@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002-2005, International Business Machines Corporation and
+ * Copyright (c) 2002-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -26,10 +26,10 @@ U_NAMESPACE_END
  */
 class T_CTEST_EXPORT_API DataMap {
 public:
-  virtual ~DataMap() {};
+  virtual ~DataMap();
 
 protected:
-  DataMap() {};
+  DataMap();
   int32_t utoi(const UnicodeString &s) const;
 
 
