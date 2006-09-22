@@ -679,10 +679,9 @@ public class TestConversion extends ModuleTest {
         logln("...............................................");
 
 //         ----for debugging only
-        // TODO: ***Currently skipping test for charset ibm-1390, gb18030,
-        // ibm-930 due to external mapping need to be fix
-         if (cc.charset.equalsIgnoreCase("ibm-1390")
-                || cc.charset.equalsIgnoreCase("gb18030")
+        // TODO: ***Currently skipping test for charset ibm-1390
+        // due to improper substitution handling.
+        if (cc.charset.equalsIgnoreCase("ibm-1390")
                 || cc.charset.equalsIgnoreCase("ibm-970")) {
             logln("Skipping test:("
                     + cc.charset
@@ -1009,8 +1008,8 @@ public class TestConversion extends ModuleTest {
         len = len - target.position();
 
         if (len != source.remaining()) {
-            errln("Test failed: output does not match expected\n");
-            logln("[" + cc.caseNr + "]:" + cc.charset + "\noutput=");
+            errln("Test[" + cc.caseNr + "]:" + cc.charset + " failed: output does not match expected");
+            logln("output=");
             printbytes(target, len);
             logln("");
             return false;

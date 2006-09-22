@@ -2872,8 +2872,8 @@ class CharsetMBCS extends CharsetICU {
                 long[] range;
                 int i;
         
-                range = gb18030Ranges[0];
-                for(i=0; i<gb18030Ranges.length/gb18030Ranges[0].length; range=gb18030Ranges[i], ++i) {
+                for(i=0; i<gb18030Ranges.length; ++i) {
+                    range=gb18030Ranges[i];
                     if(range[0]<=cp && cp<=range[1]) {
                         /* found the Unicode code point, output the four-byte sequence for it */
                         long linear;
