@@ -39,7 +39,8 @@ _set_add(USet *set, UChar32 c) {
     ((UnicodeSet *)set)->add(c);
 }
 
-static void U_CALLCONV
+// These functions aren't used.
+/*static void U_CALLCONV
 _set_addRange(USet *set, UChar32 start, UChar32 end) {
     ((UnicodeSet *)set)->add(start, end);
 }
@@ -47,7 +48,7 @@ _set_addRange(USet *set, UChar32 start, UChar32 end) {
 static void U_CALLCONV
 _set_addString(USet *set, const UChar *str, int32_t length) {
     ((UnicodeSet *)set)->add(UnicodeString((UBool)(length<0), str, length));
-}
+}*/
 
 U_CDECL_END
 
@@ -63,9 +64,9 @@ NameUnicodeTransliterator::NameUnicodeTransliterator(UnicodeFilter* adoptedFilte
     USetAdder sa = {
         (USet *)legalPtr, // USet* == UnicodeSet*
         _set_add,
-        _set_addRange,
-        _set_addString,
-        NULL // don't need remove()
+        NULL, // Don't need _set_addRange
+        NULL, // Don't need _set_addString
+        NULL // Don't need remove()
     };
     uprv_getCharNameCharacters(&sa);
 }
