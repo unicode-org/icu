@@ -231,7 +231,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
             length=charErrorBufferLength;
             i=0;
             do {
-                if(target.remaining()<0) {
+                if(target.remaining()<=0) {
                     /* the overflow buffer contains too much, keep the rest */
                     int j=0;
     
