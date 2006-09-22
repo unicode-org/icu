@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2004, International Business Machines Corporation and         *
+ * Copyright (C) 2003-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -475,14 +475,16 @@ int32_t CollationServiceTest::checkStringEnumeration(const char* msg,
                                                      int32_t expectedCount) {
     UErrorCode ec = U_ZERO_ERROR;
     U_ASSERT(expectedCount >= 0 && expectedCount < 31); // [sic] 31 not 32
-    int32_t i = 0, n = iter.count(ec);
+    int32_t i = 0, idxAfterReset = 0, n = iter.count(ec);
     assertSuccess("count", ec);
-    UnicodeString buf;
+    UnicodeString buf, buffAfterReset;
     int32_t seenMask = 0;
     for (;; ++i) {
         const UnicodeString* s = iter.snext(ec);
-        if (!assertSuccess("snext", ec) || s == NULL) break;
-        if (i != 0) buf.append(", ");
+        if (!assertSuccess("snext", ec) || s == NULL)
+            break;
+        if (i != 0)
+            buf.append(UNICODE_STRING_SIMPLE(", "));
         buf.append(*s);
         // check expected list
         for (int32_t j=0, bit=1; j<expectedCount; ++j, bit<<=1) {
@@ -502,6 +504,17 @@ int32_t CollationServiceTest::checkStringEnumeration(const char* msg,
     logln(UnicodeString() + msg + " = [" + buf + "] (??? NO_FORMATTING)");
 #endif
     assertTrue("count verified", i==n);
+    iter.reset(ec);
+    for (;; ++idxAfterReset) {
+        const UChar *s = iter.unext(NULL, ec);
+        if (!assertSuccess("unext", ec) || s == NULL)
+            break;
+        if (idxAfterReset != 0)
+            buffAfterReset.append(UNICODE_STRING_SIMPLE(", "));
+        buffAfterReset.append(s);
+    }
+    assertTrue("idxAfterReset verified", idxAfterReset==n);
+    assertTrue("buffAfterReset verified", buffAfterReset==buf);
     // did we see all expected strings?
     if (((1<<expectedCount)-1) != seenMask) {
         for (int32_t j=0, bit=1; j<expectedCount; ++j, bit<<=1) {
