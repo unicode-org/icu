@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002-2005, International Business Machines Corporation and
+ * Copyright (c) 2002-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -96,7 +96,7 @@ public:
 private:
 //  RBTestData() {};
 //  RBTestData(const RBTestData& original) {};
-  RBTestData& operator=(const RBTestData& /*original*/) {return *this;};
+  RBTestData& operator=(const RBTestData& /*original*/);
 
 public:
   virtual ~RBTestData();
