@@ -10,18 +10,18 @@ package com.ibm.icu.charset;
 
 interface UConverterConstants {
 
-     static final short UNSIGNED_BYTE_MASK = 0xff;
-     static final int UNSIGNED_SHORT_MASK = 0xffff;
-     static final long UNSIGNED_INT_MASK = 0xffffffffL;
+    static final short UNSIGNED_BYTE_MASK = 0xff;
+    static final int UNSIGNED_SHORT_MASK = 0xffff;
+    static final long UNSIGNED_INT_MASK = 0xffffffffL;
     
-     static final int U_IS_BIG_ENDIAN = 0;
+    static final int U_IS_BIG_ENDIAN = 0;
 	
 	/**
 	 * Useful constant for the maximum size of the whole locale ID
 	 * (including the terminating NULL).
 	 * @draft ICU 3.6
 	 */
-	 static final int ULOC_FULLNAME_CAPACITY = 56;
+	static final int ULOC_FULLNAME_CAPACITY = 56;
 	
 	/**
 	 * This value is intended for sentinel values for APIs that
@@ -38,7 +38,7 @@ interface UConverterConstants {
 	 * CharacterIterator::hasNext() or UnicodeString::length().
 	 * @draft ICU 2.4
 	 */
-	 static final int U_SENTINEL = -1;
+	static final int U_SENTINEL = -1;
 	
 	//end utf.h
 	
@@ -51,56 +51,51 @@ interface UConverterConstants {
 	static final byte OPTION_SEP_CHAR  = ',';
 	
 	/** Maximum length of a converter name including the terminating NULL @draft ICU 3.6 */
-	 static final int MAX_CONVERTER_NAME_LENGTH  = 60;
+	static final int MAX_CONVERTER_NAME_LENGTH  = 60;
 	/** Maximum length of a converter name including path and terminating NULL @draft ICU 3.6 */
-	 static final int MAX_FULL_FILE_NAME_LENGTH = (600+MAX_CONVERTER_NAME_LENGTH);
+	static final int MAX_FULL_FILE_NAME_LENGTH = (600+MAX_CONVERTER_NAME_LENGTH);
 	
 	/** Shift in for EBDCDIC_STATEFUL and iso2022 states @draft ICU 3.6 */
-	 static final int SI = 0x0F;
+	static final int SI = 0x0F;
 	/** Shift out for EBDCDIC_STATEFUL and iso2022 states @draft ICU 3.6 */
-	 static final int  SO = 0x0E;
+	static final int SO = 0x0E;
 	
 	//end ucnv.h
 	
 	// begin bld.h
 	/* size of the overflow buffers in UConverter, enough for escaping callbacks */
 	//#define ERROR_BUFFER_LENGTH 32
-	 static final int ERROR_BUFFER_LENGTH = 32;
+	static final int ERROR_BUFFER_LENGTH = 32;
 	
 	/* at most 4 bytes per substitution character (part of .cnv file format! see UConverterStaticData) */
-	 static final int MAX_SUBCHAR_LEN = 4;
+	static final int MAX_SUBCHAR_LEN = 4;
 	
 	/* at most 8 bytes per character in toUBytes[] (UTF-8 uses up to 6) */
-	 static final int MAX_CHAR_LEN = 8;
+	static final int MAX_CHAR_LEN = 8;
 	
 	/* converter options bits */
-	 static final int OPTION_VERSION     = 0xf;
-	 static final int OPTION_SWAP_LFNL   = 0x10;
-	 static final int OPTION_MAC   = 0x20; //agljport:comment added for Mac ISCII encodings
+	static final int OPTION_VERSION     = 0xf;
+	static final int OPTION_SWAP_LFNL   = 0x10;
+	static final int OPTION_MAC   = 0x20; //agljport:comment added for Mac ISCII encodings
 	
 	/** values for the unicodeMask */
-	 static final int HAS_SUPPLEMENTARY = 1;
-	 static final int HAS_SURROGATES =   2;
+	static final int HAS_SUPPLEMENTARY = 1;
+	static final int HAS_SURROGATES =   2;
 	// end bld.h
 	
 	// begin cnv.h
 	/* this is used in fromUnicode DBCS tables as an "unassigned" marker */
-	 static final int missingCharMarker = 0xFFFF;
+	static final int missingCharMarker = 0xFFFF;
 	 /**
       * 
       * @author ram
       * @draft ICU 3.6
       * @provisional This API might change or be removed in a future release.
 	  */
-	 final class UConverterResetChoice {
-         /**
-          * private constructor to prevent construction 
-          *
-          */
-         private UConverterResetChoice(){}
-	     static final int RESET_BOTH = 0;
-	     static final int RESET_TO_UNICODE = RESET_BOTH + 1;
-	     static final int RESET_FROM_UNICODE = RESET_TO_UNICODE + 1;
+	static interface UConverterResetChoice {
+	    static final int RESET_BOTH = 0;
+	    static final int RESET_TO_UNICODE = RESET_BOTH + 1;
+	    static final int RESET_FROM_UNICODE = RESET_TO_UNICODE + 1;
 	}
 	
 	// begin utf16.h
@@ -108,7 +103,7 @@ interface UConverterConstants {
 	 * The maximum number of 16-bit code units per Unicode code point (U+0000..U+10ffff).
 	 * @draft ICU 2.4
 	 */
-	 static final int U16_MAX_LENGTH = 2;
+	static final int U16_MAX_LENGTH = 2;
 	// end utf16.h	
 	
 	// begin err.h	
@@ -116,13 +111,13 @@ interface UConverterConstants {
 	 * FROM_U, TO_U context options for sub callback
 	 * @draft ICU 3.6
 	 */
-	 static byte[] SUB_STOP_ON_ILLEGAL = {'i'};
+	static byte[] SUB_STOP_ON_ILLEGAL = {'i'};
 	
 	/**
 	 * FROM_U, TO_U context options for skip callback
 	 * @draft ICU 3.6
 	 */
-	 static byte[] SKIP_STOP_ON_ILLEGAL = {'i'};	
+	static byte[] SKIP_STOP_ON_ILLEGAL = {'i'};	
 	
 	/** 
 	 * The process condition code to be used with the callbacks.  
@@ -131,13 +126,7 @@ interface UConverterConstants {
 	 * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
 	 */
-	 static final class UConverterCallbackReason {
-         /**
-          * private constructor to prevent construction
-          *
-          */
-         private UConverterCallbackReason(){}
-         
+	static interface UConverterCallbackReason {
 		 static final int UNASSIGNED = 0;  /**< The code point is unassigned.
 	                             The error code U_INVALID_CHAR_FOUND will be set. */
 		 static final int ILLEGAL = 1;     /**< The code point is illegal. For example, 
