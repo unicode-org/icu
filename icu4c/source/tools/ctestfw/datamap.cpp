@@ -11,6 +11,9 @@
 #include "hash.h"
 #include <stdlib.h>
 
+DataMap::~DataMap() {}
+DataMap::DataMap() {}
+
 int32_t 
 DataMap::utoi(const UnicodeString &s) const
 {
