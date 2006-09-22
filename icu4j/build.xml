@@ -85,6 +85,7 @@
         <property name="doc.dir" value="doc"/>
         <property name="testjar.file" value="icu4jtests.jar"/>
         <property name="jar.file" value="icu4j.jar"/>
+        <property name="charsets.jar.file" value="icu4j-charsets.jar"/>
         <property name="jarSrc.file" value="icu4jsrc.jar"/>
         <property name="zipCoreSrc.file" value="icu4jcsrc.zip"/>
         <property name="zipTestSrc.file" value="icu4jtsrc.zip"/>
@@ -431,14 +432,37 @@
     <!-- Creates the 3 release jar archives for distribution -->
     <target name="jarRelease" depends="jar,jarSrc,jarDocs"/>
 
-    <target name="jar" depends="core,indices" description="build full 'icu4j.jar' jar file">
+    <target name="jar" depends="core,indices" description="build 'icu4j.jar' jar file">
         <jar jarfile="${jar.file}"
             compress="true"
-            includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*,META-INF/services/*"
+            includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*"
+            excludes="META-INF/services/**/*,com/ibm/icu/charset/**/*,${icu4j.data.path}/*.cnv, ${icu4j.data.path}/cnvalias.icu"
             basedir="${build.dir}"
             manifest="${icu4j.manifest}"/>
     </target>
-
+    
+    <target name="charsetsJar" depends="core,indices" description="build  'icu4j-charstes.jar' jar file">
+        <jar jarfile="${charsets.jar.file}"
+            compress="true"
+            includes="META-INF/services/**/*, com/ibm/icu/charset/**/*, ${icu4j.data.path}/*.cnv, ${icu4j.data.path}/cnvalias.icu"
+            basedir="${build.dir}">
+             <manifest>
+                <attribute name="Built-By" value="${corp}"/>
+                <section name="common">
+                  <attribute name="Specification-Title" value="ICU4J Charsets"/>
+                  <attribute name="Specification-Version" value="${icu4j.version.string}"/>
+                  <attribute name="Specification-Vendor" value="ICU"/>
+                  <attribute name="Implementation-Title" value=" ICU for Java Charsets"/>
+                  <attribute name="Implementation-Version" value="${icu4j.version.string}"/> 
+                  <attribute name="Implementation-Vendor" value="${corp}"/>
+                  <attribute name="Implementation-Vendor-Id" value="com.ibm"/>
+                  <attribute name="Copyright-Info" value="${copyright}"/>
+                  <attribute name="Sealed" value="false"/>
+                </section>
+            </manifest>
+        </jar>
+    </target>
+    
     <target name="jarTests" depends="tests,jar" description="build runtime 'icu4jtests.jar' jar file">
         <jar jarfile="${testjar.file}" compress="true" manifest="${icu4j.tests.manifest}">
             <fileset dir="${build.dir}" includes="com/ibm/icu/dev/test/**/*"/>
@@ -578,13 +602,14 @@
             <fileset dir="${build.dir}/com/ibm/icu/util"/>                 
         </delete>
     </target>
-    <target name="check" depends="tests, jar, deleteCore" description="run standard icu4j test suite">
+    <target name="check" depends="tests, jar, charsetsJar, deleteCore" description="run standard icu4j test suite">
         <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
             <jvmarg value="-ea"/>  <!-- enable assertion checks -->
             <arg value="-n"/>
             <classpath>
                 <pathelement path="${java.class.path}/"/>
-                <pathelement location="icu4j.jar"/>
+                <pathelement location="${jar.file}"/>
+                <pathelement location="${charsets.jar.file}"/>
                 <pathelement location="clover.jar"/>
                 <pathelement path="${build.dir}"/>
             </classpath>
@@ -598,7 +623,8 @@
             <arg value="-e10"/>
             <classpath>
                 <pathelement path="${java.class.path}/"/>
-                <pathelement location="icu4j.jar"/>
+                <pathelement location="${jar.file}"/>
+                <pathelement location="${charsets.jar.file}"/>
                 <pathelement location="clover.jar"/>
                 <pathelement path="${build.dir}"/>
             </classpath>
@@ -619,6 +645,7 @@
             <classpath>
                 <pathelement location="clover.jar"/>
                 <pathelement location="${jar.file}"/>
+                <pathelement location="${charsets.jar.file}"/>
                 <pathelement location="${testjar.file}"/>
             </classpath>
         </java>
@@ -1472,7 +1499,8 @@
             <arg value="-n"/>
             <classpath>
                 <pathelement path="${java.class.path}/"/>
-                <pathelement location="icu4j.jar"/>
+                 <pathelement location="${jar.file}"/>
+                <pathelement location="${charsets.jar.file}"/>
                 <pathelement location="clover.jar"/>
                 <pathelement path="${build.dir}"/>
             </classpath>
