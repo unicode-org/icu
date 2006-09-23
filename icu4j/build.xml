@@ -94,15 +94,10 @@
         <property name="eclipse.projects.dir" value="eclipseProjects"/>
         <property name="wrapper.build.dir" value="classes.wrapper"/>
         <property name="jarDocs.file" value="icu4jdocs.jar"/>
-        <property name="icu4j.manifest" value="${src.dir}/com/ibm/icu/manifest.stub"/>
-        <property name="icu4j.module.manifest" value="${src.dir}/com/ibm/icu/manifest.module.stub"/>
-        <property name="xliff.manifest" value="${src.dir}/com/ibm/dev/tool/localeconverter/manifest.xliff.stub"/>
-        <property name="cldr.util.manifest" value="${src.dir}/com/ibm/icu/dev/test/util/manifest.cldrutil.stub"/>
-        <property name="icu4j.tests.manifest" value="${src.dir}/com/ibm/icu/dev/test/manifest.test.stub"/>
-        <property name="ime.translit.manifest" value="${src.dir}/com/ibm/icu/dev/tool/ime/translit/manifest.stub"/>
         <property name="ime.translit.jar.file" value="icutransime.jar"/>
-        <property name="ime.indic.manifest" value="${src.dir}/com/ibm/icu/dev/tool/ime/indic/manifest.stub"/>
         <property name="ime.indic.jar.file" value="icuindicime.jar"/>
+        <property name="ime.translit.manifest" value="${src.dir}/com/ibm/icu/dev/tool/ime/translit/manifest.stub"/>
+        <property name="ime.indic.manifest" value="${src.dir}/com/ibm/icu/dev/tool/ime/indic/manifest.stub"/>
         <property name="zip.file" value="../icu4j${DSTAMP}.zip"/>
         <property name="zipSrc.file" value="../icu4jSrc${DSTAMP}.zip"/>
 
@@ -432,13 +427,27 @@
     <!-- Creates the 3 release jar archives for distribution -->
     <target name="jarRelease" depends="jar,jarSrc,jarDocs"/>
 
-    <target name="jar" depends="core,indices" description="build 'icu4j.jar' jar file">
+    <target name="jar" depends="core,indices,charsetsJar" description="build 'icu4j.jar' jar file">
         <jar jarfile="${jar.file}"
             compress="true"
             includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*"
             excludes="META-INF/services/**/*,com/ibm/icu/charset/**/*,${icu4j.data.path}/*.cnv, ${icu4j.data.path}/cnvalias.icu"
-            basedir="${build.dir}"
-            manifest="${icu4j.manifest}"/>
+            basedir="${build.dir}">
+            <manifest>
+                <attribute name="Built-By" value="${corp}"/>
+                <section name="common">
+                  <attribute name="Specification-Title" value="ICU4J"/>
+                  <attribute name="Specification-Version" value="${icu4j.version.string}"/>
+                  <attribute name="Specification-Vendor" value="ICU"/>
+                  <attribute name="Implementation-Title" value=" ICU for Java"/>
+                  <attribute name="Implementation-Version" value="${icu4j.version.string}"/> 
+                  <attribute name="Implementation-Vendor" value="${corp}"/>
+                  <attribute name="Implementation-Vendor-Id" value="com.ibm"/>
+                  <attribute name="Copyright-Info" value="${copyright}"/>
+                  <attribute name="Sealed" value="false"/>
+                </section>
+            </manifest>
+        </jar>
     </target>
     
     <target name="charsetsJar" depends="core,indices" description="build  'icu4j-charstes.jar' jar file">
@@ -480,15 +489,43 @@
         <jar jarfile="${jarSrc.file}"
             compress="true"
             basedir="."
-            excludes="${richedit.dir}/**/*,test_*,${src.dir}/com/ibm/icu/dev/data/unicode//UnicodeData-*.txt,${src.dir}/com/ibm/icu/dev/data/unicode/SpecialCasing-*.txt,${src.dir}/com/ibm/icu/dev/data/unicode/CompositionExclusions-*.txt,${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*,${doc.dir}/**,*.jar,*.zip, *.gz"
-            manifest="${icu4j.manifest}"/>
+            excludes="${richedit.dir}/**/*,test_*,${src.dir}/com/ibm/icu/dev/data/unicode//UnicodeData-*.txt,${src.dir}/com/ibm/icu/dev/data/unicode/SpecialCasing-*.txt,${src.dir}/com/ibm/icu/dev/data/unicode/CompositionExclusions-*.txt,${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*,${doc.dir}/**,*.jar,*.zip, *.gz">
+            <manifest>
+                <attribute name="Built-By" value="${corp}"/>
+                <section name="common">
+                  <attribute name="Specification-Title" value="ICU4J Source Files"/>
+                  <attribute name="Specification-Version" value="${icu4j.version.string}"/>
+                  <attribute name="Specification-Vendor" value="ICU"/>
+                  <attribute name="Implementation-Title" value=" ICU for Java"/>
+                  <attribute name="Implementation-Version" value="${icu4j.version.string}"/> 
+                  <attribute name="Implementation-Vendor" value="${corp}"/>
+                  <attribute name="Implementation-Vendor-Id" value="com.ibm"/>
+                  <attribute name="Copyright-Info" value="${copyright}"/>
+                  <attribute name="Sealed" value="false"/>
+                </section>
+            </manifest>
+        </jar>        
     </target>
 
     <target name="jarDocs" depends="docs" description="build documentation 'icu4jdocs.jar' jar file">
         <jar jarfile="${jarDocs.file}"
             compress="true"
-            basedir="${doc.dir}"
-            manifest="${icu4j.manifest}"/>
+            basedir="${doc.dir}">
+            <manifest>
+                <attribute name="Built-By" value="${corp}"/>
+                <section name="common">
+                  <attribute name="Specification-Title" value="ICU4J Source Files"/>
+                  <attribute name="Specification-Version" value="${icu4j.version.string}"/>
+                  <attribute name="Specification-Vendor" value="ICU"/>
+                  <attribute name="Implementation-Title" value=" ICU for Java"/>
+                  <attribute name="Implementation-Version" value="${icu4j.version.string}"/> 
+                  <attribute name="Implementation-Vendor" value="${corp}"/>
+                  <attribute name="Implementation-Vendor-Id" value="com.ibm"/>
+                  <attribute name="Copyright-Info" value="${copyright}"/>
+                  <attribute name="Sealed" value="false"/>
+                </section>
+            </manifest>
+        </jar>
     </target>
 
     <target name="translitIMEJar" depends="collator, transliterator" description="build transliterator IME 'icutransime.jar' jar file">
@@ -602,7 +639,7 @@
             <fileset dir="${build.dir}/com/ibm/icu/util"/>                 
         </delete>
     </target>
-    <target name="check" depends="tests, jar, charsetsJar, deleteCore" description="run standard icu4j test suite">
+    <target name="check" depends="tests, jar, deleteCore" description="run standard icu4j test suite">
         <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
             <jvmarg value="-ea"/>  <!-- enable assertion checks -->
             <arg value="-n"/>
@@ -852,8 +889,22 @@
         <jar jarfile="${jar.file}"
             compress="true"
             includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*"
-            basedir="${build.dir}"
-            manifest="${icu4j.module.manifest}"/>
+            basedir="${build.dir}">
+            <manifest>
+                <attribute name="Built-By" value="${corp}"/>
+                <section name="common">
+                  <attribute name="Specification-Title" value="ICU4J Modularized Build"/>
+                  <attribute name="Specification-Version" value="${icu4j.version.string}"/>
+                  <attribute name="Specification-Vendor" value="ICU"/>
+                  <attribute name="Implementation-Title" value=" ICU for Java Module"/>
+                  <attribute name="Implementation-Version" value="${icu4j.version.string}"/> 
+                  <attribute name="Implementation-Vendor" value="${corp}"/>
+                  <attribute name="Implementation-Vendor-Id" value="com.ibm"/>
+                  <attribute name="Copyright-Info" value="${copyright}"/>
+                  <attribute name="Sealed" value="false"/>
+                </section>
+            </manifest>
+        </jar>
     </target>
 
     <!--
@@ -1179,13 +1230,42 @@
         <jar jarfile="xliff.jar"
             compress="true"
             includes="com/ibm/icu/dev/tool/localeconverter/XLIFF2ICUConverter*.class,com/ibm/icu/dev/tool/localeconverter/CalculateCRC32.class,com/ibm/icu/dev/tool/UOption.class"
-            basedir="${build.dir}"
-            manifest="${icu4j.module.manifest}"/>
+            basedir="${build.dir}">
+            <manifest>
+                <attribute name="Built-By" value="${corp}"/>
+                <section name="common">
+                  <attribute name="Specification-Title" value="XLIFF To ICU Converter"/>
+                  <attribute name="Specification-Version" value="${icu4j.version.string}"/>
+                  <attribute name="Specification-Vendor" value="ICU"/>
+                  <attribute name="Implementation-Title" value="XLIFF2ICUConverter"/>
+                  <attribute name="Implementation-Version" value="${icu4j.version.string}"/> 
+                  <attribute name="Implementation-Vendor" value="${corp}"/>
+                  <attribute name="Implementation-Vendor-Id" value="com.ibm"/>
+                  <attribute name="Copyright-Info" value="${copyright}"/>
+                  <attribute name="Sealed" value="false"/>
+                </section>
+            </manifest>
+        </jar>
+            
         <jar jarfile="xliff-src.jar"
             compress="true"
             includes="com/ibm/icu/dev/tool/localeconverter/XLIFF2ICUConverter.java,com/ibm/icu/dev/tool/localeconverter/CalculateCRC32.java,com/ibm/icu/dev/tool/UOption.java"
-            basedir="${src.dir}"
-            manifest="${icu4j.module.manifest}"/>
+            basedir="${src.dir}">
+                <manifest>
+                    <attribute name="Built-By" value="${corp}"/>
+                    <section name="common">
+                      <attribute name="Specification-Title" value="XLIFF To ICU Converter Sources"/>
+                      <attribute name="Specification-Version" value="${icu4j.version.string}"/>
+                      <attribute name="Specification-Vendor" value="ICU"/>
+                      <attribute name="Implementation-Title" value="XLIFF2ICUConverter Sources"/>
+                      <attribute name="Implementation-Version" value="${icu4j.version.string}"/> 
+                      <attribute name="Implementation-Vendor" value="${corp}"/>
+                      <attribute name="Implementation-Vendor-Id" value="com.ibm"/>
+                      <attribute name="Copyright-Info" value="${copyright}"/>
+                      <attribute name="Sealed" value="false"/>
+                    </section>
+                </manifest>
+            </jar>
      </target>
      
     <!-- Target for builing Utilities Jar for CLDR -->
@@ -1201,8 +1281,22 @@
         <jar jarfile="utilities.jar"
             compress="true"
             includes="com/ibm/icu/dev/test/util/*.class,com/ibm/icu/dev/test/TestFmwk*.class,com/ibm/icu/dev/test/AbstractTest*.class,com/ibm/icu/dev/test/TestLog*.class,com/ibm/icu/dev/tool/UOption*.class"
-            basedir="${build.dir}"
-            manifest="${cldr.util.manifest}"/>
+            basedir="${build.dir}">
+             <manifest>
+                <attribute name="Built-By" value="${corp}"/>
+                <section name="common">
+                  <attribute name="Specification-Title" value="Utilities for CLDR Tools"/>
+                  <attribute name="Specification-Version" value="${icu4j.version.string}"/>
+                  <attribute name="Specification-Vendor" value="ICU"/>
+                  <attribute name="Implementation-Title" value="CLDR Utilities"/>
+                  <attribute name="Implementation-Version" value="${icu4j.version.string}"/> 
+                  <attribute name="Implementation-Vendor" value="${corp}"/>
+                  <attribute name="Implementation-Vendor-Id" value="com.ibm"/>
+                  <attribute name="Copyright-Info" value="${copyright}"/>
+                  <attribute name="Sealed" value="false"/>
+                </section>
+            </manifest>
+        </jar>
      </target>
      <!--Target for building jars -->
      <target name="distJars" depends="jarSrc, jar, jarDocs" />   
@@ -1305,8 +1399,22 @@
         <jar jarfile="${jar.file}"
             compress="true"
             includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*"
-            basedir="${build.dir}"
-            manifest="${icu4j.manifest}"/>
+            basedir="${build.dir}">
+            <manifest>
+                <attribute name="Built-By" value="${corp}"/>
+                <section name="common">
+                  <attribute name="Specification-Title" value="ICU4J Eclipse Build"/>
+                  <attribute name="Specification-Version" value="${icu4j.version.string}"/>
+                  <attribute name="Specification-Vendor" value="ICU"/>
+                  <attribute name="Implementation-Title" value=" ICU for Java"/>
+                  <attribute name="Implementation-Version" value="${icu4j.version.string}"/> 
+                  <attribute name="Implementation-Vendor" value="${corp}"/>
+                  <attribute name="Implementation-Vendor-Id" value="com.ibm"/>
+                  <attribute name="Copyright-Info" value="${copyright}"/>
+                  <attribute name="Sealed" value="false"/>
+                </section>
+            </manifest>
+        </jar>
     </target>
 
     <target name="eclipseCoreProject" depends="eclipseCore" description="gather eclipse icu core project files">
@@ -1412,9 +1520,23 @@
             debug="on"
             deprecation="off"/>
         <antcall target="indices"/>
-        <jar jarfile="${testjar.file}" compress="true" manifest="${icu4j.tests.manifest}">
+        <jar jarfile="${testjar.file}" compress="true" >
             <fileset dir="${build.dir}" includes="com/ibm/icu/dev/test/**/*"/>
             <fileset dir="${build.dir}" includes="com/ibm/icu/dev/data/**/*"/>
+            <manifest>
+                <attribute name="Built-By" value="${corp}"/>
+                <section name="common">
+                  <attribute name="Specification-Title" value="Tests for ICU4J "/>
+                  <attribute name="Specification-Version" value="${icu4j.version.string}"/>
+                  <attribute name="Specification-Vendor" value="ICU"/>
+                  <attribute name="Implementation-Title" value="Tests for ICU4J"/>
+                  <attribute name="Implementation-Version" value="${icu4j.version.string}"/> 
+                  <attribute name="Implementation-Vendor" value="${corp}"/>
+                  <attribute name="Implementation-Vendor-Id" value="com.ibm"/>
+                  <attribute name="Copyright-Info" value="${copyright}"/>
+                  <attribute name="Sealed" value="false"/>
+                </section>
+            </manifest>
         </jar>
     </target>
 
@@ -1540,8 +1662,22 @@
         <jar jarfile="${jar.file}"
             compress="true"
             includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*,META-INF/services/*"
-            basedir="${build.dir}"
-            manifest="${icu4j.manifest}"/>
+            basedir="${build.dir}">
+            <manifest>
+                <attribute name="Built-By" value="${corp}"/>
+                <section name="common">
+                  <attribute name="Specification-Title" value="ICU4J JDK 1.3 Compatible Build"/>
+                  <attribute name="Specification-Version" value="${icu4j.version.string}"/>
+                  <attribute name="Specification-Vendor" value="ICU"/>
+                  <attribute name="Implementation-Title" value=" ICU for Java Charsets"/>
+                  <attribute name="Implementation-Version" value="${icu4j.version.string}"/> 
+                  <attribute name="Implementation-Vendor" value="${corp}"/>
+                  <attribute name="Implementation-Vendor-Id" value="com.ibm"/>
+                  <attribute name="Copyright-Info" value="${copyright}"/>
+                  <attribute name="Sealed" value="false"/>
+                </section>
+            </manifest>
+        </jar>
     </target>
 
     <target name="jdk13Compat" depends="init, eclipseCoreMangle, core13" description="builds ICU4J core with JDK 1.3"/>
