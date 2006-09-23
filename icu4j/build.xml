@@ -636,7 +636,8 @@
             <fileset dir="${build.dir}/com/ibm/icu/impl"/>
             <fileset dir="${build.dir}/com/ibm/icu/math"/>
             <fileset dir="${build.dir}/com/ibm/icu/lang"/>
-            <fileset dir="${build.dir}/com/ibm/icu/util"/>                 
+            <fileset dir="${build.dir}/com/ibm/icu/util"/>       
+            <fileset dir="${build.dir}/com/ibm/icu/charset"/>                   
         </delete>
     </target>
     <target name="check" depends="tests, jar, deleteCore" description="run standard icu4j test suite">
