@@ -760,6 +760,7 @@
         <delete dir="${build.dir}"/>
         <delete dir="${doc.dir}"/>
         <delete file="${jar.file}"/>
+        <delete file="${charsets.jar.file}"/>
         <delete dir="${richedit.dir}"/>
         <delete file="${testjar.file}"/>
         <delete file="${jarSrc.file}"/>
