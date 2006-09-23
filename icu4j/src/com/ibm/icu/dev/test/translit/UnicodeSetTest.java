@@ -1396,7 +1396,16 @@ public class UnicodeSetTest extends TestFmwk {
             }
             Random random = new Random(0);
             UnicodeSet test = new UnicodeSet();
-            for (; i < 1000; ++i) {
+            
+            // To keep runtimes under control, make the number of random test cases
+            //   to try depends on the test framework exhaustive setting.
+            //  params.inclusions = 5:   default exhaustive value
+            //  params.inclusions = 10:  max exhaustive value.
+            int iterations = 50;
+            if (params.inclusion > 5) {
+                iterations = (params.inclusion-5) * 200;
+            }
+            for (; i < iterations; ++i) {
                 double start = random.nextGaussian() * 0x10000;
                 if (start < 0) start = - start;
                 if (start > 0x10FFFF) {

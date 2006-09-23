@@ -13,6 +13,8 @@ import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
 import com.ibm.icu.util.LocaleData;
 import com.ibm.icu.util.ULocale;
+import java.util.HashSet;
+import java.util.Arrays;
 
 /**
  * @author ram
@@ -87,21 +89,62 @@ public class LocaleDataTest extends TestFmwk{
             }
         }
     }
+    
+    // Bundle together a UnicodeSet (of expemplars) and ScriptCode combination.
+    //   We keep a set of combinations that have already been tested, to
+    //   avoid repeated (time consuming) retesting of the same data.
+    //   Instances of this class must be well behaved as members of a set.
+    static class ExemplarGroup {
+        private int[] scs;
+        private UnicodeSet set;
+        
+        ExemplarGroup(UnicodeSet s, int[] scriptCodes) {
+            set = s;
+            scs = scriptCodes;
+        }
+        public int hashCode() {
+            int hash = 0;
+            for (int i=0; i<scs.length && i<4; i++) {
+                hash = (hash<<8)+scs[i];
+            }
+            return hash;
+        }        
+        public boolean equals(Object other) {
+            ExemplarGroup o = (ExemplarGroup)other;
+            boolean r = Arrays.equals(scs, o.scs) &&
+                         set.equals(o.set);
+            return r;
+        }
+    };
+    
     public void TestExemplarSet(){
+        HashSet  testedExemplars = new HashSet();
         int equalCount = 0;
         for(int i=0; i<availableLocales.length; i++){
             ULocale locale = availableLocales[i];
+            int[] scriptCodes = UScript.getCode(locale);
+            if (scriptCodes==null) {
+                // I hate the JDK's solution for deprecated language codes.
+                // Why does the Locale constructor change the string I passed to it ?
+                // such a broken hack !!!!!
+                // so in effect I can never test the script code for Indonesian :(
+                if(locale.toString().indexOf(("in"))<0){
+                    errln("UScript.getCode returned null for locale: " + locale); 
+                }
+                continue;
+            }
             UnicodeSet exemplarSets[] = new UnicodeSet[2];
-            for (int k=0; k<2; ++k) {
+            for (int k=0; k<2; ++k) {   // for casing option in (normal, caseInsensitive)
                 int option = (k==0) ? 0 : UnicodeSet.CASE;
                 UnicodeSet exemplarSet = LocaleData.getExemplarSet(locale, option);
                 exemplarSets[k] = exemplarSet;
-                int[] code = UScript.getCode(locale);
-                if(code != null){
-                    UnicodeSet[] sets = new UnicodeSet[code.length];
+                ExemplarGroup exGrp = new ExemplarGroup(exemplarSet, scriptCodes);
+                if (!testedExemplars.contains(exGrp)) {
+                    testedExemplars.add(exGrp);
+                    UnicodeSet[] sets = new UnicodeSet[scriptCodes.length];
                     // create the UnicodeSets for the script
-                    for(int j=0; j < code.length; j++){
-                        sets[j] = new UnicodeSet("[:" + UScript.getShortName(code[j]) + ":]");
+                    for(int j=0; j < scriptCodes.length; j++){
+                        sets[j] = new UnicodeSet("[:" + UScript.getShortName(scriptCodes[j]) + ":]");
                     }
                     boolean existsInScript = false;
                     UnicodeSetIterator iter = new UnicodeSetIterator(exemplarSet);
@@ -126,14 +169,6 @@ public class LocaleDataTest extends TestFmwk{
                     if(existsInScript == false){
                         errln("ExemplarSet containment failed for locale : "+ locale);
                     }
-                }else{
-                    // I hate the JDK's solution for deprecated language codes.
-                    // Why does the Locale constructor change the string I passed to it ?
-                    // such a broken hack !!!!!
-                    // so in effect I can never test the script code for Indonesian :(
-                    if(locale.toString().indexOf(("in"))<0){
-                        errln("UScript.getCode returned null for locale: " + locale); 
-                    }
                 }
             }
             // This is expensive, so only do it if it will be visible
@@ -142,7 +177,7 @@ public class LocaleDataTest extends TestFmwk{
                 logln(locale.toString() + " exemplar(case-folded) " + exemplarSets[1]);
             }
             assertTrue(locale.toString() + " case-folded is a superset",
-                       exemplarSets[1].containsAll(exemplarSets[0]));
+                    exemplarSets[1].containsAll(exemplarSets[0]));
             if (exemplarSets[1].equals(exemplarSets[0])) {
                 ++equalCount;
             }
@@ -154,25 +189,34 @@ public class LocaleDataTest extends TestFmwk{
     }
     public void TestExemplarSet2(){
         int equalCount = 0;
+        HashSet  testedExemplars = new HashSet();
         for(int i=0; i<availableLocales.length; i++){
             ULocale locale = availableLocales[i];
             LocaleData ld = LocaleData.getInstance(locale);
+            int[] scriptCodes = UScript.getCode(locale);
+            if (scriptCodes==null) {
+                if(locale.toString().indexOf(("in"))<0){
+                    errln("UScript.getCode returned null for locale: "+ locale); 
+                }
+                continue;
+            }
             UnicodeSet exemplarSets[] = new UnicodeSet[4];
 
-            for (int k=0; k<2; ++k) {
+            for (int k=0; k<2; ++k) {  // for casing option in (normal, uncased)
                 int option = (k==0) ? 0 : UnicodeSet.CASE;
-                for(int h=0; h<2; ++h){
+                for(int h=0; h<2; ++h){  
                     int type = (h==0) ? LocaleData.ES_STANDARD : LocaleData.ES_AUXILIARY;
-                    
+
                     UnicodeSet exemplarSet = ld.getExemplarSet(option, type);
                     exemplarSets[k*2+h] = exemplarSet;
-                    
-                    int[] code = UScript.getCode(locale);
-                    if(code != null){
-                        UnicodeSet[] sets = new UnicodeSet[code.length];
+
+                    ExemplarGroup exGrp = new ExemplarGroup(exemplarSet, scriptCodes);
+                    if (!testedExemplars.contains(exGrp)) {
+                        testedExemplars.add(exGrp);
+                        UnicodeSet[] sets = new UnicodeSet[scriptCodes.length];
                         // create the UnicodeSets for the script
-                        for(int j=0; j < code.length; j++){
-                            sets[j] = new UnicodeSet("[:" + UScript.getShortName(code[j]) + ":]");
+                        for(int j=0; j < scriptCodes.length; j++){
+                            sets[j] = new UnicodeSet("[:" + UScript.getShortName(scriptCodes[j]) + ":]");
                         }
                         boolean existsInScript = false;
                         UnicodeSetIterator iter = new UnicodeSetIterator(exemplarSet);
@@ -198,11 +242,7 @@ public class LocaleDataTest extends TestFmwk{
                         if(existsInScript == false && h == 0){
                             errln("ExemplarSet containment failed for locale,option,type : "+ locale + ", " + option + ", " + type);
                         }
-                    }else{
-                        if(locale.toString().indexOf(("in"))<0){
-                            errln("UScript.getCode returned null for locale,option,type : "+ locale + ", " + option + ", " + type); 
-                        }
-                }
+                    }
                 }
             }
             // This is expensive, so only do it if it will be visible
@@ -213,7 +253,7 @@ public class LocaleDataTest extends TestFmwk{
                 logln(locale.toString() + " exemplar(case-folded,ES_AUXILIARY) " + exemplarSets[3]);
             }
             assertTrue(locale.toString() + " case-folded is a superset",
-                       exemplarSets[2].containsAll(exemplarSets[0]));
+                    exemplarSets[2].containsAll(exemplarSets[0]));
             assertTrue(locale.toString() + " case-folded is a superset",
                     exemplarSets[3].containsAll(exemplarSets[1]));
             if (exemplarSets[2].equals(exemplarSets[0])) {
@@ -226,7 +266,7 @@ public class LocaleDataTest extends TestFmwk{
         // Note: The case-folded set should sometimes be a strict superset
         // and sometimes be equal.
         assertTrue("case-folded is sometimes a strict superset, and sometimes equal",
-                   equalCount > 0 && equalCount < availableLocales.length * 2);
+                equalCount > 0 && equalCount < availableLocales.length * 2);
     }
     public void TestCoverage(){
         LocaleData ld = LocaleData.getInstance();
