@@ -9,7 +9,6 @@
 
 package com.ibm.icu.charset;
 
-import java.nio.BufferOverflowException;
 import java.nio.CharBuffer;
 import java.nio.IntBuffer;
 import java.nio.charset.CharsetDecoder;

@@ -77,12 +77,18 @@ public class TestCharset extends TestFmwk {
     }
     public void TestUTF16Converter(){
         CharsetProvider icu = new CharsetProviderICU();
-        Charset icuChar = icu.charsetForName("UTF-16");
-        CharsetEncoder encoder = icuChar.newEncoder();
-        CharsetDecoder decoder = icuChar.newDecoder();
+        Charset cs1 = icu.charsetForName("UTF-16");
+        CharsetEncoder e1 = cs1.newEncoder();
+        CharsetDecoder d1 = cs1.newDecoder();
+        
+        Charset cs2 = icu.charsetForName("UTF-16LE");
+        CharsetEncoder e2 = cs2.newEncoder();
+        CharsetDecoder d2 = cs2.newDecoder();
+        
         for(int i=0x0000; i<0x10FFFF; i+=0xFF){
             CharBuffer us = CharBuffer.allocate(0xFF*2);
-            ByteBuffer bs = ByteBuffer.allocate(0xFF*8);
+            ByteBuffer bs1 = ByteBuffer.allocate(0xFF*8);
+            ByteBuffer bs2 = ByteBuffer.allocate(0xFF*8);
             for(int j=0;j<0xFF; j++){
                 int c = i+j;
               
@@ -103,36 +109,136 @@ public class TestCharset extends TestFmwk {
                     }
                     us.put(lead);
                     us.put(trail);
-                    bs.put((byte)(lead>>8));
-                    bs.put((byte)(lead&0xFF));
-                    bs.put((byte)(trail>>8));
-                    bs.put((byte)(trail&0xFF));
+                    bs1.put((byte)(lead>>8));
+                    bs1.put((byte)(lead&0xFF));
+                    bs1.put((byte)(trail>>8));
+                    bs1.put((byte)(trail&0xFF));
+                    
+                    bs2.put((byte)(lead&0xFF));
+                    bs2.put((byte)(lead>>8));
+                    bs2.put((byte)(trail&0xFF));
+                    bs2.put((byte)(trail>>8));
                 }else{
 
                     if(c<0xFF){
-                        bs.put((byte)(c>>8));
-                        bs.put((byte)(c&0xFF));
+                        bs1.put((byte)0x00);
+                        bs1.put((byte)(c));
+                        bs2.put((byte)(c));
+                        bs2.put((byte)0x00);
                     }else{
-                        bs.put((byte)(c>>8));
-                        bs.put((byte)(c&0xFF));
+                        bs1.put((byte)(c>>8));
+                        bs1.put((byte)(c&0xFF));
+                        
+                        bs2.put((byte)(c&0xFF));
+                        bs2.put((byte)(c>>8));
                     }
                     us.put((char)c);
                 }
             }
-            bs.limit(bs.position());
-            bs.position(0);
+            
+            
             us.limit(us.position());
             us.position(0);
             if(us.length()==0){
                 continue;
             }
-            smBufDecode(decoder, "UTF-16", bs, us);
-            ByteBuffer newBS = ByteBuffer.allocate(bs.capacity());
+            
+
+            bs1.limit(bs1.position());
+            bs1.position(0);
+            ByteBuffer newBS = ByteBuffer.allocate(bs1.capacity());
             newBS.put((byte)0xFE);
             newBS.put((byte)0xFF);
-            newBS.put(bs);
+            newBS.put(bs1);    
+            bs1.position(0);
+            smBufDecode(d1, "UTF-16", bs1, us);
+            smBufEncode(e1, "UTF-16", us, newBS);
             
-            smBufEncode(encoder, "UTF-16", us, newBS);
+            bs2.limit(bs2.position());
+            bs2.position(0);
+            newBS.clear();
+            newBS.put((byte)0xFF);
+            newBS.put((byte)0xFE);
+            newBS.put(bs2);     
+            bs2.position(0);
+            smBufDecode(d2, "UTF16-LE", bs2, us);
+            smBufEncode(e2, "UTF-16LE", us, newBS);
+            
+        }
+        
+    }
+    public void TestUTF32Converter(){
+        CharsetProvider icu = new CharsetProviderICU();
+        Charset cs1 = icu.charsetForName("UTF-32");
+        CharsetEncoder e1 = cs1.newEncoder();
+        CharsetDecoder d1 = cs1.newDecoder();
+        
+        Charset cs2 = icu.charsetForName("UTF-32LE");
+        CharsetEncoder e2 = cs2.newEncoder();
+        CharsetDecoder d2 = cs2.newDecoder();
+        
+        for(int i=0x1d827; i<0x10FFFF; i+=0xFF){
+            CharBuffer us = CharBuffer.allocate(0xFF*2);
+            ByteBuffer bs1 = ByteBuffer.allocate(0xFF*8);
+            ByteBuffer bs2 = ByteBuffer.allocate(0xFF*8);
+            for(int j=0;j<0xFF; j++){
+                int c = i+j;
+              
+                if((c>=0xd800&&c<=0xdFFF)||c>0x10FFFF){
+                    continue;
+                }
+
+                if(c>0xFFFF){
+                    char lead = UTF16.getLeadSurrogate(c);
+                    char trail = UTF16.getTrailSurrogate(c);
+
+                    us.put(lead);
+                    us.put(trail);
+                }else{
+                    us.put((char)c);
+                }
+                bs1.put((byte) (c >>> 24));
+                bs1.put((byte) (c >>> 16)); 
+                bs1.put((byte) (c >>> 8)); 
+                bs1.put((byte) (c & 0xFF));       
+                                
+                bs2.put((byte) (c & 0xFF));  
+                bs2.put((byte) (c >>> 8));
+                bs2.put((byte) (c >>> 16)); 
+                bs2.put((byte) (c >>> 24));
+            }
+            bs1.limit(bs1.position());
+            bs1.position(0);
+            bs2.limit(bs2.position());
+            bs2.position(0);
+            us.limit(us.position());
+            us.position(0);
+            if(us.length()==0){
+                continue;
+            }
+            
+
+            ByteBuffer newBS = ByteBuffer.allocate(bs1.capacity());
+            
+            newBS.put((byte)0x00);
+            newBS.put((byte)0x00);
+            newBS.put((byte)0xFE);
+            newBS.put((byte)0xFF);
+            newBS.put(bs1);    
+            bs1.position(0);
+            smBufDecode(d1, "UTF-32", bs1, us);
+            smBufEncode(e1, "UTF-32", us, newBS);
+            
+            
+            newBS.clear();
+            newBS.put((byte)0xFF);
+            newBS.put((byte)0xFE);
+            newBS.put((byte)0x00);
+            newBS.put((byte)0x00);
+            newBS.put(bs2);    
+            bs2.position(0);
+            smBufDecode(d2, "UTF-32LE", bs2, us);
+            smBufEncode(e2, "UTF-32LE", us, newBS);
         }
         
     }
@@ -441,7 +547,7 @@ public class TestCharset extends TestFmwk {
             boolean result = true;
             for (int i = 0; i < chars.length; i++) {
                 if (chars[i] != compareTo[i]) {
-                    errln(
+                    logln(
                         "Got: "
                             + hex(chars[i])
                             + " Expected: "
@@ -480,7 +586,7 @@ public class TestCharset extends TestFmwk {
             boolean result = true;
             for (int i = 0; i < chars.length; i++) {
                 if (chars[i] != compareTo[i]) {
-                    errln(
+                    logln(
                         "Got: "
                             + hex(chars[i])
                             + " Expected: "
@@ -779,11 +885,42 @@ public class TestCharset extends TestFmwk {
 
         ByteBuffer mySource = source.duplicate();
         CharBuffer myTarget = CharBuffer.allocate(target.capacity());
+        {            
+            decoder.reset();
+            myTarget.limit(target.limit());
+            mySource.limit(source.limit());
+            mySource.position(source.position());
+            CoderResult result = CoderResult.UNDERFLOW;
+            result = decoder.decode(mySource, myTarget, true);
+            if (result.isError()) {
+                errln("Test complete buffers while decoding failed. "+result.toString());
+                return;
+            }
+            if (result.isOverflow()) {
+                errln("Test complete buffers while decoding threw overflow exception");
+                return;
+            }
+            myTarget.limit(myTarget.position());
+            myTarget.position(0);
+            target.position(0);
+            if (result.isUnderflow()&&!equals(myTarget,target)) {
+                errln(
+                    " Test complete buffers while decoding  "
+                        + encoding
+                        + " TO Unicode--failed");
+            }
+        }
+        if(isQuick()){
+            return;
+        }
         {
             decoder.reset();
             myTarget.limit(target.limit());
             mySource.limit(source.limit());
             mySource.position(source.position());
+            myTarget.clear();
+            myTarget.position(0);
+            
             int inputLen = mySource.remaining();
 
             CoderResult result = CoderResult.UNDERFLOW;
@@ -819,6 +956,7 @@ public class TestCharset extends TestFmwk {
             myTarget.limit(target.limit());
             mySource.limit(source.limit());
             mySource.position(source.position());
+            myTarget.clear();
             while (true) {
                 int pos = myTarget.position();
                 myTarget.limit(++pos);
@@ -858,6 +996,34 @@ public class TestCharset extends TestFmwk {
             myTarget.limit(target.limit());
             mySource.limit(source.limit());
             mySource.position(source.position());
+            CoderResult result=null;
+            
+            result = encoder.encode(mySource, myTarget, true);
+
+            if (result.isError()) {
+                errln("Test complete while encoding failed. "+result.toString());
+            }
+            if (result.isOverflow()) {
+                errln("Test complete while encoding threw overflow exception");
+            }
+            if (!equals(myTarget,target)) {
+
+                errln("Test complete buffers while encoding for "+ encoding+ " failed");
+
+            }else{
+                logln("Tests complete buffers for "+ encoding +" passed");
+            }
+        }
+        if(isQuick()){
+            return;
+        }
+        {
+            logln("Running tests on small input buffers for "+ encoding);
+            encoder.reset();
+            myTarget.clear();
+            myTarget.limit(target.limit());
+            mySource.limit(source.limit());
+            mySource.position(source.position());
             int inputLen = mySource.limit();
             CoderResult result=null;
             for(int i=1; i<=inputLen; i++) {
@@ -869,19 +1035,17 @@ public class TestCharset extends TestFmwk {
                 if (result.isOverflow()) {
                     errln("Test small input buffers while encoding threw overflow exception");
                 }
-
             }
-            
             if (!equals(myTarget,target)) {
-
                 errln("Test small input buffers "+ encoding+ " From Unicode failed");
-
+            }else{
+                logln("Tests on small input buffers for "+ encoding +" passed");
             }
-            logln("Tests on small input buffers for "+ encoding +" passed");
         }
         {
             logln("Running tests on small output buffers for "+ encoding);
             encoder.reset();
+            myTarget.clear();
             myTarget.limit(target.limit());
             mySource.limit(source.limit());
             mySource.position(source.position());
