@@ -170,6 +170,10 @@ public abstract class CharsetICU extends Charset{
        throw new UnsupportedCharsetException( icuCanonicalName+": "+"Could not load " + className);    
     }
     
+    static final boolean isSurrogate(int c){
+        return (((c)&0xfffff800)==0xd800);
+    }
+    
     /**
      * Always use fallbacks from codepage to Unicode?
      * @draft ICU 3.6

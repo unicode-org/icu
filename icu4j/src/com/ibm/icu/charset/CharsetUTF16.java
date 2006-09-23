@@ -409,8 +409,7 @@ class CharsetUTF16 extends CharsetICU {
                             length=4; /* 4 bytes to output */
                             c=0;
                         } else {
-                            /* unmatched lead surrogate */
-                            //pErrorCode[0]=ErrorCode.U_ILLEGAL_CHAR_FOUND;
+                            /* unmatched lead surrogate */										
                             cr = CoderResult.malformedForLength(sourceArrayIndex);
                         }
                     } else {
