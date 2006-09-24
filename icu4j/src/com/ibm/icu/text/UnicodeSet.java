@@ -3079,7 +3079,9 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
                         v = Integer.parseInt(Utility.deleteRuleWhiteSpace(valueAlias));
                         // If the resultant set is empty then the numeric value
                         // was invalid.
-                        mustNotBeEmpty = true;
+                        //mustNotBeEmpty = true;
+                        // old code was wrong; anything between 0 and 255 is valid even if unused.
+                        if (v < 0 || v > 255) throw e;
                     } else {
                         throw e;
                     }
