@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Normalizer.java,v $
-* $Date: 2005/11/01 00:10:54 $
-* $Revision: 1.17 $
+* $Date: 2006/09/24 23:32:44 $
+* $Revision: 1.18 $
 *
 *******************************************************************************
 */
@@ -14,9 +14,13 @@
 package com.ibm.text.UCD;
 
 import java.util.*;
+
+import com.ibm.icu.dev.test.util.UnicodeMap;
 import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
 
 import com.ibm.text.utility.*;
+import com.sun.java_cup.internal.internal_error;
 
 
 /**
@@ -302,6 +306,7 @@ public final class Normalizer implements UCD_Types {
     private byte form;
     private boolean composition;
     private boolean compatibility;
+    private UnicodeMap substituteMapping;
 
     /**
     * Decomposes text, either canonical or compatibility,
@@ -319,7 +324,12 @@ public final class Normalizer implements UCD_Types {
         for (int i = 0; i < source.length(); i += UTF16.getCharCount(ch32)) {
             buffer.setLength(0);
             ch32 = UTF16.charAt(source, i);
-            data.getRecursiveDecomposition(ch32, buffer, compat);
+            String sub = substituteMapping == null ? null : (String) substituteMapping.getValue(ch32);
+            if (sub != null) {
+                buffer.append(sub);
+            } else {
+                data.getRecursiveDecomposition(ch32, buffer, compat);
+            }
 
             // add all of the characters in the decomposition.
             // (may be just the original character, if there was
@@ -559,6 +569,81 @@ Problem: differs: true, call: false U+1FED GREEK DIALYTIKA AND VARIA
             versionCache.put(version, result);
         }
         return result;
+    }
+
+    public UnicodeMap getSubstituteMapping() {
+        return substituteMapping;
+    }
+
+    public Normalizer setSubstituteMapping(UnicodeMap substituteMapping) {
+        this.substituteMapping = substituteMapping;
+        return this;
+    }
+    
+    static UnicodeMap spacingMap;;
+    public void setSpacingSubstitute() {
+        if (spacingMap == null) {
+            makeSpacingMap();
+        }
+        setSubstituteMapping(spacingMap);
+    }
+
+    private void makeSpacingMap() {
+        spacingMap = new UnicodeMap();
+       StringBuffer b = new StringBuffer();
+       main:
+       for (int i = 0; i <= 0x10FFFF; ++i) {
+           boolean compat = data.ucd.getDecompositionType(i) >= data.ucd.CANONICAL; 
+           if (!compat) continue;
+           b.setLength(0);
+           data.getRecursiveDecomposition(i, b, true);
+           if (b.length() == 1) continue;
+           char firstChar = b.charAt(0);
+           if (firstChar != 0x20 && firstChar != '\u0640') continue;
+           // if rest are just Mn or Me marks, then add to substitute mapping
+           int cp;
+           for (int j = 1; j < b.length(); j += UTF16.getCharCount(cp)) {
+               cp = UTF16.charAt(b,j);
+               int cat = data.ucd.getCategory(cp);
+               if (cat != data.ucd.Mn && cat != data.ucd.Me) continue main;
+           }
+           spacingMap.put(i, UTF16.valueOf(i));
+        }
+        String[][] specials = {
+                {"[\\u0384\\u1FFD]", "\u00B4"},
+                {"[\\uFFE3]", "\u00AF"},
+                {"[\\uFE49-\\uFE4C]", "\u203E"},
+                {"[\\u1FED]", "\u00A8\u0300"},
+                {"[\\u1FEE\\u0385]", "\u00A8\u0301"},
+                {"[\\u1FC1]", "\u00A8\u0342"},
+                {"[\\u1FBD]", "\u1FBF"},
+                {"[\\u1FCD]", "\u1FBF\u0300"},
+                {"[\\u1FCE]", "\u1FBF\u0301"},
+                {"[\\u1FCF]", "\u1FBF\u0342"},
+                {"[\\u1FDD]", "\u1FFE\u0300"},
+                {"[\\u1FDE]", "\u1FFE\u0301"},
+                {"[\\u1FDF]", "\u1FFE\u0342"},
+                {"[\\uFC5E]", "\uFE72\u0651"},
+                {"[\\uFC5F]", "\uFE74\u0651"},
+                {"[\\uFC60]", "\uFE76\u0651"},
+                {"[\\uFC61]", "\uFE78\u0651"},
+                {"[\\uFC62]", "\uFE7A\u0651"},
+                {"[\\uFC63]", "\uFE7C\u0670"},
+                {"[\\uFCF2]", "\uFE77\u0651"},
+                {"[\\uFCF3]", "\uFE79\u0651"},
+                {"[\\uFCF4]", "\uFE7B\u0651"},
+            };
+            int count = 0;
+            UnicodeSet mappedChars = spacingMap.keySet();
+            for (int i = 0; i < specials.length; ++i) {
+                UnicodeSet source = new UnicodeSet(specials[i][0]);
+                if (!mappedChars.containsAll(source)) {
+                    throw new InternalError("Remapping character that doesn't need it!" + source);
+                }
+                spacingMap.putAll(source, specials[i][1]);
+                count += source.size();
+            }
+            spacingMap.freeze();
     }
 
     /**

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateThaiBreaks.java,v $
-* $Date: 2004/02/07 01:01:14 $
-* $Revision: 1.4 $
+* $Date: 2006/09/24 23:32:44 $
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -14,9 +14,10 @@
 package com.ibm.text.UCD;
 import java.io.*;
 import com.ibm.icu.text.UTF16;
-import com.ibm.text.utility.*;
+//import com.ibm.text.utility;
 import com.ibm.icu.text.UnicodeSet;
-import java.util.*;
+import com.ibm.text.utility.Utility;
+//import java.util.*;
 
 public class GenerateThaiBreaks {
   public static void main(String [] args) throws IOException {

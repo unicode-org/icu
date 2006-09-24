@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Locale;
 
 import com.ibm.icu.dev.test.util.BagFormatter;
+import com.ibm.icu.dev.test.util.Tabber;
+import com.ibm.icu.dev.test.util.TransliteratorUtilities;
 import com.ibm.icu.dev.tool.UOption;
 import com.ibm.icu.text.SymbolTable;
 import com.ibm.icu.text.UTF16;
@@ -21,13 +23,15 @@ public class TestUnicodeInvariants {
     private static final int
     HELP1 = 0,
     FILE = 1,
-    RANGE = 2
+    RANGE = 2,
+    TABLE = 3
     ;
 
     private static final UOption[] options = {
         UOption.HELP_H(),
         UOption.create("file", 'f', UOption.REQUIRES_ARG),
-        UOption.create("range", 'r', UOption.NO_ARG),
+        UOption.create("norange", 'n', UOption.NO_ARG),
+        UOption.create("table", 't', UOption.NO_ARG),
     };
     
     public static void main(String[] args) throws IOException {
@@ -35,7 +39,10 @@ public class TestUnicodeInvariants {
 
     	String file = "UnicodeInvariants.txt";
     	if (options[FILE].doesOccur) file = options[FILE].value;
-    	boolean doRange = options[RANGE].doesOccur;
+    	boolean doRange = !options[RANGE].doesOccur;
+        System.out.println("File:\t" + file);
+        System.out.println("Ranges?\t" + doRange);
+        System.out.println("HTML?\t" + options[TABLE].doesOccur);
     	
         testInvariants(file, doRange);
     }
@@ -92,11 +99,19 @@ public class TestUnicodeInvariants {
        PrintWriter out = BagFormatter.openUTF8Writer(UCD_Types.GEN_DIR, "UnicodeInvariantResults.txt");
        out.write('\uFEFF'); // BOM
        BufferedReader in = BagFormatter.openUTF8Reader("com/ibm/text/UCD/", outputFile);
-       BagFormatter bf = new BagFormatter();
-       bf.setUnicodePropertyFactory(ToolUnicodePropertySource.make(""));
-       BagFormatter bf2 = new BagFormatter();
-       bf2.setUnicodePropertyFactory(ToolUnicodePropertySource.make(""));
-       bf2.setMergeRanges(doRange);
+       
+       BagFormatter errorLister = new BagFormatter();
+       errorLister.setMergeRanges(doRange);
+       errorLister.setUnicodePropertyFactory(ToolUnicodePropertySource.make(""));
+       errorLister.setShowLiteral(TransliteratorUtilities.toXML);
+       if (options[TABLE].doesOccur) errorLister.setTabber(new Tabber.HTMLTabber());
+       
+       BagFormatter showLister = new BagFormatter();
+       showLister.setUnicodePropertyFactory(ToolUnicodePropertySource.make(""));
+       showLister.setMergeRanges(doRange);
+       showLister.setShowLiteral(TransliteratorUtilities.toXML);
+       if (options[TABLE].doesOccur) showLister.setTabber(new Tabber.HTMLTabber());
+              
        ChainedSymbolTable st = new ChainedSymbolTable(new SymbolTable[] {
            ToolUnicodePropertySource.make(UCD.lastVersion).getSymbolTable("\u00D7"),
            ToolUnicodePropertySource.make(Default.ucdVersion()).getSymbolTable("")});
@@ -112,6 +127,7 @@ public class TestUnicodeInvariants {
            int pos = line.indexOf('#');
            if (pos >= 0) line = line.substring(0,pos).trim();
            if (line.length() == 0) continue;
+           if (line.equalsIgnoreCase("Stop")) break;
 
            // fix all the variables
            String oldLine = line;
@@ -133,12 +149,12 @@ public class TestUnicodeInvariants {
            		String part = line.substring(4).trim();
            		if (part.startsWith("Each")) {
            			part = part.substring(4).trim();
-           			bf2.setMergeRanges(false);
+           			showLister.setMergeRanges(false);
            		}
            		pp.setIndex(0);
            		UnicodeSet leftSet = new UnicodeSet(part, pp, st);
-           		bf2.showSetNames(out, leftSet);
-           		bf2.setMergeRanges(doRange);
+           		showLister.showSetNames(out, leftSet);
+           		showLister.setMergeRanges(doRange);
 				continue;
            }
            
@@ -210,7 +226,7 @@ public class TestUnicodeInvariants {
            out.println();
            out.println(String.valueOf(ok).toUpperCase(Locale.ENGLISH));
            out.println("**** START Error Info ****");
-           bf.showSetDifferences(out, rightSide, rightSet, leftSide, leftSet);
+           errorLister.showSetDifferences(out, rightSide, rightSet, leftSide, leftSet);
            out.println("**** END Error Info ****");
            out.println();
            testFailureCount++;      
