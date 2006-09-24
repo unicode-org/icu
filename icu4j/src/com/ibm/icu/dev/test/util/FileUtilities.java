@@ -72,7 +72,10 @@ public class FileUtilities {
     }
     
     public static String anchorize(String source) {
-    	return source.toLowerCase(Locale.ENGLISH).replaceAll("\\P{L}", "_");
+        String result = source.toLowerCase(Locale.ENGLISH).replaceAll("[^\\p{L}\\p{N}]+", "_");
+        if (result.endsWith("_")) result = result.substring(0,result.length()-1);
+        if (result.startsWith("_")) result = result.substring(1);
+    	return result;
     }
 }
 //#endif

@@ -484,7 +484,7 @@ public class BagFormatter {
 
             valueSize = getValueSource().getMaxWidth(shortValue);
             if (DEBUG) System.out.println("ValueSize: " + valueSize);
-            if (valueSize > 0) tabber.add(valueSize + 2,Tabber.LEFT); // value
+            if (getValueSource() != UnicodeLabel.NULL) tabber.add(valueSize + 2,Tabber.LEFT); // value
 
             tabber.add(3,Tabber.LEFT); // comment character
 
@@ -555,7 +555,7 @@ public class BagFormatter {
             } else {
                 String thing = o.toString();
                 String value = getValueSource() == UnicodeLabel.NULL ? "" : getValueSource().getValue(thing, ",", true);
-                if (value.length() != 0) value = "\t; " + value;
+                if (getValueSource() != UnicodeLabel.NULL) value = "\t; " + value;
                 String label = getLabelSource(true) == UnicodeLabel.NULL ? "" : getLabelSource(true).getValue(thing, ",", true);
                 if (label.length() != 0) label = " " + label;
                 output.print(

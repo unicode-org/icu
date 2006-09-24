@@ -155,6 +155,13 @@ public abstract class Tabber {
         
     }
     
+    public static Tabber NULL_TABBER = new Tabber() {
+        public void process_field(int count, String source, int start, int limit, StringBuffer output) {
+            if (count > 0) output.append( "\t");
+            output.append(source.substring(start, limit));
+        }
+    };
+    
     public static class HTMLTabber extends Tabber {
         private List parameters = new ArrayList();
         {
