@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateBreakTest.java,v $
-* $Date: 2006/04/05 22:12:44 $
-* $Revision: 1.14 $
+* $Date: 2006/09/24 23:32:44 $
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */
@@ -16,14 +16,17 @@ package com.ibm.text.UCD;
 import java.util.*;
 import java.io.*;
 
+import org.unicode.cldr.util.Segmenter;
+
 import com.ibm.text.utility.*;
+import com.ibm.icu.dev.test.util.UnicodeMap;
 import com.ibm.icu.dev.test.util.UnicodeProperty;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 
 abstract public class GenerateBreakTest implements UCD_Types {
 
-    static boolean DEBUG = false;
+    static boolean DEBUG = true;
     static final boolean SHOW_TYPE = false;
     UCD ucd;
     Normalizer nfd;
@@ -122,7 +125,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
     }
 
     // quick & dirty routine
-    String insertEverywhere(String source, String insertion, GenerateBreakTest breaker) {
+    static String insertEverywhere(String source, String insertion, GenerateBreakTest breaker) {
         String result = insertion;
         for (int i = 0; i < source.length(); ++i) {
             result += source.charAt(i);
@@ -291,6 +294,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
     private String[] ruleList = new String[100];
     private int ruleListCount = 0;
     protected boolean collectingRules = false;
+	protected boolean needsFullBreakSample = true;
     
     public void setRule(String rule) {
         if (collectingRules) {
@@ -330,6 +334,12 @@ abstract public class GenerateBreakTest implements UCD_Types {
         out.println("<h2>" + fileName + " Break Chart</h2>");
         out.println("<p><b>Unicode Version:</b> " + ucd.getVersion() + "</p>");
         out.println("<p><b>Date:</b> " + Default.getDate() + "</p>");
+        out.println("<p>This page illustrates the application of the boundary specifications. " +
+        		"The first chart shows where breaks would appear between different sample characters or strings. " +
+        		"The sample characters are chosen mechanically to represent the different properties used by the specification. " +
+        		"Where properties used in the rules have 'overlaps', the samples are given 'composed' names. " +
+        		"For example, SentenceBreak uses GCLF_Sep: Sep is the SentenceBreak property, but it overlaps with the GraphemeClusterBreak property LF." +
+        		"</p>");
         generateTable(out);
         
 
@@ -485,8 +495,8 @@ abstract public class GenerateBreakTest implements UCD_Types {
             result.append(ucd.getCodeAndName(cp));
             result.append(", gc=" + ucd.getCategoryID_fromIndex(ucd.getCategory(cp),SHORT));
             result.append(", sc=" + ucd.getScriptID_fromIndex(ucd.getScript(cp),SHORT));
-            result.append(", lb=" + ucd.getLineBreakID_fromIndex(ucd.getLineBreak(cp))
-                + "=" + ucd.getLineBreakID_fromIndex(ucd.getLineBreak(cp), LONG));
+            //result.append(", lb=" + ucd.getLineBreakID_fromIndex(ucd.getLineBreak(cp))
+            //    + "=" + ucd.getLineBreakID_fromIndex(ucd.getLineBreak(cp), LONG));
         }
         return result.toString();
     }
@@ -560,19 +570,41 @@ abstract public class GenerateBreakTest implements UCD_Types {
         }
         
         // gather the data for the rules
+        if (needsFullBreakSample ) {
         collectingRules = true;
         isBreak(fullBreakSample(), 1);
         collectingRules = false;
+        }
         
         out.println("<h3>Rules</h3>");
-        out.println("<ul>");
+        out.println("<p>Due to the way they have been mechanically processed for generation, " +
+        		"the following rules do not match the UAX rules precisely. " +
+        		"In particular:</p>"+
+        		"<ol>" +
+        		"<li>The rules are cast into a more regex-style.</li>"+
+        		"<li>The rules \"sot ÷\", \"÷ eot\", and \"÷ Any\" are added mechanically, and have artificial numbers.</li>"+
+        		"<li>The rules are given decimal numbers, so rules such as 11a are given a number using tenths, such as 11.1.</li>"+
+        		"<li>Where a rule has multiple parts (lines), each one is numbered using hundredths, such as 21.01) × BA, 21.02) × HY,...</li>"+
+        		"<li>Any 'treat as' or 'ignore' rules are handled as discussed in Unicode Standard Annex #29, and thus" +
+        		"reflected in a transformation of the rules not visible here.</li>" +
+        		"</ol>" +
+        		"<p>For the original rules, see the UAX.</p>"
+
+        		);
+        out.println("<ul style='list-style-type: none'>");
             for (int ii = 0; ii < ruleListCount; ++ii) {
-                out.println("<li>" + ruleList[ii] + "</li>");
+                out.println("<li>" + ruleList[ii].replaceAll("[$]","") + "</li>");
             }
         out.println("</ul>");
         
         if (extraSingleSamples.length > 0) {
             out.println("<h3>Sample Strings</h3>");
+            out.println("<p>" +
+            		"The following samples illustrate the application of the rules. " +
+            		"The blue lines indicate possible break points. " +
+            		"If your browser supports titles, then positioning the mouse over each character will show its name, " +
+            		"white positioning between characters shows the rule number of the rule responsible for the break-status." +
+            		"</p>");
             out.println("<ol>");
                 for (int ii = 0; ii < extraSingleSamples.length; ++ii) {
                     out.println("<li><font size='5'>");
@@ -631,6 +663,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
 
         if (comments && !html) string.append(comment);
         out.println(string);
+        if (DEBUG) System.out.println("*" + string);
     }
 
     public void findSamples() {
@@ -642,7 +675,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
         BitSet bitset = new BitSet();
         Map list = new TreeMap();
 
-        for (int i = 1; i <= 0x10FFFF; ++i) {
+        for (int i = 1; i <= 0xFFFF; ++i) {
             if (!ucd.isAllocated(i)) continue;
             if (0xD800 <= i && i <= 0xDFFF) continue;
             if (DEBUG && i == 0x1100) {
@@ -657,6 +690,9 @@ abstract public class GenerateBreakTest implements UCD_Types {
             }
 
             int combined = (mapType(lb) << 7) + mapType(lb2);
+            if (combined < 0) {
+            	throw new IllegalArgumentException("should never happen");
+            }
             if (!bitset.get(combined)) {
                 bitset.set(combined);
                 list.put(new Integer(combined), UTF16.valueOf(i));
@@ -777,10 +813,142 @@ abstract public class GenerateBreakTest implements UCD_Types {
 
 
     //==============================================
+    
+    static class XGenerateBreakTest extends GenerateBreakTest {
+    	Segmenter seg;
+    	String sample;
+    	{
+    		needsFullBreakSample = false;
+    	}
+    	
+    	public XGenerateBreakTest(UCD ucd, Segmenter.Builder segBuilder, String sample, String filename, String[] extraSamples, String[] extraSingleSamples) {
+    		super(ucd);
+    		this.seg = segBuilder.make();
+    		this.sample = sample;
+    		List rules = segBuilder.getRules();
+    		collectingRules = true;
+    		for (Iterator it = rules.iterator(); it.hasNext();) {
+    			String rule = (String)it.next();
+    			setRule(rule);
+    		}
+    		collectingRules = false;
+    		map.add("Other", new UnicodeSet(0,0x10FFFF));
+    		UnicodeMap segSamples = seg.getSamples();
+    		Collection x = segSamples.getAvailableValues();
+    		for (Iterator it = x.iterator(); it.hasNext();) {
+    			String label = (String)it.next();
+    			map.add(label, segSamples.getSet(label), true, false);
+    		}
+            this.fileName = filename;
+            sampleMap = map;
+            this.extraSamples = extraSamples;
+            this.extraSingleSamples = extraSingleSamples;
+    	}
 
-    static class GenerateGraphemeBreakTest extends GenerateBreakTest {
+		public boolean isBreak(String source, int offset) {
+			boolean result = seg.breaksAt(source, offset);
+			setRule(String.valueOf(seg.getBreakRule()));
+			return result;
+		}
 
-        GenerateGraphemeBreakTest(UCD ucd) {
+		public String fullBreakSample() {
+			return sample;
+		}
+
+        // stuff that subclasses need to override
+        public String getTypeID(int cp) {
+            return map.getLabel(cp);
+        }
+
+        // stuff that subclasses need to override
+        public byte getType(int cp) {
+            return (byte) map.getIndex(cp);
+        }    
+    }
+    
+    static class GenerateGraphemeBreakTest extends XGenerateBreakTest {
+		public GenerateGraphemeBreakTest(UCD ucd) {
+	        super(ucd, Segmenter.make(ToolUnicodePropertySource.make(ucd.getVersion()),"GraphemeClusterBreak"), "aa", "Grapheme",
+	        		new String[]{}, new String[]{});
+		}	
+    }
+
+    static class GenerateLineBreakTest extends XGenerateBreakTest {
+		public GenerateLineBreakTest(UCD ucd) {
+	        super(ucd, Segmenter.make(ToolUnicodePropertySource.make(ucd.getVersion()),"LineBreak"), "aa", "Line",
+	        	new String[]{}, new String[] {
+	        	"can't", "can\u2019t", "ab\u00ADby",
+	             "-3",
+	             "e.g.",
+	             "\u4e00.\u4e00.",
+	              "a  b",
+	              "a  \u200bb",
+	              "a \u0308b",
+	              "1\u0308b(a)-(b)",
+	              });
+		}	
+    }
+    
+    static class GenerateSentenceBreakTest extends XGenerateBreakTest {
+		public GenerateSentenceBreakTest(UCD ucd) {
+	        super(ucd, Segmenter.make(ToolUnicodePropertySource.make(ucd.getVersion()),"SentenceBreak"), "aa", "Sentence",
+	        		new String[]{},
+	        		getExtraSamples());
+		}	
+		static String[] getExtraSamples() {
+            GenerateBreakTest grapheme = new GenerateGraphemeBreakTest(Default.ucd());
+	        String[] extraSingleSamples = new String[] {
+	                "(\"Go.\") (He did.)", 
+	                "(\u201CGo?\u201D) (He did.)", 
+	                "U.S.A\u0300. is", 
+	                "U.S.A\u0300? He", 
+	                "U.S.A\u0300.", 
+	                "3.4", 
+	                "c.d",
+	                "etc.)\u2019 \u2018(the",
+	                "etc.)\u2019 \u2018(The",
+	                "the resp. leaders are",
+	                "\u5B57.\u5B57",
+	                "etc.\u5B83",
+	                "etc.\u3002",
+	                "\u5B57\u3002\u5B83",
+	            };
+	            String[] temp = new String [extraSingleSamples.length * 2];
+	            System.arraycopy(extraSingleSamples, 0, temp, 0, extraSingleSamples.length);
+	            for (int i = 0; i < extraSingleSamples.length; ++i) {
+	                temp[i+extraSingleSamples.length] = insertEverywhere(extraSingleSamples[i], "\u2060", grapheme);
+	            }
+	            extraSingleSamples = temp;
+	            return extraSingleSamples;
+		}
+    }
+
+    static class GenerateWordBreakTest extends XGenerateBreakTest {
+		public GenerateWordBreakTest(UCD ucd) {
+	        super(ucd, Segmenter.make(ToolUnicodePropertySource.make(ucd.getVersion()),"WordBreak"), "aa", "Word",
+	    	        new String[] {
+                /*"\uFF70", "\uFF65", "\u30FD", */ "a\u2060", "a:", "a'", "a'\u2060", "a,", "1:", "1'", "1,",  "1.\u2060"
+            	},
+
+
+	        	getExtraSamples());
+		}	
+		static String[] getExtraSamples() {
+            GenerateBreakTest grapheme = new GenerateGraphemeBreakTest(Default.ucd());
+	                String [] temp = {"can't", "can\u2019t", "ab\u00ADby", "a$-34,567.14%b", "3a" };
+	                String[] extraSingleSamples = new String [temp.length * 2];
+	                System.arraycopy(temp, 0, extraSingleSamples, 0, temp.length);
+	                for (int i = 0; i < temp.length; ++i) {
+	                    extraSingleSamples[i+temp.length] = insertEverywhere(temp[i], "\u2060", grapheme);
+	                }
+
+	            return extraSingleSamples;
+		}
+    }
+
+    static class OLDGenerateGraphemeBreakTest extends GenerateBreakTest {
+
+    	OLDGenerateGraphemeBreakTest(UCD ucd) {
             super(ucd);
             fileName = "Grapheme";
             sampleMap = map;
@@ -866,13 +1034,13 @@ abstract public class GenerateBreakTest implements UCD_Types {
 
     //==============================================
 
-    static class GenerateWordBreakTest extends GenerateBreakTest {
+    static class XGenerateWordBreakTest extends GenerateBreakTest {
         
         GenerateGraphemeBreakTest grapheme;
         MyBreakIterator breaker;
         Context context = new Context();
 
-        GenerateWordBreakTest(UCD ucd) {
+        XGenerateWordBreakTest(UCD ucd) {
             super(ucd);
             grapheme = new GenerateGraphemeBreakTest(ucd);
             breaker = new MyBreakIterator(grapheme);
@@ -1017,13 +1185,13 @@ abstract public class GenerateBreakTest implements UCD_Types {
 
     // ========================================
 
-    static class GenerateLineBreakTest extends GenerateBreakTest {
+    static class XGenerateLineBreakTest extends GenerateBreakTest {
 
         GenerateGraphemeBreakTest grapheme;
         MyBreakIterator breaker;
         Context context = new Context();
 
-        GenerateLineBreakTest(UCD ucd) {
+        XGenerateLineBreakTest(UCD ucd) {
             super(ucd);
             grapheme = new GenerateGraphemeBreakTest(ucd);
             breaker = new MyBreakIterator(grapheme);
@@ -1505,12 +1673,12 @@ abstract public class GenerateBreakTest implements UCD_Types {
 
     //==============================================
 
-    static class GenerateSentenceBreakTest extends GenerateBreakTest {
+    static class XGenerateSentenceBreakTest extends GenerateBreakTest {
         
         GenerateGraphemeBreakTest grapheme;
         MyBreakIterator breaker;
         
-        GenerateSentenceBreakTest(UCD ucd) {
+        XGenerateSentenceBreakTest(UCD ucd) {
             super(ucd);
             grapheme = new GenerateGraphemeBreakTest(ucd);
             breaker = new MyBreakIterator(grapheme);

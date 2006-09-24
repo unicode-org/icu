@@ -331,11 +331,10 @@ AC00..D7A3     # Lo [11172] HANGUL SYLLABLE GA..HANGUL SYLLABLE HIH
 </ol>
 <h3>5. UCA</h3>
 <ol>
-	<li>
-	You will use com.ibm.text.UCA.Main as your main class, creating along 
+	<li>You will use com.ibm.text.UCA.Main as your main class, creating along 
 	the same lines as above.</li>
 	<li>To test whether the UCA files are valid, use the
-	<span style="font-weight: 400">options (<i>note: you should also build the ICU 
+	<span style="font-weight: 400">options (<i>note: you must also build the ICU 
 	files below, since they test other aspects</i>).</span><pre>writeCollationValidityLog</pre>
 	<p>It will create a file:</p>
 	<pre><a href="file:///C:/DATA/GEN/collation/5.0.0/CheckCollationValidity.html">C:\DATA\GEN\collation\5.0.0\CheckCollationValidity.html</a></pre>
@@ -354,24 +353,45 @@ AC00..D7A3     # Lo [11172] HANGUL SYLLABLE GA..HANGUL SYLLABLE HIH
 		</ol></li>
 	</ol></li>
 	<li>
-	<h4><span style="font-weight: 400">To build all the charts, use the options:
-	</span> </h4>
+	<h4><span style="font-weight: 400">To build all the charts (including for 
+	the UCA), use the options: </span></h4>
 	<pre>normalizationChart caseChart scriptChart indexChart</pre>
+	<p>They will be built into</p>
+	<pre><a href="file:///C:/DATA/GEN/charts">C:\DATA\GEN\charts</a></pre>
+	<p><b>Once UCA is released, then copy those files up to the right spots in 
+	the Unicode site:</b><ul>
+		<li>
+		<pre><a href="http://www.unicode.org/charts/normalization/">http://www.unicode.org/charts/normalization/</a></pre>
+		</li>
+		<li>
+		<pre><a href="http://www.unicode.org/charts/collation/">http://www.unicode.org/charts/collation/</a> </pre>
+		</li>
+		<li>
+		<pre><a href="http://www.unicode.org/charts/case/">http://www.unicode.org/charts/case/</a> </pre>
+		</li>
+		<li>
+		<pre><a href="http://www.unicode.org/charts/collation/">http://www.unicode.org/charts/collation/</a> </pre>
+		</li>
+	</ul>
 	</li>
 	<li>
 	<h4><span style="font-weight: 400">To build all the UCA files used by ICU, use the 
 	option:</span></h4>
 	<pre>ICU</pre>
+	<p>They will be built into:</p>
+	<pre><a href="file:///C:/DATA/GEN/collation/5.0.0">C:\DATA\GEN\collation\5.0.0</a></pre>
 	</li>
 	<li>You should then build a set of the ICU files for the previous version, 
-	if you don't have them. The key file is UCA_Rules_NoCE.txt. It contains the 
-	rules expressed in ICU format, which allows for comparison across versions 
-	of UCA.<ol>
-	<li>Do a Diff, and verify that all the differences are either new 
-	characters, or were authorized to be changed by the UTC.</li>
-</ol>
-
-	</li>
+	if you don't have them. Use the options:<pre>version 4.1.0 ICU</pre>
+	<p>Or whatever the last version was.</li>
+	<li>Now, you will want to compare versions. The key file is 
+	UCA_Rules_NoCE.txt. It contains the rules expressed in ICU format, which 
+	allows for comparison across versions of UCA without spurious variations of 
+	the numbers getting in the way.<ol>
+		<li>Do a Diff between the last and current versions of these files, and 
+		verify that all the differences are either new characters, or were 
+		authorized to be changed by the UTC.</li>
+	</ol></li>
 </ol>
 
 </body>

@@ -1,5 +1,5 @@
-Generate: .*
-DeltaVersion: 16
+Generate: .*BreakTest.*
+DeltaVersion: 17
 CopyrightYear: 2006
 
 File: auxiliary/GraphemeBreakProperty
