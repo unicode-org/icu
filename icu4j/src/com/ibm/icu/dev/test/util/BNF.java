@@ -143,9 +143,7 @@ public class BNF {
         throw new IllegalArgumentException(msg
         + "\r\n" + t.toString());
     }
-    
-    
-    
+ 
     private boolean addRule() {
         int type = t.next();
         if (type == Tokenizer.DONE) return false;
@@ -320,6 +318,15 @@ public class BNF {
             result[i] = ((Integer)list.get(i)).intValue();
         }
         return result;
+    }
+
+    public int getMaxRepeat() {
+      return maxRepeat;
+    }
+
+    public BNF setMaxRepeat(int maxRepeat) {
+      this.maxRepeat = maxRepeat;
+      return this;
     }
 }
 //#endif
