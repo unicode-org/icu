@@ -26,6 +26,82 @@ public class UnicodeSetTest extends TestFmwk {
     public static void main(String[] args) throws Exception {
         new UnicodeSetTest().run(args);
     }
+    
+    
+    public void TestPropertyAccess() {
+      // test to see that all of the names work
+      for (int propNum = UProperty.BINARY_START; propNum < UProperty.INT_LIMIT; ++propNum) {
+        for (int nameChoice = UProperty.NameChoice.SHORT; nameChoice <= UProperty.NameChoice.LONG; ++nameChoice) {
+          if (propNum >= UProperty.BINARY_LIMIT && propNum < UProperty.INT_START) continue; // skip the gap
+          String propName;
+          try {
+            propName = UCharacter.getPropertyName(propNum, nameChoice);
+            if (propName == null) {
+              if (nameChoice == UProperty.NameChoice.SHORT) continue; // allow non-existent short names
+              throw new NullPointerException();
+            }
+          } catch (RuntimeException e1) {
+            errln("Can't get property name for: "
+                + "Property (" + propNum + ")"
+                + ", NameChoice: " + nameChoice + ", "
+                + e1.getClass().getName());
+            continue;
+          }
+          logln("Property (" + propNum + "): " + propName);
+          for (int valueNum = UCharacter.getIntPropertyMinValue(propNum); valueNum <= UCharacter.getIntPropertyMaxValue(propNum); ++valueNum) {
+            String valueName;
+            try {
+              valueName = UCharacter.getPropertyValueName(propNum, valueNum, nameChoice);
+              if (valueName == null) {
+                if (nameChoice == UProperty.NameChoice.SHORT) continue; // allow non-existent short names
+                throw new NullPointerException();
+              }
+            } catch (RuntimeException e1) {
+              // HACK for now
+              if (skipIfBeforeICU(3,7)) {
+                if (propNum == 4098 && e1 instanceof NullPointerException) {
+                  continue;
+                }
+                if (propNum == 4112 || propNum == 4113) {
+                  continue;
+                }
+              }
+              errln("Can't get property value name for: "
+                  + "Property (" + propNum + "): " + propName + ", " 
+                  + "Value (" + valueNum + ") "
+                  + ", NameChoice: " + nameChoice + ", "
+                  + e1.getClass().getName());
+              continue;
+            }
+            logln("Value (" + valueNum + "): " + valueName);
+            UnicodeSet testSet;
+            try {
+              testSet = new UnicodeSet("[:" + propName + "=" + valueName + ":]");
+            } catch (RuntimeException e) {
+              errln("Can't create UnicodeSet for: "
+                  + "Property (" + propNum + "): " + propName + ", " 
+                  + "Value (" + valueNum + "): " + valueName + ", "
+                  + e.getClass().getName());
+              continue;
+            }
+            UnicodeSet collectedErrors = new UnicodeSet();
+            for (UnicodeSetIterator it = new UnicodeSetIterator(testSet); it.next();) {
+              int value = UCharacter.getIntPropertyValue(it.codepoint, propNum);
+              if (value != valueNum) {
+                collectedErrors.add(it.codepoint);
+              }
+            }
+            if (collectedErrors.size() != 0) {
+              errln("Property Value Differs: " 
+                  + "Property (" + propNum + "): " + propName + ", " 
+                  + "Value (" + valueNum + "): " + valueName + ", "
+                  + "Differing values: " + collectedErrors.toPattern(true));
+            }
+          }
+        }
+      }
+    }
+
 
     /**
      * Test toPattern().
