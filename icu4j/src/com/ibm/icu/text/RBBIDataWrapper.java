@@ -12,8 +12,6 @@ import java.io.InputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 
-import com.ibm.icu.impl.ICUData;
-import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Trie;
 import com.ibm.icu.impl.CharTrie;
 
@@ -87,16 +85,6 @@ final class RBBIDataWrapper {
     final static int      RBBI_LOOKAHEAD_HARD_BREAK = 1;
     final static int      RBBI_BOF_REQUIRED         = 2;  
     
-    //  Getters for fields from the state table header
-    //
-    final static int   getNumStates(short  table[]) {
-        int  hi = table[NUMSTATES];
-        int  lo = table[NUMSTATES+1];
-        int  val = (hi<<16) + (lo&0x0000ffff);
-        return val;
-     }
-    
-    
     /**
      * Data Header.  A struct-like class with the fields from the RBBI data file header.
      */
@@ -159,12 +147,6 @@ final class RBBIDataWrapper {
     RBBIDataWrapper() {
     }
 
-    static RBBIDataWrapper get(String name) throws IOException {
-        String  fullName = "data/" + name;
-        InputStream is = ICUData.getRequiredStream(fullName);
-        return get(is);
-    }
-    
     /*
      *  Get an RBBIDataWrapper from an InputStream onto a pre-compiled set
      *  of RBBI rules.
@@ -340,9 +322,19 @@ final class RBBIDataWrapper {
         }
         return This;
     }
-    
-    
-    
+
+    ///CLOVER:OFF
+    //  Getters for fields from the state table header
+    //
+    final static int   getNumStates(short  table[]) {
+        int  hi = table[NUMSTATES];
+        int  lo = table[NUMSTATES+1];
+        int  val = (hi<<16) + (lo&0x0000ffff);
+        return val;
+    }
+    ///CLOVER:ON
+
+    ///CLOVER:OFF
     /** Debug function to display the break iterator data.  
      *  @internal
      */
@@ -362,7 +354,9 @@ final class RBBIDataWrapper {
         System.out.println("Source Rules: " + fRuleSource);
         
     }
-    
+    ///CLOVER:ON
+
+    ///CLOVER:OFF
     /** Fixed width int-to-string conversion.   
      *  @internal
      * 
@@ -375,7 +369,9 @@ final class RBBIDataWrapper {
         }
         return dest.toString();
     }
-    
+    ///CLOVER:ON
+
+    ///CLOVER:OFF
     /** Fixed width int-to-string conversion.   
      *  @internal
      * 
@@ -388,7 +384,9 @@ final class RBBIDataWrapper {
         }
         return dest.toString();
     }
-    
+    ///CLOVER:ON
+
+    ///CLOVER:OFF
     /** Dump a state table.  (A full set of RBBI rules has 4 state tables.)  */
     private void dumpTable(short table[]) {
         if (table == null)   {
@@ -411,7 +409,9 @@ final class RBBIDataWrapper {
             System.out.println();
         }
     }
-    
+    ///CLOVER:ON
+
+    ///CLOVER:OFF
     /**
      * Dump (for debug) a single row of an RBBI state table
      * @param table
@@ -440,7 +440,9 @@ final class RBBIDataWrapper {
 
         System.out.println(dest);
     }
-    
+    ///CLOVER:ON
+
+    ///CLOVER:OFF
     private void dumpCharCategories() {
         int n = fHeader.fCatCount;
         String   catStrings[] = new  String[n+1];
@@ -492,7 +494,14 @@ final class RBBIDataWrapper {
         }
         System.out.println();
     }
-    
+    ///CLOVER:ON
+
+    /*static RBBIDataWrapper get(String name) throws IOException {
+        String  fullName = "data/" + name;
+        InputStream is = ICUData.getRequiredStream(fullName);
+        return get(is);
+    }
+
     public static void main(String[] args) {
         String s;
         if (args.length == 0) {
@@ -512,6 +521,5 @@ final class RBBIDataWrapper {
            System.out.println("Exception: " + e.toString());
        }
            
-    }
-
+    }*/
 }
