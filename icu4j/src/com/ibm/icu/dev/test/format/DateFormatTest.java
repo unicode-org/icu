@@ -309,12 +309,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     }
 
     public void TestGenericTime() {
-        if (System.getSecurityManager() != null) {
-            // !!! if we're running under a security manager, JDKTimeZone won't return the right
-            // dst offset values for us in a few cases around the DST changeover, so ignore this test.
-            warnln("cannot pass under security manager");
-            return;
-        }
+
 
         // any zone pattern should parse any zone
         Locale en = new Locale("en", "", "");

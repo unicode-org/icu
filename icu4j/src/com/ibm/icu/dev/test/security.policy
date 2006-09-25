@@ -1,3 +1,10 @@
+//#
+ //#*******************************************************************************
+//#* Copyright (C) 1997-2006, International Business Machines Corporation and    *
+//#* others. All Rights Reserved.                                                *
+//#*******************************************************************************
+//#* This is the ant build file for ICU4J.  See readme.html for more information.
+//#*
 // policies needed to run tests
 grant // codebase "file:${user.dir}/icu4jtests.jar"
 {
@@ -13,9 +20,14 @@ grant // codebase "file:${user.dir}/icu4jtests.jar"
 	// needed for TestUtils
 	permission java.util.PropertyPermission "ICUDataPath", "read";
 	permission java.util.PropertyPermission "user.dir", "read";
-
-	// time zone tests
+    permission java.util.PropertyPermission "U_RBBIDEBUG", "read";
+	
+    // time zone tests
 	permission java.util.PropertyPermission "user.timezone", "read";
+    
+    //for charsets
+    permission java.lang.RuntimePermission "charsetProvider", "read";
+
 };
 
 // there must be a way for code in one jar file to call code in another jar
@@ -31,4 +43,5 @@ grant // codebase "file:${user.dir}/icu4jtests.jar"
 grant codebase "file:${user.dir}/icu4j.jar"
 {
 	permission java.io.FilePermission "${/}${user.dir}${/}icu4jtests.jar", "read";
+	permission java.io.FilePermission "${/}${user.dir}${/}icu4j-charsets.jar", "read";
 };

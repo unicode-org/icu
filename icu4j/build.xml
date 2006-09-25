@@ -473,9 +473,23 @@
     </target>
     
     <target name="jarTests" depends="tests,jar" description="build runtime 'icu4jtests.jar' jar file">
-        <jar jarfile="${testjar.file}" compress="true" manifest="${icu4j.tests.manifest}">
+        <jar jarfile="${testjar.file}" compress="true">
             <fileset dir="${build.dir}" includes="com/ibm/icu/dev/test/**/*"/>
             <fileset dir="${build.dir}" includes="com/ibm/icu/dev/data/**/*"/>
+            <manifest>
+                <attribute name="Built-By" value="${corp}"/>
+                <section name="common">
+                  <attribute name="Specification-Title" value="ICU4J Tests"/>
+                  <attribute name="Specification-Version" value="${icu4j.version.string}"/>
+                  <attribute name="Specification-Vendor" value="ICU"/>
+                  <attribute name="Implementation-Title" value=" ICU for Java Tests"/>
+                  <attribute name="Implementation-Version" value="${icu4j.version.string}"/> 
+                  <attribute name="Implementation-Vendor" value="${corp}"/>
+                  <attribute name="Implementation-Vendor-Id" value="com.ibm"/>
+                  <attribute name="Copyright-Info" value="${copyright}"/>
+                  <attribute name="Sealed" value="false"/>
+                </section>
+            </manifest>
         </jar>
     </target>
 
@@ -678,8 +692,8 @@
         <!-- <jvmarg value="-Djava.security.debug=access:failure,domain"/> -->
             <jvmarg value="-Djava.security.manager"/>
             <jvmarg value="-Djava.security.policy=${src.dir}/com/ibm/icu/dev/test/security.policy"/>
-            <!-- jvmarg value="-Djava.security.debug=access:failure"/ -->
-            <arg value="-w"/>
+            <!--<jvmarg value="-Djava.security.debug=access:failure"/>-->
+             <arg value="-w"/>
             <classpath>
                 <pathelement location="clover.jar"/>
                 <pathelement location="${jar.file}"/>

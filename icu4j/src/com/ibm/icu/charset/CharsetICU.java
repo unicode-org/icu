@@ -144,14 +144,6 @@ public abstract class CharsetICU extends Charset{
            final Constructor c = cs.getConstructor(paramTypes);
            Object[] params = new Object[]{ icuCanonicalName, javaCanonicalName, aliases};
            
-           java.security.AccessController.doPrivileged
-           (new java.security.PrivilegedAction() {
-                   public Object run() {
-                       c.setAccessible(true);
-                       return null;
-                   }
-               });
-
            // Run constructor
            try {
                Object obj = c.newInstance(params);
