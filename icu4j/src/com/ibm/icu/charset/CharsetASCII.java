@@ -123,6 +123,8 @@ class CharsetASCII extends CharsetICU {
                         ch = UCharacter.getCodePoint((char)ch, trail);
                         /* convert this supplementary code point */
                         /* callback(unassigned) */
+                        cr = CoderResult.unmappableForLength(sourceArrayIndex);
+                        doloop = false;
                     } else {
                         /* this is an unmatched lead code unit (1st surrogate) */
                         /* callback(illegal) */
