@@ -4,7 +4,7 @@
   <meta http-equiv="Content-Type"
  content="text/html; charset=iso-8859-1">
   <meta name="Copyright"
- content="Copyright (c) 2001-2005, International Business Machines Corporation and others. All Rights Reserved.">
+ content="Copyright (c) 2001-2006, International Business Machines Corporation and others. All Rights Reserved.">
   <meta name="Author" content="Eric Mader">
   <meta name="GENERATOR"
  content="Mozilla/4.72 [en] (Windows NT 5.0; U) [Netscape]">
@@ -31,7 +31,7 @@ verified that the text is displayed correctly, gendata is run to
 produce
 testdata.cpp, and then letest is run on Windows to verify that letest
 still works with the new data.) <br>
-&nbsp; </p>
+</p>
 <h2> How do I build letest?</h2>
 First, you need to build ICU, including the LayoutEngine.
 <p>On Windows, the layout project should be listed as a dependency of
@@ -45,7 +45,7 @@ layout should build when you do "make all install" </p>
 &lt;icu&gt;\source\test\letest and build it. On UNIX systems, connect
 to
 &lt;top-build-dir&gt;/test/letest and do "make all" <br>
-&nbsp; </p>
+</p>
 <h2> How do I run letest?</h2>
 Before you can run letest, you'll need to get the fonts it uses. For
 legal reasons, we can't include them with ICU, but you can download
@@ -53,7 +53,7 @@ them
 from the web. To do this, you'll need access to a computer running
 Windows. Here's how to get the fonts:
 <p>Download a recent version of the Java 2 Platform, Standard Edition
-(J2SE) from <a href="http://java.sun.com/j2se.index.jsp">java.sun.com</a>.
+(J2SE) from <a href="http://java.sun.com/javase/downloads/">java.sun.com</a>.
 From this page, follow the link for the version you want to download,
 and then select the "Downloads" link on the left side of the page.
 Select either the SDK or the JRE. (The JRE is sufficient for letest.)
@@ -64,9 +64,9 @@ example, "C:\j2sdk1.4.2_06/jre/lib/fonts. The file you want is
 "LucidaSansRegular.ttf". Copy this file into the directory from which
 you'll run letest.<br>
 </p>
-<p>Next is the Hindi font. Go to the&nbsp; NCST site and download&nbsp;<a
- href="http://rohini.ncst.ernet.in/indix/download/font/raghu.ttf">
-raghu.ttf</a>. Be sure to look at the <a
+<p>Next is the Hindi font. Go to the NCST site and download <a
+ href="http://rohini.ncst.ernet.in/indix/download/font/raghu.ttf">raghu.ttf</a>.
+Be sure to look at the <a
  href="http://rohini.ncst.ernet.in/indix/download/font/README">README</a>
 file before you download the font. You can download raghu.ttf into the
 directory from which you'll run letest.<br>
@@ -77,8 +77,8 @@ and click on the link for the Angsana font. This will download a .ZIP
 file. Extract the font file, angsd___.ttf, into the directory from
 which you will run letest.<br>
 </p>
-<p>There's still one more font to get, the Code2000 Unicode font.Go to
-James Kass' &nbsp;<a href="http://home.att.net/%7Ejameskass/">Unicode
+<p>There's still one more font to get, the Code2000 Unicode font. Go to
+James Kass' <a href="http://www.code2000.net/">Unicode
 Support In Your Browser</a> page and click on the link that says "Click
 Here to download Code2000 shareware demo Unicode font." This will
 download a .ZIP file which contains CODE2000.TTF and CODE2000.HTM.
@@ -90,7 +90,7 @@ shareware. If you want to use it for longer than a trial period, you
 should send a shareware fee to James. Directions for how to do this are
 in CODE2000.HTM.</p>
 <p>That's it! Now all you have to do is run letest (CTRL+F5 in Visual
-C++, or "./letest" in UNIX) If&nbsp; everything's OK you should see
+C++, or "./letest" in UNIX) If everything's OK you should see
 something like this: </p>
 <blockquote><tt>Test 0, font = raghu.ttf... passed.</tt> <br>
   <tt>Test 1, font = CODE2000.TTF... passed.</tt> <br>
