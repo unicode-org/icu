@@ -1196,6 +1196,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
             
             if(DEBUG)System.out.println("The bundle created is: "+b+" and disableFallback="+disableFallback+" and bundle.getNoFallback="+(b!=null && b.getNoFallback()));
             if(disableFallback || (b!=null && b.getNoFallback())){
+                addToCache(root, fullName, defaultLocale, b);
                 // no fallback because the caller said so or because the bundle says so
                 return b;
             }
@@ -1232,7 +1233,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
                 if (i != -1) {
                     parent = instantiateBundle(baseName, localeName.substring(0, i), root, disableFallback);
                 }else if(!localeName.equals(rootLocale)){
-                    parent = ICUResourceBundleImpl.createBundle(baseName, rootLocale, root);   
+                    parent = instantiateBundle(baseName, rootLocale, root, true);   
                 }
                 
                 if(!b.equals(parent)){
