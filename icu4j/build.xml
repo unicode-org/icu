@@ -428,11 +428,11 @@
     <target name="jarRelease" depends="jar,jarSrc,jarDocs"/>
 
     <target name="jar" depends="core,indices,charsetsJar" description="build 'icu4j.jar' jar file">
-        <jar jarfile="${jar.file}"
-            compress="true"
-            includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*"
-            excludes="META-INF/services/**/*,com/ibm/icu/charset/**/*,${icu4j.data.path}/*.cnv, ${icu4j.data.path}/cnvalias.icu"
-            basedir="${build.dir}">
+        <jar jarfile="${jar.file}" compress="true">
+            <fileset    dir="${basedir}" includes="license.html, unicode-license.txt" />
+            <fileset    dir="${build.dir}"             
+                            includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*"
+                            excludes="META-INF/services/**/*,com/ibm/icu/charset/**/*,${icu4j.data.path}/*.cnv, ${icu4j.data.path}/cnvalias.icu"/>
             <manifest>
                 <attribute name="Built-By" value="${corp}"/>
                 <section name="common">
@@ -451,10 +451,10 @@
     </target>
     
     <target name="charsetsJar" depends="core,indices" description="build  'icu4j-charstes.jar' jar file">
-        <jar jarfile="${charsets.jar.file}"
-            compress="true"
-            includes="META-INF/services/**/*, com/ibm/icu/charset/**/*, ${icu4j.data.path}/*.cnv, ${icu4j.data.path}/cnvalias.icu"
-            basedir="${build.dir}">
+        <jar jarfile="${charsets.jar.file}" compress="true">
+            <fileset    dir="${basedir}" includes="license.html, unicode-license.txt" />
+            <fileset    dir="${build.dir}"             
+                            includes="META-INF/services/**/*,com/ibm/icu/charset/**/*,${icu4j.data.path}/*.cnv, ${icu4j.data.path}/cnvalias.icu"/>
              <manifest>
                 <attribute name="Built-By" value="${corp}"/>
                 <section name="common">
@@ -475,7 +475,6 @@
     <target name="jarTests" depends="tests,jar" description="build runtime 'icu4jtests.jar' jar file">
         <jar jarfile="${testjar.file}" compress="true">
             <fileset dir="${build.dir}" includes="com/ibm/icu/dev/test/**/*"/>
-            <fileset dir="${build.dir}" includes="com/ibm/icu/dev/data/**/*"/>
             <manifest>
                 <attribute name="Built-By" value="${corp}"/>
                 <section name="common">
@@ -1412,10 +1411,11 @@
             deprecation="off"
             encoding="ascii"/>
         <antcall target="indices"/>
-        <jar jarfile="${jar.file}"
-            compress="true"
-            includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*"
-            basedir="${build.dir}">
+        <jar jarfile="${jar.file}" compress="true">
+            <fileset    dir="${basedir}" includes="license.html, unicode-license.txt" />
+            <fileset    dir="${build.dir}"             
+                            includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*"
+                            excludes="META-INF/services/**/*,com/ibm/icu/charset/**/*,${icu4j.data.path}/*.cnv, ${icu4j.data.path}/cnvalias.icu"/>
             <manifest>
                 <attribute name="Built-By" value="${corp}"/>
                 <section name="common">
@@ -1675,10 +1675,12 @@
     </target>
 
     <target name="jar13" depends="core13,indices" description="build full 'icu4j.jar' jar file for jdk1.3">
-        <jar jarfile="${jar.file}"
-            compress="true"
-            includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*,META-INF/services/*"
-            basedir="${build.dir}">
+        <jar jarfile="${jar.file}"    compress="true">
+            <fileset    dir="${basedir}" includes="license.html, unicode-license.txt" />
+            <fileset    dir="${build.dir}"             
+                            includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*"
+                            excludes="META-INF/services/**/*,com/ibm/icu/charset/**/*,${icu4j.data.path}/*.cnv, ${icu4j.data.path}/cnvalias.icu"/>
+                            
             <manifest>
                 <attribute name="Built-By" value="${corp}"/>
                 <section name="common">
