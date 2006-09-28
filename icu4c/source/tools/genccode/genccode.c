@@ -30,19 +30,22 @@
 #   define NOMCX
 #include <windows.h>
 #include <time.h>
-
-/* _M_IA64 should be defined in windows.h */
-#if defined(_M_IA64)
-#   define ICU_OBJECT_MACHINE_TYPE IMAGE_FILE_MACHINE_IA64
-#   define ICU_ENTRY_OFFSET 0
-#elif defined(_M_AMD64)
-#   define ICU_OBJECT_MACHINE_TYPE IMAGE_FILE_MACHINE_AMD64
-#   define ICU_ENTRY_OFFSET 0
-#else
-#   define ICU_OBJECT_MACHINE_TYPE IMAGE_FILE_MACHINE_I386
-#   define ICU_ENTRY_OFFSET 1
 #endif
 
+#ifdef U_LINUX
+#   define U_ELF
+#endif
+
+#ifdef U_ELF
+#   include <elf.h>
+#   if defined(ELFCLASS64)
+#       define U_ELF64
+#   endif
+    /* Old elf.h headers may not have EM_X86_64, or have EM_X8664 instead. */
+#   ifndef EM_X86_64
+#       define EM_X86_64 62
+#   endif
+#   define ICU_ENTRY_OFFSET 0
 #endif
 
 #include <stdio.h>
@@ -59,7 +62,7 @@
 
 static uint32_t column=MAX_COLUMN;
 
-#ifdef U_WINDOWS
+#if defined(U_WINDOWS) || defined(U_ELF)
 #define CAN_GENERATE_OBJECTS
 #endif
 
@@ -99,6 +102,7 @@ enum {
   kOptEntryPoint,
 #ifdef CAN_GENERATE_OBJECTS
   kOptObject,
+  kOptMatchArch,
 #endif
   kOptFilename,
   kOptAssembly
@@ -213,6 +217,7 @@ static UOption options[]={
      UOPTION_DEF("entrypoint", 'e', UOPT_REQUIRES_ARG),
 #ifdef CAN_GENERATE_OBJECTS
 /*5*/UOPTION_DEF("object", 'o', UOPT_NO_ARG),
+     UOPTION_DEF("match-arch", 'm', UOPT_REQUIRES_ARG),
 #endif
      UOPTION_DEF("filename", 'f', UOPT_REQUIRES_ARG),
      UOPTION_DEF("assembly", 'a', UOPT_REQUIRES_ARG)
@@ -229,7 +234,7 @@ main(int argc, char* argv[]) {
 
     /* read command line options */
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
-    
+
     /* error handling, printing usage message */
     if(argc<0) {
         fprintf(stderr,
@@ -245,14 +250,17 @@ main(int argc, char* argv[]) {
             "\t-h or -? or --help  this usage text\n"
             "\t-d or --destdir     destination directory, followed by the path\n"
             "\t-n or --name        symbol prefix, followed by the prefix\n"
-            "\t-e or --entrypoint  entry point name, followed by the name\n"
+            "\t-e or --entrypoint  entry point name, followed by the name (_dat will be appended)\n"
             "\t-r or --revision    Specify a version\n"
-#ifdef CAN_GENERATE_OBJECTS
-            "\t-o or --object      write a .obj file instead of .c\n"
-#endif
-            "\t-f or --filename    Specify an alternate base filename. (default: symbolname_typ)\n"
             , argv[0]);
+#ifdef CAN_GENERATE_OBJECTS
         fprintf(stderr,
+            "\t-o or --object      write a .obj file instead of .c\n"
+            "\t-m or --match-arch file.o  match the architecture (CPU, 32/64 bits) of the specified .o\n"
+            "\t                    ELF format defaults to i386. Windows defaults to the native platform.\n");
+#endif
+        fprintf(stderr,
+            "\t-f or --filename    Specify an alternate base filename. (default: symbolname_typ)\n"
             "\t-a or --assembly    Create assembly file. (possible values are: ");
 
         fprintf(stderr, "%s", assemblyHeader[0].name);
@@ -487,9 +495,352 @@ writeCCode(const char *filename, const char *destdir) {
 
 #ifdef CAN_GENERATE_OBJECTS
 static void
+getArchitecture(uint16_t *pCPU, uint16_t *pBits, UBool *pIsBigEndian) {
+    int64_t buffer[256];
+    const char *filename;
+    FileStream *in;
+    int32_t length;
+
+#ifdef U_ELF
+    /* Pointer to ELF header. Elf32_Ehdr and ELF64_Ehdr are identical for the necessary fields. */
+    const Elf32_Ehdr *pHeader32;
+#elif defined(U_WINDOWS)
+    const IMAGE_FILE_HEADER *pHeader;
+#else
+#   error "Unknown platform for CAN_GENERATE_OBJECTS."
+#endif
+
+    if(options[kOptMatchArch].doesOccur) {
+        filename=options[kOptMatchArch].value;
+    } else {
+        /* set defaults */
+#ifdef U_ELF
+        /* set EM_386 because elf.h does not provide better defaults */
+        *pCPU=EM_386;
+        *pBits=32;
+        *pIsBigEndian=(UBool)(U_IS_BIG_ENDIAN ? ELFDATA2MSB : ELFDATA2LSB);
+#elif defined(U_WINDOWS)
+/* _M_IA64 should be defined in windows.h */
+#   if defined(_M_IA64)
+        *pCPU=IMAGE_FILE_MACHINE_IA64;
+#   elif defined(_M_AMD64)
+        *pCPU=IMAGE_FILE_MACHINE_AMD64;
+#   else
+        *pCPU=IMAGE_FILE_MACHINE_I386;
+#   endif
+        *pBits= *pCPU==IMAGE_FILE_MACHINE_I386 ? 32 : 64;
+        *pIsBigEndian=FALSE;
+#else
+#   error "Unknown platform for CAN_GENERATE_OBJECTS."
+#endif
+        return;
+    }
+
+    in=T_FileStream_open(filename, "rb");
+    if(in==NULL) {
+        fprintf(stderr, "genccode: unable to open match-arch file %s\n", filename);
+        exit(U_FILE_ACCESS_ERROR);
+    }
+    length=T_FileStream_read(in, buffer, sizeof(buffer));
+
+#ifdef U_ELF
+    if(length<sizeof(Elf32_Ehdr)) {
+        fprintf(stderr, "genccode: match-arch file %s is too short\n", filename);
+        exit(U_UNSUPPORTED_ERROR);
+    }
+    pHeader32=(const Elf32_Ehdr *)buffer;
+    if(
+        pHeader32->e_ident[0]!=ELFMAG0 ||
+        pHeader32->e_ident[1]!=ELFMAG1 ||
+        pHeader32->e_ident[2]!=ELFMAG2 ||
+        pHeader32->e_ident[3]!=ELFMAG3 ||
+        pHeader32->e_ident[EI_CLASS]<ELFCLASS32 || pHeader32->e_ident[EI_CLASS]>ELFCLASS64
+    ) {
+        fprintf(stderr, "genccode: match-arch file %s is not an ELF object file, or not supported\n", filename);
+        exit(U_UNSUPPORTED_ERROR);
+    }
+
+    *pBits= pHeader32->e_ident[EI_CLASS]==ELFCLASS32 ? 32 : 64; /* only 32 or 64: see check above */
+#ifdef U_ELF64
+    if(*pBits!=32 && *pBits!=64) {
+        fprintf(stderr, "genccode: currently only supports 32-bit and 64-bit ELF format\n");
+        exit(U_UNSUPPORTED_ERROR);
+    }
+#else
+    if(*pBits!=32) {
+        fprintf(stderr, "genccode: built with elf.h missing 64-bit definitions\n");
+        exit(U_UNSUPPORTED_ERROR);
+    }
+#endif
+
+    *pIsBigEndian=(UBool)(pHeader32->e_ident[EI_DATA]==ELFDATA2MSB);
+    if(*pIsBigEndian!=U_IS_BIG_ENDIAN) {
+        fprintf(stderr, "genccode: currently only same-endianness ELF formats are supported\n");
+        exit(U_UNSUPPORTED_ERROR);
+    }
+    /* TODO: Support byte swapping */
+
+    *pCPU=pHeader32->e_machine;
+#elif defined(U_WINDOWS)
+    if(length<sizeof(IMAGE_FILE_HEADER)) {
+        fprintf(stderr, "genccode: match-arch file %s is too short\n", filename);
+        exit(U_UNSUPPORTED_ERROR);
+    }
+    pHeader=(const IMAGE_FILE_HEADER *)buffer;
+    *pCPU=pHeader->Machine;
+    /*
+     * The number of bits is implicit with the Machine value.
+     * *pBits is ignored in the calling code, so this need not be precise.
+     */
+    *pBits= *pCPU==IMAGE_FILE_MACHINE_I386 ? 32 : 64;
+    /* Windows always runs on little-endian CPUs. */
+    *pIsBigEndian=FALSE;
+#else
+#   error "Unknown platform for CAN_GENERATE_OBJECTS."
+#endif
+
+    T_FileStream_close(in);
+}
+
+static void
 writeObjectCode(const char *filename, const char *destdir) {
-#ifdef U_WINDOWS
-    char buffer[4096], entry[40];
+    /* common variables */
+    char buffer[4096], entry[40]={ 0 };
+    FileStream *in, *out;
+    const char *newSuffix;
+    int32_t i, entryLength, length, size, entryOffset=0, entryLengthOffset=0;
+
+    uint16_t cpu, bits;
+    UBool makeBigEndian;
+
+    /* platform-specific variables and initialization code */
+#ifdef U_ELF
+    /* 32-bit Elf file header */
+    static Elf32_Ehdr header32={
+        {
+            /* e_ident[] */
+            ELFMAG0, ELFMAG1, ELFMAG2, ELFMAG3,
+            ELFCLASS32,
+            U_IS_BIG_ENDIAN ? ELFDATA2MSB : ELFDATA2LSB,
+            EV_CURRENT /* EI_VERSION */
+        },
+        ET_REL,
+        EM_386,
+        EV_CURRENT, /* e_version */
+        0, /* e_entry */
+        0, /* e_phoff */
+        (Elf32_Off)sizeof(Elf32_Ehdr), /* e_shoff */
+        0, /* e_flags */
+        (Elf32_Half)sizeof(Elf32_Ehdr), /* eh_size */
+        0, /* e_phentsize */
+        0, /* e_phnum */
+        (Elf32_Half)sizeof(Elf32_Shdr), /* e_shentsize */
+        5, /* e_shnum */
+        2 /* e_shstrndx */
+    };
+
+    /* 32-bit Elf section header table */
+    static Elf32_Shdr sectionHeaders32[5]={
+        { /* SHN_UNDEF */
+            0
+        },
+        { /* .symtab */
+            1, /* sh_name */
+            SHT_SYMTAB,
+            0, /* sh_flags */
+            0, /* sh_addr */
+            (Elf32_Off)(sizeof(header32)+sizeof(sectionHeaders32)), /* sh_offset */
+            (Elf32_Word)(2*sizeof(Elf32_Sym)), /* sh_size */
+            3, /* sh_link=sect hdr index of .strtab */
+            1, /* sh_info=One greater than the symbol table index of the last
+                * local symbol (with STB_LOCAL). */
+            4, /* sh_addralign */
+            (Elf32_Word)(sizeof(Elf32_Sym)) /* sh_entsize */
+        },
+        { /* .shstrtab */
+            9, /* sh_name */
+            SHT_STRTAB,
+            0, /* sh_flags */
+            0, /* sh_addr */
+            (Elf32_Off)(sizeof(header32)+sizeof(sectionHeaders32)+2*sizeof(Elf32_Sym)), /* sh_offset */
+            40, /* sh_size */
+            0, /* sh_link */
+            0, /* sh_info */
+            1, /* sh_addralign */
+            0 /* sh_entsize */
+        },
+        { /* .strtab */
+            19, /* sh_name */
+            SHT_STRTAB,
+            0, /* sh_flags */
+            0, /* sh_addr */
+            (Elf32_Off)(sizeof(header32)+sizeof(sectionHeaders32)+2*sizeof(Elf32_Sym)+40), /* sh_offset */
+            (Elf32_Word)sizeof(entry), /* sh_size */
+            0, /* sh_link */
+            0, /* sh_info */
+            1, /* sh_addralign */
+            0 /* sh_entsize */
+        },
+        { /* .rodata */
+            27, /* sh_name */
+            SHT_PROGBITS,
+            SHF_ALLOC, /* sh_flags */
+            0, /* sh_addr */
+            (Elf32_Off)(sizeof(header32)+sizeof(sectionHeaders32)+2*sizeof(Elf32_Sym)+40+sizeof(entry)), /* sh_offset */
+            0, /* sh_size */
+            0, /* sh_link */
+            0, /* sh_info */
+            16, /* sh_addralign */
+            0 /* sh_entsize */
+        }
+    };
+
+    /* symbol table */
+    static Elf32_Sym symbols32[2]={
+        { /* STN_UNDEF */
+            0
+        },
+        { /* data entry point */
+            1, /* st_name */
+            0, /* st_value */
+            0, /* st_size */
+            ELF64_ST_INFO(STB_GLOBAL, STT_OBJECT),
+            0, /* st_other */
+            4 /* st_shndx=index of related section table entry */
+        }
+    };
+
+    /* section header string table, with decimal string offsets */
+    static const char sectionStrings[40]=
+        /*  0 */ "\0"
+        /*  1 */ ".symtab\0"
+        /*  9 */ ".shstrtab\0"
+        /* 19 */ ".strtab\0"
+        /* 27 */ ".rodata\0"
+        /* 35 */ "\0\0\0\0"; /* contains terminating NUL */
+        /* 40: padded to multiple of 8 bytes */
+
+    /*
+     * Use entry[] for the string table which will contain only the
+     * entry point name.
+     * entry[0] must be 0 (NUL)
+     * The entry point name can be up to 38 characters long (sizeof(entry)-2).
+     */
+
+    /* 16-align .rodata in the .o file, just in case */
+    static const char padding[16]={ 0 };
+    int32_t paddingSize;
+
+#ifdef U_ELF64
+    /* 64-bit Elf file header */
+    static Elf64_Ehdr header64={
+        {
+            /* e_ident[] */
+            ELFMAG0, ELFMAG1, ELFMAG2, ELFMAG3,
+            ELFCLASS64,
+            U_IS_BIG_ENDIAN ? ELFDATA2MSB : ELFDATA2LSB,
+            EV_CURRENT /* EI_VERSION */
+        },
+        ET_REL,
+        EM_X86_64,
+        EV_CURRENT, /* e_version */
+        0, /* e_entry */
+        0, /* e_phoff */
+        (Elf64_Off)sizeof(Elf64_Ehdr), /* e_shoff */
+        0, /* e_flags */
+        (Elf64_Half)sizeof(Elf64_Ehdr), /* eh_size */
+        0, /* e_phentsize */
+        0, /* e_phnum */
+        (Elf64_Half)sizeof(Elf64_Shdr), /* e_shentsize */
+        5, /* e_shnum */
+        2 /* e_shstrndx */
+    };
+
+    /* 64-bit Elf section header table */
+    static Elf64_Shdr sectionHeaders64[5]={
+        { /* SHN_UNDEF */
+            0
+        },
+        { /* .symtab */
+            1, /* sh_name */
+            SHT_SYMTAB,
+            0, /* sh_flags */
+            0, /* sh_addr */
+            (Elf64_Off)(sizeof(header64)+sizeof(sectionHeaders64)), /* sh_offset */
+            (Elf64_Xword)(2*sizeof(Elf64_Sym)), /* sh_size */
+            3, /* sh_link=sect hdr index of .strtab */
+            1, /* sh_info=One greater than the symbol table index of the last
+                * local symbol (with STB_LOCAL). */
+            4, /* sh_addralign */
+            (Elf64_Xword)(sizeof(Elf64_Sym)) /* sh_entsize */
+        },
+        { /* .shstrtab */
+            9, /* sh_name */
+            SHT_STRTAB,
+            0, /* sh_flags */
+            0, /* sh_addr */
+            (Elf64_Off)(sizeof(header64)+sizeof(sectionHeaders64)+2*sizeof(Elf64_Sym)), /* sh_offset */
+            40, /* sh_size */
+            0, /* sh_link */
+            0, /* sh_info */
+            1, /* sh_addralign */
+            0 /* sh_entsize */
+        },
+        { /* .strtab */
+            19, /* sh_name */
+            SHT_STRTAB,
+            0, /* sh_flags */
+            0, /* sh_addr */
+            (Elf64_Off)(sizeof(header64)+sizeof(sectionHeaders64)+2*sizeof(Elf64_Sym)+40), /* sh_offset */
+            (Elf64_Xword)sizeof(entry), /* sh_size */
+            0, /* sh_link */
+            0, /* sh_info */
+            1, /* sh_addralign */
+            0 /* sh_entsize */
+        },
+        { /* .rodata */
+            27, /* sh_name */
+            SHT_PROGBITS,
+            SHF_ALLOC, /* sh_flags */
+            0, /* sh_addr */
+            (Elf64_Off)(sizeof(header64)+sizeof(sectionHeaders64)+2*sizeof(Elf64_Sym)+40+sizeof(entry)), /* sh_offset */
+            0, /* sh_size */
+            0, /* sh_link */
+            0, /* sh_info */
+            16, /* sh_addralign */
+            0 /* sh_entsize */
+        }
+    };
+
+    /*
+     * 64-bit symbol table
+     * careful: different order of items compared with Elf32_sym!
+     */
+    static Elf64_Sym symbols64[2]={
+        { /* STN_UNDEF */
+            0
+        },
+        { /* data entry point */
+            1, /* st_name */
+            ELF64_ST_INFO(STB_GLOBAL, STT_OBJECT),
+            0, /* st_other */
+            4, /* st_shndx=index of related section table entry */
+            0, /* st_value */
+            0 /* st_size */
+        }
+    };
+
+#endif /* U_ELF64 */
+
+    /* entry[] have a leading NUL */
+    entryOffset=1;
+
+    /* in the common code, count entryLength from after the NUL */
+    entryLengthOffset=1;
+
+    newSuffix=".o";
+
+#elif defined(U_WINDOWS)
     struct {
         IMAGE_FILE_HEADER fileHeader;
         IMAGE_SECTION_HEADER sections[2];
@@ -500,28 +851,46 @@ writeObjectCode(const char *filename, const char *destdir) {
         DWORD sizeofLongNames;
         char longNames[100];
     } symbolNames;
-    FileStream *in, *out;
-    DWORD i, entryLength, length, size;
+
+    /*
+     * entry sometimes have a leading '_'
+     * overwritten if entryOffset==0 depending on the target platform
+     * see check for cpu below
+     */
+    entry[0]='_';
+
+    newSuffix=".obj";
+#else
+#   error "Unknown platform for CAN_GENERATE_OBJECTS."
+#endif
+
+    /* deal with options, files and the entry point name */
+    getArchitecture(&cpu, &bits, &makeBigEndian);
+    printf("genccode: --match-arch cpu=%hu bits=%hu big-endian=%hu\n", cpu, bits, makeBigEndian);
+#ifdef U_WINDOWS
+    if(cpu==IMAGE_FILE_MACHINE_I386) {
+        entryOffset=1;
+    }
+#endif
 
     in=T_FileStream_open(filename, "rb");
     if(in==NULL) {
         fprintf(stderr, "genccode: unable to open input file %s\n", filename);
         exit(U_FILE_ACCESS_ERROR);
     }
+    size=T_FileStream_size(in);
 
-    /* entry have a leading '_' */
-    entry[0]='_';
-    getOutFilename(filename, destdir, buffer, entry+ICU_ENTRY_OFFSET, ".obj");
+    getOutFilename(filename, destdir, buffer, entry+entryOffset, newSuffix);
 
     if(options[kOptEntryPoint].doesOccur) {
-        uprv_strcpy(entry+ICU_ENTRY_OFFSET, options[kOptEntryPoint].value);
-        uprv_strcat(entry, "_dat");
+        uprv_strcpy(entry+entryOffset, options[kOptEntryPoint].value);
+        uprv_strcat(entry+entryOffset, "_dat");
     }
     /* turn dashes in the entry name into underscores */
-    entryLength=(int32_t)uprv_strlen(entry);
+    entryLength=(int32_t)uprv_strlen(entry+entryLengthOffset);
     for(i=0; i<entryLength; ++i) {
-        if(entry[i]=='-') {
-            entry[i]='_';
+        if(entry[entryLengthOffset+i]=='-') {
+            entry[entryLengthOffset+i]='_';
         }
     }
 
@@ -532,11 +901,59 @@ writeObjectCode(const char *filename, const char *destdir) {
         exit(U_FILE_ACCESS_ERROR);
     }
 
+#ifdef U_ELF
+    if(bits==32) {
+        header32.e_ident[EI_DATA]= makeBigEndian ? ELFDATA2MSB : ELFDATA2LSB;
+        header32.e_machine=cpu;
+
+        /* 16-align .rodata in the .o file, just in case */
+        paddingSize=sectionHeaders32[4].sh_offset & 0xf;
+        if(paddingSize!=0) {
+                paddingSize=0x10-paddingSize;
+                sectionHeaders32[4].sh_offset+=paddingSize;
+        }
+
+        sectionHeaders32[4].sh_size=(Elf32_Word)size;
+
+        symbols32[1].st_size=(Elf32_Word)size;
+
+        /* write .o headers */
+        T_FileStream_write(out, &header32, (int32_t)sizeof(header32));
+        T_FileStream_write(out, sectionHeaders32, (int32_t)sizeof(sectionHeaders32));
+        T_FileStream_write(out, symbols32, (int32_t)sizeof(symbols32));
+    } else /* bits==64 */ {
+#ifdef U_ELF64
+        header64.e_ident[EI_DATA]= makeBigEndian ? ELFDATA2MSB : ELFDATA2LSB;
+        header64.e_machine=cpu;
+
+        /* 16-align .rodata in the .o file, just in case */
+        paddingSize=sectionHeaders64[4].sh_offset & 0xf;
+        if(paddingSize!=0) {
+                paddingSize=0x10-paddingSize;
+                sectionHeaders64[4].sh_offset+=paddingSize;
+        }
+
+        sectionHeaders64[4].sh_size=(Elf64_Xword)size;
+
+        symbols64[1].st_size=(Elf64_Xword)size;
+
+        /* write .o headers */
+        T_FileStream_write(out, &header64, (int32_t)sizeof(header64));
+        T_FileStream_write(out, sectionHeaders64, (int32_t)sizeof(sectionHeaders64));
+        T_FileStream_write(out, symbols64, (int32_t)sizeof(symbols64));
+#endif
+    }
+
+    T_FileStream_write(out, sectionStrings, (int32_t)sizeof(sectionStrings));
+    T_FileStream_write(out, entry, (int32_t)sizeof(entry));
+    if(paddingSize!=0) {
+        T_FileStream_write(out, padding, paddingSize);
+    }
+#elif defined(U_WINDOWS)
     /* populate the .obj headers */
     uprv_memset(&objHeader, 0, sizeof(objHeader));
     uprv_memset(&symbols, 0, sizeof(symbols));
     uprv_memset(&symbolNames, 0, sizeof(symbolNames));
-    size=T_FileStream_size(in);
 
     /* write the linker export directive */
     uprv_strcpy(objHeader.linkerOptions, "-export:");
@@ -547,9 +964,9 @@ writeObjectCode(const char *filename, const char *destdir) {
     length+=6;
 
     /* set the file header */
-    objHeader.fileHeader.Machine=ICU_OBJECT_MACHINE_TYPE;
+    objHeader.fileHeader.Machine=cpu;
     objHeader.fileHeader.NumberOfSections=2;
-    objHeader.fileHeader.TimeDateStamp=time(NULL);
+    objHeader.fileHeader.TimeDateStamp=(DWORD)time(NULL);
     objHeader.fileHeader.PointerToSymbolTable=IMAGE_SIZEOF_FILE_HEADER+2*IMAGE_SIZEOF_SECTION_HEADER+length+size; /* start of symbol table */
     objHeader.fileHeader.NumberOfSymbols=1;
 
@@ -580,6 +997,9 @@ writeObjectCode(const char *filename, const char *destdir) {
 
     /* write the file header and the linker options section */
     T_FileStream_write(out, &objHeader, objHeader.sections[1].PointerToRawData);
+#else
+#   error "Unknown platform for CAN_GENERATE_OBJECTS."
+#endif
 
     /* copy the data file into section 2 */
     for(;;) {
@@ -590,9 +1010,11 @@ writeObjectCode(const char *filename, const char *destdir) {
         T_FileStream_write(out, buffer, (int32_t)length);
     }
 
+#ifdef U_WINDOWS
     /* write the symbol table */
     T_FileStream_write(out, symbols, IMAGE_SIZEOF_SYMBOL);
     T_FileStream_write(out, &symbolNames, symbolNames.sizeofLongNames);
+#endif
 
     if(T_FileStream_error(in)) {
         fprintf(stderr, "genccode: file read error while generating from file %s\n", filename);
@@ -606,7 +1028,6 @@ writeObjectCode(const char *filename, const char *destdir) {
 
     T_FileStream_close(out);
     T_FileStream_close(in);
-#endif
 }
 #endif
 
@@ -785,4 +1206,3 @@ write8str(FileStream *out, uint8_t byte) {
     T_FileStream_writeLine(out, s);
 }
 #endif
-
