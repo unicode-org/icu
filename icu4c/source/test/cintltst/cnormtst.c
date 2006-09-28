@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -788,7 +788,7 @@ enum {
 
 static void
 TestNormCoverage() {
-    static UChar input[2000], expect[3000], output[3000];
+    UChar input[1000], expect[1000], output[1000];
     UErrorCode errorCode;
     int32_t i, length, inLength, expectLength, hangulPrefixLength, preflightLength;
 
