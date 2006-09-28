@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*   file name:  cbiditst.h
@@ -55,7 +55,7 @@ enum {
     dirPropCount
 };
 
-extern const char *
+extern const char * const
 dirPropNames[dirPropCount];
 
 extern UChar
@@ -72,10 +72,10 @@ typedef struct {
     const uint8_t *visualMap;
 } BiDiTestData;
 
-extern BiDiTestData
+extern const BiDiTestData
 tests[];
 
-extern int
+extern const int
 bidiTestCount;
 
 #ifdef XP_CPLUSPLUS
