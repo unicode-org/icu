@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 2001-2003 International Business Machines 
+ * Copyright (c) 2001-2006 International Business Machines 
  * Corporation and others. All Rights Reserved.
  ********************************************************************
  * File USRCHDAT.H
@@ -8,24 +8,28 @@
  * synwee         July 31 2001    creation
  ********************************************************************/
 
+
+/*
+Note: This file is included by other C and C++ files. This file should not be directly compiled.
+*/
 #ifndef USRCHDAT_C
 #define USRCHDAT_C
 
-#include "unicode/utypes.h"
+#include "unicode/ucol.h"
 
 #if !UCONFIG_NO_COLLATION
 
-#include "unicode/ucol.h"
-
+U_CDECL_BEGIN
 struct SearchData {
     const char               *text;
     const char               *pattern;
     const char               *collator;
           UCollationStrength  strength;
     const char               *breaker;
-          int32_t         offset[32];
-          uint32_t            size[32];
+          int8_t              offset[32];
+          uint8_t             size[32];
 };
+U_CDECL_END
 
 typedef struct SearchData SearchData;
 
