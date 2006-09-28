@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2005, International Business Machines
+* Copyright (c) 2003-2006, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -21,7 +21,8 @@ RuleCharacterIterator::RuleCharacterIterator(const UnicodeString& theText, const
     text(theText),
     pos(thePos),
     sym(theSym),
-    buf(0)
+    buf(0),
+    bufPos(0)
 {}
 
 UBool RuleCharacterIterator::atEnd() const {
