@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2002-2005, International Business Machines
+*   Copyright (C) 2002-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -163,7 +163,7 @@
  * to trail byte values 0..19 (0..0x13) as used in the difference calculation.
  * External byte values that are illegal as trail bytes are mapped to -1.
  */
-static int8_t
+static const int8_t
 bocu1ByteToTrail[BOCU1_MIN]={
 /*  0     1     2     3     4     5     6     7    */
     -1,   0x00, 0x01, 0x02, 0x03, 0x04, 0x05, -1,
@@ -186,7 +186,7 @@ bocu1ByteToTrail[BOCU1_MIN]={
  * from trail byte values 0..19 (0..0x13) as used in the difference calculation
  * to external byte values 0x00..0x20.
  */
-static int8_t
+static const int8_t
 bocu1TrailToByte[BOCU1_TRAIL_CONTROLS_COUNT]={
 /*  0     1     2     3     4     5     6     7    */
     0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x10, 0x11,
@@ -871,20 +871,28 @@ TestBOCU1RefDiff(void) {
 
 /* cintltst code ------------------------------------------------------------ */
 
+static const int32_t DEFAULT_BUFFER_SIZE = 30000;
+
+
 /* test one string with the ICU and the reference BOCU-1 implementations */
 static void
 roundtripBOCU1(UConverter *bocu1, int32_t number, const UChar *text, int32_t length) {
-    static UChar roundtripRef[30000], roundtripICU[30000];
-    static char bocu1Ref[30000], bocu1ICU[30000];
+    UChar *roundtripRef, *roundtripICU;
+    char *bocu1Ref, *bocu1ICU;
 
     int32_t bocu1RefLength, bocu1ICULength, roundtripRefLength, roundtripICULength;
     UErrorCode errorCode;
+
+    roundtripRef = malloc(DEFAULT_BUFFER_SIZE * sizeof(UChar));
+    roundtripICU = malloc(DEFAULT_BUFFER_SIZE * sizeof(UChar));
+    bocu1Ref = malloc(DEFAULT_BUFFER_SIZE);
+    bocu1ICU = malloc(DEFAULT_BUFFER_SIZE);
 
     /* Unicode -> BOCU-1 */
     bocu1RefLength=writeString(text, length, (uint8_t *)bocu1Ref);
 
     errorCode=U_ZERO_ERROR;
-    bocu1ICULength=ucnv_fromUChars(bocu1, bocu1ICU, sizeof(bocu1ICU), text, length, &errorCode);
+    bocu1ICULength=ucnv_fromUChars(bocu1, bocu1ICU, DEFAULT_BUFFER_SIZE, text, length, &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("ucnv_fromUChars(BOCU-1, text(%d)[%d]) failed: %s\n", number, length, u_errorName(errorCode));
         return;
@@ -901,7 +909,7 @@ roundtripBOCU1(UConverter *bocu1, int32_t number, const UChar *text, int32_t len
         return; /* readString() found an error and reported it */
     }
 
-    roundtripICULength=ucnv_toUChars(bocu1, roundtripICU, sizeof(roundtripICU)/U_SIZEOF_UCHAR, bocu1ICU, bocu1ICULength, &errorCode);
+    roundtripICULength=ucnv_toUChars(bocu1, roundtripICU, DEFAULT_BUFFER_SIZE, bocu1ICU, bocu1ICULength, &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("ucnv_toUChars(BOCU-1, text(%d)[%d]) failed: %s\n", number, length, u_errorName(errorCode));
         return;
@@ -915,6 +923,10 @@ roundtripBOCU1(UConverter *bocu1, int32_t number, const UChar *text, int32_t len
         log_err("BOCU-1 -> Unicode: reference(%d)[%d]!=ICU[%d]\n", number, roundtripRefLength, roundtripICULength);
         return;
     }
+    free(roundtripRef);
+    free(roundtripICU);
+    free(bocu1Ref);
+    free(bocu1ICU);
 }
 
 static const UChar feff[]={ 0xfeff };
@@ -962,7 +974,7 @@ static const struct {
  */
 static void
 TestBOCU1(void) {
-    UChar text[30000];
+    UChar *text;
     int32_t i, length;
 
     UConverter *bocu1;
@@ -974,6 +986,8 @@ TestBOCU1(void) {
         log_err("error: unable to open BOCU-1 converter: %s\n", u_errorName(errorCode));
         return;
     }
+
+    text = malloc(DEFAULT_BUFFER_SIZE * sizeof(UChar));
 
     /* text 1: each of strings[] once */
     length=0;
@@ -1005,6 +1019,7 @@ TestBOCU1(void) {
     roundtripBOCU1(bocu1, 3, text, length);
 
     ucnv_close(bocu1);
+    free(text);
 }
 
 U_CFUNC void addBOCU1Tests(TestNode** root);
