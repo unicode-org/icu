@@ -38,7 +38,7 @@ static void
 doTests(UBiDi *pBiDi, UBiDi *pLine, UBool countRunsFirst);
 
 static void
-doTest(UBiDi *pBiDi, int testNumber, BiDiTestData *test, int32_t lineStart, UBool countRunsFirst);
+doTest(UBiDi *pBiDi, int testNumber, const BiDiTestData *test, int32_t lineStart, UBool countRunsFirst);
 
 static void
 testReordering(UBiDi *pBiDi, int testNumber);
@@ -625,7 +625,7 @@ static void TestReorder(){
 }
 
 static void
-doTest(UBiDi *pBiDi, int testNumber, BiDiTestData *test, int32_t lineStart, UBool countRunsFirst) {
+doTest(UBiDi *pBiDi, int testNumber, const BiDiTestData *test, int32_t lineStart, UBool countRunsFirst) {
     const uint8_t *dirProps=test->text+lineStart;
     const UBiDiLevel *levels=test->levels;
     const uint8_t *visualMap=test->visualMap;
