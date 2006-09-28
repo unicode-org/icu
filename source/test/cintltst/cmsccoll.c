@@ -1475,9 +1475,9 @@ const static char impTest[][20] = {
 
 
 static void TestImplicitTailoring(void) {
-  static struct {
+  static const struct {
     const char *rules;
-    const char *data[50];
+    const char *data[10];
     const uint32_t len;
   } tests[] = {
       { "&[before 1]\\u4e00 < b < c &[before 1]\\u4e00 < d < e", { "d", "e", "b", "c", "\\u4e00"}, 5 },
@@ -1824,7 +1824,7 @@ static void TestJ815(void) {
 static void TestRedundantRules(void) {
   int32_t i;
 
-  struct {
+  static const struct {
       const char *rules;
       const char *expectedRules;
       const char *testdata[8];
@@ -2212,8 +2212,8 @@ static void TestIncrementalNormalize(void) {
     /*         of the string.  Checks a couple of edge cases.*/
 
     {
-        UChar strA[] = {0x41, 0x41, 0x300, 0x316, 0};
-        UChar strB[] = {0x41, 0xc0, 0x316, 0};
+        static const UChar strA[] = {0x41, 0x41, 0x300, 0x316, 0};
+        static const UChar strB[] = {0x41, 0xc0, 0x316, 0};
         ucol_setStrength(coll, UCOL_TERTIARY);
         doTest(coll, strA, strB, UCOL_EQUAL);
     }
@@ -2226,8 +2226,8 @@ static void TestIncrementalNormalize(void) {
        * than d800 dc00
        */
         /*UChar strA[] = {0x41, 0x41, 0x300, 0x316, 0xD801, 0xDC00, 0};*/
-        UChar strA[] = {0x41, 0x41, 0x300, 0x316, 0xD800, 0xDC01, 0};
-        UChar strB[] = {0x41, 0xc0, 0x316, 0xD800, 0xDC00, 0};
+        static const UChar strA[] = {0x41, 0x41, 0x300, 0x316, 0xD800, 0xDC01, 0};
+        static const UChar strB[] = {0x41, 0xc0, 0x316, 0xD800, 0xDC00, 0};
         ucol_setStrength(coll, UCOL_TERTIARY);
         doTest(coll, strA, strB, UCOL_GREATER);
     }
@@ -2235,8 +2235,8 @@ static void TestIncrementalNormalize(void) {
     /*  Test 4:  Imbedded nulls do not terminate a string when length is specified.*/
 
     {
-        UChar strA[] = {0x41, 0x00, 0x42, 0x00};
-        UChar strB[] = {0x41, 0x00, 0x00, 0x00};
+        static const UChar strA[] = {0x41, 0x00, 0x42, 0x00};
+        static const UChar strB[] = {0x41, 0x00, 0x00, 0x00};
         char  sortKeyA[50];
         char  sortKeyAz[50];
         char  sortKeyB[50];
@@ -2297,8 +2297,8 @@ static void TestIncrementalNormalize(void) {
     /*  Test 5:  Null characters in non-normal source strings.*/
 
     {
-        UChar strA[] = {0x41, 0x41, 0x300, 0x316, 0x00, 0x42, 0x00};
-        UChar strB[] = {0x41, 0x41, 0x300, 0x316, 0x00, 0x00, 0x00};
+        static const UChar strA[] = {0x41, 0x41, 0x300, 0x316, 0x00, 0x42, 0x00};
+        static const UChar strB[] = {0x41, 0x41, 0x300, 0x316, 0x00, 0x00, 0x00};
         char  sortKeyA[50];
         char  sortKeyAz[50];
         char  sortKeyB[50];
@@ -2357,8 +2357,8 @@ static void TestIncrementalNormalize(void) {
     /*  Test 6:  Null character as base of a non-normal combining sequence.*/
 
     {
-        UChar strA[] = {0x41, 0x0, 0x300, 0x316, 0x41, 0x302, 0x00};
-        UChar strB[] = {0x41, 0x0, 0x302, 0x316, 0x41, 0x300, 0x00};
+        static const UChar strA[] = {0x41, 0x0, 0x300, 0x316, 0x41, 0x302, 0x00};
+        static const UChar strB[] = {0x41, 0x0, 0x302, 0x316, 0x41, 0x300, 0x00};
 
         result = ucol_strcoll(coll, strA, 5, strB, 5);
         if (result != UCOL_LESS) {
@@ -3384,9 +3384,9 @@ static void TestStrCollIdenticalPrefix(void) {
 /* Contractions should have all their canonically equivalent */
 /* strings included */
 static void TestContractionClosure(void) {
-  static struct {
+  static const struct {
     const char *rules;
-    const char *data[50];
+    const char *data[10];
     const uint32_t len;
   } tests[] = {
     {   "&b=\\u00e4\\u00e4",
@@ -3404,9 +3404,9 @@ static void TestContractionClosure(void) {
 
 /* This tests also fails*/
 static void TestBeforePrefixFailure(void) {
-  static struct {
+  static const struct {
     const char *rules;
-    const char *data[50];
+    const char *data[10];
     const uint32_t len;
   } tests[] = {
     { "&g <<< a"
@@ -3520,9 +3520,9 @@ static void TestRuleOptions(void) {
    * when the UCA changes, one might be forced to change these
    * values. (\\u02d0, \\U00010FFFC etc...)
    */
-  static struct {
+  static const struct {
     const char *rules;
-    const char *data[50];
+    const char *data[10];
     const uint32_t len;
   } tests[] = {
     /* - all befores here amount to zero */
@@ -3607,9 +3607,9 @@ static void TestOptimize(void) {
    * Cannot really test, since the functionality
    * remains the same.
    */
-  static struct {
+  static const struct {
     const char *rules;
-    const char *data[50];
+    const char *data[10];
     const uint32_t len;
   } tests[] = {
     /* - all befores here amount to zero */
@@ -3713,7 +3713,7 @@ static void Alexis2(void) {
 
   UCollationResult resU16, resU16BE, resU8;
 
-  const char* pairs[][2] = {
+  static const char* const pairs[][2] = {
     { "\\ud800\\u0021", "\\uFFFC\\u0062"},
     { "\\u0435\\u0308\\u0334", "\\u0415\\u0334\\u0340" },
     { "\\u0E40\\u0021", "\\u00A1\\u0021"},
@@ -3783,7 +3783,7 @@ static void Alexis2(void) {
 
 static void TestHebrewUCA(void) {
   UErrorCode status = U_ZERO_ERROR;
-  const char *first[] = {
+  static const char *first[] = {
     "d790d6b8d79cd795d6bcd7a9",
     "d790d79cd79ed7a7d799d799d7a1",
     "d790d6b4d79ed795d6bcd7a9",
@@ -3820,7 +3820,7 @@ static void TestHebrewUCA(void) {
 }
 
 static void TestPartialSortKeyTermination(void) {
-  const char* cases[] = {
+  static const char* cases[] = {
     "\\u1234\\u1234\\udc00",
     "\\udc00\\ud800\\ud800"
   };
@@ -3852,12 +3852,12 @@ static void TestPartialSortKeyTermination(void) {
 }
 
 static void TestSettings(void) {
-  const char* cases[] = {
+  static const char* cases[] = {
     "apple",
       "Apple"
   };
 
-  const char* locales[] = {
+  static const char* locales[] = {
     "",
       "en"
   };
@@ -4558,9 +4558,9 @@ assert: m <<< x <<< X <<< \u24DC <<< M  << q <<< Q < z < n
 #if 0
 /* requires features not yet supported */
 static void TestMoreBefore(void) {
-    struct {
+    static const struct {
         const char* rules;
-        const char* order[20];
+        const char* order[16];
         int32_t size;
     } tests[] = {
         { "&m < a &[before 1] a < x <<< X << q <<< Q < z",

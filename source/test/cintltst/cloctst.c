@@ -48,7 +48,7 @@ void PrintDataTable();
 #define LOCALE_SIZE 9
 #define LOCALE_INFO_SIZE 28
 
-static const char* rawData2[LOCALE_INFO_SIZE][LOCALE_SIZE] = {
+static const char* const rawData2[LOCALE_INFO_SIZE][LOCALE_SIZE] = {
     /* language code */
     {   "en",   "fr",   "ca",   "el",   "no",   "zh",   "de",   "es",  "ja"    },
     /* script code */
@@ -371,7 +371,7 @@ static void TestPrefixes() {
     int n;
     const char *loc, *expected;
     
-    const char *testData[][7] =
+    static const char * const testData[][7] =
     {
         /* NULL canonicalize() column means "expect same as getName()" */
         {"sv", "", "FI", "AL", "sv-fi-al", "sv_FI_AL", NULL},
@@ -400,7 +400,7 @@ static void TestPrefixes() {
         {NULL,NULL,NULL,NULL,NULL,NULL,NULL}
     };
     
-    const char *testTitles[] = {
+    static const char * const testTitles[] = {
         "uloc_getLanguage()",
         "uloc_getScript()",
         "uloc_getCountry()",
@@ -587,12 +587,12 @@ static void TestDisplayNames()
 
     {
         int32_t i;
-        const char *aLocale = "es@collation=traditional;calendar=japanese";
-        const char *testL[] = { "en_US", 
+        static const char *aLocale = "es@collation=traditional;calendar=japanese";
+        static const char *testL[] = { "en_US", 
             "fr_FR", 
             "ca_ES",
             "el_GR" };
-        const char *expect[] = { "Spanish (Calendar=Japanese Calendar, Collation=Traditional)", /* note sorted order of keywords */
+        static const char *expect[] = { "Spanish (Calendar=Japanese Calendar, Collation=Traditional)", /* note sorted order of keywords */
             "espagnol (Calendrier=Calendrier japonais, Ordonnancement=Ordre traditionnel)",
             "espanyol (calendar=japanese, collation=traditional)",
             "\\u0399\\u03C3\\u03C0\\u03B1\\u03BD\\u03B9\\u03BA\\u03AC (\\u0397\\u03BC\\u03B5\\u03C1\\u03BF\\u03BB\\u03CC\\u03B3\\u03B9\\u03BF=\\u0399\\u03B1\\u03C0\\u03C9\\u03BD\\u03B9\\u03BA\\u03CC \\u0397\\u03BC\\u03B5\\u03C1\\u03BF\\u03BB\\u03CC\\u03B3\\u03B9\\u03BF, \\u03A4\\u03B1\\u03BA\\u03C4\\u03BF\\u03C0\\u03BF\\u03AF\\u03B7\\u03C3\\u03B7=\\u03A0\\u03B1\\u03C1\\u03B1\\u03B4\\u03BF\\u03C3\\u03B9\\u03B1\\u03BA\\u03AE)" };
@@ -1035,13 +1035,13 @@ static void TestUninstalledISO3Names()
 {
   /* This test checks to make sure getISO3Language and getISO3Country work right
      even for locales that are not installed. */
-    const char iso2Languages [][4] = {     "am", "ba", "fy", "mr", "rn",
+    static const char iso2Languages [][4] = {     "am", "ba", "fy", "mr", "rn",
                                         "ss", "tw", "zu" };
-    const char iso3Languages [][5] = {     "amh", "bak", "fry", "mar", "run",
+    static const char iso3Languages [][5] = {     "amh", "bak", "fry", "mar", "run",
                                         "ssw", "twi", "zul" };
-    char iso2Countries [][6] = {     "am_AF", "ba_BW", "fy_KZ", "mr_MO", "rn_MN",
+    static const char iso2Countries [][6] = {     "am_AF", "ba_BW", "fy_KZ", "mr_MO", "rn_MN",
                                         "ss_SB", "tw_TC", "zu_ZW" };
-    char iso3Countries [][4] = {     "AFG", "BWA", "KAZ", "MAC", "MNG",
+    static const char iso3Countries [][4] = {     "AFG", "BWA", "KAZ", "MAC", "MNG",
                                         "SLB", "TCA", "ZWE" };
     int32_t i;
 
@@ -1066,13 +1066,13 @@ static void TestUninstalledISO3Names()
 
 static void TestVariantParsing()
 {
-    const char* en_US_custom="en_US_De Anza_Cupertino_California_United States_Earth";
-    const char* dispName="English (United States, DE ANZA_CUPERTINO_CALIFORNIA_UNITED STATES_EARTH)";
-    const char* dispVar="DE ANZA_CUPERTINO_CALIFORNIA_UNITED STATES_EARTH";
-    const char* shortVariant="fr_FR_foo";
-    const char* bogusVariant="fr_FR__foo";
-    const char* bogusVariant2="fr_FR_foo_";
-    const char* bogusVariant3="fr_FR__foo_";
+    static const char* en_US_custom="en_US_De Anza_Cupertino_California_United States_Earth";
+    static const char* dispName="English (United States, DE ANZA_CUPERTINO_CALIFORNIA_UNITED STATES_EARTH)";
+    static const char* dispVar="DE ANZA_CUPERTINO_CALIFORNIA_UNITED STATES_EARTH";
+    static const char* shortVariant="fr_FR_foo";
+    static const char* bogusVariant="fr_FR__foo";
+    static const char* bogusVariant2="fr_FR_foo_";
+    static const char* bogusVariant3="fr_FR__foo_";
 
 
     UChar displayVar[100];
@@ -1174,13 +1174,13 @@ static void TestObsoleteNames(void)
     UErrorCode status = U_ZERO_ERROR;
     char buff[256];
 
-    struct
+    static const struct
     {
         char locale[9];
-        char lang3[6];
-        char lang[6];
-        char ctry3[6];
-        char ctry[6];
+        char lang3[4];
+        char lang[4];
+        char ctry3[4];
+        char ctry[4];
     } tests[] =
     {
         { "eng_USA", "eng", "en", "USA", "US" },
@@ -1357,7 +1357,7 @@ static void TestObsoleteNames(void)
 
 static void TestKeywordVariants(void) 
 {
-    struct {
+    static const struct {
         const char *localeID;
         const char *expectedLocaleID;
         const char *expectedLocaleIDNoKeywords;
@@ -1454,7 +1454,7 @@ static void TestKeywordVariants(void)
 
 static void TestKeywordVariantParsing(void) 
 {
-    struct {
+    static const struct {
         const char *localeID;
         const char *keyword;
         const char *expectedValue;
@@ -1481,7 +1481,7 @@ static void TestKeywordVariantParsing(void)
     }
 }
 
-static struct {
+static const struct {
   const char *l; /* locale */
   const char *k; /* kw */
   const char *v; /* value */
@@ -1668,7 +1668,7 @@ static int32_t _canonicalize(int32_t selector, /* 0==getName, 1==canonicalize */
 
 static void TestCanonicalization(void)
 {
-    static struct {
+    static const struct {
         const char *localeID;    /* input */
         const char *getNameID;   /* expected getName() result */
         const char *canonicalID; /* expected canonicalize() result */
@@ -1866,9 +1866,9 @@ static void TestDisplayKeywords(void)
 }
 
 static void TestDisplayKeywordValues(void){
-        int32_t i;
+    int32_t i;
 
-    struct {
+    static const struct {
         const char *localeID;
         const char *displayLocale;
         UChar displayKeywordValue[500];
@@ -1948,7 +1948,7 @@ static void TestDisplayKeywordValues(void){
         int32_t keywordCount = 0;
         const char* localeID = "es@collation=phonebook;calendar=buddhist;currency=DEM";
         const char* displayLocale = "de";
-        const UChar expected[][50] = {
+        static const UChar expected[][50] = {
             {0x0042, 0x0075, 0x0064, 0x0064, 0x0068, 0x0069, 0x0073, 0x0074, 0x0069, 0x0073, 0x0063, 0x0068, 0x0065, 0x0072, 0x0020, 0x004b, 0x0061, 0x006c, 0x0065, 0x006e, 0x0064, 0x0065, 0x0072, 0x0000},
 
             {0x0054, 0x0065, 0x006c, 0x0065, 0x0066, 0x006f, 0x006e, 0x0062, 0x0075, 0x0063, 0x0068, 0x002d, 0x0053, 0x006f, 0x0072, 0x0074, 0x0069, 0x0065, 0x0072, 0x0072, 0x0065, 0x0067, 0x0065, 0x006c, 0x006e, 0x0000},
@@ -2010,7 +2010,7 @@ static void TestDisplayKeywordValues(void){
 
 
 static void TestGetBaseName(void) {
-    struct {
+    static const struct {
         const char *localeID;
         const char *baseName;
     } testCases[] = {
@@ -2284,65 +2284,66 @@ static void TestLanguageExemplarsFallbacks(void) {
 }
 
 static void TestAcceptLanguage(void) {
-  UErrorCode status = U_ZERO_ERROR;
-  UAcceptResult outResult;
-  UEnumeration *available;
-  char tmp[200];
-  int i;
-  int32_t rc = 0;
+    UErrorCode status = U_ZERO_ERROR;
+    UAcceptResult outResult;
+    UEnumeration *available;
+    char tmp[200];
+    int i;
+    int32_t rc = 0;
 
-  struct { 
-    int32_t httpSet; 
-    const char *icuSet;
-    const char *expect;
-    UAcceptResult res;
-  } tests[] = { 
-    /*0*/{ 0, NULL, "mt_MT", ULOC_ACCEPT_VALID },
-    /*1*/{ 1, NULL, "en", ULOC_ACCEPT_VALID },
-    /*2*/{ 2, NULL, "en", ULOC_ACCEPT_FALLBACK },
-    /*3*/{ 3, NULL, "", ULOC_ACCEPT_FAILED },
-    /*4*/{ 4, NULL, "es", ULOC_ACCEPT_VALID },
-  };
-  const int32_t numTests = sizeof(tests)/sizeof(tests[0]);
-  const char *http[] = { /*0*/ "mt-mt, ja;q=0.76, en-us;q=0.95, en;q=0.92, en-gb;q=0.89, fr;q=0.87, iu-ca;q=0.84, iu;q=0.82, ja-jp;q=0.79, mt;q=0.97, de-de;q=0.74, de;q=0.71, es;q=0.68, it-it;q=0.66, it;q=0.63, vi-vn;q=0.61, vi;q=0.58, nl-nl;q=0.55, nl;q=0.53, th-th-traditional;q=.01",
-                         /*1*/ "ja;q=0.5, en;q=0.8, tlh",
-                         /*2*/ "en-wf, de-lx;q=0.8",
-                         /*3*/ "mga-ie;q=0.9, tlh",
-                         /*4*/ "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "
-                               "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "
-                               "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "
-                               "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "
-                               "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "
-                               "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "
-                               "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "
-                               "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "
-                               "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "
-                               "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "
-                               "es"
-  };
-        
-  for(i=0;i<numTests;i++) {
-    outResult = -3;
-    status=U_ZERO_ERROR;
-    log_verbose("test #%d: http[%s], ICU[%s], expect %s, %d\n", 
+    struct { 
+        int32_t httpSet; 
+        const char *icuSet;
+        const char *expect;
+        UAcceptResult res;
+    } tests[] = { 
+        /*0*/{ 0, NULL, "mt_MT", ULOC_ACCEPT_VALID },
+        /*1*/{ 1, NULL, "en", ULOC_ACCEPT_VALID },
+        /*2*/{ 2, NULL, "en", ULOC_ACCEPT_FALLBACK },
+        /*3*/{ 3, NULL, "", ULOC_ACCEPT_FAILED },
+        /*4*/{ 4, NULL, "es", ULOC_ACCEPT_VALID },
+    };
+    const int32_t numTests = sizeof(tests)/sizeof(tests[0]);
+    static const char *http[] = {
+        /*0*/ "mt-mt, ja;q=0.76, en-us;q=0.95, en;q=0.92, en-gb;q=0.89, fr;q=0.87, iu-ca;q=0.84, iu;q=0.82, ja-jp;q=0.79, mt;q=0.97, de-de;q=0.74, de;q=0.71, es;q=0.68, it-it;q=0.66, it;q=0.63, vi-vn;q=0.61, vi;q=0.58, nl-nl;q=0.55, nl;q=0.53, th-th-traditional;q=.01",
+        /*1*/ "ja;q=0.5, en;q=0.8, tlh",
+        /*2*/ "en-wf, de-lx;q=0.8",
+        /*3*/ "mga-ie;q=0.9, tlh",
+        /*4*/ "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "
+              "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "
+              "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "
+              "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "
+              "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "
+              "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "
+              "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "
+              "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "
+              "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "
+              "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "
+              "es"
+    };
+
+    for(i=0;i<numTests;i++) {
+        outResult = -3;
+        status=U_ZERO_ERROR;
+        log_verbose("test #%d: http[%s], ICU[%s], expect %s, %d\n", 
+            i, http[tests[i].httpSet], tests[i].icuSet, tests[i].expect, tests[i].res);
+
+        available = ures_openAvailableLocales(tests[i].icuSet, &status);
+        tmp[0]=0;
+        rc = uloc_acceptLanguageFromHTTP(tmp, 199, &outResult, http[tests[i].httpSet], available, &status);
+        uenum_close(available);
+        log_verbose(" got %s, %d [%s]\n", tmp[0]?tmp:"(EMPTY)", outResult, u_errorName(status));
+        if(outResult != tests[i].res) {
+            log_err("FAIL: #%d: expected outResult of %d but got %d\n", i, tests[i].res, outResult);
+            log_info("test #%d: http[%s], ICU[%s], expect %s, %d\n", 
                 i, http[tests[i].httpSet], tests[i].icuSet, tests[i].expect, tests[i].res);
-
-    available = ures_openAvailableLocales(tests[i].icuSet, &status);
-    tmp[0]=0;
-    rc = uloc_acceptLanguageFromHTTP(tmp, 199, &outResult, http[tests[i].httpSet], available, &status);
-    uenum_close(available);
-    log_verbose(" got %s, %d [%s]\n", tmp[0]?tmp:"(EMPTY)", outResult, u_errorName(status));
-    if(outResult != tests[i].res) {
-      log_err("FAIL: #%d: expected outResult of %d but got %d\n", i, tests[i].res, outResult);
-      log_info("test #%d: http[%s], ICU[%s], expect %s, %d\n", 
-               i, http[tests[i].httpSet], tests[i].icuSet, tests[i].expect, tests[i].res);
+        }
+        if((outResult>0)&&uprv_strcmp(tmp, tests[i].expect)) {
+            log_err("FAIL: #%d: expected %s but got %s\n", i, tests[i].expect, tmp);
+            log_info("test #%d: http[%s], ICU[%s], expect %s, %d\n", 
+                i, http[tests[i].httpSet], tests[i].icuSet, tests[i].expect, tests[i].res);
+        }
     }
-    if((outResult>0)&&uprv_strcmp(tmp, tests[i].expect)) {
-      log_err("FAIL: #%d: expected %s but got %s\n", i, tests[i].expect, tmp);
-      log_info("test #%d: http[%s], ICU[%s], expect %s, %d\n", 
-               i, http[tests[i].httpSet], tests[i].icuSet, tests[i].expect, tests[i].res);
-    }
-  }
 }
 
 static const char* LOCALE_ALIAS[][2] = {
