@@ -18,10 +18,10 @@ h3.doc { background: #CCCCFF }
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h2>International Components for Unicode for Java (ICU4J)</h2>
-<h3>Read Me for ICU4J 3.6 d02</h3>
+<h3>Read Me for ICU4J 3.6</h3>
 <hr size="2" width="100%">
 <p><b>Release Date</b><br>
-September 20, 2006<br>
+October 1, 2006<br>
 </p>
 <p><b>Note:</b> This is major release of ICU4J.  It contains bug fixes
 and adds implementations of inherited API and introduces new API
@@ -204,10 +204,12 @@ current and complete version of this support is always found in ICU4J.
       <li><strong>Locale Data</strong>: ICU uses and supports data from <a href="http://www.unicode.org/press/pr-cldr1.4.html">Common Locale Data
       Repository (CLDR) 1.4</a>, which includes many improvements in quality
       and quantity of data. There is 25% more CLDR locale data in 245 locales in ICU.</li>
-    <li><strong>Formatting</strong>: A flexible date/time format generator has been added. This allows multiple date and time format patterns to be generated that are valid for specific locales.</li>
     <li><strong>Globalization Preferences</strong>: A new flexible container for locale data was added.</li>
-    <li><strong>Charset Conversion</strong>: A preview of the ICU4J implementation of the java.nio.charset.Charset API was added.</li>
+    <li><strong>Formatting</strong>: A <strong>preview</strong> of the flexible date/time format generator has been added. This allows multiple date and time format patterns to be generated that are valid for specific locales.</li>
+    <li><strong>Charset Conversion</strong>: A <strong>preview</strong> of the ICU4J implementation of the java.nio.charset.Charset API was added.</li>
 </ul>
+<p><i><font color="red"><strong>Note</strong>: Do not use preview APIs in production code. They may change drastically in subsequent releases.</font></i></p>
+
 <h3 class="doc"><a name="license"></a>License Information</h3>
 <p>
 The ICU projects (ICU4C and ICU4J) use the X license. The X
@@ -1275,7 +1277,7 @@ overwrite any corresponding resource files already in that directory.
   <li><a
  href="http://www.ibm.com/software/globalization/icu/downloads.jsp">ICU4C</a></li>
   <li>Compilers and tools required for building <a
- href="http://dev.icu-project.org/cgi-bin/viewcvs.cgi/*checkout*/icu/readme.html#HowToBuild">ICU4C</a>.</li>
+ href="http://dev.icu-project.org/cgi-bin/viewcvs.cgi/icu/readme.html?view=co#HowToBuild">ICU4C</a>.</li>
   <li>Java SDK version 1.4.0 or above.</li>
   <li>Perl version 5 or above.</li>
 </ul>
@@ -1283,7 +1285,7 @@ overwrite any corresponding resource files already in that directory.
 <ol>
   <li> Download and build ICU4C on a Windows machine. For instructions on
 downloading and building ICU4C, please click <a
- href="http://dev.icu-project.org/cgi-bin/viewcvs.cgi/*checkout*/icu/readme.html#HowToBuild">here</a>.</li>
+ href="http://dev.icu-project.org/cgi-bin/viewcvs.cgi/icu/readme.html?view=co#HowToBuild">here</a>.</li>
   <li> Change directory to <i>$icu_root</i>/source/tools/genrb </li>
   <li> Launch gendtjar.pl from that directory itself with the command <br>
 gendtjar.pl --icu-root=<i>$icu_root</i> --jar=<i>$jdk_home/bin</i>
@@ -1351,7 +1353,7 @@ review all comments.</p>
 <p><i><font size="-1">Copyright &copy; 2002-2006 International Business
 Machines Corporation and others. All Rights
 Reserved.<br>
-5600 Cottle Road, San Jos&eacute;, CA 95193
+4400 North First Street, San Jos&eacute;, CA 95193, USA
 </font></i></p>
 </body>
 </html>
