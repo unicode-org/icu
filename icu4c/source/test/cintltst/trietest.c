@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2001-2005, International Business Machines
+*   Copyright (C) 2001-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -51,7 +51,7 @@ typedef struct CheckRange {
 } CheckRange;
 struct{
     double bogus; /* needed for aligining the storage */
-    uint8_t storage[10000000];
+    uint8_t storage[65536];
 } storageHolder;
 
 
@@ -270,7 +270,8 @@ testTrieRangesWithMalloc(const char *testName,
     UErrorCode errorCode;
     UBool overwrite, ok;
     uint8_t* storage =NULL;
-    storage = (uint8_t*) uprv_malloc(sizeof(uint8_t)*100000);
+    static const int32_t DEFAULT_STORAGE_SIZE = 65536;
+    storage = (uint8_t*) uprv_malloc(sizeof(uint8_t)*DEFAULT_STORAGE_SIZE);
 
     log_verbose("\ntesting Trie '%s'\n", testName);
     newTrie=utrie_open(NULL, NULL, 2000,
@@ -317,7 +318,7 @@ testTrieRangesWithMalloc(const char *testName,
     }
 
     errorCode=U_ZERO_ERROR;
-    length=utrie_serialize(newTrie, storage, 1000000,
+    length=utrie_serialize(newTrie, storage, DEFAULT_STORAGE_SIZE,
                            dataIs32 ? _testFoldedValue32 : _testFoldedValue16,
                            (UBool)!dataIs32,
                            &errorCode);
