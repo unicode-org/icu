@@ -37,15 +37,15 @@ void backAndForth(UCollationElements *iter);
 /* gets an array of CEs for a string in UCollationElements iterator. */
 int32_t* getOrders(UCollationElements *iter, int32_t *orderLength);
 
-void genericOrderingTestWithResult(UCollator *coll, const char *s[], uint32_t size, UCollationResult result);
-void genericOrderingTest(UCollator *coll, const char *s[], uint32_t size);
-void genericLocaleStarter(const char *locale, const char *s[], uint32_t size);
-void genericLocaleStarterWithResult(const char *locale, const char *s[], uint32_t size, UCollationResult result);
-void genericLocaleStarterWithOptions(const char *locale, const char *s[], uint32_t size, const UColAttribute *attrs, const UColAttributeValue *values, uint32_t attsize);
-void genericLocaleStarterWithOptionsAndResult(const char *locale, const char *s[], uint32_t size, const UColAttribute *attrs, const UColAttributeValue *values, uint32_t attsize, UCollationResult result);
-void genericRulesStarterWithResult(const char *rules, const char *s[], uint32_t size, UCollationResult result);
-void genericRulesStarter(const char *rules, const char *s[], uint32_t size);
-void genericRulesStarterWithOptionsAndResult(const char *rules, const char *s[], uint32_t size, const UColAttribute *attrs, const UColAttributeValue *values, uint32_t attsize, UCollationResult result);
+void genericOrderingTestWithResult(UCollator *coll, const char * const s[], uint32_t size, UCollationResult result);
+void genericOrderingTest(UCollator *coll, const char * const s[], uint32_t size);
+void genericLocaleStarter(const char *locale, const char * const s[], uint32_t size);
+void genericLocaleStarterWithResult(const char *locale, const char * const s[], uint32_t size, UCollationResult result);
+void genericLocaleStarterWithOptions(const char *locale, const char * const s[], uint32_t size, const UColAttribute *attrs, const UColAttributeValue *values, uint32_t attsize);
+void genericLocaleStarterWithOptionsAndResult(const char *locale, const char * const s[], uint32_t size, const UColAttribute *attrs, const UColAttributeValue *values, uint32_t attsize, UCollationResult result);
+void genericRulesStarterWithResult(const char *rules, const char * const s[], uint32_t size, UCollationResult result);
+void genericRulesStarter(const char *rules, const char * const s[], uint32_t size);
+void genericRulesStarterWithOptionsAndResult(const char *rules, const char * const s[], uint32_t size, const UColAttribute *attrs, const UColAttributeValue *values, uint32_t attsize, UCollationResult result);
 UBool hasCollationElements(const char *locName);
 
 
