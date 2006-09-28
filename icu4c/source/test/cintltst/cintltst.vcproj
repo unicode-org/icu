@@ -104,7 +104,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				OutputFile=".\Release/cintltst.exe"
-				LinkIncremental="2"
+				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile=".\Release/cintltst.pdb"
