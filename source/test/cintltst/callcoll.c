@@ -540,7 +540,7 @@ backAndForth(UCollationElements *iter)
     free(orders);
 }
 
-void genericOrderingTestWithResult(UCollator *coll, const char *s[], uint32_t size, UCollationResult result) {
+void genericOrderingTestWithResult(UCollator *coll, const char * const s[], uint32_t size, UCollationResult result) {
   UChar t1[2048] = {0};
   UChar t2[2048] = {0};
   UCollationElements *iter;
@@ -571,11 +571,11 @@ void genericOrderingTestWithResult(UCollator *coll, const char *s[], uint32_t si
   ucol_closeElements(iter);
 }
 
-void genericOrderingTest(UCollator *coll, const char *s[], uint32_t size) {
+void genericOrderingTest(UCollator *coll, const char * const s[], uint32_t size) {
   genericOrderingTestWithResult(coll, s, size, UCOL_LESS);
 }
 
-void genericLocaleStarter(const char *locale, const char *s[], uint32_t size) {
+void genericLocaleStarter(const char *locale, const char * const s[], uint32_t size) {
   UErrorCode status = U_ZERO_ERROR;
   UCollator *coll = ucol_open(locale, &status);
 
@@ -592,7 +592,7 @@ void genericLocaleStarter(const char *locale, const char *s[], uint32_t size) {
   ucol_close(coll);
 }
 
-void genericLocaleStarterWithResult(const char *locale, const char *s[], uint32_t size, UCollationResult result) {
+void genericLocaleStarterWithResult(const char *locale, const char * const s[], uint32_t size, UCollationResult result) {
   UErrorCode status = U_ZERO_ERROR;
   UCollator *coll = ucol_open(locale, &status);
 
@@ -610,7 +610,7 @@ void genericLocaleStarterWithResult(const char *locale, const char *s[], uint32_
 }
 
 /* currently not used with options */
-void genericRulesStarterWithOptionsAndResult(const char *rules, const char *s[], uint32_t size, const UColAttribute *attrs, const UColAttributeValue *values, uint32_t attsize, UCollationResult result) {
+void genericRulesStarterWithOptionsAndResult(const char *rules, const char * const s[], uint32_t size, const UColAttribute *attrs, const UColAttributeValue *values, uint32_t attsize, UCollationResult result) {
   UErrorCode status = U_ZERO_ERROR;
   UChar rlz[RULE_BUFFER_LEN] = { 0 };
   uint32_t rlen = u_unescape(rules, rlz, RULE_BUFFER_LEN);
@@ -633,7 +633,7 @@ void genericRulesStarterWithOptionsAndResult(const char *rules, const char *s[],
   ucol_close(coll);
 }
 
-void genericLocaleStarterWithOptionsAndResult(const char *locale, const char *s[], uint32_t size, const UColAttribute *attrs, const UColAttributeValue *values, uint32_t attsize, UCollationResult result) {
+void genericLocaleStarterWithOptionsAndResult(const char *locale, const char * const s[], uint32_t size, const UColAttribute *attrs, const UColAttributeValue *values, uint32_t attsize, UCollationResult result) {
   UErrorCode status = U_ZERO_ERROR;
   uint32_t i;
 
@@ -655,11 +655,11 @@ void genericLocaleStarterWithOptionsAndResult(const char *locale, const char *s[
   ucol_close(coll);
 }
 
-void genericLocaleStarterWithOptions(const char *locale, const char *s[], uint32_t size, const UColAttribute *attrs, const UColAttributeValue *values, uint32_t attsize) {
+void genericLocaleStarterWithOptions(const char *locale, const char * const s[], uint32_t size, const UColAttribute *attrs, const UColAttributeValue *values, uint32_t attsize) {
   genericLocaleStarterWithOptionsAndResult(locale, s, size, attrs, values, attsize, UCOL_LESS);
 }
 
-void genericRulesStarterWithResult(const char *rules, const char *s[], uint32_t size, UCollationResult result) {
+void genericRulesStarterWithResult(const char *rules, const char * const s[], uint32_t size, UCollationResult result) {
   UErrorCode status = U_ZERO_ERROR;
   UChar rlz[RULE_BUFFER_LEN] = { 0 };
   uint32_t rlen = u_unescape(rules, rlz, RULE_BUFFER_LEN);
@@ -678,7 +678,7 @@ void genericRulesStarterWithResult(const char *rules, const char *s[], uint32_t 
   }
 }
 
-void genericRulesStarter(const char *rules, const char *s[], uint32_t size) {
+void genericRulesStarter(const char *rules, const char * const s[], uint32_t size) {
   genericRulesStarterWithResult(rules, s, size, UCOL_LESS);
 }
 
