@@ -865,10 +865,11 @@ UnicodeSet* TransliteratorParser::orphanCompoundFilter() {
  */
 void TransliteratorParser::parseRules(const UnicodeString& rule,
                                       UTransDirection theDirection,
-                                      UErrorCode& status) {
+                                      UErrorCode& status)
+{
     // Clear error struct
+    uprv_memset(&parseError, 0, sizeof(parseError));
     parseError.line = parseError.offset = -1;
-    parseError.preContext[0] = parseError.postContext[0] = (UChar)0;
 
     UBool parsingIDs = TRUE;
     int32_t ruleCount = 0;
