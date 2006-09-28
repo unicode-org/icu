@@ -1627,7 +1627,7 @@ void CollationAPITest::TestBounds(void) {
     uint8_t sortkey[512], lower[512], upper[512];
     UChar buffer[512];
 
-    const char *test[] = {
+    static const char * const test[] = {
         "John Smith",
         "JOHN SMITH",
         "john SMITH",
@@ -1638,7 +1638,7 @@ void CollationAPITest::TestBounds(void) {
         "John Smithsonian"
     };
 
-    static struct teststruct tests[] = {
+    struct teststruct tests[] = {
         {"\\u010CAKI MIHALJ", {0}},
         {"\\u010CAKI MIHALJ", {0}},
         {"\\u010CAKI PIRO\\u0160KA", {0}},
