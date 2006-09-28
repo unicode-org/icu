@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -104,12 +104,6 @@
      * Test mergeSortKeys
      */
     void TestMergeSortKeys(void);
-
-    /**
-     * utility function, defined in cmsccoll.c
-     */
-    void genericLocaleStarter(const char *locale, const char *s[], uint32_t size);
-
 
     /** 
      * test short string and collator identifier functions
