@@ -1209,7 +1209,7 @@ private:
 
     void swapBuffers(void);
 
-    UBool allocateStrings();
+    UBool allocateStrings(UErrorCode &status);
 
     UnicodeString& _toPattern(UnicodeString& result,
                               UBool escapeUnprintable) const;
