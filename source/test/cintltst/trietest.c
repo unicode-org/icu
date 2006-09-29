@@ -49,10 +49,6 @@ typedef struct CheckRange {
     UChar32 limit;
     uint32_t value;
 } CheckRange;
-struct{
-    double bogus; /* needed for aligining the storage */
-    uint8_t storage[65536];
-} storageHolder;
 
 
 static uint32_t U_CALLCONV
@@ -270,7 +266,7 @@ testTrieRangesWithMalloc(const char *testName,
     UErrorCode errorCode;
     UBool overwrite, ok;
     uint8_t* storage =NULL;
-    static const int32_t DEFAULT_STORAGE_SIZE = 65536;
+    static const int32_t DEFAULT_STORAGE_SIZE = 32768;
     storage = (uint8_t*) uprv_malloc(sizeof(uint8_t)*DEFAULT_STORAGE_SIZE);
 
     log_verbose("\ntesting Trie '%s'\n", testName);
@@ -449,6 +445,10 @@ testTrieRanges(const char *testName,
                const SetRange setRanges[], int32_t countSetRanges,
                const CheckRange checkRanges[], int32_t countCheckRanges,
                UBool dataIs32, UBool latin1Linear) {
+    union{
+        double bogus; /* needed for aligining the storage */
+        uint8_t storage[32768];
+    } storageHolder;
     UTrieGetFoldingOffset *getFoldingOffset;
     UNewTrieGetFoldedValue *getFoldedValue;
     const CheckRange *enumRanges;
@@ -805,7 +805,7 @@ dummyGetFoldingOffset(uint32_t data) {
 
 static void
 dummyTest(UBool make16BitTrie) {
-    static int32_t mem[UTRIE_DUMMY_SIZE/4];
+    int32_t mem[UTRIE_DUMMY_SIZE/4];
 
     UTrie trie;
     UErrorCode errorCode;
