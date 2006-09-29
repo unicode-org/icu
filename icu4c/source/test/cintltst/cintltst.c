@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -618,7 +618,7 @@ U_CFUNC void ctest_resetTimeZone(void) {
 #endif
 }
 
-#define CTST_MAX_ALLOC 10000
+#define CTST_MAX_ALLOC 8192
 /* Array used as a queue */
 static void * ctst_allocated_stuff[CTST_MAX_ALLOC] = {0};
 static int ctst_allocated = 0;
