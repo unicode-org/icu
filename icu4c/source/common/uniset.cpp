@@ -139,13 +139,14 @@ static int8_t U_CALLCONV compareUnicodeString(UHashTok t1, UHashTok t2) {
  */
 UnicodeSet::UnicodeSet() :
     len(1), capacity(1 + START_EXTRA), bufferCapacity(0),
-    list(0), buffer(0), strings(0)
+    list(0), buffer(0), strings(NULL)
 {
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
     if(list!=NULL){
         list[0] = UNICODESET_HIGH;
     }
-    allocateStrings();
+    UErrorCode status = U_ZERO_ERROR;
+    allocateStrings(status);
     _dbgct(this);
 }
 
@@ -158,14 +159,16 @@ UnicodeSet::UnicodeSet() :
  */
 UnicodeSet::UnicodeSet(UChar32 start, UChar32 end) :
     len(1), capacity(1 + START_EXTRA), bufferCapacity(0),
-    list(0), buffer(0), strings(0)
+    list(0), buffer(0), strings(NULL)
 {
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
     if(list!=NULL){
+        UErrorCode status = U_ZERO_ERROR;
+
         list[0] = UNICODESET_HIGH;
+        allocateStrings(status);
+        complement(start, end);
     }
-    allocateStrings();
-    complement(start, end);
     _dbgct(this);
 }
 
@@ -175,11 +178,12 @@ UnicodeSet::UnicodeSet(UChar32 start, UChar32 end) :
 UnicodeSet::UnicodeSet(const UnicodeSet& o) :
     UnicodeFilter(o),
     len(0), capacity(o.len + GROW_EXTRA), bufferCapacity(0),
-    list(0), buffer(0), strings(0)
+    list(0), buffer(0), strings(NULL)
 {
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
     if(list!=NULL){
-        allocateStrings();
+        UErrorCode status = U_ZERO_ERROR;
+        allocateStrings(status);
         *this = o;
     }
     _dbgct(this);
@@ -1368,11 +1372,13 @@ int32_t UnicodeSet::serialize(uint16_t *dest, int32_t destCapacity, UErrorCode& 
 /**
  * Allocate our strings vector and return TRUE if successful.
  */
-UBool UnicodeSet::allocateStrings() {
-    UErrorCode ec = U_ZERO_ERROR;
+UBool UnicodeSet::allocateStrings(UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return FALSE;
+    }
     strings = new UVector(uhash_deleteUnicodeString,
-                          uhash_compareUnicodeString, ec);
-    if (U_FAILURE(ec)) {
+                          uhash_compareUnicodeString, 1, status);
+    if (U_FAILURE(status)) {
         delete strings;
         strings = NULL;
         return FALSE;
