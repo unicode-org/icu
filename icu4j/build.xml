@@ -665,11 +665,23 @@
                 <pathelement path="${build.dir}"/>
             </classpath>
         </java>
+        <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
+            <jvmarg value="-ea"/>  <!-- enable assertion checks -->
+            <arg value="-n"/>
+            <classpath>
+                <pathelement path="${java.class.path}/"/>
+                <pathelement location="${jar.file}"/>
+                <pathelement location="${charsets.jar.file}"/>
+                <pathelement location="clover.jar"/>
+                <pathelement path="${build.dir}"/>
+            </classpath>
+        </java>
     </target>
 
     <target name="exhaustiveCheck" depends="tests, jar, deleteCore" description="run standard icu4j test suite in exhaustive mode">
         <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
             <jvmarg value="-ea"/>  <!-- enable assertion checks -->
+            <jvmarg value="-Xmx128m"/>  <!-- set the max heap size to 128m -->
             <arg value="-n"/>
             <arg value="-e10"/>
             <classpath>
