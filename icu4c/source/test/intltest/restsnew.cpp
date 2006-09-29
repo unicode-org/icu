@@ -34,11 +34,11 @@ enum E_Where
 
 //***************************************************************************************
 
-#define CONFIRM_EQ(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail(); errln(action + (UnicodeString)" returned " + (actual) + (UnicodeString)" instead of " + (expected) + (UnicodeString)"\n"); }
-#define CONFIRM_GE(actual,expected) if ((actual)>=(expected)) { record_pass(); } else { record_fail(); errln(action + (UnicodeString)" returned " + (actual) + (UnicodeString)" instead of x >= " + (expected) + (UnicodeString)"\n"); }
-#define CONFIRM_NE(actual,expected) if ((expected)!=(actual)) { record_pass(); } else { record_fail(); errln(action + (UnicodeString)" returned " + (actual) + (UnicodeString)" instead of x != " + (expected) + (UnicodeString)"\n"); }
+#define CONFIRM_EQ(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail(); errln(action + (UnicodeString)" returned " + (actual) + (UnicodeString)" instead of " + (expected)); }
+#define CONFIRM_GE(actual,expected) if ((actual)>=(expected)) { record_pass(); } else { record_fail(); errln(action + (UnicodeString)" returned " + (actual) + (UnicodeString)" instead of x >= " + (expected)); }
+#define CONFIRM_NE(actual,expected) if ((expected)!=(actual)) { record_pass(); } else { record_fail(); errln(action + (UnicodeString)" returned " + (actual) + (UnicodeString)" instead of x != " + (expected)); }
 
-#define CONFIRM_UErrorCode(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail(); errln(action + (UnicodeString)" returned " + (UnicodeString)u_errorName(actual) + (UnicodeString)" instead of " + (UnicodeString)u_errorName(expected) + (UnicodeString)"\n"); }
+#define CONFIRM_UErrorCode(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail(); errln(action + (UnicodeString)" returned " + (UnicodeString)u_errorName(actual) + (UnicodeString)" instead of " + (UnicodeString)u_errorName(expected)); }
 
 //***************************************************************************************
 
