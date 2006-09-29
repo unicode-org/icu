@@ -98,7 +98,7 @@ Normalization</b></a> &#8211; NFC, NFD, NFKD, NFKC<br>
 XML and the net</li>
   <li><a
  href="http://icu.sourceforge.net/userguide/dateCalendar.html"><b>International
-Calendars</b></a> &#8211; Arabic, Buddhist, Hebrew, and Japanese calendars<br>
+Calendars</b></a> &#8211; Arabic, Buddhist, Hebrew, Japanese, Ethiopic, Islamic, Coptic and Chinese calendars<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Required for correct presentation of dates in
 certain countries</li>
   <li><a
@@ -119,6 +119,10 @@ Compression</b></a> &#8211; Standard compression of Unicode text<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Suitable for large numbers of small fields,
 where LZW and similar schemes
 do not apply</li>
+  <li><a
+ href="http://icu.sourceforge.net/userguide/conversion.html"><b>Charset Conversion</b></a> &#8211; Conversion to and from different charsets.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Plugs into JDK's CharsetProvider Service Provider Interface (SPI)</li>
+
 </ul>
 <blockquote>
   <p><b>Note:</b> We continue to provide assistance to Sun, and in some
@@ -271,7 +275,7 @@ code. These versions are tested more thoroughly than day-to-day
 development builds, and they are packaged in jar files for convenient
 download. These packaged files can be found at the <a
  href="http://icu.sourceforge.net/download/">ICU Downloads page</a>.
-A packaged snapshot is named <b>icu4jsrc_XXX.jar</b>, where XXX
+A packaged snapshot is named <b>icu4j-XXX-src.jar</b>, where XXX
 is the release version number. Please unjar this file. It
 will reconstruct the source directory.</li>
 </ul>
@@ -330,6 +334,12 @@ removed from icu4j.jar, and can be built into their own jar.</p>
 <table bgcolor="#ccccff" border="0" cellpadding="3" frame="void"
  width="623">
   <tbody>
+    <tr>
+      <th align="right" bgcolor="#ffffff" valign="baseline">$Root/src/com/ibm/icu/charset<br>
+      <font color="red">Core, API (Preview)</font></th>
+      <td bgcolor="#ffffff" valign="baseline">Packages that provide Charset conversion
+      </td>
+    </tr>
     <tr>
       <th align="right" bgcolor="#ffffff" valign="baseline">$Root/src/com/ibm/icu/dev<br>
       <font color="red">Non-Core, Non-API</font></th>
@@ -391,7 +401,7 @@ These add to, and in some cases replace, related core Java classes:
       <td bgcolor="#ffffff" valign="baseline">Additional utility
 classes:
       <ul>
-        <li>Calendars - Gregorian, Buddhist, Coptic, Ethiopic, Hebrew, Islamic, Japanese </li>
+        <li>Calendars - Gregorian, Buddhist, Coptic, Ethiopic, Hebrew, Islamic, Japanese, Chinese </li>
         <li>Holiday</li>
         <li>TimeZone</li>
         <li>VersionInfo</li>
@@ -503,7 +513,8 @@ multi-lingual searching</a> </li>
 <h3 class="doc"><a name="HowToInstallJavac"></a>How to Install and Build</h3>
 <p>To install ICU4J, simply place the prebuilt jar file <strong>icu4j.jar</strong>
 on your
-Java CLASSPATH. No other files are needed.</p>
+Java CLASSPATH. If you need Charset API support please place <strong>icu4j-charsets.jar</strong> on your class path.
+No other files are needed.</p>
 <p><b>Eclipse users:</b> See the ICU4J site for information on<a
  href="http://icu.sourceforge.net/docs/eclipse_howto/eclipse_howto.html">
 how to configure Eclipse</a> to build ICU4J.</p>
@@ -524,7 +535,7 @@ Linux using Ant. The build system requires Ant 1.6 or later.
  href="http://ant.apache.org/bindownload.cgi">http://ant.apache.org/bindownload.cgi</a>),
 extract it onto your system, set some environment variables, and add
 its bin directory to your path. For example: </p>
-    <pre>    set JAVA_HOME=C:\jdk1.4.2<br>    set ANT_HOME=C:\ant<br>    set PATH=%PATH%;%ANT_HOME%\bin</pre>
+    <pre>    set JAVA_HOME=C:\jdk1.5.0<br>    set ANT_HOME=C:\ant<br>    set PATH=%PATH%;%ANT_HOME%\bin</pre>
     <p>See the current Ant documentation for details.</p>
   </li>
 </ul>
@@ -538,6 +549,7 @@ properly. For example:</p>
 <blockquote>
   <pre>F:\icu4j&gt;ant tests<br>Buildfile: build.xml<br>Project base dir set to: F:\icu4j<br>Executing Target: core<br>Compiling 71 source files to F:\icu4j\classes<br>Executing Target: tests<br>Compiling 24 source files to F:\icu4j\classes<br>Completed in 19 seconds</pre>
 </blockquote>
+<i>Note: The above output is an example. The numbers are likely to be different with the current version ICU4J.</i>
 <p>The following are some targets that you can provide to <b>ant</b>.
 For more targets run <code>ant -projecthelp</code> or see the build.xml file.</p>
 <table bgcolor="#ccccff" border="0" cellpadding="3" frame="void"
@@ -1088,6 +1100,10 @@ or disappear without notice.</p>
 <p>The icu4j.jar file contains only the core ICU4J classes, not the
 demo classes, so unless you build ICU4J there is little to try out.
 </p>
+<h4>Charset</h4>
+To try out the <strong>Charset</strong> package, build <strong>icu4j.jar</strong> and <strong>icu4j-charsets.jar</strong> using 'jar' target.
+You can use the charsets by placing these files on your classpath.
+<blockquote><tt>java -cp $Root/icu4j.jar:$Root/icu4j-charsets.jar &lt;your program&gt;</tt></blockquote>
 <h4>Rich Edit</h4>
 To try out the <strong>richedit</strong> package, first build the
 richeditJar target.
@@ -1154,20 +1170,20 @@ from release to release, so clients should not depend on the exact
 organization
 of the data in ICU4J.</p>
 <ul>
-  <li>The primary <b>locale data</b> is under the directory <tt>icudt34b</tt>,
+  <li>The primary <b>locale data</b> is under the directory <tt>icudt36b</tt>,
 as a set of <tt>".res"</tt> files whose names are the locale identifiers. 
 Locale naming is documented the <code>com.ibm.icu.util.ULocale</code>
 class, and the use of these names in searching for resources is documented 
 in <code>java.util.ResourceBundle</code>.
   </li>
-  <li>The <b>collation data</b> is under the directory <tt>icudt34b/coll</tt>,
+  <li>The <b>collation data</b> is under the directory <tt>icudt36b/coll</tt>,
 as a set of <tt>".res"</tt> files.</li>
   <li>The <b>rule-based transliterator data</b> is under the directory
-<tt>icudt34b/translit</tt> as a set of <tt>".res"</tt> files.  (<b>Note:</b> the
+<tt>icudt36b/translit</tt> as a set of <tt>".res"</tt> files.  (<b>Note:</b> the
 Han transliterator test data is no longer included in the core icu4j.jar 
 file by default.)</li>
   <li>The <b>rule-based number format data</b> is under the directory
-<tt>icudt34b/rbnf</tt> as a set of <tt>".res"</tt> files.
+<tt>icudt36b/rbnf</tt> as a set of <tt>".res"</tt> files.
   <li>The <b>break iterator data</b> is directly under the data
 directory, as a set of <tt>".brk"</tt> files, named according to the
 type of break and the locale where there are locale-specific versions.</li>
