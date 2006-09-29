@@ -1,0 +1,7 @@
+#
+#
+# fully-qualified name of the java.awt.im.spi.InputMethodDescriptor
+# implementation class
+#
+
+com.ibm.icu.dev.tool.ime.translit.TransliteratorInputMethodDescriptor
