@@ -18,8 +18,8 @@
 
 #define ARRAY_SIZE(array) (sizeof array / sizeof array[0])
 
-#define NEW_ARRAY(type,count) (type *) ctst_malloc((count) * sizeof(type))
-#define DELETE_ARRAY(array)
+#define NEW_ARRAY(type,count) (type *) malloc((count) * sizeof(type))
+#define DELETE_ARRAY(array) free(array)
 
 static void TestConstruction(void);
 static void TestUTF8(void);
@@ -56,17 +56,6 @@ static int32_t preflight(const UChar *src, int32_t length, UConverter *cnv)
     } while (status == U_BUFFER_OVERFLOW_ERROR);
 
     return result;
-}
-
-static UChar *unescape(const char *src, int32_t *length)
-{
-    int32_t charCount = u_unescape(src, NULL, 0);
-    UChar *chars = NEW_ARRAY(UChar, charCount + 1); 
-
-    u_unescape(src, chars, charCount);
-
-    *length = charCount;
-    return chars;
 }
 
 static char *extractBytes(const UChar *src, int32_t length, const char *codepage, int32_t *byteLength)
@@ -119,16 +108,19 @@ static void TestConstruction(void)
 static void TestUTF8(void)
 {
     UErrorCode status = U_ZERO_ERROR;
-    const char *ss = "This is a string with some non-ascii characters that will "
+    static const char ss[] = "This is a string with some non-ascii characters that will "
                "be converted to UTF-8, then shoved through the detection process.  "
                "\\u0391\\u0392\\u0393\\u0394\\u0395"
                "Sure would be nice if our source could contain Unicode directly!";
     int32_t byteLength = 0, sLength = 0, dLength = 0;
-    UChar *s = unescape(ss, &sLength);
-    char *bytes = extractBytes(s, sLength, "UTF-8", &byteLength);
+    UChar s[sizeof(ss)];
+    char *bytes;
     UCharsetDetector *csd = ucsdet_open(&status);
     const UCharsetMatch *match;
-    UChar *detected = NEW_ARRAY(UChar, sLength);
+    UChar detected[sizeof(ss)];
+
+    sLength = u_unescape(ss, s, sizeof(ss));
+    bytes = extractBytes(s, sLength, "UTF-8", &byteLength);
 
     ucsdet_setText(csd, bytes, byteLength, &status);
     match = ucsdet_detect(csd, &status);
@@ -156,7 +148,7 @@ static void TestUTF16(void)
 {
     UErrorCode status = U_ZERO_ERROR;
     /* Notice the BOM on the start of this string */
-    UChar chars[] = {
+    static const UChar chars[] = {
         0xFEFF, 0x0623, 0x0648, 0x0631, 0x0648, 0x0628, 0x0627, 0x002C,
         0x0020, 0x0628, 0x0631, 0x0645, 0x062c, 0x064a, 0x0627, 0x062a,
         0x0020, 0x0627, 0x0644, 0x062d, 0x0627, 0x0633, 0x0648, 0x0628,
@@ -220,17 +212,22 @@ static void TestC1Bytes(void)
 {
 #if !UCONFIG_NO_LEGACY_CONVERSION
     UErrorCode status = U_ZERO_ERROR;
-    const char *ssISO = "This is a small sample of some English text. Just enough to be sure that it detects correctly.";
-    const char *ssWindows = "This is another small sample of some English text. Just enough to be sure that it detects correctly. It also includes some \\u201CC1\\u201D bytes.";
+    static const char ssISO[] = "This is a small sample of some English text. Just enough to be sure that it detects correctly.";
+    static const char ssWindows[] = "This is another small sample of some English text. Just enough to be sure that it detects correctly. It also includes some \\u201CC1\\u201D bytes.";
     int32_t sISOLength = 0, sWindowsLength = 0;
-    UChar *sISO = unescape(ssISO, &sISOLength);
-    UChar *sWindows = unescape(ssWindows, &sWindowsLength);
+    UChar sISO[sizeof(ssISO)];
+    UChar sWindows[sizeof(ssWindows)];
     int32_t lISO = 0, lWindows = 0;
-    char *bISO = extractBytes(sISO, sISOLength, "ISO-8859-1", &lISO);
-    char *bWindows = extractBytes(sWindows, sWindowsLength, "windows-1252", &lWindows);
+    char *bISO;
+    char *bWindows;
     UCharsetDetector *csd = ucsdet_open(&status);
     const UCharsetMatch *match;
     const char *name;
+
+    sISOLength = u_unescape(ssISO, sISO, sizeof(ssISO));
+    sWindowsLength = u_unescape(ssWindows, sWindows, sizeof(ssWindows));
+    bISO = extractBytes(sISO, sISOLength, "ISO-8859-1", &lISO);
+    bWindows = extractBytes(sWindows, sWindowsLength, "windows-1252", &lWindows);
 
     ucsdet_setText(csd, bWindows, lWindows, &status);
     match = ucsdet_detect(csd, &status);
@@ -271,14 +268,17 @@ bail:
 static void TestInputFilter(void)
 {
     UErrorCode status = U_ZERO_ERROR;
-    const char *ss = "<a> <lot> <of> <English> <inside> <the> <markup> Un tr\\u00E8s petit peu de Fran\\u00E7ais. <to> <confuse> <the> <detector>";
+    static const char ss[] = "<a> <lot> <of> <English> <inside> <the> <markup> Un tr\\u00E8s petit peu de Fran\\u00E7ais. <to> <confuse> <the> <detector>";
     int32_t sLength = 0;
-    UChar *s  = unescape(ss, &sLength);
+    UChar s[sizeof(ss)];
     int32_t byteLength = 0;
-    char *bytes = extractBytes(s, sLength, "ISO-8859-1", &byteLength);
+    char *bytes;
     UCharsetDetector *csd = ucsdet_open(&status);
     const UCharsetMatch *match;
     const char *lang, *name;
+
+    sLength = u_unescape(ss, s, sizeof(ss));
+    bytes = extractBytes(s, sLength, "ISO-8859-1", &byteLength);
 
     ucsdet_enableInputFilter(csd, TRUE);
 
