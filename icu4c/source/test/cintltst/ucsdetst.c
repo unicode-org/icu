@@ -139,7 +139,6 @@ static void TestUTF8(void)
     ucsdet_setDeclaredEncoding(csd, "UTF-8", 5, &status); /* for coverage */
 
 bail:
-    DELETE_ARRAY(detected);
     freeBytes(bytes);
     ucsdet_close(csd);
 }
