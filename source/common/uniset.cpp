@@ -1272,15 +1272,15 @@ const UnicodeString* UnicodeSet::getString(int32_t index) const {
  * possible space, without changing this object's value.
  */
 UnicodeSet& UnicodeSet::compact() {
-    if (len != capacity) {
-        capacity = len;
-        UChar32* temp = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
-        uprv_memcpy(temp, list, len*sizeof(UChar32));
-        uprv_free(list);
-        list = temp;
-    }
+    // Delete buffer first to defragment memory less.
     uprv_free(buffer);
     buffer = NULL;
+    if (len < capacity) {
+        // Make the capacity equal to len or 1.
+        // We don't want to realloc of 0 size.
+        capacity = len + (len == 0);
+        list = (UChar32*) uprv_realloc(list, sizeof(UChar32) * capacity);
+    }
     return *this;
 }
 
