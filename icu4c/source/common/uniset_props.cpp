@@ -144,7 +144,7 @@ isPOSIXClose(const UnicodeString &pattern, int32_t pos) {
 UnicodeSet::UnicodeSet(const UnicodeString& pattern,
                        UErrorCode& status) :
     len(0), capacity(START_EXTRA), bufferCapacity(0),
-    list(0), buffer(0), strings(0)
+    list(0), buffer(0), strings(NULL)
 {   
     if(U_SUCCESS(status)){
         list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
@@ -152,7 +152,7 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern,
         if(list == NULL) {
             status = U_MEMORY_ALLOCATION_ERROR;  
         }else{
-            allocateStrings();
+            allocateStrings(status);
             applyPattern(pattern, USET_IGNORE_SPACE, NULL, status);
         }
     }
@@ -172,7 +172,7 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern,
                        const SymbolTable* symbols,
                        UErrorCode& status) :
     len(0), capacity(START_EXTRA), bufferCapacity(0),
-    list(0), buffer(0), strings(0)
+    list(0), buffer(0), strings(NULL)
 {   
     if(U_SUCCESS(status)){
         list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
@@ -180,7 +180,7 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern,
         if(list == NULL) {
             status = U_MEMORY_ALLOCATION_ERROR;  
         }else{
-            allocateStrings();
+            allocateStrings(status);
             applyPattern(pattern, options, symbols, status);
         }
     }
@@ -192,7 +192,7 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
                        const SymbolTable* symbols,
                        UErrorCode& status) :
     len(0), capacity(START_EXTRA), bufferCapacity(0),
-    list(0), buffer(0), strings(0)
+    list(0), buffer(0), strings(NULL)
 {
     if(U_SUCCESS(status)){
         list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
@@ -200,7 +200,7 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
         if(list == NULL) {
             status = U_MEMORY_ALLOCATION_ERROR;   
         }else{
-            allocateStrings();
+            allocateStrings(status);
             applyPattern(pattern, pos, options, symbols, status);
         }
     }
