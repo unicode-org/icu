@@ -673,20 +673,23 @@ Currently ICU4J can be divided into the following modules:
 <table bgcolor="#ccccff" cellpadding="3" frame="void" width="623">
   <tbody>
     <tr>
+
       <th align="left" valign="baseline"><b>Module Name</b></th>
       <th align="left" valign="baseline"><b>Ant Targets</b></th>
       <th align="left" valign="baseline"><b>Test Package Supported</b></th>
-      <th align="right" valign="baseline"><b>Size&#8225;</b></th>
+      <th align="right" valign="baseline"><b>Size‡</b></th>
     </tr>
     <tr bgcolor="#ffffff">
+
       <td colspan="4">
       <table>
         <tbody>
           <tr>
             <td valign="baseline">Package*</td>
-            <td valign="baseline">Main Classes&#8224; </td>
+            <td valign="baseline">Main Classes† </td>
           </tr>
         </tbody>
+
       </table>
       </td>
     </tr>
@@ -695,20 +698,23 @@ Currently ICU4J can be divided into the following modules:
 <b><font size="2">* com.ibm. should be prepended to the package names
 listed.
 <br>
-&#8224; A bold class name core service APIs. Only APIs in these classes are
+† Class name in bold indicates core service API. Only APIs in these classes are
 fully supported.
 <br>
-&#8225; Sizes are of the compressed jar file containing only this module.
-These sizes are approximate for release 3.4.5.
+‡ Sizes are of the compressed jar file containing only this module.
+These sizes are approximate for release 3.6.
 </font></b>
 <p><b>Modules:</b></p>
+
 <table bgcolor="#ccccff" cellpadding="3" frame="void" width="623">
+
   <tbody>
     <tr>
       <th align="left" valign="baseline">Normalizer</th>
       <td align="left" valign="baseline">normalizer, normalizerTests</td>
       <td align="left" valign="baseline">com.ibm.icu.dev.test.normalizer</td>
-      <td align="right" valign="baseline">451&nbsp;KB</td>
+      <td align="right" valign="baseline">698&nbsp;KB</td>
+
     </tr>
     <tr bgcolor="#ffffff">
       <td colspan="4" valign="top">
@@ -716,29 +722,68 @@ These sizes are approximate for release 3.4.5.
         <tbody>
           <tr>
             <td valign="baseline">icu.lang:</td>
-            <td valign="baseline">UCharacter, UCharacterCategory,
-UCharacterDirection, UCharacterNameIterator, UCharacterTypeIterator,
-UProperty, UScript</td>
+            <td valign="baseline">
+
+              UCharacter,
+              UCharacterCategory,
+              UCharacterDirection,
+              UCharacterEnums,
+              UProperty,
+              UScript
+            </td>
           </tr>
           <tr>
             <td valign="baseline">icu.text:</td>
-            <td valign="baseline"><b>Normalizer</b>, Replaceable,
-ReplaceableString, <b>UCharacterIterator</b>, <b>UForwardCharacterIterator</b>,
-UnicodeFilter, UnicodeMatcher, UnicodeSet, UnicodeSetIterator, UTF16</td>
+            <td valign="baseline">
+              BreakIterator,
+              CanonicalIterator,
+              CollationElementIterator, 
+              CollationKey,
+              Collator,
+              <b>Normalizer</b>,
+              RawCollationKey,
+              Replaceable,
+              ReplaceableString,
+              RuleBasedCollatior,
+              RuleBasedTransliterator,
+              SymbolTable,
+              Transliterator,
+              <b>UCharacterIterator</b>,
+              <b>UForwardCharacterIterator</b>,
+              UnicodeFilter,
+              UnicodeMatcher,
+              UnicodeSet,
+              UnicodeSetIterator,
+              UTF16
+            </td>
+
           </tr>
           <tr>
             <td valign="baseline">icu.util:</td>
-            <td valign="baseline">ValueIterator, VersionInfo</td>
+            <td valign="baseline">
+              ByteArrayWrapper,
+              CaseInsensitiveString,
+              Freezable,
+              RangeValueIterator,
+              StringTokenizer,
+              ULocale,
+              UResourceBundle,
+              UResourceTypeMismatchException,
+              ValueIterator,
+              VersionInfo
+            </td>
           </tr>
         </tbody>
       </table>
+
       </td>
     </tr>
     <tr>
       <th align="left" valign="baseline">Collator</th>
       <td align="left" valign="baseline">collator, collatorTests</td>
       <td align="left" valign="baseline">com.ibm.icu.dev.test.collator</td>
-      <td align="right" valign="baseline">1,508&nbsp;KB</td>
+      <td align="right" valign="baseline">2,031&nbsp;KB</td>
+
     </tr>
     <tr bgcolor="#ffffff">
       <td colspan="4" valign="top">
@@ -746,34 +791,70 @@ UnicodeFilter, UnicodeMatcher, UnicodeSet, UnicodeSetIterator, UTF16</td>
         <tbody>
           <tr>
             <td valign="baseline">icu.lang:</td>
-            <td valign="baseline">UCharacter, UCharacterCategory,
-UCharacterDirection, UCharacterNameIterator, UCharacterTypeIterator,
-lang.UProperty, UScript </td>
+            <td valign="baseline">
+
+              UCharacter,
+              UCharacterCategory,
+              UCharacterEnums,
+              UProperty,
+              UScript
+            </td>
           </tr>
           <tr>
             <td valign="baseline">icu.text:</td>
-            <td valign="baseline">BreakDictionary, BreakIterator,
-BreakIteratorFactory, CanonicalIterator, <b>CollationElementIterator</b>,
-            <b>CollationKey</b>, <b>CollationParsedRuleBuilder</b>, <b>CollationRuleParser</b>,
-            <b>Collator</b>, <b>CollatorReader</b>,
-DictionaryBasedBreakIterator, <b>Normalizer</b>, Replaceable,
-ReplaceableString, RuleBasedBreakIterator, <b>RuleBasedCollator</b>, <b>SearchIterator</b>,
-            <b>StringSearch</b>, <b>UCharacterIterator</b>, <b>UForwardCharacterIterator</b>,
-UnicodeFilter, UnicodeMatcher, UnicodeSet, UnicodeSetIterator, UTF16 </td>
+            <td valign="baseline">
+              BreakDictionary,
+              BreakIterator,
+              CanonicalIterator,
+              <b>CollationElementIterator</b>,
+              <b>CollationKey</b>,
+              <b>Collator</b>,
+              DictionaryBasedBreakIterator,
+              <b>Normalizer</b>,
+              RawCollationKey,
+              Replaceable,
+              ReplaceableString,
+              RuleBasedBreakIterator,
+              <b>RuleBasedCollator</b>,
+              SymbolTable,
+              Transliterator,
+              <b>UCharacterIterator</b>,
+              <b>UForwardCharacterIterator</b>,
+              UnicodeFilter,
+              UnicodeMatcher,
+              UnicodeSet,
+              UnicodeSetIterator,
+              UTF16
+            </td>
+
           </tr>
           <tr>
             <td valign="baseline">icu.util:</td>
-            <td valign="baseline">ValueIterator, VersionInfo </td>
+            <td valign="baseline">
+              ByteArrayWrapper,
+              CaseInsensitiveString,
+              CompactByteArray,
+              Freezable,
+              RangeValueIterator,
+              StringTokenizer,
+              ULocale,
+              UResourceBundle,
+              UResourceTypeMismatchException,
+              ValueIterator,
+              VersionInfo
+            </td>
           </tr>
         </tbody>
       </table>
+
       </td>
     </tr>
     <tr>
       <th align="left" valign="baseline">Calendar</th>
       <td align="left" valign="baseline">calendar, calendarTests</td>
       <td align="left" valign="baseline">com.ibm.icu.dev.test.calendar</td>
-      <td align="right" valign="baseline">1,773&nbsp;KB</td>
+      <td align="right" valign="baseline">2,006&nbsp;KB</td>
+
     </tr>
     <tr bgcolor="#ffffff">
       <td colspan="4" valign="top">
@@ -781,34 +862,97 @@ UnicodeFilter, UnicodeMatcher, UnicodeSet, UnicodeSetIterator, UTF16 </td>
         <tbody>
           <tr>
             <td valign="baseline">icu.lang:</td>
-            <td valign="baseline">UCharacter, UCharacterCategory,
-UCharacterDirection, UCharacterNameIterator, UCharacterTypeIterator,
-UProperty, UScript </td>
+            <td valign="baseline">
+
+              UCharacter,
+              UCharacterCategory,
+              UCharacterEnums,
+              UProperty,
+              UScript
+            </td>
           </tr>
           <tr>
             <td valign="baseline">icu.math:</td>
-            <td valign="baseline"><b>BigDecimal</b> </td>
+            <td valign="baseline">
+              <b>BigDecimal</b>,
+              MathContext
+            </td>
           </tr>
+
           <tr>
             <td valign="baseline">icu.text:</td>
-            <td valign="baseline">BreakIterator, <b>ChineseDateFormat</b>,
-            <b>ChineseDateFormatSymbols</b>, <b>DateFormat</b>, <b>DateFormatSymbols</b>,
-            <b>DecimalFormat</b>, <b>DecimalFormatSymbols</b>,
-Normalizer, NumberFormat, Replaceable, ReplaceableString, <b>SimpleDateFormat</b>,
-            <b>UCharacterIterator</b>, <b>UForwardCharacterIterator</b>,
-UnicodeFilter, UnicodeMatcher, UnicodeSet, UnicodeSetIterator, UTF16 </td>
+            <td valign="baseline">
+              BreakIterator,
+              CanonicalIterator,
+              <b>ChineseDateFormat</b>,
+              <b>ChineseDateFormatSymbols</b>,
+              CollationElementIterator,
+              CollationKey,
+              Collator,
+              <b>DateFormat</b>,
+              <b>DateFormatSymbols</b>,
+              <b>DecimalFormat</b>,
+              <b>DecimalFormatSymbols</b>,
+              MessageFormat,
+              Normalizer,
+              NumberFormat,
+              RawCollationKey,
+              Replaceable,
+              ReplaceableString,
+              RuleBasedCollator,
+              RuleBasedNumberFormat,
+              RuleBasedTransliterator,
+              <b>SimpleDateFormat</b>,
+              SymbolTable,
+              Transliterator,
+              <b>UCharacterIterator</b>,
+              UFormat,
+              <b>UForwardCharacterIterator</b>,
+              UnicodeFilter,
+              UnicodeMatcher,
+              UnicodeSet,
+              UnicodeSetIterator,
+              UTF16
+            </td>
+
           </tr>
           <tr>
             <td valign="baseline">icu.util:</td>
-            <td valign="baseline"><b>BuddhistCalendar</b>, <b>Calendar</b>,
-            <b>CalendarAstronomer</b>, <b>CalendarCache</b>, <b>CalendarFactory</b>,
-            <b>ChineseCalendar</b>, <b>Currency</b>, <b>DateRule</b>,
-            <b>EasterHoliday</b>, <b>EasterRule</b>, <b>GregorianCalendar</b>,
-            <b>HebrewCalendar</b>, <b>HebrewHoliday</b>, <b>Holiday</b>,
-            <b>IslamicCalendar</b>, <b>JapaneseCalendar</b>, <b>RangeDateRule</b>,
-            <b>SimpleDateRule</b>, <b>SimpleHoliday</b>, <b>SimpleTimeZone</b>,
-            <b>SimpleTimeZoneAdapter</b>, <b>TimeZone</b>, <b>TimeZoneData</b>,
-ValueIterator, VersionInfo </td>
+            <td valign="baseline">
+              <b>BuddhistCalendar</b>,
+              ByteArrayWrapper,
+              <b>Calendar</b>,
+              CaseInsensitiveString,
+              <b>ChineseCalendar</b>,
+              <b>CopticCalendar</b>,
+              <b>Currency</b>,
+              CurrencyAmount,
+              <b>DateRule</b>,
+              <b>EasterHoliday</b>,
+              <b>EthiopicCalendar</b>,
+              Freezable,
+              <b>GregorianCalendar</b>,
+              <b>HebrewCalendar</b>,
+              <b>HebrewHoliday</b>,
+              <b>Holiday</b>,
+              <b>IslamicCalendar</b>,
+              <b>JapaneseCalendar</b>,
+              Measure,
+              MeasureUnit,
+              <b>RangeDateRule</b>,
+              RangeValueIterator,
+              <b>SimpleDateRule</b>,
+              <b>SimpleHoliday</b>,
+              <b>SimpleTimeZone</b>,
+              StringTokenizer,
+              <b>TimeZone</b>,
+              ULocale,
+              UResourceBundle,
+              UResourceTypeMismatchException,
+              ValueIterator,
+              VersionInfo
+            </td>
+
           </tr>
         </tbody>
       </table>
@@ -818,69 +962,149 @@ ValueIterator, VersionInfo </td>
       <th align="left" valign="baseline">BreakIterator</th>
       <td align="left" valign="baseline">breakIterator,
 breakIteratorTests</td>
+
       <td align="left" valign="baseline">com.ibm.icu.dev.test.breakiterator</td>
-      <td align="right" valign="baseline">1,546&nbsp;KB</td>
+      <td align="right" valign="baseline">1,893&nbsp;KB</td>
     </tr>
     <tr bgcolor="#ffffff">
       <td colspan="4" valign="top">
       <table border="0" cellpadding="5">
         <tbody>
+
           <tr>
             <td valign="baseline">icu.lang:</td>
-            <td valign="baseline">UCharacter, UCharacterCategory,
-UCharacterDirection, UCharacterNameIterator, UCharacterTypeIterator,
-UProperty, UScript </td>
+            <td valign="baseline">
+              UCharacter,
+              UCharacterCategory,
+              UCharacterDirection,
+              UCharacterEnums,
+              UProperty,
+              UScript
+            </td>
           </tr>
           <tr>
             <td valign="baseline">icu.text:</td>
-            <td valign="baseline"><b>BreakDictionary</b>, <b>BreakIterator</b>,
-            <b>BreakIteratorFactory</b>, <b>DictionaryBasedBreakIterator</b>,
-Normalizer, Replaceable, ReplaceableString, <b>text.RuleBasedBreakIterator</b>,
-UCharacterIterator, UForwardCharacterIterator, UnicodeFilter,
-UnicodeMatcher, UnicodeSet, UnicodeSetIterator, UTF16 </td>
+
+            <td valign="baseline">
+              <b>BreakDictionary</b>,
+              <b>BreakIterator</b>,
+              CanonicalIterator,
+              CollationElementIterator,
+              CollationKey,
+              Collator,
+              <b>DictionaryBasedBreakIterator</b>,
+              Normalizer,
+              RawCollationKey,
+              Replaceable,
+              ReplaceableString,
+              <b>RuleBasedBreakIterator</b>,
+              RuleBasedCollator,
+              RuleBasedTransliterator,
+              SymbolTable,
+              Transliterator,
+              UCharacterIterator,
+              UForwardCharacterIterator,
+              UnicodeFilter,
+              UnicodeMatcher,
+              UnicodeSet,
+              UnicodeSetIterator,
+              UTF16</td>
           </tr>
           <tr>
             <td valign="baseline">icu.util:</td>
-            <td valign="baseline">RangeValueIterator, ValueIterator,
-VersionInfo </td>
+
+            <td valign="baseline">
+              ByteArrayWrapper,
+              CaseInsensitiveString,
+              CompactByteArray,
+              Freezable,
+              RangeValueIterator,
+              StringTokenizer,
+              ULocale,
+              UResourceBundle,
+              UResourceTypeMismatchException,
+              ValueIterator,
+              VersionInfo
+            </td>
           </tr>
         </tbody>
       </table>
       </td>
     </tr>
     <tr>
+
       <th align="left" valign="baseline">Basic Properties</th>
       <td align="left" valign="baseline">propertiesBasic,
 propertiesBasicTests</td>
       <td align="left" valign="baseline">com.ibm.icu.dev.test.lang</td>
-      <td align="right" valign="baseline">535&nbsp;KB</td>
+      <td align="right" valign="baseline">802&nbsp;KB</td>
     </tr>
     <tr bgcolor="#ffffff">
+
       <td colspan="4" valign="top">
       <table border="0" cellpadding="5">
         <tbody>
           <tr>
             <td valign="baseline">icu.lang:</td>
-            <td valign="baseline"><b>UCharacter</b>, <b>UCharacterCategory</b>,
-            <b>UCharacterDirection</b>, <b>UCharacterNameIterator</b>,
-            <b>UCharacterTypeIterator</b>, <b>UProperty</b>, <b>UScript</b>,
-            <b>UScriptRun</b> </td>
+            <td valign="baseline">
+              <b>UCharacter</b>,
+              <b>UCharacterCategory</b>,
+              <b>UCharacterDirection</b>,
+              <b>UCharacterEnums</b>,
+              <b>UProperty</b>,
+              <b>UScript</b>,
+              <b>UScriptRun</b>
+
+            </td>
           </tr>
           <tr>
             <td valign="baseline">icu.text:</td>
-            <td valign="baseline">BreakDictionary, BreakIterator,
-BreakIteratorFactory, DictionaryBasedBreakIterator, Normalizer,
-Replaceable, ReplaceableString, RuleBasedBreakIterator, SymbolTable,
-UCharacterIterator, UForwardCharacterIterator, UnicodeFilter,
-UnicodeMatcher, UnicodeSet, UnicodeSetIterator, <b>UTF16</b> </td>
+            <td valign="baseline">
+              BreakDictionary,
+              BreakIterator,
+              CanonicalIterator,
+              CollationElementIterator,
+              CollationKey,
+              Collator,
+              DictionaryBasedBreakIterator,
+              Normalizer,
+              RawCollationKey,
+              Replaceable,
+              ReplaceableString,
+              RuleBasedBreakIterator,
+              RuleBasedCollator,
+              RuleBasedTransliterator,
+              SymbolTable,
+              Transliterator,
+              UCharacterIterator,
+              UForwardCharacterIterator,
+              UnicodeFilter,
+              UnicodeMatcher,
+              UnicodeSet,
+              UnicodeSetIterator,
+              <b>UTF16</b>
+            </td>
+
           </tr>
           <tr>
             <td valign="baseline">icu.util:</td>
-            <td valign="baseline">CompactByteArray, RangeValueIterator,
-ValueIterator, VersionInfo </td>
+            <td valign="baseline">
+              ByteArrayWrapper,
+              CaseInsensitiveString,
+              CompactByteArray,
+              Freezable,
+              RangeValueIterator,
+              StringTokenizer,
+              ULocale,
+              UResourceBundle,
+              UResourceTypeMismatchException,
+              ValueIterator,
+              VersionInfo
+            </td>
           </tr>
         </tbody>
       </table>
+
       </td>
     </tr>
     <tr>
@@ -888,7 +1112,8 @@ ValueIterator, VersionInfo </td>
       <td align="left" valign="baseline">propertiesFull,
 propertiesFullTests</td>
       <td align="left" valign="baseline">com.ibm.icu.dev.test.lang</td>
-      <td align="right" valign="baseline">1,410&nbsp;KB</td>
+      <td align="right" valign="baseline">1,837&nbsp;KB</td>
+
     </tr>
     <tr bgcolor="#ffffff">
       <td colspan="4" valign="top">
@@ -896,24 +1121,60 @@ propertiesFullTests</td>
         <tbody>
           <tr>
             <td valign="baseline">icu.lang:</td>
-            <td valign="baseline"><b>UCharacter</b>, <b>UCharacterCategory</b>,
-            <b>UCharacterDirection</b>, <b>UCharacterNameIterator</b>,
-            <b>UCharacterTypeIterator</b>, <b>UProperty</b>, <b>UScript</b>,
-            <b>UScriptRun</b> </td>
+            <td valign="baseline">
+
+              <b>UCharacter</b>,
+              <b>UCharacterCategory</b>,
+              <b>UCharacterDirection</b>,
+              <b>UCharacterEnums</b>,
+              <b>UProperty</b>,
+              <b>UScript</b>,
+              <b>UScriptRun</b>
+            </td>
+
           </tr>
           <tr>
             <td valign="baseline">icu.text:</td>
-            <td valign="baseline">BreakDictionary, BreakIterator,
-BreakIteratorFactory, DictionaryBasedBreakIterator, <b>Normalizer</b>,
-            <b>Replaceable</b>, <b>ReplaceableString</b>,
-RuleBasedBreakIterator, <b>UCharacterIterator</b>, <b>UForwardCharacterIterator</b>,
-            <b>UnicodeFilter</b>, <b>UnicodeMatcher</b>, <b>UnicodeSet</b>,
-            <b>UnicodeSetIterator</b>, <b>UTF16</b></td>
+            <td valign="baseline">
+              BreakDictionary,
+              BreakIterator,
+              CanonicalIterator,
+              DictionaryBasedBreakIterator,
+              <b>Normalizer</b>,
+              RawCollationKey,
+              <b>Replaceable</b>,
+              <b>ReplaceableString</b>,
+              RuleBasedBreakIterator,
+              RuleBasedCollator,
+              RuleBasedTransliterator,
+              SymbolTable,
+              Transliterator,
+              <b>UCharacterIterator</b>,
+              <b>UForwardCharacterIterator</b>,
+              <b>UnicodeFilter</b>,
+              <b>UnicodeMatcher</b>,
+              <b>UnicodeSet</b>,
+              <b>UnicodeSetIterator</b>,
+              <b>UTF16</b>
+
+            </td>
           </tr>
           <tr>
             <td valign="baseline">icu.util:</td>
-            <td valign="baseline"><b>RangeValueIterator</b>, <b>ValueIterator</b>,
-            <b>VersionInfo</b> </td>
+            <td valign="baseline">
+              ByteArrayWrapper,
+              CaseInsensitiveString,
+              CompactByteArray,
+              Freezable,
+              <b>RangeValueIterator</b>,
+              StringTokenizer,
+              ULocale,
+              UResourceBundle,
+              UResourceTypeMismatchException,
+              <b>ValueIterator</b>,
+              <b>VersionInfo</b>
+
+            </td>
           </tr>
         </tbody>
       </table>
@@ -921,43 +1182,103 @@ RuleBasedBreakIterator, <b>UCharacterIterator</b>, <b>UForwardCharacterIterator<
     </tr>
     <tr>
       <th align="left" valign="baseline">Formatting</th>
+
       <td align="left" valign="baseline">format, formatTests</td>
       <td align="left" valign="baseline">com.ibm.icu.dev.test.format</td>
-      <td align="right" valign="baseline">2,592&nbsp;KB</td>
+      <td align="right" valign="baseline">3,207&nbsp;KB</td>
     </tr>
     <tr bgcolor="#ffffff">
       <td colspan="4" valign="top">
       <table border="0" cellpadding="5">
+
         <tbody>
           <tr>
             <td valign="baseline">icu.lang:</td>
-            <td valign="baseline">UCharacter, UCharacterCategory,
-UCharacterDirection, UCharacterNameIterator, UCharacterTypeIterator,
-UProperty, UScript </td>
+            <td valign="baseline">
+              UCharacter,
+              UCharacterCategory,
+              UCharacterEnums,
+              UProperty,
+              UScript
+            </td>
           </tr>
           <tr>
             <td valign="baseline">icu.math:</td>
-            <td valign="baseline"><b>math.BigDecimal</b> </td>
+
+            <td valign="baseline">
+              <b>BigDecimal</b>
+              MathContext
+            </td>
           </tr>
           <tr>
             <td valign="baseline">icu.text:</td>
-            <td valign="baseline">BreakIterator, CanonicalIterator,
-ChineseDateFormat, ChineseDateFormatSymbols, CollationElementIterator,
-CollationKey, CollationParsedRuleBuilder, CollationRuleParser,
-Collator, CollatorReader, <b>DateFormat</b>, <b>DateFormatSymbols</b>,
-            <b>DecimalFormat</b>, <b>DecimalFormatSymbols</b>,
-Normalizer, <b>NumberFormat</b>, Replaceable, ReplaceableString,
-RuleBasedCollator, <b>RuleBasedNumberFormat</b>, <b>SimpleDateFormat</b>,
-            <b>UCharacterIterator</b>, <b>UForwardCharacterIterator</b>,
-UnicodeFilter, UnicodeMatcher, UnicodeSet, UnicodeSetIterator, UTF16 </td>
+            <td valign="baseline">
+
+              BreakIterator,
+              CanonicalIterator,
+              ChineseDateFormat,
+              ChineseDateFormatSymbols,
+              CollationElementIterator,
+              CollationKey,
+              Collator,
+              <b>DateFormat</b>,
+              <b>DateFormatSymbols</b>,
+              <b>DecimalFormat</b>,
+              <b>DecimalFormatSymbols</b>,
+              MeasureFormat,
+              MessageFormat,
+              Normalizer,
+              <b>NumberFormat</b>,
+              RawCollationKey,
+              Replaceable,
+              ReplaceableString,
+              RuleBasedCollator,
+              <b>RuleBasedNumberFormat</b>,
+              RuleBasedTransliterator,
+              <b>SimpleDateFormat</b>,
+              SymbolTable,
+              Transliterator,
+              <b>UCharacterIterator</b>,
+              UFormat,
+              <b>UForwardCharacterIterator</b>,
+              UnicodeFilter,
+              UnicodeMatcher,
+              UnicodeSet,
+              UnicodeSetIterator,
+              UTF16
+            </td>
+
           </tr>
           <tr>
             <td valign="baseline">icu.util:</td>
-            <td valign="baseline"><b>Calendar</b>, <b>CalendarAstronomer</b>,
-            <b>CalendarCache</b>, <b>CalendarFactory</b>, <b>ChineseCalendar</b>,
-            <b>Currency</b>, <b>GregorianCalendar</b>, <b>RangeValueIterator</b>,
-            <b>SimpleTimeZone</b>, <b>SimpleTimeZoneAdapter</b>, <b>TimeZone</b>,
-            <b>TimeZoneData</b>, ValueIterator,VersionInfo </td>
+            <td valign="baseline">
+              <b>BuddhistCalendar</b>,
+              ByteArrayWrapper,
+              <b>Calendar</b>,
+              CaseInsensitiveString,
+              <b>ChineseCalendar</b>,
+              <b>CopticCalendar</b>,
+              <b>Currency</b>,
+              CurrencyAmount,
+              <b>EthiopicCalendar</b>,
+              Freezable,
+              <b>GregorianCalendar</b>,
+              <b>HebrewCalendar</b>,
+              <b>IslamicCalendar</b>,
+              <b>JapaneseCalendar</b>,
+              Measure,
+              MeasureUnit,
+              <b>RangeValueIterator</b>,
+              <b>SimpleTimeZone</b>,
+              StringTokenizer,
+              <b>TimeZone</b>,
+              ULocale,
+              UResourceBundle,
+              UResourceTypeMismatchException,
+              ValueIterator,
+              VersionInfo
+            </td>
+
           </tr>
         </tbody>
       </table>
@@ -966,68 +1287,148 @@ UnicodeFilter, UnicodeMatcher, UnicodeSet, UnicodeSetIterator, UTF16 </td>
     <tr>
       <th align="left" valign="baseline">StringPrep, IDNA</th>
       <td align="left" valign="baseline">stringPrep, stringPrepTests</td>
+
       <td align="left" valign="baseline">com.ibm.icu.dev.test.stringprep</td>
-      <td align="right" valign="baseline">478&nbsp;KB</td>
+      <td align="right" valign="baseline">725&nbsp;KB</td>
     </tr>
     <tr bgcolor="#ffffff">
       <td colspan="4" valign="top">
       <table border="0" cellpadding="5">
         <tbody>
+
           <tr>
             <td valign="baseline">icu.lang:</td>
-            <td valign="baseline">UCharacter, UCharacterCategory,
-UCharacterDirection, UCharacterNameIterator, UCharacterTypeIterator,
-UProperty, UScript </td>
+            <td valign="baseline">
+              UCharacter,
+              UCharacterCategory,
+              UCharacterDirection,
+              UCharacterEnums,
+              UProperty,
+              UScript
+            </td>
           </tr>
           <tr>
             <td valign="baseline">icu.text:</td>
-            <td valign="baseline">BreakIterator, CanonicalIterator, <b>IDNA</b>,
-Normalizer, Replaceable, ReplaceableString, <b>StringPrep</b>, <b>StringParseException</b>,
-UCharacterIterator, UForwardCharacterIterator, UnicodeSet, UTF16 </td>
+
+            <td valign="baseline">
+              BreakIterator,
+              CanonicalIterator,
+              CollationElementIterator,
+              CollationKey,
+              Collator,
+              <b>IDNA</b>,
+              Normalizer,
+              RawCollationKey,
+              Replaceable,
+              ReplaceableString,
+              RuleBasedCollator,
+              RuleBasedTransliterator,
+              <b>StringPrep</b>,
+              <b>StringParseException</b>,
+              SymbolTable,
+              Transliterator,
+              UCharacterIterator,
+              UForwardCharacterIterator,
+              UnicodeFilter,
+              UnicodeMatcher,
+              UnicodeSet,
+              UnicodeSetIterator,
+              UTF16
+            </td>
           </tr>
           <tr>
             <td valign="baseline">icu.util:</td>
-            <td valign="baseline"> RangeValueIterator, StringTokenizer,
-ULocale, UResourceBundle ValueIterator,VersionInfo </td>
+
+            <td valign="baseline">
+              ByteArrayWrapper,
+              CaseInsensitiveString,
+              Freezable,
+              RangeValueIterator,
+              StringTokenizer,
+              ULocale,
+              UResourceBundle,
+              UResourceTypeMismatchException,
+              ValueIterator,
+              VersionInfo
+            </td>
           </tr>
         </tbody>
       </table>
       </td>
     </tr>
     <tr>
+
       <th align="left" valign="baseline">Transforms</th>
       <td align="left" valign="baseline">transliterator,
 transliteratorTests</td>
       <td align="left" valign="baseline">com.ibm.icu.dev.test.translit</td>
-      <td align="right" valign="baseline">775&nbsp;KB</td>
+      <td align="right" valign="baseline">988&nbsp;KB</td>
     </tr>
     <tr bgcolor="#ffffff">
+
       <td colspan="4" valign="top">
       <table border="0" cellpadding="5">
         <tbody>
           <tr>
             <td valign="baseline">icu.lang:</td>
-            <td valign="baseline"><b>UCharacter</b>, <b>UCharacterCategory</b>,
-            <b>UCharacterDirection</b>, <b>UCharacterNameIterator</b>,
-            <b>UCharacterTypeIterator</b>, <b>UProperty</b>, <b>UScript</b>,
-            <b>UScriptRun</b> </td>
+            <td valign="baseline">
+              <b>UCharacter</b>,
+              <b>UCharacterCategory</b>,
+              <b>UCharacterDirection</b>,
+              <b>UCharacterEnums</b>,
+              <b>UProperty</b>,
+              <b>UScript</b>,
+              <b>UScriptRun</b>
+
+            </td>
           </tr>
           <tr>
             <td valign="baseline">icu.text:</td>
-            <td valign="baseline"><b>AnyTransliterator</b>, <b>BreakDictionary</b>,
-            <b>BreakIterator</b>, <b>BreakIteratorFactory</b>, <b>BreakTransliterator</b>,
-            <b>DictionaryBasedBreakIterator</b>, <b>Normalizer</b>, <b>Replaceable</b>,
-            <b>ReplaceableString</b>, <b>RuleBasedBreakIterator</b>, <b>StringReplacer</b>,
-            <b>Transliterator</b>, <b>UCharacterIterator</b>, <b>UForwardCharacterIterator</b>,
-            <b>UnicodeSet</b>, <b>UnicodeSetIterator</b>, <b>UTF16</b>
+            <td valign="baseline">
+              <b>BreakDictionary</b>,
+              <b>BreakIterator</b>,
+              CanonicalIterator,
+              CollationElementIterator,
+              CollationKey,
+              Collator,
+              <b>DictionaryBasedBreakIterator</b>,
+              <b>Normalizer</b>,
+              RawCollationKey,
+              <b>Replaceable</b>,
+              <b>ReplaceableString</b>,
+              <b>RuleBasedBreakIterator</b>,
+              RuleBasedCollator,
+              RuleBasedTransliterator,
+              SymbolTable,
+              <b>Transliterator</b>,
+              <b>UCharacterIterator</b>,
+              <b>UForwardCharacterIterator</b>,
+              UnicodeFilter,
+              UnicodeMatcher,
+              <b>UnicodeSet</b>,
+              <b>UnicodeSetIterator</b>,
+              <b>UTF16</b>
+
             </td>
             <td> <br>
             </td>
           </tr>
           <tr>
             <td valign="baseline">icu.util:</td>
-            <td valign="baseline"><b>RangeValueIterator</b>, <b>ValueIterator</b>,
-            <b>VersionInfo</b> </td>
+            <td valign="baseline">
+              ByteArrayWrapper,
+              CaseInsensitiveString,
+              CompactByteArray,
+              Freezable,
+              <b>RangeValueIterator</b>,
+              StringTokenizer,
+              ULocale,
+              UResourceBundle,
+              UResourceTypeMismatchException,
+              <b>ValueIterator</b>,
+              <b>VersionInfo</b>
+
+            </td>
           </tr>
         </tbody>
       </table>
