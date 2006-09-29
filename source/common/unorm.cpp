@@ -524,6 +524,8 @@ internalGetNXHangul(UErrorCode &errorCode) {
             errorCode=U_MEMORY_ALLOCATION_ERROR;
             return NULL;
         }
+        // Compact the set for caching.
+        set->compact();
 
         umtx_lock(NULL);
         if(nxCache[UNORM_NX_HANGUL]==NULL) {
@@ -581,6 +583,8 @@ internalGetSerializedNX(int32_t options, int32_t nxIndex, UErrorCode &errorCode)
         for(i=0; uset_getSerializedRange(&sset, i, &start, &end); ++i) {
             set->add(start, end);
         }
+        // Compact the set for caching.
+        set->compact();
 
         umtx_lock(NULL);
         if(nxCache[options]==NULL) {
@@ -672,6 +676,8 @@ internalGetNX(int32_t options, UErrorCode &errorCode) {
             delete set;
             return NULL;
         }
+        // Compact the set for caching.
+        set->compact();
 
         umtx_lock(NULL);
         if(nxCache[options]==NULL) {
