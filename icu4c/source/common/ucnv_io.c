@@ -1069,9 +1069,9 @@ ucnv_openAllNames(UErrorCode *pErrorCode) {
 }
 
 U_CFUNC uint16_t
-ucnv_io_countTotalAliases(UErrorCode *pErrorCode) {
+ucnv_io_countKnownConverters(UErrorCode *pErrorCode) {
     if (haveAliasData(pErrorCode)) {
-        return (uint16_t)gMainTable.aliasListSize;
+        return (uint16_t)gMainTable.converterListSize;
     }
     return 0;
 }
