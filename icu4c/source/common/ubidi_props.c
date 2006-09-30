@@ -200,19 +200,20 @@ ubidi_closeProps(UBiDiProps *bdp) {
 
 /* UBiDiProps singleton ----------------------------------------------------- */
 
-static UBiDiProps *gBdp=NULL, *gBdpDummy=NULL;
+static UBiDiProps *gBdpDummy=NULL;
 #if !UBIDI_HARDCODE_DATA
+static UBiDiProps *gBdp=NULL;
 static UErrorCode gErrorCode=U_ZERO_ERROR;
 static int8_t gHaveData=0;
 #endif
 
 static UBool U_CALLCONV
 ubidi_cleanup(void) {
-    ubidi_closeProps(gBdp);
-    gBdp=NULL;
     ubidi_closeProps(gBdpDummy);
     gBdpDummy=NULL;
 #if !UBIDI_HARDCODE_DATA
+    ubidi_closeProps(gBdp);
+    gBdp=NULL;
     gErrorCode=U_ZERO_ERROR;
     gHaveData=0;
 #endif
