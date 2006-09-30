@@ -1250,6 +1250,8 @@ const UnicodeSet* UnicodeSet::getInclusions(int32_t src, UErrorCode &status) {
                 break;
             }
             if (U_SUCCESS(status)) {
+                // Compact for caching
+                incl->compact();
                 umtx_lock(NULL);
                 if (INCLUSIONS[src] == NULL) {
                     INCLUSIONS[src] = incl;
