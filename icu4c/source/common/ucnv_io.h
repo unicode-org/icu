@@ -95,13 +95,12 @@ U_CFUNC const char *
 ucnv_io_getConverterName(const char *alias, UBool *containsOption, UErrorCode *pErrorCode);
 
 /**
- * Return the number of all aliases and converter names.
- * This is helpful if you need a number for creating an alias table.
+ * Return the number of all known converter names (no aliases).
  * @param pErrorCode The error code
  * @return the number of all aliases
  */
 U_CFUNC uint16_t
-ucnv_io_countTotalAliases(UErrorCode *pErrorCode);
+ucnv_io_countKnownConverters(UErrorCode *pErrorCode);
 
 /**
  * Swap an ICU converter alias table. See implementation for details.
