@@ -363,6 +363,15 @@ getAlgorithmicTypeFromName(const char *realName)
     return NULL;
 }
 
+/*
+* Based on the number of known converters, this determines how many times larger
+* the shared data hash table should be. When on small platforms, or just a couple
+* of converters are used, this number should be 2. When memory is plentiful, or
+* when ucnv_countAvailable is ever used, this should be 4.
+* Larger numbers reduce the number of hash collisions, but use more memory.
+*/
+#define UCNV_CACHE_LOAD_FACTOR 4
+
 /* Puts the shared data in the static hashtable SHARED_DATA_HASHTABLE */
 /*   Will always be called with the cnvCacheMutex alrady being held   */
 /*     by the calling function.                                       */
@@ -379,7 +388,7 @@ ucnv_shareConverterData(UConverterSharedData * data)
     if (SHARED_DATA_HASHTABLE == NULL)
     {
         SHARED_DATA_HASHTABLE = uhash_openSize(uhash_hashChars, uhash_compareChars, NULL,
-                            ucnv_io_countTotalAliases(&err),
+                            ucnv_io_countKnownConverters(&err)*UCNV_CACHE_LOAD_FACTOR,
                             &err);
         ucln_common_registerCleanup(UCLN_COMMON_UCNV, ucnv_cleanup);
 
@@ -1039,6 +1048,9 @@ static UBool haveAvailableConverterList(UErrorCode *pErrorCode) {
             *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
             return FALSE;
         }
+
+        /* Open the default converter to make sure that it has first dibs in the hash table. */
+        ucnv_close(ucnv_createConverter(&tempConverter, NULL, &localStatus));
 
         localConverterCount = 0;
 
