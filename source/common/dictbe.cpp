@@ -81,8 +81,10 @@ DictionaryBreakEngine::findBreaks( UText *text,
 }
 
 void
-DictionaryBreakEngine::setCharacters( UnicodeSet &set ) {
+DictionaryBreakEngine::setCharacters( const UnicodeSet &set ) {
     fSet = set;
+    // Compact for caching
+    fSet.compact();
 }
 
 /*void
@@ -225,6 +227,12 @@ ThaiBreakEngine::ThaiBreakEngine(const TrieWordDictionary *adoptDictionary, UErr
     fBeginWordSet.add(0x0E40, 0x0E44);      // SARA E through SARA AI MAIMALAI
     fSuffixSet.add(THAI_PAIYANNOI);
     fSuffixSet.add(THAI_MAIYAMOK);
+
+    // Compact for caching.
+    fMarkSet.compact();
+    fEndWordSet.compact();
+    fBeginWordSet.compact();
+    fSuffixSet.compact();
 }
 
 ThaiBreakEngine::~ThaiBreakEngine() {
