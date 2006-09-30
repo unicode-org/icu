@@ -104,7 +104,7 @@ class DictionaryBreakEngine : public LanguageBreakEngine {
   *
   * @param set A UnicodeSet of the set of characters handled by the engine
   */
-  virtual void setCharacters( UnicodeSet &set );
+  virtual void setCharacters( const UnicodeSet &set );
 
  /**
   * <p>Set the break types handled by this engine.</p>
