@@ -3189,7 +3189,7 @@ static void TestSurrogates(void) {
 static void TestPrefix(void) {
   uint32_t i;
 
-  static struct {
+  static const struct {
     const char *rules;
     const char *data[50];
     const uint32_t len;
@@ -3215,7 +3215,7 @@ static void TestPrefix(void) {
 /* JIS X 4061 collation order implementation                                   */
 static void TestNewJapanese(void) {
 
-  static const char *test1[] = {
+  static const char * const test1[] = {
       "\\u30b7\\u30e3\\u30fc\\u30ec",
       "\\u30b7\\u30e3\\u30a4",
       "\\u30b7\\u30e4\\u30a3",
@@ -4453,7 +4453,7 @@ static void TestBeforePinyin(void) {
 }
 
 static void TestBeforeTightening(void) {
-    struct {
+    static const struct {
         const char *rules;
         UErrorCode expectedStatus;
     } tests[] = {

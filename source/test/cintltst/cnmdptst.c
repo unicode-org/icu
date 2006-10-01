@@ -797,7 +797,7 @@ static void TestSecondaryGrouping(void) {
 
 static void TestCurrencyKeywords(void)
 {
-    static const char *currencies[] = { 
+    static const char * const currencies[] = { 
         "ADD", "ADP", "AED", "AFA", "AFN", "AIF", "ALK", "ALL", "ALV", "ALX", "AMD",
         "ANG", "AOA", "AOK", "AON", "AOR", "AOS", "ARA", "ARM", "ARP", "ARS", "ATS",
         "AUD", "AUP", "AWG", "AZM", "BAD", "BAM", "BAN", "BBD", "BDT", "BEC", "BEF",

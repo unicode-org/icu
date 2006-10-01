@@ -95,7 +95,7 @@ Test_nfs4_mixed_prep_data(void){
 
 }
 
-static struct ConformanceTestCases
+static const struct ConformanceTestCases
    {
      const char *comment;
      const char *in;

@@ -1980,8 +1980,8 @@ TestJ932(void)
 static void bug1()
 {
 #if !UCONFIG_NO_LEGACY_CONVERSION
-   static char char_in[CHUNK_SIZE+32];
-   static char char_out[CHUNK_SIZE*2];
+   char char_in[CHUNK_SIZE+32];
+   char char_out[CHUNK_SIZE*2];
 
    /* GB 18030 equivalent of U+10000 is 90308130 */
    static const char test_seq[]={ (char)0x90u, 0x30, (char)0x81u, 0x30 };
@@ -2095,8 +2095,8 @@ static void bug2()
 static void bug3()
 {
 #if !UCONFIG_NO_LEGACY_CONVERSION
-    static char char_in[CHUNK_SIZE*4];
-    static char target[5];
+    char char_in[CHUNK_SIZE*4];
+    char target[5];
     UErrorCode err = U_ZERO_ERROR;
     int32_t size;
 
