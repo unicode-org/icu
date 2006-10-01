@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2005, International Business Machines
+ *   Copyright (C) 2003-2006, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -221,7 +221,7 @@ testAPI(const UChar* src, const UChar* expected, const char* testName,
     free(tSrc);
 }
 
-static UChar unicodeIn[][41] ={
+static const UChar unicodeIn[][41] ={
     {
         0x0644, 0x064A, 0x0647, 0x0645, 0x0627, 0x0628, 0x062A, 0x0643, 0x0644,
         0x0645, 0x0648, 0x0634, 0x0639, 0x0631, 0x0628, 0x064A, 0x061F, 0x0000
@@ -341,7 +341,7 @@ static UChar unicodeIn[][41] ={
     }
 };
 
-static const char *asciiIn[] = {
+static const char * const asciiIn[] = {
     "xn--egbpdaj6bu4bxfgehfvwxn",
     "xn--ihqwcrb4cv8a8dqg056pqjye",
     "xn--Proprostnemluvesky-uyb24dma41a",
@@ -369,7 +369,7 @@ static const char *asciiIn[] = {
 
 };
 
-static const char *domainNames[] = {
+static const char * const domainNames[] = {
     "slip129-37-118-146.nc.us.ibm.net",
     "saratoga.pe.utexas.edu",
     "dial-120-45.ots.utexas.edu",
