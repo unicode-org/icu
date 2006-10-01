@@ -31,7 +31,7 @@
 #include "unicode/putil.h"
 #include "idnaconf.h"
 
-static UChar unicodeIn[][41] ={
+static const UChar unicodeIn[][41] ={
     { 
         0x0644, 0x064A, 0x0647, 0x0645, 0x0627, 0x0628, 0x062A, 0x0643, 0x0644,
         0x0645, 0x0648, 0x0634, 0x0639, 0x0631, 0x0628, 0x064A, 0x061F, 0x0000
@@ -233,7 +233,7 @@ static const char *domainNames[] = {
 
 typedef struct ErrorCases ErrorCases;
 
-static struct ErrorCases{
+static const struct ErrorCases{
 
     UChar unicode[100];
     const char *ascii;
@@ -407,7 +407,7 @@ static struct ErrorCases{
 };
 
 
-static struct ConformanceTestCases
+static const struct ConformanceTestCases
    {
      const char *comment;
      const char *in;
@@ -1177,7 +1177,7 @@ void TestIDNA::testConformance(const char* toASCIIName, TestFunc toASCII,
 
 // test and ascertain
 // func(func(func(src))) == func(src)
-void TestIDNA::testChaining(UChar* src,int32_t numIterations,const char* testName,
+void TestIDNA::testChaining(const UChar* src,int32_t numIterations,const char* testName,
                   UBool useSTD3ASCIIRules, UBool caseInsensitive, TestFunc func){
     UChar even[MAX_DEST_SIZE];
     UChar odd[MAX_DEST_SIZE];

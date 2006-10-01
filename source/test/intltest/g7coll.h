@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -70,9 +70,6 @@ public:
     // " & aa ; a'-' & ee ; e'-' & ii ; i'-' & oo ; o'-' & uu ; u'-' "
     void TestDemo4(/* char* par */);
 
-private:
-    static const UChar testCases[][MAX_TOKEN_LEN];
-    static const int32_t results[TESTLOCALES][TOTALTESTSET];
 };
 
 #endif /* #if !UCONFIG_NO_COLLATION */

@@ -1,12 +1,12 @@
 /*
-**************************************************************************************
+********************************************************************************
 *   Copyright (C) 1999-2006 International Business Machines Corporation and
 *   others. All Rights Reserved.
-**************************************************************************************
+********************************************************************************
 *   Date        Name        Description
 *   10/20/99    alan        Creation.
 *   03/22/2000  Madhu       Added additional tests
-**************************************************************************************
+********************************************************************************
 */
 
 #include "unicode/utypes.h"
@@ -812,7 +812,7 @@ void UnicodeSetTest::TestScriptSet() {
  * Test the [:Latin:] syntax.
  */
 void UnicodeSetTest::TestPropertySet() {
-    static const char* DATA[] = {
+    static const char* const DATA[] = {
         // Pattern, Chars IN, Chars NOT in
 
         "[:Latin:]",

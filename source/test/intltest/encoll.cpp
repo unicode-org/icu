@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -26,7 +26,7 @@ CollationEnglishTest::~CollationEnglishTest()
     delete myCollation;
 }
 
-const UChar CollationEnglishTest::testSourceCases[][CollationEnglishTest::MAX_TOKEN_LEN] = {
+static const UChar testSourceCases[][CollationEnglishTest::MAX_TOKEN_LEN] = {
         {(UChar)0x0061 /* 'a' */, (UChar)0x0062 /* 'b' */, 0},
         {(UChar)0x0062 /* 'b' */, (UChar)0x006C /* 'l' */, (UChar)0x0061 /* 'a' */, (UChar)0x0063 /* 'c' */, (UChar)0x006B /* 'k' */, (UChar)0x002D /* '-' */, (UChar)0x0062 /* 'b' */, (UChar)0x0069 /* 'i' */, (UChar)0x0072 /* 'r' */, (UChar)0x0064 /* 'd' */, 0},
         {(UChar)0x0062 /* 'b' */, (UChar)0x006C /* 'l' */, (UChar)0x0061 /* 'a' */, (UChar)0x0063 /* 'c' */, (UChar)0x006B /* 'k' */, (UChar)0x0020 /* ' ' */, (UChar)0x0062 /* 'b' */, (UChar)0x0069 /* 'i' */, (UChar)0x0072 /* 'r' */, (UChar)0x0064 /* 'd' */, 0},
@@ -78,7 +78,7 @@ const UChar CollationEnglishTest::testSourceCases[][CollationEnglishTest::MAX_TO
         {(UChar)0x0070 /* 'p' */, 0x00E9, (UChar)0x0063 /* 'c' */, (UChar)0x0068 /* 'h' */, 0x00E9, 0}                                            // 49
 };
 
-const UChar CollationEnglishTest::testTargetCases[][CollationEnglishTest::MAX_TOKEN_LEN] = {
+static const UChar testTargetCases[][CollationEnglishTest::MAX_TOKEN_LEN] = {
         {(UChar)0x0061 /* 'a' */, (UChar)0x0062 /* 'b' */, (UChar)0x0063 /* 'c' */, 0},
         {(UChar)0x0062 /* 'b' */, (UChar)0x006C /* 'l' */, (UChar)0x0061 /* 'a' */, (UChar)0x0063 /* 'c' */, (UChar)0x006B /* 'k' */, (UChar)0x0062 /* 'b' */, (UChar)0x0069 /* 'i' */, (UChar)0x0072 /* 'r' */, (UChar)0x0064 /* 'd' */, 0},
         {(UChar)0x0062 /* 'b' */, (UChar)0x006C /* 'l' */, (UChar)0x0061 /* 'a' */, (UChar)0x0063 /* 'c' */, (UChar)0x006B /* 'k' */, (UChar)0x002D /* '-' */, (UChar)0x0062 /* 'b' */, (UChar)0x0069 /* 'i' */, (UChar)0x0072 /* 'r' */, (UChar)0x0064 /* 'd' */, 0},
@@ -130,7 +130,7 @@ const UChar CollationEnglishTest::testTargetCases[][CollationEnglishTest::MAX_TO
         {(UChar)0x0070 /* 'p' */, 0x00EA, (UChar)0x0063 /* 'c' */, (UChar)0x0068 /* 'h' */, (UChar)0x0065 /* 'e' */, 0}                                           // 49
 };
 
-const Collator::EComparisonResult CollationEnglishTest::results[] = {
+static const Collator::EComparisonResult results[] = {
         Collator::LESS, 
         Collator::LESS, /*Collator::GREATER,*/
         Collator::LESS,
@@ -186,7 +186,7 @@ const Collator::EComparisonResult CollationEnglishTest::results[] = {
         Collator::LESS                                                                  // 49
 };
 
-const UChar CollationEnglishTest::testBugs[][CollationEnglishTest::MAX_TOKEN_LEN] = {
+static const UChar testBugs[][CollationEnglishTest::MAX_TOKEN_LEN] = {
     {0x61, 0},
     {0x41, 0},
     {0x65, 0},
@@ -201,7 +201,7 @@ const UChar CollationEnglishTest::testBugs[][CollationEnglishTest::MAX_TOKEN_LEN
 
 // 0x0300 is grave, 0x0301 is acute
 // the order of elements in this array must be different than the order in CollationFrenchTest
-const UChar CollationEnglishTest::testAcute[][CollationEnglishTest::MAX_TOKEN_LEN] = {
+static const UChar testAcute[][CollationEnglishTest::MAX_TOKEN_LEN] = {
     {0x65, 0x65, 0},
     {0x65, 0x65, 0x0301, 0},
     {0x65, 0x65, 0x0301, 0x0300, 0},

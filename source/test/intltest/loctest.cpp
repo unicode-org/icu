@@ -14,7 +14,7 @@
 #include "cstring.h"
 #include <stdio.h>
 
-const char* rawData[33][8] = {
+static const char* const rawData[33][8] = {
 
         // language code
         {   "en",   "fr",   "ca",   "el",   "no",   "it",   "xx",   "zh"  },
@@ -1538,7 +1538,7 @@ LocaleTest::TestSetIsBogus() {
 
 void
 LocaleTest::TestKeywordVariants(void) {
-    struct {
+    static const struct {
         const char *localeID;
         const char *expectedLocaleID;
         //const char *expectedLocaleIDNoKeywords;
@@ -1645,7 +1645,7 @@ LocaleTest::TestKeywordVariants(void) {
 
 void
 LocaleTest::TestKeywordVariantParsing(void) {
-    struct {
+    static const struct {
         const char *localeID;
         const char *keyword;
         const char *expectedValue;
@@ -1675,7 +1675,7 @@ LocaleTest::TestKeywordVariantParsing(void) {
 
 void
 LocaleTest::TestGetBaseName(void) {
-    struct {
+    static const struct {
         const char *localeID;
         const char *baseName;
     } testCases[] = {
@@ -2017,7 +2017,7 @@ static Locale _canonicalize(int32_t selector, /* 0==createFromName, 1==createCan
 
 void LocaleTest::TestCanonicalization(void)
 {
-    static struct {
+    static const struct {
         const char *localeID;    /* input */
         const char *getNameID;   /* expected getName() result */
         const char *canonicalID; /* expected canonicalize() result */
