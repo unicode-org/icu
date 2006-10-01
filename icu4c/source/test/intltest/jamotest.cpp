@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
 ************************************************************************
@@ -215,7 +215,7 @@ void JamoTest::TestPiecemeal(void) {
 void
 JamoTest::TestRealText() {
     // Test text taken from the Unicode web site
-     static const char* WHAT_IS_UNICODE[] = {
+     static const char* const WHAT_IS_UNICODE[] = {
       "\\uc720\\ub2c8\\ucf54\\ub4dc\\uc5d0", "\\ub300\\ud574", "?",
 
       "\\uc5b4\\ub5a4", "\\ud50c\\ub7ab\\ud3fc,", "\\uc5b4\\ub5a4",

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -118,7 +118,7 @@ class IntlTestRBNF : public IntlTest {
   virtual void TestHebrewFraction();
 
  protected:
-  virtual void doTest(RuleBasedNumberFormat* formatter, const char* testData[][2], UBool testParsing);
+  virtual void doTest(RuleBasedNumberFormat* formatter, const char* const testData[][2], UBool testParsing);
   virtual void doLenientParseTest(RuleBasedNumberFormat* formatter, const char* testData[][2]);
 
 /* U_HAVE_RBNF */

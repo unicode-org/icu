@@ -109,10 +109,6 @@ public:
      */
     virtual void TestBadInput135(void);
  
-private:
-    static const char* parseFormats[];
-    static const char* inputStrings[];
- 
 public:
     /**
      * Verify the correct behavior when parsing an array of inputs against an

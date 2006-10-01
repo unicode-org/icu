@@ -37,10 +37,10 @@
 
 #define MAX_CLASS_ID 200
 
-UClassID    ids[MAX_CLASS_ID];
-const char *ids_factory[MAX_CLASS_ID];
-const char *ids_class[MAX_CLASS_ID];
-uint32_t    ids_count = 0;
+static UClassID    ids[MAX_CLASS_ID];
+static const char *ids_factory[MAX_CLASS_ID];
+static const char *ids_class[MAX_CLASS_ID];
+static uint32_t    ids_count = 0;
 
 UObject *UObjectTest::testClass(UObject *obj,
                 const char *className, const char *factory, 
