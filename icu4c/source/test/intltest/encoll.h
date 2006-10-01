@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -40,12 +40,6 @@ public:
     void TestTertiary(/* char* par */);
 
 private:
-    static const UChar testBugs[][MAX_TOKEN_LEN];
-    static const UChar testSourceCases[][MAX_TOKEN_LEN];
-    static const UChar testTargetCases[][MAX_TOKEN_LEN];
-    static const Collator::EComparisonResult results[];
-    static const UChar testAcute[][MAX_TOKEN_LEN];
-
     Collator *myCollation;
 };
 

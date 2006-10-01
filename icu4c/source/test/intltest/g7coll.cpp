@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -16,7 +16,7 @@
 #include "sfwdchit.h"
 
 
-const UChar G7CollationTest::testCases[][G7CollationTest::MAX_TOKEN_LEN] = {
+static const UChar testCases[][G7CollationTest::MAX_TOKEN_LEN] = {
     {  0x0062 /*'b'*/, 0x006c /*'l'*/, 0x0061 /*'a'*/, 0x0062 /*'c'*/, 0x006b /*'k'*/, 
         0x0062 /*'b'*/, 0x0069 /*'i'*/, 0x0072 /*'r'*/, 0x0064 /*'d'*/, 0x0073 /*'s'*/, 0x0000},                    /* 9 */
     { 0x0050 /*'P'*/, 0x0061 /*'a'*/, 0x0074/*'t'*/, 0x0000},                                                    /* 1 */
@@ -56,7 +56,7 @@ const UChar G7CollationTest::testCases[][G7CollationTest::MAX_TOKEN_LEN] = {
     { 0x007a /*'z'*/, 0x0065  /*'e'*/, 0x0062 /*'b'*/, 0x0072 /*'r'*/, 0x0061 /*'a'*/, 0x0000}                    /* 29 */
 };
 
-const int32_t G7CollationTest::results[G7CollationTest::TESTLOCALES][G7CollationTest::TOTALTESTSET] = {
+static const int32_t results[G7CollationTest::TESTLOCALES][G7CollationTest::TOTALTESTSET] = {
     { 12, 13, 9, 0, 14, 1, 11, 2, 3, 4, 5, 6, 8, 10, 7, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31 }, /* en_US */
     { 12, 13, 9, 0, 14, 1, 11, 2, 3, 4, 5, 6, 8, 10, 7, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31 }, /* en_GB */
     { 12, 13, 9, 0, 14, 1, 11, 2, 3, 4, 5, 6, 8, 10, 7, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31 }, /* en_CA */

@@ -777,7 +777,7 @@ DateFormatTest::TestBadInput135()
         errln((UnicodeString)"FAIL: UErrorCode received during test: " + (int32_t)status);
 }
  
-const char* DateFormatTest::parseFormats[] = {
+static const char* const parseFormats[] = {
     "MMMM d, yyyy",
     "MMMM d yyyy",
     "M/d/yy",
@@ -789,7 +789,7 @@ const char* DateFormatTest::parseFormats[] = {
     "h:mm a MMMM d, yyyy"
 };
  
-const char* DateFormatTest::inputStrings[] = {
+static const char* const inputStrings[] = {
     "bogus string", 0, 0, 0, 0, 0, 0, 0, 0, 0,
     "April 1, 1997", "April 1, 1997", 0, 0, 0, 0, 0, "April 1", 0, 0,
     "Jan 1, 1970", "January 1, 1970", 0, 0, 0, 0, 0, "January 1", 0, 0,

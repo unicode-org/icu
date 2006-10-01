@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2004, International Business Machines
+ *   Copyright (C) 2003-2006, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -90,7 +90,7 @@ private:
     void testErrorCases(const char* IDNToASCIIName, TestFunc IDNToASCII,
                     const char* IDNToUnicodeName, TestFunc IDNToUnicode);
 
-    void testChaining(UChar* src,int32_t numIterations,const char* testName,
+    void testChaining(const UChar* src,int32_t numIterations,const char* testName,
                   UBool useSTD3ASCIIRules, UBool caseInsensitive, TestFunc func);
 
     void testRootLabelSeparator(const char* testName, CompareFunc func, 
