@@ -3,14 +3,14 @@
  * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
-/********************************************************************************
+/*******************************************************************************
 *
 * File CUCDTST.C
 *
 * Modification History:
 *        Name                     Description
 *     Madhu Katragadda            Ported for C API, added tests for string functions
-*********************************************************************************
+********************************************************************************
 */
 
 #include <string.h>
@@ -2084,7 +2084,7 @@ TestAdditionalProperties() {
     };
 
     /* test data for u_hasBinaryProperty() */
-    static int32_t
+    static const int32_t
     props[][3]={ /* code point, property, value */
         { 0x0627, UCHAR_ALPHABETIC, TRUE },
         { 0x1034a, UCHAR_ALPHABETIC, TRUE },

@@ -3,7 +3,7 @@
  * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
-/********************************************************************************
+/*******************************************************************************
 *
 * File CRESTST.C
 *
@@ -11,7 +11,7 @@
 *        Name              Date               Description
 *   Madhu Katragadda    05/09/2000   Ported Tests for New ResourceBundle API
 *   Madhu Katragadda    05/24/2000   Added new tests to test RES_BINARY for collationElements
-*********************************************************************************
+********************************************************************************
 */
 
 
@@ -2500,7 +2500,7 @@ static void TestGetKeywordValues(void) {
   }
 }
 
-static void TestGetFunctionalEquivalentOf(const char *path, const char *resName, const char *keyword, UBool truncate, const char *testCases[]) {
+static void TestGetFunctionalEquivalentOf(const char *path, const char *resName, const char *keyword, UBool truncate, const char * const testCases[]) {
   int32_t i;
   for(i=0;testCases[i];i+=3) {
     UBool expectAvail = (testCases[i][0]=='t')?TRUE:FALSE;
@@ -2533,7 +2533,7 @@ static void TestGetFunctionalEquivalentOf(const char *path, const char *resName,
 }
 
 static void TestGetFunctionalEquivalent(void) {
-  static const char *collCases[] = {
+  static const char * const collCases[] = {
    /*   avail   locale          equiv   */
         "f",    "de_US_CALIFORNIA",            "de",
         "t",    "zh_TW@collation=stroke",      "zh@collation=stroke",

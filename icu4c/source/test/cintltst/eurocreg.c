@@ -46,7 +46,7 @@ void addTestEuroRegression(TestNode** root)
  * I could not find such "updates" for codepages 1362 and 1363 - we might want to supply them later.
  */
 
-char convertersToCheck[][15] = { 
+static const char convertersToCheck[][15] = { 
   "cp1250",
   "cp1251",
   "cp1252",
