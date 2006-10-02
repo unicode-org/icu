@@ -341,65 +341,59 @@ static void TestUDataOpen(){
     free(path);
 }
 
+typedef struct {
+    uint16_t headerSize;
+    uint8_t magic1, magic2;
+    UDataInfo info;
+    char padding[8];
+    uint32_t count, reserved;
+    /*
+    const struct {
+    const char *const name; 
+    const void *const data;
+    } toc[1];
+    */
+   int32_t   fakeNameAndData[4];
+} ICU_COMMON_Data_Header;
+
+static const ICU_COMMON_Data_Header gEmptyHeader = {
+    32,          /* headerSize */
+    0xda,        /* magic1,  (see struct MappedData in udata.c)  */
+    0x27,        /* magic2     */
+    {            /*UDataInfo   */
+        sizeof(UDataInfo),      /* size        */
+        0,                      /* reserved    */
+
+#if U_IS_BIG_ENDIAN
+        1,
+#else
+        0,
+#endif
+
+        U_CHARSET_FAMILY,
+        sizeof(UChar),   
+        0,               /* reserved      */
+        {                /* data format identifier */
+           0x43, 0x6d, 0x6e, 0x44}, /* "CmnD" */
+           {1, 0, 0, 0},   /* format version major, minor, milli, micro */
+           {0, 0, 0, 0}    /* dataVersion   */
+    },
+    {0,0,0,0,0,0,0,0},  /* Padding[8]   */ 
+    0,                  /* count        */
+    0,                  /* Reserved     */
+    {                   /*  TOC structure */
+/*        {    */
+          0 , 0 , 0, 0  /* name and data entries.  Count says there are none,  */
+                        /*  but put one in just in case.                       */
+/*        }  */
+    }
+};
 
 
 static void TestUDataSetAppData(){
 /*    UDataMemory      *dataItem;*/
 
     UErrorCode        status=U_ZERO_ERROR;
-    int               fileHandle = 0;              /* We are going to read the testdata.dat file */
-    struct stat       statBuf;
-    size_t            fileSize = 0;
-    char             *fileBuf = 0;
-
-    size_t            i;
-       
-    /* Open the testdata.dat file, using normal   */
-    const char* tdrelativepath = loadTestData(&status);
-    char* filePath=(char*)malloc(sizeof(char) * (strlen(tdrelativepath) + strlen(".dat") +1 +strlen(tdrelativepath)) );
-
-    if(U_FAILURE(status)) {
-        log_err("Could not load testdata.dat, status = %s\n", u_errorName(status));
-        return;
-    }
-
-    strcpy(filePath, tdrelativepath);
-    strcat(filePath, ".dat");
-
-    log_verbose("Testing udata_setAppData() with %s\n", filePath);
-
-#if defined(U_WINDOWS) || defined(U_CYGWIN)
-    fileHandle = open( filePath, O_RDONLY | O_BINARY );
-#else
-    fileHandle = open( filePath, O_RDONLY);
-#endif
-    if( fileHandle == -1 ) {
-        log_err("FAIL: TestUDataSetAppData() can not open(\"%s\", O_RDONLY)\n", filePath);
-        goto cleanupAndReturn;
-    }
-
-    /* 
-     *Find the size of testdata.dat, and read the whole thing into memory
-     */
-    if (fstat(fileHandle, &statBuf) == 0) {
-        fileSize = statBuf.st_size;
-    }
-    if (fileSize == 0) {
-        log_err("FAIL: TestUDataSetAppData() can not find size of file \"%s\".\n", filePath);
-        goto cleanupAndReturn;
-    }
-
-    fileBuf = (char *)ctst_malloc(fileSize);
-    if (fileBuf == 0) {
-        log_err("FAIL: TestUDataSetAppData() can not malloc(%d) for file \"%s\".\n", fileSize, filePath);
-        goto cleanupAndReturn;
-    }
-
-    i = read(fileHandle, fileBuf, fileSize);
-    if (i != fileSize) {
-        log_err("FAIL: TestUDataSetAppData() error reading file \"%s\" size=%d read=%d.\n", filePath, fileSize, i);
-        goto cleanupAndReturn;
-    }
 
     /*
      * First we try some monkey business and try to do bad things.
@@ -410,35 +404,35 @@ static void TestUDataSetAppData(){
     if (status != U_ILLEGAL_ARGUMENT_ERROR) {
         log_err("FAIL: TestUDataSetAppData(): udata_setAppData(\"appData1\", NULL, status) should have failed."
                 " It returned status of %s\n", u_errorName(status));
-        goto cleanupAndReturn;
+        return;
     }
     /* The following call should fail.
        If the following works with a bad UErrorCode, then later calls to appData1 should fail. */
-    udata_setAppData("appData1", fileBuf, &status);
+    udata_setAppData("appData1", &gEmptyHeader, &status);
 
     /*
      * Got testdata.dat into memory, now we try setAppData using the memory image.
      */
 
     status=U_ZERO_ERROR;
-    udata_setAppData("appData1", fileBuf, &status); 
+    udata_setAppData("appData1", &gEmptyHeader, &status); 
     if (status != U_ZERO_ERROR) {
         log_err("FAIL: TestUDataSetAppData(): udata_setAppData(\"appData1\", fileBuf, status) "
                 " returned status of %s\n", u_errorName(status));
-        goto cleanupAndReturn;
+        return;
     }
 
-    udata_setAppData("appData2", fileBuf, &status); 
+    udata_setAppData("appData2", &gEmptyHeader, &status); 
     if (status != U_ZERO_ERROR) {
         log_err("FAIL: TestUDataSetAppData(): udata_setAppData(\"appData2\", fileBuf, status) "
                 " returned status of %s\n", u_errorName(status));
-        goto cleanupAndReturn;
+        return;
     }
 
     /*  If we try to setAppData with the same name a second time, we should get a 
      *    a using default warning.
      */
-    udata_setAppData("appData2", fileBuf, &status); 
+    udata_setAppData("appData2", &gEmptyHeader, &status); 
     if (status != U_USING_DEFAULT_WARNING) {
         log_err("FAIL: TestUDataSetAppData(): udata_setAppData(\"appData2\", fileBuf, status) "
                 " returned status of %s, expected U_USING_DEFAULT_WARNING.\n", u_errorName(status));
@@ -449,16 +443,6 @@ static void TestUDataSetAppData(){
         package of a contained item.
         
         dataItem = udata_open("appData1", "res", "te_IN", &status); **/
-
-cleanupAndReturn:
-    /*  Note:  fileBuf is not deleted because ICU retains a pointer to it
-     *         forever (until ICU is shut down).
-     */
-    if (fileHandle > 0) {
-        close(fileHandle);
-    }
-    free(filePath);
-    return;
 }
 
 static char *safeGetICUDataDirectory() {
