@@ -525,6 +525,11 @@ testTrieRanges(const char *testName,
         utrie_close(newTrie);
         return;
     }
+    if (length >= (int32_t)sizeof(storageHolder.storage)) {
+        log_err("error: utrie_serialize(%s) needs more memory\n", testName);
+        utrie_close(newTrie);
+        return;
+    }
 
     /* test linear Latin-1 range from utrie_getData() */
     if(latin1Linear) {
