@@ -89,9 +89,112 @@ static const char ASSIGNED[] = "Assigned"; // [:^Cn:]
  */
 //static const UChar CATEGORY_CLOSE[] = {COLON, SET_CLOSE, 0x0000}; /* ":]" */
 
-U_NAMESPACE_BEGIN
+U_CDECL_BEGIN
 
 static UnicodeSet *INCLUSIONS[UPROPS_SRC_COUNT] = { NULL }; // cached getInclusions()
+
+//----------------------------------------------------------------
+// Inclusions list
+//----------------------------------------------------------------
+
+// USetAdder implementation
+// Does not use uset.h to reduce code dependencies
+static void U_CALLCONV
+_set_add(USet *set, UChar32 c) {
+    ((UnicodeSet *)set)->add(c);
+}
+
+static void U_CALLCONV
+_set_addRange(USet *set, UChar32 start, UChar32 end) {
+    ((UnicodeSet *)set)->add(start, end);
+}
+
+static void U_CALLCONV
+_set_addString(USet *set, const UChar *str, int32_t length) {
+    ((UnicodeSet *)set)->add(UnicodeString((UBool)(length<0), str, length));
+}
+
+/**
+ * Cleanup function for UnicodeSet
+ */
+static UBool U_CALLCONV uset_cleanup(void) {
+    int32_t i;
+
+    for(i = UPROPS_SRC_NONE; i < UPROPS_SRC_COUNT; ++i) {
+        if (INCLUSIONS[i] != NULL) {
+            delete INCLUSIONS[i];
+            INCLUSIONS[i] = NULL;
+        }
+    }
+
+    return TRUE;
+}
+
+U_CDECL_END
+
+U_NAMESPACE_BEGIN
+
+static const UnicodeSet* getInclusions(int32_t src, UErrorCode &status) {
+    UBool needInit;
+    UMTX_CHECK(NULL, (INCLUSIONS[src] == NULL), needInit);
+    if (needInit) {
+        UnicodeSet* incl = new UnicodeSet();
+        USetAdder sa = {
+            (USet *)incl,
+            _set_add,
+            _set_addRange,
+            _set_addString,
+            NULL // don't need remove()
+        };
+
+        if (incl != NULL) {
+            switch(src) {
+            case UPROPS_SRC_CHAR:
+                uchar_addPropertyStarts(&sa, &status);
+                break;
+            case UPROPS_SRC_PROPSVEC:
+                upropsvec_addPropertyStarts(&sa, &status);
+                break;
+            case UPROPS_SRC_CHAR_AND_PROPSVEC:
+                uchar_addPropertyStarts(&sa, &status);
+                upropsvec_addPropertyStarts(&sa, &status);
+                break;
+            case UPROPS_SRC_HST:
+                uhst_addPropertyStarts(&sa, &status);
+                break;
+#if !UCONFIG_NO_NORMALIZATION
+            case UPROPS_SRC_NORM:
+                unorm_addPropertyStarts(&sa, &status);
+                break;
+#endif
+            case UPROPS_SRC_CASE:
+                ucase_addPropertyStarts(ucase_getSingleton(&status), &sa, &status);
+                break;
+            case UPROPS_SRC_BIDI:
+                ubidi_addPropertyStarts(ubidi_getSingleton(&status), &sa, &status);
+                break;
+            default:
+                status = U_INTERNAL_PROGRAM_ERROR;
+                break;
+            }
+            if (U_SUCCESS(status)) {
+                // Compact for caching
+                incl->compact();
+                umtx_lock(NULL);
+                if (INCLUSIONS[src] == NULL) {
+                    INCLUSIONS[src] = incl;
+                    incl = NULL;
+                    ucln_common_registerCleanup(UCLN_COMMON_USET, uset_cleanup);
+                }
+                umtx_unlock(NULL);
+            }
+            delete incl;
+        } else {
+            status = U_MEMORY_ALLOCATION_ERROR;
+        }
+    }
+    return INCLUSIONS[src];
+}
 
 // helper functions for matching of pattern syntax pieces ------------------ ***
 // these functions are parallel to the PERL_OPEN etc. strings above
@@ -143,8 +246,8 @@ isPOSIXClose(const UnicodeString &pattern, int32_t pos) {
  */
 UnicodeSet::UnicodeSet(const UnicodeString& pattern,
                        UErrorCode& status) :
-    len(0), capacity(START_EXTRA), bufferCapacity(0),
-    list(0), buffer(0), strings(NULL)
+    len(0), capacity(START_EXTRA), list(0), buffer(0),
+    bufferCapacity(0), patLen(0), strings(NULL), pat(NULL)
 {   
     if(U_SUCCESS(status)){
         list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
@@ -171,8 +274,8 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern,
                        uint32_t options,
                        const SymbolTable* symbols,
                        UErrorCode& status) :
-    len(0), capacity(START_EXTRA), bufferCapacity(0),
-    list(0), buffer(0), strings(NULL)
+    len(0), capacity(START_EXTRA), list(0), buffer(0),
+    bufferCapacity(0), patLen(0), strings(NULL), pat(NULL)
 {   
     if(U_SUCCESS(status)){
         list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
@@ -191,8 +294,8 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
                        uint32_t options,
                        const SymbolTable* symbols,
                        UErrorCode& status) :
-    len(0), capacity(START_EXTRA), bufferCapacity(0),
-    list(0), buffer(0), strings(NULL)
+    len(0), capacity(START_EXTRA), list(0), buffer(0),
+    bufferCapacity(0), patLen(0), strings(NULL), pat(NULL)
 {
     if(U_SUCCESS(status)){
         list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
@@ -283,7 +386,7 @@ UnicodeSet& UnicodeSet::applyPattern(const UnicodeString& pattern,
         status = U_MALFORMED_SET;
         return *this;
     }
-    pat = rebuiltPat;
+    setPattern(rebuiltPat);
     return *this;
 }
 
@@ -1163,109 +1266,6 @@ void UnicodeSet::applyPropertyPattern(RuleCharacterIterator& chars,
     }
     chars.jumpahead(pos.getIndex());
     rebuiltPat.append(pattern, 0, pos.getIndex());
-}
-
-//----------------------------------------------------------------
-// Inclusions list
-//----------------------------------------------------------------
-
-U_CDECL_BEGIN
-
-// USetAdder implementation
-// Does not use uset.h to reduce code dependencies
-static void U_CALLCONV
-_set_add(USet *set, UChar32 c) {
-    ((UnicodeSet *)set)->add(c);
-}
-
-static void U_CALLCONV
-_set_addRange(USet *set, UChar32 start, UChar32 end) {
-    ((UnicodeSet *)set)->add(start, end);
-}
-
-static void U_CALLCONV
-_set_addString(USet *set, const UChar *str, int32_t length) {
-    ((UnicodeSet *)set)->add(UnicodeString((UBool)(length<0), str, length));
-}
-
-/**
- * Cleanup function for UnicodeSet
- */
-static UBool U_CALLCONV uset_cleanup(void) {
-    int32_t i;
-
-    for(i = UPROPS_SRC_NONE; i < UPROPS_SRC_COUNT; ++i) {
-        if (INCLUSIONS[i] != NULL) {
-            delete INCLUSIONS[i];
-            INCLUSIONS[i] = NULL;
-        }
-    }
-
-    return TRUE;
-}
-
-U_CDECL_END
-
-const UnicodeSet* UnicodeSet::getInclusions(int32_t src, UErrorCode &status) {
-    UBool needInit;
-    UMTX_CHECK(NULL, (INCLUSIONS[src] == NULL), needInit);
-    if (needInit) {
-        UnicodeSet* incl = new UnicodeSet();
-        USetAdder sa = {
-            (USet *)incl,
-            _set_add,
-            _set_addRange,
-            _set_addString,
-            NULL // don't need remove()
-        };
-
-        if (incl != NULL) {
-            switch(src) {
-            case UPROPS_SRC_CHAR:
-                uchar_addPropertyStarts(&sa, &status);
-                break;
-            case UPROPS_SRC_PROPSVEC:
-                upropsvec_addPropertyStarts(&sa, &status);
-                break;
-            case UPROPS_SRC_CHAR_AND_PROPSVEC:
-                uchar_addPropertyStarts(&sa, &status);
-                upropsvec_addPropertyStarts(&sa, &status);
-                break;
-            case UPROPS_SRC_HST:
-                uhst_addPropertyStarts(&sa, &status);
-                break;
-#if !UCONFIG_NO_NORMALIZATION
-            case UPROPS_SRC_NORM:
-                unorm_addPropertyStarts(&sa, &status);
-                break;
-#endif
-            case UPROPS_SRC_CASE:
-                ucase_addPropertyStarts(ucase_getSingleton(&status), &sa, &status);
-                break;
-            case UPROPS_SRC_BIDI:
-                ubidi_addPropertyStarts(ubidi_getSingleton(&status), &sa, &status);
-                break;
-            default:
-                status = U_INTERNAL_PROGRAM_ERROR;
-                break;
-            }
-            if (U_SUCCESS(status)) {
-                // Compact for caching
-                incl->compact();
-                umtx_lock(NULL);
-                if (INCLUSIONS[src] == NULL) {
-                    INCLUSIONS[src] = incl;
-                    incl = NULL;
-                    ucln_common_registerCleanup(UCLN_COMMON_USET, uset_cleanup);
-                }
-                umtx_unlock(NULL);
-            }
-            delete incl;
-        } else {
-            status = U_MEMORY_ALLOCATION_ERROR;
-        }
-    }
-    return INCLUSIONS[src];
 }
 
 //----------------------------------------------------------------
