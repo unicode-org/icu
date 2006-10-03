@@ -8,14 +8,12 @@ package com.ibm.icu.text;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ByteArrayInputStream;
 
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import com.ibm.icu.impl.ICUData;
-import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICUService;
