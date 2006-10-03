@@ -1852,10 +1852,15 @@ void UnicodeSet::releasePattern() {
 */
 void UnicodeSet::setPattern(const UnicodeString& newPat) {
     releasePattern();
-    patLen = newPat.length();
-    pat = (UChar *)uprv_malloc((patLen + 1) * sizeof(UChar));
-    newPat.extractBetween(0, patLen, pat);
-    pat[patLen] = 0;
+    int32_t newPatLen = newPat.length();
+    pat = (UChar *)uprv_malloc((newPatLen + 1) * sizeof(UChar));
+    if (pat) {
+        patLen = newPatLen;
+        newPat.extractBetween(0, patLen, pat);
+        pat[patLen] = 0;
+    }
+    // else we don't care if malloc failed. This was just a nice cache.
+    // We can regenerate an equivalent pattern later when requested.
 }
 
 U_NAMESPACE_END
