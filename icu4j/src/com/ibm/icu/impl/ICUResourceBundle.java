@@ -209,7 +209,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
      * Returns a string from a string resource type
      *
      * @return a string
-     * @see #getBinary
+     * @see #getBinary()
      * @see #getIntVector
      * @see #getInt
      * @throws MissingResourceException
@@ -227,7 +227,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
         throw new UResourceTypeMismatchException("");
     }
 
-    /**
+    /*
      * Returns a string from a string resource type
      * @param key The key whose values needs to be fetched
      * @return a string
@@ -277,7 +277,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
      * Returns a 32 bit integer array from a resource.
      *
      * @return a pointer to a chunk of unsigned bytes which live in a memory mapped/DLL file.
-     * @see #getBinary
+     * @see #getBinary()
      * @see #getInt
      * @throws MissingResourceException
      * @throws UResourceTypeMismatchException
@@ -292,7 +292,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
      *
      * @return an integer value
      * @see #getIntVector
-     * @see #getBinary
+     * @see #getBinary()
      * @throws MissingResourceException
      * @throws UResourceTypeMismatchException
      * @stable ICU 2.0
@@ -307,7 +307,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
      *
      * @return an integer value
      * @see #getIntVector
-     * @see #getBinary
+     * @see #getBinary()
      * @throws MissingResourceException
      * @throws UResourceTypeMismatchException
      * @stable ICU 2.0
