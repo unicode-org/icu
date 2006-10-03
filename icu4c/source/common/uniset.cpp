@@ -138,8 +138,8 @@ static int8_t U_CALLCONV compareUnicodeString(UHashTok t1, UHashTok t2) {
  * Constructs an empty set.
  */
 UnicodeSet::UnicodeSet() :
-    len(1), capacity(1 + START_EXTRA), bufferCapacity(0),
-    list(0), buffer(0), strings(NULL)
+    len(1), capacity(1 + START_EXTRA), list(0), buffer(0),
+    bufferCapacity(0), patLen(0), strings(NULL), pat(NULL)
 {
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
     if(list!=NULL){
@@ -158,8 +158,8 @@ UnicodeSet::UnicodeSet() :
  * @param end last character, inclusive, of range
  */
 UnicodeSet::UnicodeSet(UChar32 start, UChar32 end) :
-    len(1), capacity(1 + START_EXTRA), bufferCapacity(0),
-    list(0), buffer(0), strings(NULL)
+    len(1), capacity(1 + START_EXTRA), list(0), buffer(0),
+    bufferCapacity(0), patLen(0), strings(NULL), pat(NULL)
 {
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
     if(list!=NULL){
@@ -177,8 +177,8 @@ UnicodeSet::UnicodeSet(UChar32 start, UChar32 end) :
  */
 UnicodeSet::UnicodeSet(const UnicodeSet& o) :
     UnicodeFilter(o),
-    len(0), capacity(o.len + GROW_EXTRA), bufferCapacity(0),
-    list(0), buffer(0), strings(NULL)
+    len(0), capacity(o.len + GROW_EXTRA), list(0), buffer(0),
+    bufferCapacity(0), patLen(0), strings(NULL), pat(NULL)
 {
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
     if(list!=NULL){
@@ -199,6 +199,7 @@ UnicodeSet::~UnicodeSet() {
         uprv_free(buffer);
     }
     delete strings;
+    releasePattern();
 }
 
 /**
@@ -210,7 +211,10 @@ UnicodeSet& UnicodeSet::operator=(const UnicodeSet& o) {
     uprv_memcpy(list, o.list, len*sizeof(UChar32));
     UErrorCode ec = U_ZERO_ERROR;
     strings->assign(*o.strings, cloneUnicodeString, ec);
-    pat = o.pat;
+    releasePattern();
+    if (o.pat) {
+        setPattern(UnicodeString(o.pat, o.patLen));
+    }
     return *this;
 }
 
@@ -869,7 +873,7 @@ UnicodeSet& UnicodeSet::add(UChar32 c) {
     }
 #endif
 
-    pat.truncate(0);
+    releasePattern();
     return *this;
 }
 
@@ -888,7 +892,7 @@ UnicodeSet& UnicodeSet::add(const UnicodeString& s) {
     if (cp < 0) {
         if (!strings->contains((void*) &s)) {
             _add(s);
-            pat.truncate(0);
+            releasePattern();
         }
     } else {
         add((UChar32)cp, (UChar32)cp);
@@ -1069,7 +1073,7 @@ UnicodeSet& UnicodeSet::remove(const UnicodeString& s) {
     int32_t cp = getSingleCP(s);
     if (cp < 0) {
         strings->removeElement((void*) &s);
-        pat.truncate(0);
+        releasePattern();
     } else {
         remove((UChar32)cp, (UChar32)cp);
     }
@@ -1092,7 +1096,7 @@ UnicodeSet& UnicodeSet::complement(UChar32 start, UChar32 end) {
         UChar32 range[3] = { start, end+1, UNICODESET_HIGH };
         exclusiveOr(range, 2, 0);
     }
-    pat.truncate(0);
+    releasePattern();
     return *this;
 }
 
@@ -1116,7 +1120,7 @@ UnicodeSet& UnicodeSet::complement(void) {
         ++len;
     }
     swapBuffers();
-    pat.truncate(0);
+    releasePattern();
     return *this;
 }
 
@@ -1137,7 +1141,7 @@ UnicodeSet& UnicodeSet::complement(const UnicodeString& s) {
         } else {
             _add(s);
         }
-        pat.truncate(0);
+        releasePattern();
     } else {
         complement((UChar32)cp, (UChar32)cp);
     }
@@ -1224,7 +1228,7 @@ UnicodeSet& UnicodeSet::complementAll(const UnicodeSet& c) {
 UnicodeSet& UnicodeSet::clear(void) {
     list[0] = UNICODESET_HIGH;
     len = 1;
-    pat.truncate(0);
+    releasePattern();
     strings->removeAllElements();
     return *this;
 }
@@ -1465,7 +1469,7 @@ void UnicodeSet::exclusiveOr(const UChar32* other, int32_t otherLen, int8_t pola
         }
     }
     swapBuffers();
-    pat.truncate(0);
+    releasePattern();
 }
 
 // polarity = 0 is normal: x union y
@@ -1570,7 +1574,7 @@ void UnicodeSet::add(const UChar32* other, int32_t otherLen, int8_t polarity) {
     buffer[k++] = UNICODESET_HIGH;    // terminate
     len = k;
     swapBuffers();
-    pat.truncate(0);
+    releasePattern();
 }
 
 // polarity = 0 is normal: x intersect y
@@ -1659,7 +1663,7 @@ void UnicodeSet::retain(const UChar32* other, int32_t otherLen, int8_t polarity)
     buffer[k++] = UNICODESET_HIGH;    // terminate
     len = k;
     swapBuffers();
-    pat.truncate(0);
+    releasePattern();
 }
 
 /**
@@ -1717,13 +1721,14 @@ escapeUnprintable) {
  * is one.  Otherwise it will be generated.
  */
 UnicodeString& UnicodeSet::_toPattern(UnicodeString& result,
-                                      UBool escapeUnprintable) const {
-    if (pat.length() > 0) {
+                                      UBool escapeUnprintable) const
+{
+    if (pat != NULL) {
         int32_t i;
         int32_t backslashCount = 0;
-        for (i=0; i<pat.length(); ) {
-            UChar32 c = pat.char32At(i);
-            i += UTF_CHAR_LENGTH(c);
+        for (i=0; i<patLen; ) {
+            UChar32 c;
+            U16_NEXT(pat, i, patLen, c);
             if (escapeUnprintable && ICU_Utility::isUnprintable(c)) {
                 // If the unprintable character is preceded by an odd
                 // number of backslashes, then it has been escaped.
@@ -1755,7 +1760,8 @@ UnicodeString& UnicodeSet::_toPattern(UnicodeString& result,
  * will produce another set that is equal to this one.
  */
 UnicodeString& UnicodeSet::toPattern(UnicodeString& result,
-                                     UBool escapeUnprintable) const {
+                                     UBool escapeUnprintable) const
+{
     result.truncate(0);
     return _toPattern(result, escapeUnprintable);
 }
@@ -1766,7 +1772,8 @@ UnicodeString& UnicodeSet::toPattern(UnicodeString& result,
  * passed to applyPattern().
  */
 UnicodeString& UnicodeSet::_generatePattern(UnicodeString& result,
-                                            UBool escapeUnprintable) const {
+                                            UBool escapeUnprintable) const
+{
     result.append(SET_OPEN);
 
 //  // Check against the predefined categories.  We implicitly build
@@ -1829,5 +1836,26 @@ UnicodeString& UnicodeSet::_generatePattern(UnicodeString& result,
     return result.append(SET_CLOSE);
 }
 
+/**
+* Release existing cached pattern
+*/
+void UnicodeSet::releasePattern() {
+    if (pat) {
+        uprv_free(pat);
+        pat = NULL;
+        patLen = 0;
+    }
+}
+
+/**
+* Set the new pattern to cache.
+*/
+void UnicodeSet::setPattern(const UnicodeString& newPat) {
+    releasePattern();
+    patLen = newPat.length();
+    pat = (UChar *)uprv_malloc((patLen + 1) * sizeof(UChar));
+    newPat.extractBetween(0, patLen, pat);
+    pat[patLen] = 0;
+}
 
 U_NAMESPACE_END
