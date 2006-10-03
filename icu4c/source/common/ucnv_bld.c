@@ -1050,6 +1050,7 @@ static UBool haveAvailableConverterList(UErrorCode *pErrorCode) {
         }
 
         /* Open the default converter to make sure that it has first dibs in the hash table. */
+        localStatus = U_ZERO_ERROR;
         ucnv_close(ucnv_createConverter(&tempConverter, NULL, &localStatus));
 
         localConverterCount = 0;
