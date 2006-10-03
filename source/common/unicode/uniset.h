@@ -262,11 +262,10 @@ class U_COMMON_API UnicodeSet : public UnicodeFilter {
 
     int32_t len; // length of list used; 0 <= len <= capacity
     int32_t capacity; // capacity of list
-    int32_t bufferCapacity; // capacity of buffer
     UChar32* list; // MUST be terminated with HIGH
     UChar32* buffer; // internal buffer, may be NULL
-
-    UVector* strings; // maintained in sorted order
+    int32_t bufferCapacity; // capacity of buffer
+    int32_t patLen;
 
     /**
      * The pattern representation of this set.  This may not be the
@@ -277,7 +276,8 @@ class U_COMMON_API UnicodeSet : public UnicodeFilter {
      * indicating that toPattern() must generate a pattern
      * representation from the inversion list.
      */
-    UnicodeString pat;
+    UChar *pat;
+    UVector* strings; // maintained in sorted order
 
 public:
 
@@ -1309,9 +1309,13 @@ private:
                      UErrorCode &status);
 
     /**
-     * Return a cached copy of the inclusions list for the property source.
+     * Set the new pattern to cache.
      */
-    static const UnicodeSet* getInclusions(int32_t src, UErrorCode &errorCode);
+    void setPattern(const UnicodeString& newPat);
+    /**
+     * Release existing cached pattern.
+     */
+    void releasePattern();
 
     friend class UnicodeSetIterator;
 };
