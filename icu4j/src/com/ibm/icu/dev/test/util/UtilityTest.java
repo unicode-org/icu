@@ -17,6 +17,7 @@ import java.util.Set;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Assert;
+import com.ibm.icu.impl.InvalidFormatException;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.ByteArrayWrapper;
@@ -210,7 +211,7 @@ public class UtilityTest extends TestFmwk {
             }
         }
         try {
-            Assert.fail(new IllegalArgumentException("Assert message"));
+            Assert.fail(new InvalidFormatException());
             errln("FAIL: Assert.fail with an exception");
         }
         catch (IllegalStateException e) {
