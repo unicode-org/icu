@@ -6,6 +6,9 @@
  */
 package com.ibm.icu.dev.test;
 
+import java.util.Date;
+
+import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.VersionInfo;
 
 public abstract class AbstractTestLog implements TestLog {
@@ -92,5 +95,13 @@ public abstract class AbstractTestLog implements TestLog {
                 delegate.msg(message, level, incCount, newln);
             }
         }
+    }
+    public boolean isDateAtLeast(int year, int month, int day){
+        Calendar c = Calendar.getInstance();
+        Date dt = new Date(year, month, day);
+        if(c.getTime().compareTo(dt)>=0){
+            return true;
+        }
+        return false;
     }
 }

@@ -10,7 +10,6 @@ package com.ibm.icu.dev.test;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.NumberFormat;
-import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 import java.io.ByteArrayOutputStream;
@@ -25,7 +24,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Random;
@@ -77,6 +75,9 @@ public class TestFmwk extends AbstractTestLog {
             ex = ((ExceptionInInitializerError)ex).getException();
         }
         String msg = ex.getMessage();
+        if(msg==null){
+            msg = "";
+        }
         //System.err.println("TF handleException msg: " + msg);
         if (ex instanceof MissingResourceException || ex instanceof NoClassDefFoundError || msg.indexOf("java.util.MissingResourceException")>=0) {
             if (params.warnings || params.nodata) {
@@ -376,8 +377,11 @@ public class TestFmwk extends AbstractTestLog {
                     handleException(e);
                 }catch (NoClassDefFoundError e) {
                     handleException(e);
-                }catch (Exception o){
-                    System.out.println(o);
+                }catch (Exception e){
+                    /*errln("Encountered: "+ e.toString());
+                    e.printStackTrace(System.err);
+                    */
+                    handleException(e);
                 }
             }
         }
@@ -1775,12 +1779,4 @@ public class TestFmwk extends AbstractTestLog {
 
     private final static String spaces = "                                          ";
     
-    public boolean isDateAtLeast(int year, int month, int day){
-        Calendar c = Calendar.getInstance();
-        Date dt = new Date(year, month, day);
-        if(c.getTime().compareTo(dt)>=0){
-            return true;
-        }
-        return false;
-    }
 }
