@@ -600,7 +600,6 @@ public:
      */
     static const Locale* U_EXPORT2 getAvailableLocales(int32_t& count);
 
-#if !UCONFIG_NO_SERVICE
     /**
      * Return a StringEnumeration over the locales available at the time of the call,
      * including registered locales.  If a severe error occurs (such as out of memory
@@ -610,7 +609,6 @@ public:
      * @stable ICU 2.6
      */
     static StringEnumeration* U_EXPORT2 getAvailableLocales(void);
-#endif
 
     /**
      * Create a string enumerator of all possible keywords that are relevant to
