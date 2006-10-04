@@ -44,30 +44,40 @@
 #include "unicode/coll.h"
 #include "unicode/tblcoll.h"
 #include "ucol_imp.h"
+#include "cstring.h"
 #include "cmemory.h"
 #include "umutex.h"
 #include "servloc.h"
 #include "ustrenum.h"
 #include "ucln_in.h"
 
-U_NAMESPACE_BEGIN
-#if !UCONFIG_NO_SERVICE
-U_NAMESPACE_END
-
+static U_NAMESPACE_QUALIFIER Locale* availableLocaleList = NULL;
+static int32_t  availableLocaleListCount;
 static U_NAMESPACE_QUALIFIER ICULocaleService* gService = NULL;
+
 /**
  * Release all static memory held by collator.
  */
 U_CDECL_BEGIN
 static UBool U_CALLCONV collator_cleanup(void) {
+#if !UCONFIG_NO_SERVICE
     if (gService) {
         delete gService;
         gService = NULL;
     }
+#endif
+    if (availableLocaleList) {
+        delete []availableLocaleList;
+        availableLocaleList = NULL;
+    }
+    availableLocaleListCount = 0;
+
     return TRUE;
 }
+
 U_CDECL_END
 
+#if !UCONFIG_NO_SERVICE
 U_NAMESPACE_BEGIN
 
 // ------------------------------------------
@@ -178,8 +188,6 @@ public:
 
 // -------------------------------------
 
-class ICUCollatorService;
-
 static ICULocaleService* 
 getService(void)
 {
@@ -199,9 +207,7 @@ getService(void)
             delete newservice;
         }
         else {
-#if !UCONFIG_NO_SERVICE
             ucln_i18n_registerCleanup(UCLN_I18N_COLLATOR, collator_cleanup);
-#endif
         }
     }
     return gService;
@@ -241,6 +247,57 @@ Collator::createUCollator(const char *loc,
     return result;
 }
 #endif /* UCONFIG_NO_SERVICE */
+
+static UBool isAvailableLocaleListInitialized(UErrorCode &status) {
+    // for now, there is a hardcoded list, so just walk through that list and set it up.
+    UBool needInit;
+    UMTX_CHECK(NULL, availableLocaleList == NULL, needInit);
+
+    if (needInit) {
+        UResourceBundle *index = NULL;
+        UResourceBundle installed;
+        Locale * temp;
+        int32_t i = 0;
+        int32_t localeCount;
+        
+        ures_initStackObject(&installed);
+        index = ures_openDirect(U_ICUDATA_COLL, "res_index", &status);
+        ures_getByKey(index, "InstalledLocales", &installed, &status);
+        
+        if(U_SUCCESS(status)) {
+            localeCount = ures_getSize(&installed);
+            temp = new Locale[localeCount];
+            
+            if (temp != NULL) {
+                ures_resetIterator(&installed);
+                while(ures_hasNext(&installed)) {
+                    const char *tempKey = NULL;
+                    ures_getNextString(&installed, NULL, &tempKey, &status);
+                    temp[i++] = Locale(tempKey);
+                }
+                
+                umtx_lock(NULL);
+                if (availableLocaleList == NULL)
+                {
+                    availableLocaleList = temp;
+                    availableLocaleListCount = localeCount;
+                    temp = NULL;
+                    ucln_i18n_registerCleanup(UCLN_I18N_COLLATOR, collator_cleanup);
+                } 
+                umtx_unlock(NULL);
+
+                needInit = FALSE;
+                if (temp) {
+                    delete []temp;
+                }
+            }
+
+            ures_close(&installed);
+        }
+        ures_close(index);
+    }
+    return !needInit;
+}
 
 // Collator public methods -----------------------------------------------
 
@@ -396,7 +453,15 @@ UBool Collator::greater(const UnicodeString& source,
 // array of indefinite lifetime
 const Locale* U_EXPORT2 Collator::getAvailableLocales(int32_t& count) 
 {
-    return Locale::getAvailableLocales(count);
+    UErrorCode status = U_ZERO_ERROR;
+    Locale *result = NULL;
+    count = 0;
+    if (isAvailableLocaleListInitialized(status))
+    {
+        result = availableLocaleList;
+        count = availableLocaleListCount;
+    }
+    return result;
 }
 
 UnicodeString& U_EXPORT2 Collator::getDisplayName(const Locale& objectLocale,
@@ -617,15 +682,82 @@ Collator::unregister(URegistryKey key, UErrorCode& status)
     }
     return FALSE;
 }
+#endif /* UCONFIG_NO_SERVICE */
+
+class CollationLocaleListEnumeration : public StringEnumeration {
+private:
+    int32_t index;
+public:
+    static UClassID U_EXPORT2 getStaticClassID(void);
+    virtual UClassID getDynamicClassID(void) const;
+public:
+    CollationLocaleListEnumeration()
+        : index(0)
+    {
+        // The global variables should already be initialized.
+        //isAvailableLocaleListInitialized(status);
+    }
+
+    virtual ~CollationLocaleListEnumeration() {
+    }
+
+    virtual StringEnumeration * clone() const
+    {
+        CollationLocaleListEnumeration *result = new CollationLocaleListEnumeration();
+        result->index = index;
+        return result;
+    }
+
+    virtual int32_t count(UErrorCode &/*status*/) const {
+        return availableLocaleListCount;
+    }
+
+    virtual const char* next(int32_t* resultLength, UErrorCode& /*status*/) {
+        const char* result;
+        if(index < availableLocaleListCount) {
+            result = availableLocaleList[index++].getName();
+            if(resultLength != NULL) {
+                *resultLength = uprv_strlen(result);
+            }
+        } else {
+            if(resultLength != NULL) {
+                *resultLength = 0;
+            }
+            result = NULL;
+        }
+        return result;
+    }
+
+    virtual const UnicodeString* snext(UErrorCode& status) {
+        int32_t resultLength = 0;
+        const char *s = next(&resultLength, status);
+        return setChars(s, resultLength, status);
+    }
+
+    virtual void reset(UErrorCode& /*status*/) {
+        index = 0;
+    }
+};
+
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(CollationLocaleListEnumeration)
+
 
 // -------------------------------------
 
 StringEnumeration* U_EXPORT2
 Collator::getAvailableLocales(void)
 {
-    return getService()->getAvailableLocales();
-}
+#if !UCONFIG_NO_SERVICE
+    if (hasService()) {
+        return getService()->getAvailableLocales();
+    }
 #endif /* UCONFIG_NO_SERVICE */
+    UErrorCode status = U_ZERO_ERROR;
+    if (isAvailableLocaleListInitialized(status)) {
+        return new CollationLocaleListEnumeration();
+    }
+    return NULL;
+}
 
 StringEnumeration* U_EXPORT2
 Collator::getKeywords(UErrorCode& status) {
