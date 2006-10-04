@@ -247,7 +247,7 @@ isPOSIXClose(const UnicodeString &pattern, int32_t pos) {
 UnicodeSet::UnicodeSet(const UnicodeString& pattern,
                        UErrorCode& status) :
     len(0), capacity(START_EXTRA), list(0), buffer(0),
-    bufferCapacity(0), patLen(0), strings(NULL), pat(NULL)
+    bufferCapacity(0), patLen(0), pat(NULL), strings(NULL)
 {   
     if(U_SUCCESS(status)){
         list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
@@ -275,7 +275,7 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern,
                        const SymbolTable* symbols,
                        UErrorCode& status) :
     len(0), capacity(START_EXTRA), list(0), buffer(0),
-    bufferCapacity(0), patLen(0), strings(NULL), pat(NULL)
+    bufferCapacity(0), patLen(0), pat(NULL), strings(NULL)
 {   
     if(U_SUCCESS(status)){
         list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
@@ -295,7 +295,7 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
                        const SymbolTable* symbols,
                        UErrorCode& status) :
     len(0), capacity(START_EXTRA), list(0), buffer(0),
-    bufferCapacity(0), patLen(0), strings(NULL), pat(NULL)
+    bufferCapacity(0), patLen(0), pat(NULL), strings(NULL)
 {
     if(U_SUCCESS(status)){
         list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
