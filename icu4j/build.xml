@@ -185,7 +185,7 @@
             encoding="ascii">
             
             <exclude name="**/CVS/**/*"/>
-            
+            <include name="com/ibm/icu/charset/**/*.java"/>
             <include name="com/ibm/icu/impl/**/*.java"/>
             <include name="com/ibm/icu/lang/*.java"/>
             <include name="com/ibm/icu/math/**/*.java"/>
@@ -1040,8 +1040,9 @@
             <include name="com/ibm/icu/text/SymbolTable.java"/>
             <include name="com/ibm/icu/text/UnicodeFilter.java"/>
             <include name="com/ibm/icu/text/UnicodeMatcher.java"/>
-            <include name="com/ibm/icu/text/UnicodeSet.java"/>        	
+            <include name="com/ibm/icu/text/UnicodeSet.java"/> 
             <include name="com/ibm/icu/text/UnicodeSetIterator.java"/>
+            <include name="com/ibm/icu/util/Freezable.java"/>
             <include name="com/ibm/icu/util/RangeValueIterator.java"/>
             <include name="com/ibm/icu/util/StringTokenizer.java"/>
             <include name="com/ibm/icu/util/ULocale.java"/>
