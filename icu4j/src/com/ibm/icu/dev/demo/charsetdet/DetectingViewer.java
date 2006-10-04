@@ -1,7 +1,7 @@
 /*
  **************************************************************************
- * Copyright (C) 2005, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                           *
+ * Copyright (C) 2005-2006, International Business Machines Corporation   *
+ * and others. All Rights Reserved.                                       *
  **************************************************************************
  *
  */
@@ -15,7 +15,6 @@ import java.net.URL;
 
 import javax.swing.*;
 
-import com.ibm.icu.impl.UTF32;
 import com.ibm.icu.text.CharsetDetector;
 import com.ibm.icu.text.CharsetMatch;
 
@@ -95,12 +94,6 @@ public class DetectingViewer extends JFrame implements ActionListener
         
         return new BufferedInputStream(fileStream);
     }
-    
-    private void openFile(String directory, String filename)
-    {
-        openFile(new File(directory, filename));
-    }
-    
     
     private BufferedInputStream openURL(String url)
     {
@@ -260,33 +253,13 @@ public class DetectingViewer extends JFrame implements ActionListener
             
             inputStream.reset();
             
-            if (encoding.startsWith("UTF-32")) {
-                byte[] bytes = new byte[1024];
-                int offset = 0;
-                int chBytes = 0;
-                UTF32 utf32 = UTF32.getInstance(encoding);
-                
-                while ((bytesRead = inputStream.read(bytes, offset, 1024)) >= 0) {
-                    offset  = bytesRead % 4;
-                    chBytes = bytesRead - offset;
-                    
-                    sb.append(utf32.fromBytes(bytes, 0, chBytes));
-                    
-                    if (offset != 0) {
-                        for (int i = 0; i < offset; i += 1) {
-                            bytes[i] = bytes[chBytes + i];
-                        }
-                    }
-                }
-            } else {
-                isr = new InputStreamReader(inputStream, encoding);
-                
-                while ((bytesRead = isr.read(buffer, 0, 1024)) >= 0) {
-                    sb.append(buffer, 0, bytesRead);
-                }
-                
-                isr.close();
+            isr = new InputStreamReader(inputStream, encoding);
+            
+            while ((bytesRead = isr.read(buffer, 0, 1024)) >= 0) {
+                sb.append(buffer, 0, bytesRead);
             }
+            
+            isr.close();
             
             this.setTitle(title + " - " + encodingName(matches[0]));
             

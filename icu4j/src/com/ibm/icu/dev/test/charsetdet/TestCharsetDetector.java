@@ -13,7 +13,6 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.UTF32;
 import com.ibm.icu.text.CharsetDetector;
 import com.ibm.icu.text.CharsetMatch;
 
@@ -141,36 +140,30 @@ public class TestCharsetDetector extends TestFmwk
             CharsetDetector det = new CharsetDetector();
             byte[] bytes;
             
-            if (enc.startsWith("UTF-32")) {
-                UTF32 utf32 = UTF32.getInstance(enc);
-                
-                bytes = utf32.toBytes(testString);
-            } else {
-                String from = enc;
+            String from = enc;
 
-                while (true) {
-                    try {
-                        bytes = testString.getBytes(from);
-                    } catch (UnsupportedOperationException uoe) {
-                         // In some runtimes, the ISO-2022-CN converter
-                         // only converts *to* Unicode - we have to use
-                         // x-ISO-2022-CN-GB to convert *from* Unicode.
-                        if (from.equals("ISO-2022-CN")) {
-                            from = "x-ISO-2022-CN-GB";
-                            continue;
-                        }
-                        
-                        // Ignore any other converters that can't
-                        // convert from Unicode.
-                        return;
-                    } catch (UnsupportedEncodingException uee) {
-                        // Ignore any encodings that this runtime
-                        // doesn't support.
-                        return;
+            while (true) {
+                try {
+                    bytes = testString.getBytes(from);
+                } catch (UnsupportedOperationException uoe) {
+                     // In some runtimes, the ISO-2022-CN converter
+                     // only converts *to* Unicode - we have to use
+                     // x-ISO-2022-CN-GB to convert *from* Unicode.
+                    if (from.equals("ISO-2022-CN")) {
+                        from = "x-ISO-2022-CN-GB";
+                        continue;
                     }
                     
-                    break;
+                    // Ignore any other converters that can't
+                    // convert from Unicode.
+                    return;
+                } catch (UnsupportedEncodingException uee) {
+                    // Ignore any encodings that this runtime
+                    // doesn't support.
+                    return;
                 }
+                
+                break;
             }
         
             det.setText(bytes);
