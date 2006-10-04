@@ -139,7 +139,7 @@ static int8_t U_CALLCONV compareUnicodeString(UHashTok t1, UHashTok t2) {
  */
 UnicodeSet::UnicodeSet() :
     len(1), capacity(1 + START_EXTRA), list(0), buffer(0),
-    bufferCapacity(0), patLen(0), strings(NULL), pat(NULL)
+    bufferCapacity(0), patLen(0), pat(NULL), strings(NULL)
 {
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
     if(list!=NULL){
@@ -159,7 +159,7 @@ UnicodeSet::UnicodeSet() :
  */
 UnicodeSet::UnicodeSet(UChar32 start, UChar32 end) :
     len(1), capacity(1 + START_EXTRA), list(0), buffer(0),
-    bufferCapacity(0), patLen(0), strings(NULL), pat(NULL)
+    bufferCapacity(0), patLen(0), pat(NULL), strings(NULL)
 {
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
     if(list!=NULL){
@@ -178,7 +178,7 @@ UnicodeSet::UnicodeSet(UChar32 start, UChar32 end) :
 UnicodeSet::UnicodeSet(const UnicodeSet& o) :
     UnicodeFilter(o),
     len(0), capacity(o.len + GROW_EXTRA), list(0), buffer(0),
-    bufferCapacity(0), patLen(0), strings(NULL), pat(NULL)
+    bufferCapacity(0), patLen(0), pat(NULL), strings(NULL)
 {
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
     if(list!=NULL){
