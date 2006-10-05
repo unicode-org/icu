@@ -1,5 +1,5 @@
 /*
- *   Copyright (C) 2005, International Business Machines
+ *   Copyright (C) 2005-2006, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  */
 
@@ -31,7 +31,7 @@ final class STZInfo implements Serializable {
         this.ea = ea;
     }
 
-    void applyTo(java.util.SimpleTimeZone stz) {
+    /*void applyTo(java.util.SimpleTimeZone stz) {
         if (sy != -1) {
             stz.setStartYear(sy);
         }
@@ -53,7 +53,7 @@ final class STZInfo implements Serializable {
                 stz.setEndRule(em, edm, edw, et, ea);
             }
         }
-    }
+    }*/
     
     void applyTo(com.ibm.icu.util.SimpleTimeZone stz) {
         if (sy != -1) {

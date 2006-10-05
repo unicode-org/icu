@@ -378,11 +378,9 @@ public abstract class UResourceBundle extends ResourceBundle{
                 hashCodeCache ^= root.hashCode();
             }
         }
-        ///CLOVER:OFF
-        private void clear() {
+        /*private void clear() {
             setKeyValues(null, "", null);
-        }
-        ///CLOVER:ON
+        }*/
     }
     
     private static final ResourceCacheKey cacheKey = new ResourceCacheKey();
@@ -411,14 +409,13 @@ public abstract class UResourceBundle extends ResourceBundle{
         
         if (rootType == null) {
             String rootLocale = (baseName.indexOf('.')==-1) ? "root" : "";
-            int rt = ROOT_MISSING;
-            UResourceBundle b = null;  
+            int rt = ROOT_MISSING; // value set on success
             try{
-                b = ICUResourceBundle.getBundleInstance(baseName, rootLocale, root, true);
+                ICUResourceBundle.getBundleInstance(baseName, rootLocale, root, true);
                 rt = ROOT_ICU; 
             }catch(MissingResourceException ex){
                 try{
-                    b = ResourceBundleWrapper.getBundleInstance(baseName, rootLocale, root, true);
+                    ResourceBundleWrapper.getBundleInstance(baseName, rootLocale, root, true);
                     rt = ROOT_JAVA;
                 }catch(MissingResourceException e){
                     //throw away the exception
