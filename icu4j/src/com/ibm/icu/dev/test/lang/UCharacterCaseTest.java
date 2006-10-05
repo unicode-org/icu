@@ -294,11 +294,11 @@ public final class UCharacterCaseTest extends TestFmwk
             for (int i = 0; i < TITLE_DATA_.length;) {
                 String test = TITLE_DATA_[i++];
                 String expected = TITLE_DATA_[i++];
-                ULocale locale = new ULocale(TITLE_DATA_[i++]);
+                Locale locale = new Locale(TITLE_DATA_[i++]);
                 int breakType = Integer.parseInt(TITLE_DATA_[i++]);
                 BreakIterator iter =
                     breakType >= 0 ?
-                        BreakIterator.getBreakInstance(locale, breakType) :
+                        BreakIterator.getBreakInstance(ULocale.forLocale(locale), breakType) :
                         null;
                 String result = UCharacter.toTitleCase(locale, test, iter);
                 if (!expected.equals(result)) {
