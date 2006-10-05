@@ -122,12 +122,10 @@ final class UConverterSharedData {
 	{
 	}
 	
-*/	
 	protected void doUnload()
 	{
 	}
 
-	/*
 	// interface UConverterImplOpenable extends UConverterImpl
 	protected void doOpen(UConverter cnv, String name, String locale, long options, int[] pErrorCode)
 	{
