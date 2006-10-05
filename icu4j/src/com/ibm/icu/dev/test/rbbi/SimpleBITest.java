@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -152,9 +152,7 @@ public class SimpleBITest extends TestFmwk{
             bundle = (ListResourceBundle)cls.newInstance();
         }
         catch (Exception e) {
-            ///CLOVER:OFF
             errln("could not create bundle: " + bname + "exception: " + e.getMessage());
-            ///CLOVER:ON
             return null;
         }
         
@@ -251,7 +249,7 @@ public class SimpleBITest extends TestFmwk{
         logln(out.toString());
     }
 
-    private void debugPrintln2(String s) {
+/*    private void debugPrintln2(String s) {
         StringBuffer out = new StringBuffer();
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
@@ -261,6 +259,6 @@ public class SimpleBITest extends TestFmwk{
                 out.append(c);
         }
         logln(out.toString());
-    }
+    }*/
 }
 

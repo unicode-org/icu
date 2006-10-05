@@ -199,19 +199,15 @@ public class ICUServiceTest extends TestFmwk
     {
         Factory factory = new Factory() {
             public Object create(Key key, ICUService service) {
-            return new ULocale(key.currentID());
+                return new ULocale(key.currentID());
             }
 
-                    ///CLOVER:OFF
             public void updateVisibleIDs(Map result) {
             }
-                    ///CLOVER:ON
 
-                    ///CLOVER:OFF
             public String getDisplayName(String id, ULocale l) {
-            return null;
+                return null;
             }
-                    ///CLOVER:ON
         };
         service.registerFactory(factory);
 
@@ -991,15 +987,13 @@ public class ICUServiceTest extends TestFmwk
     }
 
     static class ICUNSubclass extends ICUNotifier {
-    public boolean acceptsListener(EventListener l) {
-        return l instanceof MyListener;
-    }
-
+        public boolean acceptsListener(EventListener l) {
+            return l instanceof MyListener;
+        }
+    
         // not used, just needed to implement abstract base
-        ///CLOVER:OFF
-    public void notifyListener(EventListener l) {
-    }
-        ///CLOVER:ON
+        public void notifyListener(EventListener l) {
+        }
     }
 
     static class LKFSubclass extends LocaleKeyFactory {
