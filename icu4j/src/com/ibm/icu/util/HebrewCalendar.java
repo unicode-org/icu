@@ -634,19 +634,17 @@ public class HebrewCalendar extends Calendar {
         return day;
     }
 
-    /**
+    /*
      * Find the day of the week for a given day
      *
      * @param day   The # of days since the start of the Hebrew calendar,
      *              1-based (i.e. 1/1/1 AM is day 1).
      */
-    ///CLOVER:OFF
-    private static int absoluteDayToDayOfWeek(long day)
+    /*private static int absoluteDayToDayOfWeek(long day)
     {
         // We know that 1/1/1 AM is a Monday, which makes the math easy...
         return (int)(day % 7) + 1;
-    }
-    ///CLOVER:ON
+    }*/
 
     /**
      * Returns the the type of a given year.
