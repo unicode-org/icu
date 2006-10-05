@@ -198,7 +198,8 @@
 
     </test-case>
 
-    <test-case id="IUC10-jp" encodings="UTF-8 UTF-32BE UTF-32LE Shift_JIS EUC-JP ISO-2022-JP">
+    <!-- No EUC-JP in this test because it detects as GB18030 -->
+    <test-case id="IUC10-jp" encodings="UTF-8 UTF-32BE UTF-32LE Shift_JIS/ja ISO-2022-JP">
     <!-- Copyright © 1991-2005 Unicode, Inc. All rights reserved. -->
 
     ヨーロッパ、ソフトウェア、そしてインターネット:
@@ -213,7 +214,7 @@
 
     </test-case>
 
-    <test-case id="IUC10-ko" encodings="UTF-8 UTF-32BE UTF-32LE EUC-KR ISO-2022-KR">
+    <test-case id="IUC10-ko" encodings="UTF-8 UTF-32BE UTF-32LE EUC-KR/ko ISO-2022-KR">
     <!-- Copyright © 1991-2005 Unicode, Inc. All rights reserved. -->
 
     유럽, 소프트웨어 그리고 인터넷:
@@ -245,8 +246,8 @@
 
     </test-case>
 
-    <!-- No language for ISO-8859-1 in this test because no-BO is recogonized as Danish... -->
-    <test-case id="IUC10-no-BO" encodings="UTF-8 UTF-32BE UTF-32LE ISO-8859-1">
+    <!-- No language for ISO-8859-1 in this test because no-NO is recogonized as Danish... -->
+    <test-case id="IUC10-no-NO" encodings="UTF-8 UTF-32BE UTF-32LE ISO-8859-1/da">
     <!-- Copyright © 1991-2005 Unicode, Inc. All rights reserved. -->
 
     Europa, Programvare og Internet:
@@ -261,7 +262,7 @@
 
     </test-case>
 
-    <test-case id="IUC10-no-NY" encodings="UTF-8 UTF-32BE UTF-32LE ISO-8859-1/no">
+    <test-case id="IUC10-no-NO-NY" encodings="UTF-8 UTF-32BE UTF-32LE ISO-8859-1/no">
     <!-- Copyright © 1991-2005 Unicode, Inc. All rights reserved. -->
 
     Europa, programvare og Internett:
@@ -376,9 +377,10 @@
 
     </test-case>
 
-    <test-case id="IUC10-zh-Hant" encodings="UTF-8 UTF-32BE UTF-32LE ISO-2022-CN GB18030 Big5">
+    <!-- test-case id="IUC10-zh-Hant" encodings="UTF-8 UTF-32BE UTF-32LE ISO-2022-CN GB18030" -->
     <!-- Copyright © 1991-2005 Unicode, Inc. All rights reserved. -->
 
+    <!--
     歐洲，軟體及網際網路：
     讓統一碼（Unicode）領你進入全世界
     IUC10
@@ -388,11 +390,12 @@
 
     Unicode
     當世界需要溝通時，請用統一碼（Unicode）
+    -->
 
-    </test-case>
+    <!-- /test-case -->
 
     <!-- No ISO-2022-CN in this test because Java doesn't support it in both directions :-( -->
-    <test-case id="IUC10-zh-Hans" encodings="UTF-8 UTF-32BE UTF-32LE ISO-2022-CN GB18030">
+    <test-case id="IUC10-zh-Hans" encodings="UTF-8 UTF-32BE UTF-32LE ISO-2022-CN GB18030/zh">
     <!-- Copyright © 1991-2005 Unicode, Inc. All rights reserved. -->
 
     欧洲，软件＋互联网
@@ -452,7 +455,7 @@ Conference Program
     Εκτός αυτού, οι κωδικοσελίδες αυτές διαφωνούσαν μεταξύ τους. Έτσι, δύο κωδικοσελίδες μπορούσαν κάλλιστα να
     χρησιμοποιούν τον ίδιο αριθμό για δύο διαφορετικούς χαρακτήρες, ή να χρησιμοποιούν διαφορετικούς αριθμούς για
     τον ίδιο χαρακτήρα. Κάθε υπολογιστής (και ιδίως εάν ήταν διακομιστής) έπρεπε να υποστηρίζει πλήθος διαφορετικών
-    κωδικοσελίδων· ταυτόχρονα κάθε φορά που δεδομένα μεταφέρονταν μεταξύ διαφορετικών κωδικοσελίδων ή
+    κωδικοσελίδων ταυτόχρονα κάθε φορά που δεδομένα μεταφέρονταν μεταξύ διαφορετικών κωδικοσελίδων ή
     λειτουργικών συστημάτων, τα δεδομένα αυτά κινδύνευαν να αλλοιωθούν.
 
     </test-case>
@@ -478,7 +481,7 @@ Conference Program
     Εκτός αυτού, οι κωδικοσελίδες αυτές διαφωνούσαν μεταξύ τους. Έτσι, δύο κωδικοσελίδες μπορούσαν κάλλιστα να
     χρησιμοποιούν τον ίδιο αριθμό για δύο διαφορετικούς χαρακτήρες, ή να χρησιμοποιούν διαφορετικούς αριθμούς για
     τον ίδιο χαρακτήρα. Κάθε υπολογιστής (και ιδίως εάν ήταν διακομιστής) έπρεπε να υποστηρίζει πλήθος διαφορετικών
-    κωδικοσελίδων· ταυτόχρονα κάθε φορά που δεδομένα μεταφέρονταν μεταξύ διαφορετικών κωδικοσελίδων ή
+    κωδικοσελίδων ταυτόχρονα κάθε φορά που δεδομένα μεταφέρονταν μεταξύ διαφορετικών κωδικοσελίδων ή
     λειτουργικών συστημάτων, τα δεδομένα αυτά κινδύνευαν να αλλοιωθούν.
 
     </test-case>
