@@ -360,10 +360,12 @@ public final class UniversalTimeScale
     /*
      * Prevent construction of this class.
      */
+    ///CLOVER:OFF
     private UniversalTimeScale()
     {
         // nothing to do
     }
+    ///CLOVER:ON
     
     /**
      * Convert a <code>long</code> datetime from the given time scale to the universal time scale.
