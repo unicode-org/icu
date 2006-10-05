@@ -656,8 +656,8 @@ public abstract class ICUResourceBundle extends UResourceBundle {
      * accessed, then do: <code>
      *  UResourceBundle bundle = UResourceBundle.getBundleInstance("de__PHONEBOOK");
      *  ICUResourceBundle result = null;
-     *  if(bundle instanceof ICUListResourceBundle){
-     *      result = ((ICUListResourceBundle) bundle).getWithFallback("collations/default");
+     *  if(bundle instanceof ICUResourceBundle){
+     *      result = ((ICUResourceBundle) bundle).getWithFallback("collations/default");
      *  }
      * </code>
      * 
