@@ -375,7 +375,6 @@ public class IslamicCalendar extends Calendar {
 //     * @param day   The # of days since the start of the Islamic calendar.
 //     */
 //    // private and uncalled, perhaps not used yet?
-//    ///CLOVER:OFF
 //    private static final int absoluteDayToDayOfWeek(long day)
 //    {
 //        // Calculate the day of the week.
@@ -386,7 +385,6 @@ public class IslamicCalendar extends Calendar {
 //        }
 //        return dayOfWeek;
 //    }
-//    ///CLOVER:ON
 
     /**
      * Determine whether a year is a leap year in the Islamic civil calendar
@@ -414,7 +412,7 @@ public class IslamicCalendar extends Calendar {
      * from the Hijri epoch, origin 0.
      *
      * @param year  The hijri year
-     * @param year  The hijri month, 0-based
+     * @param month  The hijri month, 0-based
      */
     private long monthStart(int year, int month) {
         if (civil) {
