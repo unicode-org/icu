@@ -27,9 +27,6 @@ import org.w3c.dom.*;
 
 /**
  * @author andy
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
  */
 public class TestCharsetDetector extends TestFmwk
 {
@@ -101,7 +98,11 @@ public class TestCharsetDetector extends TestFmwk
             return;
         }
         
-        if (! (language == null || m.getLanguage().equals(language))) {
+        String charsetMatchLanguage = m.getLanguage();
+        if ((language != null && !charsetMatchLanguage.equals(language))
+            || (language == null && charsetMatchLanguage != null)
+            || (language != null && charsetMatchLanguage == null))
+        {
             errln(id + ", " + encoding + ": language detection failure - expected " + language + ", got " + m.getLanguage());
         }
         
@@ -179,7 +180,8 @@ public class TestCharsetDetector extends TestFmwk
             det.setText(new ByteArrayInputStream(bytes));
             checkMatch(det, testString, enc, lang, id);
          } catch (Exception e) {
-            errln(id + ": " + e.toString());
+            errln(id + ": " + e.toString() + "enc=" + enc);
+            e.printStackTrace();
         }
     }
     
