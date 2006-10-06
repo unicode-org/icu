@@ -420,7 +420,7 @@ final class UConverterDataReader implements ICUBinary.Authenticate {
                                         throws IOException{
         //if(debug) System.out.println("Bytes in inputStream " + inputStream.available());
         
-        unicodeVersion = ICUBinary.readHeader(inputStream, DATA_FORMAT_ID, this);
+        /*unicodeVersion = */ICUBinary.readHeader(inputStream, DATA_FORMAT_ID, this);
         
         //if(debug) System.out.println("Bytes left in inputStream " +inputStream.available());
         
@@ -518,19 +518,19 @@ final class UConverterDataReader implements ICUBinary.Authenticate {
         return tables;
     }
 
-     byte[] getDataFormatVersion(){
+    byte[] getDataFormatVersion(){
         return DATA_FORMAT_VERSION;
     }
     /**
      * Inherited method
      */
-     public boolean isDataVersionAcceptable(byte version[]){
+    public boolean isDataVersionAcceptable(byte version[]){
         return version[0] == DATA_FORMAT_VERSION[0];
     }
     
-     byte[] getUnicodeVersion(){
+/*    byte[] getUnicodeVersion(){
         return unicodeVersion;    
-    }
+    }*/
     // private data members -------------------------------------------------
       
     /**
@@ -538,7 +538,7 @@ final class UConverterDataReader implements ICUBinary.Authenticate {
     */
     private DataInputStream dataInputStream;
     
-    private byte[] unicodeVersion;
+//    private byte[] unicodeVersion;
                                        
     /**
     * File format version that this class understands.
