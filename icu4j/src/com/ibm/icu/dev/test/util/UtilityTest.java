@@ -21,6 +21,7 @@ import com.ibm.icu.impl.InvalidFormatException;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.ByteArrayWrapper;
+import com.ibm.icu.util.CaseInsensitiveString;
 
 /**
  * @test
@@ -216,6 +217,17 @@ public class UtilityTest extends TestFmwk {
         }
         catch (IllegalStateException e) {
             logln("Assert.fail works");
+        }
+    }
+    
+    public void TestCaseInsensitiveString() {
+    	CaseInsensitiveString str1 = new CaseInsensitiveString("ThIs is A tEst");
+        CaseInsensitiveString str2 = new CaseInsensitiveString("This IS a test");
+        if (!str1.equals(str2)
+            || !str1.toString().equals(str1.getString())
+            || str1.toString().equals(str2.toString()))
+        {
+            errln("FAIL: str1("+str1+") != str2("+str2+")");
         }
     }
 }
