@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -454,7 +454,7 @@ final class NFRule {
      * to be recalculated.  This is used during construction when we
      * don't know the rule's base value until after it's been
      * constructed.  It should not be used at any other time.
-     * @param The new base value for the rule.
+     * @param newBaseValue The new base value for the rule.
      */
     public final void setBaseValue(long newBaseValue) {
         // set the base value
@@ -687,7 +687,7 @@ final class NFRule {
      * Used by the owning rule set to determine whether to invoke the
      * rollback rule (i.e., whether this rule or the one that precedes
      * it in the rule set's list should be used to format the number)
-     * @param The number being formatted
+     * @param number The number being formatted
      * @return True if the rule set should use the rule that precedes
      * this one in its list; false if it should use this rule
      */
@@ -1177,7 +1177,7 @@ final class NFRule {
         }
     }
 
-    /**
+    /*
      * Searches a string for another string.  If lenient parsing is off,
      * this just calls indexOf().  If lenient parsing is on, this function
      * uses CollationElementIterator to match characters, and only
@@ -1190,9 +1190,9 @@ final class NFRule {
      * number of characters in "str" that matched (which isn't necessarily
      * the same as the length of "key")
      */
-    private int[] findText(String str, String key) {
+/*    private int[] findText(String str, String key) {
         return findText(str, key, 0);
-    }
+    }*/
 
     /**
      * Searches a string for another string.  If lenient parsing is off,
