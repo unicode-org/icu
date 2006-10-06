@@ -534,9 +534,8 @@ USet *ucol_uprv_tok_readAndSetUnicodeSet(const UChar *start, const UChar *end, U
         }
         current++;
     }
-    UChar *nextBrace = NULL;
 
-    if(noOpenBraces != 0 || (nextBrace = u_strchr(start+current, 0x005d /*']'*/)) == NULL) {
+    if(noOpenBraces != 0 || u_strchr(start+current, 0x005d /*']'*/) == NULL) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
@@ -750,7 +749,6 @@ ucol_tok_parseNextToken(UColTokenParser *src,
     UBool inChars = TRUE;
     UBool inQuote = FALSE;
     UBool wasInQuote = FALSE;
-    UChar *optionEnd = NULL;
     uint8_t before = 0;
     UBool isEscaped = FALSE;
     // TODO: replace these variables with src->parsedToken counterparts
@@ -894,9 +892,8 @@ ucol_tok_parseNextToken(UColTokenParser *src,
 
                 case 0x005b/*'['*/:
                     /* options - read an option, analyze it */
-                    if((optionEnd = u_strchr(src->current, 0x005d /*']'*/)) != NULL) {
+                    if(u_strchr(src->current, 0x005d /*']'*/) != NULL) {
                         uint8_t result = ucol_uprv_tok_readAndSetOption(src, status);
-                        //src->current = optionEnd;
                         if(U_SUCCESS(*status)) {
                             if(result & UCOL_TOK_TOP) {
                                 if(newStrength == UCOL_TOK_RESET) {
