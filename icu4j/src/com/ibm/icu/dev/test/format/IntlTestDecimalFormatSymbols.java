@@ -1,6 +1,6 @@
 /*****************************************************************************************
  *
- *   Copyright (C) 1996-2005, International Business Machines
+ *   Copyright (C) 1996-2006, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **/
 
@@ -69,6 +69,12 @@ public class IntlTestDecimalFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
         fr.setDecimalSeparator(decimal);
         if(fr.getDecimalSeparator() != en.getDecimalSeparator()) {
             errln("ERROR: get/set DecimalSeparator failed");
+        }
+
+        char monetaryDecimal = en.getMonetaryDecimalSeparator();
+        fr.setMonetaryDecimalSeparator(monetaryDecimal);
+        if(fr.getMonetaryDecimalSeparator() != en.getMonetaryDecimalSeparator()) {
+            errln("ERROR: get/set MonetaryDecimalSeparator failed");
         }
 
         char perMill = en.getPerMill();
