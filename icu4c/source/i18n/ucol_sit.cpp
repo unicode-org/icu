@@ -451,10 +451,9 @@ ucol_prepareShortStringOpen( const char *definition,
     // settings
 
     // analyse the string in order to get everything we need.
-    const char *string = definition;
     CollatorSpec s;
     ucol_sit_initCollatorSpecs(&s);
-    string = ucol_sit_readSpecs(&s, definition, parseError, status);
+    ucol_sit_readSpecs(&s, definition, parseError, status);
     ucol_sit_calculateWholeLocale(&s);
     
     char buffer[internalBufferSize];
