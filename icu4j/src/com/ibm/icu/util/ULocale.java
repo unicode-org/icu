@@ -892,7 +892,7 @@ public final class ULocale implements Serializable {
      *        if a security manager exists and its
      *        <code>checkPermission</code> method doesn't allow the operation.
      * @throws NullPointerException if <code>newLocale</code> is null
-     * @see SecurityManager#checkPermission
+     * @see SecurityManager#checkPermission(java.security.Permission)
      * @see java.util.PropertyPermission
      * @stable ICU 3.0 
      */
@@ -974,7 +974,8 @@ public final class ULocale implements Serializable {
     /**
      * Returns the language code for this locale, which will either be the empty string
      * or a lowercase ISO 639 code.
-     * @see #getDisplayLanguage
+     * @see #getDisplayLanguage()
+     * @see #getDisplayLanguage(ULocale)
      * @stable ICU 3.0
      */
     public String getLanguage() {
@@ -985,7 +986,8 @@ public final class ULocale implements Serializable {
      * Returns the language code for the locale ID,
      * which will either be the empty string
      * or a lowercase ISO 639 code.
-     * @see #getDisplayLanguage
+     * @see #getDisplayLanguage()
+     * @see #getDisplayLanguage(ULocale)
      * @stable ICU 3.0
      */
     public static String getLanguage(String localeID) {
@@ -994,7 +996,8 @@ public final class ULocale implements Serializable {
      
     /**
      * Returns the script code for this locale, which might be the empty string.
-     * @see #getDisplayScript
+     * @see #getDisplayScript()
+     * @see #getDisplayScript(ULocale)
      * @stable ICU 3.0
      */
     public String getScript() {
@@ -1003,7 +1006,8 @@ public final class ULocale implements Serializable {
 
     /**
      * Returns the script code for the specified locale, which might be the empty string.
-     * @see #getDisplayScript
+     * @see #getDisplayScript()
+     * @see #getDisplayScript(ULocale)
      * @stable ICU 3.0
      */
     public static String getScript(String localeID) {
@@ -1013,7 +1017,8 @@ public final class ULocale implements Serializable {
     /**
      * Returns the country/region code for this locale, which will either be the empty string
      * or an uppercase ISO 3166 2-letter code.
-     * @see #getDisplayCountry
+     * @see #getDisplayCountry()
+     * @see #getDisplayCountry(ULocale)
      * @stable ICU 3.0
      */
     public String getCountry() {
@@ -1024,7 +1029,8 @@ public final class ULocale implements Serializable {
      * Returns the country/region code for this locale, which will either be the empty string
      * or an uppercase ISO 3166 2-letter code.
      * @param localeID
-     * @see #getDisplayCountry
+     * @see #getDisplayCountry()
+     * @see #getDisplayCountry(ULocale)
      * @stable ICU 3.0
      */
     public static String getCountry(String localeID) {
@@ -1033,7 +1039,8 @@ public final class ULocale implements Serializable {
     
     /**
      * Returns the variant code for this locale, which might be the empty string.
-     * @see #getDisplayVariant
+     * @see #getDisplayVariant()
+     * @see #getDisplayVariant(ULocale)
      * @stable ICU 3.0
      */
     public String getVariant() {
@@ -1042,7 +1049,8 @@ public final class ULocale implements Serializable {
 
     /**
      * Returns the variant code for the specified locale, which might be the empty string.
-     * @see #getDisplayVariant
+     * @see #getDisplayVariant()
+     * @see #getDisplayVariant(ULocale)
      * @stable ICU 3.0
      */
     public static String getVariant(String localeID) {
@@ -1319,12 +1327,12 @@ public final class ULocale implements Serializable {
             return index >= id.length || isTerminator(id[index]);
         }
 
-        /**
+        /*
          * Returns true if the character is an id separator (underscore or hyphen).
          */
-        private boolean isIDSeparator(char c) {
+/*        private boolean isIDSeparator(char c) {
             return c == UNDERSCORE || c == HYPHEN;
-        }
+        }*/
 
         /**
          * Returns true if the character is a terminator (keyword separator, dot, or DONE).
@@ -2009,7 +2017,7 @@ public final class ULocale implements Serializable {
         return parser.getName();
     }
 
-    /**
+    /*
      * Given a locale id, a keyword, and a value, return a new locale id with an updated
      * keyword and value, if the keyword does not already have a value.  The keyword and
      * value must not be null or empty.
@@ -2019,11 +2027,11 @@ public final class ULocale implements Serializable {
      * @return the updated locale id
      * @internal
      */
-    private static String defaultKeywordValue(String localeID, String keyword, String value) {
+/*    private static String defaultKeywordValue(String localeID, String keyword, String value) {
         IDParser parser = new IDParser(localeID);
         parser.defaultKeywordValue(keyword, value);
         return parser.getName();
-    }
+    }*/
 
     /**
      * Returns a three-letter abbreviation for this locale's language.  If the locale
@@ -2392,7 +2400,7 @@ public final class ULocale implements Serializable {
      * Returns a keyword localized for display in the default locale.
      * @param keyword the keyword to be displayed.
      * @return the localized keyword name.
-     * @see #getKeywords
+     * @see #getKeywords()
      * @stable ICU 3.0
      */
     public static String getDisplayKeyword(String keyword) {
@@ -2404,7 +2412,7 @@ public final class ULocale implements Serializable {
      * @param keyword the keyword to be displayed.
      * @param displayLocaleID the id of the locale in which to display the keyword.
      * @return the localized keyword name.
-     * @see #getKeywords
+     * @see #getKeywords(String)
      * @stable ICU 3.0
      */
     public static String getDisplayKeyword(String keyword, String displayLocaleID) {
@@ -2416,7 +2424,7 @@ public final class ULocale implements Serializable {
      * @param keyword the keyword to be displayed.
      * @param displayLocale the locale in which to display the keyword.
      * @return the localized keyword name.
-     * @see #getKeywords
+     * @see #getKeywords(String)
      * @stable ICU 3.0
      */
     public static String getDisplayKeyword(String keyword, ULocale displayLocale) {
@@ -2681,7 +2689,6 @@ public final class ULocale implements Serializable {
         
         final int l = acceptLanguageList.length();
         int n;
-        int last=-1;
         for(n=0;n<l;n++) {
             int itemEnd = acceptLanguageList.indexOf(',',n);
             if(itemEnd == -1) {
