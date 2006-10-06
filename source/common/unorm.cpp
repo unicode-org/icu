@@ -1278,10 +1278,12 @@ unorm_getQuickCheck(UChar32 c, UNormalizationMode mode) {
 
 U_CAPI uint16_t U_EXPORT2
 unorm_getFCD16FromCodePoint(UChar32 c) {
-    UErrorCode errorCode;
     uint16_t fcd;
-
+#if !UNORM_HARDCODE_DATA
+    UErrorCode errorCode;
     errorCode=U_ZERO_ERROR;
+#endif
+
     if(
 #if !UNORM_HARDCODE_DATA
         !_haveData(errorCode) ||
