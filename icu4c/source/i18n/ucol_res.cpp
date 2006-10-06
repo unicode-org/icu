@@ -229,7 +229,6 @@ ucol_openRules( const UChar        *rules,
                UParseError        *parseError,
                UErrorCode         *status)
 {
-    uint32_t listLen = 0;
     UColTokenParser src;
     UColAttributeValue norm;
     UParseError tErr;
@@ -257,14 +256,14 @@ ucol_openRules( const UChar        *rules,
     }
 
     switch(normalizationMode) {
-  case UCOL_OFF:
-  case UCOL_ON:
-  case UCOL_DEFAULT:
-      norm = normalizationMode;
-      break;
-  default:
-      *status = U_ILLEGAL_ARGUMENT_ERROR;
-      return 0;
+    case UCOL_OFF:
+    case UCOL_ON:
+    case UCOL_DEFAULT:
+        norm = normalizationMode;
+        break;
+    default:
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
     }
 
     UCollator *UCA = ucol_initUCA(status);
@@ -274,7 +273,7 @@ ucol_openRules( const UChar        *rules,
     }
 
     ucol_tok_initTokenList(&src, rules, rulesLength, UCA, status);
-    listLen = ucol_tok_assembleTokenList(&src,parseError, status);
+    ucol_tok_assembleTokenList(&src,parseError, status);
 
     if(U_FAILURE(*status)) {
         /* if status is U_ILLEGAL_ARGUMENT_ERROR, src->current points at the offending option */
@@ -691,7 +690,6 @@ ucol_getTailoredSet(const UCollator *coll, UErrorCode *status)
     UColTokenParser src;
     int32_t rulesLen = 0;
     const UChar *rules = ucol_getRules(coll, &rulesLen);
-    const UChar *current = NULL;
     UBool startOfRules = TRUE;
     // we internally use the C++ class, for the following reasons:
     // 1. we need to utilize canonical iterator, which is a C++ only class
@@ -706,7 +704,7 @@ ucol_getTailoredSet(const UCollator *coll, UErrorCode *status)
     // The idea is to tokenize the rule set. For each non-reset token,
     // we add all the canonicaly equivalent FCD sequences
     ucol_tok_initTokenList(&src, rules, rulesLen, coll->UCA, status);
-    while ((current = ucol_tok_parseNextToken(&src, startOfRules, &parseError, status)) != NULL) {
+    while (ucol_tok_parseNextToken(&src, startOfRules, &parseError, status) != NULL) {
         startOfRules = FALSE;
         if(src.parsedToken.strength != UCOL_TOK_RESET) {
             const UChar *stuff = src.source+(src.parsedToken.charsOffset);

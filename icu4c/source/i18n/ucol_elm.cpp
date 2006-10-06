@@ -803,11 +803,10 @@ static uint32_t uprv_uca_addPrefix(tempUCATable *t, uint32_t CE,
     if(!isPrefix(CE)) { 
         /* if it wasn't contraction, we wouldn't end up here*/
         int32_t firstContractionOffset = 0;
-        int32_t contractionOffset = 0;
         firstContractionOffset = uprv_cnttab_addContraction(contractions, UPRV_CNTTAB_NEWELEMENT, 0, CE, status);
         uint32_t newCE = uprv_uca_processContraction(contractions, element, UCOL_NOT_FOUND, status);
-        contractionOffset = uprv_cnttab_addContraction(contractions, firstContractionOffset, *element->prefix, newCE, status);
-        contractionOffset = uprv_cnttab_addContraction(contractions, firstContractionOffset, 0xFFFF, CE, status);
+        uprv_cnttab_addContraction(contractions, firstContractionOffset, *element->prefix, newCE, status);
+        uprv_cnttab_addContraction(contractions, firstContractionOffset, 0xFFFF, CE, status);
         CE =  constructContractCE(SPEC_PROC_TAG, firstContractionOffset);
     } else { /* we are adding to existing contraction */
         /* there were already some elements in the table, so we need to add a new contraction */
@@ -874,11 +873,10 @@ static uint32_t uprv_uca_addContraction(tempUCATable *t, uint32_t CE,
         if(!isContraction(CE)) { 
             /* if it wasn't contraction, we wouldn't end up here*/
             int32_t firstContractionOffset = 0;
-            int32_t contractionOffset = 0;
             firstContractionOffset = uprv_cnttab_addContraction(contractions, UPRV_CNTTAB_NEWELEMENT, 0, CE, status);
             uint32_t newCE = uprv_uca_processContraction(contractions, element, UCOL_NOT_FOUND, status);
-            contractionOffset = uprv_cnttab_addContraction(contractions, firstContractionOffset, *element->cPoints, newCE, status);
-            contractionOffset = uprv_cnttab_addContraction(contractions, firstContractionOffset, 0xFFFF, CE, status);
+            uprv_cnttab_addContraction(contractions, firstContractionOffset, *element->cPoints, newCE, status);
+            uprv_cnttab_addContraction(contractions, firstContractionOffset, 0xFFFF, CE, status);
             CE =  constructContractCE(CONTRACTION_TAG, firstContractionOffset);
         } else { /* we are adding to existing contraction */
             /* there were already some elements in the table, so we need to add a new contraction */
@@ -910,7 +908,6 @@ static uint32_t uprv_uca_addContraction(tempUCATable *t, uint32_t CE,
 
 static uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *element, uint32_t existingCE, UErrorCode *status) {
     int32_t firstContractionOffset = 0;
-    int32_t contractionOffset = 0;
     //    uint32_t contractionElement = UCOL_NOT_FOUND;
 
     if(U_FAILURE(*status)) {
@@ -939,8 +936,8 @@ static uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements 
         /* if it wasn't contraction, we wouldn't end up here*/
         firstContractionOffset = uprv_cnttab_addContraction(contractions, UPRV_CNTTAB_NEWELEMENT, 0, existingCE, status);
         uint32_t newCE = uprv_uca_processContraction(contractions, element, UCOL_NOT_FOUND, status);
-        contractionOffset = uprv_cnttab_addContraction(contractions, firstContractionOffset, *element->cPoints, newCE, status);
-        contractionOffset = uprv_cnttab_addContraction(contractions, firstContractionOffset, 0xFFFF, existingCE, status);
+        uprv_cnttab_addContraction(contractions, firstContractionOffset, *element->cPoints, newCE, status);
+        uprv_cnttab_addContraction(contractions, firstContractionOffset, 0xFFFF, existingCE, status);
         existingCE =  constructContractCE(contractions->currentTag, firstContractionOffset);
     } else { /* we are adding to existing contraction */
         /* there were already some elements in the table, so we need to add a new contraction */

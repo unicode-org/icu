@@ -2934,7 +2934,7 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
          We do a check to see if we want to collate digits as numbers; if so we generate
          a custom collation key. Otherwise we pull out the value stored in the expansion table.
       */
-      uint32_t size;
+      //uint32_t size;
       uint32_t i;    /* general counter */
 
       if (source->coll->numericCollation == UCOL_ON){
@@ -3116,7 +3116,7 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
 
         // Now transfer the collation key to our collIterate struct.
         // The total size for our collation key is endIndx bumped up to the next largest even value divided by two.
-          size = ((endIndex+1) & ~1)/2;
+          //size = ((endIndex+1) & ~1)/2;
           CE = (((numTempBuf[0] << 8) | numTempBuf[1]) << UCOL_PRIMARYORDERSHIFT) | //Primary weight
                 (UCOL_BYTE_COMMON << UCOL_SECONDARYORDERSHIFT) | // Secondary weight
                 UCOL_BYTE_COMMON; // Tertiary weight.
