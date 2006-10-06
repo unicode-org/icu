@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and    *
+* Copyright (C) 1996-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -872,17 +872,17 @@ public final class CollationElementIterator
 
     // special ce values and tags -------------------------------------------
     
-    private static final int CE_EXPANSION_ = 0xF1000000;
+//    private static final int CE_EXPANSION_ = 0xF1000000;
     private static final int CE_CONTRACTION_ = 0xF2000000;
     /**
      * Indicates the last ce has been consumed. Compare with NULLORDER.
      * NULLORDER is returned if error occurs.
      */
-    private static final int CE_NO_MORE_CES_ = 0x00010101;
+/*    private static final int CE_NO_MORE_CES_ = 0x00010101;
     private static final int CE_NO_MORE_CES_PRIMARY_ = 0x00010000;
     private static final int CE_NO_MORE_CES_SECONDARY_ = 0x00000100;
     private static final int CE_NO_MORE_CES_TERTIARY_ = 0x00000001;
-
+*/
     private static final int CE_NOT_FOUND_TAG_ = 0;
     /**
      * Charset processing, not yet implemented
@@ -913,7 +913,7 @@ public final class CollationElementIterator
      */
     private static final int CE_LONG_PRIMARY_TAG_ = 12;
                         
-    private static final int CE_CE_TAGS_COUNT = 14;
+//    private static final int CE_CE_TAGS_COUNT = 14;
     private static final int CE_BYTE_COMMON_ = 0x05;
 
     // end special ce values and tags ---------------------------------------
@@ -927,7 +927,7 @@ public final class CollationElementIterator
 
     // CJK stuff ------------------------------------------------------------
 
-    private static final int CJK_BASE_ = 0x4E00;
+/*    private static final int CJK_BASE_ = 0x4E00;
     private static final int CJK_LIMIT_ = 0x9FFF+1;
     private static final int CJK_COMPAT_USED_BASE_ = 0xFA0E;
     private static final int CJK_COMPAT_USED_LIMIT_ = 0xFA2F + 1;
@@ -936,7 +936,7 @@ public final class CollationElementIterator
     private static final int CJK_B_BASE_ = 0x20000;
     private static final int CJK_B_LIMIT_ = 0x2A6DF + 1;
     private static final int NON_CJK_OFFSET_ = 0x110000;
-
+*/
     private static final boolean DEBUG  =  ICUDebug.enabled("collator");
     
     // private methods ------------------------------------------------------
@@ -1628,7 +1628,6 @@ public final class CollationElementIterator
      * Gets the next contraction ce
      * @param collator collator to use
      * @param ce current ce
-     * @param entrybackup entry backup iterator status
      * @return ce of the next contraction
      */
     private int nextContraction(RuleBasedCollator collator, int ce)
@@ -2809,29 +2808,29 @@ public final class CollationElementIterator
 //        return cp + NON_CJK_OFFSET_; // non-CJK
 //    }
     
-    /** 
-     * Gets a character from the source string at a given offset.
-     * Handles both normal and iterative cases.
-     * No error checking and does not access the normalization buffer 
-     * - caller beware!
-     * @param offset offset from current position which character is to be 
-     *               retrieved
-     * @return character at current position + offset
-     */
-    private char peekCharacter(int offset) 
-    {
-        if (offset != 0) {
-            int currentoffset = m_source_.getIndex();
-            m_source_.setIndex(currentoffset + offset);
-            char result = (char)m_source_.current();
-            m_source_.setIndex(currentoffset);
-            return result;
-        } 
-        else {
-            return (char)m_source_.current();
-        }
-    }
-    
+//    /** 
+//     * Gets a character from the source string at a given offset.
+//     * Handles both normal and iterative cases.
+//     * No error checking and does not access the normalization buffer 
+//     * - caller beware!
+//     * @param offset offset from current position which character is to be 
+//     *               retrieved
+//     * @return character at current position + offset
+//     */
+//    private char peekCharacter(int offset) 
+//    {
+//        if (offset != 0) {
+//            int currentoffset = m_source_.getIndex();
+//            m_source_.setIndex(currentoffset + offset);
+//            char result = (char)m_source_.current();
+//            m_source_.setIndex(currentoffset);
+//            return result;
+//        } 
+//        else {
+//            return (char)m_source_.current();
+//        }
+//    }
+
     /**
      * Moves back 1 position in the source string. This is slightly less 
      * complicated than previousChar in that it doesn't normalize while 
