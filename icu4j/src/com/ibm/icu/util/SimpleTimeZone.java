@@ -9,10 +9,6 @@ import com.ibm.icu.impl.JDKTimeZone;
 import java.io.IOException;
 import java.util.Date;
 
-import com.ibm.icu.impl.OlsonTimeZone;
-import com.ibm.icu.impl.Utility;
-
-///CLOVER:USECLASS
 /**
  * <code>SimpleTimeZone</code> is a concrete subclass of <code>TimeZone</code>
  * that represents a time zone for use with a Gregorian calendar. This
@@ -444,19 +440,19 @@ public class SimpleTimeZone extends JDKTimeZone {
         return dst;
     }
 
-    /**
+    /*
      * Constructs a SimpleTimeZone that wraps the given
      * java.util.SimpleTimeZone.  Do not call; use the TimeZone
      * API.
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    public SimpleTimeZone(java.util.SimpleTimeZone tz, String ID) {
-        super(tz);
-        super.setID(ID);
-        dst = tz.getDSTSavings();
-        raw = tz.getRawOffset();
-    }
+//    public SimpleTimeZone(java.util.SimpleTimeZone tz, String ID) {
+//        super(tz);
+//        super.setID(ID);
+//        dst = tz.getDSTSavings();
+//        raw = tz.getRawOffset();
+//    }
     
     /**
      * Returns the java.util.SimpleTimeZone that this class wraps.
@@ -468,8 +464,8 @@ public class SimpleTimeZone extends JDKTimeZone {
     // on JDK 1.4 and later, can't deserialize a SimpleTimeZone as a SimpleTimeZone...
     private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
-        String id = getID();
         /*
+        String id = getID();
         if (id!=null && !(zone instanceof java.util.SimpleTimeZone && zone.getID().equals(id))) {
             // System.out.println("*** readjust " + zone.getClass().getName() + " " + zone.getID() + " ***");
             java.util.SimpleTimeZone stz = 
@@ -515,9 +511,9 @@ public class SimpleTimeZone extends JDKTimeZone {
 //  Gregorian, since we know they didn't have daylight time when
 //  Gregorian calendar started.
   //  private static final int[] STATICMONTHLENGTH = new int[]{31,29,31,30,31,30,31,31,30,31,30,31};
-    private final byte monthLength[] = staticMonthLength;
+//    private final byte monthLength[] = staticMonthLength;
     private final static byte staticMonthLength[] = {31,29,31,30,31,30,31,31,30,31,30,31};
-    private final static byte staticLeapMonthLength[] = {31,29,31,30,31,30,31,31,30,31,30,31};
+//    private final static byte staticLeapMonthLength[] = {31,29,31,30,31,30,31,31,30,31,30,31};
 
 //  -------------------------------------
 
