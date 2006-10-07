@@ -27,7 +27,6 @@ import java.util.Hashtable;
 import java.util.Locale;
 import java.util.Map;
 
-import com.ibm.icu.impl.LocaleUtility;
 
 /**
  * <code>SimpleDateFormat</code> is a concrete class for formatting and
@@ -990,11 +989,11 @@ public class SimpleDateFormat extends DateFormat {
         buf.append((char)0x003A) /*':'*/;
         zeroPaddingNumber(buf, (int)((value%millisPerHour)/millisPerMinute), 2, 2);
     }
-    /**
+    /*
      * Internal method. Returns null if the value of an array is empty, or if the
      * index is out of bounds
      */
-    private String getZoneArrayValue(String[] zs, int ix) {
+/*    private String getZoneArrayValue(String[] zs, int ix) {
         if (ix >= 0 && ix < zs.length) {
             String result = zs[ix];
             if (result != null && result.length() != 0) {
@@ -1002,7 +1001,7 @@ public class SimpleDateFormat extends DateFormat {
             }
         }
         return null;
-    }
+    }*/
 
     /**
      * Internal high-speed method.  Reuses a StringBuffer for results
