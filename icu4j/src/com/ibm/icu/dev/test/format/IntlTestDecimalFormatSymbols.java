@@ -71,6 +71,12 @@ public class IntlTestDecimalFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
             errln("ERROR: get/set DecimalSeparator failed");
         }
 
+        char monetaryGroup = en.getMonetaryGroupingSeparator();
+        fr.setMonetaryGroupingSeparator(monetaryGroup);
+        if(fr.getMonetaryGroupingSeparator() != en.getMonetaryGroupingSeparator()) {
+            errln("ERROR: get/set MonetaryGroupingSeparator failed");
+        }
+
         char monetaryDecimal = en.getMonetaryDecimalSeparator();
         fr.setMonetaryDecimalSeparator(monetaryDecimal);
         if(fr.getMonetaryDecimalSeparator() != en.getMonetaryDecimalSeparator()) {
