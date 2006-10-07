@@ -23,7 +23,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -1461,7 +1460,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
                         TIMEZONE_EXEMPLAR_CITY  = 6,
                         TIMEZONE_COUNT          = 7;
 
-     /**
+     /*
      * Package private: used by SimpleDateFormat
      * Gets the index for the given time zone ID to obtain the timezone
      * strings for formatting. The time zone ID is just for programmatic
@@ -1471,7 +1470,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * the given time zone ID can't be located in the DateFormatSymbols object.
      * @see com.ibm.icu.util.SimpleTimeZone
      */
-    final int getZoneIndex(String ID) {
+/*    final int getZoneIndex(String ID) {
         int result = _getZoneIndex(ID);
         if (result >= 0) {
             return result;
@@ -1490,23 +1489,22 @@ public class DateFormatSymbols implements Serializable, Cloneable {
             }
         }
         return -1;
-    }
+    }*/
     
-    /**
+    /*
      * Lookup the given ID.  Do NOT do an equivalency search.
      */
-    private int _getZoneIndex(String ID)
+/*    private int _getZoneIndex(String ID)
     {
         for (int index=0; index<zoneStrings.length; index++) {
             if (ID.equalsIgnoreCase(zoneStrings[index][0])) return index;
         }
         return -1;
-    }
+    }*/
 
     /**
      * Clones an array of Strings.
      * @param srcArray the source array to be cloned.
-     * @param count the number of elements in the given source array.
      * @return a cloned array.
      */
     private final String[] duplicate(String[] srcArray)
@@ -1728,7 +1726,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * Fetch a custom calendar's DateFormatSymbols out of the given resource
      * bundle.  Symbols that are not overridden are inherited from the
      * default DateFormatSymbols for the locale.
-     * @see DateFormatSymbols#DateFormatSymbols
+     * @see DateFormatSymbols#DateFormatSymbols(java.util.Locale)
      * @stable ICU 2.0
      */
     public DateFormatSymbols(ResourceBundle bundle, Locale locale) {
@@ -1739,7 +1737,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * Fetch a custom calendar's DateFormatSymbols out of the given resource
      * bundle.  Symbols that are not overridden are inherited from the
      * default DateFormatSymbols for the locale.
-     * @see DateFormatSymbols#DateFormatSymbols
+     * @see DateFormatSymbols#DateFormatSymbols(java.util.Locale)
      * @draft ICU 3.2
      * @provisional This API might change or be removed in a future release.
      */
