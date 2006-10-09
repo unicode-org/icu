@@ -11,15 +11,9 @@
 package com.ibm.icu.impl;
 
 import java.text.ParsePosition;
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.MissingResourceException;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
 import java.util.Vector;
 
 import com.ibm.icu.text.MessageFormat;
@@ -293,7 +287,7 @@ public final class ZoneMeta {
         if (country_code != null) {
             ICUResourceBundle rb = 
                 (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
-            if (rb.getLoadingStatus() != rb.FROM_ROOT && rb.getLoadingStatus() != rb.FROM_DEFAULT) {
+            if (rb.getLoadingStatus() != ICUResourceBundle.FROM_ROOT && rb.getLoadingStatus() != ICUResourceBundle.FROM_DEFAULT) {
                 country = ULocale.getDisplayCountry("xx_" + country_code, locale);
             }
             if (country == null || country.length() == 0) country = country_code;
@@ -335,8 +329,8 @@ public final class ZoneMeta {
             }
         }
 
-        final long mph = 3600000;
-        final long mpm = 60000;
+        //final long mph = 3600000;
+        //final long mpm = 60000;
 
         SimpleDateFormat sdf = new SimpleDateFormat(dtepat, locale);
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -363,14 +357,14 @@ public final class ZoneMeta {
         return bundle.getStringWithFallback(ZONE_STRINGS+FORWARD_SLASH+format);
     }
 
-    private static Set getValidIDs() {
-        // Construct list of time zones that are valid, according
-        // to the current underlying core JDK.  We have to do this
-        // at runtime since we don't know what we're running on.
-        Set valid = new TreeSet();
-        valid.addAll(Arrays.asList(java.util.TimeZone.getAvailableIDs()));
-        return valid;
-    }
+//    private static Set getValidIDs() {
+//        // Construct list of time zones that are valid, according
+//        // to the current underlying core JDK.  We have to do this
+//        // at runtime since we don't know what we're running on.
+//        Set valid = new TreeSet();
+//        valid.addAll(Arrays.asList(java.util.TimeZone.getAvailableIDs()));
+//        return valid;
+//    }
 
     /**
      * Empty string array.
@@ -383,7 +377,6 @@ public final class ZoneMeta {
      * Given an ID, open the appropriate resource for the given time zone.
      * Dereference aliases if necessary.
      * @param id zone id
-     * @param res resource, which must be ready for use (initialized but not open)
      * @return top-level resource bundle
      */
     public static ICUResourceBundle openOlsonResource(String id)
@@ -456,16 +449,16 @@ public final class ZoneMeta {
         }
         return -1;
     }
-    private static final String kZONEINFO = "zoneinfo";
+    //private static final String kZONEINFO = "zoneinfo";
     private static final String kREGIONS  = "Regions";
     private static final String kZONES    = "Zones";
-    private static final String kRULES    = "Rules";
+    //private static final String kRULES    = "Rules";
     private static final String kNAMES    = "Names";
-    private static final String kDEFAULT  = "Default";
+    //private static final String kDEFAULT  = "Default";
     private static final String kGMT_ID   = "GMT";
     private static final String kCUSTOM_ID= "Custom";    
     //private static ICUResourceBundle zoneBundle = null;
-    private static java.util.Enumeration idEnum  = null;
+    //private static java.util.Enumeration idEnum  = null;
     private static SoftCache zoneCache = new SoftCache();
     /**
      * The Olson data is stored the "zoneinfo" resource bundle.

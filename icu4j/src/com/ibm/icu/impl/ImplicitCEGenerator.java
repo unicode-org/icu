@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2004, International Business Machines Corporation and         *
+ * Copyright (C) 2004-2006, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -33,30 +33,29 @@ public class ImplicitCEGenerator {
     
     static final int MAX_INPUT = 0x220001; // 2 * Unicode range + 2
 
-    public static final int 
-        CJK_BASE = 0x4E00,
-        CJK_LIMIT = 0x9FFF+1,
-        CJK_COMPAT_USED_BASE = 0xFA0E,
-        CJK_COMPAT_USED_LIMIT = 0xFA2F+1,
-        CJK_A_BASE = 0x3400,
-        CJK_A_LIMIT = 0x4DBF+1,
-        CJK_B_BASE = 0x20000,
-        CJK_B_LIMIT = 0x2A6DF+1;
+    public static final int CJK_BASE = 0x4E00;
+    public static final int CJK_LIMIT = 0x9FFF+1;
+    public static final int CJK_COMPAT_USED_BASE = 0xFA0E;
+    public static final int CJK_COMPAT_USED_LIMIT = 0xFA2F+1;
+    public static final int CJK_A_BASE = 0x3400;
+    public static final int CJK_A_LIMIT = 0x4DBF+1;
+    public static final int CJK_B_BASE = 0x20000;
+    public static final int CJK_B_LIMIT = 0x2A6DF+1;
     
-    private void throwError(String title, int cp) {
-        throw new IllegalArgumentException(title + "\t" + Utility.hex(cp, 6) + "\t" + 
-                                           Utility.hex(getImplicitFromRaw(cp) & fourBytes));
-    }
-
-    private void throwError(String title, long ce) {
-        throw new IllegalArgumentException(title + "\t" + Utility.hex(ce & fourBytes));
-    }
-
-    private void show(int i) {
-        if (i >= 0 && i <= MAX_INPUT) {
-            System.out.println(Utility.hex(i) + "\t" + Utility.hex(getImplicitFromRaw(i) & fourBytes));
-        } 
-    }
+//    private void throwError(String title, int cp) {
+//        throw new IllegalArgumentException(title + "\t" + Utility.hex(cp, 6) + "\t" + 
+//                                           Utility.hex(getImplicitFromRaw(cp) & fourBytes));
+//    }
+//
+//    private void throwError(String title, long ce) {
+//        throw new IllegalArgumentException(title + "\t" + Utility.hex(ce & fourBytes));
+//    }
+//
+//    private void show(int i) {
+//        if (i >= 0 && i <= MAX_INPUT) {
+//            System.out.println(Utility.hex(i) + "\t" + Utility.hex(getImplicitFromRaw(i) & fourBytes));
+//        } 
+//    }
     
     /**
      * Precomputed by constructor
