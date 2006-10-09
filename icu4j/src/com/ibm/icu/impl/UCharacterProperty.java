@@ -10,20 +10,15 @@ package com.ibm.icu.impl;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.io.IOException;
-import java.util.Locale;
 import java.util.MissingResourceException;
 
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UProperty;
-import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.Normalizer;
-import com.ibm.icu.text.UCharacterIterator;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.util.RangeValueIterator;
-import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.VersionInfo;
 
 /**
@@ -171,16 +166,16 @@ public final class UCharacterProperty
         // this all is an inlined form of return m_trie_.getCodePointValue(ch);
     }
 
-    /**
+    /*
     * Getting the signed numeric value of a character embedded in the property
     * argument
     * @param prop the character
     * @return signed numberic value
     */
-    public static int getSignedValue(int prop)
-    {
-        return ((short)prop >> VALUE_SHIFT_);
-    }
+//    public static int getSignedValue(int prop)
+//    {
+//        return ((short)prop >> VALUE_SHIFT_);
+//    }
 
     /**
     * Getting the unsigned numeric value of a character embedded in the property
@@ -188,12 +183,10 @@ public final class UCharacterProperty
     * @param prop the character
     * @return unsigned numberic value
     */
-    ///CLOVER:OFF
     public static int getUnsignedValue(int prop)
     {
         return (prop >> VALUE_SHIFT_) & UNSIGNED_VALUE_MASK_AFTER_SHIFT_;
     }
-    ///CLOVER:ON
 
     /* internal numeric pseudo-types for special encodings of numeric values */
     public static final int NT_FRACTION=4; /* ==UCharacter.NumericType.COUNT, must not change unless binary format version changes */
@@ -773,15 +766,6 @@ public final class UCharacterProperty
     private static final int LAST_5_BIT_MASK_ = 0x1F;
 
     /**
-    * Shift 5 bits
-    */
-    private static final int SHIFT_5_ = 5;
-    /**
-    * Shift 10 bits
-    */
-    private static final int SHIFT_10_ = 10;
-
-    /**
     * Shift value for lead surrogate to form a supplementary character.
     */
     private static final int LEAD_SURROGATE_SHIFT_ = 10;
@@ -793,97 +777,7 @@ public final class UCharacterProperty
                            (UTF16.SURROGATE_MIN_VALUE <<
                            LEAD_SURROGATE_SHIFT_) -
                            UTF16.TRAIL_SURROGATE_MIN_VALUE;
-    /**
-    * Latin uppercase I
-    */
-    private static final char LATIN_CAPITAL_LETTER_I_ = 0x49;
-    /**
-    * Combining dot above
-    */
-    private static final char COMBINING_DOT_ABOVE_ = 0x307;
-    /**
-    * LATIN SMALL LETTER J
-    */
-    private static final int LATIN_SMALL_LETTER_J_ = 0x6a;
-    /**
-    * LATIN SMALL LETTER I WITH OGONEK
-    */
-    private static final int LATIN_SMALL_LETTER_I_WITH_OGONEK_ = 0x12f;
-    /**
-    * LATIN SMALL LETTER I WITH TILDE BELOW
-    */
-    private static final int LATIN_SMALL_LETTER_I_WITH_TILDE_BELOW_ = 0x1e2d;
-    /**
-    * LATIN SMALL LETTER I WITH DOT BELOW
-    */
-    private static final int LATIN_SMALL_LETTER_I_WITH_DOT_BELOW_ = 0x1ecb;
-    /**
-    * Combining class for combining mark above
-    */
-    private static final int COMBINING_MARK_ABOVE_CLASS_ = 230;
 
-    /**
-    * LATIN CAPITAL LETTER J
-    */
-    private static final int LATIN_CAPITAL_LETTER_J_ = 0x4a;
-
-    /**
-    * LATIN CAPITAL LETTER I WITH OGONEK
-    */
-    private static final int LATIN_CAPITAL_I_WITH_OGONEK_ = 0x12e;
-    /**
-    * LATIN CAPITAL LETTER I WITH TILDE
-    */
-    private static final int LATIN_CAPITAL_I_WITH_TILDE_ = 0x128;
-    /**
-    * LATIN CAPITAL LETTER I WITH GRAVE
-    */
-    private static final int LATIN_CAPITAL_I_WITH_GRAVE_ = 0xcc;
-    /**
-    * LATIN CAPITAL LETTER I WITH ACUTE
-    */
-    private static final int LATIN_CAPITAL_I_WITH_ACUTE_ = 0xcd;
-    /**
-    * COMBINING GRAVE ACCENT
-    */
-    private static final int COMBINING_GRAVE_ACCENT_ = 0x300;
-    /**
-    * COMBINING ACUTE ACCENT
-    */
-    private static final int COMBINING_ACUTE_ACCENT_ = 0x301;
-    /**
-    * COMBINING TILDE
-    */
-    private static final int COMBINING_TILDE_ = 0x303;
-    /**
-    * Greek capital letter sigma
-    */
-    private static final char GREEK_CAPITAL_LETTER_SIGMA_ = 0x3a3;
-    /**
-    * Greek small letter sigma
-    */
-    private static final char GREEK_SMALL_LETTER_SIGMA_ = 0x3c3;
-    /**
-    * Greek small letter rho
-    */
-    private static final char GREEK_SMALL_LETTER_RHO_ = 0x3c2;
-    /**
-    * Hyphens
-    */
-    private static final int HYPHEN_      = 0x2010;
-    private static final int SOFT_HYPHEN_ = 0xAD;
-    /**
-    * To get the last character out from a data type
-    */
-    private static final int LAST_CHAR_MASK_ = 0xFFFF;
-    /**
-    * To get the last byte out from a data type
-    */
-    private static final int LAST_BYTE_MASK_ = 0xFF;
-    /**
-    * Shift 16 bits
-    */
-    private static final int SHIFT_16_ = 16;
 
     // additional properties ----------------------------------------------
 
