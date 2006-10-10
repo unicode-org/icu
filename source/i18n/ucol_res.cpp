@@ -548,13 +548,20 @@ ucol_getDisplayName(    const    char        *objLoc,
 U_CAPI const char* U_EXPORT2
 ucol_getAvailable(int32_t index)
 {
-    return uloc_getAvailable(index);
+    int32_t count = 0;
+    const Locale *loc = Collator::getAvailableLocales(count);
+    if (loc != NULL && index < count) {
+        return loc[index].getName();
+    }
+    return NULL;
 }
 
 U_CAPI int32_t U_EXPORT2
 ucol_countAvailable()
 {
-    return uloc_countAvailable();
+    int32_t count = 0;
+    Collator::getAvailableLocales(count);
+    return count;
 }
 
 #if !UCONFIG_NO_SERVICE
