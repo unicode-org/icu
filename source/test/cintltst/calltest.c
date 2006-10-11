@@ -28,7 +28,6 @@ void addUTF16Test(TestNode** root);
 void addUTF8Test(TestNode** root);
 void addUTransTest(TestNode** root);
 void addPUtilTest(TestNode** root);
-void addTestDeprecatedAPI(TestNode** root);
 void addUCharTransformTest(TestNode** root);
 void addUSetTest(TestNode** root);
 void addUStringPrepTest(TestNode** root);
@@ -43,38 +42,37 @@ void addUCsdetTest(TestNode** root);
 void addAllTests(TestNode** root)
 {
     addUDataTest(root);
+    addHeapMutexTest(root);
     addPUtilTest(root);
     addUTF16Test(root);
     addUTF8Test(root);
     addUtility(root);
+    addUTraceTest(root);
+    addUTextTest(root);
     addConvert(root);
     addUCharTransformTest(root);
     addStandardNamesTest(root);
-#if !UCONFIG_NO_FORMATTING
-    addFormatTest(root);
-#endif
-#if !UCONFIG_NO_BREAK_ITERATION
-    addBreakIter(root);
-#endif
-#if !UCONFIG_NO_COLLATION
-    addCollTest(root);
-#endif
+    addUCsdetTest(root);
     addComplexTest(root);
-#if !UCONFIG_NO_TRANSLITERATION
-    addUTransTest(root);
-#endif
     addUSetTest(root);
-    addTestDeprecatedAPI(root);
 #if !UCONFIG_NO_IDNA
     addUStringPrepTest(root);
     addIDNATest(root);
 #endif
-    addHeapMutexTest(root);
-    addUTraceTest(root);
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
     addURegexTest(root);
 #endif
-    addUTextTest(root);
-    addUCsdetTest(root);
+#if !UCONFIG_NO_BREAK_ITERATION
+    addBreakIter(root);
+#endif
+#if !UCONFIG_NO_FORMATTING
+    addFormatTest(root);
+#endif
+#if !UCONFIG_NO_COLLATION
+    addCollTest(root);
+#endif
+#if !UCONFIG_NO_TRANSLITERATION
+    addUTransTest(root);
+#endif
 }
 
