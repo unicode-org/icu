@@ -2140,7 +2140,7 @@ static void TestIncrementalNormalize(void) {
     /*UChar baseA     =0x61;*/
     UChar baseA     =0x41;
 /*    UChar baseB     = 0x42;*/
-    UChar ccMix[]   = {0x316, 0x321, 0x300};
+    static const UChar ccMix[]   = {0x316, 0x321, 0x300};
     /*UChar ccMix[]   = {0x61, 0x61, 0x61};*/
     /*
         0x316 is combining grave accent below, cc=220
@@ -2148,8 +2148,8 @@ static void TestIncrementalNormalize(void) {
         0x300 is combining grave accent, cc=230
     */
 
-    /*int          maxSLen   = 2000;*/
-    int          maxSLen   = 64000;
+    int          maxSLen   = 2000;
+    /*int          maxSLen   = 64000;*/
     int          sLen;
     int          i;
 
