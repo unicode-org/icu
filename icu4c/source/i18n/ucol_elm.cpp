@@ -148,6 +148,9 @@ uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollat
         UCOL_SPECIAL_FLAG | (initTag<<24),
         UCOL_SPECIAL_FLAG | (supplementaryInitTag << 24),
         TRUE); // Do your own mallocs for the structure, array and have linear Latin 1
+    if (t->mapping == NULL) {
+        goto allocation_failure;
+    }
     t->prefixLookup = uhash_open(prefixLookupHash, prefixLookupComp, NULL, status);
     uhash_setValueDeleter(t->prefixLookup, uhash_freeBlock);
 
