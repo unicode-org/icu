@@ -440,9 +440,6 @@
 				RelativePath=".\cintltst.h">
 			</File>
 			<File
-				RelativePath=".\ctstdep.c">
-			</File>
-			<File
 				RelativePath=".\cutiltst.c">
 			</File>
 			<File
