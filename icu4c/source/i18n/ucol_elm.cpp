@@ -141,10 +141,8 @@ uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollat
         goto allocation_failure;
     }
     uprv_memset(t->expansions, 0, sizeof(ExpansionTable));
-    /*t->mapping = ucmpe32_open(UCOL_SPECIAL_FLAG | (initTag<<24), UCOL_SPECIAL_FLAG | (SURROGATE_TAG<<24), UCOL_SPECIAL_FLAG | (LEAD_SURROGATE_TAG<<24), status);*/
-    /*t->mapping = utrie_open(NULL, NULL, 0x100000, UCOL_SPECIAL_FLAG | (initTag<<24), TRUE); // Do your own mallocs for the structure, array and have linear Latin 1*/
 
-    t->mapping = utrie_open(NULL, NULL, 0x100000,
+    t->mapping = utrie_open(NULL, NULL, UCOL_ELM_TRIE_CAPACITY,
         UCOL_SPECIAL_FLAG | (initTag<<24),
         UCOL_SPECIAL_FLAG | (supplementaryInitTag << 24),
         TRUE); // Do your own mallocs for the structure, array and have linear Latin 1

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2005, International Business Machines
+*   Copyright (C) 2000-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -34,6 +34,14 @@
 #endif
 
 U_CDECL_BEGIN
+
+/* This is the maximum trie capacity for the mapping trie.
+Due to current limitations in genuca and the design of UTrie,
+this number can't be more than 256K.
+As of Unicode 5, it currently could safely go to 128K without
+a problem. Normally, less than 32K are tailored.
+*/
+#define UCOL_ELM_TRIE_CAPACITY 0x30000
 
 typedef struct {
     uint32_t *CEs;
