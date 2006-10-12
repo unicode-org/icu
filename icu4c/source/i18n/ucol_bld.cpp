@@ -1103,6 +1103,7 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
             }
         }
         if(U_FAILURE(*status)) {
+            uprv_free(image);
             return NULL;
         }
     }
