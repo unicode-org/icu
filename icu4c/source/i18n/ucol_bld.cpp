@@ -1105,7 +1105,6 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
         if(U_FAILURE(*status)) {
             return NULL;
         }
-
     }
 
     if(src->varTop != NULL) { /* stuff the variable top value */
@@ -1127,6 +1126,10 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
 
 
     tempUCATable *t = uprv_uca_initTempTable(image, src->opts, src->UCA, NOT_FOUND_TAG, NOT_FOUND_TAG, status);
+    if(U_FAILURE(*status)) {
+        uprv_free(image);
+        return NULL;
+    }
 
 
     /* After this, we have assigned CE values to all regular CEs      */
