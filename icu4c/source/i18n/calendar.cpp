@@ -2318,6 +2318,9 @@ const UFieldResolutionTable Calendar::kYearPrecedence[] =
 void Calendar::computeTime(UErrorCode& status) {
     if (!isLenient()) {
         validateFields(status);
+        if (U_FAILURE(status)) {
+            return;
+        }
     }
 
     // Compute the Julian day
