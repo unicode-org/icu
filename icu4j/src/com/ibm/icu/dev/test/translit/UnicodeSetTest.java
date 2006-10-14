@@ -1601,6 +1601,32 @@ public class UnicodeSetTest extends TestFmwk {
     }
   }
   
+  public void TestContains() {
+    int limit = 256; // combinations to test
+    for (int i = 0; i < limit; ++i) {
+      logln("Trying: " + i);
+      UnicodeSet x = bitsToSet(i);
+      for (int j = 0; j < limit; ++j) {
+        UnicodeSet y = bitsToSet(j);
+        boolean containsNone = (i & j) == 0;
+        boolean containsAll = (i & j) == j;
+        boolean equals = i == j;
+        if (containsNone != x.containsNone(y)) {
+          x.containsNone(y); // repeat for debugging
+          errln("FAILED: " + x +  " containsSome " + y);
+        }
+        if (containsAll != x.containsAll(y)) {
+          x.containsAll(y); // repeat for debugging
+          errln("FAILED: " + x +  " containsAll " + y);
+        }
+        if (equals != x.equals(y)) {
+          x.equals(y); // repeat for debugging
+          errln("FAILED: " + x +  " equals " + y);
+        }
+      }
+    }
+  }
+  
   void _testComplement(int a) {
     UnicodeSet x = bitsToSet(a);
     UnicodeSet z = bitsToSet(a);
