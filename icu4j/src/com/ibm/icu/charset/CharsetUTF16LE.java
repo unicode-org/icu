@@ -269,7 +269,7 @@ class CharsetUTF16LE extends CharsetICU {
             }
             char c;
             /* write the BOM if necessary */
-            if(fromUnicodeStatus==NEED_TO_WRITE_BOM) {
+            if(fromUnicodeStatus==NEED_TO_WRITE_BOM && writeBOM) {
                 byte bom[]={ (byte)0xff, (byte)0xfe };
                 cr = fromUWriteBytes(this,bom, 0, bom.length, target, offsets, -1);
                 if(cr.isError()){

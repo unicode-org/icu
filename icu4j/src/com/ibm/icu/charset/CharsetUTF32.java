@@ -175,7 +175,7 @@ class CharsetUTF32 extends CharsetICU {
             }
             
             /* write the BOM if necessary */
-            if(fromUnicodeStatus==NEED_TO_WRITE_BOM) {
+            if(fromUnicodeStatus==NEED_TO_WRITE_BOM && writeBOM) {
                 byte[] bom={ 0, 0, (byte)0xfe, (byte)0xff };
                 cr = fromUWriteBytes(this, bom, 0, bom.length, target, offsets, -1);
                 if(cr.isError()){

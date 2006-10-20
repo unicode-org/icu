@@ -47,7 +47,6 @@ public class TestCharset extends TestFmwk {
             (byte) 0x00,(byte) 0x0d,
             (byte) 0x00,(byte) 0x0a };
     static final byte[] expectedByteStr ={
-        (byte) 0xFE,(byte) 0xFF,    
         (byte) 0x00,(byte) 'a',
         (byte) 0x00,(byte) 'b',
         (byte) 0x00,(byte) 'c',
@@ -147,8 +146,8 @@ public class TestCharset extends TestFmwk {
             bs1.limit(bs1.position());
             bs1.position(0);
             ByteBuffer newBS = ByteBuffer.allocate(bs1.capacity());
-            newBS.put((byte)0xFE);
-            newBS.put((byte)0xFF);
+            //newBS.put((byte)0xFE);
+            //newBS.put((byte)0xFF);
             newBS.put(bs1);    
             bs1.position(0);
             smBufDecode(d1, "UTF-16", bs1, us);
@@ -157,8 +156,8 @@ public class TestCharset extends TestFmwk {
             bs2.limit(bs2.position());
             bs2.position(0);
             newBS.clear();
-            newBS.put((byte)0xFF);
-            newBS.put((byte)0xFE);
+            //newBS.put((byte)0xFF);
+            //newBS.put((byte)0xFE);
             newBS.put(bs2);     
             bs2.position(0);
             smBufDecode(d2, "UTF16-LE", bs2, us);
@@ -216,29 +215,33 @@ public class TestCharset extends TestFmwk {
             if(us.length()==0){
                 continue;
             }
-            
+             
 
             ByteBuffer newBS = ByteBuffer.allocate(bs1.capacity());
-            
+            /*
             newBS.put((byte)0x00);
             newBS.put((byte)0x00);
             newBS.put((byte)0xFE);
             newBS.put((byte)0xFF);
-            newBS.put(bs1);    
+            */
+            newBS.put(bs1);
             bs1.position(0);
             smBufDecode(d1, "UTF-32", bs1, us);
             smBufEncode(e1, "UTF-32", us, newBS);
             
             
             newBS.clear();
+            /*
             newBS.put((byte)0xFF);
             newBS.put((byte)0xFE);
             newBS.put((byte)0x00);
             newBS.put((byte)0x00);
+            */
             newBS.put(bs2);    
             bs2.position(0);
             smBufDecode(d2, "UTF-32LE", bs2, us);
             smBufEncode(e2, "UTF-32LE", us, newBS);
+
         }
         
     }

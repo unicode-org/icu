@@ -175,7 +175,7 @@ class CharsetUTF32LE extends CharsetICU {
             }
             
             /* write the BOM if necessary */
-            if(fromUnicodeStatus==NEED_TO_WRITE_BOM) {
+            if(fromUnicodeStatus==NEED_TO_WRITE_BOM && writeBOM) {
                 byte[] bom={ (byte)0xff, (byte)0xfe, 0, 0 };
                 cr = fromUWriteBytes(this, bom, 0, bom.length, target, offsets, -1);
                 if(cr.isError()){
@@ -183,7 +183,7 @@ class CharsetUTF32LE extends CharsetICU {
                 }
                 fromUnicodeStatus=0;
             }
-            
+             
             int ch, ch2;
             int indexToWrite;
             byte temp[] = new byte[4];
