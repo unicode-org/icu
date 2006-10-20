@@ -21,7 +21,7 @@ grant // codebase "file:${user.dir}/icu4jtests.jar"
 	permission java.util.PropertyPermission "ICUDataPath", "read";
 	permission java.util.PropertyPermission "user.dir", "read";
     permission java.util.PropertyPermission "U_RBBIDEBUG", "read";
-    permission java.util.PropertyPermission "GENERATE_TEST_DATA", "read"
+    permission java.util.PropertyPermission "GENERATE_TEST_DATA", "read";
 	
     // time zone tests
 	permission java.util.PropertyPermission "user.timezone", "read";

@@ -748,6 +748,7 @@
             <jvmarg value="-Djava.security.policy=${src.dir}/com/ibm/icu/dev/test/security.policy"/>
             <!--<jvmarg value="-Djava.security.debug=access:failure"/>-->
              <arg value="-w"/>
+             <arg value="-nothrow"/>
             <classpath>
                 <pathelement location="clover.jar"/>
                 <pathelement location="${jar.file}"/>
@@ -2059,6 +2060,7 @@
             </manifest>
         </jar>
      </target>
+     
      <!--Target for building jars -->
      <target name="distJars" depends="jarSrc, jar, jarDocs" />   
      
