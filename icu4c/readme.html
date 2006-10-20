@@ -31,10 +31,10 @@
 
   <body>
     <h1>International Components for Unicode<br />
-     <abbr title="International Components for Unicode">ICU</abbr> 3.6
+     <abbr title="International Components for Unicode">ICU</abbr> 3.7
     ReadMe</h1>
 
-    <p>Version: 2006-Aug-31<br />
+    <p>Version: 2006-Oct-20<br />
      Copyright &copy; 1997-2006 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -113,9 +113,9 @@
     <ul>
       <li>The latest version of the Unicode standard</li>
 
-      <li>Character set conversions with support for over 200 codepages</li>
+      <li>Character set conversions with support for over 220 codepages</li>
 
-      <li>Locale data for more than 230 locales</li>
+      <li>Locale data for more than 250 locales</li>
 
       <li>Language sensitive text collation (sorting) and searching based on the
       Unicode Collation Algorithm (=ISO 14651)</li>
@@ -1094,33 +1094,18 @@
     Build And Install On z/OS (OS/390)</a></h3>
 
     <p>You can install ICU on z/OS or OS/390 (the previous name of z/OS), but IBM
-    tests only the z/OS installation. These platforms commonly are called "MVS".
-    You install ICU in a z/OS UNIX system services file system such as HFS or
-    zFS. On this platform, it is important that you understand a few details:</p>
+    tests only the z/OS installation. You install ICU in a z/OS UNIX system
+    services file system such as HFS or zFS. On this platform, it is important
+    that you understand a few details:</p>
 
     <ul>
-      <li>APAR PQ58392 may be needed by z/OS 1.2 or 1.3 in order to get some ICU
-      number formatting functions to work properly. The APAR affects C and C++
-      code.</li>
-
-      <li>The makedep executable that is used with the z/OS ICU build process is
-      not shipped with ICU. It is available at the <a href=
+      <li>The makedep and GNU make tools are required for building ICU. If it
+      is not already installed on your system, it is available at the <a href=
       "http://www.ibm.com/servers/eserver/zseries/zos/unix/redbook/">z/OS UNIX -
       Tools and Toys</a> site. The PATH environment variable should be updated to
-      contain the location of this executable prior to build. Alternatively,
-      makedep may be moved into an existing PATH directory.</li>
-
-      <li>The gnu utilities gmake and gzip/gunzip are needed and can be obtained
-      for z/OS from <a href=
-      "http://www.ibm.com/servers/eserver/zseries/zos/unix/redbook/">z/OS UNIX -
-      Tools and Toys</a>.</li>
-
-      <li>Since the default make on z/OS is not gmake, the pkgdata tool requires
-      that the "make" command is aliased to your installed version of gmake. You
-      may also need to set $MAKE equal to the fully qualified path of GNU make.
-      GNU make is available with the "z/OS UNIX - Tools and Toys" that was
-      mentioned above. ICU requires the same GNU make as described in the UNIX
-      build instructions.</li>
+      contain the location of this executable prior to build. Failure to add these
+      tools to your PATH will cause ICU build failures or cause pkgdata to fail
+      to run.</li>
 
       <li>Since USS does not support using the mmap() function over NFS, it is
       recommended that you build ICU on a local filesystem. Once ICU has been
@@ -1147,19 +1132,15 @@
       for codepage conversion, resource bundle and UnicodeString operations, but
       the Format APIs require IEEE binary floating point.</li>
 
-      <li>
-        <p>z/OS introduced the concept of Extra Performance Linkage (XPLINK) to
-        bring performance improvement opportunities to call-intensive C and C++
-        applications such as ICU. XPLINK is enabled on a DLL-by-DLL basis, so if
-        you are considering using XPLINK in your application that uses ICU, you
-        should consider building the XPLINK-enabled version of ICU. You need to
-        set ICU's environment variable <code>OS390_XPLINK=1</code> prior to
-        invoking the make process to produce binaries that are enabled for
-        XPLINK.</p>
-
-        <p>Note: XPLINK, which is enabled for z/OS 1.2 and later, requires the
-        PTF PQ69418 to build XPLINK enabled binaries.</p>
-      </li>
+      <li>z/OS introduced the concept of Extra Performance Linkage (XPLINK) to
+      bring performance improvement opportunities to call-intensive C and C++
+      applications such as ICU. XPLINK is enabled on a DLL-by-DLL basis, so if
+      you are considering using XPLINK in your application that uses ICU, you
+      should consider building the XPLINK-enabled version of ICU. You need to
+      set ICU's environment variable <code>OS390_XPLINK=1</code> prior to
+      invoking the make process to produce binaries that are enabled for
+      XPLINK. The XPLINK option, which is available for z/OS 1.2 and later,
+      requires the PTF PQ69418 to build XPLINK enabled binaries.</li>
 
       <li>Currently in ICU 3.0, there is an issue with building on z/OS without
       XPLINK and with the C++ iostream. By default, the iostream library on z/OS
@@ -1167,21 +1148,6 @@
       ICU, you should use the <code>--with-iostream=old</code> configure option
       when using runConfigureICU. This will prevent applications that use the
       icuio library from crashing.</li>
-
-      <li>
-        <p>When you build ICU on a system such as z/OS 1.2, the binaries that
-        result can run on that level of the operating system and later, such as
-        z/OS 1.3 and z/OS 1.4. It's possible that you may have a z/OS 1.4 system,
-        but you may need to deliver binaries on z/OS 1.2 and above. z/OS gives
-        you this ability by targeting the complier and linker to run at the older
-        level, thereby producing the desired binaries.</p>
-
-        <p>To set the compiler and LE environment to OS/390 2.10, specify the
-        following, "<code>./runConfigureICU OS390V2R10</code>"</p>
-
-        <p>To set the compiler and LE environment to z/OS 1.2 specify the
-        following, "<code>./runConfigureICU zOSV1R2</code>"</p>
-      </li>
 
       <li>The rest of the instructions for building and testing ICU on z/OS with
       UNIX System Services are the same as the <a href="#HowToBuildUNIX">How To
@@ -1551,60 +1517,12 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
     ICU thread safe with RogueWave and other libraries using the 2.0 Standard C++
     library. Your applications that use ICU will also need to use the <a href=
     "http://docs.hp.com/en/1405/options.htm#optioncap-AA">-AA</a> compiler flag.
-    To turn off this behavior in ICU, you will need to use the --with-iostream=
-    old configure option when you first use runConfigureICU.</p>
+    To turn off this behavior in ICU, you will need to use the --with-iostream=old
+    configure option when you first use runConfigureICU.</p>
 
     <h4><a name="ImportantNotesSolaris" href="#ImportantNotesSolaris" id=
     "ImportantNotesSolaris">Using ICU in a Multithreaded Environment on
     Solaris</a></h4>
-
-    <h5>ICU's tests may hang on Solaris 8 and Earlier</h5>
-
-    <p>ICU's tests use <code>usleep()</code>, which is multithread unsafe on
-    versions of Solaris before version 9. This does not mean that ICU is not
-    thread safe because only ICU's test code uses <code>usleep()</code>. The
-    <code>sleep()</code> and <code>nanosleep()</code> functions could be used in
-    ICU's multithreaded tests, but <code>sleep()</code> and
-    <code>nanosleep()</code> are not a stable API between versions of Solaris.
-    Solaris 9 fixes usleep so that it is multithread safe.</p>
-
-    <p>This hanging behavior tends to appear on multi-CPU machines. Single CPU
-    Solaris 8 machines do not seem to show this behavior.</p>
-
-    <p>In a future version of ICU, we hope to find a portable solution to this
-    problem that will work between the modern versions of Solaris.</p>
-
-    <h5>Solaris Deadlock Issues in Solaris 8 (2.8) and Earlier</h5>
-
-    <p>Solaris 8, and earlier, has outstanding thread deadlocking issues that
-    <strong>may</strong> be problematic for applications using either native, or
-    POSIX, threading on these platforms. Sun states that Solaris 9 <strong>does
-    not</strong> have the deadlock problems. Deadlocks <strong>may</strong> occur
-    either during initialization of the Solaris threading library, or at any
-    other time.</p>
-
-    <p>Sun Microsystems has provided a Sun Alert Notification regarding the
-    issue. Users <strong>should</strong> consider applying the latest OS patches
-    to their Solaris installations in order to help avoid deadlock. Further
-    information regarding the issue, and links to applicable patches, may be
-    found at:</p>
-
-    <p>[1] "<i>Applications Linked to libthread May Hang</i>", Sun Alert
-    Notification, Sun Microsystems, Inc., 04-Sep-2002<br />
-     <a href=
-    "http://sunsolve.sun.com/search/document.do?assetkey=1-26-46867">http://sunsolve.sun.com/search/document.do?assetkey=1-26-46867</a></p>
-
-    <p>Sun is <strong>not</strong> providing patches for Solaris 6 (2.6), or
-    earlier.</p>
-
-    <p>Sun states that by applying the patch users will avoid the deadlock
-    issues. However, with all applicable patches applied, deadlock
-    <strong>may</strong> still be seen, as demonstrated by the ICU Mutex unit
-    tests. The unit test will hang indefinitely. No bug exists in ICU. However, a
-    latent bug still exists in Solaris, which Sun Microsystems has yet to
-    resolve. In order to avoid this, users are <strong>suggested</strong> to
-    modify their LD_LIBRARY_PATH according to the guidelines specified by Sun
-    Microsystems in the Sun Alert Notification.</p>
 
     <h5>Linking on Solaris</h5>
 
@@ -1625,10 +1543,10 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
     <p>Failure to do this may cause spurious lock conflicts, recursive mutex
     failure, and deadlock.</p>
 
-    <p>[2] "<i>Solaris Multithreaded Programming Guide, Compiling and
+    <p>Source: "<i>Solaris Multithreaded Programming Guide, Compiling and
     Debugging</i>", Sun Microsystems, Inc., Apr 2004<br />
      <a href=
-    "http://docs.sun.com/db/doc/806-6867/6jfpgdcob?a=view">http://docs.sun.com/db/doc/806-6867/6jfpgdcob?a=view</a></p>
+    "http://docs.sun.com/app/docs/doc/816-5137/6mba5vpke?a=view">http://docs.sun.com/app/docs/doc/816-5137/6mba5vpke?a=view</a></p>
 
     <h3><a name="ImportantNotesWindows" href="#ImportantNotesWindows" id=
     "ImportantNotesWindows">Windows Platform</a></h3>
@@ -1649,19 +1567,13 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
     <h4><a name="ImportantNotesWindowsPath" id=
     "ImportantNotesWindowsPath">Changing your PATH</a></h4>
 
-    <ul>
-      <li><strong>Windows 2000/XP</strong>: Use the System Icon in the Control
-      Panel. Pick the "Advanced" tab. Select the "Environment Variables..."
-      button. Select the variable PATH in the lower box, and select the lower
-      "Edit..." button. In the "Variable Value" box, append the string
-      ";<i>&lt;ICU&gt;</i>\bin" to the end of the path string. If there is
-      nothing there, just type in "<i>&lt;ICU&gt;</i>\bin". Click the Set button,
-      then the OK button.</li>
-
-      <li><strong>Windows 95/98/ME</strong>: Edit the autoexec.bat, and add the
-      following line to the end of file, "SET
-      PATH=%PATH%;<i>&lt;ICU&gt;</i>\bin"</li>
-    </ul>
+    <p><strong>Windows 2000/XP</strong>: Use the System Icon in the Control
+    Panel. Pick the "Advanced" tab. Select the "Environment Variables..."
+    button. Select the variable PATH in the lower box, and select the lower
+    "Edit..." button. In the "Variable Value" box, append the string
+    ";<i>&lt;ICU&gt;</i>\bin" to the end of the path string. If there is
+    nothing there, just type in "<i>&lt;ICU&gt;</i>\bin". Click the Set button,
+    then the OK button.</p>
 
     <p>Note: When packaging a Windows application for distribution and
     installation on user systems, copies of the ICU DLLs should be included with
@@ -1721,8 +1633,8 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
     User Guide <a href="http://icu.sourceforge.net/userguide/icudata.html">ICU
     Data</a> chapter.</p>
 
-    <p>ICU 2.8 removes the requirement that ICU be completely built in the native
-    operating environment. It adds the icuswap tool which can be run on any
+    <p>ICU 3.6 removes the requirement that ICU be completely built in the native
+    operating environment. It adds the icupkg tool which can be run on any
     platform to turn binary ICU data files from any one of the three formats into
     any one of the other data formats. This allows a application to use ICU data
     built anywhere to be used for any other target platform.</p>
@@ -1772,14 +1684,12 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
     <ul>
       <li>
         <strong>unicode/platform.h.in</strong> (autoconf'ed platforms)<br />
-         <strong>unicode/p<i>XXXX</i>.h</strong> (others: pwin32.h, pmacos.h,
+         <strong>unicode/p<i>XXXX</i>.h</strong> (others: pwin32.h, ppalmos.h,
         ..): Platform-dependent typedefs and defines:<br />
         <br />
          
 
         <ul>
-          <li>XP_CPLUSPLUS for C++ only.</li>
-
           <li>Generic types like UBool, int8_t, int16_t, int32_t, int64_t,
           uint64_t etc.</li>
 
@@ -1787,6 +1697,8 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
           export</li>
 
           <li>&lt;iostream&gt; usability</li>
+
+          <li>Thread safety usability</li>
         </ul>
         <br />
       </li>
@@ -1820,15 +1732,8 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
         multithreaded applications. If you wish to use International Components
         for Unicode in a multithreaded application, you must provide a
         synchronization primitive that the classes can use to protect their
-        global data against simultaneous modifications. See Users' guide for more
-        information.<br />
-        <br />
-         
-
-        <ul>
-          <li>We supply sample implementations for Windows, Sun Solaris, Linux,
-          AIX, HP-UX, BSD, Mac OS X, z/OS and many others.</li>
-        </ul>
+        global data against simultaneous modifications. We already supply working
+        implementations for many platforms that ICU builds on.<br />
         <br />
       </li>
 
