@@ -13,7 +13,6 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.UTF32;
 import com.ibm.icu.text.CharsetDetector;
 import com.ibm.icu.text.CharsetMatch;
 
