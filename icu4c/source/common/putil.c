@@ -38,18 +38,13 @@
 
 /* Define _XOPEN_SOURCE for Solaris and friends. */
 /* NetBSD needs it to be >= 4 */
-#ifndef _XOPEN_SOURCE
+#if !defined(_XOPEN_SOURCE)
 #if __STDC_VERSION__ >= 199901L
-/* It is invalid to compile an XPG3, XPG4, XPG4v2 or XPG5 application using c99 */
+/* It is invalid to compile an XPG3, XPG4, XPG4v2 or XPG5 application using c99 on Solaris */
 #define _XOPEN_SOURCE 600
 #else
 #define _XOPEN_SOURCE 4
 #endif
-#endif
-
-/* Make sure things like readlink and such functions work. */
-#ifndef _XOPEN_SOURCE_EXTENDED
-#define _XOPEN_SOURCE_EXTENDED 1
 #endif
 
 /* include ICU headers */
@@ -63,6 +58,14 @@
 #include "cstring.h"
 #include "locmap.h"
 #include "ucln_cmn.h"
+
+/* Make sure things like readlink and such functions work. 
+Poorly upgraded Solaris machines can't have this defined.
+Cleanly installed Solaris can use this #define.
+*/
+#if !defined(_XOPEN_SOURCE_EXTENDED) && !defined(U_SOLARIS)
+#define _XOPEN_SOURCE_EXTENDED 1
+#endif
 
 /* Include standard headers. */
 #include <stdio.h>

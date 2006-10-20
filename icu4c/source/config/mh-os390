@@ -58,7 +58,7 @@ SHAREDLIBCXXFLAGS	= -Wc,expo
 # -+ means accept any file extension as a C++ file. By default only .C is accepted.
 CFLAGS          += -Wc,'langlvl(extended),spill(2000),ros,dll' $(ICU_IEEE)
 CXXFLAGS        += -Wc,'langlvl(extended),spill(2000),ros,dll' $(ICU_IEEE) -+
-DEFS            += -D_XOPEN_SOURCE_EXTENDED -D_MSE_PROTOS
+DEFS            += -D_MSE_PROTOS
 ARFLAGS         = -cr
 
 ifeq (${OS390_XPLINK}, 1)
