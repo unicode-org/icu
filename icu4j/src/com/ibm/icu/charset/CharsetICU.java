@@ -61,7 +61,9 @@ public abstract class CharsetICU extends Charset{
      short unicodeMask;            /* +79: 1  bit 0: has supplementary  bit 1: has single surrogates */
      byte subChar1;               /* +80: 1  single-byte substitution character for IBM MBCS (0 if none) */
      byte reserved[/*19*/];           /* +81: 19 to round out the structure */
-    
+     
+     boolean writeBOM = false; /* only used by UTF-16, UTF-32 */
+     
     /**
      * 
      * @param icuCanonicalName
@@ -101,8 +103,8 @@ public abstract class CharsetICU extends Charset{
         algorithmicCharsets.put("HZ",                    "com.ibm.icu.charset.CharsetHZ" );
         algorithmicCharsets.put("imapmailboxname",       "com.ibm.icu.charset.CharsetIMAP" );
         algorithmicCharsets.put("ISCII",                 "com.ibm.icu.charset.CharsetISCII" );
-        algorithmicCharsets.put("iso2022",               "com.ibm.icu.charset.CharsetISO2022" );*/
-        /*algorithmicCharsets.put("lmbcs1",                "com.ibm.icu.charset.CharsetLMBCS1" );
+        algorithmicCharsets.put("iso2022",               "com.ibm.icu.charset.CharsetISO2022" );
+        algorithmicCharsets.put("lmbcs1",                "com.ibm.icu.charset.CharsetLMBCS1" );
         algorithmicCharsets.put("lmbcs11",               "com.ibm.icu.charset.CharsetLMBCS11" );
         algorithmicCharsets.put("lmbcs16",               "com.ibm.icu.charset.CharsetLMBCS16" );
         algorithmicCharsets.put("lmbcs17",               "com.ibm.icu.charset.CharsetLMBCS17" );
@@ -219,11 +221,13 @@ public abstract class CharsetICU extends Charset{
      */
     public static Charset forNameICU(String charsetName) throws IllegalCharsetNameException, UnsupportedCharsetException {
         CharsetProviderICU icuProvider = new CharsetProviderICU();
-        Charset cs = icuProvider.charsetForName(charsetName);
+        CharsetICU cs = (CharsetICU) icuProvider.charsetForName(charsetName);
         if (cs != null) {
+            cs.writeBOM = true;
             return cs;
         }
         return Charset.forName(charsetName);
     }
+    
 }
 

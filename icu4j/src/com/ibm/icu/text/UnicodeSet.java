@@ -28,8 +28,6 @@ import com.ibm.icu.util.VersionInfo;
 
 import com.ibm.icu.text.BreakIterator;
 
-import java.util.Map;
-import java.util.HashMap;
 import java.util.MissingResourceException;
 import java.util.TreeSet;
 import java.util.Iterator;

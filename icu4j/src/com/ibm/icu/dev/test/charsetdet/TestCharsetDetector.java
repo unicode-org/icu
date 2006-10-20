@@ -142,11 +142,11 @@ public class TestCharsetDetector extends TestFmwk
             CharsetDetector det = new CharsetDetector();
             byte[] bytes;
             
-            if (enc.startsWith("UTF-32")) {
-                UTF32 utf32 = UTF32.getInstance(enc);
+            //if (enc.startsWith("UTF-32")) {
+            //    UTF32 utf32 = UTF32.getInstance(enc);
                 
-                bytes = utf32.toBytes(testString);
-            } else {
+            //    bytes = utf32.toBytes(testString);
+            //} else {
                 String from = enc;
 
                 while (true) {
@@ -172,7 +172,7 @@ public class TestCharsetDetector extends TestFmwk
                     
                     break;
                 }
-            }
+            //}
         
             det.setText(bytes);
             checkMatch(det, testString, enc, lang, id);
