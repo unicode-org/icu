@@ -612,7 +612,9 @@ enum {
 
 const char* TIME_MODE[] = {"w", "s", "u"};
 
-const int MONTH_LEN[] = {31,28,31,30,31,30,31,31,30,31,30,31};
+// Allow 29 days in February because zic outputs February 29
+// for rules like "last Sunday in February".
+const int MONTH_LEN[] = {31,29,31,30,31,30,31,31,30,31,30,31};
 
 const int HOUR = 3600;
 
@@ -623,15 +625,27 @@ struct FinalZone {
     set<string> aliases;
     FinalZone(int _offset, int _year, const string& _ruleid) :
         offset(_offset), year(_year), ruleid(_ruleid)  {
-        if (offset <= -16*HOUR || offset >= 16*HOUR ||
-            year < 1900 || year >= 2050) {
-            throw invalid_argument("Invalid input arguments");
+        if (offset <= -16*HOUR || offset >= 16*HOUR) {
+            ostringstream os;
+            os << "Invalid input offset " << offset
+               << " for year " << year
+               << " and rule ID " << ruleid;
+            throw invalid_argument(os.str());
+        }
+        if (year < 1900 || year >= 2050) {
+            ostringstream os;
+            os << "Invalid input year " << year
+               << " with offset " << offset
+               << " and rule ID " << ruleid;
+            throw invalid_argument(os.str());
         }
     }
     FinalZone() : offset(-1), year(-1) {}
     void addLink(const string& alias) {
         if (aliases.find(alias) != aliases.end()) {
-            throw invalid_argument("Duplicate alias");
+            ostringstream os;
+            os << "Duplicate alias " << alias;
+            throw invalid_argument(os.str());
         }
         aliases.insert(alias);
     }
@@ -665,7 +679,8 @@ struct FinalRulePart {
     bool isset; // used during building; later ignored
 
     FinalRulePart() : isset(false) {}
-    void set(const string& _mode,
+    void set(const string& id,
+             const string& _mode,
              int _month,
              int _dom,
              int _dow,
@@ -693,11 +708,31 @@ struct FinalRulePart {
         isstd = _isstd;
         isgmt = _isgmt;
         offset = _offset;
-        if (month < 0 || month >= 12 || dom < 1 || dom > MONTH_LEN[month] ||
-            (mode != DOM && (dow < 0 || dow >= 7)) ||
-            offset < 0 || offset > HOUR ||
-            (isgmt && !isstd)) {
-            throw invalid_argument("Invalid input arguments");
+
+        ostringstream os;
+        if (month < 0 || month >= 12) {
+            os << "Invalid input month " << month;
+        }
+        if (dom < 1 || dom > MONTH_LEN[month]) {
+            os << "Invalid input day of month " << dom;
+        }
+        if (mode != DOM && (dow < 0 || dow >= 7)) {
+            os << "Invalid input day of week " << dow;
+        }
+        if (offset < 0 || offset > HOUR) {
+            os << "Invalid input offset " << offset;
+        }
+        if (isgmt && !isstd) {
+            os << "Invalid input isgmt && !isstd";
+        }
+        if (!os.str().empty()) {
+            os << " for rule "
+               << id
+               << _mode
+               << month << dom << dow << time
+               << isstd << isgmt
+               << offset;
+            throw invalid_argument(os.str());
         }
     }
 
@@ -818,7 +853,7 @@ void readFinalZonesAndRules(istream& in) {
             consumeLine(in);
             FinalRule& fr = finalRules[id];
             int p = fr.part[0].isset ? 1 : 0;
-            fr.part[p].set(mode, month, dom, dow, time, isstd, isgmt, offset);
+            fr.part[p].set(id, mode, month, dom, dow, time, isstd, isgmt, offset);
         } else if (token == "link") {
             string fromid, toid; // fromid == "real" zone, toid == alias
             in >> fromid >> toid;
