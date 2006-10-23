@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2003-2005, International Business Machines Corporation and
+ * Copyright (c) 2003-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -38,9 +38,9 @@ void addHeapMutexTest(TestNode **root);
 void
 addHeapMutexTest(TestNode** root)
 {
-    addTest(root, &TestHeapFunctions,       "tsutil/hpmufn/TestHeapFunctions"  );
-    addTest(root, &TestMutexFunctions,      "tsutil/hpmufn/TestMutexFunctions" );
-    addTest(root, &TestIncDecFunctions,     "tsutil/hpmufn/TestIncDecFunctions");
+    addTest(root, &TestHeapFunctions,       "hpmufn/TestHeapFunctions"  );
+    addTest(root, &TestMutexFunctions,      "hpmufn/TestMutexFunctions" );
+    addTest(root, &TestIncDecFunctions,     "hpmufn/TestIncDecFunctions");
 }
 
 static int32_t gMutexFailures = 0;
