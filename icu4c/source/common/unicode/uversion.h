@@ -114,24 +114,67 @@
  */
 typedef uint8_t UVersionInfo[U_MAX_VERSION_LENGTH];
 
+/*===========================================================================*/
+/* C++ namespace if supported. Versioned unless versioning is disabled.      */
+/*===========================================================================*/
+
+/**
+ * \def U_NAMESPACE_BEGIN
+ * This is used to begin a declaration of a public ICU C++ API.
+ * If the compiler doesn't support namespaces, this does nothing.
+ * @stable ICU 2.4
+ */
+
+/**
+ * \def U_NAMESPACE_END
+ * This is used to end a declaration of a public ICU C++ API 
+ * If the compiler doesn't support namespaces, this does nothing.
+ * @stable ICU 2.4
+ */
+
+/**
+ * \def U_NAMESPACE_USE
+ * This is used to specify that the rest of the code uses the
+ * public ICU C++ API namespace.
+ * If the compiler doesn't support namespaces, this does nothing.
+ * @stable ICU 2.4
+ */
+
+/**
+ * \def U_NAMESPACE_QUALIFIER
+ * This is used to qualify that a function or class is part of
+ * the public ICU C++ API namespace.
+ * If the compiler doesn't support namespaces, this does nothing.
+ * @stable ICU 2.4
+ */
+
+/* Define namespace symbols if the compiler supports it. */
 #if U_HAVE_NAMESPACE && defined(XP_CPLUSPLUS)
-#if U_DISABLE_RENAMING
-#define U_ICU_NAMESPACE icu
-namespace U_ICU_NAMESPACE { }
+#   if U_DISABLE_RENAMING
+#       define U_ICU_NAMESPACE icu
+        namespace U_ICU_NAMESPACE { }
+#   else
+#       define U_ICU_NAMESPACE icu_3_6
+        namespace U_ICU_NAMESPACE { }
+        namespace icu = U_ICU_NAMESPACE;
+#   endif
+
+#   define U_NAMESPACE_BEGIN namespace U_ICU_NAMESPACE {
+#   define U_NAMESPACE_END  }
+#   define U_NAMESPACE_USE using namespace U_ICU_NAMESPACE;
+#   define U_NAMESPACE_QUALIFIER U_ICU_NAMESPACE::
+
+#   ifndef U_USING_ICU_NAMESPACE
+#       define U_USING_ICU_NAMESPACE 1
+#   endif
+#   if U_USING_ICU_NAMESPACE
+        U_NAMESPACE_USE
+#   endif
 #else
-#define U_ICU_NAMESPACE icu_3_6
-namespace U_ICU_NAMESPACE { }
-namespace icu = U_ICU_NAMESPACE;
-#endif
-
-#ifndef U_USING_ICU_NAMESPACE
-#   define U_USING_ICU_NAMESPACE 1
-#endif
-
-#if U_USING_ICU_NAMESPACE
-U_NAMESPACE_USE
-#endif
-
+#   define U_NAMESPACE_BEGIN
+#   define U_NAMESPACE_END
+#   define U_NAMESPACE_USE
+#   define U_NAMESPACE_QUALIFIER
 #endif
 
 
