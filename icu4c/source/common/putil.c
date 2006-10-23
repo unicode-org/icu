@@ -47,6 +47,14 @@
 #endif
 #endif
 
+/* Make sure things like readlink and such functions work. 
+Poorly upgraded Solaris machines can't have this defined.
+Cleanly installed Solaris can use this #define.
+*/
+#if !defined(_XOPEN_SOURCE_EXTENDED) && __STDC_VERSION__ >= 199901L
+#define _XOPEN_SOURCE_EXTENDED 1
+#endif
+
 /* include ICU headers */
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
@@ -58,14 +66,6 @@
 #include "cstring.h"
 #include "locmap.h"
 #include "ucln_cmn.h"
-
-/* Make sure things like readlink and such functions work. 
-Poorly upgraded Solaris machines can't have this defined.
-Cleanly installed Solaris can use this #define.
-*/
-#if !defined(_XOPEN_SOURCE_EXTENDED) && !defined(U_SOLARIS)
-#define _XOPEN_SOURCE_EXTENDED 1
-#endif
 
 /* Include standard headers. */
 #include <stdio.h>
