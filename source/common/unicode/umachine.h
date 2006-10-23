@@ -102,49 +102,6 @@
 #   define U_CDECL_END
 #endif
 
-/**
- * \def U_NAMESPACE_BEGIN
- * This is used to begin a declaration of a public ICU C++ API.
- * If the compiler doesn't support namespaces, this does nothing.
- * @stable ICU 2.4
- */
-
-/**
- * \def U_NAMESPACE_END
- * This is used to end a declaration of a public ICU C++ API 
- * If the compiler doesn't support namespaces, this does nothing.
- * @stable ICU 2.4
- */
-
-/**
- * \def U_NAMESPACE_USE
- * This is used to specify that the rest of the code uses the
- * public ICU C++ API namespace.
- * If the compiler doesn't support namespaces, this does nothing.
- * @stable ICU 2.4
- */
-
-/**
- * \def U_NAMESPACE_QUALIFIER
- * This is used to qualify that a function or class is part of
- * the public ICU C++ API namespace.
- * If the compiler doesn't support namespaces, this does nothing.
- * @stable ICU 2.4
- */
-
-/* Define namespace symbols if the compiler supports it. */
-#if U_HAVE_NAMESPACE
-#   define U_NAMESPACE_BEGIN namespace U_ICU_NAMESPACE {
-#   define U_NAMESPACE_END  }
-#   define U_NAMESPACE_USE using namespace U_ICU_NAMESPACE;
-#   define U_NAMESPACE_QUALIFIER U_ICU_NAMESPACE::
-#else
-#   define U_NAMESPACE_BEGIN
-#   define U_NAMESPACE_END
-#   define U_NAMESPACE_USE
-#   define U_NAMESPACE_QUALIFIER
-#endif
-
 /** This is used to declare a function as a public ICU C API @stable ICU 2.0*/
 #define U_CAPI U_CFUNC U_EXPORT
 #define U_STABLE U_CAPI
