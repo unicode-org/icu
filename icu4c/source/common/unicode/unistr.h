@@ -67,7 +67,7 @@ class BreakIterator;        // unicode/brkiter.h
  *
  * @stable ICU 3.2
  */
-#define US_INV UnicodeString::kInvariant
+#define US_INV U_NAMESPACE_QUALIFIER UnicodeString::kInvariant
 
 /**
  * Unicode String literals in C++.
@@ -87,11 +87,11 @@ class BreakIterator;        // unicode/brkiter.h
  * @stable ICU 2.0
  */
 #if U_SIZEOF_WCHAR_T==U_SIZEOF_UCHAR && (U_CHARSET_FAMILY==U_ASCII_FAMILY || (U_SIZEOF_UCHAR == 2 && defined(U_WCHAR_IS_UTF16)))
-#   define UNICODE_STRING(cs, _length) UnicodeString(TRUE, (const UChar *)L ## cs, _length)
+#   define UNICODE_STRING(cs, _length) U_NAMESPACE_QUALIFIER UnicodeString(TRUE, (const UChar *)L ## cs, _length)
 #elif U_SIZEOF_UCHAR==1 && U_CHARSET_FAMILY==U_ASCII_FAMILY
-#   define UNICODE_STRING(cs, _length) UnicodeString(TRUE, (const UChar *)cs, _length)
+#   define UNICODE_STRING(cs, _length) U_NAMESPACE_QUALIFIER UnicodeString(TRUE, (const UChar *)cs, _length)
 #else
-#   define UNICODE_STRING(cs, _length) UnicodeString(cs, _length, US_INV)
+#   define UNICODE_STRING(cs, _length) U_NAMESPACE_QUALIFIER UnicodeString(cs, _length, US_INV)
 #endif
 
 /**
@@ -108,11 +108,11 @@ class BreakIterator;        // unicode/brkiter.h
  * @stable ICU 2.0
  */
 #if U_SIZEOF_WCHAR_T==U_SIZEOF_UCHAR && (U_CHARSET_FAMILY==U_ASCII_FAMILY || (U_SIZEOF_UCHAR == 2 && defined(U_WCHAR_IS_UTF16)))
-#   define UNICODE_STRING_SIMPLE(cs) UnicodeString(TRUE, (const UChar *)L ## cs, -1)
+#   define UNICODE_STRING_SIMPLE(cs) U_NAMESPACE_QUALIFIER UnicodeString(TRUE, (const UChar *)L ## cs, -1)
 #elif U_SIZEOF_UCHAR==1 && U_CHARSET_FAMILY==U_ASCII_FAMILY
-#   define UNICODE_STRING_SIMPLE(cs) UnicodeString(TRUE, (const UChar *)cs, -1)
+#   define UNICODE_STRING_SIMPLE(cs) U_NAMESPACE_QUALIFIER UnicodeString(TRUE, (const UChar *)cs, -1)
 #else
-#   define UNICODE_STRING_SIMPLE(cs) UnicodeString(cs, -1, US_INV)
+#   define UNICODE_STRING_SIMPLE(cs) U_NAMESPACE_QUALIFIER UnicodeString(cs, -1, US_INV)
 #endif
 
 /**
