@@ -57,6 +57,7 @@ void UnicodeStringTest::runIndexedTest( int32_t index, UBool exec, const char* &
         case 14: name = "TestCountChar32"; if (exec) TestCountChar32(); break;
         case 15: name = "TestStringEnumeration"; if (exec) TestStringEnumeration(); break;
         case 16: name = "TestCharString"; if (exec) TestCharString(); break;
+        case 17: name = "TestNameSpace"; if (exec) TestNameSpace(); break;
 
         default: name = ""; break; //needed to end loop
     }
@@ -1660,3 +1661,42 @@ UnicodeStringTest::TestCharString() {
     }
 }
 
+/*
+ * Namespace test, to make sure that macros like UNICODE_STRING include the
+ * namespace qualifier.
+ *
+ * Define a (bogus) UnicodeString class in another namespace and check for ambiguity.
+ */
+#if U_HAVE_NAMESPACE
+namespace bogus {
+    class UnicodeString {
+    public:
+        UnicodeString() : i(1) {}
+        UnicodeString(UBool isTerminated, const UChar *text, int32_t textLength) : i(textLength) {}
+        UnicodeString(const char *src, int32_t length, enum EInvariant inv) : i(length) {}
+        enum EInvariant { kInvariant };
+    private:
+        int32_t i;
+    };
+}
+#endif
+
+void
+UnicodeStringTest::TestNameSpace() {
+#if U_HAVE_NAMESPACE
+    // Provoke name collision unless the UnicodeString macros properly
+    // qualify the icu::UnicodeString class.
+    using namespace bogus;
+
+    // Use all UnicodeString macros from unistr.h.
+    icu::UnicodeString s1=icu::UnicodeString("abc", 3, US_INV);
+    icu::UnicodeString s2=UNICODE_STRING("def", 3);
+    icu::UnicodeString s3=UNICODE_STRING_SIMPLE("ghi");
+
+    // Make sure the compiler does not optimize away instantiation of s1, s2, s3.
+    icu::UnicodeString s4=s1+s2+s3;
+    if(s4.length()!=9) {
+        errln("Something wrong with UnicodeString::operator+().");
+    }
+#endif
+}
