@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2005, International Business Machines Corporation and    *
+* Copyright (C) 1997-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -29,12 +29,20 @@
 #include "unicode/gregocal.h"
 #include "unicode/smpdtfmt.h"
 
+#include "gregoimp.h"
+
 U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(SimpleTimeZone)
 
-// WARNING: assumes that no rule is measured from the end of February,
-// since we don't handle leap years. Could handle assuming always
+// Use only for decodeStartRule() and decodeEndRule() where the year is not
+// available. Set February to 29 days to accomodate rules with that date
+// and day-of-week-on-or-before-that-date mode (DOW_LE_DOM_MODE).
+// The compareToRule() method adjusts to February 28 in non-leap years.
+//
+// For actual getOffset() calculations, use Grego::monthLength() and
+// Grego::previousMonthLength() which take leap years into account.
+// We handle leap years assuming always
 // Gregorian, since we know they didn't have daylight time when
 // Gregorian calendar started.
 const int8_t SimpleTimeZone::STATICMONTHLENGTH[] = {31,29,31,30,31,30,31,31,30,31,30,31};
@@ -369,7 +377,7 @@ int32_t
 SimpleTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
                           uint8_t dayOfWeek, int32_t millis, UErrorCode& status) const
 {
-    // Check the month before indexing into STATICMONTHLENGTH. This
+    // Check the month before calling Grego::monthLength(). This
     // duplicates the test that occurs in the 7-argument getOffset(),
     // however, this is unavoidable. We don't mind because this method, in
     // fact, should not be called; internal code should always call the
@@ -381,14 +389,14 @@ SimpleTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
         return 0;
     }
 
-    return getOffset(era, year, month, day, dayOfWeek, millis, STATICMONTHLENGTH[month], status);
+    return getOffset(era, year, month, day, dayOfWeek, millis, Grego::monthLength(year, month), status);
 }
 
 int32_t 
 SimpleTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
                           uint8_t dayOfWeek, int32_t millis, 
                           int32_t monthLength, UErrorCode& status) const {
-    // Check the month before indexing into STATICMONTHLENGTH. This
+    // Check the month before calling Grego::monthLength(). This
     // duplicates a test that occurs in the 9-argument getOffset(),
     // however, this is unavoidable. We don't mind because this method, in
     // fact, should not be called; internal code should always call the
@@ -401,11 +409,10 @@ SimpleTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
         return -1;
     }
 
-    // TODO FIX We don't handle leap years yet!
-    int32_t prevMonthLength = (month >= 1) ? STATICMONTHLENGTH[month - 1] : 31;
-
     return getOffset(era, year, month, day, dayOfWeek, millis,
-                     monthLength, prevMonthLength, status);
+                     Grego::monthLength(year, month),
+                     Grego::previousMonthLength(year, month),
+                     status);
 }
 
 int32_t 
@@ -528,6 +535,12 @@ SimpleTimeZone::compareToRule(int8_t month, int8_t monthLen, int8_t prevMonthLen
 
     // calculate the actual day of month for the rule
     int32_t ruleDayOfMonth = 0;
+
+    // Adjust the ruleDay to the monthLen, for non-leap year February 29 rule days.
+    if (ruleDay > monthLen) {
+        ruleDay = monthLen;
+    }
+
     switch (ruleMode)
     {
     // if the mode is day-of-month, the day of month is given
@@ -547,11 +560,9 @@ SimpleTimeZone::compareToRule(int8_t month, int8_t monthLen, int8_t prevMonthLen
         
         // if ruleDay is negative (we assume it's not zero here), we have to do
         // the same calculation figuring backward from the last day of the month.
-        // (STATICMONTHLENGTH gives us that last day.  We don't take leap years
-        // into account, so this may not work right for February.)
         else
         {
-             // (again, this code is trusting that dayOfMonth and dayOfMonth are
+            // (again, this code is trusting that dayOfWeek and dayOfMonth are
             // consistent with each other here, since we're using them to figure
             // the day of week of the first of the month)
             ruleDayOfMonth = monthLen + (ruleDay + 1) * 7 -
