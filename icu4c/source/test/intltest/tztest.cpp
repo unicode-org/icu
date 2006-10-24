@@ -18,6 +18,8 @@
 #include "cmemory.h"
 #include "putilimp.h"
 
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
+
 #define CASE(id,test) case id:                               \
                           name = #test;                      \
                           if (exec) {                        \
@@ -49,6 +51,7 @@ void TimeZoneTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
         CASE(12,TestEquivalentIDs);
         CASE(13, TestAliasedNames);
         CASE(14, TestFractionalDST);
+        CASE(15, TestFebruary);
        default: name = ""; break;
     }
 }
@@ -619,7 +622,7 @@ void TimeZoneTest::TestShortZoneIDs()
         UBool ok = TRUE;
         // Check existence.
         TimeZone *tz = TimeZone::createTimeZone(itsID);
-        if (!tz) {
+        if (!tz || (kReferenceList[i].offset != 0 && *tz == *TimeZone::getGMT())) {
             errln("FAIL: Time Zone " + itsID + " does not exist!");
             continue;
         }
@@ -1493,6 +1496,106 @@ void TimeZoneTest::TestEquivalentIDs() {
         }
         if (!sawLA) {
             errln("FAIL: America/Los_Angeles should be in the list");
+        }
+    }
+}
+
+// Test that a transition at the end of February is handled correctly.
+void TimeZoneTest::TestFebruary() {
+    UErrorCode status = U_ZERO_ERROR;
+
+    // Time zone with daylight savings time from the first Sunday in November
+    // to the last Sunday in February.
+    // Similar to the new rule for Brazil (Sao Paulo) in tzdata2006n.
+    SimpleTimeZone tz1(-3 * U_MILLIS_PER_HOUR,          // raw offset: 3h before (west of) GMT
+                       UNICODE_STRING("nov-feb", 7),
+                       UCAL_NOVEMBER, 1, UCAL_SUNDAY,   // start: November, first, Sunday
+                       0,                               //        midnight wall time
+                       UCAL_FEBRUARY, -1, UCAL_SUNDAY,  // end:   February, last, Sunday
+                       0,                               //        midnight wall time
+                       status);
+    if (U_FAILURE(status)) {
+        errln("Unable to create the SimpleTimeZone(nov-feb): %s", u_errorName(status));
+        return;
+    }
+
+    // Time zone for Brazil, with effectively the same rules as above,
+    // but expressed with DOW_GE_DOM_MODE and DOW_LE_DOM_MODE rules.
+    TimeZone *tz2 = TimeZone::createTimeZone(UNICODE_STRING_SIMPLE("America/Sao_Paulo"));
+    if (U_FAILURE(status) || (*tz2 == *TimeZone::getGMT())) {
+        delete tz2;
+        errln("Unable to create the America/Sao_Paulo TimeZone: %s", u_errorName(status));
+        return;
+    }
+
+    // Gregorian calendar with the UTC time zone for getting sample test date/times.
+    GregorianCalendar gc(*TimeZone::getGMT(), status);
+    if (U_FAILURE(status)) {
+        errln("Unable to create the UTC calendar: %s", u_errorName(status));
+        return;
+    }
+
+    struct {
+        // UTC time.
+        int32_t year, month, day, hour, minute, second;
+        // Expected time zone offset in hours after GMT (negative=before GMT).
+        int32_t offsetHours;
+    } data[] = {
+        { 2006, UCAL_NOVEMBER,  5, 02, 59, 59, -3 },
+        { 2006, UCAL_NOVEMBER,  5, 03, 00, 00, -2 },
+        { 2007, UCAL_FEBRUARY, 25, 01, 59, 59, -2 },
+        { 2007, UCAL_FEBRUARY, 25, 02, 00, 00, -3 },
+
+        { 2007, UCAL_NOVEMBER,  4, 02, 59, 59, -3 },
+        { 2007, UCAL_NOVEMBER,  4, 03, 00, 00, -2 },
+        { 2008, UCAL_FEBRUARY, 24, 01, 59, 59, -2 },
+        { 2008, UCAL_FEBRUARY, 24, 02, 00, 00, -3 },
+
+        { 2008, UCAL_NOVEMBER,  2, 02, 59, 59, -3 },
+        { 2008, UCAL_NOVEMBER,  2, 03, 00, 00, -2 },
+        { 2009, UCAL_FEBRUARY, 22, 01, 59, 59, -2 },
+        { 2009, UCAL_FEBRUARY, 22, 02, 00, 00, -3 },
+
+        { 2009, UCAL_NOVEMBER,  1, 02, 59, 59, -3 },
+        { 2009, UCAL_NOVEMBER,  1, 03, 00, 00, -2 },
+        { 2010, UCAL_FEBRUARY, 28, 01, 59, 59, -2 },
+        { 2010, UCAL_FEBRUARY, 28, 02, 00, 00, -3 }
+    };
+
+    TimeZone *timezones[] = { &tz1, tz2 };
+
+    TimeZone *tz;
+    UDate dt;
+    int32_t t, i, raw, dst;
+    for (t = 0; t < LENGTHOF(timezones); ++t) {
+        tz = timezones[t];
+        for (i = 0; i < LENGTHOF(data); ++i) {
+            gc.set(data[i].year, data[i].month, data[i].day,
+                   data[i].hour, data[i].minute, data[i].second);
+            dt = gc.getTime(status);
+            if (U_FAILURE(status)) {
+                errln("test case %d.%d: bad date/time %04d-%02d-%02d %02d:%02d:%02d",
+                      t, i,
+                      data[i].year, data[i].month + 1, data[i].day,
+                      data[i].hour, data[i].minute, data[i].second);
+                status = U_ZERO_ERROR;
+                continue;
+            }
+            tz->getOffset(dt, FALSE, raw, dst, status);
+            if (U_FAILURE(status)) {
+                errln("test case %d.%d: tz.getOffset(%04d-%02d-%02d %02d:%02d:%02d) fails: %s",
+                      t, i,
+                      data[i].year, data[i].month + 1, data[i].day,
+                      data[i].hour, data[i].minute, data[i].second,
+                      u_errorName(status));
+                status = U_ZERO_ERROR;
+            } else if ((raw + dst) != data[i].offsetHours * U_MILLIS_PER_HOUR) {
+                errln("test case %d.%d: tz.getOffset(%04d-%02d-%02d %02d:%02d:%02d) returns %d+%d != %d",
+                      t, i,
+                      data[i].year, data[i].month + 1, data[i].day,
+                      data[i].hour, data[i].minute, data[i].second,
+                      raw, dst, data[i].offsetHours * U_MILLIS_PER_HOUR);
+            }
         }
     }
 }

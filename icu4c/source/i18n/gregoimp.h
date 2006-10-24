@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2005, International Business Machines
+* Copyright (c) 2003-2006, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -229,7 +229,7 @@ inline UBool Grego::isLeapYear(int32_t year) {
 
 inline int8_t
 Grego::monthLength(int32_t year, int32_t month) {
-    return MONTH_LENGTH[month + isLeapYear(year)?12:0];
+    return MONTH_LENGTH[month + (isLeapYear(year) ? 12 : 0)];
 }
 
 inline int8_t
