@@ -1528,6 +1528,20 @@ void TimeZoneTest::TestFebruary() {
         return;
     }
 
+    // Now hardcode the same rules as for Brazil, so that we cover the intended code
+    // even when in the future zoneinfo hardcodes these transition dates.
+    SimpleTimeZone tz3(-3 * U_MILLIS_PER_HOUR,          // raw offset: 3h before (west of) GMT
+                       UNICODE_STRING("nov-feb2", 8),
+                       UCAL_NOVEMBER, 1, -UCAL_SUNDAY,  // start: November, 1 or after, Sunday
+                       0,                               //        midnight wall time
+                       UCAL_FEBRUARY, -29, -UCAL_SUNDAY,// end:   February, 29 or before, Sunday
+                       0,                               //        midnight wall time
+                       status);
+    if (U_FAILURE(status)) {
+        errln("Unable to create the SimpleTimeZone(nov-feb2): %s", u_errorName(status));
+        return;
+    }
+
     // Gregorian calendar with the UTC time zone for getting sample test date/times.
     GregorianCalendar gc(*TimeZone::getGMT(), status);
     if (U_FAILURE(status)) {
@@ -1562,7 +1576,7 @@ void TimeZoneTest::TestFebruary() {
         { 2010, UCAL_FEBRUARY, 28, 02, 00, 00, -3 }
     };
 
-    TimeZone *timezones[] = { &tz1, tz2 };
+    TimeZone *timezones[] = { &tz1, tz2, &tz3 };
 
     TimeZone *tz;
     UDate dt;
