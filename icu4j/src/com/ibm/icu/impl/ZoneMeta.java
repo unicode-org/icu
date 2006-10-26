@@ -170,7 +170,7 @@ public final class ZoneMeta {
         if (size == 4 || size == 6) {
             ICUResourceBundle r = res.get(size-1);
             int[] v = r.getIntVector();
-            if (index >= 0 && index < size && getOlsonMeta()) {
+            if (index >= 0 && index < v.length && getOlsonMeta()) {
                 zone = v[index];
             }
         }
