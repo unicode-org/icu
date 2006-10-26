@@ -831,6 +831,26 @@ public class TimeZoneTest extends TestFmwk
                 logln("" + i + ":" + s);
             }
         }
+
+        // JB#5480 - equivalent IDs should not be empty within range
+        String[] ids = TimeZone.getAvailableIDs();
+        for (int i = 0; i < ids.length; i++) {
+            int nEquiv = TimeZone.countEquivalentIDs(ids[i]);
+            // Each equivalent ID must not be empty
+            for (int j = 0; j < nEquiv; j++) {
+                String equivID = TimeZone.getEquivalentID(ids[i], j);
+                if (equivID.length() == 0) {
+                    errln("FAIL: getEquivalentID(" + ids[i] + ", " + i +
+                            ") returned \"" + equivID + "\", expected valid ID");
+                }
+            }
+            // equivalent ID out of range must be empty
+            String outOfRangeID = TimeZone.getEquivalentID(ids[i], nEquiv);
+            if (outOfRangeID.length() != 0) {
+                errln("FAIL: getEquivalentID(" + ids[i] + ", " + i +
+                        ") returned \"" + outOfRangeID + "\", expected empty string");
+            }
+        }
     }
 
     public void TestCountries() {
