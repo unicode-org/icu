@@ -180,7 +180,7 @@ int main(int argc, const char* const argv[])
         u_init(&errorCode);
         if (U_FAILURE(errorCode)) {
             fprintf(stderr,
-                "#### Note:  ICU Init without build-specific setDataDirectory() failed.\n");
+                "#### Note:  ICU Init without build-specific setDataDirectory() failed. %s\n", u_errorName(errorCode));
             defaultDataFound = FALSE;
         }
         u_cleanup();
