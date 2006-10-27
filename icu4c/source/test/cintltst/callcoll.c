@@ -42,6 +42,7 @@
 #include "unicode/ustring.h"
 #include "unicode/uclean.h"
 #include "unicode/putil.h"
+#include "unicode/uenum.h"
 
 #include "cintltst.h"
 #include "ccolltst.h"
@@ -83,6 +84,8 @@ static void TestInvalidRules(void);
 static void TestJitterbug1098(void);
 
 static void TestFCDCrash(void);
+
+static void TestJ5298(void);
 
 const UCollationResult results[] = {
     UCOL_LESS,
@@ -199,8 +202,8 @@ void addAllCollTest(TestNode** root)
     addTest(root, &TestJB1401, "tscoll/callcoll/TestJB1401");      
     addTest(root, &TestJitterbug1098, "tscoll/callcoll/TestJitterbug1098");     
     addTest(root, &TestFCDCrash, "tscoll/callcoll/TestFCDCrash");
-
-   }
+    addTest(root, &TestJ5298, "tscoll/callcoll/TestJ5298");
+}
 
 UBool hasCollationElements(const char *locName) {
 
@@ -1251,5 +1254,47 @@ TestFCDCrash(void) {
     free(icuDataDir);
 
 }
-
+static UBool
+find(UEnumeration* list, const char* str, UErrorCode* status){
+    const char* value = NULL;
+    int32_t length=0;
+    if(U_FAILURE(*status)){
+        return FALSE;
+    }
+    uenum_reset(list, status);
+    while( (value= uenum_next(list, &length, status))!=NULL){
+        if(strcmp(value, str)==0){
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+static void TestJ5298(void)
+{
+   UErrorCode status = U_ZERO_ERROR;
+   char input[256], output[256];
+   UBool isAvailable;
+   int32_t i = 0;
+   UEnumeration* values = NULL;
+   const char *keywordValue = NULL;
+   log_verbose("Number of collator locales returned : %i \n", ucol_countAvailable());
+   for (i = 0; i < ucol_countAvailable(); i++) {
+     values = ucol_getKeywordValues("collation", &status);
+     while ((keywordValue = uenum_next(values, NULL, &status)) != NULL) {
+       strcpy(input, ucol_getAvailable(i));
+       if (strcmp(keywordValue, "standard") != 0) {
+           strcat(input, "@collation=");
+           strcat(input, keywordValue);
+       }
+       
+       ucol_getFunctionalEquivalent(output, 256, "collation", input, &isAvailable, &status);
+       if (strcmp(input, output) == 0) { /* Unique locale, print it out */
+           //log_verbose("%s, ", input);
+           log_verbose("%s, \n", output);
+       
+       }
+     }
+   }
+   log_verbose("\n");
+}
 #endif /* #if !UCONFIG_NO_COLLATION */
