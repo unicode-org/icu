@@ -27,6 +27,12 @@ ms_MY{
                 "dd/MM/yyyy",
                 "{1} {0}",
             }
+            availableFormats{
+                MMMMdd{"dd MMMM"}
+                MMdd{"dd/MM"}
+                yyyyMM{"MM/yyyy"}
+                yyyyMMMM{"MMMM yyyy"}
+            }
         }
     }
 }

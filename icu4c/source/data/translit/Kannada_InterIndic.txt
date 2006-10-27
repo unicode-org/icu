@@ -5,7 +5,7 @@
 # *
 # ***************************************************************************
 # File: Kannada_InterIndic.txt
-# Generated from CLDR: Thu Jul 20 16:27:16 PDT 2006
+# Generated from CLDR 
 #
 \u0CC6ೕ>\uE047;        # VOWEL SIGN EE
 \u0CC6\u0CCDೖ>\uE048\uE04D;        # VOWEL SIGN AI

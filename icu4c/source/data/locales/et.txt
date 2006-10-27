@@ -332,6 +332,13 @@ et{
                 "dd.MM.yy",
                 "{1} {0}",
             }
+            availableFormats{
+                MMMMd{"d MMMM"}
+                MMdd{"dd.MM"}
+                mmss{"mm:ss"}
+                yyyyMM{"MM.yyyy"}
+                yyyyMMMM{"MMMM yyyy"}
+            }
             dayNames{
                 format{
                     abbreviated{

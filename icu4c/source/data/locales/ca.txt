@@ -427,6 +427,12 @@ ca{
                 "dd/MM/yy",
                 "{1} {0}",
             }
+            availableFormats{
+                hhmm{"hh:mm a"}
+                hhmmss{"hh:mm:ss a"}
+                mmss{"mm:ss"}
+                yyyyMM{"MM/yyyy"}
+            }
             dayNames{
                 format{
                     abbreviated{

@@ -42,7 +42,6 @@ bg{
         154{"Северна Европа"}
         155{"Западна Европа"}
         830{"Нормандски о-ви"}
-        833{"о.Ман"}
         AD{"Андора"}
         AE{"Обединени Арабски Емирства"}
         AF{"Афганистан"}
@@ -144,6 +143,7 @@ bg{
         ID{"Индонезия"}
         IE{"Ирландия"}
         IL{"Израел"}
+        IM{"о.Ман"}
         IN{"Индия"}
         IO{"Британски територии в Индийския океан"}
         IQ{"Ирак"}
@@ -1404,7 +1404,7 @@ bg{
             traditional{"Традиционно"}
         }
     }
-    Version{"1.71"}
+    Version{"1.72"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1421,6 +1421,17 @@ bg{
                 "dd.MM.yyyy",
                 "dd.MM.yy",
                 "{1} {0}",
+            }
+            availableFormats{
+                HHmm{"HH:mm"}
+                MMMMdd{"dd MMMM"}
+                MMdd{"dd.MM"}
+                hmm{"h:mm a"}
+                hmmss{"h:mm:ss a"}
+                mmss{"mm:ss"}
+                yyyyMM{"MM.yyyy"}
+                yyyyMMMM{"MMMM yyyy"}
+                yyyyQQQQ{"QQQQ yyyy 'г'."}
             }
             dayNames{
                 format{

@@ -115,6 +115,13 @@ be{
                 "d.M.yy",
                 "{1} {0}",
             }
+            availableFormats{
+                MMMMd{"d MMMM"}
+                Md{"d.M"}
+                mmss{"mm.ss"}
+                yyyyM{"M.yyyy"}
+                yyyyMMMM{"MMMM yyyy"}
+            }
             dayNames{
                 format{
                     abbreviated{

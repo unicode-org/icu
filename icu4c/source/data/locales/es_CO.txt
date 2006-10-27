@@ -31,6 +31,10 @@ es_CO{
                 "d/MM/yy",
                 "{1} {0}",
             }
+            availableFormats{
+                mmss{"mm:ss"}
+                yyyyMM{"MM/yyyy"}
+            }
         }
     }
 }

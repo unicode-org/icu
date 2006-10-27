@@ -322,6 +322,9 @@ lv{
                 "yy.d.M",
                 "{1} {0}",
             }
+            availableFormats{
+                Md{"d.M"}
+            }
             dayNames{
                 format{
                     abbreviated{

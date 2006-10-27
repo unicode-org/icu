@@ -112,6 +112,12 @@ pt_PT{
                 "yy/MM/dd",
                 "{1} {0}",
             }
+            availableFormats{
+                MMdd{"MM/dd"}
+                yyMMMEEEd{"EEE, d 'de' MMM 'de' yy"}
+                yyMMMd{"d 'de' MMM 'de' yy"}
+                yyyyMM{"yyyy/MM"}
+            }
             fields{
                 day{
                     dn{"Dia"}

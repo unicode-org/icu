@@ -5,7 +5,7 @@
 # *
 # ***************************************************************************
 # File: ThaiLogical_Latin.txt
-# Generated from CLDR: Thu Jul 20 16:27:19 PDT 2006
+# Generated from CLDR 
 #
 $notAbove = [^\p{ccc=0}\p{ccc=above}] ;
 $notBelow = [^\p{ccc=0}\p{ccc=below}] ;

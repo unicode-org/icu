@@ -5,7 +5,7 @@
 # *
 # ***************************************************************************
 # File: Kannada_Gurmukhi.txt
-# Generated from CLDR: Thu Jul 20 16:27:16 PDT 2006
+# Generated from CLDR 
 #
 ::[ಂ-ಃಅ-ಌಎ-ಐಒ-ನಪ-ಳವ-ಹ\u0CBCಽಾ-ೄ\u0CC6-ೈೊ-\u0CCDೕ-ೖೞೠ-ೡ೦-೯];
 ::NFD;

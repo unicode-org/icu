@@ -5,7 +5,7 @@
 # *
 # ***************************************************************************
 # File: Hebrew_Latin.txt
-# Generated from CLDR: Thu Jul 20 16:27:15 PDT 2006
+# Generated from CLDR 
 #
 :: [[:Hebrew:] [:^ccc=0:] [\u05B0-\u05B9\u05BB-\u05BC\u05C1-\u05C2ℵ-ℸ\u0304\u05BF] - [\u05BD]] ;
 :: nfkd (nfc) ;

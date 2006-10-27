@@ -38,7 +38,6 @@ sr{
         151{"Источна Европа"}
         155{"Западна Европа"}
         830{"Каналска острва"}
-        833{"Острво Ман"}
         AD{"Андора"}
         AE{"Уједињени Арапски Емирати"}
         AF{"Авганистан"}
@@ -135,6 +134,7 @@ sr{
         ID{"Индонезија"}
         IE{"Ирска"}
         IL{"Израел"}
+        IM{"Острво Ман"}
         IN{"Индија"}
         IQ{"Ирак"}
         IR{"Иран"}
@@ -537,7 +537,7 @@ sr{
             traditional{"Традиционално сортирање"}
         }
     }
-    Version{"1.69"}
+    Version{"1.71"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -550,6 +550,16 @@ sr{
                 "dd.MM.yyyy.",
                 "d.M.yy.",
                 "{1} {0}",
+            }
+            availableFormats{
+                MMMdd{"dd.MMM"}
+                MMdd{"MM-dd"}
+                hhmm{"hh:mm a"}
+                hhmmss{"hh:mm:ss a"}
+                mmss{"mm.ss"}
+                yyMM{"MM.yy"}
+                yyMMMd{"d. MMM yy"}
+                yyQQQQ{"QQQQ yy"}
             }
             dayNames{
                 format{

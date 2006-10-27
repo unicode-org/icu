@@ -36,6 +36,12 @@ haw_US{
                 "d/M/yy",
                 "{1} {0}",
             }
+            availableFormats{
+                MMMMd{"d MMMM"}
+                Md{"d/M"}
+                yyM{"M/yy"}
+                yyyyMMMM{"MMMM yyyy"}
+            }
         }
     }
 }

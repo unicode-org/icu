@@ -45,6 +45,14 @@ ms_BN{
                 "dd/MM/yyyy",
                 "{1} {0}",
             }
+            availableFormats{
+                Hmm{"H:mm"}
+                MMMMdd{"dd MMMM"}
+                MMdd{"dd/MM"}
+                mmss{"mm:ss"}
+                yyyyMM{"MM/yyyy"}
+                yyyyMMMM{"MMMM yyyy"}
+            }
         }
     }
 }

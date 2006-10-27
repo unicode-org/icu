@@ -35,6 +35,11 @@ en_SG{
                 "M/d/yy",
                 "{1} {0}",
             }
+            availableFormats{
+                MMMMdd{"dd MMMM"}
+                MMdd{"dd/MM"}
+                yyyyMMMM{"MMMM yyyy"}
+            }
         }
     }
 }

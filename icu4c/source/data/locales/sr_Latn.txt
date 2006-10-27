@@ -40,7 +40,6 @@ sr_Latn{
         154{"Severna Evropa"}
         155{"Zapadna Evropa"}
         830{"Kanalska ostrva"}
-        833{"Ostrvo Man"}
         AD{"Andora"}
         AE{"Ujedinjeni Arapski Emirati"}
         AF{"Avganistan"}
@@ -142,6 +141,7 @@ sr_Latn{
         ID{"Indonezija"}
         IE{"Irska"}
         IL{"Izrael"}
+        IM{"Ostrvo Man"}
         IN{"Indija"}
         IO{"British Indian Ocean Territory"}
         IQ{"Irak"}
@@ -538,7 +538,7 @@ sr_Latn{
             traditional{"Tradicionalno sortiranje"}
         }
     }
-    Version{"1.52"}
+    Version{"1.53"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -551,6 +551,9 @@ sr_Latn{
                 "dd.MM.yyyy.",
                 "d.M.yy.",
                 "{1} {0}",
+            }
+            availableFormats{
+                yyMMdd{"dd.MM.yy"}
             }
             dayNames{
                 format{
@@ -589,6 +592,10 @@ sr_Latn{
                 abbreviated{
                     "p. n. e.",
                     "n. e.",
+                }
+                wide{
+                    "Pre nove ere",
+                    "Nove ere",
                 }
             }
             monthNames{
@@ -656,6 +663,10 @@ sr_Latn{
                 }
             }
         }
+    }
+    messages{
+        nostr{"ne:n"}
+        yesstr{"da:d"}
     }
     zoneStrings{
         "Africa:Kinshasa"{

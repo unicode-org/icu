@@ -354,6 +354,11 @@ am{
                 "yy/MM/dd",
                 "{1} {0}",
             }
+            availableFormats{
+                MMMMd{"MMMM d"}
+                MMdd{"dd/MM"}
+                yyMM{"MM/yy"}
+            }
             dayNames{
                 format{
                     abbreviated{

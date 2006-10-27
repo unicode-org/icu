@@ -27,6 +27,10 @@ ru_UA{
                 "dd.MM.yy",
                 "{1} {0}",
             }
+            availableFormats{
+                MMMMd{"d MMMM"}
+                yyyyMMMM{"MMMM yyyy"}
+            }
         }
     }
 }

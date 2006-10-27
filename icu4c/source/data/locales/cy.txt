@@ -78,7 +78,7 @@ cy{
     Scripts{
         Latn{"Lladin"}
     }
-    Version{"1.41"}
+    Version{"1.42"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -91,6 +91,15 @@ cy{
                 "yyyy MMM d",
                 "yy/MM/dd",
                 "{1} {0}",
+            }
+            availableFormats{
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                MMdd{"MM-dd"}
+                hhmm{"hh:mm a"}
+                hhmmss{"hh:mm:ss a"}
+                yyMMdd{"yy-MM-dd"}
+                yyQQQQ{"QQQQ yy"}
             }
             dayNames{
                 format{

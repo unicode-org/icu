@@ -1801,6 +1801,11 @@ ko{
                 "yy. MM. dd",
                 "{1} {0}",
             }
+            availableFormats{
+                Hms{"H'시' m'분' s'초'"}
+                MMdd{"MM. dd"}
+                yyyyMM{"yyyy. MM"}
+            }
             dayNames{
                 format{
                     abbreviated{

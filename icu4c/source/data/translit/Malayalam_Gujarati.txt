@@ -5,7 +5,7 @@
 # *
 # ***************************************************************************
 # File: Malayalam_Gujarati.txt
-# Generated from CLDR: Thu Jul 20 16:27:18 PDT 2006
+# Generated from CLDR 
 #
 ::[ം-ഃഅ-ഌഎ-ഐഒ-നപ-ഹാ-\u0D43െ-ൈൊ-\u0D4Dൗൠ-ൡ൦-൯];
 ::NFD;

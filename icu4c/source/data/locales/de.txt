@@ -40,7 +40,6 @@ de{
         155{"Westeuropa"}
         419{"Lateinamerika und Karibik"}
         830{"Kanalinseln"}
-        833{"Insel Man"}
         AD{"Andorra"}
         AE{"Vereinigte Arabische Emirate"}
         AF{"Afghanistan"}
@@ -142,6 +141,7 @@ de{
         ID{"Indonesien"}
         IE{"Irland"}
         IL{"Israel"}
+        IM{"Insel Man"}
         IN{"Indien"}
         IO{"Britisches Territorium im Indischen Ozean"}
         IQ{"Irak"}
@@ -1795,7 +1795,7 @@ de{
         POSIX{"Posix"}
         REVISED{"Revidiert"}
     }
-    Version{"1.77"}
+    Version{"1.78"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1812,6 +1812,17 @@ de{
                 "dd.MM.yyyy",
                 "dd.MM.yy",
                 "{1} {0}",
+            }
+            availableFormats{
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                MMMMd{"d. MMMM"}
+                MMdd{"dd.MM"}
+                hhmm{"hh:mm a"}
+                hhmmss{"hh:mm:ss a"}
+                yyMM{"MM.yy"}
+                yyQQQQ{"QQQQ yy"}
+                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{

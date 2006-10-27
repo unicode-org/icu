@@ -15,7 +15,7 @@ fa_IR{
                 1,
             }
             weekend:intvector{
-                7,
+                5,
                 0,
                 6,
                 86400000,

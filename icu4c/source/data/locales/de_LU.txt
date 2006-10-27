@@ -45,6 +45,9 @@ de_LU{
                 "dd.MM.yy",
                 "{1} {0}",
             }
+            availableFormats{
+                yyMMdd{"dd.MM.yy"}
+            }
         }
     }
 }

@@ -5,7 +5,7 @@
 # *
 # ***************************************************************************
 # File: Bengali_InterIndic.txt
-# Generated from CLDR: Thu Jul 20 16:27:12 PDT 2006
+# Generated from CLDR 
 #
 ো>\uE04B; # VOWEL SIGN O
 ৌ>\uE04C; # VOWEL SIGN AU

@@ -196,6 +196,12 @@ af{
                 "yy/MM/dd",
                 "{1} {0}",
             }
+            availableFormats{
+                MMMMd{"d MMMM"}
+                MMdd{"MM-dd"}
+                yyyyMM{"yyyy-MM"}
+                yyyyMMMM{"MMMM yyyy"}
+            }
             dayNames{
                 format{
                     abbreviated{

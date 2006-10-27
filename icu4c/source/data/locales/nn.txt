@@ -43,7 +43,6 @@ nn{
         172{"Samveldet av uavhengige statar"}
         419{"Latin-Amerika og Karibia"}
         830{"Kanaløyane"}
-        833{"Man"}
         AD{"Andorra"}
         AE{"Dei sameinte arabiske emirata"}
         AF{"Afghanistan"}
@@ -145,6 +144,7 @@ nn{
         ID{"Indonesia"}
         IE{"Irland"}
         IL{"Israel"}
+        IM{"Man"}
         IN{"India"}
         IO{"Britiske områder i det indiske hav"}
         IQ{"Irak"}
@@ -937,7 +937,7 @@ nn{
         POLYTONI{"polytonisk"}
         REVISED{"revidert ortografi"}
     }
-    Version{"1.60"}
+    Version{"1.61"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -950,6 +950,13 @@ nn{
                 "d. MMM. yyyy",
                 "dd.MM.yy",
                 "{1} {0}",
+            }
+            availableFormats{
+                MMMMd{"d. MMMM"}
+                MMdd{"dd.MM"}
+                mmss{"mm.ss"}
+                yyMM{"MM.yy"}
+                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{

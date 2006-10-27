@@ -66,6 +66,13 @@ sv_SE{
                 "yyyy-MM-dd",
                 "{1} {0}",
             }
+            availableFormats{
+                MMMMEEEd{"EEE d MMMM"}
+                MMd{"d/MM"}
+                hhmm{"hh.mm a"}
+                hhmmss{"hh.mm.ss a"}
+                yyyyQQQQ{"QQQQ yyyy"}
+            }
             fields{
                 dayperiod{
                     dn{"tidsvisning"}

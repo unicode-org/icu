@@ -45,6 +45,11 @@ fr_CH{
                 "dd.MM.yy",
                 "{1} {0}",
             }
+            availableFormats{
+                MMdd{"dd.MM"}
+                yyMM{"MM.yy"}
+                yyMMMd{"d. MMM yy"}
+            }
         }
     }
 }

@@ -31,6 +31,12 @@ en_ZW{
                 "d/M/yyyy",
                 "{1} {0}",
             }
+            availableFormats{
+                MMMMdd{"dd MMMM"}
+                Md{"d/M"}
+                yyyyM{"M/yyyy"}
+                yyyyMMMM{"MMMM yyyy"}
+            }
         }
     }
 }

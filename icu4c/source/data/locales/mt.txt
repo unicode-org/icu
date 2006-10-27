@@ -39,7 +39,6 @@ mt{
         155{"Ewropa tal-Punent"}
         172{"Commonwealth tal-Istati Independenti"}
         419{"Amerika Latina u l-Karibew"}
-        833{"Isle of Man"}
         AD{"Andorra"}
         AE{"Emirati Għarab Maqgħuda"}
         AF{"Afganistan"}
@@ -140,6 +139,7 @@ mt{
         ID{"Indoneżja"}
         IE{"Irlanda"}
         IL{"Iżrael"}
+        IM{"Isle of Man"}
         IN{"Indja"}
         IO{"British Indian Ocean Territory"}
         IQ{"Iraq"}
@@ -805,7 +805,7 @@ mt{
     Variants{
         REVISED{"Ortografija Irriveda"}
     }
-    Version{"1.54"}
+    Version{"1.55"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -822,6 +822,12 @@ mt{
                 "dd MMM yyyy",
                 "dd/MM/yyyy",
                 "{1} {0}",
+            }
+            availableFormats{
+                MMMMd{"d 'ta’' MMMM"}
+                MMdd{"dd/MM"}
+                yyyyMM{"MM/yyyy"}
+                yyyyMMM{"MMM yyyy"}
             }
             dayNames{
                 format{

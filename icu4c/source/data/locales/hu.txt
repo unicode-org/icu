@@ -36,7 +36,6 @@ hu{
         154{"Észak-Európa"}
         155{"Nyugat-Európa"}
         830{"Csatorna-szigetek"}
-        833{"Man-sziget"}
         AD{"Andorra"}
         AE{"Egyesült Arab Emirátus"}
         AF{"Afganisztán"}
@@ -137,6 +136,7 @@ hu{
         ID{"Indonézia"}
         IE{"Írország"}
         IL{"Izrael"}
+        IM{"Man-sziget"}
         IN{"India"}
         IO{"Brit Indiai Oceán"}
         IQ{"Irak"}
@@ -1474,7 +1474,7 @@ hu{
             traditional{"Hagyományos"}
         }
     }
-    Version{"1.69"}
+    Version{"1.70"}
     calendar{
         buddhist{
             eras{
@@ -1498,6 +1498,13 @@ hu{
                 "yyyy.MM.dd.",
                 "yyyy.MM.dd.",
                 "{1} {0}",
+            }
+            availableFormats{
+                MMMMd{"MMMM d."}
+                MMdd{"MM.dd."}
+                mmss{"mm:ss"}
+                yyyyMM{"yyyy.MM"}
+                yyyyMMMM{"yyyy. MMMM"}
             }
             dayNames{
                 format{

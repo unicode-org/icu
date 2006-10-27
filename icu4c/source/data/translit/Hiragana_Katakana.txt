@@ -5,7 +5,7 @@
 # *
 # ***************************************************************************
 # File: Hiragana_Katakana.txt
-# Generated from CLDR: Thu Jul 20 16:27:15 PDT 2006
+# Generated from CLDR 
 #
 :: [\u0000-\u007E 、。 \u3099-゜ ァ-ー ｡-ﾟー[:Hiragana:] [:Katakana:] [:nonspacing mark:]] ;
 :: NFKC ();

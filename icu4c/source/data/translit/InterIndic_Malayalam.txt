@@ -5,7 +5,7 @@
 # *
 # ***************************************************************************
 # File: InterIndic_Malayalam.txt
-# Generated from CLDR: Thu Jul 20 16:27:16 PDT 2006
+# Generated from CLDR 
 #
 \uE001>ം; # REMAP (indicExceptions.txt): \u0D01>ം = SIGN CANDRABINDU>SIGN ANUSVARA
 \uE002>ം; # SIGN ANUSVARA

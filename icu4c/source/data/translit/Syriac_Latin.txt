@@ -5,7 +5,7 @@
 # *
 # ***************************************************************************
 # File: Syriac_Latin.txt
-# Generated from CLDR: Thu Jul 20 16:27:18 PDT 2006
+# Generated from CLDR 
 #
 ܫ <> sh;
 ܞ > yh;

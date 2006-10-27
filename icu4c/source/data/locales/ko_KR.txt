@@ -39,6 +39,9 @@ ko_KR{
                 "yy. MM. dd",
                 "{1} {0}",
             }
+            availableFormats{
+                yyQ{"yy'년도 제'Q'사분기'"}
+            }
         }
     }
     delimiters{

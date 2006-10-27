@@ -1794,6 +1794,12 @@ pt{
                 "dd-MM-yyyy",
                 "{1} {0}",
             }
+            availableFormats{
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                yyyyMM{"MM-yyyy"}
+                yyyyMMM{"MMM/yyyy"}
+            }
             dayNames{
                 format{
                     abbreviated{

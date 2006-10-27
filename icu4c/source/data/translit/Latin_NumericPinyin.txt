@@ -5,7 +5,7 @@
 # *
 # ***************************************************************************
 # File: Latin_NumericPinyin.txt
-# Generated from CLDR: Thu Jul 20 16:27:18 PDT 2006
+# Generated from CLDR 
 #
 ::NFD (NFC);
 $tone = [\u0304\u0301\u030C\u0300\u0306] ;

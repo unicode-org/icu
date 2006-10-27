@@ -43,7 +43,6 @@ fi{
         172{"Itsenäisten valtioiden yhteisö"}
         419{"Latinalainen Amerikka ja Karibia"}
         830{"Kanaalisaaret"}
-        833{"Mansaari"}
         AD{"Andorra"}
         AE{"Arabiemiirikunnat"}
         AF{"Afganistan"}
@@ -145,6 +144,7 @@ fi{
         ID{"Indonesia"}
         IE{"Irlanti"}
         IL{"Israel"}
+        IM{"Mansaari"}
         IN{"Intia"}
         IO{"Brittiläinen Intian valtameren alue"}
         IQ{"Irak"}
@@ -1992,7 +1992,7 @@ fi{
         ROZAJ{"sloveenin resia-murre"}
         SAAHO{"afarin saho-murre"}
     }
-    Version{"1.75"}
+    Version{"1.76"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2009,6 +2009,15 @@ fi{
                 "d.M.yyyy",
                 "d.M.yyyy",
                 "{1} {0}",
+            }
+            availableFormats{
+                MMMMd{"d. MMMM'ta'"}
+                Md{"d.M"}
+                mmss{"mm.ss"}
+                yyyyM{"M.yyyy"}
+                yyyyMEEEd{"EEE d.M.yyyy"}
+                yyyyMMMM{"MMMM'ta 'yyyy"}
+                yyyyQQQQ{"QQQQ yyyy"}
             }
             dayNames{
                 format{

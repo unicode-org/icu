@@ -5,7 +5,7 @@
 # *
 # ***************************************************************************
 # File: Bengali_Kannada.txt
-# Generated from CLDR: Thu Jul 20 16:27:12 PDT 2006
+# Generated from CLDR 
 #
 ::[।-॥\u0981-ঃঅ-ঌএ-ঐও-নপ-রলশ-হ\u09BC-\u09C4ে-ৈো-\u09CDৗড়-ঢ়য়-\u09E3০-৺ৎ];
 ::NFD;

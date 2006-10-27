@@ -5,7 +5,7 @@
 # *
 # ***************************************************************************
 # File: Malayalam_InterIndic.txt
-# Generated from CLDR: Thu Jul 20 16:27:18 PDT 2006
+# Generated from CLDR 
 #
 ം>\uE002;      # SIGN ANUSVARA
 ഃ>\uE003;      # SIGN VISARGA

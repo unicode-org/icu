@@ -1729,6 +1729,13 @@ da{
                 "dd/MM/yy",
                 "{1} {0}",
             }
+            availableFormats{
+                MMMd{"d. MMM"}
+                MMdd{"dd/MM"}
+                mmss{"mm.ss"}
+                yyyyMM{"MM/yyyy"}
+                yyyyMMM{"MMM yyyy"}
+            }
             dayNames{
                 format{
                     abbreviated{

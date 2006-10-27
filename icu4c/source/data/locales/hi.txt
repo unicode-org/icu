@@ -416,6 +416,17 @@ hi{
                 "yy/MM/dd",
                 "{1} {0}",
             }
+            availableFormats{
+                GGGGyMMMMEEEEdd{"EEEE,dd MMMM GGGGy"}
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                MMMdd{"MMM dd"}
+                hhmm{"hh:mm a"}
+                hhmmss{"hh:mm:ss a"}
+                yyMMMEEEd{"EEE, MMM d, yy"}
+                yyMMMd{"MMM d, yy"}
+                yyMMdd{"dd-MM-yy"}
+            }
             dayNames{
                 format{
                     abbreviated{

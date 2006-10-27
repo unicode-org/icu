@@ -37,7 +37,6 @@ pl{
         154{"Europa Północna"}
         155{"Europa Zachodnia"}
         830{"Wyspy Normandzkie"}
-        833{"Wyspa Man"}
         AD{"Andora"}
         AE{"Zjednoczone Emiraty Arabskie"}
         AF{"Afganistan"}
@@ -139,6 +138,7 @@ pl{
         ID{"Indonezja"}
         IE{"Irlandia"}
         IL{"Izrael"}
+        IM{"Wyspa Man"}
         IN{"Indie"}
         IO{"Terytorium Brytyjskie Oceanu Indyjskiego"}
         IQ{"Irak"}
@@ -1337,7 +1337,7 @@ pl{
             traditional{"tradycyjny"}
         }
     }
-    Version{"1.71"}
+    Version{"1.72"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1350,6 +1350,16 @@ pl{
                 "yyyy-MM-dd",
                 "yy-MM-dd",
                 "{1} {0}",
+            }
+            availableFormats{
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                MMMMd{"d MMMM"}
+                MMdd{"MM-dd"}
+                hhmm{"hh:mm a"}
+                hhmmss{"hh:mm:ss a"}
+                yyyyMM{"yyyy-MM"}
+                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{

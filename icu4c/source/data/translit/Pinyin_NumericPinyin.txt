@@ -5,7 +5,7 @@
 # *
 # ***************************************************************************
 # File: Pinyin_NumericPinyin.txt
-# Generated from CLDR: Thu Jul 20 16:27:18 PDT 2006
+# Generated from CLDR 
 #
 \u0304 <> 1;
 \u0301 <> 2;
