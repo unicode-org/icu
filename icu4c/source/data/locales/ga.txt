@@ -1367,6 +1367,10 @@ ga{
                 "yy/MM/dd",
                 "{1} {0}",
             }
+            availableFormats{
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+            }
             dayNames{
                 format{
                     abbreviated{

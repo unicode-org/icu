@@ -169,8 +169,8 @@ ml{
             "ബാര്‍ബഡോസ് ഡോളര്‍",
         }
         BEL{
-            "ബല്‍ജിയന്‍ ഫ്രാങ്ക്",
             "BEL",
+            "ബല്‍ജിയന്‍ ഫ്രാങ്ക്",
         }
         BGN{
             "BGN",
@@ -379,7 +379,7 @@ ml{
         Orya{"ഒറിയ"}
         Taml{"തമിഴ്"}
     }
-    Version{"1.27"}
+    Version{"1.28"}
     calendar{
         gregorian{
             AmPmMarkers{

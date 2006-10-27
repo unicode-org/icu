@@ -248,6 +248,10 @@ hy{
                 "MM/dd/yy",
                 "{1} {0}",
             }
+            availableFormats{
+                MMMMdd{"MMMM dd"}
+                MMdd{"MM/dd"}
+            }
             dayNames{
                 format{
                     abbreviated{

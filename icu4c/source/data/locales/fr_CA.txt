@@ -41,6 +41,10 @@ fr_CA{
                 "yy-MM-dd",
                 "{1} {0}",
             }
+            availableFormats{
+                MMdd{"MM-dd"}
+                yyMM{"yy-MM"}
+            }
         }
     }
 }

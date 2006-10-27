@@ -205,6 +205,9 @@ root{
                 Week{"{0} ({2}: {1})"}
                 Year{"{0} {1}"}
             }
+            availableFormats{
+                yyQ{"Q yy"}
+            }
             dayNames{
                 default{"format"}
                 format{

@@ -31,6 +31,12 @@ en_NZ{
                 "d/MM/yy",
                 "{1} {0}",
             }
+            availableFormats{
+                MMMMd{"d MMMM"}
+                MMd{"d/MM"}
+                yyyyMM{"MM/yyyy"}
+                yyyyMMMM{"MMMM yyyy"}
+            }
         }
     }
 }

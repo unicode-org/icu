@@ -185,6 +185,7 @@ structLocale:table(nofallback){
         MA{""}
         MC{""}
         MD{""}
+        ME{""}
         MG{""}
         MH{""}
         MK{""}
@@ -236,6 +237,7 @@ structLocale:table(nofallback){
         QU{""}
         RE{""}
         RO{""}
+        RS{""}
         RU{""}
         RW{""}
         SA{""}
@@ -1702,6 +1704,7 @@ structLocale:table(nofallback){
         non{""}
         nr{""}
         nso{""}
+        nqo{""}
         nub{""}
         nv{""}
         nwc{""}
@@ -1867,6 +1870,7 @@ structLocale:table(nofallback){
         zu{""}
         zun{""}
         zxx{""}
+        zza{""}
     }
     LocaleScript{
         "",
@@ -1909,6 +1913,7 @@ structLocale:table(nofallback){
         Bugi{""}
         Buhd{""}
         Cans{""}
+        Cari{""}
         Cham{""}
         Cher{""}
         Cirt{""}
@@ -1942,11 +1947,13 @@ structLocale:table(nofallback){
         Inds{""}
         Ital{""}
         Java{""}
+        Jpan{""}
         Kali{""}
         Kana{""}
         Khar{""}
         Khmr{""}
         Knda{""}
+        Lana{""}
         Laoo{""}
         Latf{""}
         Latg{""}
@@ -1955,6 +1962,8 @@ structLocale:table(nofallback){
         Limb{""}
         Lina{""}
         Linb{""}
+        Lyci{""}
+        Lydi{""}
         Mand{""}
         Maya{""}
         Mero{""}
@@ -1963,6 +1972,7 @@ structLocale:table(nofallback){
         Mymr{""}
         Nkoo{""}
         Ogam{""}
+        Olck{""}
         Orkh{""}
         Orya{""}
         Osma{""}
@@ -1971,11 +1981,15 @@ structLocale:table(nofallback){
         Phnx{""}
         Plrd{""}
         Qaai{""}
+        Rjng{""}
         Roro{""}
         Runr{""}
         Sara{""}
+        Saur{""}
+        Sgnw{""}
         Shaw{""}
         Sinh{""}
+        Sund{""}
         Sylo{""}
         Syrc{""}
         Syre{""}
@@ -2026,6 +2040,8 @@ structLocale:table(nofallback){
     Variants{
         1901{""}
         1996{""}
+        AREVELA{""}
+        AREVMDA{""}
         POSIX{""}
         POLYTONI{""}
         REVISED{""}

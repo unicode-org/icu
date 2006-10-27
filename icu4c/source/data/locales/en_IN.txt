@@ -27,6 +27,11 @@ en_IN{
                 "dd/MM/yy",
                 "{1} {0}",
             }
+            availableFormats{
+                MMMMd{"d MMMM"}
+                MMdd{"dd/MM"}
+                yyyyMMMM{"MMMM yyyy"}
+            }
             weekend:intvector{
                 1,
                 0,

@@ -37,7 +37,6 @@ el{
         154{"Βόρεια Ευρώπη"}
         155{"Δυτική Ευρώπη"}
         830{"Νήσοι Καναλιού"}
-        833{"Νήσος Μαν"}
         AD{"Ανδόρα"}
         AE{"Ηνωμένα Αραβικά Εμιράτα"}
         AF{"Αφγανιστάν"}
@@ -139,6 +138,7 @@ el{
         ID{"Ινδονησία"}
         IE{"Ιρλανδία"}
         IL{"Ισραήλ"}
+        IM{"Νήσος Μαν"}
         IN{"Ινδία"}
         IO{"Βρετανικά Έδάφη Ινδικού Ωκεανού"}
         IQ{"Ιράκ"}
@@ -1358,7 +1358,7 @@ el{
             traditional{"Παραδοσιακή"}
         }
     }
-    Version{"1.68"}
+    Version{"1.69"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1375,6 +1375,15 @@ el{
                 "dd MMM yyyy",
                 "dd/MM/yyyy",
                 "{1} {0}",
+            }
+            availableFormats{
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                MMMMdd{"dd MMMM"}
+                MMdd{"dd/MM"}
+                yyQQQQ{"QQQQ yy"}
+                yyyyMM{"MM/yyyy"}
+                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{

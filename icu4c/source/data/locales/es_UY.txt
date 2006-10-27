@@ -33,6 +33,9 @@ es_UY{
                 "dd/MM/yy",
                 "{1} {0}",
             }
+            availableFormats{
+                yyyyMM{"MM/yyyy"}
+            }
         }
     }
 }

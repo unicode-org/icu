@@ -39,6 +39,12 @@ fr_BE{
                 "d/MM/yy",
                 "{1} {0}",
             }
+            availableFormats{
+                MMMdd{"dd-MMM"}
+                MMd{"d/MM"}
+                yyMMM{"MMM-yy"}
+                yyMMMEEEd{"EEE d MMM yy"}
+            }
         }
     }
 }

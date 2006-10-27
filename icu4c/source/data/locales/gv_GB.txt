@@ -27,6 +27,14 @@ gv_GB{
                 "dd/MM/yy",
                 "{1} {0}",
             }
+            availableFormats{
+                HHmm{"HH:mm"}
+                MMMMdd{"dd MMMM"}
+                MMdd{"dd/MM"}
+                mmss{"mm:ss"}
+                yyMM{"MM/yy"}
+                yyyyMMMM{"MMMM yyyy"}
+            }
         }
     }
 }

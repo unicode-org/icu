@@ -1888,6 +1888,12 @@ ar{
                 "d/M/yyyy",
                 "{1} {0}",
             }
+            availableFormats{
+                MMMMd{"d MMMM"}
+                MMdd{"dd/MM"}
+                yyyyMM{"MM/yyyy"}
+                yyyyMMMM{"MMMM, yyyy"}
+            }
             dayNames{
                 format{
                     abbreviated{

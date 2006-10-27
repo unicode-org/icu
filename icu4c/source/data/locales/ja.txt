@@ -43,7 +43,6 @@ ja{
         172{"独立国家共同体"}
         419{"ラテンアメリカ・カリブ地域"}
         830{"チャネル諸島"}
-        833{"マン島"}
         AD{"アンドラ"}
         AE{"アラブ首長国連邦"}
         AF{"アフガニスタン"}
@@ -145,6 +144,7 @@ ja{
         ID{"インドネシア"}
         IE{"アイルランド"}
         IL{"イスラエル"}
+        IM{"マン島"}
         IN{"インド"}
         IO{"英領インド洋植民地"}
         IQ{"イラク"}
@@ -1950,7 +1950,7 @@ ja{
         POSIX{"コンピュータ"}
         REVISED{"改訂版"}
     }
-    Version{"1.89"}
+    Version{"1.90"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1967,6 +1967,12 @@ ja{
                 "yyyy/MM/dd",
                 "yy/MM/dd",
                 "{1} {0}",
+            }
+            availableFormats{
+                GGGGyMd{"GGGGy'年'M'月'd'日'"}
+                MMdd{"MM/dd"}
+                mmss{"mm:ss"}
+                yyyyMM{"yyyy/MM"}
             }
             dayNames{
                 format{

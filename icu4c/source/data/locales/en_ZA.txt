@@ -25,6 +25,12 @@ en_ZA{
                 "yyyy/MM/dd",
                 "{1} {0}",
             }
+            availableFormats{
+                MMMMdd{"dd MMMM"}
+                MMdd{"MM/dd"}
+                yyyyMM{"yyyy/MM"}
+                yyyyMMMM{"MMMM yyyy"}
+            }
         }
     }
 }

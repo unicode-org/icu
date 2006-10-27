@@ -41,6 +41,11 @@ es_ES{
                 "dd/MM/yy",
                 "{1} {0}",
             }
+            availableFormats{
+                MMdd{"dd/MM"}
+                mmss{"mm:ss"}
+                yyyyMM{"MM/yyyy"}
+            }
         }
     }
 }

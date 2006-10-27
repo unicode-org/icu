@@ -4,7 +4,7 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 2005-2006, International Business Machines Corporation and         *
+* Copyright (C) 2005-2006, International Business Machines Corporation and    *    
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -276,7 +276,7 @@
                 <include name="brkfiles.mk" />
             </fileset>
             <fileset id="locales" dir="${env.ICU4C_DIR}/source/data/misc">
-                <include name="CurrencyData.txt" />
+                <include name="supplementalData.txt" />
             </fileset>
         </delete>
     </target>

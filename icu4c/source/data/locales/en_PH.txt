@@ -37,6 +37,9 @@ en_PH{
                 "M/d/yy",
                 "{1} {0}",
             }
+            availableFormats{
+                MMd{"MM d"}
+            }
         }
     }
 }

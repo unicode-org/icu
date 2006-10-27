@@ -5,7 +5,7 @@
 # *
 # ***************************************************************************
 # File: Telugu_InterIndic.txt
-# Generated from CLDR: Thu Jul 20 16:27:18 PDT 2006
+# Generated from CLDR 
 #
 \u0C46\u0C4D\u0C56>\uE048\uE04D;
 \u0C46\u0C56>\uE048;# VOWEL SIGN AI

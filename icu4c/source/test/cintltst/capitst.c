@@ -1230,7 +1230,7 @@ void TestGetLocale() {
     const char* validLocale;
     const char* actualLocale;
   } testStruct[] = {
-    { "sr_YU", "sr_YU", "ru" },
+    { "sr_RS", "sr_RS", "ru" },
     { "sh_YU", "sh_YU", "hr" }, /* this used to be sh, but now sh collation aliases hr */
     { "en_BE_FOO", "en_BE", "en_BE" },
     { "fr_FR_NONEXISTANT", "fr_FR", "fr" }
@@ -1245,7 +1245,7 @@ void TestGetLocale() {
       ucol_close(coll);
       continue;
     }
-    locale = ucol_getLocale(coll, ULOC_REQUESTED_LOCALE, &status);
+   locale = ucol_getLocale(coll, ULOC_REQUESTED_LOCALE, &status);
     if(strcmp(locale, testStruct[i].requestedLocale) != 0) {
       log_err("[Coll %s]: Error in requested locale, expected %s, got %s\n", testStruct[i].requestedLocale, testStruct[i].requestedLocale, locale);
     }

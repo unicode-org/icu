@@ -8,12 +8,4 @@
 // ***************************************************************************
 zh_SG{
     "%%ALIAS"{"zh_Hans_SG"}
-    calendar{
-        gregorian{
-            DateTimeElements:intvector{
-                1,
-                1,
-            }
-        }
-    }
 }

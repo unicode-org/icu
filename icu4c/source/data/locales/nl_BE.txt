@@ -9,7 +9,7 @@
 nl_BE{
     Countries{
         172{"Gemenebest van Onafhankelijke Staten"}
-        833{"Het Eiland Man"}
+        IM{"Het Eiland Man"}
     }
     Languages{
         lv{"Lets"}
@@ -28,7 +28,7 @@ nl_BE{
             traditional{"Traditioneel"}
         }
     }
-    Version{"1.49"}
+    Version{"1.51"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -45,6 +45,12 @@ nl_BE{
                 "d-MMM-yy",
                 "d/MM/yy",
                 "{1} {0}",
+            }
+            availableFormats{
+                MMMd{"d-MMM"}
+                MMd{"d/MM"}
+                yyMM{"MM/yy"}
+                yyMMM{"MMM-yy"}
             }
         }
     }

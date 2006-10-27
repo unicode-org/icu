@@ -9,7 +9,7 @@
 /**
  * validSubLocale of "sr"
  */
-sr_YU{
+sr_RS{
     /**
      * so genrb doesn't issue warnings
      */

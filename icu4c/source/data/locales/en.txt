@@ -186,6 +186,7 @@ en{
         MA{"Morocco"}
         MC{"Monaco"}
         MD{"Moldova"}
+        ME{"Montenegro"}
         MG{"Madagascar"}
         MH{"Marshall Islands"}
         MK{"Macedonia"}
@@ -236,6 +237,7 @@ en{
         QU{"European Union"}
         RE{"Reunion"}
         RO{"Romania"}
+        RS{"Serbia"}
         RU{"Russia"}
         RW{"Rwanda"}
         SA{"Saudi Arabia"}
@@ -946,6 +948,10 @@ en{
         }
         MZM{
             "Mt",
+            "Old Mozambique Metical",
+        }
+        MZN{
+            "MTn",
             "Mozambique Metical",
         }
         NAD{
@@ -1684,6 +1690,7 @@ en{
         no{"Norwegian"}
         nog{"Nogai"}
         non{"Norse, Old"}
+        nqo{"N’Ko"}
         nr{"South Ndebele"}
         nso{"Northern Sotho"}
         nub{"Nubian Languages"}
@@ -1821,7 +1828,7 @@ en{
         uga{"Ugaritic"}
         uk{"Ukrainian"}
         umb{"Umbundu"}
-        und{"Undetermined"}
+        und{"Unknown or Invalid Language"}
         ur{"Urdu"}
         uz{"Uzbek"}
         vai{"Vai"}
@@ -1851,6 +1858,7 @@ en{
         zu{"Zulu"}
         zun{"Zuni"}
         zxx{"No linguistic content"}
+        zza{"Zaza"}
     }
     LocaleScript{
         "Latn",
@@ -1874,6 +1882,7 @@ en{
         Bugi{"Buginese"}
         Buhd{"Buhid"}
         Cans{"Unified Canadian Aboriginal Symbols"}
+        Cari{"Carian"}
         Cham{"Cham"}
         Cher{"Cherokee"}
         Cirt{"Cirth"}
@@ -1907,11 +1916,13 @@ en{
         Inds{"Indus (Harappan)"}
         Ital{"Old Italic"}
         Java{"Javanese"}
+        Jpan{"Japanese"}
         Kali{"Kayah Li"}
         Kana{"Katakana"}
         Khar{"Kharoshthi"}
         Khmr{"Khmer"}
         Knda{"Kannada"}
+        Lana{"Lanna"}
         Laoo{"Lao"}
         Latf{"Latin (Fraktur variant)"}
         Latg{"Latin (Gaelic variant)"}
@@ -1920,6 +1931,8 @@ en{
         Limb{"Limbu"}
         Lina{"Linear A"}
         Linb{"Linear B"}
+        Lyci{"Lycian"}
+        Lydi{"Lydian"}
         Mand{"Mandaean"}
         Maya{"Mayan hieroglyphs"}
         Mero{"Meroitic"}
@@ -1928,6 +1941,7 @@ en{
         Mymr{"Myanmar"}
         Nkoo{"N’Ko"}
         Ogam{"Ogham"}
+        Olck{"Ol Chiki"}
         Orkh{"Orkhon"}
         Orya{"Oriya"}
         Osma{"Osmanya"}
@@ -1936,11 +1950,15 @@ en{
         Phnx{"Phoenician"}
         Plrd{"Pollard Phonetic"}
         Qaai{"Inherited"}
+        Rjng{"Rejang"}
         Roro{"Rongorongo"}
         Runr{"Runic"}
         Sara{"Sarati"}
+        Saur{"Saurashtra"}
+        Sgnw{"SignWriting"}
         Shaw{"Shavian"}
         Sinh{"Sinhala"}
+        Sund{"Sundanese"}
         Sylo{"Syloti Nagri"}
         Syrc{"Syriac"}
         Syre{"Syriac (Estrangelo variant)"}
@@ -1963,9 +1981,9 @@ en{
         Xpeo{"Old Persian"}
         Xsux{"Sumero-Akkadian Cuneiform"}
         Yiii{"Yi"}
-        Zxxx{"Code for unwritten languages"}
+        Zxxx{"Unwritten"}
         Zyyy{"Common"}
-        Zzzz{"Code for uncoded script"}
+        Zzzz{"Unknown or Invalid Script"}
     }
     Types{
         calendar{
@@ -1990,6 +2008,8 @@ en{
     Variants{
         1901{"Traditional German orthography"}
         1996{"German orthography of 1996"}
+        AREVELA{"Eastern Armenian"}
+        AREVMDA{"Western Armenian"}
         BOONT{"Boontling"}
         GAULISH{"Gaulish"}
         GUOYU{"Mandarin or Standard Chinese"}
@@ -2004,7 +2024,7 @@ en{
         SCOUSE{"Scouse"}
         XIANG{"Xiang or Hunanese"}
     }
-    Version{"1.109"}
+    Version{"1.113"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -2017,6 +2037,16 @@ en{
                 "MMM d, yyyy",
                 "M/d/yy",
                 "{1} {0}",
+            }
+            availableFormats{
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                MMMMd{"MMMM d"}
+                Md{"M/d"}
+                mmss{"mm:ss"}
+                yyMM{"MM/yy"}
+                yyQQQQ{"QQQQ yy"}
+                yyyyMMM{"MMM yyyy"}
             }
             dayNames{
                 format{

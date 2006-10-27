@@ -1944,7 +1944,7 @@ nb{
         POLYTONI{"polytonisk"}
         REVISED{"revidert ortografi"}
     }
-    Version{"1.69"}
+    Version{"1.70"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1961,6 +1961,14 @@ nb{
                 "d. MMM. yyyy",
                 "dd.MM.yy",
                 "{1} {0}",
+            }
+            availableFormats{
+                MMMMd{"d. MMMM"}
+                MMdd{"dd.MM"}
+                mmss{"mm.ss"}
+                yyMM{"MM.yy"}
+                yyQQQQ{"QQQQ yy"}
+                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{

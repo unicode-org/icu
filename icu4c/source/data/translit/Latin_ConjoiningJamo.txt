@@ -5,7 +5,7 @@
 # *
 # ***************************************************************************
 # File: Latin_ConjoiningJamo.txt
-# Generated from CLDR: Thu Jul 20 16:27:17 PDT 2006
+# Generated from CLDR 
 #
 $Gi = ᄀ;
 $GGi = ᄁ;

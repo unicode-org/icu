@@ -45,6 +45,12 @@ om_ET{
                 "dd/MM/yy",
                 "{1} {0}",
             }
+            availableFormats{
+                MMMMdd{"dd MMMM"}
+                MMdd{"dd/MM"}
+                yyMM{"MM/yy"}
+                yyyyMMMM{"MMMM yyyy"}
+            }
         }
     }
 }

@@ -5,7 +5,7 @@
 # *
 # ***************************************************************************
 # File: InterIndic_Tamil.txt
-# Generated from CLDR: Thu Jul 20 16:27:16 PDT 2006
+# Generated from CLDR 
 #
 \uE001>\u0B82; # FALLBACK SIGN CANDRABINDU
 \uE002>\u0B82; # SIGN ANUSVARA
