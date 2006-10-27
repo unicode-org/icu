@@ -5,7 +5,7 @@
 # *
 # ***************************************************************************
 # File: Devanagari_InterIndic.txt
-# Generated from CLDR: Thu Jul 20 16:27:13 PDT 2006
+# Generated from CLDR 
 #
 \u0901>\uE001;  # SIGN CANDRABINDU
 \u0902>\uE002;  # SIGN ANUSVARA

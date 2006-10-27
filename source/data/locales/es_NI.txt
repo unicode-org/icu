@@ -35,6 +35,9 @@ es_NI{
                 "dd/MM/yy",
                 "{1} {0}",
             }
+            availableFormats{
+                yyyyMM{"MM/yyyy"}
+            }
         }
     }
 }

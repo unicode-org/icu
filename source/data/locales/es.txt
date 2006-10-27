@@ -1941,6 +1941,17 @@ es{
                 "d/MM/yy",
                 "{1} {0}",
             }
+            availableFormats{
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                MMMdd{"dd-MMM"}
+                MMd{"d/MM"}
+                hhmm{"hh:mm a"}
+                hhmmss{"hh:mm:ss a"}
+                yyMM{"MM/yy"}
+                yyMMM{"MMM-yy"}
+                yyQQQQ{"QQQQ yy"}
+            }
             dayNames{
                 format{
                     abbreviated{

@@ -11,12 +11,4 @@
  */
 uz_UZ{
     "%%ALIAS"{"uz_Cyrl_UZ"}
-    calendar{
-        gregorian{
-            DateTimeElements:intvector{
-                1,
-                1,
-            }
-        }
-    }
 }

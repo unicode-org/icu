@@ -11,12 +11,4 @@
  */
 az_AZ{
     "%%ALIAS"{"az_Latn_AZ"}
-    calendar{
-        gregorian{
-            DateTimeElements:intvector{
-                1,
-                1,
-            }
-        }
-    }
 }

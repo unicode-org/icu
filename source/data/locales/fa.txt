@@ -1063,6 +1063,16 @@ fa{
             appendItems{
                 Day-Of-Week{"{1} {0}"}
             }
+            availableFormats{
+                GGGGyyyyMMMMd{"d MMMM yyyy GGGG"}
+                HHmmZ{"HH:mm (Z)"}
+                MMMMd{"d MMMM"}
+                Md{"M/d"}
+                mmss{"mm:ss"}
+                yyyyM{"yyyy/M"}
+                yyyyMMMM{"MMMM yyyy"}
+                yyyyMMMMEEEEd{"EEEE d MMMM yyyy"}
+            }
             dayNames{
                 format{
                     abbreviated{

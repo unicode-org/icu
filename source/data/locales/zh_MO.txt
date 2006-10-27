@@ -8,12 +8,4 @@
 // ***************************************************************************
 zh_MO{
     "%%ALIAS"{"zh_Hant_MO"}
-    calendar{
-        gregorian{
-            DateTimeElements:intvector{
-                1,
-                1,
-            }
-        }
-    }
 }

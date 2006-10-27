@@ -13,7 +13,7 @@ bg_BG{
         "#,##0%",
         "#E0",
     }
-    Version{"1.42"}
+    Version{"1.43"}
     delimiters{
         alternateQuotationEnd{"„"}
         alternateQuotationStart{"“"}

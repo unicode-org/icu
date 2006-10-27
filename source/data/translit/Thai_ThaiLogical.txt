@@ -5,7 +5,7 @@
 # *
 # ***************************************************************************
 # File: Thai_ThaiLogical.txt
-# Generated from CLDR: Thu Jul 20 16:27:19 PDT 2006
+# Generated from CLDR 
 #
 $thai = [[:thai:] ก-\u0E3Aเ-๛] ;
 ' '  < $thai { '; '  } $thai;

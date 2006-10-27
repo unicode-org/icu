@@ -27,6 +27,14 @@ kw_GB{
                 "dd/MM/yyyy",
                 "{1} {0}",
             }
+            availableFormats{
+                HHmm{"HH:mm"}
+                MMMMd{"d MMMM"}
+                MMdd{"dd/MM"}
+                mmss{"mm:ss"}
+                yyyyMM{"MM/yyyy"}
+                yyyyMMMM{"MMMM yyyy"}
+            }
         }
     }
 }

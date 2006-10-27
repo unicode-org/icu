@@ -37,6 +37,11 @@ de_BE{
                 "d/MM/yy",
                 "{1} {0}",
             }
+            availableFormats{
+                MMMMd{"d MMMM"}
+                MMd{"d/MM"}
+                yyMM{"MM/yy"}
+            }
             dayNames{
                 format{
                     abbreviated{

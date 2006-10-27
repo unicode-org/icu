@@ -178,6 +178,12 @@ fo{
                 "dd-MM-yy",
                 "{1} {0}",
             }
+            availableFormats{
+                MMMd{"d. MMM"}
+                MMdd{"dd-MM"}
+                yyyyMM{"MM-yyyy"}
+                yyyyMMM{"MMM yyyy"}
+            }
             dayNames{
                 format{
                     abbreviated{

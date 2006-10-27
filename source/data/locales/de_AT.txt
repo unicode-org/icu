@@ -25,6 +25,10 @@ de_AT{
                 "dd.MM.yy",
                 "{1} {0}",
             }
+            availableFormats{
+                MMMMdd{"dd. MMMM"}
+                yyMMdd{"dd.MM.yy"}
+            }
             monthNames{
                 format{
                     abbreviated{

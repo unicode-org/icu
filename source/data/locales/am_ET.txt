@@ -41,6 +41,10 @@ am_ET{
                 "yy/MM/dd",
                 "{1} {0}",
             }
+            availableFormats{
+                MMMMdd{"dd MMMM"}
+                yyyyMMMM{"MMMM yyyy"}
+            }
         }
     }
 }

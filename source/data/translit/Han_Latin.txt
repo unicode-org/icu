@@ -5,7 +5,7 @@
 # *
 # ***************************************************************************
 # File: Han_Latin.txt
-# Generated from CLDR: Thu Jul 20 16:27:15 PDT 2006
+# Generated from CLDR 
 #
 ::Han-Spacedhan();
 [吖呵錒锕阿]>ā;

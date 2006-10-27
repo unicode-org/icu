@@ -39,7 +39,6 @@ sk{
         155{"Západná Európa"}
         200{"Československo"}
         830{"Kanál La Manche"}
-        833{"Ostrov Man"}
         AD{"Andorra"}
         AE{"Spojené arabské emiráty"}
         AF{"Afganistan"}
@@ -141,6 +140,7 @@ sk{
         ID{"Indonézia"}
         IE{"Írsko"}
         IL{"Izrael"}
+        IM{"Ostrov Man"}
         IN{"India"}
         IO{"Britské územie v Indickom oceáne"}
         IQ{"Irak"}
@@ -1311,7 +1311,7 @@ sk{
             traditional{"Tradičné"}
         }
     }
-    Version{"1.65"}
+    Version{"1.66"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1324,6 +1324,14 @@ sk{
                 "d.M.yyyy",
                 "d.M.yyyy",
                 "{1} {0}",
+            }
+            availableFormats{
+                MMMMd{"d. MMMM"}
+                Md{"d.M"}
+                mmss{"mm:ss"}
+                yyQQQQ{"QQQQ yy"}
+                yyyyM{"M.yyyy"}
+                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{

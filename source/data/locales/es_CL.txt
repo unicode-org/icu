@@ -53,6 +53,9 @@ es_CL{
                 "dd-MM-yy",
                 "{1} {0}",
             }
+            availableFormats{
+                mmss{"mm:ss"}
+            }
         }
     }
 }

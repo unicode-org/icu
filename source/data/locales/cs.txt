@@ -40,7 +40,6 @@ cs{
         155{"Západní Evropa"}
         200{"Československo"}
         830{"Normanské ostrovy"}
-        833{"Ostrov Man"}
         AD{"Andorra"}
         AE{"Spojené arabské emiráty"}
         AF{"Afghánistán"}
@@ -142,6 +141,7 @@ cs{
         ID{"Indonésie"}
         IE{"Irsko"}
         IL{"Izrael"}
+        IM{"Ostrov Man"}
         IN{"Indie"}
         IO{"Britské území v Indickém oceánu"}
         IQ{"Irák"}
@@ -1431,7 +1431,7 @@ cs{
             japanese{"Japonský kalendář"}
         }
     }
-    Version{"1.83"}
+    Version{"1.84"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1448,6 +1448,13 @@ cs{
                 "d.M.yyyy",
                 "d.M.yy",
                 "{1} {0}",
+            }
+            availableFormats{
+                MMMMd{"d. MMMM"}
+                Md{"d.M"}
+                mmss{"mm:ss"}
+                yyyyM{"M.yyyy"}
+                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{

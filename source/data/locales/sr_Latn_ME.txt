@@ -3,15 +3,15 @@
 // * Copyright (C) 2006 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/icu-config.xml & build.xml
+// * Source File:<path>/common/main/sr_Latn_ME.xml
 // *
 // ***************************************************************************
-/**
- * validSubLocale of "sr"
- */
-sr_Cyrl_YU{
-    /**
-     * so genrb doesn't issue warnings
-     */
-    ___{""}
+sr_Latn_ME{
+    Version{"1.22"}
+    delimiters{
+        alternateQuotationEnd{"”"}
+        alternateQuotationStart{"“"}
+        quotationEnd{"’"}
+        quotationStart{"‘"}
+    }
 }

@@ -5,7 +5,7 @@
 # *
 # ***************************************************************************
 # File: Oriya_Devanagari.txt
-# Generated from CLDR: Thu Jul 20 16:27:18 PDT 2006
+# Generated from CLDR 
 #
 ::[\u0B01-ଃଅ-ଌଏ-ଐଓ-ନପ-ରଲ-ଳଵ-ହ\u0B3C-\u0B43େ-ୈୋ-\u0B4D\u0B56-ୗଡ଼-ଢ଼ୟ-ୡ୦-ୱ];
 ::NFD;

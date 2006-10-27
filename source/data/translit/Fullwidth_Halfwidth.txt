@@ -5,7 +5,7 @@
 # *
 # ***************************************************************************
 # File: Fullwidth_Halfwidth.txt
-# Generated from CLDR: Thu Jul 20 16:27:13 PDT 2006
+# Generated from CLDR 
 #
 ガ<>ｶﾞ; # to KATAKANA LETTER GA
 ギ<>ｷﾞ; # to KATAKANA LETTER GI

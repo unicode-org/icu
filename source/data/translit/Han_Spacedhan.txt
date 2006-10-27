@@ -5,7 +5,7 @@
 # *
 # ***************************************************************************
 # File: Han_Spacedhan.txt
-# Generated from CLDR: Thu Jul 20 16:27:15 PDT 2006
+# Generated from CLDR 
 #
 :: fullwidth-halfwidth;
 ｡ > '.';

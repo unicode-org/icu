@@ -1887,6 +1887,17 @@ it{
                 "dd/MM/yy",
                 "{1} {0}",
             }
+            availableFormats{
+                HHmm{"HH.mm"}
+                HHmmss{"HH.mm.ss"}
+                MMMMdd{"dd MMMM"}
+                MMdd{"dd/MM"}
+                hhmm{"hh.mm a"}
+                hhmmss{"hh.mm.ss a"}
+                yyMM{"MM/yy"}
+                yyQQQQ{"QQQQ yy"}
+                yyyyMMMM{"MMMM yyyy"}
+            }
             dayNames{
                 format{
                     abbreviated{

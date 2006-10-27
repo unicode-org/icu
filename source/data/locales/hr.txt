@@ -39,7 +39,6 @@ hr{
         154{"Sjeverna Europa"}
         155{"Zapadna Europa"}
         830{"Kanalski otoci"}
-        833{"Otok Man"}
         AD{"Andora"}
         AE{"Ujedinjeni Arapski Emirati"}
         AF{"Afganistan"}
@@ -141,6 +140,7 @@ hr{
         ID{"Indonezija"}
         IE{"Irska"}
         IL{"Izrael"}
+        IM{"Otok Man"}
         IN{"Indija"}
         IO{"Britanski Teritorij Indijskog Oceana"}
         IQ{"Irak"}
@@ -1105,7 +1105,7 @@ hr{
             traditional{"Tradicionano poredavanje"}
         }
     }
-    Version{"1.67"}
+    Version{"1.68"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1118,6 +1118,18 @@ hr{
                 "yyyy.MM.dd",
                 "yyyy.MM.dd",
                 "{1} {0}",
+            }
+            availableFormats{
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                MMMMdd{"MMMM dd"}
+                MMdd{"MM.dd"}
+                hhmm{"hh:mm a"}
+                hhmmss{"hh:mm:ss a"}
+                yyMMMEEEd{"EEE yy.MMM d"}
+                yyQQQQ{"QQQQ yy"}
+                yyyyMM{"yyyy.MM"}
+                yyyyMMMM{"yyyy. MMMM"}
             }
             dayNames{
                 format{

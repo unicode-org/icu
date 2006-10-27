@@ -5,7 +5,7 @@
 # *
 # ***************************************************************************
 # File: Latin_Thai.txt
-# Generated from CLDR: Thu Jul 20 16:27:18 PDT 2006
+# Generated from CLDR 
 #
 ::[[:Latin:][:Mn:][:Me:] \u0020\u0026 ;0-9|~«»ʹʹ‡ˌ];
 ::NFD;

@@ -56,6 +56,10 @@ en_BE{
                 "dd/MM/yy",
                 "{1} {0}",
             }
+            availableFormats{
+                MMMdd{"dd MMM"}
+                MMdd{"dd/MM"}
+            }
         }
     }
 }

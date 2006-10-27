@@ -45,7 +45,6 @@ fr{
         172{"Communauté des États indépendants"}
         419{"Amérique latine et Caraïbes"}
         830{"anglo-normandes, îles"}
-        833{"Île de Man"}
         AD{"Andorre"}
         AE{"Émirats arabes unis"}
         AF{"Afghanistan"}
@@ -143,6 +142,7 @@ fr{
         ID{"Indonésie"}
         IE{"Irlande"}
         IL{"Israël"}
+        IM{"Île de Man"}
         IN{"Inde"}
         IQ{"Iraq"}
         IR{"Iran"}
@@ -1885,7 +1885,7 @@ fr{
         REVISED{"orthographe révisée"}
         ROZAJ{"dialecte de Resia"}
     }
-    Version{"1.84"}
+    Version{"1.85"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1898,6 +1898,17 @@ fr{
                 "d MMM yy",
                 "dd/MM/yy",
                 "{1} {0}",
+            }
+            availableFormats{
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                MMMMd{"d MMMM"}
+                MMdd{"dd/MM"}
+                hhmm{"hh:mm a"}
+                hhmmss{"hh:mm:ss a"}
+                yyMM{"MM/yy"}
+                yyQQQQ{"QQQQ yy"}
+                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{

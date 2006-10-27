@@ -5,7 +5,7 @@
 # *
 # ***************************************************************************
 # File: Devanagari_Gujarati.txt
-# Generated from CLDR: Thu Jul 20 16:27:12 PDT 2006
+# Generated from CLDR 
 #
 ::[\u0901-ःऄअ-ह\u093C-\u094Dॐ-\u0954क़-९ॽ];
 ::NFD;

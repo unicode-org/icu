@@ -907,7 +907,7 @@ he{
             traditional{"מסורתי"}
         }
     }
-    Version{"1.70"}
+    Version{"1.71"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -920,6 +920,12 @@ he{
                 "dd/MM/yyyy",
                 "dd/MM/yy",
                 "{0} {1}",
+            }
+            availableFormats{
+                MMMMd{"d MMMM"}
+                MMdd{"dd/MM"}
+                yyyyMM{"MM/yyyy"}
+                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{

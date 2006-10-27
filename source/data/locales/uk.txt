@@ -38,7 +38,6 @@ uk{
         151{"Східна Європа"}
         154{"Північна Європа"}
         155{"Західна Європа"}
-        833{"Острів Мен"}
         AD{"Андорра"}
         AE{"Обʼєднані Арабські Емірати"}
         AF{"Афганістан"}
@@ -139,6 +138,7 @@ uk{
         ID{"Індонезія"}
         IE{"Ірландія"}
         IL{"Ізраїль"}
+        IM{"Острів Мен"}
         IN{"Індія"}
         IO{"Британські території Індійського океану"}
         IQ{"Ірак"}
@@ -1485,7 +1485,7 @@ uk{
             traditional{"Традиційний"}
         }
     }
-    Version{"1.74"}
+    Version{"1.75"}
     calendar{
         coptic{
             monthNames{
@@ -1534,6 +1534,13 @@ uk{
                 "d MMM yyyy",
                 "dd.MM.yy",
                 "{1} {0}",
+            }
+            availableFormats{
+                MMMMd{"d MMMM"}
+                MMdd{"dd.MM"}
+                yyMM{"MM.yy"}
+                yyyyMMMM{"MMMM yyyy"}
+                yyyyQQQQ{"QQQQ yyyy 'р.'"}
             }
             dayNames{
                 format{

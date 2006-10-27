@@ -28,7 +28,6 @@ zh{
         151{"东欧"}
         154{"北欧"}
         830{"海峡群岛"}
-        833{"曼岛"}
         AD{"安道尔"}
         AE{"阿拉伯联合酋长国"}
         AF{"阿富汗"}
@@ -129,6 +128,7 @@ zh{
         ID{"印度尼西亚"}
         IE{"爱尔兰"}
         IL{"以色列"}
+        IM{"曼岛"}
         IN{"印度"}
         IO{"英属印度洋领地"}
         IQ{"伊拉克"}
@@ -1817,7 +1817,7 @@ zh{
     Variants{
         REVISED{"已修订"}
     }
-    Version{"1.77"}
+    Version{"1.78"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1834,6 +1834,10 @@ zh{
                 "yyyy MMM d",
                 "yy/MM/dd",
                 "{1} {0}",
+            }
+            availableFormats{
+                Md{"M'月'd'日'"}
+                yyyyM{"yyyy'年'M'月'"}
             }
             dayNames{
                 format{

@@ -5,7 +5,7 @@
 # *
 # ***************************************************************************
 # File: InterIndic_Bengali.txt
-# Generated from CLDR: Thu Jul 20 16:27:15 PDT 2006
+# Generated from CLDR 
 #
 \uE001>\u0981;          # SIGN CANDRABINDU
 \uE002>ং;          # SIGN ANUSVARA

@@ -43,7 +43,6 @@ nl{
         155{"West-Europa"}
         419{"Latijns-Amerika en het Caribisch gebied"}
         830{"Kanaaleilanden"}
-        833{"Isle of Man"}
         AD{"Andorra"}
         AE{"Verenigde Arabische Emiraten"}
         AF{"Afghanistan"}
@@ -145,6 +144,7 @@ nl{
         ID{"Indonesië"}
         IE{"Ierland"}
         IL{"Israël"}
+        IM{"Isle of Man"}
         IN{"India"}
         IO{"Britse Gebieden in de Indische Oceaan"}
         IQ{"Irak"}
@@ -1953,7 +1953,7 @@ nl{
         ROZAJ{"Resiaans"}
         SAAHO{"Saho"}
     }
-    Version{"1.73"}
+    Version{"1.74"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1966,6 +1966,14 @@ nl{
                 "d MMM yyyy",
                 "dd-MM-yy",
                 "{1} {0}",
+            }
+            availableFormats{
+                MMMMd{"d MMMM"}
+                MMdd{"dd-MM"}
+                mmss{"mm:ss"}
+                yyMM{"MM-yy"}
+                yyQQQQ{"QQQQ yy"}
+                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{

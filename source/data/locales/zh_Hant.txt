@@ -26,7 +26,6 @@ zh_Hant{
         154{"北歐"}
         155{"西歐"}
         830{"海峽群島"}
-        833{"曼島"}
         AD{"安道爾"}
         AE{"阿拉伯聯合大公國"}
         AG{"安地卡及巴布達"}
@@ -112,6 +111,7 @@ zh_Hant{
         HR{"克羅埃西亞"}
         ID{"印尼"}
         IE{"愛爾蘭"}
+        IM{"曼島"}
         IO{"英屬印度洋領土"}
         IS{"冰島"}
         IT{"義大利"}
@@ -1669,7 +1669,7 @@ zh_Hant{
     Variants{
         REVISED{"已修訂"}
     }
-    Version{"1.59"}
+    Version{"1.60"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1682,6 +1682,10 @@ zh_Hant{
                 "yyyy/M/d",
                 "yyyy/M/d",
                 "{1} {0}",
+            }
+            availableFormats{
+                Md{"M/d"}
+                yyyyM{"yyyy/M"}
             }
             quarters{
                 format{

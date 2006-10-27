@@ -55,6 +55,11 @@ kk{
                 "dd.MM.yy",
                 "{1} {0}",
             }
+            availableFormats{
+                MMdd{"dd.MM"}
+                yyyyMM{"MM.yyyy"}
+                yyyyMMMM{"MMMM yyyy 'ж.'"}
+            }
             dayNames{
                 format{
                     abbreviated{

@@ -1395,7 +1395,7 @@ is{
             traditional{"Hefðbundin"}
         }
     }
-    Version{"1.61"}
+    Version{"1.62"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1408,6 +1408,12 @@ is{
                 "d.M.yyyy",
                 "d.M.yyyy",
                 "{1} {0}",
+            }
+            availableFormats{
+                MMMMd{"d. MMMM"}
+                Md{"d.M"}
+                yyyyM{"M.yyyy"}
+                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{

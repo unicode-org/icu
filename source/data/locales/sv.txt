@@ -43,7 +43,6 @@ sv{
         172{"Samväldet av oberoende stater"}
         419{"Latinamerika och Karibien"}
         830{"Kanalöarna"}
-        833{"Isle of Man"}
         AD{"Andorra"}
         AE{"Förenade Arabemiraten"}
         AF{"Afghanistan"}
@@ -142,6 +141,7 @@ sv{
         ID{"Indonesien"}
         IE{"Irland"}
         IL{"Israel"}
+        IM{"Isle of Man"}
         IN{"Indien"}
         IO{"Brittiska Indiska oceanöarna"}
         IQ{"Irak"}
@@ -1852,7 +1852,7 @@ sv{
         ROZAJ{"resisk dialekt"}
         SAAHO{"saho"}
     }
-    Version{"1.84"}
+    Version{"1.85"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1865,6 +1865,16 @@ sv{
                 "d MMM yyyy",
                 "yyyy-MM-dd",
                 "{1} {0}",
+            }
+            availableFormats{
+                MMMd{"d MMM"}
+                MMdd{"MM-dd"}
+                hhmm{"hh:mm a"}
+                hhmmss{"hh:mm:ss a"}
+                mmss{"mm.ss"}
+                yyyyMM{"yyyy-MM"}
+                yyyyMMM{"MMM yyyy"}
+                yyyyQQQQ{"QQQQ',' yyyy"}
             }
             dayNames{
                 format{

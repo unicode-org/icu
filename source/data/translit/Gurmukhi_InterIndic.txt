@@ -5,7 +5,7 @@
 # *
 # ***************************************************************************
 # File: Gurmukhi_InterIndic.txt
-# Generated from CLDR: Thu Jul 20 16:27:14 PDT 2006
+# Generated from CLDR 
 #
 \u0A01>\uE001;  # SIGN CHANDRABINDU
 \u0A02>\uE002;  # SIGN BINDI

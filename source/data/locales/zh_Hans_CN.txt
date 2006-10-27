@@ -31,6 +31,10 @@ zh_Hans_CN{
                 "yy-M-d",
                 "{1} {0}",
             }
+            availableFormats{
+                Md{"M-d"}
+                yyyyM{"yyyy-M"}
+            }
         }
     }
     zoneStrings{

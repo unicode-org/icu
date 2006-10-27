@@ -35,6 +35,9 @@ es_PA{
                 "MM/dd/yy",
                 "{1} {0}",
             }
+            availableFormats{
+                MMdd{"MM/dd"}
+            }
         }
     }
 }
