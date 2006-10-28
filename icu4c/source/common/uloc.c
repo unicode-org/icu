@@ -151,7 +151,7 @@ static const char * const LANGUAGES[] = {
     "mo",  "moh", "mos", "mr",  "ms",  "mt",  "mul", "mun",
     "mus", "mwl", "mwr", "my",  "myn", "myv", "na",  "nah", "nai", "nap",
     "nb",  "nd",  "nds", "ne",  "new", "ng",  "nia", "nic",
-    "niu", "nl",  "nn",  "no",  "nog", "non", "nr",  "nso", "nub",
+    "niu", "nl",  "nn",  "no",  "nog", "non", "nqo", "nr",  "nso", "nub",
     "nv",  "nwc", "ny",  "nym", "nyn", "nyo", "nzi", "oc",  "oj",
     "om",  "or",  "os",  "osa", "ota", "oto", "pa",  "paa",
     "pag", "pal", "pam", "pap", "pau", "peo", "phi", "phn",
@@ -171,7 +171,7 @@ static const char * const LANGUAGES[] = {
     "uz",  "vai", "ve",  "vi",  "vo",  "vot", "wa",  "wak",
     "wal", "war", "was", "wen", "wo",  "xal", "xh",  "yao", "yap",
     "yi",  "yo",  "ypk", "za",  "zap", "zen", "zh",  "znd",
-    "zu",  "zun", "zxx",
+    "zu",  "zun", "zxx", "zza",
 NULL,
     "in",  "iw",  "ji",  "jw",  "sh",    /* obsolete language codes */
 NULL
@@ -272,8 +272,8 @@ static const char * const LANGUAGES_3[] = {
     "mus", "mwl", "mwr", "mya", "myn", "myv", "nau", "nah", "nai", "nap",
 /*  "nb",  "nd",  "nds", "ne",  "new", "ng",  "nia", "nic",    */
     "nob", "nde", "nds", "nep", "new", "ndo", "nia", "nic",
-/*  "niu", "nl",  "nn",  "no",  "nog", "non", "nr",  "nso", "nub",    */
-    "niu", "nld", "nno", "nor", "nog", "non", "nbl", "nso", "nub",
+/*  "niu", "nl",  "nn",  "no",  "nog", "non", "nqo", "nr",  "nso", "nub",    */
+    "niu", "nld", "nno", "nor", "nog", "non", "nqo", "nbl", "nso", "nub",
 /*  "nv",  "nwc", "ny",  "nym", "nyn", "nyo", "nzi", "oc",  "oj",     */
     "nav", "nwc", "nya", "nym", "nyn", "nyo", "nzi", "oci", "oji",
 /*  "om",  "or",  "os",  "osa", "ota", "oto", "pa",  "paa",    */
@@ -312,8 +312,8 @@ static const char * const LANGUAGES_3[] = {
     "wal", "war", "was", "wen", "wol", "xal", "xho", "yao", "yap",
 /*  "yi",  "yo",  "ypk", "za",  "zap", "zen", "zh",  "znd",    */
     "yid", "yor", "ypk", "zha", "zap", "zen", "zho", "znd",
-/*  "zu",  "zun",                                              */
-    "zul", "zun", "zxx", 
+/*  "zu",  "zun", "zxx", "zza",                                         */
+    "zul", "zun", "zxx", "zza",
 NULL,
 /*  "in",  "iw",  "ji",  "jw",  "sh",                          */
     "ind", "heb", "yid", "jaw", "srp",
