@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  *
  *  FILE NAME: DOCMAIN.h
@@ -41,7 +41,7 @@
  * <h3>API References for Previous Releases</h3>
  * <p>The API References for each release of ICU are also available as
  * a zip file from the ICU 
- * <a href="http://www.ibm.com/software/globalization/icu/downloads.jsp">download page</a>.</p>
+ * <a href="http://icu.sourceforge.net/download/">download page</a>.</p>
  *
  * <hr>
  *

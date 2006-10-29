@@ -1,12 +1,12 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2001, International Business Machines Corporation and    *
+* Copyright (C) 1996-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2006/06/08 18:16:40 $ 
-* $Revision: 1.44 $
+* $Date: 2006/10/29 18:13:56 $ 
+* $Revision: 1.45 $
 *
 *******************************************************************************
 */
@@ -1818,7 +1818,7 @@ F900..FAFF; CJK Compatibility Ideographs
             "Generated:   " + getNormalDate(),
         	"NOTE: Since UCA handles canonical equivalents, no composites are necessary",
         	"(except in extensions).",
-        	"For syntax description, see: http://oss.software.ibm.com/icu/userguide/Collate_Intro.html"
+        	"For syntax description, see: http://icu.sourceforge.net/userguide/Collate_Intro.html"
         };
         
         if (option == IN_XML) {
