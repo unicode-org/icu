@@ -7,7 +7,7 @@
 
 # If this converter alias table looks very confusing, a much easier to
 # understand view can be found at this demo:
-# http://www.ibm.com/software/globalization/icu/demo/converters
+# http://demo.icu-project.org/icu-bin/convexp
 
 # IMPORTANT NOTE
 #
