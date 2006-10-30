@@ -1139,13 +1139,17 @@ Package::extractItems(const char *filesPath, const Package &listPkg, char outTyp
     }
 }
 
-void
-Package::listItems(FILE *file) {
-    int32_t i;
+int32_t
+Package::getItemCount() {
+    return itemCount;
+}
 
-    for(i=0; i<itemCount; ++i) {
-        fprintf(file, "%s\n", items[i].name);
+const Item *
+Package::getItem(int32_t idx) {
+    if (0 <= idx && idx < itemCount) {
+        return &items[idx];
     }
+    return NULL;
 }
 
 void

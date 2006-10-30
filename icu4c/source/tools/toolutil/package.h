@@ -107,7 +107,8 @@ public:
     /* This variant extracts an item to a specific filename. */
     void extractItem(const char *filesPath, const char *outName, int32_t index, char outType);
 
-    void listItems(FILE *file);
+    int32_t getItemCount();
+    const Item *getItem(int32_t idx);
 
     /*
      * Check dependencies and return TRUE if all dependencies are fulfilled.

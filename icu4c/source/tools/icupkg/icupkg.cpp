@@ -528,7 +528,11 @@ main(int argc, char *argv[]) {
 
     /* list items */
     if(options[OPT_LIST_ITEMS].doesOccur) {
-        pkg->listItems(stdout);
+        int32_t i;
+
+        for(i=0; i<pkg->getItemCount(); ++i) {
+            fprintf(stdout, "%s\n", pkg->getItem(i)->name);
+        }
     }
 
     /* check dependencies between items */
