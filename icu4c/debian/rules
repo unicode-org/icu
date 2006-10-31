@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 #
-# Copyright (c) 1999-2006, International Business Machines Corporation and
-# others. All Rights Reserved.
+# Copyright (c) 2000-2006 International Business Machines
+# Corporation and others. All Rights Reserved.
 #
 # To distinguish variables that are truly local to this file (rather
 # than for use by cdbs), we adopt the convention of starting local
