@@ -1254,7 +1254,8 @@ TestFCDCrash(void) {
     free(icuDataDir);
 
 }
-static UBool
+
+/*static UBool
 find(UEnumeration* list, const char* str, UErrorCode* status){
     const char* value = NULL;
     int32_t length=0;
@@ -1268,7 +1269,8 @@ find(UEnumeration* list, const char* str, UErrorCode* status){
         }
     }
     return FALSE;
-}
+}*/
+
 static void TestJ5298(void)
 {
    UErrorCode status = U_ZERO_ERROR;
@@ -1289,12 +1291,11 @@ static void TestJ5298(void)
        
        ucol_getFunctionalEquivalent(output, 256, "collation", input, &isAvailable, &status);
        if (strcmp(input, output) == 0) { /* Unique locale, print it out */
-           //log_verbose("%s, ", input);
            log_verbose("%s, \n", output);
-       
        }
      }
    }
    log_verbose("\n");
 }
 #endif /* #if !UCONFIG_NO_COLLATION */
+
