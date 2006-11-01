@@ -725,7 +725,6 @@ uprv_tzname(int n)
         return tzid;
     }
 #else
-    const char *tzid = NULL;
 
 /*#if defined(U_DARWIN)
     int ret;
