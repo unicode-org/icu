@@ -44,7 +44,7 @@ endif
 
 # For a dynamically called DLL module to share access to the POSIX external
 # variables, with its caller, the DLL module must define these _SHR_* macros.
-SHAREDLIBCPPFLAGS	= -D_SHR_TZNAME -D_SHR_TIMEZONE
+SHAREDLIBCPPFLAGS	= -D_SHR_TZNAME -D_SHR_TIMEZONE -D_SHR_DAYLIGHT
 
 ## Additional flags when building libraries and with threads
 THREADSCPPFLAGS = -D_OPEN_THREADS
