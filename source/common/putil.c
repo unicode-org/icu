@@ -717,35 +717,36 @@ static const char* remapShortTimeZone(const char *stdID, const char *dstID, int3
 U_CAPI const char* U_EXPORT2
 uprv_tzname(int n)
 {
+    const char *tzid = NULL;
 #ifdef U_WINDOWS
-    const char *id = uprv_detectWindowsTimeZone();
+    tzid = uprv_detectWindowsTimeZone();
 
-    if (id != NULL) {
-        return id;
+    if (tzid != NULL) {
+        return tzid;
     }
 #else
-    const char *tzenv = NULL;
+    const char *tzid = NULL;
 
 /*#if defined(U_DARWIN)
     int ret;
 
-    tzenv = getenv("TZFILE");
-    if (tzenv != NULL) {
-        return tzenv;
+    tzid = getenv("TZFILE");
+    if (tzid != NULL) {
+        return tzid;
     }
 #endif*/
 
-    tzenv = getenv("TZ");
-    if (tzenv != NULL && isValidOlsonID(tzenv))
+    tzid = getenv("TZ");
+    if (tzid != NULL && isValidOlsonID(tzid))
     {
         /* This might be a good Olson ID. */
-        if (uprv_strncmp(tzenv, "posix/", 6) == 0
-            || uprv_strncmp(tzenv, "right/", 6) == 0)
+        if (uprv_strncmp(tzid, "posix/", 6) == 0
+            || uprv_strncmp(tzid, "right/", 6) == 0)
         {
             /* Remove the posix/ or right/ prefix. */
-            tzenv += 6;
+            tzid += 6;
         }
-        return tzenv;
+        return tzid;
     }
     /* else U_TZNAME will give a better result. */
 
@@ -779,9 +780,9 @@ uprv_tzname(int n)
     U_TZNAME is usually a non-unique abbreviation,
     which isn't normally usable.
     */
-    tzenv = remapShortTimeZone(U_TZNAME[0], U_TZNAME[1], uprv_daylight(), uprv_timezone());
-    if (tzenv != NULL) {
-        return tzenv;
+    tzid = remapShortTimeZone(U_TZNAME[0], U_TZNAME[1], uprv_daylight(), uprv_timezone());
+    if (tzid != NULL) {
+        return tzid;
     }
     return U_TZNAME[n];
 #else
