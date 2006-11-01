@@ -51,7 +51,7 @@
 Poorly upgraded Solaris machines can't have this defined.
 Cleanly installed Solaris can use this #define.
 */
-#if !defined(_XOPEN_SOURCE_EXTENDED) && __STDC_VERSION__ >= 199901L
+#if !defined(_XOPEN_SOURCE_EXTENDED) && (!defined(__STDC_VERSION__) || __STDC_VERSION__ >= 199901L)
 #define _XOPEN_SOURCE_EXTENDED 1
 #endif
 
