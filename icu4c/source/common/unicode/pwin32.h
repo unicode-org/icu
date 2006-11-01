@@ -253,6 +253,9 @@ Intel can define _M_IX86 or _M_X64
 #if 1
 #define U_TZNAME        _tzname
 #endif
+#if 1
+#define U_DAYLIGHT      _daylight
+#endif
 
 #define U_HAVE_MMAP 0
 #define U_HAVE_POPEN 0

@@ -246,6 +246,9 @@ typedef unsigned int uint32_t;
 #if @U_HAVE_TZNAME@
 #define U_TZNAME        @U_TZNAME@
 #endif
+#if @U_HAVE_DAYLIGHT@
+#define U_DAYLIGHT      @U_DAYLIGHT@
+#endif
 
 #define U_HAVE_MMAP     @HAVE_MMAP@
 #define U_HAVE_POPEN    @U_HAVE_POPEN@
