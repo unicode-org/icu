@@ -99,6 +99,13 @@
  *    <td>days</td>
  *    <td>Dec 31, 1899</td>
  *  </tr>
+ *
+ *  <tr>
+ *    <td>UDTS_UNIX_MICROSECONDS_TIME</td>
+ *    <td>int64_t</td>
+ *    <td>microseconds</td>
+ *    <td>Jan 1, 1970</td>
+ *  </tr>
  * </table>
  *
  * <p>
@@ -264,6 +271,15 @@ typedef enum UDateTimeScale {
      * @stable ICU 3.2
      */
     UDTS_DB2_TIME,
+
+    /**
+     * Data is a <code>long</code>. Value is microseconds since January 1, 1970.
+     * Similar to Unix time (linear value from 1970) and struct timeval
+     * (microseconds resolution).
+     *
+     * @draft ICU 3.8
+     */
+    UDTS_UNIX_MICROSECONDS_TIME,
 
     /**
      * The first unused time scale value. The limit of this enum
