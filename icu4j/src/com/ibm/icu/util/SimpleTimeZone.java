@@ -4,6 +4,8 @@
 */
 
 package com.ibm.icu.util;
+
+import com.ibm.icu.impl.Grego;
 import com.ibm.icu.impl.JDKTimeZone;
 
 import java.io.IOException;
@@ -506,14 +508,18 @@ public class SimpleTimeZone extends JDKTimeZone {
         }
         return xinfo;
     }
-//  WARNING: assumes that no rule is measured from the end of February,
-//  since we don't handle leap years. Could handle assuming always
-//  Gregorian, since we know they didn't have daylight time when
-//  Gregorian calendar started.
-  //  private static final int[] STATICMONTHLENGTH = new int[]{31,29,31,30,31,30,31,31,30,31,30,31};
-//    private final byte monthLength[] = staticMonthLength;
+
+    //  Use only for decodeStartRule() and decodeEndRule() where the year is not
+    //  available. Set February to 29 days to accomodate rules with that date
+    //  and day-of-week-on-or-before-that-date mode (DOW_LE_DOM_MODE).
+    //  The compareToRule() method adjusts to February 28 in non-leap years.
+    //
+    //  For actual getOffset() calculations, use TimeZone::monthLength() and
+    //  TimeZone::previousMonthLength() which take leap years into account.
+    //  We handle leap years assuming always
+    //  Gregorian, since we know they didn't have daylight time when
+    //  Gregorian calendar started.
     private final static byte staticMonthLength[] = {31,29,31,30,31,30,31,31,30,31,30,31};
-//    private final static byte staticLeapMonthLength[] = {31,29,31,30,31,30,31,31,30,31,30,31};
 
 //  -------------------------------------
 
@@ -524,7 +530,7 @@ public class SimpleTimeZone extends JDKTimeZone {
     public int getOffset(int era, int year, int month, int day,
                          int dayOfWeek, int millis) 
     {
-        // Check the month before indexing into STATICMONTHLENGTH. This
+        // Check the month before calling Grego.monthLength(). This
         // duplicates the test that occurs in the 7-argument getOffset(),
         // however, this is unavoidable. We don't mind because this method, in
         // fact, should not be called; internal code should always call the
@@ -535,7 +541,7 @@ public class SimpleTimeZone extends JDKTimeZone {
             throw new IllegalArgumentException();
         }
 
-        return getOffset(era, year, month, day, dayOfWeek, millis, staticMonthLength[month]);
+        return getOffset(era, year, month, day, dayOfWeek, millis, Grego.monthLength(year, month));
     }
 
     /**
@@ -545,7 +551,7 @@ public class SimpleTimeZone extends JDKTimeZone {
     public int getOffset(int era, int year, int month, int day,
                               int dayOfWeek, int millis, 
                               int monthLength)  {
-        // Check the month before indexing into STATICMONTHLENGTH. This
+        // Check the month before calling Grego.monthLength(). This
         // duplicates a test that occurs in the 9-argument getOffset(),
         // however, this is unavoidable. We don't mind because this method, in
         // fact, should not be called; internal code should always call the
@@ -556,11 +562,8 @@ public class SimpleTimeZone extends JDKTimeZone {
             throw new IllegalArgumentException();
         }
         
-        // TODO FIX We don't handle leap years yet!
-        int prevMonthLength = (month >= 1) ? staticMonthLength[month - 1] : 31;
-
         return getOffset(era, year, month, day, dayOfWeek, millis,
-                         monthLength, prevMonthLength);
+                         Grego.monthLength(year, month), Grego.previousMonthLength(year, month));
     }
 
     int getOffset(int era, int year, int month, int day,
@@ -713,7 +716,7 @@ public class SimpleTimeZone extends JDKTimeZone {
             dayOfWeek = 1 + (dayOfWeek % 7); // dayOfWeek is one-based
             if (dayOfMonth > monthLen) {
                 dayOfMonth = 1;
-                /* When incrementing the month, it is desirible to overflow
+                /* When incrementing the month, it is desirable to overflow
                  * from DECEMBER to DECEMBER+1, since we use the result to
                  * compare against a real month. Wraparound of the value
                  * leads to bug 4173604. */
@@ -734,6 +737,12 @@ public class SimpleTimeZone extends JDKTimeZone {
         else if (month > ruleMonth) return 1;
 
         int ruleDayOfMonth = 0;
+
+        // Adjust the ruleDay to the monthLen, for non-leap year February 29 rule days.
+        if (ruleDay > monthLen) {
+            ruleDay = monthLen;
+        }
+
         switch (ruleMode)
         {
         case DOM_MODE:
@@ -773,6 +782,7 @@ public class SimpleTimeZone extends JDKTimeZone {
                 return 0;
         }
     }
+
     // data needed for streaming mutated SimpleTimeZones in JDK14
     private int raw;// the TimeZone's raw GMT offset 
     private int dst = 3600000;
