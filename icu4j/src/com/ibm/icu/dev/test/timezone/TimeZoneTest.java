@@ -1215,6 +1215,90 @@ public class TimeZoneTest extends TestFmwk
         //reset
         java.util.TimeZone.setDefault(save);
     }
+
+    // Copied from the protected constant in TimeZone.
+    private static final int MILLIS_PER_HOUR = 60*60*1000;
+
+    //  Test that a transition at the end of February is handled correctly.
+    public void TestFebruary() {
+        // Time zone with daylight savings time from the first Sunday in November
+        // to the last Sunday in February.
+        // Similar to the new rule for Brazil (Sao Paulo) in tzdata2006n.
+        SimpleTimeZone tz1 = new SimpleTimeZone(
+                           -3 * MILLIS_PER_HOUR,                    // raw offset: 3h before (west of) GMT
+                           "nov-feb",
+                           Calendar.NOVEMBER, 1, Calendar.SUNDAY,   // start: November, first, Sunday
+                           0,                                       //        midnight wall time
+                           Calendar.FEBRUARY, -1, Calendar.SUNDAY,  // end:   February, last, Sunday
+                           0);                                      //        midnight wall time
+
+        // Time zone for Brazil, with effectively the same rules as above,
+        // but expressed with DOW_GE_DOM_MODE and DOW_LE_DOM_MODE rules.
+        TimeZone tz2 = TimeZone.getTimeZone("America/Sao_Paulo");
+
+        // Now hardcode the same rules as for Brazil, so that we cover the intended code
+        // even when in the future zoneinfo hardcodes these transition dates.
+        SimpleTimeZone tz3= new SimpleTimeZone(
+                           -3 * MILLIS_PER_HOUR,                    // raw offset: 3h before (west of) GMT
+                           "nov-feb2",
+                           Calendar.NOVEMBER, 1, -Calendar.SUNDAY,  // start: November, 1 or after, Sunday
+                           0,                                       //        midnight wall time
+                           Calendar.FEBRUARY, -29, -Calendar.SUNDAY,// end:   February, 29 or before, Sunday
+                           0);                                      //        midnight wall time
+
+        // Gregorian calendar with the UTC time zone for getting sample test date/times.
+        GregorianCalendar gc = new GregorianCalendar(TimeZone.getTimeZone("Etc/GMT"));
+        // "Unable to create the UTC calendar: %s"
+
+        int[] data = {
+            // UTC time (6 fields) followed by
+            // expected time zone offset in hours after GMT (negative=before GMT).
+            // int year, month, day, hour, minute, second, offsetHours
+            2006, Calendar.NOVEMBER,  5, 02, 59, 59, -3,
+            2006, Calendar.NOVEMBER,  5, 03, 00, 00, -2,
+            2007, Calendar.FEBRUARY, 25, 01, 59, 59, -2,
+            2007, Calendar.FEBRUARY, 25, 02, 00, 00, -3,
+
+            2007, Calendar.NOVEMBER,  4, 02, 59, 59, -3,
+            2007, Calendar.NOVEMBER,  4, 03, 00, 00, -2,
+            2008, Calendar.FEBRUARY, 24, 01, 59, 59, -2,
+            2008, Calendar.FEBRUARY, 24, 02, 00, 00, -3,
+
+            2008, Calendar.NOVEMBER,  2, 02, 59, 59, -3,
+            2008, Calendar.NOVEMBER,  2, 03, 00, 00, -2,
+            2009, Calendar.FEBRUARY, 22, 01, 59, 59, -2,
+            2009, Calendar.FEBRUARY, 22, 02, 00, 00, -3,
+
+            2009, Calendar.NOVEMBER,  1, 02, 59, 59, -3,
+            2009, Calendar.NOVEMBER,  1, 03, 00, 00, -2,
+            2010, Calendar.FEBRUARY, 28, 01, 59, 59, -2,
+            2010, Calendar.FEBRUARY, 28, 02, 00, 00, -3
+        };
+
+        TimeZone timezones[] = { tz1, tz2, tz3 };
+
+        TimeZone tz;
+        Date dt;
+        int t, i, raw, dst;
+        int[] offsets = new int[2]; // raw = offsets[0], dst = offsets[1]
+        for (t = 0; t < timezones.length; ++t) {
+            tz = timezones[t];
+            for (i = 0; i < data.length; i+=7) {
+                gc.set(data[i], data[i+1], data[i+2],
+                       data[i+3], data[i+4], data[i+5]);
+                dt = gc.getTime();
+                tz.getOffset(dt.getTime(), false, offsets);
+                raw = offsets[0];
+                dst = offsets[1];
+                if ((raw + dst) != data[i+6] * MILLIS_PER_HOUR) {
+                    errln("test case " + t + "." + (i/7) + ": " +
+                          "tz.getOffset(" + data[i] + "-" + (data[i+1] + 1) + "-" + data[i+2] + " " +
+                          data[i+3] + ":" + data[i+4] + ":" + data[i+5] +
+                          ") returns " + raw + "+" + dst + " != " + data[i+6] * MILLIS_PER_HOUR);
+                }
+            }
+        }
+    }
 }
 
 //eof
