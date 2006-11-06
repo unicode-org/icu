@@ -229,7 +229,8 @@ static void buildPseudoTables(void)
     - @ == LRM
     - & == RLM
     - A-F == Arabic Letters 0631-0636
-    - G-Z == Hebrew letters 05d7-05ea
+    - G-Z == Hebrew letters 05d7-05e6
+    - W-Z == Unassigned RTL 08d0-08d3
     - 0-5 == western digits 0030-0035
     - 6-9 == Arabic-Indic digits 0666-0669
     - ` == Combining Grave Accent 0300 (NSM)
@@ -304,7 +305,13 @@ static void buildPseudoTables(void)
         UCharToPseud2[uchar & 0x00ff] = c;
     }
     /* initialize Hebrew letters */
-    for (i = 16, uchar = 0x05D7; i < 36; i++, uchar++) {
+    for (i = 16, uchar = 0x05D7; i < 32; i++, uchar++) {
+        c = (uint8_t)columns[i];
+        pseudoToUChar[c] = uchar;
+        UCharToPseud2[uchar & 0x00ff] = c;
+    }
+    /* initialize Unassigned code points */
+    for (i = 32, uchar=0x08D0; i < 36; i++, uchar++) {
         c = (uint8_t)columns[i];
         pseudoToUChar[c] = uchar;
         UCharToPseud2[uchar & 0x00ff] = c;
@@ -392,6 +399,7 @@ static void TestReorder(){
             "day  4   I  DPIQNF    dayabbr",
             "day  5  M  DPMEG  dayabbr",
             "helloDPMEG",
+            "hello WXYZ"
     };
     static const char* const visualOrder[]={
             "del(CK)add(&.C.K)",
@@ -405,6 +413,7 @@ static void TestReorder(){
             "day  4   FNQIPD  I    dayabbr",
             "day  5  GEMPD  M  dayabbr",
             "helloGEMPD",
+            "hello ZYXW"
     };
     static const char* const visualOrder1[]={
             ")K.C.&(dda)KC(led",
@@ -418,6 +427,7 @@ static void TestReorder(){
             "rbbayad    I  DPIQNF   4  yad",
             "rbbayad  M  DPMEG  5  yad",
             "DPMEGolleh",
+            "WXYZ olleh"
     };
 
     static const char* const visualOrder2[]={
@@ -432,6 +442,7 @@ static void TestReorder(){
             "rbbayad    @I  DPIQNF@   4  yad",
             "rbbayad  @M  DPMEG@  5  yad",
             "DPMEGolleh",
+            "WXYZ@ olleh"
     };
     static const char* const visualOrder3[]={
             ")K.C.&(KC)dda(led",
@@ -444,7 +455,8 @@ static void TestReorder(){
             "rbbayad  DPJQVM   J  3 yad",
             "rbbayad    DPIQNF     I 4 yad",
             "rbbayad  DPMEG   M  5 yad",
-            "DPMEGolleh"
+            "DPMEGolleh",
+            "WXYZ olleh"
     };
     static const char* const visualOrder4[]={
             "del(add(CK(.C.K)",
@@ -457,7 +469,8 @@ static void TestReorder(){
             "day 3  J   MVQJPD  dayabbr",
             "day 4 I     FNQIPD    dayabbr",
             "day 5  M   GEMPD  dayabbr",
-            "helloGEMPD"
+            "helloGEMPD",
+            "hello ZYXW"
     };
     char formatChars[MAXLEN];
     UErrorCode ec = U_ZERO_ERROR;
