@@ -225,11 +225,16 @@ CollationAPITest::TestProperty(/* char* par */)
     if (U_FAILURE(success))
     {
         errln("Creating French collator failed.");
-        delete col; delete junk;
+        delete col;
+        delete junk;
         return;
     }
 
-    doAssert((*frCol != *junk), "The junk is the same as the French collator.");
+    // If the default locale isn't French, the French and non-French collators
+    // should be different
+    if (frCol->getLocale(ULOC_ACTUAL_LOCALE, success) != Locale::getFrench()) {
+        doAssert((*frCol != *junk), "The junk is the same as the French collator.");
+    }
     Collator *aFrCol = frCol->clone();
     doAssert((*frCol == *aFrCol), "The cloning of a French collator failed.");
     logln("Collator property test ended.");
