@@ -240,6 +240,25 @@ int main(int argc, const char* const argv[])
             }
         }
 
+        errorCode = U_ZERO_ERROR;
+        rb = ures_open(NULL, NULL, &errorCode);
+        if(U_SUCCESS(errorCode)) {
+            /* ok */
+            if (errorCode == U_USING_DEFAULT_WARNING || errorCode == U_USING_FALLBACK_WARNING) {
+                fprintf(stderr,
+                        "#### Note: The default locale %s is not available\n", uloc_getDefault());
+            }
+            ures_close(rb);
+        } else {
+            fprintf(stderr,
+                    "*** %s! Can not open a resource bundle for the default locale %s\n", warnOrErr, uloc_getDefault());
+            if(warnOnMissingData == 0) {
+                fprintf(stderr, "*** Exitting.  Use the '-w' option if data files were\n"
+                    "*** purposely removed, to continue test anyway.\n");
+                u_cleanup();
+                return 1;
+            }
+        }
         fprintf(stdout, "Default locale for this run is %s\n", uloc_getDefault());
 
         /* Build a tree of all tests.   
