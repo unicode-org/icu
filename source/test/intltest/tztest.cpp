@@ -510,6 +510,9 @@ TimeZoneTest::TestGetAvailableIDs913()
  * definition. This test has been updated to reflect this.
  * 12/3/99 aliu
  *
+ * Added tests for additional zones and aliases from the icuzones file.
+ * Markus Scherer 2006-nov-06
+ *
  * [srl - from java - 7/5/1998]
  * @bug 4130885
  * Certain short zone IDs, used since 1.1.x, are incorrect.
@@ -613,6 +616,30 @@ void TimeZoneTest::TestShortZoneIDs()
         // "NST", 720, FALSE,
         // As of bug 4130885, fix NST (New Zealand)
         {"NST", 720, TRUE}, // Pacific/Auckland
+
+        // From icuzones:
+        {"Etc/Unknown", 0, FALSE},
+
+        {"SystemV/AST4ADT", -240, TRUE},
+        {"SystemV/EST5EDT", -300, TRUE},
+        {"SystemV/CST6CDT", -360, TRUE},
+        {"SystemV/MST7MDT", -420, TRUE},
+        {"SystemV/PST8PDT", -480, TRUE},
+        {"SystemV/YST9YDT", -540, TRUE},
+        {"SystemV/AST4", -240, FALSE},
+#if U_ICU_VERSION_MAJOR_NUM>3 || U_ICU_VERSION_MINOR_NUM>=8
+        // CLDR 1.4.1 has an alias from SystemV/EST5 to America/Indianapolis
+        // which is incorrect because Indiana has started to observe DST.
+        // Re-enable this test once CLDR has fixed the alias.
+        // (For example, it could alias SystemV/EST5 to Etc/GMT+5.)
+        {"SystemV/EST5", -300, FALSE},
+#endif
+        {"SystemV/CST6", -360, FALSE},
+        {"SystemV/MST7", -420, FALSE},
+        {"SystemV/PST8", -480, FALSE},
+        {"SystemV/YST9", -540, FALSE},
+        {"SystemV/HST10", -600, FALSE},
+
         {"",0,FALSE}
     };
 
