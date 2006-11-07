@@ -627,7 +627,7 @@ static UBool isValidOlsonID(const char *id) {
 #endif
 
 #ifdef U_TZNAME
-#include <stdio.h>
+/*#include <stdio.h>*/
 #define CONVERT_HOURS_TO_SECONDS(offset) (int32_t)(offset*3600)
 typedef struct OffsetZoneMapping {
     int32_t offsetSeconds;
@@ -699,7 +699,7 @@ static const struct OffsetZoneMapping OFFSET_ZONE_MAPPINGS[] = {
 static const char* remapShortTimeZone(const char *stdID, const char *dstID, int32_t daylightUsed, int32_t offset)
 {
     int32_t idx;
-    fprintf(stderr, "std=%s dst=%s daylight=%d offset=%d\n", stdID, dstID, daylightUsed, offset);
+    /*fprintf(stderr, "std=%s dst=%s daylight=%d offset=%d\n", stdID, dstID, daylightUsed, offset);*/
     for (idx = 0; idx < (int32_t)sizeof(OFFSET_ZONE_MAPPINGS)/sizeof(OFFSET_ZONE_MAPPINGS[0]); idx++)
     {
         if (offset == OFFSET_ZONE_MAPPINGS[idx].offsetSeconds
@@ -1445,7 +1445,8 @@ int_getDefaultCodepage()
 
 #elif defined(OS390)
     static char codepage[64];
-    sprintf(codepage,"%s" UCNV_SWAP_LFNL_OPTION_STRING, nl_langinfo(CODESET));
+    sprintf(codepage,"%63s" UCNV_SWAP_LFNL_OPTION_STRING, nl_langinfo(CODESET));
+    codepage[63] = 0; /* NULL terminate */
     return codepage;
 
 #elif defined(XP_MAC)
