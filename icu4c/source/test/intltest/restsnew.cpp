@@ -439,12 +439,18 @@ NewResourceBundleTest::TestOtherAPI(){
 
     logln("Testing ResourceBundle(UErrorCode)\n");
     ResourceBundle defaultresource(err);
+    ResourceBundle explicitdefaultresource(NULL, Locale::getDefault(), err);
     if(U_FAILURE(err)){
         errln("Construction of default resourcebundle failed");
         return;
     }
-    if(strcmp(defaultresource.getLocale().getName(), Locale::getDefault().getName()) != 0){
-        errln("Construction of default resourcebundle didn't take the defaultlocale\n");
+    // You can't compare the default locale to the resolved locale in the
+    // resource bundle due to aliasing, keywords in the default locale
+    // or the chance that the machine running these tests is using a locale
+    // that isn't available in ICU.
+    if(strcmp(defaultresource.getLocale().getName(), explicitdefaultresource.getLocale().getName()) != 0){
+        errln("Construction of default resourcebundle didn't take the defaultlocale. Expected %s Got %s err=%s\n",
+            explicitdefaultresource.getLocale().getName(), defaultresource.getLocale().getName(), u_errorName(err));
     }
     
 
