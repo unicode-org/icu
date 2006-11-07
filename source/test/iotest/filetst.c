@@ -97,7 +97,7 @@ static void TestFileFromICU(UFILE *myFile) {
     fprintf(u_fgetfile(myFile), "\tNormal fprintf count value: n=%d\n", (int)*n); /* Should be 27 as stated later on. */
 
     u_fclose(myFile);
-    myFile = u_fopen(STANDARD_TEST_FILE, "r", NULL, NULL);
+    myFile = u_fopen(STANDARD_TEST_FILE, "r", "en_US_POSIX", NULL);
 
     if (myFile == NULL) {
         log_err("Can't read test file.");
@@ -310,7 +310,7 @@ static void TestFile(void) {
 /*    FILE *standardFile;*/
 
     log_verbose("Testing u_fopen\n");
-    TestFileFromICU(u_fopen(STANDARD_TEST_FILE, "w", NULL, NULL));
+    TestFileFromICU(u_fopen(STANDARD_TEST_FILE, "w", "en_US_POSIX", NULL));
 
 /* Don't know how to make this work without stdout or stderr */
 /*
