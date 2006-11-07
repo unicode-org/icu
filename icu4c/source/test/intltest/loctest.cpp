@@ -467,23 +467,31 @@ LocaleTest::TestDisplayNames()
     logln("  In locale = el_GR...");
     doTestDisplayNames(greek, DLANG_EL);
 
-    /* test that the default locale has a display name for its own language */
     UnicodeString s;
-    Locale().getDisplayLanguage(Locale(), s);
-    if(s.length()<=3 && s.charAt(0)<=0x7f) {
-        /* check <=3 to reject getting the language code as a display name */
-        errln("unable to get a display string for the language of the default locale\n");
-    }
+    UErrorCode status = U_ZERO_ERROR;
+    DecimalFormatSymbols symb(status);
+    /* Check to see if ICU supports this locale */
+    if (symb.getLocale(ULOC_VALID_LOCALE, status) != Locale("root")) {
+        /* test that the default locale has a display name for its own language */
+        Locale().getDisplayLanguage(Locale(), s);
+        if(s.length()<=3 && s.charAt(0)<=0x7f) {
+            /* check <=3 to reject getting the language code as a display name */
+            errln("unable to get a display string for the language of the default locale\n");
+        }
 
-    /*
-     * API coverage improvements: call
-     * Locale::getDisplayLanguage(UnicodeString &) and
-     * Locale::getDisplayCountry(UnicodeString &)
-     */
-    s.remove();
-    Locale().getDisplayLanguage(s);
-    if(s.length()<=3 && s.charAt(0)<=0x7f) {
-        errln("unable to get a display string for the language of the default locale [2]\n");
+        /*
+         * API coverage improvements: call
+         * Locale::getDisplayLanguage(UnicodeString &) and
+         * Locale::getDisplayCountry(UnicodeString &)
+         */
+        s.remove();
+        Locale().getDisplayLanguage(s);
+        if(s.length()<=3 && s.charAt(0)<=0x7f) {
+            errln("unable to get a display string for the language of the default locale [2]\n");
+        }
+    }
+    else {
+        logln("Default locale %s is unsupported by ICU\n", Locale().getName());
     }
     s.remove();
     french.getDisplayCountry(s);
