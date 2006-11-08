@@ -2151,5 +2151,5 @@ static const uint32_t propsVectors[3384]={
 
 static const int32_t countPropsVectors=3384;
 static const int32_t propsVectorsColumns=3;
-static const int32_t indexes[UPROPS_INDEX_COUNT]={0x1a54,0x1a54,0x1a54,0x1a54,0x3b66,3,0x489e,0,0,0,0x8ecd67,0x29d31,0,0,0,0};
+static const int32_t indexes[UPROPS_INDEX_COUNT]={0x1a54,0x1a54,0x1a54,0x1a54,0x3b66,3,0x489e,0,0,0,0x8ecd71,0x29d31,0,0,0,0};
 

@@ -160,9 +160,22 @@ typedef enum UScriptCode {
       USCRIPT_CUNEIFORM                     = 101,/* Xsux */
       USCRIPT_UNWRITTEN_LANGUAGES           = 102,/* Zxxx */
       USCRIPT_UNKNOWN                       = 103,/* Zzzz */ /* Unknown="Code for uncoded script", for unassigned code points */
+
+      /* New script codes from ISO 15924 @draft ICU 3.8 */
+      USCRIPT_CARIAN                        = 104,/* Cari */
+      USCRIPT_JAPANESE                      = 105,/* Jpan */
+      USCRIPT_LANNA                         = 106,/* Lana */
+      USCRIPT_LYCIAN                        = 107,/* Lyci */
+      USCRIPT_LYDIAN                        = 108,/* Lydi */
+      USCRIPT_OL_CHIKI                      = 109,/* Olck */
+      USCRIPT_REJANG                        = 110,/* Rjng */
+      USCRIPT_SAURASHTRA                    = 111,/* Saur */
+      USCRIPT_SIGN_WRITING                  = 112,/* Sgnw */
+      USCRIPT_SUNDANESE                     = 113,/* Sund */
+
       /* Private use codes from Qaaa - Qabx are not supported*/
 #endif /* U_HIDE_DRAFT_API */
-      USCRIPT_CODE_LIMIT    = 104
+      USCRIPT_CODE_LIMIT    = 114
 } UScriptCode;
 
 /**
