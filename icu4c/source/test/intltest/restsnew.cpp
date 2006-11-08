@@ -207,7 +207,9 @@ NewResourceBundleTest::TestResourceBundles()
 
     /* Make sure that users using te_IN for the default locale don't get test failures. */
     Locale originalDefault;
-    Locale::setDefault(Locale("en_US"), status);
+    if (Locale::getDefault() == Locale("te_IN")) {
+        Locale::setDefault(Locale("en_US"), status);
+    }
 
     testTag("only_in_Root", TRUE, FALSE, FALSE);
     testTag("only_in_te", FALSE, TRUE, FALSE);
@@ -239,7 +241,9 @@ NewResourceBundleTest::TestConstruction()
 
     /* Make sure that users using te_IN for the default locale don't get test failures. */
     Locale originalDefault;
-    Locale::setDefault(Locale("en_US"), err);
+    if (Locale::getDefault() == Locale("te_IN")) {
+        Locale::setDefault(Locale("en_US"), err);
+    }
 
     ResourceBundle  test1((UnicodeString)testdatapath, err);
     ResourceBundle  test2(testdatapath, locale, err);
@@ -431,7 +435,9 @@ NewResourceBundleTest::TestOtherAPI(){
 
     /* Make sure that users using te_IN for the default locale don't get test failures. */
     Locale originalDefault;
-    Locale::setDefault(Locale("en_US"), err);
+    if (Locale::getDefault() == Locale("te_IN")) {
+        Locale::setDefault(Locale("en_US"), err);
+    }
 
     Locale       *locale=new Locale("te_IN");
 
