@@ -1,6 +1,6 @@
 // ***************************************************************************
 // *
-// *   Copyright (C) 2004, International Business Machines
+// *   Copyright (C) 2004-2006, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
@@ -24,6 +24,7 @@ pt {
         "80: oitenta[ e >>];\n"
         "90: noventa[ e >>];\n"
         "100: cem;\n"
+        "101: cento >>;\n"
         "200: doscentos[ >>];\n"
         "300: tr\u00E8sentos[ >>];\n"
         "400: cuatrocentos[ >>];\n"
