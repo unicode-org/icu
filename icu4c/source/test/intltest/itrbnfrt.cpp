@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2003, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -42,7 +42,7 @@ void RbnfRoundTripTest::runIndexedTest(int32_t index, UBool exec, const char* &n
       TESTCASE(8, TestDutchSpelloutRT);
       TESTCASE(9, TestJapaneseSpelloutRT);
       TESTCASE(10, TestRussianSpelloutRT);
-      TESTCASE(11, TestGreekSpelloutRT);
+      TESTCASE(11, TestPortugueseSpelloutRT);
 #else
       TESTCASE(0, TestRBNFDisabled);
 #endif
@@ -253,19 +253,19 @@ RbnfRoundTripTest::TestRussianSpelloutRT()
 }
 
 /**
- * Perform an exhaustive round-trip test on the Greek spellout rules
+ * Perform an exhaustive round-trip test on the Portuguese spellout rules
  */
 void
-RbnfRoundTripTest::TestGreekSpelloutRT() 
+RbnfRoundTripTest::TestPortugueseSpelloutRT() 
 {
   UErrorCode status = U_ZERO_ERROR;
   RuleBasedNumberFormat* formatter
-    = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale("el", "GR"), status);
+    = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale("pt", "BR"), status);
 
   if (U_FAILURE(status)) {
     errln("failed to construct formatter");
   } else {
-    doTest(formatter, 0, 12345678);
+    doTest(formatter, -12345678, 12345678);
   }
   delete formatter;
 }
