@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -77,9 +77,9 @@ class RbnfRoundTripTest : public IntlTest {
   virtual void TestRussianSpelloutRT();
 
   /**
-   * Perform an exhaustive round-trip test on the Greek spellout rules
+   * Perform an exhaustive round-trip test on the Portuguese spellout rules
    */
-  virtual void TestGreekSpelloutRT();
+  virtual void TestPortugueseSpelloutRT();
 
  protected:
   void doTest(const RuleBasedNumberFormat* formatter,  double lowLimit, double highLimit);
