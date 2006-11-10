@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2006 - All Rights Reserved
  *
  */
 
@@ -47,6 +47,10 @@ le_int32 CoverageFormat1Table::getGlyphCoverage(LEGlyphID glyphID) const
     le_uint16 extra = count - power;
     le_uint16 probe = power;
     le_uint16 index = 0;
+
+	if (count == 0) {
+		return -1;
+	}
 
     if (SWAPW(glyphArray[extra]) <= ttGlyphID) {
         index = extra;
