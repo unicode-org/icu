@@ -1,0 +1,20 @@
+#!/bin/sh
+#
+# This test script enumerates all locales and all timezones installed on a
+# machine (usually Linux), and runs the existing ICU4C tests to make sure that
+# the tests pass. Not everyone is using and testing ICU4C in the en_US locale
+# with the Pacific timezone.
+top_icu_dir=../../../icu
+release_tools_dir=../../../../tools/release/c
+cd $top_icu_dir/source/test/intltest
+$release_tools_dir/allLocaleTest.sh intltest &
+$release_tools_dir/allTimezoneTest.sh intltest &
+cd ../iotest
+$release_tools_dir/allLocaleTest.sh iotest &
+$release_tools_dir/allTimezoneTest.sh iotest &
+cd ../cintltst
+$release_tools_dir/allLocaleTest.sh cintltst &
+$release_tools_dir/allTimezoneTest.sh cintltst &
+
+echo "All tests have been spawned."
+echo "Please wait while the tests run. This may take a while."
