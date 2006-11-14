@@ -115,6 +115,7 @@ static void TestFromUCountPending(void);
 static void TestDefaultName(void);
 static void TestCompareNames(void);
 static void TestSubstString(void);
+static void InvalidArguments(void);
 
 void addTestConvert(TestNode** root);
 
@@ -126,11 +127,9 @@ void addTestConvert(TestNode** root)
     addTest(root, &TestAlias,                   "tsconv/ccapitst/TestAlias"); 
     addTest(root, &TestDuplicateAlias,          "tsconv/ccapitst/TestDuplicateAlias"); 
     addTest(root, &TestConvertSafeClone,        "tsconv/ccapitst/TestConvertSafeClone");
-
 #if !UCONFIG_NO_LEGACY_CONVERSION
     addTest(root, &TestConvertSafeCloneCallback,"tsconv/ccapitst/TestConvertSafeCloneCallback");
 #endif
- 
     addTest(root, &TestCCSID,                   "tsconv/ccapitst/TestCCSID"); 
     addTest(root, &TestJ932,                    "tsconv/ccapitst/TestJ932");
     addTest(root, &TestJ1968,                   "tsconv/ccapitst/TestJ1968");
@@ -144,6 +143,7 @@ void addTestConvert(TestNode** root)
     addTest(root, &TestDefaultName,             "tsconv/ccapitst/TestDefaultName");
     addTest(root, &TestCompareNames,            "tsconv/ccapitst/TestCompareNames");
     addTest(root, &TestSubstString,             "tsconv/ccapitst/TestSubstString");
+    addTest(root, &InvalidArguments,            "tsconv/ccapitst/InvalidArguments");
 }
 
 static void ListNames(void) {
@@ -3246,3 +3246,59 @@ TestSubstString() {
      * functions with UErrorCode parameters.
      */
 }
+
+static void
+InvalidArguments() {
+    UConverter *cnv;
+    UErrorCode errorCode;
+    char charBuffer[2] = {1, 1};
+    char ucharAsCharBuffer[2] = {2, 2};
+    char *charsPtr = charBuffer;
+    UChar *ucharsPtr = (UChar *)ucharAsCharBuffer;
+    UChar *ucharsBadPtr = (UChar *)(ucharAsCharBuffer + 1);
+
+    errorCode=U_ZERO_ERROR;
+    cnv=ucnv_open("UTF-8", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("ucnv_open() failed - %s\n", u_errorName(errorCode));
+        return;
+    }
+
+    errorCode=U_ZERO_ERROR;
+    /* This one should fail because an incomplete UChar is being passed in */
+    ucnv_fromUnicode(cnv, &charsPtr, charsPtr, &ucharsPtr, ucharsBadPtr, NULL, TRUE, &errorCode);
+    if(errorCode != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("ucnv_fromUnicode() failed to return U_ILLEGAL_ARGUMENT_ERROR for incomplete UChar * buffer - %s\n", u_errorName(errorCode));
+    }
+
+    errorCode=U_ZERO_ERROR;
+    /* This one should fail because ucharsBadPtr is > than ucharsPtr */
+    ucnv_fromUnicode(cnv, &charsPtr, charsPtr, &ucharsBadPtr, ucharsPtr, NULL, TRUE, &errorCode);
+    if(errorCode != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("ucnv_fromUnicode() failed to return U_ILLEGAL_ARGUMENT_ERROR for bad limit pointer - %s\n", u_errorName(errorCode));
+    }
+
+    errorCode=U_ZERO_ERROR;
+    /* This one should fail because an incomplete UChar is being passed in */
+    ucnv_toUnicode(cnv, &ucharsPtr, ucharsBadPtr, &charsPtr, charsPtr, NULL, TRUE, &errorCode);
+    if(errorCode != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("ucnv_toUnicode() failed to return U_ILLEGAL_ARGUMENT_ERROR for incomplete UChar * buffer - %s\n", u_errorName(errorCode));
+    }
+
+    errorCode=U_ZERO_ERROR;
+    /* This one should fail because ucharsBadPtr is > than ucharsPtr */
+    ucnv_toUnicode(cnv, &ucharsBadPtr, ucharsPtr, &charsPtr, charsPtr, NULL, TRUE, &errorCode);
+    if(errorCode != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("ucnv_toUnicode() failed to return U_ILLEGAL_ARGUMENT_ERROR for bad limit pointer - %s\n", u_errorName(errorCode));
+    }
+
+    if (charBuffer[0] != 1 || charBuffer[1] != 1
+        || ucharAsCharBuffer[0] != 2 || ucharAsCharBuffer[1] != 2)
+    {
+        log_err("Data was incorrectly written to buffers\n");
+    }
+
+    ucnv_close(cnv);
+}
+
+
