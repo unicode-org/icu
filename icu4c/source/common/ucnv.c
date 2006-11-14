@@ -1116,13 +1116,13 @@ ucnv_fromUnicode(UConverter *cnv,
 
     s=*source;
     t=*target;
-    if(sourceLimit<s || targetLimit<t) {
-        *err=U_ILLEGAL_ARGUMENT_ERROR;
-        return;
-    }
 
     /*
-     * Make sure that the buffer sizes do not exceed the number range for
+     * All these conditions should never happen.
+     *
+     * 1) Make sure that the limits are >= to the address source or target
+     *
+     * 2) Make sure that the buffer sizes do not exceed the number range for
      * int32_t because some functions use the size (in units or bytes)
      * rather than comparing pointers, and because offsets are int32_t values.
      *
@@ -1132,11 +1132,15 @@ ucnv_fromUnicode(UConverter *cnv,
      * not be able to maintain the semantics that either the source must be
      * consumed or the target filled (unless an error occurs).
      * An adjustment would be targetLimit=t+0x7fffffff; for example.
+     *
+     * 3) Make sure that the user didn't incorrectly cast a UChar * pointer
+     * to a char * pointer and provide an incomplete UChar code unit.
      */
-    if(
+    if (sourceLimit<s || targetLimit<t ||
         ((size_t)(sourceLimit-s)>(size_t)0x3fffffff && sourceLimit>s) ||
-        ((size_t)(targetLimit-t)>(size_t)0x7fffffff && targetLimit>t)
-    ) {
+        ((size_t)(targetLimit-t)>(size_t)0x7fffffff && targetLimit>t) ||
+        (((const char *)sourceLimit-(const char *)s) & 1) != 0)
+    {
         *err=U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -1514,13 +1518,13 @@ ucnv_toUnicode(UConverter *cnv,
 
     s=*source;
     t=*target;
-    if(sourceLimit<s || targetLimit<t) {
-        *err=U_ILLEGAL_ARGUMENT_ERROR;
-        return;
-    }
 
     /*
-     * Make sure that the buffer sizes do not exceed the number range for
+     * All these conditions should never happen.
+     *
+     * 1) Make sure that the limits are >= to the address source or target
+     *
+     * 2) Make sure that the buffer sizes do not exceed the number range for
      * int32_t because some functions use the size (in units or bytes)
      * rather than comparing pointers, and because offsets are int32_t values.
      *
@@ -1530,10 +1534,14 @@ ucnv_toUnicode(UConverter *cnv,
      * not be able to maintain the semantics that either the source must be
      * consumed or the target filled (unless an error occurs).
      * An adjustment would be sourceLimit=t+0x7fffffff; for example.
+     *
+     * 3) Make sure that the user didn't incorrectly cast a UChar * pointer
+     * to a char * pointer and provide an incomplete UChar code unit.
      */
-    if(
+    if (sourceLimit<s || targetLimit<t ||
         ((size_t)(sourceLimit-s)>(size_t)0x7fffffff && sourceLimit>s) ||
-        ((size_t)(targetLimit-t)>(size_t)0x3fffffff && targetLimit>t)
+        ((size_t)(targetLimit-t)>(size_t)0x3fffffff && targetLimit>t) ||
+        (((const char *)targetLimit-(const char *)t) & 1) != 0
     ) {
         *err=U_ILLEGAL_ARGUMENT_ERROR;
         return;
