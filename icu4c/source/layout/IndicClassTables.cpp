@@ -192,8 +192,8 @@ static const IndicClassTable::CharClass kndaCharClasses[] =
 static const IndicClassTable::CharClass mlymCharClasses[] =
 {
     _xx, _xx, _mp, _mp, _xx, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _iv, _iv, // 0D00 - 0D0F
-    _iv, _xx, _iv, _iv, _iv, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _bb, // 0D10 - 0D1F
-    _ct, _ct, _ct, _bb, _ct, _bb, _bb, _ct, _ct, _xx, _ct, _ct, _ct, _ct, _ct, _pb, // 0D20 - 0D2F
+    _iv, _xx, _iv, _iv, _iv, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, // 0D10 - 0D1F
+    _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _xx, _ct, _ct, _ct, _ct, _ct, _pb, // 0D20 - 0D2F
     _pb, _cn, _bb, _ct, _ct, _pb, _ct, _ct, _ct, _ct, _xx, _xx, _xx, _xx, _r2, _dr, // 0D30 - 0D3F
     _dr, _dr, _dr, _dr, _xx, _xx, _l1, _l1, _dl, _xx, _s1, _s2, _s3, _vr, _xx, _xx, // 0D40 - 0D4F
     _xx, _xx, _xx, _xx, _xx, _xx, _xx, _m2, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, // 0D50 - 0D5F
@@ -237,6 +237,7 @@ static const SplitMatra sinhSplitTable[] = {{0x0DD9, 0x0DCA}, {0x0DD9, 0x0DCF}, 
 
 // FIXME: post 'GSUB' reordering of MATRA_PRE's for Malayalam and Tamil
 // FIXME: reformed Malayalam needs to reorder VATTU to before base glyph...
+// FIXME: not sure passing ZWJ/ZWNJ is best way to render Malayalam Cillu...
 // FIXME: eyelash RA only for Devanagari??
 #define DEVA_SCRIPT_FLAGS (SF_EYELASH_RA | SF_NO_POST_BASE_LIMIT | SF_FILTER_ZERO_WIDTH)
 #define BENG_SCRIPT_FLAGS (SF_REPH_AFTER_BELOW | SF_NO_POST_BASE_LIMIT | SF_FILTER_ZERO_WIDTH)
@@ -246,7 +247,7 @@ static const SplitMatra sinhSplitTable[] = {{0x0DD9, 0x0DCA}, {0x0DD9, 0x0DCF}, 
 #define TAML_SCRIPT_FLAGS (SF_MPRE_FIXUP | SF_NO_POST_BASE_LIMIT | SF_FILTER_ZERO_WIDTH)
 #define TELU_SCRIPT_FLAGS (SF_MATRAS_AFTER_BASE | SF_FILTER_ZERO_WIDTH | 3)
 #define KNDA_SCRIPT_FLAGS (SF_MATRAS_AFTER_BASE | SF_FILTER_ZERO_WIDTH | 3)
-#define MLYM_SCRIPT_FLAGS (SF_MPRE_FIXUP | SF_NO_POST_BASE_LIMIT | SF_FILTER_ZERO_WIDTH)
+#define MLYM_SCRIPT_FLAGS (SF_MPRE_FIXUP | SF_NO_POST_BASE_LIMIT /*| SF_FILTER_ZERO_WIDTH*/)
 #define SINH_SCRIPT_FLAGS (SF_MPRE_FIXUP | SF_NO_POST_BASE_LIMIT)
 
 //
