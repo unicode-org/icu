@@ -626,8 +626,8 @@ static UBool isValidOlsonID(const char *id) {
 }
 #endif
 
-#ifdef U_TZNAME
-/*#include <stdio.h>*/
+#if defined(U_TZNAME) && !defined(U_WINDOWS)
+
 #define CONVERT_HOURS_TO_SECONDS(offset) (int32_t)(offset*3600)
 typedef struct OffsetZoneMapping {
     int32_t offsetSeconds;
@@ -775,14 +775,20 @@ uprv_tzname(int n)
 #endif
 
 #ifdef U_TZNAME
+#if !defined(U_WINDOWS)
     /*
-    U_TZNAME is usually a non-unique abbreviation,
-    which isn't normally usable.
+    U_TZNAME is usually a non-unique abbreviation, which isn't normally usable.
+    So we remap the abbreviation to an olson ID.
+
+    Since Windows exposes a little more timezone information,
+    we normally don't use this code on Windows because uprv_detectWindowsTimeZone
+    should have already given the correct answer.
     */
     tzid = remapShortTimeZone(U_TZNAME[0], U_TZNAME[1], uprv_daylight(), uprv_timezone());
     if (tzid != NULL) {
         return tzid;
     }
+#endif
     return U_TZNAME[n];
 #else
     return "";
