@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2006, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -23,8 +23,6 @@
 #include "unicode/ucol.h"
 #include "unicode/ustring.h"
 #include "cmemory.h"
-
-UChar U_CALLCONV testInc(void *context);
 
 void addCollTest(TestNode** root);
 
@@ -154,21 +152,6 @@ UChar* appendCompareResult(UCollationResult result, UChar* target)
     }
 
     return target;
-}
-
-/* Support for testing incremental strcoll */
-typedef struct {
-    const UChar *start;
-    const UChar *end;
-} testContext;
-
-UChar U_CALLCONV testInc(void *context) {
-    testContext *s = (testContext *)context;
-    if(s->start == s->end) {
-        return 0xFFFF;
-    } else {
-        return *(s->start++);
-    }
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
