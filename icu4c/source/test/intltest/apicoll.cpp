@@ -1022,15 +1022,51 @@ CollationAPITest::TestCompare(/* char* par */)
 void
 CollationAPITest::TestGetAll(/* char* par */)
 {
-    int32_t count;
-    const Locale* list = Collator::getAvailableLocales(count);
-    for (int32_t i = 0; i < count; ++i) {
-        UnicodeString locName, dispName;
-        log("Locale name: ");
-        log(list[i].getName());
-        log(" , the display name is : ");
-        logln(list[i].getDisplayName(dispName));
+    int32_t count1, count2;
+    UErrorCode status = U_ZERO_ERROR;
+
+    logln("Trying Collator::getAvailableLocales(int&)");
+
+    const Locale* list = Collator::getAvailableLocales(count1);
+    for (int32_t i = 0; i < count1; ++i) {
+        UnicodeString dispName;
+        logln(UnicodeString("Locale name: ")
+            + UnicodeString(list[i].getName())
+            + UnicodeString(" , the display name is : ")
+            + UnicodeString(list[i].getDisplayName(dispName)));
     }
+
+    logln("Trying Collator::getAvailableLocales()");
+    StringEnumeration* localeEnum = Collator::getAvailableLocales();
+    const UnicodeString* locStr;
+    const char *locCStr;
+    count2 = 0;
+    while ((locStr = localeEnum->snext(status)) != NULL)
+    {
+        logln(UnicodeString("Locale name is: ") + *locStr);
+        count2++;
+    }
+    if (count1 != count2) {
+        errln("getAvailableLocales(int&) returned %d and getAvailableLocales() returned %d", count1, count2);
+    }
+
+    logln("Trying Collator::getAvailableLocales() clone");
+    count1 = 0;
+    StringEnumeration* localeEnum2 = localeEnum->clone();
+    localeEnum2->reset(status);
+    while ((locCStr = localeEnum2->next(NULL, status)) != NULL)
+    {
+        logln(UnicodeString("Locale name is: ") + UnicodeString(locCStr));
+        count1++;
+    }
+    if (count1 != count2) {
+        errln("getAvailableLocales(3rd time) returned %d and getAvailableLocales(2nd time) returned %d", count1, count2);
+    }
+    if (localeEnum->count(status) != count1) {
+        errln("localeEnum->count() returned %d and getAvailableLocales() returned %d", localeEnum->count(status), count1);
+    }
+    delete localeEnum;
+    delete localeEnum2;
 }
 
 void CollationAPITest::TestSortKey()
