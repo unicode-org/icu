@@ -46,69 +46,69 @@ UObject *UObjectTest::testClass(UObject *obj,
                 const char *className, const char *factory, 
                 UClassID staticID)
 {
-  uint32_t i;
-  UnicodeString what = UnicodeString(className) + " * x= " + UnicodeString(factory?factory:" ABSTRACT ") + "; ";
-  UClassID dynamicID = NULL;
+    uint32_t i;
+    UnicodeString what = UnicodeString(className) + " * x= " + UnicodeString(factory?factory:" ABSTRACT ") + "; ";
+    UClassID dynamicID = NULL;
 
-  if(ids_count >= MAX_CLASS_ID) {
-    char count[100];
-    sprintf(count, " (currently %d) ", MAX_CLASS_ID);
-    errln("FAIL: Fatal: Ran out of IDs! Increase MAX_CLASS_ID." + UnicodeString(count) + what);
+    if(ids_count >= MAX_CLASS_ID) {
+        char count[100];
+        sprintf(count, " (currently %d) ", MAX_CLASS_ID);
+        errln("FAIL: Fatal: Ran out of IDs! Increase MAX_CLASS_ID." + UnicodeString(count) + what);
+        return obj;
+    }
+
+    if(obj) {
+        dynamicID = obj->getDynamicClassID();
+    }
+
+    {
+        char tmp[500];
+        sprintf(tmp, " [static=%p, dynamic=%p] ", staticID, dynamicID);
+        logln(what + tmp);
+    }
+
+    if(staticID == NULL) {
+        errln(  "FAIL: staticID == NULL!" + what);
+    }
+
+    if(factory != NULL) {  /* NULL factory means: abstract */
+        if(!obj) {
+            errln( "FAIL: ==NULL!" + what);
+            return obj;
+        }
+
+        if(dynamicID == NULL) {
+            errln("FAIL: dynamicID == NULL!" + what);
+        }
+
+        if(dynamicID != staticID) {
+            errln("FAIL: dynamicID != staticID!" + what );
+        }
+    }
+
+    // Bail out if static ID is null. Error message was already printed.
+    if(staticID == NULL) {
+        return obj;
+    }
+
+    for(i=0;i<ids_count;i++) {
+        if(staticID == ids[i]) {
+            if(!strcmp(ids_class[i], className)) {
+                logln("OK: ID found is the same as " + UnicodeString(ids_class[i]) + UnicodeString(" *y= ") + ids_factory[i] + what);
+                return obj; 
+            } else {
+                errln("FAIL: ID is the same as " + UnicodeString(ids_class[i]) + UnicodeString(" *y= ") + ids_factory[i] + what);
+                return obj;
+            }
+        }
+    }
+
+    ids[ids_count] = staticID;
+    ids_factory[ids_count] = factory;
+    ids_class[ids_count] = className;
+    ids_count++;
+
     return obj;
-  }
-
-  if(obj) {
-    dynamicID = obj->getDynamicClassID();
-  }    
-
-  {
-    char tmp[500];
-    sprintf(tmp, " [static=%p, dynamic=%p] ", staticID, dynamicID);
-    logln(what + tmp);
-  }
-
-  if(staticID == NULL) {
-    errln(  "FAIL: staticID == NULL!" + what);
-  }
-
-  if(factory != NULL) {  /* NULL factory means: abstract */
-    if(!obj) {
-      errln( "FAIL: ==NULL!" + what);
-      return obj;
-    }
-
-    if(dynamicID == NULL) {
-      errln("FAIL: dynamicID == NULL!" + what);
-    }
-    
-    if(dynamicID != staticID) {
-      errln("FAIL: dynamicID != staticID!" + what );
-    }
-  }
-
-  // Bail out if static ID is null
-  if(staticID == NULL) {
-    return obj;
-  }
-
-  for(i=0;i<ids_count;i++) {
-    if(staticID == ids[i]) {
-      if(!strcmp(ids_class[i], className)) {
-    logln("OK: ID found is the same as " + UnicodeString(ids_class[i]) + UnicodeString(" *y= ") + ids_factory[i] + what);
-    return obj; 
-      } else {
-    errln("FAIL: ID is the same as " + UnicodeString(ids_class[i]) + UnicodeString(" *y= ") + ids_factory[i] + what);
-    return obj;
-      }
-    }
-  }
-
-  ids[ids_count] = staticID;
-  ids_factory[ids_count] = factory;
-  ids_class[ids_count] = className;
-  ids_count++;
-
-  return obj;
 }
 
 
@@ -153,6 +153,7 @@ UObject *UObjectTest::testClass(UObject *obj,
 #include "japancal.h"
 #include "hebrwcal.h"
 #include "ustrenum.h"
+#include "olsontz.h"
 
 // External Things
 #include "unicode/brkiter.h"
@@ -208,6 +209,13 @@ UObject *UObjectTest::testClass(UObject *obj,
 class TestLocaleKeyFactory : public LocaleKeyFactory {
 public:
     TestLocaleKeyFactory(int32_t coverage) : LocaleKeyFactory(coverage) {}
+};
+#endif
+
+#if !UCONFIG_NO_FORMATTING
+class TestOlsonTimeZone : public OlsonTimeZone {
+public:
+    TestOlsonTimeZone(int32_t) : OlsonTimeZone() {}
 };
 #endif
 
@@ -321,6 +329,7 @@ void UObjectTest::testIDs()
 
 #if !UCONFIG_NO_FORMATTING
     TESTCLASSID_ABSTRACT(TimeZone);
+    TESTCLASSID_CTOR(TestOlsonTimeZone, (42));   // Test replacement for OlsonTimeZone
 #endif
 
 #if !UCONFIG_NO_TRANSLITERATION
