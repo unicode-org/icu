@@ -877,12 +877,23 @@ uhash_equals(const UHashtable* hash1, const UHashtable* hash2){
         return TRUE;
     }
 
-    if(hash1==NULL || hash2==NULL){
-        return FALSE;
-    }
-    /* make sure that we are comparing 2 hashes of the same type */
-    if( hash1->keyComparator != hash2->keyComparator ||
-        hash2->valueComparator != hash2->valueComparator){
+    /*
+     * Make sure that we are comparing 2 valid hashes of the same type
+     * with valid comparison functions.
+     * Without valid comparison functions, a binary comparison
+     * of the hash values will yield random results on machines
+     * with 64-bit pointers and 32-bit integer hashes.
+     * A valueComparator is normally optional.
+     */
+    if (hash1==NULL || hash2==NULL ||
+        hash1->keyComparator != hash2->keyComparator ||
+        hash1->valueComparator != hash2->valueComparator ||
+        hash1->valueComparator == NULL)
+    {
+        /*
+        Normally we would return an error here about incompatible hash tables,
+        but we return FALSE instead.
+        */
         return FALSE;
     }
 

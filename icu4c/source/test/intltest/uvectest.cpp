@@ -160,6 +160,13 @@ void UVectorTest::UStack_API() {
     delete a;
 }
 
+U_CDECL_BEGIN
+static UBool U_CALLCONV neverTRUE(const UHashTok /*key1*/, const UHashTok /*key2*/) {
+    return FALSE;
+}
+
+U_CDECL_END
+
 void UVectorTest::Hashtable_API() {
     UErrorCode status = U_ZERO_ERROR;
     Hashtable *a = new Hashtable(status);
@@ -170,6 +177,24 @@ void UVectorTest::Hashtable_API() {
     TEST_ASSERT((a->find("b") != NULL));
     TEST_ASSERT((a->removei("a") == 1));
     TEST_ASSERT((a->find("a") == NULL));
+
+    /* verify that setValueCompartor works */
+    Hashtable b(status);
+    TEST_ASSERT((!a->equals(b)));
+    TEST_ASSERT((b.puti("b", 2, status) == 0));
+    TEST_ASSERT((!a->equals(b))); // Without a value comparator, this will be FALSE by default.
+    b.setValueCompartor(uhash_compareLong);
+    TEST_ASSERT((!a->equals(b)));
+    a->setValueCompartor(uhash_compareLong);
+    TEST_ASSERT((a->equals(b)));
+    TEST_ASSERT((a->equals(*a))); // This better be reflexive.
+
+    /* verify that setKeyCompartor works */
+    TEST_ASSERT((a->puti("a", 1, status) == 0));
+    TEST_ASSERT((a->find("a") != NULL));
+    a->setKeyCompartor(neverTRUE);
+    TEST_ASSERT((a->find("a") == NULL));
+
     delete a;
 }
 
