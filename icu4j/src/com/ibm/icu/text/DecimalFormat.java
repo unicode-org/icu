@@ -1884,7 +1884,7 @@ public class DecimalFormat extends NumberFormat {
                 {
                     if (strictParse) {
                         if (backup != -1 ||
-                            (lastGroup != -1 && position - lastGroup != groupingSize - 1)) {
+                            (lastGroup != -1 && position - lastGroup != groupingSize + 1)) {
                             strictFail = true;
                             break;
                         }
