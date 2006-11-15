@@ -469,11 +469,10 @@ static ContractionTable *_cnttab_getContractionTable(CntTable *table, uint32_t e
     element &= 0xFFFFFF;
     ContractionTable *tbl = NULL;
 
-    if((element == 0xFFFFFF) || (tbl = table->elements[element]) == NULL) {
-        return NULL;
-    } else {
-        return tbl;
+    if(element != 0xFFFFFF) {
+        tbl = table->elements[element]; /* This could also return NULL */
     }
+    return tbl;
 }
 
 static int32_t _cnttab_findCP(ContractionTable *tbl, UChar codePoint) {
