@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004, International Business Machines
+* Copyright (c) 2004-2006, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -71,25 +71,11 @@ class U_I18N_API CurrencyFormat : public MeasureFormat {
                                   UErrorCode& ec) const;
 
     /**
-     * Redeclare Format API to prevent hiding.
-     */
-    UnicodeString& format(const Formattable& obj,
-                          UnicodeString& appendTo,
-                          UErrorCode& ec) const;
-
-    /**
      * Override Format API.
      */
     virtual void parseObject(const UnicodeString& source,
                              Formattable& result,
                              ParsePosition& pos) const;
-
-    /**
-     * Redeclare Format API to prevent hiding.
-     */
-    void parseObject(const UnicodeString& source,
-                     Formattable& result,
-                     UErrorCode& ec) const;
 
     /**
      * Override Format API.

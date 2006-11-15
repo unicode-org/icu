@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004, International Business Machines
+* Copyright (c) 2004-2006, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -53,22 +53,10 @@ UnicodeString& CurrencyFormat::format(const Formattable& obj,
     return fmt->format(obj, appendTo, pos, ec);
 }
 
-UnicodeString& CurrencyFormat::format(const Formattable& obj,
-                                      UnicodeString& appendTo,
-                                      UErrorCode& ec) const {
-    return MeasureFormat::format(obj, appendTo, ec);
-}
-
 void CurrencyFormat::parseObject(const UnicodeString& source,
                                  Formattable& result,
                                  ParsePosition& pos) const {
     fmt->parseCurrency(source, result, pos);
-}
-
-void CurrencyFormat::parseObject(const UnicodeString& source,
-                                 Formattable& result,
-                                 UErrorCode& ec) const {
-    MeasureFormat::parseObject(source, result, ec);
 }
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(CurrencyFormat)
