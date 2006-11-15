@@ -1,7 +1,7 @@
 //##header
 /*
  *******************************************************************************
- * Copyright (C) 2001-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -181,5 +181,53 @@ public class NumberFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
 //#endif
+    }
+
+    /*
+     * Test case for JB#5509, strict parsing issue
+     */
+    public void TestJB5509() {
+        String[] data = {
+                "1,2",
+                "1.2",
+                "1,2.5",
+                "1,23.5",
+                "1,234.5",
+                "1,234",
+                "1,234,567",
+                "1,234,567.8",
+                "1,234,5",
+                "1,234,5.6",
+                "1,234,56.7"
+        };
+        boolean[] expected = { // false for expected parse failure
+                false,
+                true,
+                false,
+                false,
+                true,
+                true,
+                true,
+                true,
+                false,
+                false,
+                false,
+                false
+        };
+
+        DecimalFormat df = new DecimalFormat("#,##0.###", new DecimalFormatSymbols(new ULocale("en_US")));
+        df.setParseStrict(true);
+        for (int i = 0; i < data.length; i++) {
+            try {
+                Number n = df.parse(data[i]);
+                if (!expected[i]) {
+                    errln("Failed: ParseException must be thrown for string " + data[i]);
+                }
+            } catch (ParseException pe) {
+                if (expected[i]) {
+                    errln("Failed: ParseException must not be thrown for string " + data[i]);
+                }
+            }
+        }
     }
 }
