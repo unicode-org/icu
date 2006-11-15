@@ -1786,6 +1786,7 @@ U_CFUNC const char* ures_getName(const UResourceBundle* resB) {
   return resB->fData->fName;
 }
 
+#ifdef URES_DEBUG
 U_CFUNC const char* ures_getPath(const UResourceBundle* resB) {
   if(resB == NULL) {
     return NULL;
@@ -1793,6 +1794,7 @@ U_CFUNC const char* ures_getPath(const UResourceBundle* resB) {
 
   return resB->fData->fPath;
 }
+#endif
 
 /* OLD API implementation */
 
