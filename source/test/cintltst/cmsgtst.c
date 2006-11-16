@@ -1038,12 +1038,36 @@ static void TestErrorChaining(void) {
 
     umsg_open(NULL, 0, NULL, NULL, &status);
     umsg_applyPattern(NULL, NULL, 0, NULL, &status);
+    umsg_toPattern(NULL, NULL, 0, &status);
     umsg_clone(NULL, &status);
+    umsg_format(NULL, NULL, 0, &status);
+    umsg_parse(NULL, NULL, 0, NULL, &status);
     umsg_close(NULL);
 
     /* All of this code should have done nothing. */
     if (status != U_USELESS_COLLATOR_ERROR) {
         log_err("Status got changed to %s\n", u_errorName(status));
+    }
+
+    status = U_ZERO_ERROR;
+    umsg_open(NULL, 0, NULL, NULL, &status);
+    if (status != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("Status should be U_ILLEGAL_ARGUMENT_ERROR instead of %s\n", u_errorName(status));
+    }
+    status = U_ZERO_ERROR;
+    umsg_applyPattern(NULL, NULL, 0, NULL, &status);
+    if (status != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("Status should be U_ILLEGAL_ARGUMENT_ERROR instead of %s\n", u_errorName(status));
+    }
+    status = U_ZERO_ERROR;
+    umsg_toPattern(NULL, NULL, 0, &status);
+    if (status != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("Status should be U_ILLEGAL_ARGUMENT_ERROR instead of %s\n", u_errorName(status));
+    }
+    status = U_ZERO_ERROR;
+    umsg_clone(NULL, &status);
+    if (status != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("Status should be U_ILLEGAL_ARGUMENT_ERROR instead of %s\n", u_errorName(status));
     }
 }
 
