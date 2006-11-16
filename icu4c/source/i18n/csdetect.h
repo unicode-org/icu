@@ -45,7 +45,7 @@ public:
 
     UBool getStripTagsFlag() const;
 
-    const char *getCharsetName(int32_t index, UErrorCode& status) const;
+//    const char *getCharsetName(int32_t index, UErrorCode& status) const;
 
     static int32_t getDetectableCount(); 
 };
