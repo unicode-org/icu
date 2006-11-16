@@ -301,7 +301,7 @@ const CharsetMatch * const *CharsetDetector::detectAll(int32_t &maxMatchesFound,
     return resultArray;
 }
 
-const char *CharsetDetector::getCharsetName(int32_t index, UErrorCode &status) const
+/*const char *CharsetDetector::getCharsetName(int32_t index, UErrorCode &status) const
 {
     if( index > fCSRecognizers_size-1 || index < 0) {
         status = U_INDEX_OUTOFBOUNDS_ERROR;
@@ -310,7 +310,7 @@ const char *CharsetDetector::getCharsetName(int32_t index, UErrorCode &status) c
     } else {
         return fCSRecognizers[index]->getName();
     }
-}
+}*/
 
 U_NAMESPACE_END
 
