@@ -897,8 +897,8 @@ typedef uint8_t ImpAct[];
  * instead of having a pair of ImpTab and a pair of ImpAct.
  */
 typedef struct ImpTabPair {
-    ImpTab * pImpTab[2];
-    ImpAct * pImpAct[2];
+    const ImpTab * pImpTab[2];
+    const ImpAct * pImpAct[2];
 } ImpTabPair;
 
 /*********************************************************************/
@@ -964,9 +964,9 @@ static const ImpTab impTabR_DEFAULT =   /* Odd  paragraph level */
 /* 5 : L+AN+ON    */ {     1 ,     0 ,     1 ,     3 ,     5 ,     5 ,     0 ,  0 }
 };
 static const ImpAct impAct0 = {0,1,2,3,4,5,6};
-static const ImpTabPair impTab_DEFAULT = {{(ImpTab*)&impTabL_DEFAULT,
-                                           (ImpTab*)&impTabR_DEFAULT},
-                                          {(ImpAct*)&impAct0, (ImpAct*)&impAct0}};
+static const ImpTabPair impTab_DEFAULT = {{&impTabL_DEFAULT,
+                                           &impTabR_DEFAULT},
+                                          {&impAct0, &impAct0}};
 
 static const ImpTab impTabL_NUMBERS_SPECIAL =   /* Even paragraph level */
 /*  In this table, conditional sequences receive the higher possible level
@@ -980,9 +980,9 @@ static const ImpTab impTabL_NUMBERS_SPECIAL =   /* Even paragraph level */
 /* 3 : R+ON       */ { _(2,0),     2 ,    4 ,      4 ,     3 ,     3 , _(2,0),  1 },
 /* 4 : R+EN/AN    */ {     0 ,     2 ,    4 ,      4 , _(1,3), _(1,3),     0 ,  2 }
   };
-static const ImpTabPair impTab_NUMBERS_SPECIAL = {{(ImpTab*)&impTabL_NUMBERS_SPECIAL,
-                                                   (ImpTab*)&impTabR_DEFAULT},
-                                                  {(ImpAct*)&impAct0, (ImpAct*)&impAct0}};
+static const ImpTabPair impTab_NUMBERS_SPECIAL = {{&impTabL_NUMBERS_SPECIAL,
+                                                   &impTabR_DEFAULT},
+                                                  {&impAct0, &impAct0}};
 
 static const ImpTab impTabL_GROUP_NUMBERS_WITH_R =
 /*  In this table, EN/AN+ON sequences receive levels as if associated with R
@@ -1010,9 +1010,9 @@ static const ImpTab impTabR_GROUP_NUMBERS_WITH_R =
 /* 4 L+EN/AN      */ { _(2,2),     0 ,     4 ,     4 ,     3 ,     0 ,     0 ,  1 }
 };
 static const ImpTabPair impTab_GROUP_NUMBERS_WITH_R = {
-                        {(ImpTab*)&impTabL_GROUP_NUMBERS_WITH_R,
-                         (ImpTab*)&impTabR_GROUP_NUMBERS_WITH_R},
-                        {(ImpAct*)&impAct0, (ImpAct*)&impAct0}};
+                        {&impTabL_GROUP_NUMBERS_WITH_R,
+                         &impTabR_GROUP_NUMBERS_WITH_R},
+                        {&impAct0, &impAct0}};
 
 
 static const ImpTab impTabL_INVERSE_NUMBERS_AS_L =
@@ -1042,9 +1042,9 @@ static const ImpTab impTabR_INVERSE_NUMBERS_AS_L =
 /* 5 : L+AN+ON    */ {     1 ,     0 ,     1 ,     1 ,     5 ,     5 ,     0 ,  0 }
 };
 static const ImpTabPair impTab_INVERSE_NUMBERS_AS_L = {
-                        {(ImpTab*)&impTabL_INVERSE_NUMBERS_AS_L,
-                         (ImpTab*)&impTabR_INVERSE_NUMBERS_AS_L},
-                        {(ImpAct*)&impAct0, (ImpAct*)&impAct0}};
+                        {&impTabL_INVERSE_NUMBERS_AS_L,
+                         &impTabR_INVERSE_NUMBERS_AS_L},
+                        {&impAct0, &impAct0}};
 
 static const ImpTab impTabR_INVERSE_LIKE_DIRECT =   /* Odd  paragraph level */
 /*  In this table, conditional sequences receive the lower possible level
@@ -1064,9 +1064,9 @@ static const ImpAct impAct1 = {0,1,11,12};
 /* FOOD FOR THOUGHT: in LTR table below, check case "JKL 123abc"
  */
 static const ImpTabPair impTab_INVERSE_LIKE_DIRECT = {
-                        {(ImpTab*)&impTabL_DEFAULT,
-                         (ImpTab*)&impTabR_INVERSE_LIKE_DIRECT},
-                        {(ImpAct*)&impAct0, (ImpAct*)&impAct1}};
+                        {&impTabL_DEFAULT,
+                         &impTabR_INVERSE_LIKE_DIRECT},
+                        {&impAct0, &impAct1}};
 
 static const ImpTab impTabL_INVERSE_LIKE_DIRECT_WITH_MARKS =
 /*  The case handled in this table is (visually):  R EN L
@@ -1097,14 +1097,14 @@ static const ImpTab impTabR_INVERSE_LIKE_DIRECT_WITH_MARKS =
 };
 static const ImpAct impAct2 = {0,1,7,8,9,10};
 static const ImpTabPair impTab_INVERSE_LIKE_DIRECT_WITH_MARKS = {
-                        {(ImpTab*)&impTabL_INVERSE_LIKE_DIRECT_WITH_MARKS,
-                         (ImpTab*)&impTabR_INVERSE_LIKE_DIRECT_WITH_MARKS},
-                        {(ImpAct*)&impAct0, (ImpAct*)&impAct2}};
+                        {&impTabL_INVERSE_LIKE_DIRECT_WITH_MARKS,
+                         &impTabR_INVERSE_LIKE_DIRECT_WITH_MARKS},
+                        {&impAct0, &impAct2}};
 
 static const ImpTabPair impTab_INVERSE_FOR_NUMBERS_SPECIAL = {
-                        {(ImpTab*)&impTabL_NUMBERS_SPECIAL,
-                         (ImpTab*)&impTabR_INVERSE_LIKE_DIRECT},
-                        {(ImpAct*)&impAct0, (ImpAct*)&impAct1}};
+                        {&impTabL_NUMBERS_SPECIAL,
+                         &impTabR_INVERSE_LIKE_DIRECT},
+                        {&impAct0, &impAct1}};
 
 static const ImpTab impTabL_INVERSE_FOR_NUMBERS_SPECIAL_WITH_MARKS =
 /*  The case handled in this table is (visually):  R EN L
@@ -1118,15 +1118,15 @@ static const ImpTab impTabL_INVERSE_FOR_NUMBERS_SPECIAL_WITH_MARKS =
 /* 4 : R+EN/AN    */ { _(3,0), _(4,2),     4 ,     4 , _(1,3), _(3,0), _(3,0),  4 }
 };
 static const ImpTabPair impTab_INVERSE_FOR_NUMBERS_SPECIAL_WITH_MARKS = {
-                        {(ImpTab*)&impTabL_INVERSE_FOR_NUMBERS_SPECIAL_WITH_MARKS,
-                         (ImpTab*)&impTabR_INVERSE_LIKE_DIRECT_WITH_MARKS},
-                        {(ImpAct*)&impAct0, (ImpAct*)&impAct2}};
+                        {&impTabL_INVERSE_FOR_NUMBERS_SPECIAL_WITH_MARKS,
+                         &impTabR_INVERSE_LIKE_DIRECT_WITH_MARKS},
+                        {&impAct0, &impAct2}};
 
 #undef _
 
 typedef struct {
-    ImpTab * pImpTab;                   /* level table pointer          */
-    ImpAct * pImpAct;                   /* action map array             */
+    const ImpTab * pImpTab;             /* level table pointer          */
+    const ImpAct * pImpAct;             /* action map array             */
     int32_t startON;                    /* start of ON sequence         */
     int32_t startL2EN;                  /* start of level 2 sequence    */
     int32_t lastStrongRTL;              /* index of last found R or AL  */
@@ -1195,8 +1195,8 @@ static void
 processPropertySeq(UBiDi *pBiDi, LevState *pLevState, uint8_t _prop,
                    int32_t start, int32_t limit) {
     uint8_t cell, oldStateSeq, actionSeq;
-    ImpTab * pImpTab=pLevState->pImpTab;
-    ImpAct * pImpAct=pLevState->pImpAct;
+    const ImpTab * pImpTab=pLevState->pImpTab;
+    const ImpAct * pImpAct=pLevState->pImpAct;
     UBiDiLevel * levels=pBiDi->levels;
     UBiDiLevel level, addLevel;
     InsertPoints * pInsertPoints;
