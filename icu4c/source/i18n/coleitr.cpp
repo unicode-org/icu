@@ -86,11 +86,7 @@ UBool CollationElementIterator::operator!=(
 UBool CollationElementIterator::operator==(
                                     const CollationElementIterator& that) const
 {
-    if (this == &that) {
-        return TRUE;
-    }
-  
-    if (m_data_ == that.m_data_) {
+    if (this == &that || m_data_ == that.m_data_) {
         return TRUE;
     }
 
@@ -123,7 +119,7 @@ UBool CollationElementIterator::operator==(
 
     // checking normalization buffer
     if ((m_data_->iteratordata_.flags & UCOL_ITER_HASLEN) == 0) {
-        if ((m_data_->iteratordata_.flags & UCOL_ITER_HASLEN) != 0) {
+        if ((that.m_data_->iteratordata_.flags & UCOL_ITER_HASLEN) != 0) {
             return FALSE;
         }
         // both are in the normalization buffer
@@ -135,7 +131,7 @@ UBool CollationElementIterator::operator==(
             return FALSE;
         }
     }
-    else if ((m_data_->iteratordata_.flags & UCOL_ITER_HASLEN) == 0) {
+    else if ((that.m_data_->iteratordata_.flags & UCOL_ITER_HASLEN) == 0) {
         return FALSE;
     }
     // checking ce position
