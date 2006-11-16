@@ -1381,11 +1381,13 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByIndex(const UResourceBundle *resB,
             }
             return ures_getStringWithAlias(resB, r, indexS, len, status);
         case URES_ALIAS:
-          return ures_getStringWithAlias(resB, resB->fRes, indexS, len, status);
+            return ures_getStringWithAlias(resB, resB->fRes, indexS, len, status);
 
         /*case URES_INT_VECTOR:*/
-        /*default:*/
-          /*return;*/
+        default:
+            /* Fall through. This should probably return a resource mismatch error */
+            break;
+            /*return;*/
         }
     } else {
         *status = U_MISSING_RESOURCE_ERROR;
