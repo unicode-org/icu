@@ -76,7 +76,10 @@ le_uint32 PairPositioningFormat1Subtable::process(GlyphIterator *glyphIterator, 
             valueRecord2->adjustPosition(SWAPW(valueFormat2), (char *) this, *glyphIterator, fontInstance);
         }
 
-        return 2;
+        // back up glyphIterator so second glyph can be
+        // first glyph in the next pair
+        glyphIterator->prev();
+        return 1;
     }
 
     return 0;
@@ -112,7 +115,10 @@ le_uint32 PairPositioningFormat2Subtable::process(GlyphIterator *glyphIterator, 
             valueRecord2->adjustPosition(SWAPW(valueFormat2), (const char *) this, *glyphIterator, fontInstance);
         }
 
-        return 2;
+        // back up glyphIterator so second glyph can be
+        // first glyph in the next pair
+        glyphIterator->prev();
+        return 1;
     }
 
     return 0;
