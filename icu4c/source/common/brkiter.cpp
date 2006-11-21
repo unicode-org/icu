@@ -122,7 +122,7 @@ BreakIterator::buildInstance(const Locale& loc, const char *type, int32_t kind, 
 
     // If there is a result, set the valid locale and actual locale, and the kind
     if (U_SUCCESS(status) && result != NULL) {
-        U_LOCALE_BASED(locBased, *result);
+        U_LOCALE_BASED(locBased, *(BreakIterator*)result);
         locBased.setLocaleIDs(ures_getLocaleByType(b, ULOC_VALID_LOCALE, &status), actualLocale);
         result->setBreakType(kind);
     }
