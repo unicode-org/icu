@@ -535,35 +535,48 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
                 lastConsonant -= 1;
             }
 
+            IndicClassTable::CharClass charClass = CC_RESERVED;
+            IndicClassTable::CharClass nextClass = CC_RESERVED;
             le_int32 baseConsonant = lastConsonant;
             le_int32 postBase = lastConsonant + 1;
             le_int32 postBaseLimit = classTable->scriptFlags & SF_POST_BASE_LIMIT_MASK;
             le_bool  seenVattu = FALSE;
             le_bool  seenBelowBaseForm = FALSE;
+            le_bool  hasNukta = FALSE;
+            le_bool  hasBelowBaseForm = FALSE;
+            le_bool  hasPostBaseForm = FALSE;
 
             if (postBase < markStart && classTable->isNukta(chars[postBase])) {
+                charClass = CC_NUKTA;
                 postBase += 1;
             }
 
             while (baseConsonant > baseLimit) {
-                IndicClassTable::CharClass charClass = classTable->getCharClass(chars[baseConsonant]);
+                nextClass = charClass;
+                hasNukta  = IndicClassTable::isNukta(nextClass);
+                charClass = classTable->getCharClass(chars[baseConsonant]);
+
+                hasBelowBaseForm = IndicClassTable::hasBelowBaseForm(charClass) && !hasNukta;
+                hasPostBaseForm  = IndicClassTable::hasPostBaseForm(charClass)  && !hasNukta;
 
                 if (IndicClassTable::isConsonant(charClass)) {
                     if (postBaseLimit == 0 || seenVattu ||
                         (baseConsonant > baseLimit && !classTable->isVirama(chars[baseConsonant - 1])) ||
-                        !IndicClassTable::hasPostOrBelowBaseForm(charClass)) {
+                        !(hasBelowBaseForm || hasPostBaseForm)) {
                         break;
                     }
 
-                    seenVattu = IndicClassTable::isVattu(charClass);
+                    // consonants with nuktas are never vattus
+                    seenVattu = IndicClassTable::isVattu(charClass) && !hasNukta;
 
-                    if (IndicClassTable::hasPostBaseForm(charClass)) {
+                    // consonants with nuktas never have below- or post-base forms
+                    if (hasPostBaseForm) {
                         if (seenBelowBaseForm) {
                             break;
                         }
 
                         postBase = baseConsonant;
-                    } else if (IndicClassTable::hasBelowBaseForm(charClass)) {
+                    } else if (hasBelowBaseForm) {
                         seenBelowBaseForm = TRUE;
                     }
 
@@ -591,14 +604,17 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
                 LEUnicode ch = chars[i];
                 // Don't put 'blwf' on first consonant.
                 FeatureMask features = (i == baseLimit? tagArray2 : tagArray1);
-                IndicClassTable::CharClass charClass = classTable->getCharClass(ch);
+
+                charClass = classTable->getCharClass(ch);
+                nextClass = classTable->getCharClass(chars[i + 1]);
+                hasNukta  = IndicClassTable::isNukta(nextClass);
 
                 if (IndicClassTable::isConsonant(charClass)) {
-                    if (IndicClassTable::isVattu(charClass) && supressVattu) {
+                    if (IndicClassTable::isVattu(charClass) && !hasNukta && supressVattu) {
                         features = tagArray4;
                     }
 
-                    supressVattu = IndicClassTable::isVattu(charClass);
+                    supressVattu = IndicClassTable::isVattu(charClass) && !hasNukta;
                 } else if (IndicClassTable::isVirama(charClass) && chars[i + 1] == C_SIGN_ZWNJ)
                 {
                     features = tagArray4;
