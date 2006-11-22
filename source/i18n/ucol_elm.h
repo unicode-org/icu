@@ -41,7 +41,7 @@ this number can't be more than 256K.
 As of Unicode 5, it currently could safely go to 128K without
 a problem. Normally, less than 32K are tailored.
 */
-#define UCOL_ELM_TRIE_CAPACITY 0x30000
+#define UCOL_ELM_TRIE_CAPACITY 0x40000
 
 typedef struct {
     uint32_t *CEs;
