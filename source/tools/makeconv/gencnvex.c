@@ -439,15 +439,22 @@ generateToUTable(CnvExtData *extData, UCMTable *table,
 
     /* step 2: allocate the section; set count, section */
     count=(high-low)+1;
-    if(unitIndex==0 || uniqueCount>=(3*count)/4) {
+    if(count<0x100 && (unitIndex==0 || uniqueCount>=(3*count)/4)) {
         /*
          * for the root table and for fairly full tables:
          * allocate for direct, linear array access
          * by keeping count, to write an entry for each unit value
          * from low to high
+         * exception: use a compact table if count==0x100 because
+         * that cannot be encoded in the length byte
          */
     } else {
         count=uniqueCount;
+    }
+
+    if(count>=0x100) {
+        fprintf(stderr, "error: toUnicode extension table section overflow: %ld section entries\n", (long)count);
+        return FALSE;
     }
 
     /* allocate the section: 1 entry for the header + count for the items */
