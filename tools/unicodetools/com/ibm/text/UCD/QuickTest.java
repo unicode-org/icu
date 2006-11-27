@@ -5,13 +5,34 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/QuickTest.java,v $
-* $Date: 2006/09/24 23:32:45 $
-* $Revision: 1.13 $
+* $Date: 2006/11/27 23:15:21 $
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */
 
 package com.ibm.text.UCD;
+
+import org.unicode.cldr.util.Counter;
+
+import com.ibm.icu.dev.demo.translit.CaseIterator;
+import com.ibm.icu.dev.test.util.BagFormatter;
+import com.ibm.icu.dev.test.util.Tabber;
+import com.ibm.icu.dev.test.util.UnicodeMap;
+import com.ibm.icu.dev.test.util.UnicodeProperty.UnicodeMapProperty;
+import com.ibm.icu.impl.PrettyPrinter;
+import com.ibm.icu.impl.Utility;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UProperty;
+import com.ibm.icu.text.CanonicalIterator;
+import com.ibm.icu.text.Collator;
+import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.text.RuleBasedCollator;
+import com.ibm.icu.text.Transliterator;
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.text.UnicodeSetIterator;
+import com.ibm.icu.util.ULocale;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -33,36 +54,15 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.unicode.cldr.util.Counter;
-
-import com.ibm.icu.dev.demo.translit.CaseIterator;
-import com.ibm.icu.dev.test.util.BagFormatter;
-import com.ibm.icu.dev.test.util.Tabber;
-import com.ibm.icu.dev.test.util.UnicodeMap;
-import com.ibm.icu.dev.test.util.UnicodeProperty.UnicodeMapProperty;
-import com.ibm.icu.impl.PrettyPrinter;
-import com.ibm.icu.impl.Utility;
-import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.lang.UProperty;
-import com.ibm.icu.text.CanonicalIterator;
-import com.ibm.icu.text.Collator;
-//import com.ibm.icu.text.Normalizer;
-
-import com.ibm.icu.text.NumberFormat;
-import com.ibm.icu.text.RuleBasedCollator;
-import com.ibm.icu.text.Transliterator;
-import com.ibm.icu.text.UTF16;
-import com.ibm.icu.text.UnicodeSet;
-import com.ibm.icu.text.UnicodeSetIterator;
-import com.ibm.icu.util.ULocale;
-
 public class QuickTest implements UCD_Types {
 	public static void main(String[] args) throws IOException {
 		try {
-            
-            getHangulDecomps();
+      String methodName = System.getProperty("method");
+      org.unicode.cldr.util.Utility.callMethod(methodName, QuickTest.class);
+
 
             if (true) return;
+            getHangulDecomps();
 
 			
       showLeadingTrailingNonStarters();
@@ -203,8 +203,8 @@ public class QuickTest implements UCD_Types {
 		
 //		System.out.println(bf.showSetDifferences("NFC CWP", leadingC, "NFC Trailing", trailingC));
 	}
-	
-	private static void checkCaseChanges() {
+    
+  private static void checkCaseChanges() {
 		String first = "3.0.0";
 		String last = "4.1.0";
 		UCD ucd30 = UCD.make(first);

@@ -540,7 +540,7 @@ public class MakeUnicodeFiles {
                   = ToolUnicodePropertySource.make(Default.ucdVersion());
         TreeSet sortedSet = new TreeSet(CASELESS_COMPARATOR);
         BagFormatter bf = new BagFormatter();
-        Tabber.MonoTabber mt = new Tabber.MonoTabber()
+        Tabber.MonoTabber mt = (Tabber.MonoTabber) new Tabber.MonoTabber()
         .add(10,Tabber.LEFT)
         .add(30,Tabber.LEFT);
         int count = 0;
@@ -639,7 +639,7 @@ public class MakeUnicodeFiles {
                         // 123456789012345678901234567890123
 
         // sc ; Arab      ; Arabic
-        Tabber.MonoTabber mt2 = new Tabber.MonoTabber()
+        Tabber.MonoTabber mt2 = (Tabber.MonoTabber) new Tabber.MonoTabber()
         .add(3,Tabber.LEFT)
         .add(2,Tabber.LEFT) // ;
         .add(10,Tabber.LEFT)
@@ -649,7 +649,7 @@ public class MakeUnicodeFiles {
         .add(33,Tabber.LEFT);
         
         // ccc; 216; ATAR ; Attached_Above_Right
-        Tabber.MonoTabber mt3 = new Tabber.MonoTabber()
+        Tabber.MonoTabber mt3 = (Tabber.MonoTabber) new Tabber.MonoTabber()
         .add(3,Tabber.LEFT)
         .add(2,Tabber.LEFT) // ;
         .add(3,Tabber.RIGHT)
