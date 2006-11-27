@@ -3,16 +3,16 @@
 // Corporation and others.  All Rights Reserved.
 //---------------------------------------------------------
 // Build tool: tz2icu
-// Build date: Mon Nov  6 12:45:57 2006
+// Build date: Mon Nov 27 07:50:07 2006
 // Olson source: ftp://elsie.nci.nih.gov/pub/
-// Olson version: 2006o
+// Olson version: 2006p
 //---------------------------------------------------------
 // >> !!! >>   THIS IS A MACHINE-GENERATED FILE   << !!! <<
 // >> !!! >>>            DO NOT EDIT             <<< !!! <<
 //---------------------------------------------------------
 
 zoneinfo:table(nofallback) {
- TZVersion { "2006o" }
+ TZVersion { "2006p" }
  Zones:array { 
   /* ACT */ :int { 318 } //Z#0
 ,  /* AET */ :int { 329 } //Z#1
@@ -1767,9 +1767,9 @@ zoneinfo:table(nofallback) {
 ,  /* Australia/NSW */ :int { 329 } //Z#324
 ,  /* Australia/North */ :int { 318 } //Z#325
 ,  /* Australia/Perth */ :array {
-    :intvector { -1672559940, -1665385200, -883634400, -876121200, -860392800, -844671600, 152042400, 162928800, 436298400, 447184800, 690314400, 699386400 }
+    :intvector { -1672559940, -1665385200, -883634400, -876121200, -860392800, -844671600, 152042400, 162928800, 436298400, 447184800, 690314400, 699386400, 1165082400, 1174759200, 1193508000, 1206813600, 1224957600, 1238263200 }
     :intvector { 28800, 0, 28800, 3600 }
-    :bin { "010001000100010001000100" }
+    :bin { "010001000100010001000100010001000100" }
     :intvector { 326, 332 }
   } //Z#326
 ,  /* Australia/Queensland */ :int { 314 } //Z#327
