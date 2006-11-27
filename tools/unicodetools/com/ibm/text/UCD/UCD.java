@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2006/04/05 22:12:44 $
-* $Revision: 1.41 $
+* $Date: 2006/11/27 23:15:21 $
+* $Revision: 1.42 $
 *
 *******************************************************************************
 */
@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.BitSet;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import java.io.IOException;
 import java.io.DataInputStream;
@@ -31,6 +33,7 @@ import com.ibm.text.utility.*;
 import com.ibm.icu.dev.test.util.BagFormatter;
 import com.ibm.icu.dev.test.util.UnicodeMap;
 import com.ibm.icu.dev.test.util.UnicodeProperty;
+import com.ibm.icu.text.Transliterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 
@@ -200,7 +203,13 @@ public final class UCD implements UCD_Types {
      * Get the name and number (U+xxxx NAME) for a code point
      */
     public String getCodeAndName(int codePoint, byte type) {
-        return getCode(codePoint) + " " + getName(codePoint, type);
+      return getCodeAndName(codePoint, type, null);
+    }
+    
+    public String getCodeAndName(int codePoint, byte type, Transliterator charTrans) {
+        return getCode(codePoint)
+        + (charTrans == null ? " " : " ( " + charTrans.transliterate(UTF16.valueOf(codePoint)) + " ) ") 
+        + getName(codePoint, type);
     }
 
     /**
@@ -208,14 +217,18 @@ public final class UCD implements UCD_Types {
      * separated by ", "
      */
     public String getCodeAndName(String s, byte type) {
+      return getCodeAndName(s,type,null);
+    }
+    
+    public String getCodeAndName(String s, byte type, Transliterator charTrans) {
         if (s == null || s.length() == 0) return "NULL";
-        if (s.length() == 1) return getCodeAndName(s.charAt(0)); // fast path
+        if (s.length() == 1) return getCodeAndName(s.charAt(0), type, charTrans); // fast path
         StringBuffer result = new StringBuffer();
         int cp;
         for (int i = 0; i < s.length(); i += UTF32.count16(cp)) {
             cp = UTF32.char32At(s, i);
             if (i > 0) result.append(", ");
-            result.append(getCodeAndName(cp));
+            result.append(getCodeAndName(cp, type, charTrans));
         }
         return result.toString();
     }
@@ -1666,24 +1679,34 @@ to guarantee identifier closure.
         return blockData.getSet(value, result);
     }
     
+    static final Matcher blockPattern = Pattern.compile("([0-9A-F]+)\\s*(?:[.][.]|[;])\\s*([0-9A-F]+)\\s*[;](.*)").matcher("");
     private void loadBlocks() {
         blockData = new UnicodeMap();
+        
         try {
             BufferedReader in = Utility.openUnicodeFile("Blocks", version, true, Utility.LATIN1);
             try {
-                while (true) {
+              for (int i = 1; ; ++i) {
                     // 0000..007F; Basic Latin
                     String line = Utility.readDataLine(in);
                     if (line == null) break;
                     if (line.length() == 0) continue;
-                    int pos1 = line.indexOf('.');
-                    int pos2 = line.indexOf(';', pos1);
+                    if (!blockPattern.reset(line).matches()) {
+                      throw new IllegalArgumentException("Bad line: " + line);
+                    }
+//                    int pos1 = line.indexOf(';');
+//                    int pos2 = line.indexOf(';', pos1+1);
                         
                     //lastBlock = new BlockData();
-                    int start = Integer.parseInt(line.substring(0, pos1), 16);
-                    int end = Integer.parseInt(line.substring(pos1+2, pos2), 16);
-                    String name = line.substring(pos2+1).trim().replace(' ', '_');
-                    blockData.putAll(start,end, name);
+                    try {
+                      int start = Integer.parseInt(blockPattern.group(1), 16);
+                      int end = Integer.parseInt(blockPattern.group(2), 16);
+                      String name = blockPattern.group(3).trim().replace(' ', '_');
+                      blockData.putAll(start,end, name);
+                    } catch (RuntimeException e) {
+                      System.err.println("Failed on line " + i + "\t" + line);
+                      throw e;
+                    }
                 }
                 blockData.setMissing("No_Block");
             } finally {
