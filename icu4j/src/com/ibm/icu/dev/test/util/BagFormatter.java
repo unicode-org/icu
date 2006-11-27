@@ -472,9 +472,35 @@ public class BagFormatter {
         int counter;
         int valueSize;
         int labelSize;
+        boolean isHtml;
+        boolean inTable = false;
+        
+        public void toOutput(String s) {
+          if (isHtml) {
+            if (inTable) {
+              output.print("</table>");
+              inTable = false;
+            }
+            output.print("<p>");
+          }
+          output.print(s);
+          if (isHtml)
+            output.println("</p>");
+          else
+            output.print(lineSeparator);
+        }
+        
+        public void toTable(String s) {
+          if (isHtml && !inTable) {
+            output.print("<table>");
+            inTable = true;
+          }
+          output.print(tabber.process(s) +  lineSeparator);
+        }
 
         public void doAt(Object c, PrintWriter output) {
             this.output = output;
+            isHtml = tabber instanceof Tabber.HTMLTabber;
             counter = 0;
             
             tabber.clear();
@@ -518,7 +544,7 @@ public class BagFormatter {
 
         protected void doBefore(Object container, Object o) {
             if (showSetAlso && container instanceof UnicodeSet) {
-                output.print("#" + container +  lineSeparator );
+              toOutput("#" + container);
             }
         }
 
@@ -528,14 +554,14 @@ public class BagFormatter {
         protected void doAfter(Object container, Object o) {
             if (fullTotal != -1 && fullTotal != counter) {
                 if (showTotal) {
-                    output.print(lineSeparator);
-                    output.print("# The above property value applies to " + nf.format(fullTotal-counter) + " code points not listed here." + lineSeparator);
-                    output.print("# Total code points: " + nf.format(fullTotal) + lineSeparator);
+                    toOutput("");
+                    toOutput("# The above property value applies to " + nf.format(fullTotal-counter) + " code points not listed here.");
+                    toOutput("# Total code points: " + nf.format(fullTotal));
                 }
                 fullTotal = -1;
             } else if (showTotal) {
-                output.print(lineSeparator);
-                output.print("# Total code points: " + nf.format(counter) + lineSeparator);
+                toOutput("");
+                toOutput("# Total code points: " + nf.format(counter));
             }
         }
 
@@ -546,7 +572,7 @@ public class BagFormatter {
                 Object value = oo.getValue();
                 doBefore(o, key);
                 doAt(key);
-                output.print("->");
+                output.println("\u2192");
                 doAt(value);
                 doAfter(o, value);
                 counter++;
@@ -558,16 +584,14 @@ public class BagFormatter {
                 if (getValueSource() != UnicodeLabel.NULL) value = "\t; " + value;
                 String label = getLabelSource(true) == UnicodeLabel.NULL ? "" : getLabelSource(true).getValue(thing, ",", true);
                 if (label.length() != 0) label = " " + label;
-                output.print(
-                    tabber.process(
-                        hex(thing)
-							+ value
-                            + commentSeparator
-							+ label
-                            + insertLiteral(thing)
-                            + "\t"
-                            + getName(thing))
-                    +  lineSeparator );
+                toTable(
+                    hex(thing)
+                    + value
+                    + commentSeparator
+                    + label
+                    + insertLiteral(thing)
+                    + "\t"
+                    + getName(thing));
                 counter++;
             }
         }
@@ -612,17 +636,15 @@ public class BagFormatter {
                 else count = "\t ["+ nf.format(end - start + 1)+ "]";
            }
 
-            output.print(
-                tabber.process(
-                    hex(start, end)
-                        + pn
-                        + value
-                        + commentSeparator
-                        + label
-                        + count
-                        + insertLiteral(start, end)
-                        + getName("\t ", start, end))
-                +  lineSeparator );
+            toTable(
+                hex(start, end)
+                + pn
+                + value
+                + commentSeparator
+                + label
+                + count
+                + insertLiteral(start, end)
+                + getName("\t ", start, end));
         }
 
         private String insertLiteral(String thing) {
