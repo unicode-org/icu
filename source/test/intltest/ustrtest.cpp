@@ -1673,8 +1673,9 @@ namespace bogus {
     public:
         enum EInvariant { kInvariant };
         UnicodeString() : i(1) {}
-        UnicodeString(UBool isTerminated, const UChar *text, int32_t textLength) : i(textLength) {}
-        UnicodeString(const char *src, int32_t length, enum EInvariant inv) : i(length) {}
+        UnicodeString(UBool /*isTerminated*/, const UChar * /*text*/, int32_t textLength) : i(textLength) {}
+        UnicodeString(const char * /*src*/, int32_t length, enum EInvariant /*inv*/
+) : i(length) {}
     private:
         int32_t i;
     };

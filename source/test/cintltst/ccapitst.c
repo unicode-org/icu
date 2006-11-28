@@ -3266,28 +3266,28 @@ InvalidArguments() {
 
     errorCode=U_ZERO_ERROR;
     /* This one should fail because an incomplete UChar is being passed in */
-    ucnv_fromUnicode(cnv, &charsPtr, charsPtr, &ucharsPtr, ucharsBadPtr, NULL, TRUE, &errorCode);
+    ucnv_fromUnicode(cnv, &charsPtr, charsPtr, (const UChar **)&ucharsPtr, ucharsBadPtr, NULL, TRUE, &errorCode);
     if(errorCode != U_ILLEGAL_ARGUMENT_ERROR) {
         log_err("ucnv_fromUnicode() failed to return U_ILLEGAL_ARGUMENT_ERROR for incomplete UChar * buffer - %s\n", u_errorName(errorCode));
     }
 
     errorCode=U_ZERO_ERROR;
     /* This one should fail because ucharsBadPtr is > than ucharsPtr */
-    ucnv_fromUnicode(cnv, &charsPtr, charsPtr, &ucharsBadPtr, ucharsPtr, NULL, TRUE, &errorCode);
+    ucnv_fromUnicode(cnv, &charsPtr, charsPtr, (const UChar **)&ucharsBadPtr, ucharsPtr, NULL, TRUE, &errorCode);
     if(errorCode != U_ILLEGAL_ARGUMENT_ERROR) {
         log_err("ucnv_fromUnicode() failed to return U_ILLEGAL_ARGUMENT_ERROR for bad limit pointer - %s\n", u_errorName(errorCode));
     }
 
     errorCode=U_ZERO_ERROR;
     /* This one should fail because an incomplete UChar is being passed in */
-    ucnv_toUnicode(cnv, &ucharsPtr, ucharsBadPtr, &charsPtr, charsPtr, NULL, TRUE, &errorCode);
+    ucnv_toUnicode(cnv, &ucharsPtr, ucharsBadPtr, (const char **)&charsPtr, charsPtr, NULL, TRUE, &errorCode);
     if(errorCode != U_ILLEGAL_ARGUMENT_ERROR) {
         log_err("ucnv_toUnicode() failed to return U_ILLEGAL_ARGUMENT_ERROR for incomplete UChar * buffer - %s\n", u_errorName(errorCode));
     }
 
     errorCode=U_ZERO_ERROR;
     /* This one should fail because ucharsBadPtr is > than ucharsPtr */
-    ucnv_toUnicode(cnv, &ucharsBadPtr, ucharsPtr, &charsPtr, charsPtr, NULL, TRUE, &errorCode);
+    ucnv_toUnicode(cnv, &ucharsBadPtr, ucharsPtr, (const char **)&charsPtr, charsPtr, NULL, TRUE, &errorCode);
     if(errorCode != U_ILLEGAL_ARGUMENT_ERROR) {
         log_err("ucnv_toUnicode() failed to return U_ILLEGAL_ARGUMENT_ERROR for bad limit pointer - %s\n", u_errorName(errorCode));
     }
