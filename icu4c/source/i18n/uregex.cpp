@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2004-2005, International Business Machines
+*   Copyright (C) 2004-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  regex.cpp
@@ -19,6 +19,8 @@
 #include "umutex.h"
 #include "uassert.h"
 #include "cmemory.h"
+
+U_NAMESPACE_USE
 
 struct URegularExpression: public UMemory {
 public:
@@ -39,8 +41,6 @@ public:
 };
 
 static const int32_t REXP_MAGIC = 0x72657870; // "rexp" in ASCII
-
-U_NAMESPACE_USE
 
 URegularExpression::URegularExpression() {
     fMagic        = REXP_MAGIC;
