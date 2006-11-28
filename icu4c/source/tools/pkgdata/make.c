@@ -396,7 +396,7 @@ pkg_mak_writeAssemblyHeader(FileStream *f, const UPKGOptions *o)
     T_FileStream_writeLine(f, "BASE_OBJECTS=$(NAME)_dat.o\n");
     T_FileStream_writeLine(f, "\n");
     T_FileStream_writeLine(f, "$(TEMP_DIR)/$(NAME).dat: $(CMNLIST) $(DATAFILEPATHS)\n");
-    T_FileStream_writeLine(f, "\t$(INVOKE) $(ICUPKG) -t$(ICUDATA_CHAR) -c -s $(SRCDIR) -a $(CMNLIST) new $(TARGETDIR)/$(CNAME).dat\n");
+    T_FileStream_writeLine(f, "\t$(INVOKE) $(ICUPKG) -t$(ICUDATA_CHAR) -c -s $(SRCDIR) -a $(CMNLIST) new $(TEMP_DIR)/$(CNAME).dat\n");
     T_FileStream_writeLine(f, "\n");
     T_FileStream_writeLine(f, "$(TEMP_DIR)/$(NAME)_dat.o : $(TEMP_DIR)/$(NAME).dat\n");
     T_FileStream_writeLine(f, "\t$(INVOKE) $(GENCCODE) $(GENCCODE_ASSEMBLY) -n $(NAME) -e $(ENTRYPOINT) -d $(TEMP_DIR) $<\n");
