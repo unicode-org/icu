@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 #******************************************************************************
-#   Copyright (C) 1999-2005, International Business Machines
+#   Copyright (C) 1999-2006, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #******************************************************************************
 # This Makefile.inc is designed to be included into projects which make use
@@ -136,7 +136,7 @@ MIDDLE_SO_TARGET = $(SO_TARGET).$(SO_TARGET_VERSION_MAJOR)
 # Use as follows:  $(INVOKE) $(GENRB) arguments .. 
 INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(libdir):$$$(LDLIBRARYPATH_ENVVAR) $(LEAK_CHECKER)
 GENCCODE = $(sbindir)/genccode
-GENCMN   = $(sbindir)/gencmn
+ICUPKG   = $(sbindir)/icupkg
 GENRB    = $(bindir)/genrb
 PKGDATA  = $(bindir)/pkgdata
 
