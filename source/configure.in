@@ -1062,7 +1062,6 @@ AC_OUTPUT([icudefs.mk \
 		tools/icupkg/Makefile \
 		tools/icuswap/Makefile \
 		tools/pkgdata/Makefile \
-		tools/dumpce/Makefile \
 		tools/tzcode/Makefile \
 		test/Makefile \
 		test/testdata/Makefile \
@@ -1071,10 +1070,7 @@ AC_OUTPUT([icudefs.mk \
 		test/intltest/Makefile \
 		test/cintltst/Makefile \
 		test/iotest/Makefile \
-		test/thaitest/Makefile \
-		test/testmap/Makefile \
 		test/letest/Makefile \
-		test/threadtest/Makefile \
 		samples/Makefile samples/date/Makefile \
 		samples/cal/Makefile samples/csdet/Makefile samples/layout/Makefile \
 		common/unicode/platform.h])

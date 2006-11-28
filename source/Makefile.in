@@ -151,9 +151,9 @@ clean-local:
 	$(RMV) Doxyfile doc
 
 distclean-local: clean-local
-	$(RMV) Makefile config/Makefile icudefs.mk
 	$(RMV) $(top_builddir)/config/Makefile.inc $(top_builddir)/config/icu-config
 	$(RMV) config.cache config.log config.status
+	$(RMV) Makefile config/Makefile icudefs.mk $(LIBDIR) $(BINDIR)
 
 check-local:
 
