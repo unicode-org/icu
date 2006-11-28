@@ -955,9 +955,8 @@ const Locale* U_EXPORT2
 Locale::getAvailableLocales(int32_t& count)
 {
     // for now, there is a hardcoded list, so just walk through that list and set it up.
-    umtx_lock(NULL);
-    UBool needInit = availableLocaleList == 0;
-    umtx_unlock(NULL);
+    UBool needInit;
+    UMTX_CHECK(NULL, availableLocaleList == NULL, needInit);
 
     if (needInit) {
         int32_t locCount = uloc_countAvailable();
