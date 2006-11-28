@@ -50,7 +50,7 @@
  *  @stable ICU 2.4
  */
 #define U_COPYRIGHT_STRING \
-  " Copyright (C) 2005, International Business Machines Corporation and others. All Rights Reserved. "
+  " Copyright (C) 2007, International Business Machines Corporation and others. All Rights Reserved. "
 
 /** Maximum length of the copyright string.
  *  @stable ICU 2.4
