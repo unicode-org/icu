@@ -89,7 +89,6 @@ sr_Latn{
         CN{"Kina"}
         CO{"Kolumbija"}
         CR{"Kostarika"}
-        CS{"Srbija i Crna Gora"}
         CU{"Kuba"}
         CV{"Kape Verde"}
         CX{"Uskršnja Ostrva"}
@@ -225,6 +224,7 @@ sr_Latn{
         QO{"Ostala okeanija"}
         RE{"Rejunion"}
         RO{"Rumunija"}
+        RS{"Srbija"}
         RU{"Rusija"}
         RW{"Ruanda"}
         SA{"Saudijska Arabija"}
