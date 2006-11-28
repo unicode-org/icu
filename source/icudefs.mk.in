@@ -3,7 +3,7 @@
 #
 # Yves Arrouye.
 #
-# Copyright (C) 2000-2005, International Business Machines Corporation and others.
+# Copyright (C) 2000-2006, International Business Machines Corporation and others.
 # All Rights Reserved.
 
 #
@@ -63,6 +63,8 @@ ICUDATA_NAME = $(ICUDATA_PLATFORM_NAME)
 ICUPKGDATA_DIR = $(ICUDATA_DIR)
 endif
 endif
+# This is needed so that make -j2 doesn't complain when invoking pkgdata's make
+PKGDATA_INVOKE_OPTS = MAKEFLAGS=
 
 # These are defined here because mh-cygwin-msvc needs to override these values.
 ICUPKGDATA_INSTALL_DIR = $(DESTDIR)$(ICUPKGDATA_DIR)
