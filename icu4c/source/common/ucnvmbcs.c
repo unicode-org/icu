@@ -603,7 +603,7 @@ static UChar32
 _extFromU(UConverter *cnv, const UConverterSharedData *sharedData,
           UChar32 cp,
           const UChar **source, const UChar *sourceLimit,
-          char **target, const char *targetLimit,
+          uint8_t **target, const uint8_t *targetLimit,
           int32_t **offsets, int32_t sourceIndex,
           UBool flush,
           UErrorCode *pErrorCode) {
@@ -615,7 +615,7 @@ _extFromU(UConverter *cnv, const UConverterSharedData *sharedData,
         ucnv_extInitialMatchFromU(
             cnv, cx,
             cp, source, sourceLimit,
-            target, targetLimit,
+            (char **)target, (char *)targetLimit,
             offsets, sourceIndex,
             flush,
             pErrorCode)
@@ -649,7 +649,7 @@ _extFromU(UConverter *cnv, const UConverterSharedData *sharedData,
 
                 /* output this sequence */
                 ucnv_fromUWriteBytes(cnv,
-                                     bytes, 4, target, targetLimit,
+                                     bytes, 4, (char **)target, (char *)targetLimit,
                                      offsets, sourceIndex, pErrorCode);
                 return 0;
             }
@@ -669,7 +669,7 @@ _extFromU(UConverter *cnv, const UConverterSharedData *sharedData,
 static int8_t
 _extToU(UConverter *cnv, const UConverterSharedData *sharedData,
         int8_t length,
-        const char **source, const char *sourceLimit,
+        const uint8_t **source, const uint8_t *sourceLimit,
         UChar **target, const UChar *targetLimit,
         int32_t **offsets, int32_t sourceIndex,
         UBool flush,
@@ -679,7 +679,7 @@ _extToU(UConverter *cnv, const UConverterSharedData *sharedData,
     if( (cx=sharedData->mbcs.extIndexes)!=NULL &&
         ucnv_extInitialMatchToU(
             cnv, cx,
-            length, source, sourceLimit,
+            length, (const char **)source, (const char *)sourceLimit,
             target, targetLimit,
             offsets, sourceIndex,
             flush,
@@ -1364,7 +1364,7 @@ ucnv_MBCSSingleToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
             pArgs->source=(const char *)source;
             cnv->toUBytes[0]=*(source-1);
             cnv->toULength=_extToU(cnv, cnv->sharedData,
-                                    1, (const char **)&source, (const char *)sourceLimit,
+                                    1, &source, sourceLimit,
                                     &target, targetLimit,
                                     &offsets, sourceIndex,
                                     pArgs->flush,
@@ -1565,7 +1565,7 @@ unrolled:
             lastSource=source;
             cnv->toUBytes[0]=*(source-1);
             cnv->toULength=_extToU(cnv, cnv->sharedData,
-                                    1, (const char **)&source, (const char *)sourceLimit,
+                                    1, &source, sourceLimit,
                                     &target, target+targetCapacity,
                                     &offsets, sourceIndex,
                                     pArgs->flush,
@@ -1971,7 +1971,7 @@ ucnv_MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
             /* try an extension mapping */
             pArgs->source=(const char *)source;
             byteIndex=_extToU(cnv, cnv->sharedData,
-                              byteIndex, (const char **)&source, (const char *)sourceLimit,
+                              byteIndex, &source, sourceLimit,
                               &target, targetLimit,
                               &offsets, sourceIndex,
                               pArgs->flush,
@@ -2637,7 +2637,7 @@ unassigned:
                 pArgs->source=source;
                 c=_extFromU(cnv, cnv->sharedData,
                             c, &source, sourceLimit,
-                            (char **)&target, (char *)target+targetCapacity,
+                            &target, target+targetCapacity,
                             &offsets, sourceIndex,
                             pArgs->flush,
                             pErrorCode);
@@ -2842,7 +2842,7 @@ unassigned:
                 pArgs->source=source;
                 c=_extFromU(cnv, cnv->sharedData,
                             c, &source, sourceLimit,
-                            (char **)&target, (char *)target+targetCapacity,
+                            &target, target+targetCapacity,
                             &offsets, sourceIndex,
                             pArgs->flush,
                             pErrorCode);
@@ -3072,7 +3072,7 @@ getTrail:
         lastSource=source;
         c=_extFromU(cnv, cnv->sharedData,
                     c, &source, sourceLimit,
-                    (char **)&target, (char *)target+targetCapacity,
+                    &target, target+targetCapacity,
                     &offsets, sourceIndex,
                     pArgs->flush,
                     pErrorCode);
@@ -3461,7 +3461,7 @@ unassigned:
                 pArgs->source=source;
                 c=_extFromU(cnv, cnv->sharedData,
                             c, &source, sourceLimit,
-                            (char **)&target, (char *)target+targetCapacity,
+                            &target, target+targetCapacity,
                             &offsets, sourceIndex,
                             pArgs->flush,
                             pErrorCode);
