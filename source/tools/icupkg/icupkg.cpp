@@ -506,7 +506,6 @@ main(int argc, char *argv[]) {
         listPkg=readList(sourcePath, options[OPT_ADD_LIST].value, TRUE);
         if(listPkg!=NULL) {
             pkg->addItems(*listPkg);
-            delete listPkg;
             isModified=TRUE;
         } else {
             printUsage(pname, FALSE);

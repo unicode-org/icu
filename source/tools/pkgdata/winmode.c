@@ -42,14 +42,15 @@ void writeCmnRules(UPKGOptions *o,  FileStream *makefile)
 
     infiles = o->files; 
     sprintf(tmp, "\"$(TARGETDIR)\\$(CMNTARGET)\" : $(DATAFILEPATHS)\n"
-        "\t%s\"$(GENCMN)\" %s%s%s-d \"$(TARGETDIR)\" -s \"$(SRCDIR)\" -n \"$(NAME)\" 0 <<\n",
+        "\t%s\"$(ICUPKG)\" -t%c %s%s%s -s \"$(SRCDIR)\" -a $(LISTFILES) new \"$(TARGETDIR)\\$(CMNTARGET)\"\n",
         (o->verbose ? "" : "@"),
+        (U_IS_BIG_ENDIAN ? 'b' : 'l'),
         (o->comment ? "-C \"" : ""),
         (o->comment ? o->comment : ""),
         (o->comment ? "\" " : ""));
     T_FileStream_writeLine(makefile, tmp);
 
-    pkg_writeCharList(makefile, infiles, "\n", -1);
+/*    pkg_writeCharList(makefile, infiles, "\n", -1);*/
 /*
     for(;infiles;infiles = infiles->next) {
     if(infiles->str[0] != '"' && infiles->str[uprv_strlen(infiles->str)-1] != '"') {
@@ -60,8 +61,8 @@ void writeCmnRules(UPKGOptions *o,  FileStream *makefile)
     T_FileStream_writeLine(makefile, tmp);
     }
 */
-    sprintf(tmp, "\n<<\n");
-    T_FileStream_writeLine(makefile, tmp);
+/*    sprintf(tmp, "\n<<\n");
+    T_FileStream_writeLine(makefile, tmp);*/
 }
 
 
@@ -82,11 +83,11 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
 
     if (CONTAINS_REAL_PATH(o)) {
         sprintf(tmp2,
-            "GENCMN = $(ICUROOT)%sgencmn.exe\n", separator);
+            "ICUPKG = $(ICUROOT)%sicupkg.exe\n", separator);
     }
     else {
         sprintf(tmp2,
-            "GENCMN = $(ICUROOT)%sbin\\gencmn.exe\n", separator);
+            "ICUPKG = $(ICUROOT)%sbin\\icupkg.exe\n", separator);
     }
     T_FileStream_writeLine(makefile, tmp2);
 

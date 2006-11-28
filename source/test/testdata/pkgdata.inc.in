@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 2000-2004, International Business Machines
+#   Copyright (C) 2000-2006, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -16,5 +16,5 @@ include $(top_builddir)/icudefs.mk
 ##### Add the following to source/config/Makefile.in
 
 GENCCODE=$(BINDIR)/genccode
-GENCMN=$(BINDIR)/gencmn
+ICUPKG=$(BINDIR)/icupkg
 
