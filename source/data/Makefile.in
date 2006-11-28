@@ -78,7 +78,7 @@ MISCSRCDIR=$(SRCDATADIR)/misc
 UCMSRCDIR=$(SRCDATADIR)/mappings
 COMINCDIR=$(top_srcdir)/common/unicode
 SRCLISTDEPS=Makefile $(srcdir)/Makefile.in
-BUILD_DIRS=$(OUTDIR) $(BUILDDIR) $(BRKBLDDIR) $(COLBLDDIR) $(RBNFBLDDIR) $(TRANSLITBLDDIR) $(TESTOUTDIR) $(TESTBUILDDIR) $(OUTTMPDIR) $(OUTTMPDIR_390STUB) $(OUTTMPDIR)/$(COLLATION_TREE) $(OUTTMPDIR)/$(RBNF_TREE) $(OUTTMPDIR)/$(TRANSLIT_TREE) $(OUTTMPDIR)/$(BREAK_TREE)
+BUILD_DIRS=$(OUTDIR) $(MAINBUILDDIR) $(BUILDDIR) $(BRKBLDDIR) $(COLBLDDIR) $(RBNFBLDDIR) $(TRANSLITBLDDIR) $(OUTTMPDIR) $(OUTTMPDIR_390STUB) $(OUTTMPDIR)/$(COLLATION_TREE) $(OUTTMPDIR)/$(RBNF_TREE) $(OUTTMPDIR)/$(TRANSLIT_TREE) $(OUTTMPDIR)/$(BREAK_TREE)
 
 # relative lib links from pkgdata are the same as for tmp
 TOOLDIR=$(top_builddir)/tools
@@ -351,9 +351,15 @@ endif
 endif
 
 
-build-dir: $(BUILD_DIRS)
-$(BUILD_DIRS):
-	-$(MKINSTALLDIRS) $(BUILD_DIRS)
+build-dir:
+	@list='$(BUILD_DIRS)'; \
+	for dir in $$list; do \
+	  if ! test -d $$dir; then \
+	    echo $(MKINSTALLDIRS) $(BUILD_DIRS); \
+	    $(MKINSTALLDIRS) $(BUILD_DIRS); \
+	  fi; \
+	done
+
 
 
 # Now, sections for building each kind of data.
@@ -446,7 +452,7 @@ $(OUTTMPDIR)/$(COLLATION_TREE)/$(INDEX_NAME).txt: $(SRCLISTDEPS)
 	echo "}" >> $@;
 
 ### brk res
-$(BRKBLDDIR)/%.res: $(BRKSRCDIR)/%.txt  $(BINDIR)/genrb$(EXEEXT) $(DAT_FILES)
+$(BRKBLDDIR)/%.res: $(BRKSRCDIR)/%.txt $(BINDIR)/genrb$(EXEEXT) $(BRK_FILES) $(DAT_FILES)
 	$(INVOKE) $(BINDIR)/genrb $(GENRBOPTS) -i $(BUILDDIR) -s $(BRKSRCDIR) -d $(BRKBLDDIR) $(<F)
 
 $(BRKBLDDIR)/$(INDEX_NAME).res: $(OUTTMPDIR)/$(BREAK_TREE)/$(INDEX_NAME).txt $(BINDIR)/genrb$(EXEEXT)
