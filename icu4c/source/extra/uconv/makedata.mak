@@ -1,5 +1,5 @@
 #**********************************************************************
-#* Copyright (C) 1999-2004, International Business Machines Corporation
+#* Copyright (C) 1999-2006, International Business Machines Corporation
 #* and others.  All Rights Reserved.
 #**********************************************************************
 # nmake file for creating data files on win32
@@ -63,8 +63,8 @@ FILESEPCHAR=
 !ELSE
 !ERROR ERROR: cannot find "$(RESFILES)"
 !ENDIF
-RB_FILES = $(RESSRC:.txt=.res)
-RB_FILES = resources\$(RB_FILES:.res =.res resources\)
+RES_FILES = $(RESSRC:.txt=.res)
+RB_FILES = resources\$(RES_FILES:.res =.res resources\)
 RESOURCESDIR=
 
 # This target should build all the data files
@@ -82,7 +82,7 @@ ALL : $(OUTPUT)
 "$(DLL_OUTPUT)\$(RESNAME).lib" : $(RB_FILES) $(RESFILES)
 	@echo Building $(RESNAME).lib
 	@"$(ICUTOOLS)\pkgdata" -f -v -m static -c -p $(RESNAME) -d "$(DLL_OUTPUT)" -s "$(RESDIR)" <<pkgdatain.txt
-$(RESSRC:.txt =.res
+$(RES_FILES:.res =.res
 )
 <<KEEP
 
