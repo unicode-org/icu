@@ -67,6 +67,9 @@ doTashkeelSpecialVLTRArabicShapingTest(void);
 static void
 doLOGICALArabicDeShapingTest(void);
 
+static void
+doArabicShapingTestForBug5421(void);
+
 static void TestReorder(void);
 
 static void TestFailureRecovery(void);
@@ -126,6 +129,7 @@ addComplexTest(TestNode** root) {
     addTest(root, doLamAlefSpecialVLTRArabicShapingTest, "complex/arabic-shaping/lamalef");
     addTest(root, doTashkeelSpecialVLTRArabicShapingTest, "complex/arabic-shaping/tashkeel");
     addTest(root, doLOGICALArabicDeShapingTest, "complex/arabic-shaping/unshaping");
+    addTest(root, doArabicShapingTestForBug5421, "complex/arabic-shaping/bug-5421");
 }
 
 /* verify that the exemplar characters have the expected bidi classes */
@@ -1852,6 +1856,82 @@ doLOGICALArabicDeShapingTest() {
         log_err("failure in u_shapeArabic(unshape_grow_shrink)\n");
     }
 
+}
+
+static void
+doArabicShapingTestForBug5421() {
+    static const UChar
+    persian_letters_source[]={
+        0x0020, 0x0698, 0x067E, 0x0686, 0x06AF, 0x0020
+    }, persian_letters[]={
+        0x0020, 0xFB8B, 0xFB59, 0xFB7D, 0xFB94, 0x0020
+    }, tashkeel_aggregation_source[]={
+        0x0020, 0x0628, 0x0651, 0x064E, 0x062A, 0x0631, 0x0645, 0x0020,
+        0x0628, 0x064E, 0x0651, 0x062A, 0x0631, 0x0645, 0x0020
+    }, tashkeel_aggregation[]={
+        0x0020, 0xFE90, 0xFC60, 0xFE97, 0xFEAE, 0xFEE3,
+        0x0020, 0xFE90, 0xFC60, 0xFE97, 0xFEAE, 0xFEE3, 0x0020
+    }, untouched_presentation_source[]={
+        0x0020 ,0x0627, 0xfe90,0x0020
+    }, untouched_presentation[]={
+        0x0020,0xfe8D, 0xfe90,0x0020
+    }, untouched_presentation_r_source[]={
+        0x0020 ,0xfe90, 0x0627, 0x0020
+    }, untouched_presentation_r[]={
+        0x0020, 0xfe90,0xfe8D,0x0020
+    };
+
+    UChar dest[38];
+    UErrorCode errorCode;
+    int32_t length;
+
+    errorCode=U_ZERO_ERROR;
+
+    length=u_shapeArabic(persian_letters_source, LENGTHOF(persian_letters_source),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_LETTERS_SHAPE|U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
+                         &errorCode);
+
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(persian_letters) || memcmp(dest, persian_letters, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(persian_letters)\n");
+    }
+
+    errorCode=U_ZERO_ERROR;
+
+    length=u_shapeArabic(tashkeel_aggregation_source, LENGTHOF(tashkeel_aggregation_source),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_AGGREGATE_TASHKEEL|U_SHAPE_PRESERVE_PRESENTATION|
+                         U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED|U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
+                         &errorCode);
+
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(tashkeel_aggregation) || memcmp(dest, tashkeel_aggregation, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(tashkeel_aggregation)\n");
+    }
+
+    errorCode=U_ZERO_ERROR;
+
+    length=u_shapeArabic(untouched_presentation_source, LENGTHOF(untouched_presentation_source),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_PRESERVE_PRESENTATION|
+                         U_SHAPE_LETTERS_SHAPE|U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
+                         &errorCode);
+
+    
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(untouched_presentation) || memcmp(dest, untouched_presentation, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(untouched_presentation)\n");
+    }
+
+    errorCode=U_ZERO_ERROR;
+
+    length=u_shapeArabic(untouched_presentation_r_source, LENGTHOF(untouched_presentation_r_source),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_PRESERVE_PRESENTATION|
+                         U_SHAPE_LETTERS_SHAPE|U_SHAPE_TEXT_DIRECTION_LOGICAL,
+                         &errorCode);
+
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(untouched_presentation_r) || memcmp(dest, untouched_presentation_r, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(untouched_presentation_r)\n");
+    }
 }
 
 /* helpers ------------------------------------------------------------------ */

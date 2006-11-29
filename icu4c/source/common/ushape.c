@@ -54,6 +54,11 @@
 #define ALEFTYPE   32
 #define LINKR      1
 #define LINKL      2
+#define APRESENT   8
+#define SHADDA     64
+#define CSHADDA    128
+#define COMBINE    (SHADDA+CSHADDA)
+
 
 static const UChar IrrelevantPos[] = {
     0x0, 0x2, 0x4, 0x6,
@@ -111,10 +116,19 @@ static const UChar araLink[178]=
   1                + 256 * 0x7D,/*0x0648*/
   1                + 256 * 0x7F,/*0x0649*/
   1 + 2            + 256 * 0x81,/*0x064A*/
-  4, 4, 4, 4,                   /*0x064B-0x064E*/
-  4, 4, 4, 4,                   /*0x064F-0x0652*/
-  4, 4, 4, 0, 0,                /*0x0653-0x0657*/
-  0, 0, 0, 0,                   /*0x0658-0x065B*/
+         4         + 256 * 1,   /*0x064B*/
+         4 + 128   + 256 * 1,   /*0x064C*/
+         4 + 128   + 256 * 1,   /*0x064D*/
+         4 + 128   + 256 * 1,   /*0x064E*/
+         4 + 128   + 256 * 1,   /*0x064F*/
+         4 + 128   + 256 * 1,   /*0x0650*/
+         4 + 64    + 256 * 3,   /*0x0651*/
+         4         + 256 * 1,   /*0x0652*/
+         4         + 256 * 7,   /*0x0653*/
+         4         + 256 * 8,   /*0x0654*/
+         4         + 256 * 8,   /*0x0655*/ 
+         4         + 256 * 1,   /*0x0656*/
+  0, 0, 0, 0, 0,                /*0x0657-0x065B*/
   1                + 256 * 0x85,/*0x065C*/
   1                + 256 * 0x87,/*0x065D*/
   1                + 256 * 0x89,/*0x065E*/
@@ -122,75 +136,85 @@ static const UChar araLink[178]=
   0, 0, 0, 0, 0,                /*0x0660-0x0664*/
   0, 0, 0, 0, 0,                /*0x0665-0x0669*/
   0, 0, 0, 0, 0, 0,             /*0x066A-0x066F*/
-  4,                            /*0x0670*/
-  0,                            /*0x0671*/
-  1           + 32,             /*0x0672*/
-  1           + 32,             /*0x0673*/
+         4         + 256 * 6,   /*0x0670*/
+  1        + 8     + 256 * 0x00,/*0x0671*/
+  1            + 32,            /*0x0672*/
+  1            + 32,            /*0x0673*/
   0,                            /*0x0674*/
-  1           + 32,             /*0x0675*/
+  1            + 32,            /*0x0675*/
   1, 1,                         /*0x0676-0x0677*/
   1+2, 1+2, 1+2, 1+2, 1+2, 1+2, /*0x0678-0x067D*/
-  1+2, 1+2, 1+2, 1+2, 1+2, 1+2, /*0x067E-0x0683*/
-  1+2, 1+2, 1+2, 1+2,           /*0x0684-0x0687*/
+  1+2+8+256 * 0x06, 1+2, 1+2, 1+2, 1+2, 1+2, /*0x067E-0x0683*/
+  1+2, 1+2, 1+2+8+256 * 0x2A, 1+2,           /*0x0684-0x0687*/
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /*0x0688-0x0691*/
-  1, 1, 1, 1, 1, 1, 1, 1,       /*0x0692-0x0699*/
+  1, 1, 1, 1, 1, 1, 1+8+256 * 0x3A, 1,       /*0x0692-0x0699*/
   1+2, 1+2, 1+2, 1+2, 1+2, 1+2, /*0x069A-0x06A3*/
   1+2, 1+2, 1+2, 1+2,           /*0x069A-0x06A3*/
-  1+2, 1+2, 1+2, 1+2, 1+2, 1+2, /*0x06A4-0x06AD*/
+  1+2, 1+2, 1+2, 1+2, 1+2, 1+2+8+256 * 0x3E, /*0x06A4-0x06AD*/
   1+2, 1+2, 1+2, 1+2,           /*0x06A4-0x06AD*/
-  1+2, 1+2, 1+2, 1+2, 1+2, 1+2, /*0x06AE-0x06B7*/
+  1+2, 1+2+8+256 * 0x42, 1+2, 1+2, 1+2, 1+2, /*0x06AE-0x06B7*/
   1+2, 1+2, 1+2, 1+2,           /*0x06AE-0x06B7*/
   1+2, 1+2, 1+2, 1+2, 1+2, 1+2, /*0x06B8-0x06BF*/
   1+2, 1+2,                     /*0x06B8-0x06BF*/
   1,                            /*0x06C0*/
   1+2,                          /*0x06C1*/
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /*0x06C2-0x06CB*/
-  1+2,                          /*0x06CC*/
+  1+2+8+256 * 0xAC,             /*0x06CC*/
   1,                            /*0x06CD*/
   1+2, 1+2, 1+2, 1+2,           /*0x06CE-0x06D1*/
   1, 1                          /*0x06D2-0x06D3*/
 };
 
-static const UChar presLink[141]=
+static const UChar presALink[] = {
+/***********0*****1*****2*****3*****4*****5*****6*****7*****8*****9*****A*****B*****C*****D*****E*****F*/
+/*FB5*/    0,    1,    0,    0,    0,    0,    0,    1,    2,1 + 2,    0,    0,    0,    0,    0,    0,
+/*FB6*/    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+/*FB7*/    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    1,    2,1 + 2,    0,    0,
+/*FB8*/    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    1,    0,    0,    0,    1,
+/*FB9*/    2,1 + 2,    0,    1,    2,1 + 2,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+/*FBA*/    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+/*FBB*/    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+/*FBC*/    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+/*FBD*/    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+/*FBE*/    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+/*FBF*/    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    1,    2,1 + 2,
+/*FC0*/    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+/*FC1*/    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+/*FC2*/    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+/*FC3*/    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+/*FC4*/    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+/*FC5*/    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    4,    4,
+/*FC6*/    4,    4,    4
+};
+
+static const UChar presBLink[]=
 {
-  1 + 2,                        /*0xFE70*/
-  1 + 2,                        /*0xFE71*/
-  1 + 2, 0, 1+ 2, 0, 1+ 2,      /*0xFE72-0xFE76*/
-  1 + 2,                        /*0xFE77*/
-  1+ 2, 1 + 2, 1+2, 1 + 2,      /*0xFE78-0xFE81*/
-  1+ 2, 1 + 2, 1+2, 1 + 2,      /*0xFE82-0xFE85*/
-  0, 0 + 32, 1 + 32, 0 + 32,    /*0xFE86-0xFE89*/
-  1 + 32, 0, 1,  0 + 32,        /*0xFE8A-0xFE8D*/
-  1 + 32, 0, 2,  1 + 2,         /*0xFE8E-0xFE91*/
-  1, 0 + 32, 1 + 32, 0,         /*0xFE92-0xFE95*/
-  2, 1 + 2, 1, 0,               /*0xFE96-0xFE99*/
-  1, 0, 2, 1 + 2,               /*0xFE9A-0xFE9D*/
-  1, 0, 2, 1 + 2,               /*0xFE9E-0xFEA1*/
-  1, 0, 2, 1 + 2,               /*0xFEA2-0xFEA5*/
-  1, 0, 2, 1 + 2,               /*0xFEA6-0xFEA9*/
-  1, 0, 2, 1 + 2,               /*0xFEAA-0xFEAD*/
-  1, 0, 1, 0,                   /*0xFEAE-0xFEB1*/
-  1, 0, 1, 0,                   /*0xFEB2-0xFEB5*/
-  1, 0, 2, 1+2,                 /*0xFEB6-0xFEB9*/
-  1, 0, 2, 1+2,                 /*0xFEBA-0xFEBD*/
-  1, 0, 2, 1+2,                 /*0xFEBE-0xFEC1*/
-  1, 0, 2, 1+2,                 /*0xFEC2-0xFEC5*/
-  1, 0, 2, 1+2,                 /*0xFEC6-0xFEC9*/
-  1, 0, 2, 1+2,                 /*0xFECA-0xFECD*/
-  1, 0, 2, 1+2,                 /*0xFECE-0xFED1*/
-  1, 0, 2, 1+2,                 /*0xFED2-0xFED5*/
-  1, 0, 2, 1+2,                 /*0xFED6-0xFED9*/
-  1, 0, 2, 1+2,                 /*0xFEDA-0xFEDD*/
-  1, 0, 2, 1+2,                 /*0xFEDE-0xFEE1*/
-  1, 0 + 16, 2 + 16, 1 + 2 +16, /*0xFEE2-0xFEE5*/
-  1 + 16, 0, 2, 1+2,            /*0xFEE6-0xFEE9*/
-  1, 0, 2, 1+2,                 /*0xFEEA-0xFEED*/
-  1, 0, 2, 1+2,                 /*0xFEEE-0xFEF1*/
-  1, 0, 1, 0,                   /*0xFEF2-0xFEF5*/
-  1, 0, 2, 1+2,                 /*0xFEF6-0xFEF9*/
-  1, 0, 1, 0,                   /*0xFEFA-0xFEFD*/
-  1, 0, 1, 0,
-  1
+/***********0*****1*****2*****3*****4*****5*****6*****7*****8*****9*****A*****B*****C*****D*****E*****F*/
+/*FE7*/1 + 2,1 + 2,1 + 2,    0,1 + 2,    0,1 + 2,1 + 2,1 + 2,1 + 2,1 + 2,1 + 2,1 + 2,1 + 2,1 + 2,1 + 2, 
+/*FE8*/    0,    0,    1,    0,    1,    0,    1,    0,    1,    0,    1,    2,1 + 2,    0,    1,    0,
+/*FE9*/    1,    2,1 + 2,    0,    1,    0,    1,    2,1 + 2,    0,    1,    2,1 + 2,    0,    1,    2,
+/*FEA*/1 + 2,    0,    1,    2,1 + 2,    0,    1,    2,1 + 2,    0,    1,    0,    1,    0,    1,    0,  
+/*FEB*/    1,    0,    1,    2,1 + 2,    0,    1,    2,1 + 2,    0,    1,    2,1 + 2,    0,    1,    2,
+/*FEC*/1 + 2,    0,    1,    2,1 + 2,    0,    1,    2,1 + 2,    0,    1,    2,1 + 2,    0,    1,    2,
+/*FED*/1 + 2,    0,    1,    2,1 + 2,    0,    1,    2,1 + 2,    0,    1,    2,1 + 2,    0,    1,    2,
+/*FEE*/1 + 2,    0,    1,    2,1 + 2,    0,    1,    2,1 + 2,    0,    1,    2,1 + 2,    0,    1,    0,
+/*FEF*/    1,    0,    1,    2,1 + 2,    0,    1,    0,    1,    0,    1,    0,    1,    0,    0,    0
+};
+
+static const UChar convertFBto06[] =
+{
+/***********0******1******2******3******4******5******6******7******8******9******A******B******C******D******E******F***/
+/*FB5*/   0x671, 0x671,     0,     0,     0,     0, 0x07E, 0x07E, 0x07E, 0x07E,     0,     0,     0,     0,     0,     0,
+/*FB6*/       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+/*FB7*/       0,     0,     0,     0,     0,     0,     0,     0,     0,     0, 0x686, 0x686, 0x686, 0x686,     0,     0,
+/*FB8*/       0,     0,     0,     0,     0,     0,     0,     0,     0,     0, 0x698, 0x698,     0,     0, 0x6A9, 0x6A9,
+/*FB9*/   0x6A9, 0x6A9, 0x6AF, 0x6AF, 0x6AF, 0x6AF,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+/*FBA*/       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+/*FBB*/       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+/*FBC*/       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+/*FBD*/       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+/*FBE*/       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+/*FBF*/       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0, 0x6CC, 0x6CC, 0x6CC, 0x6CC
 };
 
 static const UChar convertFEto06[] =
@@ -290,15 +314,9 @@ _shapeToArabicDigitsWithContext(UChar *s, int32_t length,
  *           U_SHAPE_TEXT_DIRECTION_LOGICAL
  */
 static void
-invertBuffer(UChar *buffer,int32_t size,uint32_t options,int32_t *spacesCountl,int32_t *spacesCountr) {
-
+invertBuffer(UChar *buffer,int32_t size,uint32_t options,int32_t lowlimit,int32_t highlimit) {
     UChar temp;
     int32_t i=0,j=0;
-    int32_t lowlimit = 0, highlimit = 0;
-
-    lowlimit = *spacesCountl;
-    highlimit = *spacesCountr;
-
     for(i=lowlimit,j=size-highlimit-1;i<j;i++,j--) {
         temp = buffer[i];
         buffer[i] = buffer[j];
@@ -316,7 +334,6 @@ invertBuffer(UChar *buffer,int32_t size,uint32_t options,int32_t *spacesCountl,i
  */
 static U_INLINE UChar
 changeLamAlef(UChar ch) {
-
     switch(ch) {
     case 0x0622 :
         return 0x065C;
@@ -331,27 +348,6 @@ changeLamAlef(UChar ch) {
 }
 
 /*
- *Name     : specialChar
- *Function : Special Arabic characters need special handling in the shapeUnicode
- *           function, this function returns 1 or 2 for these special characters
- */
-static int32_t
-specialChar(UChar ch) {
-
-    if( (ch>0x0621 && ch<0x0626)||(ch==0x0627)||(ch>0x062e && ch<0x0633)||
-        (ch>0x0647 && ch<0x064a)||(ch==0x0629) ) {
-        return (1);
-    }
-    else if( ch>=0x064B && ch<= 0x0652 )
-        return (2);
-    else if( (ch>=0x0653 && ch<= 0x0655) || ch == 0x0670 ||
-        (ch>=0xFE70 && ch<= 0xFE7F) )
-        return (3);
-    else
-        return (0);
-}
-
-/*
  *Name     : getLink
  *Function : Resolves the link between the characters as
  *           Arabic characters have four forms :
@@ -359,15 +355,16 @@ specialChar(UChar ch) {
  */
 static UChar
 getLink(UChar ch) {
-
     if(ch >= 0x0622 && ch <= 0x06D3) {
         return(araLink[ch-0x0622]);
     } else if(ch == 0x200D) {
         return(3);
     } else if(ch >= 0x206D && ch <= 0x206F) {
         return(4);
+    } else if(ch >= 0xFB50 && ch <= 0xFC62) {
+        return(presALink[ch-0xFB50]);
     } else if(ch >= 0xFE70 && ch <= 0xFEFC) {
-        return(presLink[ch-0xFE70]);
+        return(presBLink[ch-0xFE70]);
     } else {
         return(0);
     }
@@ -380,10 +377,8 @@ getLink(UChar ch) {
  */
 static void
 countSpaces(UChar *dest,int32_t size,uint32_t options,int32_t *spacesCountl,int32_t *spacesCountr) {
-
     int32_t i = 0;
     int32_t countl = 0,countr = 0;
-
     while(dest[i] == 0x0020) {
        countl++;
        i++;
@@ -431,26 +426,22 @@ isLamAlefChar(UChar ch) {
 static int32_t
 calculateSize(const UChar *source, int32_t sourceLength,
               int32_t destSize,uint32_t options) {
-
     int32_t i = 0;
     destSize = sourceLength;
-
     switch(options&U_SHAPE_LETTERS_MASK) {
-
     case U_SHAPE_LETTERS_SHAPE :
+    case U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED:
         if((options&U_SHAPE_TEXT_DIRECTION_MASK)==U_SHAPE_TEXT_DIRECTION_VISUAL_LTR) {
             for(i=0;i<sourceLength;i++) {
                 if( (isAlefChar(source[i]))&&(source[i+1]==0x0644) ) {
                     destSize--;
                 }
             }
-        }
-        else
-        if((options&U_SHAPE_TEXT_DIRECTION_MASK)==U_SHAPE_TEXT_DIRECTION_LOGICAL) {
+        } else if((options&U_SHAPE_TEXT_DIRECTION_MASK)==U_SHAPE_TEXT_DIRECTION_LOGICAL) {
             for(i=0;i<sourceLength;i++) {
-               if( (isAlefChar(source[i+1]))&&(source[i]==0x0644) ) {
-                   destSize--;
-               }
+                if( (isAlefChar(source[i+1]))&&(source[i]==0x0644) ) {
+                    destSize--;
+                }
             }
         }
         break;
@@ -788,7 +779,6 @@ shapeUnicode(UChar *dest, int32_t sourceLength,
     int32_t          step;
     int32_t          lastPos,Nx, Nw;
     unsigned int     Shape;
-    int32_t          flag;
     int32_t          lamalef_found = 0;
     UChar            prevLink = 0, lastLink = 0, currLink, nextLink = 0;
     UChar            wLamalef;
@@ -799,12 +789,18 @@ shapeUnicode(UChar *dest, int32_t sourceLength,
      * even the lamalef is converted to the special region in
      * the 06xx range
      */
-    for (i = 0; i < sourceLength; i++) {
-        UChar inputChar = dest[i];
-        if ( (inputChar >= 0xFE70) && (inputChar <= 0xFEFC)) {
-            dest[i] = convertFEto06 [ (inputChar - 0xFE70) ] ;
-        } else {
-            dest[i] = inputChar ;
+    if ((options & U_SHAPE_PRESERVE_PRESENTATION_MASK)  == U_SHAPE_PRESERVE_PRESENTATION_NOOP) {
+        for (i = 0; i < sourceLength; i++) {
+            UChar inputChar  = dest[i];
+            if ( (inputChar >= 0xFB50) && (inputChar <= 0xFBFF)) {
+                UChar c = convertFBto06 [ (inputChar - 0xFB50) ];
+                if (c != 0)
+                    dest[i] = c;
+            } else if ( (inputChar >= 0xFE70) && (inputChar <= 0xFEFC)) {
+                dest[i] = convertFEto06 [ (inputChar - 0xFE70) ] ;
+            } else {
+                dest[i] = inputChar ;
+            }
         }
     }
 
@@ -825,7 +821,7 @@ shapeUnicode(UChar *dest, int32_t sourceLength,
 
     while (i != iend) {
         /* If high byte of currLink > 0 then more than one shape */
-        if ((currLink & 0xFF00) > 0 || isTashkeelChar(dest[i])) {
+        if ((currLink & 0xFF00) > 0 || (getLink(dest[i]) & IRRELEVANT) != 0) {
             Nw = i + step;
             while (Nx < 0) {         /* we need to know about next char */
                 if(Nw == iend) {
@@ -852,59 +848,56 @@ shapeUnicode(UChar *dest, int32_t sourceLength,
                 lastLink = prevLink;             /* spaces generated during lamalef generation.      */
                 currLink = getLink(wLamalef);    /* 0xFFFF is added here and is replaced by spaces   */
             }                                    /* in removeLamAlefSpaces()                         */
-            /*
+            /*  
              * get the proper shape according to link ability of neighbors
              * and of character; depends on the order of the shapes
              * (isolated, initial, middle, final) in the compatibility area
              */
-             flag  = specialChar(dest[i]);
+            Shape = shapeTable[nextLink & (LINKR + LINKL)]
+                              [lastLink & (LINKR + LINKL)]
+                              [currLink & (LINKR + LINKL)]; 
 
-             Shape = shapeTable[nextLink & (LINKR + LINKL)]
-                               [lastLink & (LINKR + LINKL)]
-                               [currLink & (LINKR + LINKL)];
-
-             if (flag == 1) {
-                 Shape = (Shape == 1 || Shape == 3) ? 1 : 0;
-             }
-             else if(flag == 2) {
-                 if( (lastLink & LINKL) && (nextLink & LINKR) && (tashkeelFlag == 1) &&
-                      dest[i] != 0x064C && dest[i] != 0x064D )
-                 {
-                     Shape = 1;
-                     if( (nextLink&ALEFTYPE) == ALEFTYPE && (lastLink&LAMTYPE) == LAMTYPE ) {
-                         Shape = 0;
-                     }
-                 }
-                 else {
-                     Shape = 0;
-                 }
-             }
-
-             if(flag == 2) {
-                 dest[i] =  0xFE70 + IrrelevantPos[(dest[i] - 0x064B)] + Shape;
-             }
-             else
-                 dest[i] = (UChar)(0xFE70 + (currLink >> 8) + Shape);
+            if ((currLink & (LINKR+LINKL)) == 1) {
+                Shape &= 1;
+            } else if(isTashkeelChar(dest[i])) {
+                if( (lastLink & LINKL) && (nextLink & LINKR) && (tashkeelFlag == 1) &&
+                     dest[i] != 0x064C && dest[i] != 0x064D )
+                {
+                    Shape = 1; 
+                    if( (nextLink&ALEFTYPE) == ALEFTYPE && (lastLink&LAMTYPE) == LAMTYPE ) {
+                        Shape = 0; 
+                    }
+                }
+                else {
+                    Shape = 0;
+                }
+            }
+            if ((dest[i] ^ 0x0600) < 0x100) {
+                if(isTashkeelChar(dest[i]))
+                    dest[i] =  0xFE70 + IrrelevantPos[(dest[i] - 0x064B)] + Shape;
+                else if ((currLink & APRESENT) > 0)
+                    dest[i] = (UChar)(0xFB50 + (currLink >> 8) + Shape);
+                else if ((currLink >> 8) > 0 && (currLink & IRRELEVANT) == 0)  
+                    dest[i] = (UChar)(0xFE70 + (currLink >> 8) + Shape);
+            }
         }
 
         /* move one notch forward */
         if ((currLink & IRRELEVANT) == 0) {
-              prevLink = lastLink;
-              lastLink = currLink;
-              lastPos = i;
+            prevLink = lastLink;
+            lastLink = currLink;
+            lastPos = i;
         }
 
         i = i + step;
         if (i == Nx) {
             currLink = nextLink;
             Nx = -2;
-        }
-        else if(i != iend) {
+        } else if(i != iend) {
             currLink = getLink(dest[i]);
         }
     }
 
-    /* If there is lamalef in the buffer call expandLamAlef */
     if(lamalef_found != 0)
         destSize = removeLamAlefSpaces(dest,sourceLength,destSize,options,pErrorCode);
     else
@@ -931,7 +924,11 @@ deShapeUnicode(UChar *dest, int32_t sourceLength,
      */
     for(i = 0; i < sourceLength; i++) {
         UChar  inputChar = dest[i];
-        if (( inputChar >= 0xFE70) && (inputChar <= 0xFEF4 )) { /* FExx Arabic range */
+        if ( (inputChar >= 0xFB50) && (inputChar <= 0xFBFF)) { /* FBxx Arabic range */
+            UChar c = convertFBto06 [ (inputChar - 0xFB50) ];
+            if (c != 0)
+                dest[i] = c;
+        } else if (( inputChar >= 0xFE70) && (inputChar <= 0xFEF4 )) { /* FExx Arabic range */
             dest[i] = convertFEto06 [ (inputChar - 0xFE70) ]  ;
         } else {
             dest[i] = inputChar ;
@@ -963,15 +960,18 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
     }
 
     /* make sure that no reserved options values are used; allow dest==NULL only for preflighting */
-    if( source==NULL || sourceLength<-1 ||
-        (dest==NULL && destCapacity!=0) || destCapacity<0 ||
-        options>=U_SHAPE_DIGIT_TYPE_RESERVED ||
-        (options&U_SHAPE_DIGITS_MASK)>=U_SHAPE_DIGITS_RESERVED
+    if( source==NULL || sourceLength<-1 || (dest==NULL && destCapacity!=0) || destCapacity<0 ||
+                (options&U_SHAPE_DIGIT_TYPE_RESERVED)==U_SHAPE_DIGIT_TYPE_RESERVED ||
+                (options&U_SHAPE_DIGITS_MASK)==U_SHAPE_DIGITS_RESERVED ||
+                ((options&U_SHAPE_LENGTH_MASK) != U_SHAPE_LENGTH_GROW_SHRINK  &&
+                (options&U_SHAPE_AGGREGATE_TASHKEEL_MASK) != 0) ||
+                ((options&U_SHAPE_AGGREGATE_TASHKEEL_MASK) == U_SHAPE_AGGREGATE_TASHKEEL &&
+                (options&U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED) != U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED)
     ) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
-
+        
     /* determine the source length */
     if(sourceLength==-1) {
         sourceLength=u_strlen(source);
@@ -983,16 +983,52 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
     /* check that source and destination do not overlap */
     if( dest!=NULL &&
         ((source<=dest && dest<source+sourceLength) ||
-         (dest<=source && source<dest+destCapacity))
-    ) {
+         (dest<=source && source<dest+destCapacity))) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
 
     if((options&U_SHAPE_LETTERS_MASK)!=U_SHAPE_LETTERS_NOOP) {
         UChar buffer[300];
-        UChar *tempbuffer;
+        UChar *tempbuffer, *tempsource = NULL;
         int32_t outputSize, spacesCountl=0, spacesCountr=0;
+
+        if((options&U_SHAPE_AGGREGATE_TASHKEEL_MASK)>0) {
+            int32_t logical_order = (options&U_SHAPE_TEXT_DIRECTION_MASK) == U_SHAPE_TEXT_DIRECTION_LOGICAL;
+            int32_t aggregate_tashkeel = 
+                        (options&(U_SHAPE_AGGREGATE_TASHKEEL_MASK+U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED)) == 
+                        (U_SHAPE_AGGREGATE_TASHKEEL+U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED);
+            int step=logical_order?1:-1;
+            int j=logical_order?-1:2*sourceLength;
+            int i=logical_order?-1:sourceLength;
+            int end=logical_order?sourceLength:-1;
+            int aggregation_possible = 1;
+            UChar prev = 0;
+            UChar prevLink, currLink = 0;
+            int newSourceLength = 0;
+            tempsource = (UChar *)uprv_malloc(2*sourceLength*U_SIZEOF_UCHAR);
+            if(tempsource == NULL) {
+                *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
+                return 0;
+            }
+
+            while ((i+=step) != end) {
+                prevLink = currLink;
+                currLink = getLink(source[i]);
+                if (aggregate_tashkeel && ((prevLink|currLink)&COMBINE) == COMBINE && aggregation_possible) {
+                    aggregation_possible = 0; 
+                    tempsource[j] = (prev<source[i]?prev:source[i])-0x064C+0xFC5E;
+                    currLink = getLink(tempsource[j]);
+                } else {
+                    aggregation_possible = 1;
+                    tempsource[j+=step] = source[i];
+                    prev = source[i];
+                    newSourceLength++;
+                }
+            }
+            source = tempsource+(logical_order?0:j);
+            sourceLength = newSourceLength;
+        }
 
         /* calculate destination size */
         /* TODO: do we ever need to do this pure preflighting? */
@@ -1003,6 +1039,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
         }
         if(outputSize>destCapacity) {
             *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+                if (tempsource != NULL) uprv_free(tempsource);
             return outputSize;
         }
 
@@ -1024,17 +1061,19 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
             /*Test for NULL*/
             if(tempbuffer == NULL) {
                 *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
+                if (tempsource != NULL) uprv_free(tempsource);
                 return 0;
             }
         }
         uprv_memcpy(tempbuffer, source, sourceLength*U_SIZEOF_UCHAR);
+        if (tempsource != NULL) uprv_free(tempsource);
         if(sourceLength<outputSize) {
             uprv_memset(tempbuffer+sourceLength, 0, (outputSize-sourceLength)*U_SIZEOF_UCHAR);
         }
 
         if((options&U_SHAPE_TEXT_DIRECTION_MASK) == U_SHAPE_TEXT_DIRECTION_LOGICAL) {
             countSpaces(tempbuffer,sourceLength,options,&spacesCountl,&spacesCountr);
-            invertBuffer(tempbuffer,sourceLength,options,&spacesCountl,&spacesCountr);
+            invertBuffer(tempbuffer,sourceLength,options,spacesCountl,spacesCountr);
         }
 
         switch(options&U_SHAPE_LETTERS_MASK) {
@@ -1065,7 +1104,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
 
         if((options&U_SHAPE_TEXT_DIRECTION_MASK) == U_SHAPE_TEXT_DIRECTION_LOGICAL) {
             countSpaces(tempbuffer,destLength,options,&spacesCountl,&spacesCountr);
-            invertBuffer(tempbuffer,destLength,options,&spacesCountl,&spacesCountr);
+            invertBuffer(tempbuffer,destLength,options,spacesCountl,spacesCountr);
         }
         uprv_memcpy(dest, tempbuffer, uprv_min(destLength, destCapacity)*U_SIZEOF_UCHAR);
 
