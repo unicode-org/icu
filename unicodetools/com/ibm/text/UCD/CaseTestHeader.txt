@@ -1,0 +1,47 @@
+#
+# This file is used to test (1) case conversion, (2) case detection, 
+# and (3) case-insensitive matching.
+# (1) is represented below by function names such as toLower(),
+# (2) is represented below by function names such as isLower().
+# (3) is represented below by the function name equalsCaseInsensitive().
+# (The actual function names will vary depending on software language and/or library.)
+#
+# The test cases also check whether canonical equivalence is preserved
+# by these functions.
+#
+# Format:
+# <src> ; <lower> ; <upper> ; <title> ; <fold> (# <comment>)? 
+#
+# Test:
+#
+# A. For each line:
+#    1. Verify the following equalities:
+#           lower == toLower(src)
+#           upper == toUpper(src)
+#           title == toTitle(src)
+#           fold == toFold(src)
+#    2. Verify that all of the following are true:
+#           isLower(toLower(lower))
+#           isUpper(toUpper(upper))
+#           isTitle(toTitle(title))
+#           isFold(toTitle(fold))
+#    3. Verify that all of the following are true:
+#           equalsCaseInsensitive(src, lower)
+#           equalsCaseInsensitive(src, upper)
+#           equalsCaseInsensitive(src, title)
+#           equalsCaseInsensitive(src, fold)
+#
+# B. For each code point that is NOT listed as a src:
+#    1. Verify the following equalities:
+#           src == toLower(src) == toUpper(src) == toTitle(src) == toFold(src)
+#    2. Verify that all of the following are true:
+#           isLower(toLower(lower))
+#           isUpper(toUpper(upper))
+#           isTitle(toTitle(title))
+#           isFold(toTitle(fold))
+#    3. Verify that all of the following are true:
+#           equalsCaseInsensitive(src, lower)
+#           equalsCaseInsensitive(src, upper)
+#           equalsCaseInsensitive(src, title)
+#           equalsCaseInsensitive(src, fold)
+#
