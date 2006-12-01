@@ -1,0 +1,226 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>Unicode Character Database</title>
+<style>
+<!--
+table        { padding: 4 }
+td           { padding: 4 }
+-->
+</style>
+</head>
+
+<body>
+
+<span class="cb" id style="DISPLAY: block">
+<h1 align="center">Unicode Character Database (UCD) in XML Format</h1>
+<h1 align="center"><b><font color="#FF0000">WARNING: FORMAT IS DRAFT!</font></b></h1>
+<p align="center">MD 2000.10.16</p>
+<table border="1" width="40%" align="right" cellspacing="4" cellpadding="0">
+  <tr>
+    <td width="100%" bgcolor="#C0C0C0"><span class="cb" id
+      style="DISPLAY: block">
+      <h4 align="center">Using Internet Explorer</h4>
+      <p>The UCD-Main.xml file can be read in Internet Explorer (5.0 and above).
+      However:</p>
+      <ul>
+        <li>It may take a few minutes to load completely.</li>
+        <li>The XML parser in IE does not appear to be conformant: it seems to
+          break on</span> the following valid code points (and others):
+        <ul>
+          <li>&lt;IEbugs<br>
+            c1='&amp;#xFFF9;'<br>
+            c2='&amp;#xFFFA;'<br>
+            c3='&amp;#xFFFB;'<br>
+            c4='&amp;#xFFFC;'<br>
+            c5='&amp;#xFFFD;'<br>
+            c6='&amp;#xF0000;'<br>
+            c7='&amp;#xFFFFD;'<br>
+            c8='&amp;#x100000;'<br>
+            c9='&amp;#x10FFFD;'/&gt;</li>
+        </ul>
+      </li>
+      </ul>
+    </td>
+  </tr>
+</table>
+<p><a href="UCD-Main.xml">UCD-Main.xml</a> provides an XML format for the main
+files in the Unicode Character Database. These include:</p>
+<ul>
+  <li><code>UnicodeData.txt</code></li>
+  <li><code>ArabicShaping.txt</code></li>
+  <li><code>Jamo.txt</code></li>
+  <li><code>SpecialCasing.txt</code></li>
+  <li><code>CompositionExclusions.txt</code></li>
+  <li><code>EastAsianWidth.txt</code></li>
+  <li><code>LineBreak.txt</code></li>
+  <li><code>BidiMirroring.txt</code></li>
+  <li><code>CaseFolding.txt</code></li>
+  <li><code>Blocks.txt</code></li>
+  <li><code>PropList.alpha.txt</code></li>
+</ul>
+<p>Other files in the UCD have very different structure or purpose, and are best
+expressed with separate files. Some annotational data, such as that in
+NamesList.txt or the 10646 comment in UnicodeData, is also best served with
+separate files. The current UCD files not yet in XML format are:</p>
+<ul>
+  <li><code>Unihan.txt</code></li>
+  <li><code>NamesList.txt</code></li>
+  <li><code>Index.txt</code></li>
+  <li><code>NormalizationTest.txt</code></li>
+</ul>
+<h3>Format</h3>
+<p>The Unicode blocks are provided as a list of &lt;block .../&gt; elements,
+with attributes providing the start, end, and name.</p>
+<p>Each assigned code point is a &lt;e .../&gt; element, with attributes
+supplying specific properties. The meaning of the attributes is specified below.
+There is one exception: large ranges of code points&nbsp; for characters such as
+Hangul Syllables are abbreviated by indicating the start and end of the range.</p>
+<p>Because of the volume of data, the attribute names are abbreviated. A <a
+href="#AttributeAbbreviations">key</a> explains the abbreviations, and relates
+them to the fields and values of the original UCD semicolon-delimited files.
+With few exceptions, the values in the XML are directly copied from data in the
+original UCD semicolon-delimited files. Those exceptions are described <a
+href="http://www.unicode.org/Public/3.0-Update1/UnicodeCharacterDatabase-3.0.1.html#DataModifications">below</a>.</p>
+<p>Numeric character references (NCRs) are used to encode the Unicode code
+points. Some Unicode code points cannot be transmitted in XML, even as NCRs (see
+<a href="http://www.w3.org/TR/REC-xml#charsets">http://www.w3.org/TR/REC-xml#charsets</a>),
+or would not be visibly distinct (TAB, CR, LF) in the data. Such code points are
+represented by '#xX;', where X is a hex number.</p>
+<h3><a name="AttributeAbbreviations">Attribute Abbreviations</a></h3>
+<p>To reduce the size of the document, the following attribute abbreviations are
+used. If an attribute is missing, that means it gets a default value. The
+defaults are listed in parentheses below. If there is no specific default, then
+a missing attribute should be read as N/A (not applicable). A default with '='
+means the default is the value of another other field (recursively!). Thus if
+the titlecase attribute is missing, then the value is the same as the uppercase.
+If that in turn is missing, then the value is the same as the code point itself.</p>
+<p>For a description of the source files, see <a
+href="http://www.unicode.org/Public/UNIDATA/UnicodeCharacterDatabase.html">UnicodeCharacterDatabase.html</a>.
+That file also has links to the descriptions of the fields within the files.
+Since the PropList values are so long, they will probably also be abbreviated in
+the future.</p>
+<table border="1" width="100%">
+  <tr>
+    <td width="50%" valign="top"><span class="cb" id style="DISPLAY: block">
+      <h4>UnicodeData</h4>
+      <p>&nbsp; c: code point<br>
+      &nbsp; n: name<br>
+      &nbsp; gc: general category (Lo)<br>
+      &nbsp; cc: combining class (0)<br>
+      &nbsp; bc: bidi category (L)<br>
+      &nbsp; dm: decomposition mapping<br>
+      &nbsp; dt: decomposition type (canonical)<br>
+      &nbsp; nt: numeric type<br>
+      &nbsp; nv: numeric value<br>
+      &nbsp; bm: bidi mirrored (N)<br>
+      &nbsp; uc: uppercase (=c)<br>
+      &nbsp; lc: lowercase (=c)<br>
+      &nbsp; tc: titlecase (=uc)</p>
+      <h4>SpecialCasing:</h4>
+      <p>&nbsp; sl: special lower (=lc)<br>
+      &nbsp; su: special upper (=uc)<br>
+      &nbsp; st: special title (=su)<br>
+      &nbsp; sc: special case condition</p>
+      <h4>CaseFolding:</h4>
+      <p>&nbsp; fc: foldcase (=sl)</span></td>
+    <td width="50%" valign="top"><span class="cb" id style="DISPLAY: block">
+      <h4>CompositionExclusions:</h4>
+      <p>&nbsp; ce: composition exclusion (N)</p>
+      <h4>EastAsianWidth:</h4>
+      <p>&nbsp; ea: east asian width (N)</p>
+      <h4>Jamo:</h4>
+      <p>&nbsp; jn: jamo name</p>
+      <h4>LineBreak:</h4>
+      <p>&nbsp; lb: line break class (AL)</p>
+      <h4>ArabicShaping:</h4>
+      <p>&nbsp; jt: joining type<br>
+      &nbsp; jg: joining group</p>
+      <h4>BidiMirroring:</h4>
+      <p>&nbsp; bg: bidi mirroring glyph (=c)</p>
+      <p><b>PropList:</b></p>
+      <p>&nbsp; xs: space-delimited list of properties from the file</p>
+      <p><b><i>WARNING: these values are likely to change!</i></b></span></td>
+  </tr>
+</table>
+<br>
+<h3><a name="DataModifications">Data Modifications</a></h3>
+</span>
+<p>The XML format is generated from the original semicolon-delimited UCD files.
+In general, all fields and values are direct copies. However, there are some
+changes, detailed below.</p>
+<h4>1. Some redundant or annotational fields are omitted</h4>
+<table border="1" width="100%">
+  <tr>
+    <td width="50%" valign="top"><b>UnicodeData<br>
+      </b>1.0 Name<br>
+      10646 comment<br>
+      <br>
+      <b>CaseFolding<br>
+      </b>Type (since it is computable from whether the fold equals the normal
+      lowercase)
+      <p><b>ArabicShaping<br>
+      </b>Name<br>
+      <br>
+      <b>EastAsianWidth<br>
+      </b>Name<br>
+      <br>
+      <b>LineBreak<br>
+      </b>Name</p>
+    </td>
+    <td width="50%" valign="top"><b>PropList</b><font face="Times New Roman"
+      color="#000000">
+      <p>The fields are based on the proposed PropList.alpha, which changes the
+      fields considerably.</p>
+      </font>
+      <p><span class="cb" id style="display: block"><b><i>WARNING: other values
+      are also likely to change!</i></b></span></p>
+    </td>
+  </tr>
+</table>
+<h4>2. Some fields are broken into several fields; others may be combined into a
+single field</h4>
+<ul>
+  <li><b>dt: </b>decomposition tag
+    <ul>
+      <li>the 'tag' field extracted from the decomposition mapping. If there is
+        no tag, the value is &quot;canonical&quot;. Only has meaning if there is
+        a decomposition (<b>dm</b>).</li>
+    </ul>
+  </li>
+  <li><b>nt: </b>numeric type
+    <ul>
+      <li>an enumeration [decimal, digit, numeric] for the type of number. It
+        replaces having duplicate field values for numbers</li>
+    </ul>
+  </li>
+  <li><b>rg: </b>range
+    <ul>
+      <li>used for ranges of values that share characteristics, instead of
+        having to do a substring check.<br>
+        &quot;START&quot; corresponds to &quot;&lt;..., First&gt;&quot;<br>
+        &quot;END&quot; corresponds to &quot;&lt;..., Last&gt;&quot;</li>
+    </ul>
+  </li>
+  <li><b>nc: </b>name computed
+    <ul>
+      <li>if &quot;COMPUTED&quot;, indicates that the name must be computed:
+        e.g. Hangul Syllables, Ideographs</li>
+    </ul>
+  </li>
+  <li><b>na: </b>name annotation
+    <ul>
+      <li>used for code points that do not really have associated names, like
+        control characters and private use characters. The data in that case is
+        either extracted from the &quot;&lt;...&gt;&quot; style name in the old
+        format, or gotten from the &quot;1.0 Unicode name&quot;.</li>
+    </ul>
+  </li>
+</ul>
+
+</body>
+
+</html>

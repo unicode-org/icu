@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Language" content="en-us">
+<meta name="VI60_defaultClientScript" content="JavaScript">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="keywords" content="Unicode Standard, technical reports">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>Technical Reports</title>
+<link rel="stylesheet" type="text/css"
+href="http://www.unicode.org/webscripts/standard_styles.css">
+<script language="Javascript" src="http://www.unicode.org/webscripts/commonHeader.js"></script>
+</head>
+
+<body text="#330000" topmargin="0" leftmargin="0" marginwidth="0"
+marginheight="0">
+
+<form action="http://www.unicode.org/webscripts/POST">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+    <tr>
+      <td colspan="2">
+        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+          <tr>
+            <td class="icon"><img border="0"
+              src="http://www.unicode.org/webscripts/logo60s2.gif"
+              align="middle" alt="[Unicode]" width="34" height="33">&nbsp;&nbsp;Charts</td>
+            <td class="bar"><a href="http://www.unicode.org" class="bar">Home</a> 
+              | <a href="http://www.unicode.org/sitemap/" class="bar">Site Map</a> 
+              | <a href="http://www.unicode.org/search" class="bar">Search </a><script language="Javascript" src="http://www.unicode.org/webscripts/commonSearch.js"></script><noscript><a
+              href="http://www.unicode.org/webscripts/quick_links.html"
+              class="bar" target="_blank">Goto</a></noscript></td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" class="gray">&nbsp;</td>
+    </tr>
+    <tr>
+      <td>
+        <h1>Collation Charts</h1>
+      </td>
+    </tr>
+    <tr><td valign="top" class="navCol">

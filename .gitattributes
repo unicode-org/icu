@@ -1,0 +1,112 @@
+* text=auto !eol
+
+*.c text !eol
+*.cc text !eol
+*.classpath text !eol
+*.cpp text !eol
+*.css text !eol
+*.dsp text !eol
+*.dsw text !eol
+*.filters text !eol
+*.h text !eol
+*.htm text !eol
+*.html text !eol
+*.in text !eol
+*.java text !eol
+*.launch text !eol
+*.mak text !eol
+*.md text !eol
+*.MF text !eol
+*.mk text !eol
+*.pl text !eol
+*.pm text !eol
+*.project text !eol
+*.properties text !eol
+*.py text !eol
+*.rc text !eol
+*.sh text eol=lf
+*.sln text !eol
+*.stub text !eol
+*.txt text !eol
+*.ucm text !eol
+*.vcproj text !eol
+*.vcxproj text !eol
+*.xml text !eol
+*.xsl text !eol
+*.xslt text !eol
+Makefile text !eol
+configure text !eol
+LICENSE text !eol
+README text !eol
+
+*.bin -text
+*.brk -text
+*.cnv -text
+*.icu -text
+*.res -text
+*.nrm -text
+*.spp -text
+*.tri2 -text
+
+unicodetools/com/ibm/rbm/docs/images/TitleLogo_transparent.gif -text
+unicodetools/com/ibm/rbm/docs/images/arrow_bullet.gif -text
+unicodetools/com/ibm/rbm/docs/images/diamond_bullet.gif -text
+unicodetools/com/ibm/rbm/docs/images/ibm_logo_small_white.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/RBReporter.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/basic_file.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/basic_group.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/basic_resource.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/basic_translation.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/basic_untranslated.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/create_group.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/empty_group.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/empty_resource.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/empty_screen.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/empty_with_preferences.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/laf_metal.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/laf_motif.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/laf_windows.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/lookup_resource.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/main_page.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/menu_file.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/menu_file_export.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/menu_file_import.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/menu_help.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/menu_options.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/menu_popup_tree.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/new_baseclass.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/new_bundle.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/preferences_dialog.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/view_groups_bundle.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/view_groups_file.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/view_search.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/view_stats_bundle.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/view_stats_file.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/view_tree_basic.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/view_untrans_bundle.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/view_untrans_dialog0.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/view_untrans_file.gif -text
+unicodetools/com/ibm/rbm/docs/images/spacer.gif -text
+unicodetools/com/ibm/rbm/docs/images/template_l.gif -text
+unicodetools/com/ibm/rbm/docs/images/template_line.gif -text
+unicodetools/com/ibm/rbm/docs/images/template_ll.gif -text
+unicodetools/com/ibm/rbm/docs/images/template_u.gif -text
+unicodetools/com/ibm/rbm/docs/images/template_ul.gif -text
+unicodetools/com/ibm/rbm/gui/images/TitleLogo_transparent.gif -text
+unicodetools/com/ibm/rbm/gui/images/tree_icon_bundle.gif -text
+unicodetools/com/ibm/rbm/gui/images/tree_icon_country.gif -text
+unicodetools/com/ibm/rbm/gui/images/tree_icon_file.gif -text
+unicodetools/com/ibm/rbm/gui/images/tree_icon_group.gif -text
+unicodetools/com/ibm/rbm/gui/images/tree_icon_item.gif -text
+unicodetools/com/ibm/rbm/gui/images/tree_icon_language.gif -text
+unicodetools/com/ibm/rbm/gui/images/tree_icon_project.gif -text
+unicodetools/com/ibm/rbm/gui/images/tree_icon_variant.gif -text
+
+# The following file types are stored in Git-LFS.
+*.jar filter=lfs diff=lfs merge=lfs -text
+*.dat filter=lfs diff=lfs merge=lfs -text
+*.zip filter=lfs diff=lfs merge=lfs -text
+*.gz filter=lfs diff=lfs merge=lfs -text
+*.bz2 filter=lfs diff=lfs merge=lfs -text
+*.gif filter=lfs diff=lfs merge=lfs -text
+

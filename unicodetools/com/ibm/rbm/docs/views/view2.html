@@ -1,0 +1,161 @@
+<HTML><!-- #BeginTemplate "/Templates/MainTemplate.dwt" -->
+<HEAD>
+<!-- #BeginEditable "doctitle" --> 
+<TITLE>RB Manager - The Statistics Tab</TITLE>
+<!-- #EndEditable --> 
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<STYLE TYPE="TEXT/CSS">
+<!--
+.topicHead {  font-family: "Times New Roman", Times, serif; font-size: 14pt; font-weight: bold; text-align: center; color: #333333}
+.topicList {  font-family: Georgia, "Times New Roman", Times, serif; font-size: 9pt; color: #FF0099; list-style-image: url(../images/diamond_bullet.gif); text-decoration: none; font-weight: bold}
+.mainBlock {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12pt; margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px; padding-top: 5px; padding-right: 10px; padding-bottom: 5px; padding-left: 10px; text-align: justify}
+-->
+</STYLE>
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF" LEFTMARGIN="0" TOPMARGIN="0" MARGINWIDTH="0" MARGINHEIGHT="0">
+<TABLE WIDTH="100%" BORDER="0" CELLSPACING="0" CELLPADDING="0">
+  <TR>
+    <TD ROWSPAN="2" COLSPAN="2" BACKGROUND="../images/template_ul.gif" HEIGHT="75"><IMG SRC="../images/spacer.gif" WIDTH="280" HEIGHT="1" HSPACE="0"></TD>
+		<TD HEIGHT="15"  WIDTH="100%" BACKGROUND="../images/template_u.gif"></TD>
+	</TR>
+	<TR>
+		<TD HEIGHT="60" >
+			<CENTER><IMG SRC="../images/TitleLogo_transparent.gif" VSPACE="0"></CENTER>
+		</TD>
+	</TR>
+	<TR>
+		
+    <TD WIDTH="200" BACKGROUND="../images/template_l.gif" VALIGN="top">
+		<TABLE WIDTH="180" CELLSPACING="0" CELLPADDING="1"> 
+      	<TR>
+			<TD CLASS="topicHead">General</TD>
+		</TR>
+		<TR>
+			<TD VALIGN="center"><IMG SRC="../images/template_line.gif"></TD>
+		</TR>
+		<TR>
+			<TD CLASS="topicList">
+	        <UL>
+              <LI><A HREF="../system_requirements.html">System Requirements</A></LI>
+              <LI><A HREF="../faq.html">FAQ</A></LI>
+              <LI><A HREF="../future_features.html">Future Releases</A></LI>
+              <LI CLASS="topicList"><A HREF="../future_features.html">Version 
+                History</A></LI>
+            </UL>
+			</TD>
+		</TR>
+      	<TR>
+			<TD CLASS="topicHead">RB Manager</TD>
+		</TR>
+		<TR>
+			<TD VALIGN="center"><IMG SRC="../images/template_line.gif"></TD>
+		</TR>
+		<TR>
+			<TD CLASS="topicList">
+	        <UL>
+              <LI><A HREF="../index.html">Home</A></LI>
+              <LI><A HREF="../tutorial/index.html">Tutorial</A></LI>
+              <LI><A HREF="index.html">Functionality and Views</A></LI>
+              <LI><A HREF="../lookandfeel.html">Look and Feel</A></LI>
+              <LI><A HREF="../menu.html">Menu Items</A></LI>
+              <LI CLASS="topicList"><A HREF="../tutorial/step1.html">Preferences</A></LI>
+            </UL>
+			</TD>
+		</TR>
+		<TR>
+			<TD CLASS="topicHead">RB Reporter</TD>
+		</TR>
+		<TR>
+			<TD VALIGN="center"><IMG SRC="../images/template_line.gif"></TD>
+		</TR>
+		<TR>
+			<TD CLASS="topicList">
+	  <UL>
+              <LI><A HREF="../RBReporter.html">Home</A></LI>
+        <LI>Report Types</LI>
+              <LI><A HREF="../scanfile.html">Code Scanning</A></LI>
+            </UL>
+			</TD>
+		</TR>
+	</TABLE>
+
+      <P>&nbsp; </P>
+      </TD>
+		
+    <TD COLSPAN="2" VALIGN="top" CLASS="mainBlock"><!-- #BeginEditable "Main" --> 
+      <H3 ALIGN="CENTER">View 2. The Statistics Tab</H3>
+      <P>The first tab on the right panel of the RB Manager application is the 
+        Statistics tab. As with all of the tab views, the statistics tab looks 
+        and functions differently when working with the resource bundle as a whole 
+        than when working with an individual resource file. For an overview of 
+        this difference see <A HREF="view1.html">View 1</A>.</P>
+      <P><B>Working with a Resource Bundle</B></P>
+      <P>The screen shot below shows RB Manager and some statistics concerning 
+        the resource bundle associated with the application.</P>
+      <P><IMG SRC="../images/screenshots/view_stats_bundle.gif" WIDTH="642" HEIGHT="543"></P>
+      <P>Three basic areas are covered by this view, Resource Files, Resource 
+        Groups, and Resource Items.</P>
+      <P>In the Resource Files section, the total number of individual files is 
+        shown as well as the names of these files (made up of the language, country, 
+        and variant information known about the files). New resource files can 
+        be added to the bundle by pressing the 'Add a New Resource File' button 
+        or using the accelerator key (in this case 'N') in the manner specified 
+        by your operating system. New files can also be added through the Options 
+        menu.</P>
+      <P>In the Resource Groups section, the total number of groups associated 
+        with the bundle as well as an alphabetical list of the groups is displayed. 
+        For more information on Resource Groups, see the <A HREF="../tutorial/index.html">Tutorial</A>. 
+        New groups can be created by pressing the 'Add a New Resourece Group' 
+        button. This can also be done from the Options menu or the Groups tab 
+        view.</P>
+      <P>In the Resource Items view, the total number of resources in the bundle 
+        is displayed. This number represents the number of resources in the base 
+        class file, as the other resource files are not required to posses all 
+        of the resource items. In addition, the number of duplicated resource 
+        keys is displayed. This number should be zero or the resource bundle may 
+        not function the way it was intended to. The list box will display the 
+        names of the duplicated keys, so that the errors can be removed. Note 
+        that if you create your Resource Bundles through RB Manager, you should 
+        never have duplicate keys. However, if you imported the bundles from another 
+        source, this error can be a common one.</P>
+      <P><B>Working with a Resource File</B></P>
+      <P>The screen shot below shows the statistics view for an individual resource 
+        file, in this case the German (Deutsch) file. For our example, I have 
+        removed some of the translations from this file.</P>
+      <P><IMG SRC="../images/screenshots/view_stats_file.gif" WIDTH="671" HEIGHT="543"></P>
+      <P>This view shows some meta data that is associated with the Resource File. 
+        This meta data has absolutely no impact on the functioning of the resource 
+        bundle within an application. It is there solely to aid development and 
+        translation teams in managing their efforts.</P>
+      <P>The Resource Title is a way to identify this file and will show at the 
+        top of most views when working with a resource file. The Comment can be 
+        used to specify anything special about this file. The Resource File Manager 
+        is the person in charge of translations in the locale associated with 
+        the file. The Language, Country, and Variant represent the long names 
+        (i.e. not the ISO encodings) of the language, country, and variant associate 
+        with the file. These are the names that show up in the Resource Tree.</P>
+      <P>Also displayed for the selected file is the total number of translations 
+        in this file. This number should be less than or equal to the number of 
+        translations in the bundle. The number of untranslated resource items 
+        is also shown. These statistics are useful in monitoring the progress 
+        of translation. To work with the untranslated items, a convenient view 
+        is given in the Untranslated tab view.</P>
+      <P ALIGN="CENTER"><A HREF="view3.html">View 3. The Untranslated Tab</A></P>
+      <!-- #EndEditable --></TD>
+	</TR>
+	<TR>
+		<TD BACKGROUND="../images/template_ll.gif" HEIGHT="40" WIDTH="200">
+			<!-- Comment -->
+		</TD>
+		<TD WIDTH="80">
+			<!-- Comment -->
+		</TD>
+		<TD>
+			<CENTER><SPAN CLASS="Copyright">Copyright 2000-2001 International Business Machines, All Rights Reserved</SPAN></CENTER>
+		</TD>
+	</TR>
+</TABLE>
+
+</BODY>
+<!-- #EndTemplate --></HTML>
