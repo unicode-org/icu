@@ -1,0 +1,10 @@
+*.d
+libicu*.*
+Debug
+Release
+Makefile
+svchook.mk
+icucfg.h
+*.ao
+*.o
+*.plg

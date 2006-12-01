@@ -1,0 +1,7 @@
+*.d
+*.o
+Debug
+Release
+Makefile
+iotest
+iotest.exe

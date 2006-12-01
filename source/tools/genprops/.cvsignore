@@ -1,0 +1,11 @@
+Debug
+Release
+Makefile
+*.d
+*.o
+*.pdb
+genprops
+genprops.[0-9]
+*.plg
+*.ncb
+*.opt

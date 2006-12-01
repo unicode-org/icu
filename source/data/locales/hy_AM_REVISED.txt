@@ -1,0 +1,57 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2006 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/hy_AM_REVISED.xml
+// *
+// ***************************************************************************
+hy_AM_REVISED{
+    Version{"1.38"}
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "Առ․",
+                "Կե․",
+            }
+            eras{
+                abbreviated{
+                    "Մ․Թ․Ա․",
+                    "Մ․Թ․",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Հունվար",
+                        "Փտվ",
+                        "Մրտ",
+                        "Ապրիլ",
+                        "Մայիս",
+                        "Հունիս",
+                        "Հլս",
+                        "Օգս",
+                        "Սեպտեմբեր",
+                        "Հոկտեմբեր",
+                        "Նոյեմբեր",
+                        "Դեկտեմբեր",
+                    }
+                    wide{
+                        "Հունվար",
+                        "Փետրվար",
+                        "Մարտ",
+                        "Ապրիլ",
+                        "Մայիս",
+                        "Հունիս",
+                        "Հուլիս",
+                        "Օգոստոս",
+                        "Սեպտեմբեր",
+                        "Հոկտեմբեր",
+                        "Նոյեմբեր",
+                        "Դեկտեմբեր",
+                    }
+                }
+            }
+        }
+    }
+}
