@@ -46,6 +46,7 @@
 #include <vector>
 
 #include "tz2icu.h"
+#include "unicode/uversion.h"
 
 using namespace std;
 
@@ -1451,6 +1452,7 @@ int main(int argc, char *argv[]) {
              << "// Build date: " << asctime(now) /* << endl -- asctime emits CR */
              << "// Olson source: ftp://elsie.nci.nih.gov/pub/" << endl
              << "// Olson version: " << version << endl
+             << "// ICU version: " << U_ICU_VERSION << endl
              << "//---------------------------------------------------------" << endl
              << "// >> !!! >>   THIS IS A MACHINE-GENERATED FILE   << !!! <<" << endl
              << "// >> !!! >>>            DO NOT EDIT             <<< !!! <<" << endl
@@ -1540,6 +1542,7 @@ int main(int argc, char *argv[]) {
              << "// Build date: " << asctime(now) /* << endl -- asctime emits CR */
              << "// Olson source: ftp://elsie.nci.nih.gov/pub/" << endl
              << "// Olson version: " << version << endl
+             << "// ICU version: " << U_ICU_VERSION << endl
              << "//---------------------------------------------------------" << endl
              << "// >> !!! >>   THIS IS A MACHINE-GENERATED FILE   << !!! <<" << endl
              << "// >> !!! >>>            DO NOT EDIT             <<< !!! <<" << endl

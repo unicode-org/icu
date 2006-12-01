@@ -25,14 +25,14 @@ PRIMARY_YDATA=	africa antarctica asia australasia \
 YDATA=		$(PRIMARY_YDATA) pacificnew etcetera factory backward
 NDATA=		systemv
 SDATA=		solar87 solar88 solar89
-TDATA=		$(YDATA) $(NDATA) $(SDATA) $(srcdir)/icuzones
+TDATA=		$(YDATA) $(NDATA) $(SDATA) 
 YEARISTYPE=     ./yearistype
 
 ZIC = ./zic
 TZDIR=zoneinfo
 
 CFLAGS+=-D_POSIX_C_SOURCE
-CPPFLAGS+= -DTZDIR=\"$(TZDIR)\"
+CPPFLAGS+= -DTZDIR=\"$(TZDIR)\" 
 
 # more data
 XDATA=zone.tab yearistype.sh leapseconds iso3166.tab
@@ -44,7 +44,7 @@ zic:		$(OBJECTS) yearistype $(srcdir)/tz2icu.h
 		$(CC) $(CFLAGS) $(LFLAGS) -I$(srcdir) $(OBJECTS) $(LDLIBS) -o $@
 
 tz2icu:		$(srcdir)/tz2icu.cpp $(srcdir)/tz2icu.h
-		$(CXX) -W -Wall -I$(srcdir) -pedantic $(srcdir)/tz2icu.cpp -o $@
+		$(CXX) -W -Wall  -I$(srcdir) -I$(top_srcdir)/common -pedantic $(srcdir)/tz2icu.cpp -o $@
 
 yearistype.sh: $(TZDATA)
 	gunzip -d < $(TZDATA) | tar xf -
@@ -56,8 +56,8 @@ yearistype:	yearistype.sh
 tz.alias:		$(srcdir)/tz.alias
 	cp $< .
 
-posix_only:	zic $(TDATA)
-		$(ZIC) -y $(YEARISTYPE) -d $(TZDIR) -L /dev/null $(TDATA)
+posix_only:	zic $(TDATA) $(srcdir)/icuzones
+		$(ZIC) -y $(YEARISTYPE) -d $(TZDIR) -L /dev/null $(TDATA) $(srcdir)/icuzones
 
 
 icu_data:	tz2icu posix_only tz.alias
