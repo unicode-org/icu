@@ -102,12 +102,14 @@ icu4c/source/samples/cal/Debug
 icu4c/source/samples/cal/Makefile
 icu4c/source/samples/cal/Release
 icu4c/source/samples/cal/icucal
+icu4c/source/samples/cal/icucal.exe
 icu4c/source/samples/date/*.d
 icu4c/source/samples/date/*.pdb
 icu4c/source/samples/date/Debug
 icu4c/source/samples/date/Makefile
 icu4c/source/samples/date/Release
 icu4c/source/samples/date/icudate
+icu4c/source/samples/date/icudate.exe
 icu4c/source/samples/layout/*.d
 icu4c/source/samples/layout/*.pdb
 icu4c/source/samples/layout/.#*
