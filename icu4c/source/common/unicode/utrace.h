@@ -26,6 +26,12 @@
 /**
  * \file
  * \brief C API:  Definitions for ICU tracing/logging. 
+ *
+ * This provides API for debugging the internals of ICU without the use of
+ * a traditional debugger.
+ *
+ * By default, tracing is disabled in ICU. If you need to debug ICU with 
+ * tracing, please compile ICU with the --enable-tracing configure option.
  */
  
 U_CDECL_BEGIN
