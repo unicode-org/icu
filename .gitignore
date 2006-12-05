@@ -124,8 +124,10 @@ icu4c/source/stubdata/*.plg
 icu4c/source/stubdata/Debug
 icu4c/source/stubdata/Makefile
 icu4c/source/stubdata/Release
+icu4c/source/stubdata/cygicudt*.*
 icu4c/source/stubdata/debug
 icu4c/source/stubdata/libicu*.*
+icu4c/source/stubdata/libsicu*.*
 icu4c/source/stubdata/release
 icu4c/source/stubdata/stubdatabuilt.txt
 icu4c/source/test/Makefile
@@ -229,11 +231,13 @@ icu4c/source/tools/ctestfw/*.pdb
 icu4c/source/tools/ctestfw/*icutest*.dll
 icu4c/source/tools/ctestfw/*icutest*.exp
 icu4c/source/tools/ctestfw/*icutest*.lib
+icu4c/source/tools/ctestfw/*icutest*.lnk
 icu4c/source/tools/ctestfw/Debug
 icu4c/source/tools/ctestfw/Makefile
 icu4c/source/tools/ctestfw/Release
 icu4c/source/tools/ctestfw/debug
 icu4c/source/tools/ctestfw/libicutest*
+icu4c/source/tools/ctestfw/libsicutest*
 icu4c/source/tools/ctestfw/release
 icu4c/source/tools/dumpce/*.css
 icu4c/source/tools/dumpce/*.d
