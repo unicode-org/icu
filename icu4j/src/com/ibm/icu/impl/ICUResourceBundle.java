@@ -930,7 +930,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
         // all. gotta be a better way to do this, since to add a locale you have
         // to update this list,
         // and it's embedded in our binary resources.
-        ICUResourceBundle bundle = (ICUResourceBundle) createBundle(baseName, ICU_RESOURCE_INDEX, root);
+        ICUResourceBundle bundle = (ICUResourceBundle) UResourceBundle.instantiateBundle(baseName, ICU_RESOURCE_INDEX, root, true);
         
         bundle = bundle.get(INSTALLED_LOCALES);
         int length = bundle.getSize();
@@ -952,7 +952,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
 
     private static final String[] createLocaleNameArray(String baseName,
             ClassLoader root) {
-        ICUResourceBundle bundle = (ICUResourceBundle) createBundle( baseName, ICU_RESOURCE_INDEX, root);
+        ICUResourceBundle bundle = (ICUResourceBundle) UResourceBundle.instantiateBundle( baseName, ICU_RESOURCE_INDEX, root, true);
         bundle = bundle.get(INSTALLED_LOCALES);
         int length = bundle.getSize();
         int i = 0;
