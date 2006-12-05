@@ -88,11 +88,6 @@ icu4c/source/extra/uconv/uconv
 icu4c/source/extra/uconv/uconv.1
 icu4c/source/extra/uconv/uconv.plg
 icu4c/source/extra/uconv/uconvmsg
-icu4c/source/extra/ustdio/*.d
-icu4c/source/extra/ustdio/Debug
-icu4c/source/extra/ustdio/Makefile
-icu4c/source/extra/ustdio/Release
-icu4c/source/extra/ustdio/libicuio.*
 icu4c/source/i18n/*.ao
 icu4c/source/i18n/*.d
 icu4c/source/i18n/*.o
@@ -166,14 +161,7 @@ icu4c/source/test/cintltst/Makefile
 icu4c/source/test/cintltst/Release
 icu4c/source/test/cintltst/cintltst
 icu4c/source/test/cintltst/cintltst.exe
-icu4c/source/test/collperf/Makefile
 icu4c/source/test/hdrtst/Makefile
-icu4c/source/test/ieeetest/*.d
-icu4c/source/test/ieeetest/*.plg
-icu4c/source/test/ieeetest/Debug
-icu4c/source/test/ieeetest/Makefile
-icu4c/source/test/ieeetest/Release
-icu4c/source/test/ieeetest/ieeetest
 icu4c/source/test/intltest/*.d
 icu4c/source/test/intltest/*.o
 icu4c/source/test/intltest/*.plg
