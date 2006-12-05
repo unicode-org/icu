@@ -218,7 +218,7 @@ Intel can define _M_IX86 or _M_X64
 
 /* Determine whether to enable tracing. */
 #ifndef U_ENABLE_TRACING
-#define U_ENABLE_TRACING 1
+#define U_ENABLE_TRACING 0
 #endif
 
 /* Do we allow ICU users to use the draft APIs by default? */

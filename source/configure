@@ -860,7 +860,7 @@ Optional Features:
   --enable-release        build release libraries default=yes
   --enable-draft         enable draft APIs default=yes
   --enable-renaming       add a version suffix to symbols default=yes
-  --enable-tracing        enable function and data tracing default=yes
+  --enable-tracing        enable function and data tracing default=no
   --enable-rpath          use rpath when linking default is only if necessary
   --enable-threads        build ICU with thread safety default=yes
   --enable-extras         build ICU extras default=yes
@@ -3796,7 +3796,7 @@ echo "${ECHO_T}$enabled" >&6
 echo "$as_me:$LINENO: checking whether to enable function and data tracing" >&5
 echo $ECHO_N "checking whether to enable function and data tracing... $ECHO_C" >&6
 enabled=yes
-U_ENABLE_TRACING=1
+U_ENABLE_TRACING=0
 # Check whether --enable-tracing or --disable-tracing was given.
 if test "${enable_tracing+set}" = set; then
   enableval="$enable_tracing"
@@ -7908,10 +7908,9 @@ for ac_i in : $LIBOBJS; do test "x$ac_i" = x: && continue
   # 1. Remove the extension, and $U if already installed.
   ac_i=`echo "$ac_i" |
 	 sed 's/\$U\././;s/\.o$//;s/\.obj$//'`
-  # 2. Prepend LIBOBJDIR.  When used with automake>=1.10 LIBOBJDIR
-  #    will be set to the directory where LIBOBJS objects are built.
-  ac_libobjs="$ac_libobjs \${LIBOBJDIR}$ac_i\$U.$ac_objext"
-  ac_ltlibobjs="$ac_ltlibobjs \${LIBOBJDIR}$ac_i"'$U.lo'
+  # 2. Add them.
+  ac_libobjs="$ac_libobjs $ac_i\$U.$ac_objext"
+  ac_ltlibobjs="$ac_ltlibobjs $ac_i"'$U.lo'
 done
 LIBOBJS=$ac_libobjs
 
