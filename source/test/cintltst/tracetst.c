@@ -252,8 +252,6 @@ static void TestTraceAPI() {
         TEST_ASSERT(gTraceDataCount  > 0);
         TEST_ASSERT(gFnNameError   == FALSE);
         TEST_ASSERT(gFnFormatError == FALSE);
-#else
-        log_info("Tracing has been disabled. Testing of this feature has been skipped.\n");
 #endif
     }
 
