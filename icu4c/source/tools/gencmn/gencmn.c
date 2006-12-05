@@ -148,8 +148,6 @@ main(int argc, char* argv[]) {
 
     U_MAIN_INIT_ARGS(argc, argv);
 
-    fprintf(stderr, "Warning: gencmn is an obsolete tool and it will be removed in the next ICU release.\nPlease use the icupkg tool instead.\n");
-
     /* preset then read command line options */
     options[4].value=u_getDataDirectory();
     options[6].value=COMMON_DATA_NAME;
