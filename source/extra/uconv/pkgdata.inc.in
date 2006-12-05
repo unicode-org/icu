@@ -59,6 +59,7 @@ ld_rpath_suf=@ld_rpath_suf@
 ##### Add the following to source/config/Makefile.in
 
 GENCCODE=$(BINDIR)/genccode
+GENCMN=$(BINDIR)/gencmn
 ICUPKG=$(BINDIR)/icupkg
 
 
