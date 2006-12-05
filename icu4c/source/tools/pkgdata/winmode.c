@@ -42,7 +42,7 @@ void writeCmnRules(UPKGOptions *o,  FileStream *makefile)
 
     infiles = o->files; 
     sprintf(tmp, "\"$(TARGETDIR)\\$(CMNTARGET)\" : $(DATAFILEPATHS)\n"
-        "\t%s\"$(ICUPKG)\" -t%c %s%s%s -s \"$(SRCDIR)\" -a $(LISTFILES) new \"$(TARGETDIR)\\$(CMNTARGET)\"\n",
+        "\t%s\"$(ICUPKG)\" -t%c %s%s%s -s \"$(SRCDIR)\" -a \"$(LISTFILES)\" new \"$(TARGETDIR)\\$(CMNTARGET)\"\n",
         (o->verbose ? "" : "@"),
         (U_IS_BIG_ENDIAN ? 'b' : 'l'),
         (o->comment ? "-C \"" : ""),
