@@ -188,6 +188,16 @@ static const struct AssemblyType {
 
         ".word "
     },
+    {"sun86",
+        "Drodata.rodata:\n"
+        "\t.type   Drodata.rodata,@object\n"
+        "\t.size   Drodata.rodata,0\n"
+        "\t.globl  %s\n"
+        "\t.align  8\n"
+        "%s:\n",
+
+        ".4byte "
+    },
     {"xlc",
         ".globl %s{RO}\n"
         "\t.toc\n"
