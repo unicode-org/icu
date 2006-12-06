@@ -1,7 +1,0 @@
-*.d
-Debug
-Release
-Makefile
-*.ao
-*.o
-*.plg

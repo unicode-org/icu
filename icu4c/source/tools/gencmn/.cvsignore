@@ -1,9 +1,0 @@
-Debug
-Release
-Makefile
-*.d
-*.o
-*.pdb
-*.plg
-gencmn
-gencmn.[0-9]

@@ -1,9 +1,0 @@
-Debug
-Release
-Makefile
-*.d
-*.o
-*.pdb
-makeconv
-makeconv.[0-9]
-*.plg

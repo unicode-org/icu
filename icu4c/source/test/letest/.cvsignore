@@ -1,7 +1,0 @@
-Makefile
-*.d
-*.o
-Debug
-Release
-letest
-letest.exe
