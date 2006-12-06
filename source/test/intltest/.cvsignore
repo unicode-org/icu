@@ -1,8 +1,0 @@
-*.d
-*.o
-intltest
-intltest.exe
-Debug
-Release
-Makefile
-*.plg

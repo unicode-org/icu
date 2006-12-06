@@ -1,8 +1,0 @@
-Makefile
-*.d
-*.pdb
-Debug
-Release
-tmp
-.#*
-

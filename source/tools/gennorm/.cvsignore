@@ -1,9 +1,0 @@
-Debug
-Release
-Makefile
-*.d
-*.o
-*.pdb
-*.plg
-gennorm
-gennorm.[0-9]
