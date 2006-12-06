@@ -1,6 +1,0 @@
-*.d
-*.o
-ubrkperf
-Debug
-Release
-Makefile

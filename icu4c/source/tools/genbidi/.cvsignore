@@ -1,9 +1,0 @@
-Debug
-Release
-Makefile
-*.d
-*.o
-*.pdb
-*.plg
-genbidi
-genbidi.[0-9]

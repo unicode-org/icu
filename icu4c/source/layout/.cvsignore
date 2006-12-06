@@ -1,7 +1,0 @@
-*.d
-*.o
-*.ao
-*.pdb
-Debug
-Makefile
-Release
