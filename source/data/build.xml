@@ -167,6 +167,11 @@
                     <alias from="in_ID" to="id_ID" /> 
                     <alias from="iw" to="he" /> 
                     <alias from="iw_IL" to="he_IL" />
+                    <alias from="zh_CN" to="zh_Hans_CN" />
+                    <alias from="zh_SG" to="zh_Hans_SG" />
+                    <alias from="zh_HK" to="zh_Hant_HK" />
+                    <alias from="zh_MO" to="zh_Hant_MO" />
+                    <alias from="zh_TW" to="zh_Hant_TW" />
                     <emptyLocale locale="de_" />
                     <emptyLocale locale="es_" />
                     <emptyLocale locale="hi_" />
