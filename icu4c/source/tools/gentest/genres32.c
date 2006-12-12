@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2004, International Business Machines
+*   Copyright (C) 2003-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -59,7 +59,8 @@ genres32(const char *prog, const char *path) {
     }
     uprv_strcat(file,"testtable32.txt");
     out = fopen(file, "w");
-    puts(file);
+    /*puts(file);*/
+    puts("Generating testtable32.txt");
     if(out == NULL) {
         fprintf(stderr, "%s: Couldn't create resource test file %s\n",
                 prog, file);
