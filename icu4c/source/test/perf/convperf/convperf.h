@@ -186,7 +186,7 @@ public:
         mimeInfo.uiCodePage = 0;
         mimeInfo.uiInternetEncoding =0;
         /* get the charset info */
-        pMulti->GetCharsetInfo(bEnc,&mimeInfo);
+        pMulti->GetCharsetInfo((wchar_t *)bEnc,&mimeInfo);
         uiCodePage = (mimeInfo.uiInternetEncoding==0)?mimeInfo.uiCodePage:mimeInfo.uiInternetEncoding;
     }
     virtual void call(UErrorCode* status){
@@ -240,7 +240,7 @@ public:
         mimeInfo.uiCodePage = 0;
         mimeInfo.uiInternetEncoding =0;
         /* get the charset info */
-        pMulti->GetCharsetInfo(bEnc,&mimeInfo);
+        pMulti->GetCharsetInfo((wchar_t *)bEnc,&mimeInfo);
         uiCodePage = (mimeInfo.uiInternetEncoding==0)?mimeInfo.uiCodePage:mimeInfo.uiInternetEncoding;
     }
     virtual void call(UErrorCode* status){
@@ -303,7 +303,7 @@ public:
             tenc++;
         }
         /* get the charset info */
-        pMulti->GetCharsetInfo(bEnc,&mimeInfo);
+        pMulti->GetCharsetInfo((wchar_t *)bEnc,&mimeInfo);
         pMulti->CreateConvertCharset(mimeInfo.uiCodePage, 1200 /*unicode*/, (DWORD)0,&pConvToUni);
         getErr(err,status);
         src = source;
@@ -359,7 +359,7 @@ public:
             tenc++;
         }
         /* get the charset info */
-        pMulti->GetCharsetInfo(bEnc,&mimeInfo);
+        pMulti->GetCharsetInfo((wchar_t *)bEnc,&mimeInfo);
         pMulti->CreateConvertCharset(1200 /*unicode*/, mimeInfo.uiCodePage, (DWORD)0,&pConvFromUni);
         getErr(err,status);
         src = source;
@@ -416,7 +416,7 @@ public:
         MIMECSETINFO mimeInfo;
         mimeInfo.uiCodePage = 0;
         mimeInfo.uiInternetEncoding =0;
-        pMulti->GetCharsetInfo(bEnc,&mimeInfo);
+        pMulti->GetCharsetInfo((wchar_t *)bEnc,&mimeInfo);
         dwEnc = (mimeInfo.uiInternetEncoding==0)?mimeInfo.uiCodePage:mimeInfo.uiInternetEncoding;
     }
 
@@ -472,7 +472,7 @@ public:
         mimeInfo.uiCodePage = 0;
         mimeInfo.uiInternetEncoding =0;
 
-        pMulti->GetCharsetInfo(bEnc,&mimeInfo);
+        pMulti->GetCharsetInfo((wchar_t *)bEnc,&mimeInfo);
         dwEnc = (mimeInfo.uiInternetEncoding==0)?mimeInfo.uiCodePage:mimeInfo.uiInternetEncoding;
     }
 

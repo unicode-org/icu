@@ -100,17 +100,17 @@ public:
     virtual UPerfFunction* runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ){
         switch (index) {
             case 0: name = "titlecase_letter_add"; 
-                if (exec) return new CmdOp(U_TITLECASE_LETTER, CmdOp::add) ; break;
+                if (exec) return new CmdOp(U_TITLECASE_LETTER, &CmdOp::add) ; break;
             case 1: name = "titlecase_letter_contains"; 
-                if (exec) return new CmdOp(U_TITLECASE_LETTER, CmdOp::contains)  ; break;
+                if (exec) return new CmdOp(U_TITLECASE_LETTER, &CmdOp::contains)  ; break;
             case 2: name = "titlecase_letter_iterator"; 
-                if (exec) return new CmdOp(U_TITLECASE_LETTER, CmdOp::iterator)  ; break;
+                if (exec) return new CmdOp(U_TITLECASE_LETTER, &CmdOp::iterator)  ; break;
             case 3: name = "unassigned_add"; 
-                if (exec) return new CmdOp(U_UNASSIGNED, CmdOp::add)  ; break;
+                if (exec) return new CmdOp(U_UNASSIGNED, &CmdOp::add)  ; break;
             case 4: name = "unassigned_contains"; 
-                if (exec) return new CmdOp(U_UNASSIGNED, CmdOp::contains)  ; break;
+                if (exec) return new CmdOp(U_UNASSIGNED, &CmdOp::contains)  ; break;
             case 5: name = "unassigned_iterator"; 
-                if (exec) return new CmdOp(U_UNASSIGNED, CmdOp::iterator)  ; break;
+                if (exec) return new CmdOp(U_UNASSIGNED, &CmdOp::iterator)  ; break;
             case 6: name = "pattern1"; 
                 if (exec) return new CmdPattern(PAT[0])  ; break;
             case 7: name = "pattern2";
