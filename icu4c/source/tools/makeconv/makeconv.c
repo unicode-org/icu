@@ -258,7 +258,7 @@ int main(int argc, char* argv[])
 #endif
 
     err = U_ZERO_ERROR;
-    printFilename = (UBool) (VERBOSE);
+    printFilename = (UBool) (argc > 2 || VERBOSE);
     for (++argv; --argc; ++argv)
     {
         arg = getLongPathname(*argv);
@@ -346,7 +346,7 @@ int main(int argc, char* argv[])
             }
             else if (printFilename)
             {
-                puts(outFileName);
+                puts(outBasename);
             }
         }
         fflush(stdout);
