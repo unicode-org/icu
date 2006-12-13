@@ -25,7 +25,7 @@
 				Name="VCNMakeTool"
 				BuildCommandLine="nmake /f &quot;resources.mak&quot;"
 				ReBuildCommandLine="nmake /f &quot;resources.mak&quot; /a"
-				CleanCommandLine=""
+				CleanCommandLine="nmake /f &quot;resources.mak&quot; clean"
 				Output="uresb_root.res"
 				PreprocessorDefinitions=""
 				IncludeSearchPath=""
@@ -46,7 +46,7 @@
 				Name="VCNMakeTool"
 				BuildCommandLine="nmake /f &quot;resources.mak&quot;"
 				ReBuildCommandLine="nmake /f &quot;resources.mak&quot; /a"
-				CleanCommandLine=""
+				CleanCommandLine="nmake /f &quot;resources.mak&quot; clean"
 				Output="uresb_root.res"
 				PreprocessorDefinitions=""
 				IncludeSearchPath=""
@@ -74,6 +74,14 @@
 			</File>
 			<File
 				RelativePath=".\sr.txt"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Build Script"
+			>
+			<File
+				RelativePath=".\resources.mak"
 				>
 			</File>
 		</Filter>
