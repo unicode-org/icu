@@ -47,6 +47,7 @@ icu4c/source/data/*.plg
 icu4c/source/data/Makefile
 icu4c/source/data/icupkg.inc
 icu4c/source/data/in
+icu4c/source/data/makedata.vcproj.*.*.user
 icu4c/source/data/out
 icu4c/source/extra/Makefile
 icu4c/source/extra/scrptrun/Makefile
@@ -63,6 +64,7 @@ icu4c/source/extra/uconv/resources/*.res
 icu4c/source/extra/uconv/uconv
 icu4c/source/extra/uconv/uconv.1
 icu4c/source/extra/uconv/uconv.plg
+icu4c/source/extra/uconv/uconv.vcproj.*.*.user
 icu4c/source/extra/uconv/uconvmsg
 icu4c/source/i18n/*.ao
 icu4c/source/i18n/*.d
@@ -231,6 +233,7 @@ icu4c/source/test/perf/charperf/Debug
 icu4c/source/test/perf/charperf/Makefile
 icu4c/source/test/perf/charperf/Release
 icu4c/source/test/perf/charperf/charperf
+icu4c/source/test/perf/charperf/charperf.vcproj.*.*.user
 icu4c/source/test/perf/charperf/debug
 icu4c/source/test/perf/charperf/release
 icu4c/source/test/perf/collperf/*.d
@@ -239,8 +242,10 @@ icu4c/source/test/perf/collperf/Debug
 icu4c/source/test/perf/collperf/Makefile
 icu4c/source/test/perf/collperf/Release
 icu4c/source/test/perf/collperf/collperf
+icu4c/source/test/perf/collperf/collperf.vcproj.*.*.user
 icu4c/source/test/perf/collperf/debug
 icu4c/source/test/perf/collperf/release
+icu4c/source/test/perf/convperf/convperf.vcproj.*.*.user
 icu4c/source/test/perf/convperf/debug
 icu4c/source/test/perf/convperf/release
 icu4c/source/test/perf/normperf/*.d
@@ -250,6 +255,7 @@ icu4c/source/test/perf/normperf/Makefile
 icu4c/source/test/perf/normperf/Release
 icu4c/source/test/perf/normperf/debug
 icu4c/source/test/perf/normperf/normperf
+icu4c/source/test/perf/normperf/normperf.vcproj.*.*.user
 icu4c/source/test/perf/normperf/release
 icu4c/source/test/perf/perf.ncb
 icu4c/source/test/perf/perf.suo
@@ -261,6 +267,7 @@ icu4c/source/test/perf/ubrkperf/Release
 icu4c/source/test/perf/ubrkperf/debug
 icu4c/source/test/perf/ubrkperf/release
 icu4c/source/test/perf/ubrkperf/ubrkperf
+icu4c/source/test/perf/ubrkperf/ubrkperf.vcproj.*.*.user
 icu4c/source/test/perf/usetperf/*.d
 icu4c/source/test/perf/usetperf/*.o
 icu4c/source/test/perf/usetperf/Debug
@@ -269,6 +276,7 @@ icu4c/source/test/perf/usetperf/Release
 icu4c/source/test/perf/usetperf/debug
 icu4c/source/test/perf/usetperf/release
 icu4c/source/test/perf/usetperf/usetperf
+icu4c/source/test/perf/usetperf/usetperf.vcproj.*.*.user
 icu4c/source/test/perf/ustrperf/*.d
 icu4c/source/test/perf/ustrperf/*.o
 icu4c/source/test/perf/ustrperf/Debug
@@ -277,6 +285,7 @@ icu4c/source/test/perf/ustrperf/Release
 icu4c/source/test/perf/ustrperf/charperf
 icu4c/source/test/perf/ustrperf/debug
 icu4c/source/test/perf/ustrperf/release
+icu4c/source/test/perf/ustrperf/stringperf.vcproj.*.*.user
 icu4c/source/test/perf/utfperf/*.d
 icu4c/source/test/perf/utfperf/*.o
 icu4c/source/test/perf/utfperf/Debug
@@ -285,6 +294,7 @@ icu4c/source/test/perf/utfperf/Release
 icu4c/source/test/perf/utfperf/debug
 icu4c/source/test/perf/utfperf/release
 icu4c/source/test/perf/utfperf/utfperf
+icu4c/source/test/perf/utfperf/utfperf.vcproj.*.*.user
 icu4c/source/test/testdata/Makefile
 icu4c/source/test/testdata/out
 icu4c/source/test/testdata/pkgdata.inc
@@ -329,6 +339,7 @@ icu4c/source/tools/genbidi/Release
 icu4c/source/tools/genbidi/debug
 icu4c/source/tools/genbidi/genbidi
 icu4c/source/tools/genbidi/genbidi.[0-9]
+icu4c/source/tools/genbidi/genbidi.vcproj.*.*.user
 icu4c/source/tools/genbidi/release
 icu4c/source/tools/genbrk/*.d
 icu4c/source/tools/genbrk/*.o
@@ -354,6 +365,7 @@ icu4c/source/tools/gencase/Release
 icu4c/source/tools/gencase/debug
 icu4c/source/tools/gencase/gencase
 icu4c/source/tools/gencase/gencase.[0-9]
+icu4c/source/tools/gencase/gencase.vcproj.*.*.user
 icu4c/source/tools/gencase/release
 icu4c/source/tools/genccode/*.d
 icu4c/source/tools/genccode/*.o
@@ -417,6 +429,7 @@ icu4c/source/tools/gennames/Release
 icu4c/source/tools/gennames/debug
 icu4c/source/tools/gennames/gennames
 icu4c/source/tools/gennames/gennames.[0-9]
+icu4c/source/tools/gennames/gennames.vcproj.*.*.user
 icu4c/source/tools/gennames/release
 icu4c/source/tools/gennorm/*.d
 icu4c/source/tools/gennorm/*.o
@@ -428,6 +441,7 @@ icu4c/source/tools/gennorm/Release
 icu4c/source/tools/gennorm/debug
 icu4c/source/tools/gennorm/gennorm
 icu4c/source/tools/gennorm/gennorm.[0-9]
+icu4c/source/tools/gennorm/gennorm.vcproj.*.*.user
 icu4c/source/tools/gennorm/release
 icu4c/source/tools/genpname/*.d
 icu4c/source/tools/genpname/*.o
@@ -438,6 +452,7 @@ icu4c/source/tools/genpname/Makefile
 icu4c/source/tools/genpname/Release
 icu4c/source/tools/genpname/debug
 icu4c/source/tools/genpname/genpname
+icu4c/source/tools/genpname/genpname.vcproj.*.*.user
 icu4c/source/tools/genpname/release
 icu4c/source/tools/genprops/*.d
 icu4c/source/tools/genprops/*.ncb
@@ -451,6 +466,7 @@ icu4c/source/tools/genprops/Release
 icu4c/source/tools/genprops/debug
 icu4c/source/tools/genprops/genprops
 icu4c/source/tools/genprops/genprops.[0-9]
+icu4c/source/tools/genprops/genprops.vcproj.*.*.user
 icu4c/source/tools/genprops/release
 icu4c/source/tools/genrb/*.d
 icu4c/source/tools/genrb/*.o
@@ -533,6 +549,7 @@ icu4c/source/tools/icuswap/Release
 icu4c/source/tools/icuswap/debug
 icu4c/source/tools/icuswap/icuswap
 icu4c/source/tools/icuswap/icuswap.[0-9]
+icu4c/source/tools/icuswap/icuswap.vcproj.*.*.user
 icu4c/source/tools/icuswap/release
 icu4c/source/tools/makeconv/*.d
 icu4c/source/tools/makeconv/*.o
