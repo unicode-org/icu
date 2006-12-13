@@ -1,37 +1,60 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.10"
+	Version="8.00"
 	Name="resources"
-	SccProjectName=""
-	SccLocalPath=""
-	Keyword="MakeFileProj">
+	ProjectGUID="{AB75D6BC-660C-4225-A601-CC40294E775E}"
+	Keyword="MakeFileProj"
+	>
 	<Platforms>
 		<Platform
-			Name="Win32"/>
+			Name="Win32"
+		/>
 	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory=".\resources_Win32_Debug"
 			IntermediateDirectory=".\resources_Win32_Debug"
-			ConfigurationType="0">
+			ConfigurationType="0"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			>
 			<Tool
 				Name="VCNMakeTool"
 				BuildCommandLine="nmake /f &quot;resources.mak&quot;"
 				ReBuildCommandLine="nmake /f &quot;resources.mak&quot; /a"
-				Output="uresb_root.res"/>
+				CleanCommandLine=""
+				Output="uresb_root.res"
+				PreprocessorDefinitions=""
+				IncludeSearchPath=""
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory=".\resources_Win32_Release"
 			IntermediateDirectory=".\resources_Win32_Release"
-			ConfigurationType="0">
+			ConfigurationType="0"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			>
 			<Tool
 				Name="VCNMakeTool"
 				BuildCommandLine="nmake /f &quot;resources.mak&quot;"
 				ReBuildCommandLine="nmake /f &quot;resources.mak&quot; /a"
-				Output="uresb_root.res"/>
+				CleanCommandLine=""
+				Output="uresb_root.res"
+				PreprocessorDefinitions=""
+				IncludeSearchPath=""
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -39,15 +62,19 @@
 	<Files>
 		<Filter
 			Name="Resource Files"
-			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;txt">
+			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;txt"
+			>
 			<File
-				RelativePath=".\en.txt">
+				RelativePath=".\en.txt"
+				>
 			</File>
 			<File
-				RelativePath=".\root.txt">
+				RelativePath=".\root.txt"
+				>
 			</File>
 			<File
-				RelativePath=".\sr.txt">
+				RelativePath=".\sr.txt"
+				>
 			</File>
 		</Filter>
 	</Files>

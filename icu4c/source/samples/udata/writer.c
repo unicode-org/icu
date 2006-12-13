@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2000, International Business Machines
+*   Copyright (C) 1999-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -71,7 +71,7 @@ main(int argc, const char *argv[]) {
     char *currdir = getcwd(NULL, 0);
 #endif
 
-    pData=udata_create(getcwd(NULL, 0), DATA_TYPE, DATA_NAME, &dataInfo,
+    pData=udata_create(currdir, DATA_TYPE, DATA_NAME, &dataInfo,
                        U_COPYRIGHT_STRING, &errorCode);
 
     if(currdir != NULL) {
