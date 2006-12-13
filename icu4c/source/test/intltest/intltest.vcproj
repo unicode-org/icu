@@ -1,135 +1,197 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.10"
+	Version="8.00"
 	Name="intltest"
-	SccProjectName=""
-	SccLocalPath="">
+	ProjectGUID="{73632960-B3A6-464D-83A3-4B43365F19B8}"
+	>
 	<Platforms>
 		<Platform
-			Name="Win32"/>
+			Name="Win32"
+		/>
 	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory=".\Debug"
 			IntermediateDirectory=".\Debug"
 			ConfigurationType="1"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="2">
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TypeLibraryName=".\Debug/intltest.tlb"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="..\..\..\include;..\..\common;..\..\i18n;..\..\tools\toolutil;..\..\tools\ctestfw"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
-				BufferSecurityCheck="TRUE"
-				DisableLanguageExtensions="TRUE"
-				TreatWChar_tAsBuiltInType="TRUE"
+				BufferSecurityCheck="true"
+				DisableLanguageExtensions="true"
+				TreatWChar_tAsBuiltInType="true"
 				PrecompiledHeaderFile=".\Debug/intltest.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
 				BrowseInformation="1"
 				WarningLevel="3"
-				SuppressStartupBanner="TRUE"
+				SuppressStartupBanner="true"
 				DebugInformationFormat="4"
-				CompileAs="0"/>
+				CompileAs="0"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG"
+				Culture="1033"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
 				OutputFile=".\Debug/intltest.exe"
 				LinkIncremental="2"
-				SuppressStartupBanner="TRUE"
-				GenerateDebugInformation="TRUE"
+				SuppressStartupBanner="true"
+				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Debug/intltest.pdb"
 				SubSystem="1"
-				FixedBaseAddress="1"/>
+				FixedBaseAddress="1"
+			/>
 			<Tool
-				Name="VCMIDLTool"
-				TypeLibraryName=".\Debug/intltest.tlb"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCManifestTool"
+				UseFAT32Workaround="true"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG"
-				Culture="1033"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
+				Name="VCWebDeploymentTool"
+			/>
 			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory=".\Release"
 			IntermediateDirectory=".\Release"
 			ConfigurationType="1"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="2">
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TypeLibraryName=".\Release/intltest.tlb"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="..\..\..\include;..\..\common;..\..\i18n;..\..\tools\toolutil;..\..\tools\ctestfw"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
-				StringPooling="TRUE"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CRT_SECURE_NO_DEPRECATE=1"
+				StringPooling="true"
 				RuntimeLibrary="0"
-				DisableLanguageExtensions="TRUE"
-				TreatWChar_tAsBuiltInType="TRUE"
+				DisableLanguageExtensions="true"
+				TreatWChar_tAsBuiltInType="true"
 				PrecompiledHeaderFile=".\Release/intltest.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
 				WarningLevel="3"
-				SuppressStartupBanner="TRUE"
-				CompileAs="0"/>
+				SuppressStartupBanner="true"
+				CompileAs="0"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="1033"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
 				OutputFile=".\Release/intltest.exe"
 				LinkIncremental="1"
-				SuppressStartupBanner="TRUE"
-				GenerateDebugInformation="TRUE"
+				SuppressStartupBanner="true"
+				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Release/intltest.pdb"
-				SubSystem="1"/>
+				SubSystem="1"
+			/>
 			<Tool
-				Name="VCMIDLTool"
-				TypeLibraryName=".\Release/intltest.tlb"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG"
-				Culture="1033"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
+				Name="VCWebDeploymentTool"
+			/>
 			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -137,787 +199,1027 @@
 	<Files>
 		<Filter
 			Name="break iteration"
-			Filter="">
+			>
 			<File
-				RelativePath=".\itrbbi.cpp">
+				RelativePath=".\itrbbi.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\itrbbi.h">
+				RelativePath=".\itrbbi.h"
+				>
 			</File>
 			<File
-				RelativePath=".\rbbiapts.cpp">
+				RelativePath=".\rbbiapts.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\rbbiapts.h">
+				RelativePath=".\rbbiapts.h"
+				>
 			</File>
 			<File
-				RelativePath=".\rbbitst.cpp">
+				RelativePath=".\rbbitst.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\rbbitst.h">
+				RelativePath=".\rbbitst.h"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="collation"
-			Filter="">
+			>
 			<File
-				RelativePath=".\allcoll.cpp">
+				RelativePath=".\allcoll.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\allcoll.h">
+				RelativePath=".\allcoll.h"
+				>
 			</File>
 			<File
-				RelativePath=".\apicoll.cpp">
+				RelativePath=".\apicoll.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\apicoll.h">
+				RelativePath=".\apicoll.h"
+				>
 			</File>
 			<File
-				RelativePath=".\cntabcol.cpp">
+				RelativePath=".\cntabcol.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\cntabcol.h">
+				RelativePath=".\cntabcol.h"
+				>
 			</File>
 			<File
-				RelativePath=".\currcoll.cpp">
+				RelativePath=".\currcoll.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\currcoll.h">
+				RelativePath=".\currcoll.h"
+				>
 			</File>
 			<File
-				RelativePath=".\dadrcoll.cpp">
+				RelativePath=".\dadrcoll.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\dadrcoll.h">
+				RelativePath=".\dadrcoll.h"
+				>
 			</File>
 			<File
-				RelativePath=".\decoll.cpp">
+				RelativePath=".\decoll.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\decoll.h">
+				RelativePath=".\decoll.h"
+				>
 			</File>
 			<File
-				RelativePath=".\encoll.cpp">
+				RelativePath=".\encoll.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\encoll.h">
+				RelativePath=".\encoll.h"
+				>
 			</File>
 			<File
-				RelativePath=".\escoll.cpp">
+				RelativePath=".\escoll.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\escoll.h">
+				RelativePath=".\escoll.h"
+				>
 			</File>
 			<File
-				RelativePath=".\ficoll.cpp">
+				RelativePath=".\ficoll.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\ficoll.h">
+				RelativePath=".\ficoll.h"
+				>
 			</File>
 			<File
-				RelativePath=".\frcoll.cpp">
+				RelativePath=".\frcoll.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\frcoll.h">
+				RelativePath=".\frcoll.h"
+				>
 			</File>
 			<File
-				RelativePath=".\g7coll.cpp">
+				RelativePath=".\g7coll.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\g7coll.h">
+				RelativePath=".\g7coll.h"
+				>
 			</File>
 			<File
-				RelativePath=".\itercoll.cpp">
+				RelativePath=".\itercoll.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\itercoll.h">
+				RelativePath=".\itercoll.h"
+				>
 			</File>
 			<File
-				RelativePath=".\jacoll.cpp">
+				RelativePath=".\jacoll.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\jacoll.h">
+				RelativePath=".\jacoll.h"
+				>
 			</File>
 			<File
-				RelativePath=".\lcukocol.cpp">
+				RelativePath=".\lcukocol.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\lcukocol.h">
+				RelativePath=".\lcukocol.h"
+				>
 			</File>
 			<File
-				RelativePath=".\mnkytst.cpp">
+				RelativePath=".\mnkytst.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\mnkytst.h">
+				RelativePath=".\mnkytst.h"
+				>
 			</File>
 			<File
-				RelativePath=".\regcoll.cpp">
+				RelativePath=".\regcoll.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\regcoll.h">
+				RelativePath=".\regcoll.h"
+				>
 			</File>
 			<File
-				RelativePath=".\rndmcoll.cpp">
+				RelativePath=".\rndmcoll.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\rndmcoll.h">
+				RelativePath=".\rndmcoll.h"
+				>
 			</File>
 			<File
-				RelativePath=".\srchtest.cpp">
+				RelativePath=".\srchtest.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\srchtest.h">
+				RelativePath=".\srchtest.h"
+				>
 			</File>
 			<File
-				RelativePath="svccoll.cpp">
+				RelativePath="svccoll.cpp"
+				>
 			</File>
 			<File
-				RelativePath="svccoll.h">
+				RelativePath="svccoll.h"
+				>
 			</File>
 			<File
-				RelativePath=".\thcoll.cpp">
+				RelativePath=".\thcoll.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\thcoll.h">
+				RelativePath=".\thcoll.h"
+				>
 			</File>
 			<File
-				RelativePath=".\trcoll.cpp">
+				RelativePath=".\trcoll.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\trcoll.h">
+				RelativePath=".\trcoll.h"
+				>
 			</File>
 			<File
-				RelativePath=".\tscoll.cpp">
+				RelativePath=".\tscoll.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\tscoll.h">
+				RelativePath=".\tscoll.h"
+				>
 			</File>
 			<File
-				RelativePath=".\ucaconf.cpp">
+				RelativePath=".\ucaconf.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\ucaconf.h">
+				RelativePath=".\ucaconf.h"
+				>
 			</File>
 			<File
-				RelativePath=".\wbnf.cpp">
+				RelativePath=".\wbnf.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\wbnf.h">
+				RelativePath=".\wbnf.h"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="collections"
-			Filter="">
+			>
 			<File
-				RelativePath=".\uvectest.cpp">
+				RelativePath=".\uvectest.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\uvectest.h">
+				RelativePath=".\uvectest.h"
+				>
 			</File>
 			<File
-				RelativePath=".\v32test.cpp">
+				RelativePath=".\v32test.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\v32test.h">
+				RelativePath=".\v32test.h"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="configuration"
-			Filter="">
+			>
 			<File
-				RelativePath=".\strtest.cpp">
+				RelativePath=".\strtest.cpp"
+				>
 				<FileConfiguration
-					Name="Debug|Win32">
+					Name="Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						DisableLanguageExtensions="FALSE"/>
+						DisableLanguageExtensions="false"
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32">
+					Name="Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						DisableLanguageExtensions="FALSE"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\strtest.h">
-			</File>
-			<File
-				RelativePath=".\tsmthred.cpp">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						DisableLanguageExtensions="FALSE"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						DisableLanguageExtensions="FALSE"/>
+						DisableLanguageExtensions="false"
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\tsmthred.h">
+				RelativePath=".\strtest.h"
+				>
 			</File>
 			<File
-				RelativePath=".\tsputil.cpp">
+				RelativePath=".\tsmthred.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						DisableLanguageExtensions="false"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						DisableLanguageExtensions="false"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\tsputil.h">
+				RelativePath=".\tsmthred.h"
+				>
+			</File>
+			<File
+				RelativePath=".\tsputil.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\tsputil.h"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="data &amp; memory"
-			Filter="">
+			>
 			<File
-				RelativePath=".\uobjtest.cpp">
+				RelativePath=".\uobjtest.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\uobjtest.h">
+				RelativePath=".\uobjtest.h"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="formatting"
-			Filter="">
+			>
 			<File
-				RelativePath=".\astrotst.cpp">
+				RelativePath=".\astrotst.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\astrotst.h">
+				RelativePath=".\astrotst.h"
+				>
 			</File>
 			<File
-				RelativePath=".\calcasts.cpp">
+				RelativePath=".\calcasts.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\calcasts.h">
+				RelativePath=".\calcasts.h"
+				>
 			</File>
 			<File
-				RelativePath=".\callimts.cpp">
+				RelativePath=".\callimts.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\callimts.h">
+				RelativePath=".\callimts.h"
+				>
 			</File>
 			<File
-				RelativePath=".\calregts.cpp">
+				RelativePath=".\calregts.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\calregts.h">
+				RelativePath=".\calregts.h"
+				>
 			</File>
 			<File
-				RelativePath=".\caltest.cpp">
+				RelativePath=".\caltest.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\caltest.h">
+				RelativePath=".\caltest.h"
+				>
 			</File>
 			<File
-				RelativePath=".\caltztst.cpp">
+				RelativePath=".\caltztst.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\caltztst.h">
+				RelativePath=".\caltztst.h"
+				>
 			</File>
 			<File
-				RelativePath=".\dcfmapts.cpp">
+				RelativePath=".\dcfmapts.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\dcfmapts.h">
+				RelativePath=".\dcfmapts.h"
+				>
 			</File>
 			<File
-				RelativePath=".\dtfmapts.cpp">
+				RelativePath=".\dtfmapts.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\dtfmapts.h">
+				RelativePath=".\dtfmapts.h"
+				>
 			</File>
 			<File
-				RelativePath=".\dtfmrgts.cpp">
+				RelativePath=".\dtfmrgts.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\dtfmrgts.h">
+				RelativePath=".\dtfmrgts.h"
+				>
 			</File>
 			<File
-				RelativePath=".\dtfmtrtts.cpp">
+				RelativePath=".\dtfmtrtts.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\dtfmtrtts.h">
+				RelativePath=".\dtfmtrtts.h"
+				>
 			</File>
 			<File
-				RelativePath=".\dtfmttst.cpp">
+				RelativePath=".\dtfmttst.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\dtfmttst.h">
+				RelativePath=".\dtfmttst.h"
+				>
 			</File>
 			<File
-				RelativePath=".\incaltst.cpp">
+				RelativePath=".\incaltst.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\incaltst.h">
+				RelativePath=".\incaltst.h"
+				>
 			</File>
 			<File
-				RelativePath=".\itformat.cpp">
+				RelativePath=".\itformat.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\itformat.h">
+				RelativePath=".\itformat.h"
+				>
 			</File>
 			<File
-				RelativePath=".\itrbnf.cpp">
+				RelativePath=".\itrbnf.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\itrbnf.h">
+				RelativePath=".\itrbnf.h"
+				>
 			</File>
 			<File
-				RelativePath=".\itrbnfp.cpp">
+				RelativePath=".\itrbnfp.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\itrbnfp.h">
+				RelativePath=".\itrbnfp.h"
+				>
 			</File>
 			<File
-				RelativePath=".\itrbnfrt.cpp">
+				RelativePath=".\itrbnfrt.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\itrbnfrt.h">
+				RelativePath=".\itrbnfrt.h"
+				>
 			</File>
 			<File
-				RelativePath=".\miscdtfm.cpp">
+				RelativePath=".\miscdtfm.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\miscdtfm.h">
+				RelativePath=".\miscdtfm.h"
+				>
 			</File>
 			<File
-				RelativePath=".\msfmrgts.cpp">
+				RelativePath=".\msfmrgts.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\msfmrgts.h">
+				RelativePath=".\msfmrgts.h"
+				>
 			</File>
 			<File
-				RelativePath=".\nmfmapts.cpp">
+				RelativePath=".\nmfmapts.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\nmfmapts.h">
+				RelativePath=".\nmfmapts.h"
+				>
 			</File>
 			<File
-				RelativePath=".\nmfmtrt.cpp">
+				RelativePath=".\nmfmtrt.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\nmfmtrt.h">
+				RelativePath=".\nmfmtrt.h"
+				>
 			</File>
 			<File
-				RelativePath=".\numfmtst.cpp">
+				RelativePath=".\numfmtst.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\numfmtst.h">
+				RelativePath=".\numfmtst.h"
+				>
 			</File>
 			<File
-				RelativePath=".\numrgts.cpp">
+				RelativePath=".\numrgts.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\numrgts.h">
+				RelativePath=".\numrgts.h"
+				>
 			</File>
 			<File
-				RelativePath=".\pptest.cpp">
+				RelativePath=".\pptest.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\pptest.h">
+				RelativePath=".\pptest.h"
+				>
 			</File>
 			<File
-				RelativePath=".\sdtfmtts.cpp">
+				RelativePath=".\sdtfmtts.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\sdtfmtts.h">
+				RelativePath=".\sdtfmtts.h"
+				>
 			</File>
 			<File
-				RelativePath=".\tchcfmt.cpp">
+				RelativePath=".\tchcfmt.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\tchcfmt.h">
+				RelativePath=".\tchcfmt.h"
+				>
 			</File>
 			<File
-				RelativePath=".\tfsmalls.cpp">
+				RelativePath=".\tfsmalls.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\tfsmalls.h">
+				RelativePath=".\tfsmalls.h"
+				>
 			</File>
 			<File
-				RelativePath=".\tmsgfmt.cpp">
+				RelativePath=".\tmsgfmt.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\tmsgfmt.h">
+				RelativePath=".\tmsgfmt.h"
+				>
 			</File>
 			<File
-				RelativePath=".\tsdate.cpp">
+				RelativePath=".\tsdate.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\tsdate.h">
+				RelativePath=".\tsdate.h"
+				>
 			</File>
 			<File
-				RelativePath=".\tsdcfmsy.cpp">
+				RelativePath=".\tsdcfmsy.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\tsdcfmsy.h">
+				RelativePath=".\tsdcfmsy.h"
+				>
 			</File>
 			<File
-				RelativePath=".\tsdtfmsy.cpp">
+				RelativePath=".\tsdtfmsy.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\tsdtfmsy.h">
+				RelativePath=".\tsdtfmsy.h"
+				>
 			</File>
 			<File
-				RelativePath=".\tsnmfmt.cpp">
+				RelativePath=".\tsnmfmt.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\tsnmfmt.h">
+				RelativePath=".\tsnmfmt.h"
+				>
 			</File>
 			<File
-				RelativePath=".\tzbdtest.cpp">
+				RelativePath=".\tzbdtest.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\tzbdtest.h">
+				RelativePath=".\tzbdtest.h"
+				>
 			</File>
 			<File
-				RelativePath=".\tzregts.cpp">
+				RelativePath=".\tzregts.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\tzregts.h">
+				RelativePath=".\tzregts.h"
+				>
 			</File>
 			<File
-				RelativePath=".\tztest.cpp">
+				RelativePath=".\tztest.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\tztest.h">
+				RelativePath=".\tztest.h"
+				>
 			</File>
 			<File
-				RelativePath=".\windttst.cpp">
+				RelativePath=".\windttst.cpp"
+				>
 				<FileConfiguration
-					Name="Debug|Win32">
+					Name="Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						DisableLanguageExtensions="FALSE"/>
+						DisableLanguageExtensions="false"
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32">
+					Name="Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						DisableLanguageExtensions="FALSE"/>
+						DisableLanguageExtensions="false"
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\windttst.h">
+				RelativePath=".\windttst.h"
+				>
 			</File>
 			<File
-				RelativePath=".\winnmtst.cpp">
+				RelativePath=".\winnmtst.cpp"
+				>
 				<FileConfiguration
-					Name="Debug|Win32">
+					Name="Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						DisableLanguageExtensions="FALSE"/>
+						DisableLanguageExtensions="false"
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32">
+					Name="Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						DisableLanguageExtensions="FALSE"/>
+						DisableLanguageExtensions="false"
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\winnmtst.h">
+				RelativePath=".\winnmtst.h"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="idna"
-			Filter="*.c,*.h">
+			Filter="*.c,*.h"
+			>
 			<File
-				RelativePath=".\idnaconf.cpp">
+				RelativePath=".\idnaconf.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\idnaconf.h">
+				RelativePath=".\idnaconf.h"
+				>
 			</File>
 			<File
-				RelativePath=".\idnaref.cpp">
+				RelativePath=".\idnaref.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\idnaref.h">
+				RelativePath=".\idnaref.h"
+				>
 			</File>
 			<File
-				RelativePath=".\nptrans.cpp">
+				RelativePath=".\nptrans.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\nptrans.h">
+				RelativePath=".\nptrans.h"
+				>
 			</File>
 			<File
-				RelativePath=".\punyref.c">
+				RelativePath=".\punyref.c"
+				>
 			</File>
 			<File
-				RelativePath=".\punyref.h">
+				RelativePath=".\punyref.h"
+				>
 			</File>
 			<File
-				RelativePath=".\testidn.cpp">
+				RelativePath=".\testidn.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\testidna.cpp">
+				RelativePath=".\testidna.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\testidna.h">
+				RelativePath=".\testidna.h"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="locales &amp; resources"
-			Filter="">
+			>
 			<File
-				RelativePath=".\aliastst.cpp">
+				RelativePath=".\aliastst.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\aliastst.h">
+				RelativePath=".\aliastst.h"
+				>
 			</File>
 			<File
-				RelativePath=".\loctest.cpp">
+				RelativePath=".\loctest.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\loctest.h">
+				RelativePath=".\loctest.h"
+				>
 			</File>
 			<File
-				RelativePath=".\restest.cpp">
+				RelativePath=".\restest.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\restest.h">
+				RelativePath=".\restest.h"
+				>
 			</File>
 			<File
-				RelativePath=".\restsnew.cpp">
+				RelativePath=".\restsnew.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\restsnew.h">
+				RelativePath=".\restsnew.h"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="misc"
-			Filter="">
+			>
 			<File
-				RelativePath=".\intltest.cpp">
+				RelativePath=".\intltest.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\intltest.h">
+				RelativePath=".\intltest.h"
+				>
 			</File>
 			<File
-				RelativePath=".\itmajor.cpp">
+				RelativePath=".\itmajor.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\itmajor.h">
+				RelativePath=".\itmajor.h"
+				>
 			</File>
 			<File
-				RelativePath=".\itutil.cpp">
+				RelativePath=".\itutil.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\itutil.h">
+				RelativePath=".\itutil.h"
+				>
 			</File>
 			<File
-				RelativePath=".\testutil.cpp">
+				RelativePath=".\testutil.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\testutil.h">
+				RelativePath=".\testutil.h"
+				>
 			</File>
 			<File
-				RelativePath=".\textfile.cpp">
+				RelativePath=".\textfile.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\textfile.h">
+				RelativePath=".\textfile.h"
+				>
 			</File>
 			<File
-				RelativePath=".\tokiter.cpp">
+				RelativePath=".\tokiter.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\tokiter.h">
+				RelativePath=".\tokiter.h"
+				>
 			</File>
 			<File
-				RelativePath=".\winutil.cpp">
+				RelativePath=".\winutil.cpp"
+				>
 				<FileConfiguration
-					Name="Debug|Win32">
+					Name="Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						DisableLanguageExtensions="FALSE"/>
+						DisableLanguageExtensions="false"
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32">
+					Name="Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						DisableLanguageExtensions="FALSE"/>
+						DisableLanguageExtensions="false"
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\winutil.h">
+				RelativePath=".\winutil.h"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="normalization"
-			Filter="">
+			>
 			<File
-				RelativePath=".\canittst.cpp">
+				RelativePath=".\canittst.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\canittst.h">
+				RelativePath=".\canittst.h"
+				>
 			</File>
 			<File
-				RelativePath=".\normconf.cpp">
+				RelativePath=".\normconf.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\normconf.h">
+				RelativePath=".\normconf.h"
+				>
 			</File>
 			<File
-				RelativePath=".\tstnorm.cpp">
+				RelativePath=".\tstnorm.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\tstnorm.h">
+				RelativePath=".\tstnorm.h"
+				>
 			</File>
 			<File
-				RelativePath=".\tstnrapi.cpp">
+				RelativePath=".\tstnrapi.cpp"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="properties &amp; sets"
-			Filter="">
+			>
 			<File
-				RelativePath=".\ucdtest.cpp">
+				RelativePath=".\ucdtest.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\ucdtest.h">
+				RelativePath=".\ucdtest.h"
+				>
 			</File>
 			<File
-				RelativePath=".\usettest.cpp">
+				RelativePath=".\usettest.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\usettest.h">
+				RelativePath=".\usettest.h"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="regex"
-			Filter="">
+			>
 			<File
-				RelativePath=".\regextst.cpp">
+				RelativePath=".\regextst.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\regextst.h">
+				RelativePath=".\regextst.h"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="registration"
-			Filter="">
+			>
 			<File
-				RelativePath=".\icusvtst.cpp">
+				RelativePath=".\icusvtst.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\icusvtst.h">
+				RelativePath=".\icusvtst.h"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="strings"
-			Filter="">
+			>
 			<File
-				RelativePath=".\citrtest.cpp">
+				RelativePath=".\citrtest.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\citrtest.h">
+				RelativePath=".\citrtest.h"
+				>
 			</File>
 			<File
-				RelativePath=".\reptest.cpp">
+				RelativePath=".\reptest.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\reptest.h">
+				RelativePath=".\reptest.h"
+				>
 			</File>
 			<File
-				RelativePath=".\sfwdchit.cpp">
+				RelativePath=".\sfwdchit.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\sfwdchit.h">
+				RelativePath=".\sfwdchit.h"
+				>
 			</File>
 			<File
-				RelativePath=".\strcase.cpp">
+				RelativePath=".\strcase.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\ustrtest.cpp">
+				RelativePath=".\ustrtest.cpp"
+				>
 				<FileConfiguration
-					Name="Debug|Win32">
+					Name="Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						DisableLanguageExtensions="FALSE"/>
+						DisableLanguageExtensions="false"
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32">
+					Name="Release|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						DisableLanguageExtensions="FALSE"/>
+						DisableLanguageExtensions="false"
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\ustrtest.h">
+				RelativePath=".\ustrtest.h"
+				>
 			</File>
 			<File
-				RelativePath=".\utxttest.cpp">
+				RelativePath=".\utxttest.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\utxttest.h">
+				RelativePath=".\utxttest.h"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="transforms"
-			Filter="">
+			>
 			<File
-				RelativePath=".\cpdtrtst.cpp">
+				RelativePath=".\cpdtrtst.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\cpdtrtst.h">
+				RelativePath=".\cpdtrtst.h"
+				>
 			</File>
 			<File
-				RelativePath=".\ittrans.cpp">
+				RelativePath=".\ittrans.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\ittrans.h">
+				RelativePath=".\ittrans.h"
+				>
 			</File>
 			<File
-				RelativePath=".\jamotest.cpp">
+				RelativePath=".\jamotest.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\jamotest.h">
+				RelativePath=".\jamotest.h"
+				>
 			</File>
 			<File
-				RelativePath=".\transapi.cpp">
+				RelativePath=".\transapi.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\transapi.h">
+				RelativePath=".\transapi.h"
+				>
 			</File>
 			<File
-				RelativePath=".\transrt.cpp">
+				RelativePath=".\transrt.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\transrt.h">
+				RelativePath=".\transrt.h"
+				>
 			</File>
 			<File
-				RelativePath=".\transtst.cpp">
+				RelativePath=".\transtst.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\transtst.h">
+				RelativePath=".\transtst.h"
+				>
 			</File>
 			<File
-				RelativePath=".\trnserr.cpp">
+				RelativePath=".\trnserr.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\trnserr.h">
+				RelativePath=".\trnserr.h"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="conversion"
-			Filter="">
+			>
 			<File
-				RelativePath=".\convtest.cpp">
+				RelativePath=".\convtest.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\convtest.h">
+				RelativePath=".\convtest.h"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="charset detection"
-			Filter="">
+			>
 			<File
-				RelativePath=".\csdetest.cpp">
+				RelativePath=".\csdetest.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\csdetest.h">
+				RelativePath=".\csdetest.h"
+				>
 			</File>
 		</Filter>
 	</Files>
