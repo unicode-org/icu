@@ -498,7 +498,7 @@ CLEAN : GODATA
 
 # Batch inference rule for creating converters
 {$(ICUSRCDATA_RELATIVE_PATH)\$(ICUUCM)}.ucm.cnv::
-	@echo Generating converters
+	@echo Making Charset Conversion tables
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" -c -d"$(ICUBLD_PKG)" $<
 
 # Batch inference rule for creating miscellaneous resource files

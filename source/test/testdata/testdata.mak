@@ -87,8 +87,7 @@ nfsmxp.spp
 	"$(ICUTOOLS)\gentest\$(CFG)\gentest" -r -d"$(TESTDATABLD)"
 
 "$(TESTDATABLD)\testtable32.res": "$(TESTDATABLD)\testtable32.txt"
-	@echo Making Test Resource Bundle file for IDNA reference implementation
-	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -s"$(TESTDATABLD)" -d"$(TESTDATABLD)" testtable32.txt
+	"$(ICUTOOLS)\genrb\$(CFG)\genrb" -s"$(TESTDATABLD)" -d"$(TESTDATABLD)" testtable32.txt
 
 # Targets for nfscsi.spp
 "$(TESTDATABLD)\nfscsi.spp" : {"$(ICUTOOLS)\gensprep\$(CFG)"}gensprep.exe "$(TESTDATA)\nfs4_cs_prep_ci.txt"
