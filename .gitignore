@@ -129,7 +129,9 @@ icu4c/source/samples/citer/release
 icu4c/source/samples/coll/Debug
 icu4c/source/samples/coll/coll.vcproj.*.*.user
 icu4c/source/samples/coll/release
+icu4c/source/samples/csdet/Debug
 icu4c/source/samples/csdet/csdet.vcproj.*.*.user
+icu4c/source/samples/csdet/release
 icu4c/source/samples/date/*.d
 icu4c/source/samples/date/*.pdb
 icu4c/source/samples/date/Debug

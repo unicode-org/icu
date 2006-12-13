@@ -49,6 +49,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "citer", "..\citer\citer.vcp
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "coll", "..\coll\coll.vcproj", "{D7209337-9F39-4BCC-AAEA-982632FD846E}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "csdet", "..\csdet\csdet.vcproj", "{683745AD-3BC2-4B89-898B-93490D7F2757}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -147,6 +149,10 @@ Global
 		{D7209337-9F39-4BCC-AAEA-982632FD846E}.Debug|Win32.Build.0 = Debug|Win32
 		{D7209337-9F39-4BCC-AAEA-982632FD846E}.Release|Win32.ActiveCfg = Release|Win32
 		{D7209337-9F39-4BCC-AAEA-982632FD846E}.Release|Win32.Build.0 = Release|Win32
+		{683745AD-3BC2-4B89-898B-93490D7F2757}.Debug|Win32.ActiveCfg = Debug|Win32
+		{683745AD-3BC2-4B89-898B-93490D7F2757}.Debug|Win32.Build.0 = Debug|Win32
+		{683745AD-3BC2-4B89-898B-93490D7F2757}.Release|Win32.ActiveCfg = Release|Win32
+		{683745AD-3BC2-4B89-898B-93490D7F2757}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
