@@ -189,69 +189,70 @@ public:
         ucol_closeElements(iter);
     }
     CmdIterAll(UErrorCode & status, UCollator * col, int32_t count,  UChar * data, CALL call,int32_t,int32_t)
-        :count(count),data(data){
-            exec_count = 0;
-            if (call == forward_null || call == backward_null) {
-                iter = ucol_openElements(col, data, -1, &status);
-            } else {
-                iter = ucol_openElements(col, data, count, &status);
-            }
-
-            if (call == forward_null || call == forward_len){
-                fn = icu_forward_all;
-            } else {
-                fn = icu_backward_all;
-            }
-        }
-        virtual long getOperationsPerIteration(){return exec_count ? exec_count : 1;}
-
-        virtual void call(UErrorCode* status){
-            (this->*fn)(status);
+        :count(count),data(data)
+    {
+        exec_count = 0;
+        if (call == forward_null || call == backward_null) {
+            iter = ucol_openElements(col, data, -1, &status);
+        } else {
+            iter = ucol_openElements(col, data, count, &status);
         }
 
-        void icu_forward_all(UErrorCode* status){
-            int strlen = count - 5;
-            int count5 = 5;
-            int strindex = 0;
-            ucol_setOffset(iter, strindex, status);
-            while (TRUE) {
-                if (ucol_next(iter, status) == UCOL_NULLORDER) {
+        if (call == forward_null || call == forward_len){
+            fn = &CmdIterAll::icu_forward_all;
+        } else {
+            fn = &CmdIterAll::icu_backward_all;
+        }
+    }
+    virtual long getOperationsPerIteration(){return exec_count ? exec_count : 1;}
+
+    virtual void call(UErrorCode* status){
+        (this->*fn)(status);
+    }
+
+    void icu_forward_all(UErrorCode* status){
+        int strlen = count - 5;
+        int count5 = 5;
+        int strindex = 0;
+        ucol_setOffset(iter, strindex, status);
+        while (TRUE) {
+            if (ucol_next(iter, status) == UCOL_NULLORDER) {
+                break;
+            }
+            exec_count++;
+            count5 --;
+            if (count5 == 0) {
+                strindex += 10;
+                if (strindex > strlen) {
                     break;
                 }
-                exec_count++;
-                count5 --;
-                if (count5 == 0) {
-                    strindex += 10;
-                    if (strindex > strlen) {
-                        break;
-                    }
-                    ucol_setOffset(iter, strindex, status);
-                    count5 = 5;
-                }
+                ucol_setOffset(iter, strindex, status);
+                count5 = 5;
             }
         }
+    }
 
-        void icu_backward_all(UErrorCode* status){
-            int strlen = count;
-            int count5 = 5;
-            int strindex = 5;
-            ucol_setOffset(iter, strindex, status);
-            while (TRUE) {
-                if (ucol_previous(iter, status) == UCOL_NULLORDER) {
+    void icu_backward_all(UErrorCode* status){
+        int strlen = count;
+        int count5 = 5;
+        int strindex = 5;
+        ucol_setOffset(iter, strindex, status);
+        while (TRUE) {
+            if (ucol_previous(iter, status) == UCOL_NULLORDER) {
+                break;
+            }
+            exec_count++;
+            count5 --;
+            if (count5 == 0) {
+                strindex += 10;
+                if (strindex > strlen) {
                     break;
                 }
-                exec_count++;
-                count5 --;
-                if (count5 == 0) {
-                    strindex += 10;
-                    if (strindex > strlen) {
-                        break;
-                    }
-                    ucol_setOffset(iter, strindex, status);
-                    count5 = 5;
-                }
+                ucol_setOffset(iter, strindex, status);
+                count5 = 5;
             }
         }
+    }
 
 };
 
@@ -670,7 +671,7 @@ public:
         int temp = 0;
 
 #define TEST_KEYGEN(testname, func)\
-    TEST(testname, CmdKeyGen, col, win_langid, count, rnd_index, CmdKeyGen::func, 0)
+    TEST(testname, CmdKeyGen, col, win_langid, count, rnd_index, &CmdKeyGen::func, 0)
         TEST_KEYGEN(TestIcu_KeyGen_null, icu_key_null);
         TEST_KEYGEN(TestIcu_KeyGen_len,  icu_key_len);
         TEST_KEYGEN(TestPosix_KeyGen_null, posix_key_null);
@@ -678,7 +679,7 @@ public:
         TEST_KEYGEN(TestWin_KeyGen_len, win_key_len);
 
 #define TEST_ITER(testname, func)\
-    TEST(testname, CmdIter, col, count, icu_data, CmdIter::func,0,0)
+    TEST(testname, CmdIter, col, count, icu_data, &CmdIter::func,0,0)
         TEST_ITER(TestIcu_ForwardIter_null, icu_forward_null);
         TEST_ITER(TestIcu_ForwardIter_len, icu_forward_len);
         TEST_ITER(TestIcu_BackwardIter_null, icu_backward_null);
@@ -703,7 +704,7 @@ public:
         TEST_QSORT(TestWin_qsort_usekey, win_cmpkey);
 
 #define TEST_BIN(testname, func)\
-    TEST(testname, CmdBinSearch, col, win_langid, count, rnd_index, ord_icu_key,CmdBinSearch::func)
+    TEST(testname, CmdBinSearch, col, win_langid, count, rnd_index, ord_icu_key, &CmdBinSearch::func)
         TEST_BIN(TestIcu_BinarySearch_strcoll_null, icu_strcoll_null);
         TEST_BIN(TestIcu_BinarySearch_strcoll_len, icu_strcoll_len);
         TEST_BIN(TestIcu_BinarySearch_usekey, icu_cmpkey);
