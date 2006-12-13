@@ -1,6 +1,6 @@
 /**************************************************************************
 *
-*   Copyright (C) 2001-2005, International Business Machines
+*   Copyright (C) 2001-2006, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ***************************************************************************
@@ -187,7 +187,7 @@ int main(int argc, char **argv)
         exit(-1);
     }
 
-    i = time(NULL) % numFortunes;    /*  Use time to pick a somewhat-random fortune.  */
+    i = (int)time(NULL) % numFortunes;    /*  Use time to pick a somewhat-random fortune.  */
     resString = ures_getStringByIndex(fortunes_r, i, &len, &err);
     if (U_FAILURE(err)) {
         fprintf(stderr, "%s: ures_getStringByIndex(%d) failed, %s\n", programName, i, u_errorName(err));
