@@ -22,6 +22,7 @@
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
+			BuildLogFile=".\out\tmp\ReleaseBuildLog.html"
 			>
 			<Tool
 				Name="VCNMakeTool"
@@ -45,6 +46,7 @@
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
+			BuildLogFile=".\out\tmp\DebugBuildLog.html"
 			>
 			<Tool
 				Name="VCNMakeTool"
@@ -78,15 +80,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\brkitr\brsfiles.mk"
-				>
-			</File>
-			<File
 				RelativePath=".\coll\colfiles.mk"
-				>
-			</File>
-			<File
-				RelativePath=".\brkitr\ctdfiles.mk"
 				>
 			</File>
 			<File
