@@ -113,7 +113,7 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
 
         sprintf(tmp2,
             "LINK32 = link.exe\n"
-            "LINK32_FLAGS = /nologo /out:\"$(TARGETDIR)\\$(DLLTARGET)\" /DLL /NOENTRY $(LDFLAGS) $(PKGDATA_LDFLAGS) /implib:\"$(TARGETDIR)\\$(LIBNAME).lib\" %s%s%s\n",
+            "LINK32_FLAGS = /nologo /release /out:\"$(TARGETDIR)\\$(DLLTARGET)\" /DLL /NOENTRY $(LDFLAGS) $(PKGDATA_LDFLAGS) /implib:\"$(TARGETDIR)\\$(LIBNAME).lib\" %s%s%s\n",
             (o->comment ? "/comment:\"" : ""),
             (o->comment ? o->comment : ""),
             (o->comment ? "\"" : ""),
