@@ -78,8 +78,11 @@
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				GenerateManifest="false"
+				IgnoreAllDefaultLibraries="true"
 				ProgramDatabaseFile=".\Release/icudt36.pdb"
 				ResourceOnlyDLL="true"
+				SetChecksum="true"
+				BaseAddress="0x4ad00000"
 				TurnOffAssemblyGeneration="true"
 				ImportLibrary="..\..\lib\icudt.lib"
 			/>
@@ -175,6 +178,9 @@
 				GenerateManifest="false"
 				ProgramDatabaseFile=".\Debug/icudt36.pdb"
 				ResourceOnlyDLL="true"
+				SetChecksum="true"
+				BaseAddress="0x4ad00000"
+				TurnOffAssemblyGeneration="true"
 				ImportLibrary="..\..\lib\icudt.lib"
 			/>
 			<Tool
@@ -225,6 +231,26 @@
 			Name="Resource Files"
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 			>
+			<File
+				RelativePath="..\data\misc\icudata.rc"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCResourceCompilerTool"
+						AdditionalIncludeDirectories="../common"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCResourceCompilerTool"
+						AdditionalIncludeDirectories="../common"
+					/>
+				</FileConfiguration>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
