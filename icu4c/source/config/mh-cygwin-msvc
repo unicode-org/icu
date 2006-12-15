@@ -54,8 +54,8 @@ LINK.c=		LINK.EXE /subsystem:console $(LDFLAGS)
 LINK.cc=	LINK.EXE /subsystem:console $(LDFLAGS)
 
 ## Commands to make a shared library
-SHLIB.c=	LINK.EXE /subsystem:console /DLL $(LDFLAGS)
-SHLIB.cc=	LINK.EXE /subsystem:console /DLL $(LDFLAGS)
+SHLIB.c=	LINK.EXE /DLL $(LDFLAGS)
+SHLIB.cc=	LINK.EXE /DLL $(LDFLAGS)
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	
@@ -98,7 +98,7 @@ LIBCTESTFW=	$(top_builddir)/tools/ctestfw/$(LIBICU)$(CTESTFW_STUBNAME)$(ICULIBSU
 LIBICUTOOLUTIL=	$(LIBDIR)/$(LIBICU)$(TOOLUTIL_STUBNAME)$(ICULIBSUFFIX).lib
 
 ## These are the library specific LDFLAGS
-LDFLAGSICUDT=	/base:"0x4ad00000" /NOENTRY# The NOENTRY option is required for creating a resource-only DLL.
+LDFLAGSICUDT+=	/base:"0x4ad00000" /NOENTRY# The NOENTRY option is required for creating a resource-only DLL.
 LDFLAGSICUUC=	/base:"0x4a800000"# in-uc = 1MB
 LDFLAGSICUI18N=	/base:"0x4a900000"# io-in = 2MB
 LDFLAGSICUIO=	/base:"0x4ab00000"# le-io = 1MB
@@ -199,6 +199,11 @@ PKGDATA_INVOKE_OPTS = MAKEFLAGS=
 
 # Include the version information in the shared library
 ENABLE_SO_VERSION_DATA=1
+
+## Starting in MSVC 2005, manifest files are required. This reduces the obnoxiousness of this feature.
+ifneq (`LINK.EXE /? | grep MANIFESTFILE`,)
+LDFLAGSICUDT += /MANIFEST:NO
+endif
 
 ## End Cygwin-specific setup
 
