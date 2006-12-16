@@ -222,6 +222,7 @@ case $platform in
         CXX=cl; export CXX
         RELEASE_CFLAGS='/O2 /Ob2'
         RELEASE_CXXFLAGS='/O2 /Ob2'
+        RELEASE_LDFLAGS='/OPT:NOWIN98'
         DEBUG_CFLAGS='/Zi'
         DEBUG_CXXFLAGS='/Zi'
         DEBUG_LDFLAGS='/DEBUG'
