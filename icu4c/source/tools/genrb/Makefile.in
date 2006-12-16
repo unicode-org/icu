@@ -84,9 +84,11 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 
 $(TARGET) : $(OBJECTS)
 	$(LINK.cc) $(OUTOPT)$@ $^ $(LIBS) 
+	$(POST_BUILD_STEP)
 
 $(DERB) : $(DERB_OBJ)
-	$(LINK.c) $(OUTOPT)$@ $^ $(LIBS) 
+	$(LINK.c) $(OUTOPT)$@ $^ $(LIBS)
+	$(POST_BUILD_STEP)
 
 
 # This line is needed to serialize builds when the gmake -j option is used.
