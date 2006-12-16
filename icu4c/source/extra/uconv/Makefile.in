@@ -128,6 +128,7 @@ $(TARGET_STUB_NAME).$(SECTION): $(srcdir)/$(TARGET_STUB_NAME).$(SECTION).in pkgd
 
 $(TARGET) : $(OBJECTS)  $(UCONVMSG_LIB)
 	$(LINK.cc) $(OUTOPT)$@ $(OBJECTS) $(LIBS)
+	$(POST_BUILD_STEP)
 
 resfiles: $(RESFILES) package-resfiles
 

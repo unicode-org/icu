@@ -78,6 +78,7 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 
 $(TARGET) : $(OBJECTS)
 	$(LINK.cc) $(OUTOPT)$@ $^ $(LIBS)
+	$(POST_BUILD_STEP)
 
 
 %.$(SECTION): $(srcdir)/%.$(SECTION).in

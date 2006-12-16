@@ -84,9 +84,11 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 
 $(TESTTARGET) : $(COMMONOBJECTS) $(TESTOBJECTS)
 	$(LINK.cc) -o $@ $^ $(LIBS)
+	$(POST_BUILD_STEP)
 
 $(GENTARGET) : $(COMMONOBJECTS) $(GENOBJECTS)
 	$(LINK.cc) -o $@ $^ $(LIBS)
+	$(POST_BUILD_STEP)
 
 invoke:
 	ICU_DATA=$${ICU_DATA:-$(top_builddir)/data/} TZ=PST8PDT $(INVOKE) $(INVOCATION)
