@@ -32,7 +32,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#if _MSC_VER >= 1400
+/*
+MSVC 2005 has the annoying habit of creating a manifest when one isn't needed.
+The generated library doesn't depend on anything due to the /NOENTRY usage.
+*/
+#if defined(_MSC_VER) && _MSC_VER >= 1400
 #define NO_MANIFEST "/MANIFEST:NO "
 #endif
 
@@ -105,7 +109,7 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
 
         sprintf(tmp2,
             "LINK32 = link.exe\n"
-            "LINK32_FLAGS = /nologo /release /out:\"$(TARGETDIR)\\$(DLLTARGET)\" /DLL /NOENTRY $(LDFLAGS) $(PKGDATA_LDFLAGS) /implib:\"$(TARGETDIR)\\$(LIBNAME).lib\" %s%s%s\n",
+            "LINK32_FLAGS = /nologo /release /out:\"$(TARGETDIR)\\$(DLLTARGET)\" /DLL /NOENTRY " NO_MANIFEST "$(LDFLAGS) $(PKGDATA_LDFLAGS) /implib:\"$(TARGETDIR)\\$(LIBNAME).lib\" %s%s%s\n",
             (o->comment ? "/comment:\"" : ""),
             (o->comment ? o->comment : ""),
             (o->comment ? "\"" : ""),
@@ -212,7 +216,7 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
         T_FileStream_writeLine(makefile, tmp);
 
         sprintf(tmp, "\"$(TARGETDIR)\\$(DLLTARGET)\": \"$(TEMP_DIR)\\$(CMNOBJTARGET)\"\n"
-            "\t$(LINK32) $(LINK32_FLAGS) " NO_MANIFEST "\"$(TEMP_DIR)\\$(CMNOBJTARGET)\" $(DATA_VER_INFO)\n\n");
+            "\t$(LINK32) $(LINK32_FLAGS) \"$(TEMP_DIR)\\$(CMNOBJTARGET)\" $(DATA_VER_INFO)\n\n");
         T_FileStream_writeLine(makefile, tmp);
         sprintf(tmp, "\"$(TEMP_DIR)\\$(CMNOBJTARGET)\": \"$(TEMP_DIR)\\$(CMNTARGET)\"\n"
             "\t@\"$(GENCCODE)\" $(GENCOPTIONS) -e $(ENTRYPOINT) -o -d \"$(TEMP_DIR)\" \"$(TEMP_DIR)\\$(CMNTARGET)\"\n\n");
