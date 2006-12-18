@@ -1194,27 +1194,6 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
     }
     
     /**
-     * Clears the pattern used to create this set, if there was one. The effect
-     * of this is that the next time that toString() or toPattern() is called,
-     * the pattern will be constructed. Thus:
-     * <pre>
-     * System.out.println(new UnicodeSet(&quot;[:whitespace:]&quot;));
-     * System.out.println(new UnicodeSet(&quot;[:whitespace:]&quot;).clearPattern());
-     * </pre>
-     * produces:
-     * <pre>
-     * [:whitespace:]
-     * [\\u0009-\\u0085\\u00A0\\u1680\\u180E\\u2000-\\u200A\\u2028\\u2029\\u202F\\u205F\\u3000]
-     * </pre>
-     * @return this, for chaining
-     * @draft
-     */
-    public final UnicodeSet clearPattern() {
-      pat = null;
-      return this;
-    }
-
-    /**
      * @return a code point IF the string consists of a single one.
      * otherwise returns -1.
      * @param string to test
