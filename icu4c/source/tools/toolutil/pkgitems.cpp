@@ -280,15 +280,15 @@ ures_enumDependencies(const UDataSwapper *ds,
                 return;
             }
 
-            if(U_CHARSET_FAMILY==U_EBCDIC_FAMILY) {
-                // swap to EBCDIC
-                // our swapper is probably not the right one, but
-                // the function uses it only for printing errors
-                uprv_ebcdicFromAscii(ds, localeID, stringLength, localeID, pErrorCode);
-                if(U_FAILURE(*pErrorCode)) {
-                    return;
-                }
+#if (U_CHARSET_FAMILY==U_EBCDIC_FAMILY)
+            // swap to EBCDIC
+            // our swapper is probably not the right one, but
+            // the function uses it only for printing errors
+            uprv_ebcdicFromAscii(ds, localeID, stringLength, localeID, pErrorCode);
+            if(U_FAILURE(*pErrorCode)) {
+                return;
             }
+#endif
 #if U_CHARSET_FAMILY!=U_ASCII_FAMILY && U_CHARSET_FAMILY!=U_EBCDIC_FAMILY
 #           error Unknown U_CHARSET_FAMILY value!
 #endif

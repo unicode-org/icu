@@ -363,7 +363,7 @@ int32_t StringSearch::handleNext(int32_t position, UErrorCode &status)
             }
 
             ucol_setOffset(m_strsrch_->textIter, position, &status);
-            while (TRUE) {
+            for (;;) {
                 if (m_search_->isCanonicalMatch) {
                     // can't use exact here since extra accents are allowed.
                     usearch_handleNextCanonical(m_strsrch_, &status);
@@ -426,7 +426,7 @@ int32_t StringSearch::handlePrev(int32_t position, UErrorCode &status)
                 setMatchNotFound();
                 return USEARCH_DONE;
             }
-            while (TRUE) {
+            for (;;) {
                 if (m_search_->isCanonicalMatch) {
                     // can't use exact here since extra accents are allowed.
                     usearch_handlePreviousCanonical(m_strsrch_, &status);

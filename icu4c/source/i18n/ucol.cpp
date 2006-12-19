@@ -2314,9 +2314,9 @@ uint32_t getDiscontiguous(const UCollator *coll, collIterate *source,
           backupState(source, &discState);
 
     //*tempdb = *(source->pos - 1);
-          *tempdb = peekCharacter(source, -1);
-    tempdb ++;
-    while (TRUE) {
+    *tempdb = peekCharacter(source, -1);
+    tempdb++;
+    for (;;) {
         UChar    *UCharOffset;
         UChar     schar,
                   tchar;
