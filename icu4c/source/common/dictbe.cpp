@@ -323,7 +323,7 @@ foundBest:
                 int32_t remaining = rangeEnd - (current+wordLength);
                 UChar32 pc = utext_current32(text);
                 int32_t chars = 0;
-                while (TRUE) {
+                for (;;) {
                     utext_next32(text);
                     uc = utext_current32(text);
                     // TODO: Here we're counting on the fact that the SA languages are all

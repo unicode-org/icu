@@ -914,7 +914,7 @@ public:
         return;
 #endif
 
-#if 1
+#if 0
         // debugging code, 
         int m;
         for (m=0; m<4000; m++) {
@@ -961,13 +961,13 @@ public:
         // Keep this data here to avoid static initialization.
         FormatThreadTestData kPercentFormatTestData[] = 
         {
-            FormatThreadTestData((double)5.0, UnicodeString("500%", "")),
-                FormatThreadTestData( 1.0, UnicodeString("100%", "")),
-                FormatThreadTestData( 0.26, UnicodeString("26%", "")),
+            FormatThreadTestData((double)5.0, CharsToUnicodeString("500\\u00a0%")),
+                FormatThreadTestData( 1.0, CharsToUnicodeString("100\\u00a0%")),
+                FormatThreadTestData( 0.26, CharsToUnicodeString("26\\u00a0%")),
                 FormatThreadTestData( 
-                   16384.99, CharsToUnicodeString("1\\u00a0638\\u00a0499%") ), // U+00a0 = NBSP
+                   16384.99, CharsToUnicodeString("1\\u00a0638\\u00a0499\\u00a0%")), // U+00a0 = NBSP
                 FormatThreadTestData( 
-                    81890.23, CharsToUnicodeString("8\\u00a0189\\u00a0023%" )),
+                    81890.23, CharsToUnicodeString("8\\u00a0189\\u00a0023\\u00a0%")),
         };
         int32_t kPercentFormatTestDataLength = 
                 (int32_t)(sizeof(kPercentFormatTestData) / sizeof(kPercentFormatTestData[0]));

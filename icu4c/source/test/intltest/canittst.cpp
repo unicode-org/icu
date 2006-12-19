@@ -149,7 +149,7 @@ void CanonicalIteratorTest::TestBasic() {
           UnicodeString testStr = CharsToUnicodeString(testArray[i][0]);
           it.setSource(testStr, status);
           set->removeAll();
-          while (TRUE) {
+          for (;;) {
               //UnicodeString *result = new UnicodeString(it.next());
               UnicodeString result(it.next());
               if (result.isBogus()) {
@@ -187,7 +187,7 @@ void CanonicalIteratorTest::characterTest(UnicodeString &s, UChar32 ch, Canonica
     
     it.setSource(s, status);
     
-    while (TRUE) {
+    for (;;) {
         UnicodeString item = it.next();
         if (item.isBogus()) break;
         if (item == s) gotSource = TRUE;

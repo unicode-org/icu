@@ -1603,7 +1603,7 @@ setParaRunsOnly(UBiDi *pBiDi, const UChar *text, int32_t length,
     if(U_FAILURE(*pErrorCode)) {
         goto cleanup1;
     }
-    ubidi_getRuns(pBiDi);
+    ubidi_getRuns(pBiDi, pErrorCode);
     /* check if some runs must be split, count how many splits */
     addedRuns=0;
     runCount=pBiDi->runCount;

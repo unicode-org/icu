@@ -2904,7 +2904,7 @@ static void TestVariableTopSetting(void) {
 
   /* this test will fail when normalization is turned on */
   /* therefore we always turn off exhaustive mode for it */
-  if(1) { /* QUICK > 0*/
+  { /* QUICK > 0*/
     log_verbose("Slide variable top over UCARules\n");
     rulesLen = ucol_getRulesEx(coll, UCOL_FULL_RULES, rulesCopy, 0);
     rulesCopy = (UChar *)malloc((rulesLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
@@ -2928,7 +2928,7 @@ static void TestVariableTopSetting(void) {
         specs = src.parsedToken.flags;
 
         startOfRules = FALSE;
-        if(0) {
+        {
           log_verbose("%04X %d ", *(rulesCopy+chOffset), chLen);
         }
         if(strength == UCOL_PRIMARY) {

@@ -153,7 +153,7 @@ typedef struct Run {
 #define IS_EVEN_RUN(x) (((x)&INDEX_ODD_BIT)==0)
 
 U_CFUNC UBool
-ubidi_getRuns(UBiDi *pBiDi);
+ubidi_getRuns(UBiDi *pBiDi, UErrorCode *pErrorCode);
 
 /** BiDi control code points */
 enum {

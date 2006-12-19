@@ -214,7 +214,7 @@ doTests(UBiDi *pBiDi, UBiDi *pLine, UBool countRunsFirst) {
     }
 }
 
-static const char columns[62] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+static const char columns[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 #define TABLE_SIZE  256
 static UBool   tablesInitialized = FALSE;
