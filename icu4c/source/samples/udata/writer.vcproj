@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="writer"
-	ProjectGUID="{45D0BE49-661A-41A5-AD81-986655688801}"
+	ProjectGUID="{40A90302-F173-4629-A003-F571D2D93D16}"
 	>
 	<Platforms>
 		<Platform

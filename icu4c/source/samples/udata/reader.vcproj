@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="reader"
-	ProjectGUID="{10EE4F33-B301-47DB-90C7-1082E5460F7F}"
+	ProjectGUID="{BFEFC070-C5A9-42E3-BAAE-A51FB2C4BA28}"
 	>
 	<Platforms>
 		<Platform

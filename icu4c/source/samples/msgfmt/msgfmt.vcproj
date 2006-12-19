@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="msgfmt"
-	ProjectGUID="{0D62472B-CCBF-46CD-AEA1-5DACAD6D05F2}"
+	ProjectGUID="{5FF1D1A2-1630-446C-B6EA-93EFD4F975C3}"
 	>
 	<Platforms>
 		<Platform
