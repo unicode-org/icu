@@ -95,6 +95,7 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 
 $(TARGET) : $(OBJECTS)
 	$(LINK.c) $(OUTOPT)$@ $^ $(LIBS)
+	$(POST_BUILD_STEP)
 
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)
