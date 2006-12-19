@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="ugrep"
-	ProjectGUID="{482D52CE-ECE9-4E25-A756-84E3A17F6B30}"
+	ProjectGUID="{63166CEB-02CC-472C-B3B7-E6C559939BDA}"
 	>
 	<Platforms>
 		<Platform

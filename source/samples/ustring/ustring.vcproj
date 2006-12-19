@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="ustring"
-	ProjectGUID="{3A28CC89-98B6-4E9E-B688-DF5651819759}"
+	ProjectGUID="{FF92E6C1-BACA-41AD-BB6D-ECA19C05573E}"
 	>
 	<Platforms>
 		<Platform

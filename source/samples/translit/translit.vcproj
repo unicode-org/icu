@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="translit"
-	ProjectGUID="{BDA22320-4F5F-4FFB-8C72-413B3C19631D}"
+	ProjectGUID="{D1BEC124-303A-4F44-BA70-55769B8FE96A}"
 	>
 	<Platforms>
 		<Platform
