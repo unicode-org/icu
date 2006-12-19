@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="strsrch"
-	ProjectGUID="{A7BC6C55-74CE-43BC-A31F-6D4FC9DAD98C}"
+	ProjectGUID="{E97790D1-7ABE-4C8E-9627-251ABEAA3EEC}"
 	>
 	<Platforms>
 		<Platform

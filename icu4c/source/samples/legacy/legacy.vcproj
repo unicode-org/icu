@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="legacy"
-	ProjectGUID="{CFD6D1D6-60E8-4A1E-9D31-3B35BB6B482A}"
+	ProjectGUID="{57F56795-1802-4605-88A0-013AAE9998F6}"
 	>
 	<Platforms>
 		<Platform

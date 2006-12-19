@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="ufortune"
-	ProjectGUID="{621EF6F2-9E09-49E0-AF19-8417FE8534DF}"
+	ProjectGUID="{25F534DF-93C9-4853-A88E-DB7D8CF74042}"
 	>
 	<Platforms>
 		<Platform

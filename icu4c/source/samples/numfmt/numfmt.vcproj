@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="numfmt"
-	ProjectGUID="{CF07EC2D-94A2-4107-9CAF-087150957AFC}"
+	ProjectGUID="{721FBD47-E458-4C35-90DA-FF192907D5E2}"
 	>
 	<Platforms>
 		<Platform
