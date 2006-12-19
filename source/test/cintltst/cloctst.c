@@ -2554,7 +2554,7 @@ static void TestUResourceBundle() {
             continue;
         }
         rb1 = ures_open(NULL, oldLoc, &status);
-        if (U_FAILURE(U_ZERO_ERROR)) {
+        if (U_FAILURE(status)) {
             log_err("ures_open(%s) failed %s\n", oldLoc, u_errorName(status));
         }
 
@@ -2562,7 +2562,7 @@ static void TestUResourceBundle() {
 
         status = U_ZERO_ERROR;
         rb2 = ures_open(NULL, newLoc, &status);
-        if (U_FAILURE(U_ZERO_ERROR)) {
+        if (U_FAILURE(status)) {
             log_err("ures_open(%s) failed %s\n", oldLoc, u_errorName(status));
         } 
         us2 = ures_getLocale(rb2, &status);

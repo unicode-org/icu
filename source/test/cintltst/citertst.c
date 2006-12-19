@@ -1818,7 +1818,7 @@ static void TestSortKeyValidity(void)
     /* en_US has no tailorings */
     UCollator  *coll        = ucol_open("en_US", &status);
     /* tailored locales */
-    char        locale[][6] = {"fr_FR\0", "ko_KR\0", "sh_YU\0", "th_TH\0", "zh_CN\0"};
+    char        locale[][6] = {"fr_FR", "ko_KR", "sh_YU", "th_TH", "zh_CN"};
     FileStream *file = getFractionalUCA();
     char        line[1024];
     UChar       codepoints[10];

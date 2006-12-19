@@ -1140,7 +1140,7 @@ inline int32_t getPreviousBaseOffset(const UChar       *text,
                                                int32_t  textoffset)
 {
     if (textoffset > 0) {
-        while (TRUE) {
+        for (;;) {
             int32_t result = textoffset;
             UTF_BACK_1(text, 0, textoffset);
             int32_t temp = textoffset;
@@ -3200,7 +3200,7 @@ UBool usearch_handleNextExact(UStringSearch *strsrch, UErrorCode *status)
 
         setColEIterOffset(coleiter, textoffset);
 
-        while (TRUE) {
+        for (;;) {
             // finding the last pattern ce match, imagine composite characters
             // for example: search for pattern A in text \u00C0
             // we'll have to skip \u0300 the grave first before we get to A
@@ -3496,7 +3496,7 @@ UBool usearch_handlePreviousCanonical(UStringSearch *strsrch,
         int32_t     firstce        = UCOL_NULLORDER;
 
         setColEIterOffset(coleiter, textoffset);
-        while (TRUE) {
+        for (;;) {
             // finding the first pattern ce match, imagine composite 
             // characters. for example: search for pattern \u0300 in text 
             // \u00C0, we'll have to skip A first before we get to 

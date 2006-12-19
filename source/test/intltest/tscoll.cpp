@@ -154,7 +154,7 @@ IntlTestCollator::doTestVariant(Collator* col, const UnicodeString &source, cons
     const UChar* trg = target.getBuffer();
     UCollationResult compareResultIter = (UCollationResult)result;
 
-    if(1) {
+    {
       UCharIterator sIter, tIter;
       uiter_setString(&sIter, src, sLen);
       uiter_setString(&tIter, trg, tLen);
@@ -202,7 +202,7 @@ IntlTestCollator::doTestVariant(Collator* col, const UnicodeString &source, cons
     }
 
     /* testing the partial sortkeys */
-    if(1) { /*!QUICK*/
+    { /*!QUICK*/
       int32_t partialSizes[] = { 3, 1, 2, 4, 8, 20, 80 }; /* just size 3 in the quick mode */
       int32_t partialSizesSize = 1;
       if(!quick) {

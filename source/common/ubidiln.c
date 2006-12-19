@@ -25,6 +25,7 @@
 #include "unicode/uchar.h"
 #include "unicode/ubidi.h"
 #include "ubidiimp.h"
+#include "uassert.h"
 
 /*
  * General remarks about the functions in this file:
@@ -354,7 +355,7 @@ ubidi_countRuns(UBiDi *pBiDi, UErrorCode *pErrorCode) {
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return -1;
     } else if(!IS_VALID_PARA_OR_LINE(pBiDi) ||
-              (pBiDi->runCount<0 && !ubidi_getRuns(pBiDi))) {
+              (pBiDi->runCount<0 && !ubidi_getRuns(pBiDi, pErrorCode))) {
         *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
         return -1;
     } else {
@@ -364,9 +365,11 @@ ubidi_countRuns(UBiDi *pBiDi, UErrorCode *pErrorCode) {
 
 U_CAPI UBiDiDirection U_EXPORT2
 ubidi_getVisualRun(UBiDi *pBiDi, int32_t runIndex,
-                   int32_t *pLogicalStart, int32_t *pLength) {
+                   int32_t *pLogicalStart, int32_t *pLength)
+{
+    UErrorCode status = U_ZERO_ERROR;
     if( !IS_VALID_PARA_OR_LINE(pBiDi) || runIndex<0 ||
-        (pBiDi->runCount==-1 && !ubidi_getRuns(pBiDi)) ||
+        (pBiDi->runCount==-1 && !ubidi_getRuns(pBiDi, &status)) ||
         runIndex>=pBiDi->runCount
     ) {
         return UBIDI_LTR;
@@ -517,7 +520,7 @@ reorderLine(UBiDi *pBiDi, UBiDiLevel minLevel, UBiDiLevel maxLevel) {
 
 /* compute the runs array --------------------------------------------------- */
 
-static int32_t getRunFromLogicalIndex(UBiDi *pBiDi, int32_t logicalIndex) {
+static int32_t getRunFromLogicalIndex(UBiDi *pBiDi, int32_t logicalIndex, UErrorCode *status) {
     Run *runs=pBiDi->runs;
     int32_t runCount=pBiDi->runCount, visualStart=0, i, length, logicalStart;
 
@@ -530,8 +533,8 @@ static int32_t getRunFromLogicalIndex(UBiDi *pBiDi, int32_t logicalIndex) {
         visualStart+=length;
     }
     /* we should never get here */
-    i=length+25;
-    i/=(i-length-25);           /* force program crash */
+    U_ASSERT(FALSE);
+    *status = U_INDEX_OUTOFBOUNDS_ERROR;
     return 0;
 }
 
@@ -547,7 +550,7 @@ static int32_t getRunFromLogicalIndex(UBiDi *pBiDi, int32_t logicalIndex) {
  * negative number of BiDi control characters within this run.
  */
 U_CFUNC UBool
-ubidi_getRuns(UBiDi *pBiDi) {
+ubidi_getRuns(UBiDi *pBiDi, UErrorCode *pErrorCode) {
     if(pBiDi->direction!=UBIDI_MIXED) {
         /* simple, single-run case - this covers length==0 */
         /* pBiDi->paraLevel is ok even for contextual multiple paragraphs */
@@ -686,7 +689,7 @@ ubidi_getRuns(UBiDi *pBiDi) {
                       *limit=start+pBiDi->insertPoints.size;
         int32_t runIndex;
         for(point=start; point<limit; point++) {
-            runIndex=getRunFromLogicalIndex(pBiDi, point->pos);
+            runIndex=getRunFromLogicalIndex(pBiDi, point->pos, pErrorCode);
             pBiDi->runs[runIndex].insertRemove|=point->flag;
         }
     }
@@ -697,7 +700,7 @@ ubidi_getRuns(UBiDi *pBiDi) {
         const UChar *start=pBiDi->text, *limit=start+pBiDi->length, *pu;
         for(pu=start; pu<limit; pu++) {
             if(IS_BIDI_CONTROL_CHAR(*pu)) {
-                runIndex=getRunFromLogicalIndex(pBiDi, pu-start);
+                runIndex=getRunFromLogicalIndex(pBiDi, pu-start, pErrorCode);
                 pBiDi->runs[runIndex].insertRemove--;
             }
         }
@@ -892,7 +895,7 @@ ubidi_getVisualIndex(UBiDi *pBiDi, int32_t logicalIndex, UErrorCode *pErrorCode)
             visualIndex=pBiDi->length-logicalIndex-1;
             break;
         default:
-            if(pBiDi->runCount<0 && !ubidi_getRuns(pBiDi)) {
+            if(pBiDi->runCount<0 && !ubidi_getRuns(pBiDi, pErrorCode)) {
                 *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
                 return 0;
             } else {
@@ -1005,7 +1008,7 @@ ubidi_getLogicalIndex(UBiDi *pBiDi, int32_t visualIndex, UErrorCode *pErrorCode)
         else if(pBiDi->direction==UBIDI_RTL) {
             return pBiDi->length-visualIndex-1;
         }
-        if(pBiDi->runCount<0 && !ubidi_getRuns(pBiDi)) {
+        if(pBiDi->runCount<0 && !ubidi_getRuns(pBiDi, pErrorCode)) {
             *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
             return 0;
         }
