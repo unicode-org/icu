@@ -38,6 +38,8 @@ The generated library doesn't depend on anything due to the /NOENTRY usage.
 */
 #if defined(_MSC_VER) && _MSC_VER >= 1400
 #define NO_MANIFEST "/MANIFEST:NO "
+#else
+#define NO_MANIFEST ""
 #endif
 
 /*#define WINBUILDMODE (*(o->options)=='R'?"Release":"Debug")*/
