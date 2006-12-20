@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="layout"
-	ProjectGUID="{497500ED-DE1D-4B20-B529-F41B5A0FBEEB}"
+	ProjectGUID="{EE80B3B5-40F2-46F2-AC4B-FB929683515C}"
 	>
 	<Platforms>
 		<Platform
@@ -43,7 +43,7 @@
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="..\..\..\include,..\..\..\include\layout,..\..\common"
-				PreprocessorDefinitions="NDEBUG;_CONSOLE;WIN32;UNICODE;_WIN32_WINNT=0X500;_CRT_SECURE_NO_DEPRECATE;LE_USE_CMEMORY"
+				PreprocessorDefinitions="NDEBUG;_CONSOLE;WIN32;UNICODE;_CRT_SECURE_NO_DEPRECATE;LE_USE_CMEMORY"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -132,7 +132,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\..\include,..\..\..\include\layout,..\..\common"
-				PreprocessorDefinitions="_DEBUG;WIN32;UNICODE;_WIN32_WINNT=0X500;LE_USE_CMEMORY;_CRT_SECURE_NO_DEPRECATE"
+				PreprocessorDefinitions="_DEBUG;WIN32;UNICODE;LE_USE_CMEMORY;_CRT_SECURE_NO_DEPRECATE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				TreatWChar_tAsBuiltInType="true"
