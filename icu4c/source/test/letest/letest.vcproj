@@ -70,7 +70,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="../../../lib/icule.lib ../../../lib/icuuc.lib odbc32.lib odbccp32.lib"
 				OutputFile=".\Release/letest.exe"
 				LinkIncremental="1"
@@ -160,7 +159,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
 				OutputFile=".\Debug/letest.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
