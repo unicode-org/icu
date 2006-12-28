@@ -2,7 +2,7 @@
 /*
  ****************************************************************************** *
  *
- *   Copyright (C) 1999-2005, International Business Machines
+ *   Copyright (C) 1999-2006, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  ****************************************************************************** *
@@ -13,7 +13,8 @@
  */
 
 #include <gnome.h>
-#include "freetype/freetype.h"
+#include <ft2build.h>
+#include FT_FREETYPE_H
 
 #include "unicode/ustring.h"
 #include "unicode/uscript.h"
@@ -36,7 +37,7 @@ struct Context
     Paragraph *paragraph;
 };
 
-static TT_Engine engine;
+static FT_Library engine;
 static GnomeGUISupport *guiSupport;
 static GnomeFontMap *fontMap;
 static ScriptCompositeFontInstance *font;
@@ -49,6 +50,7 @@ void       closeSample(GtkWidget *sample);
 void showabout(GtkWidget */*widget*/, gpointer /*data*/)
 {
     GtkWidget *aboutBox;
+    const gchar *documentedBy[] = {NULL};
     const gchar *writtenBy[] = {
         "Eric Mader",
         NULL
@@ -56,9 +58,11 @@ void showabout(GtkWidget */*widget*/, gpointer /*data*/)
 
     aboutBox = gnome_about_new("Gnome Layout Sample",
                                "0.1",
-                               "Copyright (C) 1998-2002 By International Business Machines Corporation and others. All Rights Reserved.",
-                               writtenBy,
+                               "Copyright (C) 1998-2006 By International Business Machines Corporation and others. All Rights Reserved.",
                                "A simple demo of the ICU LayoutEngine.",
+                               writtenBy,
+                               documentedBy,
+                               "",
                                NULL);
 
     gtk_widget_show(aboutBox);
@@ -71,7 +75,7 @@ void notimpl(GtkObject */*object*/, gpointer /*data*/)
 
 gchar *prettyTitle(const gchar *path)
 {
-  gchar *name  = g_basename(path);
+  const gchar *name  = g_basename(path);
   gchar *title = g_strconcat("Gnome Layout Sample - ", name, NULL);
 
   return title;
@@ -297,7 +301,7 @@ int main (int argc, char *argv[])
     LEErrorCode   fontStatus = LE_NO_ERROR;
     GtkWidget     *app;
 
-    TT_Init_FreeType(&engine);
+    FT_Init_FreeType(&engine);
 
     gnome_init("gnomelayout", "0.1", argc, argv);
 
@@ -306,7 +310,7 @@ int main (int argc, char *argv[])
     font       = new ScriptCompositeFontInstance(fontMap);
 
     if (LE_FAILURE(fontStatus)) {
-        TT_Done_FreeType(engine);
+        FT_Done_FreeType(engine);
         return 1;
     }
 
@@ -327,7 +331,7 @@ int main (int argc, char *argv[])
     delete font;
     delete guiSupport;
 
-    TT_Done_FreeType(engine);
+    FT_Done_FreeType(engine);
 
     exit(0);
 }

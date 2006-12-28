@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 1998-2005, International Business Machines Corporation and   *
+ * Copyright (C) 1998-2006, International Business Machines Corporation and   *
  * others. All Rights Reserved.                                               *
  ******************************************************************************
  */
@@ -25,11 +25,13 @@ FontMap::FontMap(const char *fileName, le_int16 pointSize, GUISupport *guiSuppor
     le_int32 defaultFont = -1, i, script;
     le_bool haveFonts = FALSE;
 
+/**/
     for (i = 0; i < scriptCodeCount; i += 1) {
         fFontIndices[i] = -1;
         fFontNames[i] = NULL;
         fFontInstances[i] = NULL;
     }
+ /**/
 
     if (LE_FAILURE(status)) {
         return;
