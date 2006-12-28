@@ -22,13 +22,9 @@ CLEANFILES = *~ $(DEPS)
 ## Target information
 TARGET = gnomelayout
 
-CPPFLAGS += `gnome-config --cflags gnomeui` -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/layoutex -I$(top_srcdir)/layout -I$(top_srcdir) -g
+CPPFLAGS += -DLE_USE_CMEMORY `pkg-config --cflags libgnomeui-2.0 freetype2 cairo` -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/layoutex -I$(top_srcdir)/layout -I$(top_srcdir) -g
 
-# Change the following as needed to locate freetype.
-CPPFLAGS +=  -DLE_USE_CMEMORY -I/usr/include/freetype1
-
-LIBS = $(LIBICULX) $(LIBICULE) $(LIBICUUC) $(LIBICUI18N) @LIBS@ @LIB_M@ `gnome-config --libs gnomeui` -lttf
-
+LIBS = $(LIBICULX) $(LIBICULE) $(LIBICUUC) $(LIBICUI18N) @LIBS@ @LIB_M@ `pkg-config --libs libgnomeui-2.0 freetype2 cairo`
 
 OBJECTS=cmaps.o UnicodeReader.o GnomeGUISupport.o FontMap.o GnomeFontMap.o ScriptCompositeFontInstance.o GnomeFontInstance.o FontTableCache.o  paragraph.o gnomelayout.o
 
