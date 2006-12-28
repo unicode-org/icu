@@ -2,7 +2,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2003, International Business Machines
+ *   Copyright (C) 1999-2006, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -16,7 +16,10 @@
 #define __GNOMEFONTINSTANCE_H
 
 #include <gnome.h>
-#include "freetype/freetype.h"
+#include <ft2build.h>
+#include FT_FREETYPE_H
+#include FT_GLYPH_H
+#include <cairo.h>
 
 #include "layout/LETypes.h"
 #include "layout/LEFontInstance.h"
@@ -39,14 +42,16 @@ public:
 
 private:
     GtkWidget *fWidget;
+    cairo_t   *fCairo;
 };
 
 class GnomeFontInstance : public LEFontInstance, protected FontTableCache
 {
  protected:
-    TT_Face fFace;
-    TT_Instance fInstance;
-    TT_Glyph fGlyph;
+    FT_Face fFace;
+//  FT_Glyph fGlyph;
+    
+    cairo_font_face_t *fCairoFace;
 
     le_int32 fPointSize;
     le_int32 fUnitsPerEM;
@@ -64,11 +69,9 @@ class GnomeFontInstance : public LEFontInstance, protected FontTableCache
     virtual LEErrorCode initMapper();
 
  public:
-    GnomeFontInstance(TT_Engine engine, const TT_Text *fontPathName, le_int16 pointSize, LEErrorCode &status);
+    GnomeFontInstance(FT_Library engine, const char *fontPathName, le_int16 pointSize, LEErrorCode &status);
 
     virtual ~GnomeFontInstance();
-
-    TT_Instance getFont() const;
 
     virtual const void *getFontTable(LETag tableTag) const;
 
@@ -94,10 +97,8 @@ class GnomeFontInstance : public LEFontInstance, protected FontTableCache
 
     float getScaleFactorY() const;
 
-    TT_Raster_Map *rasterizeGlyphs(const LEGlyphID *glyphs, le_int32 glyphCount, const le_int32 *dx, const le_int32 *dy,
-				   le_int32 &xOffset, le_int32 &yOffset) const;
-
-    void freeRaster(TT_Raster_Map *raster);
+    void rasterizeGlyphs(cairo_t *cairo, const LEGlyphID *glyphs, le_int32 glyphCount, const float *positions,
+				   le_int32 x, le_int32 y) const;
 };
 
 inline GtkWidget *GnomeSurface::getWidget() const
@@ -110,10 +111,12 @@ inline void GnomeSurface::setWidget(GtkWidget *theWidget)
     fWidget = theWidget;
 }
 
-inline TT_Instance GnomeFontInstance::getFont() const
+/*
+inline FT_Instance GnomeFontInstance::getFont() const
 {
     return fInstance;
 }
+*/
 
 inline le_int32 GnomeFontInstance::getUnitsPerEM() const
 {

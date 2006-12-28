@@ -80,7 +80,7 @@ Paragraph::Paragraph(const LEUnicode chars[], int32_t charCount, const FontRuns 
     fLineCount(0), fLinesMax(LINE_GROW), fLinesGrow(LINE_GROW), fLines(NULL), fChars(NULL),
     fLineHeight(-1), fAscent(-1), fWidth(-1), fHeight(-1), fParagraphLevel(UBIDI_DEFAULT_LTR)
 {
-    static const LEUnicode separators[] = {CH_LF, CH_CR, CH_LSEP, CH_PSEP};
+    static const LEUnicode separators[] = {CH_LF, CH_CR, CH_LSEP, CH_PSEP, 0x0000};
 
 	if (LE_FAILURE(status)) {
 		return;

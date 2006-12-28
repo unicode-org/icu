@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 1998-2003, International Business Machines Corporation and   *
+ * Copyright (C) 1998-2006, International Business Machines Corporation and   *
  * others. All Rights Reserved.                                               *
  ******************************************************************************
  */
@@ -8,7 +8,8 @@
 #ifndef __GNOMEFONTMAP_H
 #define __GNOMEFONTMAP_H
 
-#include "freetype/freetype.h"
+#include <ft2build.h>
+#include FT_FREETYPE_H
 
 #include "unicode/uscript.h"
 
@@ -23,7 +24,7 @@
 class GnomeFontMap : public FontMap
 {
  public:
-    GnomeFontMap(TT_Engine engine, const char *fileName, le_int16 pointSize, GUISupport *guiSupport, LEErrorCode &status);
+    GnomeFontMap(FT_Library engine, const char *fileName, le_int16 pointSize, GUISupport *guiSupport, LEErrorCode &status);
 
     virtual ~GnomeFontMap();
 
@@ -31,7 +32,7 @@ class GnomeFontMap : public FontMap
     virtual const LEFontInstance *openFont(const char *fontName, le_int16 pointSize, LEErrorCode &status);
 
  private:
-    TT_Engine fEngine;
+    FT_Library fEngine;
 };
 
 #endif
