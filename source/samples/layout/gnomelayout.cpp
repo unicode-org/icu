@@ -327,18 +327,17 @@ int main (int argc, char *argv[])
         return 1;
     }
 
+    const char  *defaultArgs[] = {"Sample.txt", NULL};
     const char **args = poptGetArgs(ptctx);
     
     if (args == NULL) {
-        app = newSample("Sample.txt");
-        
-        gtk_widget_show_all(app);
-    } else {
-        for (int i = 0; args[i] != NULL; i += 1) {
-           app = newSample(args[i]);
+        args = defaultArgs;
+    }
+
+    for (int i = 0; args[i] != NULL; i += 1) {
+       app = newSample(args[i]);
            
-           gtk_widget_show_all(app);
-        }
+       gtk_widget_show_all(app);
     }
     
     gtk_main();
