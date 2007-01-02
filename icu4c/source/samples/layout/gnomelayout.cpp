@@ -2,7 +2,7 @@
 /*
  ****************************************************************************** *
  *
- *   Copyright (C) 1999-2006, International Business Machines
+ *   Copyright (C) 1999-2007, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  ****************************************************************************** *
@@ -296,14 +296,27 @@ void closeSample(GtkWidget *app)
   }
 }
 
+static struct poptOption options[] = {
+    {
+        NULL,
+        '\0',
+        0,
+        NULL,
+        0,
+        NULL,
+        NULL
+    }
+};
+
 int main (int argc, char *argv[])
 {
     LEErrorCode   fontStatus = LE_NO_ERROR;
-    GtkWidget     *app;
+    poptContext   ptctx;
+    GtkWidget    *app;
 
     FT_Init_FreeType(&engine);
 
-    gnome_init("gnomelayout", "0.1", argc, argv);
+    gnome_init_with_popt_table("gnomelayout", "0.1", argc, argv, options, 0, &ptctx);
 
     guiSupport = new GnomeGUISupport();
     fontMap    = new GnomeFontMap(engine, "FontMap.Gnome", 24, guiSupport, fontStatus);
@@ -314,18 +327,20 @@ int main (int argc, char *argv[])
         return 1;
     }
 
-    if (argc <= 1) {
-      app = newSample("Sample.txt");
-
-      gtk_widget_show_all(app);
+    const char **args = poptGetArgs(ptctx);
+    
+    if (args == NULL) {
+        app = newSample("Sample.txt");
+        
+        gtk_widget_show_all(app);
     } else {
-      for (int i = 1; i < argc; i += 1) {
-	app = newSample(argv[i]);
-
-	gtk_widget_show_all(app);
-      }
+        for (int i = 0; args[i] != NULL; i += 1) {
+           app = newSample(args[i]);
+           
+           gtk_widget_show_all(app);
+        }
     }
-
+    
     gtk_main();
 
     delete font;
