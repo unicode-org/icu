@@ -1,7 +1,7 @@
 //##header
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -747,7 +747,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
 
         try {
             description = bundle.getString(rulenames[format-1]);
-            ICUResourceBundle locb = bundle.get(locnames[format-1]);
+            UResourceBundle locb = bundle.get(locnames[format-1]);
             localizations = new String[locb.getSize()][];
             for (int i = 0; i < localizations.length; ++i) {
                 localizations[i] = locb.get(i).getStringArray();

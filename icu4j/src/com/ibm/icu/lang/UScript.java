@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2001-2006, International Business Machines Corporation and         *
+* Copyright (C) 2001-20067 International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -664,7 +664,7 @@ public final class UScript {
         if(rb.getLoadingStatus()==ICUResourceBundle.FROM_DEFAULT && ! locale.equals(ULocale.getDefault())){
             return null;
         }
-        ICUResourceBundle sub = rb.get(kLocaleScript);
+        UResourceBundle sub = rb.get(kLocaleScript);
         
         int[] result = new int[sub.getSize()];
         int w = 0;

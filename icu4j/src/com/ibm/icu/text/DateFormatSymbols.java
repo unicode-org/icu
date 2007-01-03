@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1299,7 +1299,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
             ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, tempLocale);
             ICUResourceBundle zoneStringsBundle = bundle.getWithFallback("zoneStrings");
             for(int i = 0; i < zoneStringsBundle.getSize(); i++){
-                ICUResourceBundle zoneTable = zoneStringsBundle.get(i);
+                ICUResourceBundle zoneTable = (ICUResourceBundle)zoneStringsBundle.get(i);
                 String key = Utility.replaceAll(zoneTable.getKey(), ":", "/");
                 // hack for the root zone strings
                 if(key.length() == 0|| zoneTable.getType() != ICUResourceBundle.TABLE){

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -35,8 +35,7 @@ public class NamePrepTransform {
     
     private NamePrepTransform(){
         // load the resource bundle
-        //        ICUResourceBundle bundle = (ICUResourceBundle)ICUResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","idna_rules", true);
-        ICUResourceBundle bundle = (ICUResourceBundle)ICUResourceBundle.createBundle("com/ibm/icu/dev/data/testdata","idna_rules", NamePrepTransform.class.getClassLoader());
+        ICUResourceBundle bundle = (ICUResourceBundle)ICUResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","idna_rules", NamePrepTransform.class.getClassLoader(), true);
         String  mapRules      = bundle.getString("MapNoNormalization");
         mapRules             += bundle.getString("MapNFKC");
         mapTransform          = Transliterator.createFromRules("CaseMap",mapRules,Transliterator.FORWARD);

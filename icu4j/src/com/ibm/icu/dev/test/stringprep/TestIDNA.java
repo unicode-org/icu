@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -809,6 +809,38 @@ public class TestIDNA extends TestFmwk {
             }
         }catch(StringPrepParseException ex){
             logln("Got the expected exception: " + ex.getMessage());
+        }
+    }
+    public void TestJB5275(){
+        String domain = "xn--m\u00FCller.de";
+        try{
+            IDNA.convertIDNToUnicode(domain, IDNA.DEFAULT);
+        }catch(StringPrepParseException ex){
+            logln("Got the expected exception. "+ex.getMessage());
+        }catch (Exception ex){
+            errln("Did not get the expected exception "+ex.getMessage());
+        }
+        try{
+            IDNA.convertIDNToUnicode(domain, IDNA.USE_STD3_RULES);
+        }catch(StringPrepParseException ex){
+            logln("Got the expected exception. "+ex.getMessage());
+        }catch (Exception ex){
+            errln("Did not get the expected exception "+ex.getMessage());
+        }
+        try{
+            IDNA.convertToUnicode("xn--m\u00FCller", IDNA.DEFAULT);
+        }catch(Exception ex){
+            errln("ToUnicode operation failed! "+ex.getMessage());
+        }
+        try{
+            IDNA.convertToUnicode("xn--m\u00FCller", IDNA.USE_STD3_RULES);
+        }catch(Exception ex){
+            errln("ToUnicode operation failed! "+ex.getMessage());
+        }
+        try{
+            IDNA.convertIDNToUnicode("xn--m\u1234ller", IDNA.USE_STD3_RULES);
+        }catch(StringPrepParseException ex){
+            errln("ToUnicode operation failed! "+ex.getMessage());
         }
     }
 }
