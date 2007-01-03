@@ -296,18 +296,6 @@ void closeSample(GtkWidget *app)
   }
 }
 
-static struct poptOption options[] = {
-    {
-        NULL,
-        '\0',
-        0,
-        NULL,
-        0,
-        NULL,
-        NULL
-    }
-};
-
 int main (int argc, char *argv[])
 {
     LEErrorCode   fontStatus = LE_NO_ERROR;
@@ -316,7 +304,7 @@ int main (int argc, char *argv[])
 
     FT_Init_FreeType(&engine);
 
-    gnome_init_with_popt_table("gnomelayout", "0.1", argc, argv, options, 0, &ptctx);
+    gnome_init_with_popt_table("gnomelayout", "0.1", argc, argv, NULL, 0, &ptctx);
 
     guiSupport = new GnomeGUISupport();
     fontMap    = new GnomeFontMap(engine, "FontMap.Gnome", 24, guiSupport, fontStatus);
