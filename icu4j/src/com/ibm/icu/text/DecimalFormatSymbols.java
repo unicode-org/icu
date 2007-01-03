@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -658,7 +658,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
                 try{
                     currency = currency.getWithFallback(currencyCode);
                     if(currency.getSize()>2) {
-                        currency = currency.get(2);
+                        currency = (ICUResourceBundle)currency.get(2);
                         currencyPattern = currency.getString(0);
                         monetarySeparator = currency.getString(1).charAt(0);
                         monetaryGroupingSeparator = currency.getString(2).charAt(0);

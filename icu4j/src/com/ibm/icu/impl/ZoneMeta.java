@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2006, International Business Machines
+* Copyright (c) 2003-20067 International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -56,10 +56,10 @@ public final class ZoneMeta {
             return EMPTY;
         }
         try{
-	        ICUResourceBundle top = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-	        ICUResourceBundle regions = top.get(kREGIONS);
-	        ICUResourceBundle names = top.get(kNAMES); // dereference Zones section
-	        ICUResourceBundle temp = regions.get(country);
+	        UResourceBundle top = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+	        UResourceBundle regions = top.get(kREGIONS);
+	        UResourceBundle names = top.get(kNAMES); // dereference Zones section
+	        UResourceBundle temp = regions.get(country);
 	        int[] vector = temp.getIntVector();
 	        if (ASSERT) Assert.assrt("vector.length>0", vector.length>0);
 	        String[] ret = new String[vector.length];
@@ -79,8 +79,8 @@ public final class ZoneMeta {
             return EMPTY;
         }
         try{
-            ICUResourceBundle top = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-            ICUResourceBundle names = top.get(kNAMES); // dereference Zones section
+            UResourceBundle top = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+            UResourceBundle names = top.get(kNAMES); // dereference Zones section
             return names.getStringArray();
         }catch(MissingResourceException ex){
             //throw away the exception
@@ -110,8 +110,8 @@ public final class ZoneMeta {
     }
     private static String getID(int i) {
         try{
-            ICUResourceBundle top = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-            ICUResourceBundle names = top.get(kNAMES); // dereference Zones section
+            UResourceBundle top = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+            UResourceBundle names = top.get(kNAMES); // dereference Zones section
             return names.getString(i);
         }catch(MissingResourceException ex){
             //throw away the exception
@@ -133,10 +133,10 @@ public final class ZoneMeta {
      */
     public static synchronized int countEquivalentIDs(String id) {
 
-        ICUResourceBundle res = openOlsonResource(id);
+        UResourceBundle res = openOlsonResource(id);
         int size = res.getSize();
         if (size == 4 || size == 6) {
-            ICUResourceBundle r=res.get(size-1);
+            UResourceBundle r=res.get(size-1);
             //result = ures_getSize(&r); // doesn't work
             int[] v = r.getIntVector();
             return v.length;
@@ -164,19 +164,19 @@ public final class ZoneMeta {
      */
     public static synchronized String getEquivalentID(String id, int index) {
         String result="";
-        ICUResourceBundle res = openOlsonResource(id);
+        UResourceBundle res = openOlsonResource(id);
         int zone = -1;
         int size = res.getSize();
         if (size == 4 || size == 6) {
-            ICUResourceBundle r = res.get(size-1);
+            UResourceBundle r = res.get(size-1);
             int[] v = r.getIntVector();
             if (index >= 0 && index < v.length && getOlsonMeta()) {
                 zone = v[index];
             }
         }
         if (zone >= 0) {
-        	ICUResourceBundle top = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-            ICUResourceBundle ares = top.get(kNAMES); // dereference Zones section
+        	UResourceBundle top = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+            UResourceBundle ares = top.get(kNAMES); // dereference Zones section
             result = ares.getString(zone);
 
         }
@@ -379,19 +379,19 @@ public final class ZoneMeta {
      * @param id zone id
      * @return top-level resource bundle
      */
-    public static ICUResourceBundle openOlsonResource(String id)
+    public static UResourceBundle openOlsonResource(String id)
     {
         if(!getOlsonMeta()){
             return null;
         }
-        ICUResourceBundle top = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-        ICUResourceBundle res = getZoneByName(top, id);
+        ICUResourceBundle top = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        UResourceBundle res = getZoneByName(top, id);
         // Dereference if this is an alias.  Docs say result should be 1
         // but it is 0 in 2.8 (?).
          if (res.getSize() <= 1 && getOlsonMeta(top)) {
             int deref = res.getInt() + 0;
-            ICUResourceBundle ares = top.get(kZONES); // dereference Zones section
-            res = ares.get(deref);
+            UResourceBundle ares = top.get(kZONES); // dereference Zones section
+            res = (ICUResourceBundle) ares.get(deref);
         } 
         return res;
     }
@@ -401,16 +401,16 @@ public final class ZoneMeta {
      * @param id Time zone ID
      * @return the zone's bundle if found, or undefined if error.  Reuses oldbundle.
      */
-    private static ICUResourceBundle getZoneByName(ICUResourceBundle top, String id) {
+    private static UResourceBundle getZoneByName(UResourceBundle top, String id) {
         // load the Rules object
-        ICUResourceBundle tmp = top.get(kNAMES);
+        UResourceBundle tmp = top.get(kNAMES);
         
         // search for the string
         int idx = findInStringArray(tmp, id);
         
         if((idx == -1)) {
             // not found 
-            throw new MissingResourceException(kNAMES, tmp.resPath, id);
+            throw new MissingResourceException(kNAMES, ((ICUResourceBundle)tmp).getResPath(), id);
             //ures_close(oldbundle);
             //oldbundle = NULL;
         } else {
@@ -419,7 +419,7 @@ public final class ZoneMeta {
         }
         return tmp;
     }
-    private static int findInStringArray(ICUResourceBundle array, String id){
+    private static int findInStringArray(UResourceBundle array, String id){
         int start = 0;
         int limit = array.getSize();
         int mid;
@@ -476,7 +476,7 @@ public final class ZoneMeta {
      */
     private static boolean getOlsonMeta(ICUResourceBundle top) {
         if (OLSON_ZONE_START < 0) {
-            ICUResourceBundle res = top.get(kZONES);
+            UResourceBundle res = top.get(kZONES);
             OLSON_ZONE_COUNT = res.getSize();
             OLSON_ZONE_START = 0;
         }
@@ -502,8 +502,8 @@ public final class ZoneMeta {
         TimeZone z = (TimeZone)zoneCache.get(id);
         if (z == null) {
             try{
-                ICUResourceBundle top = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-                ICUResourceBundle res = openOlsonResource(id);
+                UResourceBundle top = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+                UResourceBundle res = openOlsonResource(id);
                 z = new OlsonTimeZone(top, res);
                 z.setID(id);
                 zoneCache.put(id, z);

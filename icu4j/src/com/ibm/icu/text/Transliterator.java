@@ -1826,8 +1826,8 @@ public abstract class Transliterator {
          *
          * The extra blank field on "alias" lines is to make the array square.
          */
-        ICUResourceBundle bundle, transIDs, colBund;
-        bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_TRANSLIT_BASE_NAME, INDEX);
+        UResourceBundle bundle, transIDs, colBund;
+        bundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_TRANSLIT_BASE_NAME, INDEX);
         transIDs = bundle.get(RB_RULE_BASED_IDS);
 
         int row, maxRows;
@@ -1835,7 +1835,7 @@ public abstract class Transliterator {
         for (row = 0; row < maxRows; row++) {
             colBund = transIDs.get(row);
             String ID = colBund.getKey();
-            ICUResourceBundle res = colBund.get(0);
+            UResourceBundle res = colBund.get(0);
             String type = res.getKey();
             if (type.equals("file") || type.equals("internal")) {
                 // Rest of line is <resource>:<encoding>:<direction>

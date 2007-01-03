@@ -1,7 +1,7 @@
 //##header
 /*
  **********************************************************************
- * Copyright (c) 2006, International Business Machines
+ * Copyright (c) 2006-2007, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Created on 2006-4-21
@@ -17,8 +17,8 @@ import java.util.MissingResourceException;
 import java.util.NoSuchElementException;
 
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.ICUResourceBundleIterator;
 import com.ibm.icu.util.UResourceBundle;
+import com.ibm.icu.util.UResourceBundleIterator;
 import com.ibm.icu.util.UResourceTypeMismatchException;
 
 /**
@@ -71,20 +71,20 @@ class ResourceModule implements TestDataModule {
     private static final String DATA = "Cases";
 
     
-    ICUResourceBundle res;
-    ICUResourceBundle info;
-    ICUResourceBundle defaultHeader;
-    ICUResourceBundle testData;
+    UResourceBundle res;
+    UResourceBundle info;
+    UResourceBundle defaultHeader;
+    UResourceBundle testData;
     
     ResourceModule(String baseName, String localeName) throws DataModuleFormatError{
 
-        res = (ICUResourceBundle) UResourceBundle.getBundleInstance(baseName, localeName);
-        info = getFromTable(res, INFO, ICUResourceBundle.TABLE);
-        testData = getFromTable(res, TEST_DATA, ICUResourceBundle.TABLE);
+        res = (UResourceBundle) UResourceBundle.getBundleInstance(baseName, localeName);
+        info = getFromTable(res, INFO, UResourceBundle.TABLE);
+        testData = getFromTable(res, TEST_DATA, UResourceBundle.TABLE);
 
         try {
             // unfortunately, actually, data can be either ARRAY or STRING
-            defaultHeader = getFromTable(info, HEADER, new int[]{ICUResourceBundle.ARRAY, ICUResourceBundle.STRING});
+            defaultHeader = getFromTable(info, HEADER, new int[]{UResourceBundle.ARRAY, UResourceBundle.STRING});
         } catch (MissingResourceException e){
             defaultHeader = null;
         }
@@ -104,35 +104,35 @@ class ResourceModule implements TestDataModule {
 
     public Iterator getTestDataIterator() {
         return new IteratorAdapter(testData){
-            protected Object prepareNext(ICUResourceBundle nextRes) throws DataModuleFormatError {
+            protected Object prepareNext(UResourceBundle nextRes) throws DataModuleFormatError {
                 return new UResourceTestData(defaultHeader, nextRes);
             }
         };
     }
 
     /**
-     * To make ICUResourceBundleIterator works like Iterator
+     * To make UResourceBundleIterator works like Iterator
      * and return various data-driven test object for next() call
      * 
      * @author Raymond Yang
      */
     private abstract static class IteratorAdapter implements Iterator{
-        private ICUResourceBundle res;
-        private ICUResourceBundleIterator itr;
+        private UResourceBundle res;
+        private UResourceBundleIterator itr;
         private Object preparedNextElement = null;
-        // fix a strange behavior for ICUResourceBundleIterator for 
-        // ICUResourceBundle.STRING. It support hasNext(), but does 
+        // fix a strange behavior for UResourceBundleIterator for 
+        // UResourceBundle.STRING. It support hasNext(), but does 
         // not support next() now. 
         // 
         // Use the iterated resource itself as the result from next() call
         private boolean isStrRes = false;
         private boolean isStrResPrepared = false; // for STRING resouce, we only prepare once
 
-        IteratorAdapter(ICUResourceBundle theRes) {
+        IteratorAdapter(UResourceBundle theRes) {
             assert_not (theRes == null);
             res = theRes;
-            itr = res.getIterator();
-            isStrRes = res.getType() == ICUResourceBundle.STRING;
+            itr = ((ICUResourceBundle)res).getIterator();
+            isStrRes = res.getType() == UResourceBundle.STRING;
         }
         
         public void remove() {
@@ -163,7 +163,7 @@ class ResourceModule implements TestDataModule {
             if (isStrRes) return hasNextForStrRes();
             
             if (preparedNextElement != null) return true;
-            ICUResourceBundle t = null;
+            UResourceBundle t = null;
             if (itr.hasNext()) {
                 // Notice, other RuntimeException may be throwed
                 t = itr.next();
@@ -197,7 +197,7 @@ class ResourceModule implements TestDataModule {
         /**
          * To prepare data-driven test object for next() call, should not return null
          */
-        abstract protected Object prepareNext(ICUResourceBundle nextRes) throws DataModuleFormatError;
+        abstract protected Object prepareNext(UResourceBundle nextRes) throws DataModuleFormatError;
     }
     
     
@@ -234,13 +234,13 @@ class ResourceModule implements TestDataModule {
      * silently also. The behavior is modified because some resource are 
      * optional and can be missed.
      */
-    static ICUResourceBundle getFromTable(ICUResourceBundle res, String key, int expResType) throws DataModuleFormatError{
+    static UResourceBundle getFromTable(UResourceBundle res, String key, int expResType) throws DataModuleFormatError{
         return getFromTable(res, key, new int[]{expResType});
     }
     
-    static ICUResourceBundle getFromTable(ICUResourceBundle res, String key, int[] expResTypes) throws DataModuleFormatError{
-        assert_is (res != null && key != null && res.getType() == ICUResourceBundle.TABLE);
-        ICUResourceBundle t = res.get(key); 
+    static UResourceBundle getFromTable(UResourceBundle res, String key, int[] expResTypes) throws DataModuleFormatError{
+        assert_is (res != null && key != null && res.getType() == UResourceBundle.TABLE);
+        UResourceBundle t = res.get(key); 
       
         assert_not (t ==null);
         int type = t.getType();
@@ -257,21 +257,21 @@ class ResourceModule implements TestDataModule {
     }
     
     /**
-     * Unfortunately, ICUResourceBundle is unable to treat one string as string array.
-     * This function return a String[] from ICUResourceBundle, regardless it is an array or a string 
+     * Unfortunately, UResourceBundle is unable to treat one string as string array.
+     * This function return a String[] from UResourceBundle, regardless it is an array or a string 
      */
-    static String[] getStringArrayHelper(ICUResourceBundle res, String key) throws DataModuleFormatError{
-        ICUResourceBundle t = getFromTable(res, key, new int[]{ICUResourceBundle.ARRAY, ICUResourceBundle.STRING});
+    static String[] getStringArrayHelper(UResourceBundle res, String key) throws DataModuleFormatError{
+        UResourceBundle t = getFromTable(res, key, new int[]{UResourceBundle.ARRAY, UResourceBundle.STRING});
         return getStringArrayHelper(t);
     }
 
-    static String[] getStringArrayHelper(ICUResourceBundle res) throws DataModuleFormatError{
+    static String[] getStringArrayHelper(UResourceBundle res) throws DataModuleFormatError{
         try{
             int type = res.getType();
             switch (type) {
-            case ICUResourceBundle.ARRAY:
+            case UResourceBundle.ARRAY:
                 return res.getStringArray();
-            case ICUResourceBundle.STRING:
+            case UResourceBundle.STRING:
                 return new String[]{res.getString()};
             default:
                 throw new UResourceTypeMismatchException("Only accept ARRAY and STRING types.");
@@ -299,24 +299,24 @@ class ResourceModule implements TestDataModule {
     }
 
     private static class UResourceTestData implements TestData{
-        private ICUResourceBundle res;
-        private ICUResourceBundle info;
-        private ICUResourceBundle settings; 
-        private ICUResourceBundle header;
-        private ICUResourceBundle data;
+        private UResourceBundle res;
+        private UResourceBundle info;
+        private UResourceBundle settings; 
+        private UResourceBundle header;
+        private UResourceBundle data;
 
-        UResourceTestData(ICUResourceBundle defaultHeader, ICUResourceBundle theRes) throws DataModuleFormatError{
+        UResourceTestData(UResourceBundle defaultHeader, UResourceBundle theRes) throws DataModuleFormatError{
             
-            assert_is (theRes != null && theRes.getType() == ICUResourceBundle.TABLE);
+            assert_is (theRes != null && theRes.getType() == UResourceBundle.TABLE);
             res = theRes;
             // unfortunately, actually, data can be either ARRAY or STRING
-            data = getFromTable(res, DATA, new int[]{ICUResourceBundle.ARRAY, ICUResourceBundle.STRING});
+            data = getFromTable(res, DATA, new int[]{UResourceBundle.ARRAY, UResourceBundle.STRING});
        
 
             
             try {
                 // unfortunately, actually, data can be either ARRAY or STRING
-                header = getFromTable(res, HEADER, new int[]{ICUResourceBundle.ARRAY, ICUResourceBundle.STRING});
+                header = getFromTable(res, HEADER, new int[]{UResourceBundle.ARRAY, UResourceBundle.STRING});
             } catch (MissingResourceException e){
                 if (defaultHeader == null) {
                     throw new DataModuleFormatError("Unable to find a header for test data '" + res.getKey() + "' and no default header exist.");
@@ -325,8 +325,8 @@ class ResourceModule implements TestDataModule {
                 }
             }
          try{
-                settings = getFromTable(res, SETTINGS, ICUResourceBundle.ARRAY);
-                info = getFromTable(res, INFO, ICUResourceBundle.TABLE);
+                settings = getFromTable(res, SETTINGS, UResourceBundle.ARRAY);
+                info = getFromTable(res, INFO, UResourceBundle.TABLE);
             } catch (MissingResourceException e){
                 // do nothing, left them null;
                 settings = data;
@@ -342,9 +342,9 @@ class ResourceModule implements TestDataModule {
         }
 
         public Iterator getSettingsIterator() {
-            assert_is (settings.getType() == ICUResourceBundle.ARRAY);
+            assert_is (settings.getType() == UResourceBundle.ARRAY);
             return new IteratorAdapter(settings){
-                protected Object prepareNext(ICUResourceBundle nextRes) throws DataModuleFormatError {
+                protected Object prepareNext(UResourceBundle nextRes) throws DataModuleFormatError {
                     return new UTableResource(nextRes);
                 }
             };
@@ -352,10 +352,10 @@ class ResourceModule implements TestDataModule {
 
         public Iterator getDataIterator() {
             // unfortunately,
-            assert_is (data.getType() == ICUResourceBundle.ARRAY 
-                 || data.getType() == ICUResourceBundle.STRING);
+            assert_is (data.getType() == UResourceBundle.ARRAY 
+                 || data.getType() == UResourceBundle.STRING);
             return new IteratorAdapter(data){
-                protected Object prepareNext(ICUResourceBundle nextRes) throws DataModuleFormatError {
+                protected Object prepareNext(UResourceBundle nextRes) throws DataModuleFormatError {
                     return new UArrayResource(header, nextRes);
                 }
             };
@@ -363,9 +363,9 @@ class ResourceModule implements TestDataModule {
     }
         
     private static class UTableResource implements DataMap{
-        private ICUResourceBundle res;
+        private UResourceBundle res;
 
-        UTableResource(ICUResourceBundle theRes){
+        UTableResource(UResourceBundle theRes){
             res = theRes;
         }
         public String getString(String key) {
@@ -385,7 +385,7 @@ class ResourceModule implements TestDataModule {
     
     private static class UArrayResource implements DataMap{
         private Map theMap; 
-        UArrayResource(ICUResourceBundle theHeader, ICUResourceBundle theData) throws DataModuleFormatError{
+        UArrayResource(UResourceBundle theHeader, UResourceBundle theData) throws DataModuleFormatError{
             assert_is (theHeader != null && theData != null);
             String[] header;
          
@@ -394,9 +394,9 @@ class ResourceModule implements TestDataModule {
                 throw new DataModuleFormatError("The count of Header and Data is mismatch.");
             theMap = new HashMap();
             for (int i = 0; i < header.length; i++) {
-                if(theData.getType()==ICUResourceBundle.ARRAY){
+                if(theData.getType()==UResourceBundle.ARRAY){
                     theMap.put(header[i], theData.get(i));
-                }else if(theData.getType()==ICUResourceBundle.STRING){
+                }else if(theData.getType()==UResourceBundle.STRING){
                     theMap.put(header[i], theData.getString());
                 }else{
                     throw new DataModuleFormatError("Did not get the expected data!");                   

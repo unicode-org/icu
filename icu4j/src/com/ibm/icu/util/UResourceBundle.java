@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -18,7 +18,6 @@ import java.util.ResourceBundle;
 import java.util.Vector;
 
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.ICUResourceBundleImpl;
 import com.ibm.icu.impl.ICUResourceBundleReader;
 import com.ibm.icu.impl.ResourceBundleWrapper;
 import com.ibm.icu.util.ULocale;
@@ -245,6 +244,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @stable ICU 3.0
      */
     protected abstract String getBaseName();
+    
     /**
      * Gets the parent bundle
      * @return The parent bundle
@@ -505,6 +505,410 @@ public abstract class UResourceBundle extends ResourceBundle{
             }
             return b;
         }
+    }
+
+    
+       /**
+      * Returns a binary data from a binary resource.
+      *
+      * @return a pointer to a chuck of unsigned bytes which live in a memory mapped/DLL file.
+      * @see #getIntVector
+      * @see #getInt
+      * @throws MissingResourceException
+      * @throws UResourceTypeMismatchException
+      * @draft ICU 3.8
+      */
+    public ByteBuffer getBinary() {
+        throw new UResourceTypeMismatchException("");
+    }
+    
+    /**
+      * Returns a string from a string resource type
+      *
+      * @return a string
+      * @see #getBinary()
+      * @see #getIntVector
+      * @see #getInt
+      * @throws MissingResourceException
+      * @throws UResourceTypeMismatchException
+      * @draft ICU 3.8
+      */
+    public String getString() {
+        throw new UResourceTypeMismatchException("");
+    }
+
+    /**
+      * Returns a string array from a array resource type
+      *
+      * @return a string
+      * @see #getString()
+      * @see #getIntVector
+      * @see #
+      * @throws MissingResourceException
+      * @throws UResourceTypeMismatchException
+      * @draft ICU 3.8
+      */
+    public String[] getStringArray() {
+        throw new UResourceTypeMismatchException("");
+    }
+
+    /**
+      * Returns a binary data from a binary resource.
+      *
+      * @param ba  The byte array to write the bytes to. A null variable is OK.  
+      * @return an array bytes containing the binary data from the resource.
+      * @see #getIntVector
+      * @see #getInt
+      * @throws MissingResourceException
+      * @throws UResourceTypeMismatchException
+      * @draft ICU 3.8
+      */
+    public byte[] getBinary(byte[] ba) {
+        throw new UResourceTypeMismatchException("");
+    }
+    
+    /**
+      * Returns a 32 bit integer array from a resource.
+      *
+      * @return a pointer to a chunk of unsigned bytes which live in a memory mapped/DLL file.
+      * @see #getBinary()
+      * @see #getInt
+      * @throws MissingResourceException
+      * @throws UResourceTypeMismatchException
+      * @draft ICU 3.8
+      */
+    public int[] getIntVector() {
+        throw new UResourceTypeMismatchException("");
+    }
+
+    /**
+      * Returns a signed integer from a resource.
+      *
+      * @return an integer value
+      * @see #getIntVector
+      * @see #getBinary()
+      * @throws MissingResourceException
+      * @throws UResourceTypeMismatchException
+      * @draft ICU 3.8
+      */
+    public int getInt() {
+        throw new UResourceTypeMismatchException("");
+    }
+
+    /**
+      * Returns a unsigned integer from a resource.
+      * This integer is originally 28 bit and the sign gets propagated.
+      *
+      * @return an integer value
+      * @see #getIntVector
+      * @see #getBinary()
+      * @throws MissingResourceException
+      * @throws UResourceTypeMismatchException
+      * @draft ICU 3.8
+      */
+    public int getUInt() {
+        throw new UResourceTypeMismatchException("");
+    }
+    
+    /**
+      * Returns a resource in a given resource that has a given key.
+      *
+      * @param key               a key associated with the wanted resource
+      * @return                  a resource bundle object representing rhe resource
+      * @throws MissingResourceException
+      * @draft ICU 3.8
+      */
+    public UResourceBundle get(String key) {
+        UResourceBundle obj = handleGet(key, null, this);
+        UResourceBundle res = this;
+        if (obj == null) {
+            while((res=res.getParent())!=null && obj==null){
+                //call the get method to recursively fetch the resource
+                obj = res.handleGet(key, null, this);
+            }
+            if (obj == null) {
+                String fullName = ICUResourceBundleReader.getFullName(
+                        getBaseName(), getLocaleID());
+                throw new MissingResourceException(
+                        "Can't find resource for bundle " + fullName + ", key "
+                                + key, this.getClass().getName(), key);
+            }
+        }
+        ICUResourceBundle.setLoadingStatus(obj, getLocaleID());
+        return obj;
+    }
+    
+    /**
+      * Returns the string in a given resource at the specified index.
+      *
+      * @param index            an index to the wanted string.
+      * @return                  a string which lives in the resource.
+      * @throws IndexOutOfBoundsException
+      * @throws UResourceTypeMismatchException
+      * @draft ICU 3.8
+      */
+    public String getString(int index) {
+        ICUResourceBundle temp = (ICUResourceBundle)get(index);
+        if (temp.getType() == STRING) {
+            return temp.getString();
+        }
+        throw new UResourceTypeMismatchException("");
+    }
+
+    /**
+      * Returns the resource in a given resource at the specified index.
+      *
+      * @param index             an index to the wanted resource.
+      * @return                  the sub resource UResourceBundle object
+      * @throws IndexOutOfBoundsException
+      * @draft ICU 3.8
+      */
+    public UResourceBundle get(int index) {
+        UResourceBundle obj = handleGet(index, null, this);
+        if (obj == null) {
+            obj = (ICUResourceBundle) getParent();
+            if (obj != null) {
+                obj = obj.get(index);
+            }
+            if (obj == null)
+                throw new MissingResourceException(
+                        "Can't find resource for bundle "
+                                + this.getClass().getName() + ", key "
+                                + getKey(), this.getClass().getName(), getKey());
+        }
+        ICUResourceBundle.setLoadingStatus(obj, getLocaleID());
+        return obj;
+    }
+    /**
+      * Returns the keys in this bundle as an enumeration
+      * @return an enumeration containing key strings
+      * @draft ICU 3.8
+      */
+    public Enumeration getKeys() {
+        initKeysVector();
+        return keys.elements();
+    }
+    
+    private Vector keys = null;
+    private synchronized void initKeysVector(){
+        if(keys!=null){
+            return;
+        }
+        //ICUResourceBundle current = this;
+        keys = new Vector();
+        Enumeration e = this.handleGetKeys();
+        while(e.hasMoreElements()){
+            String elem = (String)e.nextElement();
+            if(!keys.contains(elem)){
+                keys.add(elem);
+            }
+        }
+    }
+    
+    /**
+      * Returns the size of a resource. Size for scalar types is always 1,
+      * and for vector/table types is the number of child resources.
+      * <br><b><font color='red'>Warning: </font></b> Integer array is treated as a scalar type. There are no
+      *          APIs to access individual members of an integer array. It
+      *          is always returned as a whole.
+      * @return number of resources in a given resource.
+      * @draft ICU 3.8
+      */
+    public int getSize() {
+        return size;
+    }
+
+    /**
+      * Returns the type of a resource.
+      * Available types are {@link #INT INT}, {@link #ARRAY ARRAY},
+      * {@link #BINARY BINARY}, {@link #INT_VECTOR INT_VECTOR},
+      * {@link #STRING STRING}, {@link #TABLE TABLE}.
+      *
+      * @return type of the given resource.
+      * @draft ICU 3.8
+      */
+    public int getType() {
+        int type = ICUResourceBundle.RES_GET_TYPE(resource);
+        if(type==TABLE32){
+            return TABLE; //Mask the table32's real type
+        }
+        return type;
+    }
+
+    /**
+      * Return the version number associated with this UResourceBundle as an
+      * VersionInfo object.
+      * @return VersionInfo object containing the version of the bundle
+      * @draft ICU 3.8
+      */
+    public VersionInfo getVersion() {
+        return null;
+    }
+    
+    /**
+      * Returns the iterator which iterates over this
+      * resource bundle
+      * @draft ICU 3.8
+      */
+    public UResourceBundleIterator getIterator() {
+        return new UResourceBundleIterator(this);
+    }
+    /**
+      * Returns the key associated with a given resource. Not all the resources have a key - only
+      * those that are members of a table.
+      * @return a key associated to this resource, or NULL if it doesn't have a key
+      * @draft ICU 3.8
+      */
+    public String getKey() {
+        return key;
+    }
+    /**
+      * Resource type constant for "no resource".
+      * @draft ICU 3.8
+      */
+    public static final int NONE = -1;
+
+    /**
+      * Resource type constant for strings.
+      * @draft ICU 3.8
+      */
+    public static final int STRING = 0;
+
+    /**
+      * Resource type constant for binary data.
+      * @draft ICU 3.8
+      */
+    public static final int BINARY = 1;
+
+    /**
+      * Resource type constant for tables of key-value pairs.
+      * @draft ICU 3.8
+      */
+    public static final int TABLE = 2;
+
+    /**
+      * Resource type constant for aliases;
+      * internally stores a string which identifies the actual resource
+      * storing the data (can be in a different resource bundle).
+      * Resolved internally before delivering the actual resource through the API.
+      * @draft ICU 3.8
+      * @internal
+      */
+    protected static final int ALIAS = 3;
+
+    /**
+      * Internal use only.
+      * Alternative resource type constant for tables of key-value pairs.
+      * Never returned by getType().
+      * @internal
+      * @draft ICU 3.8
+      */
+    protected static final int TABLE32 = 4;
+
+    /**
+      * Resource type constant for a single 28-bit integer, interpreted as
+      * signed or unsigned by the getInt() function.
+      * @see #getInt
+      * @draft ICU 3.8
+      */
+    public static final int INT = 7;
+
+    /**
+      * Resource type constant for arrays of resources.
+      * @draft ICU 3.8
+      */
+    public static final int ARRAY = 8;
+
+    /**
+      * Resource type constant for vectors of 32-bit integers.
+      * @see #getIntVector
+      * @draft ICU 3.8
+      */
+    public static final int INT_VECTOR = 14;
+
+    //====== protected members ==============
+    protected String key;
+    protected int size = 1;
+    protected long resource = RES_BOGUS;
+    protected boolean isTopLevel = false;
+
+    protected static final long RES_BOGUS = 0xffffffff;
+
+    protected UResourceBundle handleGet(String key, HashMap table, UResourceBundle requested) {
+        return null;
+    }
+    
+    protected UResourceBundle handleGet(int index, HashMap table, UResourceBundle requested) {
+        return null;
+    }
+    
+    protected UResourceBundle handleGet(int index, UResourceBundle requested) {
+        return null;
+    }
+
+    protected UResourceBundle handleGet(String key, UResourceBundle requested) {
+        return null;
+    }
+    
+    protected String[] handleGetStringArray() {
+        return null;
+    }
+    protected Enumeration handleGetKeys(){
+        Vector keys = new Vector();
+        UResourceBundle item = null;
+        for (int i = 0; i < size; i++) {
+            item = get(i);
+            keys.add(item.getKey());
+        }
+        return keys.elements();
+    }
+    // this method is declared in ResourceBundle class
+    // so cannot change the signature
+    protected Object handleGetObject(String key) {
+        return handleGetObjectImpl(key, this);
+    }
+
+    // To facilitate XPath style aliases we need a way to pass the reference
+    // to requested locale. The only way I could figure out is to implement
+    // the look up logic here. This has a disadvantage that if the client
+    // loads an ICUResourceBundle, calls ResourceBundle.getObject method
+    // with a key that does not exist in the bundle then the lookup is
+    // done twice before throwing a MissingResourceExpection.
+    private Object handleGetObjectImpl(String key, UResourceBundle requested) {
+        Object obj = resolveObject(key, requested);
+        if (obj == null) {
+            UResourceBundle parent = getParent();
+            if (parent != null) {
+                obj = parent.handleGetObjectImpl(key, requested);
+            }
+            if (obj == null)
+                throw new MissingResourceException(
+                    "Can't find resource for bundle "
+                    + this.getClass().getName() + ", key " + key,
+                    this.getClass().getName(), key);
+        }
+        return obj;
+    }
+    // Routine for figuring out the type of object to be returned
+    // string or string array
+    private Object resolveObject(String key, UResourceBundle requested) {
+        if (getType() == STRING) {
+            return getString();
+        }
+        UResourceBundle obj = handleGet(key, requested);
+        if (obj != null) {
+            if (obj.getType() == STRING) {
+                return obj.getString();
+            }
+            try {
+                if (obj.getType() == ARRAY) {
+                    return obj.handleGetStringArray();
+                }
+            } catch (UResourceTypeMismatchException ex) {
+                return obj;
+            }
+        }
+        return obj;
     }
 
     /**

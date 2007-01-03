@@ -14,6 +14,7 @@ import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.UResourceBundle;
 
 /**
  * A time zone based on the Olson database.  Olson time zones change
@@ -340,10 +341,10 @@ public class OlsonTimeZone extends TimeZone {
      * to lookup the rule that `res' may refer to, if there is one.
      * @param res the resource bundle of the zone to be constructed
      */
-    public OlsonTimeZone(ICUResourceBundle top, ICUResourceBundle res){
+    public OlsonTimeZone(UResourceBundle top, UResourceBundle res){
         construct(top, res);
     }
-    private void construct(ICUResourceBundle top, ICUResourceBundle res){
+    private void construct(UResourceBundle top, UResourceBundle res){
         
         if ((top == null || res == null)) {
             throw new IllegalArgumentException();
@@ -368,7 +369,7 @@ public class OlsonTimeZone extends TimeZone {
         }
 
         // Transitions list may be empty
-        ICUResourceBundle r = res.get(0);
+        UResourceBundle r = res.get(0);
         transitionTimes = r.getIntVector();
         
         if ((transitionTimes.length<0 || transitionTimes.length>0x7FFF) ) {
@@ -446,8 +447,8 @@ public class OlsonTimeZone extends TimeZone {
 
 
     public OlsonTimeZone(String id){
-        ICUResourceBundle top = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-        ICUResourceBundle res = ZoneMeta.openOlsonResource(id);
+        UResourceBundle top = (UResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        UResourceBundle res = ZoneMeta.openOlsonResource(id);
         construct(top, res);
         if(finalZone!=null){
             finalZone.setID(id);
@@ -641,8 +642,8 @@ public class OlsonTimeZone extends TimeZone {
         return julian - JULIAN_1970_CE; // JD => epoch day
     }
 
-    private static ICUResourceBundle loadRule(ICUResourceBundle top, String ruleid) {
-        ICUResourceBundle r = top.get("Rules");
+    private static UResourceBundle loadRule(UResourceBundle top, String ruleid) {
+        UResourceBundle r = top.get("Rules");
         r = r.get(ruleid);
         return r;
     }

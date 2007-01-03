@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -128,7 +128,7 @@ public class DisplayNameTest extends TestFmwk {
             ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(locale);
             ICUResourceBundle table = bundle.getWithFallback("zoneStrings");
             for (int i = 0; i < table.getSize(); ++i) {
-                ICUResourceBundle stringSet = table.get(i);
+                UResourceBundle stringSet = table.get(i);
                 //ICUResourceBundle stringSet = table.getWithFallback(String.valueOf(i));
                 String key = stringSet.getString(0);
                 if (SHOW_ALL) System.out.println("key: " + key);
