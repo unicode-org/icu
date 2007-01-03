@@ -2,7 +2,7 @@
 //
 //  file:  regexcmp.cpp
 //
-//  Copyright (C) 2002-2006 International Business Machines Corporation and others.
+//  Copyright (C) 2002-2007 International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains the ICU regular expression compiler, which is responsible
@@ -190,7 +190,7 @@ void    RegexCompile::compile(
         // We've found the row of the state table that matches the current input
         //   character from the rules string.
         // Perform any action specified  by this row in the state table.
-        if (doParseActions((EParseAction)tableEl->fAction) == FALSE) {
+        if (doParseActions(tableEl->fAction) == FALSE) {
             // Break out of the state machine loop if the
             //   the action signalled some kind of error, or
             //   the action was to exit, occurs on normal end-of-rules-input.
@@ -320,7 +320,7 @@ void    RegexCompile::compile(
 //
 //
 //------------------------------------------------------------------------------
-UBool RegexCompile::doParseActions(EParseAction action)
+UBool RegexCompile::doParseActions(int32_t action)
 {
     UBool   returnVal = TRUE;
 
@@ -341,7 +341,7 @@ UBool RegexCompile::doParseActions(EParseAction action)
 
         // Standard open nonCapture paren action emits the two NOPs and
         //   sets up the paren stack frame.
-        doParseActions((EParseAction)doOpenNonCaptureParen);
+        doParseActions(doOpenNonCaptureParen);
         break;
 
     case doPatFinish:
