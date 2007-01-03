@@ -113,7 +113,6 @@ icu4j/src/com/ibm/icu/impl/data/icudata.jar -text
 icu4j/src/com/ibm/icu/impl/data/th.brk -text
 icu4j/src/com/ibm/richtext/textapps/resources/unicode.arabic.red -text
 icu4j/src/com/ibm/richtext/textapps/resources/unicode.hebrew.red -text
-icu4j/test.txt -text
 tools/unicodetools/com/ibm/rbm/docs/images/TitleLogo_transparent.gif -text
 tools/unicodetools/com/ibm/rbm/docs/images/arrow_bullet.gif -text
 tools/unicodetools/com/ibm/rbm/docs/images/diamond_bullet.gif -text
