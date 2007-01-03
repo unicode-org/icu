@@ -328,6 +328,8 @@ int main (int argc, char *argv[])
        gtk_widget_show_all(app);
     }
     
+    poptFreeContext(ptctx);
+    
     gtk_main();
 
     delete font;
