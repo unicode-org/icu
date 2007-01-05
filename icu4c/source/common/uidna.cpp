@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2006, International Business Machines
+ *   Copyright (C) 2003-2007, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -31,15 +31,19 @@ static const UChar ACE_PREFIX[] ={ 0x0078,0x006E,0x002d,0x002d } ;
 #define ACE_PREFIX_LENGTH 4
 
 #define MAX_LABEL_LENGTH 63
-#define HYPHEN      0x002D
-/* The Max length of the labels should not be more than 64 */
-#define MAX_LABEL_BUFFER_SIZE 100 
-#define MAX_IDN_BUFFER_SIZE   300
+/* The Max length of the labels should not be more than MAX_LABEL_LENGTH */
+#define MAX_LABEL_BUFFER_SIZE MAX_LABEL_LENGTH+1
 
+#define MAX_DOMAIN_NAME_LENGTH 255
+/* The Max length of the domain names should not be more than MAX_DOMAIN_NAME_LENGTH */
+#define MAX_IDN_BUFFER_SIZE   MAX_DOMAIN_NAME_LENGTH+1
+
+#define LOWER_CASE_DELTA 0x0020
+#define HYPHEN           0x002D
+#define FULL_STOP        0x002E
 #define CAPITAL_A        0x0041
 #define CAPITAL_Z        0x005A
-#define LOWER_CASE_DELTA 0x0020
-#define FULL_STOP        0x002E
+
 #define DATA_FILE_NAME   "uidna"
 
 inline static UChar 
@@ -139,9 +143,8 @@ static inline UBool isLabelSeparator(UChar ch){
 // if *limit == separator then the length returned does not include 
 // the separtor.
 static inline int32_t
-getNextSeparator(UChar *src,int32_t srcLength,
-                 UChar **limit,
-                 UBool *done){
+getNextSeparator(UChar *src, int32_t srcLength,
+                 UChar **limit, UBool *done){
     if(srcLength == -1){
         int32_t i;
         for(i=0 ; ;i++){
@@ -223,6 +226,11 @@ _internal_toASCII(const UChar* src, int32_t srcLength,
         srcLength = u_strlen(src);
     }
     
+    if(srcLength > MAX_LABEL_LENGTH){
+        *status = U_IDNA_LABEL_TOO_LONG_ERROR;
+        return 0;
+    }
+
     // step 1 
     for( j=0;j<srcLength;j++){
         if(src[j] > 0x7F){
@@ -357,7 +365,7 @@ _internal_toASCII(const UChar* src, int32_t srcLength,
             goto CLEANUP;
         }
     }
-    // step 8: verify the length of lable
+    // step 8: verify the length of label
     if(reqLength > MAX_LABEL_LENGTH){
         *status = U_IDNA_LABEL_TOO_LONG_ERROR;
     }
@@ -431,6 +439,11 @@ _internal_toUnicode(const UChar* src, int32_t srcLength,
             }
         }
     }else{
+        return 0;
+    }
+    
+    if(srcLength > MAX_LABEL_LENGTH){
+        *status = U_IDNA_LABEL_TOO_LONG_ERROR;
         return 0;
     }
 
@@ -624,7 +637,7 @@ uidna_toUnicode(const UChar* src, int32_t srcLength,
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }  
-    
+
     UStringPrepProfile* nameprep = usprep_open(NULL, DATA_FILE_NAME, status);
     
     if(U_FAILURE(*status)){
@@ -722,6 +735,10 @@ uidna_IDNToASCII(  const UChar *src, int32_t srcLength,
 
     }
    
+    if(reqLength > MAX_DOMAIN_NAME_LENGTH){
+        *status = U_IDNA_DOMAIN_NAME_TOO_LONG_ERROR;
+    }
+
     usprep_close(nameprep);
     
     return u_terminateUChars(dest, destCapacity, reqLength, status);
@@ -767,6 +784,7 @@ uidna_IDNToUnicode(  const UChar* src, int32_t srcLength,
         if(labelLen==0 && done==FALSE){ 
             *status = U_IDNA_ZERO_LENGTH_LABEL_ERROR;
         }
+        
         labelReqLength = _internal_toUnicode(labelStart, labelLen, 
                                              currentDest, remainingDestCapacity, 
                                              options, nameprep, 
@@ -778,7 +796,6 @@ uidna_IDNToUnicode(  const UChar* src, int32_t srcLength,
             remainingDestCapacity = 0;
         }
 
-    
         if(U_FAILURE(*status)){
             break;
         }
@@ -810,7 +827,11 @@ uidna_IDNToUnicode(  const UChar* src, int32_t srcLength,
         }
 
     }
-   
+    
+    if(reqLength > MAX_DOMAIN_NAME_LENGTH){
+        *status = U_IDNA_DOMAIN_NAME_TOO_LONG_ERROR;
+    }
+
     usprep_close(nameprep);
     
     return u_terminateUChars(dest, destCapacity, reqLength, status);

@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2006, International Business Machines
+*   Copyright (C) 1997-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -164,7 +164,8 @@ _uIDNAErrorName[U_IDNA_ERROR_LIMIT - U_IDNA_ERROR_START] = {
      "U_IDNA_ACE_PREFIX_ERROR",
      "U_IDNA_VERIFICATION_ERROR",
      "U_IDNA_LABEL_TOO_LONG_ERROR",
-     "U_IDNA_ZERO_LENGTH_LABEL_ERROR"
+     "U_IDNA_ZERO_LENGTH_LABEL_ERROR",
+     "U_IDNA_DOMAIN_NAME_TOO_LONG_ERROR"
 };
 
 U_CAPI const char * U_EXPORT2
