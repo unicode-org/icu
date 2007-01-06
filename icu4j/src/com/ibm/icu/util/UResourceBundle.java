@@ -1,3 +1,4 @@
+//##header
 /*
  *******************************************************************************
  * Copyright (C) 2004-2007, International Business Machines Corporation and    *
@@ -8,7 +9,6 @@
 package com.ibm.icu.util;
 
 import java.lang.ref.SoftReference;
-import java.nio.ByteBuffer;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Locale;
@@ -21,6 +21,12 @@ import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICUResourceBundleReader;
 import com.ibm.icu.impl.ResourceBundleWrapper;
 import com.ibm.icu.util.ULocale;
+
+//#ifndef FOUNDATION
+import java.nio.ByteBuffer;
+//#else
+//##import com.ibm.icu.impl.ByteBuffer;
+//#endif
 
 /**
  * A class representing a collection of resource information pertaining to a given
@@ -278,6 +284,7 @@ public abstract class UResourceBundle extends ResourceBundle{
     }
 
     /**
+     * Method used by subclasses to add the a particular resource bundle object to the managed cache
      * @internal revisit for ICU 3.6
      * @deprecated This API is ICU internal only.
      */
@@ -288,6 +295,7 @@ public abstract class UResourceBundle extends ResourceBundle{
         }
     }
     /**
+     * Method used by sub classes to load a resource bundle object from the managed cache
      * @internal revisit for ICU 3.6
      * @deprecated This API is ICU internal only.
      */
@@ -543,7 +551,6 @@ public abstract class UResourceBundle extends ResourceBundle{
       * @return a string
       * @see #getString()
       * @see #getIntVector
-      * @see #
       * @throws MissingResourceException
       * @throws UResourceTypeMismatchException
       * @draft ICU 3.8
@@ -661,6 +668,7 @@ public abstract class UResourceBundle extends ResourceBundle{
       * @param index             an index to the wanted resource.
       * @return                  the sub resource UResourceBundle object
       * @throws IndexOutOfBoundsException
+      * @throws MissingResourceException
       * @draft ICU 3.8
       */
     public UResourceBundle get(int index) {
@@ -749,6 +757,7 @@ public abstract class UResourceBundle extends ResourceBundle{
       * Returns the iterator which iterates over this
       * resource bundle
       * @draft ICU 3.8
+      * @return UResourceBundleIterator that iterates over the resources in the bundle
       */
     public UResourceBundleIterator getIterator() {
         return new UResourceBundleIterator(this);
@@ -756,7 +765,7 @@ public abstract class UResourceBundle extends ResourceBundle{
     /**
       * Returns the key associated with a given resource. Not all the resources have a key - only
       * those that are members of a table.
-      * @return a key associated to this resource, or NULL if it doesn't have a key
+      * @return a key associated to this resource, or null if it doesn't have a key
       * @draft ICU 3.8
       */
     public String getKey() {
@@ -827,32 +836,59 @@ public abstract class UResourceBundle extends ResourceBundle{
     public static final int INT_VECTOR = 14;
 
     //====== protected members ==============
+    /**
+     * Data member where the subclasses store the key
+     */
     protected String key;
     protected int size = 1;
     protected long resource = RES_BOGUS;
     protected boolean isTopLevel = false;
 
-    protected static final long RES_BOGUS = 0xffffffff;
+    private static final long RES_BOGUS = 0xffffffff;
 
+    /**
+     * Actual worker method for fetching a resource based on the given key.
+     * Sub classes must override this method if they support resources with keys.
+     * @param key the key string of the resource to be fetched
+     * @param table hastable object to hold references of resources already seen
+     * @param requested the original resource bundle object on which the get method was invoked.
+     *                  The requested bundle and the bundle on which this method is invoked
+     *                  are the same, except in the cases where aliases are involved.
+     * @return UResourceBundle a resource assoicated with the key 
+     */
     protected UResourceBundle handleGet(String key, HashMap table, UResourceBundle requested) {
         return null;
     }
     
+    /**
+     * Actual worker method for fetching a resource based on the given index.
+     * Sub classes must override this method if they support arrays of resources.
+     * @param index the index of the resource to be fetched
+     * @param table hastable object to hold references of resources already seen
+     * @param requested the original resource bundle object on which the get method was invoked.
+     *                  The requested bundle and the bundle on which this method is invoked
+     *                  are the same, except in the cases where aliases are involved.
+     * @return UResourceBundle a resource assoicated with the index 
+     */
     protected UResourceBundle handleGet(int index, HashMap table, UResourceBundle requested) {
         return null;
     }
     
-    protected UResourceBundle handleGet(int index, UResourceBundle requested) {
-        return null;
-    }
-
-    protected UResourceBundle handleGet(String key, UResourceBundle requested) {
-        return null;
-    }
-    
+    /**
+     * Actual worker method for fetching the array of strings in a resource.
+     * Sub classes must override this method if they support arrays of strings.
+     * @return String[] An array of strings containing strings 
+     */
     protected String[] handleGetStringArray() {
         return null;
     }
+    
+    /**
+     * Actual worker method for fetching the keys of resources contained in the resource.
+     * Sub classes must override this method if they support keys and associated resources.
+     * 
+     * @return Enumeration An enumeration of all the keys in this resource.
+     */
     protected Enumeration handleGetKeys(){
         Vector keys = new Vector();
         UResourceBundle item = null;
@@ -862,12 +898,20 @@ public abstract class UResourceBundle extends ResourceBundle{
         }
         return keys.elements();
     }
+    
+    /**
+     * Override the superclass method
+     */
     // this method is declared in ResourceBundle class
     // so cannot change the signature
+    // Override this method
     protected Object handleGetObject(String key) {
         return handleGetObjectImpl(key, this);
     }
 
+    /**
+     * Override the superclass method
+     */
     // To facilitate XPath style aliases we need a way to pass the reference
     // to requested locale. The only way I could figure out is to implement
     // the look up logic here. This has a disadvantage that if the client
@@ -889,13 +933,14 @@ public abstract class UResourceBundle extends ResourceBundle{
         }
         return obj;
     }
+    
     // Routine for figuring out the type of object to be returned
     // string or string array
     private Object resolveObject(String key, UResourceBundle requested) {
         if (getType() == STRING) {
             return getString();
         }
-        UResourceBundle obj = handleGet(key, requested);
+        UResourceBundle obj = handleGet(key, null, requested);
         if (obj != null) {
             if (obj.getType() == STRING) {
                 return obj.getString();
@@ -912,6 +957,8 @@ public abstract class UResourceBundle extends ResourceBundle{
     }
 
     /**
+     * This method is for setting the loading status of the resource. 
+     * The status is analogous to the warning status in ICU4C.
      * @internal
      * @deprecated This API is ICU internal only.
      */

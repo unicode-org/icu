@@ -682,7 +682,7 @@ public  class ICUResourceBundle extends UResourceBundle {
             ICUResourceBundle current = (ICUResourceBundle) actualBundle;
             while (st.hasMoreTokens()) {
                 String subKey = st.nextToken();
-                sub =  (ICUResourceBundle)current.handleGet(subKey, requested);
+                sub =  (ICUResourceBundle)current.handleGet(subKey, null, requested);
                 if (sub == null) {
                     break;
                 }
@@ -885,7 +885,7 @@ public  class ICUResourceBundle extends UResourceBundle {
         if (type == TABLE) {
             ICUResourceBundleImpl.ResourceTable table = new ICUResourceBundleImpl.ResourceTable(reader, baseName, localeID, loader);
             if(table.getSize()==1){
-                UResourceBundle b = table.handleGet(0, table);
+                UResourceBundle b = table.handleGet(0, null, table);
                 String itemKey = b.getKey();
                 
                 // %%ALIAS is such a hack!
