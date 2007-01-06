@@ -1,12 +1,12 @@
+//##header
 /**
  *******************************************************************************
- * Copyright (C) 2001-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.impl;
 
-import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.MissingResourceException;
 
@@ -14,6 +14,10 @@ import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceBundleIterator;
 import com.ibm.icu.util.UResourceTypeMismatchException;
+
+//#ifndef FOUNDATION 
+import java.nio.ByteBuffer; 
+//#endif 
 
 class ICUResourceBundleImpl {
     
@@ -33,9 +37,7 @@ class ICUResourceBundleImpl {
         public String[] getStringArray() {
             return handleGetStringArray();
         }
-        protected UResourceBundle handleGet(String index, UResourceBundle requested) {
-            return handleGet(index, null, requested);
-        }
+
         protected UResourceBundle handleGet(String index, HashMap table, UResourceBundle requested) {
             int val = getIndex(index);
             if (val > -1) {
@@ -43,9 +45,7 @@ class ICUResourceBundleImpl {
             }
             throw new UResourceTypeMismatchException("Could not get the correct value for index: "+ index);
         }
-        protected UResourceBundle handleGet(int index, UResourceBundle requested) {
-            return handleGet(index, null, requested);
-        }
+
         protected UResourceBundle handleGet(int index, HashMap table, UResourceBundle requested) {
             if (index > size) {
                 throw new IndexOutOfBoundsException();
@@ -156,9 +156,6 @@ class ICUResourceBundleImpl {
     
     static final class ResourceTable extends ICUResourceBundle {
 
-        protected UResourceBundle handleGet(String key, UResourceBundle requested) {
-            return handleGet(key, null, requested);
-        }
         protected UResourceBundle handleGet(String key, HashMap table, UResourceBundle requested) {
             if(size<=0){
                 return null;
@@ -182,9 +179,7 @@ class ICUResourceBundleImpl {
             String path = (isTopLevel == true) ? key : resPath + "/" + key;
             return createBundleObject(key, resource, path, table, requested, this);
         }
-        protected UResourceBundle handleGet(int index, UResourceBundle requested) {
-            return handleGet(index, null, requested);
-        }
+
         public String getKey(int currentOffset, int index) {
             int charOffset = currentOffset + getCharOffset(index);
             int keyOffset = getChar(rawData,charOffset);
@@ -244,12 +239,6 @@ class ICUResourceBundleImpl {
     }
     static final class ResourceTable32 extends ICUResourceBundle{
 
-        protected UResourceBundle handleGet(String key, UResourceBundle requested) {
-            if(size<=0){
-                return null;
-            }
-            return handleGet(key, null, requested);
-        }
         protected UResourceBundle handleGet(String key, HashMap table, UResourceBundle requested) {
             int offset = RES_GET_OFFSET(resource);
             // offset+0 contains number of entries
@@ -269,15 +258,16 @@ class ICUResourceBundleImpl {
             String path = (isTopLevel == true) ? key : resPath + "/" + key;
             return createBundleObject(key, resource, path, table, requested, this);
         }
-        protected UResourceBundle handleGet(int index, UResourceBundle requested) {
-            return handleGet(index, null, requested);
-        }
+
         public String getKey(int currentOffset, int index) {
             int charOffset = currentOffset + getIntOffset(index);
             int keyOffset = ICUResourceBundle.getInt(rawData,charOffset);
             return RES_GET_KEY(rawData, keyOffset).toString();
         }
         protected UResourceBundle handleGet(int index, HashMap table, UResourceBundle requested) {
+            if(size<=0){
+                return null;
+            }
             if (index > size) {
                 throw new IndexOutOfBoundsException();
             }
