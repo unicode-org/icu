@@ -1,16 +1,16 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
-/********************************************************************************
+/*******************************************************************************
 *
 * File CALLCOLL.C
 *
 * Modification History:
 *        Name                     Description            
 *     Madhu Katragadda              Ported for C API
-*********************************************************************************
+********************************************************************************
 */
 
 /*
@@ -1281,19 +1281,20 @@ static void TestJ5298(void)
    const char *keywordValue = NULL;
    log_verbose("Number of collator locales returned : %i \n", ucol_countAvailable());
    for (i = 0; i < ucol_countAvailable(); i++) {
-     values = ucol_getKeywordValues("collation", &status);
-     while ((keywordValue = uenum_next(values, NULL, &status)) != NULL) {
-       strcpy(input, ucol_getAvailable(i));
-       if (strcmp(keywordValue, "standard") != 0) {
-           strcat(input, "@collation=");
-           strcat(input, keywordValue);
-       }
+       values = ucol_getKeywordValues("collation", &status);
+       while ((keywordValue = uenum_next(values, NULL, &status)) != NULL) {
+           strcpy(input, ucol_getAvailable(i));
+           if (strcmp(keywordValue, "standard") != 0) {
+               strcat(input, "@collation=");
+               strcat(input, keywordValue);
+           }
        
-       ucol_getFunctionalEquivalent(output, 256, "collation", input, &isAvailable, &status);
-       if (strcmp(input, output) == 0) { /* Unique locale, print it out */
-           log_verbose("%s, \n", output);
+           ucol_getFunctionalEquivalent(output, 256, "collation", input, &isAvailable, &status);
+           if (strcmp(input, output) == 0) { /* Unique locale, print it out */
+               log_verbose("%s, \n", output);
+           }
        }
-     }
+       uenum_close(values);
    }
    log_verbose("\n");
 }
