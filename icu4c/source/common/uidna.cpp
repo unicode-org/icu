@@ -32,7 +32,7 @@ static const UChar ACE_PREFIX[] ={ 0x0078,0x006E,0x002d,0x002d } ;
 
 #define MAX_LABEL_LENGTH 63
 /* The Max length of the labels should not be more than MAX_LABEL_LENGTH */
-#define MAX_LABEL_BUFFER_SIZE MAX_LABEL_LENGTH+1
+#define MAX_LABEL_BUFFER_SIZE 100
 
 #define MAX_DOMAIN_NAME_LENGTH 255
 /* The Max length of the domain names should not be more than MAX_DOMAIN_NAME_LENGTH */
@@ -226,9 +226,13 @@ _internal_toASCII(const UChar* src, int32_t srcLength,
         srcLength = u_strlen(src);
     }
     
-    if(srcLength > MAX_LABEL_LENGTH){
-        *status = U_IDNA_LABEL_TOO_LONG_ERROR;
-        return 0;
+    if(srcLength > b1Capacity){
+        b1 = (UChar*) uprv_malloc(srcLength * U_SIZEOF_UCHAR);
+        if(b1==NULL){
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            goto CLEANUP;
+        }
+        b1Capacity = srcLength;
     }
 
     // step 1 
@@ -248,6 +252,9 @@ _internal_toASCII(const UChar* src, int32_t srcLength,
         if(*status == U_BUFFER_OVERFLOW_ERROR){
             // redo processing of string
             // we do not have enough room so grow the buffer
+            if(b1 != b1Stack){
+                uprv_free(b1);
+            }
             b1 = (UChar*) uprv_malloc(b1Len * U_SIZEOF_UCHAR);
             if(b1==NULL){
                 *status = U_MEMORY_ALLOCATION_ERROR;
@@ -442,11 +449,6 @@ _internal_toUnicode(const UChar* src, int32_t srcLength,
         return 0;
     }
     
-    if(srcLength > MAX_LABEL_LENGTH){
-        *status = U_IDNA_LABEL_TOO_LONG_ERROR;
-        return 0;
-    }
-
     if(srcIsASCII == FALSE){
         // step 2: process the string
         b1Len = usprep_prepare(nameprep, src, srcLength, b1, b1Capacity, namePrepOptions, parseError, status);
