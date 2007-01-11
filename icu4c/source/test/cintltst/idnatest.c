@@ -723,16 +723,36 @@ static void TestJB4475(){
 
 static void TestLength(){
     {
-        static const char* cl = "my_very_very_very_very_very_very_very_long_and_incredibly_uncreative_domain_label";
+        static const char* cl = "my_very_very_very_very_very_very_very_very_very_very_very_very_very_long_and_incredibly_uncreative_domain_label";
         UChar ul[128] = {'\0'};
         UChar dest[256] = {'\0'};
+        /* this unicode string is longer than MAX_LABEL_BUFFER_SIZE and produces an 
+           IDNA prepared string (including xn--)that is exactly 63 bytes long */
+        UChar ul1[] = { 0xC138, 0xACC4, 0xC758, 0xBAA8, 0xB4E0, 0xC0AC, 0xB78C, 0xB4E4, 0xC774, 
+                        0xD55C, 0xAD6D, 0xC5B4, 0xB97C, 0xC774, 0x00AD, 0x034F, 0x1806, 0x180B, 
+                        0x180C, 0x180D, 0x200B, 0x200C, 0x200D, 0x2060, 0xFE00, 0xFE01, 0xFE02, 
+                        0xFE03, 0xFE04, 0xFE05, 0xFE06, 0xFE07, 0xFE08, 0xFE09, 0xFE0A, 0xFE0B, 
+                        0xFE0C, 0xFE0D, 0xFE0E, 0xFE0F, 0xFEFF, 0xD574, 0xD55C, 0xB2E4, 0xBA74, 
+                        0xC138, 0x0041, 0x00AD, 0x034F, 0x1806, 0x180B, 0x180C, 0x180D, 0x200B, 
+                        0x200C, 0x200D, 0x2060, 0xFE00, 0xFE01, 0xFE02, 0xFE03, 0xFE04, 0xFE05, 
+                        0xFE06, 0xFE07, 0xFE08, 0xFE09, 0xFE0A, 0xFE0B, 0xFE0C, 0xFE0D, 0xFE0E, 
+                        0xFE0F, 0xFEFF, 0x00AD, 0x034F, 0x1806, 0x180B, 0x180C, 0x180D, 0x200B, 
+                        0x200C, 0x200D, 0x2060, 0xFE00, 0xFE01, 0xFE02, 0xFE03, 0xFE04, 0xFE05, 
+                        0xFE06, 0xFE07, 0xFE08, 0xFE09, 0xFE0A, 0xFE0B, 0xFE0C, 0xFE0D, 0xFE0E, 
+                        0xFE0F, 0xFEFF, 0x00AD, 0x034F, 0x1806, 0x180B, 0x180C, 0x180D, 0x200B, 
+                        0x200C, 0x200D, 0x2060, 0xFE00, 0xFE01, 0xFE02, 0xFE03, 0xFE04, 0xFE05, 
+                        0xFE06, 0xFE07, 0xFE08, 0xFE09, 0xFE0A, 0xFE0B, 0xFE0C, 0xFE0D, 0xFE0E, 
+                        0xFE0F, 0xFEFF, 0x0000
+                      };
+
+        int32_t len1 = LENGTHOF(ul1)-1/*remove the null termination*/;
         int32_t destLen = LENGTHOF(dest);
         UErrorCode status = U_ZERO_ERROR;
         UParseError ps;
         int32_t len = (int32_t)strlen(cl);
         u_charsToUChars(cl, ul, len+1);
         destLen = uidna_toUnicode(ul, len, dest, destLen, UIDNA_DEFAULT, &ps, &status);
-        if(status != U_IDNA_LABEL_TOO_LONG_ERROR){
+        if(status != U_ZERO_ERROR){
             log_err("uidna_toUnicode failed with error %s.\n", u_errorName(status));
         }
 
@@ -740,13 +760,12 @@ static void TestLength(){
         destLen = LENGTHOF(dest);
         len = -1;
         destLen = uidna_toUnicode(ul, len, dest, destLen, UIDNA_DEFAULT, &ps, &status);
-        if(status != U_IDNA_LABEL_TOO_LONG_ERROR){
+        if(status != U_ZERO_ERROR){
             log_err("uidna_toUnicode failed with error %s.\n", u_errorName(status));
         }
-        
         status = U_ZERO_ERROR;
         destLen = LENGTHOF(dest);
-        len = -1;
+        len = (int32_t)strlen(cl);
         destLen = uidna_toASCII(ul, len, dest, destLen, UIDNA_DEFAULT, &ps, &status);
         if(status != U_IDNA_LABEL_TOO_LONG_ERROR){
             log_err("uidna_toASCII failed with error %s.\n", u_errorName(status));
@@ -757,6 +776,21 @@ static void TestLength(){
         len = -1;
         destLen = uidna_toASCII(ul, len, dest, destLen, UIDNA_DEFAULT, &ps, &status);
         if(status != U_IDNA_LABEL_TOO_LONG_ERROR){
+            log_err("uidna_toASCII failed with error %s.\n", u_errorName(status));
+        }
+
+        status = U_ZERO_ERROR;
+        destLen = LENGTHOF(dest);
+        destLen = uidna_toASCII(ul1, len1, dest, destLen, UIDNA_DEFAULT, &ps, &status);
+        if(status != U_ZERO_ERROR){
+            log_err("uidna_toASCII failed with error %s.\n", u_errorName(status));
+        }
+        
+        status = U_ZERO_ERROR;
+        destLen = LENGTHOF(dest);
+        len1 = -1;
+        destLen = uidna_toASCII(ul1, len1, dest, destLen, UIDNA_DEFAULT, &ps, &status);
+        if(status != U_ZERO_ERROR){
             log_err("uidna_toASCII failed with error %s.\n", u_errorName(status));
         }
     }
@@ -785,7 +819,7 @@ static void TestLength(){
         
         status = U_ZERO_ERROR;
         destLen = LENGTHOF(dest);
-        len = -1;
+        len = (int32_t)strlen(cl);
         destLen = uidna_IDNToASCII(ul, len, dest, destLen, UIDNA_DEFAULT, &ps, &status);
         if(status != U_IDNA_DOMAIN_NAME_TOO_LONG_ERROR){
             log_err("uidna_IDNToASCII failed with error %s.\n", u_errorName(status));
