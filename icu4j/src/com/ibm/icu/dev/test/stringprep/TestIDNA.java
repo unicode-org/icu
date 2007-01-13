@@ -843,4 +843,74 @@ public class TestIDNA extends TestFmwk {
             errln("ToUnicode operation failed! "+ex.getMessage());
         }
     }
+    
+    public void TestLength(){
+        String ul = "my_very_very_very_very_very_very_very_very_very_very_very_very_very_long_and_incredibly_uncreative_domain_label";
+
+        /* this unicode string is longer than MAX_LABEL_BUFFER_SIZE and produces an 
+           IDNA prepared string (including xn--)that is exactly 63 bytes long */
+        String ul1 ="\uC138\uACC4\uC758\uBAA8\uB4E0\uC0AC\uB78C\uB4E4\uC774"+
+                    "\uD55C\uAD6D\uC5B4\uB97C\uC774\u00AD\u034F\u1806\u180B"+
+                    "\u180C\u180D\u200B\u200C\u200D\u2060\uFE00\uFE01\uFE02"+
+                    "\uFE03\uFE04\uFE05\uFE06\uFE07\uFE08\uFE09\uFE0A\uFE0B"+
+                    "\uFE0C\uFE0D\uFE0E\uFE0F\uFEFF\uD574\uD55C\uB2E4\uBA74"+
+                    "\uC138\u0041\u00AD\u034F\u1806\u180B\u180C\u180D\u200B"+
+                    "\u200C\u200D\u2060\uFE00\uFE01\uFE02\uFE03\uFE04\uFE05"+
+                    "\uFE06\uFE07\uFE08\uFE09\uFE0A\uFE0B\uFE0C\uFE0D\uFE0E"+
+                    "\uFE0F\uFEFF\u00AD\u034F\u1806\u180B\u180C\u180D\u200B"+
+                    "\u200C\u200D\u2060\uFE00\uFE01\uFE02\uFE03\uFE04\uFE05"+
+                    "\uFE06\uFE07\uFE08\uFE09\uFE0A\uFE0B\uFE0C\uFE0D\uFE0E"+
+                    "\uFE0F\uFEFF\u00AD\u034F\u1806\u180B\u180C\u180D\u200B"+
+                    "\u200C\u200D\u2060\uFE00\uFE01\uFE02\uFE03\uFE04\uFE05"+
+                    "\uFE06\uFE07\uFE08\uFE09\uFE0A\uFE0B\uFE0C\uFE0D\uFE0E"+
+                    "\uFE0F\uFEFF";
+        try{
+            IDNA.convertToASCII(ul, IDNA.DEFAULT);
+            errln("IDNA.convertToUnicode did not fail!");
+        }catch (StringPrepParseException ex){
+            if(ex.getError()!= StringPrepParseException.LABEL_TOO_LONG_ERROR){
+                errln("IDNA.convertToASCII failed with error: "+ex.toString());
+            }else{
+                logln("IDNA.convertToASCII(ul, IDNA.DEFAULT) Succeeded");
+            }
+        }
+        try{
+            IDNA.convertToASCII(ul1, IDNA.DEFAULT);
+        }catch (StringPrepParseException ex){
+            errln("IDNA.convertToASCII failed with error: "+ex.toString());
+        }
+        try{
+            IDNA.convertToUnicode(ul1, IDNA.DEFAULT);
+        }catch (StringPrepParseException ex){
+            errln("IDNA.convertToASCII failed with error: "+ex.toString());
+        }
+        try{
+            IDNA.convertToUnicode(ul, IDNA.DEFAULT);
+        }catch (StringPrepParseException ex){
+            errln("IDNA.convertToASCII failed with error: "+ex.toString());
+        }
+        
+        String idn = "my_very_very_long_and_incredibly_uncreative_domain_label.my_very_very_long_and_incredibly_uncreative_domain_label.my_very_very_long_and_incredibly_uncreative_domain_label.my_very_very_long_and_incredibly_uncreative_domain_label.my_very_very_long_and_incredibly_uncreative_domain_label.my_very_very_long_and_incredibly_uncreative_domain_label.ibm.com";
+        try{
+            IDNA.convertIDNToASCII(idn, IDNA.DEFAULT);
+            errln("IDNA.convertToUnicode did not fail!");
+        }catch (StringPrepParseException ex){
+            if(ex.getError()!= StringPrepParseException.DOMAIN_NAME_TOO_LONG_ERROR){
+                errln("IDNA.convertToASCII failed with error: "+ex.toString());
+            }else{
+                logln("IDNA.convertToASCII(idn, IDNA.DEFAULT) Succeeded");
+            }
+        }
+        try{
+            IDNA.convertIDNToUnicode(idn, IDNA.DEFAULT);
+            errln("IDNA.convertToUnicode did not fail!");  
+        }catch (StringPrepParseException ex){
+            if(ex.getError()!= StringPrepParseException.DOMAIN_NAME_TOO_LONG_ERROR){
+                errln("IDNA.convertToUnicode failed with error: "+ex.toString());
+            }else{
+                logln("IDNA.convertToUnicode(idn, IDNA.DEFAULT) Succeeded");
+            }
+        }
+        
+    }
 }

@@ -61,9 +61,14 @@ public class StringPrepParseException extends ParseException {
     public static final int BUFFER_OVERFLOW_ERROR   = 9;
     
     /**
-     * @stable ICU 2.2
+     * @stable ICU 2.8
      */
     public static final int ZERO_LENGTH_LABEL   = 10;
+    
+    /**
+     * @draft ICU 3.8
+     */
+    public static final int DOMAIN_NAME_TOO_LONG_ERROR   = 11;
     
     /**
      * Construct a ParseException object with the given message
@@ -202,5 +207,15 @@ public class StringPrepParseException extends ParseException {
     private void setContext(String str,int pos){
         setPreContext(str,pos);
         setPostContext(str,pos);
+    }
+    
+    /**
+     * Returns the error code of this exception. 
+     * This method is only used for testing to verify the error.
+     * @return The error code
+     * @draft ICU 3.8
+     */
+    public int getError(){
+        return error;
     }
 }
