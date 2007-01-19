@@ -1,4 +1,5 @@
 * text=auto !eol
+icu4c/delete/tmp -text
 icu4c/license.html svneol=native#text/html
 icu4c/readme.html svneol=native#text/html
 icu4c/source/data/build.xml svneol=native#text/xml
