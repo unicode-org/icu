@@ -48,6 +48,7 @@ README text !eol
 *.spp -text
 *.tri2 -text
 
+icu4c/delete/tmp -text
 icu4c/source/samples/ucnv/data02.bin -text
 icu4c/source/test/testdata/icu26_testtypes.res -text
 icu4c/source/test/testdata/icu26e_testtypes.res -text
