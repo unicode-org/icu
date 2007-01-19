@@ -1,4 +1,4 @@
-# Copyright (c) 2005-2006 International Business Machines 
+# Copyright (c) 2005-2007 International Business Machines 
 # Corporation and others. All Rights Reserved.
 # suffix matches
 *.brk
@@ -199,4 +199,5 @@ icuhtml/icu.sf.net/meetings/*.*
 icuhtml/icu.sf.net/ssi/footer.html
 icuhtml/icu.sf.net/ssi/header.html
 icuapps/redemo/readme
+icuapps/datacustom/gendatadep/resources/pkgdatain.txt
 icuapps/configure
