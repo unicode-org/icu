@@ -1,6 +1,6 @@
 # ******************************************************************************
 # *
-# *   Copyright (C) 1995-2006, International Business Machines
+# *   Copyright (C) 1995-2007, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 # *
 # ******************************************************************************
@@ -235,12 +235,12 @@ UTF-7 { IANA* MIME* WINDOWS }   windows-65000 { WINDOWS* }
 IMAP-mailbox-name
 
 SCSU { IANA* }
-    ibm-1212 { IBM* } # SCSU with IBM PUA
-    ibm-1213 { IBM }  # SCSU
+    ibm-1212 { IBM }  # SCSU with IBM PUA
+    ibm-1213 { IBM* } # SCSU
 BOCU-1 { IANA* }
     csBOCU-1 { IANA }
-    ibm-1214 { IBM* } # BOCU-1 with IBM PUA
-    ibm-1215 { IBM }  # BOCU-1
+    ibm-1214 { IBM }  # BOCU-1 with IBM PUA
+    ibm-1215 { IBM* } # BOCU-1
 
 # See http://www.unicode.org/unicode/reports/tr26 for this Compatibility Encoding Scheme for UTF-16
 # The Unicode Consortium does not encourage the use of CESU-8
@@ -711,12 +711,12 @@ ibm-850_P100-1995 { UTR22* }    ibm-850 { IBM* } IBM850 { IANA* WINDOWS JAVA } c
 ibm-851_P100-1995 { UTR22* }    ibm-851 { IBM* } IBM851 { IANA* } cp851 { IANA MIME* } 851 { IANA } csPC851 { IANA }             # PC DOS Greek (w/o euro)
 ibm-852_P100-1995 { UTR22* }    ibm-852 { IBM* } IBM852 { IANA* WINDOWS JAVA } cp852 { IANA WINDOWS JAVA* } 852 { IANA WINDOWS JAVA } csPCp852 { IANA JAVA } windows-852 { WINDOWS* } # PC latin2 (w/o euro update)
 ibm-855_P100-1995 { UTR22* }    ibm-855 { IBM* } IBM855 { IANA* JAVA } cp855 { IANA JAVA* } 855 { IANA } csIBM855 { IANA } csPCp855 { JAVA } # PC cyrillic (w/o euro update)
-ibm-856_P100-1995 { UTR22* }    ibm-856 { IBM* } IBM856 { JAVA } cp856 { MIME* JAVA* } 856 { JAVA }  # PC Hebrew (old)
+ibm-856_P100-1995 { UTR22* }    ibm-856 { IBM* } IBM856 { JAVA } cp856 { MIME* JAVA* } 856 { JAVA }  # PC Hebrew implicit order
 ibm-857_P100-1995 { UTR22* }    ibm-857 { IBM* } IBM857 { IANA* WINDOWS JAVA } cp857 { IANA MIME* JAVA* } 857 { IANA JAVA } csIBM857 { IANA JAVA } windows-857 { WINDOWS* }   # PC Latin 5 (w/o euro update)
 ibm-858_P100-1997 { UTR22* }    ibm-858 { IBM* } IBM00858 { IANA* JAVA } CCSID00858 { IANA JAVA } CP00858 { IANA JAVA } PC-Multilingual-850+euro { IANA } cp858 { MIME* JAVA* }  # PC latin1 with Euro
 ibm-860_P100-1995 { UTR22* }    ibm-860 { IBM* } IBM860 { IANA* JAVA } cp860 { IANA MIME* JAVA* } 860 { IANA JAVA } csIBM860 { IANA JAVA }    # PC Portugal
 ibm-861_P100-1995 { UTR22* }    ibm-861 { IBM* } IBM861 { IANA* WINDOWS JAVA } cp861 { IANA MIME* JAVA* } 861 { IANA JAVA } cp-is { IANA JAVA } csIBM861 { IANA JAVA } windows-861 { WINDOWS* } # PC Iceland
-ibm-862_P100-1995 { UTR22* }    ibm-862 { IBM* } IBM862 { IANA* JAVA } cp862 { IANA MIME* JAVA* } 862 { IANA JAVA } csPC862LatinHebrew { IANA JAVA } DOS-862 { WINDOWS } windows-862 { WINDOWS* }    # PC Hebrew (w/o euro update)
+ibm-862_P100-1995 { UTR22* }    ibm-862 { IBM* } IBM862 { IANA* JAVA } cp862 { IANA MIME* JAVA* } 862 { IANA JAVA } csPC862LatinHebrew { IANA JAVA } DOS-862 { WINDOWS } windows-862 { WINDOWS* }    # PC Hebrew visual order (w/o euro update)
 ibm-863_P100-1995 { UTR22* }    ibm-863 { IBM* } IBM863 { IANA* JAVA } cp863 { IANA MIME* JAVA* } 863 { IANA JAVA } csIBM863 { IANA JAVA }    # PC Canadian French
 ibm-864_X110-1999 { UTR22* }    ibm-864 { IBM* } IBM864 { IANA* JAVA } cp864 { IANA MIME* JAVA* } csIBM864 { IANA JAVA } # PC Arabic (w/o euro update)
 ibm-865_P100-1995 { UTR22* }    ibm-865 { IBM* } IBM865 { IANA* JAVA } cp865 { IANA MIME* JAVA* } 865 { IANA JAVA } csIBM865 { IANA JAVA }    # PC Nordic
@@ -800,7 +800,7 @@ HZ                              HZ-GB-2312 { IANA* }
 ibm-897_P100-1995 { UTR22* }    ibm-897 { IBM* } JIS_X0201 { IANA* } X0201 { IANA } csHalfWidthKatakana { IANA }
 
 
-ISCII,version=0         x-iscii-de { WINDOWS } windows-57002 { WINDOWS* } iscii-dev
+ISCII,version=0         x-iscii-de { WINDOWS } windows-57002 { WINDOWS* } iscii-dev ibm-4902 { IBM* } # ibm-806 contains non-standard box drawing symbols.
 ISCII,version=1         x-iscii-be { WINDOWS } windows-57003 { WINDOWS* } iscii-bng windows-57006 { WINDOWS } x-iscii-as { WINDOWS } # be is different from as on Windows.
 ISCII,version=2         x-iscii-pa { WINDOWS } windows-57011 { WINDOWS* } iscii-gur
 ISCII,version=3         x-iscii-gu { WINDOWS } windows-57010 { WINDOWS* } iscii-guj
