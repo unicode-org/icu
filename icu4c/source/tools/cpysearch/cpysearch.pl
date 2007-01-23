@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #  ***********************************************************************
 #  * COPYRIGHT:
-#  * Copyright (c) 2002-2005, International Business Machines Corporation
+#  * Copyright (c) 2002-2007, International Business Machines Corporation
 #  * and others. All Rights Reserved.
 #  ***********************************************************************
 #
@@ -11,7 +11,7 @@
 use strict;
 
 my $icuSource = $ARGV[0];
-my $ignore = "CVS|\\~|\\#|Debug|Release|\\.dll|\\.ilk|\\.idb|\\.pdb|\\.dsp|\\.dsw|\\.opt|\\.ncb|\\.vcproj|\\.sln|\\.suo|\\.cvsignore|\\.cnv|\\.res|\\.icu|\\.exe|\\.obj|\\.bin|\\.exp|\\.lib|\\.out|\\.plg|positions|unidata|\\.jar|\\.spp|\\.stub|\\.policy";
+my $ignore = "CVS|\\.svn|\\~|\\#|Debug|Release|\\.dll|\\.ilk|\\.idb|\\.pdb|\\.dsp|\\.dsw|\\.opt|\\.ncb|\\.vcproj|\\.sln|\\.suo|\\.cvsignore|\\.cnv|\\.res|\\.icu|\\.exe|\\.obj|\\.bin|\\.exp|\\.lib|\\.out|\\.plg|positions|unidata|\\.jar|\\.spp|\\.stub|\\.policy";
 
 my ($sec, $min, $hour, , $day, $mon, $year, $wday, $yday, $isdst) = localtime;
 $year += 1900;
