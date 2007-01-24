@@ -169,7 +169,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
         setSourcePosition(in);
         return ret;
 	}
-    
+ 
     /**
      * Implements the ICU semantic for decode operation
      * @param in The input byte buffer

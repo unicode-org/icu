@@ -19,7 +19,7 @@ import com.ibm.icu.text.UTF16;
 /**
  * @author Niti Hantaweepant
  */
-class CharsetUTF32LE extends CharsetICU {
+class CharsetUTF32LE extends CharsetUTF32 {
     
     protected byte[] fromUSubstitution = new byte[]{(byte)0xfd, (byte)0xff, (byte)0, (byte)0};
     
@@ -29,142 +29,34 @@ class CharsetUTF32LE extends CharsetICU {
         minBytesPerChar = 4;
         maxCharsPerByte = 1;
     }
-    class CharsetDecoderUTF32LE extends CharsetDecoderICU{
-
+    class CharsetDecoderUTF32LE extends CharsetDecoderUTF32{
+        
         public CharsetDecoderUTF32LE(CharsetICU cs) {
             super(cs);
         }
-
-        protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush){
-            CoderResult cr = CoderResult.UNDERFLOW;
-            
-            int sourceArrayIndex = source.position();
-            int ch, i;
-
-            donefornow:
-            {                    
-                /* UTF-8 returns here for only non-offset, this needs to change.*/
-                if (toUnicodeStatus != 0 && target.hasRemaining()) {
-                    i = toULength;       /* restore # of bytes consumed */
-            
-                    ch = (int)(toUnicodeStatus - 1);/*Stores the previously calculated ch from a previous call*/
-                    toUnicodeStatus = 0;
-                    toULength=0;
-                    
-                    while (i < 4) {
-                        if (sourceArrayIndex < source.limit()) {
-                            ch |= (source.get(sourceArrayIndex) & UConverterConstants.UNSIGNED_BYTE_MASK) << (i * 8);
-                            toUBytesArray[i++] = (byte) source.get(sourceArrayIndex++);
-                        }
-                        else {
-                            /* stores a partially calculated target*/
-                            /* + 1 to make 0 a valid character */
-                            toUnicodeStatus = ch + 1;
-                            toULength = (byte) i;
-                            break donefornow;
-                        }
-                    }
-            
-                    if (ch <= UConverterConstants.MAXIMUM_UTF && !isSurrogate(ch)) {
-                        /* Normal valid byte when the loop has not prematurely terminated (i < inBytes) */
-                        if (ch <= UConverterConstants.MAXIMUM_UCS2) 
-                        {
-                            /* fits in 16 bits */
-                            target.put((char)ch);
-                        }
-                        else {
-                            /* write out the surrogates */
-                            target.put(UTF16.getLeadSurrogate(ch));
-                            ch = UTF16.getTrailSurrogate(ch);
-                            if (target.hasRemaining()) {
-                                target.put((char)ch);
-                            }
-                            else {
-                                /* Put in overflow buffer (not handled here) */
-                                charErrorBufferArray[0] = (char) ch;
-                                charErrorBufferLength = 1;
-                                cr = CoderResult.OVERFLOW;
-                            }
-                        }
-                    }
-                    else {
-                        toULength = (byte)i;
-                        cr = CoderResult.malformedForLength(sourceArrayIndex);
-                        break donefornow;
-                    }
-                }
-                
-                while (sourceArrayIndex < source.limit() && target.hasRemaining()) {
-                    i = 0;
-                    ch = 0;
-            
-                    while (i < 4) {
-                        if (sourceArrayIndex < source.limit()) {
-                            ch |= (source.get(sourceArrayIndex) & UConverterConstants.UNSIGNED_BYTE_MASK) << (i * 8);
-                            toUBytesArray[i++] = (byte) source.get(sourceArrayIndex++);
-                        }
-                        else {
-                            /* stores a partially calculated target*/
-                            /* + 1 to make 0 a valid character */
-                            toUnicodeStatus = ch + 1;
-                            toULength = (byte) i;
-                            break donefornow;
-                        }
-                    }
-            
-                    if (ch <= UConverterSharedData.MAXIMUM_UTF && !isSurrogate(ch)) {
-                        /* Normal valid byte when the loop has not prematurely terminated (i < inBytes) */
-                        if (ch <= UConverterSharedData.MAXIMUM_UCS2) 
-                        {
-                            /* fits in 16 bits */
-                            target.put((char) ch);
-                        }
-                        else {
-                            /* write out the surrogates */
-                            target.put(UTF16.getLeadSurrogate(ch));
-                            ch = UTF16.getTrailSurrogate(ch);
-                            if (target.hasRemaining()) {
-                                target.put((char)ch);
-                            }
-                            else {
-                                /* Put in overflow buffer (not handled here) */
-                                charErrorBufferArray[0] = (char) ch;
-                                charErrorBufferLength = 1;
-                                cr = CoderResult.OVERFLOW;                                    
-                                break;
-                            }
-                        }
-                    }
-                    else {
-                        toULength = (byte)i;
-                        cr = CoderResult.malformedForLength(sourceArrayIndex);
-                        break;
-                    }
-                }
+        protected CoderResult decodeLoopImpl(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush){
+            return decodeLoopUTF32LE(source, target, offsets, flush);
+        }
+        protected int getChar(byte[] bytes, int length){
+            int i=0;
+            int ch=0;
+            while(i<length){
+                ch |= (bytes[i] & UConverterConstants.UNSIGNED_BYTE_MASK) << (i * 8);
+                i++;
             }
-            
-            if (sourceArrayIndex < source.limit() && !target.hasRemaining()) {
-                /* End of target buffer */
-                cr = CoderResult.OVERFLOW;
-            }                    
-            
-            source.position(sourceArrayIndex);
-            return cr;
-        }        
+            return ch;
+        }
     }
-    
     class CharsetEncoderUTF32LE extends CharsetEncoderICU{
 
         public CharsetEncoderUTF32LE(CharsetICU cs) {
             super(cs, fromUSubstitution);
             implReset();
         }
-
-        private final static int NEED_TO_WRITE_BOM = 1;
         
         protected void implReset() {
             super.implReset();
-            fromUnicodeStatus = NEED_TO_WRITE_BOM;
+            fromUnicodeStatus = 0;
         }
         
         protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush){

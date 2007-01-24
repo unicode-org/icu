@@ -29,13 +29,86 @@ class CharsetUTF32 extends CharsetICU {
         minBytesPerChar = 4;
         maxCharsPerByte = 1;
     }
+    
+    
     class CharsetDecoderUTF32 extends CharsetDecoderICU{
-
+        boolean isFirstBuffer;
+        final int SIGNATURE_LENGTH=4;
         public CharsetDecoderUTF32(CharsetICU cs) {
             super(cs);
+            isFirstBuffer = true;
         }
-
+        
         protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush){
+            int state, offsetDelta;
+            int offsetsPos = (offsets==null)?0:offsets.position();
+            CoderResult cr = CoderResult.UNDERFLOW;
+            state=mode;
+
+            /*
+             * If we detect a BOM in this buffer, then we must add the BOM size to the
+             * offsets because the actual converter function will not see and count the BOM.
+             * offsetDelta will have the number of the BOM bytes that are in the current buffer.
+             */
+            offsetDelta=0;
+            int pos = source.position();
+            if(isFirstBuffer && toULength<SIGNATURE_LENGTH){
+                while(pos < source.limit() && pos < toULength) {
+                    toUBytesArray[toULength++] = source.get(pos++);
+                }
+                if(toULength==SIGNATURE_LENGTH){
+                    if(toUBytesArray[0]==0x00 && toUBytesArray[1]==0x00 && toUBytesArray[2]==0xFE && toUBytesArray[3]==0xFF){
+                        // may be BE
+                        state = 1;
+                        offsetDelta=4;
+                    }else if(toUBytesArray[0]==0xFF && toUBytesArray[1]==0xFE && toUBytesArray[2]==0x00 && toUBytesArray[3]==0x00){
+                        //may be LE
+                        state = 2;
+                        offsetDelta=4;
+                    }else{
+                        //default to the subclass charset
+                        state = 3;
+                        toUnicodeStatus = getChar(toUBytesArray, toULength)+1;  
+                    }
+                    isFirstBuffer = false;
+                }
+            }
+
+            /* add BOM size to offsets - see comment at offsetDelta declaration */
+            if(offsets!=null && offsetDelta!=0) {
+                int offsetsLimit=offsets.position();
+                while(offsetsPos<offsetsLimit) {
+                    int delta = offsetDelta + offsets.get(pos);
+                    offsets.put(pos++, delta);
+                }
+            }
+            
+            source.position(pos);
+            if(!cr.isError() && source.hasRemaining()){
+                cr = decodeLoopImpl(source, target, offsets, flush);
+            }
+            mode=state;
+            return cr;
+        }
+        protected int getChar(byte[] bytes, int length){
+            return -1;
+        }
+        protected CoderResult decodeLoopImpl(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush){
+            
+            CoderResult cr = CoderResult.UNDERFLOW;
+            if(mode==1){
+                /* call UTF-16BE */
+                cr = decodeLoopUTF32BE(source, target, offsets, flush);
+            }else if(mode==2){
+                /* call UTF-16LE */
+                cr =decodeLoopUTF32LE(source, target, offsets, flush);
+            }else{
+                /* should not occur */
+                cr = decodeLoopUTF32BE(source, target, offsets, flush);
+            }
+            return cr;
+        }
+        final CoderResult decodeLoopUTF32BE(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush){
             CoderResult cr = CoderResult.UNDERFLOW;
             
             int sourceArrayIndex = source.position();
@@ -151,6 +224,127 @@ class CharsetUTF32 extends CharsetICU {
             source.position(sourceArrayIndex);
             return cr;
         }        
+
+        final CoderResult decodeLoopUTF32LE(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush){
+            CoderResult cr = CoderResult.UNDERFLOW;
+            
+            int sourceArrayIndex = source.position();
+            int ch, i;
+
+            donefornow:
+            {                    
+                /* UTF-8 returns here for only non-offset, this needs to change.*/
+                if (toUnicodeStatus != 0 && target.hasRemaining()) {
+                    i = toULength;       /* restore # of bytes consumed */
+            
+                    ch = (int)(toUnicodeStatus - 1);/*Stores the previously calculated ch from a previous call*/
+                    toUnicodeStatus = 0;
+                    toULength=0;
+                    
+                    while (i < 4) {
+                        if (sourceArrayIndex < source.limit()) {
+                            ch |= (source.get(sourceArrayIndex) & UConverterConstants.UNSIGNED_BYTE_MASK) << (i * 8);
+                            toUBytesArray[i++] = (byte) source.get(sourceArrayIndex++);
+                        }
+                        else {
+                            /* stores a partially calculated target*/
+                            /* + 1 to make 0 a valid character */
+                            toUnicodeStatus = ch + 1;
+                            toULength = (byte) i;
+                            break donefornow;
+                        }
+                    }
+            
+                    if (ch <= UConverterConstants.MAXIMUM_UTF && !isSurrogate(ch)) {
+                        /* Normal valid byte when the loop has not prematurely terminated (i < inBytes) */
+                        if (ch <= UConverterConstants.MAXIMUM_UCS2) 
+                        {
+                            /* fits in 16 bits */
+                            target.put((char)ch);
+                        }
+                        else {
+                            /* write out the surrogates */
+                            target.put(UTF16.getLeadSurrogate(ch));
+                            ch = UTF16.getTrailSurrogate(ch);
+                            if (target.hasRemaining()) {
+                                target.put((char)ch);
+                            }
+                            else {
+                                /* Put in overflow buffer (not handled here) */
+                                charErrorBufferArray[0] = (char) ch;
+                                charErrorBufferLength = 1;
+                                cr = CoderResult.OVERFLOW;
+                            }
+                        }
+                    }
+                    else {
+                        toULength = (byte)i;
+                        cr = CoderResult.malformedForLength(sourceArrayIndex);
+                        break donefornow;
+                    }
+                }
+                
+                while (sourceArrayIndex < source.limit() && target.hasRemaining()) {
+                    i = 0;
+                    ch = 0;
+            
+                    while (i < 4) {
+                        if (sourceArrayIndex < source.limit()) {
+                            ch |= (source.get(sourceArrayIndex) & UConverterConstants.UNSIGNED_BYTE_MASK) << (i * 8);
+                            toUBytesArray[i++] = (byte) source.get(sourceArrayIndex++);
+                        }
+                        else {
+                            /* stores a partially calculated target*/
+                            /* + 1 to make 0 a valid character */
+                            toUnicodeStatus = ch + 1;
+                            toULength = (byte) i;
+                            break donefornow;
+                        }
+                    }
+            
+                    if (ch <= UConverterSharedData.MAXIMUM_UTF && !isSurrogate(ch)) {
+                        /* Normal valid byte when the loop has not prematurely terminated (i < inBytes) */
+                        if (ch <= UConverterSharedData.MAXIMUM_UCS2) 
+                        {
+                            /* fits in 16 bits */
+                            target.put((char) ch);
+                        }
+                        else {
+                            /* write out the surrogates */
+                            target.put(UTF16.getLeadSurrogate(ch));
+                            ch = UTF16.getTrailSurrogate(ch);
+                            if (target.hasRemaining()) {
+                                target.put((char)ch);
+                            }
+                            else {
+                                /* Put in overflow buffer (not handled here) */
+                                charErrorBufferArray[0] = (char) ch;
+                                charErrorBufferLength = 1;
+                                cr = CoderResult.OVERFLOW;                                    
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        toULength = (byte)i;
+                        cr = CoderResult.malformedForLength(sourceArrayIndex);
+                        break;
+                    }
+                }
+            }
+            
+            if (sourceArrayIndex < source.limit() && !target.hasRemaining()) {
+                /* End of target buffer */
+                cr = CoderResult.OVERFLOW;
+            }                    
+            
+            source.position(sourceArrayIndex);
+            return cr;
+        }  
+        protected void implReset() {
+            super.implReset();
+            isFirstBuffer = true;
+        }
     }
     
     class CharsetEncoderUTF32 extends CharsetEncoderICU{
@@ -158,10 +352,9 @@ class CharsetUTF32 extends CharsetICU {
         public CharsetEncoderUTF32(CharsetICU cs) {
             super(cs, fromUSubstitution);
             implReset();
+            writeBOM = true;
         }
 
-        private final static int NEED_TO_WRITE_BOM = 1;
-        
         protected void implReset() {
             super.implReset();
             fromUnicodeStatus = NEED_TO_WRITE_BOM;

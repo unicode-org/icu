@@ -149,6 +149,10 @@
             <srcfiles dir="${build.dir}" includes="${icu4j.data.path}/*.icu"/>
         </uptodate>
         <!-- <echo message="icu4j.module.resources result: ${icu4j.module.resources}" /> -->
+        <tstamp>
+            <format property="date.time" pattern="yyyy-MM-dd 'at' hh:mm:ss z" locale="en,US"/>
+        </tstamp>
+        <echo message="Initialized at ${date.time}"/>
     </target>
 
     <!-- build everything but dist-related stuff -->
