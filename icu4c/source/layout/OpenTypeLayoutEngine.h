@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2006 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2007 - All Rights Reserved
  *
  */
 
@@ -220,14 +220,6 @@ protected:
      * @internal
      */
     LETag fLangSysTag;
-
-    /**
-     * <code>TRUE</code> if <code>mapCharsToGlyphs</code> should replace ZWJ / ZWNJ with a glyph
-     * with no contours.
-     *
-     * @internal
-     */
-    le_bool fFilterZeroWidth;
 
     /**
      * This method does the OpenType character processing. It assigns the OpenType feature

@@ -1,7 +1,7 @@
 
 /*
  *
- * (C) Copyright IBM Corp. 1998-2006 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2007 - All Rights Reserved
  *
  */
 
@@ -61,6 +61,10 @@ LEUnicode32 DefaultCharMapper::mapChar(LEUnicode32 ch) const
         }
     }
 
+    if (fFilterZeroWidth && (ch == 0x200C || ch == 0x200D)) {
+        return 0xFFFF;
+    }
+
     return ch;
 }
 
@@ -101,7 +105,7 @@ static const le_int32 canonFeatureMapCount = LE_ARRAY_SIZE(canonFeatureMap);
 
 LayoutEngine::LayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, le_int32 typoFlags)
   : fGlyphStorage(NULL), fFontInstance(fontInstance), fScriptCode(scriptCode), fLanguageCode(languageCode),
-    fTypoFlags(typoFlags)
+    fTypoFlags(typoFlags), fFilterZeroWidth(FALSE)
 {
     fGlyphStorage = new LEGlyphStorage();
 }
@@ -238,10 +242,10 @@ le_int32 LayoutEngine::computeGlyphs(const LEUnicode chars[], le_int32 offset, l
     le_int32 outCharCount = characterProcessing(chars, offset, count, max, rightToLeft, outChars, glyphStorage, success);
 
     if (outChars != NULL) {
-        mapCharsToGlyphs(outChars, 0, outCharCount, rightToLeft, rightToLeft, TRUE, glyphStorage, success);
+        mapCharsToGlyphs(outChars, 0, outCharCount, rightToLeft, rightToLeft, glyphStorage, success);
         LE_DELETE_ARRAY(outChars); // FIXME: a subclass may have allocated this, in which case this delete might not work...
     } else {
-        mapCharsToGlyphs(chars, offset, count, rightToLeft, rightToLeft, TRUE, glyphStorage, success);
+        mapCharsToGlyphs(chars, offset, count, rightToLeft, rightToLeft, glyphStorage, success);
     }
 
     return glyphStorage.getGlyphCount();
@@ -382,7 +386,7 @@ const void *LayoutEngine::getFontTable(LETag tableTag) const
     return fFontInstance->getFontTable(tableTag);
 }
 
-void LayoutEngine::mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, le_bool mirror, le_bool filterZeroWidth,
+void LayoutEngine::mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, le_bool mirror,
                                     LEGlyphStorage &glyphStorage, LEErrorCode &success)
 {
     if (LE_FAILURE(success)) {
@@ -391,9 +395,9 @@ void LayoutEngine::mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le
 
     glyphStorage.allocateGlyphArray(count, reverse, success);
 
-    DefaultCharMapper charMapper(TRUE, mirror);
+    DefaultCharMapper charMapper(TRUE, mirror, fFilterZeroWidth);
 
-    fFontInstance->mapCharsToGlyphs(chars, offset, count, reverse, &charMapper, filterZeroWidth, glyphStorage);
+    fFontInstance->mapCharsToGlyphs(chars, offset, count, reverse, &charMapper, glyphStorage);
 }
 
 // Input: characters, font?

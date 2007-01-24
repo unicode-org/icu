@@ -1,7 +1,7 @@
 
 /*
  *
- * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2007 - All Rights Reserved
  *
  */
 
@@ -39,7 +39,7 @@ le_int32 GXLayoutEngine::computeGlyphs(const LEUnicode chars[], le_int32 offset,
         return 0;
     }
 
-    mapCharsToGlyphs(chars, offset, count, FALSE, rightToLeft, TRUE, glyphStorage, success);
+    mapCharsToGlyphs(chars, offset, count, FALSE, rightToLeft, glyphStorage, success);
 
     if (LE_FAILURE(success)) {
         return 0;
