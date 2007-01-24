@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2006, International Business Machines
+ *   Copyright (C) 1999-2007, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -358,13 +358,6 @@ le_int32 PortableFontInstance::getDescent() const
 le_int32 PortableFontInstance::getLeading() const
 {
     return fLeading;
-}
-
-// We really want to inherit this method from the superclass, but some compilers
-// issue a warning if we don't implement it...
-LEGlyphID PortableFontInstance::mapCharToGlyph(LEUnicode32 ch, const LECharMapper *mapper, le_bool filterZeroWidth) const
-{
-    return LEFontInstance::mapCharToGlyph(ch, mapper, filterZeroWidth);
 }
 
 // We really want to inherit this method from the superclass, but some compilers
