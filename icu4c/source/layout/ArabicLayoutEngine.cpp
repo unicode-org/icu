@@ -1,7 +1,7 @@
 
 /*
  *
- * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2007 - All Rights Reserved
  *
  */
 
@@ -164,14 +164,14 @@ le_int32 UnicodeArabicOpenTypeLayoutEngine::glyphPostProcessing(LEGlyphStorage &
 
     glyphStorage.adoptCharIndicesArray(tempGlyphStorage);
 
-    ArabicOpenTypeLayoutEngine::mapCharsToGlyphs(tempChars, 0, tempGlyphCount, FALSE, TRUE, TRUE, glyphStorage, success);
+    ArabicOpenTypeLayoutEngine::mapCharsToGlyphs(tempChars, 0, tempGlyphCount, FALSE, TRUE, glyphStorage, success);
 
     LE_DELETE_ARRAY(tempChars);
 
     return tempGlyphCount;
 }
 
-void UnicodeArabicOpenTypeLayoutEngine::mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, le_bool /*mirror*/, le_bool /*filterZeroWidth*/, LEGlyphStorage &glyphStorage, LEErrorCode &success)
+void UnicodeArabicOpenTypeLayoutEngine::mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, le_bool /*mirror*/, LEGlyphStorage &glyphStorage, LEErrorCode &success)
 {
     if (LE_FAILURE(success)) {
         return;
