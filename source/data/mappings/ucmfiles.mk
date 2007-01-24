@@ -1,4 +1,4 @@
-# Copyright (c) 1999-2005, International Business Machines Corporation and
+# Copyright (c) 1999-2007, International Business Machines Corporation and
 # others. All Rights Reserved.
 # A list of UCM's to build
 # Note: 
@@ -25,8 +25,7 @@
 # ucmebcdic.mk from the <icu>/source/data directory
 #
 
-UCM_SOURCE_FILES = ibm-367_P100-1995.ucm\
-ibm-437_P100-1995.ucm\
+UCM_SOURCE_FILES = ibm-437_P100-1995.ucm\
 ibm-737_P100-1997.ucm\
 ibm-775_P100-1996.ucm\
 ibm-813_P100-1995.ucm\
@@ -41,7 +40,7 @@ ibm-860_P100-1995.ucm\
 ibm-861_P100-1995.ucm\
 ibm-862_P100-1995.ucm\
 ibm-863_P100-1995.ucm\
-ibm-864_X110-1999.ucm\
+ibm-864_X110_P110-1999.ucm\
 ibm-865_P100-1995.ucm\
 ibm-866_P100-1995.ucm\
 ibm-867_P100-1998.ucm\
@@ -62,7 +61,7 @@ ibm-1129_P100-1997.ucm\
 ibm-1131_P100-1997.ucm\
 ibm-1133_P100-1997.ucm\
 ibm-1162_P100-1999.ucm\
-ibm-1168_P100-2002.ucm\
+ibm-1168_P100_P100-2002.ucm\
 ibm-1250_P100-1995.ucm\
 ibm-1251_P100-1995.ucm\
 ibm-1252_P100-2000.ucm\
@@ -75,18 +74,19 @@ ibm-1258_P100-1997.ucm\
 ibm-1276_P100-1995.ucm\
 ibm-5351_P100-1998.ucm\
 ibm-5353_P100-1998.ucm\
-ibm-942_P12A-1999.ucm\
-ibm-943_P130-1999.ucm\
-ibm-949_P110-1999.ucm\
-ibm-950_P110-1999.ucm\
-ibm-954_P101-2000.ucm\
-ibm-964_P110-1999.ucm\
+ibm-942_P12A_P12A-1999.ucm\
+ibm-943_P130_P120-1999.ucm\
+ibm-949_P110_P100-1999.ucm\
+ibm-950_P110_P100-1999.ucm\
+ibm-954_P101_P101-2000.ucm\
+ibm-964_P110_P100-1999.ucm\
 ibm-971_P100-1995.ucm\
 ibm-1363_P110-1997.ucm\
-ibm-1375_P100-2003.ucm\
+ibm-1375_P100-2005.ucm\
+ibm-5471_P100_P100-2005.ucm\
 ibm-9005_X100-2005.ucm\
 ibm-9448_X100-2005.ucm\
-ibm-33722_P120-1999.ucm\
+ibm-33722_P120_P110-1999.ucm\
 iso-8859_10-1998.ucm\
 iso-8859_11-2001.ucm\
 iso-8859_14-1998.ucm\

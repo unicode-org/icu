@@ -1,16 +1,16 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ***************************************************************************/
-/*******************************************************************************
+/*****************************************************************************
 *
 * File NCNVCBTS
 *
 * Modification History:
 *      Name              Date                  Description            
 * Madhu Katragadda    06/23/2000     Tests for Conveter FallBack API and Functionality
-**********************************************************************************
+******************************************************************************
 */
 #include <stdio.h>
 #include "unicode/uloc.h"
@@ -519,10 +519,10 @@ static void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize )
     
     static const char* nativeCodePage[]={
         /*NLCS Mapping*/
-        "ibm-367",
         "ibm-437",
         "ibm-850",
         "ibm-878",
+        "ibm-923",
         "ibm-1051",
         "ibm-1089",
         "ibm-1250",
