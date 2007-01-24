@@ -47,6 +47,7 @@ public class TestCharset extends TestFmwk {
             (byte) 0x00,(byte) 0x0d,
             (byte) 0x00,(byte) 0x0a };
     static final byte[] expectedByteStr ={
+        (byte) 0xfe,(byte) 0xff,
         (byte) 0x00,(byte) 'a',
         (byte) 0x00,(byte) 'b',
         (byte) 0x00,(byte) 'c',
@@ -76,7 +77,7 @@ public class TestCharset extends TestFmwk {
     }
     public void TestUTF16Converter(){
         CharsetProvider icu = new CharsetProviderICU();
-        Charset cs1 = icu.charsetForName("UTF-16");
+        Charset cs1 = icu.charsetForName("UTF-16BE");
         CharsetEncoder e1 = cs1.newEncoder();
         CharsetDecoder d1 = cs1.newDecoder();
         
@@ -168,7 +169,7 @@ public class TestCharset extends TestFmwk {
     }
     public void TestUTF32Converter(){
         CharsetProvider icu = new CharsetProviderICU();
-        Charset cs1 = icu.charsetForName("UTF-32");
+        Charset cs1 = icu.charsetForName("UTF-32BE");
         CharsetEncoder e1 = cs1.newEncoder();
         CharsetDecoder d1 = cs1.newDecoder();
         
@@ -176,7 +177,7 @@ public class TestCharset extends TestFmwk {
         CharsetEncoder e2 = cs2.newEncoder();
         CharsetDecoder d2 = cs2.newDecoder();
         
-        for(int i=0x1d827; i<0x10FFFF; i+=0xFF){
+        for(int i=0x000; i<0x10FFFF; i+=0xFF){
             CharBuffer us = CharBuffer.allocate(0xFF*2);
             ByteBuffer bs1 = ByteBuffer.allocate(0xFF*8);
             ByteBuffer bs2 = ByteBuffer.allocate(0xFF*8);
@@ -868,12 +869,12 @@ public class TestCharset extends TestFmwk {
         CharBuffer inBuf = CharBuffer.allocate(in.length);
         inBuf.put(in);
         CharsetEncoder encoder = cs.newEncoder();
-        ByteBuffer outBuf = ByteBuffer.allocate(in.length*2);
+        ByteBuffer outBuf = ByteBuffer.allocate(in.length*2+2);
         inBuf.rewind();
         encoder.encode(inBuf, outBuf, true);
         outBuf.rewind();
-        if(outBuf.remaining()> in.length*2){
-            errln("The UTF16 encoder appended bom. Length returned: " + outBuf.remaining());
+        if(outBuf.get(0)!= (byte)0xFE && outBuf.get(1)!= (byte)0xFF){
+            errln("The UTF16 encoder did not appended bom. Length returned: " + outBuf.remaining());
         }
         while(outBuf.hasRemaining()){
             logln("0x"+hex(outBuf.get()));
@@ -881,7 +882,19 @@ public class TestCharset extends TestFmwk {
         CharsetDecoder decoder = cs.newDecoder();
         outBuf.rewind();
         CharBuffer rt = CharBuffer.allocate(in.length);
-        decoder.decode(outBuf, rt, true);
+        CoderResult cr = decoder.decode(outBuf, rt, true);
+        if(cr.isError()){
+            errln("Decoding with BOM failed. Error: "+ cr.toString());
+        }
+        equals(rt, in);
+        {
+            rt.clear();
+            outBuf.rewind();
+            Charset utf16 = Charset.forName("UTF-16");
+            CharsetDecoder dc = utf16.newDecoder();
+            cr = dc.decode(outBuf, rt, true);
+            equals(rt, in);
+        }
     }
      
     private void smBufDecode(CharsetDecoder decoder, String encoding, ByteBuffer source, CharBuffer target) {
@@ -1530,5 +1543,50 @@ public class TestCharset extends TestFmwk {
             return ex;
         }
         return null;
+    }
+    public void TestUTF32BOM(){
+
+        Charset cs = (new CharsetProviderICU()).charsetForName("UTF-32");
+        char[] in = new char[] { 0xd800, 0xdc00, 
+                                 0xd801, 0xdc01,
+                                 0xdbff, 0xdfff, 
+                                 0xd900, 0xdd00, 
+                                 0x0000, 0x0041,
+                                 0x0000, 0x0042,
+                                 0x0000, 0x0043};
+        
+        CharBuffer inBuf = CharBuffer.allocate(in.length);
+        inBuf.put(in);
+        CharsetEncoder encoder = cs.newEncoder();
+        ByteBuffer outBuf = ByteBuffer.allocate(in.length*4+4);
+        inBuf.rewind();
+        encoder.encode(inBuf, outBuf, true);
+        outBuf.rewind();
+        if(outBuf.get(0)!= (byte)0x00 && outBuf.get(1)!= (byte)0x00 && 
+                outBuf.get(2)!= (byte)0xFF && outBuf.get(3)!= (byte)0xFE){
+            errln("The UTF16 encoder did not appended bom. Length returned: " + outBuf.remaining());
+        }
+        while(outBuf.hasRemaining()){
+            logln("0x"+hex(outBuf.get()));
+        }
+        CharsetDecoder decoder = cs.newDecoder();
+        outBuf.limit(outBuf.position());
+        outBuf.rewind();
+        CharBuffer rt = CharBuffer.allocate(in.length);
+        CoderResult cr = decoder.decode(outBuf, rt, true);
+        if(cr.isError()){
+            errln("Decoding with BOM failed. Error: "+ cr.toString());
+        }
+        equals(rt, in);
+        try{
+            rt.clear();
+            outBuf.rewind();
+            Charset utf16 = Charset.forName("UTF-32");
+            CharsetDecoder dc = utf16.newDecoder();
+            cr = dc.decode(outBuf, rt, true);
+            equals(rt, in);
+        }catch(UnsupportedCharsetException ex){
+            // swallow the expection.
+        }
     }
 }

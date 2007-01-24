@@ -29,6 +29,9 @@ import com.ibm.icu.text.UTF16;
  */
 public abstract class CharsetEncoderICU extends CharsetEncoder {
 
+    static final int NEED_TO_WRITE_BOM = 1;
+    boolean writeBOM = false; /* only used by UTF-16, UTF-32 */
+    
     byte[] errorBuffer = new byte[30];
     int errorBufferLength = 0;
     
