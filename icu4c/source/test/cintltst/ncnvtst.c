@@ -1,16 +1,16 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
-/*******************************************************************************
+/*****************************************************************************
 *
 * File CCONVTST.C
 *
 * Modification History:
 *        Name                     Description
 *   Madhu Katragadda              7/7/2000        Converter Tests for extended code coverage
-********************************************************************************
+******************************************************************************
 */
 #include <stdio.h>
 #include <stdlib.h>
@@ -381,7 +381,7 @@ static void TestErrorBehaviour(){
         static const uint8_t expected3MBCS[] = { 0x01, 0xa2, 0xb4, 0xa1, 0xe0};
         static const int32_t offsets3MBCS[]        = { 0x00, 0x01, 0x01, 0x02, 0x02};
 
-        static const UChar       sampleText4MBCS[] = { 0x0061, 0x00a6, 0xdc01};
+        static const UChar       sampleText4MBCS[] = { 0x0061, 0xFFE4, 0xdc01};
         static const uint8_t expected4MBCS[] = { 0x61, 0x8f, 0xa2, 0xc3, 0xf4, 0xfe};
         static const int32_t offsets4MBCS[]        = { 0x00, 0x01, 0x01, 0x01, 0x02, 0x02 };
 
