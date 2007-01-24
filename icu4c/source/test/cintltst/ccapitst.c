@@ -1,16 +1,16 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
-/*******************************************************************************
+/*****************************************************************************
 *
 * File CU_CAPITST.C
 *
 * Modification History:
 *        Name                      Description            
 *     Madhu Katragadda              Ported for C API
-********************************************************************************
+******************************************************************************
 */
 #include <stdio.h>
 #include <stdlib.h>
@@ -314,7 +314,7 @@ static void TestConvert()
 
     const char*      CodePagesToTest[NUM_CODEPAGE]       =
     {
-       "ibm-949_P110-1999"
+       "ibm-949_P110_P100-1999"
 
         
     }; 

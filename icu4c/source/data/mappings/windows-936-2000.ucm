@@ -1,6 +1,6 @@
 # ***************************************************************************
 # *
-# *   Copyright (C) 2001-2003, International Business Machines
+# *   Copyright (C) 2001-2007, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 # *
 # ***************************************************************************
@@ -37,7 +37,7 @@
 
 # build an extension-only (delta) .cnv file
 # requires the base .cnv file at runtime
-<icu:base>                    "ibm-1386_P100-2002"
+<icu:base>                    "ibm-1386_P100_P100-2001"
 
 # The following was the generated state table.
 # This does not account for unassigned characters
@@ -45,6 +45,9 @@
 #<icu:state>                  40-7e, 80-fe
 #
 CHARMAP
+#
+#UNICODE 936
+#_______ _________
 <U0000> \x00 |0
 <U0001> \x01 |0
 <U0002> \x02 |0
@@ -24527,4 +24530,6 @@ CHARMAP
 <UFFE3> \xA3\xFE |0
 <UFFE4> \xA9\x57 |0
 <UFFE5> \xA3\xA4 |0
+#
 END CHARMAP
+#

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1998-2006, International Business Machines Corporation and
+ * Copyright (c) 1998-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -10,7 +10,7 @@
 *
 *   Date          Name        Description
 *   02/22/2000    Madhu       Creation
-*******************************************************************************
+******************************************************************************
 */
 
 #include "unicode/utypes.h"
@@ -1266,13 +1266,13 @@ static const struct {
     /* conversion table files */
 
     /* SBCS conversion table file without extension */
-    {"ibm-913_P100-2000",        "cnv", ucnv_swap},
+    {"ibm-913_P100_P100-2000",   "cnv", ucnv_swap},
     /* EBCDIC_STATEFUL conversion table file with extension */
     {"ibm-1390_P110-2003",       "cnv", ucnv_swap},
     /* DBCS extension-only conversion table file */
     {"ibm-16684_P110-2003",      "cnv", ucnv_swap},
     /* EUC-TW (3-byte) conversion table file without extension */
-    {"ibm-964_P110-1999",        "cnv", ucnv_swap},
+    {"ibm-964_P110_P100-1999",        "cnv", ucnv_swap},
     /* GB 18030 (4-byte) conversion table file without extension */
     {"gb18030",                  "cnv", ucnv_swap},
     /* MBCS conversion table file with extension */

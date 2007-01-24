@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2006, International Business Machines
+*   Copyright (C) 1998-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -46,11 +46,11 @@ typedef struct UAmbiguousConverter {
 } UAmbiguousConverter;
 
 static const UAmbiguousConverter ambiguousConverters[]={
-    { "ibm-942_P120-1999", 0xa5 },
-    { "ibm-943_P130-1999", 0xa5 },
+    { "ibm-942_P120_P110-1999", 0xa5 },
+    { "ibm-943_P130_P120-1999", 0xa5 },
     { "ibm-897_P100-1995", 0xa5 },
-    { "ibm-33722_P120-1999", 0xa5 },
-    { "ibm-949_P110-1999", 0x20a9 },
+    { "ibm-33722_P120_P110-1999", 0xa5 },
+    { "ibm-949_P110_P100-1999", 0x20a9 },
     { "ibm-1363_P110-1997", 0x20a9 },
     { "ISO_2022,locale=ko,version=0", 0x20a9 }
 };

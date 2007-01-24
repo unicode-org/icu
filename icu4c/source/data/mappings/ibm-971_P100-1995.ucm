@@ -1,6 +1,6 @@
 # ***************************************************************************
 # *
-# *   Copyright (C) 1995-2003, International Business Machines
+# *   Copyright (C) 1995-2007, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 # *
 # ***************************************************************************
@@ -19,7 +19,7 @@
 
 # build an extension-only (delta) .cnv file
 # requires the base .cnv file at runtime
-<icu:base>                    "ibm-970_P110-1995"
+<icu:base>                    "ibm-970_P110_P110-2006"
 
 CHARMAP
 <U00A1> \xA2\xAE |0
