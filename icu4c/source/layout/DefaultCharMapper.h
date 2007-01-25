@@ -28,7 +28,6 @@ class DefaultCharMapper : public UMemory, public LECharMapper
 private:
     le_bool fFilterControls;
     le_bool fMirror;
-    le_bool fFilterZeroWidth;
 
     static const LEUnicode32 controlChars[];
 
@@ -40,8 +39,8 @@ private:
     static const le_int32 mirroredCharsCount;
 
 public:
-    DefaultCharMapper(le_bool filterControls, le_bool mirror, le_bool filterZeroWidth)
-        : fFilterControls(filterControls), fMirror(mirror), fFilterZeroWidth(filterZeroWidth)
+    DefaultCharMapper(le_bool filterControls, le_bool mirror)
+        : fFilterControls(filterControls), fMirror(mirror)
     {
         // nothing
     };

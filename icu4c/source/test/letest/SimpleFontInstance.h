@@ -47,6 +47,10 @@ public:
 
     // We really want to inherit this method from the superclass, but some compilers
     // issue a warning if we don't implement it...
+    virtual LEGlyphID mapCharToGlyph(LEUnicode32 ch, const LECharMapper *mapper, le_bool filterZeroWidth) const;
+    
+    // We really want to inherit this method from the superclass, but some compilers
+    // issue a warning if we don't implement it...
     virtual LEGlyphID mapCharToGlyph(LEUnicode32 ch, const LECharMapper *mapper) const;
 
     virtual LEGlyphID mapCharToGlyph(LEUnicode32 ch) const;
