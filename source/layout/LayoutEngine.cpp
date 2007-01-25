@@ -61,10 +61,6 @@ LEUnicode32 DefaultCharMapper::mapChar(LEUnicode32 ch) const
         }
     }
 
-    if (fFilterZeroWidth && (ch == 0x200C || ch == 0x200D)) {
-        return 0xFFFF;
-    }
-
     return ch;
 }
 
@@ -395,9 +391,9 @@ void LayoutEngine::mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le
 
     glyphStorage.allocateGlyphArray(count, reverse, success);
 
-    DefaultCharMapper charMapper(TRUE, mirror, fFilterZeroWidth);
+    DefaultCharMapper charMapper(TRUE, mirror);
 
-    fFontInstance->mapCharsToGlyphs(chars, offset, count, reverse, &charMapper, glyphStorage);
+    fFontInstance->mapCharsToGlyphs(chars, offset, count, reverse, &charMapper, fFilterZeroWidth, glyphStorage);
 }
 
 // Input: characters, font?
