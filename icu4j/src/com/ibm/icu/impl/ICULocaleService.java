@@ -265,13 +265,16 @@ public class ICULocaleService extends ICUService {
         public String currentDescriptor() {
             String result = currentID();
             if (result != null) {
-                result = "/" + result;
-                if (varstart != -1) {
-                    result += primaryID.substring(varstart);
-                }
+                StringBuffer buf = new StringBuffer(result.length() + 32);
                 if (kind != KIND_ANY) {
-                    result = prefix() + result;
+                    buf.append(prefix());
                 }
+                buf.append('/');
+                buf.append(result);
+                if (varstart != -1) {
+                    buf.append(primaryID.substring(varstart, primaryID.length()));
+                }
+                result = buf.toString();
             }
             return result;
         }

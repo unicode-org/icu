@@ -7,18 +7,6 @@
 
 package com.ibm.icu.text;
 
-import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.CalendarData;
-import com.ibm.icu.impl.TextTrieMap;
-import com.ibm.icu.impl.Utility;
-import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.GregorianCalendar;
-import com.ibm.icu.util.TimeZone;
-import com.ibm.icu.util.UResourceBundle;
-import com.ibm.icu.impl.ZoneMeta;
-import com.ibm.icu.util.ULocale;
-import com.ibm.icu.impl.SoftCache;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +14,19 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+
+import com.ibm.icu.impl.CalendarData;
+import com.ibm.icu.impl.ICUCache;
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.SimpleCache;
+import com.ibm.icu.impl.TextTrieMap;
+import com.ibm.icu.impl.Utility;
+import com.ibm.icu.impl.ZoneMeta;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
 
 /**
  * <code>DateFormatSymbols</code> is a public class for encapsulating
@@ -825,7 +826,6 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     {
         try {
             DateFormatSymbols other = (DateFormatSymbols)super.clone();
-            copyMembers(this, other);
             return other;
         } catch (CloneNotSupportedException e) {
             ///CLOVER:OFF
@@ -896,6 +896,10 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * Useful constant for defining timezone offsets.
      */
     static final int millisPerHour = 60*60*1000;
+
+    // DateFormatSymbols cache
+    private static ICUCache DFSCACHE = new SimpleCache();
+
     /**
      * 
      * @param desiredLocale
@@ -904,10 +908,54 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      */
     protected void initializeData(ULocale desiredLocale, String type)
     {
-        CalendarData calData = new CalendarData(desiredLocale, type);
-        initializeData(desiredLocale, calData);
+        String key = desiredLocale.toString() + "+" + type;
+        DateFormatSymbols dfs = (DateFormatSymbols)DFSCACHE.get(key);
+        if (dfs == null) {
+            // Initialize data from scratch put a clone of this instance into the cache
+            CalendarData calData = new CalendarData(desiredLocale, type);
+            initializeData(desiredLocale, calData);
+            dfs = (DateFormatSymbols)this.clone();
+            DFSCACHE.put(key, dfs);
+        } else {
+            initializeData(dfs);
+        }
     }
 
+    /* 
+     * Initialize format symbols using another instance.
+     * 
+     * TODO Clean up initialization methods for subclasses
+     */
+    void initializeData(DateFormatSymbols dfs) {
+        this.eras = dfs.eras;
+        this.eraNames = dfs.eraNames;
+        this.narrowEras = dfs.narrowEras;
+        this.months = dfs.months;
+        this.shortMonths = dfs.shortMonths;
+        this.narrowMonths = dfs.narrowMonths;
+        this.standaloneMonths = dfs.standaloneMonths;
+        this.standaloneShortMonths = dfs.standaloneShortMonths;
+        this.standaloneNarrowMonths = dfs.standaloneNarrowMonths;
+        this.weekdays = dfs.weekdays;
+        this.shortWeekdays = dfs.shortWeekdays;
+        this.narrowWeekdays = dfs.narrowWeekdays;
+        this.standaloneWeekdays = dfs.standaloneWeekdays;
+        this.standaloneShortWeekdays = dfs.standaloneShortWeekdays;
+        this.standaloneNarrowWeekdays = dfs.standaloneNarrowWeekdays;
+        this.ampms = dfs.ampms;
+        this.shortQuarters = dfs.shortQuarters;
+        this.quarters = dfs.quarters;
+        this.standaloneShortQuarters = dfs.standaloneShortQuarters;
+        this.standaloneQuarters = dfs.standaloneQuarters;
+
+        this.zoneStrings = dfs.zoneStrings; // always null at initialization time for now
+        this.localPatternChars = dfs.localPatternChars;
+
+        this.actualLocale = dfs.actualLocale;
+        this.validLocale = dfs.validLocale;
+        this.requestedLocale = dfs.requestedLocale;
+    }
+    
     /**
      * 
      * @param desiredLocale
@@ -1242,7 +1290,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * A cache for ZoneItemInfo objects, shared by class instances.
      */
-    private static SoftCache zoneItemInfoCache = new SoftCache();
+    private static ICUCache zoneItemInfoCache = new SimpleCache();
 
     /**
      * A ZoneItemInfo instance which holds custom timezone strings
@@ -1518,36 +1566,6 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         for (int i = 0; i < srcArray.length; ++i)
             aCopy[i] = duplicate(srcArray[i]);
         return aCopy;
-    }
-
-    /**
-     * Clones all the data members from the source DateFormatSymbols to
-     * the target DateFormatSymbols. This is only for subclasses.
-     * @param src the source DateFormatSymbols.
-     * @param dst the target DateFormatSymbols.
-     */
-    private final void copyMembers(DateFormatSymbols src, DateFormatSymbols dst)
-    {
-        dst.eras = duplicate(src.eras);
-        dst.eraNames = duplicate(src.eraNames);
-        dst.months = duplicate(src.months);
-        dst.shortMonths = duplicate(src.shortMonths);
-        dst.narrowMonths = duplicate(src.narrowMonths);
-        dst.standaloneMonths = duplicate(src.standaloneMonths);
-        dst.standaloneShortMonths = duplicate(src.standaloneShortMonths);
-        dst.standaloneNarrowMonths = duplicate(src.standaloneNarrowMonths);
-        dst.weekdays = duplicate(src.weekdays);
-        dst.shortWeekdays = duplicate(src.shortWeekdays);
-        dst.narrowWeekdays = duplicate(src.narrowWeekdays);
-        dst.standaloneWeekdays = duplicate(src.standaloneWeekdays);
-        dst.standaloneShortWeekdays = duplicate(src.standaloneShortWeekdays);
-        dst.standaloneNarrowWeekdays = duplicate(src.standaloneNarrowWeekdays);
-        dst.ampms = duplicate(src.ampms);
-        if (src.zoneStrings != null) {
-            dst.zoneStrings = duplicate(src.zoneStrings);
-        }
-        dst.requestedLocale = new ULocale(src.requestedLocale.toString());
-        dst.localPatternChars = new String (src.localPatternChars);
     }
 
     /**
