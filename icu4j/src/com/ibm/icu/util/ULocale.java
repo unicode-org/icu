@@ -8,6 +8,7 @@
 package com.ibm.icu.util;
 
 import java.io.Serializable;
+import java.lang.ref.SoftReference;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -16,12 +17,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.TreeMap;
-import java.lang.ref.SoftReference;
 
-import com.ibm.icu.impl.LocaleUtility;
+import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.lang.UCharacter;
-
 /**
  * A class analogous to {@link java.util.Locale} that provides additional
  * support for ICU protocol.  In ICU 3.0 this class is enhanced to support
@@ -232,30 +232,7 @@ public final class ULocale implements Serializable {
      */ 
     public static final ULocale ROOT = new ULocale("root", EMPTY_LOCALE);
     
-    private static final HashMap CACHE = new HashMap(20);
-    static {
-        CACHE.put(EMPTY_LOCALE, ROOT);
-        CACHE.put(Locale.ENGLISH, ENGLISH);
-        CACHE.put(Locale.FRENCH, FRENCH);
-        CACHE.put(Locale.GERMAN, GERMAN);
-        CACHE.put(Locale.ITALIAN, ITALIAN);
-        CACHE.put(Locale.JAPANESE, JAPANESE);
-        CACHE.put(Locale.KOREAN, KOREAN);
-        CACHE.put(Locale.CHINESE, CHINESE);
-        CACHE.put(Locale.SIMPLIFIED_CHINESE, SIMPLIFIED_CHINESE);
-        CACHE.put(Locale.TRADITIONAL_CHINESE, TRADITIONAL_CHINESE);
-        CACHE.put(Locale.FRANCE, FRANCE);
-        CACHE.put(Locale.GERMANY, GERMANY);
-        CACHE.put(Locale.ITALY, ITALY);
-        CACHE.put(Locale.JAPAN, JAPAN);
-        CACHE.put(Locale.KOREA, KOREA);
-        CACHE.put(Locale.CHINA, CHINA);
-        CACHE.put(Locale.TAIWAN, TAIWAN);
-        CACHE.put(Locale.UK, UK);
-        CACHE.put(Locale.US, US);
-        CACHE.put(Locale.CANADA, CANADA);
-        CACHE.put(Locale.CANADA_FRENCH, CANADA_FRENCH);
-    }
+    private static final SimpleCache CACHE = new SimpleCache();
 
     /**
      * Cache the locale.
@@ -749,14 +726,19 @@ public final class ULocale implements Serializable {
         if (loc == null) {
             return null;
         }
-        if (loc.toString().length() == 0) {
-            return ROOT;
-        }
         ULocale result = (ULocale)CACHE.get(loc);
-        if (result == null && defaultULocale != null && loc == defaultULocale.locale) {
+        if (result == null) {
+            if (defaultULocale != null && loc == defaultULocale.locale) {
             result = defaultULocale;
         } else {
-            result = new ULocale(loc.toString(), loc);
+                String locStr = loc.toString();
+                if (locStr.length() == 0) {
+                    result = ROOT;
+                } else {
+                    result = new ULocale(locStr, loc);
+                }
+            }
+            CACHE.put(loc, result);
         }
         return result;
     }
@@ -863,10 +845,12 @@ public final class ULocale implements Serializable {
         return locale;
     }
     
+    private static SoftReference nameCacheRef = new SoftReference(Collections.synchronizedMap(new HashMap()));
     /**
      * Keep our own default ULocale.
      */
-    private static ULocale defaultULocale;
+    private static Locale defaultLocale = Locale.getDefault();
+    private static ULocale defaultULocale = new ULocale(defaultLocale);
 
     /**
      * Returns the current default ULocale.
@@ -874,8 +858,9 @@ public final class ULocale implements Serializable {
      */ 
     public static ULocale getDefault() {
         synchronized (ULocale.class) {
-            Locale defaultLocale = Locale.getDefault();
-            if (defaultULocale == null || defaultULocale.toLocale() != defaultLocale) {
+            Locale currentDefault = Locale.getDefault();
+            if (defaultLocale != currentDefault) {
+                defaultLocale = currentDefault;
                 defaultULocale = new ULocale(defaultLocale);
             }
             return defaultULocale;
@@ -1143,7 +1128,6 @@ public final class ULocale implements Serializable {
         }
         return name;
     }
-    private static SoftReference nameCacheRef = new SoftReference(Collections.synchronizedMap(new HashMap()));
 
     /**
      * Returns a string representation of this object.

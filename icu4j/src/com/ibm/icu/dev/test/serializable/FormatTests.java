@@ -1,7 +1,7 @@
 //##header
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -10,9 +10,10 @@
 package com.ibm.icu.dev.test.serializable;
 
 import java.util.Date;
-import java.util.Locale;
 import java.util.HashMap;
+import java.util.Locale;
 
+import com.ibm.icu.impl.DateNumberFormat;
 import com.ibm.icu.text.ChineseDateFormat;
 import com.ibm.icu.text.ChineseDateFormatSymbols;
 import com.ibm.icu.text.DateFormat;
@@ -1391,6 +1392,24 @@ public class FormatTests
     }
 //#endif
 
+    public static class DateNumberFormatHandler implements SerializableTest.Handler
+    {
+        public Object[] getTestObjects()
+        {
+            Locale locales[] = SerializableTest.getLocales();
+            DateNumberFormat[] dnfmts = new DateNumberFormat[locales.length];
+            for (int i = 0; i < locales.length; i++) {
+                ULocale uloc = ULocale.forLocale(locales[i]);
+                dnfmts[i] = new DateNumberFormat(uloc);
+            }
+            return dnfmts;
+        }
+
+        public boolean hasSameBehavior(Object a, Object b) {
+            return a.equals(b);
+        }
+    }
+    
     public static void main(String[] args)
     {
         // nothing needed...
