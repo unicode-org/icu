@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  Copyright (c) 1999-2006 International Business Machines
+  Copyright (c) 1999-2007 International Business Machines
   Corporation and others. All rights reserved.
 -->
 
@@ -74,4 +74,9 @@
       <test-font name="TestFont1.otf"/>
       <test-text>शङ़ु</test-text>
     </test-case>
+  
+  <test-case id="Deva ZWJ" script="deva">
+    <test-font name="raghu.ttf"/>
+    <test-text>क्ष र्क क्‍ष र्‍क</test-text>
+  </test-case>
 </layout-tests>
