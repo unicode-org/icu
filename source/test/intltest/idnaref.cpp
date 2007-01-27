@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2005, International Business Machines
+ *   Copyright (C) 2003-2007, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -283,7 +283,16 @@ idnaref_toASCII(const UChar* src, int32_t srcLength,
     if(srcLength == -1){
         srcLength = u_strlen(src);
     }
-
+    
+    if(srcLength > b1Capacity){
+        b1 = (UChar*) uprv_malloc(srcLength * U_SIZEOF_UCHAR);
+        if(b1==NULL){
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            goto CLEANUP;
+        }
+        b1Capacity = srcLength;
+    }
+    
     // step 1 
     for( j=0;j<srcLength;j++){
         if(src[j] > 0x7F){
@@ -303,6 +312,9 @@ idnaref_toASCII(const UChar* src, int32_t srcLength,
     if(*status == U_BUFFER_OVERFLOW_ERROR){
         // redo processing of string
         /* we do not have enough room so grow the buffer*/
+        if(b1 != b1Stack){
+             uprv_free(b1);
+        }
         b1 = (UChar*) uprv_malloc(b1Len * U_SIZEOF_UCHAR);
         if(b1==NULL){
             *status = U_MEMORY_ALLOCATION_ERROR;
