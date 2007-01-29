@@ -280,10 +280,15 @@ idnaref_toASCII(const UChar* src, int32_t srcLength,
     UBool srcIsLDH = TRUE; 
     int32_t j=0;
 
+    NamePrepTransform* prep = TestIDNA::getInstance(*status);
+
+    if(U_FAILURE(*status)){
+        goto CLEANUP;
+    }
+
     if(srcLength == -1){
         srcLength = u_strlen(src);
-    }
-    
+    }    
     if(srcLength > b1Capacity){
         b1 = (UChar*) uprv_malloc(srcLength * U_SIZEOF_UCHAR);
         if(b1==NULL){
@@ -301,11 +306,6 @@ idnaref_toASCII(const UChar* src, int32_t srcLength,
         b1[b1Len++] = src[j];
     }
     // step 2
-    NamePrepTransform* prep = TestIDNA::getInstance(*status);
-
-    if(U_FAILURE(*status)){
-        goto CLEANUP;
-    }
     
     b1Len = prep->process(src,srcLength,b1, b1Capacity,allowUnassigned,parseError,*status);
     
