@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2005-2006, International Business Machines
+*   Copyright (C) 2005-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -578,8 +578,6 @@ utext_setup(UText *ut, int32_t extraSpace, UErrorCode *status) {
             if (spaceRequired>0) {
                 ut->extraSize = extraSpace;
                 ut->pExtra    = &((ExtendedUText *)ut)->extension;
-                uprv_memset(ut->pExtra, 0, extraSpace);  // Purify whines about copying untouched extra [buffer]
-                                                         //  space when cloning, so init it now.
             }
         }
     } else {
@@ -611,7 +609,6 @@ utext_setup(UText *ut, int32_t extraSpace, UErrorCode *status) {
             } else {
                 ut->extraSize = extraSpace;
                 ut->flags |= UTEXT_EXTRA_HEAP_ALLOCATED;
-                uprv_memset(ut->pExtra, 0, extraSpace);
             }
         }
     }
@@ -638,6 +635,9 @@ utext_setup(UText *ut, int32_t extraSpace, UErrorCode *status) {
         ut->privB               = 0;
         ut->privC               = 0;
         ut->privP               = NULL;
+		if (ut->pExtra!=NULL && ut->extraSize>0)
+		    uprv_memset(ut->pExtra, 0, ut->extraSize);  
+
     }
     return ut;
 }
@@ -799,6 +799,7 @@ shallowTextClone(UText * dest, const UText * src, UErrorCode * status) {
     adjustPointer(dest, &dest->p, src);
     adjustPointer(dest, &dest->q, src);
     adjustPointer(dest, &dest->r, src);
+	adjustPointer(dest, (const void **)&dest->chunkContents, src);
 
     return dest;
 }

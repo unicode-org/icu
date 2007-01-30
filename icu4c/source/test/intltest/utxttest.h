@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2005-2006, International Business Machines Corporation and
+ * Copyright (c) 2005-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /************************************************************************
@@ -31,6 +31,7 @@ public:
     void TextTest();
     void ErrorTest();
     void FreezeTest();
+	void Ticket5560();
 
 private:
     struct m {                              // Map between native indices & code points.

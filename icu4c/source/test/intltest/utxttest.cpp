@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2005-2006, International Business Machines Corporation and
+ * Copyright (c) 2005-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /************************************************************************
@@ -54,6 +54,8 @@ UTextTest::runIndexedTest(int32_t index, UBool exec,
             if (exec) ErrorTest();   break;
         case 2: name = "FreezeTest";
             if (exec) FreezeTest();  break;
+		case 3: name = "Ticket5560";
+			if (exec) Ticket5560();  break;
         default: name = "";          break;
     }
 }
@@ -1350,3 +1352,40 @@ openFragmentedUnicodeString(UText *ut, UnicodeString *s, UErrorCode *status) {
     return ut;
 }
 
+// Regression test for Ticket 5560
+//   Clone fails to update chunkContentPointer in the cloned copy.
+//   This is only an issue for UText types that work in a local buffer,
+//      (UTF-8 wrapper, for example)
+//
+//   The test:
+//     1.  Create an inital UText
+//     2.  Deep clone it.  Contents should match original.
+//     3.  Reset original to something different.
+//     4.  Check that clone contents did not change.  
+//
+void UTextTest::Ticket5560() {
+	char  *s1 = "ABCDEF";
+	char  *s2 = "123456";
+	UErrorCode status = U_ZERO_ERROR;
+
+	UText ut1 = UTEXT_INITIALIZER;
+	UText ut2 = UTEXT_INITIALIZER;
+
+	utext_openUTF8(&ut1, s1, -1, &status);
+	UChar c = utext_next32(&ut1);
+	TEST_ASSERT(c == 0x41);  // c == 'A'
+
+	utext_clone(&ut2, &ut1, TRUE, FALSE, &status);
+	TEST_SUCCESS(status);
+    c = utext_next32(&ut2);
+	TEST_ASSERT(c == 0x42);  // c == 'B'
+    c = utext_next32(&ut1);
+	TEST_ASSERT(c == 0x42);  // c == 'B'
+
+	utext_openUTF8(&ut1, s2, -1, &status);
+	c = utext_next32(&ut1);
+	TEST_ASSERT(c == 0x31);  // c == '1'
+    c = utext_next32(&ut2);
+	TEST_ASSERT(c == 0x43);  // c == 'C'
+
+}
