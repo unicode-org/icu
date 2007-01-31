@@ -75,10 +75,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\icuio36.dll"
+				OutputFile="..\..\bin\icuio37.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				ProgramDatabaseFile=".\..\..\lib\icuio36.pdb"
+				ProgramDatabaseFile=".\..\..\lib\icuio37.pdb"
 				EnableCOMDATFolding="2"
 				BaseAddress="0x4ab00000"
 				ImportLibrary="..\..\lib\icuio.lib"
@@ -172,11 +172,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\icuio36d.dll"
+				OutputFile="..\..\bin\icuio37d.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\..\..\lib\icuio36d.pdb"
+				ProgramDatabaseFile=".\..\..\lib\icuio37d.pdb"
 				BaseAddress="0x4ab00000"
 				ImportLibrary="..\..\lib\icuiod.lib"
 			/>

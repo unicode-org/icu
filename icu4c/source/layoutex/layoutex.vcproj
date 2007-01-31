@@ -73,10 +73,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\iculx36.dll"
+				OutputFile="..\..\bin\iculx37.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				ProgramDatabaseFile=".\..\..\lib\iculx36.pdb"
+				ProgramDatabaseFile=".\..\..\lib\iculx37.pdb"
 				EnableCOMDATFolding="2"
 				BaseAddress="0x4ac80000"
 				ImportLibrary="..\..\lib\iculx.lib"
@@ -169,11 +169,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\iculx36d.dll"
+				OutputFile="..\..\bin\iculx37d.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\..\..\lib\iculx36d.pdb"
+				ProgramDatabaseFile=".\..\..\lib\iculx37d.pdb"
 				BaseAddress="0x4ac80000"
 				ImportLibrary="..\..\lib\iculxd.lib"
 			/>
