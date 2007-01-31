@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2000-2006, International Business Machines
+*   Copyright (C) 2000-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *
@@ -67,32 +67,32 @@
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.6
  */
-#define U_ICU_VERSION_MINOR_NUM 6
+#define U_ICU_VERSION_MINOR_NUM 7
 
 /** The current ICU patchlevel version as an integer.  
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.4
  */
-#define U_ICU_VERSION_PATCHLEVEL_NUM 0
+#define U_ICU_VERSION_PATCHLEVEL_NUM 1
 
 /** Glued version suffix for renamers 
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.6
  */
-#define U_ICU_VERSION_SUFFIX _3_6
+#define U_ICU_VERSION_SUFFIX _3_7
 
 /** The current ICU library version as a dotted-decimal string. The patchlevel
  *  only appears in this string if it non-zero. 
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.4
  */
-#define U_ICU_VERSION "3.6"
+#define U_ICU_VERSION "3.7.1"
 
 /** The current ICU library major/minor version as a string without dots, for library name suffixes. 
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.6
  */
-#define U_ICU_VERSION_SHORT "36"
+#define U_ICU_VERSION_SHORT "37"
 
 /** An ICU version consists of up to 4 numbers from 0..255.
  *  @stable ICU 2.4
@@ -154,7 +154,7 @@ typedef uint8_t UVersionInfo[U_MAX_VERSION_LENGTH];
 #       define U_ICU_NAMESPACE icu
         namespace U_ICU_NAMESPACE { }
 #   else
-#       define U_ICU_NAMESPACE icu_3_6
+#       define U_ICU_NAMESPACE icu_3_7
         namespace U_ICU_NAMESPACE { }
         namespace icu = U_ICU_NAMESPACE;
 #   endif

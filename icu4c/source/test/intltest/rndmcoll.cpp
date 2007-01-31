@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 2005-2006, International Business Machines Corporation and   *
+ * Copyright (C) 2005-2007, International Business Machines Corporation and   *
  * others. All Rights Reserved.                                               *
  ******************************************************************************
  */
@@ -71,7 +71,7 @@ static const char collationBNF[] =
     "$root = $command{0,5} $reset $mostRules{1,20};";
 
 
-static const UVersionInfo ICU_37 = {3,7,0,0};
+static const UVersionInfo ICU_37 = {3,7,2,0};
 
 void RandomCollatorTest::Test2(){
     if(!isICUVersionAtLeast(ICU_37)){
