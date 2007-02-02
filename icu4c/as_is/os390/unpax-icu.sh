@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (C) 2001-2006, International Business Machines
+# Copyright (C) 2001-2007, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 # Authors:
@@ -37,17 +37,17 @@ echo ""
 echo "Extracting from $tar_file ..."
 echo ""
 # extract files while converting them to EBCDIC
-pax -rvf $tar_file -o to=IBM-1047,from=ISO8859-1
+pax -rvf $tar_file -o to=IBM-1047,from=ISO8859-1 -o setfiletag
 
 echo ""
 echo "Determining binary files ..."
 echo ""
 
 # When building in ASCII mode, text files are converted as ASCII
-if [ ${ICU_ENABLE_ASCII_STRINGS} -eq 1 ]; then
+if [ "${ICU_ENABLE_ASCII_STRINGS}" -eq 1 ]; then
     binary_suffixes="$binary_suffixes txt TXT ucm UCM"
 else
-	for file in `find ./icu \( -name \*.txt -print \)`; do
+	for file in `find ./icu \( -name \*.txt -print \) | sed -e 's/^\.\///'`; do
 		bom8=`head -c 3 $file|\
 			od -t x1|\
 			head -n 1|\
@@ -94,6 +94,9 @@ else
     echo ""
     rm $binary_files
     pax -rvf $tar_file $binary_files
+    # Tag the files as binary for proper interaction with the _BPXK_AUTOCVT
+    # environment setting
+    chtag -b $binary_files
 fi
 echo ""
 echo "$0 has completed extracting ICU from $tar_file."
