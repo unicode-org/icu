@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -265,7 +265,7 @@ public class ICULocaleService extends ICUService {
         public String currentDescriptor() {
             String result = currentID();
             if (result != null) {
-                StringBuffer buf = new StringBuffer(result.length() + 32);
+                StringBuffer buf = new StringBuffer(); // default capacity 16 is usually good enough
                 if (kind != KIND_ANY) {
                     buf.append(prefix());
                 }
