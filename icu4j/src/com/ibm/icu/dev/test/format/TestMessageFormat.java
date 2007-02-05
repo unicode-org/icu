@@ -115,13 +115,11 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
                                   "1.0<=Arg<2.0",
                                   "2.0<-Arg"};
         ChoiceFormat cf = new ChoiceFormat(limit, formats);
-        FieldPosition status = new FieldPosition(0);
         assertEquals("ChoiceFormat.format", formats[1], cf.format(1));
     }
 
     public void TestBug2()
     {
-        String result;
         // {sfb} use double format in pattern, so result will match (not strictly necessary)
         final String pattern = "There {0,choice,0.0#are no files|1.0#is one file|1.0<are {0, number} files} on disk {1}. ";
         logln("The input pattern : " + pattern);
@@ -190,7 +188,6 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
 
             //it_out << "Pat out: " << form.toPattern(buffer));
             StringBuffer result = new StringBuffer();
-            int count = 4;
             FieldPosition fieldpos = new FieldPosition(0);
             form.format(testArgs, result, fieldpos);
             assertEquals("format", testResultStrings[i], result.toString());
@@ -200,6 +197,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
     //        /* TODO: Look at this test and see if this is still a valid test */
     //        logln("---------------- test parse ----------------");
     //
+    //        int count = 4;
     //        form.toPattern(buffer);
     //        logln("MSG pattern for parse: " + buffer);
     //
@@ -499,7 +497,6 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         String msgFormatString = "{0} =sep= {1}";
         MessageFormat msg = new MessageFormat(msgFormatString);
         String source = "abc =sep= def";
-        String tmp1, tmp2;
 
         try {
             Object[] fmt_arr = msg.parse(source);
@@ -567,8 +564,6 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         Format[] formatsAct = null;
         Format a = null;
         Format b = null;
-        String patCmp;
-        String patAct;
         Format[] formatsToAdopt = null;
 
         if (formats==null || formatsCmp==null || (formats.length <= 0) || (formats.length != formatsCmp.length)) {
@@ -780,7 +775,6 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
                 "despite the Glimmung's efforts "+
                 "and to delight of the printers, Nick, his father, "+
                 "his mother, the spiddles, and of course Horace.";
-            String result;
             assertEquals("format", expected, msg.format(ARGS));
         } catch (IllegalArgumentException e1) {
             errln("FAIL: constructor failed");

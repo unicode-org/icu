@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -19,16 +19,6 @@ import java.text.*;
  * @author Richard Gillam
  */
 abstract class NFSubstitution {
-    //-----------------------------------------------------------------------
-    // constants
-    //-----------------------------------------------------------------------
-
-    /**
-     * Puts a copyright in the .class file
-     */
-    private static final String copyrightNotice
-        = "Copyright \u00a91997-2004 IBM Corp.  All rights reserved.";
-
     //-----------------------------------------------------------------------
     // data members
     //-----------------------------------------------------------------------
@@ -538,16 +528,6 @@ abstract class NFSubstitution {
  */
 class SameValueSubstitution extends NFSubstitution {
     //-----------------------------------------------------------------------
-    // constants
-    //-----------------------------------------------------------------------
-
-    /**
-     * Puts a copyright in the .class file
-     */
-    private static final String copyrightNotice
-        = "Copyright \u00a91997-1998 IBM Corp.  All rights reserved.";
-
-    //-----------------------------------------------------------------------
     // construction
     //-----------------------------------------------------------------------
 
@@ -636,16 +616,6 @@ class SameValueSubstitution extends NFSubstitution {
  * rules.
  */
 class MultiplierSubstitution extends NFSubstitution {
-    //-----------------------------------------------------------------------
-    // constants
-    //-----------------------------------------------------------------------
-
-    /**
-     * Puts a copyright in the .class file
-     */
-    private static final String copyrightNotice
-        = "Copyright \u00a91997-1998 IBM Corp.  All rights reserved.";
-
     //-----------------------------------------------------------------------
     // data members
     //-----------------------------------------------------------------------
@@ -798,16 +768,6 @@ class MultiplierSubstitution extends NFSubstitution {
  * regular rule.
  */
 class ModulusSubstitution extends NFSubstitution {
-    //-----------------------------------------------------------------------
-    // constants
-    //-----------------------------------------------------------------------
-
-    /**
-     * Puts a copyright in the .class file
-     */
-    private static final String copyrightNotice
-        = "Copyright \u00a91997-1998 IBM Corp.  All rights reserved.";
-
     //-----------------------------------------------------------------------
     // data members
     //-----------------------------------------------------------------------
@@ -1073,16 +1033,6 @@ class ModulusSubstitution extends NFSubstitution {
  */
 class IntegralPartSubstitution extends NFSubstitution {
     //-----------------------------------------------------------------------
-    // constants
-    //-----------------------------------------------------------------------
-
-    /**
-     * Puts a copyright in the .class file
-     */
-    private static final String copyrightNotice
-        = "Copyright \u00a91997-1998 IBM Corp.  All rights reserved.";
-
-    //-----------------------------------------------------------------------
     // construction
     //-----------------------------------------------------------------------
 
@@ -1170,16 +1120,6 @@ class IntegralPartSubstitution extends NFSubstitution {
  * represented by &gt;&gt; in a fraction rule.
  */
 class FractionalPartSubstitution extends NFSubstitution {
-    //-----------------------------------------------------------------------
-    // constants
-    //-----------------------------------------------------------------------
-
-    /**
-     * Puts a copyright in the .class file
-     */
-    private static final String copyrightNotice
-        = "Copyright \u00a91997-1998 IBM Corp.  All rights reserved.";
-
     //-----------------------------------------------------------------------
     // data members
     //-----------------------------------------------------------------------
@@ -1449,16 +1389,6 @@ class FractionalPartSubstitution extends NFSubstitution {
   */
 class AbsoluteValueSubstitution extends NFSubstitution {
     //-----------------------------------------------------------------------
-    // constants
-    //-----------------------------------------------------------------------
-
-    /**
-     * Puts a copyright in the .class file
-     */
-    private static final String copyrightNotice
-        = "Copyright \u00a91997-1998 IBM Corp.  All rights reserved.";
-
-    //-----------------------------------------------------------------------
     // construction
     //-----------------------------------------------------------------------
 
@@ -1544,16 +1474,6 @@ class AbsoluteValueSubstitution extends NFSubstitution {
  * in a fraction rule set.
  */
 class NumeratorSubstitution extends NFSubstitution {
-    //-----------------------------------------------------------------------
-    // constants
-    //-----------------------------------------------------------------------
-
-    /**
-     * Puts a copyright in the .class file
-     */
-    private static final String copyrightNotice
-        = "Copyright \u00a91997-1998 IBM Corp.  All rights reserved.";
-
     //-----------------------------------------------------------------------
     // data members
     //-----------------------------------------------------------------------
@@ -1797,16 +1717,6 @@ class NumeratorSubstitution extends NFSubstitution {
  * about how many substitutions a rule has.
  */
 class NullSubstitution extends NFSubstitution {
-    //-----------------------------------------------------------------------
-    // constants
-    //-----------------------------------------------------------------------
-
-    /**
-     * Puts a copyright in the .class file
-     */
-    private static final String copyrightNotice
-        = "Copyright \u00a91997-1998 IBM Corp.  All rights reserved.";
-
     //-----------------------------------------------------------------------
     // construction
     //-----------------------------------------------------------------------

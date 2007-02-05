@@ -1840,7 +1840,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
     public void testErrorChecking() {
         try {
-            DateFormat sdf = DateFormat.getDateTimeInstance(-1, -1, Locale.US);
+            DateFormat.getDateTimeInstance(-1, -1, Locale.US);
             errln("Expected exception for getDateTimeInstance(-1, -1, Locale)");
         }
         catch(IllegalArgumentException e) {
@@ -1967,7 +1967,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         {
             ChineseDateFormat fmt = new ChineseDateFormat("yymm", Locale.US);
             try {
-                Date d = fmt.parse("2"); // fewer symbols than required 2
+                fmt.parse("2"); // fewer symbols than required 2
                 errln("whoops");
             }
             catch (ParseException e) {
@@ -1983,7 +1983,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
 
             try {
-                Date d = fmt.parse("ni hao"); // not a number, should fail
+                fmt.parse("ni hao"); // not a number, should fail
                 errln("whoops ni hao");
             }
             catch (ParseException e) {
@@ -2036,7 +2036,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             // cover bad text after GMT+.
             try {
-                Date d = fmt.parse("07/10/53 GMT+blecch");
+                fmt.parse("07/10/53 GMT+blecch");
                 errln("whoops GMT+blecch");
             }
             catch (ParseException e) {
@@ -2045,7 +2045,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             // cover bad text after GMT+hh:.
             try {
-                Date d = fmt.parse("07/10/53 GMT+07:blecch");
+                fmt.parse("07/10/53 GMT+07:blecch");
                 errln("whoops GMT+xx:blecch");
             }
             catch (ParseException e) {
@@ -2081,7 +2081,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             // cover raw digits with no leading sign (bad RFC822) 
             try {
-                Date d = fmt.parse("07/10/53 07");
+                fmt.parse("07/10/53 07");
                 errln("Parse of 07/10/53 07 for pattern MM/dd/yy z passed!");
             }
             catch (ParseException e) {
@@ -2132,7 +2132,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         {
             SimpleDateFormat fmt = new SimpleDateFormat("'aabbcc");
             try {
-                String pat = fmt.toLocalizedPattern();
+                fmt.toLocalizedPattern();
                 errln("whoops, localize unclosed quote");
             }
             catch (IllegalArgumentException e) {

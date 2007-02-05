@@ -1,7 +1,7 @@
 //##header
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -19,12 +19,6 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 public class RbnfTest extends TestFmwk {
-    /**
-     * Puts a copyright in the .class file
-     */
-    private static final String copyrightNotice
-        = "Copyright \u00a91997-1999 IBM Corp.  All rights reserved.";
-
     public static void main(String[] args) {
         RbnfTest test = new RbnfTest();
 
