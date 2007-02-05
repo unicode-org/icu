@@ -498,7 +498,7 @@ public class SimpleDateFormat extends DateFormat {
      * @stable ICU 2.0
      */
     public Date get2DigitYearStart() {
-        return defaultCenturyStart;
+        return getDefaultCenturyStart();
     }
 
     /**
