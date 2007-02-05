@@ -1,7 +1,7 @@
 //##header
 /*
 **********************************************************************
-* Copyright (c) 2002-2006, International Business Machines
+* Copyright (c) 2002-2007, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Mark Davis
@@ -44,12 +44,9 @@ import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.dev.test.util.BagFormatter;
-import com.ibm.icu.dev.tool.UOption;
 
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.DateFormat;
-import com.ibm.icu.text.DateFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.text.Transliterator;
@@ -180,8 +177,6 @@ public class TestCLDRVsICU extends TestFmwk {
         void checkResult(String value) {
             if ("true".equals(settings.get("draft"))) {
                 return; // skip draft
-            } else {
-            	int x = 1; // for debug stopping
             }
         	ULocale ul = new ULocale("xx");
             try {

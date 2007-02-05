@@ -3,8 +3,8 @@
 //#ifndef FOUNDATION
 /*
  *******************************************************************************
- * Copyright (C) 2006, Google, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2006-2007, Google, International Business Machines Corporation *
+ * and others. All Rights Reserved.                                            *
  *******************************************************************************
  */
 
@@ -20,12 +20,9 @@ import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundle;
 
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.Random;
-import java.util.ResourceBundle;
 
 public class DateTimeGeneratorTest extends TestFmwk {
     public static boolean GENERATE_TEST_DATA = System.getProperty("GENERATE_TEST_DATA") != null;

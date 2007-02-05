@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -28,17 +28,12 @@ import java.io.IOException;
  * }
  * <pre>
  *
- * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
- *
  * @author Alan Liu
  */
 public class AppletFrame extends Frame implements AppletStub, AppletContext {
 
     Applet applet;
 
-    private static final String COPYRIGHT =
-        "\u00A9 IBM Corporation 1999. All rights reserved.";
-    
     /**
      * Construct a Frame running the given Applet with the default size
      * of 640 by 480.

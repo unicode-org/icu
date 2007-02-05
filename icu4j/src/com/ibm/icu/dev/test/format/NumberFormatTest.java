@@ -1,7 +1,7 @@
 //##header
 /*
  *******************************************************************************
- * Copyright (C) 2001-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -30,7 +30,6 @@ import java.util.Locale;
 import java.util.ArrayList;
 
 public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
-    private static final char EURO = '\u20ac';
 
     public static void main(String[] args) throws Exception {
         new NumberFormatTest().run(args);

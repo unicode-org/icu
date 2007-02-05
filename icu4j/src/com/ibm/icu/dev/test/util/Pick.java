@@ -8,7 +8,6 @@ package com.ibm.icu.dev.test.util;
 
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UTF16;
-import com.ibm.icu.impl.Utility;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -255,10 +254,10 @@ abstract public class Pick {
             super(item);
             weightedIndex = new WeightedIndex(minCount).add(maxCount-minCount+1, itemWeights);
         }
-        private Repeat(int minCount, int maxCount, int itemWeight, Pick item) {
+        /*private Repeat(int minCount, int maxCount, int itemWeight, Pick item) {
             super(item);
             weightedIndex = new WeightedIndex(minCount).add(maxCount-minCount+1, itemWeight);
-        }
+        }*/
         /*
         private Repeat(int minCount, int maxCount, Object item) {
             this.item = convert(item);
@@ -475,8 +474,8 @@ abstract public class Pick {
                 + ", maxInt:" + maxInt
                 + ", maxType: " + maxType;
         }
-        private static final Object BAD = new Object();
-        private static final Object GOOD = new Object();
+        /*private static final Object BAD = new Object();
+        private static final Object GOOD = new Object();*/
         
         public boolean isFailure(Pick pick, int item) {
             ArrayList val = (ArrayList)failures.get(index);
@@ -733,7 +732,7 @@ public static int[] realloc(int[] source, int newSize) {
     }
     
     // test utilities
-    private static void append(StringBuffer target, String toAdd, StringBuffer quoteBuffer) {
+    /*private static void append(StringBuffer target, String toAdd, StringBuffer quoteBuffer) {
         Utility.appendToRule(target, (int)-1, true, false, quoteBuffer); // close previous quote
         if (DEBUG) System.out.println("\"" + toAdd + "\"");
         target.append(toAdd);
@@ -742,7 +741,7 @@ public static int[] realloc(int[] source, int newSize) {
     private static void appendQuoted(StringBuffer target, String toAdd, StringBuffer quoteBuffer) {
         if (DEBUG) System.out.println("\"" + toAdd + "\"");
         Utility.appendToRule(target, toAdd, false, false, quoteBuffer);
-    }
+    }*/
 
     /*
     public static abstract class MatchHandler {
