@@ -1277,6 +1277,11 @@ static const struct {
     {"gb18030",                  "cnv", ucnv_swap},
     /* MBCS conversion table file with extension */
     {"*test4x",                  "cnv", ucnv_swap},
+    /*
+     * MBCS conversion table file without extension,
+     * to test swapping and preflighting of UTF-8-friendly mbcsIndex[].
+     */
+    {"jisx-208",                 "cnv", ucnv_swap},
 #endif
 
 #if !UCONFIG_NO_CONVERSION
