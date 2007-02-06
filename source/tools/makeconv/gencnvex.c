@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2006, International Business Machines
+*   Copyright (C) 2003-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -287,8 +287,10 @@ CnvExtWrite(NewConverter *cnvData, const UConverterStaticData *staticData,
 /*
  * Remove fromUnicode fallbacks and SUB mappings which are irrelevant for
  * the toUnicode table.
+ * This includes mappings with MBCS_FROM_U_EXT_FLAG which were suitable
+ * for the base toUnicode table but not for the base fromUnicode table.
  * The table must be sorted.
- * Destroys previous data in the reverseMap.
+ * Modifies previous data in the reverseMap.
  */
 static int32_t
 reduceToUMappings(UCMTable *table) {
@@ -570,6 +572,7 @@ makeToUTable(CnvExtData *extData, UCMTable *table) {
 /*
  * Remove toUnicode fallbacks and non-<subchar1> SUB mappings
  * which are irrelevant for the fromUnicode extension table.
+ * Remove MBCS_FROM_U_EXT_FLAG bits.
  * Overwrite the reverseMap with an index array to the relevant mappings.
  * Modify the code point sequences to a generator-friendly format where
  * the first code points remains unchanged but the following are recoded
@@ -596,6 +599,10 @@ prepareFromUMappings(UCMTable *table) {
 
     for(i=j=0; i<count; ++m, ++i) {
         flag=m->f;
+        if(flag>=0) {
+            flag&=MBCS_FROM_U_EXT_MASK;
+            m->f=flag;
+        }
         if(flag==0 || flag==1 || (flag==2 && m->bLen==1)) {
             map[j++]=i;
 
@@ -1065,4 +1072,3 @@ CnvExtAddTable(NewConverter *cnvData, UCMTable *table, UConverterStaticData *sta
         makeToUTable(extData, table) &&
         makeFromUTable(extData, table);
 }
-

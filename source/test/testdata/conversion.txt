@@ -1,6 +1,6 @@
 //*******************************************************************************
 //
-//   Copyright (C) 2003-2006, International Business Machines
+//   Copyright (C) 2003-2007, International Business Machines
 //   Corporation and others.  All Rights Reserved.
 //
 //   file name:  conversion.txt
@@ -474,6 +474,34 @@ conversion:table(nofallback) {
     fromUnicode {
       Headers { "charset", "unicode", "bytes", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidUChars" }
       Cases {
+        // Code coverage for UTF-8->SBCS conversion (ucnv_convertEx()).
+        // Test code path for non-roundtripping ASCII characters
+        // (try EBCDIC SBCS, and IBM PC SBCS with control code rotation).
+        {
+          "ibm-37",
+          "a\x85c",
+          :bin{       811583 },
+          :intvector{ 0,1,2 },
+          :int{1}, :int{0}, "", "?", ""
+        }
+        {
+          "ibm-850",
+          "a\x1ac",
+          :bin{       617f63 },
+          :intvector{ 0,1,2 },
+          :int{1}, :int{0}, "", "?", ""
+        }
+        // Code coverage for UTF-8->DBCS conversion (ucnv_convertEx()).
+        // Test code path for non-roundtripping ASCII characters
+        // (try IBM PC DBCS with control code rotation).
+        {
+          "ibm-943",
+          "a\x1ac\u30a1\x7ff",
+          :bin{       617f6383401c66 },
+          :intvector{ 0,1,2,3,3,4,5 },
+          :int{1}, :int{0}, "", "?", ""
+        }
+        // SCSU regression test.
         {
           "SCSU",
           "1\U00010001\u0085\U000500022\ud8003\udc014\ue001",

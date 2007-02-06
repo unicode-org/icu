@@ -26,11 +26,14 @@ const char UPerfTest::gUsageString[] =
     "\t-e or --encoding     encoding of source files\n"
     "\t-u or --uselen       perform timing analysis on non-null terminated buffer using length\n"
     "\t-f or --file-name    file to be used as input data\n"
-    "\t-p or --passes       Number of passes to be performed. Requires Numeric argument. Cannot be used with --time\n"
+    "\t-p or --passes       Number of passes to be performed. Requires Numeric argument.\n"
+    "\t                     Cannot be used with --time\n"
     "\t-i or --iterations   Number of iterations to be performed. Requires Numeric argument\n"
-    "\t-t or --time         Threshold time for looping until in seconds. Requires Numeric argument.Cannot be used with --iterations\n"
+    "\t-t or --time         Threshold time for looping until in seconds. Requires Numeric argument.\n"
+    "\t                     Cannot be used with --iterations\n"
     "\t-l or --line-mode    The data file should be processed in line mode\n"
-    "\t-b or --bulk-mode    The data file should be processed in file based. Cannot be used with --line-mode\n"
+    "\t-b or --bulk-mode    The data file should be processed in file based.\n"
+    "\t                     Cannot be used with --line-mode\n"
     "\t-L or --locale       Locale for the test\n";
 
 enum
@@ -47,11 +50,12 @@ enum
     TIME,
     LINE_MODE,
     BULK_MODE,
-    LOCALE
+    LOCALE,
+    OPTIONS_COUNT
 };
 
 
-static UOption options[]={
+static UOption options[OPTIONS_COUNT+20]={
     UOPTION_HELP_H,
     UOPTION_HELP_QUESTION_MARK,
     UOPTION_VERBOSE,
@@ -67,32 +71,57 @@ static UOption options[]={
     UOPTION_DEF( "locale",        'L', UOPT_REQUIRES_ARG)
 };
 
-UPerfTest::UPerfTest(int32_t argc, const char* argv[], UErrorCode& status){
-    
-    _argc = argc;
-    _argv = argv;
-    ucharBuf = NULL;
-    encoding = "";
-    uselen = FALSE;
-    fileName = NULL;
-    sourceDir = ".";
-    lines = NULL;
-    numLines = 0;
-    line_mode = TRUE;
-    buffer = NULL;
-    bufferLen = 0;
-    verbose = FALSE;
-    bulk_mode = FALSE;
-    passes = iterations = time = 0;
-    locale = NULL;
-    
+UPerfTest::UPerfTest(int32_t argc, const char* argv[], UErrorCode& status)
+        : _argc(argc), _argv(argv), _addUsage(NULL),
+          ucharBuf(NULL), encoding(""),
+          uselen(FALSE),
+          fileName(NULL), sourceDir("."),
+          lines(NULL), numLines(0), line_mode(TRUE),
+          buffer(NULL), bufferLen(0),
+          verbose(FALSE), bulk_mode(FALSE),
+          passes(1), iterations(0), time(0),
+          locale(NULL) {
+    init(NULL, 0, status);
+}
+
+UPerfTest::UPerfTest(int32_t argc, const char* argv[],
+                     UOption addOptions[], int32_t addOptionsCount,
+                     const char *addUsage,
+                     UErrorCode& status)
+        : _argc(argc), _argv(argv), _addUsage(addUsage),
+          ucharBuf(NULL), encoding(""),
+          uselen(FALSE),
+          fileName(NULL), sourceDir("."),
+          lines(NULL), numLines(0), line_mode(TRUE),
+          buffer(NULL), bufferLen(0),
+          verbose(FALSE), bulk_mode(FALSE),
+          passes(1), iterations(0), time(0),
+          locale(NULL) {
+    init(addOptions, addOptionsCount, status);
+}
+
+void UPerfTest::init(UOption addOptions[], int32_t addOptionsCount,
+                     UErrorCode& status) {
     //initialize the argument list
-    U_MAIN_INIT_ARGS(argc, argv);
+    U_MAIN_INIT_ARGS(_argc, _argv);
+
+    // add specific options
+    int32_t optionsCount = OPTIONS_COUNT;
+    if (addOptionsCount > 0) {
+        memcpy(options+optionsCount, addOptions, addOptionsCount*sizeof(UOption));
+        optionsCount += addOptionsCount;
+    }
+
     //parse the arguments
-    _remainingArgc = u_parseArgs(argc, (char**)argv, (int32_t)(sizeof(options)/sizeof(options[0])), options);
+    _remainingArgc = u_parseArgs(_argc, (char**)_argv, optionsCount, options);
+
+    // copy back values for additional options
+    if (addOptionsCount > 0) {
+        memcpy(addOptions, options+OPTIONS_COUNT, addOptionsCount*sizeof(UOption));
+    }
 
     // Now setup the arguments
-    if(argc==1 || options[HELP1].doesOccur || options[HELP2].doesOccur) {
+    if(_argc==1 || options[HELP1].doesOccur || options[HELP2].doesOccur) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -122,12 +151,16 @@ UPerfTest::UPerfTest(int32_t argc, const char* argv[], UErrorCode& status){
     }
     if(options[ITERATIONS].doesOccur) {
         iterations = atoi(options[ITERATIONS].value);
-    }
- 
-    if(options[TIME].doesOccur) {
+        if(options[TIME].doesOccur) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return;
+        }
+    } else if(options[TIME].doesOccur) {
         time = atoi(options[TIME].value);
+    } else {
+        iterations = 1000; // some default
     }
-    
+
     if(options[LINE_MODE].doesOccur) {
         line_mode = TRUE;
         bulk_mode = FALSE;
@@ -140,11 +173,6 @@ UPerfTest::UPerfTest(int32_t argc, const char* argv[], UErrorCode& status){
     
     if(options[LOCALE].doesOccur) {
       locale = options[LOCALE].value;
-    }
-
-    if(time > 0 && iterations >0){
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
     }
 
     int32_t len = 0;
@@ -205,6 +233,9 @@ ULine* UPerfTest::getLines(UErrorCode& status){
     return lines;
 }
 const UChar* UPerfTest::getBuffer(int32_t& len, UErrorCode& status){
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
     len = ucbuf_size(ucharBuf);
     buffer =  (UChar*) uprv_malloc(U_SIZEOF_UCHAR * (len+1));
     u_strncpy(buffer,ucbuf_getBuffer(ucharBuf,&bufferLen,&status),len);
@@ -421,6 +452,11 @@ UBool UPerfTest::runTestLoop( char* testname, char* par )
 */
 void UPerfTest::usage( void )
 {
+    puts(gUsageString);
+    if (_addUsage != NULL) {
+        puts(_addUsage);
+    }
+
     UBool save_verbose = verbose;
     verbose = TRUE;
     fprintf(stdout,"Test names:\n");

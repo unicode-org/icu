@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2002-2006, International Business Machines
+*   Copyright (C) 2002-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnv_u8.c
@@ -724,6 +724,263 @@ static UChar32 ucnv_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
     return 0xffff;
 } 
 
+/* UTF-8-from-UTF-8 conversion functions ------------------------------------ */
+
+/* minimum code point values for n-byte UTF-8 sequences, n=0..4 */
+static const UChar32
+utf8_minLegal[5]={ 0, 0, 0x80, 0x800, 0x10000 };
+
+/* offsets for n-byte UTF-8 sequences that were calculated with ((lead<<6)+trail)<<6+trail... */
+static const UChar32
+utf8_offsets[7]={ 0, 0, 0x3080, 0xE2080, 0x3C82080 };
+
+/* "Convert" UTF-8 to UTF-8: Validate and copy. Modified from ucnv_DBCSFromUTF8(). */
+static void
+ucnv_UTF8FromUTF8(UConverterFromUnicodeArgs *pFromUArgs,
+                  UConverterToUnicodeArgs *pToUArgs,
+                  UErrorCode *pErrorCode) {
+    UConverter *utf8, *cnv;
+    const uint8_t *source, *sourceLimit;
+    uint8_t *target;
+    int32_t targetCapacity;
+    int32_t count;
+
+    int8_t oldToULength, toULength, toULimit;
+
+    UChar32 c;
+    uint8_t b, t1, t2;
+
+    /* set up the local pointers */
+    utf8=pToUArgs->converter;
+    cnv=pFromUArgs->converter;
+    source=(uint8_t *)pToUArgs->source;
+    sourceLimit=(uint8_t *)pToUArgs->sourceLimit;
+    target=(uint8_t *)pFromUArgs->target;
+    targetCapacity=(int32_t)(pFromUArgs->targetLimit-pFromUArgs->target);
+
+    /* get the converter state from the UTF-8 UConverter */
+    c=(UChar32)utf8->toUnicodeStatus;
+    if(c!=0) {
+        toULength=oldToULength=utf8->toULength;
+        toULimit=(int8_t)utf8->mode;
+    } else {
+        toULength=oldToULength=toULimit=0;
+    }
+
+    count=(int32_t)(sourceLimit-source)+oldToULength;
+    if(count<toULimit) {
+        /*
+         * Not enough input to complete the partial character.
+         * Jump to moreBytes below - it will not output to target.
+         */
+    } else if(targetCapacity<toULimit) {
+        /*
+         * Not enough target capacity to output the partial character.
+         * Let the standard converter handle this.
+         */
+        *pErrorCode=U_USING_DEFAULT_WARNING;
+        return;
+    } else {
+        /*
+         * Use a single counter for source and target, counting the minimum of
+         * the source length and the target capacity.
+         * As a result, the source length is checked only once per multi-byte
+         * character instead of twice.
+         *
+         * Make sure that the last byte sequence is complete, or else
+         * stop just before it.
+         * (The longest legal byte sequence has 3 trail bytes.)
+         * Count oldToULength (number of source bytes from a previous buffer)
+         * into the source length but reduce the source index by toULimit
+         * while going back over trail bytes in order to not go back into
+         * the bytes that will be read for finishing a partial
+         * sequence from the previous buffer.
+         * Let the standard converter handle edge cases.
+         */
+        int32_t i;
+
+        if(count>targetCapacity) {
+            count=targetCapacity;
+        }
+
+        i=0;
+        while(i<3 && i<(count-toULimit)) {
+            b=source[count-oldToULength-i-1];
+            if(U8_IS_TRAIL(b)) {
+                ++i;
+            } else {
+                if(i<utf8_countTrailBytes[b]) {
+                    /* stop converting before the lead byte if there are not enough trail bytes for it */
+                    count-=i+1;
+                }
+                break;
+            }
+        }
+    }
+
+    if(c!=0) {
+        utf8->toUnicodeStatus=0;
+        utf8->toULength=0;
+        goto moreBytes;
+        /* See note in ucnv_SBCSFromUTF8() about this goto. */
+    }
+
+    /* conversion loop */
+    while(count>0) {
+        b=*source++;
+        if((int8_t)b>=0) {
+            /* convert ASCII */
+            *target++=b;
+            --count;
+            continue;
+        } else {
+            if(b>0xe0) {
+                if( /* handle U+1000..U+D7FF inline */
+                    (t1=source[0]) >= 0x80 && ((b<0xed) && (t1 <= 0xbf) ||
+                                               (b==0xed && (t1 <= 0x9f))) &&
+                    (t2=source[1]) >= 0x80 && t2 <= 0xbf
+                ) {
+                    source+=2;
+                    *target++=b;
+                    *target++=t1;
+                    *target++=t2;
+                    count-=3;
+                    continue;
+                }
+            } else if(b<0xe0) {
+                if( /* handle U+0080..U+07FF inline */
+                    b>=0xc2 &&
+                    (t1=*source) >= 0x80 && t1 <= 0xbf
+                ) {
+                    ++source;
+                    *target++=b;
+                    *target++=t1;
+                    count-=2;
+                    continue;
+                }
+            } else if(b==0xe0) {
+                if( /* handle U+0800..U+0FFF inline */
+                    (t1=source[0]) >= 0xa0 && t1 <= 0xbf &&
+                    (t2=source[1]) >= 0x80 && t2 <= 0xbf
+                ) {
+                    source+=2;
+                    *target++=b;
+                    *target++=t1;
+                    *target++=t2;
+                    count-=3;
+                    continue;
+                }
+            }
+
+            /* handle "complicated" and error cases, and continuing partial characters */
+            oldToULength=0;
+            toULength=1;
+            toULimit=utf8_countTrailBytes[b]+1;
+            c=b;
+moreBytes:
+            while(toULength<toULimit) {
+                if(source<sourceLimit) {
+                    b=*source;
+                    if(U8_IS_TRAIL(b)) {
+                        ++source;
+                        ++toULength;
+                        c=(c<<6)+b;
+                    } else {
+                        break; /* sequence too short, stop with toULength<toULimit */
+                    }
+                } else {
+                    /* store the partial UTF-8 character, compatible with the regular UTF-8 converter */
+                    source-=(toULength-oldToULength);
+                    while(oldToULength<toULength) {
+                        utf8->toUBytes[oldToULength++]=*source++;
+                    }
+                    utf8->toUnicodeStatus=c;
+                    utf8->toULength=toULength;
+                    utf8->mode=toULimit;
+                    pToUArgs->source=(char *)source;
+                    pFromUArgs->target=(char *)target;
+                    return;
+                }
+            }
+
+            if( toULength==toULimit &&      /* consumed all trail bytes */
+                (toULength==3 || toULength==2) &&             /* BMP */
+                (c-=utf8_offsets[toULength])>=utf8_minLegal[toULength] &&
+                (c<=0xd7ff || 0xe000<=c)    /* not a surrogate */
+            ) {
+                /* legal byte sequence for BMP code point */
+            } else if(
+                toULength==toULimit && toULength==4 &&
+                (0x10000<=(c-=utf8_offsets[4]) && c<=0x10ffff)
+            ) {
+                /* legal byte sequence for supplementary code point */
+            } else {
+                /* error handling: illegal UTF-8 byte sequence */
+                source-=(toULength-oldToULength);
+                while(oldToULength<toULength) {
+                    utf8->toUBytes[oldToULength++]=*source++;
+                }
+                utf8->toULength=toULength;
+                pToUArgs->source=(char *)source;
+                pFromUArgs->target=(char *)target;
+                *pErrorCode=U_ILLEGAL_CHAR_FOUND;
+                return;
+            }
+
+            /* copy the legal byte sequence to the target */
+            {
+                int8_t i;
+
+                for(i=0; i<oldToULength; ++i) {
+                    *target++=utf8->toUBytes[i];
+                }
+                source-=(toULength-oldToULength);
+                for(; i<toULength; ++i) {
+                    *target++=*source++;
+                }
+                count-=toULength;
+            }
+        }
+    }
+
+    if(U_SUCCESS(*pErrorCode) && source<sourceLimit) {
+        if(target==(const uint8_t *)pFromUArgs->targetLimit) {
+            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+        } else {
+            b=*source;
+            toULimit=utf8_countTrailBytes[b]+1;
+            if(toULimit>(sourceLimit-source)) {
+                /* collect a truncated byte sequence */
+                toULength=0;
+                c=b;
+                for(;;) {
+                    utf8->toUBytes[toULength++]=b;
+                    if(++source==sourceLimit) {
+                        /* partial byte sequence at end of source */
+                        utf8->toUnicodeStatus=c;
+                        utf8->toULength=toULength;
+                        utf8->mode=toULimit;
+                        break;
+                    } else if(!U8_IS_TRAIL(b=*source)) {
+                        /* lead byte in trail byte position */
+                        utf8->toULength=toULength;
+                        *pErrorCode=U_ILLEGAL_CHAR_FOUND;
+                        break;
+                    }
+                    c=(c<<6)+b;
+                }
+            } else {
+                /* partial-sequence target overflow: fall back to the pivoting implementation */
+                *pErrorCode=U_USING_DEFAULT_WARNING;
+            }
+        }
+    }
+
+    /* write back the updated pointers */
+    pToUArgs->source=(char *)source;
+    pFromUArgs->target=(char *)target;
+}
+
 /* UTF-8 converter data ----------------------------------------------------- */
 
 static const UConverterImpl _UTF8Impl={
@@ -746,7 +1003,10 @@ static const UConverterImpl _UTF8Impl={
     NULL,
     NULL,
     NULL,
-    ucnv_getNonSurrogateUnicodeSet
+    ucnv_getNonSurrogateUnicodeSet,
+
+    ucnv_UTF8FromUTF8,
+    ucnv_UTF8FromUTF8
 };
 
 /* The 1208 CCSID refers to any version of Unicode of UTF-8 */
