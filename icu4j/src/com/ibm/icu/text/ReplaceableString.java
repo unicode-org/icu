@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -24,9 +24,6 @@ import com.ibm.icu.impl.Utility;
  */
 public class ReplaceableString implements Replaceable {
     private StringBuffer buf;
-
-    private static final String COPYRIGHT =
-        "\u00A9 IBM Corporation 1999. All rights reserved.";
 
     /**
      * Construct a new object with the given initial contents.

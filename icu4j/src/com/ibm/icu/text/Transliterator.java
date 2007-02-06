@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -12,7 +12,6 @@ import com.ibm.icu.impl.UtilityExtensions;
 import com.ibm.icu.util.CaseInsensitiveString;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
-import com.ibm.icu.impl.UCharacterProperty;
 
 import java.text.MessageFormat;
 import java.util.Enumeration;
@@ -499,9 +498,6 @@ public abstract class Transliterator {
      * <<This generates a lot of output.>>
      */
     static final boolean DEBUG = false;
-
-    private static final String COPYRIGHT =
-        "\u00A9 IBM Corporation 1999. All rights reserved.";
 
     /**
      * Default constructor.

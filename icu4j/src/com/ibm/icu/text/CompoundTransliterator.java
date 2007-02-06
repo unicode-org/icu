@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -31,9 +31,6 @@ class CompoundTransliterator extends Transliterator {
     private Transliterator[] trans;
 
     private int numAnonymousRBTs = 0;
-
-    private static final String COPYRIGHT =
-        "\u00A9 IBM Corporation 1999-2001. All rights reserved.";
 
     /**
      * Constructs a new compound transliterator given an array of

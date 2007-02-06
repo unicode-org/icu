@@ -2,20 +2,14 @@
 //#ifndef FOUNDATION
 /*
  *******************************************************************************
- * Copyright (C) 2006, Google, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2006-2007, Google, International Business Machines Corporation *
+ * and others. All Rights Reserved.                                            *
  *******************************************************************************
  */
 package com.ibm.icu.impl;
 
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
-import com.ibm.icu.text.DateTimePatternGenerator.FormatParser;
-import com.ibm.icu.text.DateTimePatternGenerator.VariableField;
-
-import java.util.BitSet;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * A simple parsing class for patterns and rules. Handles '...' quotations, \\uxxxx and \\Uxxxxxxxx, and symple syntax.

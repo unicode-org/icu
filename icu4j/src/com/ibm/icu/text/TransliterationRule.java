@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -120,9 +120,6 @@ class TransliterationRule {
      */
     private final RuleBasedTransliterator.Data data;
 
-
-    private static final String COPYRIGHT =
-        "\u00A9 IBM Corporation 1999-2001. All rights reserved.";
 
     /**
      * Construct a new rule with the given input, output text, and other

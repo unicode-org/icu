@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -11,9 +11,6 @@ package com.ibm.icu.text;
  * @internal
  */
 class NullTransliterator extends Transliterator {
-    private static final String COPYRIGHT =
-        "\u00A9 IBM Corporation 2000. All rights reserved.";
-
     /**
      * Package accessible IDs for this transliterator.
      */

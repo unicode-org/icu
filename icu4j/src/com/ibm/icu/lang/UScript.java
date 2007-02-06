@@ -24,12 +24,6 @@ import java.util.MissingResourceException;
  */
 public final class UScript {
     /**
-     * Puts a copyright in the .class file
-     */
-    private static final String copyrightNotice
-        = "Copyright \u00a92001 IBM Corp.  All rights reserved.";
-
-    /**
      * Invalid code
      * @stable ICU 2.4
      */

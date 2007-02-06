@@ -594,13 +594,11 @@ public final class UPropertyAliases implements ICUBinary.Authenticate {
          * array of stringPool[] indices.  MODIFIES THE ARRAY IN
          * PLACE.
          */
-        ///CLOVER:OFF
-        private void stringOffsetToIndex(short array[]) {
+/*        private void stringOffsetToIndex(short array[]) {
             for (int i=0; i<array.length; ++i) {
                 array[i] = stringOffsetToIndex(array[i]);
             }
-        }
-        ///CLOVER:ON
+        }*/
 
         /**
          * Convert an offset into the value map into a valueMap[]

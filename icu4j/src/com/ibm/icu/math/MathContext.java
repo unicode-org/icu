@@ -5,7 +5,7 @@ package com.ibm.icu.math;
 /* ------------------------------------------------------------------ */
 /* MathContext -- Math context settings                               */
 /* ------------------------------------------------------------------ */
-/* Copyright IBM Corporation, 1997, 2000, 2005.  All Rights Reserved.       */
+/* Copyright IBM Corporation, 1997, 2000, 2005, 2007.  All Rights Reserved. */
 /*                                                                    */
 /*   The MathContext object encapsulates the settings used by the     */
 /*   BigDecimal class; it could also be used by other arithmetics.    */
@@ -78,7 +78,7 @@ package com.ibm.icu.math;
  */
 
 public final class MathContext implements java.io.Serializable{
- private static final java.lang.String $0="MathContext.nrx";
+ //private static final java.lang.String $0="MathContext.nrx";
  
  /* ----- Properties ----- */
  /* properties public constant */
@@ -591,7 +591,7 @@ public final class MathContext implements java.io.Serializable{
  
  private static boolean isValidRound(int testround){
   int r=0;
-  {int $2=ROUNDS.length;r=0;r:for(;$2>0;$2--,r++){
+  {int $2=ROUNDS.length;for(r=0;$2>0;$2--,r++){
    if (testround==ROUNDS[r]) 
     return true;
    }

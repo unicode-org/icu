@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -73,8 +73,6 @@ import java.util.Locale;
 public class HebrewCalendar extends Calendar {
     // jdk1.4.2 serialver
     private static final long serialVersionUID = -1952524560588825816L;
-
-    private static String copyright = "Copyright \u00a9 1997-1998 IBM Corp. All Rights Reserved.";
 
     //-------------------------------------------------------------------------
     // Tons o' Constants...

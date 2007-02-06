@@ -1,6 +1,6 @@
 /*
  ****************************************************************************
- * Copyright (C) 2005-2006, International Business Machines Corporation and *
+ * Copyright (C) 2005-2007, International Business Machines Corporation and *
  * others. All Rights Reserved.                                             *
  ************************************************************************** *
  *
@@ -28,7 +28,7 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
     
     static class NGramParser
     {
-        private static final int N_GRAM_SIZE = 3;
+//        private static final int N_GRAM_SIZE = 3;
         private static final int N_GRAM_MASK = 0xFFFFFF;
 
         private int byteIndex = 0;
