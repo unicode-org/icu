@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2004, International Business Machines Corporation and        *
+* Copyright (C) 2004-2007, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -8,8 +8,6 @@
 package com.ibm.icu.util;
 
 import java.util.NoSuchElementException;
-
-import com.ibm.icu.impl.ICUResourceBundle;
 
 /**
  * <p>Class for enabling iteration over UResourceBundle objects.

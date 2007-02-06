@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2005, International Business Machines
+*   Copyright (C) 2004-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -20,9 +20,6 @@
 package com.ibm.icu.text;
 
 import com.ibm.icu.impl.UCaseProps;
-import com.ibm.icu.impl.UCharacterProperty;
-
-import com.ibm.icu.util.ULocale;
 
 /**
  * Implementation of UCaseProps.ContextIterator, iterates over a Replaceable.

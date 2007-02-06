@@ -1,6 +1,6 @@
 /*
  ****************************************************************************
- * Copyright (C) 2005-2006, International Business Machines Corporation and *
+ * Copyright (C) 2005-2007, International Business Machines Corporation and *
  * others. All Rights Reserved.                                             *
  ****************************************************************************
  *
@@ -312,7 +312,7 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
              int firstByte  = 0;
              int secondByte = 0;
              int thirdByte  = 0;
-             int fourthByte = 0;
+             //int fourthByte = 0;
              
              buildChar: {
                  firstByte = it.charValue = it.nextByte(det);                 

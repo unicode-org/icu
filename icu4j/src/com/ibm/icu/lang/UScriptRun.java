@@ -52,12 +52,6 @@ import com.ibm.icu.text.UTF16;
 public final class UScriptRun
 {
     /**
-     * Puts a copyright in the .class file
-     */
-    private static final String copyrightNotice
-        = "Copyright \u00a91999-2002 IBM Corp.  All rights reserved.";
-
-    /**
      * Construct an empty <code>UScriptRun</code> object. The <code>next()</code>
      * method will return <code>false</code> the first time it is called.
      *

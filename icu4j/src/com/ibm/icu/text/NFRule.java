@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -19,12 +19,6 @@ final class NFRule {
     //-----------------------------------------------------------------------
     // constants
     //-----------------------------------------------------------------------
-
-    /**
-     * Puts a copyright in the .class file
-     */
-    private static final String copyrightNotice
-        = "Copyright \u00a91997-1998 IBM Corp.  All rights reserved.";
 
     /**
      * Special base value used to identify a negative-number rule

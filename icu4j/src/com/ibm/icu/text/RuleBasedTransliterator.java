@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -276,9 +276,6 @@ import java.util.Hashtable;
 public class RuleBasedTransliterator extends Transliterator {
 
     private Data data;
-
-    private static final String COPYRIGHT =
-        "\u00A9 IBM Corporation 1999. All rights reserved.";
 
     /**
      * Constructs a new transliterator from the given rules.

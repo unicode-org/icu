@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2003-2006, International Business Machines Corporation and         *
+* Copyright (C) 2003-2007, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -16,10 +16,8 @@ import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICULocaleService.LocaleKeyFactory;
 import com.ibm.icu.impl.ICUService;
 import com.ibm.icu.impl.ICUService.Factory;
-import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.text.Collator.CollatorFactory;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.impl.ICUResourceBundle;
 
 final class CollatorServiceShim extends Collator.ServiceShim {
 
