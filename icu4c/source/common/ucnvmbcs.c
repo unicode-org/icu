@@ -2595,32 +2595,6 @@ ucnv_MBCSSimpleGetNextUChar(UConverterSharedData *sharedData,
 
 /* MBCS-from-Unicode conversion functions ----------------------------------- */
 
-/*
- * UTF-16-to-MBCS optimizations:
- * 0 Original code.
- * 1 Use mbcsIndex and utf8Friendly data.
- * 2 Also use asciiRoundtrips.
- *
- * Measurements have shown that 2 (both optimizations) gives the best results.
- */
-#define FASTMBCS 2
-
-/*
- * UTF-16-to-SBCS optimizations:
- * 0            Original code.
- * SBCS_ASCII   Use asciiRoundtrips.
- * SBCS_INDEX   Use sbcsIndex and utf8Friendly data.
- * Both         Use both optimizations.
- *
- * Measurements have shown that only the ASCII optimization broadly
- * yields improvements,
- * although for some combinations of charsets and text data each optimization
- * diminishes performance.
- */
-#define SBCS_ASCII 1
-#define SBCS_INDEX 2
-#define FASTSBCS SBCS_ASCII
-
 /* This version of ucnv_MBCSFromUnicodeWithOffsets() is optimized for double-byte codepages. */
 static void
 ucnv_MBCSDoubleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
@@ -2632,9 +2606,7 @@ ucnv_MBCSDoubleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     int32_t *offsets;
 
     const uint16_t *table;
-#if FASTMBCS
     const uint16_t *mbcsIndex;
-#endif
     const uint8_t *bytes;
 
     UChar32 c;
@@ -2642,9 +2614,7 @@ ucnv_MBCSDoubleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     int32_t sourceIndex, nextSourceIndex;
 
     uint32_t stage2Entry;
-#if FASTMBCS>=2
     uint32_t asciiRoundtrips;
-#endif
     uint32_t value;
     uint8_t unicodeMask;
 
@@ -2660,17 +2630,13 @@ ucnv_MBCSDoubleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     offsets=pArgs->offsets;
 
     table=cnv->sharedData->mbcs.fromUnicodeTable;
-#if FASTMBCS
     mbcsIndex=cnv->sharedData->mbcs.mbcsIndex;
-#endif
     if((cnv->options&UCNV_OPTION_SWAP_LFNL)!=0) {
         bytes=cnv->sharedData->mbcs.swapLFNLFromUnicodeBytes;
     } else {
         bytes=cnv->sharedData->mbcs.fromUnicodeBytes;
     }
-#if FASTMBCS>=2
     asciiRoundtrips=cnv->sharedData->mbcs.asciiRoundtrips;
-#endif
 
     /* get the converter state from UConverter */
     c=cnv->fromUChar32;
@@ -2701,7 +2667,6 @@ ucnv_MBCSDoubleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
              */
             c=*source++;
             ++nextSourceIndex;
-#if FASTMBCS>=2
             if(c<=0x7f && IS_ASCII_ROUNDTRIP(c, asciiRoundtrips)) {
                 *target++=(uint8_t)c;
                 if(offsets!=NULL) {
@@ -2712,8 +2677,6 @@ ucnv_MBCSDoubleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                 c=0;
                 continue;
             }
-#endif
-#if FASTMBCS
             /*
              * utf8Friendly table: Test for <=0xd7ff rather than <=MBCS_FAST_MAX
              * to avoid dealing with surrogates.
@@ -2727,7 +2690,6 @@ ucnv_MBCSDoubleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                 }
                 /* output the value */
             } else {
-#endif
                 /*
                  * This also tests if the codepage maps single surrogates.
                  * If it does, then surrogates are not paired but mapped separately.
@@ -2810,9 +2772,7 @@ unassigned:
                         continue;
                     }
                 }
-#if FASTMBCS
             }
-#endif
 
             /* write the output character bytes from value and length */
             /* from the first if in the loop we know that targetCapacity>0 */
@@ -3038,6 +2998,11 @@ unassigned:
  * that map only to and from the BMP.
  * In addition to single-byte/state optimizations, the offset calculations
  * become much easier.
+ * It would be possible to use the sbcsIndex for UTF-8-friendly tables,
+ * but measurements have shown that this diminishes performance
+ * in more cases than it improves it.
+ * See SVN revision 21013 (2007-feb-06) for the last version with #if switches
+ * for various MBCS and SBCS optimizations.
  */
 static void
 ucnv_MBCSSingleFromBMPWithOffsets(UConverterFromUnicodeArgs *pArgs,
@@ -3049,18 +3014,13 @@ ucnv_MBCSSingleFromBMPWithOffsets(UConverterFromUnicodeArgs *pArgs,
     int32_t *offsets;
 
     const uint16_t *table;
-#if FASTSBCS&SBCS_INDEX
-    const uint16_t *sbcsIndex;
-#endif
     const uint16_t *results;
 
     UChar32 c;
 
     int32_t sourceIndex;
 
-#if FASTSBCS&SBCS_ASCII
     uint32_t asciiRoundtrips;
-#endif
     uint16_t value, minValue;
 
     /* set up the local pointers */
@@ -3072,17 +3032,12 @@ ucnv_MBCSSingleFromBMPWithOffsets(UConverterFromUnicodeArgs *pArgs,
     offsets=pArgs->offsets;
 
     table=cnv->sharedData->mbcs.fromUnicodeTable;
-#if FASTSBCS&SBCS_INDEX
-    sbcsIndex=cnv->sharedData->mbcs.sbcsIndex;
-#endif
     if((cnv->options&UCNV_OPTION_SWAP_LFNL)!=0) {
         results=(uint16_t *)cnv->sharedData->mbcs.swapLFNLFromUnicodeBytes;
     } else {
         results=(uint16_t *)cnv->sharedData->mbcs.fromUnicodeBytes;
     }
-#if FASTSBCS&SBCS_ASCII
     asciiRoundtrips=cnv->sharedData->mbcs.asciiRoundtrips;
-#endif
 
     if(cnv->useFallback) {
         /* use all roundtrip and fallback results */
@@ -3175,19 +3130,12 @@ unrolled:
          * This speeds up the conversion of assigned characters.
          */
         /* convert the Unicode code point in c into codepage bytes */
-#if FASTSBCS&SBCS_ASCII
         if(c<=0x7f && IS_ASCII_ROUNDTRIP(c, asciiRoundtrips)) {
             *target++=(uint8_t)c;
             --targetCapacity;
             c=0;
             continue;
         }
-#endif
-#if FASTSBCS&SBCS_INDEX
-        if(c<=SBCS_FAST_MAX) {
-            value=SBCS_RESULT_FROM_LOW_BMP(sbcsIndex, results, c);
-        } else
-#endif
         value=MBCS_SINGLE_RESULT_FROM_U(table, results, c);
         /* is this code point assigned, or do we use fallbacks? */
         if(value>=minValue) {
@@ -3312,9 +3260,7 @@ ucnv_MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     int32_t *offsets;
 
     const uint16_t *table;
-#if FASTMBCS
     const uint16_t *mbcsIndex;
-#endif
     const uint8_t *p, *bytes;
     uint8_t outputType;
 
@@ -3323,9 +3269,7 @@ ucnv_MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     int32_t prevSourceIndex, sourceIndex, nextSourceIndex;
 
     uint32_t stage2Entry;
-#if FASTMBCS>=2
     uint32_t asciiRoundtrips;
-#endif
     uint32_t value;
     int32_t length, prevLength;
     uint8_t unicodeMask;
@@ -3348,21 +3292,13 @@ ucnv_MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     outputType=cnv->sharedData->mbcs.outputType;
     unicodeMask=cnv->sharedData->mbcs.unicodeMask;
     if(outputType==MBCS_OUTPUT_1 && !(unicodeMask&UCNV_HAS_SURROGATES)) {
-        if(!(unicodeMask&UCNV_HAS_SUPPLEMENTARY)
-#if FASTSBCS&SBCS_INDEX
-            && cnv->sharedData->mbcs.utf8Friendly
-#endif
-        ) {
+        if(!(unicodeMask&UCNV_HAS_SUPPLEMENTARY)) {
             ucnv_MBCSSingleFromBMPWithOffsets(pArgs, pErrorCode);
         } else {
             ucnv_MBCSSingleFromUnicodeWithOffsets(pArgs, pErrorCode);
         }
         return;
-    } else if(outputType==MBCS_OUTPUT_2
-#if FASTMBCS
-              && cnv->sharedData->mbcs.utf8Friendly
-#endif
-    ) {
+    } else if(outputType==MBCS_OUTPUT_2 && cnv->sharedData->mbcs.utf8Friendly) {
         ucnv_MBCSDoubleFromUnicodeWithOffsets(pArgs, pErrorCode);
         return;
     }
@@ -3375,21 +3311,17 @@ ucnv_MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     offsets=pArgs->offsets;
 
     table=cnv->sharedData->mbcs.fromUnicodeTable;
-#if FASTMBCS
     if(cnv->sharedData->mbcs.utf8Friendly) {
         mbcsIndex=cnv->sharedData->mbcs.mbcsIndex;
     } else {
         mbcsIndex=NULL;
     }
-#endif
     if((cnv->options&UCNV_OPTION_SWAP_LFNL)!=0) {
         bytes=cnv->sharedData->mbcs.swapLFNLFromUnicodeBytes;
     } else {
         bytes=cnv->sharedData->mbcs.fromUnicodeBytes;
     }
-#if FASTMBCS>=2
     asciiRoundtrips=cnv->sharedData->mbcs.asciiRoundtrips;
-#endif
 
     /* get the converter state from UConverter */
     c=cnv->fromUChar32;
@@ -3445,7 +3377,6 @@ ucnv_MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
              */
             c=*source++;
             ++nextSourceIndex;
-#if FASTMBCS>=2
             if(c<=0x7f && IS_ASCII_ROUNDTRIP(c, asciiRoundtrips)) {
                 *target++=(uint8_t)c;
                 if(offsets!=NULL) {
@@ -3457,8 +3388,6 @@ ucnv_MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                 c=0;
                 continue;
             }
-#endif
-#if FASTMBCS
             /*
              * utf8Friendly table: Test for <=0xd7ff rather than <=MBCS_FAST_MAX
              * to avoid dealing with surrogates.
@@ -3614,7 +3543,6 @@ ucnv_MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                 }
                 /* output the value */
             } else {
-#endif
                 /*
                  * This also tests if the codepage maps single surrogates.
                  * If it does, then surrogates are not paired but mapped separately.
@@ -3858,9 +3786,7 @@ unassigned:
                         continue;
                     }
                 }
-#if FASTMBCS
             }
-#endif
 
             /* write the output character bytes from value and length */
             /* from the first if in the loop we know that targetCapacity>0 */
