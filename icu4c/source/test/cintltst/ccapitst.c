@@ -20,6 +20,7 @@
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"
 #include "unicode/putil.h"
+#include "unicode/uset.h"
 #include "unicode/ustring.h"
 #include "ucnv_bld.h" /* for sizeof(UConverter) */
 #include "cmemory.h"  /* for UAlignedMemory */
@@ -108,6 +109,7 @@ static void TestConvertSafeCloneCallback(void);
 
 static void TestEBCDICSwapLFNL(void);
 static void TestConvertEx(void);
+static void TestConvertExFromUTF8(void);
 static void TestConvertAlgorithmic(void);
        void TestDefaultConverterError(void);    /* defined in cctest.c */
 static void TestToUCountPending(void);
@@ -136,6 +138,7 @@ void addTestConvert(TestNode** root)
     addTest(root, &TestLMBCSMaxChar,            "tsconv/ccapitst/TestLMBCSMaxChar");
     addTest(root, &TestEBCDICSwapLFNL,          "tsconv/ccapitst/TestEBCDICSwapLFNL");
     addTest(root, &TestConvertEx,               "tsconv/ccapitst/TestConvertEx");
+    addTest(root, &TestConvertExFromUTF8,       "tsconv/ccapitst/TestConvertExFromUTF8");
     addTest(root, &TestConvertAlgorithmic,      "tsconv/ccapitst/TestConvertAlgorithmic");
     addTest(root, &TestDefaultConverterError,   "tsconv/ccapitst/TestDefaultConverterError");
     addTest(root, &TestToUCountPending,         "tsconv/ccapitst/TestToUCountPending");
@@ -2205,6 +2208,11 @@ convertExStreaming(UConverter *srcCnv, UConverter *targetCnv,
                        pivotBuffer, &pivotSource, &pivotTarget, pivotLimit,
                        FALSE, flush, &errorCode);
         targetLength=(int32_t)(target-targetBuffer);
+        if(target>targetLimit) {
+            log_err("ucnv_convertEx(%s) chunk[%d] target %p exceeds targetLimit %p\n",
+                    testName, chunkSize, target, targetLimit);
+            break; /* TODO: major problem! */
+        }
         if(errorCode==U_BUFFER_OVERFLOW_ERROR) {
             /* continue converting another chunk */
             errorCode=U_ZERO_ERROR;
@@ -2400,6 +2408,264 @@ static void TestConvertEx() {
     ucnv_close(cnv1);
     ucnv_close(cnv2);
 #endif
+}
+
+/* Test illegal UTF-8 input: Data and functions for TestConvertExFromUTF8(). */
+static const char *const badUTF8[]={
+    /* truncated multi-byte sequences */
+    "\xd0",
+    "\xe0",
+    "\xe1",
+    "\xed",
+    "\xee",
+    "\xf0",
+    "\xf1",
+    "\xf4",
+    "\xf8",
+    "\xfc",
+
+    "\xe0\x80",
+    "\xe0\xa0",
+    "\xe1\x80",
+    "\xed\x80",
+    "\xed\xa0",
+    "\xee\x80",
+    "\xf0\x80",
+    "\xf0\x90",
+    "\xf1\x80",
+    "\xf4\x80",
+    "\xf4\x90",
+    "\xf8\x80",
+    "\xfc\x80",
+
+    "\xf0\x80\x80",
+    "\xf0\x90\x80",
+    "\xf1\x80\x80",
+    "\xf4\x80\x80",
+    "\xf4\x90\x80",
+    "\xf8\x80\x80",
+    "\xfc\x80\x80",
+
+    "\xf8\x80\x80\x80",
+    "\xfc\x80\x80\x80",
+
+    "\xfc\x80\x80\x80\x80",
+
+    /* complete sequences but non-shortest forms or out of range etc. */
+    "\xc0\x80",
+    "\xe0\x80\x80",
+    "\xed\xa0\x80",
+    "\xf0\x80\x80\x80",
+    "\xf4\x90\x80\x80",
+    "\xf8\x80\x80\x80\x80",
+    "\xfc\x80\x80\x80\x80\x80",
+    "\xfe",
+    "\xff"
+};
+
+/* get some character that can be converted and convert it */
+static UBool getTestChar(UConverter *cnv, const char *converterName,
+                         char charUTF8[4], int32_t *pCharUTF8Length,
+                         char char0[8], int32_t *pChar0Length,
+                         char char1[8], int32_t *pChar1Length) {
+    UChar utf16[U16_MAX_LENGTH];
+    int32_t utf16Length;
+
+    const UChar *utf16Source;
+    char *target;
+
+    USet *set;
+    UChar32 c;
+    UErrorCode errorCode;
+
+    errorCode=U_ZERO_ERROR;
+    set=uset_open(1, 0);
+    ucnv_getUnicodeSet(cnv, set, UCNV_ROUNDTRIP_SET, &errorCode);
+    c=uset_charAt(set, uset_size(set)/2);
+    uset_close(set);
+
+    utf16Length=0;
+    U16_APPEND_UNSAFE(utf16, utf16Length, c);
+    *pCharUTF8Length=0;
+    U8_APPEND_UNSAFE(charUTF8, *pCharUTF8Length, c);
+
+    utf16Source=utf16;
+    target=char0;
+    ucnv_fromUnicode(cnv,
+                     &target, char0+sizeof(char0),
+                     &utf16Source, utf16+utf16Length,
+                     NULL, FALSE, &errorCode);
+    *pChar0Length=(int32_t)(target-char0);
+
+    utf16Source=utf16;
+    target=char1;
+    ucnv_fromUnicode(cnv,
+                     &target, char1+sizeof(char1),
+                     &utf16Source, utf16+utf16Length,
+                     NULL, FALSE, &errorCode);
+    *pChar1Length=(int32_t)(target-char1);
+
+    if(U_FAILURE(errorCode)) {
+        log_err("unable to get test character for %s - %s\n", converterName, u_errorName(errorCode));
+        return FALSE;
+    }
+    return TRUE;
+}
+
+static void testFromTruncatedUTF8(UConverter *utf8Cnv, UConverter *cnv, const char *converterName,
+                                  char charUTF8[4], int32_t charUTF8Length,
+                                  char char0[8], int32_t char0Length,
+                                  char char1[8], int32_t char1Length) {
+    char utf8[16];
+    int32_t utf8Length;
+
+    char output[16];
+    int32_t outputLength;
+
+    char invalidChars[8];
+    int8_t invalidLength;
+
+    char *source;
+    char *target;
+
+    UChar pivotBuffer[8];
+    UChar *pivotSource, *pivotTarget;
+
+    UErrorCode errorCode;
+    int32_t i;
+
+    /* test truncated sequences */
+    errorCode=U_ZERO_ERROR;
+    ucnv_setToUCallBack(utf8Cnv, UCNV_TO_U_CALLBACK_STOP, NULL, NULL, NULL, &errorCode);
+
+    memcpy(utf8, charUTF8, charUTF8Length);
+
+    for(i=0; i<LENGTHOF(badUTF8); ++i) {
+        /* truncated sequence? */
+        int32_t length=strlen(badUTF8[i]);
+        if(length>=(1+U8_COUNT_TRAIL_BYTES(badUTF8[i][0]))) {
+            continue;
+        }
+
+        /* assemble a string with the test character and the truncated sequence */
+        memcpy(utf8+charUTF8Length, badUTF8[i], length);
+        utf8Length=charUTF8Length+length;
+
+        /* convert and check the invalidChars */
+        source=utf8;
+        target=output;
+        pivotSource=pivotTarget=pivotBuffer;
+        errorCode=U_ZERO_ERROR;
+        ucnv_convertEx(cnv, utf8Cnv,
+                       &target, output+sizeof(output),
+                       &source, utf8+utf8Length,
+                       pivotBuffer, &pivotSource, &pivotTarget, pivotBuffer+LENGTHOF(pivotBuffer),
+                       TRUE, TRUE, /* reset & flush */
+                       &errorCode);
+        outputLength=(int32_t)(target-output);
+        if(errorCode!=U_TRUNCATED_CHAR_FOUND || pivotSource!=pivotBuffer) {
+            log_err("unexpected error %s from %s badUTF8[%ld]\n", u_errorName(errorCode), converterName, (long)i);
+            continue;
+        }
+
+        errorCode=U_ZERO_ERROR;
+        invalidLength=(int8_t)sizeof(invalidChars);
+        ucnv_getInvalidChars(utf8Cnv, invalidChars, &invalidLength, &errorCode);
+        if(invalidLength!=length || 0!=memcmp(invalidChars, badUTF8[i], length)) {
+            log_err("wrong invalidChars from %s badUTF8[%ld]\n", converterName, (long)i);
+        }
+    }
+}
+
+static void testFromBadUTF8(UConverter *utf8Cnv, UConverter *cnv, const char *converterName,
+                            char charUTF8[4], int32_t charUTF8Length,
+                            char char0[8], int32_t char0Length,
+                            char char1[8], int32_t char1Length) {
+    char utf8[600], expect[600];
+    int32_t utf8Length, expectLength;
+
+    char testName[32];
+
+    UErrorCode errorCode;
+    int32_t i;
+
+    errorCode=U_ZERO_ERROR;
+    ucnv_setToUCallBack(utf8Cnv, UCNV_TO_U_CALLBACK_SKIP, NULL, NULL, NULL, &errorCode);
+
+    /*
+     * assemble an input string with the test character between each
+     * bad sequence,
+     * and an expected string with repeated test character output
+     */
+    memcpy(utf8, charUTF8, charUTF8Length);
+    utf8Length=charUTF8Length;
+
+    memcpy(expect, char0, char0Length);
+    expectLength=char0Length;
+
+    for(i=0; i<LENGTHOF(badUTF8); ++i) {
+        int32_t length=strlen(badUTF8[i]);
+        memcpy(utf8+utf8Length, badUTF8[i], length);
+        utf8Length+=length;
+
+        memcpy(utf8+utf8Length, charUTF8, charUTF8Length);
+        utf8Length+=charUTF8Length;
+
+        memcpy(expect+expectLength, char1, char1Length);
+        expectLength+=char1Length;
+    }
+
+    /* expect that each bad UTF-8 sequence is detected and skipped */
+    strcpy(testName, "from bad UTF-8 to ");
+    strcat(testName, converterName);
+
+    convertExMultiStreaming(utf8Cnv, cnv,
+                            utf8, utf8Length,
+                            expect, expectLength,
+                            testName,
+                            U_ZERO_ERROR);
+}
+
+/* Test illegal UTF-8 input. */
+static void TestConvertExFromUTF8() {
+    static const char *const converterNames[]={
+        "windows-1252",
+        "shift-jis",
+        "us-ascii",
+        "iso-8859-1",
+        "utf-8"
+    };
+
+    UConverter *utf8Cnv, *cnv;
+    UErrorCode errorCode;
+    int32_t i;
+
+    /* fromUnicode versions of some character, from initial state and later */
+    char charUTF8[4], char0[8], char1[8];
+    int32_t charUTF8Length, char0Length, char1Length;
+
+    errorCode=U_ZERO_ERROR;
+    utf8Cnv=ucnv_open("UTF-8", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("unable to open UTF-8 converter - %s\n", u_errorName(errorCode));
+        return;
+    }
+
+    for(i=0; i<LENGTHOF(converterNames); ++i) {
+        errorCode=U_ZERO_ERROR;
+        cnv=ucnv_open(converterNames[i], &errorCode);
+        if(U_FAILURE(errorCode)) {
+            log_err("unable to open %s converter - %s\n", converterNames[i], u_errorName(errorCode));
+            continue;
+        }
+        if(!getTestChar(cnv, converterNames[i], charUTF8, &charUTF8Length, char0, &char0Length, char1, &char1Length)) {
+            continue;
+        }
+        testFromTruncatedUTF8(utf8Cnv, cnv, converterNames[i], charUTF8, charUTF8Length, char0, char0Length, char1, char1Length);
+        testFromBadUTF8(utf8Cnv, cnv, converterNames[i], charUTF8, charUTF8Length, char0, char0Length, char1, char1Length);
+        ucnv_close(cnv);
+    }
+    ucnv_close(utf8Cnv);
 }
 
 static void
