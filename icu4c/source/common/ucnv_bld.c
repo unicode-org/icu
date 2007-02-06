@@ -1,7 +1,7 @@
 /*
  ********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1996-2006, International Business Machines Corporation and
+ * Copyright (c) 1996-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
  *
@@ -1433,6 +1433,7 @@ ucnv_swap(const UDataSwapper *ds,
                                        outBytes+offset, pErrorCode);
                 } else {
                     /* otherwise: swap the stage tables separately */
+                    int32_t maxFastUChar;
 
                     /* stage 1 table: uint16_t[0x440 or 0x40] */
                     if(inStaticData->unicodeMask&UCNV_HAS_SUPPLEMENTARY) {
@@ -1466,6 +1467,20 @@ ucnv_swap(const UDataSwapper *ds,
                     default:
                         /* just uint8_t[], nothing to swap */
                         break;
+                    }
+
+                    /*
+                     * utf8Friendly MBCS files (mbcsHeader.version 4.3)
+                     * contain an additional mbcsIndex table:
+                     *   uint16_t[(maxFastUChar+1)>>6];
+                     * where maxFastUChar=((mbcsHeader.version[2]<<8)|0xff).
+                     */
+                    if(mbcsHeader.version[1]>=3 && (maxFastUChar=mbcsHeader.version[2])!=0) {
+                        maxFastUChar=(maxFastUChar<<8)|0xff;
+                        offset+=count;
+                        count=((maxFastUChar+1)>>6)*2;
+                        ds->swapArray16(ds, inBytes+offset, (int32_t)count,
+                                           outBytes+offset, pErrorCode);
                     }
                 }
             }

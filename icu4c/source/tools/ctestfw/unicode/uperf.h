@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2005, International Business Machines
+* Copyright (c) 2002-2006, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 **********************************************************************
@@ -15,6 +15,10 @@
 #include "unicode/testtype.h"
 #include "unicode/utimer.h"
 #include "ucbuf.h"
+
+// Forward declarations from uoptions.h.
+struct UOption;
+typedef struct UOption UOption;
 
 #if !UCONFIG_NO_CONVERSION
 
@@ -126,6 +130,14 @@ public:
 protected:
     UPerfTest(int32_t argc, const char* argv[], UErrorCode& status);
 
+    UPerfTest(int32_t argc, const char* argv[],
+              UOption addOptions[], int32_t addOptionsCount,
+              const char *addUsage,
+              UErrorCode& status);
+
+    void init(UOption addOptions[], int32_t addOptionsCount,
+              UErrorCode& status);
+
     virtual UPerfFunction* runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ); // overide !
 
     virtual UBool runTestLoop( char* testname, char* par );
@@ -141,6 +153,7 @@ protected:
     int32_t      iterations;
     int32_t      passes;
     int32_t      time;
+    const char * _addUsage;
     const char** _argv;
     int32_t      _argc;
     int32_t      _remainingArgc;

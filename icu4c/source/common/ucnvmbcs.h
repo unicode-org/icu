@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2000-2004, International Business Machines
+*   Copyright (C) 2000-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -41,6 +41,59 @@
  * the same toUnicode structures, while the fromUnicode structures for SBCS
  * differ from those for other MBCS-style converters.
  *
+ * _MBCSHeader.version 4.3 optionally modifies the fromUnicode data structures
+ * slightly and optionally adds a table for conversion to MBCS (non-SBCS)
+ * charsets.
+ *
+ * The modifications are to make the data utf8Friendly. Not every 4.3 file
+ * file contains utf8Friendly data.
+ * It is utf8Friendly if _MBCSHeader.version[2]!=0.
+ * In this case, the data structures are utf8Friendly up to the code point
+ *   maxFastUChar=((_MBCSHeader.version[2]<<8)|0xff)
+ *
+ * A utf8Friendly file has fromUnicode stage 3 entries for code points up to
+ * maxFastUChar allocated in blocks of 64 for indexing with the 6 bits from
+ * a UTF-8 trail byte. ASCII is allocated linearly with 128 contiguous entries.
+ *
+ * In addition, a utf8Friendly MBCS file contains an additional
+ *   uint16_t mbcsIndex[(maxFastUChar+1)>>6];
+ * which replaces the stage 1 and 2 tables for indexing with bits from the
+ * UTF-8 lead byte and middle trail byte. Unlike the older MBCS stage 2 table,
+ * the mbcsIndex does not contain roundtrip flags. Therefore, all fallbacks
+ * from code points up to maxFastUChar (and roundtrips to 0x00) are moved to
+ * the extension data structure. This also allows for faster roundtrip
+ * conversion from UTF-16.
+ *
+ * SBCS files do not contain an additional sbcsIndex[] array because the
+ * proportional size increase would be noticeable, but the runtime
+ * code builds one for the code point range for which the runtime conversion
+ * code is optimized.
+ *
+ * For SBCS, maxFastUChar should be at least U+0FFF. The initial makeconv
+ * implementation sets it to U+1FFF. Because the sbcsIndex is not stored in
+ * the file, a larger maxFastUChar only affects stage 3 block allocation size
+ * and is free in empty blocks. (Larger blocks with sparse contents cause larger
+ * files.) U+1FFF includes almost all of the small scripts.
+ * U+0FFF covers UTF-8 two-byte sequences and three-byte sequences starting with
+ * 0xe0. This includes most scripts with legacy SBCS charsets.
+ * The initial runtime implementation using 4.3 files only builds an sbcsIndex
+ * for code points up to U+0FFF.
+ *
+ * For MBCS, maxFastUChar should be at least U+D7FF (=initial value).
+ * This boundary is convenient because practically all of the commonly used
+ * characters are below it, and because it is the boundary to surrogate
+ * code points, above which special handling is necessary anyway.
+ * (Surrogate pair assembly for UTF-16, validity checking for UTF-8.)
+ *
+ * maxFastUChar could be up to U+FFFF to cover the whole BMP, which could be
+ * useful especially for conversion from UTF-8 when the input can be assumed
+ * to be valid, because the surrogate range would then not have to be
+ * checked.
+ * (With maxFastUChar=0xffff, makeconv would have to check for mbcsIndex value
+ * overflow because with the all-unassigned block 0 and nearly full mappings
+ * from the BMP it is theoretically possible that an index into stage 3
+ * exceeds 16 bits.)
+ *
  * _MBCSHeader.version 4.2 adds an optional conversion extension data structure.
  * If it is present, then an ICU version reading header versions 4.0 or 4.1
  * will be able to use the base table and ignore the extension.
@@ -60,7 +113,7 @@
  * struct _MBCSHeader (see the definition in this header file below)
  * contains 32-bit fields as follows:
  * 8 values:
- *  0   uint8_t[4]  MBCS version in UVersionInfo format (currently 4.2.0.0)
+ *  0   uint8_t[4]  MBCS version in UVersionInfo format (currently 4.3.x.0)
  *  1   uint32_t    countStates
  *  2   uint32_t    countToUFallbacks
  *  3   uint32_t    offsetToUCodeUnits
@@ -121,6 +174,15 @@
  *         uint16_t fromUBytes[fromUBytesLength/2]; or
  *         uint32_t fromUBytes[fromUBytesLength/4];
  *     }
+ *
+ *     -- optional utf8Friendly mbcsIndex -- _MBCSHeader.version 4.3 (ICU 3.8) and higher
+ *     if(outputType!=MBCS_OUTPUT_1 &&
+ *        _MBCSHeader.version[1]>=3 &&
+ *        (maxFastUChar=_MBCSHeader.version[2])!=0
+ *     ) {
+ *         maxFastUChar=(maxFastUChar<<8)|0xff;
+ *         uint16_t mbcsIndex[(maxFastUChar+1)>>6];
+ *     }
  * }
  *
  * -- extension table, details see ucnv_ext.h
@@ -180,8 +242,16 @@ enum {
 #define MBCS_ENTRY_FINAL_VALUE(entry) ((entry)&0xfffff)
 #define MBCS_ENTRY_FINAL_VALUE_16(entry) (uint16_t)(entry)
 
+#define IS_ASCII_ROUNDTRIP(b, asciiRoundtrips) (((asciiRoundtrips) & (1<<((b)>>2)))!=0)
+
 /* single-byte fromUnicode: get the 16-bit result word */
 #define MBCS_SINGLE_RESULT_FROM_U(table, results, c) (results)[ (table)[ (table)[(c)>>10] +(((c)>>4)&0x3f) ] +((c)&0xf) ]
+
+/* single-byte fromUnicode using the sbcsIndex */
+#define SBCS_RESULT_FROM_LOW_BMP(table, results, c) (results)[ (table)[(c)>>6] +((c)&0x3f) ]
+
+/* single-byte fromUTF8 using the sbcsIndex; l and t must be masked externally; can be l=0 and t<=0x7f */
+#define SBCS_RESULT_FROM_UTF8(table, results, l, t) (results)[ (table)[l] +(t) ]
 
 /* multi-byte fromUnicode: get the 32-bit stage 2 entry */
 #define MBCS_STAGE_2_FROM_U(table, c) ((const uint32_t *)(table))[ (table)[(c)>>10] +(((c)>>4)&0x3f) ]
@@ -191,6 +261,12 @@ enum {
 #define MBCS_VALUE_4_FROM_STAGE_2(bytes, stage2Entry, c) ((uint32_t *)(bytes))[16*(uint32_t)(uint16_t)(stage2Entry)+((c)&0xf)]
 
 #define MBCS_POINTER_3_FROM_STAGE_2(bytes, stage2Entry, c) ((bytes)+(16*(uint32_t)(uint16_t)(stage2Entry)+((c)&0xf))*3)
+
+/* double-byte fromUnicode using the mbcsIndex */
+#define DBCS_RESULT_FROM_MOST_BMP(table, results, c) (results)[ (table)[(c)>>6] +((c)&0x3f) ]
+
+/* double-byte fromUTF8 using the mbcsIndex; l and t1 combined into lt1; lt1 and t2 must be masked externally */
+#define DBCS_RESULT_FROM_UTF8(table, results, lt1, t2) (results)[ (table)[lt1] +(t2) ]
 
 
 /**
@@ -226,9 +302,19 @@ typedef struct {
     UChar32 codePoint;
 } _MBCSToUFallback;
 
+/** Constants for fast and UTF-8-friendly conversion. */
+enum {
+    SBCS_FAST_MAX=0x0fff,               /* maximum code point with UTF-8-friendly SBCS runtime code, see makeconv SBCS_UTF8_MAX */
+    SBCS_FAST_LIMIT=SBCS_FAST_MAX+1,    /* =0x1000 */
+    MBCS_FAST_MAX=0xd7ff,               /* maximum code point with UTF-8-friendly MBCS runtime code, see makeconv MBCS_UTF8_MAX */
+    MBCS_FAST_LIMIT=MBCS_FAST_MAX+1     /* =0xd800 */
+};
+
 /**
  * This is the MBCS part of the UConverterTable union (a runtime data structure).
  * It keeps all the per-converter data and points into the loaded mapping tables.
+ *
+ * utf8Friendly data structures added with _MBCSHeader.version 4.3
  */
 typedef struct UConverterMBCSTable {
     /* toUnicode */
@@ -242,10 +328,17 @@ typedef struct UConverterMBCSTable {
 
     /* fromUnicode */
     const uint16_t *fromUnicodeTable;
+    const uint16_t *mbcsIndex;              /* for fast conversion from most of BMP to MBCS (utf8Friendly data) */
+    uint16_t sbcsIndex[SBCS_FAST_LIMIT>>6]; /* for fast conversion from low BMP to SBCS (utf8Friendly data) */
     const uint8_t *fromUnicodeBytes;
-    uint8_t *swapLFNLFromUnicodeBytes; /* for swaplfnl */
+    uint8_t *swapLFNLFromUnicodeBytes;      /* for swaplfnl */
     uint32_t fromUBytesLength;
     uint8_t outputType, unicodeMask;
+    UBool utf8Friendly;                     /* for utf8Friendly data */
+    UChar maxFastUChar;                     /* for utf8Friendly data */
+
+    /* roundtrips */
+    uint32_t asciiRoundtrips;
 
     /* converter name for swaplfnl */
     char *swapLFNLName;

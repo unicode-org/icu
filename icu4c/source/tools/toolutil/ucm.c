@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2005, International Business Machines
+*   Copyright (C) 2003-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -238,7 +238,7 @@ ucm_sortTable(UCMTable *t) {
          * allocate mappingsCapacity instead of mappingsLength so that
          * if mappings are added, the reverseMap need not be
          * reallocated each time
-         * (see moveMappings() and ucm_addMapping())
+         * (see ucm_moveMappings() and ucm_addMapping())
          */
         t->reverseMap=(int32_t *)uprv_malloc(t->mappingsCapacity*sizeof(int32_t));
         if(t->reverseMap==NULL) {
@@ -264,20 +264,12 @@ ucm_sortTable(UCMTable *t) {
     t->isSorted=TRUE;
 }
 
-enum {
-    MOVE_TO_EXT=1,
-    REMOVE_MAPPING=2
-};
-
 /*
- * move mappings with their move flag set from the base table
- * and optionally to the extension table
- *
- * works only with explicit precision flags because it uses some of the
- * flags bits
+ * remove mappings with their move flag set from the base table
+ * and move some of them (with UCM_MOVE_TO_EXT) to the extension table
  */
-static void
-moveMappings(UCMTable *base, UCMTable *ext) {
+U_CAPI void U_EXPORT2
+ucm_moveMappings(UCMTable *base, UCMTable *ext) {
     UCMapping *mb, *mbLimit;
     int8_t flag;
 
@@ -290,12 +282,12 @@ moveMappings(UCMTable *base, UCMTable *ext) {
             /* reset the move flag */
             mb->moveFlag=0;
 
-            if(ext!=NULL && (flag&MOVE_TO_EXT)) {
+            if(ext!=NULL && (flag&UCM_MOVE_TO_EXT)) {
                 /* add the mapping to the extension table */
                 ucm_addMapping(ext, mb, UCM_GET_CODE_POINTS(base, mb), UCM_GET_BYTES(base, mb));
             }
 
-            /* move the last base mapping down and overwrite the current one */
+            /* remove this mapping: move the last base mapping down and overwrite the current one */
             if(mb<(mbLimit-1)) {
                 uprv_memcpy(mb, mbLimit-1, sizeof(UCMapping));
             }
@@ -364,7 +356,7 @@ checkBaseExtUnicode(UCMStates *baseStates, UCMTable *base, UCMTable *ext,
                  * if ext is DBCS, move DBCS mappings here
                  * and check SBCS ones for Unicode prefix below
                  */
-                mb->moveFlag|=MOVE_TO_EXT;
+                mb->moveFlag|=UCM_MOVE_TO_EXT;
                 result|=NEEDS_MOVE;
 
             /* does mb map from an input sequence that is a prefix of me's? */
@@ -373,7 +365,7 @@ checkBaseExtUnicode(UCMStates *baseStates, UCMTable *base, UCMTable *ext,
             ) {
                 if(moveToExt) {
                     /* mark this mapping to be moved to the extension table */
-                    mb->moveFlag|=MOVE_TO_EXT;
+                    mb->moveFlag|=UCM_MOVE_TO_EXT;
                     result|=NEEDS_MOVE;
                 } else {
                     fprintf(stderr,
@@ -394,11 +386,11 @@ checkBaseExtUnicode(UCMStates *baseStates, UCMTable *base, UCMTable *ext,
             if( mb->f==me->f && mb->bLen==me->bLen &&
                 0==uprv_memcmp(UCM_GET_BYTES(base, mb), UCM_GET_BYTES(ext, me), mb->bLen)
             ) {
-                me->moveFlag|=REMOVE_MAPPING;
+                me->moveFlag|=UCM_REMOVE_MAPPING;
                 result|=NEEDS_MOVE;
             } else if(intersectBase) {
                 /* mapping in base but not in ext, move it */
-                mb->moveFlag|=MOVE_TO_EXT;
+                mb->moveFlag|=UCM_MOVE_TO_EXT;
                 result|=NEEDS_MOVE;
             } else {
                 fprintf(stderr,
@@ -476,7 +468,7 @@ checkBaseExtBytes(UCMStates *baseStates, UCMTable *base, UCMTable *ext,
         if(cmp<0) {
             if(intersectBase) {
                 /* mapping in base but not in ext, move it */
-                mb->moveFlag|=MOVE_TO_EXT;
+                mb->moveFlag|=UCM_MOVE_TO_EXT;
                 result|=NEEDS_MOVE;
 
             /*
@@ -490,7 +482,7 @@ checkBaseExtBytes(UCMStates *baseStates, UCMTable *base, UCMTable *ext,
             ) {
                 if(moveToExt) {
                     /* mark this mapping to be moved to the extension table */
-                    mb->moveFlag|=MOVE_TO_EXT;
+                    mb->moveFlag|=UCM_MOVE_TO_EXT;
                     result|=NEEDS_MOVE;
                 } else {
                     fprintf(stderr,
@@ -511,11 +503,11 @@ checkBaseExtBytes(UCMStates *baseStates, UCMTable *base, UCMTable *ext,
             if( mb->f==me->f && mb->uLen==me->uLen &&
                 0==uprv_memcmp(UCM_GET_CODE_POINTS(base, mb), UCM_GET_CODE_POINTS(ext, me), 4*mb->uLen)
             ) {
-                me->moveFlag|=REMOVE_MAPPING;
+                me->moveFlag|=UCM_REMOVE_MAPPING;
                 result|=NEEDS_MOVE;
             } else if(intersectBase) {
                 /* mapping in base but not in ext, move it */
-                mb->moveFlag|=MOVE_TO_EXT;
+                mb->moveFlag|=UCM_MOVE_TO_EXT;
                 result|=NEEDS_MOVE;
             } else {
                 fprintf(stderr,
@@ -586,8 +578,8 @@ ucm_checkBaseExt(UCMStates *baseStates,
     }
 
     if(result&NEEDS_MOVE) {
-        moveMappings(ext, NULL);
-        moveMappings(base, moveTarget);
+        ucm_moveMappings(ext, NULL);
+        ucm_moveMappings(base, moveTarget);
         ucm_sortTable(base);
         ucm_sortTable(ext);
         if(moveTarget!=NULL) {
@@ -715,7 +707,7 @@ ucm_separateMappings(UCMFile *ucm, UBool isSISO) {
         if(isSISO && m->bLen==1 && (m->b.bytes[0]==0xe || m->b.bytes[0]==0xf)) {
             fprintf(stderr, "warning: removing illegal mapping from an SI/SO-stateful table\n");
             ucm_printMapping(table, m, stderr);
-            m->moveFlag|=REMOVE_MAPPING;
+            m->moveFlag|=UCM_REMOVE_MAPPING;
             needsMove=TRUE;
             continue;
         }
@@ -728,7 +720,7 @@ ucm_separateMappings(UCMFile *ucm, UBool isSISO) {
             printMapping(m, UCM_GET_CODE_POINTS(table, m), UCM_GET_BYTES(table, m), stderr);
             isOK=FALSE;
         } else if(type>0) {
-            m->moveFlag|=MOVE_TO_EXT;
+            m->moveFlag|=UCM_MOVE_TO_EXT;
             needsMove=TRUE;
         }
     }
@@ -737,7 +729,7 @@ ucm_separateMappings(UCMFile *ucm, UBool isSISO) {
         return FALSE;
     }
     if(needsMove) {
-        moveMappings(ucm->base, ucm->ext);
+        ucm_moveMappings(ucm->base, ucm->ext);
         return ucm_checkBaseExt(&ucm->states, ucm->base, ucm->ext, ucm->ext, FALSE);
     } else {
         ucm_sortTable(ucm->base);
@@ -1058,15 +1050,31 @@ ucm_mappingType(UCMStates *baseStates,
 
     /*
      * Suitable for an ICU conversion base table means:
-     * - a 1:1 mapping
-     * - not a |2 SUB mappings for <subchar1>
-     * - not a |1 fallback to 0x00
-     * - no leading 0x00 bytes
+     * - a 1:1 mapping (1 Unicode code point : 1 byte sequence)
+     * - SBCS: any 1:1 mapping
+     *         (the table stores additional bits to distinguish mapping types)
+     * - MBCS: not a |2 SUB mapping for <subchar1>
+     * - MBCS: not a |1 fallback to 0x00
+     * - MBCS: not a multi-byte mapping with leading 0x00 bytes
+     *
+     * Further restrictions for fromUnicode tables
+     * are enforced in makeconv (MBCSOkForBaseFromUnicode()).
+     *
+     * All of the MBCS fromUnicode specific tests could be removed from here,
+     * but the ones above are for unusual mappings, and removing the tests
+     * from here would change canonucm output which seems gratuitous.
+     * (Markus Scherer 2006-nov-28)
+     *
+     * Exception: All implicit mappings (f<0) that need to be moved
+     * because of fromUnicode restrictions _must_ be moved here because
+     * makeconv uses a hack for moving mappings only for the fromUnicode table
+     * that only works with non-negative values of f.
      */
     if( m->uLen==1 && count==1 &&
-        !((m->f==2 && m->bLen==1 && baseStates->maxCharLength>1) ||
-          (m->f==1 && m->bLen==1 && bytes[0]==0) ||
-          (m->bLen>1 && bytes[0]==0))
+        (baseStates->maxCharLength==1 ||
+            !((m->f==2 && m->bLen==1) ||
+              (m->f==1 && bytes[0]==0) ||
+              (m->f<=1 && m->bLen>1 && bytes[0]==0)))
     ) {
         return 0; /* suitable for a base table */
     } else {
@@ -1178,4 +1186,3 @@ ucm_readTable(UCMFile *ucm, FileStream* convFile,
     }
 }
 #endif
-
