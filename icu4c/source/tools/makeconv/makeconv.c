@@ -1,7 +1,7 @@
 /*
  ********************************************************************************
  *
- *   Copyright (C) 1998-2006, International Business Machines
+ *   Copyright (C) 1998-2007, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  ********************************************************************************
@@ -761,11 +761,8 @@ createConverter(ConvData *data, const char *converterName, UErrorCode *pErrorCod
                          *
                          * We do not call MBCSAddTable() here (we probably could)
                          * so we need to do the analysis before building the extension table.
-                         * We assume the "worst case" of a UTF-8-friendly table, even if
-                         * MBCSAddTable() might revert to a regular table due to some overflow.
+                         * We assume that MBCSAddTable() will build a UTF-8-friendly table.
                          * Redundant mappings in the extension table are ok except they cost some size.
-                         * Overflows in MBCSAddTable() should be very rare.
-                         * TODO: Change "worst case" comment if the MBCSAddTable() loop goes away.
                          *
                          * Do this after ucm_checkBaseExt().
                          */
