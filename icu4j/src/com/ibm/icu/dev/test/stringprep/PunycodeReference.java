@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -52,7 +52,7 @@ public final class PunycodeReference {
     private static final int delimiter = 0x2D;
     
     
-    private static final long UNSIGNED_INT_MASK = 0xffffffffL;
+//    private static final long UNSIGNED_INT_MASK = 0xffffffffL;
     
     /* basic(cp) tests whether cp is a basic code point: */
     private static boolean basic(int cp){

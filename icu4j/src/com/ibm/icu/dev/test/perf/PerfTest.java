@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2006, International Business Machines
+* Copyright (c) 2002-2007, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -10,13 +10,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -600,16 +598,17 @@ public abstract class PerfTest{
     }
 
 
-    /**
+    /*
      * Private utility to convert a List of Integer objects to int[].
      */
-    private static int[] toIntArray(List list) {
+    /*private static int[] toIntArray(List list) {
         int[] result = new int[list.size()];
         for (int i=0; i<list.size(); ++i) {
             result[i] = ((Integer) list.get(i)).intValue();
         }
         return result;
-    }
+    }*/
+    
     public static char[] readToEOS(InputStreamReader stream) {
         ArrayList vec = new ArrayList();
         int count = 0;

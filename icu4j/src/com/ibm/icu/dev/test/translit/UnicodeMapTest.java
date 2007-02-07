@@ -1,20 +1,15 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.translit;
-import com.ibm.icu.lang.*;
-import com.ibm.icu.lang.UCharacterEnums.ECharacterCategory;
-import com.ibm.icu.text.*;
+
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.dev.test.util.UnicodeMap;
-import com.ibm.icu.impl.PrettyPrinter;
 import com.ibm.icu.impl.Utility;
-import com.ibm.icu.impl.SortedSetRelation;
 import java.util.*;
-import java.text.ParsePosition;
 
 /**
  * @test

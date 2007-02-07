@@ -1,7 +1,7 @@
 //##header
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -42,11 +42,6 @@ import java.util.Random;
  * arguments to the log only if the test is being run in verbose mode.
  */
 public class TestFmwk extends AbstractTestLog {
-    /**
-     * Puts a copyright in the .class file
-     */
-    private static final String copyrightNotice = "Copyright \u00a91997-2003 IBM Corp.  All rights reserved.";
-
     /**
      * The default time zone for all of our tests. Used in Target.run();
      */

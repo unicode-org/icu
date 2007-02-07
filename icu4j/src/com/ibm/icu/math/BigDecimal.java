@@ -8,7 +8,7 @@ import com.ibm.icu.impl.Utility;
 /* ------------------------------------------------------------------ */
 /* BigDecimal -- Decimal arithmetic for Java                          */
 /* ------------------------------------------------------------------ */
-/* Copyright IBM Corporation, 1996-2006.  All Rights Reserved.       */
+/* Copyright IBM Corporation, 1996-2007.  All Rights Reserved.       */
 /*                                                                    */
 /* The BigDecimal class provides immutable arbitrary-precision        */
 /* floating point (including integer) decimal numbers.                */
@@ -259,7 +259,7 @@ import com.ibm.icu.impl.Utility;
  */
 
 public class BigDecimal extends java.lang.Number implements java.io.Serializable,java.lang.Comparable{
- private static final java.lang.String $0="BigDecimal.nrx";
+ //private static final java.lang.String $0="BigDecimal.nrx";
  
  
  
@@ -372,7 +372,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
  // Serialization version
  private static final long serialVersionUID=8245355804974198832L;
  
- private static final java.lang.String copyright=" Copyright (c) IBM Corporation 1996, 2000.  All rights reserved. ";
+ //private static final java.lang.String copyright=" Copyright (c) IBM Corporation 1996, 2000.  All rights reserved. ";
  
  /* properties static private */
  // Precalculated constant arrays (used by byteaddsub)
@@ -675,7 +675,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
    elen=length-((k-offset)); // possible number of digits
    if ((elen==0)|(elen>9)) 
     bad(inchars); // 0 or more than 9 digits
-   {int $2=elen;j=k;j:for(;$2>0;$2--,j++){
+   {int $2=elen;j=k;for(;$2>0;$2--,j++){
     sj=inchars[j];
     if (sj<'0') 
      bad(inchars); // always bad
@@ -740,7 +740,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   j=offset; // input offset
   if (exotic) 
    {exotica:do{ // slow: check for exotica
-    {int $4=d;i=0;i:for(;$4>0;$4--,i++){
+    {int $4=d;i=0;for(;$4>0;$4--,i++){
      if (i==dotoff) 
       j++; // at dot
      sj=inchars[j];
@@ -759,7 +759,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
    }while(false);}/*exotica*/
   else 
    {simple:do{
-    {int $5=d;i=0;i:for(;$5>0;$5--,i++){
+    {int $5=d;i=0;for(;$5>0;$5--,i++){
      if (i==dotoff) 
       j++;
      mant[i]=(byte)(((int)(inchars[j]))-((int)('0')));
@@ -1418,7 +1418,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
        unless maybe rounding [rounding is very unusual] */
     if ((thislength<=set.digits)|(set.digits==0)) 
      {
-      {int $6=thislength;i=0;i:for(;$6>0;$6--,i++){
+      {int $6=thislength;i=0;for(;$6>0;$6--,i++){
        if (this.mant[i]<rhs.mant[i]) 
         return (byte)-this.ind;
        if (this.mant[i]>rhs.mant[i]) 
@@ -1817,7 +1817,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   // to likely final length on first addition; this avoids a one-digit
   // extension (and object allocation) each time around the loop.
   // Initial number therefore has virtual zeros added to right.
-  {int $7=multer.length;n=0;n:for(;$7>0;$7--,n++){
+  {int $7=multer.length;n=0;for(;$7>0;$7--,n++){
    mult=multer[n];
    if (mult!=0) 
     { // [optimization]
@@ -2285,7 +2285,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
    
    { // mantissas say all
     // here with equal-length byte arrays to compare
-    {int $8=this.mant.length;i=0;i:for(;$8>0;$8--,i++){
+    {int $8=this.mant.length;i=0;for(;$8>0;$8--,i++){
      if (this.mant[i]!=rhs.mant[i]) 
       return false;
      }
@@ -2298,7 +2298,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
     if (lca.length!=rca.length) 
      return false; // mismatch
     // here with equal-length character arrays to compare
-    {int $9=lca.length;i=0;i:for(;$9>0;$9--,i++){
+    {int $9=lca.length;i=0;for(;$9>0;$9--,i++){
      if (lca[i]!=rca[i]) 
       return false;
      }
@@ -2664,7 +2664,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
     if (p<before) 
      { // need leading blanks
       newa=new char[(a.length+before)-p];
-      {int $12=before-p;i=0;i:for(;$12>0;$12--,i++){
+      {int $12=before-p;i=0;for(;$12>0;$12--,i++){
        newa[i]=' ';
        }
       }/*i*/
@@ -2687,7 +2687,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      { // no E part; add trailing blanks
       newa=new char[(a.length+explaces)+2];
       java.lang.System.arraycopy((java.lang.Object)a,0,(java.lang.Object)newa,0,a.length);
-      {int $14=explaces+2;i=a.length;i:for(;$14>0;$14--,i++){
+      {int $14=explaces+2;i=a.length;for(;$14>0;$14--,i++){
        newa[i]=' ';
        }
       }/*i*/
@@ -2702,7 +2702,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
        { // need to insert zeros
         newa=new char[(a.length+explaces)-places];
         java.lang.System.arraycopy((java.lang.Object)a,0,(java.lang.Object)newa,0,p+2); // through E and sign
-        {int $15=explaces-places;i=p+2;i:for(;$15>0;$15--,i++){
+        {int $15=explaces-places;i=p+2;for(;$15>0;$15--,i++){
          newa[i]='0';
          }
         }/*i*/
@@ -2798,7 +2798,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
    }
   /* convert the mantissa to binary, inline for speed */
   result=0;
-  {int $16=lodigit+useexp;i=0;i:for(;i<=$16;i++){
+  {int $16=lodigit+useexp;i=0;for(;i<=$16;i++){
    result=result*10;
    if (i<=lodigit) 
     result=result+mant[i];
@@ -2896,7 +2896,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   // algorithm here, but instead we parallel the intValueExact
   // algorithm for ease of checking and maintenance.
   result=(long)0;
-  {int $17=lodigit+useexp;i=0;i:for(;i<=$17;i++){
+  {int $17=lodigit+useexp;i=0;for(;i<=$17;i++){
    result=result*10;
    if (i<=lodigit) 
     result=result+mant[i];
@@ -3420,7 +3420,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   int mag;
   int len=0;
   cmant=new char[mant.length]; // copy byte[] to a char[]
-  {int $18=mant.length;i=0;i:for(;$18>0;$18--,i++){
+  {int $18=mant.length;i=0;for(;$18>0;$18--,i++){
    cmant[i]=(char)(mant[i]+((int)('0')));
    }
   }/*i*/
@@ -3500,7 +3500,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      rec[0]='-';
     rec[needsign]='0';
     rec[needsign+1]='.';
-    {int $20=(int)-mag;i=needsign+2;i:for(;$20>0;$20--,i++){ // maybe none
+    {int $20=(int)-mag;i=needsign+2;for(;$20>0;$20--,i++){ // maybe none
      rec[i]='0';
      }
     }/*i*/
@@ -3515,7 +3515,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
     if (needsign!=0) 
      rec[0]='-';
     java.lang.System.arraycopy((java.lang.Object)cmant,0,(java.lang.Object)rec,needsign,cmant.length);
-    {int $21=mag-cmant.length;i=needsign+cmant.length;i:for(;$21>0;$21--,i++){ // never 0
+    {int $21=mag-cmant.length;i=needsign+cmant.length;for(;$21>0;$21--,i++){ // never 0
      rec[i]='0';
      }
     }/*i*/
@@ -3705,7 +3705,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
     if (var1len==var2len) 
      { // compare needed
       {compare:do{ // comparison
-       {int $22=var1len;i=0;i:for(;$22>0;$22--,i++){
+       {int $22=var1len;i=0;for(;$22>0;$22--,i++){
         // var1len is always <= var1.length
         if (i<var2.length) 
          v2=var2[i];
@@ -4047,7 +4047,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   newarr[0]=(byte)digit; // the carried digit ..
   // .. and all the rest [use local loop for short numbers]
   if (maxarr<10) 
-   {int $24=maxarr+1;i=0;i:for(;$24>0;$24--,i++){
+   {int $24=maxarr+1;i=0;for(;$24>0;$24--,i++){
     newarr[i+1]=reb[i];
     }
    }/*i*/
@@ -4276,7 +4276,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   int i=0;
   if (start<0) 
    start=0;
-  {int $25=array.length-1;i=start;i:for(;i<=$25;i++){
+  {int $25=array.length-1;i=start;for(;i<=$25;i++){
    if (array[i]!=0) 
     return false;
    }
@@ -4337,7 +4337,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   form=(byte)com.ibm.icu.math.MathContext.PLAIN; // preset
   
   /* Now check for leading- and all- zeros in mantissa */
-  {int $26=this.mant.length;i=0;i:for(;$26>0;$26--,i++){
+  {int $26=this.mant.length;i=0;for(;$26>0;$26--,i++){
    if (this.mant[i]!=0) 
     {
      // non-0 result; ind will be correct

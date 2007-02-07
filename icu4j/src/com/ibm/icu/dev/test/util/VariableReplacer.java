@@ -1,18 +1,16 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.util;import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
 public class VariableReplacer {
 	// simple implementation for now
-	private Comparator c;
 	private Map m = new TreeMap(Collections.reverseOrder());
 	
 	// TODO - fix to do streams also, clean up implementation

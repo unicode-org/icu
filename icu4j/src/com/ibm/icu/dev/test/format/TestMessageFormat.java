@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2006, International Business Machines
+* Copyright (c) 2004-2007, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -176,7 +176,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         for (int i = 0; i < 9; ++i) {
             //it_out << "\nPat in:  " << testCases[i]);
 
-            String buffer;
+            //String buffer;
             MessageFormat form = null;
             try {
                 form = new MessageFormat(testCases[i], Locale.US);

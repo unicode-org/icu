@@ -1,7 +1,7 @@
 //##header
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -436,7 +436,7 @@ public final class CollectionUtilities {
 		UnicodeSet result = new UnicodeSet();
 		boolean gotString = false;
 		for (UnicodeSetIterator it = new UnicodeSetIterator(exemplar1); it.nextRange();) {
-			if (it.codepoint == it.IS_STRING) {
+			if (it.codepoint == UnicodeSetIterator.IS_STRING) {
 				result.addAll(it.string);
 				gotString = true;
 			} else {

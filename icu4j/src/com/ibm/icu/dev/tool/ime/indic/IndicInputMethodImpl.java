@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2000-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -49,7 +49,7 @@ class IndicInputMethodImpl {
     // Nukta form of the above characters
     protected char[] NUKTA_FORM;
         
-    private int log2;
+    //private int log2;
     private int power;
     private int extra;
 

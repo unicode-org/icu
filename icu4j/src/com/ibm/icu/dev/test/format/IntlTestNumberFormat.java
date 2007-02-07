@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -278,7 +278,6 @@ public class IntlTestNumberFormat extends com.ibm.icu.dev.test.TestFmwk {
             }
             for (int i=0; i<count; ++i)
             {
-                String name = locales[i].getDisplayName();
                 logln(SEP);
                 _testLocale(locales[i]);
             }

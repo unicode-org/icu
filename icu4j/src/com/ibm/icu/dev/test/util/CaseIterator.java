@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2006, International Business Machines Corporation and    *
+* Copyright (C) 1996-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -20,10 +20,9 @@ import com.ibm.icu.text.UnicodeSet;
 public class CaseIterator {
     
     // testing stuff
-    private static final boolean DEBUG = true;
-    static Transliterator toName = Transliterator.getInstance("[:^ascii:] Any-Name");
-    static Transliterator toHex = Transliterator.getInstance("[:^ascii:] Any-Hex");
-    static Transliterator toHex2 = Transliterator.getInstance("[[^\u0021-\u007F]-[,]] Any-Hex");
+    private static Transliterator toName = Transliterator.getInstance("[:^ascii:] Any-Name");
+    private static Transliterator toHex = Transliterator.getInstance("[:^ascii:] Any-Hex");
+    private static Transliterator toHex2 = Transliterator.getInstance("[[^\u0021-\u007F]-[,]] Any-Hex");
     
     // global tables (could be precompiled)
     private static Map fromCaseFold = new HashMap();

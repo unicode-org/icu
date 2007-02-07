@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -18,8 +18,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.Class;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -39,7 +38,7 @@ public class SerializableChecker implements URLHandler.URLVisitor
     
     private String path = null;
     
-    private boolean write;
+    //private boolean write;
     
     public SerializableChecker(String path)
     {
@@ -97,12 +96,13 @@ public class SerializableChecker implements URLHandler.URLVisitor
                 
                 if (serializable.isAssignableFrom(c) /*&&
                     (! throwable.isAssignableFrom(c) || c.getDeclaredFields().length > 0)*/) {
-                    Field uid;
+                    //Field uid;
                     
                     System.out.print(className + " (" + Modifier.toString(m) + ") - ");
                     
                     try {
-                        uid = c.getDeclaredField("serialVersionUID");
+                        /* uid = */
+                        c.getDeclaredField("serialVersionUID");
                     } catch (Exception e) {
                         System.out.print("no serialVersionUID - ");
                     }

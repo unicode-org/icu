@@ -9,7 +9,6 @@
 package com.ibm.icu.dev.test;
 
 import java.util.Arrays;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
