@@ -1,7 +1,7 @@
 //##header
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -86,7 +86,6 @@ public class TestUtilities extends TestFmwk {
         logln("Comparing Values");
         Set values1 = (Set) map1.getAvailableValues(new TreeSet());
         Set values2 = new TreeSet(map2.values());
-        Set temp;
         if (!TestBoilerplate.verifySetsIdentical(this, values1, values2)) {
             throw new IllegalArgumentException("Halting");
         }

@@ -1,6 +1,6 @@
  /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -76,21 +76,21 @@ public final class NormalizerImpl {
     // 16 bits for the index to UChars and other extra data
     private static final int EXTRA_SHIFT=16;
     // start of surrogate specials after shift                
-    private static final int EXTRA_INDEX_TOP=0xfc00;       
+    //private static final int EXTRA_INDEX_TOP=0xfc00;       
 
-    private static final int EXTRA_SURROGATE_MASK=0x3ff;
-    private static final int EXTRA_SURROGATE_TOP=0x3f0;    /* hangul etc. */
+    //private static final int EXTRA_SURROGATE_MASK=0x3ff;
+    //private static final int EXTRA_SURROGATE_TOP=0x3f0;    /* hangul etc. */
 
-    private static final int EXTRA_HANGUL=EXTRA_SURROGATE_TOP;
-    private static final int EXTRA_JAMO_L=EXTRA_SURROGATE_TOP+1;/* ### not used */
-    private static final int EXTRA_JAMO_V=EXTRA_SURROGATE_TOP+2;
-    private static final int EXTRA_JAMO_T=EXTRA_SURROGATE_TOP+3;
+    //private static final int EXTRA_HANGUL=EXTRA_SURROGATE_TOP;
+    //private static final int EXTRA_JAMO_L=EXTRA_SURROGATE_TOP+1;/* ### not used */
+    //private static final int EXTRA_JAMO_V=EXTRA_SURROGATE_TOP+2;
+    //private static final int EXTRA_JAMO_T=EXTRA_SURROGATE_TOP+3;
     
     /* norm32 value constants using >16 bits */
     private static final long  MIN_SPECIAL    =  (long)(0xfc000000 & UNSIGNED_INT_MASK);
     private static final long  SURROGATES_TOP =  (long)(0xfff00000 & UNSIGNED_INT_MASK);
     private static final long  MIN_HANGUL     =  (long)(0xfff00000 & UNSIGNED_INT_MASK);
-    private static final long  MIN_JAMO_V     =  (long)(0xfff20000 & UNSIGNED_INT_MASK);
+    //private static final long  MIN_JAMO_V     =  (long)(0xfff20000 & UNSIGNED_INT_MASK);
     private static final long  JAMO_V_TOP     =  (long)(0xfff30000 & UNSIGNED_INT_MASK);
     
     
@@ -375,11 +375,9 @@ public final class NormalizerImpl {
      * Given isNorm32HangulOrJamo(),
      * is this a Hangul syllable or a Jamo?
      */
-     ///CLOVER:OFF
-    private static  boolean isHangulJamoNorm32HangulOrJamoL(long norm32) {
-        return norm32<MIN_JAMO_V;
-    }
-    ///CLOVER:ON
+//    private static  boolean isHangulJamoNorm32HangulOrJamoL(long norm32) {
+//        return norm32<MIN_JAMO_V;
+//    }
     
     /*
      * Given norm32 for Jamo V or T,
@@ -404,21 +402,18 @@ public final class NormalizerImpl {
         return ((UNSIGNED_INT_MASK) & 
                     NormTrieImpl.normTrie.getTrailValue((int)norm32, c2));
     }
-    ///CLOVER:OFF
     private static long getNorm32(int c){
         return (UNSIGNED_INT_MASK&(NormTrieImpl.normTrie.getCodePointValue(c)));
     }
     
-    private static long getNorm32(int c,int mask){
-        long/*unsigned*/ norm32= getNorm32(UTF16.getLeadSurrogate(c));
-        if(((norm32&mask)>0) && isNorm32LeadSurrogate(norm32)) {
-            /* c is a lead surrogate, get the real norm32 */
-            norm32=getNorm32FromSurrogatePair(norm32,UTF16.getTrailSurrogate(c));
-        }
-        return norm32; 
-    }
-    ///CLOVER:ON
-    
+//    private static long getNorm32(int c,int mask){
+//        long/*unsigned*/ norm32= getNorm32(UTF16.getLeadSurrogate(c));
+//        if(((norm32&mask)>0) && isNorm32LeadSurrogate(norm32)) {
+//            /* c is a lead surrogate, get the real norm32 */
+//            norm32=getNorm32FromSurrogatePair(norm32,UTF16.getTrailSurrogate(c));
+//        }
+//        return norm32; 
+//    }
     
     /*
      * get a norm32 from text with complete code points
@@ -3596,7 +3591,7 @@ public final class NormalizerImpl {
     private static final int OPTIONS_NX_MASK=0x1f;
     private static final int OPTIONS_UNICODE_MASK=0xe0; 
     public  static final int OPTIONS_SETS_MASK=0xff;
-    private static final int OPTIONS_UNICODE_SHIFT=5;
+    //private static final int OPTIONS_UNICODE_SHIFT=5;
     private static final UnicodeSet[] nxCache = new UnicodeSet[OPTIONS_SETS_MASK+1];
      
     /* Constants for options flags for normalization.*/

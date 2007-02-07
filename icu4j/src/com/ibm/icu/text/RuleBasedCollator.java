@@ -1,7 +1,7 @@
 //##header
 /**
 *******************************************************************************
-* Copyright (C) 1996-2006, International Business Machines Corporation and    *
+* Copyright (C) 1996-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -874,7 +874,6 @@ public final class RuleBasedCollator extends Collator
         if(expansions != null) {
             expansions.clear();
         }
-        int rulesLen = 0;
         String rules = getRules();
         try {
             CollationRuleParser src = new CollationRuleParser(rules);
@@ -2115,14 +2114,14 @@ public final class RuleBasedCollator extends Collator
      * This is an enum that lists magic special byte values from the
      * fractional UCA
      */
-    private static final byte BYTE_ZERO_ = 0x0;
-    private static final byte BYTE_LEVEL_SEPARATOR_ = (byte)0x01;
-    private static final byte BYTE_SORTKEY_GLUE_ = (byte)0x02;
+    //private static final byte BYTE_ZERO_ = 0x0;
+    //private static final byte BYTE_LEVEL_SEPARATOR_ = (byte)0x01;
+    //private static final byte BYTE_SORTKEY_GLUE_ = (byte)0x02;
     private static final byte BYTE_SHIFT_PREFIX_ = (byte)0x03;
     /*private*/ static final byte BYTE_UNSHIFTED_MIN_ = BYTE_SHIFT_PREFIX_;
-    private static final byte BYTE_FIRST_UCA_ = BYTE_COMMON_;
+    //private static final byte BYTE_FIRST_UCA_ = BYTE_COMMON_;
     static final byte CODAN_PLACEHOLDER = 0x24;
-    private static final byte BYTE_LAST_LATIN_PRIMARY_ = (byte)0x4C;
+    //private static final byte BYTE_LAST_LATIN_PRIMARY_ = (byte)0x4C;
     private static final byte BYTE_FIRST_NON_LATIN_PRIMARY_ = (byte)0x4D;
     private static final byte BYTE_UNSHIFTED_MAX_ = (byte)0xFF;
     private static final int TOTAL_2_ = COMMON_TOP_2_ - COMMON_BOTTOM_2_ - 1;
@@ -2140,11 +2139,11 @@ public final class RuleBasedCollator extends Collator
     private static final int COMMON_2_ = COMMON_BOTTOM_2_;
     private static final int COMMON_UPPER_FIRST_3_ = 0xC5;
     private static final int COMMON_NORMAL_3_ = COMMON_BOTTOM_3_;
-    private static final int COMMON_4_ = (byte)0xFF;
+    //private static final int COMMON_4_ = (byte)0xFF;
 
 
 
-    /**
+    /*
      * Minimum size required for the binary collation data in bytes.
      * Size of UCA header + size of options to 4 bytes
      */
@@ -2184,8 +2183,8 @@ public final class RuleBasedCollator extends Collator
 
     private static final int LAST_BYTE_MASK_ = 0xFF;
 
-    private static final int CE_RESET_TOP_VALUE_ = 0x9F000303;
-    private static final int CE_NEXT_TOP_VALUE_ = 0xE8960303;
+    //private static final int CE_RESET_TOP_VALUE_ = 0x9F000303;
+    //private static final int CE_NEXT_TOP_VALUE_ = 0xE8960303;
 
     private static final byte SORT_CASE_BYTE_START_ = (byte)0x80;
     private static final byte SORT_CASE_SHIFT_START_ = (byte)7;

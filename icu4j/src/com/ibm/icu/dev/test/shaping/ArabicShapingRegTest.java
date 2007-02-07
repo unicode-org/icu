@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2001-2006, International Business Machines
+*   Copyright (C) 2001-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -38,7 +38,7 @@ public class ArabicShapingRegTest extends TestFmwk {
     public static final int DIGITS_AN2EN = 0x40;
     public static final int DIGITS_EN2AN_INIT_LR = 0x60;
     public static final int DIGITS_EN2AN_INIT_AL = 0x80;
-    private static final int DIGITS_RESERVED = 0xa0;
+//    private static final int DIGITS_RESERVED = 0xa0;
 
     public static final int DIGIT_TYPE_AN = 0;
     public static final int DIGIT_TYPE_AN_EXTENDED = 0x100;

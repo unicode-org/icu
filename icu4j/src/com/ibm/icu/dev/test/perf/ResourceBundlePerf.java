@@ -11,7 +11,6 @@ import java.nio.ByteBuffer;
 import java.util.ResourceBundle;
 
 import com.ibm.icu.impl.ICULocaleData;
-import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.util.UResourceBundle;
 
 public class ResourceBundlePerf extends PerfTest {

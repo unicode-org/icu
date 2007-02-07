@@ -1,7 +1,7 @@
 //##header
 /*
  *******************************************************************************
- * Copyright (C) 2002-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -59,7 +59,6 @@ public class BagFormatter {
     private UnicodeLabel valueSource;
     private String propName = "";
     private boolean showCount = true;
-    private boolean skipNullValues = true;
     //private boolean suppressReserved = true;
     private boolean hexValue = false;
     private static final String NULL_VALUE = "_NULL_VALUE_";

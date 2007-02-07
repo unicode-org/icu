@@ -720,11 +720,9 @@ public class TestIDNA extends TestFmwk {
         };
 
         String ascii = null, unicode = null;
-        StringPrepParseException ex2;
         int i;
 
         for(i=0; i<strings.length; ++i) {
-            ex2=null;
             try {
                 ascii=IDNA.convertToASCII(strings[i], 0).toString();
                 unicode=IDNA.convertToUnicode(ascii, 0).toString();

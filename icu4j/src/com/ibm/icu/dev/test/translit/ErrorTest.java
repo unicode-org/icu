@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -208,8 +208,7 @@ public class ErrorTest extends TestFmwk {
                 Transliterator.registerClass(id, t.getClass(), null);
                 Transliterator.unregister(id);
                 try {
-                    Transliterator t1 =
-                        Transliterator.getInstance(id, Transliterator.REVERSE);
+                    Transliterator.getInstance(id, Transliterator.REVERSE);
                     errln("FAIL: construction of unregistered ID should have failed.");
                 } catch (IllegalArgumentException e) {
                 }

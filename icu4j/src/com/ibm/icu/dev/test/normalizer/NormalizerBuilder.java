@@ -1,7 +1,7 @@
 /**
  * Builds the normalization tables. This is a separate class so that it
  * can be unloaded once not needed.<br>
- * Copyright (C) 1998-2004 International Business Machines Corporation and
+ * Copyright (C) 1998-2007 International Business Machines Corporation and
  * Unicode, Inc. All Rights Reserved.<br>
  * The Unicode Consortium makes no expressed or implied warranty of any
  * kind, and assumes no liability for errors or omissions.
@@ -21,14 +21,14 @@ import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.dev.test.UTF16Util;
 
 class NormalizerBuilder {
-    static final String copyright = "Copyright (C) 1998-2003 International Business Machines Corporation and Unicode, Inc.";
+    //private static final String copyright = "Copyright (C) 1998-2003 International Business Machines Corporation and Unicode, Inc.";
 
     /**
      * Testing flags
      */
 
     private static final boolean DEBUG = false;
-    private static final boolean GENERATING = false;
+    //private static final boolean GENERATING = false;
 
     /**
      * Constants for the data file version to use.

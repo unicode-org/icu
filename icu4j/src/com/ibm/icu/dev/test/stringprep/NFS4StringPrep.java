@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -11,7 +11,6 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.MissingResourceException;
 
-import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.text.StringPrepParseException;
 import com.ibm.icu.text.StringPrep;
 import com.ibm.icu.text.UCharacterIterator;

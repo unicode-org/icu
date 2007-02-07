@@ -1,6 +1,6 @@
 /*
  ***********************************************************************
- * Copyright (C) 2005, International Business Machines Corporation and *
+ * Copyright (C) 2005-2007, International Business Machines Corporation and *
  * others. All Rights Reserved.                                        *
  ***********************************************************************
  *
@@ -143,7 +143,6 @@ public class InputFile implements NGramList.NGramKeyMapper
     
     public byte[] encode(char[] chars)
     {
-        int length    = chars.length;
         CharBuffer cb = CharBuffer.wrap(chars);
         ByteBuffer bb;
         
@@ -159,7 +158,6 @@ public class InputFile implements NGramList.NGramKeyMapper
     
     public char[] decode(byte[] bytes)
     {
-        int length    = bytes.length;
         ByteBuffer bb = ByteBuffer.wrap(bytes);
         CharBuffer cb;
         
