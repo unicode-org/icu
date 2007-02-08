@@ -2,14 +2,8 @@
 //#ifndef FOUNDATION
 /*
  *******************************************************************************
- * Copyright (C) 2006, Google, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
- *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DateTimePatternGenerator.java,v $
- * $Date: 2006/09/24 23:23:00 $
- * $Revision: 1.10 $
- *
+ * Copyright (C) 2006-2007, Google, International Business Machines Corporation *
+ * and others. All Rights Reserved.                                            *
  *******************************************************************************
  */
 package com.ibm.icu.text;
@@ -18,10 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -30,9 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 //import org.unicode.cldr.util.Utility;
 
@@ -44,7 +32,6 @@ import com.ibm.icu.text.Transliterator;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.Freezable;
-import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
@@ -371,7 +358,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     public DateTimePatternGenerator add(String pattern, boolean override, PatternInfo returnInfo) {
         checkFrozen();
         if (pattern.indexOf("\\u") >= 0) {
-            String oldPattern = pattern;
+            //String oldPattern = pattern;
             pattern = fromHex.transliterate(pattern);
         }
         DateTimeMatcher matcher = new DateTimeMatcher().set(pattern, fp);
@@ -1198,14 +1185,14 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         return appendItemFormats[foundMask];
     }
     
-    /**
-     * @param current2
-     * @return
-     */
-    private String adjustSeconds(DateTimeMatcher current2) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+//    /**
+//     * @param current2
+//     * @return
+//     */
+//    private String adjustSeconds(DateTimeMatcher current2) {
+//        // TODO Auto-generated method stub
+//        return null;
+//    }
     
     /**
      * @param foundMask
@@ -1227,7 +1214,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         PatternInfo patternInfo = new PatternInfo();
         // make sure that every valid field occurs once, with a "default" length
         for (int i = 0; i < CANONICAL_ITEMS.length; ++i) {
-            char c = (char)types[i][0];
+            //char c = (char)types[i][0];
             add(String.valueOf(CANONICAL_ITEMS[i]), false, patternInfo);
         }
         isComplete = true;
@@ -1497,7 +1484,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         
         DateTimeMatcher set(String pattern, FormatParser fp) {
             if (pattern.indexOf("\\u") >= 0) {
-                String oldPattern = pattern;
+                //String oldPattern = pattern;
                 pattern = fromHex.transliterate(pattern);
             }
             for (int i = 0; i < TYPE_LIMIT; ++i) {

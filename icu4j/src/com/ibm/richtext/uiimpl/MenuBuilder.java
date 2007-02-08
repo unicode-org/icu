@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2004.  All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2007.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or
  * implied, including the warranty of non-infringement and the implied
@@ -288,21 +288,21 @@ public abstract class MenuBuilder {
                                          colors);
     }
     
-    private void createFontMenu() {
-        
-        handleAddMenu(FrameResources.FONT);
-        
-        String[] fonts = FontList.getFontList();
-        MenuData[] mData = new MenuData[fonts.length];
-        for (int i=0; i < mData.length; i++) {
-            mData[i] = new MenuData(fonts[i]);
-        }
-        
-        new StyleMenuItemSet(TextAttribute.FAMILY,
-                                fonts,
-                                mData,
-                                StyleMenuItemSet.CHARACTER).setTextPanel(fTextPanel);
-    }
+//    private void createFontMenu() {
+//        
+//        handleAddMenu(FrameResources.FONT);
+//        
+//        String[] fonts = FontList.getFontList();
+//        MenuData[] mData = new MenuData[fonts.length];
+//        for (int i=0; i < mData.length; i++) {
+//            mData[i] = new MenuData(fonts[i]);
+//        }
+//        
+//        new StyleMenuItemSet(TextAttribute.FAMILY,
+//                                fonts,
+//                                mData,
+//                                StyleMenuItemSet.CHARACTER).setTextPanel(fTextPanel);
+//    }
     
     private void createFlushMenu() {
         

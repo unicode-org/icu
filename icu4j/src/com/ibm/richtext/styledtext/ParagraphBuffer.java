@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2004.  All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2007.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or
  * implied, including the warranty of non-infringement and the implied
@@ -578,22 +578,22 @@ final class ParagraphBuffer extends MParagraphBuffer implements Externalizable {
         return modifiedAnywhere;
     }
 
-    private static void dumpParagraphStarts(ParagraphBuffer st) {
-
-        System.out.println("fRunArray.fPosEnd="+st.fRunArray.fPosEnd+", fRunArray.fNegStart="+st.fRunArray.fNegStart+
-                            ", fRunArray.getArrayLength()="+st.fRunArray.getArrayLength()+", fRunArray.getCurTextLength()="+st.fRunArray.getCurTextLength());
-
-        int i;
-        System.out.print("Positives: ");
-        for (i=0; i<=st.fRunArray.fPosEnd; i++)
-            System.out.print(st.fRunArray.fRunStart[i]+" ");
-
-        System.out.print("   Negatives: ");
-        for (i=st.fRunArray.fNegStart; i<st.fRunArray.getArrayLength(); i++)
-            System.out.print(st.fRunArray.fRunStart[i]+" ");
-
-        System.out.println(" ");
-    }
+//    private static void dumpParagraphStarts(ParagraphBuffer st) {
+//
+//        System.out.println("fRunArray.fPosEnd="+st.fRunArray.fPosEnd+", fRunArray.fNegStart="+st.fRunArray.fNegStart+
+//                            ", fRunArray.getArrayLength()="+st.fRunArray.getArrayLength()+", fRunArray.getCurTextLength()="+st.fRunArray.getCurTextLength());
+//
+//        int i;
+//        System.out.print("Positives: ");
+//        for (i=0; i<=st.fRunArray.fPosEnd; i++)
+//            System.out.print(st.fRunArray.fRunStart[i]+" ");
+//
+//        System.out.print("   Negatives: ");
+//        for (i=st.fRunArray.fNegStart; i<st.fRunArray.getArrayLength(); i++)
+//            System.out.print(st.fRunArray.fRunStart[i]+" ");
+//
+//        System.out.println(" ");
+//    }
 
     private static final int kNoRun = -42; // iterator use
 

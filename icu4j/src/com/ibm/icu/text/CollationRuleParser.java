@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2006, International Business Machines Corporation and    *
+* Copyright (C) 1996-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -390,10 +390,10 @@ final class CollationRuleParser
      * Need it for UnicodeSet reading support.
      */
     private int m_optionEnd_;
-    /**
+    /*
      * Current offset in m_source
      */
-    private int m_sourceLimit_;
+    //private int m_sourceLimit_;
     /**
      * Offset to m_source_ ofr the extra expansion characters
      */
@@ -410,20 +410,20 @@ final class CollationRuleParser
      * the UCA.
      */
     UnicodeSet m_removeSet_;
-    /**
+    /*
      * This is space for the extra strings that need to be unquoted during the
      * parsing of the rules
      */
-    private static final int TOKEN_EXTRA_RULE_SPACE_SIZE_ = 2048;
+    //private static final int TOKEN_EXTRA_RULE_SPACE_SIZE_ = 2048;
     /**
      * Indicator that the token is not set yet
      */
     private static final int TOKEN_UNSET_ = 0xFFFFFFFF;
-    /**
+    /*
      * Indicator that the rule is in the > polarity, ie everything on the
      * right of the rule is less than
      */
-    private static final int TOKEN_POLARITY_NEGATIVE_ = 0;
+    //private static final int TOKEN_POLARITY_NEGATIVE_ = 0;
     /**
      * Indicator that the rule is in the < polarity, ie everything on the
      * right of the rule is greater than
@@ -463,12 +463,12 @@ final class CollationRuleParser
      */
     private static final IndirectBoundaries INDIRECT_BOUNDARIES_[];
 
-    /**
-     * Inverse UCA constants
-     */
-    private static final int INVERSE_SIZE_MASK_ = 0xFFF00000;
-    private static final int INVERSE_OFFSET_MASK_ = 0x000FFFFF;
-    private static final int INVERSE_SHIFT_VALUE_ = 20;
+//    /**
+//     * Inverse UCA constants
+//     */
+//    private static final int INVERSE_SIZE_MASK_ = 0xFFF00000;
+//    private static final int INVERSE_OFFSET_MASK_ = 0x000FFFFF;
+//    private static final int INVERSE_SHIFT_VALUE_ = 20;
 
     /**
      * Collation option tags
@@ -1617,7 +1617,7 @@ final class CollationRuleParser
         } else {
 
             // first ce and second ce m_utilCEBuffer_
-            int invpos = CollationParsedRuleBuilder.INVERSE_UCA_.getInversePrevCE(
+            /*int invpos = */CollationParsedRuleBuilder.INVERSE_UCA_.getInversePrevCE(
                                                          basece, basecontce,
                                                          strength, m_utilCEBuffer_);
             // we got the previous CE. Now we need to see if the difference between

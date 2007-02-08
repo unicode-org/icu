@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -145,6 +145,8 @@ public class StringPrepParseException extends ParseException {
     public String toString(){
         StringBuffer buf = new StringBuffer();
         buf.append(super.getMessage());
+        buf.append(". line:  ");
+        buf.append(line);
         buf.append(". preContext:  ");
         buf.append(preContext);
         buf.append(". postContext: ");

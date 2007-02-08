@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -440,7 +440,7 @@ public final class CanonicalIterator {
    // ================= BUILDER =========================
     // TODO: Flatten this data so it doesn't have to be reconstructed each time!
 
-    private static final UnicodeSet EMPTY = new UnicodeSet(); // constant, don't change
+    //private static final UnicodeSet EMPTY = new UnicodeSet(); // constant, don't change
     private static final Set SET_WITH_NULL_STRING = new HashSet(); // constant, don't change
     static {
         SET_WITH_NULL_STRING.add("");

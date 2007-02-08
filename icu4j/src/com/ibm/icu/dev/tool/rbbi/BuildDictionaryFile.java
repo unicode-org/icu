@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -625,144 +625,144 @@ System.out.print("Stacking, inspecting row " + i + "...\r");
         }
     }
 
-    private void printTable() {
-        short cell;
-        int populatedCells = 0;
-/*
-        System.out.println("Conceptual table:");
-        System.out.println(" Row:   a   b   c   d   e   f   g   h   i   j   k   l   m   n"
-                + "   o   p   q   r   s   t   u   v   w   x   y   z   '   #");
+//    private void printTable() {
+//        short cell;
+//        int populatedCells = 0;
+///*
+//        System.out.println("Conceptual table:");
+//        System.out.println(" Row:   a   b   c   d   e   f   g   h   i   j   k   l   m   n"
+//                + "   o   p   q   r   s   t   u   v   w   x   y   z   '   #");
+//
+//        boolean[] rowPrintFlags = new boolean[rowIndex.length];
+//        printConceptualTable("", 0, rowPrintFlags);
+//*/
+//
+//        System.out.println();
+//        System.out.println("Conceptual table:");
+//        System.out.print(" Row:");
+//        for (int i = 0; i < reverseColumnMap.length; i++) {
+//                System.out.print("   " + reverseColumnMap[i]);
+//        }
+//        for (int i = 0; i < rowIndex.length; i++) {
+//            System.out.println();
+//            printNumber(i, 4);
+//            System.out.print(":");
+//            for (int j = 0; j < numCols; j++)
+//                printNumber(at(i, j), 4);
+//        }
+//        System.out.println('\n');
+//
+//        System.out.println();
+//        System.out.println("Internally stored table:");
+//        System.out.print(" Row:");
+//        for (int i = 0; i < reverseColumnMap.length; i++) {
+//                System.out.print("   " + reverseColumnMap[i]);
+//        }
+//        for (int i = 0; i < table.length; i++) {
+//            if (i % numCols == 0) {
+//                System.out.println();
+//                printNumber(i / numCols, 4);
+//                System.out.print(":");
+//            }
+//            cell = table[i];
+//            if (cell != 0)
+//                populatedCells++;
+//            printNumber(cell, 4);
+//        }
+//        System.out.println('\n');
+//
+//System.out.println("Row index:");
+//for (int i = 0; i < rowIndex.length; i++) {
+//    System.out.print("   " + i + " -> " + rowIndex[i]);
+//    if (rowIndexFlagsIndex[i] < 0)
+//        System.out.print(", flags = " + Integer.toBinaryString((1 << (-rowIndexFlagsIndex[i]))) + " (" + rowIndexFlagsIndex[i]);
+//    else
+//        System.out.print(", flags = " + Integer.toBinaryString(rowIndexFlags[rowIndexFlagsIndex[i]]) + " (" + rowIndexFlagsIndex[i]);
+//    System.out.println("), shift = " + rowIndexShifts[i]);
+//}
+///*
+//        int theoreticalMinRows = populatedCells / numCols;
+//        if (populatedCells % numCols != 0)
+//            theoreticalMinRows++;
+//        int oneCellRows = 0;
+//        for (int i = 0; i < rowIndexFlags.length; i++) {
+//            double temp = Math.log(rowIndexFlags[i]) / Math.log(2);
+//            if (temp == (int)temp)
+//                oneCellRows++;
+//        }
+//
+//        System.out.println('\n');
+//        System.out.println("Total words in input = " + totalWords);
+//        System.out.println("Total unique words = " + uniqueWords + ", comprising " +
+//                        totalUniqueWordChars + " characters\n");
+//        System.out.println("Number of populated cells = " + populatedCells);
+//        System.out.println("Total number of cells = " + (table.length));
+//        System.out.println("Residency = " + ((float)populatedCells / table.length * 100) + '%');
+//        System.out.println("Ratio of populated cells to unique-word characters = " +
+//                        ((float)populatedCells / totalUniqueWordChars * 100) + '%');
+//        System.out.println("Ratio of total cells to unique-word characters = " +
+//                        ((float)table.length / totalUniqueWordChars * 100) + '%');
+//        System.out.println("Number of rows = " + (table.length / numCols));
+//        System.out.println("Theoretical minimum number of rows = " + theoreticalMinRows);
+//        System.out.println("Ratio of number of rows to theoretical minimum = " +
+//                        ((float)(table.length / numCols) / theoreticalMinRows * 100) + '%');
+//        System.out.println("Number of conceptual rows = " + rowIndex.length);
+//        System.out.println("Conceptual rows with only one populated cell = " + oneCellRows);
+//        System.out.println("Ratio of one-cell rows to total conceptual rows = " + (((float)oneCellRows)
+//                        / rowIndex.length * 100) + '%');
+//        System.out.println("Average number of populated cells in multi-cell rows = " +
+//                        ((float)(populatedCells - oneCellRows) / (rowIndex.length - oneCellRows)));
+//
+//        int storageUsed = table.length * 2 + rowIndex.length * 2
+//                        + rowIndexFlags.length * 4 + rowIndexShifts.length;
+//        System.out.println("Total number of bytes in table (including indexes) = " +
+//                        storageUsed);
+//        System.out.println("Bytes of overhead per unique-word character = " + ((double)(storageUsed
+//                        - (totalUniqueWordChars * 2)) / totalUniqueWordChars));
+//*/
+//    }
 
-        boolean[] rowPrintFlags = new boolean[rowIndex.length];
-        printConceptualTable("", 0, rowPrintFlags);
-*/
-
-        System.out.println();
-        System.out.println("Conceptual table:");
-        System.out.print(" Row:");
-        for (int i = 0; i < reverseColumnMap.length; i++) {
-                System.out.print("   " + reverseColumnMap[i]);
-        }
-        for (int i = 0; i < rowIndex.length; i++) {
-            System.out.println();
-            printNumber(i, 4);
-            System.out.print(":");
-            for (int j = 0; j < numCols; j++)
-                printNumber(at(i, j), 4);
-        }
-        System.out.println('\n');
-
-        System.out.println();
-        System.out.println("Internally stored table:");
-        System.out.print(" Row:");
-        for (int i = 0; i < reverseColumnMap.length; i++) {
-                System.out.print("   " + reverseColumnMap[i]);
-        }
-        for (int i = 0; i < table.length; i++) {
-            if (i % numCols == 0) {
-                System.out.println();
-                printNumber(i / numCols, 4);
-                System.out.print(":");
-            }
-            cell = table[i];
-            if (cell != 0)
-                populatedCells++;
-            printNumber(cell, 4);
-        }
-        System.out.println('\n');
-
-System.out.println("Row index:");
-for (int i = 0; i < rowIndex.length; i++) {
-    System.out.print("   " + i + " -> " + rowIndex[i]);
-    if (rowIndexFlagsIndex[i] < 0)
-        System.out.print(", flags = " + Integer.toBinaryString((1 << (-rowIndexFlagsIndex[i]))) + " (" + rowIndexFlagsIndex[i]);
-    else
-        System.out.print(", flags = " + Integer.toBinaryString(rowIndexFlags[rowIndexFlagsIndex[i]]) + " (" + rowIndexFlagsIndex[i]);
-    System.out.println("), shift = " + rowIndexShifts[i]);
-}
-/*
-        int theoreticalMinRows = populatedCells / numCols;
-        if (populatedCells % numCols != 0)
-            theoreticalMinRows++;
-        int oneCellRows = 0;
-        for (int i = 0; i < rowIndexFlags.length; i++) {
-            double temp = Math.log(rowIndexFlags[i]) / Math.log(2);
-            if (temp == (int)temp)
-                oneCellRows++;
-        }
-
-        System.out.println('\n');
-        System.out.println("Total words in input = " + totalWords);
-        System.out.println("Total unique words = " + uniqueWords + ", comprising " +
-                        totalUniqueWordChars + " characters\n");
-        System.out.println("Number of populated cells = " + populatedCells);
-        System.out.println("Total number of cells = " + (table.length));
-        System.out.println("Residency = " + ((float)populatedCells / table.length * 100) + '%');
-        System.out.println("Ratio of populated cells to unique-word characters = " +
-                        ((float)populatedCells / totalUniqueWordChars * 100) + '%');
-        System.out.println("Ratio of total cells to unique-word characters = " +
-                        ((float)table.length / totalUniqueWordChars * 100) + '%');
-        System.out.println("Number of rows = " + (table.length / numCols));
-        System.out.println("Theoretical minimum number of rows = " + theoreticalMinRows);
-        System.out.println("Ratio of number of rows to theoretical minimum = " +
-                        ((float)(table.length / numCols) / theoreticalMinRows * 100) + '%');
-        System.out.println("Number of conceptual rows = " + rowIndex.length);
-        System.out.println("Conceptual rows with only one populated cell = " + oneCellRows);
-        System.out.println("Ratio of one-cell rows to total conceptual rows = " + (((float)oneCellRows)
-                        / rowIndex.length * 100) + '%');
-        System.out.println("Average number of populated cells in multi-cell rows = " +
-                        ((float)(populatedCells - oneCellRows) / (rowIndex.length - oneCellRows)));
-
-        int storageUsed = table.length * 2 + rowIndex.length * 2
-                        + rowIndexFlags.length * 4 + rowIndexShifts.length;
-        System.out.println("Total number of bytes in table (including indexes) = " +
-                        storageUsed);
-        System.out.println("Bytes of overhead per unique-word character = " + ((double)(storageUsed
-                        - (totalUniqueWordChars * 2)) / totalUniqueWordChars));
-*/
-    }
-
-    private void printConceptualTable(String initialString, int state, boolean[] flags) {
-        if (initialString.length() == 0)
-            System.out.println("root:");
-        else
-            System.out.println(initialString + ':');
-
-        if (!flags[state]) {
-            flags[state] = true;
-            printNumber(state, 4);
-            System.out.print(":");
-            for (int i = 0; i < numCols; i++)
-                printNumber(at(state, i), 4);
-            System.out.println();
-        }
-
-        int nextState;
-        for (int i = 0; i < numCols; i++) {
-            nextState = at(state, i);
-            if (nextState > 0 && !flags[nextState]) {
-                printNumber(nextState, 4);
-                System.out.print(":");
-                for (int j = 0; j < numCols; j++)
-                    printNumber(at(nextState, j), 4);
-                System.out.println();
-            }
-        }
-        for (int i = 0; i < numCols; i++) {
-            nextState = at(state, i);
-            if (nextState > 0 && !flags[nextState]) {
-                char nextChar;
-                if (nextState == 27)
-                    nextChar = ' ';
-                else if (nextState == 26)
-                    nextChar = '\'';
-                else
-                    nextChar = (char)(i + 'a');
-                flags[nextState] = true;
-                printConceptualTable(initialString + nextChar, nextState, flags);
-            }
-        }
-    }
+//    private void printConceptualTable(String initialString, int state, boolean[] flags) {
+//        if (initialString.length() == 0)
+//            System.out.println("root:");
+//        else
+//            System.out.println(initialString + ':');
+//
+//        if (!flags[state]) {
+//            flags[state] = true;
+//            printNumber(state, 4);
+//            System.out.print(":");
+//            for (int i = 0; i < numCols; i++)
+//                printNumber(at(state, i), 4);
+//            System.out.println();
+//        }
+//
+//        int nextState;
+//        for (int i = 0; i < numCols; i++) {
+//            nextState = at(state, i);
+//            if (nextState > 0 && !flags[nextState]) {
+//                printNumber(nextState, 4);
+//                System.out.print(":");
+//                for (int j = 0; j < numCols; j++)
+//                    printNumber(at(nextState, j), 4);
+//                System.out.println();
+//            }
+//        }
+//        for (int i = 0; i < numCols; i++) {
+//            nextState = at(state, i);
+//            if (nextState > 0 && !flags[nextState]) {
+//                char nextChar;
+//                if (nextState == 27)
+//                    nextChar = ' ';
+//                else if (nextState == 26)
+//                    nextChar = '\'';
+//                else
+//                    nextChar = (char)(i + 'a');
+//                flags[nextState] = true;
+//                printConceptualTable(initialString + nextChar, nextState, flags);
+//            }
+//        }
+//    }
 
     private void printWordList(String partialWord, int state, PrintWriter out)
             throws IOException {
@@ -816,15 +816,15 @@ for (int i = 0; i < rowIndex.length; i++) {
         out.close();
     }
 
-    private void printNumber(int x, int width) {
-        String s = String.valueOf(x);
-        if (width > s.length())
-            System.out.print(spaces.substring(0, width - s.length()));
-        if (x != 0)
-            System.out.print(s);
-        else
-            System.out.print('.');
-    }
+//    private void printNumber(int x, int width) {
+//        String s = String.valueOf(x);
+//        if (width > s.length())
+//            System.out.print(spaces.substring(0, width - s.length()));
+//        if (x != 0)
+//            System.out.print(s);
+//        else
+//            System.out.print('.');
+//    }
 
     public final short at(int row, char ch) {
         int col = columnMap.elementAt(ch);
@@ -865,6 +865,6 @@ for (int i = 0; i < rowIndex.length; i++) {
     private int uniqueWords = 0;
     private int totalUniqueWordChars = 0;
 
-    private static final String spaces = "      ";
+    //private static final String spaces = "      ";
 }
 

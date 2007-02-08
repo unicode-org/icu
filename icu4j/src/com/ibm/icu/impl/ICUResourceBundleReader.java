@@ -1,7 +1,7 @@
 //##header
 /*
  *******************************************************************************
- * Copyright (C) 2004-2005, International Business Machines Corporation and         *
+ * Copyright (C) 2004-2007, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -129,14 +129,14 @@ public final class ICUResourceBundleReader implements ICUBinary.Authenticate{
     
     /* indexes[] value names; indexes are generally 32-bit (Resource) indexes */
     private static final int    URES_INDEX_LENGTH           = 0;        /* [0] contains URES_INDEX_TOP==the length of indexes[] */
-    private static final int    URES_INDEX_STRINGS_TOP      = 1;        /* [1] contains the top of the strings, */
+    //private static final int    URES_INDEX_STRINGS_TOP      = 1;        /* [1] contains the top of the strings, */
                                                                         /*     same as the bottom of resources, rounded up */
-    private static final int    URES_INDEX_RESOURCES_TOP    = 2;        /* [2] contains the top of all resources */
+    //private static final int    URES_INDEX_RESOURCES_TOP    = 2;        /* [2] contains the top of all resources */
     private static final int    URES_INDEX_BUNDLE_TOP       = 3;        /* [3] contains the top of the bundle, */
                                                                         /*     in case it were ever different from [2] */
-    private static final int    URES_INDEX_MAX_TABLE_LENGTH = 4;        /* [4] max. length of any table */
+    //private static final int    URES_INDEX_MAX_TABLE_LENGTH = 4;        /* [4] max. length of any table */
     private static final int    URES_INDEX_ATTRIBUTES       = 5;        /* [5] attributes bit set, see URES_ATT_* (new in formatVersion 1.2) */
-    private static final int    URES_INDEX_TOP              = 6;
+    //private static final int    URES_INDEX_TOP              = 6;
 
     //private static final int    URES_STRINGS_BOTTOM=(1+URES_INDEX_TOP)*4;
 

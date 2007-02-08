@@ -1136,11 +1136,11 @@ class FractionalPartSubstitution extends NFSubstitution {
      */
     private boolean useSpaces = true;
 
-    /**
+    /*
      * The largest number of digits after the decimal point that this
      * object will show in "by digits" mode
      */
-    private static final int MAXDECIMALDIGITS = 18; // 8
+    //private static final int MAXDECIMALDIGITS = 18; // 8
 
     //-----------------------------------------------------------------------
     // construction
@@ -1554,7 +1554,7 @@ class NumeratorSubstitution extends NFSubstitution {
     public void doSubstitution(double number, StringBuffer toInsertInto, int pos) {
         // perform a transformation on the number being formatted that
         // is dependent on the type of substitution this is
-        String s = toInsertInto.toString();
+        //String s = toInsertInto.toString();
         double numberToFormat = transformNumber(number);
 
         if (withZeros && ruleSet != null) {
@@ -1623,11 +1623,11 @@ class NumeratorSubstitution extends NFSubstitution {
         if (withZeros) {
             String workText = new String(text);
             ParsePosition workPos = new ParsePosition(1);
-            int digit;
+            //int digit;
 
             while (workText.length() > 0 && workPos.getIndex() != 0) {
                 workPos.setIndex(0);
-                digit = ruleSet.parse(workText, workPos, 1).intValue(); // parse zero or nothing at all
+                /*digit = */ruleSet.parse(workText, workPos, 1).intValue(); // parse zero or nothing at all
                 if (workPos.getIndex() == 0) {
                     // we failed, either there were no more zeros, or the number was formatted with digits
                     // either way, we're done

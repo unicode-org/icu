@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2002-2006, International Business Machines
+*   Copyright (c) 2002-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -14,8 +14,6 @@ import java.util.HashSet;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Iterator;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Collection;
 
 import com.ibm.icu.impl.Assert;
@@ -760,7 +758,6 @@ class RBBITableBuilder {
            //       else
            //           add the tag list for this state to the global list.
            //
-           int i;
            int n;
            
            // Pre-load a single tag of {0} into the table.

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1016,7 +1016,7 @@ public class CollationRegressionTest extends TestFmwk {
         // where the same token (after normalization) appears twice in a row
         boolean caughtException = false;
         try {
-            RuleBasedCollator dummy = new RuleBasedCollator("\u00e0<a\u0300");
+            new RuleBasedCollator("\u00e0<a\u0300");
         }
         catch (ParseException e) {
             caughtException = true;

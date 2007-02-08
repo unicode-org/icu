@@ -494,12 +494,6 @@ public class RuleBasedNumberFormat extends NumberFormat {
     static final long serialVersionUID = -7664252765575395068L;
     
     /**
-     * Puts a copyright in the .class file
-     */
-    private static final String copyrightNotice
-        = "Copyright \u00a91997-2004 IBM Corp.  All rights reserved.";
-
-    /**
      * Selector code that tells the constructor to create a spellout formatter
      * @stable ICU 2.0
      */
@@ -1610,25 +1604,25 @@ public class RuleBasedNumberFormat extends NumberFormat {
         return result;
     }
 
-    /**
-     * This function is called ONLY DURING CONSTRUCTION to fill in the
-     * defaultRuleSet variable once we've set up all the rule sets.
-     * The default rule set is the last public rule set in the description.
-     * (It's the last rather than the first so that a caller can append
-     * text to the end of an existing formatter description to change its
-     * behavior.)
-     */
-    private void initDefaultRuleSet() {
-        // seek backward from the end of the list until we reach a rule set
-        // whose name DOESN'T begin with %%.  That's the default rule set
-        for (int i = ruleSets.length - 1; i >= 0; --i) {
-            if (!ruleSets[i].getName().startsWith("%%")) {
-                defaultRuleSet = ruleSets[i];
-                return;
-            }
-        }
-        defaultRuleSet = ruleSets[ruleSets.length - 1];
-    }
+//    /**
+//     * This function is called ONLY DURING CONSTRUCTION to fill in the
+//     * defaultRuleSet variable once we've set up all the rule sets.
+//     * The default rule set is the last public rule set in the description.
+//     * (It's the last rather than the first so that a caller can append
+//     * text to the end of an existing formatter description to change its
+//     * behavior.)
+//     */
+//    private void initDefaultRuleSet() {
+//        // seek backward from the end of the list until we reach a rule set
+//        // whose name DOESN'T begin with %%.  That's the default rule set
+//        for (int i = ruleSets.length - 1; i >= 0; --i) {
+//            if (!ruleSets[i].getName().startsWith("%%")) {
+//                defaultRuleSet = ruleSets[i];
+//                return;
+//            }
+//        }
+//        defaultRuleSet = ruleSets[ruleSets.length - 1];
+//    }
 
     //-----------------------------------------------------------------------
     // formatting implementation
