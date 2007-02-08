@@ -1,7 +1,7 @@
 //##header
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -280,8 +280,6 @@ public abstract class UnicodeProperty extends UnicodeLabel {
 
   // TODO use this instead of plain strings
   public static class Name implements Comparable {
-    private static Map skeletonCache;
-
     private String skeleton;
 
     private String pretty;
@@ -749,7 +747,6 @@ public abstract class UnicodeProperty extends UnicodeLabel {
         if (DEBUG)
           System.out.println("\t(" + prefix + ")Parsing <" + text.substring(pos.getIndex(), limit) + ">");
         int start = pos.getIndex();
-        int veryStart = start;
         // ensure that it starts with 'prefix'
         if (!text.regionMatches(true, start, prefix, 0, prefix.length()))
           return null;
@@ -1029,7 +1026,6 @@ public abstract class UnicodeProperty extends UnicodeLabel {
         toValueAliases = new HashMap(1);
       for (Iterator it = getAvailableValues().iterator(); it.hasNext();) {
         Object value = it.next();
-        List result;
         _ensureValueInAliases(value);
       }
     }

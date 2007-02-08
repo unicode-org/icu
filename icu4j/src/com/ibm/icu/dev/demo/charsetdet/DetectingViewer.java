@@ -1,6 +1,6 @@
 /*
  **************************************************************************
- * Copyright (C) 2005-2006, International Business Machines Corporation   *
+ * Copyright (C) 2005-2007, International Business Machines Corporation   *
  * and others. All Rights Reserved.                                       *
  **************************************************************************
  *
@@ -98,10 +98,10 @@ public class DetectingViewer extends JFrame implements ActionListener
         return new BufferedInputStream(fileStream);
     }
     
-    private void openFile(String directory, String filename)
-    {
-        openFile(new File(directory, filename));
-    }
+//    private void openFile(String directory, String filename)
+//    {
+//        openFile(new File(directory, filename));
+//    }
     
     
     private BufferedInputStream openURL(String url)

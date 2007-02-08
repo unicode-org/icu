@@ -1,7 +1,7 @@
 //##header
 /**
 *******************************************************************************
-* Copyright (C) 1996-2006, International Business Machines Corporation and    *
+* Copyright (C) 1996-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -5863,25 +5863,25 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     private static final int LAST_CHAR_MASK_ = 0xFFFF;
       
-    /**
-     * To get the last byte out from a data type
-     */
-    private static final int LAST_BYTE_MASK_ = 0xFF;
-      
-    /**
-     * Shift 16 bits
-     */
-    private static final int SHIFT_16_ = 16;
-      
-    /**
-     * Shift 24 bits
-     */
-    private static final int SHIFT_24_ = 24;  
-    
-    /**
-     * Decimal radix
-     */
-    private static final int DECIMAL_RADIX_ = 10;
+//    /**
+//     * To get the last byte out from a data type
+//     */
+//    private static final int LAST_BYTE_MASK_ = 0xFF;
+//      
+//    /**
+//     * Shift 16 bits
+//     */
+//    private static final int SHIFT_16_ = 16;
+//      
+//    /**
+//     * Shift 24 bits
+//     */
+//    private static final int SHIFT_24_ = 24;  
+//    
+//    /**
+//     * Decimal radix
+//     */
+//    private static final int DECIMAL_RADIX_ = 10;
       
     /**
      * No break space code point
@@ -5962,10 +5962,10 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Delete code point
      */
     private static final int DELETE_ = 0x007F;
-    /**
+    /*
      * ISO control character first range upper limit 0x0 - 0x1F
      */
-    private static final int ISO_CONTROL_FIRST_RANGE_MAX_ = 0x1F;
+    //private static final int ISO_CONTROL_FIRST_RANGE_MAX_ = 0x1F;
     /**
      * Shift to get numeric type
      */
@@ -5976,25 +5976,25 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     private static final int NUMERIC_TYPE_MASK_ = 0x7 << NUMERIC_TYPE_SHIFT_;
       
     /* encoding of fractional and large numbers */
-    private static final int MAX_SMALL_NUMBER=0xff;
+    //private static final int MAX_SMALL_NUMBER=0xff;
 
     private static final int FRACTION_NUM_SHIFT=3;        /* numerator: bits 7..3 */
     private static final int FRACTION_DEN_MASK=7;         /* denominator: bits 2..0 */
 
-    private static final int FRACTION_MAX_NUM=31;
+    //private static final int FRACTION_MAX_NUM=31;
     private static final int FRACTION_DEN_OFFSET=2;       /* denominator values are 2..9 */
 
-    private static final int FRACTION_MIN_DEN=FRACTION_DEN_OFFSET;
-    private static final int FRACTION_MAX_DEN=FRACTION_MIN_DEN+FRACTION_DEN_MASK;
+    //private static final int FRACTION_MIN_DEN=FRACTION_DEN_OFFSET;
+    //private static final int FRACTION_MAX_DEN=FRACTION_MIN_DEN+FRACTION_DEN_MASK;
 
     private static final int LARGE_MANT_SHIFT=4;          /* mantissa: bits 7..4 */
     private static final int LARGE_EXP_MASK=0xf;          /* exponent: bits 3..0 */
     private static final int LARGE_EXP_OFFSET=2;          /* regular exponents 2..17 */
     private static final int LARGE_EXP_OFFSET_EXTRA=18;   /* extra large exponents 18..33 */
 
-    private static final int LARGE_MIN_EXP=LARGE_EXP_OFFSET;
-    private static final int LARGE_MAX_EXP=LARGE_MIN_EXP+LARGE_EXP_MASK;
-    private static final int LARGE_MAX_EXP_EXTRA=LARGE_EXP_OFFSET_EXTRA+LARGE_EXP_MASK;
+    //private static final int LARGE_MIN_EXP=LARGE_EXP_OFFSET;
+    //private static final int LARGE_MAX_EXP=LARGE_MIN_EXP+LARGE_EXP_MASK;
+    //private static final int LARGE_MAX_EXP_EXTRA=LARGE_EXP_OFFSET_EXTRA+LARGE_EXP_MASK;
 
     /**
      * Han digit characters
@@ -6018,16 +6018,16 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     private static final int CJK_IDEOGRAPH_TEN_THOUSAND_     = 0x824c;    
     private static final int CJK_IDEOGRAPH_HUNDRED_MILLION_  = 0x5104;
 
-    /**
-     * Zero Width Non Joiner.
-     * Equivalent to icu4c ZWNJ.
-     */
-    private static final int ZERO_WIDTH_NON_JOINER_ = 0x200c;
-    /**
-     * Zero Width Joiner
-     * Equivalent to icu4c ZWJ. 
-     */
-    private static final int ZERO_WIDTH_JOINER_ = 0x200d;
+//    /**
+//     * Zero Width Non Joiner.
+//     * Equivalent to icu4c ZWNJ.
+//     */
+//    private static final int ZERO_WIDTH_NON_JOINER_ = 0x200c;
+//    /**
+//     * Zero Width Joiner
+//     * Equivalent to icu4c ZWJ. 
+//     */
+//    private static final int ZERO_WIDTH_JOINER_ = 0x200d;
 
     /*
      * Properties in vector word 2

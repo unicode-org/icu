@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2006, International Business Machines Corporation and    *
+* Copyright (C) 1996-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -1153,34 +1153,34 @@ final class CollationParsedRuleBuilder
      * Start of a contraction 
      */
     private static final int CE_CONTRACTION_TAG_ = 2;
-    /** 
+    /* 
      * Thai character - do the reordering 
      */
-    private static final int CE_THAI_TAG_ = 3;            
-    /** 
+    //private static final int CE_THAI_TAG_ = 3;            
+    /* 
      * Charset processing, not yet implemented
      */
-    private static final int CE_CHARSET_TAG_ = 4;         
+    //private static final int CE_CHARSET_TAG_ = 4;         
     /** 
      * Lead surrogate that is tailored and doesn't start a contraction 
      */
     private static final int CE_SURROGATE_TAG_ = 5;
-    /** 
+    /* 
      * AC00-D7AF
      */
-    private static final int CE_HANGUL_SYLLABLE_TAG_ = 6;
-    /** 
+    //private static final int CE_HANGUL_SYLLABLE_TAG_ = 6;
+    /* 
      * D800-DBFF
      */
-    private static final int CE_LEAD_SURROGATE_TAG_ = 7;
-    /** 
+    //private static final int CE_LEAD_SURROGATE_TAG_ = 7;
+    /* 
      * DC00-DFFF
      */
-    private static final int CE_TRAIL_SURROGATE_TAG_ = 8; 
-    /** 
+    //private static final int CE_TRAIL_SURROGATE_TAG_ = 8; 
+    /*
      * 0x3400-0x4DB5, 0x4E00-0x9FA5, 0xF900-0xFA2D
      */    
-    private static final int CE_CJK_IMPLICIT_TAG_ = 9;
+    //private static final int CE_CJK_IMPLICIT_TAG_ = 9;
     private static final int CE_IMPLICIT_TAG_ = 10;
     private static final int CE_SPEC_PROC_TAG_ = 11;
     /** 
@@ -1206,14 +1206,14 @@ final class CollationParsedRuleBuilder
     private static final int UPPER_CASE_ = 0x80;
     private static final int MIXED_CASE_ = 0x40;
     private static final int LOWER_CASE_ = 0x00;
-    /**
+    /*
      * Initial table size
      */
-    private static final int INIT_TABLE_SIZE_ = 1028;
-    /**
+    //private static final int INIT_TABLE_SIZE_ = 1028;
+    /*
      * Header size, copied from ICU4C, to be changed when that value changes
      */
-    private static final int HEADER_SIZE_ = 0xC4;
+    //private static final int HEADER_SIZE_ = 0xC4;
     /**
      * Contraction table new element indicator
      */
