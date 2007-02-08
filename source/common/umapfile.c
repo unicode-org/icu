@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2006, International Business Machines
+*   Copyright (C) 1999-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************/
@@ -133,7 +133,7 @@
         UDataMemory_init(pData); /* Clear the output struct.        */
 
         /* open the input file */
-        file=CreateFile(path, GENERIC_READ, FILE_SHARE_READ, NULL,
+        file=CreateFileA(path, GENERIC_READ, FILE_SHARE_READ, NULL,
             OPEN_EXISTING,
             FILE_ATTRIBUTE_NORMAL|FILE_FLAG_RANDOM_ACCESS, NULL);
         if(file==INVALID_HANDLE_VALUE) {
