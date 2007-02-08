@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 1996-2006, international Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, international Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -118,7 +118,7 @@ public class PrettyPrinter {
 		// make sure that comparison separates all strings, even canonically equivalent ones
 		Set orderedStrings = new TreeSet(ordering);
 		for (UnicodeSetIterator it = new UnicodeSetIterator(uset); it.nextRange();) {
-            if (it.codepoint == it.IS_STRING) {
+            if (it.codepoint == UnicodeSetIterator.IS_STRING) {
                 orderedStrings.add(it.string);
             } else {
                 for (int i = it.codepoint; i <= it.codepointEnd; ++i) {

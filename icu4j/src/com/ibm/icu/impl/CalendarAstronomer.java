@@ -1428,7 +1428,7 @@ public class CalendarAstronomer {
     private transient double    meanAnomalySun  = INVALID;
     private transient double    moonLongitude   = INVALID;
     private transient double    moonEclipLong   = INVALID;
-    private transient double    meanAnomalyMoon = INVALID;
+    //private transient double    meanAnomalyMoon = INVALID;
     private transient double    eclipObliquity  = INVALID;
     private transient double    siderealT0      = INVALID;
     private transient double    siderealTime    = INVALID;
@@ -1442,7 +1442,7 @@ public class CalendarAstronomer {
         meanAnomalySun  = INVALID;
         moonLongitude   = INVALID;
         moonEclipLong   = INVALID;
-        meanAnomalyMoon = INVALID;
+        //meanAnomalyMoon = INVALID;
         eclipObliquity  = INVALID;
         siderealTime    = INVALID;
         siderealT0      = INVALID;

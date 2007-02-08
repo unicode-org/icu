@@ -1,7 +1,7 @@
 //##header
 /*
  *******************************************************************************
- * Copyright (C) 2004-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -142,7 +142,7 @@ public class GlobalizationPreferences implements Freezable {
         ID_CURRENCY_SYMBOL = 8,
         ID_TIMEZONE = 9;
 
-    private static final int ID_LIMIT = ID_TIMEZONE + 1;
+    //private static final int ID_LIMIT = ID_TIMEZONE + 1;
 
     /**
      * Break iterator types

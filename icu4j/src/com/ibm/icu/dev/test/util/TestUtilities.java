@@ -382,7 +382,7 @@ public class TestUtilities extends TestFmwk {
             case 2:
                 int enumValue = UCharacter.getIntPropertyValue(cp, propEnum);
                 //if (enumValue <= 0) continue;
-                String value = UCharacter.getPropertyValueName(propEnum,enumValue, UProperty.NameChoice.LONG);
+                UCharacter.getPropertyValueName(propEnum,enumValue, UProperty.NameChoice.LONG);
                 break;                
             case 3: map3.get(new Integer(cp)); break;
             }

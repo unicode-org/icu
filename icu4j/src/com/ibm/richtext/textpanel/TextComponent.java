@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2005.  All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2007.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or
  * implied, including the warranty of non-infringement and the implied
@@ -573,7 +573,6 @@ class TextComponent extends FakeComponent
     private static final class DocumentView {
 
         private TextComponent fHost;
-        private boolean fWraps;
         private boolean fWrapToWindowWidth;
         private int fInsetAmount;
         private PanelEventBroadcaster fListener;

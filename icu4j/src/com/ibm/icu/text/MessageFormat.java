@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2006, International Business Machines
+* Copyright (c) 2004-2007, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -1245,7 +1245,7 @@ public class MessageFormat extends UFormat {
         // note: this implementation assumes a fast substring & index.
         // if this is not true, would be better to append chars one by one.
         int lastOffset = 0;
-        int last = result.length();
+        //int last = result.length();
         for (int i = 0; i <= maxOffset; ++i) {
             result.append(pattern.substring(lastOffset, offsets[i]));
             lastOffset = offsets[i];
@@ -1339,7 +1339,7 @@ public class MessageFormat extends UFormat {
 //                        fp.setBeginIndex(last);
 //                        fp.setEndIndex(result.length());
 //                    }
-                    last = result.length();
+//                    last = result.length();
                 }
             }
         }

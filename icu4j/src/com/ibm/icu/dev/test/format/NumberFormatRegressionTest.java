@@ -1,7 +1,7 @@
 //##header
 /*
  *******************************************************************************
- * Copyright (C) 2001-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -219,7 +219,7 @@ public class NumberFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         df.setParseStrict(true);
         for (int i = 0; i < data.length; i++) {
             try {
-                Number n = df.parse(data[i]);
+                df.parse(data[i]);
                 if (!expected[i]) {
                     errln("Failed: ParseException must be thrown for string " + data[i]);
                 }

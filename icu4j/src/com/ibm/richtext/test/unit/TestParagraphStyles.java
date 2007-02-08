@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2004.  All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2007.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or
  * implied, including the warranty of non-infringement and the implied
@@ -317,21 +317,21 @@ public final class TestParagraphStyles extends TestFmwk {
         }
     }
 
-    private void checkEndpoint(MConstText text) {
-
-        boolean emptyFinalParagraph;
-        int length = text.length();
-
-        if (length != 0) {
-            char ch = text.at(length-1);
-            emptyFinalParagraph = isParagraphBreak(ch);
-        }
-        else {
-            emptyFinalParagraph = true;
-        }
-
-        if ((text.paragraphStart(length) == length) != emptyFinalParagraph) {
-            errln("Final paragraph length is incorrect");
-        }
-    }
+//    private void checkEndpoint(MConstText text) {
+//
+//        boolean emptyFinalParagraph;
+//        int length = text.length();
+//
+//        if (length != 0) {
+//            char ch = text.at(length-1);
+//            emptyFinalParagraph = isParagraphBreak(ch);
+//        }
+//        else {
+//            emptyFinalParagraph = true;
+//        }
+//
+//        if ((text.paragraphStart(length) == length) != emptyFinalParagraph) {
+//            errln("Final paragraph length is incorrect");
+//        }
+//    }
 }
