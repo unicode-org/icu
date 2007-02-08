@@ -739,7 +739,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   mant=new byte[d]; // we know the length
   j=offset; // input offset
   if (exotic) 
-   {exotica:do{ // slow: check for exotica
+   {do{ // slow: check for exotica
     {int $4=d;i=0;for(;$4>0;$4--,i++){
      if (i==dotoff) 
       j++; // at dot
@@ -758,7 +758,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
     }/*i*/
    }while(false);}/*exotica*/
   else 
-   {simple:do{
+   {do{
     {int $5=d;i=0;for(;$5>0;$5--,i++){
      if (i==dotoff) 
       j++;
@@ -858,7 +858,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   // We fastpath commoners
   if (num<=9) 
    if (num>=(-9)) 
-    {singledigit:do{
+    {do{
      // very common single digit case
      {/*select*/
      if (num==0)
@@ -1184,7 +1184,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   usellen=lhs.mant.length;
   user=rhs.mant;
   userlen=rhs.mant.length;
-  {padder:do{/*select*/
+  {do{/*select*/
   if (lhs.exp==rhs.exp)
    {/* no padding needed */
     // This is the most common, and fastest, path
@@ -1267,12 +1267,12 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   if (((lhs.ind==isneg)?1:0)==((rhs.ind==isneg)?1:0))  // same sign, 0 non-negative
    mult=1;
   else 
-   {signdiff:do{ // different signs, so subtraction is needed
+   {do{ // different signs, so subtraction is needed
     mult=-1; // will cause subtract
     /* Before we can subtract we must determine which is the larger,
        as our add/subtract routine only handles non-negative results
        so we may need to swap the operands. */
-    {swaptest:do{/*select*/
+    {do{/*select*/
     if (rhs.ind==iszero){
      // original A bigger
     }else if ((usellen<userlen)|(lhs.ind==iszero))
@@ -2565,7 +2565,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   */
   
   /* determine form */
-  {setform:do{/*select*/
+  {do{/*select*/
   if (exdigits==(-1))
    num.form=(byte)com.ibm.icu.math.MathContext.PLAIN;
   else if (num.ind==iszero)
@@ -3439,7 +3439,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
        sb.append('.').append(cmant,1,cmant.length-1);
      }
     else 
-     {engineering:do{
+     {do{
       sig=euse%3; // common
       if (sig<0) 
        sig=3+sig; // negative exponent
@@ -3799,7 +3799,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      throw new java.lang.ArithmeticException("Integer overflow");
     
     if (code=='R') 
-     {remainder:do{
+     {do{
       /* We were doing Remainder -- return the residue */
       if (res.mant[0]==0)  // no integer part was found
        return clone(lhs).finish(set,false); // .. so return lhs, canonical
@@ -3849,7 +3849,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   /* Here for Divide or Integer Divide */
   // handle scaled results first ['I' always scale 0, optional for 'D']
   if (scale>=0) 
-   {scaled:do{
+   {do{
     // say 'scale have res.exp len' scale have res.exp res.mant.length
     if (have!=res.mant.length) 
      // already padded with 0's, so just adjust exponent
@@ -4021,7 +4021,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
    /* result so far (digit) could be -90 through 99 */
    if (digit<10) 
     if (digit>=0) 
-     {quick:do{ // 0-9
+     {do{ // 0-9
       reb[op]=(byte)digit;
       digit=0; // no carry
       continue op;
@@ -4173,7 +4173,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   
   // decide rounding adjustment depending on mode, sign, and discarded digits
   increment=0; // bumper
-  {modes:do{/*select*/
+  {do{/*select*/
   if (mode==ROUND_HALF_UP)
    { // default first [most common]
     if (first>=5) 
@@ -4233,7 +4233,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   }while(false);}/*modes*/
   
   if (increment!=0) 
-   {bump:do{
+   {do{
     if (ind==iszero) 
      {
       // we must not subtract from 0, but result is trivial anyway
@@ -4343,7 +4343,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      // non-0 result; ind will be correct
      // remove leading zeros [e.g., after subtract]
      if (i>0) 
-      {delead:do{
+      {do{
        newmant=new byte[this.mant.length-i];
        java.lang.System.arraycopy((java.lang.Object)this.mant,i,(java.lang.Object)newmant,0,this.mant.length-i);
        this.mant=newmant;

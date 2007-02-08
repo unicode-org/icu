@@ -23,7 +23,6 @@ import java.util.Enumeration;
 import java.util.jar.JarEntry;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.UTF16;

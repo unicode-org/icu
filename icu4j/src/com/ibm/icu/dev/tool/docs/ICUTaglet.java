@@ -1,7 +1,7 @@
 //##header  VERSION_1.5
 /**
 *******************************************************************************
-* Copyright (C) 2002-2006, International Business Machines Corporation and    *
+* Copyright (C) 2002-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -15,7 +15,9 @@
 package com.ibm.icu.dev.tool.docs;
 
 import com.sun.javadoc.*;
-import com.sun.tools.doclets.*;
+//#ifndef VERSION_1.5
+//import com.sun.tools.doclets.*;
+//#endif
 //#ifdef VERSION_1.5
 
 import com.sun.tools.doclets.internal.toolkit.taglets.*;
