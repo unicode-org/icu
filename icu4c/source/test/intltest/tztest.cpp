@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation
+ * Copyright (c) 1997-2007, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -896,7 +896,7 @@ void TimeZoneTest::TestCustomParse()
     }
 }
 
-static const UVersionInfo ICU_37 = {3,7,0,0};
+static const UVersionInfo ICU_37 = {3,7,2,0};
 
 void
 TimeZoneTest::TestAliasedNames()
