@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 2005-2006, International Business Machines
+*   Copyright (C) 2005-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -251,7 +251,7 @@ static int32_t detectWindowsType()
         Specifically, is it 9x/Me or not, and is it "GMT" or "GMT
         Standard Time". */
     for (winType = 0; winType < 2; winType += 1) {
-        result = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
+        result = RegOpenKeyExA(HKEY_LOCAL_MACHINE,
                               WIN_TYPE_PROBE_REGKEY[winType],
                               0,
                               KEY_QUERY_VALUE,
@@ -323,7 +323,7 @@ static LONG openTZRegKey(HKEY *hkey, const char *winid)
         uprv_strcat(subKeyName, STANDARD_TIME_REGKEY);
     }
 
-    result = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
+    result = RegOpenKeyExA(HKEY_LOCAL_MACHINE,
                             subKeyName,
                             0,
                             KEY_QUERY_VALUE,
@@ -340,7 +340,7 @@ static LONG openTZRegKey(HKEY *hkey, const char *winid)
                 if (*(ZONE_REMAP[i].altwinid) == '+' && fWinType != WIN_9X_ME_TYPE) {
                     uprv_strcat(subKeyName, STANDARD_TIME_REGKEY);                
                 }
-                return RegOpenKeyEx(HKEY_LOCAL_MACHINE,
+                return RegOpenKeyExA(HKEY_LOCAL_MACHINE,
                                       subKeyName,
                                       0,
                                       KEY_QUERY_VALUE,
@@ -361,7 +361,7 @@ static LONG getTZI(const char *winid, TZI *tzi)
     result = openTZRegKey(&hkey, winid);
 
     if (result == ERROR_SUCCESS) {
-        result = RegQueryValueEx(hkey,
+        result = RegQueryValueExA(hkey,
                                     TZI_REGKEY,
                                     NULL,
                                     NULL,
@@ -527,14 +527,14 @@ uprv_detectWindowsTimeZone() {
            (not the API). This avoids conversion issues.  Use the
            standard name, since Windows modifies the daylight name to
            match the standard name if there is no DST. */
-        if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
+        if (RegOpenKeyExA(HKEY_LOCAL_MACHINE,
                               CURRENT_ZONE_REGKEY,
                               0,
                               KEY_QUERY_VALUE,
                               &hkey) == ERROR_SUCCESS)
         {
             stdNameSize = sizeof(stdName);
-            result = RegQueryValueEx(hkey,
+            result = RegQueryValueExA(hkey,
                                      (LPTSTR)STANDARD_NAME_REGKEY,
                                      NULL,
                                      NULL,
@@ -552,7 +552,7 @@ uprv_detectWindowsTimeZone() {
                 result = openTZRegKey(&hkey, ZONE_MAP[j].winid);
 
                 if (result == ERROR_SUCCESS) {
-                    result = RegQueryValueEx(hkey,
+                    result = RegQueryValueExA(hkey,
                                              (LPTSTR)STD_REGKEY,
                                              NULL,
                                              NULL,

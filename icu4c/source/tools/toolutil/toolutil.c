@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -43,7 +43,7 @@ getLongPathname(const char *pathname) {
 #ifdef U_WINDOWS
     /* anticipate problems with "short" pathnames */
     static WIN32_FIND_DATA info;
-    HANDLE file=FindFirstFile(pathname, &info);
+    HANDLE file=FindFirstFileA(pathname, &info);
     if(file!=INVALID_HANDLE_VALUE) {
         if(info.cAlternateFileName[0]!=0) {
             /* this file has a short name, get and use the long one */
