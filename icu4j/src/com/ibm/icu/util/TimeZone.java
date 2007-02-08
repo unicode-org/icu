@@ -1,7 +1,7 @@
 /*
  * @(#)TimeZone.java    1.51 00/01/19
  *
- * Copyright (C) 1996-2006, International Business Machines
+ * Copyright (C) 1996-2007, International Business Machines
  * Corporation and others.  All Rights Reserved.
  */
 
@@ -12,9 +12,7 @@ import java.lang.ref.SoftReference;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Locale;
-import java.util.MissingResourceException;
 
-import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.TimeZoneAdapter;
 import com.ibm.icu.impl.ZoneMeta;
 import com.ibm.icu.text.SimpleDateFormat;

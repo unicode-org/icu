@@ -14,7 +14,6 @@ import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.LocaleUtility;
 
 /**
  * A class encapsulating a currency, as defined by ISO 4217.  A

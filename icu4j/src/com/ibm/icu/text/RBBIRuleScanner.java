@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2006,
+ * Copyright (C) 2003-2007,
  * International Business Machines Corporation and others. All Rights Reserved.
  *******************************************************************************
  */
@@ -269,7 +269,7 @@ class RBBIRuleScanner {
             //  OR this rule into the appropriate group of them.
             //
 
-            int destRules = (fReverseRule ? fRB.fReverseTree : fRB.fDefaultTree);
+            int destRules = (fReverseRule ? RBBIRuleBuilder.fReverseTree : fRB.fDefaultTree);
 
             if (fRB.fTreeRoots[destRules] != null) {
                 // This is not the first rule encounted.
@@ -415,13 +415,13 @@ class RBBIRuleScanner {
             } else if (opt.equals("LBCMNoChain")) {
                 fRB.fLBCMNoChain = true;
             } else if (opt.equals("forward")) {
-                fRB.fDefaultTree = fRB.fForwardTree;
+                fRB.fDefaultTree = RBBIRuleBuilder.fForwardTree;
             } else if (opt.equals("reverse")) {
-                fRB.fDefaultTree = fRB.fReverseTree;
+                fRB.fDefaultTree = RBBIRuleBuilder.fReverseTree;
             } else if (opt.equals("safe_forward")) {
-                fRB.fDefaultTree = fRB.fSafeFwdTree;
+                fRB.fDefaultTree = RBBIRuleBuilder.fSafeFwdTree;
             } else if (opt.equals("safe_reverse")) {
-                fRB.fDefaultTree = fRB.fSafeRevTree;
+                fRB.fDefaultTree = RBBIRuleBuilder.fSafeRevTree;
             } else if (opt.equals("lookAheadHardBreak")) {
                 fRB.fLookAheadHardBreak = true;
             } else {
