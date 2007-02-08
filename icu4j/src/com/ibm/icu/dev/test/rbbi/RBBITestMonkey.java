@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2006 International Business Machines Corporation and     *
+ * Copyright (C) 2003-2007 International Business Machines Corporation and     *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -179,7 +179,7 @@ public class RBBITestMonkey extends TestFmwk {
         }   
 
         int   next(int prevPos) {  
-            int    p0, p1, p2, p3;      // Indices of the significant code points around the 
+            int    /*p0,*/ p1, p2, p3;      // Indices of the significant code points around the 
                                         //   break position being tested.  The candidate break
                                         //   location is before p2.
             int     breakPos = -1;
@@ -190,7 +190,7 @@ public class RBBITestMonkey extends TestFmwk {
             if (prevPos >= fText.length()) {
                 return -1;
             }
-            p0 = p1 = p2 = p3 = prevPos;
+            /*p0 =*/ p1 = p2 = p3 = prevPos;
             c3 = UTF16.charAt(fText, prevPos);
             c0 = c1 = c2 = 0;
             
@@ -199,7 +199,7 @@ public class RBBITestMonkey extends TestFmwk {
             // Loop runs once per "significant" character position in the input text.
             for (;;) {
                 // Move all of the positions forward in the input string.
-                p0 = p1;  c0 = c1;
+                /*p0 = p1;*/  c0 = c1;
                 p1 = p2;  c1 = c2;
                 p2 = p3;  c2 = c3;
                 
@@ -467,7 +467,6 @@ public class RBBITestMonkey extends TestFmwk {
             int    nextPos;   //  Index of the next character following pos.
                               //     Usually skips over combining marks.
             int    tPos;      //  temp value.
-            int    c;
             int    matchVals[]  = null;       // Number  Expression Match Results
  
             
@@ -1086,7 +1085,7 @@ public class RBBITestMonkey extends TestFmwk {
         }
 
         int   next(int prevPos) {  
-            int    p0, p1, p2, p3;      // Indices of the significant code points around the 
+            int    /*p0,*/ p1, p2, p3;      // Indices of the significant code points around the 
                                         //   break position being tested.  The candidate break
                                         //   location is before p2.
             int     breakPos = -1;
@@ -1098,14 +1097,14 @@ public class RBBITestMonkey extends TestFmwk {
             if (prevPos >= fText.length()) {
                 return -1;
             }
-            p0 = p1 = p2 = p3 = prevPos;
+            /*p0 =*/ p1 = p2 = p3 = prevPos;
             c3 = UTF16.charAt(fText, prevPos);
             c0 = c1 = c2 = 0;
             
             // Loop runs once per "significant" character position in the input text.
             for (;;) {
                 // Move all of the positions forward in the input string.
-                p0 = p1;  c0 = c1;
+                /*p0 = p1;*/  c0 = c1;
                 p1 = p2;  c1 = c2;
                 p2 = p3;  c2 = c3;
                 

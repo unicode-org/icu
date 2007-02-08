@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2005, International Business Machines
+*   Copyright (C) 2004-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -23,9 +23,7 @@ import java.io.InputStream;
 import java.io.DataInputStream;
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.util.MissingResourceException;
 
-import com.ibm.icu.util.VersionInfo;
 import com.ibm.icu.util.RangeValueIterator;
 
 import com.ibm.icu.text.UnicodeSet;
@@ -277,8 +275,8 @@ public final class UBiDiProps {
 
     /* indexes into indexes[] */
     private static final int IX_INDEX_TOP=0;
-    private static final int IX_LENGTH=1;
-    private static final int IX_TRIE_SIZE=2;
+    //private static final int IX_LENGTH=1;
+    //private static final int IX_TRIE_SIZE=2;
     private static final int IX_MIRROR_LENGTH=3;
 
     private static final int IX_JG_START=4;
@@ -315,14 +313,14 @@ public final class UBiDiProps {
     }
 
     private static final int ESC_MIRROR_DELTA=-4;
-    private static final int MIN_MIRROR_DELTA=-3;
-    private static final int MAX_MIRROR_DELTA=3;
+    //private static final int MIN_MIRROR_DELTA=-3;
+    //private static final int MAX_MIRROR_DELTA=3;
 
     // definitions for 32-bit mirror table entry --------------------------- ***
 
     /* the source Unicode code point takes 21 bits (20..0) */
     private static final int MIRROR_INDEX_SHIFT=21;
-    private static final int MAX_MIRROR_INDEX=0x7ff;
+    //private static final int MAX_MIRROR_INDEX=0x7ff;
 
     private static final int getMirrorCodePoint(int m) {
         return m&0x1fffff;

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2006, International Business Machines
+*   Copyright (C) 2004-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -1309,12 +1309,12 @@ public final class UCaseProps {
 
     /* indexes into indexes[] */
     private static final int IX_INDEX_TOP=0;
-    private static final int IX_LENGTH=1;
-    private static final int IX_TRIE_SIZE=2;
+    //private static final int IX_LENGTH=1;
+    //private static final int IX_TRIE_SIZE=2;
     private static final int IX_EXC_LENGTH=3;
     private static final int IX_UNFOLD_LENGTH=4;
 
-    private static final int IX_MAX_FULL_LENGTH=15;
+    //private static final int IX_MAX_FULL_LENGTH=15;
     private static final int IX_TOP=16;
 
     // definitions for 16-bit case properties word ------------------------- ***
@@ -1334,16 +1334,16 @@ public final class UCaseProps {
     private static final int EXCEPTION=     8;
 
     private static final int DOT_MASK=      0x30;
-    private static final int NO_DOT=        0;      /* normal characters with cc=0 */
+    //private static final int NO_DOT=        0;      /* normal characters with cc=0 */
     private static final int SOFT_DOTTED=   0x10;   /* soft-dotted characters with cc=0 */
     private static final int ABOVE=         0x20;   /* "above" accents with cc=230 */
     private static final int OTHER_ACCENT=  0x30;   /* other accent character (0<cc!=230) */
 
     /* no exception: bits 15..6 are a 10-bit signed case mapping delta */
     private static final int DELTA_SHIFT=   6;
-    private static final int DELTA_MASK=    0xffc0;
-    private static final int MAX_DELTA=     0x1ff;
-    private static final int MIN_DELTA=     (-MAX_DELTA-1);
+    //private static final int DELTA_MASK=    0xffc0;
+    //private static final int MAX_DELTA=     0x1ff;
+    //private static final int MIN_DELTA=     (-MAX_DELTA-1);
 
     private static final int getDelta(int props) {
         return (short)props>>DELTA_SHIFT;
@@ -1354,8 +1354,8 @@ public final class UCaseProps {
 
     /* exception: bits 15..4 are an unsigned 12-bit index into the exceptions array */
     private static final int EXC_SHIFT=     4;
-    private static final int EXC_MASK=      0xfff0;
-    private static final int MAX_EXCEPTIONS=0x1000;
+    //private static final int EXC_MASK=      0xfff0;
+    //private static final int MAX_EXCEPTIONS=0x1000;
 
     /* definitions for 16-bit main exceptions word ------------------------------ */
 
@@ -1364,11 +1364,11 @@ public final class UCaseProps {
     private static final int EXC_FOLD=1;
     private static final int EXC_UPPER=2;
     private static final int EXC_TITLE=3;
-    private static final int EXC_4=4;           /* reserved */
-    private static final int EXC_5=5;           /* reserved */
+    //private static final int EXC_4=4;           /* reserved */
+    //private static final int EXC_5=5;           /* reserved */
     private static final int EXC_CLOSURE=6;
     private static final int EXC_FULL_MAPPINGS=7;
-    private static final int EXC_ALL_SLOTS=8;   /* one past the last slot */
+    //private static final int EXC_ALL_SLOTS=8;   /* one past the last slot */
 
     /* each slot is 2 uint16_t instead of 1 */
     private static final int EXC_DOUBLE_SLOTS=          0x100;
@@ -1379,11 +1379,11 @@ public final class UCaseProps {
     private static final int EXC_DOT_SHIFT=8;
 
     /* normally stored in the main word, but pushed out for larger exception indexes */
-    private static final int EXC_DOT_MASK=              0x3000;
-    private static final int EXC_NO_DOT=                0;
-    private static final int EXC_SOFT_DOTTED=           0x1000;
-    private static final int EXC_ABOVE=                 0x2000; /* "above" accents with cc=230 */
-    private static final int EXC_OTHER_ACCENT=          0x3000; /* other character (0<cc!=230) */
+    //private static final int EXC_DOT_MASK=              0x3000;
+    //private static final int EXC_NO_DOT=                0;
+    //private static final int EXC_SOFT_DOTTED=           0x1000;
+    //private static final int EXC_ABOVE=                 0x2000; /* "above" accents with cc=230 */
+    //private static final int EXC_OTHER_ACCENT=          0x3000; /* other character (0<cc!=230) */
 
     /* complex/conditional mappings */
     private static final int EXC_CONDITIONAL_SPECIAL=   0x4000;
@@ -1391,12 +1391,12 @@ public final class UCaseProps {
 
     /* definitions for lengths word for full case mappings */
     private static final int FULL_LOWER=    0xf;
-    private static final int FULL_FOLDING=  0xf0;
-    private static final int FULL_UPPER=    0xf00;
-    private static final int FULL_TITLE=    0xf000;
+    //private static final int FULL_FOLDING=  0xf0;
+    //private static final int FULL_UPPER=    0xf00;
+    //private static final int FULL_TITLE=    0xf000;
 
     /* maximum lengths */
-    private static final int FULL_MAPPINGS_MAX_LENGTH=4*0xf;
+    //private static final int FULL_MAPPINGS_MAX_LENGTH=4*0xf;
     private static final int CLOSURE_MAX_LENGTH=0xf;
 
     /* constants for reverse case folding ("unfold") data */

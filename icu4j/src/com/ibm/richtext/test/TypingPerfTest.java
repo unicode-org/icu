@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2004.  All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2007.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or
  * implied, including the warranty of non-infringement and the implied
@@ -38,15 +38,12 @@ import com.ibm.richtext.demo.EditDemo;
 import com.ibm.richtext.demo.TextDocument;
 
 public class TypingPerfTest implements ActionListener {
-
-    static final String COPYRIGHT =
-                "(C) Copyright IBM Corp. 1998-1999 - All Rights Reserved";
     private TextFrame fTextFrame;
     private KeyEventForwarder fKeyEventForwarder;
     private PrintWriter fOut;
 
-    private static final String fgAtStartCommand = "Insert at start";
-    private static final String fgAtEndCommand = "Insert at end";
+    //private static final String fgAtStartCommand = "Insert at start";
+    //private static final String fgAtEndCommand = "Insert at end";
     private static final String fgFwdDelete = "Forward delete";
     private static final String fgBackspace = "Backspace";
     private static final String fgAtCurrentPosCommand = "Insert at current position";

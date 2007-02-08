@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2006, International Business Machines Corporation and    *
+* Copyright (C) 1996-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -755,15 +755,15 @@ public final class UCharacterProperty
     */
     private static final int UNSIGNED_VALUE_MASK_AFTER_SHIFT_ = 0xFF;
 
-    /**
+    /*
      *
      */
-    private static final int NUMERIC_TYPE_SHIFT = 5;
+    //private static final int NUMERIC_TYPE_SHIFT = 5;
 
-    /**
+    /*
     * To get the last 5 bits out from a data type
     */
-    private static final int LAST_5_BIT_MASK_ = 0x1F;
+    //private static final int LAST_5_BIT_MASK_ = 0x1F;
 
     /**
     * Shift value for lead surrogate to form a supplementary character.
@@ -796,8 +796,8 @@ public final class UCharacterProperty
      * ICU 2.6/uprops format version 3.2 stores full properties instead of "Other_".
      */
     private static final int WHITE_SPACE_PROPERTY_ = 0;
-    private static final int BIDI_CONTROL_PROPERTY_ = 1;
-    private static final int JOIN_CONTROL_PROPERTY_ = 2;
+    //private static final int BIDI_CONTROL_PROPERTY_ = 1;
+    //private static final int JOIN_CONTROL_PROPERTY_ = 2;
     private static final int DASH_PROPERTY_ = 3;
     private static final int HYPHEN_PROPERTY_ = 4;
     private static final int QUOTATION_MARK_PROPERTY_ = 5;
@@ -809,8 +809,8 @@ public final class UCharacterProperty
     private static final int IDEOGRAPHIC_PROPERTY_ = 11;
     private static final int DIACRITIC_PROPERTY_ = 12;
     private static final int EXTENDER_PROPERTY_ = 13;
-    private static final int LOWERCASE_PROPERTY_ = 14;
-    private static final int UPPERCASE_PROPERTY_ = 15;
+    //private static final int LOWERCASE_PROPERTY_ = 14;
+    //private static final int UPPERCASE_PROPERTY_ = 15;
     private static final int NONCHARACTER_CODE_POINT_PROPERTY_ = 16;
     private static final int GRAPHEME_EXTEND_PROPERTY_ = 17;
     private static final int GRAPHEME_LINK_PROPERTY_ = 18;
@@ -820,14 +820,14 @@ public final class UCharacterProperty
     private static final int UNIFIED_IDEOGRAPH_PROPERTY_ = 22;
     private static final int DEFAULT_IGNORABLE_CODE_POINT_PROPERTY_ = 23;
     private static final int DEPRECATED_PROPERTY_ = 24;
-    private static final int SOFT_DOTTED_PROPERTY_ = 25;
+    //private static final int SOFT_DOTTED_PROPERTY_ = 25;
     private static final int LOGICAL_ORDER_EXCEPTION_PROPERTY_ = 26;
     private static final int XID_START_PROPERTY_ = 27;
     private static final int XID_CONTINUE_PROPERTY_ = 28;
     private static final int ID_START_PROPERTY_    = 29;
     private static final int ID_CONTINUE_PROPERTY_ = 30;
     private static final int GRAPHEME_BASE_PROPERTY_ = 31;
-    private static final int BINARY_1_TOP_PROPERTY_ = 32;
+    //private static final int BINARY_1_TOP_PROPERTY_ = 32;
 
     /**
      * First nibble shift
@@ -882,8 +882,8 @@ public final class UCharacterProperty
     // property starts for UnicodeSet -------------------------------------- ***
 
     private static final int TAB     = 0x0009;
-    private static final int LF      = 0x000a;
-    private static final int FF      = 0x000c;
+    //private static final int LF      = 0x000a;
+    //private static final int FF      = 0x000c;
     private static final int CR      = 0x000d;
     private static final int U_A     = 0x0041;
     private static final int U_F     = 0x0046;
@@ -897,8 +897,8 @@ public final class UCharacterProperty
     private static final int CGJ     = 0x034f;
     private static final int FIGURESP= 0x2007;
     private static final int HAIRSP  = 0x200a;
-    private static final int ZWNJ    = 0x200c;
-    private static final int ZWJ     = 0x200d;
+    //private static final int ZWNJ    = 0x200c;
+    //private static final int ZWJ     = 0x200d;
     private static final int RLM     = 0x200f;
     private static final int NNBSP   = 0x202f;
     private static final int WJ      = 0x2060;

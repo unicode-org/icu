@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2004.  All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2007.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or
  * implied, including the warranty of non-infringement and the implied
@@ -203,7 +203,7 @@ final class BidiParagraphRenderer extends ParagraphRenderer {
         }
     }
 
-    private static final int FLUSH_LEADING = TextAttribute.FLUSH_LEADING.intValue();
+    //private static final int FLUSH_LEADING = TextAttribute.FLUSH_LEADING.intValue();
     private static final int FLUSH_CENTER = TextAttribute.FLUSH_CENTER.intValue();
     private static final int FLUSH_TRAILING = TextAttribute.FLUSH_TRAILING.intValue();
     private static final int FULLY_JUSTIFIED = TextAttribute.FULLY_JUSTIFIED.intValue();

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2004.  All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2007.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or
  * implied, including the warranty of non-infringement and the implied
@@ -391,21 +391,21 @@ final class AsyncFormatter extends MFormatter implements Runnable
         return fLineDim;
     }
 
-    /**
-    * Return <tt>true</tt> if characters run from low to high coordinates on line.
-    */
-    private boolean lineInc()
-    {
-        return fLineInc;
-    }
-
-    /**
-    * Return <tt>true</tt> if lines run from low to high coordinates on page.
-    */
-    private boolean fillInc()
-    {
-        return fFillInc;
-    }
+//    /**
+//    * Return <tt>true</tt> if characters run from low to high coordinates on line.
+//    */
+//    private boolean lineInc()
+//    {
+//        return fLineInc;
+//    }
+//
+//    /**
+//    * Return <tt>true</tt> if lines run from low to high coordinates on page.
+//    */
+//    private boolean fillInc()
+//    {
+//        return fFillInc;
+//    }
 
     /**
     * Remove all lines in the line table.  Used after an operation that
@@ -1228,21 +1228,21 @@ final class AsyncFormatter extends MFormatter implements Runnable
         return new Rectangle(fMinX, damageStart, fMaxX-fMinX, damageLength);
     }
 
-    private void dumpLineTable()
-    {
-        int i;
-
-        System.out.println("fLTCurTextLen=" + fLTCurTextLen + " " );
-        for (i=0; i<= fLTPosEnd; i++)
-            System.out.println("Line " + i + " starts at "
-                                + fLineTable[i].getCharStart(fLTCurTextLen)
-                                + " and extends " + fLineTable[i].getCharLength());
-
-        for (i=fLTNegStart; i< fLTSize; i++)
-            System.out.println("Line " + (i-fLTNegStart+fLTPosEnd+1) + " starts at "
-                                + fLineTable[i].getCharStart(fLTCurTextLen)
-                                + " and extends " + fLineTable[i].getCharLength());
-    }
+//    private void dumpLineTable()
+//    {
+//        int i;
+//
+//        System.out.println("fLTCurTextLen=" + fLTCurTextLen + " " );
+//        for (i=0; i<= fLTPosEnd; i++)
+//            System.out.println("Line " + i + " starts at "
+//                                + fLineTable[i].getCharStart(fLTCurTextLen)
+//                                + " and extends " + fLineTable[i].getCharLength());
+//
+//        for (i=fLTNegStart; i< fLTSize; i++)
+//            System.out.println("Line " + (i-fLTNegStart+fLTPosEnd+1) + " starts at "
+//                                + fLineTable[i].getCharStart(fLTCurTextLen)
+//                                + " and extends " + fLineTable[i].getCharLength());
+//    }
 
     public synchronized int minX() {
     

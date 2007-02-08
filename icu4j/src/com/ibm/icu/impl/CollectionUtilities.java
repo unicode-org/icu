@@ -1,18 +1,16 @@
 //##header
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.impl;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 
@@ -110,7 +108,7 @@ public final class CollectionUtilities {
     		while (it.hasNext()) {
     			Object item = it.next();
                 int compValue = comp.compare(item, bestSoFar);
-    			if (comp.compare(item, bestSoFar) < 0) {
+    			if (compValue < 0) {
     				bestSoFar = item;
                 }
     		}
@@ -118,7 +116,7 @@ public final class CollectionUtilities {
             while (it.hasNext()) {
                 Object item = it.next();
                 int compValue = comp.compare(item, bestSoFar);
-                if (comp.compare(item, bestSoFar) > 0) {
+                if (compValue > 0) {
                     bestSoFar = item;
                 }
             }
@@ -423,7 +421,7 @@ public final class CollectionUtilities {
 		UnicodeSet result = new UnicodeSet();
 		boolean gotString = false;
 		for (UnicodeSetIterator it = new UnicodeSetIterator(exemplar1); it.nextRange();) {
-			if (it.codepoint == it.IS_STRING) {
+			if (it.codepoint == UnicodeSetIterator.IS_STRING) {
 				result.addAll(it.string);
 				gotString = true;
 			} else {

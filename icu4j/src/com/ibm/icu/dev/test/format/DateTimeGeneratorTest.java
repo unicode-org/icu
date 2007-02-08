@@ -133,9 +133,9 @@ public class DateTimeGeneratorTest extends TestFmwk {
         while (true) {
             buffer.setLength(0);
             int status = pp.next(buffer);
-            if (status == pp.DONE) break;
+            if (status == PatternTokenizer.DONE) break;
             String lit = "";
-            if (status != pp.SYNTAX ) {
+            if (status != PatternTokenizer.SYNTAX ) {
                 lit = "\t<" + pp.quoteLiteral(buffer) + ">";
             }
             logln("\t" + statusName[status] + "\t<" + buffer + ">" + lit);
