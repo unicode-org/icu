@@ -136,6 +136,7 @@ icu4j/src/com/ibm/icu/dev/tool/docs/icu4j34.api.gz -text
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j341.api.gz -text
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j342.api.gz -text
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j343.api.gz -text
+icu4j/src/com/ibm/icu/dev/tool/timezone/ICUZDump.java -text
 icu4j/src/com/ibm/icu/impl/DateNumberFormat.java -text
 icu4j/src/com/ibm/icu/impl/ICUCache.java -text
 icu4j/src/com/ibm/icu/impl/SimpleCache.java -text
