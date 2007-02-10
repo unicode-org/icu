@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -56,7 +56,7 @@ public abstract class ModuleTest extends TestFmwk {
             if (testData != null) {
                 try {
                     Method method = getClass()
-                            .getMethod("processModules", null);
+                            .getMethod("processModules", (Class[])null);
                     while (testData.hasNext()) {
                         target = new MethodTarget(((TestData) testData.next())
                                 .getName(), method).setNext(target);

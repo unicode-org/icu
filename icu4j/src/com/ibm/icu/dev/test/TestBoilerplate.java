@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2005, International Business Machines Corporation and         *
+ * Copyright (C) 2004-2007, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -126,8 +126,8 @@ public abstract class TestBoilerplate extends TestFmwk {
     protected Object _clone(Object a) throws Exception {
         Class aClass = a.getClass();
         try {
-            Method cloner = aClass.getMethod("clone", null);
-            return cloner.invoke(a,null);
+            Method cloner = aClass.getMethod("clone", (Class[])null);
+            return cloner.invoke(a,(Object[])null);
         } catch (NoSuchMethodException e) {
             Constructor constructor = aClass.getConstructor(new Class[] {aClass});
             return constructor.newInstance(new Object[]{a});

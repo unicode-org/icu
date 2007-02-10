@@ -170,7 +170,7 @@ public abstract class PerfTest{
             }
             
             try {
-                Method m = refer.getClass().getDeclaredMethod(name,null);
+                Method m = refer.getClass().getDeclaredMethod(name,(Class[])null);
                 return (Function) m.invoke(refer, new Object[]{});
             } catch (Exception e) {
                 throw new Error("TestPrefixProvider implementation error. Finding: " + name,e);
