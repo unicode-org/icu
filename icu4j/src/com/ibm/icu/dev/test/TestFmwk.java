@@ -672,7 +672,7 @@ public class TestFmwk extends AbstractTestLog {
         Class cls = getClass();
         if (targetName != null) {
             try {
-                Method method = cls.getMethod(targetName, null);
+                Method method = cls.getMethod(targetName, (Class[])null);
                 return new MethodTarget(targetName, method);
             } catch (NoSuchMethodException e) {
                 return new Target(targetName); // invalid target
