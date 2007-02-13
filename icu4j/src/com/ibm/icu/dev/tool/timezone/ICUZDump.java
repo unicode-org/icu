@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.TreeSet;
 
 import com.ibm.icu.impl.JDKTimeZone;
+import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.SimpleTimeZone;
@@ -184,9 +186,12 @@ public class ICUZDump {
 
     public class DumpFormatter {
         private SimpleTimeZone stz = new SimpleTimeZone(0, "");
-        private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd EEE HH:mm:ssZ", ULocale.US);
+        private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd EEE HH:mm:ss", ULocale.US);
+        private DecimalFormat decf;
 
         public DumpFormatter() {
+            DecimalFormatSymbols decfs = new DecimalFormatSymbols(ULocale.US);
+            decf = new DecimalFormat("00", decfs);
         }
 
         public String format(long time, int offset, boolean isDst) {
@@ -194,6 +199,25 @@ public class ICUZDump {
             stz.setRawOffset(offset);
             sdf.setTimeZone(stz);
             buf.append(sdf.format(new Date(time)));
+            if (offset < 0) {
+                buf.append("-");
+                offset = -offset;
+            } else {
+                buf.append("+");
+            }
+
+            int hour, min, sec;
+
+            offset /= 1000;
+            sec = offset % 60;
+            offset = (offset - sec) / 60;
+            min = offset % 60;
+            hour = offset / 60;
+
+            buf.append(decf.format(hour));
+            buf.append(decf.format(min));
+            buf.append(decf.format(sec));
+
             buf.append("[DST=");
             buf.append(isDst ? "1" : "0");
             buf.append("]");
