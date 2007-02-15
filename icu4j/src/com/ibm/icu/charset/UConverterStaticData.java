@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006, International Business Machines Corporation and    *
+* Copyright (C) 2006-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -56,6 +56,6 @@ final class UConverterStaticData {   /* +offset: size */
         System.arraycopy(reserved_, 0, reserved, 0, (reserved.length < reserved_.length? reserved.length : reserved_.length));
     }*/
 
-    public static final int sizeofUConverterStaticData = 100;
+    public static final int SIZE_OF_UCONVERTER_STATIC_DATA = 100;
 }
 

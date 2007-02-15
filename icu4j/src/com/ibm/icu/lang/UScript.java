@@ -625,12 +625,72 @@ public final class UScript {
     public static final int UNKNOWN                       = 103;/* Zzzz */ /* Unknown="Code for uncoded script", for unassigned code points */
     
     /* Private use codes from Qaaa - Qabx are not supported*/
-
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.8 
+     * @provisional This API might change or be removed in a future release.
+     */ 
+    public static final int CARIAN                        = 104;/* Cari */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.8 
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int JAPANESE                      = 105;/* Jpan */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.8 
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int LANNA                         = 106;/* Lana */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.8 
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int LYCIAN                        = 107;/* Lyci */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.8 
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int LYDIAN                        = 108;/* Lydi */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.8 
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int OL_CHIKI                      = 109;/* Olck */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.8 
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int REJANG                        = 110;/* Rjng */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.8 
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int SAURASHTRA                    = 111;/* Saur */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.8 
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int SIGN_WRITING                  = 112;/* Sgnw */
+    /**
+     * New script codes from ISO 15924 
+     * @draft ICU 3.8 
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int SUNDANESE                     = 113;/* Sund */
+    
     /**
      * Limit
      * @stable ICU 2.4
      */
-    public static final int CODE_LIMIT   = 104;
+    public static final int CODE_LIMIT   = 114;
 
     private static final int SCRIPT_MASK   = 0x0000007f;
     private static final UCharacterProperty prop= UCharacterProperty.getInstance();

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -135,7 +135,7 @@ public class TestConversion extends ModuleTest {
         }
 
         // ----for debugging only
-        logln("\nTestFromUnicode[" + caseNr + "] " + cc.charset + " ");
+        logln("TestFromUnicode[" + caseNr + "] " + cc.charset + " ");
         logln("Unicode: " + cc.unicode);
         logln("Bytes:");
         printbytes(cc.bytes, cc.bytes.limit());
@@ -400,13 +400,13 @@ public class TestConversion extends ModuleTest {
             }
             logln("fromUnicode[" + cc.caseNr + "](" + cc.charset
                     + ") callback:" + cc.cbopt + " failed: +"
-                    + "wrong result length" + "\n");
+                    + "wrong result length" + "");
             return false;
         }
         if (!checkResultsFromUnicode(cc, cc.bytes, cc.fromUnicodeResult)) {
             logln("fromUnicode[" + cc.caseNr + "](" + cc.charset
                     + ") callback:" + cc.cbopt + " failed: +"
-                    + "wrong result string" + "\n");
+                    + "wrong result string" + "");
             return false;
         }
 
@@ -448,7 +448,7 @@ public class TestConversion extends ModuleTest {
         }
 
         // ----for debugging only
-        logln("\nTestToUnicode[" + caseNr + "] " + cc.charset + " ");
+        logln("TestToUnicode[" + caseNr + "] " + cc.charset + " ");
         logln("Bytes:");
         printbytes(cc.bytes, cc.bytes.limit());
         logln("");
@@ -456,7 +456,7 @@ public class TestConversion extends ModuleTest {
         logln("Callback: (" + cc.cbopt + ")");
         ByteBuffer c = ByteBuffer.wrap(cc.cbopt.getBytes());
         printbytes(c, c.limit());
-        logln("\n...............................................");
+        logln("...............................................");
 
         // ----for debugging only
 
@@ -845,13 +845,13 @@ public class TestConversion extends ModuleTest {
         // check everything that might have gone wrong
         if (cc.unicode.length() != resultLength) {
             logln("toUnicode[" + cc.caseNr + "](" + cc.charset + ") callback:"
-                    + cc.cbopt + " failed: +" + "wrong result length" + "\n");
+                    + cc.cbopt + " failed: +" + "wrong result length" + "");
             checkResultsToUnicode(cc, cc.unicode, cc.toUnicodeResult);
             return false;
         }
         if (!checkResultsToUnicode(cc, cc.unicode, cc.toUnicodeResult)) {
             logln("toUnicode[" + cc.caseNr + "](" + cc.charset + ") callback:"
-                    + cc.cbopt + " failed: +" + "wrong result string" + "\n");
+                    + cc.cbopt + " failed: +" + "wrong result string" + "");
             return false;
         }
 
@@ -1014,8 +1014,8 @@ public class TestConversion extends ModuleTest {
         len = len - target.position();
 
         if (len != source.remaining()) {
-            errln("Test failed: output does not match expected\n");
-            logln("[" + cc.caseNr + "]:" + cc.charset + "\noutput=");
+            errln("Test failed: output length does not match expected for charset: "+cc.charset+ " [" + cc.caseNr + "]");
+            logln("[" + cc.caseNr + "]:" + cc.charset + "output=");
             printbytes(target, len);
             logln("");
             return false;
@@ -1023,8 +1023,8 @@ public class TestConversion extends ModuleTest {
         source.rewind();
         for (int i = 0; i < source.remaining(); i++) {
             if (target.get() != source.get()) {
-                errln("Test failed: output does not match expected\n");
-                logln("[" + cc.caseNr + "]:" + cc.charset + "\noutput=");
+                errln("Test failed: output does not match expected for charset: "+cc.charset+ " [" + cc.caseNr + "]");
+                logln("[" + cc.caseNr + "]:" + cc.charset + "output=");
                 printbytes(target, len);
                 logln("");
                 return false;
@@ -1033,7 +1033,7 @@ public class TestConversion extends ModuleTest {
         logln("[" + cc.caseNr + "]:" + cc.charset);
         log("output=");
         printbytes(target, len);
-        logln("\nPassed\n");
+        logln("Passed");
         return true;
     }
 
@@ -1045,15 +1045,15 @@ public class TestConversion extends ModuleTest {
 
         // test to see if the conversion matches actual results
         if (len != source.length()) {
-            errln("Test failed: output does not match expected\n");
-            logln("[" + cc.caseNr + "]:" + cc.charset + "\noutput=");
+            errln("Test failed: output length does not match expected for charset: "+cc.charset+ " [" + cc.caseNr + "]");
+            logln("[" + cc.caseNr + "]:" + cc.charset + "output=");
             printchar(target, len);
             return false;
         }
         for (int i = 0; i < source.length(); i++) {
             if (!(hex(target.get(i)).equals(hex(source.charAt(i))))) {
-                errln("Test failed: output does not match expected\n");
-                logln("[" + cc.caseNr + "]:" + cc.charset + "\noutput=");
+                errln("Test failed: output does not match expected for charset: "+cc.charset+ " [" + cc.caseNr + "]");
+                logln("[" + cc.caseNr + "]:" + cc.charset + "output=");
                 printchar(target, len);
                 return false;
             }
@@ -1061,7 +1061,7 @@ public class TestConversion extends ModuleTest {
         logln("[" + cc.caseNr + "]:" + cc.charset);
         log("output=");
         printchar(target, len);
-        logln("\nPassed\n");
+        logln("Passed");
         return true;
     }
 
