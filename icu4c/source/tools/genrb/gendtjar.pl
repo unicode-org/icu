@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 #  ********************************************************************
 #  * COPYRIGHT:
-#  * Copyright (c) 2002-2006, International Business Machines Corporation and
+#  * Copyright (c) 2002-2007, International Business Machines Corporation and
 #  * others. All Rights Reserved.
 #  ********************************************************************
 
@@ -111,7 +111,7 @@ sub main(){
         #print "#################### $version, $endian ######\n";
     }
     
-    $icuswap = $icuBinDir."/icuswap -tb";
+    $icupkg = $icuBinDir."/icupkg -tb";
     $tempDir = $cwd."/temp";
     $version =~ s/\.//;
     $icu4jImpl = "com/ibm/icu/impl/data/";
@@ -121,11 +121,11 @@ sub main(){
     
     $icuDataDir =$icuBuildDir."/icudt".$version.checkPlatformEndianess();
 
-    convertData($icuDataDir, $icuswap, $tempDir, $icu4jDataDir, $verbose);
-    #convertData($icuDataDir."/coll/", $icuswap, $tempDir, $icu4jDataDir."/coll");
+    convertData($icuDataDir, $icupkg, $tempDir, $icu4jDataDir, $verbose);
+    #convertData($icuDataDir."/coll/", $icupkg, $tempDir, $icu4jDataDir."/coll");
     createJar("$jarDir/jar", "icudata.jar", $tempDir, $icu4jDataDir, $verbose);
     
-    convertTestData($icuTestDataDir, $icuswap, $tempDir, $icu4jTestDataDir, $verbose);
+    convertTestData($icuTestDataDir, $icupkg, $tempDir, $icu4jTestDataDir, $verbose);
     createJar("$jarDir/jar", "testdata.jar", $tempDir, $icu4jTestDataDir, $verbose);
     copyData($icu4jDir, $icu4jImpl, $icu4jDevDataDir, $tempDir, $verbose);
 }
@@ -227,7 +227,7 @@ sub copyData{
 }
 #-----------------------------------------------------------------------
 sub convertData{
-    local($icuDataDir, $icuswap, $tempDir, $icu4jDataDir)  =@_;
+    local($icuDataDir, $icupkg, $tempDir, $icu4jDataDir)  =@_;
     my $dir = $tempDir."/".$icu4jDataDir;
     # create the temp directory
     mkpath($dir) ;
@@ -239,7 +239,7 @@ sub convertData{
     #print $icuDataDir;
     @list =  readdir(DIR);
     closedir(DIR);
-    my $op = $icuswap;
+    my $op = $icupkg;
     #print "####### $endian ############\n";
     if($endian eq "l"){
         print "INFO: {Command: $op $icuDataDir/*.*}\n";
@@ -255,16 +255,16 @@ sub convertData{
        #         $item=~/$\.crs/ || $item=~ /$\.txt/ ||
        #         $item=~/icudata\.res/ || $item=~/$\.exp/ || $item=~/$\.lib/ ||
        #         $item=~/$\.obj/ || $item=~/$\.lst/);
-        next if($item =~ /^t_.*$\.res/ ||$item =~ /^translit_.*$\.res/   || $item =~ /$\.cnv/ ||
+        next if($item =~ /^t_.*$\.res/ ||$item =~ /^translit_.*$\.res/  ||
                $item=~/$\.crs/ || $item=~ /$\.txt/ ||
                $item=~/icudata\.res/ || $item=~/$\.exp/ || $item=~/$\.lib/ || $item=~/$\.obj/ ||
-               $item=~/cnvalias\.icu/ || $item=~/$\.lst/);
+               $item=~/$\.lst/);
         if(-d "$icuDataDir/$item"){
-            convertData("$icuDataDir/$item/", $icuswap, $tempDir, "$icu4jDataDir/$item/");
+            convertData("$icuDataDir/$item/", $icupkg, $tempDir, "$icu4jDataDir/$item/");
             next;
         }
         if($endian eq "l"){
-           $command = $icuswap." $icuDataDir/$item $tempDir/$icu4jDataDir/$item";
+           $command = $icupkg." $icuDataDir/$item $tempDir/$icu4jDataDir/$item";
            cmd($command, $verbose);
         }else{
            $rc = copy("$icuDataDir/$item", "$tempDir/$icu4jDataDir/$item");
@@ -279,13 +279,13 @@ sub convertData{
 }
 #-----------------------------------------------------------------------
 sub convertTestData{
-    local($icuDataDir, $icuswap, $tempDir, $icu4jDataDir)  =@_;
+    local($icuDataDir, $icupkg, $tempDir, $icu4jDataDir)  =@_;
     my $dir = $tempDir."/".$icu4jDataDir;
     # create the temp directory
     mkpath($dir);
     # cd to the temp directory
     chdir($tempDir);
-    my $op = $icuswap;
+    my $op = $icupkg;
     print "INFO: {Command: $op $icuDataDir/*.*}\n";
     my @list;
     opendir(DIR,$icuDataDir) or die "ERROR: Could not open the $icuDataDir directory for reading $!";
@@ -297,13 +297,13 @@ sub convertTestData{
     # now convert
     foreach $item (@list){
         next if($item eq "." || $item eq "..");
-        next if($item =~ /$\.cnv/ || item=~/$\.crs/ || $item=~ /$\.txt/ ||
+        next if( item=~/$\.crs/ || $item=~ /$\.txt/ ||
                 $item=~/$\.exp/ || $item=~/$\.lib/ || $item=~/$\.obj/ ||
                 $item=~/$\.mak/ || $item=~/test\.icu/ || $item=~/$\.lst/);
         $file = $item;
         $file =~ s/testdata_//g;
         if($endian eq "l"){ 
-            $command = "$icuswap $icuDataDir/$item $tempDir/$icu4jDataDir/$file";
+            $command = "$icupkg $icuDataDir/$item $tempDir/$icu4jDataDir/$file";
             cmd($command, $verbose);
         }else{
             #print("Copying $icuDataDir/$item $tempDir/$icu4jDataDir/$file\n");
