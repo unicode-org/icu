@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006, International Business Machines Corporation and    *
+* Copyright (C) 2006-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -174,7 +174,7 @@ class CharsetMBCS extends CharsetICU {
         int type = staticData.conversionType;
     
         if( type != UConverterSharedData.UConverterType.MBCS ||
-            staticData.structSize != UConverterSharedData.SIZE_OF_UCONVERTER_SHARED_DATA) 
+            staticData.structSize != UConverterStaticData.SIZE_OF_UCONVERTER_STATIC_DATA) 
         {
             throw new InvalidFormatException();
         }
@@ -217,31 +217,17 @@ class CharsetMBCS extends CharsetICU {
                 baseNameString = reader.readBaseTableName();
                 if(offset != 0) {
                     //agljport:commment subtract 32 for sizeof(_MBCSHeader) and length of baseNameString and 1 null terminator byte all already read;
-                    mbcsTable.extIndexes=reader.readExtIndexes(offset - 32 - baseNameString.length() - 1);
+                    mbcsTable.extIndexes=reader.readExtIndexes(offset - (reader.bytesRead - reader.staticDataBytesRead));
                 }
             }
             catch(IOException e) {
                 throw new InvalidFormatException();
             }
         }
-        /*
-        if(offset != 0) {
-            try {
-                //agljport:commment subtract 32 for sizeof(_MBCSHeader) and length of baseNameString and 1 null terminator byte all already read;
-                int namelen = baseNameString != null? baseNameString.length() + 1: 0;
-                mbcsTable.extIndexes=dataReader.readExtIndexes(offset - 32 - namelen);
-                
-            }
-            catch(IOException e) {
-                if(debug) System.err.println("Caught IOException: " + e.getMessage());
-                pErrorCode[0] = UErrorCode.U_INVALID_FORMAT_ERROR;
-                return;
-            }
-        }
-        */
+ 
         //agljport:add this would be unnecessary if extIndexes were memory mapped
-        if(mbcsTable.extIndexes != null) {
-            /*
+        /*if(mbcsTable.extIndexes != null) {
+            
             try {
                 //int nbytes = mbcsTable.extIndexes[UConverterExt.UCNV_EXT_TO_U_LENGTH]*4 + mbcsTable.extIndexes[UConverterExt.UCNV_EXT_TO_U_UCHARS_LENGTH]*2 + mbcsTable.extIndexes[UConverterExt.UCNV_EXT_FROM_U_LENGTH]*6 + mbcsTable.extIndexes[UConverterExt.UCNV_EXT_FROM_U_BYTES_LENGTH] + mbcsTable.extIndexes[UConverterExt.UCNV_EXT_FROM_U_STAGE_12_LENGTH]*2 + mbcsTable.extIndexes[UConverterExt.UCNV_EXT_FROM_U_STAGE_3_LENGTH]*2 + mbcsTable.extIndexes[UConverterExt.UCNV_EXT_FROM_U_STAGE_3B_LENGTH]*4; 
                 //int nbytes = mbcsTable.extIndexes[UConverterExt.UCNV_EXT_SIZE] 
@@ -253,9 +239,9 @@ class CharsetMBCS extends CharsetICU {
                 pErrorCode[0] = UErrorCode.U_INVALID_FORMAT_ERROR;
                 return;
             }
-            */
+            
         }
-    
+        */
         if(mbcsTable.outputType==MBCS_OUTPUT_EXT_ONLY) {
             UConverterSharedData baseSharedData = null;
             ByteBuffer extIndexes;
@@ -436,8 +422,7 @@ class CharsetMBCS extends CharsetICU {
                 try {
                     //agljport:commment subtract 32 for sizeof(_MBCSHeader) and length of baseNameString and 1 null terminator byte all already read;
                     //int namelen = baseNameString != null? baseNameString.length() + 1: 0;
-                    //mbcsTable.extIndexes=dataReader.readExtIndexes(offset - 32 - namelen);
-                    mbcsTable.extIndexes=reader.readExtIndexes(0);
+                    mbcsTable.extIndexes=reader.readExtIndexes(offset-(reader.bytesRead - reader.staticDataBytesRead));
                 }
                 catch(IOException e) {
                     throw new InvalidFormatException();

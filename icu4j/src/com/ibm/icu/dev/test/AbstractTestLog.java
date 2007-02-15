@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2003-2006, International Business Machines Corporation and         *
+ * Copyright (C) 2003-2007, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -14,16 +14,14 @@ import com.ibm.icu.util.VersionInfo;
 public abstract class AbstractTestLog implements TestLog {
 
     public static boolean dontSkipForVersion = false;
-    public boolean skipIfBeforeICU(int major, int minor) {
-        if (dontSkipForVersion || VersionInfo.ICU_VERSION.compareTo(VersionInfo.getInstance(major, minor)) > 0) {
+    public boolean skipIfBeforeICU(int major, int minor, int micro) {
+        if (dontSkipForVersion || VersionInfo.ICU_VERSION.compareTo(VersionInfo.getInstance(major, minor, micro)) > 0) {
             return false;
         } 
         logln("Test skipped before ICU release " + major + "." + minor);
         return true;
     }
-    public boolean isICUVersionAtLeast(int major, int minor){
-       return (VersionInfo.ICU_VERSION.compareTo(VersionInfo.getInstance(major, minor)) >= 0);
-    }
+
     
     /**
      * Add a message.

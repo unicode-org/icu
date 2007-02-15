@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006, International Business Machines Corporation and    *
+* Copyright (C) 2006-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -415,7 +415,7 @@ final class UConverterSharedData {
 	    //static final int MAC_HEBREW = MAC_ARABIC + 1; //34 Not in ICU4C
 
 	    // Number of converter types for which we have conversion routines.
-	    //static final int NUMBER_OF_SUPPORTED_CONVERTER_TYPES = MAC_HEBREW + 1;
+	    static final int NUMBER_OF_SUPPORTED_CONVERTER_TYPES = IMAP_MAILBOX + 1;
 	}
 	
 	/**
@@ -440,7 +440,7 @@ final class UConverterSharedData {
 	
     static final String DATA_TYPE = "cnv";
     //static final int CNV_DATA_BUFFER_SIZE = 25000;
-    static final int SIZE_OF_UCONVERTER_SHARED_DATA = 100;
+    static final int SIZE_OF_UCONVERTER_SHARED_DATA = 228;
 
 	static final int MAXIMUM_UCS2 =            0x0000FFFF;
 	static final int MAXIMUM_UTF =             0x0010FFFF;

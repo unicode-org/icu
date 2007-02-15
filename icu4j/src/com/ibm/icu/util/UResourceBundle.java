@@ -73,12 +73,17 @@ import java.nio.ByteBuffer;
  * Depending on the organization of your resources, the syntax to getBundleInstance will change.
  * To open ICU style organization use:
  * <pre>
- *      UResourceBundle bundle = UResourceBundle.getBundleInstance("com/ibm/icu/impl/data/icudt30b", "en_US");
+ *      UResourceBundle bundle = UResourceBundle.getBundleInstance("com/mycompany/resources", "en_US", myClassLoader);
  * </pre>
  * To open Java/JDK style organization use:
  * <pre>
- *      UResourceBundle bundle = UResourceBundle.getBundleInstance("com.ibm.icu.impl.data.LocaleElements", "en_US");
+ *      UResourceBundle bundle = UResourceBundle.getBundleInstance("com.mycompany.resources.LocaleElements", "en_US", myClassLoader);
  * </pre>
+ * <note>
+ * Please use pass a class loader for loading non-ICU resources. Java security does not
+ * allow loading of resources across jar files. You must provide your class loader
+ * to load the resources
+ * </note>
  * @stable ICU 3.0
  * @author ram
  */
@@ -214,6 +219,9 @@ public abstract class UResourceBundle extends ResourceBundle{
     /**
      * Creates a UResourceBundle, from which users can extract resources by using
      * their corresponding keys.
+     * @note Please use this API for loading non-ICU resources. Java security does not
+     * allow loading of resources across jar files. You must provide your class loader
+     * to load the resources
      * @param baseName string containing the name of the data package.
      *                    If null the default ICU package name is used.
      * @param locale  specifies the locale for which we want to open the resource.

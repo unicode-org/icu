@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006, International Business Machines Corporation and    *
+* Copyright (C) 2006-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -409,7 +409,10 @@ final class UConverterDataReader implements ICUBinary.Authenticate {
             unicodeVersion = r.unicodeVersion;
         }
         */
-    
+   /* the number bytes read from the stream */ 
+   int bytesRead = 0;
+   /* the number of bytes read for static data */
+   int staticDataBytesRead = 0;
    /**
     * <p>Protected constructor.</p>
     * @param inputStream ICU uprop.dat file input stream
@@ -433,73 +436,128 @@ final class UConverterDataReader implements ICUBinary.Authenticate {
     
     protected void readStaticData(UConverterStaticData sd) throws IOException
     {
+        int bRead = 0;
         sd.structSize = dataInputStream.readInt();
+        bRead +=4;
         byte[] name = new byte[UConverterConstants.MAX_CONVERTER_NAME_LENGTH];
-        int length = dataInputStream.read(name);
-        sd.name = new String(name, 0, length);
+        int len = dataInputStream.read(name);
+        if(len==-1){
+            throw new IOException("Read failed");
+        }
+        bRead +=len;
+        sd.name = new String(name, 0, len);
         sd.codepage = dataInputStream.readInt();
+        bRead +=4;
         sd.platform = dataInputStream.readByte();
+        bRead++;
         sd.conversionType = dataInputStream.readByte();
+        bRead++;
         sd.minBytesPerChar = dataInputStream.readByte();
+        bRead++;
         sd.maxBytesPerChar = dataInputStream.readByte();
-        dataInputStream.read(sd.subChar);
+        bRead++;
+        len=dataInputStream.read(sd.subChar);
+        if(len==-1){
+            throw new IOException("Read failed");
+        }
+        bRead += len;
         sd.subCharLen = dataInputStream.readByte();
+        bRead++;
         sd.hasToUnicodeFallback = dataInputStream.readByte();
+        bRead++;
         sd.hasFromUnicodeFallback = dataInputStream.readByte();
+        bRead++;
         sd.unicodeMask = (short)dataInputStream.readUnsignedByte();
+        bRead++;
         sd.subChar1 = dataInputStream.readByte();
-        dataInputStream.read(sd.reserved);
+        bRead++;
+        len = dataInputStream.read(sd.reserved);
+        if(len==-1){
+            throw new IOException("Read failed");
+        }
+        bRead += len;
+        staticDataBytesRead = bRead;
+        bytesRead += bRead;
     }
 
     protected void readMBCSHeader(CharsetMBCS.MBCSHeader h) throws IOException
     {
-        dataInputStream.read(h.version);
+        int len =dataInputStream.read(h.version);
+        if(len==-1){
+            throw new IOException("Read failed");
+        }
+        bytesRead += len;
         h.countStates = dataInputStream.readInt();
+        bytesRead+=4;
         h.countToUFallbacks = dataInputStream.readInt();
+        bytesRead+=4;
         h.offsetToUCodeUnits = dataInputStream.readInt();
+        bytesRead+=4;
         h.offsetFromUTable = dataInputStream.readInt();
+        bytesRead+=4;
         h.offsetFromUBytes = dataInputStream.readInt();
+        bytesRead+=4;
         h.flags = dataInputStream.readInt();
+        bytesRead+=4;
         h.fromUBytesLength = dataInputStream.readInt();
+        bytesRead+=4;
     }
     
     protected void readMBCSTable(int[][] stateTableArray, CharsetMBCS.MBCSToUFallback[] toUFallbacksArray, char[] unicodeCodeUnitsArray, char[] fromUnicodeTableArray, byte[] fromUnicodeBytesArray) throws IOException
     {
         int i, j;
-        for(i = 0; i < stateTableArray.length; ++i)
-            for(j = 0; j < stateTableArray[i].length; ++j)
+        for(i = 0; i < stateTableArray.length; ++i){
+            for(j = 0; j < stateTableArray[i].length; ++j){
                 stateTableArray[i][j] = dataInputStream.readInt();
+                bytesRead+=4;
+            }
+        }
         for(i = 0; i < toUFallbacksArray.length; ++i) {
             toUFallbacksArray[i].offset = dataInputStream.readInt();
+            bytesRead+=4;
             toUFallbacksArray[i].codePoint = dataInputStream.readInt();
+            bytesRead+=4;
         }
-        for(i = 0; i < unicodeCodeUnitsArray.length; ++i)
+        for(i = 0; i < unicodeCodeUnitsArray.length; ++i){
             unicodeCodeUnitsArray[i] = dataInputStream.readChar();
-        for(i = 0; i < fromUnicodeTableArray.length; ++i)
+            bytesRead+=2;
+        }
+        for(i = 0; i < fromUnicodeTableArray.length; ++i){
             fromUnicodeTableArray[i] = dataInputStream.readChar();
-        for(i = 0; i < fromUnicodeBytesArray.length; ++i)
+            bytesRead+=2;
+        }
+        for(i = 0; i < fromUnicodeBytesArray.length; ++i){
             fromUnicodeBytesArray[i] = dataInputStream.readByte();
+            bytesRead++;
+        }
     }
 
     protected String readBaseTableName() throws IOException
     {
         char c;
         StringBuffer name = new StringBuffer();
-        while((c = (char)dataInputStream.readByte()) !=  0)
+        while((c = (char)dataInputStream.readByte()) !=  0){
             name.append(c);
+            bytesRead++;
+        }
+        bytesRead++/*for null terminator*/;
         return name.toString();
     }
 
     //protected int[] readExtIndexes(int skip) throws IOException
     protected ByteBuffer readExtIndexes(int skip) throws IOException
     {
-        dataInputStream.skipBytes(skip);
-
+        int skipped = dataInputStream.skipBytes(skip);
+        if(skipped != skip){
+            throw new IOException("could not skip "+ skip +" bytes");
+        }
         int n = dataInputStream.readInt();
+        bytesRead+=4;
         int[] indexes = new int[n];
         indexes[0] = n;
         for(int i = 1; i < n; ++i) {
             indexes[i] = dataInputStream.readInt();
+            bytesRead+=4;
         }
         //return indexes;
 
@@ -507,14 +565,22 @@ final class UConverterDataReader implements ICUBinary.Authenticate {
         for(int i = 0; i < n; ++i) {
             b.putInt(indexes[i]);
         }
-        dataInputStream.read(b.array(), b.position(), b.remaining());
+        int len = dataInputStream.read(b.array(), b.position(), b.remaining());
+        if(len==-1){
+            throw new IOException("Read failed");
+        }
+        bytesRead += len;
         return b;
     }
 
     protected byte[] readExtTables(int n) throws IOException
     {
         byte[] tables = new byte[n];
-        dataInputStream.read(tables);
+        int len =dataInputStream.read(tables);
+        if(len==-1){
+            throw new IOException("Read failed");
+        }
+        bytesRead += len;
         return tables;
     }
 
@@ -536,7 +602,7 @@ final class UConverterDataReader implements ICUBinary.Authenticate {
     /**
     * ICU data file input stream
     */
-    private DataInputStream dataInputStream;
+    DataInputStream dataInputStream;
     
 //    private byte[] unicodeVersion;
                                        
