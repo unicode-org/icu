@@ -320,9 +320,9 @@ static void TestGetSortKey() {
 
     lenActualSortKey = ucol_getSortKey(pCollator,
         (const UChar *)pucUTF16,
-        sizeof(pucUTF16) / sizeof(pucUTF16[0]),          // in # of UChars
+        sizeof(pucUTF16) / sizeof(pucUTF16[0]),
         pucSortKey,
-        LENSORTKEY);  // in # of bytes
+        LENSORTKEY);
 
     if (lenActualSortKey > LENSORTKEY) {
         log_err("sort key too big for original buffer. Got: %d Expected: %d\n", lenActualSortKey, LENSORTKEY);
