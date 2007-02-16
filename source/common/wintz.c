@@ -535,7 +535,7 @@ uprv_detectWindowsTimeZone() {
         {
             stdNameSize = sizeof(stdName);
             result = RegQueryValueExA(hkey,
-                                     (LPTSTR)STANDARD_NAME_REGKEY,
+                                     STANDARD_NAME_REGKEY,
                                      NULL,
                                      NULL,
                                      (LPBYTE)stdName,
@@ -553,7 +553,7 @@ uprv_detectWindowsTimeZone() {
 
                 if (result == ERROR_SUCCESS) {
                     result = RegQueryValueExA(hkey,
-                                             (LPTSTR)STD_REGKEY,
+                                             STD_REGKEY,
                                              NULL,
                                              NULL,
                                              (LPBYTE)stdRegName,
