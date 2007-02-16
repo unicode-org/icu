@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-2006, International Business Machines
+*   Copyright (C) 1996-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  ucol.cpp
@@ -4827,7 +4827,18 @@ ucol_calcSortKey(const    UCollator    *coll,
             break;
         } else {
           prevBuffSize = minBufferSize;
+
+          uint32_t frenchStartOffset, frenchEndOffset;
+          if (frenchStartPtr != NULL) {
+             frenchStartOffset = frenchStartPtr - secStart;
+             frenchEndOffset = frenchEndPtr - secStart;
+          }
           secStart = reallocateBuffer(&secondaries, secStart, second, &secSize, 2*secSize, status);
+          if (frenchStartPtr != NULL) {
+             frenchStartPtr = secStart + frenchStartOffset;
+             frenchEndPtr = secStart + frenchEndOffset;
+          }
+
           terStart = reallocateBuffer(&tertiaries, terStart, tert, &terSize, 2*terSize, status);
           caseStart = reallocateBuffer(&cases, caseStart, caseB, &caseSize, 2*caseSize, status);
           quadStart = reallocateBuffer(&quads, quadStart, quad, &quadSize, 2*quadSize, status);
