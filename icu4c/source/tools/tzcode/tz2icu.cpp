@@ -1,7 +1,7 @@
 
 /*
 **********************************************************************
-* Copyright (c) 2003-2006, International Business Machines
+* Copyright (c) 2003-2007, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -48,20 +48,23 @@
 #include "tz2icu.h"
 #include "unicode/uversion.h"
 
+#define USE64BITDATA
+
 using namespace std;
 
 //--------------------------------------------------------------------
 // Time utilities
 //--------------------------------------------------------------------
 
-const long SECS_PER_YEAR      = 31536000; // 365 days
-const long SECS_PER_LEAP_YEAR = 31622400; // 366 days
+const int64_t SECS_PER_YEAR      = 31536000; // 365 days
+const int64_t SECS_PER_LEAP_YEAR = 31622400; // 366 days
+const int64_t LOWEST_TIME32    = (int64_t)((int32_t)0x80000000);
 
-bool isLeap(int y) {
+bool isLeap(int32_t y) {
     return (y%4 == 0) && ((y%100 != 0) || (y%400 == 0)); // Gregorian
 }
 
-long secsPerYear(int y) {
+int64_t secsPerYear(int32_t y) {
     return isLeap(y) ? SECS_PER_LEAP_YEAR : SECS_PER_YEAR;
 }
 
@@ -69,10 +72,10 @@ long secsPerYear(int y) {
  * Given a calendar year, return the GMT epoch seconds for midnight
  * GMT of January 1 of that year.  yearToSeconds(1970) == 0.
  */
-long yearToSeconds(int year) {
+int64_t yearToSeconds(int32_t year) {
     // inefficient but foolproof
-    long s = 0;
-    int y = 1970;
+    int64_t s = 0;
+    int32_t y = 1970;
     while (y < year) {
         s += secsPerYear(y++);
     }
@@ -86,10 +89,10 @@ long yearToSeconds(int year) {
  * Given 1970 GMT epoch seconds, return the calendar year containing
  * that time.  secondsToYear(0) == 1970.
  */
-int secondsToYear(long seconds) {
+int32_t secondsToYear(int64_t seconds) {
     // inefficient but foolproof
-    int y = 1970;
-    long s = 0;
+    int32_t y = 1970;
+    int64_t s = 0;
     if (seconds >= 0) {
         for (;;) {
             s += secsPerYear(y++);
@@ -116,9 +119,9 @@ struct SimplifiedZoneType;
 // A transition from one ZoneType to another
 // Minimal size = 5 bytes (4+1)
 struct Transition {
-    long time;  // seconds, 1970 epoch
-    int  type;  // index into 'ZoneInfo.types' 0..255
-    Transition(long _time, int _type) {
+    int64_t time;  // seconds, 1970 epoch
+    int32_t  type;  // index into 'ZoneInfo.types' 0..255
+    Transition(int64_t _time, int32_t _type) {
         time = _time;
         type = _type;
     }
@@ -128,12 +131,12 @@ struct Transition {
 // Minimal size = 6 bytes (4+1+3bits)
 // SEE: SimplifiedZoneType
 struct ZoneType {
-    long rawoffset; // raw seconds offset from GMT
-    long dstoffset; // dst seconds offset from GMT
+    int64_t rawoffset; // raw seconds offset from GMT
+    int64_t dstoffset; // dst seconds offset from GMT
 
     // We don't really need any of the following, but they are
     // retained for possible future use.  See SimplifiedZoneType.
-    int  abbr;      // index into ZoneInfo.abbrs 0..n-1
+    int32_t  abbr;      // index into ZoneInfo.abbrs 0..n-1
     bool isdst;
     bool isstd;
     bool isgmt;
@@ -161,16 +164,16 @@ struct ZoneInfo {
     vector<string>     abbrs;
 
     string finalRuleID;
-    int finalOffset;
-    int finalYear; // -1 if none
+    int32_t finalOffset;
+    int32_t finalYear; // -1 if none
 
     // If this is an alias, then all other fields are meaningless, and
     // this field will point to the "real" zone 0..n-1.
-    int aliasTo; // -1 if this is a "real" zone
+    int32_t aliasTo; // -1 if this is a "real" zone
 
     // If there are aliases TO this zone, then the following set will
     // contain their index numbers (each index >= 0).
-    set<int> aliases;
+    set<int32_t> aliases;
 
     ZoneInfo() : finalYear(-1), aliasTo(-1) {}
 
@@ -179,13 +182,13 @@ struct ZoneInfo {
     void optimizeTypeList();
 
     // Set this zone to be an alias TO another zone.
-    void setAliasTo(int index);
+    void setAliasTo(int32_t index);
 
     // Clear the list of aliases OF this zone.
     void clearAliases();
 
     // Add an alias to the list of aliases OF this zone.
-    void addAlias(int index);
+    void addAlias(int32_t index);
 
     // Is this an alias to another zone?
     bool isAlias() const {
@@ -193,7 +196,7 @@ struct ZoneInfo {
     }
 
     // Retrieve alias list
-    const set<int>& getAliases() const {
+    const set<int32_t>& getAliases() const {
         return aliases;
     }
 
@@ -205,12 +208,12 @@ void ZoneInfo::clearAliases() {
     aliases.clear();
 }
 
-void ZoneInfo::addAlias(int index) {
+void ZoneInfo::addAlias(int32_t index) {
     assert(aliasTo < 0 && index >= 0 && aliases.find(index) == aliases.end());
     aliases.insert(index);
 }
 
-void ZoneInfo::setAliasTo(int index) {
+void ZoneInfo::setAliasTo(int32_t index) {
     assert(index >= 0);
     assert(aliases.size() == 0);
     aliasTo = index;
@@ -232,13 +235,31 @@ ZoneMap ZONEINFO;
 //--------------------------------------------------------------------
 
 // Read zic-coded 32-bit integer from file
-long readcoded(ifstream& file, long minv=numeric_limits<long>::min(),
-                               long maxv=numeric_limits<long>::max()) {
+int64_t readcoded(ifstream& file, int64_t minv=numeric_limits<int64_t>::min(),
+                               int64_t maxv=numeric_limits<int64_t>::max()) {
     unsigned char buf[4]; // must be UNSIGNED
-    long val=0;
+    int64_t val=0;
     file.read((char*)buf, 4);
-    for(int i=0,shift=24;i<4;++i,shift-=8) {
+    for(int32_t i=0,shift=24;i<4;++i,shift-=8) {
         val |= buf[i] << shift;
+    }
+    if (val < minv || val > maxv) {
+        ostringstream os;
+        os << "coded value out-of-range: " << val << ", expected ["
+           << minv << ", " << maxv << "]";
+        throw out_of_range(os.str());
+    }
+    return val;
+}
+
+// Read zic-coded 64-bit integer from file
+int64_t readcoded64(ifstream& file, int64_t minv=numeric_limits<int64_t>::min(),
+                               int64_t maxv=numeric_limits<int64_t>::max()) {
+    unsigned char buf[8]; // must be UNSIGNED
+    int64_t val=0;
+    file.read((char*)buf, 8);
+    for(int32_t i=0,shift=56;i<8;++i,shift-=8) {
+        val |= (int64_t)buf[i] << shift;
     }
     if (val < minv || val > maxv) {
         ostringstream os;
@@ -255,7 +276,7 @@ bool readbool(ifstream& file) {
     file.read(&c, 1);
     if (c!=0 && c!=1) {
         ostringstream os;
-        os << "boolean value out-of-range: " << (int)c;
+        os << "boolean value out-of-range: " << (int32_t)c;
         throw out_of_range(os.str());
     }
     return (c!=0);
@@ -265,8 +286,8 @@ bool readbool(ifstream& file) {
  * Read the zoneinfo file structure (see tzfile.h) into a ZoneInfo
  * @param file an already-open file stream
  */
-void readzoneinfo(ifstream& file, ZoneInfo& info) {
-    int i;
+void readzoneinfo(ifstream& file, ZoneInfo& info, bool is64bitData=false) {
+    int32_t i;
 
     // Check for TZ_ICU_MAGIC signature at file start.  If we get a
     // signature mismatch, it means we're trying to read a file which
@@ -294,12 +315,12 @@ void readzoneinfo(ifstream& file, ZoneInfo& info) {
     }
 
     // Read array sizes
-    long isgmtcnt = readcoded(file, 0);
-    long isdstcnt = readcoded(file, 0);
-    long leapcnt  = readcoded(file, 0);
-    long timecnt  = readcoded(file, 0);
-    long typecnt  = readcoded(file, 0);
-    long charcnt  = readcoded(file, 0);
+    int64_t isgmtcnt = readcoded(file, 0);
+    int64_t isdstcnt = readcoded(file, 0);
+    int64_t leapcnt  = readcoded(file, 0);
+    int64_t timecnt  = readcoded(file, 0);
+    int64_t typecnt  = readcoded(file, 0);
+    int64_t charcnt  = readcoded(file, 0);
 
     // Confirm sizes that we assume to be equal.  These assumptions
     // are drawn from a reading of the zic source (2003a), so they
@@ -311,19 +332,23 @@ void readzoneinfo(ifstream& file, ZoneInfo& info) {
     // Used temporarily to store transition times and types.  We need
     // to do this because the times and types are stored in two
     // separate arrays.
-    vector<long> transitionTimes(timecnt, -1); // temporary
-    vector<int>  transitionTypes(timecnt, -1); // temporary
+    vector<int64_t> transitionTimes(timecnt, -1); // temporary
+    vector<int32_t>  transitionTypes(timecnt, -1); // temporary
 
     // Read transition times
     for (i=0; i<timecnt; ++i) {
-        transitionTimes[i] = readcoded(file);
+        if (is64bitData) {
+            transitionTimes[i] = readcoded64(file);
+        } else {
+            transitionTimes[i] = readcoded(file);
+        }
     }
 
     // Read transition types
     for (i=0; i<timecnt; ++i) {
         unsigned char c;
         file.read((char*) &c, 1);
-        int t = (int) c;
+        int32_t t = (int32_t) c;
         if (t < 0 || t >= typecnt) {
             ostringstream os;
             os << "illegal type: " << t << ", expected [0, " << (typecnt-1) << "]";
@@ -333,8 +358,35 @@ void readzoneinfo(ifstream& file, ZoneInfo& info) {
     }
 
     // Build transitions vector out of corresponding times and types.
-    for (i=0; i<timecnt; ++i) {
-        info.transitions.push_back(Transition(transitionTimes[i], transitionTypes[i]));
+    bool insertInitial = false;
+    if (is64bitData) {
+        if (timecnt > 0) {
+            int32_t minidx = -1;
+            for (i=0; i<timecnt; ++i) {
+                if (transitionTimes[i] < LOWEST_TIME32) {
+                    if (minidx == -1 || transitionTimes[i] > transitionTimes[minidx]) {
+                        // Preserve the latest transition before the 32bit minimum time
+                        minidx = i;
+                    }
+                } else {
+                    info.transitions.push_back(Transition(transitionTimes[i], transitionTypes[i]));
+                }
+            }
+    
+            if (minidx != -1) {
+                // If there are any transitions before the 32bit minimum time,
+                // put the type information with the 32bit minimum time
+                vector<Transition>::iterator itr = info.transitions.begin();
+                info.transitions.insert(itr, Transition(LOWEST_TIME32, transitionTypes[minidx]));
+            } else {
+                // Otherwise, we need insert the initial type later
+                insertInitial = true;
+            }
+        }
+    } else {
+        for (i=0; i<timecnt; ++i) {
+            info.transitions.push_back(Transition(transitionTimes[i], transitionTypes[i]));
+        }
     }
 
     // Read types (except for the isdst and isgmt flags, which come later (why??))
@@ -347,7 +399,7 @@ void readzoneinfo(ifstream& file, ZoneInfo& info) {
 
         unsigned char c;
         file.read((char*) &c, 1);
-        type.abbr = (int) c;
+        type.abbr = (int32_t) c;
 
         if (type.isdst != (type.dstoffset != 0)) {
             throw invalid_argument("isdst does not reflect dstoffset");
@@ -355,7 +407,37 @@ void readzoneinfo(ifstream& file, ZoneInfo& info) {
 
         info.types.push_back(type);
     }
+
     assert(info.types.size() == (unsigned) typecnt);
+
+    if (insertInitial) {
+        assert(timecnt > 0);
+        assert(typecnt > 0);
+
+        int32_t initialTypeIdx = -1;
+
+        // Check if the first type is not dst
+        if (info.types.at(0).dstoffset != 0) {
+            // Initial type's rawoffset is same with the rawoffset after the
+            // first transition, but no DST is observed.
+            int64_t rawoffset0 = (info.types.at(info.transitions.at(0).type)).rawoffset;    
+            // Look for matching type
+            for (i=0; i<(int32_t)info.types.size(); ++i) {
+                if (info.types.at(i).rawoffset == rawoffset0
+                        && info.types.at(i).dstoffset == 0) {
+                    initialTypeIdx = i;
+                    break;
+                }
+            }
+        } else {
+        	initialTypeIdx = 0;
+        }
+        assert(initialTypeIdx >= 0);
+        // Add the initial type associated with the lowest int32 time
+        vector<Transition>::iterator itr = info.transitions.begin();
+        info.transitions.insert(itr, Transition(LOWEST_TIME32, initialTypeIdx));
+    }
+
 
     // Read the abbreviation string
     if (charcnt) {
@@ -366,7 +448,7 @@ void readzoneinfo(ifstream& file, ZoneInfo& info) {
 
         // Split abbreviations apart into individual strings.  Record
         // offset of each abbr in a vector.
-        vector<int> abbroffset;
+        vector<int32_t> abbroffset;
         char *limit=str+charcnt;
         for (char* p=str; p<limit; ++p) {
             char* start = p;
@@ -385,7 +467,7 @@ void readzoneinfo(ifstream& file, ZoneInfo& info) {
         for (vector<ZoneType>::iterator it=info.types.begin();
              it!=info.types.end();
              ++it) {
-            vector<int>::const_iterator x=
+            vector<int32_t>::const_iterator x=
                 find(abbroffset.begin(), abbroffset.end(), it->abbr);
             if (x==abbroffset.end()) {
                 // TODO: Modify code to add a new string to the end of
@@ -400,7 +482,7 @@ void readzoneinfo(ifstream& file, ZoneInfo& info) {
                 ostringstream os;
                 os << "Warning: unusual abbr offset " << it->abbr
                    << ", expected one of";
-                for (vector<int>::const_iterator y=abbroffset.begin();
+                for (vector<int32_t>::const_iterator y=abbroffset.begin();
                      y!=abbroffset.end(); ++y) {
                     os << ' ' << *y;
                 }
@@ -408,13 +490,13 @@ void readzoneinfo(ifstream& file, ZoneInfo& info) {
 #endif
                 it->abbr = 0;
             } else {
-                int index = x - abbroffset.begin();
+                int32_t index = x - abbroffset.begin();
                 it->abbr = index;
                 abbrseen[index] = true;
             }
         }
 
-        for (int ii=0;ii<(int) abbrseen.size();++ii) {
+        for (int32_t ii=0;ii<(int32_t) abbrseen.size();++ii) {
             if (!abbrseen[ii]) {
                 cerr << "Warning: unused abbreviation: " << ii << endl;
             }
@@ -456,6 +538,7 @@ void handleFile(string path, string id) {
     if (!file) {
         throw invalid_argument("can't open file");
     }
+
     ZoneInfo info;
     readzoneinfo(file, info);
 
@@ -464,12 +547,51 @@ void handleFile(string path, string id) {
         throw invalid_argument("read error");
     }
 
+#ifdef USE64BITDATA
+    ZoneInfo info64;
+    readzoneinfo(file, info64, true);
+
+    bool alldone = false;
+    int64_t eofPos = (int64_t) file.tellg();
+
+    // '\n' + <envvar string> + '\n' after the 64bit version data
+    char ch = file.get();
+    if (ch == 0x0a) {
+        bool invalidchar = false;
+        while (file.get(ch)) {
+            if (ch == 0x0a) {
+                break;
+            }
+            if (ch < 0x20) {
+                // must be printable ascii
+                invalidchar = true;
+                break;
+            }
+        }
+        if (!invalidchar) {
+            eofPos = (int64_t) file.tellg();
+            file.seekg(0, ios::end);
+            eofPos = eofPos - (int64_t) file.tellg();
+            if (eofPos == 0) {
+                alldone = true;
+            }
+        }
+    }
+    if (!alldone) {
+        ostringstream os;
+        os << (-eofPos) << " unprocessed bytes at end";
+        throw invalid_argument(os.str());
+    }
+
+    ZONEINFO[id] = info64;
+
+#else
     // Check eof-relative pos (there may be a cleaner way to do this)
-    long eofPos = (long) file.tellg();
+    int64_t eofPos = (int64_t) file.tellg();
     char buf[32];
     file.read(buf, 4);
     file.seekg(0, ios::end);
-    eofPos =  eofPos - (long) file.tellg();
+    eofPos =  eofPos - (int64_t) file.tellg();
     if (eofPos) {
       // 2006c merged 32 and 64 bit versions in a fat binary
       // 64 version starts at the end of 32 bit version.
@@ -481,8 +603,8 @@ void handleFile(string path, string id) {
         throw invalid_argument(os.str());
       }
     }
-
     ZONEINFO[id] = info;
+#endif
 }
 
 /**
@@ -575,7 +697,7 @@ void scandir(string dir, string prefix="") {
     closedir(dp);
     chdir(pwd);
 
-    for(int i=0;i<(int)subfiles.size();i+=2) {
+    for(int32_t i=0;i<(int32_t)subfiles.size();i+=2) {
         try {
             handleFile(subfiles[i], subfiles[i+1]);
         } catch (const exception& e) {
@@ -584,7 +706,7 @@ void scandir(string dir, string prefix="") {
             exit(1);
         }
     }
-    for(int i=0;i<(int)subdirs.size();i+=2) {
+    for(int32_t i=0;i<(int32_t)subdirs.size();i+=2) {
         scandir(subdirs[i], subdirs[i+1]);
     }
 }
@@ -599,7 +721,7 @@ void scandir(string dir, string prefix="") {
  * Read and discard the current line.
  */
 void consumeLine(istream& in) {
-    int c;
+    int32_t c;
     do {
         c = in.get();
     } while (c != EOF && c != '\n');
@@ -615,16 +737,16 @@ const char* TIME_MODE[] = {"w", "s", "u"};
 
 // Allow 29 days in February because zic outputs February 29
 // for rules like "last Sunday in February".
-const int MONTH_LEN[] = {31,29,31,30,31,30,31,31,30,31,30,31};
+const int32_t MONTH_LEN[] = {31,29,31,30,31,30,31,31,30,31,30,31};
 
-const int HOUR = 3600;
+const int32_t HOUR = 3600;
 
 struct FinalZone {
-    int offset; // raw offset
-    int year; // takes effect for y >= year
+    int32_t offset; // raw offset
+    int32_t year; // takes effect for y >= year
     string ruleid;
     set<string> aliases;
-    FinalZone(int _offset, int _year, const string& _ruleid) :
+    FinalZone(int32_t _offset, int32_t _year, const string& _ruleid) :
         offset(_offset), year(_year), ruleid(_ruleid)  {
         if (offset <= -16*HOUR || offset >= 16*HOUR) {
             ostringstream os;
@@ -653,12 +775,12 @@ struct FinalZone {
 };
 
 struct FinalRulePart {
-    int mode;
-    int month;
-    int dom;
-    int dow;
-    int time;
-    int offset; // dst offset, usually either 0 or 1:00
+    int32_t mode;
+    int32_t month;
+    int32_t dom;
+    int32_t dow;
+    int32_t time;
+    int32_t offset; // dst offset, usually either 0 or 1:00
 
     // Isstd and isgmt only have 3 valid states, corresponding to local
     // wall time, local standard time, and GMT standard time.
@@ -682,13 +804,13 @@ struct FinalRulePart {
     FinalRulePart() : isset(false) {}
     void set(const string& id,
              const string& _mode,
-             int _month,
-             int _dom,
-             int _dow,
-             int _time,
+             int32_t _month,
+             int32_t _dom,
+             int32_t _dow,
+             int32_t _time,
              bool _isstd,
              bool _isgmt,
-             int _offset) {
+             int32_t _offset) {
         if (isset) {
             throw invalid_argument("FinalRulePart set twice");
         }
@@ -741,7 +863,7 @@ struct FinalRulePart {
      * Return the time mode as an ICU SimpleTimeZone int from 0..2;
      * see simpletz.h.
      */
-    int timemode() const {
+    int32_t timemode() const {
         if (isgmt) {
             assert(isstd);
             return 2; // gmt standard
@@ -766,14 +888,14 @@ struct FinalRulePart {
     /**
      * Return a "dowim" param suitable for SimpleTimeZone.
      */
-    int stz_dowim() const {
+    int32_t stz_dowim() const {
         return (mode == DOWLEQ) ? -dom : dom;
     }
 
     /**
      * Return a "dow" param suitable for SimpleTimeZone.
      */
-    int stz_dow() const {
+    int32_t stz_dow() const {
         return (mode == DOM) ? 0 : -(dow+1);
     }
 };
@@ -840,7 +962,7 @@ void readFinalZonesAndRules(istream& in) {
         } else if (token == "zone") {
             // zone Africa/Cairo 7200 1995 Egypt # zone Africa/Cairo, offset 7200, year >= 1995, rule Egypt (0)
             string id, ruleid;
-            int offset, year;
+            int32_t offset, year;
             in >> id >> offset >> year >> ruleid;
             consumeLine(in);
             finalZones[id] = FinalZone(offset, year, ruleid);
@@ -848,12 +970,12 @@ void readFinalZonesAndRules(istream& in) {
             // rule US DOWGEQ 3 1 0 7200 0 0 3600 # 52: US, file data/northamerica, line 119, mode DOWGEQ, April, dom 1, Sunday, time 7200, isstd 0, isgmt 0, offset 3600
             // rule US DOWLEQ 9 31 0 7200 0 0 0 # 53: US, file data/northamerica, line 114, mode DOWLEQ, October, dom 31, Sunday, time 7200, isstd 0, isgmt 0, offset 0
             string id, mode;
-            int month, dom, dow, time, offset;
+            int32_t month, dom, dow, time, offset;
             bool isstd, isgmt;
             in >> id >> mode >> month >> dom >> dow >> time >> isstd >> isgmt >> offset;
             consumeLine(in);
             FinalRule& fr = finalRules[id];
-            int p = fr.part[0].isset ? 1 : 0;
+            int32_t p = fr.part[0].isset ? 1 : 0;
             fr.part[p].set(id, mode, month, dom, dow, time, isstd, isgmt, offset);
         } else if (token == "link") {
             string fromid, toid; // fromid == "real" zone, toid == alias
@@ -955,7 +1077,7 @@ void ZoneInfo::print(ostream& os, const string& id) const {
     if (aliases.size() != 0) {
         first = true;
         os << "    :intvector { ";
-        for (set<int>::const_iterator i=aliases.begin(); i!=aliases.end(); ++i) {
+        for (set<int32_t>::const_iterator i=aliases.begin(); i!=aliases.end(); ++i) {
             if (!first) os << ", ";
             first = false;
             os << *i;
@@ -968,7 +1090,7 @@ void ZoneInfo::print(ostream& os, const string& id) const {
 
 inline ostream&
 operator<<(ostream& os, const ZoneMap& zoneinfo) {
-    int c = 0;
+    int32_t c = 0;
     for (ZoneMapIter it = zoneinfo.begin();
          it != zoneinfo.end();
          ++it) {
@@ -981,8 +1103,8 @@ operator<<(ostream& os, const ZoneMap& zoneinfo) {
 
 // print the string list 
 ostream& printStringList( ostream& os, const ZoneMap& zoneinfo) {
-  int n = 0; // count
-  int col = 0; // column
+  int32_t n = 0; // count
+  int32_t col = 0; // column
   os << " Names {" << endl
      << "    ";
   for (ZoneMapIter it = zoneinfo.begin();
@@ -1013,7 +1135,7 @@ ostream& printStringList( ostream& os, const ZoneMap& zoneinfo) {
 //--------------------------------------------------------------------
 
 // Unary predicate for finding transitions after a given time
-bool isAfter(const Transition t, long thresh) {
+bool isAfter(const Transition t, int64_t thresh) {
     return t.time >= thresh;
 }
 
@@ -1022,8 +1144,8 @@ bool isAfter(const Transition t, long thresh) {
  * optimizeTypeList() method.
  */
 struct SimplifiedZoneType {
-    long rawoffset;
-    long dstoffset;
+    int64_t rawoffset;
+    int64_t dstoffset;
     SimplifiedZoneType() : rawoffset(-1), dstoffset(-1) {}
     SimplifiedZoneType(const ZoneType& t) : rawoffset(t.rawoffset),
                                             dstoffset(t.dstoffset) {}
@@ -1072,13 +1194,13 @@ void ZoneInfo::optimizeTypeList() {
     set<SimplifiedZoneType> simpleset;
     for (vector<Transition>::const_iterator i=transitions.begin();
          i!=transitions.end(); ++i) {
-        assert(i->type < (int)types.size());
+        assert(i->type < (int32_t)types.size());
         simpleset.insert(types[i->type]);
     }
 
     // Map types to integer indices
-    map<SimplifiedZoneType,int> simplemap;
-    int n=0;
+    map<SimplifiedZoneType,int32_t> simplemap;
+    int32_t n=0;
     for (set<SimplifiedZoneType>::const_iterator i=simpleset.begin();
          i!=simpleset.end(); ++i) {
         simplemap[*i] = n++;
@@ -1087,7 +1209,7 @@ void ZoneInfo::optimizeTypeList() {
     // Remap transitions
     for (vector<Transition>::iterator i=transitions.begin();
          i!=transitions.end(); ++i) {
-        assert(i->type < (int)types.size());
+        assert(i->type < (int32_t)types.size());
         ZoneType oldtype = types[i->type];
         SimplifiedZoneType newtype(oldtype);
         assert(simplemap.find(newtype) != simplemap.end());
@@ -1103,8 +1225,8 @@ void ZoneInfo::optimizeTypeList() {
  * Merge final zone data into this zone.
  */
 void ZoneInfo::mergeFinalData(const FinalZone& fz) {
-    int year = fz.year;
-    long seconds = yearToSeconds(year);
+    int32_t year = fz.year;
+    int64_t seconds = yearToSeconds(year);
     vector<Transition>::iterator it =
         find_if(transitions.begin(), transitions.end(),
                 bind2nd(ptr_fun(isAfter), seconds));
@@ -1148,12 +1270,12 @@ void mergeFinalZone(const pair<string,FinalZone>& p) {
 void FinalRule::print(ostream& os) const {
     // First print the rule part that enters DST; then the rule part
     // that exits it.
-    int whichpart = (part[0].offset != 0) ? 0 : 1;
+    int32_t whichpart = (part[0].offset != 0) ? 0 : 1;
     assert(part[whichpart].offset != 0);
     assert(part[1-whichpart].offset == 0);
 
     os << "    ";
-    for (int i=0; i<2; ++i) {
+    for (int32_t i=0; i<2; ++i) {
         const FinalRulePart& p = part[whichpart];
         whichpart = 1-whichpart;
         os << p.month << ", " << p.stz_dowim() << ", " << p.stz_dow() << ", "
@@ -1206,7 +1328,7 @@ int main(int argc, char *argv[]) {
             cerr << "Error: Unable to open " ICU_TZ_ALIAS << endl;
             return 1;
         }
-        int n = 0;
+        int32_t n = 0;
         string line;
         while (getline(aliases, line)) {
             string::size_type lb = line.find('#');
@@ -1298,14 +1420,14 @@ int main(int argc, char *argv[]) {
     }
  
     // 2. Create a mapping from zones to index numbers 0..n-1.
-    map<string,int> zoneIDs;
+    map<string,int32_t> zoneIDs;
     vector<string> zoneIDlist;
-    int z=0;
+    int32_t z=0;
     for (ZoneMap::iterator i=ZONEINFO.begin(); i!=ZONEINFO.end(); ++i) {
         zoneIDs[i->first] = z++;
         zoneIDlist.push_back(i->first);
     }
-    assert(z == (int) ZONEINFO.size());
+    assert(z == (int32_t) ZONEINFO.size());
 
     // 3. Merge aliases.  Sometimes aliases link to other aliases; we
     // resolve these into simplest possible sets.
@@ -1367,7 +1489,7 @@ int main(int argc, char *argv[]) {
             cerr << "Error: Unable to open " << zonetab << endl;
             return 1;
         }
-        int n = 0;
+        int32_t n = 0;
         string line;
         while (getline(f, line)) {
             string::size_type lb = line.find('#');
@@ -1434,7 +1556,7 @@ int main(int argc, char *argv[]) {
     time_t sec;
     time(&sec);
     struct tm* now = localtime(&sec);
-    int thisYear = now->tm_year + 1900;
+    int32_t thisYear = now->tm_year + 1900;
 
     // Write out a resource-bundle source file containing data for
     // all zones.
@@ -1470,7 +1592,7 @@ int main(int argc, char *argv[]) {
         // Final Rules are used if requested by the zone
         file << " Rules { " << endl;
         // Emit final rules
-        int frc = 0;
+        int32_t frc = 0;
         for(map<string,FinalRule>::iterator i=finalRules.begin();
             i!=finalRules.end(); ++i) {
             const string& id = i->first;
@@ -1486,7 +1608,7 @@ int main(int argc, char *argv[]) {
         // trims this to 171 kb.  More work for the runtime code, but
         // a smaller data footprint.
         file << " Regions { " << endl;
-        int  rc = 0;
+        int32_t  rc = 0;
         for (map<string, set<string> >::const_iterator i=countryMap.begin();
              i != countryMap.end(); ++i) {
             string country = i->first;
@@ -1554,7 +1676,7 @@ int main(int argc, char *argv[]) {
 
         // Emit equivalency lists
         bool first1 = true;
-	java << "  public static final String VERSION = \"" + version + "\";" << endl;
+        java << "  public static final String VERSION = \"" + version + "\";" << endl;
         java << "  public static final String[][] EQUIV = {" << endl;
         for (ZoneMap::const_iterator i=ZONEINFO.begin(); i!=ZONEINFO.end(); ++i) {
             if (i->second.isAlias() || i->second.getAliases().size() == 0) {
@@ -1568,8 +1690,8 @@ int main(int argc, char *argv[]) {
             // the canonical zone, we should move it to position 0.
             java << "    { ";
             bool first2 = true;
-            const set<int>& s = i->second.getAliases();
-            for (set<int>::const_iterator j=s.begin(); j!=s.end(); ++j) {
+            const set<int32_t>& s = i->second.getAliases();
+            for (set<int32_t>::const_iterator j=s.begin(); j!=s.end(); ++j) {
                 if (!first2) java << ", ";
                 java << '"' << zoneIDlist[*j] << '"';
                 first2 = false;

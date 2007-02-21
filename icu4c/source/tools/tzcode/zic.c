@@ -2321,15 +2321,6 @@ wp = ecpyalloc(_("no POSIX environment variable for zone"));
 					break;	/* go on to next year */
 				rp = &zp->z_rules[k];
 				rp->r_todo = FALSE;
-#ifdef ICU
-                                if (year >= finalRuleYear && rp == finalRule1) {
-                                    emit_icu_zone(icuFile,
-                                                  zpfirst->z_name, zp->z_gmtoff,
-                                                  rp, finalRuleIndex, year);
-                                    /* only emit this for the first year */
-                                    finalRule1 = NULL;
-                                }
-#endif
 				if (useuntil && ktime >= untiltime)
 					break;
 				stdoff = rp->r_stdoff;
@@ -2356,6 +2347,22 @@ wp = ecpyalloc(_("no POSIX environment variable for zone"));
 								FALSE);
 					}
 				}
+#ifdef ICU
+                                if (year >= finalRuleYear && rp == finalRule1) {
+                                    /* We want to shift final year 1 year after
+                                     * the actual final rule takes effect (year + 1),
+                                     * because the previous type is valid until the first
+                                     * transition defined by the final rule.  Otherwise
+                                     * we may see unexpected offset shift at the
+                                     * begining of the year when the final rule takes
+                                     * effect. */
+                                    emit_icu_zone(icuFile,
+                                                  zpfirst->z_name, zp->z_gmtoff,
+                                                  rp, finalRuleIndex, year + 1);
+                                    /* only emit this for the first year */
+                                    finalRule1 = NULL;
+                                }
+#endif
 				eats(zp->z_filename, zp->z_linenum,
 					rp->r_filename, rp->r_linenum);
 				doabbr(ab, zp->z_format, rp->r_abbrvar,
