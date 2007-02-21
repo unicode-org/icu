@@ -72,7 +72,8 @@ class ResultModel extends AbstractTableModel {
     }
 
     public void add(ICUFile entry) {
-        if (entry.isReadable() && entry.isWritable())
+        File file = entry.getFile();
+        if (file.canRead() && file.canWrite())
             add(permissibleList, hidden, entry);
 
         add(completeList, !hidden, entry);
@@ -108,8 +109,6 @@ class ResultModel extends AbstractTableModel {
         else
             updateAll(completeList, updateURL, backupDir);
     }
-
-    // ///////////////////////////
 
     private void add(List list, boolean fire, ICUFile entry) {
         remove(list, fire, entry.getFile());
@@ -218,4 +217,6 @@ class ResultModel extends AbstractTableModel {
     private List permissibleList = new ArrayList();
 
     private boolean hidden = true;
+
+    public static final long serialVersionUID = 1338;
 }

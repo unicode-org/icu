@@ -6,11 +6,7 @@
  */
 package com.ibm.icu.dev.tool.tzu;
 
-import java.util.List;
-import java.util.*;
 import javax.swing.*;
-import javax.swing.table.*;
-import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -19,7 +15,6 @@ import java.net.*;
 public class ResultComponent extends JComponent {
     public ResultComponent(final GUILoader owner,
             final ResultModel resultModel, final SourceModel sourceModel) {
-        this.owner = owner;
         this.resultModel = resultModel;
         this.sourceModel = sourceModel;
 
@@ -167,7 +162,7 @@ public class ResultComponent extends JComponent {
     }
 
     private URL getSelectedSource() {
-        return sourceModel.getValue(resultSourceList.getSelectedItem());
+        return sourceModel.getURL(resultSourceList.getSelectedItem());
     }
 
     private boolean addFile(File file) {
@@ -193,11 +188,9 @@ public class ResultComponent extends JComponent {
         resultCancelUpdateButton.setEnabled(value);
     }
 
-    private GUILoader owner;
-
     private JPanel resultInputPanel = new JPanel();
 
-    private JPanel resultTablePanel = new JPanel();
+    // private JPanel resultTablePanel = new JPanel();
 
     private JPanel resultOptionPanel = new JPanel();
 
@@ -238,4 +231,5 @@ public class ResultComponent extends JComponent {
 
     private SourceModel sourceModel;
 
+    public static final long serialVersionUID = 1341;
 }

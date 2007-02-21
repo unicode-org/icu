@@ -6,7 +6,6 @@
  */
 package com.ibm.icu.dev.tool.tzu;
 
-import java.util.List;
 import java.util.*;
 import javax.swing.*;
 import java.io.*;
@@ -16,13 +15,8 @@ import javax.swing.text.html.*;
 import javax.swing.text.html.parser.*;
 
 class SourceModel extends AbstractListModel implements ComboBoxModel {
-    public SourceModel() {
-        // map.put(TZ_LOCAL_CHOICE, TZ_LOCAL_URL);
-    }
-
     public void findSources() {
         BufferedReader reader = null;
-        final Thread t = Thread.currentThread();
         try {
             reader = new BufferedReader(new InputStreamReader(TZ_BASE_URL
                     .openStream()));
@@ -47,14 +41,14 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
                         if (!"..".equals(str))
                             try {
                                 // add the new item to the map
-                                map.put(str, new URL(TZ_BASE_URLSTRING_START
+                                urlMap.put(str, new URL(TZ_BASE_URLSTRING_START
                                         + str + TZ_BASE_URLSTRING_END));
 
                                 // update the selected item and fire off an
                                 // event
-                                selected = (String) map.lastKey();
+                                selected = (String) urlMap.lastKey();
                                 int index = 0;
-                                for (Iterator iter = map.keySet().iterator(); iter
+                                for (Iterator iter = urlMap.keySet().iterator(); iter
                                         .hasNext();) {
                                     if (iter.next().equals(str))
                                         index++;
@@ -84,31 +78,43 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
     }
 
     public Iterator iterator() {
-        return map.entrySet().iterator();
+        return urlMap.entrySet().iterator();
     }
 
     public int getSize() {
-        return map.size() + 1; // the added size is due to the local copy not
-                                // being inside the map
+        // the added size (+1) is due to the local copy not being inside the map
+        return urlMap.size() + 1;
     }
 
     public Object getElementAt(int index) {
         if (index == 0)
             return TZ_LOCAL_CHOICE;
-        else if (index < 0 || index > map.size())
+        else if (index < 0 || index > urlMap.size())
             return null;
         else {
-            Iterator iter = map.keySet().iterator();
+            Iterator iter = urlMap.keySet().iterator();
             for (int i = 1; i < index; i++)
                 iter.next();
             return iter.next();
         }
     }
 
-    public URL getValue(Object choice) {
-        return (choice == null) ? null
-                : (((String) choice).toLowerCase() == TZ_LOCAL_CHOICE
-                        .toLowerCase()) ? TZ_LOCAL_URL : (URL) map.get(choice);
+    public URL getURL(Object choice) {
+        if (choice == null || !(choice instanceof String))
+            return null;
+        else if (TZ_LOCAL_CHOICE.equalsIgnoreCase((String) choice))
+            return TZ_LOCAL_URL;
+        else
+            return (URL) urlMap.get(choice);
+    }
+
+    public String getVersion(Object choice) {
+        if (choice == null || !(choice instanceof String))
+            return null;
+        else if (TZ_LOCAL_CHOICE.equalsIgnoreCase((String) choice))
+            return TZ_LOCAL_VERSION;
+        else
+            return (String) choice;
     }
 
     public Object getSelectedItem() {
@@ -121,7 +127,7 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
 
     private Object selected = TZ_LOCAL_CHOICE;
 
-    private TreeMap map = new TreeMap();
+    private TreeMap urlMap = new TreeMap();
 
     public static final String TZ_LOCAL_CHOICE = "Local Copy";
 
@@ -129,16 +135,25 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
 
     public static final String TZ_BASE_URLSTRING_END = "/be/zoneinfo.res";
 
+    public static final File TZ_LOCAL_FILE = new File("zoneinfo.res");
+
+    public static String TZ_LOCAL_VERSION = null;
+
     public static URL TZ_BASE_URL = null;
 
     public static URL TZ_LOCAL_URL = null;
 
     static {
+        // cannot make TZ_BASE_URL and TZ_LOCAL_URL final since url creations
+        // need to be try-catched
         try {
             TZ_BASE_URL = new URL(TZ_BASE_URLSTRING_START);
-            TZ_LOCAL_URL = new File("zoneinfo.res").toURL();
+            TZ_LOCAL_URL = TZ_LOCAL_FILE.toURL();
+            TZ_LOCAL_VERSION = "tobefixed"; // ICUFile.findFileTZVersion(TZ_LOCAL_FILE);
         } catch (MalformedURLException ex) {
             ex.printStackTrace();
         }
     }
+
+    public static final long serialVersionUID = 1339;
 }

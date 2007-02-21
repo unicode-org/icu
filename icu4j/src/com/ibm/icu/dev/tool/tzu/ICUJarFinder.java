@@ -29,6 +29,15 @@ public class ICUJarFinder {
         if (backupDir != null)
             excluded.add(backupDir);
 
+        System.out.println("*************");
+        System.out.println("Included:");
+        for (int i = 0; i < included.size(); i++)
+            System.out.println(included.get(i));
+        System.out.println("Excluded:");
+        for (int i = 0; i < excluded.size(); i++)
+            System.out.println(excluded.get(i));
+        System.out.println("*************");
+
         for (int i = 0; i < included.size(); i++)
             search(resultModel, (File) included.get(i), excluded, subdirs, true);
 
@@ -37,11 +46,9 @@ public class ICUJarFinder {
     private static void search(ResultModel resultModel, File file,
             List excluded, boolean subdirs, boolean firstdip)
             throws InterruptedException {
-        List result = new ArrayList();
-
         Iterator iter = excluded.iterator();
         while (iter.hasNext())
-            if (file.getAbsolutePath().equals(
+            if (file.getAbsolutePath().equalsIgnoreCase(
                     ((File) iter.next()).getAbsolutePath()))
                 return;
 

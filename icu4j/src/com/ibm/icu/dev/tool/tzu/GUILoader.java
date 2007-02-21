@@ -6,18 +6,10 @@
  */
 package com.ibm.icu.dev.tool.tzu;
 
-import java.util.List;
-import java.util.*;
 import javax.swing.*;
-import javax.swing.table.*;
-import javax.swing.border.*;
-import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
-import javax.swing.text.*;
-import javax.swing.text.html.*;
-import javax.swing.text.html.parser.*;
 
 public class GUILoader {
     public static void main(String[] args) {
@@ -230,8 +222,6 @@ public class GUILoader {
     private JFrame pathFrame;
 
     private JFrame resultFrame;
-
-    private ICUJarFinder jarFinder;
 
     private File backupDir;
 }

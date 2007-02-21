@@ -11,7 +11,6 @@ import java.util.jar.*;
 import java.io.*;
 import java.net.*;
 import com.ibm.icu.util.*;
-import com.ibm.icu.impl.*;
 
 public class ICUFile {
     public ICUFile(File file) throws IOException {
@@ -26,14 +25,6 @@ public class ICUFile {
         tzVersion = findEntryTZVersion(file, insertEntry);
 
         System.out.println("Added: " + file);
-    }
-
-    public boolean isReadable() {
-        return getFile().canRead();
-    }
-
-    public boolean isWritable() {
-        return getFile().canWrite();
     }
 
     public File getFile() {
@@ -70,19 +61,17 @@ public class ICUFile {
 
     public void updateJar(URL insertURL, File backupDir) throws IOException {
         if (!file.canRead() || !file.canWrite())
-            throw new JarException("Missing permissions for " + file);
+            throw new IOException("Missing permissions for " + file);
         File backupFile = null;
         if ((backupFile = createBackupFile(file, backupDir)) == null)
-            throw new JarException("Failed to create a backup file.");
+            throw new IOException("Failed to create a backup file.");
         if (!copyFile(file, backupFile))
-            throw new JarException("Could not replace the original jar.");
+            throw new IOException("Could not replace the original jar.");
         if (!createUpdatedJar(backupFile, file, insertEntry, insertURL))
             throw new IOException("Could not create an updated jar.");
 
         tzVersion = findEntryTZVersion(file, insertEntry);
     }
-
-    // //////////////////////////////////////
 
     private static File createBackupFile(File inputFile, File backupBase) {
         String filename = inputFile.getName();
@@ -122,8 +111,8 @@ public class ICUFile {
                 backupFile = null;
             } finally {
                 ostream.close();
-                return backupFile;
             }
+            return backupFile;
         }
     }
 
@@ -161,8 +150,8 @@ public class ICUFile {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
-            return success;
         }
+        return success;
     }
 
     private static boolean copyEntry(File inputFile, JarEntry inputEntry,
@@ -208,8 +197,8 @@ public class ICUFile {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
-            return success;
         }
+        return success;
     }
 
     private static boolean createUpdatedJar(File inputFile, File outputFile,
@@ -284,8 +273,8 @@ public class ICUFile {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
-            return success;
         }
+        return success;
     }
 
     private boolean isUpdatable() {
@@ -301,8 +290,6 @@ public class ICUFile {
                     Attributes attr = (Attributes) iter.next();
                     icuTitle = attr
                             .getValue(Attributes.Name.IMPLEMENTATION_TITLE);
-                    icuVendor = attr
-                            .getValue(Attributes.Name.IMPLEMENTATION_VENDOR);
                     icuVersion = attr
                             .getValue(Attributes.Name.IMPLEMENTATION_VERSION);
                     if (!("ICU for Java".equals(icuTitle) || "Modularized ICU for Java"
@@ -329,8 +316,8 @@ public class ICUFile {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
-            return success;
         }
+        return success;
 
     }
 
@@ -344,7 +331,7 @@ public class ICUFile {
         return false;
     }
 
-    private static String findEntryTZVersion(File icuFile, JarEntry tzEntry) {
+    public static String findEntryTZVersion(File icuFile, JarEntry tzEntry) {
         try {
             File temp = File.createTempFile("zoneinfo", ".res");
             temp.deleteOnExit();
@@ -368,6 +355,13 @@ public class ICUFile {
         }
     }
 
+    /*
+     * public static String findURLTZVersion(File tzFile) { try { File temp =
+     * File.createTempFile("zoneinfo", ".res"); temp.deleteOnExit();
+     * copyFile(tzFile, temp); return findTZVersion(temp); } catch (IOException
+     * ex) { ex.printStackTrace(); return null; } }
+     */
+
     private static String findTZVersion(File tzFile) {
         try {
             String filename = tzFile.getName();
@@ -376,6 +370,7 @@ public class ICUFile {
 
             URL url = new URL(tzFile.getParentFile().toURL().toString());
             ClassLoader loader = new URLClassLoader(new URL[] { url });
+
             UResourceBundle bundle = UResourceBundle.getBundleInstance("",
                     entryname, loader);
 
@@ -387,8 +382,6 @@ public class ICUFile {
             // not an error -- some zoneinfo files do not have a version number
             // included
         } catch (MalformedURLException ex) {
-            ex.printStackTrace();
-        } catch (IOException ex) {
             ex.printStackTrace();
         }
 
@@ -406,8 +399,6 @@ public class ICUFile {
     private File file;
 
     private JarEntry insertEntry;
-
-    private String icuVendor;
 
     private String icuTitle;
 
