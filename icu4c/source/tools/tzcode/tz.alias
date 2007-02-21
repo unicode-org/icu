@@ -1,5 +1,5 @@
 ######################################################################
-# Copyright (C) 1999-2006, International Business Machines
+# Copyright (C) 1999-2007, International Business Machines
 # Corporation and others.  All Rights Reserved.
 ######################################################################
 # A simple alias list. We use this to retain backward compatibility.
@@ -12,7 +12,7 @@
 #
 # Format: alias_name unix_name # optional comment
 
-#### Aliases that conflict with Olson compatibility links
+#### Aliases that conflict with Olson compatibility Zone definition
 
 ACT Australia/Darwin
 AET Australia/Sydney
@@ -28,14 +28,14 @@ CTT Asia/Shanghai
 EAT Africa/Addis_Ababa
 ECT Europe/Paris
 # EET Europe/Istanbul # EET is a standard UNIX zone
-#### EST America/New_York # Linked to America/Indianapolis in Olson
-HST Pacific/Honolulu # Olson LINK - was removed 2005-Nov-21, confirmed gone in 2006a.
+#### EST America/New_York # Defined as -05:00
+#### HST Pacific/Honolulu # Defined as -10:00
 IET America/Indianapolis
 IST Asia/Calcutta
 JST Asia/Tokyo
 # MET Asia/Tehran # MET is a standard UNIX zone
 MIT Pacific/Apia
-#### MST America/Denver # Linked to America/Phoenix in Olson
+#### MST America/Denver # Defined as -07:00
 NET Asia/Yerevan
 NST Pacific/Auckland
 PLT Asia/Karachi
