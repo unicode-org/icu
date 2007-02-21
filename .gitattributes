@@ -141,6 +141,7 @@ icu4j/src/com/ibm/icu/dev/tool/tzu/CLILoader.java -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/GUILoader.java -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/ICUFile.java -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/ICUJarFinder.java -text
+icu4j/src/com/ibm/icu/dev/tool/tzu/ICUTZUMain.java -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/IncludePath.java -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/PathComponent.java -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/PathModel.java -text
@@ -149,6 +150,7 @@ icu4j/src/com/ibm/icu/dev/tool/tzu/ResultModel.java -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/SourceModel.java -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/runicutzu.bat -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/runicutzuenv.bat -text
+icu4j/src/com/ibm/icu/dev/tool/tzu/zoneinfo.res -text
 icu4j/src/com/ibm/icu/impl/DateNumberFormat.java -text
 icu4j/src/com/ibm/icu/impl/ICUCache.java -text
 icu4j/src/com/ibm/icu/impl/SimpleCache.java -text
