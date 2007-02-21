@@ -29,7 +29,6 @@ class PathModel extends AbstractListModel {
 
     public void loadPaths() {
         BufferedReader reader = null;
-        String buffer;
         int lineNumber = 1;
         String line;
         char sign;
@@ -42,7 +41,7 @@ class PathModel extends AbstractListModel {
                 if (line.length() >= 1) {
                     sign = line.charAt(0);
                     if (sign != '#') {
-                        if (sign != '+' && sign != '-')
+                        if (sign != '+' && sign != '-' && !"all".equals(line))
                             pathlistError(
                                     "Each path entry must start with a + or - to denote inclusion/exclusion",
                                     lineNumber);// error
@@ -168,4 +167,6 @@ class PathModel extends AbstractListModel {
     private ResultModel resultModel = null;
 
     public static final String PATHLIST_FILENAME = "DirectorySearch.txt";
+
+    public static final long serialVersionUID = 1337;
 }

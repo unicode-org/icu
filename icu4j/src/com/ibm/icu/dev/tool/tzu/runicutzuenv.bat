@@ -5,14 +5,14 @@ rem * others. All Rights Reserved.                                              
 rem *******************************************************************************
 rem */
 
-rem set JAVA_HOME to the a Java installation directory
+rem Set JAVA_HOME to the Java installation directory.
 set JAVA_HOME=C:\Program Files\Java\jre1.6.0
 
-rem set NOGUI
+rem Set whether the GUI will be run or not.
 set NOGUI=true
 
-rem set DISCOVERONLY
+rem Set whether the cmd-line utility will only discover update icu4j files.
 set DISCOVERONLY=false
 
-rem set SILENTPATCH
+rem Set whether the cmd-line utility will run silently.
 set SILENTPATCH=false

@@ -18,32 +18,37 @@ public class CLILoader {
 
     public CLILoader(String[] args) {
         try {
+            // make sure the result model hides unreadable/unwritable files
             resultModel.setHidden(false);
 
-            boolean nogui = "true".equals(System.getProperty("nogui"));
-            boolean discoveronly = "true".equals(System
-                    .getProperty("discoveronly"));
-            boolean silentpatch = "true".equals(System
-                    .getProperty("silentpatch"));
+            // set some options to be true based on environment variables
+            if ("true".equals(System.getProperty("discoveronly")))
+                options[DISCOVERONLY].doesOccur = true;
+            if ("true".equals(System.getProperty("silentpatch")))
+                options[QUIET].doesOccur = true;
 
-            System.out.println("nogui=" + nogui);
-            System.out.println("discoveryonly=" + discoveronly);
-            System.out.println("silentpatch=" + silentpatch);
-
+            // parse the arguments using UOption.parseArgs
             int argsleft = UOption.parseArgs(args, options);
 
+            // if help is specified, show the help specs and do nothing else
             if (options[HELP].doesOccur) {
                 showHelp();
                 return;
             }
 
+            // make sure only there is only one update mode in the options
             int choiceType = (options[OFFLINE].doesOccur ? 1 : 0)
                     + (options[TZVERSION].doesOccur ? 1 : 0)
-                    + (options[BEST].doesOccur ? 1 : 0);
+                    + (options[BEST].doesOccur ? 1 : 0)
+                    + (options[DISCOVERONLY].doesOccur ? 1 : 0);
             if (choiceType > 1)
-                syntaxError("Options -o (--offline), -t (--tzversion), and -b (--best) are mutually exclusive");// error
+                syntaxError("Options -o (--offline), -t (--tzversion), -b (--best) and -d (--discoveronly) are mutually exclusive");// error
+
+            // make sure that quiet & verbose do not both occur
             if (options[QUIET].doesOccur && options[VERBOSE].doesOccur)
                 syntaxError("Options -q (--quiet) and -v (--verbose) are mutually exclusive");// error
+
+            // make sure that exactly one of backup & nobackup occurs
             if (options[BACKUP].doesOccur && options[NOBACKUP].doesOccur)
                 syntaxError("Options -b (--backup) and -B (--nobackup) are mutually exclusive");// error
             if (!options[BACKUP].doesOccur && !options[NOBACKUP].doesOccur)
@@ -51,22 +56,29 @@ public class CLILoader {
             if (argsleft != 0)
                 syntaxError("Too many arguments");// error
 
-            if (options[QUIET].doesOccur) // quiet implies auto
+            // quiet implies auto
+            if (options[QUIET].doesOccur)
                 options[AUTO].doesOccur = true;
-            if (options[AUTO].doesOccur && choiceType == 0) // auto implies best
-                                                            // by default
-            {
+
+            // auto implies best if no preference specified
+            if (options[AUTO].doesOccur && choiceType == 0) {
                 options[BEST].doesOccur = true;
                 choiceType = 1;
             }
 
+            // get the backup dir from the options
             if (options[BACKUP].doesOccur)
                 backupDir = new File(options[BACKUP].value);
+
+            // if the user did not specify to stay offline, go online and find
+            // zoneinfo.res files
             if (!options[OFFLINE].doesOccur)
                 sourceModel.findSources();
 
+            // load paths from the directory search file
             pathModel.loadPaths();
 
+            // search the paths for updatable icu4j files
             try {
                 System.out.println("Search started.");
                 pathModel.searchAll(options[RECURSE].doesOccur, backupDir);
@@ -75,20 +87,31 @@ public class CLILoader {
                 System.out.println("Search interrupted.");
             }
 
-            String chosenString = (options[BEST].doesOccur) ? getBestString()
-                    : (options[OFFLINE].doesOccur) ? getLocalString()
-                            : (options[TZVERSION].doesOccur) ? getTZVersionString(options[TZVERSION].value)
-                                    : null;
+            // get the name and url associated with the update mode (or null if
+            // unspecified)
+            String chosenName = null;
+            String chosenVersion = null;
+            URL chosenURL = null;
+            if (options[BEST].doesOccur) {
+                chosenName = getBestName();
+                chosenVersion = getBestVersion();
+                chosenURL = getBestURL();
+            } else if (options[OFFLINE].doesOccur) {
+                chosenName = getLocalName();
+                chosenVersion = getLocalVersion();
+                chosenURL = getLocalURL();
+            } else if (options[TZVERSION].doesOccur) {
+                chosenName = getTZVersionName(options[TZVERSION].value);
+                chosenVersion = getTZVersionVersion(options[TZVERSION].value);
+                chosenURL = getTZVersionURL(options[TZVERSION].value);
+            }
 
-            URL chosenURL = (options[BEST].doesOccur) ? getBestURL()
-                    : (options[OFFLINE].doesOccur) ? getLocalURL()
-                            : (options[TZVERSION].doesOccur) ? getTZVersionURL(options[TZVERSION].value)
-                                    : null;
-
+            // create a reader for user input
             BufferedReader reader = new BufferedReader(new InputStreamReader(
                     System.in));
-            Iterator resultIter = resultModel.iterator();
 
+            // iterate through each icu4j file in the search results
+            Iterator resultIter = resultModel.iterator();
             while (resultIter.hasNext()) {
                 try {
                     ICUFile entry = (ICUFile) resultIter.next();
@@ -109,13 +132,14 @@ public class CLILoader {
 
                     if (options[AUTO].doesOccur) // automatic mode
                     {
-                        update(entry, chosenString, chosenURL);
+                        update(entry, chosenName, chosenURL);
                     } else if (choiceType == 1) // confirmation mode
                     {
-                        String input = askConfirm(chosenString, reader);
+                        String input = askConfirm(chosenName, chosenVersion,
+                                entry.getTZVersion(), reader);
 
                         if ("yes".startsWith(input))
-                            update(entry, chosenString, chosenURL);
+                            update(entry, chosenName, chosenURL);
                         else
                             skipUpdate();
                     } else // interactive mode
@@ -123,11 +147,11 @@ public class CLILoader {
                         String input = askChoice(reader);
 
                         if ("best".startsWith(input))
-                            update(entry, getBestString(), getBestURL());
-                        else if (!"local choice".startsWith(input))
-                            update(entry, getLocalString(), getLocalURL());
+                            update(entry, getBestName(), getBestURL());
+                        else if ("local choice".startsWith(input))
+                            update(entry, getLocalName(), getLocalURL());
                         else if (!"none".startsWith(input))
-                            update(entry, getTZVersionString(input),
+                            update(entry, getTZVersionName(input),
                                     getTZVersionURL(input));
                         else
                             skipUpdate();
@@ -146,11 +170,21 @@ public class CLILoader {
         }
     }
 
-    private String askConfirm(String chosenString, BufferedReader reader)
-            throws IOException {
-        System.out.println("Update to " + chosenString
-                + "? [yes (default), no]");
-        System.out.print(": ");
+    private String askConfirm(String chosenString, String chosenVersion,
+            String currentVersion, BufferedReader reader) throws IOException {
+        int betterness = 1; // chosenString.compareToIgnoreCase(currentVersion);
+        if (betterness == 0) {
+            System.out.println("Updating should have no effect on this file.");
+            System.out.print("Update anyway?");
+        } else if (betterness < 0) {
+            System.out
+                    .println("Warning: The version specified is older than the one present in the file.");
+            System.out.print("Update anyway?");
+        } else {
+            System.out.print("Update to " + chosenVersion + "?");
+        }
+
+        System.out.print(" [yes (default), no]\n: ");
         return reader.readLine().trim().toLowerCase();
     }
 
@@ -163,6 +197,7 @@ public class CLILoader {
         while (sourceIter.hasNext())
             System.out.print(", " + ((Map.Entry) sourceIter.next()).getKey());
 
+        System.out.println();
         System.out
                 .println("Update Version? [best (default), <specific version>, local copy, none]");
         System.out.print(": ");
@@ -175,7 +210,7 @@ public class CLILoader {
             entry.updateJar(url, backupDir);
             System.out.println("Update done.");
         } catch (IOException ex) {
-            System.out.println(ex);
+            System.err.println(ex);
         }
     }
 
@@ -183,20 +218,32 @@ public class CLILoader {
         System.out.println("Update skipped.");
     }
 
-    private String getBestString() {
+    private String getBestName() {
         return (String) sourceModel.getSelectedItem();
     }
 
-    private String getLocalString() {
+    private String getLocalName() {
         return SourceModel.TZ_LOCAL_CHOICE;
     }
 
-    private String getTZVersionString(String version) {
-        return version;
+    private String getTZVersionName(String version) {
+        return version.trim().toLowerCase();
+    }
+
+    private String getBestVersion() {
+        return sourceModel.getVersion(sourceModel.getSelectedItem());
+    }
+
+    private String getLocalVersion() {
+        return SourceModel.TZ_LOCAL_VERSION;
+    }
+
+    private String getTZVersionVersion(String version) {
+        return version.trim().toLowerCase();
     }
 
     private URL getBestURL() {
-        return sourceModel.getValue(sourceModel.getSelectedItem());
+        return sourceModel.getURL(sourceModel.getSelectedItem());
     }
 
     private URL getLocalURL() {
@@ -228,9 +275,6 @@ public class CLILoader {
     private SourceModel sourceModel = new SourceModel();
 
     private File backupDir = null;
-
-    // { pathModel.add(new ICUPath(new File("C:\\Documents and Settings\\Daniel
-    // Kesserich\\Desktop\\Spring 2007\\IBM\\updatehere"), true)); }
 
     private static UOption options[] = new UOption[] {
             UOption.create("help", '?', UOption.NO_ARG),

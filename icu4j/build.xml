@@ -100,7 +100,8 @@
         <property name="ime.indic.manifest" value="${src.dir}/com/ibm/icu/dev/tool/ime/indic/manifest.stub"/>
         <property name="zip.file" value="../icu4j${DSTAMP}.zip"/>
         <property name="zipSrc.file" value="../icu4jSrc${DSTAMP}.zip"/>
-
+    	<property name="tzu.bin.dir" value="${basedir}/ICU4JTZU"/>
+    	<property name="tzujar.file" value="${tzu.bin.dir}/icutzu.jar"/>
         <property file="build.properties" />
         <!-- fix the data folder every time there is a version update-->
 
@@ -2457,4 +2458,50 @@
     <target name="jdk13Compat" depends="init, eclipseCoreMangle, core13" description="builds ICU4J core with JDK 1.3"/>
     <target name="jdk13CompatTests" depends="init, jdk13Compat, eclipseTestMangle, eclipseTests" description="builds ICU4J tests with JDK 1.3"/>
     <target name="jdk13CompatCheck" depends="init, jdk13CompatTests, jar13, deleteCore, eclipseRunCheck" description="runs the tests with JDK 1.3"/>
+    <target name="icutzu" depends="init" description="build ICU4J TimeZone Update Utility Classes">
+        <javac includes="com/ibm/icu/dev/tool/tzu/**/*.java"
+            excludes="**/.svn/**/*"
+            srcdir="${src.dir}"
+            destdir="${build.dir}"
+            classpathref="build.classpath"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
+            debug="on" deprecation="off"
+            encoding="ascii"/>
+    </target>
+	
+    <target name="icutzujar" depends="init,icutzu,jar" description="build ICU4J TimeZone Update Utility Classes">
+        <mkdir dir="${tzu.bin.dir}"/>
+    	<copy todir="${tzu.bin.dir}">
+    	    <fileset dir="${src.dir}/com/ibm/icu/dev/tool/tzu">
+    	      <include name="*.bat"/>
+    	      <include name="*.sh"/>
+    	      <include name="*.res"/>
+    	    </fileset>
+    		<fileset dir="${basedir}">
+    			<include name="${jar.file}"/>
+    		</fileset>
+    	</copy>
+    	<echo file="${tzu.bin.dir}/DirectorySearch.txt">all</echo>
+    	<jar jarfile="${tzujar.file}"    compress="true">       	
+            <fileset    dir="${basedir}" includes="license.html" />
+            <fileset    dir="${build.dir}" includes="com/ibm/icu/dev/tool/tzu/**/*.class"/>
+    		<fileset    dir="${build.dir}" includes="com/ibm/icu/dev/tool/UOption*.*"/>  
+            <manifest>
+                <attribute name="Built-By" value="${corp}"/>
+                <section name="common">
+                  <attribute name="Specification-Title" value="ICU4J TimeZone Update Utility"/>
+                  <attribute name="Specification-Version" value="${icu4j.version.string}"/>
+                  <attribute name="Specification-Vendor" value="ICU"/>
+                  <attribute name="Implementation-Title" value="ICU4JTZU"/>
+                  <attribute name="Implementation-Version" value="${icu4j.version.string}"/> 
+                  <attribute name="Implementation-Vendor" value="${corp}"/>
+                  <attribute name="Implementation-Vendor-Id" value="com.ibm"/>
+                  <attribute name="Copyright-Info" value="${copyright}"/>
+                  <attribute name="Sealed" value="false"/>
+                </section>
+            </manifest>
+        </jar>
+    	<echo message="Please see ${tzu.bin.dir} directory for the files."/>
+    </target>
 </project>

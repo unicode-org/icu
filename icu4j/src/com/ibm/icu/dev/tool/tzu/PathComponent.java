@@ -6,22 +6,13 @@
  */
 package com.ibm.icu.dev.tool.tzu;
 
-import java.util.List;
-import java.util.*;
 import javax.swing.*;
-import javax.swing.table.*;
-import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.net.*;
-import javax.swing.text.*;
-import javax.swing.text.html.*;
-import javax.swing.text.html.parser.*;
 
 public class PathComponent extends JComponent {
     public PathComponent(final GUILoader owner, final PathModel pathModel) {
-        this.owner = owner;
         this.pathModel = pathModel;
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -157,11 +148,9 @@ public class PathComponent extends JComponent {
         pathSearchButton.setEnabled(value);
     }
 
-    private GUILoader owner;
-
     private JPanel pathInputPanel = new JPanel();
 
-    private JPanel pathListPanel = new JPanel();
+    // private JPanel pathListPanel = new JPanel();
 
     private JPanel pathOptionPanel = new JPanel();
 
@@ -199,4 +188,6 @@ public class PathComponent extends JComponent {
     private JMenuItem pathSearchAllItem = new JMenuItem("Search All");
 
     private PathModel pathModel;
+
+    public static final long serialVersionUID = 1340;
 }
