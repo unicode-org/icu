@@ -321,7 +321,6 @@ icu4j/src/com/ibm/icu/dev/tool/tzu/ResultModel.java -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/SourceModel.java -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/runicutzu.bat -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/runicutzuenv.bat -text
-icu4j/src/com/ibm/icu/dev/tool/tzu/zoneinfo.res -text
 icu4j/src/com/ibm/icu/impl/DateNumberFormat.java -text
 icu4j/src/com/ibm/icu/impl/ICUCache.java -text
 icu4j/src/com/ibm/icu/impl/SimpleCache.java -text

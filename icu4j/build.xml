@@ -2469,20 +2469,23 @@
             debug="on" deprecation="off"
             encoding="ascii"/>
     </target>
-	
-    <target name="icutzujar" depends="init,icutzu,jar" description="build ICU4J TimeZone Update Utility Classes">
+    <target name="icutzudata" depends="init" >
         <mkdir dir="${tzu.bin.dir}"/>
     	<copy todir="${tzu.bin.dir}">
     	    <fileset dir="${src.dir}/com/ibm/icu/dev/tool/tzu">
     	      <include name="*.bat"/>
     	      <include name="*.sh"/>
-    	      <include name="*.res"/>
     	    </fileset>
     		<fileset dir="${basedir}">
     			<include name="${jar.file}"/>
     		</fileset>
+            <fileset dir="${build.dir}/${icu4j.data.path}">
+    			<include name="zoneinfo.res"/>
+    		</fileset>
     	</copy>
     	<echo file="${tzu.bin.dir}/DirectorySearch.txt">all</echo>
+     </target>   
+    <target name="icutzujar" depends="init, icutzu, jar, icutzudata" description="build ICU4J TimeZone Update Utility Classes">
     	<jar jarfile="${tzujar.file}"    compress="true">       	
             <fileset    dir="${basedir}" includes="license.html" />
             <fileset    dir="${build.dir}" includes="com/ibm/icu/dev/tool/tzu/**/*.class"/>
