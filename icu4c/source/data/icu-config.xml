@@ -1,7 +1,7 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 2005-2006, International Business Machines Corporation and         *
+* Copyright (C) 2005-2007, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -305,6 +305,7 @@
         <include xpath="//ldml/dates/calendars/calendar\[@type='.*'\]/dateTimeFormats/availableFormats/.*" locales=".*" draft="provisional" />
         <include xpath="//ldml/collations/collation\[@type='standard'\]/.*" locales="ml or" draft="confirmed" />
         <!-- Exclude unusable data -->
+        <exclude xpath="//ldml/dates/localizedPatternChars.*"/>
         <exclude xpath="//ldml/posix/messages/.*"/>
         <exclude xpath="//ldml/numbers/currencies/.*" locales="bg_BG, nl_BE"/>
         <exclude xpath="//ldml/localeDisplayNames/.*" locales=".*" alt=".*" />

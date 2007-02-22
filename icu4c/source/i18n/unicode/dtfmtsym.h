@@ -1,6 +1,6 @@
 /*  
 ********************************************************************************
-*   Copyright (C) 1997-2006, International Business Machines
+*   Copyright (C) 1997-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -405,6 +405,10 @@ public:
 
     /**
      * Gets localized date-time pattern characters. For example: 'u', 't', etc.
+     * <p>
+     * Note: ICU no longer provides localized date-time pattern characters for a locale
+     * starting ICU 3.8.  This method returns the non-localized date-time pattern
+     * characters unless user defined localized data is set by setLocalPatternChars.
      * @param result    Output param which will receive the localized date-time pattern characters.
      * @return          A reference to 'result'.
      * @stable ICU 2.0

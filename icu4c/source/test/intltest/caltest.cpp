@@ -1,6 +1,6 @@
 /************************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation
+ * Copyright (c) 1997-2007, International Business Machines Corporation
  * and others. All Rights Reserved.
  ************************************************************************/
 
@@ -1288,8 +1288,11 @@ CalendarTest::TestDOW_LOCALandYEAR_WOY()
     if (U_FAILURE(status)) { errln("Couldn't create GregorianCalendar"); return; }
     SimpleDateFormat *sdf=new SimpleDateFormat(UnicodeString("YYYY'-W'ww-ee"), Locale::getGermany(), status);
     if (U_FAILURE(status)) { errln("Couldn't create SimpleDateFormat"); return; }
+    // ICU no longer use localized date-time pattern characters by default (ticket#5597)
+	/*
     sdf->applyLocalizedPattern(UnicodeString("JJJJ'-W'ww-ee"), status);
     if (U_FAILURE(status)) { errln("Couldn't apply localized pattern"); return; }
+    */
     cal->clear();
     cal->set(1997, UCAL_DECEMBER, 25);
     doYEAR_WOYLoop(cal, sdf, times, status);

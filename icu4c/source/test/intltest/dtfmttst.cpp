@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
  
@@ -329,12 +329,9 @@ void DateFormatTest::TestFieldPosition() {
     DateFormatSymbols rootSyms(Locale(""), ec);
     assertSuccess("DateFormatSymbols", ec);
 
-    // local pattern chars not accurate when CLDR 1.4 data
-    // first introduced...
-    if(isICUVersionAtLeast(ICU_37)) {
-        assertEquals("patternChars", PATTERN_CHARS, rootSyms.getLocalPatternChars(buf));
-    }
-
+    // local pattern chars data is not longer loaded
+    // from icu locale bundle
+    assertEquals("patternChars", PATTERN_CHARS, rootSyms.getLocalPatternChars(buf));
     assertEquals("patternChars", PATTERN_CHARS, DateFormatSymbols::getPatternUChars());
     assertTrue("DATEFORMAT_FIELD_NAMES", DATEFORMAT_FIELD_NAMES_LENGTH == UDAT_FIELD_COUNT);
     assertTrue("Data", UDAT_FIELD_COUNT == uprv_strlen(PATTERN_CHARS));
