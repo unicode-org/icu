@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2006, International Business Machines Corporation and    *
+* Copyright (C) 1997-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -1253,7 +1253,8 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
         status = U_ZERO_ERROR;
         initField(&fStandaloneShortQuarters, fStandaloneShortQuartersCount, calData.getByKey2(gQuartersTag, gNamesAbbrTag, status), status);
     }
-
+    // ICU 3.8 or later version no longer uses localized date-time pattern characters by default (ticket#5597)
+    /*
     // fastCopyFrom()/setTo() - see assignArray comments
     resStr = ures_getStringByKey(fResourceBundle, gLocalPatternCharsTag, &len, &status);
     fLocalPatternChars.setTo(TRUE, resStr, len);
@@ -1262,6 +1263,8 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     if (len < PATTERN_CHARS_LEN) {
         fLocalPatternChars.append(UnicodeString(TRUE, &gPatternChars[len], PATTERN_CHARS_LEN-len));
     }
+    */
+    fLocalPatternChars = gPatternChars;
 
     // {sfb} fixed to handle 1-based weekdays
     weekdaysData = calData.getByKey2(gDayNamesTag, gNamesWideTag, status);

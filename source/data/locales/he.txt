@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/he.xml
@@ -1097,7 +1097,6 @@ he{
         characters{"right-to-left"}
         lines{"top-to-bottom"}
     }
-    localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZvcL"}
     zoneStrings{
         "Africa:Timbuktu"{
             ec{"אפריקה/טימבקטו"}
