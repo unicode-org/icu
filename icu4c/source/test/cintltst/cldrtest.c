@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -309,8 +309,11 @@ TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
                         subBundleKey,
                         ures_getKey(currentBundle),
                         locale);
-            } else if (strcmp(subBundleKey, "localPatternChars") == 0 &&
-                       isICUVersionAtLeast(ICU_37)) {
+            } else if (strcmp(subBundleKey, "localPatternChars") == 0) {
+                /* Note: We no longer import localPatternChars data starting
+                 * ICU 3.8.  So it never comes into this else if block. (ticket#5597)
+                 */
+
                 /* Check well-formedness of localPatternChars.  First, the
                  * length must match the number of fields defined by
                  * DateFormat.  Second, each character in the string must

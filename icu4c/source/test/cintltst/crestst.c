@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -119,7 +119,7 @@ void TestAliasConflict(void) {
         log_err("Failed to get resource with %s\n", myErrorName(status));
     }
     ures_close(iw);
-    result = ures_getStringByKey(he, "localPatternChars", &resultLen, &status);
+    result = ures_getStringByKey(he, "ExemplarCharacters", &resultLen, &status);
     if(U_FAILURE(status) || result == NULL) {
         log_err("Failed to get resource with %s\n", myErrorName(status));
     }
