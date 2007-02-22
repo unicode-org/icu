@@ -21,6 +21,7 @@ rem Set environmental variables.
 call "%ICUTZU_HOME%runicutzuenv.bat"
 rem Double-check that JAVA_HOME is set.
 @echo Java Home: %JAVA_HOME%
+IF NOT EXIST "%JAVA_HOME%/bin/java" GOTO MissingJAVAHOME
 
 IF EXIST "%ICUTZU_HOME%\Temp" GOTO Next
 rem Create a temporary directory.
@@ -46,9 +47,12 @@ GOTO Exit
 GOTO Exit
 
 :MissingICUTZUENV
-@echo runjtzuenv.bat file doesn't exist in %ICUTZU_HOME%.
+@echo runicutzuenv.bat file doesn't exist in %ICUTZU_HOME%.
 GOTO Exit
 
+:MissingJAVAHOME
+@echo java.exe does not exist in %JAVA_HOME%\bin. Please update the JAVA_HOME enviroment variable in runicutzuenv.bat
+GOTO Exit
 
 
 :Exit
