@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2003-2006, International Business Machines Corporation
+* Copyright (C) 2003-2007, International Business Machines Corporation
 * and others. All Rights Reserved.
 ******************************************************************************
 *
@@ -493,13 +493,27 @@ int32_t HebrewCalendar::handleGetLimit(UCalendarDateFields field, ELimitType lim
 * @internal
 */
 int32_t HebrewCalendar::handleGetMonthLength(int32_t extendedYear, int32_t month) const {
+    // Resolve out-of-range months.  This is necessary in order to
+    // obtain the correct year.  We correct to
+    // a 12- or 13-month year (add/subtract 12 or 13, depending
+    // on the year) but since we _always_ number from 0..12, and
+    // the leap year determines whether or not month 5 (Adar 1)
+    // is present, we allow 0..12 in any given year.
+    while (month < 0) {
+        month += monthsInYear(--extendedYear);
+    }
+    // Careful: allow 0..12 in all years
+    while (month > 12) {
+        month -= monthsInYear(extendedYear++);
+    }
+
     switch (month) {
-  case HESHVAN:
-  case KISLEV:
+    case HESHVAN:
+    case KISLEV:
       // These two month lengths can vary
       return MONTH_LENGTH[month][yearType(extendedYear)];
 
-  default:
+    default:
       // The rest are a fixed length
       return MONTH_LENGTH[month][0];
     }

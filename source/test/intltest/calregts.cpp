@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation
+ * Copyright (c) 1997-2007, International Business Machines Corporation
  * and others. All Rights Reserved.
  ********************************************************************/
  
@@ -81,6 +81,7 @@ CalendarRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &
         CASE(42,TestWeekShift);
         CASE(43,TestTimeZoneTransitionAdd);
         CASE(44,TestDeprecates);
+        CASE(45,TestT5555);
     default: name = ""; break;
     }
 }
@@ -2268,6 +2269,41 @@ void CalendarRegressionTest::TestJ438(void) {
         }
     }
     delete pcal;
+}
+
+void CalendarRegressionTest::TestT5555()
+{
+    UErrorCode ec = U_ZERO_ERROR;
+    Calendar *cal = Calendar::createInstance(ec);
+
+    if (cal == NULL || U_FAILURE(ec)) {
+        errln("FAIL: Calendar::createInstance()");
+        delete cal;
+        return;
+    }
+
+    // Set to Wednesday, February 21, 2007
+    cal->set(2007, UCAL_FEBRUARY, 21);
+
+    // Advance three years
+    cal->add(UCAL_MONTH, 36, ec);
+
+    // Set to last Wednesday of the month
+    cal->set(UCAL_DAY_OF_WEEK_IN_MONTH, -1);
+
+    cal->getTime(ec);
+
+    int32_t yy, mm, dd, ee;
+
+    yy = cal->get(UCAL_YEAR, ec);
+    mm = cal->get(UCAL_MONTH, ec);
+    dd = cal->get(UCAL_DATE, ec);
+    ee = cal->get(UCAL_DAY_OF_WEEK, ec);
+
+    // Should be set to Wednesday, February 24, 2010
+    if (U_FAILURE(ec) || yy != 2010 || mm != UCAL_FEBRUARY || dd != 24 || ee != UCAL_WEDNESDAY) {
+        errln("FAIL: got date %4d/%02d/%02d, expected 210/02/24: ", yy, mm + 1, dd);
+    }
 }
 
 /**
