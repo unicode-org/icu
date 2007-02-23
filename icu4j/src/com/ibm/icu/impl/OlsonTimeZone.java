@@ -1,6 +1,6 @@
  /*
   *******************************************************************************
-  * Copyright (C) 2005-2006, International Business Machines Corporation and         *
+  * Copyright (C) 2005-2007, International Business Machines Corporation and         *
   * others. All Rights Reserved.                                                *
   *******************************************************************************
   */
@@ -165,7 +165,11 @@ public class OlsonTimeZone extends TimeZone {
      * @see com.ibm.icu.util.TimeZone#setRawOffset(int)
      */
     public void setRawOffset(int offsetMillis) {
-        finalZone.setRawOffset(offsetMillis);
+        if (finalZone == null) {
+            finalRawOffset = new Integer(offsetMillis);
+        } else {
+            finalZone.setRawOffset(offsetMillis);
+        }
     }
     public Object clone() {
         OlsonTimeZone other = (OlsonTimeZone) super.clone();
@@ -219,6 +223,14 @@ public class OlsonTimeZone extends TimeZone {
 
         double secs = Math.floor(date / MILLIS_PER_SECOND);
         getHistoricalOffset(secs, local, offsets);
+
+        if (finalRawOffset != null) {
+            // When raw offset is set by setRawOffset and no "finalZone" available,
+            // finalRawOffset store the offset.  setRawOffset no longer makes sense
+            // in OlsonTimeZone, but it's a public API and need to do something
+            // reasonable.
+            offsets[0] = finalRawOffset.intValue();
+        }
         return;
     }
     double[] floorDivide(double dividend, double divisor) {
@@ -623,7 +635,16 @@ public class OlsonTimeZone extends TimeZone {
      * If and only if finalYear == INT32_MAX then finalZone == 0.
      */
     private SimpleTimeZone finalZone = null; // owned, may be NULL
-    
+ 
+    /**
+     * When absense of finalZone, finalRawOffset stores user defined
+     * raw offset set by setRawOffset.  This timezone implementation
+     * supports historical transitions, so setting raw offset does
+     * not make sense much.  However, we need to make the API
+     * setRawOffset/getRawOffset work reasonably (ticket#5280)
+     */
+    private Integer finalRawOffset = null;
+
     private static final boolean DEBUG = ICUDebug.enabled("olson");
     private static final int[] DAYS_BEFORE = new int[] {0,31,59,90,120,151,181,212,243,273,304,334,
                                            0,31,60,91,121,152,182,213,244,274,305,335};
