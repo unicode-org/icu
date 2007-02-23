@@ -44,7 +44,7 @@
  * resource data.
  */
 
-#define PATTERN_CHARS_LEN 26
+#define PATTERN_CHARS_LEN 29
 
 /**
  * Unlocalized date-time pattern characters. For example: 'y', 'd', etc. All
@@ -1191,7 +1191,7 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
             initField(&fShortQuarters, fShortQuartersCount, (const UChar *)gLastResortQuarters, kQuarterNum, kQuarterLen, status);
             initField(&fStandaloneQuarters, fStandaloneQuartersCount, (const UChar *)gLastResortQuarters, kQuarterNum, kQuarterLen, status);
             initField(&fStandaloneShortQuarters, fStandaloneShortQuartersCount, (const UChar *)gLastResortQuarters, kQuarterNum, kQuarterLen, status);
-            fLocalPatternChars = gPatternChars;
+            fLocalPatternChars.setTo(TRUE, gPatternChars, PATTERN_CHARS_LEN);
         }
         goto cleanup;
     }
@@ -1264,7 +1264,7 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
         fLocalPatternChars.append(UnicodeString(TRUE, &gPatternChars[len], PATTERN_CHARS_LEN-len));
     }
     */
-    fLocalPatternChars = gPatternChars;
+    fLocalPatternChars.setTo(TRUE, gPatternChars, PATTERN_CHARS_LEN);
 
     // {sfb} fixed to handle 1-based weekdays
     weekdaysData = calData.getByKey2(gDayNamesTag, gNamesWideTag, status);

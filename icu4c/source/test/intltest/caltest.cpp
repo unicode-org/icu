@@ -9,6 +9,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "caltest.h"
+#include "unicode/dtfmtsym.h"
 #include "unicode/gregocal.h"
 #include "unicode/smpdtfmt.h"
 #include "unicode/simpletz.h"
@@ -1288,12 +1289,16 @@ CalendarTest::TestDOW_LOCALandYEAR_WOY()
     if (U_FAILURE(status)) { errln("Couldn't create GregorianCalendar"); return; }
     SimpleDateFormat *sdf=new SimpleDateFormat(UnicodeString("YYYY'-W'ww-ee"), Locale::getGermany(), status);
     if (U_FAILURE(status)) { errln("Couldn't create SimpleDateFormat"); return; }
-    // ICU no longer use localized date-time pattern characters by default (ticket#5597)
-	/*
+
+    // ICU no longer use localized date-time pattern characters by default.
+    // So we set pattern chars using 'J' instead of 'Y'.
+    DateFormatSymbols *dfs = new DateFormatSymbols(Locale::getGermany(), status);
+    dfs->setLocalPatternChars(UnicodeString("GyMdkHmsSEDFwWahKzJeugAZvcLQq"));
+    sdf->adoptDateFormatSymbols(dfs);
     sdf->applyLocalizedPattern(UnicodeString("JJJJ'-W'ww-ee"), status);
     if (U_FAILURE(status)) { errln("Couldn't apply localized pattern"); return; }
-    */
-    cal->clear();
+
+	cal->clear();
     cal->set(1997, UCAL_DECEMBER, 25);
     doYEAR_WOYLoop(cal, sdf, times, status);
     //loop_addroll(cal, /*sdf,*/ times, UCAL_YEAR_WOY, UCAL_YEAR,  status);
