@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2006, International Business Machines Corporation and    *
+* Copyright (C) 1997-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -574,6 +574,12 @@ int32_t GregorianCalendar::handleComputeMonthStart(int32_t eyear, int32_t month,
 
 int32_t GregorianCalendar::handleGetMonthLength(int32_t extendedYear, int32_t month)  const
 {
+    // If the month is out of range, adjust it into range, and
+    // modify the extended year value accordingly.
+    if (month < 0 || month > 11) {
+        extendedYear += Math::floorDivide(month, 12, month);
+    }
+
     return isLeapYear(extendedYear) ? kLeapMonthLength[month] : kMonthLength[month];
 }
 
