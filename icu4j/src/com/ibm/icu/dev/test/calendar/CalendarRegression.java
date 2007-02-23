@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1742,6 +1742,37 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
                       dy + "y " + dm + "m " + dd + "d = " +
                       date22);
             }
+        }
+    }
+    
+    public void TestT5555() throws Exception
+    {
+        Calendar cal = Calendar.getInstance();
+        
+        // Set date to Wednesday, February 21, 2007
+        cal.set(2007, Calendar.FEBRUARY, 21);
+
+        try {
+            // Advance month by three years
+            cal.add(Calendar.MONTH, 36);
+            
+            // Move to last Wednesday of month.
+            cal.set(Calendar.DAY_OF_WEEK_IN_MONTH, -1);
+            
+            cal.getTime();
+        } catch (Exception e) {
+            errln("Got an exception calling getTime().");
+        }
+        
+        int yy, mm, dd, ee;
+        
+        yy = cal.get(Calendar.YEAR);
+        mm = cal.get(Calendar.MONTH);
+        dd = cal.get(Calendar.DATE);
+        ee = cal.get(Calendar.DAY_OF_WEEK_IN_MONTH);
+        
+        if (yy != 2010 || mm != Calendar.FEBRUARY || dd != 24 || ee != Calendar.WEDNESDAY) {
+            errln("Got date " + yy + "/" + (mm + 1) + "/" + dd + ", expected 2010/2/24");
         }
     }
 

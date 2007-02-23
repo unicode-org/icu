@@ -706,6 +706,19 @@ public class HebrewCalendar extends Calendar {
      * @stable ICU 2.8
      */
     protected int handleGetMonthLength(int extendedYear, int month) {
+        // Resolve out-of-range months.  This is necessary in order to
+        // obtain the correct year.  We correct to
+        // a 12- or 13-month year (add/subtract 12 or 13, depending
+        // on the year) but since we _always_ number from 0..12, and
+        // the leap year determines whether or not month 5 (Adar 1)
+        // is present, we allow 0..12 in any given year.
+        while (month < 0) {
+            month += monthsInYear(--extendedYear);
+        }
+        // Careful: allow 0..12 in all years
+        while (month > 12) {
+            month -= monthsInYear(extendedYear++);
+        }
 
         switch (month) {
             case HESHVAN:
