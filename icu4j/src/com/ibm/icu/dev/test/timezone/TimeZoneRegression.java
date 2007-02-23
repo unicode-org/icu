@@ -1048,6 +1048,23 @@ public class TimeZoneRegression extends TestFmwk {
         }
 //#endif
     }
+
+    /**
+     * Test setRawOffset works OK with system timezone
+     */
+    public void TestT5280() {
+        TimeZone tzTokyo = TimeZone.getTimeZone("Asia/Tokyo");
+        int newRawOffset = 28800000;
+        try {
+            tzTokyo.setRawOffset(newRawOffset);
+        } catch (Exception e) {
+            errln("FAIL: setRawOffset throws an exception");
+        }
+        int offset = tzTokyo.getRawOffset();
+        if (offset != newRawOffset) {
+            errln("FAIL: getRawOffset returns " + offset + "/ Expected: " + newRawOffset);
+        }
+    }
 }
 
 //eof
