@@ -801,6 +801,10 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Gets localized date-time pattern characters. For example: 'u', 't', etc.
+     * <p>
+     * Note: ICU no longer provides localized date-time pattern characters for a locale
+     * starting ICU 3.8.  This method returns the non-localized date-time pattern
+     * characters unless user defined localized data is set by setLocalPatternChars.
      * @return the localized date-time pattern characters.
      * @stable ICU 2.0
      */
@@ -1126,9 +1130,15 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         }
 */        
         requestedLocale = desiredLocale;
-     
+
         ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, desiredLocale);
-        localPatternChars = rb.getString("localPatternChars");
+
+        // Because localized date/time pattern characters will be obsolete in CLDR,
+        // we decided not to maintain localized pattern characters in ICU any more.
+        // We always use the base pattern characters by default. (ticket#5597)
+
+        //localPatternChars = rb.getString("localPatternChars");
+        localPatternChars = patternChars;
 
         // TODO: obtain correct actual/valid locale later
         ULocale uloc = rb.getULocale();
