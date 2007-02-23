@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2006, International Business Machines
+*   Copyright (C) 1998-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -250,6 +250,11 @@ main(int argc,
             printf("Processing file \"%s\"\n", theCurrentFileName);
         }
         processFile(arg, encoding, inputDir, outputDir, gPackageName, &status);
+    }
+
+    /* Dont return warnings as a failure */
+    if (! U_FAILURE(status)) {
+        return 0;
     }
 
     return status;
