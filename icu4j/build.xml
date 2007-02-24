@@ -2491,6 +2491,7 @@
             <fileset    dir="${build.dir}" includes="com/ibm/icu/dev/tool/tzu/**/*.class"/>
     		<fileset    dir="${build.dir}" includes="com/ibm/icu/dev/tool/UOption*.*"/>  
             <manifest>
+                <attribute name="Main-Class" value="com.ibm.icu.dev.tool.tzu.ICUTZUMain"/>
                 <attribute name="Built-By" value="${corp}"/>
                 <section name="common">
                   <attribute name="Specification-Title" value="ICU4J TimeZone Update Utility"/>

@@ -143,6 +143,7 @@ icu4j/src/com/ibm/icu/dev/tool/tzu/ICUFile.java -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/ICUJarFinder.java -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/ICUTZUMain.java -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/IncludePath.java -text
+icu4j/src/com/ibm/icu/dev/tool/tzu/Logger.java -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/PathComponent.java -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/PathModel.java -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/ResultComponent.java -text

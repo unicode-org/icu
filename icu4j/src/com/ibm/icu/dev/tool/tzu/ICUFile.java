@@ -24,7 +24,7 @@ public class ICUFile {
 
         tzVersion = findEntryTZVersion(file, insertEntry);
 
-        System.out.println("Added: " + file);
+        Logger.println("Added: " + file, Logger.NORMAL);
     }
 
     public File getFile() {
@@ -104,7 +104,7 @@ public class ICUFile {
                 ostream = new PrintStream(new FileOutputStream(backupDesc));
                 ostream.println(inputFile.toString());
             } catch (IOException ex) {
-                ex.printStackTrace();
+                // ex.printStackTrace();
                 backupFile.delete();
                 backupDesc.delete();
                 backupDir.delete();
@@ -117,8 +117,8 @@ public class ICUFile {
     }
 
     private static boolean copyFile(File inputFile, File outputFile) {
-        System.out.println("Coping from \"" + inputFile + "\" to \""
-                + outputFile + "\"");
+        Logger.println("Coping from \"" + inputFile + "\" to \"" + outputFile
+                + "\"", Logger.VERBOSE);
         InputStream istream = null;
         OutputStream ostream = null;
         byte[] buffer = new byte[BUFFER_SIZE];
@@ -134,7 +134,7 @@ public class ICUFile {
 
             success = true;
         } catch (IOException ex) {
-            ex.printStackTrace();
+            // ex.printStackTrace();
             outputFile.delete();
         } finally {
             // safely close the streams
@@ -142,13 +142,13 @@ public class ICUFile {
                 try {
                     istream.close();
                 } catch (IOException ex) {
-                    ex.printStackTrace();
+                    // ex.printStackTrace();
                 }
             if (ostream != null)
                 try {
                     ostream.close();
                 } catch (IOException ex) {
-                    ex.printStackTrace();
+                    // ex.printStackTrace();
                 }
         }
         return success;
@@ -156,8 +156,8 @@ public class ICUFile {
 
     private static boolean copyEntry(File inputFile, JarEntry inputEntry,
             File outputFile) {
-        // System.out.println("Coping from \"" + inputFile + "!/" + inputEntry +
-        // "\" to \"" + outputFile + "\"");
+        Logger.println("Coping from \"" + inputFile + "!/" + inputEntry
+                + "\" to \"" + outputFile + "\"", Logger.VERBOSE);
         JarFile jar = null;
         InputStream istream = null;
         OutputStream ostream = null;
@@ -175,7 +175,7 @@ public class ICUFile {
 
             success = true;
         } catch (IOException ex) {
-            ex.printStackTrace();
+            // ex.printStackTrace();
             outputFile.delete();
         } finally {
             // safely close the streams
@@ -183,19 +183,19 @@ public class ICUFile {
                 try {
                     jar.close();
                 } catch (IOException ex) {
-                    ex.printStackTrace();
+                    // ex.printStackTrace();
                 }
             if (istream != null)
                 try {
                     istream.close();
                 } catch (IOException ex) {
-                    ex.printStackTrace();
+                    // ex.printStackTrace();
                 }
             if (ostream != null)
                 try {
                     ostream.close();
                 } catch (IOException ex) {
-                    ex.printStackTrace();
+                    // ex.printStackTrace();
                 }
         }
         return success;
@@ -203,8 +203,8 @@ public class ICUFile {
 
     private static boolean createUpdatedJar(File inputFile, File outputFile,
             JarEntry insertEntry, URL inputURL) {
-        System.out.println("Inserting \"" + inputURL + "\" into \"" + inputFile
-                + "/" + insertEntry + "\"");
+        Logger.println("Inserting \"" + inputURL + "\" into \"" + inputFile
+                + "/" + insertEntry + "\"", Logger.VERBOSE);
         JarFile jar = null;
         JarOutputStream ostream = null;
         InputStream istream = null;
@@ -245,7 +245,7 @@ public class ICUFile {
 
             success = true;
         } catch (IOException ex) {
-            ex.printStackTrace();
+            // ex.printStackTrace();
             outputFile.delete();
         } finally {
             // safely close the streams
@@ -253,25 +253,25 @@ public class ICUFile {
                 try {
                     istream.close();
                 } catch (IOException ex) {
-                    ex.printStackTrace();
+                    // ex.printStackTrace();
                 }
             if (ostream != null)
                 try {
                     ostream.close();
                 } catch (IOException ex) {
-                    ex.printStackTrace();
+                    // ex.printStackTrace();
                 }
             if (jstream != null)
                 try {
                     jstream.close();
                 } catch (IOException ex) {
-                    ex.printStackTrace();
+                    // ex.printStackTrace();
                 }
             if (jar != null)
                 try {
                     jar.close();
                 } catch (IOException ex) {
-                    ex.printStackTrace();
+                    // ex.printStackTrace();
                 }
         }
         return success;
@@ -304,17 +304,17 @@ public class ICUFile {
             }
         } catch (IOException ex) {
             // log the unexplained i/o error, but we must drudge on
-            System.out.println("Error with " + file);
-            ex.printStackTrace();
+            Logger.println("Error with " + file, Logger.NORMAL);
+            // ex.printStackTrace();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            // ex.printStackTrace();
         } finally {
             // new Throwable().printStackTrace();
             if (jar != null)
                 try {
                     jar.close();
                 } catch (IOException ex) {
-                    ex.printStackTrace();
+                    // ex.printStackTrace();
                 }
         }
         return success;
@@ -338,7 +338,7 @@ public class ICUFile {
             copyEntry(icuFile, tzEntry, temp);
             return findTZVersion(temp);
         } catch (IOException ex) {
-            ex.printStackTrace();
+            // ex.printStackTrace();
             return null;
         }
     }
@@ -350,7 +350,7 @@ public class ICUFile {
             copyFile(tzFile, temp);
             return findTZVersion(temp);
         } catch (IOException ex) {
-            ex.printStackTrace();
+            // ex.printStackTrace();
             return null;
         }
     }
@@ -382,6 +382,7 @@ public class ICUFile {
             // not an error -- some zoneinfo files do not have a version number
             // included
         } catch (MalformedURLException ex) {
+            // this should never happen
             ex.printStackTrace();
         }
 
