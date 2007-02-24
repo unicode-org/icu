@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2003-2004, International Business Machines Corporation and   *
+* Copyright (C) 2003-2007, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -332,7 +332,7 @@ public final class XLIFF2ICUConverter {
                 System.err.println("The XLIFF document is invalid, please check it first: ");
                 System.err.println("Line "+e.getLineNumber()+", Column "+e.getColumnNumber());
                 System.err.println("Error: " + e.getMessage());
-                System.exit(0);
+                System.exit(-1);
             }
             public void fatalError(SAXParseException e) throws SAXException {
                 throw e;
