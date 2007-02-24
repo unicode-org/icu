@@ -148,17 +148,6 @@ public class ResultComponent extends JComponent {
                         .setHidden(event.getStateChange() == ItemEvent.SELECTED);
             }
         });
-
-        /*
-         * Iterator iter = sourceList.keySet().iterator(); while
-         * (iter.hasNext()) resultSourceList.addItem(iter.next());
-         * 
-         * int n = resultSourceList.getItemCount();
-         * resultSourceList.setSelectedIndex(n - 1); if (n > 1 &&
-         * resultSourceList.getSelectedItem().equals(TZ_LOCAL_CHOICE))
-         * resultSourceList.setSelectedIndex(n - 2);
-         * 
-         */
     }
 
     private URL getSelectedSource() {

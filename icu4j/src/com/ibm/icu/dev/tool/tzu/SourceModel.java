@@ -129,7 +129,7 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
 
     private TreeMap urlMap = new TreeMap();
 
-    public static final String TZ_LOCAL_CHOICE = "Local Copy";
+    public static String TZ_LOCAL_CHOICE;
 
     public static final String TZ_BASE_URLSTRING_START = "http://source.icu-project.org/repos/icu/data/trunk/tzdata/icu/";
 
@@ -148,9 +148,20 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
         // need to be try-catched
         try {
             TZ_BASE_URL = new URL(TZ_BASE_URLSTRING_START);
-            TZ_LOCAL_URL = TZ_LOCAL_FILE.toURL();
-            TZ_LOCAL_VERSION = "tobefixed"; // ICUFile.findFileTZVersion(TZ_LOCAL_FILE);
+
+            if (!TZ_LOCAL_FILE.exists()) {
+                Logger.errorln("Local copy (zoneinfo.res) does not exist.");
+            } else {
+                TZ_LOCAL_URL = TZ_LOCAL_FILE.toURL();
+                TZ_LOCAL_VERSION = ICUFile.findFileTZVersion(TZ_LOCAL_FILE);
+                if (TZ_LOCAL_VERSION == null) {
+                    Logger.errorln("Failed to determine version of local copy");
+                } else {
+                    TZ_LOCAL_CHOICE = "Local Copy (" + TZ_LOCAL_VERSION + ")";
+                }
+            }
         } catch (MalformedURLException ex) {
+            // this shouldn't happen
             ex.printStackTrace();
         }
     }

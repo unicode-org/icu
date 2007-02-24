@@ -21,17 +21,17 @@ rem Set environmental variables.
 call "%ICUTZU_HOME%runicutzuenv.bat"
 rem Double-check that JAVA_HOME is set.
 @echo Java Home: %JAVA_HOME%
-IF NOT EXIST "%JAVA_HOME%/bin/java" GOTO MissingJAVAHOME
+IF NOT EXIST "%JAVA_HOME%\bin\java.exe" GOTO MissingJAVAHOME
 
-IF EXIST "%ICUTZU_HOME%\Temp" GOTO Next
+IF EXIST "%ICUTZU_HOME%Temp" GOTO Next
 rem Create a temporary directory.
-mkdir "%ICUTZU_HOME%\Temp"
+mkdir "%ICUTZU_HOME%Temp"
 :Next
 
 rem Run the ICUTZU tool.
 @echo Launching the ICU4J Time Zone Update Utility (ICUTZU) ...
-@echo "%JAVA_HOME%\bin\java.exe" -cp "%ICUTZU_HOME%icu4j.jar";"%ICUTZU_HOME%icutzu.jar" -Dnogui=%NOGUI% -Ddiscoveronly=%DISCOVERONLY% -Dsilentpatch=%SILENTPATCH% com.ibm.icu.dev.tool.tzu.ICUTZUMain --recurse --backup "%ICUTZU_HOME%Temp"
-"%JAVA_HOME%\bin\java.exe" -cp "%ICUTZU_HOME%icu4j.jar";"%ICUTZU_HOME%icutzu.jar" -Dnogui=%NOGUI% -Ddiscoveronly=%DISCOVERONLY% -Dsilentpatch=%SILENTPATCH% com.ibm.icu.dev.tool.tzu.ICUTZUMain --recurse --backup "%ICUTZU_HOME%Temp"
+@echo "%JAVA_HOME%\bin\java.exe" -cp "%ICUTZU_HOME%icu4j.jar";"%ICUTZU_HOME%icutzu.jar" -Dnogui=%NOGUI% -Ddiscoveronly=%DISCOVERONLY% -Dsilentpatch=%SILENTPATCH% com.ibm.icu.dev.tool.tzu.ICUTZUMain --recurse --backup "%ICUTZU_HOME%Temp" %1 %2 %3 %4 %5 %6 %7 %8 %9
+"%JAVA_HOME%\bin\java.exe" -cp "%ICUTZU_HOME%icu4j.jar";"%ICUTZU_HOME%icutzu.jar" -Dnogui=%NOGUI% -Ddiscoveronly=%DISCOVERONLY% -Dsilentpatch=%SILENTPATCH% com.ibm.icu.dev.tool.tzu.ICUTZUMain --recurse --backup "%ICUTZU_HOME%Temp" %1 %2 %3 %4 %5 %6 %7 %8 %9
 
 GOTO Exit
 

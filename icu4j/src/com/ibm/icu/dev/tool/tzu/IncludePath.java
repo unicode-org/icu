@@ -7,7 +7,7 @@
 
 package com.ibm.icu.dev.tool.tzu;
 
-import java.io.*;
+import java.io.File;
 
 public class IncludePath {
     public IncludePath(File path, boolean include) {

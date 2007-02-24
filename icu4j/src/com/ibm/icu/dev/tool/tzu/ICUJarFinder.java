@@ -29,14 +29,14 @@ public class ICUJarFinder {
         if (backupDir != null)
             excluded.add(backupDir);
 
-        System.out.println("*************");
-        System.out.println("Included:");
+        Logger.println("*************", Logger.NORMAL);
+        Logger.println("Included:", Logger.NORMAL);
         for (int i = 0; i < included.size(); i++)
-            System.out.println(included.get(i));
-        System.out.println("Excluded:");
+            Logger.println(included.get(i), Logger.NORMAL);
+        Logger.println("Excluded:", Logger.NORMAL);
         for (int i = 0; i < excluded.size(); i++)
-            System.out.println(excluded.get(i));
-        System.out.println("*************");
+            Logger.println(excluded.get(i), Logger.NORMAL);
+        Logger.println("*************", Logger.NORMAL);
 
         for (int i = 0; i < included.size(); i++)
             search(resultModel, (File) included.get(i), excluded, subdirs, true);
@@ -60,7 +60,7 @@ public class ICUJarFinder {
                     // if it's not an ICU file we care about, ignore it
                 }
             } else if (file.isDirectory() && (subdirs || firstdip)) {
-                System.out.println(file);
+                Logger.println(file, Logger.NORMAL);
                 File[] dirlist = file.listFiles();
                 if (dirlist != null)
                     for (int i = 0; i < dirlist.length; i++)

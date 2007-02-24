@@ -78,7 +78,7 @@ public class GUILoader {
 
         workerThread = new Thread(new Runnable() {
             public void run() {
-                System.out.println("Search started.");
+                Logger.println("Search started.", Logger.NORMAL);
                 setCancelSearchEnabled(true);
                 setUpdateEnabled(false);
                 setSearchEnabled(false);
@@ -91,7 +91,7 @@ public class GUILoader {
                 setSearchEnabled(true);
                 setUpdateEnabled(true);
                 setCancelSearchEnabled(false);
-                System.out.println("Search ended.");
+                Logger.println("Search ended.", Logger.NORMAL);
             }
         });
 
@@ -103,7 +103,7 @@ public class GUILoader {
 
         workerThread = new Thread(new Runnable() {
             public void run() {
-                System.out.println("Search started.");
+                Logger.println("Search started.", Logger.NORMAL);
                 setCancelSearchEnabled(true);
                 setUpdateEnabled(false);
                 setSearchEnabled(false);
@@ -116,7 +116,7 @@ public class GUILoader {
                 setSearchEnabled(true);
                 setUpdateEnabled(true);
                 setCancelSearchEnabled(false);
-                System.out.println("Search ended.");
+                Logger.println("Search ended.", Logger.NORMAL);
             }
         });
 
@@ -128,7 +128,7 @@ public class GUILoader {
 
         workerThread = new Thread(new Runnable() {
             public void run() {
-                System.out.println("Update started.");
+                Logger.println("Update started.", Logger.NORMAL);
                 setCancelUpdateEnabled(true);
                 setUpdateEnabled(false);
                 setSearchEnabled(false);
@@ -139,7 +139,7 @@ public class GUILoader {
                 setUpdateEnabled(true);
                 setSearchEnabled(true);
                 setCancelUpdateEnabled(false);
-                System.out.println("Update ended.");
+                Logger.println("Update ended.", Logger.NORMAL);
             }
         });
 
@@ -151,7 +151,7 @@ public class GUILoader {
 
         workerThread = new Thread(new Runnable() {
             public void run() {
-                System.out.println("Update started.");
+                Logger.println("Update started.", Logger.NORMAL);
                 setCancelUpdateEnabled(true);
                 setUpdateEnabled(false);
                 setSearchEnabled(false);
@@ -162,7 +162,7 @@ public class GUILoader {
                 setUpdateEnabled(true);
                 setSearchEnabled(true);
                 setCancelUpdateEnabled(false);
-                System.out.println("Update ended.");
+                Logger.println("Update ended.", Logger.NORMAL);
             }
         });
 

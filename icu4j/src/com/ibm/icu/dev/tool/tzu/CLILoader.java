@@ -30,6 +30,14 @@ public class CLILoader {
             // parse the arguments using UOption.parseArgs
             int argsleft = UOption.parseArgs(args, options);
 
+            // set the logging options
+            if (options[QUIET].doesOccur)
+                Logger.setVerbosity(Logger.QUIET);
+            else if (options[VERBOSE].doesOccur)
+                Logger.setVerbosity(Logger.VERBOSE);
+            else
+                Logger.setVerbosity(Logger.NORMAL);
+
             // if help is specified, show the help specs and do nothing else
             if (options[HELP].doesOccur) {
                 showHelp();
@@ -60,6 +68,10 @@ public class CLILoader {
             if (options[QUIET].doesOccur)
                 options[AUTO].doesOccur = true;
 
+            // discoveronly implies auto
+            if (options[DISCOVERONLY].doesOccur)
+                options[AUTO].doesOccur = true;
+
             // auto implies best if no preference specified
             if (options[AUTO].doesOccur && choiceType == 0) {
                 options[BEST].doesOccur = true;
@@ -70,21 +82,29 @@ public class CLILoader {
             if (options[BACKUP].doesOccur)
                 backupDir = new File(options[BACKUP].value);
 
+            // if we're running offline and the local file doesnt exist, we
+            // can't update squat
+            if (options[OFFLINE].doesOccur
+                    && !SourceModel.TZ_LOCAL_FILE.exists()
+                    && !options[DISCOVERONLY].doesOccur)
+                throw new IllegalArgumentException(
+                        "Running offline mode but local file does not exist (no sources available)");
+
             // if the user did not specify to stay offline, go online and find
             // zoneinfo.res files
             if (!options[OFFLINE].doesOccur)
                 sourceModel.findSources();
 
-            // load paths from the directory search file
+            // load paths stored in the directory search file
             pathModel.loadPaths();
 
             // search the paths for updatable icu4j files
             try {
-                System.out.println("Search started.");
+                Logger.println("Search started.", Logger.NORMAL);
                 pathModel.searchAll(options[RECURSE].doesOccur, backupDir);
-                System.out.println("Search done.");
+                Logger.println("Search done.", Logger.NORMAL);
             } catch (InterruptedException ex) {
-                System.out.println("Search interrupted.");
+                Logger.println("Search interrupted.", Logger.NORMAL);
             }
 
             // get the name and url associated with the update mode (or null if
@@ -105,6 +125,7 @@ public class CLILoader {
                 chosenVersion = getTZVersionVersion(options[TZVERSION].value);
                 chosenURL = getTZVersionURL(options[TZVERSION].value);
             }
+            // (do nothing in the case of DISCOVERONLY)
 
             // create a reader for user input
             BufferedReader reader = new BufferedReader(new InputStreamReader(
@@ -115,24 +136,26 @@ public class CLILoader {
             while (resultIter.hasNext()) {
                 try {
                     ICUFile entry = (ICUFile) resultIter.next();
-                    System.out.println();
-                    System.out.println("Filename:  "
-                            + entry.getFile().getName());
-                    System.out.println("Location:  "
-                            + entry.getFile().getParent());
-                    System.out.println("Current Version: "
-                            + entry.getTZVersion());
+                    Logger.println("", Logger.NORMAL);
+                    Logger.println("Filename:  " + entry.getFile().getName(),
+                            Logger.NORMAL);
+                    Logger.println("Location:  " + entry.getFile().getParent(),
+                            Logger.NORMAL);
+                    Logger.println("Current Version: " + entry.getTZVersion(),
+                            Logger.NORMAL);
 
                     if (!entry.getFile().canRead()
                             || !entry.getFile().canWrite()) {
-                        System.out.println("Missing permissions for "
-                                + entry.getFile().getName() + ".");
+                        Logger.println("Missing permissions for "
+                                + entry.getFile().getName() + ".",
+                                Logger.NORMAL);
                         continue;
                     }
 
                     if (options[AUTO].doesOccur) // automatic mode
                     {
-                        update(entry, chosenName, chosenURL);
+                        if (!options[DISCOVERONLY].doesOccur)
+                            update(entry, chosenName, chosenURL);
                     } else if (choiceType == 1) // confirmation mode
                     {
                         String input = askConfirm(chosenName, chosenVersion,
@@ -157,65 +180,70 @@ public class CLILoader {
                             skipUpdate();
                     }
                 } catch (IOException ex) {
-                    // error in command-line input
-                    ex.printStackTrace();
+                    // error in command-line input ???
+                    Logger.errorln("Error in command-line input.");
                 }
             }
 
-            System.out.println();
-            System.out.println("ICUTZU finished successfully.");
+            Logger.println("", Logger.NORMAL);
+            Logger.println("ICUTZU finished successfully.", Logger.NORMAL);
         } catch (IllegalArgumentException ex) {
-            System.out.println(ex);
+            Logger.errorln(ex.getMessage());
             return;
         }
     }
 
     private String askConfirm(String chosenString, String chosenVersion,
             String currentVersion, BufferedReader reader) throws IOException {
-        int betterness = 1; // chosenString.compareToIgnoreCase(currentVersion);
+        int betterness = chosenVersion.compareToIgnoreCase(currentVersion);
         if (betterness == 0) {
-            System.out.println("Updating should have no effect on this file.");
-            System.out.print("Update anyway?");
+            Logger.println("Updating should have no effect on this file.",
+                    Logger.NORMAL);
+            Logger.println("Update anyway?", Logger.NORMAL);
         } else if (betterness < 0) {
-            System.out
-                    .println("Warning: The version specified is older than the one present in the file.");
-            System.out.print("Update anyway?");
+            Logger
+                    .println(
+                            "Warning: The version specified is older than the one present in the file.",
+                            Logger.NORMAL);
+            Logger.println("Update anyway?", Logger.NORMAL);
         } else {
-            System.out.print("Update to " + chosenVersion + "?");
+            Logger.println("Update to " + chosenVersion + "?", Logger.NORMAL);
         }
 
-        System.out.print(" [yes (default), no]\n: ");
+        Logger.println(" [yes (default), no]\n: ", Logger.NORMAL);
         return reader.readLine().trim().toLowerCase();
     }
 
     private String askChoice(BufferedReader reader) throws IOException {
-        System.out.print("Available Versions: ");
+        Logger.println("Available Versions: ", Logger.NORMAL);
         Iterator sourceIter = sourceModel.iterator();
 
-        if (sourceIter.hasNext())
-            System.out.print(((Map.Entry) sourceIter.next()).getKey());
+        Logger.println(getLocalName(), Logger.NORMAL);
         while (sourceIter.hasNext())
-            System.out.print(", " + ((Map.Entry) sourceIter.next()).getKey());
+            Logger.println(", " + ((Map.Entry) sourceIter.next()).getKey(),
+                    Logger.NORMAL);
+        Logger.println("", Logger.NORMAL);
 
-        System.out.println();
-        System.out
-                .println("Update Version? [best (default), <specific version>, local copy, none]");
-        System.out.print(": ");
+        Logger
+                .println(
+                        "Update to which version? [best (default), none, local copy, <specific version above>]",
+                        Logger.NORMAL);
+        Logger.println(": ", Logger.NORMAL);
         return reader.readLine().trim().toLowerCase();
     }
 
     private void update(ICUFile entry, String chosenString, URL url) {
-        System.out.println("Updating to " + chosenString + "...");
+        Logger.println("Updating to " + chosenString + "...", Logger.NORMAL);
         try {
             entry.updateJar(url, backupDir);
-            System.out.println("Update done.");
+            Logger.println("Update done.", Logger.NORMAL);
         } catch (IOException ex) {
-            System.err.println(ex);
+            Logger.error("Could not update " + entry.getFile().getName());
         }
     }
 
     private void skipUpdate() {
-        System.out.println("Update skipped.");
+        Logger.println("Update skipped.", Logger.NORMAL);
     }
 
     private String getBestName() {
@@ -261,7 +289,7 @@ public class CLILoader {
     }
 
     private static void showHelp() {
-        System.out.println("Help!");
+        Logger.println("Help!", Logger.NORMAL);
     }
 
     private static void syntaxError(String message) {
