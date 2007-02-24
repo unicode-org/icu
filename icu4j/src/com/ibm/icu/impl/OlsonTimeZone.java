@@ -8,12 +8,11 @@ package com.ibm.icu.impl;
 
 import java.util.Date;
 
-import com.ibm.icu.impl.Grego;
-
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
 /**
@@ -165,8 +164,18 @@ public class OlsonTimeZone extends TimeZone {
      * @see com.ibm.icu.util.TimeZone#setRawOffset(int)
      */
     public void setRawOffset(int offsetMillis) {
+        GregorianCalendar cal = new GregorianCalendar(ULocale.ROOT);
+        cal.setTimeZone(this);
+        int currentYear = cal.get(Calendar.YEAR);
+
+        // Apply the raw offset starting current year and beyond
+        if (finalYear > currentYear) {
+            finalYear = currentYear;
+            finalMillis = fieldsToDay(currentYear, 0, 1) * TimeZone.MILLIS_PER_DAY;
+        }
         if (finalZone == null) {
-            finalRawOffset = new Integer(offsetMillis);
+            // Create SimpleTimeZone instance to store the offset
+            finalZone = new SimpleTimeZone(offsetMillis, getID());
         } else {
             finalZone.setRawOffset(offsetMillis);
         }
@@ -223,14 +232,6 @@ public class OlsonTimeZone extends TimeZone {
 
         double secs = Math.floor(date / MILLIS_PER_SECOND);
         getHistoricalOffset(secs, local, offsets);
-
-        if (finalRawOffset != null) {
-            // When raw offset is set by setRawOffset and no "finalZone" available,
-            // finalRawOffset store the offset.  setRawOffset no longer makes sense
-            // in OlsonTimeZone, but it's a public API and need to do something
-            // reasonable.
-            offsets[0] = finalRawOffset.intValue();
-        }
         return;
     }
     double[] floorDivide(double dividend, double divisor) {
@@ -636,15 +637,6 @@ public class OlsonTimeZone extends TimeZone {
      */
     private SimpleTimeZone finalZone = null; // owned, may be NULL
  
-    /**
-     * When absense of finalZone, finalRawOffset stores user defined
-     * raw offset set by setRawOffset.  This timezone implementation
-     * supports historical transitions, so setting raw offset does
-     * not make sense much.  However, we need to make the API
-     * setRawOffset/getRawOffset work reasonably (ticket#5280)
-     */
-    private Integer finalRawOffset = null;
-
     private static final boolean DEBUG = ICUDebug.enabled("olson");
     private static final int[] DAYS_BEFORE = new int[] {0,31,59,90,120,151,181,212,243,273,304,334,
                                            0,31,60,91,121,152,182,213,244,274,305,335};
