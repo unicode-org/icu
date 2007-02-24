@@ -1053,16 +1053,26 @@ public class TimeZoneRegression extends TestFmwk {
      * Test setRawOffset works OK with system timezone
      */
     public void TestT5280() {
-        TimeZone tzTokyo = TimeZone.getTimeZone("Asia/Tokyo");
-        int newRawOffset = 28800000;
-        try {
-            tzTokyo.setRawOffset(newRawOffset);
-        } catch (Exception e) {
-            errln("FAIL: setRawOffset throws an exception");
-        }
-        int offset = tzTokyo.getRawOffset();
-        if (offset != newRawOffset) {
-            errln("FAIL: getRawOffset returns " + offset + "/ Expected: " + newRawOffset);
+        String[] tzids = TimeZone.getAvailableIDs();
+        for (int i = 0; i < tzids.length; i++) {
+            TimeZone tz = TimeZone.getTimeZone(tzids[i]);
+            // Increse offset for 30 minutes
+            int newRawOffset = tz.getRawOffset() + 30*60*1000;
+            try {
+                tz.setRawOffset(newRawOffset);
+            } catch (Exception e) {
+                errln("FAIL: setRawOffset throws an exception");
+            }
+            int offset = tz.getRawOffset();
+            if (offset != newRawOffset) {
+                errln("FAIL: Modified zone(" + tz.getID() + ") - getRawOffset returns " + offset + "/ Expected: " + newRawOffset);
+            }
+            // Make sure the offset is preserved in a clone
+            TimeZone tzClone = (TimeZone)tz.clone();
+            offset = tzClone.getRawOffset();
+            if (offset != newRawOffset) {
+                errln("FAIL: Cloned modified zone(" + tz.getID() + ") - getRawOffset returns " + offset + "/ Expected: " + newRawOffset);
+            }
         }
     }
 }
