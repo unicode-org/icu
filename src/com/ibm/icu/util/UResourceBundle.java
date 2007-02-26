@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -8,17 +8,13 @@
 package com.ibm.icu.util;
 
 import java.lang.ref.SoftReference;
-import java.nio.ByteBuffer;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-import java.util.Vector;
 
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.ICUResourceBundleImpl;
 import com.ibm.icu.impl.ICUResourceBundleReader;
 import com.ibm.icu.impl.ResourceBundleWrapper;
 import com.ibm.icu.util.ULocale;
