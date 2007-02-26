@@ -8,13 +8,17 @@
 package com.ibm.icu.util;
 
 import java.lang.ref.SoftReference;
+import java.nio.ByteBuffer;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.Vector;
 
 import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.ICUResourceBundleImpl;
 import com.ibm.icu.impl.ICUResourceBundleReader;
 import com.ibm.icu.impl.ResourceBundleWrapper;
 import com.ibm.icu.util.ULocale;
@@ -277,17 +281,21 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @internal revisit for ICU 3.6
      * @deprecated This API is ICU internal only.
      */
-    protected static synchronized void addToCache(ClassLoader cl, String fullName, ULocale defaultLocale,  UResourceBundle b){
-        cacheKey.setKeyValues(cl, fullName, defaultLocale);
-        addToCache((ResourceCacheKey)cacheKey.clone(), b);
+    protected static void addToCache(ClassLoader cl, String fullName, ULocale defaultLocale,  UResourceBundle b){
+        synchronized(cacheKey){
+            cacheKey.setKeyValues(cl, fullName, defaultLocale);
+            addToCache((ResourceCacheKey)cacheKey.clone(), b);
+        }
     }
     /**
      * @internal revisit for ICU 3.6
      * @deprecated This API is ICU internal only.
      */
-    protected static synchronized UResourceBundle loadFromCache(ClassLoader cl, String fullName, ULocale defaultLocale){
-        cacheKey.setKeyValues(cl, fullName, defaultLocale);
-        return loadFromCache(cacheKey);
+    protected static UResourceBundle loadFromCache(ClassLoader cl, String fullName, ULocale defaultLocale){
+        synchronized(cacheKey){
+            cacheKey.setKeyValues(cl, fullName, defaultLocale);
+            return loadFromCache(cacheKey);
+        }
     }
     private static UResourceBundle loadFromCache(ResourceCacheKey key) {
         if (BUNDLE_CACHE != null) {
@@ -364,7 +372,7 @@ public abstract class UResourceBundle extends ResourceBundle{
             }
         }
         ///CLOVER:ON
-        private void setKeyValues(ClassLoader root, String searchName, ULocale defaultLocale) {
+        private synchronized void setKeyValues(ClassLoader root, String searchName, ULocale defaultLocale) {
             this.searchName = searchName;
             hashCodeCache = searchName.hashCode();
             this.defaultLocale = defaultLocale;
@@ -378,11 +386,9 @@ public abstract class UResourceBundle extends ResourceBundle{
                 hashCodeCache ^= root.hashCode();
             }
         }
-        ///CLOVER:OFF
-        private void clear() {
+        /*private void clear() {
             setKeyValues(null, "", null);
-        }
-        ///CLOVER:ON
+        }*/
     }
     
     private static final ResourceCacheKey cacheKey = new ResourceCacheKey();
@@ -411,14 +417,13 @@ public abstract class UResourceBundle extends ResourceBundle{
         
         if (rootType == null) {
             String rootLocale = (baseName.indexOf('.')==-1) ? "root" : "";
-            int rt = ROOT_MISSING;
-            UResourceBundle b = null;  
+            int rt = ROOT_MISSING; // value set on success
             try{
-                b = ICUResourceBundle.getBundleInstance(baseName, rootLocale, root, true);
+                ICUResourceBundle.getBundleInstance(baseName, rootLocale, root, true);
                 rt = ROOT_ICU; 
             }catch(MissingResourceException ex){
                 try{
-                    b = ResourceBundleWrapper.getBundleInstance(baseName, rootLocale, root, true);
+                    ResourceBundleWrapper.getBundleInstance(baseName, rootLocale, root, true);
                     rt = ROOT_JAVA;
                 }catch(MissingResourceException e){
                     //throw away the exception
@@ -459,9 +464,8 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @return a resource bundle for the given base name and locale
      * @stable ICU 3.0
      */
-    protected static synchronized UResourceBundle instantiateBundle(
-        String baseName, String localeName, ClassLoader root, boolean disableFallback)
-    {
+    protected static UResourceBundle instantiateBundle(String baseName, String localeName, 
+                                                       ClassLoader root, boolean disableFallback){
         UResourceBundle b = null;
         int rootType = getRootType(baseName, root);
 
@@ -472,13 +476,14 @@ public abstract class UResourceBundle extends ResourceBundle{
         case ROOT_ICU:
             if(disableFallback) {
                 String fullName = ICUResourceBundleReader.getFullName(baseName, localeName);        
-                
-                cacheKey.setKeyValues(root, fullName, defaultLocale);
-                b = loadFromCache(cacheKey);
+                synchronized(cacheKey){
+                    cacheKey.setKeyValues(root, fullName, defaultLocale);
+                    b = loadFromCache(cacheKey);     
+                }
                 
                 if (b == null) {
                     b = ICUResourceBundle.getBundleInstance(baseName, localeName, root, disableFallback);
-                    cacheKey.setKeyValues(root, fullName, defaultLocale);
+                    //cacheKey.setKeyValues(root, fullName, defaultLocale);
                     addToCache(cacheKey, b);
                 }
             } else {
@@ -501,7 +506,7 @@ public abstract class UResourceBundle extends ResourceBundle{
             return b;
         }
     }
-    
+
     /**
      * @internal
      * @deprecated This API is ICU internal only.

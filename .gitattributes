@@ -103,8 +103,12 @@ src/com/ibm/icu/dev/tool/docs/icu4j34.api.gz -text
 src/com/ibm/icu/dev/tool/docs/icu4j341.api.gz -text
 src/com/ibm/icu/dev/tool/docs/icu4j342.api.gz -text
 src/com/ibm/icu/dev/tool/docs/icu4j343.api.gz -text
+src/com/ibm/icu/impl/DateNumberFormat.java -text
+src/com/ibm/icu/impl/ICUCache.java -text
+src/com/ibm/icu/impl/SimpleCache.java -text
 src/com/ibm/icu/impl/data/icudata.jar -text
 src/com/ibm/icu/impl/data/th.brk -text
+src/com/ibm/icu/util/CalendarServiceShim.java -text
 src/com/ibm/richtext/textapps/resources/unicode.arabic.red -text
 src/com/ibm/richtext/textapps/resources/unicode.hebrew.red -text
 

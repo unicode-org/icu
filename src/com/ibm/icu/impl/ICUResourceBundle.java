@@ -209,7 +209,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
      * Returns a string from a string resource type
      *
      * @return a string
-     * @see #getBinary
+     * @see #getBinary()
      * @see #getIntVector
      * @see #getInt
      * @throws MissingResourceException
@@ -227,7 +227,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
         throw new UResourceTypeMismatchException("");
     }
 
-    /**
+    /*
      * Returns a string from a string resource type
      * @param key The key whose values needs to be fetched
      * @return a string
@@ -277,7 +277,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
      * Returns a 32 bit integer array from a resource.
      *
      * @return a pointer to a chunk of unsigned bytes which live in a memory mapped/DLL file.
-     * @see #getBinary
+     * @see #getBinary()
      * @see #getInt
      * @throws MissingResourceException
      * @throws UResourceTypeMismatchException
@@ -292,7 +292,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
      *
      * @return an integer value
      * @see #getIntVector
-     * @see #getBinary
+     * @see #getBinary()
      * @throws MissingResourceException
      * @throws UResourceTypeMismatchException
      * @stable ICU 2.0
@@ -307,7 +307,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
      *
      * @return an integer value
      * @see #getIntVector
-     * @see #getBinary
+     * @see #getBinary()
      * @throws MissingResourceException
      * @throws UResourceTypeMismatchException
      * @stable ICU 2.0
@@ -656,8 +656,8 @@ public abstract class ICUResourceBundle extends UResourceBundle {
      * accessed, then do: <code>
      *  UResourceBundle bundle = UResourceBundle.getBundleInstance("de__PHONEBOOK");
      *  ICUResourceBundle result = null;
-     *  if(bundle instanceof ICUListResourceBundle){
-     *      result = ((ICUListResourceBundle) bundle).getWithFallback("collations/default");
+     *  if(bundle instanceof ICUResourceBundle){
+     *      result = ((ICUResourceBundle) bundle).getWithFallback("collations/default");
      *  }
      * </code>
      * 
@@ -930,7 +930,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
         // all. gotta be a better way to do this, since to add a locale you have
         // to update this list,
         // and it's embedded in our binary resources.
-        ICUResourceBundle bundle = (ICUResourceBundle) createBundle(baseName, ICU_RESOURCE_INDEX, root);
+        ICUResourceBundle bundle = (ICUResourceBundle) UResourceBundle.instantiateBundle(baseName, ICU_RESOURCE_INDEX, root, true);
         
         bundle = bundle.get(INSTALLED_LOCALES);
         int length = bundle.getSize();
@@ -952,7 +952,7 @@ public abstract class ICUResourceBundle extends UResourceBundle {
 
     private static final String[] createLocaleNameArray(String baseName,
             ClassLoader root) {
-        ICUResourceBundle bundle = (ICUResourceBundle) createBundle( baseName, ICU_RESOURCE_INDEX, root);
+        ICUResourceBundle bundle = (ICUResourceBundle) UResourceBundle.instantiateBundle( baseName, ICU_RESOURCE_INDEX, root, true);
         bundle = bundle.get(INSTALLED_LOCALES);
         int length = bundle.getSize();
         int i = 0;
