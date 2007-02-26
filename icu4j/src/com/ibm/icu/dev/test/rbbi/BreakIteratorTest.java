@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -819,6 +819,28 @@ public class BreakIteratorTest extends TestFmwk
         expected.add("like ");
         expected.add("them?");
         generalIteratorTest(lineBreak, expected);
+    }
+
+    /**
+     * Ticket#5615
+     */
+    public void TestT5615() {
+        com.ibm.icu.util.ULocale[] ulocales = BreakIterator.getAvailableULocales();
+        int type = 0;
+        com.ibm.icu.util.ULocale loc = null;
+        try {
+            for (int i = 0; i < ulocales.length; i++) {
+                loc = ulocales[i];
+                for (type = 0; type <= 4; ++type) {
+                    BreakIterator brk = BreakIterator.getBreakInstance(loc, type);
+                    if (brk == null) {
+                        errln("ERR: Failed to create an instance type: " + type + " / locale: " + loc);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            errln("ERR: Failed to create an instance type: " + type + " / locale: " + loc + " / exception: " + e.getMessage());
+        }
     }
 }
 
