@@ -1,6 +1,7 @@
-/*
-* Copyright (C) {1997-2005}, International Business Machines Corporation and others. All Rights Reserved.
-********************************************************************************
+/*************************************************************************
+* Copyright (c) 1997-2007, International Business Machines Corporation
+* and others. All Rights Reserved.
+**************************************************************************
 *
 * File TIMEZONE.H
 *
@@ -20,7 +21,7 @@
 *                           Hashtable replaced by new static data structures.
 *   12/14/99    aliu        Made GMT public.
 *   08/15/01    grhoten     Made GMT private and added the getGMT() function
-********************************************************************************
+**************************************************************************
 */
 
 #ifndef TIMEZONE_H
@@ -305,7 +306,7 @@ public:
     static TimeZone* U_EXPORT2 createDefault(void);
 
     /**
-     * Sets the default time zone (i.e., what's returned by getDefault()) to be the
+     * Sets the default time zone (i.e., what's returned by createDefault()) to be the
      * specified time zone.  If NULL is specified for the time zone, the default time
      * zone is set to the default host time zone.  This call adopts the TimeZone object
      * passed in; the clent is no longer responsible for deleting it.

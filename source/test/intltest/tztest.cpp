@@ -90,7 +90,7 @@ TimeZoneTest::TestGenericAPI()
 
     TimeZone* saveDefault = TimeZone::createDefault();
     logln((UnicodeString)"TimeZone::createDefault() => " + saveDefault->getID(id));
-    //TimeZone* pstZone = TimeZone::createTimeZone("PST");
+    TimeZone* pstZone = TimeZone::createTimeZone("America/Los_Angeles");
 
     logln("call uprv_timezone() which uses the host");
     logln("to get the difference in seconds between coordinated universal");
@@ -101,17 +101,12 @@ TimeZoneTest::TestGenericAPI()
     // Invert sign because UNIX semantics are backwards
     if (tzoffset < 0)
         tzoffset = -tzoffset;
-    // --- The following test would fail outside PST now that
-    // --- PST is generally set to be default timezone in format tests
-    //if ((*saveDefault == *pstZone) && (tzoffset != 28800)) {
-    //  errln("FAIL: t_timezone may be incorrect.  It is not 28800");
-    //}
-
-    if (tzoffset != 28800) {
-        logln("***** WARNING: If testing in the PST timezone, uprv_timezone should return 28800! *****");
+    if ((*saveDefault == *pstZone) && (tzoffset != 28800)) {
+        errln("FAIL: t_timezone may be incorrect.  It is not 28800");
     }
-    if ((tzoffset % 1800 != 0)) {
-      errln("FAIL: t_timezone may be incorrect. It is not a multiple of 30min. It is %d", tzoffset);
+
+    if ((tzoffset % 900) != 0) {
+        errln("FAIL: t_timezone may be incorrect. It is not a multiple of 15min. It is %d", tzoffset);
     }
 
     TimeZone::adoptDefault(zone);
@@ -122,7 +117,7 @@ TimeZoneTest::TestGenericAPI()
     TimeZone::adoptDefault(saveDefault);
     delete defaultzone;
     delete zoneclone;
-    //delete pstZone;
+    delete pstZone;
 }
 
 // ---------------------------------------------------------------------------------
