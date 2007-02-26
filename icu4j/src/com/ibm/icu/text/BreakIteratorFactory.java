@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -107,9 +107,9 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
 
 
     private static BreakIterator createBreakInstance(ULocale locale, int kind) {
-        
+
         BreakIterator    iter       = null;
-        UResourceBundle  rb         = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BRKITR_BASE_NAME, locale);
+        ICUResourceBundle rb        = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BRKITR_BASE_NAME, locale);
         
         //
         //  Get the binary rules.  These are needed for both normal RulesBasedBreakIterators
@@ -117,9 +117,8 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
         //
         InputStream      ruleStream = null;
         try {
-            ResourceBundle boundaries    = (ResourceBundle)rb.getObject("boundaries"); 
             String         typeKey       = KIND_NAMES[kind];
-            String         brkfname      = boundaries.getString(typeKey);
+            String         brkfname      = rb.getStringWithFallback("boundaries/" + typeKey);
             String         rulesFileName = ICUResourceBundle.ICU_BUNDLE +ICUResourceBundle.ICU_BRKITR_NAME+ "/" + brkfname;
                            ruleStream    = ICUData.getStream(rulesFileName);
         }
