@@ -1180,6 +1180,15 @@ ucnv_fromUnicode(UConverter *cnv,
     s=*source;
     t=*target;
 
+    if ((const void *)U_MAX_PTR(sourceLimit) == (const void *)sourceLimit) {
+        /*
+        Prevent code from going into an infinite loop in case we do hit this
+        limit. The limit pointer is expected to be on a UChar * boundary.
+        This also prevents the next argument check from failing.
+        */
+        sourceLimit = (const UChar *)(((const char *)sourceLimit) - 1);
+    }
+
     /*
      * All these conditions should never happen.
      *
@@ -1613,6 +1622,15 @@ ucnv_toUnicode(UConverter *cnv,
 
     s=*source;
     t=*target;
+
+    if ((const void *)U_MAX_PTR(targetLimit) == (const void *)targetLimit) {
+        /*
+        Prevent code from going into an infinite loop in case we do hit this
+        limit. The limit pointer is expected to be on a UChar * boundary.
+        This also prevents the next argument check from failing.
+        */
+        targetLimit = (const UChar *)(((const char *)targetLimit) - 1);
+    }
 
     /*
      * All these conditions should never happen.
