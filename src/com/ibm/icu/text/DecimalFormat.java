@@ -1,7 +1,7 @@
 //##header
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -2506,16 +2506,23 @@ public class DecimalFormat extends NumberFormat {
      * @see #setRoundingMode
      * @stable ICU 2.0
      */
-//#ifndef FOUNDATION
+//#ifdef FOUNDATION
+//##    public BigDecimal getRoundingIncrement() {
+//##        if (roundingIncrementICU == null) return null;
+//##        return new BigDecimal(roundingIncrementICU.toString());
+//##    }
+//#else
+//#ifdef ECLIPSE_FRAGMENT
+//##    public BigDecimal getRoundingIncrement() {
+//##        if (roundingIncrementICU == null) return null;
+//##        return new BigDecimal(roundingIncrementICU.toString());
+//##    }
+//#else
     public java.math.BigDecimal getRoundingIncrement() {
         if (roundingIncrementICU == null) return null;
         return roundingIncrementICU.toBigDecimal();
     }
-//#else
-//##    public BigDecimal getRoundingIncrement() {
-//##    	if (roundingIncrementICU == null) return null;
-//##        return new BigDecimal(roundingIncrementICU.toString());
-//##    }
+//#endif
 //#endif
     
 //#ifndef FOUNDATION
