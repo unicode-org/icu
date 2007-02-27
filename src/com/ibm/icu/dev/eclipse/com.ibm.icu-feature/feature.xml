@@ -2,7 +2,7 @@
 <feature
       id="com.ibm.icu"
       label="com.ibm.icu"
-      version="3.6">
+      version="@BUILD_VERSION@">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]
@@ -20,13 +20,13 @@
          id="com.ibm.icu"
          download-size="0"
          install-size="0"
-         version="3.6"
+         version="@BUILD_VERSION@"
          unpack="false"/>
 
    <plugin
          id="com.ibm.icu.source"
          download-size="0"
          install-size="0"
-         version="3.6"/>
+         version="@BUILD_VERSION@"/>
 
 </feature>

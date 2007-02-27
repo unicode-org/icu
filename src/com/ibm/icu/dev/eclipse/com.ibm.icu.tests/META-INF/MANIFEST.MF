@@ -10,4 +10,4 @@ Bundle-Copyright: Licensed Materials - Property of IBM
  (C) Copyright IBM Corp. 2000-2006. All Rights Reserved. 
  IBM is a registered trademark of IBM Corp.
 Require-Bundle: org.junit
-Bundle-ClassPath: icu4jtests.jar
+Bundle-ClassPath: .,icu4jtests.jar

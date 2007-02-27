@@ -87,9 +87,9 @@
         <property name="jar.file" value="icu4j.jar"/>
         <property name="charsets.jar.file" value="icu4j-charsets.jar"/>
         <property name="jarSrc.file" value="icu4jsrc.jar"/>
-        <property name="zipCoreSrc.file" value="icu4jcsrc.zip"/>
         <property name="zipTestSrc.file" value="icu4jtsrc.zip"/>
         <property name="jdk.wrapper.jar.file" value="icu4jwrapper.jar"/>
+        <property name="fragment.jar.file" value="icu4jfragment.jar"/>
         <property name="eclipse.dir" value="${src.dir}/com/ibm/icu/dev/eclipse"/>
         <property name="eclipse.projects.dir" value="eclipseProjects"/>
         <property name="wrapper.build.dir" value="classes.wrapper"/>
@@ -792,9 +792,9 @@
 
         <delete dir="${eclipse.projects.dir}"/>
         <delete dir="${wrapper.build.dir}"/>
-        <delete file="${zipCoreSrc.file}"/>
         <delete file="${zipTestSrc.file}"/>
         <delete file="${jdk.wrapper.jar.file}"/>
+        <delete file="${fragment.jar.file}"/>
     </target>
 
     <!--
@@ -1391,14 +1391,22 @@
     </target>
     
     <!-- for building eclipse distribution -->
+    <target name="initIcuEclipseVersion" depends="init">
+        <tstamp>
+            <format property="build.date" pattern="yyyyMMdd"/>
+        </tstamp>
+        <property name="icu4j.eclipse.build.version.string" value="${icu4j.eclipse.spec.version.string}.${build.date}"/>
+    </target>
+
     <target name="eclipseProjects" 
-        depends="eclipseCoreProject,eclipseTestProject,eclipseWrapperProject"
+        depends="eclipseCoreProject,eclipseTestProject,eclipseWrapperProject,eclipseFragmentProject"
         description="create all eclipse icu projects"/>
 
     <target name="undoEclipseMangle" depends="buildmangle" description="preprocess files back to default)">
         <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true">
             <arg value="@eclipseCoreArgs.txt"/>
             <arg value="@eclipseTestArgs.txt"/>
+            <arg value="@eclipseFragmentArgs.txt"/>
         </java>
     </target>
 
@@ -1445,7 +1453,7 @@
         </jar>
     </target>
 
-    <target name="eclipseCoreProject" depends="eclipseCore" description="gather eclipse icu core project files">
+    <target name="eclipseCoreProject" depends="eclipseCore,initIcuEclipseVersion" description="gather eclipse icu core project files">
         <delete failonerror="no">
             <fileset dir="${eclipse.projects.dir}/com.ibm.icu"/>
             <fileset dir="${eclipse.projects.dir}/com.ibm.icu-feature"/>
@@ -1467,6 +1475,12 @@
             <fileset dir="${eclipse.dir}"
             includes="com.ibm.icu/**/*,com.ibm.icu-feature/**/*"
             excludes="**/CVS/**/*"/>
+            <filterset>
+                <filter token="BUILD_VERSION" value="${icu4j.eclipse.build.version.string}"/>
+                <filter token="COPYRIGHT" value="${copyright.eclipse}"/>
+                <filter token="SPEC_VERSION" value="${icu4j.eclipse.spec.version.string}"/>
+                <filter token="VERSION_NUMBER" value="${icu4j.version.number}"/>
+            </filterset>
         </copy>
         <!-- copy ICU license file -->
         <copy file="license.html"
@@ -1505,7 +1519,7 @@
         <!-- TODO: build the wrapper test code this ant target -->
     </target>
 
-    <target name="eclipseWrapperProject" depends="eclipseWrapper,eclipseWrapperTest" description="gather eclipse icu core project files">
+    <target name="eclipseWrapperProject" depends="eclipseWrapper,eclipseWrapperTest,initIcuEclipseVersion" description="gather eclipse icu core project files">
         <delete failonerror="no">
             <fileset dir="${eclipse.projects.dir}/com.ibm.icu.base"/>
             <fileset dir="${eclipse.projects.dir}/com.ibm.icu.base-feature"/>
@@ -1516,6 +1530,12 @@
             <fileset dir="${eclipse.dir}"
             includes="com.ibm.icu.base/**/*,com.ibm.icu.base-feature/**/*,com.ibm.icu.base.tests/**/*"
             excludes="**/CVS/**/*"/>
+            <filterset>
+                <filter token="BUILD_VERSION" value="${icu4j.eclipse.build.version.string}"/>
+                <filter token="COPYRIGHT" value="${copyright.eclipse}"/>
+                <filter token="SPEC_VERSION" value="${icu4j.eclipse.spec.version.string}"/>
+                <filter token="VERSION_NUMBER" value="${icu4j.version.number}"/>
+            </filterset>
         </copy>
         <!-- copy ICU license file -->
         <copy file="license.html"
@@ -1584,12 +1604,93 @@
         <copy toDir="${eclipse.projects.dir}/com.ibm.icu.tests" file="${zipTestSrc.file}"/>
     </target>
 
-    <target name="zipCoreSrc" depends="init" description="build zip of core sources for debugging">
-        <!-- for eclipse -->
-        <zip destfile="${zipCoreSrc.file}"
-            compress="true"
-            basedir="${src.dir}"
-            includes="../license.html,../Copyright_Assignment.rtf,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*,com/ibm/icu/math/**/*,com/ibm/icu/text/**/*,com/ibm/icu/util/**/*"/>
+    <target name="eclipseFragmentMangle" depends="eclipseCoreMangle">
+        <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true">
+            <arg value="-dECLIPSE_FRAGMENT"/>
+            <arg value="-t"/>
+            <arg value="@eclipseFragmentArgs.txt"/>
+         </java>
+    </target>
+
+    <target name="eclipseFragment" depends="eclipseCore,eclipseFragmentMangle">
+        <property name="timepattern" value="yyyyMMdd'T'HHmmss','SSS"/>
+        <tstamp>
+            <format property="time.before.compile" pattern="${timepattern}"/>
+        </tstamp>
+        <!--
+            Note: *.class files compiled by the target "eclipseCore" are in ${build.dir} directory.
+            The target "eclipseFragmentMangle" updates timestamp of .java files, so only modified files
+            should be compiled.
+        -->
+        <javac includes="com/ibm/icu/util/**/*.java,com/ibm/icu/text/**/*.java,com/ibm/icu/math/**/*.java,com/ibm/icu/impl/**/*.java,com/ibm/icu/lang/*.java"
+            compiler="javac1.4"
+            srcdir="${src.dir}"
+            destdir="${build.dir}"
+            classpathref="build.classpath"
+            source="1.3"
+            target="1.2"
+            debug="on"
+            deprecation="off"
+            encoding="ascii"
+            listfiles="true"/>
+        <tstamp>
+            <format property="time.after.compile" pattern="${timepattern}"/>
+        </tstamp>
+        <!-- collect only class files updated, which are fragment specific files -->
+        <jar jarfile="${fragment.jar.file}" compress="true">
+            <fileset dir="${build.dir}" includes="**/*.class">
+                <date datetime="${time.before.compile}" pattern="${timepattern}" when="after"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <target name="eclipseFragmentProject" depends="eclipseFragment,initIcuEclipseVersion" description="gather eclipse icu fragment project files">
+        <delete failonerror="no">
+            <fileset dir="${eclipse.projects.dir}/com.ibm.icu.jse4"/>
+            <fileset dir="${eclipse.projects.dir}/com.ibm.icu.jse4-feature"/>
+        </delete>
+        <!-- collect source files -->
+        <copy toDir="${eclipse.projects.dir}/com.ibm.icu.jse4/src">
+            <!-- TODO: Use a single file list as input.  The list is identical with eclipseFragmentArgs.txt -->
+            <fileset dir="${src.dir}">
+                <include name="com/ibm/icu/impl/CollectionUtilities.java"/>
+                <include name="com/ibm/icu/impl/PatternTokenizer.java"/>
+                <include name="com/ibm/icu/impl/Utility.java"/>
+                <include name="com/ibm/icu/lang/UCharacter.java"/>
+                <include name="com/ibm/icu/math/BigDecimal.java"/>
+                <include name="com/ibm/icu/text/DateTimePatternGenerator.java"/>
+                <include name="com/ibm/icu/text/DecimalFormat.java"/>
+                <include name="com/ibm/icu/text/DigitList.java"/>
+                <include name="com/ibm/icu/text/NumberFormat.java"/>
+                <include name="com/ibm/icu/text/RuleBasedNumberFormat.java"/>
+                <include name="com/ibm/icu/text/UnicodeSet.java"/>
+                <include name="com/ibm/icu/text/UTF16.java"/>
+                <include name="com/ibm/icu/util/GlobalizationPreferences.java"/>
+            </fileset>
+        </copy>
+        <!-- collect eclipse project files -->
+        <copy todir="${eclipse.projects.dir}">
+            <fileset dir="${eclipse.dir}"
+            includes="com.ibm.icu.jse4/**/*,com.ibm.icu.jse4-feature/**/*"/>
+            <filterset>
+                <filter token="BUILD_VERSION" value="${icu4j.eclipse.build.version.string}"/>
+                <filter token="COPYRIGHT" value="${copyright.eclipse}"/>
+                <filter token="SPEC_VERSION" value="${icu4j.eclipse.spec.version.string}"/>
+                <filter token="VERSION_NUMBER" value="${icu4j.version.number}"/>
+            </filterset>
+        </copy>
+        <!-- copy ICU license file -->
+        <copy file="license.html"
+        todir="${eclipse.projects.dir}/com.ibm.icu.jse4/about_files"/>
+        <!-- ucd terms -->
+        <copy file="src/com/ibm/icu/dev/data/unicode/ucdterms.txt"
+        todir="${eclipse.projects.dir}/com.ibm.icu.jse4/about_files"/>
+        <!-- copy ICU about file -->
+        <copy file="${eclipse.dir}/misc/about_icu.html"
+        tofile="${eclipse.projects.dir}/com.ibm.icu.jse4/about.html"/>
+        <!-- common eclipse about file -->
+        <copy file="${eclipse.dir}/misc/about.html"
+        todir="${eclipse.projects.dir}/com.ibm.icu.jse4-feature/sourceTemplatePlugin"/>
     </target>
 
     <target name="zipTestSrc" depends="init" description="build zip of test sources for debugging">
@@ -1662,7 +1763,7 @@
             <arg value="-n"/>
             <classpath>
                 <pathelement path="${java.class.path}/"/>
-                <pathelement location="icu4j.jar"/>
+                <pathelement location="${jar.file}"/>
                 <pathelement location="clover.jar"/>
                 <pathelement path="${build.dir}"/>
             </classpath>
@@ -1673,6 +1774,18 @@
     <target name="eclipseCompatTests" depends="init, eclipseTestMangle, eclipseTests" />
     <target name="eclipseCompatCheck" depends="init, eclipseCompat, eclipseCompatTests, deleteCore, eclipseRunCheck"/>
 
+    <target name="eclipseFragmentCheck" depends="eclipseCompat,eclipseFragment,eclipseCompatTests,deleteCore">
+        <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
+            <arg value="-n"/>
+            <classpath>
+                <pathelement path="${java.class.path}/"/>
+                <pathelement location="${fragment.jar.file}"/>
+                <pathelement location="${jar.file}"/>
+                <pathelement location="clover.jar"/>
+                <pathelement path="${build.dir}"/>
+            </classpath>
+        </java>
+    </target>
 
     <target name="core13" depends="init,coreData,icudata" description="build core classes and data">
         <javac includes="com/ibm/icu/util/**/*.java,com/ibm/icu/text/**/*.java,com/ibm/icu/math/**/*.java,com/ibm/icu/impl/**/*.java,com/ibm/icu/lang/*.java,com/ibm/icu/charset/**/*.java"
