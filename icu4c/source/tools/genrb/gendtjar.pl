@@ -100,6 +100,7 @@ sub main(){
     # TODO add more platforms and test on Linux and Unix
     
     $icuBuildDir =$icuRootDir."/source/data/out/build";
+    $icuTestDataSrcDir =$icuRootDir."/source/test/testdata/";
     $icuTestDataDir =$icuRootDir."/source/test/testdata/out/build/";    
     
     # now build ICU
@@ -142,13 +143,17 @@ sub buildICU{
     unlink($icuTestDataDir."../"); 
     
     if(($platform eq "cygwin")||($platform eq "darwin")||($platform eq "linux")){
+        
         # make all in ICU
         cmd("make all", $verbose);
         chdir($icuSrcDataDir);
         cmd("make uni-core-data", $verbose);
-        chdir($icuTestDataDir."../../");
-        #print($icuTestDataDir."../../\n");
-        cmd("make", $verbose);
+        if(chdir($icuTestDataSrcDir)){
+            print("Invoking make in directory $icuTestDataSrcDir\n");
+	        cmd("make", $verbose);
+        }else{
+	        die "Could not cd to $icuTestDataSrcDir\n";
+        }
     }elsif($platform eq "aix"){
         # make all in ICU
         cmd("gmake all", $verbose);
