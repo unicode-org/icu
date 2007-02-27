@@ -4828,7 +4828,7 @@ ucol_calcSortKey(const    UCollator    *coll,
         } else {
           prevBuffSize = minBufferSize;
 
-          uint32_t frenchStartOffset, frenchEndOffset;
+          uint32_t frenchStartOffset = 0, frenchEndOffset = 0;
           if (frenchStartPtr != NULL) {
              frenchStartOffset = frenchStartPtr - secStart;
              frenchEndOffset = frenchEndPtr - secStart;
