@@ -1364,8 +1364,8 @@ openFragmentedUnicodeString(UText *ut, UnicodeString *s, UErrorCode *status) {
 //     4.  Check that clone contents did not change.  
 //
 void UTextTest::Ticket5560() {
-	char  *s1 = "ABCDEF";
-	char  *s2 = "123456";
+	const char *s1 = "ABCDEF";
+	const char *s2 = "123456";
 	UErrorCode status = U_ZERO_ERROR;
 
 	UText ut1 = UTEXT_INITIALIZER;
