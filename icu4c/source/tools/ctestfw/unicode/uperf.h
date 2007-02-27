@@ -1,8 +1,7 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2006, International Business Machines
+* Copyright (c) 2002-2007, International Business Machines
 * Corporation and others.  All Rights Reserved.
-**********************************************************************
 **********************************************************************
 */
 #ifndef _UPERF_H
@@ -144,26 +143,26 @@ protected:
 
     virtual UBool callTest( UPerfTest& testToBeCalled, char* par );
 
-    UBool        verbose;
-    const char*  sourceDir;
-    const char*  fileName;
+    int32_t      _argc;
+    const char** _argv;
+    const char * _addUsage;
     char*        resolvedFileName;
+    UCHARBUF*    ucharBuf;
     const char*  encoding;
     UBool        uselen;
-    int32_t      iterations;
-    int32_t      passes;
-    int32_t      time;
-    const char * _addUsage;
-    const char** _argv;
-    int32_t      _argc;
+    const char*  fileName;
+    const char*  sourceDir;
     int32_t      _remainingArgc;
     ULine*       lines;
     int32_t      numLines;
-    UCHARBUF*    ucharBuf;
     UBool        line_mode;
-    UBool        bulk_mode;
     UChar* buffer;
     int32_t      bufferLen;
+    UBool        verbose;
+    UBool        bulk_mode;
+    int32_t      passes;
+    int32_t      iterations;
+    int32_t      time;
     const char*  locale;
 private:
     UPerfTest*   caller;
