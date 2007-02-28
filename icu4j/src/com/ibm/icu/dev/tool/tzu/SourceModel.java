@@ -15,6 +15,33 @@ import javax.swing.text.html.*;
 import javax.swing.text.html.parser.*;
 
 class SourceModel extends AbstractListModel implements ComboBoxModel {
+    public SourceModel(Logger logger) {
+        this.logger = logger;
+    }
+
+    public static void initialize(Logger logger) {
+        // cannot make TZ_BASE_URL and TZ_LOCAL_URL final since url creations
+        // need to be try-catched
+        try {
+            TZ_BASE_URL = new URL(TZ_BASE_URLSTRING_START);
+
+            if (!TZ_LOCAL_FILE.exists()) {
+                logger.errorln("Local copy (zoneinfo.res) does not exist.");
+            } else {
+                TZ_LOCAL_URL = TZ_LOCAL_FILE.toURL();
+                TZ_LOCAL_VERSION = ICUFile.findFileTZVersion(TZ_LOCAL_FILE);
+                if (TZ_LOCAL_VERSION == null) {
+                    logger.errorln("Failed to determine version of local copy");
+                } else {
+                    TZ_LOCAL_CHOICE = "Local Copy (" + TZ_LOCAL_VERSION + ")";
+                }
+            }
+        } catch (MalformedURLException ex) {
+            // this shouldn't happen
+            ex.printStackTrace();
+        }
+    }
+
     public void findSources() {
         BufferedReader reader = null;
         try {
@@ -143,28 +170,7 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
 
     public static URL TZ_LOCAL_URL = null;
 
-    static {
-        // cannot make TZ_BASE_URL and TZ_LOCAL_URL final since url creations
-        // need to be try-catched
-        try {
-            TZ_BASE_URL = new URL(TZ_BASE_URLSTRING_START);
-
-            if (!TZ_LOCAL_FILE.exists()) {
-                Logger.errorln("Local copy (zoneinfo.res) does not exist.");
-            } else {
-                TZ_LOCAL_URL = TZ_LOCAL_FILE.toURL();
-                TZ_LOCAL_VERSION = ICUFile.findFileTZVersion(TZ_LOCAL_FILE);
-                if (TZ_LOCAL_VERSION == null) {
-                    Logger.errorln("Failed to determine version of local copy");
-                } else {
-                    TZ_LOCAL_CHOICE = "Local Copy (" + TZ_LOCAL_VERSION + ")";
-                }
-            }
-        } catch (MalformedURLException ex) {
-            // this shouldn't happen
-            ex.printStackTrace();
-        }
-    }
-
     public static final long serialVersionUID = 1339;
+
+    private Logger logger;
 }

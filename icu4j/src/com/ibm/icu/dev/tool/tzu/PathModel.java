@@ -11,8 +11,9 @@ import javax.swing.*;
 import java.io.*;
 
 class PathModel extends AbstractListModel {
-    public PathModel(ResultModel resultModel) {
+    public PathModel(ResultModel resultModel, Logger logger) {
         this.resultModel = resultModel;
+        this.logger = logger;
     }
 
     public Iterator iterator() {
@@ -141,7 +142,7 @@ class PathModel extends AbstractListModel {
                 else
                     iter.next();
 
-            ICUJarFinder.search(resultModel, paths, subdirs, backupDir);
+            ICUJarFinder.search(resultModel, logger, paths, subdirs, backupDir);
         }
     }
 
@@ -153,7 +154,7 @@ class PathModel extends AbstractListModel {
             Iterator iter = list.iterator();
             for (int i = 0; i < n; i++)
                 paths[i] = (IncludePath) iter.next();
-            ICUJarFinder.search(resultModel, paths, subdirs, backupDir);
+            ICUJarFinder.search(resultModel, logger, paths, subdirs, backupDir);
         }
     }
 
@@ -169,4 +170,6 @@ class PathModel extends AbstractListModel {
     public static final String PATHLIST_FILENAME = "DirectorySearch.txt";
 
     public static final long serialVersionUID = 1337;
+
+    private Logger logger;
 }

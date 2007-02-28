@@ -13,49 +13,60 @@ import java.io.FileNotFoundException;
 
 public class Logger {
 
-    static {
-        try {
-            log = new PrintStream(new FileOutputStream("icutzu.log"));
-        } catch (FileNotFoundException ex) {
-            System.err.println("Could not create a log file.");
-        }
-    }
-
     private Logger() {
     }
 
-    public static void setVerbosity(int verbosity) {
-        Logger.verbosity = verbosity;
+    public static Logger initLogger(String filename, int verbosity) {
+        try {
+            System.out.println("Log file: " + filename);
+            if (logger.log != null)
+                logger.log.close();
+            logger.log = new PrintStream(new FileOutputStream(filename));
+            logger.verbosity = verbosity;
+        } catch (FileNotFoundException ex) {
+            System.err.println("Could not create " + filename + ".");
+        }
+        return logger;
     }
 
-    public static int getVerbosity() {
+    public static Logger getInstance() {
+        return logger;
+    }
+
+    public void setVerbosity(int verbosity) {
+        this.verbosity = verbosity;
+    }
+
+    public int getVerbosity() {
         return verbosity;
     }
 
-    public static void print(Object output, int verbosity) {
-        if (verbosity >= Logger.verbosity)
+    public void print(String output, int verbosity) {
+        if (verbosity >= this.verbosity)
             System.out.print(output);
     }
 
-    public static void println(Object output, int verbosity) {
-        if (verbosity >= Logger.verbosity)
+    public void println(String output, int verbosity) {
+        if (verbosity >= this.verbosity)
             System.out.println(output);
     }
 
-    public static void error(Object output) {
+    public void error(String output) {
         System.err.print(output);
     }
 
-    public static void errorln(Object output) {
+    public void errorln(String output) {
         System.err.println(output);
     }
 
-    public static void log(Object output) {
-        log.print(output);
+    public void log(String output) {
+        if (log != null)
+            log.print(output);
     }
 
-    public static void logln(Object output) {
-        log.println(output);
+    public void logln(String output) {
+        if (log != null)
+            log.println(output);
     }
 
     public static final int QUIET = -1;
@@ -64,7 +75,11 @@ public class Logger {
 
     public static final int VERBOSE = 1;
 
-    private static int verbosity = NORMAL;
+    private int verbosity = NORMAL;
 
-    private static PrintStream log;
+    private PrintStream log;
+
+    private static Logger logger = new Logger();
+
+    public static final String DEFAULT_FILENAME = "icutzu.log";
 }

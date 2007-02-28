@@ -19,9 +19,10 @@ public class GUILoader {
     public GUILoader() {
         String title = "ICU Time Zone Updater";
 
-        resultModel = new ResultModel();
-        pathModel = new PathModel(resultModel);
-        sourceModel = new SourceModel();
+        logger = Logger.initLogger(Logger.DEFAULT_FILENAME, Logger.NORMAL);
+        resultModel = new ResultModel(logger);
+        pathModel = new PathModel(resultModel, logger);
+        sourceModel = new SourceModel(logger);
 
         pathGUI = new PathComponent(this, pathModel);
         pathFrame = new JFrame(title + " - Search Paths");
@@ -78,7 +79,7 @@ public class GUILoader {
 
         workerThread = new Thread(new Runnable() {
             public void run() {
-                Logger.println("Search started.", Logger.NORMAL);
+                logger.println("Search started.", Logger.NORMAL);
                 setCancelSearchEnabled(true);
                 setUpdateEnabled(false);
                 setSearchEnabled(false);
@@ -91,7 +92,7 @@ public class GUILoader {
                 setSearchEnabled(true);
                 setUpdateEnabled(true);
                 setCancelSearchEnabled(false);
-                Logger.println("Search ended.", Logger.NORMAL);
+                logger.println("Search ended.", Logger.NORMAL);
             }
         });
 
@@ -103,7 +104,7 @@ public class GUILoader {
 
         workerThread = new Thread(new Runnable() {
             public void run() {
-                Logger.println("Search started.", Logger.NORMAL);
+                logger.println("Search started.", Logger.NORMAL);
                 setCancelSearchEnabled(true);
                 setUpdateEnabled(false);
                 setSearchEnabled(false);
@@ -116,7 +117,7 @@ public class GUILoader {
                 setSearchEnabled(true);
                 setUpdateEnabled(true);
                 setCancelSearchEnabled(false);
-                Logger.println("Search ended.", Logger.NORMAL);
+                logger.println("Search ended.", Logger.NORMAL);
             }
         });
 
@@ -128,7 +129,7 @@ public class GUILoader {
 
         workerThread = new Thread(new Runnable() {
             public void run() {
-                Logger.println("Update started.", Logger.NORMAL);
+                logger.println("Update started.", Logger.NORMAL);
                 setCancelUpdateEnabled(true);
                 setUpdateEnabled(false);
                 setSearchEnabled(false);
@@ -139,7 +140,7 @@ public class GUILoader {
                 setUpdateEnabled(true);
                 setSearchEnabled(true);
                 setCancelUpdateEnabled(false);
-                Logger.println("Update ended.", Logger.NORMAL);
+                logger.println("Update ended.", Logger.NORMAL);
             }
         });
 
@@ -151,7 +152,7 @@ public class GUILoader {
 
         workerThread = new Thread(new Runnable() {
             public void run() {
-                Logger.println("Update started.", Logger.NORMAL);
+                logger.println("Update started.", Logger.NORMAL);
                 setCancelUpdateEnabled(true);
                 setUpdateEnabled(false);
                 setSearchEnabled(false);
@@ -162,7 +163,7 @@ public class GUILoader {
                 setUpdateEnabled(true);
                 setSearchEnabled(true);
                 setCancelUpdateEnabled(false);
-                Logger.println("Update ended.", Logger.NORMAL);
+                logger.println("Update ended.", Logger.NORMAL);
             }
         });
 
@@ -224,4 +225,6 @@ public class GUILoader {
     private JFrame resultFrame;
 
     private File backupDir;
+
+    private Logger logger;
 }
