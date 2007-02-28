@@ -13,18 +13,18 @@ import java.net.*;
 import com.ibm.icu.util.*;
 
 public class ICUFile {
-    public ICUFile(File file) throws IOException {
+    public ICUFile(File file, Logger logger) throws IOException {
         this.file = file;
+        ICUFile.logger = logger;
 
         if (!file.isFile())
-            throw new IOException(file + " is not a file.");
-
+            throw new IOException("not a file");
         if (!isUpdatable())
-            throw new IOException(file + " is not an updatable ICU4J jar file.");
+            throw new IOException("not an updatable ICU4J jar");
+        if (isSigned())
+            throw new IOException("not a signed jar");
 
         tzVersion = findEntryTZVersion(file, insertEntry);
-
-        Logger.println("Added: " + file, Logger.NORMAL);
     }
 
     public File getFile() {
@@ -117,8 +117,9 @@ public class ICUFile {
     }
 
     private static boolean copyFile(File inputFile, File outputFile) {
-        Logger.println("Coping from \"" + inputFile + "\" to \"" + outputFile
-                + "\"", Logger.VERBOSE);
+        logger.println("Coping from " + inputFile + " to " + outputFile + ".",
+                Logger.VERBOSE);
+        logger.logln("Coping from " + inputFile + " to " + outputFile + ".");
         InputStream istream = null;
         OutputStream ostream = null;
         byte[] buffer = new byte[BUFFER_SIZE];
@@ -133,9 +134,12 @@ public class ICUFile {
                 ostream.write(buffer, 0, bytesRead);
 
             success = true;
+            logger.println("Copy successful.", Logger.VERBOSE);
+            logger.logln("Copy successful.");
         } catch (IOException ex) {
-            // ex.printStackTrace();
             outputFile.delete();
+            logger.println("Copy failed.", Logger.VERBOSE);
+            logger.logln("Copy failed.");
         } finally {
             // safely close the streams
             if (istream != null)
@@ -156,8 +160,10 @@ public class ICUFile {
 
     private static boolean copyEntry(File inputFile, JarEntry inputEntry,
             File outputFile) {
-        Logger.println("Coping from \"" + inputFile + "!/" + inputEntry
-                + "\" to \"" + outputFile + "\"", Logger.VERBOSE);
+        logger.println("Coping from " + inputFile + "!/" + inputEntry + " to "
+                + outputFile + ".", Logger.VERBOSE);
+        logger.logln("Coping from " + inputFile + "!/" + inputEntry + " to "
+                + outputFile + ".");
         JarFile jar = null;
         InputStream istream = null;
         OutputStream ostream = null;
@@ -174,9 +180,13 @@ public class ICUFile {
                 ostream.write(buffer, 0, bytesRead);
 
             success = true;
+            logger.println("Copy successful.", Logger.VERBOSE);
+            logger.logln("Copy successful.");
         } catch (IOException ex) {
             // ex.printStackTrace();
             outputFile.delete();
+            logger.println("Copy failed.", Logger.VERBOSE);
+            logger.logln("Copy failed.");
         } finally {
             // safely close the streams
             if (jar != null)
@@ -203,8 +213,10 @@ public class ICUFile {
 
     private static boolean createUpdatedJar(File inputFile, File outputFile,
             JarEntry insertEntry, URL inputURL) {
-        Logger.println("Inserting \"" + inputURL + "\" into \"" + inputFile
-                + "/" + insertEntry + "\"", Logger.VERBOSE);
+        logger.println("Inserting " + inputURL + " into " + inputFile + "/"
+                + insertEntry + ".", Logger.VERBOSE);
+        logger.logln("Inserting " + inputURL + " into " + inputFile + "/"
+                + insertEntry + ".");
         JarFile jar = null;
         JarOutputStream ostream = null;
         InputStream istream = null;
@@ -244,9 +256,13 @@ public class ICUFile {
             }
 
             success = true;
+            logger.println("Insert successful.", Logger.VERBOSE);
+            logger.logln("Insert successful.");
         } catch (IOException ex) {
             // ex.printStackTrace();
             outputFile.delete();
+            logger.println("Insert failed.", Logger.VERBOSE);
+            logger.logln("Insert failed.");
         } finally {
             // safely close the streams
             if (istream != null)
@@ -284,32 +300,32 @@ public class ICUFile {
         try {
             jar = new JarFile(file);
             Manifest manifest = jar.getManifest();
-            if (manifest != null) {
-                Iterator iter = manifest.getEntries().values().iterator();
-                while (iter.hasNext()) {
-                    Attributes attr = (Attributes) iter.next();
-                    icuTitle = attr
-                            .getValue(Attributes.Name.IMPLEMENTATION_TITLE);
-                    icuVersion = attr
-                            .getValue(Attributes.Name.IMPLEMENTATION_VERSION);
-                    if (!("ICU for Java".equals(icuTitle) || "Modularized ICU for Java"
-                            .equals(icuTitle)))
-                        continue;
+            if (manifest == null)
+                return hasFile(jar);
+            Iterator iter = manifest.getEntries().values().iterator();
+            while (iter.hasNext()) {
+                Attributes attr = (Attributes) iter.next();
+                icuTitle = attr.getValue(Attributes.Name.IMPLEMENTATION_TITLE);
+                icuVersion = attr
+                        .getValue(Attributes.Name.IMPLEMENTATION_VERSION);
+                if (!("ICU for Java".equals(icuTitle) || "Modularized ICU for Java"
+                        .equals(icuTitle)))
+                    continue;
 
-                    // since it's an ICU file, we will search inside for the
-                    // intended file
-                    success = hasFile(jar);
-                    break;
-                }
+                // since it's an ICU file, we will search inside for the
+                // intended file
+                success = hasFile(jar);
+                break;
             }
         } catch (IOException ex) {
+            // unable to create the JarFile,
+            // unable to get the Manifest
             // log the unexplained i/o error, but we must drudge on
-            Logger.println("Error with " + file, Logger.NORMAL);
-            // ex.printStackTrace();
+            logger.println("I/O Error with " + file.getPath(), Logger.VERBOSE);
+            logger.logln("I/O Error with " + file.getPath());
         } catch (Exception ex) {
             // ex.printStackTrace();
         } finally {
-            // new Throwable().printStackTrace();
             if (jar != null)
                 try {
                     jar.close();
@@ -318,7 +334,6 @@ public class ICUFile {
                 }
         }
         return success;
-
     }
 
     private boolean hasFile(JarFile jar) {
@@ -331,6 +346,10 @@ public class ICUFile {
         return false;
     }
 
+    private boolean isSigned() {
+        return insertEntry.getCertificates() != null;
+    }
+
     public static String findEntryTZVersion(File icuFile, JarEntry tzEntry) {
         try {
             File temp = File.createTempFile("zoneinfo", ".res");
@@ -338,7 +357,7 @@ public class ICUFile {
             copyEntry(icuFile, tzEntry, temp);
             return findTZVersion(temp);
         } catch (IOException ex) {
-            // ex.printStackTrace();
+            logger.logln(ex.getMessage());
             return null;
         }
     }
@@ -350,7 +369,7 @@ public class ICUFile {
             copyFile(tzFile, temp);
             return findTZVersion(temp);
         } catch (IOException ex) {
-            // ex.printStackTrace();
+            logger.logln(ex.getMessage());
             return null;
         }
     }
@@ -380,7 +399,6 @@ public class ICUFile {
                 return tzVersion;
         } catch (MissingResourceException ex) {
             // not an error -- some zoneinfo files do not have a version number
-            // included
         } catch (MalformedURLException ex) {
             // this should never happen
             ex.printStackTrace();
@@ -406,4 +424,6 @@ public class ICUFile {
     private String icuVersion;
 
     private String tzVersion;
+
+    private static Logger logger;
 }

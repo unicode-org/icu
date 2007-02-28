@@ -30,19 +30,22 @@ public class CLILoader {
             // parse the arguments using UOption.parseArgs
             int argsleft = UOption.parseArgs(args, options);
 
-            // set the logging options
-            if (options[QUIET].doesOccur)
-                Logger.setVerbosity(Logger.QUIET);
-            else if (options[VERBOSE].doesOccur)
-                Logger.setVerbosity(Logger.VERBOSE);
-            else
-                Logger.setVerbosity(Logger.NORMAL);
-
             // if help is specified, show the help specs and do nothing else
             if (options[HELP].doesOccur) {
                 showHelp();
                 return;
             }
+
+            // init the logger
+            logger = Logger.initLogger(Logger.DEFAULT_FILENAME,
+                    options[QUIET].doesOccur ? Logger.QUIET
+                            : options[VERBOSE].doesOccur ? Logger.VERBOSE
+                                    : Logger.NORMAL);
+
+            // create the resultModel, the pathModel, and the sourceModel
+            resultModel = new ResultModel(logger);
+            pathModel = new PathModel(resultModel, logger);
+            sourceModel = new SourceModel(logger);
 
             // make sure only there is only one update mode in the options
             int choiceType = (options[OFFLINE].doesOccur ? 1 : 0)
@@ -100,11 +103,11 @@ public class CLILoader {
 
             // search the paths for updatable icu4j files
             try {
-                Logger.println("Search started.", Logger.NORMAL);
+                logger.println("Search started.", Logger.NORMAL);
                 pathModel.searchAll(options[RECURSE].doesOccur, backupDir);
-                Logger.println("Search done.", Logger.NORMAL);
+                logger.println("Search done.", Logger.NORMAL);
             } catch (InterruptedException ex) {
-                Logger.println("Search interrupted.", Logger.NORMAL);
+                logger.println("Search interrupted.", Logger.NORMAL);
             }
 
             // get the name and url associated with the update mode (or null if
@@ -136,17 +139,17 @@ public class CLILoader {
             while (resultIter.hasNext()) {
                 try {
                     ICUFile entry = (ICUFile) resultIter.next();
-                    Logger.println("", Logger.NORMAL);
-                    Logger.println("Filename:  " + entry.getFile().getName(),
+                    logger.println("", Logger.NORMAL);
+                    logger.println("Filename:  " + entry.getFile().getName(),
                             Logger.NORMAL);
-                    Logger.println("Location:  " + entry.getFile().getParent(),
+                    logger.println("Location:  " + entry.getFile().getParent(),
                             Logger.NORMAL);
-                    Logger.println("Current Version: " + entry.getTZVersion(),
+                    logger.println("Current Version: " + entry.getTZVersion(),
                             Logger.NORMAL);
 
                     if (!entry.getFile().canRead()
                             || !entry.getFile().canWrite()) {
-                        Logger.println("Missing permissions for "
+                        logger.println("Missing permissions for "
                                 + entry.getFile().getName() + ".",
                                 Logger.NORMAL);
                         continue;
@@ -181,14 +184,14 @@ public class CLILoader {
                     }
                 } catch (IOException ex) {
                     // error in command-line input ???
-                    Logger.errorln("Error in command-line input.");
+                    logger.errorln("Error in command-line input.");
                 }
             }
 
-            Logger.println("", Logger.NORMAL);
-            Logger.println("ICUTZU finished successfully.", Logger.NORMAL);
+            logger.println("", Logger.NORMAL);
+            logger.println("ICUTZU finished successfully.", Logger.NORMAL);
         } catch (IllegalArgumentException ex) {
-            Logger.errorln(ex.getMessage());
+            logger.errorln(ex.getMessage());
             return;
         }
     }
@@ -197,53 +200,53 @@ public class CLILoader {
             String currentVersion, BufferedReader reader) throws IOException {
         int betterness = chosenVersion.compareToIgnoreCase(currentVersion);
         if (betterness == 0) {
-            Logger.println("Updating should have no effect on this file.",
+            logger.println("Updating should have no effect on this file.",
                     Logger.NORMAL);
-            Logger.println("Update anyway?", Logger.NORMAL);
+            logger.println("Update anyway?", Logger.NORMAL);
         } else if (betterness < 0) {
-            Logger
+            logger
                     .println(
                             "Warning: The version specified is older than the one present in the file.",
                             Logger.NORMAL);
-            Logger.println("Update anyway?", Logger.NORMAL);
+            logger.println("Update anyway?", Logger.NORMAL);
         } else {
-            Logger.println("Update to " + chosenVersion + "?", Logger.NORMAL);
+            logger.println("Update to " + chosenVersion + "?", Logger.NORMAL);
         }
 
-        Logger.println(" [yes (default), no]\n: ", Logger.NORMAL);
+        logger.println(" [yes (default), no]\n: ", Logger.NORMAL);
         return reader.readLine().trim().toLowerCase();
     }
 
     private String askChoice(BufferedReader reader) throws IOException {
-        Logger.println("Available Versions: ", Logger.NORMAL);
+        logger.println("Available Versions: ", Logger.NORMAL);
         Iterator sourceIter = sourceModel.iterator();
 
-        Logger.println(getLocalName(), Logger.NORMAL);
+        logger.println(getLocalName(), Logger.NORMAL);
         while (sourceIter.hasNext())
-            Logger.println(", " + ((Map.Entry) sourceIter.next()).getKey(),
+            logger.println(", " + ((Map.Entry) sourceIter.next()).getKey(),
                     Logger.NORMAL);
-        Logger.println("", Logger.NORMAL);
+        logger.println("", Logger.NORMAL);
 
-        Logger
+        logger
                 .println(
                         "Update to which version? [best (default), none, local copy, <specific version above>]",
                         Logger.NORMAL);
-        Logger.println(": ", Logger.NORMAL);
+        logger.println(": ", Logger.NORMAL);
         return reader.readLine().trim().toLowerCase();
     }
 
     private void update(ICUFile entry, String chosenString, URL url) {
-        Logger.println("Updating to " + chosenString + "...", Logger.NORMAL);
+        logger.println("Updating to " + chosenString + "...", Logger.NORMAL);
         try {
             entry.updateJar(url, backupDir);
-            Logger.println("Update done.", Logger.NORMAL);
+            logger.println("Update done.", Logger.NORMAL);
         } catch (IOException ex) {
-            Logger.error("Could not update " + entry.getFile().getName());
+            logger.error("Could not update " + entry.getFile().getName());
         }
     }
 
     private void skipUpdate() {
-        Logger.println("Update skipped.", Logger.NORMAL);
+        logger.println("Update skipped.", Logger.NORMAL);
     }
 
     private String getBestName() {
@@ -288,19 +291,19 @@ public class CLILoader {
         }
     }
 
-    private static void showHelp() {
-        Logger.println("Help!", Logger.NORMAL);
+    private void showHelp() {
+        logger.println("Help!", Logger.NORMAL);
     }
 
-    private static void syntaxError(String message) {
+    private void syntaxError(String message) {
         throw new IllegalArgumentException("Error in argument list: " + message);
     }
 
-    private ResultModel resultModel = new ResultModel();
+    private ResultModel resultModel;
 
-    private PathModel pathModel = new PathModel(resultModel);
+    private PathModel pathModel;
 
-    private SourceModel sourceModel = new SourceModel();
+    private SourceModel sourceModel;
 
     private File backupDir = null;
 
@@ -338,4 +341,6 @@ public class CLILoader {
     private static final int NOBACKUP = 9;
 
     private static final int DISCOVERONLY = 10;
+
+    private Logger logger;
 }

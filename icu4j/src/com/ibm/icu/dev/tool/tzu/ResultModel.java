@@ -12,7 +12,8 @@ import java.io.*;
 import java.net.*;
 
 class ResultModel extends AbstractTableModel {
-    public ResultModel() {
+    public ResultModel(Logger logger) {
+        this.logger = logger;
     }
 
     public int getColumnCount() {
@@ -61,7 +62,7 @@ class ResultModel extends AbstractTableModel {
 
     public boolean add(File file) {
         try {
-            ICUFile entry = new ICUFile(file);
+            ICUFile entry = new ICUFile(file, logger);
             if (file.canRead() && file.canWrite())
                 add(permissibleList, hidden, entry);
             add(completeList, !hidden, entry);
@@ -219,4 +220,6 @@ class ResultModel extends AbstractTableModel {
     private boolean hidden = true;
 
     public static final long serialVersionUID = 1338;
+
+    private Logger logger;
 }
