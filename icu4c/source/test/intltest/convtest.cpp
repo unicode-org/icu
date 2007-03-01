@@ -782,8 +782,8 @@ ConversionTest::ToUnicodeCase(ConversionCase &cc, UConverterToUCallback callback
         }
     }
 
-    int32_t resultOffsets[200];
-    UChar result[200];
+    int32_t resultOffsets[256];
+    UChar result[256];
     int32_t resultLength;
     UBool ok;
 
@@ -817,6 +817,10 @@ ConversionTest::ToUnicodeCase(ConversionCase &cc, UConverterToUCallback callback
             // bulk test is first, then offsets are not checked any more
             cc.offsets=NULL;
         }
+        else {
+            memset(resultOffsets, -1, LENGTHOF(resultOffsets));
+        }
+        memset(result, -1, LENGTHOF(result));
         errorCode=U_ZERO_ERROR;
         resultLength=stepToUnicode(cc, cnv,
                                 result, LENGTHOF(result),
@@ -831,6 +835,14 @@ ConversionTest::ToUnicodeCase(ConversionCase &cc, UConverterToUCallback callback
             // reset if an error occurred or we did not flush
             // otherwise do nothing to make sure that flushing resets
             ucnv_resetToUnicode(cnv);
+        }
+        if (resultOffsets[resultLength] != -1) {
+            errln("toUnicode[%d](%s) Conversion wrote too much to offsets at index %d",
+                cc.caseNr, cc.charset, resultLength);
+        }
+        if (result[resultLength] != (UChar)-1) {
+            errln("toUnicode[%d](%s) Conversion wrote too much to result at index %d",
+                cc.caseNr, cc.charset, resultLength);
         }
     }
 
@@ -1205,7 +1217,7 @@ ConversionTest::FromUnicodeCase(ConversionCase &cc, UConverterFromUCallback call
     }
 
     // convert unicode to utf8
-    char utf8[200];
+    char utf8[256];
     cc.utf8=utf8;
     u_strToUTF8(utf8, LENGTHOF(utf8), &cc.utf8Length,
                 cc.unicode, cc.unicodeLength,
@@ -1217,8 +1229,8 @@ ConversionTest::FromUnicodeCase(ConversionCase &cc, UConverterFromUCallback call
         cc.utf8Length=-1;
     }
 
-    int32_t resultOffsets[200];
-    char result[200];
+    int32_t resultOffsets[256];
+    char result[256];
     int32_t resultLength;
     UBool ok;
 
@@ -1236,6 +1248,8 @@ ConversionTest::FromUnicodeCase(ConversionCase &cc, UConverterFromUCallback call
     ok=TRUE;
     for(i=0; i<LENGTHOF(steps) && ok; ++i) {
         step=steps[i].step;
+        memset(resultOffsets, -1, LENGTHOF(resultOffsets));
+        memset(result, -1, LENGTHOF(result));
         errorCode=U_ZERO_ERROR;
         resultLength=stepFromUnicode(cc, cnv,
                                 result, LENGTHOF(result),
@@ -1250,6 +1264,14 @@ ConversionTest::FromUnicodeCase(ConversionCase &cc, UConverterFromUCallback call
             // reset if an error occurred or we did not flush
             // otherwise do nothing to make sure that flushing resets
             ucnv_resetFromUnicode(cnv);
+        }
+        if (resultOffsets[resultLength] != -1) {
+            errln("fromUnicode[%d](%s) Conversion wrote too much to offsets at index %d",
+                cc.caseNr, cc.charset, resultLength);
+        }
+        if (result[resultLength] != -1) {
+            errln("fromUnicode[%d](%s) Conversion wrote too much to result at index %d",
+                cc.caseNr, cc.charset, resultLength);
         }
 
         // bulk test is first, then offsets are not checked any more
