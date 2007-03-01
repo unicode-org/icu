@@ -3168,6 +3168,9 @@ getTrail:
                 }
             } else {
                 /* no more input */
+                if (pArgs->flush) {
+                    *pErrorCode=U_TRUNCATED_CHAR_FOUND;
+                }
                 break;
             }
         } else {
@@ -3235,6 +3238,14 @@ getTrail:
     /* set offsets since the start or the last callback */
     if(offsets!=NULL) {
         size_t count=source-lastSource;
+        if (count > 0 && *pErrorCode == U_TRUNCATED_CHAR_FOUND) {
+            /*
+            Caller gave us a partial supplementary character,
+            which this function couldn't convert in any case.
+            The callback will handle the offset.
+            */
+            count--;
+        }
         while(count>0) {
             *offsets++=sourceIndex++;
             --count;
@@ -4799,8 +4810,7 @@ ucnv_MBCSWriteSub(UConverterFromUnicodeArgs *pArgs,
     /* reset the selector for the next code point */
     cnv->useSubChar1=FALSE;
 
-    switch(cnv->sharedData->mbcs.outputType) {
-    case MBCS_OUTPUT_2_SISO:
+    if (cnv->sharedData->mbcs.outputType == MBCS_OUTPUT_2_SISO) {
         p=buffer;
 
         /* fromUnicodeStatus contains prevLength */
@@ -4826,16 +4836,11 @@ ucnv_MBCSWriteSub(UConverterFromUnicodeArgs *pArgs,
             *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
-        ucnv_cbFromUWriteBytes(pArgs,
-                               buffer, (int32_t)(p-buffer),
-                               offsetIndex, pErrorCode);
-        break;
-    default:
-        ucnv_cbFromUWriteBytes(pArgs,
-                               subchar, length,
-                               offsetIndex, pErrorCode);
-        break;
+        subchar=buffer;
+        length=(int32_t)(p-buffer);
     }
+
+    ucnv_cbFromUWriteBytes(pArgs, subchar, length, offsetIndex, pErrorCode);
 }
 
 U_CFUNC UConverterType

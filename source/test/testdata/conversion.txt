@@ -518,6 +518,34 @@ conversion:table(nofallback) {
           :int{1}, :int{0}, "", "?=@$!@$", ""
         }
         {
+          "windows-1252",
+          "1\U00010001\u0085\U000500022\ud8003\udc014\ue001",
+          :bin{ 311a1a1a321a331a341a },
+          :intvector{ 0,1,3,4,6,7,8,9,10,11 },
+          :int{1}, :int{0}, "", "?", ""
+        }
+        {
+          "windows-1252",
+          "\uD87E", // lone surrogate can cause an offset overflow
+          :bin{ 1a },
+          :intvector{ 0 },
+          :int{1}, :int{0}, "", "?", ""
+        }
+        {
+          "windows-1252",
+          "\uD87E", // lone surrogate can cause an offset overflow
+          :bin{ 6875683f },
+          :intvector{ 0,0,0,0 },
+          :int{1}, :int{0}, "", "?=huh?", "" // Use a long substitution character
+        }
+        {
+          "*test4",
+          "\u30ab", // An incomplete multi-codepoint character
+          :bin{ ff },
+          :intvector{ 0 },
+          :int{1}, :int{0}, "", "?", ""
+        }
+        {
           "ibm-930", // stateful MBCS
           "a\ufdd0\u4e00\ufdd0e",
           :bin{       620e4bce0f400e45414bce0f4066 },
