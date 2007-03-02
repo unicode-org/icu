@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -63,7 +63,7 @@ public class ICUJDKCompare {
     private String[] namePairs;
     private String[] ignore;
     private boolean swap;
-    private boolean signature;
+    //private boolean signature;
 
     // call System.exit with non-zero if there were some missing APIs
     public static void main(String[] args) {

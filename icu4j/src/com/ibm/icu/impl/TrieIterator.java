@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and   *
+* Copyright (C) 1996-2007, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -488,10 +488,10 @@ public class TrieIterator implements RangeValueIterator
     * Trail surrogate minimum value
     */
     private static final int TRAIL_SURROGATE_MIN_VALUE_ = 0xDC00;
-    /**
+    /*
     * Trail surrogate maximum value
     */
-    private static final int TRAIL_SURROGATE_MAX_VALUE_ = 0xDFFF;
+    //private static final int TRAIL_SURROGATE_MAX_VALUE_ = 0xDFFF;
     /**
     * Number of trail surrogate
     */
@@ -510,11 +510,11 @@ public class TrieIterator implements RangeValueIterator
     */
     private static final int DATA_BLOCK_LENGTH_ = 
                                               1 << Trie.INDEX_STAGE_1_SHIFT_;
-    /**
-    * Number of codepoints in a stage 2 block
-    */
-    private static final int DATA_BLOCK_SUPPLEMENTARY_LENGTH_ =
-                                                     DATA_BLOCK_LENGTH_ << 10;
+//    /**
+//    * Number of codepoints in a stage 2 block
+//    */
+//    private static final int DATA_BLOCK_SUPPLEMENTARY_LENGTH_ =
+//                                                     DATA_BLOCK_LENGTH_ << 10;
     /**
     * Trie instance
     */

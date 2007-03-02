@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -12,7 +12,7 @@ package com.ibm.icu.dev.tool.localeconverter;
  */
 public class CollationItem {
     private static final char[] OP_CHARS = {'=', '<', ';', ',', '&' };
-    private static final char[] SPECIAL_CHARS = { '&', '@' , '=', '<', ';', ',' };
+    //private static final char[] SPECIAL_CHARS = { '&', '@' , '=', '<', ';', ',' };
     public static final int NONE = 0;
     public static final int PRIMARY = 1;
     public static final int SECONDARY = 2;

@@ -1,6 +1,6 @@
  /*
  *******************************************************************************
- * Copyright (C) 2002-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -37,7 +37,7 @@ public class CollationMiscTest extends TestFmwk {
         // new CollationMiscTest().TestLocaleRuleBasedCollators(); 
     }
     
-    private static final int NORM_BUFFER_TEST_LEN_ = 32;
+    //private static final int NORM_BUFFER_TEST_LEN_ = 32;
     private static final class Tester 
     {
         int u;
