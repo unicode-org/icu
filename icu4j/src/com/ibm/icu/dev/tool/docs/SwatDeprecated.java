@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2006, International Business Machines Corporation and         *
+ * Copyright (C) 2006-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -151,7 +151,6 @@ public class SwatDeprecated {
 
     public void processFile(File inFile) {
         File bakFile = null;
-        File oldFile = null;
         try {
             String inPath = inFile.getCanonicalPath();
             if (verbosity >= 5) {
@@ -190,7 +189,7 @@ public class SwatDeprecated {
             String line;
             int n = 0;
             int tc = 0;
-            boolean debug = false;
+//            boolean debug = false;
             while (null != (line = br.readLine())) {
                 // int temp = line.indexOf("@deprecated");
                 int ix = line.indexOf(srcTag);

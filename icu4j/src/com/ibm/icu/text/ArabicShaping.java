@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2001-2005, International Business Machines
+*   Copyright (C) 2001-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -305,7 +305,7 @@ public final class ArabicShaping {
     public static final int DIGITS_EN2AN_INIT_AL = 0x80;
 
     /** Not a valid option value. */
-    private static final int DIGITS_RESERVED = 0xa0;
+    //private static final int DIGITS_RESERVED = 0xa0;
 
     /** 
      * Bit mask for digit shaping options. 

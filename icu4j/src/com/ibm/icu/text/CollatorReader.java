@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and    *
+* Copyright (C) 1996-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -589,11 +589,6 @@ final class CollatorReader
                                                                (byte)0x6e,  
                                                                (byte)0x76, 
                                                                (byte)0x43};
-    /**
-    * Corrupted error string
-    */
-    private static final String CORRUPTED_DATA_ERROR_ =
-                                "Data corrupted in Collation data file";
                                 
     /**
     * Wrong unicode version error string
