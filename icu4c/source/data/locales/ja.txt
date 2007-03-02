@@ -436,7 +436,7 @@ ja{
             "ブラジル クルゼイロ (1990-1993)",
         }
         BRL{
-            "BRL",
+            "R$",
             "ブラジル レアル",
         }
         BRN{
@@ -620,7 +620,7 @@ ja{
             "フランス フラン",
         }
         GBP{
-            "£",
+            "UK£",
             "英国ポンド",
         }
         GEK{
@@ -732,7 +732,7 @@ ja{
             "アイスランド クローナ",
         }
         ITL{
-            "₤",
+            "IT₤",
             "イタリア リラ",
         }
         JMD{
@@ -1160,7 +1160,7 @@ ja{
             "ウガンダ シリング",
         }
         USD{
-            "$",
+            "US$",
             "米ドル",
         }
         USN{
@@ -1833,6 +1833,12 @@ ja{
         "Hira",
         "Hani",
     }
+    NumberPatterns{
+        "#,##0.###",
+        "¤#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
     Scripts{
         Arab{"アラビア文字"}
         Armn{"アルメニア文字"}
@@ -1950,7 +1956,7 @@ ja{
         POSIX{"コンピュータ"}
         REVISED{"改訂版"}
     }
-    Version{"1.90"}
+    Version{"1.97"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1958,20 +1964,21 @@ ja{
                 "午後",
             }
             DateTimePatterns{
-                "H'時'mm'分'ss'秒'z",
+                "H時mm分ss秒v",
                 "H:mm:ss:z",
                 "H:mm:ss",
                 "H:mm",
                 "yyyy'年'M'月'd'日'EEEE",
                 "yyyy'年'M'月'd'日'",
                 "yyyy/MM/dd",
-                "yy/MM/dd",
+                "yyyy-MM-dd",
                 "{1} {0}",
             }
             availableFormats{
                 GGGGyMd{"GGGGy'年'M'月'd'日'"}
                 MMdd{"MM/dd"}
                 mmss{"mm:ss"}
+                yyQ{"Q yy"}
                 yyyyMM{"yyyy/MM"}
             }
             dayNames{
@@ -2048,9 +2055,31 @@ ja{
                         "12 月",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
             }
             quarters{
                 format{
+                    abbreviated{
+                        "Q1",
+                        "第 2 四半期",
+                        "Q3",
+                        "Q4",
+                    }
                     wide{
                         "第 1 四半期",
                         "第 2 四半期",
@@ -2062,7 +2091,7 @@ ja{
         }
         japanese{
             DateTimePatterns{
-                "H'時'mm'分'ss'秒'z",
+                "H時mm分ss秒v",
                 "H:mm:ss:z",
                 "H:mm:ss",
                 "H:mm",
@@ -2320,10 +2349,6 @@ ja{
         }
         "Africa:Casablanca"{
             ec{"カサブランカ"}
-            ld{"グリニッジ標準時"}
-            ls{"グリニッジ標準時"}
-            sd{"GMT"}
-            ss{"GMT"}
         }
         "Africa:Ceuta"{
             ec{"アフリカ/セウタ"}
@@ -2342,10 +2367,6 @@ ja{
         }
         "America:Anchorage"{
             ec{"アンカレッジ"}
-            ld{"アラスカ夏時間"}
-            ls{"アラスカ標準時"}
-            sd{"AKDT"}
-            ss{"AKST"}
         }
         "America:Araguaina"{
             ec{"アメリカ/アラグァイナ"}
@@ -2397,10 +2418,6 @@ ja{
         }
         "America:Chicago"{
             ec{"シカゴ"}
-            ld{"中部夏時間"}
-            ls{"中部標準時"}
-            sd{"CDT"}
-            ss{"CST"}
         }
         "America:Chihuahua"{
             ec{"アメリカ/チワワ"}
@@ -2425,10 +2442,6 @@ ja{
         }
         "America:Denver"{
             ec{"デンバー"}
-            ld{"山地夏時間"}
-            ls{"山地標準時"}
-            sd{"MDT"}
-            ss{"MST"}
         }
         "America:Detroit"{
             ec{"アメリカ/デトロイト"}
@@ -2456,10 +2469,6 @@ ja{
         }
         "America:Halifax"{
             ec{"ハリファクス"}
-            ld{"大西洋夏時間"}
-            ls{"大西洋標準時"}
-            sd{"ADT"}
-            ss{"AST"}
         }
         "America:Hermosillo"{
             ec{"アメリカ/エルモシヨ"}
@@ -2499,10 +2508,6 @@ ja{
         }
         "America:Los_Angeles"{
             ec{"ロサンゼルス"}
-            ld{"太平洋夏時間"}
-            ls{"太平洋標準時"}
-            sd{"PDT"}
-            ss{"PST"}
         }
         "America:Louisville"{
             ec{"アメリカ/ルイスビル"}
@@ -2539,10 +2544,6 @@ ja{
         }
         "America:New_York"{
             ec{"ニューヨーク"}
-            ld{"東部夏時間"}
-            ls{"東部標準時"}
-            sd{"EDT"}
-            ss{"EST"}
         }
         "America:Nipigon"{
             ec{"アメリカ/ニピゴン"}
@@ -2594,10 +2595,6 @@ ja{
         }
         "America:St_Johns"{
             ec{"セントジョンズ"}
-            ld{"ニューファンドランド島夏時間"}
-            ls{"ニューファンドランド島標準時"}
-            sd{"NDT"}
-            ss{"NST"}
         }
         "America:Swift_Current"{
             ec{"アメリカ/スウィフトカレント"}
@@ -2697,10 +2694,6 @@ ja{
         }
         "Asia:Jerusalem"{
             ec{"エルサレム"}
-            ld{"イスラエル夏時間"}
-            ls{"イスラエル標準時"}
-            sd{"IDT"}
-            ss{"IST"}
         }
         "Asia:Kamchatka"{
             ec{"アジア/カムチャッカ"}
@@ -2743,9 +2736,6 @@ ja{
         }
         "Asia:Shanghai"{
             ec{"上海"}
-            ld{"中国夏時間"}
-            ls{"中国標準時"}
-            ss{"CTT"}
         }
         "Asia:Tashkent"{
             ec{"アジア/タシケント"}
@@ -2822,10 +2812,6 @@ ja{
         }
         "Europe:Bucharest"{
             ec{"ブカレスト"}
-            ld{"東欧夏時間"}
-            ls{"東欧標準時"}
-            sd{"EEST"}
-            ss{"EET"}
         }
         "Europe:Kaliningrad"{
             ec{"ヨーロッパ/カリーニングラード"}
@@ -2847,10 +2833,6 @@ ja{
         }
         "Europe:Paris"{
             ec{"パリ"}
-            ld{"中欧夏時間"}
-            ls{"中欧標準時"}
-            sd{"CEST"}
-            ss{"CET"}
         }
         "Europe:Samara"{
             ec{"ヨーロッパ/サマラ"}
@@ -2884,10 +2866,6 @@ ja{
         }
         "Pacific:Honolulu"{
             ec{"ホノルル"}
-            ld{"ハワイ夏時間"}
-            ls{"ハワイ標準時"}
-            sd{"HDT"}
-            ss{"HST"}
         }
         "Pacific:Johnston"{
             ec{"太平洋/ジョンストン"}
@@ -2927,6 +2905,81 @@ ja{
         }
         "Pacific:Yap"{
             ec{"太平洋/ヤップ"}
+        }
+        "meta:Alaska"{
+            ld{"アラスカ夏時間"}
+            ls{"アラスカ標準時"}
+            sd{"AKDT"}
+            ss{"AKST"}
+        }
+        "meta:America_Central"{
+            ld{"中部夏時間"}
+            ls{"中部標準時"}
+            sd{"CDT"}
+            ss{"CST"}
+        }
+        "meta:America_Eastern"{
+            ld{"東部夏時間"}
+            ls{"東部標準時"}
+            sd{"EDT"}
+            ss{"EST"}
+        }
+        "meta:America_Mountain"{
+            ld{"山地夏時間"}
+            ls{"山地標準時"}
+            sd{"MDT"}
+            ss{"MST"}
+        }
+        "meta:America_Pacific"{
+            ld{"太平洋夏時間"}
+            ls{"太平洋標準時"}
+            sd{"PDT"}
+            ss{"PST"}
+        }
+        "meta:Atlantic"{
+            ld{"大西洋夏時間"}
+            ls{"大西洋標準時"}
+            sd{"ADT"}
+            ss{"AST"}
+        }
+        "meta:China"{
+            ld{"中国夏時間"}
+            ls{"中国標準時"}
+            ss{"CTT"}
+        }
+        "meta:Europe_Central"{
+            ld{"中欧夏時間"}
+            ls{"中欧標準時"}
+            sd{"CEST"}
+            ss{"CET"}
+        }
+        "meta:Europe_Eastern"{
+            ld{"東欧夏時間"}
+            ls{"東欧標準時"}
+            sd{"EEST"}
+            ss{"EET"}
+        }
+        "meta:GMT"{
+            ls{"グリニッジ標準時"}
+            ss{"GMT"}
+        }
+        "meta:Hawaii"{
+            ld{"ハワイ夏時間"}
+            ls{"ハワイ標準時"}
+            sd{"HDT"}
+            ss{"HST"}
+        }
+        "meta:Israel"{
+            ld{"イスラエル夏時間"}
+            ls{"イスラエル標準時"}
+            sd{"IDT"}
+            ss{"IST"}
+        }
+        "meta:Newfoundland"{
+            ld{"ニューファンドランド島夏時間"}
+            ls{"ニューファンドランド島標準時"}
+            sd{"NDT"}
+            ss{"NST"}
         }
         fallbackFormat{"{0} ({1})時間"}
         hourFormat{"+HHmm;-HHmm"}

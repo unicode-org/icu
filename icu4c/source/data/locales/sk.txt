@@ -584,7 +584,7 @@ sk{
             "Francúzsky frank",
         }
         GBP{
-            "£",
+            "UK£",
             "Britská libra",
         }
         GEK{
@@ -696,7 +696,7 @@ sk{
             "Islandská krona",
         }
         ITL{
-            "₤",
+            "IT₤",
             "Talianská lira",
         }
         JMD{
@@ -708,7 +708,7 @@ sk{
             "Jordánsky dinár",
         }
         JPY{
-            "¥",
+            "JP¥",
             "Japonský yen",
         }
         KES{
@@ -1286,6 +1286,12 @@ sk{
         "NaN",
         "+",
     }
+    NumberPatterns{
+        "#,##0.###",
+        "#,##0.00 ¤",
+        "#,##0%",
+        "#E0",
+    }
     Scripts{
         Arab{"Arabský"}
         Armn{"Arménsky"}
@@ -1311,11 +1317,11 @@ sk{
             traditional{"Tradičné"}
         }
     }
-    Version{"1.66"}
+    Version{"1.72"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "H:mm:ss z",
+                "H:mm:ss v",
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
@@ -1329,6 +1335,7 @@ sk{
                 MMMMd{"d. MMMM"}
                 Md{"d.M"}
                 mmss{"mm:ss"}
+                yyQ{"Q yy"}
                 yyQQQQ{"QQQQ yy"}
                 yyyyM{"M.yyyy"}
                 yyyyMMMM{"MMMM yyyy"}
@@ -1422,6 +1429,12 @@ sk{
             }
             quarters{
                 format{
+                    abbreviated{
+                        "Q1",
+                        "2. štvrťrok",
+                        "Q3",
+                        "Q4",
+                    }
                     wide{
                         "1. štvrťrok",
                         "2. štvrťrok",
@@ -1431,6 +1444,12 @@ sk{
                 }
             }
         }
+    }
+    delimiters{
+        alternateQuotationEnd{"“"}
+        alternateQuotationStart{"„"}
+        quotationEnd{"‘"}
+        quotationStart{"‚"}
     }
     zoneStrings{
         "Antarctica:South_Pole"{

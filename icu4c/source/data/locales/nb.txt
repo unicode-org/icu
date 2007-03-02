@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/nb.xml
@@ -618,7 +618,7 @@ nb{
             "franske franc",
         }
         GBP{
-            "£",
+            "UK£",
             "britiske pund sterling",
         }
         GEK{
@@ -730,7 +730,7 @@ nb{
             "islandske kronar",
         }
         ITL{
-            "₤",
+            "IT₤",
             "italienske lire",
         }
         JMD{
@@ -742,7 +742,7 @@ nb{
             "jordanske dinarer",
         }
         JPY{
-            "¥",
+            "JP¥",
             "japanske yen",
         }
         KES{
@@ -1808,7 +1808,7 @@ nb{
     }
     NumberPatterns{
         "#,##0.###",
-        "¤ #,##0.00",
+        "#,##0.00 ¤",
         "#,##0 %",
         "#E0",
     }
@@ -1944,7 +1944,7 @@ nb{
         POLYTONI{"polytonisk"}
         REVISED{"revidert ortografi"}
     }
-    Version{"1.70"}
+    Version{"1.77"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1952,7 +1952,7 @@ nb{
                 "ettermiddag",
             }
             DateTimePatterns{
-                "'kl. 'HH.mm.ss z",
+                "'kl'. HH.mm.ss v",
                 "HH.mm.ss z",
                 "HH.mm.ss",
                 "HH.mm",
@@ -1963,10 +1963,13 @@ nb{
                 "{1} {0}",
             }
             availableFormats{
+                HHmm{"HH.mm"}
+                HHmmss{"HH.mm.ss"}
                 MMMMd{"d. MMMM"}
-                MMdd{"dd.MM"}
+                MMdd{"dd. MM"}
                 mmss{"mm.ss"}
                 yyMM{"MM.yy"}
+                yyQ{"Q yy"}
                 yyQQQQ{"QQQQ yy"}
                 yyyyMMMM{"MMMM yyyy"}
             }
@@ -2110,12 +2113,6 @@ nb{
             }
         }
     }
-    delimiters{
-        alternateQuotationEnd{"\""}
-        alternateQuotationStart{"\""}
-        quotationEnd{"»"}
-        quotationStart{"«"}
-    }
     measurementSystemNames{
         US{"amerikansk"}
         metric{"metrisk"}
@@ -2135,16 +2132,18 @@ nb{
         }
         "Europe:Bucharest"{
             ec{"Bucuresti"}
-            ld{"østeuropeisk sommertid"}
-            ls{"østeuropeisk standardtid"}
-            sd{"EEST"}
-            ss{"EET"}
         }
         "Europe:Lisbon"{
             ec{"Lisboa"}
         }
         "Europe:Moscow"{
             ec{"Moskva"}
+        }
+        "meta:Europe_Eastern"{
+            ld{"østeuropeisk sommertid"}
+            ls{"østeuropeisk standardtid"}
+            sd{"EEST"}
+            ss{"EET"}
         }
     }
 }

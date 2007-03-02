@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/te.xml
@@ -37,7 +37,7 @@ te{
             "యురొ",
         }
         GBP{
-            "£",
+            "UK£",
             "బ్ిటిష్ పౌన్డ స్టెర్లిగ్",
         }
         INR{
@@ -45,7 +45,7 @@ te{
             "రూపాయి",
         }
         JPY{
-            "¥",
+            "JP¥",
             "జపాను దేశ యెస్",
         }
         RUB{
@@ -53,7 +53,7 @@ te{
             "రష్య దేశ రూబల్",
         }
         USD{
-            "$",
+            "US$",
             "ఐక్య రాష్ట్ర అమెరిక డాలర్",
         }
     }
@@ -89,6 +89,12 @@ te{
         "NaN",
         "+",
     }
+    NumberPatterns{
+        "#,##,##0.###",
+        "¤ #,##,##0.00",
+        "#,##,##0%",
+        "#E0",
+    }
     Scripts{
         Arab{"అరబ్బి లిపి"}
         Cyrl{"సిరిలిక్ లిపి"}
@@ -102,12 +108,19 @@ te{
         1996{"1996 ఙర్మన వర్ణక్రమం"}
         REVISED{"సవరించబడిన వర్ణక్రమం"}
     }
-    Version{"1.52"}
+    Version{"1.58"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "పూర్వాహ్నం",
                 "అపరాహ్నం",
+            }
+            availableFormats{
+                MMMMd{"d MMMM"}
+                MMdd{"dd-MM"}
+                yyQ{"Q yy"}
+                yyyyMM{"MM-yyyy"}
+                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{
@@ -192,6 +205,12 @@ te{
             }
             quarters{
                 format{
+                    abbreviated{
+                        "Q1",
+                        "రెండు  2",
+                        "Q3",
+                        "Q4",
+                    }
                     wide{
                         "ఒకటి  1",
                         "రెండు  2",

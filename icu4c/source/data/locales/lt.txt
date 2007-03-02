@@ -38,6 +38,7 @@ lt{
         151{"Rytų Europa"}
         154{"Šiaurės Europa"}
         155{"Vakarų Europa"}
+        172{"Nepriklausomų Valstybių Sandrauga"}
         200{"Čekoslovakija"}
         419{"Lotynų Amerika ir Karibai"}
         AD{"Andora"}
@@ -281,7 +282,7 @@ lt{
     }
     Currencies{
         BRL{
-            "BRL",
+            "R$",
             "Brazilijos realas",
         }
         CNY{
@@ -293,7 +294,7 @@ lt{
             "Euras",
         }
         GBP{
-            "£",
+            "UK£",
             "Svaras sterlingų",
         }
         INR{
@@ -301,7 +302,7 @@ lt{
             "Indijos rupija",
         }
         JPY{
-            "¥",
+            "JP¥",
             "Jena",
         }
         LTL{
@@ -313,7 +314,7 @@ lt{
             "Rusijos rublis",
         }
         USD{
-            "$",
+            "US$",
             "JAV doleris",
         }
     }
@@ -323,39 +324,124 @@ lt{
         currency{"valiuta"}
     }
     Languages{
-        ar{"Arabų"}
-        bg{"Bulgarų"}
-        bn{"Bengalų"}
-        cs{"Čekų"}
-        da{"Danų"}
-        de{"Vokiečių"}
-        el{"Graikų"}
-        en{"Anglų"}
-        es{"Ispanų"}
-        et{"Estų"}
-        fi{"Suomių"}
-        fr{"Prancūzų"}
-        he{"Hebrajų"}
-        hi{"Hindi"}
-        hr{"Kroatų"}
-        hu{"Vengrų"}
-        it{"Italų"}
-        ja{"Japonų"}
-        ko{"Korėjiečių"}
-        lt{"Lietuvių"}
-        lv{"Latvių"}
-        nl{"Olandų"}
-        no{"Norvegų"}
-        pl{"Lenkų"}
-        pt{"Portugalų"}
-        ro{"Rumunų"}
-        ru{"Rusų"}
-        sk{"Slovakų"}
-        sl{"Slovėnų"}
-        sv{"Švedų"}
-        th{"Tajų"}
-        tr{"Turkų"}
-        zh{"Kinų"}
+        ab{"Abchazų"}
+        ady{"Adygėjų"}
+        ale{"Aleutų"}
+        ang{"Senoji anglų (450-1100)"}
+        ar{"arabų"}
+        art{"Dirbtinė (kita)"}
+        aus{"Australų kalbos"}
+        az{"Azerbaidžaniečių"}
+        ba{"Baškirų"}
+        bat{"Baltų (kita)"}
+        be{"Baltarusių"}
+        ber{"Berberų"}
+        bg{"bulgarų"}
+        bn{"bengalų"}
+        bnt{"Bantų"}
+        bo{"Tibetiečių"}
+        br{"Bretonų"}
+        bs{"Bosnių"}
+        bua{"Buriatų"}
+        ca{"Katalonų"}
+        cai{"Centrinės Amerikos indėnų (kita)"}
+        cau{"Kaukaziečių (kita)"}
+        ce{"Čečėnų"}
+        cel{"Keltų (kita)"}
+        co{"Korsikiečių"}
+        crh{"Krymo turkų; Krymo totorių"}
+        cs{"čekų"}
+        cu{"Bažnytinė slavų"}
+        cv{"Čiuvašų"}
+        cy{"Valų"}
+        da{"danų"}
+        de{"vokiečių"}
+        el{"graikų"}
+        en{"anglų"}
+        es{"ispanų"}
+        et{"estų"}
+        eu{"Baskų"}
+        fa{"Persų"}
+        fi{"suomių"}
+        fiu{"Finougrų (kita)"}
+        fr{"prancūzų"}
+        fro{"Senoji prancūzų"}
+        fy{"Fryzų"}
+        ga{"Airių"}
+        gem{"Germanų (kita)"}
+        got{"Gotų"}
+        grc{"Senovės graikų"}
+        he{"hebrajų"}
+        hi{"hindi"}
+        hr{"kroatų"}
+        hu{"vengrų"}
+        hy{"Armėnų"}
+        id{"Indoneziečių"}
+        ine{"Indoeuropiečių (kita)"}
+        inh{"Ingušų"}
+        ira{"Iraniečių"}
+        is{"Islandų"}
+        it{"italų"}
+        ja{"japonų"}
+        ka{"Gruzinų"}
+        kaa{"Karakalpakų"}
+        kbd{"Kabardinų"}
+        kk{"Kazachų"}
+        km{"Khmerų"}
+        ko{"korėjiečių"}
+        ku{"Kurdų"}
+        ky{"Kirgizų"}
+        la{"Lotynų"}
+        lb{"Liuksemburgiečių"}
+        lez{"Lezginų"}
+        lt{"lietuvių"}
+        lv{"latvių"}
+        mis{"Įvairios kalbos"}
+        mk{"Makedonų"}
+        mn{"Mongolų"}
+        mo{"Moldavų"}
+        ms{"Malajų"}
+        mul{"Kelios kalbos"}
+        nai{"Šiaurės Amerikos indėnų (kita)"}
+        nap{"Neapoliečių"}
+        nl{"olandų"}
+        no{"norvegų"}
+        os{"Osetinų"}
+        paa{"Papuasų (kita)"}
+        peo{"Senoji persų"}
+        pl{"lenkų"}
+        pt{"portugalų"}
+        ro{"rumunų"}
+        ru{"rusų"}
+        sa{"Sanskritas"}
+        sah{"Jakutų"}
+        sc{"Sardiniečių"}
+        scn{"Siciliečių"}
+        sco{"Škotų"}
+        sga{"Senoji airių"}
+        sk{"slovakų"}
+        sl{"slovėnų"}
+        sla{"Slavų (kita)"}
+        sq{"Albanų"}
+        sr{"Serbų"}
+        sux{"Šumerų"}
+        sv{"švedų"}
+        ta{"Tamilų"}
+        th{"tajų"}
+        tk{"Turkmėnų"}
+        tr{"turkų"}
+        tt{"Totorių"}
+        tyv{"Tuvių"}
+        udm{"Udmurtų"}
+        uk{"Ukrainiečių"}
+        und{"Nenustatyta"}
+        uz{"Uzbekų"}
+        vi{"Vietnamiečių"}
+        vo{"Volapiuk"}
+        wa{"Valonų"}
+        xal{"Kalmukų"}
+        yi{"Jidiš"}
+        zh{"kinų"}
     }
     LocaleScript{
         "Latn",
@@ -374,10 +460,33 @@ lt{
         "NaN",
         "+",
     }
-    Scripts{
-        Latn{"Latin"}
+    NumberPatterns{
+        "#,##0.###",
+        "#,##0.00 ¤",
+        "#,##0%",
+        "#E0",
     }
-    Version{"1.71"}
+    Scripts{
+        Arab{"Arabų"}
+        Armn{"Armėnų"}
+        Beng{"Bengalų"}
+        Cyrl{"Kirilica"}
+        Cyrs{"Kirilica (senasis bažnytinis variantas)"}
+        Egyp{"Egipto hieroglifai"}
+        Ethi{"Etiopų"}
+        Geor{"Gruzinų"}
+        Goth{"Gotų"}
+        Grek{"Graikų"}
+        Hebr{"Hebrajų"}
+        Hung{"Senasis vengrų"}
+        Ital{"Senasis italų"}
+        Kana{"Katakana"}
+        Khmr{"Khmerų"}
+        Latn{"Lotynų"}
+        Mong{"Mongolų"}
+        Runr{"Runų"}
+    }
+    Version{"1.80"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -385,7 +494,7 @@ lt{
                 "popiet",
             }
             DateTimePatterns{
-                "HH:mm:ss z",
+                "HH:mm:ss v",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -402,6 +511,7 @@ lt{
                 MMdd{"MM.dd"}
                 hhmm{"hh:mm a"}
                 hhmmss{"hh:mm:ss a"}
+                yyQ{"Q yy"}
                 yyyyMM{"yyyy.MM"}
             }
             dayNames{
@@ -559,6 +669,8 @@ lt{
         }
     }
     delimiters{
+        alternateQuotationEnd{"“"}
+        alternateQuotationStart{"„"}
         quotationEnd{"“"}
         quotationStart{"„"}
     }

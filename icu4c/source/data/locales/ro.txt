@@ -280,36 +280,36 @@ ro{
     }
     ExemplarCharacters{"[a ă â b-i î j-p r s ș t ț u-x z]"}
     Languages{
-        ar{"Arabă"}
-        bg{"Bulgară"}
-        cs{"Cehă"}
-        da{"Daneză"}
-        de{"Germană"}
-        el{"Greacă"}
-        en{"Engleză"}
-        es{"Spaniolă"}
-        et{"Estoniană"}
-        fi{"Finlandeză"}
-        fr{"Franceză"}
-        he{"Ebraică"}
-        hr{"Croată"}
-        hu{"Maghiară"}
-        it{"Italiană"}
-        ja{"Japoneză"}
-        ko{"Coreeană"}
-        lt{"Lituaniană"}
-        lv{"Letonă"}
-        nl{"Olandeză"}
-        no{"Norvegiană"}
-        pl{"Poloneză"}
-        pt{"Portugheză"}
-        ro{"Română"}
-        ru{"Rusă"}
-        sk{"Slovacă"}
-        sl{"Slovenă"}
-        sv{"Suedeză"}
-        tr{"Turcă"}
-        zh{"Chineză"}
+        ar{"arabă"}
+        bg{"bulgară"}
+        cs{"cehă"}
+        da{"daneză"}
+        de{"germană"}
+        el{"greacă"}
+        en{"engleză"}
+        es{"spaniolă"}
+        et{"estoniană"}
+        fi{"finlandeză"}
+        fr{"franceză"}
+        he{"ebraică"}
+        hr{"croată"}
+        hu{"maghiară"}
+        it{"italiană"}
+        ja{"japoneză"}
+        ko{"coreeană"}
+        lt{"lituaniană"}
+        lv{"letonă"}
+        nl{"olandeză"}
+        no{"norvegiană"}
+        pl{"poloneză"}
+        pt{"portugheză"}
+        ro{"română"}
+        ru{"rusă"}
+        sk{"slovacă"}
+        sl{"slovenă"}
+        sv{"suedeză"}
+        tr{"turcă"}
+        zh{"chineză"}
     }
     LocaleScript{
         "Latn",
@@ -328,11 +328,17 @@ ro{
         "NaN",
         "+",
     }
-    Version{"1.66"}
+    NumberPatterns{
+        "#,##0.###",
+        "#,##0.00 ¤",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.74"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "HH:mm:ss z",
+                "HH:mm:ss v",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -345,6 +351,7 @@ ro{
             availableFormats{
                 MMMMd{"d MMMM"}
                 MMdd{"dd.MM"}
+                yyQ{"Q yy"}
                 yyyyMM{"MM.yyyy"}
                 yyyyMMMM{"MMMM yyyy"}
             }
@@ -438,10 +445,10 @@ ro{
             quarters{
                 format{
                     abbreviated{
-                        "T1",
-                        "T2",
-                        "T3",
-                        "T4",
+                        "trimestrul 1",
+                        "Q2",
+                        "trimestrul 3",
+                        "trimestrul 4",
                     }
                     wide{
                         "trimestrul 1",

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/collation/root.xml
@@ -11,12 +11,12 @@
  */
 root{
     UCARules:process(uca_rules){"../unidata/UCARules.txt"}
-    Version{"1.24"}
+    Version{"1.25"}
     collations{
         default{"standard"}
         standard{
             Sequence{""}
-            Version{"1.4"}
+            Version{"1.5"}
         }
         unihan{
             Sequence{
@@ -2766,7 +2766,7 @@ root{
                 "<𪛄<龞<𪛅<𪛆<𪛇<𪛈<龠<龡<䶳<𪛊<龢<龣<䶴<𪛋<𪛌<𪛍<龤<龥<𪛎<𪛏<𪛐<𪛑<䶵<𪛒<𪛓<𪛔"
                 "<𪛕<𪛖"
             }
-            Version{"1.4"}
+            Version{"1.5"}
         }
     }
 }

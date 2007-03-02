@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/fi.xml
  */
 fi{
-    AuxExemplarCharacters{"[á à ã č ç é è ë í ï ñ ô ř ú ü æ ø õ œ]"}
+    AuxExemplarCharacters{"[á à â ã č ç đ é è ë ǧ ǥ ȟ í ï ǩ ń ñ ŋ ô ř ŧ ú ü æ ø õ œ ʒ ǯ]"}
     Countries{
         001{"maailma"}
         002{"Afrikka"}
@@ -436,7 +436,7 @@ fi{
             "Brasilian cruzeiro (1990-1993)",
         }
         BRL{
-            "BRL",
+            "R$",
             "Brasilian real",
         }
         BRN{
@@ -628,7 +628,7 @@ fi{
             "Ranskan frangi",
         }
         GBP{
-            "£",
+            "UK£",
             "Englannin punta",
         }
         GEK{
@@ -752,7 +752,7 @@ fi{
             "Jordanian dinaari",
         }
         JPY{
-            "¥",
+            "JP¥",
             "Japanin jeni",
         }
         KES{
@@ -1184,7 +1184,7 @@ fi{
             "Ugandan šillinki",
         }
         USD{
-            "$",
+            "US$",
             "Yhdysvaltain dollari",
         }
         USN{
@@ -1853,7 +1853,7 @@ fi{
     }
     NumberPatterns{
         "#,##0.###",
-        "#,##0.00 ¤",
+        "#,##0.00 ¤",
         "#,##0 %",
         "#E0",
     }
@@ -1992,7 +1992,7 @@ fi{
         ROZAJ{"sloveenin resia-murre"}
         SAAHO{"afarin saho-murre"}
     }
-    Version{"1.76"}
+    Version{"1.82"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2014,6 +2014,7 @@ fi{
                 MMMMd{"d. MMMM'ta'"}
                 Md{"d.M"}
                 mmss{"mm.ss"}
+                yyQ{"Q yy"}
                 yyyyM{"M.yyyy"}
                 yyyyMEEEd{"EEE d.M.yyyy"}
                 yyyyMMMM{"MMMM'ta 'yyyy"}
@@ -2232,65 +2233,12 @@ fi{
     zoneStrings{
         "Africa:Casablanca"{
             ec{"Casablanca"}
-            ld{"Greenwichin kesäaika"}
-            ls{"Greenwichin normaaliaika"}
-            sd{"GMT"}
-            ss{"GMT"}
-        }
-        "America:Anchorage"{
-            ec{"Anchorage"}
-            ld{"Alaskan kesäaika"}
-            ls{"Alaskan normaaliaika"}
-            sd{"AKDT"}
-            ss{"AKST"}
         }
         "America:Argentina:ComodRivadavia"{
             ec{"Comodoro Rivadavia"}
         }
         "America:Cancun"{
             ec{"Cancún"}
-        }
-        "America:Chicago"{
-            ec{"Chicago"}
-            ld{"Yhdysvaltain keskinen kesäaika"}
-            ls{"Yhdysvaltain keskinen normaaliaika"}
-            sd{"CDT"}
-            ss{"CST"}
-        }
-        "America:Denver"{
-            ec{"Denver"}
-            ld{"Kalliovuorten kesäaika"}
-            ls{"Kalliovuorten normaaliaika"}
-            sd{"MDT"}
-            ss{"MST"}
-        }
-        "America:Halifax"{
-            ec{"Halifax"}
-            ld{"Kanadan Atlantin kesäaika"}
-            ls{"Kanadan Atlantin normaaliaika"}
-            sd{"ADT"}
-            ss{"AST"}
-        }
-        "America:Indianapolis"{
-            ec{"Indianapolis"}
-            ld{"Yhdysvaltain itäinen kesäaika"}
-            ls{"Yhdysvaltain itäinen normaaliaika"}
-            sd{"EDT"}
-            ss{"EST"}
-        }
-        "America:Los_Angeles"{
-            ec{"Los Angeles"}
-            ld{"Yhdysvaltain Tyynenmeren kesäaika"}
-            ls{"Yhdysvaltain Tyynenmeren normaaliaika"}
-            sd{"PDT"}
-            ss{"PST"}
-        }
-        "America:New_York"{
-            ec{"New York"}
-            ld{"Yhdysvaltain itäinen kesäaika"}
-            ls{"Yhdysvaltain itäinen normaaliaika"}
-            sd{"EDT"}
-            ss{"EST"}
         }
         "America:North_Dakota:Center"{
             ec{"keskinen North Dakota"}
@@ -2300,9 +2248,6 @@ fi{
         }
         "America:St_Johns"{
             ec{"St. Johns"}
-            ld{"Newfoundlandin kesäaika"}
-            ls{"Newfoundlandin normaaliaika"}
-            ss{"CNT"}
         }
         "Antarctica:DumontDUrville"{
             ec{"Dumont d'Urville"}
@@ -2312,10 +2257,6 @@ fi{
         }
         "Asia:Jerusalem"{
             ec{"Jerusalem"}
-            ld{"Israelin kesäaika"}
-            ls{"Israelin normaaliaika"}
-            sd{"IDT"}
-            ss{"IST"}
         }
         "Asia:Kamchatka"{
             ec{"Kamtšatka"}
@@ -2326,13 +2267,6 @@ fi{
         "Asia:Sakhalin"{
             ec{"Sahalin"}
         }
-        "Asia:Shanghai"{
-            ec{"Shanghai"}
-            ld{"Kiinan kesäaika"}
-            ls{"Kiinan normaaliaika"}
-            sd{"CTT"}
-            ss{"CTT"}
-        }
         "Asia:Tashkent"{
             ec{"Taškent"}
         }
@@ -2340,7 +2274,7 @@ fi{
             ec{"Tokio"}
             ld{"Japanin kesäaika"}
             ls{"Japanin normaaliaika"}
-            sd{"JST"}
+            sd{"JDT"}
             ss{"JST"}
         }
         "Asia:Ulaanbaatar"{
@@ -2360,10 +2294,6 @@ fi{
         }
         "Europe:Bucharest"{
             ec{"Bukarest"}
-            ld{"Itä-Euroopan kesäaika"}
-            ls{"Itä-Euroopan normaaliaika"}
-            sd{"EEST"}
-            ss{"EET"}
         }
         "Europe:Kiev"{
             ec{"Kiova"}
@@ -2379,10 +2309,6 @@ fi{
         }
         "Europe:Paris"{
             ec{"Pariisi"}
-            ld{"Keski-Euroopan kesäaika"}
-            ls{"Keski-Euroopan normaaliaika"}
-            sd{"CEDT"}
-            ss{"CEST"}
         }
         "Europe:Uzhgorod"{
             ec{"Užgorod"}
@@ -2390,12 +2316,80 @@ fi{
         "Pacific:Easter"{
             ec{"Pääsiäissaari"}
         }
-        "Pacific:Honolulu"{
-            ec{"Honolulu"}
+        "meta:Alaska"{
+            ld{"Alaskan kesäaika"}
+            ls{"Alaskan normaaliaika"}
+            sd{"AKDT"}
+            ss{"AKST"}
+        }
+        "meta:America_Central"{
+            ld{"Yhdysvaltain keskinen kesäaika"}
+            ls{"Yhdysvaltain keskinen normaaliaika"}
+            sd{"CDT"}
+            ss{"CST"}
+        }
+        "meta:America_Eastern"{
+            ld{"Yhdysvaltain itäinen kesäaika"}
+            ls{"Yhdysvaltain itäinen normaaliaika"}
+            sd{"EDT"}
+            ss{"EST"}
+        }
+        "meta:America_Mountain"{
+            ld{"Kalliovuorten kesäaika"}
+            ls{"Kalliovuorten normaaliaika"}
+            sd{"MDT"}
+            ss{"MST"}
+        }
+        "meta:America_Pacific"{
+            ld{"Yhdysvaltain Tyynenmeren kesäaika"}
+            ls{"Yhdysvaltain Tyynenmeren normaaliaika"}
+            sd{"PDT"}
+            ss{"PST"}
+        }
+        "meta:Atlantic"{
+            ld{"Kanadan Atlantin kesäaika"}
+            ls{"Kanadan Atlantin normaaliaika"}
+            sd{"ADT"}
+            ss{"AST"}
+        }
+        "meta:China"{
+            ld{"Kiinan kesäaika"}
+            ls{"Kiinan normaaliaika"}
+            sd{"CTT"}
+            ss{"CTT"}
+        }
+        "meta:Europe_Central"{
+            ld{"Keski-Euroopan kesäaika"}
+            ls{"Keski-Euroopan normaaliaika"}
+            sd{"CEDT"}
+            ss{"CEST"}
+        }
+        "meta:Europe_Eastern"{
+            ld{"Itä-Euroopan kesäaika"}
+            ls{"Itä-Euroopan normaaliaika"}
+            sd{"EEST"}
+            ss{"EET"}
+        }
+        "meta:GMT"{
+            ls{"Greenwichin normaaliaika"}
+            ss{"GMT"}
+        }
+        "meta:Hawaii"{
             ld{"Havaijin kesäaika"}
             ls{"Havaijin normaaliaika"}
             sd{"HDT"}
             ss{"HST"}
+        }
+        "meta:Israel"{
+            ld{"Israelin kesäaika"}
+            ls{"Israelin normaaliaika"}
+            sd{"IDT"}
+            ss{"IST"}
+        }
+        "meta:Newfoundland"{
+            ld{"Newfoundlandin kesäaika"}
+            ls{"Newfoundlandin normaaliaika"}
+            ss{"CNT"}
         }
     }
 }

@@ -550,7 +550,7 @@ da{
             "Fransk franc",
         }
         GBP{
-            "£",
+            "UK£",
             "Britisk pund",
         }
         GEK{
@@ -658,7 +658,7 @@ da{
             "Islandsk krona",
         }
         ITL{
-            "₤",
+            "IT₤",
             "Italiensk lira",
         }
         JMD{
@@ -670,7 +670,7 @@ da{
             "Jordansk dinar",
         }
         JPY{
-            "¥",
+            "JP¥",
             "Japansk yen",
         }
         KES{
@@ -1197,22 +1197,17 @@ da{
         ady{"adyghe"}
         ae{"avestan"}
         af{"afrikaans"}
-        afa{"afro-asiatisk (øvrige)"}
         afh{"afrihili"}
-        ain{"ainu"}
         ak{"akan"}
         akk{"akkadisk"}
-        ale{"aleutisk"}
         alg{"algonkiske sprog"}
         am{"amharisk"}
         an{"aragonesisk"}
-        ang{"Angelsaksisk (ca.450-1100)"}
         apa{"apache sprog"}
         ar{"arabisk"}
         arc{"aramæisk"}
         arn{"araukansk"}
         arp{"arapaho"}
-        art{"kunstsprog (øvrige)"}
         arw{"arawak"}
         as{"assamesisk"}
         ast{"asturisk"}
@@ -1220,30 +1215,26 @@ da{
         aus{"australske sprog"}
         av{"avarisk"}
         awa{"awadhi"}
-        ay{"Aymara"}
-        az{"aserbajdsjansk"}
+        ay{"aymara"}
         ba{"bashkir"}
         bad{"banda"}
-        bai{"bamilekiske sprog"}
         bal{"baluchi"}
         ban{"balinesisk"}
         bas{"basa"}
-        bat{"baltiske sprog (øvrige)"}
         be{"hviderussisk"}
         bej{"beja"}
         bem{"bemba"}
-        ber{"berberisk"}
         bg{"bulgarsk"}
         bh{"bihari"}
         bho{"bhojpuri"}
         bi{"bislama"}
         bik{"bikol"}
         bin{"bini"}
-        bla{"Siksika"}
+        bla{"siksika"}
         bm{"bambara"}
         bn{"bengalsk"}
         bnt{"bantu"}
-        bo{"Tibetansk"}
+        bo{"tibetansk"}
         br{"bretonsk"}
         bra{"braj"}
         bs{"bosnisk"}
@@ -1253,401 +1244,370 @@ da{
         byn{"blin"}
         ca{"katalansk"}
         cad{"caddo"}
-        cai{"mellemamerikansk indiansk (øvrige)"}
         car{"caribisk"}
-        cau{"kaukasisk (øvrige)"}
         ce{"tjetjensk"}
         ceb{"cebuano"}
-        cel{"keltisk (øvrige)"}
         ch{"chamorro"}
-        chb{"Chibcha"}
+        chb{"chibcha"}
         chg{"chagatai"}
-        chk{"Chuukese"}
-        chm{"Mari"}
-        chn{"Chinook"}
-        cho{"Choctaw"}
-        chp{"Chipewyan"}
+        chk{"chuukese"}
+        chm{"mari"}
+        cho{"choctaw"}
+        chp{"chipewyan"}
         chr{"cherokee"}
         chy{"cheyenne"}
-        cmc{"chamic sprog"}
-        co{"Korsikansk"}
-        cop{"Koptisk"}
-        cpe{"Kreolsk og pidgin, baseret på engelsk (øvrige)"}
-        cpf{"Kreolsk og pidgin, baseret på fransk (øvrige)"}
-        cpp{"Kreolsk og pidgin, baseret på portugisisk (øvrige)"}
-        cr{"Cree"}
+        co{"korsikansk"}
+        cop{"koptisk"}
+        cr{"cree"}
         crh{"Krim-tyrkisk; Krim-tatarisk"}
-        crp{"Kreolsk og pidgin (øvrige)"}
-        cs{"Tjekkisk"}
-        csb{"Kashubian"}
-        cu{"Kirkeslavisk"}
-        cus{"Kusjitiske sprog (øvrige)"}
-        cv{"Chuvash"}
-        cy{"Walisisk"}
-        da{"Dansk"}
-        dak{"Dakota"}
-        dar{"Dargwa"}
-        day{"Dayak"}
-        de{"Tysk"}
-        del{"Delaware"}
-        den{"Slave (Athapascan)"}
-        dgr{"Dogrib"}
-        din{"Dinka"}
-        doi{"Dogri"}
-        dra{"Dravidiske sprog (øvrige)"}
-        dsb{"Nedre sorbisk"}
-        dua{"Duala"}
-        dum{"Hollandsk (ca. 1050-1350)"}
-        dv{"Divehi"}
-        dyu{"Dyula"}
-        dz{"Dzongkha"}
-        ee{"Ewe"}
-        efi{"Efik"}
-        egy{"Egyptisk (oldtid)"}
-        eka{"Ekajuk"}
-        el{"Græsk"}
-        elx{"Elamitisk"}
-        en{"Engelsk"}
-        enm{"Engelsk, Middel- (1100-1500)"}
-        eo{"Esperanto"}
-        es{"Spansk"}
-        et{"Estisk"}
+        cs{"tjekkisk"}
+        cu{"kirkeslavisk"}
+        cv{"chuvash"}
+        cy{"walisisk"}
+        da{"dansk"}
+        dak{"dakota"}
+        dar{"dargwa"}
+        day{"dayak"}
+        de{"tysk"}
+        del{"delaware"}
+        dgr{"dogrib"}
+        din{"dinka"}
+        doi{"dogri"}
+        dua{"duala"}
+        dv{"divehi"}
+        dyu{"dyula"}
+        dz{"dzongkha"}
+        ee{"ewe"}
+        efi{"efik"}
+        eka{"ekajuk"}
+        el{"græsk"}
+        elx{"elamitisk"}
+        en{"engelsk"}
+        eo{"esperanto"}
+        es{"spansk"}
+        et{"estisk"}
         eu{"baskisk"}
-        ewo{"Ewondo"}
-        fa{"Persisk"}
-        fan{"Fang"}
-        fat{"Fanti"}
-        ff{"Fulah"}
-        fi{"Finsk"}
-        fiu{"Finsk-ugriske sprog (øvrige)"}
-        fj{"Fijian"}
-        fo{"Færøsk"}
-        fon{"Fon"}
-        fr{"Fransk"}
-        frm{"Fransk, Middel- (ca.1400-1600)"}
-        fro{"Fransk, Old- (842-ca.1400)"}
-        fur{"Friulian"}
-        fy{"Frisisk"}
-        ga{"Irsk"}
-        gaa{"Ga"}
-        gay{"Gayo"}
-        gba{"Gbaya"}
-        gd{"Gælisk (skotsk)"}
-        gem{"Germanske sprog (øvrige)"}
-        gez{"Geez"}
-        gil{"Gilbertesisk"}
-        gl{"Galicisk"}
-        gmh{"Tysk, Middelhøj- (ca.1050-1500)"}
-        gn{"Guarani"}
-        goh{"Tysk, Oldhøj- (ca.750-1050)"}
-        gon{"Gondi"}
-        gor{"Gorontalo"}
-        got{"Gotisk"}
-        grb{"Grebo"}
-        grc{"oldgræsk (til 1453)"}
-        gu{"Gujaratisk"}
-        gv{"Manx"}
-        gwi{"Gwichʼin"}
-        ha{"Hausa"}
-        hai{"Haida"}
-        haw{"Hawaiiansk"}
-        he{"Hebraisk"}
-        hi{"Hindi"}
-        hil{"Hiligaynon"}
-        him{"Himachali"}
-        hit{"Hittitisk"}
-        hmn{"Hmong"}
+        ewo{"ewondo"}
+        fa{"persisk"}
+        fan{"fang"}
+        fat{"fanti"}
+        ff{"fulah"}
+        fi{"finsk"}
+        fo{"færøsk"}
+        fon{"fon"}
+        fr{"fransk"}
+        fur{"friulian"}
+        fy{"frisisk"}
+        ga{"irsk"}
+        gaa{"ga"}
+        gay{"gayo"}
+        gba{"gbaya"}
+        gez{"geez"}
+        gil{"gilbertesisk"}
+        gl{"galicisk"}
+        gn{"guarani"}
+        gon{"gondi"}
+        gor{"gorontalo"}
+        got{"gotisk"}
+        grb{"grebo"}
+        gu{"gujaratisk"}
+        gv{"manx"}
+        ha{"hausa"}
+        hai{"haida"}
+        haw{"hawaiiansk"}
+        he{"hebraisk"}
+        hi{"hindi"}
+        hil{"hiligaynon"}
+        him{"himachali"}
+        hit{"hittitisk"}
+        hmn{"hmong"}
         ho{"Hiri Motu"}
-        hr{"Kroatisk"}
-        hsb{"Øvre sorbisk"}
-        ht{"Haitisk"}
-        hu{"Ungarsk"}
-        hup{"Hupa"}
+        hr{"kroatisk"}
+        hu{"ungarsk"}
+        hup{"hupa"}
         hy{"armensk"}
-        hz{"Herero"}
-        ia{"Interlingua"}
-        iba{"Iban"}
-        id{"Indonesisk"}
-        ie{"Interlingue"}
-        ig{"Igbo"}
+        hz{"herero"}
+        ia{"interlingua"}
+        iba{"iban"}
+        id{"indonesisk"}
+        ie{"interlingue"}
+        ig{"igbo"}
         ii{"Sichuan Yi"}
-        ijo{"Ijo"}
-        ik{"Inupiaq"}
-        ilo{"Iloko"}
-        inc{"Indiske sprog (øvrige)"}
-        ine{"Indoeuropæiske sprog (øvrige)"}
-        inh{"Ingush"}
-        io{"Ido"}
-        ira{"Iranske sprog (øvrige)"}
-        iro{"Irokesiske sprog"}
-        is{"Islandsk"}
-        it{"Italiensk"}
-        iu{"Inuktitut"}
-        ja{"Japansk"}
-        jbo{"Lojban"}
-        jpr{"Jødisk-persisk"}
-        jrb{"Jødisk-arabisk"}
-        jv{"Javanesisk"}
-        ka{"Georgisk"}
-        kaa{"Karakalpakisk"}
-        kab{"Kabyle"}
-        kac{"Kachin"}
-        kam{"Kamba"}
-        kar{"Karen"}
-        kaw{"Kawi"}
-        kbd{"Kabardian"}
-        kg{"Kongo"}
-        kha{"Khasi"}
-        khi{"Khoisan (øvrige)"}
-        kho{"Khotanesisk"}
-        ki{"Kikuyu"}
-        kj{"Kuanyama"}
-        kk{"Kasakhisk"}
-        kl{"Kalaallisut"}
-        km{"Khmer"}
-        kmb{"Kimbundu"}
-        kn{"Kannaresisk"}
-        ko{"Koreansk"}
-        kok{"Konkani"}
-        kos{"Kosraean"}
-        kpe{"Kpelle"}
-        kr{"Kanuri"}
+        ijo{"ijo"}
+        ik{"inupiaq"}
+        ilo{"iloko"}
+        inc{"indiske sprog (øvrige)"}
+        ine{"indoeuropæiske sprog (øvrige)"}
+        inh{"ingush"}
+        io{"ido"}
+        ira{"iranske sprog (øvrige)"}
+        iro{"irokesiske sprog"}
+        is{"islandsk"}
+        it{"italiensk"}
+        iu{"inuktitut"}
+        ja{"japansk"}
+        jbo{"lojban"}
+        jpr{"jødisk-persisk"}
+        jrb{"jødisk-arabisk"}
+        jv{"javanesisk"}
+        ka{"georgisk"}
+        kaa{"karakalpakisk"}
+        kab{"kabyle"}
+        kac{"kachin"}
+        kam{"kamba"}
+        kar{"karen"}
+        kaw{"kawi"}
+        kbd{"kabardian"}
+        kg{"kongo"}
+        kha{"khasi"}
+        khi{"khoisan (øvrige)"}
+        kho{"khotanesisk"}
+        ki{"kikuyu"}
+        kj{"kuanyama"}
+        kk{"kasakhisk"}
+        kl{"kalaallisut"}
+        km{"khmer"}
+        kmb{"kimbundu"}
+        kn{"kannaresisk"}
+        ko{"koreansk"}
+        kok{"konkani"}
+        kos{"kosraean"}
+        kpe{"kpelle"}
+        kr{"kanuri"}
         krc{"Karachay-Balkar"}
-        kro{"Kru"}
-        kru{"Kurukh"}
-        ks{"Kashmiri"}
-        ku{"Kurdisk"}
-        kw{"Cornisk"}
-        ky{"Kirgisisk"}
-        la{"Latin"}
-        lad{"Ladino"}
-        lah{"Lahnda"}
-        lam{"Lamba"}
-        lb{"Luxembourgsk"}
-        lez{"Lezghian"}
-        lg{"Ganda"}
-        li{"Limburgsk"}
-        ln{"Lingala"}
-        lo{"Lao"}
-        lol{"Mongo"}
-        loz{"Lozi"}
-        lt{"Litauisk"}
+        kro{"kru"}
+        kru{"kurukh"}
+        ks{"kashmiri"}
+        ku{"kurdisk"}
+        kw{"cornisk"}
+        ky{"kirgisisk"}
+        la{"latin"}
+        lad{"ladino"}
+        lah{"lahnda"}
+        lam{"lamba"}
+        lb{"luxembourgsk"}
+        lez{"lezghian"}
+        lg{"ganda"}
+        li{"limburgsk"}
+        ln{"lingala"}
+        lo{"lao"}
+        lol{"mongo"}
+        loz{"lozi"}
+        lt{"litauisk"}
         lu{"Luba-Katanga"}
         lua{"Luba-Lulua"}
-        lui{"Luiseno"}
-        lun{"Lunda"}
-        luo{"Luo"}
-        lus{"Lushai"}
-        lv{"Lettisk"}
-        mad{"Madurese"}
-        mag{"Magahi"}
-        mai{"Maithili"}
-        mak{"Makasar"}
-        man{"Mandingo"}
+        lui{"luiseno"}
+        lun{"lunda"}
+        luo{"luo"}
+        lus{"lushai"}
+        lv{"lettisk"}
+        mad{"madurese"}
+        mag{"magahi"}
+        mai{"maithili"}
+        mak{"makasar"}
+        man{"mandingo"}
         map{"malajo-polynesisk"}
-        mas{"Masai"}
-        mdf{"Moksha"}
-        mdr{"Mandar"}
-        men{"Mende"}
-        mg{"Malagasy"}
+        mas{"masai"}
+        mdf{"moksha"}
+        mdr{"mandar"}
+        men{"mende"}
+        mg{"malagasy"}
         mga{"Irsk, Middel- (900-1200)"}
-        mh{"Marshallese"}
-        mi{"Maori"}
-        mic{"Micmac"}
-        min{"Minangkabau"}
-        mis{"Diverse sprog"}
-        mk{"Makedonsk"}
-        mkh{"Mon-khmer (øvrige)"}
-        ml{"Malayalam"}
-        mn{"Mongolsk"}
-        mnc{"Manchu"}
-        mni{"Manipuri"}
-        mo{"Moldovisk"}
-        moh{"Mohawk"}
-        mos{"Mossi"}
-        mr{"Marathisk"}
-        ms{"Malay"}
-        mt{"Maltesisk"}
-        mul{"Flere sprog"}
-        mun{"Munda (øvrige)"}
-        mus{"Creek"}
-        mwr{"Marwari"}
+        mh{"marshallese"}
+        mi{"maori"}
+        mic{"micmac"}
+        min{"minangkabau"}
+        mis{"diverse sprog"}
+        mk{"makedonsk"}
+        mkh{"mon-khmer (øvrige)"}
+        ml{"malayalam"}
+        mn{"mongolsk"}
+        mnc{"manchu"}
+        mni{"manipuri"}
+        mo{"moldovisk"}
+        moh{"mohawk"}
+        mos{"mossi"}
+        mr{"marathisk"}
+        ms{"malay"}
+        mt{"maltesisk"}
+        mul{"flere sprog"}
+        mun{"munda (øvrige)"}
+        mus{"creek"}
+        mwr{"marwari"}
         my{"burmesisk"}
-        myn{"Maya sprog"}
-        myv{"Erzya"}
-        na{"Nauru"}
-        nah{"Nahuatl"}
-        nai{"Nordamerikanske indianske sprog (øvrige)"}
-        nap{"Neapolitansk"}
+        myn{"maya sprog"}
+        myv{"erzya"}
+        na{"nauru"}
+        nah{"nahuatl"}
+        nai{"nordamerikanske indianske sprog (øvrige)"}
+        nap{"neapolitansk"}
         nb{"Norsk Bokmål"}
         nd{"Ndebele, Nord"}
-        nds{"Nedertysk; nedersachsisk"}
-        ne{"Nepalesisk"}
-        new{"Newari"}
-        ng{"Ndonga"}
-        nia{"Nias"}
+        nds{"nedertysk; nedersachsisk"}
+        ne{"nepalesisk"}
+        new{"newari"}
+        ng{"ndonga"}
+        nia{"nias"}
         nic{"Niger-Congo sprog (øvrige)"}
-        niu{"Niuean"}
-        nl{"Hollandsk"}
-        nn{"Nynorsk"}
-        no{"Norsk"}
-        nog{"Nogai"}
+        niu{"niuean"}
+        nl{"hollandsk"}
+        nn{"nynorsk"}
+        no{"norsk"}
+        nog{"nogai"}
         non{"Islandsk, Old-"}
         nr{"Ndebele, Syd"}
         nso{"Sotho, Nord"}
-        nub{"Nubiske sprog"}
-        nv{"Navajo"}
+        nub{"nubiske sprog"}
+        nv{"navajo"}
         ny{"Nyanja; Chichewa; Chewa"}
-        nym{"Nyamwezi"}
-        nyn{"Nyankole"}
-        nyo{"Nyoro sprog"}
-        nzi{"Nzima"}
+        nym{"nyamwezi"}
+        nyn{"nyankole"}
+        nyo{"nyoro sprog"}
+        nzi{"nzima"}
         oc{"Occitansk (efter 1500); Provencalsk"}
-        oj{"Ojibwa"}
-        om{"Oromo"}
-        or{"Oriya"}
-        os{"Ossetisk"}
-        osa{"Osage"}
-        ota{"Osmannisk (1500-1928)"}
-        oto{"Otomi sprog"}
-        pa{"Punjabi"}
-        paa{"Papua-australske sprog (øvrige)"}
-        pag{"Pangasinan"}
-        pal{"Pahlavi"}
-        pam{"Pampanga"}
-        pap{"Papiamento"}
-        pau{"Palauansk"}
+        oj{"ojibwa"}
+        om{"oromo"}
+        or{"oriya"}
+        os{"ossetisk"}
+        osa{"osage"}
+        ota{"osmannisk (1500-1928)"}
+        oto{"otomi sprog"}
+        pa{"punjabi"}
+        paa{"papua-australske sprog (øvrige)"}
+        pag{"pangasinan"}
+        pal{"pahlavi"}
+        pam{"pampanga"}
+        pap{"papiamento"}
+        pau{"palauansk"}
         peo{"Persisk, Old- (ca. 600-400 f. Kr.)"}
-        phi{"Filippinske sprog (øvrige)"}
-        phn{"Fønikisk"}
-        pi{"Pali"}
-        pl{"Polsk"}
-        pon{"Ponape"}
-        pro{"Provencalsk (før 1500)"}
+        phi{"filippinske sprog (øvrige)"}
+        phn{"fønikisk"}
+        pi{"pali"}
+        pl{"polsk"}
+        pon{"ponape"}
+        pro{"provencalsk (før 1500)"}
         ps{"Pashto (Pushto)"}
-        pt{"Portugisisk"}
-        qu{"Quechua"}
-        raj{"Rajasthani"}
-        rap{"Rapanui"}
-        rar{"Rarotongan"}
-        rm{"Rætoromansk"}
-        rn{"Rundi"}
-        ro{"Rumænsk"}
-        roa{"Romanske sprog (øvrige)"}
-        rom{"Romani"}
-        ru{"Russisk"}
+        pt{"portugisisk"}
+        qu{"quechua"}
+        raj{"rajasthani"}
+        rap{"rapanui"}
+        rar{"rarotongan"}
+        rm{"rætoromansk"}
+        rn{"rundi"}
+        ro{"rumænsk"}
+        roa{"romanske sprog (øvrige)"}
+        rom{"romani"}
+        ru{"russisk"}
         rup{"arumænsk"}
-        rw{"Kinyarwanda"}
-        sa{"Sanskrit"}
-        sad{"Sandawe"}
-        sah{"Yakut"}
-        sai{"Sydamerikanske indianske sprog (øvrige)"}
-        sam{"Samaritansk"}
-        sas{"Sasak"}
-        sat{"Santali"}
-        sc{"Sardinsk"}
-        sco{"Skotsk"}
-        sd{"Sindhi"}
-        se{"Nordsamisk"}
-        sel{"Selkupisk"}
-        sem{"Semitiske sprog (øvrige)"}
-        sg{"Sango"}
+        rw{"kinyarwanda"}
+        sa{"sanskrit"}
+        sad{"sandawe"}
+        sah{"yakut"}
+        sai{"sydamerikanske indianske sprog (øvrige)"}
+        sam{"samaritansk"}
+        sas{"sasak"}
+        sat{"santali"}
+        sc{"sardinsk"}
+        sco{"skotsk"}
+        sd{"sindhi"}
+        se{"nordsamisk"}
+        sel{"selkupisk"}
+        sem{"semitiske sprog (øvrige)"}
+        sg{"sango"}
         sga{"Irsk, Old- (indtil 900)"}
-        sgn{"Tegnsprog"}
-        sh{"Serbokroatisk"}
-        shn{"Shan"}
-        si{"Singalesisk"}
-        sid{"Sidamo"}
-        sit{"Sino-tibetanske sprog (øvrige)"}
-        sk{"Slovakisk"}
-        sl{"Slovensk"}
-        sla{"Slaviske sprog (øvrige)"}
-        sm{"Samoansk"}
-        sma{"Sydsamisk"}
-        smi{"Samiske sprog (øvrige)"}
+        sgn{"tegnsprog"}
+        shn{"shan"}
+        si{"singalesisk"}
+        sid{"sidamo"}
+        sit{"sino-tibetanske sprog (øvrige)"}
+        sk{"slovakisk"}
+        sl{"slovensk"}
+        sla{"slaviske sprog (øvrige)"}
+        sm{"samoansk"}
+        sma{"sydsamisk"}
+        smi{"samiske sprog (øvrige)"}
         smj{"Lule Sami"}
         smn{"Inari Sami"}
         sms{"Skolt Sami"}
-        sn{"Shona"}
-        snk{"Soninke"}
-        so{"Somalisk"}
-        sog{"Sogdiansk"}
-        son{"Songhai"}
+        sn{"shona"}
+        snk{"soninke"}
+        so{"somalisk"}
+        sog{"sogdiansk"}
+        son{"songhai"}
         sq{"albansk"}
-        sr{"Serbisk"}
-        srr{"Serer"}
-        ss{"Swati"}
+        sr{"serbisk"}
+        srr{"serer"}
+        ss{"swati"}
         ssa{"Afrikanske sprog syd for Sahara (øvrige)"}
         st{"Sotho, Southern"}
-        su{"Sundanesisk"}
-        suk{"Sukuma"}
-        sus{"Susu"}
-        sux{"Sumerisk"}
-        sv{"Svensk"}
-        sw{"Swahili"}
-        syr{"Syrisk"}
-        ta{"Tamilsk"}
-        tai{"Tai (øvrige)"}
-        te{"Telugu"}
-        tem{"Temne"}
-        ter{"Tereno"}
-        tet{"Tetum"}
-        tg{"Tajik"}
-        th{"Thailandsk"}
-        ti{"Tigrinya"}
-        tig{"Tigre"}
-        tiv{"Tivi"}
-        tk{"Turkmensk"}
-        tkl{"Tokelau"}
-        tl{"Tagalog"}
-        tli{"Tlingit"}
-        tmh{"Tamashek"}
-        tn{"Tswana"}
+        su{"sundanesisk"}
+        suk{"sukuma"}
+        sus{"susu"}
+        sux{"sumerisk"}
+        sv{"svensk"}
+        sw{"swahili"}
+        syr{"syrisk"}
+        ta{"tamilsk"}
+        tai{"tai (øvrige)"}
+        te{"telugu"}
+        tem{"temne"}
+        ter{"tereno"}
+        tet{"tetum"}
+        tg{"tajik"}
+        th{"thailandsk"}
+        ti{"tigrinya"}
+        tig{"tigre"}
+        tiv{"tivi"}
+        tk{"turkmensk"}
+        tkl{"tokelau"}
+        tl{"tagalog"}
+        tli{"tlingit"}
+        tmh{"tamashek"}
+        tn{"tswana"}
         to{"Tonga (Tongaøerne)"}
         tog{"Tonga (Nyasa)"}
         tpi{"Tok Pisin"}
-        tr{"Tyrkisk"}
-        ts{"Tsonga"}
-        tsi{"Tsimshisk"}
-        tt{"Tatarisk"}
-        tum{"Tumbuka"}
+        tr{"tyrkisk"}
+        ts{"tsonga"}
+        tsi{"tsimshisk"}
+        tt{"tatarisk"}
+        tum{"tumbuka"}
         tut{"tyrkisk-tatarisk (øvrige)"}
-        tvl{"Tuvalu"}
-        tw{"Twi"}
-        ty{"Tahitiansk"}
-        tyv{"Tuvinian"}
-        udm{"Udmurt"}
-        ug{"Uigurisk"}
-        uga{"Ugaristisk"}
-        uk{"Ukrainsk"}
-        umb{"Umbundu"}
-        und{"Sproget kan ikke bestemmes"}
-        ur{"Urdu"}
-        uz{"Usbekisk"}
-        vai{"Vai"}
-        ve{"Venda"}
-        vi{"Vietnamesisk"}
-        vo{"Volapük"}
-        vot{"Votisk"}
-        wa{"Vallonsk"}
-        wal{"Walamo"}
-        war{"Waray"}
-        was{"Washo"}
-        wen{"Vendiske sprog"}
-        wo{"Wolof"}
-        xal{"Kalmyk"}
-        xh{"Xhosa"}
-        yao{"Yao"}
-        yap{"Yap"}
-        yi{"Jiddisch"}
-        yo{"Yoruba"}
-        za{"Zhuang"}
-        zap{"Zapotec"}
-        zen{"Zenaga"}
-        zh{"Kinesisk"}
-        znd{"Zande"}
-        zu{"Zulu"}
-        zun{"Zuni"}
+        tvl{"tuvalu"}
+        tw{"twi"}
+        ty{"tahitiansk"}
+        tyv{"tuvinian"}
+        udm{"udmurt"}
+        ug{"uigurisk"}
+        uga{"ugaristisk"}
+        uk{"ukrainsk"}
+        umb{"umbundu"}
+        und{"sproget kan ikke bestemmes"}
+        ur{"urdu"}
+        uz{"usbekisk"}
+        vai{"vai"}
+        ve{"venda"}
+        vi{"vietnamesisk"}
+        vot{"votisk"}
+        wa{"vallonsk"}
+        wal{"walamo"}
+        war{"waray"}
+        was{"washo"}
+        wen{"vendiske sprog"}
+        wo{"wolof"}
+        xal{"kalmyk"}
+        xh{"xhosa"}
+        yao{"yao"}
+        yap{"yap"}
+        yi{"jiddisch"}
+        yo{"yoruba"}
+        za{"zhuang"}
+        zap{"zapotec"}
+        zen{"zenaga"}
+        zh{"kinesisk"}
+        znd{"zande"}
+        zu{"zulu"}
+        zun{"zuni"}
     }
     LocaleScript{
         "Latn",
@@ -1715,11 +1675,11 @@ da{
             traditional{"Traditionel sorteringsrækkefølge"}
         }
     }
-    Version{"1.68"}
+    Version{"1.77"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "HH.mm.ss z",
+                "HH.mm.ss v",
                 "HH.mm.ss z",
                 "HH.mm.ss",
                 "HH.mm",
@@ -1733,6 +1693,7 @@ da{
                 MMMd{"d. MMM"}
                 MMdd{"dd/MM"}
                 mmss{"mm.ss"}
+                yyQ{"Q yy"}
                 yyyyMM{"MM/yyyy"}
                 yyyyMMM{"MMM yyyy"}
             }
@@ -1879,41 +1840,31 @@ da{
     zoneStrings{
         "Africa:Casablanca"{
             ec{"Casablanca"}
-            ld{"Verdenstid"}
-            ls{"Verdenstid"}
-            sd{"GMT"}
-            ss{"GMT"}
+            ld{"Casablanca, sommertid"}
+            ls{"Casablanca, normaltid"}
         }
         "America:Anchorage"{
             ec{"Anchorage"}
-            ld{"Alaska-sommertid"}
-            ls{"Alaska-normaltid"}
-            sd{"AKDT"}
-            ss{"AKST"}
+            ld{"Alaska, sommertid"}
+            ls{"Alaska, normaltid"}
         }
         "America:Chicago"{
             ec{"Chicago"}
-            ld{"Central-sommertid"}
-            ls{"Central-normaltid"}
-            sd{"CDT"}
-            ss{"CST"}
+            ld{"Chicago, sommertid"}
+            ls{"Chicago, normaltid"}
         }
         "America:Denver"{
             ec{"Denver"}
-            ld{"Mountain-sommertid"}
-            ls{"Mountain-normaltid"}
-            sd{"MDT"}
-            ss{"MST"}
+            ld{"Denver, sommertid"}
+            ls{"Denver, normaltid"}
         }
         "America:Godthab"{
             ec{"Nuuk"}
         }
         "America:Halifax"{
             ec{"Halifax"}
-            ld{"Atlantic-sommertid"}
-            ls{"Atlantic-normaltid"}
-            sd{"ADT"}
-            ss{"AST"}
+            ld{"Halifax, sommertid"}
+            ls{"Halifax, normaltid"}
         }
         "America:Indianapolis"{
             ec{"Indianapolis"}
@@ -1922,52 +1873,42 @@ da{
         }
         "America:Los_Angeles"{
             ec{"Los Angeles"}
-            ld{"Pacific-sommertid"}
-            ls{"Pacific-normaltid"}
-            sd{"PDT"}
-            ss{"PST"}
+            ld{"Los Angeles, sommertid"}
+            ls{"Los Angeles, normaltid"}
         }
         "America:New_York"{
             ec{"New York"}
-            ld{"Eastern-sommertid"}
-            ls{"Eastern-normaltid"}
-            sd{"EDT"}
-            ss{"EST"}
+            ld{"New York, sommertid"}
+            ls{"New York, normaltid"}
         }
         "America:Phoenix"{
             ec{"Phoenix"}
-            ld{"Mountain-normaltid"}
-            ls{"Mountain-normaltid"}
-            sd{"MST"}
-            ss{"MST"}
+            ld{"Phoenix, sommertid"}
+            ls{"Phoenix, normaltid"}
         }
         "America:St_Johns"{
             ec{"St. Johns"}
-            ld{"Newfoundland-sommertid"}
-            ls{"Newfoundland-normaltid"}
-            sd{"NDT"}
-            ss{"NST"}
+            ld{"St. Johns, sommertid"}
+            ls{"St. Johns, normaltid"}
         }
         "Antarctica:South_Pole"{
             ec{"Sydpolen"}
         }
         "Asia:Jerusalem"{
             ec{"Jerusalem"}
-            ld{"Israelsk sommertid"}
-            ls{"Israelsk normaltid"}
-            sd{"IDT"}
-            ss{"IST"}
+            ld{"Jerusalem, sommertid"}
+            ls{"Jerusalem, normaltid"}
         }
         "Asia:Shanghai"{
             ec{"Shanghai"}
-            ld{"Kinesisk normaltid"}
-            ls{"Kinesisk normaltid"}
+            ld{"Shanghai, sommertid"}
+            ls{"Shanghai, normaltid"}
         }
         "Asia:Tokyo"{
             ec{"Tokyo"}
-            ld{"Japansk normaltid"}
+            ld{"Japansk sommertid"}
             ls{"Japansk normaltid"}
-            sd{"JST"}
+            sd{"JDT"}
             ss{"JST"}
         }
         "Atlantic:Canary"{
@@ -1975,10 +1916,8 @@ da{
         }
         "Europe:Bucharest"{
             ec{"Bukarest"}
-            ld{"Østeuropæisk sommertid"}
-            ls{"Østeuropæisk normaltid"}
-            sd{"EEST"}
-            ss{"EET"}
+            ld{"Bucharest, sommertid"}
+            ls{"Bucharest, normaltid"}
         }
         "Europe:Lisbon"{
             ec{"Lissabon"}
@@ -1988,20 +1927,90 @@ da{
         }
         "Europe:Paris"{
             ec{"Paris"}
-            ld{"Mellemeuropæisk sommertid"}
-            ls{"Mellemeuropæisk normaltid"}
-            sd{"CEST"}
-            ss{"CET"}
+            ld{"Paris, sommertid"}
+            ls{"Paris, normaltid"}
         }
         "Pacific:Easter"{
             ec{"Påskeøen"}
         }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
-            ld{"Hawaii-normaltid"}
+            ld{"Hawaii, sommertid"}
+            ls{"Hawaii, normaltid"}
+        }
+        "meta:Alaska"{
+            ld{"Alaska-sommertid"}
+            ls{"Alaska-normaltid"}
+            sd{"AKDT"}
+            ss{"AKST"}
+        }
+        "meta:America_Central"{
+            ld{"Central-sommertid"}
+            ls{"Central-normaltid"}
+            sd{"CDT"}
+            ss{"CST"}
+        }
+        "meta:America_Eastern"{
+            ld{"Eastern-sommertid"}
+            ls{"Eastern-normaltid"}
+            sd{"EDT"}
+            ss{"EST"}
+        }
+        "meta:America_Mountain"{
+            ld{"Mountain-sommertid"}
+            ls{"Mountain-normaltid"}
+            sd{"MDT"}
+            ss{"MST"}
+        }
+        "meta:America_Pacific"{
+            ld{"Pacific-sommertid"}
+            ls{"Pacific-normaltid"}
+            sd{"PDT"}
+            ss{"PST"}
+        }
+        "meta:Atlantic"{
+            ld{"Atlantic-sommertid"}
+            ls{"Atlantic-normaltid"}
+            sd{"ADT"}
+            ss{"AST"}
+        }
+        "meta:China"{
+            ld{"Kinesisk sommertid"}
+            ls{"Kinesisk normaltid"}
+        }
+        "meta:Europe_Central"{
+            ld{"Mellemeuropæisk sommertid"}
+            ls{"Mellemeuropæisk normaltid"}
+            sd{"CEST"}
+            ss{"CET"}
+        }
+        "meta:Europe_Eastern"{
+            ld{"Østeuropæisk sommertid"}
+            ls{"Østeuropæisk normaltid"}
+            sd{"EEST"}
+            ss{"EET"}
+        }
+        "meta:GMT"{
+            ls{"Verdenstid"}
+            ss{"GMT"}
+        }
+        "meta:Hawaii"{
+            ld{"Hawaii-sommertid"}
             ls{"Hawaii-normaltid"}
-            sd{"HST"}
+            sd{"HDT"}
             ss{"HST"}
+        }
+        "meta:Israel"{
+            ld{"Israelsk sommertid"}
+            ls{"Israelsk normaltid"}
+            sd{"IDT"}
+            ss{"IST"}
+        }
+        "meta:Newfoundland"{
+            ld{"Newfoundland-sommertid"}
+            ls{"Newfoundland-normaltid"}
+            sd{"NDT"}
+            ss{"NST"}
         }
     }
 }

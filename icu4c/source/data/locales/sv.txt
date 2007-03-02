@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/sv.xml
@@ -264,7 +264,7 @@ sv{
         TZ{"Tanzania"}
         UA{"Ukraina"}
         UG{"Uganda"}
-        UM{"USAs yttre öar"}
+        UM{"USA:s yttre öar"}
         US{"USA"}
         UY{"Uruguay"}
         UZ{"Uzbekistan"}
@@ -585,7 +585,7 @@ sv{
             "Fransk franc",
         }
         GBP{
-            "£",
+            "UK£",
             "Brittiskt pund sterling",
         }
         GEK{
@@ -697,7 +697,7 @@ sv{
             "Isländsk krona",
         }
         ITL{
-            "₤",
+            "IT₤",
             "Italiensk lira",
         }
         JMD{
@@ -709,7 +709,7 @@ sv{
             "Jordansk dinar",
         }
         JPY{
-            "¥",
+            "JP¥",
             "Japansk yen",
         }
         KES{
@@ -1240,7 +1240,7 @@ sv{
         ady{"adygeiska"}
         ae{"avestiska"}
         af{"afrikaans"}
-        afa{"afro-asiatiskt språk (annat)"}
+        afa{"afroasiatiskt (annat)"}
         afh{"afrihili"}
         ain{"ainu"}
         ak{"akan"}
@@ -1316,12 +1316,12 @@ sv{
         cmc{"chamispråk"}
         co{"korsikanska"}
         cop{"koptiska"}
-        cpe{"kreolspråk och pidgin, engelskbaserade (annat)"}
-        cpf{"kreolspråk och pidgin, franskbaserade (annat)"}
-        cpp{"kreolspråk och pidgin, portugisiskbaserade (annat)"}
+        cpe{"kreol- och pidginspråk, engelskbaserade (övriga)"}
+        cpf{"kreol- och pidginspråk, franskbaserade (övriga)"}
+        cpp{"kreol- och pidginspråk, portugisiskbaserade (övriga)"}
         cr{"cree"}
-        crh{"krimturkiska; krimtatariska"}
-        crp{"kreolspråk och pidgin (annat)"}
+        crh{"krimturkiska, krimtatariska"}
+        crp{"kreol- och pidginspråk (annat)"}
         cs{"tjeckiska"}
         csb{"kasjubiska"}
         cu{"kyrkslaviska"}
@@ -1352,7 +1352,7 @@ sv{
         el{"grekiska"}
         elx{"elamitiska"}
         en{"engelska"}
-        enm{"medelengelska (1100-1500)"}
+        enm{"medelengelska (ca 1100-1500)"}
         eo{"esperanto"}
         es{"spanska"}
         et{"estniska"}
@@ -1379,10 +1379,10 @@ sv{
         gd{"höglandsskotska"}
         gem{"germanskt språk (annat)"}
         gez{"etiopiska"}
-        gil{"gilbertesiska; kiribati"}
+        gil{"gilbertesiska, kiribati"}
         gl{"galiciska"}
         gmh{"medelhögtyska (ca 1050-1500)"}
-        gn{"guaraní"}
+        gn{"guarani"}
         gon{"gondi"}
         gor{"gorontalo"}
         got{"gotiska"}
@@ -1422,7 +1422,7 @@ sv{
         inh{"ingusjiska"}
         io{"ido"}
         ira{"iranska"}
-        iro{"irokesiskt språk"}
+        iro{"irokesiska språk"}
         is{"isländska"}
         it{"italienska"}
         iu{"inuktitut"}
@@ -1441,15 +1441,15 @@ sv{
         kbd{"kabardinska"}
         kg{"kikongo"}
         kha{"khasi"}
-        khi{"khoisanspråk (annat)"}
+        khi{"khoisanska (annat)"}
         kho{"khotanesiska"}
         ki{"kikuyu"}
         kj{"kuanyama"}
         kk{"kazakstanska"}
         kl{"grönländska"}
-        km{"kambodjanska; khmeriska"}
+        km{"kambodjanska, khmeriska"}
         kmb{"kimbundu"}
-        kn{"kanaresiska; kannada"}
+        kn{"kanaresiska, kannada"}
         ko{"koreanska"}
         kok{"konkani"}
         kos{"kosreanska"}
@@ -1475,7 +1475,7 @@ sv{
         li{"limburgiska"}
         ln{"lingala"}
         lo{"laotiska"}
-        lol{"lolo; mongo"}
+        lol{"lolo, mongo"}
         loz{"lozi"}
         lt{"litauiska"}
         lu{"luba-katanga"}
@@ -1494,7 +1494,7 @@ sv{
         mdr{"mandar"}
         men{"mende"}
         mg{"malagassiska"}
-        mga{"medeliriska (900-1200)"}
+        mga{"medeliriska (ca 900-1200)"}
         mh{"marshalliska"}
         mi{"maori"}
         mic{"mic-mac"}
@@ -1522,11 +1522,11 @@ sv{
         myn{"mayaspråk"}
         myv{"erjya"}
         na{"nauru"}
-        nah{"nahuatl; aztekiska"}
+        nah{"nahuatl, aztekiska"}
         nai{"nordamerikanskt indianspråk (annat)"}
         nap{"napolitanska"}
         nb{"norska (bokmål)"}
-        nds{"lågtyska; lågsaxiska"}
+        nds{"lågtyska, lågsaxiska"}
         ne{"nepalesiska"}
         new{"newariska"}
         ng{"ndonga"}
@@ -1546,8 +1546,8 @@ sv{
         nyn{"nyankole"}
         nyo{"nyoro"}
         nzi{"nzima"}
-        oc{"provensalska (efter 1500); occitanska"}
-        oj{"odjibwa; chippewa"}
+        oc{"provensalska (efter 1500), occitanska"}
+        oj{"odjibwa, chippewa"}
         om{"oromo"}
         or{"oriya"}
         os{"ossetiska"}
@@ -1563,13 +1563,13 @@ sv{
         pau{"palau"}
         peo{"fornpersiska (ca 600-400 f.Kr.)"}
         phi{"filippinskt språk (annat)"}
-        phn{"kananeiska; feniciska"}
+        phn{"kananeiska, feniciska"}
         pi{"pali"}
         pl{"polska"}
         pon{"ponape"}
         pra{"prakritspråk"}
         pro{"fornprovensalska (till 1500)"}
-        ps{"pashto; afghanska"}
+        ps{"pashto, afghanska"}
         pt{"portugisiska"}
         qu{"quechua"}
         raj{"rajasthani"}
@@ -1581,7 +1581,7 @@ sv{
         rom{"romani"}
         ru{"ryska"}
         rup{"arumänska"}
-        rw{"rwanda; kinjarwanda"}
+        rw{"rwanda, kinjarwanda"}
         sa{"sanskrit"}
         sad{"sandawe"}
         sah{"jakutiska"}
@@ -1602,17 +1602,17 @@ sv{
         shn{"shan"}
         si{"singalesiska"}
         sid{"sidamo"}
-        sit{"sinotibetanskt språk (annat)"}
+        sit{"sinotibetanskt (annat)"}
         sk{"slovakiska"}
         sl{"slovenska"}
         sla{"slaviskt språk (annat)"}
         sm{"samoanska"}
         sma{"sydsamiska"}
-        smi{"samiskt språk (annat)"}
+        smi{"samiska språk (övriga)"}
         smj{"lulesamiska"}
         smn{"enaresamiska"}
         sms{"skoltsamiska"}
-        sn{"shona; manshona"}
+        sn{"shona, manshona"}
         snk{"soninke"}
         so{"somaliska"}
         sog{"sogdiska"}
@@ -1839,7 +1839,7 @@ sv{
             gb2312han{"förenklad kinesiska i gb2312-ordning"}
             phonebook{"telefonkatalogsordning"}
             pinyin{"kinesiska i pinyin-ordning"}
-            stroke{"kinesiska i streck-ordning"}
+            stroke{"streckordning"}
             traditional{"kinesiska i traditionell ordning"}
         }
     }
@@ -1852,29 +1852,32 @@ sv{
         ROZAJ{"resisk dialekt"}
         SAAHO{"saho"}
     }
-    Version{"1.85"}
+    Version{"1.93"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "'kl. 'HH.mm.ss z",
+                "'kl'. HH.mm.ss v",
                 "HH.mm.ss z",
                 "HH.mm.ss",
                 "HH.mm",
                 "EEEE, yyyy MMMM dd",
-                "EEEE d MMM yyyy",
+                "EEE d MMM yyyy",
                 "d MMM yyyy",
                 "yyyy-MM-dd",
                 "{1} {0}",
             }
             availableFormats{
+                MMMMEEEd{"EEE d MMMM"}
                 MMMd{"d MMM"}
+                MMd{"d/MM"}
                 MMdd{"MM-dd"}
-                hhmm{"hh:mm a"}
-                hhmmss{"hh:mm:ss a"}
+                hhmm{"hh.mm a"}
+                hhmmss{"hh.mm.ss a"}
                 mmss{"mm.ss"}
+                yyQ{"Q yy"}
                 yyyyMM{"yyyy-MM"}
                 yyyyMMM{"MMM yyyy"}
-                yyyyQQQQ{"QQQQ',' yyyy"}
+                yyyyQQQQ{"QQQQ yyyy"}
             }
             dayNames{
                 format{
@@ -2017,21 +2020,19 @@ sv{
         }
     }
     delimiters{
-        alternateQuotationStart{"’"}
-        quotationStart{"”"}
+        alternateQuotationEnd{"”"}
+        alternateQuotationStart{"”"}
+        quotationEnd{"’"}
+        quotationStart{"’"}
     }
     zoneStrings{
         "Africa:Casablanca"{
             ec{"Casablanca"}
-            ld{"Greenwichtid"}
-            ls{"Greenwichtid"}
-            sd{"GMT"}
-            ss{"GMT"}
+            ld{"Afrika/Casablanca, normaltid"}
+            ls{"Afrika/Casablanca, sommartid"}
         }
         "America:Anchorage"{
             ec{"Alaska/Anchorage"}
-            ld{"Alaska, sommartid"}
-            ls{"Alaska, normaltid"}
         }
         "America:Argentina:ComodRivadavia"{
             ec{"Comod. Rivadavia"}
@@ -2041,62 +2042,50 @@ sv{
         }
         "America:Chicago"{
             ec{"Chicago"}
-            ld{"Central, sommartid"}
-            ls{"Central, normaltid"}
+            ld{"USA/Chicago, sommartid"}
+            ls{"USA/Chicago, normaltid"}
         }
         "America:Denver"{
             ec{"Denver"}
             ld{"USA/Denver, sommartid"}
             ls{"USA/Denver, normaltid"}
-            sd{"MDT"}
-            ss{"MST"}
         }
         "America:Godthab"{
             ec{"Godthåb"}
         }
         "America:Halifax"{
             ec{"Halifax"}
-            ld{"Atlantic, sommartid"}
-            ls{"Atlantic, normaltid"}
+            ld{"USA/Halifax, sommartid"}
+            ls{"USA/Halifax, normaltid"}
         }
         "America:Indianapolis"{
             ec{"Indianapolis"}
-            ld{"USA/Indianapolis, normaltid"}
+            ld{"USA/Indianapolis, sommartid"}
             ls{"USA/Indanapolis, normaltid"}
         }
         "America:Los_Angeles"{
             ec{"Los Angeles"}
-            ld{"Pacific, sommartid"}
-            ls{"Pacific, normaltid"}
-            sd{"PDT"}
-            ss{"PST"}
+            ld{"USA/Los Angeles, sommarid"}
+            ls{"USA/Los Angeles, normaltid"}
         }
         "America:New_York"{
             ec{"New York"}
-            ld{"Eastern, sommartid"}
-            ls{"Eastern, normaltid"}
-            sd{"EDT"}
-            ss{"EST"}
+            ld{"USA/New York, sommatid"}
+            ls{"USA/New York, normaltid"}
         }
         "America:North_Dakota:Center"{
             ec{"North Dakota"}
         }
         "America:Phoenix"{
             ec{"Phoenix"}
-            ld{"Mountain, sommartid"}
-            ls{"Mountain, normaltid"}
-            sd{"MST"}
-            ss{"MST"}
+            ld{"USA/Phoenix, sommartid"}
+            ls{"USA/Phoenix, normaltid"}
         }
         "America:Sao_Paulo"{
             ec{"Brasilien/São Paulo"}
         }
         "America:St_Johns"{
             ec{"St. Johns"}
-            ld{"Newfoundland, sommartid"}
-            ls{"Newfoundland, normaltid"}
-            sd{"CDT"}
-            ss{"CNT"}
         }
         "Antarctica:DumontDUrville"{
             ec{"Dumont d'Urville"}
@@ -2115,10 +2104,6 @@ sv{
         }
         "Asia:Jerusalem"{
             ec{"Jerusalem"}
-            ld{"Israel, sommartid"}
-            ls{"Israel, normaltid"}
-            sd{"IDT"}
-            ss{"IST"}
         }
         "Asia:Kamchatka"{
             ec{"Kamtjatka"}
@@ -2129,19 +2114,14 @@ sv{
         "Asia:Sakhalin"{
             ec{"Sachalin"}
         }
-        "Asia:Shanghai"{
-            ec{"Shanghai"}
-            ld{"Kina, normaltid"}
-            ls{"Kina, normaltid"}
-        }
         "Asia:Tashkent"{
             ec{"Tasjkent"}
         }
         "Asia:Tokyo"{
             ec{"Tokyo"}
-            ld{"Japan, normaltid"}
+            ld{"Japan, sommartid"}
             ls{"Japan, normaltid"}
-            sd{"JST"}
+            sd{"JDT"}
             ss{"JST"}
         }
         "Asia:Ulaanbaatar"{
@@ -2161,10 +2141,6 @@ sv{
         }
         "Europe:Bucharest"{
             ec{"Bukarest"}
-            ld{"Östeuropa, sommartid"}
-            ls{"Östeuropa, normaltid"}
-            sd{"EEST"}
-            ss{"EET"}
         }
         "Europe:Lisbon"{
             ec{"Lissabon"}
@@ -2174,10 +2150,6 @@ sv{
         }
         "Europe:Paris"{
             ec{"Paris"}
-            ld{"Centraleuropa, sommartid"}
-            ls{"Centraleuropa, normaltid"}
-            sd{"CEST"}
-            ss{"CET"}
         }
         "Europe:Uzhgorod"{
             ec{"Uzjgorod"}
@@ -2188,12 +2160,73 @@ sv{
         "Pacific:Easter"{
             ec{"Påskön"}
         }
-        "Pacific:Honolulu"{
-            ec{"Honolulu"}
-            ld{"Hawaii, normaltid"}
+        "meta:Alaska"{
+            ld{"Alaska, sommartid"}
+            ls{"Alaska, normaltid"}
+        }
+        "meta:America_Central"{
+            ld{"Central, sommartid"}
+            ls{"Central, normaltid"}
+        }
+        "meta:America_Eastern"{
+            ld{"Eastern, sommartid"}
+            ls{"Eastern, normaltid"}
+            sd{"EDT"}
+            ss{"EST"}
+        }
+        "meta:America_Mountain"{
+            ld{"Mountain, sommartid"}
+            ls{"Mountain, normaltid"}
+            sd{"MDT"}
+            ss{"MST"}
+        }
+        "meta:America_Pacific"{
+            ld{"Pacific, sommartid"}
+            ls{"Pacific, normaltid"}
+            sd{"PDT"}
+            ss{"PST"}
+        }
+        "meta:Atlantic"{
+            ld{"Atlantic, sommartid"}
+            ls{"Atlantic, normaltid"}
+        }
+        "meta:China"{
+            ld{"Kina, sommartid"}
+            ls{"Kina, normaltid"}
+        }
+        "meta:Europe_Central"{
+            ld{"Centraleuropa, sommartid"}
+            ls{"Centraleuropa, normaltid"}
+            sd{"CEST"}
+            ss{"CET"}
+        }
+        "meta:Europe_Eastern"{
+            ld{"Östeuropa, sommartid"}
+            ls{"Östeuropa, normaltid"}
+            sd{"EEST"}
+            ss{"EET"}
+        }
+        "meta:GMT"{
+            ls{"Greenwichtid"}
+            ss{"GMT"}
+        }
+        "meta:Hawaii"{
+            ld{"Hawaii, sommartid"}
             ls{"Hawaii, normaltid"}
-            sd{"HST"}
+            sd{"HDT"}
             ss{"HST"}
+        }
+        "meta:Israel"{
+            ld{"Israel, sommartid"}
+            ls{"Israel, normaltid"}
+            sd{"IDT"}
+            ss{"IST"}
+        }
+        "meta:Newfoundland"{
+            ld{"Newfoundland, sommartid"}
+            ls{"Newfoundland, normaltid"}
+            sd{"CDT"}
+            ss{"CNT"}
         }
         hourFormat{"+HH.mm;-HH.mm"}
     }

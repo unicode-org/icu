@@ -217,7 +217,6 @@ sr{
         QO{"Остала океанија"}
         RE{"Реинион"}
         RO{"Румунија"}
-        RS{"Србија"}
         RU{"Русија"}
         RW{"Руанда"}
         SA{"Саудијска Арабија"}
@@ -294,7 +293,7 @@ sr{
             "Белгијски франак",
         }
         BRL{
-            "BRL",
+            "R$",
             "Бразилски Реал",
         }
         CAD{
@@ -338,7 +337,7 @@ sr{
             "Француски франак",
         }
         GBP{
-            "£",
+            "UK£",
             "Фунта стерлинга",
         }
         GRD{
@@ -362,11 +361,11 @@ sr{
             "Индијски Рупи",
         }
         ITL{
-            "₤",
+            "IT₤",
             "Италијанска лира",
         }
         JPY{
-            "¥",
+            "JP¥",
             "Јен",
         }
         KWD{
@@ -538,11 +537,11 @@ sr{
             traditional{"Традиционално сортирање"}
         }
     }
-    Version{"1.71"}
+    Version{"1.77"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "HH.mm.ss z",
+                "HH.mm.ss v",
                 "HH.mm.ss z",
                 "HH.mm.ss",
                 "HH.mm",
@@ -560,6 +559,7 @@ sr{
                 mmss{"mm.ss"}
                 yyMM{"MM.yy"}
                 yyMMMd{"d. MMM yy"}
+                yyQ{"Q yy"}
                 yyQQQQ{"QQQQ yy"}
             }
             dayNames{
@@ -689,11 +689,6 @@ sr{
         "Asia:Tashkent"{
             ec{"Ташкент"}
         }
-        "Europe:Belgrade"{
-            ec{"Belgrade"}
-            ld{"Централно Европско Летње Време"}
-            ls{"Централно Европско Време"}
-        }
         "Europe:Kiev"{
             ec{"Кијев"}
         }
@@ -705,6 +700,10 @@ sr{
         }
         "Europe:Zaporozhye"{
             ec{"Запорожје"}
+        }
+        "meta:Europe_Central"{
+            ld{"Централно Европско Летње Време"}
+            ls{"Средње Европско Вријеме"}
         }
         hourFormat{"+HHmm;-HHmm"}
     }

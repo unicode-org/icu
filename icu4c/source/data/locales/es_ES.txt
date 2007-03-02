@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/es_ES.xml
@@ -17,6 +17,28 @@ es_ES{
                 ".",
             }
         }
+        MXN{
+            "MEX$",
+            "peso mexicano",
+        }
+        USD{
+            "US$",
+            "dólar estadounidense",
+        }
+    }
+    NumberElements{
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
     }
     NumberPatterns{
         "#,##0.###",
@@ -27,11 +49,11 @@ es_ES{
     Scripts{
         Ethi{"etíope"}
     }
-    Version{"1.40"}
+    Version{"1.47"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "HH'H'mm''ss\" z",
+                "HH'H'mm''ss\" v",
                 "HH:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
@@ -43,8 +65,6 @@ es_ES{
             }
             availableFormats{
                 MMdd{"dd/MM"}
-                mmss{"mm:ss"}
-                yyyyMM{"MM/yyyy"}
             }
         }
     }

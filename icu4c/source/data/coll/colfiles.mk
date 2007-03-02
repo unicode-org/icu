@@ -1,4 +1,4 @@
-# *   Copyright (C) 1998-2006, International Business Machines
+# *   Copyright (C) 1998-2007, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 # A list of txt's to build
 # Note: 
@@ -27,7 +27,8 @@
 # Aliases which do not have a corresponding xx.xml file (see icu-config.xml & build.xml)
 COLLATION_SYNTHETIC_ALIAS = de_.txt de__PHONEBOOK.txt es_.txt es__TRADITIONAL.txt\
  hi_.txt hi__DIRECT.txt in.txt in_ID.txt iw.txt\
- iw_IL.txt zh_.txt zh_TW_STROKE.txt zh__PINYIN.txt
+ iw_IL.txt zh_.txt zh_CN.txt zh_HK.txt zh_MO.txt\
+ zh_SG.txt zh_TW.txt zh_TW_STROKE.txt zh__PINYIN.txt
 
 
 # All aliases (to not be included under 'installed'), but not including root.
@@ -62,7 +63,7 @@ COLLATION_EMPTY_SOURCE = ar_AE.txt ar_BH.txt ar_DZ.txt ar_EG.txt\
  sq_AL.txt sr_BA.txt sr_Cyrl.txt sr_Cyrl_BA.txt sr_Cyrl_ME.txt\
  sr_Cyrl_RS.txt sr_RS.txt sv_FI.txt sv_SE.txt ta_IN.txt\
  te_IN.txt th_TH.txt tr_TR.txt uk_UA.txt vi_VN.txt\
- zh_CN.txt zh_SG.txt
+ zh_Hans_CN.txt zh_Hans_SG.txt zh_Hant_HK.txt zh_Hant_MO.txt zh_Hant_TW.txt
 
 
 # Ordinary resources
@@ -78,6 +79,5 @@ COLLATION_SOURCE = $(COLLATION_EMPTY_SOURCE) ar.txt as.txt be.txt bg.txt\
  pa.txt pl.txt ps.txt ro.txt ru.txt\
  sh.txt sk.txt sl.txt sq.txt sr.txt\
  sv.txt ta.txt te.txt th.txt tr.txt\
- uk.txt vi.txt zh.txt zh_HK.txt zh_Hant.txt\
- zh_MO.txt zh_TW.txt
+ uk.txt vi.txt zh.txt zh_Hant.txt
 

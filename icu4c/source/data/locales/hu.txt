@@ -428,7 +428,7 @@ hu{
             "Brazil cruzeiro (1990-1993)",
         }
         BRL{
-            "R$",
+            "BRL",
             "Brazil real",
         }
         BRN{
@@ -1112,7 +1112,7 @@ hu{
             "Ugandai shilling",
         }
         USD{
-            "US$",
+            "USD",
             "USA dollár",
         }
         USN{
@@ -1474,7 +1474,7 @@ hu{
             traditional{"Hagyományos"}
         }
     }
-    Version{"1.70"}
+    Version{"1.78"}
     calendar{
         buddhist{
             eras{
@@ -1489,7 +1489,7 @@ hu{
                 "DU",
             }
             DateTimePatterns{
-                "H:mm:ss z",
+                "H:mm:ss v",
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
@@ -1503,6 +1503,7 @@ hu{
                 MMMMd{"MMMM d."}
                 MMdd{"MM.dd."}
                 mmss{"mm:ss"}
+                yyQ{"Q yy"}
                 yyyyMM{"yyyy.MM"}
                 yyyyMMMM{"yyyy. MMMM"}
             }
@@ -1697,6 +1698,10 @@ hu{
             }
         }
     }
+    delimiters{
+        alternateQuotationEnd{"”"}
+        alternateQuotationStart{"„"}
+    }
     zoneStrings{
         "America:Araguaina"{
             ec{"Araguaína"}
@@ -1859,8 +1864,6 @@ hu{
         }
         "Europe:Paris"{
             ec{"Paris"}
-            ld{"közép-európai nyári idő"}
-            ls{"közép-európai idő"}
         }
         "Europe:Samara"{
             ec{"Szamara"}
@@ -1915,6 +1918,10 @@ hu{
         }
         "Pacific:Yap"{
             ec{"Yap-szigetek"}
+        }
+        "meta:Europe_Central"{
+            ld{"közép-európai nyári idő"}
+            ls{"közép-európai idő"}
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/es_CO.xml
@@ -12,16 +12,30 @@ es_CO{
             "$",
             "Peso de Colombia",
         }
-        USD{
-            "US$",
-            "Dólar Americano",
+        MXN{
+            "MEX$",
+            "peso mexicano",
         }
     }
-    Version{"1.42"}
+    NumberElements{
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    Version{"1.49"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "HH:mm:ss z",
+                "HH:mm:ss v",
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
@@ -30,10 +44,6 @@ es_CO{
                 "d/MM/yyyy",
                 "d/MM/yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                mmss{"mm:ss"}
-                yyyyMM{"MM/yyyy"}
             }
         }
     }

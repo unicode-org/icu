@@ -1,5 +1,5 @@
 <!DOCTYPE project [
-    <!ENTITY icu-config SYSTEM "file:./icu-config.xml">
+    <!ENTITY icu-config SYSTEM "./icu-config.xml">
 ]>
 <!--
 /*
