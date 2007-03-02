@@ -736,21 +736,33 @@ public class SimpleDateFormat extends DateFormat {
                     if (patternCharIndex == TIMEZONE_GENERIC_FIELD) {
                         if(count < 4){
                             res = formatData.getZoneString(zid, DateFormatSymbols.TIMEZONE_SHORT_GENERIC);
+                            if ( res == null )
+                               res = formatData.getMetazoneString(zid, DateFormatSymbols.TIMEZONE_SHORT_GENERIC,cal);
                         }else{
                             res = formatData.getZoneString(zid, DateFormatSymbols.TIMEZONE_LONG_GENERIC);
+                            if ( res == null )
+                               res = formatData.getMetazoneString(zid, DateFormatSymbols.TIMEZONE_LONG_GENERIC,cal);
                         }
                     } else {
                         if (cal.get(Calendar.DST_OFFSET) != 0) {
                             if(count < 4){
                                 res = formatData.getZoneString(zid, DateFormatSymbols.TIMEZONE_SHORT_DAYLIGHT);
+                                if ( res == null )
+                                   res = formatData.getMetazoneString(zid, DateFormatSymbols.TIMEZONE_SHORT_DAYLIGHT,cal);
                             }else{
                                 res = formatData.getZoneString(zid, DateFormatSymbols.TIMEZONE_LONG_DAYLIGHT);
+                                if ( res == null )
+                                   res = formatData.getMetazoneString(zid, DateFormatSymbols.TIMEZONE_LONG_DAYLIGHT,cal);
                             }
                         }else{
                             if(count < 4){
                                 res = formatData.getZoneString(zid, DateFormatSymbols.TIMEZONE_SHORT_STANDARD);
+                                if ( res == null )
+                                   res = formatData.getMetazoneString(zid, DateFormatSymbols.TIMEZONE_SHORT_STANDARD,cal);
                             }else{
                                 res = formatData.getZoneString(zid, DateFormatSymbols.TIMEZONE_LONG_STANDARD);
+                                if ( res == null )
+                                   res = formatData.getMetazoneString(zid, DateFormatSymbols.TIMEZONE_LONG_STANDARD,cal);
                             }
                         }
                     }
