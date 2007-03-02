@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2006, International Business Machines Corporation and    *
+* Copyright (C) 1997-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -1628,24 +1628,49 @@ int32_t DecimalFormat::compareAffix(const UnicodeString& text,
                                     int32_t pos,
                                     UBool isNegative,
                                     UBool isPrefix,
-                                    UChar* currency) const {
+                                    UChar* currency) const
+{
+    const UnicodeString *patternToCompare;
     if (fCurrencyChoice != NULL || currency != NULL) {
-        if (isPrefix) {
-            return compareComplexAffix(isNegative ? *fNegPrefixPattern : *fPosPrefixPattern,
-                                       text, pos, currency);
-        } else {
-            return compareComplexAffix(isNegative ? *fNegSuffixPattern : *fPosSuffixPattern,
-                                       text, pos, currency);
+        if (isNegative) {
+            if (isPrefix) {
+                patternToCompare = fNegPrefixPattern;
+            }
+            else {
+                patternToCompare = fNegSuffixPattern;
+            }
         }
+        else {
+            if (isPrefix) {
+                patternToCompare = fPosPrefixPattern;
+            }
+            else {
+                patternToCompare = fPosSuffixPattern;
+            }
+        }
+        if (patternToCompare != NULL) {
+            return compareComplexAffix(*patternToCompare, text, pos, currency);
+        }
+        /* else the caller modified the pattern. Fallback to normal behavior. */
     }
     
-    if (isPrefix) {
-        return compareSimpleAffix(isNegative ? fNegativePrefix : fPositivePrefix,
-                                  text, pos);
-    } else {
-        return compareSimpleAffix(isNegative ? fNegativeSuffix : fPositiveSuffix,
-                                  text, pos);
+    if (isNegative) {
+        if (isPrefix) {
+            patternToCompare = &fNegativePrefix;
+        }
+        else {
+            patternToCompare = &fNegativeSuffix;
+        }
     }
+    else {
+        if (isPrefix) {
+            patternToCompare = &fPositivePrefix;
+        }
+        else {
+            patternToCompare = &fPositiveSuffix;
+        }
+    }
+    return compareSimpleAffix(*patternToCompare, text, pos);
 }
 
 /**
