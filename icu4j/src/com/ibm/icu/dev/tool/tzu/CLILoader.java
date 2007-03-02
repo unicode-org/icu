@@ -6,10 +6,18 @@
  */
 package com.ibm.icu.dev.tool.tzu;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Iterator;
+import java.util.Map;
+
 import com.ibm.icu.dev.tool.UOption;
-import java.util.*;
-import java.io.*;
-import java.net.*;
+
 
 public class CLILoader {
     public static void main(String[] args) {
@@ -35,13 +43,16 @@ public class CLILoader {
                 showHelp();
                 return;
             }
-
+            try{
             // init the logger
-            logger = Logger.initLogger(Logger.DEFAULT_FILENAME,
+            logger = Logger.getInstance(Logger.DEFAULT_FILENAME,
                     options[QUIET].doesOccur ? Logger.QUIET
                             : options[VERBOSE].doesOccur ? Logger.VERBOSE
                                     : Logger.NORMAL);
-
+            }catch(FileNotFoundException ex){
+                ex.printStackTrace();
+                System.exit(-1);
+            }
             // create the resultModel, the pathModel, and the sourceModel
             resultModel = new ResultModel(logger);
             pathModel = new PathModel(resultModel, logger);

@@ -6,10 +6,30 @@
  */
 package com.ibm.icu.dev.tool.tzu;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.File;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JFileChooser;
+import javax.swing.JList;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
+
 
 public class PathComponent extends JComponent {
     public PathComponent(final GUILoader owner, final PathModel pathModel) {

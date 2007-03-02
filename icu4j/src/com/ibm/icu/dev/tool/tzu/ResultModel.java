@@ -6,10 +6,17 @@
  */
 package com.ibm.icu.dev.tool.tzu;
 
-import java.util.*;
-import javax.swing.table.*;
-import java.io.*;
-import java.net.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.swing.table.AbstractTableModel;
+
+
 
 class ResultModel extends AbstractTableModel {
     public ResultModel(Logger logger) {

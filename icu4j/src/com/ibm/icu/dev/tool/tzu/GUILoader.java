@@ -6,10 +6,15 @@
  */
 package com.ibm.icu.dev.tool.tzu;
 
-import javax.swing.*;
-import java.awt.event.*;
-import java.io.*;
-import java.net.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.net.URL;
+
+import javax.swing.JFrame;
+
+
 
 public class GUILoader {
     public static void main(String[] args) {
@@ -18,8 +23,11 @@ public class GUILoader {
 
     public GUILoader() {
         String title = "ICU Time Zone Updater";
-
-        logger = Logger.initLogger(Logger.DEFAULT_FILENAME, Logger.NORMAL);
+        try{
+            logger = Logger.getInstance(Logger.DEFAULT_FILENAME, Logger.NORMAL);
+        }catch(FileNotFoundException ex){
+            // TODO: handle the exception gracefully
+        }
         resultModel = new ResultModel(logger);
         pathModel = new PathModel(resultModel, logger);
         sourceModel = new SourceModel(logger);
