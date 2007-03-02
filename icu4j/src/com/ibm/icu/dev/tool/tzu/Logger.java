@@ -13,24 +13,19 @@ import java.io.FileNotFoundException;
 
 public class Logger {
 
-    private Logger() {
+    private Logger(String filename, int verbosity)throws FileNotFoundException {
+        System.out.println("Log file: " + filename);
+        if (logger.log != null)
+            logger.log.close();
+        logger.log = new PrintStream(new FileOutputStream(filename));
+        logger.verbosity = verbosity;
     }
 
-    public static Logger initLogger(String filename, int verbosity) {
-        try {
-            System.out.println("Log file: " + filename);
-            if (logger.log != null)
-                logger.log.close();
-            logger.log = new PrintStream(new FileOutputStream(filename));
-            logger.verbosity = verbosity;
-        } catch (FileNotFoundException ex) {
-            System.err.println("Could not create " + filename + ".");
-        }
-        return logger;
-    }
-
-    public static Logger getInstance() {
-        return logger;
+    public static synchronized Logger getInstance(String filename, int verbosity) throws FileNotFoundException{
+       if(logger == null){
+           logger = new Logger(filename, verbosity);
+       }
+       return logger;
     }
 
     public void setVerbosity(int verbosity) {
@@ -79,7 +74,7 @@ public class Logger {
 
     private PrintStream log;
 
-    private static Logger logger = new Logger();
+    private static Logger logger = null;
 
     public static final String DEFAULT_FILENAME = "icutzu.log";
 }

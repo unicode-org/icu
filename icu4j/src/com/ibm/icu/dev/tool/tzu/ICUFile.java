@@ -6,11 +6,28 @@
  */
 package com.ibm.icu.dev.tool.tzu;
 
-import java.util.*;
-import java.util.jar.*;
-import java.io.*;
-import java.net.*;
-import com.ibm.icu.util.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.MissingResourceException;
+import java.util.jar.Attributes;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.jar.JarOutputStream;
+import java.util.jar.Manifest;
+
+import com.ibm.icu.util.UResourceBundle;
+
+
 
 public class ICUFile {
     public ICUFile(File file, Logger logger) throws IOException {
