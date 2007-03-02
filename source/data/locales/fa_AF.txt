@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/fa_AF.xml
@@ -132,7 +132,7 @@ fa_AF{
             "کرون دنمارک",
         }
         JPY{
-            "¥",
+            "JP¥",
             "ین جاپان",
         }
         MXN{
@@ -160,7 +160,7 @@ fa_AF{
             "سامانی تاجکستان",
         }
         USD{
-            "$",
+            "US$",
             "دالر امریکا",
         }
     }
@@ -208,7 +208,7 @@ fa_AF{
     Scripts{
         Mong{"مغلی"}
     }
-    Version{"1.48"}
+    Version{"1.53"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -219,17 +219,17 @@ fa_AF{
                 format{
                     abbreviated{
                         "جنوری",
-                        "فبروری",
+                        "2",
                         "مارچ",
-                        "اپریل",
-                        "می",
+                        "4",
+                        "مـی",
                         "جون",
                         "جول",
                         "اگست",
                         "سپتمبر",
                         "اکتوبر",
                         "نومبر",
-                        "دسمبر",
+                        "دسم",
                     }
                     wide{
                         "جنوری",

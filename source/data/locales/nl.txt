@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/nl.xml
@@ -624,7 +624,7 @@ nl{
             "Franse franc",
         }
         GBP{
-            "£",
+            "UK£",
             "Brits pond sterling",
         }
         GEK{
@@ -736,7 +736,7 @@ nl{
             "IJslandse kroon",
         }
         ITL{
-            "₤",
+            "IT₤",
             "Italiaanse lire",
         }
         JMD{
@@ -748,7 +748,7 @@ nl{
             "Jordaanse dinar",
         }
         JPY{
-            "¥",
+            "JP¥",
             "Japanse yen",
         }
         KES{
@@ -1824,6 +1824,12 @@ nl{
         "NaN",
         "+",
     }
+    NumberPatterns{
+        "#,##0.###",
+        "¤ #,##0.00;¤ #,##0.00-",
+        "#,##0%",
+        "#E0",
+    }
     Scripts{
         Arab{"Arabisch"}
         Armn{"Armeens"}
@@ -1953,7 +1959,7 @@ nl{
         ROZAJ{"Resiaans"}
         SAAHO{"Saho"}
     }
-    Version{"1.74"}
+    Version{"1.80"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1972,6 +1978,7 @@ nl{
                 MMdd{"dd-MM"}
                 mmss{"mm:ss"}
                 yyMM{"MM-yy"}
+                yyQ{"Q yy"}
                 yyQQQQ{"QQQQ yy"}
                 yyyyMMMM{"MMMM yyyy"}
             }
@@ -2167,18 +2174,9 @@ nl{
     zoneStrings{
         "Africa:Casablanca"{
             ec{"Casablanca"}
-            ld{"Greenwich Mean Time"}
-            ls{"Greenwich Mean Time"}
-            sd{"GMT"}
-            ss{"GMT"}
         }
         "Africa:Timbuktu"{
             ec{"Timboektoe"}
-        }
-        "America:Anchorage"{
-            ec{"Anchorage"}
-            ld{"Alaska-zomertijd"}
-            ls{"Alaska-standaardtijd"}
         }
         "America:Argentina:ComodRivadavia"{
             ec{"Comodora Rivadavia"}
@@ -2192,37 +2190,11 @@ nl{
         "America:Cancun"{
             ec{"Cancún"}
         }
-        "America:Chicago"{
-            ec{"Chicago"}
-            ld{"Central-zomertijd"}
-            ls{"Central-standaardtijd"}
-            sd{"CDT"}
-            ss{"CST"}
-        }
         "America:Cordoba"{
             ec{"Córdoba"}
         }
         "America:Cuiaba"{
             ec{"Cuiabá"}
-        }
-        "America:Denver"{
-            ec{"Denver"}
-            ld{"Mountain-zomertijd"}
-            ls{"Mountain-standaardtijd"}
-            sd{"MDT"}
-            ss{"MST"}
-        }
-        "America:Halifax"{
-            ec{"Halifax"}
-            ld{"Atlantic-zomertijd"}
-            ls{"Atlantic-standaardtijd"}
-        }
-        "America:Los_Angeles"{
-            ec{"Los Angeles"}
-            ld{"Pacific-zomertijd"}
-            ls{"Pacific-standaardtijd"}
-            sd{"PDT"}
-            ss{"PST"}
         }
         "America:Maceio"{
             ec{"Maceió"}
@@ -2239,20 +2211,6 @@ nl{
         "America:Montreal"{
             ec{"Montréal"}
         }
-        "America:New_York"{
-            ec{"New York"}
-            ld{"Eastern-zomertijd"}
-            ls{"Eastern-standaardtijd"}
-            sd{"EDT"}
-            ss{"EST"}
-        }
-        "America:Phoenix"{
-            ec{"Phoenix"}
-            ld{"Mountain-standaardtijd"}
-            ls{"Mountain-standaardtijd"}
-            sd{"MST"}
-            ss{"MST"}
-        }
         "America:Porto_Velho"{
             ec{"Pôrto Velho"}
         }
@@ -2261,8 +2219,6 @@ nl{
         }
         "America:St_Johns"{
             ec{"St. Johns"}
-            ld{"Newfoundland-zomertijd"}
-            ls{"Newfoundland-standaardtijd"}
         }
         "Antarctica:DumontDUrville"{
             ec{"Dumont d'Urville"}
@@ -2272,23 +2228,15 @@ nl{
         }
         "Asia:Jerusalem"{
             ec{"Jeruzalem"}
-            ld{"Israëlische zomertijd"}
-            ls{"Israëlische standaardtijd"}
-            sd{"IDT"}
-            ss{"IST"}
-        }
-        "Asia:Shanghai"{
-            ld{"Chinese standaardtijd"}
-            ls{"Chinese standaardtijd"}
         }
         "Asia:Tashkent"{
             ec{"Tasjkent"}
         }
         "Asia:Tokyo"{
             ec{"Tokyo"}
-            ld{"Japanse standaardtijd"}
+            ld{"Japanse zomertijd"}
             ls{"Japanse standaardtijd"}
-            sd{"JST"}
+            sd{"JDT"}
             ss{"JST"}
         }
         "Asia:Ulaanbaatar"{
@@ -2302,10 +2250,6 @@ nl{
         }
         "Europe:Bucharest"{
             ec{"Boekarest"}
-            ld{"Oost-Europese zomertijd"}
-            ls{"Oost-Europese standaardtijd"}
-            sd{"EEST"}
-            ss{"EET"}
         }
         "Europe:Lisbon"{
             ec{"Lissabon"}
@@ -2318,20 +2262,77 @@ nl{
         }
         "Europe:Paris"{
             ec{"Parijs"}
+        }
+        "Pacific:Easter"{
+            ec{"Paaseiland"}
+        }
+        "meta:Alaska"{
+            ld{"Alaska-zomertijd"}
+            ls{"Alaska-standaardtijd"}
+        }
+        "meta:America_Central"{
+            ld{"Central-zomertijd"}
+            ls{"Central-standaardtijd"}
+            sd{"CDT"}
+            ss{"CST"}
+        }
+        "meta:America_Eastern"{
+            ld{"Eastern-zomertijd"}
+            ls{"Eastern-standaardtijd"}
+            sd{"EDT"}
+            ss{"EST"}
+        }
+        "meta:America_Mountain"{
+            ld{"Mountain-zomertijd"}
+            ls{"Mountain-standaardtijd"}
+            sd{"MDT"}
+            ss{"MST"}
+        }
+        "meta:America_Pacific"{
+            ld{"Pacific-zomertijd"}
+            ls{"Pacific-standaardtijd"}
+            sd{"PDT"}
+            ss{"PST"}
+        }
+        "meta:Atlantic"{
+            ld{"Atlantic-zomertijd"}
+            ls{"Atlantic-standaardtijd"}
+        }
+        "meta:China"{
+            ld{"Chinese zomertijd"}
+            ls{"Chinese standaardtijd"}
+        }
+        "meta:Europe_Central"{
             ld{"Midden-Europese zomertijd"}
             ls{"Midden-Europese standaardtijd"}
             sd{"CEST"}
             ss{"CET"}
         }
-        "Pacific:Easter"{
-            ec{"Paaseiland"}
+        "meta:Europe_Eastern"{
+            ld{"Oost-Europese zomertijd"}
+            ls{"Oost-Europese standaardtijd"}
+            sd{"EEST"}
+            ss{"EET"}
         }
-        "Pacific:Honolulu"{
-            ec{"Honolulu"}
-            ld{"Hawaï-standaardtijd"}
+        "meta:GMT"{
+            ls{"Greenwich Mean Time"}
+            ss{"GMT"}
+        }
+        "meta:Hawaii"{
+            ld{"Hawaï-zomertijd"}
             ls{"Hawaï-standaardtijd"}
-            sd{"HST"}
+            sd{"HDT"}
             ss{"HST"}
+        }
+        "meta:Israel"{
+            ld{"Israëlische zomertijd"}
+            ls{"Israëlische standaardtijd"}
+            sd{"IDT"}
+            ss{"IST"}
+        }
+        "meta:Newfoundland"{
+            ld{"Newfoundland-zomertijd"}
+            ls{"Newfoundland-standaardtijd"}
         }
     }
 }

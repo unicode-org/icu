@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/supplementalData.xml
@@ -12,63 +12,45 @@ supplementalData:table(nofallback){
      * NOTE: This is not true locale data; it exists only in ROOT
      */
     CurrencyMap{
-        830{
-            {
-                id{"GBP"}
-                from:intvector{
-                    -2028,
-                    -1467671008,
-                }
-            }
-        }
-        833{
-            {
-                id{"GBP"}
-                from:intvector{
-                    -2028,
-                    -1467671008,
-                }
-            }
-        }
         AD{
             {
                 id{"EUR"}
                 from:intvector{
                     213,
-                    349625952,
+                    342425952,
                 }
             }
             {
                 id{"ESP"}
                 from:intvector{
                     -713,
-                    1357682048,
+                    1354082048,
                 }
                 to:intvector{
                     235,
-                    -1407361856,
+                    -1414561856,
                 }
             }
             {
                 id{"FRF"}
                 from:intvector{
                     -74,
-                    -2057727392,
+                    -2064927392,
                 }
                 to:intvector{
                     235,
-                    1937205440,
+                    1930005440,
                 }
             }
             {
                 id{"ADP"}
                 from:intvector{
                     -250,
-                    769024000,
+                    761824000,
                 }
                 to:intvector{
                     228,
-                    1676176512,
+                    1668976512,
                 }
             }
         }
@@ -77,7 +59,7 @@ supplementalData:table(nofallback){
                 id{"AED"}
                 from:intvector{
                     22,
-                    1789419488,
+                    1782219488,
                 }
             }
         }
@@ -86,18 +68,18 @@ supplementalData:table(nofallback){
                 id{"AFN"}
                 from:intvector{
                     235,
-                    1073685440,
+                    1066485440,
                 }
             }
             {
                 id{"AFA"}
                 from:intvector{
                     -316,
-                    1363445536,
+                    1356245536,
                 }
                 to:intvector{
                     235,
-                    -1147561856,
+                    -1154761856,
                 }
             }
         }
@@ -106,7 +88,7 @@ supplementalData:table(nofallback){
                 id{"XCD"}
                 from:intvector{
                     -37,
-                    1608789952,
+                    1601589952,
                 }
             }
         }
@@ -115,7 +97,7 @@ supplementalData:table(nofallback){
                 id{"XCD"}
                 from:intvector{
                     -37,
-                    1608789952,
+                    1601589952,
                 }
             }
         }
@@ -124,7 +106,7 @@ supplementalData:table(nofallback){
                 id{"ALL"}
                 from:intvector{
                     -37,
-                    -1822297344,
+                    -1829497344,
                 }
             }
         }
@@ -133,29 +115,29 @@ supplementalData:table(nofallback){
                 id{"AMD"}
                 from:intvector{
                     169,
-                    1840786976,
+                    1833586976,
                 }
             }
             {
                 id{"RUR"}
                 from:intvector{
                     154,
-                    -928810880,
+                    -936010880,
                 }
                 to:intvector{
                     169,
-                    1840786976,
+                    1833586976,
                 }
             }
             {
                 id{"SUR"}
                 from:intvector{
                     -67,
-                    -500098464,
+                    -507298464,
                 }
                 to:intvector{
                     154,
-                    -928810880,
+                    -936010880,
                 }
             }
         }
@@ -164,7 +146,7 @@ supplementalData:table(nofallback){
                 id{"ANG"}
                 from:intvector{
                     -221,
-                    -1071694880,
+                    -1078894880,
                 }
             }
         }
@@ -173,40 +155,40 @@ supplementalData:table(nofallback){
                 id{"AOA"}
                 from:intvector{
                     213,
-                    1387085952,
+                    1379885952,
                 }
             }
             {
                 id{"AOR"}
                 from:intvector{
                     183,
-                    -1326362464,
+                    -1333562464,
                 }
                 to:intvector{
                     220,
-                    1820914880,
+                    1813714880,
                 }
             }
             {
                 id{"AON"}
                 from:intvector{
                     147,
-                    1894747488,
+                    1887547488,
                 }
                 to:intvector{
                     220,
-                    1820914880,
+                    1813714880,
                 }
             }
             {
                 id{"AOK"}
                 from:intvector{
                     51,
-                    -1779839392,
+                    -1787039392,
                 }
                 to:intvector{
                     154,
-                    1292016416,
+                    1284816416,
                 }
             }
         }
@@ -219,29 +201,29 @@ supplementalData:table(nofallback){
                 id{"ARS"}
                 from:intvector{
                     161,
-                    -1531841952,
+                    -1539041952,
                 }
             }
             {
                 id{"ARA"}
                 from:intvector{
                     110,
-                    2091557440,
+                    2084357440,
                 }
                 to:intvector{
                     161,
-                    -1531841952,
+                    -1539041952,
                 }
             }
             {
                 id{"ARP"}
                 from:intvector{
                     95,
-                    -2060500416,
+                    -2067700416,
                 }
                 to:intvector{
                     110,
-                    2091557440,
+                    2084357440,
                 }
             }
         }
@@ -250,7 +232,7 @@ supplementalData:table(nofallback){
                 id{"USD"}
                 from:intvector{
                     -485,
-                    1535958560,
+                    1532358560,
                 }
             }
         }
@@ -259,18 +241,18 @@ supplementalData:table(nofallback){
                 id{"EUR"}
                 from:intvector{
                     213,
-                    349625952,
+                    342425952,
                 }
             }
             {
                 id{"ATS"}
                 from:intvector{
                     -169,
-                    291793024,
+                    284593024,
                 }
                 to:intvector{
                     235,
-                    -1407361856,
+                    -1414561856,
                 }
             }
         }
@@ -279,7 +261,7 @@ supplementalData:table(nofallback){
                 id{"AUD"}
                 from:intvector{
                     -30,
-                    -524228416,
+                    -531428416,
                 }
             }
         }
@@ -288,18 +270,18 @@ supplementalData:table(nofallback){
                 id{"AWG"}
                 from:intvector{
                     117,
-                    -1855680928,
+                    -1862880928,
                 }
             }
             {
                 id{"ANG"}
                 from:intvector{
                     -221,
-                    -1071694880,
+                    -1078894880,
                 }
                 to:intvector{
                     117,
-                    -1855680928,
+                    -1862880928,
                 }
             }
         }
@@ -308,7 +290,7 @@ supplementalData:table(nofallback){
                 id{"EUR"}
                 from:intvector{
                     213,
-                    349625952,
+                    342425952,
                 }
             }
         }
@@ -317,36 +299,40 @@ supplementalData:table(nofallback){
                 id{"AZN"}
                 from:intvector{
                     264,
-                    -2063873440,
+                    -2071073440,
                 }
             }
             {
                 id{"AZM"}
                 from:intvector{
                     169,
-                    1840786976,
+                    1833586976,
+                }
+                to:intvector{
+                    265,
+                    521586560,
                 }
             }
             {
                 id{"RUR"}
                 from:intvector{
                     154,
-                    -928810880,
+                    -936010880,
                 }
                 to:intvector{
                     176,
-                    1497015904,
+                    1489815904,
                 }
             }
             {
                 id{"SUR"}
                 from:intvector{
                     -67,
-                    -500098464,
+                    -507298464,
                 }
                 to:intvector{
                     154,
-                    -928810880,
+                    -936010880,
                 }
             }
         }
@@ -355,40 +341,40 @@ supplementalData:table(nofallback){
                 id{"BAM"}
                 from:intvector{
                     183,
-                    -1326722464,
+                    -1333922464,
                 }
             }
             {
                 id{"BAD"}
                 from:intvector{
                     161,
-                    -1531481952,
+                    -1538681952,
                 }
                 to:intvector{
                     198,
-                    1702495392,
+                    1695295392,
                 }
             }
             {
                 id{"YUN"}
                 from:intvector{
                     146,
-                    -179332512,
+                    -186532512,
                 }
                 to:intvector{
                     161,
-                    -1531481952,
+                    -1538681952,
                 }
             }
             {
                 id{"YUD"}
                 from:intvector{
                     -30,
-                    -1647488416,
+                    -1654688416,
                 }
                 to:intvector{
                     146,
-                    -179332512,
+                    -186532512,
                 }
             }
         }
@@ -397,18 +383,18 @@ supplementalData:table(nofallback){
                 id{"BBD"}
                 from:intvector{
                     22,
-                    407439488,
+                    400239488,
                 }
             }
             {
                 id{"XCD"}
                 from:intvector{
                     -37,
-                    1608789952,
+                    1601589952,
                 }
                 to:intvector{
                     22,
-                    407439488,
+                    400239488,
                 }
             }
         }
@@ -417,29 +403,29 @@ supplementalData:table(nofallback){
                 id{"BDT"}
                 from:intvector{
                     14,
-                    -1323649440,
+                    -1330849440,
                 }
             }
             {
                 id{"PKR"}
                 from:intvector{
                     -162,
-                    1503341952,
+                    1496141952,
                 }
                 to:intvector{
                     14,
-                    -1323649440,
+                    -1330849440,
                 }
             }
             {
                 id{"INR"}
                 from:intvector{
                     -992,
-                    1804437632,
+                    1800837632,
                 }
                 to:intvector{
                     -162,
-                    1503341952,
+                    1496141952,
                 }
             }
         }
@@ -448,29 +434,29 @@ supplementalData:table(nofallback){
                 id{"EUR"}
                 from:intvector{
                     213,
-                    349625952,
+                    342425952,
                 }
             }
             {
                 id{"BEF"}
                 from:intvector{
                     -1022,
-                    -736270784,
+                    -739870784,
                 }
                 to:intvector{
                     235,
-                    -1407361856,
+                    -1414561856,
                 }
             }
             {
                 id{"NLG"}
                 from:intvector{
                     -1132,
-                    -983668224,
+                    -987268224,
                 }
                 to:intvector{
                     -1022,
-                    -736270784,
+                    -739870784,
                 }
             }
         }
@@ -479,7 +465,7 @@ supplementalData:table(nofallback){
                 id{"XOF"}
                 from:intvector{
                     102,
-                    -329951488,
+                    -337151488,
                 }
             }
         }
@@ -488,18 +474,18 @@ supplementalData:table(nofallback){
                 id{"BGN"}
                 from:intvector{
                     213,
-                    695585952,
+                    688385952,
                 }
             }
             {
                 id{"BGL"}
                 from:intvector{
                     -59,
-                    971130464,
+                    963930464,
                 }
                 to:intvector{
                     213,
-                    695585952,
+                    688385952,
                 }
             }
         }
@@ -508,7 +494,7 @@ supplementalData:table(nofallback){
                 id{"BHD"}
                 from:intvector{
                     -37,
-                    -1822177344,
+                    -1829377344,
                 }
             }
         }
@@ -517,7 +503,7 @@ supplementalData:table(nofallback){
                 id{"BIF"}
                 from:intvector{
                     -44,
-                    1174061024,
+                    1166861024,
                 }
             }
         }
@@ -526,7 +512,7 @@ supplementalData:table(nofallback){
                 id{"XOF"}
                 from:intvector{
                     37,
-                    1387670048,
+                    1380470048,
                 }
             }
         }
@@ -535,7 +521,7 @@ supplementalData:table(nofallback){
                 id{"BMD"}
                 from:intvector{
                     0,
-                    460920000,
+                    453720000,
                 }
             }
         }
@@ -544,18 +530,18 @@ supplementalData:table(nofallback){
                 id{"BND"}
                 from:intvector{
                     -22,
-                    774440512,
+                    767240512,
                 }
             }
             {
                 id{"MYR"}
                 from:intvector{
                     -52,
-                    -556127904,
+                    -563327904,
                 }
                 to:intvector{
                     -22,
-                    774440512,
+                    767240512,
                 }
             }
         }
@@ -564,18 +550,18 @@ supplementalData:table(nofallback){
                 id{"BOB"}
                 from:intvector{
                     124,
-                    -384452000,
+                    -391652000,
                 }
             }
             {
                 id{"BOP"}
                 from:intvector{
                     -52,
-                    -1852607904,
+                    -1859807904,
                 }
                 to:intvector{
                     118,
-                    736979072,
+                    729779072,
                 }
             }
         }
@@ -584,62 +570,62 @@ supplementalData:table(nofallback){
                 id{"BRL"}
                 from:intvector{
                     176,
-                    1497375904,
+                    1490175904,
                 }
             }
             {
                 id{"BRR"}
                 from:intvector{
                     169,
-                    26206976,
+                    19006976,
                 }
                 to:intvector{
                     176,
-                    1497375904,
+                    1490175904,
                 }
             }
             {
                 id{"BRE"}
                 from:intvector{
                     147,
-                    1116787488,
+                    1109587488,
                 }
                 to:intvector{
                     169,
-                    26206976,
+                    19006976,
                 }
             }
             {
                 id{"BRN"}
                 from:intvector{
                     139,
-                    -440961440,
+                    -448161440,
                 }
                 to:intvector{
                     147,
-                    1116787488,
+                    1109587488,
                 }
             }
             {
                 id{"BRC"}
                 from:intvector{
                     118,
-                    477179072,
+                    469979072,
                 }
                 to:intvector{
                     139,
-                    -440961440,
+                    -448161440,
                 }
             }
             {
                 id{"BRB"}
                 from:intvector{
                     -22,
-                    860600512,
+                    853400512,
                 }
                 to:intvector{
                     118,
-                    477179072,
+                    469979072,
                 }
             }
         }
@@ -648,7 +634,7 @@ supplementalData:table(nofallback){
                 id{"BSD"}
                 from:intvector{
                     -29,
-                    426351584,
+                    419151584,
                 }
             }
         }
@@ -657,14 +643,14 @@ supplementalData:table(nofallback){
                 id{"INR"}
                 from:intvector{
                     -463,
-                    444658048,
+                    441058048,
                 }
             }
             {
                 id{"BTN"}
                 from:intvector{
                     29,
-                    -1297178880,
+                    -1304378880,
                 }
             }
         }
@@ -673,7 +659,7 @@ supplementalData:table(nofallback){
                 id{"NOK"}
                 from:intvector{
                     -478,
-                    -1979039808,
+                    -1982639808,
                 }
             }
         }
@@ -682,18 +668,18 @@ supplementalData:table(nofallback){
                 id{"BWP"}
                 from:intvector{
                     44,
-                    -2041048320,
+                    -2048248320,
                 }
             }
             {
                 id{"ZAR"}
                 from:intvector{
                     -66,
-                    623161536,
+                    615961536,
                 }
                 to:intvector{
                     44,
-                    -2041048320,
+                    -2048248320,
                 }
             }
         }
@@ -702,40 +688,40 @@ supplementalData:table(nofallback){
                 id{"BYR"}
                 from:intvector{
                     220,
-                    1820854880,
+                    1813654880,
                 }
             }
             {
                 id{"BYB"}
                 from:intvector{
                     176,
-                    1497435904,
+                    1490235904,
                 }
                 to:intvector{
                     221,
-                    118547584,
+                    111347584,
                 }
             }
             {
                 id{"RUR"}
                 from:intvector{
                     154,
-                    -928810880,
+                    -936010880,
                 }
                 to:intvector{
                     176,
-                    2102415904,
+                    2095215904,
                 }
             }
             {
                 id{"SUR"}
                 from:intvector{
                     -67,
-                    -500098464,
+                    -507298464,
                 }
                 to:intvector{
                     154,
-                    -928810880,
+                    -936010880,
                 }
             }
         }
@@ -744,7 +730,7 @@ supplementalData:table(nofallback){
                 id{"BZD"}
                 from:intvector{
                     29,
-                    1705208416,
+                    1698008416,
                 }
             }
         }
@@ -753,7 +739,7 @@ supplementalData:table(nofallback){
                 id{"CAD"}
                 from:intvector{
                     -823,
-                    418544608,
+                    414944608,
                 }
             }
         }
@@ -762,7 +748,7 @@ supplementalData:table(nofallback){
                 id{"AUD"}
                 from:intvector{
                     -30,
-                    -524228416,
+                    -531428416,
                 }
             }
         }
@@ -771,29 +757,29 @@ supplementalData:table(nofallback){
                 id{"CDF"}
                 from:intvector{
                     205,
-                    -1121242976,
+                    -1128442976,
                 }
             }
             {
                 id{"ZRN"}
                 from:intvector{
                     169,
-                    26386976,
+                    19186976,
                 }
                 to:intvector{
                     205,
-                    -1121242976,
+                    -1128442976,
                 }
             }
             {
                 id{"ZRZ"}
                 from:intvector{
                     7,
-                    -547938368,
+                    -555138368,
                 }
                 to:intvector{
                     169,
-                    26386976,
+                    19186976,
                 }
             }
         }
@@ -802,7 +788,7 @@ supplementalData:table(nofallback){
                 id{"XAF"}
                 from:intvector{
                     169,
-                    25786976,
+                    18586976,
                 }
             }
         }
@@ -811,7 +797,7 @@ supplementalData:table(nofallback){
                 id{"XAF"}
                 from:intvector{
                     169,
-                    25726976,
+                    18526976,
                 }
             }
         }
@@ -820,7 +806,7 @@ supplementalData:table(nofallback){
                 id{"CHF"}
                 from:intvector{
                     -1257,
-                    -311696224,
+                    -315296224,
                 }
             }
         }
@@ -829,7 +815,7 @@ supplementalData:table(nofallback){
                 id{"XOF"}
                 from:intvector{
                     -89,
-                    -445357952,
+                    -452557952,
                 }
             }
         }
@@ -838,7 +824,7 @@ supplementalData:table(nofallback){
                 id{"NZD"}
                 from:intvector{
                     -22,
-                    601700512,
+                    594500512,
                 }
             }
         }
@@ -847,7 +833,7 @@ supplementalData:table(nofallback){
                 id{"CLP"}
                 from:intvector{
                     37,
-                    1301150048,
+                    1293950048,
                 }
             }
         }
@@ -856,7 +842,7 @@ supplementalData:table(nofallback){
                 id{"XAF"}
                 from:intvector{
                     22,
-                    234159488,
+                    226959488,
                 }
             }
         }
@@ -865,7 +851,7 @@ supplementalData:table(nofallback){
                 id{"CNY"}
                 from:intvector{
                     -125,
-                    442292000,
+                    435092000,
                 }
             }
         }
@@ -874,7 +860,7 @@ supplementalData:table(nofallback){
                 id{"COP"}
                 from:intvector{
                     -478,
-                    1797167488,
+                    1793567488,
                 }
             }
         }
@@ -883,7 +869,7 @@ supplementalData:table(nofallback){
                 id{"CRC"}
                 from:intvector{
                     -544,
-                    -866158272,
+                    -869758272,
                 }
             }
         }
@@ -892,25 +878,33 @@ supplementalData:table(nofallback){
                 id{"EUR"}
                 from:intvector{
                     242,
-                    -2009732928,
+                    -2016932928,
+                }
+                to:intvector{
+                    264,
+                    -1897973440,
                 }
             }
             {
                 id{"CSD"}
                 from:intvector{
                     235,
-                    1764585440,
+                    1757385440,
+                }
+                to:intvector{
+                    264,
+                    -1897973440,
                 }
             }
             {
                 id{"YUM"}
                 from:intvector{
                     176,
-                    -810751392,
+                    -817951392,
                 }
                 to:intvector{
                     235,
-                    1764585440,
+                    1757385440,
                 }
             }
         }
@@ -919,18 +913,18 @@ supplementalData:table(nofallback){
                 id{"CUP"}
                 from:intvector{
                     -816,
-                    1889773536,
+                    1886173536,
                 }
             }
             {
                 id{"USD"}
                 from:intvector{
                     -522,
-                    1473328512,
+                    1469728512,
                 }
                 to:intvector{
                     -81,
-                    765950976,
+                    758750976,
                 }
             }
         }
@@ -939,18 +933,18 @@ supplementalData:table(nofallback){
                 id{"CVE"}
                 from:intvector{
                     -412,
-                    -1968781344,
+                    -1972381344,
                 }
             }
             {
                 id{"PTE"}
                 from:intvector{
                     -434,
-                    -359260832,
+                    -362860832,
                 }
                 to:intvector{
                     36,
-                    -772569952,
+                    -779769952,
                 }
             }
         }
@@ -959,7 +953,7 @@ supplementalData:table(nofallback){
                 id{"AUD"}
                 from:intvector{
                     -30,
-                    -524228416,
+                    -531428416,
                 }
             }
         }
@@ -968,7 +962,7 @@ supplementalData:table(nofallback){
                 id{"CYP"}
                 from:intvector{
                     -412,
-                    -1190701344,
+                    -1194301344,
                 }
             }
         }
@@ -977,18 +971,18 @@ supplementalData:table(nofallback){
                 id{"CZK"}
                 from:intvector{
                     169,
-                    25786976,
+                    18586976,
                 }
             }
             {
                 id{"CSK"}
                 from:intvector{
                     -125,
-                    442472000,
+                    435272000,
                 }
                 to:intvector{
                     169,
-                    25906976,
+                    18706976,
                 }
             }
         }
@@ -997,18 +991,18 @@ supplementalData:table(nofallback){
                 id{"EUR"}
                 from:intvector{
                     213,
-                    349625952,
+                    342425952,
                 }
             }
             {
                 id{"DEM"}
                 from:intvector{
                     -162,
-                    -1149905344,
+                    -1157105344,
                 }
                 to:intvector{
                     235,
-                    -1407361856,
+                    -1414561856,
                 }
             }
         }
@@ -1017,7 +1011,7 @@ supplementalData:table(nofallback){
                 id{"DJF"}
                 from:intvector{
                     51,
-                    -137939392,
+                    -145139392,
                 }
             }
         }
@@ -1026,7 +1020,7 @@ supplementalData:table(nofallback){
                 id{"DKK"}
                 from:intvector{
                     -713,
-                    -690585248,
+                    -694185248,
                 }
             }
         }
@@ -1035,7 +1029,7 @@ supplementalData:table(nofallback){
                 id{"XCD"}
                 from:intvector{
                     -37,
-                    1608789952,
+                    1601589952,
                 }
             }
         }
@@ -1044,18 +1038,18 @@ supplementalData:table(nofallback){
                 id{"DOP"}
                 from:intvector{
                     -169,
-                    32473024,
+                    25273024,
                 }
             }
             {
                 id{"USD"}
                 from:intvector{
                     -478,
-                    -769439808,
+                    -773039808,
                 }
                 to:intvector{
                     -169,
-                    32473024,
+                    25273024,
                 }
             }
         }
@@ -1064,7 +1058,7 @@ supplementalData:table(nofallback){
                 id{"DZD"}
                 from:intvector{
                     -45,
-                    -381198976,
+                    -388398976,
                 }
             }
         }
@@ -1073,18 +1067,18 @@ supplementalData:table(nofallback){
                 id{"USD"}
                 from:intvector{
                     220,
-                    1907794880,
+                    1900594880,
                 }
             }
             {
                 id{"ECS"}
                 from:intvector{
                     -632,
-                    534371072,
+                    530771072,
                 }
                 to:intvector{
                     220,
-                    1907794880,
+                    1900594880,
                 }
             }
         }
@@ -1093,18 +1087,18 @@ supplementalData:table(nofallback){
                 id{"EEK"}
                 from:intvector{
                     162,
-                    196458048,
+                    189258048,
                 }
             }
             {
                 id{"SUR"}
                 from:intvector{
                     -67,
-                    -500098464,
+                    -507298464,
                 }
                 to:intvector{
                     162,
-                    110058048,
+                    102858048,
                 }
             }
         }
@@ -1113,7 +1107,7 @@ supplementalData:table(nofallback){
                 id{"EGP"}
                 from:intvector{
                     -625,
-                    -1079347296,
+                    -1082947296,
                 }
             }
         }
@@ -1122,7 +1116,7 @@ supplementalData:table(nofallback){
                 id{"MAD"}
                 from:intvector{
                     44,
-                    -1782208320,
+                    -1789408320,
                 }
             }
         }
@@ -1131,7 +1125,7 @@ supplementalData:table(nofallback){
                 id{"ERN"}
                 from:intvector{
                     198,
-                    -1987431904,
+                    -1994631904,
                 }
             }
         }
@@ -1140,18 +1134,18 @@ supplementalData:table(nofallback){
                 id{"EUR"}
                 from:intvector{
                     213,
-                    349625952,
+                    342425952,
                 }
             }
             {
                 id{"ESP"}
                 from:intvector{
                     -750,
-                    -320495296,
+                    -324095296,
                 }
                 to:intvector{
                     235,
-                    -1407361856,
+                    -1414561856,
                 }
             }
         }
@@ -1160,7 +1154,7 @@ supplementalData:table(nofallback){
                 id{"ETB"}
                 from:intvector{
                     44,
-                    1562778976,
+                    1555578976,
                 }
             }
         }
@@ -1169,18 +1163,18 @@ supplementalData:table(nofallback){
                 id{"EUR"}
                 from:intvector{
                     213,
-                    349625952,
+                    342425952,
                 }
             }
             {
                 id{"FIM"}
                 from:intvector{
                     -52,
-                    -1852607904,
+                    -1859807904,
                 }
                 to:intvector{
                     235,
-                    -1407361856,
+                    -1414561856,
                 }
             }
         }
@@ -1189,7 +1183,7 @@ supplementalData:table(nofallback){
                 id{"FJD"}
                 from:intvector{
                     -8,
-                    -405568928,
+                    -412768928,
                 }
             }
         }
@@ -1198,7 +1192,7 @@ supplementalData:table(nofallback){
                 id{"FKP"}
                 from:intvector{
                     -507,
-                    120819072,
+                    117219072,
                 }
             }
         }
@@ -1207,18 +1201,18 @@ supplementalData:table(nofallback){
                 id{"USD"}
                 from:intvector{
                     -192,
-                    -176846464,
+                    -184046464,
                 }
             }
             {
                 id{"JPY"}
                 from:intvector{
                     -412,
-                    -1795441344,
+                    -1799041344,
                 }
                 to:intvector{
                     -192,
-                    -176846464,
+                    -184046464,
                 }
             }
         }
@@ -1226,8 +1220,8 @@ supplementalData:table(nofallback){
             {
                 id{"DKK"}
                 from:intvector{
-                    -713,
-                    -690585248,
+                    -162,
+                    1495901952,
                 }
             }
         }
@@ -1236,18 +1230,18 @@ supplementalData:table(nofallback){
                 id{"EUR"}
                 from:intvector{
                     213,
-                    349625952,
+                    342425952,
                 }
             }
             {
                 id{"FRF"}
                 from:intvector{
                     -74,
-                    -2057727392,
+                    -2064927392,
                 }
                 to:intvector{
                     235,
-                    1937205440,
+                    1930005440,
                 }
             }
         }
@@ -1256,7 +1250,7 @@ supplementalData:table(nofallback){
                 id{"XAF"}
                 from:intvector{
                     169,
-                    25786976,
+                    18586976,
                 }
             }
         }
@@ -1265,7 +1259,7 @@ supplementalData:table(nofallback){
                 id{"GBP"}
                 from:intvector{
                     -2028,
-                    -1467671008,
+                    -1471271008,
                 }
             }
         }
@@ -1274,7 +1268,7 @@ supplementalData:table(nofallback){
                 id{"XCD"}
                 from:intvector{
                     -22,
-                    2070200512,
+                    2063000512,
                 }
             }
         }
@@ -1283,40 +1277,40 @@ supplementalData:table(nofallback){
                 id{"GEL"}
                 from:intvector{
                     184,
-                    574557536,
+                    567357536,
                 }
             }
             {
                 id{"GEK"}
                 from:intvector{
                     169,
-                    371566976,
+                    364366976,
                 }
                 to:intvector{
                     184,
-                    747357536,
+                    740157536,
                 }
             }
             {
                 id{"RUR"}
                 from:intvector{
                     154,
-                    -928810880,
+                    -936010880,
                 }
                 to:intvector{
                     169,
-                    890086976,
+                    882886976,
                 }
             }
             {
                 id{"SUR"}
                 from:intvector{
                     -67,
-                    -500098464,
+                    -507298464,
                 }
                 to:intvector{
                     154,
-                    -928810880,
+                    -936010880,
                 }
             }
         }
@@ -1325,18 +1319,27 @@ supplementalData:table(nofallback){
                 id{"EUR"}
                 from:intvector{
                     213,
-                    349625952,
+                    342425952,
                 }
             }
             {
                 id{"FRF"}
                 from:intvector{
                     -74,
-                    -2057727392,
+                    -2064927392,
                 }
                 to:intvector{
                     235,
-                    1937205440,
+                    1930005440,
+                }
+            }
+        }
+        GG{
+            {
+                id{"GBP"}
+                from:intvector{
+                    -1029,
+                    1565347584,
                 }
             }
         }
@@ -1345,7 +1348,7 @@ supplementalData:table(nofallback){
                 id{"GHC"}
                 from:intvector{
                     66,
-                    1249138464,
+                    1241938464,
                 }
             }
         }
@@ -1354,7 +1357,7 @@ supplementalData:table(nofallback){
                 id{"GIP"}
                 from:intvector{
                     -1889,
-                    -1185345152,
+                    -1188945152,
                 }
             }
         }
@@ -1363,7 +1366,7 @@ supplementalData:table(nofallback){
                 id{"DKK"}
                 from:intvector{
                     -713,
-                    -690585248,
+                    -694185248,
                 }
             }
         }
@@ -1372,7 +1375,7 @@ supplementalData:table(nofallback){
                 id{"GMD"}
                 from:intvector{
                     7,
-                    1500448928,
+                    1493248928,
                 }
             }
         }
@@ -1381,18 +1384,18 @@ supplementalData:table(nofallback){
                 id{"GNF"}
                 from:intvector{
                     117,
-                    -1423680928,
+                    -1430880928,
                 }
             }
             {
                 id{"GNS"}
                 from:intvector{
                     14,
-                    -1236709440,
+                    -1243909440,
                 }
                 to:intvector{
                     117,
-                    -1423680928,
+                    -1430880928,
                 }
             }
         }
@@ -1401,18 +1404,18 @@ supplementalData:table(nofallback){
                 id{"EUR"}
                 from:intvector{
                     213,
-                    349565952,
+                    342365952,
                 }
             }
             {
                 id{"FRF"}
                 from:intvector{
                     -74,
-                    -2057727392,
+                    -2064927392,
                 }
                 to:intvector{
                     235,
-                    1937205440,
+                    1930005440,
                 }
             }
         }
@@ -1421,18 +1424,18 @@ supplementalData:table(nofallback){
                 id{"XAF"}
                 from:intvector{
                     169,
-                    25786976,
+                    18586976,
                 }
             }
             {
                 id{"GQE"}
                 from:intvector{
                     36,
-                    -599769952,
+                    -606969952,
                 }
                 to:intvector{
                     117,
-                    -1855380928,
+                    -1862580928,
                 }
             }
         }
@@ -1441,18 +1444,18 @@ supplementalData:table(nofallback){
                 id{"EUR"}
                 from:intvector{
                     227,
-                    -916483488,
+                    -923683488,
                 }
             }
             {
                 id{"GRD"}
                 from:intvector{
                     -118,
-                    1913640928,
+                    1906440928,
                 }
                 to:intvector{
                     235,
-                    -1407361856,
+                    -1414561856,
                 }
             }
         }
@@ -1461,7 +1464,7 @@ supplementalData:table(nofallback){
                 id{"GBP"}
                 from:intvector{
                     -456,
-                    1915886976,
+                    1912286976,
                 }
             }
         }
@@ -1470,7 +1473,7 @@ supplementalData:table(nofallback){
                 id{"GTQ"}
                 from:intvector{
                     -331,
-                    -455692320,
+                    -462892320,
                 }
             }
         }
@@ -1479,7 +1482,7 @@ supplementalData:table(nofallback){
                 id{"USD"}
                 from:intvector{
                     -191,
-                    1551633536,
+                    1544433536,
                 }
             }
         }
@@ -1488,25 +1491,25 @@ supplementalData:table(nofallback){
                 id{"GWP"}
                 from:intvector{
                     44,
-                    -1609408320,
+                    -1616608320,
                 }
             }
             {
                 id{"XOF"}
                 from:intvector{
                     198,
-                    1702135392,
+                    1694935392,
                 }
             }
             {
                 id{"GWE"}
                 from:intvector{
                     -412,
-                    -1968781344,
+                    -1972381344,
                 }
                 to:intvector{
                     44,
-                    -1609408320,
+                    -1616608320,
                 }
             }
         }
@@ -1515,7 +1518,7 @@ supplementalData:table(nofallback){
                 id{"GYD"}
                 from:intvector{
                     -29,
-                    512751584,
+                    505551584,
                 }
             }
         }
@@ -1524,7 +1527,7 @@ supplementalData:table(nofallback){
                 id{"HKD"}
                 from:intvector{
                     -552,
-                    -116499904,
+                    -120099904,
                 }
             }
         }
@@ -1533,7 +1536,7 @@ supplementalData:table(nofallback){
                 id{"AUD"}
                 from:intvector{
                     -22,
-                    1119800512,
+                    1112600512,
                 }
             }
         }
@@ -1542,7 +1545,7 @@ supplementalData:table(nofallback){
                 id{"HNL"}
                 from:intvector{
                     -324,
-                    -1058123392,
+                    -1065323392,
                 }
             }
         }
@@ -1551,40 +1554,40 @@ supplementalData:table(nofallback){
                 id{"HRK"}
                 from:intvector{
                     176,
-                    -292111392,
+                    -299311392,
                 }
             }
             {
                 id{"HRD"}
                 from:intvector{
                     154,
-                    -1101610880,
+                    -1108810880,
                 }
                 to:intvector{
                     183,
-                    -1326722464,
+                    -1333922464,
                 }
             }
             {
                 id{"YUN"}
                 from:intvector{
                     146,
-                    -179332512,
+                    -186532512,
                 }
                 to:intvector{
                     154,
-                    -1101610880,
+                    -1108810880,
                 }
             }
             {
                 id{"YUD"}
                 from:intvector{
                     -30,
-                    -1647488416,
+                    -1654688416,
                 }
                 to:intvector{
                     146,
-                    -179332512,
+                    -186532512,
                 }
             }
         }
@@ -1593,14 +1596,14 @@ supplementalData:table(nofallback){
                 id{"HTG"}
                 from:intvector{
                     -720,
-                    1960533120,
+                    1956933120,
                 }
             }
             {
                 id{"USD"}
                 from:intvector{
                     -405,
-                    -497612416,
+                    -501212416,
                 }
             }
         }
@@ -1609,7 +1612,7 @@ supplementalData:table(nofallback){
                 id{"HUF"}
                 from:intvector{
                     -176,
-                    461864096,
+                    454664096,
                 }
             }
         }
@@ -1618,7 +1621,7 @@ supplementalData:table(nofallback){
                 id{"IDR"}
                 from:intvector{
                     -37,
-                    -2081257344,
+                    -2088457344,
                 }
             }
         }
@@ -1627,29 +1630,29 @@ supplementalData:table(nofallback){
                 id{"EUR"}
                 from:intvector{
                     213,
-                    349565952,
+                    342365952,
                 }
             }
             {
                 id{"IEP"}
                 from:intvector{
                     -353,
-                    1387455488,
+                    1380255488,
                 }
                 to:intvector{
                     235,
-                    1246005440,
+                    1238805440,
                 }
             }
             {
                 id{"GBP"}
                 from:intvector{
                     -1250,
-                    -223047296,
+                    -226647296,
                 }
                 to:intvector{
                     -353,
-                    1387455488,
+                    1380255488,
                 }
             }
         }
@@ -1658,18 +1661,27 @@ supplementalData:table(nofallback){
                 id{"ILS"}
                 from:intvector{
                     110,
-                    1227737440,
+                    1220537440,
                 }
             }
             {
                 id{"ILP"}
                 from:intvector{
                     -162,
-                    -1495385344,
+                    -1502585344,
                 }
                 to:intvector{
                     73,
-                    -451459904,
+                    -458659904,
+                }
+            }
+        }
+        IM{
+            {
+                id{"GBP"}
+                from:intvector{
+                    -956,
+                    -556572320,
                 }
             }
         }
@@ -1678,7 +1690,7 @@ supplementalData:table(nofallback){
                 id{"INR"}
                 from:intvector{
                     -992,
-                    1804437632,
+                    1800837632,
                 }
             }
         }
@@ -1687,14 +1699,14 @@ supplementalData:table(nofallback){
                 id{"USD"}
                 from:intvector{
                     -37,
-                    1781649952,
+                    1774449952,
                 }
             }
             {
                 id{"GBP"}
                 from:intvector{
                     -37,
-                    1781649952,
+                    1774449952,
                 }
             }
         }
@@ -1703,29 +1715,29 @@ supplementalData:table(nofallback){
                 id{"IQD"}
                 from:intvector{
                     -287,
-                    -823113344,
+                    -830313344,
                 }
             }
             {
                 id{"EGP"}
                 from:intvector{
                     -368,
-                    -776742368,
+                    -783942368,
                 }
                 to:intvector{
                     -287,
-                    -823113344,
+                    -830313344,
                 }
             }
             {
                 id{"INR"}
                 from:intvector{
                     -368,
-                    -776742368,
+                    -783942368,
                 }
                 to:intvector{
                     -287,
-                    -823113344,
+                    -830313344,
                 }
             }
         }
@@ -1734,7 +1746,7 @@ supplementalData:table(nofallback){
                 id{"IRR"}
                 from:intvector{
                     -279,
-                    129775584,
+                    122575584,
                 }
             }
         }
@@ -1743,18 +1755,18 @@ supplementalData:table(nofallback){
                 id{"ISK"}
                 from:intvector{
                     80,
-                    -708290976,
+                    -715490976,
                 }
             }
             {
                 id{"DKK"}
                 from:intvector{
                     -713,
-                    -690585248,
+                    -694185248,
                 }
                 to:intvector{
                     -383,
-                    -291772928,
+                    -295372928,
                 }
             }
         }
@@ -1763,18 +1775,27 @@ supplementalData:table(nofallback){
                 id{"EUR"}
                 from:intvector{
                     213,
-                    349625952,
+                    342425952,
                 }
             }
             {
                 id{"ITL"}
                 from:intvector{
                     -794,
-                    -212454272,
+                    -216054272,
                 }
                 to:intvector{
                     235,
-                    -1407361856,
+                    -1414561856,
+                }
+            }
+        }
+        JE{
+            {
+                id{"GBP"}
+                from:intvector{
+                    -978,
+                    -848151808,
                 }
             }
         }
@@ -1783,7 +1804,7 @@ supplementalData:table(nofallback){
                 id{"JMD"}
                 from:intvector{
                     -8,
-                    -837088928,
+                    -844288928,
                 }
             }
         }
@@ -1792,7 +1813,7 @@ supplementalData:table(nofallback){
                 id{"JOD"}
                 from:intvector{
                     -147,
-                    237412512,
+                    230212512,
                 }
             }
         }
@@ -1801,7 +1822,7 @@ supplementalData:table(nofallback){
                 id{"JPY"}
                 from:intvector{
                     -728,
-                    -1670815808,
+                    -1674415808,
                 }
             }
         }
@@ -1810,7 +1831,7 @@ supplementalData:table(nofallback){
                 id{"KES"}
                 from:intvector{
                     -30,
-                    -523808416,
+                    -531008416,
                 }
             }
         }
@@ -1819,29 +1840,29 @@ supplementalData:table(nofallback){
                 id{"KGS"}
                 from:intvector{
                     169,
-                    803626976,
+                    796426976,
                 }
             }
             {
                 id{"RUR"}
                 from:intvector{
                     154,
-                    -928810880,
+                    -936010880,
                 }
                 to:intvector{
                     169,
-                    803626976,
+                    796426976,
                 }
             }
             {
                 id{"SUR"}
                 from:intvector{
                     -67,
-                    -500098464,
+                    -507298464,
                 }
                 to:intvector{
                     154,
-                    -928810880,
+                    -936010880,
                 }
             }
         }
@@ -1850,7 +1871,7 @@ supplementalData:table(nofallback){
                 id{"KHR"}
                 from:intvector{
                     73,
-                    -624199904,
+                    -631399904,
                 }
             }
         }
@@ -1859,7 +1880,7 @@ supplementalData:table(nofallback){
                 id{"AUD"}
                 from:intvector{
                     -30,
-                    -524228416,
+                    -531428416,
                 }
             }
         }
@@ -1868,7 +1889,7 @@ supplementalData:table(nofallback){
                 id{"KMF"}
                 from:intvector{
                     36,
-                    -686169952,
+                    -693369952,
                 }
             }
         }
@@ -1877,7 +1898,7 @@ supplementalData:table(nofallback){
                 id{"XCD"}
                 from:intvector{
                     -37,
-                    1608789952,
+                    1601589952,
                 }
             }
         }
@@ -1886,7 +1907,7 @@ supplementalData:table(nofallback){
                 id{"KPW"}
                 from:intvector{
                     -81,
-                    -2146376320,
+                    2141390976,
                 }
             }
         }
@@ -1895,7 +1916,7 @@ supplementalData:table(nofallback){
                 id{"KRW"}
                 from:intvector{
                     -59,
-                    1749030464,
+                    1741830464,
                 }
             }
         }
@@ -1904,7 +1925,7 @@ supplementalData:table(nofallback){
                 id{"KWD"}
                 from:intvector{
                     -67,
-                    -499918464,
+                    -507118464,
                 }
             }
         }
@@ -1913,18 +1934,18 @@ supplementalData:table(nofallback){
                 id{"KYD"}
                 from:intvector{
                     7,
-                    1500028928,
+                    1492828928,
                 }
             }
             {
                 id{"JMD"}
                 from:intvector{
                     -8,
-                    -837088928,
+                    -844288928,
                 }
                 to:intvector{
                     7,
-                    1500028928,
+                    1492828928,
                 }
             }
         }
@@ -1933,7 +1954,7 @@ supplementalData:table(nofallback){
                 id{"KZT"}
                 from:intvector{
                     169,
-                    371986976,
+                    364786976,
                 }
             }
         }
@@ -1942,7 +1963,7 @@ supplementalData:table(nofallback){
                 id{"LAK"}
                 from:intvector{
                     66,
-                    1336078464,
+                    1328878464,
                 }
             }
         }
@@ -1951,7 +1972,7 @@ supplementalData:table(nofallback){
                 id{"LBP"}
                 from:intvector{
                     -162,
-                    1589621952,
+                    1582421952,
                 }
             }
         }
@@ -1960,7 +1981,7 @@ supplementalData:table(nofallback){
                 id{"XCD"}
                 from:intvector{
                     -37,
-                    1608789952,
+                    1601589952,
                 }
             }
         }
@@ -1969,7 +1990,7 @@ supplementalData:table(nofallback){
                 id{"CHF"}
                 from:intvector{
                     -361,
-                    -83653440,
+                    -90853440,
                 }
             }
         }
@@ -1978,7 +1999,7 @@ supplementalData:table(nofallback){
                 id{"LKR"}
                 from:intvector{
                     59,
-                    901229536,
+                    894029536,
                 }
             }
         }
@@ -1987,7 +2008,7 @@ supplementalData:table(nofallback){
                 id{"LRD"}
                 from:intvector{
                     -192,
-                    -176786464,
+                    -183986464,
                 }
             }
         }
@@ -1996,14 +2017,14 @@ supplementalData:table(nofallback){
                 id{"ZAR"}
                 from:intvector{
                     -66,
-                    623161536,
+                    615961536,
                 }
             }
             {
                 id{"LSL"}
                 from:intvector{
                     73,
-                    -451519904,
+                    -458719904,
                 }
             }
         }
@@ -2012,29 +2033,29 @@ supplementalData:table(nofallback){
                 id{"LTL"}
                 from:intvector{
                     169,
-                    2099686976,
+                    2092486976,
                 }
             }
             {
                 id{"LTT"}
                 from:intvector{
                     161,
-                    -1531301952,
+                    -1538501952,
                 }
                 to:intvector{
                     169,
-                    2099686976,
+                    2092486976,
                 }
             }
             {
                 id{"SUR"}
                 from:intvector{
                     -67,
-                    -500098464,
+                    -507298464,
                 }
                 to:intvector{
                     161,
-                    -1531301952,
+                    -1538501952,
                 }
             }
         }
@@ -2043,18 +2064,18 @@ supplementalData:table(nofallback){
                 id{"EUR"}
                 from:intvector{
                     213,
-                    349625952,
+                    342425952,
                 }
             }
             {
                 id{"LUF"}
                 from:intvector{
                     -191,
-                    82893536,
+                    75693536,
                 }
                 to:intvector{
                     235,
-                    -1407361856,
+                    -1414561856,
                 }
             }
         }
@@ -2063,29 +2084,29 @@ supplementalData:table(nofallback){
                 id{"LVL"}
                 from:intvector{
                     169,
-                    -1936080320,
+                    -1943280320,
                 }
             }
             {
                 id{"LVR"}
                 from:intvector{
                     161,
-                    -1013201952,
+                    -1020401952,
                 }
                 to:intvector{
                     169,
-                    1408726976,
+                    1401526976,
                 }
             }
             {
                 id{"SUR"}
                 from:intvector{
                     -67,
-                    -500098464,
+                    -507298464,
                 }
                 to:intvector{
                     162,
-                    110118048,
+                    102918048,
                 }
             }
         }
@@ -2094,7 +2115,7 @@ supplementalData:table(nofallback){
                 id{"LYD"}
                 from:intvector{
                     7,
-                    1500568928,
+                    1493368928,
                 }
             }
         }
@@ -2103,7 +2124,7 @@ supplementalData:table(nofallback){
                 id{"MAD"}
                 from:intvector{
                     -81,
-                    -2146016320,
+                    2141750976,
                 }
             }
         }
@@ -2112,18 +2133,18 @@ supplementalData:table(nofallback){
                 id{"EUR"}
                 from:intvector{
                     213,
-                    349625952,
+                    342425952,
                 }
             }
             {
                 id{"FRF"}
                 from:intvector{
                     -74,
-                    -2057727392,
+                    -2064927392,
                 }
                 to:intvector{
                     235,
-                    1937205440,
+                    1930005440,
                 }
             }
         }
@@ -2132,7 +2153,38 @@ supplementalData:table(nofallback){
                 id{"MDL"}
                 from:intvector{
                     169,
-                    -1849380320,
+                    -1856580320,
+                }
+            }
+        }
+        ME{
+            {
+                id{"EUR"}
+                from:intvector{
+                    235,
+                    547545440,
+                }
+            }
+            {
+                id{"DEM"}
+                from:intvector{
+                    213,
+                    429365952,
+                }
+                to:intvector{
+                    235,
+                    1757385440,
+                }
+            }
+            {
+                id{"YUM"}
+                from:intvector{
+                    176,
+                    -817951392,
+                }
+                to:intvector{
+                    235,
+                    1757385440,
                 }
             }
         }
@@ -2141,18 +2193,18 @@ supplementalData:table(nofallback){
                 id{"MGA"}
                 from:intvector{
                     95,
-                    -2060200416,
+                    -2067400416,
                 }
             }
             {
                 id{"MGF"}
                 from:intvector{
                     -52,
-                    -1852247904,
+                    -1859447904,
                 }
                 to:intvector{
                     250,
-                    1708436000,
+                    1787696000,
                 }
             }
         }
@@ -2161,7 +2213,7 @@ supplementalData:table(nofallback){
                 id{"USD"}
                 from:intvector{
                     -192,
-                    -176846464,
+                    -184046464,
                 }
             }
         }
@@ -2170,7 +2222,7 @@ supplementalData:table(nofallback){
                 id{"MKD"}
                 from:intvector{
                     169,
-                    1667626976,
+                    1660426976,
                 }
             }
         }
@@ -2179,29 +2231,29 @@ supplementalData:table(nofallback){
                 id{"XOF"}
                 from:intvector{
                     102,
-                    -589271488,
+                    -596471488,
                 }
             }
             {
                 id{"MLF"}
                 from:intvector{
                     -59,
-                    1057890464,
+                    1050690464,
                 }
                 to:intvector{
                     103,
-                    2002848512,
+                    1995648512,
                 }
             }
             {
                 id{"XOF"}
                 from:intvector{
                     -88,
-                    1282582048,
+                    1275382048,
                 }
                 to:intvector{
                     -59,
-                    1057890464,
+                    1050690464,
                 }
             }
         }
@@ -2210,18 +2262,18 @@ supplementalData:table(nofallback){
                 id{"MMK"}
                 from:intvector{
                     139,
-                    -181461440,
+                    -188661440,
                 }
             }
             {
                 id{"BUK"}
                 from:intvector{
                     -133,
-                    -1115096928,
+                    -1122296928,
                 }
                 to:intvector{
                     139,
-                    -181461440,
+                    -188661440,
                 }
             }
         }
@@ -2230,7 +2282,7 @@ supplementalData:table(nofallback){
                 id{"MNT"}
                 from:intvector{
                     -405,
-                    -497432416,
+                    -501032416,
                 }
             }
         }
@@ -2239,7 +2291,7 @@ supplementalData:table(nofallback){
                 id{"MOP"}
                 from:intvector{
                     -507,
-                    120819072,
+                    117219072,
                 }
             }
         }
@@ -2248,7 +2300,7 @@ supplementalData:table(nofallback){
                 id{"USD"}
                 from:intvector{
                     -192,
-                    -176846464,
+                    -184046464,
                 }
             }
         }
@@ -2257,18 +2309,18 @@ supplementalData:table(nofallback){
                 id{"EUR"}
                 from:intvector{
                     213,
-                    349625952,
+                    342425952,
                 }
             }
             {
                 id{"FRF"}
                 from:intvector{
                     -74,
-                    -2057727392,
+                    -2064927392,
                 }
                 to:intvector{
                     235,
-                    1937205440,
+                    1930005440,
                 }
             }
         }
@@ -2277,18 +2329,18 @@ supplementalData:table(nofallback){
                 id{"MRO"}
                 from:intvector{
                     22,
-                    -1641487808,
+                    -1648687808,
                 }
             }
             {
                 id{"XOF"}
                 from:intvector{
                     -88,
-                    1628182048,
+                    1620982048,
                 }
                 to:intvector{
                     22,
-                    -1641487808,
+                    -1648687808,
                 }
             }
         }
@@ -2297,7 +2349,7 @@ supplementalData:table(nofallback){
                 id{"XCD"}
                 from:intvector{
                     -22,
-                    2070200512,
+                    2063000512,
                 }
             }
         }
@@ -2306,18 +2358,18 @@ supplementalData:table(nofallback){
                 id{"MTL"}
                 from:intvector{
                     -15,
-                    1813669440,
+                    1806469440,
                 }
             }
             {
                 id{"MTP"}
                 from:intvector{
                     -412,
-                    -931561344,
+                    -935161344,
                 }
                 to:intvector{
                     -15,
-                    1813669440,
+                    1806469440,
                 }
             }
         }
@@ -2326,7 +2378,7 @@ supplementalData:table(nofallback){
                 id{"MUR"}
                 from:intvector{
                     -265,
-                    2121773440,
+                    2114573440,
                 }
             }
         }
@@ -2335,7 +2387,7 @@ supplementalData:table(nofallback){
                 id{"MVR"}
                 from:intvector{
                     80,
-                    -707930976,
+                    -715130976,
                 }
             }
         }
@@ -2344,7 +2396,7 @@ supplementalData:table(nofallback){
                 id{"MWK"}
                 from:intvector{
                     7,
-                    -1585218368,
+                    -1592418368,
                 }
             }
         }
@@ -2353,18 +2405,18 @@ supplementalData:table(nofallback){
                 id{"MXN"}
                 from:intvector{
                     169,
-                    25786976,
+                    18586976,
                 }
             }
             {
                 id{"MXP"}
                 from:intvector{
                     -1088,
-                    -1783749248,
+                    -1787349248,
                 }
                 to:intvector{
                     162,
-                    1060818048,
+                    1053618048,
                 }
             }
         }
@@ -2373,27 +2425,38 @@ supplementalData:table(nofallback){
                 id{"MYR"}
                 from:intvector{
                     -52,
-                    -556127904,
+                    -563327904,
                 }
             }
         }
         MZ{
             {
+                id{"MZN"}
+                from:intvector{
+                    264,
+                    -2070713440,
+                }
+            }
+            {
                 id{"MZM"}
                 from:intvector{
                     73,
-                    -969619904,
+                    -976819904,
+                }
+                to:intvector{
+                    265,
+                    521586560,
                 }
             }
             {
                 id{"MZE"}
                 from:intvector{
                     37,
-                    955370048,
+                    948170048,
                 }
                 to:intvector{
                     73,
-                    -969619904,
+                    -976819904,
                 }
             }
         }
@@ -2402,14 +2465,14 @@ supplementalData:table(nofallback){
                 id{"ZAR"}
                 from:intvector{
                     -66,
-                    623161536,
+                    615961536,
                 }
             }
             {
                 id{"NAD"}
                 from:intvector{
                     169,
-                    25726976,
+                    18526976,
                 }
             }
         }
@@ -2418,7 +2481,7 @@ supplementalData:table(nofallback){
                 id{"XPF"}
                 from:intvector{
                     110,
-                    967997440,
+                    960797440,
                 }
             }
         }
@@ -2427,7 +2490,7 @@ supplementalData:table(nofallback){
                 id{"XOF"}
                 from:intvector{
                     -88,
-                    850642048,
+                    843442048,
                 }
             }
         }
@@ -2436,7 +2499,7 @@ supplementalData:table(nofallback){
                 id{"AUD"}
                 from:intvector{
                     -30,
-                    -524228416,
+                    -531428416,
                 }
             }
         }
@@ -2445,7 +2508,7 @@ supplementalData:table(nofallback){
                 id{"NGN"}
                 from:intvector{
                     22,
-                    233979488,
+                    226779488,
                 }
             }
         }
@@ -2454,18 +2517,18 @@ supplementalData:table(nofallback){
                 id{"NIO"}
                 from:intvector{
                     154,
-                    -497290880,
+                    -504490880,
                 }
             }
             {
                 id{"NIC"}
                 from:intvector{
                     132,
-                    -1998530368,
+                    -2005730368,
                 }
                 to:intvector{
                     154,
-                    -497290880,
+                    -504490880,
                 }
             }
         }
@@ -2474,18 +2537,18 @@ supplementalData:table(nofallback){
                 id{"EUR"}
                 from:intvector{
                     213,
-                    349625952,
+                    342425952,
                 }
             }
             {
                 id{"NLG"}
                 from:intvector{
                     -1154,
-                    1982259584,
+                    1978659584,
                 }
                 to:intvector{
                     235,
-                    -1407361856,
+                    -1414561856,
                 }
             }
         }
@@ -2494,18 +2557,18 @@ supplementalData:table(nofallback){
                 id{"NOK"}
                 from:intvector{
                     -478,
-                    -1979039808,
+                    -1982639808,
                 }
             }
             {
                 id{"SEK"}
                 from:intvector{
                     -713,
-                    -690585248,
+                    -694185248,
                 }
                 to:intvector{
                     -478,
-                    -1979039808,
+                    -1982639808,
                 }
             }
         }
@@ -2514,18 +2577,18 @@ supplementalData:table(nofallback){
                 id{"NPR"}
                 from:intvector{
                     -272,
-                    650304512,
+                    643104512,
                 }
             }
             {
                 id{"INR"}
                 from:intvector{
                     -735,
-                    1152562560,
+                    1148962560,
                 }
                 to:intvector{
                     -30,
-                    -264548416,
+                    -271748416,
                 }
             }
         }
@@ -2534,7 +2597,7 @@ supplementalData:table(nofallback){
                 id{"AUD"}
                 from:intvector{
                     -30,
-                    -524228416,
+                    -531428416,
                 }
             }
         }
@@ -2543,7 +2606,7 @@ supplementalData:table(nofallback){
                 id{"NZD"}
                 from:intvector{
                     -22,
-                    601700512,
+                    594500512,
                 }
             }
         }
@@ -2552,7 +2615,7 @@ supplementalData:table(nofallback){
                 id{"NZD"}
                 from:intvector{
                     -22,
-                    601700512,
+                    594500512,
                 }
             }
         }
@@ -2561,7 +2624,7 @@ supplementalData:table(nofallback){
                 id{"OMR"}
                 from:intvector{
                     14,
-                    -459049440,
+                    -466249440,
                 }
             }
         }
@@ -2570,14 +2633,14 @@ supplementalData:table(nofallback){
                 id{"PAB"}
                 from:intvector{
                     -493,
-                    -971830368,
+                    -975430368,
                 }
             }
             {
                 id{"USD"}
                 from:intvector{
                     -492,
-                    237769632,
+                    234169632,
                 }
             }
         }
@@ -2586,29 +2649,29 @@ supplementalData:table(nofallback){
                 id{"PEN"}
                 from:intvector{
                     154,
-                    1292256416,
+                    1285056416,
                 }
             }
             {
                 id{"PEI"}
                 from:intvector{
                     110,
-                    968117440,
+                    960917440,
                 }
                 to:intvector{
                     154,
-                    1292256416,
+                    1285056416,
                 }
             }
             {
                 id{"PES"}
                 from:intvector{
                     -786,
-                    394414656,
+                    390814656,
                 }
                 to:intvector{
                     110,
-                    968117440,
+                    960917440,
                 }
             }
         }
@@ -2617,7 +2680,7 @@ supplementalData:table(nofallback){
                 id{"XPF"}
                 from:intvector{
                     -184,
-                    -753464832,
+                    -760664832,
                 }
             }
         }
@@ -2626,18 +2689,18 @@ supplementalData:table(nofallback){
                 id{"PGK"}
                 from:intvector{
                     37,
-                    177950048,
+                    170750048,
                 }
             }
             {
                 id{"AUD"}
                 from:intvector{
                     -30,
-                    -524228416,
+                    -531428416,
                 }
                 to:intvector{
                     37,
-                    177950048,
+                    170750048,
                 }
             }
         }
@@ -2646,7 +2709,7 @@ supplementalData:table(nofallback){
                 id{"PHP"}
                 from:intvector{
                     -177,
-                    -1179735904,
+                    -1186935904,
                 }
             }
         }
@@ -2655,18 +2718,18 @@ supplementalData:table(nofallback){
                 id{"PKR"}
                 from:intvector{
                     -162,
-                    1503341952,
+                    1496141952,
                 }
             }
             {
                 id{"INR"}
                 from:intvector{
                     -992,
-                    1804437632,
+                    1800837632,
                 }
                 to:intvector{
                     -169,
-                    1241953024,
+                    1234753024,
                 }
             }
         }
@@ -2675,18 +2738,18 @@ supplementalData:table(nofallback){
                 id{"PLN"}
                 from:intvector{
                     183,
-                    -1326722464,
+                    -1333922464,
                 }
             }
             {
                 id{"PLZ"}
                 from:intvector{
                     -147,
-                    -1724574784,
+                    -1731774784,
                 }
                 to:intvector{
                     176,
-                    -205291392,
+                    -212491392,
                 }
             }
         }
@@ -2695,18 +2758,18 @@ supplementalData:table(nofallback){
                 id{"EUR"}
                 from:intvector{
                     213,
-                    349625952,
+                    342425952,
                 }
             }
             {
                 id{"FRF"}
                 from:intvector{
                     15,
-                    405010560,
+                    397810560,
                 }
                 to:intvector{
                     235,
-                    1937205440,
+                    1930005440,
                 }
             }
         }
@@ -2715,7 +2778,7 @@ supplementalData:table(nofallback){
                 id{"NZD"}
                 from:intvector{
                     -8,
-                    -405568928,
+                    -412768928,
                 }
             }
         }
@@ -2724,18 +2787,18 @@ supplementalData:table(nofallback){
                 id{"USD"}
                 from:intvector{
                     -529,
-                    780419584,
+                    776819584,
                 }
             }
             {
                 id{"ESP"}
                 from:intvector{
                     -1250,
-                    -223047296,
+                    -226647296,
                 }
                 to:intvector{
                     -529,
-                    780419584,
+                    776819584,
                 }
             }
         }
@@ -2744,36 +2807,36 @@ supplementalData:table(nofallback){
                 id{"JOD"}
                 from:intvector{
                     191,
-                    1094966464,
+                    1087766464,
                 }
             }
             {
                 id{"ILS"}
                 from:intvector{
                     110,
-                    1227737440,
+                    1220537440,
                 }
             }
             {
                 id{"ILP"}
                 from:intvector{
                     -23,
-                    -175959488,
+                    -183159488,
                 }
                 to:intvector{
                     73,
-                    -451459904,
+                    -458659904,
                 }
             }
             {
                 id{"JOD"}
                 from:intvector{
                     -147,
-                    237412512,
+                    230212512,
                 }
                 to:intvector{
                     -23,
-                    -175959488,
+                    -183159488,
                 }
             }
         }
@@ -2782,18 +2845,18 @@ supplementalData:table(nofallback){
                 id{"EUR"}
                 from:intvector{
                     213,
-                    349625952,
+                    342425952,
                 }
             }
             {
                 id{"PTE"}
                 from:intvector{
                     -434,
-                    -359260832,
+                    -362860832,
                 }
                 to:intvector{
                     235,
-                    -1407361856,
+                    -1414561856,
                 }
             }
         }
@@ -2802,7 +2865,7 @@ supplementalData:table(nofallback){
                 id{"USD"}
                 from:intvector{
                     -192,
-                    -176846464,
+                    -184046464,
                 }
             }
         }
@@ -2811,7 +2874,7 @@ supplementalData:table(nofallback){
                 id{"PYG"}
                 from:intvector{
                     -199,
-                    -1647415392,
+                    -1654615392,
                 }
             }
         }
@@ -2820,7 +2883,7 @@ supplementalData:table(nofallback){
                 id{"QAR"}
                 from:intvector{
                     22,
-                    1789419488,
+                    1782219488,
                 }
             }
         }
@@ -2829,18 +2892,18 @@ supplementalData:table(nofallback){
                 id{"EUR"}
                 from:intvector{
                     213,
-                    349625952,
+                    342425952,
                 }
             }
             {
                 id{"FRF"}
                 from:intvector{
                     36,
-                    -1118529952,
+                    -1125729952,
                 }
                 to:intvector{
                     235,
-                    1937205440,
+                    1930005440,
                 }
             }
         }
@@ -2849,18 +2912,49 @@ supplementalData:table(nofallback){
                 id{"RON"}
                 from:intvector{
                     257,
-                    760224928,
+                    753024928,
                 }
             }
             {
                 id{"ROL"}
                 from:intvector{
                     -132,
-                    1217343072,
+                    1210143072,
                 }
                 to:intvector{
                     265,
-                    528786560,
+                    521586560,
+                }
+            }
+        }
+        RS{
+            {
+                id{"RSD"}
+                from:intvector{
+                    265,
+                    3066560,
+                }
+            }
+            {
+                id{"CSD"}
+                from:intvector{
+                    235,
+                    1757385440,
+                }
+                to:intvector{
+                    265,
+                    3066560,
+                }
+            }
+            {
+                id{"YUM"}
+                from:intvector{
+                    176,
+                    -817951392,
+                }
+                to:intvector{
+                    235,
+                    1757385440,
                 }
             }
         }
@@ -2869,18 +2963,18 @@ supplementalData:table(nofallback){
                 id{"RUB"}
                 from:intvector{
                     213,
-                    349625952,
+                    342425952,
                 }
             }
             {
                 id{"RUR"}
                 from:intvector{
                     154,
-                    -928810880,
+                    -936010880,
                 }
                 to:intvector{
                     206,
-                    1471057024,
+                    1463857024,
                 }
             }
         }
@@ -2889,7 +2983,7 @@ supplementalData:table(nofallback){
                 id{"RWF"}
                 from:intvector{
                     -44,
-                    1174061024,
+                    1166861024,
                 }
             }
         }
@@ -2898,7 +2992,7 @@ supplementalData:table(nofallback){
                 id{"SAR"}
                 from:intvector{
                     -132,
-                    699483072,
+                    692283072,
                 }
             }
         }
@@ -2907,18 +3001,18 @@ supplementalData:table(nofallback){
                 id{"SBD"}
                 from:intvector{
                     51,
-                    -396899392,
+                    -404099392,
                 }
             }
             {
                 id{"AUD"}
                 from:intvector{
                     -30,
-                    -524228416,
+                    -531428416,
                 }
                 to:intvector{
                     59,
-                    1592489536,
+                    1585289536,
                 }
             }
         }
@@ -2927,7 +3021,7 @@ supplementalData:table(nofallback){
                 id{"SCR"}
                 from:intvector{
                     -493,
-                    -1231030368,
+                    -1234630368,
                 }
             }
         }
@@ -2936,40 +3030,40 @@ supplementalData:table(nofallback){
                 id{"SDD"}
                 from:intvector{
                     161,
-                    -1531901952,
+                    -1539101952,
                 }
             }
             {
                 id{"SDP"}
                 from:intvector{
                     -96,
-                    -1571466880,
+                    -1578666880,
                 }
                 to:intvector{
                     205,
-                    -1121302976,
+                    -1128502976,
                 }
             }
             {
                 id{"EGP"}
                 from:intvector{
                     -595,
-                    1028401120,
+                    1024801120,
                 }
                 to:intvector{
                     -89,
-                    -705217952,
+                    -712417952,
                 }
             }
             {
                 id{"GBP"}
                 from:intvector{
                     -595,
-                    1028401120,
+                    1024801120,
                 }
                 to:intvector{
                     -89,
-                    -705217952,
+                    -712417952,
                 }
             }
         }
@@ -2978,7 +3072,7 @@ supplementalData:table(nofallback){
                 id{"SEK"}
                 from:intvector{
                     -713,
-                    -690585248,
+                    -694185248,
                 }
             }
         }
@@ -2987,18 +3081,18 @@ supplementalData:table(nofallback){
                 id{"SGD"}
                 from:intvector{
                     -22,
-                    774440512,
+                    767240512,
                 }
             }
             {
                 id{"MYR"}
                 from:intvector{
                     -52,
-                    -556127904,
+                    -563327904,
                 }
                 to:intvector{
                     -22,
-                    774440512,
+                    767240512,
                 }
             }
         }
@@ -3007,16 +3101,27 @@ supplementalData:table(nofallback){
                 id{"SHP"}
                 from:intvector{
                     -390,
-                    -554001856,
+                    -557601856,
                 }
             }
         }
         SI{
             {
+                id{"EUR"}
+                from:intvector{
+                    271,
+                    -599844512,
+                }
+            }
+            {
                 id{"SIT"}
                 from:intvector{
                     161,
-                    -1012901952,
+                    -1020101952,
+                }
+                to:intvector{
+                    272,
+                    523355488,
                 }
             }
         }
@@ -3025,7 +3130,7 @@ supplementalData:table(nofallback){
                 id{"NOK"}
                 from:intvector{
                     -478,
-                    -1979039808,
+                    -1982639808,
                 }
             }
         }
@@ -3034,18 +3139,18 @@ supplementalData:table(nofallback){
                 id{"SKK"}
                 from:intvector{
                     162,
-                    1060818048,
+                    1053618048,
                 }
             }
             {
                 id{"CSK"}
                 from:intvector{
                     -125,
-                    442472000,
+                    435272000,
                 }
                 to:intvector{
                     162,
-                    1060818048,
+                    1053618048,
                 }
             }
         }
@@ -3054,18 +3159,18 @@ supplementalData:table(nofallback){
                 id{"SLL"}
                 from:intvector{
                     -45,
-                    -121758976,
+                    -128958976,
                 }
             }
             {
                 id{"GBP"}
                 from:intvector{
                     -1190,
-                    1254542240,
+                    1250942240,
                 }
                 to:intvector{
                     -30,
-                    -1388228416,
+                    -1395428416,
                 }
             }
         }
@@ -3074,18 +3179,18 @@ supplementalData:table(nofallback){
                 id{"EUR"}
                 from:intvector{
                     213,
-                    349625952,
+                    342425952,
                 }
             }
             {
                 id{"ITL"}
                 from:intvector{
                     -772,
-                    -93494784,
+                    -97094784,
                 }
                 to:intvector{
                     228,
-                    1416376512,
+                    1409176512,
                 }
             }
         }
@@ -3094,7 +3199,7 @@ supplementalData:table(nofallback){
                 id{"XOF"}
                 from:intvector{
                     -81,
-                    1025390976,
+                    1018190976,
                 }
             }
         }
@@ -3103,7 +3208,7 @@ supplementalData:table(nofallback){
                 id{"SOS"}
                 from:intvector{
                     -74,
-                    -2057367392,
+                    -2064567392,
                 }
             }
         }
@@ -3112,29 +3217,29 @@ supplementalData:table(nofallback){
                 id{"SRD"}
                 from:intvector{
                     249,
-                    -797764000,
+                    -804964000,
                 }
             }
             {
                 id{"SRG"}
                 from:intvector{
                     -221,
-                    -1071694880,
+                    -1078894880,
                 }
                 to:intvector{
                     243,
-                    323667072,
+                    316467072,
                 }
             }
             {
                 id{"NLG"}
                 from:intvector{
                     -1139,
-                    -2022957152,
+                    -2026557152,
                 }
                 to:intvector{
                     -221,
-                    -1071694880,
+                    -1078894880,
                 }
             }
         }
@@ -3143,7 +3248,7 @@ supplementalData:table(nofallback){
                 id{"STD"}
                 from:intvector{
                     51,
-                    -1779359392,
+                    -1786559392,
                 }
             }
         }
@@ -3152,14 +3257,14 @@ supplementalData:table(nofallback){
                 id{"SVC"}
                 from:intvector{
                     -375,
-                    2046996000,
+                    2039796000,
                 }
             }
             {
                 id{"USD"}
                 from:intvector{
                     227,
-                    -916483488,
+                    -923683488,
                 }
             }
         }
@@ -3168,7 +3273,7 @@ supplementalData:table(nofallback){
                 id{"SYP"}
                 from:intvector{
                     -162,
-                    1503161952,
+                    1495961952,
                 }
             }
         }
@@ -3177,7 +3282,7 @@ supplementalData:table(nofallback){
                 id{"SZL"}
                 from:intvector{
                     29,
-                    2137688416,
+                    2130488416,
                 }
             }
         }
@@ -3186,7 +3291,7 @@ supplementalData:table(nofallback){
                 id{"USD"}
                 from:intvector{
                     -8,
-                    -837088928,
+                    -844288928,
                 }
             }
         }
@@ -3195,7 +3300,7 @@ supplementalData:table(nofallback){
                 id{"XAF"}
                 from:intvector{
                     169,
-                    25786976,
+                    18586976,
                 }
             }
         }
@@ -3204,18 +3309,18 @@ supplementalData:table(nofallback){
                 id{"EUR"}
                 from:intvector{
                     213,
-                    349625952,
+                    342425952,
                 }
             }
             {
                 id{"FRF"}
                 from:intvector{
                     -81,
-                    766010976,
+                    758810976,
                 }
                 to:intvector{
                     235,
-                    1937205440,
+                    1930005440,
                 }
             }
         }
@@ -3224,7 +3329,7 @@ supplementalData:table(nofallback){
                 id{"XOF"}
                 from:intvector{
                     -88,
-                    1628182048,
+                    1620982048,
                 }
             }
         }
@@ -3233,7 +3338,7 @@ supplementalData:table(nofallback){
                 id{"THB"}
                 from:intvector{
                     -309,
-                    -1373832832,
+                    -1381032832,
                 }
             }
         }
@@ -3242,18 +3347,18 @@ supplementalData:table(nofallback){
                 id{"TJS"}
                 from:intvector{
                     220,
-                    -313572416,
+                    -320772416,
                 }
             }
             {
                 id{"TJR"}
                 from:intvector{
                     183,
-                    -548882464,
+                    -556082464,
                 }
                 to:intvector{
                     220,
-                    -399972416,
+                    -407172416,
                 }
             }
         }
@@ -3262,7 +3367,7 @@ supplementalData:table(nofallback){
                 id{"NZD"}
                 from:intvector{
                     -22,
-                    601700512,
+                    594500512,
                 }
             }
         }
@@ -3271,29 +3376,29 @@ supplementalData:table(nofallback){
                 id{"USD"}
                 from:intvector{
                     213,
-                    1991765952,
+                    1984565952,
                 }
             }
             {
                 id{"TPE"}
                 from:intvector{
                     -81,
-                    852410976,
+                    845210976,
                 }
                 to:intvector{
                     235,
-                    -2098381856,
+                    -2105581856,
                 }
             }
             {
                 id{"IDR"}
                 from:intvector{
                     36,
-                    -599469952,
+                    -606669952,
                 }
                 to:intvector{
                     235,
-                    -2098381856,
+                    -2105581856,
                 }
             }
         }
@@ -3302,29 +3407,29 @@ supplementalData:table(nofallback){
                 id{"TMM"}
                 from:intvector{
                     169,
-                    26386976,
+                    19186976,
                 }
             }
             {
                 id{"RUR"}
                 from:intvector{
                     154,
-                    -928810880,
+                    -936010880,
                 }
                 to:intvector{
                     169,
-                    26386976,
+                    19186976,
                 }
             }
             {
                 id{"SUR"}
                 from:intvector{
                     -67,
-                    -500098464,
+                    -507298464,
                 }
                 to:intvector{
                     154,
-                    -928810880,
+                    -936010880,
                 }
             }
         }
@@ -3333,7 +3438,7 @@ supplementalData:table(nofallback){
                 id{"TND"}
                 from:intvector{
                     -89,
-                    -704617952,
+                    -711817952,
                 }
             }
         }
@@ -3342,7 +3447,7 @@ supplementalData:table(nofallback){
                 id{"TOP"}
                 from:intvector{
                     -30,
-                    -524228416,
+                    -531428416,
                 }
             }
         }
@@ -3351,18 +3456,18 @@ supplementalData:table(nofallback){
                 id{"TRY"}
                 from:intvector{
                     257,
-                    759864928,
+                    752664928,
                 }
             }
             {
                 id{"TRL"}
                 from:intvector{
                     -353,
-                    1388115488,
+                    1380915488,
                 }
                 to:intvector{
                     257,
-                    -942442368,
+                    -949642368,
                 }
             }
         }
@@ -3371,7 +3476,7 @@ supplementalData:table(nofallback){
                 id{"TTD"}
                 from:intvector{
                     -45,
-                    -381438976,
+                    -388638976,
                 }
             }
         }
@@ -3380,7 +3485,7 @@ supplementalData:table(nofallback){
                 id{"AUD"}
                 from:intvector{
                     -30,
-                    -524228416,
+                    -531428416,
                 }
             }
         }
@@ -3389,7 +3494,7 @@ supplementalData:table(nofallback){
                 id{"TWD"}
                 from:intvector{
                     -155,
-                    -24276416,
+                    -31476416,
                 }
             }
         }
@@ -3398,7 +3503,7 @@ supplementalData:table(nofallback){
                 id{"TZS"}
                 from:intvector{
                     -30,
-                    -523988416,
+                    -531188416,
                 }
             }
         }
@@ -3407,40 +3512,40 @@ supplementalData:table(nofallback){
                 id{"UAH"}
                 from:intvector{
                     191,
-                    231386464,
+                    224186464,
                 }
             }
             {
                 id{"UAK"}
                 from:intvector{
                     161,
-                    -494441952,
+                    -501641952,
                 }
                 to:intvector{
                     169,
-                    1408726976,
+                    1401526976,
                 }
             }
             {
                 id{"RUR"}
                 from:intvector{
                     154,
-                    -928810880,
+                    -936010880,
                 }
                 to:intvector{
                     161,
-                    -494441952,
+                    -501641952,
                 }
             }
             {
                 id{"SUR"}
                 from:intvector{
                     -67,
-                    -500098464,
+                    -507298464,
                 }
                 to:intvector{
                     154,
-                    -928810880,
+                    -936010880,
                 }
             }
         }
@@ -3449,18 +3554,18 @@ supplementalData:table(nofallback){
                 id{"UGX"}
                 from:intvector{
                     125,
-                    825388000,
+                    818188000,
                 }
             }
             {
                 id{"UGS"}
                 from:intvector{
                     -30,
-                    -437468416,
+                    -444668416,
                 }
                 to:intvector{
                     125,
-                    825388000,
+                    818188000,
                 }
             }
         }
@@ -3469,7 +3574,7 @@ supplementalData:table(nofallback){
                 id{"USD"}
                 from:intvector{
                     -192,
-                    -176846464,
+                    -184046464,
                 }
             }
         }
@@ -3478,7 +3583,7 @@ supplementalData:table(nofallback){
                 id{"USD"}
                 from:intvector{
                     -1308,
-                    719223168,
+                    715623168,
                 }
             }
         }
@@ -3487,18 +3592,18 @@ supplementalData:table(nofallback){
                 id{"UYU"}
                 from:intvector{
                     169,
-                    25906976,
+                    18706976,
                 }
             }
             {
                 id{"UYP"}
                 from:intvector{
                     36,
-                    -1118169952,
+                    -1125369952,
                 }
                 to:intvector{
                     169,
-                    25906976,
+                    18706976,
                 }
             }
         }
@@ -3507,7 +3612,7 @@ supplementalData:table(nofallback){
                 id{"UZS"}
                 from:intvector{
                     176,
-                    1497375904,
+                    1490175904,
                 }
             }
         }
@@ -3516,18 +3621,18 @@ supplementalData:table(nofallback){
                 id{"EUR"}
                 from:intvector{
                     213,
-                    349625952,
+                    342425952,
                 }
             }
             {
                 id{"ITL"}
                 from:intvector{
                     -735,
-                    -1586604736,
+                    -1590204736,
                 }
                 to:intvector{
                     235,
-                    -1407361856,
+                    -1414561856,
                 }
             }
         }
@@ -3536,7 +3641,7 @@ supplementalData:table(nofallback){
                 id{"XCD"}
                 from:intvector{
                     -37,
-                    1608789952,
+                    1601589952,
                 }
             }
         }
@@ -3545,7 +3650,7 @@ supplementalData:table(nofallback){
                 id{"VEB"}
                 from:intvector{
                     -728,
-                    -806875808,
+                    -810475808,
                 }
             }
         }
@@ -3554,18 +3659,18 @@ supplementalData:table(nofallback){
                 id{"USD"}
                 from:intvector{
                     -1007,
-                    1774067072,
+                    1770467072,
                 }
             }
             {
                 id{"GBP"}
                 from:intvector{
                     -1007,
-                    1774067072,
+                    1770467072,
                 }
                 to:intvector{
                     -81,
-                    765950976,
+                    758750976,
                 }
             }
         }
@@ -3574,7 +3679,7 @@ supplementalData:table(nofallback){
                 id{"USD"}
                 from:intvector{
                     -978,
-                    -844551808,
+                    -848151808,
                 }
             }
         }
@@ -3583,7 +3688,7 @@ supplementalData:table(nofallback){
                 id{"VND"}
                 from:intvector{
                     110,
-                    2091737440,
+                    2084537440,
                 }
             }
         }
@@ -3592,7 +3697,7 @@ supplementalData:table(nofallback){
                 id{"VUV"}
                 from:intvector{
                     80,
-                    -708290976,
+                    -715490976,
                 }
             }
         }
@@ -3601,7 +3706,7 @@ supplementalData:table(nofallback){
                 id{"XPF"}
                 from:intvector{
                     -66,
-                    2005861536,
+                    1998661536,
                 }
             }
         }
@@ -3610,7 +3715,7 @@ supplementalData:table(nofallback){
                 id{"WST"}
                 from:intvector{
                     -22,
-                    601700512,
+                    594500512,
                 }
             }
         }
@@ -3619,7 +3724,7 @@ supplementalData:table(nofallback){
                 id{"YER"}
                 from:intvector{
                     147,
-                    1635307488,
+                    1628107488,
                 }
             }
         }
@@ -3628,29 +3733,29 @@ supplementalData:table(nofallback){
                 id{"EUR"}
                 from:intvector{
                     213,
-                    349625952,
+                    342425952,
                 }
             }
             {
                 id{"FRF"}
                 from:intvector{
                     44,
-                    -2041408320,
+                    -2048608320,
                 }
                 to:intvector{
                     235,
-                    1937205440,
+                    1930005440,
                 }
             }
             {
                 id{"KMF"}
                 from:intvector{
                     36,
-                    -1118529952,
+                    -1125729952,
                 }
                 to:intvector{
                     44,
-                    -2041408320,
+                    -2048608320,
                 }
             }
         }
@@ -3659,7 +3764,7 @@ supplementalData:table(nofallback){
                 id{"ZAR"}
                 from:intvector{
                     -66,
-                    623161536,
+                    615961536,
                 }
             }
         }
@@ -3668,7 +3773,7 @@ supplementalData:table(nofallback){
                 id{"ZMK"}
                 from:intvector{
                     -15,
-                    -1703997856,
+                    -1711197856,
                 }
             }
         }
@@ -3677,7 +3782,7 @@ supplementalData:table(nofallback){
                 id{"ZWD"}
                 from:intvector{
                     73,
-                    -796939904,
+                    -804139904,
                 }
             }
         }
@@ -3906,6 +4011,18 @@ supplementalData:table(nofallback){
         }
     }
     languageData{
+        aa{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "DJ",
+                    "ER",
+                    "ET",
+                }
+            }
+        }
         ab{
             secondary{
                 scripts{
@@ -3932,6 +4049,16 @@ supplementalData:table(nofallback){
                 territories{
                     "NA",
                     "ZA",
+                }
+            }
+        }
+        ak{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "GH",
                 }
             }
         }
@@ -4075,6 +4202,18 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        bho{
+            primary{
+                scripts{
+                    "Deva",
+                }
+                territories{
+                    "IN",
+                    "NP",
+                    "MU",
+                }
+            }
+        }
         bn{
             primary{
                 scripts{
@@ -4098,6 +4237,16 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        br{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "FR",
+                }
+            }
+        }
         bs{
             primary{
                 scripts{
@@ -4113,7 +4262,18 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "HR",
-                    "CS",
+                    "ME",
+                    "RS",
+                }
+            }
+        }
+        byn{
+            primary{
+                scripts{
+                    "Ethi",
+                }
+                territories{
+                    "ER",
                 }
             }
         }
@@ -4137,6 +4297,24 @@ supplementalData:table(nofallback){
                     "NG",
                 }
             }
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "NG",
+                }
+            }
+        }
+        ceb{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "PH",
+                }
+            }
         }
         ch{
             primary{
@@ -4154,6 +4332,36 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                     "Cher",
+                }
+                territories{
+                    "US",
+                }
+            }
+        }
+        co{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "FR",
+                }
+            }
+        }
+        cop{
+            primary{
+                scripts{
+                    "Copt",
+                    "Arab",
+                }
+                territories{
+                    "EG",
+                }
+            }
+            secondary{
+                scripts{
+                    "Copt",
+                    "Arab",
                 }
                 territories{
                     "US",
@@ -4263,6 +4471,17 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        ee{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "GH",
+                    "TG",
+                }
+            }
+        }
         el{
             primary{
                 scripts{
@@ -4358,6 +4577,11 @@ supplementalData:table(nofallback){
             }
         }
         eo{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
             primary{
                 scripts{
                     "Latn",
@@ -4538,6 +4762,16 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        fur{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "IT",
+                }
+            }
+        }
         fy{
             secondary{
                 scripts{
@@ -4567,6 +4801,16 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        gaa{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "GH",
+                }
+            }
+        }
         gd{
             primary{
                 scripts{
@@ -4574,6 +4818,17 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "GB",
+                }
+            }
+        }
+        gez{
+            primary{
+                scripts{
+                    "Ethi",
+                }
+                territories{
+                    "ER",
+                    "ET",
                 }
             }
         }
@@ -4649,10 +4904,12 @@ supplementalData:table(nofallback){
             }
         }
         haw{
-            secondary{
+            primary{
                 scripts{
                     "Latn",
                 }
+            }
+            secondary{
                 territories{
                     "US",
                 }
@@ -4704,7 +4961,8 @@ supplementalData:table(nofallback){
                     "Latn",
                 }
                 territories{
-                    "CS",
+                    "ME",
+                    "RS",
                 }
             }
         }
@@ -4733,7 +4991,10 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "SI",
-                    "CS",
+                    "SK",
+                    "HR",
+                    "RO",
+                    "RS",
                 }
             }
         }
@@ -4757,6 +5018,13 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        ia{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+        }
         id{
             primary{
                 scripts{
@@ -4764,6 +5032,16 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "ID",
+                }
+            }
+        }
+        ig{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "NG",
                 }
             }
         }
@@ -4800,6 +5078,11 @@ supplementalData:table(nofallback){
             }
         }
         iu{
+            primary{
+                scripts{
+                    "Cans",
+                }
+            }
             secondary{
                 scripts{
                     "Cans",
@@ -4817,14 +5100,32 @@ supplementalData:table(nofallback){
         ja{
             primary{
                 scripts{
+                    "Japn",
                     "Hani",
                     "Hira",
                     "Kana",
+                    "Hrkt",
                 }
                 territories{
                     "GU",
                     "JP",
                     "PW",
+                }
+            }
+        }
+        jv{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "ID",
+                    "MY",
+                }
+            }
+            secondary{
+                scripts{
+                    "Java",
                 }
             }
         }
@@ -4847,6 +5148,24 @@ supplementalData:table(nofallback){
                     "NG",
                 }
             }
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "NG",
+                }
+            }
+        }
+        kam{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "KE",
+                }
+            }
         }
         kcg{
             primary{
@@ -4857,8 +5176,24 @@ supplementalData:table(nofallback){
                     "NG",
                 }
             }
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "NG",
+                }
+            }
         }
         kfo{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "NG",
+                }
+            }
             primary{
                 scripts{
                     "Latn",
@@ -4930,6 +5265,17 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        kpe{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "GN",
+                    "LR",
+                }
+            }
+        }
         ks{
             primary{
                 scripts{
@@ -4966,10 +5312,12 @@ supplementalData:table(nofallback){
             }
         }
         kw{
-            secondary{
+            primary{
                 scripts{
                     "Latn",
                 }
+            }
+            secondary{
                 territories{
                     "GB",
                 }
@@ -4987,8 +5335,8 @@ supplementalData:table(nofallback){
             }
             secondary{
                 scripts{
-                    "Arab",
                     "Cyrl",
+                    "Arab",
                 }
                 territories{
                     "CN",
@@ -5145,6 +5493,7 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "MN",
+                    "CN",
                 }
             }
         }
@@ -5179,7 +5528,6 @@ supplementalData:table(nofallback){
         ms{
             primary{
                 scripts{
-                    "Arab",
                     "Latn",
                 }
                 territories{
@@ -5188,6 +5536,11 @@ supplementalData:table(nofallback){
                     "CX",
                     "MY",
                     "SG",
+                }
+            }
+            secondary{
+                scripts{
+                    "Arab",
                 }
             }
         }
@@ -5338,12 +5691,15 @@ supplementalData:table(nofallback){
             }
         }
         oc{
-            secondary{
+            primary{
                 scripts{
                     "Latn",
                 }
+            }
+            secondary{
                 territories{
                     "ES",
+                    "FR",
                 }
             }
         }
@@ -5393,6 +5749,9 @@ supplementalData:table(nofallback){
         }
         pau{
             primary{
+                scripts{
+                    "Latn",
+                }
                 territories{
                     "PW",
                 }
@@ -5482,7 +5841,7 @@ supplementalData:table(nofallback){
                     "Latn",
                 }
                 territories{
-                    "CS",
+                    "RS",
                 }
             }
         }
@@ -5521,7 +5880,7 @@ supplementalData:table(nofallback){
             }
         }
         sa{
-            secondary{
+            primary{
                 scripts{
                     "Deva",
                 }
@@ -5533,12 +5892,24 @@ supplementalData:table(nofallback){
         sd{
             primary{
                 scripts{
-                    "Deva",
                     "Arab",
+                    "Deva",
                 }
                 territories{
                     "IN",
                     "PK",
+                }
+            }
+        }
+        se{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "FI",
+                    "NO",
+                    "SE",
                 }
             }
         }
@@ -5552,6 +5923,19 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        sh{
+            secondary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "BA",
+                    "HR",
+                    "ME",
+                    "RS",
+                }
+            }
+        }
         si{
             primary{
                 scripts{
@@ -5559,6 +5943,16 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "LK",
+                }
+            }
+        }
+        sid{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "ET",
                 }
             }
         }
@@ -5576,7 +5970,7 @@ supplementalData:table(nofallback){
                     "Latn",
                 }
                 territories{
-                    "CS",
+                    "RS",
                 }
             }
         }
@@ -5598,6 +5992,60 @@ supplementalData:table(nofallback){
                 territories{
                     "AS",
                     "WS",
+                }
+            }
+        }
+        sma{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "NO",
+                    "SE",
+                }
+            }
+        }
+        smi{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "FI",
+                    "NO",
+                    "SE",
+                }
+            }
+        }
+        smj{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "NO",
+                    "SE",
+                }
+            }
+        }
+        smn{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "FI",
+                }
+            }
+        }
+        sms{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "FI",
                 }
             }
         }
@@ -5641,7 +6089,8 @@ supplementalData:table(nofallback){
                 territories{
                     "AL",
                     "MK",
-                    "CS",
+                    "ME",
+                    "RS",
                 }
             }
         }
@@ -5653,7 +6102,8 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "BA",
-                    "CS",
+                    "ME",
+                    "RS",
                 }
             }
             secondary{
@@ -5712,6 +6162,16 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        syr{
+            primary{
+                scripts{
+                    "Syrc",
+                }
+                territories{
+                    "SY",
+                }
+            }
+        }
         ta{
             primary{
                 scripts{
@@ -5763,6 +6223,12 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "TJ",
+                    "PK",
+                }
+            }
+            secondary{
+                scripts{
+                    "Latn",
                 }
             }
         }
@@ -5784,6 +6250,16 @@ supplementalData:table(nofallback){
                 territories{
                     "ER",
                     "ET",
+                }
+            }
+        }
+        tig{
+            primary{
+                scripts{
+                    "Ethi",
+                }
+                territories{
+                    "ER",
                 }
             }
         }
@@ -5876,12 +6352,16 @@ supplementalData:table(nofallback){
         tr{
             primary{
                 scripts{
-                    "Arab",
                     "Latn",
                 }
                 territories{
                     "CY",
                     "TR",
+                }
+            }
+            secondary{
+                scripts{
+                    "Arab",
                 }
             }
         }
@@ -5895,6 +6375,16 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        tt{
+            primary{
+                scripts{
+                    "Cyrl",
+                }
+                territories{
+                    "RU",
+                }
+            }
+        }
         tvl{
             primary{
                 scripts{
@@ -5902,6 +6392,16 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "TV",
+                }
+            }
+        }
+        ug{
+            primary{
+                scripts{
+                    "Arab",
+                }
+                territories{
+                    "CN",
                 }
             }
         }
@@ -5976,6 +6476,16 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        wal{
+            primary{
+                scripts{
+                    "Ethi",
+                }
+                territories{
+                    "ET",
+                }
+            }
+        }
         wo{
             primary{
                 scripts{
@@ -6003,6 +6513,16 @@ supplementalData:table(nofallback){
             primary{
                 scripts{
                     "Hebr",
+                }
+            }
+        }
+        yo{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "NG",
                 }
             }
         }
@@ -6068,7 +6588,6 @@ supplementalData:table(nofallback){
             Asia/Calcutta{"India"}
             Asia/Colombo{"Sri Lanka"}
             Asia/Dhaka{"Central Asia"}
-            Asia/Hong_Kong{"China"}
             Asia/Irkutsk{"North Asia East"}
             Asia/Jerusalem{"Israel"}
             Asia/Kabul{"Afghanistan"}
@@ -6081,6 +6600,7 @@ supplementalData:table(nofallback){
             Asia/Rangoon{"Myanmar"}
             Asia/Riyadh{"Arab"}
             Asia/Seoul{"Korea"}
+            Asia/Shanghai{"China"}
             Asia/Singapore{"Singapore"}
             Asia/Taipei{"Taipei"}
             Asia/Tbilisi{"Caucasus"}
@@ -6129,6 +6649,11 @@ supplementalData:table(nofallback){
             "015",
             "017",
             "018",
+        }
+        003{
+            "021",
+            "029",
+            "013",
         }
         003{
             "013",
@@ -6220,6 +6745,7 @@ supplementalData:table(nofallback){
         017{
             "AO",
             "CD",
+            "ZR",
             "CF",
             "CG",
             "CM",
@@ -6240,6 +6766,8 @@ supplementalData:table(nofallback){
             "013",
             "021",
             "029",
+            "003",
+            "419",
         }
         021{
             "BM",
@@ -6301,11 +6829,13 @@ supplementalData:table(nofallback){
             "KH",
             "LA",
             "MM",
+            "BU",
             "MY",
             "PH",
             "SG",
             "TH",
             "TL",
+            "TP",
             "VN",
         }
         039{
@@ -6317,13 +6847,16 @@ supplementalData:table(nofallback){
             "GR",
             "HR",
             "IT",
+            "ME",
             "MK",
             "MT",
+            "CS",
+            "RS",
             "PT",
             "SI",
             "SM",
             "VA",
-            "CS",
+            "YU",
         }
         053{
             "AU",
@@ -6358,12 +6891,17 @@ supplementalData:table(nofallback){
             "WF",
             "WS",
         }
+        062{
+            "034",
+            "143",
+        }
         142{
             "030",
             "035",
             "143",
             "145",
             "034",
+            "062",
         }
         143{
             "TM",
@@ -6388,15 +6926,18 @@ supplementalData:table(nofallback){
             "PS",
             "QA",
             "SA",
+            "NT",
             "SY",
             "TR",
             "YE",
+            "YD",
         }
         150{
             "039",
             "151",
             "154",
             "155",
+            "QU",
         }
         151{
             "BG",
@@ -6407,12 +6948,14 @@ supplementalData:table(nofallback){
             "PL",
             "RO",
             "RU",
+            "SU",
             "SK",
             "UA",
         }
         154{
-            "830",
-            "833",
+            "GG",
+            "IM",
+            "JE",
             "AX",
             "DK",
             "EE",
@@ -6420,6 +6963,7 @@ supplementalData:table(nofallback){
             "FO",
             "GB",
             "IE",
+            "IM",
             "IS",
             "LT",
             "LV",
@@ -6432,7 +6976,9 @@ supplementalData:table(nofallback){
             "BE",
             "CH",
             "DE",
+            "DD",
             "FR",
+            "FX",
             "LI",
             "LU",
             "MC",
@@ -6453,9 +6999,18 @@ supplementalData:table(nofallback){
             "UZ",
         }
         419{
+            "029",
+            "013",
+            "005",
+        }
+        419{
             "005",
             "013",
             "029",
+        }
+        830{
+            "GG",
+            "JE",
         }
         QO{
             "AQ",
@@ -6503,115 +7058,23 @@ supplementalData:table(nofallback){
         Africa/Accra{
             territory{"GH"}
         }
-        America/Adak{
-            territory{"US"}
-            aliases{
-                "America/Atka",
-                "US/Aleutian",
-            }
-        }
         Africa/Addis_Ababa{
             territory{"ET"}
-        }
-        Australia/Adelaide{
-            territory{"AU"}
-            aliases{
-                "Australia/South",
-            }
-        }
-        Asia/Aden{
-            territory{"YE"}
         }
         Africa/Algiers{
             territory{"DZ"}
         }
-        Asia/Almaty{
-            territory{"KZ"}
-        }
-        Asia/Amman{
-            territory{"JO"}
-        }
-        Europe/Amsterdam{
-            territory{"NL"}
-        }
-        Asia/Anadyr{
-            territory{"RU"}
-        }
-        America/Anchorage{
-            territory{"US"}
-            aliases{
-                "SystemV/YST9YDT",
-                "US/Alaska",
-            }
-        }
-        Europe/Andorra{
-            territory{"AD"}
-        }
-        America/Anguilla{
-            territory{"AI"}
-        }
-        Indian/Antananarivo{
-            territory{"MG"}
-        }
-        America/Antigua{
-            territory{"AG"}
-        }
-        Pacific/Apia{
-            territory{"WS"}
-        }
-        Asia/Aqtau{
-            territory{"KZ"}
-        }
-        Asia/Aqtobe{
-            territory{"KZ"}
-        }
-        America/Araguaina{
-            territory{"BR"}
-        }
-        America/Aruba{
-            territory{"AW"}
-        }
-        Asia/Ashgabat{
-            territory{"TM"}
-            aliases{
-                "Asia/Ashkhabad",
-            }
-        }
         Africa/Asmera{
             territory{"ER"}
-        }
-        America/Asuncion{
-            territory{"PY"}
-        }
-        Europe/Athens{
-            territory{"GR"}
-        }
-        Pacific/Auckland{
-            territory{"NZ"}
             aliases{
-                "NZ",
+                "Africa/Asmara",
             }
-        }
-        Atlantic/Azores{
-            territory{"PT"}
-        }
-        Asia/Baghdad{
-            territory{"IQ"}
-        }
-        America/Bahia{
-            territory{"BR"}
-        }
-        Asia/Bahrain{
-            territory{"BH"}
-        }
-        Asia/Baku{
-            territory{"AZ"}
         }
         Africa/Bamako{
             territory{"ML"}
-        }
-        Asia/Bangkok{
-            territory{"TH"}
+            aliases{
+                "Africa/Timbuktu",
+            }
         }
         Africa/Bangui{
             territory{"CF"}
@@ -6619,83 +7082,14 @@ supplementalData:table(nofallback){
         Africa/Banjul{
             territory{"GM"}
         }
-        America/Barbados{
-            territory{"BB"}
-        }
-        Asia/Beirut{
-            territory{"LB"}
-        }
-        America/Belem{
-            territory{"BR"}
-        }
-        Europe/Belfast{
-            territory{"GB"}
-        }
-        Europe/Belgrade{
-            territory{"CS"}
-        }
-        America/Belize{
-            territory{"BZ"}
-        }
-        Europe/Berlin{
-            territory{"DE"}
-        }
-        Atlantic/Bermuda{
-            territory{"BM"}
-        }
-        Asia/Bishkek{
-            territory{"KG"}
-        }
         Africa/Bissau{
             territory{"GW"}
         }
         Africa/Blantyre{
             territory{"MW"}
         }
-        America/Boa_Vista{
-            territory{"BR"}
-        }
-        America/Bogota{
-            territory{"CO"}
-        }
-        America/Boise{
-            territory{"US"}
-        }
-        Europe/Bratislava{
-            territory{"SK"}
-        }
         Africa/Brazzaville{
             territory{"CG"}
-        }
-        Australia/Brisbane{
-            territory{"AU"}
-            aliases{
-                "Australia/Queensland",
-            }
-        }
-        Australia/Broken_Hill{
-            territory{"AU"}
-            aliases{
-                "Australia/Yancowinna",
-            }
-        }
-        Asia/Brunei{
-            territory{"BN"}
-        }
-        Europe/Brussels{
-            territory{"BE"}
-        }
-        Europe/Bucharest{
-            territory{"RO"}
-        }
-        Europe/Budapest{
-            territory{"HU"}
-        }
-        America/Buenos_Aires{
-            territory{"AR"}
-            aliases{
-                "America/Argentina/Buenos_Aires",
-            }
         }
         Africa/Bujumbura{
             territory{"BI"}
@@ -6706,8 +7100,196 @@ supplementalData:table(nofallback){
                 "Egypt",
             }
         }
-        Asia/Calcutta{
-            territory{"IN"}
+        Africa/Casablanca{
+            territory{"MA"}
+        }
+        Africa/Ceuta{
+            territory{"ES"}
+        }
+        Africa/Conakry{
+            territory{"GN"}
+        }
+        Africa/Dakar{
+            territory{"SN"}
+        }
+        Africa/Dar_es_Salaam{
+            territory{"TZ"}
+        }
+        Africa/Djibouti{
+            territory{"DJ"}
+        }
+        Africa/Douala{
+            territory{"CM"}
+        }
+        Africa/El_Aaiun{
+            territory{"EH"}
+        }
+        Africa/Freetown{
+            territory{"SL"}
+        }
+        Africa/Gaborone{
+            territory{"BW"}
+        }
+        Africa/Harare{
+            territory{"ZW"}
+        }
+        Africa/Johannesburg{
+            territory{"ZA"}
+        }
+        Africa/Kampala{
+            territory{"UG"}
+        }
+        Africa/Khartoum{
+            territory{"SD"}
+        }
+        Africa/Kigali{
+            territory{"RW"}
+        }
+        Africa/Kinshasa{
+            territory{"CD"}
+        }
+        Africa/Lagos{
+            territory{"NG"}
+        }
+        Africa/Libreville{
+            territory{"GA"}
+        }
+        Africa/Lome{
+            territory{"TG"}
+        }
+        Africa/Luanda{
+            territory{"AO"}
+        }
+        Africa/Lubumbashi{
+            territory{"CD"}
+        }
+        Africa/Lusaka{
+            territory{"ZM"}
+        }
+        Africa/Malabo{
+            territory{"GQ"}
+        }
+        Africa/Maputo{
+            territory{"MZ"}
+        }
+        Africa/Maseru{
+            territory{"LS"}
+        }
+        Africa/Mbabane{
+            territory{"SZ"}
+        }
+        Africa/Mogadishu{
+            territory{"SO"}
+        }
+        Africa/Monrovia{
+            territory{"LR"}
+        }
+        Africa/Nairobi{
+            territory{"KE"}
+        }
+        Africa/Ndjamena{
+            territory{"TD"}
+        }
+        Africa/Niamey{
+            territory{"NE"}
+        }
+        Africa/Nouakchott{
+            territory{"MR"}
+        }
+        Africa/Ouagadougou{
+            territory{"BF"}
+        }
+        Africa/Porto-Novo{
+            territory{"BJ"}
+        }
+        Africa/Sao_Tome{
+            territory{"ST"}
+        }
+        Africa/Tripoli{
+            territory{"LY"}
+            aliases{
+                "Libya",
+            }
+        }
+        Africa/Tunis{
+            territory{"TN"}
+        }
+        Africa/Windhoek{
+            territory{"NA"}
+        }
+        America/Adak{
+            territory{"US"}
+            aliases{
+                "America/Atka",
+                "US/Aleutian",
+            }
+        }
+        America/Anchorage{
+            territory{"US"}
+            aliases{
+                "SystemV/YST9YDT",
+                "US/Alaska",
+            }
+        }
+        America/Anguilla{
+            territory{"AI"}
+        }
+        America/Antigua{
+            territory{"AG"}
+        }
+        America/Araguaina{
+            territory{"BR"}
+        }
+        America/Argentina/La_Rioja{
+            territory{"AR"}
+        }
+        America/Argentina/Rio_Gallegos{
+            territory{"AR"}
+        }
+        America/Argentina/San_Juan{
+            territory{"AR"}
+        }
+        America/Argentina/Tucuman{
+            territory{"AR"}
+        }
+        America/Argentina/Ushuaia{
+            territory{"AR"}
+        }
+        America/Aruba{
+            territory{"AW"}
+        }
+        America/Asuncion{
+            territory{"PY"}
+        }
+        America/Bahia{
+            territory{"BR"}
+        }
+        America/Barbados{
+            territory{"BB"}
+        }
+        America/Belem{
+            territory{"BR"}
+        }
+        America/Belize{
+            territory{"BZ"}
+        }
+        America/Blanc-Sablon{
+            territory{"CA"}
+        }
+        America/Boa_Vista{
+            territory{"BR"}
+        }
+        America/Bogota{
+            territory{"CO"}
+        }
+        America/Boise{
+            territory{"US"}
+        }
+        America/Buenos_Aires{
+            territory{"AR"}
+            aliases{
+                "America/Argentina/Buenos_Aires",
+            }
         }
         America/Cambridge_Bay{
             territory{"CA"}
@@ -6715,28 +7297,17 @@ supplementalData:table(nofallback){
         America/Campo_Grande{
             territory{"BR"}
         }
-        Atlantic/Canary{
-            territory{"ES"}
-        }
         America/Cancun{
             territory{"MX"}
         }
-        Atlantic/Cape_Verde{
-            territory{"CV"}
-        }
         America/Caracas{
             territory{"VE"}
-        }
-        Africa/Casablanca{
-            territory{"MA"}
-        }
-        Antarctica/Casey{
-            territory{"AQ"}
         }
         America/Catamarca{
             territory{"AR"}
             aliases{
                 "America/Argentina/Catamarca",
+                "America/Argentina/ComodRivadavia",
             }
         }
         America/Cayenne{
@@ -6744,21 +7315,6 @@ supplementalData:table(nofallback){
         }
         America/Cayman{
             territory{"KY"}
-        }
-        America/North_Dakota/Center{
-            territory{"US"}
-        }
-        Africa/Ceuta{
-            territory{"ES"}
-        }
-        Indian/Chagos{
-            territory{"IO"}
-        }
-        Pacific/Chatham{
-            territory{"NZ"}
-            aliases{
-                "NZ-CHAT",
-            }
         }
         America/Chicago{
             territory{"US"}
@@ -6771,41 +7327,11 @@ supplementalData:table(nofallback){
         America/Chihuahua{
             territory{"MX"}
         }
-        Europe/Chisinau{
-            territory{"MD"}
+        America/Coral_Harbour{
+            territory{"CA"}
             aliases{
-                "Europe/Tiraspol",
+                "America/Atikokan",
             }
-        }
-        Asia/Choibalsan{
-            territory{"MN"}
-        }
-        Asia/Chongqing{
-            territory{"CN"}
-            aliases{
-                "Asia/Chungking",
-            }
-        }
-        Indian/Christmas{
-            territory{"CX"}
-        }
-        Indian/Cocos{
-            territory{"CC"}
-        }
-        Asia/Colombo{
-            territory{"LK"}
-        }
-        America/Argentina/ComodRivadavia{
-            territory{"AR"}
-        }
-        Indian/Comoro{
-            territory{"KM"}
-        }
-        Africa/Conakry{
-            territory{"GN"}
-        }
-        Europe/Copenhagen{
-            territory{"DK"}
         }
         America/Cordoba{
             territory{"AR"}
@@ -6823,26 +7349,8 @@ supplementalData:table(nofallback){
         America/Curacao{
             territory{"AN"}
         }
-        Africa/Dakar{
-            territory{"SN"}
-        }
-        Asia/Damascus{
-            territory{"SY"}
-        }
         America/Danmarkshavn{
             territory{"GL"}
-        }
-        Africa/Dar_es_Salaam{
-            territory{"TZ"}
-        }
-        Australia/Darwin{
-            territory{"AU"}
-            aliases{
-                "Australia/North",
-            }
-        }
-        Antarctica/Davis{
-            territory{"AQ"}
         }
         America/Dawson{
             territory{"CA"}
@@ -6864,6 +7372,476 @@ supplementalData:table(nofallback){
                 "US/Michigan",
             }
         }
+        America/Dominica{
+            territory{"DM"}
+        }
+        America/Edmonton{
+            territory{"CA"}
+            aliases{
+                "Canada/Mountain",
+            }
+        }
+        America/Eirunepe{
+            territory{"BR"}
+        }
+        America/El_Salvador{
+            territory{"SV"}
+        }
+        America/Fortaleza{
+            territory{"BR"}
+        }
+        America/Glace_Bay{
+            territory{"CA"}
+        }
+        America/Godthab{
+            territory{"GL"}
+        }
+        America/Goose_Bay{
+            territory{"CA"}
+        }
+        America/Grand_Turk{
+            territory{"TC"}
+        }
+        America/Grenada{
+            territory{"GD"}
+        }
+        America/Guadeloupe{
+            territory{"GP"}
+        }
+        America/Guatemala{
+            territory{"GT"}
+        }
+        America/Guayaquil{
+            territory{"EC"}
+        }
+        America/Guyana{
+            territory{"GY"}
+        }
+        America/Halifax{
+            territory{"CA"}
+            aliases{
+                "Canada/Atlantic",
+                "SystemV/AST4ADT",
+            }
+        }
+        America/Havana{
+            territory{"CU"}
+            aliases{
+                "Cuba",
+            }
+        }
+        America/Hermosillo{
+            territory{"MX"}
+        }
+        America/Indiana/Knox{
+            territory{"US"}
+            aliases{
+                "America/Knox_IN",
+                "US/Indiana-Starke",
+            }
+        }
+        America/Indiana/Marengo{
+            territory{"US"}
+        }
+        America/Indiana/Petersburg{
+            territory{"US"}
+        }
+        America/Indiana/Vevay{
+            territory{"US"}
+        }
+        America/Indiana/Vincennes{
+            territory{"US"}
+        }
+        America/Indianapolis{
+            territory{"US"}
+            aliases{
+                "America/Fort_Wayne",
+                "America/Indiana/Indianapolis",
+                "EST",
+                "SystemV/EST5",
+                "US/East-Indiana",
+            }
+        }
+        America/Inuvik{
+            territory{"CA"}
+        }
+        America/Iqaluit{
+            territory{"CA"}
+        }
+        America/Jamaica{
+            territory{"JM"}
+            aliases{
+                "Jamaica",
+            }
+        }
+        America/Jujuy{
+            territory{"AR"}
+            aliases{
+                "America/Argentina/Jujuy",
+            }
+        }
+        America/Juneau{
+            territory{"US"}
+        }
+        America/Kentucky/Monticello{
+            territory{"US"}
+        }
+        America/La_Paz{
+            territory{"BO"}
+        }
+        America/Lima{
+            territory{"PE"}
+        }
+        America/Los_Angeles{
+            territory{"US"}
+            aliases{
+                "PST8PDT",
+                "SystemV/PST8PDT",
+                "US/Pacific",
+                "US/Pacific-New",
+            }
+        }
+        America/Louisville{
+            territory{"US"}
+            aliases{
+                "America/Kentucky/Louisville",
+            }
+        }
+        America/Maceio{
+            territory{"BR"}
+        }
+        America/Managua{
+            territory{"NI"}
+        }
+        America/Manaus{
+            territory{"BR"}
+            aliases{
+                "Brazil/West",
+            }
+        }
+        America/Martinique{
+            territory{"MQ"}
+        }
+        America/Mazatlan{
+            territory{"MX"}
+            aliases{
+                "Mexico/BajaSur",
+            }
+        }
+        America/Mendoza{
+            territory{"AR"}
+            aliases{
+                "America/Argentina/Mendoza",
+            }
+        }
+        America/Menominee{
+            territory{"US"}
+        }
+        America/Merida{
+            territory{"MX"}
+        }
+        America/Mexico_City{
+            territory{"MX"}
+            aliases{
+                "Mexico/General",
+            }
+        }
+        America/Miquelon{
+            territory{"PM"}
+        }
+        America/Moncton{
+            territory{"CA"}
+        }
+        America/Monterrey{
+            territory{"MX"}
+        }
+        America/Montevideo{
+            territory{"UY"}
+        }
+        America/Montreal{
+            territory{"CA"}
+        }
+        America/Montserrat{
+            territory{"MS"}
+        }
+        America/Nassau{
+            territory{"BS"}
+        }
+        America/New_York{
+            territory{"US"}
+            aliases{
+                "EST5EDT",
+                "SystemV/EST5EDT",
+                "US/Eastern",
+            }
+        }
+        America/Nipigon{
+            territory{"CA"}
+        }
+        America/Nome{
+            territory{"US"}
+        }
+        America/Noronha{
+            territory{"BR"}
+            aliases{
+                "Brazil/DeNoronha",
+            }
+        }
+        America/North_Dakota/Center{
+            territory{"US"}
+        }
+        America/North_Dakota/New_Salem{
+            territory{"US"}
+        }
+        America/Panama{
+            territory{"PA"}
+        }
+        America/Pangnirtung{
+            territory{"CA"}
+        }
+        America/Paramaribo{
+            territory{"SR"}
+        }
+        America/Phoenix{
+            territory{"US"}
+            aliases{
+                "MST",
+                "SystemV/MST7",
+                "US/Arizona",
+            }
+        }
+        America/Port_of_Spain{
+            territory{"TT"}
+        }
+        America/Port-au-Prince{
+            territory{"HT"}
+        }
+        America/Porto_Velho{
+            territory{"BR"}
+        }
+        America/Puerto_Rico{
+            territory{"PR"}
+            aliases{
+                "SystemV/AST4",
+            }
+        }
+        America/Rainy_River{
+            territory{"CA"}
+        }
+        America/Rankin_Inlet{
+            territory{"CA"}
+        }
+        America/Recife{
+            territory{"BR"}
+        }
+        America/Regina{
+            territory{"CA"}
+            aliases{
+                "Canada/East-Saskatchewan",
+                "Canada/Saskatchewan",
+                "SystemV/CST6",
+            }
+        }
+        America/Rio_Branco{
+            territory{"BR"}
+            aliases{
+                "America/Porto_Acre",
+                "Brazil/Acre",
+            }
+        }
+        America/Santiago{
+            territory{"CL"}
+            aliases{
+                "Chile/Continental",
+            }
+        }
+        America/Santo_Domingo{
+            territory{"DO"}
+        }
+        America/Sao_Paulo{
+            territory{"BR"}
+            aliases{
+                "Brazil/East",
+            }
+        }
+        America/Scoresbysund{
+            territory{"GL"}
+        }
+        America/Shiprock{
+            territory{"US"}
+            aliases{
+                "Navajo",
+            }
+        }
+        America/St_Johns{
+            territory{"CA"}
+            aliases{
+                "Canada/Newfoundland",
+            }
+        }
+        America/St_Kitts{
+            territory{"KN"}
+        }
+        America/St_Lucia{
+            territory{"LC"}
+        }
+        America/St_Thomas{
+            territory{"VI"}
+            aliases{
+                "America/Virgin",
+            }
+        }
+        America/St_Vincent{
+            territory{"VC"}
+        }
+        America/Swift_Current{
+            territory{"CA"}
+        }
+        America/Tegucigalpa{
+            territory{"HN"}
+        }
+        America/Thule{
+            territory{"GL"}
+        }
+        America/Thunder_Bay{
+            territory{"CA"}
+        }
+        America/Tijuana{
+            territory{"MX"}
+            aliases{
+                "America/Ensenada",
+                "Mexico/BajaNorte",
+            }
+        }
+        America/Toronto{
+            territory{"CA"}
+            aliases{
+                "Canada/Eastern",
+            }
+        }
+        America/Tortola{
+            territory{"VG"}
+        }
+        America/Vancouver{
+            territory{"CA"}
+            aliases{
+                "Canada/Pacific",
+            }
+        }
+        America/Whitehorse{
+            territory{"CA"}
+            aliases{
+                "Canada/Yukon",
+            }
+        }
+        America/Winnipeg{
+            territory{"CA"}
+            aliases{
+                "Canada/Central",
+            }
+        }
+        America/Yakutat{
+            territory{"US"}
+        }
+        America/Yellowknife{
+            territory{"CA"}
+        }
+        Antarctica/Casey{
+            territory{"AQ"}
+        }
+        Antarctica/Davis{
+            territory{"AQ"}
+        }
+        Antarctica/DumontDUrville{
+            territory{"AQ"}
+        }
+        Antarctica/Mawson{
+            territory{"AQ"}
+        }
+        Antarctica/McMurdo{
+            territory{"AQ"}
+        }
+        Antarctica/Palmer{
+            territory{"AQ"}
+        }
+        Antarctica/Rothera{
+            territory{"AQ"}
+        }
+        Antarctica/South_Pole{
+            territory{"AQ"}
+        }
+        Antarctica/Syowa{
+            territory{"AQ"}
+        }
+        Antarctica/Vostok{
+            territory{"AQ"}
+        }
+        Arctic/Longyearbyen{
+            territory{"SJ"}
+        }
+        Asia/Aden{
+            territory{"YE"}
+        }
+        Asia/Almaty{
+            territory{"KZ"}
+        }
+        Asia/Amman{
+            territory{"JO"}
+        }
+        Asia/Anadyr{
+            territory{"RU"}
+        }
+        Asia/Aqtau{
+            territory{"KZ"}
+        }
+        Asia/Aqtobe{
+            territory{"KZ"}
+        }
+        Asia/Ashgabat{
+            territory{"TM"}
+            aliases{
+                "Asia/Ashkhabad",
+            }
+        }
+        Asia/Baghdad{
+            territory{"IQ"}
+        }
+        Asia/Bahrain{
+            territory{"BH"}
+        }
+        Asia/Baku{
+            territory{"AZ"}
+        }
+        Asia/Bangkok{
+            territory{"TH"}
+        }
+        Asia/Beirut{
+            territory{"LB"}
+        }
+        Asia/Bishkek{
+            territory{"KG"}
+        }
+        Asia/Brunei{
+            territory{"BN"}
+        }
+        Asia/Calcutta{
+            territory{"IN"}
+        }
+        Asia/Choibalsan{
+            territory{"MN"}
+        }
+        Asia/Chongqing{
+            territory{"CN"}
+            aliases{
+                "Asia/Chungking",
+            }
+        }
+        Asia/Colombo{
+            territory{"LK"}
+        }
+        Asia/Damascus{
+            territory{"SY"}
+        }
         Asia/Dhaka{
             territory{"BD"}
             aliases{
@@ -6873,95 +7851,311 @@ supplementalData:table(nofallback){
         Asia/Dili{
             territory{"TL"}
         }
-        Africa/Djibouti{
-            territory{"DJ"}
-        }
-        America/Dominica{
-            territory{"DM"}
-        }
-        Africa/Douala{
-            territory{"CM"}
-        }
         Asia/Dubai{
             territory{"AE"}
-        }
-        Europe/Dublin{
-            territory{"IE"}
-            aliases{
-                "Eire",
-            }
-        }
-        Antarctica/DumontDUrville{
-            territory{"AQ"}
         }
         Asia/Dushanbe{
             territory{"TJ"}
         }
-        Pacific/Easter{
-            territory{"CL"}
-            aliases{
-                "Chile/EasterIsland",
-            }
-        }
-        America/Edmonton{
-            territory{"CA"}
-            aliases{
-                "Canada/Mountain",
-            }
-        }
-        Pacific/Efate{
-            territory{"VU"}
-        }
-        America/Eirunepe{
-            territory{"BR"}
-        }
-        Africa/El_Aaiun{
-            territory{"EH"}
-        }
-        America/El_Salvador{
-            territory{"SV"}
-        }
-        Pacific/Enderbury{
-            territory{"KI"}
-        }
-        Atlantic/Faeroe{
-            territory{"FO"}
-        }
-        Pacific/Fakaofo{
-            territory{"TK"}
-        }
-        Pacific/Fiji{
-            territory{"FJ"}
-        }
-        America/Fortaleza{
-            territory{"BR"}
-        }
-        Africa/Freetown{
-            territory{"SL"}
-        }
-        Pacific/Funafuti{
-            territory{"TV"}
-        }
-        Africa/Gaborone{
-            territory{"BW"}
-        }
-        Pacific/Galapagos{
-            territory{"EC"}
-        }
-        Pacific/Gambier{
-            territory{"PF"}
-            aliases{
-                "SystemV/YST9",
-            }
-        }
         Asia/Gaza{
             territory{"PS"}
         }
-        Europe/Gibraltar{
-            territory{"GI"}
+        Asia/Harbin{
+            territory{"CN"}
         }
-        America/Glace_Bay{
-            territory{"CA"}
+        Asia/Hong_Kong{
+            territory{"HK"}
+            aliases{
+                "Hongkong",
+            }
+        }
+        Asia/Hovd{
+            territory{"MN"}
+        }
+        Asia/Irkutsk{
+            territory{"RU"}
+        }
+        Asia/Jakarta{
+            territory{"ID"}
+        }
+        Asia/Jayapura{
+            territory{"ID"}
+        }
+        Asia/Jerusalem{
+            territory{"IL"}
+            aliases{
+                "Asia/Tel_Aviv",
+                "Israel",
+            }
+        }
+        Asia/Kabul{
+            territory{"AF"}
+        }
+        Asia/Kamchatka{
+            territory{"RU"}
+        }
+        Asia/Karachi{
+            territory{"PK"}
+        }
+        Asia/Kashgar{
+            territory{"CN"}
+        }
+        Asia/Katmandu{
+            territory{"NP"}
+        }
+        Asia/Krasnoyarsk{
+            territory{"RU"}
+        }
+        Asia/Kuala_Lumpur{
+            territory{"MY"}
+        }
+        Asia/Kuching{
+            territory{"MY"}
+        }
+        Asia/Kuwait{
+            territory{"KW"}
+        }
+        Asia/Macau{
+            territory{"MO"}
+            aliases{
+                "Asia/Macao",
+            }
+        }
+        Asia/Magadan{
+            territory{"RU"}
+        }
+        Asia/Makassar{
+            territory{"ID"}
+            aliases{
+                "Asia/Ujung_Pandang",
+            }
+        }
+        Asia/Manila{
+            territory{"PH"}
+        }
+        Asia/Muscat{
+            territory{"OM"}
+        }
+        Asia/Nicosia{
+            territory{"CY"}
+            aliases{
+                "Europe/Nicosia",
+            }
+        }
+        Asia/Novosibirsk{
+            territory{"RU"}
+        }
+        Asia/Omsk{
+            territory{"RU"}
+        }
+        Asia/Oral{
+            territory{"KZ"}
+        }
+        Asia/Phnom_Penh{
+            territory{"KH"}
+        }
+        Asia/Pontianak{
+            territory{"ID"}
+        }
+        Asia/Pyongyang{
+            territory{"KP"}
+        }
+        Asia/Qatar{
+            territory{"QA"}
+        }
+        Asia/Qyzylorda{
+            territory{"KZ"}
+        }
+        Asia/Rangoon{
+            territory{"MM"}
+        }
+        Asia/Riyadh{
+            territory{"SA"}
+        }
+        Asia/Saigon{
+            territory{"VN"}
+        }
+        Asia/Sakhalin{
+            territory{"RU"}
+        }
+        Asia/Samarkand{
+            territory{"UZ"}
+        }
+        Asia/Seoul{
+            territory{"KR"}
+            aliases{
+                "ROK",
+            }
+        }
+        Asia/Shanghai{
+            territory{"CN"}
+            aliases{
+                "PRC",
+            }
+        }
+        Asia/Singapore{
+            territory{"SG"}
+            aliases{
+                "Singapore",
+            }
+        }
+        Asia/Taipei{
+            territory{"TW"}
+            aliases{
+                "ROC",
+            }
+        }
+        Asia/Tashkent{
+            territory{"UZ"}
+        }
+        Asia/Tbilisi{
+            territory{"GE"}
+        }
+        Asia/Tehran{
+            territory{"IR"}
+            aliases{
+                "Iran",
+            }
+        }
+        Asia/Thimphu{
+            territory{"BT"}
+            aliases{
+                "Asia/Thimbu",
+            }
+        }
+        Asia/Tokyo{
+            territory{"JP"}
+            aliases{
+                "Japan",
+            }
+        }
+        Asia/Ulaanbaatar{
+            territory{"MN"}
+            aliases{
+                "Asia/Ulan_Bator",
+            }
+        }
+        Asia/Urumqi{
+            territory{"CN"}
+        }
+        Asia/Vientiane{
+            territory{"LA"}
+        }
+        Asia/Vladivostok{
+            territory{"RU"}
+        }
+        Asia/Yakutsk{
+            territory{"RU"}
+        }
+        Asia/Yekaterinburg{
+            territory{"RU"}
+        }
+        Asia/Yerevan{
+            territory{"AM"}
+        }
+        Atlantic/Azores{
+            territory{"PT"}
+        }
+        Atlantic/Bermuda{
+            territory{"BM"}
+        }
+        Atlantic/Canary{
+            territory{"ES"}
+        }
+        Atlantic/Cape_Verde{
+            territory{"CV"}
+        }
+        Atlantic/Faeroe{
+            territory{"FO"}
+            aliases{
+                "Atlantic/Faroe",
+            }
+        }
+        Atlantic/Jan_Mayen{
+            territory{"SJ"}
+        }
+        Atlantic/Madeira{
+            territory{"PT"}
+        }
+        Atlantic/Reykjavik{
+            territory{"IS"}
+            aliases{
+                "Iceland",
+            }
+        }
+        Atlantic/South_Georgia{
+            territory{"GS"}
+        }
+        Atlantic/St_Helena{
+            territory{"SH"}
+        }
+        Atlantic/Stanley{
+            territory{"FK"}
+        }
+        Australia/Adelaide{
+            territory{"AU"}
+            aliases{
+                "Australia/South",
+            }
+        }
+        Australia/Brisbane{
+            territory{"AU"}
+            aliases{
+                "Australia/Queensland",
+            }
+        }
+        Australia/Broken_Hill{
+            territory{"AU"}
+            aliases{
+                "Australia/Yancowinna",
+            }
+        }
+        Australia/Currie{
+            territory{"AU"}
+        }
+        Australia/Darwin{
+            territory{"AU"}
+            aliases{
+                "Australia/North",
+            }
+        }
+        Australia/Eucla{
+            territory{"AU"}
+        }
+        Australia/Hobart{
+            territory{"AU"}
+            aliases{
+                "Australia/Tasmania",
+            }
+        }
+        Australia/Lindeman{
+            territory{"AU"}
+        }
+        Australia/Lord_Howe{
+            territory{"AU"}
+            aliases{
+                "Australia/LHI",
+            }
+        }
+        Australia/Melbourne{
+            territory{"AU"}
+            aliases{
+                "Australia/Victoria",
+            }
+        }
+        Australia/Perth{
+            territory{"AU"}
+            aliases{
+                "Australia/West",
+            }
+        }
+        Australia/Sydney{
+            territory{"AU"}
+            aliases{
+                "Australia/ACT",
+                "Australia/Canberra",
+                "Australia/NSW",
+            }
         }
         Etc/GMT{
             territory{"001"}
@@ -7063,102 +8257,62 @@ supplementalData:table(nofallback){
         Etc/GMT+12{
             territory{"001"}
         }
-        America/Godthab{
-            territory{"GL"}
+        Etc/Unknown{
+            territory{"001"}
         }
-        America/Goose_Bay{
-            territory{"CA"}
+        Europe/Amsterdam{
+            territory{"NL"}
         }
-        America/Grand_Turk{
-            territory{"TC"}
+        Europe/Andorra{
+            territory{"AD"}
         }
-        America/Grenada{
-            territory{"GD"}
+        Europe/Athens{
+            territory{"GR"}
         }
-        Pacific/Guadalcanal{
-            territory{"SB"}
+        Europe/Belgrade{
+            territory{"RS"}
         }
-        America/Guadeloupe{
-            territory{"GP"}
+        Europe/Berlin{
+            territory{"DE"}
         }
-        Pacific/Guam{
-            territory{"GU"}
+        Europe/Bratislava{
+            territory{"SK"}
         }
-        America/Guatemala{
-            territory{"GT"}
+        Europe/Brussels{
+            territory{"BE"}
         }
-        America/Guayaquil{
-            territory{"EC"}
+        Europe/Bucharest{
+            territory{"RO"}
         }
-        America/Guyana{
-            territory{"GY"}
+        Europe/Budapest{
+            territory{"HU"}
         }
-        America/Halifax{
-            territory{"CA"}
+        Europe/Chisinau{
+            territory{"MD"}
             aliases{
-                "Canada/Atlantic",
-                "SystemV/AST4ADT",
+                "Europe/Tiraspol",
             }
         }
-        Africa/Harare{
-            territory{"ZW"}
+        Europe/Copenhagen{
+            territory{"DK"}
         }
-        Asia/Harbin{
-            territory{"CN"}
-        }
-        America/Havana{
-            territory{"CU"}
+        Europe/Dublin{
+            territory{"IE"}
             aliases{
-                "Cuba",
+                "Eire",
             }
+        }
+        Europe/Gibraltar{
+            territory{"GI"}
+        }
+        Europe/Guernsey{
+            territory{"GG"}
         }
         Europe/Helsinki{
             territory{"FI"}
         }
-        America/Hermosillo{
-            territory{"MX"}
-        }
-        Australia/Hobart{
-            territory{"AU"}
-            aliases{
-                "Australia/Tasmania",
-            }
-        }
-        Asia/Hong_Kong{
-            territory{"HK"}
-            aliases{
-                "Hongkong",
-            }
-        }
-        Pacific/Honolulu{
-            territory{"US"}
-            aliases{
-                "HST",
-                "SystemV/HST10",
-                "US/Hawaii",
-            }
-        }
-        Asia/Hovd{
-            territory{"MN"}
-        }
-        America/Indianapolis{
-            territory{"US"}
-            aliases{
-                "America/Fort_Wayne",
-                "America/Indiana/Indianapolis",
-                "EST",
-                "SystemV/EST5",
-                "US/East-Indiana",
-            }
-        }
-        America/Inuvik{
-            territory{"CA"}
-        }
-        America/Iqaluit{
-            territory{"CA"}
-        }
-        Asia/Irkutsk{
-            territory{"RU"}
+        Europe/Isle_of_Man{
+            territory{"IM"}
         }
         Europe/Istanbul{
             territory{"TR"}
@@ -7167,127 +8321,14 @@ supplementalData:table(nofallback){
                 "Turkey",
             }
         }
-        Asia/Jakarta{
-            territory{"ID"}
-        }
-        America/Jamaica{
-            territory{"JM"}
-            aliases{
-                "Jamaica",
-            }
-        }
-        Atlantic/Jan_Mayen{
-            territory{"SJ"}
-        }
-        Asia/Jayapura{
-            territory{"ID"}
-        }
-        Asia/Jerusalem{
-            territory{"IL"}
-            aliases{
-                "Asia/Tel_Aviv",
-                "Israel",
-            }
-        }
-        Africa/Johannesburg{
-            territory{"ZA"}
-        }
-        Pacific/Johnston{
-            territory{"UM"}
-        }
-        America/Jujuy{
-            territory{"AR"}
-            aliases{
-                "America/Argentina/Jujuy",
-            }
-        }
-        America/Juneau{
-            territory{"US"}
-        }
-        Asia/Kabul{
-            territory{"AF"}
+        Europe/Jersey{
+            territory{"JE"}
         }
         Europe/Kaliningrad{
             territory{"RU"}
         }
-        Asia/Kamchatka{
-            territory{"RU"}
-        }
-        Africa/Kampala{
-            territory{"UG"}
-        }
-        Asia/Karachi{
-            territory{"PK"}
-        }
-        Asia/Kashgar{
-            territory{"CN"}
-        }
-        Asia/Katmandu{
-            territory{"NP"}
-        }
-        Indian/Kerguelen{
-            territory{"TF"}
-        }
-        Africa/Khartoum{
-            territory{"SD"}
-        }
         Europe/Kiev{
             territory{"UA"}
-        }
-        Africa/Kigali{
-            territory{"RW"}
-        }
-        Africa/Kinshasa{
-            territory{"CD"}
-        }
-        Pacific/Kiritimati{
-            territory{"KI"}
-        }
-        America/Indiana/Knox{
-            territory{"US"}
-            aliases{
-                "America/Knox_IN",
-                "US/Indiana-Starke",
-            }
-        }
-        Pacific/Kosrae{
-            territory{"FM"}
-        }
-        Asia/Krasnoyarsk{
-            territory{"RU"}
-        }
-        Asia/Kuala_Lumpur{
-            territory{"MY"}
-        }
-        Asia/Kuching{
-            territory{"MY"}
-        }
-        Asia/Kuwait{
-            territory{"KW"}
-        }
-        Pacific/Kwajalein{
-            territory{"MH"}
-            aliases{
-                "Kwajalein",
-            }
-        }
-        America/La_Paz{
-            territory{"BO"}
-        }
-        America/Argentina/La_Rioja{
-            territory{"AR"}
-        }
-        Africa/Lagos{
-            territory{"NG"}
-        }
-        Africa/Libreville{
-            territory{"GA"}
-        }
-        America/Lima{
-            territory{"PE"}
-        }
-        Australia/Lindeman{
-            territory{"AU"}
         }
         Europe/Lisbon{
             territory{"PT"}
@@ -7298,198 +8339,31 @@ supplementalData:table(nofallback){
         Europe/Ljubljana{
             territory{"SI"}
         }
-        Africa/Lome{
-            territory{"TG"}
-        }
         Europe/London{
             territory{"GB"}
             aliases{
+                "Europe/Belfast",
                 "GB",
                 "GB-Eire",
             }
         }
-        Arctic/Longyearbyen{
-            territory{"SJ"}
-        }
-        Australia/Lord_Howe{
-            territory{"AU"}
-            aliases{
-                "Australia/LHI",
-            }
-        }
-        America/Los_Angeles{
-            territory{"US"}
-            aliases{
-                "PST8PDT",
-                "SystemV/PST8PDT",
-                "US/Pacific",
-                "US/Pacific-New",
-            }
-        }
-        America/Louisville{
-            territory{"US"}
-            aliases{
-                "America/Kentucky/Louisville",
-            }
-        }
-        Africa/Luanda{
-            territory{"AO"}
-        }
-        Africa/Lubumbashi{
-            territory{"CD"}
-        }
-        Africa/Lusaka{
-            territory{"ZM"}
-        }
         Europe/Luxembourg{
             territory{"LU"}
-        }
-        Asia/Macau{
-            territory{"MO"}
-            aliases{
-                "Asia/Macao",
-            }
-        }
-        America/Maceio{
-            territory{"BR"}
-        }
-        Atlantic/Madeira{
-            territory{"PT"}
         }
         Europe/Madrid{
             territory{"ES"}
         }
-        Asia/Magadan{
-            territory{"RU"}
-        }
-        Indian/Mahe{
-            territory{"SC"}
-        }
-        Pacific/Majuro{
-            territory{"MH"}
-        }
-        Asia/Makassar{
-            territory{"ID"}
-            aliases{
-                "Asia/Ujung_Pandang",
-            }
-        }
-        Africa/Malabo{
-            territory{"GQ"}
-        }
-        Indian/Maldives{
-            territory{"MV"}
-        }
         Europe/Malta{
             territory{"MT"}
-        }
-        America/Managua{
-            territory{"NI"}
-        }
-        America/Manaus{
-            territory{"BR"}
-            aliases{
-                "Brazil/West",
-            }
-        }
-        Asia/Manila{
-            territory{"PH"}
-        }
-        Africa/Maputo{
-            territory{"MZ"}
-        }
-        America/Indiana/Marengo{
-            territory{"US"}
         }
         Europe/Mariehamn{
             territory{"AX"}
         }
-        Pacific/Marquesas{
-            territory{"PF"}
-        }
-        America/Martinique{
-            territory{"MQ"}
-        }
-        Africa/Maseru{
-            territory{"LS"}
-        }
-        Indian/Mauritius{
-            territory{"MU"}
-        }
-        Antarctica/Mawson{
-            territory{"AQ"}
-        }
-        Indian/Mayotte{
-            territory{"YT"}
-        }
-        America/Mazatlan{
-            territory{"MX"}
-            aliases{
-                "Mexico/BajaSur",
-            }
-        }
-        Africa/Mbabane{
-            territory{"SZ"}
-        }
-        Antarctica/McMurdo{
-            territory{"AQ"}
-        }
-        Australia/Melbourne{
-            territory{"AU"}
-            aliases{
-                "Australia/Victoria",
-            }
-        }
-        America/Mendoza{
-            territory{"AR"}
-            aliases{
-                "America/Argentina/Mendoza",
-            }
-        }
-        America/Menominee{
-            territory{"US"}
-        }
-        America/Merida{
-            territory{"MX"}
-        }
-        America/Mexico_City{
-            territory{"MX"}
-            aliases{
-                "Mexico/General",
-            }
-        }
-        Pacific/Midway{
-            territory{"UM"}
-        }
         Europe/Minsk{
             territory{"BY"}
         }
-        America/Miquelon{
-            territory{"PM"}
-        }
-        Africa/Mogadishu{
-            territory{"SO"}
-        }
         Europe/Monaco{
             territory{"MC"}
-        }
-        Africa/Monrovia{
-            territory{"LR"}
-        }
-        America/Monterrey{
-            territory{"MX"}
-        }
-        America/Montevideo{
-            territory{"UY"}
-        }
-        America/Kentucky/Monticello{
-            territory{"US"}
-        }
-        America/Montreal{
-            territory{"CA"}
-        }
-        America/Montserrat{
-            territory{"MS"}
         }
         Europe/Moscow{
             territory{"RU"}
@@ -7497,76 +8371,211 @@ supplementalData:table(nofallback){
                 "W-SU",
             }
         }
-        Asia/Muscat{
-            territory{"OM"}
+        Europe/Oslo{
+            territory{"NO"}
         }
-        Africa/Nairobi{
-            territory{"KE"}
+        Europe/Paris{
+            territory{"FR"}
         }
-        America/Nassau{
-            territory{"BS"}
+        Europe/Podgorica{
+            territory{"ME"}
+        }
+        Europe/Prague{
+            territory{"CZ"}
+        }
+        Europe/Riga{
+            territory{"LV"}
+        }
+        Europe/Rome{
+            territory{"IT"}
+        }
+        Europe/Samara{
+            territory{"RU"}
+        }
+        Europe/San_Marino{
+            territory{"SM"}
+        }
+        Europe/Sarajevo{
+            territory{"BA"}
+        }
+        Europe/Simferopol{
+            territory{"UA"}
+        }
+        Europe/Skopje{
+            territory{"MK"}
+        }
+        Europe/Sofia{
+            territory{"BG"}
+        }
+        Europe/Stockholm{
+            territory{"SE"}
+        }
+        Europe/Tallinn{
+            territory{"EE"}
+        }
+        Europe/Tirane{
+            territory{"AL"}
+        }
+        Europe/Uzhgorod{
+            territory{"UA"}
+        }
+        Europe/Vaduz{
+            territory{"LI"}
+        }
+        Europe/Vatican{
+            territory{"VA"}
+        }
+        Europe/Vienna{
+            territory{"AT"}
+        }
+        Europe/Vilnius{
+            territory{"LT"}
+        }
+        Europe/Volgograd{
+            territory{"RU"}
+        }
+        Europe/Warsaw{
+            territory{"PL"}
+            aliases{
+                "Poland",
+            }
+        }
+        Europe/Zagreb{
+            territory{"HR"}
+        }
+        Europe/Zaporozhye{
+            territory{"UA"}
+        }
+        Europe/Zurich{
+            territory{"CH"}
+        }
+        Indian/Antananarivo{
+            territory{"MG"}
+        }
+        Indian/Chagos{
+            territory{"IO"}
+        }
+        Indian/Christmas{
+            territory{"CX"}
+        }
+        Indian/Cocos{
+            territory{"CC"}
+        }
+        Indian/Comoro{
+            territory{"KM"}
+        }
+        Indian/Kerguelen{
+            territory{"TF"}
+        }
+        Indian/Mahe{
+            territory{"SC"}
+        }
+        Indian/Maldives{
+            territory{"MV"}
+        }
+        Indian/Mauritius{
+            territory{"MU"}
+        }
+        Indian/Mayotte{
+            territory{"YT"}
+        }
+        Indian/Reunion{
+            territory{"RE"}
+        }
+        Pacific/Apia{
+            territory{"WS"}
+        }
+        Pacific/Auckland{
+            territory{"NZ"}
+            aliases{
+                "NZ",
+            }
+        }
+        Pacific/Chatham{
+            territory{"NZ"}
+            aliases{
+                "NZ-CHAT",
+            }
+        }
+        Pacific/Easter{
+            territory{"CL"}
+            aliases{
+                "Chile/EasterIsland",
+            }
+        }
+        Pacific/Efate{
+            territory{"VU"}
+        }
+        Pacific/Enderbury{
+            territory{"KI"}
+        }
+        Pacific/Fakaofo{
+            territory{"TK"}
+        }
+        Pacific/Fiji{
+            territory{"FJ"}
+        }
+        Pacific/Funafuti{
+            territory{"TV"}
+        }
+        Pacific/Galapagos{
+            territory{"EC"}
+        }
+        Pacific/Gambier{
+            territory{"PF"}
+            aliases{
+                "SystemV/YST9",
+            }
+        }
+        Pacific/Guadalcanal{
+            territory{"SB"}
+        }
+        Pacific/Guam{
+            territory{"GU"}
+        }
+        Pacific/Honolulu{
+            territory{"US"}
+            aliases{
+                "HST",
+                "SystemV/HST10",
+                "US/Hawaii",
+            }
+        }
+        Pacific/Johnston{
+            territory{"UM"}
+        }
+        Pacific/Kiritimati{
+            territory{"KI"}
+        }
+        Pacific/Kosrae{
+            territory{"FM"}
+        }
+        Pacific/Kwajalein{
+            territory{"MH"}
+            aliases{
+                "Kwajalein",
+            }
+        }
+        Pacific/Majuro{
+            territory{"MH"}
+        }
+        Pacific/Marquesas{
+            territory{"PF"}
+        }
+        Pacific/Midway{
+            territory{"UM"}
         }
         Pacific/Nauru{
             territory{"NR"}
         }
-        Africa/Ndjamena{
-            territory{"TD"}
-        }
-        America/New_York{
-            territory{"US"}
-            aliases{
-                "EST5EDT",
-                "SystemV/EST5EDT",
-                "US/Eastern",
-            }
-        }
-        Africa/Niamey{
-            territory{"NE"}
-        }
-        Asia/Nicosia{
-            territory{"CY"}
-            aliases{
-                "Europe/Nicosia",
-            }
-        }
-        America/Nipigon{
-            territory{"CA"}
-        }
         Pacific/Niue{
             territory{"NU"}
-        }
-        America/Nome{
-            territory{"US"}
         }
         Pacific/Norfolk{
             territory{"NF"}
         }
-        America/Noronha{
-            territory{"BR"}
-            aliases{
-                "Brazil/DeNoronha",
-            }
-        }
-        Africa/Nouakchott{
-            territory{"MR"}
-        }
         Pacific/Noumea{
             territory{"NC"}
-        }
-        Asia/Novosibirsk{
-            territory{"RU"}
-        }
-        Asia/Omsk{
-            territory{"RU"}
-        }
-        Asia/Oral{
-            territory{"KZ"}
-        }
-        Europe/Oslo{
-            territory{"NO"}
-        }
-        Africa/Ouagadougou{
-            territory{"BF"}
         }
         Pacific/Pago_Pago{
             territory{"AS"}
@@ -7578,38 +8587,6 @@ supplementalData:table(nofallback){
         Pacific/Palau{
             territory{"PW"}
         }
-        Antarctica/Palmer{
-            territory{"AQ"}
-        }
-        America/Panama{
-            territory{"PA"}
-        }
-        America/Pangnirtung{
-            territory{"CA"}
-        }
-        America/Paramaribo{
-            territory{"SR"}
-        }
-        Europe/Paris{
-            territory{"FR"}
-        }
-        Australia/Perth{
-            territory{"AU"}
-            aliases{
-                "Australia/West",
-            }
-        }
-        Asia/Phnom_Penh{
-            territory{"KH"}
-        }
-        America/Phoenix{
-            territory{"US"}
-            aliases{
-                "MST",
-                "SystemV/MST7",
-                "US/Arizona",
-            }
-        }
         Pacific/Pitcairn{
             territory{"PN"}
             aliases{
@@ -7619,410 +8596,35 @@ supplementalData:table(nofallback){
         Pacific/Ponape{
             territory{"FM"}
         }
-        Asia/Pontianak{
-            territory{"ID"}
-        }
         Pacific/Port_Moresby{
             territory{"PG"}
-        }
-        America/Port_of_Spain{
-            territory{"TT"}
-        }
-        America/Port-au-Prince{
-            territory{"HT"}
-        }
-        America/Porto_Velho{
-            territory{"BR"}
-        }
-        Africa/Porto-Novo{
-            territory{"BJ"}
-        }
-        Europe/Prague{
-            territory{"CZ"}
-        }
-        America/Puerto_Rico{
-            territory{"PR"}
-            aliases{
-                "SystemV/AST4",
-            }
-        }
-        Asia/Pyongyang{
-            territory{"KP"}
-        }
-        Asia/Qatar{
-            territory{"QA"}
-        }
-        Asia/Qyzylorda{
-            territory{"KZ"}
-        }
-        America/Rainy_River{
-            territory{"CA"}
-        }
-        Asia/Rangoon{
-            territory{"MM"}
-        }
-        America/Rankin_Inlet{
-            territory{"CA"}
         }
         Pacific/Rarotonga{
             territory{"CK"}
         }
-        America/Recife{
-            territory{"BR"}
-        }
-        America/Regina{
-            territory{"CA"}
-            aliases{
-                "Canada/East-Saskatchewan",
-                "Canada/Saskatchewan",
-                "SystemV/CST6",
-            }
-        }
-        Indian/Reunion{
-            territory{"RE"}
-        }
-        Atlantic/Reykjavik{
-            territory{"IS"}
-            aliases{
-                "Iceland",
-            }
-        }
-        Europe/Riga{
-            territory{"LV"}
-        }
-        America/Rio_Branco{
-            territory{"BR"}
-            aliases{
-                "America/Porto_Acre",
-                "Brazil/Acre",
-            }
-        }
-        America/Argentina/Rio_Gallegos{
-            territory{"AR"}
-        }
-        Asia/Riyadh{
-            territory{"SA"}
-        }
-        Europe/Rome{
-            territory{"IT"}
-        }
-        Antarctica/Rothera{
-            territory{"AQ"}
-        }
-        Asia/Saigon{
-            territory{"VN"}
-        }
         Pacific/Saipan{
             territory{"MP"}
-        }
-        Asia/Sakhalin{
-            territory{"RU"}
-        }
-        Europe/Samara{
-            territory{"RU"}
-        }
-        Asia/Samarkand{
-            territory{"UZ"}
-        }
-        America/Argentina/San_Juan{
-            territory{"AR"}
-        }
-        Europe/San_Marino{
-            territory{"SM"}
-        }
-        America/Santiago{
-            territory{"CL"}
-            aliases{
-                "Chile/Continental",
-            }
-        }
-        America/Santo_Domingo{
-            territory{"DO"}
-        }
-        America/Sao_Paulo{
-            territory{"BR"}
-            aliases{
-                "Brazil/East",
-            }
-        }
-        Africa/Sao_Tome{
-            territory{"ST"}
-        }
-        Europe/Sarajevo{
-            territory{"BA"}
-        }
-        America/Scoresbysund{
-            territory{"GL"}
-        }
-        Asia/Seoul{
-            territory{"KR"}
-            aliases{
-                "ROK",
-            }
-        }
-        Asia/Shanghai{
-            territory{"CN"}
-            aliases{
-                "PRC",
-            }
-        }
-        America/Shiprock{
-            territory{"US"}
-            aliases{
-                "Navajo",
-            }
-        }
-        Europe/Simferopol{
-            territory{"UA"}
-        }
-        Asia/Singapore{
-            territory{"SG"}
-            aliases{
-                "Singapore",
-            }
-        }
-        Europe/Skopje{
-            territory{"MK"}
-        }
-        Europe/Sofia{
-            territory{"BG"}
-        }
-        Atlantic/South_Georgia{
-            territory{"GS"}
-        }
-        Antarctica/South_Pole{
-            territory{"AQ"}
-        }
-        Atlantic/St_Helena{
-            territory{"SH"}
-        }
-        America/St_Johns{
-            territory{"CA"}
-            aliases{
-                "Canada/Newfoundland",
-            }
-        }
-        America/St_Kitts{
-            territory{"KN"}
-        }
-        America/St_Lucia{
-            territory{"LC"}
-        }
-        America/St_Thomas{
-            territory{"VI"}
-            aliases{
-                "America/Virgin",
-            }
-        }
-        America/St_Vincent{
-            territory{"VC"}
-        }
-        Atlantic/Stanley{
-            territory{"FK"}
-        }
-        Europe/Stockholm{
-            territory{"SE"}
-        }
-        America/Swift_Current{
-            territory{"CA"}
-        }
-        Australia/Sydney{
-            territory{"AU"}
-            aliases{
-                "Australia/ACT",
-                "Australia/Canberra",
-                "Australia/NSW",
-            }
-        }
-        Antarctica/Syowa{
-            territory{"AQ"}
         }
         Pacific/Tahiti{
             territory{"PF"}
         }
-        Asia/Taipei{
-            territory{"TW"}
-            aliases{
-                "ROC",
-            }
-        }
-        Europe/Tallinn{
-            territory{"EE"}
-        }
         Pacific/Tarawa{
             territory{"KI"}
-        }
-        Asia/Tashkent{
-            territory{"UZ"}
-        }
-        Asia/Tbilisi{
-            territory{"GE"}
-        }
-        America/Tegucigalpa{
-            territory{"HN"}
-        }
-        Asia/Tehran{
-            territory{"IR"}
-            aliases{
-                "Iran",
-            }
-        }
-        Asia/Thimphu{
-            territory{"BT"}
-            aliases{
-                "Asia/Thimbu",
-            }
-        }
-        America/Thule{
-            territory{"GL"}
-        }
-        America/Thunder_Bay{
-            territory{"CA"}
-        }
-        America/Tijuana{
-            territory{"MX"}
-            aliases{
-                "America/Ensenada",
-                "Mexico/BajaNorte",
-            }
-        }
-        Africa/Timbuktu{
-            territory{"ML"}
-        }
-        Europe/Tirane{
-            territory{"AL"}
-        }
-        Asia/Tokyo{
-            territory{"JP"}
-            aliases{
-                "Japan",
-            }
         }
         Pacific/Tongatapu{
             territory{"TO"}
         }
-        America/Toronto{
-            territory{"CA"}
-            aliases{
-                "Canada/Eastern",
-            }
-        }
-        America/Tortola{
-            territory{"VG"}
-        }
-        Africa/Tripoli{
-            territory{"LY"}
-            aliases{
-                "Libya",
-            }
-        }
         Pacific/Truk{
             territory{"FM"}
-        }
-        America/Argentina/Tucuman{
-            territory{"AR"}
-        }
-        Africa/Tunis{
-            territory{"TN"}
-        }
-        Asia/Ulaanbaatar{
-            territory{"MN"}
             aliases{
-                "Asia/Ulan_Bator",
+                "Pacific/Yap",
             }
-        }
-        Asia/Urumqi{
-            territory{"CN"}
-        }
-        America/Argentina/Ushuaia{
-            territory{"AR"}
-        }
-        Europe/Uzhgorod{
-            territory{"UA"}
-        }
-        Europe/Vaduz{
-            territory{"LI"}
-        }
-        America/Vancouver{
-            territory{"CA"}
-            aliases{
-                "Canada/Pacific",
-            }
-        }
-        Europe/Vatican{
-            territory{"VA"}
-        }
-        America/Indiana/Vevay{
-            territory{"US"}
-        }
-        Europe/Vienna{
-            territory{"AT"}
-        }
-        Asia/Vientiane{
-            territory{"LA"}
-        }
-        Europe/Vilnius{
-            territory{"LT"}
-        }
-        Asia/Vladivostok{
-            territory{"RU"}
-        }
-        Antarctica/Vostok{
-            territory{"AQ"}
         }
         Pacific/Wake{
             territory{"UM"}
         }
         Pacific/Wallis{
             territory{"WF"}
-        }
-        Europe/Warsaw{
-            territory{"PL"}
-            aliases{
-                "Poland",
-            }
-        }
-        America/Whitehorse{
-            territory{"CA"}
-            aliases{
-                "Canada/Yukon",
-            }
-        }
-        Africa/Windhoek{
-            territory{"NA"}
-        }
-        America/Winnipeg{
-            territory{"CA"}
-            aliases{
-                "Canada/Central",
-            }
-        }
-        America/Yakutat{
-            territory{"US"}
-        }
-        Asia/Yakutsk{
-            territory{"RU"}
-        }
-        Pacific/Yap{
-            territory{"FM"}
-        }
-        Asia/Yekaterinburg{
-            territory{"RU"}
-        }
-        America/Yellowknife{
-            territory{"CA"}
-        }
-        Asia/Yerevan{
-            territory{"AM"}
-        }
-        Europe/Zagreb{
-            territory{"HR"}
-        }
-        Europe/Zaporozhye{
-            territory{"UA"}
-        }
-        Europe/Zurich{
-            territory{"CH"}
         }
     }
 }

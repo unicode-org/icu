@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/fo.xml
@@ -164,11 +164,17 @@ fo{
         "NaN",
         "+",
     }
-    Version{"1.43"}
+    NumberPatterns{
+        "#,##0.###",
+        "¤#,##0.00;¤ -#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.49"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "HH:mm:ss z",
+                "HH:mm:ss v",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -181,6 +187,7 @@ fo{
             availableFormats{
                 MMMd{"d. MMM"}
                 MMdd{"dd-MM"}
+                yyQ{"Q yy"}
                 yyyyMM{"MM-yyyy"}
                 yyyyMMM{"MMM yyyy"}
             }
@@ -203,6 +210,17 @@ fo{
                         "hósdagur",
                         "fríggjadagur",
                         "leygardagur",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
                     }
                 }
             }
@@ -235,6 +253,22 @@ fo{
                         "oktober",
                         "november",
                         "desember",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
                     }
                 }
             }

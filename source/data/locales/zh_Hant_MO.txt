@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh_Hant_MO.xml
@@ -10,13 +10,98 @@ zh_Hant_MO{
     Countries{
         MO{"澳門特別行政區"}
     }
+    Currencies{
+        CSD{
+            "CSD",
+            "CSD",
+        }
+        EQE{
+            "EQE",
+            "EQE",
+        }
+        ESA{
+            "ESA",
+            "ESA",
+        }
+        ESB{
+            "ESB",
+            "ESB",
+        }
+        INR{
+            "=0#Rs.|1#Re.|1<Rs.",
+            "印度盧布",
+        }
+        LSM{
+            "LSM",
+            "LSM",
+        }
+        LUC{
+            "LUC",
+            "LUC",
+        }
+        LUL{
+            "LUL",
+            "LUL",
+        }
+        MXV{
+            "MXV",
+            "墨西哥法律反轉(UDI)",
+        }
+        RHD{
+            "RHD",
+            "RHD",
+        }
+        SRD{
+            "SRD",
+            "SRD",
+        }
+        XPD{
+            "XPD",
+            "XPD",
+        }
+        XPT{
+            "XPT",
+            "XPT",
+        }
+        ZRN{
+            "ZRN",
+            "薩伊扎新伊爾",
+        }
+    }
+    Languages{
+        ban{"巴厘文"}
+        ceb{"宿務族文"}
+        crp{"克里奧爾文和皮欽文"}
+        cv{"楚瓦甚文"}
+        dum{"荷蘭，中古 (ca. 1050-1350)"}
+        elx{"埃蘭文"}
+        enm{"英文，中世紀 (1100-1500)"}
+        gmh{"德文, 中古全盛時期 (ca.1050-1500)"}
+        goh{"德文,上古全盛時期 (ca.750-1050)"}
+        got{"哥特文"}
+        grc{"古希臘文 (至 1453)"}
+        ia{"拉丁國際文 Interlingua"}
+        ie{"拉丁國際文 Interlingue"}
+        kho{"和闐[與闐]文"}
+        pro{"普羅文斯文 (to 1500)"}
+        root{"root"}
+        rup{"rup"}
+        sco{"苏格兰文"}
+        xh{"科薩語"}
+    }
     NumberPatterns{
         "#,##0.###",
         "¤#,##0.00;(¤#,##0.00)",
         "#,##0%",
         "#E0",
     }
-    Version{"1.36"}
+    Scripts{
+        Geok{"Geok"}
+        Gujr{"吉亞拉塔文"}
+        Hano{"哈努努文"}
+        Hans{"簡體漢語"}
+    }
+    Version{"1.45"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -24,7 +109,7 @@ zh_Hant_MO{
                 1,
             }
             DateTimePatterns{
-                "ahh'時'mm'分'ss'秒' z",
+                "ahh時mm分ss秒 v",
                 "ahh'時'mm'分'ss'秒'",
                 "ahh:mm:ss",
                 "ah:mm",
@@ -33,6 +118,54 @@ zh_Hant_MO{
                 "yyyy'年'M'月'd'日'",
                 "yy'年'M'月'd'日'",
                 "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "周日",
+                        "週一",
+                        "周二",
+                        "周三",
+                        "周四",
+                        "星期五",
+                        "星期六",
+                    }
+                }
+            }
+            fields{
+                day{
+                    dn{"Day"}
+                }
+                dayperiod{
+                    dn{"Dayperiod"}
+                }
+                era{
+                    dn{"Era"}
+                }
+                hour{
+                    dn{"Hour"}
+                }
+                minute{
+                    dn{"Minute"}
+                }
+                month{
+                    dn{"Month"}
+                }
+                second{
+                    dn{"Second"}
+                }
+                week{
+                    dn{"Week"}
+                }
+                weekday{
+                    dn{"Day of the Week"}
+                }
+                year{
+                    dn{"Year"}
+                }
+                zone{
+                    dn{"Zone"}
+                }
             }
             monthNames{
                 format{
@@ -52,70 +185,6 @@ zh_Hant_MO{
                     }
                 }
             }
-        }
-    }
-    delimiters{
-        alternateQuotationEnd{"』"}
-        alternateQuotationStart{"『"}
-        quotationEnd{"」"}
-        quotationStart{"「"}
-    }
-    zoneStrings{
-        "Africa:Casablanca"{
-            ec{"Casablanca"}
-            ld{"格林威治夏令時間"}
-        }
-        "America:Anchorage"{
-            ec{"Anchorage"}
-            ld{"阿拉斯加夏令時間"}
-        }
-        "America:Chicago"{
-            ec{"Chicago"}
-            ld{"中部夏令時間"}
-        }
-        "America:Halifax"{
-            ec{"Halifax"}
-            ld{"大西洋夏令時間"}
-        }
-        "America:Indianapolis"{
-            ec{"Indianapolis"}
-            ld{"東部夏令時間"}
-        }
-        "America:Los_Angeles"{
-            ec{"Los Angeles"}
-            ld{"太平洋夏令時間"}
-        }
-        "America:New_York"{
-            ec{"New York"}
-            ld{"東部夏令時間"}
-        }
-        "America:St_Johns"{
-            ec{"St Johns"}
-            ld{"紐芬蘭夏令時間"}
-        }
-        "Asia:Jerusalem"{
-            ec{"Jerusalem"}
-            ld{"以色列夏令時間"}
-        }
-        "Asia:Shanghai"{
-            ec{"Shanghai"}
-            ld{"中國夏令時間"}
-        }
-        "Asia:Tokyo"{
-            ec{"Tokyo"}
-            ld{"日本夏令時間"}
-        }
-        "Europe:Bucharest"{
-            ec{"Bucharest"}
-            ld{"東歐夏令時間"}
-        }
-        "Europe:Paris"{
-            ec{"Paris"}
-            ld{"中歐夏令時間"}
-        }
-        "Pacific:Honolulu"{
-            ec{"Honolulu"}
-            ld{"夏威夷夏令時間"}
         }
     }
 }

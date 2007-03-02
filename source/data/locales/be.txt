@@ -25,7 +25,7 @@ be{
     }
     Currencies{
         BRL{
-            "BRL",
+            "R$",
             "бразільскі рэал",
         }
         BYB{
@@ -45,7 +45,7 @@ be{
             "еўра",
         }
         GBP{
-            "£",
+            "UK£",
             "англійскі фунт",
         }
         INR{
@@ -53,7 +53,7 @@ be{
             "індыйская рупія",
         }
         JPY{
-            "¥",
+            "JP¥",
             "японская іена",
         }
         RUB{
@@ -61,7 +61,7 @@ be{
             "рускі рубель",
         }
         USD{
-            "$",
+            "US$",
             "долар ЗША",
         }
     }
@@ -97,15 +97,21 @@ be{
         "NaN",
         "+",
     }
+    NumberPatterns{
+        "#,##0.###",
+        "¤#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
     Scripts{
         Cyrl{"кірылічны"}
         Latn{"лацінскі"}
     }
-    Version{"1.52"}
+    Version{"1.57"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "HH.mm.ss z",
+                "HH.mm.ss v",
                 "HH.mm.ss z",
                 "HH.mm.ss",
                 "HH.mm",
@@ -119,6 +125,7 @@ be{
                 MMMMd{"d MMMM"}
                 Md{"d.M"}
                 mmss{"mm.ss"}
+                yyQ{"Q yy"}
                 yyyyM{"M.yyyy"}
                 yyyyMMMM{"MMMM yyyy"}
             }
@@ -212,10 +219,10 @@ be{
             quarters{
                 format{
                     abbreviated{
-                        "1-ы кв.",
-                        "2-ы кв.",
-                        "3-ы кв.",
-                        "4-ы кв.",
+                        "1-ы квартал",
+                        "Q2",
+                        "3-ы квартал",
+                        "4-ы квартал",
                     }
                     wide{
                         "1-ы квартал",

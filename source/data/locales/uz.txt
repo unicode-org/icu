@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/uz.xml
@@ -27,7 +27,7 @@ uz{
     }
     Currencies{
         BRL{
-            "BRL",
+            "R$",
             "Бразил реали",
         }
         CNY{
@@ -39,7 +39,7 @@ uz{
             "Евро",
         }
         GBP{
-            "£",
+            "UK£",
             "Инглиз фунт стерлинги",
         }
         INR{
@@ -47,7 +47,7 @@ uz{
             "Ҳинд рупияси",
         }
         JPY{
-            "¥",
+            "JP¥",
             "Япон йенаси",
         }
         RUB{
@@ -55,7 +55,7 @@ uz{
             "Рус рубли",
         }
         USD{
-            "$",
+            "US$",
             "АҚШ доллари",
         }
         UZS{
@@ -100,9 +100,27 @@ uz{
         Cyrl{"Кирил"}
         Latn{"Лотин"}
     }
-    Version{"1.32"}
+    Version{"1.37"}
     calendar{
         gregorian{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
+            DateTimePatterns{
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, yyyy MMMM dd",
+                "yyyy MMMM d",
+                "yyyy MMM d",
+                "yy/MM/dd",
+                "{1} {0}",
+            }
+            availableFormats{
+                yyQ{"Q yy"}
+            }
             dayNames{
                 format{
                     abbreviated{
@@ -134,6 +152,16 @@ uz{
                         "Ж",
                         "Ш",
                     }
+                }
+            }
+            eras{
+                abbreviated{
+                    "BCE",
+                    "CE",
+                }
+                wide{
+                    "BCE",
+                    "CE",
                 }
             }
             monthNames{
@@ -184,15 +212,32 @@ uz{
                     }
                 }
             }
+            quarters{
+                format{
+                    abbreviated{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                    wide{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                }
+            }
         }
     }
     zoneStrings{
         "Asia:Kabul"{
             ec{"کابل"}
-            ld{"افغانستان وقتی"}
             ls{"افغانستان وقتی"}
-            sd{"AFT"}
             ss{"AFT"}
         }
+        gmtFormat{"GMT{0}"}
+        hourFormat{"+HH:mm;-HH:mm"}
+        regionFormat{"{0} Time"}
     }
 }

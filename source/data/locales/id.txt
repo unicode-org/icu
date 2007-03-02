@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/id.xml
@@ -504,9 +504,17 @@ id{
         "#,##0%",
         "#E0",
     }
-    Version{"1.52"}
+    Version{"1.58"}
     calendar{
         gregorian{
+            availableFormats{
+                MMMMdd{"dd MMMM"}
+                MMdd{"dd/MM"}
+                mmss{"mm:ss"}
+                yyMM{"MM/yy"}
+                yyQ{"Q yy"}
+                yyyyMMMM{"MMMM yyyy"}
+            }
             dayNames{
                 format{
                     abbreviated{
@@ -526,6 +534,17 @@ id{
                         "Kamis",
                         "Jumat",
                         "Sabtu",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
                     }
                 }
             }
@@ -560,14 +579,30 @@ id{
                         "Desember",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
             }
             quarters{
                 format{
                     abbreviated{
-                        "K1",
-                        "K2",
-                        "K3",
-                        "K4",
+                        "kuartal pertama",
+                        "Q2",
+                        "kuartal ketiga",
+                        "kuartal keempat",
                     }
                     wide{
                         "kuartal pertama",

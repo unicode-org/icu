@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/cy.xml
@@ -16,7 +16,7 @@ cy{
     }
     Currencies{
         BRL{
-            "BRL",
+            "R$",
             "Real Brasil",
         }
         CNY{
@@ -28,7 +28,7 @@ cy{
             "Ewro",
         }
         GBP{
-            "£",
+            "UK£",
             "Punt Sterling Prydain",
         }
         INR{
@@ -36,7 +36,7 @@ cy{
             "Rwpî India",
         }
         JPY{
-            "¥",
+            "JP¥",
             "Yen Siapan",
         }
         RUB{
@@ -44,7 +44,7 @@ cy{
             "Rwbl Rwsia",
         }
         USD{
-            "$",
+            "US$",
             "Doler yr UDA",
         }
     }
@@ -78,28 +78,21 @@ cy{
     Scripts{
         Latn{"Lladin"}
     }
-    Version{"1.42"}
+    Version{"1.48"}
     calendar{
         gregorian{
-            DateTimePatterns{
-                "HH:mm:ss z",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, yyyy MMMM dd",
-                "yyyy MMMM d",
-                "yyyy MMM d",
-                "yy/MM/dd",
-                "{1} {0}",
-            }
             availableFormats{
                 HHmm{"HH:mm"}
                 HHmmss{"HH:mm:ss"}
-                MMdd{"MM-dd"}
+                MMMMdd{"dd MMMM"}
+                MMdd{"dd/MM"}
                 hhmm{"hh:mm a"}
                 hhmmss{"hh:mm:ss a"}
                 yyMMdd{"yy-MM-dd"}
+                yyQ{"Q yy"}
                 yyQQQQ{"QQQQ yy"}
+                yyyyMM{"MM/yyyy"}
+                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{
@@ -179,6 +172,22 @@ cy{
                         "H",
                         "T",
                         "R",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                    wide{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
                     }
                 }
             }

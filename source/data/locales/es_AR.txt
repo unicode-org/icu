@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/es_AR.xml
@@ -12,16 +12,30 @@ es_AR{
             "$",
             "Peso Argentino",
         }
-        USD{
-            "US$",
-            "Dólar Americano",
+        MXN{
+            "MEX$",
+            "peso mexicano",
         }
     }
-    Version{"1.41"}
+    NumberElements{
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    Version{"1.47"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "HH'h'''mm z",
+                "HH'h'''mm v",
                 "H:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -30,9 +44,6 @@ es_AR{
                 "dd/MM/yyyy",
                 "dd/MM/yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                yyyyMM{"MM/yyyy"}
             }
         }
     }

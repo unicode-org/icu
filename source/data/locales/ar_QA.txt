@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ar_QA.xml
@@ -13,7 +13,10 @@ ar_QA{
         "#,##0%",
         "#E0",
     }
-    Version{"1.38"}
+    Scripts{
+        Ital{"اللأيطالية القديمة"}
+    }
+    Version{"1.42"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -40,5 +43,11 @@ ar_QA{
                 86400000,
             }
         }
+    }
+    delimiters{
+        alternateQuotationEnd{"‘"}
+        alternateQuotationStart{"’"}
+        quotationEnd{"“"}
+        quotationStart{"”"}
     }
 }

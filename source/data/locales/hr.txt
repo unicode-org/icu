@@ -344,7 +344,7 @@ hr{
             "Brunejski dolar",
         }
         BRL{
-            "BRL",
+            "R$",
             "Brazilski Real",
         }
         CAD{
@@ -468,7 +468,7 @@ hr{
             "Francuski franak",
         }
         GBP{
-            "£",
+            "UK£",
             "Britanska funta",
         }
         GEK{
@@ -576,7 +576,7 @@ hr{
             "Islandska kruna",
         }
         ITL{
-            "₤",
+            "IT₤",
             "Talijanska lira",
         }
         JMD{
@@ -588,7 +588,7 @@ hr{
             "Jordanski dinar",
         }
         JPY{
-            "¥",
+            "JP¥",
             "Japanski jen",
         }
         KES{
@@ -1105,11 +1105,11 @@ hr{
             traditional{"Tradicionano poredavanje"}
         }
     }
-    Version{"1.68"}
+    Version{"1.73"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "HH:mm:ss z",
+                "HH:mm:ss v",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -1127,6 +1127,7 @@ hr{
                 hhmm{"hh:mm a"}
                 hhmmss{"hh:mm:ss a"}
                 yyMMMEEEd{"EEE yy.MMM d"}
+                yyQ{"Q yy"}
                 yyQQQQ{"QQQQ yy"}
                 yyyyMM{"yyyy.MM"}
                 yyyyMMMM{"yyyy. MMMM"}
@@ -1281,6 +1282,12 @@ hr{
                 }
             }
         }
+    }
+    delimiters{
+        alternateQuotationEnd{"”"}
+        alternateQuotationStart{"“"}
+        quotationEnd{"’"}
+        quotationStart{"‘"}
     }
     zoneStrings{
         "Africa:Kinshasa"{

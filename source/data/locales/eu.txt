@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/eu.xml
@@ -163,9 +163,18 @@ eu{
         "NaN",
         "+",
     }
-    Version{"1.51"}
+    NumberPatterns{
+        "#,##0.###",
+        "#,##0.00 ¤",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.56"}
     calendar{
         gregorian{
+            availableFormats{
+                yyQ{"Q yy"}
+            }
             dayNames{
                 format{
                     abbreviated{
@@ -185,6 +194,17 @@ eu{
                         "osteguna",
                         "ostirala",
                         "larunbata",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
                     }
                 }
             }
@@ -219,14 +239,30 @@ eu{
                         "abendua",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
             }
             quarters{
                 format{
                     abbreviated{
-                        "Hh1",
-                        "Hh2",
-                        "Hh3",
-                        "Hh4",
+                        "1. hiruhilekoa",
+                        "Q2",
+                        "3. hiruhilekoa",
+                        "4. hiruhilekoa",
                     }
                     wide{
                         "1. hiruhilekoa",

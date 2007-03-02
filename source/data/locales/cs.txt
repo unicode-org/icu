@@ -20,7 +20,6 @@ cs{
         014{"Východní Afrika"}
         015{"Severní Afrika"}
         017{"Střední Afrika"}
-        018{"Jižní Afrika"}
         019{"Amerika"}
         021{"Severní Amerika"}
         029{"Karibik"}
@@ -597,7 +596,7 @@ cs{
             "Frank francouzský",
         }
         GBP{
-            "£",
+            "UK£",
             "Libra šterlinků",
         }
         GEK{
@@ -709,7 +708,7 @@ cs{
             "Koruna islandská",
         }
         ITL{
-            "₤",
+            "IT₤",
             "Lira italská",
         }
         JMD{
@@ -721,7 +720,7 @@ cs{
             "Dinár jordánský",
         }
         JPY{
-            "¥",
+            "JP¥",
             "Jen",
         }
         KES{
@@ -1260,145 +1259,146 @@ cs{
         currency{"Měna"}
     }
     Languages{
-        aa{"Afarština"}
-        ab{"Abcházština"}
-        af{"Afrikánština"}
-        am{"Amharština"}
-        ar{"Arabština"}
-        as{"Assaméština"}
-        ay{"Aymárština"}
-        az{"Azerbajdžánština"}
-        ba{"Baskirština"}
-        be{"Běloruština"}
-        bg{"Bulharština"}
-        bh{"Biharština"}
-        bi{"Bislámština"}
-        bn{"Bengálština"}
-        bo{"Tibetština"}
-        br{"Bretaňština"}
-        ca{"Katalánština"}
-        co{"Korsičtina"}
-        cs{"Čeština"}
-        cy{"Velština"}
-        da{"Dánština"}
-        de{"Němčina"}
-        dz{"Bhútánština"}
-        el{"Řečtina"}
-        en{"Angličtina"}
-        eo{"Esperanto"}
-        es{"Španělština"}
-        et{"Estonština"}
-        eu{"Baskičtina"}
-        fa{"Perština"}
-        fi{"Finština"}
-        fj{"Fidži"}
-        fo{"Faerština"}
-        fr{"Francouzština"}
-        fy{"Fríština"}
-        ga{"Irština"}
-        gd{"Skotská galština"}
-        gl{"Haličština"}
-        gn{"Guaranština"}
-        gu{"Gujaratština"}
-        gv{"Manština"}
-        ha{"Hausa"}
-        he{"Hebrejština"}
-        hi{"Hindština"}
-        hr{"Chorvatština"}
-        hu{"Maďarština"}
-        hy{"Arménština"}
-        ia{"Interlingua"}
-        id{"Indonéština"}
-        ie{"Interlingue"}
-        ik{"Inupiakština"}
-        is{"Islandština"}
-        it{"Italština"}
-        iu{"Inuktitutština"}
-        ja{"Japonština"}
-        jv{"Javánština"}
-        ka{"Gruzínština"}
-        kk{"Kazachština"}
-        kl{"Grónština"}
-        km{"Kambodžština"}
-        kn{"Kannadština"}
-        ko{"Korejština"}
-        ks{"Kašmírština"}
-        ku{"Kurdština"}
-        ky{"Kirgizština"}
-        la{"Latina"}
-        ln{"Lingalština"}
-        lo{"Laoština"}
-        lt{"Litevština"}
-        lv{"Lotyština"}
-        mg{"Malgaština"}
-        mi{"Maorština"}
-        mk{"Makedonština"}
-        ml{"Malabarština"}
-        mn{"Mongolština"}
-        mo{"Moldavština"}
-        mr{"Marathi"}
-        ms{"Malajština"}
-        mt{"Maltština"}
-        my{"Barmština"}
-        na{"Nauru"}
-        ne{"Nepálština"}
-        no{"Norština"}
-        oc{"Occitan"}
+        aa{"afarština"}
+        ab{"abcházština"}
+        af{"afrikánština"}
+        am{"amharština"}
+        ar{"arabština"}
+        as{"assaméština"}
+        ay{"aymárština"}
+        az{"azerbajdžánština"}
+        ba{"baskirština"}
+        be{"běloruština"}
+        bg{"bulharština"}
+        bh{"biharština"}
+        bi{"bislámština"}
+        bn{"bengálština"}
+        bo{"tibetština"}
+        br{"bretaňština"}
+        ca{"katalánština"}
+        co{"korsičtina"}
+        cs{"čeština"}
+        cy{"velština"}
+        da{"dánština"}
+        de{"němčina"}
+        dz{"bhútánština"}
+        el{"řečtina"}
+        en{"angličtina"}
+        eo{"esperanto"}
+        es{"španělština"}
+        et{"estonština"}
+        eu{"baskičtina"}
+        fa{"perština"}
+        fi{"finština"}
+        fj{"fidži"}
+        fo{"faerština"}
+        fr{"francouzština"}
+        fy{"fríština"}
+        ga{"irština"}
+        gd{"skotská galština"}
+        gl{"haličština"}
+        gn{"guaranština"}
+        gu{"gujaratština"}
+        gv{"manština"}
+        ha{"hausa"}
+        he{"hebrejština"}
+        hi{"hindština"}
+        hr{"chorvatština"}
+        hu{"maďarština"}
+        hy{"arménština"}
+        ia{"interlingua"}
+        id{"indonéština"}
+        ie{"interlingue"}
+        ik{"inupiakština"}
+        is{"islandština"}
+        it{"italština"}
+        iu{"inuktitutština"}
+        ja{"japonština"}
+        jv{"javánština"}
+        ka{"gruzínština"}
+        kk{"kazachština"}
+        kl{"grónština"}
+        km{"kambodžština"}
+        kn{"kannadština"}
+        ko{"korejština"}
+        ks{"kašmírština"}
+        ku{"kurdština"}
+        ky{"kirgizština"}
+        la{"latina"}
+        lb{"Lucemburština"}
+        ln{"lingalština"}
+        lo{"laoština"}
+        lt{"litevština"}
+        lv{"lotyština"}
+        mg{"malgaština"}
+        mi{"maorština"}
+        mk{"makedonština"}
+        ml{"malabarština"}
+        mn{"mongolština"}
+        mo{"moldavština"}
+        mr{"marathi"}
+        ms{"malajština"}
+        mt{"maltština"}
+        my{"barmština"}
+        na{"nauru"}
+        ne{"nepálština"}
+        no{"norština"}
+        oc{"occitan"}
         om{"Oromo (Afan)"}
-        or{"Oriya"}
-        pa{"Paňdžábština"}
-        pl{"Polština"}
+        or{"oriya"}
+        pa{"paňdžábština"}
+        pl{"polština"}
         ps{"Pashto (Pushto)"}
-        pt{"Portugalština"}
-        qu{"Kečuánština"}
-        rm{"Rétorománština"}
-        rn{"Kirundi"}
-        ro{"Rumunština"}
-        ru{"Ruština"}
-        rw{"Kinyarwandština"}
-        sa{"Sanskrt"}
-        sd{"Sindhi"}
-        sg{"Sangho"}
-        sh{"Srbochorvatština"}
-        si{"Sinhálština"}
-        sk{"Slovenština"}
-        sl{"Slovinština"}
-        sm{"Samoyština"}
-        sn{"Shona"}
-        so{"Somálština"}
-        sq{"Albánština"}
-        sr{"Srbština"}
-        ss{"Siswatština"}
-        st{"Sesotho"}
-        su{"Sundanština"}
-        sv{"Švédština"}
-        sw{"Svahilština"}
-        ta{"Tamilština"}
-        te{"Telugština"}
-        tg{"Tádžičtina"}
-        th{"Thajština"}
-        ti{"Tigrinijština"}
-        tk{"Turkmenština"}
-        tl{"Tagalog"}
-        tn{"Setswanština"}
-        to{"Tonga"}
-        tr{"Turečtina"}
-        ts{"Tsonga"}
-        tt{"Tatarština"}
-        tw{"Twi"}
-        ug{"Uighurština"}
-        uk{"Ukrajinština"}
-        ur{"Urdština"}
-        uz{"Uzbečtina"}
-        vi{"Vietnamština"}
-        vo{"Volapuk"}
-        wo{"Wolof"}
-        xh{"Xhosa"}
-        yi{"Jidiš"}
-        yo{"Yoruba"}
-        za{"Zhuang"}
-        zh{"Čínština"}
-        zu{"Zulu"}
+        pt{"portugalština"}
+        qu{"kečuánština"}
+        rm{"rétorománština"}
+        rn{"kirundi"}
+        ro{"rumunština"}
+        ru{"ruština"}
+        rw{"kinyarwandština"}
+        sa{"sanskrt"}
+        sd{"sindhi"}
+        sg{"sangho"}
+        sh{"srbochorvatština"}
+        si{"sinhálština"}
+        sk{"slovenština"}
+        sl{"slovinština"}
+        sm{"samoyština"}
+        sn{"shona"}
+        so{"somálština"}
+        sq{"albánština"}
+        sr{"srbština"}
+        ss{"siswatština"}
+        st{"sesotho"}
+        su{"sundanština"}
+        sv{"švédština"}
+        sw{"svahilština"}
+        ta{"tamilština"}
+        te{"telugština"}
+        tg{"tádžičtina"}
+        th{"thajština"}
+        ti{"tigrinijština"}
+        tk{"turkmenština"}
+        tl{"tagalog"}
+        tn{"setswanština"}
+        to{"tonga"}
+        tr{"turečtina"}
+        ts{"tsonga"}
+        tt{"tatarština"}
+        tw{"twi"}
+        ug{"uighurština"}
+        uk{"ukrajinština"}
+        ur{"urdština"}
+        uz{"uzbečtina"}
+        vi{"vietnamština"}
+        vo{"volapuk"}
+        wo{"wolof"}
+        xh{"xhosa"}
+        yi{"jidiš"}
+        yo{"yoruba"}
+        za{"zhuang"}
+        zh{"čínština"}
+        zu{"zulu"}
     }
     LocaleScript{
         "Latn",
@@ -1417,6 +1417,12 @@ cs{
         "NaN",
         "+",
     }
+    NumberPatterns{
+        "#,##0.###",
+        "#,##0.00 ¤",
+        "#,##0%",
+        "#E0",
+    }
     Scripts{
         Latn{"Latinka"}
     }
@@ -1431,7 +1437,7 @@ cs{
             japanese{"Japonský kalendář"}
         }
     }
-    Version{"1.84"}
+    Version{"1.94"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1439,7 +1445,7 @@ cs{
                 "odp.",
             }
             DateTimePatterns{
-                "HH:mm:ss z",
+                "HH:mm:ss v",
                 "HH:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
@@ -1453,6 +1459,7 @@ cs{
                 MMMMd{"d. MMMM"}
                 Md{"d.M"}
                 mmss{"mm:ss"}
+                yyQ{"Q yy"}
                 yyyyM{"M.yyyy"}
                 yyyyMMMM{"MMMM yyyy"}
             }
@@ -1498,17 +1505,17 @@ cs{
             monthNames{
                 format{
                     abbreviated{
-                        "ledna",
+                        "led",
                         "úno",
-                        "bře",
+                        "března",
                         "dub",
-                        "května",
+                        "kvě",
                         "června",
-                        "července",
-                        "srp",
+                        "črc",
+                        "srpna",
                         "září",
-                        "říj",
-                        "lis",
+                        "října",
+                        "listopadu",
                         "prosince",
                     }
                     narrow{
@@ -1587,6 +1594,12 @@ cs{
             }
             quarters{
                 format{
+                    abbreviated{
+                        "Q1",
+                        "2. čtvrtletí",
+                        "Q3",
+                        "Q4",
+                    }
                     wide{
                         "1. čtvrtletí",
                         "2. čtvrtletí",
@@ -1612,67 +1625,12 @@ cs{
     zoneStrings{
         "Africa:Casablanca"{
             ec{"Casablanca"}
-            ld{"Greenwichský střední čas"}
-            ls{"Greenwichský střední čas"}
-            sd{"GMT"}
-            ss{"GMT"}
-        }
-        "America:Anchorage"{
-            ec{"Anchorage"}
-            ld{"Aljašský letní čas"}
-            ls{"Aljašský standardní čas"}
-            sd{"AKDT"}
-            ss{"AKST"}
-        }
-        "America:Chicago"{
-            ec{"Chicago"}
-            ld{"Centrální letní čas"}
-            ls{"Centrální standardní čas"}
-            sd{"CDT"}
-            ss{"CST"}
         }
         "America:Cordoba"{
             ec{"Kordoba"}
         }
-        "America:Denver"{
-            ec{"Denver"}
-            ld{"Horský letní čas"}
-            ls{"Horský standardní čas"}
-            sd{"MDT"}
-            ss{"MST"}
-        }
-        "America:Halifax"{
-            ec{"Halifax"}
-            ld{"Atlantický letní čas"}
-            ls{"Atlantický standardní čas"}
-            sd{"ADT"}
-            ss{"AST"}
-        }
-        "America:Indianapolis"{
-            ec{"Indianapolis"}
-            ld{"Východní letní čas (Indianapolis)"}
-            ls{"Východní standardní čas"}
-        }
-        "America:Los_Angeles"{
-            ec{"Los Angeles"}
-            ld{"Pacifický letní čas"}
-            ls{"Pacifický standardní čas"}
-            sd{"PDT"}
-            ss{"PST"}
-        }
-        "America:New_York"{
-            ec{"New York"}
-            ld{"Východní letní čas (New York)"}
-            ls{"Východní standardní čas (New York)"}
-            sd{"EDT"}
-            ss{"EST"}
-        }
-        "America:Phoenix"{
-            ec{"Phoenix"}
-            ld{"Horský standardní čas"}
-            ls{"Horský standardní čas"}
-            sd{"MST"}
-            ss{"MST"}
+        "America:St_Johns"{
+            ec{"St. Johns"}
         }
         "America:Tijuana"{
             ec{"Tichuana"}
@@ -1682,10 +1640,6 @@ cs{
         }
         "Asia:Jerusalem"{
             ec{"Jeruzalém"}
-            ld{"Izraelský letní čas"}
-            ls{"Izraelský standardní čas"}
-            sd{"IDT"}
-            ss{"IST"}
         }
         "Asia:Kamchatka"{
             ec{"Kamčatka"}
@@ -1699,6 +1653,9 @@ cs{
         "Asia:Sakhalin"{
             ec{"Sachalin"}
         }
+        "Asia:Shanghai"{
+            ec{"Šanghaj"}
+        }
         "Asia:Tashkent"{
             ec{"Taškent"}
         }
@@ -1706,7 +1663,7 @@ cs{
             ec{"Tokio"}
             ld{"Japonský letní čas"}
             ls{"Japonský standardní čas"}
-            sd{"JST"}
+            sd{"JDT"}
             ss{"JST"}
         }
         "Asia:Ulaanbaatar"{
@@ -1726,10 +1683,6 @@ cs{
         }
         "Europe:Bucharest"{
             ec{"Bukurešť"}
-            ld{"Východoevropský letní čas"}
-            ls{"Východoevropský standardní čas"}
-            sd{"EEST"}
-            ss{"EET"}
         }
         "Europe:Kiev"{
             ec{"Kyjev"}
@@ -1745,10 +1698,6 @@ cs{
         }
         "Europe:Paris"{
             ec{"Paříž"}
-            ld{"Středoevropský letní čas"}
-            ls{"Středoevropský standardní čas"}
-            sd{"CEST"}
-            ss{"CET"}
         }
         "Europe:Uzhgorod"{
             ec{"Užhorod"}
@@ -1759,12 +1708,78 @@ cs{
         "Pacific:Galapagos"{
             ec{"Galapágy"}
         }
-        "Pacific:Honolulu"{
-            ec{"Honolulu"}
+        "meta:Alaska"{
+            ld{"Aljašský letní čas"}
+            ls{"Aljašský standardní čas"}
+            sd{"AKDT"}
+            ss{"AKST"}
+        }
+        "meta:America_Central"{
+            ld{"Centrální letní čas"}
+            ls{"Centrální standardní čas"}
+            sd{"CDT"}
+            ss{"CST"}
+        }
+        "meta:America_Eastern"{
+            ld{"Východní letní čas"}
+            ls{"Východní standardní čas"}
+            sd{"EDT"}
+            ss{"EST"}
+        }
+        "meta:America_Mountain"{
+            ld{"Horský letní čas"}
+            ls{"Horský standardní čas"}
+            sd{"MDT"}
+            ss{"MST"}
+        }
+        "meta:America_Pacific"{
+            ld{"Pacifický letní čas"}
+            ls{"Pacifický standardní čas"}
+            sd{"PDT"}
+            ss{"PST"}
+        }
+        "meta:Atlantic"{
+            ld{"Atlantický letní čas"}
+            ls{"Atlantický standardní čas"}
+            sd{"ADT"}
+            ss{"AST"}
+        }
+        "meta:China"{
+            ls{"Čínský standardní čas"}
+            ss{"CTT"}
+        }
+        "meta:Europe_Central"{
+            ld{"Středoevropský letní čas"}
+            ls{"Středoevropský standardní čas"}
+            sd{"CEST"}
+            ss{"CET"}
+        }
+        "meta:Europe_Eastern"{
+            ld{"Východoevropský letní čas"}
+            ls{"Východoevropský standardní čas"}
+            sd{"EEST"}
+            ss{"EET"}
+        }
+        "meta:GMT"{
+            ls{"Greenwichský střední čas"}
+            ss{"GMT"}
+        }
+        "meta:Hawaii"{
             ld{"Havajský letní čas"}
             ls{"Havajský standardní čas"}
-            sd{"HST"}
+            sd{"HDT"}
             ss{"HST"}
+        }
+        "meta:Israel"{
+            ld{"Izraelský letní čas"}
+            ls{"Izraelský standardní čas"}
+            sd{"IDT"}
+            ss{"IST"}
+        }
+        "meta:Newfoundland"{
+            ld{"Newfoundlandský letní čas"}
+            ls{"Newfoundlandský standardní čas"}
+            ss{"CNT"}
         }
     }
 }

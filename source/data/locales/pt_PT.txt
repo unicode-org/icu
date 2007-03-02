@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/pt_PT.xml
@@ -8,11 +8,12 @@
 // ***************************************************************************
 pt_PT{
     Countries{
+        172{"172"}
         AE{"Emiratos Árabes Unidos"}
         AM{"Arménia"}
         AQ{"Antárctica"}
         AZ{"Azerbeijão"}
-        BA{"Bósnia-Herzegovina"}
+        BH{"Bareine"}
         BJ{"Benim"}
         BY{"Bielorrússia"}
         CM{"Camarões"}
@@ -44,6 +45,7 @@ pt_PT{
         MP{"Ilhas Mariana do Norte"}
         MU{"Maurícias"}
         NC{"Nova Caledónia"}
+        NL{"Países Baixos"}
         PG{"Papua Nova Guiné"}
         PL{"Polónia"}
         PS{"Território Palestiniano"}
@@ -72,9 +74,45 @@ pt_PT{
             "AFA",
             "Afeghani (1927-2002)",
         }
-        BRB{
-            "BRB",
-            "Cruzeiro novo brasileiro (1967-1986)",
+        BAD{
+            "BAD",
+            "Dinar da Bósnia-Herzegóvina",
+        }
+        BAM{
+            "BAM",
+            "Marco bósnio-herzegóvino conversível",
+        }
+        CYP{
+            "CYP",
+            "Libra de Chipre",
+        }
+        CZK{
+            "CZK",
+            "Coroa da República Checa",
+        }
+        ECV{
+            "ECV",
+            "Unidad de Valor Constante (UVC) do Equador",
+        }
+        KYD{
+            "KYD",
+            "Dólar das Ilhas Caimão",
+        }
+        MXP{
+            "MXP",
+            "Peso Plata mexicano (1861-1992)",
+        }
+        MXV{
+            "MXV",
+            "Unidad de Inversion (UDI) mexicana",
+        }
+        NIC{
+            "NIC",
+            "Córdoba nicaraguano",
+        }
+        NIO{
+            "NIO",
+            "Córdoba Ouro nicaraguano",
         }
         PTE{
             "Esc.",
@@ -85,12 +123,46 @@ pt_PT{
                 ",",
             }
         }
+        TZS{
+            "TZS",
+            "Xelim de Tanzânia",
+        }
+        WST{
+            "WST",
+            "Tala de Samoa Ocidental",
+        }
     }
     Languages{
+        ang{"inglês, arcaico (aprox. 450-1100)"}
+        awa{"Awadhi"}
+        bai{"bamileke Languages"}
+        bug{"Buginese"}
+        ce{"chechene"}
         cs{"checo"}
+        dum{"holandês, medieval (aprox. 1050-1350)"}
+        enm{"inglês, medieval (1100-1500)"}
         et{"estónio"}
+        frm{"francês, medieval (aprox.1400-1600)"}
+        fro{"francês, arcaico (842-aprox.1400)"}
+        gmh{"alemão, medieval alto (aprox.1050-1500)"}
+        goh{"alemão, arcaico alto (aprox.750-1050)"}
+        grc{"grego, arcaico (até 1453)"}
+        iba{"Iban"}
+        ik{"Inupiaq"}
+        jv{"jv"}
+        mga{"irlandês, medieval (900-1200)"}
+        mkh{"mon-khmer (other)"}
+        nd{"ndebele, north"}
+        non{"norse, old"}
+        nso{"soto, setentrional"}
+        ota{"turco, otomano (1500-1928)"}
+        peo{"persa arcaico (aprox. 600-400 a.C.)"}
         pl{"polaco"}
+        pro{"provençal, arcaico (até 1500)"}
+        sal{"salishan languages"}
+        sgn{"linguages de sinais"}
         sl{"esloveno"}
+        wak{"wakashan languages"}
     }
     NumberPatterns{
         "#,##0.###",
@@ -98,11 +170,27 @@ pt_PT{
         "#,##0%",
         "#E0",
     }
-    Version{"1.53"}
+    Scripts{
+        Osma{"osmanya"}
+    }
+    Version{"1.59"}
     calendar{
+        buddhist{
+            DateTimePatterns{
+                "HH'H'mm'm'ss's' v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, MMMM d, yyyy G",
+                "MMMM d, yyyy G",
+                "MMM d, yyyy G",
+                "M/d/yyyy",
+                "{1} {0}",
+            }
+        }
         gregorian{
             DateTimePatterns{
-                "HH'H'mm'm'ss's' z",
+                "HH'H'mm'm'ss's' v",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -119,33 +207,25 @@ pt_PT{
                 yyyyMM{"yyyy/MM"}
             }
             fields{
-                day{
-                    dn{"Dia"}
-                }
-                dayperiod{
-                    dn{"Período do dia"}
-                }
-                hour{
-                    dn{"Hora"}
-                }
-                minute{
-                    dn{"Minuto"}
-                }
-                month{
-                    dn{"Mês"}
-                }
-                week{
-                    dn{"Semana"}
-                }
-                weekday{
-                    dn{"Dia da semana"}
-                }
-                year{
-                    dn{"Ano"}
+                second{
+                    dn{"Second"}
                 }
                 zone{
                     dn{"Zona"}
                 }
+            }
+        }
+        japanese{
+            DateTimePatterns{
+                "HH'H'mm'm'ss's' v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, MMMM d, y G",
+                "MMMM d, y G",
+                "MMM d, y G",
+                "M/d/yy",
+                "{1} {0}",
             }
         }
     }
@@ -159,6 +239,9 @@ pt_PT{
         "America:Araguaina"{
             ec{"Araguaina"}
         }
+        "America:Argentina:Tucuman"{
+            ec{"Tucumán"}
+        }
         "America:Bahia"{
             ec{"Baía"}
         }
@@ -170,6 +253,9 @@ pt_PT{
         }
         "America:North_Dakota:Center"{
             ec{"Center"}
+        }
+        "America:Phoenix"{
+            ec{"Phoenix"}
         }
         "Asia:Sakhalin"{
             ec{"Sacalina"}
@@ -185,6 +271,18 @@ pt_PT{
         }
         "Europe:Moscow"{
             ec{"Moscovo"}
+        }
+        "meta:America_Mountain"{
+            ld{"Horário de Verão Montanha"}
+            ls{"Horário Padrão Montanha"}
+        }
+        "meta:Atlantic"{
+            ld{"Horário de Verão Atlântico"}
+            ls{"Horário Padrão Atlântico"}
+        }
+        "meta:Europe_Central"{
+            ld{"Horário de Verão Europa Central"}
+            ls{"Horário Padrão Europa Central"}
         }
     }
 }

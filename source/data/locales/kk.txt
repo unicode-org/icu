@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/kk.xml
@@ -41,11 +41,17 @@ kk{
         "NaN",
         "+",
     }
-    Version{"1.39"}
+    NumberPatterns{
+        "#,##0.###",
+        "#,##0.00 ¤;-¤ #,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.44"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "HH:mm:ss z",
+                "HH:mm:ss v",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -57,6 +63,7 @@ kk{
             }
             availableFormats{
                 MMdd{"dd.MM"}
+                yyQ{"Q yy"}
                 yyyyMM{"MM.yyyy"}
                 yyyyMMMM{"MMMM yyyy 'ж.'"}
             }
@@ -79,6 +86,17 @@ kk{
                         "бейсенбі",
                         "жұма",
                         "сенбі",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
                     }
                 }
             }
@@ -111,6 +129,38 @@ kk{
                         "қазан",
                         "қараша",
                         "желтоқсан",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                    wide{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
                     }
                 }
             }

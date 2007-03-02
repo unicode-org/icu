@@ -285,7 +285,7 @@ sl{
     }
     Currencies{
         BRL{
-            "BRL",
+            "R$",
             "Brazilski Real",
         }
         CNY{
@@ -297,7 +297,7 @@ sl{
             "Evro",
         }
         GBP{
-            "£",
+            "UK£",
             "Britanski Funt Sterling",
         }
         INR{
@@ -305,7 +305,7 @@ sl{
             "Indijski Rupi",
         }
         JPY{
-            "¥",
+            "JP¥",
             "Japonski Jen",
         }
         RUB{
@@ -317,7 +317,7 @@ sl{
             "Slovenski tolar",
         }
         USD{
-            "$",
+            "US$",
             "Ameriški Dolar",
         }
     }
@@ -328,36 +328,36 @@ sl{
         currency{"Valuta"}
     }
     Languages{
-        ar{"Arabščina"}
-        bg{"Bolgarščina"}
-        cs{"Češčina"}
-        da{"Danščina"}
-        de{"Nemščina"}
-        el{"Grščina"}
-        en{"Angleščina"}
-        es{"Španščina"}
-        et{"Estonščina"}
-        fi{"Finščina"}
-        fr{"Francoščina"}
-        he{"Hebrejščina"}
-        hr{"Hrvaščina"}
-        hu{"Madžarščina"}
-        it{"Italijanščina"}
-        ja{"Japonščina"}
-        ko{"Korejščina"}
-        lt{"Litovščina"}
-        lv{"Letonščina"}
-        nl{"Nizozemščina"}
-        no{"Norveščina"}
-        pl{"Poljščina"}
-        pt{"Portugalščina"}
-        ro{"Romunščina"}
-        ru{"Ruščina"}
-        sk{"Slovaščina"}
-        sl{"Slovenščina"}
-        sv{"Švedščina"}
-        tr{"Turščina"}
-        zh{"Kitajščina"}
+        ar{"arabščina"}
+        bg{"bolgarščina"}
+        cs{"češčina"}
+        da{"danščina"}
+        de{"nemščina"}
+        el{"grščina"}
+        en{"angleščina"}
+        es{"španščina"}
+        et{"estonščina"}
+        fi{"finščina"}
+        fr{"francoščina"}
+        he{"hebrejščina"}
+        hr{"hrvaščina"}
+        hu{"madžarščina"}
+        it{"italijanščina"}
+        ja{"japonščina"}
+        ko{"korejščina"}
+        lt{"litovščina"}
+        lv{"letonščina"}
+        nl{"nizozemščina"}
+        no{"norveščina"}
+        pl{"poljščina"}
+        pt{"portugalščina"}
+        ro{"romunščina"}
+        ru{"ruščina"}
+        sk{"slovaščina"}
+        sl{"slovenščina"}
+        sv{"švedščina"}
+        tr{"turščina"}
+        zh{"kitajščina"}
     }
     LocaleScript{
         "Latn",
@@ -375,6 +375,12 @@ sl{
         "∞",
         "NaN",
         "+",
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "¤ #,##0.00",
+        "#,##0%",
+        "#E0",
     }
     Scripts{
         Latn{"Latinski"}
@@ -397,11 +403,11 @@ sl{
             traditional{"Tradicionano zlaganje"}
         }
     }
-    Version{"1.68"}
+    Version{"1.76"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "H:mm:ss z",
+                "H:mm:ss v",
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
@@ -415,6 +421,7 @@ sl{
                 MMMMdd{"dd. MMMM"}
                 Md{"d.M"}
                 mmss{"mm:ss"}
+                yyQ{"Q yy"}
                 yyyyM{"M.yyyy"}
                 yyyyMMMM{"MMMM yyyy"}
             }
@@ -512,10 +519,10 @@ sl{
             quarters{
                 format{
                     abbreviated{
-                        "K1",
-                        "K2",
-                        "K3",
-                        "K4",
+                        "Prvo četrtletje",
+                        "Q2",
+                        "Tretje četrtletje",
+                        "Četrto četrtletje",
                     }
                     wide{
                         "Prvo četrtletje",

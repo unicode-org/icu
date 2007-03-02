@@ -429,7 +429,7 @@ de{
             "Brasilianischer Cruzeiro (1990-1993)",
         }
         BRL{
-            "BRL",
+            "R$",
             "Real",
         }
         BRN{
@@ -585,7 +585,7 @@ de{
             "Französischer Franc",
         }
         GBP{
-            "£",
+            "UK£",
             "Pfund Sterling",
         }
         GEK{
@@ -693,7 +693,7 @@ de{
             "Isländische Krone",
         }
         ITL{
-            "₤",
+            "IT₤",
             "Italienische Lire",
         }
         JMD{
@@ -705,7 +705,7 @@ de{
             "Jordanischer Dinar",
         }
         JPY{
-            "¥",
+            "JP¥",
             "Yen",
         }
         KES{
@@ -1105,7 +1105,7 @@ de{
             "Uganda Schilling",
         }
         USD{
-            "$",
+            "US$",
             "US Dollar",
         }
         USN{
@@ -1720,7 +1720,7 @@ de{
     }
     NumberPatterns{
         "#,##0.###",
-        "¤ #,##0.00",
+        "#,##0.00 ¤",
         "#,##0%",
         "#E0",
     }
@@ -1795,7 +1795,7 @@ de{
         POSIX{"Posix"}
         REVISED{"Revidiert"}
     }
-    Version{"1.78"}
+    Version{"1.85"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1803,7 +1803,7 @@ de{
                 "nachm.",
             }
             DateTimePatterns{
-                "H:mm' Uhr 'z",
+                "H:mm 'Uhr' v",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -1821,6 +1821,7 @@ de{
                 hhmm{"hh:mm a"}
                 hhmmss{"hh:mm:ss a"}
                 yyMM{"MM.yy"}
+                yyQ{"Q yy"}
                 yyQQQQ{"QQQQ yy"}
                 yyyyMMMM{"MMMM yyyy"}
             }
@@ -1946,6 +1947,12 @@ de{
             }
             quarters{
                 format{
+                    abbreviated{
+                        "Q1",
+                        "2. Quartal",
+                        "Q3",
+                        "Q4",
+                    }
                     wide{
                         "1. Quartal",
                         "2. Quartal",
@@ -2010,10 +2017,6 @@ de{
         }
         "Europe:Berlin"{
             ec{"Berlin"}
-            ld{"Mitteleuropäische Sommerzeit"}
-            ls{"Mitteleuropäische Zeit"}
-            sd{"MESZ"}
-            ss{"MEZ"}
         }
         "Europe:Kiev"{
             ec{"Kiew"}
@@ -2032,6 +2035,12 @@ de{
         }
         "Pacific:Easter"{
             ec{"Osterinsel"}
+        }
+        "meta:Europe_Central"{
+            ld{"Mitteleuropäische Sommerzeit"}
+            ls{"Mitteleuropäische Zeit"}
+            sd{"MESZ"}
+            ss{"MEZ"}
         }
     }
 }

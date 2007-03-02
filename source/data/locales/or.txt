@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/or.xml
@@ -35,9 +35,37 @@ or{
         "NaN",
         "+",
     }
-    Version{"1.27"}
+    NumberPatterns{
+        "#,##,##0.###",
+        "¤ #,##,##0.00",
+        "#,##,##0%",
+        "#E0",
+    }
+    Version{"1.32"}
     calendar{
         gregorian{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
+            DateTimePatterns{
+                "h:mm:ss a v",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE d MMMM yyyy",
+                "d MMMM yyyy",
+                "dd-MM-yyyy",
+                "dd-MM-yy",
+                "{1} {0}",
+            }
+            availableFormats{
+                MMMMd{"d MMMM"}
+                MMdd{"dd-MM"}
+                yyQ{"Q yy"}
+                yyyyMM{"MM-yyyy"}
+                yyyyMMMM{"MMMM yyyy"}
+            }
             dayNames{
                 format{
                     abbreviated{
@@ -59,9 +87,44 @@ or{
                         "ଶନିବାର",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "BCE",
+                    "CE",
+                }
+                wide{
+                    "BCE",
+                    "CE",
+                }
             }
             monthNames{
                 format{
+                    abbreviated{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
                     wide{
                         "ଜାନୁଆରୀ",
                         "ଫେବ୍ରୁୟାରୀ",
@@ -77,7 +140,44 @@ or{
                         "ଡିସେମ୍ବର",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                    wide{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                }
             }
         }
+    }
+    zoneStrings{
+        gmtFormat{"GMT{0}"}
+        hourFormat{"+HH:mm;-HH:mm"}
+        regionFormat{"{0} Time"}
     }
 }

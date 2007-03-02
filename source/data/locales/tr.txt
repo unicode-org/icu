@@ -600,7 +600,7 @@ tr{
             "Fransız Frangı",
         }
         GBP{
-            "£",
+            "UK£",
             "İngiliz Sterlini",
         }
         GEK{
@@ -712,7 +712,7 @@ tr{
             "İzlanda Kronu",
         }
         ITL{
-            "₤",
+            "IT₤",
             "İtalyan Lireti",
         }
         JMD{
@@ -724,7 +724,7 @@ tr{
             "Ürdün Dinarı",
         }
         JPY{
-            "¥",
+            "JP¥",
             "Japon Yeni",
         }
         KES{
@@ -1589,11 +1589,11 @@ tr{
             traditional{"Geleneksel"}
         }
     }
-    Version{"1.72"}
+    Version{"1.78"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "HH:mm:ss z",
+                "HH:mm:ss v",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -1608,6 +1608,7 @@ tr{
                 HHmmss{"HH:mm:ss"}
                 hhmm{"hh:mm a"}
                 hhmmss{"hh:mm:ss a"}
+                yyQ{"Q yy"}
                 yyQQQQ{"QQQQ yy"}
             }
             dayNames{
@@ -1736,7 +1737,7 @@ tr{
                 format{
                     abbreviated{
                         "Ç1",
-                        "Ç2",
+                        "2. çeyrek",
                         "Ç3",
                         "Ç4",
                     }
@@ -1753,7 +1754,7 @@ tr{
             monthNames{
                 format{
                     abbreviated{
-                        "Tişri",
+                        "Tishri",
                         "Heşvan",
                         "Kislev",
                         "Tevet",
@@ -1789,18 +1790,18 @@ tr{
             monthNames{
                 format{
                     abbreviated{
-                        "Muharrem",
+                        "Muharram",
                         "Safer",
-                        "Rebiülevvel",
+                        "Rabiʻ I",
                         "Rebiülahir",
                         "Cemaziyelevvel",
                         "Cemaziyelahir",
                         "Recep",
                         "Shaʻban",
                         "Ramadan",
-                        "Shawwal",
-                        "Zilkade",
-                        "Dhuʻl-Hijjah",
+                        "Şevval",
+                        "Dhuʻl-Qiʻdah",
+                        "Zilhicce",
                     }
                     wide{
                         "Muharrem",
@@ -1843,18 +1844,18 @@ tr{
             monthNames{
                 format{
                     abbreviated{
-                        "Ferwerdin",
+                        "Farvardin",
                         "Ordibeheşt",
-                        "Hordâd",
+                        "Khordad",
                         "Tir",
                         "Mordâd",
                         "Şehrivar",
                         "Mehr",
                         "Aban",
                         "Azar",
-                        "Dey",
-                        "Behman",
-                        "Esfand",
+                        "Daî",
+                        "Bahman",
+                        "İsfand",
                     }
                     wide{
                         "Ferwerdin",
@@ -1874,6 +1875,12 @@ tr{
             }
         }
     }
+    delimiters{
+        alternateQuotationEnd{"”"}
+        alternateQuotationStart{"“"}
+        quotationEnd{"’"}
+        quotationStart{"‘"}
+    }
     zoneStrings{
         "Africa:Ceuta"{
             ec{"Septe"}
@@ -1884,56 +1891,18 @@ tr{
         "Africa:Lubumbashi"{
             ec{"Lubumbaşi"}
         }
-        "America:Anchorage"{
-            ec{"Anchorage"}
-            ld{"Alaska Yaz Saati"}
-            ls{"Alaska Standart Saati"}
-        }
         "America:Cancun"{
             ec{"Kankun"}
         }
         "America:Chicago"{
             ec{"Şikago"}
-            ld{"Merkezi Yaz Saati"}
-            ls{"Merkezi Standart Saati"}
-        }
-        "America:Denver"{
-            ec{"Denver"}
-            ld{"ABD Sıradağlar Yaz Saati"}
-            ls{"ABD Sıradağlar Standart Saati"}
-        }
-        "America:Halifax"{
-            ec{"Halifax"}
-            ld{"Atlantik Yaz Saati"}
-            ls{"Atlantik Standart Saati"}
         }
         "America:Indianapolis"{
             ec{"Indianapolis"}
             ld{"Doğu (Indianapolis) Yaz Saati"}
-            ls{"Doğu Standart Saati"}
-        }
-        "America:Los_Angeles"{
-            ec{"Los Angeles"}
-            ld{"Pasifik Yaz Saati"}
-            ls{"Pasifik Standart Saati"}
         }
         "America:Mexico_City"{
             ec{"Meksiko City"}
-        }
-        "America:New_York"{
-            ec{"New York"}
-            ld{"Doğu Yaz Saati"}
-            ls{"Doğu Standart Saati"}
-        }
-        "America:Phoenix"{
-            ec{"Phoenix"}
-            ld{"ABD Sıradağlar Standart Saati"}
-            ls{"ABD Sıradağlar Standart Saati"}
-        }
-        "America:St_Johns"{
-            ec{"St Johns"}
-            ld{"Newfoundland Yaz Saati"}
-            ls{"Newfoundland Standart Saati"}
         }
         "Antarctica:South_Pole"{
             ec{"Güney Kutbu"}
@@ -1979,8 +1948,6 @@ tr{
         }
         "Asia:Shanghai"{
             ec{"Şangay"}
-            ld{"Çin Standart Saati"}
-            ls{"Çin Standart Saati"}
         }
         "Asia:Tashkent"{
             ec{"Taşkent"}
@@ -2012,13 +1979,44 @@ tr{
         "Europe:Moscow"{
             ec{"Moskova"}
         }
-        "Pacific:Honolulu"{
-            ec{"Honolulu"}
-            ld{"Hawaii Standart Saati"}
-            ls{"Hawaii Standart Saati"}
-        }
         "Pacific:Marquesas"{
             ec{"Markiz"}
+        }
+        "meta:Alaska"{
+            ld{"Alaska Yaz Saati"}
+            ls{"Alaska Standart Saati"}
+        }
+        "meta:America_Central"{
+            ld{"Merkezi Yaz Saati"}
+            ls{"Merkezi Standart Saati"}
+        }
+        "meta:America_Eastern"{
+            ld{"Doğu Yaz Saati"}
+            ls{"Doğu Standart Saati"}
+        }
+        "meta:America_Mountain"{
+            ld{"ABD Sıradağlar Yaz Saati"}
+            ls{"ABD Sıradağlar Standart Saati"}
+        }
+        "meta:America_Pacific"{
+            ld{"Pasifik Yaz Saati"}
+            ls{"Pasifik Standart Saati"}
+        }
+        "meta:Atlantic"{
+            ld{"Atlantik Yaz Saati"}
+            ls{"Atlantik Standart Saati"}
+        }
+        "meta:China"{
+            ld{"Çin Yaz Saati"}
+            ls{"Çin Standart Saati"}
+        }
+        "meta:Hawaii"{
+            ld{"Hawaii Yaz Saati"}
+            ls{"Hawaii Standart Saati"}
+        }
+        "meta:Newfoundland"{
+            ld{"Newfoundland Yaz Saati"}
+            ls{"Newfoundland Standart Saati"}
         }
     }
 }
