@@ -681,14 +681,14 @@ void TimeZoneTest::TestShortZoneIDs()
 
     const char* compatibilityMap[] = {
         // This list is copied from tz.alias.  If tz.alias
-        // changes, this list must be updated.  Current as of Aug 2003
+        // changes, this list must be updated.  Current as of Mar 2007
         "ACT", "Australia/Darwin",
         "AET", "Australia/Sydney",
         "AGT", "America/Buenos_Aires",
         "ART", "Africa/Cairo",
         "AST", "America/Anchorage",
         "BET", "America/Sao_Paulo",
-        "BST", "Asia/Dhaka", // Spelling changed in 2000h
+        "BST", "Asia/Dhaka", // # spelling changed in 2000h; was Asia/Dacca
         "CAT", "Africa/Harare",
         "CNT", "America/St_Johns",
         "CST", "America/Chicago",
@@ -696,14 +696,14 @@ void TimeZoneTest::TestShortZoneIDs()
         "EAT", "Africa/Addis_Ababa",
         "ECT", "Europe/Paris",
         // EET Europe/Istanbul # EET is a standard UNIX zone
-        // "EST", "America/New_York", # EST is an Olson alias now (2003)
-        "HST", "Pacific/Honolulu",
+        // "EST", "America/New_York", # Defined as -05:00
+        // "HST", "Pacific/Honolulu", # Defined as -10:00
         "IET", "America/Indianapolis",
         "IST", "Asia/Calcutta",
         "JST", "Asia/Tokyo",
         // MET Asia/Tehran # MET is a standard UNIX zone
         "MIT", "Pacific/Apia",
-        // "MST", "America/Denver", # MST is an Olson alias now (2003)
+        // "MST", "America/Denver", # Defined as -07:00
         "NET", "Asia/Yerevan",
         "NST", "Pacific/Auckland",
         "PLT", "Asia/Karachi",
