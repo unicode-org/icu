@@ -178,6 +178,8 @@ public:
     void TestStandAloneMonths(void);
 
     void TestQuarters(void);
+    
+    void TestZTimeZoneParsing(void);
 
  private:
     void expectParse(const char** data, int32_t data_length,
