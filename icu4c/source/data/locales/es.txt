@@ -613,7 +613,7 @@ es{
             "franco francés",
         }
         GBP{
-            "£",
+            "UK£",
             "libra esterlina británica",
         }
         GEK{
@@ -725,7 +725,7 @@ es{
             "corona islandesa",
         }
         ITL{
-            "₤",
+            "IT₤",
             "lira italiana",
         }
         JMD{
@@ -737,7 +737,7 @@ es{
             "dinar jordano",
         }
         JPY{
-            "¥",
+            "JP¥",
             "yen japonés",
         }
         KES{
@@ -893,8 +893,8 @@ es{
             "kwacha de Malawi",
         }
         MXN{
-            "MEX$",
-            "peso mexicano",
+            "$",
+            "MXN",
         }
         MXP{
             "MXP",
@@ -1166,7 +1166,7 @@ es{
         }
         USD{
             "US$",
-            "dólar estadounidense",
+            "Dólar Americano",
         }
         USN{
             "USN",
@@ -1807,8 +1807,8 @@ es{
         "Latn",
     }
     NumberElements{
-        ",",
         ".",
+        ",",
         ";",
         "%",
         "0",
@@ -1923,7 +1923,7 @@ es{
     Variants{
         REVISED{"Ortografía revisada"}
     }
-    Version{"1.79"}
+    Version{"1.87"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1931,14 +1931,14 @@ es{
                 "p.m.",
             }
             DateTimePatterns{
-                "HH'H'mm''ss\" z",
+                "hh:mm:ss a v",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
                 "EEEE d' de 'MMMM' de 'yyyy",
                 "d' de 'MMMM' de 'yyyy",
-                "dd-MMM-yy",
-                "d/MM/yy",
+                "dd/MM/yyyy",
+                "dd/MM/yy",
                 "{1} {0}",
             }
             availableFormats{
@@ -1950,7 +1950,9 @@ es{
                 hhmmss{"hh:mm:ss a"}
                 yyMM{"MM/yy"}
                 yyMMM{"MMM-yy"}
+                yyQ{"Q yy"}
                 yyQQQQ{"QQQQ yy"}
+                yyyyMM{"MM/yyyy"}
             }
             dayNames{
                 format{
@@ -2105,17 +2107,6 @@ es{
     zoneStrings{
         "Africa:Casablanca"{
             ec{"Casablanca"}
-            ld{"Hora media de Greenwich"}
-            ls{"Hora media de Greenwich"}
-            sd{"GMT"}
-            ss{"GMT"}
-        }
-        "America:Anchorage"{
-            ec{"Anchorage"}
-            ld{"Hora de verano de Alaska"}
-            ls{"Hora estándar de Alaska"}
-            sd{"AKDT"}
-            ss{"AKST"}
         }
         "America:Argentina:Rio_Gallegos"{
             ec{"Río Gallegos"}
@@ -2126,39 +2117,14 @@ es{
         "America:Cancun"{
             ec{"Cancún"}
         }
-        "America:Chicago"{
-            ec{"Chicago"}
-            ld{"Hora de verano central"}
-            ls{"Hora estándar central"}
-            sd{"CDT"}
-            ss{"CST"}
-        }
         "America:Cordoba"{
             ec{"Córdoba"}
-        }
-        "America:Denver"{
-            ec{"Denver"}
-            ld{"Hora de verano de Montaña"}
-            ls{"Hora estándar de Montaña"}
-            sd{"MDT"}
-            ss{"MST"}
-        }
-        "America:Halifax"{
-            ec{"Halifax"}
-            ld{"Hora de verano del Atlántico"}
-            ls{"Hora estándar del Atlántico"}
-            sd{"ADT"}
-            ss{"AST"}
         }
         "America:Indianapolis"{
             ec{"Indianápolis"}
         }
         "America:Los_Angeles"{
             ec{"Los Ángeles"}
-            ld{"Hora de verano del Pacífico"}
-            ls{"Hora estándar del Pacífico"}
-            sd{"PDT"}
-            ss{"PST"}
         }
         "America:Merida"{
             ec{"Mérida"}
@@ -2168,45 +2134,21 @@ es{
         }
         "America:New_York"{
             ec{"Nueva York"}
-            ld{"Hora de verano oriental"}
-            ls{"Hora estándar oriental"}
-            sd{"EDT"}
-            ss{"EST"}
-        }
-        "America:Phoenix"{
-            ec{"Phoenix"}
-            ld{"Hora estándar de Montaña"}
-            ls{"Hora estándar de Montaña"}
-            sd{"MST"}
-            ss{"MST"}
         }
         "America:St_Johns"{
             ec{"St. Johns"}
-            ld{"Hora de verano de Newfoundland"}
-            ls{"Hora estándar de Newfoundland"}
-            ss{"CNT"}
         }
         "Antarctica:South_Pole"{
             ec{"Polo Sur"}
         }
         "Asia:Jerusalem"{
             ec{"Jerusalén"}
-            ld{"Hora de verano de Israel"}
-            ls{"Hora estándar de Israel"}
-            sd{"IDT"}
-            ss{"IST"}
-        }
-        "Asia:Shanghai"{
-            ec{"Shanghai"}
-            ld{"Hora estándar de China"}
-            ls{"Hora estándar de China"}
-            ss{"CTT"}
         }
         "Asia:Tokyo"{
             ec{"Tokio"}
-            ld{"Hora estándar de Japón"}
+            ld{"Hora de verano de Japón"}
             ls{"Hora estándar de Japón"}
-            sd{"JST"}
+            sd{"JDT"}
             ss{"JST"}
         }
         "Asia:Yekaterinburg"{
@@ -2217,10 +2159,6 @@ es{
         }
         "Europe:Bucharest"{
             ec{"Bucarest"}
-            ld{"Hora de verano de Europa del Este"}
-            ls{"Hora estándar de Europa del Este"}
-            sd{"EEST"}
-            ss{"EET"}
         }
         "Europe:Kaliningrad"{
             ec{"Kaliningrado"}
@@ -2236,10 +2174,6 @@ es{
         }
         "Europe:Paris"{
             ec{"París"}
-            ld{"Hora de verano de Europa Central"}
-            ls{"Hora estándar de Europa Central"}
-            sd{"CEST"}
-            ss{"CET"}
         }
         "Pacific:Easter"{
             ec{"Pascua"}
@@ -2247,15 +2181,82 @@ es{
         "Pacific:Galapagos"{
             ec{"Galápagos"}
         }
-        "Pacific:Honolulu"{
-            ec{"Honolulu"}
-            ld{"Hora estándar de Hawai"}
-            ls{"Hora estándar de Hawai"}
-            sd{"HST"}
-            ss{"HST"}
-        }
         "Pacific:Tahiti"{
             ec{"Tahití"}
+        }
+        "meta:Alaska"{
+            ld{"Hora de verano de Alaska"}
+            ls{"Hora estándar de Alaska"}
+            sd{"AKDT"}
+            ss{"AKST"}
+        }
+        "meta:America_Central"{
+            ld{"Hora de verano central"}
+            ls{"Hora estándar central"}
+            sd{"CDT"}
+            ss{"CST"}
+        }
+        "meta:America_Eastern"{
+            ld{"Hora de verano oriental"}
+            ls{"Hora estándar oriental"}
+            sd{"EDT"}
+            ss{"EST"}
+        }
+        "meta:America_Mountain"{
+            ld{"Hora de verano de Montaña"}
+            ls{"Hora estándar de Montaña"}
+            sd{"MDT"}
+            ss{"MST"}
+        }
+        "meta:America_Pacific"{
+            ld{"Hora de verano del Pacífico"}
+            ls{"Hora estándar del Pacífico"}
+            sd{"PDT"}
+            ss{"PST"}
+        }
+        "meta:Atlantic"{
+            ld{"Hora de verano del Atlántico"}
+            ls{"Hora estándar del Atlántico"}
+            sd{"ADT"}
+            ss{"AST"}
+        }
+        "meta:China"{
+            ld{"Hora de verano de China"}
+            ls{"Hora estándar de China"}
+            ss{"CTT"}
+        }
+        "meta:Europe_Central"{
+            ld{"Hora de verano de Europa Central"}
+            ls{"Hora estándar de Europa Central"}
+            sd{"CEST"}
+            ss{"CET"}
+        }
+        "meta:Europe_Eastern"{
+            ld{"Hora de verano de Europa del Este"}
+            ls{"Hora estándar de Europa del Este"}
+            sd{"EEST"}
+            ss{"EET"}
+        }
+        "meta:GMT"{
+            ls{"Hora media de Greenwich"}
+            ss{"GMT"}
+        }
+        "meta:Hawaii"{
+            ld{"Hora de verano de Hawai"}
+            ls{"Hora estándar de Hawai"}
+            sd{"HDT"}
+            ss{"HST"}
+        }
+        "meta:Israel"{
+            ld{"Hora de verano de Israel"}
+            ls{"Hora estándar de Israel"}
+            sd{"IDT"}
+            ss{"IST"}
+        }
+        "meta:Newfoundland"{
+            ld{"Hora de verano de Newfoundland"}
+            ls{"Hora estándar de Newfoundland"}
+            ss{"CNT"}
         }
     }
 }

@@ -559,7 +559,7 @@ ga{
             "Franc Francach",
         }
         GBP{
-            "£",
+            "UK£",
             "Punt Steirling",
         }
         GEK{
@@ -643,7 +643,7 @@ ga{
             "Rupiah Indinéiseach",
         }
         IEP{
-            "IR£",
+            "£",
             "Punt Éireannach",
         }
         ILP{
@@ -671,7 +671,7 @@ ga{
             "Krona Íoslannach",
         }
         ITL{
-            "₤",
+            "IT₤",
             "Lira Iodálach",
         }
         JMD{
@@ -683,7 +683,7 @@ ga{
             "Dínear Iordánach",
         }
         JPY{
-            "¥",
+            "JP¥",
             "Yen Seapánach",
         }
         KES{
@@ -1087,7 +1087,7 @@ ga{
             "Scilling Uganda",
         }
         USD{
-            "$",
+            "US$",
             "Dollar S.A.M.",
         }
         USN{
@@ -1349,27 +1349,27 @@ ga{
     LocaleScript{
         "Latn",
     }
-    Version{"1.51"}
+    NumberPatterns{
+        "#,##0.###",
+        "¤#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.57"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "a.m.",
                 "p.m.",
             }
-            DateTimePatterns{
-                "HH:mm:ss z",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, yyyy MMMM dd",
-                "yyyy MMMM d",
-                "yyyy MMM d",
-                "yy/MM/dd",
-                "{1} {0}",
-            }
             availableFormats{
                 HHmm{"HH:mm"}
                 HHmmss{"HH:mm:ss"}
+                MMMMd{"d MMMM"}
+                MMdd{"dd/MM"}
+                yyQ{"Q yy"}
+                yyyyMM{"MM/yyyy"}
+                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{
@@ -1390,6 +1390,17 @@ ga{
                         "Déardaoin",
                         "Dé hAoine",
                         "Dé Sathairn",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
                     }
                 }
             }
@@ -1466,25 +1477,18 @@ ga{
         }
     }
     zoneStrings{
-        "Europe:Belfast"{
-            ec{"Béal Feirste"}
-            ld{"Am Samhraidh na Breataine"}
-            ls{"Meán-Am Greenwich"}
-            sd{"ASB"}
-            ss{"MAG"}
-        }
         "Europe:Dublin"{
             ec{"Baile Átha Cliath"}
             ld{"Am Samhraidh na hÉireann"}
-            ls{"Meán-Am Greenwich"}
             sd{"ASÉ"}
-            ss{"MAG"}
         }
         "Europe:London"{
             ec{"Londain"}
             ld{"Am Samhraidh na Breataine"}
-            ls{"Meán-Am Greenwich"}
             sd{"ASB"}
+        }
+        "meta:GMT"{
+            ls{"Meán-Am Greenwich"}
             ss{"MAG"}
         }
     }

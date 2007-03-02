@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/pa.xml
@@ -50,12 +50,15 @@ pa{
         "#,##,##0%",
         "#E0",
     }
-    Version{"1.45"}
+    Version{"1.51"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "ਸਵੇਰੇ",
                 "ਸ਼ਾਮ",
+            }
+            availableFormats{
+                yyQ{"Q yy"}
             }
             dayNames{
                 format{
@@ -76,6 +79,17 @@ pa{
                         "ਵੀਰਵਾਰ",
                         "ਸ਼ੁੱਕਰਵਾਰ",
                         "ਸ਼ਨੀਚਰਵਾਰ",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
                     }
                 }
             }
@@ -136,9 +150,31 @@ pa{
                         "ਦਸੰਬਰ",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
             }
             quarters{
                 format{
+                    abbreviated{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "ਚੌਥਾ ਚੌਥਾਈ",
+                    }
                     wide{
                         "ਪਹਿਲਾਂ ਚੌਥਾਈ",
                         "ਦੂਜਾ ਚੌਥਾਈ",

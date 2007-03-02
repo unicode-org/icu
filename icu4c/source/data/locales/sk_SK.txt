@@ -1,19 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/sk_SK.xml
 // *
 // ***************************************************************************
 sk_SK{
-    NumberPatterns{
-        "#,##0.###",
-        "#,##0.00 ¤",
-        "#,##0%",
-        "#E0",
-    }
-    Version{"1.37"}
+    Version{"1.42"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -21,11 +15,5 @@ sk_SK{
                 4,
             }
         }
-    }
-    delimiters{
-        alternateQuotationEnd{"“"}
-        alternateQuotationStart{"„"}
-        quotationEnd{"‘"}
-        quotationStart{"‚"}
     }
 }

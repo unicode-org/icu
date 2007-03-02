@@ -1,27 +1,18 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ar_EG.xml
 // *
 // ***************************************************************************
 ar_EG{
-    Scripts{
-        Ital{"الأيطالية القديمة"}
-    }
-    Version{"1.39"}
+    Version{"1.44"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
                 7,
                 1,
-            }
-            eras{
-                wide{
-                    "قبل الميلاد",
-                    "ميلادي",
-                }
             }
             weekend:intvector{
                 6,
@@ -30,11 +21,5 @@ ar_EG{
                 86400000,
             }
         }
-    }
-    delimiters{
-        alternateQuotationEnd{"\""}
-        alternateQuotationStart{"\""}
-        quotationEnd{"’"}
-        quotationStart{"‘"}
     }
 }

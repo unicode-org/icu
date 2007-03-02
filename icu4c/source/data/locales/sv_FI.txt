@@ -1,18 +1,80 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/sv_FI.xml
 // *
 // ***************************************************************************
 sv_FI{
-    Version{"1.41"}
+    Countries{
+        UM{"USAs yttre öar"}
+    }
+    Languages{
+        afa{"afro-asiatiskt språk (annat)"}
+        cpe{"kreolspråk och pidgin, engelskbaserade (annat)"}
+        cpf{"kreolspråk och pidgin, franskbaserade (annat)"}
+        cpp{"kreolspråk och pidgin, portugisiskbaserade (annat)"}
+        crh{"krimturkiska; krimtatariska"}
+        crp{"kreolspråk och pidgin (annat)"}
+        enm{"medelengelska (1100-1500)"}
+        gil{"gilbertesiska; kiribati"}
+        gn{"guaraní"}
+        iro{"irokesiskt språk"}
+        khi{"khoisanspråk (annat)"}
+        km{"kambodjanska; khmeriska"}
+        kn{"kanaresiska; kannada"}
+        lol{"lolo; mongo"}
+        mga{"medeliriska (900-1200)"}
+        nah{"nahuatl; aztekiska"}
+        nds{"lågtyska; lågsaxiska"}
+        oc{"provensalska (efter 1500); occitanska"}
+        oj{"odjibwa; chippewa"}
+        phn{"kananeiska; feniciska"}
+        ps{"pashto; afghanska"}
+        rw{"rwanda; kinjarwanda"}
+        sit{"sinotibetanskt språk (annat)"}
+        smi{"samiskt språk (annat)"}
+        sn{"shona; manshona"}
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "¤ #,##0.00",
+        "#,##0 %",
+        "#E0",
+    }
+    Types{
+        collation{
+            stroke{"kinesiska i streck-ordning"}
+        }
+    }
+    Version{"1.47"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
                 2,
                 4,
+            }
+            DateTimePatterns{
+                "'kl'. HH.mm.ss v",
+                "HH.mm.ss z",
+                "HH.mm.ss",
+                "HH.mm",
+                "EEEE, yyyy MMMM dd",
+                "EEEE d MMM yyyy",
+                "d MMM yyyy",
+                "yyyy-MM-dd",
+                "{1} {0}",
+            }
+            availableFormats{
+                hhmm{"hh:mm a"}
+                hhmmss{"hh:mm:ss a"}
+                yyyyQQQQ{"QQQQ',' yyyy"}
+            }
+            fields{
+                dayperiod{
+                    dn{"dagsperiod"}
+                }
             }
         }
         hebrew{
@@ -105,5 +167,11 @@ sv_FI{
                 }
             }
         }
+    }
+    delimiters{
+        alternateQuotationEnd{"’"}
+        alternateQuotationStart{"’"}
+        quotationEnd{"”"}
+        quotationStart{"”"}
     }
 }

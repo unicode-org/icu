@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/am.xml
@@ -140,7 +140,6 @@ am{
     Languages{
         aa{"አፋርኛ"}
         ab{"አብሐዚኛ"}
-        af{"አፍሪቃንስኛ"}
         am{"አማርኛ"}
         ar{"ዐርቢኛ"}
         as{"አሳሜዛዊ"}
@@ -304,7 +303,7 @@ am{
         "#,##0%",
         "#E0",
     }
-    Version{"1.56"}
+    Version{"1.62"}
     calendar{
         ethiopic{
             monthNames{
@@ -318,7 +317,7 @@ am{
                         "የካቲ",
                         "መጋቢት",
                         "ሚያዝያ",
-                        "ግንቦ",
+                        "ግንቦት",
                         "ሰኔ",
                         "ሐምሌ",
                         "ነሐሴ",
@@ -343,21 +342,13 @@ am{
             }
         }
         gregorian{
-            DateTimePatterns{
-                "HH:mm:ss z",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, yyyy MMMM dd",
-                "yyyy MMMM d",
-                "yyyy MMM d",
-                "yy/MM/dd",
-                "{1} {0}",
-            }
             availableFormats{
                 MMMMd{"MMMM d"}
+                MMMMdd{"dd MMMM"}
                 MMdd{"dd/MM"}
                 yyMM{"MM/yy"}
+                yyQ{"Q yy"}
+                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{
@@ -466,6 +457,22 @@ am{
                         "ኦ",
                         "ኖ",
                         "ዲ",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                    wide{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
                     }
                 }
             }

@@ -614,7 +614,7 @@ fr{
             "franc français",
         }
         GBP{
-            "£",
+            "UK£",
             "livre sterling",
         }
         GEK{
@@ -718,7 +718,7 @@ fr{
             "couronne islandaise",
         }
         ITL{
-            "₤",
+            "IT₤",
             "lire italienne",
         }
         JMD{
@@ -730,7 +730,7 @@ fr{
             "dinar jordanien",
         }
         JPY{
-            "¥",
+            "JP¥",
             "yen",
         }
         KES{
@@ -1154,7 +1154,7 @@ fr{
             "shilling ougandais",
         }
         USD{
-            "$",
+            "US$",
             "dollar des États-Unis",
         }
         USN{
@@ -1885,11 +1885,11 @@ fr{
         REVISED{"orthographe révisée"}
         ROZAJ{"dialecte de Resia"}
     }
-    Version{"1.85"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "HH' h 'mm z",
+                "HH' h 'mm v",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -1907,6 +1907,7 @@ fr{
                 hhmm{"hh:mm a"}
                 hhmmss{"hh:mm:ss a"}
                 yyMM{"MM/yy"}
+                yyQ{"Q yy"}
                 yyQQQQ{"QQQQ yy"}
                 yyyyMMMM{"MMMM yyyy"}
             }
@@ -2074,65 +2075,11 @@ fr{
         "Africa:Timbuktu"{
             ec{"Tombouctou"}
         }
-        "America:Anchorage"{
-            ec{"Anchorage"}
-            ld{"Heure avancée de l’Alaska"}
-            lg{"Heure de l’Alaska"}
-            ls{"Heure normale de l’Alaska"}
-            sd{"HAAK"}
-            sg{"HAK"}
-            ss{"HNAK"}
-        }
         "America:Argentina:ComodRivadavia"{
             ec{"Comodoro Rivadavia"}
         }
-        "America:Chicago"{
-            ec{"Chicago"}
-            ld{"Heure avancée du Centre (ÉUA)"}
-            lg{"Heure du Centre (ÉUA)"}
-            ls{"Heure normale du Centre (ÉUA)"}
-            sd{"HAC (ÉUA)"}
-            sg{"HC (ÉUA)"}
-            ss{"HNC (ÉUA)"}
-        }
-        "America:Denver"{
-            ec{"Denver"}
-            ld{"Heure avancée des Rocheuses (ÉUA)"}
-            lg{"Heure des Rocheuses (ÉUA)"}
-            ls{"Heure normale des Rocheuses (ÉUA)"}
-            sd{"HAR (ÉUA)"}
-            sg{"HR (ÉUA)"}
-            ss{"HNR (ÉUA)"}
-        }
         "America:Detroit"{
             ec{"Détroit"}
-        }
-        "America:Edmonton"{
-            ec{"Edmonton"}
-            ld{"Heure avancée des Rocheuses"}
-            lg{"Heure des Rocheuses"}
-            ls{"Heure normale des Rocheuses"}
-            sd{"HAR"}
-            sg{"HR"}
-            ss{"HNR"}
-        }
-        "America:Halifax"{
-            ec{"Halifax"}
-            ld{"Heure avancée de l’Atlantique"}
-            lg{"Heure de l’Atlantique"}
-            ls{"Heure normale de l’Atlantique"}
-            sd{"HAA"}
-            sg{"HA"}
-            ss{"HNA"}
-        }
-        "America:Los_Angeles"{
-            ec{"Los Angeles"}
-            ld{"Heure avancée du Pacifique (ÉUA)"}
-            lg{"Heure du Pacifique (ÉUA)"}
-            ls{"Heure normale du Pacifique (ÉUA)"}
-            sd{"HAP (ÉUA)"}
-            sg{"HP (ÉUA)"}
-            ss{"HNP (ÉUA)"}
         }
         "America:Manaus"{
             ec{"Manaos"}
@@ -2142,46 +2089,9 @@ fr{
         }
         "America:Montreal"{
             ec{"Montréal"}
-            ld{"Heure avancée de l’Est"}
-            lg{"Heure de l’Est"}
-            ls{"Heure normale de l’Est"}
-            sd{"HAE"}
-            sg{"HE"}
-            ss{"HNE"}
-        }
-        "America:New_York"{
-            ec{"New York"}
-            ld{"Heure avancée de l’Est (ÉUA)"}
-            lg{"Heure de l’Est (ÉUA)"}
-            ls{"Heure normale de l’Est (ÉUA)"}
-            sd{"HAE (ÉUA)"}
-            sg{"HE (ÉUA)"}
-            ss{"HNE (ÉUA)"}
         }
         "America:St_Johns"{
             ec{"Saint-Jean de Terre-Neuve"}
-            ld{"Heure avancée de Terre-Neuve"}
-            lg{"Heure de Terre-Neuve"}
-            ls{"Heure normale de Terre-Neuve"}
-            sd{"HAT"}
-            sg{"HT"}
-            ss{"HNT"}
-        }
-        "America:Vancouver"{
-            ec{"Vancouver"}
-            ld{"Heure avancée du Pacifique"}
-            lg{"Heure du Pacifique"}
-            ls{"Heure normale du Pacifique"}
-            sd{"HAP"}
-            sg{"HP"}
-            ss{"HNP"}
-        }
-        "America:Winnipeg"{
-            ec{"Winnipeg"}
-            ld{"Heure avancée du Centre"}
-            lg{"Heure du Centre"}
-            ls{"Heure normale du Centre"}
-            sg{"HC"}
         }
         "Antarctica:DumontDUrville"{
             ec{"Dumont d'Urville"}
@@ -2209,10 +2119,6 @@ fr{
         }
         "Asia:Jerusalem"{
             ec{"Jérusalem"}
-            ld{"Heure avancée d’Israël"}
-            ls{"Heure normale d’Israël"}
-            sd{"HAI"}
-            ss{"HNI"}
         }
         "Asia:Kamchatka"{
             ec{"Kamtchatka"}
@@ -2234,13 +2140,6 @@ fr{
         }
         "Asia:Sakhalin"{
             ec{"Sakhaline"}
-        }
-        "Asia:Shanghai"{
-            ec{"Shanghai"}
-            ld{"Heure avancée de Chine"}
-            ls{"Heure normale de Chine"}
-            sd{"HAC"}
-            ss{"HNC"}
         }
         "Asia:Tokyo"{
             ec{"Tokyo"}
@@ -2272,10 +2171,6 @@ fr{
         }
         "Europe:Bucharest"{
             ec{"Bucarest"}
-            ld{"Heure avancée de l’Europe de l’Est"}
-            ls{"Heure normale de l’Europe de l’Est"}
-            sd{"HAEE"}
-            ss{"HEE"}
         }
         "Europe:Lisbon"{
             ec{"Lisbonne"}
@@ -2288,12 +2183,6 @@ fr{
         }
         "Europe:Paris"{
             ec{"Paris"}
-            ld{"Heure avancée de l’Europe centrale"}
-            lg{"Heure de l’Europe centrale"}
-            ls{"Heure normale de l’Europe centrale"}
-            sd{"HAEC"}
-            sg{"HEC"}
-            ss{"HNEC"}
         }
         "Europe:Uzhgorod"{
             ec{"Oujgorod"}
@@ -2304,16 +2193,97 @@ fr{
         "Pacific:Easter"{
             ec{"Île de Pâques"}
         }
-        "Pacific:Honolulu"{
-            ec{"Honolulu"}
+        "Pacific:Marquesas"{
+            ec{"Marquises"}
+        }
+        "meta:Alaska"{
+            ld{"Heure avancée de l’Alaska"}
+            lg{"Heure de l’Alaska"}
+            ls{"Heure normale de l’Alaska"}
+            sd{"HAAK"}
+            sg{"HAK"}
+            ss{"HNAK"}
+        }
+        "meta:America_Central"{
+            ld{"Heure avancée du Centre"}
+            lg{"Heure du Centre"}
+            ls{"Heure normale du Centre"}
+            sd{"HAC"}
+            sg{"HC"}
+            ss{"HNC"}
+        }
+        "meta:America_Eastern"{
+            ld{"Heure avancée de l’Est"}
+            lg{"Heure de l’Est"}
+            ls{"Heure normale de l’Est"}
+            sd{"HAE"}
+            sg{"HE"}
+            ss{"HNE"}
+        }
+        "meta:America_Mountain"{
+            ld{"Heure avancée des Rocheuses"}
+            lg{"Heure des Rocheuses"}
+            ls{"Heure normale des Rocheuses"}
+            sd{"HAR"}
+            sg{"HR"}
+            ss{"HNR"}
+        }
+        "meta:America_Pacific"{
+            ld{"Heure avancée du Pacifique"}
+            lg{"Heure du Pacifique"}
+            ls{"Heure normale du Pacifique"}
+            sd{"HAP"}
+            sg{"HP"}
+            ss{"HNP"}
+        }
+        "meta:Atlantic"{
+            ld{"Heure avancée de l’Atlantique"}
+            lg{"Heure de l’Atlantique"}
+            ls{"Heure normale de l’Atlantique"}
+            sd{"HAA"}
+            sg{"HA"}
+            ss{"HNA"}
+        }
+        "meta:China"{
+            ld{"Heure avancée de Chine"}
+            ls{"Heure normale de Chine"}
+            sd{"HAC (Chine)"}
+            ss{"HNC (Chine)"}
+        }
+        "meta:Europe_Central"{
+            ld{"Heure avancée de l’Europe centrale"}
+            lg{"Heure de l’Europe centrale"}
+            ls{"Heure normale de l’Europe centrale"}
+            sd{"HAEC"}
+            sg{"HEC"}
+            ss{"HNEC"}
+        }
+        "meta:Europe_Eastern"{
+            ld{"Heure avancée de l’Europe de l’Est"}
+            ls{"Heure normale de l’Europe de l’Est"}
+            sd{"HAEE"}
+            ss{"HEE"}
+        }
+        "meta:Hawaii"{
             ld{"Heure avancée d’Hawaï"}
             lg{"Heure d’Hawaï"}
             ls{"Heure normale d’Hawaï"}
             sd{"HDT"}
             ss{"HST"}
         }
-        "Pacific:Marquesas"{
-            ec{"Marquises"}
+        "meta:Israel"{
+            ld{"Heure avancée d’Israël"}
+            ls{"Heure normale d’Israël"}
+            sd{"HAI"}
+            ss{"HNI"}
+        }
+        "meta:Newfoundland"{
+            ld{"Heure avancée de Terre-Neuve"}
+            lg{"Heure de Terre-Neuve"}
+            ls{"Heure normale de Terre-Neuve"}
+            sd{"HAT"}
+            sg{"HT"}
+            ss{"HNT"}
         }
     }
 }

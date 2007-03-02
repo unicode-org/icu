@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/as.xml
@@ -30,12 +30,36 @@ as{
     LocaleScript{
         "Beng",
     }
-    Version{"1.31"}
+    NumberPatterns{
+        "#,##,##0.###",
+        "¤ #,##,##0.00",
+        "#,##,##0%",
+        "#E0",
+    }
+    Version{"1.38"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "পূৰ্বা",
                 "অপ",
+            }
+            DateTimePatterns{
+                "h.mm.ss a v",
+                "h.mm.ss a z",
+                "h.mm.ss a",
+                "h.mm. a",
+                "EEEE, d MMMM, yyyy",
+                "d MMMM, yyyy",
+                "dd-MM-yyyy",
+                "d-M-yyyy",
+                "{1} {0}",
+            }
+            availableFormats{
+                MMMMd{"d MMMM"}
+                MMdd{"dd-MM"}
+                yyQ{"Q yy"}
+                yyyyMM{"MM-yyyy"}
+                yyyyMMMM{"MMMM, yyyy"}
             }
             dayNames{
                 format{
@@ -57,6 +81,27 @@ as{
                         "শুক্ৰবাৰ",
                         "শনিবাৰ",
                     }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "BCE",
+                    "CE",
+                }
+                wide{
+                    "BCE",
+                    "CE",
                 }
             }
             monthNames{
@@ -90,16 +135,51 @@ as{
                         "ডিসেম্বৰ",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                    wide{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                }
             }
         }
     }
     zoneStrings{
         "Asia:Calcutta"{
             ec{"এলাহাৱাদ"}
-            ld{"ভাৰতীয় সময়"}
+        }
+        "meta:India"{
             ls{"ভাৰতীয় সময়"}
-            sd{"ভা. স."}
             ss{"ভা. স."}
         }
+        gmtFormat{"GMT{0}"}
+        hourFormat{"+HH:mm;-HH:mm"}
+        regionFormat{"{0} Time"}
     }
 }

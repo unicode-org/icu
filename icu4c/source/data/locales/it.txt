@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/it.xml
@@ -433,7 +433,7 @@ it{
             "Cruzeiro Brasiliano (1990-1993)",
         }
         BRL{
-            "BRL",
+            "R$",
             "Real Brasiliano",
         }
         BRN{
@@ -601,7 +601,7 @@ it{
             "Franco Francese",
         }
         GBP{
-            "£",
+            "UK£",
             "Sterlina Inglese",
         }
         GEK{
@@ -715,6 +715,11 @@ it{
         ITL{
             "₤",
             "Lira Italiana",
+            {
+                "¤ #,##0;-¤ #,##0",
+                ",",
+                ".",
+            }
         }
         JMD{
             "J$",
@@ -725,7 +730,7 @@ it{
             "Dinaro Giordano",
         }
         JPY{
-            "¥",
+            "JP¥",
             "Yen Giapponese",
         }
         KES{
@@ -1129,7 +1134,7 @@ it{
             "Scellino Ugandese",
         }
         USD{
-            "$",
+            "US$",
             "Dollaro Statunitense",
         }
         USN{
@@ -1271,9 +1276,9 @@ it{
     }
     ExemplarCharacters{"[a à b-e é è f-i ì j-o ó ò p-u ù v-z]"}
     Keys{
-        calendar{"Calendario"}
-        collation{"Collazione"}
-        currency{"Valuta"}
+        calendar{"calendario"}
+        collation{"collazione"}
+        currency{"valuta"}
     }
     Languages{
         aa{"afar"}
@@ -1842,22 +1847,22 @@ it{
     }
     Types{
         calendar{
-            buddhist{"Calendario Buddista"}
-            chinese{"Calendario Cinese"}
-            gregorian{"Calendario Gregoriano"}
-            hebrew{"Calendario Ebraico"}
-            islamic{"Calendario Islamico"}
-            islamic-civil{"Calendario Civile Islamico"}
-            japanese{"Calendario Giapponese"}
+            buddhist{"calendario buddista"}
+            chinese{"calendario cinese"}
+            gregorian{"calendario gregoriano"}
+            hebrew{"calendario ebraico"}
+            islamic{"calendario islamico"}
+            islamic-civil{"calendario civile islamico"}
+            japanese{"calendario giapponese"}
         }
         collation{
-            big5han{"Cinese Tradizionale"}
-            direct{"Ordine Diretto"}
-            gb2312han{"Cinese Semplificato"}
-            phonebook{"Ordine Elenco Telefonico"}
-            pinyin{"Ordine Pinyin"}
-            stroke{"Ordine Segni"}
-            traditional{"Ordine Tradizionale"}
+            big5han{"cinese tradizionale"}
+            direct{"ordine diretto"}
+            gb2312han{"cinese semplificato"}
+            phonebook{"ordine elenco telefonico"}
+            pinyin{"ordine pinyin"}
+            stroke{"ordine segni"}
+            traditional{"ordine tradizionale"}
         }
     }
     Variants{
@@ -1869,7 +1874,7 @@ it{
         ROZAJ{"resiano"}
         SAAHO{"saho"}
     }
-    Version{"1.70"}
+    Version{"1.80"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1877,7 +1882,7 @@ it{
                 "p.",
             }
             DateTimePatterns{
-                "HH:mm:ss z",
+                "HH:mm:ss v",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -1895,6 +1900,7 @@ it{
                 hhmm{"hh.mm a"}
                 hhmmss{"hh.mm.ss a"}
                 yyMM{"MM/yy"}
+                yyQ{"Q yy"}
                 yyQQQQ{"QQQQ yy"}
                 yyyyMMMM{"MMMM yyyy"}
             }
@@ -2046,7 +2052,7 @@ it{
     }
     measurementSystemNames{
         US{"USA"}
-        metric{"Metrico"}
+        metric{"metrico"}
     }
     zoneStrings{
         "Africa:Casablanca"{

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/en_CA.xml
@@ -12,14 +12,12 @@ en_CA{
             "$",
             "Canadian Dollar",
         }
+        USD{
+            "US$",
+            "US Dollar",
+        }
     }
-    NumberPatterns{
-        "#,##0.###",
-        "¤#,##0.00;(¤#,##0.00)",
-        "#,##0%",
-        "#E0",
-    }
-    Version{"1.46"}
+    Version{"1.51"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

@@ -308,11 +308,17 @@ lv{
         "NaN",
         "+",
     }
-    Version{"1.57"}
+    NumberPatterns{
+        "#,##0.###",
+        "#,##0.00 ¤",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.63"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "HH:mm:ss z",
+                "HH:mm:ss v",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -324,6 +330,7 @@ lv{
             }
             availableFormats{
                 Md{"d.M"}
+                yyQ{"Q yy"}
             }
             dayNames{
                 format{
@@ -344,6 +351,17 @@ lv{
                         "ceturtdiena",
                         "piektdiena",
                         "sestdiena",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
                     }
                 }
             }
@@ -382,6 +400,22 @@ lv{
                         "oktobris",
                         "novembris",
                         "decembris",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
                     }
                 }
             }

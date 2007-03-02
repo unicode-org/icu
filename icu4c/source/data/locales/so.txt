@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/so.xml
@@ -116,6 +116,10 @@ so{
             "Ksh",
             "KES",
         }
+        SOS{
+            "$",
+            "SOS",
+        }
     }
     ExemplarCharacters{"[a-z]"}
     Languages{
@@ -124,7 +128,13 @@ so{
     LocaleScript{
         "Latn",
     }
-    Version{"1.42"}
+    NumberPatterns{
+        "#,##0.###",
+        "¤#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.46"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -146,6 +156,7 @@ so{
                 MMMMdd{"dd MMMM"}
                 MMdd{"dd/MM"}
                 yyMM{"MM/yy"}
+                yyQ{"Q yy"}
                 yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
@@ -232,6 +243,22 @@ so{
                         "T",
                         "K",
                         "L",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                    wide{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
                     }
                 }
             }

@@ -449,7 +449,7 @@ mk{
             "Француски франк",
         }
         GBP{
-            "£",
+            "UK£",
             "Британска Фунта",
         }
         GEL{
@@ -541,7 +541,7 @@ mk{
             "Исландска крона",
         }
         ITL{
-            "₤",
+            "IT₤",
             "Италијанкса лира",
         }
         JMD{
@@ -553,7 +553,7 @@ mk{
             "Јордански динар",
         }
         JPY{
-            "¥",
+            "JP¥",
             "Јапонски јен",
         }
         KES{
@@ -1008,6 +1008,12 @@ mk{
         "NaN",
         "+",
     }
+    NumberPatterns{
+        "#,##0.###;(#,##0.###)",
+        "¤ #,##0.00",
+        "#,##0%",
+        "#E0",
+    }
     Types{
         calendar{
             buddhist{"Будистички календар"}
@@ -1026,11 +1032,11 @@ mk{
             traditional{"Традиционално"}
         }
     }
-    Version{"1.58"}
+    Version{"1.63"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "HH:mm:ss z",
+                "HH:mm:ss v",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -1043,6 +1049,7 @@ mk{
             availableFormats{
                 MMMMdd{"dd MMMM"}
                 Mdd{"dd.M"}
+                yyQ{"Q yy"}
                 yyyyM{"M.yyyy"}
                 yyyyMMMM{"MMMM yyyy"}
             }
@@ -1130,6 +1137,22 @@ mk{
                         "о",
                         "но",
                         "д",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                    wide{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
                     }
                 }
             }

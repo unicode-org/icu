@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ms.xml
@@ -266,9 +266,22 @@ ms{
     LocaleScript{
         "Latn",
     }
-    Version{"1.44"}
+    NumberPatterns{
+        "#,##0.###",
+        "¤#,##0.00;(¤#,##0.00)",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.50"}
     calendar{
         gregorian{
+            availableFormats{
+                MMMMdd{"dd MMMM"}
+                MMdd{"dd/MM"}
+                yyQ{"Q yy"}
+                yyyyMM{"MM/yyyy"}
+                yyyyMMMM{"MMMM yyyy"}
+            }
             dayNames{
                 format{
                     abbreviated{
@@ -288,6 +301,17 @@ ms{
                         "Khamis",
                         "Jumaat",
                         "Sabtu",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
                     }
                 }
             }
@@ -322,14 +346,30 @@ ms{
                         "Disember",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
             }
             quarters{
                 format{
                     abbreviated{
-                        "S1",
-                        "S2",
-                        "S3",
-                        "S4",
+                        "suku pertama",
+                        "Q2",
+                        "suku ketiga",
+                        "suku keempat",
                     }
                     wide{
                         "suku pertama",

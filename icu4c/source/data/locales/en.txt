@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/en.xml
@@ -37,6 +37,7 @@ en{
         054{"Melanesia"}
         057{"Micronesian Region"}
         061{"Polynesia"}
+        062{"South-Central Asia"}
         142{"Asia"}
         143{"Central Asia"}
         145{"Western Asia"}
@@ -85,10 +86,10 @@ en{
         BY{"Belarus"}
         BZ{"Belize"}
         CA{"Canada"}
-        CC{"Cocos (Keeling) Islands"}
-        CD{"Congo (Kinshasa)"}
+        CC{"Cocos Islands"}
+        CD{"Congo - Kinshasa"}
         CF{"Central African Republic"}
-        CG{"Congo (Brazzaville)"}
+        CG{"Congo - Brazzaville"}
         CH{"Switzerland"}
         CI{"Ivory Coast"}
         CK{"Cook Islands"}
@@ -536,7 +537,7 @@ en{
         }
         CSD{
             "CSD",
-            "Serbian Dinar",
+            "Old Serbian Dinar",
         }
         CSK{
             "CSK",
@@ -1050,6 +1051,10 @@ en{
             "=0#lei|1#leu|1<lei",
             "Romanian Leu",
         }
+        RSD{
+            "RSD",
+            "Serbian Dinar",
+        }
         RUB{
             "RUB",
             "Russian Ruble",
@@ -1203,7 +1208,7 @@ en{
             "Ugandan Shilling",
         }
         USD{
-            "US$",
+            "$",
             "US Dollar",
         }
         USN{
@@ -1316,7 +1321,7 @@ en{
         }
         XXX{
             "XXX",
-            "No Currency",
+            "Unknown or Invalid Currency",
         }
         YDD{
             "YDD",
@@ -1378,7 +1383,7 @@ en{
         ady{"Adyghe"}
         ae{"Avestan"}
         af{"Afrikaans"}
-        afa{"Afro-Asiatic (Other)"}
+        afa{"Other Afro-Asiatic"}
         afh{"Afrihili"}
         ain{"Ainu"}
         ak{"Akan"}
@@ -1388,14 +1393,14 @@ en{
         alt{"Southern Altai"}
         am{"Amharic"}
         an{"Aragonese"}
-        ang{"Old English (ca.450-1100)"}
+        ang{"Old English"}
         anp{"Angika"}
         apa{"Apache Languages"}
         ar{"Arabic"}
         arc{"Aramaic"}
         arn{"Araucanian"}
         arp{"Arapaho"}
-        art{"Artificial (Other)"}
+        art{"Other Artificial"}
         arw{"Arawak"}
         as{"Assamese"}
         ast{"Asturian"}
@@ -1411,7 +1416,7 @@ en{
         bal{"Baluchi"}
         ban{"Balinese"}
         bas{"Basa"}
-        bat{"Baltic (Other)"}
+        bat{"Other Baltic"}
         be{"Belarusian"}
         bej{"Beja"}
         bem{"Bemba"}
@@ -1436,13 +1441,13 @@ en{
         byn{"Blin"}
         ca{"Catalan"}
         cad{"Caddo"}
-        cai{"Central American Indian (Other)"}
+        cai{"Other Central American Indian"}
         car{"Carib"}
-        cau{"Caucasian (Other)"}
+        cau{"Other Caucasian"}
         cch{"Atsam"}
         ce{"Chechen"}
         ceb{"Cebuano"}
-        cel{"Celtic (Other)"}
+        cel{"Other Celtic"}
         ch{"Chamorro"}
         chb{"Chibcha"}
         chg{"Chagatai"}
@@ -1460,12 +1465,12 @@ en{
         cpf{"Other French-based Creoles and Pidgins"}
         cpp{"Other Portuguese-based Creoles and Pidgins"}
         cr{"Cree"}
-        crh{"Crimean Turkish; Crimean Tatar"}
-        crp{"Creoles and Pidgins (Other)"}
+        crh{"Crimean Turkish"}
+        crp{"Other Creoles and Pidgins"}
         cs{"Czech"}
         csb{"Kashubian"}
         cu{"Church Slavic"}
-        cus{"Cushitic (Other)"}
+        cus{"Other Cushitic"}
         cv{"Chuvash"}
         cy{"Welsh"}
         da{"Danish"}
@@ -1473,12 +1478,13 @@ en{
         dar{"Dargwa"}
         day{"Dayak"}
         de{"German"}
+        de_AT{"Austrian German"}
         del{"Delaware"}
         den{"Slave"}
         dgr{"Dogrib"}
         din{"Dinka"}
         doi{"Dogri"}
-        dra{"Dravidian (Other)"}
+        dra{"Other Dravidian"}
         dsb{"Lower Sorbian"}
         dua{"Duala"}
         dum{"Middle Dutch"}
@@ -1487,14 +1493,19 @@ en{
         dz{"Dzongkha"}
         ee{"Ewe"}
         efi{"Efik"}
-        egy{"Egyptian (Ancient)"}
+        egy{"Ancient Egyptian"}
         eka{"Ekajuk"}
         el{"Greek"}
         elx{"Elamite"}
         en{"English"}
+        en_AU{"Australian English"}
+        en_CA{"Canadian English"}
+        en_GB{"British English"}
+        en_US{"U.S. English"}
         enm{"Middle English"}
         eo{"Esperanto"}
         es{"Spanish"}
+        es_419{"Latin American Spanish"}
         et{"Estonian"}
         eu{"Basque"}
         ewo{"Ewondo"}
@@ -1504,11 +1515,13 @@ en{
         ff{"Fulah"}
         fi{"Finnish"}
         fil{"Filipino"}
-        fiu{"Finno - Ugrian (Other)"}
+        fiu{"Other Finno - Ugrian"}
         fj{"Fijian"}
         fo{"Faroese"}
         fon{"Fon"}
         fr{"French"}
+        fr_CA{"Canadian French"}
+        fr_CH{"Swiss French"}
         frm{"Middle French"}
         fro{"Old French"}
         frr{"Northern Frisian"}
@@ -1520,7 +1533,7 @@ en{
         gay{"Gayo"}
         gba{"Gbaya"}
         gd{"Scottish Gaelic"}
-        gem{"Germanic (Other)"}
+        gem{"Other Germanic"}
         gez{"Geez"}
         gil{"Gilbertese"}
         gl{"Galician"}
@@ -1562,11 +1575,11 @@ en{
         ijo{"Ijo"}
         ik{"Inupiaq"}
         ilo{"Iloko"}
-        inc{"Indic (Other)"}
-        ine{"Indo-European (Other)"}
+        inc{"Other Indic"}
+        ine{"Other Indo-European"}
         inh{"Ingush"}
         io{"Ido"}
-        ira{"Iranian (Other)"}
+        ira{"Other Iranian"}
         iro{"Iroquoian languages"}
         is{"Icelandic"}
         it{"Italian"}
@@ -1589,7 +1602,7 @@ en{
         kfo{"Koro"}
         kg{"Kongo"}
         kha{"Khasi"}
-        khi{"Khoisan (Other)"}
+        khi{"Other Khoisan"}
         kho{"Khotanese"}
         ki{"Kikuyu"}
         kj{"Kuanyama"}
@@ -1652,7 +1665,7 @@ en{
         min{"Minangkabau"}
         mis{"Miscellaneous Languages"}
         mk{"Macedonian"}
-        mkh{"Mon-Khmer (Other)"}
+        mkh{"Other Mon-Khmer"}
         ml{"Malayalam"}
         mn{"Mongolian"}
         mnc{"Manchu"}
@@ -1674,34 +1687,35 @@ en{
         myv{"Erzya"}
         na{"Nauru"}
         nah{"Nahuatl"}
-        nai{"North American Indian (Other)"}
+        nai{"Other North American Indian"}
         nap{"Neapolitan"}
         nb{"Norwegian Bokmål"}
         nd{"North Ndebele"}
-        nds{"Low German; Low Saxon"}
+        nds{"Low German"}
         ne{"Nepali"}
         new{"Newari"}
         ng{"Ndonga"}
         nia{"Nias"}
-        nic{"Niger - Kordofanian (Other)"}
+        nic{"Other Niger - Kordofanian"}
         niu{"Niuean"}
         nl{"Dutch"}
+        nl_BE{"Flemish"}
         nn{"Norwegian Nynorsk"}
         no{"Norwegian"}
         nog{"Nogai"}
-        non{"Norse, Old"}
+        non{"Old Norse"}
         nqo{"N’Ko"}
         nr{"South Ndebele"}
         nso{"Northern Sotho"}
         nub{"Nubian Languages"}
         nv{"Navajo"}
         nwc{"Classical Newari"}
-        ny{"Nyanja; Chichewa; Chewa"}
+        ny{"Nyanja"}
         nym{"Nyamwezi"}
         nyn{"Nyankole"}
         nyo{"Nyoro"}
         nzi{"Nzima"}
-        oc{"Occitan (post 1500); Provençal"}
+        oc{"Occitan"}
         oj{"Ojibwa"}
         om{"Oromo"}
         or{"Oriya"}
@@ -1710,14 +1724,14 @@ en{
         ota{"Ottoman Turkish"}
         oto{"Otomian Languages"}
         pa{"Punjabi"}
-        paa{"Papuan (Other)"}
+        paa{"Other Papuan"}
         pag{"Pangasinan"}
         pal{"Pahlavi"}
         pam{"Pampanga"}
         pap{"Papiamento"}
         pau{"Palauan"}
         peo{"Old Persian"}
-        phi{"Philippine (Other)"}
+        phi{"Other Philippine"}
         phn{"Phoenician"}
         pi{"Pali"}
         pl{"Polish"}
@@ -1726,6 +1740,7 @@ en{
         pro{"Old Provençal"}
         ps{"Pashto"}
         pt{"Portuguese"}
+        pt_BR{"Brazilian Portuguese"}
         qu{"Quechua"}
         raj{"Rajasthani"}
         rap{"Rapanui"}
@@ -1733,7 +1748,7 @@ en{
         rm{"Rhaeto-Romance"}
         rn{"Rundi"}
         ro{"Romanian"}
-        roa{"Romance (Other)"}
+        roa{"Other Romance"}
         rom{"Romany"}
         root{"Root"}
         ru{"Russian"}
@@ -1742,7 +1757,7 @@ en{
         sa{"Sanskrit"}
         sad{"Sandawe"}
         sah{"Yakut"}
-        sai{"South American Indian (Other)"}
+        sai{"Other South American Indian"}
         sal{"Salishan languages"}
         sam{"Samaritan Aramaic"}
         sas{"Sasak"}
@@ -1753,7 +1768,7 @@ en{
         sd{"Sindhi"}
         se{"Northern Sami"}
         sel{"Selkup"}
-        sem{"Semitic (Other)"}
+        sem{"Other Semitic"}
         sg{"Sango"}
         sga{"Old Irish"}
         sgn{"Sign Languages"}
@@ -1762,13 +1777,13 @@ en{
         si{"Sinhalese"}
         sid{"Sidamo"}
         sio{"Siouan Languages"}
-        sit{"Sino-Tibetan (Other)"}
+        sit{"Other Sino-Tibetan"}
         sk{"Slovak"}
         sl{"Slovenian"}
-        sla{"Slavic (Other)"}
+        sla{"Other Slavic"}
         sm{"Samoan"}
         sma{"Southern Sami"}
-        smi{"Sami languages (Other)"}
+        smi{"Other Sami languages"}
         smj{"Lule Sami"}
         smn{"Inari Sami"}
         sms{"Skolt Sami"}
@@ -1782,7 +1797,7 @@ en{
         srn{"Sranan Tongo"}
         srr{"Serer"}
         ss{"Swati"}
-        ssa{"Nilo-Saharan (Other)"}
+        ssa{"Other Nilo-Saharan"}
         st{"Southern Sotho"}
         su{"Sundanese"}
         suk{"Sukuma"}
@@ -1792,7 +1807,7 @@ en{
         sw{"Swahili"}
         syr{"Syriac"}
         ta{"Tamil"}
-        tai{"Tai (Other)"}
+        tai{"Other Tai"}
         te{"Telugu"}
         tem{"Timne"}
         ter{"Tereno"}
@@ -1809,8 +1824,8 @@ en{
         tli{"Tlingit"}
         tmh{"Tamashek"}
         tn{"Tswana"}
-        to{"Tonga (Tonga Islands)"}
-        tog{"Tonga (Nyasa)"}
+        to{"Tonga"}
+        tog{"Nyasa Tonga"}
         tpi{"Tok Pisin"}
         tr{"Turkish"}
         ts{"Tsonga"}
@@ -1818,7 +1833,7 @@ en{
         tt{"Tatar"}
         tum{"Tumbuka"}
         tup{"Tupi languages"}
-        tut{"Altaic (Other)"}
+        tut{"Other Altaic"}
         tvl{"Tuvalu"}
         tw{"Twi"}
         ty{"Tahitian"}
@@ -1854,6 +1869,8 @@ en{
         zap{"Zapotec"}
         zen{"Zenaga"}
         zh{"Chinese"}
+        zh_Hans{"Simplified Chinese"}
+        zh_Hant{"Traditional Chinese"}
         znd{"Zande"}
         zu{"Zulu"}
         zun{"Zuni"}
@@ -1865,7 +1882,7 @@ en{
     }
     NumberPatterns{
         "#,##0.###",
-        "¤#,##0.00",
+        "¤#,##0.00;(¤#,##0.00)",
         "#,##0%",
         "#E0",
     }
@@ -1889,14 +1906,14 @@ en{
         Copt{"Coptic"}
         Cprt{"Cypriot"}
         Cyrl{"Cyrillic"}
-        Cyrs{"Cyrillic (Old Church Slavonic variant)"}
+        Cyrs{"Old Church Slavonic Cyrillic"}
         Deva{"Devanagari"}
         Dsrt{"Deseret"}
         Egyd{"Egyptian demotic"}
         Egyh{"Egyptian hieratic"}
         Egyp{"Egyptian hieroglyphs"}
         Ethi{"Ethiopic"}
-        Geok{"Khutsuri (Asomtavruli and Nuskhuri)"}
+        Geok{"Georgian Khutsuri"}
         Geor{"Georgian"}
         Glag{"Glagolitic"}
         Goth{"Gothic"}
@@ -1913,7 +1930,7 @@ en{
         Hmng{"Pahawh Hmong"}
         Hrkt{"Katakana or Hiragana"}
         Hung{"Old Hungarian"}
-        Inds{"Indus (Harappan)"}
+        Inds{"Indus"}
         Ital{"Old Italic"}
         Java{"Javanese"}
         Jpan{"Japanese"}
@@ -1924,10 +1941,10 @@ en{
         Knda{"Kannada"}
         Lana{"Lanna"}
         Laoo{"Lao"}
-        Latf{"Latin (Fraktur variant)"}
-        Latg{"Latin (Gaelic variant)"}
+        Latf{"Fraktur Latin"}
+        Latg{"Gaelic Latin"}
         Latn{"Latin"}
-        Lepc{"Lepcha (Róng)"}
+        Lepc{"Lepcha"}
         Limb{"Limbu"}
         Lina{"Linear A"}
         Linb{"Linear B"}
@@ -1938,6 +1955,8 @@ en{
         Mero{"Meroitic"}
         Mlym{"Malayalam"}
         Mong{"Mongolian"}
+        Moon{"Moon"}
+        Mtei{"Meitei Mayek"}
         Mymr{"Myanmar"}
         Nkoo{"N’Ko"}
         Ogam{"Ogham"}
@@ -1961,16 +1980,16 @@ en{
         Sund{"Sundanese"}
         Sylo{"Syloti Nagri"}
         Syrc{"Syriac"}
-        Syre{"Syriac (Estrangelo variant)"}
-        Syrj{"Syriac (Western variant)"}
-        Syrn{"Syriac (Eastern variant)"}
+        Syre{"Estrangelo Syriac"}
+        Syrj{"Western Syriac"}
+        Syrn{"Eastern Syriac"}
         Tagb{"Tagbanwa"}
         Tale{"Tai Le"}
         Talu{"New Tai Lue"}
         Taml{"Tamil"}
         Telu{"Telugu"}
         Teng{"Tengwar"}
-        Tfng{"Tifinagh (Berber)"}
+        Tfng{"Tifinagh"}
         Tglg{"Tagalog"}
         Thaa{"Thaana"}
         Thai{"Thai"}
@@ -1996,9 +2015,9 @@ en{
             japanese{"Japanese Calendar"}
         }
         collation{
-            big5han{"Traditional Chinese (Big5)"}
+            big5han{"Traditional Chinese - Big5"}
             direct{"Direct Order"}
-            gb2312han{"Simplified Chinese (GB2312)"}
+            gb2312han{"Simplified Chinese - GB2312"}
             phonebook{"Phonebook Order"}
             pinyin{"Pinyin Order"}
             stroke{"Stroke Order"}
@@ -2011,12 +2030,15 @@ en{
         AREVELA{"Eastern Armenian"}
         AREVMDA{"Western Armenian"}
         BOONT{"Boontling"}
+        FONIPA{"IPA Phonetics"}
+        FONUPA{"UPA Phonetics"}
         GAULISH{"Gaulish"}
         GUOYU{"Mandarin or Standard Chinese"}
         HAKKA{"Hakka"}
         LOJBAN{"Lojban"}
+        MONOTON{"Monotonic"}
         NEDIS{"Natisone dialect"}
-        POLYTONI{"Polytonic"}
+        POLYTON{"Polytonic"}
         POSIX{"Computer"}
         REVISED{"Revised Orthography"}
         ROZAJ{"Resian"}
@@ -2024,7 +2046,7 @@ en{
         SCOUSE{"Scouse"}
         XIANG{"Xiang or Hunanese"}
     }
-    Version{"1.113"}
+    Version{"1.136"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -2045,6 +2067,7 @@ en{
                 Md{"M/d"}
                 mmss{"mm:ss"}
                 yyMM{"MM/yy"}
+                yyQ{"Q yy"}
                 yyQQQQ{"QQQQ yy"}
                 yyyyMMM{"MMM yyyy"}
             }
@@ -2153,6 +2176,12 @@ en{
             }
             quarters{
                 format{
+                    abbreviated{
+                        "Q1",
+                        "2nd quarter",
+                        "Q3",
+                        "Q4",
+                    }
                     wide{
                         "1st quarter",
                         "2nd quarter",
@@ -2164,120 +2193,215 @@ en{
         }
     }
     zoneStrings{
-        "America:Anchorage"{
-            ec{"Anchorage"}
-            ld{"Alaska Daylight Time"}
-            lg{"Alaska Time"}
-            ls{"Alaska Standard Time"}
-            sg{"AKT"}
-            ss{"AKST"}
+        "America:Asuncion"{
+            ec{"Asuncion"}
+            ld{"Paraguay Summer Time"}
+            ls{"Paraguay Time"}
+            sd{"PYST"}
+            ss{"PYT"}
         }
-        "America:Chicago"{
-            ec{"Chicago"}
-            ld{"Central Daylight Time"}
-            lg{"Central Time"}
-            ls{"Central Standard Time"}
-            sd{"CDT"}
-            sg{"CT"}
-            ss{"CST"}
+        "America:Bogota"{
+            ec{"Bogota"}
+            ld{"Colombia Summer Time"}
+            ls{"Colombia Time"}
+            sd{"COST"}
+            ss{"COT"}
         }
-        "America:Denver"{
-            ec{"Denver"}
-            ld{"Mountain Daylight Time"}
-            lg{"Mountain Time"}
-            ls{"Mountain Standard Time"}
-            sd{"MDT"}
-            sg{"MT"}
-            ss{"MST"}
+        "America:Caracas"{
+            ec{"Caracas"}
+            ls{"Venezuela Time"}
+            ss{"VET"}
         }
-        "America:Edmonton"{
-            ec{"Edmonton"}
-            ld{"Mountain Daylight Time (CA)"}
-            lg{"Mountain Time (CA)"}
-            ls{"Mountain Standard Time (CA)"}
-            sd{"MDT (CA)"}
-            sg{"MT (CA)"}
-            ss{"MST (CA)"}
+        "America:Cayenne"{
+            ec{"Cayenne"}
+            ls{"French Guiana Time"}
+            ss{"GFT"}
         }
-        "America:Halifax"{
-            ec{"Halifax"}
-            ld{"Atlantic Daylight Time"}
-            lg{"Atlantic Time"}
-            ls{"Atlantic Standard Time"}
-            sd{"ADT"}
-            sg{"AT"}
-            ss{"AST"}
+        "America:Guyana"{
+            ec{"Guyana"}
+            ls{"Guyana Time"}
+            ss{"GYT"}
         }
-        "America:Los_Angeles"{
-            ec{"Los Angeles"}
-            ld{"Pacific Daylight Time"}
-            lg{"Pacific Time"}
-            ls{"Pacific Standard Time"}
-            sd{"PDT"}
-            sg{"PT"}
-            ss{"PST"}
+        "America:Havana"{
+            ec{"Havana"}
+            ld{"Cuba Daylight Time"}
+            lg{"Cuba Time"}
+            ls{"Cuba Standard Time"}
+            sd{"CDT (Cuba)"}
+            ss{"CST (Cuba)"}
         }
-        "America:Montreal"{
-            ec{"Montreal"}
-            ld{"Eastern Daylight Time (CA)"}
-            lg{"Eastern Time (CA)"}
-            ls{"Eastern Standard Time (CA)"}
-            sd{"EDT (CA)"}
-            sg{"ET (CA)"}
-            ss{"EST (CA)"}
+        "America:La_Paz"{
+            ec{"La Paz"}
+            ls{"Bolivia Time"}
+            ss{"BOT"}
         }
-        "America:New_York"{
-            ec{"New York"}
-            ld{"Eastern Daylight Time"}
-            lg{"Eastern Time"}
-            ls{"Eastern Standard Time"}
-            sd{"EDT"}
-            sg{"ET"}
-            ss{"EST"}
+        "America:Lima"{
+            ec{"Lima"}
+            ld{"Peru Summer Time"}
+            ls{"Peru Time"}
+            sd{"PEST"}
+            ss{"PET"}
+        }
+        "America:Montevideo"{
+            ec{"Montevideo"}
+            ld{"Uruguay Summer Time"}
+            ls{"Uruguay Time"}
+            sd{"UYST"}
+            ss{"UYT"}
+        }
+        "America:Noronha"{
+            ec{"Noronha"}
+            ld{"Fernando de Noronha Summer Time"}
+            ls{"Fernando de Noronha Time"}
+            sd{"FNST"}
+            ss{"FNT"}
         }
         "America:St_Johns"{
             ec{"St. John’s"}
-            ld{"Newfoundland Daylight Time"}
-            lg{"Newfoundland Time"}
-            ls{"Newfoundland Standard Time"}
-            sd{"NDT"}
-            sg{"NT"}
-            ss{"NST"}
         }
-        "America:Vancouver"{
-            ec{"Vancouver"}
-            ld{"Pacific Daylight Time (CA)"}
-            lg{"Pacific Time (CA)"}
-            ls{"Pacific Standard Time (CA)"}
-            sd{"PDT (CA)"}
-            sg{"PT (CA)"}
-            ss{"PST (CA)"}
+        "Antarctica:Davis"{
+            ec{"Davis"}
+            ls{"Davis Time"}
+            ss{"DAVT"}
         }
-        "America:Winnipeg"{
-            ec{"Winnipeg"}
-            ld{"Central Daylight Time (CA)"}
-            lg{"Central Time (CA)"}
-            ls{"Central Standard Time (CA)"}
-            sd{"CDT (CA)"}
-            sg{"CT (CA)"}
-            ss{"CST (CA)"}
+        "Antarctica:DumontDUrville"{
+            ec{"DumontDUrville"}
+            ls{"Dumont-d'Urville Time"}
+            ss{"DDUT"}
         }
-        "Asia:Jerusalem"{
-            ec{"Jerusalem"}
-            ld{"Israel Daylight Time"}
-            ls{"Israel Standard Time"}
+        "Antarctica:Mawson"{
+            ec{"Mawson"}
+            ls{"Mawson Time"}
+            ss{"MAWT"}
         }
-        "Asia:Shanghai"{
-            ec{"Shanghai"}
-            ld{"China Daylight Time"}
-            ls{"China Standard Time"}
+        "Antarctica:Rothera"{
+            ec{"Rothera"}
+            ls{"Rothera Time"}
+            ss{"ROTT"}
+        }
+        "Antarctica:Syowa"{
+            ec{"Syowa"}
+            ls{"Syowa Time"}
+            ss{"SYOT"}
+        }
+        "Antarctica:Vostok"{
+            ec{"Vostok"}
+            ls{"Vostok Time"}
+            ss{"VOST"}
+        }
+        "Asia:Anadyr"{
+            ec{"Anadyr"}
+            ld{"Anadyr Summer Time"}
+            ls{"Anadyr Time"}
+            sd{"ANAST"}
+            ss{"ANAT"}
+        }
+        "Asia:Brunei"{
+            ec{"Brunei"}
+            ls{"Brunei Darussalam Time"}
+            ss{"BNT"}
+        }
+        "Asia:Hong_Kong"{
+            ec{"Hong Kong"}
+            ld{"Hong Kong Summer Time"}
+            ls{"Hong Kong Time"}
+            sd{"HKST"}
+            ss{"HKT"}
+        }
+        "Asia:Hovd"{
+            ec{"Hovd"}
+            ld{"Hovd Summer Time"}
+            ls{"Hovd Time"}
+            sd{"HOVST"}
+            ss{"HOVT"}
+        }
+        "Asia:Irkutsk"{
+            ec{"Irkutsk"}
+            ld{"Irkutsk Summer Time"}
+            ls{"Irkutsk Time"}
+            sd{"IRKST"}
+            ss{"IRKT"}
+        }
+        "Asia:Kabul"{
+            ec{"Kabul"}
+            ls{"Afghanistan Time"}
+            ss{"AFT"}
+        }
+        "Asia:Kamchatka"{
+            ec{"Kamchatka"}
+            ld{"Petropavlovsk-Kamchatski Summer Time"}
+            ls{"Petropavlovsk-Kamchatski Time"}
+            sd{"PETST"}
+            ss{"PETT"}
+        }
+        "Asia:Katmandu"{
+            ec{"Katmandu"}
+            ls{"Nepal Time"}
+            ss{"NPT"}
+        }
+        "Asia:Krasnoyarsk"{
+            ec{"Krasnoyarsk"}
+            ld{"Krasnoyarsk Summer Time"}
+            ls{"Krasnoyarsk Time"}
+            sd{"KRAST"}
+            ss{"KRAT"}
+        }
+        "Asia:Kuala_Lumpur"{
+            ec{"Kuala Lumpur"}
+            ls{"Malaysia Time"}
+            ss{"MYT"}
+        }
+        "Asia:Magadan"{
+            ec{"Magadan"}
+            ld{"Magadan Summer Time"}
+            ls{"Magadan Time"}
+            sd{"MAGST"}
+            ss{"MAGT"}
+        }
+        "Asia:Manila"{
+            ec{"Manila"}
+            ld{"Philippine Summer Time"}
+            ls{"Philippine Time"}
+            sd{"PHST"}
+            ss{"PHT"}
+        }
+        "Asia:Novosibirsk"{
+            ec{"Novosibirsk"}
+            ld{"Novosibirsk Summer Time"}
+            ls{"Novosibirsk Time"}
+            sd{"NOVST"}
+            ss{"NOVT"}
+        }
+        "Asia:Omsk"{
+            ec{"Omsk"}
+            ld{"Omsk Summer Time"}
+            ls{"Omsk Time"}
+            sd{"OMSST"}
+            ss{"OMST"}
+        }
+        "Asia:Rangoon"{
+            ec{"Rangoon"}
+            ls{"Myanmar Time"}
+            ss{"MMT"}
+        }
+        "Asia:Sakhalin"{
+            ec{"Sakhalin"}
+            ld{"Sakhalin Summer Time"}
+            ls{"Sakhalin Time"}
+            sd{"SAKST"}
+            ss{"SAKT"}
         }
         "Asia:Singapore"{
             ec{"Singapore"}
-            ld{"Singapore Standard Time"}
             ls{"Singapore Standard Time"}
-            sd{"SST"}
-            ss{"SST"}
+            ss{"SGT"}
+        }
+        "Asia:Tehran"{
+            ec{"Tehran"}
+            ld{"Iran Daylight Time"}
+            ls{"Iran Standard Time"}
+            sd{"IRDT"}
+            ss{"IRST"}
         }
         "Asia:Tokyo"{
             ec{"Tokyo"}
@@ -2286,38 +2410,556 @@ en{
             sd{"JDT"}
             ss{"JST"}
         }
-        "Europe:Bucharest"{
-            ec{"Bucharest"}
-            ld{"Eastern European Daylight Time"}
-            ls{"Eastern European Standard Time"}
-            sd{"EEST"}
-            ss{"EET"}
+        "Asia:Vladivostok"{
+            ec{"Vladivostok"}
+            ld{"Vladivostok Summer Time"}
+            ls{"Vladivostok Time"}
+            sd{"VLAST"}
+            ss{"VLAT"}
+        }
+        "Asia:Yakutsk"{
+            ec{"Yakutsk"}
+            ld{"Yakutsk Summer Time"}
+            ls{"Yakutsk Time"}
+            sd{"YAKST"}
+            ss{"YAKT"}
+        }
+        "Atlantic:Cape_Verde"{
+            ec{"Cape Verde"}
+            ld{"Cape Verde Summer Time"}
+            ls{"Cape Verde Time"}
+            sd{"CVST"}
+            ss{"CVT"}
+        }
+        "Atlantic:South_Georgia"{
+            ec{"South Georgia"}
+            ls{"South Georgia Time"}
+            ss{"GST (S. Georgia)"}
+        }
+        "Atlantic:Stanley"{
+            ec{"Stanley"}
+            ld{"Falkland Islands Summer Time"}
+            ls{"Falkland Islands Time"}
+            sd{"FKST"}
+            ss{"FKT"}
+        }
+        "Australia:Eucla"{
+            ec{"Eucla"}
+            lg{"Central West Time"}
+            ls{"Western Central Standard Time"}
+            sg{"CWT"}
+            ss{"CWST"}
         }
         "Europe:Dublin"{
             ec{"Dublin"}
             ld{"Irish Summer Time"}
-            ls{"Greenwich Mean Time"}
-            sd{"IST"}
-            ss{"GMT"}
+            sd{"IST (Irish)"}
         }
         "Europe:London"{
             ec{"London"}
             ld{"British Summer Time"}
-            ls{"Greenwich Mean Time"}
             sd{"BST"}
+        }
+        "Europe:Volgograd"{
+            ec{"Volgograd"}
+            ld{"Volgograd Summer Time"}
+            ls{"Volgograd Time"}
+            sd{"VOLST"}
+            ss{"VOLT"}
+        }
+        "Indian:Chagos"{
+            ec{"Chagos"}
+            ls{"Indian Ocean Time"}
+            ss{"IOT"}
+        }
+        "Indian:Christmas"{
+            ec{"Christmas"}
+            ls{"Christmas Island Time"}
+            ss{"CXT"}
+        }
+        "Indian:Cocos"{
+            ec{"Cocos"}
+            ls{"Cocos Islands Time"}
+            ss{"CCT"}
+        }
+        "Indian:Kerguelen"{
+            ec{"Kerguelen"}
+            ls{"French Southern and Antarctic Time"}
+            ss{"TFT"}
+        }
+        "Indian:Mahe"{
+            ec{"Mahe"}
+            ls{"Seychelles Time"}
+            ss{"SCT"}
+        }
+        "Indian:Maldives"{
+            ec{"Maldives"}
+            ls{"Maldives Time"}
+            ss{"MVT"}
+        }
+        "Indian:Mauritius"{
+            ec{"Mauritius"}
+            ls{"Mauritius Time"}
+            ss{"MUT"}
+        }
+        "Indian:Reunion"{
+            ec{"Reunion"}
+            ls{"Reunion Time"}
+            ss{"RET"}
+        }
+        "Pacific:Chatham"{
+            ec{"Chatham"}
+            ld{"Chatham Daylight Time"}
+            ls{"Chatham Standard Time"}
+            sd{"CHADT"}
+            ss{"CHAST"}
+        }
+        "Pacific:Easter"{
+            ec{"Easter"}
+            ld{"Easter Island Summer Time"}
+            ls{"Easter Island Time"}
+            sd{"EASST"}
+            ss{"EAST"}
+        }
+        "Pacific:Efate"{
+            ec{"Efate"}
+            ld{"Vanuatu Summer Time"}
+            ls{"Vanuatu Time"}
+            sd{"VUST"}
+            ss{"VUT"}
+        }
+        "Pacific:Enderbury"{
+            ec{"Enderbury"}
+            ls{"Phoenix Islands Time"}
+            ss{"PHOT"}
+        }
+        "Pacific:Fakaofo"{
+            ec{"Fakaofo"}
+            ls{"Tokelau Time"}
+            ss{"TKT"}
+        }
+        "Pacific:Fiji"{
+            ec{"Fiji"}
+            ld{"Fiji Summer Time"}
+            ls{"Fiji Time"}
+            sd{"FJST"}
+            ss{"FJT"}
+        }
+        "Pacific:Funafuti"{
+            ec{"Funafuti"}
+            ls{"Tuvalu Time"}
+            ss{"TVT"}
+        }
+        "Pacific:Gambier"{
+            ec{"Gambier"}
+            ls{"Gambier Time"}
+            ss{"GAMT"}
+        }
+        "Pacific:Guadalcanal"{
+            ec{"Guadalcanal"}
+            ls{"Solomon Islands Time"}
+            ss{"SBT"}
+        }
+        "Pacific:Kiritimati"{
+            ec{"Kiritimati"}
+            ls{"Line Islands Time"}
+            ss{"LINT"}
+        }
+        "Pacific:Kosrae"{
+            ec{"Kosrae"}
+            ls{"Kosrae Time"}
+            ss{"KOST"}
+        }
+        "Pacific:Marquesas"{
+            ec{"Marquesas"}
+            ls{"Marquesas Time"}
+            ss{"MART"}
+        }
+        "Pacific:Nauru"{
+            ec{"Nauru"}
+            ls{"Nauru Time"}
+            ss{"NRT"}
+        }
+        "Pacific:Niue"{
+            ec{"Niue"}
+            ls{"Niue Time"}
+            ss{"NUT"}
+        }
+        "Pacific:Norfolk"{
+            ec{"Norfolk"}
+            ls{"Norfolk Islands Time"}
+            ss{"NFT"}
+        }
+        "Pacific:Noumea"{
+            ec{"Noumea"}
+            ld{"New Caledonia Summer Time"}
+            ls{"New Caledonia Time"}
+            sd{"NCST"}
+            ss{"NCT"}
+        }
+        "Pacific:Palau"{
+            ec{"Palau"}
+            ls{"Palau Time"}
+            ss{"PWT"}
+        }
+        "Pacific:Pitcairn"{
+            ec{"Pitcairn"}
+            ls{"Pitcairn Time"}
+            ss{"PNT"}
+        }
+        "Pacific:Ponape"{
+            ec{"Ponape"}
+            ls{"Ponape Time"}
+            ss{"PONT"}
+        }
+        "Pacific:Port_Moresby"{
+            ec{"Port Moresby"}
+            ls{"Papua New Guinea Time"}
+            ss{"PGT"}
+        }
+        "Pacific:Rarotonga"{
+            ec{"Rarotonga"}
+            ld{"Cook Islands Half Summer Time"}
+            ls{"Cook Islands Time"}
+            sd{"CKHST"}
+            ss{"CKT"}
+        }
+        "Pacific:Tahiti"{
+            ec{"Tahiti"}
+            ls{"Tahiti Time"}
+            ss{"TAHT"}
+        }
+        "Pacific:Tarawa"{
+            ec{"Tarawa"}
+            ls{"Gilbert Islands Time"}
+            ss{"GILT"}
+        }
+        "Pacific:Tongatapu"{
+            ec{"Tongatapu"}
+            ld{"Tonga Summer Time"}
+            ls{"Tonga Time"}
+            sd{"TOST"}
+            ss{"TOT"}
+        }
+        "Pacific:Truk"{
+            ec{"Truk"}
+            ls{"Truk Time"}
+            ss{"TRUT"}
+        }
+        "Pacific:Wake"{
+            ec{"Wake"}
+            ls{"Wake Island Time"}
+            ss{"WAKT"}
+        }
+        "Pacific:Wallis"{
+            ec{"Wallis"}
+            ls{"Wallis and Futuna Time"}
+            ss{"WFT"}
+        }
+        "meta:Acre"{
+            ld{"Acre Summer Time"}
+            ls{"Acre Time"}
+            sd{"ACST"}
+            ss{"ACT"}
+        }
+        "meta:Africa_Central"{
+            ls{"Central Africa Time"}
+            ss{"CAT"}
+        }
+        "meta:Africa_Eastern"{
+            ls{"East Africa Time"}
+            ss{"EAT"}
+        }
+        "meta:Africa_Southern"{
+            ls{"South Africa Standard Time"}
+            ss{"SAST"}
+        }
+        "meta:Africa_Western"{
+            ld{"West Africa Summer Time"}
+            ls{"West Africa Time"}
+            sd{"WAST"}
+            ss{"WAT"}
+        }
+        "meta:Aktyubinsk"{
+            ld{"Aktyubinsk Summer Time"}
+            ls{"Aktyubinsk Time"}
+            sd{"AKTST"}
+            ss{"AKTT"}
+        }
+        "meta:Alaska"{
+            ld{"Alaska Daylight Time"}
+            lg{"Alaska Time"}
+            ls{"Alaska Standard Time"}
+            sd{"AKDT"}
+            sg{"AKT"}
+            ss{"AKST"}
+        }
+        "meta:Alaska_Hawaii"{
+            ld{"Alaska-Hawaii Daylight Time"}
+            ls{"Alaska-Hawaii Standard Time"}
+            sd{"AHDT"}
+            ss{"AHST"}
+        }
+        "meta:Amazon"{
+            ld{"Amazon Summer Time"}
+            ls{"Amazon Time"}
+            sd{"AMST"}
+            ss{"AMT"}
+        }
+        "meta:America_Central"{
+            ld{"Central Daylight Time"}
+            lg{"Central Time"}
+            ls{"Central Standard Time"}
+            sd{"CDT"}
+            sg{"CT"}
+            ss{"CST"}
+        }
+        "meta:America_Eastern"{
+            ld{"Eastern Daylight Time"}
+            lg{"Eastern Time"}
+            ls{"Eastern Standard Time"}
+            sd{"EDT"}
+            sg{"ET"}
+            ss{"EST"}
+        }
+        "meta:America_Mountain"{
+            ld{"Mountain Daylight Time"}
+            lg{"Mountain Time"}
+            ls{"Mountain Standard Time"}
+            sd{"MDT"}
+            sg{"MT"}
+            ss{"MST"}
+        }
+        "meta:America_Pacific"{
+            ld{"Pacific Daylight Time"}
+            lg{"Pacific Time"}
+            ls{"Pacific Standard Time"}
+            sd{"PDT"}
+            sg{"PT"}
+            ss{"PST"}
+        }
+        "meta:Aqtau"{
+            ld{"Aqtau Summer Time"}
+            ls{"Aqtau Time"}
+            sd{"AQTST (Aqtau)"}
+            ss{"AQTT (Aqtau)"}
+        }
+        "meta:Aqtobe"{
+            ld{"Aqtobe Summer Time"}
+            ls{"Aqtobe Time"}
+            sd{"AQTST (Aqtobe)"}
+            ss{"AQTT (Aqtobe)"}
+        }
+        "meta:Arabian"{
+            ld{"Arabian Daylight Time"}
+            lg{"Arabian Time"}
+            ls{"Arabian Standard Time"}
+            sd{"ADT (Arabian)"}
+            ss{"AST (Arabian)"}
+        }
+        "meta:Argentina"{
+            ld{"Argentina Summer Time"}
+            ls{"Argentina Time"}
+            sd{"ARST"}
+            ss{"ART"}
+        }
+        "meta:Argentina_Western"{
+            ls{"Western Argentina Time"}
+            ss{"WART"}
+        }
+        "meta:Armenia"{
+            ld{"Armenia Summer Time"}
+            ls{"Armenia Time"}
+            sd{"AMST (Armenia)"}
+            ss{"AMT (Armenia)"}
+        }
+        "meta:Ashkhabad"{
+            ld{"Ashkhabad Summer Time"}
+            ls{"Ashkhabad Time"}
+            sd{"ASHST"}
+            ss{"ASHT"}
+        }
+        "meta:Atlantic"{
+            ld{"Atlantic Daylight Time"}
+            lg{"Atlantic Time"}
+            ls{"Atlantic Standard Time"}
+            sd{"ADT"}
+            sg{"AT"}
+            ss{"AST"}
+        }
+        "meta:Australia_Central"{
+            ld{"Australian Central Daylight Time"}
+            lg{"Central Australia Time"}
+            ls{"Australian Central Standard Time"}
+            sd{"ACDT"}
+            ss{"ACST"}
+        }
+        "meta:Australia_Eastern"{
+            ld{"Australian Eastern Daylight Time"}
+            lg{"Eastern Australia Time"}
+            ls{"Australian Eastern Standard Time"}
+            sd{"AEDT"}
+            ss{"AEST"}
+        }
+        "meta:Australia_Western"{
+            ld{"Australian Western Daylight Time"}
+            lg{"Western Australia Time"}
+            ls{"Australian Western Standard Time"}
+            sd{"AWDT"}
+            ss{"AWST"}
+        }
+        "meta:Azores"{
+            ld{"Azores Summer Time"}
+            ls{"Azores Time"}
+            sd{"AZOST"}
+            ss{"AZOT"}
+        }
+        "meta:Baku"{
+            ld{"Baku Summer Time"}
+            ls{"Baku Time"}
+            sd{"BAKST"}
+            ss{"BAKT"}
+        }
+        "meta:Bangladesh"{
+            ls{"Bangladesh Time"}
+            ss{"BDT"}
+        }
+        "meta:Bering"{
+            ld{"Bering Daylight Time"}
+            lg{"Bering Time"}
+            ls{"Bering Standard Time"}
+            sd{"BDT (Bering)"}
+            ss{"BST (Bering)"}
+        }
+        "meta:Bhutan"{
+            ls{"Bhutan Time"}
+            ss{"BTT"}
+        }
+        "meta:Borneo"{
+            ld{"Borneo Summer Time"}
+            ls{"Borneo Time"}
+            sd{"BORST"}
+            ss{"BORT"}
+        }
+        "meta:Brasilia"{
+            ld{"Brasilia Summer Time"}
+            ls{"Brasilia Time"}
+            sd{"BRST"}
+            ss{"BRT"}
+        }
+        "meta:Chamorro"{
+            ls{"Chamorro Standard Time"}
+            ss{"ChST"}
+        }
+        "meta:Changbai"{
+            ls{"Changbai Time"}
+            ss{"CHAT"}
+        }
+        "meta:Chile"{
+            ld{"Chile Summer Time"}
+            ls{"Chile Time"}
+            sd{"CLST"}
+            ss{"CLT"}
+        }
+        "meta:China"{
+            ld{"China Daylight Time"}
+            ls{"China Standard Time"}
+            sd{"CDT (China)"}
+            ss{"CST (China)"}
+        }
+        "meta:Choibalsan"{
+            ld{"Choibalsan Summer Time"}
+            ls{"Choibalsan Time"}
+            sd{"CHOST"}
+            ss{"CHOT"}
+        }
+        "meta:Dacca"{
+            ls{"Dacca Time"}
+            ss{"DACT"}
+        }
+        "meta:Dushanbe"{
+            ld{"Dushanbe Summer Time"}
+            ls{"Dushanbe Time"}
+            sd{"DUSST"}
+            ss{"DUST"}
+        }
+        "meta:Dutch_Guiana"{
+            ls{"Dutch Guiana Time"}
+            ss{"NEGT"}
+        }
+        "meta:East_Timor"{
+            ls{"East Timor Time"}
+            ss{"TLT"}
+        }
+        "meta:Ecuador"{
+            ls{"Ecuador Time"}
+            ss{"ECT"}
+        }
+        "meta:Europe_Central"{
+            ld{"Central European Summer Time"}
+            ls{"Central European Time"}
+            sd{"CEST"}
+            ss{"CET"}
+        }
+        "meta:Europe_Eastern"{
+            ld{"Eastern European Summer Time"}
+            ls{"Eastern European Time"}
+            sd{"EEST"}
+            ss{"EET"}
+        }
+        "meta:Europe_Western"{
+            ld{"Western European Summer Time"}
+            ls{"Western European Time"}
+            sd{"WEST"}
+            ss{"WET"}
+        }
+        "meta:Frunze"{
+            ld{"Frunze Summer Time"}
+            ls{"Frunze Time"}
+            sd{"FRUST"}
+            ss{"FRUT"}
+        }
+        "meta:GMT"{
+            ls{"Greenwich Mean Time"}
             ss{"GMT"}
         }
-        "Europe:Paris"{
-            ec{"Paris"}
-            ld{"Central European Daylight Time"}
-            lg{"Central European Time"}
-            ls{"Central European Standard Time"}
-            sd{"CEDT"}
-            sg{"CET"}
-            ss{"CEST"}
+        "meta:Galapagos"{
+            ls{"Galapagos Time"}
+            ss{"GALT"}
         }
-        "Pacific:Honolulu"{
-            ec{"Honolulu"}
+        "meta:Georgia"{
+            ld{"Georgia Summer Time"}
+            ls{"Georgia Time"}
+            sd{"GEST"}
+            ss{"GET"}
+        }
+        "meta:Greenland_Central"{
+            ld{"Central Greenland Summer Time"}
+            ls{"Central Greenland Time"}
+            sd{"CGST"}
+            ss{"CGT"}
+        }
+        "meta:Greenland_Eastern"{
+            ld{"East Greenland Summer Time"}
+            ls{"East Greenland Time"}
+            sd{"EGST"}
+            ss{"EGT"}
+        }
+        "meta:Greenland_Western"{
+            ld{"West Greenland Summer Time"}
+            ls{"West Greenland Time"}
+            sd{"WGST"}
+            ss{"WGT"}
+        }
+        "meta:Guam"{
+            ls{"Guam Standard Time"}
+            ss{"GST (Guam)"}
+        }
+        "meta:Gulf"{
+            ls{"Gulf Standard Time"}
+            ss{"GST"}
+        }
+        "meta:Hawaii"{
             ld{"Hawaii Daylight Time"}
             lg{"Hawaii Time"}
             ls{"Hawaii Standard Time"}
@@ -2325,5 +2967,253 @@ en{
             sg{"HT"}
             ss{"HST"}
         }
+        "meta:Hawaii_Aleutian"{
+            ld{"Hawaii-Aleutian Daylight Time"}
+            lg{"Hawaii-Aleutian Time"}
+            ls{"Hawaii-Aleutian Standard Time"}
+            sd{"HADT"}
+            sg{"HAT"}
+            ss{"HAST"}
+        }
+        "meta:India"{
+            ls{"India Standard Time"}
+            ss{"IST"}
+        }
+        "meta:Indonesia_Central"{
+            ls{"Central Indonesia Time"}
+            ss{"CIT"}
+        }
+        "meta:Indonesia_Eastern"{
+            ls{"Eastern Indonesia Time"}
+            ss{"EIT"}
+        }
+        "meta:Indonesia_Western"{
+            ls{"Western Indonesia Time"}
+            ss{"WIT"}
+        }
+        "meta:Israel"{
+            ld{"Israel Daylight Time"}
+            ls{"Israel Standard Time"}
+            sd{"IDT"}
+            ss{"IST (Israel)"}
+        }
+        "meta:Karachi"{
+            ls{"Karachi Time"}
+            ss{"KART"}
+        }
+        "meta:Kashgar"{
+            ls{"Kashgar Time"}
+            ss{"KAST"}
+        }
+        "meta:Kazakhstan_Eastern"{
+            ls{"East Kazakhstan Standard Time"}
+            ss{"EKST"}
+        }
+        "meta:Kazakhstan_Western"{
+            ls{"West Kazakhstan Standard Time"}
+            ss{"WKST"}
+        }
+        "meta:Kizilorda"{
+            ld{"Kizilorda Summer Time"}
+            ls{"Kizilorda Time"}
+            sd{"KIZST"}
+            ss{"KIZT"}
+        }
+        "meta:Korea"{
+            ld{"Korean Daylight Time"}
+            lg{"Korean Time"}
+            ls{"Korean Standard Time"}
+            sd{"KDT"}
+            ss{"KST"}
+        }
+        "meta:Kuybyshev"{
+            ld{"Kuybyshev Summer Time"}
+            ls{"Kuybyshev Time"}
+            sd{"KUYST"}
+            ss{"KUYT"}
+        }
+        "meta:Kwajalein"{
+            ls{"Kwajalein Time"}
+            ss{"KWAT"}
+        }
+        "meta:Kyrgystan"{
+            ls{"Kyrgystan Time"}
+            ss{"KGT"}
+        }
+        "meta:Lanka"{
+            ls{"Lanka Time"}
+            ss{"LKT"}
+        }
+        "meta:Long_Shu"{
+            ls{"Long-Shu Time"}
+            ss{"LONT"}
+        }
+        "meta:Lord_Howe"{
+            ld{"Lord Howe Daylight Time"}
+            lg{"Lord Howe Time"}
+            ls{"Lord Howe Standard Time"}
+            ss{"LHDT"}
+        }
+        "meta:Macau"{
+            ld{"Macau Summer Time"}
+            ls{"Macau Time"}
+            sd{"MOST"}
+            ss{"MOT"}
+        }
+        "meta:Malaya"{
+            ls{"Malaya Time"}
+            ss{"MALT"}
+        }
+        "meta:Malaysia"{
+            ls{"Malaysia Time"}
+            ss{"MYT"}
+        }
+        "meta:Marshall_Islands"{
+            ls{"Marshall Islands Time"}
+            ss{"MHT"}
+        }
+        "meta:Mongolia"{
+            ld{"Ulan Bator Summer Time"}
+            ls{"Ulan Bator Time"}
+            sd{"ULAST"}
+            ss{"ULAT"}
+        }
+        "meta:New_Zealand"{
+            ld{"New Zealand Daylight Time"}
+            lg{"New Zealand Time"}
+            ls{"New Zealand Standard Time"}
+            sd{"NZDT"}
+            ss{"NZST"}
+        }
+        "meta:Newfoundland"{
+            ld{"Newfoundland Daylight Time"}
+            lg{"Newfoundland Time"}
+            ls{"Newfoundland Standard Time"}
+            sd{"NDT"}
+            sg{"NT"}
+            ss{"NST"}
+        }
+        "meta:North_Mariana"{
+            ls{"North Mariana Islands Time"}
+            ss{"MPT"}
+        }
+        "meta:Pakistan"{
+            ld{"Pakistan Summer Time"}
+            ls{"Pakistan Time"}
+            sd{"PKST"}
+            ss{"PKT"}
+        }
+        "meta:Pierre_Miquelon"{
+            ld{"Pierre and Miquelon Daylight Time"}
+            lg{"Pierre and Miquelon Time"}
+            ls{"Pierre and Miquelon Standard Time"}
+            sd{"PMDT"}
+            ss{"PMST"}
+        }
+        "meta:Qyzylorda"{
+            ld{"Qyzylorda Summer Time"}
+            ls{"Qyzylorda Time"}
+            sd{"QYZST"}
+            ss{"QYZT"}
+        }
+        "meta:Samara"{
+            ld{"Samara Summer Time"}
+            ls{"Samara Time"}
+            sd{"SAMST"}
+            ss{"SAMT"}
+        }
+        "meta:Samarkand"{
+            ld{"Samarkand Summer Time"}
+            ls{"Samarkand Time"}
+            sd{"SAMST (Samarkand)"}
+            ss{"SAMT (Samarkand)"}
+        }
+        "meta:Samoa"{
+            ls{"Samoa Standard Time"}
+            ss{"SST"}
+        }
+        "meta:Shevchenko"{
+            ld{"Shevchenko Summer Time"}
+            ls{"Shevchenko Time"}
+            sd{"SHEST"}
+            ss{"SHET"}
+        }
+        "meta:Suriname"{
+            ls{"Suriname Time"}
+            ss{"SRT"}
+        }
+        "meta:Sverdlovsk"{
+            ld{"Sverdlovsk Summer Time"}
+            ls{"Sverdlovsk Time"}
+            sd{"SVEST"}
+            ss{"SVET"}
+        }
+        "meta:Tajikistan"{
+            ls{"Tajikistan Time"}
+            ss{"TJT"}
+        }
+        "meta:Tashkent"{
+            ld{"Tashkent Summer Time"}
+            ls{"Tashkent Time"}
+            sd{"TASST"}
+            ss{"TAST"}
+        }
+        "meta:Tbilisi"{
+            ld{"Tbilisi Summer Time"}
+            ls{"Tbilisi Time"}
+            sd{"TBIST"}
+            ss{"TBIT"}
+        }
+        "meta:Turkey"{
+            ld{"Turkey Summer Time"}
+            ls{"Turkey Time"}
+            sd{"TRST"}
+            ss{"TRT"}
+        }
+        "meta:Turkmenistan"{
+            ld{"Turkmenistan Summer Time"}
+            ls{"Turkmenistan Time"}
+            sd{"TMST"}
+            ss{"TMT"}
+        }
+        "meta:Uralsk"{
+            ld{"Ural'sk Summer Time"}
+            ls{"Ural'sk Time"}
+            sd{"URAST"}
+            ss{"URAT"}
+        }
+        "meta:Urumqi"{
+            ls{"Urumqi Time"}
+            ss{"URUT"}
+        }
+        "meta:Uzbekistan"{
+            ld{"Uzbekistan Summer Time"}
+            ls{"Uzbekistan Time"}
+            sd{"UZST"}
+            ss{"UZT"}
+        }
+        "meta:Yekaterinburg"{
+            ld{"Yekaterinburg Summer Time"}
+            ls{"Yekaterinburg Time"}
+            sd{"YEKST"}
+            ss{"YEKT"}
+        }
+        "meta:Yerevan"{
+            ld{"Yerevan Summer Time"}
+            ls{"Yerevan Time"}
+            sd{"YERST"}
+            ss{"YERT"}
+        }
+        "meta:Yukon"{
+            ld{"Yukon Daylight Time"}
+            lg{"Yukon Time"}
+            ls{"Yukon Standard Time"}
+            sd{"YDT"}
+            sg{"YT"}
+            ss{"YST"}
+        }
+        gmtFormat{"GMT{0}"}
+        hourFormat{"+HH:mm;-HH:mm"}
+        regionFormat{"{0} Time"}
     }
 }

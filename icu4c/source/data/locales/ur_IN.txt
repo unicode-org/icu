@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ur_IN.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ur_IN.xml
  */
 ur_IN{
-    Version{"1.7"}
+    Version{"1.10"}
     calendar{
         gregorian{
             weekend:intvector{

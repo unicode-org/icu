@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/nn.xml
@@ -801,7 +801,7 @@ nn{
     }
     NumberPatterns{
         "#,##0.###",
-        "¤ #,##0.00",
+        "#,##0.00 ¤",
         "#,##0 %",
         "#E0",
     }
@@ -937,11 +937,11 @@ nn{
         POLYTONI{"polytonisk"}
         REVISED{"revidert ortografi"}
     }
-    Version{"1.61"}
+    Version{"1.68"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "'kl. 'HH.mm.ss z",
+                "'kl'. HH.mm.ss v",
                 "HH.mm.ss z",
                 "HH.mm.ss",
                 "HH.mm",
@@ -956,6 +956,7 @@ nn{
                 MMdd{"dd.MM"}
                 mmss{"mm.ss"}
                 yyMM{"MM.yy"}
+                yyQ{"Q yy"}
                 yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/az.xml
@@ -32,6 +32,14 @@ az{
     ExemplarCharacters{"[a-c ç d e ə f g ğ h i İ ı j-o ö p-s ş t u ü v x-z]"}
     Languages{
         az{"azərbaycanca"}
+        de{"almanca"}
+        en{"ingiliscə"}
+        es{"ispanca"}
+        fr{"fransızca"}
+        ja{"yaponca"}
+        pt{"portuqalca"}
+        ru{"rusca"}
+        zh{"çincə"}
     }
     LocaleScript{
         "Latn",
@@ -50,9 +58,27 @@ az{
         "NaN",
         "+",
     }
-    Version{"1.39"}
+    Version{"1.44"}
     calendar{
         gregorian{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
+            DateTimePatterns{
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, yyyy MMMM dd",
+                "yyyy MMMM d",
+                "yyyy MMM d",
+                "yy/MM/dd",
+                "{1} {0}",
+            }
+            availableFormats{
+                yyQ{"Q yy"}
+            }
             dayNames{
                 format{
                     abbreviated{
@@ -72,6 +98,17 @@ az{
                         "cümə axşamı",
                         "cümə axşamı",
                         "şənbə",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
                     }
                 }
             }
@@ -116,6 +153,22 @@ az{
                         "Dekabr",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
             }
             quarters{
                 format{
@@ -140,5 +193,10 @@ az{
         alternateQuotationStart{"“"}
         quotationEnd{"’"}
         quotationStart{"‘"}
+    }
+    zoneStrings{
+        gmtFormat{"GMT{0}"}
+        hourFormat{"+HH:mm;-HH:mm"}
+        regionFormat{"{0} Time"}
     }
 }

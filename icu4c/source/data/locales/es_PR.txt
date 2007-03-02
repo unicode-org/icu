@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/es_PR.xml
@@ -8,33 +8,23 @@
 // ***************************************************************************
 es_PR{
     Currencies{
+        MXN{
+            "MEX$",
+            "peso mexicano",
+        }
         USD{
             "$",
             "Dólar Americano",
         }
     }
-    NumberElements{
-        ".",
-        ",",
-        ";",
-        "%",
-        "0",
-        "#",
-        "-",
-        "E",
-        "‰",
-        "∞",
-        "NaN",
-        "+",
-    }
-    Version{"1.43"}
+    Version{"1.48"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "hh:mm:ss a z",
-                "hh:mm:ss a z",
-                "hh:mm:ss a",
-                "hh:mm a",
+                "hh:mm:ss a v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
                 "EEEE d' de 'MMMM' de 'yyyy",
                 "d' de 'MMMM' de 'yyyy",
                 "MM/dd/yyyy",

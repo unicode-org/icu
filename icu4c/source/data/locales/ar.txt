@@ -561,7 +561,7 @@ ar{
             "فرنك فرنسى",
         }
         GBP{
-            "£",
+            "UK£",
             "جنيه سترليني",
         }
         GEL{
@@ -669,7 +669,7 @@ ar{
             "كرونه أيسلندى",
         }
         ITL{
-            "₤",
+            "IT₤",
             "ليرة ايطالية",
         }
         JMD{
@@ -681,7 +681,7 @@ ar{
             "دينار أردنى",
         }
         JPY{
-            "¥",
+            "JP¥",
             "ين ياباني",
         }
         KES{
@@ -1069,7 +1069,7 @@ ar{
             "شلن أوغندى",
         }
         USD{
-            "$",
+            "US$",
             "دولار أمريكي",
         }
         UYP{
@@ -1708,7 +1708,6 @@ ar{
         Hrkt{"الكتكانا أو الهيراجانا"}
         Hung{"المجرية القديمة"}
         Inds{"اندس - هارابان"}
-        Ital{"اللأيطالية القديمة"}
         Java{"الجاوية"}
         Kali{"الكياه لى"}
         Kana{"الكتكانا"}
@@ -1791,7 +1790,7 @@ ar{
     Variants{
         NEDIS{"لهجة ناتيسون"}
     }
-    Version{"1.68"}
+    Version{"1.74"}
     calendar{
         buddhist{
             eras{
@@ -1804,18 +1803,18 @@ ar{
             monthNames{
                 format{
                     abbreviated{
-                        "توت",
-                        "Baba",
-                        "هاتور",
+                        "Tout",
+                        "بابه",
+                        "Hator",
                         "كياهك",
-                        "Toba",
+                        "طوبة",
                         "أمشير",
                         "برامهات",
                         "Baramouda",
-                        "بشنس",
-                        "Paona",
-                        "أبيب",
-                        "Mesra",
+                        "Bashans",
+                        "بؤونة",
+                        "Epep",
+                        "مسرى",
                         "نسيئ",
                     }
                     wide{
@@ -1840,18 +1839,18 @@ ar{
             monthNames{
                 format{
                     abbreviated{
-                        "مسكريم",
-                        "Tekemt",
-                        "هدار",
+                        "Meskerem",
+                        "تكمت",
+                        "Hedar",
                         "تهساس",
-                        "Ter",
+                        "تر",
                         "يكتت",
                         "مجابيت",
                         "Miazia",
-                        "جنبت",
-                        "Sene",
-                        "هامل",
-                        "Nehasse",
+                        "Genbot",
+                        "سين",
+                        "Hamle",
+                        "نهاس",
                         "باجمن",
                     }
                     wide{
@@ -1878,7 +1877,7 @@ ar{
                 "م",
             }
             DateTimePatterns{
-                "z h:mm:ss a",
+                "v h:mm:ss a",
                 "h:mm:ss a",
                 "h:mm:ss a",
                 "h:mm a",
@@ -1891,6 +1890,7 @@ ar{
             availableFormats{
                 MMMMd{"d MMMM"}
                 MMdd{"dd/MM"}
+                yyQ{"Q yy"}
                 yyyyMM{"MM/yyyy"}
                 yyyyMMMM{"MMMM, yyyy"}
             }
@@ -2034,18 +2034,18 @@ ar{
             monthNames{
                 format{
                     abbreviated{
-                        "تشري",
+                        "Tishri",
                         "مرحشوان",
-                        "كيسلو",
+                        "Kislev",
                         "طيست",
                         "شباط",
                         "آذار الأول",
                         "آذار الثاني",
                         "Nisan",
                         "Iyar",
-                        "Sivan",
-                        "تموز",
-                        "Av",
+                        "سيوان",
+                        "Tamuz",
+                        "آب",
                         "أيلول",
                     }
                     wide{
@@ -2099,18 +2099,18 @@ ar{
             monthNames{
                 format{
                     abbreviated{
-                        "فروردین",
+                        "Farvardin",
                         "أذربيهشت",
-                        "خرداد",
+                        "Khordad",
                         "تیر",
                         "مرداد",
                         "شهریار",
                         "مهر",
                         "Aban",
                         "Azar",
-                        "Dey",
-                        "بهمن",
-                        "Esfand",
+                        "دي",
+                        "Bahman",
+                        "اسفندار",
                     }
                     wide{
                         "فروردین",
@@ -2129,12 +2129,6 @@ ar{
                 }
             }
         }
-    }
-    delimiters{
-        alternateQuotationEnd{"‘"}
-        alternateQuotationStart{"’"}
-        quotationEnd{"“"}
-        quotationStart{"”"}
     }
     layout{
         characters{"right-to-left"}

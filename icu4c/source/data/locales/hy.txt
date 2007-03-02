@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/hy.xml
@@ -230,7 +230,7 @@ hy{
         "#0%",
         "#E0",
     }
-    Version{"1.49"}
+    Version{"1.54"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -238,7 +238,7 @@ hy{
                 "Եր․",
             }
             DateTimePatterns{
-                "HH:mm:ss z",
+                "HH:mm:ss v",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -251,6 +251,7 @@ hy{
             availableFormats{
                 MMMMdd{"MMMM dd"}
                 MMdd{"MM/dd"}
+                yyQ{"Q yy"}
             }
             dayNames{
                 format{
@@ -273,11 +274,22 @@ hy{
                         "Շաբաթ",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                    }
+                }
             }
             eras{
                 abbreviated{
-                    "Յ․Տ․",
-                    "Ն․Ք․",
+                    "Ք․Ա․",
+                    "Ք․Ե․",
                 }
             }
             monthNames{
@@ -309,6 +321,38 @@ hy{
                         "Հոկտեմբեր",
                         "Նոյեմբեր",
                         "Դեկտեմբեր",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                    wide{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
                     }
                 }
             }

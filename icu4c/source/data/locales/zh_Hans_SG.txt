@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2006 International Business Machines
+// * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh_Hans_SG.xml
@@ -19,13 +19,7 @@ zh_Hans_SG{
         root{"根 源"}
         sh{"塞尔维亚克罗地亚文"}
     }
-    NumberPatterns{
-        "#,##0.###",
-        "¤#,##0.00",
-        "#,##0%",
-        "#E0",
-    }
-    Version{"1.32"}
+    Version{"1.40"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -46,9 +40,52 @@ zh_Hans_SG{
             availableFormats{
                 MMMMdd{"dd MMMM"}
                 MMdd{"dd/MM"}
+                Md{"M'月'd'日'"}
                 yyMM{"MM/yy"}
+                yyyyM{"yyyy'年'M'月'"}
                 yyyyMMMM{"MMMM yyyy"}
             }
+        }
+    }
+    zoneStrings{
+        "Antarctica:Palmer"{
+            ec{"帕默"}
+        }
+        "Asia:Aqtau"{
+            ec{"阿克套"}
+        }
+        "Asia:Kamchatka"{
+            ec{"堪察加半岛"}
+        }
+        "Asia:Novosibirsk"{
+            ec{"新西伯利亚"}
+        }
+        "Asia:Sakhalin"{
+            ec{"库页岛"}
+        }
+        "Atlantic:Azores"{
+            ec{"亚速尔群岛"}
+        }
+        "Atlantic:Canary"{
+            ec{"加那利群岛"}
+        }
+        "Atlantic:Jan_Mayen"{
+            ec{"扬马延岛"}
+        }
+        "Atlantic:Madeira"{
+            ec{"马德拉群岛"}
+        }
+        "Pacific:Easter"{
+            ec{"复活节岛"}
+        }
+        "Pacific:Kwajalein"{
+            ec{"卡瓦加兰"}
+        }
+        "Pacific:Wake"{
+            ec{"威克岛"}
+        }
+        "Pacific:Yap"{
+            ec{"雅浦岛"}
         }
     }
 }

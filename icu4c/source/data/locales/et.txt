@@ -259,7 +259,7 @@ et{
                 /**
                  * Duplicated from NumberPatterns resource
                  */
-                "¤ #,##0.00",
+                "#,##0.00 ¤",
                 ".",
                 /**
                  * Duplicated from NumberElements resource
@@ -270,36 +270,36 @@ et{
     }
     ExemplarCharacters{"[a-s š z ž t-w õ ä ö ü x y]"}
     Languages{
-        ar{"Araabia"}
-        bg{"Bulgaaria"}
-        cs{"Tiehhi"}
-        da{"Taani"}
-        de{"Saksa"}
-        el{"Kreeka"}
-        en{"Inglise"}
-        es{"Hispaania"}
-        et{"Eesti"}
-        fi{"Soome"}
-        fr{"Prantsuse"}
-        he{"Heebrea"}
-        hr{"Horvaadi"}
-        hu{"Ungari"}
-        it{"Itaalia"}
-        ja{"Jaapani"}
-        ko{"Korea"}
-        lt{"Leedu"}
-        lv{"Läti"}
-        nl{"Hollandi"}
-        no{"Norra"}
-        pl{"Poola"}
-        pt{"Portugali"}
-        ro{"Rumeenia"}
-        ru{"Vene"}
-        sk{"Slovaki"}
-        sl{"Sloveeni"}
-        sv{"Rootsi"}
-        tr{"Türgi"}
-        zh{"Hiina"}
+        ar{"araabia"}
+        bg{"bulgaaria"}
+        cs{"tiehhi"}
+        da{"taani"}
+        de{"saksa"}
+        el{"kreeka"}
+        en{"inglise"}
+        es{"hispaania"}
+        et{"eesti"}
+        fi{"soome"}
+        fr{"prantsuse"}
+        he{"heebrea"}
+        hr{"horvaadi"}
+        hu{"ungari"}
+        it{"itaalia"}
+        ja{"jaapani"}
+        ko{"korea"}
+        lt{"leedu"}
+        lv{"läti"}
+        nl{"hollandi"}
+        no{"norra"}
+        pl{"poola"}
+        pt{"portugali"}
+        ro{"rumeenia"}
+        ru{"vene"}
+        sk{"slovaki"}
+        sl{"sloveeni"}
+        sv{"rootsi"}
+        tr{"türgi"}
+        zh{"hiina"}
     }
     LocaleScript{
         "Latn",
@@ -318,11 +318,17 @@ et{
         "NaN",
         "+",
     }
-    Version{"1.56"}
+    NumberPatterns{
+        "#,##0.###",
+        "#,##0.00 ¤",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.66"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "H:mm:ss z",
+                "H:mm:ss v",
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
@@ -336,6 +342,7 @@ et{
                 MMMMd{"d MMMM"}
                 MMdd{"dd.MM"}
                 mmss{"mm:ss"}
+                yyQ{"Q yy"}
                 yyyyMM{"MM.yyyy"}
                 yyyyMMMM{"MMMM yyyy"}
             }
@@ -358,6 +365,17 @@ et{
                         "neljapäev",
                         "reede",
                         "laupäev",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
                     }
                 }
             }
@@ -398,14 +416,30 @@ et{
                         "detsember",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
             }
             quarters{
                 format{
                     abbreviated{
-                        "K1",
-                        "K2",
-                        "K3",
-                        "K4",
+                        "1. kvartal",
+                        "Q2",
+                        "3. kvartal",
+                        "4. kvartal",
                     }
                     wide{
                         "1. kvartal",
