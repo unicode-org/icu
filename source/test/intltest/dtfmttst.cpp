@@ -75,6 +75,7 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCASE(30,TestStandAloneDays);
         TESTCASE(31,TestStandAloneMonths);
         TESTCASE(32,TestQuarters);
+        TESTCASE(33,TestZTimeZoneParsing);
         default: name = ""; break;
     }
 }
@@ -1911,6 +1912,51 @@ void DateFormatTest::TestTimeZoneStringsAPI() {
     }
     delete keys;
     delete keys2;
+}
+
+void DateFormatTest::TestZTimeZoneParsing(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    const Locale en("en");
+    UnicodeString test;
+    //SimpleDateFormat univ("yyyy-MM-dd'T'HH:mm Z", en, status);
+    SimpleDateFormat univ("HH:mm Z", en, status);
+    const TimeZone *t = TimeZone::getGMT();
+    univ.setTimeZone(*t);
+    
+    univ.setLenient(false);
+    ParsePosition pp(0);
+    ASSERT_OK(status);
+    struct {
+        UnicodeString input;
+        UnicodeString expected_result;
+    } tests[] = {
+        { "11:00 -0200", "13:00 +0000" },
+        { "11:00 +0200", "09:00 +0000" },
+        { "11:00 +0400", "07:00 +0000" },
+        { "11:00 +0530", "05:30 +0000" }
+    };
+
+    UnicodeString result;
+    int32_t tests_length = sizeof(tests)/sizeof(tests[0]);
+    for (int i = 0; i < tests_length; ++i) {
+        pp.setIndex(0);
+        UDate d = univ.parse(tests[i].input, pp);
+        if(pp.getIndex() != tests[i].input.length()){
+            errln("setZoneString() did not succeed. Consumed: %i instead of %i",
+                  pp.getIndex(), tests[i].input.length()); 
+            return;
+        }            
+        result.remove();
+        univ.format(d, result);
+        if(result != tests[i].expected_result) {
+            errln("Expected " + tests[i].expected_result
+                  + " got " + result);
+            return;
+        }
+        logln("SUCCESS: Parsed " + tests[i].input
+              + " got " + result
+              + " expected " + tests[i].expected_result);
+    }
 }
 
 void DateFormatTest::TestHost(void)

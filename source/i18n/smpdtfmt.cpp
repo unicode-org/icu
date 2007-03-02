@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2006, International Business Machines Corporation and    *
+* Copyright (C) 1997-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -1770,7 +1770,9 @@ SimpleDateFormat::subParseZoneString(const UnicodeString& text, int32_t start, C
   fSymbols->getZoneID(getTimeZone().getID(id), zid, status);
   if(zid.length() > 0){
       fSymbols->getZoneType(zid, text, start, type, value, status);
-      tz = getTimeZone().clone();
+      if(type != DateFormatSymbols::TIMEZONE_COUNT) {
+          tz = getTimeZone().clone();
+      }
   }
   
   // optimize for default time zone, assume different from caller
@@ -1779,18 +1781,12 @@ SimpleDateFormat::subParseZoneString(const UnicodeString& text, int32_t start, C
       fSymbols->getZoneID(defaultZone->getID(id), zid, status);
       if(zid.length() > 0){
           fSymbols->getZoneType(zid, text, start, type, value, status);
-          tz = defaultZone;
+          if(type != DateFormatSymbols::TIMEZONE_COUNT) {
+              tz = defaultZone;
+          }
       }
       if (tz == NULL) {
           delete defaultZone;
-      }
-  }
-
-  // still no luck, check all time zone strings
-  if(tz == NULL){
-      fSymbols->findZoneIDTypeValue(zid, text, start, type, value, status);
-      if(zid.length() > 0){
-          tz = TimeZone::createTimeZone(zid);
       }
   }
 
