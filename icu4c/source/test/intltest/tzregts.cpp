@@ -493,6 +493,9 @@ void TimeZoneRegressionTest:: Test4126678()
     if (offset == raw_offset)
         errln("Offsets should not match when in DST");
     */
+    /* TODO: When ICU support the Olson LMT offset for America/Los_Angeles, we need to update
+     * the reference data.
+     */
     if (offset != raw_offset)
         errln("Offsets should match");
 

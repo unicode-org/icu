@@ -473,6 +473,9 @@ void IntlCalendarTest::TestJapaneseFormat() {
      * If ICU properly capture entire Olson zone definition, the start time of "Meiji 1" is
      * -3197117222000. -Yoshito
      */
+    /* TODO: When ICU support the Olson LMT offset for America/Los_Angeles, we need to update
+     * the reference data.
+     */
     //aDate = -3197120400000.;
     aDate = -3197116800000.;
     CHECK(status, "creating date format instance");

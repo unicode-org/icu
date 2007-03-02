@@ -108,8 +108,10 @@ void DateFormatRoundTripTest::TestCentury()
      * offset calculation bug that observed DST in 1926, which was resolved.
      * Before the bug was resolved, result[0] == result[1] was true,
      * but after the bug fix, the expected result is actually
-     * result[0] != result[1].  We actually need to review this code
-     * and clarify what we really want to test here.  -Yoshito
+     * result[0] != result[1]. -Yoshito
+     */
+    /* TODO: We need to review this code and clarify what we really
+     * want to test here.
      */
     //if (date[1] != date[2] || result[0] != result[1]) {
     if (date[1] != date[2]) {
