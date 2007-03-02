@@ -482,8 +482,19 @@ void TimeZoneRegressionTest:: Test4126678()
     failure(status, "cal->get");
     int32_t offset = tz->getOffset((uint8_t)era, year, month, day, (uint8_t)dayOfWeek, millis, status);
     int32_t raw_offset = tz->getRawOffset();
+    /* Because of better historical timezone support based on Olson data,
+     * DST is not observed in year 98.  Thus, the expected result is changed.
+     * As of Mar 2007, ICU timezone transition data is represented by 32-bit.
+     * When we support 64-bit Olson transition data, the actual offset in
+     * AD 98 for America/Los_Angeles will be changed again (-7:52:58).  Until
+     * then, expected result is offset == raw_offset.  -Yoshito
+     */
+    /*
     if (offset == raw_offset)
         errln("Offsets should not match when in DST");
+    */
+    if (offset != raw_offset)
+        errln("Offsets should match");
 
     delete cal;
 }

@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation
+ * Copyright (c) 1997-2007, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
  
@@ -98,7 +98,21 @@ void DateFormatRoundTripTest::TestCentury()
     fmt.format(date[1], result[1]);
     date[2] = fmt.parse(result[1], status);
 
-    if (date[1] != date[2] || result[0] != result[1]) {
+    /* This test case worked OK by accident before.  date[1] != date[0],
+     * because we use -80/+20 year window for 2-digit year parsing.
+     * (date[0] is in year 1926, date[1] is in year 2026.)  result[1] set
+     * by the first format call returns "07/13/26 07:48:28 p.m. PST",
+     * which is correct, because DST was not used in year 1926 in zone
+     * America/Los_Angeles.  When this is parsed, date[1] becomes a time
+     * in 2026, which is "07/13/26 08:48:28 p.m. PDT".  There was a zone
+     * offset calculation bug that observed DST in 1926, which was resolved.
+     * Before the bug was resolved, result[0] == result[1] was true,
+     * but after the bug fix, the expected result is actually
+     * result[0] != result[1].  We actually need to review this code
+     * and clarify what we really want to test here.  -Yoshito
+     */
+    //if (date[1] != date[2] || result[0] != result[1]) {
+    if (date[1] != date[2]) {
         errln("Round trip failure: \"%S\" (%f), \"%S\" (%f)", result[0].getBuffer(), date[1], result[1].getBuffer(), date[2]);
     }
 }
