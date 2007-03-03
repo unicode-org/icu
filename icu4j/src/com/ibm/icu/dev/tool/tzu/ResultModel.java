@@ -16,8 +16,6 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-
-
 class ResultModel extends AbstractTableModel {
     public ResultModel(Logger logger) {
         this.logger = logger;
@@ -39,18 +37,22 @@ class ResultModel extends AbstractTableModel {
     public Object getValueAt(int row, int col) {
         List list = hidden ? permissibleList : completeList;
         ICUFile entry = ((ICUFile) list.get(row));
-        return (col == COLUMN_FILE_NAME) ? entry.getPath()
-                : (col == COLUMN_FILE_PATH) ? entry.getFilename()
-                        : (col == COLUMN_ICU_VERSION) ? entry.getICUVersion()
-                                : (col == COLUMN_TZ_VERSION) ? entry
-                                        .getTZVersion()
-                                        : (col == COLUMN_READABLE) ? entry
-                                                .getFile().canRead() ? "Yes"
-                                                : "No"
-                                                : (col == COLUMN_WRITABLE) ? entry
-                                                        .getFile().canWrite() ? "Yes"
-                                                        : "No"
-                                                        : null;
+        switch (col) {
+        case COLUMN_FILE_NAME:
+            return entry.getPath();
+        case COLUMN_FILE_PATH:
+            return entry.getFilename();
+        case COLUMN_ICU_VERSION:
+            return entry.getICUVersion();
+        case COLUMN_TZ_VERSION:
+            return entry.getTZVersion();
+        case COLUMN_READABLE:
+            return entry.getFile().canRead() ? "Yes" : "No";
+        case COLUMN_WRITABLE:
+            return entry.getFile().canWrite() ? "Yes" : "No";
+        default:
+            return null;
+        }
     }
 
     public Iterator iterator() {
@@ -102,16 +104,14 @@ class ResultModel extends AbstractTableModel {
         removeAll(completeList, !hidden);
     }
 
-    public void update(int[] indices, URL updateURL, File backupDir)
-            throws InterruptedException {
+    public void update(int[] indices, URL updateURL, File backupDir) throws InterruptedException {
         if (hidden)
             update(permissibleList, indices, updateURL, backupDir);
         else
             update(completeList, indices, updateURL, backupDir);
     }
 
-    public void updateAll(URL updateURL, File backupDir)
-            throws InterruptedException {
+    public void updateAll(URL updateURL, File backupDir) throws InterruptedException {
         if (hidden)
             updateAll(permissibleList, updateURL, backupDir);
         else
@@ -164,8 +164,7 @@ class ResultModel extends AbstractTableModel {
         }
     }
 
-    private void update(List list, int[] indices, URL updateURL, File backupDir)
-            throws InterruptedException {
+    private void update(List list, int[] indices, URL updateURL, File backupDir) throws InterruptedException {
         if (list.size() > 0 && indices.length > 0) {
             Arrays.sort(indices);
             int n = indices.length;
@@ -188,8 +187,7 @@ class ResultModel extends AbstractTableModel {
         }
     }
 
-    private void updateAll(List list, URL updateURL, File backupDir)
-            throws InterruptedException {
+    private void updateAll(List list, URL updateURL, File backupDir) throws InterruptedException {
         if (list.size() > 0) {
             int n = list.size();
             Iterator iter = list.iterator();
@@ -205,8 +203,8 @@ class ResultModel extends AbstractTableModel {
         }
     }
 
-    public static final String[] COLUMN_NAMES = new String[] { "Path", "Name",
-            "ICU Version", "TZ Version", "Readable", "Writable" };
+    public static final String[] COLUMN_NAMES = new String[] { "Path", "Name", "ICU Version", "TZ Version", "Readable",
+            "Writable" };
 
     public static final int COLUMN_FILE_NAME = 0;
 

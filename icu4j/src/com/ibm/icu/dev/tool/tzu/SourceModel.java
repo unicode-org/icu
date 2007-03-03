@@ -24,41 +24,42 @@ import javax.swing.text.html.parser.ParserDelegator;
 
 class SourceModel extends AbstractListModel implements ComboBoxModel {
     public SourceModel(Logger logger) {
-        this.logger = logger;
-    }
-/*
-    public static void initialize(Logger logger) {
-        // cannot make TZ_BASE_URL and TZ_LOCAL_URL final since url creations
-        // need to be try-catched
-        try {
-            TZ_BASE_URL = new URL(TZ_BASE_URLSTRING_START);
+        // this.logger = logger;
 
-            if (!TZ_LOCAL_FILE.exists()) {
-                logger.errorln("Local copy (zoneinfo.res) does not exist.");
-            } else {
-                TZ_LOCAL_URL = TZ_LOCAL_FILE.toURL();
-                TZ_LOCAL_VERSION = ICUFile.findFileTZVersion(TZ_LOCAL_FILE);
-                if (TZ_LOCAL_VERSION == null) {
-                    logger.errorln("Failed to determine version of local copy");
+        // if all constants are not yet initialized
+        // (this is where they get initialized)
+        if (TZ_BASE_URL == null) {
+            try {
+                TZ_BASE_URL = new URL(TZ_BASE_URLSTRING_START);
+
+                if (!TZ_LOCAL_FILE.exists()) {
+                    // not a critical error, but we won't be able to use the
+                    // local tz file
+                    logger.errorln("Local copy (zoneinfo.res) does not exist");
                 } else {
-                    TZ_LOCAL_CHOICE = "Local Copy (" + TZ_LOCAL_VERSION + ")";
+                    TZ_LOCAL_URL = TZ_LOCAL_FILE.toURL();
+                    TZ_LOCAL_VERSION = ICUFile.findFileTZVersion(TZ_LOCAL_FILE, logger);
+                    if (TZ_LOCAL_VERSION == null) {
+                        logger.errorln("Failed to determine version of local copy");
+                        TZ_LOCAL_CHOICE = "Local Copy";
+                    } else {
+                        TZ_LOCAL_CHOICE = "Local Copy (" + TZ_LOCAL_VERSION + ")";
+                    }
                 }
+            } catch (MalformedURLException ex) {
+                // this shouldn't happen
+                ex.printStackTrace();
             }
-        } catch (MalformedURLException ex) {
-            // this shouldn't happen
-            ex.printStackTrace();
         }
     }
-*/
+
     public void findSources() {
         BufferedReader reader = null;
         try {
-            reader = new BufferedReader(new InputStreamReader(TZ_BASE_URL
-                    .openStream()));
+            reader = new BufferedReader(new InputStreamReader(TZ_BASE_URL.openStream()));
 
             HTMLEditorKit.ParserCallback htmlCallback = new HTMLEditorKit.ParserCallback() {
-                public void handleStartTag(HTML.Tag tag,
-                        MutableAttributeSet attr, int pos) {
+                public void handleStartTag(HTML.Tag tag, MutableAttributeSet attr, int pos) {
                     if (tag == HTML.Tag.LI)
                         listItem = true;
                 }
@@ -76,15 +77,13 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
                         if (!"..".equals(str))
                             try {
                                 // add the new item to the map
-                                urlMap.put(str, new URL(TZ_BASE_URLSTRING_START
-                                        + str + TZ_BASE_URLSTRING_END));
+                                urlMap.put(str, new URL(TZ_BASE_URLSTRING_START + str + TZ_BASE_URLSTRING_END));
 
                                 // update the selected item and fire off an
                                 // event
                                 selected = (String) urlMap.lastKey();
                                 int index = 0;
-                                for (Iterator iter = urlMap.keySet().iterator(); iter
-                                        .hasNext();) {
+                                for (Iterator iter = urlMap.keySet().iterator(); iter.hasNext();) {
                                     if (iter.next().equals(str))
                                         index++;
                                 }
@@ -170,7 +169,9 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
 
     public static final String TZ_BASE_URLSTRING_END = "/be/zoneinfo.res";
 
-    public static final File TZ_LOCAL_FILE = new File("zoneinfo.res");
+    public static final String TZ_LOCAL_FILENAME = "zoneinfo.res";
+
+    public static final File TZ_LOCAL_FILE = new File(TZ_LOCAL_FILENAME);
 
     public static String TZ_LOCAL_VERSION = null;
 
@@ -180,5 +181,5 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
 
     public static final long serialVersionUID = 1339;
 
-    private Logger logger;
+    // private Logger logger;
 }

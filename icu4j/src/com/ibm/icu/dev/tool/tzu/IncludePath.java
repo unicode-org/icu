@@ -28,8 +28,7 @@ public class IncludePath {
     }
 
     public boolean equals(Object other) {
-        return !(other instanceof IncludePath) ? false : path
-                .equals(((IncludePath) other).path);
+        return !(other instanceof IncludePath) ? false : path.equals(((IncludePath) other).path);
     }
 
     private File path;

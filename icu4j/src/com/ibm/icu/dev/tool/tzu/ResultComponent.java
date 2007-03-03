@@ -32,10 +32,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.text.JTextComponent;
 
 public class ResultComponent extends JComponent {
-    public ResultComponent(final GUILoader owner,
-            final ResultModel resultModel, final SourceModel sourceModel) {
+    public ResultComponent(final GUILoader owner, final ResultModel resultModel, final SourceModel sourceModel) {
         this.resultModel = resultModel;
         this.sourceModel = sourceModel;
 
@@ -94,8 +94,7 @@ public class ResultComponent extends JComponent {
 
             private void checkPopup(MouseEvent event) {
                 if (event.isPopupTrigger())
-                    resultPopup.show((Component) event.getSource(), event
-                            .getX(), event.getY());
+                    resultPopup.show((Component) event.getSource(), event.getX(), event.getY());
             }
         });
 
@@ -120,9 +119,7 @@ public class ResultComponent extends JComponent {
 
         resultUpdateSelectedItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                owner
-                        .update(resultTable.getSelectedRows(),
-                                getSelectedSource());
+                owner.update(resultTable.getSelectedRows(), getSelectedSource());
             }
         });
 
@@ -156,8 +153,7 @@ public class ResultComponent extends JComponent {
 
         resultBrowseButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                int returnVal = resultChooser
-                        .showOpenDialog(ResultComponent.this);
+                int returnVal = resultChooser.showOpenDialog(ResultComponent.this);
                 if (returnVal == JFileChooser.APPROVE_OPTION)
                     addFile(resultChooser.getSelectedFile());
             }
@@ -165,8 +161,7 @@ public class ResultComponent extends JComponent {
 
         resultHideOption.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent event) {
-                resultModel
-                        .setHidden(event.getStateChange() == ItemEvent.SELECTED);
+                resultModel.setHidden(event.getStateChange() == ItemEvent.SELECTED);
             }
         });
     }
@@ -177,9 +172,8 @@ public class ResultComponent extends JComponent {
 
     private boolean addFile(File file) {
         if (!resultModel.add(file)) {
-            JOptionPane.showMessageDialog(ResultComponent.this, "\""
-                    + file.toString() + "\" is not an updatable ICU jar file.",
-                    "Cannot add file", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(ResultComponent.this, "\"" + file.toString()
+                    + "\" is not an updatable ICU jar file.", "Cannot add file", JOptionPane.ERROR_MESSAGE);
             return false;
         } else {
             return true;
@@ -198,6 +192,10 @@ public class ResultComponent extends JComponent {
         resultCancelUpdateButton.setEnabled(value);
     }
 
+    public JTextComponent getStatusBar() {
+        return statusBar;
+    }
+
     private JPanel resultInputPanel = new JPanel();
 
     // private JPanel resultTablePanel = new JPanel();
@@ -210,8 +208,7 @@ public class ResultComponent extends JComponent {
 
     private JTextField resultField = new JTextField(30);
 
-    private JCheckBox resultHideOption = new JCheckBox(
-            "Hide Unreadable/Unwritable Files", true);
+    private JCheckBox resultHideOption = new JCheckBox("Hide Unreadable/Unwritable Files", true);
 
     private JButton resultBrowseButton = new JButton("Browse...");
 
@@ -225,13 +222,11 @@ public class ResultComponent extends JComponent {
 
     private JPopupMenu resultPopup = new JPopupMenu();
 
-    private JMenuItem resultRemoveSelectedItem = new JMenuItem(
-            "Remove Selected Items");
+    private JMenuItem resultRemoveSelectedItem = new JMenuItem("Remove Selected Items");
 
     private JMenuItem resultRemoveAllItem = new JMenuItem("Remove All");
 
-    private JMenuItem resultUpdateSelectedItem = new JMenuItem(
-            "Update Selected Items");
+    private JMenuItem resultUpdateSelectedItem = new JMenuItem("Update Selected Items");
 
     private JMenuItem resultUpdateAllItem = new JMenuItem("Update All");
 
@@ -240,6 +235,8 @@ public class ResultComponent extends JComponent {
     private ResultModel resultModel;
 
     private SourceModel sourceModel;
+
+    private JTextComponent statusBar = new JTextField(30);
 
     public static final long serialVersionUID = 1341;
 }

@@ -7,25 +7,25 @@
 
 package com.ibm.icu.dev.tool.tzu;
 
-import java.io.PrintStream;
-import java.io.FileOutputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 
 public class Logger {
 
-    private Logger(String filename, int verbosity)throws FileNotFoundException {
+    private Logger(String filename, int verbosity) throws FileNotFoundException {
         System.out.println("Log file: " + filename);
-        if (logger.log != null)
-            logger.log.close();
-        logger.log = new PrintStream(new FileOutputStream(filename));
-        logger.verbosity = verbosity;
+        if (this.log != null)
+            this.log.close();
+        this.log = new PrintStream(new FileOutputStream(filename));
+        this.verbosity = verbosity;
     }
 
-    public static synchronized Logger getInstance(String filename, int verbosity) throws FileNotFoundException{
-       if(logger == null){
-           logger = new Logger(filename, verbosity);
-       }
-       return logger;
+    public static synchronized Logger getInstance(String filename, int verbosity) throws FileNotFoundException {
+        if (logger == null) {
+            logger = new Logger(filename, verbosity);
+        }
+        return logger;
     }
 
     public void setVerbosity(int verbosity) {
@@ -36,30 +36,40 @@ public class Logger {
         return verbosity;
     }
 
+    public void log(String output, int verbosity) {
+        if (verbosity <= this.verbosity) {
+            System.out.print(output);
+            if (log != null)
+                log.print(output);
+        }
+    }
+
+    public void logln(String output, int verbosity) {
+        if (verbosity <= this.verbosity) {
+            System.out.println(output);
+            if (log != null)
+                log.println(output);
+        }
+    }
+
     public void print(String output, int verbosity) {
-        if (verbosity >= this.verbosity)
+        if (verbosity <= this.verbosity)
             System.out.print(output);
     }
 
     public void println(String output, int verbosity) {
-        if (verbosity >= this.verbosity)
+        if (verbosity <= this.verbosity)
             System.out.println(output);
     }
 
     public void error(String output) {
         System.err.print(output);
-    }
-
-    public void errorln(String output) {
-        System.err.println(output);
-    }
-
-    public void log(String output) {
         if (log != null)
             log.print(output);
     }
 
-    public void logln(String output) {
+    public void errorln(String output) {
+        System.err.println(output);
         if (log != null)
             log.println(output);
     }
