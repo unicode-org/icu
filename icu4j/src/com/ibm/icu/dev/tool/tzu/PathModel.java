@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.AbstractListModel;
+import javax.swing.text.JTextComponent;
 
 class PathModel extends AbstractListModel {
     public PathModel(ResultModel resultModel, Logger logger) {
@@ -50,15 +51,11 @@ class PathModel extends AbstractListModel {
                     sign = line.charAt(0);
                     if (sign != '#') {
                         if (sign != '+' && sign != '-' && !"all".equals(line))
-                            pathlistError(
-                                    "Each path entry must start with a + or - to denote inclusion/exclusion",
+                            pathlistError("Each path entry must start with a + or - to denote inclusion/exclusion",
                                     lineNumber);// error
                         if (!add(line))
-                            pathlistError(
-                                    "\""
-                                            + line.substring(1).trim()
-                                            + "\" is not a valid file or directory (perhaps it does not exist?)",
-                                    lineNumber);// error
+                            pathlistError("\"" + line.substring(1).trim()
+                                    + "\" is not a valid file or directory (perhaps it does not exist?)", lineNumber);// error
                     }
                 }
 
@@ -80,8 +77,7 @@ class PathModel extends AbstractListModel {
             addAllDrives();
             return true;
         } else {
-            return add(new IncludePath(new File(filename.substring(1).trim()),
-                    filename.charAt(0) == '+'));
+            return add(new IncludePath(new File(filename.substring(1).trim()), filename.charAt(0) == '+'));
         }
     }
 
@@ -134,7 +130,7 @@ class PathModel extends AbstractListModel {
         }
     }
 
-    public void search(int[] indices, boolean subdirs, File backupDir)
+    public void search(int[] indices, boolean subdirs, File backupDir, JTextComponent statusBar)
             throws InterruptedException {
         if (list.size() > 0 && indices.length > 0) {
             Arrays.sort(indices);
@@ -149,25 +145,23 @@ class PathModel extends AbstractListModel {
                 else
                     iter.next();
 
-            ICUJarFinder.search(resultModel, logger, paths, subdirs, backupDir);
+            ICUJarFinder.search(resultModel, logger, statusBar, paths, subdirs, backupDir);
         }
     }
 
-    public void searchAll(boolean subdirs, File backupDir)
-            throws InterruptedException {
+    public void searchAll(boolean subdirs, File backupDir, JTextComponent statusBar) throws InterruptedException {
         if (list.size() > 0) {
             int n = list.size();
             IncludePath[] paths = new IncludePath[n];
             Iterator iter = list.iterator();
             for (int i = 0; i < n; i++)
                 paths[i] = (IncludePath) iter.next();
-            ICUJarFinder.search(resultModel, logger, paths, subdirs, backupDir);
+            ICUJarFinder.search(resultModel, logger, statusBar, paths, subdirs, backupDir);
         }
     }
 
     private static void pathlistError(String message, int lineNumber) {
-        throw new IllegalArgumentException("Error in " + PATHLIST_FILENAME
-                + " (line " + lineNumber + "): " + message);
+        throw new IllegalArgumentException("Error in " + PATHLIST_FILENAME + " (line " + lineNumber + "): " + message);
     }
 
     private List list = new ArrayList(); // list of paths (Files)

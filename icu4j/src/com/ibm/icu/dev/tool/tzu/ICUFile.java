@@ -27,12 +27,14 @@ import java.util.jar.Manifest;
 
 import com.ibm.icu.util.UResourceBundle;
 
-
-
 public class ICUFile {
+    private ICUFile(Logger logger) {
+        this.logger = logger;
+    }
+
     public ICUFile(File file, Logger logger) throws IOException {
-        this.file = file;
-        ICUFile.logger = logger;
+        this.icuFile = file;
+        this.logger = logger;
 
         if (!file.isFile())
             throw new IOException("not a file");
@@ -41,26 +43,26 @@ public class ICUFile {
         if (isSigned())
             throw new IOException("not a signed jar");
 
-        tzVersion = findEntryTZVersion(file, insertEntry);
+        tzVersion = findEntryTZVersion(file, tzEntry);
     }
 
     public File getFile() {
-        return file;
+        return icuFile;
     }
 
     public String getFilename() {
-        return file.getName();
+        return icuFile.getName();
     }
 
     public String getPath() {
-        String path = file.getPath();
+        String path = icuFile.getPath();
         int pos = path.lastIndexOf(File.separator);
         path = (pos == -1) ? "" : path.substring(0, pos);
         return path;
     }
 
     public String toString() {
-        return file.toString();
+        return icuFile.toString();
     }
 
     public String getICUVersion() {
@@ -72,29 +74,29 @@ public class ICUFile {
     }
 
     public boolean equals(Object other) {
-        return (!(other instanceof ICUFile)) ? false : file
-                .equals(((ICUFile) other).file);
+        return (!(other instanceof ICUFile)) ? false : icuFile.getPath().equalsIgnoreCase(
+                ((ICUFile) other).icuFile.getPath());
     }
 
     public void updateJar(URL insertURL, File backupDir) throws IOException {
-        if (!file.canRead() || !file.canWrite())
-            throw new IOException("Missing permissions for " + file);
+        if (!icuFile.canRead() || !icuFile.canWrite())
+            throw new IOException("Missing permissions for " + icuFile);
         File backupFile = null;
-        if ((backupFile = createBackupFile(file, backupDir)) == null)
+        if ((backupFile = createBackupFile(icuFile, backupDir)) == null)
             throw new IOException("Failed to create a backup file.");
-        if (!copyFile(file, backupFile))
+        if (!copyFile(icuFile, backupFile))
             throw new IOException("Could not replace the original jar.");
-        if (!createUpdatedJar(backupFile, file, insertEntry, insertURL))
+        if (!createUpdatedJar(backupFile, icuFile, tzEntry, insertURL))
             throw new IOException("Could not create an updated jar.");
 
-        tzVersion = findEntryTZVersion(file, insertEntry);
+        tzVersion = findEntryTZVersion(icuFile, tzEntry);
     }
 
-    private static File createBackupFile(File inputFile, File backupBase) {
+    private File createBackupFile(File inputFile, File backupBase) {
+        logger.logln("Creating backup file for + " + inputFile + " at " + backupBase + ".", Logger.VERBOSE);
         String filename = inputFile.getName();
         String suffix = ".jar";
-        String prefix = filename.substring(0, filename.length()
-                - ".jar".length());
+        String prefix = filename.substring(0, filename.length() - ".jar".length());
 
         if (backupBase == null) {
             try {
@@ -107,21 +109,20 @@ public class ICUFile {
         } else {
             File backupFile = null;
             File backupDesc = null;
-            File backupDir = new File(backupBase.getPath() + File.separator
-                    + prefix);
+            File backupDir = new File(backupBase.getPath() + File.separator + prefix);
             PrintStream ostream = null;
 
             try {
                 backupBase.mkdir();
                 backupDir.mkdir();
                 backupFile = File.createTempFile(prefix, suffix, backupDir);
-                backupDesc = new File(backupDir.toString() + File.separator
-                        + prefix + ".txt");
+                backupDesc = new File(backupDir.toString() + File.separator + prefix + ".txt");
                 backupDesc.createNewFile();
                 ostream = new PrintStream(new FileOutputStream(backupDesc));
                 ostream.println(inputFile.toString());
+                logger.logln("Successfully created backup file at " + backupFile + ".", Logger.VERBOSE);
             } catch (IOException ex) {
-                // ex.printStackTrace();
+                logger.logln("Failed to create backup file.", Logger.VERBOSE);
                 backupFile.delete();
                 backupDesc.delete();
                 backupDir.delete();
@@ -133,10 +134,8 @@ public class ICUFile {
         }
     }
 
-    private static boolean copyFile(File inputFile, File outputFile) {
-        logger.println("Coping from " + inputFile + " to " + outputFile + ".",
-                Logger.VERBOSE);
-        logger.logln("Coping from " + inputFile + " to " + outputFile + ".");
+    private boolean copyFile(File inputFile, File outputFile) {
+        logger.logln("Copying from " + inputFile + " to " + outputFile + ".", Logger.VERBOSE);
         InputStream istream = null;
         OutputStream ostream = null;
         byte[] buffer = new byte[BUFFER_SIZE];
@@ -151,36 +150,28 @@ public class ICUFile {
                 ostream.write(buffer, 0, bytesRead);
 
             success = true;
-            logger.println("Copy successful.", Logger.VERBOSE);
-            logger.logln("Copy successful.");
+            logger.logln("Copy successful.", Logger.VERBOSE);
         } catch (IOException ex) {
             outputFile.delete();
-            logger.println("Copy failed.", Logger.VERBOSE);
-            logger.logln("Copy failed.");
+            logger.logln("Copy failed.", Logger.VERBOSE);
         } finally {
             // safely close the streams
             if (istream != null)
                 try {
                     istream.close();
                 } catch (IOException ex) {
-                    // ex.printStackTrace();
                 }
             if (ostream != null)
                 try {
                     ostream.close();
                 } catch (IOException ex) {
-                    // ex.printStackTrace();
                 }
         }
         return success;
     }
 
-    private static boolean copyEntry(File inputFile, JarEntry inputEntry,
-            File outputFile) {
-        logger.println("Coping from " + inputFile + "!/" + inputEntry + " to "
-                + outputFile + ".", Logger.VERBOSE);
-        logger.logln("Coping from " + inputFile + "!/" + inputEntry + " to "
-                + outputFile + ".");
+    private boolean copyEntry(File inputFile, JarEntry inputEntry, File outputFile) {
+        logger.logln("Copying from " + inputFile + "!/" + inputEntry + " to " + outputFile + ".", Logger.VERBOSE);
         JarFile jar = null;
         InputStream istream = null;
         OutputStream ostream = null;
@@ -197,43 +188,32 @@ public class ICUFile {
                 ostream.write(buffer, 0, bytesRead);
 
             success = true;
-            logger.println("Copy successful.", Logger.VERBOSE);
-            logger.logln("Copy successful.");
+            logger.logln("Copy successful.", Logger.VERBOSE);
         } catch (IOException ex) {
-            // ex.printStackTrace();
             outputFile.delete();
-            logger.println("Copy failed.", Logger.VERBOSE);
-            logger.logln("Copy failed.");
+            logger.logln("Copy failed.", Logger.VERBOSE);
         } finally {
             // safely close the streams
             if (jar != null)
                 try {
                     jar.close();
                 } catch (IOException ex) {
-                    // ex.printStackTrace();
                 }
             if (istream != null)
                 try {
                     istream.close();
                 } catch (IOException ex) {
-                    // ex.printStackTrace();
                 }
             if (ostream != null)
                 try {
                     ostream.close();
                 } catch (IOException ex) {
-                    // ex.printStackTrace();
                 }
         }
         return success;
     }
 
-    private static boolean createUpdatedJar(File inputFile, File outputFile,
-            JarEntry insertEntry, URL inputURL) {
-        logger.println("Inserting " + inputURL + " into " + inputFile + "/"
-                + insertEntry + ".", Logger.VERBOSE);
-        logger.logln("Inserting " + inputURL + " into " + inputFile + "/"
-                + insertEntry + ".");
+    private boolean createUpdatedJar(File inputFile, File outputFile, JarEntry insertEntry, URL inputURL) {
         JarFile jar = null;
         JarOutputStream ostream = null;
         InputStream istream = null;
@@ -273,38 +253,31 @@ public class ICUFile {
             }
 
             success = true;
-            logger.println("Insert successful.", Logger.VERBOSE);
-            logger.logln("Insert successful.");
+            logger.logln("Insert successful.", Logger.VERBOSE);
         } catch (IOException ex) {
-            // ex.printStackTrace();
             outputFile.delete();
-            logger.println("Insert failed.", Logger.VERBOSE);
-            logger.logln("Insert failed.");
+            logger.logln("Insert failed.", Logger.VERBOSE);
         } finally {
             // safely close the streams
             if (istream != null)
                 try {
                     istream.close();
                 } catch (IOException ex) {
-                    // ex.printStackTrace();
                 }
             if (ostream != null)
                 try {
                     ostream.close();
                 } catch (IOException ex) {
-                    // ex.printStackTrace();
                 }
             if (jstream != null)
                 try {
                     jstream.close();
                 } catch (IOException ex) {
-                    // ex.printStackTrace();
                 }
             if (jar != null)
                 try {
                     jar.close();
                 } catch (IOException ex) {
-                    // ex.printStackTrace();
                 }
         }
         return success;
@@ -315,39 +288,30 @@ public class ICUFile {
         boolean success = false;
 
         try {
-            jar = new JarFile(file);
+            jar = new JarFile(icuFile);
             Manifest manifest = jar.getManifest();
-            if (manifest == null)
-                return hasFile(jar);
-            Iterator iter = manifest.getEntries().values().iterator();
-            while (iter.hasNext()) {
-                Attributes attr = (Attributes) iter.next();
-                icuTitle = attr.getValue(Attributes.Name.IMPLEMENTATION_TITLE);
-                icuVersion = attr
-                        .getValue(Attributes.Name.IMPLEMENTATION_VERSION);
-                if (!("ICU for Java".equals(icuTitle) || "Modularized ICU for Java"
-                        .equals(icuTitle)))
-                    continue;
-
-                // since it's an ICU file, we will search inside for the
-                // intended file
-                success = hasFile(jar);
-                break;
+            icuVersion = ICU_VERSION_UNKNOWN;
+            if (manifest != null) {
+                Iterator iter = manifest.getEntries().values().iterator();
+                while (iter.hasNext()) {
+                    Attributes attr = (Attributes) iter.next();
+                    String ver = attr.getValue(Attributes.Name.IMPLEMENTATION_VERSION);
+                    if (ver != null) {
+                        icuVersion = ver;
+                        break;
+                    }
+                }
             }
+            success = (jar.getJarEntry(TZ_ENTRY_DIR) != null) && hasFile(jar);
         } catch (IOException ex) {
-            // unable to create the JarFile,
-            // unable to get the Manifest
+            // unable to create the JarFile or unable to get the Manifest
             // log the unexplained i/o error, but we must drudge on
-            logger.println("I/O Error with " + file.getPath(), Logger.VERBOSE);
-            logger.logln("I/O Error with " + file.getPath());
-        } catch (Exception ex) {
-            // ex.printStackTrace();
+            logger.logln("I/O Error with " + icuFile.getPath(), Logger.VERBOSE);
         } finally {
             if (jar != null)
                 try {
                     jar.close();
                 } catch (IOException ex) {
-                    // ex.printStackTrace();
                 }
         }
         return success;
@@ -356,37 +320,39 @@ public class ICUFile {
     private boolean hasFile(JarFile jar) {
         Enumeration e = jar.entries();
         while (e.hasMoreElements()) {
-            insertEntry = (JarEntry) e.nextElement();
-            if (insertEntry.getName().endsWith(UPDATE_FILENAME))
+            tzEntry = (JarEntry) e.nextElement();
+            if (tzEntry.getName().endsWith(TZ_ENTRY_FILENAME))
                 return true;
         }
         return false;
     }
 
     private boolean isSigned() {
-        return insertEntry.getCertificates() != null;
+        return tzEntry.getCertificates() != null;
     }
 
-    public static String findEntryTZVersion(File icuFile, JarEntry tzEntry) {
+    public String findEntryTZVersion(File icuFile, JarEntry tzEntry) {
         try {
             File temp = File.createTempFile("zoneinfo", ".res");
             temp.deleteOnExit();
             copyEntry(icuFile, tzEntry, temp);
             return findTZVersion(temp);
         } catch (IOException ex) {
-            logger.logln(ex.getMessage());
+            logger.errorln(ex.getMessage());
             return null;
         }
     }
 
-    public static String findFileTZVersion(File tzFile) {
+    public static String findFileTZVersion(File tzFile, Logger logger) {
+        ICUFile rawTZFile = new ICUFile(logger);
+
         try {
             File temp = File.createTempFile("zoneinfo", ".res");
             temp.deleteOnExit();
-            copyFile(tzFile, temp);
-            return findTZVersion(temp);
+            rawTZFile.copyFile(tzFile, temp);
+            return rawTZFile.findTZVersion(temp);
         } catch (IOException ex) {
-            logger.logln(ex.getMessage());
+            logger.errorln(ex.getMessage());
             return null;
         }
     }
@@ -398,21 +364,18 @@ public class ICUFile {
      * ex) { ex.printStackTrace(); return null; } }
      */
 
-    private static String findTZVersion(File tzFile) {
+    private String findTZVersion(File tzFile) {
         try {
             String filename = tzFile.getName();
-            String entryname = filename.substring(0, filename.length()
-                    - ".res".length());
+            String entryname = filename.substring(0, filename.length() - ".res".length());
 
             URL url = new URL(tzFile.getParentFile().toURL().toString());
             ClassLoader loader = new URLClassLoader(new URL[] { url });
 
-            UResourceBundle bundle = UResourceBundle.getBundleInstance("",
-                    entryname, loader);
+            UResourceBundle bundle = UResourceBundle.getBundleInstance("", entryname, loader);
 
             String tzVersion;
-            if (bundle != null
-                    && (tzVersion = bundle.getString(TZ_VERSION_KEY)) != null)
+            if (bundle != null && (tzVersion = bundle.getString(TZ_VERSION_KEY)) != null)
                 return tzVersion;
         } catch (MissingResourceException ex) {
             // not an error -- some zoneinfo files do not have a version number
@@ -421,26 +384,28 @@ public class ICUFile {
             ex.printStackTrace();
         }
 
-        return UNKNOWN_VERSION;
+        return TZ_VERSION_UNKNOWN;
     }
-
-    public static final String UPDATE_FILENAME = "zoneinfo.res";
 
     public static final int BUFFER_SIZE = 1024;
 
-    public static final String UNKNOWN_VERSION = "Unknown";
+    public static final String ICU_VERSION_UNKNOWN = "Unknown";
+
+    public static final String TZ_VERSION_UNKNOWN = "Unknown";
 
     public static final String TZ_VERSION_KEY = "TZVersion";
 
-    private File file;
+    public static final String TZ_ENTRY_DIR = "com/ibm/icu/impl";
 
-    private JarEntry insertEntry;
+    public static final String TZ_ENTRY_FILENAME = "zoneinfo.res";
 
-    private String icuTitle;
+    private File icuFile;
 
     private String icuVersion;
 
     private String tzVersion;
 
-    private static Logger logger;
+    private JarEntry tzEntry;
+
+    private Logger logger;
 }

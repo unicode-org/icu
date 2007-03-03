@@ -6,11 +6,13 @@ rem * others. All Rights Reserved.                                              
 rem *******************************************************************************
 rem */
 
+@echo.
 @echo *********** Welcome to the ICU4J Time Zone Update Utility (ICUTZU) ***********
 
 rem Set ICUTZU_HOME to the current directory.
 set ICUTZU_HOME=%~dp0
 @echo ICUTZU Home: %ICUTZU_HOME%
+@echo.
 
 rem Make sure certain files are present.
 IF NOT EXIST "%ICUTZU_HOME%icutzu.jar" GOTO MissingICUTZUJAR
@@ -19,41 +21,60 @@ IF NOT EXIST "%ICUTZU_HOME%runicutzuenv.bat" GOTO MissingICUTZUENV
 
 rem Set environmental variables.
 call "%ICUTZU_HOME%runicutzuenv.bat"
-rem Double-check that JAVA_HOME is set.
-@echo Java Home: %JAVA_HOME%
 IF NOT EXIST "%JAVA_HOME%\bin\java.exe" GOTO MissingJAVAHOME
 
-IF EXIST "%ICUTZU_HOME%Temp" GOTO Next
-rem Create a temporary directory.
+rem Create a temporary directory if one doesn't exit already.
+IF EXIST "%ICUTZU_HOME%Temp" GOTO TempAlreadyExists
 mkdir "%ICUTZU_HOME%Temp"
-:Next
+:TempAlreadyExists
+
+rem Collect all the arguments in this batch into a single variable.
+SET ARGS=
+:CollectArguments
+IF /I "%1"=="" GOTO :DoneCollectingArguments
+SET ARGS=%ARGS% %1
+SHIFT /1
+GOTO CollectArguments
+:DoneCollectingArguments
+
+
 
 rem Run the ICUTZU tool.
-@echo Launching the ICU4J Time Zone Update Utility (ICUTZU) ...
-@echo "%JAVA_HOME%\bin\java.exe" -cp "%ICUTZU_HOME%icu4j.jar";"%ICUTZU_HOME%icutzu.jar" -Dnogui=%NOGUI% -Ddiscoveronly=%DISCOVERONLY% -Dsilentpatch=%SILENTPATCH% com.ibm.icu.dev.tool.tzu.ICUTZUMain --recurse --backup "%ICUTZU_HOME%Temp" %1 %2 %3 %4 %5 %6 %7 %8 %9
-"%JAVA_HOME%\bin\java.exe" -cp "%ICUTZU_HOME%icu4j.jar";"%ICUTZU_HOME%icutzu.jar" -Dnogui=%NOGUI% -Ddiscoveronly=%DISCOVERONLY% -Dsilentpatch=%SILENTPATCH% com.ibm.icu.dev.tool.tzu.ICUTZUMain --recurse --backup "%ICUTZU_HOME%Temp" %1 %2 %3 %4 %5 %6 %7 %8 %9
-
-GOTO Exit
+@echo.
+@echo Launching the ICU4J Time Zone Update Utility (ICUTZU)...
+@echo "%JAVA_HOME%\bin\java.exe" -cp "%ICUTZU_HOME%icu4j.jar";"%ICUTZU_HOME%icutzu.jar" -Dnogui=%NOGUI% -Ddiscoveronly=%DISCOVERONLY% -Dsilentpatch=%SILENTPATCH% com.ibm.icu.dev.tool.tzu.ICUTZUMain --recurse --backup "%ICUTZU_HOME%Temp" %ARGS%
+@echo.
+"%JAVA_HOME%\bin\java.exe" -cp "%ICUTZU_HOME%icu4j.jar";"%ICUTZU_HOME%icutzu.jar" -Dnogui=%NOGUI% -Ddiscoveronly=%DISCOVERONLY% -Dsilentpatch=%SILENTPATCH% com.ibm.icu.dev.tool.tzu.ICUTZUMain --recurse --backup "%ICUTZU_HOME%Temp" %ARGS%
+IF ERRORLEVEL==0 GOTO Success
+GOTO Failure
 
 
 
 :MissingICUTZUJAR
 @echo The ICU4J Time Zone Update Utility (icutzu.jar) doesn't exist in %ICUTZU_HOME%.
 IF NOT EXIST "%ICUTZU_HOME%icu4j.jar" GOTO MissingICU4JJAR
-GOTO Exit
+GOTO Failure
 
 :MissingICU4JJAR
 @echo ICU for Java (icu4j.jar) doesn't exist in %ICUTZU_HOME%.
-GOTO Exit
+GOTO Failure
 
 :MissingICUTZUENV
 @echo runicutzuenv.bat file doesn't exist in %ICUTZU_HOME%.
-GOTO Exit
+GOTO Failure
 
 :MissingJAVAHOME
 @echo java.exe does not exist in %JAVA_HOME%\bin. Please update the JAVA_HOME enviroment variable in runicutzuenv.bat
+GOTO Failure
+
+:Success
+@echo.
+@echo End of ICU4J Time Zone Update Utility (ICUTZU) completed successfully.
 GOTO Exit
 
+:Failure
+@echo.
+@echo ICU4J Time Zone Update Utility (ICUTZU) did not complete successfully.
+GOTO Exit
 
 :Exit
-@echo End of ICU4J Time Zone Update Utility (ICUTZU).

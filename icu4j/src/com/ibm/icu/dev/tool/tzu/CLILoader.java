@@ -18,7 +18,6 @@ import java.util.Map;
 
 import com.ibm.icu.dev.tool.UOption;
 
-
 public class CLILoader {
     public static void main(String[] args) {
         new CLILoader(args);
@@ -26,9 +25,6 @@ public class CLILoader {
 
     public CLILoader(String[] args) {
         try {
-            // make sure the result model hides unreadable/unwritable files
-            resultModel.setHidden(false);
-
             // set some options to be true based on environment variables
             if ("true".equals(System.getProperty("discoveronly")))
                 options[DISCOVERONLY].doesOccur = true;
@@ -43,14 +39,12 @@ public class CLILoader {
                 showHelp();
                 return;
             }
-            try{
-            // init the logger
-            logger = Logger.getInstance(Logger.DEFAULT_FILENAME,
-                    options[QUIET].doesOccur ? Logger.QUIET
-                            : options[VERBOSE].doesOccur ? Logger.VERBOSE
-                                    : Logger.NORMAL);
-            }catch(FileNotFoundException ex){
-                ex.printStackTrace();
+            try {
+                // init the logger
+                logger = Logger.getInstance(Logger.DEFAULT_FILENAME, options[QUIET].doesOccur ? Logger.QUIET
+                        : options[VERBOSE].doesOccur ? Logger.VERBOSE : Logger.NORMAL);
+            } catch (FileNotFoundException ex) {
+                System.out.println("Could not open " + Logger.DEFAULT_FILENAME + " for writing.");
                 System.exit(-1);
             }
             // create the resultModel, the pathModel, and the sourceModel
@@ -58,23 +52,23 @@ public class CLILoader {
             pathModel = new PathModel(resultModel, logger);
             sourceModel = new SourceModel(logger);
 
+            // make sure the result model hides unreadable/unwritable files
+            resultModel.setHidden(false);
+
             // make sure only there is only one update mode in the options
-            int choiceType = (options[OFFLINE].doesOccur ? 1 : 0)
-                    + (options[TZVERSION].doesOccur ? 1 : 0)
-                    + (options[BEST].doesOccur ? 1 : 0)
-                    + (options[DISCOVERONLY].doesOccur ? 1 : 0);
+            int choiceType = (options[OFFLINE].doesOccur ? 1 : 0) + (options[TZVERSION].doesOccur ? 1 : 0)
+                    + (options[BEST].doesOccur ? 1 : 0) + (options[DISCOVERONLY].doesOccur ? 1 : 0);
             if (choiceType > 1)
-                syntaxError("Options -o (--offline), -t (--tzversion), -b (--best) and -d (--discoveronly) are mutually exclusive");// error
+                syntaxError("Options -o (--offline), -t (--tzversion), -b (--best) and -d (--discoveronly) are mutually exclusive");
 
             // make sure that quiet & verbose do not both occur
             if (options[QUIET].doesOccur && options[VERBOSE].doesOccur)
-                syntaxError("Options -q (--quiet) and -v (--verbose) are mutually exclusive");// error
+                syntaxError("Options -q (--quiet) and -v (--verbose) are mutually exclusive");
 
-            // make sure that exactly one of backup & nobackup occurs
             if (options[BACKUP].doesOccur && options[NOBACKUP].doesOccur)
-                syntaxError("Options -b (--backup) and -B (--nobackup) are mutually exclusive");// error
+                syntaxError("Options -b (--backup) and -B (--nobackup) are mutually exclusive");
             if (!options[BACKUP].doesOccur && !options[NOBACKUP].doesOccur)
-                syntaxError("One of the options -b (--backup) or -B (--nobackup) must occur");// error
+                syntaxError("One of the options -b (--backup) or -B (--nobackup) must occur");
             if (argsleft != 0)
                 syntaxError("Too many arguments");// error
 
@@ -98,9 +92,7 @@ public class CLILoader {
 
             // if we're running offline and the local file doesnt exist, we
             // can't update squat
-            if (options[OFFLINE].doesOccur
-                    && !SourceModel.TZ_LOCAL_FILE.exists()
-                    && !options[DISCOVERONLY].doesOccur)
+            if (options[OFFLINE].doesOccur && !SourceModel.TZ_LOCAL_FILE.exists() && !options[DISCOVERONLY].doesOccur)
                 throw new IllegalArgumentException(
                         "Running offline mode but local file does not exist (no sources available)");
 
@@ -115,7 +107,7 @@ public class CLILoader {
             // search the paths for updatable icu4j files
             try {
                 logger.println("Search started.", Logger.NORMAL);
-                pathModel.searchAll(options[RECURSE].doesOccur, backupDir);
+                pathModel.searchAll(options[RECURSE].doesOccur, backupDir, null);
                 logger.println("Search done.", Logger.NORMAL);
             } catch (InterruptedException ex) {
                 logger.println("Search interrupted.", Logger.NORMAL);
@@ -142,8 +134,7 @@ public class CLILoader {
             // (do nothing in the case of DISCOVERONLY)
 
             // create a reader for user input
-            BufferedReader reader = new BufferedReader(new InputStreamReader(
-                    System.in));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
             // iterate through each icu4j file in the search results
             Iterator resultIter = resultModel.iterator();
@@ -151,18 +142,12 @@ public class CLILoader {
                 try {
                     ICUFile entry = (ICUFile) resultIter.next();
                     logger.println("", Logger.NORMAL);
-                    logger.println("Filename:  " + entry.getFile().getName(),
-                            Logger.NORMAL);
-                    logger.println("Location:  " + entry.getFile().getParent(),
-                            Logger.NORMAL);
-                    logger.println("Current Version: " + entry.getTZVersion(),
-                            Logger.NORMAL);
+                    logger.println("Filename:  " + entry.getFile().getName(), Logger.NORMAL);
+                    logger.println("Location:  " + entry.getFile().getParent(), Logger.NORMAL);
+                    logger.println("Current Version: " + entry.getTZVersion(), Logger.NORMAL);
 
-                    if (!entry.getFile().canRead()
-                            || !entry.getFile().canWrite()) {
-                        logger.println("Missing permissions for "
-                                + entry.getFile().getName() + ".",
-                                Logger.NORMAL);
+                    if (!entry.getFile().canRead() || !entry.getFile().canWrite()) {
+                        logger.println("Missing permissions for " + entry.getFile().getName() + ".", Logger.NORMAL);
                         continue;
                     }
 
@@ -172,8 +157,7 @@ public class CLILoader {
                             update(entry, chosenName, chosenURL);
                     } else if (choiceType == 1) // confirmation mode
                     {
-                        String input = askConfirm(chosenName, chosenVersion,
-                                entry.getTZVersion(), reader);
+                        String input = askConfirm(chosenName, chosenVersion, entry.getTZVersion(), reader);
 
                         if ("yes".startsWith(input))
                             update(entry, chosenName, chosenURL);
@@ -188,8 +172,7 @@ public class CLILoader {
                         else if ("local choice".startsWith(input))
                             update(entry, getLocalName(), getLocalURL());
                         else if (!"none".startsWith(input))
-                            update(entry, getTZVersionName(input),
-                                    getTZVersionURL(input));
+                            update(entry, getTZVersionName(input), getTZVersionURL(input));
                         else
                             skipUpdate();
                     }
@@ -207,18 +190,14 @@ public class CLILoader {
         }
     }
 
-    private String askConfirm(String chosenString, String chosenVersion,
-            String currentVersion, BufferedReader reader) throws IOException {
+    private String askConfirm(String chosenString, String chosenVersion, String currentVersion, BufferedReader reader)
+            throws IOException {
         int betterness = chosenVersion.compareToIgnoreCase(currentVersion);
         if (betterness == 0) {
-            logger.println("Updating should have no effect on this file.",
-                    Logger.NORMAL);
+            logger.println("Updating should have no effect on this file.", Logger.NORMAL);
             logger.println("Update anyway?", Logger.NORMAL);
         } else if (betterness < 0) {
-            logger
-                    .println(
-                            "Warning: The version specified is older than the one present in the file.",
-                            Logger.NORMAL);
+            logger.println("Warning: The version specified is older than the one present in the file.", Logger.NORMAL);
             logger.println("Update anyway?", Logger.NORMAL);
         } else {
             logger.println("Update to " + chosenVersion + "?", Logger.NORMAL);
@@ -234,14 +213,11 @@ public class CLILoader {
 
         logger.println(getLocalName(), Logger.NORMAL);
         while (sourceIter.hasNext())
-            logger.println(", " + ((Map.Entry) sourceIter.next()).getKey(),
-                    Logger.NORMAL);
+            logger.println(", " + ((Map.Entry) sourceIter.next()).getKey(), Logger.NORMAL);
         logger.println("", Logger.NORMAL);
 
-        logger
-                .println(
-                        "Update to which version? [best (default), none, local copy, <specific version above>]",
-                        Logger.NORMAL);
+        logger.println("Update to which version? [best (default), none, local copy, <specific version above>]",
+                Logger.NORMAL);
         logger.println(": ", Logger.NORMAL);
         return reader.readLine().trim().toLowerCase();
     }
@@ -294,8 +270,7 @@ public class CLILoader {
 
     private URL getTZVersionURL(String version) {
         try {
-            return new URL(SourceModel.TZ_BASE_URLSTRING_START + version
-                    + SourceModel.TZ_BASE_URLSTRING_END);
+            return new URL(SourceModel.TZ_BASE_URLSTRING_START + version + SourceModel.TZ_BASE_URLSTRING_END);
         } catch (MalformedURLException ex) {
             ex.printStackTrace();
             return null;
@@ -318,18 +293,12 @@ public class CLILoader {
 
     private File backupDir = null;
 
-    private static UOption options[] = new UOption[] {
-            UOption.create("help", '?', UOption.NO_ARG),
-            UOption.create("verbose", 'v', UOption.NO_ARG),
-            UOption.create("quiet", 'q', UOption.NO_ARG),
-            UOption.create("auto", 'a', UOption.NO_ARG),
-            UOption.create("offline", 'o', UOption.NO_ARG),
-            UOption.create("best", 'b', UOption.NO_ARG),
-            UOption.create("tzversion", 't', UOption.REQUIRES_ARG),
-            UOption.create("recurse", 'r', UOption.NO_ARG),
-            UOption.create("backup", 'b', UOption.REQUIRES_ARG),
-            UOption.create("nobackup", 'B', UOption.NO_ARG),
-            UOption.create("discoveronly", 'd', UOption.NO_ARG), };
+    private static UOption options[] = new UOption[] { UOption.create("help", '?', UOption.NO_ARG),
+            UOption.create("verbose", 'v', UOption.NO_ARG), UOption.create("quiet", 'q', UOption.NO_ARG),
+            UOption.create("auto", 'a', UOption.NO_ARG), UOption.create("offline", 'o', UOption.NO_ARG),
+            UOption.create("best", 'b', UOption.NO_ARG), UOption.create("tzversion", 't', UOption.REQUIRES_ARG),
+            UOption.create("recurse", 'r', UOption.NO_ARG), UOption.create("backup", 'b', UOption.REQUIRES_ARG),
+            UOption.create("nobackup", 'B', UOption.NO_ARG), UOption.create("discoveronly", 'd', UOption.NO_ARG), };
 
     private static final int HELP = 0;
 

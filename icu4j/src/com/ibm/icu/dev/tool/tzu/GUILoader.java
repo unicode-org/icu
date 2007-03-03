@@ -13,8 +13,7 @@ import java.io.FileNotFoundException;
 import java.net.URL;
 
 import javax.swing.JFrame;
-
-
+import javax.swing.text.JTextComponent;
 
 public class GUILoader {
     public static void main(String[] args) {
@@ -23,10 +22,11 @@ public class GUILoader {
 
     public GUILoader() {
         String title = "ICU Time Zone Updater";
-        try{
+        try {
             logger = Logger.getInstance(Logger.DEFAULT_FILENAME, Logger.NORMAL);
-        }catch(FileNotFoundException ex){
-            // TODO: handle the exception gracefully
+        } catch (FileNotFoundException ex) {
+            System.out.println("Could not open " + Logger.DEFAULT_FILENAME + " for writing.");
+            System.exit(-1);
         }
         resultModel = new ResultModel(logger);
         pathModel = new PathModel(resultModel, logger);
@@ -63,6 +63,8 @@ public class GUILoader {
             }
         });
 
+        statusBar = resultGUI.getStatusBar();
+
         // ask the user for a backup dir
         /***********************************************************************
          * JFileChooser backupChooser = new JFileChooser();
@@ -71,8 +73,7 @@ public class GUILoader {
          * (backupChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) ?
          * backupChooser.getSelectedFile() : null; /
          **********************************************************************/
-        backupDir = new File(
-                "C:\\Documents and Settings\\Daniel Kesserich\\Desktop\\Spring 2007\\IBM\\backup");
+        backupDir = new File("C:\\Documents and Settings\\Daniel Kesserich\\Desktop\\Spring 2007\\IBM\\backup");
         /**/
 
         setCancelSearchEnabled(false);
@@ -94,7 +95,7 @@ public class GUILoader {
                 try {
                     resultFrame.setVisible(true);
                     resultClosed = false;
-                    pathModel.searchAll(subdirs, backupDir);
+                    pathModel.searchAll(subdirs, backupDir, statusBar);
                 } catch (InterruptedException ex) { /* i escaped! i'm free! */
                 }
                 setSearchEnabled(true);
@@ -119,7 +120,7 @@ public class GUILoader {
                 try {
                     resultFrame.setVisible(true);
                     resultClosed = false;
-                    pathModel.search(indices, subdirs, backupDir);
+                    pathModel.search(indices, subdirs, backupDir, statusBar);
                 } catch (InterruptedException ex) { /* i escaped! i'm free! */
                 }
                 setSearchEnabled(true);
@@ -235,4 +236,6 @@ public class GUILoader {
     private File backupDir;
 
     private Logger logger;
+
+    private JTextComponent statusBar;
 }

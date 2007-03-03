@@ -30,7 +30,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 
-
 public class PathComponent extends JComponent {
     public PathComponent(final GUILoader owner, final PathModel pathModel) {
         this.pathModel = pathModel;
@@ -89,8 +88,7 @@ public class PathComponent extends JComponent {
 
             private void checkPopup(MouseEvent event) {
                 if (event.isPopupTrigger())
-                    pathPopup.show((Component) event.getSource(), event.getX(),
-                            event.getY());
+                    pathPopup.show((Component) event.getSource(), event.getX(), event.getY());
             }
         });
 
@@ -115,8 +113,7 @@ public class PathComponent extends JComponent {
 
         pathSearchSelectedItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                owner.search(pathList.getSelectedIndices(), pathSubdirOption
-                        .isSelected());
+                owner.search(pathList.getSelectedIndices(), pathSubdirOption.isSelected());
             }
         });
 
@@ -144,9 +141,22 @@ public class PathComponent extends JComponent {
 
         pathBrowseButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
+                // set the chooser's intial path to be whatever is in the text
+                // field
+                File path = new File(pathField.getText());
+                if (path.exists())
+                    pathChooser.setSelectedFile(path);
+
+                // run the chooser dialog
                 int returnVal = pathChooser.showOpenDialog(PathComponent.this);
-                if (returnVal == JFileChooser.APPROVE_OPTION)
-                    addFile(pathChooser.getSelectedFile());
+
+                // on an accept, add the path to the model and set the text
+                // field to it
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    path = pathChooser.getSelectedFile();
+                    addFile(path);
+                    pathField.setText(path.getPath());
+                }
             }
         });
 
@@ -159,9 +169,9 @@ public class PathComponent extends JComponent {
 
     private void addFile(File file) {
         if (!pathModel.add(new IncludePath(file, isIncluded())))
-            JOptionPane.showMessageDialog(PathComponent.this, "\""
-                    + file.getPath() + "\" is not a valid file or path.",
-                    "Cannot add path/file", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(PathComponent.this,
+                    "\"" + file.getPath() + "\" is not a valid file or path.", "Cannot add path/file",
+                    JOptionPane.ERROR_MESSAGE);
     }
 
     public void setSearchEnabled(boolean value) {
@@ -178,13 +188,11 @@ public class PathComponent extends JComponent {
 
     private JList pathList = new JList();
 
-    private JComboBox pathSignBox = new JComboBox(new Object[] { "Include",
-            "Exclude" });
+    private JComboBox pathSignBox = new JComboBox(new Object[] { "Include", "Exclude" });
 
     private JTextField pathField = new JTextField(30);
 
-    private JCheckBox pathSubdirOption = new JCheckBox("Search Subdirectories",
-            true);
+    private JCheckBox pathSubdirOption = new JCheckBox("Search Subdirectories", true);
 
     private JButton pathBrowseButton = new JButton("Browse...");
 
@@ -194,16 +202,13 @@ public class PathComponent extends JComponent {
 
     private JPopupMenu pathPopup = new JPopupMenu();
 
-    private JMenuItem pathAddAllDrivesItem = new JMenuItem(
-            "Add All Drives to List");
+    private JMenuItem pathAddAllDrivesItem = new JMenuItem("Add All Drives to List");
 
-    private JMenuItem pathRemoveSelectedItem = new JMenuItem(
-            "Remove Selected Items");
+    private JMenuItem pathRemoveSelectedItem = new JMenuItem("Remove Selected Items");
 
     private JMenuItem pathRemoveAllItem = new JMenuItem("Remove All");
 
-    private JMenuItem pathSearchSelectedItem = new JMenuItem(
-            "Search Selected Items");
+    private JMenuItem pathSearchSelectedItem = new JMenuItem("Search Selected Items");
 
     private JMenuItem pathSearchAllItem = new JMenuItem("Search All");
 
