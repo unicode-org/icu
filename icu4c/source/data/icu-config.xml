@@ -297,7 +297,7 @@
         <coverageLevel group="G3" level="basic" org="IBM"/>
         <coverageLevel group="G4" level="basic" org="IBM"/>
         <include xpath="//ldml/.*"/>
-        <include xpath="//ldml/characters/exemplarCharacters.*" locales="gl" draft="unconfirmed" />
+        <include xpath="//ldml/characters/exemplarCharacters.*" locales="gl ti" draft="unconfirmed" />
         <include xpath="//ldml/.*/special/.*"/>
         <include xpath="//ldml/localeDisplayNames/territories/territory\[@type='DO'].*" locales="fr" draft="unconfirmed" />
         <include xpath="//ldml/dates/calendars/calendar\[@type='gregorian'\]/eras.*" locales="bg sl" draft="unconfirmed" />

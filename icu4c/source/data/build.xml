@@ -4,7 +4,7 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 2005-2006, International Business Machines Corporation and    *    
+* Copyright (C) 2005-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -12,34 +12,34 @@
 <project name="icu-build" default="all" basedir=".">
     <target name="init">
         <tstamp/>
-        
+
         <!-- Load environment variables -->
         <property environment="env"/>
-        
+
         <condition property="is.icu4j.classes.set" >
             <or>
                 <isset property="env.ICU4J_CLASSES" />
                 <isset property="env.ICU4J_JAR" />
             </or>
-        </condition > 
+        </condition >
         <fail unless="is.icu4j.classes.set" message="Please set the ICU4J_CLASSES or ICU4J_JAR environment variable."/>
-        
+
         <condition property="is.icu4c.dir.set" >
             <isset property="env.ICU4C_DIR" />
-        </condition > 
+        </condition >
         <fail unless="is.icu4c.dir.set" message="Please set the ICU4C_DIR environment variable."/>
-        
+
         <condition property="is.cldr.dir.set" >
             <isset property="env.CLDR_DIR" />
-        </condition > 
+        </condition >
         <fail unless="is.cldr.dir.set" message="Please set the CLDR_DIR environment variable."/>
-        
+
         <condition property="is.cldr.classes.set" >
             <or>
                 <isset property="env.CLDR_CLASSES" />
                 <isset property="env.CLDR_JAR" />
             </or>
-        </condition > 
+        </condition >
         <fail unless="is.cldr.classes.set" message="Please set the CLDR_CLASSES or CLDR_JAR environment variable."/>
 
         <condition property="is.utilities.classes.set" >
@@ -47,16 +47,16 @@
                 <isset property="env.ICU4J_CLASSES" />
                 <isset property="env.UTILITIES_JAR" />
             </or>
-        </condition > 
+        </condition >
         <fail unless="is.utilities.classes.set" message="Please set the ICU4J_CLASSES or UTILITIES_JAR environment variable."/>
-   
+
         <echo message="java home: ${java.home}"/>
         <echo message="java version: ${java.version}"/>
         <echo message="ant java version: ${ant.java.version}"/>
         <echo message="${ant.version}"/>
     </target>
     <target name="setup">
-    
+
         <echo message="${env.CLDR_CLASSES}"/>
         <taskdef name="cldr-build" classname="org.unicode.cldr.ant.CLDRBuild">
             <classpath>
@@ -67,11 +67,11 @@
                 <pathelement location="${env.CLDR_JAR}"/>
                 <pathelement location="${env.UTILITIES_JAR}"/>
             </classpath>
-        </taskdef> 
+        </taskdef>
     </target>
     <!-- target for generating ICU data -->
     <target name="all" depends="locales, resfiles, collation, colfiles, supplementalData, brkitr, brkfiles" />
-    
+
     <target name="locales" depends="init,setup" description="builds locale files in ICU text format">
         <cldr-build toolName="org.unicode.cldr.icu.LDML2ICUConverter" srcFile=".*xml" destFile=".*txt">
             <!-- launch the tool and generate the data after reading the config file -->
@@ -98,37 +98,39 @@
                     <arg name="-w" value="${env.CLDR_DIR}/common/main" />
                 </args>
                   <!-- locale aliases (main) -->
-                <deprecates> 
-                    <alias from="in" to="id" /> 
-                    <alias from="in_ID" to="id_ID" /> 
-                    <alias from="iw" to="he" /> 
-                    <alias from="iw_IL" to="he_IL" /> 
-                    <alias from="ja_JP_TRADITIONAL" to="ja_JP@calendar=japanese" xpath="//ldml/dates/calendars/default[@type='japanese']"/> 
-                    <alias from="ji" to="yi" /> 
-                    <alias from="jw" to="jv"/> 
-                    <alias from="no" to="nb"/> 
-                    <alias from="no_NO" to="nb_NO"/> 
+                <deprecates>
+                    <alias from="in" to="id" />
+                    <alias from="in_ID" to="id_ID" />
+                    <alias from="iw" to="he" />
+                    <alias from="iw_IL" to="he_IL" />
+                    <alias from="ja_JP_TRADITIONAL" to="ja_JP@calendar=japanese" xpath="//ldml/dates/calendars/default[@type='japanese']"/>
+                    <alias from="ji" to="yi" />
+                    <alias from="jw" to="jv"/>
+                    <alias from="no" to="nb"/>
+                    <alias from="no_NO" to="nb_NO"/>
                     <alias from="no_NO_NY" to="nn_NO" />
-                    <alias from="en_RH" to="en_ZW" />    
-                    <alias from="th_TH_TRADITIONAL" to="th_TH@calendar=buddhist" xpath="//ldml/dates/calendars/default[@type='buddhist']" /> 
-                    <aliasLocale locale="az_AZ" /> 
-                    <aliasLocale locale="sh" /> 
-                    <aliasLocale locale="sh_BA" /> 
-                    <aliasLocale locale="sh_CS" /> 
-                    <aliasLocale locale="sh_YU" /> 
-                    <aliasLocale locale="sr_BA" /> 
-                    <aliasLocale locale="sr_CS" /> 
-                    <aliasLocale locale="sr_YU" /> 
-                    <aliasLocale locale="sr_Cyrl_YU" /> 
-                    <aliasLocale locale="sr_Latn_YU" /> 
-                    <aliasLocale locale="uz_AF" /> 
-                    <aliasLocale locale="uz_UZ" /> 
-                    <aliasLocale locale="zh_CN" /> 
-                    <aliasLocale locale="zh_HK" /> 
-                    <aliasLocale locale="zh_MO" /> 
-                    <aliasLocale locale="zh_SG" /> 
+                    <alias from="en_RH" to="en_ZW" />
+                    <alias from="th_TH_TRADITIONAL" to="th_TH@calendar=buddhist" xpath="//ldml/dates/calendars/default[@type='buddhist']" />
+                    <aliasLocale locale="az_AZ" />
+                    <aliasLocale locale="sh" />
+                    <aliasLocale locale="sh_BA" />
+                    <aliasLocale locale="sh_CS" />
+                    <aliasLocale locale="sh_YU" />
+                    <aliasLocale locale="sr_BA" />
+                    <aliasLocale locale="sr_CS" />
+                    <aliasLocale locale="sr_ME" />
+                    <aliasLocale locale="sr_RS" />
+                    <aliasLocale locale="sr_YU" />
+                    <aliasLocale locale="sr_Cyrl_YU" />
+                    <aliasLocale locale="sr_Latn_YU" />
+                    <aliasLocale locale="uz_AF" />
+                    <aliasLocale locale="uz_UZ" />
+                    <aliasLocale locale="zh_CN" />
+                    <aliasLocale locale="zh_HK" />
+                    <aliasLocale locale="zh_MO" />
+                    <aliasLocale locale="zh_SG" />
                     <aliasLocale locale="zh_TW" />
-                </deprecates> 
+                </deprecates>
             </run>
         </cldr-build>
     </target>
@@ -139,7 +141,7 @@
                     <arg name="--sourcedir"       value="${env.CLDR_DIR}/common/collation" />
                     <arg name="--destdir"         value="${env.ICU4C_DIR}/source/data/coll"/>
                     <arg name="--specialsdir"     value="${env.ICU4C_DIR}/source/data/xml/collation"/>
-                    <arg name="--supplementaldir" value="${env.CLDR_DIR}/common/supplemental" />  
+                    <arg name="--supplementaldir" value="${env.CLDR_DIR}/common/supplemental" />
                 </args>
                 <!-- http://ant.apache.org/faq.html#xml-entity-include -->
                 &icu-config;
@@ -157,16 +159,19 @@
                     <arg name="-m" value="${env.CLDR_DIR}/common/supplemental" />
                     <arg name="-w" value="${env.CLDR_DIR}/common/collation" />
                 </args>
-                 <deprecates> 
-                    <alias from="de__PHONEBOOK" to="de@collation=phonebook"  xpath="//ldml/collations/default[@type='phonebook']"/> 
-                    <alias from="es__TRADITIONAL" to="es@collation=traditional" xpath="//ldml/collations/default[@type='traditional']"/> 
-                    <alias from="hi__DIRECT" to="hi@collation=direct" xpath="//ldml/collations/default[@type='direct']"/> 
-                    <alias from="zh__PINYIN" to="zh@collation=pinyin" xpath="//ldml/collations/default[@type='pinyin']"/> 
-                    <alias from="zh_TW_STROKE" to="zh@collation=stroke" xpath="//ldml/collations/default[@type='stroke']"/> 
-                    <alias from="in" to="id" /> 
-                    <alias from="in_ID" to="id_ID" /> 
-                    <alias from="iw" to="he" /> 
+                 <deprecates>
+                    <alias from="de__PHONEBOOK" to="de@collation=phonebook"  xpath="//ldml/collations/default[@type='phonebook']"/>
+                    <alias from="es__TRADITIONAL" to="es@collation=traditional" xpath="//ldml/collations/default[@type='traditional']"/>
+                    <alias from="hi__DIRECT" to="hi@collation=direct" xpath="//ldml/collations/default[@type='direct']"/>
+                    <alias from="zh__PINYIN" to="zh@collation=pinyin" xpath="//ldml/collations/default[@type='pinyin']"/>
+                    <alias from="zh_TW_STROKE" to="zh@collation=stroke" xpath="//ldml/collations/default[@type='stroke']"/>
+                    <alias from="in" to="id" />
+                    <alias from="in_ID" to="id_ID" />
+                    <alias from="iw" to="he" />
                     <alias from="iw_IL" to="he_IL" />
+                    <alias from="sr_BA" to="sr_Cyrl_BA" />
+                    <alias from="sr_ME" to="sr_Cyrl_ME" />
+                    <alias from="sr_RS" to="sr_Cyrl_RS" />
                     <alias from="zh_CN" to="zh_Hans_CN" />
                     <alias from="zh_SG" to="zh_Hans_SG" />
                     <alias from="zh_HK" to="zh_Hant_HK" />
@@ -176,7 +181,7 @@
                     <emptyLocale locale="es_" />
                     <emptyLocale locale="hi_" />
                     <emptyLocale locale="zh_" />
-                </deprecates> 
+                </deprecates>
             </run>
         </cldr-build>
     </target>
@@ -200,10 +205,10 @@
                 <args>
                     <arg name="--sourcedir"       value="${env.ICU4C_DIR}/source/data/xml/brkitr"/>
                     <arg name="--destdir"         value="${env.ICU4C_DIR}/source/data/brkitr"/>
-                    <arg name="--supplementaldir" value="${env.CLDR_DIR}/common/supplemental" />  
+                    <arg name="--supplementaldir" value="${env.CLDR_DIR}/common/supplemental" />
                 </args>
                 <!-- The entity include is not required for this target -->
-                <!-- http://ant.apache.org/faq.html#xml-entity-include 
+                <!-- http://ant.apache.org/faq.html#xml-entity-include
                 &icu-config;
                 -->
             </run>
@@ -231,7 +236,7 @@
                     <arg name="--commentSkip"/>
                 </args>
                 <!-- http://ant.apache.org/faq.html#xml-entity-include -->
-                
+
             </run>
         </cldr-build>
     </target>
@@ -246,21 +251,21 @@
                     <arg name="-m" value="${env.CLDR_DIR}/common/supplemental" />
                     <arg name="-w" value="${env.CLDR_DIR}/common/collation" />
                 </args>
-                 <deprecates> 
-                    <alias from="de__PHONEBOOK" to="de@collation=phonebook"  xpath="//ldml/collations/default[@type='phonebook']"/> 
-                    <alias from="es__TRADITIONAL" to="es@collation=traditional" xpath="//ldml/collations/default[@type='traditional']"/> 
-                    <alias from="hi__DIRECT" to="hi@collation=direct" xpath="//ldml/collations/default[@type='direct']"/> 
-                    <alias from="zh__PINYIN" to="zh@collation=pinyin" xpath="//ldml/collations/default[@type='pinyin']"/> 
-                    <alias from="zh_TW_STROKE" to="zh@collation=stroke" xpath="//ldml/collations/default[@type='stroke']"/> 
-                    <alias from="in" to="id" /> 
-                    <alias from="in_ID" to="id_ID" /> 
-                    <alias from="iw" to="he" /> 
+                 <deprecates>
+                    <alias from="de__PHONEBOOK" to="de@collation=phonebook"  xpath="//ldml/collations/default[@type='phonebook']"/>
+                    <alias from="es__TRADITIONAL" to="es@collation=traditional" xpath="//ldml/collations/default[@type='traditional']"/>
+                    <alias from="hi__DIRECT" to="hi@collation=direct" xpath="//ldml/collations/default[@type='direct']"/>
+                    <alias from="zh__PINYIN" to="zh@collation=pinyin" xpath="//ldml/collations/default[@type='pinyin']"/>
+                    <alias from="zh_TW_STROKE" to="zh@collation=stroke" xpath="//ldml/collations/default[@type='stroke']"/>
+                    <alias from="in" to="id" />
+                    <alias from="in_ID" to="id_ID" />
+                    <alias from="iw" to="he" />
                     <alias from="iw_IL" to="he_IL" />
                     <emptyLocale locale="de_" />
                     <emptyLocale locale="es_" />
                     <emptyLocale locale="hi_" />
                     <emptyLocale locale="zh_" />
-                </deprecates> 
+                </deprecates>
             </run>
         </cldr-build>
     </target>
@@ -275,7 +280,7 @@
                 <include name="colfiles.mk" />
             </fileset>
             <fileset id="locales" dir="${env.ICU4C_DIR}/source/data/brkitr">
-                <!-- brkitr directory contains bunch of txt files that are not produced by LDML2ICUConverter. 
+                <!-- brkitr directory contains bunch of txt files that are not produced by LDML2ICUConverter.
                      So can't clean up everything. This needs to be updated when new files are added to xml/brkitr directory -->
                 <include name="root.txt, en.txt, en_US.txt, en_US_POSIX.txt, ja.txt" />
                 <include name="brkfiles.mk" />
