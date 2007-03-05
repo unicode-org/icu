@@ -1,6 +1,6 @@
 // ***************************************************************************
 // *
-// * Copyright (C) 2004-2006 International Business Machines
+// * Copyright (C) 2004-2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
@@ -1052,6 +1052,10 @@ structLocale:table(nofallback){
             "",
         }
         RON{
+            "",
+            "",
+        }
+        RSD{
             "",
             "",
         }
@@ -5897,6 +5901,15 @@ structLocale:table(nofallback){
             ss{""}
             ec{""}
         }
+        "Australia:Eucla"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            ec{""}
+        }
         "Australia:Hobart"{
             ld{""}
             lg{""}
@@ -7059,6 +7072,15 @@ structLocale:table(nofallback){
             ec{""}
         }
         "Europe:Vilnius"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            ec{""}
+        }
+        "Europe:Volgograd"{
             ld{""}
             lg{""}
             ls{""}
@@ -8290,6 +8312,906 @@ structLocale:table(nofallback){
             sg{""}
             ss{""}
             ec{""}
+        }
+        "meta:Acre"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Africa_Central"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Africa_Eastern"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Africa_Southern"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Africa_Western"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Aktyubinsk"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Alaska"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Alaska_Hawaii"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Amazon"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:America_Central"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:America_Eastern"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:America_Mountain"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:America_Pacific"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Aqtau"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Aqtobe"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Arabian"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Argentina"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Argentina_Western"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Armenia"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Ashkhabad"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Atlantic"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Australia_Central"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Australia_Eastern"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Australia_Western"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Azores"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Baku"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Bangladesh"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Bering"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Bhutan"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Borneo"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Brasilia"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Chamorro"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Changbai"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Chile"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:China"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Choibalsan"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Dacca"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Dushanbe"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Dutch_Guiana"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:East_Timor"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Ecuador"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Europe_Central"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Europe_Eastern"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Europe_Western"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Frunze"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:GMT"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Galapagos"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Georgia"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Greenland_Central"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Greenland_Eastern"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Greenland_Western"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Guam"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Gulf"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Hawaii"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Hawaii_Aleutian"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:India"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Indonesia_Central"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Indonesia_Eastern"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Indonesia_Western"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Israel"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Karachi"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Kashgar"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Kazakhstan_Eastern"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Kazakhstan_Western"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Kizilorda"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Korea"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Kuybyshev"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Kwajalein"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Kyrgystan"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Lanka"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Long_Shu"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Lord_Howe"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Macau"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Malaya"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Malaysia"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Marshall_Islands"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Mongolia"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:New_Zealand"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Newfoundland"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:North_Mariana"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Pakistan"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Pierre_Miquelon"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Qyzylorda"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Samara"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Samarkand"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Samoa"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Shevchenko"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Suriname"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Sverdlovsk"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Tajikistan"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Tashkent"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Tbilisi"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Turkey"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Turkmenistan"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Uralsk"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Urumqi"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Uzbekistan"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Yekaterinburg"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Yerevan"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Yukon"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
         }
     }
 }
