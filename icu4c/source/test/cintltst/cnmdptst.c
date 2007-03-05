@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation
+ * Copyright (c) 1997-2007, International Business Machines Corporation
  * and others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -531,17 +531,17 @@ static void TestCurrencyObject(void)
     
     const char* locale[]={
         "fr_FR",
-            "fr_FR",
+        "fr_FR",
     };
     
     const char* currency[]={
         "",
-            "JPY",
+        "JPY",
     };
     
     const char* result[]={
         "1\\u00A0234,56 \\u20AC",
-            "1\\u00A0235 \\u00A5",
+        "1\\u00A0235 JP\\u00A5",
     };
     
     log_verbose("\nTesting the number format with different currency codes\n");
