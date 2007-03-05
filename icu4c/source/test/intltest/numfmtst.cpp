@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /* Modification History:
@@ -758,13 +758,13 @@ void NumberFormatTest::TestCurrencyObject() {
     expectCurrency(*fmt, null, 1234.56, CharsToUnicodeString("1 234,56 \\u20AC"));
 
     expectCurrency(*fmt, Locale::getJapan(),
-                   1234.56, CharsToUnicodeString("1 235 \\u00A5")); // Yen
+                   1234.56, CharsToUnicodeString("1 235 JP\\u00A5")); // Yen
 
     expectCurrency(*fmt, Locale("fr", "CH", ""),
                    1234.56, "1 234,55 sFr."); // 0.05 rounding
 
     expectCurrency(*fmt, Locale::getUS(),
-                   1234.56, "1 234,56 $");
+                   1234.56, "1 234,56 US$");
 
     expectCurrency(*fmt, Locale::getFrance(),
                    1234.56, CharsToUnicodeString("1 234,56 \\u20AC")); // Euro
@@ -1481,7 +1481,7 @@ void NumberFormatTest::TestCurrencyNames(void) {
     // Do a basic check of getName()
     // USD { "US$", "US Dollar"            } // 04/04/1792-
     UErrorCode ec = U_ZERO_ERROR;
-    static const UChar USD[] = {85, 83, 68, 0}; /*USD*/
+    static const UChar USD[] = {0x55, 0x53, 0x44, 0}; /*USD*/
     static const UChar CAD[] = {0x43, 0x41, 0x44, 0}; /*CAD*/
     static const UChar ITL[] = {0x49, 0x54, 0x4C, 0}; /*ITL*/
     UBool isChoiceFormat;
