@@ -1489,7 +1489,7 @@ void NumberFormatTest::TestCurrencyNames(void) {
     // Warning: HARD-CODED LOCALE DATA in this test.  If it fails, CHECK
     // THE LOCALE DATA before diving into the code.
     assertEquals("USD.getName(SYMBOL_NAME)",
-                 UnicodeString("US$"),
+                 UnicodeString("$"),
                  UnicodeString(ucurr_getName(USD, "en",
                                              UCURR_SYMBOL_NAME,
                                              &isChoiceFormat, &len, &ec)));
@@ -1498,20 +1498,41 @@ void NumberFormatTest::TestCurrencyNames(void) {
                  UnicodeString(ucurr_getName(USD, "en",
                                              UCURR_LONG_NAME,
                                              &isChoiceFormat, &len, &ec)));
+    assertEquals("CAD.getName(SYMBOL_NAME)",
+                 UnicodeString("Can$"),
+                 UnicodeString(ucurr_getName(CAD, "en",
+                                             UCURR_SYMBOL_NAME,
+                                             &isChoiceFormat, &len, &ec)));
+    assertEquals("CAD.getName(SYMBOL_NAME)",
+                 UnicodeString("$"),
+                 UnicodeString(ucurr_getName(CAD, "en_CA",
+                                             UCURR_SYMBOL_NAME,
+                                             &isChoiceFormat, &len, &ec)));
+    assertEquals("USD.getName(SYMBOL_NAME)",
+                 UnicodeString("US$"),
+                 UnicodeString(ucurr_getName(USD, "en_AU",
+                                             UCURR_SYMBOL_NAME,
+                                             &isChoiceFormat, &len, &ec)));
+    assertEquals("CAD.getName(SYMBOL_NAME)",
+                 UnicodeString("Can$"),
+                 UnicodeString(ucurr_getName(CAD, "en_AU",
+                                             UCURR_SYMBOL_NAME,
+                                             &isChoiceFormat, &len, &ec)));
     assertSuccess("ucurr_getName", ec);
     
+    ec = U_ZERO_ERROR;
     // Test that a default or fallback warning is being returned. JB 4239.
-    (void) ucurr_getName(CAD, "en_US", UCURR_LONG_NAME, &isChoiceFormat,
+    ucurr_getName(CAD, "en_US", UCURR_LONG_NAME, &isChoiceFormat,
                             &len, &ec);
     assertTrue("ucurr_getName (fallback)",
                     U_USING_FALLBACK_WARNING == ec, TRUE);
-    (void) ucurr_getName(CAD, "vi", UCURR_LONG_NAME, &isChoiceFormat,
+    ucurr_getName(CAD, "vi", UCURR_LONG_NAME, &isChoiceFormat,
                             &len, &ec);
     assertTrue("ucurr_getName (default)",
                     U_USING_DEFAULT_WARNING == ec, TRUE);
     
     // Test that a default warning is being returned when falling back to root. JB 4536.
-    (void) ucurr_getName(ITL, "cy", UCURR_LONG_NAME, &isChoiceFormat,
+    ucurr_getName(ITL, "cy", UCURR_LONG_NAME, &isChoiceFormat,
                             &len, &ec);
     assertTrue("ucurr_getName (default to root)",
                     U_USING_DEFAULT_WARNING == ec, TRUE);
