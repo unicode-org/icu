@@ -172,10 +172,12 @@ typedef enum UScriptCode {
       USCRIPT_SAURASHTRA                    = 111,/* Saur */
       USCRIPT_SIGN_WRITING                  = 112,/* Sgnw */
       USCRIPT_SUNDANESE                     = 113,/* Sund */
+      USCRIPT_MOON                          = 114,/* Moon */
+      USCRIPT_MEITEI_MAYEK                  = 115,/* Mtei */
 
       /* Private use codes from Qaaa - Qabx are not supported*/
 #endif /* U_HIDE_DRAFT_API */
-      USCRIPT_CODE_LIMIT    = 114
+      USCRIPT_CODE_LIMIT    = 116
 } UScriptCode;
 
 /**
