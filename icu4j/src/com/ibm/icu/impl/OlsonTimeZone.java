@@ -166,12 +166,12 @@ public class OlsonTimeZone extends TimeZone {
     public void setRawOffset(int offsetMillis) {
         GregorianCalendar cal = new GregorianCalendar(ULocale.ROOT);
         cal.setTimeZone(this);
-        int currentYear = cal.get(Calendar.YEAR);
+        int tmpFinalYear = cal.get(Calendar.YEAR) - 1;
 
         // Apply the raw offset starting current year and beyond
-        if (finalYear > currentYear) {
-            finalYear = currentYear;
-            finalMillis = fieldsToDay(currentYear, 0, 1) * TimeZone.MILLIS_PER_DAY;
+        if (finalYear > tmpFinalYear) {
+            finalYear = tmpFinalYear;
+            finalMillis = fieldsToDay(tmpFinalYear, 0, 1) * TimeZone.MILLIS_PER_DAY;
         }
         if (finalZone == null) {
             // Create SimpleTimeZone instance to store the offset
