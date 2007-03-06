@@ -2052,11 +2052,15 @@ structLocale:table(nofallback){
         POLYTONI{""}
         REVISED{""}
         BOONT{""}
+        FONIPA{""}
+        FONUPA{""}
         GAULISH{""}
         GUOYU{""}
         HAKKA{""}
         LOJBAN{""}
+        MONOTON{""}
         NEDIS{""}
+        POLYTON{""}
         SAAHO{""}
         ROZAJ{""}
         SCOUSE{""}
