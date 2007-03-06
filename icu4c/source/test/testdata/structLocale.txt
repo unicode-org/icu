@@ -1973,6 +1973,8 @@ structLocale:table(nofallback){
         Mero{""}
         Mlym{""}
         Mong{""}
+        Moon{""}
+        Mtei{""}
         Mymr{""}
         Nkoo{""}
         Ogam{""}
