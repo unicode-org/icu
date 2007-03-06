@@ -32,7 +32,7 @@ GENRB_SYNTHETIC_ALIAS = en_RH.txt in.txt in_ID.txt iw.txt\
 
 # All aliases (to not be included under 'installed'), but not including root.
 GENRB_ALIAS_SOURCE = $(GENRB_SYNTHETIC_ALIAS) az_AZ.txt sh.txt sh_CS.txt sh_YU.txt\
- sr_CS.txt sr_Cyrl_YU.txt sr_Latn_YU.txt sr_YU.txt uz_UZ.txt\
+ sr_CS.txt sr_ME.txt sr_RS.txt sr_Cyrl_YU.txt sr_Latn_YU.txt sr_YU.txt uz_UZ.txt\
  zh_CN.txt zh_HK.txt zh_MO.txt zh_SG.txt zh_TW.txt
 
 
@@ -79,7 +79,7 @@ GENRB_SOURCE = af.txt af_ZA.txt am.txt am_ET.txt\
  sl.txt sl_SI.txt so.txt so_DJ.txt so_ET.txt\
  so_KE.txt so_SO.txt sq.txt sq_AL.txt sr.txt\
  sr_Cyrl.txt sr_Cyrl_CS.txt sr_Cyrl_ME.txt sr_Cyrl_RS.txt sr_Latn.txt\
- sr_Latn_CS.txt sr_Latn_ME.txt sr_Latn_RS.txt sr_ME.txt sr_RS.txt\
+ sr_Latn_CS.txt sr_Latn_ME.txt sr_Latn_RS.txt\
  sv.txt sv_FI.txt sv_SE.txt sw.txt sw_KE.txt\
  sw_TZ.txt ta.txt ta_IN.txt te.txt te_IN.txt\
  th.txt th_TH.txt ti.txt ti_ER.txt ti_ET.txt\
