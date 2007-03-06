@@ -53,6 +53,8 @@ sc ; Lydi ; Lydi
 sc ; Mand ; Mand 
 sc ; Maya ; Maya 
 sc ; Mero ; Mero 
+sc ; Moon ; Moon 
+sc ; Mtei ; Mtei 
 sc ; Olck ; Olck 
 sc ; Orkh ; Orkh 
 sc ; Perm ; Perm 
