@@ -150,9 +150,9 @@ sub buildICU{
         cmd("make uni-core-data", $verbose);
         if(chdir($icuTestDataSrcDir)){
             print("Invoking make in directory $icuTestDataSrcDir\n");
-	        cmd("make", $verbose);
+	    cmd("make", $verbose);
         }else{
-	        die "Could not cd to $icuTestDataSrcDir\n";
+	    die "Could not cd to $icuTestDataSrcDir\n";
         }
     }elsif($platform eq "aix"){
         # make all in ICU
@@ -361,4 +361,5 @@ gendtjar.pl --icu-root=\\work\\icu --jar=\\jdk1.4.1\\bin --icu4j-root=\\work\\ic
 END
   exit(0);
 }
+
 
