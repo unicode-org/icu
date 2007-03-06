@@ -176,6 +176,7 @@ sr_Latn{
         MA{"Maroko"}
         MC{"Monako"}
         MD{"Moldavija"}
+        ME{"Crna Gora"}
         MG{"Madagaskar"}
         MH{"Maršalska Ostrva"}
         MK{"Makedonija"}
@@ -225,6 +226,7 @@ sr_Latn{
         QO{"Ostala okeanija"}
         RE{"Rejunion"}
         RO{"Rumunija"}
+        RS{"Srbija"}
         RU{"Rusija"}
         RW{"Ruanda"}
         SA{"Saudijska Arabija"}
