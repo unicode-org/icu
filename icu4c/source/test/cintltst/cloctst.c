@@ -863,7 +863,7 @@ static void TestISOFunctions()
     const char* const* str=uloc_getISOLanguages();
     const char* const* str1=uloc_getISOCountries();
     const char* test;
-    int32_t count  = 0;
+    int32_t count = 0, skipped = 0;
     int32_t expect;
     UResourceBundle *res;
     UErrorCode status = U_ZERO_ERROR;
@@ -887,8 +887,13 @@ static void TestISOFunctions()
 #if U_CHARSET_FAMILY==U_ASCII_FAMILY
         {
             /* This code only works on ASCII machines where the keys are stored in ASCII order */
-            const char *key;
-            ures_getNextString(res, NULL, &key, &status);
+            const char *key = NULL;
+            do {
+                /* Skip over language tags. This API only returns language codes. */
+                skipped += (key != NULL);
+                ures_getNextString(res, NULL, &key, &status);
+            }
+            while (key != NULL && strchr(key, '_'));
             if(!strcmp(key,"root"))
                 ures_getNextString(res, NULL, &key, &status);
             if(!strcmp(key,"Fallback"))
@@ -918,6 +923,7 @@ static void TestISOFunctions()
     /* We check root, just in case the en locale is removed. The en locale should have the same number of resources. */
     expect = ures_getSize(res) - 1; /* Ignore root */
     expect -= 1; /* TODO: Remove this line once sh goes away. */
+    expect -= skipped;
     ures_close(res);
 
     if(count!=expect) {
