@@ -1,8 +1,8 @@
 /**
- *******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and         *
- * others. All Rights Reserved.                                                *
- *******************************************************************************
+ * ******************************************************************************
+ * Copyright (C) 2007, International Business Machines Corporation and * others.
+ * All Rights Reserved. *
+ * ******************************************************************************
  */
 package com.ibm.icu.dev.tool.tzu;
 
@@ -13,27 +13,29 @@ import java.io.FileNotFoundException;
 import java.net.URL;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.text.JTextComponent;
 
 public class GUILoader {
     public static void main(String[] args) {
-        new GUILoader();
+        new GUILoader(args);
     }
 
-    public GUILoader() {
-        String title = "ICU Time Zone Updater";
+    public GUILoader(String[] args) {
         try {
             logger = Logger.getInstance(Logger.DEFAULT_FILENAME, Logger.NORMAL);
         } catch (FileNotFoundException ex) {
-            System.out.println("Could not open " + Logger.DEFAULT_FILENAME + " for writing.");
+            String error = "Could not open " + Logger.DEFAULT_FILENAME + " for writing.";
+            System.out.println(error);
+            JOptionPane.showMessageDialog(null, error, TITLE, JOptionPane.ERROR_MESSAGE);
             System.exit(-1);
         }
         resultModel = new ResultModel(logger);
-        pathModel = new PathModel(resultModel, logger);
+        pathModel = new PathModel(logger);
         sourceModel = new SourceModel(logger);
 
         pathGUI = new PathComponent(this, pathModel);
-        pathFrame = new JFrame(title + " - Search Paths");
+        pathFrame = new JFrame(TITLE + " - Search Paths");
         pathFrame.getContentPane().add(pathGUI);
         pathFrame.pack();
         // pathFrame.setLocationRelativeTo(null);
@@ -48,7 +50,7 @@ public class GUILoader {
         });
 
         resultGUI = new ResultComponent(this, resultModel, sourceModel);
-        resultFrame = new JFrame(title + " - Updatable ICU4J Jars");
+        resultFrame = new JFrame(TITLE + " - Updatable ICU4J Jars");
         resultFrame.getContentPane().add(resultGUI);
         resultFrame.pack();
         // resultFrame.setLocationRelativeTo(null);
@@ -65,16 +67,7 @@ public class GUILoader {
 
         statusBar = resultGUI.getStatusBar();
 
-        // ask the user for a backup dir
-        /***********************************************************************
-         * JFileChooser backupChooser = new JFileChooser();
-         * backupChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-         * backupChooser.setDialogTitle("Choose Backup Directory"); backupDir =
-         * (backupChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) ?
-         * backupChooser.getSelectedFile() : null; /
-         **********************************************************************/
-        backupDir = new File("C:\\Documents and Settings\\Daniel Kesserich\\Desktop\\Spring 2007\\IBM\\backup");
-        /**/
+        backupDir = (args.length == 1) ? new File(args[0]) : null;
 
         setCancelSearchEnabled(false);
         setCancelUpdateEnabled(false);
@@ -95,7 +88,7 @@ public class GUILoader {
                 try {
                     resultFrame.setVisible(true);
                     resultClosed = false;
-                    pathModel.searchAll(subdirs, backupDir, statusBar);
+                    pathModel.searchAll(resultModel, subdirs, backupDir, statusBar);
                 } catch (InterruptedException ex) { /* i escaped! i'm free! */
                 }
                 setSearchEnabled(true);
@@ -120,7 +113,7 @@ public class GUILoader {
                 try {
                     resultFrame.setVisible(true);
                     resultClosed = false;
-                    pathModel.search(indices, subdirs, backupDir, statusBar);
+                    pathModel.search(resultModel, indices, subdirs, backupDir, statusBar);
                 } catch (InterruptedException ex) { /* i escaped! i'm free! */
                 }
                 setSearchEnabled(true);
@@ -209,7 +202,7 @@ public class GUILoader {
                 workerThread.interrupt();
                 workerThread.join();
             } catch (Exception ex) {
-                // squelch!
+                // do nothing
             }
     }
 
@@ -238,4 +231,6 @@ public class GUILoader {
     private Logger logger;
 
     private JTextComponent statusBar;
+
+    public static final String TITLE = "ICUTZU (ICU4J Time Zone Updater)";
 }

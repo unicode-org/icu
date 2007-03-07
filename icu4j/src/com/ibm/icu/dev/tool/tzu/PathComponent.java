@@ -14,6 +14,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -160,7 +161,15 @@ public class PathComponent extends JComponent {
             }
         });
 
-        pathModel.loadPaths();
+        try {
+            pathModel.loadPaths();
+        } catch (IOException ex) {
+            // failed to load the directory search file
+            pathModel.addAllDrives();
+        } catch (IllegalArgumentException ex) {
+            // failed to load the directory search file
+            pathModel.addAllDrives();
+        }
     }
 
     private boolean isIncluded() {

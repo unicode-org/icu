@@ -6,7 +6,12 @@
  */
 package com.ibm.icu.dev.tool.tzu;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -202,6 +207,74 @@ class ResultModel extends AbstractTableModel {
                 }
         }
     }
+
+    public void loadResults() throws IOException, IllegalArgumentException {
+        BufferedReader reader = null;
+        int lineNumber = 1;
+        String line;
+        int tab;
+        String filename;
+
+        try {
+            reader = new BufferedReader(new FileReader(RESULTLIST_FILENAME));
+            while (reader.ready()) {
+                line = reader.readLine().trim();
+
+                if (line.length() >= 1 && (tab = line.lastIndexOf('\n')) >= 0) {
+                    if (!add(filename = line.substring(0, tab)))
+                        resultListError(filename + " is not an updatable ICU4J file", lineNumber);
+                }
+
+                lineNumber++;
+            }
+        } catch (FileNotFoundException ex) {
+            resultListError("The "
+                    + RESULTLIST_FILENAME
+                    + " file doesn't exist. Please re-run the tool with -Ddiscoveronly=true option to generate the list of ICU4J jars.");
+        } catch (IOException ex) {
+            resultListError("Could not read the "
+                    + RESULTLIST_FILENAME
+                    + " file. Please re-run the tool with -Ddiscoveronly=true option to generate the list of ICU4J jars.");
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException ex) {
+            }
+        }
+    }
+
+    public void saveResults() throws IOException, IllegalArgumentException {
+        BufferedWriter writer = null;
+        ICUFile icuFile = null;
+
+        try {
+            writer = new BufferedWriter(new FileWriter(RESULTLIST_FILENAME));
+            Iterator iter = (hidden ? permissibleList : completeList).iterator();
+            while (iter.hasNext()) {
+                icuFile = (ICUFile) iter.next();
+                writer.write(icuFile.getFile().getPath() + '\t' + icuFile.getTZVersion() + '\n');
+            }
+        } catch (FileNotFoundException ex) {
+            resultListError("Could not create the " + RESULTLIST_FILENAME + " file.");
+        } catch (IOException ex) {
+            resultListError("Could not write to the " + RESULTLIST_FILENAME + " file.");
+        } finally {
+            try {
+                writer.close();
+            } catch (IOException ex) {
+            }
+        }
+    }
+
+    private static void resultListError(String message, int lineNumber) throws IllegalArgumentException {
+        throw new IllegalArgumentException("Error in " + RESULTLIST_FILENAME + " (line " + lineNumber + "): " + message);
+    }
+
+    private static void resultListError(String message) throws IOException {
+        throw new IOException("Error in " + RESULTLIST_FILENAME + ": " + message);
+    }
+
+    public static final String RESULTLIST_FILENAME = "ICUList.txt";
 
     public static final String[] COLUMN_NAMES = new String[] { "Path", "Name", "ICU Version", "TZ Version", "Readable",
             "Writable" };
