@@ -1,13 +1,14 @@
 /**
- *******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and         *
- * others. All Rights Reserved.                                                *
- *******************************************************************************
+ * ******************************************************************************
+ * Copyright (C) 2007, International Business Machines Corporation and * others.
+ * All Rights Reserved. *
+ * ******************************************************************************
  */
 package com.ibm.icu.dev.tool.tzu;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,8 +20,7 @@ import javax.swing.AbstractListModel;
 import javax.swing.text.JTextComponent;
 
 class PathModel extends AbstractListModel {
-    public PathModel(ResultModel resultModel, Logger logger) {
-        this.resultModel = resultModel;
+    public PathModel(Logger logger) {
         this.logger = logger;
     }
 
@@ -36,44 +36,10 @@ class PathModel extends AbstractListModel {
         return (list == null) ? 0 : list.size();
     }
 
-    public void loadPaths() {
-        BufferedReader reader = null;
-        int lineNumber = 1;
-        String line;
-        char sign;
-
-        try {
-            reader = new BufferedReader(new FileReader(PATHLIST_FILENAME));
-            while (reader.ready()) {
-                line = reader.readLine().trim();
-
-                if (line.length() >= 1) {
-                    sign = line.charAt(0);
-                    if (sign != '#') {
-                        if (sign != '+' && sign != '-' && !"all".equals(line))
-                            pathlistError("Each path entry must start with a + or - to denote inclusion/exclusion",
-                                    lineNumber);// error
-                        if (!add(line))
-                            pathlistError("\"" + line.substring(1).trim()
-                                    + "\" is not a valid file or directory (perhaps it does not exist?)", lineNumber);// error
-                    }
-                }
-
-                lineNumber++;
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        } finally {
-            try {
-                reader.close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
-
     public boolean add(String filename) {
         if ("all".equals(filename)) {
+            logger.println("The tool will search all drives for ICU4J jars except any excluded directories specified",
+                    Logger.NORMAL);
             addAllDrives();
             return true;
         } else {
@@ -130,7 +96,7 @@ class PathModel extends AbstractListModel {
         }
     }
 
-    public void search(int[] indices, boolean subdirs, File backupDir, JTextComponent statusBar)
+    public void search(ResultModel resultModel, int[] indices, boolean subdirs, File backupDir, JTextComponent statusBar)
             throws InterruptedException {
         if (list.size() > 0 && indices.length > 0) {
             Arrays.sort(indices);
@@ -149,7 +115,8 @@ class PathModel extends AbstractListModel {
         }
     }
 
-    public void searchAll(boolean subdirs, File backupDir, JTextComponent statusBar) throws InterruptedException {
+    public void searchAll(ResultModel resultModel, boolean subdirs, File backupDir, JTextComponent statusBar)
+            throws InterruptedException {
         if (list.size() > 0) {
             int n = list.size();
             IncludePath[] paths = new IncludePath[n];
@@ -160,13 +127,56 @@ class PathModel extends AbstractListModel {
         }
     }
 
-    private static void pathlistError(String message, int lineNumber) {
+    public void loadPaths() throws IOException, IllegalArgumentException {
+        logger.println("Scanning " + PATHLIST_FILENAME + " file...", Logger.NORMAL);
+        logger.println(PATHLIST_FILENAME + " file contains", Logger.NORMAL);
+
+        BufferedReader reader = null;
+        int lineNumber = 1;
+        String line;
+        char sign;
+
+        try {
+            reader = new BufferedReader(new FileReader(PATHLIST_FILENAME));
+            while (reader.ready()) {
+                line = reader.readLine().trim();
+
+                if (line.length() >= 1) {
+                    sign = line.charAt(0);
+                    if (sign != '#') {
+                        logger.println(line, Logger.NORMAL);
+                        if (sign != '+' && sign != '-' && !"all".equals(line))
+                            pathListError("Each path entry must start with a + or - to denote inclusion/exclusion",
+                                    lineNumber);
+                        if (!add(line))
+                            pathListError("\"" + line.substring(1).trim()
+                                    + "\" is not a valid file or directory (perhaps it does not exist?)", lineNumber);
+                    }
+                }
+
+                lineNumber++;
+            }
+        } catch (FileNotFoundException ex) {
+            pathListError("The " + PATHLIST_FILENAME + " file doesn't exist.");
+        } catch (IOException ex) {
+            pathListError("Could not read the " + PATHLIST_FILENAME + " file.");
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException ex) {
+            }
+        }
+    }
+
+    private static void pathListError(String message, int lineNumber) throws IllegalArgumentException {
         throw new IllegalArgumentException("Error in " + PATHLIST_FILENAME + " (line " + lineNumber + "): " + message);
     }
 
-    private List list = new ArrayList(); // list of paths (Files)
+    private static void pathListError(String message) throws IOException {
+        throw new IOException("Error in " + PATHLIST_FILENAME + ": " + message);
+    }
 
-    private ResultModel resultModel = null;
+    private List list = new ArrayList(); // list of paths (Files)
 
     public static final String PATHLIST_FILENAME = "DirectorySearch.txt";
 

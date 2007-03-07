@@ -1,8 +1,8 @@
 /**
- *******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and         *
- * others. All Rights Reserved.                                                *
- *******************************************************************************
+ * ******************************************************************************
+ * Copyright (C) 2007, International Business Machines Corporation and * others.
+ * All Rights Reserved. *
+ * ******************************************************************************
  */
 
 package com.ibm.icu.dev.tool.tzu;
@@ -59,6 +59,16 @@ public class Logger {
 
     public void println(String output, int verbosity) {
         if (verbosity <= this.verbosity)
+            System.out.println(output);
+    }
+
+    public void print(String output) {
+        if (Logger.NORMAL <= this.verbosity)
+            System.out.print(output);
+    }
+
+    public void println(String output) {
+        if (Logger.NORMAL <= this.verbosity)
             System.out.println(output);
     }
 
