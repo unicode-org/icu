@@ -87,6 +87,7 @@ icu4c/source/test/testdata/uni-text.bin -text
 icu4j/.classpath -text
 icu4j/.externalToolBuilders/ICU4J_Resources.launch -text
 icu4j/.project -text
+icu4j/.settings/org.eclipse.core.resources.prefs -text
 icu4j/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/ee.foundation.jar -text
