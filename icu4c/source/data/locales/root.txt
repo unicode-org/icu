@@ -97,7 +97,7 @@ root{
                 wide:alias{"/LOCALE/calendar/buddhist/eras/abbreviated"}
             }
             monthNames:alias{"/LOCALE/calendar/gregorian/monthNames"}
-            quarters:alias{"/LOCALE/calendar/gregorian"}
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
         chinese{
             AmPmMarkers{
@@ -121,7 +121,7 @@ root{
                 "*",
             }
             monthNames:alias{"/LOCALE/calendar/gregorian/monthNames"}
-            quarters:alias{"/LOCALE/calendar/gregorian"}
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
         coptic{
             AmPmMarkers{
@@ -190,7 +190,7 @@ root{
                     wide:alias{"/LOCALE/calendar/coptic/monthNames/format/wide"}
                 }
             }
-            quarters:alias{"/LOCALE/calendar/gregorian"}
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
         default{"gregorian"}
         ethiopic{
@@ -260,7 +260,7 @@ root{
                     wide:alias{"/LOCALE/calendar/ethiopic/monthNames/format/wide"}
                 }
             }
-            quarters:alias{"/LOCALE/calendar/gregorian"}
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
         gregorian{
             AmPmMarkers{
@@ -425,8 +425,8 @@ root{
             }
             quarters{
                 format{
-                    abbreviated:alias{"/LOCALE/calendar/gregorian"}
-                    narrow:alias{"/LOCALE/calendar/gregorian"}
+                    abbreviated:alias{"/LOCALE/calendar/gregorian/quarters/format/wide"}
+                    narrow:alias{"/LOCALE/calendar/gregorian/quarters/stand-alone/narrow"}
                     wide{
                         "Q1",
                         "Q2",
@@ -435,14 +435,14 @@ root{
                     }
                 }
                 stand-alone{
-                    abbreviated:alias{"/LOCALE/calendar/gregorian"}
+                    abbreviated:alias{"/LOCALE/calendar/gregorian/quarters/format/abbreviated"}
                     narrow{
                         "1",
                         "2",
                         "3",
                         "4",
                     }
-                    wide:alias{"/LOCALE/calendar/gregorian"}
+                    wide:alias{"/LOCALE/calendar/gregorian/quarters/format/wide"}
                 }
             }
             weekend:intvector{
@@ -518,7 +518,7 @@ root{
                     wide:alias{"/LOCALE/calendar/hebrew/monthNames/format/wide"}
                 }
             }
-            quarters:alias{"/LOCALE/calendar/gregorian"}
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
         islamic{
             AmPmMarkers{
@@ -567,7 +567,7 @@ root{
                 }
                 stand-alone:alias{"/LOCALE/calendar/gregorian/monthNames/stand-alone"}
             }
-            quarters:alias{"/LOCALE/calendar/gregorian"}
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
         islamic-civil:alias{"/LOCALE/calendar/islamic"}
         japanese{
@@ -829,7 +829,7 @@ root{
                 wide:alias{"/LOCALE/calendar/japanese/eras/abbreviated"}
             }
             monthNames:alias{"/LOCALE/calendar/gregorian/monthNames"}
-            quarters:alias{"/LOCALE/calendar/gregorian"}
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
         persian{
             AmPmMarkers{
@@ -878,7 +878,7 @@ root{
                 }
                 stand-alone:alias{"/LOCALE/calendar/gregorian/monthNames/stand-alone"}
             }
-            quarters:alias{"/LOCALE/calendar/gregorian"}
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
     }
     delimiters{
