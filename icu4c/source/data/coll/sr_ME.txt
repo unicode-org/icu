@@ -6,12 +6,6 @@
 // * Source File:<path>/icu-config.xml & build.xml
 // *
 // ***************************************************************************
-/**
- * validSubLocale of "zh"
- */
-zh_Hans{
-    /**
-     * so genrb doesn't issue warnings
-     */
-    ___{""}
+sr_ME{
+    "%%ALIAS"{"sr_Cyrl_ME"}
 }

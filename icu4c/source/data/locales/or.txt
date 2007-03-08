@@ -178,6 +178,6 @@ or{
     zoneStrings{
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;-HH:mm"}
-        regionFormat{"{0} Time"}
+        regionFormat{"{0}"}
     }
 }
