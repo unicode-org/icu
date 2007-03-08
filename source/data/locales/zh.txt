@@ -1979,12 +1979,23 @@ zh{
         REVISED{"已修订的拼字学"}
         SAAHO{"萨霍"}
     }
-    Version{"1.87"}
+    Version{"1.88"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "上午",
                 "下午",
+            }
+            DateTimePatterns{
+                "ahh时mm分ss秒 v",
+                "ahh'时'mm'分'ss'秒'",
+                "ahh:mm:ss",
+                "ah:mm",
+                "yyyy'年'M'月'd'日'EEEE",
+                "yyyy'年'M'月'd'日'",
+                "yyyy-M-d",
+                "yy-M-d",
+                "{1} {0}",
             }
             availableFormats{
                 Md{"M-d"}
