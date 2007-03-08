@@ -49,6 +49,7 @@ README text !eol
 *.tri2 -text
 
 icu4c/source/data/coll/sr_ME.txt -text
+icu4c/source/data/coll/zh_Hans.txt -text
 icu4c/source/data/coll/zh_Hans_CN.txt -text
 icu4c/source/data/coll/zh_Hans_SG.txt -text
 icu4c/source/data/coll/zh_Hant_HK.txt -text
