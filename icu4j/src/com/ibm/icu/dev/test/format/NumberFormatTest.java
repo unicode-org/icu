@@ -309,13 +309,13 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         expectCurrency(fmt, null, 1234.56, "1 234,56 \u20AC");
 
         expectCurrency(fmt, Currency.getInstance(Locale.JAPAN),
-                       1234.56, "1 235 \u00A5"); // Yen
+                       1234.56, "1 235 JP\u00A5"); // Yen
 
         expectCurrency(fmt, Currency.getInstance(new Locale("fr", "CH", "")),
                        1234.56, "1 234,55 sFr."); // 0.25 rounding
 
         expectCurrency(fmt, Currency.getInstance(Locale.US),
-                       1234.56, "1 234,56 $");
+                       1234.56, "1 234,56 US$");
 
         expectCurrency(fmt, Currency.getInstance(Locale.FRANCE),
                        1234.56, "1 234,56 \u20AC"); // Euro

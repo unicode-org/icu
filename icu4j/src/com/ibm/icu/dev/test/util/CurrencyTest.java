@@ -142,7 +142,7 @@ public class CurrencyTest extends TestFmwk {
         // THE LOCALE DATA before diving into the code.
         if (!noData()) {
             assertEquals("USD.getName(SYMBOL_NAME)",
-                         "US$",
+                         "$",
                          usd.getName(en, Currency.SYMBOL_NAME, isChoiceFormat));
             assertEquals("USD.getName(LONG_NAME)",
                          "US Dollar",
