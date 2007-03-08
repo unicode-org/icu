@@ -417,8 +417,9 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         // Just use unlocalized currency symbol.
         //String compareStrGer = "At <time> on 08.08.1997, you made a deposit of 456,83 DM.";
         String compareStrGer = "At <time> on 08.08.1997, you made a deposit of ";
+        compareStrGer += "456,83 ";
         compareStrGer += '\u00a4';
-        compareStrGer += " 456,83.";
+        compareStrGer += ".";
 
         MessageFormat msg = new MessageFormat(formatStr, Locale.ENGLISH);
         result.setLength(0);
@@ -851,8 +852,9 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         compareStr2 += "456.83.";
         // both date and currency formats are German-style
         String compareStr3 = "At <time> on 08.08.1997, you made a deposit of ";
+        compareStr3 += "456,83 ";
         compareStr3 += '\u00a4';
-        compareStr3 += " 456,83.";
+        compareStr3 += ".";
 
         MessageFormat msg = new MessageFormat(formatStr, ULocale.US);
         result.setLength(0);

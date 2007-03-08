@@ -850,12 +850,13 @@ public final class ICUResourceBundleTest extends TestFmwk {
         try {
             ICUResourceBundle root =(ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "root");
             ICUResourceBundle t = null;    
-            try{
-                t = root.getWithFallback("calendar/islamic-civil/AmPmMarkers");
-                errln("Second resource does not exist. How did it get here?\n");
-            }catch(MissingResourceException ex){
-                logln("Got the expected exception");
-            }
+// AmPmMarkers now exist in root/islamic calendar, so this test is rendered useless.
+//          try{
+//              t = root.getWithFallback("calendar/islamic-civil/AmPmMarkers");
+//              errln("Second resource does not exist. How did it get here?\n");
+//          }catch(MissingResourceException ex){
+//              logln("Got the expected exception");
+//          }
             try{
                 t = root.getWithFallback("calendar/islamic-civil/eras/abbreviated/0/mikimaus/pera");
                 errln("Second resource does not exist. How did it get here?\n");

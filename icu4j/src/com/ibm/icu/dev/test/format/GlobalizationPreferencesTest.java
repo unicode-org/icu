@@ -1099,7 +1099,8 @@ public class GlobalizationPreferencesTest extends TestFmwk {
 
         logln("Currency symbol[USD]: " + name1 + " | " + name2 + " | " + name3);
         String dollar = "$";
-        if (!name1.equals(dollar) || !name2.equals(dollar) || !name3.equals(dollar)) {
+        String us_dollar = "US$";
+        if (!name1.equals(dollar) || !name2.equals(us_dollar) || !name3.equals(us_dollar)) {
             errln("FAIL: Currency symbol ID");
         }
 

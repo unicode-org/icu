@@ -385,7 +385,7 @@ public class TimeZoneTest extends TestFmwk
         }
         // dlf - we will use generic time, or if unavailable, GMT for standard time in the zone 
         //     - we now (3.4.1) have localizations for this zone, so change test string
-        else if(!name.equals("Los Angeles (Stati Uniti)") &&
+        else if(!name.equals("Stati Uniti (Los Angeles)") &&
             !name.equals("GMT-08:00") &&
             !name.equals("GMT-8:00") &&
             !name.equals("GMT-0800") &&
