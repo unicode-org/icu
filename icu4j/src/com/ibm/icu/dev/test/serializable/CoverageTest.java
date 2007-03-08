@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.URL;
 
@@ -111,7 +110,7 @@ public class CoverageTest extends CompatibilityTest implements URLHandler.URLVis
             } else {
                 Class c = Class.forName(name);
                 try {
-                    Field uid = c.getDeclaredField("serialVersionUID");
+                    /*Field uid = */c.getDeclaredField("serialVersionUID");
                 } catch (Exception e) {
                     errln("No serialVersionUID");
                 }
@@ -150,8 +149,6 @@ public class CoverageTest extends CompatibilityTest implements URLHandler.URLVis
                         
                         if (handler != null) {
                             Object objectsOut[] = handler.getTestObjects();
-                            Object objectsIn[];
-                            boolean passed = true;
                             
                             ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
                             ObjectOutputStream out = new ObjectOutputStream(byteOut);

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -67,14 +67,12 @@ public class AstroTest extends TestFmwk {
     }
 
     public void TestCoordinates() {
-        GregorianCalendar gc = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));
         CalendarAstronomer astro = new CalendarAstronomer();
         Equatorial result = astro.eclipticToEquatorial(139.686111 * PI/ 180.0, 4.875278* PI / 180.0);
         logln("result is " + result + ";  " + result.toHmsString());
     }
 
     public void TestCoverage() {
-        GregorianCalendar gc = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));
         GregorianCalendar cal = new GregorianCalendar(1958, Calendar.AUGUST, 15);
         Date then = cal.getTime();
         CalendarAstronomer myastro = new CalendarAstronomer(then);
@@ -263,7 +261,6 @@ public class AstroTest extends TestFmwk {
 
     public void TestBasics() {
         // Check that our JD computation is the same as the book's (p. 88)
-        GregorianCalendar gc = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));
         CalendarAstronomer astro = new CalendarAstronomer();
         GregorianCalendar cal3 = new GregorianCalendar(TimeZone.getTimeZone("GMT"), Locale.US);
         DateFormat d3 = DateFormat.getDateTimeInstance(cal3, DateFormat.MEDIUM,DateFormat.MEDIUM,Locale.US);

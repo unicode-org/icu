@@ -1,7 +1,7 @@
 //##header
 /*
  *******************************************************************************
- * Copyright (C) 2004-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -1554,7 +1554,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         Calendar cal = gp.getCalendar();
         // Calendar instance returned from GP should be initialized
         // by the current time
-        long timeDiff = System.currentTimeMillis() - gp.getCalendar().getTimeInMillis();
+        long timeDiff = System.currentTimeMillis() - cal.getTimeInMillis();
         if (Math.abs(timeDiff) > 1000) {
             // if difference is more than 1 second..
             errln("FAIL: The Calendar was not initialized by current time - difference:" + timeDiff);
