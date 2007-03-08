@@ -61,10 +61,10 @@ COLLATION_EMPTY_SOURCE = ar_AE.txt ar_BH.txt ar_DZ.txt ar_EG.txt\
  om_ET.txt om_KE.txt pa_IN.txt pl_PL.txt ps_AF.txt\
  pt.txt pt_BR.txt pt_PT.txt ro_RO.txt ru_RU.txt\
  ru_UA.txt sh_BA.txt sh_YU.txt sk_SK.txt sl_SI.txt\
- sq_AL.txt sr_BA.txt sr_Cyrl.txt sr_Cyrl_BA.txt sr_Cyrl_ME.txt\
- sr_Cyrl_RS.txt sr_RS.txt sv_FI.txt sv_SE.txt ta_IN.txt\
- te_IN.txt th_TH.txt tr_TR.txt uk_UA.txt vi_VN.txt\
- zh_Hans_CN.txt zh_Hans_SG.txt zh_Hant_HK.txt zh_Hant_MO.txt zh_Hant_TW.txt
+ sq_AL.txt sr_Cyrl.txt sr_Cyrl_BA.txt sr_Cyrl_ME.txt sr_Cyrl_RS.txt\
+ sv_FI.txt sv_SE.txt ta_IN.txt te_IN.txt th_TH.txt\
+ tr_TR.txt uk_UA.txt vi_VN.txt zh_Hans.txt zh_Hans_CN.txt\
+ zh_Hans_SG.txt zh_Hant_HK.txt zh_Hant_MO.txt zh_Hant_TW.txt
 
 
 # Ordinary resources
