@@ -6,12 +6,6 @@
 // * Source File:<path>/icu-config.xml & build.xml
 // *
 // ***************************************************************************
-/**
- * validSubLocale of "sr"
- */
 sr_RS{
-    /**
-     * so genrb doesn't issue warnings
-     */
-    ___{""}
+    "%%ALIAS"{"sr_Cyrl_RS"}
 }

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/zh.xml
  */
 zh{
-    Version{"1.24"}
+    Version{"1.25"}
     collations{
         big5han{
             Sequence{
