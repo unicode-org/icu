@@ -1605,7 +1605,12 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         //save default locale
         ULocale defaultLocale = ULocale.getDefault();
         ULocale.setDefault(new ULocale("qr_QR"));
-        NumberFormat nf1 = NumberFormat.getInstance();
+        try {
+            NumberFormat.getInstance();
+        }
+        catch (Exception e) {
+            errln("Numberformat threw exception for non-existent locale. It should use the default.");
+        }
         //reset default locale
         ULocale.setDefault(defaultLocale);
     }
