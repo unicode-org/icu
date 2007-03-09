@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2006, International Business Machines Corporation and    *
+* Copyright (C) 1996-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -635,9 +635,8 @@ public abstract class Collator implements Comparator, Cloneable
      * @param locID The requested locale
      * @param isAvailable If non-null, isAvailable[0] will receive and
      * output boolean that indicates whether the requested locale was
-     * 'available' to the collation service. The locale is defined as
-     * 'available' if it physically exists within the collation locale
-     * data.  If non-null, isAvailable must have length >= 1.
+     * 'available' to the collation service. If non-null, isAvailable 
+     * must have length >= 1.
      * @return the locale
      * @stable ICU 3.0
      */
