@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -53,8 +53,8 @@ public class Demo extends Frame {
 
     static final String NO_TRANSLITERATOR = "None";
 
-    private static final String COPYRIGHT =
-        "\u00A9 IBM Corporation 1999. All rights reserved.";
+    //private static final String COPYRIGHT =
+    //    "\u00A9 IBM Corporation 1999. All rights reserved.";
 
     public static void main(String[] args) {
         Frame f = new Demo(600, 200);
@@ -607,7 +607,7 @@ public class Demo extends Frame {
             BreakIterator sentenceBreak = BreakIterator.getSentenceInstance();
             
             byte titleSetting = TITLELINE;
-            boolean upperfilter = false;
+            //boolean upperfilter = false;
             boolean first = true;
             while (true) {
                 String line = in.readLine();
@@ -623,7 +623,7 @@ public class Demo extends Frame {
                     out.println("<tr><td colspan='2' class='title'><b>Names</b></td></tr>");
                     continue;
                 } else if (line.equals("@UPPERFILTER@")) {
-                    upperfilter = true;
+                    //upperfilter = true;
                     continue;
                 } else if (line.startsWith("@SET")) {
                     UnicodeSet s = new UnicodeSet(line.substring(4).trim());

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -46,9 +46,9 @@ abstract public class Pick {
         private void clear() {
             quoter.clear();
         }
-        private int length() {
+        /*private int length() {
             return quoter.length();
-        }
+        }*/
         private Target append(int codepoint) {
             quoter.append(codepoint);
             return this;
@@ -281,7 +281,7 @@ abstract public class Pick {
         
         // match longest, e.g. up to just before a failure
         protected boolean match(String input, Position p) {
-            int bestMatch = p.index;
+            //int bestMatch = p.index;
             int count = 0;
             for (int i = 0; i < weightedIndex.weights.length; ++i) {
                 if (p.isFailure(this,i)) break;
@@ -289,7 +289,7 @@ abstract public class Pick {
                     p.setFailure(this,i);
                     break;
                 } 
-                bestMatch = p.index;
+                //bestMatch = p.index;
                 count++;               
             }
             if (count >= minCount) {

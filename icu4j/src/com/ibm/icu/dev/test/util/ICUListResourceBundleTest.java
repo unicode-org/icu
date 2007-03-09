@@ -9,7 +9,7 @@ package com.ibm.icu.dev.test.util;
 import java.util.ResourceBundle;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.Utility;
+//import com.ibm.icu.impl.Utility;
 
 
 public final class ICUListResourceBundleTest extends TestFmwk 
@@ -122,7 +122,7 @@ public final class ICUListResourceBundleTest extends TestFmwk
                                                     "Los Angeles",
                                                 },
                                             };                                          
-    private boolean arrayEquals(Object[][] s1, Object[][] s2){
+    /*private boolean arrayEquals(Object[][] s1, Object[][] s2){
         boolean isEqual = true;
         if(s1.length != s2.length){
             return false;
@@ -148,7 +148,7 @@ public final class ICUListResourceBundleTest extends TestFmwk
            }
         }
         return isEqual;
-    }
+    }*/
     
     /* 
     public void TestAliases(){

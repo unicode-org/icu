@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -23,9 +23,6 @@ public class DemoApplet extends Applet {
 
     Demo frame = null;
     
-    private static final String COPYRIGHT =
-        "\u00A9 IBM Corporation 1999. All rights reserved.";
-
     public static void main(String args[]) {
         final DemoApplet applet = new DemoApplet();
         new AppletFrame("Transliteration Demo", applet, 640, 480);
