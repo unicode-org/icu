@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -8,13 +8,8 @@
 
 package com.ibm.icu.dev.tool.timescale;
 
-import java.util.Locale;
-
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.text.MessageFormat;
-import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.SimpleTimeZone;
-import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.UniversalTimeScale;
 
 /**
@@ -59,8 +54,6 @@ public class CalculateLimits {
      */
     public static void main(String[] args)
     {
-        TimeZone utc = new SimpleTimeZone(0, "UTC");
-        Calendar cal = Calendar.getInstance(utc, Locale.ENGLISH);
         MessageFormat fmt = new MessageFormat("{0}L, {1}L, {2}L, {3}L");        
         BigDecimal universalMin = new BigDecimal(Long.MIN_VALUE);
         BigDecimal universalMax = new BigDecimal(Long.MAX_VALUE);

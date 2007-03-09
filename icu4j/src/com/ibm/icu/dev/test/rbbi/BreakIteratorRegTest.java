@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -52,7 +52,7 @@ public class BreakIteratorRegTest extends TestFmwk
         assertEqual(test4, twbi, "foo word == thai word");
     }
 
-    Locale[] locales = BreakIterator.getAvailableLocales();
+    //Locale[] locales = BreakIterator.getAvailableLocales();
     
     assertTrue(BreakIterator.unregister(key2), "unregister us word (thai word)");
     assertTrue(!BreakIterator.unregister(key2), "unregister second time");
