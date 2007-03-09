@@ -107,7 +107,7 @@ public final class StringPrep {
     // mapping data read from the data file
     private char[] mappingData;
     // format version of the data file
-    private byte[] formatVersion;
+    //private byte[] formatVersion;
     // the version of Unicode supported by the data file
     private VersionInfo sprepUniVer;
     // the Unicode version of last entry in the
@@ -167,7 +167,7 @@ public final class StringPrep {
         sprepTrie = new CharTrie(new ByteArrayInputStream(sprepBytes), null);
               
         // get the data format version                           
-        formatVersion = reader.getDataFormatVersion();
+        /*formatVersion = */reader.getDataFormatVersion();
  
         // get the options
         doNFKC            = ((indexes[OPTIONS] & NORMALIZATION_ON) > 0);
