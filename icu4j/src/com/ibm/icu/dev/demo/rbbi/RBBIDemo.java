@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -246,7 +246,7 @@ JTextArea text;
         public void keyPressed(KeyEvent e) {
             if (e.isControlDown()) {
             int kc = e.getKeyCode();
-            switch (e.getKeyCode()) {
+            switch (kc) {
             case KeyEvent.VK_N:
             case KeyEvent.VK_RIGHT:
                 handleForward();

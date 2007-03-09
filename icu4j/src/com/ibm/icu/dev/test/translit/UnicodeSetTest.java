@@ -1188,7 +1188,7 @@ public class UnicodeSetTest extends TestFmwk {
             (j==0) ? UScript.getName(i) : UScript.getShortName(i);
             pat = "[:" + name + ":]";
             UnicodeSet set = new UnicodeSet(pat);
-            logln("Ok: " + pat);
+            logln("Ok: " + pat + " -> " + set.toPattern(false));
         } catch (IllegalArgumentException e) {
           if (pat.length() == 0) {
             errln("FAIL (in UScript): No name for script " + i);

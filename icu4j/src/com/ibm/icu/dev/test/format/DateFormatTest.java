@@ -1,6 +1,6 @@
  /*
  *******************************************************************************
- * Copyright (C) 2001-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1979,7 +1979,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 logln("ok");
             }
             catch (ParseException e) {
-                logln("whoops");
+                errln("whoops");
             }
 
             try {
@@ -2614,7 +2614,6 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     void expectFormat(String[] data, Locale loc)
     {
         int i = 1;
-        SimpleDateFormat univ = new SimpleDateFormat("EE G yyyy MM dd HH:mm:ss.SSS zzz", loc);
         String currentPat = null;
         SimpleDateFormat ref = new SimpleDateFormat(data[0], loc);
 

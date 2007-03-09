@@ -10,7 +10,6 @@ package com.ibm.icu.text;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -1517,7 +1516,6 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      */
     private static String[][] getDefaultZoneStrings(ULocale locale) {
         ArrayList tmpList = new ArrayList();
-        HashSet tmpSet = new HashSet();
         ArrayList zoneStringsBundleList = new ArrayList();
 
         for (ULocale tempLocale = locale; tempLocale != null; tempLocale = tempLocale.getFallback()) {
