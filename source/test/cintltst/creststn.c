@@ -2448,162 +2448,172 @@ static void TestJB3763(void) {
 }
 
 static void TestGetKeywordValues(void) {
-  UEnumeration *kwVals;
-  UBool foundStandard = FALSE;
-  UErrorCode status = U_ZERO_ERROR;
-  const char *kw;
+    UEnumeration *kwVals;
+    UBool foundStandard = FALSE;
+    UErrorCode status = U_ZERO_ERROR;
+    const char *kw;
 #if !UCONFIG_NO_COLLATION
-  kwVals = ures_getKeywordValues( U_ICUDATA_COLL, "collations", &status);
+    kwVals = ures_getKeywordValues( U_ICUDATA_COLL, "collations", &status);
 
-  log_verbose("Testing getting collation keyword values:\n");
-  
-  while((kw=uenum_next(kwVals, NULL, &status))) {
-    log_verbose("  %s\n", kw);
-    if(!strcmp(kw,"standard")) {
-      if(foundStandard == FALSE) {
-        foundStandard = TRUE;
-      } else {
-        log_err("'standard' was found twice in the keyword list.\n");
-      }
+    log_verbose("Testing getting collation keyword values:\n");
+
+    while((kw=uenum_next(kwVals, NULL, &status))) {
+        log_verbose("  %s\n", kw);
+        if(!strcmp(kw,"standard")) {
+            if(foundStandard == FALSE) {
+                foundStandard = TRUE;
+            } else {
+                log_err("'standard' was found twice in the keyword list.\n");
+            }
+        }
     }
-  }
-  if(foundStandard == FALSE) {
-    log_err("'standard' was not found in the keyword list.\n");
-  }
-  uenum_close(kwVals);
-  if(U_FAILURE(status)) {
-    log_err("err %s getting collation values\n", u_errorName(status));
-  }
-  status = U_ZERO_ERROR;
+    if(foundStandard == FALSE) {
+        log_err("'standard' was not found in the keyword list.\n");
+    }
+    uenum_close(kwVals);
+    if(U_FAILURE(status)) {
+        log_err("err %s getting collation values\n", u_errorName(status));
+    }
+    status = U_ZERO_ERROR;
 #endif
-  foundStandard = FALSE;
-  kwVals = ures_getKeywordValues( "ICUDATA", "calendar", &status);
+    foundStandard = FALSE;
+    kwVals = ures_getKeywordValues( "ICUDATA", "calendar", &status);
 
-  log_verbose("Testing getting calendar keyword values:\n");
-  
-  while((kw=uenum_next(kwVals, NULL, &status))) {
-    log_verbose("  %s\n", kw);
-    if(!strcmp(kw,"japanese")) {
-      if(foundStandard == FALSE) {
-        foundStandard = TRUE;
-      } else {
-        log_err("'japanese' was found twice in the calendar keyword list.\n");
-      }
+    log_verbose("Testing getting calendar keyword values:\n");
+
+    while((kw=uenum_next(kwVals, NULL, &status))) {
+        log_verbose("  %s\n", kw);
+        if(!strcmp(kw,"japanese")) {
+            if(foundStandard == FALSE) {
+                foundStandard = TRUE;
+            } else {
+                log_err("'japanese' was found twice in the calendar keyword list.\n");
+            }
+        }
     }
-  }
-  if(foundStandard == FALSE) {
-    log_err("'japanese' was not found in the calendar keyword list.\n");
-  }
-  uenum_close(kwVals);
-  if(U_FAILURE(status)) {
-    log_err("err %s getting calendar values\n", u_errorName(status));
-  }
+    if(foundStandard == FALSE) {
+        log_err("'japanese' was not found in the calendar keyword list.\n");
+    }
+    uenum_close(kwVals);
+    if(U_FAILURE(status)) {
+        log_err("err %s getting calendar values\n", u_errorName(status));
+    }
 }
 
 static void TestGetFunctionalEquivalentOf(const char *path, const char *resName, const char *keyword, UBool truncate, const char * const testCases[]) {
-  int32_t i;
-  for(i=0;testCases[i];i+=3) {
-    UBool expectAvail = (testCases[i][0]=='t')?TRUE:FALSE;
-    UBool gotAvail = FALSE;
-    const char *inLocale = testCases[i+1];
-    const char *expectLocale = testCases[i+2];
-    char equivLocale[256];
-    int32_t len;
-    UErrorCode status = U_ZERO_ERROR;
-    log_verbose("%d:   %c      %s\texpect %s\n",i/3,  expectAvail?'t':'f', inLocale, expectLocale);
-    len = ures_getFunctionalEquivalent(equivLocale, 255, path,
-                                       resName, keyword, inLocale,
-                                       &gotAvail, truncate, &status);
-    if(U_FAILURE(status) || (len <= 0)) {
-      log_err("FAIL: got len %d, err %s  on #%d: %c\t%s\t%s\n",  
-            len, u_errorName(status),
-            i/3,expectAvail?'t':'f', inLocale, expectLocale);
-    } else {
-      log_verbose("got:  %c   %s\n", expectAvail?'t':'f',equivLocale);
-      
-      if((gotAvail != expectAvail) || strcmp(equivLocale, expectLocale)) {
-        log_err("FAIL: got avail=%c, loc=%s but  expected #%d: %c\t%s\t-> loc=%s\n",  
-                gotAvail?'t':'f', equivLocale,
-                i/3,
-                expectAvail?'t':'f', inLocale, expectLocale);
+    int32_t i;
+    for(i=0;testCases[i];i+=3) {
+        UBool expectAvail = (testCases[i][0]=='t')?TRUE:FALSE;
+        UBool gotAvail = FALSE;
+        const char *inLocale = testCases[i+1];
+        const char *expectLocale = testCases[i+2];
+        char equivLocale[256];
+        int32_t len;
+        UErrorCode status = U_ZERO_ERROR;
+        log_verbose("%d:   %c      %s\texpect %s\n",i/3,  expectAvail?'t':'f', inLocale, expectLocale);
+        len = ures_getFunctionalEquivalent(equivLocale, 255, path,
+            resName, keyword, inLocale,
+            &gotAvail, truncate, &status);
+        if(U_FAILURE(status) || (len <= 0)) {
+            log_err("FAIL: got len %d, err %s  on #%d: %c\t%s\t%s\n",  
+                len, u_errorName(status),
+                i/3,expectAvail?'t':'f', inLocale, expectLocale);
+        } else {
+            log_verbose("got:  %c   %s\n", expectAvail?'t':'f',equivLocale);
 
-      }
+            if((gotAvail != expectAvail) || strcmp(equivLocale, expectLocale)) {
+                log_err("FAIL: got avail=%c, loc=%s but  expected #%d: %c\t%s\t-> loc=%s\n",  
+                    gotAvail?'t':'f', equivLocale,
+                    i/3,
+                    expectAvail?'t':'f', inLocale, expectLocale);
+
+            }
+        }
     }
-  }
 }
 
 static void TestGetFunctionalEquivalent(void) {
-  static const char * const collCases[] = {
-   /*   avail   locale          equiv   */
-        "f",    "de_US_CALIFORNIA",            "de",
-        "t",    "zh_TW@collation=stroke",      "zh@collation=stroke",
-        "f",    "de_CN@collation=pinyin",      "de",
-        "t",    "zh@collation=pinyin",      "zh",
-        "t",    "zh_CN@collation=pinyin",      "zh", /* should be 'T' when validSubLocales works */
-        "t",    "zh_HK@collation=pinyin",      "zh",
-        "t",    "zh_HK@collation=stroke",      "zh@collation=stroke",
-        "t",    "zh_HK",  "zh@collation=stroke",
-        "t",    "zh_MO",  "zh@collation=stroke",
-        "t",    "zh_TW_STROKE",  "zh@collation=stroke",
-        "t",    "zh_TW_STROKE@collation=big5han",  "zh@collation=big5han",
-        "f",    "de_CN@calendar=japanese",     "de",
-        "t",    "de@calendar=japanese",        "de",
-        "t",    "zh_TW@collation=big5han",    "zh@collation=big5han",
-        "t",    "zh_TW@collation=gb2312han", "zh@collation=gb2312han",
-        "t",    "zh_CN@collation=big5han",    "zh@collation=big5han",
-        "t",    "zh_CN@collation=gb2312han", "zh@collation=gb2312han",
-        "t",    "zh@collation=big5han",       "zh@collation=big5han",
-        "t",    "zh@collation=gb2312han",    "zh@collation=gb2312han",
-        "t",    "hi_IN@collation=direct",      "hi@collation=direct",
-        "t",    "hi@collation=standard",      "hi",
-        "t",    "hi@collation=direct",      "hi@collation=direct",
-        "f",    "hi_AU@collation=direct;currency=CHF;calendar=buddhist",   "hi@collation=direct",
-        "f",    "hi_AU@collation=standard;currency=CHF;calendar=buddhist",   "hi",
-        "t",    "de_DE@collation=pinyin",      "de", /* bug 4582 tests */
-        "f",    "de_DE_BONN@collation=pinyin", "de",
-        "t",    "nl",                          "root",
-        "t",    "nl_NL",                       "root",
-        "f",    "nl_NL_EEXT",                  "root",
-        "t",    "nl@collation=stroke",         "root",
-        "t",    "nl_NL@collation=stroke",      "root",
-        "f",    "nl_NL_EEXT@collation=stroke", "root",
-       NULL
-  };
+    static const char * const collCases[] = {
+        /*   avail   locale          equiv   */
+        "f",    "de_US_CALIFORNIA",               "de",
+        "f",    "zh_TW@collation=stroke",         "zh@collation=stroke", /* alias of zh_Hant_TW */
+        "t",    "zh_Hant_TW@collation=stroke",    "zh@collation=stroke",
+        "f",    "de_CN@collation=pinyin",         "de",
+        "t",    "zh@collation=pinyin",            "zh",
+        "f",    "zh_CN@collation=pinyin",         "zh", /* alias of zh_Hans_CN */
+        "t",    "zh_Hans_CN@collation=pinyin",    "zh",
+        "f",    "zh_HK@collation=pinyin",         "zh", /* alias of zh_Hant_HK */
+        "t",    "zh_Hant_HK@collation=pinyin",    "zh",
+        "f",    "zh_HK@collation=stroke",         "zh@collation=stroke", /* alias of zh_Hant_HK */
+        "t",    "zh_Hant_HK@collation=stroke",    "zh@collation=stroke",
+        "f",    "zh_HK",                          "zh@collation=stroke", /* alias of zh_Hant_HK */
+        "t",    "zh_Hant_HK",                     "zh@collation=stroke",
+        "f",    "zh_MO",                          "zh@collation=stroke", /* alias of zh_Hant_MO */
+        "t",    "zh_Hant_MO",                     "zh@collation=stroke",
+        "t",    "zh_TW_STROKE",                   "zh@collation=stroke",
+        "t",    "zh_TW_STROKE@collation=big5han", "zh@collation=big5han",
+        "f",    "de_CN@calendar=japanese",        "de",
+        "t",    "de@calendar=japanese",           "de",
+        "f",    "zh_TW@collation=big5han",        "zh@collation=big5han", /* alias of zh_Hant_TW */
+        "t",    "zh_Hant_TW@collation=big5han",   "zh@collation=big5han",
+        "f",    "zh_TW@collation=gb2312han",      "zh@collation=gb2312han", /* alias of zh_Hant_TW */
+        "t",    "zh_Hant_TW@collation=gb2312han", "zh@collation=gb2312han",
+        "f",    "zh_CN@collation=big5han",        "zh@collation=big5han", /* alias of zh_Hans_CN */
+        "t",    "zh_Hans_CN@collation=big5han",   "zh@collation=big5han",
+        "f",    "zh_CN@collation=gb2312han",      "zh@collation=gb2312han", /* alias of zh_Hans_CN */
+        "t",    "zh_Hans_CN@collation=gb2312han", "zh@collation=gb2312han",
+        "t",    "zh@collation=big5han",           "zh@collation=big5han",
+        "t",    "zh@collation=gb2312han",         "zh@collation=gb2312han",
+        "t",    "hi_IN@collation=direct",         "hi@collation=direct",
+        "t",    "hi@collation=standard",          "hi",
+        "t",    "hi@collation=direct",            "hi@collation=direct",
+        "f",    "hi_AU@collation=direct;currency=CHF;calendar=buddhist",      "hi@collation=direct",
+        "f",    "hi_AU@collation=standard;currency=CHF;calendar=buddhist",    "hi",
+        "t",    "de_DE@collation=pinyin",         "de", /* bug 4582 tests */
+        "f",    "de_DE_BONN@collation=pinyin",    "de",
+        "t",    "nl",                             "root",
+        "t",    "nl_NL",                          "root",
+        "f",    "nl_NL_EEXT",                     "root",
+        "t",    "nl@collation=stroke",            "root",
+        "t",    "nl_NL@collation=stroke",         "root",
+        "f",    "nl_NL_EEXT@collation=stroke",    "root",
+        NULL
+    };
 
-  static const char *calCases[] = {
-   /*   avail   locale                       equiv   */
-    "t",    "en_US_POSIX",                   "en_US@calendar=gregorian",
-    "f",    "ja_JP_TOKYO",                   "ja_JP@calendar=gregorian",
-    "f",    "ja_JP_TOKYO@calendar=japanese", "ja@calendar=japanese",
-    "t",    "sr@calendar=gregorian", "sr@calendar=gregorian",
-    "t",    "en", "en@calendar=gregorian",
-    NULL
-  };
-  
+    static const char *calCases[] = {
+        /*   avail   locale                       equiv   */
+        "t",    "en_US_POSIX",                   "en_US@calendar=gregorian",
+        "f",    "ja_JP_TOKYO",                   "ja_JP@calendar=gregorian",
+        "f",    "ja_JP_TOKYO@calendar=japanese", "ja@calendar=japanese",
+        "t",    "sr@calendar=gregorian", "sr@calendar=gregorian",
+        "t",    "en", "en@calendar=gregorian",
+        NULL
+    };
+
 #if !UCONFIG_NO_COLLATION
-  TestGetFunctionalEquivalentOf(U_ICUDATA_COLL, "collations", "collation", TRUE, collCases);
+    TestGetFunctionalEquivalentOf(U_ICUDATA_COLL, "collations", "collation", TRUE, collCases);
 #endif
-  TestGetFunctionalEquivalentOf("ICUDATA", "calendar", "calendar", FALSE, calCases);
+    TestGetFunctionalEquivalentOf("ICUDATA", "calendar", "calendar", FALSE, calCases);
 
 #if !UCONFIG_NO_COLLATION
-  log_verbose("Testing error conditions:\n");
-  {
-    char equivLocale[256] = "???";
-    int32_t len;
-    UErrorCode status = U_ZERO_ERROR;
-    UBool gotAvail = FALSE;
+    log_verbose("Testing error conditions:\n");
+    {
+        char equivLocale[256] = "???";
+        int32_t len;
+        UErrorCode status = U_ZERO_ERROR;
+        UBool gotAvail = FALSE;
 
-    len = ures_getFunctionalEquivalent(equivLocale, 255, U_ICUDATA_COLL,
-                                       "calendar", "calendar", "ar_EG@calendar=islamic", 
-                                       &gotAvail, FALSE, &status);
+        len = ures_getFunctionalEquivalent(equivLocale, 255, U_ICUDATA_COLL,
+            "calendar", "calendar", "ar_EG@calendar=islamic", 
+            &gotAvail, FALSE, &status);
 
-    if(status == U_MISSING_RESOURCE_ERROR) {
-      log_verbose("PASS: Got expected U_MISSING_RESOURCE_ERROR\n");
-    } else {
-      log_err("ures_getFunctionalEquivalent  returned locale %s, avail %c, err %s, but expected U_MISSING_RESOURCE_ERROR \n",
-              equivLocale, gotAvail?'t':'f', u_errorName(status));
+        if(status == U_MISSING_RESOURCE_ERROR) {
+            log_verbose("PASS: Got expected U_MISSING_RESOURCE_ERROR\n");
+        } else {
+            log_err("ures_getFunctionalEquivalent  returned locale %s, avail %c, err %s, but expected U_MISSING_RESOURCE_ERROR \n",
+                equivLocale, gotAvail?'t':'f', u_errorName(status));
+        }
     }
-  }
 #endif
 }
 
