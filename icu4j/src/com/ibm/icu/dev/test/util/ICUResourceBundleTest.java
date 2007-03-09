@@ -807,7 +807,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
               "f",    "nl_NL_EEXT@collation=stroke",    "root",	  
            };
 
-       String F_STR = "f";
+       //String F_STR = "f";
        String T_STR = "t";
        boolean isAvail[] = new boolean[1];
        int i;
@@ -834,7 +834,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
 
        logln("Testing error conditions:");
        try {
-           ULocale equivLocale = ICUResourceBundle.getFunctionalEquivalent(ICUResourceBundle.ICU_COLLATION_BASE_NAME, "calendar",
+           ICUResourceBundle.getFunctionalEquivalent(ICUResourceBundle.ICU_COLLATION_BASE_NAME, "calendar",
               "calendar", new ULocale("ar_EG@calendar=islamic"), new boolean[1]);
            errln("Err: expected MissingResourceException");
        } catch ( MissingResourceException t ) {
@@ -1065,7 +1065,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
             errln("Did not get the expected number of keys: got " + i + ", expected 4");
         }
         UResourceBundle bundle4 = UResourceBundle.getBundleInstance(baseName,"fr_Latn_FR", testLoader);
-        if(bundle==null){
+        if(bundle4==null){
             errln("Could not load bundle fr_Latn_FR");
         }
     }
