@@ -2148,6 +2148,16 @@ ures_openAvailableLocales(const char *path, UErrorCode *status)
     return en;
 }
 
+static UBool isLocaleInList(UEnumeration *locEnum, const char *locToSearch, UErrorCode *status) {
+    const char *loc;
+    while ((loc = uenum_next(locEnum, NULL, status)) != NULL) {
+        if (uprv_strcmp(loc, locToSearch) == 0) {
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
 U_CAPI int32_t U_EXPORT2
 ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
                              const char *path, const char *resName, const char *keyword, const char *locid,
@@ -2165,9 +2175,6 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
     UErrorCode subStatus = U_ZERO_ERROR;
     int32_t length = 0;
     if(U_FAILURE(*status)) return 0;
-    if(isAvailable) { 
-        *isAvailable = TRUE;
-    }
     uloc_getKeywordValue(locid, keyword, kwVal, 1024-1,&subStatus);
     if(!uprv_strcmp(kwVal, DEFAULT_TAG)) {
         kwVal[0]=0;
@@ -2183,7 +2190,16 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
     
     uprv_strcpy(parent, base);
     uprv_strcpy(found, base);
-    
+
+    if(isAvailable) { 
+        UEnumeration *locEnum = ures_openAvailableLocales(path, &subStatus);
+        *isAvailable = TRUE;
+        if (U_SUCCESS(subStatus)) {
+            *isAvailable = isLocaleInList(locEnum, parent, &subStatus);
+        }
+        uenum_close(locEnum);
+    }
+
     if(U_FAILURE(subStatus)) {
         *status = subStatus;
         return 0;
@@ -2193,7 +2209,8 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
         subStatus = U_ZERO_ERROR;
         res = ures_open(path, parent, &subStatus);
         if(((subStatus == U_USING_FALLBACK_WARNING) ||
-            (subStatus == U_USING_DEFAULT_WARNING)) && isAvailable) {
+            (subStatus == U_USING_DEFAULT_WARNING)) && isAvailable)
+        {
             *isAvailable = FALSE;
         }
         isAvailable = NULL; /* only want to set this the first time around */
@@ -2234,10 +2251,10 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
         
         subStatus = U_ZERO_ERROR;
         
-        uprv_strcpy(found, parent);
-        uloc_getParent(found,parent,1023,&subStatus);
+        uprv_strcpy(found, ures_getLocaleByType(res, ULOC_VALID_LOCALE, &subStatus));
+        uloc_getParent(found,parent,sizeof(parent),&subStatus);
         ures_close(res);
-    } while(!defVal[0] && *found && U_SUCCESS(*status));
+    } while(!defVal[0] && *found && uprv_strcmp(found, "root") != 0 && U_SUCCESS(*status));
     
     /* Now, see if we can find the kwVal collator.. start the search over.. */
     uprv_strcpy(parent, base);
