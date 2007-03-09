@@ -1269,7 +1269,7 @@ ConversionTest::FromUnicodeCase(ConversionCase &cc, UConverterFromUCallback call
             errln("fromUnicode[%d](%s) Conversion wrote too much to offsets at index %d",
                 cc.caseNr, cc.charset, resultLength);
         }
-        if (result[resultLength] != -1) {
+        if (result[resultLength] != (char)-1) {
             errln("fromUnicode[%d](%s) Conversion wrote too much to result at index %d",
                 cc.caseNr, cc.charset, resultLength);
         }
