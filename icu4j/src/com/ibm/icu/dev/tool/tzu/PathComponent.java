@@ -94,6 +94,7 @@ public class PathComponent extends JComponent {
         });
 
         pathList.addKeyListener(new KeyAdapter() {
+            @Override
             public void keyPressed(KeyEvent event) {
                 if (event.getKeyCode() == KeyEvent.VK_DELETE)
                     pathModel.remove(pathList.getSelectedIndices());

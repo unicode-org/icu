@@ -99,6 +99,7 @@ public class ResultComponent extends JComponent {
         });
 
         resultTable.addKeyListener(new KeyAdapter() {
+            @Override
             public void keyPressed(KeyEvent event) {
                 if (event.getKeyCode() == KeyEvent.VK_DELETE)
                     resultModel.remove(resultTable.getSelectedRows());

@@ -11,6 +11,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 
+/**
+ * Loads the ICUTZU tool, command-line version.
+ */
 public class CLILoader {
     /**
      * An entry point for the ICUTZU tool that goes directly to command-line.
@@ -34,7 +37,7 @@ public class CLILoader {
     public CLILoader(String[] args) {
         // create the logger based on the silentpatch option
         try {
-            logger = Logger.getInstance(Logger.DEFAULT_FILENAME, "true".equalsIgnoreCase(System
+            this.logger = Logger.getInstance(Logger.DEFAULT_FILENAME, "true".equalsIgnoreCase(System
                     .getProperty("silentpatch")) ? Logger.QUIET : Logger.NORMAL);
         } catch (FileNotFoundException ex) {
             System.out.println("Could not open " + Logger.DEFAULT_FILENAME + " for writing.");
