@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -693,7 +693,7 @@ public final class StringSearch extends SearchIterator
             m_shift_ = new char[MAX_TABLE_SIZE_];
             m_backShift_ = new char[MAX_TABLE_SIZE_];
         }
-    };
+    }
 
 
     // private data members ------------------------------------------------

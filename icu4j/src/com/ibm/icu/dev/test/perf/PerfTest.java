@@ -176,7 +176,7 @@ public abstract class PerfTest{
                 throw new Error("TestPrefixProvider implementation error. Finding: " + name,e);
             }
         }
-    };
+    }
     
 
     /**

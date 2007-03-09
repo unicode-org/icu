@@ -193,7 +193,7 @@ class RBBITableBuilder {
            //
            mergeRuleStatusVals();
 
-           if (fRB.fDebugEnv!=null && fRB.fDebugEnv.indexOf("states")>=0) {printStates();};
+           if (fRB.fDebugEnv!=null && fRB.fDebugEnv.indexOf("states")>=0) {printStates();}
        }
 
 

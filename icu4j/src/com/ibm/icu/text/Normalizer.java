@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2000-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -439,7 +439,7 @@ public final class Normalizer implements Cloneable {
                                                   )
                                                 );
         } 
-    };
+    }
                                          
     /** 
      * Default normalization.  
@@ -503,7 +503,7 @@ public final class Normalizer implements Cloneable {
                                                   )
                                                 );
         } 
-    };
+    }
                                         
     /** 
      * "Fast C or D" form. 
@@ -545,7 +545,7 @@ public final class Normalizer implements Cloneable {
             /* FCD: skippable if lead cc==0 and trail cc<=1 */
             return (NormalizerImpl.getFCD16(c)>1);
         }   
-    };
+    }
 
     
     /**

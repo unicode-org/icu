@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2005, International Business Machines
+* Copyright (c) 20052007, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -167,6 +167,9 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
         pos.setErrorIndex(4);
         if (pos.getErrorIndex() != 4)
             errln("setErrorIndex failed, got " + pos.getErrorIndex() + " instead of 4");
+        if (objs != null) {
+            errln("objs should be null");
+        }
         ChoiceFormat f = new ChoiceFormat(
             "-1#are negative|0#are no or fraction|1#is one|1.0<is 1+|2#are two|2<are more than 2.");
         pos.setIndex(0); pos.setErrorIndex(-1);
@@ -600,7 +603,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
     public void test4232154() {
         boolean gotException = false;
         try {
-            MessageFormat format = new MessageFormat("The date is {0:date}");
+            new MessageFormat("The date is {0:date}");
         } catch (Exception e) {
             gotException = true;
             if (!(e instanceof IllegalArgumentException)) {

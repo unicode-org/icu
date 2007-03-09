@@ -1595,8 +1595,7 @@ public class TransliteratorTest extends TestFmwk {
     public void TestUndefinedVariable() {
         String rule = "$initial } a <> \u1161;";
         try {
-            Transliterator t = Transliterator.createFromRules("<ID>", rule,Transliterator.FORWARD);
-            t = null;
+            Transliterator.createFromRules("<ID>", rule,Transliterator.FORWARD);
         } catch (IllegalArgumentException e) {
             logln("OK: Got exception for " + rule + ", as expected: " +
                   e.getMessage());
