@@ -1,7 +1,7 @@
 //##header
 /*
  *******************************************************************************
- * Copyright (C) 2001-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -283,7 +283,6 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
         Number negativeNumber = new Double(-350.76);
 
         Locale us = Locale.US;
-        Locale tr = new Locale("tr", "TR");
 
         // test number instance
         t_Format(1, number, NumberFormat.getNumberInstance(us),

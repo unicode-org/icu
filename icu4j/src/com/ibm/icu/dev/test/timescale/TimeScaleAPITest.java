@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -13,10 +13,7 @@ import com.ibm.icu.util.UniversalTimeScale;
 import com.ibm.icu.dev.test.TestFmwk;
 
 /**
- * @author Owner
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * Test UniversalTimeScale API
  */
 public class TimeScaleAPITest extends TestFmwk
 {
@@ -31,10 +28,9 @@ public class TimeScaleAPITest extends TestFmwk
     public void TestBigDecimalFromBigDecimal()
     {
         BigDecimal bigZero = new BigDecimal(0);
-        BigDecimal result;
         
         try {
-            result = UniversalTimeScale.bigDecimalFrom(bigZero, -1);
+            UniversalTimeScale.bigDecimalFrom(bigZero, -1);
             errln("bigDecimalFrom(bigZero, -1) did not throw IllegalArgumentException.");
         } catch (IllegalArgumentException iae) {
             logln("PASS: UniversalTimeScale.bigDecimalFrom failed as expected");
@@ -42,14 +38,14 @@ public class TimeScaleAPITest extends TestFmwk
         
         for (int scale = 0; scale < UniversalTimeScale.MAX_SCALE; scale += 1) {
             try {
-                result = UniversalTimeScale.bigDecimalFrom(bigZero, scale);
+                UniversalTimeScale.bigDecimalFrom(bigZero, scale);
             } catch (IllegalArgumentException iae) {
                 errln("bigDecimalFrom(bigZero, " + scale + ") threw IllegalArgumentException.");
             }
-       }
+        }
         
         try {
-            result = UniversalTimeScale.bigDecimalFrom(bigZero, UniversalTimeScale.MAX_SCALE);
+            UniversalTimeScale.bigDecimalFrom(bigZero, UniversalTimeScale.MAX_SCALE);
             errln("from(bigZero, MAX_SCALE) did not throw IllegalArgumetException.");
         } catch (IllegalArgumentException iae) {
             logln("PASS: UniversalTimeScale.bigDecimalFrom failed as expected");
@@ -58,10 +54,8 @@ public class TimeScaleAPITest extends TestFmwk
     
     public void TestBigDecimalFromDouble()
     {
-        BigDecimal result;
-        
         try {
-            result = UniversalTimeScale.bigDecimalFrom(0.0, -1);
+            UniversalTimeScale.bigDecimalFrom(0.0, -1);
             errln("bigDecimalFrom(0.0, -1) did not throw IllegalArgumentException.");
         } catch (IllegalArgumentException iae) {
             logln("PASS: UniversalTimeScale.bigDecimalFrom failed as expected");
@@ -69,14 +63,14 @@ public class TimeScaleAPITest extends TestFmwk
         
         for (int scale = 0; scale < UniversalTimeScale.MAX_SCALE; scale += 1) {
             try {
-                result = UniversalTimeScale.bigDecimalFrom(0.0, scale);
+                UniversalTimeScale.bigDecimalFrom(0.0, scale);
             } catch (IllegalArgumentException iae) {
                 errln("bigDecimalFrom(0.0, " + scale + ") threw IllegalArgumentException.");
             }
        }
         
         try {
-            result = UniversalTimeScale.bigDecimalFrom(0.0, UniversalTimeScale.MAX_SCALE);
+            UniversalTimeScale.bigDecimalFrom(0.0, UniversalTimeScale.MAX_SCALE);
             errln("from(0.0, MAX_SCALE) did not throw IllegalArgumetException.");
         } catch (IllegalArgumentException iae) {
             logln("PASS: UniversalTimeScale.bigDecimalFrom failed as expected");
@@ -85,10 +79,8 @@ public class TimeScaleAPITest extends TestFmwk
     
     public void TestBigDecimalFromLong()
     {
-        BigDecimal result;
-        
         try {
-            result = UniversalTimeScale.bigDecimalFrom(0L, -1);
+            UniversalTimeScale.bigDecimalFrom(0L, -1);
             errln("bigDecimalFrom(0L, -1) did not throw IllegalArgumentException.");
         } catch (IllegalArgumentException iae) {
             logln("PASS: UniversalTimeScale.bigDecimalFrom failed as expected");
@@ -96,14 +88,14 @@ public class TimeScaleAPITest extends TestFmwk
         
         for (int scale = 0; scale < UniversalTimeScale.MAX_SCALE; scale += 1) {
             try {
-                result = UniversalTimeScale.bigDecimalFrom(0L, scale);
+                UniversalTimeScale.bigDecimalFrom(0L, scale);
             } catch (IllegalArgumentException iae) {
                 errln("bigDecimalFrom(0L, " + scale + ") threw IllegalArgumentException.");
             }
        }
         
         try {
-            result = UniversalTimeScale.bigDecimalFrom(0L, UniversalTimeScale.MAX_SCALE);
+            UniversalTimeScale.bigDecimalFrom(0L, UniversalTimeScale.MAX_SCALE);
             errln("from(0L, MAX_SCALE) did not throw IllegalArgumetException.");
         } catch (IllegalArgumentException iae) {
             logln("PASS: UniversalTimeScale.bigDecimalFrom failed as expected");
@@ -214,10 +206,9 @@ public class TimeScaleAPITest extends TestFmwk
     public void TestToBigDecimalFromBigDecimal()
     {
         BigDecimal bigZero = new BigDecimal(0);
-        BigDecimal result;
         
         try {
-            result = UniversalTimeScale.toBigDecimal(bigZero, -1);
+            UniversalTimeScale.toBigDecimal(bigZero, -1);
             errln("toBigDecimal(bigZero, -1) did not throw IllegalArgumentException.");
         } catch (IllegalArgumentException iae) {
             logln("PASS: UniversalTimeScale.toBigDecimal failed as expected");
@@ -225,14 +216,14 @@ public class TimeScaleAPITest extends TestFmwk
         
         for (int scale = 0; scale < UniversalTimeScale.MAX_SCALE; scale += 1) {
             try {
-                result = UniversalTimeScale.toBigDecimal(bigZero, scale);
+                UniversalTimeScale.toBigDecimal(bigZero, scale);
             } catch (IllegalArgumentException iae) {
                 errln("toBigDecimal(bigZero, " + scale + ") threw IllegalArgumentException.");
             }
         }
         
         try {
-            result = UniversalTimeScale.toBigDecimal(bigZero, UniversalTimeScale.MAX_SCALE);
+            UniversalTimeScale.toBigDecimal(bigZero, UniversalTimeScale.MAX_SCALE);
             errln("toBigDecimal(bigZero, MAX_SCALE) did not throw IllegalArgumetException.");
         } catch (IllegalArgumentException iae) {
             logln("PASS: UniversalTimeScale.toBigDecimal failed as expected");
@@ -242,10 +233,9 @@ public class TimeScaleAPITest extends TestFmwk
     public void TestToBigDecimalTrunc()
     {
         BigDecimal bigZero = new BigDecimal(0);
-        BigDecimal result;
         
         try {
-            result = UniversalTimeScale.toBigDecimalTrunc(bigZero, -1);
+            UniversalTimeScale.toBigDecimalTrunc(bigZero, -1);
             errln("toBigDecimalTrunc(bigZero, -1) did not throw IllegalArgumentException.");
         } catch (IllegalArgumentException iae) {
             logln("PASS: UniversalTimeScale.toBigDecimalTrunc failed as expected");
@@ -253,14 +243,14 @@ public class TimeScaleAPITest extends TestFmwk
         
         for (int scale = 0; scale < UniversalTimeScale.MAX_SCALE; scale += 1) {
             try {
-                result = UniversalTimeScale.toBigDecimalTrunc(bigZero, scale);
+                UniversalTimeScale.toBigDecimalTrunc(bigZero, scale);
             } catch (IllegalArgumentException iae) {
                 errln("toBigDecimalTrunc(bigZero, " + scale + ") threw IllegalArgumentException.");
             }
         }
         
         try {
-            result = UniversalTimeScale.toBigDecimalTrunc(bigZero, UniversalTimeScale.MAX_SCALE);
+            UniversalTimeScale.toBigDecimalTrunc(bigZero, UniversalTimeScale.MAX_SCALE);
             errln("toBigDecimalTrunc(bigZero, MAX_SCALE) did not throw IllegalArgumetException.");
         } catch (IllegalArgumentException iae) {
             logln("PASS: UniversalTimeScale.toBigDecimalTrunc failed as expected");
@@ -269,10 +259,8 @@ public class TimeScaleAPITest extends TestFmwk
     
     public void TestToBigDecimalFromLong()
     {
-        BigDecimal result;
-        
         try {
-            result = UniversalTimeScale.toBigDecimal(0L, -1);
+            UniversalTimeScale.toBigDecimal(0L, -1);
             errln("toBigDecimal(0L, -1) did not throw IllegalArgumentException.");
         } catch (IllegalArgumentException iae) {
             logln("PASS: UniversalTimeScale.toBigDecimal failed as expected");
@@ -280,14 +268,14 @@ public class TimeScaleAPITest extends TestFmwk
         
         for (int scale = 0; scale < UniversalTimeScale.MAX_SCALE; scale += 1) {
             try {
-                result = UniversalTimeScale.toBigDecimal(0L, scale);
+                UniversalTimeScale.toBigDecimal(0L, scale);
             } catch (IllegalArgumentException iae) {
                 errln("toBigDecimal(0L, " + scale + ") threw IllegalArgumentException.");
             }
         }
         
         try {
-            result = UniversalTimeScale.toBigDecimal(0L, UniversalTimeScale.MAX_SCALE);
+            UniversalTimeScale.toBigDecimal(0L, UniversalTimeScale.MAX_SCALE);
             errln("toBigDecimal(0L, MAX_SCALE) did not throw IllegalArgumetException.");
         } catch (IllegalArgumentException iae) {
             logln("PASS: UniversalTimeScale.toBigDecimal failed as expected");

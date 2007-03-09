@@ -1997,11 +1997,11 @@ public class CollationMiscTest extends TestFmwk {
             //int x = foo.getRawImplicit(0xF810);
             foo.getRawFromImplicit(0xE20303E7);
 
-            int gap4 = foo.getGap4();
-            logln("Gap4: " + gap4); 
-            int gap3 = foo.getGap3();
-            int minTrail = foo.getMinTrail();
-            int maxTrail = foo.getMaxTrail();
+            //int gap4 = foo.getGap4();
+            //logln("Gap4: " + gap4); 
+            //int gap3 = foo.getGap3();
+            //int minTrail = foo.getMinTrail();
+            //int maxTrail = foo.getMaxTrail();
             long last = 0;
             long current;
             for (int i = 0; i <= MAX_INPUT; ++i) {

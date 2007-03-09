@@ -986,7 +986,7 @@ public final class ArabicShaping {
         int nextLink = 0;
         int prevLink = 0;
         int lastLink = 0;
-        int prevPos = i;
+        //int prevPos = i;
         int lastPos = i;
         int nx = -2;
         int nw = 0;
@@ -1064,7 +1064,7 @@ public final class ArabicShaping {
             if ((currLink & IRRELEVANT) == 0) {
                 prevLink = lastLink;
                 lastLink = currLink;
-                prevPos = lastPos;
+                //prevPos = lastPos;
                 lastPos = i;
             }
 
