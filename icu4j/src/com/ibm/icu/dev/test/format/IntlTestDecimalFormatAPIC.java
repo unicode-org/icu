@@ -288,19 +288,19 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
         t_Format(1, number, NumberFormat.getNumberInstance(us),
                 getNumberVectorUS());
 
-//        // test percent instance
+        // test percent instance
         t_Format(3, number, NumberFormat.getPercentInstance(us),
                 getPercentVectorUS());
-//
-//        // test permille pattern
+
+        // test permille pattern
         DecimalFormat format = new DecimalFormat("###0.##\u2030");
-//        t_Format(4, number, format, getPermilleVector());
+        t_Format(4, number, format, getPermilleVector());
 
         // test exponential pattern with positive exponent
         format = new DecimalFormat("00.0#E0");
         t_Format(5, number, format, getPositiveExponentVector());
 
-//        // test exponential pattern with negative exponent
+        // test exponential pattern with negative exponent
         format = new DecimalFormat("0000.0#E0");
         t_Format(6, number, format, getNegativeExponentVector());
 
@@ -308,16 +308,16 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
         t_Format(7, number, NumberFormat.getCurrencyInstance(us),
                 getPositiveCurrencyVectorUS());
 
-//        // test negative currency instance with US Locale
+        // test negative currency instance with US Locale
         t_Format(8, negativeNumber, NumberFormat.getCurrencyInstance(us),
                 getNegativeCurrencyVectorUS());
 
-//        // test multiple grouping seperators
+        // test multiple grouping seperators
         number = new Long(100300400);
         t_Format(11, number, NumberFormat.getNumberInstance(us),
                 getNumberVector2US());
 
-//        // test 0
+        // test 0
         number = new Long(0);
         t_Format(12, number, NumberFormat.getNumberInstance(us),
                 getZeroVector());
@@ -331,20 +331,20 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
         return v;
     }
     
-    private static Vector getPositiveCurrencyVectorTR() {
-        Vector v = new Vector();
-        v.add(new FieldContainer(0, 3, NumberFormat.Field.INTEGER));
-        v.add(new FieldContainer(4, 6, NumberFormat.Field.CURRENCY));
-        return v;
-    }
-
-    private static Vector getNegativeCurrencyVectorTR() {
-        Vector v = new Vector();
-        v.add(new FieldContainer(0, 1, NumberFormat.Field.SIGN));
-        v.add(new FieldContainer(1, 4, NumberFormat.Field.INTEGER));
-        v.add(new FieldContainer(5, 7, NumberFormat.Field.CURRENCY));
-        return v;
-    }
+//    private static Vector getPositiveCurrencyVectorTR() {
+//        Vector v = new Vector();
+//        v.add(new FieldContainer(0, 3, NumberFormat.Field.INTEGER));
+//        v.add(new FieldContainer(4, 6, NumberFormat.Field.CURRENCY));
+//        return v;
+//    }
+//
+//    private static Vector getNegativeCurrencyVectorTR() {
+//        Vector v = new Vector();
+//        v.add(new FieldContainer(0, 1, NumberFormat.Field.SIGN));
+//        v.add(new FieldContainer(1, 4, NumberFormat.Field.INTEGER));
+//        v.add(new FieldContainer(5, 7, NumberFormat.Field.CURRENCY));
+//        return v;
+//    }
 
     private static Vector getPositiveCurrencyVectorUS() {
         Vector v = new Vector();
