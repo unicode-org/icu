@@ -1,8 +1,8 @@
-/**
- *******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and         *
- * others. All Rights Reserved.                                                *
- *******************************************************************************
+/*
+ * ******************************************************************************
+ * Copyright (C) 2007, International Business Machines Corporation and others.
+ * All Rights Reserved.
+ * ******************************************************************************
  */
 package com.ibm.icu.dev.tool.tzu;
 

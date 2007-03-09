@@ -1,8 +1,8 @@
-/**
- *******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and         *
- * others. All Rights Reserved.                                                *
- *******************************************************************************
+/*
+ * ******************************************************************************
+ * Copyright (C) 2007, International Business Machines Corporation and others.
+ * All Rights Reserved.
+ * ******************************************************************************
  */
 package com.ibm.icu.dev.tool.tzu;
 
@@ -175,9 +175,9 @@ public class ResultComponent extends JComponent {
             JOptionPane.showMessageDialog(ResultComponent.this, "\"" + file.toString()
                     + "\" is not an updatable ICU jar file.", "Cannot add file", JOptionPane.ERROR_MESSAGE);
             return false;
-        } else {
-            return true;
         }
+
+        return true;
     }
 
     public void setUpdateEnabled(boolean value) {

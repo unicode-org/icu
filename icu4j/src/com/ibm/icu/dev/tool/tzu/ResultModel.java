@@ -1,8 +1,8 @@
-/**
- *******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and         *
- * others. All Rights Reserved.                                                *
- *******************************************************************************
+/*
+ * ******************************************************************************
+ * Copyright (C) 2007, International Business Machines Corporation and others.
+ * All Rights Reserved.
+ * ******************************************************************************
  */
 package com.ibm.icu.dev.tool.tzu;
 
@@ -180,7 +180,7 @@ class ResultModel extends AbstractTableModel {
                 if (i == indices[k])
                     try {
                         k++;
-                        ((ICUFile) iter.next()).updateJar(updateURL, backupDir);
+                        ((ICUFile) iter.next()).update(updateURL, backupDir);
                         fireTableRowsUpdated(i, i);
                         Thread.sleep(0);
                     } catch (IOException ex) {
@@ -198,7 +198,7 @@ class ResultModel extends AbstractTableModel {
             Iterator iter = list.iterator();
             for (int i = 0; i < n; i++)
                 try {
-                    ((ICUFile) iter.next()).updateJar(updateURL, backupDir);
+                    ((ICUFile) iter.next()).update(updateURL, backupDir);
                     fireTableRowsUpdated(i, i);
                     Thread.sleep(0);
                 } catch (IOException ex) {
@@ -237,7 +237,8 @@ class ResultModel extends AbstractTableModel {
                     + " file. Please re-run the tool with -Ddiscoveronly=true option to generate the list of ICU4J jars.");
         } finally {
             try {
-                reader.close();
+                if (reader != null)
+                    reader.close();
             } catch (IOException ex) {
             }
         }
@@ -260,7 +261,8 @@ class ResultModel extends AbstractTableModel {
             resultListError("Could not write to the " + RESULTLIST_FILENAME + " file.");
         } finally {
             try {
-                writer.close();
+                if (writer != null)
+                    writer.close();
             } catch (IOException ex) {
             }
         }
