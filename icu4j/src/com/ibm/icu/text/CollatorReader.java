@@ -138,60 +138,60 @@ final class CollatorReader
     {
         m_size_ = m_dataInputStream_.readInt();
         // all the offsets are in bytes
-          // to get the address add to the header address and cast properly 
-          // Default options int options
+        // to get the address add to the header address and cast properly
+        // Default options int options
         m_headerSize_ = m_dataInputStream_.readInt(); // start of options
         int readcount = 8; // for size and headersize
-        // structure which holds values for indirect positioning and implicit 
+        // structure which holds values for indirect positioning and implicit
         // ranges
-          int UCAConst = m_dataInputStream_.readInt(); 
+        int UCAConst = m_dataInputStream_.readInt();
         readcount += 4;
-        // this one is needed only for UCA, to copy the appropriate 
+        // this one is needed only for UCA, to copy the appropriate
         // contractions
         m_dataInputStream_.skip(4);
         readcount += 4;
-          // reserved for future use
-          m_dataInputStream_.skipBytes(4);
+        // reserved for future use
+        m_dataInputStream_.skipBytes(4);
         readcount += 4;
-          // const uint8_t *mappingPosition; 
-          int mapping = m_dataInputStream_.readInt();
+        // const uint8_t *mappingPosition;
+        int mapping = m_dataInputStream_.readInt();
         readcount += 4;
-          // uint32_t *expansion; 
-          rbc.m_expansionOffset_ = m_dataInputStream_.readInt();
-        readcount += 4; 
-          // UChar *contractionIndex;     
-          rbc.m_contractionOffset_ = m_dataInputStream_.readInt();
-        readcount += 4; 
-          // uint32_t *contractionCEs;
-          int contractionCE = m_dataInputStream_.readInt();
-        readcount += 4;   
-          // needed for various closures int contractionSize 
-          int contractionSize = m_dataInputStream_.readInt();
-        readcount += 4;  
-          // array of last collation element in expansion
-          int expansionEndCE = m_dataInputStream_.readInt();
-        readcount += 4;  
-          // array of maximum expansion size corresponding to the expansion
+        // uint32_t *expansion;
+        rbc.m_expansionOffset_ = m_dataInputStream_.readInt();
+        readcount += 4;
+        // UChar *contractionIndex;
+        rbc.m_contractionOffset_ = m_dataInputStream_.readInt();
+        readcount += 4;
+        // uint32_t *contractionCEs;
+        int contractionCE = m_dataInputStream_.readInt();
+        readcount += 4;
+        // needed for various closures int contractionSize
+        /*int contractionSize = */m_dataInputStream_.readInt();
+        readcount += 4;
+        // array of last collation element in expansion
+        int expansionEndCE = m_dataInputStream_.readInt();
+        readcount += 4;
+        // array of maximum expansion size corresponding to the expansion
         // collation elements with last element in expansionEndCE
-          int expansionEndCEMaxSize = m_dataInputStream_.readInt();
-        readcount += 4;     
-          // size of endExpansionCE int expansionEndCESize
-          m_dataInputStream_.skipBytes(4);
-        readcount += 4; 
-          // hash table of unsafe code points 
-          int unsafe = m_dataInputStream_.readInt();
-        readcount += 4;            
-          // hash table of final code points in contractions.
-          int contractionEnd = m_dataInputStream_.readInt();
+        int expansionEndCEMaxSize = m_dataInputStream_.readInt();
         readcount += 4;
-          // int CEcount = m_dataInputStream_.readInt();
-          m_dataInputStream_.skipBytes(4);
+        // size of endExpansionCE int expansionEndCESize
+        m_dataInputStream_.skipBytes(4);
         readcount += 4;
-          // is jamoSpecial
-          rbc.m_isJamoSpecial_ = m_dataInputStream_.readBoolean();
-        readcount ++; 
+        // hash table of unsafe code points
+        int unsafe = m_dataInputStream_.readInt();
+        readcount += 4;
+        // hash table of final code points in contractions.
+        int contractionEnd = m_dataInputStream_.readInt();
+        readcount += 4;
+        // int CEcount = m_dataInputStream_.readInt();
+        m_dataInputStream_.skipBytes(4);
+        readcount += 4;
+        // is jamoSpecial
+        rbc.m_isJamoSpecial_ = m_dataInputStream_.readBoolean();
+        readcount++;
         // padding
-          m_dataInputStream_.skipBytes(3);
+        m_dataInputStream_.skipBytes(3);
         readcount += 3;
         rbc.m_version_ = readVersion(m_dataInputStream_);
         readcount += 4;
@@ -199,42 +199,46 @@ final class CollatorReader
         readcount += 4;
         rbc.m_UCD_version_ = readVersion(m_dataInputStream_);
         readcount += 4;
-          // byte charsetName[] = new byte[32]; // for charset CEs
-          m_dataInputStream_.skipBytes(32);
+        // byte charsetName[] = new byte[32]; // for charset CEs
+        m_dataInputStream_.skipBytes(32);
         readcount += 32;
-          m_dataInputStream_.skipBytes(56); // for future use
-        readcount += 56; 
+        m_dataInputStream_.skipBytes(56); // for future use
+        readcount += 56;
         if (m_headerSize_ < readcount) {
             throw new IOException("Internal Error: Header size error");
         }
         m_dataInputStream_.skipBytes(m_headerSize_ - readcount);
-        
-          if (rbc.m_contractionOffset_ == 0) { // contraction can be null
-              rbc.m_contractionOffset_ = mapping;
-              contractionCE = mapping;
-          }
+
+        if (rbc.m_contractionOffset_ == 0) { // contraction can be null
+            rbc.m_contractionOffset_ = mapping;
+            contractionCE = mapping;
+        }
         m_optionSize_ = rbc.m_expansionOffset_ - m_headerSize_;
-          m_expansionSize_ = rbc.m_contractionOffset_ - rbc.m_expansionOffset_;
-          m_contractionIndexSize_ = contractionCE - rbc.m_contractionOffset_;
-          m_contractionCESize_ = mapping - contractionCE;
-          m_trieSize_ = expansionEndCE - mapping;
-          m_expansionEndCESize_ = expansionEndCEMaxSize - expansionEndCE;
-          m_expansionEndCEMaxSizeSize_ = unsafe - expansionEndCEMaxSize;
-          m_unsafeSize_ = contractionEnd - unsafe;
-        m_UCAValuesSize_ = m_size_ - UCAConst; // UCA value, will be handled later
+        m_expansionSize_ = rbc.m_contractionOffset_ - rbc.m_expansionOffset_;
+        m_contractionIndexSize_ = contractionCE - rbc.m_contractionOffset_;
+        m_contractionCESize_ = mapping - contractionCE;
+        //m_trieSize_ = expansionEndCE - mapping;
+        m_expansionEndCESize_ = expansionEndCEMaxSize - expansionEndCE;
+        m_expansionEndCEMaxSizeSize_ = unsafe - expansionEndCEMaxSize;
+        m_unsafeSize_ = contractionEnd - unsafe;
+        m_UCAValuesSize_ = m_size_ - UCAConst; // UCA value, will be handled
+                                                // later
         // treat it as normal collator first
         // for normal collator there is no UCA contraction
-        m_contractionEndSize_ = m_size_ - contractionEnd;    
-        
-          rbc.m_contractionOffset_ >>= 1; // casting to ints
-          rbc.m_expansionOffset_ >>= 2; // casting to chars
+        m_contractionEndSize_ = m_size_ - contractionEnd;
+
+        rbc.m_contractionOffset_ >>= 1; // casting to ints
+        rbc.m_expansionOffset_ >>= 2; // casting to chars
     }
     
     /**
-     * Read and break up the collation options passed in the stream of data
-     * and update the argument Collator with the results
-     * @param rbc RuleBasedCollator to populate
-     * @exception IOException thrown when there's a data error.
+     * Read and break up the collation options passed in the stream of data and
+     * update the argument Collator with the results
+     * 
+     * @param rbc
+     *            RuleBasedCollator to populate
+     * @exception IOException
+     *                thrown when there's a data error.
      * @draft 2.2
      */
     private void readOptions(RuleBasedCollator rbc) throws IOException
@@ -608,10 +612,10 @@ final class CollatorReader
      * Size of contraction table in bytes
      */
     private int m_contractionCESize_;
-    /**
+    /*
      * Size of the Trie in bytes
      */
-    private int m_trieSize_;
+    //private int m_trieSize_;
     /**
      * Size of the table that contains information about collation elements
      * that end with an expansion 
