@@ -154,28 +154,24 @@ public  class ICUResourceBundle extends UResourceBundle {
      * @param resName top level resource to consider (such as "collations")
      * @param keyword a particular keyword to consider (such as "collation" )
      * @param locID The requested locale
-     * @param fillinIsAvailable If non-null, 1-element array of fillin parameter that indicates whether the
+     * @param isAvailable If non-null, 1-element array of fillin parameter that indicates whether the
      * requested locale was available. The locale is defined as 'available' if it physically
-     * exists within the specified tree.
+     * exists within the specified tree and included in 'InstalledLocales'.
      * @return the locale
      * @internal ICU 3.0
      */
     public static final ULocale getFunctionalEquivalent(String baseName,
             String resName, String keyword, ULocale locID,
-            boolean fillinIsAvailable[]) {
+            boolean isAvailable[]) {
         String kwVal = locID.getKeywordValue(keyword);
         String baseLoc = locID.getBaseName();
         String defStr = null;
         ULocale parent = new ULocale(baseLoc);
-        ULocale found = locID;
         ULocale defLoc = null; // locale where default (found) resource is
         boolean lookForDefault = false; // true if kwVal needs to be set
         ULocale fullBase = null; // base locale of found (target) resource
         int defDepth = 0; // depth of 'default' marker
         int resDepth = 0; // depth of found resource;
-        if (fillinIsAvailable != null) {
-            fillinIsAvailable[0] = true;
-        }
 
         if ((kwVal == null) || (kwVal.length() == 0)
                 || kwVal.equals(DEFAULT_TAG)) {
@@ -187,10 +183,14 @@ public  class ICUResourceBundle extends UResourceBundle {
         ICUResourceBundle r = null;
 
         r = (ICUResourceBundle) UResourceBundle.getBundleInstance(baseName, parent);
-        found = r.getULocale();
-        if (fillinIsAvailable != null) {
-            if (!found.equals(parent)) {
-                fillinIsAvailable[0] = false;
+        if (isAvailable != null) {
+            isAvailable[0] = false;
+            ULocale[] availableULocales = getAvailEntry(baseName).getULocaleList();
+            for (int i = 0; i < availableULocales.length; i++) {
+                if (parent.equals(availableULocales[i])) {
+                    isAvailable[0] = true;
+                    break;
+                }
             }
         }
         // determine in which locale (if any) the currently relevant 'default' is
@@ -908,7 +908,7 @@ public  class ICUResourceBundle extends UResourceBundle {
         }
     }
     // private constructor for inner classes
-    protected ICUResourceBundle(){};
+    protected ICUResourceBundle(){}
     
     public static final int RES_GET_TYPE(long res) {
         return (int) ((res) >> 28L);
