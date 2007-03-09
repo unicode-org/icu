@@ -117,7 +117,7 @@ void addCollAPITest(TestNode** root)
     addTest(root, &TestCloneBinary, "tscoll/capitst/TestCloneBinary");
     addTest(root, &TestGetSetAttr, "tscoll/capitst/TestGetSetAttr");
     addTest(root, &TestBounds, "tscoll/capitst/TestBounds");
-    addTest(root, &TestGetLocale, "tscoll/capitst/TestGetLocale");    
+    addTest(root, &TestGetLocale, "tscoll/capitst/TestGetLocale");
     addTest(root, &TestSortKeyBufferOverrun, "tscoll/capitst/TestSortKeyBufferOverrun");
     addTest(root, &TestAttribute, "tscoll/capitst/TestAttribute");
     addTest(root, &TestGetTailoredSet, "tscoll/capitst/TestGetTailoredSet");
@@ -1230,7 +1230,7 @@ void TestGetLocale() {
     const char* validLocale;
     const char* actualLocale;
   } testStruct[] = {
-    { "sr_RS", "sr_RS", "ru" },
+    { "sr_RS", "sr_Cyrl_RS", "ru" },
     { "sh_YU", "sh_YU", "hr" }, /* this used to be sh, but now sh collation aliases hr */
     { "en_BE_FOO", "en_BE", "en_BE" },
     { "fr_FR_NONEXISTANT", "fr_FR", "fr" }
