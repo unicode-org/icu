@@ -1,7 +1,7 @@
-/**
+/*
  * ******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and * others.
- * All Rights Reserved. *
+ * Copyright (C) 2007, International Business Machines Corporation and others.
+ * All Rights Reserved.
  * ******************************************************************************
  */
 package com.ibm.icu.dev.tool.tzu;
@@ -72,9 +72,9 @@ public class CLILoader {
      * @throws InterruptedException
      */
     private void search() throws IOException, IllegalArgumentException, InterruptedException {
-        logger.println("*********** Command-Line \'Discover Only\' Mode Started ***********");
-        logger.println("\'Discover Only\' Mode:");
-        logger.println("\tIn this mode, the tool will search for ICU4J jars"
+        logger.printlnToScreen("*********** Command-Line \'Discover Only\' Mode Started ***********");
+        logger.printlnToScreen("\'Discover Only\' Mode:");
+        logger.printlnToScreen("\tIn this mode, the tool will search for ICU4J jars"
                 + " in the directories specified in DirectorySearch.txt"
                 + " and print the ICU4J jars detected and their respective"
                 + " time zone version to the file SDKList.txt");
@@ -107,12 +107,12 @@ public class CLILoader {
      * @throws InterruptedException
      */
     private void update() throws IOException, IllegalArgumentException, InterruptedException {
-        logger.println("*********** Command-Line \'Patch\' Mode Started ***********");
-        logger.println("");
-        logger.println("\'Patch\' Mode:");
-        logger.println("\tIn this mode, the tool patches each of the ICU4J jars"
+        logger.printlnToScreen("*********** Command-Line \'Patch\' Mode Started ***********");
+        logger.printlnToScreen("");
+        logger.printlnToScreen("\'Patch\' Mode:");
+        logger.printlnToScreen("\tIn this mode, the tool patches each of the ICU4J jars"
                 + " listed in ICUList.txt with the new time zone information.");
-        logger.println("");
+        logger.printlnToScreen("");
 
         // initialize the result model and the source model
         resultModel = new ResultModel(logger);

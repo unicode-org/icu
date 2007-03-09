@@ -1,8 +1,8 @@
-/**
- *******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and         *
- * others. All Rights Reserved.                                                *
- *******************************************************************************
+/*
+ * ******************************************************************************
+ * Copyright (C) 2007, International Business Machines Corporation and others.
+ * All Rights Reserved.
+ * ******************************************************************************
  */
 package com.ibm.icu.dev.tool.tzu;
 
@@ -81,7 +81,7 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
 
                                 // update the selected item and fire off an
                                 // event
-                                selected = (String) urlMap.lastKey();
+                                selected = urlMap.lastKey();
                                 int index = 0;
                                 for (Iterator iter = urlMap.keySet().iterator(); iter.hasNext();) {
                                     if (iter.next().equals(str))

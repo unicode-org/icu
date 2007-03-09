@@ -1,7 +1,7 @@
-/**
+/*
  * ******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and * others.
- * All Rights Reserved. *
+ * Copyright (C) 2007, International Business Machines Corporation and others.
+ * All Rights Reserved.
  * ******************************************************************************
  */
 package com.ibm.icu.dev.tool.tzu;
@@ -14,6 +14,7 @@ import java.net.URL;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.WindowConstants;
 import javax.swing.text.JTextComponent;
 
 public class GUILoader {
@@ -40,7 +41,7 @@ public class GUILoader {
         pathFrame.pack();
         // pathFrame.setLocationRelativeTo(null);
 
-        pathFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        pathFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
         pathFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent event) {
                 if (resultClosed)
@@ -55,7 +56,7 @@ public class GUILoader {
         resultFrame.pack();
         // resultFrame.setLocationRelativeTo(null);
 
-        resultFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        resultFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
         resultFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent event) {
                 if (pathClosed)
@@ -81,7 +82,7 @@ public class GUILoader {
 
         workerThread = new Thread(new Runnable() {
             public void run() {
-                logger.println("Search started.", Logger.NORMAL);
+                logger.printlnToScreen("Search started.");
                 setCancelSearchEnabled(true);
                 setUpdateEnabled(false);
                 setSearchEnabled(false);
@@ -94,7 +95,7 @@ public class GUILoader {
                 setSearchEnabled(true);
                 setUpdateEnabled(true);
                 setCancelSearchEnabled(false);
-                logger.println("Search ended.", Logger.NORMAL);
+                logger.printlnToScreen("Search ended.");
             }
         });
 
@@ -106,7 +107,7 @@ public class GUILoader {
 
         workerThread = new Thread(new Runnable() {
             public void run() {
-                logger.println("Search started.", Logger.NORMAL);
+                logger.printlnToScreen("Search started.");
                 setCancelSearchEnabled(true);
                 setUpdateEnabled(false);
                 setSearchEnabled(false);
@@ -119,7 +120,7 @@ public class GUILoader {
                 setSearchEnabled(true);
                 setUpdateEnabled(true);
                 setCancelSearchEnabled(false);
-                logger.println("Search ended.", Logger.NORMAL);
+                logger.printlnToScreen("Search ended.");
             }
         });
 
@@ -131,7 +132,7 @@ public class GUILoader {
 
         workerThread = new Thread(new Runnable() {
             public void run() {
-                logger.println("Update started.", Logger.NORMAL);
+                logger.printlnToScreen("Update started.");
                 setCancelUpdateEnabled(true);
                 setUpdateEnabled(false);
                 setSearchEnabled(false);
@@ -142,7 +143,7 @@ public class GUILoader {
                 setUpdateEnabled(true);
                 setSearchEnabled(true);
                 setCancelUpdateEnabled(false);
-                logger.println("Update ended.", Logger.NORMAL);
+                logger.printlnToScreen("Update ended.");
             }
         });
 
@@ -154,7 +155,7 @@ public class GUILoader {
 
         workerThread = new Thread(new Runnable() {
             public void run() {
-                logger.println("Update started.", Logger.NORMAL);
+                logger.printlnToScreen("Update started.");
                 setCancelUpdateEnabled(true);
                 setUpdateEnabled(false);
                 setSearchEnabled(false);
@@ -165,7 +166,7 @@ public class GUILoader {
                 setUpdateEnabled(true);
                 setSearchEnabled(true);
                 setCancelUpdateEnabled(false);
-                logger.println("Update ended.", Logger.NORMAL);
+                logger.printlnToScreen("Update ended.");
             }
         });
 

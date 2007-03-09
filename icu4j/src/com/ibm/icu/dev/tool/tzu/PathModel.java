@@ -1,7 +1,7 @@
-/**
+/*
  * ******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and * others.
- * All Rights Reserved. *
+ * Copyright (C) 2007, International Business Machines Corporation and others.
+ * All Rights Reserved.
  * ******************************************************************************
  */
 package com.ibm.icu.dev.tool.tzu;
@@ -19,34 +19,67 @@ import java.util.List;
 import javax.swing.AbstractListModel;
 import javax.swing.text.JTextComponent;
 
+/**
+ * Represents a list of IncludePaths that is usable by any class that uses
+ * AbstractListModels (such as a JList in swing). Also contains methods to begin
+ * a search on those paths using ICUJarFinder and placing the results in a
+ * ResultModel, and methods to load a path list from a file.
+ */
 class PathModel extends AbstractListModel {
     public PathModel(Logger logger) {
         this.logger = logger;
     }
 
+    /**
+     * Returns an iterator of the path list.
+     */
     public Iterator iterator() {
         return list.iterator();
     }
 
+    /**
+     * Gets the index of the path list.
+     */
     public Object getElementAt(int index) {
         return list.get(index);
     }
 
+    /**
+     * Gets the size of the path list.
+     */
     public int getSize() {
         return (list == null) ? 0 : list.size();
     }
 
-    public boolean add(String filename) {
-        if ("all".equals(filename)) {
-            logger.println("The tool will search all drives for ICU4J jars except any excluded directories specified",
-                    Logger.NORMAL);
+    /**
+     * Adds a filename to the path list if it is valid and unique. The filename
+     * must either be of the form (<b>+</b>|<b>-</b>)<i>pathstring</i> and
+     * exist, or of the form <b>all</b>. In the case of the latter, all drives
+     * are added to the path list.
+     * 
+     * @param includeFilename
+     *            A filename in the form above.
+     * @return Whether or not <code>includeFilename</code> is both of the form
+     *         detailed above and exists.
+     */
+    public boolean add(String includeFilename) {
+        if ("all".equals(includeFilename)) {
+            logger
+                    .printlnToScreen("The tool will search all drives for ICU4J jars except any excluded directories specified");
             addAllDrives();
             return true;
-        } else {
-            return add(new IncludePath(new File(filename.substring(1).trim()), filename.charAt(0) == '+'));
         }
+
+        return add(new IncludePath(new File(includeFilename.substring(1).trim()), includeFilename.charAt(0) == '+'));
     }
 
+    /**
+     * Adds an IncludePath to the path list if it exists and is unique.
+     * 
+     * @param path
+     *            An existing path.
+     * @return Whether or not the given IncludePath exists.
+     */
     public boolean add(IncludePath path) {
         remove(path);
 
@@ -55,28 +88,44 @@ class PathModel extends AbstractListModel {
             int index = list.size() - 1;
             fireIntervalAdded(this, index, index);
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
+    /**
+     * Adds all drives to the path list.
+     */
     public void addAllDrives() {
         File[] roots = File.listRoots();
         for (int i = 0; i < roots.length; i++)
             add(new IncludePath(roots[i], true));
     }
 
+    /**
+     * Removes a path from the path list. Since there are no duplicates in the
+     * path list, this method either removes a single path or removes none.
+     * 
+     * @param path
+     * @return Whether or not a path was removed.
+     */
     public boolean remove(IncludePath path) {
         int index = list.indexOf(path);
         if (index != -1) {
             list.remove(index);
             fireIntervalRemoved(this, index, index);
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
+    /**
+     * Removes a selection of paths from the path list by index.
+     * 
+     * @param indices
+     *            The indices of the path list to remove.
+     */
     public void remove(int[] indices) {
         if (list.size() > 0 && indices.length > 0) {
             Arrays.sort(indices);
@@ -88,6 +137,9 @@ class PathModel extends AbstractListModel {
         }
     }
 
+    /**
+     * Clears the path list.
+     */
     public void removeAll() {
         if (list.size() > 0) {
             int index = list.size() - 1;
@@ -96,6 +148,23 @@ class PathModel extends AbstractListModel {
         }
     }
 
+    /**
+     * Searches a selection of paths in the path list for updatable ICU4J jars.
+     * Results are added to the result model. The indices provided are the
+     * indices of the path list to search.
+     * 
+     * @param resultModel
+     *            The result model to store the results of the search.
+     * @param indices
+     *            The indices of the path list to use in the search.
+     * @param subdirs
+     *            Whether to search subdiretories.
+     * @param backupDir
+     *            Where to store backup files.
+     * @param statusBar
+     *            The status bar to dispay status.
+     * @throws InterruptedException
+     */
     public void search(ResultModel resultModel, int[] indices, boolean subdirs, File backupDir, JTextComponent statusBar)
             throws InterruptedException {
         if (list.size() > 0 && indices.length > 0) {
@@ -115,6 +184,20 @@ class PathModel extends AbstractListModel {
         }
     }
 
+    /**
+     * Searches each path in the path list for updatable ICU4J jars. Results are
+     * added to the result model.
+     * 
+     * @param resultModel
+     *            The result model to store the results of the search.
+     * @param subdirs
+     *            Whether to search subdiretories.
+     * @param backupDir
+     *            Where to store backup files.
+     * @param statusBar
+     *            The status bar to dispay status.
+     * @throws InterruptedException
+     */
     public void searchAll(ResultModel resultModel, boolean subdirs, File backupDir, JTextComponent statusBar)
             throws InterruptedException {
         if (list.size() > 0) {
@@ -127,9 +210,16 @@ class PathModel extends AbstractListModel {
         }
     }
 
+    /**
+     * Loads a list of paths from <code>PATHLIST_FILENAME</code>. Each path
+     * must be of the form
+     * 
+     * @throws IOException
+     * @throws IllegalArgumentException
+     */
     public void loadPaths() throws IOException, IllegalArgumentException {
-        logger.println("Scanning " + PATHLIST_FILENAME + " file...", Logger.NORMAL);
-        logger.println(PATHLIST_FILENAME + " file contains", Logger.NORMAL);
+        logger.printlnToScreen("Scanning " + PATHLIST_FILENAME + " file...");
+        logger.printlnToScreen(PATHLIST_FILENAME + " file contains");
 
         BufferedReader reader = null;
         int lineNumber = 1;
@@ -144,7 +234,7 @@ class PathModel extends AbstractListModel {
                 if (line.length() >= 1) {
                     sign = line.charAt(0);
                     if (sign != '#') {
-                        logger.println(line, Logger.NORMAL);
+                        logger.printlnToScreen(line);
                         if (sign != '+' && sign != '-' && !"all".equals(line))
                             pathListError("Each path entry must start with a + or - to denote inclusion/exclusion",
                                     lineNumber);
@@ -162,25 +252,43 @@ class PathModel extends AbstractListModel {
             pathListError("Could not read the " + PATHLIST_FILENAME + " file.");
         } finally {
             try {
-                reader.close();
+                if (reader != null)
+                    reader.close();
             } catch (IOException ex) {
             }
         }
     }
 
+    /**
+     * Throws an IllegalArgumentException with the specified message and line
+     * number.
+     * 
+     * @param message
+     *            The message to put in the exception.
+     * @param lineNumber
+     *            The line number to put in the exception.
+     * @throws IllegalArgumentException
+     */
     private static void pathListError(String message, int lineNumber) throws IllegalArgumentException {
         throw new IllegalArgumentException("Error in " + PATHLIST_FILENAME + " (line " + lineNumber + "): " + message);
     }
 
+    /**
+     * Throws an IOException with the specified message.
+     * 
+     * @param message
+     *            The message to put in the exception.
+     * @throws IOException
+     */
     private static void pathListError(String message) throws IOException {
         throw new IOException("Error in " + PATHLIST_FILENAME + ": " + message);
     }
 
-    private List list = new ArrayList(); // list of paths (Files)
-
     public static final String PATHLIST_FILENAME = "DirectorySearch.txt";
 
     public static final long serialVersionUID = 1337;
+
+    private List list = new ArrayList(); // list of paths (Files)
 
     private Logger logger;
 }
