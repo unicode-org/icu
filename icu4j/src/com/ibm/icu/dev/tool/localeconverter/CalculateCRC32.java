@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2003-2004, International Business Machines Corporation and   *
+* Copyright (C) 2003-2007, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -28,7 +28,7 @@ import java.math.*;
  
 public class CalculateCRC32 {
     static int CRCTable[];
-    static int crc;
+    static int cachedCRC;
 
     static void buildCRCTable() {
         final int CRC32_POLYNOMIAL = 0xEDB88320;
@@ -69,18 +69,18 @@ public class CalculateCRC32 {
         buildCRCTable();  
         int temp1, temp2;
         int i = start;
-        crc = lastcrc;
+        cachedCRC = lastcrc;
       
         while (count-- != 0){
-            temp1 = crc >>> 8;
+            temp1 = cachedCRC >>> 8;
             byte s = buffer[i++];
-            temp2 = CRCTable[(crc ^s) & 0xFF];
-            crc = temp1 ^ temp2;
+            temp2 = CRCTable[(cachedCRC ^s) & 0xFF];
+            cachedCRC = temp1 ^ temp2;
         }
-        return crc;
+        return cachedCRC;
     }
 
     public byte [] toBytes() {
-        return new BigInteger(new Integer(crc).toString()).toByteArray();
+        return new BigInteger(new Integer(cachedCRC).toString()).toByteArray();
     }
 }

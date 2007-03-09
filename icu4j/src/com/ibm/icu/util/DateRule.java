@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -74,4 +74,4 @@ public interface DateRule
      * @provisional This API might change or be removed in a future release.
      */
     abstract public boolean isBetween(Date start, Date end);
-};
+}
