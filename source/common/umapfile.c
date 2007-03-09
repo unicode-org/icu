@@ -15,6 +15,12 @@
  *         wrapper functions.
  *
  *----------------------------------------------------------------------------*/
+
+/* Needed by OSF and z/OS to get the correct mmap version */
+#if !defined(_XOPEN_SOURCE_EXTENDED)
+#define _XOPEN_SOURCE_EXTENDED 1
+#endif
+
 #include "unicode/putil.h"
 
 
@@ -48,16 +54,10 @@
 
 #   define MAP_IMPLEMENTATION MAP_WIN32
 
-/* ### Todo: properly auto detect mmap(). Until then, just add your platform here. */
-#elif U_HAVE_MMAP || defined(U_AIX) || defined(U_HPUX) || defined(OS390)
+#elif U_HAVE_MMAP || defined(OS390)
     typedef size_t MemoryMap;
 
 #   define IS_MAP(map) ((map)!=0)
-
-    /* Needed by OSF to get the correct mmap version */
-#   ifndef _XOPEN_SOURCE_EXTENDED
-#       define _XOPEN_SOURCE_EXTENDED
-#   endif
 
 #   include <unistd.h>
 #   include <sys/mman.h>
