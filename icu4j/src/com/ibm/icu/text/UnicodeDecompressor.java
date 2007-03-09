@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -559,4 +559,4 @@ public final class UnicodeDecompressor implements SCSU
         fMode           = SINGLEBYTEMODE;   // Always start in single-byte mode
     fBufferLength   = 0;                // Empty buffer
     }
-};
+}

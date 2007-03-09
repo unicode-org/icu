@@ -115,7 +115,7 @@ public class LocaleDataTest extends TestFmwk{
                          set.equals(o.set);
             return r;
         }
-    };
+    }
     
     public void TestExemplarSet(){
         HashSet  testedExemplars = new HashSet();
