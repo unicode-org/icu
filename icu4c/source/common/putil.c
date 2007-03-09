@@ -631,7 +631,7 @@ static UBool isValidOlsonID(const char *id) {
 #define CONVERT_HOURS_TO_SECONDS(offset) (int32_t)(offset*3600)
 typedef struct OffsetZoneMapping {
     int32_t offsetSeconds;
-    int32_t daylight;
+    int32_t daylightUsed;
     const char *stdID;
     const char *dstID;
     const char *olsonID;
@@ -703,7 +703,7 @@ static const char* remapShortTimeZone(const char *stdID, const char *dstID, int3
     for (idx = 0; idx < (int32_t)sizeof(OFFSET_ZONE_MAPPINGS)/sizeof(OFFSET_ZONE_MAPPINGS[0]); idx++)
     {
         if (offset == OFFSET_ZONE_MAPPINGS[idx].offsetSeconds
-            && daylightUsed == OFFSET_ZONE_MAPPINGS[idx].daylight
+            && daylightUsed == OFFSET_ZONE_MAPPINGS[idx].daylightUsed
             && strcmp(OFFSET_ZONE_MAPPINGS[idx].stdID, stdID) == 0
             && strcmp(OFFSET_ZONE_MAPPINGS[idx].dstID, dstID) == 0)
         {
