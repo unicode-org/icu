@@ -27,6 +27,9 @@ import java.util.jar.Manifest;
 
 import com.ibm.icu.util.UResourceBundle;
 
+/**
+ * A class that represents an updatable ICU4J jar file.
+ */
 public class ICUFile {
     /**
      * Constructs a blank ICUFile. Used internally.
@@ -88,9 +91,9 @@ public class ICUFile {
      *            The current logger.
      * @throws IOException
      */
-    private void initialize(File file, Logger logger) throws IOException {
+    private void initialize(File file, Logger aLogger) throws IOException {
         this.icuFile = file;
-        this.logger = logger;
+        this.logger = aLogger;
         String message = null;
 
         if (!file.exists())
@@ -112,7 +115,7 @@ public class ICUFile {
         if (message != null)
             throw new IOException(message);
 
-        tzVersion = findEntryTZVersion(file, tzEntry);
+        tzVersion = findEntryTZVersion();
     }
 
     /**
@@ -150,6 +153,7 @@ public class ICUFile {
      * 
      * @return The result of getFile().toString().
      */
+    @Override
     public String toString() {
         return getFile().toString();
     }
@@ -172,6 +176,10 @@ public class ICUFile {
         return tzVersion;
     }
 
+    /**
+     * Compares two ICUFiles by the file they represent.
+     */
+    @Override
     public boolean equals(Object other) {
         return (!(other instanceof ICUFile)) ? false : icuFile.equals(((ICUFile) other).icuFile);
     }
@@ -201,7 +209,7 @@ public class ICUFile {
             throw new IOException("Could not create an updated jar.");
 
         // get the new timezone resource version
-        tzVersion = findEntryTZVersion(icuFile, tzEntry);
+        tzVersion = findEntryTZVersion();
     }
 
     /**
@@ -531,14 +539,9 @@ public class ICUFile {
      * Determines the version of a timezone resource in a jar file without
      * locking the jar file.
      * 
-     * @param icuFile
-     *            The jar file containing the timezone resource.
-     * @param tzEntry
-     *            The jar entry in the given jar file representing the timezone
-     *            resource.
      * @return The version of the timezone resource.
      */
-    public String findEntryTZVersion(File icuFile, JarEntry tzEntry) {
+    public String findEntryTZVersion() {
         try {
             File temp = File.createTempFile("zoneinfo", ".res");
             temp.deleteOnExit();
@@ -617,21 +620,42 @@ public class ICUFile {
     // }
     // }
 
-    public static final int BUFFER_SIZE = 1024;
-
+    /**
+     * ICU version to use if one cannot be found.
+     */
     public static final String ICU_VERSION_UNKNOWN = "Unknown";
 
+    /**
+     * Timezone version to use if one cannot be found.
+     */
     public static final String TZ_VERSION_UNKNOWN = "Unknown";
 
+    /**
+     * Key to use when getting the version of a timezone resource.
+     */
     public static final String TZ_VERSION_KEY = "TZVersion";
 
+    /**
+     * A directory entry that is found in every updatable ICU4J jar file.
+     */
     public static final String TZ_ENTRY_DIR = "com/ibm/icu/impl";
 
+    /**
+     * Prefix of the timezone resource filename.
+     */
     public static final String TZ_ENTRY_FILENAME_PREFIX = "zoneinfo";
 
+    /**
+     * Extension of the timezone resource filename.
+     */
     public static final String TZ_ENTRY_FILENAME_EXTENSION = ".res";
 
+    /**
+     * The timezone resource filename.
+     */
     public static final String TZ_ENTRY_FILENAME = TZ_ENTRY_FILENAME_PREFIX + TZ_ENTRY_FILENAME_EXTENSION;
+
+    private static final int BUFFER_SIZE = 1024;
 
     private File icuFile;
 

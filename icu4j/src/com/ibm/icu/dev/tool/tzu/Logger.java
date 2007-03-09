@@ -53,10 +53,6 @@ public class Logger {
      * @throws FileNotFoundException
      */
     public static synchronized Logger getInstance(String filename, int verbosity) throws FileNotFoundException {
-        if (verbosity > 1)
-            verbosity = 1;
-        if (verbosity < -1)
-            verbosity = -1;
         if (logger == null) {
             logger = new Logger(filename, verbosity);
         }
@@ -210,12 +206,24 @@ public class Logger {
             log.println(message);
     }
 
+    /**
+     * Quiet mode.
+     */
     public static final int QUIET = -1;
 
+    /**
+     * Normal mode.
+     */
     public static final int NORMAL = 0;
 
+    /**
+     * Verbose mode.
+     */
     public static final int VERBOSE = 1;
 
+    /**
+     * A default name to use for creating a log file.
+     */
     public static final String DEFAULT_FILENAME = "icutzu.log";
 
     private int verbosity = NORMAL;

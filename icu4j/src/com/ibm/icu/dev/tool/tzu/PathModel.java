@@ -26,26 +26,41 @@ import javax.swing.text.JTextComponent;
  * ResultModel, and methods to load a path list from a file.
  */
 class PathModel extends AbstractListModel {
+    /**
+     * Constructs an empty path model.
+     * 
+     * @param logger
+     *            The current logger.
+     */
     public PathModel(Logger logger) {
         this.logger = logger;
     }
 
     /**
      * Returns an iterator of the path list.
+     * 
+     * @return An iterator of the path list.
      */
     public Iterator iterator() {
         return list.iterator();
     }
 
     /**
-     * Gets the index of the path list.
+     * Returns the path at the element at a particular index of the path list.
+     * 
+     * @param index
+     *            The index of the element of the path list to return.
+     * @return The path at the specified index of the path list. Guaranteed to
+     *         always be an IncludePath.
      */
     public Object getElementAt(int index) {
         return list.get(index);
     }
 
     /**
-     * Gets the size of the path list.
+     * Returns the size of the path list.
+     * 
+     * @return The size of the path list.
      */
     public int getSize() {
         return (list == null) ? 0 : list.size();
@@ -107,17 +122,14 @@ class PathModel extends AbstractListModel {
      * path list, this method either removes a single path or removes none.
      * 
      * @param path
-     * @return Whether or not a path was removed.
+     *            The path to remove from the path list.
      */
-    public boolean remove(IncludePath path) {
+    public void remove(IncludePath path) {
         int index = list.indexOf(path);
         if (index != -1) {
             list.remove(index);
             fireIntervalRemoved(this, index, index);
-            return true;
         }
-
-        return false;
     }
 
     /**
@@ -284,8 +296,14 @@ class PathModel extends AbstractListModel {
         throw new IOException("Error in " + PATHLIST_FILENAME + ": " + message);
     }
 
+    /**
+     * The filename of the pathlist file.
+     */
     public static final String PATHLIST_FILENAME = "DirectorySearch.txt";
 
+    /**
+     * The serializable UID.
+     */
     public static final long serialVersionUID = 1337;
 
     private List list = new ArrayList(); // list of paths (Files)

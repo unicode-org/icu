@@ -43,6 +43,7 @@ public class GUILoader {
 
         pathFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
         pathFrame.addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent event) {
                 if (resultClosed)
                     System.exit(0);
@@ -58,6 +59,7 @@ public class GUILoader {
 
         resultFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
         resultFrame.addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent event) {
                 if (pathClosed)
                     System.exit(0);
