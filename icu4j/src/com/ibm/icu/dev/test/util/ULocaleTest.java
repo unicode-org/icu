@@ -1030,6 +1030,10 @@ public class ULocaleTest extends TestFmwk {
             //it and it2 are not equal here. No way to verify their equivalence yet.
             while(it.hasNext()) {
                 String key = (String)it.next();
+                String key2 = (String)it2.next();
+                if (!key.equals(key2)) {
+                    errln("FAIL: static and non-static getKeywords returned different results.");
+                }
 
                 //To verify display of Keyword
                 // display the above key in English
@@ -1038,6 +1042,9 @@ public class ULocaleTest extends TestFmwk {
                 String s2 = ULocale.getDisplayKeyword(key, "en_US");
                 if (!s1.equals(s2)) {
                     errln ("FAIL: one of the getDisplayKeyword methods failed.");
+                }
+                if (ULocale.getDefault().equals(ULocale.US) && !s1.equals(s0)) {
+                    errln ("FAIL: getDisplayKeyword methods failed for the default locale.");
                 }
                 if (!s1.equals(h[0].get(key))) {
                     warnln("Locale " + localeID + " getDisplayKeyword for key: " + key +
@@ -1068,6 +1075,9 @@ public class ULocaleTest extends TestFmwk {
                 String ss3 = ULocale.getDisplayKeywordValue(localeID, key, ULocale.US);
                 if (!ss1.equals(ss2) || !ss1.equals(ss3)) {
                     errln ("FAIL: one of the getDisplayKeywordValue methods failed.");
+                }
+                if (ULocale.getDefault().equals(ULocale.US) && !ss1.equals(ss0)) {
+                    errln ("FAIL: getDisplayKeyword methods failed for the default locale.");
                 }
                 if (!ss1.equals(h[0].get(type))) {
                     warnln(" Locale " + localeID + " getDisplayKeywordValue for key: " + key +

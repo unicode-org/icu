@@ -48,7 +48,7 @@ public final class UBiDiProps {
         DataInputStream inputStream=new DataInputStream(is);
 
         // read the header
-        unicodeVersion=ICUBinary.readHeader(inputStream, FMT, new IsAcceptable());
+        ICUBinary.readHeader(inputStream, FMT, new IsAcceptable());
 
         // read indexes[]
         int i, count;
@@ -86,7 +86,6 @@ public final class UBiDiProps {
     // implement ICUBinary.Authenticate
     private final class IsAcceptable implements ICUBinary.Authenticate {
         public boolean isDataVersionAcceptable(byte version[]) {
-            formatVersion=version;
             return version[0]==1 &&
                    version[2]==Trie.INDEX_STAGE_1_SHIFT_ && version[3]==Trie.INDEX_STAGE_2_SHIFT_;
         }
@@ -107,8 +106,6 @@ public final class UBiDiProps {
     private static UBiDiProps gBdpDummy=null;
 
     private UBiDiProps(boolean makeDummy) { // ignore makeDummy, only creates a unique signature
-        formatVersion=new byte[] { 1, 0, Trie.INDEX_STAGE_1_SHIFT_, Trie.INDEX_STAGE_2_SHIFT_ };
-        unicodeVersion=new byte[] { 2, 0, 0, 0 };
         indexes=new int[IX_TOP];
         indexes[0]=IX_TOP;
         trie=new CharTrie(0, 0, null); // dummy trie, always returns 0
@@ -262,8 +259,6 @@ public final class UBiDiProps {
     private byte jgArray[];
 
     private CharTrie trie;
-    private byte formatVersion[];
-    private byte unicodeVersion[];  
 
     // data format constants ----------------------------------------------- ***
     private static final String DATA_NAME="ubidi";

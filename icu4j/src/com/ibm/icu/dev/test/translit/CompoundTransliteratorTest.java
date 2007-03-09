@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -24,27 +24,17 @@ public class CompoundTransliteratorTest extends TestFmwk {
     public void TestConstruction(){
         logln("Testing the construction of the compound Transliterator");
         String names[]={"Greek-Latin", "Latin-Devanagari", "Devanagari-Latin", "Latin-Greek"};
-        Transliterator t1=null;
-        Transliterator t2=null;
-        Transliterator t3=null;
-        Transliterator t4=null;
 
         try {
-            t1=Transliterator.getInstance(names[0]);
-            t2=Transliterator.getInstance(names[1]);
-            t3=Transliterator.getInstance(names[2]);
-            t4=Transliterator.getInstance(names[3]);
+            Transliterator.getInstance(names[0]);
+            Transliterator.getInstance(names[1]);
+            Transliterator.getInstance(names[2]);
+            Transliterator.getInstance(names[3]);
         }catch(IllegalArgumentException ex) {
             errln("FAIL: Transliterator construction failed" + ex.getMessage());
             throw ex;
         }
   
-        Transliterator[] transarray1={t1};
-        Transliterator[] transarray2={t1, t4};
-        Transliterator[] transarray3={t4, t1, t2};
-        Transliterator[] transarray4={t1, t2, t3, t4};
-
-        Transliterator[][] transarray={transarray1, transarray2, transarray3, transarray4}; 
         final String IDs[]={
             names[0], 
             names[0]+";"+names[3], 
@@ -55,23 +45,21 @@ public class CompoundTransliteratorTest extends TestFmwk {
    
         for(int i=0; i<4; i++){
             try{
-                Transliterator cpdtrans=Transliterator.getInstance(IDs[i]);
+                Transliterator.getInstance(IDs[i]);
             }catch(IllegalArgumentException ex1) {
                 errln("FAIL: construction using CompoundTransliterator(String ID) failed for " + IDs[i]);
                 throw ex1;
             }
 
             try{
-                Transliterator cpdtrans=Transliterator.getInstance(IDs[i], Transliterator.FORWARD);
-                cpdtrans = null;
+                Transliterator.getInstance(IDs[i], Transliterator.FORWARD);
             }catch(IllegalArgumentException ex2) {
                 errln("FAIL: construction using CompoundTransliterator(String ID, int direction=FORWARD) failed for " + IDs[i]);
                 throw ex2;
             }
 
             try{
-                Transliterator cpdtrans=Transliterator.getInstance(IDs[i], Transliterator.REVERSE);
-                cpdtrans = null;
+                Transliterator.getInstance(IDs[i], Transliterator.REVERSE);
             }catch(IllegalArgumentException ex3) {
                 errln("FAIL: construction using CompoundTransliterator(String ID, int direction=REVERSE) failed for " + IDs[i]);
                 throw ex3;
