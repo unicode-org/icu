@@ -172,7 +172,7 @@ static void TestDateFormat()
         log_err("FAIL: Date Format for US locale failed using udat_format()\n");
     /*format using fr */
     
-    u_unescape("10 juil. 96 16 h 05 HAP (\\u00c9UA)", temp, 30);
+    u_unescape("10 juil. 96 16 h 05 HAP", temp, 30);
     if(result != NULL) {
         free(result);
         result = NULL;
