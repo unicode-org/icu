@@ -1040,7 +1040,7 @@ DateFormatTest::TestLocaleDateFormat() // Bug 495
         DateFormat::FULL, Locale::getFrench());
     DateFormat *dfUS = DateFormat::createDateTimeInstance(DateFormat::FULL, 
         DateFormat::FULL, Locale::getUS());
-    UnicodeString expectedFRENCH ( "lundi 15 septembre 1997 00 h 00 HAP" );
+    UnicodeString expectedFRENCH ( "lundi 15 septembre 1997 00 h 00 HP" );
     expectedFRENCH = expectedFRENCH.unescape();
     //UnicodeString expectedUS ( "Monday, September 15, 1997 12:00:00 o'clock AM PDT" );
     UnicodeString expectedUS ( "Monday, September 15, 1997 12:00:00 AM PT" );
@@ -1878,15 +1878,15 @@ void DateFormatTest::TestTimeZoneStringsAPI() {
         errln("Could not iterate over the StringEnumeration. Error: %s", u_errorName(status)); 
         return;
     }
-    UnicodeString expectedKey("America/Los_Angeles");
+    UnicodeString expectedKey("Pacific/Chatham");
     UnicodeString expectedStrs[DateFormatSymbols::TIMEZONE_COUNT];
-    expectedStrs[DateFormatSymbols::TIMEZONE_SHORT_GENERIC].setTo("PT");
-    expectedStrs[DateFormatSymbols::TIMEZONE_SHORT_STANDARD].setTo("PST");
-    expectedStrs[DateFormatSymbols::TIMEZONE_SHORT_DAYLIGHT].setTo("PDT");
-    expectedStrs[DateFormatSymbols::TIMEZONE_LONG_GENERIC].setTo("Pacific Time");
-    expectedStrs[DateFormatSymbols::TIMEZONE_LONG_STANDARD].setTo("Pacific Standard Time");
-    expectedStrs[DateFormatSymbols::TIMEZONE_LONG_DAYLIGHT].setTo("Pacific Daylight Time");
-    expectedStrs[DateFormatSymbols::TIMEZONE_EXEMPLAR_CITY].setTo("Los Angeles");
+    expectedStrs[DateFormatSymbols::TIMEZONE_SHORT_GENERIC].setTo("");
+    expectedStrs[DateFormatSymbols::TIMEZONE_SHORT_STANDARD].setTo("CHAST");
+    expectedStrs[DateFormatSymbols::TIMEZONE_SHORT_DAYLIGHT].setTo("CHADT");
+    expectedStrs[DateFormatSymbols::TIMEZONE_LONG_GENERIC].setTo("");
+    expectedStrs[DateFormatSymbols::TIMEZONE_LONG_STANDARD].setTo("Chatham Standard Time");
+    expectedStrs[DateFormatSymbols::TIMEZONE_LONG_DAYLIGHT].setTo("Chatham Daylight Time");
+    expectedStrs[DateFormatSymbols::TIMEZONE_EXEMPLAR_CITY].setTo("Chatham");
     for(int32_t i=0; i<DateFormatSymbols::TIMEZONE_COUNT; i++){
         UnicodeString result;
         result = symbols.getZoneString(expectedKey, (DateFormatSymbols::TimeZoneTranslationType)i, result,status);
