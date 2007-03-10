@@ -366,7 +366,7 @@ void DateFormatTest::TestFieldPosition() {
         "Wednesday", "", "", "", "", "PM", "2", "", "", "", "", "", "", "", "", "PT", "", "", "", "",
 
         "", "1997", "ao\\u00FBt", "13", "", "14", "34", "", "",
-        "mercredi", "", "", "", "", "", "", "", "HAP (\\u00C9UA)", "", "", "", "", "", "", "",  "", "", "", "",
+        "mercredi", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "HP",  "", "", "", "",
 
         "AD", "1997", "8", "13", "14", "14", "34", "12", "5",
         "Wed", "225", "2", "33", "3", "PM", "2", "2", "PDT", "1997", "4", "1997", "2450674", "52452513", "-0700", "PT",  "4", "8", "3", "3",
@@ -1040,7 +1040,7 @@ DateFormatTest::TestLocaleDateFormat() // Bug 495
         DateFormat::FULL, Locale::getFrench());
     DateFormat *dfUS = DateFormat::createDateTimeInstance(DateFormat::FULL, 
         DateFormat::FULL, Locale::getUS());
-    UnicodeString expectedFRENCH ( "lundi 15 septembre 1997 00 h 00 HAP (\\u00C9UA)" );
+    UnicodeString expectedFRENCH ( "lundi 15 septembre 1997 00 h 00 HAP" );
     expectedFRENCH = expectedFRENCH.unescape();
     //UnicodeString expectedUS ( "Monday, September 15, 1997 12:00:00 o'clock AM PDT" );
     UnicodeString expectedUS ( "Monday, September 15, 1997 12:00:00 AM PT" );
