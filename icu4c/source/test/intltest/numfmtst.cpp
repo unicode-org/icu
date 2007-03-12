@@ -1482,6 +1482,7 @@ void NumberFormatTest::TestCurrencyNames(void) {
     // USD { "US$", "US Dollar"            } // 04/04/1792-
     UErrorCode ec = U_ZERO_ERROR;
     static const UChar USD[] = {0x55, 0x53, 0x44, 0}; /*USD*/
+    static const UChar USX[] = {0x55, 0x53, 0x58, 0}; /*USX*/
     static const UChar CAD[] = {0x43, 0x41, 0x44, 0}; /*CAD*/
     static const UChar ITL[] = {0x49, 0x54, 0x4C, 0}; /*ITL*/
     UBool isChoiceFormat;
@@ -1518,14 +1519,31 @@ void NumberFormatTest::TestCurrencyNames(void) {
                  UnicodeString(ucurr_getName(CAD, "en_AU",
                                              UCURR_SYMBOL_NAME,
                                              &isChoiceFormat, &len, &ec)));
+    assertEquals("USX.getName(LONG_NAME)",
+                 UnicodeString("USX"),
+                 UnicodeString(ucurr_getName(USX, "en_US",
+                                             UCURR_LONG_NAME,
+                                             &isChoiceFormat, &len, &ec)));
     assertSuccess("ucurr_getName", ec);
     
     ec = U_ZERO_ERROR;
+
     // Test that a default or fallback warning is being returned. JB 4239.
-    ucurr_getName(CAD, "en_US", UCURR_LONG_NAME, &isChoiceFormat,
+    ucurr_getName(CAD, "es_ES", UCURR_LONG_NAME, &isChoiceFormat,
                             &len, &ec);
     assertTrue("ucurr_getName (fallback)",
                     U_USING_FALLBACK_WARNING == ec, TRUE);
+
+    ucurr_getName(CAD, "zh_TW", UCURR_LONG_NAME, &isChoiceFormat,
+                            &len, &ec);
+    assertTrue("ucurr_getName (fallback)",
+                    U_USING_FALLBACK_WARNING == ec, TRUE);
+
+    ucurr_getName(CAD, "en_US", UCURR_LONG_NAME, &isChoiceFormat,
+                            &len, &ec);
+    assertTrue("ucurr_getName (default)",
+                    U_USING_DEFAULT_WARNING == ec, TRUE);
+    
     ucurr_getName(CAD, "vi", UCURR_LONG_NAME, &isChoiceFormat,
                             &len, &ec);
     assertTrue("ucurr_getName (default)",
