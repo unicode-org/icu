@@ -194,18 +194,33 @@ public class SerializableTest extends TestFmwk.TestGroup
             
         }
     }
-    
+
+    private static String zoneIDs[] = {
+        "Pacific/Honolulu", "America/Anchorage", "America/Los_Angeles", "America/Denver",
+        "America/Chicago", "America/New_York", "Africa/Cairo", "Africa/Addis_Ababa", "Africa/Dar_es_Salaam",
+        "Africa/Freetown", "Africa/Johannesburg", "Africa/Nairobi", "Asia/Bangkok", "Asia/Baghdad",
+        "Asia/Calcutta", "Asia/Hong_Kong", "Asia/Jakarta", "Asia/Jerusalem", "Asia/Manila", "Asia/Tokyo",
+        "Europe/Amsterdam", "Europe/Athens", "Europe/Berlin", "Europe/London", "Europe/Malta", "Europe/Moscow",
+        "Europe/Paris", "Europe/Rome"
+    };
+        
+    private static long sampleTimes[] = {
+        1136073600000L, // 20060101T000000Z
+        1138752000000L, // 20060201T000000Z
+        1141171200000L, // 20060301T000000Z
+        1143849600000L, // 20060401T000000Z
+        1146441600000L, // 20060501T000000Z
+        1149120000000L, // 20060601T000000Z
+        1151712000000L, // 20060701T000000Z
+        1154390400000L, // 20060801T000000Z
+        1157068800000L, // 20060901T000000Z
+        1159660800000L, // 20061001T000000Z
+        1162339200000L, // 20061101T000000Z
+        1164931200000L, // 20061201T000000Z
+    };
+
     private static class OlsonTimeZoneHandler implements Handler
     {
-        String zoneIDs[] = {
-            "Pacific/Honolulu", "America/Anchorage", "America/Los_Angeles", "America/Denver",
-            "America/Chicago", "America/New_York", "Africa/Cairo", "Africa/Addis_Ababa", "Africa/Dar_es_Salaam",
-            "Africa/Freetown", "Africa/Johannesburg", "Africa/Nairobi", "Asia/Bangkok", "Asia/Baghdad",
-            "Asia/Calcutta", "Asia/Hong_Kong", "Asia/Jakarta", "Asia/Jerusalem", "Asia/Manila", "Asia/Tokyo",
-            "Europe/Amsterdam", "Europe/Athens", "Europe/Berlin", "Europe/London", "Europe/Malta", "Europe/Moscow",
-            "Europe/Paris", "Europe/Rome"
-        };
-        
         public Object[] getTestObjects()
         {
             OlsonTimeZone timeZones[] = new OlsonTimeZone[zoneIDs.length];
@@ -222,28 +237,24 @@ public class SerializableTest extends TestFmwk.TestGroup
         {
             OlsonTimeZone otz_a = (OlsonTimeZone) a;
             OlsonTimeZone otz_b = (OlsonTimeZone) b;
-            long now = System.currentTimeMillis();
             int a_offsets[] = {0, 0};
             int b_offsets[] = {0, 0};
-            
-            otz_a.getOffset(now, false, a_offsets);
-            otz_b.getOffset(now, false, b_offsets);
-            
-            return a_offsets[0] == b_offsets[0] && a_offsets[1] == b_offsets[1];
+
+            boolean bSame = true;
+            for (int i = 0; i < sampleTimes.length; i++) {
+                otz_a.getOffset(sampleTimes[i], false, a_offsets);
+                otz_b.getOffset(sampleTimes[i], false, b_offsets);
+                if (a_offsets[0] != b_offsets[0] || a_offsets[1] != b_offsets[1]) {
+                    bSame = false;
+                    break;
+                }
+            }
+            return bSame;
         }
     }
     
     private static class JDKTimeZoneHandler implements Handler
     {
-        String zoneIDs[] = {
-            "Pacific/Honolulu", "America/Anchorage", "America/Los_Angeles", "America/Denver",
-            "America/Chicago", "America/New_York", "Africa/Cairo", "Africa/Addis_Ababa", "Africa/Dar_es_Salaam",
-            "Africa/Freetown", "Africa/Johannesburg", "Africa/Nairobi", "Asia/Bangkok", "Asia/Baghdad",
-            "Asia/Calcutta", "Asia/Hong_Kong", "Asia/Jakarta", "Asia/Jerusalem", "Asia/Manila", "Asia/Tokyo",
-            "Europe/Amsterdam", "Europe/Athens", "Europe/Berlin", "Europe/London", "Europe/Malta", "Europe/Moscow",
-            "Europe/Paris", "Europe/Rome"
-        };
-        
         public Object[] getTestObjects()
         {
             JDKTimeZone timeZones[] = new JDKTimeZone[zoneIDs.length];
@@ -260,28 +271,24 @@ public class SerializableTest extends TestFmwk.TestGroup
         {
             JDKTimeZone jtz_a = (JDKTimeZone) a;
             JDKTimeZone jtz_b = (JDKTimeZone) b;
-            long now = System.currentTimeMillis();
             int a_offsets[] = {0, 0};
             int b_offsets[] = {0, 0};
-            
-            jtz_a.getOffset(now, false, a_offsets);
-            jtz_b.getOffset(now, false, b_offsets);
-            
-            return a_offsets[0] == b_offsets[0] && a_offsets[1] == b_offsets[1];
+
+            boolean bSame = true;
+            for (int i = 0; i < sampleTimes.length; i++) {
+                jtz_a.getOffset(sampleTimes[i], false, a_offsets);
+                jtz_b.getOffset(sampleTimes[i], false, b_offsets);
+                if (a_offsets[0] != b_offsets[0] || a_offsets[1] != b_offsets[1]) {
+                    bSame = false;
+                    break;
+                }
+            }
+            return bSame;
         }
     }
-    
+
     private static class TimeZoneAdapterHandler implements Handler
     {
-        String zoneIDs[] = {
-            "Pacific/Honolulu", "America/Anchorage", "America/Los_Angeles", "America/Denver",
-            "America/Chicago", "America/New_York", "Africa/Cairo", "Africa/Addis_Ababa", "Africa/Dar_es_Salaam",
-            "Africa/Freetown", "Africa/Johannesburg", "Africa/Nairobi", "Asia/Bangkok", "Asia/Baghdad",
-            "Asia/Calcutta", "Asia/Hong_Kong", "Asia/Jakarta", "Asia/Jerusalem", "Asia/Manila", "Asia/Tokyo",
-            "Europe/Amsterdam", "Europe/Athens", "Europe/Berlin", "Europe/London", "Europe/Malta", "Europe/Moscow",
-            "Europe/Paris", "Europe/Rome"
-        };
-        
         public Object[] getTestObjects()
         {
             TimeZoneAdapter timeZones[] = new TimeZoneAdapter[zoneIDs.length];
