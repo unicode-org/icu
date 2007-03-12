@@ -1,0 +1,15 @@
+# Copyright (C) 2005-2006, International Business Machines Corporation and
+# others. All Rights Reserved.
+src/com/ibm/icu/impl/CollectionUtilities.java
+src/com/ibm/icu/impl/PatternTokenizer.java
+src/com/ibm/icu/impl/Utility.java
+src/com/ibm/icu/lang/UCharacter.java
+src/com/ibm/icu/math/BigDecimal.java
+src/com/ibm/icu/text/DateTimePatternGenerator.java
+src/com/ibm/icu/text/DecimalFormat.java
+src/com/ibm/icu/text/DigitList.java
+src/com/ibm/icu/text/NumberFormat.java
+src/com/ibm/icu/text/RuleBasedNumberFormat.java
+src/com/ibm/icu/text/UnicodeSet.java
+src/com/ibm/icu/text/UTF16.java
+src/com/ibm/icu/util/GlobalizationPreferences.java
