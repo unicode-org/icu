@@ -7,7 +7,7 @@
   <title>ReadMe for ICU4J</title>
 <!--
 *******************************************************************************
-* Copyright (C) 2000-2006, International Business Machines Corporation and    *
+* Copyright (C) 2000-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 -->
@@ -18,14 +18,14 @@ h3.doc { background: #CCCCFF }
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h2>International Components for Unicode for Java (ICU4J)</h2>
-<h3>Read Me for ICU4J 3.6</h3>
+<h3>Read Me for ICU4J 3.6.1</h3>
 <hr size="2" width="100%">
 <p><b>Release Date</b><br>
-October 1, 2006<br>
+March 19, 2007<br>
 </p>
-<p><b>Note:</b> This is major release of ICU4J.  It contains bug fixes
-and adds implementations of inherited API and introduces new API
-or functionality.
+<p><b>Note:</b> This is an update release of ICU4J 3.6.  It contains bug fixes
+and adds implementations of inherited API, but does not introduce new API or
+functionality.  These changes will be rolled into the next release of ICU4J.
 </p>
 <p>For the most recent release, see the <a
  href="http://icu.sourceforge.net/download/"> ICU4J
@@ -198,22 +198,46 @@ current and complete version of this support is always found in ICU4J.
 
 -->
 <h3 class="doc"><a name="news"></a>What Is New In This Release?</h3>
+<strong>ICU4J 3.6</strong>
 <ul>
-      <li><strong>Unicode</strong>: ICU uses and supports Unicode 5.0, which is the
-      latest major release of Unicode. Unicode 5.0 will be used in many
-      operating systems and applications, and this version of ICU is important
-      maintain interoperability with these new operating systems and applications.
-      More information about Unicode 5.0 can be found in the <a href="http://www.unicode.org/press/pr-ucd5.0.html">Unicode press
-      release</a>.</li>
-      <li><strong>Locale Data</strong>: ICU uses and supports data from <a href="http://www.unicode.org/press/pr-cldr1.4.html">Common Locale Data
-      Repository (CLDR) 1.4</a>, which includes many improvements in quality
-      and quantity of data. There is 25% more CLDR locale data in 245 locales in ICU.</li>
+    <li><strong>Unicode</strong>: ICU uses and supports Unicode 5.0, which is the
+    latest major release of Unicode. Unicode 5.0 will be used in many
+    operating systems and applications, and this version of ICU is important
+    maintain interoperability with these new operating systems and applications.
+    More information about Unicode 5.0 can be found in the <a href="http://www.unicode.org/press/pr-ucd5.0.html">Unicode press
+    release</a>.</li>
+    <li><strong>Locale Data</strong>: ICU uses and supports data from <a href="http://www.unicode.org/press/pr-cldr1.4.html">Common Locale Data
+    Repository (CLDR) 1.4</a>, which includes many improvements in quality
+    and quantity of data. There is 25% more CLDR locale data in 245 locales in ICU.</li>
     <li><strong>Globalization Preferences</strong>: A new flexible container for locale data was added.</li>
     <li><strong>Formatting</strong>: A <strong>preview</strong> of the flexible date/time format generator has been added. This allows multiple date and time format patterns to be generated that are valid for specific locales.</li>
     <li><strong>Charset Conversion</strong>: A <strong>preview</strong> of the ICU4J implementation of the java.nio.charset.Charset API was added.</li>
 </ul>
 <p><i><font color="red"><strong>Note</strong>: Do not use preview APIs in production code. They may change drastically in subsequent releases.</font></i></p>
-
+<strong>ICU4J 3.6.1</strong>
+<ul>
+    <li><strong>Bug fixes</strong>:  This release contains following bug fixes
+    (not a complete list)
+        <ul>
+            <li><a href="http://bugs.icu-project.org/trac/ticket/5402">
+            Ticket#5402: ICU's DateFormat is slow compared with the JDK version</a> - 
+            The fix also resolved following related bugs - 
+            #<a href="http://bugs.icu-project.org/trac/ticket/5168">5168</a>,
+            #<a href="http://bugs.icu-project.org/trac/ticket/5187">5187</a>,
+            #<a href="http://bugs.icu-project.org/trac/ticket/5281">5281</a>,
+            #<a href="http://bugs.icu-project.org/trac/ticket/5508">5508</a></li>
+            <li><a href="http://bugs.icu-project.org/trac/ticket/5615">
+            Ticket#5615: BreakIterator#getLineInstance fails in Japanese locale</a></li>
+        </ul>
+    </li>
+    <li><strong>New time zone data</strong>: Release 3.6.1 updates the time zone
+    data to version 2007c from the Olson time zone database.  There was a ICU time
+    zone data generation tool's bug which caused some offset calculation problems
+    reported by Ticket#<a href="http://bugs.icu-project.org/trac/ticket/5135">5135</a>.
+    The bug in the tool was fixed and the version of time zone data contained in this release
+    no longer has the offset calculation problems.
+    </li>
+</ul>
 <h3 class="doc"><a name="license"></a>License Information</h3>
 <p>
 The ICU projects (ICU4C and ICU4J) use the X license. The X
@@ -280,14 +304,14 @@ is the release version number. Please unjar this file. It
 will reconstruct the source directory.</li>
 </ul>
 <ul type="disc">
-  <li><b>CVS Source Repository:</b><br>
+  <li><b>Subversion Source Repository:</b><br>
 If you are interested in developing features, patches, or bug fixes for
 ICU4J, you should probably be working with the latest version of the
-ICU4J source code. You will need to check the code out of our CVS
+ICU4J source code. You will need to check the code out of our Subversion
 repository to ensure that you have the most recent version of all of
 the files. There are several ways to do this. Please follow the
 directions that are contained on the <a
- href="http://www.ibm.com/software/globalization/icu/repository.jsp">Source
+ href="http://icu.sourceforge.net/repository/">Source
  Repository page</a> for details.
   </li>
 </ul>
@@ -1692,7 +1716,7 @@ overwrite any corresponding resource files already in that directory.
 <h5>Requirements</h5>
 <ul>
   <li><a
- href="http://www.ibm.com/software/globalization/icu/downloads.jsp">ICU4C</a></li>
+ href="http://icu.sourceforge.net/download/">ICU4C</a></li>
   <li>Compilers and tools required for building <a
  href="http://dev.icu-project.org/cgi-bin/viewcvs.cgi/icu/readme.html?view=co#HowToBuild">ICU4C</a>.</li>
   <li>Java SDK version 1.4.0 or above.</li>
@@ -1767,7 +1791,7 @@ review all comments.</p>
 <h2>Thank you for your interest in ICU4J!</h2>
 <br>
 <hr align="center" size="2" width="100%">
-<p><i><font size="-1">Copyright &copy; 2002-2006 International Business
+<p><i><font size="-1">Copyright &copy; 2002-2007 International Business
 Machines Corporation and others. All Rights
 Reserved.<br>
 4400 North First Street, San Jos&eacute;, CA 95193, USA

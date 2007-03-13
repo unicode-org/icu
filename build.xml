@@ -1,7 +1,7 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 1997-2006, International Business Machines Corporation and    *
+* Copyright (C) 1997-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -1599,6 +1599,9 @@
             <fileset dir="${eclipse.dir}/com.ibm.icu.tests"
             includes="**/*"
             excludes="**/CVS/**/"/>
+            <filterset>
+                <filter token="COPYRIGHT" value="${copyright.eclipse}"/>
+            </filterset>
         </copy>
         <!-- copy icu test jar -->
         <copy toDir="${eclipse.projects.dir}/com.ibm.icu.tests" file="${testjar.file}"/>
