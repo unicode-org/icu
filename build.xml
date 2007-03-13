@@ -1411,6 +1411,7 @@
     </target>
 
     <target name="eclipseCoreMangle" depends="buildmangle">
+        <antcall target="undoEclipseMangle"/>
         <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true">
             <arg value="-dFOUNDATION"/>
             <arg value="-t"/>
@@ -1549,6 +1550,7 @@
     </target>
 
     <target name="eclipseTestMangle" depends="buildmangle">
+        <antcall target="eclipseCoreMangle"/>
         <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true">
             <arg value="-dFOUNDATION"/>
             <arg value="-t"/>
@@ -1557,7 +1559,7 @@
     </target>
 
     <target name="eclipseTests" depends="eclipseCore,testdata,eclipseTestMangle" description="build tests trimmed for eclipse API">
-    	<!-- TODO: we should actually use ee.foundation.jar for eclipse env -->
+        <!-- TODO: we should actually use ee.foundation.jar for eclipse env -->
         <javac includes="com/ibm/icu/dev/test/**/*.java"
             excludes="**/CVS/**/*,com/ibm/icu/dev/test/charset/**/*.*,com/ibm/icu/dev/test/perf/**/*.*"
             srcdir="${src.dir}"
@@ -1604,7 +1606,8 @@
         <copy toDir="${eclipse.projects.dir}/com.ibm.icu.tests" file="${zipTestSrc.file}"/>
     </target>
 
-    <target name="eclipseFragmentMangle" depends="eclipseCoreMangle">
+    <target name="eclipseFragmentMangle" depends="buildmangle">
+        <antcall target="undoEclipseMangle"/>
         <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true">
             <arg value="-dECLIPSE_FRAGMENT"/>
             <arg value="-t"/>

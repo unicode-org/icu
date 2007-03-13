@@ -48,6 +48,7 @@ README text !eol
 *.spp -text
 *.tri2 -text
 
+/eclipseFragmentArgs.txt -text
 /ee.foundation.jar -text
 src/com/ibm/icu/dev/data/rbbi/english.dict -text
 src/com/ibm/icu/dev/data/testdata.jar -text
