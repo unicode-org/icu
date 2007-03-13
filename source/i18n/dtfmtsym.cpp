@@ -1659,22 +1659,12 @@ DateFormatSymbols::initZoneStrings(UErrorCode &status){
     fZoneStringsHash->setValueDeleter(deleteUnicodeStringArray);
 
     if(fResourceBundle != NULL){
-        UnicodeString solidus = UNICODE_STRING_SIMPLE("/");
-        UnicodeString colon = UNICODE_STRING_SIMPLE(":");
-        UResourceBundle zoneArray,zoneItem;
+        UnicodeString solidus(UNICODE_STRING_SIMPLE("/"));
+        UnicodeString colon(UNICODE_STRING_SIMPLE(":"));
+        UResourceBundle zoneArray, zoneItem;
         ures_initStackObject(&zoneItem);
         ures_initStackObject(&zoneArray);
-        UBool rb_done = FALSE;
-        const UResourceBundle* rb;
-        for(rb = fResourceBundle; !rb_done; rb=ures_getParentBundle(rb)){
-            if ( rb == NULL ) {
-               rb_done = TRUE;
-               UResourceBundle* rootRes = ures_open((char*)0, "", &status);
-               if(U_FAILURE(status)){
-                  break;
-               }
-               rb = (const UResourceBundle*) rootRes;
-            }
+        for(const UResourceBundle* rb = fResourceBundle; rb!=NULL; rb=ures_getParentBundle(rb)){
             ures_getByKey(rb, gZoneStringsTag, &zoneArray, &status);
             if(U_FAILURE(status)){
                 break;
@@ -1685,82 +1675,79 @@ DateFormatSymbols::initZoneStrings(UErrorCode &status){
                 UnicodeString key(ures_getKey(&zoneItem), -1, US_INV);
                 // Skip regionFormat, hourFormat, etc. found in root
                 if (key.indexOf(colon) == -1)
-                   continue;
+                    continue;
                 key.findAndReplace(colon, solidus);
-                UnicodeString* array = newUnicodeStringArray(UTZ_MAX_DISPLAY_STRINGS_LENGTH);
+                UnicodeString* strArray = newUnicodeStringArray(UTZ_MAX_DISPLAY_STRINGS_LENGTH);
                 int32_t len = 0;
                 //fetch the strings with fine grained fallback
                 const UChar* str = ures_getStringByKeyWithFallback(&zoneItem,UTZ_SHORT_STANDARD, &len, &tempStatus);
                 if(U_SUCCESS(tempStatus)){
-                    array[TIMEZONE_SHORT_STANDARD].setTo(TRUE, str, len);
+                    strArray[TIMEZONE_SHORT_STANDARD].setTo(TRUE, str, len);
                 }else{
                     tempStatus = U_ZERO_ERROR;
                 }
                 str = ures_getStringByKeyWithFallback(&zoneItem,UTZ_SHORT_GENERIC, &len, &tempStatus);
                 if(U_SUCCESS(tempStatus)){
-                    array[TIMEZONE_SHORT_GENERIC].setTo(TRUE, str, len);
+                    strArray[TIMEZONE_SHORT_GENERIC].setTo(TRUE, str, len);
                 }else{
                     tempStatus = U_ZERO_ERROR;
                 }                
                 str = ures_getStringByKeyWithFallback(&zoneItem,UTZ_SHORT_DAYLIGHT, &len, &tempStatus);
                 if(U_SUCCESS(tempStatus)){
-                    array[TIMEZONE_SHORT_DAYLIGHT].setTo(TRUE, str, len);
+                    strArray[TIMEZONE_SHORT_DAYLIGHT].setTo(TRUE, str, len);
                 }else{
                     tempStatus = U_ZERO_ERROR;
                 }
                 str = ures_getStringByKeyWithFallback(&zoneItem,UTZ_LONG_STANDARD, &len, &tempStatus);
                 if(U_SUCCESS(tempStatus)){
-                    array[TIMEZONE_LONG_STANDARD].setTo(TRUE, str, len);
+                    strArray[TIMEZONE_LONG_STANDARD].setTo(TRUE, str, len);
                 }else{
                     tempStatus = U_ZERO_ERROR;
                 }
                 str = ures_getStringByKeyWithFallback(&zoneItem,UTZ_LONG_GENERIC, &len, &tempStatus);
                 if(U_SUCCESS(tempStatus)){
-                    array[TIMEZONE_LONG_GENERIC].setTo(TRUE, str, len);
+                    strArray[TIMEZONE_LONG_GENERIC].setTo(TRUE, str, len);
                 }else{
                     tempStatus = U_ZERO_ERROR;
                 }                
                 str = ures_getStringByKeyWithFallback(&zoneItem,UTZ_LONG_DAYLIGHT, &len, &tempStatus);
                 if(U_SUCCESS(tempStatus)){
-                    array[TIMEZONE_LONG_DAYLIGHT].setTo(TRUE, str, len);
+                    strArray[TIMEZONE_LONG_DAYLIGHT].setTo(TRUE, str, len);
                 }else{
                     tempStatus = U_ZERO_ERROR;
                 }
                 str = ures_getStringByKeyWithFallback(&zoneItem,UTZ_EXEMPLAR_CITY, &len, &tempStatus);
                 if(U_SUCCESS(tempStatus)){
-                    array[TIMEZONE_EXEMPLAR_CITY].setTo(TRUE, str, len);
+                    strArray[TIMEZONE_EXEMPLAR_CITY].setTo(TRUE, str, len);
                 }else{
                     tempStatus = U_ZERO_ERROR;
                 }
                 UResourceBundle *um = ures_getByKeyWithFallback(&zoneItem,UTZ_USES_METAZONE, NULL, &tempStatus);
                 if(U_SUCCESS(tempStatus)){
-                   int32_t mz_index = 8;
-                   while (ures_hasNext(um)) {
-                      UResourceBundle *mz = ures_getNextResource(um,NULL,&tempStatus);
-                      for ( int32_t mzi = 0 ; mzi <= 2 ; mzi++ ) {
-                         str = ures_getStringByIndex(mz,mzi,&len,&tempStatus);
-                         if(U_SUCCESS(tempStatus)){
-                            array[mz_index+mzi].setTo(TRUE, str, len);
-                         }else{
-                            tempStatus = U_ZERO_ERROR;
-                         }
-                      }
-                      ures_close(mz);
-                      mz_index += 3;
-                   }
-                   ures_close(um);
+                    int32_t mz_index = 8;
+                    while (ures_hasNext(um)) {
+                        UResourceBundle *mz = ures_getNextResource(um,NULL,&tempStatus);
+                        for ( int32_t mzi = 0 ; mzi <= 2 ; mzi++ ) {
+                            str = ures_getStringByIndex(mz,mzi,&len,&tempStatus);
+                            if(U_SUCCESS(tempStatus)){
+                                strArray[mz_index+mzi].setTo(TRUE, str, len);
+                            }else{
+                                tempStatus = U_ZERO_ERROR;
+                            }
+                        }
+                        ures_close(mz);
+                        mz_index += 3;
+                    }
                 }else{
                     tempStatus = U_ZERO_ERROR;
                 }
+                ures_close(um);
                 // store the strings in hash
-                fZoneStringsHash->put(key, array, status);
+                fZoneStringsHash->put(key, strArray, status);
             }
             ures_close(&zoneItem);
             ures_close(&zoneArray);
         }
-
-        if ( rb != NULL )
-           ures_close((UResourceBundle *)rb);
 
         int32_t length = fZoneStringsHash->count();
         TimeZoneKeysEnumeration* keysEnum = new TimeZoneKeysEnumeration(length, status);
@@ -1781,8 +1768,8 @@ DateFormatSymbols::initZoneStrings(UErrorCode &status){
         }
     }else{
         //last resort strings
-        UnicodeString* array = newUnicodeStringArray(UTZ_MAX_DISPLAY_STRINGS_LENGTH);
-        if(array==NULL){
+        UnicodeString* strArray = newUnicodeStringArray(UTZ_MAX_DISPLAY_STRINGS_LENGTH);
+        if(strArray==NULL){
             delete fZoneStringsHash;
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
@@ -1793,7 +1780,7 @@ DateFormatSymbols::initZoneStrings(UErrorCode &status){
         fZoneIDEnumeration = keysEnum;
         if(fZoneIDEnumeration==NULL){
             delete fZoneStringsHash;
-            delete[] array;
+            delete[] strArray;
             fZoneStringsHash = NULL;
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
@@ -1801,9 +1788,9 @@ DateFormatSymbols::initZoneStrings(UErrorCode &status){
         keysEnum->put(key, status);
         int32_t j=1;
         for(i=0; i< length; ){
-            array[i++].setTo(gLastResortZoneStrings[j++]);
+            strArray[i++].setTo(gLastResortZoneStrings[j++]);
         }
-        fZoneStringsHash->put(key, array, status);
+        fZoneStringsHash->put(key, strArray, status);
     }
 }
 void 
@@ -1834,8 +1821,8 @@ DateFormatSymbols::initZoneStrings(const UnicodeString** strings, int32_t rowCou
         // the first string in the array is the key.
         UnicodeString key = strings[row][0];
         keysEnum->put(key, status);
-        UnicodeString* array = newUnicodeStringArray(UTZ_MAX_DISPLAY_STRINGS_LENGTH);
-        if(array==NULL){
+        UnicodeString* strArray = newUnicodeStringArray(UTZ_MAX_DISPLAY_STRINGS_LENGTH);
+        if(strArray==NULL){
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
@@ -1843,35 +1830,35 @@ DateFormatSymbols::initZoneStrings(const UnicodeString** strings, int32_t rowCou
             // fastCopyFrom() - see assignArray comments
             switch (col){
                 case 1:
-                    array[TIMEZONE_LONG_STANDARD].setTo(strings[row][col]);
+                    strArray[TIMEZONE_LONG_STANDARD].setTo(strings[row][col]);
                     break;
                 case 2:
-                    array[TIMEZONE_SHORT_STANDARD].setTo(strings[row][col]);
+                    strArray[TIMEZONE_SHORT_STANDARD].setTo(strings[row][col]);
                     break;
                 case 3:
-                    array[TIMEZONE_LONG_DAYLIGHT].setTo(strings[row][col]);
+                    strArray[TIMEZONE_LONG_DAYLIGHT].setTo(strings[row][col]);
                     break;
                 case 4:
-                     array[TIMEZONE_SHORT_DAYLIGHT].setTo(strings[row][col]);
-                     break;
+                    strArray[TIMEZONE_SHORT_DAYLIGHT].setTo(strings[row][col]);
+                    break;
                 case 5:
-                     array[TIMEZONE_EXEMPLAR_CITY].setTo(strings[row][col]);
-                     break;
+                    strArray[TIMEZONE_EXEMPLAR_CITY].setTo(strings[row][col]);
+                    break;
                 case 6:
-                     array[TIMEZONE_LONG_GENERIC].setTo(strings[row][col]);
-                     break; 
+                    strArray[TIMEZONE_LONG_GENERIC].setTo(strings[row][col]);
+                    break; 
                 case 7:
-                    array[TIMEZONE_SHORT_GENERIC].setTo(strings[row][col]);
+                    strArray[TIMEZONE_SHORT_GENERIC].setTo(strings[row][col]);
                     break;
                 default:
                     if ( col > UTZ_MAX_DISPLAY_STRINGS_LENGTH )
-                       status = U_ILLEGAL_ARGUMENT_ERROR;
+                        status = U_ILLEGAL_ARGUMENT_ERROR;
                     else
-                       array[col].setTo(strings[row][col]);
+                        strArray[col].setTo(strings[row][col]);
                     break;
             }
             // populate the hash table
-            fZoneStringsHash->put(strings[row][0], array, status);
+            fZoneStringsHash->put(strings[row][0], strArray, status);
         }
     }
 
@@ -1988,17 +1975,17 @@ DateFormatSymbols::createZoneStringsHash(const Hashtable* otherHash){
         const UHashTok otherValueTok = elem->value;
         UnicodeString* otherKey = (UnicodeString*)otherKeyTok.pointer;
         UnicodeString* otherArray = (UnicodeString*)otherValueTok.pointer;
-        UnicodeString* array = newUnicodeStringArray(UTZ_MAX_DISPLAY_STRINGS_LENGTH);
-        if(array==NULL){
+        UnicodeString* strArray = newUnicodeStringArray(UTZ_MAX_DISPLAY_STRINGS_LENGTH);
+        if(strArray==NULL){
             return NULL;
         }
         UnicodeString key(*otherKey);
         for(int32_t i=0; i<UTZ_MAX_DISPLAY_STRINGS_LENGTH; i++){
-            array[i].setTo(otherArray[i]);
+            strArray[i].setTo(otherArray[i]);
         }
-        hash->put(key, array, status);
+        hash->put(key, strArray, status);
         if(U_FAILURE(status)){
-            delete[] array;
+            delete[] strArray;
             return NULL;
         }
     } 
@@ -2093,106 +2080,106 @@ DateFormatSymbols::findZoneIDTypeValue( UnicodeString& zid, const UnicodeString&
 
 UnicodeString
 DateFormatSymbols::resolveParsedMetazone( const UnicodeString& zid ) {
-
-       if ( zid == UNICODE_STRING_SIMPLE("meta/America_Pacific")) return UNICODE_STRING_SIMPLE("America/Los_Angeles");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/America_Mountain")) return UNICODE_STRING_SIMPLE("America/Denver");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/America_Central")) return UNICODE_STRING_SIMPLE("America/Chicago");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/America_Eastern")) return UNICODE_STRING_SIMPLE("America/New_York");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Acre")) return UNICODE_STRING_SIMPLE("America/Rio_Branco");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Africa_Central")) return UNICODE_STRING_SIMPLE("Africa/Maputo");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Africa_Eastern")) return UNICODE_STRING_SIMPLE("Africa/Nairobi");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Africa_Southern")) return UNICODE_STRING_SIMPLE("Africa/Johannesburg");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Africa_Western")) return UNICODE_STRING_SIMPLE("Africa/Lagos");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Alaska")) return UNICODE_STRING_SIMPLE("America/Anchorage");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Alaska_Hawaii")) return UNICODE_STRING_SIMPLE("America/Anchorage");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Amazon")) return UNICODE_STRING_SIMPLE("America/Manaus");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Aqtau")) return UNICODE_STRING_SIMPLE("Asia/Aqtau");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Aqtobe")) return UNICODE_STRING_SIMPLE("Asia/Aqtobe");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Arabian")) return UNICODE_STRING_SIMPLE("Asia/Riyadh");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Argentina")) return UNICODE_STRING_SIMPLE("America/Buenos_Aires");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Argentina_Western")) return UNICODE_STRING_SIMPLE("America/Catamarca");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Armenia")) return UNICODE_STRING_SIMPLE("Asia/Yerevan");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Ashkhabad")) return UNICODE_STRING_SIMPLE("Asia/Ashgabat");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Atlantic")) return UNICODE_STRING_SIMPLE("America/Halifax");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Australia_Central")) return UNICODE_STRING_SIMPLE("Australia/Adelaide");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Australia_Eastern")) return UNICODE_STRING_SIMPLE("Australia/Sydney");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Australia_Western")) return UNICODE_STRING_SIMPLE("Australia/Perth");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Azores")) return UNICODE_STRING_SIMPLE("Atlantic/Azores");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Baku")) return UNICODE_STRING_SIMPLE("Asia/Baku");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Bangladesh")) return UNICODE_STRING_SIMPLE("Asia/Dhaka");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Bering")) return UNICODE_STRING_SIMPLE("America/Adak");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Bhutan")) return UNICODE_STRING_SIMPLE("Asia/Thimphu");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Borneo")) return UNICODE_STRING_SIMPLE("Asia/Kuching");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Brasilia")) return UNICODE_STRING_SIMPLE("America/Sao_Paulo");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Chamorro")) return UNICODE_STRING_SIMPLE("Pacific/Saipan");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Changbai")) return UNICODE_STRING_SIMPLE("Asia/Harbin");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Chile")) return UNICODE_STRING_SIMPLE("America/Santiago");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/China")) return UNICODE_STRING_SIMPLE("Asia/Shanghai");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Choibalsan")) return UNICODE_STRING_SIMPLE("Asia/Choibalsan");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Dacca")) return UNICODE_STRING_SIMPLE("Asia/Dhaka");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Dushanbe")) return UNICODE_STRING_SIMPLE("Asia/Dushanbe");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Dutch_Guiana")) return UNICODE_STRING_SIMPLE("America/Paramaribo");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/East_Timor")) return UNICODE_STRING_SIMPLE("Asia/Dili");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Ecuador")) return UNICODE_STRING_SIMPLE("America/Guayaquil");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Europe_Central")) return UNICODE_STRING_SIMPLE("Europe/Paris");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Europe_Eastern")) return UNICODE_STRING_SIMPLE("Europe/Bucharest");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Europe_Western")) return UNICODE_STRING_SIMPLE("Europe/Lisbon");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Frunze")) return UNICODE_STRING_SIMPLE("Asia/Bishkek");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/GMT")) return UNICODE_STRING_SIMPLE("Europe/London");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Galapagos")) return UNICODE_STRING_SIMPLE("Pacific/Galapagos");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Georgia")) return UNICODE_STRING_SIMPLE("Asia/Tbilisi");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Greenland_Central")) return UNICODE_STRING_SIMPLE("America/Scoresbysund");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Greenland_Eastern")) return UNICODE_STRING_SIMPLE("America/Scoresbysund");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Greenland_Western")) return UNICODE_STRING_SIMPLE("America/Godthab");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Guam")) return UNICODE_STRING_SIMPLE("Pacific/Guam");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Gulf")) return UNICODE_STRING_SIMPLE("Asia/Dubai");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Hawaii")) return UNICODE_STRING_SIMPLE("Pacific/Honolulu");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Hawaii_Aleutian")) return UNICODE_STRING_SIMPLE("America/Adak");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/India")) return UNICODE_STRING_SIMPLE("Asia/Calcutta");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Indonesia_Central")) return UNICODE_STRING_SIMPLE("Asia/Makassar");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Indonesia_Eastern")) return UNICODE_STRING_SIMPLE("Asia/Jayapura");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Indonesia_Western")) return UNICODE_STRING_SIMPLE("Asia/Jakarta");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Israel")) return UNICODE_STRING_SIMPLE("Asia/Jerusalem");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Karachi")) return UNICODE_STRING_SIMPLE("Asia/Karachi");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Kashgar")) return UNICODE_STRING_SIMPLE("Asia/Kashgar");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Kazakhstan_Eastern")) return UNICODE_STRING_SIMPLE("Asia/Almaty");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Kazakhstan_Western")) return UNICODE_STRING_SIMPLE("Asia/Aqtau");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Kizilorda")) return UNICODE_STRING_SIMPLE("Asia/Qyzylorda");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Korea")) return UNICODE_STRING_SIMPLE("Asia/Seoul");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Kuybyshev")) return UNICODE_STRING_SIMPLE("Europe/Samara");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Kwajalein")) return UNICODE_STRING_SIMPLE("Pacific/Kwajalein");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Kyrgystan")) return UNICODE_STRING_SIMPLE("Asia/Bishkek");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Lanka")) return UNICODE_STRING_SIMPLE("Asia/Colombo");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Long_Shu")) return UNICODE_STRING_SIMPLE("Asia/Chongqing");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Lord_Howe")) return UNICODE_STRING_SIMPLE("Australia/Lord_Howe");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Macau")) return UNICODE_STRING_SIMPLE("Asia/Macau");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Malaya")) return UNICODE_STRING_SIMPLE("Asia/Kuala_Lumpur");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Malaysia")) return UNICODE_STRING_SIMPLE("Asia/Kuala_Lumpur");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Marshall_Islands")) return UNICODE_STRING_SIMPLE("Pacific/Majuro");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Mongolia")) return UNICODE_STRING_SIMPLE("Asia/Ulaanbaatar");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/New_Zealand")) return UNICODE_STRING_SIMPLE("Pacific/Auckland");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Newfoundland")) return UNICODE_STRING_SIMPLE("America/St_Johns");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/North_Mariana")) return UNICODE_STRING_SIMPLE("Pacific/Saipan");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Pakistan")) return UNICODE_STRING_SIMPLE("Asia/Karachi");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Pierre_Miquelon")) return UNICODE_STRING_SIMPLE("America/Miquelon");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Qyzylorda")) return UNICODE_STRING_SIMPLE("Asia/Qyzylorda");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Samara")) return UNICODE_STRING_SIMPLE("Europe/Samara");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Samarkand")) return UNICODE_STRING_SIMPLE("Asia/Samarkand");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Samoa")) return UNICODE_STRING_SIMPLE("Pacific/Apia");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Shevchenko")) return UNICODE_STRING_SIMPLE("Asia/Aqtau");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Suriname")) return UNICODE_STRING_SIMPLE("America/Paramaribo");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Sverdlovsk")) return UNICODE_STRING_SIMPLE("Asia/Yekaterinburg");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Tajikistan")) return UNICODE_STRING_SIMPLE("Asia/Dushanbe");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Tashkent")) return UNICODE_STRING_SIMPLE("Asia/Tashkent");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Tbilisi")) return UNICODE_STRING_SIMPLE("Asia/Tbilisi");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Turkey")) return UNICODE_STRING_SIMPLE("Europe/Istanbul");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Turkmenistan")) return UNICODE_STRING_SIMPLE("Asia/Ashgabat");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Uralsk")) return UNICODE_STRING_SIMPLE("Asia/Oral");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Urumqi")) return UNICODE_STRING_SIMPLE("Asia/Urumqi");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Uzbekistan")) return UNICODE_STRING_SIMPLE("Asia/Tashkent");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Yekaterinburg")) return UNICODE_STRING_SIMPLE("Asia/Yekaterinburg");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Yerevan")) return UNICODE_STRING_SIMPLE("Asia/Yerevan");
-       if ( zid == UNICODE_STRING_SIMPLE("meta/Yukon")) return UNICODE_STRING_SIMPLE("America/Dawson");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/America_Pacific")) return UNICODE_STRING_SIMPLE("America/Los_Angeles");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/America_Mountain")) return UNICODE_STRING_SIMPLE("America/Denver");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/America_Central")) return UNICODE_STRING_SIMPLE("America/Chicago");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/America_Eastern")) return UNICODE_STRING_SIMPLE("America/New_York");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Acre")) return UNICODE_STRING_SIMPLE("America/Rio_Branco");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Africa_Central")) return UNICODE_STRING_SIMPLE("Africa/Maputo");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Africa_Eastern")) return UNICODE_STRING_SIMPLE("Africa/Nairobi");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Africa_Southern")) return UNICODE_STRING_SIMPLE("Africa/Johannesburg");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Africa_Western")) return UNICODE_STRING_SIMPLE("Africa/Lagos");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Alaska")) return UNICODE_STRING_SIMPLE("America/Anchorage");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Alaska_Hawaii")) return UNICODE_STRING_SIMPLE("America/Anchorage");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Amazon")) return UNICODE_STRING_SIMPLE("America/Manaus");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Aqtau")) return UNICODE_STRING_SIMPLE("Asia/Aqtau");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Aqtobe")) return UNICODE_STRING_SIMPLE("Asia/Aqtobe");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Arabian")) return UNICODE_STRING_SIMPLE("Asia/Riyadh");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Argentina")) return UNICODE_STRING_SIMPLE("America/Buenos_Aires");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Argentina_Western")) return UNICODE_STRING_SIMPLE("America/Catamarca");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Armenia")) return UNICODE_STRING_SIMPLE("Asia/Yerevan");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Ashkhabad")) return UNICODE_STRING_SIMPLE("Asia/Ashgabat");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Atlantic")) return UNICODE_STRING_SIMPLE("America/Halifax");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Australia_Central")) return UNICODE_STRING_SIMPLE("Australia/Adelaide");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Australia_Eastern")) return UNICODE_STRING_SIMPLE("Australia/Sydney");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Australia_Western")) return UNICODE_STRING_SIMPLE("Australia/Perth");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Azores")) return UNICODE_STRING_SIMPLE("Atlantic/Azores");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Baku")) return UNICODE_STRING_SIMPLE("Asia/Baku");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Bangladesh")) return UNICODE_STRING_SIMPLE("Asia/Dhaka");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Bering")) return UNICODE_STRING_SIMPLE("America/Adak");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Bhutan")) return UNICODE_STRING_SIMPLE("Asia/Thimphu");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Borneo")) return UNICODE_STRING_SIMPLE("Asia/Kuching");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Brasilia")) return UNICODE_STRING_SIMPLE("America/Sao_Paulo");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Chamorro")) return UNICODE_STRING_SIMPLE("Pacific/Saipan");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Changbai")) return UNICODE_STRING_SIMPLE("Asia/Harbin");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Chile")) return UNICODE_STRING_SIMPLE("America/Santiago");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/China")) return UNICODE_STRING_SIMPLE("Asia/Shanghai");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Choibalsan")) return UNICODE_STRING_SIMPLE("Asia/Choibalsan");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Dacca")) return UNICODE_STRING_SIMPLE("Asia/Dhaka");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Dushanbe")) return UNICODE_STRING_SIMPLE("Asia/Dushanbe");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Dutch_Guiana")) return UNICODE_STRING_SIMPLE("America/Paramaribo");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/East_Timor")) return UNICODE_STRING_SIMPLE("Asia/Dili");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Ecuador")) return UNICODE_STRING_SIMPLE("America/Guayaquil");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Europe_Central")) return UNICODE_STRING_SIMPLE("Europe/Paris");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Europe_Eastern")) return UNICODE_STRING_SIMPLE("Europe/Bucharest");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Europe_Western")) return UNICODE_STRING_SIMPLE("Europe/Lisbon");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Frunze")) return UNICODE_STRING_SIMPLE("Asia/Bishkek");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/GMT")) return UNICODE_STRING_SIMPLE("Europe/London");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Galapagos")) return UNICODE_STRING_SIMPLE("Pacific/Galapagos");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Georgia")) return UNICODE_STRING_SIMPLE("Asia/Tbilisi");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Greenland_Central")) return UNICODE_STRING_SIMPLE("America/Scoresbysund");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Greenland_Eastern")) return UNICODE_STRING_SIMPLE("America/Scoresbysund");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Greenland_Western")) return UNICODE_STRING_SIMPLE("America/Godthab");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Guam")) return UNICODE_STRING_SIMPLE("Pacific/Guam");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Gulf")) return UNICODE_STRING_SIMPLE("Asia/Dubai");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Hawaii")) return UNICODE_STRING_SIMPLE("Pacific/Honolulu");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Hawaii_Aleutian")) return UNICODE_STRING_SIMPLE("America/Adak");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/India")) return UNICODE_STRING_SIMPLE("Asia/Calcutta");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Indonesia_Central")) return UNICODE_STRING_SIMPLE("Asia/Makassar");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Indonesia_Eastern")) return UNICODE_STRING_SIMPLE("Asia/Jayapura");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Indonesia_Western")) return UNICODE_STRING_SIMPLE("Asia/Jakarta");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Israel")) return UNICODE_STRING_SIMPLE("Asia/Jerusalem");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Karachi")) return UNICODE_STRING_SIMPLE("Asia/Karachi");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Kashgar")) return UNICODE_STRING_SIMPLE("Asia/Kashgar");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Kazakhstan_Eastern")) return UNICODE_STRING_SIMPLE("Asia/Almaty");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Kazakhstan_Western")) return UNICODE_STRING_SIMPLE("Asia/Aqtau");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Kizilorda")) return UNICODE_STRING_SIMPLE("Asia/Qyzylorda");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Korea")) return UNICODE_STRING_SIMPLE("Asia/Seoul");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Kuybyshev")) return UNICODE_STRING_SIMPLE("Europe/Samara");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Kwajalein")) return UNICODE_STRING_SIMPLE("Pacific/Kwajalein");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Kyrgystan")) return UNICODE_STRING_SIMPLE("Asia/Bishkek");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Lanka")) return UNICODE_STRING_SIMPLE("Asia/Colombo");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Long_Shu")) return UNICODE_STRING_SIMPLE("Asia/Chongqing");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Lord_Howe")) return UNICODE_STRING_SIMPLE("Australia/Lord_Howe");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Macau")) return UNICODE_STRING_SIMPLE("Asia/Macau");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Malaya")) return UNICODE_STRING_SIMPLE("Asia/Kuala_Lumpur");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Malaysia")) return UNICODE_STRING_SIMPLE("Asia/Kuala_Lumpur");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Marshall_Islands")) return UNICODE_STRING_SIMPLE("Pacific/Majuro");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Mongolia")) return UNICODE_STRING_SIMPLE("Asia/Ulaanbaatar");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/New_Zealand")) return UNICODE_STRING_SIMPLE("Pacific/Auckland");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Newfoundland")) return UNICODE_STRING_SIMPLE("America/St_Johns");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/North_Mariana")) return UNICODE_STRING_SIMPLE("Pacific/Saipan");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Pakistan")) return UNICODE_STRING_SIMPLE("Asia/Karachi");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Pierre_Miquelon")) return UNICODE_STRING_SIMPLE("America/Miquelon");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Qyzylorda")) return UNICODE_STRING_SIMPLE("Asia/Qyzylorda");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Samara")) return UNICODE_STRING_SIMPLE("Europe/Samara");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Samarkand")) return UNICODE_STRING_SIMPLE("Asia/Samarkand");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Samoa")) return UNICODE_STRING_SIMPLE("Pacific/Apia");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Shevchenko")) return UNICODE_STRING_SIMPLE("Asia/Aqtau");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Suriname")) return UNICODE_STRING_SIMPLE("America/Paramaribo");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Sverdlovsk")) return UNICODE_STRING_SIMPLE("Asia/Yekaterinburg");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Tajikistan")) return UNICODE_STRING_SIMPLE("Asia/Dushanbe");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Tashkent")) return UNICODE_STRING_SIMPLE("Asia/Tashkent");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Tbilisi")) return UNICODE_STRING_SIMPLE("Asia/Tbilisi");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Turkey")) return UNICODE_STRING_SIMPLE("Europe/Istanbul");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Turkmenistan")) return UNICODE_STRING_SIMPLE("Asia/Ashgabat");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Uralsk")) return UNICODE_STRING_SIMPLE("Asia/Oral");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Urumqi")) return UNICODE_STRING_SIMPLE("Asia/Urumqi");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Uzbekistan")) return UNICODE_STRING_SIMPLE("Asia/Tashkent");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Yekaterinburg")) return UNICODE_STRING_SIMPLE("Asia/Yekaterinburg");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Yerevan")) return UNICODE_STRING_SIMPLE("Asia/Yerevan");
+    if ( zid == UNICODE_STRING_SIMPLE("meta/Yukon")) return UNICODE_STRING_SIMPLE("America/Dawson");
+    return UnicodeString();
 }
 U_NAMESPACE_END
 
