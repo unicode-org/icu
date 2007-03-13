@@ -667,8 +667,9 @@ void TestMessageFormat::testSetLocale()
     // Just use unlocalized currency symbol.
     //UnicodeString compareStrGer = "At <time> on 08.08.1997, you made a deposit of 456,83 DM.";
     UnicodeString compareStrGer = "At <time> on 08.08.1997, you made a deposit of ";
+    compareStrGer += "456,83 ";
     compareStrGer += (UChar) 0x00a4;
-    compareStrGer += " 456,83.";
+    compareStrGer += ".";
 
     MessageFormat msg( formatStr, err);
     result = "";
