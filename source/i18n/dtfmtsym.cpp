@@ -24,6 +24,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "unicode/ustring.h"
 #include "unicode/dtfmtsym.h"
 #include "unicode/smpdtfmt.h"
 #include "cpputils.h"
@@ -182,7 +183,8 @@ static UMTX LOCK;
 /*
  * Keep this variable in synch with max length of display strings
  */
-#define UTZ_MAX_DISPLAY_STRINGS_LENGTH 37
+#define ZID_KEY_MAX 128
+#define UTZ_MAX_DISPLAY_STRINGS_LENGTH 7
 #define UTZ_SHORT_GENERIC   "sg"
 #define UTZ_SHORT_STANDARD  "ss"
 #define UTZ_SHORT_DAYLIGHT  "sd"
@@ -191,7 +193,6 @@ static UMTX LOCK;
 #define UTZ_LONG_DAYLIGHT   "ld"
 #define UTZ_EXEMPLAR_CITY   "ec"
 #define UTZ_USES_METAZONE   "um"
-#define UTZ_METAZONE        "mz"
 
 /**
  * Jitterbug 2974: MSVC has a bug whereby new X[0] behaves badly.
@@ -1585,7 +1586,7 @@ DateFormatSymbols::initZoneStringsArray(UErrorCode& status){
         return;
     }
     fZoneStringsRowCount = fZoneIDEnumeration->count(status);
-    fZoneStringsColCount = 38;
+    fZoneStringsColCount = 8;
     fZoneStrings = (UnicodeString **)uprv_malloc(fZoneStringsRowCount * sizeof(UnicodeString *));
     /* if we can't get a chunk of heap then the system is going down. Pin the blame on system*/
     if (fZoneStrings == NULL) {
@@ -1612,9 +1613,6 @@ DateFormatSymbols::initZoneStringsArray(UErrorCode& status){
         fZoneStrings[i][5].setTo(strings[TIMEZONE_EXEMPLAR_CITY]);
         fZoneStrings[i][6].setTo(strings[TIMEZONE_LONG_GENERIC]);
         fZoneStrings[i][7].setTo(strings[TIMEZONE_SHORT_GENERIC]);
-        for ( int32_t j = 8 ; j < fZoneStringsColCount ; j++ )
-           fZoneStrings[i][j].setTo(strings[j-1]);
-
         i++;
     }
 }
@@ -1659,9 +1657,9 @@ DateFormatSymbols::initZoneStrings(UErrorCode &status){
     fZoneStringsHash->setValueDeleter(deleteUnicodeStringArray);
 
     if(fResourceBundle != NULL){
-        UnicodeString solidus(UNICODE_STRING_SIMPLE("/"));
-        UnicodeString colon(UNICODE_STRING_SIMPLE(":"));
-        UResourceBundle zoneArray, zoneItem;
+        UnicodeString solidus = UNICODE_STRING_SIMPLE("/");
+        UnicodeString colon = UNICODE_STRING_SIMPLE(":");
+        UResourceBundle zoneArray,zoneItem;
         ures_initStackObject(&zoneItem);
         ures_initStackObject(&zoneArray);
         for(const UResourceBundle* rb = fResourceBundle; rb!=NULL; rb=ures_getParentBundle(rb)){
@@ -1671,13 +1669,12 @@ DateFormatSymbols::initZoneStrings(UErrorCode &status){
             }
             while(ures_hasNext(&zoneArray)){
                 UErrorCode tempStatus = U_ZERO_ERROR;
+                UnicodeString* strArray = newUnicodeStringArray(UTZ_MAX_DISPLAY_STRINGS_LENGTH);
                 ures_getNextResource(&zoneArray, &zoneItem, &status);
                 UnicodeString key(ures_getKey(&zoneItem), -1, US_INV);
-                // Skip regionFormat, hourFormat, etc. found in root
-                if (key.indexOf(colon) == -1)
-                    continue;
+                if ( key.indexOf(colon) == -1 )
+                   continue;
                 key.findAndReplace(colon, solidus);
-                UnicodeString* strArray = newUnicodeStringArray(UTZ_MAX_DISPLAY_STRINGS_LENGTH);
                 int32_t len = 0;
                 //fetch the strings with fine grained fallback
                 const UChar* str = ures_getStringByKeyWithFallback(&zoneItem,UTZ_SHORT_STANDARD, &len, &tempStatus);
@@ -1722,31 +1719,47 @@ DateFormatSymbols::initZoneStrings(UErrorCode &status){
                 }else{
                     tempStatus = U_ZERO_ERROR;
                 }
-                UResourceBundle *um = ures_getByKeyWithFallback(&zoneItem,UTZ_USES_METAZONE, NULL, &tempStatus);
-                if(U_SUCCESS(tempStatus)){
-                    int32_t mz_index = 8;
-                    while (ures_hasNext(um)) {
-                        UResourceBundle *mz = ures_getNextResource(um,NULL,&tempStatus);
-                        for ( int32_t mzi = 0 ; mzi <= 2 ; mzi++ ) {
-                            str = ures_getStringByIndex(mz,mzi,&len,&tempStatus);
-                            if(U_SUCCESS(tempStatus)){
-                                strArray[mz_index+mzi].setTo(TRUE, str, len);
-                            }else{
-                                tempStatus = U_ZERO_ERROR;
-                            }
-                        }
-                        ures_close(mz);
-                        mz_index += 3;
-                    }
-                }else{
-                    tempStatus = U_ZERO_ERROR;
-                }
-                ures_close(um);
                 // store the strings in hash
                 fZoneStringsHash->put(key, strArray, status);
             }
+
             ures_close(&zoneItem);
             ures_close(&zoneArray);
+        }
+
+        // Need to make sure that all zoneStrings in root are covered as well, otherwise metazone lookups won't
+        // work properly
+        UResourceBundle* root_res = ures_open(NULL, "", &status);
+        ures_getByKey(root_res, gZoneStringsTag, &zoneArray, &status);
+        if (U_SUCCESS(status)) {
+           while(ures_hasNext(&zoneArray)){
+                   UErrorCode tempStatus = U_ZERO_ERROR;
+                   ures_getNextResource(&zoneArray, &zoneItem, &status);
+                   UnicodeString key(ures_getKey(&zoneItem), -1, US_INV);
+                   if ( key.indexOf(colon) == -1 )
+                      continue;
+                   key.findAndReplace(colon, solidus);
+
+                   // Don't step on anything that is already there
+                   UnicodeString* existingArray = (UnicodeString*)fZoneStringsHash->get(key);
+                   if(existingArray != NULL){
+                      continue;
+                   }
+                   UnicodeString* strArray = newUnicodeStringArray(UTZ_MAX_DISPLAY_STRINGS_LENGTH);
+                   int32_t len = 0;
+
+                   const UChar *str = ures_getStringByKeyWithFallback(&zoneItem,UTZ_EXEMPLAR_CITY, &len, &tempStatus);
+                   if(U_SUCCESS(tempStatus)){
+                       strArray[TIMEZONE_EXEMPLAR_CITY].setTo(TRUE, str, len);
+                   }else{
+                       tempStatus = U_ZERO_ERROR;
+                   }
+                // store the strings in hash
+                fZoneStringsHash->put(key, strArray, status);
+           }
+           ures_close(&zoneItem);
+           ures_close(&zoneArray);
+           ures_close(root_res);
         }
 
         int32_t length = fZoneStringsHash->count();
@@ -1768,8 +1781,8 @@ DateFormatSymbols::initZoneStrings(UErrorCode &status){
         }
     }else{
         //last resort strings
-        UnicodeString* strArray = newUnicodeStringArray(UTZ_MAX_DISPLAY_STRINGS_LENGTH);
-        if(strArray==NULL){
+        UnicodeString* array = newUnicodeStringArray(UTZ_MAX_DISPLAY_STRINGS_LENGTH);
+        if(array==NULL){
             delete fZoneStringsHash;
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
@@ -1780,7 +1793,7 @@ DateFormatSymbols::initZoneStrings(UErrorCode &status){
         fZoneIDEnumeration = keysEnum;
         if(fZoneIDEnumeration==NULL){
             delete fZoneStringsHash;
-            delete[] strArray;
+            delete[] array;
             fZoneStringsHash = NULL;
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
@@ -1788,9 +1801,9 @@ DateFormatSymbols::initZoneStrings(UErrorCode &status){
         keysEnum->put(key, status);
         int32_t j=1;
         for(i=0; i< length; ){
-            strArray[i++].setTo(gLastResortZoneStrings[j++]);
+            array[i++].setTo(gLastResortZoneStrings[j++]);
         }
-        fZoneStringsHash->put(key, strArray, status);
+        fZoneStringsHash->put(key, array, status);
     }
 }
 void 
@@ -1821,8 +1834,8 @@ DateFormatSymbols::initZoneStrings(const UnicodeString** strings, int32_t rowCou
         // the first string in the array is the key.
         UnicodeString key = strings[row][0];
         keysEnum->put(key, status);
-        UnicodeString* strArray = newUnicodeStringArray(UTZ_MAX_DISPLAY_STRINGS_LENGTH);
-        if(strArray==NULL){
+        UnicodeString* array = newUnicodeStringArray(UTZ_MAX_DISPLAY_STRINGS_LENGTH);
+        if(array==NULL){
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
@@ -1830,35 +1843,31 @@ DateFormatSymbols::initZoneStrings(const UnicodeString** strings, int32_t rowCou
             // fastCopyFrom() - see assignArray comments
             switch (col){
                 case 1:
-                    strArray[TIMEZONE_LONG_STANDARD].setTo(strings[row][col]);
+                    array[TIMEZONE_LONG_STANDARD].setTo(strings[row][col]);
                     break;
                 case 2:
-                    strArray[TIMEZONE_SHORT_STANDARD].setTo(strings[row][col]);
+                    array[TIMEZONE_SHORT_STANDARD].setTo(strings[row][col]);
                     break;
                 case 3:
-                    strArray[TIMEZONE_LONG_DAYLIGHT].setTo(strings[row][col]);
+                    array[TIMEZONE_LONG_DAYLIGHT].setTo(strings[row][col]);
                     break;
                 case 4:
-                    strArray[TIMEZONE_SHORT_DAYLIGHT].setTo(strings[row][col]);
-                    break;
+                     array[TIMEZONE_LONG_DAYLIGHT].setTo(strings[row][col]);
+                     break;
                 case 5:
-                    strArray[TIMEZONE_EXEMPLAR_CITY].setTo(strings[row][col]);
-                    break;
+                     array[TIMEZONE_EXEMPLAR_CITY].setTo(strings[row][col]);
+                     break;
                 case 6:
-                    strArray[TIMEZONE_LONG_GENERIC].setTo(strings[row][col]);
-                    break; 
+                     array[TIMEZONE_LONG_GENERIC].setTo(strings[row][col]);
+                     break; 
                 case 7:
-                    strArray[TIMEZONE_SHORT_GENERIC].setTo(strings[row][col]);
-                    break;
+                     array[TIMEZONE_SHORT_GENERIC].setTo(strings[row][col]);
+                     break;
                 default:
-                    if ( col > UTZ_MAX_DISPLAY_STRINGS_LENGTH )
-                        status = U_ILLEGAL_ARGUMENT_ERROR;
-                    else
-                        strArray[col].setTo(strings[row][col]);
-                    break;
+                    status = U_ILLEGAL_ARGUMENT_ERROR;
             }
             // populate the hash table
-            fZoneStringsHash->put(strings[row][0], strArray, status);
+            fZoneStringsHash->put(strings[row][0], array, status);
         }
     }
 
@@ -1868,6 +1877,10 @@ UnicodeString&
 DateFormatSymbols::getZoneString(const UnicodeString &zid, const TimeZoneTranslationType type, 
                                  UnicodeString &result, UErrorCode &status){
 
+    char zidkey[ZID_KEY_MAX];
+    UChar zid_as_uchar[ZID_KEY_MAX];
+    UErrorCode tempStatus = U_ZERO_ERROR;
+
     if(fZoneStringsHash == NULL){
         //lazy initialization
         initZoneStrings(status);
@@ -1875,11 +1888,16 @@ DateFormatSymbols::getZoneString(const UnicodeString &zid, const TimeZoneTransla
     if(U_FAILURE(status)){
         return result;
     }
+    zid.extract(zid_as_uchar,ZID_KEY_MAX,tempStatus);
+    if (U_FAILURE(tempStatus) ) {
+       return result;
+    }
+    u_austrcpy(zidkey,zid_as_uchar);
+
     UnicodeString* stringsArray = (UnicodeString*)fZoneStringsHash->get(zid);
     if(stringsArray != NULL){
         result.setTo(stringsArray[type],0);
     }
-
     return result;
 }
 
@@ -1887,33 +1905,72 @@ UnicodeString&
 DateFormatSymbols::getMetazoneString(const UnicodeString &zid, const TimeZoneTranslationType type, Calendar &cal,
                                  UnicodeString &result, UErrorCode &status){
 
-
+    UErrorCode tempStatus = U_ZERO_ERROR;
     UnicodeString mzid;
+    int32_t len;
+    
+    // Get the appropriate metazone mapping from the resource bundles
+
+    char usesMetazoneKey[ZID_KEY_MAX];
+    char zidkey[ZID_KEY_MAX];
+    UChar zid_as_uchar[ZID_KEY_MAX];
+
+    uprv_strcpy(usesMetazoneKey,gZoneStringsTag);
+    uprv_strcat(usesMetazoneKey,"/");
+
+    zid.extract(zid_as_uchar,ZID_KEY_MAX,tempStatus);
+    if (U_FAILURE(tempStatus) ) {
+       return result;
+    }
+    u_austrcpy(zidkey,zid_as_uchar);
+
+    // Replace / with : for zid
+    for ( int i = 0 ; i < uprv_strlen(zidkey) ; i++ )
+       if ( zidkey[i] == '/' )
+          zidkey[i] = ':';
+
+    uprv_strcat(usesMetazoneKey,zidkey);
+    uprv_strcat(usesMetazoneKey,"/");
+    uprv_strcat(usesMetazoneKey,UTZ_USES_METAZONE);
+
+    UResourceBundle *um = ures_getByKeyWithFallback(fResourceBundle, usesMetazoneKey, NULL, &tempStatus);
+    if (U_FAILURE(tempStatus) ) {
+       return result;
+    }
+
     UnicodeString* stringsArray = (UnicodeString*)fZoneStringsHash->get(zid);
 
     if(stringsArray != NULL){
        UnicodeString pattern = UNICODE_STRING_SIMPLE("yyyy-MM-dd HH:mm");
-       SimpleDateFormat *df = new SimpleDateFormat(pattern,status);
+       SimpleDateFormat *df = new SimpleDateFormat(pattern,tempStatus);
        TimeZone *tz = TimeZone::createTimeZone(zid);
        df->setTimeZone(*tz);
        UnicodeString theTime;
-       df->format(cal.getTime(status),theTime);
-       int mz_index = 8;
-       while ( mz_index < UTZ_MAX_DISPLAY_STRINGS_LENGTH ) {
-          if ( !stringsArray[mz_index].isEmpty() &&
-                stringsArray[mz_index+1] <= theTime &&
-                stringsArray[mz_index+2] > theTime ) {
+       df->format(cal.getTime(tempStatus),theTime);
+
+
+       while (ures_hasNext(um)) {
+          UResourceBundle *mz = ures_getNextResource(um,NULL,&tempStatus);
+          UnicodeString mz_name = ures_getStringByIndex(mz,0,&len,&tempStatus);
+          UnicodeString mz_from = ures_getStringByIndex(mz,1,&len,&tempStatus);
+          UnicodeString mz_to   = ures_getStringByIndex(mz,2,&len,&tempStatus);
+          if(U_FAILURE(tempStatus)){
+             return result;
+          }
+
+          if ( !mz_name.isEmpty() &&
+                mz_from <= theTime &&
+                mz_to > theTime ) {
              mzid = UNICODE_STRING_SIMPLE("meta/");
-             mzid += stringsArray[mz_index];
+             mzid += mz_name;
+             status = U_ZERO_ERROR;
              getZoneString(mzid,type,result,status);
              return result;
           }
-          mz_index += 3;
        }
     } 
     return result;
 }
-
 StringEnumeration* 
 DateFormatSymbols::createZoneStringIDs(UErrorCode &status){
     if(U_FAILURE(status)){
@@ -1975,17 +2032,17 @@ DateFormatSymbols::createZoneStringsHash(const Hashtable* otherHash){
         const UHashTok otherValueTok = elem->value;
         UnicodeString* otherKey = (UnicodeString*)otherKeyTok.pointer;
         UnicodeString* otherArray = (UnicodeString*)otherValueTok.pointer;
-        UnicodeString* strArray = newUnicodeStringArray(UTZ_MAX_DISPLAY_STRINGS_LENGTH);
-        if(strArray==NULL){
+        UnicodeString* array = newUnicodeStringArray(UTZ_MAX_DISPLAY_STRINGS_LENGTH);
+        if(array==NULL){
             return NULL;
         }
         UnicodeString key(*otherKey);
         for(int32_t i=0; i<UTZ_MAX_DISPLAY_STRINGS_LENGTH; i++){
-            strArray[i].setTo(otherArray[i]);
+            array[i].setTo(otherArray[i]);
         }
-        hash->put(key, strArray, status);
+        hash->put(key, array, status);
         if(U_FAILURE(status)){
-            delete[] strArray;
+            delete[] array;
             return NULL;
         }
     } 
@@ -2062,7 +2119,7 @@ DateFormatSymbols::findZoneIDTypeValue( UnicodeString& zid, const UnicodeString&
     while( (myKey=keys->snext(pos, status))!= NULL){
         UnicodeString* strings = (UnicodeString*)fZoneStringsHash->get(*myKey);
         if(strings != NULL){
-            for(int32_t j=0; j<8; j++){
+            for(int32_t j=0; j<UTZ_MAX_DISPLAY_STRINGS_LENGTH; j++){
                 if(strings[j].length()>0 && text.caseCompare(start, strings[j].length(), strings[j], 0)==0){
                     type = (TimeZoneTranslationType)j;
                     value.setTo(strings[j]);
