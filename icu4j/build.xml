@@ -100,7 +100,7 @@
         <property name="ime.indic.manifest" value="${src.dir}/com/ibm/icu/dev/tool/ime/indic/manifest.stub"/>
         <property name="zip.file" value="../icu4j${DSTAMP}.zip"/>
         <property name="zipSrc.file" value="../icu4jSrc${DSTAMP}.zip"/>
-    	<property name="tzu.bin.dir" value="${basedir}/ICU4JTZU"/>
+    	<property name="tzu.bin.dir" value="${basedir}/icu4jtzu"/>
     	<property name="tzujar.file" value="${tzu.bin.dir}/icutzu.jar"/>
         <property file="build.properties" />
         <!-- fix the data folder every time there is a version update-->
@@ -2475,6 +2475,7 @@
     	    <fileset dir="${src.dir}/com/ibm/icu/dev/tool/tzu">
     	      <include name="*.bat"/>
     	      <include name="*.sh"/>
+      	      <include name="*.gif"/>
     	    </fileset>
     		<fileset dir="${basedir}">
     			<include name="${jar.file}"/>

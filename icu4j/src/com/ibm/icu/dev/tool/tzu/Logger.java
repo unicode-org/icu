@@ -6,9 +6,13 @@
  */
 package com.ibm.icu.dev.tool.tzu;
 
+import java.awt.Component;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 /**
  * A singleton object that handles output to the screen and to a log file. Get
@@ -24,14 +28,56 @@ public class Logger {
      *            The filename to use for logging output.
      * @param verbosity
      *            The verbosity for output to the screen.
+     * @param statusBar
+     *            The status bar for status-bar messages, or null if none is
+     *            present.
+     * @param dialogParent
+     *            The parent for dialog messages, or null if no dialog messages
+     *            are wanted.
      * @throws FileNotFoundException
      */
-    private Logger(String filename, int verbosity) throws FileNotFoundException {
+    private Logger(String filename, int verbosity, JLabel statusBar,
+            Component dialogParent) throws FileNotFoundException {
         System.out.println("Log file: " + filename);
         if (this.log != null)
             this.log.close();
         this.log = new PrintStream(new FileOutputStream(filename));
         this.verbosity = verbosity;
+        this.statusBar = statusBar;
+        this.dialogParent = dialogParent;
+    }
+
+    /**
+     * Gets the instance of the logger, constructing a new one with
+     * <code>filename</code> and <code>verbosity</code> if one is not
+     * already constructed.
+     * 
+     * @param filename
+     *            The filename to use for logging output.
+     * @param verbosity
+     *            The verbosity for output to the screen. Should be one of the
+     *            following:
+     *            <ul>
+     *            <li>QUIET</li>
+     *            <li>NORMAL</li>
+     *            <li>VERBOSE</li>
+     *            </ul>
+     * @param statusBar
+     *            The status bar for status-bar messages, or null if none is
+     *            present.
+     * @param dialogParent
+     *            The parent for dialog messages, or null if no dialog messages
+     *            are wanted.
+     * @return The instance of the logger.
+     * @throws FileNotFoundException
+     */
+    public static synchronized Logger getInstance(String filename,
+            int verbosity, JLabel statusBar, Component dialogParent)
+            throws FileNotFoundException {
+        if (logger == null) {
+            logger = new Logger(filename, verbosity, statusBar, dialogParent);
+        }
+        return logger;
     }
 
     /**
@@ -52,9 +98,10 @@ public class Logger {
      * @return The instance of the logger.
      * @throws FileNotFoundException
      */
-    public static synchronized Logger getInstance(String filename, int verbosity) throws FileNotFoundException {
+    public static synchronized Logger getInstance(String filename, int verbosity)
+            throws FileNotFoundException {
         if (logger == null) {
-            logger = new Logger(filename, verbosity);
+            logger = new Logger(filename, verbosity, null, null);
         }
         return logger;
     }
@@ -81,7 +128,8 @@ public class Logger {
      *            The message to print.
      */
     public void printToScreen(String message) {
-        System.out.print(message);
+        if (verbosity >= NORMAL)
+            System.out.print(message);
     }
 
     /**
@@ -91,7 +139,8 @@ public class Logger {
      *            The message to print.
      */
     public void printlnToScreen(String message) {
-        System.out.println(message);
+        if (verbosity >= NORMAL)
+            System.out.println(message);
     }
 
     /**
@@ -125,7 +174,8 @@ public class Logger {
      *            The message to print.
      */
     public void logToFile(String message) {
-        log.print(message);
+        if (log != null)
+            log.print(message);
     }
 
     /**
@@ -135,7 +185,8 @@ public class Logger {
      *            The message to print.
      */
     public void loglnToFile(String message) {
-        log.println(message);
+        if (log != null)
+            log.println(message);
     }
 
     /**
@@ -145,7 +196,8 @@ public class Logger {
      *            The message to print.
      */
     public void printToBoth(String message) {
-        log.print(message);
+        printToScreen(message);
+        logToFile(message);
     }
 
     /**
@@ -155,7 +207,8 @@ public class Logger {
      *            The message to print.
      */
     public void printlnToBoth(String message) {
-        log.println(message);
+        printlnToScreen(message);
+        loglnToFile(message);
     }
 
     /**
@@ -167,7 +220,8 @@ public class Logger {
      *            The message to print.
      */
     public void logToBoth(String message) {
-        log.print(message);
+        logToScreen(message);
+        logToFile(message);
     }
 
     /**
@@ -178,7 +232,8 @@ public class Logger {
      *            The message to print.
      */
     public void loglnToBoth(String message) {
-        log.println(message);
+        loglnToScreen(message);
+        loglnToFile(message);
     }
 
     /**
@@ -207,6 +262,44 @@ public class Logger {
     }
 
     /**
+     * If dialogParent is not null, brings up an informative dialog about
+     * something the user should be aware of.
+     * 
+     * @param message
+     *            The message to the user.
+     */
+    public void showInformationDialog(String message) {
+        if (dialogParent != null)
+            JOptionPane.showMessageDialog(dialogParent, message,
+                    "INFORMATION MESSAGE", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    /**
+     * If dialogParent is not null, brings up an warning dialog about something
+     * the user should be aware of.
+     * 
+     * @param message
+     *            The message to the user.
+     */
+    public void showWarningDialog(String message) {
+        if (dialogParent != null)
+            JOptionPane.showMessageDialog(dialogParent, message,
+                    "WARNING MESSAGE", JOptionPane.WARNING_MESSAGE);
+    }
+
+    /**
+     * If the status bar is not null, produces a status message so that the user
+     * is aware of the current status.
+     * 
+     * @param message
+     *            The status.
+     */
+    public void setStatus(String message) {
+        if (statusBar != null)
+            statusBar.setText(message);
+    }
+
+    /**
      * Quiet mode.
      */
     public static final int QUIET = -1;
@@ -228,7 +321,11 @@ public class Logger {
 
     private int verbosity = NORMAL;
 
-    private PrintStream log;
+    private PrintStream log = null;
+
+    private JLabel statusBar = null;
+
+    private Component dialogParent = null;
 
     private static Logger logger = null;
 }

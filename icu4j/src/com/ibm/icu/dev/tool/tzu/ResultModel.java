@@ -31,11 +31,15 @@ class ResultModel extends AbstractTableModel {
     /**
      * Constructs an empty result list.
      * 
+     * @param resultFile
+     *            The file to load and save results from and to.
      * @param logger
      *            The current logger.
      */
-    public ResultModel(Logger logger) {
+    public ResultModel(Logger logger, File resultFile) {
         this.logger = logger;
+        this.resultFile = resultFile;
+        this.resultFilename = resultFile.getName();
     }
 
     /**
@@ -64,7 +68,6 @@ class ResultModel extends AbstractTableModel {
      *            The index of the column.
      * @return <code>COLUMN_NAMES[col]</code>
      */
-    @Override
     public String getColumnName(int col) {
         return COLUMN_NAMES[col];
     }
@@ -264,7 +267,8 @@ class ResultModel extends AbstractTableModel {
      *            The directory in which to store backups.
      * @throws InterruptedException
      */
-    public void update(int[] indices, URL updateURL, File backupDir) throws InterruptedException {
+    public void update(int[] indices, URL updateURL, File backupDir)
+            throws InterruptedException {
         if (hidden)
             update(permissibleList, indices, updateURL, backupDir);
         else
@@ -281,7 +285,8 @@ class ResultModel extends AbstractTableModel {
      *            The directory in which to store backups.
      * @throws InterruptedException
      */
-    public void updateAll(URL updateURL, File backupDir) throws InterruptedException {
+    public void updateAll(URL updateURL, File backupDir)
+            throws InterruptedException {
         if (hidden)
             updateAll(permissibleList, updateURL, backupDir);
         else
@@ -301,7 +306,8 @@ class ResultModel extends AbstractTableModel {
      *            The directory in which to store backups.
      * @throws InterruptedException
      */
-    private void update(List list, int[] indices, URL updateURL, File backupDir) throws InterruptedException {
+    private void update(List list, int[] indices, URL updateURL, File backupDir)
+            throws InterruptedException {
         if (list.size() > 0 && indices.length > 0) {
             Arrays.sort(indices);
             int n = indices.length;
@@ -334,7 +340,8 @@ class ResultModel extends AbstractTableModel {
      *            The directory in which to store backups.
      * @throws InterruptedException
      */
-    private void updateAll(List list, URL updateURL, File backupDir) throws InterruptedException {
+    private void updateAll(List list, URL updateURL, File backupDir)
+            throws InterruptedException {
         if (list.size() > 0) {
             int n = list.size();
             Iterator iter = list.iterator();
@@ -351,13 +358,16 @@ class ResultModel extends AbstractTableModel {
     }
 
     /**
-     * Loads a list of ICUFiles from <code>RESULTLIST_FILENAME</code>. Lines
-     * should be of the form <b><i>pathstring</i><tab><i>tzversion</i></b>.
+     * Loads a list of ICUFiles from the given result list file. Lines should be
+     * of the form <b><i>pathstring</i><tab><i>tzversion</i></b>.
      * 
      * @throws IOException
      * @throws IllegalArgumentException
      */
     public void loadResults() throws IOException, IllegalArgumentException {
+        logger.printlnToScreen("Scanning " + resultFilename + " file...");
+        logger.printlnToScreen(resultFilename + " file contains");
+
         BufferedReader reader = null;
         int lineNumber = 1;
         String line;
@@ -365,24 +375,26 @@ class ResultModel extends AbstractTableModel {
         String filename;
 
         try {
-            reader = new BufferedReader(new FileReader(RESULTLIST_FILENAME));
+            reader = new BufferedReader(new FileReader(resultFile));
             while (reader.ready()) {
                 line = reader.readLine().trim();
+                logger.printlnToScreen(line);
 
-                if (line.length() >= 1 && (tab = line.lastIndexOf('\n')) >= 0) {
+                if (line.length() >= 1 && (tab = line.lastIndexOf('\t')) >= 0) {
                     if (!add(filename = line.substring(0, tab)))
-                        resultListError(filename + " is not an updatable ICU4J file", lineNumber);
+                        resultListError(filename
+                                + " is not an updatable ICU4J file", lineNumber);
                 }
 
                 lineNumber++;
             }
         } catch (FileNotFoundException ex) {
             resultListError("The "
-                    + RESULTLIST_FILENAME
+                    + resultFilename
                     + " file doesn't exist. Please re-run the tool with -Ddiscoveronly=true option to generate the list of ICU4J jars.");
         } catch (IOException ex) {
             resultListError("Could not read the "
-                    + RESULTLIST_FILENAME
+                    + resultFilename
                     + " file. Please re-run the tool with -Ddiscoveronly=true option to generate the list of ICU4J jars.");
         } finally {
             try {
@@ -394,27 +406,33 @@ class ResultModel extends AbstractTableModel {
     }
 
     /**
-     * Saves a list of ICUFiles to <code>RESULTLIST_FILENAME</code>. Lines
-     * will be of the form <b><i>pathstring</i><tab><i>tzversion</i></b>.
+     * Saves a list of ICUFiles to the given result list file. Lines will be of
+     * the form <b><i>pathstring</i><tab><i>tzversion</i></b>.
      * 
      * @throws IOException
      * @throws IllegalArgumentException
      */
     public void saveResults() throws IOException, IllegalArgumentException {
+        logger.printlnToScreen("Saving to file " + resultFilename + " ...");
         BufferedWriter writer = null;
         ICUFile icuFile = null;
 
         try {
-            writer = new BufferedWriter(new FileWriter(RESULTLIST_FILENAME));
-            Iterator iter = (hidden ? permissibleList : completeList).iterator();
+            writer = new BufferedWriter(new FileWriter(resultFile));
+            Iterator iter = (hidden ? permissibleList : completeList)
+                    .iterator();
             while (iter.hasNext()) {
                 icuFile = (ICUFile) iter.next();
-                writer.write(icuFile.getFile().getPath() + '\t' + icuFile.getTZVersion() + '\n');
+                String line = icuFile.getFile().getPath() + '\t'
+                        + icuFile.getTZVersion() + "\n";
+                logger.printlnToScreen(line);
+                writer.write(line);
             }
         } catch (FileNotFoundException ex) {
-            resultListError("Could not create the " + RESULTLIST_FILENAME + " file.");
+            resultListError("Could not create the " + resultFilename + " file.");
         } catch (IOException ex) {
-            resultListError("Could not write to the " + RESULTLIST_FILENAME + " file.");
+            resultListError("Could not write to the " + resultFilename
+                    + " file.");
         } finally {
             try {
                 if (writer != null)
@@ -434,8 +452,10 @@ class ResultModel extends AbstractTableModel {
      *            The line number.
      * @throws IllegalArgumentException
      */
-    private static void resultListError(String message, int lineNumber) throws IllegalArgumentException {
-        throw new IllegalArgumentException("Error in " + RESULTLIST_FILENAME + " (line " + lineNumber + "): " + message);
+    private void resultListError(String message, int lineNumber)
+            throws IllegalArgumentException {
+        throw new IllegalArgumentException("Error in " + resultFilename
+                + " (line " + lineNumber + "): " + message);
     }
 
     /**
@@ -445,20 +465,15 @@ class ResultModel extends AbstractTableModel {
      *            The message.
      * @throws IllegalArgumentException
      */
-    private static void resultListError(String message) throws IOException {
-        throw new IOException("Error in " + RESULTLIST_FILENAME + ": " + message);
+    private void resultListError(String message) throws IOException {
+        throw new IOException("Error in " + resultFilename + ": " + message);
     }
-
-    /**
-     * The filename of the resultlist file.
-     */
-    public static final String RESULTLIST_FILENAME = "ICUList.txt";
 
     /**
      * A list of names of the columns in a result model.
      */
-    public static final String[] COLUMN_NAMES = new String[] { "Path", "Name", "ICU Version", "TZ Version", "Readable",
-            "Writable" };
+    public static final String[] COLUMN_NAMES = new String[] { "Path", "Name",
+            "ICU Version", "TZ Version", "Readable", "Writable" };
 
     /**
      * The column designating filenames.
@@ -490,16 +505,21 @@ class ResultModel extends AbstractTableModel {
      */
     public static final int COLUMN_WRITABLE = 5;
 
-    /**
-     * The serializable UID.
-     */
-    public static final long serialVersionUID = 1338;
-
     private List completeList = new ArrayList();
 
     private List permissibleList = new ArrayList();
 
     private boolean hidden = true;
 
+    private File resultFile;
+
+    private String resultFilename;
+
     private Logger logger;
+
+    /**
+     * The serializable UID.
+     */
+    public static final long serialVersionUID = 1338;
+
 }

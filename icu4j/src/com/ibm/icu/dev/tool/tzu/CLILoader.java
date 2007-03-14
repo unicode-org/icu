@@ -9,43 +9,44 @@ package com.ibm.icu.dev.tool.tzu;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URL;
 
 /**
  * Loads the ICUTZU tool, command-line version.
  */
 public class CLILoader {
     /**
-     * An entry point for the ICUTZU tool that goes directly to command-line.
-     * Creates a new <code>CLILoader</code> object with <code>args</code>.
+     * Entry point for the command-line version of the tool.
      * 
-     * @param args
-     *            Arguments for the constructor.
+     * @param curDir
+     *            The base directory of the tool.
+     * @param backupDir
+     *            The location to store backups.
+     * @param pathFile
+     *            The file to load paths from.
+     * @param resultFile
+     *            The file to load/save results to/from.
+     * @param tzFile
+     *            The local timezone resource file.
      */
-    public static void main(String[] args) {
-        new CLILoader(args);
-    }
-
-    /**
-     * Gets the logger instance, gets the backup directory from the arguments,
-     * 
-     * @param args
-     *            If <code>args</code> contains one element, that element is
-     *            used as the backup directory for ICU4J jars when in patch
-     *            mode.
-     */
-    public CLILoader(String[] args) {
+    public CLILoader(File curDir, File backupDir, File pathFile,
+            File resultFile, File tzFile) {
         // create the logger based on the silentpatch option
         try {
-            this.logger = Logger.getInstance(Logger.DEFAULT_FILENAME, "true".equalsIgnoreCase(System
-                    .getProperty("silentpatch")) ? Logger.QUIET : Logger.NORMAL);
+            this.logger = Logger
+                    .getInstance(Logger.DEFAULT_FILENAME,
+                            "true".equalsIgnoreCase(System
+                                    .getProperty("silentpatch")) ? Logger.QUIET
+                                    : Logger.NORMAL);
         } catch (FileNotFoundException ex) {
-            System.out.println("Could not open " + Logger.DEFAULT_FILENAME + " for writing.");
+            System.out.println("Could not open " + Logger.DEFAULT_FILENAME
+                    + " for writing.");
             System.exit(-1);
         }
 
-        // get the backup directory from the arguments if it is in there
-        backupDir = (args.length == 1) ? new File(args[0]) : null;
+        this.pathFile = pathFile;
+        this.resultFile = resultFile;
+        this.tzFile = tzFile;
+        this.backupDir = backupDir;
 
         // if discoveryonly is enabled, call the search method
         // otherwise, call the update method
@@ -65,26 +66,30 @@ public class CLILoader {
     }
 
     /**
-     * Discover Only Mode. Load the path list from
-     * <code>PathModel.PATHLIST_FILENAME</code> and save the path of each
-     * updatable ICU jar files it finds to
-     * <code>PathModel.RESULTLIST_FILENAME</code>
+     * Discover Only Mode. Load the path list from the path file and save the
+     * path of each updatable ICU jar files it finds to the result list
      * 
      * @throws IOException
      * @throws IllegalArgumentException
      * @throws InterruptedException
      */
-    private void search() throws IOException, IllegalArgumentException, InterruptedException {
-        logger.printlnToScreen("*********** Command-Line \'Discover Only\' Mode Started ***********");
+    private void search() throws IOException, IllegalArgumentException,
+            InterruptedException {
+        logger.printlnToScreen("");
+        logger.printlnToScreen("*********** Command-Line \'Discover Only\'"
+                + " Mode Started ***********");
+        logger.printlnToScreen("");
         logger.printlnToScreen("\'Discover Only\' Mode:");
-        logger.printlnToScreen("\tIn this mode, the tool will search for ICU4J jars"
+        logger.printlnToScreen("\tIn this mode, "
+                + "the tool will search for ICU4J jars"
                 + " in the directories specified in DirectorySearch.txt"
                 + " and print the ICU4J jars detected and their respective"
-                + " time zone version to the file SDKList.txt");
+                + " time zone version to the file ICUList.txt");
+        logger.printlnToScreen("");
 
         // initialize the result model and the path model
-        resultModel = new ResultModel(logger);
-        pathModel = new PathModel(logger);
+        resultModel = new ResultModel(logger, resultFile);
+        pathModel = new PathModel(logger, pathFile);
 
         // load paths stored in PathModel.PATHLIST_FILENAME
         pathModel.loadPaths();
@@ -93,15 +98,21 @@ public class CLILoader {
         // searching all subdirectories of the included path, using the backup
         // directory specified, and without using a status bar (since this is
         // command-line)
-        pathModel.searchAll(resultModel, true, backupDir, null);
+        pathModel.searchAll(resultModel, true, curDir, backupDir);
 
         // save the results in PathModel.RESULTLIST_FILENAME
         resultModel.saveResults();
+
+        logger.printlnToScreen("");
+        logger.printlnToScreen("Please run with DISCOVERYONLY=false"
+                + " in order to update ICU4J jars listed in ICUList.txt");
+        logger.printlnToScreen("*********** Command-Line \'Discover Only\'"
+                + " Mode Ended ***********");
+        logger.printlnToScreen("");
     }
 
     /**
-     * Patch Mode. Load all the results from
-     * <code>PathModel.RESULTLIST_FILENAME</code>, populate the tz version
+     * Patch Mode. Load all the results from resultFile, populate the tz version
      * list via the web, and update all the results with the best available Time
      * Zone data.
      * 
@@ -109,17 +120,21 @@ public class CLILoader {
      * @throws IllegalArgumentException
      * @throws InterruptedException
      */
-    private void update() throws IOException, IllegalArgumentException, InterruptedException {
-        logger.printlnToScreen("*********** Command-Line \'Patch\' Mode Started ***********");
+    private void update() throws IOException, IllegalArgumentException,
+            InterruptedException {
+        logger.printlnToScreen("");
+        logger.printlnToScreen("*********** Command-Line \'Patch\'"
+                + " Mode Started ***********");
         logger.printlnToScreen("");
         logger.printlnToScreen("\'Patch\' Mode:");
-        logger.printlnToScreen("\tIn this mode, the tool patches each of the ICU4J jars"
-                + " listed in ICUList.txt with the new time zone information.");
+        logger.printlnToScreen("\tIn this mode, the tool patches each of the"
+                + " ICU4J jars listed in ICUList.txt with the new time zone"
+                + " information.");
         logger.printlnToScreen("");
 
         // initialize the result model and the source model
-        resultModel = new ResultModel(logger);
-        sourceModel = new SourceModel(logger);
+        resultModel = new ResultModel(logger, resultFile);
+        sourceModel = new SourceModel(logger, tzFile);
 
         // load the results from the result list file
         resultModel.loadResults();
@@ -128,7 +143,13 @@ public class CLILoader {
         sourceModel.findSources();
 
         // perform the updates using the best tz version available
-        resultModel.updateAll((URL) sourceModel.getSelectedItem(), backupDir);
+        resultModel.updateAll(
+                sourceModel.getURL(sourceModel.getSelectedItem()), backupDir);
+
+        logger.printlnToScreen("");
+        logger.printlnToScreen("*********** Command-Line \'Patch\'"
+                + " Mode Ended ***********");
+        logger.printlnToScreen("");
     }
 
     /**
@@ -150,10 +171,30 @@ public class CLILoader {
     private SourceModel sourceModel;
 
     /**
+     * The file that stores the path list.
+     */
+    private File pathFile = null;
+
+    /**
+     * The file that stores the result list.
+     */
+    private File resultFile = null;
+
+    /**
+     * The local timezone resource file.
+     */
+    private File tzFile = null;
+
+    /**
      * The backup directory to use in patch mode, or null if there should be no
      * backups.
      */
     private File backupDir = null;
+
+    /**
+     * The current directory.
+     */
+    private File curDir = null;
 
     /**
      * A logger that manages both output to the screen and to the log file.
@@ -163,7 +204,7 @@ public class CLILoader {
     /**
      * Old code... removed for a variety of reasons, but most importantly
      * because DISCOVERY_ONLY must be implemented correctly and there were
-     * conflicts with the argument structure.
+     * conflicts with the old argument structure.
      * 
      * <pre>
      * public CLILoader(String[] args) {
@@ -182,10 +223,13 @@ public class CLILoader {
      *         }
      *         try { // init the
      *             // logger
-     *             logger = Logger.getInstance(Logger.DEFAULT_FILENAME, options[QUIET].doesOccur ? Logger.QUIET
-     *                     : options[VERBOSE].doesOccur ? Logger.VERBOSE : Logger.NORMAL);
+     *             logger = Logger.getInstance(Logger.DEFAULT_FILENAME,
+     *                     options[QUIET].doesOccur ? Logger.QUIET
+     *                             : options[VERBOSE].doesOccur ? Logger.VERBOSE
+     *                                     : Logger.NORMAL);
      *         } catch (FileNotFoundException ex) {
-     *             System.out.println(&quot;Could not open &quot; + Logger.DEFAULT_FILENAME + &quot; for writing.&quot;);
+     *             System.out.println(&quot;Could not open &quot; + Logger.DEFAULT_FILENAME
+     *                     + &quot; for writing.&quot;);
      *             System.exit(-1);
      *         }
      *         // create the resultModel, the pathModel, and the sourceModel
@@ -195,8 +239,10 @@ public class CLILoader {
      *         // make sure the result model hides unreadable/unwritable files
      *         resultModel.setHidden(false);
      *         // make sure only there is only one update mode in the options
-     *         int choiceType = (options[OFFLINE].doesOccur ? 1 : 0) + (options[TZVERSION].doesOccur ? 1 : 0)
-     *                 + (options[BEST].doesOccur ? 1 : 0) + (options[DISCOVERONLY].doesOccur ? 1 : 0);
+     *         int choiceType = (options[OFFLINE].doesOccur ? 1 : 0)
+     *                 + (options[TZVERSION].doesOccur ? 1 : 0)
+     *                 + (options[BEST].doesOccur ? 1 : 0)
+     *                 + (options[DISCOVERONLY].doesOccur ? 1 : 0);
      *         if (choiceType &gt; 1)
      *             syntaxError(&quot;Options -o (--offline), -t (--tzversion), -b (--best) and -d (--discoveronly) are mutually exclusive&quot;);
      *         // make sure that quiet &amp; verbose do not both occur
@@ -227,7 +273,8 @@ public class CLILoader {
      *         // if we're running offline and the local file doesnt exist, we
      *         // can't update anything
      * 
-     *         if (options[OFFLINE].doesOccur &amp;&amp; !SourceModel.TZ_LOCAL_FILE.exists() &amp;&amp; !options[DISCOVERONLY].doesOccur)
+     *         if (options[OFFLINE].doesOccur &amp;&amp; !SourceModel.TZ_LOCAL_FILE.exists()
+     *                 &amp;&amp; !options[DISCOVERONLY].doesOccur)
      *             throw new IllegalArgumentException(
      *                     &quot;Running offline mode but local file does not exist (no sources available)&quot;);
      *         // if the user did not specify to stay offline, go online and find
@@ -268,19 +315,24 @@ public class CLILoader {
      *         }
      *         // (do nothing in the case of DISCOVERONLY)
      *         // create a reader for user input
-     *         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+     *         BufferedReader reader = new BufferedReader(new InputStreamReader(
+     *                 System.in));
      *         // iterate through each icu4j file in the search results
      *         Iterator resultIter = resultModel.iterator();
      *         while (resultIter.hasNext()) {
      *             try {
      *                 ICUFile entry = (ICUFile) resultIter.next();
      *                 logger.println(&quot;&quot;, Logger.NORMAL);
-     *                 logger.println(&quot;Filename: &quot; + entry.getFile().getName(), Logger.NORMAL);
-     *                 logger.println(&quot;Location: &quot; + entry.getFile().getParent(), Logger.NORMAL);
-     *                 logger.println(&quot;Current Version: &quot; + entry.getTZVersion(), Logger.NORMAL);
+     *                 logger.println(&quot;Filename: &quot; + entry.getFile().getName(),
+     *                         Logger.NORMAL);
+     *                 logger.println(&quot;Location: &quot; + entry.getFile().getParent(),
+     *                         Logger.NORMAL);
+     *                 logger.println(&quot;Current Version: &quot; + entry.getTZVersion(),
+     *                         Logger.NORMAL);
      * 
      *                 if (!entry.getFile().canRead() || !entry.getFile().canWrite()) {
-     *                     logger.println(&quot;Missing permissions for &quot; + entry.getFile().getName() + &quot;.&quot;, Logger.NORMAL);
+     *                     logger.println(&quot;Missing permissions for &quot;
+     *                             + entry.getFile().getName() + &quot;.&quot;, Logger.NORMAL);
      *                     continue;
      *                 }
      * 
@@ -290,7 +342,8 @@ public class CLILoader {
      *                         update(entry, chosenName, chosenURL);
      *                 } else if (choiceType == 1) // confirmation mode
      *                 {
-     *                     String input = askConfirm(chosenName, chosenVersion, entry.getTZVersion(), reader);
+     *                     String input = askConfirm(chosenName, chosenVersion, entry
+     *                             .getTZVersion(), reader);
      * 
      *                     if (&quot;yes&quot;.startsWith(input))
      *                         update(entry, chosenName, chosenURL);
@@ -304,7 +357,8 @@ public class CLILoader {
      *                     else if (&quot;local choice&quot;.startsWith(input))
      *                         update(entry, getLocalName(), getLocalURL());
      *                     else if (!&quot;none&quot;.startsWith(input))
-     *                         update(entry, getTZVersionName(input), getTZVersionURL(input));
+     *                         update(entry, getTZVersionName(input),
+     *                                 getTZVersionURL(input));
      *                     else
      *                         skipUpdate();
      *                 }
@@ -322,14 +376,18 @@ public class CLILoader {
      *     }
      * }
      * 
-     * private String askConfirm(String chosenString, String chosenVersion, String currentVersion, BufferedReader reader)
-     *         throws IOException {
+     * private String askConfirm(String chosenString, String chosenVersion,
+     *         String currentVersion, BufferedReader reader) throws IOException {
      *     int betterness = chosenVersion.compareToIgnoreCase(currentVersion);
      *     if (betterness == 0) {
-     *         logger.println(&quot;Updating should have no effect on this file.&quot;, Logger.NORMAL);
+     *         logger.println(&quot;Updating should have no effect on this file.&quot;,
+     *                 Logger.NORMAL);
      *         logger.println(&quot;Update anyway?&quot;, Logger.NORMAL);
      *     } else if (betterness &lt; 0) {
-     *         logger.println(&quot;Warning: The version specified is older than the one present in the file.&quot;, Logger.NORMAL);
+     *         logger
+     *                 .println(
+     *                         &quot;Warning: The version specified is older than the one present in the file.&quot;,
+     *                         Logger.NORMAL);
      *         logger.println(&quot;Update anyway?&quot;, Logger.NORMAL);
      *     } else {
      *         logger.println(&quot;Update to &quot; + chosenVersion + &quot;?&quot;, Logger.NORMAL);
@@ -345,11 +403,14 @@ public class CLILoader {
      * 
      *     logger.println(getLocalName(), Logger.NORMAL);
      *     while (sourceIter.hasNext())
-     *         logger.println(&quot;, &quot; + ((Map.Entry) sourceIter.next()).getKey(), Logger.NORMAL);
+     *         logger.println(&quot;, &quot; + ((Map.Entry) sourceIter.next()).getKey(),
+     *                 Logger.NORMAL);
      *     logger.println(&quot;&quot;, Logger.NORMAL);
      * 
-     *     logger.println(&quot;Update to which version? [best (default), none, local copy, &lt;specific version above&gt;]&quot;,
-     *             Logger.NORMAL);
+     *     logger
+     *             .println(
+     *                     &quot;Update to which version? [best (default), none, local copy, &lt;specific version above&gt;]&quot;,
+     *                     Logger.NORMAL);
      *     logger.println(&quot;: &quot;, Logger.NORMAL);
      *     return reader.readLine().trim().toLowerCase();
      * }
@@ -402,7 +463,8 @@ public class CLILoader {
      * 
      * private URL getTZVersionURL(String version) {
      *     try {
-     *         return new URL(SourceModel.TZ_BASE_URLSTRING_START + version + SourceModel.TZ_BASE_URLSTRING_END);
+     *         return new URL(SourceModel.TZ_BASE_URLSTRING_START + version
+     *                 + SourceModel.TZ_BASE_URLSTRING_END);
      *     } catch (MalformedURLException ex) {
      *         ex.printStackTrace();
      *         return null;
@@ -417,12 +479,18 @@ public class CLILoader {
      *     throw new IllegalArgumentException(&quot;Error in argument list: &quot; + message);
      * }
      * 
-     * private static UOption options[] = new UOption[] { UOption.create(&quot;help&quot;, '?', UOption.NO_ARG),
-     *         UOption.create(&quot;verbose&quot;, 'v', UOption.NO_ARG), UOption.create(&quot;quiet&quot;, 'q', UOption.NO_ARG),
-     *         UOption.create(&quot;auto&quot;, 'a', UOption.NO_ARG), UOption.create(&quot;offline&quot;, 'o', UOption.NO_ARG),
-     *         UOption.create(&quot;best&quot;, 's', UOption.NO_ARG), UOption.create(&quot;tzversion&quot;, 't', UOption.REQUIRES_ARG),
-     *         UOption.create(&quot;recurse&quot;, 'r', UOption.NO_ARG), UOption.create(&quot;backup&quot;, 'b', UOption.REQUIRES_ARG),
-     *         UOption.create(&quot;nobackup&quot;, 'B', UOption.NO_ARG), UOption.create(&quot;discoveronly&quot;, 'd', UOption.NO_ARG), };
+     * private static UOption options[] = new UOption[] {
+     *         UOption.create(&quot;help&quot;, '?', UOption.NO_ARG),
+     *         UOption.create(&quot;verbose&quot;, 'v', UOption.NO_ARG),
+     *         UOption.create(&quot;quiet&quot;, 'q', UOption.NO_ARG),
+     *         UOption.create(&quot;auto&quot;, 'a', UOption.NO_ARG),
+     *         UOption.create(&quot;offline&quot;, 'o', UOption.NO_ARG),
+     *         UOption.create(&quot;best&quot;, 's', UOption.NO_ARG),
+     *         UOption.create(&quot;tzversion&quot;, 't', UOption.REQUIRES_ARG),
+     *         UOption.create(&quot;recurse&quot;, 'r', UOption.NO_ARG),
+     *         UOption.create(&quot;backup&quot;, 'b', UOption.REQUIRES_ARG),
+     *         UOption.create(&quot;nobackup&quot;, 'B', UOption.NO_ARG),
+     *         UOption.create(&quot;discoveronly&quot;, 'd', UOption.NO_ARG), };
      * 
      * private static final int HELP = 0;
      * 

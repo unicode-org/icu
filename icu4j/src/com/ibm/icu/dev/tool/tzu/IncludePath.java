@@ -46,8 +46,9 @@ public class IncludePath {
 
     /**
      * Outputs this IncludePath in the form (<b>+</b>|<b>-</b>)<i>pathstring</i>.
+     * 
+     * @return The IncludePath as a string.
      */
-    @Override
     public String toString() {
         return (include ? '+' : '-') + path.toString();
     }
@@ -56,10 +57,15 @@ public class IncludePath {
      * Returns true if the other object is an IncludePath and the path that both
      * objects represent are the same. It is not required for both IncludePaths
      * to be included or excluded.
+     * 
+     * @param other
+     *            The other IncludePath to compare this one to.
+     * @return Whether the two IncludePaths are considered equal by the criteria
+     *         above.
      */
-    @Override
     public boolean equals(Object other) {
-        return !(other instanceof IncludePath) ? false : path.equals(((IncludePath) other).path);
+        return !(other instanceof IncludePath) ? false : path
+                .equals(((IncludePath) other).path);
     }
 
     private File path;

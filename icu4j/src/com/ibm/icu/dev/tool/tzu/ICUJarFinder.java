@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.swing.text.JTextComponent;
-
 /**
  * Finds all updatable ICU4J jars in a set of specified directories.
  */
@@ -31,21 +29,21 @@ public class ICUJarFinder {
      *            The result model to add any discovered ICU4J jars to.
      * @param logger
      *            The current logger.
-     * @param statusBar
-     *            The status bar for status-bar messages, or null if none is
-     *            present.
      * @param paths
      *            The list of paths to include to and exclude from the search.
      * @param subdirs
      *            Whether to include subdirectories in the search.
+     * @param curDir
+     *            The base directory of the tool.
      * @param backupDir
      *            The backup directory, or null if none. The backup directory is
      *            excluded from the search
      * @return The same result model as given.
      * @throws InterruptedException
      */
-    public static ResultModel search(ResultModel resultModel, Logger logger, JTextComponent statusBar,
-            IncludePath[] paths, boolean subdirs, File backupDir) throws InterruptedException {
+    public static ResultModel search(ResultModel resultModel, Logger logger,
+            IncludePath[] paths, boolean subdirs, File curDir, File backupDir)
+            throws InterruptedException {
         // sift the included / excluded paths into two seperate arraylists
         List included = new ArrayList();
         List excluded = new ArrayList();
@@ -61,19 +59,16 @@ public class ICUJarFinder {
         if (backupDir != null)
             excluded.add(backupDir);
 
-        // logger.logln("*************", Logger.VERBOSE);
-        // logger.logln("Search Paths", Logger.VERBOSE);
-        // logger.logln("Included:", Logger.VERBOSE);
-        // for (int i = 0; i < included.size(); i++)
-        // logger.logln(included.get(i).toString(), Logger.VERBOSE);
-        // logger.logln("Excluded:", Logger.VERBOSE);
-        // for (int i = 0; i < excluded.size(); i++)
-        // logger.logln(excluded.get(i).toString(), Logger.VERBOSE);
-        // logger.logln("*************", Logger.VERBOSE);
+        // the icutzu_home dir must be specified, don't search it
+        excluded.add(curDir);
 
         // search each of the included files/directories
         for (int i = 0; i < included.size(); i++)
-            search(resultModel, logger, statusBar, (File) included.get(i), excluded, subdirs, 0);
+            search(resultModel, logger, (File) included.get(i), excluded,
+                    subdirs, 0);
+
+        // finalize the status.
+        logger.setStatus("Search complete.");
 
         // chain the result model
         return resultModel;
@@ -102,8 +97,9 @@ public class ICUJarFinder {
      * @return The same result model as given.
      * @throws InterruptedException
      */
-    private static ResultModel search(ResultModel resultModel, Logger logger, JTextComponent statusBar, File file,
-            List excluded, boolean subdirs, int depth) throws InterruptedException {
+    private static ResultModel search(ResultModel resultModel, Logger logger,
+            File file, List excluded, boolean subdirs, int depth)
+            throws InterruptedException {
         // check for interruptions
         if (Thread.currentThread().isInterrupted())
             throw new InterruptedException();
@@ -111,21 +107,22 @@ public class ICUJarFinder {
         // make sure the current file/directory isn't excluded
         Iterator iter = excluded.iterator();
         while (iter.hasNext())
-            if (file.getAbsolutePath().equalsIgnoreCase(((File) iter.next()).getAbsolutePath()))
+            if (file.getAbsolutePath().equalsIgnoreCase(
+                    ((File) iter.next()).getAbsolutePath()))
                 return resultModel;
 
         if (file.isDirectory() && (subdirs || depth == 0)) {
-            // notify the user that something is happening
-            if (statusBar != null)
-                statusBar.setText(file.getPath());
-
             // recurse through each file/directory inside this directory
             File[] dirlist = file.listFiles();
             if (dirlist != null && dirlist.length > 0) {
                 // notify the user that something is happening
-                logger.printlnToScreen(dirlist[0].getPath());
+                if (depth <= 2) {
+                    logger.setStatus(file.getPath());
+                    logger.printlnToScreen(file.getPath());
+                }
                 for (int i = 0; i < dirlist.length; i++)
-                    search(resultModel, logger, statusBar, dirlist[i], excluded, subdirs, depth + 1);
+                    search(resultModel, logger, dirlist[i], excluded, subdirs,
+                            depth + 1);
             }
         } else {
             // attempt to create an ICUFile object on the current file and add

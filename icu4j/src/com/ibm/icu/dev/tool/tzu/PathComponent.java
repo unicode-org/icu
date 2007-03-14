@@ -14,7 +14,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
-import java.io.IOException;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -31,10 +30,17 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 
+/**
+ * The path list GUI component.
+ */
 public class PathComponent extends JComponent {
-    public PathComponent(final GUILoader owner, final PathModel pathModel) {
-        this.pathModel = pathModel;
-
+    /**
+     * Constructs the path list GUI component.
+     * 
+     * @param owner
+     *            The GUILoader object that ownes this component.
+     */
+    public PathComponent(final GUILoader owner) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         add(pathInputPanel);
         add(new JScrollPane(pathList));
@@ -46,8 +52,6 @@ public class PathComponent extends JComponent {
         pathInputPanel.add(pathBrowseButton);
         pathOptionPanel.add(pathSubdirOption);
         pathSearchPanel.add(pathSearchButton);
-
-        pathList.setModel(pathModel);
 
         pathChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 
@@ -89,12 +93,12 @@ public class PathComponent extends JComponent {
 
             private void checkPopup(MouseEvent event) {
                 if (event.isPopupTrigger())
-                    pathPopup.show((Component) event.getSource(), event.getX(), event.getY());
+                    pathPopup.show((Component) event.getSource(), event.getX(),
+                            event.getY());
             }
         });
 
         pathList.addKeyListener(new KeyAdapter() {
-            @Override
             public void keyPressed(KeyEvent event) {
                 if (event.getKeyCode() == KeyEvent.VK_DELETE)
                     pathModel.remove(pathList.getSelectedIndices());
@@ -115,7 +119,8 @@ public class PathComponent extends JComponent {
 
         pathSearchSelectedItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                owner.search(pathList.getSelectedIndices(), pathSubdirOption.isSelected());
+                owner.search(pathList.getSelectedIndices(), pathSubdirOption
+                        .isSelected());
             }
         });
 
@@ -161,16 +166,6 @@ public class PathComponent extends JComponent {
                 }
             }
         });
-
-        try {
-            pathModel.loadPaths();
-        } catch (IOException ex) {
-            // failed to load the directory search file
-            pathModel.addAllDrives();
-        } catch (IllegalArgumentException ex) {
-            // failed to load the directory search file
-            pathModel.addAllDrives();
-        }
     }
 
     private boolean isIncluded() {
@@ -179,18 +174,33 @@ public class PathComponent extends JComponent {
 
     private void addFile(File file) {
         if (!pathModel.add(new IncludePath(file, isIncluded())))
-            JOptionPane.showMessageDialog(PathComponent.this,
-                    "\"" + file.getPath() + "\" is not a valid file or path.", "Cannot add path/file",
-                    JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(PathComponent.this, "\""
+                    + file.getPath() + "\" is not a valid file or path.",
+                    "Cannot add path/file", JOptionPane.ERROR_MESSAGE);
     }
 
+    /**
+     * Sets whether the search button should be enabled.
+     * 
+     * @param value
+     *            Whether the search button should be enabled.
+     */
     public void setSearchEnabled(boolean value) {
         pathSearchButton.setEnabled(value);
     }
 
-    private JPanel pathInputPanel = new JPanel();
+    /**
+     * Sets the path model.
+     * 
+     * @param pathModel
+     *            The path model.
+     */
+    public void setPathModel(PathModel pathModel) {
+        this.pathModel = pathModel;
+        pathList.setModel(pathModel);
+    }
 
-    // private JPanel pathListPanel = new JPanel();
+    private JPanel pathInputPanel = new JPanel();
 
     private JPanel pathOptionPanel = new JPanel();
 
@@ -198,11 +208,13 @@ public class PathComponent extends JComponent {
 
     private JList pathList = new JList();
 
-    private JComboBox pathSignBox = new JComboBox(new Object[] { "Include", "Exclude" });
+    private JComboBox pathSignBox = new JComboBox(new Object[] { "Include",
+            "Exclude" });
 
     private JTextField pathField = new JTextField(30);
 
-    private JCheckBox pathSubdirOption = new JCheckBox("Search Subdirectories", true);
+    private JCheckBox pathSubdirOption = new JCheckBox("Search Subdirectories",
+            true);
 
     private JButton pathBrowseButton = new JButton("Browse...");
 
@@ -212,17 +224,23 @@ public class PathComponent extends JComponent {
 
     private JPopupMenu pathPopup = new JPopupMenu();
 
-    private JMenuItem pathAddAllDrivesItem = new JMenuItem("Add All Drives to List");
+    private JMenuItem pathAddAllDrivesItem = new JMenuItem(
+            "Add All Drives to List");
 
-    private JMenuItem pathRemoveSelectedItem = new JMenuItem("Remove Selected Items");
+    private JMenuItem pathRemoveSelectedItem = new JMenuItem(
+            "Remove Selected Items");
 
     private JMenuItem pathRemoveAllItem = new JMenuItem("Remove All");
 
-    private JMenuItem pathSearchSelectedItem = new JMenuItem("Search Selected Items");
+    private JMenuItem pathSearchSelectedItem = new JMenuItem(
+            "Search Selected Items");
 
     private JMenuItem pathSearchAllItem = new JMenuItem("Search All");
 
     private PathModel pathModel;
 
+    /**
+     * The serializable UID.
+     */
     public static final long serialVersionUID = 1340;
 }
