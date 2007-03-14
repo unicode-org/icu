@@ -992,13 +992,15 @@ DateFormatSymbols::getZoneStrings(int32_t& rowCount, int32_t& columnCount) const
     if(fZoneStrings==NULL){
         // cast away const to get around the problem for lazy initialization
         ((DateFormatSymbols*)this)->initZoneStringsArray(status);
-        if(U_FAILURE(status)){
-            return NULL;
-        }
     }
     rowCount = fZoneStringsRowCount;
     columnCount = fZoneStringsColCount;
     umtx_unlock(&LOCK);
+    if(U_FAILURE(status)){
+        rowCount = 0;
+        columnCount = 0;
+        return NULL;
+    }
     return (const UnicodeString**)fZoneStrings; // Compiler requires cast
 }
 
