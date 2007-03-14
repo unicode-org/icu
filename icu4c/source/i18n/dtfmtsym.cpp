@@ -1877,8 +1877,6 @@ UnicodeString&
 DateFormatSymbols::getZoneString(const UnicodeString &zid, const TimeZoneTranslationType type, 
                                  UnicodeString &result, UErrorCode &status){
 
-    char zidkey[ZID_KEY_MAX];
-    UChar zid_as_uchar[ZID_KEY_MAX];
     UErrorCode tempStatus = U_ZERO_ERROR;
 
     if(fZoneStringsHash == NULL){
@@ -1888,11 +1886,6 @@ DateFormatSymbols::getZoneString(const UnicodeString &zid, const TimeZoneTransla
     if(U_FAILURE(status)){
         return result;
     }
-    zid.extract(zid_as_uchar,ZID_KEY_MAX,tempStatus);
-    if (U_FAILURE(tempStatus) ) {
-       return result;
-    }
-    u_austrcpy(zidkey,zid_as_uchar);
 
     UnicodeString* stringsArray = (UnicodeString*)fZoneStringsHash->get(zid);
     if(stringsArray != NULL){
@@ -1903,31 +1896,32 @@ DateFormatSymbols::getZoneString(const UnicodeString &zid, const TimeZoneTransla
 
 UnicodeString&
 DateFormatSymbols::getMetazoneString(const UnicodeString &zid, const TimeZoneTranslationType type, Calendar &cal,
-                                 UnicodeString &result, UErrorCode &status){
-
+                                 UnicodeString &result, UErrorCode &status)
+{
     UErrorCode tempStatus = U_ZERO_ERROR;
     UnicodeString mzid;
     int32_t len;
-    
+
     // Get the appropriate metazone mapping from the resource bundles
 
     char usesMetazoneKey[ZID_KEY_MAX];
     char zidkey[ZID_KEY_MAX];
-    UChar zid_as_uchar[ZID_KEY_MAX];
 
     uprv_strcpy(usesMetazoneKey,gZoneStringsTag);
     uprv_strcat(usesMetazoneKey,"/");
 
-    zid.extract(zid_as_uchar,ZID_KEY_MAX,tempStatus);
-    if (U_FAILURE(tempStatus) ) {
-       return result;
-    }
-    u_austrcpy(zidkey,zid_as_uchar);
+    len = zid.length();
+    len = (len >= (ZID_KEY_MAX-1) ? ZID_KEY_MAX-1 : len);
+    u_UCharsToChars(zid.getBuffer(), zidkey, len);
+    zidkey[len] = 0; // NULL terminate
 
     // Replace / with : for zid
-    for ( int i = 0 ; i < uprv_strlen(zidkey) ; i++ )
-       if ( zidkey[i] == '/' )
-          zidkey[i] = ':';
+    len = (int32_t)uprv_strlen(zidkey);
+    for (int i = 0; i < len; i++) {
+        if (zidkey[i] == '/') {
+            zidkey[i] = ':';
+        }
+    }
 
     uprv_strcat(usesMetazoneKey,zidkey);
     uprv_strcat(usesMetazoneKey,"/");
@@ -1935,39 +1929,40 @@ DateFormatSymbols::getMetazoneString(const UnicodeString &zid, const TimeZoneTra
 
     UResourceBundle *um = ures_getByKeyWithFallback(fResourceBundle, usesMetazoneKey, NULL, &tempStatus);
     if (U_FAILURE(tempStatus) ) {
-       return result;
+        return result;
     }
 
     UnicodeString* stringsArray = (UnicodeString*)fZoneStringsHash->get(zid);
 
     if(stringsArray != NULL){
-       UnicodeString pattern = UNICODE_STRING_SIMPLE("yyyy-MM-dd HH:mm");
-       SimpleDateFormat *df = new SimpleDateFormat(pattern,tempStatus);
-       TimeZone *tz = TimeZone::createTimeZone(zid);
-       df->setTimeZone(*tz);
-       UnicodeString theTime;
-       df->format(cal.getTime(tempStatus),theTime);
+        UnicodeString pattern = UNICODE_STRING_SIMPLE("yyyy-MM-dd HH:mm");
+        SimpleDateFormat *df = new SimpleDateFormat(pattern,tempStatus);
+        TimeZone *tz = TimeZone::createTimeZone(zid);
+        df->setTimeZone(*tz);
+        UnicodeString theTime;
+        df->format(cal.getTime(tempStatus),theTime);
 
 
-       while (ures_hasNext(um)) {
-          UResourceBundle *mz = ures_getNextResource(um,NULL,&tempStatus);
-          UnicodeString mz_name = ures_getStringByIndex(mz,0,&len,&tempStatus);
-          UnicodeString mz_from = ures_getStringByIndex(mz,1,&len,&tempStatus);
-          UnicodeString mz_to   = ures_getStringByIndex(mz,2,&len,&tempStatus);
-          if(U_FAILURE(tempStatus)){
-             return result;
-          }
+        while (ures_hasNext(um)) {
+            UResourceBundle *mz = ures_getNextResource(um,NULL,&tempStatus);
+            UnicodeString mz_name = ures_getStringByIndex(mz,0,&len,&tempStatus);
+            UnicodeString mz_from = ures_getStringByIndex(mz,1,&len,&tempStatus);
+            UnicodeString mz_to   = ures_getStringByIndex(mz,2,&len,&tempStatus);
+            if(U_FAILURE(tempStatus)){
+                return result;
+            }
 
-          if ( !mz_name.isEmpty() &&
+            if ( !mz_name.isEmpty() &&
                 mz_from <= theTime &&
-                mz_to > theTime ) {
-             mzid = UNICODE_STRING_SIMPLE("meta/");
-             mzid += mz_name;
-             status = U_ZERO_ERROR;
-             getZoneString(mzid,type,result,status);
-             return result;
-          }
-       }
+                mz_to > theTime )
+            {
+                mzid = UNICODE_STRING_SIMPLE("meta/");
+                mzid += mz_name;
+                status = U_ZERO_ERROR;
+                getZoneString(mzid,type,result,status);
+                return result;
+            }
+        }
     } 
     return result;
 }
@@ -1976,7 +1971,7 @@ DateFormatSymbols::createZoneStringIDs(UErrorCode &status){
     if(U_FAILURE(status)){
         return NULL;
     }
-    if(fZoneStringsHash == NULL){    
+    if(fZoneStringsHash == NULL){
         //lazy initialization
         initZoneStrings(status);
     }
