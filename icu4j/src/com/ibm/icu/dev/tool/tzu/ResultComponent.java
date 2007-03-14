@@ -24,6 +24,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -32,29 +33,30 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.text.JTextComponent;
 
+/**
+ * The path list GUI component.
+ */
 public class ResultComponent extends JComponent {
-    public ResultComponent(final GUILoader owner, final ResultModel resultModel, final SourceModel sourceModel) {
-        this.resultModel = resultModel;
-        this.sourceModel = sourceModel;
-
+    /**
+     * @param owner
+     *            The GUILoader object that ownes this component.
+     */
+    public ResultComponent(final GUILoader owner) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         add(resultInputPanel);
         add(new JScrollPane(resultTable));
+        add(resultStatusPanel);
         add(resultOptionPanel);
         add(resultUpdatePanel);
 
         resultInputPanel.add(resultField);
         resultInputPanel.add(resultBrowseButton);
-        // resultOptionPanel.add(resultHideOption);
+        resultStatusPanel.add(statusBar);
         resultOptionPanel.add(resultSourceList);
         resultUpdatePanel.add(resultCancelSearchButton);
         resultUpdatePanel.add(resultUpdateButton);
         resultUpdatePanel.add(resultCancelUpdateButton);
-
-        resultTable.setModel(resultModel);
-        resultSourceList.setModel(sourceModel);
 
         resultChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
@@ -94,12 +96,12 @@ public class ResultComponent extends JComponent {
 
             private void checkPopup(MouseEvent event) {
                 if (event.isPopupTrigger())
-                    resultPopup.show((Component) event.getSource(), event.getX(), event.getY());
+                    resultPopup.show((Component) event.getSource(), event
+                            .getX(), event.getY());
             }
         });
 
         resultTable.addKeyListener(new KeyAdapter() {
-            @Override
             public void keyPressed(KeyEvent event) {
                 if (event.getKeyCode() == KeyEvent.VK_DELETE)
                     resultModel.remove(resultTable.getSelectedRows());
@@ -120,7 +122,9 @@ public class ResultComponent extends JComponent {
 
         resultUpdateSelectedItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                owner.update(resultTable.getSelectedRows(), getSelectedSource());
+                owner
+                        .update(resultTable.getSelectedRows(),
+                                getSelectedSource());
             }
         });
 
@@ -154,7 +158,8 @@ public class ResultComponent extends JComponent {
 
         resultBrowseButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                int returnVal = resultChooser.showOpenDialog(ResultComponent.this);
+                int returnVal = resultChooser
+                        .showOpenDialog(ResultComponent.this);
                 if (returnVal == JFileChooser.APPROVE_OPTION)
                     addFile(resultChooser.getSelectedFile());
             }
@@ -162,44 +167,104 @@ public class ResultComponent extends JComponent {
 
         resultHideOption.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent event) {
-                resultModel.setHidden(event.getStateChange() == ItemEvent.SELECTED);
+                resultModel
+                        .setHidden(event.getStateChange() == ItemEvent.SELECTED);
             }
         });
     }
 
+    /**
+     * Returns the URL of the currently selected item in the result source list.
+     * 
+     * @return The URL of the currently selected item in the result source list.
+     */
     private URL getSelectedSource() {
         return sourceModel.getURL(resultSourceList.getSelectedItem());
     }
 
+    /**
+     * Adds a file to the result list. The file must be an updatable ICU4J jar
+     * by the standards laid out in ICUFile.
+     * 
+     * @param file
+     *            The file to add.
+     * @return Whether the file was added successfully.
+     */
     private boolean addFile(File file) {
         if (!resultModel.add(file)) {
-            JOptionPane.showMessageDialog(ResultComponent.this, "\"" + file.toString()
-                    + "\" is not an updatable ICU jar file.", "Cannot add file", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(ResultComponent.this, "\""
+                    + file.toString() + "\" is not an updatable ICU jar file.",
+                    "Cannot add file", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
         return true;
     }
 
+    /**
+     * Sets whether the update button should be enabled.
+     * 
+     * @param value
+     *            Whether the update button should be enabled.
+     */
     public void setUpdateEnabled(boolean value) {
         resultUpdateButton.setEnabled(value);
     }
 
+    /**
+     * Sets whether the cancel search button should be enabled.
+     * 
+     * @param value
+     *            Whether the cancel search button should be enabled.
+     */
     public void setCancelSearchEnabled(boolean value) {
         resultCancelSearchButton.setEnabled(value);
     }
 
+    /**
+     * Sets whether the cancel update button should be enabled.
+     * 
+     * @param value
+     *            Whether the cancel update button should be enabled.
+     */
     public void setCancelUpdateEnabled(boolean value) {
         resultCancelUpdateButton.setEnabled(value);
     }
 
-    public JTextComponent getStatusBar() {
+    /**
+     * Returns the status bar.
+     * 
+     * @return The status bar.
+     */
+    public JLabel getStatusBar() {
         return statusBar;
+    }
+
+    /**
+     * Sets the result model.
+     * 
+     * @param resultModel
+     *            The result model.
+     */
+    public void setResultModel(ResultModel resultModel) {
+        this.resultModel = resultModel;
+        resultTable.setModel(resultModel);
+    }
+
+    /**
+     * Sets the source model.
+     * 
+     * @param sourceModel
+     *            The source model.
+     */
+    public void setSourceModel(SourceModel sourceModel) {
+        this.sourceModel = sourceModel;
+        resultSourceList.setModel(sourceModel);
     }
 
     private JPanel resultInputPanel = new JPanel();
 
-    // private JPanel resultTablePanel = new JPanel();
+    private JPanel resultStatusPanel = new JPanel();
 
     private JPanel resultOptionPanel = new JPanel();
 
@@ -209,7 +274,8 @@ public class ResultComponent extends JComponent {
 
     private JTextField resultField = new JTextField(30);
 
-    private JCheckBox resultHideOption = new JCheckBox("Hide Unreadable/Unwritable Files", true);
+    private JCheckBox resultHideOption = new JCheckBox(
+            "Hide Unreadable/Unwritable Files", true);
 
     private JButton resultBrowseButton = new JButton("Browse...");
 
@@ -223,11 +289,13 @@ public class ResultComponent extends JComponent {
 
     private JPopupMenu resultPopup = new JPopupMenu();
 
-    private JMenuItem resultRemoveSelectedItem = new JMenuItem("Remove Selected Items");
+    private JMenuItem resultRemoveSelectedItem = new JMenuItem(
+            "Remove Selected Items");
 
     private JMenuItem resultRemoveAllItem = new JMenuItem("Remove All");
 
-    private JMenuItem resultUpdateSelectedItem = new JMenuItem("Update Selected Items");
+    private JMenuItem resultUpdateSelectedItem = new JMenuItem(
+            "Update Selected Items");
 
     private JMenuItem resultUpdateAllItem = new JMenuItem("Update All");
 
@@ -237,7 +305,10 @@ public class ResultComponent extends JComponent {
 
     private SourceModel sourceModel;
 
-    private JTextComponent statusBar = new JTextField(30);
+    private JLabel statusBar = new JLabel();
 
+    /**
+     * The serializable UID.
+     */
     public static final long serialVersionUID = 1341;
 }

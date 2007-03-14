@@ -42,13 +42,11 @@ GOTO CollectArguments
 rem Run the ICUTZU tool.
 @echo.
 @echo Launching the ICU4J Time Zone Update Utility (ICUTZU)...
-@echo "%JAVA_HOME%\bin\java.exe" -cp "%ICUTZU_HOME%icu4j.jar";"%ICUTZU_HOME%icutzu.jar" -Dnogui=%NOGUI% -Ddiscoveronly=%DISCOVERONLY% -Dsilentpatch=%SILENTPATCH% com.ibm.icu.dev.tool.tzu.ICUTZUMain "%ICUTZU_HOME%Temp"%ARGS%
+@echo "%JAVA_HOME%\bin\java.exe" -cp "%ICUTZU_HOME%icu4j.jar";"%ICUTZU_HOME%icutzu.jar" -Dnogui=%NOGUI% -Ddiscoveronly=%DISCOVERONLY% -Dsilentpatch=%SILENTPATCH% com.ibm.icu.dev.tool.tzu.ICUTZUMain "%ICUTZU_HOME%\" DirectorySearch.txt ICUList.txt zoneinfo.res Temp icu.gif%ARGS%
 @echo.
-"%JAVA_HOME%\bin\java.exe" -cp "%ICUTZU_HOME%icu4j.jar";"%ICUTZU_HOME%icutzu.jar" -Dnogui=%NOGUI% -Ddiscoveronly=%DISCOVERONLY% -Dsilentpatch=%SILENTPATCH% com.ibm.icu.dev.tool.tzu.ICUTZUMain "%ICUTZU_HOME%Temp"%ARGS%
+"%JAVA_HOME%\bin\java.exe" -cp "%ICUTZU_HOME%icu4j.jar";"%ICUTZU_HOME%icutzu.jar" -Dnogui=%NOGUI% -Ddiscoveronly=%DISCOVERONLY% -Dsilentpatch=%SILENTPATCH% com.ibm.icu.dev.tool.tzu.ICUTZUMain "%ICUTZU_HOME%\" DirectorySearch.txt ICUList.txt zoneinfo.res Temp icu.gif%ARGS%
 IF ERRORLEVEL==0 GOTO Success
 GOTO Failure
-
-rem "%JAVA_HOME%\bin\java.exe" -cp "%ICUTZU_HOME%icu4j.jar";"%ICUTZU_HOME%icutzu.jar" -Dnogui=%NOGUI% -Ddiscoveronly=%DISCOVERONLY% -Dsilentpatch=%SILENTPATCH% com.ibm.icu.dev.tool.tzu.ICUTZUMain --recurse --auto --backup "%ICUTZU_HOME%Temp"%ARGS%
 
 
 

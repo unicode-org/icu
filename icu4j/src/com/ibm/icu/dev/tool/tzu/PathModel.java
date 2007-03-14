@@ -17,7 +17,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.AbstractListModel;
-import javax.swing.text.JTextComponent;
 
 /**
  * Represents a list of IncludePaths that is usable by any class that uses
@@ -29,11 +28,15 @@ class PathModel extends AbstractListModel {
     /**
      * Constructs an empty path model.
      * 
+     * @param pathFile
+     *            The file to load the path list from.
      * @param logger
      *            The current logger.
      */
-    public PathModel(Logger logger) {
+    public PathModel(Logger logger, File pathFile) {
         this.logger = logger;
+        this.pathFile = pathFile;
+        this.pathFilename = pathFile.getName();
     }
 
     /**
@@ -85,7 +88,9 @@ class PathModel extends AbstractListModel {
             return true;
         }
 
-        return add(new IncludePath(new File(includeFilename.substring(1).trim()), includeFilename.charAt(0) == '+'));
+        return add(new IncludePath(
+                new File(includeFilename.substring(1).trim()), includeFilename
+                        .charAt(0) == '+'));
     }
 
     /**
@@ -171,14 +176,14 @@ class PathModel extends AbstractListModel {
      *            The indices of the path list to use in the search.
      * @param subdirs
      *            Whether to search subdiretories.
+     * @param curDir
+     *            The base directory of the tool.
      * @param backupDir
      *            Where to store backup files.
-     * @param statusBar
-     *            The status bar to dispay status.
      * @throws InterruptedException
      */
-    public void search(ResultModel resultModel, int[] indices, boolean subdirs, File backupDir, JTextComponent statusBar)
-            throws InterruptedException {
+    public void search(ResultModel resultModel, int[] indices, boolean subdirs,
+            File curDir, File backupDir) throws InterruptedException {
         if (list.size() > 0 && indices.length > 0) {
             Arrays.sort(indices);
             int n = indices.length;
@@ -192,7 +197,8 @@ class PathModel extends AbstractListModel {
                 else
                     iter.next();
 
-            ICUJarFinder.search(resultModel, logger, statusBar, paths, subdirs, backupDir);
+            ICUJarFinder.search(resultModel, logger, paths, subdirs, curDir,
+                    backupDir);
         }
     }
 
@@ -204,34 +210,35 @@ class PathModel extends AbstractListModel {
      *            The result model to store the results of the search.
      * @param subdirs
      *            Whether to search subdiretories.
+     * @param curDir
+     *            The base directory of the tool.
      * @param backupDir
      *            Where to store backup files.
-     * @param statusBar
-     *            The status bar to dispay status.
      * @throws InterruptedException
      */
-    public void searchAll(ResultModel resultModel, boolean subdirs, File backupDir, JTextComponent statusBar)
-            throws InterruptedException {
+    public void searchAll(ResultModel resultModel, boolean subdirs,
+            File curDir, File backupDir) throws InterruptedException {
         if (list.size() > 0) {
             int n = list.size();
             IncludePath[] paths = new IncludePath[n];
             Iterator iter = list.iterator();
             for (int i = 0; i < n; i++)
                 paths[i] = (IncludePath) iter.next();
-            ICUJarFinder.search(resultModel, logger, statusBar, paths, subdirs, backupDir);
+            ICUJarFinder.search(resultModel, logger, paths, subdirs, curDir,
+                    backupDir);
         }
     }
 
     /**
-     * Loads a list of paths from <code>PATHLIST_FILENAME</code>. Each path
-     * must be of the form
+     * Loads a list of paths from the given path list file. Each path must be of
+     * the form
      * 
      * @throws IOException
      * @throws IllegalArgumentException
      */
     public void loadPaths() throws IOException, IllegalArgumentException {
-        logger.printlnToScreen("Scanning " + PATHLIST_FILENAME + " file...");
-        logger.printlnToScreen(PATHLIST_FILENAME + " file contains");
+        logger.printlnToScreen("Scanning " + pathFilename + " file...");
+        logger.printlnToScreen(pathFilename + " file contains");
 
         BufferedReader reader = null;
         int lineNumber = 1;
@@ -239,7 +246,7 @@ class PathModel extends AbstractListModel {
         char sign;
 
         try {
-            reader = new BufferedReader(new FileReader(PATHLIST_FILENAME));
+            reader = new BufferedReader(new FileReader(pathFile));
             while (reader.ready()) {
                 line = reader.readLine().trim();
 
@@ -248,20 +255,24 @@ class PathModel extends AbstractListModel {
                     if (sign != '#') {
                         logger.printlnToScreen(line);
                         if (sign != '+' && sign != '-' && !"all".equals(line))
-                            pathListError("Each path entry must start with a + or - to denote inclusion/exclusion",
+                            pathListError(
+                                    "Each path entry must start with a + or - to denote inclusion/exclusion",
                                     lineNumber);
                         if (!add(line))
-                            pathListError("\"" + line.substring(1).trim()
-                                    + "\" is not a valid file or directory (perhaps it does not exist?)", lineNumber);
+                            pathListError(
+                                    "\""
+                                            + line.substring(1).trim()
+                                            + "\" is not a valid file or directory (perhaps it does not exist?)",
+                                    lineNumber);
                     }
                 }
 
                 lineNumber++;
             }
         } catch (FileNotFoundException ex) {
-            pathListError("The " + PATHLIST_FILENAME + " file doesn't exist.");
+            pathListError("The " + pathFilename + " file doesn't exist.");
         } catch (IOException ex) {
-            pathListError("Could not read the " + PATHLIST_FILENAME + " file.");
+            pathListError("Could not read the " + pathFilename + " file.");
         } finally {
             try {
                 if (reader != null)
@@ -281,8 +292,10 @@ class PathModel extends AbstractListModel {
      *            The line number to put in the exception.
      * @throws IllegalArgumentException
      */
-    private static void pathListError(String message, int lineNumber) throws IllegalArgumentException {
-        throw new IllegalArgumentException("Error in " + PATHLIST_FILENAME + " (line " + lineNumber + "): " + message);
+    private void pathListError(String message, int lineNumber)
+            throws IllegalArgumentException {
+        throw new IllegalArgumentException("Error in " + pathFilename
+                + " (line " + lineNumber + "): " + message);
     }
 
     /**
@@ -292,21 +305,20 @@ class PathModel extends AbstractListModel {
      *            The message to put in the exception.
      * @throws IOException
      */
-    private static void pathListError(String message) throws IOException {
-        throw new IOException("Error in " + PATHLIST_FILENAME + ": " + message);
+    private void pathListError(String message) throws IOException {
+        throw new IOException("Error in " + pathFilename + ": " + message);
     }
 
-    /**
-     * The filename of the pathlist file.
-     */
-    public static final String PATHLIST_FILENAME = "DirectorySearch.txt";
+    private String pathFilename;
+
+    private File pathFile;
+
+    private List list = new ArrayList(); // list of paths (Files)
+
+    private Logger logger;
 
     /**
      * The serializable UID.
      */
     public static final long serialVersionUID = 1337;
-
-    private List list = new ArrayList(); // list of paths (Files)
-
-    private Logger logger;
 }

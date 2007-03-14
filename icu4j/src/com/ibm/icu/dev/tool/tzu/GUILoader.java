@@ -6,44 +6,56 @@
  */
 package com.ibm.icu.dev.tool.tzu;
 
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
-import javax.swing.text.JTextComponent;
 
+/**
+ * Loads the ICUTZU tool, GUI version.
+ */
 public class GUILoader {
-    public static void main(String[] args) {
-        new GUILoader(args);
-    }
+    /**
+     * Entry point for the GUI version of the tool.
+     * 
+     * @param curDir
+     *            The base directory of the tool.
+     * @param backupDir
+     *            The location to store backups.
+     * @param pathFile
+     *            The file to load paths from.
+     * @param resultFile
+     *            The file to load/save results to/from.
+     * @param tzFile
+     *            The local timezone resource file.
+     * @param iconFile
+     *            The icon file.
+     */
+    public GUILoader(File curDir, File backupDir, File pathFile,
+            File resultFile, File tzFile, File iconFile) {
+        // set the backup dir
+        this.backupDir = backupDir;
+        this.curDir = curDir;
 
-    public GUILoader(String[] args) {
-        try {
-            logger = Logger.getInstance(Logger.DEFAULT_FILENAME, Logger.NORMAL);
-        } catch (FileNotFoundException ex) {
-            String error = "Could not open " + Logger.DEFAULT_FILENAME + " for writing.";
-            System.out.println(error);
-            JOptionPane.showMessageDialog(null, error, TITLE, JOptionPane.ERROR_MESSAGE);
-            System.exit(-1);
-        }
-        resultModel = new ResultModel(logger);
-        pathModel = new PathModel(logger);
-        sourceModel = new SourceModel(logger);
+        // get the icon
+        Image icon = Toolkit.getDefaultToolkit().getImage(iconFile.getPath());
 
-        pathGUI = new PathComponent(this, pathModel);
+        // initialize the path list gui
+        pathGUI = new PathComponent(this);
         pathFrame = new JFrame(TITLE + " - Search Paths");
         pathFrame.getContentPane().add(pathGUI);
         pathFrame.pack();
-        // pathFrame.setLocationRelativeTo(null);
-
         pathFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+        pathFrame.setIconImage(icon);
         pathFrame.addWindowListener(new WindowAdapter() {
-            @Override
             public void windowClosing(WindowEvent event) {
                 if (resultClosed)
                     System.exit(0);
@@ -51,15 +63,14 @@ public class GUILoader {
             }
         });
 
-        resultGUI = new ResultComponent(this, resultModel, sourceModel);
+        // initialize the result list gui
+        resultGUI = new ResultComponent(this);
         resultFrame = new JFrame(TITLE + " - Updatable ICU4J Jars");
         resultFrame.getContentPane().add(resultGUI);
         resultFrame.pack();
-        // resultFrame.setLocationRelativeTo(null);
-
         resultFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+        resultFrame.setIconImage(icon);
         resultFrame.addWindowListener(new WindowAdapter() {
-            @Override
             public void windowClosing(WindowEvent event) {
                 if (pathClosed)
                     System.exit(0);
@@ -68,17 +79,59 @@ public class GUILoader {
             }
         });
 
-        statusBar = resultGUI.getStatusBar();
+        // get the logger instance
+        try {
+            logger = Logger.getInstance(Logger.DEFAULT_FILENAME, Logger.NORMAL,
+                    resultGUI.getStatusBar(), pathFrame);
+        } catch (FileNotFoundException ex) {
+            String error = "Could not open " + Logger.DEFAULT_FILENAME
+                    + " for writing.";
+            System.out.println(error);
+            JOptionPane.showMessageDialog(null, error, TITLE,
+                    JOptionPane.ERROR_MESSAGE);
+            System.exit(-1);
+        }
 
-        backupDir = (args.length == 1) ? new File(args[0]) : null;
+        // initialize the models
+        resultModel = new ResultModel(logger, resultFile);
+        pathModel = new PathModel(logger, pathFile);
+        sourceModel = new SourceModel(logger, tzFile);
 
+        // attach the models to the guis
+        resultGUI.setResultModel(resultModel);
+        pathGUI.setPathModel(pathModel);
+        resultGUI.setSourceModel(sourceModel);
+
+        // load all the paths into the path model
+        try {
+            pathModel.loadPaths();
+        } catch (IOException ex) {
+            // failed to load the directory search file
+            pathModel.addAllDrives();
+        } catch (IllegalArgumentException ex) {
+            // failed to load the directory search file
+            pathModel.addAllDrives();
+        }
+
+        // find sources for updating
+        sourceModel.findSources();
+
+        // make sure that search and update cancelation is disabled (since we
+        // are initially neither updating nor searching, so there is nothing to
+        // cancel)
         setCancelSearchEnabled(false);
         setCancelUpdateEnabled(false);
-        pathFrame.setVisible(true);
 
-        sourceModel.findSources();
+        // show the path list gui
+        pathFrame.setVisible(true);
     }
 
+    /**
+     * Searchs all the paths in the path model.
+     * 
+     * @param subdirs
+     *            Whether to search subdirectories.
+     */
     public void searchAll(final boolean subdirs) {
         makeThreadDead();
 
@@ -91,7 +144,8 @@ public class GUILoader {
                 try {
                     resultFrame.setVisible(true);
                     resultClosed = false;
-                    pathModel.searchAll(resultModel, subdirs, backupDir, statusBar);
+                    pathModel
+                            .searchAll(resultModel, subdirs, curDir, backupDir);
                 } catch (InterruptedException ex) { /* i escaped! i'm free! */
                 }
                 setSearchEnabled(true);
@@ -104,6 +158,14 @@ public class GUILoader {
         workerThread.start();
     }
 
+    /**
+     * Searchs the selected paths in the path model.
+     * 
+     * @param indices
+     *            Which paths in the path models to be used in the search.
+     * @param subdirs
+     *            Whether to search subdirectories.
+     */
     public void search(final int[] indices, final boolean subdirs) {
         makeThreadDead();
 
@@ -116,7 +178,8 @@ public class GUILoader {
                 try {
                     resultFrame.setVisible(true);
                     resultClosed = false;
-                    pathModel.search(resultModel, indices, subdirs, backupDir, statusBar);
+                    pathModel.search(resultModel, indices, subdirs, curDir,
+                            backupDir);
                 } catch (InterruptedException ex) { /* i escaped! i'm free! */
                 }
                 setSearchEnabled(true);
@@ -129,6 +192,12 @@ public class GUILoader {
         workerThread.start();
     }
 
+    /**
+     * Updates all the results in the result model.
+     * 
+     * @param updateURL
+     *            The URL to use as the update for each ICU4J jar.
+     */
     public void updateAll(final URL updateURL) {
         makeThreadDead();
 
@@ -152,6 +221,14 @@ public class GUILoader {
         workerThread.start();
     }
 
+    /**
+     * Updates the selected results in the result model.
+     * 
+     * @param indices
+     *            Which ICU4J jars in the result model to be used in the update.
+     * @param updateURL
+     *            The URL to use as the update for each ICU4J jar.
+     */
     public void update(final int[] indices, final URL updateURL) {
         makeThreadDead();
 
@@ -175,37 +252,71 @@ public class GUILoader {
         workerThread.start();
     }
 
+    /**
+     * Cancels a search.
+     */
     public void cancelSearch() {
         makeThreadDead();
     }
 
+    /**
+     * Cancels an update.
+     */
     public void cancelUpdate() {
         makeThreadDead();
     }
 
+    /**
+     * Sets whether the search button should be enabled.
+     * 
+     * @param value
+     *            Whether the search button should be enabled.
+     */
     private void setSearchEnabled(boolean value) {
         pathGUI.setSearchEnabled(value);
     }
 
+    /**
+     * Sets whether the update button should be enabled.
+     * 
+     * @param value
+     *            Whether the update button should be enabled.
+     */
     private void setUpdateEnabled(boolean value) {
         resultGUI.setUpdateEnabled(value);
     }
 
+    /**
+     * Sets whether the cancel search button should be enabled.
+     * 
+     * @param value
+     *            Whether the cancel search button should be enabled.
+     */
     private void setCancelSearchEnabled(boolean value) {
         resultGUI.setCancelSearchEnabled(value);
     }
 
+    /**
+     * Sets whether the cancel update button should be enabled.
+     * 
+     * @param value
+     *            Whether the cancel update button should be enabled.
+     */
     private void setCancelUpdateEnabled(boolean value) {
         resultGUI.setCancelUpdateEnabled(value);
     }
 
+    /**
+     * Interrupts the worker thread and waits for it to finish.
+     */
     private void makeThreadDead() {
         if (workerThread != null)
             try {
                 workerThread.interrupt();
                 workerThread.join();
             } catch (Exception ex) {
-                // do nothing
+                // do nothing -- if an exception was thrown, the worker thread
+                // must have already been dead, which is perfectly fine
             }
     }
 
@@ -231,9 +342,12 @@ public class GUILoader {
 
     private File backupDir;
 
+    private File curDir;
+
     private Logger logger;
 
-    private JTextComponent statusBar;
-
+    /**
+     * The title for the application.
+     */
     public static final String TITLE = "ICUTZU (ICU4J Time Zone Updater)";
 }

@@ -34,9 +34,11 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
      * 
      * @param logger
      *            The current logger.
+     * @param tzLocalFile
+     *            The local timezone resource file.
      */
-    public SourceModel(Logger logger) {
-        // this.logger = logger;
+    public SourceModel(Logger logger, File tzLocalFile) {
+        this.logger = logger;
 
         // if all constants are not yet initialized
         // (this is where they get initialized)
@@ -44,19 +46,24 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
             try {
                 TZ_BASE_URL = new URL(TZ_BASE_URLSTRING_START);
 
-                if (!TZ_LOCAL_FILE.exists()) {
+                SourceModel.tzLocalFile = tzLocalFile;
+                if (!tzLocalFile.exists()) {
                     // not a critical error, but we won't be able to use the
                     // local tz file
                     logger.errorln("Local copy (zoneinfo.res) does not exist");
                 } else {
-                    TZ_LOCAL_URL = TZ_LOCAL_FILE.toURL();
-                    TZ_LOCAL_VERSION = ICUFile.findFileTZVersion(TZ_LOCAL_FILE, logger);
+                    TZ_LOCAL_URL = tzLocalFile.toURL();
+                    TZ_LOCAL_VERSION = ICUFile.findFileTZVersion(tzLocalFile,
+                            logger);
                     if (TZ_LOCAL_VERSION == null) {
-                        logger.errorln("Failed to determine version of local copy");
+                        logger
+                                .errorln("Failed to determine version of local copy");
                         TZ_LOCAL_CHOICE = "Local Copy";
                     } else {
-                        TZ_LOCAL_CHOICE = "Local Copy (" + TZ_LOCAL_VERSION + ")";
+                        TZ_LOCAL_CHOICE = "Local Copy (" + TZ_LOCAL_VERSION
+                                + ")";
                     }
+                    selected = TZ_LOCAL_CHOICE;
                 }
             } catch (MalformedURLException ex) {
                 // this shouldn't happen
@@ -73,24 +80,23 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
     public void findSources() {
         BufferedReader reader = null;
         try {
-            reader = new BufferedReader(new InputStreamReader(TZ_BASE_URL.openStream()));
+            reader = new BufferedReader(new InputStreamReader(TZ_BASE_URL
+                    .openStream()));
 
             // create an html callback function to parse through every list item
             // (every list item
             HTMLEditorKit.ParserCallback htmlCallback = new HTMLEditorKit.ParserCallback() {
-                @Override
-                public void handleStartTag(HTML.Tag tag, MutableAttributeSet attr, int pos) {
+                public void handleStartTag(HTML.Tag tag,
+                        MutableAttributeSet attr, int pos) {
                     if (tag == HTML.Tag.LI)
                         listItem = true;
                 }
 
-                @Override
                 public void handleEndTag(HTML.Tag tag, int pos) {
                     if (tag == HTML.Tag.LI)
                         listItem = false;
                 }
 
-                @Override
                 public void handleText(char[] data, int pos) {
                     if (listItem) {
                         String str = new String(data);
@@ -99,13 +105,15 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
                         if (!"..".equals(str))
                             try {
                                 // add the new item to the map
-                                urlMap.put(str, new URL(TZ_BASE_URLSTRING_START + str + TZ_BASE_URLSTRING_END));
+                                urlMap.put(str, new URL(TZ_BASE_URLSTRING_START
+                                        + str + TZ_BASE_URLSTRING_END));
 
                                 // update the selected item and fire off an
                                 // event
                                 selected = urlMap.lastKey();
                                 int index = 0;
-                                for (Iterator iter = urlMap.keySet().iterator(); iter.hasNext();) {
+                                for (Iterator iter = urlMap.keySet().iterator(); iter
+                                        .hasNext();) {
                                     if (iter.next().equals(str))
                                         index++;
                                 }
@@ -121,7 +129,13 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
 
             new ParserDelegator().parse(reader, htmlCallback, false);
         } catch (IOException ex) {
-            ex.printStackTrace();
+            // cannot connect to the repository -- use local version only.
+            String message = "Failed to connect to the ICU Timezone Repository at "
+                    + TZ_BASE_URL.toString()
+                    + " .\n\n"
+                    + "Check your connection and re-run ICUTZU or continue using the local copy of the timezone update (version "
+                    + TZ_LOCAL_VERSION + ").";
+            logger.showInformationDialog(message);
         } finally {
             // close the reader gracefully
             if (reader != null)
@@ -231,14 +245,9 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
     }
 
     /**
-     * The filename of the local timezone resource file.
-     */
-    public static final String TZ_LOCAL_FILENAME = "zoneinfo.res";
-
-    /**
      * The local timezone resource file.
      */
-    public static final File TZ_LOCAL_FILE = new File(TZ_LOCAL_FILENAME);
+    public static File tzLocalFile = null;
 
     /**
      * The version of the local timezone resource file, ie. "2007c". Since the
@@ -287,5 +296,5 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
 
     private TreeMap urlMap = new TreeMap();
 
-    // private Logger logger;
+    private Logger logger;
 }

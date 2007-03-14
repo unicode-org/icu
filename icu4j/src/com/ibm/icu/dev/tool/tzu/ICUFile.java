@@ -28,11 +28,21 @@ import java.util.jar.Manifest;
 import com.ibm.icu.util.UResourceBundle;
 
 /**
- * A class that represents an updatable ICU4J jar file.
+ * A class that represents an updatable ICU4J jar file. A file is an updatable
+ * ICU4J jar file if it
+ * <ul>
+ * <li>exists</li>
+ * <li>is a file (ie. not a directory)</li>
+ * <li>does not end with .ear or .war (these file types are unsupported)</li>
+ * <li>ends with .jar</li>
+ * <li>is updatable according the <code>isUpdatable</code></li>
+ * <li>is not signed.</li>
+ * </ul>
  */
 public class ICUFile {
     /**
-     * Constructs a blank ICUFile. Used internally.
+     * Constructs a blank ICUFile. Used internally for timezone resource files
+     * that are not contained within a jar.
      * 
      * @param logger
      *            The current logger.
@@ -91,25 +101,36 @@ public class ICUFile {
      *            The current logger.
      * @throws IOException
      */
-    private void initialize(File file, Logger aLogger) throws IOException {
+    private void initialize(File file, Logger log) throws IOException {
         this.icuFile = file;
-        this.logger = aLogger;
+        this.logger = log;
         String message = null;
 
-        if (!file.exists())
+        if (!file.exists()) {
             message = "Skipped " + file.getPath() + " (does not exist).";
-        else if (!file.isFile())
+        } else if (!file.isFile()) {
             message = "Skipped " + file.getPath() + " (not a file).";
-        else if (file.getName().endsWith(".ear") || file.getName().endsWith(".war")) {
-            message = "Skipped " + file.getPath() + " (this tool does not support .ear and .war files).";
+        } else if (file.getName().endsWith(".ear")
+                || file.getName().endsWith(".war")) {
+            message = "Skipped " + file.getPath()
+                    + " (this tool does not support .ear and .war files).";
             logger.loglnToBoth(message);
-        } else if (!file.getName().endsWith(".jar"))
+            logger.showInformationDialog(message);
+        } else if (!file.getName().endsWith(".jar")) {
             message = "Skipped " + file.getPath() + " (not a jar file).";
-        else if (!isUpdatable())
-            message = "Skipped " + file.getPath() + " (not an updatable ICU4J jar).";
-        else if (isSigned()) {
-            message = "Skipped " + file.getPath() + " (signed jar).";
+        } else if (!isUpdatable()) {
+            message = "Skipped " + file.getPath()
+                    + " (not an updatable ICU4J jar).";
+        } else if (isSigned()) {
+            message = "Skipped " + file.getPath()
+                    + " (cannot update signed jars).";
             logger.loglnToBoth(message);
+            logger.showInformationDialog(message);
+        } else if (isEclipseFragment()) {
+            message = "Skipped " + file.getPath()
+                    + " (eclipse fragments must be updated through ICU).";
+            logger.loglnToBoth(message);
+            logger.showInformationDialog(message);
         }
 
         if (message != null)
@@ -142,10 +163,7 @@ public class ICUFile {
      * @return The path of this ICUFile object, without the filename.
      */
     public String getPath() {
-        String path = icuFile.getPath();
-        int pos = path.lastIndexOf(File.separator);
-        path = (pos == -1) ? "" : path.substring(0, pos);
-        return path;
+        return icuFile.getParent();
     }
 
     /**
@@ -153,7 +171,6 @@ public class ICUFile {
      * 
      * @return The result of getFile().toString().
      */
-    @Override
     public String toString() {
         return getFile().toString();
     }
@@ -178,10 +195,14 @@ public class ICUFile {
 
     /**
      * Compares two ICUFiles by the file they represent.
+     * 
+     * @param other
+     *            The other ICUFile to compare to.
+     * @return Whether the files represented by the two ICUFiles are equal.
      */
-    @Override
     public boolean equals(Object other) {
-        return (!(other instanceof ICUFile)) ? false : icuFile.equals(((ICUFile) other).icuFile);
+        return (!(other instanceof ICUFile)) ? false : icuFile
+                .equals(((ICUFile) other).icuFile);
     }
 
     /**
@@ -198,6 +219,9 @@ public class ICUFile {
      * @throws IOException
      */
     public void update(URL insertURL, File backupDir) throws IOException {
+        logger.printlnToBoth("");
+        logger.printlnToBoth("Updating " + icuFile.toString() + " ...");
+
         if (!icuFile.canRead() || !icuFile.canWrite())
             throw new IOException("Missing permissions for " + icuFile);
         File backupFile = null;
@@ -210,6 +234,8 @@ public class ICUFile {
 
         // get the new timezone resource version
         tzVersion = findEntryTZVersion();
+
+        logger.printlnToBoth("Successfully updated " + icuFile.toString());
     }
 
     /**
@@ -225,10 +251,12 @@ public class ICUFile {
      * @return The temporary file that was created.
      */
     private File createBackupFile(File inputFile, File backupBase) {
-        logger.loglnToBoth("Creating backup file for + " + inputFile + " at " + backupBase + ".");
+        logger.loglnToBoth("Creating backup file for + " + inputFile + " at "
+                + backupBase + ".");
         String filename = inputFile.getName();
         String suffix = ".jar";
-        String prefix = filename.substring(0, filename.length() - ".jar".length());
+        String prefix = filename.substring(0, filename.length()
+                - ".jar".length());
 
         if (backupBase == null) {
             try {
@@ -242,18 +270,21 @@ public class ICUFile {
 
         File backupFile = null;
         File backupDesc = null;
-        File backupDir = new File(backupBase.getPath() + File.separator + prefix);
+        File backupDir = new File(backupBase.getPath() + File.separator
+                + prefix);
         PrintStream ostream = null;
 
         try {
             backupBase.mkdir();
             backupDir.mkdir();
             backupFile = File.createTempFile(prefix, suffix, backupDir);
-            backupDesc = new File(backupDir.toString() + File.separator + prefix + ".txt");
+            backupDesc = new File(backupDir.toString() + File.separator
+                    + prefix + ".txt");
             backupDesc.createNewFile();
             ostream = new PrintStream(new FileOutputStream(backupDesc));
             ostream.println(inputFile.toString());
-            logger.loglnToBoth("Successfully created backup file at " + backupFile + ".");
+            logger.loglnToBoth("Successfully created backup file at "
+                    + backupFile + ".");
         } catch (IOException ex) {
             logger.loglnToBoth("Failed to create backup file.");
             if (backupFile != null)
@@ -280,7 +311,8 @@ public class ICUFile {
      * @return Whether the operation was successful.
      */
     private boolean copyFile(File inputFile, File outputFile) {
-        logger.loglnToBoth("Copying from " + inputFile + " to " + outputFile + ".");
+        logger.loglnToBoth("Copying from " + inputFile + " to " + outputFile
+                + ".");
         InputStream istream = null;
         OutputStream ostream = null;
         byte[] buffer = new byte[BUFFER_SIZE];
@@ -327,8 +359,10 @@ public class ICUFile {
      *            The output file.
      * @return Whether the operation was successful.
      */
-    private boolean copyEntry(File inputFile, JarEntry inputEntry, File outputFile) {
-        logger.loglnToBoth("Copying from " + inputFile + "!/" + inputEntry + " to " + outputFile + ".");
+    private boolean copyEntry(File inputFile, JarEntry inputEntry,
+            File outputFile) {
+        logger.loglnToBoth("Copying from " + inputFile + "!/" + inputEntry
+                + " to " + outputFile + ".");
         JarFile jar = null;
         InputStream istream = null;
         OutputStream ostream = null;
@@ -384,9 +418,10 @@ public class ICUFile {
      *            The URL to use in replacing the entry.
      * @return Whether the operation was successful.
      */
-    private boolean createUpdatedJar(File inputFile, File outputFile, JarEntry insertEntry, URL inputURL) {
-        logger.loglnToBoth("Copying " + inputFile + " to " + outputFile + ", replacing " + insertEntry + " with "
-                + inputURL + ".");
+    private boolean createUpdatedJar(File inputFile, File outputFile,
+            JarEntry insertEntry, URL inputURL) {
+        logger.loglnToBoth("Copying " + inputFile + " to " + outputFile
+                + ", replacing " + insertEntry + " with " + inputURL + ".");
         JarFile jar = null;
         JarOutputStream ostream = null;
         InputStream istream = null;
@@ -478,7 +513,8 @@ public class ICUFile {
                 Iterator iter = manifest.getEntries().values().iterator();
                 while (iter.hasNext()) {
                     Attributes attr = (Attributes) iter.next();
-                    String ver = attr.getValue(Attributes.Name.IMPLEMENTATION_VERSION);
+                    String ver = attr
+                            .getValue(Attributes.Name.IMPLEMENTATION_VERSION);
                     if (ver != null) {
                         icuVersion = ver;
                         break;
@@ -488,7 +524,8 @@ public class ICUFile {
 
             // if the jar's directory structure contains TZ_ENTRY_DIR and there
             // is a timezone resource in the jar, then the jar is updatable
-            success = (jar.getJarEntry(TZ_ENTRY_DIR) != null) && ((this.tzEntry = getTZEntry(jar)) != null);
+            success = (jar.getJarEntry(TZ_ENTRY_DIR) != null)
+                    && ((this.tzEntry = getTZEntry(jar)) != null);
         } catch (IOException ex) {
             // unable to create the JarFile or unable to get the Manifest
             // log the unexplained i/o error, but we must drudge on
@@ -533,6 +570,36 @@ public class ICUFile {
      */
     private boolean isSigned() {
         return tzEntry.getCertificates() != null;
+    }
+
+    /**
+     * Determines whether the current jar is an Eclipse Fragment.
+     * 
+     * @return Whether the current jar is an Eclipse Fragment.
+     */
+    private boolean isEclipseFragment() {
+        return (isEclipseDataFragment() || isEclipseMainFragment());
+    }
+
+    /**
+     * Determines whether the current jar is an Eclipse Data Fragment.
+     * 
+     * @return Whether the current jar is an Eclipse Fragment.
+     */
+    private boolean isEclipseDataFragment() {
+        return (icuFile.getPath().contains(
+                "plugins" + File.separator + "com.ibm.icu.data.update") && icuFile
+                .getName().equals("icu-data.jar"));
+    }
+
+    /**
+     * Determines whether the current jar is an Eclipse Main Fragment.
+     * 
+     * @return Whether the current jar is an Eclipse Fragment.
+     */
+    private boolean isEclipseMainFragment() {
+        return (icuFile.getPath().contains("plugins") && icuFile.getName()
+                .startsWith("com.ibm.icu_"));
     }
 
     /**
@@ -588,15 +655,18 @@ public class ICUFile {
     private static String findTZVersion(File tzFile) {
         try {
             String filename = tzFile.getName();
-            String entryname = filename.substring(0, filename.length() - ".res".length());
+            String entryname = filename.substring(0, filename.length()
+                    - ".res".length());
 
             URL url = new URL(tzFile.getParentFile().toURL().toString());
             ClassLoader loader = new URLClassLoader(new URL[] { url });
 
-            UResourceBundle bundle = UResourceBundle.getBundleInstance("", entryname, loader);
+            UResourceBundle bundle = UResourceBundle.getBundleInstance("",
+                    entryname, loader);
 
             String tzVersion;
-            if (bundle != null && (tzVersion = bundle.getString(TZ_VERSION_KEY)) != null)
+            if (bundle != null
+                    && (tzVersion = bundle.getString(TZ_VERSION_KEY)) != null)
                 return tzVersion;
         } catch (MissingResourceException ex) {
             // not an error -- some zoneinfo files do not have a version number
@@ -653,7 +723,8 @@ public class ICUFile {
     /**
      * The timezone resource filename.
      */
-    public static final String TZ_ENTRY_FILENAME = TZ_ENTRY_FILENAME_PREFIX + TZ_ENTRY_FILENAME_EXTENSION;
+    public static final String TZ_ENTRY_FILENAME = TZ_ENTRY_FILENAME_PREFIX
+            + TZ_ENTRY_FILENAME_EXTENSION;
 
     private static final int BUFFER_SIZE = 1024;
 
