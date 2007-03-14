@@ -233,20 +233,21 @@ public class SimpleTimeZone extends JDKTimeZone {
     
 
     /**
-     * Sets the GMT offset for this time zone.
-     *
+     * Overrides TimeZone
+     * Sets the base time zone offset to GMT.
+     * This is the offset to add "to" UTC to get local time.
      * @param offsetMillis the raw offset of the time zone
-     * @stable ICU 3.8
+     * @stable ICU 2.0
      */
     public void setRawOffset(int offsetMillis) {
         raw = offsetMillis;
     }
   
     /**
+     * Overrides TimeZone
      * Gets the GMT offset for this time zone.
-     *
      * @return the raw offset
-     * @stable ICU 3.8
+     * @stable ICU 2.0
      */
     public int getRawOffset() {
         return raw;
@@ -850,16 +851,18 @@ public class SimpleTimeZone extends JDKTimeZone {
     private int startMode, endMode;   // flags indicating what kind of rules the DST rules are
     
     /**
-     * @internal revisit for ICU 3.6
-     * @deprecated This API is ICU internal only.
+     * Overrides TimeZone
+     * Queries if this time zone uses Daylight Saving Time.
+     * @stable ICU 2.0
      */
     public boolean useDaylightTime(){
         return useDaylight;
     }
-    
+
     /**
-     * @internal revisit for ICU 3.6
-     * @deprecated This API is ICU internal only.
+     * Overrides TimeZone
+     * Queries if the give date is in Daylight Saving Time.
+     * @stable ICU 2.0
      */
     public boolean inDaylightTime(Date date){
         GregorianCalendar gc = new GregorianCalendar(this);
@@ -1152,8 +1155,10 @@ public class SimpleTimeZone extends JDKTimeZone {
     }
 
     /**
-     * @internal revisit for ICU 3.6
-     * @deprecated This API is ICU internal only.
+     * Return true if this zone has the same rules and offset as another zone.
+     * @param othr the TimeZone object to be compared with
+     * @return true if the given zone has the same rules and offset as this one
+     * @stable ICU 2.0
      */
     public boolean hasSameRules(TimeZone othr) {
         if(!(othr instanceof SimpleTimeZone)){
