@@ -422,8 +422,8 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Sets era name strings. For example: "Anno Domini" and "Before Christ".
      * @param newEraNames the new era strings.
-     * @internal revisit for ICU 3.6
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public void setEraNames(String[] newEraNames) {
         eraNames = duplicate(newEraNames);
@@ -495,8 +495,8 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @param context    The formatting context, FORMAT or STANDALONE.
      * @param width      The width of the month string,
      *                   either WIDE, ABBREVIATED, or NARROW.
-     * @internal revisit for ICU 3.6
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public void setMonths(String[] newMonths, int context, int width) {
         switch (context) {
@@ -606,8 +606,8 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @param context     The formatting context, FORMAT or STANDALONE.
      * @param width       The width of the strings,
      *                    either WIDE, ABBREVIATED, or NARROW.
-     * @internal revisit for ICU 3.6
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public void setWeekdays(String[] newWeekdays, int context, int width) {
         switch (context) {
@@ -720,8 +720,8 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @param context    The formatting context, FORMAT or STANDALONE.
      * @param width      The width of the quarter string,
      *                   either WIDE or ABBREVIATED. There are no NARROW quarters.
-     * @internal revisit for ICU 3.6
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public void setQuarters(String[] newQuarters, int context, int width) {
         switch (context) {
@@ -895,7 +895,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     // =======================privates===============================
 
-    /**
+    /*
      * Useful constant for defining timezone offsets.
      */
     static final int millisPerHour = 60*60*1000;
@@ -904,11 +904,13 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     private static ICUCache DFSCACHE = new SimpleCache();
 
     /**
-     * 
-     * @param desiredLocale
-     * @param type
+     * Initialize format symbols for the locale and calendar type
+     * @param desiredLocale The locale whose symbols are desired.
+     * @param type          The calendar type whose date format symbols are desired.
      * @stable ICU 3.0
      */
+    //TODO: This protected seems to be marked as @stable accidentally.
+    // We may need to deescalate this API to @internal.
     protected void initializeData(ULocale desiredLocale, String type)
     {
         String key = desiredLocale.toString() + "+" + type;
@@ -958,13 +960,15 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         this.validLocale = dfs.validLocale;
         this.requestedLocale = dfs.requestedLocale;
     }
-    
+
     /**
-     * 
-     * @param desiredLocale
-     * @param calData
+     * Initialize format symbols for the locale and calendar type
+     * @param desiredLocale The locale whose symbols are desired.
+     * @param calData       The calendar resource data
      * @stable ICU 3.0
      */
+    //FIXME: This protected method must not be a stable API, because
+    // CalendarData is a non API class   
     protected void initializeData(ULocale desiredLocale, CalendarData calData)
     {
 
@@ -1164,7 +1168,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         return equal;
     }
 
-    /**
+    /*
      * Package private: used by SimpleDateFormat.
      * Gets the string for the specified time zone.
      * @param zid The time zone ID
@@ -1181,7 +1185,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         return zoneString;
     }
 
-    /**
+    /*
      * Gets the zone string from the specified zone item info
      */
     private String getZoneString(ZoneItemInfo zinfo, String zid, int type) {
@@ -1225,7 +1229,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         return null;
     }
 
-    /**
+    /*
      * Package private: used by SimpleDateFormat.
      * Gets the string for the specified time zone.
      * @param zid The time zone ID
@@ -1242,7 +1246,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         return zoneString;
     }
 
-    /**
+    /*
      * Gets the zone string from the specified zone item info
      */
     private String getMetazoneString(ZoneItemInfo zinfo, String zid, int type, Calendar cal) {
@@ -1279,7 +1283,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         String zid;
     }
 
-    /**
+    /*
      * Package private: used by SimpleDateformat
      * Gets the ZoneItem instance which has zone strings
      * which matches the specified text.
@@ -1439,7 +1443,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
        return zid;
     }
 
-    /**
+    /*
      * A class holds zone strings and searchable indice
      */
     private class ZoneItemInfo {
@@ -1448,22 +1452,22 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         TextTrieMap tzStringMap;
     }
 
-    /**
+    /*
      * A cache for ZoneItemInfo objects, shared by class instances.
      */
     private static ICUCache zoneItemInfoCache = new SimpleCache();
 
-    /**
+    /*
      * A ZoneItemInfo instance which holds custom timezone strings
      */
     private transient ZoneItemInfo localZoneItemInfo;
 
-    /**
+    /*
      * Single entry cache for findZoneTypeValue()
      */
     private transient ZoneItem lastZoneItem;
 
-    /**
+    /*
      * Gets the ZoneItemInfo instance for the locale used by this object.
      * If it does not exist, create new one and register in the static cache.
      */
@@ -1511,7 +1515,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
        return null;
     }
 
-    /**
+    /*
      * Gets the array of zone strings for the specified locale.
      */
     private static String[][] getDefaultZoneStrings(ULocale locale) {
@@ -1599,7 +1603,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         return array;
     }
 
-    /**
+    /*
      * Gets the array of zone strings for the custom zone strings
      */
     private ZoneItemInfo getLocalZoneItemInfo() {
@@ -1609,7 +1613,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         return localZoneItemInfo;
     }
 
-    /**
+    /*
      * Creates a new ZoneItemInfo instance from the array of time zone
      * strings.
      */
@@ -1665,15 +1669,13 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         return zii;
     }
 
-    /**
+    /*
      * save the input locale
      */
     private ULocale requestedLocale; 
  
-    /**
+    /*
      * The translation type of the translated zone strings
-     * @internal ICU 3.6
-     * @deprecated This API is ICU internal only.
      */
      private static final String   SHORT_GENERIC  = "sg",
                                    SHORT_STANDARD = "ss",
@@ -1685,10 +1687,8 @@ public class DateFormatSymbols implements Serializable, Cloneable {
                                    USES_METAZONE  = "um",
                                    METAZONE       = "mz",
                                    COMMONLY_USED  = "cu";
-    /**
+    /*
      * The translation type of the translated zone strings
-     * @internal ICU 3.6
-     * @deprecated This API is ICU internal only.
      */
      static final int   TIMEZONE_SHORT_GENERIC  = 0,
                         TIMEZONE_SHORT_STANDARD = 1,
@@ -1742,7 +1742,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         return -1;
     }*/
 
-    /**
+    /*
      * Clones an array of Strings.
      * @param srcArray the source array to be cloned.
      * @return a cloned array.
@@ -1760,7 +1760,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         return aCopy;
     }
 
-    /**
+    /*
      * Compares the equality of the two arrays of String.
      * @param current this String array.
      * @param other that String array.
@@ -2067,7 +2067,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
             this.actualLocale : this.validLocale;
     }
 
-    /**
+    /*
      * Set information about the locales that were used to create this
      * object.  If the object was not constructed from locale data,
      * both arguments should be set to null.  Otherwise, neither
@@ -2082,8 +2082,6 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @see com.ibm.icu.util.ULocale
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
-     * @internal
-     * @deprecated This API is ICU internal only.
      */
     final void setLocale(ULocale valid, ULocale actual) {
         // Change the following to an assertion later
@@ -2098,20 +2096,16 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         this.actualLocale = actual;
     }
 
-    /**
+    /*
      * The most specific locale containing any resource data, or null.
      * @see com.ibm.icu.util.ULocale
-     * @internal
-     * @deprecated This API is ICU internal only.
      */
     private ULocale validLocale;
 
-    /**
+    /*
      * The locale containing data used to construct this object, or
      * null.
      * @see com.ibm.icu.util.ULocale
-     * @internal
-     * @deprecated This API is ICU internal only.
      */
     private ULocale actualLocale;
 
