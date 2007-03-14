@@ -17,7 +17,6 @@
 // Time bomb - allows temporary behavior that expires at a given
 //             release
 //--------------------------------------------------------------------
-static const UVersionInfo ICU_372 = {3,7,2,0};
 
 void IntlTestDateFormatSymbols::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
@@ -311,25 +310,18 @@ void IntlTestDateFormatSymbols::TestSymbols(/* char *par */)
     if( *en.getAmPmStrings(count) != *fr.getAmPmStrings(count)) {
         errln("ERROR: setAmPmStrings() failed");
     }
-    if ( isICUVersionAtLeast(ICU_372) ) {   // Time bomb here
-       errln("FAIL: Test get/set zone strings needs to be investigated to see why it crashes");
-       return;
-       int32_t rowCount = 0, columnCount = 0;
-       const UnicodeString **strings = en.getZoneStrings(rowCount, columnCount);
-       fr.setZoneStrings(strings, rowCount, columnCount);
-       const UnicodeString **strings1 = fr.getZoneStrings(rowCount, columnCount);
-       for(int32_t i = 0; i < rowCount; i++) {
-           for(int32_t j = 0; j < columnCount; j++) {
-               if( strings[i][j] != strings1[i][j] ) {
-                   errln("ERROR: setZoneStrings() failed");
-               }
-   
-           }
-       }
-    }
-    else
-       logln("Warning: Test get/set zone strings needs to be investigated to see why it crashes");
 
+    int32_t rowCount = 0, columnCount = 0;
+    const UnicodeString **strings = en.getZoneStrings(rowCount, columnCount);
+    fr.setZoneStrings(strings, rowCount, columnCount);
+    const UnicodeString **strings1 = fr.getZoneStrings(rowCount, columnCount);
+    for(int32_t i = 0; i < rowCount; i++) {
+       for(int32_t j = 0; j < columnCount; j++) {
+            if( strings[i][j] != strings1[i][j] ) {
+                errln("ERROR: setZoneStrings() failed");
+            }
+        }
+    }
 
     UnicodeString localPattern, pat1, pat2;
     localPattern = en.getLocalPatternChars(localPattern);
