@@ -3089,18 +3089,42 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
         private FormatConfiguration() {
         }
 
+        /**
+         * Gets the pattern string
+         * @return the format pattern string
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         public String getPatternString() {
             return pattern;
         }
 
+        /**
+         * Gets the calendar
+         * @return the calendar
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         public Calendar getCalendar() {
             return cal;
         }
 
+        /**
+         * Gets the locale
+         * @return the locale
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         public ULocale getLocale() {
             return loc;
         }
 
+        /**
+         * Gets the format symbols
+         * @return the format symbols
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         public DateFormatSymbols getDateFormatSymbols() {
             return formatData;
         }
@@ -5146,8 +5170,8 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * Return the current Calendar type.
      * Note, in 3.0 this function will return 'gregorian' in Calendar to emulate legacy behavior
      * @return type of calendar (gregorian, etc)
-     * @internal ICU 3.0
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public String getType() {
         return "gregorian";

@@ -885,9 +885,9 @@ public class GregorianCalendar extends Calendar {
 
     /**
      * Return the current Calendar type.
-     * @return type of calendar (gregorian, etc.)
-     * @internal ICU 3.0
-     * @deprecated This API is ICU internal only.
+     * @return type of calendar
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public String getType() {
         return "gregorian";
