@@ -52,9 +52,6 @@ public class JDKTimeZone extends TimeZone {
      * Constructs a JDKTimeZone given a java.util.TimeZone reference
      * which must not be null.
      * @param tz the time zone to wrap
-     * 
-     * @internal 
-     * @deprecated This API is ICU internal only.
      */
     public JDKTimeZone(java.util.TimeZone tz) {
         String id = tz.getID();
