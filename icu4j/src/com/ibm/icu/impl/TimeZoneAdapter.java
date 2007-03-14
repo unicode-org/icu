@@ -58,9 +58,6 @@ public class TimeZoneAdapter extends java.util.TimeZone {
 
     /**
      * Constructs an adapter for a com.ibm.icu.util.TimeZone object.
-     * 
-     * @internal
-     * @deprecated This API is ICU internal only.
      */
     public TimeZoneAdapter(TimeZone zone) {
         this.zone = zone;

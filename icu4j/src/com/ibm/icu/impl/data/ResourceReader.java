@@ -81,8 +81,10 @@ public class ResourceReader {
     }
 
     /**
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * Construct a reader object for the input stream associated with
+     * the given resource name.
+     * @param is the input stream of the resource
+     * @param resourceName the name of the resource
      */
      public ResourceReader(InputStream is, String resourceName) {
          this.root = null;
