@@ -718,9 +718,9 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
               if(uprv_strcmp(path, "LOCALE") == 0) {
                 /* this is an XPath alias, starting with "/LOCALE/" */
                 /* it contains the path to a resource which should be looked up */
-                /* starting in parent */
+                /* starting in the requested locale */
                 keyPath = locale; 
-                locale = parent->fData->fName; /* this is the parent's name */
+                locale = parent->fTopLevelData->fName; /* this is the requested locale's name */
                 path = realData->fPath; /* we will be looking in the same package */
               } else {
                 if(uprv_strcmp(path, "ICUDATA") == 0) { /* want ICU data */
