@@ -1899,7 +1899,6 @@ DateFormatSymbols::getMetazoneString(const UnicodeString &zid, const TimeZoneTra
                                  UnicodeString &result, UErrorCode &status)
 {
     UErrorCode tempStatus = U_ZERO_ERROR;
-    UnicodeString mzid;
     int32_t len;
 
     // Get the appropriate metazone mapping from the resource bundles
@@ -1927,43 +1926,42 @@ DateFormatSymbols::getMetazoneString(const UnicodeString &zid, const TimeZoneTra
     uprv_strcat(usesMetazoneKey,"/");
     uprv_strcat(usesMetazoneKey,UTZ_USES_METAZONE);
 
-    UResourceBundle *um = ures_getByKeyWithFallback(fResourceBundle, usesMetazoneKey, NULL, &tempStatus);
-    if (U_FAILURE(tempStatus) ) {
+    UResourceBundle *um = ures_getByKeyWithFallback(fResourceBundle, usesMetazoneKey, NULL, &status);
+    if (U_FAILURE(status)) {
         return result;
     }
 
     UnicodeString* stringsArray = (UnicodeString*)fZoneStringsHash->get(zid);
 
     if(stringsArray != NULL){
-        UnicodeString pattern = UNICODE_STRING_SIMPLE("yyyy-MM-dd HH:mm");
-        SimpleDateFormat *df = new SimpleDateFormat(pattern,tempStatus);
+        SimpleDateFormat df(UNICODE_STRING_SIMPLE("yyyy-MM-dd HH:mm"), Locale(""),tempStatus);
         TimeZone *tz = TimeZone::createTimeZone(zid);
-        df->setTimeZone(*tz);
+        df.setTimeZone(*tz);
         UnicodeString theTime;
-        df->format(cal.getTime(tempStatus),theTime);
-
+        df.format(cal.getTime(tempStatus),theTime);
 
         while (ures_hasNext(um)) {
-            UResourceBundle *mz = ures_getNextResource(um,NULL,&tempStatus);
-            UnicodeString mz_name = ures_getStringByIndex(mz,0,&len,&tempStatus);
-            UnicodeString mz_from = ures_getStringByIndex(mz,1,&len,&tempStatus);
-            UnicodeString mz_to   = ures_getStringByIndex(mz,2,&len,&tempStatus);
-            if(U_FAILURE(tempStatus)){
-                return result;
+            UResourceBundle *mz = ures_getNextResource(um,NULL,&status);
+            const UChar *mz_name = ures_getStringByIndex(mz,0,&len,&status);
+            const UChar *mz_from = ures_getStringByIndex(mz,1,&len,&status);
+            const UChar *mz_to   = ures_getStringByIndex(mz,2,&len,&status);
+            ures_close(mz);
+            if(U_FAILURE(status)){
+                break;
             }
 
-            if ( !mz_name.isEmpty() &&
-                mz_from <= theTime &&
-                mz_to > theTime )
+            if (mz_name[0] != 0 &&
+                UnicodeString(TRUE, mz_from, -1) <= theTime &&
+                UnicodeString(TRUE, mz_to, -1) > theTime )
             {
-                mzid = UNICODE_STRING_SIMPLE("meta/");
+                UnicodeString mzid(UNICODE_STRING_SIMPLE("meta/"));
                 mzid += mz_name;
-                status = U_ZERO_ERROR;
                 getZoneString(mzid,type,result,status);
-                return result;
+                break;
             }
         }
     } 
+    ures_close(um);
     return result;
 }
 StringEnumeration* 
