@@ -32,6 +32,24 @@ public class SimpleTimeZone extends JDKTimeZone {
     private static final long serialVersionUID = -7034676239311322769L;
 
     /**
+     * Constant for a mode of start or end time specified as local wall time.
+     * @stable ICU 3.8
+     */
+    public static final int WALL_TIME = 0;
+
+    /**
+     * Constant for a mode of start or end time specified as local standard time.
+     * @stable ICU 3.8
+     */
+    public static final int STANDARD_TIME = 1;
+
+    /**
+     * Constant for a mode of start or end time specified as UTC.
+     * @stable ICU 3.8
+     */
+    public static final int UTC_TIME = 2;
+
+    /**
      * Constructs a SimpleTimeZone with the given base time zone offset from GMT
      * and time zone ID. Timezone IDs can be obtained from
      * TimeZone.getAvailableIDs. Normally you should use TimeZone.getDefault to
@@ -130,6 +148,58 @@ public class SimpleTimeZone extends JDKTimeZone {
     }
 
     /**
+     * Construct a SimpleTimeZone with the given base time zone offset from
+     * GMT, time zone ID, time and its mode to start and end the daylight time.
+     * The mode specifies either {@link #WALL_TIME} or {@link #STANDARD_TIME}
+     * or {@link #UTC_TIME}.
+     * 
+     * @param rawOffset       The given base time zone offset to GMT.
+     * @param ID              The time zone ID which is obtained from
+     *                        TimeZone.getAvailableIDs.
+     * @param startMonth      The daylight savings starting month. Month is
+     *                        0-based. eg, 0 for January.
+     * @param startDay        The daylight savings starting
+     *                        day-of-week-in-month. Please see the member
+     *                        description for an example.
+     * @param startDayOfWeek  The daylight savings starting day-of-week. Please
+     *                        see the member description for an example.
+     * @param startTime       The daylight savings starting time in local wall
+     *                        time, which is standard time in this case. Please see the
+     *                        member description for an example.
+     * @param startTimeMode   The mode of the start time specified by startTime.
+     * @param endMonth        The daylight savings ending month. Month is
+     *                        0-based. eg, 0 for January.
+     * @param endDay          The daylight savings ending day-of-week-in-month.
+     *                        Please see the member description for an example.
+     * @param endDayOfWeek    The daylight savings ending day-of-week. Please
+     *                        see the member description for an example.
+     * @param endTime         The daylight savings ending time in local wall time,
+     *                        which is daylight time in this case. Please see the
+     *                        member description for an example.
+     * @param endTimeMode     The mode of the end time specified by endTime.
+     * @exception IllegalArgumentException the month, day, dayOfWeek, or time
+     * parameters are out of range for the start or end rule
+     * @stable ICU 3.8
+     */
+    public SimpleTimeZone(int raw,  String ID,
+                          int startMonth, int startDay,
+                          int startDayOfWeek, int startTime,
+                          int startTimeMode,
+                          int endMonth, int endDay,
+                          int endDayOfWeek, int endTime,
+                          int endTimeMode,int dst){
+        /*this(new java.util.SimpleTimeZone(rawOffsetGMT, ID, savingsStartMonth, savingsStartDay,
+                savingsStartDayOfWeek, savingsStartTime, savingsEndMonth,
+                savingsEndDay, savingsEndDayOfWeek, savingsEndTime, savingsDST), ID);*/
+        construct(raw,
+                  startMonth, startDay, startDayOfWeek,
+                  startTime, startTimeMode,
+                  endMonth, endDay, endDayOfWeek,
+                  endTime, endTimeMode,
+                  dst);
+    }
+
+    /**
      * Constructor.  This constructor is identical to the 10-argument
      * constructor, but also takes a dstSavings parameter.
      * @param dstSavings   The amount of time in ms saved during DST.
@@ -163,22 +233,20 @@ public class SimpleTimeZone extends JDKTimeZone {
     
 
     /**
-     * Set the raw offset.
+     * Sets the GMT offset for this time zone.
      *
      * @param offsetMillis the raw offset of the time zone
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public void setRawOffset(int offsetMillis) {
         raw = offsetMillis;
     }
   
     /**
-     * get the raw offset.
+     * Gets the GMT offset for this time zone.
      *
      * @return the raw offset
-     * @internal revisit for ICU 3.6
-     * @deprecated This API is ICU internal only.
+     * @stable ICU 3.8
      */
     public int getRawOffset() {
         return raw;
@@ -677,21 +745,6 @@ public class SimpleTimeZone extends JDKTimeZone {
         DOW_LE_DOM_MODE=4;
 
     /**
-     * TimeMode is used, together with a millisecond offset after
-     * midnight, to specify a rule transition time.  Most rules
-     * transition at a local wall time, that is, according to the
-     * current time in effect, either standard, or DST.  However, some
-     * rules transition at local standard time, and some at a specific
-     * UTC time.  Although it might seem that all times could be
-     * converted to wall time, thus eliminating the need for this
-     * parameter, this is not the case.
-     * @draft ICU 3.6
-     */
-     private static final int WALL_TIME = 0,
-                              STANDARD_TIME = 1,
-                              UTC_TIME = 2;
-
-    /**
      * Compare a given date in the year to a rule. Return 1, 0, or -1, depending
      * on whether the date is after, equal to, or before the rule date. The
      * millis are compared directly against the ruleMillis, so any
@@ -814,27 +867,6 @@ public class SimpleTimeZone extends JDKTimeZone {
         return gc.inDaylightTime();
     }
 
-    /**
-     * @internal revisit for ICU 3.6
-     * @deprecated This API is ICU internal only.
-     */
-    public SimpleTimeZone(int raw,  String ID,
-                          int startMonth, int startDay,
-                          int startDayOfWeek, int startTime,
-                          int startTimeMode,
-                          int endMonth, int endDay,
-                          int endDayOfWeek, int endTime,
-                          int endTimeMode,int dst){
-        /*this(new java.util.SimpleTimeZone(rawOffsetGMT, ID, savingsStartMonth, savingsStartDay,
-                savingsStartDayOfWeek, savingsStartTime, savingsEndMonth,
-                savingsEndDay, savingsEndDayOfWeek, savingsEndTime, savingsDST), ID);*/
-        construct(raw,
-                  startMonth, startDay, startDayOfWeek,
-                  startTime, startTimeMode,
-                  endMonth, endDay, endDayOfWeek,
-                  endTime, endTimeMode,
-                  dst);
-    }
 
 //  -------------------------------------
 /*
