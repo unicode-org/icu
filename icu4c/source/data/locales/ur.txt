@@ -99,11 +99,6 @@ ur{
             }
         }
         islamic{
-            fields{
-                dayperiod{
-                    dn{"رات/صبح"}
-                }
-            }
             monthNames{
                 format{
                     wide{
