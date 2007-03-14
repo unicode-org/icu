@@ -46,7 +46,6 @@ structLocale:table(nofallback){
         200{""}
         419{""}
         830{""}
-        833{""}
         AD{""}
         AE{""}
         AF{""}
@@ -1489,6 +1488,7 @@ structLocale:table(nofallback){
         dar{""}
         day{""}
         de{""}
+        de_AT{""}
         del{""}
         den{""}
         dgr{""}
@@ -1508,9 +1508,14 @@ structLocale:table(nofallback){
         el{""}
         elx{""}
         en{""}
+        en_AU{""}
+        en_CA{""}
+        en_GB{""}
+        en_US{""}
         enm{""}
         eo{""}
         es{""}
+        es_419{""}
         et{""}
         eu{""}
         ewo{""}
@@ -1525,6 +1530,8 @@ structLocale:table(nofallback){
         fo{""}
         fon{""}
         fr{""}
+        fr_CA{""}
+        fr_CH{""}
         frm{""}
         fro{""}
         frr{""}
@@ -1702,6 +1709,7 @@ structLocale:table(nofallback){
         nic{""}
         niu{""}
         nl{""}
+        nl_BE{""}
         nn{""}
         no{""}
         nog{""}
@@ -1742,6 +1750,7 @@ structLocale:table(nofallback){
         pro{""}
         ps{""}
         pt{""}
+        pt_BR{""}
         qu{""}
         raj{""}
         rap{""}
@@ -1870,6 +1879,8 @@ structLocale:table(nofallback){
         zap{""}
         zen{""}
         zh{""}
+        zh_Hans{""}
+        zh_Hant{""}
         znd{""}
         zu{""}
         zun{""}
