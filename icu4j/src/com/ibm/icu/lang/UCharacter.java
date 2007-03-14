@@ -3757,8 +3757,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param s string to format
      * @param separator string to go between names
      * @return string of names
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static String getName(String s, String separator) {
         if (s.length() == 1) { // handle common case

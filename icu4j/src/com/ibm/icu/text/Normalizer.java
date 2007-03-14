@@ -1759,8 +1759,8 @@ public final class Normalizer implements Cloneable {
      * Gets the FC_NFKC closure set from the normalization data
      * @param c The code point whose closure set is to be retrieved
      * @param dest The char array to recive the closure set
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static int getFC_NFKC_Closure(int c,char[] dest) {
         return NormalizerImpl.getFC_NFKC_Closure(c,dest);
@@ -1769,8 +1769,8 @@ public final class Normalizer implements Cloneable {
      * Gets the FC_NFKC closure set from the normalization data
      * @param c The the code point whose closure set is to be retrieved
      * @return String representation of the closure set
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */ 
     public static String getFC_NFKC_Closure(int c) {
         char[] dest = new char[10];
