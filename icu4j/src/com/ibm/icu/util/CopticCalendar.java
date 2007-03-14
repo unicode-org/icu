@@ -288,9 +288,9 @@ public final class CopticCalendar extends CECalendar
 
     /**
      * Return the current Calendar type.
-     * @return type of calendar (gregorian, etc.)
-     * @internal ICU 3.4
-     * @deprecated This API is ICU internal only.
+     * @return type of calendar
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public String getType() {
         return "coptic";
