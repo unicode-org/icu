@@ -16,6 +16,10 @@ import java.util.List;
  * Finds all updatable ICU4J jars in a set of specified directories.
  */
 public class ICUJarFinder {
+
+    /**
+     * An empty constructor that restricts construction.
+     */
     private ICUJarFinder() {
     }
 

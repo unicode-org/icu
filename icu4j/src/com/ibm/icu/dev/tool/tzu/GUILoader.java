@@ -320,30 +320,70 @@ public class GUILoader {
             }
     }
 
+    /**
+     * The thread that partakes in the searching and updating.
+     */
     private Thread workerThread = null;
 
+    /**
+     * Whether the paths frame has been closed or not.
+     */
     private boolean pathClosed = false;
 
+    /**
+     * Whether the results frame has been closed or not.
+     */
     private boolean resultClosed = true;
 
+    /**
+     * The path model that stores all the paths and takes care of searching.
+     */
     private PathModel pathModel;
 
-    private PathComponent pathGUI;
-
+    /**
+     * The result model that stores all the results and takes care of updating.
+     */
     private ResultModel resultModel;
 
+    /**
+     * The source model that stores all the update sources and accesses the
+     * repository for more sources.
+     */
     private SourceModel sourceModel;
 
+    /**
+     * The component that allows the user to interact with the path model.
+     */
+    private PathComponent pathGUI;
+
+    /**
+     * The component that allows the user to interact with the result model.
+     */
     private ResultComponent resultGUI;
 
+    /**
+     * The frame that displays the path model component (<code>pathGUI</code>).
+     */
     private JFrame pathFrame;
 
+    /**
+     * The frame that displays the result model component (<code>resultGUI</code>).
+     */
     private JFrame resultFrame;
 
+    /**
+     * The backup directory to store files.
+     */
     private File backupDir;
 
+    /**
+     * The tool's home directory.
+     */
     private File curDir;
 
+    /**
+     * The current logger.
+     */
     private Logger logger;
 
     /**

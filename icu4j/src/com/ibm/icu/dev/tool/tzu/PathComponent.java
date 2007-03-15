@@ -168,10 +168,23 @@ public class PathComponent extends JComponent {
         });
     }
 
+    /**
+     * Returns whether the user has specified to include or to exclude the
+     * entered path.
+     * 
+     * @return Whether the user has specified to include or to exclude the
+     *         entered path.
+     */
     private boolean isIncluded() {
         return ((String) pathSignBox.getSelectedItem()).equals("Include");
     }
 
+    /**
+     * Attempts to add a path to the path model.
+     * 
+     * @param file
+     *            The path to add.
+     */
     private void addFile(File file) {
         if (!pathModel.add(new IncludePath(file, isIncluded())))
             JOptionPane.showMessageDialog(PathComponent.this, "\""
@@ -200,43 +213,102 @@ public class PathComponent extends JComponent {
         pathList.setModel(pathModel);
     }
 
+    /**
+     * The panel to hold the input components.
+     */
     private JPanel pathInputPanel = new JPanel();
 
+    /**
+     * The panel to hold the output components.
+     */
     private JPanel pathOptionPanel = new JPanel();
 
+    /**
+     * The panel to hold the search components.
+     */
     private JPanel pathSearchPanel = new JPanel();
 
+    /**
+     * The JList that holds the path model.
+     */
     private JList pathList = new JList();
 
+    /**
+     * The combobox where a user specifies whether to include or to exclude an
+     * entered path.
+     */
     private JComboBox pathSignBox = new JComboBox(new Object[] { "Include",
             "Exclude" });
 
+    /**
+     * The field where the user can enter a path.
+     */
     private JTextField pathField = new JTextField(30);
 
+    /**
+     * The checkbox where the user can specify whether or not to search
+     * subdirectories. Set to true by default.
+     */
     private JCheckBox pathSubdirOption = new JCheckBox("Search Subdirectories",
             true);
 
+    /**
+     * The browse button where the user can browse for a particular path.
+     */
     private JButton pathBrowseButton = new JButton("Browse...");
 
+    /**
+     * The search button that starts the search on the selected paths (or all
+     * the paths if none are selected).
+     */
     private JButton pathSearchButton = new JButton("Search");
 
+    /**
+     * The browse dialog that pops up when the browse button is clicked.
+     */
     private JFileChooser pathChooser = new JFileChooser();
 
+    /**
+     * The context menu for extra options.
+     */
     private JPopupMenu pathPopup = new JPopupMenu();
 
+    /**
+     * A menu item for <code>pathPopup</code> to add all drives to the path
+     * model.
+     */
     private JMenuItem pathAddAllDrivesItem = new JMenuItem(
             "Add All Drives to List");
 
+    /**
+     * A menu item for <code>pathPopup</code> to remove the selected paths
+     * from the path model.
+     */
     private JMenuItem pathRemoveSelectedItem = new JMenuItem(
             "Remove Selected Items");
 
+    /**
+     * A menu item for <code>pathPopup</code> to remove all paths from the
+     * path model.
+     */
     private JMenuItem pathRemoveAllItem = new JMenuItem("Remove All");
 
+    /**
+     * A menu item for <code>pathPopup</code> to begin a search on all paths
+     * in the path model.
+     */
     private JMenuItem pathSearchSelectedItem = new JMenuItem(
             "Search Selected Items");
 
+    /**
+     * A menu item for <code>pathPopup</code> to begin a search on the
+     * selected paths in the path model.
+     */
     private JMenuItem pathSearchAllItem = new JMenuItem("Search All");
 
+    /**
+     * The path model that stores all the paths.
+     */
     private PathModel pathModel;
 
     /**
