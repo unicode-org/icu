@@ -68,7 +68,13 @@ public class IncludePath {
                 .equals(((IncludePath) other).path);
     }
 
+    /**
+     * The path represented by this IncludePath.
+     */
     private File path;
 
+    /**
+     * Whether to include or exclude the path represented by this IncludePath.
+     */
     private boolean include;
 }

@@ -16,7 +16,9 @@ import javax.swing.JOptionPane;
 
 /**
  * A singleton object that handles output to the screen and to a log file. Get
- * the current instance of the logger with <code>getInstance</code>,
+ * the current instance of the logger with <code>getInstance</code> and use
+ * the output functions to output to the screen, the log file, the status bar,
+ * and in dialog messages.
  */
 public class Logger {
 
@@ -39,9 +41,9 @@ public class Logger {
     private Logger(String filename, int verbosity, JLabel statusBar,
             Component dialogParent) throws FileNotFoundException {
         System.out.println("Log file: " + filename);
-        if (this.log != null)
-            this.log.close();
-        this.log = new PrintStream(new FileOutputStream(filename));
+        if (this.fileStream != null)
+            this.fileStream.close();
+        this.fileStream = new PrintStream(new FileOutputStream(filename));
         this.verbosity = verbosity;
         this.statusBar = statusBar;
         this.dialogParent = dialogParent;
@@ -50,7 +52,9 @@ public class Logger {
     /**
      * Gets the instance of the logger, constructing a new one with
      * <code>filename</code> and <code>verbosity</code> if one is not
-     * already constructed.
+     * already constructed. If a statusbar is given, status messages will be
+     * sent to it. If a dialogParent is specified, dialog messages will be
+     * displayed.
      * 
      * @param filename
      *            The filename to use for logging output.
@@ -174,8 +178,8 @@ public class Logger {
      *            The message to print.
      */
     public void logToFile(String message) {
-        if (log != null)
-            log.print(message);
+        if (fileStream != null)
+            fileStream.print(message);
     }
 
     /**
@@ -185,8 +189,8 @@ public class Logger {
      *            The message to print.
      */
     public void loglnToFile(String message) {
-        if (log != null)
-            log.println(message);
+        if (fileStream != null)
+            fileStream.println(message);
     }
 
     /**
@@ -244,8 +248,8 @@ public class Logger {
      */
     public void error(String message) {
         System.err.print(message);
-        if (log != null)
-            log.print(message);
+        if (fileStream != null)
+            fileStream.print(message);
     }
 
     /**
@@ -257,8 +261,8 @@ public class Logger {
      */
     public void errorln(String message) {
         System.err.println(message);
-        if (log != null)
-            log.println(message);
+        if (fileStream != null)
+            fileStream.println(message);
     }
 
     /**
@@ -319,13 +323,28 @@ public class Logger {
      */
     public static final String DEFAULT_FILENAME = "icutzu.log";
 
+    /**
+     * The verbosity of the logger.
+     */
     private int verbosity = NORMAL;
 
-    private PrintStream log = null;
+    /**
+     * The means of output to the log file.
+     */
+    private PrintStream fileStream = null;
 
+    /**
+     * The status bar to display status messages.
+     */
     private JLabel statusBar = null;
 
+    /**
+     * The parent to use when displaying a dialog.
+     */
     private Component dialogParent = null;
 
+    /**
+     * The single instance of the logger.
+     */
     private static Logger logger = null;
 }

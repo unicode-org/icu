@@ -35,8 +35,8 @@ class PathModel extends AbstractListModel {
      */
     public PathModel(Logger logger, File pathFile) {
         this.logger = logger;
-        this.pathFile = pathFile;
-        this.pathFilename = pathFile.getName();
+        this.pathListFile = pathFile;
+        this.pathListFilename = pathFile.getName();
     }
 
     /**
@@ -237,8 +237,8 @@ class PathModel extends AbstractListModel {
      * @throws IllegalArgumentException
      */
     public void loadPaths() throws IOException, IllegalArgumentException {
-        logger.printlnToScreen("Scanning " + pathFilename + " file...");
-        logger.printlnToScreen(pathFilename + " file contains");
+        logger.printlnToScreen("Scanning " + pathListFilename + " file...");
+        logger.printlnToScreen(pathListFilename + " file contains");
 
         BufferedReader reader = null;
         int lineNumber = 1;
@@ -246,7 +246,7 @@ class PathModel extends AbstractListModel {
         char sign;
 
         try {
-            reader = new BufferedReader(new FileReader(pathFile));
+            reader = new BufferedReader(new FileReader(pathListFile));
             while (reader.ready()) {
                 line = reader.readLine().trim();
 
@@ -270,9 +270,9 @@ class PathModel extends AbstractListModel {
                 lineNumber++;
             }
         } catch (FileNotFoundException ex) {
-            pathListError("The " + pathFilename + " file doesn't exist.");
+            pathListError("The " + pathListFilename + " file doesn't exist.");
         } catch (IOException ex) {
-            pathListError("Could not read the " + pathFilename + " file.");
+            pathListError("Could not read the " + pathListFilename + " file.");
         } finally {
             try {
                 if (reader != null)
@@ -294,7 +294,7 @@ class PathModel extends AbstractListModel {
      */
     private void pathListError(String message, int lineNumber)
             throws IllegalArgumentException {
-        throw new IllegalArgumentException("Error in " + pathFilename
+        throw new IllegalArgumentException("Error in " + pathListFilename
                 + " (line " + lineNumber + "): " + message);
     }
 
@@ -306,15 +306,27 @@ class PathModel extends AbstractListModel {
      * @throws IOException
      */
     private void pathListError(String message) throws IOException {
-        throw new IOException("Error in " + pathFilename + ": " + message);
+        throw new IOException("Error in " + pathListFilename + ": " + message);
     }
 
-    private String pathFilename;
+    /**
+     * The filename of the paths file where the paths are stored.
+     */
+    private String pathListFilename;
 
-    private File pathFile;
+    /**
+     * The paths file where the paths are stored.
+     */
+    private File pathListFile;
 
-    private List list = new ArrayList(); // list of paths (Files)
+    /**
+     * The list of paths as IncludePaths.
+     */
+    private List list = new ArrayList();
 
+    /**
+     * The current logger.
+     */
     private Logger logger;
 
     /**

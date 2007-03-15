@@ -726,15 +726,33 @@ public class ICUFile {
     public static final String TZ_ENTRY_FILENAME = TZ_ENTRY_FILENAME_PREFIX
             + TZ_ENTRY_FILENAME_EXTENSION;
 
+    /**
+     * The buffer size to use for copying data.
+     */
     private static final int BUFFER_SIZE = 1024;
 
+    /**
+     * The ICU4J jar file represented by this ICUFile.
+     */
     private File icuFile;
 
+    /**
+     * The ICU version of the ICU4J jar.
+     */
     private String icuVersion;
 
+    /**
+     * The version of the timezone resource inside the ICU4J jar.
+     */
     private String tzVersion;
 
+    /**
+     * The entry for the timezone resource inside the ICU4J jar.
+     */
     private JarEntry tzEntry;
 
+    /**
+     * The current logger.
+     */
     private Logger logger;
 }
