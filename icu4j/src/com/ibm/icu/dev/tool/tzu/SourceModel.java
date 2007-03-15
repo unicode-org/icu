@@ -292,9 +292,19 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
      */
     public static final long serialVersionUID = 1339;
 
+    /**
+     * The currently selected timezone resource name. Initially set to
+     * <code>TZ_LOCAL_CHOICE</code>.
+     */
     private Object selected = TZ_LOCAL_CHOICE;
 
+    /**
+     * The map of timezone resource names to their respective URL locations.
+     */
     private TreeMap urlMap = new TreeMap();
 
+    /**
+     * The current logger.
+     */
     private Logger logger;
 }
