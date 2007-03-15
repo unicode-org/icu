@@ -38,8 +38,8 @@ class ResultModel extends AbstractTableModel {
      */
     public ResultModel(Logger logger, File resultFile) {
         this.logger = logger;
-        this.resultFile = resultFile;
-        this.resultFilename = resultFile.getName();
+        this.resultListFile = resultFile;
+        this.resultListFilename = resultFile.getName();
     }
 
     /**
@@ -208,6 +208,16 @@ class ResultModel extends AbstractTableModel {
         removeAll(completeList, !hidden);
     }
 
+    /**
+     * Adds a given ICUFile to the given list.
+     * 
+     * @param list
+     *            The list to add to.
+     * @param fire
+     *            Whether to fire off an event for this adding.
+     * @param entry
+     *            The ICUFile to add.
+     */
     private void add(List list, boolean fire, ICUFile entry) {
         remove(list, fire, entry.getFile());
         list.add(entry);
@@ -216,6 +226,16 @@ class ResultModel extends AbstractTableModel {
             fireTableRowsInserted(index, index);
     }
 
+    /**
+     * Removes a given ICUFile from the given list.
+     * 
+     * @param list
+     *            The list to remove from.
+     * @param fire
+     *            Whether to fire off an event for this removal.
+     * @param entry
+     *            The ICUFile to remove.
+     */
     private void remove(List list, boolean fire, File file) {
         if (list.size() > 0) {
             Iterator iter = list.iterator();
@@ -233,6 +253,16 @@ class ResultModel extends AbstractTableModel {
         }
     }
 
+    /**
+     * Removes a selection of ICUFiles from the given list.
+     * 
+     * @param list
+     *            The list to remove from.
+     * @param fire
+     *            Whether to fire off events for removals.
+     * @param indices
+     *            The indices of ICUFiles in the list to remove.
+     */
     private void remove(List list, boolean fire, int[] indices) {
         if (list.size() > 0 && indices.length > 0) {
             Arrays.sort(indices);
@@ -245,6 +275,14 @@ class ResultModel extends AbstractTableModel {
         }
     }
 
+    /**
+     * Removes all ICUFiles from the given list.
+     * 
+     * @param list
+     *            The list to remove from.
+     * @param fire
+     *            Whether to fire off events for removals.
+     */
     private void removeAll(List list, boolean fire) {
         if (list.size() > 0) {
             int index = list.size() - 1;
@@ -365,8 +403,8 @@ class ResultModel extends AbstractTableModel {
      * @throws IllegalArgumentException
      */
     public void loadResults() throws IOException, IllegalArgumentException {
-        logger.printlnToScreen("Scanning " + resultFilename + " file...");
-        logger.printlnToScreen(resultFilename + " file contains");
+        logger.printlnToScreen("Scanning " + resultListFilename + " file...");
+        logger.printlnToScreen(resultListFilename + " file contains");
 
         BufferedReader reader = null;
         int lineNumber = 1;
@@ -375,7 +413,7 @@ class ResultModel extends AbstractTableModel {
         String filename;
 
         try {
-            reader = new BufferedReader(new FileReader(resultFile));
+            reader = new BufferedReader(new FileReader(resultListFile));
             while (reader.ready()) {
                 line = reader.readLine().trim();
                 logger.printlnToScreen(line);
@@ -390,11 +428,11 @@ class ResultModel extends AbstractTableModel {
             }
         } catch (FileNotFoundException ex) {
             resultListError("The "
-                    + resultFilename
+                    + resultListFilename
                     + " file doesn't exist. Please re-run the tool with -Ddiscoveronly=true option to generate the list of ICU4J jars.");
         } catch (IOException ex) {
             resultListError("Could not read the "
-                    + resultFilename
+                    + resultListFilename
                     + " file. Please re-run the tool with -Ddiscoveronly=true option to generate the list of ICU4J jars.");
         } finally {
             try {
@@ -413,12 +451,12 @@ class ResultModel extends AbstractTableModel {
      * @throws IllegalArgumentException
      */
     public void saveResults() throws IOException, IllegalArgumentException {
-        logger.printlnToScreen("Saving to file " + resultFilename + " ...");
+        logger.printlnToScreen("Saving to file " + resultListFilename + " ...");
         BufferedWriter writer = null;
         ICUFile icuFile = null;
 
         try {
-            writer = new BufferedWriter(new FileWriter(resultFile));
+            writer = new BufferedWriter(new FileWriter(resultListFile));
             Iterator iter = (hidden ? permissibleList : completeList)
                     .iterator();
             while (iter.hasNext()) {
@@ -429,9 +467,10 @@ class ResultModel extends AbstractTableModel {
                 writer.write(line);
             }
         } catch (FileNotFoundException ex) {
-            resultListError("Could not create the " + resultFilename + " file.");
+            resultListError("Could not create the " + resultListFilename
+                    + " file.");
         } catch (IOException ex) {
-            resultListError("Could not write to the " + resultFilename
+            resultListError("Could not write to the " + resultListFilename
                     + " file.");
         } finally {
             try {
@@ -454,7 +493,7 @@ class ResultModel extends AbstractTableModel {
      */
     private void resultListError(String message, int lineNumber)
             throws IllegalArgumentException {
-        throw new IllegalArgumentException("Error in " + resultFilename
+        throw new IllegalArgumentException("Error in " + resultListFilename
                 + " (line " + lineNumber + "): " + message);
     }
 
@@ -466,7 +505,7 @@ class ResultModel extends AbstractTableModel {
      * @throws IllegalArgumentException
      */
     private void resultListError(String message) throws IOException {
-        throw new IOException("Error in " + resultFilename + ": " + message);
+        throw new IOException("Error in " + resultListFilename + ": " + message);
     }
 
     /**
@@ -505,16 +544,35 @@ class ResultModel extends AbstractTableModel {
      */
     public static final int COLUMN_WRITABLE = 5;
 
+    /**
+     * The complete list of ICUFiles represented by this result model.
+     */
     private List completeList = new ArrayList();
 
+    /**
+     * The list of only ICUFiles that are readable and writable.
+     */
     private List permissibleList = new ArrayList();
 
+    /**
+     * If hidden is true, only ICUFiles that are readable and writable are
+     * active. Otherwise, all ICUFiles are readable and active.
+     */
     private boolean hidden = true;
 
-    private File resultFile;
+    /**
+     * The result list file where results are saved and stored.
+     */
+    private File resultListFile;
 
-    private String resultFilename;
+    /**
+     * The filename of the result list file where results are saved and stored.
+     */
+    private String resultListFilename;
 
+    /**
+     * The current logger.
+     */
     private Logger logger;
 
     /**
