@@ -1929,8 +1929,8 @@ DateFormatSymbols::getMetazoneString(const UnicodeString &zid, const TimeZoneTra
     uprv_strcat(usesMetazoneKey,"/");
     uprv_strcat(usesMetazoneKey,UTZ_USES_METAZONE);
 
-    UResourceBundle *um = ures_getByKeyWithFallback(fResourceBundle, usesMetazoneKey, NULL, &status);
-    if (U_FAILURE(status)) {
+    UResourceBundle *um = ures_getByKeyWithFallback(fResourceBundle, usesMetazoneKey, NULL, &tempStatus);
+    if (U_FAILURE(tempStatus)) {
         return result;
     }
 
