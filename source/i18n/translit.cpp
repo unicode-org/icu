@@ -1480,7 +1480,7 @@ UBool Transliterator::initializeRegistry() {
     //static const char translit_index[] = "translit_index";
 
     UResourceBundle *bundle, *transIDs, *colBund;
-    bundle = ures_open(U_ICUDATA_TRANSLIT, NULL/*open root bundle*/, &status);
+    bundle = ures_open(U_ICUDATA_TRANSLIT, NULL/*open default locale*/, &status);
     transIDs = ures_getByKey(bundle, RB_RULE_BASED_IDS, 0, &status);
 
     int32_t row, maxRows;
