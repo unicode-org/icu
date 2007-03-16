@@ -26,23 +26,14 @@ IF EXIST "%ICUTZU_HOME%Temp" GOTO TempAlreadyExists
 mkdir "%ICUTZU_HOME%Temp"
 :TempAlreadyExists
 
-rem Collect all the arguments in this batch into a single variable.
-SET ARGS=
-:CollectArguments
-IF /I "%1"=="" GOTO :DoneCollectingArguments
-SET ARGS=%ARGS% %1
-SHIFT /1
-GOTO CollectArguments
-:DoneCollectingArguments
-
 
 
 rem Run the ICUTZU tool.
 @echo.
 @echo Launching the ICU4J Time Zone Update Utility (ICUTZU)...
-@echo "%JAVA_HOME%\bin\java.exe" -cp "%ICUTZU_HOME%icu4j.jar";"%ICUTZU_HOME%icutzu.jar" -Dnogui=%NOGUI% -Ddiscoveronly=%DISCOVERONLY% -Dsilentpatch=%SILENTPATCH% com.ibm.icu.dev.tool.tzu.ICUTZUMain "%ICUTZU_HOME%\" DirectorySearch.txt ICUList.txt zoneinfo.res Temp icu.gif%ARGS%
+@echo "%JAVA_HOME%\bin\java.exe" -cp "%ICUTZU_HOME%icu4j.jar;%ICUTZU_HOME%icutzu.jar" -Dnogui=%NOGUI% -Ddiscoveronly=%DISCOVERONLY% -Dsilentpatch=%SILENTPATCH% -Doffline=%OFFLINE% com.ibm.icu.dev.tool.tzu.ICUTZUMain "%ICUTZU_HOME%\" DirectorySearch.txt ICUList.txt zoneinfo.res Temp icu.gif
 @echo.
-"%JAVA_HOME%\bin\java.exe" -cp "%ICUTZU_HOME%icu4j.jar";"%ICUTZU_HOME%icutzu.jar" -Dnogui=%NOGUI% -Ddiscoveronly=%DISCOVERONLY% -Dsilentpatch=%SILENTPATCH% com.ibm.icu.dev.tool.tzu.ICUTZUMain "%ICUTZU_HOME%\" DirectorySearch.txt ICUList.txt zoneinfo.res Temp icu.gif%ARGS%
+"%JAVA_HOME%\bin\java.exe" -cp "%ICUTZU_HOME%icu4j.jar;%ICUTZU_HOME%icutzu.jar" -Dnogui=%NOGUI% -Ddiscoveronly=%DISCOVERONLY% -Dsilentpatch=%SILENTPATCH% -Doffline=%OFFLINE% com.ibm.icu.dev.tool.tzu.ICUTZUMain "%ICUTZU_HOME%\" DirectorySearch.txt ICUList.txt zoneinfo.res Temp icu.gif
 IF ERRORLEVEL==0 GOTO Success
 GOTO Failure
 

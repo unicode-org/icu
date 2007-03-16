@@ -184,8 +184,10 @@ public class GUILoader {
             pathModel.addAllDrives();
         }
 
-        // find sources for updating
-        sourceModel.findSources();
+        // if the offline is not set to true, populate the list of available
+        // timezone resource versions
+        if (!"true".equals(System.getProperty("offline")))
+            sourceModel.findSources();
 
         // make sure that search and update cancelation is disabled (since we
         // are initially neither updating nor searching, so there is nothing to
