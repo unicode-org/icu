@@ -30,6 +30,70 @@ import javax.swing.text.html.parser.ParserDelegator;
  */
 class SourceModel extends AbstractListModel implements ComboBoxModel {
     /**
+     * The serializable UID.
+     */
+    public static final long serialVersionUID = 1339;
+
+    /**
+     * The URL of the ICU Timezone Repository. In order to catch a
+     * MalformedURLException, this field must be initialized by the constructor.
+     */
+    public static URL TZ_BASE_URL = null;
+
+    /**
+     * The end of a URL string to any timezone resource in the ICU Timezone
+     * Repository meant for ICU4J.
+     */
+    public static final String TZ_BASE_URLSTRING_END = "/be/zoneinfo.res";
+
+    /**
+     * The URL string of the ICU Timezone Repository.
+     */
+    public static final String TZ_BASE_URLSTRING_START = "http://source.icu-project.org/repos/icu/data/trunk/tzdata/icu/";
+
+    /**
+     * The readable name of the local timezone resource file, ie. "Local Copy"
+     * or "Local Copy (2007c)". Since the version is determined by a
+     * <code>ICUFile.findFileTZVersion</code>, this field must be initialized
+     * by the constructor.
+     */
+    public static String TZ_LOCAL_CHOICE = null;
+
+    /**
+     * The URL of the local timezone resource file. In order to catch a
+     * MalformedURLException, this field must be initialized by the constructor.
+     */
+    public static URL TZ_LOCAL_URL = null;
+
+    /**
+     * The version of the local timezone resource file, ie. "2007c". Since the
+     * version is determined by a <code>ICUFile.findFileTZVersion</code>,
+     * this field must be initialized by the constructor.
+     */
+    public static String TZ_LOCAL_VERSION = null;
+
+    /**
+     * The local timezone resource file.
+     */
+    public static File tzLocalFile = null;
+
+    /**
+     * The current logger.
+     */
+    private Logger logger;
+
+    /**
+     * The currently selected timezone resource name. Initially set to
+     * <code>TZ_LOCAL_CHOICE</code>.
+     */
+    private Object selected = TZ_LOCAL_CHOICE;
+
+    /**
+     * The map of timezone resource names to their respective URL locations.
+     */
+    private TreeMap urlMap = new TreeMap();
+
+    /**
      * Constructs a source model.
      * 
      * @param logger
@@ -86,15 +150,17 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
             // create an html callback function to parse through every list item
             // (every list item
             HTMLEditorKit.ParserCallback htmlCallback = new HTMLEditorKit.ParserCallback() {
-                public void handleStartTag(HTML.Tag tag,
-                        MutableAttributeSet attr, int pos) {
-                    if (tag == HTML.Tag.LI)
-                        listItem = true;
-                }
+                private boolean listItem = false;
 
                 public void handleEndTag(HTML.Tag tag, int pos) {
                     if (tag == HTML.Tag.LI)
                         listItem = false;
+                }
+
+                public void handleStartTag(HTML.Tag tag,
+                        MutableAttributeSet attr, int pos) {
+                    if (tag == HTML.Tag.LI)
+                        listItem = true;
                 }
 
                 public void handleText(char[] data, int pos) {
@@ -123,8 +189,6 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
                             }
                     }
                 }
-
-                private boolean listItem = false;
             };
 
             new ParserDelegator().parse(reader, htmlCallback, false);
@@ -148,27 +212,6 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
     }
 
     /**
-     * Returns an iterator on the entry set of the url map. Each item iterated
-     * will be of type Map.Entry, whos key is a String and value is a URL.
-     * 
-     * @return An iterator as described above.
-     */
-    public Iterator iterator() {
-        return urlMap.entrySet().iterator();
-    }
-
-    /**
-     * Gets the number of timezone resources currently stored by the source
-     * model. There will always be at least one.
-     * 
-     * @return The number of timezone resources.
-     */
-    public int getSize() {
-        // the added size (+1) is due to the local copy not being inside the map
-        return urlMap.size() + 1;
-    }
-
-    /**
      * Returns the name of the timezone resource at the given index.
      * 
      * @param index
@@ -186,6 +229,28 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
                 iter.next();
             return iter.next();
         }
+    }
+
+    /**
+     * Returns the selected timezone resource name. If
+     * <code>setSelectedItem</code> is never called externally, then this is
+     * also the best available timezone resource (the most recent version).
+     * 
+     * @return The selected timezone resource name.
+     */
+    public Object getSelectedItem() {
+        return selected;
+    }
+
+    /**
+     * Gets the number of timezone resources currently stored by the source
+     * model. There will always be at least one.
+     * 
+     * @return The number of timezone resources.
+     */
+    public int getSize() {
+        // the added size (+1) is due to the local copy not being inside the map
+        return urlMap.size() + 1;
     }
 
     /**
@@ -224,14 +289,13 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
     }
 
     /**
-     * Returns the selected timezone resource name. If
-     * <code>setSelectedItem</code> is never called externally, then this is
-     * also the best available timezone resource (the most recent version).
+     * Returns an iterator on the entry set of the url map. Each item iterated
+     * will be of type Map.Entry, whos key is a String and value is a URL.
      * 
-     * @return The selected timezone resource name.
+     * @return An iterator as described above.
      */
-    public Object getSelectedItem() {
-        return selected;
+    public Iterator iterator() {
+        return urlMap.entrySet().iterator();
     }
 
     /**
@@ -243,68 +307,4 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
     public void setSelectedItem(Object selected) {
         this.selected = selected;
     }
-
-    /**
-     * The local timezone resource file.
-     */
-    public static File tzLocalFile = null;
-
-    /**
-     * The version of the local timezone resource file, ie. "2007c". Since the
-     * version is determined by a <code>ICUFile.findFileTZVersion</code>,
-     * this field must be initialized by the constructor.
-     */
-    public static String TZ_LOCAL_VERSION = null;
-
-    /**
-     * The readable name of the local timezone resource file, ie. "Local Copy"
-     * or "Local Copy (2007c)". Since the version is determined by a
-     * <code>ICUFile.findFileTZVersion</code>, this field must be initialized
-     * by the constructor.
-     */
-    public static String TZ_LOCAL_CHOICE;
-
-    /**
-     * The URL string of the ICU Timezone Repository.
-     */
-    public static final String TZ_BASE_URLSTRING_START = "http://source.icu-project.org/repos/icu/data/trunk/tzdata/icu/";
-
-    /**
-     * The end of a URL string to any timezone resource in the ICU Timezone
-     * Repository meant for ICU4J.
-     */
-    public static final String TZ_BASE_URLSTRING_END = "/be/zoneinfo.res";
-
-    /**
-     * The URL of the ICU Timezone Repository. In order to catch a
-     * MalformedURLException, this field must be initialized by the constructor.
-     */
-    public static URL TZ_BASE_URL = null;
-
-    /**
-     * The URL of the local timezone resource file. In order to catch a
-     * MalformedURLException, this field must be initialized by the constructor.
-     */
-    public static URL TZ_LOCAL_URL = null;
-
-    /**
-     * The serializable UID.
-     */
-    public static final long serialVersionUID = 1339;
-
-    /**
-     * The currently selected timezone resource name. Initially set to
-     * <code>TZ_LOCAL_CHOICE</code>.
-     */
-    private Object selected = TZ_LOCAL_CHOICE;
-
-    /**
-     * The map of timezone resource names to their respective URL locations.
-     */
-    private TreeMap urlMap = new TreeMap();
-
-    /**
-     * The current logger.
-     */
-    private Logger logger;
 }

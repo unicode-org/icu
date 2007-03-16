@@ -26,6 +26,31 @@ import javax.swing.AbstractListModel;
  */
 class PathModel extends AbstractListModel {
     /**
+     * The serializable UID.
+     */
+    public static final long serialVersionUID = 1337;
+
+    /**
+     * The list of paths as IncludePaths.
+     */
+    private List list = new ArrayList();
+
+    /**
+     * The current logger.
+     */
+    private Logger logger;
+
+    /**
+     * The paths file where the paths are stored.
+     */
+    private File pathListFile;
+
+    /**
+     * The filename of the paths file where the paths are stored.
+     */
+    private String pathListFilename;
+
+    /**
      * Constructs an empty path model.
      * 
      * @param pathFile
@@ -40,33 +65,23 @@ class PathModel extends AbstractListModel {
     }
 
     /**
-     * Returns an iterator of the path list.
+     * Adds an IncludePath to the path list if it exists and is unique.
      * 
-     * @return An iterator of the path list.
+     * @param path
+     *            An existing path.
+     * @return Whether or not the given IncludePath exists.
      */
-    public Iterator iterator() {
-        return list.iterator();
-    }
+    public boolean add(IncludePath path) {
+        remove(path);
 
-    /**
-     * Returns the path at the element at a particular index of the path list.
-     * 
-     * @param index
-     *            The index of the element of the path list to return.
-     * @return The path at the specified index of the path list. Guaranteed to
-     *         always be an IncludePath.
-     */
-    public Object getElementAt(int index) {
-        return list.get(index);
-    }
+        if (path.getPath().exists()) {
+            list.add(path);
+            int index = list.size() - 1;
+            fireIntervalAdded(this, index, index);
+            return true;
+        }
 
-    /**
-     * Returns the size of the path list.
-     * 
-     * @return The size of the path list.
-     */
-    public int getSize() {
-        return (list == null) ? 0 : list.size();
+        return false;
     }
 
     /**
@@ -94,32 +109,95 @@ class PathModel extends AbstractListModel {
     }
 
     /**
-     * Adds an IncludePath to the path list if it exists and is unique.
-     * 
-     * @param path
-     *            An existing path.
-     * @return Whether or not the given IncludePath exists.
-     */
-    public boolean add(IncludePath path) {
-        remove(path);
-
-        if (path.getPath().exists()) {
-            list.add(path);
-            int index = list.size() - 1;
-            fireIntervalAdded(this, index, index);
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * Adds all drives to the path list.
      */
     public void addAllDrives() {
         File[] roots = File.listRoots();
         for (int i = 0; i < roots.length; i++)
             add(new IncludePath(roots[i], true));
+    }
+
+    /**
+     * Returns the path at the element at a particular index of the path list.
+     * 
+     * @param index
+     *            The index of the element of the path list to return.
+     * @return The path at the specified index of the path list. Guaranteed to
+     *         always be an IncludePath.
+     */
+    public Object getElementAt(int index) {
+        return list.get(index);
+    }
+
+    /**
+     * Returns the size of the path list.
+     * 
+     * @return The size of the path list.
+     */
+    public int getSize() {
+        return (list == null) ? 0 : list.size();
+    }
+
+    /**
+     * Returns an iterator of the path list.
+     * 
+     * @return An iterator of the path list.
+     */
+    public Iterator iterator() {
+        return list.iterator();
+    }
+
+    /**
+     * Loads a list of paths from the given path list file. Each path must be of
+     * the form
+     * 
+     * @throws IOException
+     * @throws IllegalArgumentException
+     */
+    public void loadPaths() throws IOException, IllegalArgumentException {
+        logger.printlnToScreen("Scanning " + pathListFilename + " file...");
+        logger.printlnToScreen(pathListFilename + " file contains");
+
+        BufferedReader reader = null;
+        int lineNumber = 1;
+        String line;
+        char sign;
+
+        try {
+            reader = new BufferedReader(new FileReader(pathListFile));
+            while (reader.ready()) {
+                line = reader.readLine().trim();
+
+                if (line.length() >= 1) {
+                    sign = line.charAt(0);
+                    if (sign != '#') {
+                        logger.printlnToScreen(line);
+                        if (sign != '+' && sign != '-' && !"all".equals(line))
+                            pathListError(
+                                    "Each path entry must start with a + or - to denote inclusion/exclusion",
+                                    lineNumber);
+                        if (!add(line))
+                            pathListError(
+                                    "\""
+                                            + line.substring(1).trim()
+                                            + "\" is not a valid file or directory (perhaps it does not exist?)",
+                                    lineNumber);
+                    }
+                }
+
+                lineNumber++;
+            }
+        } catch (FileNotFoundException ex) {
+            pathListError("The " + pathListFilename + " file doesn't exist.");
+        } catch (IOException ex) {
+            pathListError("Could not read the " + pathListFilename + " file.");
+        } finally {
+            try {
+                if (reader != null)
+                    reader.close();
+            } catch (IOException ex) {
+            }
+        }
     }
 
     /**
@@ -230,56 +308,14 @@ class PathModel extends AbstractListModel {
     }
 
     /**
-     * Loads a list of paths from the given path list file. Each path must be of
-     * the form
+     * Throws an IOException with the specified message.
      * 
+     * @param message
+     *            The message to put in the exception.
      * @throws IOException
-     * @throws IllegalArgumentException
      */
-    public void loadPaths() throws IOException, IllegalArgumentException {
-        logger.printlnToScreen("Scanning " + pathListFilename + " file...");
-        logger.printlnToScreen(pathListFilename + " file contains");
-
-        BufferedReader reader = null;
-        int lineNumber = 1;
-        String line;
-        char sign;
-
-        try {
-            reader = new BufferedReader(new FileReader(pathListFile));
-            while (reader.ready()) {
-                line = reader.readLine().trim();
-
-                if (line.length() >= 1) {
-                    sign = line.charAt(0);
-                    if (sign != '#') {
-                        logger.printlnToScreen(line);
-                        if (sign != '+' && sign != '-' && !"all".equals(line))
-                            pathListError(
-                                    "Each path entry must start with a + or - to denote inclusion/exclusion",
-                                    lineNumber);
-                        if (!add(line))
-                            pathListError(
-                                    "\""
-                                            + line.substring(1).trim()
-                                            + "\" is not a valid file or directory (perhaps it does not exist?)",
-                                    lineNumber);
-                    }
-                }
-
-                lineNumber++;
-            }
-        } catch (FileNotFoundException ex) {
-            pathListError("The " + pathListFilename + " file doesn't exist.");
-        } catch (IOException ex) {
-            pathListError("Could not read the " + pathListFilename + " file.");
-        } finally {
-            try {
-                if (reader != null)
-                    reader.close();
-            } catch (IOException ex) {
-            }
-        }
+    private void pathListError(String message) throws IOException {
+        throw new IOException("Error in " + pathListFilename + ": " + message);
     }
 
     /**
@@ -297,40 +333,4 @@ class PathModel extends AbstractListModel {
         throw new IllegalArgumentException("Error in " + pathListFilename
                 + " (line " + lineNumber + "): " + message);
     }
-
-    /**
-     * Throws an IOException with the specified message.
-     * 
-     * @param message
-     *            The message to put in the exception.
-     * @throws IOException
-     */
-    private void pathListError(String message) throws IOException {
-        throw new IOException("Error in " + pathListFilename + ": " + message);
-    }
-
-    /**
-     * The filename of the paths file where the paths are stored.
-     */
-    private String pathListFilename;
-
-    /**
-     * The paths file where the paths are stored.
-     */
-    private File pathListFile;
-
-    /**
-     * The list of paths as IncludePaths.
-     */
-    private List list = new ArrayList();
-
-    /**
-     * The current logger.
-     */
-    private Logger logger;
-
-    /**
-     * The serializable UID.
-     */
-    public static final long serialVersionUID = 1337;
 }
