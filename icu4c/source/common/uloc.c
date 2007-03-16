@@ -2712,44 +2712,42 @@ static /* U_CAPI */
 double
 /* U_EXPORT2 */
 _uloc_strtod(const char *start, char **end) {
-  char *decimal;
-  char *myEnd;
-  char buf[30];
-  double rv;
-  if (!gDecimal) {
-    char rep[5];
-    /* For machines that decide to change the decimal on you,
-       and try to be too smart with localization.
-       This normally should be just a '.'. */
-    sprintf(rep, "%+1.1f", 1.0);
-    gDecimal = rep[2];
-  }
+    char *decimal;
+    char *myEnd;
+    char buf[30];
+    double rv;
+    if (!gDecimal) {
+        char rep[5];
+        /* For machines that decide to change the decimal on you,
+        and try to be too smart with localization.
+        This normally should be just a '.'. */
+        sprintf(rep, "%+1.1f", 1.0);
+        gDecimal = rep[2];
+    }
 
-  if(gDecimal == '.') {
-    return uprv_strtod(start, end); /* fall through to OS */
-  } else {
-    uprv_strncpy(buf, start, 29);
-    buf[29]=0;
-    decimal = uprv_strchr(buf, '.');
-    if(decimal) {
-      *decimal = gDecimal;
+    if(gDecimal == '.') {
+        return uprv_strtod(start, end); /* fall through to OS */
     } else {
-      return uprv_strtod(start, end); /* no decimal point */
+        uprv_strncpy(buf, start, 29);
+        buf[29]=0;
+        decimal = uprv_strchr(buf, '.');
+        if(decimal) {
+            *decimal = gDecimal;
+        } else {
+            return uprv_strtod(start, end); /* no decimal point */
+        }
+        rv = uprv_strtod(buf, &myEnd);
+        if(end) {
+            *end = (char*)(start+(myEnd-buf)); /* cast away const (to follow uprv_strtod API.) */
+        }
+        return rv;
     }
-    rv = uprv_strtod(buf, &myEnd);
-    if(end) {
-      *end = (char*)(start+(myEnd-buf)); /* cast away const (to follow uprv_strtod API.) */
-    }
-    return rv;
-  }
 }
 
 typedef struct { 
-    double q;
-    char *locale;
-#if defined(ULOC_DEBUG_PURIFY)
+    float q;
     int32_t dummy;  /* to avoid uninitialized memory copy from qsort */
-#endif
+    char *locale;
 } _acceptLangItem;
 
 static int32_t U_CALLCONV
@@ -2834,15 +2832,13 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
             while(isspace(*t)) {
                 t++;
             }
-            j[n].q = _uloc_strtod(t,NULL);
+            j[n].q = (float)_uloc_strtod(t,NULL);
         } else {
             /* no semicolon - it's 1.0 */
-            j[n].q = 1.0;
+            j[n].q = 1.0f;
             paramEnd = itemEnd;
         }
-#if defined(ULOC_DEBUG_PURIFY)
-        j[n].dummy=0xDECAFBAD;
-#endif
+        j[n].dummy=0;
         /* eat spaces prior to semi */
         for(t=(paramEnd-1);(paramEnd>s)&&isspace(*t);t--)
             ;
@@ -2861,36 +2857,36 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
             s++;
         }
         if(n>=jSize) {
-          if(j==smallBuffer) {  /* overflowed the small buffer. */
-            j = uprv_malloc(sizeof(j[0])*(jSize*2));
-            if(j!=NULL) {
-              uprv_memcpy(j,smallBuffer,sizeof(j[0])*jSize);
+            if(j==smallBuffer) {  /* overflowed the small buffer. */
+                j = uprv_malloc(sizeof(j[0])*(jSize*2));
+                if(j!=NULL) {
+                    uprv_memcpy(j,smallBuffer,sizeof(j[0])*jSize);
+                }
+#if defined(ULOC_DEBUG)
+                fprintf(stderr,"malloced at size %d\n", jSize);
+#endif
+            } else {
+                j = uprv_realloc(j, sizeof(j[0])*jSize*2);
+#if defined(ULOC_DEBUG)
+                fprintf(stderr,"re-alloced at size %d\n", jSize);
+#endif
             }
-#if defined(ULOC_DEBUG)
-            fprintf(stderr,"malloced at size %d\n", jSize);
-#endif
-          } else {
-            j = uprv_realloc(j, sizeof(j[0])*jSize*2);
-#if defined(ULOC_DEBUG)
-            fprintf(stderr,"re-alloced at size %d\n", jSize);
-#endif
-          }
-          jSize *= 2;
-          if(j==NULL) {
-            *status = U_MEMORY_ALLOCATION_ERROR;
-            return -1;
-          }
+            jSize *= 2;
+            if(j==NULL) {
+                *status = U_MEMORY_ALLOCATION_ERROR;
+                return -1;
+            }
         }
     }
     uprv_sortArray(j, n, sizeof(j[0]), uloc_acceptLanguageCompare, NULL, TRUE, status);
     if(U_FAILURE(*status)) {
-      if(j != smallBuffer) {
+        if(j != smallBuffer) {
 #if defined(ULOC_DEBUG)
-        fprintf(stderr,"freeing j %p\n", j);
+            fprintf(stderr,"freeing j %p\n", j);
 #endif
-        uprv_free(j);
-      }
-      return -1;
+            uprv_free(j);
+        }
+        return -1;
     }
     strs = uprv_malloc((size_t)(sizeof(strs[0])*n));
     for(i=0;i<n;i++) {
@@ -2907,9 +2903,9 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
     uprv_free(strs);
     if(j != smallBuffer) {
 #if defined(ULOC_DEBUG)
-      fprintf(stderr,"freeing j %p\n", j);
+        fprintf(stderr,"freeing j %p\n", j);
 #endif
-      uprv_free(j);
+        uprv_free(j);
     }
     return res;
 }
@@ -2933,8 +2929,8 @@ uloc_acceptLanguage(char *result, int32_t resultAvailable,
     }
     fallbackList = uprv_malloc((size_t)(sizeof(fallbackList[0])*acceptListCount));
     if(fallbackList==NULL) {
-      *status = U_MEMORY_ALLOCATION_ERROR;
-      return -1;
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return -1;
     }
     for(i=0;i<acceptListCount;i++) {
 #if defined(ULOC_DEBUG)

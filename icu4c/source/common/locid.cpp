@@ -170,6 +170,7 @@ void locale_set_default_internal(const char *id)
         if (gDefaultLocale == NULL) {
             gDefaultLocale = newFirstDefault;  // Assignment to gDefaultLocale must happen inside mutex
             newFirstDefault = NULL;
+            ucln_common_registerCleanup(UCLN_COMMON_LOCALE, locale_cleanup);
         }
         // Else some other thread raced us through here, and set the new Locale.
         // Use the hash table next.
