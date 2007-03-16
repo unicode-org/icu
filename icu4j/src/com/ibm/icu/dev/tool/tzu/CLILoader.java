@@ -188,8 +188,10 @@ public class CLILoader {
         // load the results from the result list file
         resultModel.loadResults();
 
-        // populate the list of tz versions
-        sourceModel.findSources();
+        // if the offline is not set to true, populate the list of available
+        // timezone resource versions
+        if (!"true".equals(System.getProperty("offline")))
+            sourceModel.findSources();
 
         // perform the updates using the best tz version available
         resultModel.updateAll(

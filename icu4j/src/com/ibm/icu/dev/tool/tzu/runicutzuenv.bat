@@ -22,3 +22,7 @@ set DISCOVERONLY=false
 rem Set whether the cmd-line utility will run silently.
 set SILENTPATCH=false
 @echo SILENTPATCH=%SILENTPATCH%
+
+rem Set whether the cmd-line utility will not use online sources.
+set OFFLINE=false
+@echo OFFLINE=%OFFLINE%
