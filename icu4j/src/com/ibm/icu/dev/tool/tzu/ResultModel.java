@@ -29,6 +29,78 @@ import javax.swing.table.AbstractTableModel;
  */
 class ResultModel extends AbstractTableModel {
     /**
+     * The column designating filenames.
+     */
+    public static final int COLUMN_FILE_NAME = 0;
+
+    /**
+     * The column designating file paths.
+     */
+    public static final int COLUMN_FILE_PATH = 1;
+
+    /**
+     * The column designating ICU versions.
+     */
+    public static final int COLUMN_ICU_VERSION = 2;
+
+    /**
+     * A list of names of the columns in a result model.
+     */
+    public static final String[] COLUMN_NAMES = new String[] { "Path", "Name",
+            "ICU Version", "TZ Version", "Readable", "Writable" };
+
+    /**
+     * The column designating whether a file is readable.
+     */
+    public static final int COLUMN_READABLE = 4;
+
+    /**
+     * The column designating timezone verisons.
+     */
+    public static final int COLUMN_TZ_VERSION = 3;
+
+    /**
+     * The column designating whether a file is writable.
+     */
+    public static final int COLUMN_WRITABLE = 5;
+
+    /**
+     * The serializable UID.
+     */
+    public static final long serialVersionUID = 1338;
+
+    /**
+     * The complete list of ICUFiles represented by this result model.
+     */
+    private List completeList = new ArrayList();
+
+    /**
+     * If hidden is true, only ICUFiles that are readable and writable are
+     * active. Otherwise, all ICUFiles are readable and active.
+     */
+    private boolean hidden = true;
+
+    /**
+     * The current logger.
+     */
+    private Logger logger;
+
+    /**
+     * The list of only ICUFiles that are readable and writable.
+     */
+    private List permissibleList = new ArrayList();
+
+    /**
+     * The result list file where results are saved and stored.
+     */
+    private File resultListFile;
+
+    /**
+     * The filename of the result list file where results are saved and stored.
+     */
+    private String resultListFilename;
+
+    /**
      * Constructs an empty result list.
      * 
      * @param resultFile
@@ -43,22 +115,58 @@ class ResultModel extends AbstractTableModel {
     }
 
     /**
+     * Adds a file to the ICUFile list.
+     * 
+     * @param file
+     *            The file.
+     * @return Whether the file was added successfully (which is determined by
+     *         if it is an updatable ICU4J jar).
+     */
+    public boolean add(File file) {
+        try {
+            ICUFile entry = new ICUFile(file, logger);
+            if (file.canRead() && file.canWrite())
+                add(permissibleList, hidden, entry);
+            add(completeList, !hidden, entry);
+            return true;
+        } catch (IOException ex) {
+            return false;
+        }
+    }
+
+    /**
+     * Adds a file to the ICUFile list.
+     * 
+     * @param entry
+     *            The file.
+     */
+    public void add(ICUFile entry) {
+        File file = entry.getFile();
+        if (file.canRead() && file.canWrite())
+            add(permissibleList, hidden, entry);
+
+        add(completeList, !hidden, entry);
+    }
+
+    /**
+     * Adds a file to the ICUFile list.
+     * 
+     * @param filename
+     *            The name of the file.
+     * @return Whether the file was added successfully (which is determined by
+     *         if it is an updatable ICU4J jar).
+     */
+    public boolean add(String filename) {
+        return add(new File(filename));
+    }
+
+    /**
      * Returns the number of columns for each represented ICUFile.
      * 
      * @return The number of columns for each represented ICUFile.
      */
     public int getColumnCount() {
         return COLUMN_NAMES.length;
-    }
-
-    /**
-     * Returns the number of ICUFiles represented.
-     * 
-     * @return The number of ICUFiles represented.
-     */
-    public int getRowCount() {
-        List list = hidden ? permissibleList : completeList;
-        return (list == null) ? 0 : list.size();
     }
 
     /**
@@ -70,6 +178,16 @@ class ResultModel extends AbstractTableModel {
      */
     public String getColumnName(int col) {
         return COLUMN_NAMES[col];
+    }
+
+    /**
+     * Returns the number of ICUFiles represented.
+     * 
+     * @return The number of ICUFiles represented.
+     */
+    public int getRowCount() {
+        List list = hidden ? permissibleList : completeList;
+        return (list == null) ? 0 : list.size();
     }
 
     /**
@@ -122,60 +240,51 @@ class ResultModel extends AbstractTableModel {
     }
 
     /**
-     * Sets whether the table should hide ICUFiles that lack permissions.
+     * Loads a list of ICUFiles from the given result list file. Lines should be
+     * of the form <b><i>pathstring</i><tab><i>tzversion</i></b>.
      * 
-     * @param value
-     *            Whether the table should hide ICUFiles that lack permissions.
+     * @throws IOException
+     * @throws IllegalArgumentException
      */
-    public void setHidden(boolean value) {
-        hidden = value;
-        fireTableDataChanged();
-    }
+    public void loadResults() throws IOException, IllegalArgumentException {
+        logger.printlnToScreen("Scanning " + resultListFilename + " file...");
+        logger.printlnToScreen(resultListFilename + " file contains");
 
-    /**
-     * Adds a file to the ICUFile list.
-     * 
-     * @param filename
-     *            The name of the file.
-     * @return Whether the file was added successfully (which is determined by
-     *         if it is an updatable ICU4J jar).
-     */
-    public boolean add(String filename) {
-        return add(new File(filename));
-    }
+        BufferedReader reader = null;
+        int lineNumber = 1;
+        String line;
+        int tab;
+        String filename;
 
-    /**
-     * Adds a file to the ICUFile list.
-     * 
-     * @param file
-     *            The file.
-     * @return Whether the file was added successfully (which is determined by
-     *         if it is an updatable ICU4J jar).
-     */
-    public boolean add(File file) {
         try {
-            ICUFile entry = new ICUFile(file, logger);
-            if (file.canRead() && file.canWrite())
-                add(permissibleList, hidden, entry);
-            add(completeList, !hidden, entry);
-            return true;
+            reader = new BufferedReader(new FileReader(resultListFile));
+            while (reader.ready()) {
+                line = reader.readLine().trim();
+                logger.printlnToScreen(line);
+
+                if (line.length() >= 1 && (tab = line.lastIndexOf('\t')) >= 0) {
+                    if (!add(filename = line.substring(0, tab)))
+                        resultListError(filename
+                                + " is not an updatable ICU4J file", lineNumber);
+                }
+
+                lineNumber++;
+            }
+        } catch (FileNotFoundException ex) {
+            resultListError("The "
+                    + resultListFilename
+                    + " file doesn't exist. Please re-run the tool with -Ddiscoveronly=true option to generate the list of ICU4J jars.");
         } catch (IOException ex) {
-            return false;
+            resultListError("Could not read the "
+                    + resultListFilename
+                    + " file. Please re-run the tool with -Ddiscoveronly=true option to generate the list of ICU4J jars.");
+        } finally {
+            try {
+                if (reader != null)
+                    reader.close();
+            } catch (IOException ex) {
+            }
         }
-    }
-
-    /**
-     * Adds a file to the ICUFile list.
-     * 
-     * @param entry
-     *            The file.
-     */
-    public void add(ICUFile entry) {
-        File file = entry.getFile();
-        if (file.canRead() && file.canWrite())
-            add(permissibleList, hidden, entry);
-
-        add(completeList, !hidden, entry);
     }
 
     /**
@@ -206,6 +315,94 @@ class ResultModel extends AbstractTableModel {
     public void removeAll() {
         removeAll(permissibleList, hidden);
         removeAll(completeList, !hidden);
+    }
+
+    /**
+     * Saves a list of ICUFiles to the given result list file. Lines will be of
+     * the form <b><i>pathstring</i><tab><i>tzversion</i></b>.
+     * 
+     * @throws IOException
+     * @throws IllegalArgumentException
+     */
+    public void saveResults() throws IOException, IllegalArgumentException {
+        logger.printlnToScreen("Saving to file " + resultListFilename + " ...");
+        BufferedWriter writer = null;
+        ICUFile icuFile = null;
+
+        try {
+            writer = new BufferedWriter(new FileWriter(resultListFile));
+            Iterator iter = (hidden ? permissibleList : completeList)
+                    .iterator();
+            while (iter.hasNext()) {
+                icuFile = (ICUFile) iter.next();
+                String line = icuFile.getFile().getPath() + '\t'
+                        + icuFile.getTZVersion() + "\n";
+                logger.printlnToScreen(line);
+                writer.write(line);
+            }
+        } catch (FileNotFoundException ex) {
+            resultListError("Could not create the " + resultListFilename
+                    + " file.");
+        } catch (IOException ex) {
+            resultListError("Could not write to the " + resultListFilename
+                    + " file.");
+        } finally {
+            try {
+                if (writer != null)
+                    writer.close();
+            } catch (IOException ex) {
+            }
+        }
+    }
+
+    /**
+     * Sets whether the table should hide ICUFiles that lack permissions.
+     * 
+     * @param value
+     *            Whether the table should hide ICUFiles that lack permissions.
+     */
+    public void setHidden(boolean value) {
+        hidden = value;
+        fireTableDataChanged();
+    }
+
+    /**
+     * Updates a selection of the ICUFiles given a URL as the source of the
+     * update and a backup directory as a place to store a copy of the
+     * un-updated file.
+     * 
+     * @param indices
+     *            The indices of the ICUFiles to update.
+     * @param updateURL
+     *            The URL to use a source of the update.
+     * @param backupDir
+     *            The directory in which to store backups.
+     * @throws InterruptedException
+     */
+    public void update(int[] indices, URL updateURL, File backupDir)
+            throws InterruptedException {
+        if (hidden)
+            update(permissibleList, indices, updateURL, backupDir);
+        else
+            update(completeList, indices, updateURL, backupDir);
+    }
+
+    /**
+     * Updates all of the ICUFiles given a URL as the source of the update and a
+     * backup directory as a place to store a copy of the un-updated file.
+     * 
+     * @param updateURL
+     *            The URL to use a source of the update.
+     * @param backupDir
+     *            The directory in which to store backups.
+     * @throws InterruptedException
+     */
+    public void updateAll(URL updateURL, File backupDir)
+            throws InterruptedException {
+        if (hidden)
+            updateAll(permissibleList, updateURL, backupDir);
+        else
+            updateAll(completeList, updateURL, backupDir);
     }
 
     /**
@@ -293,42 +490,30 @@ class ResultModel extends AbstractTableModel {
     }
 
     /**
-     * Updates a selection of the ICUFiles given a URL as the source of the
-     * update and a backup directory as a place to store a copy of the
-     * un-updated file.
+     * Throws an IllegalArgumentException with the given message.
      * 
-     * @param indices
-     *            The indices of the ICUFiles to update.
-     * @param updateURL
-     *            The URL to use a source of the update.
-     * @param backupDir
-     *            The directory in which to store backups.
-     * @throws InterruptedException
+     * @param message
+     *            The message.
+     * @throws IllegalArgumentException
      */
-    public void update(int[] indices, URL updateURL, File backupDir)
-            throws InterruptedException {
-        if (hidden)
-            update(permissibleList, indices, updateURL, backupDir);
-        else
-            update(completeList, indices, updateURL, backupDir);
+    private void resultListError(String message) throws IOException {
+        throw new IOException("Error in " + resultListFilename + ": " + message);
     }
 
     /**
-     * Updates all of the ICUFiles given a URL as the source of the update and a
-     * backup directory as a place to store a copy of the un-updated file.
+     * Throws an IllegalArgumentException with the given message and line
+     * number.
      * 
-     * @param updateURL
-     *            The URL to use a source of the update.
-     * @param backupDir
-     *            The directory in which to store backups.
-     * @throws InterruptedException
+     * @param message
+     *            The message.
+     * @param lineNumber
+     *            The line number.
+     * @throws IllegalArgumentException
      */
-    public void updateAll(URL updateURL, File backupDir)
-            throws InterruptedException {
-        if (hidden)
-            updateAll(permissibleList, updateURL, backupDir);
-        else
-            updateAll(completeList, updateURL, backupDir);
+    private void resultListError(String message, int lineNumber)
+            throws IllegalArgumentException {
+        throw new IllegalArgumentException("Error in " + resultListFilename
+                + " (line " + lineNumber + "): " + message);
     }
 
     /**
@@ -394,190 +579,5 @@ class ResultModel extends AbstractTableModel {
                 }
         }
     }
-
-    /**
-     * Loads a list of ICUFiles from the given result list file. Lines should be
-     * of the form <b><i>pathstring</i><tab><i>tzversion</i></b>.
-     * 
-     * @throws IOException
-     * @throws IllegalArgumentException
-     */
-    public void loadResults() throws IOException, IllegalArgumentException {
-        logger.printlnToScreen("Scanning " + resultListFilename + " file...");
-        logger.printlnToScreen(resultListFilename + " file contains");
-
-        BufferedReader reader = null;
-        int lineNumber = 1;
-        String line;
-        int tab;
-        String filename;
-
-        try {
-            reader = new BufferedReader(new FileReader(resultListFile));
-            while (reader.ready()) {
-                line = reader.readLine().trim();
-                logger.printlnToScreen(line);
-
-                if (line.length() >= 1 && (tab = line.lastIndexOf('\t')) >= 0) {
-                    if (!add(filename = line.substring(0, tab)))
-                        resultListError(filename
-                                + " is not an updatable ICU4J file", lineNumber);
-                }
-
-                lineNumber++;
-            }
-        } catch (FileNotFoundException ex) {
-            resultListError("The "
-                    + resultListFilename
-                    + " file doesn't exist. Please re-run the tool with -Ddiscoveronly=true option to generate the list of ICU4J jars.");
-        } catch (IOException ex) {
-            resultListError("Could not read the "
-                    + resultListFilename
-                    + " file. Please re-run the tool with -Ddiscoveronly=true option to generate the list of ICU4J jars.");
-        } finally {
-            try {
-                if (reader != null)
-                    reader.close();
-            } catch (IOException ex) {
-            }
-        }
-    }
-
-    /**
-     * Saves a list of ICUFiles to the given result list file. Lines will be of
-     * the form <b><i>pathstring</i><tab><i>tzversion</i></b>.
-     * 
-     * @throws IOException
-     * @throws IllegalArgumentException
-     */
-    public void saveResults() throws IOException, IllegalArgumentException {
-        logger.printlnToScreen("Saving to file " + resultListFilename + " ...");
-        BufferedWriter writer = null;
-        ICUFile icuFile = null;
-
-        try {
-            writer = new BufferedWriter(new FileWriter(resultListFile));
-            Iterator iter = (hidden ? permissibleList : completeList)
-                    .iterator();
-            while (iter.hasNext()) {
-                icuFile = (ICUFile) iter.next();
-                String line = icuFile.getFile().getPath() + '\t'
-                        + icuFile.getTZVersion() + "\n";
-                logger.printlnToScreen(line);
-                writer.write(line);
-            }
-        } catch (FileNotFoundException ex) {
-            resultListError("Could not create the " + resultListFilename
-                    + " file.");
-        } catch (IOException ex) {
-            resultListError("Could not write to the " + resultListFilename
-                    + " file.");
-        } finally {
-            try {
-                if (writer != null)
-                    writer.close();
-            } catch (IOException ex) {
-            }
-        }
-    }
-
-    /**
-     * Throws an IllegalArgumentException with the given message and line
-     * number.
-     * 
-     * @param message
-     *            The message.
-     * @param lineNumber
-     *            The line number.
-     * @throws IllegalArgumentException
-     */
-    private void resultListError(String message, int lineNumber)
-            throws IllegalArgumentException {
-        throw new IllegalArgumentException("Error in " + resultListFilename
-                + " (line " + lineNumber + "): " + message);
-    }
-
-    /**
-     * Throws an IllegalArgumentException with the given message.
-     * 
-     * @param message
-     *            The message.
-     * @throws IllegalArgumentException
-     */
-    private void resultListError(String message) throws IOException {
-        throw new IOException("Error in " + resultListFilename + ": " + message);
-    }
-
-    /**
-     * A list of names of the columns in a result model.
-     */
-    public static final String[] COLUMN_NAMES = new String[] { "Path", "Name",
-            "ICU Version", "TZ Version", "Readable", "Writable" };
-
-    /**
-     * The column designating filenames.
-     */
-    public static final int COLUMN_FILE_NAME = 0;
-
-    /**
-     * The column designating file paths.
-     */
-    public static final int COLUMN_FILE_PATH = 1;
-
-    /**
-     * The column designating ICU versions.
-     */
-    public static final int COLUMN_ICU_VERSION = 2;
-
-    /**
-     * The column designating timezone verisons.
-     */
-    public static final int COLUMN_TZ_VERSION = 3;
-
-    /**
-     * The column designating whether a file is readable.
-     */
-    public static final int COLUMN_READABLE = 4;
-
-    /**
-     * The column designating whether a file is writable.
-     */
-    public static final int COLUMN_WRITABLE = 5;
-
-    /**
-     * The complete list of ICUFiles represented by this result model.
-     */
-    private List completeList = new ArrayList();
-
-    /**
-     * The list of only ICUFiles that are readable and writable.
-     */
-    private List permissibleList = new ArrayList();
-
-    /**
-     * If hidden is true, only ICUFiles that are readable and writable are
-     * active. Otherwise, all ICUFiles are readable and active.
-     */
-    private boolean hidden = true;
-
-    /**
-     * The result list file where results are saved and stored.
-     */
-    private File resultListFile;
-
-    /**
-     * The filename of the result list file where results are saved and stored.
-     */
-    private String resultListFilename;
-
-    /**
-     * The current logger.
-     */
-    private Logger logger;
-
-    /**
-     * The serializable UID.
-     */
-    public static final long serialVersionUID = 1338;
 
 }

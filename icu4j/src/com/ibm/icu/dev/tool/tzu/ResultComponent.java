@@ -39,6 +39,126 @@ import javax.swing.JTextField;
  */
 public class ResultComponent extends JComponent {
     /**
+     * The serializable UID.
+     */
+    public static final long serialVersionUID = 1341;
+
+    /**
+     * A browse button to add specific results.
+     */
+    private JButton resultBrowseButton = new JButton("Browse...");
+
+    /**
+     * A cancel search button to cancel a search if one is currently occuring.
+     */
+    private JButton resultCancelSearchButton = new JButton("Cancel Search");
+
+    /**
+     * A cancel update button to cancel an update if one is currently occuring.
+     */
+    private JButton resultCancelUpdateButton = new JButton("Cancel Update");
+
+    /**
+     * The dialog that comes up when the browse button is clicked.
+     */
+    private JFileChooser resultChooser = new JFileChooser();
+
+    /**
+     * The field where an ICU4J jar file can be directly added.
+     */
+    private JTextField resultField = new JTextField(30);
+
+    /**
+     * The checkbox for whether files that are either unreadable or unwritable
+     * are displayed (and likewise updated).
+     */
+    private JCheckBox resultHideOption = new JCheckBox(
+            "Hide Unreadable and Unwritable Files", true);
+
+    /**
+     * The panel where input components are shown.
+     */
+    private JPanel resultInputPanel = new JPanel();
+
+    /**
+     * The model for all the results from a search.
+     */
+    private ResultModel resultModel;
+
+    /**
+     * The panel where option components are shown.
+     */
+    private JPanel resultOptionPanel = new JPanel();
+
+    /**
+     * The context menu that pops up with more options.
+     */
+    private JPopupMenu resultPopup = new JPopupMenu();
+
+    /**
+     * A menu item for <code>pathPopup</code> to remove all files from the
+     * result model.
+     */
+    private JMenuItem resultRemoveAllItem = new JMenuItem("Remove All");
+
+    /**
+     * A menu item for <code>pathPopup</code> to remove the selected files
+     * from the result model.
+     */
+    private JMenuItem resultRemoveSelectedItem = new JMenuItem(
+            "Remove Selected Items");
+
+    /**
+     * The combobox for choosing which timezone resource on the web to use in an
+     * update.
+     */
+    private JComboBox resultSourceList = new JComboBox();
+
+    /**
+     * The panel where status components are shown.
+     */
+    private JPanel resultStatusPanel = new JPanel();
+
+    /**
+     * The table where the result model is shown.
+     */
+    private JTable resultTable = new JTable();
+
+    /**
+     * A menu item for <code>pathPopup</code> to update all files in the
+     * result model.
+     */
+    private JMenuItem resultUpdateAllItem = new JMenuItem("Update All");
+
+    /**
+     * An update button to update the selected files, or all files if none are
+     * selected.
+     */
+    private JButton resultUpdateButton = new JButton("Update");
+
+    /**
+     * The panel where update components are shown.
+     */
+    private JPanel resultUpdatePanel = new JPanel();
+
+    /**
+     * A menu item for <code>pathPopup</code> to update the selected files in
+     * the result model.
+     */
+    private JMenuItem resultUpdateSelectedItem = new JMenuItem(
+            "Update Selected Items");
+
+    /**
+     * The model for all the timezone resources on the web.
+     */
+    private SourceModel sourceModel;
+
+    /**
+     * The status bar for status messages.
+     */
+    private JLabel statusBar = new JLabel();
+
+    /**
      * @param owner
      *            The GUILoader object that ownes this component.
      */
@@ -74,6 +194,10 @@ public class ResultComponent extends JComponent {
         });
 
         resultTable.addMouseListener(new MouseListener() {
+            public void mouseClicked(MouseEvent event) {
+                checkPopup(event);
+            }
+
             public void mouseEntered(MouseEvent event) {
                 checkPopup(event);
             }
@@ -87,10 +211,6 @@ public class ResultComponent extends JComponent {
             }
 
             public void mouseReleased(MouseEvent event) {
-                checkPopup(event);
-            }
-
-            public void mouseClicked(MouseEvent event) {
                 checkPopup(event);
             }
 
@@ -174,41 +294,12 @@ public class ResultComponent extends JComponent {
     }
 
     /**
-     * Returns the URL of the currently selected item in the result source list.
+     * Returns the status bar.
      * 
-     * @return The URL of the currently selected item in the result source list.
+     * @return The status bar.
      */
-    private URL getSelectedSource() {
-        return sourceModel.getURL(resultSourceList.getSelectedItem());
-    }
-
-    /**
-     * Adds a file to the result list. The file must be an updatable ICU4J jar
-     * by the standards laid out in ICUFile.
-     * 
-     * @param file
-     *            The file to add.
-     * @return Whether the file was added successfully.
-     */
-    private boolean addFile(File file) {
-        if (!resultModel.add(file)) {
-            JOptionPane.showMessageDialog(ResultComponent.this, "\""
-                    + file.toString() + "\" is not an updatable ICU jar file.",
-                    "Cannot add file", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Sets whether the update button should be enabled.
-     * 
-     * @param value
-     *            Whether the update button should be enabled.
-     */
-    public void setUpdateEnabled(boolean value) {
-        resultUpdateButton.setEnabled(value);
+    public JLabel getStatusBar() {
+        return statusBar;
     }
 
     /**
@@ -229,15 +320,6 @@ public class ResultComponent extends JComponent {
      */
     public void setCancelUpdateEnabled(boolean value) {
         resultCancelUpdateButton.setEnabled(value);
-    }
-
-    /**
-     * Returns the status bar.
-     * 
-     * @return The status bar.
-     */
-    public JLabel getStatusBar() {
-        return statusBar;
     }
 
     /**
@@ -263,122 +345,40 @@ public class ResultComponent extends JComponent {
     }
 
     /**
-     * The panel where input components are shown.
+     * Sets whether the update button should be enabled.
+     * 
+     * @param value
+     *            Whether the update button should be enabled.
      */
-    private JPanel resultInputPanel = new JPanel();
+    public void setUpdateEnabled(boolean value) {
+        resultUpdateButton.setEnabled(value);
+    }
 
     /**
-     * The panel where status components are shown.
+     * Adds a file to the result list. The file must be an updatable ICU4J jar
+     * by the standards laid out in ICUFile.
+     * 
+     * @param file
+     *            The file to add.
+     * @return Whether the file was added successfully.
      */
-    private JPanel resultStatusPanel = new JPanel();
+    private boolean addFile(File file) {
+        if (!resultModel.add(file)) {
+            JOptionPane.showMessageDialog(ResultComponent.this, "\""
+                    + file.toString() + "\" is not an updatable ICU jar file.",
+                    "Cannot add file", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        return true;
+    }
 
     /**
-     * The panel where option components are shown.
+     * Returns the URL of the currently selected item in the result source list.
+     * 
+     * @return The URL of the currently selected item in the result source list.
      */
-    private JPanel resultOptionPanel = new JPanel();
-
-    /**
-     * The panel where update components are shown.
-     */
-    private JPanel resultUpdatePanel = new JPanel();
-
-    /**
-     * The table where the result model is shown.
-     */
-    private JTable resultTable = new JTable();
-
-    /**
-     * The field where an ICU4J jar file can be directly added.
-     */
-    private JTextField resultField = new JTextField(30);
-
-    /**
-     * The checkbox for whether files that are either unreadable or unwritable
-     * are displayed (and likewise updated).
-     */
-    private JCheckBox resultHideOption = new JCheckBox(
-            "Hide Unreadable and Unwritable Files", true);
-
-    /**
-     * A browse button to add specific results.
-     */
-    private JButton resultBrowseButton = new JButton("Browse...");
-
-    /**
-     * An update button to update the selected files, or all files if none are
-     * selected.
-     */
-    private JButton resultUpdateButton = new JButton("Update");
-
-    /**
-     * A cancel update button to cancel an update if one is currently occuring.
-     */
-    private JButton resultCancelUpdateButton = new JButton("Cancel Update");
-
-    /**
-     * A cancel search button to cancel a search if one is currently occuring.
-     */
-    private JButton resultCancelSearchButton = new JButton("Cancel Search");
-
-    /**
-     * The dialog that comes up when the browse button is clicked.
-     */
-    private JFileChooser resultChooser = new JFileChooser();
-
-    /**
-     * The context menu that pops up with more options.
-     */
-    private JPopupMenu resultPopup = new JPopupMenu();
-
-    /**
-     * A menu item for <code>pathPopup</code> to remove the selected files
-     * from the result model.
-     */
-    private JMenuItem resultRemoveSelectedItem = new JMenuItem(
-            "Remove Selected Items");
-
-    /**
-     * A menu item for <code>pathPopup</code> to remove all files from the
-     * result model.
-     */
-    private JMenuItem resultRemoveAllItem = new JMenuItem("Remove All");
-
-    /**
-     * A menu item for <code>pathPopup</code> to update the selected files in
-     * the result model.
-     */
-    private JMenuItem resultUpdateSelectedItem = new JMenuItem(
-            "Update Selected Items");
-
-    /**
-     * A menu item for <code>pathPopup</code> to update all files in the
-     * result model.
-     */
-    private JMenuItem resultUpdateAllItem = new JMenuItem("Update All");
-
-    /**
-     * The combobox for choosing which timezone resource on the web to use in an
-     * update.
-     */
-    private JComboBox resultSourceList = new JComboBox();
-
-    /**
-     * The model for all the results from a search.
-     */
-    private ResultModel resultModel;
-
-    /**
-     * The model for all the timezone resources on the web.
-     */
-    private SourceModel sourceModel;
-
-    /**
-     * The status bar for status messages.
-     */
-    private JLabel statusBar = new JLabel();
-
-    /**
-     * The serializable UID.
-     */
-    public static final long serialVersionUID = 1341;
+    private URL getSelectedSource() {
+        return sourceModel.getURL(resultSourceList.getSelectedItem());
+    }
 }

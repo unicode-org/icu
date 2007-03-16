@@ -13,6 +13,41 @@ import java.io.File;
  */
 public class ICUTZUMain {
     /**
+     * Argument number for the backup directory.
+     */
+    public static final int BACKUP_DIR = 4;
+
+    /**
+     * Argument number for the current directory.
+     */
+    public static final int CUR_DIR = 0;
+
+    /**
+     * Argument number for the icon file.
+     */
+    public static final int ICON_FILE = 5;
+
+    /**
+     * Number of arguments.
+     */
+    public static final int NUM_ARGS = 6;
+
+    /**
+     * Argument number for the path list file.
+     */
+    public static final int PATH_FILE = 1;
+
+    /**
+     * Argument number for the result list file.
+     */
+    public static final int RESULT_FILE = 2;
+
+    /**
+     * Argument number for the timezone resource file.
+     */
+    public static final int TZ_FILE = 3;
+
+    /**
      * Entry point for the ICUTZU tool.
      * 
      * @param args
@@ -56,39 +91,4 @@ public class ICUTZUMain {
             System.exit(-1);
         }
     }
-
-    /**
-     * Argument number for the current directory.
-     */
-    public static final int CUR_DIR = 0;
-
-    /**
-     * Argument number for the path list file.
-     */
-    public static final int PATH_FILE = 1;
-
-    /**
-     * Argument number for the result list file.
-     */
-    public static final int RESULT_FILE = 2;
-
-    /**
-     * Argument number for the timezone resource file.
-     */
-    public static final int TZ_FILE = 3;
-
-    /**
-     * Argument number for the backup directory.
-     */
-    public static final int BACKUP_DIR = 4;
-
-    /**
-     * Argument number for the icon file.
-     */
-    public static final int ICON_FILE = 5;
-
-    /**
-     * Number of arguments.
-     */
-    public static final int NUM_ARGS = 6;
 }

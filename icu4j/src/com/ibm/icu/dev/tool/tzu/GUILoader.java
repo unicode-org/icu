@@ -24,6 +24,77 @@ import javax.swing.WindowConstants;
  */
 public class GUILoader {
     /**
+     * The title for the application.
+     */
+    public static final String TITLE = "ICUTZU (ICU4J Time Zone Updater)";
+
+    /**
+     * The backup directory to store files.
+     */
+    private File backupDir;
+
+    /**
+     * The tool's home directory.
+     */
+    private File curDir;
+
+    /**
+     * The current logger.
+     */
+    private Logger logger;
+
+    /**
+     * Whether the paths frame has been closed or not.
+     */
+    private boolean pathClosed = false;
+
+    /**
+     * The frame that displays the path model component (<code>pathGUI</code>).
+     */
+    private JFrame pathFrame;
+
+    /**
+     * The component that allows the user to interact with the path model.
+     */
+    private PathComponent pathGUI;
+
+    /**
+     * The path model that stores all the paths and takes care of searching.
+     */
+    private PathModel pathModel;
+
+    /**
+     * Whether the results frame has been closed or not.
+     */
+    private boolean resultClosed = true;
+
+    /**
+     * The frame that displays the result model component (<code>resultGUI</code>).
+     */
+    private JFrame resultFrame;
+
+    /**
+     * The component that allows the user to interact with the result model.
+     */
+    private ResultComponent resultGUI;
+
+    /**
+     * The result model that stores all the results and takes care of updating.
+     */
+    private ResultModel resultModel;
+
+    /**
+     * The source model that stores all the update sources and accesses the
+     * repository for more sources.
+     */
+    private SourceModel sourceModel;
+
+    /**
+     * The thread that partakes in the searching and updating.
+     */
+    private Thread workerThread = null;
+
+    /**
      * Entry point for the GUI version of the tool.
      * 
      * @param curDir
@@ -127,35 +198,17 @@ public class GUILoader {
     }
 
     /**
-     * Searchs all the paths in the path model.
-     * 
-     * @param subdirs
-     *            Whether to search subdirectories.
+     * Cancels a search.
      */
-    public void searchAll(final boolean subdirs) {
+    public void cancelSearch() {
         makeThreadDead();
+    }
 
-        workerThread = new Thread(new Runnable() {
-            public void run() {
-                logger.printlnToScreen("Search started.");
-                setCancelSearchEnabled(true);
-                setUpdateEnabled(false);
-                setSearchEnabled(false);
-                try {
-                    resultFrame.setVisible(true);
-                    resultClosed = false;
-                    pathModel
-                            .searchAll(resultModel, subdirs, curDir, backupDir);
-                } catch (InterruptedException ex) { /* i escaped! i'm free! */
-                }
-                setSearchEnabled(true);
-                setUpdateEnabled(true);
-                setCancelSearchEnabled(false);
-                logger.printlnToScreen("Search ended.");
-            }
-        });
-
-        workerThread.start();
+    /**
+     * Cancels an update.
+     */
+    public void cancelUpdate() {
+        makeThreadDead();
     }
 
     /**
@@ -193,28 +246,31 @@ public class GUILoader {
     }
 
     /**
-     * Updates all the results in the result model.
+     * Searchs all the paths in the path model.
      * 
-     * @param updateURL
-     *            The URL to use as the update for each ICU4J jar.
+     * @param subdirs
+     *            Whether to search subdirectories.
      */
-    public void updateAll(final URL updateURL) {
+    public void searchAll(final boolean subdirs) {
         makeThreadDead();
 
         workerThread = new Thread(new Runnable() {
             public void run() {
-                logger.printlnToScreen("Update started.");
-                setCancelUpdateEnabled(true);
+                logger.printlnToScreen("Search started.");
+                setCancelSearchEnabled(true);
                 setUpdateEnabled(false);
                 setSearchEnabled(false);
                 try {
-                    resultModel.updateAll(updateURL, backupDir);
+                    resultFrame.setVisible(true);
+                    resultClosed = false;
+                    pathModel
+                            .searchAll(resultModel, subdirs, curDir, backupDir);
                 } catch (InterruptedException ex) { /* i escaped! i'm free! */
                 }
-                setUpdateEnabled(true);
                 setSearchEnabled(true);
-                setCancelUpdateEnabled(false);
-                logger.printlnToScreen("Update ended.");
+                setUpdateEnabled(true);
+                setCancelSearchEnabled(false);
+                logger.printlnToScreen("Search ended.");
             }
         });
 
@@ -253,37 +309,46 @@ public class GUILoader {
     }
 
     /**
-     * Cancels a search.
-     */
-    public void cancelSearch() {
-        makeThreadDead();
-    }
-
-    /**
-     * Cancels an update.
-     */
-    public void cancelUpdate() {
-        makeThreadDead();
-    }
-
-    /**
-     * Sets whether the search button should be enabled.
+     * Updates all the results in the result model.
      * 
-     * @param value
-     *            Whether the search button should be enabled.
+     * @param updateURL
+     *            The URL to use as the update for each ICU4J jar.
      */
-    private void setSearchEnabled(boolean value) {
-        pathGUI.setSearchEnabled(value);
+    public void updateAll(final URL updateURL) {
+        makeThreadDead();
+
+        workerThread = new Thread(new Runnable() {
+            public void run() {
+                logger.printlnToScreen("Update started.");
+                setCancelUpdateEnabled(true);
+                setUpdateEnabled(false);
+                setSearchEnabled(false);
+                try {
+                    resultModel.updateAll(updateURL, backupDir);
+                } catch (InterruptedException ex) { /* i escaped! i'm free! */
+                }
+                setUpdateEnabled(true);
+                setSearchEnabled(true);
+                setCancelUpdateEnabled(false);
+                logger.printlnToScreen("Update ended.");
+            }
+        });
+
+        workerThread.start();
     }
 
     /**
-     * Sets whether the update button should be enabled.
-     * 
-     * @param value
-     *            Whether the update button should be enabled.
+     * Interrupts the worker thread and waits for it to finish.
      */
-    private void setUpdateEnabled(boolean value) {
-        resultGUI.setUpdateEnabled(value);
+    private void makeThreadDead() {
+        if (workerThread != null)
+            try {
+                workerThread.interrupt();
+                workerThread.join();
+            } catch (Exception ex) {
+                // do nothing -- if an exception was thrown, the worker thread
+                // must have already been dead, which is perfectly fine
+            }
     }
 
     /**
@@ -307,87 +372,22 @@ public class GUILoader {
     }
 
     /**
-     * Interrupts the worker thread and waits for it to finish.
+     * Sets whether the search button should be enabled.
+     * 
+     * @param value
+     *            Whether the search button should be enabled.
      */
-    private void makeThreadDead() {
-        if (workerThread != null)
-            try {
-                workerThread.interrupt();
-                workerThread.join();
-            } catch (Exception ex) {
-                // do nothing -- if an exception was thrown, the worker thread
-                // must have already been dead, which is perfectly fine
-            }
+    private void setSearchEnabled(boolean value) {
+        pathGUI.setSearchEnabled(value);
     }
 
     /**
-     * The thread that partakes in the searching and updating.
+     * Sets whether the update button should be enabled.
+     * 
+     * @param value
+     *            Whether the update button should be enabled.
      */
-    private Thread workerThread = null;
-
-    /**
-     * Whether the paths frame has been closed or not.
-     */
-    private boolean pathClosed = false;
-
-    /**
-     * Whether the results frame has been closed or not.
-     */
-    private boolean resultClosed = true;
-
-    /**
-     * The path model that stores all the paths and takes care of searching.
-     */
-    private PathModel pathModel;
-
-    /**
-     * The result model that stores all the results and takes care of updating.
-     */
-    private ResultModel resultModel;
-
-    /**
-     * The source model that stores all the update sources and accesses the
-     * repository for more sources.
-     */
-    private SourceModel sourceModel;
-
-    /**
-     * The component that allows the user to interact with the path model.
-     */
-    private PathComponent pathGUI;
-
-    /**
-     * The component that allows the user to interact with the result model.
-     */
-    private ResultComponent resultGUI;
-
-    /**
-     * The frame that displays the path model component (<code>pathGUI</code>).
-     */
-    private JFrame pathFrame;
-
-    /**
-     * The frame that displays the result model component (<code>resultGUI</code>).
-     */
-    private JFrame resultFrame;
-
-    /**
-     * The backup directory to store files.
-     */
-    private File backupDir;
-
-    /**
-     * The tool's home directory.
-     */
-    private File curDir;
-
-    /**
-     * The current logger.
-     */
-    private Logger logger;
-
-    /**
-     * The title for the application.
-     */
-    public static final String TITLE = "ICUTZU (ICU4J Time Zone Updater)";
+    private void setUpdateEnabled(boolean value) {
+        resultGUI.setUpdateEnabled(value);
+    }
 }

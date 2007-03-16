@@ -18,12 +18,6 @@ import java.util.List;
 public class ICUJarFinder {
 
     /**
-     * An empty constructor that restricts construction.
-     */
-    private ICUJarFinder() {
-    }
-
-    /**
      * Searchs the directories / files represented in <code>paths</code> for
      * valid ICU4J jars. The logic for determining if a file is an ICU4J jar is
      * taken care of by the constructor of ICUFile. The resulting ICUFile's are
@@ -143,5 +137,11 @@ public class ICUJarFinder {
 
         // chain the result model
         return resultModel;
+    }
+
+    /**
+     * An empty constructor that restricts construction.
+     */
+    private ICUJarFinder() {
     }
 }

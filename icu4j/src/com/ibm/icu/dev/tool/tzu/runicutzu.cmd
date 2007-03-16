@@ -8,17 +8,17 @@ rem ****************************************************************************
 @echo *********** Welcome to the ICU4J Time Zone Update Utility (ICUTZU) ***********
 
 rem Set ICUTZU_HOME to the current directory.
-set ICUTZU_HOME=%~dp0
+set ICUTZU_HOME=/* ENTER YOUR ICUTZU HOME PATH LIKE C:\DESKTOP\ICUTZU\ */
 @echo ICUTZU Home: %ICUTZU_HOME%
 @echo.
 
 rem Make sure certain files are present.
 IF NOT EXIST "%ICUTZU_HOME%icutzu.jar" GOTO MissingICUTZUJAR
 IF NOT EXIST "%ICUTZU_HOME%icu4j.jar" GOTO MissingICU4JJAR
-IF NOT EXIST "%ICUTZU_HOME%runicutzuenv.bat" GOTO MissingICUTZUENV
+IF NOT EXIST "%ICUTZU_HOME%runicutzuenv.cmd" GOTO MissingICUTZUENV
 
 rem Set environmental variables.
-call "%ICUTZU_HOME%runicutzuenv.bat"
+call "%ICUTZU_HOME%runicutzuenv.cmd"
 IF NOT EXIST "%JAVA_HOME%\bin\java.exe" GOTO MissingJAVAHOME
 
 rem Create a temporary directory if one doesn't exit already.
@@ -57,11 +57,11 @@ GOTO Failure
 GOTO Failure
 
 :MissingICUTZUENV
-@echo runicutzuenv.bat file doesn't exist in %ICUTZU_HOME%.
+@echo runicutzuenv.cmd file doesn't exist in %ICUTZU_HOME%.
 GOTO Failure
 
 :MissingJAVAHOME
-@echo java.exe does not exist in %JAVA_HOME%\bin. Please update the JAVA_HOME enviroment variable in runicutzuenv.bat
+@echo java.exe does not exist in %JAVA_HOME%\bin. Please update the JAVA_HOME enviroment variable in runicutzuenv.cmd
 GOTO Failure
 
 :Success
