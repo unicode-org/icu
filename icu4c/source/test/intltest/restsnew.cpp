@@ -486,7 +486,7 @@ NewResourceBundleTest::TestOtherAPI(){
         errln("copy construction failed\n");
     }
 
-    ResourceBundle defaultSub = defaultresource.get(1, err);
+    ResourceBundle defaultSub = defaultresource.get(0, err);
     ResourceBundle defSubCopy(defaultSub);
     if(strcmp(defSubCopy.getName(), defaultSub.getName() ) !=0  ||
         strcmp(defSubCopy.getLocale().getName(), defaultSub.getLocale().getName() ) !=0  ){
