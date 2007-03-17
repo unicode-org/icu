@@ -54,7 +54,7 @@ static UBool U_CALLCONV csdet_cleanup(void)
 }
 
 static int32_t U_CALLCONV
-charsetMatchComparator(const void *context, const void *left, const void *right)
+charsetMatchComparator(const void * /*context*/, const void *left, const void *right)
 {
     U_NAMESPACE_USE
 
@@ -336,7 +336,7 @@ enumCount(UEnumeration *, UErrorCode *) {
 }
 
 static const char* U_CALLCONV
-enumNext(UEnumeration *en, int32_t *resultLength, UErrorCode *status) {
+enumNext(UEnumeration *en, int32_t *resultLength, UErrorCode * /*status*/) {
     if(((Context *)en->context)->currIndex >= fCSRecognizers_size) {
         if(resultLength != NULL) {
             *resultLength = 0;
@@ -368,7 +368,7 @@ static const UEnumeration gCSDetEnumeration = {
 };
 
 U_CAPI  UEnumeration * U_EXPORT2
-ucsdet_getAllDetectableCharsets(const UCharsetDetector *ucsd,  UErrorCode *status)
+ucsdet_getAllDetectableCharsets(const UCharsetDetector *ucsd, UErrorCode *status)
 {
     U_NAMESPACE_USE
 
@@ -388,3 +388,4 @@ ucsdet_getAllDetectableCharsets(const UCharsetDetector *ucsd,  UErrorCode *statu
 U_CDECL_END
 
 #endif
+
