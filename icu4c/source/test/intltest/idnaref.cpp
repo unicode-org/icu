@@ -614,8 +614,24 @@ CLEANUP:
     }
     uprv_free(caseFlags);
 
-//    delete prep;
-
+    // The RFC states that 
+    // <quote>
+    // ToUnicode never fails. If any step fails, then the original input
+    // is returned immediately in that step.
+    // </quote>
+    // So if any step fails lets copy source to destination
+    if(U_FAILURE(*status)){
+        //copy the source to destination
+        if(dest && srcLength <= destCapacity){
+          if(srcLength == -1) {
+            uprv_memmove(dest,src,u_strlen(src)* U_SIZEOF_UCHAR);
+          } else {
+            uprv_memmove(dest,src,srcLength * U_SIZEOF_UCHAR);
+          }
+        }
+        reqLength = srcLength;
+        *status = U_ZERO_ERROR;
+    }
     return u_terminateUChars(dest, destCapacity, reqLength, status);
 }
 
