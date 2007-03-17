@@ -1391,7 +1391,9 @@ _deleteVariant(char* variants, int32_t variantsLen,
             int32_t d = toDeleteLen + (flag?1:0);
             variantsLen -= d;
             delta += d;
-            uprv_memmove(variants, variants+d, variantsLen);
+            if (variantsLen > 0) {
+                uprv_memmove(variants, variants+d, variantsLen);
+            }
         } else {
             char* p = _strnchr(variants, variantsLen, '_');
             if (p == NULL) {
@@ -1710,7 +1712,7 @@ _canonicalize(const char* localeID,
         }
 
         /* Check for EURO variants. */
-        sawEuro = _deleteVariant(variant, variantSize, "EURO", 4);
+        sawEuro = _deleteVariant(variant, uprv_min(variantSize, (nameCapacity-len)), "EURO", 4);
         len -= sawEuro;
         if (sawEuro > 0 && name[len-1] == '_') { /* delete trailing '_' */
             --len;
