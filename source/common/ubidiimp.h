@@ -302,38 +302,45 @@ struct UBiDi {
 #define IS_VALID_LINE(x) ((x) && ((x)->pParaBiDi) && ((x)->pParaBiDi->pParaBiDi==(x)->pParaBiDi))
 #define IS_VALID_PARA_OR_LINE(x) ((x) && ((x)->pParaBiDi==(x) || (((x)->pParaBiDi) && (x)->pParaBiDi->pParaBiDi==(x)->pParaBiDi)))
 
+typedef union {
+    DirProp *dirPropsMemory;
+    UBiDiLevel *levelsMemory;
+    Para *parasMemory;
+    Run *runsMemory;
+} BidiMemoryForAllocation;
+
 /* helper function to (re)allocate memory if allowed */
 U_CFUNC UBool
-ubidi_getMemory(void **pMemory, int32_t *pSize, UBool mayAllocate, int32_t sizeNeeded);
+ubidi_getMemory(BidiMemoryForAllocation *pMemory, int32_t *pSize, UBool mayAllocate, int32_t sizeNeeded);
 
 /* helper macros for each allocated array in UBiDi */
 #define getDirPropsMemory(pBiDi, length) \
-        ubidi_getMemory((void **)&(pBiDi)->dirPropsMemory, &(pBiDi)->dirPropsSize, \
+        ubidi_getMemory((BidiMemoryForAllocation *)&(pBiDi)->dirPropsMemory, &(pBiDi)->dirPropsSize, \
                         (pBiDi)->mayAllocateText, (length))
 
 #define getLevelsMemory(pBiDi, length) \
-        ubidi_getMemory((void **)&(pBiDi)->levelsMemory, &(pBiDi)->levelsSize, \
+        ubidi_getMemory((BidiMemoryForAllocation *)&(pBiDi)->levelsMemory, &(pBiDi)->levelsSize, \
                         (pBiDi)->mayAllocateText, (length))
 
 #define getRunsMemory(pBiDi, length) \
-        ubidi_getMemory((void **)&(pBiDi)->runsMemory, &(pBiDi)->runsSize, \
+        ubidi_getMemory((BidiMemoryForAllocation *)&(pBiDi)->runsMemory, &(pBiDi)->runsSize, \
                         (pBiDi)->mayAllocateRuns, (length)*sizeof(Run))
 
 /* additional macros used by ubidi_open() - always allow allocation */
 #define getInitialDirPropsMemory(pBiDi, length) \
-        ubidi_getMemory((void **)&(pBiDi)->dirPropsMemory, &(pBiDi)->dirPropsSize, \
+        ubidi_getMemory((BidiMemoryForAllocation *)&(pBiDi)->dirPropsMemory, &(pBiDi)->dirPropsSize, \
                         TRUE, (length))
 
 #define getInitialLevelsMemory(pBiDi, length) \
-        ubidi_getMemory((void **)&(pBiDi)->levelsMemory, &(pBiDi)->levelsSize, \
+        ubidi_getMemory((BidiMemoryForAllocation *)&(pBiDi)->levelsMemory, &(pBiDi)->levelsSize, \
                         TRUE, (length))
 
 #define getInitialParasMemory(pBiDi, length) \
-        ubidi_getMemory((void **)&(pBiDi)->parasMemory, &(pBiDi)->parasSize, \
+        ubidi_getMemory((BidiMemoryForAllocation *)&(pBiDi)->parasMemory, &(pBiDi)->parasSize, \
                         TRUE, (length)*sizeof(Para))
 
 #define getInitialRunsMemory(pBiDi, length) \
-        ubidi_getMemory((void **)&(pBiDi)->runsMemory, &(pBiDi)->runsSize, \
+        ubidi_getMemory((BidiMemoryForAllocation *)&(pBiDi)->runsMemory, &(pBiDi)->runsSize, \
                         TRUE, (length)*sizeof(Run))
 
 #endif

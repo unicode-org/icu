@@ -2528,7 +2528,7 @@ static void testFromTruncatedUTF8(UConverter *utf8Cnv, UConverter *cnv, const ch
     char invalidChars[8];
     int8_t invalidLength;
 
-    char *source;
+    const char *source;
     char *target;
 
     UChar pivotBuffer[8];
