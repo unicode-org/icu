@@ -96,6 +96,7 @@ public class CLILoader {
         this.resultFile = resultFile;
         this.tzFile = tzFile;
         this.backupDir = backupDir;
+        this.curDir = curDir;
 
         // if discoveryonly is enabled, call the search method
         // otherwise, call the update method

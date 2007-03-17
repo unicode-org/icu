@@ -73,11 +73,16 @@ public class ICUTZUMain {
             }
 
             File curDir = new File(args[CUR_DIR]);
-            File backupDir = new File(args[CUR_DIR] + args[BACKUP_DIR]);
-            File pathFile = new File(args[CUR_DIR] + args[PATH_FILE]);
-            File resultFile = new File(args[CUR_DIR] + args[RESULT_FILE]);
-            File tzFile = new File(args[CUR_DIR] + args[TZ_FILE]);
-            File iconFile = new File(args[CUR_DIR] + args[ICON_FILE]);
+            File backupDir = new File(args[CUR_DIR] + File.separator
+                    + args[BACKUP_DIR]);
+            File pathFile = new File(args[CUR_DIR] + File.separator
+                    + args[PATH_FILE]);
+            File resultFile = new File(args[CUR_DIR] + File.separator
+                    + args[RESULT_FILE]);
+            File tzFile = new File(args[CUR_DIR] + File.separator
+                    + args[TZ_FILE]);
+            File iconFile = new File(args[CUR_DIR] + File.separator
+                    + args[ICON_FILE]);
 
             if ("true".equals(System.getProperty("nogui")))
                 new CLILoader(curDir, backupDir, pathFile, resultFile, tzFile);

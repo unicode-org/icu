@@ -108,7 +108,6 @@ public class ICUJarFinder {
             if (file.getAbsolutePath().equalsIgnoreCase(
                     ((File) iter.next()).getAbsolutePath()))
                 return resultModel;
-
         if (file.isDirectory() && (subdirs || depth == 0)) {
             // recurse through each file/directory inside this directory
             File[] dirlist = file.listFiles();
