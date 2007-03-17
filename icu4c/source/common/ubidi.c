@@ -194,7 +194,8 @@ ubidi_openSized(int32_t maxLength, int32_t maxRunCount, UErrorCode *pErrorCode) 
  * is this the best way to do this??
  */
 U_CFUNC UBool
-ubidi_getMemory(void **pMemory, int32_t *pSize, UBool mayAllocate, int32_t sizeNeeded) {
+ubidi_getMemory(BidiMemoryForAllocation *bidiMem, int32_t *pSize, UBool mayAllocate, int32_t sizeNeeded) {
+    void **pMemory = (void **)bidiMem;
     /* check for existing memory */
     if(*pMemory==NULL) {
         /* we need to allocate memory */
