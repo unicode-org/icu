@@ -166,17 +166,15 @@ static UBool gDefaultConverterContainsOption;
 
 static const char DATA_TYPE[] = "cnv";
 
-/* ucnv_cleanup - delete all storage held by the converter cache, except any in use    */
-/*                by open converters.                                                  */
-/*                Not thread safe.                                                     */
-/*                Not supported  API.  Marked U_CAPI only for use by test programs.    */
+/* ucnv_cleanup - delete all storage held by the converter cache, except any  */
+/*                in use by open converters.                                  */
+/*                Not thread safe.                                            */
+/*                Not supported API.                                          */
 static UBool U_CALLCONV ucnv_cleanup(void) {
-    if (SHARED_DATA_HASHTABLE != NULL) {
-        ucnv_flushCache();
-        if (SHARED_DATA_HASHTABLE != NULL && uhash_count(SHARED_DATA_HASHTABLE) == 0) {
-            uhash_close(SHARED_DATA_HASHTABLE);
-            SHARED_DATA_HASHTABLE = NULL;
-        }
+    ucnv_flushCache();
+    if (SHARED_DATA_HASHTABLE != NULL && uhash_count(SHARED_DATA_HASHTABLE) == 0) {
+        uhash_close(SHARED_DATA_HASHTABLE);
+        SHARED_DATA_HASHTABLE = NULL;
     }
 
     /* Called from ucnv_flushCache because it allocates the hashtable */
@@ -187,9 +185,9 @@ static UBool U_CALLCONV ucnv_cleanup(void) {
     gDefaultConverterContainsOption = FALSE;
     gDefaultAlgorithmicSharedData = NULL;
 
-    umtx_destroy(&cnvCacheMutex);           /* Don't worry about destroying the mutex even  */
-                                            /*  if the hash table still exists.  The mutex  */
-                                            /*  will lazily re-init  itself if needed.      */
+    umtx_destroy(&cnvCacheMutex);    /* Don't worry about destroying the mutex even  */
+                                     /*  if the hash table still exists.  The mutex  */
+                                     /*  will lazily re-init  itself if needed.      */
     return (SHARED_DATA_HASHTABLE == NULL);
 }
 
