@@ -477,7 +477,7 @@ _internal_toUnicode(const UChar* src, int32_t srcLength,
     }
 
     //step 3: verify ACE Prefix
-    if(startsWithPrefix(src,srcLength)){
+    if(startsWithPrefix(b1,b1Len)){
 
         //step 4: Remove the ACE Prefix
         b1Prime = b1 + ACE_PREFIX_LENGTH;
@@ -591,6 +591,7 @@ CLEANUP:
           }
         }
         reqLength = srcLength;
+        *status = U_ZERO_ERROR;
     }
 
     return u_terminateUChars(dest, destCapacity, reqLength, status);
