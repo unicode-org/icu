@@ -395,7 +395,8 @@ SimpleTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
 int32_t 
 SimpleTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
                           uint8_t dayOfWeek, int32_t millis, 
-                          int32_t monthLength, UErrorCode& status) const {
+                          int32_t /*monthLength*/, UErrorCode& status) const
+{
     // Check the month before calling Grego::monthLength(). This
     // duplicates a test that occurs in the 9-argument getOffset(),
     // however, this is unavoidable. We don't mind because this method, in
@@ -409,6 +410,9 @@ SimpleTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
         return -1;
     }
 
+    // We ignore monthLength because it can be derived from year and month.
+    // This is so that February in leap years is calculated correctly.
+    // We keep this argument in this function for backwards compatibility.
     return getOffset(era, year, month, day, dayOfWeek, millis,
                      Grego::monthLength(year, month),
                      Grego::previousMonthLength(year, month),
