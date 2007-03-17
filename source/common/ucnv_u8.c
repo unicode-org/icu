@@ -846,7 +846,7 @@ ucnv_UTF8FromUTF8(UConverterFromUnicodeArgs *pFromUArgs,
         } else {
             if(b>0xe0) {
                 if( /* handle U+1000..U+D7FF inline */
-                    (t1=source[0]) >= 0x80 && ((b<0xed) && (t1 <= 0xbf) ||
+                    (t1=source[0]) >= 0x80 && ((b<0xed && t1 <= 0xbf) ||
                                                (b==0xed && (t1 <= 0x9f))) &&
                     (t2=source[1]) >= 0x80 && t2 <= 0xbf
                 ) {
