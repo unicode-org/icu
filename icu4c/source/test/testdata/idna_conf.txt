@@ -637,7 +637,7 @@ passfail: pass
 type: toascii
 
 =====
-desc: 3-2-1 Sharp S conversion; should display as m<00EB>ss <icu> ICU fixed the namezone token to to be m<00EB>ss since this is a tounicode without error.</icu>
+desc: 3-2-1 Sharp S conversion; should display as m<00EB>ss
 namebase: xn--m<00DF>-jma
 nameutf8: xn--m√ü-jma
 namezone: m<00EB>ss
@@ -785,10 +785,10 @@ passfail: fail
 type: tounicode
 
 =====
-desc: 3-8-1 Should show the Unicode <00ED>4dn; <icu> Changed namebase and nameutf8 from xn--4dn-lla to xn--4dn-qma </icu>
-namebase: xn--4dn-qma
-nameutf8: xn--4dn-qma
-namezone: <00ED>4dn
+desc: 3-8-1 Should show the Unicode <00E3>4dn
+namebase: xn--4dn-lla
+nameutf8: xn--4dn-lla
+namezone: <00E3>4dn
 failzone1: 
 failzone2: 
 token: 23377435
@@ -919,7 +919,7 @@ type: toascii
 desc: 4-1-2-9 nonbmp<10400><00ED>dn ->\
  nonbmp<10428><00ED>dn
 namebase: nonbmp<10400><00ED>dn
-nameutf8: nonbmp–êCŒ§n
+nameutf8: nonbmpÌ†ÅÌ∞Ä√≠dn
 namezone: xn--nonbmpdn-h2a34747d
 failzone1: xn--nonbmpdn-h2a37046d
 failzone2: 
@@ -931,7 +931,7 @@ type: toascii
 desc: 4-1-2-10 nonbmptoascii<1D400><00ED>dn ->\
  nonbmptoasciia<00ED>dn
 namebase: nonbmptoascii<1D400><00ED>dn
-nameutf8: nonbmptoascii›êCŒ§n
+nameutf8: nonbmptoasciiÌ†µÌ∞Ä√≠dn
 namezone: xn--nonbmptoasciiadn-msb
 failzone1: xn--nonbmptoasciidn-hpb54112i
 failzone2: 
@@ -1015,7 +1015,7 @@ type: toascii
 desc: 4-2-2-1 newnorm<2F874><00ED>dn ->\
  newnorm<5F33><00ED>dn should not become <5F53>
 namebase: newnorm<2F874><00ED>dn
-nameutf8: newnorm‡Ø°’ÉŒ§n
+nameutf8: newnormÌ°æÌ±¥√≠dn
 namezone: xn--newnormdn-m5a7856x
 failzone1: xn--newnormdn-m5a9396x
 failzone2: xn--newnormdn-m5a9968x
@@ -1059,7 +1059,7 @@ type: toascii
 =====
 desc: 4-3-4 Private use, non-BMP
 namebase: <F0005><00ED>dn
-nameutf8: „∞Ä∆ÉŒ§n
+nameutf8: ÌÆÄÌ∞Ö√≠dn
 namezone: 
 failzone1: xn--dn-mja7922x
 failzone2: 
@@ -1081,7 +1081,7 @@ type: toascii
 =====
 desc: 4-3-6 Non-character, non-BMP
 namebase: <1FFFE><00ED>dn
-nameutf8: ﬂøﬂÉŒ§n
+nameutf8: Ì†øÌøæ√≠dn
 namezone: 
 failzone1: xn--dn-mja7922x
 failzone2: 
@@ -1147,7 +1147,7 @@ type: toascii
 =====
 desc: 4-3-12 Language tags
 namebase: <E0001><E0045><E004E><0068><0069>idn
-nameutf8: „†Ä¬≥∆≥œ®iidn
+nameutf8: Ì≠ÄÌ∞ÅÌ≠ÄÌ±ÖÌ≠ÄÌ±éhiidn
 namezone: 
 failzone1: xn--hiidn-km43aaa
 failzone2: 
@@ -1235,7 +1235,7 @@ type: toascii
 =====
 desc: 5-1-2 Unassinged outside BMP; zone editors should reject
 namebase: <10205><00ED>dn
-nameutf8: –à∆ÉŒ§n
+nameutf8: Ì†ÄÌ∏Ö√≠dn
 namezone: xn--dn-mja7734x
 failzone1: xn--dn-mja7922x
 failzone2: 
@@ -1257,10 +1257,11 @@ type: toascii
 =====
 desc: 5-2-2 Newly assigned outside of BMP; zone editors should reject
 namebase: <10005><00ED>dn
-nameutf8: –Ä∆ÉŒ§n
+nameutf8: Ì†ÄÌ∞Ö√≠dn
 namezone: xn--dn-mja9232x
 failzone1: xn--dn-mja7922x
 failzone2: 
 token: 95537699
 passfail: pass
 type: toascii
+
