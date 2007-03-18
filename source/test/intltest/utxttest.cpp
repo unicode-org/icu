@@ -564,10 +564,12 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
     status = U_ZERO_ERROR;
     utext_setNativeIndex(shallowClone, 0);
     UText *deepClone = utext_clone(NULL, shallowClone, TRUE, FALSE, &status);
+    utext_close(shallowClone);
     if (status != U_UNSUPPORTED_ERROR) {
         TEST_SUCCESS(status);
         TestAccessNoClone(us, deepClone, cpCount, cpMap);
     }
+    utext_close(deepClone);
 }
     
 
@@ -1388,4 +1390,7 @@ void UTextTest::Ticket5560() {
     c = utext_next32(&ut2);
 	TEST_ASSERT(c == 0x43);  // c == 'C'
 
+    utext_close(&ut1);
+    utext_close(&ut2);
 }
+
