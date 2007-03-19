@@ -65,7 +65,7 @@ ucurr.o digitlst.o fmtable_cnv.o \
 choicfmt.o datefmt.o smpdtfmt.o dtfmtsym.o udat.o \
 nfrs.o nfrule.o nfsubs.o rbnf.o ucsdet.o \
 ucal.o calendar.o gregocal.o timezone.o simpletz.o olsontz.o \
-astro.o buddhcal.o islamcal.o japancal.o gregoimp.o hebrwcal.o \
+astro.o buddhcal.o persncal.o islamcal.o japancal.o gregoimp.o hebrwcal.o \
 coleitr.o coll.o tblcoll.o sortkey.o bocsu.o ucoleitr.o \
 ucol.o ucol_res.o ucol_bld.o ucol_sit.o ucol_tok.o ucol_wgt.o ucol_cnt.o ucol_elm.o \
 strmatch.o usearch.o search.o stsearch.o \
