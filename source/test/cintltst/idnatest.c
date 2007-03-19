@@ -37,7 +37,7 @@ static void TestUnicode32Norm(void);
 static void TestJB4490(void);
 static void TestJB4475(void); 
 static void TestLength(void);
-
+static void TestJB5273(void);
 void addIDNATest(TestNode** root);
 
 
@@ -65,6 +65,7 @@ addIDNATest(TestNode** root)
    addTest(root, &TestJB4490,        "idna/TestJB4490");
    addTest(root, &TestJB4475,       "idna/TestJB4475");
    addTest(root, &TestLength,       "idna/TestLength");
+   addTest(root, &TestJB5273,       "idna/TestJB5273");
 }
 
 static void
@@ -656,9 +657,8 @@ static void TestUnicode32Norm() {
         errorCode=U_ZERO_ERROR;
         length=uidna_toASCII(strings[i], -1, ascii, LENGTHOF(ascii), 0, NULL, &errorCode);
         length=uidna_toUnicode(ascii, length, unicode, LENGTHOF(unicode), 0, NULL, &errorCode);
-        if(errorCode!=U_IDNA_VERIFICATION_ERROR) {
-            log_err("string %d yields %s instead of U_IDNA_VERIFICATION_ERROR\n",
-                i, u_errorName(errorCode));
+        if(u_strncmp(ascii, unicode, length)!=0) {
+            log_err("Did not get the correct output\n");
         }
     }
 }
@@ -843,6 +843,34 @@ static void TestLength(){
             log_err("uidna_compare failed with error %s.\n", u_errorName(status));
         }
     }    
+}
+static void TestJB5273(){
+    char* INVALID_DOMAIN_NAME = "xn--m\u00FCller.de";
+    UChar invalid_idn[25] = {'\0'};
+    int32_t len = u_unescape(INVALID_DOMAIN_NAME, invalid_idn, strlen(INVALID_DOMAIN_NAME));
+    UChar output[50] = {'\0'};
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError prsError;
+    int32_t outLen = uidna_toUnicode(invalid_idn, len, output, 50, UIDNA_DEFAULT, &prsError, &status);
+    if(U_FAILURE(status)){
+        log_err("uidna_toUnicode failed with error: %s\n", u_errorName(status));
+    }
+    status = U_ZERO_ERROR;
+    outLen = uidna_toUnicode(invalid_idn, len, output, 50, UIDNA_USE_STD3_RULES, &prsError, &status);
+    if(U_FAILURE(status)){
+        log_err("uidna_toUnicode failed with error: %s\n", u_errorName(status));
+    }
+
+    status = U_ZERO_ERROR;
+    outLen = uidna_IDNToUnicode(invalid_idn, len, output, 50, UIDNA_DEFAULT, &prsError, &status);
+    if(U_FAILURE(status)){
+        log_err("uidna_toUnicode failed with error: %s\n", u_errorName(status));
+    }
+    status = U_ZERO_ERROR;
+    outLen = uidna_IDNToUnicode(invalid_idn, len, output, 50, UIDNA_USE_STD3_RULES, &prsError, &status);
+    if(U_FAILURE(status)){
+        log_err("uidna_toUnicode failed with error: %s\n", u_errorName(status));
+    }
 }
 #endif
 
