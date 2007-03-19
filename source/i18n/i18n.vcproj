@@ -884,6 +884,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\persncal.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\persncal.h"
+				>
+			</File>
+			<File
 				RelativePath=".\japancal.cpp"
 				>
 			</File>
