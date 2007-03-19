@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1999-2006, International Business Machines Corporation and
+ * Copyright (c) 1999-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -8,6 +8,11 @@
 # ifndef _INCLUDE_POSIX_SOURCE
 #  define _INCLUDE_POSIX_SOURCE
 # endif
+#endif
+
+/* Needed by z/OS to get usleep */
+#if !defined(_XOPEN_SOURCE_EXTENDED)
+#define _XOPEN_SOURCE_EXTENDED 1
 #endif
 
 #include "unicode/utypes.h"
