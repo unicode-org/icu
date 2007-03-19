@@ -75,6 +75,8 @@ void IntlCalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &n
     CASE(4,TestBuddhistFormat);
     CASE(5,TestJapaneseFormat);
     CASE(6,TestJapanese3860);
+    CASE(7,TestPersian);
+    CASE(8,TestPersianFormat);
     default: name = ""; break;
     }
 }
@@ -656,6 +658,66 @@ void IntlCalendarTest::TestJapanese3860()
     delete cal;
     delete fmt2;
 }
+
+
+
+
+/**
+ * Verify the Persian Calendar.
+ */
+void IntlCalendarTest::TestPersian() {
+    UDate timeA = Calendar::getNow();
+    
+    Calendar *cal;
+    UErrorCode status = U_ZERO_ERROR;
+    cal = Calendar::createInstance("fa_IR@calendar=persian", status);
+    CHECK(status, UnicodeString("Creating fa_IR@calendar=persian calendar"));
+    // Sanity check the calendar 
+    UDate timeB = Calendar::getNow();
+    UDate timeCal = cal->getTime(status);
+
+    if(!(timeA <= timeCal) || !(timeCal <= timeB)) {
+      errln((UnicodeString)"Error: Calendar time " + timeCal +
+            " is not within sampled times [" + timeA + " to " + timeB + "]!");
+    }
+    // end sanity check
+// quasiGregorianTest(*cal,Locale("ja_JP"),data);
+    delete cal;
+}
+
+void IntlCalendarTest::TestPersianFormat() {
+    UErrorCode status = U_ZERO_ERROR;
+    SimpleDateFormat *fmt = new SimpleDateFormat(UnicodeString("MMMM d, yyyy G"), Locale(" en_US@calendar=persian"), status);
+    CHECK(status, "creating date format instance");
+    SimpleDateFormat *fmt2 = new SimpleDateFormat(UnicodeString("MMMM d, yyyy G"), Locale("en_US@calendar=gregorian"), status);
+    CHECK(status, "creating gregorian date format instance");
+    UnicodeString gregorianDate("January 18, 2007 AD");
+    UDate aDate = fmt2->parse(gregorianDate, status); 
+    if(!fmt) { 
+        errln("Coudln't create en_US instance");
+    } else {
+        UnicodeString str;
+        fmt->format(aDate, str);
+        logln(UnicodeString() + "as Persian Calendar: " + escape(str)); 
+        UnicodeString expected("Dey 28, 1385 AP");
+        if(str != expected) {
+            errln("Expected " + escape(expected) + " but got " + escape(str));
+        }
+        UDate otherDate = fmt->parse(expected, status); 
+        if(otherDate != aDate) { 
+            UnicodeString str3;
+            fmt->format(otherDate, str3);
+            errln("Parse incorrect of " + escape(expected) + " - wanted " + aDate + " but got " +  otherDate + ", " + escape(str3)); 
+        } else {
+            logln("Parsed OK: " + expected);
+        }
+        delete fmt;
+    }
+    delete fmt2;
+    
+    CHECK(status, "Error occured testing Persian Calendar in English "); 
+}
+
 
 void IntlCalendarTest::simpleTest(const Locale& loc, const UnicodeString& expect, UDate expectDate, UErrorCode& status)
 {

@@ -80,6 +80,8 @@ icu4c/source/data/mappings/ibm-950_P110_P100-1999.ucm -text
 icu4c/source/data/mappings/ibm-954_P101_P101-2000.ucm -text
 icu4c/source/data/mappings/ibm-964_P110_P100-1999.ucm -text
 icu4c/source/data/mappings/ibm-970_P110_P110-2006.ucm -text
+icu4c/source/i18n/persncal.cpp -text
+icu4c/source/i18n/persncal.h -text
 icu4c/source/samples/ucnv/data02.bin -text
 icu4c/source/test/testdata/icu26_testtypes.res -text
 icu4c/source/test/testdata/icu26e_testtypes.res -text
