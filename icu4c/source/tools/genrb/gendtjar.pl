@@ -121,7 +121,10 @@ sub main(){
     $icu4jTestDataDir = "$icu4jDevDataDir/testdata";
     
     $icuDataDir =$icuBuildDir."/icudt".$version.checkPlatformEndianess();
-
+    
+    #remove the stale directories
+    unlink($tempDir);
+    
     convertData($icuDataDir, $icupkg, $tempDir, $icu4jDataDir, $verbose);
     #convertData($icuDataDir."/coll/", $icupkg, $tempDir, $icu4jDataDir."/coll");
     createJar("$jarDir/jar", "icudata.jar", $tempDir, $icu4jDataDir, $verbose);
