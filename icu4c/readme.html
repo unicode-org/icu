@@ -34,7 +34,7 @@
      <abbr title="International Components for Unicode">ICU</abbr> 3.7
     ReadMe</h1>
 
-    <p>Version: 2006-Oct-20<br />
+    <p>Version: 2007-Mar-19<br />
      Copyright &copy; 1997-2006 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -1163,10 +1163,10 @@
     when your application is externalized via Job Control Language (JCL).</p>
 
     <p>The OS390BATCH environment variable enables non-UNIX support including the
-    batch environment. When OS390BATCH is set, the libicuuc<i>XX</i>.dll,
-    libicudt<i>XX</i>e.dll, and libicudt<i>XX</i>e_stub.dll binaries are built
-    into data sets (the native file system). Turning on OS390BATCH does not turn
-    off the normal z/OS UNIX build. This means that the z/OS UNIX (HFS) DLLs will
+    batch environment. When OS390BATCH is set, the libicui18n<i>XX</i>.dll,
+    libicuuc<i>XX</i>.dll, and libicudt<i>XX</i>e.dll binaries are built into
+    data sets (the native file system). Turning on OS390BATCH does not turn off
+    the normal z/OS UNIX build. This means that the z/OS UNIX (HFS) DLLs will
     always be created.</p>
 
     <p>Two additional environment variables indicate the names of the z/OS data
@@ -1195,8 +1195,7 @@ LOADEXP=<i>USER</i>.ICU.EXP</samp>
 <pre>
 <samp>IXMI<i>XX</i>IN --&gt; libicui18n<i>XX</i>.dll
 IXMI<i>XX</i>UC --&gt; libicuuc<i>XX</i>.dll
-IXMI<i>XX</i>DA --&gt; libicudt<i>XX</i>e.dll
-IXMI<i>XX</i>D1 --&gt; libicudt<i>XX</i>e_stub.dll <i>(Only when OS390_STUBDATA=1)</i></samp>
+IXMI<i>XX</i>DA --&gt; libicudt<i>XX</i>e.dll</samp>
 </pre>
 
     <p>You should point the LOADMOD environment variable at a partitioned data
@@ -1209,11 +1208,11 @@ Management class. . : <i>**None**</i>
 Storage class . . . : <i>BASE</i>
 Volume serial . . . : <i>TSO007</i>
 Device type . . . . : <i>3390</i>
-Data class. . . . . : LOAD
+Data class. . . . . : <i>LOAD</i>
 Organization  . . . : PO
 Record format . . . : U
 Record length . . . : 0
-Block size  . . . . : 32760
+Block size  . . . . : <i>32760</i>
 1st extent cylinders: 1
 Secondary cylinders : 5
 Data set name type  : LIBRARY</samp>
