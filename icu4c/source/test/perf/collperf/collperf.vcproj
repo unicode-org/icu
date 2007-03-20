@@ -161,11 +161,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="icuuc.lib icuin.lib ctestfw.lib icutu.lib winmm.lib"
+				AdditionalDependencies="icuuc.lib icuin.lib icutest.lib icutu.lib winmm.lib"
 				OutputFile=".\Release/collperf.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="..\..\..\lib\"
+				AdditionalLibraryDirectories="..\..\..\..\lib\"
 				ProgramDatabaseFile=".\Release/collperf.pdb"
 				SubSystem="1"
 				TargetMachine="1"
