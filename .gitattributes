@@ -83,6 +83,11 @@ icu4c/source/data/mappings/ibm-970_P110_P110-2006.ucm -text
 icu4c/source/i18n/persncal.cpp -text
 icu4c/source/i18n/persncal.h -text
 icu4c/source/samples/ucnv/data02.bin -text
+icu4c/source/test/perf/charperf/CharPerf_r.pl -text
+icu4c/source/test/perf/convperf/ConvPerf_r.pl -text
+icu4c/source/test/perf/normperf/NormPerf_r.pl -text
+icu4c/source/test/perf/ubrkperf/UBrkPerf_r.pl -text
+icu4c/source/test/perf/ustrperf/StringPerf_r.pl -text
 icu4c/source/test/testdata/icu26_testtypes.res -text
 icu4c/source/test/testdata/icu26e_testtypes.res -text
 icu4c/source/test/testdata/importtest.bin -text
