@@ -268,7 +268,7 @@ class PathModel extends AbstractListModel {
             IncludePath[] paths = new IncludePath[n];
 
             int k = 0;
-            Iterator iter = list.iterator();
+            Iterator iter = iterator();
             for (int i = 0; k < n && iter.hasNext(); i++)
                 if (i == indices[k])
                     paths[k++] = (IncludePath) iter.next();
@@ -299,7 +299,7 @@ class PathModel extends AbstractListModel {
         if (list.size() > 0) {
             int n = list.size();
             IncludePath[] paths = new IncludePath[n];
-            Iterator iter = list.iterator();
+            Iterator iter = iterator();
             for (int i = 0; i < n; i++)
                 paths[i] = (IncludePath) iter.next();
             ICUJarFinder.search(resultModel, logger, paths, subdirs, curDir,

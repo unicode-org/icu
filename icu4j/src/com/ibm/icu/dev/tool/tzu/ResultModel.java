@@ -44,25 +44,15 @@ class ResultModel extends AbstractTableModel {
     public static final int COLUMN_ICU_VERSION = 2;
 
     /**
-     * A list of names of the columns in a result model.
-     */
-    public static final String[] COLUMN_NAMES = new String[] { "Path", "Name",
-            "ICU Version", "TZ Version", "Readable", "Writable" };
-
-    /**
-     * The column designating whether a file is readable.
-     */
-    public static final int COLUMN_READABLE = 4;
-
-    /**
      * The column designating timezone verisons.
      */
     public static final int COLUMN_TZ_VERSION = 3;
 
     /**
-     * The column designating whether a file is writable.
+     * A list of names of the columns in a result model.
      */
-    public static final int COLUMN_WRITABLE = 5;
+    public static final String[] COLUMN_NAMES = new String[] { "Path", "Name",
+            "ICU Version", "TZ Version" };
 
     /**
      * The serializable UID.
@@ -70,25 +60,14 @@ class ResultModel extends AbstractTableModel {
     public static final long serialVersionUID = 1338;
 
     /**
-     * The complete list of ICUFiles represented by this result model.
+     * The list of ICUFiles represented by this result model.
      */
-    private List completeList = new ArrayList();
-
-    /**
-     * If hidden is true, only ICUFiles that are readable and writable are
-     * active. Otherwise, all ICUFiles are readable and active.
-     */
-    private boolean hidden = true;
+    private List icuFileList = new ArrayList();
 
     /**
      * The current logger.
      */
     private Logger logger;
-
-    /**
-     * The list of only ICUFiles that are readable and writable.
-     */
-    private List permissibleList = new ArrayList();
 
     /**
      * The result list file where results are saved and stored.
@@ -124,10 +103,8 @@ class ResultModel extends AbstractTableModel {
      */
     public boolean add(File file) {
         try {
-            ICUFile entry = new ICUFile(file, logger);
-            if (file.canRead() && file.canWrite())
-                add(permissibleList, hidden, entry);
-            add(completeList, !hidden, entry);
+            ICUFile icuFile = new ICUFile(file, logger);
+            add(icuFile);
             return true;
         } catch (IOException ex) {
             return false;
@@ -137,15 +114,14 @@ class ResultModel extends AbstractTableModel {
     /**
      * Adds a file to the ICUFile list.
      * 
-     * @param entry
+     * @param icuFile
      *            The file.
      */
-    public void add(ICUFile entry) {
-        File file = entry.getFile();
-        if (file.canRead() && file.canWrite())
-            add(permissibleList, hidden, entry);
-
-        add(completeList, !hidden, entry);
+    public void add(ICUFile icuFile) {
+        remove(icuFile.getFile());
+        icuFileList.add(icuFile);
+        int index = icuFileList.size() - 1;
+        fireTableRowsInserted(index, index);
     }
 
     /**
@@ -186,8 +162,7 @@ class ResultModel extends AbstractTableModel {
      * @return The number of ICUFiles represented.
      */
     public int getRowCount() {
-        List list = hidden ? permissibleList : completeList;
-        return (list == null) ? 0 : list.size();
+        return (icuFileList == null) ? 0 : icuFileList.size();
     }
 
     /**
@@ -203,27 +178,20 @@ class ResultModel extends AbstractTableModel {
      *            <li>COLUMN_FILE_PATH</li>
      *            <li>COLUMN_ICU_VERSION</li>
      *            <li>COLUMN_TZ_VERSION</li>
-     *            <li>COLUMN_READABLE</li>
-     *            <li>COLUMN_WRITABLE</li>
      *            </ul>
      * @return The item at the given row and column. Will always be a String.
      */
     public Object getValueAt(int row, int col) {
-        List list = hidden ? permissibleList : completeList;
-        ICUFile entry = ((ICUFile) list.get(row));
+        ICUFile icuFile = ((ICUFile) icuFileList.get(row));
         switch (col) {
         case COLUMN_FILE_NAME:
-            return entry.getPath();
+            return icuFile.getFilename();
         case COLUMN_FILE_PATH:
-            return entry.getFilename();
+            return icuFile.getPath();
         case COLUMN_ICU_VERSION:
-            return entry.getICUVersion();
+            return icuFile.getICUVersion();
         case COLUMN_TZ_VERSION:
-            return entry.getTZVersion();
-        case COLUMN_READABLE:
-            return entry.getFile().canRead() ? "Yes" : "No";
-        case COLUMN_WRITABLE:
-            return entry.getFile().canWrite() ? "Yes" : "No";
+            return icuFile.getTZVersion();
         default:
             return null;
         }
@@ -235,8 +203,7 @@ class ResultModel extends AbstractTableModel {
      * @return An iterator on the list of ICUFiles.
      */
     public Iterator iterator() {
-        List list = hidden ? permissibleList : completeList;
-        return list.iterator();
+        return icuFileList.iterator();
     }
 
     /**
@@ -294,8 +261,19 @@ class ResultModel extends AbstractTableModel {
      *            The file to remove.
      */
     public void remove(File file) {
-        remove(permissibleList, hidden, file);
-        remove(completeList, !hidden, file);
+        if (icuFileList.size() > 0) {
+            Iterator iter = iterator();
+            int i = 0;
+            while (iter.hasNext()) {
+                ICUFile icuFile = (ICUFile) iter.next();
+                if (icuFile.getFile().equals(file)) {
+                    icuFileList.remove(icuFile);
+                    fireTableRowsDeleted(i, i);
+                    return;
+                }
+                i++;
+            }
+        }
     }
 
     /**
@@ -305,16 +283,24 @@ class ResultModel extends AbstractTableModel {
      *            The indices of the files to remove.
      */
     public void remove(int[] indices) {
-        remove(permissibleList, hidden, indices);
-        remove(completeList, !hidden, indices);
+        if (icuFileList.size() > 0 && indices.length > 0) {
+            Arrays.sort(indices);
+            for (int i = indices.length - 1; i >= 0; i--) {
+                icuFileList.remove(indices[i]);
+                fireTableRowsDeleted(indices[i], indices[i]);
+            }
+        }
     }
 
     /**
      * Clears the ICUFile list.
      */
     public void removeAll() {
-        removeAll(permissibleList, hidden);
-        removeAll(completeList, !hidden);
+        if (icuFileList.size() > 0) {
+            int lastIndex = icuFileList.size() - 1;
+            icuFileList.clear();
+            fireTableRowsDeleted(0, lastIndex);
+        }
     }
 
     /**
@@ -331,8 +317,7 @@ class ResultModel extends AbstractTableModel {
 
         try {
             writer = new BufferedWriter(new FileWriter(resultListFile));
-            Iterator iter = (hidden ? permissibleList : completeList)
-                    .iterator();
+            Iterator iter = iterator();
             while (iter.hasNext()) {
                 icuFile = (ICUFile) iter.next();
                 String line = icuFile.getFile().getPath() + '\t'
@@ -356,17 +341,6 @@ class ResultModel extends AbstractTableModel {
     }
 
     /**
-     * Sets whether the table should hide ICUFiles that lack permissions.
-     * 
-     * @param value
-     *            Whether the table should hide ICUFiles that lack permissions.
-     */
-    public void setHidden(boolean value) {
-        hidden = value;
-        fireTableDataChanged();
-    }
-
-    /**
      * Updates a selection of the ICUFiles given a URL as the source of the
      * update and a backup directory as a place to store a copy of the
      * un-updated file.
@@ -381,10 +355,26 @@ class ResultModel extends AbstractTableModel {
      */
     public void update(int[] indices, URL updateURL, File backupDir)
             throws InterruptedException {
-        if (hidden)
-            update(permissibleList, indices, updateURL, backupDir);
-        else
-            update(completeList, indices, updateURL, backupDir);
+        if (icuFileList.size() > 0 && indices.length > 0) {
+            Arrays.sort(indices);
+            int n = indices.length;
+
+            int k = 0;
+            Iterator iter = iterator();
+            for (int i = 0; k < n && iter.hasNext(); i++)
+                if (i == indices[k])
+                    try {
+                        // update the file
+                        ((ICUFile) iter.next()).update(updateURL, backupDir);
+                        fireTableRowsUpdated(i, i);
+                        k++;
+                    } catch (IOException ex) {
+                        // could not update the jar
+                        ex.printStackTrace();
+                    }
+                else
+                    iter.next();
+        }
     }
 
     /**
@@ -399,93 +389,17 @@ class ResultModel extends AbstractTableModel {
      */
     public void updateAll(URL updateURL, File backupDir)
             throws InterruptedException {
-        if (hidden)
-            updateAll(permissibleList, updateURL, backupDir);
-        else
-            updateAll(completeList, updateURL, backupDir);
-    }
-
-    /**
-     * Adds a given ICUFile to the given list.
-     * 
-     * @param list
-     *            The list to add to.
-     * @param fire
-     *            Whether to fire off an event for this adding.
-     * @param entry
-     *            The ICUFile to add.
-     */
-    private void add(List list, boolean fire, ICUFile entry) {
-        remove(list, fire, entry.getFile());
-        list.add(entry);
-        int index = list.size() - 1;
-        if (fire)
-            fireTableRowsInserted(index, index);
-    }
-
-    /**
-     * Removes a given ICUFile from the given list.
-     * 
-     * @param list
-     *            The list to remove from.
-     * @param fire
-     *            Whether to fire off an event for this removal.
-     * @param entry
-     *            The ICUFile to remove.
-     */
-    private void remove(List list, boolean fire, File file) {
-        if (list.size() > 0) {
-            Iterator iter = list.iterator();
-            int i = 0;
-            while (iter.hasNext()) {
-                ICUFile entry = (ICUFile) iter.next();
-                if (entry.getFile().equals(file)) {
-                    list.remove(entry);
-                    if (fire)
-                        fireTableRowsDeleted(i, i);
-                    return;
+        if (icuFileList.size() > 0) {
+            int n = icuFileList.size();
+            Iterator iter = iterator();
+            for (int i = 0; i < n; i++)
+                try {
+                    ((ICUFile) iter.next()).update(updateURL, backupDir);
+                    fireTableRowsUpdated(i, i);
+                } catch (IOException ex) {
+                    // could not update the jar
+                    ex.printStackTrace();
                 }
-                i++;
-            }
-        }
-    }
-
-    /**
-     * Removes a selection of ICUFiles from the given list.
-     * 
-     * @param list
-     *            The list to remove from.
-     * @param fire
-     *            Whether to fire off events for removals.
-     * @param indices
-     *            The indices of ICUFiles in the list to remove.
-     */
-    private void remove(List list, boolean fire, int[] indices) {
-        if (list.size() > 0 && indices.length > 0) {
-            Arrays.sort(indices);
-            int max = indices[indices.length - 1];
-            int min = indices[0];
-            for (int i = indices.length - 1; i >= 0; i--)
-                list.remove(indices[i]);
-            if (fire)
-                fireTableRowsDeleted(min, max);
-        }
-    }
-
-    /**
-     * Removes all ICUFiles from the given list.
-     * 
-     * @param list
-     *            The list to remove from.
-     * @param fire
-     *            Whether to fire off events for removals.
-     */
-    private void removeAll(List list, boolean fire) {
-        if (list.size() > 0) {
-            int index = list.size() - 1;
-            list.clear();
-            if (fire)
-                fireTableRowsDeleted(0, index);
         }
     }
 
@@ -515,69 +429,4 @@ class ResultModel extends AbstractTableModel {
         throw new IllegalArgumentException("Error in " + resultListFilename
                 + " (line " + lineNumber + "): " + message);
     }
-
-    /**
-     * Updates a selection of the ICUFiles given a URL as the source of the
-     * update and a backup directory as a place to store a copy of the
-     * un-updated file.
-     * 
-     * @param indices
-     *            The indices of the ICUFiles to update.
-     * @param updateURL
-     *            The URL to use a source of the update.
-     * @param backupDir
-     *            The directory in which to store backups.
-     * @throws InterruptedException
-     */
-    private void update(List list, int[] indices, URL updateURL, File backupDir)
-            throws InterruptedException {
-        if (list.size() > 0 && indices.length > 0) {
-            Arrays.sort(indices);
-            int n = indices.length;
-
-            int k = 0;
-            Iterator iter = list.iterator();
-            for (int i = 0; k < n && iter.hasNext(); i++)
-                if (i == indices[k])
-                    try {
-                        k++;
-                        ((ICUFile) iter.next()).update(updateURL, backupDir);
-                        fireTableRowsUpdated(i, i);
-                        Thread.sleep(0);
-                    } catch (IOException ex) {
-                        // could not update the jar
-                        ex.printStackTrace();
-                    }
-                else
-                    iter.next();
-        }
-    }
-
-    /**
-     * Updates all of the ICUFiles given a URL as the source of the update and a
-     * backup directory as a place to store a copy of the un-updated file.
-     * 
-     * @param updateURL
-     *            The URL to use a source of the update.
-     * @param backupDir
-     *            The directory in which to store backups.
-     * @throws InterruptedException
-     */
-    private void updateAll(List list, URL updateURL, File backupDir)
-            throws InterruptedException {
-        if (list.size() > 0) {
-            int n = list.size();
-            Iterator iter = list.iterator();
-            for (int i = 0; i < n; i++)
-                try {
-                    ((ICUFile) iter.next()).update(updateURL, backupDir);
-                    fireTableRowsUpdated(i, i);
-                    Thread.sleep(0);
-                } catch (IOException ex) {
-                    // could not update the jar
-                    ex.printStackTrace();
-                }
-        }
-    }
-
 }

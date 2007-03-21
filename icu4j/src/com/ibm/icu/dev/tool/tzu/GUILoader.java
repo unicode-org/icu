@@ -26,7 +26,7 @@ public class GUILoader {
     /**
      * The title for the application.
      */
-    public static final String TITLE = "ICUTZU (ICU4J Time Zone Updater)";
+    public static final String TITLE = "ICU4J Time Zone Update Utility (ICUTZU)";
 
     /**
      * The backup directory to store files.
@@ -121,7 +121,7 @@ public class GUILoader {
 
         // initialize the path list gui
         pathGUI = new PathComponent(this);
-        pathFrame = new JFrame(TITLE + " - Search Paths");
+        pathFrame = new JFrame(TITLE + " - Directories to Search");
         pathFrame.getContentPane().add(pathGUI);
         pathFrame.pack();
         pathFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
@@ -136,7 +136,7 @@ public class GUILoader {
 
         // initialize the result list gui
         resultGUI = new ResultComponent(this);
-        resultFrame = new JFrame(TITLE + " - Updatable ICU4J Jars");
+        resultFrame = new JFrame(TITLE + " - ICU4J Jar Files to Update");
         resultFrame.getContentPane().add(resultGUI);
         resultFrame.pack();
         resultFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
@@ -152,8 +152,10 @@ public class GUILoader {
 
         // get the logger instance
         try {
-            logger = Logger.getInstance(Logger.DEFAULT_FILENAME, Logger.NORMAL,
-                    resultGUI.getStatusBar(), pathFrame);
+            File logFile = new File(curDir.getPath() + File.separator
+                    + "icutzugui.log");
+            logger = Logger.getInstance(logFile, Logger.NORMAL, resultGUI
+                    .getStatusBar(), pathFrame);
         } catch (FileNotFoundException ex) {
             String error = "Could not open " + Logger.DEFAULT_FILENAME
                     + " for writing.";
@@ -226,21 +228,28 @@ public class GUILoader {
 
         workerThread = new Thread(new Runnable() {
             public void run() {
-                logger.printlnToScreen("Search started.");
-                setCancelSearchEnabled(true);
-                setUpdateEnabled(false);
-                setSearchEnabled(false);
                 try {
+                    logger.printlnToScreen("Search started ...");
+                    logger.setStatus("Search started ...");
+                    setCancelSearchEnabled(true);
+                    setUpdateEnabled(false);
+                    setSearchEnabled(false);
                     resultFrame.setVisible(true);
                     resultClosed = false;
                     pathModel.search(resultModel, indices, subdirs, curDir,
                             backupDir);
-                } catch (InterruptedException ex) { /* i escaped! i'm free! */
+                    logger.printlnToScreen("Search ended.");
+                    logger.setStatus("Search ended.");
+                } catch (InterruptedException ex) {
+                    try {
+                        logger.setStatus("Search interrupted.");
+                    } catch (InterruptedException e) {
+                        // once is enough
+                    }
                 }
                 setSearchEnabled(true);
                 setUpdateEnabled(true);
                 setCancelSearchEnabled(false);
-                logger.printlnToScreen("Search ended.");
             }
         });
 
@@ -258,21 +267,28 @@ public class GUILoader {
 
         workerThread = new Thread(new Runnable() {
             public void run() {
-                logger.printlnToScreen("Search started.");
-                setCancelSearchEnabled(true);
-                setUpdateEnabled(false);
-                setSearchEnabled(false);
                 try {
+                    logger.printlnToScreen("Search started ...");
+                    logger.setStatus("Search started ...");
+                    setCancelSearchEnabled(true);
+                    setUpdateEnabled(false);
+                    setSearchEnabled(false);
                     resultFrame.setVisible(true);
                     resultClosed = false;
                     pathModel
                             .searchAll(resultModel, subdirs, curDir, backupDir);
-                } catch (InterruptedException ex) { /* i escaped! i'm free! */
+                    logger.printlnToScreen("Search ended.");
+                    logger.setStatus("Search ended.");
+                } catch (InterruptedException ex) {
+                    try {
+                        logger.setStatus("Search interrupted.");
+                    } catch (InterruptedException e) {
+                        // once is enough
+                    }
                 }
                 setSearchEnabled(true);
                 setUpdateEnabled(true);
                 setCancelSearchEnabled(false);
-                logger.printlnToScreen("Search ended.");
             }
         });
 
@@ -292,18 +308,25 @@ public class GUILoader {
 
         workerThread = new Thread(new Runnable() {
             public void run() {
-                logger.printlnToScreen("Update started.");
-                setCancelUpdateEnabled(true);
-                setUpdateEnabled(false);
-                setSearchEnabled(false);
                 try {
+                    logger.printlnToScreen("Update started ...");
+                    logger.setStatus("Update started ...");
+                    setCancelUpdateEnabled(true);
+                    setUpdateEnabled(false);
+                    setSearchEnabled(false);
                     resultModel.update(indices, updateURL, backupDir);
-                } catch (InterruptedException ex) { /* i escaped! i'm free! */
+                    logger.printlnToScreen("Update ended.");
+                    logger.setStatus("Update ended.");
+                } catch (InterruptedException ex) {
+                    // try {
+                    // logger.setStatus("Update interrupted.");
+                    // } catch (InterruptedException e) {
+                    // // once is enough
+                    // }
                 }
                 setUpdateEnabled(true);
                 setSearchEnabled(true);
                 setCancelUpdateEnabled(false);
-                logger.printlnToScreen("Update ended.");
             }
         });
 
@@ -321,18 +344,25 @@ public class GUILoader {
 
         workerThread = new Thread(new Runnable() {
             public void run() {
-                logger.printlnToScreen("Update started.");
-                setCancelUpdateEnabled(true);
-                setUpdateEnabled(false);
-                setSearchEnabled(false);
                 try {
+                    logger.printlnToScreen("Update started ...");
+                    logger.setStatus("Update started ...");
+                    setCancelUpdateEnabled(true);
+                    setUpdateEnabled(false);
+                    setSearchEnabled(false);
                     resultModel.updateAll(updateURL, backupDir);
-                } catch (InterruptedException ex) { /* i escaped! i'm free! */
+                    logger.printlnToScreen("Update ended.");
+                    logger.setStatus("Update ended.");
+                } catch (InterruptedException ex) {
+                    // try {
+                    // logger.setStatus("Update interrupted.");
+                    // } catch (InterruptedException e) {
+                    // // once is enough
+                    // }
                 }
                 setUpdateEnabled(true);
                 setSearchEnabled(true);
                 setCancelUpdateEnabled(false);
-                logger.printlnToScreen("Update ended.");
             }
         });
 

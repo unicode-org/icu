@@ -15,6 +15,16 @@ import java.io.IOException;
  */
 public class CLILoader {
     /**
+     * The filename of the log file in patch mode.
+     */
+    public static final String LOG_FILENAME_PATCH = "icutzu_patch.log";
+
+    /**
+     * The filename of the log file in discovery only mode.
+     */
+    public static final String LOG_FILENAME_DISCOVERYONLY = "icutzu_discovery.log";
+
+    /**
      * The backup directory to use in patch mode, or null if there should be no
      * backups.
      */
@@ -79,15 +89,20 @@ public class CLILoader {
      */
     public CLILoader(File curDir, File backupDir, File pathFile,
             File resultFile, File tzFile) {
+        // determine whether we are running in discover only mode or patch mode
+        boolean discoverOnly = "true".equalsIgnoreCase(System
+                .getProperty("discoveronly"));
+        boolean silentPatch = "true".equalsIgnoreCase(System
+                .getProperty("silentpatch"));
+        File logFile = new File(curDir.getPath() + File.separator
+                + (discoverOnly ? "icutzu_discover.log" : "icutzu_patch.log"));
+
         // create the logger based on the silentpatch option
         try {
-            this.logger = Logger
-                    .getInstance(Logger.DEFAULT_FILENAME,
-                            "true".equalsIgnoreCase(System
-                                    .getProperty("silentpatch")) ? Logger.QUIET
-                                    : Logger.NORMAL);
+            this.logger = Logger.getInstance(logFile,
+                    silentPatch ? Logger.QUIET : Logger.NORMAL);
         } catch (FileNotFoundException ex) {
-            System.out.println("Could not open " + Logger.DEFAULT_FILENAME
+            System.out.println("Could not open " + logFile.getPath()
                     + " for writing.");
             System.exit(-1);
         }
@@ -101,11 +116,10 @@ public class CLILoader {
         // if discoveryonly is enabled, call the search method
         // otherwise, call the update method
         try {
-            if ("true".equalsIgnoreCase(System.getProperty("discoveronly"))) {
+            if (discoverOnly)
                 search();
-            } else {
+            else
                 update();
-            }
         } catch (IllegalArgumentException ex) {
             logger.errorln(ex.getMessage());
         } catch (IOException ex) {

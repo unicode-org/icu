@@ -65,9 +65,6 @@ public class ICUJarFinder {
             search(resultModel, logger, (File) included.get(i), excluded,
                     subdirs, 0);
 
-        // finalize the status.
-        logger.setStatus("Search complete.");
-
         // chain the result model
         return resultModel;
     }

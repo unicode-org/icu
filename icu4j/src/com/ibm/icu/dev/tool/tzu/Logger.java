@@ -7,6 +7,7 @@
 package com.ibm.icu.dev.tool.tzu;
 
 import java.awt.Component;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -52,8 +53,8 @@ public class Logger {
      * <code>filename</code> and <code>verbosity</code> if one is not
      * already constructed.
      * 
-     * @param filename
-     *            The filename to use for logging output.
+     * @param logFile
+     *            The file to use for logging output.
      * @param verbosity
      *            The verbosity for output to the screen. Should be one of the
      *            following:
@@ -65,10 +66,10 @@ public class Logger {
      * @return The instance of the logger.
      * @throws FileNotFoundException
      */
-    public static synchronized Logger getInstance(String filename, int verbosity)
+    public static synchronized Logger getInstance(File logFile, int verbosity)
             throws FileNotFoundException {
         if (logger == null) {
-            logger = new Logger(filename, verbosity, null, null);
+            logger = new Logger(logFile, verbosity, null, null);
         }
         return logger;
     }
@@ -80,8 +81,8 @@ public class Logger {
      * sent to it. If a dialogParent is specified, dialog messages will be
      * displayed.
      * 
-     * @param filename
-     *            The filename to use for logging output.
+     * @param logFile
+     *            The file to use for logging output.
      * @param verbosity
      *            The verbosity for output to the screen. Should be one of the
      *            following:
@@ -99,11 +100,11 @@ public class Logger {
      * @return The instance of the logger.
      * @throws FileNotFoundException
      */
-    public static synchronized Logger getInstance(String filename,
-            int verbosity, JLabel statusBar, Component dialogParent)
+    public static synchronized Logger getInstance(File logFile, int verbosity,
+            JLabel statusBar, Component dialogParent)
             throws FileNotFoundException {
         if (logger == null) {
-            logger = new Logger(filename, verbosity, statusBar, dialogParent);
+            logger = new Logger(logFile, verbosity, statusBar, dialogParent);
         }
         return logger;
     }
@@ -144,12 +145,11 @@ public class Logger {
      *            are wanted.
      * @throws FileNotFoundException
      */
-    private Logger(String filename, int verbosity, JLabel statusBar,
+    private Logger(File logFile, int verbosity, JLabel statusBar,
             Component dialogParent) throws FileNotFoundException {
-        System.out.println("Log file: " + filename);
         if (this.fileStream != null)
             this.fileStream.close();
-        this.fileStream = new PrintStream(new FileOutputStream(filename));
+        this.fileStream = new PrintStream(new FileOutputStream(logFile));
         this.verbosity = verbosity;
         this.statusBar = statusBar;
         this.dialogParent = dialogParent;
@@ -316,10 +316,17 @@ public class Logger {
      * 
      * @param message
      *            The status.
+     * @throws InterruptedException
      */
-    public void setStatus(String message) {
-        if (statusBar != null)
+    public void setStatus(String message) throws InterruptedException {
+        if (statusBar != null) {
             statusBar.setText(message);
+
+            // give a chance for the UI to display the message
+            if (Thread.currentThread().isInterrupted())
+                throw new InterruptedException();
+            Thread.sleep(0);
+        }
     }
 
     /**
