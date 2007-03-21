@@ -773,23 +773,7 @@ public class TestIDNA extends TestFmwk {
         }
             
     }
-    
-    public void TestJB5273()
-    {
-        String INVALID_DOMAIN_NAME = "xn--m\u00FCller.de";
-
-        try {
-            IDNA.convertIDNToUnicode(INVALID_DOMAIN_NAME, IDNA.DEFAULT);
-            IDNA.convertIDNToUnicode(INVALID_DOMAIN_NAME, IDNA.USE_STD3_RULES);
-
-        } catch (StringPrepParseException ex) {
-            errln("Unexpected exceptoin: " + ex.getMessage());
-        } catch (ArrayIndexOutOfBoundsException ex) {
-            errln("Got an ArrayIndexOutOfBoundsException calling convertIDNToUnicode(\"" + INVALID_DOMAIN_NAME + "\")");
-        }
- 
-    }
-    
+        
     public void TestDebug(){     
         try{
             String src = "\u00ED4dn";
@@ -809,21 +793,32 @@ public class TestIDNA extends TestFmwk {
             logln("Got the expected exception: " + ex.getMessage());
         }
     }
-    public void TestJB5275(){
+    public void TestJB5273(){
+        String INVALID_DOMAIN_NAME = "xn--m\u00FCller.de";
+        try {
+            IDNA.convertIDNToUnicode(INVALID_DOMAIN_NAME, IDNA.DEFAULT);
+            IDNA.convertIDNToUnicode(INVALID_DOMAIN_NAME, IDNA.USE_STD3_RULES);
+
+        } catch (StringPrepParseException ex) {
+            errln("Unexpected exception: " + ex.getMessage());
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            errln("Got an ArrayIndexOutOfBoundsException calling convertIDNToUnicode(\"" + INVALID_DOMAIN_NAME + "\")");
+        }
+        
         String domain = "xn--m\u00FCller.de";
         try{
             IDNA.convertIDNToUnicode(domain, IDNA.DEFAULT);
         }catch(StringPrepParseException ex){
             logln("Got the expected exception. "+ex.getMessage());
         }catch (Exception ex){
-            errln("Did not get the expected exception "+ex.getMessage());
+            errln("Unexpected exception: " + ex.getMessage());
         }
         try{
             IDNA.convertIDNToUnicode(domain, IDNA.USE_STD3_RULES);
         }catch(StringPrepParseException ex){
             logln("Got the expected exception. "+ex.getMessage());
         }catch (Exception ex){
-            errln("Did not get the expected exception "+ex.getMessage());
+            errln("Unexpected exception: " + ex.getMessage());
         }
         try{
             IDNA.convertToUnicode("xn--m\u00FCller", IDNA.DEFAULT);
