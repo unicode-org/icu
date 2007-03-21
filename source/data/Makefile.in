@@ -1,5 +1,5 @@
 ## Makefile.in for ICU data
-## Copyright (c) 1999-2006, International Business Machines Corporation and
+## Copyright (c) 1999-2007, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -364,7 +364,9 @@ build-dir:
 
 # The | is an order-only prerequisite. This helps when the -j option is used,
 # and we don't want the files to be built before the directories are built.
+ifneq ($(filter order-only,$(.FEATURES)),)
 $(ALL_FILES) $(ALL_INDEX_SRC_FILES): | build-dir
+endif
 
 # Now, sections for building each kind of data.
 
