@@ -64,6 +64,13 @@ public class ICUTZUMain {
      */
     public static void main(String[] args) {
         try {
+            if (args.length == 0) {
+                // in the case of running without commandline options
+                new GUILoader(new File("."), new File("Temp"), new File(
+                        "DirectoryList.txt"), new File("ICUList.txt"),
+                        new File("zoneinfo.res"), new File("icu.gif"));
+                return;
+            }
 
             if (args.length != NUM_ARGS) {
                 System.err.println("Incorrect number of arguments.");

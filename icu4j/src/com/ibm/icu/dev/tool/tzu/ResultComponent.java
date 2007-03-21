@@ -7,10 +7,9 @@
 package com.ibm.icu.dev.tool.tzu;
 
 import java.awt.Component;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -20,19 +19,16 @@ import java.net.URL;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 
 /**
  * The path list GUI component.
@@ -44,19 +40,14 @@ public class ResultComponent extends JComponent {
     public static final long serialVersionUID = 1341;
 
     /**
-     * A browse button to add specific results.
-     */
-    private JButton resultBrowseButton = new JButton("Browse...");
-
-    /**
      * A cancel search button to cancel a search if one is currently occuring.
      */
-    private JButton resultCancelSearchButton = new JButton("Cancel Search");
+    private JButton resultCancelSearchButton = new JButton("Stop Search");
 
     /**
      * A cancel update button to cancel an update if one is currently occuring.
      */
-    private JButton resultCancelUpdateButton = new JButton("Cancel Update");
+    private JButton resultCancelUpdateButton = new JButton("Stop Update");
 
     /**
      * The dialog that comes up when the browse button is clicked.
@@ -64,21 +55,9 @@ public class ResultComponent extends JComponent {
     private JFileChooser resultChooser = new JFileChooser();
 
     /**
-     * The field where an ICU4J jar file can be directly added.
+     * A menu item for copying a filename to the clipboard.
      */
-    private JTextField resultField = new JTextField(30);
-
-    /**
-     * The checkbox for whether files that are either unreadable or unwritable
-     * are displayed (and likewise updated).
-     */
-    private JCheckBox resultHideOption = new JCheckBox(
-            "Hide Unreadable and Unwritable Files", true);
-
-    /**
-     * The panel where input components are shown.
-     */
-    private JPanel resultInputPanel = new JPanel();
+    private JMenuItem resultCopyItem = new JMenuItem("Copy Selected");
 
     /**
      * The model for all the results from a search.
@@ -109,6 +88,11 @@ public class ResultComponent extends JComponent {
             "Remove Selected Items");
 
     /**
+     * The label for the result source list.
+     */
+    private JLabel resultSourceLabel = new JLabel("New Time Zone Version: ");
+
+    /**
      * The combobox for choosing which timezone resource on the web to use in an
      * update.
      */
@@ -118,6 +102,11 @@ public class ResultComponent extends JComponent {
      * The panel where status components are shown.
      */
     private JPanel resultStatusPanel = new JPanel();
+
+    /**
+     * The label for the path list.
+     */
+    private JLabel resultTableLabel = new JLabel("ICU4J Jar Files found:");
 
     /**
      * The table where the result model is shown.
@@ -164,15 +153,14 @@ public class ResultComponent extends JComponent {
      */
     public ResultComponent(final GUILoader owner) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        add(resultInputPanel);
+        add(resultTableLabel);
         add(new JScrollPane(resultTable));
         add(resultStatusPanel);
         add(resultOptionPanel);
         add(resultUpdatePanel);
 
-        resultInputPanel.add(resultField);
-        resultInputPanel.add(resultBrowseButton);
         resultStatusPanel.add(statusBar);
+        resultOptionPanel.add(resultSourceLabel);
         resultOptionPanel.add(resultSourceList);
         resultUpdatePanel.add(resultCancelSearchButton);
         resultUpdatePanel.add(resultUpdateButton);
@@ -180,18 +168,13 @@ public class ResultComponent extends JComponent {
 
         resultChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
+        resultPopup.add(resultCopyItem);
+        resultPopup.add(new JSeparator());
         resultPopup.add(resultRemoveSelectedItem);
         resultPopup.add(resultRemoveAllItem);
         resultPopup.add(new JSeparator());
         resultPopup.add(resultUpdateSelectedItem);
         resultPopup.add(resultUpdateAllItem);
-
-        resultField.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                addFile(new File(resultField.getText()));
-                resultField.selectAll();
-            }
-        });
 
         resultTable.addMouseListener(new MouseListener() {
             public void mouseClicked(MouseEvent event) {
@@ -225,6 +208,21 @@ public class ResultComponent extends JComponent {
             public void keyPressed(KeyEvent event) {
                 if (event.getKeyCode() == KeyEvent.VK_DELETE)
                     resultModel.remove(resultTable.getSelectedRows());
+            }
+        });
+
+        resultCopyItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                String selection = "";
+                int[] rows = resultTable.getSelectedRows();
+                for (int i = 0; i < rows.length; i++)
+                    selection += resultModel.getValueAt(rows[i],
+                            ResultModel.COLUMN_FILE_PATH)
+                            + File.separator
+                            + resultModel.getValueAt(rows[i],
+                                    ResultModel.COLUMN_FILE_NAME) + "\n";
+                getToolkit().getSystemClipboard().setContents(
+                        new StringSelection(selection), null);
             }
         });
 
@@ -273,22 +271,6 @@ public class ResultComponent extends JComponent {
         resultCancelUpdateButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 owner.cancelUpdate();
-            }
-        });
-
-        resultBrowseButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                int returnVal = resultChooser
-                        .showOpenDialog(ResultComponent.this);
-                if (returnVal == JFileChooser.APPROVE_OPTION)
-                    addFile(resultChooser.getSelectedFile());
-            }
-        });
-
-        resultHideOption.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent event) {
-                resultModel
-                        .setHidden(event.getStateChange() == ItemEvent.SELECTED);
             }
         });
     }
@@ -352,25 +334,6 @@ public class ResultComponent extends JComponent {
      */
     public void setUpdateEnabled(boolean value) {
         resultUpdateButton.setEnabled(value);
-    }
-
-    /**
-     * Adds a file to the result list. The file must be an updatable ICU4J jar
-     * by the standards laid out in ICUFile.
-     * 
-     * @param file
-     *            The file to add.
-     * @return Whether the file was added successfully.
-     */
-    private boolean addFile(File file) {
-        if (!resultModel.add(file)) {
-            JOptionPane.showMessageDialog(ResultComponent.this, "\""
-                    + file.toString() + "\" is not an updatable ICU jar file.",
-                    "Cannot add file", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
-        return true;
     }
 
     /**

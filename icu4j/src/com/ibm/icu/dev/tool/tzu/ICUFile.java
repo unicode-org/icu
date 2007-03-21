@@ -334,10 +334,14 @@ public class ICUFile {
      *            The directory to store a backup for this ICUFile, or null if
      *            no backup.
      * @throws IOException
+     * @throws InterruptedException
      */
-    public void update(URL insertURL, File backupDir) throws IOException {
+    public void update(URL insertURL, File backupDir) throws IOException,
+            InterruptedException {
+        String message = "Updating " + icuFile.toString() + " ...";
         logger.printlnToBoth("");
-        logger.printlnToBoth("Updating " + icuFile.toString() + " ...");
+        logger.printlnToBoth(message);
+        logger.setStatus(message);
 
         if (!icuFile.canRead() || !icuFile.canWrite())
             throw new IOException("Missing permissions for " + icuFile);
@@ -352,7 +356,9 @@ public class ICUFile {
         // get the new timezone resource version
         tzVersion = findEntryTZVersion();
 
-        logger.printlnToBoth("Successfully updated " + icuFile.toString());
+        message = "Successfully updated " + icuFile.toString();
+        logger.printlnToBoth(message);
+        logger.setStatus(message);
     }
 
     /**

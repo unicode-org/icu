@@ -12,11 +12,11 @@ set JAVA_HOME=/*ENTER JAVA PATH UPTO JRE*/
 @echo JAVA_HOME=%JAVA_HOME%
 
 rem Set whether the GUI will be run or not.
-set NOGUI=false
+set NOGUI=true
 @echo NOGUI=%NOGUI%
 
 rem Set whether the cmd-line utility will only discover update icu4j files.
-set DISCOVERONLY=false
+set DISCOVERONLY=true
 @echo DISCOVERONLY=%DISCOVERONLY%
 
 rem Set whether the cmd-line utility will run silently.

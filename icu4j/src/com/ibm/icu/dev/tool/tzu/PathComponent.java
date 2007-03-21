@@ -7,6 +7,7 @@
 package com.ibm.icu.dev.tool.tzu;
 
 import java.awt.Component;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -21,6 +22,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -52,6 +54,11 @@ public class PathComponent extends JComponent {
     private JButton pathBrowseButton = new JButton("Browse...");
 
     /**
+     * A menu item that copies the selected filenames to the clipboard.
+     */
+    private JMenuItem pathCopyItem = new JMenuItem("Copy selected");
+
+    /**
      * The browse dialog that pops up when the browse button is clicked.
      */
     private JFileChooser pathChooser = new JFileChooser();
@@ -60,6 +67,18 @@ public class PathComponent extends JComponent {
      * The field where the user can enter a path.
      */
     private JTextField pathField = new JTextField(30);
+
+    /**
+     * The label for path input field.
+     */
+    private JLabel pathInputLabel = new JLabel(
+            "Include/exclude a directory or a file:");
+
+    /**
+     * The label for the path list.
+     */
+    private JLabel pathListLabel = new JLabel(
+            "Directories to search and ICU4J jar files to check:");
 
     /**
      * The panel to hold the input components.
@@ -146,20 +165,28 @@ public class PathComponent extends JComponent {
     public PathComponent(final GUILoader owner) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         add(pathInputPanel);
+        add(pathListLabel);
         add(new JScrollPane(pathList));
         add(pathOptionPanel);
         add(pathSearchPanel);
 
-        pathInputPanel.add(pathSignBox);
-        pathInputPanel.add(pathField);
-        pathInputPanel.add(pathBrowseButton);
+        JPanel pathInputSubPanel = new JPanel();
+        pathInputPanel
+                .setLayout(new BoxLayout(pathInputPanel, BoxLayout.Y_AXIS));
+        pathInputPanel.add(pathInputLabel);
+        pathInputPanel.add(pathInputSubPanel);
+        pathInputSubPanel.add(pathSignBox);
+        pathInputSubPanel.add(pathField);
+        pathInputSubPanel.add(pathBrowseButton);
+
         pathOptionPanel.add(pathSubdirOption);
         pathSearchPanel.add(pathSearchButton);
 
         pathChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 
-        pathPopup.add(pathAddAllDrivesItem);
+        pathPopup.add(pathCopyItem);
         pathPopup.add(new JSeparator());
+        pathPopup.add(pathAddAllDrivesItem);
         pathPopup.add(pathRemoveSelectedItem);
         pathPopup.add(pathRemoveAllItem);
         pathPopup.add(new JSeparator());
@@ -168,7 +195,7 @@ public class PathComponent extends JComponent {
 
         pathField.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                addFile(new File(pathField.getText()));
+                addFile(new File(pathField.getText().trim()));
                 pathField.selectAll();
             }
         });
@@ -205,6 +232,26 @@ public class PathComponent extends JComponent {
             public void keyPressed(KeyEvent event) {
                 if (event.getKeyCode() == KeyEvent.VK_DELETE)
                     pathModel.remove(pathList.getSelectedIndices());
+            }
+        });
+
+        pathCopyItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                String selection = "";
+                int[] rows = pathList.getSelectedIndices();
+                for (int i = 0; i < rows.length; i++) {
+                    String includePathString = pathModel.getElementAt(rows[i])
+                            .toString();
+                    // get rid of a + or - at the begining of includePathString
+                    // if one exists
+                    if (includePathString.length() > 0
+                            && (includePathString.charAt(0) == '+' || includePathString
+                                    .charAt(0) == '-'))
+                        includePathString = includePathString.substring(1);
+                    selection += includePathString + "\n";
+                }
+                getToolkit().getSystemClipboard().setContents(
+                        new StringSelection(selection), null);
             }
         });
 
@@ -253,7 +300,7 @@ public class PathComponent extends JComponent {
             public void actionPerformed(ActionEvent event) {
                 // set the chooser's intial path to be whatever is in the text
                 // field
-                File path = new File(pathField.getText());
+                File path = new File(pathField.getText().trim());
                 if (path.exists())
                     pathChooser.setSelectedFile(path);
 
