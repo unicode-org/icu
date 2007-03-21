@@ -16,7 +16,7 @@ package com.ibm.icu.dev.tool.docs;
 
 import com.sun.javadoc.*;
 //#ifndef VERSION_1.5
-//##//import com.sun.tools.doclets.*;
+//##import com.sun.tools.doclets.*;
 //#endif
 //#ifdef VERSION_1.5
 
