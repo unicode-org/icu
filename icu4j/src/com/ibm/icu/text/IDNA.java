@@ -627,14 +627,14 @@ public final class IDNA {
            throws StringPrepParseException{
         
         boolean[] caseFlags = null;
-        
+                
         // the source contains all ascii codepoints
         boolean srcIsASCII  = true;
         // assume the source contains all LDH codepoints
         boolean srcIsLDH = true; 
         
         //get the options
-        boolean useSTD3ASCIIRules = ((options & USE_STD3_RULES) != 0);
+        //boolean useSTD3ASCIIRules = ((options & USE_STD3_RULES) != 0);
         
         int failPos = -1;
         int ch;
