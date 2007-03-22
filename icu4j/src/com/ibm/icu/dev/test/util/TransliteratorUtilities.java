@@ -11,6 +11,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 import com.ibm.icu.text.Transliterator;
+//#ifdef FOUNDATION
+//##import com.ibm.icu.dev.test.TestUtil;
+//#endif
 
 public class TransliteratorUtilities {
 	public static boolean DEBUG = false;
