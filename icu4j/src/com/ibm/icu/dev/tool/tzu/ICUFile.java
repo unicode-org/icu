@@ -677,8 +677,8 @@ public class ICUFile {
      * @return Whether the current jar is an Eclipse Fragment.
      */
     private boolean isEclipseDataFragment() {
-        return (icuFile.getPath().contains(
-                "plugins" + File.separator + "com.ibm.icu.data.update") && icuFile
+        return (icuFile.getPath().indexOf(
+                "plugins" + File.separator + "com.ibm.icu.data.update") >= 0 && icuFile
                 .getName().equals("icu-data.jar"));
     }
 
@@ -697,7 +697,7 @@ public class ICUFile {
      * @return Whether the current jar is an Eclipse Fragment.
      */
     private boolean isEclipseMainFragment() {
-        return (icuFile.getPath().contains("plugins") && icuFile.getName()
+        return (icuFile.getPath().indexOf("plugins") >= 0 && icuFile.getName()
                 .startsWith("com.ibm.icu_"));
     }
 
