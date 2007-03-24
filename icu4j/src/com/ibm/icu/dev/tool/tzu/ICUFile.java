@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -24,8 +26,6 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
-
-import com.ibm.icu.util.UResourceBundle;
 
 /**
  * A class that represents an updatable ICU4J jar file. A file is an updatable
@@ -98,7 +98,7 @@ public class ICUFile {
             File temp = File.createTempFile("zoneinfo", ".res");
             temp.deleteOnExit();
             rawTZFile.copyFile(tzFile, temp);
-            return findTZVersion(temp);
+            return findTZVersion(temp, logger);
         } catch (IOException ex) {
             logger.errorln(ex.getMessage());
             return null;
@@ -111,29 +111,60 @@ public class ICUFile {
      * 
      * @param tzFile
      *            The file representing the timezone resource.
+     * @param logger
+     *            The current logger.
      * @return The version of the timezone resource.
      */
-    private static String findTZVersion(File tzFile) {
+    private static String findTZVersion(File tzFile, Logger logger) {
         try {
             String filename = tzFile.getName();
             String entryname = filename.substring(0, filename.length()
                     - ".res".length());
 
-            URL url = new URL(tzFile.getParentFile().toURL().toString());
+            URL url = new URL(tzFile.getAbsoluteFile().getParentFile().toURL()
+                    .toString());
             ClassLoader loader = new URLClassLoader(new URL[] { url });
 
-            UResourceBundle bundle = UResourceBundle.getBundleInstance("",
-                    entryname, loader);
+            // UResourceBundle bundle = UResourceBundle.getBundleInstance("",
+            // entryname, loader);
 
-            String tzVersion;
-            if (bundle != null
-                    && (tzVersion = bundle.getString(TZ_VERSION_KEY)) != null)
-                return tzVersion;
-        } catch (MissingResourceException ex) {
-            // not an error -- some zoneinfo files do not have a version number
+            URL bundleURL = new URL(new File("icu4j.jar").toURL().toString());
+            URLClassLoader bundleLoader = new URLClassLoader(
+                    new URL[] { bundleURL });
+            Class bundleClass = bundleLoader
+                    .loadClass("com.ibm.icu.util.UResourceBundle");
+            Method bundleGetInstance = bundleClass.getMethod(
+                    "getBundleInstance", new Class[] { String.class,
+                            String.class, ClassLoader.class });
+            Object bundle = bundleGetInstance.invoke(null, new Object[] { "",
+                    entryname, loader });
+
+            if (bundle != null) {
+                Method bundleGetString = bundleClass.getMethod("getString",
+                        new Class[] { String.class });
+                String tzVersion = (String) bundleGetString.invoke(bundle,
+                        new Object[] { TZ_VERSION_KEY });
+                if (tzVersion != null)
+                    return tzVersion;
+            }
         } catch (MalformedURLException ex) {
             // this should never happen
             ex.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            // this would most likely happen when UResourceBundle cannot be
+            // resolved, which is when icu4j.jar is not where it should be
+            logger.errorln("icu4j.jar not found");
+        } catch (NoSuchMethodException ex) {
+            // this can only be caused by a very unlikely scenario
+            ex.printStackTrace();
+        } catch (IllegalAccessException ex) {
+            // this can only be caused by a very unlikely scenario
+            ex.printStackTrace();
+        } catch (InvocationTargetException ex) {
+            // if this is holding a MissingResourceException, then this is not
+            // an error -- some zoneinfo files do not have a version number
+            if (!(ex.getTargetException() instanceof MissingResourceException))
+                ex.printStackTrace();
         }
 
         return TZ_VERSION_UNKNOWN;
@@ -249,7 +280,7 @@ public class ICUFile {
             File temp = File.createTempFile("zoneinfo", ".res");
             temp.deleteOnExit();
             copyEntry(icuFile, tzEntry, temp);
-            return findTZVersion(temp);
+            return findTZVersion(temp, logger);
         } catch (IOException ex) {
             logger.errorln(ex.getMessage());
             return null;
@@ -289,7 +320,7 @@ public class ICUFile {
      * @return The path of this ICUFile object, without the filename.
      */
     public String getPath() {
-        return icuFile.getParent();
+        return icuFile.getAbsoluteFile().getParent();
     }
 
     // public static String findURLTZVersion(File tzFile) {
@@ -504,8 +535,8 @@ public class ICUFile {
             backupBase.mkdir();
             backupDir.mkdir();
             backupFile = File.createTempFile(prefix, suffix, backupDir);
-            backupDesc = new File(backupDir.toString() + File.separator
-                    + prefix + ".txt");
+            backupDesc = new File(backupDir.getPath() + File.separator + prefix
+                    + ".txt");
             backupDesc.createNewFile();
             ostream = new PrintStream(new FileOutputStream(backupDesc));
             ostream.println(inputFile.toString());
