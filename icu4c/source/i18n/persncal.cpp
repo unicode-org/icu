@@ -18,7 +18,7 @@
 static const int monthDays[] = { 31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29 };
 
 static int32_t
-jalali_to_julian (int year, int month, int day) 
+jalali_to_julian(int year, int month, int day) 
 {
     int32_t daysNo=0;
     int i;
@@ -70,19 +70,19 @@ jalali_to_julian (int year, int month, int day)
     year %= 4;
     daysNo += 365 * year;
 
-    for (i = 0; i < month; i++)
+    for (i = 0; i < month; i++) {
         daysNo += monthDays[i];
+    }
 
     daysNo += day;
 
     return daysNo-856493;
-
 }
 
 static void julian_to_jalali (int32_t daysNo, int *h_y, int *h_m, int *h_d) 
 {
     int year=0, month=0, day=0,scalarDays=0;
-    int i,yearOffset,monthOffset;
+    int i;
 
     daysNo+=856493;
     scalarDays=daysNo;
@@ -153,9 +153,9 @@ static void julian_to_jalali (int32_t daysNo, int *h_y, int *h_m, int *h_d)
 
     }
 
-    for (i = 0; i < 11 && daysNo > monthDays[i]; ++i)
-
+    for (i = 0; i < 11 && daysNo > monthDays[i]; ++i) {
         daysNo -= monthDays[i];
+    }
 
     month = i + 1;
 
@@ -245,9 +245,6 @@ static const int32_t MONTH_COUNT[12][4]  = {
     // st2  days in year before month in leap year
 };
 
-/**
- * @draft ICU 3.8
- */
 int32_t PersianCalendar::handleGetLimit(UCalendarDateFields field, ELimitType limitType) const {
     return LIMITS[field][limitType];
 }
@@ -292,7 +289,6 @@ int32_t PersianCalendar::monthStart(int32_t year, int32_t month) const {
  *
  * @param year  The hijri shamsi year
  * @param year  The hijri shamsi month, 0-based
- * @draft ICU 3.8
  */
 int32_t PersianCalendar::handleGetMonthLength(int32_t extendedYear, int32_t month) const {
     return MONTH_COUNT[month][PersianCalendar::isLeapYear(extendedYear)?1:0];
@@ -300,7 +296,6 @@ int32_t PersianCalendar::handleGetMonthLength(int32_t extendedYear, int32_t mont
 
 /**
  * Return the number of days in the given Persian year
- * @draft ICU 3.8
  */
 int32_t PersianCalendar::handleGetYearLength(int32_t extendedYear) const {
     return 365 + (PersianCalendar::isLeapYear(extendedYear) ? 1 : 0);
@@ -311,9 +306,6 @@ int32_t PersianCalendar::handleGetYearLength(int32_t extendedYear) const {
 //-------------------------------------------------------------------------
 
 // Return JD of start of given month/year
-/**
- * @draft ICU 3.8
- */
 int32_t PersianCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UBool useMonth) const {
     // If the month is out of range, adjust it into range, and
     // modify the extended year value accordingly.
@@ -321,16 +313,13 @@ int32_t PersianCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, U
         eyear += month / 12;
         month = month % 12;
     }
-    return jalali_to_julian(eyear,useMonth?month+1:1,1)-1+1947955L; 
+    return jalali_to_julian(eyear,(useMonth?month+1:1),1)-1+1947955; 
 }
 
 //-------------------------------------------------------------------------
 // Functions for converting from milliseconds to field values
 //-------------------------------------------------------------------------
 
-/**
- * @draft ICU 3.8
- */
 int32_t PersianCalendar::handleGetExtendedYear() {
     int32_t year;
     if (newerField(UCAL_EXTENDED_YEAR, UCAL_YEAR) == UCAL_EXTENDED_YEAR) {
@@ -355,11 +344,10 @@ int32_t PersianCalendar::handleGetExtendedYear() {
  * The DAY_OF_WEEK and DOW_LOCAL fields are already set when this
  * method is called. The getGregorianXxx() methods return Gregorian
  * calendar equivalents for the given Julian day.
- * @draft ICU 3.8
  */
 void PersianCalendar::handleComputeFields(int32_t julianDay, UErrorCode &/*status*/) {
     int jy,jm,jd;        
-    julian_to_jalali(julianDay-1947955L,&jy,&jm,&jd);
+    julian_to_jalali(julianDay-1947955,&jy,&jm,&jd);
     internalSet(UCAL_ERA, 0);
     internalSet(UCAL_YEAR, jy);
     internalSet(UCAL_EXTENDED_YEAR, jy);
@@ -388,7 +376,7 @@ UBool PersianCalendar::haveDefaultCentury() const
 
 UDate PersianCalendar::defaultCenturyStart() const
 {
-    return -1 ;
+    return -1;
 }
 
 int32_t PersianCalendar::defaultCenturyStartYear() const
