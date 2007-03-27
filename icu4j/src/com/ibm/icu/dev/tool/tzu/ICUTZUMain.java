@@ -64,6 +64,9 @@ public class ICUTZUMain {
      */
     public static void main(String[] args) {
         try {
+            System.setProperty("http.agent",
+                    "ICU4J Time Zone Update Utility (ICUTZU)");
+
             if (args.length == 0) {
                 // in the case of running without commandline options
                 new GUILoader(new File("."), new File("Temp"), new File(
