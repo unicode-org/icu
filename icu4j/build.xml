@@ -2041,7 +2041,6 @@
 
 	<target name="eclipseRunCheck" depends="init,eclipseTests">
 		<java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
-			<jvmarg value="-ea" />
 			<jvmarg value="-Xms96m" />
 			<jvmarg value="-Xmx128m" />
 			<arg value="-n" />
