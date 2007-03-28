@@ -101,7 +101,7 @@
         <property name="tzu.bin.dir" value="${basedir}/icu4jtzu" />
         <property name="tzujar.file" value="${tzu.bin.dir}/icutzu.jar" />
         <property name="tzu.test.dir" value="${basedir}/icu4jtzu/test" />
-        <property name="tzu.temp.dir" value="${basedir}/icu4jtzu/tmp" />
+        <property name="tzu.temp.dir" value="${basedir}/icu4jtzu/Temp" />
         <property file="build.properties" />
         <!-- fix the data folder every time there is a version update-->
 
@@ -2101,8 +2101,8 @@
                 <include name="*.sh" />
                 <include name="*.gif" />
             </fileset>
-            <fileset dir="${basedir}" file="${jar.file}" />
-            <fileset dir="${build.dir}/${icu4j.data.path}" file="zoneinfo.res" />
+            <fileset file="${basedir}/${jar.file}" />
+            <fileset file="${build.dir}/${icu4j.data.path}/zoneinfo.res" />
         </copy>
         <echo file="${tzu.bin.dir}/DirectorySearch.txt">all</echo>
     </target>
@@ -2134,8 +2134,10 @@
         <echo>Testing ICUTZU ...</echo>
 
         <mkdir dir="${tzu.temp.dir}" />
-        <copy todir="${tzu.temp.dir}" file="${tzu.bin.dir}/DirectorySearch.txt" />
-        <copy todir="${tzu.temp.dir}" file="${tzu.bin.dir}/zoneinfo.res" />
+        <copy todir="${tzu.temp.dir}">
+            <fileset file="${tzu.bin.dir}/DirectorySearch.txt" />
+            <fileset file="${tzu.bin.dir}/zoneinfo.res" />
+        </copy>
 
         <get dest="${tzu.bin.dir}/zoneinfo.res" src="http://source.icu-project.org/repos/icu/data/trunk/tzdata/icu/2006a/be/zoneinfo.res" />
         <copy todir="${tzu.test.dir}" file="${tzu.bin.dir}/icu4j.jar" />
@@ -2186,14 +2188,21 @@
             <filesmatch file1="${tzu.bin.dir}/zoneinfo.res" file2="${tzu.test.dir}/zoneinfo.res" />
         </condition>
 
-        <delete file="${tzu.bin.dir}/zoneinfo.res" />
-        <delete file="${tzu.bin.dir}/DirectorySearch.txt" />
-        <copy todir="${tzu.bin.dir}" file="${tzu.temp.dir}/zoneinfo.res" />
-        <copy todir="${tzu.bin.dir}" file="${tzu.temp.dir}/DirectorySearch.txt" />
-        <delete dir="${tzu.temp.dir}" />
+        <echo>Cleaning up ...</echo>
+        <delete>
+            <fileset file="${tzu.bin.dir}/zoneinfo.res" />
+            <fileset file="${tzu.bin.dir}/DirectorySearch.txt" />
+        </delete>
+        <copy todir="${tzu.bin.dir}">
+            <fileset file="${tzu.temp.dir}/DirectorySearch.txt" />
+            <fileset file="${tzu.temp.dir}/zoneinfo.res" />
+        </copy>
 
         <fail unless="zoneinfo.match">ICUTZU test failed.</fail>
-        <delete dir="${tzu.test.dir}" />
+        <delete includeEmptyDirs="true">
+            <fileset dir="${tzu.temp.dir}" />
+            <fileset dir="${tzu.test.dir}" />
+        </delete>
         <echo>ICUTZU test successful.</echo>
     </target>
 </project>
