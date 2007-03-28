@@ -62,7 +62,7 @@ addIDNATest(TestNode** root)
    addTest(root, &TestIDNToASCII,   "idna/TestIDNToASCII");
    addTest(root, &TestCompare,      "idna/TestCompare");
    addTest(root, &TestUnicode32Norm,"idna/TestUnicode32Norm");
-   addTest(root, &TestJB4490,        "idna/TestJB4490");
+   addTest(root, &TestJB4490,       "idna/TestJB4490");
    addTest(root, &TestJB4475,       "idna/TestJB4475");
    addTest(root, &TestLength,       "idna/TestLength");
    addTest(root, &TestJB5273,       "idna/TestJB5273");
@@ -845,7 +845,7 @@ static void TestLength(){
     }    
 }
 static void TestJB5273(){
-    char* INVALID_DOMAIN_NAME = "xn--m\u00FCller.de";
+    static const char INVALID_DOMAIN_NAME[] = "xn--m\\u00FCller.de";
     UChar invalid_idn[25] = {'\0'};
     int32_t len = u_unescape(INVALID_DOMAIN_NAME, invalid_idn, strlen(INVALID_DOMAIN_NAME));
     UChar output[50] = {'\0'};
