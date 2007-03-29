@@ -1402,6 +1402,119 @@
         depends="eclipseCoreProject,eclipseTestProject,eclipseWrapperProject,eclipseFragmentProject"
         description="create all eclipse icu projects"/>
 
+    <target name="eclipsePDEBuild"
+        depends="initEclipsePDEBuildEnv, eclipseProjects"
+        description="build icu4j plugin files">
+
+        <!-- copy OSGi jar file to baseLocation -->
+        <mkdir dir="${eclipse.projects.dir}/baseLocation/features"/>
+        <mkdir dir="${eclipse.projects.dir}/baseLocation/plugins"/>
+        <copy toDir="${eclipse.projects.dir}/baseLocation/plugins" file="${eclipse.osgi.jar}"/>
+
+        <!-- copy PDE build script files and run the build -->
+        <pathconvert property="eclipse.projects.dir.full" dirsep="/">
+            <path location="${basedir}/${eclipse.projects.dir}"/>
+        </pathconvert>
+        <antcall target="runEclipsePDEBuild">
+            <param name="icu.plugin.id" value="com.ibm.icu"/>
+        </antcall>
+        <antcall target="runEclipsePDEBuild">
+            <param name="icu.plugin.id" value="com.ibm.icu.base"/>
+        </antcall>
+        <antcall target="runEclipsePDEBuild">
+            <param name="icu.plugin.id" value="com.ibm.icu.jse4"/>
+        </antcall>
+    </target>
+
+    <target name="initEclipsePDEBuildEnv"
+            depends="init,initEclipseHome,initEclipseLauncher,initEclipseOSGiJar,initEclipsePDE"
+            description="Initialize eclipse PDE build environment">
+        <echo message="[PDE build configuration properties]"/>
+        <echo message="    Eclipse home:    ${eclipse.home}"/>
+        <echo message="    Launcher jar:    ${eclipse.launcher}"/>
+        <echo message="    OSGi bundle jar: ${eclipse.osgi.jar}"/>
+        <echo message="    Base OS:         ${eclipse.baseos}"/>
+        <echo message="    Base WS:         ${eclipse.basews}"/>
+        <echo message="    Base ARCH:       ${eclipse.basearch}"/>
+
+    </target>
+
+    <target name="initEclipseHome"
+            if="env.ECLIPSE_HOME"
+            unless="eclipse.home"
+            description="Initialize the property eclipse.home from the environment variable ECLIPSE_HOME">
+        <property name="eclipse.home" value="${env.ECLIPSE_HOME}"/>
+    </target>
+
+    <target name="initEclipseLauncher"
+            if="eclipse.home"
+            description="Locate org.eclipse.equinox.launcher jar file for eclipse 3.3 and beyond">
+        <first id="equinox.launcher">
+            <fileset dir="${eclipse.home}/plugins">
+                <include name="org.eclipse.equinox.launcher_*.jar"/>
+            </fileset>
+        </first>
+        <pathconvert property="eclipse.launcher" dirsep="/" refid="equinox.launcher"/>
+    </target>
+
+    <target name="initEclipseOSGiJar"
+            if="eclipse.home"
+            description="Locate org.eclipse.osgi plugin jar file">
+        <first id="osgi.bundle">
+            <fileset dir="${eclipse.home}/plugins">
+                <include name="org.eclipse.osgi_*.jar"/>
+            </fileset>
+        </first>
+        <pathconvert property="eclipse.osgi.jar" dirsep="/" refid="osgi.bundle"/>
+    </target>
+
+    <target name="initEclipsePDE"
+            depends="locateEclipsePDE"
+            if="eclipse.pde.dir"
+            description="Set up PDE runtime arguments">
+        <property file="${eclipse.pde.dir}/templates/headless-build/build.properties" prefix="pde.template"/>
+        <property name="eclipse.baseos" value="${pde.template.baseos}"/>
+        <property name="eclipse.basews" value="${pde.template.basews}"/>
+        <property name="eclipse.basearch" value="${pde.template.basearch}"/>
+    </target>
+
+    <target name="locateEclipsePDE"
+            if="eclipse.home"
+            description="Locate org.eclipse.pde.build plug-in and set the property 'eclipse.pde.dir'">
+        <first id="eclipse.pde.plugin.dir">
+            <dirset dir="${eclipse.home}/plugins">
+                <include name="org.eclipse.pde.build_*"/>
+            </dirset>
+        </first>
+        <pathconvert property="eclipse.pde.dir" dirsep="/" refid="eclipse.pde.plugin.dir"/>
+    </target>
+
+    <target name="runEclipsePDEBuild">
+        <mkdir dir="${eclipse.projects.dir}/buildScripts/${icu.plugin.id}"/>
+        <copy toDir="${eclipse.projects.dir}/buildScripts/${icu.plugin.id}">
+            <fileset dir="${eclipse.dir}/pdebuild" includes="**/*"/>
+            <filterset>
+                <filter token="PLUGIN_ID" value="${icu.plugin.id}"/>
+                <filter token="BUILD_DIR" value="${eclipse.projects.dir.full}"/>
+                <filter token="BUILD_TYPE" value="ICU4J"/>
+                <filter token="BUILD_ID" value="${icu.plugin.id}"/>
+                <filter token="BASE_LOCATION" value="${eclipse.projects.dir.full}/baseLocation"/>
+                <filter token="BASE_OS" value="${eclipse.baseos}"/>
+                <filter token="BASE_WS" value="${eclipse.basews}"/>
+                <filter token="BASE_ARCH" value="${eclipse.basearch}"/>
+            </filterset>
+        </copy>
+
+        <java jar="${eclipse.launcher}" fork="true" failonerror="true">
+            <arg value="-application"/>
+            <arg value="org.eclipse.ant.core.antRunner"/>
+            <arg value="-buildfile"/>
+            <arg value="${eclipse.pde.dir}/scripts/build.xml"/>
+            <arg value="-Dbuilder=${eclipse.projects.dir.full}/buildScripts/${icu.plugin.id}"/>
+        </java>
+
+    </target>
+
     <target name="undoEclipseMangle" depends="buildmangle" description="preprocess files back to default)">
         <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true">
             <arg value="@eclipseCoreArgs.txt"/>
@@ -1433,10 +1546,10 @@
             encoding="ascii"/>
         <antcall target="indices"/>
         <jar jarfile="${jar.file}" compress="true">
-            <fileset    dir="${basedir}" includes="license.html, unicode-license.txt" />
-            <fileset    dir="${build.dir}"             
-                            includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*"
-                            excludes="META-INF/services/**/*,com/ibm/icu/charset/**/*,${icu4j.data.path}/*.cnv, ${icu4j.data.path}/cnvalias.icu"/>
+            <fileset dir="${basedir}" includes="license.html, unicode-license.txt" />
+            <fileset dir="${build.dir}"
+                includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*"
+                excludes="META-INF/services/**/*,com/ibm/icu/charset/**/*,${icu4j.data.path}/*.cnv, ${icu4j.data.path}/cnvalias.icu"/>
             <manifest>
                 <attribute name="Built-By" value="${corp}"/>
                 <section name="common">
@@ -1456,26 +1569,26 @@
 
     <target name="eclipseCoreProject" depends="eclipseCore,initIcuEclipseVersion" description="gather eclipse icu core project files">
         <delete failonerror="no">
-            <fileset dir="${eclipse.projects.dir}/com.ibm.icu"/>
-            <fileset dir="${eclipse.projects.dir}/com.ibm.icu-feature"/>
+            <fileset dir="${eclipse.projects.dir}/plugins/com.ibm.icu"/>
+            <fileset dir="${eclipse.projects.dir}/features/com.ibm.icu"/>
         </delete>
-        <!-- collect source files -->
-        <copy toDir="${eclipse.projects.dir}/com.ibm.icu/src/com/ibm/icu">
+
+        <!-- PLUGIN FILES -->
+        <!-- icu source -->
+        <copy toDir="${eclipse.projects.dir}/plugins/com.ibm.icu/src/com/ibm/icu">
             <fileset dir="src/com/ibm/icu"
-            includes="impl/**/*,lang/**/*,math/**/*,text/**/*,util/**/*"
-            excludes="**/CVS/**/*,**/*.jar,**/Transliterator_Han_Latin*.txt"/>
+                includes="impl/**/*,lang/**/*,math/**/*,text/**/*,util/**/*"
+                excludes="**/.svn/**/*,**/*.jar,**/Transliterator_Han_Latin*.txt"/>
         </copy>
-        <!-- collect icu data files -->
-        <copy todir="${eclipse.projects.dir}/com.ibm.icu/src/com/ibm/icu/impl/data">
-            <fileset dir="${build.dir}/com/ibm/icu/impl/data" 
+        <!-- icu data -->
+        <copy todir="${eclipse.projects.dir}/plugins/com.ibm.icu/src/com/ibm/icu/impl/data">
+            <fileset dir="${build.dir}/com/ibm/icu/impl/data"
                 includes="**/*.brk,**/*.icu,**/*.res,**/*.spp,**/*.txt"
                 excludes="**/Transliterator_Han_Latin*.txt"/>
         </copy>
-        <!-- collect eclipse project files -->
-        <copy todir="${eclipse.projects.dir}">
-            <fileset dir="${eclipse.dir}"
-            includes="com.ibm.icu/**/*,com.ibm.icu-feature/**/*"
-            excludes="**/CVS/**/*"/>
+        <!-- plugin project -->
+        <copy todir="${eclipse.projects.dir}/plugins/com.ibm.icu">
+            <fileset dir="${eclipse.dir}/plugins/com.ibm.icu" excludes="**/.svn/**/*"/>
             <filterset>
                 <filter token="BUILD_VERSION" value="${icu4j.eclipse.build.version.string}"/>
                 <filter token="COPYRIGHT" value="${copyright.eclipse}"/>
@@ -1483,26 +1596,36 @@
                 <filter token="VERSION_NUMBER" value="${icu4j.version.number}"/>
             </filterset>
         </copy>
-        <!-- copy ICU license file -->
+        <!-- license -->
         <copy file="license.html"
-        todir="${eclipse.projects.dir}/com.ibm.icu/about_files"/>
+            todir="${eclipse.projects.dir}/plugins/com.ibm.icu/about_files"/>
         <!-- ucd terms -->
         <copy file="src/com/ibm/icu/dev/data/unicode/ucdterms.txt"
-        todir="${eclipse.projects.dir}/com.ibm.icu/about_files"/>
-        <!-- copy ICU about file -->
+            todir="${eclipse.projects.dir}/plugins/com.ibm.icu/about_files"/>
+        <!-- about -->
         <copy file="${eclipse.dir}/misc/about_icu.html"
-        tofile="${eclipse.projects.dir}/com.ibm.icu/about.html"/>
+            tofile="${eclipse.projects.dir}/plugins/com.ibm.icu/about.html"/>
+
+        <!-- FEATURE FILES -->
+        <copy todir="${eclipse.projects.dir}/features/com.ibm.icu">
+            <fileset dir="${eclipse.dir}/features/com.ibm.icu" excludes="**/.svn/**/*"/>
+            <filterset>
+                <filter token="BUILD_VERSION" value="${icu4j.eclipse.build.version.string}"/>
+                <filter token="COPYRIGHT" value="${copyright.eclipse}"/>
+                <filter token="SPEC_VERSION" value="${icu4j.eclipse.spec.version.string}"/>
+                <filter token="VERSION_NUMBER" value="${icu4j.version.number}"/>
+            </filterset>
+        </copy>
         <!-- common eclipse about file -->
         <copy file="${eclipse.dir}/misc/about.html"
-        todir="${eclipse.projects.dir}/com.ibm.icu-feature/sourceTemplatePlugin"/>
+            todir="${eclipse.projects.dir}/features/com.ibm.icu/sourceTemplatePlugin"/>
     </target>
-
 
     <!-- ensure eclipse wrapper code builds with foundation1.0/java1.3 -->
     <target name="eclipseWrapper" depends="init">
         <javac includes="com/ibm/icu/util/**/*.java,com/ibm/icu/text/**/*.java"
             compiler="javac1.3"
-            srcdir="${src.dir}/com/ibm/icu/dev/eclipse/com.ibm.icu.base/src"
+            srcdir="${eclipse.dir}/plugins/com.ibm.icu.base/src"
             destdir="${wrapper.build.dir}"
             classpathref="build.classpath"
             bootclasspath="ee.foundation.jar"
@@ -1522,15 +1645,16 @@
 
     <target name="eclipseWrapperProject" depends="eclipseWrapper,eclipseWrapperTest,initIcuEclipseVersion" description="gather eclipse icu core project files">
         <delete failonerror="no">
-            <fileset dir="${eclipse.projects.dir}/com.ibm.icu.base"/>
-            <fileset dir="${eclipse.projects.dir}/com.ibm.icu.base-feature"/>
-            <fileset dir="${eclipse.projects.dir}/com.ibm.icu.base.tests"/>
+            <fileset dir="${eclipse.projects.dir}/plugins/com.ibm.icu.base"/>
+            <fileset dir="${eclipse.projects.dir}/plugins/com.ibm.icu.base.tests"/>
+            <fileset dir="${eclipse.projects.dir}/features/com.ibm.icu.base"/>
         </delete>
-        <!-- collect eclipse project files -->
-        <copy todir="${eclipse.projects.dir}">
-            <fileset dir="${eclipse.dir}"
-            includes="com.ibm.icu.base/**/*,com.ibm.icu.base-feature/**/*,com.ibm.icu.base.tests/**/*"
-            excludes="**/CVS/**/*"/>
+        <!-- PLUGIN FILES -->
+        <!-- source and project files -->
+        <copy todir="${eclipse.projects.dir}/plugins">
+            <fileset dir="${eclipse.dir}/plugins"
+                includes="com.ibm.icu.base/**/*,com.ibm.icu.base.tests/**/*"
+                excludes="**/.svn/**/*"/>
             <filterset>
                 <filter token="BUILD_VERSION" value="${icu4j.eclipse.build.version.string}"/>
                 <filter token="COPYRIGHT" value="${copyright.eclipse}"/>
@@ -1538,15 +1662,28 @@
                 <filter token="VERSION_NUMBER" value="${icu4j.version.number}"/>
             </filterset>
         </copy>
-        <!-- copy ICU license file -->
+        <!-- license -->
         <copy file="license.html"
-        todir="${eclipse.projects.dir}/com.ibm.icu.base/about_files"/>
-        <!-- copy ICU about file -->
+            todir="${eclipse.projects.dir}/plugins/com.ibm.icu.base/about_files"/>
+        <!-- about -->
         <copy file="${eclipse.dir}/misc/about_icu.html"
-        tofile="${eclipse.projects.dir}/com.ibm.icu.base/about.html"/>
+            tofile="${eclipse.projects.dir}/plugins/com.ibm.icu.base/about.html"/>
+
+        <!-- FEATURE FILES -->
+        <!-- project files -->
+        <copy todir="${eclipse.projects.dir}/features/com.ibm.icu.base">
+            <fileset dir="${eclipse.dir}/features/com.ibm.icu.base"
+                excludes="**/.svn/**/*"/>
+            <filterset>
+                <filter token="BUILD_VERSION" value="${icu4j.eclipse.build.version.string}"/>
+                <filter token="COPYRIGHT" value="${copyright.eclipse}"/>
+                <filter token="SPEC_VERSION" value="${icu4j.eclipse.spec.version.string}"/>
+                <filter token="VERSION_NUMBER" value="${icu4j.version.number}"/>
+            </filterset>
+        </copy>
         <!-- common eclipse about file -->
         <copy file="${eclipse.dir}/misc/about.html"
-        todir="${eclipse.projects.dir}/com.ibm.icu.base-feature/sourceTemplatePlugin"/>
+            todir="${eclipse.projects.dir}/features/com.ibm.icu.base/sourceTemplatePlugin"/>
     </target>
 
     <target name="eclipseTestMangle" depends="buildmangle">
@@ -1592,21 +1729,20 @@
 
     <target name="eclipseTestProject" depends="eclipseTests,zipTestSrc" description="gather eclipse icu test project files">
         <delete failonerror="no">
-            <fileset dir="${eclipse.projects.dir}/com.ibm.icu.tests"/>
+            <fileset dir="${eclipse.projects.dir}/plugins/com.ibm.icu.tests"/>
         </delete>
         <!-- copy eclipse test source and project files -->
-        <copy toDir="${eclipse.projects.dir}/com.ibm.icu.tests">
-            <fileset dir="${eclipse.dir}/com.ibm.icu.tests"
-            includes="**/*"
-            excludes="**/CVS/**/"/>
+        <copy toDir="${eclipse.projects.dir}/plugins/com.ibm.icu.tests">
+            <fileset dir="${eclipse.dir}/plugins/com.ibm.icu.tests"
+                excludes="**/.svn/**/"/>
             <filterset>
                 <filter token="COPYRIGHT" value="${copyright.eclipse}"/>
             </filterset>
         </copy>
         <!-- copy icu test jar -->
-        <copy toDir="${eclipse.projects.dir}/com.ibm.icu.tests" file="${testjar.file}"/>
+        <copy toDir="${eclipse.projects.dir}/plugins/com.ibm.icu.tests" file="${testjar.file}"/>
         <!-- copy icu test source zip -->
-        <copy toDir="${eclipse.projects.dir}/com.ibm.icu.tests" file="${zipTestSrc.file}"/>
+        <copy toDir="${eclipse.projects.dir}/plugins/com.ibm.icu.tests" file="${zipTestSrc.file}"/>
     </target>
 
     <target name="eclipseFragmentMangle" depends="buildmangle">
@@ -1652,11 +1788,13 @@
 
     <target name="eclipseFragmentProject" depends="eclipseFragment,initIcuEclipseVersion" description="gather eclipse icu fragment project files">
         <delete failonerror="no">
-            <fileset dir="${eclipse.projects.dir}/com.ibm.icu.jse4"/>
-            <fileset dir="${eclipse.projects.dir}/com.ibm.icu.jse4-feature"/>
+            <fileset dir="${eclipse.projects.dir}/plugins/com.ibm.icu.jse4"/>
+            <fileset dir="${eclipse.projects.dir}/features/com.ibm.icu.jse4"/>
         </delete>
-        <!-- collect source files -->
-        <copy toDir="${eclipse.projects.dir}/com.ibm.icu.jse4/src">
+
+        <!-- PLUGIN FILES -->
+        <!-- source -->
+        <copy toDir="${eclipse.projects.dir}/plugins/com.ibm.icu.jse4/src">
             <!-- TODO: Use a single file list as input.  The list is identical with eclipseFragmentArgs.txt -->
             <fileset dir="${src.dir}">
                 <include name="com/ibm/icu/impl/CollectionUtilities.java"/>
@@ -1674,10 +1812,10 @@
                 <include name="com/ibm/icu/util/GlobalizationPreferences.java"/>
             </fileset>
         </copy>
-        <!-- collect eclipse project files -->
-        <copy todir="${eclipse.projects.dir}">
-            <fileset dir="${eclipse.dir}"
-            includes="com.ibm.icu.jse4/**/*,com.ibm.icu.jse4-feature/**/*"/>
+        <!-- project files -->
+        <copy todir="${eclipse.projects.dir}/plugins/com.ibm.icu.jse4">
+            <fileset dir="${eclipse.dir}/plugins/com.ibm.icu.jse4"
+                excludes="**/.svn/**/*"/>
             <filterset>
                 <filter token="BUILD_VERSION" value="${icu4j.eclipse.build.version.string}"/>
                 <filter token="COPYRIGHT" value="${copyright.eclipse}"/>
@@ -1685,18 +1823,28 @@
                 <filter token="VERSION_NUMBER" value="${icu4j.version.number}"/>
             </filterset>
         </copy>
-        <!-- copy ICU license file -->
+        <!-- license -->
         <copy file="license.html"
-        todir="${eclipse.projects.dir}/com.ibm.icu.jse4/about_files"/>
+            todir="${eclipse.projects.dir}/plugins/com.ibm.icu.jse4/about_files"/>
         <!-- ucd terms -->
         <copy file="src/com/ibm/icu/dev/data/unicode/ucdterms.txt"
-        todir="${eclipse.projects.dir}/com.ibm.icu.jse4/about_files"/>
-        <!-- copy ICU about file -->
-        <copy file="${eclipse.dir}/misc/about_icu.html"
-        tofile="${eclipse.projects.dir}/com.ibm.icu.jse4/about.html"/>
-        <!-- common eclipse about file -->
+            todir="${eclipse.projects.dir}/plugins/com.ibm.icu.jse4/about_files"/>
+
+        <!-- FEATURE FILES -->
+        <!-- project files -->
+        <copy todir="${eclipse.projects.dir}/features/com.ibm.icu.jse4">
+            <fileset dir="${eclipse.dir}/features/com.ibm.icu.jse4"
+                excludes="**/.svn/**/*"/>
+            <filterset>
+                <filter token="BUILD_VERSION" value="${icu4j.eclipse.build.version.string}"/>
+                <filter token="COPYRIGHT" value="${copyright.eclipse}"/>
+                <filter token="SPEC_VERSION" value="${icu4j.eclipse.spec.version.string}"/>
+                <filter token="VERSION_NUMBER" value="${icu4j.version.number}"/>
+            </filterset>
+        </copy>
+        <!-- common eclipse about -->
         <copy file="${eclipse.dir}/misc/about.html"
-        todir="${eclipse.projects.dir}/com.ibm.icu.jse4-feature/sourceTemplatePlugin"/>
+            todir="${eclipse.projects.dir}/features/com.ibm.icu.jse4/sourceTemplatePlugin"/>
     </target>
 
     <target name="zipTestSrc" depends="init" description="build zip of test sources for debugging">
@@ -1726,7 +1874,7 @@
 
     <target name="gatherEclipseWrapperAPI" depends="tools" if="version.1.4">
         <javadoc classpath="${build.dir}"
-            sourcepath="${src.dir}/com/ibm/icu/dev/eclipse/com.ibm.icu.base/src"
+            sourcepath="${eclipse.dir}/plugins/com.ibm.icu.base/src"
             packagenames="com.ibm.icu.text,com.ibm.icu.util"
             source="1.4">
             <doclet name="com.ibm.icu.dev.tool.docs.GatherAPIData"

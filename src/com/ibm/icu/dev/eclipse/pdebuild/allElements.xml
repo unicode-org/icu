@@ -1,0 +1,28 @@
+<project name="allElements Delegator">
+	
+ 	<!-- ===================================================================== -->
+ 	<!-- Run a given ${target} on all elements being built                     -->
+ 	<!-- Replace element.id with the id of the top level element being built.    -->
+	<!-- If element.id does not exist in ${buildDirectory}/features/element.id   -->
+	<!-- or ${baseLocation}/features/element.id, then you must provide the       -->
+	<!-- location by setting the property "pluginPath"                           -->
+ 	<!-- Add on <ant> task for each top level element being built.             -->
+ 	<!-- ===================================================================== -->
+ 	<target name="allElementsDelegator">
+ 		<ant antfile="${genericTargets}" target="${target}">
+	 		<property name="type" value="feature" />
+	 		<property name="id" value="@PLUGIN_ID@" />
+ 		</ant>
+ 	</target>
+ 
+ 	<!-- ===================================================================== -->
+ 	<!-- Targets to assemble the built elements for particular configurations  -->
+ 	<!-- These generally call the generated assemble scripts (named in         -->
+ 	<!-- ${assembleScriptName}) but may also add pre and post processing       -->
+ 	<!-- Add one target for each root element and each configuration           -->
+ 	<!-- Replace element.id with the id of the top level element being built   -->
+ 	<!-- ===================================================================== -->
+ 	<target name="assemble.@PLUGIN_ID@">
+ 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}"/>
+ 	</target>
+</project>
