@@ -1075,6 +1075,43 @@ public class TimeZoneRegression extends TestFmwk {
             }
         }
     }
+
+    /*
+     * Zone ID is not set by a SimpleTimeZone constructor
+     */
+    public void TestT5432() {
+        String tzid = "MyZone";
+        SimpleTimeZone stz;
+
+        // 2-arg constructor
+        stz = new SimpleTimeZone(0, tzid);
+        if (!tzid.equals(stz.getID())) {
+            errln("FAIL: Bad zone id (" + stz.getID() + ") is returned - expected ("
+                    + tzid + ") [2-arg constructor]");
+        }
+
+        // 10-arg constructor
+        stz = new SimpleTimeZone(0, tzid, 3, -1, 1, 3600000, 9, -1, 1, 3600000);
+        if (!tzid.equals(stz.getID())) {
+            errln("FAIL: Bad zone id (" + stz.getID() + ") is returned - expected ("
+                    + tzid + ") [10-arg constructor]");
+        }
+
+        // 11-arg constructor
+        stz = new SimpleTimeZone(0, tzid, 3, -1, 1, 3600000, 9, -1, 1, 3600000, 3600000);
+        if (!tzid.equals(stz.getID())) {
+            errln("FAIL: Bad zone id (" + stz.getID() + ") is returned - expected ("
+                    + tzid + ") [11-arg constructor]");
+        }
+
+        // 13-arg constructor - this version had a problem reported by trac#5432
+        stz = new SimpleTimeZone(0, tzid, 3, -1, 1, 3600000, SimpleTimeZone.WALL_TIME,
+                9, -1, 1, 3600000, SimpleTimeZone.WALL_TIME, 3600000);
+        if (!tzid.equals(stz.getID())) {
+            errln("FAIL: Bad zone id (" + stz.getID() + ") is returned - expected ("
+                    + tzid + ") [13-arg constructor]");
+        }
+    }
 }
 
 //eof

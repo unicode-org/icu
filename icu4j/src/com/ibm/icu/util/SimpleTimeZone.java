@@ -1,5 +1,5 @@
  /*
-*   Copyright (C) 1996-2006, International Business Machines
+*   Copyright (C) 1996-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 */
 
@@ -61,8 +61,6 @@ public class SimpleTimeZone extends JDKTimeZone {
      * @stable ICU 2.0
      */
     public SimpleTimeZone(int rawOffset, String ID) {
-        //this(new java.util.SimpleTimeZone(rawOffset, ID), ID);
-        //super(ID);
         construct(rawOffset, 0, 0, 0,
                 0, WALL_TIME,
                 0, 0, 0,
@@ -132,12 +130,6 @@ public class SimpleTimeZone extends JDKTimeZone {
     public SimpleTimeZone(int rawOffset, String ID,
                           int startMonth, int startDay, int startDayOfWeek, int startTime,
                           int endMonth, int endDay, int endDayOfWeek, int endTime) {
-/*        this(new java.util.SimpleTimeZone(rawOffset, ID, startMonth, startDay,
-                                          startDayOfWeek, startTime, endMonth,
-                                          endDay, endDayOfWeek, endTime), ID);*/
-       // STZInfo xinfo = getSTZInfo();
-       // xinfo.setStart(startMonth, startDay, startDayOfWeek, startTime, -1, false);
-       // xinfo.setEnd(endMonth, endDay, endDayOfWeek, endTime, -1, false);
         construct(rawOffset,
                 startMonth, startDay, startDayOfWeek,
                 startTime, WALL_TIME,
@@ -188,15 +180,13 @@ public class SimpleTimeZone extends JDKTimeZone {
                           int endMonth, int endDay,
                           int endDayOfWeek, int endTime,
                           int endTimeMode,int dst){
-        /*this(new java.util.SimpleTimeZone(rawOffsetGMT, ID, savingsStartMonth, savingsStartDay,
-                savingsStartDayOfWeek, savingsStartTime, savingsEndMonth,
-                savingsEndDay, savingsEndDayOfWeek, savingsEndTime, savingsDST), ID);*/
         construct(raw,
                   startMonth, startDay, startDayOfWeek,
                   startTime, startTimeMode,
                   endMonth, endDay, endDayOfWeek,
                   endTime, endTimeMode,
                   dst);
+        super.setID(ID);
     }
 
     /**
@@ -211,17 +201,6 @@ public class SimpleTimeZone extends JDKTimeZone {
                           int startMonth, int startDay, int startDayOfWeek, int startTime,
                           int endMonth, int endDay, int endDayOfWeek, int endTime,
                           int dstSavings) {
-        /*this(new java.util.SimpleTimeZone(rawOffset, ID, startMonth, startDay,
-                                          startDayOfWeek, startTime, endMonth,
-                                          endDay, endDayOfWeek, endTime, dstSavings), ID);*/
-        this.raw = rawOffset;
-        this.dst = dstSavings;
-        /*
-        STZInfo xinfo = getSTZInfo();
-        xinfo.setStart(startMonth, startDay, startDayOfWeek, startTime, -1, false);
-        xinfo.setEnd(endMonth, endDay, endDayOfWeek, endTime, -1, false);
-        */
-
         construct(rawOffset,
                 startMonth, startDay, startDayOfWeek,
                 startTime, WALL_TIME,
@@ -289,8 +268,6 @@ public class SimpleTimeZone extends JDKTimeZone {
      */
     public void setStartRule(int month, int dayOfWeekInMonth, int dayOfWeek,
                              int time) {
-        //unwrapSTZ().setStartRule(month, dayOfWeekInMonth, dayOfWeek, time);
-
         getSTZInfo().setStart(month, dayOfWeekInMonth, dayOfWeek, time, -1, false);
         setStartRule(month, dayOfWeekInMonth, dayOfWeek, time, WALL_TIME);
     }
@@ -379,12 +356,9 @@ public class SimpleTimeZone extends JDKTimeZone {
      * @stable ICU 2.0
      */
     public void setStartRule(int month, int dayOfMonth, int dayOfWeek, int time, boolean after) {
-        //unwrapSTZ().setStartRule(month, dayOfMonth, dayOfWeek, time, after);
-
         getSTZInfo().setStart(month, -1, dayOfWeek, time, dayOfMonth, after);
         setStartRule(month, after ? dayOfMonth : -dayOfMonth,
                 -dayOfWeek, time, WALL_TIME);
-
     }
 
     /**
@@ -408,8 +382,6 @@ public class SimpleTimeZone extends JDKTimeZone {
      * @stable ICU 2.0
      */
     public void setEndRule(int month, int dayOfWeekInMonth, int dayOfWeek, int time) {
-        //unwrapSTZ().setEndRule(month, dayOfWeekInMonth, dayOfWeek, time);
-
         getSTZInfo().setEnd(month, dayOfWeekInMonth, dayOfWeek, time, -1, false);
         setEndRule(month, dayOfWeekInMonth, dayOfWeek, time, WALL_TIME);        
     }
@@ -427,8 +399,6 @@ public class SimpleTimeZone extends JDKTimeZone {
      * @stable ICU 2.0
      */
     public void setEndRule(int month, int dayOfMonth, int time) {
-        //unwrapSTZ().setEndRule(month, dayOfMonth, time);
-
         getSTZInfo().setEnd(month, -1, -1, time, dayOfMonth, false);
         setEndRule(month, dayOfMonth, WALL_TIME, time);
     }
@@ -451,8 +421,6 @@ public class SimpleTimeZone extends JDKTimeZone {
      * @stable ICU 2.0
      */
     public void setEndRule(int month, int dayOfMonth, int dayOfWeek, int time, boolean after) {
-       // unwrapSTZ().setEndRule(month, dayOfMonth, dayOfWeek, time, after);
-
         getSTZInfo().setEnd(month, -1, dayOfWeek, time, dayOfMonth, after);
         setEndRule(month, dayOfMonth, dayOfWeek, time, WALL_TIME, after);
     }
@@ -493,7 +461,6 @@ public class SimpleTimeZone extends JDKTimeZone {
      * @stable ICU 2.0
      */
     public void setDSTSavings(int millisSavedDuringDST) {
-        //unwrapSTZ().setDSTSavings(millisSavedDuringDST);
         if (millisSavedDuringDST <= 0) {
             throw new IllegalArgumentException();
         }
@@ -511,20 +478,6 @@ public class SimpleTimeZone extends JDKTimeZone {
         return dst;
     }
 
-    /*
-     * Constructs a SimpleTimeZone that wraps the given
-     * java.util.SimpleTimeZone.  Do not call; use the TimeZone
-     * API.
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-//    public SimpleTimeZone(java.util.SimpleTimeZone tz, String ID) {
-//        super(tz);
-//        super.setID(ID);
-//        dst = tz.getDSTSavings();
-//        raw = tz.getRawOffset();
-//    }
-    
     /**
      * Returns the java.util.SimpleTimeZone that this class wraps.
      *
@@ -589,8 +542,6 @@ public class SimpleTimeZone extends JDKTimeZone {
     //  Gregorian, since we know they didn't have daylight time when
     //  Gregorian calendar started.
     private final static byte staticMonthLength[] = {31,29,31,30,31,30,31,31,30,31,30,31};
-
-//  -------------------------------------
 
     /**
      * @internal revisit for ICU 3.6
@@ -738,7 +689,6 @@ public class SimpleTimeZone extends JDKTimeZone {
         return result;
     }
 
-//     -------------------------------------
     private static final int
         DOM_MODE = 1,
         DOW_IN_MONTH_MODE=2,
@@ -870,40 +820,6 @@ public class SimpleTimeZone extends JDKTimeZone {
         return gc.inDaylightTime();
     }
 
-
-//  -------------------------------------
-/*
-    SimpleTimeZone(int rawOffsetGMT, String ID,
-        int savingsStartMonth, int savingsStartDay,
-        int savingsStartDayOfWeek, int savingsStartTime,
-        int savingsEndMonth, int savingsEndDay,
-        int savingsEndDayOfWeek, int savingsEndTime)
-    {
-        construct(rawOffsetGMT,
-                  savingsStartMonth, savingsStartDay, savingsStartDayOfWeek,
-                  savingsStartTime, WALL_TIME,
-                  savingsEndMonth, savingsEndDay, savingsEndDayOfWeek,
-                  savingsEndTime, WALL_TIME,
-                  TimeZone.MILLIS_PER_DAY);
-    }
-*/
-//     -------------------------------------
-/*
-    SimpleTimeZone(int rawOffsetGMT, String ID,
-        int savingsStartMonth, int savingsStartDay,
-        int savingsStartDayOfWeek, int savingsStartTime,
-        int savingsEndMonth, int savingsEndDay,
-        int savingsEndDayOfWeek, int savingsEndTime,
-        int savingsDST)
-    {
-        construct(rawOffsetGMT,
-                  savingsStartMonth, savingsStartDay, savingsStartDayOfWeek,
-                  savingsStartTime, WALL_TIME,
-                  savingsEndMonth, savingsEndDay, savingsEndDayOfWeek,
-                  savingsEndTime, WALL_TIME,
-                  savingsDST);
-    }
-    */
     /**
      * Internal construction method.
      */
