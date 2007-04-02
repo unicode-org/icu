@@ -67,7 +67,7 @@ $(ZDUMPOUT): tzorig
 dump-out: $(ZDUMPOUT) $(ICUZDUMPOUT)
 
 check-dump: dump-out
-	diff -r $(ZDUMPOUT) $(ICUZDUMPOUT)
+	diff -r zdumpout icuzdumpout
 
 endif
 endif
