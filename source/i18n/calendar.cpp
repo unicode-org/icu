@@ -2490,12 +2490,12 @@ int32_t Calendar::handleComputeJulianDay(UCalendarDateFields bestField)  {
     // If useMonth is true, get the day before the start of the month.
 
     // give calendar subclass a chance to have a default 'first' month
-    int8_t month;
+    int32_t month;
 
     if(isSet(UCAL_MONTH)) {
-        month = (int8_t)internalGet(UCAL_MONTH);
+        month = internalGet(UCAL_MONTH);
     } else {
-        month = (int8_t)getDefaultMonthInYear();
+        month = getDefaultMonthInYear();
     }
 
     int32_t julianDay = handleComputeMonthStart(year, useMonth ? month : 0, useMonth);
