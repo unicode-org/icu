@@ -4408,7 +4408,7 @@ i*86-*-solaris*)
     if test "$GCC" = yes; then
                 GENCCODE_ASSEMBLY="-a gcc"
     else
-        GENCCODE_ASSEMBLY="-a sun86"
+        GENCCODE_ASSEMBLY="-a sun-x86"
     fi ;;
 sparc-*-solaris*)
     GENCCODE_ASSEMBLY="-a sun"

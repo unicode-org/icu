@@ -188,7 +188,7 @@ static const struct AssemblyType {
 
         ".word "
     },
-    {"sun86",
+    {"sun-x86",
         "Drodata.rodata:\n"
         "\t.type   Drodata.rodata,@object\n"
         "\t.size   Drodata.rodata,0\n"
