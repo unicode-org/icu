@@ -236,6 +236,9 @@ icu4c/source/test/testdata/icu26e_testtypes.res -text
 icu4c/source/test/testdata/importtest.bin -text
 icu4c/source/test/testdata/letest.xml svneol=native#text/xml
 icu4c/source/test/testdata/uni-text.bin -text
+icu4c/source/tools/tzcode/icuzdump.cpp -text
+icu4c/source/tools/tzcode/icuzdump.vcproj -text
+icu4c/source/tools/tzcode/zdump.c -text
 icu4j/.classpath -text
 icu4j/.externalToolBuilders/ICU4J_Resources.launch -text
 icu4j/.project -text
