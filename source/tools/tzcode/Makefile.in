@@ -11,14 +11,77 @@ include $(top_builddir)/icudefs.mk
 
 OBJECTS= zic.o localtime.o asctime.o scheck.o ialloc.o
 TZDATA = $(firstword $(wildcard ./tzdata*.tar.gz) $(wildcard $(srcdir)/tzdata*.tar.gz))
+TZCODE = $(firstword $(wildcard ./tzcode*.tar.gz) $(wildcard $(srcdir)/tzcode*.tar.gz))
+
+TZORIG=./tzorig
+TZORIG_TZDIR=./tzorig/tzdir
+TZORIG_ABS := $(shell pwd)/tzorig
+TZORIG_TZDIR_ABS := $(TZORIG_ABS)/tzdir
+TZORIG_OPTS := CFLAGS=-D_POSIX_C_SOURCE TZDIR=$(TZORIG_TZDIR_ABS)
+
+
+## Options for building zdumps
+ZDUMPOUT=$(shell pwd)/zdumpout
+ICUZDUMPOUT=$(shell pwd)/icuzdumpout
+
+ZDUMP_OPTS= -v -a -d $(ZDUMPOUT) -c 1902,2038 -i
+ICUZDUMP_OPTS= -a -d $(ICUZDUMPOUT)
 
 ifeq ($(TZDATA),)
 all: 
-	@echo ERROR tzdata*.tar.gz can\'t be found.
+	@echo ERROR "tzdata*.tar.gz" can\'t be found.
 	@false
 else
 all: icu_data
 endif
+
+TZCODE_TARGETS= tzorig check-dump
+
+ifeq ($(TZCODE),)
+# we're broken.
+$(TZCODE_TARGETS):
+	@echo ERROR "tzcode*.tar.gz" can\'t be found.
+	@false
+
+else
+ifeq ($(TZDATA),)
+# we're broken.
+$(TZCODE_TARGETS):
+	@echo ERROR "tzdata*.tar.gz" can\'t be found.
+	@false
+else
+tzorig:	$(TZCODE) $(TZDATA)
+	-$(RMV) ./tzorig/
+	mkdir $@
+	mkdir $(TZORIG_TZDIR)
+	gunzip -d < $(TZDATA) | ( cd $@ ; tar xf - )
+	gunzip -d < $(TZCODE) | ( cd $@ ; tar xf - )
+	-mv $(TZORIG)/zdump.c $(TZORIG)/zdump.c.orig
+	cp $(srcdir)/zdump.c $(TZORIG)/zdump.c
+	$(MAKE) -C $@ $(TZORIG_OPTS) zdump zones
+
+$(ZDUMPOUT): tzorig
+	( cd $(TZORIG) ; ./zdump$(EXEEXT) $(ZDUMP_OPTS) )
+
+
+dump-out: $(ZDUMPOUT) $(ICUZDUMPOUT)
+
+check-dump: dump-out
+	diff -r $(ZDUMPOUT) $(ICUZDUMPOUT)
+
+endif
+endif
+
+$(ICUZDUMPOUT): icuzdump$(EXEEXT)
+	-$(RMV) $(ICUZDUMPOUT)
+	-mkdir $(ICUZDUMPOUT)
+	$(INVOKE) ./icuzdump $(ICUZDUMP_OPTS)
+
+
+#
+# old 'tz' rules start here
+#
+
 
 PRIMARY_YDATA=	africa antarctica asia australasia \
 		europe northamerica southamerica
@@ -38,13 +101,17 @@ CPPFLAGS+= -DTZDIR=\"$(TZDIR)\"
 XDATA=zone.tab yearistype.sh leapseconds iso3166.tab
 ICUDATA=ZoneMetaData.java icu_zone.txt tz2icu zoneinfo.txt
 
-
-
 zic:		$(OBJECTS) yearistype $(srcdir)/tz2icu.h
 		$(CC) $(CFLAGS) $(LFLAGS) -I$(srcdir) $(OBJECTS) $(LDLIBS) -o $@
 
 tz2icu:		$(srcdir)/tz2icu.cpp $(srcdir)/tz2icu.h
 		$(CXX) -W -Wall  -I$(srcdir) -I$(top_srcdir)/common -pedantic $(srcdir)/tz2icu.cpp -o $@
+
+icuzdump:	$(srcdir)/icuzdump.cpp
+		$(LINK.cc)  -I$(srcdir) -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/toolutil -I$(top_srcdir)/io  -pedantic $(srcdir)/icuzdump.cpp $(LIBICUUC) $(LIBICUDT) $(LIBICUI18N) $(LIBICUIO) $(LIBICUTOOLUTIL) -o $@
+
+
+#		$(CXX) -W -Wall  -I$(srcdir) -I$(top_srcdir)/common -pedantic $(srcdir)/icuzdump.cpp -o $@
 
 yearistype.sh: $(TZDATA)
 	gunzip -d < $(TZDATA) | tar xf -
@@ -68,12 +135,15 @@ clean:
 		@echo ICU specific cleanup:
 		-rm -f $(ICUDATA)
 		-rm -rf $(TZDIR)
+		-$(RMV) icuzdump tzorig ./zdumpout/ ./icuzdumpout/
 ifneq ($(srcdir),.)
 		-$(RMV) tz.alias
 endif
 ifneq ($(TZDATA),)
 		-rm -rf `gunzip -d < $(TZDATA) | tar tf - | grep -o '[^ ]*$$' | tr '\n' ' '`
 endif
+
+checkclean:
 
 dataclean: clean
 	-rm -f $(TDATA) $(XDATA)
