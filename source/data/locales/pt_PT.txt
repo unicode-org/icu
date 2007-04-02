@@ -1,0 +1,288 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2007 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/pt_PT.xml
+// *
+// ***************************************************************************
+pt_PT{
+    Countries{
+        172{"172"}
+        AE{"Emiratos Árabes Unidos"}
+        AM{"Arménia"}
+        AQ{"Antárctica"}
+        AZ{"Azerbeijão"}
+        BH{"Bareine"}
+        BJ{"Benim"}
+        BY{"Bielorrússia"}
+        CM{"Camarões"}
+        CX{"Ilha do Natal"}
+        CZ{"República Checa"}
+        EE{"Estónia"}
+        EG{"Egipto"}
+        EH{"Sahara Ocidental"}
+        ER{"Eritreia"}
+        FK{"Ilhas Falkland"}
+        GL{"Gronelândia"}
+        GS{"Ilhas South Georgia e South Sandwich"}
+        GW{"Guiné-Bissau"}
+        HK{"Hong Kong - Região Administrativa Especial da China"}
+        KE{"Quénia"}
+        KG{"Quirguizistão"}
+        KN{"Saint Kitts e Nevis"}
+        KP{"Coreia do Norte"}
+        KR{"Coreia do Sul"}
+        KY{"Ilhas Caimão"}
+        KZ{"Cazaquistão"}
+        LA{"Lao, República Popular Democrática"}
+        LV{"Letónia"}
+        MC{"Mónaco"}
+        MD{"Moldávia, República da"}
+        MG{"Madagáscar"}
+        MK{"Macedónia, República da"}
+        MO{"Macau - Região Administrativa Especial da China"}
+        MP{"Ilhas Mariana do Norte"}
+        MU{"Maurícias"}
+        NC{"Nova Caledónia"}
+        NL{"Países Baixos"}
+        PG{"Papua Nova Guiné"}
+        PL{"Polónia"}
+        PS{"Território Palestiniano"}
+        RE{"Reunion"}
+        RO{"Roménia"}
+        SC{"Seicheles"}
+        SG{"Singapura"}
+        SI{"Eslovénia"}
+        SM{"São Marino"}
+        TC{"Ilhas Turcas e Caicos"}
+        TD{"Tchade"}
+        TF{"Territórios Franceses a Sul"}
+        TJ{"Tajiquistão"}
+        TM{"Turquemenistão"}
+        UM{"Ilhas Minor Outlying (E.U.A)"}
+        UZ{"Uzbaquistão"}
+        VA{"Santa Sé (Estado da Cidade do Vaticano)"}
+        VC{"Saint Vincent e Grenadines"}
+        VG{"Ilhas Virgin Britânicas"}
+        VI{"Ilhas Virgin E.U.A."}
+        VN{"Vietname"}
+        YE{"Iémen"}
+    }
+    Currencies{
+        AFA{
+            "AFA",
+            "Afeghani (1927-2002)",
+        }
+        BAD{
+            "BAD",
+            "Dinar da Bósnia-Herzegóvina",
+        }
+        BAM{
+            "BAM",
+            "Marco bósnio-herzegóvino conversível",
+        }
+        CYP{
+            "CYP",
+            "Libra de Chipre",
+        }
+        CZK{
+            "CZK",
+            "Coroa da República Checa",
+        }
+        ECV{
+            "ECV",
+            "Unidad de Valor Constante (UVC) do Equador",
+        }
+        KYD{
+            "KYD",
+            "Dólar das Ilhas Caimão",
+        }
+        MXP{
+            "MXP",
+            "Peso Plata mexicano (1861-1992)",
+        }
+        MXV{
+            "MXV",
+            "Unidad de Inversion (UDI) mexicana",
+        }
+        NIC{
+            "NIC",
+            "Córdoba nicaraguano",
+        }
+        NIO{
+            "NIO",
+            "Córdoba Ouro nicaraguano",
+        }
+        PTE{
+            "Esc.",
+            "Escudo português",
+            {
+                "#,##0.00 ¤;-#,##0.00 ¤",
+                "$",
+                ",",
+            }
+        }
+        TZS{
+            "TZS",
+            "Xelim de Tanzânia",
+        }
+        WST{
+            "WST",
+            "Tala de Samoa Ocidental",
+        }
+    }
+    Languages{
+        ang{"inglês, arcaico (aprox. 450-1100)"}
+        awa{"Awadhi"}
+        bai{"bamileke Languages"}
+        bug{"Buginese"}
+        ce{"chechene"}
+        cs{"checo"}
+        dum{"holandês, medieval (aprox. 1050-1350)"}
+        enm{"inglês, medieval (1100-1500)"}
+        et{"estónio"}
+        frm{"francês, medieval (aprox.1400-1600)"}
+        fro{"francês, arcaico (842-aprox.1400)"}
+        gmh{"alemão, medieval alto (aprox.1050-1500)"}
+        goh{"alemão, arcaico alto (aprox.750-1050)"}
+        grc{"grego, arcaico (até 1453)"}
+        iba{"Iban"}
+        ik{"Inupiaq"}
+        jv{"jv"}
+        mga{"irlandês, medieval (900-1200)"}
+        mkh{"mon-khmer (other)"}
+        nd{"ndebele, north"}
+        non{"norse, old"}
+        nso{"soto, setentrional"}
+        ota{"turco, otomano (1500-1928)"}
+        peo{"persa arcaico (aprox. 600-400 a.C.)"}
+        pl{"polaco"}
+        pro{"provençal, arcaico (até 1500)"}
+        sal{"salishan languages"}
+        sgn{"linguages de sinais"}
+        sl{"esloveno"}
+        wak{"wakashan languages"}
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "#,##0.00 ¤",
+        "#,##0%",
+        "#E0",
+    }
+    Scripts{
+        Osma{"osmanya"}
+    }
+    Version{"1.59"}
+    calendar{
+        buddhist{
+            DateTimePatterns{
+                "HH'H'mm'm'ss's' v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, MMMM d, yyyy G",
+                "MMMM d, yyyy G",
+                "MMM d, yyyy G",
+                "M/d/yyyy",
+                "{1} {0}",
+            }
+        }
+        gregorian{
+            DateTimePatterns{
+                "HH'H'mm'm'ss's' v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d' de 'MMMM' de 'yyyy",
+                "d' de 'MMMM' de 'yyyy",
+                "yyyy/MM/dd",
+                "yy/MM/dd",
+                "{1} {0}",
+            }
+            availableFormats{
+                MMdd{"MM/dd"}
+                yyMMMEEEd{"EEE, d 'de' MMM 'de' yy"}
+                yyMMMd{"d 'de' MMM 'de' yy"}
+                yyyyMM{"yyyy/MM"}
+            }
+            fields{
+                second{
+                    dn{"Second"}
+                }
+                zone{
+                    dn{"Zona"}
+                }
+            }
+        }
+        japanese{
+            DateTimePatterns{
+                "HH'H'mm'm'ss's' v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, MMMM d, y G",
+                "MMMM d, y G",
+                "MMM d, y G",
+                "M/d/yy",
+                "{1} {0}",
+            }
+        }
+    }
+    delimiters{
+        alternateQuotationEnd{"”"}
+        alternateQuotationStart{"“"}
+        quotationEnd{"’"}
+        quotationStart{"‘"}
+    }
+    zoneStrings{
+        "America:Araguaina"{
+            ec{"Araguaina"}
+        }
+        "America:Argentina:Tucuman"{
+            ec{"Tucumán"}
+        }
+        "America:Bahia"{
+            ec{"Baía"}
+        }
+        "America:Cancun"{
+            ec{"Cancun"}
+        }
+        "America:Cuiaba"{
+            ec{"Cuibá"}
+        }
+        "America:North_Dakota:Center"{
+            ec{"Center"}
+        }
+        "America:Phoenix"{
+            ec{"Phoenix"}
+        }
+        "Asia:Sakhalin"{
+            ec{"Sacalina"}
+        }
+        "Asia:Ulaanbaatar"{
+            ec{"Ulan Bator"}
+        }
+        "Europe:Kaliningrad"{
+            ec{"Kaliningrado"}
+        }
+        "Europe:Madrid"{
+            ec{"Madrid"}
+        }
+        "Europe:Moscow"{
+            ec{"Moscovo"}
+        }
+        "meta:America_Mountain"{
+            ld{"Horário de Verão Montanha"}
+            ls{"Horário Padrão Montanha"}
+        }
+        "meta:Atlantic"{
+            ld{"Horário de Verão Atlântico"}
+            ls{"Horário Padrão Atlântico"}
+        }
+        "meta:Europe_Central"{
+            ld{"Horário de Verão Europa Central"}
+            ls{"Horário Padrão Europa Central"}
+        }
+    }
+}

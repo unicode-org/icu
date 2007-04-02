@@ -1,0 +1,98 @@
+* text=auto !eol
+
+*.c text !eol
+*.cc text !eol
+*.classpath text !eol
+*.cpp text !eol
+*.css text !eol
+*.dsp text !eol
+*.dsw text !eol
+*.filters text !eol
+*.h text !eol
+*.htm text !eol
+*.html text !eol
+*.in text !eol
+*.java text !eol
+*.launch text !eol
+*.mak text !eol
+*.md text !eol
+*.MF text !eol
+*.mk text !eol
+*.pl text !eol
+*.pm text !eol
+*.project text !eol
+*.properties text !eol
+*.py text !eol
+*.rc text !eol
+*.sh text eol=lf
+*.sln text !eol
+*.stub text !eol
+*.txt text !eol
+*.ucm text !eol
+*.vcproj text !eol
+*.vcxproj text !eol
+*.xml text !eol
+*.xsl text !eol
+*.xslt text !eol
+Makefile text !eol
+configure text !eol
+LICENSE text !eol
+README text !eol
+
+*.bin -text
+*.brk -text
+*.cnv -text
+*.icu -text
+*.res -text
+*.nrm -text
+*.spp -text
+*.tri2 -text
+
+source/data/coll/sr_ME.txt -text
+source/data/coll/zh_Hans.txt -text
+source/data/coll/zh_Hans_CN.txt -text
+source/data/coll/zh_Hans_SG.txt -text
+source/data/coll/zh_Hant_HK.txt -text
+source/data/coll/zh_Hant_MO.txt -text
+source/data/coll/zh_Hant_TW.txt -text
+source/data/mappings/ibm-1137_P100_P100-1999.ucm -text
+source/data/mappings/ibm-1168_P100_P100-2002.ucm -text
+source/data/mappings/ibm-1375_P100-2005.ucm -text
+source/data/mappings/ibm-1383_P110_P100-1999.ucm -text
+source/data/mappings/ibm-1386_P100_P100-2001.ucm -text
+source/data/mappings/ibm-33722_P120_P110-1999.ucm -text
+source/data/mappings/ibm-33722_P12A_P12A-2004.ucm -text
+source/data/mappings/ibm-420_X120_P110-1999.ucm -text
+source/data/mappings/ibm-5471_P100_P100-2005.ucm -text
+source/data/mappings/ibm-864_X110_P110-1999.ucm -text
+source/data/mappings/ibm-913_P100_P100-2000.ucm -text
+source/data/mappings/ibm-930_P120_P110-1999.ucm -text
+source/data/mappings/ibm-933_P110_P100-1999.ucm -text
+source/data/mappings/ibm-935_P110_P100-1999.ucm -text
+source/data/mappings/ibm-937_P110_P100-1999.ucm -text
+source/data/mappings/ibm-939_P120_P110-1999.ucm -text
+source/data/mappings/ibm-942_P12A_P12A-1999.ucm -text
+source/data/mappings/ibm-943_P130_P120-1999.ucm -text
+source/data/mappings/ibm-943_P15A_P14A-2003.ucm -text
+source/data/mappings/ibm-949_P110_P100-1999.ucm -text
+source/data/mappings/ibm-949_P11A_P10A-1999.ucm -text
+source/data/mappings/ibm-950_P110_P100-1999.ucm -text
+source/data/mappings/ibm-954_P101_P101-2000.ucm -text
+source/data/mappings/ibm-964_P110_P100-1999.ucm -text
+source/data/mappings/ibm-970_P110_P110-2006.ucm -text
+source/i18n/persncal.cpp -text
+source/i18n/persncal.h -text
+source/samples/ucnv/data02.bin -text
+source/test/testdata/icu26_testtypes.res -text
+source/test/testdata/icu26e_testtypes.res -text
+source/test/testdata/importtest.bin -text
+source/test/testdata/uni-text.bin -text
+
+# The following file types are stored in Git-LFS.
+*.jar filter=lfs diff=lfs merge=lfs -text
+*.dat filter=lfs diff=lfs merge=lfs -text
+*.zip filter=lfs diff=lfs merge=lfs -text
+*.gz filter=lfs diff=lfs merge=lfs -text
+*.bz2 filter=lfs diff=lfs merge=lfs -text
+*.gif filter=lfs diff=lfs merge=lfs -text
+

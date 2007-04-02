@@ -1,0 +1,202 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2007 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/az.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/az.xml
+ */
+az{
+    AuxExemplarCharacters{"[w]"}
+    Countries{
+        AZ{"Azərbaycan"}
+        BR{"Braziliya"}
+        CN{"Çin"}
+        DE{"Almaniya"}
+        FR{"Fransa"}
+        IN{"Hindistan"}
+        IT{"İtaliya"}
+        JP{"Yaponiya"}
+        RU{"Rusiya"}
+        US{"Amerika Birləşmiş Ştatları"}
+    }
+    Currencies{
+        AZM{
+            "man.",
+            "Manat",
+        }
+    }
+    ExemplarCharacters{"[a-c ç d e ə f g ğ h i İ ı j-o ö p-s ş t u ü v x-z]"}
+    Languages{
+        az{"azərbaycanca"}
+        de{"almanca"}
+        en{"ingiliscə"}
+        es{"ispanca"}
+        fr{"fransızca"}
+        ja{"yaponca"}
+        pt{"portuqalca"}
+        ru{"rusca"}
+        zh{"çincə"}
+    }
+    LocaleScript{
+        "Latn",
+    }
+    NumberElements{
+        ",",
+        " ",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    Version{"1.44"}
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
+            DateTimePatterns{
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, yyyy MMMM dd",
+                "yyyy MMMM d",
+                "yyyy MMM d",
+                "yy/MM/dd",
+                "{1} {0}",
+            }
+            availableFormats{
+                yyQ{"Q yy"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "B.",
+                        "B.e.",
+                        "Ç.a.",
+                        "Ç.",
+                        "C.a.",
+                        "C.",
+                        "Ş.",
+                    }
+                    wide{
+                        "bazar",
+                        "bazar ertəsi",
+                        "çərşənbə axşam",
+                        "çərşənbə",
+                        "cümə axşamı",
+                        "cümə axşamı",
+                        "şənbə",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "e.ə.",
+                    "b.e.",
+                }
+                wide{
+                    "eramızdan əvvəl",
+                    "bizim eramızın",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "yan",
+                        "fev",
+                        "mar",
+                        "apr",
+                        "may",
+                        "iyn",
+                        "iyl",
+                        "avq",
+                        "sen",
+                        "okt",
+                        "noy",
+                        "dek",
+                    }
+                    wide{
+                        "Yanvar",
+                        "Fevral",
+                        "Mart",
+                        "Aprel",
+                        "May",
+                        "İyun",
+                        "İyul",
+                        "Avqust",
+                        "Sentyabr",
+                        "Oktyabr",
+                        "Noyabr",
+                        "Dekabr",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "1-ci kv.",
+                        "2-ci kv.",
+                        "3-cü kv.",
+                        "4-cü kv.",
+                    }
+                    wide{
+                        "1-ci kvartal",
+                        "2-ci kvartal",
+                        "3-cü kvartal",
+                        "4-cü kvartal",
+                    }
+                }
+            }
+        }
+    }
+    delimiters{
+        alternateQuotationEnd{"”"}
+        alternateQuotationStart{"“"}
+        quotationEnd{"’"}
+        quotationStart{"‘"}
+    }
+    zoneStrings{
+        gmtFormat{"GMT{0}"}
+        hourFormat{"+HH:mm;-HH:mm"}
+        regionFormat{"{0}"}
+    }
+}
