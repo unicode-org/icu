@@ -364,7 +364,7 @@ i*86-*-solaris*)
         dnl We're using gcc, and the simple -a gcc command line works for genccode
         GENCCODE_ASSEMBLY="-a gcc"
     else
-        GENCCODE_ASSEMBLY="-a sun86"
+        GENCCODE_ASSEMBLY="-a sun-x86"
     fi ;;
 sparc-*-solaris*)
     GENCCODE_ASSEMBLY="-a sun"
