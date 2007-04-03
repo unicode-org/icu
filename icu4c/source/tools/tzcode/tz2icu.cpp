@@ -1320,6 +1320,12 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+//############################################################################
+//# Note: We no longer use tz.alias to define alias for legacy ICU time zones.
+//# The contents of tz.alias were migrated into zic source format and
+//# processed by zic as 'Link'.
+//############################################################################
+#if 0
     // Read the legacy alias list and process it.  Treat the legacy mappings
     // like links, but also record them in the "legacy" hash.
     try {
@@ -1377,7 +1383,7 @@ int main(int argc, char *argv[]) {
         cerr << "Error: While reading " ICU_TZ_ALIAS ": " << error.what() << endl;
         return 1;
     }
-
+#endif
     try {
         // Recursively scan all files below the given path, accumulating
         // their data into ZONEINFO.  All files must be TZif files.  Any

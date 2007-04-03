@@ -1,7 +1,27 @@
+/*
+*******************************************************************************
+*
+*   Copyright (C) 2007, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*   file name:  icuzdump.cpp
+*   encoding:   US-ASCII
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2007-04-02
+*   created by: Yoshito Umaoka
+*
+*   This tool write out timezone transitions for ICU timezone.  This tool
+*   is used as a part of tzdata update process to check if ICU timezone
+*   code works as well as the corresponding Olson stock localtime/zdump.
+*/
+
 #include <cstdlib>
 #include <cstring>
 #include <fstream>
-#include <strstream>
+#include <sstream>
 
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
@@ -16,8 +36,6 @@
 #include "uoptions.h"
 
 using namespace std;
-
-#define MAXFILEPATH 256
 
 class DumpFormatter {
 public:
@@ -347,8 +365,7 @@ main(int argc, char *argv[]) {
     UnicodeString id;
     if (dir != NULL) {
         // file output
-        char path[MAXFILEPATH];
-        ostrstream pathstr(path, sizeof(path));
+        ostringstream path;
         ios::openmode mode = ios::out;
         if (linesep != NULL) {
             mode |= ios::binary;
@@ -362,12 +379,12 @@ main(int argc, char *argv[]) {
             tz->getID(id);
 
             // target file path
-            pathstr.seekp(0);
-            pathstr << dir << U_FILE_SEP_CHAR;
+            path.str("");
+            path << dir << U_FILE_SEP_CHAR;
             id = id.findAndReplace("/", "-");
-            pathstr << id << ends;
+            path << id;
 
-            ofstream* fout = new ofstream(path, mode);
+            ofstream* fout = new ofstream(path.str().c_str(), mode);
             if (fout->fail()) {
                 cerr << "Cannot open file " << path << endl;
                 delete fout;
