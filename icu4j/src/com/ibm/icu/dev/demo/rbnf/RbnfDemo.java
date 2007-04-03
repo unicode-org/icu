@@ -422,9 +422,9 @@ class DemoTextField extends Component {
         Font font = getFont();
         FontMetrics fm = g.getFontMetrics();
         g.setFont(font);
-        String text = getText();
+        String txt = getText();
         BreakIterator bi = BreakIterator.getLineInstance();
-        bi.setText(text);
+        bi.setText(txt);
         int lineHeight = fm.getHeight();
         int width = getSize().width;
         int penY = fm.getAscent();
@@ -434,28 +434,28 @@ class DemoTextField extends Component {
         int maxLineEnd = 0;
         totalHeight = 0;
 
-        while (lineStart < text.length()) {
-            maxLineEnd = text.indexOf('\n', lineStart);
+        while (lineStart < txt.length()) {
+            maxLineEnd = txt.indexOf('\n', lineStart);
             if (maxLineEnd == -1)
                 maxLineEnd = Integer.MAX_VALUE;
-            while (tempLineEnd != BreakIterator.DONE && fm.stringWidth(text.substring(
+            while (tempLineEnd != BreakIterator.DONE && fm.stringWidth(txt.substring(
                             lineStart, tempLineEnd)) < width) {
                 lineEnd = tempLineEnd;
                 tempLineEnd = bi.next();
             }
             if (lineStart >= lineEnd) {
                 if (tempLineEnd == BreakIterator.DONE)
-                    lineEnd = text.length();
+                    lineEnd = txt.length();
                 else
                     lineEnd = tempLineEnd;
             }
             if (lineEnd > maxLineEnd)
                 lineEnd = maxLineEnd;
-            g.drawString(text.substring(lineStart, lineEnd), 0, penY);
+            g.drawString(txt.substring(lineStart, lineEnd), 0, penY);
             penY += lineHeight;
             totalHeight += lineHeight;
             lineStart = lineEnd;
-            if (lineStart < text.length() && text.charAt(lineStart) == '\n')
+            if (lineStart < txt.length() && txt.charAt(lineStart) == '\n')
                 ++lineStart;
         }
     }

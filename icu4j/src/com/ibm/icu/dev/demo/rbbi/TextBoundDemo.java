@@ -78,7 +78,7 @@ JTextArea text;
         */
     }
 
-    int s, e;
+    int start, end;
     int ts, te;
 
     public void checkChange()
@@ -108,9 +108,9 @@ JTextArea text;
 
     public void select(int sIn, int eIn)
     {
-        s = sIn;
-        e = eIn;
-        text.select(s, e);
+        start = sIn;
+        end = eIn;
+        text.select(start, end);
         ts = text.getSelectionStart() & 0x7FFF;
         te = text.getSelectionEnd() & 0x7FFF;
 //        if (s != ts || e != te) {
@@ -373,7 +373,7 @@ text.setWrapStyleWord(true);
             }
             //text.select(s, e);
             errorText("<" + oldStart + "," + oldEnd + "> -> <" +
-                s + "," + e + ">");
+                start + "," + end + ">");
         }
         catch (Exception exp) {
             errorText(exp.toString());
@@ -395,7 +395,7 @@ text.setWrapStyleWord(true);
                 selectRange(s, e);
             }
             //text.select(s, e);
-            errorText("<" + oldStart + "," + oldEnd + "> -> <" + s + "," + e + ">");
+            errorText("<" + oldStart + "," + oldEnd + "> -> <" + start + "," + end + ">");
         }
         catch (Exception exp) {
             errorText(exp.toString());
