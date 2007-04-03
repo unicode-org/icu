@@ -831,7 +831,7 @@ public class BreakIteratorTest extends TestFmwk
         try {
             for (int i = 0; i < ulocales.length; i++) {
                 loc = ulocales[i];
-                for (type = 0; type <= 4; ++type) {
+                for (type = 0; type < 5 /* 5 = BreakIterator.KIND_COUNT */; ++type) {
                     BreakIterator brk = BreakIterator.getBreakInstance(loc, type);
                     if (brk == null) {
                         errln("ERR: Failed to create an instance type: " + type + " / locale: " + loc);
