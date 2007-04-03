@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2004.  All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2007.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or
  * implied, including the warranty of non-infringement and the implied
@@ -39,14 +39,14 @@ import com.ibm.richtext.textformat.TextOffset;
 
 final class TypingInteractor extends Behavior {
 
-    static final String COPYRIGHT =
-                "(C) Copyright IBM Corp. 1998-1999 - All Rights Reserved";
+//    static final String COPYRIGHT =
+//                "(C) Copyright IBM Corp. 1998-1999 - All Rights Reserved";
 
     private static final char BACKSPACE = 8;
     private static final char TAB = '\t';
     private static final char RETURN = '\r';
     private static final char LINE_FEED = '\n';
-    private static final char PARAGRAPH_SEP = '\u2029';
+//    private static final char PARAGRAPH_SEP = '\u2029';
     
     private TextComponent fTextComponent;
     private TextSelection fSelection;

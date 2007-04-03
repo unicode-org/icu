@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -19,8 +19,8 @@ public class RbnfDemo extends DemoApplet {
     /**
      * Puts a copyright in the .class file
      */
-    private static final String copyrightNotice
-        = "Copyright \u00a91997-1998 IBM Corp.  All rights reserved.";
+//    private static final String copyrightNotice
+//        = "Copyright \u00a91997-1998 IBM Corp.  All rights reserved.";
 
     /*
      * code to run the demo as an application
@@ -379,7 +379,7 @@ public class RbnfDemo extends DemoApplet {
             ruleSetName = ruleSetNames[0];
     }
 
-    private Frame demoWindow = null;
+//    private Frame demoWindow = null;
 
     private TextComponent numberField;
     private DemoTextFieldHolder textField;
@@ -396,7 +396,7 @@ public class RbnfDemo extends DemoApplet {
     private boolean lenientParse = true;
 
     private double theNumber = 0;
-    private boolean canEdit = true;
+//    private boolean canEdit = true;
 
     private Choice formatterMenu;
     private Choice ruleSetMenu;
