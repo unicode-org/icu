@@ -34,8 +34,10 @@ icu4c/source/common/Makefile
 icu4c/source/common/Release
 icu4c/source/common/common.res
 icu4c/source/common/common.vcproj.*.*.user
+icu4c/source/common/debug
 icu4c/source/common/icucfg.h
 icu4c/source/common/libicu*.*
+icu4c/source/common/release
 icu4c/source/common/svchook.mk
 icu4c/source/common/unicode/platform.h
 icu4c/source/config.cache
@@ -74,8 +76,10 @@ icu4c/source/i18n/*.plg
 icu4c/source/i18n/Debug
 icu4c/source/i18n/Makefile
 icu4c/source/i18n/Release
+icu4c/source/i18n/debug
 icu4c/source/i18n/i18n.res
 icu4c/source/i18n/i18n.vcproj.*.*.user
+icu4c/source/i18n/release
 icu4c/source/icudefs.mk
 icu4c/source/io/*.ao
 icu4c/source/io/*.d
