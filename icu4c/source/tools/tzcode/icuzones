@@ -1,16 +1,13 @@
 ######################################################################
-# Copyright (C) 2006, International Business Machines
+# Copyright (C) 2007, International Business Machines
 # Corporation and others.  All Rights Reserved.
 ######################################################################
 # This is an ICU-specific file with the same format as regular
 # tzdata time zone files, for consistent parsing by the tools that
 # turn "Olson" tzdata into ICU's zoneinfo.txt.
 # The purpose of this file is to give ICU a superset of the time zones
-# that are in CLDR.
-# It would be possible with the existing tz.alias file to add more
-# aliases, but it is not possible to add a new time zone like
-# Etc/Unknown which wants to work like Etc/GMT but not be an alias.
-# The aliases in tz.alias could probably be moved here.
+# that are in CLDR and also include legacy ICU time zones originally
+# in tz.alias for rataining backward compatibility.
 
 # Add Etc/Unknown, defined by CLDR. Give it Etc/GMT behavior.
 
@@ -30,9 +27,47 @@ Link America/Denver SystemV/MST7MDT
 Link America/Los_Angeles SystemV/PST8PDT
 Link America/Anchorage SystemV/YST9YDT
 Link America/Puerto_Rico SystemV/AST4
-Link America/Indianapolis SystemV/EST5
+Link America/Indiana/Indianapolis SystemV/EST5
 Link America/Regina SystemV/CST6
 Link America/Phoenix SystemV/MST7
 Link Pacific/Pitcairn SystemV/PST8
 Link Pacific/Gambier SystemV/YST9
 Link Pacific/Honolulu SystemV/HST10
+
+
+# The list below is for supporting legacy ICU zone aliases.
+# These definitions were originally defined in tz.alias.
+
+#### Aliases that conflict with Olson compatibility Zone definition
+
+Link Australia/Darwin ACT
+Link Australia/Sydney AET
+Link America/Argentina/Buenos_Aires AGT
+Link Africa/Cairo ART
+Link America/Anchorage AST
+Link America/Sao_Paulo BET
+Link Asia/Dhaka BST
+Link Africa/Harare CAT
+Link America/St_Johns CNT
+Link America/Chicago CST
+Link Asia/Shanghai CTT
+Link Africa/Addis_Ababa EAT
+Link Europe/Paris ECT
+#Link Europe/Istanbul EET # EET is a standard UNIX zone
+####Link EST America/New_York EST # Defined as -05:00
+####Link Pacific/Honolulu HST # Defined as -10:00
+Link America/Indiana/Indianapolis IET
+Link Asia/Calcutta IST
+Link Asia/Tokyo JST
+#Link Asia/Tehran MET # MET is a standard UNIX zone
+Link Pacific/Apia MIT
+####Link America/Denver MST # Defined as -07:00
+Link Asia/Yerevan NET
+Link Pacific/Auckland NST
+Link Asia/Karachi PLT
+Link America/Phoenix PNT
+Link America/Puerto_Rico PRT
+Link America/Los_Angeles PST
+Link Pacific/Guadalcanal SST
+#Link Etc/UTC UTC # Olson LINK
+Link Asia/Saigon VST

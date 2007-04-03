@@ -58,6 +58,8 @@ tzorig:	$(TZCODE) $(TZDATA)
 	gunzip -d < $(TZCODE) | ( cd $@ ; tar xf - )
 	-mv $(TZORIG)/zdump.c $(TZORIG)/zdump.c.orig
 	cp $(srcdir)/zdump.c $(TZORIG)/zdump.c
+	-mv $(TZORIG)/factory $(TZORIG)/factory.orig
+	cat $(TZORIG)/factory.orig $(srcdir)/icuzones > $(TZORIG)/factory
 	$(MAKE) -C $@ $(TZORIG_OPTS) zdump zones
 
 $(ZDUMPOUT): tzorig
@@ -107,7 +109,7 @@ zic:		$(OBJECTS) yearistype $(srcdir)/tz2icu.h
 tz2icu:		$(srcdir)/tz2icu.cpp $(srcdir)/tz2icu.h
 		$(CXX) -W -Wall  -I$(srcdir) -I$(top_srcdir)/common -pedantic $(srcdir)/tz2icu.cpp -o $@
 
-icuzdump:	$(srcdir)/icuzdump.cpp
+icuzdump${EXEEXT}:	$(srcdir)/icuzdump.cpp
 		$(LINK.cc)  -I$(srcdir) -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/toolutil -I$(top_srcdir)/io  -pedantic $(srcdir)/icuzdump.cpp $(LIBICUUC) $(LIBICUDT) $(LIBICUI18N) $(LIBICUIO) $(LIBICUTOOLUTIL) -o $@
 
 
@@ -120,25 +122,19 @@ yearistype:	yearistype.sh
 		cp yearistype.sh yearistype
 		chmod +x yearistype
 
-tz.alias:		$(srcdir)/tz.alias
-	cp $< .
-
 posix_only:	zic $(TDATA) $(srcdir)/icuzones
 		$(ZIC) -y $(YEARISTYPE) -d $(TZDIR) -L /dev/null $(TDATA) $(srcdir)/icuzones
 
 
-icu_data:	tz2icu posix_only tz.alias
+icu_data:	tz2icu posix_only
 		./tz2icu $(TZDIR) zone.tab `echo $(TZDATA) | sed -e "s/.*\/tzdata//;s/\.tar\.gz$$//"`
 
 clean:
-		-rm -f core *.o *.out zdump zic yearistype date
+		-rm -f core *.o *.out zdump${EXEEXT} zic${EXEEXT} yearistype date tz2icu${EXEEXT}
 		@echo ICU specific cleanup:
 		-rm -f $(ICUDATA)
 		-rm -rf $(TZDIR)
-		-$(RMV) icuzdump tzorig ./zdumpout/ ./icuzdumpout/
-ifneq ($(srcdir),.)
-		-$(RMV) tz.alias
-endif
+		-$(RMV) icuzdump${EXEEXT} tzorig ./zdumpout/ ./icuzdumpout/
 ifneq ($(TZDATA),)
 		-rm -rf `gunzip -d < $(TZDATA) | tar tf - | grep -o '[^ ]*$$' | tr '\n' ' '`
 endif
