@@ -1,5 +1,5 @@
 **********************************************************************
-* Copyright (c) 2003-2006, International Business Machines
+* Copyright (c) 2003-2007, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -84,6 +84,18 @@ HOWTO
 
 3. Build ICU normally. You will see a notice "updating zoneinfo.txt..."
 
-4. For ICU maintainers, don't forget to check in the new
-    zoneinfo.txt (from its location at
-   {path_to}/icu/source/data/misc/zoneinfo.txt) into CVS.
+### Following instructions for ICU maintainers only ###
+
+4. Obtain the current version of tzcodeYYYY.tar.gz from the FTP site to
+   this directory.
+
+5. Run make target "check-dump".  This target extract makes the original
+   tzcode and compile the original tzdata with icu supplemental data
+   (icuzones).  Then it makes zdump / icuzdump and dump all time
+   transitions for all ICU timezone to files under zdumpout / icuzdumpout
+   directory.  When they produce different results, the target returns
+   the error.
+
+6. Don't forget to check in the new zoneinfo.txt (from its location at
+   {path_to}/icu/source/data/misc/zoneinfo.txt) into SVN.
+
