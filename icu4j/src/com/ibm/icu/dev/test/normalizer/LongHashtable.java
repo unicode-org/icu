@@ -4,7 +4,7 @@ import java.util.Hashtable;
 
 /**
  *******************************************************************************
- * Copyright (C) 2002-2003, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2007, International Business Machines Corporation and    *
  * Unicode, Inc. All Rights Reserved.                                          *
  *******************************************************************************
  *
@@ -14,7 +14,7 @@ import java.util.Hashtable;
  * @author Vladimir Weinstein
  */
 public class LongHashtable {
-    static final String copyright = "Copyright (C) 2002-2003 International Business Machines Corporation and Unicode, Inc.";
+//    static final String copyright = "Copyright (C) 2002-2003 International Business Machines Corporation and Unicode, Inc.";
     
     public LongHashtable (int defaultValue) {
         this.defaultValue = defaultValue;
