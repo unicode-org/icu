@@ -1,23 +1,25 @@
-/**
- * Implements Unicode Normalization Forms C, D, KC, KD.<br>
- * See UTR#15 for details.<br>
- * Copyright (C) 1998-2003 International Business Machines Corporation and
+/*
+ * Copyright (C) 1998-2007 International Business Machines Corporation and
  * Unicode, Inc. All Rights Reserved.<br>
  * The Unicode Consortium makes no expressed or implied warranty of any
  * kind, and assumes no liability for errors or omissions.
  * No liability is assumed for incidental and consequential damages
  * in connection with or arising out of the use of the information here.
- * @author Mark Davis
- * Updates for supplementary code points:
- * Vladimir Weinstein & Markus Scherer
  */
 
 package com.ibm.icu.dev.test.normalizer;
 
 import com.ibm.icu.dev.test.UTF16Util;
 
+/**
+ * Implements Unicode Normalization Forms C, D, KC, KD.<br>
+ * See UTR#15 for details.<br>
+ * @author Mark Davis
+ * Updates for supplementary code points:
+ * Vladimir Weinstein & Markus Scherer
+ */
 public class UnicodeNormalizer {
-    static final String copyright = "Copyright (C) 1998-2003 International Business Machines Corporation and Unicode, Inc.";
+//    static final String copyright = "Copyright (C) 1998-2003 International Business Machines Corporation and Unicode, Inc.";
 
     /**
      * Create a normalizer for a given form.

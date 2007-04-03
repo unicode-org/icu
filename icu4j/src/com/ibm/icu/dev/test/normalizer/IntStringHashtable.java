@@ -4,7 +4,7 @@ import java.util.Hashtable;
 
 /**
  *******************************************************************************
- * Copyright (C) 1998-2003, International Business Machines Corporation and    *
+ * Copyright (C) 1998-2007, International Business Machines Corporation and    *
  * Unicode, Inc. All Rights Reserved.                                          *
  *******************************************************************************
  *
@@ -13,7 +13,7 @@ import java.util.Hashtable;
  */
  
 public class IntStringHashtable {
-    static final String copyright = "Copyright (C) 1998-2003 International Business Machines Corporation and Unicode, Inc.";
+//    static final String copyright = "Copyright (C) 1998-2003 International Business Machines Corporation and Unicode, Inc.";
     
     public IntStringHashtable (String defaultValue) {
         this.defaultValue = defaultValue;
