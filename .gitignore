@@ -624,10 +624,7 @@ icu4c/source/tools/toolutil/toolutil.vcproj.*.*.user
 icu4c/source/tools/tzcode/Makefile
 icu4c/source/tools/tzcode/tz2icu
 icu4c/source/tools/tzcode/zic
-icu4j/.classpath
 icu4j/.clover
-icu4j/.externalToolBuilders
-icu4j/.project
 icu4j/classes
 icu4j/doc
 tools/unicodetools/com/ibm/rbm/lib
