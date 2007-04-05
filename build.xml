@@ -658,7 +658,7 @@
         <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
             <!-- enable assertion checks -->
             <jvmarg value="-ea"/>
-            <jvmarg value="-Xms96m"/>
+            <jvmarg value="-Xms128m"/>
             <jvmarg value="-Xmx128m"/>
             <arg value="-n"/>
             <classpath>
@@ -686,7 +686,7 @@
         <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
             <!-- enable assertion checks -->
             <jvmarg value="-ea"/>
-            <jvmarg value="-Xms96m"/>
+            <jvmarg value="-Xms128m"/>
             <jvmarg value="-Xmx128m"/>  <!-- set the max heap size to 128m -->
             <arg value="-n"/>
             <arg value="-e10"/>
@@ -1364,7 +1364,7 @@
         <java classname="TestDefaultPackageLoading" fork="yes" failonerror="true">
             <!-- enable assertion checks -->
             <jvmarg value="-ea"/>
-            <jvmarg value="-Xms96m"/>
+            <jvmarg value="-Xms128m"/>
             <jvmarg value="-Xmx128m"/>
             <arg value="-n"/>
             <classpath>
@@ -1912,7 +1912,7 @@
     <target name="runCheck" depends="init,tests">    
         <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
             <jvmarg value="-ea"/>
-            <jvmarg value="-Xms96m"/>
+            <jvmarg value="-Xms128m"/>
             <jvmarg value="-Xmx128m"/>
             <arg value="-n"/>
             <classpath>
@@ -1927,7 +1927,7 @@
 
     <target name="eclipseRunCheck" depends="init,eclipseTests">    
         <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
-            <jvmarg value="-Xms96m"/>
+            <jvmarg value="-Xms128m"/>
             <jvmarg value="-Xmx128m"/>
             <arg value="-n"/>
             <classpath>
