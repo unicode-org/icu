@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 #******************************************************************************
-#   Copyright (C) 1999-2006, International Business Machines
+#   Copyright (C) 1999-2007, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #******************************************************************************
 # This Makefile.inc is designed to be included into projects which make use
@@ -163,7 +163,6 @@ platform = @platform@
 #       *4*  compiler flags and misc. options
 #
 ##################################################################
-AIX_SHLIB = @AIX_SHLIB@
 AR = @AR@
 # initial tab keeps it out of the shell version.
 	ARFLAGS := @ARFLAGS@ $(ARFLAGS)
@@ -197,7 +196,6 @@ SHLIB.cc=     $(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -shared
 U_IS_BIG_ENDIAN = @U_IS_BIG_ENDIAN@
 includedir = @includedir@
 infodir = @infodir@
-ld_rpath_suf = @ld_rpath_suf@
 localstatedir = @localstatedir@
 mandir = @mandir@
 oldincludedir = @oldincludedir@
