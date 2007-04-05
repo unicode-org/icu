@@ -475,6 +475,7 @@
     <target name="jarTests" depends="tests,jar" description="build runtime 'icu4jtests.jar' jar file">
         <jar jarfile="${testjar.file}" compress="true">
             <fileset dir="${build.dir}" includes="com/ibm/icu/dev/test/**/*"/>
+            <fileset dir="${build.dir}" includes="com/ibm/icu/dev/data/**/*"/>
             <manifest>
                 <attribute name="Built-By" value="${corp}"/>
                 <section name="common">
@@ -710,6 +711,7 @@
             <jvmarg value="-Djava.security.policy=${src.dir}/com/ibm/icu/dev/test/security.policy"/>
             <!--<jvmarg value="-Djava.security.debug=access:failure"/>-->
              <arg value="-w"/>
+            <arg value="-nothrow"/>
             <classpath>
                 <pathelement location="clover.jar"/>
                 <pathelement location="${jar.file}"/>
