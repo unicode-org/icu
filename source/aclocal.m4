@@ -1,5 +1,5 @@
 dnl aclocal.m4 for ICU
-dnl Copyright (c) 1999-2006, International Business Machines Corporation and
+dnl Copyright (c) 1999-2007, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth
 
@@ -48,11 +48,7 @@ powerpc*-*-linux*)
 	if test "$GCC" = yes; then
 		icu_cv_host_frag=mh-aix-gcc
 	else
-		if test -n "`$CXX --help 2>&1 | grep 'IBM C and C++ Compilers$'`"; then
-			icu_cv_host_frag=mh-aix
-		else
-			icu_cv_host_frag=mh-aix-va
-		fi
+		icu_cv_host_frag=mh-aix-va
 	fi ;;
 *-*-hpux*)
 	if test "$GCC" = yes; then
@@ -60,7 +56,6 @@ powerpc*-*-linux*)
 	else
 		case "$CXX" in
 		*aCC)    icu_cv_host_frag=mh-hpux-acc ;;
-		*CC)     icu_cv_host_frag=mh-hpux-cc ;;
 		esac
 	fi ;;
 *-*ibm-openedition*|*-*-os390*)	icu_cv_host_frag=mh-os390 ;;
