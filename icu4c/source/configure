@@ -309,7 +309,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS PACKAGE VERSION LIB_VERSION LIB_VERSION_MAJOR UNICODE_VERSION build build_cpu build_vendor build_os host host_cpu host_vendor host_os CPPFLAGS CC CFLAGS LDFLAGS ac_ct_CC EXEEXT OBJEXT CXX CXXFLAGS ac_ct_CXX INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA U_MAKE DOXYGEN ARFLAGS COMPILE_LINK_ENVVAR LIB_M ENABLE_SHARED ENABLE_STATIC ENABLE_DEBUG ENABLE_RELEASE U_DEFAULT_SHOW_DRAFT RANLIB ac_ct_RANLIB AR U_DISABLE_RENAMING U_ENABLE_TRACING ENABLE_RPATH U_INLINE THREADS_TRUE ICU_USE_THREADS HAVE_MMAP GENCCODE_ASSEMBLY CPP EGREP U_HAVE_INTTYPES_H U_IOSTREAM_SOURCE U_IS_BIG_ENDIAN U_HAVE_NL_LANGINFO U_HAVE_NL_LANGINFO_CODESET U_NL_LANGINFO_CODESET U_HAVE_NAMESPACE U_OVERRIDE_CXX_ALLOCATION U_HAVE_PLACEMENT_NEW U_HAVE_POPEN U_HAVE_TZSET U_TZSET U_HAVE_TZNAME U_TZNAME U_HAVE_TIMEZONE U_TIMEZONE U_HAVE_DAYLIGHT U_DAYLIGHT HAVE_INT8_T HAVE_UINT8_T HAVE_INT16_T HAVE_UINT16_T HAVE_INT32_T HAVE_UINT32_T HAVE_INT64_T HAVE_UINT64_T U_HAVE_WCHAR_H U_HAVE_WCSCPY U_SIZEOF_WCHAR_T EXTRAS_TRUE ICUIO_TRUE LAYOUT_TRUE thedatadir pkgicudatadir thepkgicudatadir DATA_PACKAGING_MODE ICULIBSUFFIX U_HAVE_LIB_SUFFIX ICULIBSUFFIXCNAME TESTS_TRUE SAMPLES_TRUE ICUDATA_CHAR platform platform_make_fragment_name platform_make_fragment ld_rpath_suf AIX_SHLIB LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS PACKAGE VERSION LIB_VERSION LIB_VERSION_MAJOR UNICODE_VERSION build build_cpu build_vendor build_os host host_cpu host_vendor host_os CPPFLAGS CC CFLAGS LDFLAGS ac_ct_CC EXEEXT OBJEXT CXX CXXFLAGS ac_ct_CXX INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA U_MAKE DOXYGEN ARFLAGS COMPILE_LINK_ENVVAR LIB_M ENABLE_SHARED ENABLE_STATIC ENABLE_DEBUG ENABLE_RELEASE U_DEFAULT_SHOW_DRAFT RANLIB ac_ct_RANLIB AR U_DISABLE_RENAMING U_ENABLE_TRACING ENABLE_RPATH U_INLINE THREADS_TRUE ICU_USE_THREADS HAVE_MMAP GENCCODE_ASSEMBLY CPP EGREP U_HAVE_INTTYPES_H U_IOSTREAM_SOURCE U_IS_BIG_ENDIAN U_HAVE_NL_LANGINFO_CODESET U_NL_LANGINFO_CODESET U_HAVE_NAMESPACE U_OVERRIDE_CXX_ALLOCATION U_HAVE_PLACEMENT_NEW U_HAVE_POPEN U_HAVE_TZSET U_TZSET U_HAVE_TZNAME U_TZNAME U_HAVE_TIMEZONE U_TIMEZONE U_HAVE_DAYLIGHT U_DAYLIGHT HAVE_INT8_T HAVE_UINT8_T HAVE_INT16_T HAVE_UINT16_T HAVE_INT32_T HAVE_UINT32_T HAVE_INT64_T HAVE_UINT64_T U_HAVE_WCHAR_H U_HAVE_WCSCPY U_SIZEOF_WCHAR_T EXTRAS_TRUE ICUIO_TRUE LAYOUT_TRUE pkgicudatadir thepkgicudatadir DATA_PACKAGING_MODE ICULIBSUFFIX U_HAVE_LIB_SUFFIX ICULIBSUFFIXCNAME TESTS_TRUE SAMPLES_TRUE ICUDATA_CHAR platform platform_make_fragment_name platform_make_fragment LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -3387,11 +3387,7 @@ powerpc*-*-linux*)
 	if test "$GCC" = yes; then
 		icu_cv_host_frag=mh-aix-gcc
 	else
-		if test -n "`$CXX --help 2>&1 | grep 'IBM C and C++ Compilers$'`"; then
-			icu_cv_host_frag=mh-aix
-		else
-			icu_cv_host_frag=mh-aix-va
-		fi
+		icu_cv_host_frag=mh-aix-va
 	fi ;;
 *-*-hpux*)
 	if test "$GCC" = yes; then
@@ -3399,7 +3395,6 @@ powerpc*-*-linux*)
 	else
 		case "$CXX" in
 		*aCC)    icu_cv_host_frag=mh-hpux-acc ;;
-		*CC)     icu_cv_host_frag=mh-hpux-cc ;;
 		esac
 	fi ;;
 *-*ibm-openedition*|*-*-os390*)	icu_cv_host_frag=mh-os390 ;;
@@ -5587,7 +5582,6 @@ else
   U_HAVE_NL_LANGINFO=0
 fi
 
-
 if test $U_HAVE_NL_LANGINFO -eq 1; then
   echo "$as_me:$LINENO: checking for nl_langinfo's argument to obtain the codeset" >&5
 echo $ECHO_N "checking for nl_langinfo's argument to obtain the codeset... $ECHO_C" >&6
@@ -7642,12 +7636,7 @@ else
   datapackaging=
 fi;
 
-#thesysconfdir=`eval echo $sysconfdir`
-#AC_SUBST(thesysconfdir)
-#thelibdir=`test "x$exec_prefix" = xNONE && exec_prefix="$prefix"; eval echo $libdir`
-#AC_SUBST(thelibdir)
 thedatadir=`eval echo $datadir`
-
 pkgicudatadir=$datadir
 thepkgicudatadir=$thedatadir
 
@@ -7770,57 +7759,10 @@ platform_make_fragment='$(top_srcdir)/config/'"$platform_make_fragment_name"
 
 
 
-case "${host}" in
-	*-*-solaris*) 	ld_rpath_suf=":" ;;
-	*-*-linux*) 	ld_rpath_suf=" " ;;
-	*-*-*bsd*|*-*-dragonfly*) 	ld_rpath_suf=" " ;;
-	*-*-aix*) 	ld_rpath_suf="" ;;
-	*-*-hpux*) 	ld_rpath_suf=":" ;;
-	*-*ibm-openedition*|*-*-os390*)	ld_rpath_suf="" ;;
-	*-*-os400*)	ld_rpath_suf=" " ;;
-	*-*-irix*)      ld_rpath_suf=" " ;;
-	*) 		ld_rpath_suf="" ;;
-esac
-
-
-case "${host}" in
-	*-*-hpux*)
-		if test "${icu_cv_host_frag}" = "mh-hpux-cc"; then
-			for file in samples/date/date \
-			  samples/cal/cal test/cintltst/cintltst \
-			  tools/makeconv/makeconv tools/genrb/genrb \
-			  tools/genrb/derb tools/genccode/genccode \
-			  tools/gencmn/gencmn tools/gencmn/decmn \
-			  tools/gencnval/gencnval tools/gennorm/gennorm \
-			  tools/gennames/gennames tools/gentest/gentest \
-			  tools/pkgdata/pkgdata tools/genprops/genprops \
-                          tools/gencase/gencase \
-                          tools/genbidi/genbidi \
-			  tools/gensprep/gensprep
-			do
-			  if test -f $file.c; then
-			    mv $file.c $file.cpp
-			  else
-			    echo "# $file.c does not exist or is already renamed [warning]"
-			  fi
-			done
-		fi
-	;;
-esac
-
 if test "${FORCE_LIBS}" != ""; then
    echo " *** Overriding automatically chosen LIBS=$LIBS, using instead FORCE_LIBS=${FORCE_LIBS}"  1>&6
    LIBS=${FORCE_LIBS}
 fi
-
-
-if test "${AIX_SHLIB}" != ""; then
-   echo " *** setting AIX_SHLIB (AIX only) to ${AIX_SHLIB}]"  1>&6
-else
-   AIX_SHLIB=makeC++SharedLib_r
-fi
-
-
 
 
 
@@ -8545,7 +8487,6 @@ s,@EGREP@,$EGREP,;t t
 s,@U_HAVE_INTTYPES_H@,$U_HAVE_INTTYPES_H,;t t
 s,@U_IOSTREAM_SOURCE@,$U_IOSTREAM_SOURCE,;t t
 s,@U_IS_BIG_ENDIAN@,$U_IS_BIG_ENDIAN,;t t
-s,@U_HAVE_NL_LANGINFO@,$U_HAVE_NL_LANGINFO,;t t
 s,@U_HAVE_NL_LANGINFO_CODESET@,$U_HAVE_NL_LANGINFO_CODESET,;t t
 s,@U_NL_LANGINFO_CODESET@,$U_NL_LANGINFO_CODESET,;t t
 s,@U_HAVE_NAMESPACE@,$U_HAVE_NAMESPACE,;t t
@@ -8574,7 +8515,6 @@ s,@U_SIZEOF_WCHAR_T@,$U_SIZEOF_WCHAR_T,;t t
 s,@EXTRAS_TRUE@,$EXTRAS_TRUE,;t t
 s,@ICUIO_TRUE@,$ICUIO_TRUE,;t t
 s,@LAYOUT_TRUE@,$LAYOUT_TRUE,;t t
-s,@thedatadir@,$thedatadir,;t t
 s,@pkgicudatadir@,$pkgicudatadir,;t t
 s,@thepkgicudatadir@,$thepkgicudatadir,;t t
 s,@DATA_PACKAGING_MODE@,$DATA_PACKAGING_MODE,;t t
@@ -8587,8 +8527,6 @@ s,@ICUDATA_CHAR@,$ICUDATA_CHAR,;t t
 s,@platform@,$platform,;t t
 s,@platform_make_fragment_name@,$platform_make_fragment_name,;t t
 s,@platform_make_fragment@,$platform_make_fragment,;t t
-s,@ld_rpath_suf@,$ld_rpath_suf,;t t
-s,@AIX_SHLIB@,$AIX_SHLIB,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
 s,@LTLIBOBJS@,$LTLIBOBJS,;t t
 CEOF

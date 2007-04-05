@@ -1,6 +1,6 @@
 dnl -*-m4-*-
 dnl configure.in for ICU
-dnl Copyright (c) 1999-2006, International Business Machines Corporation and
+dnl Copyright (c) 1999-2007, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
@@ -471,7 +471,7 @@ dnl Do various POSIX related checks
 U_HAVE_NL_LANGINFO_CODESET=0
 U_NL_LANGINFO_CODESET=-1
 AC_CHECK_FUNC(nl_langinfo,[U_HAVE_NL_LANGINFO=1],[U_HAVE_NL_LANGINFO=0])
-AC_SUBST(U_HAVE_NL_LANGINFO)
+dnl AC_SUBST(U_HAVE_NL_LANGINFO)
 if test $U_HAVE_NL_LANGINFO -eq 1; then
   AC_CACHE_CHECK([for nl_langinfo's argument to obtain the codeset],
   ac_cv_nl_langinfo_codeset,
@@ -853,12 +853,12 @@ AC_ARG_WITH(data-packaging,
         [datapackaging=])
 
 dnl Note:  'thesysconfdir' is an evaluated version, for Man pages, so also for thedatadir, thelibdir, etc.. 
-#thesysconfdir=`eval echo $sysconfdir`
-#AC_SUBST(thesysconfdir)
-#thelibdir=`test "x$exec_prefix" = xNONE && exec_prefix="$prefix"; eval echo $libdir`
-#AC_SUBST(thelibdir)
+dnl thesysconfdir=`eval echo $sysconfdir`
+dnl AC_SUBST(thesysconfdir)
+dnl thelibdir=`test "x$exec_prefix" = xNONE && exec_prefix="$prefix"; eval echo $libdir`
+dnl AC_SUBST(thelibdir)
 thedatadir=`eval echo $datadir`
-AC_SUBST(thedatadir)
+dnl AC_SUBST(thedatadir)
 dnl Always put raw data files in share/icu/{version}, etc.   Never use lib/icu/{version} for data files.. Actual shared libraries will go in {libdir}. 
 pkgicudatadir=$datadir
 thepkgicudatadir=$thedatadir
@@ -965,61 +965,10 @@ platform_make_fragment='$(top_srcdir)/config/'"$platform_make_fragment_name"
 AC_SUBST(platform_make_fragment_name)
 AC_SUBST(platform_make_fragment)
 
-dnl Handle -rpath options for shared library paths
-case "${host}" in
-	*-*-solaris*) 	ld_rpath_suf=":" ;;
-	*-*-linux*) 	ld_rpath_suf=" " ;;
-	*-*-*bsd*|*-*-dragonfly*) 	ld_rpath_suf=" " ;;
-	*-*-aix*) 	ld_rpath_suf="" ;;
-	*-*-hpux*) 	ld_rpath_suf=":" ;;
-	*-*ibm-openedition*|*-*-os390*)	ld_rpath_suf="" ;;
-	*-*-os400*)	ld_rpath_suf=" " ;;
-	*-*-irix*)      ld_rpath_suf=" " ;;
-	*) 		ld_rpath_suf="" ;;
-esac
-AC_SUBST(ld_rpath_suf)
-
-dnl On HP/UX, main() functions compiled in C don't invoke
-dnl static constructors in C++ libs.  Hack around that here
-dnl by renaming some .c files to .cpp
-case "${host}" in
-	*-*-hpux*) 	
-		if test "${icu_cv_host_frag}" = "mh-hpux-cc"; then
-			for file in samples/date/date \
-			  samples/cal/cal test/cintltst/cintltst \
-			  tools/makeconv/makeconv tools/genrb/genrb \
-			  tools/genrb/derb tools/genccode/genccode \
-			  tools/gencmn/gencmn tools/gencmn/decmn \
-			  tools/gencnval/gencnval tools/gennorm/gennorm \
-			  tools/gennames/gennames tools/gentest/gentest \
-			  tools/pkgdata/pkgdata tools/genprops/genprops \
-                          tools/gencase/gencase \
-                          tools/genbidi/genbidi \
-			  tools/gensprep/gensprep
-			do
-			  if test -f $file.c; then
-			    mv $file.c $file.cpp
-			  else
-			    echo "# $file.c does not exist or is already renamed [warning]"
-			  fi
-			done
-		fi
-	;;
-esac
-
 if test "${FORCE_LIBS}" != ""; then
    echo " *** Overriding automatically chosen [LIBS=$LIBS], using instead [FORCE_LIBS=${FORCE_LIBS}]"  1>&6
    LIBS=${FORCE_LIBS}
 fi
-
-
-if test "${AIX_SHLIB}" != ""; then
-   echo " *** setting AIX_SHLIB (AIX only) to ${AIX_SHLIB}]"  1>&6
-else
-   AIX_SHLIB=makeC++SharedLib_r
-fi
-
-AC_SUBST(AIX_SHLIB)
 
 
 dnl Now that we're done using CPPFLAGS etc. for tests, we can change it
