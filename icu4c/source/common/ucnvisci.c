@@ -1,6 +1,6 @@
-/*  
+/*
 **********************************************************************
-*   Copyright (C) 2000-2006, International Business Machines
+*   Copyright (C) 2000-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnvisci.c
@@ -10,7 +10,7 @@
 *
 *   created on: 2001JUN26
 *   created by: Ram Viswanadha
-*   
+*
 *   Date        Name        Description
 *   24/7/2001   Ram         Added support for EXT character handling
 */
@@ -29,10 +29,10 @@
 
 #define UCNV_OPTIONS_VERSION_MASK 0xf
 #define NUKTA               0x093c
-#define HALANT              0x094d    
+#define HALANT              0x094d
 #define ZWNJ                0x200c /* Zero Width Non Joiner */
 #define ZWJ                 0x200d /* Zero width Joiner */
-#define INVALID_CHAR        0xffff   
+#define INVALID_CHAR        0xffff
 #define ATR                 0xEF   /* Attribute code */
 #define EXT                 0xF0   /* Extension code */
 #define DANDA               0x0964
@@ -42,7 +42,7 @@
 #define ISCII_DANDA         0xEA
 #define ISCII_INV           0xD9
 #define INDIC_BLOCK_BEGIN   0x0900
-#define INDIC_BLOCK_END     0x0D7F 
+#define INDIC_BLOCK_END     0x0D7F
 #define INDIC_RANGE         (INDIC_BLOCK_END - INDIC_BLOCK_BEGIN)
 #define VOCALLIC_RR         0x0931
 #define LF                  0x0A
@@ -111,16 +111,16 @@ typedef enum{
 typedef struct{
     UChar contextCharToUnicode;      /* previous Unicode codepoint for contextual analysis */
     UChar contextCharFromUnicode;    /* previous Unicode codepoint for contextual analysis */
-    uint16_t defDeltaToUnicode;      /* delta for switching to default state when DEF is encountered  */ 
+    uint16_t defDeltaToUnicode;      /* delta for switching to default state when DEF is encountered  */
     uint16_t currentDeltaFromUnicode;/* current delta in Indic block */
-    uint16_t currentDeltaToUnicode;  /* current delta in Indic block */  
+    uint16_t currentDeltaToUnicode;  /* current delta in Indic block */
     MaskEnum currentMaskFromUnicode; /* mask for current state in toUnicode */
     MaskEnum currentMaskToUnicode;   /* mask for current state in toUnicode */
     MaskEnum defMaskToUnicode;       /* mask for default state in toUnicode */
     UBool isFirstBuffer;             /* boolean for fromUnicode to see if we need to announce the first script */
     UBool resetToDefaultToUnicode;   /* boolean for reseting to default delta and mask when a newline is encountered*/
     char name[sizeof(ISCII_CNV_PREFIX) + 1];
-}UConverterDataISCII; 
+}UConverterDataISCII;
 
 typedef struct LookupDataStruct
 {
@@ -140,8 +140,8 @@ static const LookupDataStruct lookupInitialData[]={
     { KANNADA,    KND_MASK,  KND },
     { MALAYALAM,  MLM_MASK,  MLM }
 };
-    
-static void 
+
+static void
 _ISCIIOpen(UConverter *cnv, const char *name,const char *locale,uint32_t options, UErrorCode *errorCode){
     cnv->extraInfo = uprv_malloc (sizeof (UConverterDataISCII));
 
@@ -159,9 +159,9 @@ _ISCIIOpen(UConverter *cnv, const char *name,const char *locale,uint32_t options
             converterData->defDeltaToUnicode=
                     (uint16_t)(lookupInitialData[options & UCNV_OPTIONS_VERSION_MASK].uniLang * DELTA);
 
-            converterData->currentMaskFromUnicode = converterData->currentMaskToUnicode = 
+            converterData->currentMaskFromUnicode = converterData->currentMaskToUnicode =
             converterData->defMaskToUnicode=lookupInitialData[options & UCNV_OPTIONS_VERSION_MASK].maskEnum;
-            
+
             converterData->isFirstBuffer=TRUE;
             uprv_strcpy(converterData->name, ISCII_CNV_PREFIX);
             len = (int32_t)uprv_strlen(converterData->name);
@@ -177,7 +177,7 @@ _ISCIIOpen(UConverter *cnv, const char *name,const char *locale,uint32_t options
         *errorCode =U_MEMORY_ALLOCATION_ERROR;
     }
 }
-static void 
+static void
 _ISCIIClose(UConverter *cnv){
     if(cnv->extraInfo!=NULL) {
         if(!cnv->isExtraLocal) {
@@ -187,7 +187,7 @@ _ISCIIClose(UConverter *cnv){
     }
 }
 
-static const char* 
+static const char*
 _ISCIIgetName(const UConverter* cnv){
     if(cnv->extraInfo){
         UConverterDataISCII* myData= (UConverterDataISCII*)cnv->extraInfo;
@@ -196,7 +196,7 @@ _ISCIIgetName(const UConverter* cnv){
     return NULL;
 }
 
-static void 
+static void
 _ISCIIReset(UConverter *cnv, UConverterResetChoice choice){
     UConverterDataISCII* data =(UConverterDataISCII *) (cnv->extraInfo);
     if(choice<=UCNV_RESET_TO_UNICODE) {
@@ -207,7 +207,7 @@ _ISCIIReset(UConverter *cnv, UConverterResetChoice choice){
         data->contextCharToUnicode=NO_CHAR_MARKER;
     }
     if(choice!=UCNV_RESET_TO_UNICODE) {
-        cnv->fromUChar32=0x0000; 
+        cnv->fromUChar32=0x0000;
         data->contextCharFromUnicode=0x00;
         data->currentMaskFromUnicode=data->defMaskToUnicode;
         data->currentDeltaFromUnicode=data->defDeltaToUnicode;
@@ -216,19 +216,19 @@ _ISCIIReset(UConverter *cnv, UConverterResetChoice choice){
     }
 }
 
-/** 
- * The values in validity table are indexed by the lower bits of Unicode 
- * range 0x0900 - 0x09ff. The values have a structure like: 
+/**
+ * The values in validity table are indexed by the lower bits of Unicode
+ * range 0x0900 - 0x09ff. The values have a structure like:
  *       ---------------------------------------------------------------
  *      | DEV   | PNJ   | GJR   | ORI   | BNG   | TLG   | MLM   | TML   |
- *      |       |       |       |       | ASM   | KND   |       |       |  
+ *      |       |       |       |       | ASM   | KND   |       |       |
  *       ---------------------------------------------------------------
- * If a code point is valid in a particular script 
+ * If a code point is valid in a particular script
  * then that bit is turned on
- * 
+ *
  * Unicode does not distinguish between Bengali and Assamese so we use 1 bit for
  * to represent these languages
- * 
+ *
  * Telugu and Kannada have same codepoints except for Vocallic_RR which we special case
  * and combine and use 1 bit to represent these languages.
  *
@@ -237,11 +237,12 @@ _ISCIIReset(UConverter *cnv, UConverterResetChoice choice){
  */
 
 static const uint8_t validityTable[128] = {
-/* This state table is tool generated please donot edit unless you know exactly what you are doing */
+/* This state table is tool generated please do not edit unless you know exactly what you are doing */
+/* Note: This table was edited to mirror the Windows XP implementation */
 /*ISCII:Valid:Unicode */
 /*0xa0 : 0x00: 0x900  */ ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
 /*0xa1 : 0xb8: 0x901  */ DEV_MASK + ZERO     + GJR_MASK + ORI_MASK + BNG_MASK + ZERO     + ZERO     + ZERO     ,
-/*0xa2 : 0xfe: 0x902  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
+/*0xa2 : 0xfe: 0x902  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xa3 : 0xbf: 0x903  */ DEV_MASK + ZERO     + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0x00 : 0x00: 0x904  */ ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
 /*0xa4 : 0xff: 0x905  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
@@ -250,13 +251,13 @@ static const uint8_t validityTable[128] = {
 /*0xa7 : 0xff: 0x908  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xa8 : 0xff: 0x909  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xa9 : 0xff: 0x90a  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
-/*0xaa : 0xfe: 0x90b  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
+/*0xaa : 0xfe: 0x90b  */ DEV_MASK + ZERO     + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
 /*0x00 : 0x00: 0x90c  */ DEV_MASK + ZERO     + ZERO     + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
-/*0xae : 0x80: 0x90d  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
+/*0xae : 0x80: 0x90d  */ DEV_MASK + ZERO     + GJR_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
 /*0xab : 0x87: 0x90e  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xac : 0xff: 0x90f  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xad : 0xff: 0x910  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
-/*0xb2 : 0x80: 0x911  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
+/*0xb2 : 0x80: 0x911  */ DEV_MASK + ZERO     + GJR_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
 /*0xaf : 0x87: 0x912  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xb0 : 0xff: 0x913  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xb1 : 0xff: 0x914  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
@@ -285,21 +286,21 @@ static const uint8_t validityTable[128] = {
 /*0xc9 : 0xfe: 0x92b  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
 /*0xca : 0xfe: 0x92c  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
 /*0xcb : 0xfe: 0x92d  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
-/*0xcc : 0xfe: 0x92e  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
+/*0xcc : 0xfe: 0x92e  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xcd : 0xff: 0x92f  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xcf : 0xff: 0x930  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
-/*0xd0 : 0x87: 0x931  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + MLM_MASK + TML_MASK ,
+/*0xd0 : 0x87: 0x931  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xd1 : 0xff: 0x932  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
-/*0xd2 : 0xb7: 0x933  */ DEV_MASK + ZERO     + GJR_MASK + ORI_MASK + ZERO     + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xd2 : 0xb7: 0x933  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + ZERO     + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xd3 : 0x83: 0x934  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + MLM_MASK + TML_MASK ,
-/*0xd4 : 0xff: 0x935  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xd4 : 0xff: 0x935  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + ZERO     + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xd5 : 0xfe: 0x936  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
 /*0xd6 : 0xbf: 0x937  */ DEV_MASK + ZERO     + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xd7 : 0xff: 0x938  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xd8 : 0xff: 0x939  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0x00 : 0x00: 0x93A  */ ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
 /*0x00 : 0x00: 0x93B  */ ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
-/*0xe9 : 0xda: 0x93c  */ DEV_MASK + PNJ_MASK + ZERO     + ORI_MASK + BNG_MASK + ZERO     + MLM_MASK + ZERO     ,
+/*0xe9 : 0xda: 0x93c  */ DEV_MASK + PNJ_MASK + ZERO     + ORI_MASK + BNG_MASK + ZERO     + ZERO     + ZERO     ,
 /*0x00 : 0x00: 0x93d  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
 /*0xda : 0xff: 0x93e  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xdb : 0xff: 0x93f  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
@@ -307,12 +308,12 @@ static const uint8_t validityTable[128] = {
 /*0xdd : 0xff: 0x941  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xde : 0xff: 0x942  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xdf : 0xbe: 0x943  */ DEV_MASK + ZERO     + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
-/*0x00 : 0x00: 0x944  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
-/*0xe3 : 0x80: 0x945  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
+/*0x00 : 0x00: 0x944  */ DEV_MASK + ZERO     + GJR_MASK + ZERO     + BNG_MASK + KND_MASK + ZERO     + ZERO     ,
+/*0xe3 : 0x80: 0x945  */ DEV_MASK + ZERO     + GJR_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
 /*0xe0 : 0x87: 0x946  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xe1 : 0xff: 0x947  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xe2 : 0xff: 0x948  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
-/*0xe7 : 0x80: 0x949  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
+/*0xe7 : 0x80: 0x949  */ DEV_MASK + ZERO     + GJR_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
 /*0xe4 : 0x87: 0x94a  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xe5 : 0xff: 0x94b  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xe6 : 0xff: 0x94c  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
@@ -326,11 +327,11 @@ static const uint8_t validityTable[128] = {
 /*0x00 : 0x00: 0x954  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
 /*0x00 : 0x00: 0x955  */ ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + KND_MASK + ZERO     + ZERO     ,
 /*0x00 : 0x00: 0x956  */ ZERO     + ZERO     + ZERO     + ORI_MASK + ZERO     + KND_MASK + ZERO     + ZERO     ,
-/*0x00 : 0x00: 0x957  */ ZERO     + ZERO     + ZERO     + ORI_MASK + ZERO     + ZERO     + MLM_MASK + ZERO     ,
+/*0x00 : 0x00: 0x957  */ ZERO     + ZERO     + ZERO     + ORI_MASK + BNG_MASK + ZERO     + MLM_MASK + ZERO     ,
 /*0x00 : 0x00: 0x958  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
 /*0x00 : 0x00: 0x959  */ DEV_MASK + PNJ_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
 /*0x00 : 0x00: 0x95a  */ DEV_MASK + PNJ_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
-/*0x00 : 0x00: 0x95b  */ DEV_MASK + PNJ_MASK + ZERO     + ORI_MASK + ZERO     + ZERO     + ZERO     + ZERO     ,
+/*0x00 : 0x00: 0x95b  */ DEV_MASK + PNJ_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
 /*0x00 : 0x00: 0x95c  */ DEV_MASK + PNJ_MASK + ZERO     + ZERO     + BNG_MASK + ZERO     + ZERO     + ZERO     ,
 /*0x00 : 0x00: 0x95d  */ DEV_MASK + ZERO     + ZERO     + ORI_MASK + BNG_MASK + ZERO     + ZERO     + ZERO     ,
 /*0x00 : 0x00: 0x95e  */ DEV_MASK + PNJ_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
@@ -339,8 +340,8 @@ static const uint8_t validityTable[128] = {
 /*0x00 : 0x00: 0x961  */ DEV_MASK + ZERO     + ZERO     + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
 /*0x00 : 0x00: 0x962  */ DEV_MASK + ZERO     + ZERO     + ZERO     + BNG_MASK + ZERO     + ZERO     + ZERO     ,
 /*0x00 : 0x00: 0x963  */ DEV_MASK + ZERO     + ZERO     + ZERO     + BNG_MASK + ZERO     + ZERO     + ZERO     ,
-/*0xea : 0xf8: 0x964  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + ZERO     + ZERO     + ZERO     ,
-/*0xeaea : 0x00: 0x965*/ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + ZERO     + ZERO     + ZERO     ,
+/*0xea : 0xf8: 0x964  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
+/*0xeaea : 0x00: 0x965*/ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
 /*0xf1 : 0xff: 0x966  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xf2 : 0xff: 0x967  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xf3 : 0xff: 0x968  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
@@ -361,119 +362,119 @@ static const uint8_t validityTable[128] = {
 /*0x00 : 0x00: 0x9yz  */ ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO
 };
 
-static const uint16_t fromUnicodeTable[128]={   
-    0x00a0 ,/* 0x0900 */ 
-    0x00a1 ,/* 0x0901 */ 
-    0x00a2 ,/* 0x0902 */ 
-    0x00a3 ,/* 0x0903 */ 
-    0xFFFF ,/* 0x0904 */ 
-    0x00a4 ,/* 0x0905 */ 
-    0x00a5 ,/* 0x0906 */ 
-    0x00a6 ,/* 0x0907 */ 
-    0x00a7 ,/* 0x0908 */ 
-    0x00a8 ,/* 0x0909 */ 
-    0x00a9 ,/* 0x090a */ 
-    0x00aa ,/* 0x090b */ 
-    0xA6E9 ,/* 0x090c */ 
-    0x00ae ,/* 0x090d */ 
-    0x00ab ,/* 0x090e */ 
-    0x00ac ,/* 0x090f */ 
-    0x00ad ,/* 0x0910 */ 
-    0x00b2 ,/* 0x0911 */ 
-    0x00af ,/* 0x0912 */ 
-    0x00b0 ,/* 0x0913 */ 
-    0x00b1 ,/* 0x0914 */ 
-    0x00b3 ,/* 0x0915 */ 
-    0x00b4 ,/* 0x0916 */ 
-    0x00b5 ,/* 0x0917 */ 
-    0x00b6 ,/* 0x0918 */ 
-    0x00b7 ,/* 0x0919 */ 
-    0x00b8 ,/* 0x091a */ 
-    0x00b9 ,/* 0x091b */ 
-    0x00ba ,/* 0x091c */ 
-    0x00bb ,/* 0x091d */ 
-    0x00bc ,/* 0x091e */ 
-    0x00bd ,/* 0x091f */ 
-    0x00be ,/* 0x0920 */ 
-    0x00bf ,/* 0x0921 */ 
-    0x00c0 ,/* 0x0922 */ 
-    0x00c1 ,/* 0x0923 */ 
-    0x00c2 ,/* 0x0924 */ 
-    0x00c3 ,/* 0x0925 */ 
-    0x00c4 ,/* 0x0926 */ 
-    0x00c5 ,/* 0x0927 */ 
-    0x00c6 ,/* 0x0928 */ 
-    0x00c7 ,/* 0x0929 */ 
-    0x00c8 ,/* 0x092a */ 
-    0x00c9 ,/* 0x092b */ 
-    0x00ca ,/* 0x092c */ 
-    0x00cb ,/* 0x092d */ 
-    0x00cc ,/* 0x092e */ 
-    0x00cd ,/* 0x092f */ 
-    0x00cf ,/* 0x0930 */ 
-    0x00d0 ,/* 0x0931 */ 
-    0x00d1 ,/* 0x0932 */ 
-    0x00d2 ,/* 0x0933 */ 
-    0x00d3 ,/* 0x0934 */ 
-    0x00d4 ,/* 0x0935 */ 
-    0x00d5 ,/* 0x0936 */ 
-    0x00d6 ,/* 0x0937 */ 
-    0x00d7 ,/* 0x0938 */ 
-    0x00d8 ,/* 0x0939 */ 
-    0xFFFF ,/* 0x093A */ 
-    0xFFFF ,/* 0x093B */ 
-    0x00e9 ,/* 0x093c */ 
-    0xEAE9 ,/* 0x093d */ 
-    0x00da ,/* 0x093e */ 
-    0x00db ,/* 0x093f */ 
-    0x00dc ,/* 0x0940 */ 
-    0x00dd ,/* 0x0941 */ 
-    0x00de ,/* 0x0942 */ 
-    0x00df ,/* 0x0943 */ 
-    0xDFE9 ,/* 0x0944 */ 
-    0x00e3 ,/* 0x0945 */ 
-    0x00e0 ,/* 0x0946 */ 
-    0x00e1 ,/* 0x0947 */ 
-    0x00e2 ,/* 0x0948 */ 
-    0x00e7 ,/* 0x0949 */ 
-    0x00e4 ,/* 0x094a */ 
-    0x00e5 ,/* 0x094b */ 
-    0x00e6 ,/* 0x094c */ 
-    0x00e8 ,/* 0x094d */ 
-    0x00ec ,/* 0x094e */ 
-    0x00ed ,/* 0x094f */ 
+static const uint16_t fromUnicodeTable[128]={
+    0x00a0 ,/* 0x0900 */
+    0x00a1 ,/* 0x0901 */
+    0x00a2 ,/* 0x0902 */
+    0x00a3 ,/* 0x0903 */
+    0xFFFF ,/* 0x0904 */
+    0x00a4 ,/* 0x0905 */
+    0x00a5 ,/* 0x0906 */
+    0x00a6 ,/* 0x0907 */
+    0x00a7 ,/* 0x0908 */
+    0x00a8 ,/* 0x0909 */
+    0x00a9 ,/* 0x090a */
+    0x00aa ,/* 0x090b */
+    0xA6E9 ,/* 0x090c */
+    0x00ae ,/* 0x090d */
+    0x00ab ,/* 0x090e */
+    0x00ac ,/* 0x090f */
+    0x00ad ,/* 0x0910 */
+    0x00b2 ,/* 0x0911 */
+    0x00af ,/* 0x0912 */
+    0x00b0 ,/* 0x0913 */
+    0x00b1 ,/* 0x0914 */
+    0x00b3 ,/* 0x0915 */
+    0x00b4 ,/* 0x0916 */
+    0x00b5 ,/* 0x0917 */
+    0x00b6 ,/* 0x0918 */
+    0x00b7 ,/* 0x0919 */
+    0x00b8 ,/* 0x091a */
+    0x00b9 ,/* 0x091b */
+    0x00ba ,/* 0x091c */
+    0x00bb ,/* 0x091d */
+    0x00bc ,/* 0x091e */
+    0x00bd ,/* 0x091f */
+    0x00be ,/* 0x0920 */
+    0x00bf ,/* 0x0921 */
+    0x00c0 ,/* 0x0922 */
+    0x00c1 ,/* 0x0923 */
+    0x00c2 ,/* 0x0924 */
+    0x00c3 ,/* 0x0925 */
+    0x00c4 ,/* 0x0926 */
+    0x00c5 ,/* 0x0927 */
+    0x00c6 ,/* 0x0928 */
+    0x00c7 ,/* 0x0929 */
+    0x00c8 ,/* 0x092a */
+    0x00c9 ,/* 0x092b */
+    0x00ca ,/* 0x092c */
+    0x00cb ,/* 0x092d */
+    0x00cc ,/* 0x092e */
+    0x00cd ,/* 0x092f */
+    0x00cf ,/* 0x0930 */
+    0x00d0 ,/* 0x0931 */
+    0x00d1 ,/* 0x0932 */
+    0x00d2 ,/* 0x0933 */
+    0x00d3 ,/* 0x0934 */
+    0x00d4 ,/* 0x0935 */
+    0x00d5 ,/* 0x0936 */
+    0x00d6 ,/* 0x0937 */
+    0x00d7 ,/* 0x0938 */
+    0x00d8 ,/* 0x0939 */
+    0xFFFF ,/* 0x093A */
+    0xFFFF ,/* 0x093B */
+    0x00e9 ,/* 0x093c */
+    0xEAE9 ,/* 0x093d */
+    0x00da ,/* 0x093e */
+    0x00db ,/* 0x093f */
+    0x00dc ,/* 0x0940 */
+    0x00dd ,/* 0x0941 */
+    0x00de ,/* 0x0942 */
+    0x00df ,/* 0x0943 */
+    0xDFE9 ,/* 0x0944 */
+    0x00e3 ,/* 0x0945 */
+    0x00e0 ,/* 0x0946 */
+    0x00e1 ,/* 0x0947 */
+    0x00e2 ,/* 0x0948 */
+    0x00e7 ,/* 0x0949 */
+    0x00e4 ,/* 0x094a */
+    0x00e5 ,/* 0x094b */
+    0x00e6 ,/* 0x094c */
+    0x00e8 ,/* 0x094d */
+    0x00ec ,/* 0x094e */
+    0x00ed ,/* 0x094f */
     0xA1E9 ,/* 0x0950 */ /* OM Symbol */
-    0xFFFF ,/* 0x0951 */ 
-    0xF0B8 ,/* 0x0952 */ 
-    0xFFFF ,/* 0x0953 */ 
-    0xFFFF ,/* 0x0954 */ 
-    0xFFFF ,/* 0x0955 */ 
-    0xFFFF ,/* 0x0956 */ 
-    0xFFFF ,/* 0x0957 */ 
-    0xb3e9 ,/* 0x0958 */ 
-    0xb4e9 ,/* 0x0959 */ 
-    0xb5e9 ,/* 0x095a */ 
-    0xbae9 ,/* 0x095b */ 
-    0xbfe9 ,/* 0x095c */ 
-    0xC0E9 ,/* 0x095d */ 
-    0xc9e9 ,/* 0x095e */ 
-    0x00ce ,/* 0x095f */ 
-    0xAAe9 ,/* 0x0960 */ 
-    0xA7E9 ,/* 0x0961 */ 
-    0xDBE9 ,/* 0x0962 */ 
-    0xDCE9 ,/* 0x0963 */ 
-    0x00ea ,/* 0x0964 */ 
-    0xeaea ,/* 0x0965 */ 
-    0x00f1 ,/* 0x0966 */ 
-    0x00f2 ,/* 0x0967 */ 
-    0x00f3 ,/* 0x0968 */ 
-    0x00f4 ,/* 0x0969 */ 
-    0x00f5 ,/* 0x096a */ 
-    0x00f6 ,/* 0x096b */ 
-    0x00f7 ,/* 0x096c */ 
-    0x00f8 ,/* 0x096d */ 
-    0x00f9 ,/* 0x096e */ 
-    0x00fa ,/* 0x096f */ 
+    0xFFFF ,/* 0x0951 */
+    0xF0B8 ,/* 0x0952 */
+    0xFFFF ,/* 0x0953 */
+    0xFFFF ,/* 0x0954 */
+    0xFFFF ,/* 0x0955 */
+    0xFFFF ,/* 0x0956 */
+    0xFFFF ,/* 0x0957 */
+    0xb3e9 ,/* 0x0958 */
+    0xb4e9 ,/* 0x0959 */
+    0xb5e9 ,/* 0x095a */
+    0xbae9 ,/* 0x095b */
+    0xbfe9 ,/* 0x095c */
+    0xC0E9 ,/* 0x095d */
+    0xc9e9 ,/* 0x095e */
+    0x00ce ,/* 0x095f */
+    0xAAe9 ,/* 0x0960 */
+    0xA7E9 ,/* 0x0961 */
+    0xDBE9 ,/* 0x0962 */
+    0xDCE9 ,/* 0x0963 */
+    0x00ea ,/* 0x0964 */
+    0xeaea ,/* 0x0965 */
+    0x00f1 ,/* 0x0966 */
+    0x00f2 ,/* 0x0967 */
+    0x00f3 ,/* 0x0968 */
+    0x00f4 ,/* 0x0969 */
+    0x00f5 ,/* 0x096a */
+    0x00f6 ,/* 0x096b */
+    0x00f7 ,/* 0x096c */
+    0x00f8 ,/* 0x096d */
+    0x00f9 ,/* 0x096e */
+    0x00fa ,/* 0x096f */
     0xF0BF ,/* 0x0970 */
     0xFFFF ,/* 0x0971 */
     0xFFFF ,/* 0x0972 */
@@ -766,7 +767,7 @@ static const uint16_t nuktaSpecialCases[][2]={
     { 0xAA , 0x0960 },
     { 0xA7 , 0x0961 },
     { 0xDB , 0x0962 },
-    { 0xDC , 0x0963 }, 
+    { 0xDC , 0x0963 },
 };
 
 #define WRITE_TO_TARGET_FROM_U(args,offsets,source,target,targetLimit,targetByteUnit,err){       \
@@ -802,16 +803,16 @@ static const uint16_t nuktaSpecialCases[][2]={
                         (uint8_t) (targetByteUnit);                                             \
         *err = U_BUFFER_OVERFLOW_ERROR;                                                         \
     }                                                                                           \
-}          
+}
 
 /* Rules:
- *    Explicit Halant :  
+ *    Explicit Halant :
  *                      <HALANT> + <ZWNJ>
  *    Soft Halant :
- *                      <HALANT> + <ZWJ>                    
+ *                      <HALANT> + <ZWJ>
  */
 
-static void 
+static void
 UConverter_fromUnicode_ISCII_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
                                                       UErrorCode * err){
     const UChar *source = args->source;
@@ -834,13 +835,13 @@ UConverter_fromUnicode_ISCII_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
     converterData=(UConverterDataISCII*)args->converter->extraInfo;
     newDelta=converterData->currentDeltaFromUnicode;
     range = (uint16_t)(newDelta/DELTA);
-    
+
     if((sourceChar = args->converter->fromUChar32)!=0) {
         goto getTrail;
     }
 
     /*writing the char to the output stream */
-    while(source < sourceLimit){    
+    while(source < sourceLimit){
 
         targetByteUnit = missingCharMarker;
 
@@ -852,7 +853,7 @@ UConverter_fromUnicode_ISCII_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
             if(U_FAILURE(*err)){
                 break;
             }
-            if(sourceChar == LF){                         
+            if(sourceChar == LF){
                 targetByteUnit = ATR<<8;
                 targetByteUnit += (uint8_t) lookupInitialData[range].isciiLang;
                 args->converter->fromUnicodeStatus=sourceChar;
@@ -879,7 +880,7 @@ UConverter_fromUnicode_ISCII_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
         case ZWJ:
             /* contextChar has HALANT */
             if(converterData->contextCharFromUnicode){
-                targetByteUnit = ISCII_NUKTA;               
+                targetByteUnit = ISCII_NUKTA;
             }else{
                 targetByteUnit =ISCII_INV;
             }
@@ -888,12 +889,12 @@ UConverter_fromUnicode_ISCII_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
        default:
             /* is the sourceChar in the INDIC_RANGE? */
             if((uint16_t)(INDIC_BLOCK_END-sourceChar) <= INDIC_RANGE){
-                /* Danda and Double Danda are valid in Northern scripts.. since Unicode 
-                 * does not include these codepoints in all Northern scrips we need to 
+                /* Danda and Double Danda are valid in Northern scripts.. since Unicode
+                 * does not include these codepoints in all Northern scrips we need to
                  * filter them out
                  */
                 if(sourceChar!= DANDA && sourceChar != DOUBLE_DANDA){
-                    /* find out to which block the souceChar belongs*/ 
+                    /* find out to which block the souceChar belongs*/
                     range =(uint16_t)((sourceChar-INDIC_BLOCK_BEGIN)/DELTA);
                     newDelta =(uint16_t)(range*DELTA);
 
@@ -909,9 +910,9 @@ UConverter_fromUnicode_ISCII_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
                     sourceChar -= converterData->currentDeltaFromUnicode ;
                 }
 
-                /* get the target byte unit */                  
+                /* get the target byte unit */
                 targetByteUnit=fromUnicodeTable[(uint8_t)sourceChar];
-                            
+
                 /* is the code point valid in current script? */
                 if((validityTable[(uint8_t)sourceChar] & converterData->currentMaskFromUnicode)==0){
                     /* Vocallic RR is assigne in ISCII Telugu and Unicode */
@@ -919,12 +920,12 @@ UConverter_fromUnicode_ISCII_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
                         targetByteUnit=missingCharMarker;
                     }
                 }
-           
+
                 if(deltaChanged){
-                    /* we are in a script block which is different than 
-                     * previous sourceChar's script block write ATR and language codes 
+                    /* we are in a script block which is different than
+                     * previous sourceChar's script block write ATR and language codes
                      */
-                    uint16_t temp=0;              
+                    uint16_t temp=0;
                     temp =(uint16_t)(ATR<<8);
                     temp += (uint16_t)((uint8_t) lookupInitialData[range].isciiLang);
                     /* reset */
@@ -1034,8 +1035,8 @@ static const int32_t lookupTable[][2]={
             (UChar)targetUniChar;                                                        \
         *err = U_BUFFER_OVERFLOW_ERROR;                                                  \
     }                                                                                    \
-}                                                                                        
-                                                                                         
+}
+
 #define GET_MAPPING(sourceChar,targetUniChar,data){                                      \
     targetUniChar = toUnicodeTable[(sourceChar)] ;                                       \
     /* is the code point valid in current script? */                                     \
@@ -1052,25 +1053,25 @@ static const int32_t lookupTable[][2]={
 /***********
  *  Rules for ISCII to Unicode converter
  *  ISCII is stateful encoding. To convert ISCII bytes to Unicode,
- *  which has both precomposed and decomposed forms characters 
+ *  which has both precomposed and decomposed forms characters
  *  pre-context and post-context need to be considered.
- *  
+ *
  *  Post context
- *  i)  ATR : Attribute code is used to declare the font and script switching. 
+ *  i)  ATR : Attribute code is used to declare the font and script switching.
  *      Currently we only switch scripts and font codes consumed without generating an error
- *  ii) EXT : Extention code is used to declare switching to Sanskrit and for obscure, 
+ *  ii) EXT : Extention code is used to declare switching to Sanskrit and for obscure,
  *      obsolete characters
- *  Pre context  
+ *  Pre context
  *  i)  Halant: if preceeded by a halant then it is a explicit halant
- *  ii) Nukta : 
+ *  ii) Nukta :
  *       a) if preceeded by a halant then it is a soft halant
  *       b) if preceeded by specific consonants and the ligatures have pre-composed
  *          characters in Unicode then convert to pre-composed characters
  *  iii) Danda: If Danda is preceeded by a Danda then convert to Double Danda
- * 
+ *
  */
 
-static void 
+static void
 UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                                                             UErrorCode* err){
     const char *source = ( char *) args->source;
@@ -1087,7 +1088,7 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
-    
+
     data = (UConverterDataISCII*)(args->converter->extraInfo);
     contextCharToUnicode = &data->contextCharToUnicode; /* contains previous ISCII codepoint visited */
     toUnicodeStatus = (UChar32*)&args->converter->toUnicodeStatus;/* contains the mapping to Unicode of the above codepoint*/
@@ -1095,22 +1096,22 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
     while(source<sourceLimit){
 
         targetUniChar = missingCharMarker;
-        
+
         if(target < targetLimit){
             sourceChar = (unsigned char)*(source)++;
 
             /* look at the post-context preform special processing */
             if(*contextCharToUnicode==ATR){
-             
+
                 /* If we have ATR in *contextCharToUnicode then we need to change our
                  * state to the Indic Script specified by sourceChar
                  */
 
                 /* check if the sourceChar is supported script range*/
                 if((uint8_t)(PNJ-sourceChar)<=PNJ-DEV){
-                    data->currentDeltaToUnicode = 
+                    data->currentDeltaToUnicode =
                         (uint16_t)(lookupTable[sourceChar & 0x0F][0] * DELTA);
-                    data->currentMaskToUnicode = 
+                    data->currentMaskToUnicode =
                         (MaskEnum)lookupTable[sourceChar & 0x0F][1] ;
                 }
                 else if(sourceChar==DEF){
@@ -1129,8 +1130,8 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                 }
 
                 /* reset */
-                *contextCharToUnicode=NO_CHAR_MARKER;              
-                
+                *contextCharToUnicode=NO_CHAR_MARKER;
+
                 continue;
 
             }else if(*contextCharToUnicode==EXT){
@@ -1139,10 +1140,10 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                     /* We currently support only Anudatta and Devanagari abbreviation sign */
                     if(sourceChar==0xBF || sourceChar == 0xB8){
                         targetUniChar = (sourceChar==0xBF) ? DEV_ABBR_SIGN : DEV_ANUDATTA;
-                        
-                        /* find out if the mapping is valid in this state */                                            
+
+                        /* find out if the mapping is valid in this state */
                         if(validityTable[(uint8_t)targetUniChar] & data->currentMaskToUnicode){
-                            
+
                             *contextCharToUnicode= NO_CHAR_MARKER;
 
                             /* write to target */
@@ -1167,7 +1168,7 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                 }else{
                     targetUniChar = ZWJ;
                 }
-                
+
                 /* write to target */
                 WRITE_TO_TARGET_TO_U(args,source,target,args->offsets,(source-args->source -2),
                                                  targetUniChar,data->currentDeltaToUnicode,err);
@@ -1181,7 +1182,7 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
             case EXT: /*falls through*/
             case ATR:
                 *contextCharToUnicode = (UChar)sourceChar;
-                
+
                 if(*toUnicodeStatus != missingCharMarker){
 
                     WRITE_TO_TARGET_TO_U(args,source,target,args->offsets,(source-args->source -2),
@@ -1239,8 +1240,8 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                         }
                     }
                     if(found){
-                        /* find out if the mapping is valid in this state */                                            
-                        if(validityTable[(uint8_t)targetUniChar] & data->currentMaskToUnicode){       
+                        /* find out if the mapping is valid in this state */
+                        if(validityTable[(uint8_t)targetUniChar] & data->currentMaskToUnicode){
                             /*targetUniChar += data->currentDeltaToUnicode ;*/
                             *contextCharToUnicode= NO_CHAR_MARKER;
                             *toUnicodeStatus = missingCharMarker;
@@ -1255,7 +1256,7 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                 *contextCharToUnicode = sourceChar;
                 break;
             }
-            
+
 
             if(*toUnicodeStatus != missingCharMarker){
                 /* write the previously mapped codepoint */
@@ -1274,8 +1275,8 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                     data->resetToDefaultToUnicode=FALSE;
                 }
             }else{
-            
-                /* we reach here only if targetUniChar == missingCharMarker 
+
+                /* we reach here only if targetUniChar == missingCharMarker
                  * so assign codes to reason and err
                  */
                 *err = U_INVALID_CHAR_FOUND;
@@ -1327,10 +1328,10 @@ struct cloneISCIIStruct
 };
 
 
-static UConverter * 
-_ISCII_SafeClone(const UConverter *cnv, 
-              void *stackBuffer, 
-              int32_t *pBufferSize, 
+static UConverter *
+_ISCII_SafeClone(const UConverter *cnv,
+              void *stackBuffer,
+              int32_t *pBufferSize,
               UErrorCode *status)
 {
     struct cloneISCIIStruct * localClone;
@@ -1384,20 +1385,20 @@ _ISCIIGetUnicodeSet(const UConverter *cnv,
 static const UConverterImpl _ISCIIImpl={
 
     UCNV_ISCII,
-    
+
     NULL,
     NULL,
-    
+
     _ISCIIOpen,
     _ISCIIClose,
     _ISCIIReset,
-    
+
     UConverter_toUnicode_ISCII_OFFSETS_LOGIC,
     UConverter_toUnicode_ISCII_OFFSETS_LOGIC,
     UConverter_fromUnicode_ISCII_OFFSETS_LOGIC,
     UConverter_fromUnicode_ISCII_OFFSETS_LOGIC,
     NULL,
-    
+
     NULL,
     _ISCIIgetName,
     NULL,
@@ -1408,29 +1409,29 @@ static const UConverterImpl _ISCIIImpl={
 static const UConverterStaticData _ISCIIStaticData={
     sizeof(UConverterStaticData),
         "ISCII",
-         0, 
-         UCNV_IBM, 
-         UCNV_ISCII, 
-         1, 
+         0,
+         UCNV_IBM,
+         UCNV_ISCII,
+         1,
          4,
         { 0x1a, 0, 0, 0 },
         0x1,
-        FALSE, 
+        FALSE,
         FALSE,
         0x0,
         0x0,
         { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }, /* reserved */
 
 };
-   
+
 const UConverterSharedData _ISCIIData={
     sizeof(UConverterSharedData),
         ~((uint32_t) 0),
-        NULL, 
-        NULL, 
-        &_ISCIIStaticData, 
-        FALSE, 
-        &_ISCIIImpl, 
+        NULL,
+        NULL,
+        &_ISCIIStaticData,
+        FALSE,
+        &_ISCIIImpl,
         0
 };
 
