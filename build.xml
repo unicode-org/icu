@@ -654,23 +654,55 @@
             <fileset dir="${build.dir}/com/ibm/icu/charset"/>                   
         </delete>
     </target>
-    <target name="check" depends="tests, jar, deleteCore" description="run standard icu4j test suite">
+
+    <target name="testJvmArgs" depends="initJvmInfo" unless="test.jvmargs"
+        description="Load platform specific JVM arguments for icu4j test suite">
+        <property file="jvmcfg_${jvm_vendor}_${jvm_version}_${jvm_os}_${jvm_arch}.properties" prefix="jvmprops"/>
+        <property file="jvmcfg_${jvm_vendor}_${jvm_version_major}_${jvm_os}_${jvm_arch}.properties" prefix="jvmprops"/>
+        <property file="jvmcfg_${jvm_vendor}_${jvm_version}_${jvm_os}.properties" prefix="jvmprops"/>
+        <property file="jvmcfg_${jvm_vendor}_${jvm_version_major}_${jvm_os}.properties" prefix="jvmprops"/>
+        <property file="jvmcfg_${jvm_vendor}_${jvm_version}.properties" prefix="jvmprops"/>
+        <property file="jvmcfg_${jvm_vendor}_${jvm_version_major}.properties" prefix="jvmprops"/>
+        <property file="jvmcfg_${jvm_vendor}.properties" prefix="jvmprops"/>
+        <property file="jvmcfg.properties" prefix="jvmprops"/>
+        <condition property="test.jvmargs" value="${jvmprops.test.jvmargs}">
+            <isset property="jvmprops.test.jvmargs"/>
+        </condition>
+        <!-- when test.jvmargs is not found, set empty string to platform.jvmargs" -->
+        <property name="test.jvmargs" value=""/>
+        <echo message="Platform specific JVM arguments for tests: ${test.jvmargs}"/>
+    </target>
+
+    <target name="initJvmInfo">
+        <!-- JVM vendor -->
+        <condition property="jvm_vendor" value="sun">
+            <contains string="${java.vendor}" substring="sun" casesensitive="false"/>
+        </condition>
+        <condition property="jvm_vendor" value="ibm">
+            <contains string="${java.vendor}" substring="ibm" casesensitive="false"/>
+        </condition>
+
+        <!-- JVM version -->
+        <property name="jvm_version" value="${java.version}"/>
+
+        <!-- JVM major version -->
+        <property name="jvm_version_major" value="${ant.java.version}"/>
+
+        <!-- JVM operatiny system -->
+        <condition property="jvm_os" value="Windows">
+            <os family="Windows"/>
+        </condition>
+        <property name="jvm_os" value="${os.name}"/>
+
+        <!-- JVM architecture -->
+        <property name="jvm_arch" value="${os.arch}"/>
+    </target>
+
+    <target name="check" depends="tests, jar, deleteCore, testJvmArgs" description="run standard icu4j test suite">
         <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
             <!-- enable assertion checks -->
             <jvmarg value="-ea"/>
-            <jvmarg value="-Xms128m"/>
-            <jvmarg value="-Xmx128m"/>
-            <arg value="-n"/>
-            <classpath>
-                <pathelement path="${java.class.path}/"/>
-                <pathelement location="${jar.file}"/>
-                <pathelement location="${charsets.jar.file}"/>
-                <pathelement location="clover.jar"/>
-                <pathelement path="${build.dir}"/>
-            </classpath>
-        </java>
-        <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
-            <jvmarg value="-ea"/>  <!-- enable assertion checks -->
+            <jvmarg line="${test.jvmargs}"/>
             <arg value="-n"/>
             <classpath>
                 <pathelement path="${java.class.path}/"/>
@@ -682,12 +714,11 @@
         </java>
     </target>
 
-    <target name="exhaustiveCheck" depends="tests, jar, deleteCore" description="run standard icu4j test suite in exhaustive mode">
+    <target name="exhaustiveCheck" depends="tests, jar, deleteCore, testJvmArgs" description="run standard icu4j test suite in exhaustive mode">
         <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
             <!-- enable assertion checks -->
             <jvmarg value="-ea"/>
-            <jvmarg value="-Xms128m"/>
-            <jvmarg value="-Xmx128m"/>  <!-- set the max heap size to 128m -->
+            <jvmarg line="${test.jvmargs}"/>
             <arg value="-n"/>
             <arg value="-e10"/>
             <classpath>
@@ -702,7 +733,7 @@
     
     <target name="secure" depends="jarTests" description="builds icu4j.jar and icu4jtests.jar"/>
 
-    <target name="secureCheck" depends="secure" description="run secure (applet-like) icu4j test suite">
+    <target name="secureCheck" depends="secure, testJvmArgs" description="run secure (applet-like) icu4j test suite">
         <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
         <!-- jvmarg value="-verbose"/ -->
         <!-- (use for debugging, LOTS of output) <jvmarg value="-Djava.security.debug=access:trace"/ -->
@@ -710,7 +741,8 @@
             <jvmarg value="-Djava.security.manager"/>
             <jvmarg value="-Djava.security.policy=${src.dir}/com/ibm/icu/dev/test/security.policy"/>
             <!--<jvmarg value="-Djava.security.debug=access:failure"/>-->
-             <arg value="-w"/>
+            <jvmarg line="${test.jvmargs}"/>
+            <arg value="-w"/>
             <arg value="-nothrow"/>
             <classpath>
                 <pathelement location="clover.jar"/>
@@ -1359,13 +1391,12 @@
             tofile="${build.dir}/com/ibm/icu/dev/data/TestData_bge.res"/>
     </target>
     
-    <target name="defaultPackageCheck" depends="tests, defaultPackage" description="Run Tests for loading resources in the default package">
+    <target name="defaultPackageCheck" depends="tests, defaultPackage, testJvmArgs" description="Run Tests for loading resources in the default package">
             <!--run the tests -->
         <java classname="TestDefaultPackageLoading" fork="yes" failonerror="true">
             <!-- enable assertion checks -->
             <jvmarg value="-ea"/>
-            <jvmarg value="-Xms128m"/>
-            <jvmarg value="-Xmx128m"/>
+            <jvmarg line="${test.jvmargs}"/>
             <arg value="-n"/>
             <classpath>
                 <pathelement path="${java.class.path}/"/>
@@ -1909,11 +1940,10 @@
         </java>
     </target>
 
-    <target name="runCheck" depends="init,tests">    
+    <target name="runCheck" depends="init,tests,testJvmArgs">    
         <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
             <jvmarg value="-ea"/>
-            <jvmarg value="-Xms128m"/>
-            <jvmarg value="-Xmx128m"/>
+            <jvmarg line="${test.jvmargs}"/>
             <arg value="-n"/>
             <classpath>
                 <pathelement path="${java.class.path}/"/>
@@ -1925,10 +1955,9 @@
         </java>
     </target>
 
-    <target name="eclipseRunCheck" depends="init,eclipseTests">    
+    <target name="eclipseRunCheck" depends="init,eclipseTests,testJvmArgs">    
         <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
-            <jvmarg value="-Xms128m"/>
-            <jvmarg value="-Xmx128m"/>
+            <jvmarg line="${test.jvmargs}"/>
             <arg value="-n"/>
             <classpath>
                 <pathelement path="${java.class.path}/"/>
