@@ -7,6 +7,7 @@
 package com.ibm.icu.dev.tool.tzu;
 
 import java.io.File;
+import java.util.Locale;
 
 /**
  * Entry point for the ICUTZU tool.
@@ -64,8 +65,10 @@ public class ICUTZUMain {
      */
     public static void main(String[] args) {
         try {
-            System.setProperty("http.agent",
-                    "ICU4J Time Zone Update Utility (ICUTZU)");
+            String agent = "ICUTZU/1.0 (" + System.getProperty("os.name") + " "
+                    + System.getProperty("os.version") + "; "
+                    + Locale.getDefault().toString() + ")";
+            System.setProperty("http.agent", agent);
 
             if (args.length == 0) {
                 // in the case of running without commandline options
@@ -94,14 +97,15 @@ public class ICUTZUMain {
             File iconFile = new File(args[CUR_DIR] + File.separator
                     + args[ICON_FILE]);
 
-            if ("true".equals(System.getProperty("nogui")))
+            if ("true".equalsIgnoreCase(System.getProperty("nogui")))
                 new CLILoader(curDir, backupDir, pathFile, resultFile, tzFile);
             else
                 new GUILoader(curDir, backupDir, pathFile, resultFile, tzFile,
                         iconFile);
-        } catch (Exception ex) {
+        } catch (Throwable ex) {
             // should any unexplained exception occur, we should exit
             // abnormally. ideally, this should never happen.
+            System.err.println("Internal program error.");
             ex.printStackTrace();
             System.exit(-1);
         }

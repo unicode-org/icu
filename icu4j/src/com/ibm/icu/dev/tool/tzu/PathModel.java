@@ -8,9 +8,10 @@ package com.ibm.icu.dev.tool.tzu;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -96,7 +97,7 @@ class PathModel extends AbstractListModel {
      *         detailed above and exists.
      */
     public boolean add(String includeFilename) {
-        if ("all".equals(includeFilename)) {
+        if ("all".equalsIgnoreCase(includeFilename)) {
             logger
                     .printlnToScreen("The tool will search all drives for ICU4J jars except any excluded directories specified");
             addAllDrives();
@@ -164,7 +165,8 @@ class PathModel extends AbstractListModel {
         char sign;
 
         try {
-            reader = new BufferedReader(new FileReader(pathListFile));
+            reader = new BufferedReader(new InputStreamReader(
+                    new FileInputStream(pathListFile), "UTF-8"), 4 * 1024);
             while (reader.ready()) {
                 line = reader.readLine().trim();
 
@@ -172,7 +174,8 @@ class PathModel extends AbstractListModel {
                     sign = line.charAt(0);
                     if (sign != '#') {
                         logger.printlnToScreen(line);
-                        if (sign != '+' && sign != '-' && !"all".equals(line))
+                        if (sign != '+' && sign != '-'
+                                && !"all".equalsIgnoreCase(line))
                             pathListError(
                                     "Each path entry must start with a + or - to denote inclusion/exclusion",
                                     lineNumber);

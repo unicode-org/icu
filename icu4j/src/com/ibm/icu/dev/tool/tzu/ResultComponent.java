@@ -206,7 +206,9 @@ public class ResultComponent extends JComponent {
 
         resultTable.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent event) {
-                if (event.getKeyCode() == KeyEvent.VK_DELETE)
+                int code = event.getKeyCode();
+                if (code == KeyEvent.VK_DELETE
+                        || code == KeyEvent.VK_BACK_SPACE)
                     resultModel.remove(resultTable.getSelectedRows());
             }
         });

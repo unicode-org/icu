@@ -49,7 +49,7 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
     /**
      * The URL string of the ICU Timezone Repository.
      */
-    public static final String TZ_BASE_URLSTRING_START = "http://source.icu-project.org/repos/icu/data/trunk/tzdata/icu/";
+    public static final String TZ_BASE_URLSTRING_START = "http://icu-project.org/tzdata/";
 
     /**
      * The readable name of the local timezone resource file, ie. "Local Copy"
@@ -131,6 +131,7 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
                 }
             } catch (MalformedURLException ex) {
                 // this shouldn't happen
+                logger.errorln("Internal program error.");
                 ex.printStackTrace();
             }
         }
@@ -185,6 +186,7 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
                                 }
                                 fireIntervalAdded(this, index, index);
                             } catch (MalformedURLException ex) {
+                                logger.errorln("Internal program error.");
                                 ex.printStackTrace();
                             }
                     }
@@ -206,7 +208,6 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
                 try {
                     reader.close();
                 } catch (IOException ex) {
-                    ex.printStackTrace();
                 }
         }
     }

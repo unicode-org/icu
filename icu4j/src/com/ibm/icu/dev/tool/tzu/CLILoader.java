@@ -205,7 +205,7 @@ public class CLILoader {
 
         // if the offline is not set to true, populate the list of available
         // timezone resource versions
-        if (!"true".equals(System.getProperty("offline")))
+        if (!"true".equalsIgnoreCase(System.getProperty("offline")))
             sourceModel.findSources();
 
         // perform the updates using the best tz version available

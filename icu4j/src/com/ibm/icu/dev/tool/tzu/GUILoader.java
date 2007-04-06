@@ -188,7 +188,7 @@ public class GUILoader {
 
         // if the offline is not set to true, populate the list of available
         // timezone resource versions
-        if (!"true".equals(System.getProperty("offline")))
+        if (!"true".equalsIgnoreCase(System.getProperty("offline")))
             sourceModel.findSources();
 
         // make sure that search and update cancelation is disabled (since we
@@ -318,6 +318,8 @@ public class GUILoader {
                     logger.printlnToScreen("Update ended.");
                     logger.setStatus("Update ended.");
                 } catch (InterruptedException ex) {
+                    // we want to know what was last being updated, so do not
+                    // change the status bar message
                     // try {
                     // logger.setStatus("Update interrupted.");
                     // } catch (InterruptedException e) {
@@ -354,6 +356,8 @@ public class GUILoader {
                     logger.printlnToScreen("Update ended.");
                     logger.setStatus("Update ended.");
                 } catch (InterruptedException ex) {
+                    // we want to know what was last being updated, so do not
+                    // change the status bar message
                     // try {
                     // logger.setStatus("Update interrupted.");
                     // } catch (InterruptedException e) {

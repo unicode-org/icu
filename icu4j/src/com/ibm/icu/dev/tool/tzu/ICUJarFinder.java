@@ -18,6 +18,12 @@ import java.util.List;
 public class ICUJarFinder {
 
     /**
+     * The delay in milliseconds between showing directories to the command line
+     * user.
+     */
+    public static final int DELAY = 5000; // 5 seconds
+
+    /**
      * Searchs the directories / files represented in <code>paths</code> for
      * valid ICU4J jars. The logic for determining if a file is an ICU4J jar is
      * taken care of by the constructor of ICUFile. The resulting ICUFile's are
@@ -63,7 +69,7 @@ public class ICUJarFinder {
         // search each of the included files/directories
         for (int i = 0; i < included.size(); i++)
             search(resultModel, logger, (File) included.get(i), excluded,
-                    subdirs, 0);
+                    subdirs, 0, 0);
 
         // chain the result model
         return resultModel;
@@ -93,8 +99,8 @@ public class ICUJarFinder {
      * @throws InterruptedException
      */
     private static ResultModel search(ResultModel resultModel, Logger logger,
-            File file, List excluded, boolean subdirs, int depth)
-            throws InterruptedException {
+            File file, List excluded, boolean subdirs, int depth,
+            long lastShowtime) throws InterruptedException {
         // check for interruptions
         if (Thread.currentThread().isInterrupted())
             throw new InterruptedException();
@@ -102,21 +108,25 @@ public class ICUJarFinder {
         // make sure the current file/directory isn't excluded
         Iterator iter = excluded.iterator();
         while (iter.hasNext())
-            if (file.getAbsolutePath().equalsIgnoreCase(
-                    ((File) iter.next()).getAbsolutePath()))
+            if (file.equals((File) iter.next()))
                 return resultModel;
+
         if (file.isDirectory() && (subdirs || depth == 0)) {
             // recurse through each file/directory inside this directory
             File[] dirlist = file.listFiles();
             if (dirlist != null && dirlist.length > 0) {
                 // notify the user that something is happening
-                if (depth <= 2) {
+                long curTime = System.currentTimeMillis();
+                if (depth <= 1 || curTime - lastShowtime > DELAY) {
+                    lastShowtime = curTime;
                     logger.setStatus(file.getPath());
                     logger.printlnToScreen(file.getPath());
                 }
+
+                // recurse
                 for (int i = 0; i < dirlist.length; i++)
                     search(resultModel, logger, dirlist[i], excluded, subdirs,
-                            depth + 1);
+                            depth + 1, lastShowtime);
             }
         } else {
             // attempt to create an ICUFile object on the current file and add
