@@ -1,5 +1,5 @@
 ## Cygwin with Microsoft Visual C++ compiler specific setup
-## Copyright (c) 2001-2006, International Business Machines Corporation and
+## Copyright (c) 2001-2007, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 # We install sbin tools into the same bin directory because
@@ -159,7 +159,7 @@ endif
 
 ## Compile a Windows resource file
 %.res : $(srcdir)/%.rc
-	rc.exe /fo$@ $^
+	rc.exe /fo$@ $(SOURCE_FILE)
 
 ## Versioned target for a shared library.
 FINAL_SO_TARGET= $(basename $(SO_TARGET))$(SO_TARGET_VERSION_MAJOR).$(SO)
