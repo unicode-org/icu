@@ -9,10 +9,12 @@ package com.ibm.icu.dev.tool.tzu;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,8 +53,8 @@ class ResultModel extends AbstractTableModel {
     /**
      * A list of names of the columns in a result model.
      */
-    public static final String[] COLUMN_NAMES = new String[] { "Filename", "Path",
-            "ICU Version", "TZ Version" };
+    public static final String[] COLUMN_NAMES = new String[] { "Filename",
+            "Path", "ICU Version", "TZ Version" };
 
     /**
      * The serializable UID.
@@ -224,7 +226,8 @@ class ResultModel extends AbstractTableModel {
         String filename;
 
         try {
-            reader = new BufferedReader(new FileReader(resultListFile));
+            reader = new BufferedReader(new InputStreamReader(
+                    new FileInputStream(resultListFile), "UTF-8"), 4 * 1024);
             while (reader.ready()) {
                 line = reader.readLine().trim();
                 logger.printlnToScreen(line);
@@ -316,7 +319,8 @@ class ResultModel extends AbstractTableModel {
         ICUFile icuFile = null;
 
         try {
-            writer = new BufferedWriter(new FileWriter(resultListFile));
+            writer = new BufferedWriter(new OutputStreamWriter(
+                    new FileOutputStream(resultListFile), "UTF-8"), 4 * 1024);
             Iterator iter = iterator();
             while (iter.hasNext()) {
                 icuFile = (ICUFile) iter.next();
@@ -370,7 +374,7 @@ class ResultModel extends AbstractTableModel {
                         k++;
                     } catch (IOException ex) {
                         // could not update the jar
-                        ex.printStackTrace();
+                        logger.errorln(ex.getMessage());
                     }
                 else
                     iter.next();

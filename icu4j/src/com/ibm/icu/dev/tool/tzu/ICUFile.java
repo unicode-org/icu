@@ -149,6 +149,7 @@ public class ICUFile {
             }
         } catch (MalformedURLException ex) {
             // this should never happen
+            logger.errorln("Internal program error.");
             ex.printStackTrace();
         } catch (ClassNotFoundException ex) {
             // this would most likely happen when UResourceBundle cannot be
@@ -156,15 +157,19 @@ public class ICUFile {
             logger.errorln("icu4j.jar not found");
         } catch (NoSuchMethodException ex) {
             // this can only be caused by a very unlikely scenario
+            logger.errorln("icu4j.jar not correct");
             ex.printStackTrace();
         } catch (IllegalAccessException ex) {
             // this can only be caused by a very unlikely scenario
+            logger.errorln("icu4j.jar not correct");
             ex.printStackTrace();
         } catch (InvocationTargetException ex) {
             // if this is holding a MissingResourceException, then this is not
-            // an error -- some zoneinfo files do not have a version number
-            if (!(ex.getTargetException() instanceof MissingResourceException))
+            // an error -- some zoneinfo files are missing version numbers
+            if (!(ex.getTargetException() instanceof MissingResourceException)) {
+                logger.errorln("icu4j.jar not correct");
                 ex.printStackTrace();
+            }
         }
 
         return TZ_VERSION_UNKNOWN;
@@ -535,7 +540,10 @@ public class ICUFile {
             backupBase.mkdir();
             backupDir.mkdir();
             backupFile = File.createTempFile(prefix, suffix, backupDir);
-            backupDesc = new File(backupDir.getPath() + File.separator + prefix
+            backupDesc = new File(backupDir.getPath()
+                    + File.separator
+                    + backupFile.getName().substring(0,
+                            backupFile.getName().length() - suffix.length())
                     + ".txt");
             backupDesc.createNewFile();
             ostream = new PrintStream(new FileOutputStream(backupDesc));
@@ -679,6 +687,8 @@ public class ICUFile {
                     + " (this tool does not support .ear and .war files).";
             logger.loglnToBoth(message);
             logger.showInformationDialog(message);
+        } else if (!file.canRead() || !file.canWrite()) {
+            message = "Skipped " + file.getPath() + " (missing permissions).";
         } else if (!file.getName().endsWith(".jar")) {
             message = "Skipped " + file.getPath() + " (not a jar file).";
         } else if (!isUpdatable()) {
@@ -710,7 +720,7 @@ public class ICUFile {
     private boolean isEclipseDataFragment() {
         return (icuFile.getPath().indexOf(
                 "plugins" + File.separator + "com.ibm.icu.data.update") >= 0 && icuFile
-                .getName().equals("icu-data.jar"));
+                .getName().equalsIgnoreCase("icu-data.jar"));
     }
 
     /**
@@ -786,6 +796,8 @@ public class ICUFile {
                 try {
                     jar.close();
                 } catch (IOException ex) {
+                    logger.errorln("Could not properly close the jar file "
+                            + icuFile + ".");
                 }
         }
 
