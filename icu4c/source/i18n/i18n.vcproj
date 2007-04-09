@@ -1145,6 +1145,7 @@
 			</File>
 			<File
 				RelativePath=".\reldtfmt.h"
+				>
 			</File>
 			<File
 				RelativePath=".\timezone.cpp"
