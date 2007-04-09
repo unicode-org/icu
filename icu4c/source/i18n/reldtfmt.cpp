@@ -18,6 +18,7 @@
 #include "unicode/msgfmt.h"
 
 #include "gregoimp.h" // for CalendarData
+#include "cmemory.h"
 
 U_NAMESPACE_BEGIN
 
@@ -78,7 +79,7 @@ RelativeDateFormat::~RelativeDateFormat() {
     delete fDateFormat;
     delete fTimeFormat;
     delete fCombinedFormat;
-    delete [] dates;
+    uprv_free(dates);
 // do NOT: delete fStrings - as they are loaded from mapped memory, all owned by fCalData.
     delete fCalData;
 }
@@ -233,7 +234,7 @@ void RelativeDateFormat::loadDates(UErrorCode &status) const {
     }
 
     nonConstThis->datesLen = ures_getSize(strings);
-    nonConstThis->dates = new URelativeString[datesLen];
+    nonConstThis->dates = (URelativeString*) uprv_malloc(sizeof(dates[0])*datesLen);
 
     // Load in each item into the array...
     int n = 0;
@@ -306,3 +307,4 @@ int32_t RelativeDateFormat::dayDifference(Calendar &cal, UErrorCode &status) {
 U_NAMESPACE_END
 
 #endif
+
