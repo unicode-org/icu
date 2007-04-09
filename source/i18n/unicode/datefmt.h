@@ -160,6 +160,19 @@ public:
      // kShort  + kDateOffset = 7
 
         kDateTime             = 8,
+        
+
+        // relative dates
+        kRelative = (1 << 7),
+        
+        kFullRelative = (kFull | kRelative),
+            
+        kLongRelative = kLong | kRelative,
+        
+        kMediumRelative = kMedium | kRelative,
+        
+        kShortRelative = kShort | kRelative,
+        
 
         kDefault      = kMedium,
 

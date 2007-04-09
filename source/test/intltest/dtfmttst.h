@@ -180,6 +180,20 @@ public:
     void TestQuarters(void);
     
     void TestZTimeZoneParsing(void);
+    
+public:
+    /***
+     * Test Relative Dates
+     */
+     void TestRelative(void);
+/*   void TestRelativeError(void);
+     void TestRelativeOther(void);
+*/
+
+ private:
+      void TestRelative(int daysdelta, 
+                                  const Locale& loc,
+                                  const char *expectChars);
 
  private:
     void expectParse(const char** data, int32_t data_length,
