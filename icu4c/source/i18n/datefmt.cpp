@@ -24,6 +24,7 @@
 #include "unicode/ures.h"
 #include "unicode/datefmt.h"
 #include "unicode/smpdtfmt.h"
+#include "reldtfmt.h"
 
 #include "cstring.h"
 #include "windtfmt.h"
@@ -287,6 +288,13 @@ DateFormat::create(EStyle timeStyle, EStyle dateStyle, const Locale& locale)
     }
 #endif
 
+    // is it relative?
+    if(/*((timeStyle!=UDAT_NONE)&&(timeStyle & UDAT_RELATIVE)) || */((dateStyle!=(UDateFormatStyle)UDAT_NONE)&&((dateStyle-kDateOffset) & UDAT_RELATIVE))) {
+        RelativeDateFormat *r = new RelativeDateFormat((UDateFormatStyle)timeStyle, (UDateFormatStyle)(dateStyle-kDateOffset), locale, status);
+        if(U_SUCCESS(status)) return r;
+        delete r;
+        status = U_ZERO_ERROR;
+    }
 
     // Try to create a SimpleDateFormat of the desired style.
     SimpleDateFormat *f = new SimpleDateFormat(timeStyle, dateStyle, locale, status);

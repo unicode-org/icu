@@ -151,6 +151,19 @@ typedef enum UDateFormatStyle {
     UDAT_SHORT,
     /** Default style */
     UDAT_DEFAULT = UDAT_MEDIUM,
+
+    /** Bitfield for relative date */
+    UDAT_RELATIVE = (1 << 7),
+    
+    UDAT_FULL_RELATIVE = UDAT_FULL | UDAT_RELATIVE,
+        
+    UDAT_LONG_RELATIVE = UDAT_LONG | UDAT_RELATIVE,
+    
+    UDAT_MEDIUM_RELATIVE = UDAT_MEDIUM | UDAT_RELATIVE,
+    
+    UDAT_SHORT_RELATIVE = UDAT_SHORT | UDAT_RELATIVE,
+    
+    
     /** No style */
     UDAT_NONE = -1,
     /** for internal API use only */

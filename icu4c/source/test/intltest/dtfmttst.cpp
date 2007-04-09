@@ -19,6 +19,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "caltest.h"  // for fieldName
+#include <stdio.h> // for sprintf
 
 #ifdef U_WINDOWS
 #include "windttst.h"
@@ -26,7 +27,7 @@
 
 #define ARRAY_SIZE(array) (sizeof array / sizeof array[0])
 
-#define ASSERT_OK(status)  if(U_FAILURE(status)) {errln(#status " = %s", u_errorName(status)); return; }
+#define ASSERT_OK(status)  if(U_FAILURE(status)) {errln(#status " = %s @ %s:%d", u_errorName(status), __FILE__, __LINE__); return; }
 
 //--------------------------------------------------------------------
 // Time bomb - allows temporary behavior that expires at a given
@@ -76,6 +77,11 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCASE(31,TestStandAloneMonths);
         TESTCASE(32,TestQuarters);
         TESTCASE(33,TestZTimeZoneParsing);
+        TESTCASE(34,TestRelative);
+        /*
+        TESTCASE(35,TestRelativeError);
+        TESTCASE(36,TestRelativeOther);
+        */
         default: name = ""; break;
     }
 }
@@ -1965,6 +1971,119 @@ void DateFormatTest::TestHost(void)
     Win32DateTimeTest::testLocales(this);
 #endif
 }
+
+// Relative Date Tests
+
+void DateFormatTest::TestRelative(int daysdelta, 
+                                  const Locale& loc,
+                                  const char *expectChars) {
+    char banner[25];
+    sprintf(banner, "%d", daysdelta);
+    UnicodeString bannerStr(banner, "");
+    
+    UErrorCode status = U_ZERO_ERROR;
+    
+    FieldPosition pos(0);
+    UnicodeString test;
+    Locale en("en");
+    DateFormat *fullrelative = DateFormat::createDateInstance(DateFormat::kFullRelative, loc);
+    DateFormat *full         = DateFormat::createDateInstance(DateFormat::kFull        , loc);
+    
+    DateFormat *en_full =         DateFormat::createDateInstance(DateFormat::kFull,         en);
+    DateFormat *en_fulltime =         DateFormat::createDateTimeInstance(DateFormat::kFull,DateFormat::kFull,en);
+    UnicodeString result;
+    UnicodeString normalResult;
+    UnicodeString expect;
+    UnicodeString parseResult;
+    
+    Calendar *c = Calendar::createInstance(status);
+
+    // Today = Today
+    c->setTime(Calendar::getNow(), status);
+    if(daysdelta != 0) {
+        c->add(Calendar::DATE,daysdelta,status);
+    }
+    ASSERT_OK(status);
+
+    // calculate the expected string
+    if(expectChars != NULL) {
+        expect = expectChars;
+    } else {
+        full->format(*c, expect, pos); // expected = normal full
+    }
+    
+    fullrelative   ->format(*c, result, pos);
+    en_full        ->format(*c, normalResult, pos);
+    
+    if(result != expect) {
+        errln("FAIL: Relative Format ["+bannerStr+"] of "+normalResult+" failed, expected "+expect+" but got " + result);
+    } else {
+        logln("PASS: Relative Format ["+bannerStr+"] of "+normalResult+" got " + result);
+    }
+    
+    
+    //verify
+    UDate d = fullrelative->parse(result, status);
+    ASSERT_OK(status);
+    
+    UnicodeString parseFormat; // parse rel->format full
+    en_full->format(d, parseFormat, status);
+    
+    UnicodeString origFormat;
+    en_full->format(*c, origFormat, pos);
+    
+    if(parseFormat!=origFormat) {
+        errln("FAIL: Relative Parse ["+bannerStr+"] of "+result+" failed, expected "+parseFormat+" but got "+origFormat);
+    } else {
+        logln("PASS: Relative Parse ["+bannerStr+"] of "+result+" passed, got "+parseFormat);
+    }
+
+    
+    delete full;
+    delete fullrelative;
+    delete en_fulltime;
+    delete en_full;
+    delete c;
+    
+}
+                            
+
+void DateFormatTest::TestRelative(void)
+{
+    Locale en("en");
+    TestRelative( 0, en, "Today");
+    TestRelative(-1, en, "Yesterday");
+    TestRelative( 1, en, "Tomorrow");
+    TestRelative( 2, en, NULL);
+    TestRelative( -2, en, NULL);
+    TestRelative( 3, en, NULL);
+    TestRelative( -3, en, NULL);
+    TestRelative( 300, en, NULL);
+    TestRelative( -300, en, NULL);
+}
+
+/*
+void DateFormatTest::TestRelativeError(void)
+{
+    UErrorCode status;
+    Locale en("en");
+    
+    DateFormat *en_reltime_reldate =         DateFormat::createDateTimeInstance(DateFormat::kFullRelative,DateFormat::kFullRelative,en);
+    if(en_reltime_reldate == NULL) {
+        logln("PASS: rel date/rel time failed");
+    } else {
+        errln("FAIL: rel date/rel time created, should have failed.");
+        delete en_reltime_reldate;
+    }
+}
+
+void DateFormatTest::TestRelativeOther(void)
+{
+    logln("Nothing in this test. When we get more data from CLDR, put in some tests of -2, +2, etc. ");
+}
+*/
+
+
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
