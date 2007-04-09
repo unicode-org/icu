@@ -23,7 +23,7 @@
          install-size="0"
          version="@BUILD_VERSION@"
          fragment="true"
-         unpack="false"/>
+         unpack="true"/>
 
    <plugin
          id="com.ibm.icu.jse4.source"
