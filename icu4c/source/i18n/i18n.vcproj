@@ -1140,6 +1140,13 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\reldtfmt.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\reldtfmt.h"
+			</File>
+			<File
 				RelativePath=".\timezone.cpp"
 				>
 			</File>
