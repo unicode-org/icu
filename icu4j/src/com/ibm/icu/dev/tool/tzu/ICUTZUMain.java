@@ -71,6 +71,10 @@ public class ICUTZUMain {
             System.setProperty("http.agent", agent);
 
             if (args.length == 0) {
+                // TODO: Remove this once this has been tested!!!
+                System.out.println("Backup directory: "
+                        + new File("Temp").getPath());
+
                 // in the case of running without commandline options
                 new GUILoader(new File("."), new File("Temp"), new File(
                         "DirectoryList.txt"), new File("ICUList.txt"),
@@ -96,9 +100,6 @@ public class ICUTZUMain {
                     + args[TZ_FILE]);
             File iconFile = new File(args[CUR_DIR] + File.separator
                     + args[ICON_FILE]);
-
-            // TODO: Remove this once this has been tested!!!
-            System.out.println("Backup directory: " + backupDir.toString());
 
             if ("true".equalsIgnoreCase(System.getProperty("nogui")))
                 new CLILoader(curDir, backupDir, pathFile, resultFile, tzFile);
