@@ -128,7 +128,7 @@ public class PathComponent extends JComponent {
      * The search button that starts the search on the selected paths (or all
      * the paths if none are selected).
      */
-    private JButton pathSearchButton = new JButton("Search");
+    private JButton pathSearchAllButton = new JButton("Search All");
 
     /**
      * The panel to hold the search components.
@@ -180,7 +180,7 @@ public class PathComponent extends JComponent {
         pathInputSubPanel.add(pathBrowseButton);
 
         pathOptionPanel.add(pathSubdirOption);
-        pathSearchPanel.add(pathSearchButton);
+        pathSearchPanel.add(pathSearchAllButton);
 
         pathChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 
@@ -282,7 +282,7 @@ public class PathComponent extends JComponent {
             }
         });
 
-        pathSearchButton.addActionListener(new ActionListener() {
+        pathSearchAllButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 owner.searchAll(pathSubdirOption.isSelected());
             }
@@ -334,7 +334,7 @@ public class PathComponent extends JComponent {
      *            Whether the search button should be enabled.
      */
     public void setSearchEnabled(boolean value) {
-        pathSearchButton.setEnabled(value);
+        pathSearchAllButton.setEnabled(value);
     }
 
     /**

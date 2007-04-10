@@ -71,10 +71,6 @@ public class ICUTZUMain {
             System.setProperty("http.agent", agent);
 
             if (args.length == 0) {
-                // TODO: Remove this once this has been tested!!!
-                System.out.println("Backup directory: "
-                        + new File("Temp").getAbsoluteFile().getPath());
-
                 // in the case of running without commandline options
                 new GUILoader(new File(".").getAbsoluteFile(), new File("Temp")
                         .getAbsoluteFile(), new File("DirectoryList.txt")
