@@ -19,7 +19,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
@@ -80,6 +82,12 @@ public class ICUFile {
      * The buffer size to use for copying data.
      */
     private static final int BUFFER_SIZE = 1024;
+
+    /**
+     * A map that caches links from URLs to time zone data to their downloaded
+     * File counterparts.
+     */
+    private static final Map cacheMap = new HashMap();
 
     /**
      * Determines the version of a timezone resource as a standard file without
@@ -381,6 +389,8 @@ public class ICUFile {
 
         if (!icuFile.canRead() || !icuFile.canWrite())
             throw new IOException("Missing permissions for " + icuFile);
+        if ((insertURL = getCachedURL(insertURL)) == null)
+            throw new IOException("Could not download the TZ data.");
         File backupFile = null;
         if ((backupFile = createBackupFile(icuFile, backupDir)) == null)
             throw new IOException("Failed to create a backup file.");
@@ -686,7 +696,6 @@ public class ICUFile {
             message = "Skipped " + file.getPath()
                     + " (this tool does not support .ear and .war files).";
             logger.loglnToBoth(message);
-            logger.showInformationDialog(message);
         } else if (!file.canRead() || !file.canWrite()) {
             message = "Skipped " + file.getPath() + " (missing permissions).";
         } else if (!file.getName().endsWith(".jar")) {
@@ -698,12 +707,10 @@ public class ICUFile {
             message = "Skipped " + file.getPath()
                     + " (cannot update signed jars).";
             logger.loglnToBoth(message);
-            logger.showInformationDialog(message);
         } else if (isEclipseFragment()) {
             message = "Skipped " + file.getPath()
                     + " (eclipse fragments must be updated through ICU).";
             logger.loglnToBoth(message);
-            logger.showInformationDialog(message);
         }
 
         if (message != null)
@@ -803,5 +810,59 @@ public class ICUFile {
 
         // return whether the jar is updatable or not
         return success;
+    }
+
+    private URL getCachedURL(URL url) {
+        File outputFile = (File) cacheMap.get(url);
+        if (outputFile != null) {
+            try {
+                return outputFile.toURL();
+            } catch (MalformedURLException ex) {
+                return null;
+            }
+        } else {
+            logger.loglnToBoth("Downloading from " + url + " to " + outputFile
+                    + ".");
+            InputStream istream = null;
+            OutputStream ostream = null;
+            byte[] buffer = new byte[BUFFER_SIZE];
+            int bytesRead;
+            boolean success = false;
+
+            try {
+                istream = url.openStream();
+
+                outputFile = File.createTempFile("zoneinfo", "res");
+                outputFile.deleteOnExit();
+                ostream = new FileOutputStream(outputFile);
+
+                while ((bytesRead = istream.read(buffer)) != -1)
+                    ostream.write(buffer, 0, bytesRead);
+
+                success = true;
+                logger.loglnToBoth("Download successful.");
+            } catch (IOException ex) {
+                outputFile.delete();
+                logger.loglnToBoth("Download failed.");
+            } finally {
+                // safely close the streams
+                if (istream != null)
+                    try {
+                        istream.close();
+                    } catch (IOException ex) {
+                    }
+                if (ostream != null)
+                    try {
+                        ostream.close();
+                    } catch (IOException ex) {
+                    }
+            }
+            try {
+                return (success && outputFile != null) ? outputFile.toURL()
+                        : null;
+            } catch (MalformedURLException ex) {
+                return null;
+            }
+        }
     }
 }

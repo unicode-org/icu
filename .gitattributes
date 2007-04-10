@@ -339,6 +339,7 @@ icu4j/src/com/ibm/icu/dev/tool/docs/icu4j343.api.gz -text svneol=unset#applicati
 icu4j/src/com/ibm/icu/dev/tool/rbbi/readme.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/tool/timezone/ICUZDump.java -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/CLILoader.java -text
+icu4j/src/com/ibm/icu/dev/tool/tzu/DirectorySearch.txt -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/GUILoader.java -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/ICUFile.java -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/ICUJarFinder.java -text
