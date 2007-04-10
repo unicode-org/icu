@@ -105,7 +105,8 @@ public class ICUJarFinder {
         // make sure the current file/directory isn't excluded
         Iterator iter = excluded.iterator();
         while (iter.hasNext())
-            if (file.equals((File) iter.next()))
+            if (file.getAbsoluteFile().equals(
+                    ((File) iter.next()).getAbsoluteFile()))
                 return resultModel;
 
         if (file.isDirectory() && (subdirs || depth == 0)) {

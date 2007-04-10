@@ -47,8 +47,8 @@ public class IncludePath {
      *         above.
      */
     public boolean equals(Object other) {
-        return !(other instanceof IncludePath) ? false : path
-                .equals(((IncludePath) other).path);
+        return !(other instanceof IncludePath) ? false : path.getAbsoluteFile()
+                .equals(((IncludePath) other).path.getAbsoluteFile());
     }
 
     /**

@@ -269,7 +269,8 @@ class ResultModel extends AbstractTableModel {
             int i = 0;
             while (iter.hasNext()) {
                 ICUFile icuFile = (ICUFile) iter.next();
-                if (icuFile.getFile().equals(file)) {
+                if (icuFile.getFile().getAbsoluteFile().equals(
+                        file.getAbsoluteFile())) {
                     icuFileList.remove(icuFile);
                     fireTableRowsDeleted(i, i);
                     return;
