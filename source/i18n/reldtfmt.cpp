@@ -36,36 +36,38 @@ struct URelativeString {
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RelativeDateFormat)
 
 RelativeDateFormat::RelativeDateFormat(const RelativeDateFormat& other) :
-DateFormat(other),fCalData(NULL), fStrings(NULL), dates(NULL), datesLen(0), fCombinedFormat(NULL) {
-    
-    dateStyle = other.dateStyle;
-    timeStyle = other.timeStyle;
+DateFormat(other), fDateFormat(NULL), fTimeFormat(NULL), fCombinedFormat(NULL),
+fDateStyle(other.fDateStyle), fTimeStyle(other.fTimeStyle), fLocale(other.fLocale),
+fCalData(NULL), fStrings(NULL), fDatesLen(0), fDates(NULL)
+{
     if(other.fDateFormat != NULL) {
         fDateFormat = (DateFormat*)other.fDateFormat->clone();
     } else {
         fDateFormat = NULL;
     }
-    
+/*    
     if(other.fTimeFormat != NULL) {
         fTimeFormat = (DateFormat*)other.fTimeFormat->clone();
     } else {
         fTimeFormat = NULL;
     }
+*/
 }
 
 RelativeDateFormat::RelativeDateFormat( UDateFormatStyle timeStyle, UDateFormatStyle dateStyle, const Locale& locale, UErrorCode& status)
- : dateStyle(dateStyle), timeStyle(timeStyle), fDateFormat(NULL), fCombinedFormat(NULL), fTimeFormat(NULL),
-  locale(locale),fCalData(NULL), fStrings(NULL), dates(NULL), datesLen(0) {
+ : DateFormat(), fDateFormat(NULL), fTimeFormat(NULL), fCombinedFormat(NULL),
+fDateStyle(dateStyle), fTimeStyle(timeStyle), fCalData(NULL), fStrings(NULL), fDatesLen(0), fDates(NULL)
+ {
     if(U_FAILURE(status) ) {
         return;
     }
     
-    if(dateStyle != UDAT_NONE) {
-        EStyle newStyle = (EStyle)(dateStyle & ~UDAT_RELATIVE);
+    if(fDateStyle != UDAT_NONE) {
+        EStyle newStyle = (EStyle)(fDateStyle & ~UDAT_RELATIVE);
         // Create a DateFormat in the non-relative style requested.
         fDateFormat = createDateInstance(newStyle, locale);
     }
-    if(timeStyle != UDAT_NONE) {
+    if(fTimeStyle != UDAT_NONE) {
         // don't support time style, for now
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
@@ -79,7 +81,7 @@ RelativeDateFormat::~RelativeDateFormat() {
     delete fDateFormat;
     delete fTimeFormat;
     delete fCombinedFormat;
-    uprv_free(dates);
+    uprv_free(fDates);
 // do NOT: delete fStrings - as they are loaded from mapped memory, all owned by fCalData.
     delete fCalData;
 }
@@ -94,9 +96,9 @@ UBool RelativeDateFormat::operator==(const Format& other) const {
     if(DateFormat::operator==(other)) {
         // DateFormat::operator== guarantees following cast is safe
         RelativeDateFormat* that = (RelativeDateFormat*)&other;
-        return (dateStyle==that->dateStyle   &&
-                timeStyle==that->timeStyle   &&
-                locale==that->locale);
+        return (fDateStyle==that->fDateStyle   &&
+                fTimeStyle==that->fTimeStyle   &&
+                fLocale==that->fLocale);
     }
     return FALSE;
 }
@@ -127,6 +129,22 @@ UnicodeString& RelativeDateFormat::format(  Calendar& cal,
     }
 }
 
+
+
+UnicodeString&
+RelativeDateFormat::format(const Formattable& obj, 
+                         UnicodeString& appendTo, 
+                         FieldPosition& pos,
+                         UErrorCode& status) const
+{
+    // this is just here to get around the hiding problem
+    // (the previous format() override would hide the version of
+    // format() on DateFormat that this function correspond to, so we
+    // have to redefine it here)
+    return DateFormat::format(obj, appendTo, pos, status);
+}
+
+
 void RelativeDateFormat::parse( const UnicodeString& text,
                     Calendar& cal,
                     ParsePosition& pos) const {
@@ -143,22 +161,22 @@ void RelativeDateFormat::parse( const UnicodeString& text,
     }
     
     // Linear search the relative strings
-    for(int n=0;n<datesLen;n++) {
-        if(dates[n].string != NULL &&
+    for(int n=0;n<fDatesLen;n++) {
+        if(fDates[n].string != NULL &&
             (0==text.compare(pos.getIndex(),
-                         dates[n].len,
-                         dates[n].string))) {
+                         fDates[n].len,
+                         fDates[n].string))) {
             UErrorCode status = U_ZERO_ERROR;
             
             // Set the calendar to now+offset
             cal.setTime(Calendar::getNow(),status);
-            cal.add(UCAL_DATE,dates[n].offset, status);
+            cal.add(UCAL_DATE,fDates[n].offset, status);
             
             if(U_FAILURE(status)) { 
                 // failure in setting calendar fields
-                pos.setErrorIndex(pos.getIndex()+dates[n].len);
+                pos.setErrorIndex(pos.getIndex()+fDates[n].len);
             } else {
-                pos.setIndex(pos.getIndex()+dates[n].len);
+                pos.setIndex(pos.getIndex()+fDates[n].len);
             }
             return;
         }
@@ -167,10 +185,27 @@ void RelativeDateFormat::parse( const UnicodeString& text,
     // parse failed
 }
 
+UDate
+RelativeDateFormat::parse( const UnicodeString& text,
+                         ParsePosition& pos) const {
+    // redefined here because the other parse() function hides this function's
+    // cunterpart on DateFormat
+    return DateFormat::parse(text, pos);
+}
+
+UDate
+RelativeDateFormat::parse(const UnicodeString& text, UErrorCode& status) const
+{
+    // redefined here because the other parse() function hides this function's
+    // counterpart on DateFormat
+    return DateFormat::parse(text, status);
+}
+
+
 UResourceBundle *RelativeDateFormat::getStrings(UErrorCode& status) const {
     if(fCalData == NULL) {
         // fCalData owns the subsequent strings
-        ((RelativeDateFormat*)this)->fCalData = new CalendarData(locale, "gregorian", status);
+        ((RelativeDateFormat*)this)->fCalData = new CalendarData(fLocale, "gregorian", status);
     }
     
     if(fStrings == NULL) {
@@ -191,7 +226,7 @@ const UChar *RelativeDateFormat::getStringForDay(int32_t day, int32_t &len, UErr
         return NULL;
     }
     
-    if(dates == NULL) {
+    if(fDates == NULL) {
         loadDates(status);
         if(U_FAILURE(status)) {
             return NULL;
@@ -199,20 +234,20 @@ const UChar *RelativeDateFormat::getStringForDay(int32_t day, int32_t &len, UErr
     }
     
     // no strings.
-    if(datesLen == 0) {
+    if(fDatesLen == 0) {
         return NULL;
     }
     
     // Is it outside the resource bundle's range?
-    if(day < dayMin || day > dayMax) {
+    if(day < fDayMin || day > fDayMax) {
         return NULL; // don't have it.
     }
     
     // Linear search the held strings
-    for(int n=0;n<datesLen;n++) {
-        if(dates[n].offset == day) {
-            len = dates[n].len;
-            return dates[n].string;
+    for(int n=0;n<fDatesLen;n++) {
+        if(fDates[n].offset == day) {
+            len = fDates[n].len;
+            return fDates[n].string;
         }
     }
     
@@ -225,16 +260,16 @@ void RelativeDateFormat::loadDates(UErrorCode &status) const {
     RelativeDateFormat *nonConstThis = ((RelativeDateFormat*)this); // cast away const.
     
     // set up min/max 
-    nonConstThis->dayMin=-1;
-    nonConstThis->dayMax=1;
+    nonConstThis->fDayMin=-1;
+    nonConstThis->fDayMax=1;
 
     if(U_FAILURE(status)) {
-        nonConstThis->datesLen=0;
+        nonConstThis->fDatesLen=0;
         return;
     }
 
-    nonConstThis->datesLen = ures_getSize(strings);
-    nonConstThis->dates = (URelativeString*) uprv_malloc(sizeof(dates[0])*datesLen);
+    nonConstThis->fDatesLen = ures_getSize(strings);
+    nonConstThis->fDates = (URelativeString*) uprv_malloc(sizeof(fDates[0])*fDatesLen);
 
     // Load in each item into the array...
     int n = 0;
@@ -259,22 +294,22 @@ void RelativeDateFormat::loadDates(UErrorCode &status) const {
         int32_t offset = atoi(key);
         
         // set min/max
-        if(offset < dayMin) {
-            nonConstThis->dayMin = offset;
+        if(offset < fDayMin) {
+            nonConstThis->fDayMin = offset;
         }
-        if(offset > dayMax) {
-            nonConstThis->dayMax = offset;
+        if(offset > fDayMax) {
+            nonConstThis->fDayMax = offset;
         }
         
         // copy the string pointer
-        nonConstThis->dates[n].offset = offset;
-        nonConstThis->dates[n].string = aString;
-        nonConstThis->dates[n].len = aLen; 
+        nonConstThis->fDates[n].offset = offset;
+        nonConstThis->fDates[n].string = aString;
+        nonConstThis->fDates[n].len = aLen; 
 
         n++;
     }
     
-    // the dates[] array could be sorted here, for direct access.
+    // the fDates[] array could be sorted here, for direct access.
 }
 
 

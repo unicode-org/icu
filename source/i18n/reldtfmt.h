@@ -97,6 +97,25 @@ public:
                                     UnicodeString& appendTo,
                                     FieldPosition& pos) const;
 
+    /**
+     * Format an object to produce a string. This method handles Formattable
+     * objects with a UDate type. If a the Formattable object type is not a Date,
+     * then it returns a failing UErrorCode.
+     *
+     * @param obj       The object to format. Must be a Date.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @param pos       On input: an alignment field, if desired.
+     *                  On output: the offsets of the alignment field.
+     * @param status    Output param filled with success/failure status.
+     * @return          Reference to 'appendTo' parameter.
+     * @draft ICU 3.8
+     */
+    virtual UnicodeString& format(const Formattable& obj,
+                                  UnicodeString& appendTo,
+                                  FieldPosition& pos,
+                                  UErrorCode& status) const;
+
 
     /**
      * Parse a date/time string beginning at the given parse position. For
@@ -119,23 +138,67 @@ public:
      */
     virtual void parse( const UnicodeString& text,
                         Calendar& cal,
-                        ParsePosition& pos) const;                        
+                        ParsePosition& pos) const;    
+
+    /**
+     * Parse a date/time string starting at the given parse position. For
+     * example, a time text "07/10/96 4:5 PM, PDT" will be parsed into a Date
+     * that is equivalent to Date(837039928046).
+     * <P>
+     * By default, parsing is lenient: If the input is not in the form used by
+     * this object's format method but can still be parsed as a date, then the
+     * parse succeeds. Clients may insist on strict adherence to the format by
+     * calling setLenient(false).
+     *
+     * @see DateFormat::setLenient(boolean)
+     *
+     * @param text  The date/time string to be parsed
+     * @param pos   On input, the position at which to start parsing; on
+     *              output, the position at which parsing terminated, or the
+     *              start position if the parse failed.
+     * @return      A valid UDate if the input could be parsed.
+     * @draft ICU 3.8
+     */
+    UDate parse( const UnicodeString& text,
+                 ParsePosition& pos) const;
+
+
+    /**
+     * Parse a date/time string. For example, a time text "07/10/96 4:5 PM, PDT"
+     * will be parsed into a UDate that is equivalent to Date(837039928046).
+     * Parsing begins at the beginning of the string and proceeds as far as
+     * possible.  Assuming no parse errors were encountered, this function
+     * doesn't return any information about how much of the string was consumed
+     * by the parsing.  If you need that information, use the version of
+     * parse() that takes a ParsePosition.
+     *
+     * @param text  The date/time string to be parsed
+     * @param status Filled in with U_ZERO_ERROR if the parse was successful, and with
+     *              an error value if there was a parse error.
+     * @return      A valid UDate if the input could be parsed.
+     * @draft ICU 3.8
+     */
+    virtual UDate parse( const UnicodeString& text,
+                        UErrorCode& status) const;
+                        
+                                            
+                                                                                    
 private:
     DateFormat *fDateFormat; // the held date format 
     DateFormat *fTimeFormat; // the held time format
     MessageFormat *fCombinedFormat; //  the {0} {1} format. 
     
-    UDateFormatStyle dateStyle;
-    UDateFormatStyle timeStyle;
-    Locale  locale;
+    UDateFormatStyle fDateStyle;
+    UDateFormatStyle fTimeStyle;
+    Locale  fLocale;
     
     CalendarData *fCalData; // holds a reference to the resource data
     UResourceBundle *fStrings; // the array of strings
     
-    int32_t dayMin;    // day id of lowest #
-    int32_t dayMax;    // day id of highest #
-    int32_t datesLen;    // Length of array
-    URelativeString *dates; // array of strings
+    int32_t fDayMin;    // day id of lowest #
+    int32_t fDayMax;    // day id of highest #
+    int32_t fDatesLen;    // Length of array
+    URelativeString *fDates; // array of strings
     
     
     /**
