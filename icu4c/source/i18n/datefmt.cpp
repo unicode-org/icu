@@ -289,7 +289,7 @@ DateFormat::create(EStyle timeStyle, EStyle dateStyle, const Locale& locale)
 #endif
 
     // is it relative?
-    if(/*((timeStyle!=UDAT_NONE)&&(timeStyle & UDAT_RELATIVE)) || */((dateStyle!=(UDateFormatStyle)UDAT_NONE)&&((dateStyle-kDateOffset) & UDAT_RELATIVE))) {
+    if(/*((timeStyle!=UDAT_NONE)&&(timeStyle & UDAT_RELATIVE)) || */((dateStyle!=kNone)&&((dateStyle-kDateOffset) & UDAT_RELATIVE))) {
         RelativeDateFormat *r = new RelativeDateFormat((UDateFormatStyle)timeStyle, (UDateFormatStyle)(dateStyle-kDateOffset), locale, status);
         if(U_SUCCESS(status)) return r;
         delete r;
