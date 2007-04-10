@@ -73,12 +73,15 @@ public class ICUTZUMain {
             if (args.length == 0) {
                 // TODO: Remove this once this has been tested!!!
                 System.out.println("Backup directory: "
-                        + new File("Temp").getPath());
+                        + new File("Temp").getAbsoluteFile().getPath());
 
                 // in the case of running without commandline options
-                new GUILoader(new File("."), new File("Temp"), new File(
-                        "DirectoryList.txt"), new File("ICUList.txt"),
-                        new File("zoneinfo.res"), new File("icu.gif"));
+                new GUILoader(new File(".").getAbsoluteFile(), new File("Temp")
+                        .getAbsoluteFile(), new File("DirectoryList.txt")
+                        .getAbsoluteFile(), new File("ICUList.txt")
+                        .getAbsoluteFile(), new File("zoneinfo.res")
+                        .getAbsoluteFile(), new File("icu.gif")
+                        .getAbsoluteFile());
                 return;
             }
 
@@ -89,17 +92,17 @@ public class ICUTZUMain {
                 System.exit(-1);
             }
 
-            File curDir = new File(args[CUR_DIR]);
+            File curDir = new File(args[CUR_DIR]).getAbsoluteFile();
             File backupDir = new File(args[CUR_DIR] + File.separator
-                    + args[BACKUP_DIR]);
+                    + args[BACKUP_DIR]).getAbsoluteFile();
             File pathFile = new File(args[CUR_DIR] + File.separator
-                    + args[PATH_FILE]);
+                    + args[PATH_FILE]).getAbsoluteFile();
             File resultFile = new File(args[CUR_DIR] + File.separator
-                    + args[RESULT_FILE]);
+                    + args[RESULT_FILE]).getAbsoluteFile();
             File tzFile = new File(args[CUR_DIR] + File.separator
-                    + args[TZ_FILE]);
+                    + args[TZ_FILE]).getAbsoluteFile();
             File iconFile = new File(args[CUR_DIR] + File.separator
-                    + args[ICON_FILE]);
+                    + args[ICON_FILE]).getAbsoluteFile();
 
             if ("true".equalsIgnoreCase(System.getProperty("nogui")))
                 new CLILoader(curDir, backupDir, pathFile, resultFile, tzFile);
