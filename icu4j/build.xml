@@ -2100,11 +2100,11 @@
                 <include name="*.bat" />
                 <include name="*.sh" />
                 <include name="*.gif" />
+            	<include name="*.txt" />
             </fileset>
             <fileset file="${basedir}/${jar.file}" />
             <fileset file="${build.dir}/${icu4j.data.path}/zoneinfo.res" />
         </copy>
-        <echo file="${tzu.bin.dir}/DirectorySearch.txt">all</echo>
     </target>
 
     <target name="icutzujar" depends="init, icutzu, icutzudata" description="build ICU4J TimeZone Update Utility Classes">

@@ -229,7 +229,7 @@ class ResultModel extends AbstractTableModel {
             reader = new BufferedReader(new InputStreamReader(
                     new FileInputStream(resultListFile), "UTF-8"), 4 * 1024);
             while (reader.ready()) {
-                line = reader.readLine().trim();
+                line = reader.readLine().replace('\ufeff', ' ').trim();
                 logger.printlnToScreen(line);
 
                 if (line.length() >= 1 && (tab = line.lastIndexOf('\t')) >= 0) {
@@ -402,7 +402,7 @@ class ResultModel extends AbstractTableModel {
                     fireTableRowsUpdated(i, i);
                 } catch (IOException ex) {
                     // could not update the jar
-                    ex.printStackTrace();
+                    logger.errorln(ex.getMessage());
                 }
         }
     }

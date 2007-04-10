@@ -97,6 +97,9 @@ public class ICUTZUMain {
             File iconFile = new File(args[CUR_DIR] + File.separator
                     + args[ICON_FILE]);
 
+            // TODO: Remove this once this has been tested!!!
+            System.out.println("Backup directory: " + backupDir.toString());
+
             if ("true".equalsIgnoreCase(System.getProperty("nogui")))
                 new CLILoader(curDir, backupDir, pathFile, resultFile, tzFile);
             else

@@ -284,11 +284,7 @@ public class PathComponent extends JComponent {
 
         pathSearchButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                int[] indices = pathList.getSelectedIndices();
-                if (indices.length > 0)
-                    owner.search(indices, pathSubdirOption.isSelected());
-                else
-                    owner.searchAll(pathSubdirOption.isSelected());
+                owner.searchAll(pathSubdirOption.isSelected());
             }
         });
 

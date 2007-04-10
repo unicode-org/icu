@@ -256,11 +256,7 @@ public class ResultComponent extends JComponent {
 
         resultUpdateButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                int[] indices = resultTable.getSelectedRows();
-                if (indices.length > 0)
-                    owner.update(indices, getSelectedSource());
-                else
-                    owner.updateAll(getSelectedSource());
+                owner.updateAll(getSelectedSource());
             }
         });
 

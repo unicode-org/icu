@@ -63,9 +63,6 @@ public class ICUJarFinder {
         if (backupDir != null)
             excluded.add(backupDir);
 
-        // the icutzu_home dir must be specified, don't search it
-        excluded.add(curDir);
-
         // search each of the included files/directories
         for (int i = 0; i < included.size(); i++)
             search(resultModel, logger, (File) included.get(i), excluded,
