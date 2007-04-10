@@ -279,7 +279,8 @@ public class ICUFile {
      */
     public boolean equals(Object other) {
         return (!(other instanceof ICUFile)) ? false : icuFile
-                .equals(((ICUFile) other).icuFile);
+                .getAbsoluteFile().equals(
+                        ((ICUFile) other).icuFile.getAbsoluteFile());
     }
 
     /**
