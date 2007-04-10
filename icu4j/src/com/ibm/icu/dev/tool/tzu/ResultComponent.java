@@ -123,7 +123,7 @@ public class ResultComponent extends JComponent {
      * An update button to update the selected files, or all files if none are
      * selected.
      */
-    private JButton resultUpdateButton = new JButton("Update");
+    private JButton resultUpdateSelectedButton = new JButton("Update Selected");
 
     /**
      * The panel where update components are shown.
@@ -163,7 +163,7 @@ public class ResultComponent extends JComponent {
         resultOptionPanel.add(resultSourceLabel);
         resultOptionPanel.add(resultSourceList);
         resultUpdatePanel.add(resultCancelSearchButton);
-        resultUpdatePanel.add(resultUpdateButton);
+        resultUpdatePanel.add(resultUpdateSelectedButton);
         resultUpdatePanel.add(resultCancelUpdateButton);
 
         resultChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -254,9 +254,11 @@ public class ResultComponent extends JComponent {
             }
         });
 
-        resultUpdateButton.addActionListener(new ActionListener() {
+        resultUpdateSelectedButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                owner.updateAll(getSelectedSource());
+                int[] indices = resultTable.getSelectedRows();
+                if (indices.length > 0)
+                    owner.update(indices, getSelectedSource());
             }
         });
 
@@ -331,7 +333,7 @@ public class ResultComponent extends JComponent {
      *            Whether the update button should be enabled.
      */
     public void setUpdateEnabled(boolean value) {
-        resultUpdateButton.setEnabled(value);
+        resultUpdateSelectedButton.setEnabled(value);
     }
 
     /**
