@@ -179,7 +179,7 @@ class CharsetMBCS extends CharsetICU {
             throw new InvalidFormatException();
         }
     
-        data = new UConverterSharedData(UConverterSharedData.SIZE_OF_UCONVERTER_SHARED_DATA, 1, null, false, 0);
+        data = new UConverterSharedData(1, null, false, 0);
         data.dataReader = reader;
         data.staticData = staticData;    
         data.sharedDataCached = false;

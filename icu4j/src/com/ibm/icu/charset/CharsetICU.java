@@ -99,7 +99,6 @@ public abstract class CharsetICU extends Charset{
     private static final HashMap algorithmicCharsets = new HashMap();
     static{
         /*algorithmicCharsets.put("BOCU-1",                "com.ibm.icu.charset.CharsetBOCU1" );
-        algorithmicCharsets.put("CESU-8",                "com.ibm.icu.charset.CharsetCESU8" );
         algorithmicCharsets.put("HZ",                    "com.ibm.icu.charset.CharsetHZ" );
         algorithmicCharsets.put("imapmailboxname",       "com.ibm.icu.charset.CharsetIMAP" );
         algorithmicCharsets.put("ISCII",                 "com.ibm.icu.charset.CharsetISCII" );
@@ -132,6 +131,7 @@ public abstract class CharsetICU extends Charset{
         algorithmicCharsets.put("UTF32_OppositeEndian",  "com.ibm.icu.charset.CharsetUTF32LE" );
         algorithmicCharsets.put("UTF32_PlatformEndian",  "com.ibm.icu.charset.CharsetUTF32" );
         algorithmicCharsets.put("UTF-8",                 "com.ibm.icu.charset.CharsetUTF8" );
+        algorithmicCharsets.put("CESU-8",                "com.ibm.icu.charset.CharsetCESU8" );
     }
 
     /*public*/ static final Charset getCharset(String icuCanonicalName, String javaCanonicalName, String[] aliases){
