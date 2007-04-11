@@ -809,6 +809,11 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     // sigh, can't have static inner classes, why not?
 
     static final class PI extends Number {
+        /**
+         * For serialization
+         */
+        private static final long serialVersionUID = -305601227915602172L;
+
         private PI() {}
         public int intValue() { return (int)Math.PI; }
         public long longValue() { return (long)Math.PI; }

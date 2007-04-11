@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -8,6 +8,10 @@ package com.ibm.icu.dev.demo.translit;
 import java.awt.event.*;
 import java.awt.*;
 public class InfoDialog extends Dialog {
+    /**
+     * For serialization
+     */
+    private static final long serialVersionUID = -3086665546137919018L;
     protected Button button;
     protected TextArea area;
     protected Dialog me;

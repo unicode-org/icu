@@ -17,6 +17,11 @@ import com.ibm.icu.text.RuleBasedNumberFormat;
 
 public class RbnfDemo extends DemoApplet {
     /**
+     * For serialization
+     */
+    private static final long serialVersionUID = -9119861296873763536L;
+
+    /**
      * Puts a copyright in the .class file
      */
 //    private static final String copyrightNotice
@@ -406,6 +411,10 @@ public class RbnfDemo extends DemoApplet {
 }
 
 class DemoTextField extends Component {
+    /**
+     * For serialization
+     */
+    private static final long serialVersionUID = -7947090021239472658L;
     public DemoTextField() {
     }
 
@@ -472,6 +481,10 @@ class DemoTextField extends Component {
 }
 
 class DemoTextFieldHolder extends Panel {
+    /**
+     * For serialization
+     */
+    private static final long serialVersionUID = 7514498764062569858L;
     public DemoTextFieldHolder() {
         tf1 = new TextArea("", 0, 0, TextArea.SCROLLBARS_VERTICAL_ONLY);
         tf2 = new DemoTextField();

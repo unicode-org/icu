@@ -5593,6 +5593,10 @@ public class DiagBigDecimal extends TestFmwk {
     public static class DiagException extends java.lang.RuntimeException {
         //private final transient java.lang.String $0 = "DiagBigDecimal.nrx";
 
+        /**
+         * For serialization
+         */
+        private static final long serialVersionUID = 755873172220249188L;
         /* properties shared transient */
         /** the count of failed tests in the group which signalled this
          * exception.

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1997-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1997-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -51,6 +51,11 @@ import com.ibm.icu.util.SimpleTimeZone;
  */
 class CalendarFrame extends Frame
 {
+    /**
+     * For serialization
+     */
+    private static final long serialVersionUID = -4289697663503820619L;
+
     private static final boolean DEBUG = false;
 
     private DemoApplet applet;
@@ -344,6 +349,10 @@ class CalendarFrame extends Frame
      *    us Bidi reordering for free.
      */
     static private class ColoredLabel extends Component {
+        /**
+         * For serialization
+         */
+        private static final long serialVersionUID = 5004484960341875722L;
         public ColoredLabel(String label) {
             text = label;
         }

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1997-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1997-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -50,6 +50,11 @@ import com.ibm.icu.util.TimeZone;
 public class CalendarCalc extends DemoApplet
 {
     /**
+     * For serialization
+     */
+    private static final long serialVersionUID = 4540103433916539296L;
+
+    /**
      * The main function which defines the behavior of the MultiCalendarDemo
      * applet when an applet is started.
      */
@@ -72,6 +77,11 @@ public class CalendarCalc extends DemoApplet
  */
 class CalendarCalcFrame extends Frame implements ActionListener
 {
+    /**
+     * For serialization
+     */
+    private static final long serialVersionUID = 8901485296258761846L;
+
     static final Locale[] locales = DemoUtility.getG7Locales();
 
     private DemoApplet              applet;

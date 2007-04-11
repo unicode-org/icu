@@ -21,6 +21,11 @@ import com.ibm.icu.text.BreakIterator;
 
 public class RBBIDemo extends DemoApplet
 {
+    /**
+     * For serialization
+     */
+    private static final long serialVersionUID = 728543547366617131L;
+
     public static void main(String argv[]) {
         Locale.setDefault(new Locale("en", "US"));
         new RBBIDemo().showDemo();
@@ -35,6 +40,10 @@ public class RBBIDemo extends DemoApplet
 
 class RBBIFrame extends Frame implements ItemListener
 {
+    /**
+     * For serialization
+     */
+    private static final long serialVersionUID = 5986183892855142947L;
     //private static final String creditString = "v1.1a9, Demo";
 
     //private static final int FIELD_COLUMNS = 45;

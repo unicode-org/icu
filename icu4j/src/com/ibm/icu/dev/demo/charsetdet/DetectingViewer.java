@@ -29,6 +29,10 @@ import com.ibm.icu.text.CharsetMatch;
 public class DetectingViewer extends JFrame implements ActionListener
 {
     
+    /**
+     * For serialization
+     */
+    private static final long serialVersionUID = -2307065724464747775L;
     private JTextPane text;
     private JFileChooser fileChooser;
     

@@ -29,6 +29,10 @@ import java.io.*;
  */
 public class Demo extends Frame {
 
+    /**
+     * For serialization
+     */
+    private static final long serialVersionUID = 1L;
     static final boolean DEBUG = false;
     static final String START_TEXT = "(cut,\u03BA\u03C5\u03C4,\u05D0,\u30AF\u30C8,\u4E80,\u091A\u0941\u0924\u094D)";
 

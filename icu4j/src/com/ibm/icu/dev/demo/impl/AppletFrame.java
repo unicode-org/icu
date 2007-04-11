@@ -32,6 +32,10 @@ import java.io.IOException;
  */
 public class AppletFrame extends Frame implements AppletStub, AppletContext {
 
+    /**
+     * For serialization
+     */
+    private static final long serialVersionUID = 818828281190757725L;
     Applet applet;
 
     /**

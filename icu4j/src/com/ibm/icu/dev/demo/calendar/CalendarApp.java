@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1997-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1997-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -16,6 +16,11 @@ import com.ibm.icu.dev.demo.impl.*;
  */
 public class CalendarApp extends DemoApplet
 {
+    /**
+     * For serialization
+     */
+    private static final long serialVersionUID = -4270137898405840825L;
+
     /**
      * The main function which defines the behavior of the CalendarDemo
      * applet when an applet is started.

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1997-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1997-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -22,6 +22,11 @@ import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.SimpleTimeZone;
 
 class CalendarPanel extends Canvas {
+
+    /**
+     * For serialization
+     */
+    private static final long serialVersionUID = 625400018027387141L;
 
     public CalendarPanel( Locale locale ) {
         setLocale(locale);

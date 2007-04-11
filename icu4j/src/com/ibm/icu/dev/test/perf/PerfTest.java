@@ -236,6 +236,11 @@ public abstract class PerfTest{
      * Exception indicating a usage error.
      */
     public static class UsageException extends Exception {
+        /**
+         * For serialization
+         */
+        private static final long serialVersionUID = -1201256240606806242L;
+
         public UsageException(String message) {
             super(message);
         }
