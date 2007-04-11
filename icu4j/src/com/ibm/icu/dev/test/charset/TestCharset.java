@@ -833,14 +833,14 @@ public class TestCharset extends TestFmwk {
         }
     }
 
-    private void printCB(CharBuffer buf){
+/*    private void printCB(CharBuffer buf){
         buf.rewind();
         while(buf.hasRemaining()){
             System.out.println(hex(buf.get()));
         }
         buf.rewind();
     }
-    /*
+
     public void TestUTF8() throws CharacterCodingException{
            try{
                CharsetEncoder encoderICU = new CharsetProviderICU().charsetForName("utf-8").newEncoder();

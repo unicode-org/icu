@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2002-2004, International Business Machines Corporation and    *
+* Copyright (C) 2002-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -1023,13 +1023,13 @@ public class CollationPerformanceTest {
         } catch (InterruptedException e) {}
     }
 
-    private boolean needCRLF = false;
+    //private boolean needCRLF = false;
     
     public int DOTMASK = 0x7FF;
  
     void dot(int i) {
         if ((i % DOTMASK) == 0) {
-            needCRLF = true;
+            //needCRLF = true;
             // I do not know why print the dot here
             //System.out.print('.');
         }
