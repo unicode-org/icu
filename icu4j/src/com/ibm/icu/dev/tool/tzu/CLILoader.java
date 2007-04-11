@@ -94,8 +94,8 @@ public class CLILoader {
                 .getProperty("discoveronly"));
         boolean silentPatch = "true".equalsIgnoreCase(System
                 .getProperty("silentpatch"));
-        File logFile = new File(curDir.getPath() + File.separator
-                + (discoverOnly ? "icutzu_discover.log" : "icutzu_patch.log"));
+        File logFile = new File(curDir.getPath(),
+                (discoverOnly ? "icutzu_discover.log" : "icutzu_patch.log"));
 
         // create the logger based on the silentpatch option
         try {

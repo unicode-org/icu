@@ -218,11 +218,12 @@ public class ResultComponent extends JComponent {
                 String selection = "";
                 int[] rows = resultTable.getSelectedRows();
                 for (int i = 0; i < rows.length; i++)
-                    selection += resultModel.getValueAt(rows[i],
-                            ResultModel.COLUMN_FILE_PATH)
-                            + File.separator
-                            + resultModel.getValueAt(rows[i],
-                                    ResultModel.COLUMN_FILE_NAME) + "\n";
+                    selection += new File(resultModel.getValueAt(rows[i],
+                            ResultModel.COLUMN_FILE_PATH).toString(),
+                            resultModel.getValueAt(rows[i],
+                                    ResultModel.COLUMN_FILE_NAME).toString())
+                            .toString()
+                            + "\n";
                 getToolkit().getSystemClipboard().setContents(
                         new StringSelection(selection), null);
             }
