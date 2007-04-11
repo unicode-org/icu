@@ -180,11 +180,9 @@ class PathModel extends AbstractListModel {
                                     "Each path entry must start with a + or - to denote inclusion/exclusion",
                                     lineNumber);
                         if (!add(line))
-                            pathListError(
-                                    "\""
-                                            + line.substring(1).trim()
-                                            + "\" is not a valid file or directory (perhaps it does not exist?)",
-                                    lineNumber);
+                            logger
+                                    .errorln(line.substring(1).trim()
+                                            + " is not a valid file or directory (perhaps it does not exist?)");
                     }
                 }
 

@@ -53,15 +53,43 @@ public class ICUJarFinder {
         List excluded = new ArrayList();
         for (int i = 0; i < paths.length; i++) {
             IncludePath path = paths[i];
+            File file = path.getPath();
+            try {
+                file = file.getCanonicalFile();
+            } catch (IOException ex) {
+                // recover in the simplest way, but report the error
+                file = file.getAbsoluteFile();
+                logger.errorln(ex.getMessage());
+            }
             if (path.isIncluded())
-                included.add(path.getPath());
+                included.add(file);
             else
-                excluded.add(path.getPath());
+                excluded.add(file);
         }
 
         // if the backup dir is specified, don't search it
-        if (backupDir != null)
-            excluded.add(backupDir);
+        if (backupDir != null) {
+            File file = backupDir;
+            try {
+                file = file.getCanonicalFile();
+            } catch (IOException ex) {
+                // recover in the simplest way, but report the error
+                file = file.getAbsoluteFile();
+                logger.errorln(ex.getMessage());
+            }
+            excluded.add(file);
+        }
+
+        // exclude the icu4j.jar that comes with this tool
+        File file = new File(curDir.getPath(), "icu4j.jar");
+        try {
+            file = file.getCanonicalFile();
+        } catch (IOException ex) {
+            // recover in the simplest way, but report the error
+            file = file.getAbsoluteFile();
+            logger.errorln(ex.getMessage());
+        }
+        excluded.add(file);
 
         // search each of the included files/directories
         for (int i = 0; i < included.size(); i++)
@@ -98,6 +126,14 @@ public class ICUJarFinder {
     private static ResultModel search(ResultModel resultModel, Logger logger,
             File file, List excluded, boolean subdirs, int depth,
             long lastShowtime) throws InterruptedException {
+        // ensure that the file is in canonical form
+        try {
+            file = file.getCanonicalFile();
+        } catch (IOException ex) {
+            logger.errorln(ex.getMessage());
+            return resultModel;
+        }
+
         // check for interruptions
         if (Thread.currentThread().isInterrupted())
             throw new InterruptedException();
@@ -105,11 +141,10 @@ public class ICUJarFinder {
         // make sure the current file/directory isn't excluded
         Iterator iter = excluded.iterator();
         while (iter.hasNext())
-            if (file.getAbsoluteFile().equals(
-                    ((File) iter.next()).getAbsoluteFile()))
+            if (file.equals(((File) iter.next())))
                 return resultModel;
 
-        if (file.isDirectory() && (subdirs || depth == 0)) {
+        if ((subdirs || depth == 0) && file.isDirectory() && !isSymbolic(file)) {
             // recurse through each file/directory inside this directory
             File[] dirlist = file.listFiles();
             if (dirlist != null && dirlist.length > 0) {
@@ -141,6 +176,30 @@ public class ICUJarFinder {
 
         // chain the result model
         return resultModel;
+    }
+
+    /**
+     * Tests whether a file is a symbolic link by comparing the absolute path
+     * with the canonical path.
+     * 
+     * @param file
+     *            The file to check.
+     * @return Whether the file is a symbolic link.
+     */
+    private static boolean isSymbolic(File file) {
+        try {
+            File parent = file.getParentFile();
+            if (parent == null)
+                parent = new File(".");
+            File betterFile = new File(parent.getCanonicalPath(), file
+                    .getName());
+            return !betterFile.getAbsoluteFile().equals(
+                    betterFile.getCanonicalFile());
+        } catch (IOException ex) {
+            // if getCanonicalFile throws an IOException for this file, we won't
+            // want to dig into this path
+            return false;
+        }
     }
 
     /**

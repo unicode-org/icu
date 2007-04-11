@@ -543,17 +543,15 @@ public class ICUFile {
 
         File backupFile = null;
         File backupDesc = null;
-        File backupDir = new File(backupBase.getPath() + File.separator
-                + prefix);
+        File backupDir = new File(backupBase.getPath(), prefix);
         PrintStream ostream = null;
 
         try {
             backupBase.mkdir();
             backupDir.mkdir();
             backupFile = File.createTempFile(prefix, suffix, backupDir);
-            backupDesc = new File(backupDir.getPath()
-                    + File.separator
-                    + backupFile.getName().substring(0,
+            backupDesc = new File(backupDir.getPath(), backupFile.getName()
+                    .substring(0,
                             backupFile.getName().length() - suffix.length())
                     + ".txt");
             backupDesc.createNewFile();

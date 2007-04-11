@@ -152,8 +152,7 @@ public class GUILoader {
 
         // get the logger instance
         try {
-            File logFile = new File(curDir.getPath() + File.separator
-                    + "icutzugui.log");
+            File logFile = new File(curDir.getPath(), "icutzugui.log");
             logger = Logger.getInstance(logFile, Logger.NORMAL, resultGUI
                     .getStatusBar(), pathFrame);
         } catch (FileNotFoundException ex) {
