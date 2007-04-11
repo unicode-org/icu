@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and   *
+* Copyright (C) 1996-2007, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -60,11 +60,4 @@ class UCharacterTypeIterator extends TrieIterator
     {
         return value & UCharacterProperty.TYPE_MASK;
     }
-    
-    // private data members ---------------------------------------------
-    
-    /**
-     * Character property
-     */
-    private int m_property_[];
 }

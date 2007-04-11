@@ -533,10 +533,4 @@ public class TrieIterator implements RangeValueIterator
     private int m_nextBlock_;
     private int m_nextBlockIndex_;
     private int m_nextTrailIndexOffset_;
-    /**
-    * This is the return result element
-    */
-    private int m_start_;
-    private int m_limit_;
-    private int m_value_;
 }
