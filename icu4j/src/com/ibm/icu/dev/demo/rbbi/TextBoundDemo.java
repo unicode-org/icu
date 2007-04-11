@@ -20,6 +20,11 @@ import com.ibm.icu.text.BreakIterator;
 
 public class TextBoundDemo extends DemoApplet
 {
+    /**
+     * For serialization
+     */
+    private static final long serialVersionUID = 8123658019297481938L;
+
     public static void main(String argv[]) {
         new TextBoundDemo().showDemo();
     }
@@ -33,6 +38,10 @@ public class TextBoundDemo extends DemoApplet
 
 class TextBoundFrame extends Frame implements ItemListener
 {
+    /**
+     * For serialization
+     */
+    private static final long serialVersionUID = 4829041307280329194L;
 //    private static final String creditString =
 //        "v1.1a9, Demo";
 

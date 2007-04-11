@@ -1,6 +1,6 @@
 /*****************************************************************************************
  * (C) Copyright Taligent, Inc. 1996, 1997 - All Rights Reserved
- * (C) Copyright IBM Corp. 1996-2005 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1996-2007 - All Rights Reserved
  *
  *   The original version of this source code and documentation is copyrighted and
  * owned by Taligent, Inc., a wholly-owned subsidiary of IBM. These materials are
@@ -15,11 +15,6 @@
  * Source File: java/text/format/IntlTestSimpleDateFormatAPI.java
  **/
  
-/*
-    @test 1.4 98/03/06
-    @summary test International Simple Date Format API
-*/
-
 package com.ibm.icu.dev.test.format;
 
 import com.ibm.icu.text.*;
@@ -30,6 +25,10 @@ import java.text.Format;
 import java.text.FieldPosition;
 import java.text.ParseException;
 
+/**
+* @test 1.4 98/03/06
+* @summary test International Simple Date Format API
+*/
 public class IntlTestSimpleDateFormatAPI extends com.ibm.icu.dev.test.TestFmwk
 {
     public static void main(String[] args) throws Exception {
@@ -172,6 +171,11 @@ public class IntlTestSimpleDateFormatAPI extends com.ibm.icu.dev.test.TestFmwk
     // Jitterbug 4451, for coverage
     public void TestCoverage(){
         class StubDateFormat extends SimpleDateFormat{
+            /**
+             * For serialization
+             */
+            private static final long serialVersionUID = 8460897119491427934L;
+
             public void run(){
                 if (!zeroPaddingNumber(12, 4, 6).equals("0012")){
                     errln("SimpleDateFormat(zeroPaddingNumber(long , int , int )");

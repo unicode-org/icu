@@ -1,6 +1,6 @@
 /*****************************************************************************************
  *
- *   Copyright (C) 1996-2006, International Business Machines
+ *   Copyright (C) 1996-2007, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **/
 
@@ -206,6 +206,10 @@ public class IntlTestNumberFormatAPI extends com.ibm.icu.dev.test.TestFmwk
     // Jitterbug 4451, for coverage
     public void TestCoverage(){
         class StubNumberFormat extends NumberFormat{
+            /**
+             * For serialization
+             */
+            private static final long serialVersionUID = 3768385020503005993L;
             public void run(){
                 String p = NumberFormat.getPattern(ULocale.getDefault().toLocale(),0);
                 if (!p.equals(NumberFormat.getPattern(ULocale.getDefault(),0))){

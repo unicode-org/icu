@@ -53,6 +53,11 @@ public class TestFmwk extends AbstractTestLog {
     private final static Locale defaultLocale = Locale.US;
 
     public static final class TestFmwkException extends Exception {
+        /**
+         * For serialization
+         */
+        private static final long serialVersionUID = -3051148210247229194L;
+
         TestFmwkException(String msg) {
             super(msg);
         }

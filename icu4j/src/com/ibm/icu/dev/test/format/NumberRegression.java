@@ -1816,6 +1816,10 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
 
 class myformat implements Serializable
 {
+    /**
+     * For serialization
+     */
+    private static final long serialVersionUID = 4120813612616076506L;
     DateFormat _dateFormat = DateFormat.getDateInstance();
 
     public String Now()
@@ -1828,6 +1832,10 @@ class myformat implements Serializable
 }
 
 class MyNumberFormatTest extends NumberFormat {
+    /**
+     * For serialization
+     */
+    private static final long serialVersionUID = 1251303884737169952L;
     public StringBuffer format(double number, StringBuffer toAppendTo, FieldPosition pos) {
         return new StringBuffer("");
     }

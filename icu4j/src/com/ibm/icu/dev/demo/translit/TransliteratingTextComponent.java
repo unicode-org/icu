@@ -14,11 +14,14 @@ import com.ibm.icu.dev.demo.impl.*;
  * A subclass of {@link DumbTextComponent} that passes key events through
  * a {@link com.ibm.icu.text.Transliterator}.
  *
- * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
- *
  * @author Alan Liu
  */
 public class TransliteratingTextComponent extends DumbTextComponent {
+
+    /**
+     * For serialization
+     */
+    private static final long serialVersionUID = -8672128213174154047L;
 
     private static boolean DEBUG = false;
 

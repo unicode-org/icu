@@ -1577,6 +1577,11 @@ public class RoundTripTest extends TestFmwk {
         */
 
         static class TestTruncated extends RuntimeException {
+            /**
+             * For serialization
+             */
+            private static final long serialVersionUID = 3361828190488168323L;
+
             TestTruncated(String msg) {
                 super(msg);
             }

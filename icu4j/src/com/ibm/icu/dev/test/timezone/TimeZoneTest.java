@@ -1,15 +1,8 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- */
-
-/**
- * @test 1.22 99/09/21
- * @bug 4028006 4044013 4096694 4107276 4107570 4112869 4130885
- * @summary test TimeZone
- * @build TimeZoneTest
  */
 
 package com.ibm.icu.dev.test.timezone;
@@ -31,6 +24,12 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * @test 1.22 99/09/21
+ * @bug 4028006 4044013 4096694 4107276 4107570 4112869 4130885
+ * @summary test TimeZone
+ * @build TimeZoneTest
+ */
 public class TimeZoneTest extends TestFmwk
 {
     static final int millisPerHour = 3600000;
@@ -1173,6 +1172,10 @@ public class TimeZoneTest extends TestFmwk
     
     public void TestCoverage(){
         class StubTimeZone extends TimeZone{
+            /**
+             * For serialization
+             */
+            private static final long serialVersionUID = 8658654217433379343L;
             public int getOffset(int era, int year, int month, int day, int dayOfWeek, int milliseconds) {return 0;}
             public void setRawOffset(int offsetMillis) {}
             public int getRawOffset() {return 0;}

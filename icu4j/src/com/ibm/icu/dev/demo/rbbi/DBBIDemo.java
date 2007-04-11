@@ -21,6 +21,11 @@ import com.ibm.icu.text.BreakIterator;
 
 public class DBBIDemo extends DemoApplet
 {
+    /**
+     * For serialization
+     */
+    private static final long serialVersionUID = 7175919574190623523L;
+
     public static void main(String argv[]) {
         Locale.setDefault(new Locale("en", "US", "DEMO"));
         new DBBIDemo().showDemo();
@@ -36,6 +41,10 @@ public class DBBIDemo extends DemoApplet
 class DBBIFrame extends Frame implements ItemListener
 {
 
+    /**
+     * For serialization
+     */
+    private static final long serialVersionUID = -5905807460776050144L;
     private static final Font choiceFont = null;
     private static final boolean DEBUG = false;
     private DemoApplet applet;

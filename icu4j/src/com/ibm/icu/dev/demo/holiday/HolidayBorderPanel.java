@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1997-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1997-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -20,6 +20,10 @@ import java.awt.*;
  * @version 1.0
  */
 public class HolidayBorderPanel extends Panel {
+    /**
+     * For serialization
+     */
+    private static final long serialVersionUID = 4669213306492461159L;
     // Constants
 
     /** Solid border. */

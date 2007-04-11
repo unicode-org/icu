@@ -21,6 +21,10 @@ import com.ibm.icu.dev.demo.impl.AppletFrame;
  */
 public class DemoApplet extends Applet {
 
+    /**
+     * For serialization
+     */
+    private static final long serialVersionUID = 8214879807740061678L;
     Demo frame = null;
     
     public static void main(String args[]) {

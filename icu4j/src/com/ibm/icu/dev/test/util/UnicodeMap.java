@@ -24,6 +24,10 @@ import com.ibm.icu.util.Freezable;
  */
 
 public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
+    /**
+     * For serialization
+     */
+    private static final long serialVersionUID = -6540936876295804105L;
     static final boolean ASSERTIONS = false;
     static final long GROWTH_PERCENT = 200; // 100 is no growth!
     static final long GROWTH_GAP = 10; // extra bump!
