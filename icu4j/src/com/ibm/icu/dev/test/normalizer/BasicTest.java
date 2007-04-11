@@ -722,7 +722,7 @@ public class BasicTest extends TestFmwk {
     // Internal utilities
     //
 
-    private void backAndForth(Normalizer iter, String input)
+/*    private void backAndForth(Normalizer iter, String input)
     {
         iter.setText(input);
 
@@ -745,7 +745,7 @@ public class BasicTest extends TestFmwk {
             logln("Ok: Forward/reverse for input " + hex(input)
                   + ", forward: " + hex(forward) + ", backward: "+hex(reverse));
         }
-    }
+    }*/
 
     private void backAndForth(Normalizer iter, String[][] tests)
     {

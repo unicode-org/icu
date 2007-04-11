@@ -465,7 +465,7 @@ public class TestCLDRVsICU extends TestFmwk {
     DefaultHandler DEFAULT_HANDLER = new DefaultHandler() {
         static final boolean DEBUG = false;
         StringBuffer lastChars = new StringBuffer();
-        boolean justPopped = false;
+        //boolean justPopped = false;
         Handler handler;
 
         public void startElement(
@@ -488,7 +488,7 @@ public class TestCLDRVsICU extends TestFmwk {
                         //handler.set("locale", uLocale.toString());
                     }
                     //if (DEBUG) logln("startElement:\t" + contextStack);
-                    justPopped = false;
+                    //justPopped = false;
                 } catch (RuntimeException e) {
                     e.printStackTrace();
                     throw e;
@@ -503,7 +503,7 @@ public class TestCLDRVsICU extends TestFmwk {
                         //logln("Unexpected contents of: " + qName + ", <" + lastChars + ">");
                     }
                     lastChars.setLength(0);
-                    justPopped = true;
+                    //justPopped = true;
                 } catch (RuntimeException e) {
                     e.printStackTrace();
                     throw e;
@@ -516,7 +516,7 @@ public class TestCLDRVsICU extends TestFmwk {
                     String value = new String(ch,start,length);
                     if (DEBUG) logln("characters:\t" + value);
                     lastChars.append(value);
-                    justPopped = false;
+                    //justPopped = false;
                 } catch (RuntimeException e) {
                     e.printStackTrace();
                     throw e;
