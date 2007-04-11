@@ -23,7 +23,7 @@ class CharsetUTF16 extends CharsetICU {
  
     public CharsetUTF16(String icuCanonicalName, String javaCanonicalName, String[] aliases){
         super(icuCanonicalName, javaCanonicalName, aliases);
-        maxBytesPerChar = 4;
+        maxBytesPerChar = 2; /* max 2 bytes per code unit from UTF-16 (4 bytes from surrogate _pair_) */
         minBytesPerChar = 2;
         maxCharsPerByte = 1;
     }
