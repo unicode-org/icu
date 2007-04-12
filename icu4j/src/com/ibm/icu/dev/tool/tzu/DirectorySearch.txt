@@ -1,10 +1,11 @@
-# *******************************************************************************
+﻿# *******************************************************************************
 # * Copyright (C) 2007, International Business Machines Corporation and         *
 # * others. All Rights Reserved.                                                *
 # *******************************************************************************
 #
 # This file contains the list of directories in the file system that ICUTZU will
-# use to search for updatable icu4j jar files.
+# use to search for updatable icu4j jar files. It must be saved in UTF-8 (with
+# or without the BOM).
 #
 # To include all roots of the file system (ie. 'c:\', 'd:\', 'e:\', etc. in Windows
 # or '/' in Unix-based systems), insert the following:

@@ -21,7 +21,13 @@ public class ICUJarFinder {
      * The delay in milliseconds between showing directories to the command line
      * user.
      */
-    public static final int DELAY = 5000; // 5 seconds
+    public static final long DELAY = 5000; // 5 seconds
+
+    /**
+     * The delay in milliseconds between showing directories to the command line
+     * user.
+     */
+    public static long lastShowtime = 0; // 5 seconds
 
     /**
      * Searchs the directories / files represented in <code>paths</code> for
@@ -94,7 +100,7 @@ public class ICUJarFinder {
         // search each of the included files/directories
         for (int i = 0; i < included.size(); i++)
             search(resultModel, logger, (File) included.get(i), excluded,
-                    subdirs, 0, 0);
+                    subdirs, 0);
 
         // chain the result model
         return resultModel;
@@ -124,8 +130,8 @@ public class ICUJarFinder {
      * @throws InterruptedException
      */
     private static ResultModel search(ResultModel resultModel, Logger logger,
-            File file, List excluded, boolean subdirs, int depth,
-            long lastShowtime) throws InterruptedException {
+            File file, List excluded, boolean subdirs, int depth)
+            throws InterruptedException {
         // ensure that the file is in canonical form
         try {
             file = file.getCanonicalFile();
@@ -159,7 +165,7 @@ public class ICUJarFinder {
                 // recurse
                 for (int i = 0; i < dirlist.length; i++)
                     search(resultModel, logger, dirlist[i], excluded, subdirs,
-                            depth + 1, lastShowtime);
+                            depth + 1);
             }
         } else {
             // attempt to create an ICUFile object on the current file and add
@@ -168,7 +174,7 @@ public class ICUJarFinder {
                 // if the file/directory is an ICU jar file that we can
                 // update, add it to the results
                 resultModel.add(new ICUFile(file, logger));
-                logger.loglnToBoth("Added " + file.getPath() + ".");
+                logger.printlnToBoth("Added " + file.getPath());
             } catch (IOException ex) {
                 // if it's not an ICU jar file that we can update, ignore it
             }

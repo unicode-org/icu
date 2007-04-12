@@ -7,6 +7,7 @@
 package com.ibm.icu.dev.tool.tzu;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Locale;
 
 /**
@@ -72,39 +73,50 @@ public class ICUTZUMain {
 
             if (args.length == 0) {
                 // in the case of running without commandline options
-                new GUILoader(new File(".").getAbsoluteFile(), new File("Temp")
-                        .getAbsoluteFile(), new File("DirectoryList.txt")
-                        .getAbsoluteFile(), new File("ICUList.txt")
-                        .getAbsoluteFile(), new File("zoneinfo.res")
-                        .getAbsoluteFile(), new File("icu.gif")
-                        .getAbsoluteFile());
-                return;
-            }
+                File curDir = new File(".");
+                try {
+                    curDir = curDir.getCanonicalFile();
+                } catch (IOException ex) {
+                    curDir = curDir.getAbsoluteFile();
+                }
 
-            if (args.length != NUM_ARGS) {
+                new GUILoader(curDir, new File("Temp").getAbsoluteFile(),
+                        new File("DirectoryList.txt").getAbsoluteFile(),
+                        new File("ICUList.txt").getAbsoluteFile(), new File(
+                                "zoneinfo.res").getAbsoluteFile(), new File(
+                                "icu.gif").getAbsoluteFile());
+                return;
+            } else if (args.length != NUM_ARGS) {
                 System.err.println("Incorrect number of arguments.");
                 System.err
                         .println("Syntax: ICUTZUMain <cur dir> <path file> <result file> <tz file> <backup dir>");
                 System.exit(-1);
+            } else {
+
+                File curDir = new File(args[CUR_DIR]);
+                try {
+                    curDir = curDir.getCanonicalFile();
+                } catch (IOException ex) {
+                    curDir = curDir.getAbsoluteFile();
+                }
+
+                File backupDir = new File(curDir, args[BACKUP_DIR])
+                        .getAbsoluteFile();
+                File pathFile = new File(curDir, args[PATH_FILE])
+                        .getAbsoluteFile();
+                File resultFile = new File(curDir, args[RESULT_FILE])
+                        .getAbsoluteFile();
+                File tzFile = new File(curDir, args[TZ_FILE]).getAbsoluteFile();
+                File iconFile = new File(curDir, args[ICON_FILE])
+                        .getAbsoluteFile();
+
+                if ("true".equalsIgnoreCase(System.getProperty("nogui")))
+                    new CLILoader(curDir, backupDir, pathFile, resultFile,
+                            tzFile);
+                else
+                    new GUILoader(curDir, backupDir, pathFile, resultFile,
+                            tzFile, iconFile);
             }
-
-            File curDir = new File(args[CUR_DIR]).getAbsoluteFile();
-            File backupDir = new File(args[CUR_DIR], args[BACKUP_DIR])
-                    .getAbsoluteFile();
-            File pathFile = new File(args[CUR_DIR], args[PATH_FILE])
-                    .getAbsoluteFile();
-            File resultFile = new File(args[CUR_DIR], args[RESULT_FILE])
-                    .getAbsoluteFile();
-            File tzFile = new File(args[CUR_DIR], args[TZ_FILE])
-                    .getAbsoluteFile();
-            File iconFile = new File(args[CUR_DIR], args[ICON_FILE])
-                    .getAbsoluteFile();
-
-            if ("true".equalsIgnoreCase(System.getProperty("nogui")))
-                new CLILoader(curDir, backupDir, pathFile, resultFile, tzFile);
-            else
-                new GUILoader(curDir, backupDir, pathFile, resultFile, tzFile,
-                        iconFile);
         } catch (Throwable ex) {
             // should any unexplained exception occur, we should exit
             // abnormally. ideally, this should never happen.
