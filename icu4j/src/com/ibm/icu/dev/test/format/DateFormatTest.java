@@ -1308,15 +1308,19 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             String s = fmt.format(d);
             int month, yr, day, hr, min, sec;
             cal.setTime(d);
-            yr = cal.get(Calendar.YEAR) - 1900;
+            yr = cal.get(Calendar.YEAR);
             month = cal.get(Calendar.MONTH);
-            day = cal.get(Calendar.DAY_OF_WEEK);
+            day = cal.get(Calendar.DAY_OF_MONTH);
             hr = cal.get(Calendar.HOUR_OF_DAY);
             min = cal.get(Calendar.MINUTE);
             sec = cal.get(Calendar.SECOND);
             logln("  . parse . " + s + " (month = " + month + ")");
             if (month != Calendar.JUNE)
                 errln("FAIL: Month should be June");
+            if (yr != 1997)
+                errln("FAIL: Year should be 1997");
+            if (day != 15)
+                errln("FAIL: day should be 15");
             logln("format(July 15 1997) = " + julyStr);
             d = fmt.parse(julyStr);
             s = fmt.format(d);
@@ -1890,7 +1894,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         longChineseDateFormat.setDateFormatSymbols( dfs );
         // This next line throws the exception
         try {
-            String longFormatPattern = longChineseDateFormat.toLocalizedPattern();
+            longChineseDateFormat.toLocalizedPattern();
         }
         catch (Exception e) {
             errln("could not localized pattern: " + e.getMessage());
@@ -1958,12 +1962,22 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         
         ULocale uloc = f.getLocale(ULocale.ACTUAL_LOCALE);
         
-        int hashCode = f.hashCode();
+        DateFormat sdfmt = new SimpleDateFormat();
         
-        boolean eq = f.equals(f);
-        eq = f.equals(null);
-        eq = f.equals(new SimpleDateFormat());
+        if (f.hashCode() != f.hashCode()) {
+            errln("hashCode is not stable");
+        }
+        if (!f.equals(f)) {
+            errln("f != f");
+        }
+        if (f.equals(null)) {
+            errln("f should not equal null");
+        }
+        if (f.equals(sdfmt)) {
+            errln("A time instance shouldn't equal a default date format");
+        }
         
+        Date d;
         {
             ChineseDateFormat fmt = new ChineseDateFormat("yymm", Locale.US);
             try {
@@ -1975,7 +1989,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
 
             try {
-                Date d = fmt.parse("2255"); // should succeed with obeycount
+                fmt.parse("2255"); // should succeed with obeycount
                 logln("ok");
             }
             catch (ParseException e) {
@@ -1998,7 +2012,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             FieldPosition fpos = new FieldPosition(Calendar.HOUR_OF_DAY);
             fmt.format(xcal, xbuf, fpos);
             try {
-                Date d = fmt.parse(xbuf.toString());
+                fmt.parse(xbuf.toString());
                 logln("ok");
                 
                 xbuf.setLength(0);
@@ -2016,7 +2030,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             // cover gmt+hh:mm
             DateFormat fmt = new SimpleDateFormat("MM/dd/yy z");
             try {
-                Date d = fmt.parse("07/10/53 GMT+10:00");
+                d = fmt.parse("07/10/53 GMT+10:00");
                 logln("ok");
             }
             catch (ParseException e) {
@@ -2027,7 +2041,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             {
                 ParsePosition pp = new ParsePosition(0);
                 String text = "07/10/53 GMT=10:00";
-                Date d = fmt.parse(text, pp);
+                d = fmt.parse(text, pp);
                 if(pp.getIndex()!=12){
                     errln("Parse of 07/10/53 GMT=10:00 for pattern MM/dd/yy z");
                 }
@@ -2054,7 +2068,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             // cover no ':' GMT+#, # < 24 (hh)
             try {
-                Date d = fmt.parse("07/10/53 GMT+07");
+                d = fmt.parse("07/10/53 GMT+07");
                 logln("ok");
             }
             catch (ParseException e) {
@@ -2063,7 +2077,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             // cover no ':' GMT+#, # > 24 (hhmm)
             try {
-                Date d = fmt.parse("07/10/53 GMT+0730");
+                d = fmt.parse("07/10/53 GMT+0730");
                 logln("ok");
             }
             catch (ParseException e) {
@@ -2072,7 +2086,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             // cover no ':' GMT+#, # > 2400 (this should fail, i suspect, but doesn't)
             try {
-                Date d = fmt.parse("07/10/53 GMT+07300");
+                d = fmt.parse("07/10/53 GMT+07300");
                 logln("should GMT+9999 fail?");
             }
             catch (ParseException e) {
@@ -2090,7 +2104,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             // cover raw digits (RFC822) 
             try {
-                Date d = fmt.parse("07/10/53 +07");
+                d = fmt.parse("07/10/53 +07");
                 logln("ok");
             }
             catch (ParseException e) {
@@ -2099,7 +2113,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             // cover raw digits (RFC822) 
             try {
-                Date d = fmt.parse("07/10/53 -0730");
+                d = fmt.parse("07/10/53 -0730");
                 logln("ok");
             }
             catch (ParseException e) {
@@ -2109,7 +2123,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             // cover raw digits (RFC822) in DST
             try {
                 fmt.setTimeZone(TimeZone.getTimeZone("PDT"));
-                Date d = fmt.parse("07/10/53 -0730");
+                d = fmt.parse("07/10/53 -0730");
                 logln("ok");
             }
             catch (ParseException e) {
