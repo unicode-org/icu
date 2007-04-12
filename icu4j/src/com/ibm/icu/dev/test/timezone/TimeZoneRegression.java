@@ -751,10 +751,10 @@ public class TimeZoneRegression extends TestFmwk {
                                        cal.get(Calendar.DAY_OF_WEEK),
                                        ms);
                 cal.add(Calendar.HOUR, h);
-                int x = cal.get(Calendar.DST_OFFSET);
+                int dstOffset = cal.get(Calendar.DST_OFFSET);
                 logln("h=" + h + "; dom=" + dom +
                       "; ZONE_OFFSET=" + cal.get(Calendar.ZONE_OFFSET)/H +
-                      "; DST_OFFSET=" + cal.get(Calendar.DST_OFFSET)/H +
+                      "; DST_OFFSET=" + dstOffset/H +
                       "; getOffset()=" + off/H +
                       " (" + cal.getTime().getTime()/H + ")");
             }
