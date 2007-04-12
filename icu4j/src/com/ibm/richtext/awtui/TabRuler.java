@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2004.  All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2007.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or
  * implied, including the warranty of non-infringement and the implied
@@ -26,8 +26,12 @@ import com.ibm.richtext.styledtext.MTabRuler;
  */
 public final class TabRuler extends Component implements MTabRulerComponent {
     
-    static final String COPYRIGHT =
-                "(C) Copyright IBM Corp. 1998-1999 - All Rights Reserved";
+    /**
+     * For serialization
+     */
+    private static final long serialVersionUID = -8418099860214866635L;
+    //static final String COPYRIGHT =
+    //            "(C) Copyright IBM Corp. 1998-1999 - All Rights Reserved";
     private TabRulerImpl fImpl;
     
     /**
