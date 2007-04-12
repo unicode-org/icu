@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2004.  All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2007.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or
  * implied, including the warranty of non-infringement and the implied
@@ -41,8 +41,12 @@ import java.awt.event.WindowAdapter;
 */
 final class ObjectDialog extends Dialog implements ActionListener
 {
-    static final String COPYRIGHT =
-                "(C) Copyright IBM Corp. 1998-1999 - All Rights Reserved";
+    /**
+     * For serialization
+     */
+    private static final long serialVersionUID = 8667616278985420231L;
+    //static final String COPYRIGHT =
+    //            "(C) Copyright IBM Corp. 1998-1999 - All Rights Reserved";
 
     private final MTextPanel fTextPanel;
     private final Object fKey;

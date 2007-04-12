@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2004.  All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2007.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or
  * implied, including the warranty of non-infringement and the implied
@@ -48,6 +48,11 @@ public class TestAttributeMap extends TestFmwk  {
     private AttributeSet sets;  // A Set of Sets
 
     private static final class TestAttribute extends TextAttribute {
+
+        /**
+         * For serialization
+         */
+        private static final long serialVersionUID = 2092805803764400714L;
 
         TestAttribute(String name) {
             super(name);
