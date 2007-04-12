@@ -24,7 +24,6 @@ import java.awt.event.WindowEvent;
 
 import java.io.File;
 import java.io.PrintWriter;
-import java.io.IOException;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -52,7 +51,7 @@ public class TypingPerfTest implements ActionListener {
     private static final String USAGE = "Usage: java com.ibm.richtext.test.TypingPerfTest [file] [-insertionText text]";
     private char[] fInsText;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
         // not used OutputStream outStream = null;
         PrintWriter writer = new PrintWriter(System.out);
@@ -85,7 +84,7 @@ public class TypingPerfTest implements ActionListener {
         new TypingPerfTest(writer, text, insText);
     }
 
-    public TypingPerfTest(PrintWriter out, MConstText text, char[] insText) throws IOException {
+    public TypingPerfTest(PrintWriter out, MConstText text, char[] insText) {
 
         fInsText = insText;
         fTextFrame = new TextFrame(text, "", null);
@@ -143,27 +142,17 @@ public class TypingPerfTest implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent evt) {
-
-        try {
-            if (evt.getActionCommand().equals(fgAtCurrentPosCommand)) {
-
-                insertAtCurrentPos(1);
-            }
-            else if (evt.getActionCommand().equals(fgLotsOfTextCommand)) {
-
-                insertAtCurrentPos(8);
-            }
-            else if (evt.getActionCommand().equals(fgFwdDelete)) {
-
-                forwardDelete(1);
-            }
-            else if (evt.getActionCommand().equals(fgBackspace)) {
-
-                backspace(1);
-            }
+        if (evt.getActionCommand().equals(fgAtCurrentPosCommand)) {
+            insertAtCurrentPos(1);
         }
-        catch(IOException e) {
-            System.out.println("Caught exception: " + e);
+        else if (evt.getActionCommand().equals(fgLotsOfTextCommand)) {
+            insertAtCurrentPos(8);
+        }
+        else if (evt.getActionCommand().equals(fgFwdDelete)) {
+            forwardDelete(1);
+        }
+        else if (evt.getActionCommand().equals(fgBackspace)) {
+            backspace(1);
         }
     }
 
@@ -190,7 +179,7 @@ public class TypingPerfTest implements ActionListener {
         fOut.flush();
     }
 
-    private void forwardDelete(final int times) throws IOException {
+    private void forwardDelete(final int times) {
 
         System.gc();
 
@@ -211,7 +200,7 @@ public class TypingPerfTest implements ActionListener {
         fOut.flush();
     }
 
-    private void backspace(final int times) throws IOException {
+    private void backspace(final int times) {
 
         System.gc();
 
