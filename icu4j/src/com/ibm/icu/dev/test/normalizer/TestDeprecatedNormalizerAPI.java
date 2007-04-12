@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -50,8 +50,11 @@ public class TestDeprecatedNormalizerAPI extends TestFmwk
         java.text.CharacterIterator iter = new StringCharacterIterator(s+s);
         //test deprecated constructors
         Normalizer norm = new Normalizer(iter, Normalizer.NFC,0);
-        Normalizer norm2 = new Normalizer(s,Normalizer.NFC,0);
         if(norm.next()!=0xe4) {
+            errln("error in Normalizer(CharacterIterator).next()");
+        }       
+        Normalizer norm2 = new Normalizer(s,Normalizer.NFC,0);
+        if(norm2.next()!=0xe4) {
             errln("error in Normalizer(CharacterIterator).next()");
         }       
         // test clone(), ==, and hashCode()
@@ -148,9 +151,6 @@ public class TestDeprecatedNormalizerAPI extends TestFmwk
             String chStr = new StringBuffer().append(ch).toString();
             String decomp = Normalizer.decompose(chStr, compat);
             String comp = Normalizer.compose(decomp, compat);
-
-            int cClass = UCharacter.getCombiningClass(decomp.charAt(0));
-            cClass = 0;
 
             if (NormalizerImpl.isFullCompositionExclusion(ch)) {
                 logln("Skipped excluded char " + hex(ch) + " (" + UCharacter.getName(ch) + ")" );
