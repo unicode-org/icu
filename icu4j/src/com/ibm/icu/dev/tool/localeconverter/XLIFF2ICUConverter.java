@@ -48,17 +48,17 @@ public final class XLIFF2ICUConverter {
     private static final String ROOT            = "root";
     private static final String RESTYPE         = "restype";
     private static final String RESNAME         = "resname";
-    private static final String YES             = "yes";
-    private static final String NO              = "no";
+    //private static final String YES             = "yes";
+    //private static final String NO              = "no";
     private static final String TRANSLATE       = "translate";
-    private static final String BODY            = "body";
+    //private static final String BODY            = "body";
     private static final String GROUPS          = "group";
     private static final String FILES           = "file";
     private static final String TRANSUNIT       = "trans-unit";
     private static final String BINUNIT         = "bin-unit";
     private static final String BINSOURCE       = "bin-source";
-    private static final String TS              = "ts";
-    private static final String ORIGINAL        = "original";
+    //private static final String TS              = "ts";
+    //private static final String ORIGINAL        = "original";
     private static final String SOURCELANGUAGE  = "source-language";
     private static final String TARGETLANGUAGE  = "target-language";
     private static final String TARGET          = "target";
@@ -101,7 +101,7 @@ public final class XLIFF2ICUConverter {
         cnv.processArgs(args);
     }
     private String    sourceDir      = null;
-    private String    fileName       = null;
+    //private String    fileName       = null;
     private String    destDir        = null;
     private boolean   targetOnly     = false;
     private String    targetFileName = null; 
@@ -154,8 +154,8 @@ public final class XLIFF2ICUConverter {
         }
         
         for (int i = 0; i < remainingArgc; i++) {
-            int lastIndex = args[i].lastIndexOf(File.separator, args[i].length()) + 1; /* add 1 to skip past the separator */
-            fileName = args[i].substring(lastIndex, args[i].length());
+            //int lastIndex = args[i].lastIndexOf(File.separator, args[i].length()) + 1; /* add 1 to skip past the separator */
+            //fileName = args[i].substring(lastIndex, args[i].length());
             String xmlfileName = getFullPath(false,args[i]);
             System.out.println("Processing file: "+xmlfileName);
             createRB(xmlfileName);
@@ -436,18 +436,18 @@ public final class XLIFF2ICUConverter {
         }
     }
     
-    private void writeResource(Resource set, String sourceFileName, String targetFileName){
+    private void writeResource(Resource set, String sourceFilename, String targetFilename){
         try {
             String outputFileName = null;
-            if(targetFileName != null){
-                outputFileName = destDir+File.separator+targetFileName+".txt";
+            if(targetFilename != null){
+                outputFileName = destDir+File.separator+targetFilename+".txt";
             }else{
                 outputFileName = destDir+File.separator+set.name+".txt";
             }
             FileOutputStream file = new FileOutputStream(outputFileName);
             BufferedOutputStream writer = new BufferedOutputStream(file);
 
-            writeHeader(writer,sourceFileName);
+            writeHeader(writer,sourceFilename);
             
             //Now start writing the resource;
             Resource current = set;
@@ -878,8 +878,8 @@ public final class XLIFF2ICUConverter {
                     currentTarget.internal = currentSource.internal= value;
                     
                 }else if(name.equals(EXTERNALFILE)){
-                    String fileName = getAttributeValue(transUnit, HREF);
-                    currentTarget.external = currentSource.external = fileName;
+                    currentSource.external = getAttributeValue(transUnit, HREF);
+                    currentTarget.external = currentSource.external;
                 }
             }
             

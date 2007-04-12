@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2004.  All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2007.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or
  * implied, including the warranty of non-infringement and the implied
@@ -29,8 +29,8 @@ import com.ibm.richtext.awtui.TextFrame;
 
 public class ITestTextPanel extends Frame implements ActionListener {
 
-    static final String COPYRIGHT =
-                "(C) Copyright IBM Corp. 1998-1999 - All Rights Reserved";
+    //static final String COPYRIGHT =
+    //            "(C) Copyright IBM Corp. 1998-1999 - All Rights Reserved";
     private static long fgOpCount = 0;
 
     private TestTextPanel fTest;
@@ -38,7 +38,7 @@ public class ITestTextPanel extends Frame implements ActionListener {
     private MTextPanel fTextPanel;
     private Frame fTextFrame;
     private Clipboard fClipboard;
-    private Button fExersize, fStressTest, fResize;
+    private Button fExersize, fStressTest;
 
     public static void main(String[] args) {
 
