@@ -327,7 +327,7 @@ class ResultModel extends AbstractTableModel {
                 icuFile = (ICUFile) iter.next();
                 String line = icuFile.getFile().getPath() + '\t'
                         + icuFile.getTZVersion() + "\n";
-                logger.printlnToScreen(line);
+                logger.printToScreen(line);
                 writer.write(line);
             }
         } catch (FileNotFoundException ex) {

@@ -144,7 +144,7 @@ public class CLILoader {
                 + " Mode Started ***********");
         logger.printlnToScreen("");
         logger.printlnToScreen("\'Discover Only\' Mode:");
-        logger.printlnToScreen("\tIn this mode, "
+        logger.printlnToScreen("In this mode, "
                 + "the tool will search for ICU4J jars"
                 + " in the directories specified in DirectorySearch.txt"
                 + " and print the ICU4J jars detected and their respective"
@@ -162,7 +162,11 @@ public class CLILoader {
         // searching all subdirectories of the included path, using the backup
         // directory specified, and without using a status bar (since this is
         // command-line)
+        logger.printlnToScreen("");
+        logger.printlnToScreen("Search started.");
         pathModel.searchAll(resultModel, true, curDir, backupDir);
+        logger.printlnToScreen("Search ended.");
+        logger.printlnToScreen("");
 
         // save the results in PathModel.RESULTLIST_FILENAME
         resultModel.saveResults();
@@ -191,7 +195,7 @@ public class CLILoader {
                 + " Mode Started ***********");
         logger.printlnToScreen("");
         logger.printlnToScreen("\'Patch\' Mode:");
-        logger.printlnToScreen("\tIn this mode, the tool patches each of the"
+        logger.printlnToScreen("In this mode, the tool patches each of the"
                 + " ICU4J jars listed in ICUList.txt with the new time zone"
                 + " information.");
         logger.printlnToScreen("");
