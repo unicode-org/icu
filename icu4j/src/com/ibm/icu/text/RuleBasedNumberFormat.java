@@ -859,7 +859,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @param in The stream to read from.
      */
     private void readObject(java.io.ObjectInputStream in)
-        throws java.io.IOException, java.lang.ClassNotFoundException {
+        throws java.io.IOException {
 
         // read the description in from the stream
         String description = in.readUTF();

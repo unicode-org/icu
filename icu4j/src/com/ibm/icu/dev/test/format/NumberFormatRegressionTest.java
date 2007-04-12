@@ -160,7 +160,7 @@ public class NumberFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
     }
     
     //Test New serialized DecimalFormat(2.0) read old serialized forms of DecimalFormat(1.3.1.1)
-    public void TestSerialization() throws IOException, ClassNotFoundException{
+    public void TestSerialization() throws IOException{
 //#ifndef FOUNDATION
         byte[][] contents = NumberFormatSerialTestData.getContent();
         double data = 1234.56;

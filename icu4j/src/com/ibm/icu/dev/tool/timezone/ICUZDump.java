@@ -357,10 +357,6 @@ public class ICUZDump {
         dumper.setLowYear(low);
         dumper.setHighYear(high);
         dumper.setLineSeparator(lineSep);
-        try {
-            dumper.dump(w);
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
+        dumper.dump(w);
     }
 }

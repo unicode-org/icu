@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -9,8 +9,6 @@ package com.ibm.icu.dev.test.translit;
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.impl.Utility;
-import java.io.*;
-import java.text.ParseException;
 
 /**
  * @test
@@ -18,27 +16,24 @@ import java.text.ParseException;
  */
 public class ReplaceableTest extends TestFmwk {
     
-    public static final boolean LATER_THAN_2_1 = true;
-    
     public static void main(String[] args) throws Exception {
         new ReplaceableTest().run(args);
     }
   
-    public void Test() throws IOException, ParseException {
+    public void Test() {
         check("Lower", "ABCD", "1234");
         check("Upper", "abcd\u00DF", "123455"); // must map 00DF to SS
         check("Title", "aBCD", "1234");
         check("NFC", "A\u0300E\u0300", "13");
         check("NFD", "\u00C0\u00C8", "1122");
-        if (!LATER_THAN_2_1) return;
         check("*(x) > A $1 B", "wxy", "11223");
         check("*(x)(y) > A $2 B $1 C $2 D", "wxyz", "113322334");
         check("*(x)(y)(z) > A $3 B $2 C $1 D", "wxyzu", "114433225");
-    // Disabled for 2.4.  TODO Revisit in 2.6 or later.
-        //check("*x > a", "xyz", "223"); // expect "123"?
-        //check("*x > a", "wxy", "113"); // expect "123"?
-        //check("*x > a", "\uFFFFxy", "_33"); // expect "_23"?
-        //check("*(x) > A $1 B", "\uFFFFxy", "__223");
+        // TODO Revisit the following in 2.6 or later.
+        check("*x > a", "xyz", "223"); // expect "123"?
+        check("*x > a", "wxy", "113"); // expect "123"?
+        check("*x > a", "\uFFFFxy", "_33"); // expect "_23"?
+        check("*(x) > A $1 B", "\uFFFFxy", "__223");
     }
     
     void check(String transliteratorName, String test, String shouldProduceStyles) {

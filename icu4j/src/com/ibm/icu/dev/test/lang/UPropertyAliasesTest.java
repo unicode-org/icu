@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2003, International Business Machines
+* Copyright (c) 2002-2007, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -10,7 +10,6 @@
 */
 package com.ibm.icu.dev.test.lang;
 
-import java.io.*;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.dev.test.TestFmwk;
 
@@ -25,7 +24,7 @@ public class UPropertyAliasesTest extends TestFmwk {
     /**
      * Test the property names and property value names API.
      */
-    public void TestPropertyNames() throws IOException {
+    public void TestPropertyNames() {
         int p, v, choice, rev;
         for (p=0; ; ++p) {
             boolean sawProp = false;
