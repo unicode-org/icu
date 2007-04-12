@@ -29,6 +29,11 @@ import com.ibm.richtext.awtui.TextFrame;
 
 public class ITestTextPanel extends Frame implements ActionListener {
 
+    /**
+     * For serialization
+     */
+    private static final long serialVersionUID = 4776220202735727574L;
+
     //static final String COPYRIGHT =
     //            "(C) Copyright IBM Corp. 1998-1999 - All Rights Reserved";
     private static long fgOpCount = 0;
