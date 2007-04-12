@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001, International Business Machines
+*   Copyright (c) 2001-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -85,7 +85,7 @@ public class SourceSet {
     
     static PrintWriter out;
     
-    static void showSourceSetAux(Transliterator t, Normalizer.Mode m, boolean lowerFirst, boolean forward) throws IOException {
+    static void showSourceSetAux(Transliterator t, Normalizer.Mode m, boolean lowerFirst, boolean forward) {
         UnicodeSet sourceSet = t.getSourceSet();
         if (m != Normalizer.NONE || lowerFirst) {
             UnicodeSetClosure.close(sourceSet, m, lowerFirst);

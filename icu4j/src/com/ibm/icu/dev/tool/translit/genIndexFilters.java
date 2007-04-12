@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2003, International Business Machines
+*   Copyright (c) 2001-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -9,7 +9,6 @@
 */
 package com.ibm.icu.dev.tool.translit;
 import com.ibm.icu.text.*;
-import java.io.*;
 
 /**
  * Adjunct class to getIndexFilters.bat.  Just generates source sets
@@ -28,7 +27,7 @@ import java.io.*;
  */
 public class genIndexFilters {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         Normalizer.Mode m = Normalizer.NONE;
         boolean lowerFirst = false;
         if (args.length >= 2) {
@@ -53,7 +52,7 @@ public class genIndexFilters {
         showSourceSet(args[0], m, lowerFirst);
     }
 
-    static void showSourceSet(String ID, Normalizer.Mode m, boolean lowerFirst) throws IOException {
+    static void showSourceSet(String ID, Normalizer.Mode m, boolean lowerFirst) {
         Transliterator t = Transliterator.getInstance(ID);
         UnicodeSet sourceSet = t.getSourceSet();
         if (m != Normalizer.NONE || lowerFirst) {

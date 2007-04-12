@@ -169,7 +169,7 @@ public class SerializableChecker implements URLHandler.URLVisitor
         }
     }
 
-    public static void main(String[] args) throws java.net.MalformedURLException
+    public static void main(String[] args)
     {
         List argList = Arrays.asList(args);
         String path = null;

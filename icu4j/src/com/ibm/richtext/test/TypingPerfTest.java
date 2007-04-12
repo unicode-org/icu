@@ -167,7 +167,7 @@ public class TypingPerfTest implements ActionListener {
         }
     }
 
-    private void insertAtCurrentPos(final int times) throws IOException {
+    private void insertAtCurrentPos(final int times) {
 
         fTextFrame.toFront();
 
