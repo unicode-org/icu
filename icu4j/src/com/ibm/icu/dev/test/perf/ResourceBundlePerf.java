@@ -307,9 +307,9 @@ public class ResourceBundlePerf extends PerfTest {
                 
                 int sizej = menu_items.length;
                 for (int j=0; j< sizej; j++){
-                    String key = (String) menu_items[j][0];
+                    String itemKey = (String) menu_items[j][0];
                     String value = (String) menu_items[j][1];
-                    if(!expected[p++].equals(key)) throw new Error("not equal");
+                    if(!expected[p++].equals(itemKey)) throw new Error("not equal");
                     if(!expected[p++].equals(value)) throw new Error("not equal");
                 }
             }
@@ -336,9 +336,9 @@ public class ResourceBundlePerf extends PerfTest {
                 int sizej = menu.getSize();
                 for (int j=0; j< sizej; j++){
                     UResourceBundle menu_item = menu.get(j);
-                    String key = menu_item.getKey();
+                    String itemKey = menu_item.getKey();
                     String value = menu_item.getString();
-                    if(!expected[p++].equals(key)) throw new Error("not equal");
+                    if(!expected[p++].equals(itemKey)) throw new Error("not equal");
                     if(!expected[p++].equals(value)) throw new Error("not equal");
                 }
             }
