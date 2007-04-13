@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2002-2006, International Business Machines Corporation
+*   Copyright (c) 2002-2007, International Business Machines Corporation
 *   and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -621,7 +621,8 @@ class TransliteratorIDParser {
                 UnicodeSet.resemblesPattern(id, pos[0])) {
 
                 ParsePosition ppos = new ParsePosition(pos[0]);
-                UnicodeSet set = new UnicodeSet(id, ppos, null);
+                // Parse the set to get the position.
+                new UnicodeSet(id, ppos, null);
                 filter = id.substring(pos[0], ppos.getIndex());
                 pos[0] = ppos.getIndex();
                 continue;

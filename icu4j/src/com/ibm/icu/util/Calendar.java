@@ -4704,8 +4704,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
 
         int month = useMonth ? internalGet(MONTH, getDefaultMonthInYear(year)) : 0;
         
-        int dom = internalGet(DAY_OF_MONTH, getDefaultDayInMonth(year, month));
-        
         // Get the Julian day of the day BEFORE the start of this year.
         // If useMonth is true, get the day before the start of the month.
         int julianDay = handleComputeMonthStart(year, month, useMonth);
