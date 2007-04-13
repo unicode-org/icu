@@ -1589,4 +1589,57 @@ public class TestCharset extends TestFmwk {
             // swallow the expection.
         }
     }
+    
+    /*
+     *  Michael Ow
+     *  Modified 070413
+     */
+    //Test CharsetICUProvider
+    public void TestNullCanonicalName() {
+        String enc = null;
+        String canonicalName = CharsetProviderICU.getICUCanonicalName(enc);
+        
+        if (canonicalName != null) {
+            errln("getICUCanonicalName return a non-null string for given null string");
+        }
+    }
+    public void TestGetAllNames() {
+        String[] names = null;
+        
+        names = CharsetProviderICU.getAllNames();
+        
+        if (names == null) {
+            errln("getAllNames returned a null string.");
+        }
+    }
+    //Test CharsetICU
+    public void TestCharsetContains() {
+        boolean test;
+        
+        CharsetProvider provider = new CharsetProviderICU();     
+        Charset cs1 = provider.charsetForName("UTF-32");
+        Charset cs2 = null;
+        
+        test = cs1.contains(cs2);
+        
+        if (test != false) {
+            errln("Charset.contains returned true for a null charset.");
+        }
+        
+        cs2 = CharsetICU.forNameICU("UTF-32");
+        
+        test = cs1.contains(cs2);
+        
+        if (test != true) {
+            errln("Charset.contains returned false for an identical charset.");
+        }
+        
+        cs2 = provider.charsetForName("UTF-8");
+        
+        test = cs1.contains(cs2);
+        
+        if (test != false) {
+            errln("Charset.contains returned true for a different charset.");
+        }
+    }
 }
