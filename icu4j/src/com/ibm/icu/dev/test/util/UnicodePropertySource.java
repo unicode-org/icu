@@ -1,7 +1,7 @@
 
 /*
  *******************************************************************************
- * Copyright (C) 2002-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -29,7 +29,7 @@ import com.ibm.icu.text.UnicodeSetIterator;
 public abstract class UnicodePropertySource implements Cloneable {
     
     protected String propertyAlias;
-    protected int nameChoice = UProperty.NameChoice.LONG;
+    protected int m_nameChoice = UProperty.NameChoice.LONG;
     protected StringFilter filter = new StringFilter();
     protected UnicodeSetIterator matchIterator = new UnicodeSetIterator(new UnicodeSet(0,0x10FFFF));
     
@@ -112,11 +112,11 @@ public abstract class UnicodePropertySource implements Cloneable {
     }
     
     public int getNameChoice() {
-        return nameChoice;
+        return m_nameChoice;
     }
 
     public UnicodePropertySource setNameChoice(int choice) {
-        nameChoice = choice;
+        m_nameChoice = choice;
         return this;
     }
     
@@ -170,7 +170,7 @@ public abstract class UnicodePropertySource implements Cloneable {
         public String getPropertyValue(int codePoint) {
             if (propEnum < UProperty.INT_LIMIT) {
                 int enumValue = UCharacter.getIntPropertyValue(codePoint, propEnum);
-                return UCharacter.getPropertyValueName(propEnum,enumValue, (int)nameChoice);
+                return UCharacter.getPropertyValueName(propEnum,enumValue, (int)m_nameChoice);
             } else if (propEnum < UProperty.DOUBLE_LIMIT) {
                 return Double.toString(UCharacter.getUnicodeNumericValue(codePoint));
                 // TODO: Fix HACK -- API deficient
@@ -218,7 +218,7 @@ public abstract class UnicodePropertySource implements Cloneable {
         public Set getAvailablePropertyAliases(Set result) {
             for (int i = 0; i < ranges.length; ++i) {
                 for (int j = ranges[i][0]; j < ranges[i][1]; ++j) {
-                    result.add(UCharacter.getPropertyName(j, nameChoice));
+                    result.add(UCharacter.getPropertyName(j, m_nameChoice));
                 }
             }
             result.addAll(Extras);
@@ -230,10 +230,10 @@ public abstract class UnicodePropertySource implements Cloneable {
                 int start = UCharacter.getIntPropertyMinValue(propEnum);
                 int end = UCharacter.getIntPropertyMaxValue(propEnum);
                 for (int i = start; i <= end; ++i) {
-                    result.add(getFixedValueAlias(null, i,nameChoice));
+                    result.add(getFixedValueAlias(null, i,m_nameChoice));
                 }
             } else {
-                result.add(getFixedValueAlias(null, -1,nameChoice));
+                result.add(getFixedValueAlias(null, -1,m_nameChoice));
             }
             return result;
         }
