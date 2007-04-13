@@ -83,26 +83,26 @@ public class DisplayNameTest extends TestFmwk {
     private void checkLocale(ULocale locale) {
         logln("Checking " + locale);
         check("Language", locale, languages, null, new DisplayNameGetter() {
-            public String get(ULocale locale, String code, Object context) {
-                return ULocale.getDisplayLanguage(code, locale);
+            public String get(ULocale loc, String code, Object context) {
+                return ULocale.getDisplayLanguage(code, loc);
             }
         });
         check("Script", locale, scripts, null, new DisplayNameGetter() {
-            public String get(ULocale locale, String code, Object context) {
+            public String get(ULocale loc, String code, Object context) {
                 // TODO This is kinda a hack; ought to be direct way.
-                return ULocale.getDisplayScript("en_"+code, locale);
+                return ULocale.getDisplayScript("en_"+code, loc);
             }
         });
         check("Country", locale, countries, null, new DisplayNameGetter() {
-            public String get(ULocale locale, String code, Object context) {
+            public String get(ULocale loc, String code, Object context) {
                 // TODO This is kinda a hack; ought to be direct way.
-                return ULocale.getDisplayCountry("en_"+code, locale);
+                return ULocale.getDisplayCountry("en_"+code, loc);
             }
         });
         check("Currencies", locale, currencies, currencyFormats, new DisplayNameGetter() {
-            public String get(ULocale locale, String code, Object context) {
+            public String get(ULocale loc, String code, Object context) {
                 Currency s = Currency.getInstance(code);
-                return s.getName(locale, ((Integer)context).intValue(), new boolean[1]);
+                return s.getName(loc, ((Integer)context).intValue(), new boolean[1]);
             }
         });
         // comment this out, because the zone string information is lost
@@ -110,8 +110,8 @@ public class DisplayNameTest extends TestFmwk {
 
         check("Zones", locale, zones, zoneFormats, new DisplayNameGetter() {
             // TODO replace once we have real API
-            public String get(ULocale locale, String code, Object context) {
-                return getZoneString(locale, code, ((Integer)context).intValue());
+            public String get(ULocale loc, String code, Object context) {
+                return getZoneString(loc, code, ((Integer)context).intValue());
             }
         });
 
