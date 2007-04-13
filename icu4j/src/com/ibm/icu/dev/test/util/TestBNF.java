@@ -1,7 +1,7 @@
 //##header
 /*
  *******************************************************************************
- * Copyright (C) 2002-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -147,7 +147,7 @@ public class TestBNF {
         }
     }
     
-    static final String[] rules = {
+/*    static final String[] rules = {
         "$s = ' ';",
         "$noun = dog | house | government | wall | street | zebra;",
         "$adjective = red | glorious | simple | nasty | heavy | clean;",
@@ -163,6 +163,7 @@ public class TestBNF {
         "$conj = but | and | or;",
         "$sentence4 = $sentence1 | $sentence2 | $sentence3 20% | $sentence4 $conj $sentence4 20%;",
         "$sentence = $sentence4 '.';"};
+ */
     /*
     private static void testEnglish() {
         Pick s = Pick.unquoted(" ");
