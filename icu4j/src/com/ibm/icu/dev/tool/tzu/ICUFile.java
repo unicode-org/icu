@@ -383,27 +383,33 @@ public class ICUFile {
      */
     public void update(URL insertURL, File backupDir) throws IOException,
             InterruptedException {
-        String message = "Updating " + icuFile.toString() + " ...";
+        String message = "Updating " + icuFile.getPath() + " ...";
         logger.printlnToBoth("");
         logger.printlnToBoth(message);
         logger.setStatus(message);
 
         if (!icuFile.canRead() || !icuFile.canWrite())
-            throw new IOException("Missing permissions for " + icuFile);
+            throw new IOException("Missing permissions for "
+                    + icuFile.getPath());
         if ((insertURL = getCachedURL(insertURL)) == null)
-            throw new IOException("Could not download the TZ data.");
+            throw new IOException(
+                    "Could not download the Time Zone data, skipping update for this jar.");
         File backupFile = null;
         if ((backupFile = createBackupFile(icuFile, backupDir)) == null)
-            throw new IOException("Failed to create a backup file.");
+            throw new IOException(
+                    "Could not create an empty backup file (the original jar file remains unchanged).");
         if (!copyFile(icuFile, backupFile))
-            throw new IOException("Could not replace the original jar.");
+            throw new IOException(
+                    "Could not copy the original jar file to the backup location (the original jar file remains unchanged).");
+        logger.printlnToBoth("Backup location: " + backupFile.getPath());
         if (!createUpdatedJar(backupFile, icuFile, tzEntry, insertURL))
-            throw new IOException("Could not create an updated jar.");
+            throw new IOException(
+                    "Could not create an updated jar file at the original location (the original jar file is at the backup location).");
 
         // get the new timezone resource version
         tzVersion = findEntryTZVersion();
 
-        message = "Successfully updated " + icuFile.toString();
+        message = "Successfully updated " + icuFile.getPath();
         logger.printlnToBoth(message);
         logger.setStatus(message);
     }
@@ -524,16 +530,18 @@ public class ICUFile {
      * @return The temporary file that was created.
      */
     private File createBackupFile(File inputFile, File backupBase) {
-        logger.loglnToBoth("Creating backup file for + " + inputFile + " at "
+        logger.loglnToBoth("Creating backup file for " + inputFile + " at "
                 + backupBase + ".");
         String filename = inputFile.getName();
         String suffix = ".jar";
         String prefix = filename.substring(0, filename.length()
-                - ".jar".length());
+                - suffix.length());
 
         if (backupBase == null) {
             try {
-                File backupFile = File.createTempFile(prefix, suffix);
+                // no backup directory means we need to create a temporary file
+                // that will be deleted on exit
+                File backupFile = File.createTempFile(prefix + "~", suffix);
                 backupFile.deleteOnExit();
                 return backupFile;
             } catch (IOException ex) {
@@ -549,14 +557,14 @@ public class ICUFile {
         try {
             backupBase.mkdir();
             backupDir.mkdir();
-            backupFile = File.createTempFile(prefix, suffix, backupDir);
+            backupFile = File.createTempFile(prefix + "~", suffix, backupDir);
             backupDesc = new File(backupDir.getPath(), backupFile.getName()
                     .substring(0,
                             backupFile.getName().length() - suffix.length())
                     + ".txt");
             backupDesc.createNewFile();
             ostream = new PrintStream(new FileOutputStream(backupDesc));
-            ostream.println(inputFile.toString());
+            ostream.println(inputFile.getPath());
             logger.loglnToBoth("Successfully created backup file at "
                     + backupFile + ".");
         } catch (IOException ex) {
@@ -820,8 +828,6 @@ public class ICUFile {
                 return null;
             }
         } else {
-            logger.loglnToBoth("Downloading from " + url + " to " + outputFile
-                    + ".");
             InputStream istream = null;
             OutputStream ostream = null;
             byte[] buffer = new byte[BUFFER_SIZE];
@@ -829,10 +835,13 @@ public class ICUFile {
             boolean success = false;
 
             try {
-                istream = url.openStream();
-
                 outputFile = File.createTempFile("zoneinfo", "res");
                 outputFile.deleteOnExit();
+
+                logger.loglnToBoth("Downloading from " + url + " to "
+                        + outputFile.getPath() + ".");
+
+                istream = url.openStream();
                 ostream = new FileOutputStream(outputFile);
 
                 while ((bytesRead = istream.read(buffer)) != -1)
