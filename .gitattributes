@@ -52,6 +52,7 @@ README text !eol
 /ee.foundation.jar -text
 /jvmcfg.properties -text
 /jvmcfg_ibm_1.4_AIX.properties -text
+/jvmcfg_sun_1.5_SunOS.properties -text
 src/com/ibm/icu/dev/data/rbbi/english.dict -text
 src/com/ibm/icu/dev/data/testdata.jar -text
 src/com/ibm/icu/dev/data/thai6.ucs -text
