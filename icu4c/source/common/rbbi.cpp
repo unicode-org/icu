@@ -527,6 +527,11 @@ int32_t RuleBasedBreakIterator::previous(void) {
     if (fCachedBreakPositions != NULL) {
         if (fPositionInCache > 0) {
             --fPositionInCache;
+            // If we're at the beginning of the cache, need to reevaluate the
+            // rule status
+            if (fPositionInCache <= 0) {
+                fLastStatusIndexValid = FALSE;
+            }
             int32_t pos = fCachedBreakPositions[fPositionInCache];
             utext_setNativeIndex(fText, pos);
             return pos;
@@ -731,6 +736,11 @@ int32_t RuleBasedBreakIterator::preceding(int32_t offset) {
                    && offset > fCachedBreakPositions[fPositionInCache])
                 ++fPositionInCache;
             --fPositionInCache;
+            // If we're at the beginning of the cache, need to reevaluate the
+            // rule status
+            if (fPositionInCache <= 0) {
+                fLastStatusIndexValid = FALSE;
+            }
             utext_setNativeIndex(fText, fCachedBreakPositions[fPositionInCache]);
             return fCachedBreakPositions[fPositionInCache];
         }
@@ -1595,25 +1605,19 @@ int32_t RuleBasedBreakIterator::checkDictionary(int32_t startPos,
     // Loop through the text, looking for ranges of dictionary characters.
     // For each span, find the appropriate break engine, and ask it to find
     // any breaks within the span.
+    // Note: we always do this in the forward direction, so that the break
+    // cache is built in the right order.
+    if (reverse) {
+        utext_setNativeIndex(fText, rangeStart);
+    }
     while(U_SUCCESS(status)) {
-        if (reverse) {
-            while((current = (int32_t)UTEXT_GETNATIVEINDEX(fText)) > rangeStart && (category & 0x4000) == 0) {
-                c = UTEXT_PREVIOUS32(fText);
-                UTRIE_GET16(&fData->fTrie, c, category);
-            }
-            if (current <= rangeStart) {
-                break;
-            }
+        while((current = (int32_t)UTEXT_GETNATIVEINDEX(fText)) < rangeEnd && (category & 0x4000) == 0) {
+            utext_next32(fText);           // TODO:  tweak for post-increment operation
+            c = utext_current32(fText);
+            UTRIE_GET16(&fData->fTrie, c, category);
         }
-        else {
-            while((current = (int32_t)UTEXT_GETNATIVEINDEX(fText)) < rangeEnd && (category & 0x4000) == 0) {
-                utext_next32(fText);           // TODO:  tweak for post-increment operation
-                c = utext_current32(fText);
-                UTRIE_GET16(&fData->fTrie, c, category);
-            }
-            if (current >= rangeEnd) {
-                break;
-            }
+        if (current >= rangeEnd) {
+            break;
         }
         
         // We now have a dictionary character. Get the appropriate language object
@@ -1623,7 +1627,7 @@ int32_t RuleBasedBreakIterator::checkDictionary(int32_t startPos,
         // Ask the language object if there are any breaks. It will leave the text
         // pointer on the other side of its range, ready to search for the next one.
         if (lbe != NULL) {
-            foundBreakCount += lbe->findBreaks(fText, rangeStart, rangeEnd, reverse, fBreakType, breaks);
+            foundBreakCount += lbe->findBreaks(fText, rangeStart, rangeEnd, FALSE, fBreakType, breaks);
         }
         
         // Reload the loop variables for the next go-round
@@ -1667,9 +1671,8 @@ int32_t RuleBasedBreakIterator::checkDictionary(int32_t startPos,
         // If the allocation failed, just fall through to the "no breaks found" case.
     }
 
-    // If we get here, there were no language-based breaks. As a result, the
-    // text pointer should be back to where it started, but set it just to
-    // make sure.
+    // If we get here, there were no language-based breaks. Set the text pointer
+    // to the original proposed break.
     utext_setNativeIndex(fText, reverse ? startPos : endPos);
     return (reverse ? startPos : endPos);
 }
