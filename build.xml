@@ -1436,7 +1436,7 @@
         <tstamp>
             <format property="build.date" pattern="yyyyMMdd"/>
         </tstamp>
-        <property name="icu4j.eclipse.build.version.string" value="${icu4j.impl.version.string}.${build.date}"/>
+        <property name="icu4j.eclipse.build.version.string" value="${icu4j.impl.version.string}.v${build.date}"/>
     </target>
 
     <target name="eclipseProjects" 
