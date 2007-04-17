@@ -884,7 +884,7 @@ public  class ICUResourceBundle extends UResourceBundle {
         int type = RES_GET_TYPE(rootResource);
         if (type == TABLE) {
             ICUResourceBundleImpl.ResourceTable table = new ICUResourceBundleImpl.ResourceTable(reader, baseName, localeID, loader);
-            if(table.getSize()==1){
+            if(table.getSize()>=1){ // ticket#5683 ICU4J 3.6 data for zh_xx contains an entry other than %%ALIAS
                 UResourceBundle b = table.handleGet(0, null, table);
                 String itemKey = b.getKey();
                 

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -958,6 +958,42 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             first = s.charAt(0);
             if(first<kArabicZero || first>(kArabicZero+9)) {
                 errln(what + " wrong  digit but got " + s + " (integer digit value " + new Integer((int)first).toString());
+            }
+        }
+    }
+
+    // Ticket#5683
+    // Some ICU4J 3.6 data files contain garbage data which prevent the code to resolve another
+    // bundle as an alias.  zh_TW should be equivalent to zh_Hant_TW
+    public void TestT5683() {
+        Locale[] aliasLocales = {
+            new Locale("zh", "CN"),
+            new Locale("zh", "TW"),
+            new Locale("zh", "HK"),
+            new Locale("zh", "SG"),
+            new Locale("zh", "MO")
+        };
+
+        ULocale[] canonicalLocales = {
+            new ULocale("zh_Hans_CN"),
+            new ULocale("zh_Hant_TW"),
+            new ULocale("zh_Hant_HK"),
+            new ULocale("zh_Hans_SG"),
+            new ULocale("zh_Hant_MO")
+        };
+
+        Date d = new Date(0);
+
+        for (int i = 0; i < aliasLocales.length; i++) {
+            DateFormat dfAlias = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, aliasLocales[i]);
+            DateFormat dfCanonical = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, canonicalLocales[i]);
+
+            String sAlias = dfAlias.format(d);
+            String sCanonical = dfCanonical.format(d);
+
+            if (!sAlias.equals(sCanonical)) {
+                errln("Fail: The format result for locale " + aliasLocales[i] + " is different from the result for locale " + canonicalLocales[i]
+                        + ": " + sAlias + "[" + aliasLocales[i] + "] / " + sCanonical + "[" + canonicalLocales[i] + "]");
             }
         }
     }
