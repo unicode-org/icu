@@ -91,7 +91,7 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
         int type = RES_GET_TYPE(rootResource);
         if (type == TABLE) {
             ResourceTable table = new ResourceTable(null, rootResource, "", true);
-            if(table.size==1){
+            if(table.size>=1){ // ticket#5683 ICU4J 3.6 data for zh_xx contains an entry other than %%ALIAS
                 ICUResourceBundle b = table.handleGet(0, table);
                 String itemKey = b.getKey();
                 
