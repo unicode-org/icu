@@ -2098,6 +2098,7 @@
 		<mkdir dir="${tzu.bin.dir}" />
 		<copy todir="${tzu.bin.dir}">
 			<fileset dir="${src.dir}/com/ibm/icu/dev/tool/tzu">
+				<include name="*.cmd" />
 				<include name="*.bat" />
 				<include name="*.sh" />
 				<include name="*.gif" />
