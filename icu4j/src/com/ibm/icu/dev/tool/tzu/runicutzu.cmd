@@ -31,9 +31,9 @@ mkdir "%ICUTZU_HOME%Temp"
 rem Run the ICUTZU tool.
 @echo.
 @echo Launching the ICU4J Time Zone Update Utility (ICUTZU)...
-@echo "%JAVA_HOME%\bin\java.exe" -cp "%ICUTZU_HOME%icu4j.jar;%ICUTZU_HOME%icutzu.jar" -Dnogui=%NOGUI% -Ddiscoveronly=%DISCOVERONLY% -Dsilentpatch=%SILENTPATCH% -Doffline=%OFFLINE% com.ibm.icu.dev.tool.tzu.ICUTZUMain "%ICUTZU_HOME%\" DirectorySearch.txt ICUList.txt zoneinfo.res Temp icu.gif
+@echo "%JAVA_HOME%\bin\java.exe" -cp "%ICUTZU_HOME%icutzu.jar" -Dnogui=%NOGUI% -Ddiscoveronly=%DISCOVERONLY% -Dsilentpatch=%SILENTPATCH% -Doffline=%OFFLINE% com.ibm.icu.dev.tool.tzu.ICUTZUMain "%ICUTZU_HOME%\" DirectorySearch.txt ICUList.txt zoneinfo.res Temp icu.gif
 @echo.
-"%JAVA_HOME%\bin\java.exe" -cp "%ICUTZU_HOME%icu4j.jar;%ICUTZU_HOME%icutzu.jar" -Dnogui=%NOGUI% -Ddiscoveronly=%DISCOVERONLY% -Dsilentpatch=%SILENTPATCH% -Doffline=%OFFLINE% com.ibm.icu.dev.tool.tzu.ICUTZUMain "%ICUTZU_HOME%\" DirectorySearch.txt ICUList.txt zoneinfo.res Temp icu.gif
+"%JAVA_HOME%\bin\java.exe" -cp "%ICUTZU_HOME%icutzu.jar" -Dnogui=%NOGUI% -Ddiscoveronly=%DISCOVERONLY% -Dsilentpatch=%SILENTPATCH% -Doffline=%OFFLINE% com.ibm.icu.dev.tool.tzu.ICUTZUMain "%ICUTZU_HOME%\" DirectorySearch.txt ICUList.txt zoneinfo.res Temp icu.gif
 IF ERRORLEVEL==0 GOTO Success
 GOTO Failure
 

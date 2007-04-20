@@ -167,8 +167,8 @@ class PathModel extends AbstractListModel {
         try {
             reader = new BufferedReader(new InputStreamReader(
                     new FileInputStream(pathListFile), "UTF-8"), 4 * 1024);
-            while (reader.ready()) {
-                line = reader.readLine().replace('\ufeff', ' ').trim();
+            while ((line = reader.readLine()) != null) {
+                line = line.replace('\ufeff', ' ').trim();
 
                 if (line.length() >= 1) {
                     sign = line.charAt(0);
