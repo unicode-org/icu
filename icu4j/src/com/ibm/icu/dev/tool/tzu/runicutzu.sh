@@ -16,7 +16,7 @@ MissingICUTZUENV() {
 }
 
 MissingJAVAHOME() {
-  echo "java does not exist in $JAVA_HOME\bin. Please update the JAVA_HOME enviroment variable in runicutzuenv.sh"
+  echo "java does not exist in $JAVA_HOME/bin. Please update the JAVA_HOME enviroment variable in runicutzuenv.sh"
   Failure
 }
 
@@ -57,10 +57,10 @@ if [ ! -d "$ICUTZU_HOME/Temp" ] ; then mkdir "$ICUTZU_HOME/Temp" ; fi
 # Run the ICUTZU tool.
 echo
 echo "Launching the ICU4J Time Zone Update Utility (ICUTZU)..."
-echo "\"$JAVA_HOME/bin/java\" -cp \"$ICUTZU_HOME/icu4j.jar;$ICUTZU_HOME/icutzu.jar\" -Dnogui=$NOGUI -Ddiscoveronly=$DISCOVERONLY -Dsilentpatch=$SILENTPATCH -Doffline=$OFFLINE com.ibm.icu.dev.tool.tzu.ICUTZUMain \"$ICUTZU_HOME/\" DirectorySearch.txt ICUList.txt zoneinfo.res Temp icu.gif"
+echo "\"$JAVA_HOME/bin/java\" -cp \"$ICUTZU_HOME/icutzu.jar\" -Dnogui=$NOGUI -Ddiscoveronly=$DISCOVERONLY -Dsilentpatch=$SILENTPATCH -Doffline=$OFFLINE com.ibm.icu.dev.tool.tzu.ICUTZUMain \"$ICUTZU_HOME/\" DirectorySearch.txt ICUList.txt zoneinfo.res Temp icu.gif"
 echo
 
-"$JAVA_HOME/bin/java" -cp "$ICUTZU_HOME/icu4j.jar;$ICUTZU_HOME/icutzu.jar" -Dnogui=$NOGUI -Ddiscoveronly=$DISCOVERONLY -Dsilentpatch=$SILENTPATCH -Doffline=$OFFLINE com.ibm.icu.dev.tool.tzu.ICUTZUMain "$ICUTZU_HOME/" DirectorySearch.txt ICUList.txt zoneinfo.res Temp icu.gif
+"$JAVA_HOME/bin/java" -cp "$ICUTZU_HOME/icutzu.jar" -Dnogui=$NOGUI -Ddiscoveronly=$DISCOVERONLY -Dsilentpatch=$SILENTPATCH -Doffline=$OFFLINE com.ibm.icu.dev.tool.tzu.ICUTZUMain "$ICUTZU_HOME/" DirectorySearch.txt ICUList.txt zoneinfo.res Temp icu.gif
 
 # Test the exit code.
 if [ $? -eq "0" ] ; then

@@ -228,8 +228,8 @@ class ResultModel extends AbstractTableModel {
         try {
             reader = new BufferedReader(new InputStreamReader(
                     new FileInputStream(resultListFile), "UTF-8"), 4 * 1024);
-            while (reader.ready()) {
-                line = reader.readLine().replace('\ufeff', ' ').trim();
+            while ((line = reader.readLine()) != null) {
+                line = line.replace('\ufeff', ' ').trim();
                 logger.printlnToScreen(line);
 
                 if (line.length() >= 1 && (tab = line.lastIndexOf('\t')) >= 0) {
