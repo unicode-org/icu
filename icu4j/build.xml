@@ -98,10 +98,13 @@
 		<property name="ime.indic.manifest" value="${src.dir}/com/ibm/icu/dev/tool/ime/indic/manifest.stub" />
 		<property name="zip.file" value="../icu4j${DSTAMP}.zip" />
 		<property name="zipSrc.file" value="../icu4jSrc${DSTAMP}.zip" />
+		<property name="tzu.src.path" value="com/ibm/icu/dev/tool/tzu" />
 		<property name="tzu.bin.dir" value="${basedir}/icu4jtzu" />
-		<property name="tzujar.file" value="${tzu.bin.dir}/icutzu.jar" />
+		<property name="tzu.jar.file" value="icutzu.jar" />
 		<property name="tzu.test.dir" value="${basedir}/icu4jtzu/test" />
 		<property name="tzu.temp.dir" value="${basedir}/icu4jtzu/Temp" />
+		<property name="tzu.src.zip.file" value="icutzu-src.zip" />
+		<property name="tzu.bin.zip.file" value="icutzu-bin.zip" />
 		<property file="build.properties" />
 		<!-- fix the data folder every time there is a version update-->
 
@@ -678,12 +681,15 @@
 		<delete file="${testjar.file}" />
 		<delete file="${jarSrc.file}" />
 
-		<delete dir="${tzu.bin.dir}" />
 		<delete dir="${eclipse.projects.dir}" />
 		<delete dir="${wrapper.build.dir}" />
 		<delete file="${zipCoreSrc.file}" />
 		<delete file="${zipTestSrc.file}" />
 		<delete file="${jdk.wrapper.jar.file}" />
+
+		<delete dir="${tzu.bin.dir}" />
+		<delete file="${tzu.bin.zip.file}" />
+		<delete file="${tzu.src.zip.file}" />
 	</target>
 
 	<!--
@@ -2091,13 +2097,13 @@
 
 
 	<target name="icutzu" depends="init" description="build ICU4J TimeZone Update Utility Classes">
-		<javac includes="com/ibm/icu/dev/tool/tzu/**/*.java" excludes="**/.svn/**/*" srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}" debug="on" deprecation="off" encoding="ascii" />
+		<javac includes="${tzu.src.path}/**/*.java" excludes="**/.svn/**/*" srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}" debug="on" deprecation="off" encoding="ascii" />
 	</target>
 
 	<target name="icutzudata" depends="init, jar13">
 		<mkdir dir="${tzu.bin.dir}" />
 		<copy todir="${tzu.bin.dir}">
-			<fileset dir="${src.dir}/com/ibm/icu/dev/tool/tzu">
+			<fileset dir="${src.dir}/${tzu.src.path}">
 				<include name="*.cmd" />
 				<include name="*.bat" />
 				<include name="*.sh" />
@@ -2109,10 +2115,10 @@
 		</copy>
 	</target>
 
-	<target name="icutzujar" depends="init, icutzu, icutzudata" description="build ICU4J TimeZone Update Utility Classes">
-		<jar jarfile="${tzujar.file}" compress="true">
+	<target name="icutzujar" depends="init, icutzu, icutzudata" description="build ICU4J TimeZone Update Utility classes">
+		<jar jarfile="${tzu.bin.dir}/${tzu.jar.file}" compress="true">
 			<fileset dir="${basedir}" includes="license.html" />
-			<fileset dir="${build.dir}" includes="com/ibm/icu/dev/tool/tzu/**/*.class" />
+			<fileset dir="${build.dir}" includes="${tzu.src.path}/**/*.class" />
 			<manifest>
 				<attribute name="Main-Class" value="com.ibm.icu.dev.tool.tzu.ICUTZUMain" />
 				<attribute name="Built-By" value="${corp}" />
@@ -2148,7 +2154,7 @@
 		<echo>Running ICUTZU in Discovery Mode ...</echo>
 		<exec dir="${tzu.bin.dir}" executable="${java.home}/bin/java">
 			<arg value="-cp" />
-			<arg path="${tzu.bin.dir}/icu4j.jar;${tzu.bin.dir}/icutzu.jar" />
+			<arg path="${tzu.bin.dir}/${jar.file};${tzu.bin.dir}/${tzu.jar.file}" />
 			<arg value="-Dnogui=true" />
 			<arg value="-Ddiscoveronly=true" />
 			<arg value="-Dsilentpatch=true" />
@@ -2165,7 +2171,7 @@
 		<echo>Running ICUTZU in Patch Mode ...</echo>
 		<exec dir="${tzu.bin.dir}" executable="${java.home}/bin/java">
 			<arg value="-cp" />
-			<arg path="${tzu.bin.dir}/icu4j.jar;${tzu.bin.dir}/icutzu.jar" />
+			<arg path="${tzu.bin.dir}/${jar.file};${tzu.bin.dir}/${tzu.jar.file}" />
 			<arg value="-Dnogui=true" />
 			<arg value="-Ddiscoveronly=false" />
 			<arg value="-Dsilentpatch=true" />
@@ -2180,22 +2186,22 @@
 		</exec>
 
 		<echo>Comparing results ...</echo>
-		<unjar src="${tzu.test.dir}/icu4j.jar" dest="${tzu.test.dir}">
+		<unjar src="${tzu.test.dir}/${jar.file}" dest="${tzu.test.dir}">
 			<patternset>
 				<include name="**/zoneinfo.res" />
 			</patternset>
 		</unjar>
-		<copy todir="${tzu.test.dir}" file="${tzu.test.dir}/com/ibm/icu/impl/data/icudt${icu4j.version.number}b/zoneinfo.res" />
-		<condition property="zoneinfo.match">
+		<copy todir="${tzu.test.dir}" file="${tzu.test.dir}/${icu4j.data.path}/zoneinfo.res" />
+		<condition property="tzu.zoneinfo.match">
 			<filesmatch file1="${tzu.bin.dir}/zoneinfo.res" file2="${tzu.test.dir}/zoneinfo.res" />
 		</condition>
 
-		<fail unless="zoneinfo.match">ICUTZU test failed. ${tzu.bin.dir}/zoneinfo.res does not match ${tzu.test.dir}/zoneinfo.res</fail>
+		<fail unless="tzu.zoneinfo.match">ICUTZU test failed. ${tzu.bin.dir}/zoneinfo.res does not match ${tzu.test.dir}/zoneinfo.res</fail>
 
 		<echo>Cleaning up ...</echo>
 		<delete>
-			<fileset file="${tzu.bin.dir}/zoneinfo.res" />
 			<fileset file="${tzu.bin.dir}/DirectorySearch.txt" />
+			<fileset file="${tzu.bin.dir}/zoneinfo.res" />
 		</delete>
 		<copy todir="${tzu.bin.dir}">
 			<fileset file="${tzu.temp.dir}/DirectorySearch.txt" />
@@ -2207,5 +2213,13 @@
 		</delete>
 
 		<echo>ICUTZU test successful.</echo>
+	</target>
+
+	<target name="icutzusrc-dist" depends="init" description="ICUTZU source distributable zip">
+		<zip zipfile="${basedir}/${tzu.src.zip.file}" basedir="${basedir}" includes="${src.dir}/${tzu.src.path}/**/*" />
+	</target>
+
+	<target name="icutzubin-dist" depends="icutzujar" description="ICUTZU binaries distributable zip">
+		<zip zipfile="${basedir}/${tzu.bin.zip.file}" basedir="${tzu.bin.dir}" includes="*" />
 	</target>
 </project>
