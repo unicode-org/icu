@@ -166,14 +166,12 @@ class PathModel extends AbstractListModel {
         char sign;
 
         try {
-            System.out.println("try 3");
-            System.out.println(pathListFilename);
-            System.out.println(pathListFile);
             reader = new BufferedReader(new InputStreamReader(
                     new FileInputStream(pathListFile), "UTF-8"), 4 * 1024);
-            reader = new BufferedReader(new FileReader(pathListFile));
             while ((line = reader.readLine()) != null) {
-                line = line.replace('\ufeff', ' ').trim();
+                if (line.length() >= 1 && line.charAt(0) == '\ufeff')
+                    line = line.substring(1);
+                line = line.trim();
 
                 if (line.length() >= 1) {
                     sign = line.charAt(0);
@@ -332,11 +330,9 @@ class PathModel extends AbstractListModel {
      *            The message to put in the exception.
      * @param lineNumber
      *            The line number to put in the exception.
-     * @throws IllegalArgumentException
      */
-    private void pathListError(String message, int lineNumber)
-            throws IllegalArgumentException {
-        throw new IllegalArgumentException("Error in " + pathListFilename
-                + " (line " + lineNumber + "): " + message);
+    private void pathListError(String message, int lineNumber) {
+        logger.errorln("Error in " + pathListFilename + " (line " + lineNumber
+                + "): " + message);
     }
 }
