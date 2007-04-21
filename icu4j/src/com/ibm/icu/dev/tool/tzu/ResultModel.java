@@ -229,7 +229,9 @@ class ResultModel extends AbstractTableModel {
             reader = new BufferedReader(new InputStreamReader(
                     new FileInputStream(resultListFile), "UTF-8"), 4 * 1024);
             while ((line = reader.readLine()) != null) {
-                line = line.replace('\ufeff', ' ').trim();
+                if (line.length() >= 1 && line.charAt(0) == '\ufeff')
+                    line = line.substring(1);
+                line = line.trim();
                 logger.printlnToScreen(line);
 
                 if (line.length() >= 1 && (tab = line.lastIndexOf('\t')) >= 0) {
@@ -427,11 +429,9 @@ class ResultModel extends AbstractTableModel {
      *            The message.
      * @param lineNumber
      *            The line number.
-     * @throws IllegalArgumentException
      */
-    private void resultListError(String message, int lineNumber)
-            throws IllegalArgumentException {
-        throw new IllegalArgumentException("Error in " + resultListFilename
-                + " (line " + lineNumber + "): " + message);
+    private void resultListError(String message, int lineNumber) {
+        logger.errorln("Error in " + resultListFilename + " (line "
+                + lineNumber + "): " + message);
     }
 }
