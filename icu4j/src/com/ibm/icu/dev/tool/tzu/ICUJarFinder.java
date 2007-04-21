@@ -132,6 +132,10 @@ public class ICUJarFinder {
     private static ResultModel search(ResultModel resultModel, Logger logger,
             File file, List excluded, boolean subdirs, int depth)
             throws InterruptedException {
+        // ensure we are not following a symbolic link
+        if (isSymbolic(file))
+            return resultModel;
+        
         // ensure that the file is in canonical form
         try {
             file = file.getCanonicalFile();
@@ -150,7 +154,7 @@ public class ICUJarFinder {
             if (file.equals(((File) iter.next())))
                 return resultModel;
 
-        if ((subdirs || depth == 0) && file.isDirectory() && !isSymbolic(file)) {
+        if ((subdirs || depth == 0) && file.isDirectory()) {
             // recurse through each file/directory inside this directory
             File[] dirlist = file.listFiles();
             if (dirlist != null && dirlist.length > 0) {

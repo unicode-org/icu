@@ -81,7 +81,7 @@ public class ICUTZUMain {
                 }
 
                 new GUILoader(curDir, new File("Temp").getAbsoluteFile(),
-                        new File("DirectoryList.txt").getAbsoluteFile(),
+                        new File("DirectorySearch.txt").getAbsoluteFile(),
                         new File("ICUList.txt").getAbsoluteFile(), new File(
                                 "zoneinfo.res").getAbsoluteFile(), new File(
                                 "icu.gif").getAbsoluteFile());
