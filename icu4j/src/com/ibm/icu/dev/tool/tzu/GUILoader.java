@@ -117,7 +117,8 @@ public class GUILoader {
         this.curDir = curDir;
 
         // get the icon
-        Image icon = Toolkit.getDefaultToolkit().getImage(iconFile.getPath());
+        Image icon = Toolkit.getDefaultToolkit().getImage(
+                iconFile.getAbsolutePath());
 
         // initialize the path list gui
         pathGUI = new PathComponent(this);

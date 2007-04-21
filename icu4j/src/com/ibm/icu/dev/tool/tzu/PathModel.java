@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -165,8 +166,12 @@ class PathModel extends AbstractListModel {
         char sign;
 
         try {
+            System.out.println("try 3");
+            System.out.println(pathListFilename);
+            System.out.println(pathListFile);
             reader = new BufferedReader(new InputStreamReader(
                     new FileInputStream(pathListFile), "UTF-8"), 4 * 1024);
+            reader = new BufferedReader(new FileReader(pathListFile));
             while ((line = reader.readLine()) != null) {
                 line = line.replace('\ufeff', ' ').trim();
 
