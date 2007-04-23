@@ -515,11 +515,6 @@ icu4c/source/tools/genrb/derb
 icu4c/source/tools/genrb/derb.[0-9]
 icu4c/source/tools/genrb/derb.vcproj.*.*.user
 icu4c/source/tools/genrb/derb_*
-icu4c/source/tools/genrb/genjp/Debug
-icu4c/source/tools/genrb/genjp/genjp.ncb
-icu4c/source/tools/genrb/genjp/genjp.opt
-icu4c/source/tools/genrb/genjp/genjp.plg
-icu4c/source/tools/genrb/genjp/genjp.positions
 icu4c/source/tools/genrb/genrb
 icu4c/source/tools/genrb/genrb.[0-9]
 icu4c/source/tools/genrb/genrb.vcproj.*.*.user
