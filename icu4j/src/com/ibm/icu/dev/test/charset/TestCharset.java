@@ -24,6 +24,7 @@ import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.SortedMap;
 
+import java.nio.BufferOverflowException;
 import com.ibm.icu.charset.*;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.UTF16;
@@ -897,7 +898,7 @@ public class TestCharset extends TestFmwk {
         }
     }
      
-    private void smBufDecode(CharsetDecoder decoder, String encoding, ByteBuffer source, CharBuffer target) {
+    private void smBufDecode(CharsetDecoder decoder, String encoding, ByteBuffer source, CharBuffer target, boolean throwException)  throws BufferOverflowException {
 
         ByteBuffer mySource = source.duplicate();
         CharBuffer myTarget = CharBuffer.allocate(target.capacity());
@@ -913,6 +914,9 @@ public class TestCharset extends TestFmwk {
                 return;
             }
             if (result.isOverflow()) {
+                if (throwException) {
+                    throw new BufferOverflowException();
+                }
                 errln("Test complete buffers while decoding threw overflow exception");
                 return;
             }
@@ -952,6 +956,9 @@ public class TestCharset extends TestFmwk {
                     break;
                 }
                 if (result.isOverflow()) {
+                    if (throwException) {
+                        throw new BufferOverflowException();
+                    }
                     errln("Test small input buffers while decoding threw overflow exception");
                     break;
                 }
@@ -1002,7 +1009,7 @@ public class TestCharset extends TestFmwk {
         }
     }
 
-    private void smBufEncode(CharsetEncoder encoder, String encoding, CharBuffer source, ByteBuffer target) {
+    private void smBufEncode(CharsetEncoder encoder, String encoding, CharBuffer source, ByteBuffer target, boolean throwException) throws BufferOverflowException {
         logln("Running smBufEncode for "+ encoding + " with class " + encoder);
         CharBuffer mySource = source.duplicate();
         ByteBuffer myTarget = ByteBuffer.allocate(target.capacity());
@@ -1020,13 +1027,17 @@ public class TestCharset extends TestFmwk {
                 errln("Test complete while encoding failed. "+result.toString());
             }
             if (result.isOverflow()) {
+                if (throwException) {
+                    throw new BufferOverflowException();
+                }
                 errln("Test complete while encoding threw overflow exception");
             }
             if (!equals(myTarget,target)) {
 
                 errln("Test complete buffers while encoding for "+ encoding+ " failed");
 
-            }else{
+            }
+            else{
                 logln("Tests complete buffers for "+ encoding +" passed");
             }
         }
@@ -1049,6 +1060,9 @@ public class TestCharset extends TestFmwk {
                     errln("Test small input buffers while encoding failed. "+result.toString());
                 }
                 if (result.isOverflow()) {
+                    if (throwException) {
+                        throw new BufferOverflowException();
+                    }
                     errln("Test small input buffers while encoding threw overflow exception");
                 }
             }
@@ -1592,8 +1606,25 @@ public class TestCharset extends TestFmwk {
     
     /*
      *  Michael Ow
-     *  Modified 070413
+     *  Modified 070424
      */
+    /*The following two methods provides the option of exceptions when Decoding 
+     * and Encoding if needed for testing purposes.
+     */
+    private void smBufDecode(CharsetDecoder decoder, String encoding, ByteBuffer source, CharBuffer target) {
+        try {
+            smBufDecode(decoder, encoding, source, target, false);
+        }    
+        catch (Exception ex) {           
+        }
+    }
+    private void smBufEncode(CharsetEncoder encoder, String encoding, CharBuffer source, ByteBuffer target)  {
+        try {
+            smBufEncode(encoder, encoding, source, target, false); 
+        }
+        catch (Exception ex) {
+        }
+    }
     //Test CharsetICUProvider
     public void TestNullCanonicalName() {
         String enc = null;
@@ -1640,6 +1671,60 @@ public class TestCharset extends TestFmwk {
         
         if (test != false) {
             errln("Charset.contains returned true for a different charset.");
+        }
+    }
+    public void TestCharsetICUNullCharsetName() {
+        String charsetName = null;
+        
+        try {
+            Charset cs = CharsetICU.forNameICU(charsetName);
+            errln("CharsetICU.forName should have thown an exception after getting a null charsetName.");
+        }
+        catch(Exception ex) {          
+        }
+    }
+    //Test CharsetASCII
+    public void TestCharsetASCIIOverFlow() {
+        int byteBufferLimit;
+        int charBufferLimit;
+        
+        CharsetProvider provider = new CharsetProviderICU();
+        Charset cs = provider.charsetForName("ASCII");        
+        CharsetEncoder encoder = cs.newEncoder();
+        CharsetDecoder decoder = cs.newDecoder();
+        
+        CharBuffer charBuffer = CharBuffer.allocate(0x90);
+        ByteBuffer byteBuffer = ByteBuffer.allocate(0x90);
+        
+        CharBuffer charBufferTest = CharBuffer.allocate(0xb0);
+        ByteBuffer byteBufferTest = ByteBuffer.allocate(0xb0);
+        
+        for(int j=0;j<=0x7f; j++){
+           charBuffer.put((char)j);
+           byteBuffer.put((byte)j);
+        }
+        
+        byteBuffer.limit(byteBufferLimit = byteBuffer.position());
+        byteBuffer.position(0);
+        charBuffer.limit(charBufferLimit = charBuffer.position());
+        charBuffer.position(0);
+        
+        //test for overflow
+        byteBufferTest.limit(byteBufferLimit - 5);
+        byteBufferTest.position(0);
+        charBufferTest.limit(charBufferLimit - 5);
+        charBufferTest.position(0);
+        try {
+            smBufDecode(decoder, "ASCII", byteBuffer, charBufferTest, true);
+            errln("Overflow exception while decoding ASCII should have been thrown.");
+        }
+        catch(BufferOverflowException ex) {
+        }
+        try {
+            smBufEncode(encoder, "ASCII", charBuffer, byteBufferTest, true);
+            errln("Overflow exception while encoding ASCII should have been thrown.");
+        }
+        catch (BufferOverflowException ex) {
         }
     }
 }
