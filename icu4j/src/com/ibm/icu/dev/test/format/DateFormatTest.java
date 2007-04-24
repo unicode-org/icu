@@ -1306,14 +1306,11 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             logln("format(June 15 1997) = " + juneStr);
             Date d = fmt.parse(juneStr);
             String s = fmt.format(d);
-            int month, yr, day, hr, min, sec;
+            int month, yr, day;
             cal.setTime(d);
             yr = cal.get(Calendar.YEAR);
             month = cal.get(Calendar.MONTH);
             day = cal.get(Calendar.DAY_OF_MONTH);
-            hr = cal.get(Calendar.HOUR_OF_DAY);
-            min = cal.get(Calendar.MINUTE);
-            sec = cal.get(Calendar.SECOND);
             logln("  . parse . " + s + " (month = " + month + ")");
             if (month != Calendar.JUNE)
                 errln("FAIL: Month should be June");
@@ -1328,9 +1325,6 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             yr = cal.get(Calendar.YEAR) - 1900;
             month = cal.get(Calendar.MONTH);
             day = cal.get(Calendar.DAY_OF_WEEK);
-            hr = cal.get(Calendar.HOUR_OF_DAY);
-            min = cal.get(Calendar.MINUTE);
-            sec = cal.get(Calendar.SECOND);
             logln("  . parse . " + s + " (month = " + month + ")");
             if (month != Calendar.JULY)
                 errln("FAIL: Month should be July");

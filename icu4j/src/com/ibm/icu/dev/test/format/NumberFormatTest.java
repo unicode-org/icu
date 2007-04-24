@@ -277,9 +277,20 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         ULocale save = ULocale.getDefault();
         ULocale.setDefault(ULocale.US);
         MeasureFormat curFmt = MeasureFormat.getCurrencyFormat();
-        //Not knowing how to test this factory method,
-        //  because the concreat class of MeasureFormat -
-        //  CurrencyFormat is just for internal use.
+        String strBuf = curFmt.format(new CurrencyAmount(new Float(1234.56), Currency.getInstance("USD")));
+        try {
+            CurrencyAmount parsedVal = (CurrencyAmount)curFmt.parseObject(strBuf);
+            Number val = parsedVal.getNumber();
+            if (!val.equals(new BigDecimal("1234.56"))) {
+                errln("FAIL: getCurrencyFormat of default locale (en_US) failed roundtripping the number. val=" + val);
+            }
+            if (!parsedVal.getCurrency().equals(Currency.getInstance("USD"))) {
+                errln("FAIL: getCurrencyFormat of default locale (en_US) failed roundtripping the currency");
+            }
+        }
+        catch (ParseException e) {
+            errln("FAIL: " + e.getMessage());
+        }
         ULocale.setDefault(save);        
     }
 
