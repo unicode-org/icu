@@ -180,6 +180,7 @@ icu4j/src/com/ibm/icu/dev/tool/tzu/PathModel.java -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/ResultComponent.java -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/ResultModel.java -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/SourceModel.java -text
+icu4j/src/com/ibm/icu/dev/tool/tzu/icu.css -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/icu.gif -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/runicutzu.bat -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/runicutzu.cmd -text
