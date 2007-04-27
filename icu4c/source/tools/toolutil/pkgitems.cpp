@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2006, International Business Machines
+*   Copyright (C) 2003-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -52,8 +52,6 @@ printError(void *context, const char *fmt, va_list args) {
 }
 
 U_CDECL_END
-
-typedef void CheckDependency(void *context, const char *itemName, const char *targetName);
 
 // check a dependency ------------------------------------------------------ ***
 
@@ -586,7 +584,7 @@ getDataFormat(const uint8_t dataFormat[4]) {
 U_NAMESPACE_BEGIN
 
 void
-Package::enumDependencies(Item *pItem) {
+Package::enumDependencies(Item *pItem, void *context, CheckDependency check) {
     const UDataInfo *pInfo;
     const uint8_t *inBytes;
     int32_t format, length, infoLength, itemHeaderLength;
@@ -619,10 +617,10 @@ Package::enumDependencies(Item *pItem) {
 
         switch(format) {
         case FMT_RES:
-            ures_enumDependencies(ds, pItem->name, pInfo, inBytes, length, checkDependency, this, &errorCode);
+            ures_enumDependencies(ds, pItem->name, pInfo, inBytes, length, check, context, &errorCode);
             break;
         case FMT_CNV:
-            ucnv_enumDependencies(ds, pItem->name, pInfo, inBytes, length, checkDependency, this, &errorCode);
+            ucnv_enumDependencies(ds, pItem->name, pInfo, inBytes, length, check, context, &errorCode);
             break;
         default:
             break;

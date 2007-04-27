@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2006, International Business Machines
+*   Copyright (C) 1999-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -1164,13 +1164,18 @@ Package::checkDependency(void *context, const char *itemName, const char *target
 
 UBool
 Package::checkDependencies() {
+    isMissingItems=FALSE;
+    enumDependencies(this, checkDependency);
+    return (UBool)!isMissingItems;
+}
+
+void
+Package::enumDependencies(void *context, CheckDependency check) {
     int32_t i;
 
-    isMissingItems=FALSE;
     for(i=0; i<itemCount; ++i) {
-        enumDependencies(items+i);
+        enumDependencies(items+i, context, check);
     }
-    return (UBool)!isMissingItems;
 }
 
 char *
