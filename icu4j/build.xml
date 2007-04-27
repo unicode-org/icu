@@ -2110,6 +2110,7 @@
         <include name="*.gif" />
         <include name="*.txt" />
         <include name="*.html" />
+        <include name="*.css" />
       </fileset>
       <fileset file="${basedir}/${jar.file}" />
       <fileset file="${build.dir}/${icu4j.data.path}/zoneinfo.res" />
