@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2005-2006, International Business Machines
+*   Copyright (C) 2005-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -28,6 +28,8 @@
 #define STRING_STORE_SIZE 100000
 #define MAX_FILE_COUNT 2000
 #define MAX_PKG_NAME_LENGTH 32
+
+typedef void CheckDependency(void *context, const char *itemName, const char *targetName);
 
 U_NAMESPACE_BEGIN
 
@@ -115,8 +117,13 @@ public:
      */
     UBool checkDependencies();
 
+    /*
+     * Enumerate all the dependencies and give the results to context and check
+     */
+    void enumDependencies(void *context, CheckDependency check);
+
 private:
-    void enumDependencies(Item *pItem);
+    void enumDependencies(Item *pItem, void *context, CheckDependency check);
 
     static void checkDependency(void *context, const char *itemName, const char *targetName);
 
