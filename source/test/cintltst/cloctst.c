@@ -882,29 +882,30 @@ static void TestISOFunctions()
 
     for(count = 0; *(str+count) != 0; count++)
     {
+        const char *key = NULL;
         test = *(str+count);
+        status = U_ZERO_ERROR;
 
+        do {
+            /* Skip over language tags. This API only returns language codes. */
+            skipped += (key != NULL);
+            ures_getNextString(res, NULL, &key, &status);
+        }
+        while (key != NULL && strchr(key, '_'));
+
+        if(key == NULL)
+            break;
+        if(!strcmp(key,"root"))
+            ures_getNextString(res, NULL, &key, &status);
+        if(!strcmp(key,"Fallback"))
+            ures_getNextString(res, NULL, &key, &status);
+        if(!strcmp(key,"sh")) /* Remove this once sh is removed. */
+            ures_getNextString(res, NULL, &key, &status);
 #if U_CHARSET_FAMILY==U_ASCII_FAMILY
-        {
-            /* This code only works on ASCII machines where the keys are stored in ASCII order */
-            const char *key = NULL;
-            do {
-                /* Skip over language tags. This API only returns language codes. */
-                skipped += (key != NULL);
-                ures_getNextString(res, NULL, &key, &status);
-            }
-            while (key != NULL && strchr(key, '_'));
-            if(!strcmp(key,"root"))
-                ures_getNextString(res, NULL, &key, &status);
-            if(!strcmp(key,"Fallback"))
-                ures_getNextString(res, NULL, &key, &status);
-            if(!strcmp(key,"sh")) /* Remove this once sh is removed. */
-                ures_getNextString(res, NULL, &key, &status);
-            if(!key || strcmp(test,key)) {
-                /* The first difference usually implies the place where things get out of sync */
-                log_err("FAIL diff at offset %d, \"%s\" != \"%s\"\n", count, test, key);
-            }
-            status = U_ZERO_ERROR;
+        /* This code only works on ASCII machines where the keys are stored in ASCII order */
+        if(strcmp(test,key)) {
+            /* The first difference usually implies the place where things get out of sync */
+            log_err("FAIL diff at offset %d, \"%s\" != \"%s\"\n", count, test, key);
         }
 #endif
 
