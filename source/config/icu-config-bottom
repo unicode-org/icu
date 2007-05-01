@@ -146,7 +146,7 @@ do
 	    ;;
 
 	--invoke=*)
-	    QUOT="'"
+	    QUOT="\""
             CMD="${var}"
 
             # If it's not a locally executable command (1st choice) then 
@@ -164,7 +164,7 @@ do
 	    ;;
 
 	--invoke)
-	    QUOT="'"
+	    QUOT="\""
 	    echo "env ${QUOT}${LDLIBRARYPATH_ENVVAR}=${libdir}:"'${'"${LDLIBRARYPATH_ENVVAR}"'}'${QUOT}
 	    ;;
 
