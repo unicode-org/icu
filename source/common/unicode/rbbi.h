@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-*   Copyright (C) 1999-2006 International Business Machines Corporation   *
+*   Copyright (C) 1999-2007 International Business Machines Corporation   *
 *   and others. All rights reserved.                                      *
 ***************************************************************************
 
@@ -648,6 +648,8 @@ private:
      */
     int32_t handleNext(const RBBIStateTable *statetable);
 
+protected:
+
     /**
      * This is the function that actually implements dictionary-based
      * breaking.  Covering at least the range from startPos to endPos,
@@ -663,6 +665,8 @@ private:
      * @internal
      */
     int32_t checkDictionary(int32_t startPos, int32_t endPos, UBool reverse);
+
+private:
 
     /**
      * This function returns the appropriate LanguageBreakEngine for a
