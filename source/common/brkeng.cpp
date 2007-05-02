@@ -1,8 +1,8 @@
 /**
- *******************************************************************************
- * Copyright (C) 2006, International Business Machines Corporation and others. *
- * All Rights Reserved.                                                        *
- *******************************************************************************
+ ************************************************************************************
+ * Copyright (C) 2006-2007, International Business Machines Corporation and others. *
+ * All Rights Reserved.                                                             *
+ ************************************************************************************
  */
 
 #include "unicode/utypes.h"
