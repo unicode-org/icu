@@ -106,15 +106,6 @@ distclean-local: clean
 
 all-local: build-dir icupkg.inc build-local packagedata $(POST_DATA_BUILD) $(OS390PKG)
 
-# Starting with ICU4C 3.4, the core Unicode properties files (uprops.icu, ucase.icu, ubidi.icu, unorm.icu)
-# are hardcoded in the common DLL and therefore not included in the data package any more.
-# They are not built by default but need to be built for ICU4J data and for getting the .c source files
-# when updating the Unicode data.
-# Changed in Makefile.in revision 1.147. See Jitterbug 4497.
-uni-core-data: build-dir $(BUILDDIR)/uprops.icu $(BUILDDIR)/ucase.icu $(BUILDDIR)/ubidi.icu $(BUILDDIR)/unorm.icu
-	@echo Unicode .icu files built to $(BUILDDIR)
-	@echo Unicode .c source files built to $(OUTTMPDIR)
-
 dist-local:
 
 clean-map:
@@ -325,6 +316,14 @@ ALL_FILES = $(DAT_FILES) $(CNV_FILES) $(BRK_FILES) $(CTD_FILES) $(RES_FILES) $(I
 ALL_INDEX_SRC_FILES = $(PKGDATA_LIST) $(INDEX_FILE) $(COLLATION_INDEX_FILE) $(BRK_RES_INDEX_FILE) $(RBNF_INDEX_FILE)
 # a list to use in the .lst files (package-relative)
 ALL_FILES_LIST = $(DAT_FILES_SHORT) $(CNV_FILES_SHORT) $(BRK_FILES_SHORT) $(CTD_FILES_SHORT) $(RES_FILES_SHORT) $(INDEX_RES_FILE_SHORT) $(COLLATION_FILES_SHORT) $(COLLATION_INDEX_RES_SHORT) $(BRK_RES_FILES_SHORT) $(BRK_RES_INDEX_RES_SHORT) $(RBNF_FILES_SHORT) $(RBNF_INDEX_RES_SHORT) $(TRANSLIT_FILES_SHORT)
+
+UNI_CORE_DATA=uprops.icu ucase.icu ubidi.icu unorm.icu
+UNI_CORE_TARGET_DATA=$(UNI_CORE_DATA:%=$(BUILDDIR)/%)
+
+ifneq ($(INCLUDE_UNI_CORE_DATA),)
+ALL_FILES_LIST+=$(UNI_CORE_DATA)
+build-local: uni-core-data
+endif
 
 #####################################################
 # General data build rules
@@ -550,6 +549,15 @@ clean-resindex:
 
 $(INDEX_RES_FILE): $(INDEX_FILE) $(BINDIR)/genrb$(EXEEXT)
 	$(INVOKE) $(BINDIR)/genrb $(GENRBOPTS) -i $(BUILDDIR) -d $(BUILDDIR) $(INDEX_FILE)
+
+# Starting with ICU4C 3.4, the core Unicode properties files (uprops.icu, ucase.icu, ubidi.icu, unorm.icu)
+# are hardcoded in the common DLL and therefore not included in the data package any more.
+# They are not built by default but need to be built for ICU4J data and for getting the .c source files
+# when updating the Unicode data.
+# Changed in Makefile.in revision 1.147. See Jitterbug 4497.
+uni-core-data: build-dir $(UNI_CORE_TARGET_DATA)
+	@echo Unicode .icu files built to $(BUILDDIR)
+	@echo Unicode .c source files built to $(OUTTMPDIR)
 
 ###################################################################
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
