@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2006, International Business Machines
+*   Copyright (C) 2004-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -718,6 +718,23 @@ utext_extract(UText *ut,
         (ut)->chunkNativeStart+(ut)->chunkOffset :     \
         (ut)->pFuncs->mapOffsetToNative(ut))    
 
+/**
+  *  inline version of utext_setNativeIndex(), for performance-critical situations.
+  *
+  * Set the current iteration position to the nearest code point
+  * boundary at or preceding the specified index.
+  * The index is in the native units of the original input text.
+  * If the index is out of range, it will be pinned to be within
+  * the range of the input text.
+  *
+  * @draft ICU 3.8
+  */
+#define UTEXT_SETNATIVEINDEX(ut, ix)                       \
+    { int64_t __offset = (ix) - (ut)->chunkNativeStart; \
+      if (__offset>=0 && __offset<=(int64_t)(ut)->nativeIndexingLimit) { \
+          (ut)->chunkOffset=(int32_t)__offset; \
+      } else { \
+          utext_setNativeIndex((ut), (ix)); } }
 
 
 
