@@ -1609,6 +1609,8 @@ int32_t RuleBasedBreakIterator::checkDictionary(int32_t startPos,
     // cache is built in the right order.
     if (reverse) {
         utext_setNativeIndex(fText, rangeStart);
+        c = utext_current32(fText);
+        UTRIE_GET16(&fData->fTrie, c, category);
     }
     while(U_SUCCESS(status)) {
         while((current = (int32_t)UTEXT_GETNATIVEINDEX(fText)) < rangeEnd && (category & 0x4000) == 0) {
