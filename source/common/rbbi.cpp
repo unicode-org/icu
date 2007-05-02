@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-*   Copyright (C) 1999-2006 International Business Machines Corporation   *
+*   Copyright (C) 1999-2007 International Business Machines Corporation   *
 *   and others. All rights reserved.                                      *
 ***************************************************************************
 */
@@ -1034,7 +1034,7 @@ int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
                 lookaheadStatus      = 0;
                 // TODO:  make a standalone hard break in a rule work.
                 if (lookAheadHardBreak) {
-                    utext_setNativeIndex(fText, result);
+                    UTEXT_SETNATIVEINDEX(fText, result);
                     return result;
                 }
                 // Look-ahead completed, but other rules may match further.  Continue on
@@ -1085,13 +1085,13 @@ continueOn:
     //   (This really indicates a defect in the break rules.  They should always match
     //    at least one character.)
     if (result == initialPosition) {
-        utext_setNativeIndex(fText, initialPosition);
+        UTEXT_SETNATIVEINDEX(fText, initialPosition);
         UTEXT_NEXT32(fText);
         result = (int32_t)UTEXT_GETNATIVEINDEX(fText);
     }
 
     // Leave the iterator at our result position.
-    utext_setNativeIndex(fText, result);
+    UTEXT_SETNATIVEINDEX(fText, result);
     #ifdef RBBI_DEBUG
         if (fTrace) {
             RBBIDebugPrintf("result = %d\n\n", result);
@@ -1179,7 +1179,7 @@ int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable)
                 } else if (result == initialPosition) {
                     // Ran off start, no match found.
                     // move one index one (towards the start, since we are doing a previous())
-                    utext_setNativeIndex(fText, initialPosition);
+                    UTEXT_SETNATIVEINDEX(fText, initialPosition);
                     UTEXT_PREVIOUS32(fText);   // TODO:  shouldn't be necessary.  We're already at beginning.  Check.
                 }
                 break;
@@ -1245,7 +1245,7 @@ int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable)
                 lookaheadStatus      = 0;
                 // TODO:  make a standalone hard break in a rule work.
                 if (lookAheadHardBreak) {
-                    utext_setNativeIndex(fText, result);
+                    UTEXT_SETNATIVEINDEX(fText, result);
                     return result;
                 }
                 // Look-ahead completed, but other rules may match further.  Continue on
@@ -1293,13 +1293,13 @@ continueOn:
     //   (This really indicates a defect in the break rules.  They should always match
     //    at least one character.)
     if (result == initialPosition) {
-        utext_setNativeIndex(fText, initialPosition);
+        UTEXT_SETNATIVEINDEX(fText, initialPosition);
         UTEXT_PREVIOUS32(fText);
         result = (int32_t)UTEXT_GETNATIVEINDEX(fText);
     }
 
     // Leave the iterator at our result position.
-    utext_setNativeIndex(fText, result);
+    UTEXT_SETNATIVEINDEX(fText, result);
     #ifdef RBBI_DEBUG
         if (fTrace) {
             RBBIDebugPrintf("result = %d\n\n", result);
