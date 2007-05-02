@@ -19,6 +19,7 @@
 #include "unicode/udata.h"
 #include "unicode/putil.h"
 #include "unicode/ustring.h"
+#include "unicode/uscript.h"
 #include "uvector.h"
 #include "umutex.h"
 #include "uresimp.h"
@@ -137,82 +138,60 @@ U_NAMESPACE_BEGIN
 const LanguageBreakEngine *
 ICULanguageBreakFactory::getEngineFor(UChar32 c, int32_t breakType) {
     UBool       needsInit;
+    int32_t     i;
+    const LanguageBreakEngine *lbe = NULL;
     UErrorCode  status = U_ZERO_ERROR;
-    UMTX_CHECK(NULL, (UBool)(fEngines == NULL), needsInit);
+
+    umtx_lock(NULL);
+    needsInit = (UBool)(fEngines == NULL);
+    if (!needsInit) {
+        i = fEngines->size();
+        while (--i >= 0) {
+            lbe = (const LanguageBreakEngine *)(fEngines->elementAt(i));
+            if (lbe != NULL && lbe->handles(c, breakType)) {
+                break;
+            }
+            lbe = NULL;
+        }
+    }
+    umtx_unlock(NULL);
+    
+    if (lbe != NULL) {
+        return lbe;
+    }
     
     if (needsInit) {
         UStack  *engines = new UStack(_deleteEngine, NULL, status);
         if (U_SUCCESS(status) && engines == NULL) {
             status = U_MEMORY_ALLOCATION_ERROR;
         }
-        // TODO: add locale parameter, check "dictionaries" in locale
-        // TODO: generalize once we can figure out how to parameterize engines
-        // instead of having different subclasses. Right now it needs to check
-        // for the key of each particular subclass.
-
-        // Open root from brkitr tree.
-        char dictnbuff[256];
-        char ext[4]={'\0'};
-
-        UResourceBundle *b = ures_open(U_ICUDATA_BRKITR, "", &status);
-        b = ures_getByKeyWithFallback(b, "dictionaries", b, &status);
-        b = ures_getByKeyWithFallback(b, "Thai", b, &status);
-        int32_t dictnlength = 0;
-        const UChar *dictfname = ures_getString(b, &dictnlength, &status);
-        if (U_SUCCESS(status) && (size_t)dictnlength >= sizeof(dictnbuff)) {
-            dictnlength = 0;
-            status = U_BUFFER_OVERFLOW_ERROR;
-        }
-        if (U_SUCCESS(status) && dictfname) {
-            UChar* extStart=u_strchr(dictfname, 0x002e);
-            int len = 0;
-            if(extStart!=NULL){
-                len = extStart-dictfname;
-                u_UCharsToChars(extStart+1, ext, sizeof(ext)); // nul terminates the buff
-                u_UCharsToChars(dictfname, dictnbuff, len);
-            }
-            dictnbuff[len]=0; // nul terminate
-        }
-        ures_close(b);
-        UDataMemory *file = udata_open(U_ICUDATA_BRKITR, ext, dictnbuff, &status);
-        if (U_SUCCESS(status)) {
-            const CompactTrieDictionary *dict = new CompactTrieDictionary(
-                file, status);
-            if (U_SUCCESS(status) && dict == NULL) {
-                status = U_MEMORY_ALLOCATION_ERROR;
-            }
-            if (U_FAILURE(status)) {
-                delete dict;
-                dict = NULL;
-            }
-            const ThaiBreakEngine *thai = new ThaiBreakEngine(dict, status);
-            if (thai == NULL) {
-            	delete dict;
-            	if (U_SUCCESS(status)) {
-                	status = U_MEMORY_ALLOCATION_ERROR;
-                }
-            }
-            if (U_SUCCESS(status)) {
-                engines->push((void *)thai, status);
-            }
-            else {
-                delete thai;
-            }
-        }
-        umtx_lock(NULL);
-        if (fEngines == NULL) {
-            fEngines = engines;
+        else if (U_FAILURE(status)) {
+            delete engines;
             engines = NULL;
         }
-        umtx_unlock(NULL);
-        delete engines;
+        else {
+            umtx_lock(NULL);
+            if (fEngines == NULL) {
+                fEngines = engines;
+                engines = NULL;
+            }
+            umtx_unlock(NULL);
+            delete engines;
+        }
     }
     
     if (fEngines == NULL) {
         return NULL;
     }
-    int32_t i = fEngines->size();
-    const LanguageBreakEngine *lbe = NULL;
+
+    // We didn't find an engine the first time through, or there was no
+    // stack. Create an engine.
+    const LanguageBreakEngine *newlbe = loadEngineFor(c, breakType);
+    
+    // Now get the lock, and see if someone else has created it in the
+    // meantime
+    umtx_lock(NULL);
+    i = fEngines->size();
     while (--i >= 0) {
         lbe = (const LanguageBreakEngine *)(fEngines->elementAt(i));
         if (lbe != NULL && lbe->handles(c, breakType)) {
@@ -220,7 +199,87 @@ ICULanguageBreakFactory::getEngineFor(UChar32 c, int32_t breakType) {
         }
         lbe = NULL;
     }
+    if (lbe == NULL && newlbe != NULL) {
+        fEngines->push((void *)newlbe, status);
+        lbe = newlbe;
+        newlbe = NULL;
+    }
+    umtx_unlock(NULL);
+    
+    delete newlbe;
+
     return lbe;
+}
+
+const LanguageBreakEngine *
+ICULanguageBreakFactory::loadEngineFor(UChar32 c, int32_t breakType) {
+    UErrorCode status = U_ZERO_ERROR;
+    UScriptCode code = uscript_getScript(c, &status);
+    if (U_SUCCESS(status)) {
+        const CompactTrieDictionary *dict = loadDictionaryFor(code, breakType);
+        if (dict != NULL) {
+            const LanguageBreakEngine *engine = NULL;
+            switch(code) {
+            case USCRIPT_THAI:
+                engine = new ThaiBreakEngine(dict, status);
+                break;
+            default:
+                break;
+            }
+            if (engine == NULL) {
+                delete dict;
+            }
+            else if (U_FAILURE(status)) {
+                delete engine;
+                engine = NULL;
+            }
+            return engine;
+        }
+    }
+    return NULL;
+}
+
+const CompactTrieDictionary *
+ICULanguageBreakFactory::loadDictionaryFor(UScriptCode script, int32_t breakType) {
+    UErrorCode status = U_ZERO_ERROR;
+    // Open root from brkitr tree.
+    char dictnbuff[256];
+    char ext[4]={'\0'};
+
+    UResourceBundle *b = ures_open(U_ICUDATA_BRKITR, "", &status);
+    b = ures_getByKeyWithFallback(b, "dictionaries", b, &status);
+    b = ures_getByKeyWithFallback(b, uscript_getShortName(script), b, &status);
+    int32_t dictnlength = 0;
+    const UChar *dictfname = ures_getString(b, &dictnlength, &status);
+    if (U_SUCCESS(status) && (size_t)dictnlength >= sizeof(dictnbuff)) {
+        dictnlength = 0;
+        status = U_BUFFER_OVERFLOW_ERROR;
+    }
+    if (U_SUCCESS(status) && dictfname) {
+        UChar* extStart=u_strchr(dictfname, 0x002e);
+        int len = 0;
+        if(extStart!=NULL){
+            len = extStart-dictfname;
+            u_UCharsToChars(extStart+1, ext, sizeof(ext)); // nul terminates the buff
+            u_UCharsToChars(dictfname, dictnbuff, len);
+        }
+        dictnbuff[len]=0; // nul terminate
+    }
+    ures_close(b);
+    UDataMemory *file = udata_open(U_ICUDATA_BRKITR, ext, dictnbuff, &status);
+    if (U_SUCCESS(status)) {
+        const CompactTrieDictionary *dict = new CompactTrieDictionary(
+            file, status);
+        if (U_SUCCESS(status) && dict == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+        }
+        if (U_FAILURE(status)) {
+            delete dict;
+            dict = NULL;
+        }
+        return dict;
+    }
+    return NULL;
 }
 
 U_NAMESPACE_END

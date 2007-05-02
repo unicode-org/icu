@@ -1,8 +1,8 @@
 /**
- *******************************************************************************
- * Copyright (C) 2006, International Business Machines Corporation and others. *
- * All Rights Reserved.                                                        *
- *******************************************************************************
+ ************************************************************************************
+ * Copyright (C) 2006-2007, International Business Machines Corporation and others. *
+ * All Rights Reserved.                                                             *
+ ************************************************************************************
  */
 
 #ifndef BRKENG_H
@@ -11,11 +11,13 @@
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
 #include "unicode/utext.h"
+#include "unicode/uscript.h"
 
 U_NAMESPACE_BEGIN
 
 class UnicodeSet;
 class UStack;
+class CompactTrieDictionary;
 
 /*******************************************************************
  * LanguageBreakEngine
@@ -256,6 +258,31 @@ class ICULanguageBreakFactory : public LanguageBreakFactory {
   * @return A LanguageBreakEngine with the desired characteristics, or 0.
   */
   virtual const LanguageBreakEngine *getEngineFor(UChar32 c, int32_t breakType);
+
+ protected:
+
+ /**
+  * <p>Create a LanguageBreakEngine for the set of characters to which
+  * the supplied character belongs, for the specified break type.</p>
+  *
+  * @param c A character that begins a run for which a LanguageBreakEngine is
+  * sought.
+  * @param breakType The kind of text break for which a LanguageBreakEngine is
+  * sought.
+  * @return A LanguageBreakEngine with the desired characteristics, or 0.
+  */
+  virtual const LanguageBreakEngine *loadEngineFor(UChar32 c, int32_t breakType);
+
+ /**
+  * <p>Create a CompactTrieDictionary for the specified script and break type.</p>
+  *
+  * @param script An ISO 15924 script code that identifies the dictionary to be
+  * created.
+  * @param breakType The kind of text break for which a dictionary is
+  * sought.
+  * @return A CompactTrieDictionary with the desired characteristics, or 0.
+  */
+  virtual const CompactTrieDictionary *loadDictionaryFor(UScriptCode script, int32_t breakType);
 
 };
 
