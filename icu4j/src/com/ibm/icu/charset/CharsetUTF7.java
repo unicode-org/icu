@@ -103,7 +103,7 @@ class CharsetUTF7 extends CharsetICU {
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0
     };
     
-    private static final short TO_BASE_64[] =
+    private static final byte TO_BASE_64[] =
     {
        /* A-Z */
        65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77,
@@ -329,6 +329,7 @@ class CharsetUTF7 extends CharsetICU {
                         break;
                     }
                 } //end of while
+                break directMode;
             }
             }//end of direct mode label
             
@@ -362,6 +363,244 @@ class CharsetUTF7 extends CharsetICU {
         
         protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush) {
             CoderResult cr = CoderResult.UNDERFLOW;
+            byte inDirectMode;
+            byte encodeDirectly[];
+            int status;
+            
+            int length, targetCapacity, sourceIndex;
+            
+            byte base64Counter;
+            char bits;
+            char c;
+            
+            /* get the state machine state */
+            {
+                status = fromUnicodeStatus;
+                encodeDirectly = (((long)status)<0x10000000) ? ENCODE_DIRECTLY_MAXIMUM : ENCODE_DIRECTLY_RESTRICTED;
+                inDirectMode = (byte)((status>>24)&1);
+                base64Counter = (byte)(status>>16);
+                bits = (char)((byte)status);
+            }
+            /* UTF-7 always encodes UTF-16 code units, therefore we need only a simple sourceIndex */
+            sourceIndex = 0;
+            
+            directMode: while (true) {
+            if (inDirectMode==1) {
+                length = source.remaining();
+                targetCapacity = target.remaining();
+                if (length > targetCapacity) {
+                    length = targetCapacity;
+                }
+                while (length > 0) {
+                    c = source.get();
+                    /* currently always encode CR LF SP TAB directly */
+                    if (c<=127 && encodeDirectly[c] == 1) {
+                        /* encode directly */
+                        target.put((byte)c);
+                        if (offsets != null) {
+                            offsets.put(sourceIndex++);
+                        }
+                    } else if (c==PLUS) {
+                        /* output +- for + */
+                        target.put((byte)PLUS);
+                        if (target.hasRemaining()) {
+                            target.put((byte)MINUS);
+                            if (offsets != null) {
+                                offsets.put(sourceIndex);
+                                offsets.put(sourceIndex++);
+                            }
+                            /* realign length and targetCapacity */
+                            continue directMode;
+                        } else {
+                            if (offsets != null) {
+                                offsets.put(sourceIndex++);
+                            }
+                            errorBuffer[0]=MINUS;
+                            errorBufferLength=1;
+                            cr = CoderResult.OVERFLOW;
+                            break;
+                        }
+                    } else {
+                        /* un-read this character and switch to unicode mode */
+                        source.position(source.position() - 1);
+                        target.put((byte)PLUS);
+                        if (offsets != null) {
+                            offsets.put(sourceIndex);
+                        }
+                        inDirectMode=0;
+                        base64Counter=0;
+                        continue directMode;
+                    }
+                    --length;
+                } //end of while
+                if (source.hasRemaining() && !target.hasRemaining()) {
+                    /* target is full */
+                    cr = CoderResult.OVERFLOW;
+                }
+                break directMode;
+            } else { 
+                /* Unicode Mode */
+                while (source.hasRemaining()) {
+                    if (target.hasRemaining()) {
+                        c = source.get();
+                        if (c<=127 && encodeDirectly[c] == 1) {
+                            /* encode directly */
+                            inDirectMode = 1;
+                            
+                            /* trick: back out this character to make this easier */
+                            source.position(source.position() - 1);
+                            
+                            /* terminate the base64 sequence */
+                            if (base64Counter!=0) {
+                                /* write remaining bits for the previous character */
+                                target.put(TO_BASE_64[bits]);
+                                if (offsets!=null) {
+                                    offsets.put(sourceIndex-1);
+                                }
+                            }
+                            if (FROM_BASE_64[c]!=-1) {
+                                /* need to terminate with a minus */
+                                if (target.hasRemaining()) {
+                                    target.put((byte)MINUS);
+                                    if (offsets!=null) {
+                                        offsets.put(sourceIndex-1);
+                                    }
+                                } else {
+                                    errorBuffer[0]=MINUS;
+                                    errorBufferLength=1;
+                                    cr=CoderResult.OVERFLOW;
+                                    break;
+                                }
+                            }
+                            continue directMode;
+                        } else {
+                            /*
+                             * base64 this character:
+                             * Output 2 or 3 base64 bytres for the remaining bits of the previous character
+                             * and the bits of this character, each implicitly in UTF-16BE.
+                             * 
+                             * Here, bits is an 8-bit variable because only 6 bits need to be kept from one
+                             * character to the next.  The actual 2 or 4 bits are shifted to the left edge
+                             * of the 6-bits filed 5..0 to make the termination of the base64 sequence easier.
+                             */
+                            switch (base64Counter) {
+                            case 0:
+                                target.put(TO_BASE_64[c>>10]);
+                                if (target.hasRemaining()) {
+                                    target.put(TO_BASE_64[(c>>4)&0x3f]);
+                                    if (offsets!=null) {
+                                        offsets.put(sourceIndex);
+                                        offsets.put(sourceIndex++);
+                                    }
+                                } else {
+                                    if (offsets!=null) {
+                                        offsets.put(sourceIndex++);
+                                    }
+                                    errorBuffer[0]=TO_BASE_64[(c>>4)&0x3f];
+                                    errorBufferLength=1;
+                                    cr=CoderResult.OVERFLOW;
+                                }
+                                bits=(char)((c&15)<<2);
+                                base64Counter=1;
+                                break;
+                            case 1:
+                                target.put(TO_BASE_64[bits | (c>>14)]);
+                                if (target.hasRemaining()) {
+                                    target.put(TO_BASE_64[(c>>8)&0x3f]);
+                                    if (target.hasRemaining()) {
+                                        target.put(TO_BASE_64[(c>>2)&0x3f]);
+                                        if (offsets!=null) {
+                                            offsets.put(sourceIndex);
+                                            offsets.put(sourceIndex);
+                                            offsets.put(sourceIndex++);
+                                        }
+                                    } else {
+                                        if (offsets!=null) {
+                                            offsets.put(sourceIndex);
+                                            offsets.put(sourceIndex++);
+                                        }
+                                        errorBuffer[0]=TO_BASE_64[(c>>2)&0x3f];
+                                        errorBufferLength=1;
+                                        cr=CoderResult.OVERFLOW;
+                                    }
+                                } else {
+                                    if (offsets!=null) {
+                                        offsets.put(sourceIndex++);
+                                    }
+                                    errorBuffer[0]=TO_BASE_64[(c>>8)&0x3f];
+                                    errorBuffer[1]=TO_BASE_64[(c>>2)&0x3f];
+                                    errorBufferLength=2;
+                                    cr=CoderResult.OVERFLOW;
+                                }
+                                bits=(char)((c&3)<<4);
+                                base64Counter=2;
+                                break;
+                            case 2:
+                                target.put(TO_BASE_64[bits | (c>>12)]);
+                                if (target.hasRemaining()) {
+                                    target.put(TO_BASE_64[(c>>6)&0x3f]);
+                                    if (target.hasRemaining()) {
+                                        target.put(TO_BASE_64[c&0x3f]);
+                                        if (offsets!=null) {
+                                            offsets.put(sourceIndex);
+                                            offsets.put(sourceIndex);
+                                            offsets.put(sourceIndex++);
+                                        }
+                                    } else {
+                                        if (offsets!=null) {
+                                            offsets.put(sourceIndex);
+                                            offsets.put(sourceIndex++);
+                                        }
+                                        errorBuffer[0]=TO_BASE_64[c&0x3f];
+                                        errorBufferLength=1;
+                                        cr=CoderResult.OVERFLOW;
+                                    }
+                                } else {
+                                    if (offsets!=null) {
+                                        offsets.put(sourceIndex++);
+                                    }
+                                    errorBuffer[0]=TO_BASE_64[(c>>6)&0x3f];
+                                    errorBuffer[1]=TO_BASE_64[c&0x3f];
+                                    errorBufferLength=2;
+                                    cr=CoderResult.OVERFLOW;
+                                }
+                                bits=0;
+                                base64Counter=0;
+                                break;
+                           default:
+                               /* will never occur */
+                               break;
+                           } //end of switch 
+                        }                      
+                    } else {
+                        /* target is full */
+                        cr = CoderResult.OVERFLOW;
+                        break;
+                    }
+                } //end of while
+                break directMode;
+            }
+            } //end of directMode label
+            
+            if (flush && !source.hasRemaining()) {
+                /* flush remaining bits to the target */
+                if (inDirectMode==0 && base64Counter!=0) {
+                    if (target.hasRemaining()) {
+                        target.put(TO_BASE_64[bits]);
+                        if (offsets != null) {
+                            offsets.put(sourceIndex-1);
+                        }
+                    } else {
+                        errorBuffer[errorBufferLength++]=TO_BASE_64[bits];
+                        cr = CoderResult.OVERFLOW;
+                    }
+                }
+                /*reset the state for the next conversion */
+                fromUnicodeStatus=(int)(((long)status&0xf0000000) | 0x10000000); /* keep version, inDirectMode=TRUE */
+            } else {
+                /* set the converter state back */
+                fromUnicodeStatus=(int)(((long)status&0xf0000000) | ((long)inDirectMode<<24) | ((long)base64Counter<<16) | ((long)bits));
+            }
             
             return cr;
         }
