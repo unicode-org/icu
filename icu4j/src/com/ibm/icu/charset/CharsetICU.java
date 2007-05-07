@@ -116,7 +116,6 @@ public abstract class CharsetICU extends Charset{
         algorithmicCharsets.put("lmbcs6",                "com.ibm.icu.charset.CharsetLMBCS6" );
         algorithmicCharsets.put("lmbcs8",                "com.ibm.icu.charset.CharsetLMBCS8" )
         algorithmicCharsets.put("scsu",                  "com.ibm.icu.charset.CharsetSCSU" ); 
-        algorithmicCharsets.put("UTF-7",                 "com.ibm.icu.charset.CharsetUTF7" );
         */
         algorithmicCharsets.put("US-ASCII",              "com.ibm.icu.charset.CharsetASCII" );
         algorithmicCharsets.put("ISO-8859-1",            "com.ibm.icu.charset.Charset88591" );
@@ -132,6 +131,7 @@ public abstract class CharsetICU extends Charset{
         algorithmicCharsets.put("UTF32_PlatformEndian",  "com.ibm.icu.charset.CharsetUTF32" );
         algorithmicCharsets.put("UTF-8",                 "com.ibm.icu.charset.CharsetUTF8" );
         algorithmicCharsets.put("CESU-8",                "com.ibm.icu.charset.CharsetCESU8" );
+        algorithmicCharsets.put("UTF-7",                 "com.ibm.icu.charset.CharsetUTF7" );
     }
 
     /*public*/ static final Charset getCharset(String icuCanonicalName, String javaCanonicalName, String[] aliases){
