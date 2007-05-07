@@ -28,7 +28,7 @@ class CharsetUTF7 extends CharsetICU {
     
     private static boolean inSetD(char c) {
         return (
-                (char)(c - 97) < 26 || (char)(c -65) < 26 || /* letters */
+                (char)(c - 97) < 26 || (char)(c - 65) < 26 || /* letters */
                 (char)(c - 48) < 10 ||                        /* digits */
                 (char)(c - 39) < 3 ||                          /* ' () */
                 (char)(c - 44) < 4 ||                          /* ,-./ */
@@ -58,7 +58,7 @@ class CharsetUTF7 extends CharsetICU {
                 );
     }
     
-    private static final  byte PLUS = 43;
+    private static final byte PLUS = 43;
     private static final byte MINUS = 45;
     private static final byte BACKSLASH = 92;
     private static final byte TILDE = 126;
@@ -157,8 +157,8 @@ class CharsetUTF7 extends CharsetICU {
             //get the state of the machine state
             {
             int status = toUnicodeStatus;
-            inDirectMode = (byte)((status>>24)&1);
-            base64Counter = (byte)(status>>16);
+            inDirectMode = (byte)((status >> 24) & 1);
+            base64Counter = (byte)(status >> 16);
             bits = (char)status;
             }
             byteIndex = toULength;
@@ -166,171 +166,171 @@ class CharsetUTF7 extends CharsetICU {
             sourceIndex = byteIndex == 0 ? 0 : -1;
             nextSourceIndex = 0;
             
-            directMode:  while(true) {
-            if (inDirectMode != 0) {
-                    /* 
-                     * In Direct Mode, most US-ASCII characters are encoded directly, i.e.,
-                     * with their US-ASCII byte values.
-                     * Backslash and Tilde and most control characters are not alled in UTF-7.
-                     * A plus sign starts Unicode (or "escape") Mode.
-                     * 
-                     * In Direct Mode, only the sourceIndex is used.
-                     */
-                    byteIndex = 0;
-                    length = source.remaining();
-                    targetCapacity = target.remaining();
-                    if (length > targetCapacity) {
-                        length = targetCapacity;
-                    }
-                    while (length > 0) {
-                        b = (char)(source.get(sourceArrayIndex++) & UConverterConstants.UNSIGNED_BYTE_MASK);
-                        if (!isLegalUTF7(b)) {
-                            cr = CoderResult.malformedForLength(sourceArrayIndex);
-                            break;
-                        } else if (b != PLUS) {
-                            target.put(b);
-                            offsets.put(sourceIndex++);
-                        } else { /* PLUS */
-                            /* switch to Unicode mode */
-                            nextSourceIndex = ++sourceIndex;
-                            inDirectMode = 0;
-                            byteIndex = 0;
-                            bits = 0;
-                            base64Counter = -1;
-                            continue directMode;
+            directMode:  while (true) {
+                if (inDirectMode!=0) {
+                        /* 
+                         * In Direct Mode, most US-ASCII characters are encoded directly, i.e.,
+                         * with their US-ASCII byte values.
+                         * Backslash and Tilde and most control characters are not alled in UTF-7.
+                         * A plus sign starts Unicode (or "escape") Mode.
+                         * 
+                         * In Direct Mode, only the sourceIndex is used.
+                         */
+                        byteIndex = 0;
+                        length = source.remaining();
+                        targetCapacity = target.remaining();
+                        if (length > targetCapacity) {
+                            length = targetCapacity;
                         }
-                        --length;
-                    }//end of while
-                    if (source.hasRemaining() && target.position() >= target.limit()) {
-                        /* target is full */
-                        cr = CoderResult.OVERFLOW;
-                    }
-                    break directMode;
-            } else { /* Unicode Mode*/
-                /* 
-                 * In Unicode Mode, UTF-16BE is base64-encoded.
-                 * The base64 sequence ends with any character that is not in the base64 alphabet.
-                 * A terminating minus sign is consumed.
-                 * 
-                 * In Unicode Mode, the sourceIndex has the index to the start of the current
-                 * base64 bytes, while nextSourceIndex is precisely parallel to source,
-                 * keeping the index to the following byte.
-                 */
-                while(source.hasRemaining()) {
-                    if (target.hasRemaining()) {
-                        b = (char)(source.get(sourceArrayIndex++) & UConverterConstants.UNSIGNED_BYTE_MASK);
-                        toUBytesArray[byteIndex++] = (byte)b;
-                        if (b >= 126) {
-                            /* illegal - test other illegal US-ASCII values by base64Value==-3 */
-                            inDirectMode = 1;
-                            cr = CoderResult.malformedForLength(sourceArrayIndex);
-                            break directMode;
-                        } else if ((base64Value = FROM_BASE_64[b]) >= 0) {
-                            /* collect base64 bytes */
-                            switch (base64Counter) {
-                            case -1: /* -1 is immediately after the + */
-                            case 0:
-                                bits = (char)base64Value;
-                                base64Counter = 1;
+                        while (length>0) {
+                            b = (char)(source.get(sourceArrayIndex++) & UConverterConstants.UNSIGNED_BYTE_MASK);
+                            if (!isLegalUTF7(b)) {
+                                cr = CoderResult.malformedForLength(sourceArrayIndex);
                                 break;
-                            case 1:
-                            case 3:
-                            case 4:
-                            case 6:
-                                bits = (char)((bits<<6) | base64Value);
-                                ++base64Counter;
-                                break;
-                            case 2:
-                                target.put((char)((bits<<4) | (base64Value>>2)));
-                                if (offsets != null) {
-                                    offsets.put(sourceIndex);
-                                    sourceIndex = nextSourceIndex - 1;
-                                }
-                                toUBytesArray[0] = (byte)b; /* keep this byte in case an error occurs */
-                                byteIndex = 1;
-                                bits = (char)(base64Value&3);
-                                base64Counter = 3;
-                                break;
-                            case 5:
-                                target.put((char)((bits<<6) | base64Value));
-                                if (offsets != null) {
-                                    offsets.put(sourceIndex);
-                                    sourceIndex = nextSourceIndex - 1;
-                                }
-                                toUBytesArray[0] = (byte)b; /* keep this byte in case an error occurs */
-                                byteIndex = 1;
-                                bits = (char)(base64Value&15);
-                                base64Counter = 6;
-                                break;
-                            case 7:
-                                target.put((char)((bits<<6) | base64Value));
-                                if (offsets != null) {
-                                    offsets.put(sourceIndex);
-                                    sourceIndex = nextSourceIndex;
-                                }
+                            } else if (b!=PLUS) {
+                                target.put(b);
+                                offsets.put(sourceIndex++);
+                            } else { /* PLUS */
+                                /* switch to Unicode mode */
+                                nextSourceIndex = ++sourceIndex;
+                                inDirectMode = 0;
                                 byteIndex = 0;
                                 bits = 0;
-                                base64Counter = 0;
-                                break;
-                            default:
-                                /* will never occur */
-                                break;                                                           
-                            }//end of switch
-                        } else if (base64Value == -2) {
-                            /* minus sign terminates the base64 sequence */
-                            inDirectMode = 1;
-                            if (base64Counter == -1) {
-                                /* +- i.e. a minus immediately following a plus */
-                                target.put((char)PLUS);
-                                if (offsets != null) {
-                                    offsets.put(sourceIndex - 1);
+                                base64Counter = -1;
+                                continue directMode;
+                            }
+                            --length;
+                        }//end of while
+                        if (source.hasRemaining() && target.position()>=target.limit()) {
+                            /* target is full */
+                            cr = CoderResult.OVERFLOW;
+                        }
+                        break directMode;
+                } else { /* Unicode Mode*/
+                    /* 
+                     * In Unicode Mode, UTF-16BE is base64-encoded.
+                     * The base64 sequence ends with any character that is not in the base64 alphabet.
+                     * A terminating minus sign is consumed.
+                     * 
+                     * In Unicode Mode, the sourceIndex has the index to the start of the current
+                     * base64 bytes, while nextSourceIndex is precisely parallel to source,
+                     * keeping the index to the following byte.
+                     */
+                    while(source.hasRemaining()) {
+                        if (target.hasRemaining()) {
+                            b = (char)(source.get(sourceArrayIndex++)&UConverterConstants.UNSIGNED_BYTE_MASK);
+                            toUBytesArray[byteIndex++] = (byte)b;
+                            if (b>=126) {
+                                /* illegal - test other illegal US-ASCII values by base64Value==-3 */
+                                inDirectMode = 1;
+                                cr = CoderResult.malformedForLength(sourceArrayIndex);
+                                break directMode;
+                            } else if ((base64Value = FROM_BASE_64[b])>=0) {
+                                /* collect base64 bytes */
+                                switch (base64Counter) {
+                                case -1: /* -1 is immediately after the + */
+                                case 0:
+                                    bits = (char)base64Value;
+                                    base64Counter = 1;
+                                    break;
+                                case 1:
+                                case 3:
+                                case 4:
+                                case 6:
+                                    bits = (char)((bits<<6) | base64Value);
+                                    ++base64Counter;
+                                    break;
+                                case 2:
+                                    target.put((char)((bits<<4) | (base64Value>>2)));
+                                    if (offsets != null) {
+                                        offsets.put(sourceIndex);
+                                        sourceIndex = nextSourceIndex - 1;
+                                    }
+                                    toUBytesArray[0] = (byte)b; /* keep this byte in case an error occurs */
+                                    byteIndex = 1;
+                                    bits = (char)(base64Value&3);
+                                    base64Counter = 3;
+                                    break;
+                                case 5:
+                                    target.put((char)((bits<<6) | base64Value));
+                                    if (offsets != null) {
+                                        offsets.put(sourceIndex);
+                                        sourceIndex = nextSourceIndex - 1;
+                                    }
+                                    toUBytesArray[0] = (byte)b; /* keep this byte in case an error occurs */
+                                    byteIndex = 1;
+                                    bits = (char)(base64Value&15);
+                                    base64Counter = 6;
+                                    break;
+                                case 7:
+                                    target.put((char)((bits<<6) | base64Value));
+                                    if (offsets != null) {
+                                        offsets.put(sourceIndex);
+                                        sourceIndex = nextSourceIndex;
+                                    }
+                                    byteIndex = 0;
+                                    bits = 0;
+                                    base64Counter = 0;
+                                    break;
+                                default:
+                                    /* will never occur */
+                                    break;                                                           
+                                }//end of switch
+                            } else if (base64Value == -2) {
+                                /* minus sign terminates the base64 sequence */
+                                inDirectMode = 1;
+                                if (base64Counter == -1) {
+                                    /* +- i.e. a minus immediately following a plus */
+                                    target.put((char)PLUS);
+                                    if (offsets != null) {
+                                        offsets.put(sourceIndex - 1);
+                                    }
+                                } else {
+                                    /* absorb the minus and leave the Unicode Mode */
+                                    if (bits != 0) {
+                                        /*bits are illegally left over, a unicode character is incomplete */
+                                        cr = CoderResult.malformedForLength(sourceArrayIndex);
+                                        break;
+                                    }
                                 }
-                            } else {
-                                /* absorb the minus and leave the Unicode Mode */
-                                if (bits != 0) {
-                                    /*bits are illegally left over, a unicode character is incomplete */
+                                sourceIndex = nextSourceIndex;
+                                continue directMode;
+                            } else if (base64Value == -1) { /* for any legal character except base64 and minus sign */
+                                /* leave the Unicode Mode */
+                                inDirectMode = 1;
+                                if (base64Counter == -1) {
+                                    /* illegal:  + immediately followed by something other than base64 minus sign */
+                                    /* include the plus sign in the reported sequence */
+                                    --sourceIndex;
+                                    toUBytesArray[0] = (byte)PLUS;
+                                    toUBytesArray[1] = (byte)b;
+                                    byteIndex = 2;
+                                    cr = CoderResult.malformedForLength(sourceArrayIndex);
+                                    break;
+                                } else if (bits == 0) {
+                                    /* un-read the character in case it is a plus sign */
+                                    --sourceArrayIndex;
+                                    sourceIndex = nextSourceIndex - 1;
+                                    continue directMode;
+                                } else {
+                                    /* bits are illegally left over, a unicode character is incomplete */
                                     cr = CoderResult.malformedForLength(sourceArrayIndex);
                                     break;
                                 }
-                            }
-                            sourceIndex = nextSourceIndex;
-                            continue directMode;
-                        } else if (base64Value == -1) { /* for any legal character except base64 and minus sign */
-                            /* leave the Unicode Mode */
-                            inDirectMode = 1;
-                            if (base64Counter == -1) {
-                                /* illegal:  + immediately followed by something other than base64 minus sign */
-                                /* include the plus sign in the reported sequence */
-                                --sourceIndex;
-                                toUBytesArray[0] = (byte)PLUS;
-                                toUBytesArray[1] = (byte)b;
-                                byteIndex = 2;
-                                cr = CoderResult.malformedForLength(sourceArrayIndex);
-                                break;
-                            } else if (bits == 0) {
-                                /* un-read the character in case it is a plus sign */
-                                --sourceArrayIndex;
-                                sourceIndex = nextSourceIndex - 1;
-                                continue directMode;
-                            } else {
-                                /* bits are illegally left over, a unicode character is incomplete */
+                            } else { /* base64Value == -3 for illegal characters */
+                                /* illegal */
+                                inDirectMode = 1;
                                 cr = CoderResult.malformedForLength(sourceArrayIndex);
                                 break;
                             }
-                        } else { /* base64Value == -3 for illegal characters */
-                            /* illegal */
-                            inDirectMode = 1;
-                            cr = CoderResult.malformedForLength(sourceArrayIndex);
+                        } else {
+                            /* target is full */
+                            cr = CoderResult.OVERFLOW;
                             break;
                         }
-                    } else {
-                        /* target is full */
-                        cr = CoderResult.OVERFLOW;
-                        break;
-                    }
-                } //end of while
-                break directMode;
-            }
+                    } //end of while
+                    break directMode;
+                }
             }//end of direct mode label
             
             //TODO:  need to find a better method than cr.isUnderflow() to check for error
@@ -376,19 +376,19 @@ class CharsetUTF7 extends CharsetICU {
             /* get the state machine state */
             {
                 status = fromUnicodeStatus;
-                encodeDirectly = (((long)status)<0x10000000) ? ENCODE_DIRECTLY_MAXIMUM : ENCODE_DIRECTLY_RESTRICTED;
-                inDirectMode = (byte)((status>>24)&1);
-                base64Counter = (byte)(status>>16);
+                encodeDirectly = (((long)status) < 0x10000000) ? ENCODE_DIRECTLY_MAXIMUM : ENCODE_DIRECTLY_RESTRICTED;
+                inDirectMode = (byte)((status >> 24) & 1);
+                base64Counter = (byte)(status >> 16);
                 bits = (char)((byte)status);
             }
             /* UTF-7 always encodes UTF-16 code units, therefore we need only a simple sourceIndex */
             sourceIndex = 0;
             
-            directMode: while (true) {
-            if (inDirectMode==1) {
+            directMode: while(true) {
+            if(inDirectMode == 1) {
                 length = source.remaining();
                 targetCapacity = target.remaining();
-                if (length > targetCapacity) {
+                if(length > targetCapacity) {
                     length = targetCapacity;
                 }
                 while (length > 0) {
