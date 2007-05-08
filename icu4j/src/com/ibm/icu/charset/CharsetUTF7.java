@@ -20,10 +20,13 @@ import com.ibm.icu.text.UTF16;
  *
  */
 class CharsetUTF7 extends CharsetICU {
-    protected byte[] fromUSubstitution = null;
+    protected byte[] fromUSubstitution = new byte[]{0x2b, 0x2f, 0x76};
    
     public CharsetUTF7(String icuCanonicalName, String javaCanonicalName, String[] aliases) {
         super(icuCanonicalName, javaCanonicalName, aliases);
+        maxBytesPerChar = 3; /* max 3 bytes per code unit from UTF-7 (base64) */
+        minBytesPerChar = 1;
+        maxCharsPerByte = 1;
     }
     
     private static boolean inSetD(char c) {
