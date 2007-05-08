@@ -140,6 +140,8 @@ class CharsetUTF7 extends CharsetICU {
     class CharsetDecoderUTF7 extends CharsetDecoderICU {
         public CharsetDecoderUTF7(CharsetICU cs) {
             super(cs);
+            toULength = 0;
+            toUnicodeStatus = 0x10000000;
         }
         
         protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) {
@@ -160,7 +162,7 @@ class CharsetUTF7 extends CharsetICU {
             //get the state of the machine state
             {
             int status = toUnicodeStatus;
-            inDirectMode = (byte)((status >> 24) & 1);
+            inDirectMode = (byte)((status >> 28) & 1);
             base64Counter = (byte)(status >> 16);
             bits = (char)status;
             }
@@ -170,7 +172,7 @@ class CharsetUTF7 extends CharsetICU {
             nextSourceIndex = 0;
             
             directMode:  while (true) {
-                if (inDirectMode!=0) {
+                if (inDirectMode != 0) {
                         /* 
                          * In Direct Mode, most US-ASCII characters are encoded directly, i.e.,
                          * with their US-ASCII byte values.
@@ -335,19 +337,19 @@ class CharsetUTF7 extends CharsetICU {
                     break directMode;
                 }
             }//end of direct mode label
-            
-            //TODO:  need to find a better method than cr.isUnderflow() to check for error
-            if (cr.isUnderflow() && flush && !source.hasRemaining() && bits  ==0) {
+            if (!cr.isError() && flush && !source.hasRemaining() && bits  ==0) {
                 /*
                  * if we are in Unicode Mode, then the byteIndex might not be 0,
                  * but that is ok if bits -- 0
                  * -> we set byteIndex = 0 at the end of the stream to avoid a truncated error 
                  * (not true for IMAP-mailbox-name where we must end in direct mode)
                  */
-                byteIndex = 0;
+                if (!cr.isOverflow()) {
+                    byteIndex = 0;
+                }
             }
             /* set the converter state */
-            toUnicodeStatus = ((int)inDirectMode<<24) | ((int)((char)base64Counter)<<16) | (int)((long)bits & UConverterConstants.UNSIGNED_INT_MASK);
+            toUnicodeStatus = ((int)inDirectMode<<28) | ((int)((char)base64Counter)<<16) | (int)((long)bits & UConverterConstants.UNSIGNED_INT_MASK);
             toULength = byteIndex;
    
             return cr;
@@ -362,6 +364,7 @@ class CharsetUTF7 extends CharsetICU {
         
         protected void implReset() {
             super.implReset();
+            fromUnicodeStatus = (fromUnicodeStatus & 0xf0000000) | 0x10000000;
         }
         
         protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush) {
@@ -375,12 +378,11 @@ class CharsetUTF7 extends CharsetICU {
             byte base64Counter;
             char bits;
             char c;
-            
             /* get the state machine state */
             {
                 status = fromUnicodeStatus;
                 encodeDirectly = (((long)status) < 0x10000000) ? ENCODE_DIRECTLY_MAXIMUM : ENCODE_DIRECTLY_RESTRICTED;
-                inDirectMode = (byte)((status >> 24) & 1);
+                inDirectMode = (byte)((status >> 28) & 1);
                 base64Counter = (byte)(status >> 16);
                 bits = (char)((byte)status);
             }
@@ -602,7 +604,7 @@ class CharsetUTF7 extends CharsetICU {
                 fromUnicodeStatus=(int)(((long)status&0xf0000000) | 0x10000000); /* keep version, inDirectMode=TRUE */
             } else {
                 /* set the converter state back */
-                fromUnicodeStatus=(int)(((long)status&0xf0000000) | ((long)inDirectMode<<24) | ((long)base64Counter<<16) | ((long)bits));
+                fromUnicodeStatus=(int)(((long)status&0xf0000000) | ((long)inDirectMode<<28) | ((long)base64Counter<<16) | ((long)bits));
             }
             
             return cr;

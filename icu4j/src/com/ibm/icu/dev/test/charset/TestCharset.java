@@ -1081,6 +1081,7 @@ public class TestCharset extends TestFmwk {
             mySource.position(source.position());
             mySource.position(0);
             myTarget.position(0);
+            
             logln("myTarget.limit: " + myTarget.limit() + " myTarget.capcity: " + myTarget.capacity());
             
             while (true) {
@@ -1726,5 +1727,26 @@ public class TestCharset extends TestFmwk {
         }
         catch (BufferOverflowException ex) {
         }
+    }
+    //Test CharsetUTF7
+    public void TestCharsetUTF7() {
+        CharsetProvider provider = new CharsetProviderICU();
+        Charset cs = provider.charsetForName("UTF-7");        
+        CharsetEncoder encoder = cs.newEncoder();
+        CharsetDecoder decoder = cs.newDecoder();
+        
+        CharBuffer us = CharBuffer.allocate(0x100);
+        ByteBuffer bs = ByteBuffer.allocate(0x100);
+        
+        us.put((char)0x48); us.put((char)0x48);
+        bs.put((byte)0x48); bs.put((byte)0x48);
+        
+        bs.limit(bs.position());
+        bs.position(0);
+        us.limit(us.position());
+        us.position(0);
+
+        smBufDecode(decoder, "UTF-7", bs, us);
+        smBufEncode(encoder, "UTF-7", us, bs);
     }
 }
