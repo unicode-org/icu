@@ -1226,7 +1226,7 @@ conversion:table(nofallback) {
         }   
         {
           "ISO-2022-JP-2",
-          "[\x00-\x0d\x10-\x1a\x1c-\u0113\u0385-\u038a\u0390-\u03a1\uff61-\uff9f\u4e00-\u4e05\uffe6]",
+          "[\x00-\x0d\x10-\x1a\x1c-\u0113\u0384-\u0386\u0388-\u038a\u0390-\u03a1\uff61-\uff9f\u4e00-\u4e05\uffe6]",
           "[\x0e\x0f\x1b\uffe7-\U0010ffff]",
           :int{0}
         }

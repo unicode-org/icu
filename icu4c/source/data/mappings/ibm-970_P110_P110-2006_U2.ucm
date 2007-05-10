@@ -5,10 +5,10 @@
 # *
 # ***************************************************************************
 #
-# File created by rptp2ucm (compiled on Jan 23 2007)
+# File created by rptp2ucm (compiled on May  9 2007)
 # from source files 34B003CA.RPMAP110 and 03CA34B0.TPMAP110
 #
-<code_set_name>               "ibm-970_P110_P110-2006"
+<code_set_name>               "ibm-970_P110_P110-2006_U2"
 <char_name_mask>              "AXXXX"
 <mb_cur_max>                  2
 <mb_cur_min>                  1
