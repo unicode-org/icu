@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2001-2006, International Business Machines
+*   Copyright (C) 2001-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -839,7 +839,7 @@ u_strFromUTF8Lenient(UChar *dest,
             } else if(ch < 0xe0) { /* U+0080..U+07FF */
                 if(pSrc < pSrcLimit) {
                     /* 0x3080 = (0xc0 << 6) + 0x80 */
-                    *pDest++ = (UChar)(((ch & 0x1f) << 6) + *pSrc++ - 0x3080);
+                    *pDest++ = (UChar)((ch << 6) + *pSrc++ - 0x3080);
                     continue;
                 }
             } else if(ch < 0xf0) { /* U+0800..U+FFFF */

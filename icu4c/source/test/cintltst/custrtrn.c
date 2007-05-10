@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2001-2006, International Business Machines Corporation and
+ * Copyright (c) 2001-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -643,6 +643,10 @@ Test_FromUTF8Lenient(void) {
         0xf0, 0x90, 0,
         0xf0, 0x90, 0x80, 0,
 
+        /* non-ASCII characters in the last few bytes */
+        0x61,  0xc3, 0x9f,  0xe0, 0xa0, 0x80, 0,
+        0x61,  0xe0, 0xa0, 0x80,  0xc3, 0x9f, 0,
+
         /* empty string */
         0,
 
@@ -663,6 +667,9 @@ Test_FromUTF8Lenient(void) {
         0xfffd, 0,
         0xfffd, 0,
         0xfffd, 0,
+
+        0x61, 0xdf, 0x800,  0,
+        0x61, 0x800, 0xdf,  0,
 
         0,
 
