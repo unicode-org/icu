@@ -1,14 +1,14 @@
 # ***************************************************************************
 # *
-# *   Copyright (C) 1995-2007, International Business Machines
+# *   Copyright (C) 1995-2003, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 #
-# File created by rptp2ucm (compiled on Jan 23 2007)
+# File created by rptp2ucm (compiled on Dec  3 2002)
 # from source files 34B00360.RXMAP110 and 036034B0.TXMAP110
 #
-<code_set_name>               "ibm-864_X110_P110-1999"
+<code_set_name>               "ibm-864_X110-1999"
 <char_name_mask>              "AXXXX"
 <mb_cur_max>                  1
 <mb_cur_min>                  1

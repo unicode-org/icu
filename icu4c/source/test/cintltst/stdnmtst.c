@@ -153,10 +153,10 @@ static void TestCanonicalName()
         dotestconv("cp1208", "", "UTF-8") &&        /* default name due to ordering */
         dotestconv("UTF16_BigEndian", "", "UTF-16BE") &&        /* non-default name due to ordering */
         dotestconv("ISO-2022-CN", "IANA", "ISO_2022,locale=zh,version=0") &&/* default name */
-        dotestconv("Shift_JIS", "MIME", "ibm-943_P15A_P14A-2003") &&/* ambiguous alias */
-        dotestconv("Shift_JIS", "", "ibm-943_P130_P120-1999") &&/* ambiguous alias */
-        dotestconv("ibm-943", "", "ibm-943_P15A_P14A-2003") &&/* ambiguous alias */
-        dotestconv("ibm-943", "IBM", "ibm-943_P130_P120-1999") &&/* ambiguous alias */
+        dotestconv("Shift_JIS", "MIME", "ibm-943_P15A-2003") &&/* ambiguous alias */
+        dotestconv("Shift_JIS", "", "ibm-943_P130-1999") &&/* ambiguous alias */
+        dotestconv("ibm-943", "", "ibm-943_P15A-2003") &&/* ambiguous alias */
+        dotestconv("ibm-943", "IBM", "ibm-943_P130-1999") &&/* ambiguous alias */
         dotestconv("ibm-1363", "", "ibm-1363_P11B-1998") &&/* ambiguous alias */
         dotestconv("ibm-1363", "IBM", "ibm-1363_P110-1997") &&/* ambiguous alias */
         dotestconv("crazy", "MIME", NULL) &&
