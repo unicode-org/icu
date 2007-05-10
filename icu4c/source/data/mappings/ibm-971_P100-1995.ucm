@@ -19,7 +19,7 @@
 
 # build an extension-only (delta) .cnv file
 # requires the base .cnv file at runtime
-<icu:base>                    "ibm-970_P110_P110-2006"
+<icu:base>                    "ibm-970_P110_P110-2006_U2"
 
 CHARMAP
 <U00A1> \xA2\xAE |0
