@@ -317,7 +317,7 @@ static void TestConvert()
 
     const char*      CodePagesToTest[NUM_CODEPAGE]       =
     {
-       "ibm-949_P110_P100-1999"
+       "ibm-949_P110-1999"
 
         
     }; 

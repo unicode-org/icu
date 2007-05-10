@@ -1,14 +1,14 @@
 # ***************************************************************************
 # *
-# *   Copyright (C) 1995-2007, International Business Machines
+# *   Copyright (C) 1995-2003, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 #
-# File created by rptp2ucm (compiled on Jan 23 2007)
-# from source files 34B003B5.RPMAP110 and 03B534B0.TPMAP100
+# File created by rptp2ucm (compiled on Dec  3 2002)
+# from source files 34B003B5.RPMAP11A and 03B534B0.TPMAP10A
 #
-<code_set_name>               "ibm-949_P110_P100-1999"
+<code_set_name>               "ibm-949_P11A-1999"
 <char_name_mask>              "AXXXX"
 <mb_cur_max>                  2
 <mb_cur_min>                  1
@@ -16,11 +16,7 @@
 <subchar>                     \xAF\xFE
 <subchar1>                    \x7F
 <icu:charsetFamily>           "ASCII"
-<icu:alias>                   "ibm-949_VASCII_VSUB_VPUA"
-
-# build an extension-only (delta) .cnv file
-# requires the base .cnv file at runtime
-<icu:base>                    "ibm-949_P11A_P10A-1999"
+<icu:alias>                   "ibm-949_VSUB_VPUA"
 
 <icu:state>                   0-84, 8f-fe:1
 <icu:state>                   40-7e, 80-fe
@@ -118,7 +114,6 @@ CHARMAP
 <U0059> \x59 |0
 <U005A> \x5A |0
 <U005B> \x5B |0
-<U005C> \x82 |0
 <U005D> \x5D |0
 <U005E> \x5E |0
 <U005F> \x5F |0
@@ -154,134 +149,40 @@ CHARMAP
 <U007D> \x7D |0
 <U007E> \x7E |0
 <U007F> \x1C |0
-<U0080> \x7F |2
-<U0081> \x7F |2
-<U0082> \x7F |2
-<U0083> \x7F |2
-<U0084> \x7F |2
-<U0085> \x7F |2
-<U0086> \x7F |2
-<U0087> \x7F |2
-<U0088> \x7F |2
-<U0089> \x7F |2
-<U008A> \x7F |2
-<U008B> \x7F |2
-<U008C> \x7F |2
-<U008D> \x7F |2
-<U008E> \x7F |2
-<U008F> \x7F |2
-<U0090> \x7F |2
-<U0091> \x7F |2
-<U0092> \x7F |2
-<U0093> \x7F |2
-<U0094> \x7F |2
-<U0095> \x7F |2
-<U0096> \x7F |2
-<U0097> \x7F |2
-<U0098> \x7F |2
-<U0099> \x7F |2
-<U009A> \x7F |2
-<U009B> \x7F |2
-<U009C> \x7F |2
-<U009D> \x7F |2
-<U009E> \x7F |2
-<U009F> \x7F |2
-<U00A0> \x7F |2
 <U00A1> \xA2\xAE |0
 <U00A2> \x80 |0
-<U00A3> \x7F |2
 <U00A4> \xA2\xB4 |0
-<U00A5> \x7F |2
 <U00A6> \x84 |0
 <U00A7> \xA1\xD7 |0
 <U00A8> \xA1\xA7 |0
-<U00A9> \x7F |2
 <U00AA> \xA8\xA3 |0
-<U00AB> \x7F |2
 <U00AC> \x81 |0
 <U00AD> \xA1\xA9 |1
-<U00AE> \x7F |2
-<U00AF> \x7F |2
 <U00B0> \xA1\xC6 |0
 <U00B1> \xA1\xBE |0
 <U00B2> \xA9\xF7 |0
 <U00B3> \xA9\xF8 |0
 <U00B4> \xA2\xA5 |0
-<U00B5> \x7F |2
 <U00B6> \xA2\xD2 |0
 <U00B7> \xA1\xA4 |1
 <U00B8> \xA2\xAC |0
 <U00B9> \xA9\xF6 |0
 <U00BA> \xA8\xAC |0
-<U00BB> \x7F |2
 <U00BC> \xA8\xF9 |0
 <U00BD> \xA8\xF6 |0
 <U00BE> \xA8\xFA |0
 <U00BF> \xA2\xAF |0
-<U00C0> \x7F |2
-<U00C1> \x7F |2
-<U00C2> \x7F |2
-<U00C3> \x7F |2
-<U00C4> \x7F |2
-<U00C5> \x7F |2
 <U00C6> \xA8\xA1 |0
-<U00C7> \x7F |2
-<U00C8> \x7F |2
-<U00C9> \x7F |2
-<U00CA> \x7F |2
-<U00CB> \x7F |2
-<U00CC> \x7F |2
-<U00CD> \x7F |2
-<U00CE> \x7F |2
-<U00CF> \x7F |2
 <U00D0> \xA8\xA2 |0
-<U00D1> \x7F |2
-<U00D2> \x7F |2
-<U00D3> \x7F |2
-<U00D4> \x7F |2
-<U00D5> \x7F |2
-<U00D6> \x7F |2
 <U00D7> \xA1\xBF |0
 <U00D8> \xA8\xAA |0
-<U00D9> \x7F |2
-<U00DA> \x7F |2
-<U00DB> \x7F |2
-<U00DC> \x7F |2
-<U00DD> \x7F |2
 <U00DE> \xA8\xAD |0
 <U00DF> \xA9\xAC |0
-<U00E0> \x7F |2
-<U00E1> \x7F |2
-<U00E2> \x7F |2
-<U00E3> \x7F |2
-<U00E4> \x7F |2
-<U00E5> \x7F |2
 <U00E6> \xA9\xA1 |0
-<U00E7> \x7F |2
-<U00E8> \x7F |2
-<U00E9> \x7F |2
-<U00EA> \x7F |2
-<U00EB> \x7F |2
-<U00EC> \x7F |2
-<U00ED> \x7F |2
-<U00EE> \x7F |2
-<U00EF> \x7F |2
 <U00F0> \xA9\xA3 |0
-<U00F1> \x7F |2
-<U00F2> \x7F |2
-<U00F3> \x7F |2
-<U00F4> \x7F |2
-<U00F5> \x7F |2
-<U00F6> \x7F |2
 <U00F7> \xA1\xC0 |0
 <U00F8> \xA9\xAA |0
-<U00F9> \x7F |2
-<U00FA> \x7F |2
-<U00FB> \x7F |2
-<U00FC> \x7F |2
-<U00FD> \x7F |2
 <U00FE> \xA9\xAD |0
-<U00FF> \x7F |2
 <U0111> \xA9\xA2 |0
 <U0126> \xA8\xA4 |0
 <U0127> \xA9\xA4 |0
@@ -433,14 +334,12 @@ CHARMAP
 <U201D> \xA1\xB1 |0
 <U2020> \xA2\xD3 |0
 <U2021> \xA2\xD4 |0
-<U2022> \x07 |1
 <U2025> \xA1\xA5 |0
 <U2026> \xA1\xA6 |0
 <U2030> \xA2\xB6 |0
 <U2032> \xA1\xC7 |0
 <U2033> \xA1\xC8 |0
 <U203B> \xA1\xD8 |0
-<U203C> \x13 |1
 <U203E> \x83 |0
 <U2074> \xA9\xF9 |0
 <U207F> \xA9\xFA |0
@@ -448,7 +347,6 @@ CHARMAP
 <U2082> \xA9\xFC |0
 <U2083> \xA9\xFD |0
 <U2084> \xA9\xFE |0
-<U20A9> \x5C |0
 <U2103> \xA1\xC9 |0
 <U2109> \xA2\xB5 |0
 <U2113> \xA7\xA4 |0
@@ -507,7 +405,6 @@ CHARMAP
 <U221A> \xA1\xEE |0
 <U221D> \xA1\xF0 |0
 <U221E> \xA1\xC4 |0
-<U221F> \x1C |1
 <U2220> \xA1\xD0 |0
 <U2225> \xA1\xAB |0
 <U2227> \xA1\xFC |0
@@ -705,7 +602,6 @@ CHARMAP
 <U25BD> \xA1\xE4 |0
 <U25C0> \xA2\xB8 |0
 <U25C1> \xA2\xB7 |0
-<U25C4> \x11 |1
 <U25C6> \xA1\xDF |0
 <U25C7> \xA1\xDE |0
 <U25C8> \xA2\xC2 |0
@@ -715,15 +611,12 @@ CHARMAP
 <U25CF> \xA1\xDC |0
 <U25D0> \xA2\xC4 |0
 <U25D1> \xA2\xC5 |0
-<U25D8> \x08 |1
-<U25D9> \x0A |1
 <U2605> \xA1\xDA |0
 <U2606> \xA1\xD9 |0
 <U260E> \xA2\xCF |0
 <U260F> \xA2\xCE |0
 <U261C> \xA2\xD0 |0
 <U261E> \xA2\xD1 |0
-<U263C> \x0F |1
 <U2640> \xA1\xCF |0
 <U2642> \xA1\xCE |0
 <U2660> \xA2\xBC |0
@@ -735,7 +628,6 @@ CHARMAP
 <U2668> \xA2\xCD |0
 <U2669> \xA2\xDB |0
 <U266A> \xA2\xDC |0
-<U266B> \x0E |1
 <U266C> \xA2\xDD |0
 <U266D> \xA2\xDA |0
 <U3000> \xA1\xA1 |0
@@ -10364,6 +10256,113 @@ CHARMAP
 <UFF5C> \xA3\xFC |0
 <UFF5D> \xA3\xFD |0
 <UFF5E> \xA2\xA6 |1
+<UFFE0> \xA1\xCB |0
+<UFFE1> \xA1\xCC |0
+<UFFE2> \xA1\xFE |0
+<UFFE3> \xA3\xFE |0
+<UFFE4> \x9A\xAA |0
+<UFFE5> \xA1\xCD |0
+<UFFE6> \xA3\xDC |0
+END CHARMAP
+
+CHARMAP
+<U005C> \x5C |0
+<U005C> \x82 |3
+<U0080> \x7F |2
+<U0081> \x7F |2
+<U0082> \x7F |2
+<U0083> \x7F |2
+<U0084> \x7F |2
+<U0085> \x7F |2
+<U0086> \x7F |2
+<U0087> \x7F |2
+<U0088> \x7F |2
+<U0089> \x7F |2
+<U008A> \x7F |2
+<U008B> \x7F |2
+<U008C> \x7F |2
+<U008D> \x7F |2
+<U008E> \x7F |2
+<U008F> \x7F |2
+<U0090> \x7F |2
+<U0091> \x7F |2
+<U0092> \x7F |2
+<U0093> \x7F |2
+<U0094> \x7F |2
+<U0095> \x7F |2
+<U0096> \x7F |2
+<U0097> \x7F |2
+<U0098> \x7F |2
+<U0099> \x7F |2
+<U009A> \x7F |2
+<U009B> \x7F |2
+<U009C> \x7F |2
+<U009D> \x7F |2
+<U009E> \x7F |2
+<U009F> \x7F |2
+<U00A0> \x7F |2
+<U00A3> \x7F |2
+<U00A5> \x7F |2
+<U00A9> \x7F |2
+<U00AB> \x7F |2
+<U00AE> \x7F |2
+<U00AF> \x7F |2
+<U00B5> \x7F |2
+<U00BB> \x7F |2
+<U00C0> \x7F |2
+<U00C1> \x7F |2
+<U00C2> \x7F |2
+<U00C3> \x7F |2
+<U00C4> \x7F |2
+<U00C5> \x7F |2
+<U00C7> \x7F |2
+<U00C8> \x7F |2
+<U00C9> \x7F |2
+<U00CA> \x7F |2
+<U00CB> \x7F |2
+<U00CC> \x7F |2
+<U00CD> \x7F |2
+<U00CE> \x7F |2
+<U00CF> \x7F |2
+<U00D1> \x7F |2
+<U00D2> \x7F |2
+<U00D3> \x7F |2
+<U00D4> \x7F |2
+<U00D5> \x7F |2
+<U00D6> \x7F |2
+<U00D9> \x7F |2
+<U00DA> \x7F |2
+<U00DB> \x7F |2
+<U00DC> \x7F |2
+<U00DD> \x7F |2
+<U00E0> \x7F |2
+<U00E1> \x7F |2
+<U00E2> \x7F |2
+<U00E3> \x7F |2
+<U00E4> \x7F |2
+<U00E5> \x7F |2
+<U00E7> \x7F |2
+<U00E8> \x7F |2
+<U00E9> \x7F |2
+<U00EA> \x7F |2
+<U00EB> \x7F |2
+<U00EC> \x7F |2
+<U00ED> \x7F |2
+<U00EE> \x7F |2
+<U00EF> \x7F |2
+<U00F1> \x7F |2
+<U00F2> \x7F |2
+<U00F3> \x7F |2
+<U00F4> \x7F |2
+<U00F5> \x7F |2
+<U00F6> \x7F |2
+<U00F9> \x7F |2
+<U00FA> \x7F |2
+<U00FB> \x7F |2
+<U00FC> \x7F |2
+<U00FD> \x7F |2
+<U00FF> \x7F |2
+<U20A9> \x5C |1
 <UFFA0> \x7F |2
 <UFFA1> \x7F |2
 <UFFA2> \x7F |2
@@ -10416,16 +10415,4 @@ CHARMAP
 <UFFDA> \x7F |2
 <UFFDB> \x7F |2
 <UFFDC> \x7F |2
-<UFFE0> \xA1\xCB |0
-<UFFE1> \xA1\xCC |0
-<UFFE2> \xA1\xFE |0
-<UFFE3> \xA3\xFE |0
-<UFFE4> \x9A\xAA |0
-<UFFE5> \xA1\xCD |0
-<UFFE6> \xA3\xDC |0
-<UFFE8> \x05 |1
-<UFFE9> \x1B |1
-<UFFEA> \x18 |1
-<UFFEB> \x1A |1
-<UFFEE> \x09 |1
 END CHARMAP

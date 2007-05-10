@@ -37,7 +37,7 @@
 
 # build an extension-only (delta) .cnv file
 # requires the base .cnv file at runtime
-<icu:base>                    "ibm-1386_P100_P100-2001"
+<icu:base>                    "ibm-1386_P100-2001"
 
 # The following was the generated state table.
 # This does not account for unassigned characters

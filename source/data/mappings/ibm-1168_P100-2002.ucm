@@ -5,15 +5,14 @@
 # *
 # ***************************************************************************
 #
-# File created by rptp2ucm (compiled on Jan 23 2007)
+# File created by rptp2ucm (compiled on Jan 14 2004)
 # from source files 44B00490.RPMAP100 and 049044B0.TPMAP100
 #
-<code_set_name>               "ibm-1168_P100_P100-2002"
+<code_set_name>               "ibm-1168_P100-2002"
 <char_name_mask>              "AXXXX"
 <mb_cur_max>                  1
 <mb_cur_min>                  1
 <uconv_class>                 "SBCS"
-<subchar>                     \x1A
 <icu:charsetFamily>           "ASCII"
 <icu:alias>                   "ibm-1168_STD"
 
