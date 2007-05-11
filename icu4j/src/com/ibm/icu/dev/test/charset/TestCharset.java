@@ -1738,8 +1738,12 @@ public class TestCharset extends TestFmwk {
         CharBuffer us = CharBuffer.allocate(0x100);
         ByteBuffer bs = ByteBuffer.allocate(0x100);
         
-        us.put((char)0x48); us.put((char)0x48);
-        bs.put((byte)0x48); bs.put((byte)0x48);
+        /* Unicode :  A<not equal to Alpha>. */
+        /* UTF7: AImIDkQ. */
+        us.put((char)0x41); us.put((char)0x2262); us.put((char)0x391); us.put((char)0x2e);
+        bs.put((byte)0x41); bs.put((byte)0x2b); bs.put((byte)0x49); bs.put((byte)0x6d); 
+        bs.put((byte)0x49); bs.put((byte)0x44); bs.put((byte)0x6b); bs.put((byte)0x51); 
+        bs.put((byte)0x2e);
         
         bs.limit(bs.position());
         bs.position(0);
