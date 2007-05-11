@@ -140,11 +140,15 @@ class CharsetUTF7 extends CharsetICU {
     class CharsetDecoderUTF7 extends CharsetDecoderICU {
         public CharsetDecoderUTF7(CharsetICU cs) {
             super(cs);
-            toULength = 0;
-            toUnicodeStatus = 0x10000000;
+            implReset();
+        }
+    
+        protected void implReset() {
+            super.implReset();
+            toUnicodeStatus = (toUnicodeStatus & 0xf0000000) | 0x1000000;
         }
         
-        protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) {
+        protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) { 
             CoderResult cr = CoderResult.UNDERFLOW;
             byte base64Value;
             byte base64Counter;
@@ -153,7 +157,7 @@ class CharsetUTF7 extends CharsetICU {
             int byteIndex;
             int sourceIndex, nextSourceIndex;
             
-            int length, targetCapacity;;
+            int length, targetCapacity;
             
             char b;
             
@@ -162,55 +166,59 @@ class CharsetUTF7 extends CharsetICU {
             //get the state of the machine state
             {
             int status = toUnicodeStatus;
-            inDirectMode = (byte)((status >> 28) & 1);
+            inDirectMode = (byte)((status >> 24) & 1);
             base64Counter = (byte)(status >> 16);
             bits = (char)status;
             }
             byteIndex = toULength;
             /* sourceIndex = -1 if the current character began in the previous buffer */
             sourceIndex = byteIndex == 0 ? 0 : -1;
-            nextSourceIndex = 0;
+            nextSourceIndex = 0;            
             
             directMode:  while (true) {
-                if (inDirectMode != 0) {
-                        /* 
-                         * In Direct Mode, most US-ASCII characters are encoded directly, i.e.,
-                         * with their US-ASCII byte values.
-                         * Backslash and Tilde and most control characters are not alled in UTF-7.
-                         * A plus sign starts Unicode (or "escape") Mode.
-                         * 
-                         * In Direct Mode, only the sourceIndex is used.
-                         */
-                        byteIndex = 0;
-                        length = source.remaining();
-                        targetCapacity = target.remaining();
-                        if (length > targetCapacity) {
-                            length = targetCapacity;
-                        }
-                        while (length>0) {
-                            b = (char)(source.get(sourceArrayIndex++) & UConverterConstants.UNSIGNED_BYTE_MASK);
-                            if (!isLegalUTF7(b)) {
-                                cr = CoderResult.malformedForLength(sourceArrayIndex);
-                                break;
-                            } else if (b!=PLUS) {
-                                target.put(b);
+                if (inDirectMode == 1) {
+                    /* 
+                     * In Direct Mode, most US-ASCII characters are encoded directly, i.e.,
+                     * with their US-ASCII byte values.
+                     * Backslash and Tilde and most control characters are not alled in UTF-7.
+                     * A plus sign starts Unicode (or "escape") Mode.
+                     * 
+                     * In Direct Mode, only the sourceIndex is used.
+                     */
+                    byteIndex = 0;
+                    length = source.remaining();
+                    targetCapacity = target.remaining();
+                    //Commented out because length of source may be larger than target when it comes to bytes
+                    /*if (length > targetCapacity) {
+                        length = targetCapacity;
+                    }*/
+                    while (length > 0) {
+                        b = (char)(source.get());
+                        sourceArrayIndex++;
+                        if (!isLegalUTF7(b)) {
+                            cr = CoderResult.malformedForLength(sourceArrayIndex);
+                            break;
+                        } else if (b!=PLUS) {
+                            target.put(b);
+                            if (offsets!= null) {
                                 offsets.put(sourceIndex++);
-                            } else { /* PLUS */
-                                /* switch to Unicode mode */
-                                nextSourceIndex = ++sourceIndex;
-                                inDirectMode = 0;
-                                byteIndex = 0;
-                                bits = 0;
-                                base64Counter = -1;
-                                continue directMode;
                             }
-                            --length;
-                        }//end of while
-                        if (source.hasRemaining() && target.position()>=target.limit()) {
-                            /* target is full */
-                            cr = CoderResult.OVERFLOW;
+                        } else { /* PLUS */
+                            /* switch to Unicode mode */
+                            nextSourceIndex = ++sourceIndex;
+                            inDirectMode = 0;
+                            byteIndex = 0;
+                            bits = 0;
+                            base64Counter = -1;
+                            continue directMode;
                         }
-                        break directMode;
+                        --length;
+                    }//end of while
+                    if (source.hasRemaining() && target.position() >= target.limit()) {
+                        /* target is full */
+                        cr = CoderResult.OVERFLOW;
+                    }
+                    break directMode;
                 } else { /* Unicode Mode*/
                     /* 
                      * In Unicode Mode, UTF-16BE is base64-encoded.
@@ -223,7 +231,8 @@ class CharsetUTF7 extends CharsetICU {
                      */
                     while(source.hasRemaining()) {
                         if (target.hasRemaining()) {
-                            b = (char)(source.get(sourceArrayIndex++)&UConverterConstants.UNSIGNED_BYTE_MASK);
+                            b = (char)source.get();
+                            sourceArrayIndex++;
                             toUBytesArray[byteIndex++] = (byte)b;
                             if (b>=126) {
                                 /* illegal - test other illegal US-ASCII values by base64Value==-3 */
@@ -245,7 +254,7 @@ class CharsetUTF7 extends CharsetICU {
                                     bits = (char)((bits<<6) | base64Value);
                                     ++base64Counter;
                                     break;
-                                case 2:
+                                case 2:                    
                                     target.put((char)((bits<<4) | (base64Value>>2)));
                                     if (offsets != null) {
                                         offsets.put(sourceIndex);
@@ -257,7 +266,7 @@ class CharsetUTF7 extends CharsetICU {
                                     base64Counter = 3;
                                     break;
                                 case 5:
-                                    target.put((char)((bits<<6) | base64Value));
+                                    target.put((char)((bits<<2) | (base64Value>>4)));
                                     if (offsets != null) {
                                         offsets.put(sourceIndex);
                                         sourceIndex = nextSourceIndex - 1;
@@ -277,7 +286,7 @@ class CharsetUTF7 extends CharsetICU {
                                     bits = 0;
                                     base64Counter = 0;
                                     break;
-                                default:
+                                default:                  
                                     /* will never occur */
                                     break;                                                           
                                 }//end of switch
@@ -314,7 +323,7 @@ class CharsetUTF7 extends CharsetICU {
                                     break;
                                 } else if (bits == 0) {
                                     /* un-read the character in case it is a plus sign */
-                                    --sourceArrayIndex;
+                                    source.position(--sourceArrayIndex);
                                     sourceIndex = nextSourceIndex - 1;
                                     continue directMode;
                                 } else {
@@ -337,7 +346,7 @@ class CharsetUTF7 extends CharsetICU {
                     break directMode;
                 }
             }//end of direct mode label
-            if (!cr.isError() && flush && !source.hasRemaining() && bits  ==0) {
+            if (!cr.isError() /*&& flush (--always flush)*/ && !source.hasRemaining() && bits  ==0) {
                 /*
                  * if we are in Unicode Mode, then the byteIndex might not be 0,
                  * but that is ok if bits -- 0
@@ -349,7 +358,7 @@ class CharsetUTF7 extends CharsetICU {
                 }
             }
             /* set the converter state */
-            toUnicodeStatus = ((int)inDirectMode<<28) | ((int)((char)base64Counter)<<16) | (int)((long)bits & UConverterConstants.UNSIGNED_INT_MASK);
+            toUnicodeStatus = ((int)inDirectMode<<24 | (int)base64Counter<<16 | (int)bits);
             toULength = byteIndex;
    
             return cr;
@@ -364,7 +373,7 @@ class CharsetUTF7 extends CharsetICU {
         
         protected void implReset() {
             super.implReset();
-            fromUnicodeStatus = (fromUnicodeStatus & 0xf0000000) | 0x10000000;
+            fromUnicodeStatus = (fromUnicodeStatus & 0xf0000000) | 0x1000000;
         }
         
         protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush) {
@@ -382,7 +391,7 @@ class CharsetUTF7 extends CharsetICU {
             {
                 status = fromUnicodeStatus;
                 encodeDirectly = (((long)status) < 0x10000000) ? ENCODE_DIRECTLY_MAXIMUM : ENCODE_DIRECTLY_RESTRICTED;
-                inDirectMode = (byte)((status >> 28) & 1);
+                inDirectMode = (byte)((status >> 24) & 1);
                 base64Counter = (byte)(status >> 16);
                 bits = (char)((byte)status);
             }
@@ -587,24 +596,24 @@ class CharsetUTF7 extends CharsetICU {
             }
             } //end of directMode label
             
-            if (flush && !source.hasRemaining()) {
+            if (/*flush && always flush*/ !source.hasRemaining()) {
                 /* flush remaining bits to the target */
-                if (inDirectMode==0 && base64Counter!=0) {
+                if (inDirectMode == 0 && base64Counter != 0) {
                     if (target.hasRemaining()) {
                         target.put(TO_BASE_64[bits]);
                         if (offsets != null) {
-                            offsets.put(sourceIndex-1);
+                            offsets.put(sourceIndex - 1);
                         }
                     } else {
-                        errorBuffer[errorBufferLength++]=TO_BASE_64[bits];
+                        errorBuffer[errorBufferLength++] = TO_BASE_64[bits];
                         cr = CoderResult.OVERFLOW;
                     }
                 }
                 /*reset the state for the next conversion */
-                fromUnicodeStatus=(int)(((long)status&0xf0000000) | 0x10000000); /* keep version, inDirectMode=TRUE */
+                fromUnicodeStatus = ((status&0xf0000000) | 0x1000000); /* keep version, inDirectMode=TRUE */
             } else {
                 /* set the converter state back */
-                fromUnicodeStatus=(int)(((long)status&0xf0000000) | ((long)inDirectMode<<28) | ((long)base64Counter<<16) | ((long)bits));
+                fromUnicodeStatus = ((status&0xf0000000) | ((int)inDirectMode<<24) | ((int)base64Counter<<16) | ((int)bits));
             }
             
             return cr;
