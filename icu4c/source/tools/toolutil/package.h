@@ -73,7 +73,7 @@ public:
     char getInType();
 
     // find the item in items[], return the non-negative index if found, else the binary-not of the insertion point
-    int32_t findItem(const char *name, int32_t length=-1);
+    int32_t findItem(const char *name, int32_t length=-1) const;
 
     /*
      * Set internal state for following calls to findNextItem() which will return
@@ -109,8 +109,8 @@ public:
     /* This variant extracts an item to a specific filename. */
     void extractItem(const char *filesPath, const char *outName, int32_t index, char outType);
 
-    int32_t getItemCount();
-    const Item *getItem(int32_t idx);
+    int32_t getItemCount() const;
+    const Item *getItem(int32_t idx) const;
 
     /*
      * Check dependencies and return TRUE if all dependencies are fulfilled.

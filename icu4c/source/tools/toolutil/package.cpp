@@ -826,7 +826,7 @@ Package::writePackage(const char *filename, char outType, const char *comment) {
 }
 
 int32_t
-Package::findItem(const char *name, int32_t length) {
+Package::findItem(const char *name, int32_t length) const {
     int32_t i, start, limit;
     int result;
 
@@ -1140,12 +1140,12 @@ Package::extractItems(const char *filesPath, const Package &listPkg, char outTyp
 }
 
 int32_t
-Package::getItemCount() {
+Package::getItemCount() const {
     return itemCount;
 }
 
 const Item *
-Package::getItem(int32_t idx) {
+Package::getItem(int32_t idx) const {
     if (0 <= idx && idx < itemCount) {
         return &items[idx];
     }
