@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -101,8 +101,7 @@ public class TransliteratorTest extends TestFmwk {
                 try {
                     rules = t.toRules(true);
 
-                    Transliterator u = Transliterator.createFromRules("x",
-                                           rules, Transliterator.FORWARD);
+                    Transliterator.createFromRules("x", rules, Transliterator.FORWARD);
                 } catch (IllegalArgumentException ex2) {
                     errln("FAIL: " + ID + ".toRules() => bad rules: " +
                           rules);
@@ -555,8 +554,7 @@ public class TransliteratorTest extends TestFmwk {
         for (int i=0; i<DATA.length; i+=2) {
             String err = null;
             try {
-                Transliterator t =
-                    Transliterator.createFromRules("<ID>",
+                Transliterator.createFromRules("<ID>",
                                             (String) DATA[i+1],
                                             Transliterator.FORWARD);
             } catch (IllegalArgumentException e) {
