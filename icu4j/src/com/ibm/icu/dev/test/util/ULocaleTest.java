@@ -284,10 +284,10 @@ public class ULocaleTest extends TestFmwk {
      */
     void checkObject(String requestedLocale, Object obj,
                      String expReqValid, String expValidActual) {
-        Class[] params = new Class[] { ULocale.Type.class };
+        Class[] getLocaleParams = new Class[] { ULocale.Type.class };
         try {
             Class cls = obj.getClass();
-            Method getLocale = cls.getMethod("getLocale", params);
+            Method getLocale = cls.getMethod("getLocale", getLocaleParams);
             ULocale valid = (ULocale) getLocale.invoke(obj, new Object[] {
                 ULocale.VALID_LOCALE });
             ULocale actual = (ULocale) getLocale.invoke(obj, new Object[] {

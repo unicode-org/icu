@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1999-2005, International Business Machines Corporation and    *
+* Copyright (C) 1999-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -34,7 +34,7 @@ public class TestUScriptRun extends TestFmwk
         }
     }
     
-    private static final RunTestData[][] testData = {
+    private static final RunTestData[][] m_testData = {
         {
             new RunTestData("\u0020\u0946\u0939\u093F\u0928\u094D\u0926\u0940\u0020", UScript.DEVANAGARI),
             new RunTestData("\u0627\u0644\u0639\u0631\u0628\u064A\u0629\u0020", UScript.ARABIC),
@@ -305,8 +305,8 @@ public class TestUScriptRun extends TestFmwk
     
     public void TestRuns()
     {
-        for (int i = 0; i < testData.length; i += 1) {
-            RunTestData[] test = testData[i];
+        for (int i = 0; i < m_testData.length; i += 1) {
+            RunTestData[] test = m_testData[i];
             int stringLimit = 0;
             int[] runStarts = new int[test.length + 1];
             String testString = "";

@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -263,14 +263,14 @@ public class TestUCharacterIterator extends TestFmwk{
         private int[] s;
         private int length, i;
     }
-    // src and expect strings
-    private final char src[]={
-        UTF16.getLeadSurrogate(0x2f999), UTF16.getTrailSurrogate(0x2f999),
-        UTF16.getLeadSurrogate(0x1d15f), UTF16.getTrailSurrogate(0x1d15f),
-        0xc4,
-        0x1ed0
-    };
     public void TestPreviousNext(){
+        // src and expect strings
+        char src[]={
+                UTF16.getLeadSurrogate(0x2f999), UTF16.getTrailSurrogate(0x2f999),
+                UTF16.getLeadSurrogate(0x1d15f), UTF16.getTrailSurrogate(0x1d15f),
+                0xc4,
+                0x1ed0
+            };
         // iterators
         UCharacterIterator iter1 = UCharacterIterator.getInstance(new ReplaceableString(new String(src)));
         UCharacterIterator iter2 = UCharacterIterator.getInstance(src/*char array*/);

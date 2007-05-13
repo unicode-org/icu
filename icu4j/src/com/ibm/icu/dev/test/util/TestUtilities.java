@@ -232,19 +232,19 @@ public class TestUtilities extends TestFmwk {
 	private void checkNext(int limit) {
         logln("Comparing nextRange");
         UnicodeMap.MapIterator mi = new UnicodeMap.MapIterator(map1);
-        Map map3 = new TreeMap();
+        Map localMap = new TreeMap();
         while (mi.nextRange()) {
             logln(Utility.hex(mi.codepoint) + ".." + Utility.hex(mi.codepointEnd) + " => " + mi.value);
             for (int i = mi.codepoint; i <= mi.codepointEnd; ++i) {
                 if (i >= limit) continue;
-                map3.put(new Integer(i), mi.value);
+                localMap.put(new Integer(i), mi.value);
             }
         }
-        checkMap(map2, map3);
+        checkMap(map2, localMap);
         
         logln("Comparing next");
         mi.reset();
-        map3 = new TreeMap();
+        localMap = new TreeMap();
         Object lastValue = new Object();
         while (mi.next()) {
             if (!UnicodeMap.areEqual(lastValue, mi.value)) {
@@ -252,9 +252,9 @@ public class TestUtilities extends TestFmwk {
                 lastValue = mi.value;
             }
             if (mi.codepoint >= limit) continue;
-            map3.put(new Integer(mi.codepoint), mi.value);
+            localMap.put(new Integer(mi.codepoint), mi.value);
         }
-        checkMap(map2, map3);
+        checkMap(map2, localMap);
     }
     
     public void check(int counter) {
