@@ -519,21 +519,21 @@ public class TestFmwk extends AbstractTestLog {
             args[wx++] = null;
         }
         
-        TestParams params = TestParams.create(args, log);
-        if (params == null) {
+        TestParams localParams = TestParams.create(args, log);
+        if (localParams == null) {
             return -1;
         }
         
-        int errorCount = runTests(params, args);
+        int errorCount = runTests(localParams, args);
         
-        if (params.seed != 0) {
-            params.log.println("-random:" + params.seed);
-            params.log.flush();
+        if (localParams.seed != 0) {
+            localParams.log.println("-random:" + localParams.seed);
+            localParams.log.flush();
         }
 
-        if (params.errorSummary != null && params.errorSummary.length() > 0) {
-            params.log.println("\nError summary:");
-            params.log.println(params.errorSummary.toString());
+        if (localParams.errorSummary != null && localParams.errorSummary.length() > 0) {
+            localParams.log.println("\nError summary:");
+            localParams.log.println(localParams.errorSummary.toString());
         }
 
         if (prompt) {
@@ -542,48 +542,48 @@ public class TestFmwk extends AbstractTestLog {
             try {
                 System.in.read();
             } catch (IOException e) {
-                params.log.println("Exception: " + e.toString() + e.getMessage());
+                localParams.log.println("Exception: " + e.toString() + e.getMessage());
             }
         }
 
         return errorCount;
     }
 
-    public int runTests(TestParams params, String[] tests) {
+    public int runTests(TestParams _params, String[] tests) {
         int ec = 0;
         
         StringBuffer summary = null;
         try {
             if (tests.length == 0 || tests[0] == null) { // no args
-                params.init();
-                resolveTarget(params).run();
-                ec = params.errorCount;
+                _params.init();
+                resolveTarget(_params).run();
+                ec = _params.errorCount;
             } else {
                 for (int i = 0; i < tests.length ; ++i) {
                     if (tests[i] == null) continue;
                     
                     if (i > 0) {
-                        params.log.println();
+                        _params.log.println();
                     }
 
-                    params.init();
-                    resolveTarget(params, tests[i]).run();
-                    ec += params.errorCount;
+                    _params.init();
+                    resolveTarget(_params, tests[i]).run();
+                    ec += _params.errorCount;
                     
-                    if (params.errorSummary != null && params.errorSummary.length() > 0) {
+                    if (_params.errorSummary != null && _params.errorSummary.length() > 0) {
                         if (summary == null) {
                             summary = new StringBuffer();
                         }
                         summary.append("\nTest Root: " + tests[i] + "\n");
-                        summary.append(params.errorSummary());
+                        summary.append(_params.errorSummary());
                     }
                 }
-                params.errorSummary = summary;
+                _params.errorSummary = summary;
             }
         } catch (Exception e) {
-            e.printStackTrace(params.log);
-            params.log.println(e.getMessage());
-            params.log.println("encountered exception, exiting");
+            e.printStackTrace(_params.log);
+            _params.log.println(e.getMessage());
+            _params.log.println("encountered exception, exiting");
         }
         
         return ec;
@@ -592,8 +592,8 @@ public class TestFmwk extends AbstractTestLog {
     /**
      * Return a ClassTarget for this test. Params is set on this test.
      */
-    public Target resolveTarget(TestParams params) {
-        this.params = params;
+    public Target resolveTarget(TestParams paramsArg) {
+        this.params = paramsArg;
         return new ClassTarget();
     }
 
@@ -604,9 +604,9 @@ public class TestFmwk extends AbstractTestLog {
      * a ClassTarget created using the resolved test and remaining path (which
      * ought to be null or a method name). Params is set on the target's test.
      */
-    public Target resolveTarget(TestParams params, String targetPath) {
+    public Target resolveTarget(TestParams paramsArg, String targetPath) {
         TestFmwk test = this;
-        test.params = params;
+        test.params = paramsArg;
 
         if (targetPath != null) {
             if (targetPath.length() == 0) {
@@ -1419,7 +1419,7 @@ public class TestFmwk extends AbstractTestLog {
             suppressIndent = !newln;
         }
 
-        private void writeTestInvalid(String name, boolean nodata) {
+        private void writeTestInvalid(String name, boolean nodataArg) {
             //              msg("***" + name + "*** not found or not valid.", WARN, true,
             // true);
             if (inDocMode()) {
@@ -1432,7 +1432,7 @@ public class TestFmwk extends AbstractTestLog {
                     needLineFeed = false;
                 }
             } else {
-                if(!nodata){
+                if(!nodataArg){
                     msg("Test " + name + " not found or not valid.", WARN, true,
                         true);
                 }

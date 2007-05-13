@@ -1,7 +1,7 @@
 //##header
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -843,24 +843,24 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
                     if (forward && c > firstChar) break;
                     if (c != firstChar) continue;
 
-                    int len = matchRest(text, offset[0], limit, trial);
+                    int length = matchRest(text, offset[0], limit, trial);
 
                     if (incremental) {
                         int maxLen = forward ? limit-offset[0] : offset[0]-limit;
-                        if (len == maxLen) {
+                        if (length == maxLen) {
                             // We have successfully matched but only up to limit.
                             return U_PARTIAL_MATCH;
                         }
                     }
 
-                    if (len == trial.length()) {
+                    if (length == trial.length()) {
                         // We have successfully matched the whole string.
-                        if (len > highWaterLength) {
-                            highWaterLength = len;
+                        if (length > highWaterLength) {
+                            highWaterLength = length;
                         }
                         // In the forward direction we know strings
                         // are sorted so we can bail early.
-                        if (forward && len < highWaterLength) {
+                        if (forward && length < highWaterLength) {
                             break;
                         }
                         continue;
@@ -926,7 +926,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
      * @deprecated This API is ICU internal only.
      */
     public int matchesAt(CharSequence text, int offset) {
-        int len = -1;
+        int lastLen = -1;
         strings:
         if (strings.size() != 0) {
             char firstChar = text.charAt(offset);
@@ -940,21 +940,21 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
                 if (firstStringChar > firstChar) break strings;
             }
             // now keep checking string until we get the longest one
-            while (true) {
+            for (;;) {
                 int tempLen = CollectionUtilities.matchesAt(text, offset, trial);
-                if (len > tempLen) break strings;
-                len = tempLen;
+                if (lastLen > tempLen) break strings;
+                lastLen = tempLen;
                 if (!it.hasNext()) break;
                 trial = (String) it.next();
             }
         }
-        if (len < 2) {
+        if (lastLen < 2) {
             int cp = UTF16.charAt(text, offset);
             if (contains(cp)) {
-                len = UTF16.getCharCount(cp);
+                lastLen = UTF16.getCharCount(cp);
             }
         }
-        return offset+len;
+        return offset+lastLen;
     }
 //#endif
 
@@ -2287,7 +2287,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
             opts |= RuleCharacterIterator.SKIP_WHITESPACE;
         }
 
-        StringBuffer pat = new StringBuffer(), buf = null;
+        StringBuffer patBuf = new StringBuffer(), buf = null;
         boolean usePat = false;
         UnicodeSet scratch = null;
         Object backup = null;
@@ -2344,13 +2344,13 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
                     } else {
                         // Handle opening '[' delimiter
                         mode = 1;
-                        pat.append('[');
+                        patBuf.append('[');
                         backup = chars.getPos(backup); // prepare to backup
                         c = chars.next(opts);
                         literal = chars.isEscaped();
                         if (c == '^' && !literal) {
                             invert = true;
-                            pat.append('^');
+                            patBuf.append('^');
                             backup = chars.getPos(backup); // prepare to backup
                             c = chars.next(opts);
                             literal = chars.isEscaped();
@@ -2389,12 +2389,12 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
                         syntaxError(chars, "Char expected after operator");
                     }
                     add_unchecked(lastChar, lastChar);
-                    _appendToPat(pat, lastChar, false);
+                    _appendToPat(patBuf, lastChar, false);
                     lastItem = op = 0;
                 }
 
                 if (op == '-' || op == '&') {
-                    pat.append(op);
+                    patBuf.append(op);
                 }
 
                 if (nested == null) {
@@ -2403,14 +2403,14 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
                 }
                 switch (setMode) {
                 case 1:
-                    nested.applyPattern(chars, symbols, pat, options);
+                    nested.applyPattern(chars, symbols, patBuf, options);
                     break;
                 case 2:
                     chars.skipIgnored(opts);
-                    nested.applyPropertyPattern(chars, pat, symbols);
+                    nested.applyPropertyPattern(chars, patBuf, symbols);
                     break;
                 case 3: // `nested' already parsed
-                    nested._toPattern(pat, false);
+                    nested._toPattern(patBuf, false);
                     break;
                 }
 
@@ -2454,16 +2454,16 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
                 case ']':
                     if (lastItem == 1) {
                         add_unchecked(lastChar, lastChar);
-                        _appendToPat(pat, lastChar, false);
+                        _appendToPat(patBuf, lastChar, false);
                     }
                     // Treat final trailing '-' as a literal
                     if (op == '-') {
                         add_unchecked(op, op);
-                        pat.append(op);
+                        patBuf.append(op);
                     } else if (op == '&') {
                         syntaxError(chars, "Trailing '&'");
                     }
-                    pat.append(']');
+                    patBuf.append(']');
                     mode = 2;
                     continue;
                 case '-':
@@ -2477,7 +2477,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
                             c = chars.next(opts);
                             literal = chars.isEscaped();
                             if (c == ']' && !literal) {
-                                pat.append("-]");
+                                patBuf.append("-]");
                                 mode = 2;
                                 continue;
                             }
@@ -2498,7 +2498,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
                     }
                     if (lastItem == 1) {
                         add_unchecked(lastChar, lastChar);
-                        _appendToPat(pat, lastChar, false);
+                        _appendToPat(patBuf, lastChar, false);
                     }
                     lastItem = 0;
                     if (buf == null) {
@@ -2523,9 +2523,9 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
                     // we don't need to drop through to the further
                     // processing
                     add(buf.toString());
-                    pat.append('{');
-                    _appendToPat(pat, buf.toString(), false);
-                    pat.append('}');
+                    patBuf.append('{');
+                    _appendToPat(patBuf, buf.toString(), false);
+                    patBuf.append('}');
                     continue;
                 case SymbolTable.SYMBOL_REF:
                     //         symbols  nosymbols
@@ -2546,11 +2546,11 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
                     if (anchor && op == 0) {
                         if (lastItem == 1) {
                             add_unchecked(lastChar, lastChar);
-                            _appendToPat(pat, lastChar, false);
+                            _appendToPat(patBuf, lastChar, false);
                         }
                         add_unchecked(UnicodeMatcher.ETHER);
                         usePat = true;
-                        pat.append(SymbolTable.SYMBOL_REF).append(']');
+                        patBuf.append(SymbolTable.SYMBOL_REF).append(']');
                         mode = 2;
                         continue;
                     }
@@ -2577,13 +2577,13 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
                         syntaxError(chars, "Invalid range");
                     }
                     add_unchecked(lastChar, c);
-                    _appendToPat(pat, lastChar, false);
-                    pat.append(op);
-                    _appendToPat(pat, c, false);
+                    _appendToPat(patBuf, lastChar, false);
+                    patBuf.append(op);
+                    _appendToPat(patBuf, c, false);
                     lastItem = op = 0;
                 } else {
                     add_unchecked(lastChar, lastChar);
-                    _appendToPat(pat, lastChar, false);
+                    _appendToPat(patBuf, lastChar, false);
                     lastChar = c;
                 }
                 break;
@@ -2619,7 +2619,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
         // Use the rebuilt pattern (pat) only if necessary.  Prefer the
         // generated pattern.
         if (usePat) {
-            rebuiltPat.append(pat.toString());
+            rebuiltPat.append(patBuf.toString());
         } else {
             _generatePattern(rebuiltPat, false, true);
         }
@@ -3450,14 +3450,14 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
      */
     private void applyPropertyPattern(RuleCharacterIterator chars,
                                       StringBuffer rebuiltPat, SymbolTable symbols) {
-        String pat = chars.lookahead();
+        String patStr = chars.lookahead();
         ParsePosition pos = new ParsePosition(0);
-        applyPropertyPattern(pat, pos, symbols);
+        applyPropertyPattern(patStr, pos, symbols);
         if (pos.getIndex() == 0) {
             syntaxError(chars, "Invalid property pattern");
         }
         chars.jumpahead(pos.getIndex());
-        rebuiltPat.append(pat.substring(0, pos.getIndex()));
+        rebuiltPat.append(patStr.substring(0, pos.getIndex()));
     }
 
     //----------------------------------------------------------------

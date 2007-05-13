@@ -107,11 +107,11 @@ public class StatisticsTool implements NGramParser.NGramParserClient, NGramList.
 //        System.err.println("ioError: " + e.toString());
 //    }
 
-    private int nextBuffer(InputFile inputFile)
+    private int nextBuffer(InputFile inputFileArg)
     {
         bufIndex = 0;
         
-        return inputFile.read(buffer);
+        return inputFileArg.read(buffer);
     }
     
     public char nextChar()
