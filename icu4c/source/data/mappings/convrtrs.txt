@@ -168,7 +168,7 @@ UTF-16BE { IANA* MIME* JAVA* }  x-utf-16be { JAVA }
                                 ibm-25776 { IBM } # Unicode 4.1, UTF-16 BE with IBM PUA
                                 ibm-25777 { IBM } # Unicode 4.1, UTF-16 BE
                                 ibm-61955 { IBM } # UTF-16BE with Gaidai University (Japan) PUA
-                                ibm-61956 { IBM } # UTF-16BE with HKSCS-Big 5 PUA
+                                ibm-61956 { IBM } # UTF-16BE with Microsoft HKSCS-Big 5 PUA
                                 windows-1201 { WINDOWS* }
                                 cp1200
                                 cp1201
@@ -705,6 +705,7 @@ ibm-1162_P100-1999 { UTR22* }   # Thai (w/ euro update)
 # Platform codepages
 # If Java supports the IBM prefix, it should also support the ibm- prefix too.
 ibm-437_P100-1995 { UTR22* }    ibm-437 { IBM* } IBM437 { IANA* WINDOWS JAVA } cp437 { IANA WINDOWS JAVA* } 437 { IANA WINDOWS JAVA } csPC8CodePage437 { IANA JAVA } windows-437 { WINDOWS* }  # PC US
+ibm-720_P100-1997 { UTR22* }    ibm-720 { IBM* } windows-720 { WINDOWS* } DOS-720 { WINDOWS } # PC Arabic
 ibm-737_P100-1997 { UTR22* }    ibm-737 { IBM* } IBM737 { WINDOWS JAVA } cp737 { JAVA* } windows-737 { WINDOWS* } 737 { JAVA } # PC Greek
 ibm-775_P100-1996 { UTR22* }    ibm-775 { IBM* } IBM775 { IANA* WINDOWS JAVA } cp775 { IANA WINDOWS JAVA* } csPC775Baltic { IANA } windows-775 { WINDOWS* } 775 { JAVA } # PC Baltic
 ibm-850_P100-1995 { UTR22* }    ibm-850 { IBM* } IBM850 { IANA* WINDOWS JAVA } cp850 { IANA MIME* WINDOWS JAVA* } 850 { IANA JAVA } csPC850Multilingual { IANA JAVA } windows-850 { WINDOWS* } # PC latin1
@@ -728,7 +729,7 @@ ibm-878_P100-1996 { UTR22* }    ibm-878 { IBM* } KOI8-R { IANA* MIME* WINDOWS JA
 ibm-901_P100-1999 { UTR22* }    ibm-901 { IBM* } # PC Baltic (w/ euro update), update of ibm-921
 ibm-902_P100-1999 { UTR22* }    ibm-902 { IBM* } # PC Estonian (w/ euro update), update of ibm-922
 ibm-922_P100-1999 { UTR22* }    ibm-922 { IBM* } IBM922 { JAVA } cp922 { MIME* JAVA* } 922 { JAVA } # PC Estonian (w/o euro update)
-ibm-1168_P100-2002 { UTR22* } ibm-1168 { IBM* } KOI8-U { IANA* WINDOWS } windows-21866 { WINDOWS* } koi8-ru { WINDOWS }   # Ukrainian KOI8. koi8-ru is an unusual alias, but Microsoft states that it is an alias.
+ibm-1168_P100-2002 { UTR22* }   ibm-1168 { IBM* } KOI8-U { IANA* WINDOWS } windows-21866 { WINDOWS* } koi8-ru { WINDOWS }   # Ukrainian KOI8. koi8-ru is an unusual alias, but Microsoft states that it is an alias.
 ibm-4909_P100-1999 { UTR22* }   ibm-4909 { IBM* } # ISO Greek (w/ euro update), update of ibm-813
 
 # The cp aliases in this section aren't really windows aliases, but it was used by ICU for Windows.
@@ -814,7 +815,9 @@ ISCII,version=8         x-iscii-ma { WINDOWS } windows-57009 { WINDOWS* } iscii-
 LMBCS-1                 lmbcs ibm-65025 { IBM* }
 
 # These Lotus specific converters still work, but they aren't advertised in this alias table.
-# These are almost never used outside of Lotus software, and they take a lot of time when creating the available converter list.
+# These are almost never used outside of Lotus software,
+# and they take a lot of time when creating the available converter list.
+# Also Lotus doesn't really use them anyway. It was a mistake to create these LMBCS variant converters in ICU.
 #LMBCS-2
 #LMBCS-3
 #LMBCS-4
@@ -917,6 +920,7 @@ ibm-5123_P100-1999 { UTR22* }   ibm-5123 { IBM* }                   # Host Roman
 ibm-8482_P100-1999 { UTR22* }   ibm-8482 { IBM* }                   # host SBCS (Katakana). Euro update of ibm-290. SBCS portion of ibm-1399.
 ibm-16684_P110-2003 { UTR22* }  ibm-16684 { IBM* }                  # DBCS Jis + Roman Jis Host. This is the DBCS portion of ibm-1390 and ibm-1399 (JIS X 0213)
 ibm-4899_P100-1998 { UTR22* }   ibm-4899 { IBM* }                   # Old EBCDIC Hebrew. Update of ibm-803
+ibm-4971_P100-1999 { UTR22* }   ibm-4971 { IBM* }                   # EBCDIC Greek. Update of ibm-875 and superceded by ibm-9067
 ibm-9067_X100-2005 { UTR22* }   ibm-9067 { IBM* }                   # EBCDIC Greek. Update of ibm-875 and ibm-4971
 ibm-12712_P100-1998 { UTR22* }  ibm-12712 { IBM* } ebcdic-he        # EBCDIC Hebrew (new sheqel, control charaters update). Update of ibm-424
 ibm-16804_X110-1999 { UTR22* }  ibm-16804 { IBM* } ebcdic-ar        # EBCDIC Arabic. Update of ibm-420
@@ -950,7 +954,7 @@ ibm-16804_X110-1999 { UTR22* }  ibm-16804 { IBM* } ebcdic-ar        # EBCDIC Ara
 # they are already covered by the normal option parsing together with the
 # regular, option-less alias elsewhere in this file.
 
-ibm-37_P100-1995,swaplfnl     ibm-37-s390 ibm037-s390
+ibm-37_P100-1995,swaplfnl     ibm-37-s390 # ibm037-s390 also matches ibm-37-s390
 ibm-1047_P100-1995,swaplfnl   ibm-1047-s390
 ibm-1140_P100-1997,swaplfnl   ibm-1140-s390
 ibm-1142_P100-1997,swaplfnl   ibm-1142-s390
@@ -970,10 +974,6 @@ ibm-16804_X110-1999,swaplfnl  ibm-16804-s390
 # It maps both EBCDIC LF and NL controls to Unicode LF U+000A.
 
 ebcdic-xml-us
-
-# TODO Consider removing this table
-ibm-4971_P100-1999 { UTR22* }   ibm-4971 { IBM* }                   # EBCDIC Greek. Update of ibm-875 and superceded by ibm-9067
-
 
 # These were removed due to age, and they are rarely used.
 
