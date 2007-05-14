@@ -27,6 +27,7 @@
 
 UCM_SOURCE_FILES = ibm-437_P100-1995.ucm\
 ibm-737_P100-1997.ucm\
+ibm-720_P100-1997.ucm\
 ibm-775_P100-1996.ucm\
 ibm-813_P100-1995.ucm\
 ibm-850_P100-1995.ucm\
