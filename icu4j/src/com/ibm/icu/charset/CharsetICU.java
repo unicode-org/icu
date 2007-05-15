@@ -101,7 +101,6 @@ public abstract class CharsetICU extends Charset{
         /*algorithmicCharsets.put("BOCU-1",                "com.ibm.icu.charset.CharsetBOCU1" );
         algorithmicCharsets.put("HZ",                    "com.ibm.icu.charset.CharsetHZ" );
         algorithmicCharsets.put("imapmailboxname",       "com.ibm.icu.charset.CharsetIMAP" );
-        algorithmicCharsets.put("ISCII",                 "com.ibm.icu.charset.CharsetISCII" );
         algorithmicCharsets.put("iso2022",               "com.ibm.icu.charset.CharsetISO2022" );
         algorithmicCharsets.put("lmbcs1",                "com.ibm.icu.charset.CharsetLMBCS1" );
         algorithmicCharsets.put("lmbcs11",               "com.ibm.icu.charset.CharsetLMBCS11" );
@@ -132,6 +131,7 @@ public abstract class CharsetICU extends Charset{
         algorithmicCharsets.put("UTF-8",                 "com.ibm.icu.charset.CharsetUTF8" );
         algorithmicCharsets.put("CESU-8",                "com.ibm.icu.charset.CharsetCESU8" );
         algorithmicCharsets.put("UTF-7",                 "com.ibm.icu.charset.CharsetUTF7" );
+        algorithmicCharsets.put("ISCII",                 "com.ibm.icu.charset.CharsetISCII" );
     }
 
     /*public*/ static final Charset getCharset(String icuCanonicalName, String javaCanonicalName, String[] aliases){
