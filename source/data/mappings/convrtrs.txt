@@ -442,6 +442,7 @@ ibm-921_P100-1995 { UTR22* }
                         ibm-921 { IBM* }
                         ISO-8859-13 { IANA* MIME* JAVA* }
                         8859_13 { JAVA }
+                        windows-28603 { WINDOWS* }
                         cp921
                         921
 
@@ -546,13 +547,13 @@ ibm-950_P110-1999 { UTR22* }                # Taiwan Big-5 (w/o euro update)
                         ibm-950 { IBM* JAVA }
                         cp950 { JAVA* }
                         950 { JAVA }
-ibm-5471_P100-2007 { UTR22* } # This uses supplementary characters.
-                        ibm-5471 { IBM* }
+ibm-1375_P100-2007 { UTR22* }   # Big5-HKSCS-2004 with Unicode 3.1 mappings. This uses supplementary characters.
+                        ibm-1375 { IBM* }
                         Big5-HKSCS { IANA* JAVA* }
                         big5hk { JAVA }
                         HKSCS-BIG5  # From http://www.openi18n.org/localenameguide/
-ibm-1375_P100-2006 { UTR22* }   # IBM's interpretation of Windows' Taiwan Big-5 w/ HKSCS extensions
-                        ibm-1375 { IBM* }
+ibm-5471_P100-2006 { UTR22* }   # Big5-HKSCS-2001 with Unicode 3.0 mappings. This uses many PUA characters.
+                        ibm-5471 { IBM* }
                         Big5-HKSCS
                         MS950_HKSCS { JAVA* }
                         hkbig5 # from HP-UX 11i, which can't handle supplementary characters.
