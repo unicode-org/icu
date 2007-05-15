@@ -466,6 +466,20 @@ conversion:table(nofallback) {
             :intvector { 0,  1,  2,  3,  4,  6,  7,  8,  9,  13,  15,  16,  17,  18,  19,  20,  21,  24,  25,  26  }, 
             :int{1}, :int{0}, "", "", :bin{ "" }
         }
+        { // Verify Supplementary support
+          "Big5-HKSCS",
+          :bin{ fcfcfcfd },
+          "\U000233E6\U00026DA0",
+          :intvector{ 0, 0, 2, 2 },
+          :int{1}, :int{0}, "", "?", :bin{""}
+        }
+        { // Verify non-supplementary support
+          "big5-hkscs:unicode3.0",
+          :bin{ fcfcfcfd },
+          "\uE1D4\uE1D5",
+          :intvector{ 0, 2 },
+          :int{1}, :int{0}, "", "?", :bin{""}
+        }
       }
     }
 
