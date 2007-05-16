@@ -13,8 +13,6 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
 
-import com.ibm.icu.charset.CharsetUTF7.CharsetDecoderUTF7;
-import com.ibm.icu.charset.CharsetUTF7.CharsetEncoderUTF7;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UTF16;
 
@@ -106,9 +104,26 @@ class CharsetISCII extends CharsetICU {
         char currentDeltaToUnicode;         /* current delta in Indic block */
         int currentMaskFromUnicode;    /* mask for current state in fromUnicode */
         int currentMaskToUnicode;          /* mask for current state in toUnicode */
+        int defMaskToUnicode;           /* mask for default state in toUnicode */
         boolean isFirstBuffer;          /* boolean for fromUnicode to see if we need to announce the first script */
         boolean resetToDefaultToUnicode;    /* boolean for reseting to default delta and mask when a newline is encountered */
         String name;
+        
+        UConverterDataISCII(char contextCharToUnicode, char contextCharFromUnicode, char defDeltaToUnicode, char currentDeltaFromUnicode,
+                            char currentDeltaToUnicode, int currentMaskFromUnicode, int currentMaskToUnicode, int defMaskToUnicode,
+                            boolean isFirstBuffer, boolean resetToDefaultToUnicode, String name) {
+            this.contextCharToUnicode = contextCharToUnicode;
+            this.contextCharFromUnicode = contextCharFromUnicode;
+            this.defDeltaToUnicode = defDeltaToUnicode;
+            this.currentDeltaFromUnicode = currentDeltaFromUnicode;
+            this.currentDeltaToUnicode = currentDeltaToUnicode;
+            this.currentMaskFromUnicode = currentMaskFromUnicode;
+            this.currentMaskToUnicode = currentMaskToUnicode;
+            this.defMaskToUnicode = defMaskToUnicode;
+            this.isFirstBuffer = isFirstBuffer;
+            this.resetToDefaultToUnicode = resetToDefaultToUnicode;
+            this.name = name;
+        }
     }
     
     private static final class LookupDataStruct {
@@ -739,18 +754,241 @@ class CharsetISCII extends CharsetICU {
         
         protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) { 
             CoderResult cr = CoderResult.UNDERFLOW;
+            int targetUniChar = 0x0000;
+            byte sourceChar = 0x0000;
+            UConverterDataISCII data;
             
+            //TODO: add code to get UConverterDataISCII
+            data = new UConverterDataISCII('a', 'a', 'a', 'a', 'a', 0, 0, 0, true, true, new String());
+            //data.contextCharToUnicode; /* contains previous ISCII codepoint visited */
+            //this.toUnicodeStatus; /* contains the mapping to Unicode of the above codepoint */
+            
+            while (source.hasRemaining()) {
+                targetUniChar = UConverterConstants.missingCharMarker;
+                
+                if (target.hasRemaining()) {
+                    sourceChar = source.get();
+                    
+                    /* look at the post-context perform special processing */
+                    if (data.contextCharToUnicode == ATR) {
+                        /* If we have ATR in data.contextCharToUnicode then we need to change our
+                         * state to Indic Script specified by sourceChar
+                         */
+                        /* check if the sourceChar is supported script range */
+                        if (((short)(ISCIILang.PNJ - sourceChar) & UConverterConstants.UNSIGNED_BYTE_MASK) <= (ISCIILang.PNJ - ISCIILang.DEV)) {
+                            data.currentDeltaToUnicode = (char)(lookupTable[sourceChar & 0x0F][0] * UniLang.DELTA);
+                            data.currentMaskToUnicode = (int)lookupTable[sourceChar & 0x0F][1];
+                        } else if (sourceChar == ISCIILang.DEF) {
+                            /* switch back to default */
+                            data.currentDeltaToUnicode = data.defDeltaToUnicode;
+                            data.currentMaskToUnicode = data.defMaskToUnicode;
+                        } else {
+                            if ((sourceChar >= 0x21 && sourceChar <= 0x3F)) {
+                                /* these are display codes consume and continue */
+                            } else {
+                                cr = CoderResult.unmappableForLength(source.position() - 1);
+                                /* reset */
+                                data.contextCharToUnicode = NO_CHAR_MARKER;
+                                //TODO: add code for goto CALLBACK
+                            }
+                        }
+                        /* reset */
+                        data.contextCharToUnicode = NO_CHAR_MARKER;
+                        continue;
+                    } else if (data.contextCharToUnicode == EXT) {
+                        /* check if sourceChar is in 0xA1 - 0xEE range */
+                        if (((short)(EXT_RANGE_END - sourceChar) & UConverterConstants.UNSIGNED_BYTE_MASK) <= (EXT_RANGE_END - EXT_RANGE_BEGIN)) {
+                            /* We currently support only Anudatta and Devanagari abbreviation sign */
+                            if (sourceChar == 0xBF || sourceChar == 0xB8) {
+                                targetUniChar = (sourceChar == 0xBF) ? DEV_ABBR_SIGN : DEV_ANUDATTA;
+                                
+                                /* find out if the mappling is valid in this state */
+                                if ((validityTable[((short)targetUniChar) & UConverterConstants.UNSIGNED_BYTE_MASK] & data.currentMaskToUnicode) > 0) {
+                                    data.contextCharToUnicode = NO_CHAR_MARKER;
+                                    
+                                    /* write to target */
+                                    WriteToTargetToU(offsets, source, target, targetUniChar, data.currentDeltaToUnicode);
+                                    
+                                    continue;
+                                }
+                            }
+                            /* byte unit is unassigned */
+                            targetUniChar = UConverterConstants.missingCharMarker;
+                            cr = CoderResult.unmappableForLength(source.position() - 1);
+                        } else {
+                            /* only 0xA1 - 0xEE are legal after EXT char */
+                            data.contextCharToUnicode = NO_CHAR_MARKER;
+                            cr = CoderResult.malformedForLength(source.position() - 1); 
+                        }
+                        //TODO: add goto statement to CALLBACK
+                    } else if (data.contextCharToUnicode == ISCII_INV) {
+                        if (sourceChar == ISCII_HALANT) {
+                            targetUniChar = 0x0020; /* replace with space according to Indic FAQ */
+                        } else {
+                            targetUniChar = ZWJ;
+                        }
+                        
+                        /* write to target */
+                        //TODO: change the delta entry
+                        WriteToTargetToU(offsets, source, target, targetUniChar, data.currentDeltaToUnicode);
+                        /* reset */
+                        data.contextCharToUnicode = NO_CHAR_MARKER;
+                    }
+                    
+                    /* look at the pre-context and perform special processing */
+                    switch ((char)sourceChar) {
+                    case ISCII_INV:
+                    case EXT: /* falls through */
+                    case ATR:
+                        data.contextCharToUnicode = (char)sourceChar;
+                        
+                        if (this.toUnicodeStatus != UConverterConstants.missingCharMarker) {
+                            //TODO: add write to target and add offset and offsets entry to all 
+                            this.toUnicodeStatus = UConverterConstants.missingCharMarker;
+                        }
+                        continue;
+                    case ISCII_DANDA:
+                        /* handle double danda */
+                        if (data.contextCharToUnicode == ISCII_DANDA) {
+                            targetUniChar = DOUBLE_DANDA;
+                            /* clear the context */
+                            data.contextCharToUnicode = NO_CHAR_MARKER;
+                            this.toUnicodeStatus = UConverterConstants.missingCharMarker;
+                        } else {
+                            targetUniChar = GetMapping(sourceChar, targetUniChar, data);
+                            data.contextCharToUnicode = (char)sourceChar;
+                        }
+                        break;
+                    case 0x0A:
+                        /* fall through */
+                    case 0x0D:
+                        data.resetToDefaultToUnicode = true;
+                        targetUniChar = GetMapping(sourceChar, targetUniChar, data);
+                        data.contextCharToUnicode = (char)sourceChar;
+                        break;
+                    case ISCII_NUKTA:
+                        /* handle soft halant */
+                        if (data.contextCharToUnicode == ISCII_HALANT) {
+                            targetUniChar = ZWJ;
+                            /* clear the context */
+                            data.contextCharToUnicode = NO_CHAR_MARKER;
+                            break;
+                        } else {
+                            /* try to handle <CHAR> + ISCII_NUKTA special mappings */
+                            int i = 1;
+                            boolean found = false;
+                            for (; i < nuktaSpecialCases[0][0]; i++) {
+                                if (nuktaSpecialCases[i][0] == ((short)data.contextCharToUnicode & UConverterConstants.UNSIGNED_BYTE_MASK)) {
+                                    targetUniChar  = nuktaSpecialCases[i][1];
+                                    found = true;
+                                    break;
+                                }
+                            }
+                            if (found) {
+                                /* find out if the mapping is valid in this state */
+                                if ((validityTable[(byte)targetUniChar] & data.currentMaskToUnicode) > 0) {
+                                    data.contextCharToUnicode = NO_CHAR_MARKER;
+                                    this.toUnicodeStatus = UConverterConstants.missingCharMarker;
+                                    break;
+                                }
+                                /* else fall through to default */
+                            }
+                            /* else fall through to default */
+                        }
+                    default:
+                        targetUniChar = GetMapping(sourceChar, targetUniChar, data);
+                        data.contextCharToUnicode = (char)sourceChar;
+                        break;
+                    } //end of switch
+                    
+                    if (this.toUnicodeStatus != UConverterConstants.missingCharMarker) {
+                        /* write the previously mapped codepoint */
+                        //TODO: add WriteToTargetToU call with the correct values
+                        this.toUnicodeStatus = UConverterConstants.missingCharMarker;
+                    }
+                    
+                    if (targetUniChar != UConverterConstants.missingCharMarker) {
+                        /* now save the targetUniChar for delayed write */
+                        this.toUnicodeStatus = (char)targetUniChar;
+                        if (data.resetToDefaultToUnicode) {
+                            data.currentDeltaToUnicode = data.defDeltaToUnicode;
+                            data.currentMaskToUnicode = data.defMaskToUnicode;
+                            data.resetToDefaultToUnicode = false;
+                        }
+                    } else {
+                        /* we reach here only if targetUniChar == missingCharMarker
+                         * so assign codes to reason and err
+                         */
+                        cr = CoderResult.malformedForLength(source.position() - 1);
+//TODO: CALLBACK label here
+                        toUBytesArray[0] = (byte)sourceChar;
+                        toULength = 1;
+                        break;
+                    }
+                } else {
+                    cr = CoderResult.OVERFLOW;
+                    break;
+                }
+                
+            } //end of while
+            
+            if (!cr.isError() && !cr.isOverflow() /* && flush --always flush */&& !source.hasRemaining()) {
+                /*end of the input stream */
+                if (data.contextCharToUnicode == ATR || data.contextCharToUnicode == EXT || data.contextCharToUnicode == ISCII_INV) {
+                    /* set toUBytes[] */
+                    toUBytesArray[0] = (byte)data.contextCharToUnicode;
+                    toULength = 1;
+                    
+                    /* avoid looping on truncated sequences */
+                    data.contextCharToUnicode = NO_CHAR_MARKER;
+                } else {
+                    toULength = 0;
+                }
+                
+                if (toUnicodeStatus != UConverterConstants.missingCharMarker) {
+                    /* output a remaining target character */
+                    WriteToTargetToU(offsets, source, target, source.get(), data.currentDeltaToUnicode);
+                    this.toUnicodeStatus = UConverterConstants.missingCharMarker;    
+                }
+            }
             return cr;
         }
         
-        private CoderResult WriteToTargetToU() {
+        private CoderResult WriteToTargetToU(IntBuffer offsets, ByteBuffer source, CharBuffer target, int targetUniChar, char delta) {
             CoderResult cr = CoderResult.UNDERFLOW;
-            
+            /* add offset to current Indic Block */
+            if (targetUniChar > ASCII_END &&
+                    targetUniChar != ZWJ &&
+                    targetUniChar != ZWNJ &&
+                    targetUniChar != DANDA &&
+                    targetUniChar != DOUBLE_DANDA) {
+                targetUniChar += delta;
+            }
+            /* now write the targetUniChar */
+            if (target.hasRemaining()) {
+                target.put((char)targetUniChar);
+                if (offsets != null) {
+                    //TODO: add offsets code
+                }
+            } else {
+                charErrorBufferArray[charErrorBufferLength++] = (char)targetUniChar;
+                cr = CoderResult.OVERFLOW;
+            }
             return cr;
         }
         
-        private void GetMapping() {
-            
+        private int GetMapping(byte sourceChar, int targetUniChar, UConverterDataISCII data) {
+            targetUniChar = toUnicodeTable[sourceChar];
+            /* is the code point valid in current script? */
+            if (sourceChar > ASCII_END &&
+                    (validityTable[(byte)targetUniChar] & data.currentMaskToUnicode) == 0) {
+                /* Vocallic RR is assigne in ISCII Telugu and Unicode */
+                if (data.currentDeltaToUnicode != (TELUGU_DELTA) &&
+                        targetUniChar != VOCALLIC_RR) {
+                    targetUniChar = UConverterConstants.missingCharMarker;
+                }
+            }
+            return targetUniChar;
         }
     }
     
@@ -774,12 +1012,212 @@ class CharsetISCII extends CharsetICU {
         protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush) {
             CoderResult cr = CoderResult.UNDERFLOW;
             
+            int targetByteUnit = 0x0000;
+            int sourceChar = 0x0000;
+            UConverterDataISCII converterData;
+            char newDelta = 0;
+            char range = 0;
+            boolean deltaChanged = false;
+            
+            /* initialize data */
+            //TODO: fix this initialization of converterData
+            converterData = new UConverterDataISCII('a', 'a', 'a', 'a', 'a', 0, 0, 0, true, true, new String());
+            newDelta = converterData.currentDeltaFromUnicode;
+            range = (char)(newDelta / UniLang.DELTA);
+            
+            if ((sourceChar = fromUChar32) != 0) {
+                //TODO: setup goto getTrail
+            }
+            
+            /* writing the char to the output stream */
+            while (source.hasRemaining()) {
+                targetByteUnit = UConverterConstants.missingCharMarker;
+                sourceChar = source.get();
+                
+                /* check if input is in ASCII and C0 control codes range */
+                if (sourceChar <= ASCII_END) {
+                    //TODO: add correct parameters
+                    cr = WriteToTargetFromU(offsets, source, target, targetByteUnit);
+                    if (cr.isOverflow()) {
+                        break;
+                    }
+                    if (sourceChar == LF) {
+                        targetByteUnit = ATR << 8;
+                        targetByteUnit += (byte)lookupInitialData[range].isciiLang;
+                        fromUnicodeStatus = sourceChar;
+                        /* now append ATR and language code */
+                        //TODO: add correct parameters
+                        cr = WriteToTargetFromU(offsets, source, target, targetByteUnit);
+                        if (cr.isOverflow()) {
+                            break;
+                        }
+                    }
+                    continue;
+                }
+                switch (sourceChar) {
+                case ZWNJ:
+                    /* contextChar has HALANT */
+                    if (converterData.contextCharFromUnicode != 0) {
+                        converterData.contextCharFromUnicode = 0x00;
+                        targetByteUnit = ISCII_HALANT;
+                    } else {
+                        /* consume ZWNJ and continue */
+                        converterData.contextCharFromUnicode = 0x00;
+                        continue;
+                    }
+                    break;
+                case ZWJ:
+                    /* contextChar has HALANT */
+                    if (converterData.contextCharFromUnicode != 0) {
+                        targetByteUnit = ISCII_NUKTA;
+                    } else {
+                        targetByteUnit = ISCII_INV;
+                    }
+                    converterData.contextCharFromUnicode = 0x00;
+                    break;
+                default:
+                    /* is the sourceChar in the INDIC_RANGE? */
+                    if((char)(INDIC_BLOCK_END - sourceChar) <= INDIC_RANGE) {
+                        /* Danda and Doube Danda are valid in Northern scripts.. since Unicode
+                         * does not include these codepoints in all Northern scripts we need to
+                         * filter them out
+                         */
+                        if (sourceChar != DANDA && sourceChar != DOUBLE_DANDA) {
+                            /* find out to which block the sourceChar belongs */
+                            range = (char)((sourceChar - INDIC_BLOCK_BEGIN) / UniLang.DELTA);
+                            newDelta = (char)(range * UniLang.DELTA);
+                        
+                            /* Now are we in the same block as previous? */
+                            if (newDelta != converterData.currentDeltaFromUnicode || converterData.isFirstBuffer) {
+                                converterData.currentDeltaFromUnicode = newDelta;
+                                converterData.currentMaskFromUnicode = lookupInitialData[range].maskEnum;
+                                deltaChanged = true;
+                                converterData.isFirstBuffer = false;
+                            }
+                            /* Normalize all Indic codepoints to Devanagari and map them to ISCII */
+                            /* now subtract the new delta from sourceChar */
+                            sourceChar -= converterData.currentDeltaFromUnicode;
+                        }
+                        /* get the target byte unit */
+                        targetByteUnit = fromUnicodeTable[(short)sourceChar & UConverterConstants.UNSIGNED_BYTE_MASK];
+                        
+                        /* is the code point valid in current script? */
+                        if ((validityTable[(short)sourceChar & UConverterConstants.UNSIGNED_BYTE_MASK] & converterData.currentMaskFromUnicode) == 0) {
+                            /* Vocallic RR is assigned in ISCII Telugu and Unicode */
+                            if (converterData.currentDeltaFromUnicode != (TELUGU_DELTA) && sourceChar != VOCALLIC_RR) {
+                                targetByteUnit = UConverterConstants.missingCharMarker;
+                            }
+                        }
+                        
+                        if (deltaChanged) {
+                            /* we are in a script block which is different than
+                             * previous sourceChar's script block write ATR and language codes
+                             */
+                            char temp = 0;
+                            temp = (char)(ATR << 8);
+                            temp += (char)((short)lookupInitialData[range].isciiLang & UConverterConstants.UNSIGNED_BYTE_MASK);
+                            /* reset */
+                            deltaChanged = false;
+                            /* now append ATR and language code */
+                            //TODO: put in arguments
+                            cr = WriteToTargetFromU(offsets, source, target, targetByteUnit);
+                            if (cr.isOverflow()) {
+                                break;
+                            }
+                        }
+                    }
+                    /* reset context char */
+                    converterData.contextCharFromUnicode = 0x00;
+                    break;
+                } //end of switch
+                
+                if (targetByteUnit != UConverterConstants.missingCharMarker) {
+                    if (targetByteUnit == ISCII_HALANT) {
+                        converterData.contextCharFromUnicode = (char)targetByteUnit;
+                    }
+                    /*write targetByteUnit to target */
+                    //TODO: add correct parameters
+                    cr = WriteToTargetFromU(offsets, source, target, targetByteUnit);
+                    if (cr.isOverflow()) {
+                        break;
+                    }
+                } else {
+                    /* oops..the code point is unassigned */
+                    /* check if the char is a First surrogate */
+                    if (UTF16.isSurrogate((char)sourceChar)) {
+                        if (UTF16.isLeadSurrogate((char)sourceChar)) {
+//TODO: getTrail Label here
+                            /* look ahead to find the trail surrogate */
+                            if (source.hasRemaining()) {
+                                /* test the following code unit */
+                                char trail = source.get();
+                                source.position(source.position() - 1);
+                                if (UTF16.isTrailSurrogate(trail)) {
+                                    source.get();
+                                    sourceChar = UCharacter.getCodePoint((char)sourceChar, trail);
+                                    cr = CoderResult.malformedForLength(source.position() - 1);
+                                    /* convert this surrogate code point */
+                                    /* exit this condition tree */
+                                } else {
+                                    /* this is an unmatched lead code unit (1st surrogate) */
+                                    /* callback(illegal) */
+                                    cr = CoderResult.unmappableForLength(source.position() - 1);
+                                }
+                            } else {
+                                /* no more input */
+                                /* no error */
+                                cr = CoderResult.UNDERFLOW;
+                            } 
+                        } else {
+                            /* this is an unmatched trail code unit (2nd surrogate) */
+                            /* callback(illegal) */
+                            cr = CoderResult.unmappableForLength(source.position() - 1);
+                        }
+                    } else {
+                        /* callback(unassigned) for a BMP code point */
+                        cr = CoderResult.malformedForLength(source.position() - 1);
+                    }
+                    
+                    fromUChar32 = sourceChar;
+                    break;
+                }
+            } /* end of while */
+            
+            /* save the state and return */
             return cr;
         }
         
-        private CoderResult WriteToTargetFromU() {
+        private CoderResult WriteToTargetFromU(IntBuffer offsets, CharBuffer source, ByteBuffer target, int targetByteUnit) {
             CoderResult cr = CoderResult.UNDERFLOW;
-            
+            /* write the targetUniChar to target */
+            if (target.hasRemaining()) {
+                if (targetByteUnit <= 0xFF) {
+                    target.put((byte)targetByteUnit);
+                    if (offsets != null) {
+                        //TODO: add offsets code
+                    }
+                } else {
+                    target.put((byte)(targetByteUnit >> 8));
+                    if (offsets != null) {
+                        //TODO: add offsets code
+                    }
+                    if (target.hasRemaining()) {
+                        target.put((byte)targetByteUnit);
+                        if (offsets != null) {
+                            //TODO: add offsets code
+                        }
+                    } else {
+                        errorBuffer[errorBufferLength++] = (byte)targetByteUnit;
+                        cr = CoderResult.OVERFLOW;
+                    }
+                }
+            } else {
+                if ((targetByteUnit & 0xFF00) > 0) {
+                    errorBuffer[errorBufferLength++] = (byte)(targetByteUnit >> 8);
+                }
+                errorBuffer[errorBufferLength++] = (byte)(targetByteUnit);
+                cr = CoderResult.OVERFLOW;
+            }
             return cr;
         }
     }
