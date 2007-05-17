@@ -23,4 +23,4 @@
 #
 
 MISC_SOURCE = \
-zoneinfo.txt CurrencyData.txt
+zoneinfo.txt CurrencyData.txt supplementalData.txt
