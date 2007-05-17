@@ -357,7 +357,7 @@ main()
 {
   FILE *f=fopen("conftestval", "w");
   if (!f) exit(1);
-  fprintf(f, "%d\n", sizeof($1));
+  fprintf(f, "%d\n", (int)sizeof($1));
   exit(0);
 }], AC_CV_NAME=`cat conftestval`, AC_CV_NAME=0, ifelse([$2], , , AC_CV_NAME=$2))])dnl
 AC_MSG_RESULT($AC_CV_NAME)
