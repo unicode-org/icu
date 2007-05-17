@@ -394,8 +394,9 @@ ibm-813_P100-1995 { UTR22* }
 # From a narrow mapping point of view, there is no difference.
 # -E means explicit. -I means implicit.
 # -E requires the client to handle the ISO 6429 bidirectional controls
-ibm-916_P100-1995 { UTR22* }
-                        ibm-916 { IBM* JAVA }
+# This matches the official mapping on unicode.org
+ibm-5012_P100-1999 { UTR22* }
+                        ibm-5012 { IBM* }
                         ISO-8859-8 { MIME* IANA WINDOWS JAVA* }
                         hebrew { IANA WINDOWS JAVA }
                         csISOLatinHebrew { IANA WINDOWS JAVA }
@@ -404,9 +405,14 @@ ibm-916_P100-1995 { UTR22* }
                         ISO-8859-8-I { IANA MIME } # IANA and Windows considers this alias different and BiDi needs to be applied.
                         ISO-8859-8-E { IANA MIME } # IANA and Windows considers this alias different and BiDi needs to be applied.
                         8859_8 { JAVA }
+                        windows-28598 { WINDOWS* } # Hebrew (ISO-Visual). A hybrid between ibm-5012 and ibm-916 with extra PUA mappings.
+
+# Unfortunately, the Java aliases are split across ibm-916 and ibm-5012
+# Also many platforms are a combination between ibm-916 and ibm-5012 behaviors
+ibm-916_P100-1995 { UTR22* }
+                        ibm-916 { IBM* JAVA* }
                         cp916 { JAVA }
                         916 { JAVA }
-                        windows-28598 { WINDOWS* }
 
 # Turkish
 ibm-920_P100-1995 { UTR22* }
