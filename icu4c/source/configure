@@ -7509,7 +7509,7 @@ main()
 {
   FILE *f=fopen("conftestval", "w");
   if (!f) exit(1);
-  fprintf(f, "%d\n", sizeof(wchar_t));
+  fprintf(f, "%d\n", (int)sizeof(wchar_t));
   exit(0);
 }
 _ACEOF
