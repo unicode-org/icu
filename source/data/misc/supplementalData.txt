@@ -4016,35 +4016,55 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
+            }
+            secondary{
                 territories{
                     "DJ",
-                    "ER",
-                    "ET",
                 }
             }
         }
         ab{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
                 }
+            }
+            secondary{
                 territories{
                     "GE",
-                    "TR",
                 }
             }
         }
         abq{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
                 }
             }
         }
-        ady{
+        abr{
             secondary{
+                territories{
+                    "GH",
+                }
+            }
+        }
+        ace{
+            secondary{
+                territories{
+                    "ID",
+                }
+            }
+        }
+        ady{
+            primary{
                 scripts{
                     "Cyrl",
+                }
+            }
+            secondary{
+                territories{
+                    "RU",
                 }
             }
         }
@@ -4054,13 +4074,12 @@ supplementalData:table(nofallback){
                     "Latn",
                 }
                 territories{
-                    "NA",
                     "ZA",
                 }
             }
         }
         aii{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
                     "Syrc",
@@ -4068,13 +4087,10 @@ supplementalData:table(nofallback){
             }
         }
         ain{
-            secondary{
+            primary{
                 scripts{
                     "Kana",
                     "Latn",
-                }
-                territories{
-                    "JP",
                 }
             }
         }
@@ -4083,6 +4099,8 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
+            }
+            secondary{
                 territories{
                     "GH",
                 }
@@ -4099,12 +4117,9 @@ supplementalData:table(nofallback){
             }
         }
         amo{
-            secondary{
+            primary{
                 scripts{
                     "Latn",
-                }
-                territories{
-                    "NG",
                 }
             }
         }
@@ -4142,9 +4157,6 @@ supplementalData:table(nofallback){
                 }
             }
             secondary{
-                scripts{
-                    "Arab",
-                }
                 territories{
                     "IR",
                 }
@@ -4156,26 +4168,38 @@ supplementalData:table(nofallback){
                     "Beng",
                 }
                 territories{
-                    "BD",
                     "IN",
+                }
+            }
+        }
+        auv{
+            secondary{
+                territories{
+                    "FR",
                 }
             }
         }
         av{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
                 }
             }
+            secondary{
+                territories{
+                    "RU",
+                }
+            }
         }
         awa{
-            secondary{
+            primary{
                 scripts{
                     "Deva",
                 }
+            }
+            secondary{
                 territories{
                     "IN",
-                    "NP",
                 }
             }
         }
@@ -4186,7 +4210,6 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "BO",
-                    "PE",
                 }
             }
         }
@@ -4199,25 +4222,23 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "AZ",
-                    "IR",
                 }
             }
             secondary{
-                scripts{
-                    "Arab",
-                    "Cyrl",
-                    "Latn",
-                }
                 territories{
-                    "GE",
-                    "TR",
+                    "IR",
                 }
             }
         }
         ba{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
+                }
+            }
+            secondary{
+                territories{
+                    "RU",
                 }
             }
         }
@@ -4227,30 +4248,42 @@ supplementalData:table(nofallback){
                     "Arab",
                     "Latn",
                 }
+            }
+            secondary{
                 territories{
                     "PK",
                 }
             }
-            secondary{
+        }
+        ban{
+            primary{
                 scripts{
-                    "Arab",
                     "Latn",
                 }
+            }
+            secondary{
                 territories{
-                    "AF",
-                    "IR",
-                    "OM",
+                    "ID",
                 }
             }
         }
         bbc{
-            secondary{
+            primary{
                 scripts{
                     "Batk",
                     "Latn",
                 }
+            }
+            secondary{
                 territories{
                     "ID",
+                }
+            }
+        }
+        bcl{
+            secondary{
+                territories{
+                    "PH",
                 }
             }
         }
@@ -4264,35 +4297,31 @@ supplementalData:table(nofallback){
                 }
             }
         }
-        bfq{
+        bew{
             secondary{
+                territories{
+                    "ID",
+                }
+            }
+        }
+        bfq{
+            primary{
                 scripts{
                     "Taml",
-                }
-                territories{
-                    "IN",
                 }
             }
         }
         bft{
-            secondary{
+            primary{
                 scripts{
                     "Deva",
-                }
-                territories{
-                    "IN",
-                    "PK",
                 }
             }
         }
         bfy{
-            secondary{
+            primary{
                 scripts{
                     "Deva",
-                }
-                territories{
-                    "IN",
-                    "NP",
                 }
             }
         }
@@ -4306,23 +4335,48 @@ supplementalData:table(nofallback){
                 }
             }
         }
-        bh{
+        bgc{
             secondary{
-                scripts{
-                    "Deva",
-                }
                 territories{
                     "IN",
                 }
             }
         }
-        bhb{
-            secondary{
+        bh{
+            primary{
                 scripts{
                     "Deva",
                 }
+            }
+            secondary{
+                territories{
+                    "ZZ",
+                }
+            }
+        }
+        bhb{
+            primary{
+                scripts{
+                    "Deva",
+                }
+            }
+            secondary{
                 territories{
                     "IN",
+                }
+            }
+        }
+        bhi{
+            secondary{
+                territories{
+                    "IN",
+                }
+            }
+        }
+        bhk{
+            secondary{
+                territories{
+                    "PH",
                 }
             }
         }
@@ -4331,6 +4385,8 @@ supplementalData:table(nofallback){
                 scripts{
                     "Deva",
                 }
+            }
+            secondary{
                 territories{
                     "IN",
                     "MU",
@@ -4338,30 +4394,58 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        bi{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "VU",
+                }
+            }
+        }
         bin{
-            secondary{
+            primary{
                 scripts{
                     "Latn",
                 }
             }
         }
         bjj{
-            secondary{
+            primary{
                 scripts{
                     "Deva",
                 }
+            }
+            secondary{
                 territories{
                     "IN",
                 }
             }
         }
-        bku{
+        bjn{
             secondary{
+                territories{
+                    "ID",
+                }
+            }
+        }
+        bku{
+            primary{
                 scripts{
                     "Buhd",
                 }
+            }
+        }
+        bm{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+            secondary{
                 territories{
-                    "PH",
+                    "ML",
                 }
             }
         }
@@ -4377,14 +4461,21 @@ supplementalData:table(nofallback){
             }
         }
         bo{
-            secondary{
+            primary{
                 scripts{
                     "Tibt",
                 }
+            }
+            secondary{
                 territories{
                     "CN",
-                    "IN",
-                    "NP",
+                }
+            }
+        }
+        bqi{
+            secondary{
+                territories{
+                    "IR",
                 }
             }
         }
@@ -4393,18 +4484,19 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
-                territories{
-                    "FR",
-                }
             }
         }
         bra{
-            secondary{
+            primary{
                 scripts{
                     "Deva",
                 }
+            }
+        }
+        brh{
+            secondary{
                 territories{
-                    "IN",
+                    "PK",
                 }
             }
         }
@@ -4417,55 +4509,57 @@ supplementalData:table(nofallback){
                     "BA",
                 }
             }
+        }
+        btk{
             secondary{
-                scripts{
-                    "Latn",
-                }
                 territories{
-                    "HR",
-                    "ME",
-                    "RS",
+                    "ID",
                 }
             }
         }
         btv{
-            secondary{
+            primary{
                 scripts{
                     "Deva",
                 }
+            }
+        }
+        buc{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+            secondary{
                 territories{
-                    "IN",
-                    "PK",
+                    "YT",
                 }
             }
         }
         bug{
-            secondary{
+            primary{
                 scripts{
                     "Bugi",
                 }
+            }
+            secondary{
                 territories{
                     "ID",
-                    "MY",
                 }
             }
         }
         bxr{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
                 }
             }
         }
         bya{
-            secondary{
+            primary{
                 scripts{
                     "Batk",
                     "Latn",
-                }
-                territories{
-                    "ID",
-                    "PH",
                 }
             }
         }
@@ -4473,9 +4567,6 @@ supplementalData:table(nofallback){
             primary{
                 scripts{
                     "Ethi",
-                }
-                territories{
-                    "ER",
                 }
             }
         }
@@ -4486,6 +4577,10 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "AD",
+                }
+            }
+            secondary{
+                territories{
                     "ES",
                 }
             }
@@ -4495,29 +4590,24 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
-                territories{
-                    "NG",
-                }
             }
         }
         ccp{
-            secondary{
+            primary{
                 scripts{
                     "Beng",
-                }
-                territories{
-                    "BD",
-                    "IN",
                 }
             }
         }
         ce{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
                 }
+            }
+            secondary{
                 territories{
-                    "GE",
+                    "RU",
                 }
             }
         }
@@ -4526,8 +4616,17 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
+            }
+            secondary{
                 territories{
                     "PH",
+                }
+            }
+        }
+        cgg{
+            secondary{
+                territories{
+                    "UG",
                 }
             }
         }
@@ -4538,12 +4637,21 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "GU",
-                    "MP",
+                }
+            }
+        }
+        chk{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "FM",
                 }
             }
         }
         chm{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
                     "Latn",
@@ -4551,47 +4659,38 @@ supplementalData:table(nofallback){
             }
         }
         chr{
-            secondary{
+            primary{
                 scripts{
                     "Cher",
                     "Latn",
                 }
-                territories{
-                    "US",
-                }
             }
         }
         cja{
-            secondary{
+            primary{
                 scripts{
                     "Arab",
                     "Cham",
-                }
-                territories{
-                    "KH",
                 }
             }
         }
         cjm{
-            secondary{
+            primary{
                 scripts{
                     "Arab",
                     "Cham",
                 }
-                territories{
-                    "VN",
-                }
             }
         }
         cjs{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
                 }
             }
         }
         ckt{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
                 }
@@ -4602,9 +4701,6 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
-                territories{
-                    "FR",
-                }
             }
         }
         cop{
@@ -4612,26 +4708,7 @@ supplementalData:table(nofallback){
                 scripts{
                     "Arab",
                     "Copt",
-                }
-                territories{
-                    "EG",
-                }
-            }
-            secondary{
-                scripts{
-                    "Arab",
-                    "Copt",
-                }
-                territories{
-                    "US",
-                }
-            }
-            secondary{
-                scripts{
                     "Grek",
-                }
-                territories{
-                    "EG",
                 }
             }
         }
@@ -4640,17 +4717,23 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
-                territories{
-                    "SL",
-                }
             }
         }
         cr{
-            secondary{
+            primary{
                 scripts{
                     "Cans",
                     "Latn",
                 }
+            }
+        }
+        crk{
+            primary{
+                scripts{
+                    "Cans",
+                }
+            }
+            secondary{
                 territories{
                     "CA",
                 }
@@ -4667,9 +4750,21 @@ supplementalData:table(nofallback){
             }
         }
         cv{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
+                }
+            }
+        }
+        cwd{
+            primary{
+                scripts{
+                    "Cans",
+                }
+            }
+            secondary{
+                territories{
+                    "CA",
                 }
             }
         }
@@ -4678,6 +4773,8 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
+            }
+            secondary{
                 territories{
                     "GB",
                 }
@@ -4695,9 +4792,16 @@ supplementalData:table(nofallback){
             }
         }
         dar{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
+                }
+            }
+        }
+        dcc{
+            secondary{
+                territories{
+                    "IN",
                 }
             }
         }
@@ -4713,27 +4817,45 @@ supplementalData:table(nofallback){
                     "DE",
                     "LI",
                     "LU",
-                    "NA",
                 }
             }
             secondary{
-                scripts{
-                    "Latn",
-                }
                 territories{
-                    "IT",
+                    "BR",
+                    "US",
                 }
             }
         }
-        dgr{
+        dgo{
             secondary{
                 territories{
-                    "CA",
+                    "IN",
+                }
+            }
+        }
+        dhd{
+            secondary{
+                territories{
+                    "IN",
+                }
+            }
+        }
+        diq{
+            secondary{
+                territories{
+                    "TR",
+                }
+            }
+        }
+        dje{
+            secondary{
+                territories{
+                    "NE",
                 }
             }
         }
         dng{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
                 }
@@ -4764,9 +4886,10 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
+            }
+            secondary{
                 territories{
                     "GH",
-                    "TG",
                 }
             }
         }
@@ -4782,7 +4905,7 @@ supplementalData:table(nofallback){
             }
         }
         emk{
-            secondary{
+            primary{
                 scripts{
                     "Deva",
                 }
@@ -4798,7 +4921,6 @@ supplementalData:table(nofallback){
                     "AI",
                     "AS",
                     "AU",
-                    "AW",
                     "BB",
                     "BM",
                     "BS",
@@ -4810,20 +4932,22 @@ supplementalData:table(nofallback){
                     "CM",
                     "CX",
                     "DM",
-                    "ER",
                     "FJ",
                     "FK",
                     "FM",
                     "GB",
                     "GD",
+                    "GG",
                     "GH",
                     "GI",
                     "GM",
+                    "GU",
                     "GY",
                     "HK",
+                    "HN",
                     "IE",
-                    "IN",
-                    "IO",
+                    "IM",
+                    "JE",
                     "JM",
                     "KE",
                     "KI",
@@ -4836,6 +4960,7 @@ supplementalData:table(nofallback){
                     "MP",
                     "MS",
                     "MT",
+                    "MU",
                     "MW",
                     "NA",
                     "NF",
@@ -4847,9 +4972,10 @@ supplementalData:table(nofallback){
                     "PH",
                     "PK",
                     "PN",
-                    "PW",
+                    "PR",
                     "RW",
                     "SB",
+                    "SC",
                     "SG",
                     "SH",
                     "SL",
@@ -4858,6 +4984,7 @@ supplementalData:table(nofallback){
                     "TK",
                     "TO",
                     "TT",
+                    "TV",
                     "TZ",
                     "UG",
                     "UM",
@@ -4865,9 +4992,28 @@ supplementalData:table(nofallback){
                     "VC",
                     "VG",
                     "VI",
+                    "VU",
+                    "WS",
                     "ZA",
                     "ZM",
                     "ZW",
+                }
+            }
+            secondary{
+                scripts{
+                    "Dsrt",
+                    "Shaw",
+                }
+                territories{
+                    "BE",
+                    "DE",
+                    "ES",
+                    "FR",
+                    "IN",
+                    "IT",
+                    "MY",
+                    "NL",
+                    "PW",
                 }
             }
         }
@@ -4875,6 +5021,11 @@ supplementalData:table(nofallback){
             primary{
                 scripts{
                     "Latn",
+                }
+            }
+            secondary{
+                territories{
+                    "ZZ",
                 }
             }
         }
@@ -4893,7 +5044,6 @@ supplementalData:table(nofallback){
                     "DO",
                     "EC",
                     "ES",
-                    "GI",
                     "GQ",
                     "GT",
                     "HN",
@@ -4901,12 +5051,19 @@ supplementalData:table(nofallback){
                     "NI",
                     "PA",
                     "PE",
+                    "PH",
                     "PR",
                     "PY",
                     "SV",
-                    "US",
                     "UY",
                     "VE",
+                }
+            }
+            secondary{
+                territories{
+                    "AD",
+                    "BZ",
+                    "US",
                 }
             }
         }
@@ -4925,13 +5082,15 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
+            }
+            secondary{
                 territories{
                     "ES",
                 }
             }
         }
         evn{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
                 }
@@ -4947,6 +5106,23 @@ supplementalData:table(nofallback){
                     "IR",
                 }
             }
+            secondary{
+                territories{
+                    "PK",
+                }
+            }
+        }
+        fan{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+            secondary{
+                territories{
+                    "GQ",
+                }
+            }
         }
         fi{
             primary{
@@ -4955,6 +5131,10 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "FI",
+                }
+            }
+            secondary{
+                territories{
                     "SE",
                 }
             }
@@ -4970,13 +5150,9 @@ supplementalData:table(nofallback){
             }
         }
         fiu{
-            secondary{
+            primary{
                 scripts{
                     "Latn",
-                }
-                territories{
-                    "FI",
-                    "SE",
                 }
             }
         }
@@ -5000,6 +5176,18 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        fon{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+            secondary{
+                territories{
+                    "BJ",
+                }
+            }
+        }
         fr{
             primary{
                 scripts{
@@ -5018,6 +5206,7 @@ supplementalData:table(nofallback){
                     "CI",
                     "CM",
                     "DJ",
+                    "DZ",
                     "FR",
                     "GA",
                     "GF",
@@ -5027,11 +5216,11 @@ supplementalData:table(nofallback){
                     "HT",
                     "KM",
                     "LU",
+                    "MA",
                     "MC",
                     "MG",
                     "ML",
                     "MQ",
-                    "MR",
                     "MU",
                     "NC",
                     "NE",
@@ -5041,21 +5230,26 @@ supplementalData:table(nofallback){
                     "RW",
                     "SC",
                     "SN",
+                    "SY",
                     "TD",
-                    "TF",
                     "TG",
+                    "TN",
                     "VU",
                     "WF",
                     "YT",
                 }
             }
             secondary{
-                scripts{
-                    "Latn",
-                }
                 territories{
-                    "IT",
+                    "GB",
                     "US",
+                }
+            }
+        }
+        fud{
+            secondary{
+                territories{
+                    "WF",
                 }
             }
         }
@@ -5064,18 +5258,23 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
+            }
+        }
+        fuv{
+            secondary{
                 territories{
-                    "IT",
+                    "NG",
                 }
             }
         }
         fy{
-            secondary{
+            primary{
                 scripts{
                     "Latn",
                 }
+            }
+            secondary{
                 territories{
-                    "DE",
                     "NL",
                 }
             }
@@ -5090,9 +5289,6 @@ supplementalData:table(nofallback){
                 }
             }
             secondary{
-                scripts{
-                    "Latn",
-                }
                 territories{
                     "GB",
                 }
@@ -5103,25 +5299,41 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
+            }
+            secondary{
                 territories{
                     "GH",
                 }
             }
         }
         gag{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
                 }
             }
         }
         gbm{
-            secondary{
+            primary{
                 scripts{
                     "Deva",
                 }
+            }
+            secondary{
                 territories{
                     "IN",
+                }
+            }
+        }
+        gcr{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+            secondary{
+                territories{
+                    "GF",
                 }
             }
         }
@@ -5130,6 +5342,8 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
+            }
+            secondary{
                 territories{
                     "GB",
                 }
@@ -5140,9 +5354,15 @@ supplementalData:table(nofallback){
                 scripts{
                     "Ethi",
                 }
+            }
+        }
+        gil{
+            primary{
+                scripts{
+                    "Latn",
+                }
                 territories{
-                    "ER",
-                    "ET",
+                    "KI",
                 }
             }
         }
@@ -5151,15 +5371,24 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
+            }
+            secondary{
                 territories{
                     "ES",
                 }
             }
         }
         gld{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
+                }
+            }
+        }
+        glk{
+            secondary{
+                territories{
+                    "IR",
                 }
             }
         }
@@ -5172,40 +5401,36 @@ supplementalData:table(nofallback){
                     "PY",
                 }
             }
+        }
+        gno{
             secondary{
-                scripts{
-                    "Latn",
-                }
                 territories{
-                    "AR",
-                    "BO",
+                    "IN",
                 }
             }
         }
         gon{
-            secondary{
+            primary{
                 scripts{
                     "Deva",
                     "Telu",
                 }
+            }
+            secondary{
                 territories{
                     "IN",
                 }
             }
         }
         grt{
-            secondary{
+            primary{
                 scripts{
                     "Beng",
-                }
-                territories{
-                    "BD",
-                    "IN",
                 }
             }
         }
         gsc{
-            secondary{
+            primary{
                 scripts{
                     "Latn",
                 }
@@ -5216,8 +5441,11 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
+            }
+            secondary{
                 territories{
                     "CH",
+                    "LI",
                 }
             }
         }
@@ -5231,13 +5459,17 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        guz{
+            secondary{
+                territories{
+                    "KE",
+                }
+            }
+        }
         gv{
             primary{
                 scripts{
                     "Latn",
-                }
-                territories{
-                    "GB",
                 }
             }
         }
@@ -5248,8 +5480,12 @@ supplementalData:table(nofallback){
                     "Latn",
                 }
                 territories{
-                    "NE",
                     "NG",
+                }
+            }
+            secondary{
+                territories{
+                    "NE",
                 }
             }
         }
@@ -5262,6 +5498,13 @@ supplementalData:table(nofallback){
             secondary{
                 territories{
                     "US",
+                }
+            }
+        }
+        haz{
+            secondary{
+                territories{
+                    "AF",
                 }
             }
         }
@@ -5281,13 +5524,29 @@ supplementalData:table(nofallback){
                     "Deva",
                 }
                 territories{
-                    "FJ",
                     "IN",
+                }
+            }
+            secondary{
+                territories{
+                    "FJ",
+                }
+            }
+        }
+        hil{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+            secondary{
+                territories{
+                    "PH",
                 }
             }
         }
         hmn{
-            secondary{
+            primary{
                 scripts{
                     "Hmng",
                     "Latn",
@@ -5295,23 +5554,29 @@ supplementalData:table(nofallback){
             }
         }
         hne{
-            secondary{
+            primary{
                 scripts{
                     "Deva",
                 }
+            }
+            secondary{
                 territories{
                     "IN",
                 }
             }
         }
         hnn{
-            secondary{
+            primary{
                 scripts{
                     "Hano",
                     "Latn",
                 }
+            }
+        }
+        hno{
+            secondary{
                 territories{
-                    "PH",
+                    "PK",
                 }
             }
         }
@@ -5326,28 +5591,26 @@ supplementalData:table(nofallback){
             }
         }
         hoc{
-            secondary{
+            primary{
                 scripts{
                     "Deva",
                 }
+            }
+            secondary{
                 territories{
-                    "BD",
                     "IN",
                 }
             }
         }
         hoj{
-            secondary{
+            primary{
                 scripts{
                     "Deva",
-                }
-                territories{
-                    "IN",
                 }
             }
         }
         hop{
-            secondary{
+            primary{
                 scripts{
                     "Latn",
                 }
@@ -5364,12 +5627,8 @@ supplementalData:table(nofallback){
                 }
             }
             secondary{
-                scripts{
-                    "Latn",
-                }
                 territories{
-                    "ME",
-                    "RS",
+                    "AT",
                 }
             }
         }
@@ -5393,15 +5652,10 @@ supplementalData:table(nofallback){
                 }
             }
             secondary{
-                scripts{
-                    "Latn",
-                }
                 territories{
-                    "HR",
+                    "AT",
                     "RO",
                     "RS",
-                    "SI",
-                    "SK",
                 }
             }
         }
@@ -5414,16 +5668,6 @@ supplementalData:table(nofallback){
                     "AM",
                 }
             }
-            secondary{
-                scripts{
-                    "Armn",
-                }
-                territories{
-                    "AZ",
-                    "GE",
-                    "IR",
-                }
-            }
         }
         ia{
             primary{
@@ -5431,9 +5675,14 @@ supplementalData:table(nofallback){
                     "Latn",
                 }
             }
+            secondary{
+                territories{
+                    "ZZ",
+                }
+            }
         }
         ibb{
-            secondary{
+            primary{
                 scripts{
                     "Latn",
                 }
@@ -5465,28 +5714,50 @@ supplementalData:table(nofallback){
             }
         }
         ii{
-            secondary{
+            primary{
                 scripts{
                     "Latn",
                     "Yiii",
                 }
             }
+            secondary{
+                territories{
+                    "CN",
+                }
+            }
         }
         ik{
-            secondary{
+            primary{
                 scripts{
                     "Latn",
                 }
+            }
+        }
+        ilo{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+            secondary{
                 territories{
-                    "GL",
+                    "PH",
                 }
             }
         }
         inh{
+            primary{
+                scripts{
+                    "Cyrl",
+                }
+            }
             secondary{
                 scripts{
                     "Arab",
                     "Latn",
+                }
+                territories{
+                    "RU",
                 }
             }
         }
@@ -5509,16 +5780,14 @@ supplementalData:table(nofallback){
                     "CH",
                     "IT",
                     "SM",
-                    "VA",
                 }
             }
             secondary{
-                scripts{
-                    "Latn",
-                }
                 territories{
+                    "FR",
                     "HR",
-                    "SI",
+                    "US",
+                    "VA",
                 }
             }
         }
@@ -5530,31 +5799,22 @@ supplementalData:table(nofallback){
             }
             secondary{
                 scripts{
-                    "Cans",
                     "Cyrl",
                     "Latn",
                 }
                 territories{
                     "CA",
                     "GL",
-                    "RU",
-                    "US",
                 }
             }
         }
         ja{
             primary{
                 scripts{
-                    "Hani",
-                    "Hira",
-                    "Hrkt",
-                    "Japn",
-                    "Kana",
+                    "Jpan",
                 }
                 territories{
-                    "GU",
                     "JP",
-                    "PW",
                 }
             }
         }
@@ -5563,14 +5823,13 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
-                territories{
-                    "ID",
-                    "MY",
-                }
             }
             secondary{
                 scripts{
                     "Java",
+                }
+                territories{
+                    "ID",
                 }
             }
         }
@@ -5585,7 +5844,7 @@ supplementalData:table(nofallback){
             }
         }
         kaa{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
                 }
@@ -5596,9 +5855,6 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
-                territories{
-                    "NG",
-                }
             }
         }
         kam{
@@ -5606,20 +5862,27 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
+            }
+            secondary{
                 territories{
                     "KE",
                 }
             }
         }
         kbd{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
                 }
             }
+            secondary{
+                territories{
+                    "RU",
+                }
+            }
         }
         kca{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
                 }
@@ -5630,20 +5893,12 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
-                territories{
-                    "NG",
-                }
             }
         }
         kdt{
-            secondary{
+            primary{
                 scripts{
                     "Thai",
-                }
-                territories{
-                    "KH",
-                    "LA",
-                    "TH",
                 }
             }
         }
@@ -5652,46 +5907,72 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
-                territories{
-                    "NG",
-                }
             }
         }
         kfr{
-            secondary{
+            primary{
                 scripts{
                     "Deva",
                 }
+            }
+        }
+        kfy{
+            secondary{
                 territories{
                     "IN",
                 }
             }
         }
         kha{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
             secondary{
                 scripts{
                     "Beng",
-                    "Latn",
                 }
                 territories{
-                    "BD",
+                    "IN",
+                }
+            }
+        }
+        khn{
+            secondary{
+                territories{
                     "IN",
                 }
             }
         }
         kht{
-            secondary{
+            primary{
                 scripts{
                     "Mymr",
                 }
+            }
+        }
+        ki{
+            secondary{
                 territories{
-                    "IN",
-                    "MM",
+                    "KE",
+                }
+            }
+        }
+        kj{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+            secondary{
+                territories{
+                    "NA",
                 }
             }
         }
         kjh{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
                 }
@@ -5706,6 +5987,11 @@ supplementalData:table(nofallback){
                     "KZ",
                 }
             }
+            secondary{
+                territories{
+                    "CN",
+                }
+            }
         }
         kl{
             primary{
@@ -5714,6 +6000,18 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "GL",
+                }
+            }
+            secondary{
+                territories{
+                    "DK",
+                }
+            }
+        }
+        kln{
+            secondary{
+                territories{
+                    "KE",
                 }
             }
         }
@@ -5741,11 +6039,27 @@ supplementalData:table(nofallback){
             primary{
                 scripts{
                     "Hang",
-                    "Hani",
                 }
                 territories{
                     "KP",
                     "KR",
+                }
+            }
+            secondary{
+                territories{
+                    "CN",
+                }
+            }
+        }
+        koi{
+            primary{
+                scripts{
+                    "Cyrl",
+                }
+            }
+            secondary{
+                territories{
+                    "RU",
                 }
             }
         }
@@ -5754,8 +6068,20 @@ supplementalData:table(nofallback){
                 scripts{
                     "Deva",
                 }
+            }
+            secondary{
                 territories{
                     "IN",
+                }
+            }
+        }
+        kos{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "FM",
                 }
             }
         }
@@ -5764,38 +6090,65 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
+            }
+        }
+        kpv{
+            primary{
+                scripts{
+                    "Cyrl",
+                }
+            }
+            secondary{
                 territories{
-                    "GN",
-                    "LR",
+                    "RU",
                 }
             }
         }
         kpy{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
                 }
             }
         }
         kr{
-            secondary{
+            primary{
                 scripts{
                     "Latn",
                 }
             }
         }
         krc{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
                 }
             }
+            secondary{
+                territories{
+                    "RU",
+                }
+            }
+        }
+        kri{
+            secondary{
+                territories{
+                    "SL",
+                }
+            }
         }
         krl{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
                     "Latn",
+                }
+            }
+        }
+        kru{
+            secondary{
+                territories{
+                    "IN",
                 }
             }
         }
@@ -5817,25 +6170,30 @@ supplementalData:table(nofallback){
                     "Cyrl",
                     "Latn",
                 }
+            }
+            secondary{
                 territories{
                     "IQ",
                     "IR",
+                    "SY",
                     "TR",
                 }
             }
-            secondary{
+        }
+        kum{
+            primary{
                 scripts{
-                    "Arab",
                     "Cyrl",
-                    "Latn",
                 }
+            }
+            secondary{
                 territories{
-                    "SY",
+                    "RU",
                 }
             }
         }
         kv{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
                     "Latn",
@@ -5848,9 +6206,11 @@ supplementalData:table(nofallback){
                     "Latn",
                 }
             }
+        }
+        kxm{
             secondary{
                 territories{
-                    "GB",
+                    "TH",
                 }
             }
         }
@@ -5862,15 +6222,6 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "KG",
-                }
-            }
-            secondary{
-                scripts{
-                    "Arab",
-                    "Cyrl",
-                }
-                territories{
-                    "CN",
                 }
             }
             secondary{
@@ -5890,9 +6241,21 @@ supplementalData:table(nofallback){
             }
         }
         lad{
-            secondary{
+            primary{
                 scripts{
                     "Hebr",
+                }
+            }
+        }
+        lah{
+            primary{
+                scripts{
+                    "Arab",
+                }
+            }
+            secondary{
+                territories{
+                    "PK",
                 }
             }
         }
@@ -5907,70 +6270,79 @@ supplementalData:table(nofallback){
             }
         }
         lbe{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
+                }
+            }
+            secondary{
+                territories{
+                    "RU",
                 }
             }
         }
         lcp{
-            secondary{
+            primary{
                 scripts{
                     "Thai",
-                }
-                territories{
-                    "CN",
-                    "TH",
                 }
             }
         }
         lep{
-            secondary{
+            primary{
                 scripts{
                     "Lepc",
-                }
-                territories{
-                    "BT",
-                    "IN",
-                    "NP",
                 }
             }
         }
         lez{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
                 }
             }
+            secondary{
+                territories{
+                    "RU",
+                }
+            }
+        }
+        lg{
+            secondary{
+                territories{
+                    "UG",
+                }
+            }
         }
         lif{
-            secondary{
+            primary{
                 scripts{
                     "Deva",
                     "Limb",
                 }
-                territories{
-                    "BT",
-                    "IN",
-                    "NP",
-                }
             }
         }
         lis{
-            secondary{
+            primary{
                 scripts{
                     "Latn",
                 }
+            }
+        }
+        ljp{
+            secondary{
                 territories{
-                    "CN",
+                    "ID",
                 }
             }
         }
         lmn{
-            secondary{
+            primary{
                 scripts{
                     "Telu",
                 }
+            }
+            secondary{
                 territories{
                     "IN",
                 }
@@ -5982,15 +6354,8 @@ supplementalData:table(nofallback){
                     "Latn",
                 }
                 territories{
-                    "CG",
-                }
-            }
-            secondary{
-                scripts{
-                    "Latn",
-                }
-                territories{
                     "CD",
+                    "CG",
                 }
             }
         }
@@ -6004,6 +6369,13 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        lrc{
+            secondary{
+                territories{
+                    "IR",
+                }
+            }
+        }
         lt{
             primary{
                 scripts{
@@ -6014,13 +6386,24 @@ supplementalData:table(nofallback){
                 }
             }
         }
-        lut{
+        luo{
             secondary{
+                territories{
+                    "KE",
+                }
+            }
+        }
+        lut{
+            primary{
                 scripts{
                     "Latn",
                 }
+            }
+        }
+        luy{
+            secondary{
                 territories{
-                    "US",
+                    "KE",
                 }
             }
         }
@@ -6035,12 +6418,16 @@ supplementalData:table(nofallback){
             }
         }
         lwl{
-            secondary{
+            primary{
                 scripts{
                     "Thai",
                 }
+            }
+        }
+        mad{
+            secondary{
                 territories{
-                    "TH",
+                    "ID",
                 }
             }
         }
@@ -6049,8 +6436,42 @@ supplementalData:table(nofallback){
                 scripts{
                     "Deva",
                 }
+            }
+            secondary{
                 territories{
                     "IN",
+                    "NP",
+                }
+            }
+        }
+        mak{
+            secondary{
+                territories{
+                    "ID",
+                }
+            }
+        }
+        mdf{
+            primary{
+                scripts{
+                    "Cyrl",
+                }
+            }
+            secondary{
+                territories{
+                    "RU",
+                }
+            }
+        }
+        mdh{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+            secondary{
+                territories{
+                    "PH",
                 }
             }
         }
@@ -6059,10 +6480,36 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
+            }
+            secondary{
                 territories{
-                    "GN",
-                    "LR",
                     "SL",
+                }
+            }
+        }
+        mer{
+            secondary{
+                territories{
+                    "KE",
+                }
+            }
+        }
+        mfa{
+            secondary{
+                territories{
+                    "TH",
+                }
+            }
+        }
+        mfe{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+            secondary{
+                territories{
+                    "MU",
                 }
             }
         }
@@ -6083,18 +6530,23 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "MH",
-                    "NR",
                 }
             }
         }
         mi{
-            secondary{
+            primary{
                 scripts{
                     "Latn",
                 }
                 territories{
-                    "CK",
                     "NZ",
+                }
+            }
+        }
+        min{
+            secondary{
+                territories{
+                    "ID",
                 }
             }
         }
@@ -6125,63 +6577,52 @@ supplementalData:table(nofallback){
                     "Mong",
                 }
                 territories{
-                    "CN",
                     "MN",
+                }
+            }
+            secondary{
+                territories{
+                    "CN",
                 }
             }
         }
         mnc{
-            secondary{
+            primary{
                 scripts{
                     "Mong",
-                }
-                territories{
-                    "CN",
                 }
             }
         }
         mni{
             primary{
-                territories{
-                    "IN",
-                }
-            }
-            secondary{
                 scripts{
                     "Beng",
                 }
+            }
+            secondary{
                 territories{
-                    "BD",
                     "IN",
                 }
             }
         }
         mns{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
                 }
             }
         }
         mnw{
-            secondary{
+            primary{
                 scripts{
                     "Mymr",
-                }
-                territories{
-                    "MM",
-                    "TH",
                 }
             }
         }
         mo{
             primary{
                 scripts{
-                    "Cyrl",
                     "Latn",
-                }
-                territories{
-                    "MD",
                 }
             }
         }
@@ -6202,8 +6643,6 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "BN",
-                    "CC",
-                    "CX",
                     "MY",
                     "SG",
                 }
@@ -6211,6 +6650,10 @@ supplementalData:table(nofallback){
             secondary{
                 scripts{
                     "Arab",
+                }
+                territories{
+                    "CC",
+                    "ID",
                 }
             }
         }
@@ -6224,21 +6667,35 @@ supplementalData:table(nofallback){
                 }
             }
         }
-        muw{
+        mtr{
             secondary{
+                territories{
+                    "IN",
+                }
+            }
+        }
+        mup{
+            secondary{
+                territories{
+                    "IN",
+                }
+            }
+        }
+        muw{
+            primary{
                 scripts{
                     "Beng",
                     "Deva",
                 }
+            }
+            secondary{
                 territories{
-                    "BD",
                     "IN",
-                    "NP",
                 }
             }
         }
         mwr{
-            secondary{
+            primary{
                 scripts{
                     "Deva",
                 }
@@ -6251,6 +6708,18 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "MM",
+                }
+            }
+        }
+        myv{
+            primary{
+                scripts{
+                    "Cyrl",
+                }
+            }
+            secondary{
+                territories{
+                    "RU",
                 }
             }
         }
@@ -6276,12 +6745,9 @@ supplementalData:table(nofallback){
             }
         }
         nbf{
-            secondary{
+            primary{
                 scripts{
                     "Latn",
-                }
-                territories{
-                    "CN",
                 }
             }
         }
@@ -6290,8 +6756,17 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
+            }
+            secondary{
                 territories{
-                    "ZA",
+                    "ZW",
+                }
+            }
+        }
+        ndc{
+            secondary{
+                territories{
+                    "MZ",
                 }
             }
         }
@@ -6304,11 +6779,35 @@ supplementalData:table(nofallback){
                     "NP",
                 }
             }
+            secondary{
+                territories{
+                    "IN",
+                }
+            }
         }
         new{
-            secondary{
+            primary{
                 scripts{
                     "Deva",
+                }
+            }
+        }
+        ng{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+            secondary{
+                territories{
+                    "NA",
+                }
+            }
+        }
+        ngl{
+            secondary{
+                territories{
+                    "MZ",
                 }
             }
         }
@@ -6343,7 +6842,6 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "NO",
-                    "SJ",
                 }
             }
         }
@@ -6352,16 +6850,33 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
+            }
+        }
+        nod{
+            secondary{
                 territories{
-                    "NO",
-                    "SJ",
+                    "TH",
+                }
+            }
+        }
+        noe{
+            secondary{
+                territories{
+                    "IN",
                 }
             }
         }
         nog{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
+                }
+            }
+        }
+        nqo{
+            primary{
+                scripts{
+                    "Nkoo",
                 }
             }
         }
@@ -6369,9 +6884,6 @@ supplementalData:table(nofallback){
             primary{
                 scripts{
                     "Latn",
-                }
-                territories{
-                    "ZA",
                 }
             }
         }
@@ -6386,7 +6898,7 @@ supplementalData:table(nofallback){
             }
         }
         nv{
-            secondary{
+            primary{
                 scripts{
                     "Latn",
                 }
@@ -6402,12 +6914,15 @@ supplementalData:table(nofallback){
                 }
             }
             secondary{
-                scripts{
-                    "Latn",
-                }
                 territories{
-                    "MZ",
                     "ZM",
+                }
+            }
+        }
+        nyn{
+            secondary{
+                territories{
+                    "UG",
                 }
             }
         }
@@ -6417,21 +6932,11 @@ supplementalData:table(nofallback){
                     "Latn",
                 }
             }
-            secondary{
-                territories{
-                    "ES",
-                    "FR",
-                }
-            }
         }
         om{
             primary{
                 scripts{
                     "Latn",
-                }
-                territories{
-                    "ET",
-                    "KE",
                 }
             }
             secondary{
@@ -6439,18 +6944,7 @@ supplementalData:table(nofallback){
                     "Ethi",
                 }
                 territories{
-                    "EG",
                     "ET",
-                    "SO",
-                }
-            }
-            secondary{
-                scripts{
-                    "Latn",
-                }
-                territories{
-                    "EG",
-                    "SO",
                 }
             }
         }
@@ -6465,30 +6959,57 @@ supplementalData:table(nofallback){
             }
         }
         os{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
+                    "Latn",
                 }
             }
             secondary{
-                scripts{
-                    "Latn",
-                }
                 territories{
                     "GE",
-                    "RU",
                 }
             }
         }
         pa{
             primary{
                 scripts{
-                    "Arab",
                     "Guru",
                 }
                 territories{
                     "IN",
-                    "PK",
+                }
+            }
+            secondary{
+                scripts{
+                    "Arab",
+                }
+            }
+        }
+        pag{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+            secondary{
+                territories{
+                    "PH",
+                }
+            }
+        }
+        pap{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "AN",
+                }
+            }
+            secondary{
+                territories{
+                    "AW",
                 }
             }
         }
@@ -6503,16 +7024,11 @@ supplementalData:table(nofallback){
             }
         }
         pi{
-            secondary{
+            primary{
                 scripts{
                     "Deva",
                     "Sinh",
                     "Thai",
-                }
-                territories{
-                    "IN",
-                    "LK",
-                    "MM",
                 }
             }
         }
@@ -6525,22 +7041,26 @@ supplementalData:table(nofallback){
                     "PL",
                 }
             }
-        }
-        prd{
             secondary{
-                scripts{
-                    "Arab",
-                }
                 territories{
-                    "AF",
-                    "IR",
+                    "UA",
                 }
             }
         }
-        prg{
-            secondary{
+        pon{
+            primary{
                 scripts{
                     "Latn",
+                }
+                territories{
+                    "FM",
+                }
+            }
+        }
+        prd{
+            primary{
+                scripts{
+                    "Arab",
                 }
             }
         }
@@ -6551,6 +7071,10 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "AF",
+                }
+            }
+            secondary{
+                territories{
                     "PK",
                 }
             }
@@ -6565,7 +7089,6 @@ supplementalData:table(nofallback){
                     "BR",
                     "CV",
                     "GW",
-                    "MO",
                     "MZ",
                     "PT",
                     "ST",
@@ -6584,24 +7107,60 @@ supplementalData:table(nofallback){
                 }
             }
         }
-        ril{
+        rcf{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
             secondary{
+                territories{
+                    "RE",
+                }
+            }
+        }
+        rej{
+            secondary{
+                territories{
+                    "ID",
+                }
+            }
+        }
+        rif{
+            secondary{
+                territories{
+                    "MA",
+                }
+            }
+        }
+        ril{
+            primary{
                 scripts{
                     "Beng",
                 }
+            }
+        }
+        rjb{
+            secondary{
                 territories{
-                    "BD",
                     "IN",
                 }
             }
         }
         rm{
-            secondary{
+            primary{
                 scripts{
                     "Latn",
                 }
                 territories{
                     "CH",
+                }
+            }
+        }
+        rmt{
+            secondary{
+                territories{
+                    "IR",
                 }
             }
         }
@@ -6621,20 +7180,18 @@ supplementalData:table(nofallback){
                     "Latn",
                 }
                 territories{
+                    "MD",
                     "RO",
                 }
             }
             secondary{
-                scripts{
-                    "Latn",
-                }
                 territories{
                     "RS",
                 }
             }
         }
         rom{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
                     "Latn",
@@ -6648,20 +7205,18 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "BY",
-                    "GE",
                     "KG",
                     "KZ",
                     "RU",
-                    "SJ",
-                    "UA",
                 }
             }
             secondary{
-                scripts{
-                    "Cyrl",
-                }
                 territories{
-                    "MD",
+                    "EE",
+                    "LV",
+                    "SJ",
+                    "UA",
+                    "UZ",
                 }
             }
         }
@@ -6688,28 +7243,55 @@ supplementalData:table(nofallback){
                 scripts{
                     "Sinh",
                 }
-                territories{
-                    "IN",
-                }
             }
         }
         sah{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
                 }
             }
+            secondary{
+                territories{
+                    "RU",
+                }
+            }
+        }
+        sas{
+            secondary{
+                territories{
+                    "ID",
+                }
+            }
         }
         sat{
+            primary{
+                scripts{
+                    "Olck",
+                }
+            }
             secondary{
                 scripts{
                     "Beng",
                     "Deva",
-                    "Olck",
                     "Orya",
                 }
                 territories{
                     "IN",
+                }
+            }
+        }
+        sck{
+            secondary{
+                territories{
+                    "IN",
+                }
+            }
+        }
+        sco{
+            secondary{
+                territories{
+                    "GB",
                 }
             }
         }
@@ -6721,6 +7303,10 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "IN",
+                }
+            }
+            secondary{
+                territories{
                     "PK",
                 }
             }
@@ -6730,20 +7316,18 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
-                territories{
-                    "FI",
-                    "NO",
-                    "SE",
-                }
             }
             secondary{
                 scripts{
                     "Cyrl",
                 }
+                territories{
+                    "NO",
+                }
             }
         }
         sel{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
                 }
@@ -6759,28 +7343,15 @@ supplementalData:table(nofallback){
                 }
             }
         }
-        sh{
-            secondary{
-                scripts{
-                    "Latn",
-                }
-                territories{
-                    "BA",
-                    "HR",
-                    "ME",
-                    "RS",
-                }
-            }
-        }
         shn{
-            secondary{
+            primary{
                 scripts{
                     "Mymr",
                 }
+            }
+            secondary{
                 territories{
-                    "CN",
                     "MM",
-                    "TH",
                 }
             }
         }
@@ -6799,6 +7370,8 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
+            }
+            secondary{
                 territories{
                     "ET",
                 }
@@ -6814,9 +7387,6 @@ supplementalData:table(nofallback){
                 }
             }
             secondary{
-                scripts{
-                    "Latn",
-                }
                 territories{
                     "RS",
                 }
@@ -6829,6 +7399,11 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "SI",
+                }
+            }
+            secondary{
+                territories{
+                    "AT",
                 }
             }
         }
@@ -6848,21 +7423,12 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
-                territories{
-                    "NO",
-                    "SE",
-                }
             }
         }
         smi{
             primary{
                 scripts{
                     "Latn",
-                }
-                territories{
-                    "FI",
-                    "NO",
-                    "SE",
                 }
             }
         }
@@ -6871,29 +7437,12 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
-                territories{
-                    "NO",
-                    "SE",
-                }
             }
         }
         smn{
             primary{
                 scripts{
                     "Latn",
-                }
-                territories{
-                    "FI",
-                }
-            }
-        }
-        smp{
-            secondary{
-                scripts{
-                    "Hebr",
-                }
-                territories{
-                    "IL",
                 }
             }
         }
@@ -6902,15 +7451,17 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
-                territories{
-                    "FI",
-                }
             }
         }
         sn{
-            secondary{
+            primary{
                 scripts{
                     "Latn",
+                }
+            }
+            secondary{
+                territories{
+                    "ZW",
                 }
             }
         }
@@ -6920,29 +7471,27 @@ supplementalData:table(nofallback){
                     "Latn",
                 }
                 territories{
-                    "DJ",
                     "SO",
                 }
             }
             secondary{
-                scripts{
-                    "Latn",
-                }
                 territories{
+                    "DJ",
                     "ET",
-                    "KE",
                 }
             }
         }
         son{
-            secondary{
+            primary{
                 scripts{
                     "Latn",
                 }
+            }
+        }
+        sou{
+            secondary{
                 territories{
-                    "BJ",
-                    "ML",
-                    "NE",
+                    "TH",
                 }
             }
         }
@@ -6953,7 +7502,10 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "AL",
-                    "ME",
+                }
+            }
+            secondary{
+                territories{
                     "MK",
                     "RS",
                 }
@@ -6971,15 +7523,6 @@ supplementalData:table(nofallback){
                     "RS",
                 }
             }
-            secondary{
-                scripts{
-                    "Cyrl",
-                    "Latn",
-                }
-                territories{
-                    "HR",
-                }
-            }
         }
         ss{
             primary{
@@ -6988,6 +7531,10 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "SZ",
+                }
+            }
+            secondary{
+                territories{
                     "ZA",
                 }
             }
@@ -7000,6 +7547,16 @@ supplementalData:table(nofallback){
                 territories{
                     "LS",
                     "ZA",
+                }
+            }
+        }
+        su{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "ID",
                 }
             }
         }
@@ -7023,16 +7580,45 @@ supplementalData:table(nofallback){
                 territories{
                     "KE",
                     "TZ",
+                    "UG",
+                }
+            }
+            secondary{
+                territories{
+                    "SO",
+                }
+            }
+        }
+        swb{
+            primary{
+                scripts{
+                    "Arab",
+                }
+                territories{
+                    "KM",
+                }
+            }
+            secondary{
+                territories{
                     "YT",
                 }
             }
         }
-        syl{
+        swv{
             secondary{
+                territories{
+                    "IN",
+                }
+            }
+        }
+        syl{
+            primary{
                 scripts{
                     "Beng",
                     "Sylo",
                 }
+            }
+            secondary{
                 territories{
                     "BD",
                 }
@@ -7042,9 +7628,6 @@ supplementalData:table(nofallback){
             primary{
                 scripts{
                     "Syrc",
-                }
-                territories{
-                    "SY",
                 }
             }
         }
@@ -7059,26 +7642,33 @@ supplementalData:table(nofallback){
                     "SG",
                 }
             }
+            secondary{
+                territories{
+                    "MY",
+                }
+            }
         }
         tab{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
                 }
             }
         }
         tbw{
-            secondary{
+            primary{
                 scripts{
                     "Latn",
                 }
             }
         }
         tcy{
-            secondary{
+            primary{
                 scripts{
                     "Knda",
                 }
+            }
+            secondary{
                 territories{
                     "IN",
                 }
@@ -7099,6 +7689,8 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
+            }
+            secondary{
                 territories{
                     "SL",
                 }
@@ -7122,7 +7714,6 @@ supplementalData:table(nofallback){
                     "Latn",
                 }
                 territories{
-                    "PK",
                     "TJ",
                 }
             }
@@ -7144,6 +7735,10 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "ER",
+                }
+            }
+            secondary{
+                territories{
                     "ET",
                 }
             }
@@ -7152,9 +7747,6 @@ supplementalData:table(nofallback){
             primary{
                 scripts{
                     "Ethi",
-                }
-                territories{
-                    "ER",
                 }
             }
         }
@@ -7170,13 +7762,7 @@ supplementalData:table(nofallback){
                 }
             }
             secondary{
-                scripts{
-                    "Arab",
-                    "Cyrl",
-                    "Latn",
-                }
                 territories{
-                    "AF",
                     "IR",
                 }
             }
@@ -7196,25 +7782,21 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
-                territories{
-                    "GU",
-                    "PH",
-                }
             }
             secondary{
                 scripts{
                     "Tglg",
                 }
+                territories{
+                    "PH",
+                    "US",
+                }
             }
         }
         tmh{
-            secondary{
+            primary{
                 scripts{
                     "Latn",
-                }
-                territories{
-                    "ML",
-                    "NE",
                 }
             }
         }
@@ -7260,13 +7842,14 @@ supplementalData:table(nofallback){
                 }
             }
             secondary{
-                scripts{
-                    "Arab",
+                territories{
+                    "DE",
+                    "MK",
                 }
             }
         }
         tru{
-            secondary{
+            primary{
                 scripts{
                     "Syrc",
                 }
@@ -7281,26 +7864,57 @@ supplementalData:table(nofallback){
                     "ZA",
                 }
             }
+            secondary{
+                territories{
+                    "MZ",
+                }
+            }
+        }
+        tsg{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+            secondary{
+                territories{
+                    "PH",
+                }
+            }
         }
         tt{
             primary{
                 scripts{
                     "Cyrl",
                 }
+            }
+            secondary{
                 territories{
                     "RU",
                 }
             }
         }
-        ttt{
+        tts{
+            primary{
+                scripts{
+                    "Thai",
+                }
+            }
             secondary{
+                territories{
+                    "TH",
+                }
+            }
+        }
+        ttt{
+            primary{
                 scripts{
                     "Cyrl",
                 }
             }
         }
         tut{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
                 }
@@ -7316,40 +7930,72 @@ supplementalData:table(nofallback){
                 }
             }
         }
-        ty{
-            secondary{
+        tw{
+            primary{
                 scripts{
                     "Latn",
                 }
             }
+            secondary{
+                territories{
+                    "GH",
+                }
+            }
+        }
+        ty{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "PF",
+                }
+            }
         }
         tyv{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
                 }
             }
+            secondary{
+                territories{
+                    "RU",
+                }
+            }
         }
         tzm{
-            secondary{
+            primary{
                 scripts{
                     "Latn",
                     "Tfng",
                 }
             }
+            secondary{
+                territories{
+                    "MA",
+                }
+            }
         }
         ude{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
                 }
             }
         }
         udm{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
+                }
+            }
+            secondary{
+                scripts{
                     "Latn",
+                }
+                territories{
+                    "RU",
                 }
             }
         }
@@ -7358,14 +8004,14 @@ supplementalData:table(nofallback){
                 scripts{
                     "Arab",
                 }
-                territories{
-                    "CN",
-                }
             }
             secondary{
                 scripts{
                     "Cyrl",
                     "Latn",
+                }
+                territories{
+                    "CN",
                 }
             }
         }
@@ -7378,12 +8024,26 @@ supplementalData:table(nofallback){
                     "UA",
                 }
             }
-            secondary{
+        }
+        uli{
+            primary{
                 scripts{
-                    "Cyrl",
+                    "Latn",
                 }
                 territories{
-                    "MD",
+                    "FM",
+                }
+            }
+        }
+        und{
+            secondary{
+                territories{
+                    "AQ",
+                    "BV",
+                    "GS",
+                    "HM",
+                    "IO",
+                    "TF",
                 }
             }
         }
@@ -7410,11 +8070,6 @@ supplementalData:table(nofallback){
                 }
             }
             secondary{
-                scripts{
-                    "Arab",
-                    "Cyrl",
-                    "Latn",
-                }
                 territories{
                     "AF",
                 }
@@ -7440,8 +8095,27 @@ supplementalData:table(nofallback){
                 }
             }
             secondary{
+                territories{
+                    "US",
+                }
+            }
+        }
+        vmw{
+            secondary{
+                territories{
+                    "MZ",
+                }
+            }
+        }
+        vo{
+            primary{
                 scripts{
-                    "Hani",
+                    "Latn",
+                }
+            }
+            secondary{
+                territories{
+                    "ZZ",
                 }
             }
         }
@@ -7450,8 +8124,43 @@ supplementalData:table(nofallback){
                 scripts{
                     "Ethi",
                 }
+            }
+            secondary{
                 territories{
                     "ET",
+                }
+            }
+        }
+        war{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+            secondary{
+                territories{
+                    "PH",
+                }
+            }
+        }
+        wbq{
+            secondary{
+                territories{
+                    "IN",
+                }
+            }
+        }
+        wbr{
+            secondary{
+                territories{
+                    "IN",
+                }
+            }
+        }
+        wls{
+            secondary{
+                territories{
+                    "WF",
                 }
             }
         }
@@ -7461,14 +8170,19 @@ supplementalData:table(nofallback){
                     "Latn",
                 }
                 territories{
-                    "GM",
-                    "MR",
                     "SN",
                 }
             }
         }
-        xal{
+        wtm{
             secondary{
+                territories{
+                    "IN",
+                }
+            }
+        }
+        xal{
+            primary{
                 scripts{
                     "Cyrl",
                 }
@@ -7480,15 +8194,38 @@ supplementalData:table(nofallback){
                     "Latn",
                 }
                 territories{
-                    "LS",
                     "ZA",
                 }
             }
         }
-        xsr{
+        xnr{
             secondary{
+                territories{
+                    "IN",
+                }
+            }
+        }
+        xog{
+            secondary{
+                territories{
+                    "UG",
+                }
+            }
+        }
+        xsr{
+            primary{
                 scripts{
                     "Deva",
+                }
+            }
+        }
+        yap{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "FM",
                 }
             }
         }
@@ -7510,27 +8247,47 @@ supplementalData:table(nofallback){
             }
         }
         yrk{
-            secondary{
+            primary{
                 scripts{
                     "Cyrl",
+                }
+            }
+        }
+        za{
+            primary{
+                scripts{
+                    "Hani",
+                }
+            }
+            secondary{
+                territories{
+                    "CN",
                 }
             }
         }
         zh{
             primary{
                 scripts{
-                    "Bopo",
-                    "Hani",
                     "Hans",
                     "Hant",
                 }
                 territories{
                     "CN",
-                    "CX",
                     "HK",
                     "MO",
                     "SG",
                     "TW",
+                }
+            }
+            secondary{
+                scripts{
+                    "Bopo",
+                }
+                territories{
+                    "ID",
+                    "MY",
+                    "TH",
+                    "US",
                 }
             }
         }
@@ -7540,89 +8297,425 @@ supplementalData:table(nofallback){
                     "Latn",
                 }
                 territories{
-                    "LS",
                     "ZA",
                 }
             }
         }
     }
     mapTimezones{
+        metazones{
+            "meta:Acre_001"{"America/Rio_Branco"}
+            "meta:Afghanistan_001"{"Asia/Kabul"}
+            "meta:Africa_Central_001"{"Africa/Maputo"}
+            "meta:Africa_Central_BI"{"Africa/Bujumbura"}
+            "meta:Africa_Central_BW"{"Africa/Gaborone"}
+            "meta:Africa_Central_CD"{"Africa/Lubumbashi"}
+            "meta:Africa_Central_MW"{"Africa/Blantyre"}
+            "meta:Africa_Central_RW"{"Africa/Kigali"}
+            "meta:Africa_Central_ZM"{"Africa/Lusaka"}
+            "meta:Africa_Central_ZW"{"Africa/Harare"}
+            "meta:Africa_Eastern_001"{"Africa/Nairobi"}
+            "meta:Africa_Eastern_DJ"{"Africa/Djibouti"}
+            "meta:Africa_Eastern_ER"{"Africa/Asmera"}
+            "meta:Africa_Eastern_ET"{"Africa/Addis_Ababa"}
+            "meta:Africa_Eastern_KM"{"Indian/Comoro"}
+            "meta:Africa_Eastern_MG"{"Indian/Antananarivo"}
+            "meta:Africa_Eastern_SD"{"Africa/Khartoum"}
+            "meta:Africa_Eastern_SO"{"Africa/Mogadishu"}
+            "meta:Africa_Eastern_TZ"{"Africa/Dar_es_Salaam"}
+            "meta:Africa_Eastern_UG"{"Africa/Kampala"}
+            "meta:Africa_Eastern_YT"{"Indian/Mayotte"}
+            "meta:Africa_FarWestern_001"{"Africa/Bissau"}
+            "meta:Africa_FarWestern_EH"{"Africa/El_Aaiun"}
+            "meta:Africa_Southern_001"{"Africa/Johannesburg"}
+            "meta:Africa_Southern_LS"{"Africa/Maseru"}
+            "meta:Africa_Southern_SZ"{"Africa/Mbabane"}
+            "meta:Africa_Western_001"{"Africa/Lagos"}
+            "meta:Africa_Western_AO"{"Africa/Luanda"}
+            "meta:Africa_Western_BJ"{"Africa/Porto-Novo"}
+            "meta:Africa_Western_CD"{"Africa/Kinshasa"}
+            "meta:Africa_Western_CF"{"Africa/Bangui"}
+            "meta:Africa_Western_CG"{"Africa/Brazzaville"}
+            "meta:Africa_Western_CM"{"Africa/Douala"}
+            "meta:Africa_Western_GA"{"Africa/Libreville"}
+            "meta:Africa_Western_GQ"{"Africa/Malabo"}
+            "meta:Africa_Western_NA"{"Africa/Windhoek"}
+            "meta:Africa_Western_NE"{"Africa/Niamey"}
+            "meta:Africa_Western_TD"{"Africa/Ndjamena"}
+            "meta:Aktyubinsk_001"{"Asia/Aqtobe"}
+            "meta:Alaska_001"{"America/Anchorage"}
+            "meta:Alaska_Hawaii_001"{"America/Anchorage"}
+            "meta:Almaty_001"{"Asia/Almaty"}
+            "meta:Amazon_001"{"America/Manaus"}
+            "meta:America_Central_001"{"America/Chicago"}
+            "meta:America_Central_BZ"{"America/Belize"}
+            "meta:America_Central_CA"{"America/Winnipeg"}
+            "meta:America_Central_CR"{"America/Costa_Rica"}
+            "meta:America_Central_GT"{"America/Guatemala"}
+            "meta:America_Central_HN"{"America/Tegucigalpa"}
+            "meta:America_Central_MX"{"America/Mexico_City"}
+            "meta:America_Central_NI"{"America/Managua"}
+            "meta:America_Central_SV"{"America/El_Salvador"}
+            "meta:America_Eastern_001"{"America/New_York"}
+            "meta:America_Eastern_BS"{"America/Nassau"}
+            "meta:America_Eastern_CA"{"America/Toronto"}
+            "meta:America_Eastern_HT"{"America/Port-au-Prince"}
+            "meta:America_Eastern_JM"{"America/Jamaica"}
+            "meta:America_Eastern_KY"{"America/Cayman"}
+            "meta:America_Eastern_PA"{"America/Panama"}
+            "meta:America_Eastern_TC"{"America/Grand_Turk"}
+            "meta:America_Mountain_001"{"America/Denver"}
+            "meta:America_Mountain_CA"{"America/Edmonton"}
+            "meta:America_Mountain_MX"{"America/Hermosillo"}
+            "meta:America_Pacific_001"{"America/Los_Angeles"}
+            "meta:America_Pacific_CA"{"America/Vancouver"}
+            "meta:America_Pacific_MX"{"America/Tijuana"}
+            "meta:Anadyr_001"{"Asia/Anadyr"}
+            "meta:Aqtau_001"{"Asia/Aqtau"}
+            "meta:Aqtobe_001"{"Asia/Aqtobe"}
+            "meta:Arabian_001"{"Asia/Riyadh"}
+            "meta:Arabian_BH"{"Asia/Bahrain"}
+            "meta:Arabian_IQ"{"Asia/Baghdad"}
+            "meta:Arabian_KW"{"Asia/Kuwait"}
+            "meta:Arabian_QA"{"Asia/Qatar"}
+            "meta:Arabian_YE"{"Asia/Aden"}
+            "meta:Argentina_001"{"America/Buenos_Aires"}
+            "meta:Argentina_Western_001"{"America/Catamarca"}
+            "meta:Armenia_001"{"Asia/Yerevan"}
+            "meta:Ashkhabad_001"{"Asia/Ashgabat"}
+            "meta:Atlantic_001"{"America/Halifax"}
+            "meta:Atlantic_AG"{"America/Antigua"}
+            "meta:Atlantic_AI"{"America/Anguilla"}
+            "meta:Atlantic_AN"{"America/Curacao"}
+            "meta:Atlantic_AW"{"America/Aruba"}
+            "meta:Atlantic_BB"{"America/Barbados"}
+            "meta:Atlantic_BM"{"America/Bermuda"}
+            "meta:Atlantic_DM"{"America/Dominica"}
+            "meta:Atlantic_DO"{"America/Santo_Domingo"}
+            "meta:Atlantic_GD"{"America/Grenada"}
+            "meta:Atlantic_GL"{"America/Thule"}
+            "meta:Atlantic_GP"{"America/Guadaloupe"}
+            "meta:Atlantic_KN"{"America/St_Kitts"}
+            "meta:Atlantic_LC"{"America/St_Lucia"}
+            "meta:Atlantic_MQ"{"America/Martinique"}
+            "meta:Atlantic_MS"{"America/Montserrat"}
+            "meta:Atlantic_PR"{"America/Puerto_Rico"}
+            "meta:Atlantic_TT"{"America/Port_of_Spain"}
+            "meta:Atlantic_VC"{"America/St_Vincent"}
+            "meta:Atlantic_VG"{"America/Tortola"}
+            "meta:Atlantic_VI"{"America/St_Thomas"}
+            "meta:Australia_CentralWestern_001"{"Australia/Eucla"}
+            "meta:Australia_Central_001"{"Australia/Adelaide"}
+            "meta:Australia_Eastern_001"{"Australia/Sydney"}
+            "meta:Australia_Western_001"{"Australia/Perth"}
+            "meta:Azerbaijan_001"{"Asia/Baku"}
+            "meta:Azores_001"{"Atlantic/Azores"}
+            "meta:Baku_001"{"Asia/Baku"}
+            "meta:Bangladesh_001"{"Asia/Dhaka"}
+            "meta:Bering_001"{"America/Adak"}
+            "meta:Bhutan_001"{"Asia/Thimphu"}
+            "meta:Bolivia_001"{"America/La_Paz"}
+            "meta:Borneo_001"{"Asia/Kuching"}
+            "meta:Brasilia_001"{"America/Sao_Paulo"}
+            "meta:Brunei_001"{"Asia/Brunei"}
+            "meta:Cape_Verde_001"{"Atlantic/Cape_Verde"}
+            "meta:Chamorro_001"{"Pacific/Saipan"}
+            "meta:Chamorro_GU"{"Pacific/Guam"}
+            "meta:Changbai_001"{"Asia/Harbin"}
+            "meta:Chatham_001"{"Pacific/Chatham"}
+            "meta:Chile_001"{"America/Santiago"}
+            "meta:Chile_AQ"{"Antarctica/Palmer"}
+            "meta:China_001"{"Asia/Shanghai"}
+            "meta:China_MO"{"Asia/Macau"}
+            "meta:China_TW"{"Asia/Taipei"}
+            "meta:Choibalsan_001"{"Asia/Choibalsan"}
+            "meta:Christmas_001"{"Indian/Christmas"}
+            "meta:Cocos_001"{"Indian/Cocos"}
+            "meta:Colombia_001"{"America/Bogota"}
+            "meta:Cook_001"{"Pacific/Rarotonga"}
+            "meta:Cuba_001"{"America/Havana"}
+            "meta:Dacca_001"{"Asia/Dhaka"}
+            "meta:Davis_001"{"Antarctica/Davis"}
+            "meta:DumontDUrville_001"{"Antarctica/DumontDUrville"}
+            "meta:Dushanbe_001"{"Asia/Dushanbe"}
+            "meta:Dutch_Guiana_001"{"America/Paramaribo"}
+            "meta:East_Timor_001"{"Asia/Dili"}
+            "meta:Easter_001"{"Pacific/Easter"}
+            "meta:Ecuador_001"{"America/Guayaquil"}
+            "meta:Europe_Central_001"{"Europe/Paris"}
+            "meta:Europe_Central_AD"{"Europe/Andorra"}
+            "meta:Europe_Central_AL"{"Europe/Tirane"}
+            "meta:Europe_Central_AT"{"Europe/Vienna"}
+            "meta:Europe_Central_BA"{"Europe/Sarajevo"}
+            "meta:Europe_Central_BE"{"Europe/Brussels"}
+            "meta:Europe_Central_CH"{"Europe/Zurich"}
+            "meta:Europe_Central_CZ"{"Europe/Prague"}
+            "meta:Europe_Central_DE"{"Europe/Berlin"}
+            "meta:Europe_Central_DK"{"Europe/Copenhagen"}
+            "meta:Europe_Central_DZ"{"Africa/Algiers"}
+            "meta:Europe_Central_ES"{"Europe/Madrid"}
+            "meta:Europe_Central_GI"{"Europe/Gibraltar"}
+            "meta:Europe_Central_HR"{"Europe/Zagreb"}
+            "meta:Europe_Central_HU"{"Europe/Budapest"}
+            "meta:Europe_Central_IT"{"Europe/Rome"}
+            "meta:Europe_Central_LI"{"Europe/Vaduz"}
+            "meta:Europe_Central_LU"{"Europe/Luxembourg"}
+            "meta:Europe_Central_MC"{"Europe/Monaco"}
+            "meta:Europe_Central_ME"{"Europe/Podgorica"}
+            "meta:Europe_Central_MK"{"Europe/Skopje"}
+            "meta:Europe_Central_MT"{"Europe/Malta"}
+            "meta:Europe_Central_NL"{"Europe/Amsterdam"}
+            "meta:Europe_Central_NO"{"Europe/Oslo"}
+            "meta:Europe_Central_PL"{"Europe/Warsaw"}
+            "meta:Europe_Central_RS"{"Europe/Belgrade"}
+            "meta:Europe_Central_SE"{"Europe/Stockholm"}
+            "meta:Europe_Central_SI"{"Europe/Ljubljana"}
+            "meta:Europe_Central_SK"{"Europe/Bratislava"}
+            "meta:Europe_Central_TN"{"Africa/Tunis"}
+            "meta:Europe_Eastern_001"{"Europe/Bucharest"}
+            "meta:Europe_Eastern_BG"{"Europe/Sofia"}
+            "meta:Europe_Eastern_BY"{"Europe/Minsk"}
+            "meta:Europe_Eastern_CY"{"Asia/Nicosia"}
+            "meta:Europe_Eastern_EE"{"Europe/Tallinn"}
+            "meta:Europe_Eastern_EG"{"Africa/Cairo"}
+            "meta:Europe_Eastern_FI"{"Europe/Helsinki"}
+            "meta:Europe_Eastern_GR"{"Europe/Athens"}
+            "meta:Europe_Eastern_JO"{"Asia/Amman"}
+            "meta:Europe_Eastern_LB"{"Asia/Beirut"}
+            "meta:Europe_Eastern_LT"{"Europe/Vilnius"}
+            "meta:Europe_Eastern_LV"{"Europe/Riga"}
+            "meta:Europe_Eastern_LY"{"Africa/Tripoli"}
+            "meta:Europe_Eastern_MD"{"Europe/Chisinau"}
+            "meta:Europe_Eastern_PS"{"Asia/Gaza"}
+            "meta:Europe_Eastern_RU"{"Europe/Kaliningrad"}
+            "meta:Europe_Eastern_SY"{"Asia/Damascus"}
+            "meta:Europe_Eastern_TR"{"Europe/Istanbul"}
+            "meta:Europe_Eastern_UA"{"Europe/Kiev"}
+            "meta:Europe_Western_001"{"Europe/Lisbon"}
+            "meta:Europe_Western_EH"{"Africa/El_Aaiun"}
+            "meta:Europe_Western_FO"{"Atlantic/Faeroe"}
+            "meta:Europe_Western_MA"{"Africa/Casablanca"}
+            "meta:Falkland_001"{"Atlantic/Stanley"}
+            "meta:Fiji_001"{"Pacific/Fiji"}
+            "meta:French_Guiana_001"{"America/Cayenne"}
+            "meta:French_Southern_001"{"Indian/Kerguelen"}
+            "meta:Frunze_001"{"Asia/Bishkek"}
+            "meta:GMT_001"{"Etc/GMT"}
+            "meta:GMT_BF"{"Africa/Ouagadougou"}
+            "meta:GMT_CI"{"Africa/Abidjan"}
+            "meta:GMT_GB"{"Europe/London"}
+            "meta:GMT_GH"{"Africa/Accra"}
+            "meta:GMT_GL"{"America/Danmarkshavn"}
+            "meta:GMT_GM"{"Africa/Banjul"}
+            "meta:GMT_GN"{"Africa/Conakry"}
+            "meta:GMT_GW"{"Africa/Bissau"}
+            "meta:GMT_IE"{"Europe/Dublin"}
+            "meta:GMT_IS"{"Atlantic/Reykjavik"}
+            "meta:GMT_LR"{"Africa/Monrovia"}
+            "meta:GMT_ML"{"Africa/Bamako"}
+            "meta:GMT_MR"{"Africa/Nouakchott"}
+            "meta:GMT_SH"{"Atlantic/St_Helena"}
+            "meta:GMT_SL"{"Africa/Freetown"}
+            "meta:GMT_SN"{"Africa/Dakar"}
+            "meta:GMT_ST"{"Africa/Sao_Tome"}
+            "meta:GMT_TG"{"Africa/Lome"}
+            "meta:Galapagos_001"{"Pacific/Galapagos"}
+            "meta:Gambier_001"{"Pacific/Gambier"}
+            "meta:Georgia_001"{"Asia/Tbilisi"}
+            "meta:Gilbert_Islands_001"{"Pacific/Tarawa"}
+            "meta:Greenland_Central_001"{"America/Scoresbysund"}
+            "meta:Greenland_Eastern_001"{"America/Scoresbysund"}
+            "meta:Greenland_Western_001"{"America/Godthab"}
+            "meta:Guam_001"{"Pacific/Guam"}
+            "meta:Gulf_001"{"Asia/Dubai"}
+            "meta:Gulf_OM"{"Asia/Muscat"}
+            "meta:Guyana_001"{"America/Guyana"}
+            "meta:Hawaii_001"{"Pacific/Honolulu"}
+            "meta:Hawaii_Aleutian_001"{"America/Adak"}
+            "meta:Hong_Kong_001"{"Asia/Hong_Kong"}
+            "meta:Hovd_001"{"Asia/Hovd"}
+            "meta:India_001"{"Asia/Calcutta"}
+            "meta:India_LK"{"Asia/Colombo"}
+            "meta:Indian_Ocean_001"{"Indian/Chagos"}
+            "meta:Indochina_001"{"Asia/Saigon"}
+            "meta:Indochina_KH"{"Asia/Phnom_Penh"}
+            "meta:Indochina_LA"{"Asia/Vientiane"}
+            "meta:Indochina_TH"{"Asia/Bangkok"}
+            "meta:Indonesia_Central_001"{"Asia/Makassar"}
+            "meta:Indonesia_Eastern_001"{"Asia/Jayapura"}
+            "meta:Indonesia_Western_001"{"Asia/Jakarta"}
+            "meta:Iran_001"{"Asia/Tehran"}
+            "meta:Irkutsk_001"{"Asia/Irkutsk"}
+            "meta:Israel_001"{"Asia/Jerusalem"}
+            "meta:Japan_001"{"Asia/Tokyo"}
+            "meta:Kamchatka_001"{"Asia/Kamchatka"}
+            "meta:Karachi_001"{"Asia/Karachi"}
+            "meta:Kashgar_001"{"Asia/Kashgar"}
+            "meta:Kazakhstan_Eastern_001"{"Asia/Almaty"}
+            "meta:Kazakhstan_Western_001"{"Asia/Aqtau"}
+            "meta:Kizilorda_001"{"Asia/Qyzylorda"}
+            "meta:Korea_001"{"Asia/Seoul"}
+            "meta:Korea_KP"{"Asia/Pyongyang"}
+            "meta:Kosrae_001"{"Pacific/Kosrae"}
+            "meta:Krasnoyarsk_001"{"Asia/Krasnoyarsk"}
+            "meta:Kuybyshev_001"{"Europe/Samara"}
+            "meta:Kwajalein_001"{"Pacific/Kwajalein"}
+            "meta:Kyrgystan_001"{"Asia/Bishkek"}
+            "meta:Lanka_001"{"Asia/Colombo"}
+            "meta:Line_Islands_001"{"Pacific/Kiritimati"}
+            "meta:Long_Shu_001"{"Asia/Chongqing"}
+            "meta:Lord_Howe_001"{"Australia/Lord_Howe"}
+            "meta:Macau_001"{"Asia/Macau"}
+            "meta:Magadan_001"{"Asia/Magadan"}
+            "meta:Malaya_001"{"Asia/Kuala_Lumpur"}
+            "meta:Malaysia_001"{"Asia/Kuala_Lumpur"}
+            "meta:Maldives_001"{"Indian/Maldives"}
+            "meta:Marquesas_001"{"Pacific/Marquesas"}
+            "meta:Marshall_Islands_001"{"Pacific/Majuro"}
+            "meta:Mauritius_001"{"Indian/Mauritius"}
+            "meta:Mawson_001"{"Antarctica/Mawson"}
+            "meta:Mongolia_001"{"Asia/Ulaanbaatar"}
+            "meta:Moscow_001"{"Europe/Moscow"}
+            "meta:Myanmar_001"{"Asia/Rangoon"}
+            "meta:Nauru_001"{"Pacific/Nauru"}
+            "meta:Nepal_001"{"Asia/Katmandu"}
+            "meta:New_Caledonia_001"{"Pacific/Noumea"}
+            "meta:New_Zealand_001"{"Pacific/Auckland"}
+            "meta:New_Zealand_AQ"{"Antarctica/McMurdo"}
+            "meta:Newfoundland_001"{"America/St_Johns"}
+            "meta:Niue_001"{"Pacific/Niue"}
+            "meta:Norfolk_001"{"Pacific/Norfolk"}
+            "meta:Noronha_001"{"America/Noronha"}
+            "meta:North_Mariana_001"{"Pacific/Saipan"}
+            "meta:Novosibirsk_001"{"Asia/Novosibirsk"}
+            "meta:Omsk_001"{"Asia/Omsk"}
+            "meta:Pakistan_001"{"Asia/Karachi"}
+            "meta:Palau_001"{"Pacific/Palau"}
+            "meta:Papua_New_Guinea_001"{"Pacific/Port_Moresby"}
+            "meta:Paraguay_001"{"America/Asuncion"}
+            "meta:Peru_001"{"America/Lima"}
+            "meta:Philippines_001"{"Asia/Manila"}
+            "meta:Phoenix_Islands_001"{"Pacific/Enderbury"}
+            "meta:Pierre_Miquelon_001"{"America/Miquelon"}
+            "meta:Pitcairn_001"{"Pacific/Pitcairn"}
+            "meta:Ponape_001"{"Pacific/Ponape"}
+            "meta:Qyzylorda_001"{"Asia/Qyzylorda"}
+            "meta:Reunion_001"{"Indian/Reunion"}
+            "meta:Rothera_001"{"Antarctica/Rothera"}
+            "meta:Sakhalin_001"{"Asia/Sakhalin"}
+            "meta:Samara_001"{"Europe/Samara"}
+            "meta:Samarkand_001"{"Asia/Samarkand"}
+            "meta:Samoa_001"{"Pacific/Apia"}
+            "meta:Seychelles_001"{"Indian/Mahe"}
+            "meta:Shevchenko_001"{"Asia/Aqtau"}
+            "meta:Singapore_001"{"Asia/Singapore"}
+            "meta:Solomon_001"{"Pacific/Guadalcanal"}
+            "meta:South_Georgia_001"{"Atlantic/South_Georgia"}
+            "meta:Suriname_001"{"America/Paramaribo"}
+            "meta:Sverdlovsk_001"{"Asia/Yekaterinburg"}
+            "meta:Syowa_001"{"Antarctica/Syowa"}
+            "meta:Tahiti_001"{"Pacific/Tahiti"}
+            "meta:Tajikistan_001"{"Asia/Dushanbe"}
+            "meta:Tashkent_001"{"Asia/Tashkent"}
+            "meta:Tbilisi_001"{"Asia/Tbilisi"}
+            "meta:Tokelau_001"{"Pacific/Fakaofo"}
+            "meta:Tonga_001"{"Pacific/Tongatapu"}
+            "meta:Truk_001"{"Pacific/Truk"}
+            "meta:Turkey_001"{"Europe/Istanbul"}
+            "meta:Turkmenistan_001"{"Asia/Ashgabat"}
+            "meta:Tuvalu_001"{"Pacific/Funafuti"}
+            "meta:Uralsk_001"{"Asia/Oral"}
+            "meta:Uruguay_001"{"America/Montevideo"}
+            "meta:Urumqi_001"{"Asia/Urumqi"}
+            "meta:Uzbekistan_001"{"Asia/Tashkent"}
+            "meta:Vanuatu_001"{"Pacific/Efate"}
+            "meta:Venezuela_001"{"America/Caracas"}
+            "meta:Vladivostok_001"{"Asia/Vladivostok"}
+            "meta:Volgograd_001"{"Europe/Volgograd"}
+            "meta:Vostok_001"{"Antarctica/Vostok"}
+            "meta:Wake_001"{"Pacific/Wake"}
+            "meta:Wallis_001"{"Pacific/Wallis"}
+            "meta:Yakutsk_001"{"Asia/Yakutsk"}
+            "meta:Yekaterinburg_001"{"Asia/Yekaterinburg"}
+            "meta:Yerevan_001"{"Asia/Yerevan"}
+            "meta:Yukon_001"{"America/Dawson"}
+        }
         windows{
-            Africa/Cairo{"Egypt"}
-            Africa/Casablanca{"Greenwich"}
-            Africa/Johannesburg{"South Africa"}
-            Africa/Lagos{"W. Central Africa"}
-            Africa/Nairobi{"E. Africa"}
-            America/Anchorage{"Alaskan"}
-            America/Bogota{"SA Pacific"}
-            America/Buenos_Aires{"SA Eastern"}
-            America/Caracas{"SA Western"}
-            America/Chicago{"Central"}
-            America/Chihuahua{"Mexico Standard Time 2"}
-            America/Denver{"Mountain"}
-            America/Godthab{"Greenland"}
-            America/Halifax{"Atlantic"}
-            America/Indianapolis{"US Eastern"}
-            America/Los_Angeles{"Pacific"}
-            America/Managua{"Central America"}
-            America/Mexico_City{"Mexico"}
-            America/New_York{"Eastern"}
-            America/Noronha{"Mid-Atlantic"}
-            America/Phoenix{"US Mountain"}
-            America/Regina{"Canada Central"}
-            America/Santiago{"Pacific SA"}
-            America/Sao_Paulo{"E. South America"}
-            America/St_Johns{"Newfoundland"}
-            Asia/Baghdad{"Arabic"}
-            Asia/Bangkok{"SE Asia"}
-            Asia/Calcutta{"India"}
-            Asia/Colombo{"Sri Lanka"}
-            Asia/Dhaka{"Central Asia"}
-            Asia/Irkutsk{"North Asia East"}
-            Asia/Jerusalem{"Israel"}
-            Asia/Kabul{"Afghanistan"}
-            Asia/Karachi{"West Asia"}
-            Asia/Katmandu{"Nepal"}
-            Asia/Krasnoyarsk{"North Asia"}
-            Asia/Magadan{"Central Pacific"}
-            Asia/Muscat{"Arabian"}
-            Asia/Novosibirsk{"N. Central Asia"}
-            Asia/Rangoon{"Myanmar"}
-            Asia/Riyadh{"Arab"}
-            Asia/Seoul{"Korea"}
-            Asia/Shanghai{"China"}
-            Asia/Singapore{"Singapore"}
-            Asia/Taipei{"Taipei"}
-            Asia/Tbilisi{"Caucasus"}
-            Asia/Tehran{"Iran"}
-            Asia/Tokyo{"Tokyo"}
-            Asia/Vladivostok{"Vladivostok"}
-            Asia/Yakutsk{"Yakutsk"}
-            Asia/Yekaterinburg{"Ekaterinburg"}
-            Atlantic/Azores{"Azores"}
-            Atlantic/Cape_Verde{"Cape Verde"}
-            Australia/Adelaide{"Cen. Australia"}
-            Australia/Brisbane{"E. Australia"}
-            Australia/Darwin{"AUS Central"}
-            Australia/Hobart{"Tasmania"}
-            Australia/Perth{"W. Australia"}
-            Australia/Sydney{"AUS Eastern"}
-            Etc/GMT+12{"Dateline"}
-            Europe/Belgrade{"Central Europe"}
-            Europe/Berlin{"W. Europe"}
-            Europe/Bucharest{"E. Europe"}
-            Europe/Helsinki{"FLE"}
-            Europe/Istanbul{"GTB"}
-            Europe/London{"GMT"}
-            Europe/Moscow{"Russian"}
-            Europe/Paris{"Romance"}
-            Europe/Sarajevo{"Central European"}
-            Pacific/Apia{"Samoa"}
-            Pacific/Auckland{"New Zealand"}
-            Pacific/Fiji{"Fiji"}
-            Pacific/Guam{"West Pacific"}
-            Pacific/Honolulu{"Hawaiian"}
-            Pacific/Tongatapu{"Tonga"}
+            "Africa:Cairo"{"Egypt"}
+            "Africa:Casablanca"{"Greenwich"}
+            "Africa:Johannesburg"{"South Africa"}
+            "Africa:Lagos"{"W. Central Africa"}
+            "Africa:Nairobi"{"E. Africa"}
+            "America:Anchorage"{"Alaskan"}
+            "America:Bogota"{"SA Pacific"}
+            "America:Buenos_Aires"{"SA Eastern"}
+            "America:Caracas"{"SA Western"}
+            "America:Chicago"{"Central"}
+            "America:Chihuahua"{"Mexico Standard Time 2"}
+            "America:Denver"{"Mountain"}
+            "America:Godthab"{"Greenland"}
+            "America:Halifax"{"Atlantic"}
+            "America:Indianapolis"{"US Eastern"}
+            "America:Los_Angeles"{"Pacific"}
+            "America:Managua"{"Central America"}
+            "America:Mexico_City"{"Mexico"}
+            "America:New_York"{"Eastern"}
+            "America:Noronha"{"Mid-Atlantic"}
+            "America:Phoenix"{"US Mountain"}
+            "America:Regina"{"Canada Central"}
+            "America:Santiago"{"Pacific SA"}
+            "America:Sao_Paulo"{"E. South America"}
+            "America:St_Johns"{"Newfoundland"}
+            "Asia:Baghdad"{"Arabic"}
+            "Asia:Bangkok"{"SE Asia"}
+            "Asia:Calcutta"{"India"}
+            "Asia:Colombo"{"Sri Lanka"}
+            "Asia:Dhaka"{"Central Asia"}
+            "Asia:Irkutsk"{"North Asia East"}
+            "Asia:Jerusalem"{"Israel"}
+            "Asia:Kabul"{"Afghanistan"}
+            "Asia:Karachi"{"West Asia"}
+            "Asia:Katmandu"{"Nepal"}
+            "Asia:Krasnoyarsk"{"North Asia"}
+            "Asia:Magadan"{"Central Pacific"}
+            "Asia:Muscat"{"Arabian"}
+            "Asia:Novosibirsk"{"N. Central Asia"}
+            "Asia:Rangoon"{"Myanmar"}
+            "Asia:Riyadh"{"Arab"}
+            "Asia:Seoul"{"Korea"}
+            "Asia:Shanghai"{"China"}
+            "Asia:Singapore"{"Singapore"}
+            "Asia:Taipei"{"Taipei"}
+            "Asia:Tbilisi"{"Caucasus"}
+            "Asia:Tehran"{"Iran"}
+            "Asia:Tokyo"{"Tokyo"}
+            "Asia:Vladivostok"{"Vladivostok"}
+            "Asia:Yakutsk"{"Yakutsk"}
+            "Asia:Yekaterinburg"{"Ekaterinburg"}
+            "Atlantic:Azores"{"Azores"}
+            "Atlantic:Cape_Verde"{"Cape Verde"}
+            "Australia:Adelaide"{"Cen. Australia"}
+            "Australia:Brisbane"{"E. Australia"}
+            "Australia:Darwin"{"AUS Central"}
+            "Australia:Hobart"{"Tasmania"}
+            "Australia:Perth"{"W. Australia"}
+            "Australia:Sydney"{"AUS Eastern"}
+            "Etc:GMT+12"{"Dateline"}
+            "Europe:Belgrade"{"Central Europe"}
+            "Europe:Berlin"{"W. Europe"}
+            "Europe:Bucharest"{"E. Europe"}
+            "Europe:Helsinki"{"FLE"}
+            "Europe:Istanbul"{"GTB"}
+            "Europe:London"{"GMT"}
+            "Europe:Moscow"{"Russian"}
+            "Europe:Paris"{"Romance"}
+            "Europe:Sarajevo"{"Central European"}
+            "Pacific:Apia"{"Samoa"}
+            "Pacific:Auckland"{"New Zealand"}
+            "Pacific:Fiji"{"Fiji"}
+            "Pacific:Guam"{"West Pacific"}
+            "Pacific:Honolulu"{"Hawaiian"}
+            "Pacific:Tongatapu"{"Tonga"}
         }
     }
     territoryContainment{
@@ -7639,11 +8732,6 @@ supplementalData:table(nofallback){
             "015",
             "017",
             "018",
-        }
-        003{
-            "021",
-            "029",
-            "013",
         }
         003{
             "013",
@@ -7989,11 +9077,6 @@ supplementalData:table(nofallback){
             "UZ",
         }
         419{
-            "029",
-            "013",
-            "005",
-        }
-        419{
             "005",
             "013",
             "029",
@@ -8042,271 +9125,271 @@ supplementalData:table(nofallback){
         }
     }
     zoneFormatting{
-        Africa/Abidjan{
+        "Africa:Abidjan"{
             territory{"CI"}
         }
-        Africa/Accra{
+        "Africa:Accra"{
             territory{"GH"}
         }
-        Africa/Addis_Ababa{
+        "Africa:Addis_Ababa"{
             territory{"ET"}
         }
-        Africa/Algiers{
+        "Africa:Algiers"{
             territory{"DZ"}
         }
-        Africa/Asmera{
+        "Africa:Asmera"{
             territory{"ER"}
             aliases{
                 "Africa/Asmara",
             }
         }
-        Africa/Bamako{
+        "Africa:Bamako"{
             territory{"ML"}
             aliases{
                 "Africa/Timbuktu",
             }
         }
-        Africa/Bangui{
+        "Africa:Bangui"{
             territory{"CF"}
         }
-        Africa/Banjul{
+        "Africa:Banjul"{
             territory{"GM"}
         }
-        Africa/Bissau{
+        "Africa:Bissau"{
             territory{"GW"}
         }
-        Africa/Blantyre{
+        "Africa:Blantyre"{
             territory{"MW"}
         }
-        Africa/Brazzaville{
+        "Africa:Brazzaville"{
             territory{"CG"}
         }
-        Africa/Bujumbura{
+        "Africa:Bujumbura"{
             territory{"BI"}
         }
-        Africa/Cairo{
+        "Africa:Cairo"{
             territory{"EG"}
             aliases{
                 "Egypt",
             }
         }
-        Africa/Casablanca{
+        "Africa:Casablanca"{
             territory{"MA"}
         }
-        Africa/Ceuta{
+        "Africa:Ceuta"{
             territory{"ES"}
         }
-        Africa/Conakry{
+        "Africa:Conakry"{
             territory{"GN"}
         }
-        Africa/Dakar{
+        "Africa:Dakar"{
             territory{"SN"}
         }
-        Africa/Dar_es_Salaam{
+        "Africa:Dar_es_Salaam"{
             territory{"TZ"}
         }
-        Africa/Djibouti{
+        "Africa:Djibouti"{
             territory{"DJ"}
         }
-        Africa/Douala{
+        "Africa:Douala"{
             territory{"CM"}
         }
-        Africa/El_Aaiun{
+        "Africa:El_Aaiun"{
             territory{"EH"}
         }
-        Africa/Freetown{
+        "Africa:Freetown"{
             territory{"SL"}
         }
-        Africa/Gaborone{
+        "Africa:Gaborone"{
             territory{"BW"}
         }
-        Africa/Harare{
+        "Africa:Harare"{
             territory{"ZW"}
         }
-        Africa/Johannesburg{
+        "Africa:Johannesburg"{
             territory{"ZA"}
         }
-        Africa/Kampala{
+        "Africa:Kampala"{
             territory{"UG"}
         }
-        Africa/Khartoum{
+        "Africa:Khartoum"{
             territory{"SD"}
         }
-        Africa/Kigali{
+        "Africa:Kigali"{
             territory{"RW"}
         }
-        Africa/Kinshasa{
+        "Africa:Kinshasa"{
             territory{"CD"}
         }
-        Africa/Lagos{
+        "Africa:Lagos"{
             territory{"NG"}
         }
-        Africa/Libreville{
+        "Africa:Libreville"{
             territory{"GA"}
         }
-        Africa/Lome{
+        "Africa:Lome"{
             territory{"TG"}
         }
-        Africa/Luanda{
+        "Africa:Luanda"{
             territory{"AO"}
         }
-        Africa/Lubumbashi{
+        "Africa:Lubumbashi"{
             territory{"CD"}
         }
-        Africa/Lusaka{
+        "Africa:Lusaka"{
             territory{"ZM"}
         }
-        Africa/Malabo{
+        "Africa:Malabo"{
             territory{"GQ"}
         }
-        Africa/Maputo{
+        "Africa:Maputo"{
             territory{"MZ"}
         }
-        Africa/Maseru{
+        "Africa:Maseru"{
             territory{"LS"}
         }
-        Africa/Mbabane{
+        "Africa:Mbabane"{
             territory{"SZ"}
         }
-        Africa/Mogadishu{
+        "Africa:Mogadishu"{
             territory{"SO"}
         }
-        Africa/Monrovia{
+        "Africa:Monrovia"{
             territory{"LR"}
         }
-        Africa/Nairobi{
+        "Africa:Nairobi"{
             territory{"KE"}
         }
-        Africa/Ndjamena{
+        "Africa:Ndjamena"{
             territory{"TD"}
         }
-        Africa/Niamey{
+        "Africa:Niamey"{
             territory{"NE"}
         }
-        Africa/Nouakchott{
+        "Africa:Nouakchott"{
             territory{"MR"}
         }
-        Africa/Ouagadougou{
+        "Africa:Ouagadougou"{
             territory{"BF"}
         }
-        Africa/Porto-Novo{
+        "Africa:Porto-Novo"{
             territory{"BJ"}
         }
-        Africa/Sao_Tome{
+        "Africa:Sao_Tome"{
             territory{"ST"}
         }
-        Africa/Tripoli{
+        "Africa:Tripoli"{
             territory{"LY"}
             aliases{
                 "Libya",
             }
         }
-        Africa/Tunis{
+        "Africa:Tunis"{
             territory{"TN"}
         }
-        Africa/Windhoek{
+        "Africa:Windhoek"{
             territory{"NA"}
         }
-        America/Adak{
+        "America:Adak"{
             territory{"US"}
             aliases{
                 "America/Atka",
                 "US/Aleutian",
             }
         }
-        America/Anchorage{
+        "America:Anchorage"{
             territory{"US"}
             aliases{
                 "SystemV/YST9YDT",
                 "US/Alaska",
             }
         }
-        America/Anguilla{
+        "America:Anguilla"{
             territory{"AI"}
         }
-        America/Antigua{
+        "America:Antigua"{
             territory{"AG"}
         }
-        America/Araguaina{
+        "America:Araguaina"{
             territory{"BR"}
         }
-        America/Argentina/La_Rioja{
+        "America:Argentina:La_Rioja"{
             territory{"AR"}
         }
-        America/Argentina/Rio_Gallegos{
+        "America:Argentina:Rio_Gallegos"{
             territory{"AR"}
         }
-        America/Argentina/San_Juan{
+        "America:Argentina:San_Juan"{
             territory{"AR"}
         }
-        America/Argentina/Tucuman{
+        "America:Argentina:Tucuman"{
             territory{"AR"}
         }
-        America/Argentina/Ushuaia{
+        "America:Argentina:Ushuaia"{
             territory{"AR"}
         }
-        America/Aruba{
+        "America:Aruba"{
             territory{"AW"}
         }
-        America/Asuncion{
+        "America:Asuncion"{
             territory{"PY"}
         }
-        America/Bahia{
+        "America:Bahia"{
             territory{"BR"}
         }
-        America/Barbados{
+        "America:Barbados"{
             territory{"BB"}
         }
-        America/Belem{
+        "America:Belem"{
             territory{"BR"}
         }
-        America/Belize{
+        "America:Belize"{
             territory{"BZ"}
         }
-        America/Blanc-Sablon{
+        "America:Blanc-Sablon"{
             territory{"CA"}
         }
-        America/Boa_Vista{
+        "America:Boa_Vista"{
             territory{"BR"}
         }
-        America/Bogota{
+        "America:Bogota"{
             territory{"CO"}
         }
-        America/Boise{
+        "America:Boise"{
             territory{"US"}
         }
-        America/Buenos_Aires{
+        "America:Buenos_Aires"{
             territory{"AR"}
             aliases{
                 "America/Argentina/Buenos_Aires",
             }
         }
-        America/Cambridge_Bay{
+        "America:Cambridge_Bay"{
             territory{"CA"}
         }
-        America/Campo_Grande{
+        "America:Campo_Grande"{
             territory{"BR"}
         }
-        America/Cancun{
+        "America:Cancun"{
             territory{"MX"}
         }
-        America/Caracas{
+        "America:Caracas"{
             territory{"VE"}
         }
-        America/Catamarca{
+        "America:Catamarca"{
             territory{"AR"}
             aliases{
                 "America/Argentina/Catamarca",
                 "America/Argentina/ComodRivadavia",
             }
         }
-        America/Cayenne{
+        "America:Cayenne"{
             territory{"GF"}
         }
-        America/Cayman{
+        "America:Cayman"{
             territory{"KY"}
         }
-        America/Chicago{
+        "America:Chicago"{
             territory{"US"}
             aliases{
                 "CST6CDT",
@@ -8314,41 +9397,41 @@ supplementalData:table(nofallback){
                 "US/Central",
             }
         }
-        America/Chihuahua{
+        "America:Chihuahua"{
             territory{"MX"}
         }
-        America/Coral_Harbour{
+        "America:Coral_Harbour"{
             territory{"CA"}
             aliases{
                 "America/Atikokan",
             }
         }
-        America/Cordoba{
+        "America:Cordoba"{
             territory{"AR"}
             aliases{
                 "America/Argentina/Cordoba",
                 "America/Rosario",
             }
         }
-        America/Costa_Rica{
+        "America:Costa_Rica"{
             territory{"CR"}
         }
-        America/Cuiaba{
+        "America:Cuiaba"{
             territory{"BR"}
         }
-        America/Curacao{
+        "America:Curacao"{
             territory{"AN"}
         }
-        America/Danmarkshavn{
+        "America:Danmarkshavn"{
             territory{"GL"}
         }
-        America/Dawson{
+        "America:Dawson"{
             territory{"CA"}
         }
-        America/Dawson_Creek{
+        "America:Dawson_Creek"{
             territory{"CA"}
         }
-        America/Denver{
+        "America:Denver"{
             territory{"US"}
             aliases{
                 "MST7MDT",
@@ -8356,93 +9439,96 @@ supplementalData:table(nofallback){
                 "US/Mountain",
             }
         }
-        America/Detroit{
+        "America:Detroit"{
             territory{"US"}
             aliases{
                 "US/Michigan",
             }
         }
-        America/Dominica{
+        "America:Dominica"{
             territory{"DM"}
         }
-        America/Edmonton{
+        "America:Edmonton"{
             territory{"CA"}
             aliases{
                 "Canada/Mountain",
             }
         }
-        America/Eirunepe{
+        "America:Eirunepe"{
             territory{"BR"}
         }
-        America/El_Salvador{
+        "America:El_Salvador"{
             territory{"SV"}
         }
-        America/Fortaleza{
+        "America:Fortaleza"{
             territory{"BR"}
         }
-        America/Glace_Bay{
+        "America:Glace_Bay"{
             territory{"CA"}
         }
-        America/Godthab{
+        "America:Godthab"{
             territory{"GL"}
         }
-        America/Goose_Bay{
+        "America:Goose_Bay"{
             territory{"CA"}
         }
-        America/Grand_Turk{
+        "America:Grand_Turk"{
             territory{"TC"}
         }
-        America/Grenada{
+        "America:Grenada"{
             territory{"GD"}
         }
-        America/Guadeloupe{
+        "America:Guadeloupe"{
             territory{"GP"}
         }
-        America/Guatemala{
+        "America:Guatemala"{
             territory{"GT"}
         }
-        America/Guayaquil{
+        "America:Guayaquil"{
             territory{"EC"}
         }
-        America/Guyana{
+        "America:Guyana"{
             territory{"GY"}
         }
-        America/Halifax{
+        "America:Halifax"{
             territory{"CA"}
             aliases{
                 "Canada/Atlantic",
                 "SystemV/AST4ADT",
             }
         }
-        America/Havana{
+        "America:Havana"{
             territory{"CU"}
             aliases{
                 "Cuba",
             }
         }
-        America/Hermosillo{
+        "America:Hermosillo"{
             territory{"MX"}
         }
-        America/Indiana/Knox{
+        "America:Indiana:Knox"{
             territory{"US"}
             aliases{
                 "America/Knox_IN",
                 "US/Indiana-Starke",
             }
         }
-        America/Indiana/Marengo{
+        "America:Indiana:Marengo"{
             territory{"US"}
         }
-        America/Indiana/Petersburg{
+        "America:Indiana:Petersburg"{
             territory{"US"}
         }
-        America/Indiana/Vevay{
+        "America:Indiana:Vevay"{
             territory{"US"}
         }
-        America/Indiana/Vincennes{
+        "America:Indiana:Vincennes"{
             territory{"US"}
         }
-        America/Indianapolis{
+        "America:Indiana:Winamac"{
+            territory{"US"}
+        }
+        "America:Indianapolis"{
             territory{"US"}
             aliases{
                 "America/Fort_Wayne",
@@ -8452,37 +9538,37 @@ supplementalData:table(nofallback){
                 "US/East-Indiana",
             }
         }
-        America/Inuvik{
+        "America:Inuvik"{
             territory{"CA"}
         }
-        America/Iqaluit{
+        "America:Iqaluit"{
             territory{"CA"}
         }
-        America/Jamaica{
+        "America:Jamaica"{
             territory{"JM"}
             aliases{
                 "Jamaica",
             }
         }
-        America/Jujuy{
+        "America:Jujuy"{
             territory{"AR"}
             aliases{
                 "America/Argentina/Jujuy",
             }
         }
-        America/Juneau{
+        "America:Juneau"{
             territory{"US"}
         }
-        America/Kentucky/Monticello{
+        "America:Kentucky:Monticello"{
             territory{"US"}
         }
-        America/La_Paz{
+        "America:La_Paz"{
             territory{"BO"}
         }
-        America/Lima{
+        "America:Lima"{
             territory{"PE"}
         }
-        America/Los_Angeles{
+        "America:Los_Angeles"{
             territory{"US"}
             aliases{
                 "PST8PDT",
@@ -8491,73 +9577,73 @@ supplementalData:table(nofallback){
                 "US/Pacific-New",
             }
         }
-        America/Louisville{
+        "America:Louisville"{
             territory{"US"}
             aliases{
                 "America/Kentucky/Louisville",
             }
         }
-        America/Maceio{
+        "America:Maceio"{
             territory{"BR"}
         }
-        America/Managua{
+        "America:Managua"{
             territory{"NI"}
         }
-        America/Manaus{
+        "America:Manaus"{
             territory{"BR"}
             aliases{
                 "Brazil/West",
             }
         }
-        America/Martinique{
+        "America:Martinique"{
             territory{"MQ"}
         }
-        America/Mazatlan{
+        "America:Mazatlan"{
             territory{"MX"}
             aliases{
                 "Mexico/BajaSur",
             }
         }
-        America/Mendoza{
+        "America:Mendoza"{
             territory{"AR"}
             aliases{
                 "America/Argentina/Mendoza",
             }
         }
-        America/Menominee{
+        "America:Menominee"{
             territory{"US"}
         }
-        America/Merida{
+        "America:Merida"{
             territory{"MX"}
         }
-        America/Mexico_City{
+        "America:Mexico_City"{
             territory{"MX"}
             aliases{
                 "Mexico/General",
             }
         }
-        America/Miquelon{
+        "America:Miquelon"{
             territory{"PM"}
         }
-        America/Moncton{
+        "America:Moncton"{
             territory{"CA"}
         }
-        America/Monterrey{
+        "America:Monterrey"{
             territory{"MX"}
         }
-        America/Montevideo{
+        "America:Montevideo"{
             territory{"UY"}
         }
-        America/Montreal{
+        "America:Montreal"{
             territory{"CA"}
         }
-        America/Montserrat{
+        "America:Montserrat"{
             territory{"MS"}
         }
-        America/Nassau{
+        "America:Nassau"{
             territory{"BS"}
         }
-        America/New_York{
+        "America:New_York"{
             territory{"US"}
             aliases{
                 "EST5EDT",
@@ -8565,34 +9651,34 @@ supplementalData:table(nofallback){
                 "US/Eastern",
             }
         }
-        America/Nipigon{
+        "America:Nipigon"{
             territory{"CA"}
         }
-        America/Nome{
+        "America:Nome"{
             territory{"US"}
         }
-        America/Noronha{
+        "America:Noronha"{
             territory{"BR"}
             aliases{
                 "Brazil/DeNoronha",
             }
         }
-        America/North_Dakota/Center{
+        "America:North_Dakota:Center"{
             territory{"US"}
         }
-        America/North_Dakota/New_Salem{
+        "America:North_Dakota:New_Salem"{
             territory{"US"}
         }
-        America/Panama{
+        "America:Panama"{
             territory{"PA"}
         }
-        America/Pangnirtung{
+        "America:Pangnirtung"{
             territory{"CA"}
         }
-        America/Paramaribo{
+        "America:Paramaribo"{
             territory{"SR"}
         }
-        America/Phoenix{
+        "America:Phoenix"{
             territory{"US"}
             aliases{
                 "MST",
@@ -8600,31 +9686,31 @@ supplementalData:table(nofallback){
                 "US/Arizona",
             }
         }
-        America/Port_of_Spain{
+        "America:Port_of_Spain"{
             territory{"TT"}
         }
-        America/Port-au-Prince{
+        "America:Port-au-Prince"{
             territory{"HT"}
         }
-        America/Porto_Velho{
+        "America:Porto_Velho"{
             territory{"BR"}
         }
-        America/Puerto_Rico{
+        "America:Puerto_Rico"{
             territory{"PR"}
             aliases{
                 "SystemV/AST4",
             }
         }
-        America/Rainy_River{
+        "America:Rainy_River"{
             territory{"CA"}
         }
-        America/Rankin_Inlet{
+        "America:Rankin_Inlet"{
             territory{"CA"}
         }
-        America/Recife{
+        "America:Recife"{
             territory{"BR"}
         }
-        America/Regina{
+        "America:Regina"{
             territory{"CA"}
             aliases{
                 "Canada/East-Saskatchewan",
@@ -8632,514 +9718,514 @@ supplementalData:table(nofallback){
                 "SystemV/CST6",
             }
         }
-        America/Rio_Branco{
+        "America:Rio_Branco"{
             territory{"BR"}
             aliases{
                 "America/Porto_Acre",
                 "Brazil/Acre",
             }
         }
-        America/Santiago{
+        "America:Santiago"{
             territory{"CL"}
             aliases{
                 "Chile/Continental",
             }
         }
-        America/Santo_Domingo{
+        "America:Santo_Domingo"{
             territory{"DO"}
         }
-        America/Sao_Paulo{
+        "America:Sao_Paulo"{
             territory{"BR"}
             aliases{
                 "Brazil/East",
             }
         }
-        America/Scoresbysund{
+        "America:Scoresbysund"{
             territory{"GL"}
         }
-        America/Shiprock{
+        "America:Shiprock"{
             territory{"US"}
             aliases{
                 "Navajo",
             }
         }
-        America/St_Johns{
+        "America:St_Johns"{
             territory{"CA"}
             aliases{
                 "Canada/Newfoundland",
             }
         }
-        America/St_Kitts{
+        "America:St_Kitts"{
             territory{"KN"}
         }
-        America/St_Lucia{
+        "America:St_Lucia"{
             territory{"LC"}
         }
-        America/St_Thomas{
+        "America:St_Thomas"{
             territory{"VI"}
             aliases{
                 "America/Virgin",
             }
         }
-        America/St_Vincent{
+        "America:St_Vincent"{
             territory{"VC"}
         }
-        America/Swift_Current{
+        "America:Swift_Current"{
             territory{"CA"}
         }
-        America/Tegucigalpa{
+        "America:Tegucigalpa"{
             territory{"HN"}
         }
-        America/Thule{
+        "America:Thule"{
             territory{"GL"}
         }
-        America/Thunder_Bay{
+        "America:Thunder_Bay"{
             territory{"CA"}
         }
-        America/Tijuana{
+        "America:Tijuana"{
             territory{"MX"}
             aliases{
                 "America/Ensenada",
                 "Mexico/BajaNorte",
             }
         }
-        America/Toronto{
+        "America:Toronto"{
             territory{"CA"}
             aliases{
                 "Canada/Eastern",
             }
         }
-        America/Tortola{
+        "America:Tortola"{
             territory{"VG"}
         }
-        America/Vancouver{
+        "America:Vancouver"{
             territory{"CA"}
             aliases{
                 "Canada/Pacific",
             }
         }
-        America/Whitehorse{
+        "America:Whitehorse"{
             territory{"CA"}
             aliases{
                 "Canada/Yukon",
             }
         }
-        America/Winnipeg{
+        "America:Winnipeg"{
             territory{"CA"}
             aliases{
                 "Canada/Central",
             }
         }
-        America/Yakutat{
+        "America:Yakutat"{
             territory{"US"}
         }
-        America/Yellowknife{
+        "America:Yellowknife"{
             territory{"CA"}
         }
-        Antarctica/Casey{
+        "Antarctica:Casey"{
             territory{"AQ"}
         }
-        Antarctica/Davis{
+        "Antarctica:Davis"{
             territory{"AQ"}
         }
-        Antarctica/DumontDUrville{
+        "Antarctica:DumontDUrville"{
             territory{"AQ"}
         }
-        Antarctica/Mawson{
+        "Antarctica:Mawson"{
             territory{"AQ"}
         }
-        Antarctica/McMurdo{
+        "Antarctica:McMurdo"{
             territory{"AQ"}
         }
-        Antarctica/Palmer{
+        "Antarctica:Palmer"{
             territory{"AQ"}
         }
-        Antarctica/Rothera{
+        "Antarctica:Rothera"{
             territory{"AQ"}
         }
-        Antarctica/South_Pole{
+        "Antarctica:South_Pole"{
             territory{"AQ"}
         }
-        Antarctica/Syowa{
+        "Antarctica:Syowa"{
             territory{"AQ"}
         }
-        Antarctica/Vostok{
+        "Antarctica:Vostok"{
             territory{"AQ"}
         }
-        Arctic/Longyearbyen{
+        "Arctic:Longyearbyen"{
             territory{"SJ"}
         }
-        Asia/Aden{
+        "Asia:Aden"{
             territory{"YE"}
         }
-        Asia/Almaty{
+        "Asia:Almaty"{
             territory{"KZ"}
         }
-        Asia/Amman{
+        "Asia:Amman"{
             territory{"JO"}
         }
-        Asia/Anadyr{
+        "Asia:Anadyr"{
             territory{"RU"}
         }
-        Asia/Aqtau{
+        "Asia:Aqtau"{
             territory{"KZ"}
         }
-        Asia/Aqtobe{
+        "Asia:Aqtobe"{
             territory{"KZ"}
         }
-        Asia/Ashgabat{
+        "Asia:Ashgabat"{
             territory{"TM"}
             aliases{
                 "Asia/Ashkhabad",
             }
         }
-        Asia/Baghdad{
+        "Asia:Baghdad"{
             territory{"IQ"}
         }
-        Asia/Bahrain{
+        "Asia:Bahrain"{
             territory{"BH"}
         }
-        Asia/Baku{
+        "Asia:Baku"{
             territory{"AZ"}
         }
-        Asia/Bangkok{
+        "Asia:Bangkok"{
             territory{"TH"}
         }
-        Asia/Beirut{
+        "Asia:Beirut"{
             territory{"LB"}
         }
-        Asia/Bishkek{
+        "Asia:Bishkek"{
             territory{"KG"}
         }
-        Asia/Brunei{
+        "Asia:Brunei"{
             territory{"BN"}
         }
-        Asia/Calcutta{
+        "Asia:Calcutta"{
             territory{"IN"}
         }
-        Asia/Choibalsan{
+        "Asia:Choibalsan"{
             territory{"MN"}
         }
-        Asia/Chongqing{
+        "Asia:Chongqing"{
             territory{"CN"}
             aliases{
                 "Asia/Chungking",
             }
         }
-        Asia/Colombo{
+        "Asia:Colombo"{
             territory{"LK"}
         }
-        Asia/Damascus{
+        "Asia:Damascus"{
             territory{"SY"}
         }
-        Asia/Dhaka{
+        "Asia:Dhaka"{
             territory{"BD"}
             aliases{
                 "Asia/Dacca",
             }
         }
-        Asia/Dili{
+        "Asia:Dili"{
             territory{"TL"}
         }
-        Asia/Dubai{
+        "Asia:Dubai"{
             territory{"AE"}
         }
-        Asia/Dushanbe{
+        "Asia:Dushanbe"{
             territory{"TJ"}
         }
-        Asia/Gaza{
+        "Asia:Gaza"{
             territory{"PS"}
         }
-        Asia/Harbin{
+        "Asia:Harbin"{
             territory{"CN"}
         }
-        Asia/Hong_Kong{
+        "Asia:Hong_Kong"{
             territory{"HK"}
             aliases{
                 "Hongkong",
             }
         }
-        Asia/Hovd{
+        "Asia:Hovd"{
             territory{"MN"}
         }
-        Asia/Irkutsk{
+        "Asia:Irkutsk"{
             territory{"RU"}
         }
-        Asia/Jakarta{
+        "Asia:Jakarta"{
             territory{"ID"}
         }
-        Asia/Jayapura{
+        "Asia:Jayapura"{
             territory{"ID"}
         }
-        Asia/Jerusalem{
+        "Asia:Jerusalem"{
             territory{"IL"}
             aliases{
                 "Asia/Tel_Aviv",
                 "Israel",
             }
         }
-        Asia/Kabul{
+        "Asia:Kabul"{
             territory{"AF"}
         }
-        Asia/Kamchatka{
+        "Asia:Kamchatka"{
             territory{"RU"}
         }
-        Asia/Karachi{
+        "Asia:Karachi"{
             territory{"PK"}
         }
-        Asia/Kashgar{
+        "Asia:Kashgar"{
             territory{"CN"}
         }
-        Asia/Katmandu{
+        "Asia:Katmandu"{
             territory{"NP"}
         }
-        Asia/Krasnoyarsk{
+        "Asia:Krasnoyarsk"{
             territory{"RU"}
         }
-        Asia/Kuala_Lumpur{
+        "Asia:Kuala_Lumpur"{
             territory{"MY"}
         }
-        Asia/Kuching{
+        "Asia:Kuching"{
             territory{"MY"}
         }
-        Asia/Kuwait{
+        "Asia:Kuwait"{
             territory{"KW"}
         }
-        Asia/Macau{
+        "Asia:Macau"{
             territory{"MO"}
             aliases{
                 "Asia/Macao",
             }
         }
-        Asia/Magadan{
+        "Asia:Magadan"{
             territory{"RU"}
         }
-        Asia/Makassar{
+        "Asia:Makassar"{
             territory{"ID"}
             aliases{
                 "Asia/Ujung_Pandang",
             }
         }
-        Asia/Manila{
+        "Asia:Manila"{
             territory{"PH"}
         }
-        Asia/Muscat{
+        "Asia:Muscat"{
             territory{"OM"}
         }
-        Asia/Nicosia{
+        "Asia:Nicosia"{
             territory{"CY"}
             aliases{
                 "Europe/Nicosia",
             }
         }
-        Asia/Novosibirsk{
+        "Asia:Novosibirsk"{
             territory{"RU"}
         }
-        Asia/Omsk{
+        "Asia:Omsk"{
             territory{"RU"}
         }
-        Asia/Oral{
+        "Asia:Oral"{
             territory{"KZ"}
         }
-        Asia/Phnom_Penh{
+        "Asia:Phnom_Penh"{
             territory{"KH"}
         }
-        Asia/Pontianak{
+        "Asia:Pontianak"{
             territory{"ID"}
         }
-        Asia/Pyongyang{
+        "Asia:Pyongyang"{
             territory{"KP"}
         }
-        Asia/Qatar{
+        "Asia:Qatar"{
             territory{"QA"}
         }
-        Asia/Qyzylorda{
+        "Asia:Qyzylorda"{
             territory{"KZ"}
         }
-        Asia/Rangoon{
+        "Asia:Rangoon"{
             territory{"MM"}
         }
-        Asia/Riyadh{
+        "Asia:Riyadh"{
             territory{"SA"}
         }
-        Asia/Saigon{
+        "Asia:Saigon"{
             territory{"VN"}
         }
-        Asia/Sakhalin{
+        "Asia:Sakhalin"{
             territory{"RU"}
         }
-        Asia/Samarkand{
+        "Asia:Samarkand"{
             territory{"UZ"}
         }
-        Asia/Seoul{
+        "Asia:Seoul"{
             territory{"KR"}
             aliases{
                 "ROK",
             }
         }
-        Asia/Shanghai{
+        "Asia:Shanghai"{
             territory{"CN"}
             aliases{
                 "PRC",
             }
         }
-        Asia/Singapore{
+        "Asia:Singapore"{
             territory{"SG"}
             aliases{
                 "Singapore",
             }
         }
-        Asia/Taipei{
+        "Asia:Taipei"{
             territory{"TW"}
             aliases{
                 "ROC",
             }
         }
-        Asia/Tashkent{
+        "Asia:Tashkent"{
             territory{"UZ"}
         }
-        Asia/Tbilisi{
+        "Asia:Tbilisi"{
             territory{"GE"}
         }
-        Asia/Tehran{
+        "Asia:Tehran"{
             territory{"IR"}
             aliases{
                 "Iran",
             }
         }
-        Asia/Thimphu{
+        "Asia:Thimphu"{
             territory{"BT"}
             aliases{
                 "Asia/Thimbu",
             }
         }
-        Asia/Tokyo{
+        "Asia:Tokyo"{
             territory{"JP"}
             aliases{
                 "Japan",
             }
         }
-        Asia/Ulaanbaatar{
+        "Asia:Ulaanbaatar"{
             territory{"MN"}
             aliases{
                 "Asia/Ulan_Bator",
             }
         }
-        Asia/Urumqi{
+        "Asia:Urumqi"{
             territory{"CN"}
         }
-        Asia/Vientiane{
+        "Asia:Vientiane"{
             territory{"LA"}
         }
-        Asia/Vladivostok{
+        "Asia:Vladivostok"{
             territory{"RU"}
         }
-        Asia/Yakutsk{
+        "Asia:Yakutsk"{
             territory{"RU"}
         }
-        Asia/Yekaterinburg{
+        "Asia:Yekaterinburg"{
             territory{"RU"}
         }
-        Asia/Yerevan{
+        "Asia:Yerevan"{
             territory{"AM"}
         }
-        Atlantic/Azores{
+        "Atlantic:Azores"{
             territory{"PT"}
         }
-        Atlantic/Bermuda{
+        "Atlantic:Bermuda"{
             territory{"BM"}
         }
-        Atlantic/Canary{
+        "Atlantic:Canary"{
             territory{"ES"}
         }
-        Atlantic/Cape_Verde{
+        "Atlantic:Cape_Verde"{
             territory{"CV"}
         }
-        Atlantic/Faeroe{
+        "Atlantic:Faeroe"{
             territory{"FO"}
             aliases{
                 "Atlantic/Faroe",
             }
         }
-        Atlantic/Jan_Mayen{
+        "Atlantic:Jan_Mayen"{
             territory{"SJ"}
         }
-        Atlantic/Madeira{
+        "Atlantic:Madeira"{
             territory{"PT"}
         }
-        Atlantic/Reykjavik{
+        "Atlantic:Reykjavik"{
             territory{"IS"}
             aliases{
                 "Iceland",
             }
         }
-        Atlantic/South_Georgia{
+        "Atlantic:South_Georgia"{
             territory{"GS"}
         }
-        Atlantic/St_Helena{
+        "Atlantic:St_Helena"{
             territory{"SH"}
         }
-        Atlantic/Stanley{
+        "Atlantic:Stanley"{
             territory{"FK"}
         }
-        Australia/Adelaide{
+        "Australia:Adelaide"{
             territory{"AU"}
             aliases{
                 "Australia/South",
             }
         }
-        Australia/Brisbane{
+        "Australia:Brisbane"{
             territory{"AU"}
             aliases{
                 "Australia/Queensland",
             }
         }
-        Australia/Broken_Hill{
+        "Australia:Broken_Hill"{
             territory{"AU"}
             aliases{
                 "Australia/Yancowinna",
             }
         }
-        Australia/Currie{
+        "Australia:Currie"{
             territory{"AU"}
         }
-        Australia/Darwin{
+        "Australia:Darwin"{
             territory{"AU"}
             aliases{
                 "Australia/North",
             }
         }
-        Australia/Eucla{
+        "Australia:Eucla"{
             territory{"AU"}
         }
-        Australia/Hobart{
+        "Australia:Hobart"{
             territory{"AU"}
             aliases{
                 "Australia/Tasmania",
             }
         }
-        Australia/Lindeman{
+        "Australia:Lindeman"{
             territory{"AU"}
         }
-        Australia/Lord_Howe{
+        "Australia:Lord_Howe"{
             territory{"AU"}
             aliases{
                 "Australia/LHI",
             }
         }
-        Australia/Melbourne{
+        "Australia:Melbourne"{
             territory{"AU"}
             aliases{
                 "Australia/Victoria",
             }
         }
-        Australia/Perth{
+        "Australia:Perth"{
             territory{"AU"}
             aliases{
                 "Australia/West",
             }
         }
-        Australia/Sydney{
+        "Australia:Sydney"{
             territory{"AU"}
             aliases{
                 "Australia/ACT",
@@ -9147,7 +10233,7 @@ supplementalData:table(nofallback){
                 "Australia/NSW",
             }
         }
-        Etc/GMT{
+        "Etc:GMT"{
             territory{"001"}
             aliases{
                 "Etc/GMT+0",
@@ -9169,167 +10255,167 @@ supplementalData:table(nofallback){
                 "Zulu",
             }
         }
-        Etc/GMT-1{
+        "Etc:GMT-1"{
             territory{"001"}
         }
-        Etc/GMT-2{
+        "Etc:GMT-2"{
             territory{"001"}
         }
-        Etc/GMT-3{
+        "Etc:GMT-3"{
             territory{"001"}
         }
-        Etc/GMT-4{
+        "Etc:GMT-4"{
             territory{"001"}
         }
-        Etc/GMT-5{
+        "Etc:GMT-5"{
             territory{"001"}
         }
-        Etc/GMT-6{
+        "Etc:GMT-6"{
             territory{"001"}
         }
-        Etc/GMT-7{
+        "Etc:GMT-7"{
             territory{"001"}
         }
-        Etc/GMT-8{
+        "Etc:GMT-8"{
             territory{"001"}
         }
-        Etc/GMT-9{
+        "Etc:GMT-9"{
             territory{"001"}
         }
-        Etc/GMT-10{
+        "Etc:GMT-10"{
             territory{"001"}
         }
-        Etc/GMT-11{
+        "Etc:GMT-11"{
             territory{"001"}
         }
-        Etc/GMT-12{
+        "Etc:GMT-12"{
             territory{"001"}
         }
-        Etc/GMT-13{
+        "Etc:GMT-13"{
             territory{"001"}
         }
-        Etc/GMT-14{
+        "Etc:GMT-14"{
             territory{"001"}
         }
-        Etc/GMT+1{
+        "Etc:GMT+1"{
             territory{"001"}
         }
-        Etc/GMT+2{
+        "Etc:GMT+2"{
             territory{"001"}
         }
-        Etc/GMT+3{
+        "Etc:GMT+3"{
             territory{"001"}
         }
-        Etc/GMT+4{
+        "Etc:GMT+4"{
             territory{"001"}
         }
-        Etc/GMT+5{
+        "Etc:GMT+5"{
             territory{"001"}
         }
-        Etc/GMT+6{
+        "Etc:GMT+6"{
             territory{"001"}
         }
-        Etc/GMT+7{
+        "Etc:GMT+7"{
             territory{"001"}
         }
-        Etc/GMT+8{
+        "Etc:GMT+8"{
             territory{"001"}
         }
-        Etc/GMT+9{
+        "Etc:GMT+9"{
             territory{"001"}
         }
-        Etc/GMT+10{
+        "Etc:GMT+10"{
             territory{"001"}
         }
-        Etc/GMT+11{
+        "Etc:GMT+11"{
             territory{"001"}
         }
-        Etc/GMT+12{
+        "Etc:GMT+12"{
             territory{"001"}
         }
-        Etc/Unknown{
+        "Etc:Unknown"{
             territory{"001"}
         }
-        Europe/Amsterdam{
+        "Europe:Amsterdam"{
             territory{"NL"}
         }
-        Europe/Andorra{
+        "Europe:Andorra"{
             territory{"AD"}
         }
-        Europe/Athens{
+        "Europe:Athens"{
             territory{"GR"}
         }
-        Europe/Belgrade{
+        "Europe:Belgrade"{
             territory{"RS"}
         }
-        Europe/Berlin{
+        "Europe:Berlin"{
             territory{"DE"}
         }
-        Europe/Bratislava{
+        "Europe:Bratislava"{
             territory{"SK"}
         }
-        Europe/Brussels{
+        "Europe:Brussels"{
             territory{"BE"}
         }
-        Europe/Bucharest{
+        "Europe:Bucharest"{
             territory{"RO"}
         }
-        Europe/Budapest{
+        "Europe:Budapest"{
             territory{"HU"}
         }
-        Europe/Chisinau{
+        "Europe:Chisinau"{
             territory{"MD"}
             aliases{
                 "Europe/Tiraspol",
             }
         }
-        Europe/Copenhagen{
+        "Europe:Copenhagen"{
             territory{"DK"}
         }
-        Europe/Dublin{
+        "Europe:Dublin"{
             territory{"IE"}
             aliases{
                 "Eire",
             }
         }
-        Europe/Gibraltar{
+        "Europe:Gibraltar"{
             territory{"GI"}
         }
-        Europe/Guernsey{
+        "Europe:Guernsey"{
             territory{"GG"}
         }
-        Europe/Helsinki{
+        "Europe:Helsinki"{
             territory{"FI"}
         }
-        Europe/Isle_of_Man{
+        "Europe:Isle_of_Man"{
             territory{"IM"}
         }
-        Europe/Istanbul{
+        "Europe:Istanbul"{
             territory{"TR"}
             aliases{
                 "Asia/Istanbul",
                 "Turkey",
             }
         }
-        Europe/Jersey{
+        "Europe:Jersey"{
             territory{"JE"}
         }
-        Europe/Kaliningrad{
+        "Europe:Kaliningrad"{
             territory{"RU"}
         }
-        Europe/Kiev{
+        "Europe:Kiev"{
             territory{"UA"}
         }
-        Europe/Lisbon{
+        "Europe:Lisbon"{
             territory{"PT"}
             aliases{
                 "Portugal",
             }
         }
-        Europe/Ljubljana{
+        "Europe:Ljubljana"{
             territory{"SI"}
         }
-        Europe/London{
+        "Europe:London"{
             territory{"GB"}
             aliases{
                 "Europe/Belfast",
@@ -9337,193 +10423,193 @@ supplementalData:table(nofallback){
                 "GB-Eire",
             }
         }
-        Europe/Luxembourg{
+        "Europe:Luxembourg"{
             territory{"LU"}
         }
-        Europe/Madrid{
+        "Europe:Madrid"{
             territory{"ES"}
         }
-        Europe/Malta{
+        "Europe:Malta"{
             territory{"MT"}
         }
-        Europe/Mariehamn{
+        "Europe:Mariehamn"{
             territory{"AX"}
         }
-        Europe/Minsk{
+        "Europe:Minsk"{
             territory{"BY"}
         }
-        Europe/Monaco{
+        "Europe:Monaco"{
             territory{"MC"}
         }
-        Europe/Moscow{
+        "Europe:Moscow"{
             territory{"RU"}
             aliases{
                 "W-SU",
             }
         }
-        Europe/Oslo{
+        "Europe:Oslo"{
             territory{"NO"}
         }
-        Europe/Paris{
+        "Europe:Paris"{
             territory{"FR"}
         }
-        Europe/Podgorica{
+        "Europe:Podgorica"{
             territory{"ME"}
         }
-        Europe/Prague{
+        "Europe:Prague"{
             territory{"CZ"}
         }
-        Europe/Riga{
+        "Europe:Riga"{
             territory{"LV"}
         }
-        Europe/Rome{
+        "Europe:Rome"{
             territory{"IT"}
         }
-        Europe/Samara{
+        "Europe:Samara"{
             territory{"RU"}
         }
-        Europe/San_Marino{
+        "Europe:San_Marino"{
             territory{"SM"}
         }
-        Europe/Sarajevo{
+        "Europe:Sarajevo"{
             territory{"BA"}
         }
-        Europe/Simferopol{
+        "Europe:Simferopol"{
             territory{"UA"}
         }
-        Europe/Skopje{
+        "Europe:Skopje"{
             territory{"MK"}
         }
-        Europe/Sofia{
+        "Europe:Sofia"{
             territory{"BG"}
         }
-        Europe/Stockholm{
+        "Europe:Stockholm"{
             territory{"SE"}
         }
-        Europe/Tallinn{
+        "Europe:Tallinn"{
             territory{"EE"}
         }
-        Europe/Tirane{
+        "Europe:Tirane"{
             territory{"AL"}
         }
-        Europe/Uzhgorod{
+        "Europe:Uzhgorod"{
             territory{"UA"}
         }
-        Europe/Vaduz{
+        "Europe:Vaduz"{
             territory{"LI"}
         }
-        Europe/Vatican{
+        "Europe:Vatican"{
             territory{"VA"}
         }
-        Europe/Vienna{
+        "Europe:Vienna"{
             territory{"AT"}
         }
-        Europe/Vilnius{
+        "Europe:Vilnius"{
             territory{"LT"}
         }
-        Europe/Volgograd{
+        "Europe:Volgograd"{
             territory{"RU"}
         }
-        Europe/Warsaw{
+        "Europe:Warsaw"{
             territory{"PL"}
             aliases{
                 "Poland",
             }
         }
-        Europe/Zagreb{
+        "Europe:Zagreb"{
             territory{"HR"}
         }
-        Europe/Zaporozhye{
+        "Europe:Zaporozhye"{
             territory{"UA"}
         }
-        Europe/Zurich{
+        "Europe:Zurich"{
             territory{"CH"}
         }
-        Indian/Antananarivo{
+        "Indian:Antananarivo"{
             territory{"MG"}
         }
-        Indian/Chagos{
+        "Indian:Chagos"{
             territory{"IO"}
         }
-        Indian/Christmas{
+        "Indian:Christmas"{
             territory{"CX"}
         }
-        Indian/Cocos{
+        "Indian:Cocos"{
             territory{"CC"}
         }
-        Indian/Comoro{
+        "Indian:Comoro"{
             territory{"KM"}
         }
-        Indian/Kerguelen{
+        "Indian:Kerguelen"{
             territory{"TF"}
         }
-        Indian/Mahe{
+        "Indian:Mahe"{
             territory{"SC"}
         }
-        Indian/Maldives{
+        "Indian:Maldives"{
             territory{"MV"}
         }
-        Indian/Mauritius{
+        "Indian:Mauritius"{
             territory{"MU"}
         }
-        Indian/Mayotte{
+        "Indian:Mayotte"{
             territory{"YT"}
         }
-        Indian/Reunion{
+        "Indian:Reunion"{
             territory{"RE"}
         }
-        Pacific/Apia{
+        "Pacific:Apia"{
             territory{"WS"}
         }
-        Pacific/Auckland{
+        "Pacific:Auckland"{
             territory{"NZ"}
             aliases{
                 "NZ",
             }
         }
-        Pacific/Chatham{
+        "Pacific:Chatham"{
             territory{"NZ"}
             aliases{
                 "NZ-CHAT",
             }
         }
-        Pacific/Easter{
+        "Pacific:Easter"{
             territory{"CL"}
             aliases{
                 "Chile/EasterIsland",
             }
         }
-        Pacific/Efate{
+        "Pacific:Efate"{
             territory{"VU"}
         }
-        Pacific/Enderbury{
+        "Pacific:Enderbury"{
             territory{"KI"}
         }
-        Pacific/Fakaofo{
+        "Pacific:Fakaofo"{
             territory{"TK"}
         }
-        Pacific/Fiji{
+        "Pacific:Fiji"{
             territory{"FJ"}
         }
-        Pacific/Funafuti{
+        "Pacific:Funafuti"{
             territory{"TV"}
         }
-        Pacific/Galapagos{
+        "Pacific:Galapagos"{
             territory{"EC"}
         }
-        Pacific/Gambier{
+        "Pacific:Gambier"{
             territory{"PF"}
             aliases{
                 "SystemV/YST9",
             }
         }
-        Pacific/Guadalcanal{
+        "Pacific:Guadalcanal"{
             territory{"SB"}
         }
-        Pacific/Guam{
+        "Pacific:Guam"{
             territory{"GU"}
         }
-        Pacific/Honolulu{
+        "Pacific:Honolulu"{
             territory{"US"}
             aliases{
                 "HST",
@@ -9531,89 +10617,89 @@ supplementalData:table(nofallback){
                 "US/Hawaii",
             }
         }
-        Pacific/Johnston{
+        "Pacific:Johnston"{
             territory{"UM"}
         }
-        Pacific/Kiritimati{
+        "Pacific:Kiritimati"{
             territory{"KI"}
         }
-        Pacific/Kosrae{
+        "Pacific:Kosrae"{
             territory{"FM"}
         }
-        Pacific/Kwajalein{
+        "Pacific:Kwajalein"{
             territory{"MH"}
             aliases{
                 "Kwajalein",
             }
         }
-        Pacific/Majuro{
+        "Pacific:Majuro"{
             territory{"MH"}
         }
-        Pacific/Marquesas{
+        "Pacific:Marquesas"{
             territory{"PF"}
         }
-        Pacific/Midway{
+        "Pacific:Midway"{
             territory{"UM"}
         }
-        Pacific/Nauru{
+        "Pacific:Nauru"{
             territory{"NR"}
         }
-        Pacific/Niue{
+        "Pacific:Niue"{
             territory{"NU"}
         }
-        Pacific/Norfolk{
+        "Pacific:Norfolk"{
             territory{"NF"}
         }
-        Pacific/Noumea{
+        "Pacific:Noumea"{
             territory{"NC"}
         }
-        Pacific/Pago_Pago{
+        "Pacific:Pago_Pago"{
             territory{"AS"}
             aliases{
                 "Pacific/Samoa",
                 "US/Samoa",
             }
         }
-        Pacific/Palau{
+        "Pacific:Palau"{
             territory{"PW"}
         }
-        Pacific/Pitcairn{
+        "Pacific:Pitcairn"{
             territory{"PN"}
             aliases{
                 "SystemV/PST8",
             }
         }
-        Pacific/Ponape{
+        "Pacific:Ponape"{
             territory{"FM"}
         }
-        Pacific/Port_Moresby{
+        "Pacific:Port_Moresby"{
             territory{"PG"}
         }
-        Pacific/Rarotonga{
+        "Pacific:Rarotonga"{
             territory{"CK"}
         }
-        Pacific/Saipan{
+        "Pacific:Saipan"{
             territory{"MP"}
         }
-        Pacific/Tahiti{
+        "Pacific:Tahiti"{
             territory{"PF"}
         }
-        Pacific/Tarawa{
+        "Pacific:Tarawa"{
             territory{"KI"}
         }
-        Pacific/Tongatapu{
+        "Pacific:Tongatapu"{
             territory{"TO"}
         }
-        Pacific/Truk{
+        "Pacific:Truk"{
             territory{"FM"}
             aliases{
                 "Pacific/Yap",
             }
         }
-        Pacific/Wake{
+        "Pacific:Wake"{
             territory{"UM"}
         }
-        Pacific/Wallis{
+        "Pacific:Wallis"{
             territory{"WF"}
         }
     }
