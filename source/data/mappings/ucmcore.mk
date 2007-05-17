@@ -16,7 +16,7 @@
 # EUC-KR, KS C 5601, Windows cp949
 
 UCM_SOURCE_CORE=ibm-912_P100-1995.ucm ibm-913_P100-2000.ucm\
-ibm-914_P100-1995.ucm ibm-915_P100-1995.ucm ibm-916_P100-1995.ucm\
+ibm-914_P100-1995.ucm ibm-915_P100-1995.ucm ibm-5012_P100-1999.ucm\
 ibm-920_P100-1995.ucm ibm-923_P100-1998.ucm ibm-1089_P100-1995.ucm\
 ibm-4909_P100-1999.ucm\
 ibm-5346_P100-1998.ucm ibm-5347_P100-1998.ucm ibm-5348_P100-1997.ucm\
