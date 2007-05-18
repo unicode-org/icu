@@ -1753,4 +1753,26 @@ public class TestCharset extends TestFmwk {
         smBufDecode(decoder, "UTF-7", bs, us);
         smBufEncode(encoder, "UTF-7", us, bs);
     }
+    //Test Charset ISCII
+    public void TestCharsetISCII() {
+        //CharsetProvider provider = new CharsetProviderICU();
+        //Charset cs = provider.charsetForName("UTF-7");        
+        //CharsetEncoder encoder = cs.newEncoder();
+        //CharsetDecoder decoder = cs.newDecoder();
+        
+        CharBuffer us = CharBuffer.allocate(0x100);
+        ByteBuffer bs = ByteBuffer.allocate(0x100);
+        
+        //test Soft Halant
+        us.put((char)0x0915); us.put((char)0x094d); us.put((char)0x200D);
+        bs.put((byte)0xB3); bs.put((byte)0xE8); bs.put((byte)0xE9);
+        
+        bs.limit(bs.position());
+        bs.position(0);
+        us.limit(us.position());
+        us.position(0);
+        
+        //smBufDecode(decoder, "ISCII", bs, us);
+        //smBufEncode(encoder, "ISCII", us, bs);        
+    }
 }
