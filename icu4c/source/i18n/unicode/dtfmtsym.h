@@ -636,6 +636,8 @@ private:
     StringEnumeration* fZoneIDEnumeration;
     Hashtable*         fZoneStringsHash;
     UResourceBundle* fResourceBundle;
+    UResourceBundle* fSupplementalDataBundle;
+    const char*      fCountry;
 
     /**
      * Localized date-time pattern characters. For example: use 'u' as 'y'.
