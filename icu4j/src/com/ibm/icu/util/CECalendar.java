@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -44,7 +44,8 @@ class CECalendar extends Calendar {
         {/*                                */}, // MILLISECONDS_IN_DAY
     };
 
-    private static final int[][] ceMONTH_COUNT = {
+    /* ceToJD() doesn't use this data */
+    /*private static final int[][] ceMONTH_COUNT = {
         //len len2 st  st2
         {30, 30,   0,   0}, // Meskerem
         {30, 30,  30,  30}, // Tekemt 
@@ -63,7 +64,7 @@ class CECalendar extends Calendar {
         // len2 length of month in a leap year
         // st   days in year before start of month
         // st2  days in year before month in leap year
-    };
+    };*/
     
     // The Coptic and Ethiopic calendars differ only in their epochs.
     // We handle this by setting the jdOffset to the difference between

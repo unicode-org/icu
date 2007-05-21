@@ -29,9 +29,10 @@ public class AstroTest extends TestFmwk {
     public void TestSolarLongitude() {
         GregorianCalendar gc = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));
         CalendarAstronomer astro = new CalendarAstronomer();
+        // year, month, day, hour, minute, longitude (radians), ascension(radians), declination(radians)
         final double tests[][] = {
-            { 1980, 7, 27, 00, 00, 124.114347 },
-            { 1988, 7, 27, 00, 00, 124.187732 },
+            { 1980, 7, 27, 00, 00, 2.166442986535465, 2.2070499713207730, 0.3355704075759270 },
+            { 1988, 7, 27, 00, 00, 2.167484927693959, 2.2081183335606176, 0.3353093444275315 },
         };
         logln("");
         for (int i = 0; i < tests.length; i++) {
@@ -41,17 +42,31 @@ public class AstroTest extends TestFmwk {
             astro.setDate(gc.getTime());
 
             double longitude = astro.getSunLongitude();
-            longitude = 0;
+            if (longitude != tests[i][5]) {
+                errln("FAIL: longitude(" + longitude +
+                        ") !=  tests[i][5](" + tests[i][5] +
+                        ") for test " + i);
+            }
             Equatorial result = astro.getSunPosition();
-            result = null;
+            if (result.ascension != tests[i][6]) {
+                errln("FAIL: result.ascension(" + result.ascension +
+                        ") !=  tests[i][6](" + tests[i][6] +
+                        ") for test " + i);
+            }
+            if (result.declination != tests[i][7]) {
+                errln("FAIL: result.declination(" + result.declination +
+                        ") !=  tests[i][7](" + tests[i][7] +
+                        ") for test " + i);
+            }
         }
     }
 
     public void TestLunarPosition() {
         GregorianCalendar gc = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));
         CalendarAstronomer astro = new CalendarAstronomer();
+        // year, month, day, hour, minute, ascension(radians), declination(radians)
         final double tests[][] = {
-            { 1979, 2, 26, 16, 00,  0, 0 },
+            { 1979, 2, 26, 16, 00, -0.3778379118188744, -0.1399698825594198 },
         };
         logln("");
 
@@ -61,8 +76,16 @@ public class AstroTest extends TestFmwk {
             astro.setDate(gc.getTime());
 
             Equatorial result = astro.getMoonPosition();
-            result = null;
-        }
+            if (result.ascension != tests[i][5]) {
+                errln("FAIL: result.ascension(" + result.ascension +
+                        ") !=  tests[i][5](" + tests[i][5] +
+                        ") for test " + i);
+            }
+            if (result.declination != tests[i][6]) {
+                errln("FAIL: result.declination(" + result.declination +
+                        ") !=  tests[i][6](" + tests[i][6] +
+                        ") for test " + i);
+            }        }
 
     }
 
