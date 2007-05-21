@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -125,13 +125,13 @@ public class ICUServiceThreadTest extends TestFmwk
     }
 
     static class TestThread extends Thread {
-        private final String name;
+        //private final String name;
         protected ICUService service;
         private final long delay;
         protected final TestLog log;
 
         public TestThread(String name, ICUService service, long delay, TestLog log) {
-            this.name = name + " ";
+            //this.name = name + " ";
             this.service = service;
             this.delay = delay;
             this.log = new DelegatingLog(log);
