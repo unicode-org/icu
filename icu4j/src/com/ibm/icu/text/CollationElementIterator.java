@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2006, International Business Machines Corporation and    *
+* Copyright (C) 1996-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -819,7 +819,7 @@ public final class CollationElementIterator
     /**
      * true if Hiragana quatenary is on
      */
-    private boolean m_isHiragana4_;
+    //private boolean m_isHiragana4_;
     /**
      * CE buffer
      */
@@ -953,7 +953,7 @@ public final class CollationElementIterator
         m_CEBufferSize_ = 0;
         m_FCDLimit_ = -1;
         m_FCDStart_ = m_source_.getLength();
-        m_isHiragana4_ = m_collator_.m_isHiragana4_;
+        //m_isHiragana4_ = m_collator_.m_isHiragana4_;
         m_isForwards_ = true;
     }
 
