@@ -169,849 +169,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static final class UnicodeBlock extends Character.Subset 
     {
-        // blocks objects ---------------------------------------------------
-        
-        /** 
-         * @stable ICU 2.6
-         */
-        public static final UnicodeBlock NO_BLOCK 
-            = new UnicodeBlock("NO_BLOCK", 0);
-
-        /** 
-         * @stable ICU 2.4
-         */
-        public static final UnicodeBlock BASIC_LATIN 
-            = new UnicodeBlock("BASIC_LATIN", 1);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock LATIN_1_SUPPLEMENT 
-            = new UnicodeBlock("LATIN_1_SUPPLEMENT", 2);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock LATIN_EXTENDED_A
-            = new UnicodeBlock("LATIN_EXTENDED_A", 3);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock LATIN_EXTENDED_B 
-            = new UnicodeBlock("LATIN_EXTENDED_B", 4);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock IPA_EXTENSIONS 
-            = new UnicodeBlock("IPA_EXTENSIONS", 5);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock SPACING_MODIFIER_LETTERS 
-            = new UnicodeBlock("SPACING_MODIFIER_LETTERS", 6);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock COMBINING_DIACRITICAL_MARKS 
-            = new UnicodeBlock("COMBINING_DIACRITICAL_MARKS", 7);
-        /**
-         * Unicode 3.2 renames this block to "Greek and Coptic".
-         * @stable ICU 2.4
-         */
-        public static final UnicodeBlock GREEK
-            = new UnicodeBlock("GREEK", 8);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock CYRILLIC 
-            = new UnicodeBlock("CYRILLIC", 9);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock ARMENIAN 
-            = new UnicodeBlock("ARMENIAN", 10);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock HEBREW 
-            = new UnicodeBlock("HEBREW", 11);  
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock ARABIC
-            = new UnicodeBlock("ARABIC", 12);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock SYRIAC 
-            = new UnicodeBlock("SYRIAC", 13);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock THAANA 
-            = new UnicodeBlock("THAANA", 14);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock DEVANAGARI 
-            = new UnicodeBlock("DEVANAGARI", 15);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock BENGALI 
-            = new UnicodeBlock("BENGALI", 16);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock GURMUKHI 
-            = new UnicodeBlock("GURMUKHI", 17);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock GUJARATI 
-            = new UnicodeBlock("GUJARATI", 18);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock ORIYA 
-            = new UnicodeBlock("ORIYA", 19);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock TAMIL 
-            = new UnicodeBlock("TAMIL", 20);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock TELUGU 
-            = new UnicodeBlock("TELUGU", 21);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock KANNADA 
-            = new UnicodeBlock("KANNADA", 22);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock MALAYALAM 
-            = new UnicodeBlock("MALAYALAM", 23);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock SINHALA 
-            = new UnicodeBlock("SINHALA", 24);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock THAI 
-            = new UnicodeBlock("THAI", 25);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock LAO 
-            = new UnicodeBlock("LAO", 26);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock TIBETAN 
-            = new UnicodeBlock("TIBETAN", 27);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock MYANMAR 
-            = new UnicodeBlock("MYANMAR", 28);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock GEORGIAN 
-            = new UnicodeBlock("GEORGIAN", 29);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock HANGUL_JAMO 
-            = new UnicodeBlock("HANGUL_JAMO", 30);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock ETHIOPIC 
-            = new UnicodeBlock("ETHIOPIC", 31);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock CHEROKEE 
-            = new UnicodeBlock("CHEROKEE", 32);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS 
-            = new UnicodeBlock("UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS", 33);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock OGHAM 
-            = new UnicodeBlock("OGHAM", 34);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock RUNIC 
-            = new UnicodeBlock("RUNIC", 35);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock KHMER 
-            = new UnicodeBlock("KHMER", 36);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock MONGOLIAN 
-            = new UnicodeBlock("MONGOLIAN", 37);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock LATIN_EXTENDED_ADDITIONAL 
-            = new UnicodeBlock("LATIN_EXTENDED_ADDITIONAL", 38);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock GREEK_EXTENDED 
-            = new UnicodeBlock("GREEK_EXTENDED", 39);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock GENERAL_PUNCTUATION 
-            = new UnicodeBlock("GENERAL_PUNCTUATION", 40);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock SUPERSCRIPTS_AND_SUBSCRIPTS 
-            = new UnicodeBlock("SUPERSCRIPTS_AND_SUBSCRIPTS", 41);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock CURRENCY_SYMBOLS 
-            = new UnicodeBlock("CURRENCY_SYMBOLS", 42);
-        /**
-         * Unicode 3.2 renames this block to "Combining Diacritical Marks for 
-         * Symbols".
-         * @stable ICU 2.4
-         */
-        public static final UnicodeBlock COMBINING_MARKS_FOR_SYMBOLS 
-            = new UnicodeBlock("COMBINING_MARKS_FOR_SYMBOLS", 43);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock LETTERLIKE_SYMBOLS 
-            = new UnicodeBlock("LETTERLIKE_SYMBOLS", 44);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock NUMBER_FORMS 
-            = new UnicodeBlock("NUMBER_FORMS", 45);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock ARROWS 
-            = new UnicodeBlock("ARROWS", 46);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock MATHEMATICAL_OPERATORS 
-            = new UnicodeBlock("MATHEMATICAL_OPERATORS", 47);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock MISCELLANEOUS_TECHNICAL 
-            = new UnicodeBlock("MISCELLANEOUS_TECHNICAL", 48);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock CONTROL_PICTURES 
-            = new UnicodeBlock("CONTROL_PICTURES", 49);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock OPTICAL_CHARACTER_RECOGNITION 
-            = new UnicodeBlock("OPTICAL_CHARACTER_RECOGNITION", 50);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock ENCLOSED_ALPHANUMERICS 
-            = new UnicodeBlock("ENCLOSED_ALPHANUMERICS", 51);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock BOX_DRAWING 
-            = new UnicodeBlock("BOX_DRAWING", 52);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock BLOCK_ELEMENTS 
-            = new UnicodeBlock("BLOCK_ELEMENTS", 53);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock GEOMETRIC_SHAPES 
-            = new UnicodeBlock("GEOMETRIC_SHAPES", 54);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock MISCELLANEOUS_SYMBOLS 
-            = new UnicodeBlock("MISCELLANEOUS_SYMBOLS", 55);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock DINGBATS 
-            = new UnicodeBlock("DINGBATS", 56);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock BRAILLE_PATTERNS 
-            = new UnicodeBlock("BRAILLE_PATTERNS", 57);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock CJK_RADICALS_SUPPLEMENT 
-            = new UnicodeBlock("CJK_RADICALS_SUPPLEMENT", 58);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock KANGXI_RADICALS 
-            = new UnicodeBlock("KANGXI_RADICALS", 59);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock IDEOGRAPHIC_DESCRIPTION_CHARACTERS 
-            = new UnicodeBlock("IDEOGRAPHIC_DESCRIPTION_CHARACTERS", 60);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock CJK_SYMBOLS_AND_PUNCTUATION 
-            = new UnicodeBlock("CJK_SYMBOLS_AND_PUNCTUATION", 61);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock HIRAGANA 
-            = new UnicodeBlock("HIRAGANA", 62);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock KATAKANA 
-            = new UnicodeBlock("KATAKANA", 63);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock BOPOMOFO 
-            = new UnicodeBlock("BOPOMOFO", 64);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock HANGUL_COMPATIBILITY_JAMO 
-            = new UnicodeBlock("HANGUL_COMPATIBILITY_JAMO", 65);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock KANBUN 
-            = new UnicodeBlock("KANBUN", 66);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock BOPOMOFO_EXTENDED 
-            = new UnicodeBlock("BOPOMOFO_EXTENDED", 67);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock ENCLOSED_CJK_LETTERS_AND_MONTHS 
-            = new UnicodeBlock("ENCLOSED_CJK_LETTERS_AND_MONTHS", 68);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock CJK_COMPATIBILITY 
-            = new UnicodeBlock("CJK_COMPATIBILITY", 69);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A 
-            = new UnicodeBlock("CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A", 70);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock CJK_UNIFIED_IDEOGRAPHS 
-            = new UnicodeBlock("CJK_UNIFIED_IDEOGRAPHS", 71);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock YI_SYLLABLES 
-            = new UnicodeBlock("YI_SYLLABLES", 72);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock YI_RADICALS 
-            = new UnicodeBlock("YI_RADICALS", 73);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock HANGUL_SYLLABLES 
-            = new UnicodeBlock("HANGUL_SYLLABLES", 74);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock HIGH_SURROGATES 
-            = new UnicodeBlock("HIGH_SURROGATES", 75);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock HIGH_PRIVATE_USE_SURROGATES 
-            = new UnicodeBlock("HIGH_PRIVATE_USE_SURROGATES", 76);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock LOW_SURROGATES 
-            = new UnicodeBlock("LOW_SURROGATES", 77);
-        /**
-         * Same as public static final int PRIVATE_USE.
-         * Until Unicode 3.1.1; the corresponding block name was "Private Use";
-         * and multiple code point ranges had this block.
-         * Unicode 3.2 renames the block for the BMP PUA to "Private Use Area" 
-         * and adds separate blocks for the supplementary PUAs.
-         * @stable ICU 2.4
-         */
-        public static final UnicodeBlock PRIVATE_USE_AREA 
-            = new UnicodeBlock("PRIVATE_USE_AREA",  78);
-        /**
-         * Same as public static final int PRIVATE_USE_AREA.
-         * Until Unicode 3.1.1; the corresponding block name was "Private Use";
-         * and multiple code point ranges had this block.
-         * Unicode 3.2 renames the block for the BMP PUA to "Private Use Area" 
-         * and adds separate blocks for the supplementary PUAs.
-         * @stable ICU 2.4
-         */
-        public static final UnicodeBlock PRIVATE_USE 
-            = PRIVATE_USE_AREA;
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock CJK_COMPATIBILITY_IDEOGRAPHS 
-            = new UnicodeBlock("CJK_COMPATIBILITY_IDEOGRAPHS", 79);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock ALPHABETIC_PRESENTATION_FORMS 
-            = new UnicodeBlock("ALPHABETIC_PRESENTATION_FORMS", 80);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock ARABIC_PRESENTATION_FORMS_A 
-            = new UnicodeBlock("ARABIC_PRESENTATION_FORMS_A", 81);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock COMBINING_HALF_MARKS 
-            = new UnicodeBlock("COMBINING_HALF_MARKS", 82);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock CJK_COMPATIBILITY_FORMS 
-            = new UnicodeBlock("CJK_COMPATIBILITY_FORMS", 83);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock SMALL_FORM_VARIANTS 
-            = new UnicodeBlock("SMALL_FORM_VARIANTS", 84);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock ARABIC_PRESENTATION_FORMS_B 
-            = new UnicodeBlock("ARABIC_PRESENTATION_FORMS_B", 85);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock SPECIALS 
-            = new UnicodeBlock("SPECIALS", 86);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock HALFWIDTH_AND_FULLWIDTH_FORMS 
-            = new UnicodeBlock("HALFWIDTH_AND_FULLWIDTH_FORMS", 87);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock OLD_ITALIC 
-            = new UnicodeBlock("OLD_ITALIC", 88);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock GOTHIC 
-            = new UnicodeBlock("GOTHIC", 89);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock DESERET 
-            = new UnicodeBlock("DESERET", 90);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock BYZANTINE_MUSICAL_SYMBOLS 
-            = new UnicodeBlock("BYZANTINE_MUSICAL_SYMBOLS", 91);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock MUSICAL_SYMBOLS 
-            = new UnicodeBlock("MUSICAL_SYMBOLS", 92);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock MATHEMATICAL_ALPHANUMERIC_SYMBOLS 
-            = new UnicodeBlock("MATHEMATICAL_ALPHANUMERIC_SYMBOLS", 93);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B  
-            = new UnicodeBlock("CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B", 94);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock 
-            CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT 
-            = new UnicodeBlock("CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT", 95);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock TAGS 
-            = new UnicodeBlock("TAGS", 96);
-    
-        // New blocks in Unicode 3.2
-    
-        /** 
-         * Unicode 4.0.1 renames the "Cyrillic Supplementary" block to "Cyrillic Supplement".
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock CYRILLIC_SUPPLEMENTARY 
-            = new UnicodeBlock("CYRILLIC_SUPPLEMENTARY", 97);
-        /** 
-         * Unicode 4.0.1 renames the "Cyrillic Supplementary" block to "Cyrillic Supplement".
-         * @stable ICU 3.0
-         */
-        public static final UnicodeBlock CYRILLIC_SUPPLEMENT 
-            = new UnicodeBlock("CYRILLIC_SUPPLEMENT", 97);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock TAGALOG 
-            = new UnicodeBlock("TAGALOG", 98);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock HANUNOO 
-            = new UnicodeBlock("HANUNOO", 99);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock BUHID 
-            = new UnicodeBlock("BUHID", 100);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock TAGBANWA 
-            = new UnicodeBlock("TAGBANWA", 101);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock MISCELLANEOUS_MATHEMATICAL_SYMBOLS_A 
-            = new UnicodeBlock("MISCELLANEOUS_MATHEMATICAL_SYMBOLS_A", 102);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock SUPPLEMENTAL_ARROWS_A 
-            = new UnicodeBlock("SUPPLEMENTAL_ARROWS_A", 103);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock SUPPLEMENTAL_ARROWS_B 
-            = new UnicodeBlock("SUPPLEMENTAL_ARROWS_B", 104);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock MISCELLANEOUS_MATHEMATICAL_SYMBOLS_B 
-            = new UnicodeBlock("MISCELLANEOUS_MATHEMATICAL_SYMBOLS_B", 105);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock SUPPLEMENTAL_MATHEMATICAL_OPERATORS 
-            = new UnicodeBlock("SUPPLEMENTAL_MATHEMATICAL_OPERATORS", 106);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock KATAKANA_PHONETIC_EXTENSIONS 
-            = new UnicodeBlock("KATAKANA_PHONETIC_EXTENSIONS", 107);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock VARIATION_SELECTORS 
-            = new UnicodeBlock("VARIATION_SELECTORS", 108);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock SUPPLEMENTARY_PRIVATE_USE_AREA_A 
-            = new UnicodeBlock("SUPPLEMENTARY_PRIVATE_USE_AREA_A", 109);
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock SUPPLEMENTARY_PRIVATE_USE_AREA_B 
-            = new UnicodeBlock("SUPPLEMENTARY_PRIVATE_USE_AREA_B", 110);
-   
-        /** 
-         * @stable ICU 2.6 
-         */
-        public static final UnicodeBlock LIMBU 
-            = new UnicodeBlock("LIMBU", 111);
-        /** 
-         * @stable ICU 2.6 
-         */
-        public static final UnicodeBlock TAI_LE 
-            = new UnicodeBlock("TAI LE", 112);
-        /** 
-         * @stable ICU 2.6 
-         */
-        public static final UnicodeBlock KHMER_SYMBOLS 
-            = new UnicodeBlock("KHMER SYMBOLS", 113);
-
-        /** 
-         * @stable ICU 2.6 
-         */
-        public static final UnicodeBlock PHONETIC_EXTENSIONS 
-            = new UnicodeBlock("PHONETIC EXTENSIONS", 114);
-
-        /** 
-         * @stable ICU 2.6 
-         */
-        public static final UnicodeBlock MISCELLANEOUS_SYMBOLS_AND_ARROWS 
-            = new UnicodeBlock("MISCELLANEOUS_SYMBOLS_AND_ARROWS", 115);
-        /** 
-         * @stable ICU 2.6 
-         */
-        public static final UnicodeBlock YIJING_HEXAGRAM_SYMBOLS 
-            = new UnicodeBlock("YIJING_HEXAGRAM_SYMBOLS", 116);
-        /** 
-         * @stable ICU 2.6 
-         */
-        public static final UnicodeBlock LINEAR_B_SYLLABARY 
-            = new UnicodeBlock("LINEAR_B_SYLLABARY", 117);
-        /** 
-         * @stable ICU 2.6 
-         */
-        public static final UnicodeBlock LINEAR_B_IDEOGRAMS 
-            = new UnicodeBlock("LINEAR_B_IDEOGRAMS", 118);
-        /** 
-         * @stable ICU 2.6 
-         */
-        public static final UnicodeBlock AEGEAN_NUMBERS 
-            = new UnicodeBlock("AEGEAN_NUMBERS", 119);                                               
-        /** 
-         * @stable ICU 2.6 
-         */
-        public static final UnicodeBlock UGARITIC 
-            = new UnicodeBlock("UGARITIC", 120);
-        /** 
-         * @stable ICU 2.6 
-         */
-        public static final UnicodeBlock SHAVIAN 
-            = new UnicodeBlock("SHAVIAN", 121);
-        /** 
-         * @stable ICU 2.6 
-         */
-        public static final UnicodeBlock OSMANYA 
-            = new UnicodeBlock("OSMANYA", 122);
-        /** 
-         * @stable ICU 2.6 
-         */
-        public static final UnicodeBlock CYPRIOT_SYLLABARY 
-            = new UnicodeBlock("CYPRIOT_SYLLABARY", 123);
-        /** 
-         * @stable ICU 2.6 
-         */
-        public static final UnicodeBlock TAI_XUAN_JING_SYMBOLS 
-            = new UnicodeBlock("TAI_XUAN_JING_SYMBOLS", 124);
-        
-        /** 
-         * @stable ICU 2.6 
-         */
-        public static final UnicodeBlock VARIATION_SELECTORS_SUPPLEMENT 
-            = new UnicodeBlock("VARIATION_SELECTORS_SUPPLEMENT", 125);                                      
-
-        /* New blocks in Unicode 4.1 */
-
-        /**
-         * @draft ICU 3.4
-         * @provisional This API might change or be removed in a future release.
-         */
-        public static final UnicodeBlock ANCIENT_GREEK_MUSICAL_NOTATION = new UnicodeBlock("ANCIENT_GREEK_MUSICAL_NOTATION", 126); /*[1D200]*/
-
-        /**
-         * @draft ICU 3.4
-         * @provisional This API might change or be removed in a future release.
-         */
-        public static final UnicodeBlock ANCIENT_GREEK_NUMBERS = new UnicodeBlock("ANCIENT_GREEK_NUMBERS", 127); /*[10140]*/
-
-        /**
-         * @draft ICU 3.4
-         * @provisional This API might change or be removed in a future release.
-         */
-        public static final UnicodeBlock ARABIC_SUPPLEMENT = new UnicodeBlock("ARABIC_SUPPLEMENT", 128); /*[0750]*/
-
-        /**
-         * @draft ICU 3.4
-         * @provisional This API might change or be removed in a future release.
-         */
-        public static final UnicodeBlock BUGINESE = new UnicodeBlock("BUGINESE", 129); /*[1A00]*/
-
-        /**
-         * @draft ICU 3.4
-         * @provisional This API might change or be removed in a future release.
-         */
-        public static final UnicodeBlock CJK_STROKES = new UnicodeBlock("CJK_STROKES", 130); /*[31C0]*/
-
-        /**
-         * @draft ICU 3.4
-         * @provisional This API might change or be removed in a future release.
-         */
-        public static final UnicodeBlock COMBINING_DIACRITICAL_MARKS_SUPPLEMENT = new UnicodeBlock("COMBINING_DIACRITICAL_MARKS_SUPPLEMENT", 131); /*[1DC0]*/
-
-        /**
-         * @draft ICU 3.4
-         * @provisional This API might change or be removed in a future release.
-         */
-        public static final UnicodeBlock COPTIC = new UnicodeBlock("COPTIC", 132); /*[2C80]*/
-
-        /**
-         * @draft ICU 3.4
-         * @provisional This API might change or be removed in a future release.
-         */
-        public static final UnicodeBlock ETHIOPIC_EXTENDED = new UnicodeBlock("ETHIOPIC_EXTENDED", 133); /*[2D80]*/
-
-        /**
-         * @draft ICU 3.4
-         * @provisional This API might change or be removed in a future release.
-         */
-        public static final UnicodeBlock ETHIOPIC_SUPPLEMENT = new UnicodeBlock("ETHIOPIC_SUPPLEMENT", 134); /*[1380]*/
-
-        /**
-         * @draft ICU 3.4
-         * @provisional This API might change or be removed in a future release.
-         */
-        public static final UnicodeBlock GEORGIAN_SUPPLEMENT = new UnicodeBlock("GEORGIAN_SUPPLEMENT", 135); /*[2D00]*/
-
-        /**
-         * @draft ICU 3.4
-         * @provisional This API might change or be removed in a future release.
-         */
-        public static final UnicodeBlock GLAGOLITIC = new UnicodeBlock("GLAGOLITIC", 136); /*[2C00]*/
-
-        /**
-         * @draft ICU 3.4
-         * @provisional This API might change or be removed in a future release.
-         */
-        public static final UnicodeBlock KHAROSHTHI = new UnicodeBlock("KHAROSHTHI", 137); /*[10A00]*/
-
-        /**
-         * @draft ICU 3.4
-         * @provisional This API might change or be removed in a future release.
-         */
-        public static final UnicodeBlock MODIFIER_TONE_LETTERS = new UnicodeBlock("MODIFIER_TONE_LETTERS", 138); /*[A700]*/
-
-        /**
-         * @draft ICU 3.4
-         * @provisional This API might change or be removed in a future release.
-         */
-        public static final UnicodeBlock NEW_TAI_LUE = new UnicodeBlock("NEW_TAI_LUE", 139); /*[1980]*/
-
-        /**
-         * @draft ICU 3.4
-         * @provisional This API might change or be removed in a future release.
-         */
-        public static final UnicodeBlock OLD_PERSIAN = new UnicodeBlock("OLD_PERSIAN", 140); /*[103A0]*/
-
-        /**
-         * @draft ICU 3.4
-         * @provisional This API might change or be removed in a future release.
-         */
-        public static final UnicodeBlock PHONETIC_EXTENSIONS_SUPPLEMENT = new UnicodeBlock("PHONETIC_EXTENSIONS_SUPPLEMENT", 141); /*[1D80]*/
-
-        /**
-         * @draft ICU 3.4
-         * @provisional This API might change or be removed in a future release.
-         */
-        public static final UnicodeBlock SUPPLEMENTAL_PUNCTUATION = new UnicodeBlock("SUPPLEMENTAL_PUNCTUATION", 142); /*[2E00]*/
-
-        /**
-         * @draft ICU 3.4
-         * @provisional This API might change or be removed in a future release.
-         */
-        public static final UnicodeBlock SYLOTI_NAGRI = new UnicodeBlock("SYLOTI_NAGRI", 143); /*[A800]*/
-
-        /**
-         * @draft ICU 3.4
-         * @provisional This API might change or be removed in a future release.
-         */
-        public static final UnicodeBlock TIFINAGH = new UnicodeBlock("TIFINAGH", 144); /*[2D30]*/
-
-        /**
-         * @draft ICU 3.4
-         * @provisional This API might change or be removed in a future release.
-         */
-        public static final UnicodeBlock VERTICAL_FORMS = new UnicodeBlock("VERTICAL_FORMS", 145); /*[FE10]*/
-
-        /** 
-         * @draft ICU 3.6 
-         * @provisional This API might change or be removed in a future release.
-         */
-        public static final UnicodeBlock NKO = new UnicodeBlock( "NKO", 146); /*[07C0]*/
-        /** 
-         * @draft ICU 3.6 
-         * @provisional This API might change or be removed in a future release.
-         */
-        public static final UnicodeBlock BALINESE = new UnicodeBlock( "BALINESE", 147); /*[1B00]*/
-        /** 
-         * @draft ICU 3.6 
-         * @provisional This API might change or be removed in a future release.
-         */
-        public static final UnicodeBlock LATIN_EXTENDED_C = new UnicodeBlock( "LATIN_EXTENDED_C", 148); /*[2C60]*/
-        /** 
-         * @draft ICU 3.6 
-         * @provisional This API might change or be removed in a future release. 
-         */
-        public static final UnicodeBlock LATIN_EXTENDED_D = new UnicodeBlock( "LATIN_EXTENDED_D", 149); /*[A720]*/
-        /** 
-         * @draft ICU 3.6 
-         * @provisional This API might change or be removed in a future release.
-         */
-        public static final UnicodeBlock PHAGS_PA = new UnicodeBlock( "PHAGS_PA", 150); /*[A840]*/
-        /** 
-         * @draft ICU 3.6 
-         * @provisional This API might change or be removed in a future release.
-         */
-        public static final UnicodeBlock PHOENICIAN = new UnicodeBlock( "PHOENICIAN", 151); /*[10900]*/
-        /** 
-         * @draft ICU 3.6 
-         * @provisional This API might change or be removed in a future release.
-         */
-        public static final UnicodeBlock CUNEIFORM = new UnicodeBlock( "CUNEIFORM", 152); /*[12000]*/
-        /** 
-         * @draft ICU 3.6 
-         * @provisional This API might change or be removed in a future release.
-         */
-        public static final UnicodeBlock CUNEIFORM_NUMBERS_AND_PUNCTUATION = new UnicodeBlock( "CUNEIFORM_NUMBERS_AND_PUNCTUATION", 153); /*[12400]*/
-        /**
-         * @draft ICU 3.6 
-         * @provisional This API might change or be removed in a future release.
-         */
-        public static final UnicodeBlock COUNTING_ROD_NUMERALS = new UnicodeBlock( "COUNTING_ROD_NUMERALS", 154); /*[1D360]*/
-        
-        /** 
-         * @stable ICU 2.4 
-         */
-        public static final UnicodeBlock INVALID_CODE 
-            = new UnicodeBlock("INVALID_CODE", -1);
-           
         // block id corresponding to icu4c -----------------------------------
-           
+        
         /** 
          * @stable ICU 2.4 
          */
@@ -1720,7 +879,848 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @stable ICU 2.4 
          */
         public static final int COUNT = 155;
+
+        // blocks objects ---------------------------------------------------
         
+        /** 
+         * @stable ICU 2.6
+         */
+        public static final UnicodeBlock NO_BLOCK 
+            = new UnicodeBlock("NO_BLOCK", 0);
+
+        /** 
+         * @stable ICU 2.4
+         */
+        public static final UnicodeBlock BASIC_LATIN 
+            = new UnicodeBlock("BASIC_LATIN", BASIC_LATIN_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock LATIN_1_SUPPLEMENT 
+            = new UnicodeBlock("LATIN_1_SUPPLEMENT", LATIN_1_SUPPLEMENT_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock LATIN_EXTENDED_A
+            = new UnicodeBlock("LATIN_EXTENDED_A", LATIN_EXTENDED_A_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock LATIN_EXTENDED_B 
+            = new UnicodeBlock("LATIN_EXTENDED_B", LATIN_EXTENDED_B_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock IPA_EXTENSIONS 
+            = new UnicodeBlock("IPA_EXTENSIONS", IPA_EXTENSIONS_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock SPACING_MODIFIER_LETTERS 
+            = new UnicodeBlock("SPACING_MODIFIER_LETTERS", SPACING_MODIFIER_LETTERS_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock COMBINING_DIACRITICAL_MARKS 
+            = new UnicodeBlock("COMBINING_DIACRITICAL_MARKS", COMBINING_DIACRITICAL_MARKS_ID);
+        /**
+         * Unicode 3.2 renames this block to "Greek and Coptic".
+         * @stable ICU 2.4
+         */
+        public static final UnicodeBlock GREEK
+            = new UnicodeBlock("GREEK", GREEK_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock CYRILLIC 
+            = new UnicodeBlock("CYRILLIC", CYRILLIC_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock ARMENIAN 
+            = new UnicodeBlock("ARMENIAN", ARMENIAN_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock HEBREW 
+            = new UnicodeBlock("HEBREW", HEBREW_ID);  
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock ARABIC
+            = new UnicodeBlock("ARABIC", ARABIC_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock SYRIAC 
+            = new UnicodeBlock("SYRIAC", SYRIAC_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock THAANA 
+            = new UnicodeBlock("THAANA", THAANA_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock DEVANAGARI 
+            = new UnicodeBlock("DEVANAGARI", DEVANAGARI_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock BENGALI 
+            = new UnicodeBlock("BENGALI", BENGALI_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock GURMUKHI 
+            = new UnicodeBlock("GURMUKHI", GURMUKHI_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock GUJARATI 
+            = new UnicodeBlock("GUJARATI", GUJARATI_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock ORIYA 
+            = new UnicodeBlock("ORIYA", ORIYA_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock TAMIL 
+            = new UnicodeBlock("TAMIL", TAMIL_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock TELUGU 
+            = new UnicodeBlock("TELUGU", TELUGU_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock KANNADA 
+            = new UnicodeBlock("KANNADA", KANNADA_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock MALAYALAM 
+            = new UnicodeBlock("MALAYALAM", MALAYALAM_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock SINHALA 
+            = new UnicodeBlock("SINHALA", SINHALA_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock THAI 
+            = new UnicodeBlock("THAI", THAI_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock LAO 
+            = new UnicodeBlock("LAO", LAO_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock TIBETAN 
+            = new UnicodeBlock("TIBETAN", TIBETAN_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock MYANMAR 
+            = new UnicodeBlock("MYANMAR", MYANMAR_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock GEORGIAN 
+            = new UnicodeBlock("GEORGIAN", GEORGIAN_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock HANGUL_JAMO 
+            = new UnicodeBlock("HANGUL_JAMO", HANGUL_JAMO_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock ETHIOPIC 
+            = new UnicodeBlock("ETHIOPIC", ETHIOPIC_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock CHEROKEE 
+            = new UnicodeBlock("CHEROKEE", CHEROKEE_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS 
+            = new UnicodeBlock("UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS", UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock OGHAM 
+            = new UnicodeBlock("OGHAM", OGHAM_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock RUNIC 
+            = new UnicodeBlock("RUNIC", RUNIC_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock KHMER 
+            = new UnicodeBlock("KHMER", KHMER_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock MONGOLIAN 
+            = new UnicodeBlock("MONGOLIAN", MONGOLIAN_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock LATIN_EXTENDED_ADDITIONAL 
+            = new UnicodeBlock("LATIN_EXTENDED_ADDITIONAL", LATIN_EXTENDED_ADDITIONAL_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock GREEK_EXTENDED 
+            = new UnicodeBlock("GREEK_EXTENDED", GREEK_EXTENDED_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock GENERAL_PUNCTUATION 
+            = new UnicodeBlock("GENERAL_PUNCTUATION", GENERAL_PUNCTUATION_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock SUPERSCRIPTS_AND_SUBSCRIPTS 
+            = new UnicodeBlock("SUPERSCRIPTS_AND_SUBSCRIPTS", SUPERSCRIPTS_AND_SUBSCRIPTS_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock CURRENCY_SYMBOLS 
+            = new UnicodeBlock("CURRENCY_SYMBOLS", CURRENCY_SYMBOLS_ID);
+        /**
+         * Unicode 3.2 renames this block to "Combining Diacritical Marks for 
+         * Symbols".
+         * @stable ICU 2.4
+         */
+        public static final UnicodeBlock COMBINING_MARKS_FOR_SYMBOLS 
+            = new UnicodeBlock("COMBINING_MARKS_FOR_SYMBOLS", COMBINING_MARKS_FOR_SYMBOLS_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock LETTERLIKE_SYMBOLS 
+            = new UnicodeBlock("LETTERLIKE_SYMBOLS", LETTERLIKE_SYMBOLS_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock NUMBER_FORMS 
+            = new UnicodeBlock("NUMBER_FORMS", NUMBER_FORMS_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock ARROWS 
+            = new UnicodeBlock("ARROWS", ARROWS_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock MATHEMATICAL_OPERATORS 
+            = new UnicodeBlock("MATHEMATICAL_OPERATORS", MATHEMATICAL_OPERATORS_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock MISCELLANEOUS_TECHNICAL 
+            = new UnicodeBlock("MISCELLANEOUS_TECHNICAL", MISCELLANEOUS_TECHNICAL_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock CONTROL_PICTURES 
+            = new UnicodeBlock("CONTROL_PICTURES", CONTROL_PICTURES_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock OPTICAL_CHARACTER_RECOGNITION 
+            = new UnicodeBlock("OPTICAL_CHARACTER_RECOGNITION", OPTICAL_CHARACTER_RECOGNITION_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock ENCLOSED_ALPHANUMERICS 
+            = new UnicodeBlock("ENCLOSED_ALPHANUMERICS", ENCLOSED_ALPHANUMERICS_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock BOX_DRAWING 
+            = new UnicodeBlock("BOX_DRAWING", BOX_DRAWING_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock BLOCK_ELEMENTS 
+            = new UnicodeBlock("BLOCK_ELEMENTS", BLOCK_ELEMENTS_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock GEOMETRIC_SHAPES 
+            = new UnicodeBlock("GEOMETRIC_SHAPES", GEOMETRIC_SHAPES_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock MISCELLANEOUS_SYMBOLS 
+            = new UnicodeBlock("MISCELLANEOUS_SYMBOLS", MISCELLANEOUS_SYMBOLS_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock DINGBATS 
+            = new UnicodeBlock("DINGBATS", DINGBATS_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock BRAILLE_PATTERNS 
+            = new UnicodeBlock("BRAILLE_PATTERNS", BRAILLE_PATTERNS_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock CJK_RADICALS_SUPPLEMENT 
+            = new UnicodeBlock("CJK_RADICALS_SUPPLEMENT", CJK_RADICALS_SUPPLEMENT_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock KANGXI_RADICALS 
+            = new UnicodeBlock("KANGXI_RADICALS", KANGXI_RADICALS_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock IDEOGRAPHIC_DESCRIPTION_CHARACTERS 
+            = new UnicodeBlock("IDEOGRAPHIC_DESCRIPTION_CHARACTERS", IDEOGRAPHIC_DESCRIPTION_CHARACTERS_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock CJK_SYMBOLS_AND_PUNCTUATION 
+            = new UnicodeBlock("CJK_SYMBOLS_AND_PUNCTUATION", CJK_SYMBOLS_AND_PUNCTUATION_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock HIRAGANA 
+            = new UnicodeBlock("HIRAGANA", HIRAGANA_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock KATAKANA 
+            = new UnicodeBlock("KATAKANA", KATAKANA_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock BOPOMOFO 
+            = new UnicodeBlock("BOPOMOFO", BOPOMOFO_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock HANGUL_COMPATIBILITY_JAMO 
+            = new UnicodeBlock("HANGUL_COMPATIBILITY_JAMO", HANGUL_COMPATIBILITY_JAMO_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock KANBUN 
+            = new UnicodeBlock("KANBUN", KANBUN_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock BOPOMOFO_EXTENDED 
+            = new UnicodeBlock("BOPOMOFO_EXTENDED", BOPOMOFO_EXTENDED_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock ENCLOSED_CJK_LETTERS_AND_MONTHS 
+            = new UnicodeBlock("ENCLOSED_CJK_LETTERS_AND_MONTHS", ENCLOSED_CJK_LETTERS_AND_MONTHS_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock CJK_COMPATIBILITY 
+            = new UnicodeBlock("CJK_COMPATIBILITY", CJK_COMPATIBILITY_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A 
+            = new UnicodeBlock("CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A", CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock CJK_UNIFIED_IDEOGRAPHS 
+            = new UnicodeBlock("CJK_UNIFIED_IDEOGRAPHS", CJK_UNIFIED_IDEOGRAPHS_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock YI_SYLLABLES 
+            = new UnicodeBlock("YI_SYLLABLES", YI_SYLLABLES_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock YI_RADICALS 
+            = new UnicodeBlock("YI_RADICALS", YI_RADICALS_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock HANGUL_SYLLABLES 
+            = new UnicodeBlock("HANGUL_SYLLABLES", HANGUL_SYLLABLES_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock HIGH_SURROGATES 
+            = new UnicodeBlock("HIGH_SURROGATES", HIGH_SURROGATES_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock HIGH_PRIVATE_USE_SURROGATES 
+            = new UnicodeBlock("HIGH_PRIVATE_USE_SURROGATES", HIGH_PRIVATE_USE_SURROGATES_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock LOW_SURROGATES 
+            = new UnicodeBlock("LOW_SURROGATES", LOW_SURROGATES_ID);
+        /**
+         * Same as public static final int PRIVATE_USE.
+         * Until Unicode 3.1.1; the corresponding block name was "Private Use";
+         * and multiple code point ranges had this block.
+         * Unicode 3.2 renames the block for the BMP PUA to "Private Use Area" 
+         * and adds separate blocks for the supplementary PUAs.
+         * @stable ICU 2.4
+         */
+        public static final UnicodeBlock PRIVATE_USE_AREA 
+            = new UnicodeBlock("PRIVATE_USE_AREA",  78);
+        /**
+         * Same as public static final int PRIVATE_USE_AREA.
+         * Until Unicode 3.1.1; the corresponding block name was "Private Use";
+         * and multiple code point ranges had this block.
+         * Unicode 3.2 renames the block for the BMP PUA to "Private Use Area" 
+         * and adds separate blocks for the supplementary PUAs.
+         * @stable ICU 2.4
+         */
+        public static final UnicodeBlock PRIVATE_USE 
+            = PRIVATE_USE_AREA;
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock CJK_COMPATIBILITY_IDEOGRAPHS 
+            = new UnicodeBlock("CJK_COMPATIBILITY_IDEOGRAPHS", CJK_COMPATIBILITY_IDEOGRAPHS_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock ALPHABETIC_PRESENTATION_FORMS 
+            = new UnicodeBlock("ALPHABETIC_PRESENTATION_FORMS", ALPHABETIC_PRESENTATION_FORMS_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock ARABIC_PRESENTATION_FORMS_A 
+            = new UnicodeBlock("ARABIC_PRESENTATION_FORMS_A", ARABIC_PRESENTATION_FORMS_A_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock COMBINING_HALF_MARKS 
+            = new UnicodeBlock("COMBINING_HALF_MARKS", COMBINING_HALF_MARKS_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock CJK_COMPATIBILITY_FORMS 
+            = new UnicodeBlock("CJK_COMPATIBILITY_FORMS", CJK_COMPATIBILITY_FORMS_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock SMALL_FORM_VARIANTS 
+            = new UnicodeBlock("SMALL_FORM_VARIANTS", SMALL_FORM_VARIANTS_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock ARABIC_PRESENTATION_FORMS_B 
+            = new UnicodeBlock("ARABIC_PRESENTATION_FORMS_B", ARABIC_PRESENTATION_FORMS_B_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock SPECIALS 
+            = new UnicodeBlock("SPECIALS", SPECIALS_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock HALFWIDTH_AND_FULLWIDTH_FORMS 
+            = new UnicodeBlock("HALFWIDTH_AND_FULLWIDTH_FORMS", HALFWIDTH_AND_FULLWIDTH_FORMS_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock OLD_ITALIC 
+            = new UnicodeBlock("OLD_ITALIC", OLD_ITALIC_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock GOTHIC 
+            = new UnicodeBlock("GOTHIC", GOTHIC_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock DESERET 
+            = new UnicodeBlock("DESERET", DESERET_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock BYZANTINE_MUSICAL_SYMBOLS 
+            = new UnicodeBlock("BYZANTINE_MUSICAL_SYMBOLS", BYZANTINE_MUSICAL_SYMBOLS_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock MUSICAL_SYMBOLS 
+            = new UnicodeBlock("MUSICAL_SYMBOLS", MUSICAL_SYMBOLS_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock MATHEMATICAL_ALPHANUMERIC_SYMBOLS 
+            = new UnicodeBlock("MATHEMATICAL_ALPHANUMERIC_SYMBOLS", MATHEMATICAL_ALPHANUMERIC_SYMBOLS_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B  
+            = new UnicodeBlock("CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B", CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock 
+            CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT 
+            = new UnicodeBlock("CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT", CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock TAGS 
+            = new UnicodeBlock("TAGS", TAGS_ID);
+    
+        // New blocks in Unicode 3.2
+    
+        /** 
+         * Unicode 4.0.1 renames the "Cyrillic Supplementary" block to "Cyrillic Supplement".
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock CYRILLIC_SUPPLEMENTARY 
+            = new UnicodeBlock("CYRILLIC_SUPPLEMENTARY", CYRILLIC_SUPPLEMENTARY_ID);
+        /** 
+         * Unicode 4.0.1 renames the "Cyrillic Supplementary" block to "Cyrillic Supplement".
+         * @stable ICU 3.0
+         */
+        public static final UnicodeBlock CYRILLIC_SUPPLEMENT 
+            = new UnicodeBlock("CYRILLIC_SUPPLEMENT", CYRILLIC_SUPPLEMENT_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock TAGALOG 
+            = new UnicodeBlock("TAGALOG", TAGALOG_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock HANUNOO 
+            = new UnicodeBlock("HANUNOO", HANUNOO_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock BUHID 
+            = new UnicodeBlock("BUHID", BUHID_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock TAGBANWA 
+            = new UnicodeBlock("TAGBANWA", TAGBANWA_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock MISCELLANEOUS_MATHEMATICAL_SYMBOLS_A 
+            = new UnicodeBlock("MISCELLANEOUS_MATHEMATICAL_SYMBOLS_A", MISCELLANEOUS_MATHEMATICAL_SYMBOLS_A_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock SUPPLEMENTAL_ARROWS_A 
+            = new UnicodeBlock("SUPPLEMENTAL_ARROWS_A", SUPPLEMENTAL_ARROWS_A_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock SUPPLEMENTAL_ARROWS_B 
+            = new UnicodeBlock("SUPPLEMENTAL_ARROWS_B", SUPPLEMENTAL_ARROWS_B_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock MISCELLANEOUS_MATHEMATICAL_SYMBOLS_B 
+            = new UnicodeBlock("MISCELLANEOUS_MATHEMATICAL_SYMBOLS_B", MISCELLANEOUS_MATHEMATICAL_SYMBOLS_B_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock SUPPLEMENTAL_MATHEMATICAL_OPERATORS 
+            = new UnicodeBlock("SUPPLEMENTAL_MATHEMATICAL_OPERATORS", SUPPLEMENTAL_MATHEMATICAL_OPERATORS_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock KATAKANA_PHONETIC_EXTENSIONS 
+            = new UnicodeBlock("KATAKANA_PHONETIC_EXTENSIONS", KATAKANA_PHONETIC_EXTENSIONS_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock VARIATION_SELECTORS 
+            = new UnicodeBlock("VARIATION_SELECTORS", VARIATION_SELECTORS_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock SUPPLEMENTARY_PRIVATE_USE_AREA_A 
+            = new UnicodeBlock("SUPPLEMENTARY_PRIVATE_USE_AREA_A", SUPPLEMENTARY_PRIVATE_USE_AREA_A_ID);
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock SUPPLEMENTARY_PRIVATE_USE_AREA_B 
+            = new UnicodeBlock("SUPPLEMENTARY_PRIVATE_USE_AREA_B", SUPPLEMENTARY_PRIVATE_USE_AREA_B_ID);
+   
+        /** 
+         * @stable ICU 2.6 
+         */
+        public static final UnicodeBlock LIMBU 
+            = new UnicodeBlock("LIMBU", LIMBU_ID);
+        /** 
+         * @stable ICU 2.6 
+         */
+        public static final UnicodeBlock TAI_LE 
+            = new UnicodeBlock("TAI_LE", TAI_LE_ID);
+        /** 
+         * @stable ICU 2.6 
+         */
+        public static final UnicodeBlock KHMER_SYMBOLS 
+            = new UnicodeBlock("KHMER_SYMBOLS", KHMER_SYMBOLS_ID);
+
+        /** 
+         * @stable ICU 2.6 
+         */
+        public static final UnicodeBlock PHONETIC_EXTENSIONS 
+            = new UnicodeBlock("PHONETIC_EXTENSIONS", PHONETIC_EXTENSIONS_ID);
+
+        /** 
+         * @stable ICU 2.6 
+         */
+        public static final UnicodeBlock MISCELLANEOUS_SYMBOLS_AND_ARROWS 
+            = new UnicodeBlock("MISCELLANEOUS_SYMBOLS_AND_ARROWS", MISCELLANEOUS_SYMBOLS_AND_ARROWS_ID);
+        /** 
+         * @stable ICU 2.6 
+         */
+        public static final UnicodeBlock YIJING_HEXAGRAM_SYMBOLS 
+            = new UnicodeBlock("YIJING_HEXAGRAM_SYMBOLS", YIJING_HEXAGRAM_SYMBOLS_ID);
+        /** 
+         * @stable ICU 2.6 
+         */
+        public static final UnicodeBlock LINEAR_B_SYLLABARY 
+            = new UnicodeBlock("LINEAR_B_SYLLABARY", LINEAR_B_SYLLABARY_ID);
+        /** 
+         * @stable ICU 2.6 
+         */
+        public static final UnicodeBlock LINEAR_B_IDEOGRAMS 
+            = new UnicodeBlock("LINEAR_B_IDEOGRAMS", LINEAR_B_IDEOGRAMS_ID);
+        /** 
+         * @stable ICU 2.6 
+         */
+        public static final UnicodeBlock AEGEAN_NUMBERS 
+            = new UnicodeBlock("AEGEAN_NUMBERS", AEGEAN_NUMBERS_ID);                                               
+        /** 
+         * @stable ICU 2.6 
+         */
+        public static final UnicodeBlock UGARITIC 
+            = new UnicodeBlock("UGARITIC", UGARITIC_ID);
+        /** 
+         * @stable ICU 2.6 
+         */
+        public static final UnicodeBlock SHAVIAN 
+            = new UnicodeBlock("SHAVIAN", SHAVIAN_ID);
+        /** 
+         * @stable ICU 2.6 
+         */
+        public static final UnicodeBlock OSMANYA 
+            = new UnicodeBlock("OSMANYA", OSMANYA_ID);
+        /** 
+         * @stable ICU 2.6 
+         */
+        public static final UnicodeBlock CYPRIOT_SYLLABARY 
+            = new UnicodeBlock("CYPRIOT_SYLLABARY", CYPRIOT_SYLLABARY_ID);
+        /** 
+         * @stable ICU 2.6 
+         */
+        public static final UnicodeBlock TAI_XUAN_JING_SYMBOLS 
+            = new UnicodeBlock("TAI_XUAN_JING_SYMBOLS", TAI_XUAN_JING_SYMBOLS_ID);
+        
+        /** 
+         * @stable ICU 2.6 
+         */
+        public static final UnicodeBlock VARIATION_SELECTORS_SUPPLEMENT 
+            = new UnicodeBlock("VARIATION_SELECTORS_SUPPLEMENT", VARIATION_SELECTORS_SUPPLEMENT_ID);                                      
+
+        /* New blocks in Unicode 4.1 */
+
+        /**
+         * @draft ICU 3.4
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock ANCIENT_GREEK_MUSICAL_NOTATION = new UnicodeBlock("ANCIENT_GREEK_MUSICAL_NOTATION", ANCIENT_GREEK_MUSICAL_NOTATION_ID); /*[1D200]*/
+
+        /**
+         * @draft ICU 3.4
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock ANCIENT_GREEK_NUMBERS = new UnicodeBlock("ANCIENT_GREEK_NUMBERS", ANCIENT_GREEK_NUMBERS_ID); /*[10140]*/
+
+        /**
+         * @draft ICU 3.4
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock ARABIC_SUPPLEMENT = new UnicodeBlock("ARABIC_SUPPLEMENT", ARABIC_SUPPLEMENT_ID); /*[0750]*/
+
+        /**
+         * @draft ICU 3.4
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock BUGINESE = new UnicodeBlock("BUGINESE", BUGINESE_ID); /*[1A00]*/
+
+        /**
+         * @draft ICU 3.4
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock CJK_STROKES = new UnicodeBlock("CJK_STROKES", CJK_STROKES_ID); /*[31C0]*/
+
+        /**
+         * @draft ICU 3.4
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock COMBINING_DIACRITICAL_MARKS_SUPPLEMENT = new UnicodeBlock("COMBINING_DIACRITICAL_MARKS_SUPPLEMENT", COMBINING_DIACRITICAL_MARKS_SUPPLEMENT_ID); /*[1DC0]*/
+
+        /**
+         * @draft ICU 3.4
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock COPTIC = new UnicodeBlock("COPTIC", COPTIC_ID); /*[2C80]*/
+
+        /**
+         * @draft ICU 3.4
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock ETHIOPIC_EXTENDED = new UnicodeBlock("ETHIOPIC_EXTENDED", ETHIOPIC_EXTENDED_ID); /*[2D80]*/
+
+        /**
+         * @draft ICU 3.4
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock ETHIOPIC_SUPPLEMENT = new UnicodeBlock("ETHIOPIC_SUPPLEMENT", ETHIOPIC_SUPPLEMENT_ID); /*[1380]*/
+
+        /**
+         * @draft ICU 3.4
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock GEORGIAN_SUPPLEMENT = new UnicodeBlock("GEORGIAN_SUPPLEMENT", GEORGIAN_SUPPLEMENT_ID); /*[2D00]*/
+
+        /**
+         * @draft ICU 3.4
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock GLAGOLITIC = new UnicodeBlock("GLAGOLITIC", GLAGOLITIC_ID); /*[2C00]*/
+
+        /**
+         * @draft ICU 3.4
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock KHAROSHTHI = new UnicodeBlock("KHAROSHTHI", KHAROSHTHI_ID); /*[10A00]*/
+
+        /**
+         * @draft ICU 3.4
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock MODIFIER_TONE_LETTERS = new UnicodeBlock("MODIFIER_TONE_LETTERS", MODIFIER_TONE_LETTERS_ID); /*[A700]*/
+
+        /**
+         * @draft ICU 3.4
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock NEW_TAI_LUE = new UnicodeBlock("NEW_TAI_LUE", NEW_TAI_LUE_ID); /*[1980]*/
+
+        /**
+         * @draft ICU 3.4
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock OLD_PERSIAN = new UnicodeBlock("OLD_PERSIAN", OLD_PERSIAN_ID); /*[103A0]*/
+
+        /**
+         * @draft ICU 3.4
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock PHONETIC_EXTENSIONS_SUPPLEMENT = new UnicodeBlock("PHONETIC_EXTENSIONS_SUPPLEMENT", PHONETIC_EXTENSIONS_SUPPLEMENT_ID); /*[1D80]*/
+
+        /**
+         * @draft ICU 3.4
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock SUPPLEMENTAL_PUNCTUATION = new UnicodeBlock("SUPPLEMENTAL_PUNCTUATION", SUPPLEMENTAL_PUNCTUATION_ID); /*[2E00]*/
+
+        /**
+         * @draft ICU 3.4
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock SYLOTI_NAGRI = new UnicodeBlock("SYLOTI_NAGRI", SYLOTI_NAGRI_ID); /*[A800]*/
+
+        /**
+         * @draft ICU 3.4
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock TIFINAGH = new UnicodeBlock("TIFINAGH", TIFINAGH_ID); /*[2D30]*/
+
+        /**
+         * @draft ICU 3.4
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock VERTICAL_FORMS = new UnicodeBlock("VERTICAL_FORMS", VERTICAL_FORMS_ID); /*[FE10]*/
+
+        /** 
+         * @draft ICU 3.6 
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock NKO = new UnicodeBlock("NKO", NKO_ID); /*[07C0]*/
+        /** 
+         * @draft ICU 3.6 
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock BALINESE = new UnicodeBlock("BALINESE", BALINESE_ID); /*[1B00]*/
+        /** 
+         * @draft ICU 3.6 
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock LATIN_EXTENDED_C = new UnicodeBlock("LATIN_EXTENDED_C", LATIN_EXTENDED_C_ID); /*[2C60]*/
+        /** 
+         * @draft ICU 3.6 
+         * @provisional This API might change or be removed in a future release. 
+         */
+        public static final UnicodeBlock LATIN_EXTENDED_D = new UnicodeBlock("LATIN_EXTENDED_D", LATIN_EXTENDED_D_ID); /*[A720]*/
+        /** 
+         * @draft ICU 3.6 
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock PHAGS_PA = new UnicodeBlock("PHAGS_PA", PHAGS_PA_ID); /*[A840]*/
+        /** 
+         * @draft ICU 3.6 
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock PHOENICIAN = new UnicodeBlock("PHOENICIAN", PHOENICIAN_ID); /*[10900]*/
+        /** 
+         * @draft ICU 3.6 
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock CUNEIFORM = new UnicodeBlock("CUNEIFORM", CUNEIFORM_ID); /*[12000]*/
+        /** 
+         * @draft ICU 3.6 
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock CUNEIFORM_NUMBERS_AND_PUNCTUATION = new UnicodeBlock("CUNEIFORM_NUMBERS_AND_PUNCTUATION", CUNEIFORM_NUMBERS_AND_PUNCTUATION_ID); /*[12400]*/
+        /**
+         * @draft ICU 3.6 
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock COUNTING_ROD_NUMERALS = new UnicodeBlock("COUNTING_ROD_NUMERALS", COUNTING_ROD_NUMERALS_ID); /*[1D360]*/
+        
+        /** 
+         * @stable ICU 2.4 
+         */
+        public static final UnicodeBlock INVALID_CODE 
+            = new UnicodeBlock("INVALID_CODE", INVALID_CODE_ID);
+                   
         // public methods --------------------------------------------------
         
         /** 
