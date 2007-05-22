@@ -2379,4 +2379,28 @@ public final class UCharacterTest extends TestFmwk
             errln("UBiDiProps.getDummy().getClass(0x20)!=0");
         }
     }
+    
+    public void TestBlockData()
+    {
+        Class ubc = UCharacter.UnicodeBlock.class;
+        
+        for (int b = 1; b < UCharacter.UnicodeBlock.COUNT; b += 1) {
+            UCharacter.UnicodeBlock blk = UCharacter.UnicodeBlock.getInstance(b);
+            int id = blk.getID();
+            String name = blk.toString();
+            
+            if (id != b) {
+                errln("UCharacter.UnicodeBlock.getInstance(" + b + ") returned a block with id = " + id);
+            }
+            
+            try {
+                if (ubc.getField(name + "_ID").getInt(blk) != b) {
+                    errln("UCharacter.UnicodeBlock.getInstance(" + b + ") returned a block with a name of " + name +
+                          " which does not match the block id.");
+                }
+            } catch (Exception e) {
+                errln("Couldn't get the id name for id " + b);
+            }
+        }
+    }
 }
