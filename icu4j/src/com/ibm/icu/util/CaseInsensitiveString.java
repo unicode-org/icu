@@ -19,6 +19,14 @@ public class CaseInsensitiveString {
     private String string;
 
     private int hash = 0;
+    
+    private String folded = null;
+    
+    private static String fold(String foldee)
+    {
+        return UCharacter.foldCase(foldee, true);
+    }
+    
     /**
      * Constructs an CaseInsentiveString object from the given string
      * @param s The string to construct this object from 
@@ -41,11 +49,15 @@ public class CaseInsensitiveString {
      * @stable ICU 2.0
      */
     public boolean equals(Object o) {
+        if (folded == null) {
+            folded = fold(string);
+        }
+        
         try {
-            return string.equalsIgnoreCase(((CaseInsensitiveString)o).string);
+            return folded.equals(fold(((CaseInsensitiveString)o).string));
         } catch (ClassCastException e) {
             try {
-                return string.equalsIgnoreCase((String)o);
+                return folded.equals(fold((String) o));
             } catch (ClassCastException e2) {
                 return false;
             }
@@ -58,11 +70,17 @@ public class CaseInsensitiveString {
      * @stable ICU 2.0
      */
     public int hashCode() {
-        if (hash == 0) {
-            hash = UCharacter.foldCase(string, true).hashCode();
+        if (folded == null) {
+            folded = fold(string);
         }
+        
+        if (hash == 0) {
+            hash = folded.hashCode();
+        }
+        
         return hash;
     }
+    
     /**
      * Overrides superclass method
      * @stable ICU 3.6
