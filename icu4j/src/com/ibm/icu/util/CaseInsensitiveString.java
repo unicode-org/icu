@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -22,9 +22,16 @@ public class CaseInsensitiveString {
     
     private String folded = null;
     
-    private static String fold(String foldee)
+    private static String foldCase(String foldee)
     {
         return UCharacter.foldCase(foldee, true);
+    }
+    
+    private void getFolded()
+    {
+        if (folded == null) {
+            folded = foldCase(string);
+        }
     }
     
     /**
@@ -49,15 +56,19 @@ public class CaseInsensitiveString {
      * @stable ICU 2.0
      */
     public boolean equals(Object o) {
-        if (folded == null) {
-            folded = fold(string);
-        }
+        getFolded();
         
         try {
-            return folded.equals(fold(((CaseInsensitiveString)o).string));
+            CaseInsensitiveString cis = (CaseInsensitiveString) o;
+            
+            cis.getFolded();
+            
+            return folded.equals(cis.folded);
         } catch (ClassCastException e) {
             try {
-                return folded.equals(fold((String) o));
+                String s = (String) o;
+                
+                return folded.equals(foldCase(s));
             } catch (ClassCastException e2) {
                 return false;
             }
@@ -70,9 +81,7 @@ public class CaseInsensitiveString {
      * @stable ICU 2.0
      */
     public int hashCode() {
-        if (folded == null) {
-            folded = fold(string);
-        }
+        getFolded();
         
         if (hash == 0) {
             hash = folded.hashCode();
