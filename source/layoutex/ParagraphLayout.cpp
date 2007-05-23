@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2002-2006, International Business Machines
+ *   Copyright (C) 2002-2007, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -29,6 +29,9 @@
 U_NAMESPACE_BEGIN
 
 #define ARRAY_SIZE(array) (sizeof array  / sizeof array[0])
+
+/* Leave this copyright notice here! It needs to go somewhere in this library. */
+static const char copyright[] = U_COPYRIGHT_STRING;
 
 class StyleRuns
 {
