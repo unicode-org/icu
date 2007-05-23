@@ -34,6 +34,9 @@
 
 U_NAMESPACE_BEGIN
 
+/* Leave this copyright notice here! It needs to go somewhere in this library. */
+static const char copyright[] = U_COPYRIGHT_STRING;
+
 const LEUnicode32 DefaultCharMapper::controlChars[] = {
     0x0009, 0x000A, 0x000D,
     /*0x200C, 0x200D,*/ 0x200E, 0x200F,
