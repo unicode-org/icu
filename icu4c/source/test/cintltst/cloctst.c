@@ -227,6 +227,7 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestUResourceBundle);
     TESTCASE(TestDisplayName); 
     TESTCASE(TestAcceptLanguage); 
+    TESTCASE(TestGetLocaleForLCID);
 }
 
 
@@ -2624,5 +2625,92 @@ static void TestDisplayName() {
             }
         }
     }
+}
+
+static void TestGetLocaleForLCID() {
+    int32_t i, length, lengthPre;
+    const char* testLocale = 0;
+    UErrorCode status = U_ZERO_ERROR;
+    const char* temp;
+    char            temp2[40], temp3[40];
+    uint32_t lcid;
+    
+    lcid = uloc_getLCID("en_US");
+    if (lcid != 0x0409) {
+        log_err("  uloc_getLCID(\"en_US\") = %d, expected 0x0409\n", lcid);
+    }
+    
+    lengthPre = uloc_getLocaleForLCID(lcid, temp2, 4, &status);
+    if (status != U_BUFFER_OVERFLOW_ERROR) {
+        log_err("  unexpected result from uloc_getLocaleForLCID with small buffer: %s\n", u_errorName(status));
+    }
+    else {
+        status = U_ZERO_ERROR;
+    }
+    
+    length = uloc_getLocaleForLCID(lcid, temp2, sizeof(temp2)/sizeof(char), &status);
+    if (U_FAILURE(status)) {
+        log_err("  unexpected result from uloc_getLocaleForLCID(0x0409): %s\n", u_errorName(status));
+        status = U_ZERO_ERROR;
+    }
+    
+    if (length != lengthPre) {
+        log_err("  uloc_getLocaleForLCID(0x0409): returned length %d does not match preflight length %d\n", length, lengthPre);
+    }
+    
+    length = uloc_getLocaleForLCID(0x12345, temp2, sizeof(temp2)/sizeof(char), &status);
+    if (U_SUCCESS(status)) {
+        log_err("  unexpected result from uloc_getLocaleForLCID(0x12345): %s, status %s\n", temp2, u_errorName(status));
+    }
+    status = U_ZERO_ERROR;
+    
+    log_verbose("Testing getLocaleForLCID vs. locale data\n");
+    for (i = 0; i < LOCALE_SIZE; i++) {
+        
+        testLocale=rawData2[NAME][i];
+        
+        log_verbose("Testing   %s ......\n", testLocale);
+        
+        sscanf(rawData2[LCID][i], "%x", &lcid);
+        length = uloc_getLocaleForLCID(lcid, temp2, sizeof(temp2)/sizeof(char), &status);
+        if (U_FAILURE(status)) {
+            log_err("  unexpected failure of uloc_getLocaleForLCID(%#04x), status %s\n", lcid, u_errorName(status));
+            status = U_ZERO_ERROR;
+            continue;
+        }
+        
+        if (length != uprv_strlen(temp2)) {
+            log_err("  returned length %d not correct for uloc_getLocaleForLCID(%#04x), expected %d\n", length, lcid, uprv_strlen(temp2));
+        }
+        
+        /* Compare language, country, script */
+        length = uloc_getLanguage(temp2, temp3, sizeof(temp3)/sizeof(char), &status);
+        if (U_FAILURE(status)) {
+            log_err("  couldn't get language in uloc_getLocaleForLCID(%#04x) = %s, status %s\n", lcid, temp2, u_errorName(status));
+            status = U_ZERO_ERROR;
+        }
+        else if (uprv_strcmp(temp3, rawData2[LANG][i]) && !(uprv_strcmp(temp3, "nn") == 0 && uprv_strcmp(rawData2[VAR][i], "NY") == 0)) {
+            log_err("  language doesn't match expected %s in in uloc_getLocaleForLCID(%#04x) = %s\n", rawData2[LANG][i], lcid, temp2);
+        }
+        
+        length = uloc_getScript(temp2, temp3, sizeof(temp3)/sizeof(char), &status);
+        if (U_FAILURE(status)) {
+            log_err("  couldn't get script in uloc_getLocaleForLCID(%#04x) = %s, status %s\n", lcid, temp2, u_errorName(status));
+            status = U_ZERO_ERROR;
+        }
+        else if (uprv_strcmp(temp3, rawData2[SCRIPT][i])) {
+            log_err("  script doesn't match expected %s in in uloc_getLocaleForLCID(%#04x) = %s\n", rawData2[SCRIPT][i], lcid, temp2);
+        }
+        
+        length = uloc_getCountry(temp2, temp3, sizeof(temp3)/sizeof(char), &status);
+        if (U_FAILURE(status)) {
+            log_err("  couldn't get country in uloc_getLocaleForLCID(%#04x) = %s, status %s\n", lcid, temp2, u_errorName(status));
+            status = U_ZERO_ERROR;
+        }
+        else if (uprv_strlen(rawData2[CTRY][i]) && uprv_strcmp(temp3, rawData2[CTRY][i])) {
+            log_err("  country doesn't match expected %s in in uloc_getLocaleForLCID(%#04x) = %s\n", rawData2[CTRY][i], lcid, temp2);
+        }
+    }
+    
 }
 

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2006, International Business Machines
+*   Copyright (C) 1997-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -2000,6 +2000,24 @@ uloc_getLCID(const char* localeID)
     }
 
     return uprv_convertToLCID(langID, localeID, &status);
+}
+
+U_CAPI int32_t U_EXPORT2
+uloc_getLocaleForLCID(uint32_t hostid, char *locale, int32_t localeCapacity,
+                UErrorCode *status)
+{
+    const char *posix = uprv_convertToPosix(hostid, status);
+    if (U_FAILURE(*status) || posix == NULL) {
+        return 0;
+    }
+    int32_t length = uprv_strlen(posix);
+    if (length+1 > localeCapacity) {
+        *status = U_BUFFER_OVERFLOW_ERROR;
+    }
+    else {
+        uprv_strcpy(locale, posix);
+    }
+    return length;
 }
 
 /* ### Default locale **************************************************/
