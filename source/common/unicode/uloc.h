@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2006, International Business Machines
+*   Copyright (C) 1997-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -909,6 +909,22 @@ uloc_acceptLanguage(char *result, int32_t resultAvailable,
                     UEnumeration* availableLocales,
                     UErrorCode *status);
 
+
+/**
+ * Gets the ICU locale ID for the specified Win32 LCID value.
+ *
+ * @param hostID the Win32 LCID to translate
+ * @param locale the output buffer for the ICU locale ID, which will be NUL-terminated
+ *  if there is room.
+ * @param localeCapacity the size of the output buffer
+ * @param status an error is returned if the LCID is unrecognized or the output buffer
+ *  is too small
+ * @return actual the actual size of the locale ID, not including NUL-termination 
+ * @draft ICU 3.8
+ */
+U_DRAFT int32_t U_EXPORT2
+uloc_getLocaleForLCID(uint32_t hostid, char *locale, int32_t localeCapacity,
+                    UErrorCode *status);
 
 #endif /*_ULOC*/
 

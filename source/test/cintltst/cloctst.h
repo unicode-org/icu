@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -72,6 +72,9 @@ static  void TestDisplayNames(void);
  
  /* Test warning for no data in getDisplay* */
  static void TestDisplayNameWarning(void);
+
+ /* Test uloc_getLocaleForLCID */
+ static void TestGetLocaleForLCID(void);
 
 /**
  * routine to perform subtests, used by TestDisplayNames
