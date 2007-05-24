@@ -2631,7 +2631,6 @@ static void TestGetLocaleForLCID() {
     int32_t i, length, lengthPre;
     const char* testLocale = 0;
     UErrorCode status = U_ZERO_ERROR;
-    const char* temp;
     char            temp2[40], temp3[40];
     uint32_t lcid;
     

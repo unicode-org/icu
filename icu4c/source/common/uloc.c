@@ -2006,11 +2006,12 @@ U_CAPI int32_t U_EXPORT2
 uloc_getLocaleForLCID(uint32_t hostid, char *locale, int32_t localeCapacity,
                 UErrorCode *status)
 {
+    int32_t length;
     const char *posix = uprv_convertToPosix(hostid, status);
     if (U_FAILURE(*status) || posix == NULL) {
         return 0;
     }
-    int32_t length = uprv_strlen(posix);
+    length = (int32_t)uprv_strlen(posix);
     if (length+1 > localeCapacity) {
         *status = U_BUFFER_OVERFLOW_ERROR;
     }
