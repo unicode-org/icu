@@ -388,6 +388,11 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      */
     String  localPatternChars = null;
 
+    /* Hang on to the country of the locale used for initialization */
+    /* Used by resolveParsedMetazone for country specific metazone mappings */
+
+    private String country;
+
     /* use serialVersionUID from JDK 1.1.4 for interoperability */
     private static final long serialVersionUID = -5987973545549424702L;
 
@@ -972,6 +977,8 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     protected void initializeData(ULocale desiredLocale, CalendarData calData)
     {
 
+        country = desiredLocale.getCountry();
+
         // FIXME: cache only ResourceBundle. Hence every time, will do
         // getObject(). This won't be necessary if the Resource itself
         // is cached.
@@ -1336,111 +1343,31 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         return item;
     }
 
-//  This function is a temporary hack until we figure out what to do with metazone parsing...
-//  It's not very efficient either, so need to do something more useful.
-// 
     private String resolveParsedMetazone( String zid ) {
-        if ( zid.equals("meta/America_Pacific")) return("America/Los_Angeles");
-        if ( zid.equals("meta/America_Mountain")) return("America/Denver");
-        if ( zid.equals("meta/America_Central")) return("America/Chicago");
-        if ( zid.equals("meta/America_Eastern")) return("America/New_York");
-        if ( zid.equals("meta/Acre")) return("America/Rio_Branco");
-        if ( zid.equals("meta/Africa_Central")) return("Africa/Maputo");
-        if ( zid.equals("meta/Africa_Eastern")) return("Africa/Nairobi");
-        if ( zid.equals("meta/Africa_Southern")) return("Africa/Johannesburg");
-        if ( zid.equals("meta/Africa_Western")) return("Africa/Lagos");
-        if ( zid.equals("meta/Alaska")) return("America/Anchorage");
-        if ( zid.equals("meta/Alaska_Hawaii")) return("America/Anchorage");
-        if ( zid.equals("meta/Amazon")) return("America/Manaus");
-        if ( zid.equals("meta/Aqtau")) return("Asia/Aqtau");
-        if ( zid.equals("meta/Aqtobe")) return("Asia/Aqtobe");
-        if ( zid.equals("meta/Arabian")) return("Asia/Riyadh");
-        if ( zid.equals("meta/Argentina")) return("America/Buenos_Aires");
-        if ( zid.equals("meta/Argentina_Western")) return("America/Catamarca");
-        if ( zid.equals("meta/Armenia")) return("Asia/Yerevan");
-        if ( zid.equals("meta/Ashkhabad")) return("Asia/Ashgabat");
-        if ( zid.equals("meta/Atlantic")) return("America/Halifax");
-        if ( zid.equals("meta/Australia_Central")) return("Australia/Adelaide");
-        if ( zid.equals("meta/Australia_Eastern")) return("Australia/Sydney");
-        if ( zid.equals("meta/Australia_Western")) return("Australia/Perth");
-        if ( zid.equals("meta/Azores")) return("Atlantic/Azores");
-        if ( zid.equals("meta/Baku")) return("Asia/Baku");
-        if ( zid.equals("meta/Bangladesh")) return("Asia/Dhaka");
-        if ( zid.equals("meta/Bering")) return("America/Adak");
-        if ( zid.equals("meta/Bhutan")) return("Asia/Thimphu");
-        if ( zid.equals("meta/Borneo")) return("Asia/Kuching");
-        if ( zid.equals("meta/Brasilia")) return("America/Sao_Paulo");
-        if ( zid.equals("meta/Chamorro")) return("Pacific/Saipan");
-        if ( zid.equals("meta/Changbai")) return("Asia/Harbin");
-        if ( zid.equals("meta/Chile")) return("America/Santiago");
-        if ( zid.equals("meta/China")) return("Asia/Shanghai");
-        if ( zid.equals("meta/Choibalsan")) return("Asia/Choibalsan");
-        if ( zid.equals("meta/Dacca")) return("Asia/Dhaka");
-        if ( zid.equals("meta/Dushanbe")) return("Asia/Dushanbe");
-        if ( zid.equals("meta/Dutch_Guiana")) return("America/Paramaribo");
-        if ( zid.equals("meta/East_Timor")) return("Asia/Dili");
-        if ( zid.equals("meta/Ecuador")) return("America/Guayaquil");
-        if ( zid.equals("meta/Europe_Central")) return("Europe/Paris");
-        if ( zid.equals("meta/Europe_Eastern")) return("Europe/Bucharest");
-        if ( zid.equals("meta/Europe_Western")) return("Europe/Lisbon");
-        if ( zid.equals("meta/Frunze")) return("Asia/Bishkek");
-        if ( zid.equals("meta/GMT")) return("Europe/London");
-        if ( zid.equals("meta/Galapagos")) return("Pacific/Galapagos");
-        if ( zid.equals("meta/Georgia")) return("Asia/Tbilisi");
-        if ( zid.equals("meta/Greenland_Central")) return("America/Scoresbysund");
-        if ( zid.equals("meta/Greenland_Eastern")) return("America/Scoresbysund");
-        if ( zid.equals("meta/Greenland_Western")) return("America/Godthab");
-        if ( zid.equals("meta/Guam")) return("Pacific/Guam");
-        if ( zid.equals("meta/Gulf")) return("Asia/Dubai");
-        if ( zid.equals("meta/Hawaii")) return("Pacific/Honolulu");
-        if ( zid.equals("meta/Hawaii_Aleutian")) return("America/Adak");
-        if ( zid.equals("meta/India")) return("Asia/Calcutta");
-        if ( zid.equals("meta/Indonesia_Central")) return("Asia/Makassar");
-        if ( zid.equals("meta/Indonesia_Eastern")) return("Asia/Jayapura");
-        if ( zid.equals("meta/Indonesia_Western")) return("Asia/Jakarta");
-        if ( zid.equals("meta/Israel")) return("Asia/Jerusalem");
-        if ( zid.equals("meta/Karachi")) return("Asia/Karachi");
-        if ( zid.equals("meta/Kashgar")) return("Asia/Kashgar");
-        if ( zid.equals("meta/Kazakhstan_Eastern")) return("Asia/Almaty");
-        if ( zid.equals("meta/Kazakhstan_Western")) return("Asia/Aqtau");
-        if ( zid.equals("meta/Kizilorda")) return("Asia/Qyzylorda");
-        if ( zid.equals("meta/Korea")) return("Asia/Seoul");
-        if ( zid.equals("meta/Kuybyshev")) return("Europe/Samara");
-        if ( zid.equals("meta/Kwajalein")) return("Pacific/Kwajalein");
-        if ( zid.equals("meta/Kyrgystan")) return("Asia/Bishkek");
-        if ( zid.equals("meta/Lanka")) return("Asia/Colombo");
-        if ( zid.equals("meta/Long_Shu")) return("Asia/Chongqing");
-        if ( zid.equals("meta/Lord_Howe")) return("Australia/Lord_Howe");
-        if ( zid.equals("meta/Macau")) return("Asia/Macau");
-        if ( zid.equals("meta/Malaya")) return("Asia/Kuala_Lumpur");
-        if ( zid.equals("meta/Malaysia")) return("Asia/Kuala_Lumpur");
-        if ( zid.equals("meta/Marshall_Islands")) return("Pacific/Majuro");
-        if ( zid.equals("meta/Mongolia")) return("Asia/Ulaanbaatar");
-        if ( zid.equals("meta/New_Zealand")) return("Pacific/Auckland");
-        if ( zid.equals("meta/Newfoundland")) return("America/St_Johns");
-        if ( zid.equals("meta/North_Mariana")) return("Pacific/Saipan");
-        if ( zid.equals("meta/Pakistan")) return("Asia/Karachi");
-        if ( zid.equals("meta/Pierre_Miquelon")) return("America/Miquelon");
-        if ( zid.equals("meta/Qyzylorda")) return("Asia/Qyzylorda");
-        if ( zid.equals("meta/Samara")) return("Europe/Samara");
-        if ( zid.equals("meta/Samarkand")) return("Asia/Samarkand");
-        if ( zid.equals("meta/Samoa")) return("Pacific/Apia");
-        if ( zid.equals("meta/Shevchenko")) return("Asia/Aqtau");
-        if ( zid.equals("meta/Suriname")) return("America/Paramaribo");
-        if ( zid.equals("meta/Sverdlovsk")) return("Asia/Yekaterinburg");
-        if ( zid.equals("meta/Tajikistan")) return("Asia/Dushanbe");
-        if ( zid.equals("meta/Tashkent")) return("Asia/Tashkent");
-        if ( zid.equals("meta/Tbilisi")) return("Asia/Tbilisi");
-        if ( zid.equals("meta/Turkey")) return("Europe/Istanbul");
-        if ( zid.equals("meta/Turkmenistan")) return("Asia/Ashgabat");
-        if ( zid.equals("meta/Uralsk")) return("Asia/Oral");
-        if ( zid.equals("meta/Urumqi")) return("Asia/Urumqi");
-        if ( zid.equals("meta/Uzbekistan")) return("Asia/Tashkent");
-        if ( zid.equals("meta/Yekaterinburg")) return("Asia/Yekaterinburg");
-        if ( zid.equals("meta/Yerevan")) return("Asia/Yerevan");
-        if ( zid.equals("meta/Yukon")) return("America/Dawson");
 
-        return zid;
+        String result = null;
+        UResourceBundle supplementalDataBundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "supplementalData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+
+        if ( supplementalDataBundle == null ) {
+            return("Etc/GMT");
+        }
+
+        UResourceBundle r1 = supplementalDataBundle.get("mapTimezones");
+        UResourceBundle metazoneMap = r1.get("metazones");
+
+        String  mzMapkey = zid.replaceAll("/",":");
+
+        try {
+            result = metazoneMap.getString(mzMapkey+"_"+country);
+        } catch (MissingResourceException ex) {
+            try {
+                result = metazoneMap.getString(mzMapkey+"_001");
+            } catch (MissingResourceException ex1) {
+                return("Etc/GMT");
+            }
+        }
+        
+        return result;
     }
 
     /*
