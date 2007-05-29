@@ -48,7 +48,7 @@ public class AstroTest extends TestFmwk {
                         ") for test " + i);
             }
             Equatorial result = astro.getSunPosition();
-            if (result.ascension != tests[i][6]) {
+            if ((float)result.ascension != (float)tests[i][6]) {
                 errln("FAIL: result.ascension(" + result.ascension +
                         ") !=  tests[i][6](" + tests[i][6] +
                         ") for test " + i);
