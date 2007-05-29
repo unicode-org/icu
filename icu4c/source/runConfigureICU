@@ -31,7 +31,6 @@ The following names can be supplied as the argument for platform:
 
     AIX                 Use the IBM Visual Age xlc_r/xlC_r compilers on AIX
     AIX/GCC             Use the GNU gcc/g++ compilers on AIX
-    BeOS                Use the GNU gcc/g++ compilers on BeOS
     Cygwin              Use the GNU gcc/g++ compilers on Cygwin
     Cygwin/MSVC         Use the Microsoft Visual C++ compiler on Cygwin
     Cygwin/MSVC2005     Use the Microsoft Visual C++ 2005 compiler on Cygwin
@@ -263,28 +262,13 @@ case $platform in
         CC=qcc; export CC
         CXX=QCC; export CXX
         ;;
-    BeOS)
-        THE_OS="BeOS"
-        THE_COMP="the GNU C++"
-        OPTIMIZATIONS="-fdefault-inline -fdefer-pop -fforce-mem -fforce-addr \
-            -finline -finline-functions \
-            -fkeep-inline-functions -fkeep-static-consts -fbranch-count-reg \
-            -ffunction-cse -fstrength-reduce -fthread-jumps -fcse-follow-jumps \
-            -fcse-skip-blocks -frerun-cse-after-loop -frerun-loop-opt \
-            -fexpensive-optimizations -foptimize-register-move -fregmove \
-            -fschedule-insns -fschedule-insns2 -ffloat-store -funroll-loops \
-            -fmove-all-movables -freduce-all-givs -fpeephole \
-            -funroll-all-loops -ffunction-sections -fdata-sections"
-        RELEASE_CFLAGS="$OPTIMIZATIONS"
-        RELEASE_CXXFLAGS="$OPTIMIZATIONS"
-        ;;
     zOS)
         THE_OS="z/OS (OS/390)"
         THE_COMP="z/OS C/C++"
         CC=cc; export CC
         CXX=cxx; export CXX
-        RELEASE_CFLAGS="-2 -Wc,'inline(auto,noreport,500,2500)'"
-        RELEASE_CXXFLAGS="-2 -Wc,'inline(auto,noreport,300,2500)'"
+        RELEASE_CFLAGS="-2 -Wc,'inline(auto,noreport,500,4000)'"
+        RELEASE_CXXFLAGS="-2 -Wc,'inline(auto,noreport,500,4000)'"
         ;;
     zOSV1R2)
         THE_OS="z/OS 1.2"
@@ -296,8 +280,8 @@ case $platform in
         export LDFLAGS="-Wl,'compat=pm3'"
         export CFLAGS="-Wc,'target(zOSV1R2)'"
         export CXXFLAGS="-Wc,'target(zOSV1R2)'"
-        export RELEASE_CFLAGS="-2 -Wc,'inline(auto,noreport,500,2500)'"
-        export RELEASE_CXXFLAGS="-2 -Wc,'inline(auto,noreport,300,2500)'"
+        export RELEASE_CFLAGS="-2 -Wc,'inline(auto,noreport,500,4000)'"
+        export RELEASE_CXXFLAGS="-2 -Wc,'inline(auto,noreport,500,4000)'"
         ;;
     *)
         >&2 echo "$me: unrecognized platform \"$platform\" (use --help for help)"

@@ -65,8 +65,8 @@ SHAREDLIBCXXFLAGS	= -Wc,expo
 # The DLL option must be used by the callee and caller code when using shared libraries.
 # NOCSECT might be used as an optimization option.
 # -+ means accept any file extension as a C++ file. By default only .C is accepted.
-CFLAGS          += -Wc,'langlvl(extended),spill(2000),ros,rent,dll' $(ICU_IEEE)
-CXXFLAGS        += -Wc,'langlvl(extended),spill(2000),ros,dll' $(ICU_IEEE) -+
+CFLAGS          += -Wc,'langlvl(extended),ros,rent,dll' $(ICU_IEEE)
+CXXFLAGS        += -Wc,'langlvl(extended),ros,dll' $(ICU_IEEE) -+
 ARFLAGS         = -cr
 
 # _MSE_PROTOS usually interacts with _XOPEN_SOURCE. It affects some standard
