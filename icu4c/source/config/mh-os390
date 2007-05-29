@@ -46,12 +46,12 @@ else
 ICU_IEEE          = -DIEEE_754=0#M#
 endif
 
+## Additional flags when building libraries and with threads
+THREADSCPPFLAGS = -D_OPEN_THREADS
+
 # For a dynamically called DLL module to share access to the POSIX external
 # variables, with its caller, the DLL module must define these _SHR_* macros.
 SHAREDLIBCPPFLAGS	= -D_SHR_TZNAME -D_SHR_TIMEZONE -D_SHR_DAYLIGHT
-
-## Additional flags when building libraries and with threads
-THREADSCPPFLAGS = -D_OPEN_THREADS
 
 # -Wc,expo is used to export all functions
 SHAREDLIBCFLAGS	= -Wc,expo
@@ -62,20 +62,26 @@ SHAREDLIBCXXFLAGS	= -Wc,expo
 # The RENT option makes the program reentrant. This may not really have the same
 #       meaning as normal reentrancy on other platforms. See the z/OS documentation
 #       for details. This is the default for C++, but not C.
+# The DLL option must be used by the callee and caller code when using shared libraries.
+# NOCSECT might be used as an optimization option.
 # -+ means accept any file extension as a C++ file. By default only .C is accepted.
 CFLAGS          += -Wc,'langlvl(extended),spill(2000),ros,rent,dll' $(ICU_IEEE)
 CXXFLAGS        += -Wc,'langlvl(extended),spill(2000),ros,dll' $(ICU_IEEE) -+
-DEFS            += -D_MSE_PROTOS
 ARFLAGS         = -cr
+
+# _MSE_PROTOS usually interacts with _XOPEN_SOURCE. It affects some standard
+# C functions that use wchar_t, and it selects behavior for
+# multibyte extension support (MSE) functions.
+#DEFS            += -D_MSE_PROTOS
 
 ifeq (${OS390_XPLINK}, 1)
 #SH# if [ "x$OS390_XPLINK" = "x1" ]; then
-# Note:  The following options require the PTF for PQ69418 on z/OS 1.2
-#        and later.
 # These lines must be the last options specified.
-ICU_XPLINK_C      = -Wc,'xplink(backchain,storeargs)' -Wc,'GOFF,NOCSECT'
-ICU_XPLINK_CXX    = -Wc,'xplink(backchain,storeargs)' -Wc,'GOFF,NOCSECT,NOTEMPINC'
-ICU_XPLINK_L      = -Wl,dll,xplink
+# GOFF is is the strategic object module format for S/390. It is required for XPLINK.
+# NOTEMPINC could be used if ICU starts using templates.
+ICU_XPLINK_C      = -Wc,'xplink(backchain,storeargs),goff'
+ICU_XPLINK_CXX    = -Wc,'xplink(backchain,storeargs),goff'
+ICU_XPLINK_L      = -Wl,xplink
 #SH# fi
 endif
 
