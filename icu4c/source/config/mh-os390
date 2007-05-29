@@ -21,9 +21,10 @@
 # To build a version of ICU which uses a two data libraries       #
 # where the smaller one is loaded first, use OS390_STUBDATA.      #
 # USAGE OF THIS OPTION IS DEPRECATED. You should look into using  #
-# Link Pack Area (LPA) or other z/OS options that enable page     #
-# fault based loading of read-only code/data instead of this      #
-# option. This option may be removed in a future version of ICU.  #
+# Link Pack Area (LPA), library lookaside facility (LLA) or other #
+# z/OS options that enable page fault based loading of read-only  #
+# code/data instead of this option.								  #
+# This option will be removed in a future version of ICU.         #
 #                                                                 #
 #   export OS390_STUBDATA=1                                       #
 #                                                                 #
