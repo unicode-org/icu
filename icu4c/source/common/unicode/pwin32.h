@@ -240,6 +240,16 @@ Intel can define _M_IX86 or _M_X64
 
 #define U_HAVE_WCSCPY 1
 
+/**
+ * \def U_DECLARE_UTF16
+ * Do not use this macro. Use the UNICODE_STRING or U_STRING_DECL macros
+ * instead.
+ * @internal
+ */
+#if 1
+#define U_DECLARE_UTF16(string) L ## string
+#endif
+
 /*===========================================================================*/
 /* Information about POSIX support                                           */
 /*===========================================================================*/

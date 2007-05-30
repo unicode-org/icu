@@ -803,11 +803,53 @@ if test $U_SIZEOF_WCHAR_T = 0; then
 fi
 AC_SUBST(U_SIZEOF_WCHAR_T)
 
-#dnl Echo
-#ECHO_N=$ac_n
-#ECHO_C=$ac_c
-#AC_SUBST(ECHO_N)
-#AC_SUBST(ECHO_C)
+AC_MSG_CHECKING([for UTF-16 string literal support])
+CHECK_UTF16_STRING_PREFIX=1
+CHECK_UTF16_STRING_RESULT="unknown"
+case "${host}" in
+*-*-aix*|powerpc64-*-linux*)
+    if test "$ac_cv_prog_gcc" = no; then
+        OLD_CFLAGS="${CFLAGS}"
+        OLD_CXXFLAGS="${CXXFLAGS}"
+        CFLAGS="${CFLAGS} -qutf"
+        CXXFLAGS="${CXXFLAGS} -qutf"
+        AC_TRY_COMPILE([const unsigned short hello[] = {u"hello"};],[],
+            [CHECK_UTF16_STRING_PREFIX=1],[CHECK_UTF16_STRING_PREFIX=0])
+        if test "$CHECK_UTF16_STRING_PREFIX" = 0; then
+            CFLAGS="${OLD_CFLAGS}"
+            CXXFLAGS="${OLD_CXXFLAGS}"
+        else
+            CHECK_UTF16_STRING_RESULT="-qutf"
+        fi
+    fi
+    ;;
+*-*-solaris*)
+    if test "$ac_cv_prog_gcc" = no; then
+        OLD_CXXFLAGS="${CXXFLAGS}"
+        CXXFLAGS="${CXXFLAGS} -xustr=ascii_utf16_ushort"
+        #AC_LANG_CPLUSPLUS
+        AC_TRY_COMPILE([const unsigned short hello[] = {U"hello"};],[],
+            [CHECK_UTF16_STRING_PREFIX=1],[CHECK_UTF16_STRING_PREFIX=0])
+        #AC_LANG_RESTORE
+        dnl TODO We can't reliably depend on users using -xustr=ascii_utf16_ushort to use ICU macros.
+        dnl Remove the following line when that assumption changes.
+        CHECK_UTF16_STRING_PREFIX=0
+        if test "$CHECK_UTF16_STRING_PREFIX" = 0; then
+            CXXFLAGS="${OLD_CXXFLAGS}"
+        else
+            CHECK_UTF16_STRING_RESULT="-xustr=ascii_utf16_ushort"
+        fi
+    fi
+    ;;
+*-*-cygwin|*-*-hpux*)
+    dnl The option will be detected at compile time without additional compiler options.
+    CHECK_UTF16_STRING_RESULT="available"
+    ;;
+*)
+    ;;
+esac
+AC_MSG_RESULT($CHECK_UTF16_STRING_RESULT)
+AC_SUBST(CHECK_UTF16_STRING_PREFIX)
 
 dnl Enable/disable extras
 AC_ARG_ENABLE(extras,

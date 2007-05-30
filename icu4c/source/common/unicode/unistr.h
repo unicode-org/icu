@@ -86,7 +86,9 @@ class BreakIterator;        // unicode/brkiter.h
  * such string variable before it is used.
  * @stable ICU 2.0
  */
-#if U_SIZEOF_WCHAR_T==U_SIZEOF_UCHAR && (U_CHARSET_FAMILY==U_ASCII_FAMILY || (U_SIZEOF_UCHAR == 2 && defined(U_WCHAR_IS_UTF16)))
+#if defined(U_DECLARE_UTF16)
+#   define UNICODE_STRING(cs, _length) U_NAMESPACE_QUALIFIER UnicodeString(TRUE, (const UChar *)U_DECLARE_UTF16(cs), _length)
+#elif U_SIZEOF_WCHAR_T==U_SIZEOF_UCHAR && (U_CHARSET_FAMILY==U_ASCII_FAMILY || (U_SIZEOF_UCHAR == 2 && defined(U_WCHAR_IS_UTF16)))
 #   define UNICODE_STRING(cs, _length) U_NAMESPACE_QUALIFIER UnicodeString(TRUE, (const UChar *)L ## cs, _length)
 #elif U_SIZEOF_UCHAR==1 && U_CHARSET_FAMILY==U_ASCII_FAMILY
 #   define UNICODE_STRING(cs, _length) U_NAMESPACE_QUALIFIER UnicodeString(TRUE, (const UChar *)cs, _length)
@@ -107,13 +109,7 @@ class BreakIterator;        // unicode/brkiter.h
  * The string parameter must be a C string literal.
  * @stable ICU 2.0
  */
-#if U_SIZEOF_WCHAR_T==U_SIZEOF_UCHAR && (U_CHARSET_FAMILY==U_ASCII_FAMILY || (U_SIZEOF_UCHAR == 2 && defined(U_WCHAR_IS_UTF16)))
-#   define UNICODE_STRING_SIMPLE(cs) U_NAMESPACE_QUALIFIER UnicodeString(TRUE, (const UChar *)L ## cs, -1)
-#elif U_SIZEOF_UCHAR==1 && U_CHARSET_FAMILY==U_ASCII_FAMILY
-#   define UNICODE_STRING_SIMPLE(cs) U_NAMESPACE_QUALIFIER UnicodeString(TRUE, (const UChar *)cs, -1)
-#else
-#   define UNICODE_STRING_SIMPLE(cs) U_NAMESPACE_QUALIFIER UnicodeString(cs, -1, US_INV)
-#endif
+#define UNICODE_STRING_SIMPLE(cs) UNICODE_STRING(cs, -1)
 
 /**
  * UnicodeString is a string class that stores Unicode characters directly and provides
