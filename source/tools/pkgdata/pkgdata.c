@@ -29,12 +29,16 @@
 
 #if U_HAVE_POPEN
 /*
-  We define __USE_POSIX2 so that we can get popen and pclose when
-  --enable-strict is used
+  We define _XOPEN_SOURCE so that we can get popen and pclose.
 */
-# ifndef __USE_POSIX2
-#  define __USE_POSIX2 1
-# endif
+#if !defined(_XOPEN_SOURCE)
+#if __STDC_VERSION__ >= 199901L
+/* It is invalid to compile an XPG3, XPG4, XPG4v2 or XPG5 application using c99 on Solaris */
+#define _XOPEN_SOURCE 600
+#else
+#define _XOPEN_SOURCE 4
+#endif
+#endif
 # include <unistd.h>
 #endif
 #include <stdio.h>
