@@ -1031,7 +1031,8 @@ void UTextTest::ErrorTest()
             TEST_ASSERT(extractedLen == exLen[i]);
             if (extractedLen > 0) {
                 UChar32  c32;
-                U16_GET(buf, 0, 0, extractedLen, c32);
+                /* extractedLen-extractedLen == 0 is used to get around a compiler warning. */
+                U16_GET(buf, 0, extractedLen-extractedLen, extractedLen, c32);
                 TEST_ASSERT(c32 == c32Map[i]);
             }
         }
@@ -1099,7 +1100,8 @@ void UTextTest::ErrorTest()
             TEST_ASSERT(extractedLen == exLen[i]);
             if (extractedLen > 0) {
                 UChar32  c32;
-                U16_GET(buf, 0, 0, extractedLen, c32);
+                /* extractedLen-extractedLen == 0 is used to get around a compiler warning. */
+                U16_GET(buf, 0, extractedLen-extractedLen, extractedLen, c32);
                 TEST_ASSERT(c32 == c32Map[i]);
             }
         }
@@ -1166,7 +1168,8 @@ void UTextTest::ErrorTest()
             TEST_ASSERT(extractedLen == exLen[i]);
             if (extractedLen > 0) {
                 UChar32  c32;
-                U16_GET(buf, 0, 0, extractedLen, c32);
+                /* extractedLen-extractedLen == 0 is used to get around a compiler warning. */
+                U16_GET(buf, 0, extractedLen-extractedLen, extractedLen, c32);
                 TEST_ASSERT(c32 == c32Map[i]);
             }
         }
