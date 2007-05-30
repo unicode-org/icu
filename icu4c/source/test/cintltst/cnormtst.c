@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -1445,7 +1445,8 @@ TestQuickCheckPerCP() {
         }
 
         length=unorm_normalize(s, length, UNORM_NFD, 0, nfd, LENGTHOF(nfd), &errorCode);
-        U16_GET(nfd, 0, 0, length, lead);
+        /* length-length == 0 is used to get around a compiler warning. */
+        U16_GET(nfd, 0, length-length, length, lead);
         U16_GET(nfd, 0, length-1, length, trail);
 
         lccc1=u_getIntPropertyValue(c, UCHAR_LEAD_CANONICAL_COMBINING_CLASS);
