@@ -117,10 +117,10 @@ private:
         int32_t loopCount, UBool useUText);
 
     // Run one of the Unicode Consortium boundary test data files.
-    void  RBBITest::runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *bi);
+    void runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *bi);
 
     // Run a single test case from one of the Unicode Consortium test files.
-    void RBBITest::checkUnicodeTestCase(const char *testFileName, int lineNumber,
+    void checkUnicodeTestCase(const char *testFileName, int lineNumber,
                          const UnicodeString &testString,
                          UVector32 *breakPositions,
                          RuleBasedBreakIterator *bi);
