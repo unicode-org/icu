@@ -229,6 +229,27 @@ typedef unsigned int uint32_t;
 
 #define U_HAVE_WCSCPY       @U_HAVE_WCSCPY@
 
+/**
+ * \def U_DECLARE_UTF16
+ * Do not use this macro. Use the UNICODE_STRING or U_STRING_DECL macros
+ * instead.
+ * @internal
+ */
+#if @CHECK_UTF16_STRING_PREFIX@
+#if (defined(__xlC__) && defined(__IBM_UTF_LITERAL)) \
+    || (defined(__HP_aCC) && __HP_aCC >= 035000) \
+    || (defined(__HP_cc) && __HP_cc >= 111106)
+#define U_DECLARE_UTF16(string) u ## string
+/* We can't detect from the Sun compiler when this option is available */
+/*
+#elif (defined(__SUNPRO_CC) && __SUNPRO_CC >= 0x550)
+#define U_DECLARE_UTF16(string) U ## string
+*/
+#elif (defined(U_WINDOWS) || ((defined(OS390) || defined(OS400)) && defined(__UCS2__)))
+#define U_DECLARE_UTF16(string) L ## string
+#endif
+#endif
+
 /*===========================================================================*/
 /* Information about POSIX support                                           */
 /*===========================================================================*/
