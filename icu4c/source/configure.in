@@ -813,7 +813,7 @@ case "${host}" in
         OLD_CXXFLAGS="${CXXFLAGS}"
         CFLAGS="${CFLAGS} -qutf"
         CXXFLAGS="${CXXFLAGS} -qutf"
-        AC_TRY_COMPILE([const unsigned short hello[] = {u"hello"};],[],
+        AC_TRY_COMPILE([const unsigned short hello[] = u"hello";],[],
             [CHECK_UTF16_STRING_PREFIX=1],[CHECK_UTF16_STRING_PREFIX=0])
         if test "$CHECK_UTF16_STRING_PREFIX" = 0; then
             CFLAGS="${OLD_CFLAGS}"
@@ -827,10 +827,12 @@ case "${host}" in
     if test "$ac_cv_prog_gcc" = no; then
         OLD_CXXFLAGS="${CXXFLAGS}"
         CXXFLAGS="${CXXFLAGS} -xustr=ascii_utf16_ushort"
-        #AC_LANG_CPLUSPLUS
-        AC_TRY_COMPILE([const unsigned short hello[] = {U"hello"};],[],
+        AC_LANG_SAVE
+        AC_LANG_CPLUSPLUS
+        dnl The C compiler does not support UTF-16 literals, but the C++ can support it.
+        AC_TRY_COMPILE([const unsigned short hello[] = U"hello";],[],
             [CHECK_UTF16_STRING_PREFIX=1],[CHECK_UTF16_STRING_PREFIX=0])
-        #AC_LANG_RESTORE
+        AC_LANG_RESTORE
         dnl TODO We can't reliably depend on users using -xustr=ascii_utf16_ushort to use ICU macros.
         dnl Remove the following line when that assumption changes.
         CHECK_UTF16_STRING_PREFIX=0
