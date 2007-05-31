@@ -1925,7 +1925,7 @@ void RBBITest::runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *
     //       Caputure Group #                  1          2            3            4           5
     //       Parses this item:               divide       x       hex digits   comment & nl   unrecognized
     //
-    UnicodeString tokenExpr = "(?ms)\\s*(?:(\\u00F7)|\(\\u00D7)|([0-9a-fA-F]+)|(#.*?$.)|(.*?$.))";
+    UnicodeString tokenExpr = "(?ms)\\s*(?:(\\u00F7)|(\\u00D7)|([0-9a-fA-F]+)|(#.*?$.)|(.*?$.))";
     RegexMatcher    tokenMatcher(tokenExpr, testFileAsString, 0, status);
     UnicodeString   testString;
     UVector32       breakPositions(status);
