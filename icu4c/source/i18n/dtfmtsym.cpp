@@ -2146,10 +2146,10 @@ DateFormatSymbols::resolveParsedMetazone( const UnicodeString& zid ) {
 
     UErrorCode status = U_ZERO_ERROR;
 
-    UResourceBundle* fSupplementalDataBundle = ures_openDirect(NULL, kSUPPLEMENTAL, &status);
-    UResourceBundle* mapTz = ures_getByKey(fSupplementalDataBundle, gMaptimezonesTag, NULL, &status);
+    UResourceBundle* supplementalDataBundle = ures_openDirect(NULL, kSUPPLEMENTAL, &status);
+    UResourceBundle* mapTz = ures_getByKey(supplementalDataBundle, gMaptimezonesTag, NULL, &status);
     if(U_FAILURE(status)){
-        ures_close(fSupplementalDataBundle);
+        ures_close(supplementalDataBundle);
         return UNICODE_STRING_SIMPLE("Etc/GMT");
     }
 
@@ -2185,7 +2185,7 @@ DateFormatSymbols::resolveParsedMetazone( const UnicodeString& zid ) {
 
     ures_close(metazoneMap);
     ures_close(mapTz);
-    ures_close(fSupplementalDataBundle);
+    ures_close(supplementalDataBundle);
 
     if(U_SUCCESS(status)){
         return resStr;
