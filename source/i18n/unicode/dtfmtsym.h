@@ -636,7 +636,6 @@ private:
     StringEnumeration* fZoneIDEnumeration;
     Hashtable*         fZoneStringsHash;
     UResourceBundle* fResourceBundle;
-    UResourceBundle* fSupplementalDataBundle;
     const char*      fCountry;
 
     /**
