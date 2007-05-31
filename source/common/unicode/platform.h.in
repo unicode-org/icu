@@ -244,7 +244,7 @@ typedef unsigned int uint32_t;
     || (defined(__SUNPRO_C) && __SUNPRO_C >= 0x580)
 /* Sun Studio 8 has a broken C compiler, but a working C++ compiler. Sun Studio 11 has a working C/C++ compiler */
 #define U_DECLARE_UTF16(string) U ## string
-#elif (defined(U_WINDOWS) || ((defined(OS390) || defined(OS400)) && defined(__UCS2__)))
+#elif (defined(U_WINDOWS) || defined(U_CYGWIN) || ((defined(OS390) || defined(OS400)) && defined(__UCS2__)))
 #define U_DECLARE_UTF16(string) L ## string
 #endif
 #endif
