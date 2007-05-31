@@ -7688,7 +7688,12 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
         fi
     fi
     ;;
-*-*-cygwin|*-*-hpux*)
+*-*-hpux*)
+    if test "$ac_cv_c_compiler_gnu" = no; then
+                CHECK_UTF16_STRING_RESULT="available"
+    fi
+    ;;
+*-*-cygwin)
         CHECK_UTF16_STRING_RESULT="available"
     ;;
 *)
