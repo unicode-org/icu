@@ -843,8 +843,14 @@ case "${host}" in
         fi
     fi
     ;;
-*-*-cygwin|*-*-hpux*)
-    dnl The option will be detected at compile time without additional compiler options.
+*-*-hpux*)
+    if test "$ac_cv_prog_gcc" = no; then
+        dnl The option will be detected at compile time without additional compiler options.
+        CHECK_UTF16_STRING_RESULT="available"
+    fi
+    ;;
+*-*-cygwin)
+    dnl wchar_t can be used
     CHECK_UTF16_STRING_RESULT="available"
     ;;
 *)
