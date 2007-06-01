@@ -180,6 +180,23 @@ if test "$U_DEFAULT_SHOW_DRAFT" = 0; then
 fi
 AC_SUBST(U_DEFAULT_SHOW_DRAFT)
 
+dnl Check if we can hide variables from 
+AC_MSG_CHECKING([for library API export])
+SHAREDLIBEXPORT=no
+if test "$ac_cv_c_compiler_gnu" = yes; then
+    OLD_CFLAGS="${CFLAGS}"
+    OLD_CXXFLAGS="${CXXFLAGS}"
+    CFLAGS="${CFLAGS} -fvisibility=hidden"
+    CXXFLAGS="${CXXFLAGS} -fvisibility=hidden"
+    AC_TRY_COMPILE([__attribute__ ((visibility ("default"))) void f(void);],[],
+        [SHAREDLIBEXPORT=yes],[SHAREDLIBEXPORT=no])
+    if test "$SHAREDLIBEXPORT" = no; then
+        CFLAGS="${OLD_CFLAGS}"
+        CXXFLAGS="${OLD_CXXFLAGS}"
+    fi
+fi
+AC_MSG_RESULT($SHAREDLIBEXPORT)
+
 AC_PROG_RANLIB
 AC_PATH_PROG(AR,ar,[echo archiver ar not found re-run configure ; false],$PATH:/bin:/usr/bin:/usr/ccs/bin)
 
@@ -636,22 +653,14 @@ if test $ac_cv_var_timezone = yes; then
   U_HAVE_TIMEZONE=1
 else
   AC_CACHE_CHECK(for __timezone,ac_cv_var___timezone,
-  [AC_TRY_LINK(
-  changequote(<<, >>)dnl
-  <<#include <time.h>
-  >>,
-  changequote([, ])dnl
+  [AC_TRY_LINK([#include <time.h>], 
   [__timezone = 1;], ac_cv_var___timezone=yes, ac_cv_var___timezone=no)])
   if test $ac_cv_var___timezone = yes; then
     U_TIMEZONE=__timezone
     U_HAVE_TIMEZONE=1
   else
     AC_CACHE_CHECK(for _timezone,ac_cv_var__timezone,
-    [AC_TRY_LINK(
-    changequote(<<, >>)dnl
-    <<#include <time.h>
-    >>,
-    changequote([, ])dnl
+    [AC_TRY_LINK([#include <time.h>],
     [_timezone = 1;], ac_cv_var__timezone=yes, ac_cv_var__timezone=no)])
     if test $ac_cv_var__timezone = yes; then
       U_TIMEZONE=_timezone
@@ -682,11 +691,7 @@ if test $ac_cv_var_daylight = yes; then
   U_HAVE_DAYLIGHT=1
 else
   AC_CACHE_CHECK(for __daylight,ac_cv_var___daylight,
-  [AC_TRY_LINK(
-  changequote(<<, >>)dnl
-  <<#include <time.h>
-  >>,
-  changequote([, ])dnl
+  [AC_TRY_LINK([#include <time.h>],
   [__daylight = 1;], ac_cv_var___daylight=yes, ac_cv_var___daylight=no)])
   if test $ac_cv_var___daylight = yes; then
     U_DAYLIGHT=__daylight
