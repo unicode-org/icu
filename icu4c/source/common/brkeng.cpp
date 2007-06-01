@@ -240,7 +240,7 @@ ICULanguageBreakFactory::loadEngineFor(UChar32 c, int32_t breakType) {
 }
 
 const CompactTrieDictionary *
-ICULanguageBreakFactory::loadDictionaryFor(UScriptCode script, int32_t breakType) {
+ICULanguageBreakFactory::loadDictionaryFor(UScriptCode script, int32_t /*breakType*/) {
     UErrorCode status = U_ZERO_ERROR;
     // Open root from brkitr tree.
     char dictnbuff[256];
