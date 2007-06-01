@@ -240,9 +240,9 @@ typedef unsigned int uint32_t;
     || (defined(__HP_aCC) && __HP_aCC >= 035000) \
     || (defined(__HP_cc) && __HP_cc >= 111106)
 #define U_DECLARE_UTF16(string) u ## string
-#elif (defined(__SUNPRO_CC) && __SUNPRO_CC >= 0x550) \
-    || (defined(__SUNPRO_C) && __SUNPRO_C >= 0x580)
-/* Sun Studio 8 has a broken C compiler, but a working C++ compiler. Sun Studio 11 has a working C/C++ compiler */
+#elif (defined(__SUNPRO_CC) && __SUNPRO_CC >= 0x550)
+/* || (defined(__SUNPRO_C) && __SUNPRO_C >= 0x580) */
+/* Sun's C compiler has issues with this notation, and it's unreliable. */
 #define U_DECLARE_UTF16(string) U ## string
 #elif (defined(U_WINDOWS) || defined(U_CYGWIN) || ((defined(OS390) || defined(OS400)) && defined(__UCS2__)))
 #define U_DECLARE_UTF16(string) L ## string
