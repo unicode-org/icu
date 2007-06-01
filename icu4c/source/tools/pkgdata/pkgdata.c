@@ -16,6 +16,18 @@
 *   (DLL, common data, etc.)
 */
 
+/*
+  We define _XOPEN_SOURCE so that we can get popen and pclose.
+*/
+#if !defined(_XOPEN_SOURCE)
+#if __STDC_VERSION__ >= 199901L
+/* It is invalid to compile an XPG3, XPG4, XPG4v2 or XPG5 application using c99 on Solaris */
+#define _XOPEN_SOURCE 600
+#else
+#define _XOPEN_SOURCE 4
+#endif
+#endif
+
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
 #include "cmemory.h"
@@ -28,17 +40,6 @@
 #include "putilimp.h"
 
 #if U_HAVE_POPEN
-/*
-  We define _XOPEN_SOURCE so that we can get popen and pclose.
-*/
-#if !defined(_XOPEN_SOURCE)
-#if __STDC_VERSION__ >= 199901L
-/* It is invalid to compile an XPG3, XPG4, XPG4v2 or XPG5 application using c99 on Solaris */
-#define _XOPEN_SOURCE 600
-#else
-#define _XOPEN_SOURCE 4
-#endif
-#endif
 # include <unistd.h>
 #endif
 #include <stdio.h>
