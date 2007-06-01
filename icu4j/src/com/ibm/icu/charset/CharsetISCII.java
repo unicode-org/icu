@@ -21,96 +21,96 @@ import com.ibm.icu.text.UTF16;
  *
  */
 class CharsetISCII extends CharsetICU {
-    private final char UCNV_OPTIONS_VERSION_MASK = 0X0f;
-    private final char NUKTA = 0x093c;
-    private final char HALANT = 0x094d;
-    private final char ZWNJ = 0x200c; /* Zero Width Non Joiner */
-    private final char ZWJ = 0x200d; /* Zero Width Joiner */
-    private final char INVALID_CHAR = 0xffff;
-    private final char ATR = 0xef; /* Attribute code */
-    private final char EXT = 0xff; /* Extension code */
-    private final char DANDA = 0x0964;
-    private final char DOUBLE_DANDA = 0x0965;
-    private final char ISCII_NUKTA = 0xe9;
-    private final char ISCII_HALANT = 0xe8;
-    private final char ISCII_DANDA = 0xea;
-    private final char ISCII_INV = 0xd9;
-    private final char INDIC_BLOCK_BEGIN = 0x0900;
-    private final char INDIC_BLOCK_END = 0x0d7f;
-    private final char INDIC_RANGE = (INDIC_BLOCK_END - INDIC_BLOCK_BEGIN);
-    private final char VOCALLIC_RR = 0x0931;
-    private final char LF = 0x0a;
-    private final char ASCII_END = 0xa0;
-    private final char NO_CHAR_MARKER = 0xfffe;
-    private final char TELUGU_DELTA = (char)(UniLang.DELTA * UniLang.TELUGU);
-    private final char DEV_ABBR_SIGN = 0x0970;
-    private final char DEV_ANUDATTA = 0x0952;
-    private final char EXT_RANGE_BEGIN = 0xa1;
-    private final char EXT_RANGE_END = 0xee;
+    private final short UCNV_OPTIONS_VERSION_MASK = 0X0f;
+    private final short NUKTA = 0x093c;
+    private final short HALANT = 0x094d;
+    private final short ZWNJ = 0x200c; /* Zero Width Non Joiner */
+    private final short ZWJ = 0x200d; /* Zero Width Joiner */
+    private final int   INVALID_CHAR = 0xffff;
+    private final short ATR = 0xef; /* Attribute code */
+    private final short EXT = 0xf0; /* Extension code */
+    private final short DANDA = 0x0964;
+    private final short DOUBLE_DANDA = 0x0965;
+    private final short ISCII_NUKTA = 0xe9;
+    private final short ISCII_HALANT = 0xe8;
+    private final short ISCII_DANDA = 0xea;
+    private final short ISCII_INV = 0xd9;
+    private final short INDIC_BLOCK_BEGIN = 0x0900;
+    private final short INDIC_BLOCK_END = 0x0d7f;
+    private final short INDIC_RANGE = (INDIC_BLOCK_END - INDIC_BLOCK_BEGIN);
+    private final short VOCALLIC_RR = 0x0931;
+    private final short LF = 0x0a;
+    private final short ASCII_END = 0xa0;
+    private final int   NO_CHAR_MARKER = 0xfffe;
+    private final short TELUGU_DELTA = (UniLang.DELTA * UniLang.TELUGU);
+    private final short DEV_ABBR_SIGN = 0x0970;
+    private final short DEV_ANUDATTA = 0x0952;
+    private final short EXT_RANGE_BEGIN = 0xa1;
+    private final short EXT_RANGE_END = 0xee;
     
     private static final class UniLang {
-        static final int DEVALANGARI = 0;
-        static final int BENGALI = DEVALANGARI + 1;
-        static final int GURMUKHI = BENGALI + 1;
-        static final int GUJARATI = GURMUKHI + 1;
-        static final int ORIYA = GUJARATI + 1;
-        static final int TAMIL = ORIYA + 1;
-        static final int TELUGU = TAMIL + 1;
-        static final int KANNADA = TELUGU + 1;
-        static final int MALAYALAM = KANNADA + 1;
-        static final int DELTA = 0x80;
+        static final short DEVALANGARI = 0;
+        static final short BENGALI = DEVALANGARI + 1;
+        static final short GURMUKHI = BENGALI + 1;
+        static final short GUJARATI = GURMUKHI + 1;
+        static final short ORIYA = GUJARATI + 1;
+        static final short TAMIL = ORIYA + 1;
+        static final short TELUGU = TAMIL + 1;
+        static final short KANNADA = TELUGU + 1;
+        static final short MALAYALAM = KANNADA + 1;
+        static final short DELTA = 0x80;
     }
     
     private static final class ISCIILang {
-        static final int DEF = 0x40;
-        static final int RMN = 0x41;
-        static final int DEV = 0x42;
-        static final int BNG = 0x43;
-        static final int TML = 0x44;
-        static final int TLG = 0x45;
-        static final int ASM = 0x46;
-        static final int ORI = 0x47;
-        static final int KND = 0x48;
-        static final int MLM = 0x49;
-        static final int GJR = 0x4a;
-        static final int PNJ = 0x4b;
-        static final int ARB = 0x71;
-        static final int PES = 0x72;
-        static final int URD = 0x73;
-        static final int SND = 0x74;
-        static final int KSM = 0x75;
-        static final int PST = 0x76;
+        static final short DEF = 0x40;
+        static final short RMN = 0x41;
+        static final short DEV = 0x42;
+        static final short BNG = 0x43;
+        static final short TML = 0x44;
+        static final short TLG = 0x45;
+        static final short ASM = 0x46;
+        static final short ORI = 0x47;
+        static final short KND = 0x48;
+        static final short MLM = 0x49;
+        static final short GJR = 0x4a;
+        static final short PNJ = 0x4b;
+        static final short ARB = 0x71;
+        static final short PES = 0x72;
+        static final short URD = 0x73;
+        static final short SND = 0x74;
+        static final short KSM = 0x75;
+        static final short PST = 0x76;
     }
     
     private static final class MaskEnum {
-        static final int DEV_MASK = 0x80;
-        static final int PNJ_MASK = 0x40;
-        static final int GJR_MASK = 0x20;
-        static final int ORI_MASK = 0x10;
-        static final int BNG_MASK = 0x08;
-        static final int KND_MASK = 0x04;
-        static final int MLM_MASK = 0x02;
-        static final int TML_MASK = 0x01;
-        static final int ZERO = 0x00;
+        static final short DEV_MASK = 0x80;
+        static final short PNJ_MASK = 0x40;
+        static final short GJR_MASK = 0x20;
+        static final short ORI_MASK = 0x10;
+        static final short BNG_MASK = 0x08;
+        static final short KND_MASK = 0x04;
+        static final short MLM_MASK = 0x02;
+        static final short TML_MASK = 0x01;
+        static final short ZERO = 0x00;
     }
     
     private final String ISCII_CNV_PREFIX = "ISCII,version=";
     
     private final class UConverterDataISCII {
-        char contextCharToUnicode;      /* previous Unicode codepoint for contextual analysis */
-        char contextCharFromUnicode;    /* previous Unicode codepoint for contextual analysis */
-        char defDeltaToUnicode;             /* delta for switching to default state when DEF is encountered */
-        char currentDeltaFromUnicode;   /* current delta in Indic block */
-        char currentDeltaToUnicode;         /* current delta in Indic block */
-        int currentMaskFromUnicode;    /* mask for current state in fromUnicode */
-        int currentMaskToUnicode;          /* mask for current state in toUnicode */
-        int defMaskToUnicode;           /* mask for default state in toUnicode */
+        int contextCharToUnicode;      /* previous Unicode codepoint for contextual analysis */
+        int contextCharFromUnicode;    /* previous Unicode codepoint for contextual analysis */
+        short defDeltaToUnicode;             /* delta for switching to default state when DEF is encountered */
+        short currentDeltaFromUnicode;   /* current delta in Indic block */
+        short currentDeltaToUnicode;         /* current delta in Indic block */
+        short currentMaskFromUnicode;    /* mask for current state in fromUnicode */
+        short currentMaskToUnicode;          /* mask for current state in toUnicode */
+        short defMaskToUnicode;           /* mask for default state in toUnicode */
         boolean isFirstBuffer;          /* boolean for fromUnicode to see if we need to announce the first script */
         boolean resetToDefaultToUnicode;    /* boolean for reseting to default delta and mask when a newline is encountered */
         String name;
         
-        UConverterDataISCII(char contextCharToUnicode, char contextCharFromUnicode, char defDeltaToUnicode, char currentDeltaFromUnicode,
-                            char currentDeltaToUnicode, int currentMaskFromUnicode, int currentMaskToUnicode, int defMaskToUnicode,
+        UConverterDataISCII(int contextCharToUnicode, int contextCharFromUnicode, short defDeltaToUnicode, short currentDeltaFromUnicode,
+                            short currentDeltaToUnicode, short currentMaskFromUnicode, short currentMaskToUnicode, short defMaskToUnicode,
                             boolean isFirstBuffer, boolean resetToDefaultToUnicode, String name) {
             this.contextCharToUnicode = contextCharToUnicode;
             this.contextCharFromUnicode = contextCharFromUnicode;
@@ -127,11 +127,11 @@ class CharsetISCII extends CharsetICU {
     }
     
     private static final class LookupDataStruct {
-        int uniLang;
-        int maskEnum;
-        int isciiLang;
+        short uniLang;
+        short maskEnum;
+        short isciiLang;
         
-        LookupDataStruct(int uniLang, int maskEnum, int isciiLang) {
+        LookupDataStruct(short uniLang, short maskEnum, short isciiLang) {
             this.uniLang = uniLang;
             this.maskEnum = maskEnum;
             this.isciiLang = isciiLang;
@@ -166,7 +166,7 @@ class CharsetISCII extends CharsetICU {
      * Telugu and Kannda have same codepoints except for Vocallic_RR which we special case
      * and combine and use 1 bit to represent these languages
      */
-    private static final char validityTable[] = {
+    private static final short validityTable[] = {
         /* This state table is tool generated so please do not edit unless you know exactly what you are doing */
         /* Note:  This table was edited to mirror the Windows XP implementation */
         /* ISCII: Valid: Unicode */
@@ -698,7 +698,7 @@ class CharsetISCII extends CharsetICU {
         { 0xDC, 0x0963 }
     };
     
-    private static final int lookupTable[][] = {
+    private static final short lookupTable[][] = {
         { MaskEnum.ZERO, MaskEnum.ZERO }, /* DEFAULT */
         { MaskEnum.ZERO, MaskEnum.ZERO }, /* ROMAN */
         { UniLang.DEVALANGARI, MaskEnum.DEV_MASK },
@@ -714,24 +714,28 @@ class CharsetISCII extends CharsetICU {
     };
     
     private UConverterDataISCII extraInfo = null;
-    protected byte[] fromUSubstitution = new byte[]{0x2b, 0x2f, 0x76}; //TODO: change this to the appropriate value
+    protected byte[] fromUSubstitution = new byte[]{(byte)0x1A};
     
     public CharsetISCII(String icuCanonicalName, String javaCanonicalName, String[] aliases) {
         super(icuCanonicalName, javaCanonicalName, aliases);
-        //TODO: change these three to the appropriate value
-        maxBytesPerChar = 3; 
+        maxBytesPerChar = 4; 
         minBytesPerChar = 1;
         maxCharsPerByte = 1;
         
+        int test = lookupInitialData[options & UCNV_OPTIONS_VERSION_MASK].uniLang;
+        int test2 = UniLang.DELTA;
+        char temp = (char)(test * test2);
+        int test3 = temp + 3;
+        
         extraInfo = new UConverterDataISCII(
                             NO_CHAR_MARKER, /* contextCharToUnicode */
-                            (char)0x0000, /* contextCharFromUnicode */
-                            (char)(lookupInitialData[options & UCNV_OPTIONS_VERSION_MASK].uniLang * UniLang.DELTA), /* defDeltaToUnicode */ 
-                            (char)(lookupInitialData[options & UCNV_OPTIONS_VERSION_MASK].uniLang * UniLang.DELTA), /* currentDeltaFromUnicode */ 
-                            (char)(lookupInitialData[options & UCNV_OPTIONS_VERSION_MASK].uniLang * UniLang.DELTA), /* currentDeltaToUnicode */ 
-                            lookupInitialData[options & UCNV_OPTIONS_VERSION_MASK].maskEnum, /* currentMaskToUnicode */
-                            lookupInitialData[options & UCNV_OPTIONS_VERSION_MASK].maskEnum, /* currentMaskFromUnicode */
-                            lookupInitialData[options & UCNV_OPTIONS_VERSION_MASK].maskEnum, /* defMaskToUnicode */
+                            0x0000, /* contextCharFromUnicode */
+                            (short)(lookupInitialData[options & UCNV_OPTIONS_VERSION_MASK].uniLang * UniLang.DELTA), /* defDeltaToUnicode */ 
+                            (short)(lookupInitialData[options & UCNV_OPTIONS_VERSION_MASK].uniLang * UniLang.DELTA), /* currentDeltaFromUnicode */ 
+                            (short)(lookupInitialData[options & UCNV_OPTIONS_VERSION_MASK].uniLang * UniLang.DELTA), /* currentDeltaToUnicode */ 
+                            (short)lookupInitialData[options & UCNV_OPTIONS_VERSION_MASK].maskEnum, /* currentMaskToUnicode */
+                            (short)lookupInitialData[options & UCNV_OPTIONS_VERSION_MASK].maskEnum, /* currentMaskFromUnicode */
+                            (short)lookupInitialData[options & UCNV_OPTIONS_VERSION_MASK].maskEnum, /* defMaskToUnicode */
                             true, /* isFirstBuffer */
                             false, /* resetToDefaultToUnicode */
                             ISCII_CNV_PREFIX /* name */
@@ -765,12 +769,13 @@ class CharsetISCII extends CharsetICU {
     
         protected void implReset() {
             super.implReset();
+            this.toUnicodeStatus = 0xFFFF;
         }
         
         protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) { 
             CoderResult cr = CoderResult.UNDERFLOW;
             int targetUniChar = 0x0000;
-            byte sourceChar = 0x0000;
+            short sourceChar = 0x0000;
             UConverterDataISCII data;
             boolean gotoCallBack = false;
             
@@ -782,7 +787,7 @@ class CharsetISCII extends CharsetICU {
                 targetUniChar = UConverterConstants.missingCharMarker;
                 
                 if (target.hasRemaining()) {
-                    sourceChar = source.get();
+                    sourceChar = (short)((short)source.get() & UConverterConstants.UNSIGNED_BYTE_MASK);
                     
                     /* look at the post-context perform special processing */
                     if (data.contextCharToUnicode == ATR) {
@@ -791,8 +796,8 @@ class CharsetISCII extends CharsetICU {
                          */
                         /* check if the sourceChar is supported script range */
                         if (((short)(ISCIILang.PNJ - sourceChar) & UConverterConstants.UNSIGNED_BYTE_MASK) <= (ISCIILang.PNJ - ISCIILang.DEV)) {
-                            data.currentDeltaToUnicode = (char)(lookupTable[sourceChar & 0x0F][0] * UniLang.DELTA);
-                            data.currentMaskToUnicode = (int)lookupTable[sourceChar & 0x0F][1];
+                            data.currentDeltaToUnicode = (short)(lookupTable[sourceChar & 0x0F][0] * UniLang.DELTA);
+                            data.currentMaskToUnicode = lookupTable[sourceChar & 0x0F][1];
                         } else if (sourceChar == ISCIILang.DEF) {
                             /* switch back to default */
                             data.currentDeltaToUnicode = data.defDeltaToUnicode;
@@ -822,7 +827,7 @@ class CharsetISCII extends CharsetICU {
                                     data.contextCharToUnicode = NO_CHAR_MARKER;
                                     
                                     /* write to target */
-                                    WriteToTargetToU(offsets, source, target, targetUniChar, data.currentDeltaToUnicode);
+                                    WriteToTargetToU(offsets, (source.position() - 2), source, target, targetUniChar, data.currentDeltaToUnicode);
                                     
                                     continue;
                                 }
@@ -844,22 +849,21 @@ class CharsetISCII extends CharsetICU {
                         }
                         
                         /* write to target */
-                        //TODO: change the delta entry
-                        WriteToTargetToU(offsets, source, target, targetUniChar, data.currentDeltaToUnicode);
+                        WriteToTargetToU(offsets, (source.position() - 2), source, target, targetUniChar, data.currentDeltaToUnicode);
                         /* reset */
                         data.contextCharToUnicode = NO_CHAR_MARKER;
                     }
                     
                     /* look at the pre-context and perform special processing */
                     if (!gotoCallBack) {
-                        switch ((char)sourceChar) {
+                        switch (sourceChar) {
                         case ISCII_INV:
                         case EXT: /* falls through */
                         case ATR:
                             data.contextCharToUnicode = (char)sourceChar;
                             
                             if (this.toUnicodeStatus != UConverterConstants.missingCharMarker) {
-                                //TODO: add write to target and add offset and offsets entry to all 
+                                WriteToTargetToU(offsets, (source.position() - 2), source, target, this.toUnicodeStatus, data.currentDeltaToUnicode); 
                                 this.toUnicodeStatus = UConverterConstants.missingCharMarker;
                             }
                             continue;
@@ -870,6 +874,17 @@ class CharsetISCII extends CharsetICU {
                                 /* clear the context */
                                 data.contextCharToUnicode = NO_CHAR_MARKER;
                                 this.toUnicodeStatus = UConverterConstants.missingCharMarker;
+                            } else {
+                                targetUniChar = GetMapping(sourceChar, targetUniChar, data);
+                                data.contextCharToUnicode = (char)sourceChar;
+                            }
+                            break;
+                        case ISCII_HALANT:
+                            /* handle explicit halant */
+                            if (data.contextCharToUnicode == ISCII_HALANT) {
+                                targetUniChar = ZWNJ;
+                                /* clear context */
+                                data.contextCharToUnicode = NO_CHAR_MARKER;
                             } else {
                                 targetUniChar = GetMapping(sourceChar, targetUniChar, data);
                                 data.contextCharToUnicode = (char)sourceChar;
@@ -920,7 +935,7 @@ class CharsetISCII extends CharsetICU {
                     
                     if (this.toUnicodeStatus != UConverterConstants.missingCharMarker && !gotoCallBack) {
                         /* write the previously mapped codepoint */
-                        //TODO: add WriteToTargetToU call with the correct values
+                        WriteToTargetToU(offsets, (source.position() - 2), source, target, this.toUnicodeStatus, data.currentDeltaToUnicode);
                         this.toUnicodeStatus = UConverterConstants.missingCharMarker;
                     }
                     
@@ -967,14 +982,14 @@ class CharsetISCII extends CharsetICU {
                 
                 if (toUnicodeStatus != UConverterConstants.missingCharMarker) {
                     /* output a remaining target character */
-                    WriteToTargetToU(offsets, source, target, source.get(), data.currentDeltaToUnicode);
+                    WriteToTargetToU(offsets, (source.position() - 2), source, target, this.toUnicodeStatus, data.currentDeltaToUnicode);
                     this.toUnicodeStatus = UConverterConstants.missingCharMarker;    
                 }
             }
             return cr;
         }
         
-        private CoderResult WriteToTargetToU(IntBuffer offsets, ByteBuffer source, CharBuffer target, int targetUniChar, char delta) {
+        private CoderResult WriteToTargetToU(IntBuffer offsets, int offset, ByteBuffer source, CharBuffer target, int targetUniChar, short delta) {
             CoderResult cr = CoderResult.UNDERFLOW;
             /* add offset to current Indic Block */
             if (targetUniChar > ASCII_END &&
@@ -988,7 +1003,7 @@ class CharsetISCII extends CharsetICU {
             if (target.hasRemaining()) {
                 target.put((char)targetUniChar);
                 if (offsets != null) {
-                    //TODO: add offsets code
+                    offsets.put(offset);
                 }
             } else {
                 charErrorBufferArray[charErrorBufferLength++] = (char)targetUniChar;
@@ -997,7 +1012,7 @@ class CharsetISCII extends CharsetICU {
             return cr;
         }
         
-        private int GetMapping(byte sourceChar, int targetUniChar, UConverterDataISCII data) {
+        private int GetMapping(short sourceChar, int targetUniChar, UConverterDataISCII data) {
             targetUniChar = toUnicodeTable[sourceChar];
             /* is the code point valid in current script? */
             if (sourceChar > ASCII_END &&
@@ -1035,15 +1050,15 @@ class CharsetISCII extends CharsetICU {
             int targetByteUnit = 0x0000;
             int sourceChar = 0x0000;
             UConverterDataISCII converterData;
-            char newDelta = 0;
-            char range = 0;
+            short newDelta = 0;
+            short range = 0;
             boolean deltaChanged = false;
             boolean gotoGetTrail = false;
             
             /* initialize data */
             converterData = extraInfo;
             newDelta = converterData.currentDeltaFromUnicode;
-            range = (char)(newDelta / UniLang.DELTA);
+            range = (short)(newDelta / UniLang.DELTA);
             
             if ((sourceChar = fromUChar32) != 0) {
                 gotoGetTrail = true;
@@ -1057,8 +1072,7 @@ class CharsetISCII extends CharsetICU {
                     
                     /* check if input is in ASCII and C0 control codes range */
                     if (sourceChar <= ASCII_END) {
-                        //TODO: add correct parameters
-                        cr = WriteToTargetFromU(offsets, source, target, targetByteUnit);
+                        cr = WriteToTargetFromU(offsets, source, target, sourceChar);
                         if (cr.isOverflow()) {
                             break;
                         }
@@ -1067,7 +1081,6 @@ class CharsetISCII extends CharsetICU {
                             targetByteUnit += (byte)lookupInitialData[range].isciiLang;
                             fromUnicodeStatus = sourceChar;
                             /* now append ATR and language code */
-                            //TODO: add correct parameters
                             cr = WriteToTargetFromU(offsets, source, target, targetByteUnit);
                             if (cr.isOverflow()) {
                                 break;
@@ -1105,8 +1118,8 @@ class CharsetISCII extends CharsetICU {
                              */
                             if (sourceChar != DANDA && sourceChar != DOUBLE_DANDA) {
                                 /* find out to which block the sourceChar belongs */
-                                range = (char)((sourceChar - INDIC_BLOCK_BEGIN) / UniLang.DELTA);
-                                newDelta = (char)(range * UniLang.DELTA);
+                                range = (short)((sourceChar - INDIC_BLOCK_BEGIN) / UniLang.DELTA);
+                                newDelta = (short)(range * UniLang.DELTA);
                             
                                 /* Now are we in the same block as previous? */
                                 if (newDelta != converterData.currentDeltaFromUnicode || converterData.isFirstBuffer) {
@@ -1140,8 +1153,7 @@ class CharsetISCII extends CharsetICU {
                                 /* reset */
                                 deltaChanged = false;
                                 /* now append ATR and language code */
-                                //TODO: put in arguments
-                                cr = WriteToTargetFromU(offsets, source, target, targetByteUnit);
+                                cr = WriteToTargetFromU(offsets, source, target, temp);
                                 if (cr.isOverflow()) {
                                     break;
                                 }
@@ -1158,7 +1170,6 @@ class CharsetISCII extends CharsetICU {
                         converterData.contextCharFromUnicode = (char)targetByteUnit;
                     }
                     /*write targetByteUnit to target */
-                    //TODO: add correct parameters
                     cr = WriteToTargetFromU(offsets, source, target, targetByteUnit);
                     if (cr.isOverflow()) {
                         break;
@@ -1217,17 +1228,17 @@ class CharsetISCII extends CharsetICU {
                 if (targetByteUnit <= 0xFF) {
                     target.put((byte)targetByteUnit);
                     if (offsets != null) {
-                        //TODO: add offsets code
+                        offsets.put((source.position() - 1));
                     }
                 } else {
                     target.put((byte)(targetByteUnit >> 8));
                     if (offsets != null) {
-                        //TODO: add offsets code
+                        offsets.put((source.position() - 1));
                     }
                     if (target.hasRemaining()) {
                         target.put((byte)targetByteUnit);
                         if (offsets != null) {
-                            //TODO: add offsets code
+                            offsets.put((source.position() - 1));
                         }
                     } else {
                         errorBuffer[errorBufferLength++] = (byte)targetByteUnit;
