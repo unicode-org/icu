@@ -276,11 +276,7 @@ typedef unsigned int uint32_t;
 /* Symbol import-export control                                              */
 /*===========================================================================*/
 
-#if defined(U_DARWIN) && defined(__GNUC__) && (__GNUC__ >= 4)
-#define USE_GCC_VISIBILITY_ATTRIBUTE 1
-#endif
-
-#ifdef USE_GCC_VISIBILITY_ATTRIBUTE
+#if defined(__GNUC__) && (__GNUC__ >= 4)
 #define U_EXPORT __attribute__((visibility("default")))
 #else
 #define U_EXPORT
