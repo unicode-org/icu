@@ -1763,9 +1763,100 @@ public class TestCharset extends TestFmwk {
         CharBuffer us = CharBuffer.allocate(0x100);
         ByteBuffer bs = ByteBuffer.allocate(0x100);
         
+        //test full range of Devanagari
+        /*us.put((char)0x0901); us.put((char)0x0902); us.put((char)0x0903); us.put((char)0x0905); us.put((char)0x0906); us.put((char)0x0907);
+        us.put((char)0x0908); us.put((char)0x0909); us.put((char)0x090A); us.put((char)0x090B); us.put((char)0x090E); us.put((char)0x090F);
+        us.put((char)0x0910); us.put((char)0x090D); us.put((char)0x0912); us.put((char)0x0913); us.put((char)0x0914); us.put((char)0x0911);
+        us.put((char)0x0915); us.put((char)0x0916); us.put((char)0x0917); us.put((char)0x0918); us.put((char)0x0919); us.put((char)0x091A);
+        us.put((char)0x091B); us.put((char)0x091C); us.put((char)0x091D); us.put((char)0x091E); us.put((char)0x091F); us.put((char)0x0920);
+        us.put((char)0x0921); us.put((char)0x0922); us.put((char)0x0923); us.put((char)0x0924); us.put((char)0x0925); us.put((char)0x0926); 
+        us.put((char)0x0927); us.put((char)0x0928); us.put((char)0x0929); us.put((char)0x092A); us.put((char)0x092B); us.put((char)0x092C); 
+        us.put((char)0x092D); us.put((char)0x092E); us.put((char)0x092F); us.put((char)0x095F); us.put((char)0x0930); us.put((char)0x0931); 
+        us.put((char)0x0932); us.put((char)0x0933); us.put((char)0x0934); us.put((char)0x0935); us.put((char)0x0936); us.put((char)0x0937); 
+        us.put((char)0x0938); us.put((char)0x0939); us.put((char)0x200D); us.put((char)0x093E); us.put((char)0x093F); us.put((char)0x0940); 
+        us.put((char)0x0941); us.put((char)0x0942); us.put((char)0x0943); us.put((char)0x0946); us.put((char)0x0947); us.put((char)0x0948); 
+        us.put((char)0x0945); us.put((char)0x094A); us.put((char)0x094B); us.put((char)0x094C); us.put((char)0x0949); us.put((char)0x094D); 
+        us.put((char)0x093D); us.put((char)0x0966); us.put((char)0x0967); us.put((char)0x0968); us.put((char)0x0969); us.put((char)0x096A); 
+        us.put((char)0x096B); us.put((char)0x096C); us.put((char)0x096D); us.put((char)0x096E); us.put((char)0x096F); 
+        bs.put((byte)0xEF); bs.put((byte)0x42);
+        bs.put((byte)0xA1); bs.put((byte)0xA2); bs.put((byte)0xA3); bs.put((byte)0xA4); bs.put((byte)0xA5); bs.put((byte)0xA6);
+        bs.put((byte)0xA7); bs.put((byte)0xA8); bs.put((byte)0xA9); bs.put((byte)0xAA); bs.put((byte)0xAB); bs.put((byte)0xAC); 
+        bs.put((byte)0xAD); bs.put((byte)0xAE); bs.put((byte)0xAF); bs.put((byte)0xB0); bs.put((byte)0xB1); bs.put((byte)0xB2); 
+        bs.put((byte)0xB3); bs.put((byte)0xB4); bs.put((byte)0xB5); bs.put((byte)0xB6); bs.put((byte)0xB7); bs.put((byte)0xB8); 
+        bs.put((byte)0xB9); bs.put((byte)0xBA); bs.put((byte)0xBB); bs.put((byte)0xBC); bs.put((byte)0xBD); bs.put((byte)0xBE); 
+        bs.put((byte)0xBF); bs.put((byte)0xC0); bs.put((byte)0xC1); bs.put((byte)0xC2); bs.put((byte)0xC3); bs.put((byte)0xC4); 
+        bs.put((byte)0xC5); bs.put((byte)0xC6); bs.put((byte)0xC7); bs.put((byte)0xC8); bs.put((byte)0xC9); bs.put((byte)0xCA); 
+        bs.put((byte)0xCB); bs.put((byte)0xCC); bs.put((byte)0xCD); bs.put((byte)0xCE); bs.put((byte)0xCF); bs.put((byte)0xD0); 
+        bs.put((byte)0xD1); bs.put((byte)0xD2); bs.put((byte)0xD3); bs.put((byte)0xD4); bs.put((byte)0xD5); bs.put((byte)0xD6); 
+        bs.put((byte)0xD7); bs.put((byte)0xD8); bs.put((byte)0xD9); bs.put((byte)0xDA); bs.put((byte)0xDB); bs.put((byte)0xDC); 
+        bs.put((byte)0xDD); bs.put((byte)0xDE); bs.put((byte)0xDF); bs.put((byte)0xE0); bs.put((byte)0xE1); bs.put((byte)0xE2); 
+        bs.put((byte)0xE3); bs.put((byte)0xE4); bs.put((byte)0xE5); bs.put((byte)0xE6); bs.put((byte)0xE7); bs.put((byte)0xE8); 
+        bs.put((byte)0xEA); bs.put((byte)0xE9); bs.put((byte)0xF1); bs.put((byte)0xF2); bs.put((byte)0xF3); bs.put((byte)0xF4); 
+        bs.put((byte)0xF5); bs.put((byte)0xF6); bs.put((byte)0xF7); bs.put((byte)0xF8); bs.put((byte)0xF9); bs.put((byte)0xFA); 
+       
         //test Soft Halant
-        us.put((char)0x0915); us.put((char)0x094d); us.put((char)0x200D);
-        bs.put((byte)0xB3); bs.put((byte)0xE8); bs.put((byte)0xE9);
+        //us.put((char)0x0915); us.put((char)0x094d); us.put((char)0x200D);
+        //c bs.put((byte)0xB3); bs.put((byte)0xE8); bs.put((byte)0xE9);
+        
+        //test explicit halant
+        //us.put((char)0x0915); us.put((char)0x094D); us.put((char)0x200C);
+        //bs.put((byte)0xEF); bs.put((byte)0x42); bs.put((byte)0xB3); bs.put((byte)0xE8); bs.put((byte)0xE8);
+        
+        //test double danda
+        //us.put((char)0x0965); 
+        //bs.put((byte)0xEA); bs.put((byte)0xEA); 
+        
+        //test ASCII
+        /*us.put((char)0x1B); us.put((char)0x24); us.put((char)0x29); us.put((char)0x47); us.put((char)0x0E); us.put((char)0x23);
+        us.put((char)0x21); us.put((char)0x23); us.put((char)0x22); us.put((char)0x23); us.put((char)0x23); us.put((char)0x23);
+        us.put((char)0x24); us.put((char)0x23); us.put((char)0x25); us.put((char)0x23); us.put((char)0x26); us.put((char)0x23);
+        us.put((char)0x27); us.put((char)0x23); us.put((char)0x28); us.put((char)0x23); us.put((char)0x29); us.put((char)0x23);
+        us.put((char)0x2A); us.put((char)0x23); us.put((char)0x2B); us.put((char)0x0F); us.put((char)0x2F); us.put((char)0x2A);
+        bs.put((byte)0x1B); bs.put((byte)0x24); bs.put((byte)0x29); bs.put((byte)0x47); bs.put((byte)0x0E); bs.put((byte)0x23);
+        bs.put((byte)0x21); bs.put((byte)0x23); bs.put((byte)0x22); bs.put((byte)0x23); bs.put((byte)0x23); bs.put((byte)0x23);
+        bs.put((byte)0x24); bs.put((byte)0x23); bs.put((byte)0x25); bs.put((byte)0x23); bs.put((byte)0x26); bs.put((byte)0x23);
+        bs.put((byte)0x27); bs.put((byte)0x23); bs.put((byte)0x28); bs.put((byte)0x23); bs.put((byte)0x29); bs.put((byte)0x23);
+        bs.put((byte)0x2A); bs.put((byte)0x23); bs.put((byte)0x2B); bs.put((byte)0x0F); bs.put((byte)0x2F); bs.put((byte)0x2A);
+        */
+        //test from Lotus
+        /*us.put((char)0x0061); us.put((char)0x0915); us.put((char)0x000D); us.put((char)0x000A); us.put((char)0x0996); us.put((char)0x0043);
+        us.put((char)0x0930); us.put((char)0x094D); us.put((char)0x200D); us.put((char)0x0901); us.put((char)0x000D); us.put((char)0x000A);
+        us.put((char)0x0905); us.put((char)0x0985); us.put((char)0x0043); us.put((char)0x0915); us.put((char)0x0921); us.put((char)0x002B);
+        us.put((char)0x095F); 
+        bs.put((byte)0x61); bs.put((byte)0xEF); bs.put((byte)0x42); bs.put((byte)0xEF); bs.put((byte)0x30); bs.put((byte)0xB3);
+        bs.put((byte)0x0D); bs.put((byte)0x0A); bs.put((byte)0xEF); bs.put((byte)0x43); bs.put((byte)0xB4); bs.put((byte)0x43);
+        bs.put((byte)0xEF); bs.put((byte)0x42); bs.put((byte)0xCF); bs.put((byte)0xE8); bs.put((byte)0xD9); bs.put((byte)0xEF);
+        bs.put((byte)0x42); bs.put((byte)0xA1); bs.put((byte)0x0D); bs.put((byte)0x0A); bs.put((byte)0xEF); bs.put((byte)0x42);
+        bs.put((byte)0xA4); bs.put((byte)0xEF); bs.put((byte)0x43); bs.put((byte)0xA4); bs.put((byte)0x43); bs.put((byte)0xEF);
+        bs.put((byte)0x42); bs.put((byte)0xB3); bs.put((byte)0xBF); bs.put((byte)0x2B); bs.put((byte)0xEF); bs.put((byte)0x42);
+        bs.put((byte)0xCE);
+        
+        //tamil range
+        /*us.put((char)0x0B86); us.put((char)0x0B87); us.put((char)0x0B88);
+        bs.put((byte)0xEF); bs.put((byte)0x44); bs.put((byte)0xA5); bs.put((byte)0xA6); bs.put((byte)0xA7);
+        
+        //telugu range
+        us.put((char)0x0C05); us.put((char)0x0C02); us.put((char)0x0C03); us.put((char)0x0C31);
+        bs.put((byte)0xEF); bs.put((byte)0x45); bs.put((byte)0xA4); bs.put((byte)0xA2); bs.put((byte)0xA3); bs.put((byte)0xD0);
+        
+        //kannada range
+        us.put((char)0x0C85); us.put((char)0x0C82); us.put((char)0x0C83);
+        bs.put((byte)0xEF); bs.put((byte)0x48); bs.put((byte)0xA4); bs.put((byte)0xA2); bs.put((byte)0xA3);  
+        
+        //test Abbr sign and Anudatta
+        us.put((char)0x0970); us.put((char)0x0952); us.put((char)0x0960); us.put((char)0x0944); us.put((char)0x090C); us.put((char)0x0962);
+        us.put((char)0x0961); us.put((char)0x0963); us.put((char)0x0950); us.put((char)0x093D); us.put((char)0x0958); us.put((char)0x0959);
+        us.put((char)0x095A); us.put((char)0x095B); us.put((char)0x095C); us.put((char)0x095D); us.put((char)0x095E); us.put((char)0x0020);
+        us.put((char)0x094D); us.put((char)0x0930); us.put((char)0x0000); us.put((char)0x00A0); 
+        bs.put((byte)0xEF); bs.put((byte)0x42); bs.put((byte)0xF0); bs.put((byte)0xBF); bs.put((byte)0xF0); bs.put((byte)0xB8);
+        bs.put((byte)0xAA); bs.put((byte)0xE9); bs.put((byte)0xDF); bs.put((byte)0xE9); bs.put((byte)0xA6); bs.put((byte)0xE9);
+        bs.put((byte)0xDB); bs.put((byte)0xE9); bs.put((byte)0xA7); bs.put((byte)0xE9); bs.put((byte)0xDC); bs.put((byte)0xE9);
+        bs.put((byte)0xA1); bs.put((byte)0xE9); bs.put((byte)0xEA); bs.put((byte)0xE9); bs.put((byte)0xB3); bs.put((byte)0xE9);
+        bs.put((byte)0xB4); bs.put((byte)0xE9); bs.put((byte)0xB5); bs.put((byte)0xE9); bs.put((byte)0xBA); bs.put((byte)0xE9);
+        bs.put((byte)0xBF); bs.put((byte)0xE9); bs.put((byte)0xC0); bs.put((byte)0xE9); bs.put((byte)0xC9); bs.put((byte)0xE9);
+        bs.put((byte)0x20); bs.put((byte)0xE8); bs.put((byte)0xCF); bs.put((byte)0x00); bs.put((byte)0xA0); 
+        //bs.put((byte)0xEF); bs.put((byte)0x30); 
+       */        
         
         bs.limit(bs.position());
         bs.position(0);
