@@ -1,5 +1,5 @@
 /************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation *
+ * Copyright (C) 1996-2007, International Business Machines Corporation *
  * and others. All Rights Reserved.                                     *
  ************************************************************************
  *  2003-nov-07   srl       Port from Java
@@ -740,16 +740,16 @@ private:
   // of this object, so the clearCache method is provided.
   //
 
-  double    julianDay       ;
-  double    julianCentury   ;
-  double    sunLongitude    ;
-  double    meanAnomalySun  ;
-  double    moonLongitude   ;
-  double    moonEclipLong   ;
-  double    meanAnomalyMoon ;
-  double    eclipObliquity  ;
-  double    siderealT0      ;
-  double    siderealTime    ;
+  double    julianDay;
+  double    julianCentury;
+  double    sunLongitude;
+  double    meanAnomalySun;
+  double    moonLongitude;
+  double    moonEclipLong;
+  double    meanAnomalyMoon;
+  double    eclipObliquity;
+  double    siderealT0;
+  double    siderealTime;
 
   void clearCache();
 
@@ -772,7 +772,7 @@ U_NAMESPACE_BEGIN
  * Cache of month -> julian day
  * @internal
  */
-class U_I18N_API CalendarCache : public UMemory {
+class CalendarCache : public UMemory {
 public:
   static int32_t get(CalendarCache** cache, int32_t key, UErrorCode &status);
   static void put(CalendarCache** cache, int32_t key, int32_t value, UErrorCode &status);

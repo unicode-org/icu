@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1996-2006, International Business Machines
+*   Copyright (C) 1996-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -958,7 +958,7 @@ uchar_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode) {
     USET_ADD_CP_AND_NEXT(sa, CGJ);
 }
 
-U_CAPI void U_EXPORT2
+U_CFUNC void U_EXPORT2
 upropsvec_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode) {
     if(U_FAILURE(*pErrorCode)) {
         return;

@@ -37,7 +37,7 @@ struct URelativeString;
  * @draft ICU 3.8
  */
 
-class U_I18N_API RelativeDateFormat : public DateFormat {
+class RelativeDateFormat : public DateFormat {
 public:
     RelativeDateFormat( UDateFormatStyle timeStyle, UDateFormatStyle dateStyle, const Locale& locale, UErrorCode& status);
 
@@ -247,7 +247,7 @@ public:
      * @return          The class ID for all objects of this class.
      * @draft ICU 3.8
      */
-    static UClassID U_EXPORT2 getStaticClassID(void);
+    U_I18N_API static UClassID U_EXPORT2 getStaticClassID(void);
 
     /**
      * Returns a unique class ID POLYMORPHICALLY. Pure virtual override. This

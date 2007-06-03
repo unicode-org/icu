@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002-2006, International Business Machines Corporation and
+ * Copyright (c) 2002-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -152,8 +152,10 @@ UObject *UObjectTest::testClass(UObject *obj,
 #include "islamcal.h"
 #include "japancal.h"
 #include "hebrwcal.h"
+#include "persncal.h"
 #include "ustrenum.h"
 #include "olsontz.h"
+#include "reldtfmt.h"
 
 // External Things
 #include "unicode/brkiter.h"
@@ -212,13 +214,6 @@ public:
 };
 #endif
 
-#if !UCONFIG_NO_FORMATTING
-class TestOlsonTimeZone : public OlsonTimeZone {
-public:
-    TestOlsonTimeZone(int32_t) : OlsonTimeZone() {}
-};
-#endif
-
 void UObjectTest::testIDs()
 {
     ids_count = 0;
@@ -253,17 +248,19 @@ void UObjectTest::testIDs()
     TESTCLASSID_CTOR(ChoiceFormat, (UNICODE_STRING_SIMPLE("0#are no files|1#is one file|1<are many files"), status));
     TESTCLASSID_CTOR(MessageFormat, (UnicodeString(), status));
     TESTCLASSID_CTOR(DateFormatSymbols, (status));
+    TESTCLASSID_FACTORY(RelativeDateFormat, DateFormat::createDateInstance(DateFormat::kFullRelative, Locale::getUS()));
     TESTCLASSID_CTOR(DecimalFormatSymbols, (status));
     TESTCLASSID_DEFAULT(FieldPosition);
     TESTCLASSID_DEFAULT(Formattable);
     TESTCLASSID_CTOR(CurrencyAmount, (1.0, SMALL_STR, status));
     TESTCLASSID_CTOR(CurrencyUnit, (SMALL_STR, status));
     TESTCLASSID_CTOR(CurrencyFormat, (Locale::getUS(), status));
-    TESTCLASSID_CTOR(GregorianCalendar, (status));
-    TESTCLASSID_CTOR(BuddhistCalendar, (Locale::getUS(), status));
-    TESTCLASSID_CTOR(IslamicCalendar, (Locale::getUS(), status));
-    TESTCLASSID_CTOR(JapaneseCalendar, (Locale::getUS(), status));
-    TESTCLASSID_CTOR(HebrewCalendar, (Locale::getUS(), status));
+    TESTCLASSID_FACTORY(GregorianCalendar, Calendar::createInstance(Locale("@calendar=gregorian"), status));
+    TESTCLASSID_FACTORY(BuddhistCalendar, Calendar::createInstance(Locale("@calendar=buddhist"), status));
+    TESTCLASSID_FACTORY(IslamicCalendar, Calendar::createInstance(Locale("@calendar=islamic"), status));
+    TESTCLASSID_FACTORY(JapaneseCalendar, Calendar::createInstance(Locale("@calendar=japanese"), status));
+    TESTCLASSID_FACTORY(HebrewCalendar, Calendar::createInstance(Locale("@calendar=hebrew"), status));
+    TESTCLASSID_FACTORY(PersianCalendar, Calendar::createInstance(Locale("@calendar=persian"), status));
 #endif
 
 #if !UCONFIG_NO_BREAK_ITERATION
@@ -293,9 +290,7 @@ void UObjectTest::testIDs()
     TESTCLASSID_TRANSLIT(UppercaseTransliterator, "Upper");
     TESTCLASSID_CTOR(CaseMapTransliterator, (UnicodeString(), NULL));
     TESTCLASSID_CTOR(Quantifier, (NULL, 0, 0));
-#if UOBJTEST_TEST_INTERNALS
-    TESTCLASSID_CTOR(FunctionReplacer, (NULL,NULL) ); /* don't care */
-#endif
+    TESTCLASSID_CTOR(FunctionReplacer, (NULL,NULL));
 #endif
         
     TESTCLASSID_FACTORY(Locale, new Locale("123"));
@@ -329,7 +324,7 @@ void UObjectTest::testIDs()
 
 #if !UCONFIG_NO_FORMATTING
     TESTCLASSID_ABSTRACT(TimeZone);
-    TESTCLASSID_CTOR(TestOlsonTimeZone, (42));   // Test replacement for OlsonTimeZone
+    TESTCLASSID_FACTORY(OlsonTimeZone, TimeZone::createTimeZone(UnicodeString("America/Los_Angeles")));
 #endif
 
 #if !UCONFIG_NO_TRANSLITERATION

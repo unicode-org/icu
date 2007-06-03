@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2003-2004, International Business Machines Corporation
+ ********************************************************************************
+ * Copyright (C) 2003-2007, International Business Machines Corporation
  * and others. All Rights Reserved.
  ********************************************************************************
  *
@@ -52,14 +53,14 @@ U_NAMESPACE_BEGIN
  * <p>
  * @internal
  */
-class U_I18N_API JapaneseCalendar : public GregorianCalendar {
+class JapaneseCalendar : public GregorianCalendar {
 public:
 
     /**
      * Useful constants for JapaneseCalendar.  
      * @internal
      */
-    static const uint32_t kCurrentEra; // the current era
+    U_I18N_API static uint32_t U_EXPORT2 getCurrentEra(void); // the current era
 
     /**
      * Constructs a JapaneseCalendar based on the current time in the default time zone
@@ -131,7 +132,7 @@ public:
      * @return   The class ID for all objects of this class.
      * @internal
      */
-    static UClassID U_EXPORT2 getStaticClassID(void);
+    U_I18N_API static UClassID U_EXPORT2 getStaticClassID(void);
 
     /**
      * return the calendar type, "japanese".

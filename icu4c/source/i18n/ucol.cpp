@@ -556,7 +556,7 @@ ucol_close(UCollator *coll)
 
 /* This one is currently used by genrb & tests. After constructing from rules (tailoring),*/
 /* you should be able to get the binary chunk to write out...  Doesn't look very full now */
-U_CAPI uint8_t* U_EXPORT2
+U_CFUNC uint8_t* U_EXPORT2
 ucol_cloneRuleData(const UCollator *coll, int32_t *length, UErrorCode *status)
 {
   uint8_t *result = NULL;
@@ -975,7 +975,7 @@ uprv_uca_getImplicitFromRaw(UChar32 cp) {
     }
 }
 
-U_CAPI uint32_t U_EXPORT2
+static uint32_t U_EXPORT2
 uprv_uca_getImplicitPrimary(UChar32 cp) {
     //if (DEBUG) System.out.println("Incoming: " + Utility.hex(cp));
 
@@ -1947,7 +1947,7 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
 
 
 /*   ucol_getPrevCE, out-of-line version for use from other files.  */
-U_CAPI uint32_t  U_EXPORT2
+U_CFUNC uint32_t  U_EXPORT2
 ucol_getPrevCE(const UCollator *coll, collIterate *data,
                         UErrorCode *status) {
     return ucol_IGetPrevCE(coll, data, status);
@@ -1955,7 +1955,7 @@ ucol_getPrevCE(const UCollator *coll, collIterate *data,
 
 
 /* this should be connected to special Jamo handling */
-U_CAPI uint32_t  U_EXPORT2
+U_CFUNC uint32_t  U_EXPORT2
 ucol_getFirstCE(const UCollator *coll, UChar u, UErrorCode *status) {
   collIterate colIt;
   uint32_t order;

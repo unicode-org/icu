@@ -1,4 +1,5 @@
 /*
+ ******************************************************************************
  * Copyright (C) 2003-2007, International Business Machines Corporation
  * and others. All Rights Reserved.
  ******************************************************************************
@@ -44,7 +45,7 @@ U_NAMESPACE_BEGIN
  * @author Mehran Mehr
  * @internal
  */
-class U_I18N_API PersianCalendar : public Calendar {
+class PersianCalendar : public Calendar {
  public:
   //-------------------------------------------------------------------------
   // Constants...
@@ -265,7 +266,7 @@ class U_I18N_API PersianCalendar : public Calendar {
    * @return   The class ID for all objects of this class.
    * @internal
    */
-  static UClassID U_EXPORT2 getStaticClassID(void);
+  U_I18N_API static UClassID U_EXPORT2 getStaticClassID(void);
 
   /**
    * return the calendar type, "persian".
