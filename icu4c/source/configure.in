@@ -791,8 +791,7 @@ fi
 AC_SUBST(U_HAVE_WCHAR_H)
 AC_SUBST(U_HAVE_WCSCPY)
 
-ac_default_sizeof_wchar_t=4
-AC_DO_CHECK_SIZEOF(wchar_t,$ac_default_sizeof_wchar_t,[
+AC_CHECK_SIZEOF([wchar_t], 0, [
 #if STDC_HEADERS
 #include <stddef.h>
 #endif
@@ -801,14 +800,12 @@ AC_DO_CHECK_SIZEOF(wchar_t,$ac_default_sizeof_wchar_t,[
 #include <string.h>
 #include <wchar.h>
 #endif])
-dnl We could set ac_cv_sizeof_wchar_t to the default if the check returned
-dnl 0 (unknown) but we'd rather do it in the headers, so we know we had no
-dnl clue at configure time.
 U_SIZEOF_WCHAR_T=$ac_cv_sizeof_wchar_t
+# We do this check to verify that everything is okay.
 if test $U_SIZEOF_WCHAR_T = 0; then
-	if test $U_HAVE_WCHAR_H=1; then
-	   AC_MSG_ERROR(There is wchar.h but the size of wchar_t is 0)
-	fi
+    if test $U_HAVE_WCHAR_H=1; then
+       AC_MSG_ERROR(There is wchar.h but the size of wchar_t is 0)
+    fi
 fi
 AC_SUBST(U_SIZEOF_WCHAR_T)
 
