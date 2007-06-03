@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2005, International Business Machines
+*   Copyright (C) 2004-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -31,17 +31,17 @@ U_CDECL_BEGIN
 struct UBiDiProps;
 typedef struct UBiDiProps UBiDiProps;
 
-U_CAPI UBiDiProps * U_EXPORT2
+U_CFUNC UBiDiProps *
 ubidi_openProps(UErrorCode *pErrorCode);
 
-U_CAPI UBiDiProps * U_EXPORT2
+U_CFUNC UBiDiProps *
 ubidi_openBinary(const uint8_t *bin, int32_t length, UErrorCode *pErrorCode);
 
-U_CAPI void U_EXPORT2
+U_CFUNC void
 ubidi_closeProps(UBiDiProps *bdp);
 
 
-U_CAPI const UBiDiProps * U_EXPORT2
+U_CFUNC const UBiDiProps *
 ubidi_getSingleton(UErrorCode *pErrorCode);
 
 /**
@@ -49,16 +49,16 @@ ubidi_getSingleton(UErrorCode *pErrorCode);
  * This can be used when the real data is not available.
  * Using the dummy can reduce checks for available data after an initial failure.
  */
-U_CAPI const UBiDiProps * U_EXPORT2
+U_CAPI const UBiDiProps *
 ubidi_getDummy(UErrorCode *pErrorCode);
 
 
-U_CAPI int32_t U_EXPORT2
+U_CAPI int32_t
 ubidi_swap(const UDataSwapper *ds,
            const void *inData, int32_t length, void *outData,
            UErrorCode *pErrorCode);
 
-U_CAPI void U_EXPORT2
+U_CFUNC void
 ubidi_addPropertyStarts(const UBiDiProps *bdp, const USetAdder *sa, UErrorCode *pErrorCode);
 
 /* property access functions */
@@ -66,25 +66,25 @@ ubidi_addPropertyStarts(const UBiDiProps *bdp, const USetAdder *sa, UErrorCode *
 U_CFUNC int32_t
 ubidi_getMaxValue(const UBiDiProps *bdp, UProperty which);
 
-U_CAPI UCharDirection U_EXPORT2
+U_CAPI UCharDirection
 ubidi_getClass(const UBiDiProps *bdp, UChar32 c);
 
-U_CAPI UBool U_EXPORT2
+U_CFUNC UBool
 ubidi_isMirrored(const UBiDiProps *bdp, UChar32 c);
 
-U_CAPI UChar32 U_EXPORT2
+U_CFUNC UChar32
 ubidi_getMirror(const UBiDiProps *bdp, UChar32 c);
 
-U_CAPI UBool U_EXPORT2
+U_CFUNC UBool
 ubidi_isBidiControl(const UBiDiProps *bdp, UChar32 c);
 
-U_CAPI UBool U_EXPORT2
+U_CFUNC UBool
 ubidi_isJoinControl(const UBiDiProps *bdp, UChar32 c);
 
-U_CAPI UJoiningType U_EXPORT2
+U_CFUNC UJoiningType
 ubidi_getJoiningType(const UBiDiProps *bdp, UChar32 c);
 
-U_CAPI UJoiningGroup U_EXPORT2
+U_CFUNC UJoiningGroup
 ubidi_getJoiningGroup(const UBiDiProps *bdp, UChar32 c);
 
 /* file definitions --------------------------------------------------------- */

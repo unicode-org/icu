@@ -601,7 +601,7 @@ void IntlCalendarTest::TestJapanese3860()
             int32_t gotYear = cal2->get(UCAL_YEAR, s2);
             int32_t gotEra = cal2->get(UCAL_ERA, s2);
             int32_t expectYear = 1;
-            int32_t expectEra = JapaneseCalendar::kCurrentEra;
+            int32_t expectEra = JapaneseCalendar::getCurrentEra();
             if((gotYear!=1) || (gotEra != expectEra)) {
                 errln(UnicodeString("parse "+samplestr+" of 'y.m.d' as Japanese Calendar, expected year ") + expectYear + 
                     UnicodeString(" and era ") + expectEra +", but got year " + gotYear + " and era " + gotEra + " (Gregorian:" + str +")");

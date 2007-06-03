@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2006, International Business Machines
+*   Copyright (C) 2002-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -367,7 +367,7 @@ typedef enum UPropertySource UPropertySource;
  * @see UPropertySource
  * @internal
  */
-U_CAPI UPropertySource U_EXPORT2
+U_CFUNC UPropertySource U_EXPORT2
 uprops_getSource(UProperty which);
 
 /**
@@ -383,7 +383,7 @@ uchar_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode);
  * start of each range of same properties to the set.
  * @internal
  */
-U_CAPI void U_EXPORT2
+U_CFUNC void U_EXPORT2
 upropsvec_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode);
 
 /**

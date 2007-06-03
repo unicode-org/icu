@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2006, International Business Machines
+*   Copyright (C) 2001-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -310,7 +310,7 @@ unorm_internalQuickCheck(const UChar *src,
  * for u_getIntPropertyValue().
  * @internal
  */
-U_CAPI uint16_t U_EXPORT2
+U_CFUNC uint16_t U_EXPORT2
 unorm_getFCD16FromCodePoint(UChar32 c);
 
 /**
@@ -408,14 +408,14 @@ unorm_getDecomposition(UChar32 c, UBool compat,
  * internal API, used by uprops.cpp
  * @internal
  */
-U_CAPI UBool U_EXPORT2
+U_CFUNC UBool U_EXPORT2
 unorm_internalIsFullCompositionExclusion(UChar32 c);
 
 /**
  * Internal API, used by enumeration of canonically equivalent strings
  * @internal
  */
-U_CAPI UBool U_EXPORT2
+U_CFUNC UBool U_EXPORT2
 unorm_isCanonSafeStart(UChar32 c);
 
 /**
@@ -465,7 +465,7 @@ unorm_swap(const UDataSwapper *ds,
  * Get the NF*_QC property for a code point, for u_getIntPropertyValue().
  * @internal
  */
-U_CAPI UNormalizationCheckResult U_EXPORT2
+U_CFUNC UNormalizationCheckResult U_EXPORT2
 unorm_getQuickCheck(UChar32 c, UNormalizationMode mode);
 
 /**

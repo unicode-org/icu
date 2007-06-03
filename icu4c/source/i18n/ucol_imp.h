@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2006, International Business Machines
+*   Copyright (C) 1998-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -426,7 +426,7 @@ U_CFUNC
 uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                           collIterate *source, UErrorCode *status);
 U_CAPI uint32_t U_EXPORT2 ucol_getNextCE(const UCollator *coll, collIterate *collationSource, UErrorCode *status);
-U_CAPI uint32_t U_EXPORT2 ucol_getPrevCE(const UCollator *coll,
+U_CFUNC uint32_t U_EXPORT2 ucol_getPrevCE(const UCollator *coll,
                                          collIterate *collationSource,
                                          UErrorCode *status);
 /* function used by C++ getCollationKey to prevent restarting the calculation */
@@ -481,7 +481,7 @@ ucol_cloneRuleData(const UCollator *coll, int32_t *length, UErrorCode *status);
  * Used to set requested and valid locales on a collator returned by the collator
  * service.
  */
-U_CAPI void U_EXPORT2
+U_CFUNC void U_EXPORT2
 ucol_setReqValidLocales(UCollator *coll, char *requestedLocaleToAdopt, char *validLocaleToAdopt);
 
 #define UCOL_SPECIAL_FLAG 0xF0000000
@@ -954,7 +954,7 @@ void ucol_putOptionsToHeader(UCollator* result, UColOptionSet * opts, UErrorCode
 U_CFUNC
 void ucol_updateInternalState(UCollator *coll, UErrorCode *status);
 
-U_CAPI uint32_t U_EXPORT2 ucol_getFirstCE(const UCollator *coll, UChar u, UErrorCode *status);
+U_CFUNC uint32_t U_EXPORT2 ucol_getFirstCE(const UCollator *coll, UChar u, UErrorCode *status);
 U_CAPI UBool U_EXPORT2 ucol_isTailored(const UCollator *coll, const UChar u, UErrorCode *status);
 
 U_CAPI const InverseUCATableHeader* U_EXPORT2 ucol_initInverseUCA(UErrorCode *status);
@@ -965,8 +965,8 @@ uprv_uca_initImplicitConstants(int32_t minPrimary, int32_t maxPrimary, UErrorCod
 U_CAPI uint32_t U_EXPORT2
 uprv_uca_getImplicitFromRaw(UChar32 cp);
 
-U_CAPI uint32_t U_EXPORT2
-uprv_uca_getImplicitPrimary(UChar32 cp);
+/*U_CFUNC uint32_t U_EXPORT2
+uprv_uca_getImplicitPrimary(UChar32 cp);*/
 
 U_CAPI UChar32 U_EXPORT2
 uprv_uca_getRawFromImplicit(uint32_t implicit);

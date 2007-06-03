@@ -1,6 +1,6 @@
 /*
 ***********************************************************************
-* Copyright (c) 2002-2006, International Business Machines Corporation
+* Copyright (c) 2002-2007, International Business Machines Corporation
 * and others.  All Rights Reserved.
 ***********************************************************************
 * Date        Name        Description
@@ -32,7 +32,7 @@ U_NAMESPACE_BEGIN
  *
  * @author Alan Liu
  */
-class U_I18N_API AnyTransliterator : public Transliterator {
+class AnyTransliterator : public Transliterator {
 
     /**
      * Cache mapping UScriptCode values to Transliterator*.
@@ -80,7 +80,7 @@ public:
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      */
-    static UClassID U_EXPORT2 getStaticClassID();
+    U_I18N_API static UClassID U_EXPORT2 getStaticClassID();
 
 private:
 
