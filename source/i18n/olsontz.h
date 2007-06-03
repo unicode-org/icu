@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2005, International Business Machines
+* Copyright (c) 2003-2007, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -113,7 +113,7 @@ class SimpleTimeZone;
  * count, the metadata entry itself is considered a rule resource,
  * since its key begins with an underscore.
  */
-class U_I18N_API OlsonTimeZone: public TimeZone {
+class OlsonTimeZone: public TimeZone {
  public:
     /**
      * Construct from a resource bundle.
@@ -153,7 +153,7 @@ class U_I18N_API OlsonTimeZone: public TimeZone {
     /**
      * TimeZone API.
      */
-    static UClassID U_EXPORT2 getStaticClassID();
+    U_I18N_API static UClassID U_EXPORT2 getStaticClassID();
 
     /**
      * TimeZone API.

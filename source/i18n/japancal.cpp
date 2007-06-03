@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2003-2006, International Business Machines Corporation and    *
+* Copyright (C) 2003-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -278,7 +278,12 @@ static const struct {
 
 #define kEraCount (sizeof(kEraInfo)/sizeof(kEraInfo[0]))
 
-const uint32_t JapaneseCalendar::kCurrentEra = (kEraCount-1);
+static const uint32_t kCurrentEra = (kEraCount-1);
+
+/* Some platforms don't like to export constants, like old Palm OS and some z/OS configurations. */
+uint32_t JapaneseCalendar::getCurrentEra() {
+    return kCurrentEra;
+}
 
 JapaneseCalendar::JapaneseCalendar(const Locale& aLocale, UErrorCode& success)
 :   GregorianCalendar(aLocale, success)
@@ -470,7 +475,7 @@ int32_t JapaneseCalendar::defaultCenturyStartYear() const
 
 static int32_t gJapanCalendarLimits[2][4] = {
     //    Minimum  Greatest min      Least max   Greatest max
-    {        0,        0, JapaneseCalendar::kCurrentEra, JapaneseCalendar::kCurrentEra }, // ERA
+    {        0,        0, kCurrentEra, kCurrentEra }, // ERA
     {        1,        1,           0,           0 }, // YEAR least-max/greatest-max computed at runtime
 };
 

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (C) 1999-2006, International Business Machines Corporation
+* Copyright (C) 1999-2007, International Business Machines Corporation
 * and others. All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -42,7 +42,7 @@ class UnicodeReplacer;
  * data structure handles this.  See the parsing code for more
  * details.
  */
-class U_I18N_API TransliterationRuleData : public UMemory {
+class TransliterationRuleData : public UMemory {
 
 public:
 

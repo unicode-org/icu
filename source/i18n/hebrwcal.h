@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2003-2006, International Business Machines Corporation
+* Copyright (C) 2003-2007, International Business Machines Corporation
 * and others. All Rights Reserved.
 ******************************************************************************
 *
@@ -80,7 +80,7 @@ U_NAMESPACE_BEGIN
  * <p>
  * @internal
  */
-class U_I18N_API HebrewCalendar : public Calendar {
+class HebrewCalendar : public Calendar {
 public:
   /**
    * Useful constants for HebrewCalendar.
@@ -216,7 +216,7 @@ public:
      * @return   The class ID for all objects of this class.
      * @internal
      */
-    static UClassID U_EXPORT2 getStaticClassID(void);
+    U_I18N_API static UClassID U_EXPORT2 getStaticClassID(void);
 
     /**
      * return the calendar type, "hebrew".

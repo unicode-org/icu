@@ -1,5 +1,7 @@
 /*
-* Copyright (C) {1999}, International Business Machines Corporation and others. All Rights Reserved.
+**********************************************************************
+* Copyright (C) 1999-2007, International Business Machines Corporation
+* and others. All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
 *   11/17/99    aliu        Creation.
@@ -29,7 +31,7 @@ class UnicodeSet;
  * A set of rules for a <code>RuleBasedTransliterator</code>.
  * @author Alan Liu
  */
-class U_I18N_API TransliterationRuleSet : public UMemory {
+class TransliterationRuleSet : public UMemory {
     /**
      * Vector of rules, in the order added.  This is used while the
      * rule set is getting built.  After that, freeze() reorders and

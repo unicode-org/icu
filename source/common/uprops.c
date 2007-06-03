@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2006, International Business Machines
+*   Copyright (C) 2002-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -354,7 +354,7 @@ u_getIntPropertyMaxValue(UProperty which) {
     }
 }
 
-U_CAPI UPropertySource U_EXPORT2
+U_CFUNC UPropertySource U_EXPORT2
 uprops_getSource(UProperty which) {
     if(which<UCHAR_BINARY_START) {
         return UPROPS_SRC_NONE; /* undefined */

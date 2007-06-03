@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2006, International Business Machines
+*   Copyright (c) 2001-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -22,7 +22,7 @@ U_NAMESPACE_BEGIN
  * A transliterator that removes text.
  * @author Alan Liu
  */
-class U_I18N_API RemoveTransliterator : public Transliterator {
+class RemoveTransliterator : public Transliterator {
 
 public:
 
@@ -67,7 +67,7 @@ public:
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      */
-    static UClassID U_EXPORT2 getStaticClassID();
+    U_I18N_API static UClassID U_EXPORT2 getStaticClassID();
 
 };
 

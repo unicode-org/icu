@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (c) 1996-2006, International Business Machines
+* Copyright (c) 1996-2007, International Business Machines
 * Corporation and others. All Rights Reserved.
 ******************************************************************************
 * File unorm.cpp
@@ -971,7 +971,7 @@ u_getCombiningClass(UChar32 c) {
 #endif
 }
 
-U_CAPI UBool U_EXPORT2
+U_CFUNC UBool U_EXPORT2
 unorm_internalIsFullCompositionExclusion(UChar32 c) {
 #if UNORM_HARDCODE_DATA
     if(auxTrie.index!=NULL) {
@@ -988,7 +988,7 @@ unorm_internalIsFullCompositionExclusion(UChar32 c) {
     }
 }
 
-U_CAPI UBool U_EXPORT2
+U_CFUNC UBool U_EXPORT2
 unorm_isCanonSafeStart(UChar32 c) {
 #if UNORM_HARDCODE_DATA
     if(auxTrie.index!=NULL) {
@@ -1249,7 +1249,7 @@ unorm_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode) {
     sa->add(sa->set, HANGUL_BASE+HANGUL_COUNT); /* add Hangul+1 to continue with other properties */
 }
 
-U_CAPI UNormalizationCheckResult U_EXPORT2
+U_CFUNC UNormalizationCheckResult U_EXPORT2
 unorm_getQuickCheck(UChar32 c, UNormalizationMode mode) {
     static const uint32_t qcMask[UNORM_MODE_COUNT]={
         0, 0, _NORM_QC_NFD, _NORM_QC_NFKD, _NORM_QC_NFC, _NORM_QC_NFKC
@@ -1276,7 +1276,7 @@ unorm_getQuickCheck(UChar32 c, UNormalizationMode mode) {
     }
 }
 
-U_CAPI uint16_t U_EXPORT2
+U_CFUNC uint16_t U_EXPORT2
 unorm_getFCD16FromCodePoint(UChar32 c) {
     uint16_t fcd;
 #if !UNORM_HARDCODE_DATA
