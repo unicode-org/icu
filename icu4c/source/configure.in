@@ -198,7 +198,10 @@ if test "$ac_cv_c_compiler_gnu" = yes; then
     # option otherwise works.
     CFLAGS="${OLD_CFLAGS}"
     CXXFLAGS="${OLD_CXXFLAGS}"
-    if test "$SHAREDLIBEXPORT" = yes; then
+    if test "$SHAREDLIBEXPORT" = no; then
+        LIBCFLAGS=
+        LIBCXXFLAGS=
+    else
         U_USE_GCC_VISIBILITY_ATTRIBUTE=1
     fi
 fi
