@@ -117,6 +117,10 @@ CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 # CPPFLAGS is for C Pre-Processor flags
 CPPFLAGS = @CPPFLAGS@
+# LIBCFLAGS are the flags for static and shared libraries.
+LIBCFLAGS = @LIBCFLAGS@
+# LIBCXXFLAGS are the flags for static and shared libraries.
+LIBCXXFLAGS = @LIBCXXFLAGS@
 # DEFAULT_LIBS are the default libraries to link against
 DEFAULT_LIBS = @LIBS@
 # LIB_M is for linking against the math library
