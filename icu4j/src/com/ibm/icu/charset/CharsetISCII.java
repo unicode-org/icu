@@ -721,24 +721,21 @@ class CharsetISCII extends CharsetICU {
         maxBytesPerChar = 4; 
         minBytesPerChar = 1;
         maxCharsPerByte = 1;
-        
-        int test = lookupInitialData[options & UCNV_OPTIONS_VERSION_MASK].uniLang;
-        int test2 = UniLang.DELTA;
-        char temp = (char)(test * test2);
-        int test3 = temp + 3;
+        //get the version number of the ISCII converter
+        int option = Integer.parseInt(icuCanonicalName.substring(14));
         
         extraInfo = new UConverterDataISCII(
                             NO_CHAR_MARKER, /* contextCharToUnicode */
                             0x0000, /* contextCharFromUnicode */
-                            (short)(lookupInitialData[options & UCNV_OPTIONS_VERSION_MASK].uniLang * UniLang.DELTA), /* defDeltaToUnicode */ 
-                            (short)(lookupInitialData[options & UCNV_OPTIONS_VERSION_MASK].uniLang * UniLang.DELTA), /* currentDeltaFromUnicode */ 
-                            (short)(lookupInitialData[options & UCNV_OPTIONS_VERSION_MASK].uniLang * UniLang.DELTA), /* currentDeltaToUnicode */ 
-                            (short)lookupInitialData[options & UCNV_OPTIONS_VERSION_MASK].maskEnum, /* currentMaskToUnicode */
-                            (short)lookupInitialData[options & UCNV_OPTIONS_VERSION_MASK].maskEnum, /* currentMaskFromUnicode */
-                            (short)lookupInitialData[options & UCNV_OPTIONS_VERSION_MASK].maskEnum, /* defMaskToUnicode */
+                            (short)(lookupInitialData[option & UCNV_OPTIONS_VERSION_MASK].uniLang * UniLang.DELTA), /* defDeltaToUnicode */ 
+                            (short)(lookupInitialData[option & UCNV_OPTIONS_VERSION_MASK].uniLang * UniLang.DELTA), /* currentDeltaFromUnicode */ 
+                            (short)(lookupInitialData[option & UCNV_OPTIONS_VERSION_MASK].uniLang * UniLang.DELTA), /* currentDeltaToUnicode */ 
+                            (short)lookupInitialData[option & UCNV_OPTIONS_VERSION_MASK].maskEnum, /* currentMaskToUnicode */
+                            (short)lookupInitialData[option & UCNV_OPTIONS_VERSION_MASK].maskEnum, /* currentMaskFromUnicode */
+                            (short)lookupInitialData[option & UCNV_OPTIONS_VERSION_MASK].maskEnum, /* defMaskToUnicode */
                             true, /* isFirstBuffer */
                             false, /* resetToDefaultToUnicode */
-                            ISCII_CNV_PREFIX /* name */
+                            new String(ISCII_CNV_PREFIX + (option & UCNV_OPTIONS_VERSION_MASK))  /* name */
                         );
     }
     
