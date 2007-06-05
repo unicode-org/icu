@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2002-2006, International Business Machines
+*   Copyright (c) 2002-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -20,6 +20,7 @@
 #include "rbbidata.h"
 #include "cstring.h"
 #include "uassert.h"
+#include "cmemory.h"
 
 U_NAMESPACE_BEGIN
 
@@ -234,6 +235,9 @@ void RBBITableBuilder::calcFirstPos(RBBINode *n) {
         n->fType == RBBINode::lookAhead ||
         n->fType == RBBINode::tag) {
         // These are non-empty leaf node types.
+        // Note: In order to maintain the sort invariant on the set,
+        // this function should only be called on a node whose set is
+        // empty to start with.
         n->fFirstPosSet->addElement(n, *fStatus);
         return;
     }
@@ -277,6 +281,9 @@ void RBBITableBuilder::calcLastPos(RBBINode *n) {
         n->fType == RBBINode::lookAhead ||
         n->fType == RBBINode::tag) {
         // These are non-empty leaf node types.
+        // Note: In order to maintain the sort invariant on the set,
+        // this function should only be called on a node whose set is
+        // empty to start with.
         n->fLastPosSet->addElement(n, *fStatus);
         return;
     }
@@ -895,23 +902,78 @@ void RBBITableBuilder::sortedAdd(UVector **vector, int32_t val) {
 //
 //  setAdd     Set operation on UVector
 //             dest = dest union source
-//             Elements may only appear once.   Order is unimportant.
+//             Elements may only appear once and must be sorted.
 //
 //-----------------------------------------------------------------------------
 void RBBITableBuilder::setAdd(UVector *dest, UVector *source) {
     int destOriginalSize = dest->size();
     int sourceSize       = source->size();
-    int32_t  si, di;
+    int32_t di           = 0;
+    void *(destS[16]), *(sourceS[16]);  // Handle small cases without malloc
+    void **destH = 0, **sourceH = 0;
+    void **destBuff, **sourceBuff;
+    void **destLim, **sourceLim;
 
-    for (si=0; si<sourceSize && U_SUCCESS(*fStatus); si++) {
-        void *elToAdd = source->elementAt(si);
-        for (di=0; di<destOriginalSize; di++) {
-            if (dest->elementAt(di) == elToAdd) {
-                goto  elementAlreadyInDest;
-            }
+    if (destOriginalSize > sizeof(destS)/sizeof(destS[0])) {
+        destH = (void **)uprv_malloc(sizeof(void *) * destOriginalSize);
+        destBuff = destH;
+    }
+    else {
+        destBuff = destS;
+    }
+    if (destBuff == 0) {
+        return;
+    }
+    destLim = destBuff + destOriginalSize;
+
+    if (sourceSize > sizeof(sourceS)/sizeof(sourceS[0])) {
+        sourceH = (void **)uprv_malloc(sizeof(void *) * sourceSize);
+        sourceBuff = sourceH;
+    }
+    else {
+        sourceBuff = sourceS;
+    }
+    if (sourceBuff == 0) {
+        if (destH) {
+            uprv_free(destH);
         }
-        dest->addElement(elToAdd, *fStatus);
-        elementAlreadyInDest: ;
+        return;
+    }
+    sourceLim = sourceBuff + sourceSize;
+
+    // Avoid multiple "get element" calls by getting the contents into arrays
+    (void) dest->toArray(destBuff);
+    (void) source->toArray(sourceBuff);
+
+    dest->setSize(sourceSize+destOriginalSize);
+
+    while (sourceBuff < sourceLim && destBuff < destLim) {
+        if (*destBuff < *sourceBuff) {
+            dest->setElementAt(*destBuff++, di++);
+        }
+        else if (*sourceBuff < *destBuff) {
+            dest->setElementAt(*sourceBuff++, di++);
+        }
+        else {
+            dest->setElementAt(*sourceBuff++, di++);
+            destBuff++;
+        }
+    }
+
+    // At most one of these two cleanup loops will execute
+    while (destBuff < destLim) {
+        dest->setElementAt(*destBuff++, di++);
+    }
+    while (sourceBuff < sourceLim) {
+        dest->setElementAt(*sourceBuff++, di++);
+    }
+
+    dest->setSize(di);
+    if (destH) {
+        uprv_free(destH);
+    }
+    if (sourceH) {
+        uprv_free(sourceH);
     }
 }
 
@@ -921,40 +983,11 @@ void RBBITableBuilder::setAdd(UVector *dest, UVector *source) {
 //
 //  setEqual    Set operation on UVector.
 //              Compare for equality.
-//              Elements may appear only once.
-//              Elements may appear in any order.
+//              Elements must be sorted.
 //
 //-----------------------------------------------------------------------------
 UBool RBBITableBuilder::setEquals(UVector *a, UVector *b) {
-    int32_t    aSize = a->size();
-    int32_t    bSize = b->size();
-
-    if (aSize != bSize) {
-        return FALSE;
-    }
-
-    int32_t  ax;
-    int32_t  bx;
-    int32_t  firstBx = 0;
-    void     *aVal;
-    void     *bVal = NULL;
-
-    for (ax=0; ax<aSize; ax++) {
-        aVal = a->elementAt(ax);
-        for (bx=firstBx; bx<bSize; bx++) {
-            bVal = b->elementAt(bx);
-            if (aVal == bVal) {
-                if (bx==firstBx) {
-                    firstBx++;
-                }
-                break;
-            }
-        }
-        if (aVal != bVal) {
-            return FALSE;
-        }
-    }
-    return TRUE;
+    return a->equals(*b);
 }
 
 
