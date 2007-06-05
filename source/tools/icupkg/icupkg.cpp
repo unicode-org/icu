@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2005-2006, International Business Machines
+*   Copyright (C) 2005-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -340,7 +340,7 @@ main(int argc, char *argv[]) {
     char outType;
     UBool isHelp, isModified, isPackage;
 
-    Package *pkg, *listPkg;
+    Package *pkg, *listPkg, *addListPkg;
 
     U_MAIN_INIT_ARGS(argc, argv);
 
@@ -502,10 +502,12 @@ main(int argc, char *argv[]) {
      * use a separate Package so that its memory and items stay around
      * as long as the main Package
      */
+    addListPkg=NULL;
     if(options[OPT_ADD_LIST].doesOccur) {
-        listPkg=readList(sourcePath, options[OPT_ADD_LIST].value, TRUE);
-        if(listPkg!=NULL) {
-            pkg->addItems(*listPkg);
+        addListPkg=readList(sourcePath, options[OPT_ADD_LIST].value, TRUE);
+        if(addListPkg!=NULL) {
+            pkg->addItems(*addListPkg);
+            // delete addListPkg; deferred until after writePackage()
             isModified=TRUE;
         } else {
             printUsage(pname, FALSE);
@@ -570,6 +572,7 @@ main(int argc, char *argv[]) {
         pkg->writePackage(outFilename, outType, outComment);
     }
 
+    delete addListPkg;
     delete pkg;
     return 0;
 }
