@@ -829,7 +829,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
                 value = -value;
                 sign = 45/*'-'*/;
             }
-            value = (value / 3) * 5 + (value % 60); // minutes => KKmm
+            value = (value / 60) * 100 + (value % 60); // minutes => KKmm
             appendTo += sign;
             zeroPaddingNumber(appendTo, value, 4, 4);
         }
