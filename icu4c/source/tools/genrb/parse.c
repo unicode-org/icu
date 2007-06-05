@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2006, International Business Machines
+*   Copyright (C) 1998-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -465,6 +465,7 @@ parseTransliterator(char *tag, uint32_t startline, const struct UString* comment
 #if !UCONFIG_NO_TRANSLITERATION
     size = utrans_stripRules(pSource, size, pTarget, status);
 #else
+    size = 0;
     fprintf(stderr, " Warning: writing empty transliteration data ( UCONFIG_NO_TRANSLITERATION ) \n");
 #endif
     result = string_open(bundle, tag, pTarget, size, NULL, status);
