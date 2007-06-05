@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -54,6 +54,7 @@ DateFormatRegressionTest::runIndexedTest( int32_t index, UBool exec, const char*
         CASE(23,Test4210209)
         CASE(24,Test714)
         CASE(25,Test1684)
+        CASE(26,Test5554)
         default: name = ""; break;
     }
 }
@@ -1422,6 +1423,36 @@ void DateFormatRegressionTest::Test1684(void)
     delete tests[i];
   }
   delete cal;
+  delete sdf;
+}
+
+void DateFormatRegressionTest::Test5554(void)
+{
+  UErrorCode status = U_ZERO_ERROR;
+  UnicodeString pattern("Z","");
+  UnicodeString newfoundland("Canada/Newfoundland", "");
+  TimeZone *zone = TimeZone::createTimeZone(newfoundland);
+  Calendar *cal = new GregorianCalendar(zone, status);
+  SimpleDateFormat *sdf = new SimpleDateFormat(pattern,status);
+  if (U_FAILURE(status)) {
+    dataerrln("Error constructing SimpleDateFormat");
+    delete cal;
+    delete sdf;
+    return;
+  }
+  cal->set(2007, 1, 14);
+  UDate date = cal->getTime(status);
+  if (U_FAILURE(status)) {
+    errln("Error getting time to format");
+    return;
+  };
+  sdf->adoptCalendar(cal);
+  UnicodeString result;
+  UnicodeString correct("-0330", "");
+  sdf->format(date, result);
+  if (result != correct) {
+    errln("\nError: Newfoundland Z of Jan 14, 2007 gave '" + result + "', expected '" + correct + "'");
+  }
   delete sdf;
 }
 
