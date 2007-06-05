@@ -346,7 +346,7 @@ getDirProps(UBiDi *pBiDi) {
     DirProp dirProp=0, paraDirDefault=0;/* initialize to avoid compiler warnings */
     UBool isDefaultLevel=IS_DEFAULT_LEVEL(pBiDi->paraLevel);
     /* for inverse BiDi, the default para level is set to RTL if there is a
-       strong character at either end of the text                           */
+       strong R or AL character at either end of the text                           */
     UBool isDefaultLevelInverse=isDefaultLevel &&
             (pBiDi->reorderingMode==UBIDI_REORDER_INVERSE_LIKE_DIRECT ||
              pBiDi->reorderingMode==UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL);
@@ -859,7 +859,7 @@ static const uint8_t impTabProps[][IMPTABPROPS_COLUMNS] =
 /*17 B           */ { s(1,1), s(1,2), s(1,4), s(1,5), s(1,7),s(1,15),    17 , s(1,7), s(1,9), s(1,7),    17 , s(1,7), s(1,3),   _B }
 };
 
-/*  we must undef macro _ because the levels table have a different
+/*  we must undef macro s because the levels table have a different
  *  structure (4 bits for action and 4 bits for next state.
  */
 #undef s
