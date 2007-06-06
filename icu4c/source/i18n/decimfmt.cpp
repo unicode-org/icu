@@ -416,6 +416,7 @@ DecimalFormat::operator=(const DecimalFormat& rhs)
             *fRoundingIncrement = *rhs.fRoundingIncrement;
         }
         fRoundingDouble = rhs.fRoundingDouble;
+        fRoundingMode = rhs.fRoundingMode;
         fMultiplier = rhs.fMultiplier;
         fGroupingSize = rhs.fGroupingSize;
         fGroupingSize2 = rhs.fGroupingSize2;
@@ -732,6 +733,10 @@ DecimalFormat::format(  double number,
     DigitList digits;
 
     // This detects negativity too.
+    if (fRoundingIncrement == NULL) {
+        // If we did not round in binary space, round in decimal space
+        digits.fRoundingMode = fRoundingMode;
+    }
     digits.set(number, precision(FALSE),
                !fUseExponentialNotation && !areSignificantDigitsUsed());
 
