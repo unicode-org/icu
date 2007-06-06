@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2003, 2007 International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -38,6 +38,9 @@ static void TestCurrencySign(void);
 /* Test proper rounding by the format method.*/
 static void TestRounding487(void);
 
+/* Test proper handling of rounding modes. */
+static void TestRounding5350(void);
+
 /* Test localized currency patterns. */
 static void TestCurrency(void);
 
@@ -48,6 +51,7 @@ static void TestSecondaryGrouping(void);
 
 /*Internal functions used*/
 static void roundingTest(UNumberFormat*, double,  int32_t, const char*);
+static void roundingTest2(UNumberFormat*, double, int32_t, const char*);
 
 static void TestCurrencyKeywords(void);
 

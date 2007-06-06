@@ -49,6 +49,7 @@ void addNumFrDepTest(TestNode** root)
   addTest(root, &TestDoubleAttribute, "tsformat/cnmdptst/TestDoubleAttribute");
   addTest(root, &TestSecondaryGrouping, "tsformat/cnmdptst/TestSecondaryGrouping");
   addTest(root, &TestCurrencyKeywords, "tsformat/cnmdptst/TestCurrencyKeywords");
+  addTest(root, &TestRounding5350, "tsformat/cnmdptst/TestRounding5350");
 }
 
 /*Test Various format patterns*/
@@ -858,6 +859,69 @@ static void TestCurrencyKeywords(void)
             }
         }
         
+    }
+}
+
+/**
+ * Test proper handling of rounding modes.
+ */
+static void TestRounding5350(void)
+{
+    UNumberFormat *nnf;
+    UErrorCode status = U_ZERO_ERROR;
+    /* this is supposed to open default date format, but later on it treats it like it is "en_US" 
+     - very bad if you try to run the tests on machine where default locale is NOT "en_US" */
+    /* nnf = unum_open(UNUM_DEFAULT, NULL, &status); */
+    nnf = unum_open(UNUM_DEFAULT, NULL,0,"en_US",NULL, &status);
+
+    if(U_FAILURE(status)){
+        log_err("FAIL: failure in the construction of number format: %s\n", myErrorName(status));
+    } else {
+        unum_setAttribute(nnf, UNUM_MAX_FRACTION_DIGITS, 2);
+        roundingTest2(nnf, -0.125, UNUM_ROUND_CEILING, "-0.12");
+        roundingTest2(nnf, -0.125, UNUM_ROUND_FLOOR, "-0.13");
+        roundingTest2(nnf, -0.125, UNUM_ROUND_DOWN, "-0.12");
+        roundingTest2(nnf, -0.125, UNUM_ROUND_UP, "-0.13");
+        roundingTest2(nnf, 0.125, UNUM_FOUND_HALFEVEN, "0.12");
+        roundingTest2(nnf, 0.135, UNUM_ROUND_HALFDOWN, "0.13");
+        roundingTest2(nnf, 0.125, UNUM_ROUND_HALFUP, "0.13");
+        roundingTest2(nnf, 0.135, UNUM_FOUND_HALFEVEN, "0.14");
+    }
+
+    unum_close(nnf);
+}
+ 
+/*-------------------------------------*/
+ 
+static void roundingTest2(UNumberFormat* nf, double x, int32_t roundingMode, const char* expected)
+{
+    UChar *out = NULL;
+    UChar *res;
+    UFieldPosition pos;
+    UErrorCode status;
+    int32_t lneed;
+    status=U_ZERO_ERROR;
+    unum_setAttribute(nf, UNUM_ROUNDING_MODE, roundingMode);
+    lneed=0;
+    lneed=unum_formatDouble(nf, x, NULL, lneed, NULL, &status);
+    if(status==U_BUFFER_OVERFLOW_ERROR){
+        status=U_ZERO_ERROR;
+        out=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
+        pos.field=0;
+        unum_formatDouble(nf, x, out, lneed+1, &pos, &status);
+    }
+    if(U_FAILURE(status)) {
+        log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status) );
+    }
+    /*Need to use log_verbose here. Problem with the float*/
+    /*printf("%f format with %d fraction digits to %s\n", x, maxFractionDigits, austrdup(out) );*/
+    res=(UChar*)malloc(sizeof(UChar) * (strlen(expected)+1) );
+    u_uastrcpy(res, expected);
+    if (u_strcmp(out, res) != 0)
+        log_err("FAIL: Expected: %s or %s\n", expected, austrdup(res) );
+    free(res);
+    if(out != NULL) {
+        free(out);
     }
 }
 

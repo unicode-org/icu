@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2005, International Business Machines
+*   Copyright (C) 1997-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -94,6 +94,7 @@ DigitList::operator=(const DigitList& other)
         fDecimalAt = other.fDecimalAt;
         fCount = other.fCount;
         fIsPositive = other.fIsPositive;
+        fRoundingMode = other.fRoundingMode;
         uprv_strncpy(fDigits, other.fDigits, fCount);
     }
     return *this;
@@ -108,6 +109,7 @@ DigitList::operator==(const DigitList& that) const
             (fDecimalAt == that.fDecimalAt &&
              fCount == that.fCount &&
              fIsPositive == that.fIsPositive &&
+             fRoundingMode == that.fRoundingMode &&
              uprv_strncmp(fDigits, that.fDigits, fCount) == 0));
 }
 
@@ -120,6 +122,7 @@ DigitList::clear()
     fDecimalAt = 0;
     fCount = 0;
     fIsPositive = TRUE;
+    fRoundingMode = DecimalFormat::kRoundHalfEven;
 
     // Don't bother initializing fDigits because fCount is 0.
 }
@@ -548,7 +551,7 @@ DigitList::round(int32_t maximumDigits)
 /**
  * Return true if truncating the representation to the given number
  * of digits will result in an increment to the last digit.  This
- * method implements half-even rounding, the default rounding mode.
+ * method implements the requested rounding mode.
  * [bnf]
  * @param maximumDigits the number of digits to keep, from 0 to
  * <code>count-1</code>.  If 0, then all digits are rounded away, and
@@ -558,16 +561,38 @@ DigitList::round(int32_t maximumDigits)
  * incremented
  */
 UBool DigitList::shouldRoundUp(int32_t maximumDigits) const {
-    // Implement IEEE half-even rounding
-    if (fDigits[maximumDigits] == '5' ) {
-        for (int i=maximumDigits+1; i<fCount; ++i) {
-            if (fDigits[i] != kZero) {
+    switch (fRoundingMode) {
+    case DecimalFormat::kRoundCeiling:
+        return fIsPositive;
+    case DecimalFormat::kRoundFloor:
+        return !fIsPositive;
+    case DecimalFormat::kRoundDown:
+        return FALSE;
+    case DecimalFormat::kRoundUp:
+        return TRUE;
+    case DecimalFormat::kRoundHalfEven:
+    case DecimalFormat::kRoundHalfDown:
+    case DecimalFormat::kRoundHalfUp:
+    default:
+        if (fDigits[maximumDigits] == '5' ) {
+            for (int i=maximumDigits+1; i<fCount; ++i) {
+                if (fDigits[i] != kZero) {
+                    return TRUE;
+                }
+            }
+            switch (fRoundingMode) {
+            case DecimalFormat::kRoundHalfEven:
+            default:
+                // Implement IEEE half-even rounding
+                return maximumDigits > 0 && (fDigits[maximumDigits-1] % 2 != 0);
+            case DecimalFormat::kRoundHalfDown:
+                return FALSE;
+            case DecimalFormat::kRoundHalfUp:
                 return TRUE;
             }
         }
-        return maximumDigits > 0 && (fDigits[maximumDigits-1] % 2 != 0);
+        return (fDigits[maximumDigits] > '5');
     }
-    return (fDigits[maximumDigits] > '5');
 }
 
 // -------------------------------------
