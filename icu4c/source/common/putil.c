@@ -1386,6 +1386,13 @@ remapPlatformDependentCodepage(const char *locale, const char *name) {
             name = "EUC-KR";
         }
     }
+    else if (uprv_strcmp(name, "eucJP") == 0) {
+        /*
+        ibm-954 is the best match.
+        ibm-33722 is the default for eucJP (similar to Windows).
+        */
+        name = "eucjis";
+    }
 #elif defined(U_DARWIN)
     if (locale == NULL && *name == 0) {
         /*
@@ -1394,6 +1401,24 @@ remapPlatformDependentCodepage(const char *locale, const char *name) {
         Mac OS X uses UTF-8 by default (especially the locale data and console).
         */
         name = "UTF-8";
+    }
+#elif defined(U_HPUX)
+    if (uprv_strcmp(name, "eucJP") == 0) {
+        /*
+        ibm-1350 is the best match, but unavailable.
+        ibm-954 is mostly a superset of ibm-1350.
+        ibm-33722 is the default for eucJP (similar to Windows).
+        */
+        name = "eucjis";
+    }
+#elif defined(U_LINUX)
+    if (uprv_strcmp(name, "eucjp") == 0) {
+        /*
+        ibm-1350 is the best match, but unavailable.
+        ibm-954 is mostly a superset of ibm-1350.
+        ibm-33722 is the default for eucJP (similar to Windows).
+        */
+        name = "eucjis";
     }
 #endif
     /* return NULL when "" is passed in */

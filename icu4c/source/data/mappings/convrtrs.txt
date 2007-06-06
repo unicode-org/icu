@@ -519,13 +519,11 @@ ibm-943_P130-1999 { UTR22* }
 ibm-33722_P12A_P12A-2004_U2 { UTR22* }
                         ibm-33722   # Leave untagged because this isn't the default
                         ibm-5050    # Leave untagged because this isn't the default, and yes this alias is correct
-                        EUC-JP { IANA MIME* WINDOWS JAVA* }
-                        Extended_UNIX_Code_Packed_Format_for_Japanese { IANA* WINDOWS JAVA }
-                        csEUCPkdFmtJapanese { IANA WINDOWS JAVA }
-                        X-EUC-JP { WINDOWS JAVA }   # Japan EUC. x-euc-jp is a MIME name
-                        eucjis { JAVA }
+                        EUC-JP { IANA MIME* WINDOWS }
+                        Extended_UNIX_Code_Packed_Format_for_Japanese { IANA* WINDOWS }
+                        csEUCPkdFmtJapanese { IANA WINDOWS }
+                        X-EUC-JP { WINDOWS }   # Japan EUC. x-euc-jp is a MIME name
                         windows-51932 { WINDOWS* }
-                        ujis # Linux sometimes uses this name. This is an unfortunate generic and rarely used name. Its use is discouraged.
                         ibm-33722_VPUA
                         IBM-eucJP
 ibm-33722_P120-1999 { UTR22* }  # Japan EUC with \ <-> Yen mapping
@@ -534,11 +532,18 @@ ibm-33722_P120-1999 { UTR22* }  # Japan EUC with \ <-> Yen mapping
                         cp33722 { JAVA* }
                         33722 { JAVA }
                         ibm-33722_VASCII_VPUA
-# ibm-954 seems to be almost a superset of ibm-33722
+# ibm-954 seems to be almost a superset of ibm-33722 and ibm-1350
+# ibm-1350 seems to be almost a superset of ibm-33722
+# ibm-954 contains more PUA characters than the others.
 ibm-954_P101-2007 { UTR22* }
                         ibm-954 { IBM* }
-                        EUC-JP # This is Solaris EUC-JP.
-                        # eucJP # A closer Solaris alias
+                        EUC-JP { JAVA* } # Matches more closely with ibm-1350
+                        Extended_UNIX_Code_Packed_Format_for_Japanese { JAVA }
+                        csEUCPkdFmtJapanese { JAVA }
+                        X-EUC-JP { JAVA }   # Japan EUC. x-euc-jp is a MIME name
+                        eucjis { JAVA }
+                        ujis # Linux sometimes uses this name. This is an unfortunate generic and rarely used name. Its use is discouraged.
+                        # eucJP # This is closest to Solaris EUC-JP.
 
 # Here are various interpretations and extentions of Big5
 ibm-1373_P100-2002 { UTR22* } # IBM's interpretation of Windows' Taiwan Big-5 without HKSCS extensions
