@@ -236,7 +236,7 @@ typedef unsigned int uint32_t;
  * @internal
  */
 #if @U_CHECK_UTF16_STRING@ || defined(U_CHECK_UTF16_STRING)
-#if (defined(__xlC__) && defined(__IBM_UTF_LITERAL)) \
+#if (defined(__xlC__) && defined(__IBM_UTF_LITERAL) && U_SIZEOF_WCHAR_T != 2) \
     || (defined(__HP_aCC) && __HP_aCC >= 035000) \
     || (defined(__HP_cc) && __HP_cc >= 111106)
 #define U_DECLARE_UTF16(string) u ## string
@@ -244,7 +244,8 @@ typedef unsigned int uint32_t;
 /* || (defined(__SUNPRO_C) && __SUNPRO_C >= 0x580) */
 /* Sun's C compiler has issues with this notation, and it's unreliable. */
 #define U_DECLARE_UTF16(string) U ## string
-#elif (defined(U_WINDOWS) || defined(U_CYGWIN) || ((defined(OS390) || defined(OS400)) && defined(__UCS2__)))
+#elif U_SIZEOF_WCHAR_T == 2 \
+    && (U_CHARSET_FAMILY == 0 || ((defined(OS390) || defined(OS400)) && defined(__UCS2__)))
 #define U_DECLARE_UTF16(string) L ## string
 #endif
 #endif
