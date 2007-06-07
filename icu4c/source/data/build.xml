@@ -169,6 +169,8 @@
                     <alias from="in_ID" to="id_ID" />
                     <alias from="iw" to="he" />
                     <alias from="iw_IL" to="he_IL" />
+                    <alias from="no" to="nb" />
+                    <alias from="no_NO" to="nb_NO" />
                     <alias from="sr_BA" to="sr_Cyrl_BA" />
                     <alias from="sr_ME" to="sr_Cyrl_ME" />
                     <alias from="sr_RS" to="sr_Cyrl_RS" />
