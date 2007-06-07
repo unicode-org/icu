@@ -158,9 +158,19 @@ static UMTX        cnvCacheMutex = NULL;  /* Mutex for synchronizing cnv cache a
 static const char **gAvailableConverters = NULL;
 static uint16_t gAvailableConverterCount = 0;
 
+/* This contains the resolved converter name. So no further alias lookup is needed again. */
 static char gDefaultConverterNameBuffer[UCNV_MAX_CONVERTER_NAME_LENGTH + 1]; /* +1 for NULL */
 static const char *gDefaultConverterName = NULL;
+
+/*
+If the default converter is an algorithmic converter, this is the cached value.
+We don't cache a full UConverter and clone it because ucnv_clone doesn't have
+less overhead than an algorithmic open. We don't cache non-algorithmic converters
+because ucnv_flushCache must be able to unload the default converter and its table.
+*/
 static const UConverterSharedData *gDefaultAlgorithmicSharedData = NULL;
+
+/* Does gDefaultConverterName have a converter option and require extra parsing? */
 static UBool gDefaultConverterContainsOption;
 
 
@@ -1098,7 +1108,18 @@ ucnv_bld_getAvailableConverter(uint16_t n, UErrorCode *pErrorCode) {
 
 /* default converter name --------------------------------------------------- */
 
-/* Copy the canonical converter name. */
+/*
+Copy the canonical converter name.
+ucnv_getDefaultName must be thread safe, which can call this function.
+
+ucnv_setDefaultName calls this function and it doesn't have to be
+thread safe because there is no reliable/safe way to reset the
+converter in use in all threads. If you did reset the converter, you
+would not be sure that retrieving a default converter for one string
+would be the same type of default converter for a successive string.
+Since the name is a returned via ucnv_getDefaultName without copying,
+you shouldn't be modifying or deleting the string from a separate thread.
+*/
 static U_INLINE void
 internalSetName(const char *name, UErrorCode *status) {
     UConverterLookupData lookup;
@@ -1117,11 +1138,11 @@ internalSetName(const char *name, UErrorCode *status) {
 
     umtx_lock(&cnvCacheMutex);
 
+    gDefaultAlgorithmicSharedData = algorithmicSharedData;
+    gDefaultConverterContainsOption = containsOption;
     uprv_memcpy(gDefaultConverterNameBuffer, name, length);
     gDefaultConverterNameBuffer[length]=0;
     gDefaultConverterName = gDefaultConverterNameBuffer;
-    gDefaultConverterContainsOption = containsOption;
-    gDefaultAlgorithmicSharedData = algorithmicSharedData;
 
     ucln_common_registerCleanup(UCLN_COMMON_UCNV, ucnv_cleanup);
 
@@ -1141,6 +1162,10 @@ ucnv_getDefaultName() {
     /* local variable to be thread-safe */
     const char *name;
 
+    /*
+    Multiple calls to ucnv_getDefaultName must be thread safe,
+    but ucnv_setDefaultName is not thread safe.
+    */
     UMTX_CHECK(&cnvCacheMutex, gDefaultConverterName, name);
     if(name==NULL) {
         UErrorCode errorCode = U_ZERO_ERROR;
@@ -1180,13 +1205,15 @@ ucnv_getDefaultName() {
     return name;
 }
 
+/*
+This function is not thread safe, and it can't be thread safe.
+See internalSetName or the API reference for details.
+*/
 U_CAPI void U_EXPORT2
 ucnv_setDefaultName(const char *converterName) {
     if(converterName==NULL) {
         /* reset to the default codepage */
-        umtx_lock(&cnvCacheMutex);
         gDefaultConverterName=NULL;
-        umtx_unlock(&cnvCacheMutex);
     } else {
         UErrorCode errorCode = U_ZERO_ERROR;
         UConverter *cnv = NULL;
