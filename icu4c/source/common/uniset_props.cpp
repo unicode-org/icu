@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2006, International Business Machines
+*   Copyright (C) 1999-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -42,6 +42,8 @@
 #include "umutex.h"
 #include "uassert.h"
 #include "hash.h"
+
+U_NAMESPACE_USE
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
