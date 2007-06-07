@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2006, International Business Machines
+ *   Copyright (C) 1999-2007, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -18,6 +18,8 @@
 
 #include <stdlib.h>
 #include <string.h>
+
+U_NAMESPACE_USE
 
 #define ARRAY_SIZE(array) (sizeof array / sizeof array[0])
 

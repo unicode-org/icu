@@ -1,4 +1,3 @@
-
 /*
  *******************************************************************************
  *
@@ -15,10 +14,10 @@
 #ifndef __SIMPLEFONTINSTANCE_H
 #define __SIMPLEFONTINSTANCE_H
 
-#include <stdio.h>
-
 #include "layout/LETypes.h"
 #include "layout/LEFontInstance.h"
+
+U_NAMESPACE_USE
 
 class SimpleFontInstance : public LEFontInstance
 {

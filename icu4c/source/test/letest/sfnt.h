@@ -1,6 +1,6 @@
 /***************************************************************************
 *
-*   Copyright (C) 1998-2005, International Business Machines
+*   Copyright (C) 1998-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ************************************************************************/
@@ -10,6 +10,7 @@
 
 #include "LETypes.h"
 
+U_NAMESPACE_USE
 
 #ifndef ANY_NUMBER
 #define ANY_NUMBER 1
