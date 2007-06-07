@@ -254,7 +254,7 @@ CurrencyData:table(nofallback){
         SA { "SAR" } // SAUDI ARABIA: Saudi Riyal
         SB { "SBD" } // SOLOMON ISLANDS: Solomon Islands Dollar
         SC { "SCR" } // SEYCHELLES: Seychelles Rupee
-        SD { "SDD" } // SUDAN: Sudanese Dinar
+        SD { "SDG" } // SUDAN: Sudanese Pound
         SE { "SEK" } // SWEDEN: Swedish Krona
         SG { "SGD" } // SINGAPORE: Singapore Dollar
         SH { "SHP" } // SAINT HELENA: Saint Helena Pound
