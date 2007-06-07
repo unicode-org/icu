@@ -1086,6 +1086,10 @@ structLocale:table(nofallback){
             "",
             "",
         }
+        SDG{
+            "",
+            "",
+        }
         SDP{
             "",
             "",
