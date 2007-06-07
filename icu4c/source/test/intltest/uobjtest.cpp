@@ -153,6 +153,8 @@ UObject *UObjectTest::testClass(UObject *obj,
 #include "japancal.h"
 #include "hebrwcal.h"
 #include "persncal.h"
+#include "windtfmt.h"
+#include "winnmfmt.h"
 #include "ustrenum.h"
 #include "olsontz.h"
 #include "reldtfmt.h"
@@ -261,6 +263,10 @@ void UObjectTest::testIDs()
     TESTCLASSID_FACTORY(JapaneseCalendar, Calendar::createInstance(Locale("@calendar=japanese"), status));
     TESTCLASSID_FACTORY(HebrewCalendar, Calendar::createInstance(Locale("@calendar=hebrew"), status));
     TESTCLASSID_FACTORY(PersianCalendar, Calendar::createInstance(Locale("@calendar=persian"), status));
+#ifdef U_WINDOWS
+    TESTCLASSID_FACTORY(Win32DateFormat, DateFormat::createDateInstance(DateFormat::kFull, Locale("@compat=host")));
+    TESTCLASSID_FACTORY(Win32NumberFormat, NumberFormat::createInstance(Locale("@compat=host"), status));
+#endif
 #endif
 
 #if !UCONFIG_NO_BREAK_ITERATION
