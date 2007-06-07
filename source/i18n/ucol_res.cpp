@@ -43,6 +43,8 @@
 #include "utracimp.h"
 #include "cmemory.h"
 
+U_NAMESPACE_USE
+
 U_CDECL_BEGIN
 static void U_CALLCONV
 ucol_prv_closeResources(UCollator *coll) {
