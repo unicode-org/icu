@@ -1013,7 +1013,7 @@ class CharsetISCII extends CharsetICU {
             targetUniChar = toUnicodeTable[sourceChar];
             /* is the code point valid in current script? */
             if (sourceChar > ASCII_END &&
-                    (validityTable[(byte)targetUniChar] & data.currentMaskToUnicode) == 0) {
+                    (validityTable[(short)targetUniChar & UConverterConstants.UNSIGNED_BYTE_MASK] & data.currentMaskToUnicode) == 0) {
                 /* Vocallic RR is assigne in ISCII Telugu and Unicode */
                 if (data.currentDeltaToUnicode != (TELUGU_DELTA) &&
                         targetUniChar != VOCALLIC_RR) {
