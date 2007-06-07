@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2006, International Business Machines
+*   Copyright (C) 1999-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
  *  ucnv.h:
@@ -1766,11 +1766,12 @@ U_STABLE const char * U_EXPORT2
 ucnv_getCanonicalName(const char *alias, const char *standard, UErrorCode *pErrorCode);
 
 /**
- * returns the current default converter name.
+ * Returns the current default converter name. If you want to open
+ * a default converter, you do not need to use this function.
+ * It is faster if you pass a NULL argument to ucnv_open the
+ * default converter.
  *
- * @return returns the current default converter name;
- *         if a default converter name cannot be determined,
- *         then <code>NULL</code> is returned.
+ * @return returns the current default converter name.
  *         Storage owned by the library
  * @see ucnv_setDefaultName
  * @stable ICU 2.0
@@ -1779,12 +1780,13 @@ U_STABLE const char * U_EXPORT2
 ucnv_getDefaultName(void);
 
 /**
- * This function sets the current default converter name.
- * DO NOT call this function from multiple threads! This function is not
- * thread safe. If this function needs to be called, it should be called
- * during application initialization. Most of the time, the results from
- * ucnv_getDefaultName() is sufficient for your application.
- * @param name the converter name to be the default (must exist).
+ * This function is not thread safe. DO NOT call this function when ANY ICU
+ * function is being used from more than one thread! This function sets the
+ * current default converter name. If this function needs to be called, it
+ * should be called during application initialization. Most of the time, the
+ * results from ucnv_getDefaultName() or ucnv_open with a NULL string argument
+ * is sufficient for your application.
+ * @param name the converter name to be the default (must be known by ICU).
  * @see ucnv_getDefaultName
  * @system
  * @stable ICU 2.0
