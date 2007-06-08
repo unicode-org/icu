@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2006, International Business Machines
+*   Copyright (C) 2001-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -85,12 +85,12 @@ NameUnicodeTransliterator::NameUnicodeTransliterator(const NameUnicodeTransliter
 /**
  * Assignment operator.
  */
-NameUnicodeTransliterator& NameUnicodeTransliterator::operator=(
+/*NameUnicodeTransliterator& NameUnicodeTransliterator::operator=(
                              const NameUnicodeTransliterator& o) {
     Transliterator::operator=(o);
     // not necessary: the legal sets should all be the same -- legal=o.legal;
     return *this;
-}
+}*/
 
 /**
  * Transliterator API.

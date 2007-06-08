@@ -45,6 +45,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="/w14001 /w14063 /w14121 /w14125 /w14127 /w14130 /w14131 /w14152 /w14189 /w14204 /w14296 /w14366 /w14505 /w14702"
 				AdditionalIncludeDirectories="..\..\include;..\common"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CRT_SECURE_NO_DEPRECATE;U_I18N_IMPLEMENTATION"
 				StringPooling="true"
@@ -140,6 +141,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="/w14001 /w14063 /w14121 /w14125 /w14127 /w14130 /w14131 /w14152 /w14189 /w14204 /w14296 /w14366 /w14505 /w14702 /w14710"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\include;..\common"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;U_I18N_IMPLEMENTATION"
@@ -884,14 +886,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\persncal.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\persncal.h"
-				>
-			</File>
-			<File
 				RelativePath=".\japancal.cpp"
 				>
 			</File>
@@ -1059,6 +1053,14 @@
 			</File>
 			<File
 				RelativePath=".\olsontz.h"
+				>
+			</File>
+			<File
+				RelativePath=".\persncal.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\persncal.h"
 				>
 			</File>
 			<File

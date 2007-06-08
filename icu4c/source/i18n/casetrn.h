@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2005, International Business Machines
+*   Copyright (C) 2001-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -63,11 +63,6 @@ public:
     CaseMapTransliterator(const CaseMapTransliterator&);
 
     /**
-     * Assignment operator.
-     */
-    CaseMapTransliterator& operator=(const CaseMapTransliterator&);
-
-    /**
      * Transliterator API.
      * @return a copy of the object.
      */
@@ -99,6 +94,13 @@ protected:
 
     const UCaseProps *fCsp;
     UCaseMapFull *fMap;
+
+private:
+    /**
+     * Assignment operator.
+     */
+    CaseMapTransliterator& operator=(const CaseMapTransliterator&);
+
 };
 
 U_NAMESPACE_END

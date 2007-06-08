@@ -100,12 +100,6 @@ public:
     CompoundTransliterator(const CompoundTransliterator&);
 
     /**
-     * Assignment operator.
-     * @internal Use transliterator factory methods instead since this class will be removed in that release.
-     */
-    CompoundTransliterator& operator=(const CompoundTransliterator&);
-
-    /**
      * Transliterator API.
      * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
@@ -198,6 +192,12 @@ private:
 
     friend class Transliterator;
     friend class TransliteratorAlias; // to access private ct
+
+    /**
+     * Assignment operator.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
+     */
+    CompoundTransliterator& operator=(const CompoundTransliterator&);
 
     /**
      * Private constructor for Transliterator.

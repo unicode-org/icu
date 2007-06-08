@@ -47,11 +47,6 @@ class TitlecaseTransliterator : public CaseMapTransliterator {
     TitlecaseTransliterator(const TitlecaseTransliterator&);
 
     /**
-     * Assignment operator.
-     */
-    TitlecaseTransliterator& operator=(const TitlecaseTransliterator&);
-
-    /**
      * Transliterator API.
      * @return a copy of the object.
      */
@@ -67,7 +62,7 @@ class TitlecaseTransliterator : public CaseMapTransliterator {
      */
     U_I18N_API static UClassID U_EXPORT2 getStaticClassID();
 
- protected:
+protected:
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
@@ -80,6 +75,12 @@ class TitlecaseTransliterator : public CaseMapTransliterator {
      */
     virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
                              UBool isIncremental) const;
+
+private:
+    /**
+     * Assignment operator.
+     */
+    TitlecaseTransliterator& operator=(const TitlecaseTransliterator&);
 };
 
 U_NAMESPACE_END

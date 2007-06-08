@@ -44,11 +44,6 @@ public:
     NameUnicodeTransliterator(const NameUnicodeTransliterator&);
 
     /**
-     * Assignment operator.
-     */
-    NameUnicodeTransliterator& operator=(const NameUnicodeTransliterator&);
-
-    /**
      * Transliterator API.
      * @return    A copy of the object.
      */
@@ -82,6 +77,11 @@ public:
      * Set of characters which occur in Unicode character names.
      */
     UnicodeSet legal;
+private:
+    /**
+     * Assignment operator.
+     */
+    NameUnicodeTransliterator& operator=(const NameUnicodeTransliterator&);
 };
 
 U_NAMESPACE_END
