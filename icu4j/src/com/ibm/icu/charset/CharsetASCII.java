@@ -1,5 +1,4 @@
 /**
-<<<<<<< .mine
  *******************************************************************************
  * Copyright (C) 2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
@@ -7,15 +6,6 @@
  *
  *******************************************************************************
  */
-=======
-*******************************************************************************
-* Copyright (C) 2006-2007, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
-*******************************************************************************
-*
-*******************************************************************************
-*/ 
->>>>>>> .r21670
 package com.ibm.icu.charset;
 
 import java.nio.BufferOverflowException;
@@ -203,42 +193,6 @@ class CharsetASCII extends CharsetICU {
                             target.position(oldTarget + targetLength);
                             cr = CoderResult.OVERFLOW;
                         }
-<<<<<<< .mine
-=======
-                    }else {
-                        if (UTF16.isSurrogate((char)ch)) {
-                            if (UTF16.isLeadSurrogate((char)ch)) {
-                                //lowsurogate:
-                                if (sourceArrayIndex < source.limit()) {
-                                    ch2 = source.get(sourceArrayIndex);
-                                    if (UTF16.isTrailSurrogate((char)ch2)) {
-                                        ch = ((ch - UConverterConstants.SURROGATE_HIGH_START) << UConverterConstants.HALF_SHIFT) + ch2 + UConverterConstants.SURROGATE_LOW_BASE;
-                                        sourceArrayIndex++;
-                                    }
-                                    else {
-                                        /* this is an unmatched trail code unit (2nd surrogate) */
-                                        /* callback(illegal) */
-                                        fromUChar32 = ch;
-                                        cr = CoderResult.OVERFLOW;
-                                        break;
-                                    }
-                                }
-                                else {
-                                    /* ran out of source */
-                                    fromUChar32 = ch;
-                                    if (flush) {
-                                        /* this is an unmatched trail code unit (2nd surrogate) */
-                                        /* callback(illegal) */
-                                        cr = CoderResult.malformedForLength(sourceArrayIndex);
-                                    }
-                                    break;
-                                }
-                            }
-                        }
-                        fromUChar32 = ch;
-                        cr = CoderResult.malformedForLength(sourceArrayIndex);
-                        break;                            
->>>>>>> .r21670
                     }
                 } else {
                     /* unoptimized loop */

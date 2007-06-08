@@ -1,5 +1,4 @@
 /**
-<<<<<<< .mine
  *******************************************************************************
  * Copyright (C) 2006, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
@@ -7,15 +6,6 @@
  *
  *******************************************************************************
  */
-=======
-*******************************************************************************
-* Copyright (C) 2006-2007, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
-*******************************************************************************
-*
-*******************************************************************************
-*/ 
->>>>>>> .r21670
 package com.ibm.icu.charset;
 
 import java.nio.BufferOverflowException;
@@ -68,7 +58,7 @@ class Charset88591 extends CharsetASCII {
                     && (((ch = (int) sourceArray[i]) & 0xff00) == 0); i++)
                 targetArray[i + offset] = (byte) ch;
 
-            if ((ch & 0xff00) != 0) {
+            if ((ch & 0xff00) == 0) {
                 source.position(i + 1);
                 target.position(i + offset);
                 return encodeIllegal(source, ch, flush);
@@ -76,7 +66,6 @@ class Charset88591 extends CharsetASCII {
                 return null;
         }
 
-<<<<<<< .mine
         protected CoderResult encodeLoopCoreUnoptimized(CharBuffer source,
                 ByteBuffer target, boolean flush)
                 throws BufferUnderflowException, BufferOverflowException {
@@ -85,94 +74,6 @@ class Charset88591 extends CharsetASCII {
                 target.put((byte) ch);
 
             return encodeIllegal(source, ch, flush);
-=======
-            if (fromUChar32 != 0 && target.hasRemaining()){
-                ch = fromUChar32;
-                fromUChar32 = 0;
-                       
-                if (sourceArrayIndex < source.limit()) {
-                    /* test the following code unit */
-                    char trail = source.get(sourceArrayIndex);
-                    if(UTF16.isTrailSurrogate(trail)) {
-                        ++sourceArrayIndex;
-                        ch = UCharacter.getCodePoint((char)ch, trail);
-                        /* convert this supplementary code point */
-                        cr = CoderResult.unmappableForLength(sourceArrayIndex);
-                        doloop = false;
-                    } else {
-                        /* this is an unmatched lead code unit (1st surrogate) */
-                        /* callback(illegal) */
-                        fromUChar32 = (int)ch;
-                        cr = CoderResult.malformedForLength(sourceArrayIndex);
-                        doloop = false;
-                    }
-                } else {
-                    /* no more input */
-                    fromUChar32 = (int)ch;
-                    doloop = false;
-                }                            
-            }
-            if(doloop){
-                /* conversion loop */
-                ch=0;
-                int ch2=0;
-                while(sourceArrayIndex<source.limit()){
-                    ch=source.get(sourceArrayIndex++);
-                    if(ch<=0xff) {
-                        if( target.hasRemaining()){
-                            target.put((byte)ch);
-                        }else{
-                            cr = CoderResult.OVERFLOW;
-                            break;
-                        }
-                    }else {
-                        if (UTF16.isSurrogate((char)ch)) {
-                            if (UTF16.isLeadSurrogate((char)ch)) {
-                                //lowsurogate:
-                                if (sourceArrayIndex < source.limit()) {
-                                    ch2 = source.get(sourceArrayIndex);
-                                    if (UTF16.isTrailSurrogate((char)ch2)) {
-                                        ch = ((ch - UConverterConstants.SURROGATE_HIGH_START) << UConverterConstants.HALF_SHIFT) + ch2 + UConverterConstants.SURROGATE_LOW_BASE;
-                                        sourceArrayIndex++;
-                                    }
-                                    else {
-                                        /* this is an unmatched trail code unit (2nd surrogate) */
-                                        /* callback(illegal) */
-                                        fromUChar32 = ch;
-                                        cr = CoderResult.OVERFLOW;
-                                        break;
-                                    }
-                                }
-                                else {
-                                    /* ran out of source */
-                                    fromUChar32 = ch;
-                                    if (flush) {
-                                        /* this is an unmatched trail code unit (2nd surrogate) */
-                                        /* callback(illegal) */
-                                        cr = CoderResult.malformedForLength(sourceArrayIndex);
-                                    }
-                                    break;
-                                }
-                            }
-                        }
-                        fromUChar32 = ch;
-                        cr = CoderResult.malformedForLength(sourceArrayIndex);
-                        break;                            
-                    }
-                }
-            }
-            /* set offsets since the start */
-            if(offsets!=null) {
-                count=target.position()-oldTarget;
-                while(count>0) {
-                    offsets.put(sourceIndex++);
-                    --count;
-                }
-            } 
-               
-            source.position(sourceArrayIndex);
-            return cr;
->>>>>>> .r21670
         }
 
     }
