@@ -58,7 +58,7 @@ class Charset88591 extends CharsetASCII {
                     && (((ch = (int) sourceArray[i]) & 0xff00) == 0); i++)
                 targetArray[i + offset] = (byte) ch;
 
-            if ((ch & 0xff00) == 0) {
+            if ((ch & 0xff00) != 0) {
                 source.position(i + 1);
                 target.position(i + offset);
                 return encodeIllegal(source, ch, flush);

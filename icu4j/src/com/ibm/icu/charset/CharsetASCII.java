@@ -125,7 +125,6 @@ class CharsetASCII extends CharsetICU {
             while (((ch = (source.get() & 0xff)) & 0x80) == 0)
                 target.put((char) ch);
 
-            /* if we reach here, we have c > maxCharValue (illegal) */
             return decodeIllegal(ch);
         }
 
