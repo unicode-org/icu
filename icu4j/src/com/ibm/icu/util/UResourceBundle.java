@@ -218,8 +218,8 @@ public abstract class UResourceBundle extends ResourceBundle{
    
     /**
      * Creates a UResourceBundle, from which users can extract resources by using
-     * their corresponding keys.
-     * @note Please use this API for loading non-ICU resources. Java security does not
+     * their corresponding keys.<br><br>
+     * Note: Please use this API for loading non-ICU resources. Java security does not
      * allow loading of resources across jar files. You must provide your class loader
      * to load the resources
      * @param baseName string containing the name of the data package.

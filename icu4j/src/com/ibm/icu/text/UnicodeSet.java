@@ -1709,7 +1709,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
     /**
      * Returns true if this set contains all the characters and strings
      * of the given set.
-     * @param c set to be checked for containment
+     * @param b set to be checked for containment
      * @return true if the test condition is met
      * @stable ICU 2.0
      */
@@ -1881,7 +1881,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
      * For example, for the Unicode set [a{bc}{cd}]<br>
      * containsNone is true for: "xy", "cb"<br>
      * containsNone is false for: "a", "bc", "bcd"<br>
-     * @param c set to be checked for containment
+     * @param b set to be checked for containment
      * @return true if the test condition is met
      * @stable ICU 2.0
      */

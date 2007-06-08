@@ -169,30 +169,53 @@ public class SimpleTimeZone extends JDKTimeZone {
      *                        which is daylight time in this case. Please see the
      *                        member description for an example.
      * @param endTimeMode     The mode of the end time specified by endTime.
+     * @param dstSavings      The amount of time in ms saved during DST.
      * @exception IllegalArgumentException the month, day, dayOfWeek, or time
      * parameters are out of range for the start or end rule
      * @stable ICU 3.8
      */
-    public SimpleTimeZone(int raw,  String ID,
+    public SimpleTimeZone(int rawOffset,  String ID,
                           int startMonth, int startDay,
                           int startDayOfWeek, int startTime,
                           int startTimeMode,
                           int endMonth, int endDay,
                           int endDayOfWeek, int endTime,
-                          int endTimeMode,int dst){
-        construct(raw,
+                          int endTimeMode,int dstSavings){
+        construct(rawOffset,
                   startMonth, startDay, startDayOfWeek,
                   startTime, startTimeMode,
                   endMonth, endDay, endDayOfWeek,
                   endTime, endTimeMode,
-                  dst);
+                  dstSavings);
         super.setID(ID);
     }
 
     /**
      * Constructor.  This constructor is identical to the 10-argument
      * constructor, but also takes a dstSavings parameter.
-     * @param dstSavings   The amount of time in ms saved during DST.
+     * @param rawOffset       The given base time zone offset to GMT.
+     * @param ID              The time zone ID which is obtained from
+     *                        TimeZone.getAvailableIDs.
+     * @param startMonth      The daylight savings starting month. Month is
+     *                        0-based. eg, 0 for January.
+     * @param startDay        The daylight savings starting
+     *                        day-of-week-in-month. Please see the member
+     *                        description for an example.
+     * @param startDayOfWeek  The daylight savings starting day-of-week. Please
+     *                        see the member description for an example.
+     * @param startTime       The daylight savings starting time in local wall
+     *                        time, which is standard time in this case. Please see the
+     *                        member description for an example.
+     * @param endMonth        The daylight savings ending month. Month is
+     *                        0-based. eg, 0 for January.
+     * @param endDay          The daylight savings ending day-of-week-in-month.
+     *                        Please see the member description for an example.
+     * @param endDayOfWeek    The daylight savings ending day-of-week. Please
+     *                        see the member description for an example.
+     * @param endTime         The daylight savings ending time in local wall time,
+     *                        which is daylight time in this case. Please see the
+     *                        member description for an example.
+     * @param dstSavings      The amount of time in ms saved during DST.
      * @exception IllegalArgumentException the month, day, dayOfWeek, or time
      * parameters are out of range for the start or end rule
      * @stable ICU 2.0

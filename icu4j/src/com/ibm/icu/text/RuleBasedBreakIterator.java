@@ -1,7 +1,7 @@
 //##header
 /*
  *******************************************************************************
- * Copyright (C) 2005-2006 International Business Machines Corporation and          *
+ * Copyright (C) 2005-2007 International Business Machines Corporation and          *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -59,9 +59,6 @@ public class RuleBasedBreakIterator extends BreakIterator {
     /**
      * Construct a RuleBasedBreakIterator from a set of rules supplied as a string.
      * @param rules The break rules to be used.
-     * @param parseError  In the event of a syntax error in the rules, provides the location
-     *                    within the rules of the problem.
-     * @param status Information on any errors encountered.
      * @stable ICU 2.2
      */
     public RuleBasedBreakIterator(String rules)  {
