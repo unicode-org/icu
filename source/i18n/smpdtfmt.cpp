@@ -1060,7 +1060,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
                 // Advance over run in input text
                 int32_t s = pos;
                 while (pos<text.length() &&
-                       u_isUWhiteSpace(text.charAt(pos))) {
+                       ( u_isUWhiteSpace(text.charAt(pos)) || uprv_isRuleWhiteSpace(text.charAt(pos)))) {
                     ++pos;
                 }
 
