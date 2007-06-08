@@ -3790,10 +3790,10 @@ public class Bidi {
      *        the limit of the run, and <code>embeddingLevel</code> containing
      *        the level of the run.
      *
-     * @see BidiRun
-     * @see BidiRun.getStart
-     * @see BidiRun.getLimit
-     * @see BidiRun.getEmbeddingLevel
+     * @see com.ibm.icu.text.BidiRun
+     * @see com.ibm.icu.text.BidiRun#getStart()
+     * @see com.ibm.icu.text.BidiRun#getLimit()
+     * @see com.ibm.icu.text.BidiRun#getEmbeddingLevel()
      *
      * @draft ICU 3.8
      */
@@ -3852,11 +3852,11 @@ public class Bidi {
      *         <code>LTR==0</code> or <code>RTL==1</code>,
      *         never <code>MIXED</code>.
      *
-     * @see #countRuns
-     * @see BidiRun
-     * @see BidiRun.getStart
-     * @see BidiRun.getLength
-     * @see BidiRun.getEmbeddingLevel
+     * @see #countRuns()
+     * @see com.ibm.icu.text.BidiRun
+     * @see com.ibm.icu.text.BidiRun#getStart()
+     * @see com.ibm.icu.text.BidiRun#getLength()
+     * @see com.ibm.icu.text.BidiRun#getEmbeddingLevel()
      * @draft ICU 3.8
      */
     public BidiRun getVisualRun(int runIndex)
