@@ -58,7 +58,7 @@ class CharsetUTF8 extends CharsetICU {
 	 * which is tested with impossible values for them
 	 */
 	private static final long UTF8_MIN_CHAR32[] = { 0L, 0L, 0x80L, 0x800L, 0x10000L, 0xffffffffL, 0xffffffffL };
-
+	
     protected boolean isCESU8 = false;
     
     class CharsetDecoderUTF8 extends CharsetDecoderICU{
@@ -71,184 +71,119 @@ class CharsetUTF8 extends CharsetICU {
             CoderResult cr = CoderResult.UNDERFLOW;
         
             int sourceArrayIndex = source.position();
-            
-            // TODO: CESU8 implementation
-            // boolean isCESU8 = args.converter.sharedData == _CESU8Data;
-            int ch, ch2 = 0;
-    	    int i, inBytes;    	  
+            int sourceLimit = source.limit();
+            int ch = -1, ch2 = 0;
+    	    int i = -1, inBytes = -1; // -1 should never happen
+            boolean gotoMorebytes = false;
     	    
-			donefornow:
-			{
-	    	    if (toUnicodeStatus!=0 && target.hasRemaining())
-	    	    {
-			        inBytes = mode;            	/* restore # of bytes to consume */
-			        i = toULength;             	/* restore # of bytes consumed */
-			
-	    	        ch = toUnicodeStatus;		/*Stores the previously calculated ch from a previous call*/
-	    	        toUnicodeStatus = 0;
+            if (toUnicodeStatus!=0 && target.hasRemaining())
+            {
+                inBytes = mode;             /* restore # of bytes to consume */
+                i = toULength;              /* restore # of bytes consumed */
+                toULength = 0;
+        
+                ch = toUnicodeStatus;       /*Stores the previously calculated ch from a previous call*/
+                toUnicodeStatus = 0;
+                gotoMorebytes = true;
+            }
 
-					while (i < inBytes)
-					{
-						if (sourceArrayIndex<source.limit())
-						{
-							toUBytesArray[i] = (byte) (ch2 = source.get(sourceArrayIndex) & UConverterConstants.UNSIGNED_BYTE_MASK);
-							if (!isTrail((byte)ch2))
-							{
-								break; /* i < inBytes */
-							}
-							ch = (ch << 6) + ch2;
-							++sourceArrayIndex;
-							i++;
-						}
-						else
-						{
-							/* stores a partially calculated target*/
-							toUnicodeStatus = ch;
-							mode = inBytes;
-							toULength = (byte) i;
-							break donefornow;
-						}
-					}
-            	
-    	            /* Remove the accumulated high bits */
-    	            ch -= OFFSETS_FROM_UTF8[inBytes];
-    	
-    	            /*
-    	             * Legal UTF-8 byte sequences in Unicode 3.0.1 and up:
-    	             * - use only trail bytes after a lead byte (checked above)
-    	             * - use the right number of trail bytes for a given lead byte
-    	             * - encode a code point <= U+10ffff
-    	             * - use the fewest possible number of bytes for their code points
-    	             * - use at most 4 bytes (for i>=5 it is 0x10ffff<utf8_minChar32[])
-    	             *
-    	             * Starting with Unicode 3.2, surrogate code points must not be encoded in UTF-8.
-    	             * There are no irregular sequences any more.
-    	             * In CESU-8, only surrogates, not supplementary code points, are encoded directly.
-    	             */
-    	            if (i == inBytes && ch <= UConverterSharedData.MAXIMUM_UTF && ch >= UTF8_MIN_CHAR32[i] && (isCESU8 ? i <= 3 : !UTF16.isSurrogate((char)ch)))
-    	            {
-    	                /* Normal valid byte when the loop has not prematurely terminated (i < inBytes) */
-    	                toULength = 0;
-    	                if (ch <= UConverterSharedData.MAXIMUM_UCS2) 
-    	                {
-    	                    /* fits in 16 bits */
-    	                    target.put((char)ch);
-    	                }
-    	                else
-    	                {
-    	                    /* write out the surrogates */
-    	                    ch -= UConverterSharedData.HALF_BASE;
-    	                    target.put((char) ((ch >> UConverterSharedData.HALF_SHIFT) + UConverterSharedData.SURROGATE_HIGH_START));
-    	                    ch = (ch & UConverterSharedData.HALF_MASK) + UConverterSharedData.SURROGATE_LOW_START;
-                            if(target.hasRemaining()) {
-                                target.put((char)ch);
-                                
-                            } else /* targetCapacity==1 */ {
-                                charErrorBufferArray[charErrorBufferBegin+0]=(char)ch;
-                                charErrorBufferLength=1;
-                                cr = CoderResult.OVERFLOW;
-                               
-                            }
-    	                }
-    	            }
-    	            else
-    	            {
-    	                toULength = (byte)i;
-                        cr = CoderResult.malformedForLength(sourceArrayIndex);
-    	                break donefornow;
-    	            }
-            	}  
-                
-                while (sourceArrayIndex < source.limit() && target.hasRemaining())
-                {
+donefornow:
+            while (sourceArrayIndex < sourceLimit && target.hasRemaining())
+            {
+                if (!gotoMorebytes) {
                     ch = source.get(sourceArrayIndex++) & UConverterConstants.UNSIGNED_BYTE_MASK;
-                    if (ch < 0x80)        /* Simple case */
-                    {
-                        target.put((char)ch);
-                    }
-                    else
-                    {
+                }
+                if (ch >= 0x80 || gotoMorebytes) {
+                    if (!gotoMorebytes) {
                         /* store the first char */
                         toUBytesArray[0] = (byte)ch;
                         inBytes = BYTES_FROM_UTF8[(int)ch]; /* lookup current sequence length */
                         i = 1;
-            
-                        while (i < inBytes)
+                    }
+                    gotoMorebytes = false;
+
+//morebytes:
+                    while (i < inBytes)
+                    {
+                        if (sourceArrayIndex < source.limit())
                         {
-                            if (sourceArrayIndex < source.limit())
+                            toUBytesArray[i] = (byte) (ch2 = source.get(sourceArrayIndex) & UConverterConstants.UNSIGNED_BYTE_MASK);
+                            if (!isTrail((byte)ch2))
                             {
-                                toUBytesArray[i] = (byte) (ch2 = source.get(sourceArrayIndex) & UConverterConstants.UNSIGNED_BYTE_MASK);
-                                if (!isTrail((byte)ch2))
-                                {
-                                    break; /* i < inBytes */
-                                }
-                                ch = (ch << 6) + ch2;
-                                ++sourceArrayIndex;
-                                i++;
+                                break; /* i < inBytes */
                             }
-                            else
-                            {
-                                /* stores a partially calculated target*/
-                                toUnicodeStatus = ch;
-                                mode = inBytes;
-                                toULength = (byte) i;
-                                break donefornow;
-                            }
-                        }
-            
-                        /* Remove the accumulated high bits */
-                        ch -= OFFSETS_FROM_UTF8[inBytes];
-            
-                        /*
-                         * Legal UTF-8 byte sequences in Unicode 3.0.1 and up:
-                         * - use only trail bytes after a lead byte (checked above)
-                         * - use the right number of trail bytes for a given lead byte
-                         * - encode a code point <= U+10ffff
-                         * - use the fewest possible number of bytes for their code points
-                         * - use at most 4 bytes (for i>=5 it is 0x10ffff<utf8_minChar32[])
-                         *
-                         * Starting with Unicode 3.2, surrogate code points must not be encoded in UTF-8.
-                         * There are no irregular sequences any more.
-                         * In CESU-8, only surrogates, not supplementary code points, are encoded directly.
-                         */
-                        if (i == inBytes && ch <= UConverterSharedData.MAXIMUM_UTF && ch >= UTF8_MIN_CHAR32[i] && (isCESU8 ? i <= 3 : !UTF16.isSurrogate((char)ch)))
-                        {
-                            /* Normal valid byte when the loop has not prematurely terminated (i < inBytes) */
-                            toULength = 0;
-                            if (ch <= UConverterSharedData.MAXIMUM_UCS2) 
-                            {
-                                /* fits in 16 bits */
-                                target.put((char) ch);
-                            }
-                            else
-                            {
-                                /* write out the surrogates */
-                                ch -= UConverterSharedData.HALF_BASE;
-                                target.put((char) ((ch >>> UConverterSharedData.HALF_SHIFT) + UConverterSharedData.SURROGATE_HIGH_START));
-                                ch = (ch & UConverterSharedData.HALF_MASK) + UConverterSharedData.SURROGATE_LOW_START;
-                                if (target.hasRemaining())
-                                {
-                                    target.put((char)ch);
-                                }
-                                else
-                                {
-                                    /* Put in overflow buffer (not handled here) */
-                                    charErrorBufferArray[charErrorBufferBegin+0]=(char)ch;
-                                    charErrorBufferLength=1;
-                                    cr = CoderResult.OVERFLOW;
-                                    break;
-                                }
-                            }
+                            ch = (ch << 6) + ch2;
+                            ++sourceArrayIndex;
+                            i++;
                         }
                         else
                         {
-                            toULength = (byte)i;
-                            cr = CoderResult.malformedForLength(sourceArrayIndex);
-                            break;
+                            /* stores a partially calculated target*/
+                            toUnicodeStatus = ch;
+                            mode = inBytes;
+                            toULength = i;
+                            break donefornow;
                         }
                     }
+        
+                    /* Remove the accumulated high bits */
+                    ch -= OFFSETS_FROM_UTF8[inBytes];
+        
+                    /*
+                     * Legal UTF-8 byte sequences in Unicode 3.0.1 and up:
+                     * - use only trail bytes after a lead byte (checked above)
+                     * - use the right number of trail bytes for a given lead byte
+                     * - encode a code point <= U+10ffff
+                     * - use the fewest possible number of bytes for their code points
+                     * - use at most 4 bytes (for i>=5 it is 0x10ffff<utf8_minChar32[])
+                     *
+                     * Starting with Unicode 3.2, surrogate code points must not be encoded in UTF-8.
+                     * There are no irregular sequences any more.
+                     * In CESU-8, only surrogates, not supplementary code points, are encoded directly.
+                     */
+                    if (i == inBytes
+                            && ch <= UConverterConstants.MAXIMUM_UTF
+                            && ch >= UTF8_MIN_CHAR32[i]
+                            && (isCESU8 ? i <= 3 : !UTF16.isSurrogate((char)ch)))
+                    {
+                        /* Normal valid byte when the loop has not prematurely terminated (i < inBytes) */
+                        toULength = 0;
+                        if (ch <= UConverterConstants.MAXIMUM_UCS2) 
+                        {
+                            /* fits in 16 bits */
+                            target.put((char) ch);
+                        }
+                        else
+                        {
+                            /* write out the surrogates */
+                            ch -= UConverterConstants.HALF_BASE;
+                            target.put((char) ((ch >>> UConverterConstants.HALF_SHIFT) + UConverterConstants.SURROGATE_HIGH_START));
+                            ch = (ch & UConverterConstants.HALF_MASK) + UConverterConstants.SURROGATE_LOW_START;
+                            if (target.hasRemaining())
+                            {
+                                target.put((char)ch);
+                            }
+                            else
+                            {
+                                /* Put in overflow buffer (not handled here) */
+                                charErrorBufferArray[charErrorBufferBegin+0]=(char)ch;
+                                charErrorBufferLength=1;
+                                cr = CoderResult.OVERFLOW;
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        toULength = (byte)i;
+                        cr = CoderResult.malformedForLength(toULength);
+                        break;
+                    }
                 }
-			}
+                else {
+                    /* Simple case */
+                    target.put((char)ch);
+                }
+            }
         
     	    if (sourceArrayIndex < source.limit() && !target.hasRemaining())
     	    {
@@ -277,136 +212,88 @@ class CharsetUTF8 extends CharsetICU {
             CoderResult cr = CoderResult.UNDERFLOW;
             
             int sourceArrayIndex = source.position();
-
-            // Todo: CESU8 implementation
-            // boolean isCESU8 = args.converter.sharedData == _CESU8Data;
-            
-            int ch;
+            int sourceLimit = source.limit();
+            int ch = -1;
             short indexToWrite;
             byte temp[] = new byte[4];
-            boolean doloop = true;
+            boolean gotoLowSurrogate = false;
                             
             if (fromUChar32 != 0 && target.hasRemaining()){
                 ch = fromUChar32;
                 fromUChar32 = 0;
-                       
-                if (sourceArrayIndex < source.limit()) {
-                    /* test the following code unit */
-                    char trail = source.get(sourceArrayIndex);
-                    if(UTF16.isTrailSurrogate(trail)) {
-                        ++sourceArrayIndex;
-                        ch = UCharacter.getCodePoint((char)ch, trail);
-                        /* convert this supplementary code point */
-                        /* exit this condition tree */
-                    } else {
-                        /* this is an unmatched lead code unit (1st surrogate) */
-                        /* callback(illegal) */
-                        fromUChar32 = (int)ch;
-                        cr = CoderResult.malformedForLength(sourceArrayIndex);
-                        doloop = false;
-                    }
-                } else {
-                    /* no more input */
-                    fromUChar32 = (int)ch;
-                    doloop = false;
-                }                                    
-        
-                if (ch < UTF16.SUPPLEMENTARY_MIN_VALUE){
-                    indexToWrite = 2;
-                    temp[2] = (byte) ((ch >>> 12) | 0xe0);
-                }else{
-                    indexToWrite = 3;
-                    temp[3] = (byte) ((ch >>> 18) | 0xf0);
-                    temp[2] = (byte) (((ch >>> 12) & 0x3f) | 0x80);
-                }
-                temp[1] = (byte) (((ch >>> 6) & 0x3f) | 0x80);
-                temp[0] = (byte) ((ch & 0x3f) | 0x80);
-    
-                for (; indexToWrite >= 0; indexToWrite--){
-                    if (target.hasRemaining()){
-                        target.put(temp[indexToWrite]);
-                    }else{
-                        errorBuffer[errorBufferLength++] = temp[indexToWrite];
-                        cr = CoderResult.OVERFLOW;
-                    }
-                }
+                
+                gotoLowSurrogate = true;
             }
         
-            if(doloop) {
-                while (sourceArrayIndex < source.limit() && target.hasRemaining()){
+            while (sourceArrayIndex < sourceLimit && target.hasRemaining()){
+                if (!gotoLowSurrogate) {
                     ch = source.get(sourceArrayIndex++);
-                    if (ch < 0x80){        /* Single byte */
-                        target.put((byte)ch);
-                    }else if (ch < 0x800) {  /* Double byte */
-                        target.put((byte) ((ch >>> 6) | 0xc0));
-                        if (target.hasRemaining()){
-                            target.put((byte) ((ch & 0x3f) | 0x80));
-                        }else{
-                            errorBuffer[0] = (byte) ((ch & 0x3f) | 0x80);
-                            errorBufferLength = 1;
-                            cr = CoderResult.OVERFLOW;
-                            break;
-                        }
-                    }else{ /* Check for surrogates */
-                        if(UTF16.isSurrogate((char)ch) && !isCESU8) {
-                            if(UTF16.isLeadSurrogate((char)ch)) {
-           
-                                if (sourceArrayIndex < source.limit()) {
-                                    /* test the following code unit */
-                                    char trail = source.get(sourceArrayIndex);
-                                    if(UTF16.isTrailSurrogate(trail)) {
-                                        ++sourceArrayIndex;
-                                        ch = UCharacter.getCodePoint((char)ch, trail);
-                                        //ch2 = 0;
-                                        /* convert this supplementary code point */
-                                        /* exit this condition tree */
-                                    } 
-                                    else {
-                                        /* this is an unmatched lead code unit (1st surrogate) */
-                                        /* callback(illegal) */
-                                        fromUChar32 = ch;
-                                        cr = CoderResult.malformedForLength(sourceArrayIndex);
-                                        break;
-                                    }
-                                } 
-                                else {
-                                    /* no more input */
-                                    fromUChar32 = ch;
-                                    break;
-                                }
+                }
+                if (ch < 0x80 && !gotoLowSurrogate){        /* Single byte */
+                    target.put((byte)ch);
+                }else if (ch < 0x800 && !gotoLowSurrogate) {  /* Double byte */
+                    target.put((byte) ((ch >>> 6) | 0xc0));
+                    if (target.hasRemaining()){
+                        target.put((byte) ((ch & 0x3f) | 0x80));
+                    }else{
+                        errorBuffer[0] = (byte) ((ch & 0x3f) | 0x80);
+                        errorBufferLength = 1;
+                        cr = CoderResult.OVERFLOW;
+                        break;
+                    }
+                }else{ /* Check for surrogates */
+                    gotoLowSurrogate = false;
+                    if(UTF16.isSurrogate((char)ch) && !isCESU8) {
+//lowsurrogate:
+                        if (sourceArrayIndex < source.limit()) {
+                            /* test the following code unit */
+                            char trail = source.get(sourceArrayIndex);
+                            if(UTF16.isLeadSurrogate((char)ch) && UTF16.isTrailSurrogate(trail)) {
+                                ++sourceArrayIndex;
+                                ch = UCharacter.getCodePoint((char)ch, trail);
+                                //ch2 = 0;
+                                /* convert this supplementary code point */
+                                /* exit this condition tree */
                             } 
                             else {
-                                fromUChar32 = (int)ch;
-                                cr = CoderResult.malformedForLength(sourceArrayIndex);
+                                /* this is an unpaired trail or lead code unit */
+                                /* callback(illegal) */
+                                fromUChar32 = ch;
+                                cr = CoderResult.malformedForLength(1);
                                 break;
                             }
+                        } 
+                        else {
+                            /* no more input */
+                            fromUChar32 = ch;
+                            break;
                         }
-            
-                        if (ch < UTF16.SUPPLEMENTARY_MIN_VALUE)
+                    }
+        
+                    if (ch < UTF16.SUPPLEMENTARY_MIN_VALUE)
+                    {
+                        indexToWrite = 2;
+                        temp[2] = (byte) ((ch >>> 12) | 0xe0);
+                    }
+                    else
+                    {
+                        indexToWrite = 3;
+                        temp[3] = (byte) ((ch >>> 18) | 0xf0);
+                        temp[2] = (byte) (((ch >>> 12) & 0x3f) | 0x80);
+                    }
+                    temp[1] = (byte) (((ch >>> 6) & 0x3f) | 0x80);
+                    temp[0] = (byte) ((ch & 0x3f) | 0x80);
+        
+                    for (; indexToWrite >= 0; indexToWrite--)
+                    {
+                        if (target.hasRemaining())
                         {
-                            indexToWrite = 2;
-                            temp[2] = (byte) ((ch >>> 12) | 0xe0);
+                            target.put(temp[indexToWrite]);
                         }
                         else
                         {
-                            indexToWrite = 3;
-                            temp[3] = (byte) ((ch >>> 18) | 0xf0);
-                            temp[2] = (byte) (((ch >>> 12) & 0x3f) | 0x80);
-                        }
-                        temp[1] = (byte) (((ch >>> 6) & 0x3f) | 0x80);
-                        temp[0] = (byte) ((ch & 0x3f) | 0x80);
-            
-                        for (; indexToWrite >= 0; indexToWrite--)
-                        {
-                            if (target.hasRemaining())
-                            {
-                                target.put(temp[indexToWrite]);
-                            }
-                            else
-                            {
-                                errorBuffer[errorBufferLength++] = temp[indexToWrite];
-                                cr = CoderResult.OVERFLOW;
-                            }
+                            errorBuffer[errorBufferLength++] = temp[indexToWrite];
+                            cr = CoderResult.OVERFLOW;
                         }
                     }
                 }
@@ -417,7 +304,6 @@ class CharsetUTF8 extends CharsetICU {
             }
         
             source.position(sourceArrayIndex);
-                
 
             return cr;
         }

@@ -185,9 +185,9 @@ class CharsetUTF32 extends CharsetICU {
                         }
                     }
             
-                    if (ch <= UConverterSharedData.MAXIMUM_UTF && !isSurrogate(ch)) {
+                    if (ch <= UConverterConstants.MAXIMUM_UTF && !isSurrogate(ch)) {
                         /* Normal valid byte when the loop has not prematurely terminated (i < inBytes) */
-                        if (ch <= UConverterSharedData.MAXIMUM_UCS2) 
+                        if (ch <= UConverterConstants.MAXIMUM_UCS2) 
                         {
                             /* fits in 16 bits */
                             target.put((char) ch);
@@ -302,9 +302,9 @@ class CharsetUTF32 extends CharsetICU {
                         }
                     }
             
-                    if (ch <= UConverterSharedData.MAXIMUM_UTF && !isSurrogate(ch)) {
+                    if (ch <= UConverterConstants.MAXIMUM_UTF && !isSurrogate(ch)) {
                         /* Normal valid byte when the loop has not prematurely terminated (i < inBytes) */
-                        if (ch <= UConverterSharedData.MAXIMUM_UCS2) 
+                        if (ch <= UConverterConstants.MAXIMUM_UCS2) 
                         {
                             /* fits in 16 bits */
                             target.put((char) ch);
@@ -391,7 +391,7 @@ class CharsetUTF32 extends CharsetICU {
                 if (sourceArrayIndex < source.limit()) {
                     ch2 = source.get(sourceArrayIndex);
                     if (UTF16.isTrailSurrogate((char)ch2)) {
-                        ch = ((ch - UConverterConstants.SURROGATE_HIGH_START) << UConverterSharedData.HALF_SHIFT) + ch2 + UConverterSharedData.SURROGATE_LOW_BASE;
+                        ch = ((ch - UConverterConstants.SURROGATE_HIGH_START) << UConverterConstants.HALF_SHIFT) + ch2 + UConverterConstants.SURROGATE_LOW_BASE;
                         sourceArrayIndex++;
                     }
                     else {
@@ -439,7 +439,7 @@ class CharsetUTF32 extends CharsetICU {
                             if (sourceArrayIndex < source.limit()) {
                                 ch2 = source.get(sourceArrayIndex);
                                 if (UTF16.isTrailSurrogate((char)ch2)) {
-                                    ch = ((ch - UConverterSharedData.SURROGATE_HIGH_START) << UConverterSharedData.HALF_SHIFT) + ch2 + UConverterSharedData.SURROGATE_LOW_BASE;
+                                    ch = ((ch - UConverterConstants.SURROGATE_HIGH_START) << UConverterConstants.HALF_SHIFT) + ch2 + UConverterConstants.SURROGATE_LOW_BASE;
                                     sourceArrayIndex++;
                                 }
                                 else {

@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006, International Business Machines Corporation and    *
+* Copyright (C) 2006-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -158,7 +158,7 @@ class CharsetASCII extends CharsetICU {
                                 if (sourceArrayIndex < source.limit()) {
                                     ch2 = source.get(sourceArrayIndex);
                                     if (UTF16.isTrailSurrogate((char)ch2)) {
-                                        ch = ((ch - UConverterSharedData.SURROGATE_HIGH_START) << UConverterSharedData.HALF_SHIFT) + ch2 + UConverterSharedData.SURROGATE_LOW_BASE;
+                                        ch = ((ch - UConverterConstants.SURROGATE_HIGH_START) << UConverterConstants.HALF_SHIFT) + ch2 + UConverterConstants.SURROGATE_LOW_BASE;
                                         sourceArrayIndex++;
                                     }
                                     else {
