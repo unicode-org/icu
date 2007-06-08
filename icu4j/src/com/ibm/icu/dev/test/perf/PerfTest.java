@@ -1,10 +1,11 @@
 /*
-**********************************************************************
-* Copyright (c) 2002-2007, International Business Machines
-* Corporation and others.  All Rights Reserved.
-**********************************************************************
-*/
+ **********************************************************************
+ * Copyright (c) 2002-2007, International Business Machines
+ * Corporation and others.  All Rights Reserved.
+ **********************************************************************
+ */
 package com.ibm.icu.dev.test.perf;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -70,29 +71,41 @@ import com.ibm.icu.impl.LocaleUtility;
  * @author Alan Liu
  * @since ICU 2.4
  */
-public abstract class PerfTest{
+public abstract class PerfTest {
     // Command-line options set these:
-    protected boolean        verbose;
-    protected String         sourceDir;
-    protected String         fileName;
-    //protected String         resolvedFileName;
-    protected String         encoding;
-    protected boolean        uselen;
-    protected int            iterations;
-    protected int            passes;
-    protected int            time;
-    protected boolean        line_mode;
-    protected boolean        bulk_mode;
-    protected Locale         locale;
-    protected boolean        doPriorGC;
+    protected boolean verbose;
+
+    protected String sourceDir;
+
+    protected String fileName;
+
+    // protected String resolvedFileName;
+    protected String encoding;
+
+    protected boolean uselen;
+
+    protected int iterations;
+
+    protected int passes;
+
+    protected int time;
+
+    protected boolean line_mode;
+
+    protected boolean bulk_mode;
+
+    protected Locale locale;
+
+    protected boolean doPriorGC;
+
     protected TestCmdProvider testProvider = new TestPrefixProvider(this);
-    
+
     static interface TestCmdProvider {
         /**
          * @return The names for all available test.
          */
         public Set getAllTestCmdNames();
-        
+
         /**
          * @param name
          * @return Whether the given name is a test name. The implementation may
@@ -100,90 +113,100 @@ public abstract class PerfTest{
          *         TestCmdProvider.isTestCmd() != Set.contains()
          */
         public boolean isTestCmd(String name);
-        
+
         /**
          * @param name
          * @return the test Command or null
          */
         public PerfTest.Function getTestCmd(String name);
     }
-    
+
     /**
-     * Treat all method beginning with 'test' prefix (ignoring case)
-     * for given object as the test methods.
+     * Treat all method beginning with 'test' prefix (ignoring case) for given
+     * object as the test methods.
      */
-    static class TestPrefixProvider implements TestCmdProvider{
-        private Map theTests = null; // Map<string(no case), string(with case)> 
-        private Set orgNames = null; // shadow reference, ==theTests, for better output
+    static class TestPrefixProvider implements TestCmdProvider {
+        private Map theTests = null; // Map<string(no case), string(with
+
+        // case)>
+
+        private Set orgNames = null; // shadow reference, ==theTests, for
+
+        // better output
+
         private Object refer;
-        
-        TestPrefixProvider(Object theProvider){
+
+        TestPrefixProvider(Object theProvider) {
             refer = theProvider;
         }
-        
+
         public Set getAllTestCmdNames() {
             if (theTests == null) {
                 theTests = new HashMap();
                 orgNames = new HashSet();
                 Method[] methods = refer.getClass().getDeclaredMethods();
-                for (int i=0; i<methods.length; i++) {
+                for (int i = 0; i < methods.length; i++) {
                     String org = methods[i].getName();
-                    String name = org.toLowerCase();    // ignoring case
+                    String name = org.toLowerCase(); // ignoring case
                     // beginning with 'test'
                     // Note: methods named 'test()' are ignored
-                    if (name.length() > 4 && name.startsWith("test")) { 
+                    if (name.length() > 4 && name.startsWith("test")) {
                         if (theTests.containsKey(name)) {
-                            throw new Error("Duplicate method name ignoring case: " + name);
+                            throw new Error(
+                                    "Duplicate method name ignoring case: "
+                                            + name);
                         }
-                        theTests.put(name,org);
+                        theTests.put(name, org);
                         orgNames.add(org);
                     }
                 }
             }
-            return orgNames; // beggining with 'test', keeping case
+            return orgNames; // begining with 'test', keeping case
         }
-        
+
         /**
          * The given name will map to a method of the same name, or a method
          * named "test" + name. Case is ignored.
          */
-        private String isTestCmd_impl(String name){
+        private String isTestCmd_impl(String name) {
             getAllTestCmdNames();
             String tn1 = name.toLowerCase();
             String tn2 = "test" + tn1;
-            if (theTests.containsKey(tn1)){
+            if (theTests.containsKey(tn1)) {
                 return tn1;
-            } else if (theTests.containsKey(tn2)){
+            } else if (theTests.containsKey(tn2)) {
                 return tn2;
             }
             return null;
         }
-        
-        public boolean isTestCmd(String name){
-            return isTestCmd_impl(name)!=null;
+
+        public boolean isTestCmd(String name) {
+            return isTestCmd_impl(name) != null;
         }
-        
-        public Function getTestCmd(String aname){
+
+        public Function getTestCmd(String aname) {
             String name = (String) theTests.get(isTestCmd_impl(aname));
-            if (name == null){
+            if (name == null) {
                 return null;
             }
-            
+
             try {
-                Method m = refer.getClass().getDeclaredMethod(name,(Class[])null);
-                return (Function) m.invoke(refer, new Object[]{});
+                Method m = refer.getClass().getDeclaredMethod(name,
+                        (Class[]) null);
+                return (Function) m.invoke(refer, new Object[] {});
             } catch (Exception e) {
-                throw new Error("TestPrefixProvider implementation error. Finding: " + name,e);
+                throw new Error(
+                        "TestPrefixProvider implementation error. Finding: "
+                                + name, e);
             }
         }
     }
-    
 
     /**
-     * Subclasses of PerfTest will need to create subclasses of
-     * Function that define a call() method which contains the code to
-     * be timed.  They then call setTestFunction() in their "Test..."
-     * method to establish this as the current test functor.
+     * Subclasses of PerfTest will need to create subclasses of Function that
+     * define a call() method which contains the code to be timed. They then
+     * call setTestFunction() in their "Test..." method to establish this as the
+     * current test functor.
      */
     public abstract static class Function {
 
@@ -194,22 +217,22 @@ public abstract class PerfTest{
         public abstract void call();
 
         /**
-         * Subclasses may implement this method to return positive
-         * integer indicating the number of operations in a single
-         * call to this object's call() method.  If subclasses do not
-         * override this method, the default implementation returns 1.
+         * Subclasses may implement this method to return positive integer
+         * indicating the number of operations in a single call to this object's
+         * call() method. If subclasses do not override this method, the default
+         * implementation returns 1.
          */
         public long getOperationsPerIteration() {
             return 1;
         }
 
         /**
-         * Subclasses may implement this method to return either positive
-         * or negative integer indicating the number of events in a single
-         * call to this object's call() method.  If subclasses do not
-         * override this method, the default implementation returns -1,
-         * indicating that events are not applicable to this test.
-         * e.g: Number of breaks / iterations for break iterator
+         * Subclasses may implement this method to return either positive or
+         * negative integer indicating the number of events in a single call to
+         * this object's call() method. If subclasses do not override this
+         * method, the default implementation returns -1, indicating that events
+         * are not applicable to this test. e.g: Number of breaks / iterations
+         * for break iterator
          */
         public long getEventsPerIteration() {
             return -1;
@@ -217,9 +240,9 @@ public abstract class PerfTest{
 
         /**
          * Call call() n times in a tight loop and return the elapsed
-         * milliseconds.  If n is small and call() is fast the return
-         * result may be zero.  Small return values have limited
-         * meaningfulness, depending on the underlying VM and OS.
+         * milliseconds. If n is small and call() is fast the return result may
+         * be zero. Small return values have limited meaningfulness, depending
+         * on the underlying VM and OS.
          */
         public final long time(long n) {
             long start, stop;
@@ -257,10 +280,9 @@ public abstract class PerfTest{
     }
 
     /**
-     * Framework method.  Default implementation does not parse any
-     * extra arguments.  Subclasses may override this to parse extra
-     * arguments.  Subclass implementations should NOT call the base
-     * class implementation.
+     * Framework method. Default implementation does not parse any extra
+     * arguments. Subclasses may override this to parse extra arguments.
+     * Subclass implementations should NOT call the base class implementation.
      */
     protected void setup(String[] args) {
         if (args.length > 0) {
@@ -272,53 +294,62 @@ public abstract class PerfTest{
      * These must be kept in sync with getOptions().
      */
     static final int HELP1 = 0;
+
     static final int HELP2 = 1;
+
     static final int VERBOSE = 2;
+
     static final int SOURCEDIR = 3;
+
     static final int ENCODING = 4;
+
     static final int USELEN = 5;
+
     static final int FILE_NAME = 6;
+
     static final int PASSES = 7;
+
     static final int ITERATIONS = 8;
+
     static final int TIME = 9;
+
     static final int LINE_MODE = 10;
+
     static final int BULK_MODE = 11;
+
     static final int LOCALE = 12;
+
     // Options above here are identical to those in C; keep in sync with C
     // Options below here are unique to Java; shift down as necessary
     static final int GARBAGE_COLLECT = 13;
+
     static final int LIST = 14;
 
     UOption[] getOptions() {
-        return new UOption[] {
-            UOption.HELP_H(),
-            UOption.HELP_QUESTION_MARK(),
-            UOption.VERBOSE(),
-            UOption.SOURCEDIR(),
-            UOption.ENCODING(),
-            UOption.DEF( "uselen",        'u', UOption.NO_ARG),
-            UOption.DEF( "file-name",     'f', UOption.REQUIRES_ARG),
-            UOption.DEF( "passes",        'p', UOption.REQUIRES_ARG),
-            UOption.DEF( "iterations",    'i', UOption.REQUIRES_ARG),
-            UOption.DEF( "time",          't', UOption.REQUIRES_ARG),
-            UOption.DEF( "line-mode",     'l', UOption.NO_ARG),
-            UOption.DEF( "bulk-mode",     'b', UOption.NO_ARG),
-            UOption.DEF( "locale",        'L', UOption.REQUIRES_ARG),
+        return new UOption[] { UOption.HELP_H(), UOption.HELP_QUESTION_MARK(),
+                UOption.VERBOSE(), UOption.SOURCEDIR(),
+                UOption.ENCODING(),
+                UOption.DEF("uselen", 'u', UOption.NO_ARG),
+                UOption.DEF("file-name", 'f', UOption.REQUIRES_ARG),
+                UOption.DEF("passes", 'p', UOption.REQUIRES_ARG),
+                UOption.DEF("iterations", 'i', UOption.REQUIRES_ARG),
+                UOption.DEF("time", 't', UOption.REQUIRES_ARG),
+                UOption.DEF("line-mode", 'l', UOption.NO_ARG),
+                UOption.DEF("bulk-mode", 'b', UOption.NO_ARG),
+                UOption.DEF("locale", 'L', UOption.REQUIRES_ARG),
 
-            // Options above here are identical to those in C; keep in sync
-            // Options below here are unique to Java
+                // Options above here are identical to those in C; keep in sync
+                // Options below here are unique to Java
 
-            UOption.DEF( "gc",            'g', UOption.NO_ARG),
-            UOption.DEF( "list",     (char)-1, UOption.NO_ARG),
-        };
+                UOption.DEF("gc", 'g', UOption.NO_ARG),
+                UOption.DEF("list", (char) -1, UOption.NO_ARG), };
     }
 
     /**
-     * Subclasses should call this method in their main().  run() will
-     * in turn call setup() with any arguments it does not parse.
-     * This method parses the command line and runs the tests given on
-     * the command line, with the given parameters.  See the class
-     * description for details.
+     * Subclasses should call this method in their main(). run() will in turn
+     * call setup() with any arguments it does not parse. This method parses the
+     * command line and runs the tests given on the command line, with the given
+     * parameters. See the class description for details.
      */
     protected final void run(String[] args) throws Exception {
         Set testList = parseOptions(args);
@@ -328,50 +359,61 @@ public abstract class PerfTest{
             String meth = (String) iter.next();
 
             // Call meth to set up the test
-           // long eventsPerCall = -1;
+            // long eventsPerCall = -1;
             Function testFunction = testProvider.getTestCmd(meth);
             if (testFunction == null) {
-                throw new RuntimeException(meth + " failed to return a test function");
+                throw new RuntimeException(meth
+                        + " failed to return a test function");
             }
             if (testFunction.getOperationsPerIteration() < 1) {
-                throw new RuntimeException(meth + " returned an illegal operations/iteration()");
+                throw new RuntimeException(meth
+                        + " returned an illegal operations/iteration()");
             }
 
             long t;
-            //long b = System.currentTimeMillis();
+            // long b = System.currentTimeMillis();
             long loops = getIteration(meth, testFunction);
-            //System.out.println("The guess cost: " + (System.currentTimeMillis() - b)/1000. + " s.");
-            
-            for (int j=0; j<passes; ++j) {
+            // System.out.println("The guess cost: " +
+            // (System.currentTimeMillis() - b)/1000. + " s.");
+
+            for (int j = 0; j < passes; ++j) {
                 long events = -1;
                 if (verbose) {
                     if (iterations > 0) {
-                        System.out.println("= " + meth + " begin " + iterations);
+                        System.out
+                                .println("= " + meth + " begin " + iterations);
                     } else {
-                        System.out.println("= " + meth + " begin " + time + " seconds");
+                        System.out.println("= " + meth + " begin " + time
+                                + " seconds");
                     }
                 } else {
-                    System.out.println("= " + meth + " begin " );
+                    System.out.println("= " + meth + " begin ");
                 }
 
-                t = testFunction.time(loops);   //ms
+                t = testFunction.time(loops); // ms
                 events = testFunction.getEventsPerIteration();
 
                 if (verbose) {
-                    if (events == -1){
-                        System.out.println("= " + meth + " end " + (t/1000.0) + " loops: " + loops +
-                                                " operations: " + testFunction.getOperationsPerIteration());
+                    if (events == -1) {
+                        System.out.println("= " + meth + " end " + (t / 1000.0)
+                                + " loops: " + loops + " operations: "
+                                + testFunction.getOperationsPerIteration());
                     } else {
-                        System.out.println("= " + meth + " end " + (t/1000.0) + " loops: " + loops +
-                                                " operations: " + testFunction.getOperationsPerIteration() +" events: " + events);
+                        System.out.println("= " + meth + " end " + (t / 1000.0)
+                                + " loops: " + loops + " operations: "
+                                + testFunction.getOperationsPerIteration()
+                                + " events: " + events);
                     }
                 } else {
-                    if (events == -1){
-                        System.out.println("= " + meth + " end " + (t/1000.0) + " " + loops +
-                                                " " + testFunction.getOperationsPerIteration());
+                    if (events == -1) {
+                        System.out.println("= " + meth + " end " + (t / 1000.0)
+                                + " " + loops + " "
+                                + testFunction.getOperationsPerIteration());
                     } else {
-                        System.out.println("= " + meth + " end " + (t/1000.0) + " " + loops +
-                                                " " + testFunction.getOperationsPerIteration() + " " + events);
+                        System.out.println("= " + meth + " end " + (t / 1000.0)
+                                + " " + loops + " "
+                                + testFunction.getOperationsPerIteration()
+                                + " " + events);
                     }
                 }
 
@@ -381,20 +423,20 @@ public abstract class PerfTest{
 
     /**
      * @param args
-     * @return                  the method list to call
+     * @return the method list to call
      * @throws UsageException
      */
     private Set parseOptions(String[] args) throws UsageException {
-        
+
         doPriorGC = false;
         encoding = "";
         uselen = false;
         fileName = null;
         sourceDir = null;
-        //lines = null;
+        // lines = null;
         line_mode = false;
-        //buffer = null;
-        //bufferLen = 0;
+        // buffer = null;
+        // bufferLen = 0;
         verbose = false;
         bulk_mode = false;
         passes = iterations = time = -1;
@@ -403,75 +445,79 @@ public abstract class PerfTest{
         UOption[] options = getOptions();
         int remainingArgc = UOption.parseArgs(args, options);
 
-        if(args.length==0 || options[HELP1].doesOccur || options[HELP2].doesOccur) {
+        if (args.length == 0 || options[HELP1].doesOccur
+                || options[HELP2].doesOccur) {
             throw new UsageException();
         }
 
-        if(options[VERBOSE].doesOccur) {
+        if (options[VERBOSE].doesOccur) {
             verbose = true;
         }
 
-        if(options[SOURCEDIR].doesOccur) {
+        if (options[SOURCEDIR].doesOccur) {
             sourceDir = options[SOURCEDIR].value;
         }
 
-        if(options[ENCODING].doesOccur) {
+        if (options[ENCODING].doesOccur) {
             encoding = options[ENCODING].value;
         }
 
-        if(options[USELEN].doesOccur) {
+        if (options[USELEN].doesOccur) {
             uselen = true;
         }
 
-        if(options[FILE_NAME].doesOccur){
+        if (options[FILE_NAME].doesOccur) {
             fileName = options[FILE_NAME].value;
         }
 
         if (options[TIME].doesOccur && options[ITERATIONS].doesOccur) {
-            throw new UsageException("Cannot specify both '-t time' and '-i iterations'");
+            throw new UsageException(
+                    "Cannot specify both '-t time' and '-i iterations'");
         }
 
         if (!options[TIME].doesOccur && !options[ITERATIONS].doesOccur) {
-            throw new UsageException("Either '-t time' or '-i iteration' must be specified");
+            throw new UsageException(
+                    "Either '-t time' or '-i iteration' must be specified");
         }
-        
-        if(options[PASSES].doesOccur) {
+
+        if (options[PASSES].doesOccur) {
             passes = Integer.parseInt(options[PASSES].value);
         } else {
             throw new UsageException("'-p pass' must be specified");
         }
 
-        if(options[ITERATIONS].doesOccur) {
+        if (options[ITERATIONS].doesOccur) {
             iterations = Integer.parseInt(options[ITERATIONS].value);
         }
 
-        if(options[TIME].doesOccur) {
+        if (options[TIME].doesOccur) {
             time = Integer.parseInt(options[TIME].value);
         }
 
         if (options[LINE_MODE].doesOccur && options[BULK_MODE].doesOccur) {
-            throw new UsageException("Cannot specify both line mode and bulk mode");
+            throw new UsageException(
+                    "Cannot specify both line mode and bulk mode");
         }
 
-        if(options[LINE_MODE].doesOccur) {
+        if (options[LINE_MODE].doesOccur) {
             line_mode = true;
             bulk_mode = false;
         }
 
-        if(options[BULK_MODE].doesOccur) {
+        if (options[BULK_MODE].doesOccur) {
             bulk_mode = true;
             line_mode = false;
         }
 
-        if(options[LOCALE].doesOccur) {
+        if (options[LOCALE].doesOccur) {
             locale = LocaleUtility.getLocaleFromName(options[LOCALE].value);
         }
 
-        if(options[GARBAGE_COLLECT].doesOccur) {
+        if (options[GARBAGE_COLLECT].doesOccur) {
             doPriorGC = true;
         }
 
-        if (options[LIST].doesOccur){
+        if (options[LIST].doesOccur) {
             System.err.println("Available tests:");
             Set testNames = testProvider.getAllTestCmdNames();
             for (Iterator iter = testNames.iterator(); iter.hasNext();) {
@@ -483,13 +529,13 @@ public abstract class PerfTest{
 
         Set testList = new HashSet();
         int i, j;
-        for (i=0; i<remainingArgc; ++i) {
+        for (i = 0; i < remainingArgc; ++i) {
 
             // is args[i] a method name?
-            if (testProvider.isTestCmd(args[i])){
+            if (testProvider.isTestCmd(args[i])) {
                 testList.add(args[i]);
             } else {
-                // args[i] is neither a method name nor a number.  Pass
+                // args[i] is neither a method name nor a number. Pass
                 // everything from here on through to the subclass via
                 // setup().
                 break;
@@ -507,7 +553,7 @@ public abstract class PerfTest{
         // Pass remaining arguments, if any, through to the subclass
         // via setup() method.
         String[] subclassArgs = new String[remainingArgc - i];
-        for (j=0; i<remainingArgc; ++j) {
+        for (j = 0; i < remainingArgc; ++j) {
             subclassArgs[j] = args[i++];
         }
         setup(subclassArgs);
@@ -528,50 +574,56 @@ public abstract class PerfTest{
      */
     private long getIteration(String methName, Function fn) {
         long iter = 0;
-        if(time < 0) { // && iterations > 0
+        if (time < 0) { // && iterations > 0
             iter = iterations;
-        } else {  // && iterations < 0
+        } else { // && iterations < 0
             // Translate time to iteration
             // Assuming there is a linear relation between time and iterations
 
-            if(verbose){
-                System.out.println("= " + methName + " calibrating " + time + " seconds" );
+            if (verbose) {
+                System.out.println("= " + methName + " calibrating " + time
+                        + " seconds");
             }
 
             long base = time * 1000;
-//            System.out.println("base :" + base);
-            long seed = 1;               
-            long t=0;
-            while (t < base * 0.9 || base * 1.1 < t) { // + - 10%  
+            // System.out.println("base :" + base);
+            long seed = 1;
+            long t = 0;
+            while (t < base * 0.9 || base * 1.1 < t) { // + - 10%
                 if (iter == 0 || t == 0) {
-                    iter = seed;    // start up from 1
-                    seed *= 100;    // if the method is too fast (t == 0), multiply 100 times
+                    iter = seed; // start up from 1
+                    seed *= 100; // if the method is too fast (t == 0),
+                    // multiply 100 times
                     // 100 is rational because 'base' is always larger than 1000
                 } else {
-                    // If 't' is large enough, use linear function to calculate new iteration
+                    // If 't' is large enough, use linear function to calculate
+                    // new iteration
                     //
-                    // new iter(base)    old iter
+                    // new iter(base) old iter
                     // -------------- = -------- = k
-                    // new time          old time
+                    // new time old time
                     //
-//                    System.out.println("before guess t: " + t);
-//                    System.out.println("before guess iter: " + iter);
-                    iter = (long) ((double)iter / t * base) ;  // avoid long cut, eg. 1/10 == 0
+                    // System.out.println("before guess t: " + t);
+                    // System.out.println("before guess iter: " + iter);
+                    iter = (long) ((double) iter / t * base); // avoid long
+                    // cut, eg. 1/10
+                    // == 0
                     if (iter == 0) {
-                        throw new RuntimeException("Unable to converge on desired duration");
+                        throw new RuntimeException(
+                                "Unable to converge on desired duration");
                     }
                 }
                 t = fn.time(iter);
             }
-//            System.out.println("final t : " + t);
-//            System.out.println("final i : " + iter);
+            // System.out.println("final t : " + t);
+            // System.out.println("final i : " + iter);
         }
-        return iter;    
+        return iter;
     }
 
     /**
-     * Invoke the runtime's garbage collection procedure repeatedly
-     * until the amount of free memory stabilizes to within 10%.
+     * Invoke the runtime's garbage collection procedure repeatedly until the
+     * amount of free memory stabilizes to within 10%.
      */
     protected void gc() {
         if (false) {
@@ -582,12 +634,12 @@ public abstract class PerfTest{
                 runtime.gc();
                 last = free;
                 free = runtime.freeMemory();
-            } while (((double)Math.abs(free - last)) / free > 0.1);
+            } while (((double) Math.abs(free - last)) / free > 0.1);
             // Wait for the change in free memory to drop under 10%
             // between successive calls.
         }
 
-        // From "Java Platform Performance".  This is the procedure
+        // From "Java Platform Performance". This is the procedure
         // recommended by Javasoft.
         try {
             System.gc();
@@ -599,27 +651,37 @@ public abstract class PerfTest{
             Thread.sleep(100);
             System.runFinalization();
             Thread.sleep(100);
-        } catch (InterruptedException e) {}
+        } catch (InterruptedException e) {
+        }
     }
-
 
     /*
      * Private utility to convert a List of Integer objects to int[].
      */
-    /*private static int[] toIntArray(List list) {
-        int[] result = new int[list.size()];
-        for (int i=0; i<list.size(); ++i) {
-            result[i] = ((Integer) list.get(i)).intValue();
-        }
-        return result;
-    }*/
-    
+    /*
+     * private static int[] toIntArray(List list) { int[] result = new
+     * int[list.size()]; for (int i=0; i<list.size(); ++i) { result[i] =
+     * ((Integer) list.get(i)).intValue(); } return result; }
+     */
+
     public static char[] readToEOS(InputStreamReader stream) {
         ArrayList vec = new ArrayList();
         int count = 0;
-        int pos = 0;
+        int pos;
         final int MAXLENGTH = 0x8000; // max buffer size - 32K
         int length = 0x80; // start with small buffers and work up
+
+        try {
+            char[] firstChars = new char[1];
+            stream.read(firstChars, 0, 1);
+            if (!(firstChars[0] == BOM1 || firstChars[0] == BOM2)) {
+                // if it's not the UTF-8 BOM, add the three char to vec
+                vec.add(firstChars);
+                count = 1;
+            }
+        } catch (IOException ex) {
+        }
+
         do {
             pos = 0;
             length = length >= MAXLENGTH ? MAXLENGTH : length * 2;
@@ -628,12 +690,11 @@ public abstract class PerfTest{
                 do {
                     int n = stream.read(buffer, pos, length - pos);
                     if (n == -1) {
-                    break;
+                        break;
                     }
                     pos += n;
                 } while (pos < length);
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
             }
             vec.add(buffer);
             count += pos;
@@ -642,20 +703,33 @@ public abstract class PerfTest{
         char[] data = new char[count];
         pos = 0;
         for (int i = 0; i < vec.size(); ++i) {
-            char[] buf = (char[])vec.get(i);
+            char[] buf = (char[]) vec.get(i);
             int len = Math.min(buf.length, count - pos);
             System.arraycopy(buf, 0, data, pos, len);
             pos += len;
         }
         return data;
     }
+
     public static byte[] readToEOS(InputStream stream) {
 
         ArrayList vec = new ArrayList();
         int count = 0;
-        int pos = 0;
+        int pos;
         final int MAXLENGTH = 0x8000; // max buffer size - 32K
         int length = 0x80; // start with small buffers and work up
+
+        try {
+            byte[] firstChars = new byte[1];
+            stream.read(firstChars, 0, 1);
+            if (!(firstChars[0] == BOM1 || firstChars[0] == BOM2)) {
+                // if it's not the UTF-8 BOM, add the first char to vec
+                vec.add(firstChars);
+                count = 1;
+            }
+        } catch (IOException ex) {
+        }
+
         do {
             pos = 0;
             length = length >= MAXLENGTH ? MAXLENGTH : length * 2;
@@ -664,22 +738,20 @@ public abstract class PerfTest{
                 do {
                     int n = stream.read(buffer, pos, length - pos);
                     if (n == -1) {
-                    break;
+                        break;
                     }
                     pos += n;
                 } while (pos < length);
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
             }
             vec.add(buffer);
             count += pos;
         } while (pos == length);
 
-
         byte[] data = new byte[count];
         pos = 0;
         for (int i = 0; i < vec.size(); ++i) {
-            byte[] buf = (byte[])vec.get(i);
+            byte[] buf = (byte[]) vec.get(i);
             int len = Math.min(buf.length, count - pos);
             System.arraycopy(buf, 0, data, pos, len);
             pos += len;
@@ -694,9 +766,10 @@ public abstract class PerfTest{
         try {
             fis = new FileInputStream(fileName);
             isr = new InputStreamReader(fis, encoding);
-            br= new BufferedReader(isr);
+            br = new BufferedReader(isr);
         } catch (Exception e) {
-            System.err.println("Error: File access exception: " + e.getMessage() + "!");
+            System.err.println("Error: File access exception: "
+                    + e.getMessage() + "!");
             System.exit(1);
         }
         ArrayList list = new ArrayList();
@@ -708,8 +781,10 @@ public abstract class PerfTest{
                 System.err.println("Read File Error" + e.getMessage() + "!");
                 System.exit(1);
             }
-            if (line == null) break;
-            if (line.length() == 0) continue;
+            if (line == null)
+                break;
+            if (line.length() == 0)
+                continue;
             list.add(line);
         }
 
@@ -721,13 +796,13 @@ public abstract class PerfTest{
             StringBuffer buffer = new StringBuffer("");
             for (int i = 0; i < size; ++i) {
                 buffer.append((String) list.get(i));
-                /*if (i < (size - 1)) {
-                    buffer.append("\r\n");
-                }*/
+                /*
+                 * if (i < (size - 1)) { buffer.append("\r\n"); }
+                 */
             }
             lines[0] = buffer.toString();
         } else {
-            lines = new String [size];
+            lines = new String[size];
             for (int i = 0; i < size; ++i) {
                 lines[i] = (String) list.get(i);
             }
@@ -741,18 +816,24 @@ public abstract class PerfTest{
         String line = "";
         try {
             line = originalLine = br.readLine();
-            if (line == null) return null;
-            if (line.length() > 0 && line.charAt(0) == 0xFEFF) line = line.substring(1);
+            if (line == null)
+                return null;
+            if (line.length() > 0 && line.charAt(0) == 0xFEFF)
+                line = line.substring(1);
             int commentPos = line.indexOf('#');
-            if (commentPos >= 0) line = line.substring(0, commentPos);
+            if (commentPos >= 0)
+                line = line.substring(0, commentPos);
             line = line.trim();
         } catch (Exception e) {
             throw new Exception("Line \"{0}\",  \"{1}\"" + originalLine + " "
-                                + line + " " + e.toString());
+                    + line + " " + e.toString());
         }
         return line;
     }
 
+    final public static int BOM1 = 0xfeff; // big endian byte order mark
+
+    final public static int BOM2 = 0xfffe; // little endian byte order mark
 }
 
-//eof
+// eof
