@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006, International Business Machines Corporation and    *
+* Copyright (C) 2006-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -166,7 +166,7 @@ interface UConverterConstants {
 
     static final int MAXIMUM_UCS2 =            0x0000FFFF;
     static final int MAXIMUM_UTF =             0x0010FFFF;
-    static final int MAXIMUM_UCS4 =            0x7FFFFFFF;
+    //static final int MAXIMUM_UCS4 =            0x7FFFFFFF;
     static final int HALF_SHIFT =              10;
     static final int HALF_BASE =               0x0010000;
     static final int HALF_MASK =               0x3FF;
