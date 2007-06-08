@@ -59,7 +59,7 @@ class CharsetUTF8 extends CharsetICU {
 	 */
 	private static final long UTF8_MIN_CHAR32[] = { 0L, 0L, 0x80L, 0x800L, 0x10000L, 0xffffffffL, 0xffffffffL };
 	
-    protected boolean isCESU8 = false;
+    private final boolean isCESU8 = this instanceof CharsetCESU8;
     
     class CharsetDecoderUTF8 extends CharsetDecoderICU{
 
@@ -369,6 +369,5 @@ donefornow:
 class CharsetCESU8 extends CharsetUTF8 {
     public CharsetCESU8(String icuCanonicalName, String javaCanonicalName, String[] aliases){
         super(icuCanonicalName, javaCanonicalName, aliases);
-        isCESU8 = true;
     }
 }
