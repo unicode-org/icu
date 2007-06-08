@@ -23,8 +23,7 @@ import com.ibm.icu.text.UTF16;
 class CharsetASCII extends CharsetICU {
     protected byte[] fromUSubstitution = new byte[] { (byte) 0x1a };
 
-    public CharsetASCII(String icuCanonicalName, String javaCanonicalName,
-            String[] aliases) {
+    public CharsetASCII(String icuCanonicalName, String javaCanonicalName, String[] aliases) {
         super(icuCanonicalName, javaCanonicalName, aliases);
         maxBytesPerChar = 1;
         minBytesPerChar = 1;
@@ -37,8 +36,8 @@ class CharsetASCII extends CharsetICU {
             super(cs);
         }
 
-        protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target,
-                IntBuffer offsets, boolean flush) {
+        protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets,
+                boolean flush) {
             if (!source.hasRemaining() && toUnicodeStatus == 0) {
                 /* no input, nothing to do */
                 return CoderResult.UNDERFLOW;
@@ -55,17 +54,24 @@ class CharsetASCII extends CharsetICU {
             if (source.hasArray() && target.hasArray()) {
                 /* optimized loop */
 
+                /*
+                 * extract arrays from the buffers and obtain various constant values that will be
+                 * necessary in the core loop
+                 */
                 byte[] sourceArray = source.array();
                 char[] targetArray = target.array();
                 int offset = oldTarget - oldSource;
                 int sourceLength = source.limit() - oldSource;
                 int targetLength = target.limit() - oldTarget;
-                int limit = ((sourceLength < targetLength) ? sourceLength
-                        : targetLength)
+                int limit = ((sourceLength < targetLength) ? sourceLength : targetLength)
                         + oldSource;
 
-                if ((cr = decodeLoopCoreOptimized(source, target, sourceArray,
-                        targetArray, oldSource, offset, limit)) == null) {
+                /*
+                 * perform the core loop... if it returns null, it must be due to an overflow or
+                 * underflow
+                 */
+                if ((cr = decodeLoopCoreOptimized(source, target, sourceArray, targetArray,
+                        oldSource, offset, limit)) == null) {
                     if (sourceLength <= targetLength) {
                         source.position(oldSource + sourceLength);
                         target.position(oldTarget + sourceLength);
@@ -80,6 +86,10 @@ class CharsetASCII extends CharsetICU {
                 /* unoptimized loop */
 
                 try {
+                    /*
+                     * perform the core loop... if it throws an exception, it must be due to an
+                     * overflow or underflow
+                     */
                     cr = decodeLoopCoreUnoptimized(source, target);
 
                 } catch (BufferUnderflowException ex) {
@@ -102,33 +112,53 @@ class CharsetASCII extends CharsetICU {
             return cr;
         }
 
-        protected CoderResult decodeLoopCoreOptimized(ByteBuffer source,
-                CharBuffer target, byte[] sourceArray, char[] targetArray,
-                int oldSource, int offset, int limit) {
+        protected CoderResult decodeLoopCoreOptimized(ByteBuffer source, CharBuffer target,
+                byte[] sourceArray, char[] targetArray, int oldSource, int offset, int limit) {
             int i, ch = 0;
-            for (i = oldSource; i < limit
-                    && (((ch = (sourceArray[i] & 0xff)) & 0x80) == 0); i++)
+
+            /*
+             * perform ascii conversion from the source array to the target array, making sure each
+             * byte in the source is within the correct range
+             */
+            for (i = oldSource; i < limit && (((ch = (sourceArray[i] & 0xff)) & 0x80) == 0); i++)
                 targetArray[i + offset] = (char) ch;
 
+            /*
+             * if some byte was not in the correct range, we need to deal with this byte by calling
+             * decodeMalformedOrUnmappable and move the source and target positions to reflect the
+             * early termination of the loop
+             */
             if ((ch & 0x80) != 0) {
                 source.position(i + 1);
                 target.position(i + offset);
-                return decodeIllegal(ch);
+                return decodeMalformedOrUnmappable(ch);
             } else
                 return null;
         }
 
-        protected CoderResult decodeLoopCoreUnoptimized(ByteBuffer source,
-                CharBuffer target) throws BufferUnderflowException,
-                BufferOverflowException {
+        protected CoderResult decodeLoopCoreUnoptimized(ByteBuffer source, CharBuffer target)
+                throws BufferUnderflowException, BufferOverflowException {
             int ch = 0;
+
+            /*
+             * perform ascii conversion from the source buffer to the target buffer, making sure
+             * each byte in the source is within the correct range
+             */
             while (((ch = (source.get() & 0xff)) & 0x80) == 0)
                 target.put((char) ch);
 
-            return decodeIllegal(ch);
+            /*
+             * if we reach here, it's because a character was not in the correct range, and we need
+             * to deak with this by calling decodeMalformedOrUnmappable
+             */
+            return decodeMalformedOrUnmappable(ch);
         }
 
-        protected CoderResult decodeIllegal(int ch) {
+        protected CoderResult decodeMalformedOrUnmappable(int ch) {
+            /*
+             * put the guilty character into toUBytesArray and return a message saying that the
+             * character was malformed and of length 1.
+             */
             toUBytesArray[0] = (byte) ch;
             return CoderResult.malformedForLength(toULength = 1);
         }
@@ -148,8 +178,8 @@ class CharsetASCII extends CharsetICU {
             fromUnicodeStatus = NEED_TO_WRITE_BOM;
         }
 
-        protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target,
-                IntBuffer offsets, boolean flush) {
+        protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets,
+                boolean flush) {
             if (!source.hasRemaining()) {
                 /* no input, nothing to do */
                 return CoderResult.UNDERFLOW;
@@ -164,25 +194,34 @@ class CharsetASCII extends CharsetICU {
             int oldTarget = target.position();
 
             if (fromUChar32 != 0) {
+                /*
+                 * if we have a leading character in fromUChar32 that needs to be dealt with, we
+                 * need to check for a matching trail character and taking the appropriate action as
+                 * dictated by encodeTrail.
+                 */
                 cr = encodeTrail(source, (char) fromUChar32, flush);
             } else {
-                int ch = 0;
-
                 if (source.hasArray() && target.hasArray()) {
                     /* optimized loop */
 
+                    /*
+                     * extract arrays from the buffers and obtain various constant values that will
+                     * be necessary in the core loop
+                     */
                     char[] sourceArray = source.array();
                     byte[] targetArray = target.array();
                     int offset = oldTarget - oldSource;
                     int sourceLength = source.limit() - oldSource;
                     int targetLength = target.limit() - oldTarget;
-                    int limit = ((sourceLength < targetLength) ? sourceLength
-                            : targetLength)
+                    int limit = ((sourceLength < targetLength) ? sourceLength : targetLength)
                             + oldSource;
 
-                    if ((cr = encodeLoopCoreOptimized(source, target,
-                            sourceArray, targetArray, oldSource, offset, limit,
-                            flush)) == null) {
+                    /*
+                     * perform the core loop... if it returns null, it must be due to an overflow or
+                     * underflow
+                     */
+                    if ((cr = encodeLoopCoreOptimized(source, target, sourceArray, targetArray,
+                            oldSource, offset, limit, flush)) == null) {
                         if (sourceLength <= targetLength) {
                             source.position(oldSource + sourceLength);
                             target.position(oldTarget + sourceLength);
@@ -197,9 +236,11 @@ class CharsetASCII extends CharsetICU {
                     /* unoptimized loop */
 
                     try {
+                        /*
+                         * perform the core loop... if it throws an exception, it must be due to an
+                         * overflow or underflow
+                         */
                         cr = encodeLoopCoreUnoptimized(source, target, flush);
-
-                        cr = encodeIllegal(source, ch, flush);
 
                     } catch (BufferUnderflowException ex) {
                         cr = CoderResult.UNDERFLOW;
@@ -220,40 +261,65 @@ class CharsetASCII extends CharsetICU {
             return cr;
         }
 
-        protected CoderResult encodeLoopCoreOptimized(CharBuffer source,
-                ByteBuffer target, char[] sourceArray, byte[] targetArray,
-                int oldSource, int offset, int limit, boolean flush) {
+        protected CoderResult encodeLoopCoreOptimized(CharBuffer source, ByteBuffer target,
+                char[] sourceArray, byte[] targetArray, int oldSource, int offset, int limit,
+                boolean flush) {
             int i, ch = 0;
-            for (i = oldSource; i < limit
-                    && (((ch = (int) sourceArray[i]) & 0xff80) == 0); i++)
+
+            /*
+             * perform ascii conversion from the source array to the target array, making sure each
+             * char in the source is within the correct range
+             */
+            for (i = oldSource; i < limit && (((ch = (int) sourceArray[i]) & 0xff80) == 0); i++)
                 targetArray[i + offset] = (byte) ch;
 
+            /*
+             * if some byte was not in the correct range, we need to deal with this byte by calling
+             * encodeMalformedOrUnmappable and move the source and target positions to reflect the
+             * early termination of the loop
+             */
             if ((ch & 0xff80) != 0) {
                 source.position(i + 1);
                 target.position(i + offset);
-                return encodeIllegal(source, ch, flush);
+                return encodeMalformedOrUnmappable(source, ch, flush);
             } else
                 return null;
         }
 
-        protected CoderResult encodeLoopCoreUnoptimized(CharBuffer source,
-                ByteBuffer target, boolean flush)
-                throws BufferUnderflowException, BufferOverflowException {
+        protected CoderResult encodeLoopCoreUnoptimized(CharBuffer source, ByteBuffer target,
+                boolean flush) throws BufferUnderflowException, BufferOverflowException {
             int ch;
+
+            /*
+             * perform ascii conversion from the source buffer to the target buffer, making sure
+             * each char in the source is within the correct range
+             */
             while (((ch = (int) source.get()) & 0xff80) == 0)
                 target.put((byte) ch);
 
-            return encodeIllegal(source, ch, flush);
+            /*
+             * if we reach here, it's because a character was not in the correct range, and we need
+             * to deak with this by calling encodeMalformedOrUnmappable.
+             */
+            return encodeMalformedOrUnmappable(source, ch, flush);
         }
 
-        protected CoderResult encodeIllegal(CharBuffer source, int ch,
-                boolean flush) {
-            return (UTF16.isLeadSurrogate((char) ch)) ? encodeTrail(source,
-                    (char) ch, flush) : CoderResult.unmappableForLength(1);
+        protected CoderResult encodeMalformedOrUnmappable(CharBuffer source, int ch, boolean flush) {
+            /*
+             * if the character is a lead surrogate, we need to call encodeTrail to attempt to match
+             * it up with a trail surrogate. if not, the character is unmappable.
+             */
+            return (UTF16.isLeadSurrogate((char) ch)) ? encodeTrail(source, (char) ch, flush)
+                    : CoderResult.unmappableForLength(1);
         }
 
-        protected CoderResult encodeTrail(CharBuffer source, char lead,
-                boolean flush) {
+        protected CoderResult encodeTrail(CharBuffer source, char lead, boolean flush) {
+            /*
+             * if the next character is a trail surrogate, we have an unmappable codepoint of length
+             * 2. if the next character is not a trail surrogate, we have a single malformed
+             * character. if there is no next character, we either have a malformed character or an
+             * underflow, depending on whether flush is enabled.
+             */
             if (source.hasRemaining()) {
                 char trail = source.get();
                 if (UTF16.isTrailSurrogate(trail)) {
