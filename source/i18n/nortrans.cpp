@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2006, International Business Machines
+*   Copyright (C) 2001-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -82,12 +82,12 @@ Transliterator(o) {
 /**
  * Assignment operator.
  */
-NormalizationTransliterator& NormalizationTransliterator::operator=(const NormalizationTransliterator& o) {
+/*NormalizationTransliterator& NormalizationTransliterator::operator=(const NormalizationTransliterator& o) {
     Transliterator::operator=(o);
     fMode = o.fMode;
     options = o.options;
     return *this;
-}
+}*/
 
 /**
  * Transliterator API.

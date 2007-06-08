@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2004, International Business Machines
+*   Copyright (C) 2001-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -47,11 +47,11 @@ UppercaseTransliterator::UppercaseTransliterator(const UppercaseTransliterator& 
 /**
  * Assignment operator.
  */
-UppercaseTransliterator& UppercaseTransliterator::operator=(
+/*UppercaseTransliterator& UppercaseTransliterator::operator=(
                              const UppercaseTransliterator& o) {
     CaseMapTransliterator::operator=(o);
     return *this;
-}
+}*/
 
 /**
  * Transliterator API.

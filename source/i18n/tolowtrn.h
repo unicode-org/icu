@@ -45,11 +45,6 @@ class LowercaseTransliterator : public CaseMapTransliterator {
     LowercaseTransliterator(const LowercaseTransliterator&);
 
     /**
-     * Assignment operator.
-     */
-    LowercaseTransliterator& operator=(const LowercaseTransliterator&);
-
-    /**
      * Transliterator API.
      * @return a copy of the object.
      */
@@ -64,6 +59,12 @@ class LowercaseTransliterator : public CaseMapTransliterator {
      * ICU "poor man's RTTI", returns a UClassID for this class.
      */
     U_I18N_API static UClassID U_EXPORT2 getStaticClassID();
+private:
+
+    /**
+     * Assignment operator.
+     */
+    LowercaseTransliterator& operator=(const LowercaseTransliterator&);
 };
 
 U_NAMESPACE_END

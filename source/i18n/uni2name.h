@@ -44,11 +44,6 @@ class UnicodeNameTransliterator : public Transliterator {
     UnicodeNameTransliterator(const UnicodeNameTransliterator&);
 
     /**
-     * Assignment operator.
-     */
-    UnicodeNameTransliterator& operator=(const UnicodeNameTransliterator&);
-
-    /**
      * Transliterator API.
      */
     virtual Transliterator* clone(void) const;
@@ -76,6 +71,12 @@ class UnicodeNameTransliterator : public Transliterator {
      */
     virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
                                      UBool isIncremental) const;
+
+private:
+    /**
+     * Assignment operator.
+     */
+    UnicodeNameTransliterator& operator=(const UnicodeNameTransliterator&);
 
 };
 

@@ -48,11 +48,6 @@ class NormalizationTransliterator : public Transliterator {
     NormalizationTransliterator(const NormalizationTransliterator&);
 
     /**
-     * Assignment operator.
-     */
-    NormalizationTransliterator& operator=(const NormalizationTransliterator&);
-
-    /**
      * Transliterator API.
      * @return    A copy of the object.
      */
@@ -100,6 +95,12 @@ class NormalizationTransliterator : public Transliterator {
      */
     NormalizationTransliterator(const UnicodeString& id,
                                 UNormalizationMode mode, int32_t opt);
+
+private:
+    /**
+     * Assignment operator.
+     */
+    NormalizationTransliterator& operator=(const NormalizationTransliterator&);
 };
 
 U_NAMESPACE_END

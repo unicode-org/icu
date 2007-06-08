@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2004, International Business Machines
+*   Copyright (C) 2001-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -48,11 +48,11 @@ UnicodeNameTransliterator::UnicodeNameTransliterator(const UnicodeNameTransliter
 /**
  * Assignment operator.
  */
-UnicodeNameTransliterator& UnicodeNameTransliterator::operator=(
+/*UnicodeNameTransliterator& UnicodeNameTransliterator::operator=(
                              const UnicodeNameTransliterator& o) {
     Transliterator::operator=(o);
     return *this;
-}
+}*/
 
 /**
  * Transliterator API.
