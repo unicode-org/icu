@@ -1,4 +1,13 @@
 /**
+<<<<<<< .mine
+ *******************************************************************************
+ * Copyright (C) 2006, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ *******************************************************************************
+ */
+=======
 *******************************************************************************
 * Copyright (C) 2006-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
@@ -6,111 +15,77 @@
 *
 *******************************************************************************
 */ 
+>>>>>>> .r21670
 package com.ibm.icu.charset;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-import java.nio.IntBuffer;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
 
-import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.text.UTF16;
-
-class Charset88591 extends CharsetICU {
-    protected byte[] fromUSubstitution = new byte[]{(byte)0x1a};
-    
-    public Charset88591(String icuCanonicalName, String javaCanonicalName, String[] aliases){
+class Charset88591 extends CharsetASCII {
+    public Charset88591(String icuCanonicalName, String javaCanonicalName,
+            String[] aliases) {
         super(icuCanonicalName, javaCanonicalName, aliases);
-        maxBytesPerChar = 1;
-        minBytesPerChar = 1;
-        maxCharsPerByte = 1;
     }
-    class CharsetDecoder88591 extends CharsetDecoderICU{
 
+    class CharsetDecoder88591 extends CharsetDecoderASCII {
         public CharsetDecoder88591(CharsetICU cs) {
             super(cs);
         }
 
-        protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush){
-            CoderResult cr = CoderResult.UNDERFLOW;
-            if(!source.hasRemaining() && toUnicodeStatus==0) {
-                /* no input, nothing to do */
-                return cr;
-            }
-            if(!target.hasRemaining()) {
-                return CoderResult.OVERFLOW;
-            }
-        
-            int sourceArrayIndex=source.position(), count=0;
-            int sourceIndex = 0;
-            char c=0;
-            int oldTarget = target.position();
-            /* conversion loop */
-            c=0;
-            while(sourceArrayIndex<source.limit() &&
-                    (c=(char)(source.get(sourceArrayIndex)&0xFF))<=0xff &&
-                    target.hasRemaining()) {
-                target.put(c);
-                sourceArrayIndex++;
-            }
+        protected CoderResult decodeLoopCoreOptimized(ByteBuffer source,
+                CharBuffer target, byte[] sourceArray, char[] targetArray,
+                int oldSource, int offset, int limit) {
 
-            if(c>0xff) {
-                /* callback(illegal); copy the current bytes to toUBytes[] */
-                toUBytesArray[0]=(byte)c;
-                toULength=1;
-                cr = CoderResult.malformedForLength(toULength);
-            } else if(sourceArrayIndex<source.limit() && !target.hasRemaining()) {
-                /* target is full */
-                cr = CoderResult.OVERFLOW;
-            }
+            for (int i = oldSource; i < limit; i++)
+                targetArray[i + offset] = (char) (sourceArray[i] & 0xff);
 
-            /* set offsets since the start */
-            if(offsets!=null) {
-                count=target.position()-oldTarget;
-                while(count>0) {
-                    offsets.put(sourceIndex++);
-                    --count;
-                }
-            }
-
-            source.position(sourceArrayIndex);
-            return cr;
+            return null;
         }
-        
+
+        protected CoderResult decodeLoopCoreUnoptimized(ByteBuffer source,
+                CharBuffer target) throws BufferUnderflowException,
+                BufferOverflowException {
+            while (true)
+                target.put((char) (source.get() & 0xff));
+        }
     }
-    class CharsetEncoder88591 extends CharsetEncoderICU{
 
+    class CharsetEncoder88591 extends CharsetEncoderASCII {
         public CharsetEncoder88591(CharsetICU cs) {
-            super(cs, fromUSubstitution);
-            implReset();
+            super(cs);
         }
 
-        private final static int NEED_TO_WRITE_BOM = 1;
-        
-        protected void implReset() {
-            super.implReset();
-            fromUnicodeStatus = NEED_TO_WRITE_BOM;
-        }
-        
-        protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush){
-            CoderResult cr = CoderResult.UNDERFLOW;
-            if(!source.hasRemaining()) {
-                /* no input, nothing to do */
-                return cr;
-            }
-            
-            if(!target.hasRemaining()) {
-                return CoderResult.OVERFLOW;
-            }
-            
-            int sourceArrayIndex=source.position(), count=0;
-            int sourceIndex = 0;
-            int ch=0;
-            int oldTarget = target.position();
-            boolean doloop = true;
+        protected CoderResult encodeLoopCoreOptimized(CharBuffer source,
+                ByteBuffer target, char[] sourceArray, byte[] targetArray,
+                int oldSource, int offset, int limit, boolean flush) {
+            int i, ch = 0;
+            for (i = oldSource; i < limit
+                    && (((ch = (int) sourceArray[i]) & 0xff00) == 0); i++)
+                targetArray[i + offset] = (byte) ch;
 
+            if ((ch & 0xff00) != 0) {
+                source.position(i + 1);
+                target.position(i + offset);
+                return encodeIllegal(source, ch, flush);
+            } else
+                return null;
+        }
+
+<<<<<<< .mine
+        protected CoderResult encodeLoopCoreUnoptimized(CharBuffer source,
+                ByteBuffer target, boolean flush)
+                throws BufferUnderflowException, BufferOverflowException {
+            int ch;
+            while (((ch = (int) source.get()) & 0xff00) == 0)
+                target.put((byte) ch);
+
+            return encodeIllegal(source, ch, flush);
+=======
             if (fromUChar32 != 0 && target.hasRemaining()){
                 ch = fromUChar32;
                 fromUChar32 = 0;
@@ -197,8 +172,11 @@ class Charset88591 extends CharsetICU {
                
             source.position(sourceArrayIndex);
             return cr;
+>>>>>>> .r21670
         }
+
     }
+
     public CharsetDecoder newDecoder() {
         return new CharsetDecoder88591(this);
     }
