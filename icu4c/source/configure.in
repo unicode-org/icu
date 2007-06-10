@@ -191,7 +191,7 @@ if test "$ac_cv_c_compiler_gnu" = yes; then
     LIBCXXFLAGS="-fvisibility=hidden"
     CFLAGS="${CFLAGS} ${LIBCFLAGS}"
     CXXFLAGS="${CXXFLAGS} ${LIBCXXFLAGS}"
-    AC_TRY_COMPILE([__attribute__ ((visibility ("default"))) void f(void);],[],
+    AC_TRY_LINK([__attribute__ ((visibility ("default"))) void f(void);],[],
         [SHAREDLIBEXPORT=yes],[SHAREDLIBEXPORT=no])
     # Restore to their original state because the Intel compiler chokes
     # on this option when checking for the wchar_t size, but the
