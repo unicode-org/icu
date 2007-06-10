@@ -22,9 +22,7 @@
 #include "ucnv_cnv.h"
 
 /* control optimizations according to the platform */
-#define LATIN1_UNROLL_TO_UNICODE 1
 #define LATIN1_UNROLL_FROM_UNICODE 1
-#define ASCII_UNROLL_TO_UNICODE 1
 
 /* ISO 8859-1 --------------------------------------------------------------- */
 
@@ -60,53 +58,39 @@ _Latin1ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
         length=targetCapacity;
     }
 
-#if LATIN1_UNROLL_TO_UNICODE
-    if(targetCapacity>=16) {
+    if(targetCapacity>=8) {
+        /* This loop is unrolled for speed and improved pipelining. */
         int32_t count, loops;
 
-        loops=count=targetCapacity>>4;
-        length=targetCapacity&=0xf;
+        loops=count=targetCapacity>>3;
+        length=targetCapacity&=0x7;
         do {
-            *target++=*source++;
-            *target++=*source++;
-            *target++=*source++;
-            *target++=*source++;
-            *target++=*source++;
-            *target++=*source++;
-            *target++=*source++;
-            *target++=*source++;
-            *target++=*source++;
-            *target++=*source++;
-            *target++=*source++;
-            *target++=*source++;
-            *target++=*source++;
-            *target++=*source++;
-            *target++=*source++;
-            *target++=*source++;
+            target[0]=source[0];
+            target[1]=source[1];
+            target[2]=source[2];
+            target[3]=source[3];
+            target[4]=source[4];
+            target[5]=source[5];
+            target[6]=source[6];
+            target[7]=source[7];
+            target+=8;
+            source+=8;
         } while(--count>0);
 
         if(offsets!=NULL) {
             do {
-                *offsets++=sourceIndex++;
-                *offsets++=sourceIndex++;
-                *offsets++=sourceIndex++;
-                *offsets++=sourceIndex++;
-                *offsets++=sourceIndex++;
-                *offsets++=sourceIndex++;
-                *offsets++=sourceIndex++;
-                *offsets++=sourceIndex++;
-                *offsets++=sourceIndex++;
-                *offsets++=sourceIndex++;
-                *offsets++=sourceIndex++;
-                *offsets++=sourceIndex++;
-                *offsets++=sourceIndex++;
-                *offsets++=sourceIndex++;
-                *offsets++=sourceIndex++;
-                *offsets++=sourceIndex++;
+                offsets[0]=sourceIndex++;
+                offsets[1]=sourceIndex++;
+                offsets[2]=sourceIndex++;
+                offsets[3]=sourceIndex++;
+                offsets[4]=sourceIndex++;
+                offsets[5]=sourceIndex++;
+                offsets[6]=sourceIndex++;
+                offsets[7]=sourceIndex++;
+                offsets+=8;
             } while(--loops>0);
         }
     }
-#endif
 
     /* conversion loop */
     while(targetCapacity>0) {
@@ -513,66 +497,49 @@ _ASCIIToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
         targetCapacity=length;
     }
 
-#if ASCII_UNROLL_TO_UNICODE
-    /* unroll the loop with the most common case */
-    if(targetCapacity>=16) {
+    if(targetCapacity>=8) {
+        /* This loop is unrolled for speed and improved pipelining. */
         int32_t count, loops;
         UChar oredChars;
 
-        loops=count=targetCapacity>>4;
+        loops=count=targetCapacity>>3;
         do {
-            oredChars=*target++=*source++;
-            oredChars|=*target++=*source++;
-            oredChars|=*target++=*source++;
-            oredChars|=*target++=*source++;
-            oredChars|=*target++=*source++;
-            oredChars|=*target++=*source++;
-            oredChars|=*target++=*source++;
-            oredChars|=*target++=*source++;
-            oredChars|=*target++=*source++;
-            oredChars|=*target++=*source++;
-            oredChars|=*target++=*source++;
-            oredChars|=*target++=*source++;
-            oredChars|=*target++=*source++;
-            oredChars|=*target++=*source++;
-            oredChars|=*target++=*source++;
-            oredChars|=*target++=*source++;
+            oredChars=target[0]=source[0];
+            oredChars|=target[1]=source[1];
+            oredChars|=target[2]=source[2];
+            oredChars|=target[3]=source[3];
+            oredChars|=target[4]=source[4];
+            oredChars|=target[5]=source[5];
+            oredChars|=target[6]=source[6];
+            oredChars|=target[7]=source[7];
 
             /* were all 16 entries really valid? */
             if(oredChars>0x7f) {
                 /* no, return to the first of these 16 */
-                source-=16;
-                target-=16;
                 break;
             }
+            source+=8;
+            target+=8;
         } while(--count>0);
         count=loops-count;
-        targetCapacity-=16*count;
+        targetCapacity-=count*8;
 
         if(offsets!=NULL) {
-            oldTarget+=16*count;
+            oldTarget+=count*8;
             while(count>0) {
-                *offsets++=sourceIndex++;
-                *offsets++=sourceIndex++;
-                *offsets++=sourceIndex++;
-                *offsets++=sourceIndex++;
-                *offsets++=sourceIndex++;
-                *offsets++=sourceIndex++;
-                *offsets++=sourceIndex++;
-                *offsets++=sourceIndex++;
-                *offsets++=sourceIndex++;
-                *offsets++=sourceIndex++;
-                *offsets++=sourceIndex++;
-                *offsets++=sourceIndex++;
-                *offsets++=sourceIndex++;
-                *offsets++=sourceIndex++;
-                *offsets++=sourceIndex++;
-                *offsets++=sourceIndex++;
+                offsets[0]=sourceIndex++;
+                offsets[1]=sourceIndex++;
+                offsets[2]=sourceIndex++;
+                offsets[3]=sourceIndex++;
+                offsets[4]=sourceIndex++;
+                offsets[5]=sourceIndex++;
+                offsets[6]=sourceIndex++;
+                offsets[7]=sourceIndex++;
+                offsets+=8;
                 --count;
             }
         }
     }
-#endif
 
     /* conversion loop */
     c=0;
