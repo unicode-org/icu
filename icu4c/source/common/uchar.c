@@ -817,7 +817,7 @@ ublock_getCode(UChar32 c) {
 /* property starts for UnicodeSet ------------------------------------------- */
 
 /* for Hangul_Syllable_Type */
-U_CAPI void U_EXPORT2
+U_CFUNC void U_EXPORT2
 uhst_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode) {
     UChar32 c;
     int32_t value, value2;
@@ -891,7 +891,7 @@ _enumPropertyStartsRange(const void *context, UChar32 start, UChar32 limit, uint
 
 #define USET_ADD_CP_AND_NEXT(sa, cp) sa->add(sa->set, cp); sa->add(sa->set, cp+1)
 
-U_CAPI void U_EXPORT2
+U_CFUNC void U_EXPORT2
 uchar_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode) {
     if(U_FAILURE(*pErrorCode)) {
         return;
