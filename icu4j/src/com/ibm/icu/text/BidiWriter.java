@@ -9,8 +9,6 @@ package com.ibm.icu.text;
 
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.Bidi;
-import com.ibm.icu.text.Bidi.Point;
-import com.ibm.icu.text.Bidi.InsertPoints;
 
 final class BidiWriter {
 
