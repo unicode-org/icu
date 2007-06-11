@@ -16,10 +16,8 @@
 #include "transapi.h"
 #include "unicode/utypes.h"
 #include "unicode/translit.h"
-#include "rbt.h"
 #include "unicode/unifilt.h"
 #include "cpdtrans.h"
-#include "nultrans.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -664,8 +662,10 @@ void TransliteratorAPITest::TestRegisterUnregister(){
    status =U_ZERO_ERROR;
 
    /* Create it */
-   Transliterator *t = new RuleBasedTransliterator("TestA-TestB",
+   UParseError parseError;
+   Transliterator *t = Transliterator::createFromRules("TestA-TestB",
                                                    "a<>b",
+                                                   UTRANS_FORWARD, parseError,
                                                    status);
    /* Register it */
    Transliterator::registerInstance(t);
