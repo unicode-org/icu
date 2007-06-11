@@ -1532,7 +1532,7 @@ int_getDefaultCodepage()
     if (*codesetName == 0)
     {
         /* Everything failed. Return US ASCII (ISO 646). */
-        uprv_strcpy(codesetName, "US-ASCII");
+        (void)uprv_strcpy(codesetName, "US-ASCII");
     }
     return codesetName;
 #else

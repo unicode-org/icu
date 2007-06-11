@@ -163,7 +163,7 @@ _ISCIIOpen(UConverter *cnv, const char *name,const char *locale,uint32_t options
             converterData->defMaskToUnicode=lookupInitialData[options & UCNV_OPTIONS_VERSION_MASK].maskEnum;
 
             converterData->isFirstBuffer=TRUE;
-            uprv_strcpy(converterData->name, ISCII_CNV_PREFIX);
+            (void)uprv_strcpy(converterData->name, ISCII_CNV_PREFIX);
             len = (int32_t)uprv_strlen(converterData->name);
             converterData->name[len]= (char)((options & UCNV_OPTIONS_VERSION_MASK) + '0');
             converterData->name[len+1]=0;
