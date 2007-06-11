@@ -1,6 +1,6 @@
 /************************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2000-2005, International Business Machines Corporation
+ * Copyright (c) 2000-2007, International Business Machines Corporation
  * and others. All Rights Reserved.
  ************************************************************************/
 /************************************************************************
@@ -617,8 +617,9 @@ void TransliteratorAPITest::TestKeyboardTransliterator3(){
     delete t;
 }
 void TransliteratorAPITest::TestNullTransliterator(){
+    UErrorCode status=U_ZERO_ERROR;
     UnicodeString s("Transliterate using null transliterator");
-    NullTransliterator *nullTrans=new NullTransliterator();
+    Transliterator *nullTrans=Transliterator::createInstance("Any-Null", UTRANS_FORWARD, status);
     int32_t transLimit;
     int32_t start=0;
     int32_t limit=s.length();
@@ -635,7 +636,7 @@ void TransliteratorAPITest::TestNullTransliterator(){
     index.contextLimit = limit;
     index.start = 0;
     index.limit = limit;
-    nullTrans->handleTransliterate(replaceable, index, TRUE);
+    nullTrans->finishTransliteration(replaceable, index);
     if(index.start != limit){
         errln("ERROR: NullTransliterator->handleTransliterate() failed");
     }
@@ -648,9 +649,8 @@ void TransliteratorAPITest::TestNullTransliterator(){
 void TransliteratorAPITest::TestRegisterUnregister(){
    
    UErrorCode status=U_ZERO_ERROR;
-   UParseError parseError;
     /* Make sure it doesn't exist */
-   if (Transliterator::createInstance("TestA-TestB", UTRANS_FORWARD, parseError, status) != NULL) {
+   if (Transliterator::createInstance("TestA-TestB", UTRANS_FORWARD, status) != NULL) {
       errln("FAIL: TestA-TestB already registered\n");
       return;
    }
@@ -671,7 +671,7 @@ void TransliteratorAPITest::TestRegisterUnregister(){
    Transliterator::registerInstance(t);
 
    /* Now check again -- should exist now*/
-   Transliterator *s = Transliterator::createInstance("TestA-TestB", UTRANS_FORWARD, parseError, status);
+   Transliterator *s = Transliterator::createInstance("TestA-TestB", UTRANS_FORWARD, status);
    if (s == NULL) {
       errln("FAIL: TestA-TestB not registered\n");
       return;
@@ -693,7 +693,7 @@ void TransliteratorAPITest::TestRegisterUnregister(){
    /*unregister the instance*/
    Transliterator::unregister("TestA-TestB");
    /* now Make sure it doesn't exist */
-   if (Transliterator::createInstance("TestA-TestB", UTRANS_FORWARD, parseError, status) != NULL) {
+   if (Transliterator::createInstance("TestA-TestB", UTRANS_FORWARD, status) != NULL) {
       errln("FAIL: TestA-TestB isn't unregistered\n");
       return;
    }
