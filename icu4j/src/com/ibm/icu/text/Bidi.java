@@ -2471,7 +2471,8 @@ public class Bidi {
 
             case 7:                     /* L after R+ON/EN/AN */
                 /* include possible adjacent number on the left */
-                for (k = start0-1; k >= 0 && ((levels[k] & 1) == 0); k--);
+                for (k = start0-1; k >= 0 && ((levels[k] & 1) == 0); k--) {
+                }
                 if (k >= 0) {
                     addPoint(k, RLM_BEFORE);    /* add RLM before */
                     insertPoints.confirmed = insertPoints.size; /* confirm it */
@@ -2706,7 +2707,7 @@ public class Bidi {
     void setParaRunsOnly(char[] parmText, byte parmParaLevel) {
         int[] visualMap;
         String visualText;
-        byte[] levels;
+        //byte[] levels;
         int saveLength;
         byte[] saveLevels;
         int i, j, visualStart, logicalStart,
@@ -2839,16 +2840,16 @@ public class Bidi {
             runs[newI].level = (byte)(saveLevels[logicalPos] ^ indexOddBit);
         }
 
-      cleanup1:
+//      cleanup1:
         /* restore initial paraLevel */
         this.paraLevel ^= 1;
-      cleanup2:
+//      cleanup2:
         /* restore real text */
         this.text = parmText;
         /* free memory for mapping table and visual text */
         visualMap = null;
         visualText = null;
-      cleanup3:
+//      cleanup3:
         reorderingMode = REORDER_RUNS_ONLY;
         this.length = saveLength;
         this.originalLength = parmLength;
@@ -3589,7 +3590,8 @@ public class Bidi {
             throw new IllegalArgumentException();
         }
         int paraIndex;
-        for (paraIndex = 0; charIndex >= bidi.paras[paraIndex]; paraIndex++);
+        for (paraIndex = 0; charIndex >= bidi.paras[paraIndex]; paraIndex++) {
+        }
         return getParagraphByIndex(paraIndex);
     }
 
@@ -3622,7 +3624,8 @@ public class Bidi {
             throw new IllegalArgumentException();
         }
         int paraIndex;
-        for (paraIndex = 0; charIndex >= bidi.paras[paraIndex]; paraIndex++);
+        for (paraIndex = 0; charIndex >= bidi.paras[paraIndex]; paraIndex++) {
+        }
         return paraIndex;
     }
 
