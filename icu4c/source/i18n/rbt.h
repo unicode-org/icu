@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2004, International Business Machines
+*   Copyright (C) 1999-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -286,7 +286,7 @@ class TransliterationRuleData;
  * @author Alan Liu
  * @internal Use transliterator factory methods instead since this class will be removed in that release.
  */
-class U_I18N_API RuleBasedTransliterator : public Transliterator {
+class RuleBasedTransliterator : public Transliterator {
 private:
     /**
      * The data object is immutable, so we can freely share it with
@@ -443,7 +443,7 @@ public:
      * @return          The class ID for all objects of this class.
      * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
-    static UClassID U_EXPORT2 getStaticClassID(void);
+    U_I18N_API static UClassID U_EXPORT2 getStaticClassID(void);
 
     /**
      * Returns a unique class ID <b>polymorphically</b>.  This method
