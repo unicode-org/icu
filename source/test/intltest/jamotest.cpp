@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
 ************************************************************************
@@ -16,7 +16,6 @@
 #include "jamotest.h"
 #include "unicode/utypes.h"
 #include "unicode/translit.h"
-#include "rbt.h"
 #include "cpdtrans.h"
 
 // SEP is the disambiguation separator used by Latin-Jamo and Jamo-Latin
@@ -24,19 +23,20 @@
 
 JamoTest::JamoTest()
 {
+    UParseError parseError;
     UErrorCode status = U_ZERO_ERROR;
-    NAME_JAMO = new RuleBasedTransliterator("Name-Jamo",
+    NAME_JAMO = Transliterator::createFromRules("Name-Jamo",
                                             JAMO_NAMES_RULES,
-                                            UTRANS_FORWARD, status);
+                                            UTRANS_FORWARD, parseError, status);
 
     if (U_FAILURE(status)) {
         delete NAME_JAMO;
         NAME_JAMO = NULL;
     }
     status = U_ZERO_ERROR;
-    JAMO_NAME = new RuleBasedTransliterator("Jamo-Name",
+    JAMO_NAME = Transliterator::createFromRules("Jamo-Name",
                                             JAMO_NAMES_RULES,
-                                            UTRANS_REVERSE, status);
+                                            UTRANS_REVERSE, parseError, status);
     if (U_FAILURE(status)) {
         delete JAMO_NAME;
         JAMO_NAME = NULL;

@@ -1010,8 +1010,9 @@ void TransliteratorTest::TestPositionHandling(void) {
     int32_t n = (int32_t)(sizeof(DATA) / sizeof(DATA[0])) / 3;
     for (int32_t i=0; i<n; i++) {
         UErrorCode status = U_ZERO_ERROR;
-        Transliterator *t = new RuleBasedTransliterator("<ID>",
-                                                        DATA[3*i], status);
+        UParseError parseError;
+        Transliterator *t = Transliterator::createFromRules("<ID>",
+                                DATA[3*i], UTRANS_FORWARD, parseError, status);
         if (U_FAILURE(status)) {
             delete t;
             errln("FAIL: RBT constructor");
@@ -2250,7 +2251,7 @@ void TransliteratorTest::TestUndefinedVariable() {
     UnicodeString rule = "$initial } a <> \\u1161;";
     UParseError pe;
     UErrorCode ec = U_ZERO_ERROR;
-    Transliterator *t = new RuleBasedTransliterator("<ID>", rule, UTRANS_FORWARD, 0, pe, ec);
+    Transliterator *t = Transliterator::createFromRules("<ID>", rule, UTRANS_FORWARD, pe, ec);
     delete t;
     if (U_FAILURE(ec)) {
         logln((UnicodeString)"OK: Got exception for " + rule + ", as expected: " +
