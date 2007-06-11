@@ -20,10 +20,10 @@ open(MYFILE, ">$FILE");
 
 if (scalar(@ARGV) == 3) {
 	($year, $month, $day) = @ARGV;
-	print "We are using $month-$day-$year\n";
+	print "The date we are using is:  $month-$day-$year.\n";
 	print MYFILE "We are using $month-$day-$year\n";
 } else {
-	print "We are using the current time\n";
+	print "We are using the current date.\n";
 	print MYFILE "We are using the current time\n";
 	$USECURRENT = 1;
 }
@@ -59,8 +59,8 @@ foreach my $tzone (@TZONE) {
 	}
 }
 
-print MYFILE "\nThe number of time zones with wrong results:  $count\n";
-print "\nThe number of time zones with wrong results:  $count\n";
+print MYFILE "\nThe number of time zones with wrong results:  $count out of $index\n";
+print "\nThe number of time zones with wrong results:  $count out of $index\n";
 
 close(MYFILE);
 
