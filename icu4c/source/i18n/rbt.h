@@ -323,11 +323,11 @@ public:
      * @exception IllegalArgumentException if rules are malformed.
      * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
-    RuleBasedTransliterator(const UnicodeString& id,
+    /*RuleBasedTransliterator(const UnicodeString& id,
                             const UnicodeString& rules,
                             UTransDirection direction,
                             UnicodeFilter* adoptedFilter,
-                            UErrorCode& status);
+                            UErrorCode& status);*/
 
     /**
      * Covenience constructor with no filter.
@@ -350,10 +350,10 @@ public:
      * Covenience constructor with FORWARD direction.
      * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
-    RuleBasedTransliterator(const UnicodeString& id,
+    /*RuleBasedTransliterator(const UnicodeString& id,
                             const UnicodeString& rules,
                             UnicodeFilter* adoptedFilter,
-                            UErrorCode& status);
+                            UErrorCode& status);*/
 private:
 
      friend class TransliteratorRegistry; // to access TransliterationRuleData convenience ctor

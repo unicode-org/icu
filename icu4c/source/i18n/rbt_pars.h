@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (C) 1999-2006, International Business Machines Corporation
+* Copyright (C) 1999-2007, International Business Machines Corporation
 * and others. All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -316,8 +316,8 @@ private:
     /**
      * Glue method to get around access restrictions in C++.
      */
-    static Transliterator* createBasicInstance(const UnicodeString& id,
-                                               const UnicodeString* canonID);
+    /*static Transliterator* createBasicInstance(const UnicodeString& id,
+                                               const UnicodeString* canonID);*/
 
     friend class RuleHalf;
 
