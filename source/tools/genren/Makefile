@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 2002-2004, International Business Machines
+#   Copyright (C) 2002-2007, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -18,6 +18,12 @@ UIO=$(ICUDIR)/lib/libicuio.$(SO)
 
 LIBS=$(COM) $(I18) $(LAY) $(LEX) $(UIO)
 
+# Extra flags to prevent internal API from being hidden.
+# This is important because ELF (Linux) based platforms that don't hide internal
+# API will allow a duplicate internal name to resolve to an external library.
+# See the gcc manual on the "visibility" attribute for details.
+FLAG_OVERRIDE="LIBCFLAGS= LIBCXXFLAGS="
+
 all:
 	@cat README
 
@@ -30,26 +36,26 @@ $(ICUDIR)/config.status:
 	-mv $(ICUDIR) $(ICUDIR)old
 	-(rm -rf $(ICUDIR)old &)
 	mkdir $(ICUDIR)
-	( cd $(ICUDIR) ; CPPFLAGS=-DURENAME_H $(TOP)/../configure --with-data-packaging=archive --enable-layout=yes --enable-tests=no --enable-extras=yes --prefix=`pwd` $(GENREN_CONFIGURE_OPTS) )
+	( cd $(ICUDIR) ; CPPFLAGS=-DURENAME_H $(TOP)/../configure --with-data-packaging=archive --enable-tests=no --prefix=`pwd` $(GENREN_CONFIGURE_OPTS) )
 
 # build the libraries
 $(DAT): $(ICUDIR)/config.status Makefile
-	gmake -C $(ICUDIR)/stubdata libicudata.$(SO)
+	gmake $(FLAG_OVERRIDE) -C $(ICUDIR)/stubdata libicudata.$(SO)
 
 $(COM): $(DAT) $(ICUDIR)/config.status Makefile
-	gmake -C $(ICUDIR)/common libicuuc.$(SO)
+	gmake $(FLAG_OVERRIDE) -C $(ICUDIR)/common libicuuc.$(SO)
 
 $(I18): $(DAT) $(COM) $(ICUDIR)/config.status Makefile
-	gmake -C $(ICUDIR)/i18n libicui18n.$(SO)
+	gmake $(FLAG_OVERRIDE) -C $(ICUDIR)/i18n libicui18n.$(SO)
 
 $(LAY): $(DAT) $(I18) $(COM) $(ICUDIR)/config.status Makefile
-	gmake -C $(ICUDIR)/layout libicule.$(SO)
+	gmake $(FLAG_OVERRIDE) -C $(ICUDIR)/layout libicule.$(SO)
 
 $(LEX): $(DAT) $(I18) $(COM) $(ICUDIR)/config.status Makefile
-	gmake -C $(ICUDIR)/layoutex libiculx.$(SO)
+	gmake $(FLAG_OVERRIDE) -C $(ICUDIR)/layoutex libiculx.$(SO)
 
 $(UIO):	$(DAT) $(I18) $(COM) $(ICUDIR)/config.status Makefile
-	gmake -C $(ICUDIR)/extra/ustdio libicuio.$(SO)
+	gmake $(FLAG_OVERRIDE) -C $(ICUDIR)/io libicuio.$(SO)
 
 # the header itself
 urename.h: $(LIBS) genren.pl
