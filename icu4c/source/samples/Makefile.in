@@ -19,7 +19,7 @@ include @platform_make_fragment@
 ## Files to remove for 'make clean'
 CLEANFILES = *~
 
-SUBDIRS = date cal tzdate
+SUBDIRS = date cal
 ALLSUBDIRS = break case csdet datefmt msgfmt numfmt props translit ucnv udata ufortune uresb ustring citer uciter8
 
 ## List of phony targets
