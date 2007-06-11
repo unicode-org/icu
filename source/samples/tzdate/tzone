@@ -1,4 +1,10 @@
 #!/usr/bin/perl
+
+if ($ARGV[0] eq '-h' || $ARGV[0] eq '--help') {
+	print "Usage: tzone [year month day]\n";
+	exit(0);
+}
+
 my $FILE = 'tzdate-log.txt';
 my $LIBRARY = '../../lib';
 
