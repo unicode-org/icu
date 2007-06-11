@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2000-2006, International Business Machines
+*   Copyright (C) 2000-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnv2022.c
@@ -468,7 +468,7 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
             cnv->sharedData=(UConverterSharedData*)(&_ISO2022JPData);
             uprv_strcpy(myConverterData->locale,"ja");
 
-            uprv_strcpy(myConverterData->name,"ISO_2022,locale=ja,version=");
+            (void)uprv_strcpy(myConverterData->name,"ISO_2022,locale=ja,version=");
             len = uprv_strlen(myConverterData->name);
             myConverterData->name[len]=(char)(myConverterData->version+(int)'0');
             myConverterData->name[len+1]='\0';
@@ -485,7 +485,7 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
                     return;
                 }
 
-                uprv_strcpy(myConverterData->name,"ISO_2022,locale=ko,version=1");
+                (void)uprv_strcpy(myConverterData->name,"ISO_2022,locale=ko,version=1");
                 uprv_memcpy(cnv->subChars, myConverterData->currentConverter->subChars, 4);
                 cnv->subCharLen = myConverterData->currentConverter->subCharLen;
             }else{
@@ -497,7 +497,7 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
                 }
 
                 myConverterData->version = 0;
-                uprv_strcpy(myConverterData->name,"ISO_2022,locale=ko,version=0");
+                (void)uprv_strcpy(myConverterData->name,"ISO_2022,locale=ko,version=0");
             }
 
             /* initialize the state variables */
@@ -525,10 +525,10 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
             uprv_strcpy(myConverterData->locale,"cn");
 
             if (version==1){
-                uprv_strcpy(myConverterData->name,"ISO_2022,locale=zh,version=1");
+                (void)uprv_strcpy(myConverterData->name,"ISO_2022,locale=zh,version=1");
             }else{
                 myConverterData->version = 0;
-                uprv_strcpy(myConverterData->name,"ISO_2022,locale=zh,version=0");
+                (void)uprv_strcpy(myConverterData->name,"ISO_2022,locale=zh,version=0");
             }
         }
         else{
