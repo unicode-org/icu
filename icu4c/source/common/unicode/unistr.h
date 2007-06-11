@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1998-2006, International Business Machines
+*   Copyright (C) 1998-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -119,7 +119,7 @@ class BreakIterator;        // unicode/brkiter.h
  * The UnicodeString class is not suitable for subclassing.
  *
  * <p>For an overview of Unicode strings in C and C++ see the
- * <a href="http://icu.sourceforge.net/userguide/strings.html">User Guide Strings chapter</a>.</p>
+ * <a href="http://icu-project.org/userguide/strings.html">User Guide Strings chapter</a>.</p>
  *
  * <p>In ICU, a Unicode string consists of 16-bit Unicode <em>code units</em>.
  * A Unicode character may be stored with either one code unit
@@ -174,7 +174,7 @@ class BreakIterator;        // unicode/brkiter.h
  * significant performance improvements.
  * Also, the internal buffer is accessible via special functions.
  * For details see the
- * <a href="http://icu.sourceforge.net/userguide/strings.html">User Guide Strings chapter</a>.</p>
+ * <a href="http://icu-project.org/userguide/strings.html">User Guide Strings chapter</a>.</p>
  *
  * @see utf.h
  * @see CharacterIterator

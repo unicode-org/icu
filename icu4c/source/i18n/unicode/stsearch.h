@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2006 IBM and others. All rights reserved.
+*   Copyright (C) 2001-2007 IBM and others. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *  03/22/2000   helena      Creation.
@@ -33,12 +33,12 @@ U_NAMESPACE_BEGIN
  * StringSearch ensures that language eccentricity can be 
  * handled, e.g. for the German collator, characters &szlig; and SS will be matched 
  * if case is chosen to be ignored.
- * See the <a href="http://dev.icu-project.org/cgi-bin/viewcvs.cgi/~checkout~/icuhtml/design/collation/ICU_collation_design.htm">
+ * See the <a href="http://source.icu-project.org/repos/icu/icuhtml/trunk/design/collation/ICU_collation_design.htm">
  * "ICU Collation Design Document"</a> for more information.
  * <p> 
  * The algorithm implemented is a modified form of the Boyer Moore's search.
  * For more information  see 
- * <a href="http://icu.sourceforge.net/docs/papers/efficient_text_searching_in_java.html">
+ * <a href="http://icu-project.org/docs/papers/efficient_text_searching_in_java.html">
  * "Efficient Text Searching in Java"</a>, published in <i>Java Report</i> 
  * in February, 1999, for further information on the algorithm.
  * <p>

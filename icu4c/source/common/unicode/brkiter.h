@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2006, International Business Machines
+*   Copyright (C) 1997-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -93,7 +93,7 @@ U_NAMESPACE_BEGIN
  * <p>
  * Code snippits illustrating the use of the Break Iterator APIs
  * are available in the ICU User Guide, 
- * http://icu.sourceforge.net/userguide/boundaryAnalysis.html
+ * http://icu-project.org/userguide/boundaryAnalysis.html
  * and in the sample program icu/source/samples/break/break.cpp"
  *
  */

@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2006, International Business Machines
+*   Copyright (C) 1999-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -220,7 +220,7 @@ udata_open(const char *path, const char *type, const char *name,
  * logically prepended to the ICU data directory string.</p>
  *
  * <p>For details about ICU data loading see the User Guide
- * Data Management chapter. (http://icu.sourceforge.net/userguide/icudata.html)</p>
+ * Data Management chapter. (http://icu-project.org/userguide/icudata.html)</p>
  *
  * @param path Specifies an absolute path and/or a basename for the
  *             finding of the data in the file system.

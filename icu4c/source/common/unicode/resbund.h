@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1996-2005, International Business Machines Corporation
+*   Copyright (C) 1996-2007, International Business Machines Corporation
 *   and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -66,9 +66,9 @@ U_NAMESPACE_BEGIN
  * locale and then ask it for individual resources.
  * <P>
  * Resource bundles in ICU4C are currently defined using text files which conform to the following
- * <a href="http://dev.icu-project.org/cgi-bin/viewcvs.cgi/~checkout~/icuhtml/design/bnf_rb.txt">BNF definition</a>.
+ * <a href="http://source.icu-project.org/repos/icu/icuhtml/trunk/design/bnf_rb.txt">BNF definition</a>.
  * More on resource bundle concepts and syntax can be found in the
- * <a href="http://icu.sourceforge.net/userguide/ResourceManagement.html">Users Guide</a>.
+ * <a href="http://icu-project.org/userguide/ResourceManagement.html">Users Guide</a>.
  * <P>
  *
  * The ResourceBundle class is not suitable for subclassing.

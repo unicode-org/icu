@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 2005-2006, International Business Machines Corporation and   *
+ * Copyright (C) 2005-2007, International Business Machines Corporation and   *
  * others. All Rights Reserved.                                               *
  ******************************************************************************
  */
@@ -239,7 +239,7 @@ public:
 // Document of class Escaper
 //
 // ATTENTION: 
-// From http://icu.sourceforge.net/userguide/Collate_Customization.html.
+// From http://icu-project.org/userguide/Collate_Customization.html.
 // We get the precedence of escape/quote operations
 //
 //     (highest) 1. backslash               \

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2006, International Business Machines
+*   Copyright (C) 1999-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -95,7 +95,7 @@
  * code point values (0..U+10ffff). They are indicated with negative values instead.
  *
  * For more information see the ICU User Guide Strings chapter
- * (http://icu.sourceforge.net/userguide/strings.html).
+ * (http://icu-project.org/userguide/strings.html).
  *
  * <em>Usage:</em>
  * ICU coding guidelines for if() statements should be followed when using these macros.

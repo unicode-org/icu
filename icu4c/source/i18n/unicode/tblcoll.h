@@ -87,20 +87,20 @@ class CollationElementIterator;
  * <em>Important: </em>The ICU collation service has been reimplemented 
  * in order to achieve better performance and UCA compliance. 
  * For details, see the 
- * <a href="http://dev.icu-project.org/cgi-bin/viewcvs.cgi/~checkout~/icuhtml/design/collation/ICU_collation_design.htm">
+ * <a href="http://source.icu-project.org/repos/icu/icuhtml/trunk/design/collation/ICU_collation_design.htm">
  * collation design document</a>.
  * <p>
  * RuleBasedCollator is a thin C++ wrapper over the C implementation.
  * <p>
  * For more information about the collation service see 
- * <a href="http://icu.sourceforge.net/userguide/Collate_Intro.html">the users guide</a>.
+ * <a href="http://icu-project.org/userguide/Collate_Intro.html">the users guide</a>.
  * <p>
  * Collation service provides correct sorting orders for most locales supported in ICU. 
  * If specific data for a locale is not available, the orders eventually falls back
  * to the <a href="http://www.unicode.org/unicode/reports/tr10/">UCA sort order</a>. 
  * <p>
  * Sort ordering may be customized by providing your own set of rules. For more on
- * this subject see the <a href="http://icu.sourceforge.net/userguide/Collate_Customization.html">
+ * this subject see the <a href="http://icu-project.org/userguide/Collate_Customization.html">
  * Collation customization</a> section of the users guide.
  * <p>
  * Note, RuleBasedCollator is not to be subclassed.

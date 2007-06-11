@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1998-2006, International Business Machines
+*   Copyright (C) 1998-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -65,7 +65,7 @@
  * their occurrence is rare. Almost all characters in modern use require only
  * a single UChar code unit (i.e., their code point values are <=0xffff).
  *
- * For more details see the User Guide Strings chapter (http://icu.sourceforge.net/userguide/strings.html).
+ * For more details see the User Guide Strings chapter (http://icu-project.org/userguide/strings.html).
  * For a discussion of the handling of unpaired surrogates see also
  * Jitterbug 2145 and its icu mailing list proposal on 2002-sep-18.
  */
