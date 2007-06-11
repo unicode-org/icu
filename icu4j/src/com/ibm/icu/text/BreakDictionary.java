@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -109,12 +109,12 @@ public class BreakDictionary {
      */
     private int numCols;
 
-    /**
+    /*
      * Columns are organized into groups of 32.  This says how many
      * column groups.  (We could calculate this, but we store the
      * value to avoid having to repeatedly calculate it.)
      */
-    private int numColGroups;
+    //private int numColGroups;
 
     /**
      * The actual compressed state table.  Each conceptual row represents
@@ -194,7 +194,7 @@ public class BreakDictionary {
 
         // read in numCols and numColGroups
         numCols = in.readInt();
-        numColGroups = in.readInt();
+        /*numColGroups = */in.readInt();
 
         // read in the row-number index
         l = in.readInt();
