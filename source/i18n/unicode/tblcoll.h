@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2006, International Business Machines Corporation and
+* Copyright (C) 1996-2007, International Business Machines Corporation and
 * others. All Rights Reserved.
 ******************************************************************************
 */
@@ -654,29 +654,48 @@ private:
 
     // private static constants -----------------------------------------------
 
-    static const int32_t UNMAPPED;
-    static const int32_t CHARINDEX;  // need look up in .commit()
-    static const int32_t EXPANDCHARINDEX; // Expand index follows
-    static const int32_t CONTRACTCHARINDEX;  // contract indexes follow
+    enum {
+        /* need look up in .commit() */
+        CHARINDEX = 0x70000000,
+        /* Expand index follows */
+        EXPANDCHARINDEX = 0x7E000000,
+        /* contract indexes follows */
+        CONTRACTCHARINDEX = 0x7F000000,
+        /* unmapped character values */
+        UNMAPPED = 0xFFFFFFFF,
+        /* primary strength increment */
+        PRIMARYORDERINCREMENT = 0x00010000,
+        /* secondary strength increment */
+        SECONDARYORDERINCREMENT = 0x00000100,
+        /* tertiary strength increment */
+        TERTIARYORDERINCREMENT = 0x00000001,
+        /* mask off anything but primary order */
+        PRIMARYORDERMASK = 0xffff0000,
+        /* mask off anything but secondary order */
+        SECONDARYORDERMASK = 0x0000ff00,
+        /* mask off anything but tertiary order */
+        TERTIARYORDERMASK = 0x000000ff,
+        /* mask off ignorable char order */
+        IGNORABLEMASK = 0x0000ffff,
+        /* use only the primary difference */
+        PRIMARYDIFFERENCEONLY = 0xffff0000,
+        /* use only the primary and secondary difference */
+        SECONDARYDIFFERENCEONLY = 0xffffff00,
+        /* primary order shift */
+        PRIMARYORDERSHIFT = 16,
+        /* secondary order shift */
+        SECONDARYORDERSHIFT = 8,
+        /* starting value for collation elements */
+        COLELEMENTSTART = 0x02020202,
+        /* testing mask for primary low element */
+        PRIMARYLOWZEROMASK = 0x00FF0000,
+        /* reseting value for secondaries and tertiaries */
+        RESETSECONDARYTERTIARY = 0x00000202,
+        /* reseting value for tertiaries */
+        RESETTERTIARY = 0x00000002,
 
-    static const int32_t PRIMARYORDERINCREMENT;
-    static const int32_t SECONDARYORDERINCREMENT;
-    static const int32_t TERTIARYORDERINCREMENT;
-    static const int32_t PRIMARYORDERMASK;
-    static const int32_t SECONDARYORDERMASK;
-    static const int32_t TERTIARYORDERMASK;
-    static const int32_t IGNORABLEMASK;
-    static const int32_t PRIMARYDIFFERENCEONLY;
-    static const int32_t SECONDARYDIFFERENCEONLY;
-    static const int32_t PRIMARYORDERSHIFT;
-    static const int32_t SECONDARYORDERSHIFT;
-
-    static const int32_t COLELEMENTSTART;
-    static const int32_t PRIMARYLOWZEROMASK;
-    static const int32_t RESETSECONDARYTERTIARY;
-    static const int32_t RESETTERTIARY;
-
-    static const int32_t PRIMIGNORABLE;
+        PRIMIGNORABLE = 0x0202
+    };
 
     // private data members ---------------------------------------------------
 

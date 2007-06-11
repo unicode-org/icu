@@ -695,58 +695,6 @@ RuleBasedCollator::checkOwned() {
     }
 }
 
-/* RuleBasedCollator private data members -------------------------------- */
-
-/*
- * TODO:
- * These should probably be enums (<=0xffff) or #defines (>0xffff)
- * for better performance.
- * Include ucol_imp.h and use its constants if possible.
- * Only used in coleitr.h?!
- * Remove from here!
- */
-
-/* need look up in .commit() */
-const int32_t RuleBasedCollator::CHARINDEX = 0x70000000;
-/* Expand index follows */
-const int32_t RuleBasedCollator::EXPANDCHARINDEX = 0x7E000000;
-/* contract indexes follows */
-const int32_t RuleBasedCollator::CONTRACTCHARINDEX = 0x7F000000;
-/* unmapped character values */
-const int32_t RuleBasedCollator::UNMAPPED = 0xFFFFFFFF;
-/* primary strength increment */
-const int32_t RuleBasedCollator::PRIMARYORDERINCREMENT = 0x00010000;
-/* secondary strength increment */
-const int32_t RuleBasedCollator::SECONDARYORDERINCREMENT = 0x00000100;
-/* tertiary strength increment */
-const int32_t RuleBasedCollator::TERTIARYORDERINCREMENT = 0x00000001;
-/* mask off anything but primary order */
-const int32_t RuleBasedCollator::PRIMARYORDERMASK = 0xffff0000;
-/* mask off anything but secondary order */
-const int32_t RuleBasedCollator::SECONDARYORDERMASK = 0x0000ff00;
-/* mask off anything but tertiary order */
-const int32_t RuleBasedCollator::TERTIARYORDERMASK = 0x000000ff;
-/* mask off ignorable char order */
-const int32_t RuleBasedCollator::IGNORABLEMASK = 0x0000ffff;
-/* use only the primary difference */
-const int32_t RuleBasedCollator::PRIMARYDIFFERENCEONLY = 0xffff0000;
-/* use only the primary and secondary difference */
-const int32_t RuleBasedCollator::SECONDARYDIFFERENCEONLY = 0xffffff00;
-/* primary order shift */
-const int32_t RuleBasedCollator::PRIMARYORDERSHIFT = 16;
-/* secondary order shift */
-const int32_t RuleBasedCollator::SECONDARYORDERSHIFT = 8;
-/* starting value for collation elements */
-const int32_t RuleBasedCollator::COLELEMENTSTART = 0x02020202;
-/* testing mask for primary low element */
-const int32_t RuleBasedCollator::PRIMARYLOWZEROMASK = 0x00FF0000;
-/* reseting value for secondaries and tertiaries */
-const int32_t RuleBasedCollator::RESETSECONDARYTERTIARY = 0x00000202;
-/* reseting value for tertiaries */
-const int32_t RuleBasedCollator::RESETTERTIARY = 0x00000002;
-
-const int32_t RuleBasedCollator::PRIMIGNORABLE = 0x0202;
-
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RuleBasedCollator)
 
 U_NAMESPACE_END

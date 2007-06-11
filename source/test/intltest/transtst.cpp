@@ -1904,12 +1904,22 @@ void TransliteratorTest::TestQuantifier() {
            "bb x xb");
 }
 
-class TestTrans : public NullTransliterator {
+class TestTrans : public Transliterator {
 public:
-    TestTrans(const UnicodeString& id) {
-        setID(id);
+    TestTrans(const UnicodeString& id) : Transliterator(id, 0) {
     }
+    virtual Transliterator* clone(void) const {
+        return new TestTrans(getID());
+    }
+    virtual void handleTransliterate(Replaceable& text, UTransPosition& offsets,
+        UBool isIncremental) const
+    {
+        offsets.start = offsets.limit;
+    }
+    virtual UClassID getDynamicClassID() const;
+    static UClassID U_EXPORT2 getStaticClassID();
 };
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(TestTrans)
 
 /**
  * Test Source-Target/Variant.
