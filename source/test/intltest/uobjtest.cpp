@@ -289,7 +289,7 @@ void UObjectTest::testIDs()
     TESTCLASSID_TRANSLIT(NormalizationTransliterator, "NFD");
     TESTCLASSID_TRANSLIT(NullTransliterator, "Null");
     TESTCLASSID_TRANSLIT(RemoveTransliterator, "Remove");
-    TESTCLASSID_CTOR(RuleBasedTransliterator, (UnicodeString("abcd"), UnicodeString("a>b;"), status));
+    TESTCLASSID_FACTORY(RuleBasedTransliterator, Transliterator::createFromRules(UnicodeString("abcd"),UnicodeString("a>b;"),UTRANS_FORWARD,parseError,status));
     TESTCLASSID_TRANSLIT(TitlecaseTransliterator, "Title");
     TESTCLASSID_TRANSLIT(UnescapeTransliterator, "Hex-Any");
     TESTCLASSID_TRANSLIT(UnicodeNameTransliterator, "Any-Name");
