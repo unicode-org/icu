@@ -1,6 +1,6 @@
 /*
  ********************************************************************************
- *   Copyright (C) 2005-2006, International Business Machines
+ *   Copyright (C) 2005-2007, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  ********************************************************************************
  */
@@ -54,14 +54,7 @@ ucsdet_setText(UCharsetDetector *ucsd, const char *textIn, int32_t len, UErrorCo
         return;
     }
 
-    if (ucsd == NULL) {
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
-    }
-
-    CharsetDetector *csd = (CharsetDetector *) ucsd;
-
-    csd->setText(textIn, len);
+    ((CharsetDetector *) ucsd)->setText(textIn, len);
 }
 
 U_CAPI const char * U_EXPORT2
@@ -71,14 +64,7 @@ ucsdet_getName(const UCharsetMatch *ucsm, UErrorCode *status)
         return NULL;
     }
 
-    if (ucsm == NULL) {
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
-    }
-
-    CharsetMatch *csm = (CharsetMatch *) ucsm;
-
-    return csm->getName();
+    return ((CharsetMatch *) ucsm)->getName();
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -88,14 +74,7 @@ ucsdet_getConfidence(const UCharsetMatch *ucsm, UErrorCode *status)
         return 0;
     }
 
-    if (ucsm == NULL) {
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-
-    CharsetMatch *csm = (CharsetMatch *) ucsm;
-
-    return csm->getConfidence();
+    return ((CharsetMatch *) ucsm)->getConfidence();
 }
 
 U_CAPI const char * U_EXPORT2
@@ -105,14 +84,7 @@ ucsdet_getLanguage(const UCharsetMatch *ucsm, UErrorCode *status)
         return NULL;
     }
 
-    if (ucsm == NULL) {
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
-    }
-
-    CharsetMatch *csm = (CharsetMatch *) ucsm;
-
-    return csm->getLanguage();
+    return (CharsetMatch *) ucsm->getLanguage();
 }
 
 U_CAPI const UCharsetMatch * U_EXPORT2
@@ -122,14 +94,7 @@ ucsdet_detect(UCharsetDetector *ucsd, UErrorCode *status)
         return NULL;
     }
 
-    if (ucsd == NULL) {
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
-    }
-
-    CharsetDetector *csd = (CharsetDetector *) ucsd;
-
-    return (const UCharsetMatch *) csd->detect(*status);
+    return ((CharsetDetector *) ucsd)->detect(*status);
 }
 
 U_CAPI void U_EXPORT2
@@ -139,14 +104,7 @@ ucsdet_setDeclaredEncoding(UCharsetDetector *ucsd, const char *encoding, int32_t
         return;
     }
 
-    if (ucsd == NULL) {
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
-    }
-
-    CharsetDetector *csd = (CharsetDetector *) ucsd;
-
-    csd->setDeclaredEncoding(encoding,length);
+    ((CharsetDetector *) ucsd)->setDeclaredEncoding(encoding,length);
 }
 
 U_CAPI const UCharsetMatch**
@@ -154,11 +112,6 @@ ucsdet_detectAll(UCharsetDetector *ucsd,
                  int32_t *maxMatchesFound, UErrorCode *status)
 {
     if(U_FAILURE(*status)) {
-        return NULL;
-    }
-
-    if (ucsd == NULL) {
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
 
@@ -193,9 +146,7 @@ ucsdet_isInputFilterEnabled(const UCharsetDetector *ucsd)
         return FALSE;
     }
 
-    CharsetDetector *csd = (CharsetDetector *) ucsd;
-
-    return csd->getStripTagsFlag();
+    return ((CharsetDetector *) ucsd)->getStripTagsFlag();
 }
 
 U_CAPI  UBool U_EXPORT2
@@ -222,14 +173,7 @@ ucsdet_getUChars(const UCharsetMatch *ucsm,
         return 0;
     }
 
-    if (ucsm == NULL) {
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-
-    CharsetMatch *csm = (CharsetMatch *) ucsm;
-    
-    return csm->getUChars(buf, cap, status);
+    return ((CharsetMatch *) ucsm)->getUChars(buf, cap, status);
 }
 U_CDECL_END
 
