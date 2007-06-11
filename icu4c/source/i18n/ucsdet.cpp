@@ -84,7 +84,7 @@ ucsdet_getLanguage(const UCharsetMatch *ucsm, UErrorCode *status)
         return NULL;
     }
 
-    return (CharsetMatch *) ucsm->getLanguage();
+    return ((CharsetMatch *) ucsm)->getLanguage();
 }
 
 U_CAPI const UCharsetMatch * U_EXPORT2
@@ -94,7 +94,7 @@ ucsdet_detect(UCharsetDetector *ucsd, UErrorCode *status)
         return NULL;
     }
 
-    return ((CharsetDetector *) ucsd)->detect(*status);
+    return (const UCharsetMatch *) ((CharsetDetector *) ucsd)->detect(*status);
 }
 
 U_CAPI void U_EXPORT2
