@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  *
  *  FILE NAME: DOCMAIN.h
@@ -41,18 +41,18 @@
  * <h3>API References for Previous Releases</h3>
  * <p>The API References for each release of ICU are also available as
  * a zip file from the ICU 
- * <a href="http://icu.sourceforge.net/download/">download page</a>.</p>
+ * <a href="http://icu-project.org/download/">download page</a>.</p>
  *
  * <hr>
  *
  * <h2>Architecture (User's Guide)</h2>
  * <ul>
- *   <li><a href="http://icu.sourceforge.net/userguide/">Introduction</a></li>
- *   <li><a href="http://icu.sourceforge.net/userguide/i18n.html">Internationalization</a></li>
- *   <li><a href="http://icu.sourceforge.net/userguide/design.html">Locale Model</a></li>
- *   <li><a href="http://icu.sourceforge.net/userguide/design.html">Multithreading</a></li>
- *   <li><a href="http://icu.sourceforge.net/userguide/conversion.html">Conversion</a></li>
- *   <li><a href="http://icu.sourceforge.net/userguide/design.html">Error Handling</a></li>
+ *   <li><a href="http://icu-project.org/userguide/">Introduction</a></li>
+ *   <li><a href="http://icu-project.org/userguide/i18n.html">Internationalization</a></li>
+ *   <li><a href="http://icu-project.org/userguide/design.html">Locale Model</a></li>
+ *   <li><a href="http://icu-project.org/userguide/design.html">Multithreading</a></li>
+ *   <li><a href="http://icu-project.org/userguide/conversion.html">Conversion</a></li>
+ *   <li><a href="http://icu-project.org/userguide/design.html">Error Handling</a></li>
  * </ul>
  *
  * <hr>

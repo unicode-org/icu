@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2006, International Business Machines
+*   Copyright (C) 1997-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -56,7 +56,7 @@ U_CDECL_BEGIN
  *
  * For more information see
  * "About the Unicode Character Database" (http://www.unicode.org/ucd/)
- * and the ICU User Guide chapter on Properties (http://icu.sourceforge.net/userguide/properties.html).
+ * and the ICU User Guide chapter on Properties (http://icu-project.org/userguide/properties.html).
  *
  * Many functions are designed to match java.lang.Character functions.
  * See the individual function documentation,
@@ -2787,7 +2787,7 @@ u_isJavaIDPart(UChar32 c);
  * Full case mappings are applied by the string case mapping functions,
  * see ustring.h and the UnicodeString class.
  * See also the User Guide chapter on C/POSIX migration:
- * http://icu.sourceforge.net/userguide/posix.html#case_mappings
+ * http://icu-project.org/userguide/posix.html#case_mappings
  *
  * @param c the code point to be mapped
  * @return the Simple_Lowercase_Mapping of the code point, if any;
@@ -2812,7 +2812,7 @@ u_tolower(UChar32 c);
  * Full case mappings are applied by the string case mapping functions,
  * see ustring.h and the UnicodeString class.
  * See also the User Guide chapter on C/POSIX migration:
- * http://icu.sourceforge.net/userguide/posix.html#case_mappings
+ * http://icu-project.org/userguide/posix.html#case_mappings
  *
  * @param c the code point to be mapped
  * @return the Simple_Uppercase_Mapping of the code point, if any;
@@ -2837,7 +2837,7 @@ u_toupper(UChar32 c);
  * Full case mappings are applied by the string case mapping functions,
  * see ustring.h and the UnicodeString class.
  * See also the User Guide chapter on C/POSIX migration:
- * http://icu.sourceforge.net/userguide/posix.html#case_mappings
+ * http://icu-project.org/userguide/posix.html#case_mappings
  *
  * @param c the code point to be mapped
  * @return the Simple_Titlecase_Mapping of the code point, if any;
@@ -2882,7 +2882,7 @@ u_totitle(UChar32 c);
  * Full case mappings are applied by the string case mapping functions,
  * see ustring.h and the UnicodeString class.
  * See also the User Guide chapter on C/POSIX migration:
- * http://icu.sourceforge.net/userguide/posix.html#case_mappings
+ * http://icu-project.org/userguide/posix.html#case_mappings
  *
  * @param c the code point to be mapped
  * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I

@@ -58,7 +58,7 @@
  * The following describes the formats for collation binaries
  * (UCA & tailorings) and for the inverse UCA table.
  * Substructures are described in the collation design document at
- * http://dev.icu-project.org/cgi-bin/viewcvs.cgi/~checkout~/icuhtml/design/collation/ICU_collation_design.htm
+ * http://source.icu-project.org/repos/icu/icuhtml/trunk/design/collation/ICU_collation_design.htm
  *
  * -------------------------------------------------------------
  *

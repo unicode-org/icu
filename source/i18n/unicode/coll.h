@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1996-2006, International Business Machines                 *
+*   Copyright (C) 1996-2007, International Business Machines                 *
 *   Corporation and others.  All Rights Reserved.                            *
 ******************************************************************************
 */
@@ -84,7 +84,7 @@ class CollationKey;
 * <em>Important: </em>The ICU collation service has been reimplemented
 * in order to achieve better performance and UCA compliance.
 * For details, see the
-* <a href="http://dev.icu-project.org/cgi-bin/viewcvs.cgi/~checkout~/icuhtml/design/collation/ICU_collation_design.htm">
+* <a href="http://source.icu-project.org/repos/icu/icuhtml/trunk/design/collation/ICU_collation_design.htm">
 * collation design document</a>.
 * <p>
 * <code>Collator</code> is an abstract base class. Subclasses implement
@@ -647,7 +647,7 @@ public:
      * applications who wish to cache collators, or otherwise reuse
      * collators when possible.  The functional equivalent may change
      * over time.  For more information, please see the <a
-     * href="http://icu.sourceforge.net/userguide/locale.html#services">
+     * href="http://icu-project.org/userguide/locale.html#services">
      * Locales and Services</a> section of the ICU User Guide.
      * @param keyword a particular keyword as enumerated by
      * ucol_getKeywords.
