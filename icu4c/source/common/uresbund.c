@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1997-2006, International Business Machines Corporation and   *
+* Copyright (C) 1997-2007, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 *
@@ -1385,9 +1385,9 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByIndex(const UResourceBundle *resB,
 
         /*case URES_INT_VECTOR:*/
         default:
-            /* Fall through. This should probably return a resource mismatch error */
-            break;
-            /*return;*/
+          /* must not occur */
+          *status = U_INTERNAL_PROGRAM_ERROR;
+          break;
         }
     } else {
         *status = U_MISSING_RESOURCE_ERROR;
