@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2003-2006, International Business Machines Corporation and
+ * Copyright (c) 2003-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -19,6 +19,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
+/* We define the following to always test tracing, even when it's off in the library. */
+#ifdef U_ENABLE_TRACING
+#define ENABLE_TRACING_ORIG_VAL U_ENABLE_TRACING
+#undef U_ENABLE_TRACING
+#define U_ENABLE_TRACING 1
+#endif
 #include "utracimp.h"
 
 
@@ -246,7 +253,7 @@ static void TestTraceAPI() {
         cnv = ucnv_open(NULL, &status);
         TEST_ASSERT(U_SUCCESS(status));
         ucnv_close(cnv);
-#if U_ENABLE_TRACING
+#if ENABLE_TRACING_ORIG_VAL
         TEST_ASSERT(gTraceEntryCount > 0);
         TEST_ASSERT(gTraceExitCount  > 0);
         TEST_ASSERT(gTraceDataCount  > 0);

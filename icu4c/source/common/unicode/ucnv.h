@@ -40,7 +40,7 @@
  * many other callback actions that can be used instead of a character substitution.</p>
  *
  * <p>More information about this API can be found in our 
- * <a href="http://icu.sourceforge.net/userguide/conversion.html">User's
+ * <a href="http://icu-project.org/userguide/conversion.html">User's
  * Guide</a>.</p>
  */
 
@@ -296,7 +296,7 @@ ucnv_compareNames(const char *name1, const char *name2);
  *
  * <p>The conversion behavior and names can vary between platforms. ICU may
  * convert some characters differently from other platforms. Details on this topic
- * are in the <a href="http://icu.sourceforge.net/userguide/conversion.html">User's
+ * are in the <a href="http://icu-project.org/userguide/conversion.html">User's
  * Guide</a>. Aliases starting with a "cp" prefix have no specific meaning
  * other than its an alias starting with the letters "cp". Please do not
  * associate any meaning to these aliases.</p>

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (c) 1996-2006, International Business Machines Corporation and others.
+* Copyright (c) 1996-2007, International Business Machines Corporation and others.
 * All Rights Reserved.
 *******************************************************************************
 */
@@ -29,11 +29,11 @@
  * <em>Important: </em>The ICU collation service has been reimplemented 
  * in order to achieve better performance and UCA compliance. 
  * For details, see the 
- * <a href="http://dev.icu-project.org/cgi-bin/viewcvs.cgi/~checkout~/icuhtml/design/collation/ICU_collation_design.htm">
+ * <a href="http://source.icu-project.org/repos/icu/icuhtml/trunk/design/collation/ICU_collation_design.htm">
  * collation design document</a>.
  * <p>
  * For more information about the collation service see 
- * <a href="http://icu.sourceforge.net/userguide/Collate_Intro.html">the users guide</a>.
+ * <a href="http://icu-project.org/userguide/Collate_Intro.html">the users guide</a>.
  * <p>
  * Collation service provides correct sorting orders for most locales supported in ICU. 
  * If specific data for a locale is not available, the orders eventually falls back
@@ -41,7 +41,7 @@
  * <p>
  * Sort ordering may be customized by providing your own set of rules. For more on
  * this subject see the 
- * <a href="http://icu.sourceforge.net/userguide/Collate_Customization.html">
+ * <a href="http://icu-project.org/userguide/Collate_Customization.html">
  * Collation customization</a> section of the users guide.
  * <p>
  * @see         UCollationResult
@@ -292,7 +292,7 @@ ucol_openRules( const UChar        *rules,
  * Open a collator defined by a short form string.
  * The structure and the syntax of the string is defined in the "Naming collators"
  * section of the users guide: 
- * http://icu.sourceforge.net/userguide/Collate_Concepts.html#Naming_Collators
+ * http://icu-project.org/userguide/Collate_Concepts.html#Naming_Collators
  * Attributes are overriden by the subsequent attributes. So, for "S2_S3", final
  * strength will be 3. 3066bis locale overrides individual locale parts.
  * The call to this function is equivalent to a call to ucol_open, followed by a 
@@ -591,7 +591,7 @@ ucol_getKeywordValues(const char *keyword, UErrorCode *status);
  * applications who wish to cache collators, or otherwise reuse
  * collators when possible.  The functional equivalent may change
  * over time.  For more information, please see the <a
- * href="http://icu.sourceforge.net/userguide/locale.html#services">
+ * href="http://icu-project.org/userguide/locale.html#services">
  * Locales and Services</a> section of the ICU User Guide.
  * @param result fillin for the functionally equivalent locale
  * @param resultCapacity capacity of the fillin buffer
@@ -631,7 +631,7 @@ ucol_getRules(    const    UCollator    *coll,
  *  This string will be normalized.
  *  The structure and the syntax of the string is defined in the "Naming collators"
  *  section of the users guide: 
- *  http://icu.sourceforge.net/userguide/Collate_Concepts.html#Naming_Collators
+ *  http://icu-project.org/userguide/Collate_Concepts.html#Naming_Collators
  *  This API supports preflighting.
  *  @param coll a collator
  *  @param locale a locale that will appear as a collators locale in the resulting

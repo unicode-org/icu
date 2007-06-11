@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-* Copyright (C) 1999-2006, International Business Machines Corporation
+* Copyright (C) 1999-2007, International Business Machines Corporation
 * and others. All Rights Reserved.
 ***************************************************************************
 *   Date        Name        Description
@@ -113,8 +113,8 @@ class RuleCharacterIterator;
  * "[:Lu:]" and the Perl-like syntax "\\p{Lu}" are recognized.  For a
  * complete list of supported property patterns, see the User's Guide
  * for UnicodeSet at
- * <a href="http://icu.sourceforge.net/userguide/unicodeSet.html">
- * http://icu.sourceforge.net/userguide/unicodeSet.html</a>.
+ * <a href="http://icu-project.org/userguide/unicodeSet.html">
+ * http://icu-project.org/userguide/unicodeSet.html</a>.
  * Actual determination of property data is defined by the underlying
  * Unicode database as implemented by UCharacter.
  *
@@ -1248,7 +1248,7 @@ private:
      *
      * The original design document is out of date, but still useful.
      * Ignore the property and value names:
-     * http://dev.icu-project.org/cgi-bin/viewcvs.cgi/~checkout~/icuhtml/design/unicodeset_properties.html
+     * http://source.icu-project.org/repos/icu/icuhtml/trunk/design/unicodeset_properties.html
      *
      * Recognized syntax:
      *
