@@ -1097,6 +1097,7 @@ AC_OUTPUT([icudefs.mk \
 		test/iotest/Makefile \
 		test/letest/Makefile \
 		samples/Makefile samples/date/Makefile \
+		samples/tzdate/Makefile \
 		samples/cal/Makefile samples/csdet/Makefile samples/layout/Makefile \
 		common/unicode/platform.h])
 
