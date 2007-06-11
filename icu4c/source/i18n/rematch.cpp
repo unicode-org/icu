@@ -1,15 +1,15 @@
+/*
+**************************************************************************
+*   Copyright (C) 2002-2007 International Business Machines Corporation  *
+*   and others. All rights reserved.                                     *
+**************************************************************************
+*/
 //
 //  file:  rematch.cpp    
 //
 //         Contains the implementation of class RegexMatcher,
 //         which is one of the main API classes for the ICU regular expression package.
 //
-/*
-**************************************************************************
-*   Copyright (C) 2002-2005 International Business Machines Corporation  *
-*   and others. All rights reserved.                                     *
-**************************************************************************
-*/
 
 #include "unicode/utypes.h"
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
@@ -722,10 +722,10 @@ RegexMatcher &RegexMatcher::reset(const UnicodeString &input) {
     return *this;
 }
 
-RegexMatcher &RegexMatcher::reset(const UChar *) {
+/*RegexMatcher &RegexMatcher::reset(const UChar *) {
     fDeferredStatus = U_INTERNAL_PROGRAM_ERROR;
     return *this;
-}
+}*/
 
 
 RegexMatcher &RegexMatcher::reset(int32_t position, UErrorCode &status) {

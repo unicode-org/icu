@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1999-2006, International Business Machines
+ *   Copyright (C) 1999-2007, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *   Date        Name        Description
@@ -1567,9 +1567,9 @@ void TransliteratorParser::appendVariableDef(const UnicodeString& name,
 /**
  * Glue method to get around access restrictions in C++.
  */
-Transliterator* TransliteratorParser::createBasicInstance(const UnicodeString& id, const UnicodeString* canonID) {
+/*Transliterator* TransliteratorParser::createBasicInstance(const UnicodeString& id, const UnicodeString* canonID) {
     return Transliterator::createBasicInstance(id, canonID);
-}
+}*/
 
 U_NAMESPACE_END
 
