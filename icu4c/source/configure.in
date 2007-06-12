@@ -1089,6 +1089,7 @@ AC_OUTPUT([icudefs.mk \
 		tools/pkgdata/Makefile \
 		tools/tzcode/Makefile \
 		test/Makefile \
+		test/compat/Makefile \
 		test/testdata/Makefile \
 		test/testdata/pkgdata.inc \
 		test/hdrtst/Makefile \
