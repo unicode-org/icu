@@ -232,6 +232,10 @@ icu4c/source/samples/tzdate/Makefile.in -text
 icu4c/source/samples/tzdate/tzdate.c -text
 icu4c/source/samples/tzdate/tzone -text
 icu4c/source/samples/ucnv/data02.bin -text svneol=unset#application/octet-stream
+icu4c/source/test/compat/Makefile.in -text
+icu4c/source/test/compat/readme.txt -text
+icu4c/source/test/compat/tzdate.c -text
+icu4c/source/test/compat/tzone.pl -text
 icu4c/source/test/letest/gendata.xml svneol=native#text/xml
 icu4c/source/test/letest/readme.html svneol=native#text/html
 icu4c/source/test/perf/charperf/CharPerf_r.pl -text
