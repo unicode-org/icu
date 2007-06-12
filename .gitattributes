@@ -92,6 +92,10 @@ icu4c/source/samples/tzdate/Makefile.in -text
 icu4c/source/samples/tzdate/tzdate.c -text
 icu4c/source/samples/tzdate/tzone -text
 icu4c/source/samples/ucnv/data02.bin -text
+icu4c/source/test/compat/Makefile.in -text
+icu4c/source/test/compat/readme.txt -text
+icu4c/source/test/compat/tzdate.c -text
+icu4c/source/test/compat/tzone.pl -text
 icu4c/source/test/perf/charperf/CharPerf_r.pl -text
 icu4c/source/test/perf/convperf/ConvPerf_r.pl -text
 icu4c/source/test/perf/normperf/NormPerf_r.pl -text
