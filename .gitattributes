@@ -88,9 +88,6 @@ icu4c/source/i18n/persncal.cpp -text
 icu4c/source/i18n/persncal.h -text
 icu4c/source/i18n/reldtfmt.cpp -text
 icu4c/source/i18n/reldtfmt.h -text
-icu4c/source/samples/tzdate/Makefile.in -text
-icu4c/source/samples/tzdate/tzdate.c -text
-icu4c/source/samples/tzdate/tzone -text
 icu4c/source/samples/ucnv/data02.bin -text
 icu4c/source/test/compat/Makefile.in -text
 icu4c/source/test/compat/readme.txt -text
