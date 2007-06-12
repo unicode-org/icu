@@ -183,6 +183,8 @@ public:
 
     void TestRelativeClone(void);
     
+    void TestHostClone(void);
+
 public:
     /***
      * Test Relative Dates

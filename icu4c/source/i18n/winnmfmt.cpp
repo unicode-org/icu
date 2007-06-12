@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 2005-2006, International Business Machines
+*   Copyright (C) 2005-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -97,8 +97,10 @@ static void getNumberFormat(NUMBERFMTW *fmt, int32_t lcid)
 
 static void freeNumberFormat(NUMBERFMTW *fmt)
 {
-    DELETE_ARRAY(fmt->lpThousandSep);
-    DELETE_ARRAY(fmt->lpDecimalSep);
+    if (fmt != NULL) {
+        DELETE_ARRAY(fmt->lpThousandSep);
+        DELETE_ARRAY(fmt->lpDecimalSep);
+    }
 }
 
 static void getCurrencyFormat(CURRENCYFMTW *fmt, int32_t lcid)
@@ -126,14 +128,16 @@ static void getCurrencyFormat(CURRENCYFMTW *fmt, int32_t lcid)
 
 static void freeCurrencyFormat(CURRENCYFMTW *fmt)
 {
-    DELETE_ARRAY(fmt->lpCurrencySymbol);
-    DELETE_ARRAY(fmt->lpThousandSep);
-    DELETE_ARRAY(fmt->lpDecimalSep);
+    if (fmt != NULL) {
+        DELETE_ARRAY(fmt->lpCurrencySymbol);
+        DELETE_ARRAY(fmt->lpThousandSep);
+        DELETE_ARRAY(fmt->lpDecimalSep);
+    }
 }
 
 // TODO: keep locale too?
 Win32NumberFormat::Win32NumberFormat(const Locale &locale, UBool currency, UErrorCode &status)
-  : NumberFormat(), fCurrency(currency), fFractionDigitsSet(FALSE)
+  : NumberFormat(), fCurrency(currency), fFractionDigitsSet(FALSE), fFormatInfo(NULL)
 {
     if (!U_FAILURE(status)) {
         fLCID = locale.getLCID();
@@ -149,20 +153,25 @@ Win32NumberFormat::Win32NumberFormat(const Locale &locale, UBool currency, UErro
 }
 
 Win32NumberFormat::Win32NumberFormat(const Win32NumberFormat &other)
-  : NumberFormat(other)
+  : NumberFormat(other), fFormatInfo((FormatInfo*)uprv_malloc(sizeof(FormatInfo)))
 {
+    if (fFormatInfo != NULL) {
+        uprv_memset(fFormatInfo, 0, sizeof(*fFormatInfo));
+    }
     *this = other;
 }
 
 Win32NumberFormat::~Win32NumberFormat()
 {
-    if (fCurrency) {
-        freeCurrencyFormat(&fFormatInfo->currency);
-    } else {
-        freeNumberFormat(&fFormatInfo->number);
-    }
+    if (fFormatInfo != NULL) {
+        if (fCurrency) {
+            freeCurrencyFormat(&fFormatInfo->currency);
+        } else {
+            freeNumberFormat(&fFormatInfo->number);
+        }
 
-    uprv_free(fFormatInfo);
+        uprv_free(fFormatInfo);
+    }
 }
 
 Win32NumberFormat &Win32NumberFormat::operator=(const Win32NumberFormat &other)
