@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- Copyright (c) 2005-2006 IBM Corporation and others. All rights reserved -->
+<!-- Copyright (c) 2005-2007 IBM Corporation and others. All rights reserved -->
 <!-- See individual test cases for their specific copyright. -->
 
 <charset-detection-tests>
@@ -377,10 +377,9 @@
 
     </test-case>
 
-    <!-- test-case id="IUC10-zh-Hant" encodings="UTF-8 UTF-32BE UTF-32LE ISO-2022-CN GB18030" -->
+    <test-case id="IUC10-zh-Hant" encodings="UTF-8 UTF-32BE UTF-32LE Big5/zh">
     <!-- Copyright © 1991-2005 Unicode, Inc. All rights reserved. -->
 
-    <!--
     歐洲，軟體及網際網路：
     讓統一碼（Unicode）領你進入全世界
     IUC10
@@ -390,9 +389,8 @@
 
     Unicode
     當世界需要溝通時，請用統一碼（Unicode）
-    -->
 
-    <!-- /test-case -->
+    </test-case>
 
     <!-- No ISO-2022-CN in this test because Java doesn't support it in both directions :-( -->
     <test-case id="IUC10-zh-Hans" encodings="UTF-8 UTF-32BE UTF-32LE ISO-2022-CN GB18030/zh">
