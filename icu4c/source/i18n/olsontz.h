@@ -211,14 +211,14 @@ class OlsonTimeZone: public TimeZone {
 
     virtual int32_t getDSTSavings() const;
 
- protected:
+private:
     /**
      * Default constructor.  Creates a time zone with an empty ID and
      * a fixed GMT offset of zero.
      */
     OlsonTimeZone();
 
- private:
+private:
 
     void constructEmpty();
 
