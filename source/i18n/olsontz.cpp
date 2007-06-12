@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2006, International Business Machines
+* Copyright (c) 2003-2007, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -55,9 +55,9 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(OlsonTimeZone)
  * Default constructor.  Creates a time zone with an empty ID and
  * a fixed GMT offset of zero.
  */
-OlsonTimeZone::OlsonTimeZone() : finalYear(INT32_MAX), finalMillis(DBL_MAX), finalZone(0) {
+/*OlsonTimeZone::OlsonTimeZone() : finalYear(INT32_MAX), finalMillis(DBL_MAX), finalZone(0) {
     constructEmpty();
-}
+}*/
 
 /**
  * Construct a GMT+0 zone with no transitions.  This is done when a
