@@ -27,8 +27,8 @@
 #define SIZE 80
 #define OFFSET_MONTH 1
 
-void getSystemCurrentTime(char* systime, int year, int month, int day, int useCurrentTime);
-void getICUCurrentTime(char* icutime, int year, int month, int day, int useCurrentTime);
+double getSystemCurrentTime(char* systime, int year, int month, int day, int useCurrentTime);
+void getICUCurrentTime(char* icutime, int year, int month, int day, int useCurrentTime, double systemtime);
 void printTime(char* systime, char* icutime);
 
 int main (int argc, char** argv) {
@@ -37,6 +37,7 @@ int main (int argc, char** argv) {
     int year, month, day;
     int sysyear;
     int useCurrentTime;
+    double systemtime;
     
     sysyear = year = month = day = 0;
     
@@ -51,8 +52,8 @@ int main (int argc, char** argv) {
     systime = malloc(sizeof(char) * SIZE);
     icutime = malloc(sizeof(char) * SIZE);
 
-	getSystemCurrentTime(systime, sysyear, month, day, useCurrentTime);
-	getICUCurrentTime(icutime, year, month, day, useCurrentTime);
+	systemtime = getSystemCurrentTime(systime, sysyear, month, day, useCurrentTime);
+	getICUCurrentTime(icutime, year, month, day, useCurrentTime, systemtime * U_MILLIS_PER_SECOND);
 	
 	//print out the times if failed
 	if (strcmp(systime, icutime) != 0) {
@@ -63,7 +64,7 @@ int main (int argc, char** argv) {
 	return 0;
 }
 
-void getICUCurrentTime(char* icutime, int year, int month, int day, int useCurrentTime) {
+void getICUCurrentTime(char* icutime, int year, int month, int day, int useCurrentTime, double systemtime) {
 	UDateFormat *fmt;
 	const UChar *tz = 0;
 	UChar *s = 0;
@@ -79,31 +80,19 @@ void getICUCurrentTime(char* icutime, int year, int month, int day, int useCurre
   	if (!useCurrentTime) {
 	  	c = ucal_open(0, -1, uloc_getDefault(), UCAL_TRADITIONAL, &status);
 	  	ucal_setDate(c, year, month - OFFSET_MONTH, day, &status);
-	  	
-	  	len = udat_format(fmt, ucal_getMillis(c, &status), 0, len, 0, &status);
-	  	
-	  	if (status == U_BUFFER_OVERFLOW_ERROR)
-	  		status = U_ZERO_ERROR;
-	  	
-	    s = (UChar*) malloc(sizeof(UChar) * (len+1));
-	    	
-	    if(s == 0) 
-	    	goto finish;
-	    	
-	    udat_format(fmt, ucal_getMillis(c, &status), s, len + 1, 0, &status);
-  	} else {
-	  	len = udat_format(fmt, ucal_getNow(), 0, len, 0, &status);
-	  	
-	  	if (status == U_BUFFER_OVERFLOW_ERROR)
-	  		status = U_ZERO_ERROR;
-	  	
-	    s = (UChar*) malloc(sizeof(UChar) * (len+1));
-	    	
-	    if(s == 0) 
-	    	goto finish;
-	    	
-	    udat_format(fmt, ucal_getNow(), s, len + 1, 0, &status);
   	}
+	  	
+  	len = udat_format(fmt, (UDate)systemtime, 0, len, 0, &status);
+  	
+  	if (status == U_BUFFER_OVERFLOW_ERROR)
+  		status = U_ZERO_ERROR;
+  	
+    s = (UChar*) malloc(sizeof(UChar) * (len+1));
+    	
+    if(s == 0) 
+    	goto finish;
+    	
+    udat_format(fmt, (UDate)systemtime, s, len + 1, 0, &status);
     
     if(U_FAILURE(status)) 
     	goto finish;
@@ -121,7 +110,7 @@ finish:
   	free(s);
 }
 
-void getSystemCurrentTime(char* systime, int year, int month, int day, int useCurrentTime) {
+double getSystemCurrentTime(char* systime, int year, int month, int day, int useCurrentTime) {
 	time_t now;
 	struct tm ts;
 	
@@ -139,6 +128,8 @@ void getSystemCurrentTime(char* systime, int year, int month, int day, int useCu
 	}
 	
 	strftime(systime, sizeof(char) * 80, "%Y%m%d %I:%M %p", &ts);
+	
+	return (double)now;
 }
 
 void printTime(char* systime, char* icutime) {
