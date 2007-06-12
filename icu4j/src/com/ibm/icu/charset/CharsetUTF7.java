@@ -29,25 +29,25 @@ class CharsetUTF7 extends CharsetICU {
         maxCharsPerByte = 1;
     }
     
-    private static boolean inSetD(char c) {
-        return (
-                (char)(c - 97) < 26 || (char)(c - 65) < 26 || /* letters */
-                (char)(c - 48) < 10 ||                        /* digits */
-                (char)(c - 39) < 3 ||                          /* ' () */
-                (char)(c - 44) < 4 ||                          /* ,-./ */
-                (c == 58) || (c == 63)            /* :? */
-                );
-    }
+    //private static boolean inSetD(char c) {
+    //    return (
+    //            (char)(c - 97) < 26 || (char)(c - 65) < 26 || /* letters */
+    //            (char)(c - 48) < 10 ||                        /* digits */
+    //            (char)(c - 39) < 3 ||                          /* ' () */
+    //            (char)(c - 44) < 4 ||                          /* ,-./ */
+    //            (c == 58) || (c == 63)            /* :? */
+    //            );
+    //}
     
-    private static boolean inSetO(char c) {
-        return (
-                (char)(c - 33) < 6 ||                           /* !"#$%& */
-                (char)(c - 59) < 4 ||                           /* ;<=> */
-                (char)(c - 93) < 4 ||                           /* ]^_` */
-                (char)(c - 123) < 3 ||                         /* {|} */
-                (c == 58) || (c == 63)             /* *@[ */
-                );
-    }
+    //private static boolean inSetO(char c) {
+    //    return (
+    //            (char)(c - 33) < 6 ||                           /* !"#$%& */
+    //            (char)(c - 59) < 4 ||                           /* ;<=> */
+    //            (char)(c - 93) < 4 ||                           /* ]^_` */
+    //            (char)(c - 123) < 3 ||                         /* {|} */
+    //            (c == 58) || (c == 63)             /* *@[ */
+    //            );
+    //}
     
     private static boolean isCRLFTAB(char c) {
         return (
@@ -55,16 +55,16 @@ class CharsetUTF7 extends CharsetICU {
                 );
     }
     
-    private static boolean isCRLFSPTAB(char c) {
-        return (
-                (c == 32) || (c == 13) || (c == 10) || (c == 9)
-                );
-    }
+    //private static boolean isCRLFSPTAB(char c) {
+    //   return (
+    //            (c == 32) || (c == 13) || (c == 10) || (c == 9)
+    //            );
+    //}
     
     private static final byte PLUS = 43;
     private static final byte MINUS = 45;
     private static final byte BACKSLASH = 92;
-    private static final byte TILDE = 126;
+    //private static final byte TILDE = 126;
     
     private static boolean isLegalUTF7(char c) {
         return (
@@ -157,7 +157,7 @@ class CharsetUTF7 extends CharsetICU {
             int byteIndex;
             int sourceIndex, nextSourceIndex;
             
-            int length, targetCapacity;
+            int length;
             
             char b;
             
@@ -187,7 +187,7 @@ class CharsetUTF7 extends CharsetICU {
                      */
                     byteIndex = 0;
                     length = source.remaining();
-                    targetCapacity = target.remaining();
+                    //targetCapacity = target.remaining();
                     //Commented out because length of source may be larger than target when it comes to bytes
                     /*if (length > targetCapacity) {
                         length = targetCapacity;

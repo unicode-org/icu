@@ -22,11 +22,11 @@ import com.ibm.icu.text.UTF16;
  */
 class CharsetISCII extends CharsetICU {
     private final short UCNV_OPTIONS_VERSION_MASK = 0X0f;
-    private final short NUKTA = 0x093c;
-    private final short HALANT = 0x094d;
+    //private final short NUKTA = 0x093c;
+    //private final short HALANT = 0x094d;
     private final short ZWNJ = 0x200c; /* Zero Width Non Joiner */
     private final short ZWJ = 0x200d; /* Zero Width Joiner */
-    private final int   INVALID_CHAR = 0xffff;
+    //private final int   INVALID_CHAR = 0xffff;
     private final short ATR = 0xef; /* Attribute code */
     private final short EXT = 0xf0; /* Extension code */
     private final short DANDA = 0x0964;
