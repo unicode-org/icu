@@ -97,14 +97,10 @@ isAcceptableUCA(void * /*context*/,
         ) {
         UVersionInfo UCDVersion;
         u_getUnicodeVersion(UCDVersion);
-        if(pInfo->dataVersion[0]==UCDVersion[0] &&
-          pInfo->dataVersion[1]==UCDVersion[1]) { // &&
-        //pInfo->dataVersion[2]==ucaDataInfo.dataVersion[2] &&
-        //pInfo->dataVersion[3]==ucaDataInfo.dataVersion[3]) {
-          return TRUE;
-        } else {
-          return FALSE;
-        }
+        return (UBool)(pInfo->dataVersion[0]==UCDVersion[0]
+            && pInfo->dataVersion[1]==UCDVersion[1]);
+            //&& pInfo->dataVersion[2]==ucaDataInfo.dataVersion[2]
+            //&& pInfo->dataVersion[3]==ucaDataInfo.dataVersion[3]);
     } else {
         return FALSE;
     }
@@ -4036,11 +4032,8 @@ ucol_getSortKey(const    UCollator    *coll,
 {
   UTRACE_ENTRY(UTRACE_UCOL_GET_SORTKEY);
   if (UTRACE_LEVEL(UTRACE_VERBOSE)) {
-      int32_t actualSrcLen = sourceLength;
-      if (actualSrcLen==-1 && source!=NULL) {
-          actualSrcLen = u_strlen(source);
-      }
-      UTRACE_DATA3(UTRACE_VERBOSE, "coll=%p, source string = %vh ", coll, source, actualSrcLen);
+      UTRACE_DATA3(UTRACE_VERBOSE, "coll=%p, source string = %vh ", coll, source, 
+          ((sourceLength==-1 && source!=NULL) ? u_strlen(source) : sourceLength));
   }
 
   UErrorCode status = U_ZERO_ERROR;
@@ -6872,33 +6865,27 @@ ucol_getVersion(const UCollator* coll,
 /* This internal API checks whether a character is tailored or not */
 U_CAPI UBool  U_EXPORT2
 ucol_isTailored(const UCollator *coll, const UChar u, UErrorCode *status) {
-  uint32_t CE = UCOL_NOT_FOUND;
-  const UChar *ContractionStart = NULL;
-  if(U_SUCCESS(*status) && coll != NULL) {
-    if(coll == coll->UCA) {
-      return FALSE;
-    } else if(u < 0x100) { /* latin-1 */
-      CE = coll->latinOneMapping[u];
-      if(coll->UCA && CE == coll->UCA->latinOneMapping[u]) {
+    if(U_FAILURE(*status) || coll == NULL || coll == coll->UCA) {
         return FALSE;
-      }
+    }
+
+    uint32_t CE = UCOL_NOT_FOUND;
+    const UChar *ContractionStart = NULL;
+    if(u < 0x100) { /* latin-1 */
+        CE = coll->latinOneMapping[u];
+        if(coll->UCA && CE == coll->UCA->latinOneMapping[u]) {
+            return FALSE;
+        }
     } else { /* regular */
-      CE = UTRIE_GET32_FROM_LEAD(&coll->mapping, u);
+        CE = UTRIE_GET32_FROM_LEAD(&coll->mapping, u);
     }
 
     if(isContraction(CE)) {
-      ContractionStart = (UChar *)coll->image+getContractOffset(CE);
-      CE = *(coll->contractionCEs + (ContractionStart- coll->contractionIndex));
+        ContractionStart = (UChar *)coll->image+getContractOffset(CE);
+        CE = *(coll->contractionCEs + (ContractionStart- coll->contractionIndex));
     }
 
-    if(CE == UCOL_NOT_FOUND) {
-      return FALSE;
-    } else {
-      return TRUE;
-    }
-  } else {
-    return FALSE;
-  }
+    return (UBool)(CE != UCOL_NOT_FOUND);
 }
 
 
