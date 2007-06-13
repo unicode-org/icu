@@ -898,7 +898,7 @@ public class TestCharset extends TestFmwk {
         }
     }
      
-    private void smBufDecode(CharsetDecoder decoder, String encoding, ByteBuffer source, CharBuffer target, boolean throwException)  throws BufferOverflowException {
+    private void smBufDecode(CharsetDecoder decoder, String encoding, ByteBuffer source, CharBuffer target, boolean throwException)  throws BufferOverflowException, Exception {
 
         ByteBuffer mySource = source.duplicate();
         CharBuffer myTarget = CharBuffer.allocate(target.capacity());
@@ -910,6 +910,9 @@ public class TestCharset extends TestFmwk {
             CoderResult result = CoderResult.UNDERFLOW;
             result = decoder.decode(mySource, myTarget, true);
             if (result.isError()) {
+                if (throwException) {
+                    throw new Exception();
+                }
                 errln("Test complete buffers while decoding failed. "+result.toString());
                 return;
             }
@@ -1719,7 +1722,7 @@ public class TestCharset extends TestFmwk {
             smBufDecode(decoder, "ASCII", byteBuffer, charBufferTest, true);
             errln("Overflow exception while decoding ASCII should have been thrown.");
         }
-        catch(BufferOverflowException ex) {
+        catch(Exception ex) {
         }
         try {
             smBufEncode(encoder, "ASCII", charBuffer, byteBufferTest, true);
@@ -1738,12 +1741,12 @@ public class TestCharset extends TestFmwk {
         CharBuffer us = CharBuffer.allocate(0x100);
         ByteBuffer bs = ByteBuffer.allocate(0x100);
         
-        /* Unicode :  A<not equal to Alpha>. */
+        /* Unicode :  A<not equal to Alpha Lamda>. */
         /* UTF7: AImIDkQ. */
-        us.put((char)0x41); us.put((char)0x2262); us.put((char)0x391); us.put((char)0x2e);
+        us.put((char)0x41); us.put((char)0x2262); us.put((char)0x391); us.put((char)0x39B); us.put((char)0x2e);
         bs.put((byte)0x41); bs.put((byte)0x2b); bs.put((byte)0x49); bs.put((byte)0x6d); 
         bs.put((byte)0x49); bs.put((byte)0x44); bs.put((byte)0x6b); bs.put((byte)0x51); 
-        bs.put((byte)0x2e);
+        bs.put((byte)0x4f); bs.put((byte)0x62); bs.put((byte)0x2e);
         
         bs.limit(bs.position());
         bs.position(0);
@@ -1752,6 +1755,180 @@ public class TestCharset extends TestFmwk {
 
         smBufDecode(decoder, "UTF-7", bs, us);
         smBufEncode(encoder, "UTF-7", us, bs);
+        
+        //The rest of the code in this method is to provide better code coverage
+        CharBuffer ccus = CharBuffer.allocate(0x100);
+        ByteBuffer ccbs = ByteBuffer.allocate(0x100);
+        
+        //start of charset decoder code coverage code
+        //test for accurate illegal and control character checking
+        ccbs.put((byte)0x0D); ccbs.put((byte)0x05);
+        ccus.put((char)0x0000);
+        
+        ccbs.limit(ccbs.position());
+        ccbs.position(0);
+        ccus.limit(ccus.position());
+        ccus.position(0);
+
+        try {
+            smBufDecode(decoder, "UTF-7-CC-DE-1", ccbs, ccus, true);
+            errln("Exception while decoding UTF-7 code coverage test should have been thrown.");
+        }
+        catch (Exception ex) {
+        }
+        
+        ccbs.clear();
+        ccus.clear();
+        
+        //test for illegal base64 character
+        ccbs.put((byte)0x2b); ccbs.put((byte)0xff);
+        ccus.put((char)0x0000);
+        
+        ccbs.limit(ccbs.position());
+        ccbs.position(0);
+        ccus.limit(ccus.position());
+        ccus.position(0);
+        
+        try {
+            smBufDecode(decoder, "UTF-7-CC-DE-2", ccbs, ccus, true);
+            errln("Exception while decoding UTF-7 code coverage test should have been thrown.");
+        }
+        catch (Exception ex) {
+        }
+        
+        ccbs.clear();
+        ccus.clear();
+        
+        //test for illegal order of the base64 character sequence
+        ccbs.put((byte)0x2b); ccbs.put((byte)0x2d); ccbs.put((byte)0x2b); ccbs.put((byte)0x49); ccbs.put((byte)0x2d);
+        ccus.put((char)0x0000); ccus.put((char)0x0000);
+        
+        ccbs.limit(ccbs.position());
+        ccbs.position(0);
+        ccus.limit(ccus.position());
+        ccus.position(0);
+        
+        try {
+            smBufDecode(decoder, "UTF-7-CC-DE-3", ccbs, ccus, true);
+            errln("Exception while decoding UTF-7 code coverage test should have been thrown.");
+        }
+        catch (Exception ex) {
+        }
+        
+        ccbs.clear();
+        ccus.clear();
+        
+        //test for illegal order of the base64 character sequence 
+        ccbs.put((byte)0x2b); ccbs.put((byte)0x0a); ccbs.put((byte)0x09);
+        ccus.put((char)0x0000);
+        
+        ccbs.limit(ccbs.position());
+        ccbs.position(0);
+        ccus.limit(ccus.position());
+        ccus.position(0);
+        
+        try {
+            smBufDecode(decoder, "UTF-7-CC-DE-4", ccbs, ccus, true);
+            errln("Exception while decoding UTF-7 code coverage test should have been thrown.");
+        }
+        catch (Exception ex) {
+        }
+        
+        ccbs.clear();
+        ccus.clear();
+        
+        //test for illegal order of the base64 character sequence
+        ccbs.put((byte)0x2b); ccbs.put((byte)0x49); ccbs.put((byte)0x0a);
+        ccus.put((char)0x0000);
+        
+        ccbs.limit(ccbs.position());
+        ccbs.position(0);
+        ccus.limit(ccus.position());
+        ccus.position(0);
+        
+        try {
+            smBufDecode(decoder, "UTF-7-CC-DE-5", ccbs, ccus, true);
+            errln("Exception while decoding UTF-7 code coverage test should have been thrown.");
+        }
+        catch (Exception ex) {
+        }
+        
+        ccbs.clear();
+        ccus.clear();
+        
+        //test for illegal order of the base64 character sequence
+        ccbs.put((byte)0x2b); ccbs.put((byte)0x00);
+        ccus.put((char)0x0000);
+        
+        ccbs.limit(ccbs.position());
+        ccbs.position(0);
+        ccus.limit(ccus.position());
+        ccus.position(0);
+        
+        try {
+            smBufDecode(decoder, "UTF-7-CC-DE-6", ccbs, ccus, true);
+            errln("Exception while decoding UTF-7 code coverage test should have been thrown.");
+        }
+        catch (Exception ex) {
+        }
+        
+        ccbs.clear();
+        ccus.clear();
+        
+        //test for overflow buffer error
+        ccbs.put((byte)0x2b); ccbs.put((byte)0x49);
+        
+        ccbs.limit(ccbs.position());
+        ccbs.position(0);
+        ccus.limit(0);
+        ccus.position(0);
+        
+        try {
+            smBufDecode(decoder, "UTF-7-CC-DE-7", ccbs, ccus, true);
+            errln("Exception while decoding UTF-7 code coverage test should have been thrown.");
+        }
+        catch (Exception ex) {
+        }
+        //end of charset decoder code coverage code
+        
+        //start of charset encoder code coverage code
+        ccbs.clear();
+        ccus.clear();
+        //test for overflow buffer error
+        ccus.put((char)0x002b);
+        ccbs.put((byte)0x2b); 
+        
+        ccbs.limit(ccbs.position());
+        ccbs.position(0);
+        ccus.limit(ccus.position());
+        ccus.position(0);
+        
+        try {
+            smBufEncode(encoder, "UTF-7-CC-EN-1", ccus, ccbs, true);
+            errln("Exception while encoding UTF-7 code coverage test should have been thrown.");
+        }
+        catch (Exception ex) {
+        }
+        
+        ccbs.clear();
+        ccus.clear();
+        
+        //test for overflow buffer error
+        ccus.put((char)0x002b); ccus.put((char)0x2262);
+        ccbs.put((byte)0x2b); ccbs.put((byte)0x2d); ccbs.put((byte)0x00); ccbs.put((byte)0x00);
+        
+        ccbs.limit(ccbs.position());
+        ccbs.position(0);
+        ccus.limit(ccus.position());
+        ccus.position(0);
+        
+        try {
+            smBufEncode(encoder, "UTF-7-CC-EN-2", ccus, ccbs, true);
+            errln("Exception while encoding UTF-7 code coverage test should have been thrown.");
+        }
+        catch (Exception ex) {
+        }  
+        //end of charset encoder code coverage code
     }
     //Test Charset ISCII
     public void TestCharsetISCII() {
