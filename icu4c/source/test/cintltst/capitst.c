@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -30,6 +30,7 @@
 #include "putilimp.h"
 
 static void TestAttribute(void);
+static void TestDefault(void);
         int TestBufferSize();    /* defined in "colutil.c" */
 
 
@@ -125,6 +126,7 @@ void addCollAPITest(TestNode** root)
     addTest(root, &TestShortString, "tscoll/capitst/TestShortString");
     addTest(root, &TestGetContractionsAndUnsafes, "tscoll/capitst/TestGetContractionsAndUnsafes");
     addTest(root, &TestOpenBinary, "tscoll/capitst/TestOpenBinary");
+    addTest(root, &TestDefault, "tscoll/capitst/TestDefault");
 }
 
 void TestGetSetAttr(void) {
@@ -2069,61 +2071,78 @@ TestGetContractionsAndUnsafes(void)
 static void 
 TestOpenBinary(void) 
 {
-  UErrorCode status = U_ZERO_ERROR;
-  /*
-  char rule[] = "&h < d < c < b";
-  char *wUCA[] = { "a", "h", "d", "c", "b", "i" };
-  char *noUCA[] = {"d", "c", "b", "a", "h", "i" };
-  */
-  /* we have to use Cyrillic letters because latin-1 always gets copied */
-  const char rule[] = "&\\u0452 < \\u0434 < \\u0433 < \\u0432"; /* &dje < d < g < v */
-  const char *wUCA[] = { "\\u0430", "\\u0452", "\\u0434", "\\u0433", "\\u0432", "\\u0435" }; /* a, dje, d, g, v, e */
-  const char *noUCA[] = {"\\u0434", "\\u0433", "\\u0432", "\\u0430", "\\u0435", "\\u0452" }; /* d, g, v, a, e, dje */
+    UErrorCode status = U_ZERO_ERROR;
+    /*
+    char rule[] = "&h < d < c < b";
+    char *wUCA[] = { "a", "h", "d", "c", "b", "i" };
+    char *noUCA[] = {"d", "c", "b", "a", "h", "i" };
+    */
+    /* we have to use Cyrillic letters because latin-1 always gets copied */
+    const char rule[] = "&\\u0452 < \\u0434 < \\u0433 < \\u0432"; /* &dje < d < g < v */
+    const char *wUCA[] = { "\\u0430", "\\u0452", "\\u0434", "\\u0433", "\\u0432", "\\u0435" }; /* a, dje, d, g, v, e */
+    const char *noUCA[] = {"\\u0434", "\\u0433", "\\u0432", "\\u0430", "\\u0435", "\\u0452" }; /* d, g, v, a, e, dje */
 
-  UChar uRules[256];
-  int32_t uRulesLen = u_unescape(rule, uRules, 256);
+    UChar uRules[256];
+    int32_t uRulesLen = u_unescape(rule, uRules, 256);
 
-  UCollator *coll = ucol_openRules(uRules, uRulesLen, UCOL_DEFAULT, UCOL_DEFAULT, NULL, &status);
-  UCollator *UCA = ucol_open("root", &status);
-  UCollator *cloneNOUCA = NULL, *cloneWUCA = NULL;
+    UCollator *coll = ucol_openRules(uRules, uRulesLen, UCOL_DEFAULT, UCOL_DEFAULT, NULL, &status);
+    UCollator *UCA = ucol_open("root", &status);
+    UCollator *cloneNOUCA = NULL, *cloneWUCA = NULL;
 
-  uint8_t imageBuffer[32768];
-  uint8_t *image = imageBuffer;
-  int32_t imageBufferCapacity = 32768;
+    uint8_t imageBuffer[32768];
+    uint8_t *image = imageBuffer;
+    int32_t imageBufferCapacity = 32768;
 
-  int32_t imageSize;
+    int32_t imageSize;
 
-  if((coll==NULL)||(UCA==NULL)||(U_FAILURE(status))) {
-       log_data_err("could not load collators or error occured: %s\n",
-       u_errorName(status));
-       return;
-  }		
-  imageSize = ucol_cloneBinary(coll, image, imageBufferCapacity, &status);
-  if(U_FAILURE(status)) {
-    image = (uint8_t *)malloc(imageSize*sizeof(uint8_t));
-    status = U_ZERO_ERROR;
-    imageSize = ucol_cloneBinary(coll, imageBuffer, imageSize, &status);
-  }
-
-
-  cloneWUCA = ucol_openBinary(image, imageSize, UCA, &status);
-  cloneNOUCA = ucol_openBinary(image, imageSize, NULL, &status);
-
-  genericOrderingTest(coll, wUCA, sizeof(wUCA)/sizeof(wUCA[0]));
-
-  genericOrderingTest(cloneWUCA, wUCA, sizeof(wUCA)/sizeof(wUCA[0]));
-  genericOrderingTest(cloneNOUCA, noUCA, sizeof(noUCA)/sizeof(noUCA[0]));
+    if((coll==NULL)||(UCA==NULL)||(U_FAILURE(status))) {
+        log_data_err("could not load collators or error occured: %s\n",
+            u_errorName(status));
+        return;
+    }		
+    imageSize = ucol_cloneBinary(coll, image, imageBufferCapacity, &status);
+    if(U_FAILURE(status)) {
+        image = (uint8_t *)malloc(imageSize*sizeof(uint8_t));
+        status = U_ZERO_ERROR;
+        imageSize = ucol_cloneBinary(coll, imageBuffer, imageSize, &status);
+    }
 
 
+    cloneWUCA = ucol_openBinary(image, imageSize, UCA, &status);
+    cloneNOUCA = ucol_openBinary(image, imageSize, NULL, &status);
 
-  if(image != imageBuffer) {
-    free(image);
-  }
-  ucol_close(coll);
-  ucol_close(cloneNOUCA);
-  ucol_close(cloneWUCA);
-  ucol_close(UCA);
+    genericOrderingTest(coll, wUCA, sizeof(wUCA)/sizeof(wUCA[0]));
 
+    genericOrderingTest(cloneWUCA, wUCA, sizeof(wUCA)/sizeof(wUCA[0]));
+    genericOrderingTest(cloneNOUCA, noUCA, sizeof(noUCA)/sizeof(noUCA[0]));
+
+    if(image != imageBuffer) {
+        free(image);
+    }
+    ucol_close(coll);
+    ucol_close(cloneNOUCA);
+    ucol_close(cloneWUCA);
+    ucol_close(UCA);
+}
+
+static void TestDefault(void) {
+    /* Tests for code coverage. */
+    UErrorCode status = U_ZERO_ERROR;
+    UCollator *coll = ucol_open("es@collation=pinyin", &status);
+    if (status != U_USING_DEFAULT_WARNING) {
+        /* What do you mean that you know about using pinyin collation in Spanish!? This should be in the zh locale. */
+        log_err("es@collation=pinyin should return U_USING_DEFAULT_WARNING, but returned %s\n", u_errorName(status));
+    }
+    ucol_close(coll);
+    if (ucol_getKeywordValues("funky", &status) != NULL) {
+        log_err("Collators should not know about the funky keyword.\n");
+    }
+    if (status != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("funky keyword didn't fail as expected %s\n", u_errorName(status));
+    }
+    if (ucol_getKeywordValues("collation", &status) != NULL) {
+        log_err("ucol_getKeywordValues should not work when given a bad status.\n");
+    }
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
