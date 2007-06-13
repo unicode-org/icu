@@ -26,6 +26,7 @@
 #include "cpdtrans.h"
 #include "nultrans.h"
 #include "rbt.h"
+#include "rbt_pars.h"
 #include "anytrans.h"
 #include "esctrn.h"
 #include "name2uni.h"
@@ -186,6 +187,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(78,TestBeginEnd);
         TESTCASE(79,TestBeginEndToRules);
         TESTCASE(80,TestRegisterAlias);
+        TESTCASE(81,TestRuleStripping);
         default: name = ""; break;
     }
 }
@@ -4431,6 +4433,29 @@ void TransliteratorTest::TestRegisterAlias() {
     delete t1;
     delete t2;
     Transliterator::unregister(fakeID);
+}
+
+void TransliteratorTest::TestRuleStripping() {
+    /*
+#
+\uE001>\u0C01; # SIGN
+    */
+    static const UChar rule[] = {
+        0x0023,0x0020,0x000D,0x000A,
+        0xE001,0x003E,0x0C01,0x003B,0x0020,0x0023,0x0020,0x0053,0x0049,0x0047,0x004E,0
+    };
+    static const UChar expectedRule[] = {
+        0xE001,0x003E,0x0C01,0x003B,0
+    };
+    UChar result[sizeof(rule)/sizeof(rule[0])];
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t len = utrans_stripRules(rule, (int32_t)(sizeof(rule)/sizeof(rule[0])), result, &status);
+    if (len != u_strlen(expectedRule)) {
+        errln("utrans_stripRules return len = %d", len);
+    }
+    if (u_strncmp(expectedRule, result, len) != 0) {
+        errln("utrans_stripRules did not return expected string");
+    }
 }
 
 //======================================================================
