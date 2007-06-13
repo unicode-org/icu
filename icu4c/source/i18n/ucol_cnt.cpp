@@ -77,22 +77,17 @@ uprv_cnttab_open(UNewTrie *mapping, UErrorCode *status) {
 static ContractionTable *addATableElement(CntTable *table, uint32_t *key, UErrorCode *status) {
     ContractionTable *el = (ContractionTable *)uprv_malloc(sizeof(ContractionTable));
     if(el == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
+        goto outOfMemory;
     }
     el->CEs = (uint32_t *)uprv_malloc(INIT_EXP_TABLE_SIZE*sizeof(uint32_t));
     if(el->CEs == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
-        uprv_free(el);
-        return NULL;
+        goto outOfMemory;
     }
 
     el->codePoints = (UChar *)uprv_malloc(INIT_EXP_TABLE_SIZE*sizeof(UChar));
     if(el->codePoints == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
         uprv_free(el->CEs);
-        uprv_free(el);
-        return NULL;
+        goto outOfMemory;
     }
 
     el->position = 0;
@@ -111,22 +106,24 @@ static ContractionTable *addATableElement(CntTable *table, uint32_t *key, UError
         // do realloc
         /*        table->elements = (ContractionTable **)realloc(table->elements, table->capacity*2*sizeof(ContractionTable *));*/
         if(newElements == NULL) {
-            *status = U_MEMORY_ALLOCATION_ERROR;
             uprv_free(el->codePoints);
             uprv_free(el->CEs);
-            uprv_free(el);
-            return NULL;
-        } else {
-            ContractionTable **oldElements = table->elements;
-            uprv_memcpy(newElements, oldElements, table->capacity*sizeof(ContractionTable *));
-            uprv_memset(newElements+table->capacity, 0, table->capacity*sizeof(ContractionTable *));
-            table->capacity *= 2;
-            table->elements = newElements;
-            uprv_free(oldElements);
+            goto outOfMemory;
         }
+        ContractionTable **oldElements = table->elements;
+        uprv_memcpy(newElements, oldElements, table->capacity*sizeof(ContractionTable *));
+        uprv_memset(newElements+table->capacity, 0, table->capacity*sizeof(ContractionTable *));
+        table->capacity *= 2;
+        table->elements = newElements;
+        uprv_free(oldElements);
     }
 
     return el;
+
+outOfMemory:
+    *status = U_MEMORY_ALLOCATION_ERROR;
+    if (el) uprv_free(el);
+    return NULL;
 }
 
 U_CAPI int32_t  U_EXPORT2
@@ -233,8 +230,7 @@ uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorCode *sta
 static ContractionTable *uprv_cnttab_cloneContraction(ContractionTable *t, UErrorCode *status) {
     ContractionTable *r = (ContractionTable *)uprv_malloc(sizeof(ContractionTable));
     if(r == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
+        goto outOfMemory;
     }
 
     r->position = t->position;
@@ -242,22 +238,22 @@ static ContractionTable *uprv_cnttab_cloneContraction(ContractionTable *t, UErro
 
     r->codePoints = (UChar *)uprv_malloc(sizeof(UChar)*t->size);
     if(r->codePoints == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
-        uprv_free(r);
-        return NULL;
+        goto outOfMemory;
     }
     r->CEs = (uint32_t *)uprv_malloc(sizeof(uint32_t)*t->size);
     if(r->CEs == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
         uprv_free(r->codePoints);
-        uprv_free(r);
-        return NULL;
+        goto outOfMemory;
     }
     uprv_memcpy(r->codePoints, t->codePoints, sizeof(UChar)*t->size);
     uprv_memcpy(r->CEs, t->CEs, sizeof(uint32_t)*t->size);
 
     return r;
 
+outOfMemory:
+    *status = U_MEMORY_ALLOCATION_ERROR;
+    if (r) uprv_free(r);
+    return NULL;
 }
 
 U_CAPI CntTable* U_EXPORT2
@@ -269,8 +265,7 @@ uprv_cnttab_clone(CntTable *t, UErrorCode *status) {
     CntTable *r = (CntTable *)uprv_malloc(sizeof(CntTable));
     /* test for NULL */
     if (r == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
+        goto outOfMemory;
     }
     r->position = t->position;
     r->size = t->size;
@@ -281,9 +276,7 @@ uprv_cnttab_clone(CntTable *t, UErrorCode *status) {
     r->elements = (ContractionTable **)uprv_malloc(t->capacity*sizeof(ContractionTable *));
     /* test for NULL */
     if (r->elements == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
-        uprv_free(r);
-        return NULL;
+        goto outOfMemory;
     }
     //uprv_memcpy(r->elements, t->elements, t->capacity*sizeof(ContractionTable *));
 
@@ -295,10 +288,8 @@ uprv_cnttab_clone(CntTable *t, UErrorCode *status) {
         r->CEs = (uint32_t *)uprv_malloc(t->position*sizeof(uint32_t));
         /* test for NULL */
         if (r->CEs == NULL) {
-            *status = U_MEMORY_ALLOCATION_ERROR;
             uprv_free(r->elements);
-            uprv_free(r);
-            return NULL;
+            goto outOfMemory;
         }
         uprv_memcpy(r->CEs, t->CEs, t->position*sizeof(uint32_t));
     } else {
@@ -309,11 +300,9 @@ uprv_cnttab_clone(CntTable *t, UErrorCode *status) {
         r->codePoints = (UChar *)uprv_malloc(t->position*sizeof(UChar));
         /* test for NULL */
         if (r->codePoints == NULL) {
-            *status = U_MEMORY_ALLOCATION_ERROR;
             uprv_free(r->CEs);
             uprv_free(r->elements);
-            uprv_free(r);
-            return NULL;
+            goto outOfMemory;
         }
         uprv_memcpy(r->codePoints, t->codePoints, t->position*sizeof(UChar));
     } else {
@@ -324,12 +313,10 @@ uprv_cnttab_clone(CntTable *t, UErrorCode *status) {
         r->offsets = (int32_t *)uprv_malloc(t->size*sizeof(int32_t));
         /* test for NULL */
         if (r->offsets == NULL) {
-            *status = U_MEMORY_ALLOCATION_ERROR;
             uprv_free(r->codePoints);
             uprv_free(r->CEs);
             uprv_free(r->elements);
-            uprv_free(r);
-            return NULL;
+            goto outOfMemory;
         }
         uprv_memcpy(r->offsets, t->offsets, t->size*sizeof(int32_t));
     } else {
@@ -337,6 +324,11 @@ uprv_cnttab_clone(CntTable *t, UErrorCode *status) {
     }
 
     return r;
+
+outOfMemory:
+    *status = U_MEMORY_ALLOCATION_ERROR;
+    if (r) uprv_free(r);
+    return NULL;
 }
 
 U_CAPI void  U_EXPORT2
