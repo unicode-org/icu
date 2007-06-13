@@ -2324,9 +2324,16 @@ void NumberFormatTest::TestCurrencyFormat()
     if (result != toFormat) {
         errln("Clone does not round trip. Formatted string was \"" + str + "\" Got: " + toString(result) + " Expected: " + toString(toFormat));
     }
+    if (*measureObj != *cloneObj) {
+        errln("Cloned object is not equal to the original object");
+    }
     delete measureObj;
     delete cloneObj;
 
+    status = U_USELESS_COLLATOR_ERROR;
+    if (MeasureFormat::createCurrencyFormat(status) != NULL) {
+        errln("createCurrencyFormat should have returned NULL.");
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
