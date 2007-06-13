@@ -10,7 +10,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/calendar.h"
-#include "math.h"
+#include <math.h>
 #include <float.h>
 #include "unicode/putil.h"
 #include "uhash.h"
