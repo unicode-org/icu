@@ -789,6 +789,13 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, con
 
     ucol_updateInternalState(result, status);
 
+    /* Normally these will be set correctly later. This is the default if you use UCA or the default. */
+    result->rb = NULL;
+    result->elements = NULL;
+    result->validLocale = NULL;
+    result->requestedLocale = NULL;
+    result->hasRealData = FALSE; // real data lives in .dat file...
+    result->freeImageOnClose = FALSE;
 
     return result;
 }
@@ -1178,12 +1185,6 @@ ucol_initUCA(UErrorCode *status) {
         if(result != NULL) { /* It looks like sometimes we can fail to find the data file */
             newUCA = ucol_initCollator((const UCATableHeader *)udata_getMemory(result), newUCA, newUCA, status);
             if(U_SUCCESS(*status)){
-                newUCA->rb = NULL;
-                newUCA->elements = NULL;
-                newUCA->validLocale = NULL;
-                newUCA->requestedLocale = NULL;
-                newUCA->hasRealData = FALSE; // real data lives in .dat file...
-                newUCA->freeImageOnClose = FALSE;
                 umtx_lock(NULL);
                 if(_staticUCA == NULL) {
                     _staticUCA = newUCA;

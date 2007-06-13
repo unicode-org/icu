@@ -603,14 +603,17 @@ ucol_getKeywords(UErrorCode *status) {
 
 U_CAPI UEnumeration* U_EXPORT2
 ucol_getKeywordValues(const char *keyword, UErrorCode *status) {
+    if (U_FAILURE(*status)) {
+        return NULL;
+    }
     // hard-coded to accept exactly one collation keyword
     // modify if additional collation keyword is added later
-    if (U_SUCCESS(*status) &&
-        keyword==NULL || uprv_strcmp(keyword, KEYWORDS[0])!=0) {
-            *status = U_ILLEGAL_ARGUMENT_ERROR;
-            return NULL;
-        }
-        return ures_getKeywordValues(U_ICUDATA_COLL, RESOURCE_NAME, status);
+    if (keyword==NULL || uprv_strcmp(keyword, KEYWORDS[0])!=0)
+    {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    }
+    return ures_getKeywordValues(U_ICUDATA_COLL, RESOURCE_NAME, status);
 }
 
 U_CAPI int32_t U_EXPORT2
