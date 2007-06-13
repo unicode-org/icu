@@ -1126,16 +1126,16 @@ void TransliteratorTest::TestCopyJ476(void) {
         UParseError parseError;
         UErrorCode status = U_ZERO_ERROR;
         Transliterator *t1 = Transliterator::createFromRules("t1",
-            "a>A;b>B;", UTRANS_FORWARD, parseError, status);
+            "a>A;b>B;'foo'+>'bar'", UTRANS_FORWARD, parseError, status);
         if (U_FAILURE(status)) {
             errln("FAIL: RBT constructor");
             return;
         }
         t2 = t1->clone(); // Call copy constructor under the covers.
-        expect(*t1, "abc", "ABc");
+        expect(*t1, "abcfoofoo", "ABcbar");
         delete t1;
     }
-    expect(*t2, "abc", "ABc");
+    expect(*t2, "abcfoofoo", "ABcbar");
     delete t2;
 }
 
