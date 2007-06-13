@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2001-2006, International Business Machines Corporation and
+ * Copyright (c) 2001-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -1412,6 +1412,16 @@ static void IsTailoredTest(void) {
     }
     ucol_close(coll);
   }
+  else {
+    log_err("Can't tailor rules");
+  }
+  /* Code coverage */
+  status = U_ZERO_ERROR;
+  coll = ucol_open("ja", &status);
+  if(!ucol_isTailored(coll, 0x4E9C, &status)) {
+    log_err("0x4E9C should be tailored - it is reported as not\n");
+  }
+  ucol_close(coll);
 }
 
 
