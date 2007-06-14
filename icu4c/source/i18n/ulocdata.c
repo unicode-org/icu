@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2003-2005, International Business Machines                   *
+* Copyright (C) 2003-2007, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -89,7 +89,7 @@ U_CAPI USet* U_EXPORT2
 ulocdata_getExemplarSet(ULocaleData *uld, USet *fillIn, 
                         uint32_t options, ULocaleDataExemplarSetType extype, UErrorCode *status){
     
-    const char* exemplarSetTypes[] = { "ExemplarCharacters", "AuxExemplarCharacters" };
+    static const char* const exemplarSetTypes[] = { "ExemplarCharacters", "AuxExemplarCharacters" };
     const UChar *exemplarChars = NULL;
     int32_t len = 0;
     UErrorCode localStatus = U_ZERO_ERROR;
@@ -124,11 +124,12 @@ U_CAPI int32_t U_EXPORT2
 ulocdata_getDelimiter(ULocaleData *uld, ULocaleDataDelimiterType type, 
                       UChar *result, int32_t resultLength, UErrorCode *status){
 
-    const char* delimiterKeys[] =  { "quotationStart",
-                                     "quotationEnd",
-                                     "alternateQuotationStart",
-                                     "alternateQuotationEnd" };
-
+    static const char* const delimiterKeys[] =  {
+        "quotationStart",
+        "quotationEnd",
+        "alternateQuotationStart",
+        "alternateQuotationEnd"
+    };
  
     UResourceBundle *delimiterBundle;
     int32_t len = 0;
