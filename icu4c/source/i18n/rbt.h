@@ -333,18 +333,18 @@ public:
      * Covenience constructor with no filter.
      * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
-    RuleBasedTransliterator(const UnicodeString& id,
+    /*RuleBasedTransliterator(const UnicodeString& id,
                             const UnicodeString& rules,
                             UTransDirection direction,
-                            UErrorCode& status);
+                            UErrorCode& status);*/
 
     /**
      * Covenience constructor with no filter and FORWARD direction.
      * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
-    RuleBasedTransliterator(const UnicodeString& id,
+    /*RuleBasedTransliterator(const UnicodeString& id,
                             const UnicodeString& rules,
-                            UErrorCode& status);
+                            UErrorCode& status);*/
 
     /**
      * Covenience constructor with FORWARD direction.
