@@ -38,6 +38,7 @@
 
 static void TestNullDefault(void);
 static void TestNonexistentLanguageExemplars(void);
+static void TestLocDataErrorCodeChaining(void);
 static void TestLanguageExemplarsFallbacks(void);
 
 void PrintDataTable();
@@ -219,6 +220,7 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestGetLocale);
     TESTCASE(TestDisplayNameWarning);
     TESTCASE(TestNonexistentLanguageExemplars);
+    TESTCASE(TestLocDataErrorCodeChaining);
     TESTCASE(TestLanguageExemplarsFallbacks);
     TESTCASE(TestCalendar);
     TESTCASE(TestDateFormat);
@@ -2269,6 +2271,18 @@ static void TestNonexistentLanguageExemplars(void) {
     }
     uset_close(ulocdata_getExemplarSet(uld, NULL, 0, ULOCDATA_ES_STANDARD, &ec));
     ulocdata_close(uld);
+}
+
+static void TestLocDataErrorCodeChaining(void) {
+    UErrorCode ec = U_USELESS_COLLATOR_ERROR;
+    ulocdata_open(NULL, &ec);
+    ulocdata_getExemplarSet(NULL, NULL, 0, ULOCDATA_ES_STANDARD, &ec);
+    ulocdata_getDelimiter(NULL, ULOCDATA_ES_STANDARD, NULL, -1, &ec);
+    ulocdata_getMeasurementSystem(NULL, &ec);
+    ulocdata_getPaperSize(NULL, NULL, NULL, &ec);
+    if (ec != U_USELESS_COLLATOR_ERROR) {
+        log_err("ulocdata API changed the error code to %s\n", u_errorName(ec));
+    }
 }
 
 static void TestLanguageExemplarsFallbacks(void) {
