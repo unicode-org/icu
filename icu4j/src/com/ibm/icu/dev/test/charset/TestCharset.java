@@ -1889,6 +1889,24 @@ public class TestCharset extends TestFmwk {
         }
         catch (Exception ex) {
         }
+        
+        ccbs.clear();
+        ccus.clear();
+        
+        //test for overflow buffer error
+        ccbs.put((byte)0x0c); ccbs.put((byte)0x0c);
+        
+        ccbs.limit(ccbs.position());
+        ccbs.position(0);
+        ccus.limit(0);
+        ccus.position(0);
+        
+        try {
+            smBufDecode(decoder, "UTF-7-CC-DE-8", ccbs, ccus, true);
+            errln("Exception while decoding UTF-7 code coverage test should have been thrown.");
+        }
+        catch (Exception ex) {
+        }
         //end of charset decoder code coverage code
         
         //start of charset encoder code coverage code
@@ -2055,6 +2073,24 @@ public class TestCharset extends TestFmwk {
         }
         catch (Exception ex) {
         } 
+        
+        ccbs.clear();
+        ccus.clear();
+        
+        //test for overflow buffer error
+        ccus.put((char)0x2262); ccus.put((char)0x0049);
+        ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00);
+        ccbs.limit(ccbs.position());
+        ccbs.position(0);
+        ccus.limit(ccus.position());
+        ccus.position(0);
+        
+        try {
+            smBufEncode(encoder, "UTF-7-CC-EN-9", ccus, ccbs, true);
+            errln("Exception while encoding UTF-7 code coverage test should have been thrown.");
+        }
+        catch (Exception ex) {
+        }  
         //end of charset encoder code coverage code
     }
     //Test Charset ISCII
