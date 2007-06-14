@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1999-2006, International Business Machines Corporation and
+ * Copyright (c) 1999-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /************************************************************************
@@ -540,7 +540,8 @@ void RBBITest::TestTrieDict() {
     CompactTrieDictionary *compactDict = NULL;
     UnicodeSet            *breaks      = NULL;
     UChar                 *testFile    = NULL;
-    StringEnumeration     *enumer      = NULL;
+    StringEnumeration     *enumer1     = NULL;
+    StringEnumeration     *enumer2     = NULL;
     MutableTrieDictionary *mutable2    = NULL;
     StringEnumeration     *cloneEnum   = NULL;
     CompactTrieDictionary *compact2    = NULL;
@@ -612,21 +613,18 @@ void RBBITest::TestTrieDict() {
         goto cleanup;
     }
 
-    enumer = mutableDict->openWords(status);
+    enumer1 = mutableDict->openWords(status);
     if (U_FAILURE(status)) {
         errln("Could not open mutable dictionary enumerator: %s\n", u_errorName(status));
         goto cleanup;
     }
 
     testCount = 0;
-    if (wordCount != (testCount = enumer->count(status))) {
+    if (wordCount != (testCount = enumer1->count(status))) {
         errln("MutableTrieDictionary word count (%d) differs from file word count (%d), with status %s\n",
             testCount, wordCount, u_errorName(status));
         goto cleanup;
     }
-
-    delete enumer;
-    enumer = NULL;
 
     // Now compact it
     compactDict = new CompactTrieDictionary(*mutableDict, status);
@@ -635,20 +633,25 @@ void RBBITest::TestTrieDict() {
         goto cleanup;
     }
 
-    enumer = compactDict->openWords(status);
+    enumer2 = compactDict->openWords(status);
     if (U_FAILURE(status)) {
         errln("Could not open compact trie dictionary enumerator: %s\n", u_errorName(status));
         goto cleanup;
     }
 
-    if (wordCount != (testCount = enumer->count(status))) {
+    if (wordCount != (testCount = enumer2->count(status))) {
         errln("CompactTrieDictionary word count (%d) differs from file word count (%d), with status %s\n",
             testCount, wordCount, u_errorName(status));
         goto cleanup;
     }
 
-    delete enumer;
-    enumer = NULL;
+    if (enumer1->getDynamicClassID() == enumer2->getDynamicClassID()) {
+        errln("CompactTrieEnumeration and MutableTrieEnumeration ClassIDs are the same");
+    }
+    delete enumer1;
+    enumer1 = NULL;
+    delete enumer2;
+    enumer2 = NULL;
 
     // Now un-compact it
     mutable2 = compactDict->cloneMutable(status);
@@ -672,20 +675,20 @@ void RBBITest::TestTrieDict() {
     // Compact original dictionary to clone. Note that we can only compare the same kind of
     // dictionary as the order of the enumerators is not guaranteed to be the same between
     // different kinds
-    enumer = mutableDict->openWords(status);
+    enumer1 = mutableDict->openWords(status);
     if (U_FAILURE(status)) {
         errln("Could not re-open mutable dictionary enumerator: %s\n", u_errorName(status));
         goto cleanup;
      }
 
-    originalWord = enumer->snext(status);
+    originalWord = enumer1->snext(status);
     cloneWord = cloneEnum->snext(status);
     while (U_SUCCESS(status) && originalWord != NULL && cloneWord != NULL) {
         if (*originalWord != *cloneWord) {
             errln("Original and cloned MutableTrieDictionary word mismatch\n");
             goto cleanup;
         }
-        originalWord = enumer->snext(status);
+        originalWord = enumer1->snext(status);
         cloneWord = cloneEnum->snext(status);
     }
 
@@ -712,14 +715,14 @@ void RBBITest::TestTrieDict() {
     }
 
     // Now count the words via the second dictionary
-    delete enumer;
-    enumer = compact2->openWords(status);
+    delete enumer1;
+    enumer1 = compact2->openWords(status);
     if (U_FAILURE(status)) {
         errln("Could not open compact trie dictionary 2 enumerator: %s\n", u_errorName(status));
         goto cleanup;
     }
 
-    if (wordCount != (testCount = enumer->count(status))) {
+    if (wordCount != (testCount = enumer1->count(status))) {
         errln("CompactTrieDictionary 2 word count (%d) differs from file word count (%d), with status %s\n",
             testCount, wordCount, u_errorName(status));
         goto cleanup;
@@ -730,7 +733,7 @@ cleanup:
     delete mutableDict;
     delete breaks;
     delete[] testFile;
-    delete enumer;
+    delete enumer1;
     delete mutable2;
     delete cloneEnum;
     delete compact2;

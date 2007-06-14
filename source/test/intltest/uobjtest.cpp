@@ -26,6 +26,10 @@
  *
  *   TESTCLASSID_FACTORY(Foo, fooCreateFunction(status) ) 
  *      -- call fooCreateFunction.  'status' will be tested & reset
+ *
+ *   TESTCLASSID_FACTORY_HIDDEN(class, factory)
+ *      -- call factory.  Class is not available from a header.
+ *      'status' will be tested & reset. This only tests uniqueness.
  */
 
 
@@ -34,6 +38,7 @@
 #define TESTCLASSID_CTOR(c, x) { delete testClass(new c x, #c, "new " #c #x, c ::getStaticClassID()); if(U_FAILURE(status)) { errln(UnicodeString(#c " - new " #x " - got err status ") + UnicodeString(u_errorName(status))); status = U_ZERO_ERROR; } }
 #define TESTCLASSID_DEFAULT(c) delete testClass(new c, #c, "new " #c , c::getStaticClassID())
 #define TESTCLASSID_ABSTRACT(c) testClass(NULL, #c, NULL, c::getStaticClassID())
+#define TESTCLASSID_FACTORY_HIDDEN(c, f) {UObject *objVar = f; delete testClass(objVar, #c, #f, objVar->getDynamicClassID()); if(U_FAILURE(status)) { errln(UnicodeString(#c " - " #f " - got err status ") + UnicodeString(u_errorName(status))); status = U_ZERO_ERROR; } }
 
 #define MAX_CLASS_ID 200
 
@@ -68,7 +73,7 @@ UObject *UObjectTest::testClass(UObject *obj,
     }
 
     if(staticID == NULL) {
-        errln(  "FAIL: staticID == NULL!" + what);
+        errln("FAIL: staticID == NULL!" + what);
     }
 
     if(factory != NULL) {  /* NULL factory means: abstract */
@@ -268,6 +273,10 @@ void UObjectTest::testIDs()
     /* TESTCLASSID_ABSTRACT(BreakIterator); No staticID!  */
     TESTCLASSID_FACTORY(RuleBasedBreakIterator, BreakIterator::createLineInstance("mt",status));
     //TESTCLASSID_FACTORY(DictionaryBasedBreakIterator, BreakIterator::createLineInstance("th",status));
+
+#if !UCONFIG_NO_SERVICE
+    TESTCLASSID_FACTORY_HIDDEN(ICULocaleService, BreakIterator::getAvailableLocales());
+#endif
 #endif
     
     //TESTCLASSID_DEFAULT(GregorianCalendar);
@@ -298,6 +307,7 @@ void UObjectTest::testIDs()
 #endif
         
     TESTCLASSID_FACTORY(Locale, new Locale("123"));
+    TESTCLASSID_FACTORY_HIDDEN(KeywordEnumeration, Locale("@a=b").createKeywords(status));
     
     //TESTCLASSID_DEFAULT(Normalizer);
 
