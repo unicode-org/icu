@@ -106,7 +106,8 @@ CurrencyData:table(nofallback){
         CU { "CUP" } // CUBA: Cuban Peso
         CV { "CVE" } // CAPE VERDE: Cape Verde Escudo
         CX { "AUD" } // CHRISTMAS ISLAND: Australian Dollar
-        CY { "CYP" } // CYPRUS: Cyprus Pound
+        CY { "EUR" } // CYPRUS: Euro
+        CY_PREEURO { "CYP" } // CYPRUS: Cyprus Pound
         CZ { "CZK" } // CZECH REPUBLIC: Czech Koruna
         DE { "EUR" } // GERMANY: Euro
         DE_PREEURO { "DEM" }
@@ -210,7 +211,8 @@ CurrencyData:table(nofallback){
         MQ { "EUR" } // MARTINIQUE: Euro
         MR { "MRO" } // MAURITANIA: Ouguiya
         MS { "XCD" } // MONTSERRAT: East Caribbean Dollar
-        MT { "MTL" } // MALTA: Maltese Lira
+        MT { "EUR" } // MALTA: Euro
+        MT_PREEURO { "MTL" } // MALTA: Maltese Lira
         MU { "MUR" } // MAURITIUS: Mauritius Rupee
         MV { "MVR" } // MALDIVES: Rufiyaa
         MW { "MWK" } // MALAWI: Kwacha
