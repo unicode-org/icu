@@ -101,7 +101,7 @@ RuleBasedTransliterator::RuleBasedTransliterator(
 /**
  * Covenience constructor with no filter.
  */
-RuleBasedTransliterator::RuleBasedTransliterator(
+/*RuleBasedTransliterator::RuleBasedTransliterator(
                             const UnicodeString& id,
                             const UnicodeString& rules,
                             UTransDirection direction,
@@ -109,19 +109,19 @@ RuleBasedTransliterator::RuleBasedTransliterator(
     Transliterator(id, 0) {
     UParseError parseError;
     _construct(rules, direction,parseError, status);
-}
+}*/
 
 /**
  * Covenience constructor with no filter and FORWARD direction.
  */
-RuleBasedTransliterator::RuleBasedTransliterator(
+/*RuleBasedTransliterator::RuleBasedTransliterator(
                             const UnicodeString& id,
                             const UnicodeString& rules,
                             UErrorCode& status) :
     Transliterator(id, 0) {
     UParseError parseError;
     _construct(rules, UTRANS_FORWARD, parseError, status);
-}
+}*/
 
 /**
  * Covenience constructor with FORWARD direction.
