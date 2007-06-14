@@ -286,9 +286,9 @@ class CharsetUTF7 extends CharsetICU {
                                     bits = 0;
                                     base64Counter = 0;
                                     break;
-                                default:                  
+                                //default:                  
                                     /* will never occur */
-                                    break;                                                           
+                                    //break;                                                           
                                 }//end of switch
                             } else if (base64Value == -2) {
                                 /* minus sign terminates the base64 sequence */
@@ -581,9 +581,9 @@ class CharsetUTF7 extends CharsetICU {
                                 bits=0;
                                 base64Counter=0;
                                 break;
-                           default:
+                           //default:
                                /* will never occur */
-                               break;
+                               //break;
                            } //end of switch 
                         }                      
                     } else {
