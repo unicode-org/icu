@@ -741,10 +741,11 @@ expandLamAlef(UChar *dest, int32_t sourceLength,
             }
 
             if(countr > 0) {
-                uprv_memcpy(tempbuffer, tempbuffer+countr, sourceLength*U_SIZEOF_UCHAR);
+                uprv_memmove(tempbuffer, tempbuffer+countr, sourceLength*U_SIZEOF_UCHAR);
                 if(u_strlen(tempbuffer) < sourceLength) {
-                    for(i=sourceLength-1;i>=sourceLength-countr;i--)
+                    for(i=sourceLength-1;i>=sourceLength-countr;i--) {
                         tempbuffer[i] = 0x0020;
+                    }
                 }
             }
 
