@@ -1927,7 +1927,134 @@ public class TestCharset extends TestFmwk {
             errln("Exception while encoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
+        } 
+        
+        ccbs.clear();
+        ccus.clear();
+        
+        //test for overflow buffer error
+        ccus.put((char)0x2262); ccus.put((char)0x0049);
+        ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00);
+        ccbs.limit(ccbs.position());
+        ccbs.position(0);
+        ccus.limit(ccus.position());
+        ccus.position(0);
+        
+        try {
+            smBufEncode(encoder, "UTF-7-CC-EN-3", ccus, ccbs, true);
+            errln("Exception while encoding UTF-7 code coverage test should have been thrown.");
+        }
+        catch (Exception ex) {
         }  
+        
+        ccbs.clear();
+        ccus.clear();
+        
+        //test for overflow buffer error
+        ccus.put((char)0x2262); ccus.put((char)0x0395);
+        ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00);
+        ccbs.limit(ccbs.position());
+        ccbs.position(0);
+        ccus.limit(ccus.position());
+        ccus.position(0);
+        
+        try {
+            smBufEncode(encoder, "UTF-7-CC-EN-4", ccus, ccbs, true);
+            errln("Exception while encoding UTF-7 code coverage test should have been thrown.");
+        }
+        catch (Exception ex) {
+        }  
+        
+        ccbs.clear();
+        ccus.clear();
+        
+        //test for overflow buffer error
+        ccus.put((char)0x2262); ccus.put((char)0x0395);
+        ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00);
+        ccbs.limit(ccbs.position());
+        ccbs.position(0);
+        ccus.limit(ccus.position());
+        ccus.position(0);
+        
+        try {
+            smBufEncode(encoder, "UTF-7-CC-EN-5", ccus, ccbs, true);
+            errln("Exception while encoding UTF-7 code coverage test should have been thrown.");
+        }
+        catch (Exception ex) {
+        }  
+        
+        ccbs.clear();
+        ccus.clear();
+        
+        //test for overflow buffer error
+        ccus.put((char)0x2262); ccus.put((char)0x0395); ccus.put((char)0x0391);
+        ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00);
+        ccbs.limit(ccbs.position());
+        ccbs.position(0);
+        ccus.limit(ccus.position());
+        ccus.position(0);
+        
+        try {
+            smBufEncode(encoder, "UTF-7-CC-EN-6", ccus, ccbs, true);
+            errln("Exception while encoding UTF-7 code coverage test should have been thrown.");
+        }
+        catch (Exception ex) {
+        }  
+        
+        ccbs.clear();
+        ccus.clear();
+        
+        //test for overflow buffer error
+        ccus.put((char)0x2262); ccus.put((char)0x0395); ccus.put((char)0x0391);
+        ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00); 
+        ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00);
+        ccbs.limit(ccbs.position());
+        ccbs.position(0);
+        ccus.limit(ccus.position());
+        ccus.position(0);
+        
+        try {
+            smBufEncode(encoder, "UTF-7-CC-EN-7", ccus, ccbs, true);
+            errln("Exception while encoding UTF-7 code coverage test should have been thrown.");
+        }
+        catch (Exception ex) {
+        }  
+        
+        ccbs.clear();
+        ccus.clear();
+        
+        //test for overflow buffer error
+        ccus.put((char)0x0049); ccus.put((char)0x0048);
+        ccbs.put((byte)0x00); 
+        ccbs.limit(ccbs.position());
+        ccbs.position(0);
+        ccus.limit(ccus.position());
+        ccus.position(0);
+        
+        try {
+            smBufEncode(encoder, "UTF-7-CC-EN-8", ccus, ccbs, true);
+            errln("Exception while encoding UTF-7 code coverage test should have been thrown.");
+        }
+        catch (Exception ex) {
+        } 
+        
+        ccbs.clear();
+        ccus.clear();
+        
+        //test for overflow buffer error
+        ccus.put((char)0x2262);
+        ccbs.put((byte)0x00);
+        ccbs.limit(ccbs.position());
+        ccbs.position(0);
+        ccus.limit(ccus.position());
+        ccus.position(0);
+        
+        try {
+            smBufEncode(encoder, "UTF-7-CC-EN-9", ccus, ccbs, true);
+            errln("Exception while encoding UTF-7 code coverage test should have been thrown.");
+        }
+        catch (Exception ex) {
+        } 
         //end of charset encoder code coverage code
     }
     //Test Charset ISCII
