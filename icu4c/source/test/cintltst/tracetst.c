@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2003-2006, International Business Machines Corporation and
+ * Copyright (c) 2003-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -19,6 +19,15 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
+/* We define the following to always test tracing, even when it's off in the library. */
+#if U_ENABLE_TRACING
+#define ENABLE_TRACING_ORIG_VAL 1
+#else
+#define ENABLE_TRACING_ORIG_VAL 0
+#endif
+#undef U_ENABLE_TRACING
+#define U_ENABLE_TRACING 1
 #include "utracimp.h"
 
 
@@ -169,6 +178,22 @@ static void U_CALLCONV testTraceData(const void *context, int32_t fnNumber, int3
     /* printf("  %s()   %s\n", fnName, buf); */
 }
 
+static UConverter * psuedo_ucnv_open(const char *name, UErrorCode * err)
+{
+    UTRACE_ENTRY_OC(UTRACE_UCNV_LOAD);
+
+    UTRACE_DATA2(UTRACE_OPEN_CLOSE, "error code is %s for %s", u_errorName(*err), name);
+
+    UTRACE_EXIT_PTR_STATUS(NULL, *err);
+    return NULL;
+}
+static void psuedo_ucnv_close(UConverter * cnv)
+{
+    UTRACE_ENTRY_OC(UTRACE_UCNV_UNLOAD);
+    UTRACE_DATA1(UTRACE_OPEN_CLOSE, "unload converter %p", cnv);
+    UTRACE_EXIT_VALUE((int32_t)TRUE);
+}
+
 
 /*
  *   TestTraceAPI
@@ -243,16 +268,20 @@ static void TestTraceAPI() {
         gFnNameError     = FALSE;
         gFnFormatError   = FALSE;
         utrace_setLevel(UTRACE_OPEN_CLOSE);
+#if ENABLE_TRACING_ORIG_VAL
         cnv = ucnv_open(NULL, &status);
         TEST_ASSERT(U_SUCCESS(status));
         ucnv_close(cnv);
-#if U_ENABLE_TRACING
+#else
+        cnv = psuedo_ucnv_open(NULL, &status);
+        TEST_ASSERT(U_SUCCESS(status));
+        psuedo_ucnv_close(cnv);
+#endif
         TEST_ASSERT(gTraceEntryCount > 0);
         TEST_ASSERT(gTraceExitCount  > 0);
         TEST_ASSERT(gTraceDataCount  > 0);
         TEST_ASSERT(gFnNameError   == FALSE);
         TEST_ASSERT(gFnFormatError == FALSE);
-#endif
     }
 
 
