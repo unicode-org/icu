@@ -1,5 +1,7 @@
 /*
-* Copyright (C) 2001-2003, International Business Machines Corporation and others. All Rights Reserved.
+**********************************************************************
+*   Copyright (C) 2001-2007, International Business Machines
+*   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
 *   07/26/01    aliu        Creation.
@@ -126,7 +128,7 @@ UBool Quantifier::matchesIndexValue(uint8_t v) const {
  */
 void Quantifier::addMatchSetTo(UnicodeSet& toUnionTo) const {
     if (maxCount > 0) {
-    matcher->toMatcher()->addMatchSetTo(toUnionTo);
+        matcher->toMatcher()->addMatchSetTo(toUnionTo);
     }
 }
 

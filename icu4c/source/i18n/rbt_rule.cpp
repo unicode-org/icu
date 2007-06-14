@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1999-2004, International Business Machines
+ *   Copyright (C) 1999-2007, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *   Date        Name        Description
@@ -529,14 +529,14 @@ void TransliterationRule::setData(const TransliterationRuleData* d) {
 void TransliterationRule::addSourceSetTo(UnicodeSet& toUnionTo) const {
     int32_t limit = anteContextLength + keyLength;
     for (int32_t i=anteContextLength; i<limit; ) {
-    UChar32 ch = pattern.char32At(i);
-    i += UTF_CHAR_LENGTH(ch);
-    const UnicodeMatcher* matcher = data->lookupMatcher(ch);
-    if (matcher == NULL) {
-        toUnionTo.add(ch);
-    } else {
-        matcher->addMatchSetTo(toUnionTo);
-    }
+        UChar32 ch = pattern.char32At(i);
+        i += UTF_CHAR_LENGTH(ch);
+        const UnicodeMatcher* matcher = data->lookupMatcher(ch);
+        if (matcher == NULL) {
+            toUnionTo.add(ch);
+        } else {
+            matcher->addMatchSetTo(toUnionTo);
+        }
     }
 }
 
