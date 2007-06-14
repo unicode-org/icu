@@ -227,11 +227,6 @@ void UObjectTest::testIDs()
 #endif
    
 
-    
-    //TESTCLASSID_DEFAULT(AbbreviatedUnicodeSetIterator);
-    //TESTCLASSID_DEFAULT(AnonymousStringFactory);
-
-    
 #if !UCONFIG_NO_NORMALIZATION
     TESTCLASSID_FACTORY(CanonicalIterator, new CanonicalIterator(UnicodeString("abc"), status));
 #endif
@@ -275,12 +270,9 @@ void UObjectTest::testIDs()
     //TESTCLASSID_FACTORY(DictionaryBasedBreakIterator, BreakIterator::createLineInstance("th",status));
 #endif
     
-    //TESTCLASSID_DEFAULT(EscapeTransliterator);
-        
     //TESTCLASSID_DEFAULT(GregorianCalendar);
     
 #if !UCONFIG_NO_TRANSLITERATION
-
     TESTCLASSID_TRANSLIT(AnyTransliterator, "Any-Latin");
     TESTCLASSID_TRANSLIT(CompoundTransliterator, "Latin-Greek");
     TESTCLASSID_TRANSLIT(EscapeTransliterator, "Any-Hex");
@@ -295,8 +287,14 @@ void UObjectTest::testIDs()
     TESTCLASSID_TRANSLIT(UnicodeNameTransliterator, "Any-Name");
     TESTCLASSID_TRANSLIT(UppercaseTransliterator, "Upper");
     TESTCLASSID_CTOR(CaseMapTransliterator, (UnicodeString(), NULL));
+    TESTCLASSID_ABSTRACT(Transliterator);
+
+#if UOBJTEST_TEST_INTERNALS
     TESTCLASSID_CTOR(Quantifier, (NULL, 0, 0));
     TESTCLASSID_CTOR(FunctionReplacer, (NULL,NULL));
+    TESTCLASSID_CTOR(StringMatcher, (UnicodeString("x"), 0,0,0,TransliterationRuleData(status)));
+    TESTCLASSID_CTOR(StringReplacer,(UnicodeString(),new TransliterationRuleData(status)));
+#endif
 #endif
         
     TESTCLASSID_FACTORY(Locale, new Locale("123"));
@@ -307,7 +305,6 @@ void UObjectTest::testIDs()
     
 #if !UCONFIG_NO_TRANSLITERATION
     TESTCLASSID_DEFAULT(ParsePosition);
-    //TESTCLASSID_DEFAULT(Quantifier);
 #endif
     
 
@@ -324,23 +321,12 @@ void UObjectTest::testIDs()
     //TESTCLASSID_DEFAULT(StringReplacer);
     //TESTCLASSID_DEFAULT(StringSearch);
     
-    //TESTCLASSID_DEFAULT(TempSearch);
     //TESTCLASSID_DEFAULT(TestMultipleKeyStringFactory);
     //TESTCLASSID_DEFAULT(TestReplaceable);
 
 #if !UCONFIG_NO_FORMATTING
     TESTCLASSID_ABSTRACT(TimeZone);
     TESTCLASSID_FACTORY(OlsonTimeZone, TimeZone::createTimeZone(UnicodeString("America/Los_Angeles")));
-#endif
-
-#if !UCONFIG_NO_TRANSLITERATION
-    TESTCLASSID_FACTORY(TitlecaseTransliterator,  Transliterator::createInstance(UnicodeString("Any-Title"), UTRANS_FORWARD, parseError, status));
-    TESTCLASSID_ABSTRACT(Transliterator);
-
-#if UOBJTEST_TEST_INTERNALS
-    TESTCLASSID_CTOR(StringMatcher, (UnicodeString("x"), 0,0,0,TransliterationRuleData(status)));
-    TESTCLASSID_CTOR(StringReplacer,(UnicodeString(),new TransliterationRuleData(status)));
-#endif
 #endif
     
     TESTCLASSID_DEFAULT(UnicodeString);
