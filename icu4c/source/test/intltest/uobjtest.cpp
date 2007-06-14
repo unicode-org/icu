@@ -239,6 +239,7 @@ void UObjectTest::testIDs()
 #if !UCONFIG_NO_COLLATION
     TESTCLASSID_DEFAULT(CollationKey);
     TESTCLASSID_FACTORY(UStringEnumeration, Collator::getKeywords(status));
+    //TESTCLASSID_FACTORY_HIDDEN(CollationLocaleListEnumeration, Collator::getAvailableLocales());
 #endif
     //TESTCLASSID_FACTORY(CompoundTransliterator, Transliterator::createInstance(UnicodeString("Any-Jex;Hangul-Jamo"), UTRANS_FORWARD, parseError, status));
     
@@ -337,6 +338,7 @@ void UObjectTest::testIDs()
 #if !UCONFIG_NO_FORMATTING
     TESTCLASSID_ABSTRACT(TimeZone);
     TESTCLASSID_FACTORY(OlsonTimeZone, TimeZone::createTimeZone(UnicodeString("America/Los_Angeles")));
+    TESTCLASSID_FACTORY_HIDDEN(KeywordEnumeration, TimeZone::createEnumeration());
 #endif
     
     TESTCLASSID_DEFAULT(UnicodeString);
