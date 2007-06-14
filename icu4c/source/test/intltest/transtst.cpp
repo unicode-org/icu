@@ -2947,7 +2947,7 @@ void TransliteratorTest::TestLocaleResource() {
  * Make sure parse errors reference the right line.
  */
 void TransliteratorTest::TestParseError() {
-    const char* rule =
+    static const char* rule =
         "a > b;\n"
         "# more stuff\n"
         "d << b;";
@@ -2963,9 +2963,25 @@ void TransliteratorTest::TestParseError() {
         } else {
             errln("FAIL: " + err);
         }
-        return;
     }
-    errln("FAIL: no syntax error");
+    else {
+        errln("FAIL: no syntax error");
+    }
+    static const char* maskingRule =
+        "a>x;\n"
+        "# more stuff\n"
+        "ab>y;";
+    ec = U_ZERO_ERROR;
+    delete Transliterator::createFromRules("ID", maskingRule, UTRANS_FORWARD, pe, ec);
+    if (ec != U_RULE_MASK_ERROR) {
+        errln("FAIL: returned %s instead of U_RULE_MASK_ERROR", u_errorName(ec));
+    }
+    else if (UnicodeString("a > x;") != UnicodeString(pe.preContext)) {
+        errln("FAIL: did not get expected precontext");
+    }
+    else if (UnicodeString("ab > y;") != UnicodeString(pe.postContext)) {
+        errln("FAIL: did not get expected postcontext");
+    }
 }
 
 /**
