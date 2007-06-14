@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2002-2004, International Business Machines Corporation
+*   Copyright (c) 2002-2007, International Business Machines Corporation
 *   and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -28,12 +28,9 @@ class Transliterator;
  * UnicodeReplacer object.  That is, this replacer wraps another
  * replacer with a transliterator.
  *
- * Added U_I18N_API to make the definition of a global operator delete work.
- * See Jitterbug 2581. markus 2002dec17
- *
  * @author Alan Liu
  */
-class U_I18N_API FunctionReplacer : public UnicodeFunctor, public UnicodeReplacer {
+class FunctionReplacer : public UnicodeFunctor, public UnicodeReplacer {
 
  private:
 
