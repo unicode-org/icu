@@ -22,7 +22,6 @@
 U_NAMESPACE_BEGIN
 
 // forward declarations
-class CalendarData;
 class MessageFormat;
 
 // internal structure used for caching strings
@@ -192,9 +191,6 @@ private:
     UDateFormatStyle fTimeStyle;
     Locale  fLocale;
     
-    CalendarData *fCalData; // holds a reference to the resource data
-    UResourceBundle *fStrings; // the array of strings
-    
     int32_t fDayMin;    // day id of lowest #
     int32_t fDayMax;    // day id of highest #
     int32_t fDatesLen;    // Length of array
@@ -212,14 +208,8 @@ private:
     /** 
      * Load the Date string array
      */
-    void loadDates(UErrorCode &status) const;
+    void loadDates(UErrorCode &status);
     
-    /**
-     * Load the Strings resource needed for relative dates. Returns an error and null if it could not be loaded.
-     * Semantic const.
-     */
-    UResourceBundle *getStrings(UErrorCode &status) const;
-
     /**
      * @return the number of days in "until-now"
      */

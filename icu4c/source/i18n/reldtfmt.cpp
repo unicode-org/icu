@@ -28,8 +28,8 @@ U_NAMESPACE_BEGIN
  */
 struct URelativeString {
     int32_t offset;         /** offset of this item, such as, the relative date **/
-    const UChar* string;    /** string, or NULL if not set **/
     int32_t len;            /** length of the string **/
+    const UChar* string;    /** string, or NULL if not set **/
 };
 
 
@@ -38,13 +38,19 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RelativeDateFormat)
 RelativeDateFormat::RelativeDateFormat(const RelativeDateFormat& other) :
 DateFormat(other), fDateFormat(NULL), fTimeFormat(NULL), fCombinedFormat(NULL),
 fDateStyle(other.fDateStyle), fTimeStyle(other.fTimeStyle), fLocale(other.fLocale),
-fCalData(NULL), fStrings(NULL), fDatesLen(0), fDates(NULL)
+fDatesLen(other.fDatesLen), fDayMin(other.fDayMin), fDayMax(other.fDayMax),
+fDates(NULL)
 {
     if(other.fDateFormat != NULL) {
         fDateFormat = (DateFormat*)other.fDateFormat->clone();
     } else {
         fDateFormat = NULL;
     }
+    if (fDatesLen > 0) {
+        fDates = (URelativeString*) uprv_malloc(sizeof(fDates[0])*fDatesLen);
+        uprv_memcpy(fDates, other.fDates, sizeof(fDates[0])*fDatesLen);
+    }
+    //fCalendar = other.fCalendar->clone();
 /*    
     if(other.fTimeFormat != NULL) {
         fTimeFormat = (DateFormat*)other.fTimeFormat->clone();
@@ -56,7 +62,7 @@ fCalData(NULL), fStrings(NULL), fDatesLen(0), fDates(NULL)
 
 RelativeDateFormat::RelativeDateFormat( UDateFormatStyle timeStyle, UDateFormatStyle dateStyle, const Locale& locale, UErrorCode& status)
  : DateFormat(), fDateFormat(NULL), fTimeFormat(NULL), fCombinedFormat(NULL),
-fDateStyle(dateStyle), fTimeStyle(timeStyle), fCalData(NULL), fStrings(NULL), fDatesLen(0), fDates(NULL)
+fDateStyle(dateStyle), fTimeStyle(timeStyle), fDatesLen(0), fDates(NULL)
  {
     if(U_FAILURE(status) ) {
         return;
@@ -75,6 +81,7 @@ fDateStyle(dateStyle), fTimeStyle(timeStyle), fCalData(NULL), fStrings(NULL), fD
     
     // Initialize the parent fCalendar, so that parse() works correctly.
     initializeCalendar(NULL, locale, status);
+    loadDates(status);
 }
 
 RelativeDateFormat::~RelativeDateFormat() {
@@ -82,14 +89,11 @@ RelativeDateFormat::~RelativeDateFormat() {
     delete fTimeFormat;
     delete fCombinedFormat;
     uprv_free(fDates);
-// do NOT: delete fStrings - as they are loaded from mapped memory, all owned by fCalData.
-    delete fCalData;
 }
 
 
 Format* RelativeDateFormat::clone(void) const {
-    RelativeDateFormat *other = new RelativeDateFormat(*this);
-    return other;
+    return new RelativeDateFormat(*this);
 }
 
 UBool RelativeDateFormat::operator==(const Format& other) const {
@@ -202,39 +206,8 @@ RelativeDateFormat::parse(const UnicodeString& text, UErrorCode& status) const
 }
 
 
-UResourceBundle *RelativeDateFormat::getStrings(UErrorCode& status) const {
-    if(fCalData == NULL) {
-        // fCalData owns the subsequent strings
-        ((RelativeDateFormat*)this)->fCalData = new CalendarData(fLocale, "gregorian", status);
-    }
-    
-    if(fStrings == NULL) {
-        // load the string object
-        UResourceBundle *theStrings = fCalData->getByKey3("fields", "day", "relative", status);
-        
-        if (U_FAILURE(status)) {
-            return NULL;
-        }
-        
-        ((RelativeDateFormat*)this)->fStrings = theStrings; // cast away const
-    }
-    return fStrings;
-}
-
 const UChar *RelativeDateFormat::getStringForDay(int32_t day, int32_t &len, UErrorCode &status) const {
     if(U_FAILURE(status)) {
-        return NULL;
-    }
-    
-    if(fDates == NULL) {
-        loadDates(status);
-        if(U_FAILURE(status)) {
-            return NULL;
-        }
-    }
-    
-    // no strings.
-    if(fDatesLen == 0) {
         return NULL;
     }
     
@@ -254,22 +227,21 @@ const UChar *RelativeDateFormat::getStringForDay(int32_t day, int32_t &len, UErr
     return NULL;  // not found.
 }
 
-void RelativeDateFormat::loadDates(UErrorCode &status) const {
-    UResourceBundle *strings = getStrings(status);
+void RelativeDateFormat::loadDates(UErrorCode &status) {
+    CalendarData calData(fLocale, "gregorian", status);
+    UResourceBundle *strings = calData.getByKey3("fields", "day", "relative", status);
 
-    RelativeDateFormat *nonConstThis = ((RelativeDateFormat*)this); // cast away const.
-    
     // set up min/max 
-    nonConstThis->fDayMin=-1;
-    nonConstThis->fDayMax=1;
+    fDayMin=-1;
+    fDayMax=1;
 
     if(U_FAILURE(status)) {
-        nonConstThis->fDatesLen=0;
+        fDatesLen=0;
         return;
     }
 
-    nonConstThis->fDatesLen = ures_getSize(strings);
-    nonConstThis->fDates = (URelativeString*) uprv_malloc(sizeof(fDates[0])*fDatesLen);
+    fDatesLen = ures_getSize(strings);
+    fDates = (URelativeString*) uprv_malloc(sizeof(fDates[0])*fDatesLen);
 
     // Load in each item into the array...
     int n = 0;
@@ -295,19 +267,20 @@ void RelativeDateFormat::loadDates(UErrorCode &status) const {
         
         // set min/max
         if(offset < fDayMin) {
-            nonConstThis->fDayMin = offset;
+            fDayMin = offset;
         }
         if(offset > fDayMax) {
-            nonConstThis->fDayMax = offset;
+            fDayMax = offset;
         }
         
         // copy the string pointer
-        nonConstThis->fDates[n].offset = offset;
-        nonConstThis->fDates[n].string = aString;
-        nonConstThis->fDates[n].len = aLen; 
+        fDates[n].offset = offset;
+        fDates[n].string = aString;
+        fDates[n].len = aLen; 
 
         n++;
     }
+    ures_close(subString);
     
     // the fDates[] array could be sorted here, for direct access.
 }
