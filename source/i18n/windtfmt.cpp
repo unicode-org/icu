@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 2005-2006, International Business Machines
+*   Copyright (C) 2005-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -69,7 +69,7 @@ UnicodeString *getTimeDateFormat(const Calendar *cal, const Locale *locale, UErr
     }
 
     if (U_FAILURE(status)) {
-        UChar defaultPattern[] = {0x007B, 0x0031, 0x007D, 0x0020, 0x007B, 0x0030, 0x007D, 0x0000}; // "{1} {0}"
+        static const UChar defaultPattern[] = {0x007B, 0x0031, 0x007D, 0x0020, 0x007B, 0x0030, 0x007D, 0x0000}; // "{1} {0}"
         return new UnicodeString(defaultPattern, ARRAY_SIZE(defaultPattern));
     }
 
