@@ -2304,6 +2304,7 @@ void CalendarRegressionTest::TestT5555()
     if (U_FAILURE(ec) || yy != 2010 || mm != UCAL_FEBRUARY || dd != 24 || ee != UCAL_WEDNESDAY) {
         errln("FAIL: got date %4d/%02d/%02d, expected 210/02/24: ", yy, mm + 1, dd);
     }
+    delete cal;
 }
 
 /**
