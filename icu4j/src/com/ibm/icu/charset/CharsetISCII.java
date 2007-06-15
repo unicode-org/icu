@@ -810,8 +810,10 @@ class CharsetISCII extends CharsetICU {
                             }
                         }
                         /* reset */
-                        data.contextCharToUnicode = NO_CHAR_MARKER;
-                        continue;
+                        if (!gotoCallBack) {
+                            data.contextCharToUnicode = NO_CHAR_MARKER;
+                            continue;
+                        }
                     } else if (data.contextCharToUnicode == EXT) {
                         /* check if sourceChar is in 0xA1 - 0xEE range */
                         if (((short)(EXT_RANGE_END - sourceChar) & UConverterConstants.UNSIGNED_BYTE_MASK) <= (EXT_RANGE_END - EXT_RANGE_BEGIN)) {
