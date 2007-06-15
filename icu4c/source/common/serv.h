@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2006, International Business Machines Corporation.       *
+ * Copyright (C) 2001-2007, International Business Machines Corporation.       *
  * All Rights Reserved.                                                        *
  *******************************************************************************
  */
@@ -430,12 +430,6 @@ public:
 private:
   StringPair(const UnicodeString& displayName, const UnicodeString& id);
 };
-
-/**
- * Deleter for StringPairs
- */
-U_CAPI void U_EXPORT2
-userv_deleteStringPair(void *obj);
 
 /*******************************************************************
  * ICUService
