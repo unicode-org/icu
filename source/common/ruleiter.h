@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2006, International Business Machines
+* Copyright (c) 2003-2007, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -186,9 +186,10 @@ public:
      * resynchronize the iterator.
      * @param result a string to receive the characters to be returned
      * by future calls to next()
+     * @param maxLookAhead The maximum to copy into the result.
      * @return a reference to result
      */
-    UnicodeString& lookahead(UnicodeString& result) const;
+    UnicodeString& lookahead(UnicodeString& result, int32_t maxLookAhead = -1) const;
 
     /**
      * Advances the position by the given number of 16-bit code units.

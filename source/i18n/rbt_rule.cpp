@@ -292,6 +292,7 @@ UBool TransliterationRule::masks(const TransliterationRule& r2) const {
     int32_t left2 = r2.anteContextLength;
     int32_t right = len - left;
     int32_t right2 = r2.pattern.length() - left2;
+    int32_t cachedCompare = r2.pattern.compare(left2 - left, len, pattern);
 
     // TODO Clean this up -- some logic might be combinable with the
     // next statement.
@@ -299,7 +300,7 @@ UBool TransliterationRule::masks(const TransliterationRule& r2) const {
     // Test for anchor masking
     if (left == left2 && right == right2 &&
         keyLength <= r2.keyLength &&
-        0 == r2.pattern.compare(0, len, pattern)) {
+        0 == cachedCompare) {
         // The following boolean logic implements the table above
         return (flags == r2.flags) ||
             (!(flags & ANCHOR_START) && !(flags & ANCHOR_END)) ||
@@ -309,7 +310,7 @@ UBool TransliterationRule::masks(const TransliterationRule& r2) const {
     return left <= left2 &&
         (right < right2 ||
          (right == right2 && keyLength <= r2.keyLength)) &&
-        0 == r2.pattern.compare(left2 - left, len, pattern);
+         (0 == cachedCompare);
 }
 
 static inline int32_t posBefore(const Replaceable& str, int32_t pos) {
