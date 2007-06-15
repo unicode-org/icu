@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 2005-2006, International Business Machines
+*   Copyright (C) 2005-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -29,7 +29,7 @@ U_CDECL_END
 U_CAPI UBool U_EXPORT2
 uprv_getWindowsTimeZoneInfo(TIME_ZONE_INFORMATION *zoneInfo, const UChar *icuid, int32_t length);
 
-U_CAPI const char* U_EXPORT2
+U_CFUNC const char* U_EXPORT2
 uprv_detectWindowsTimeZone();
 
 #endif /* #ifdef U_WINDOWS */

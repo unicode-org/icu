@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2006, International Business Machines
+*   Copyright (C) 2004-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -58,7 +58,7 @@ ucase_swap(const UDataSwapper *ds,
            const void *inData, int32_t length, void *outData,
            UErrorCode *pErrorCode);
 
-U_CAPI void U_EXPORT2
+U_CFUNC void U_EXPORT2
 ucase_addPropertyStarts(const UCaseProps *csp, const USetAdder *sa, UErrorCode *pErrorCode);
 
 /**
@@ -108,7 +108,7 @@ ucase_fold(const UCaseProps *csp, UChar32 c, uint32_t options);
  * - for sharp s include ss
  * - for k include the Kelvin sign
  */
-U_CAPI void U_EXPORT2
+U_CFUNC void U_EXPORT2
 ucase_addCaseClosure(const UCaseProps *csp, UChar32 c, const USetAdder *sa);
 
 /**
@@ -123,7 +123,7 @@ ucase_addCaseClosure(const UCaseProps *csp, UChar32 c, const USetAdder *sa);
  *
  * @return TRUE if the string was found
  */
-U_CAPI UBool U_EXPORT2
+U_CFUNC UBool U_EXPORT2
 ucase_addStringCaseClosure(const UCaseProps *csp, const UChar *s, int32_t length, const USetAdder *sa);
 
 /** @return UCASE_NONE, UCASE_LOWER, UCASE_UPPER, UCASE_TITLE */
