@@ -1634,6 +1634,7 @@ void TimeZoneTest::TestFebruary() {
             }
         }
     }
+    delete tz2;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
