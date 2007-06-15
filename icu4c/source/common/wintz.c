@@ -453,7 +453,7 @@ uprv_getWindowsTimeZoneInfo(TIME_ZONE_INFORMATION *zoneInfo, const UChar *icuid,
  * Main Windows time zone detection function.  Returns the Windows
  * time zone, translated to an ICU time zone, or NULL upon failure.
  */
-U_CAPI const char* U_EXPORT2
+U_CFUNC const char* U_EXPORT2
 uprv_detectWindowsTimeZone() {
     LONG result;
     HKEY hkey;

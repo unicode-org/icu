@@ -316,10 +316,12 @@ StringPair::StringPair(const UnicodeString& _displayName,
 {
 }
 
-U_CAPI void U_EXPORT2
+U_CDECL_BEGIN
+static void U_CALLCONV
 userv_deleteStringPair(void *obj) {
     U_NAMESPACE_USE delete (StringPair*) obj;
 }
+U_CDECL_END
 
 /*
 ******************************************************************
@@ -736,6 +738,7 @@ ICUService::getDisplayNames(UVector& result,
                             UErrorCode& status) const 
 {
     result.removeAllElements();
+    result.setDeleter(userv_deleteStringPair);
     if (U_SUCCESS(status)) {
         ICUService* ncthis = (ICUService*)this; // cast away semantic const
         Mutex mutex(&ncthis->lock);

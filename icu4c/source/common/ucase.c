@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2006, International Business Machines
+*   Copyright (C) 2004-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -333,7 +333,7 @@ _enumPropertyStartsRange(const void *context, UChar32 start, UChar32 limit, uint
     return TRUE;
 }
 
-U_CAPI void U_EXPORT2
+U_CFUNC void U_EXPORT2
 ucase_addPropertyStarts(const UCaseProps *csp, const USetAdder *sa, UErrorCode *pErrorCode) {
     if(U_FAILURE(*pErrorCode)) {
         return;
@@ -466,7 +466,7 @@ ucase_totitle(const UCaseProps *csp, UChar32 c) {
     return c;
 }
 
-U_CAPI void U_EXPORT2
+U_CFUNC void U_EXPORT2
 ucase_addCaseClosure(const UCaseProps *csp, UChar32 c, const USetAdder *sa) {
     uint16_t props;
 
@@ -608,7 +608,7 @@ strcmpMax(const UChar *s, int32_t length, const UChar *t, int32_t max) {
     }
 }
 
-U_CAPI UBool U_EXPORT2
+U_CFUNC UBool U_EXPORT2
 ucase_addStringCaseClosure(const UCaseProps *csp, const UChar *s, int32_t length, const USetAdder *sa) {
     const UChar *unfold, *p;
     int32_t i, start, limit, result, unfoldRows, unfoldRowWidth, unfoldStringWidth;

@@ -174,7 +174,6 @@ UObject *UObjectTest::testClass(UObject *obj,
 #include "unicode/coll.h"
 #include "unicode/curramt.h"
 #include "unicode/datefmt.h"
-#include "unicode/dbbi.h"
 #include "unicode/dcfmtsym.h"
 #include "unicode/decimfmt.h"
 #include "unicode/dtfmtsym.h"
