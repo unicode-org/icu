@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2001-2006, International Business Machines                   *
+* Copyright (C) 2001-2007, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -48,9 +48,9 @@ u_cleanup(void)
     cmemory_cleanup();       /* undo any heap functions set by u_setMemoryFunctions(). */
     gICUInitialized = FALSE;
     UTRACE_EXIT();           /* Must be before utrace_cleanup(), which turns off tracing. */
-#if U_ENABLE_TRACING
+/*#if U_ENABLE_TRACING*/
     utrace_cleanup();
-#endif
+/*#endif*/
 }
 
 /*
