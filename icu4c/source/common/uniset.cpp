@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2006, International Business Machines
+*   Copyright (C) 1999-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -502,7 +502,8 @@ UBool UnicodeSet::matchesIndexValue(uint8_t v) const {
      * time zone month containment logic.)
      */
     int32_t i;
-    for (i=0; i<getRangeCount(); ++i) {
+    int32_t rangeCount=getRangeCount();
+    for (i=0; i<rangeCount; ++i) {
         UChar32 low = getRangeStart(i);
         UChar32 high = getRangeEnd(i);
         if ((low & ~0xFF) == (high & ~0xFF)) {
