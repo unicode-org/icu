@@ -14,7 +14,7 @@
 #include "unicode/symtable.h"
 #include "util.h"
 
-/* \U87654321 + 2 */
+/* \U87654321 or \ud800\udc00 */
 #define MAX_U_NOTATION_LEN 12
 
 U_NAMESPACE_BEGIN
