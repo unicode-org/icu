@@ -1012,7 +1012,7 @@ public class TestCharset extends TestFmwk {
         }
     }
 
-    private void smBufEncode(CharsetEncoder encoder, String encoding, CharBuffer source, ByteBuffer target, boolean throwException) throws BufferOverflowException {
+    private void smBufEncode(CharsetEncoder encoder, String encoding, CharBuffer source, ByteBuffer target, boolean throwException) throws Exception, BufferOverflowException {
         logln("Running smBufEncode for "+ encoding + " with class " + encoder);
         CharBuffer mySource = source.duplicate();
         ByteBuffer myTarget = ByteBuffer.allocate(target.capacity());
@@ -1027,6 +1027,9 @@ public class TestCharset extends TestFmwk {
             result = encoder.encode(mySource, myTarget, true);
 
             if (result.isError()) {
+                if (throwException) {
+                    throw new Exception();
+                }
                 errln("Test complete while encoding failed. "+result.toString());
             }
             if (result.isOverflow()) {
@@ -1728,7 +1731,7 @@ public class TestCharset extends TestFmwk {
             smBufEncode(encoder, "ASCII", charBuffer, byteBufferTest, true);
             errln("Overflow exception while encoding ASCII should have been thrown.");
         }
-        catch (BufferOverflowException ex) {
+        catch (Exception ex) {
         }
     }
     //Test CharsetUTF7
@@ -1757,8 +1760,8 @@ public class TestCharset extends TestFmwk {
         smBufEncode(encoder, "UTF-7", us, bs);
         
         //The rest of the code in this method is to provide better code coverage
-        CharBuffer ccus = CharBuffer.allocate(0x100);
-        ByteBuffer ccbs = ByteBuffer.allocate(0x100);
+        CharBuffer ccus = CharBuffer.allocate(0x10);
+        ByteBuffer ccbs = ByteBuffer.allocate(0x10);
         
         //start of charset decoder code coverage code
         //test for accurate illegal and control character checking
@@ -2086,11 +2089,24 @@ public class TestCharset extends TestFmwk {
         ccus.position(0);
         
         try {
-            smBufEncode(encoder, "UTF-7-CC-EN-9", ccus, ccbs, true);
+            smBufEncode(encoder, "UTF-7-CC-EN-10", ccus, ccbs, true);
             errln("Exception while encoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
         }  
+        
+        ccbs.clear();
+        ccus.clear();
+        
+        //test for overflow buffer error
+        ccus.put((char)0x2262);
+        ccbs.put((byte)0x2b); ccbs.put((byte)0x49); ccbs.put((byte)0x6d); ccbs.put((byte)0x49);
+        
+        ccbs.limit(ccbs.position());
+        ccbs.position(0);
+        ccus.limit(ccus.position());
+        ccus.position(0);
+        smBufEncode(encoder, "UTF-7-CC-EN-11", ccus, ccbs);
         //end of charset encoder code coverage code
     }
     //Test Charset ISCII
@@ -2254,5 +2270,183 @@ public class TestCharset extends TestFmwk {
         smBufDecode(decoder, "ISCII-part1", bsr, us);
         smBufEncode(encoder, "ISCII-part2", us, bs);  
         smBufDecode(decoder, "ISCII-part3", bs, us);
+        
+        //The rest of the code in this method is to provide better code coverage
+        CharBuffer ccus = CharBuffer.allocate(0x10);
+        ByteBuffer ccbs = ByteBuffer.allocate(0x10);
+        
+        //start of charset decoder code coverage code
+        //test overflow buffer
+        ccbs.put((byte)0x49);
+        
+        ccbs.limit(ccbs.position());
+        ccbs.position(0);
+        ccus.limit(0);
+        ccus.position(0);
+        
+        try {
+            smBufDecode(decoder, "ISCII-CC-DE-1", ccbs, ccus, true);
+            errln("Exception while decoding ISCII should have been thrown.");
+        }
+        catch (Exception ex) {
+        }
+        
+        ccbs.clear();
+        ccus.clear();
+        
+        //test atr overflow buffer
+        ccbs.put((byte)0xEF); ccbs.put((byte)0x40); ccbs.put((byte)0xEF); ccbs.put((byte)0x20);
+        ccus.put((char)0x00);
+        
+        ccbs.limit(ccbs.position());
+        ccbs.position(0);
+        ccus.limit(ccus.position());
+        ccus.position(0);
+        
+        try {
+            smBufDecode(decoder, "ISCII-CC-DE-2", ccbs, ccus, true);
+            errln("Exception while decoding ISCII should have been thrown.");
+        }
+        catch (Exception ex) {
+        }
+        
+        //end of charset decoder code coverage code
+        
+        ccbs.clear();
+        ccus.clear();
+      
+        //start of charset encoder code coverage code
+        //test ascii overflow buffer
+        ccus.put((char)0x41);
+        
+        ccus.limit(ccus.position());
+        ccus.position(0);
+        ccbs.limit(0);
+        ccbs.position(0);
+           
+        try {
+            smBufEncode(encoder, "ISCII-CC-EN-1", ccus, ccbs, true);
+            errln("Exception while encoding ISCII should have been thrown.");
+        }
+        catch (Exception ex) {
+        }
+        
+        ccbs.clear();
+        ccus.clear();
+        
+        //test ascii overflow buffer
+        ccus.put((char)0x0A);
+        ccbs.put((byte)0x00);
+        
+        ccus.limit(ccus.position());
+        ccus.position(0);
+        ccbs.limit(ccbs.position());
+        ccbs.position(0);
+           
+        try {
+            smBufEncode(encoder, "ISCII-CC-EN-2", ccus, ccbs, true);
+            errln("Exception while encoding ISCII should have been thrown.");
+        }
+        catch (Exception ex) {
+        }
+        
+        ccbs.clear();
+        ccus.clear();
+        
+        //test surrogate malform
+        ccus.put((char)0x06E3);
+        ccbs.put((byte)0x00);
+        
+        ccus.limit(ccus.position());
+        ccus.position(0);
+        ccbs.limit(ccbs.position());
+        ccbs.position(0);
+           
+        try {
+            smBufEncode(encoder, "ISCII-CC-EN-3", ccus, ccbs, true);
+            errln("Exception while encoding ISCII should have been thrown.");
+        }
+        catch (Exception ex) {
+        }
+        
+        ccbs.clear();
+        ccus.clear();
+        
+        //test surrogate malform
+        ccus.put((char)0xD801); ccus.put((char)0xDD01);
+        ccbs.put((byte)0x00);
+        
+        ccus.limit(ccus.position());
+        ccus.position(0);
+        ccbs.limit(ccbs.position());
+        ccbs.position(0);
+           
+        try {
+            smBufEncode(encoder, "ISCII-CC-EN-4", ccus, ccbs, true);
+            errln("Exception while encoding ISCII should have been thrown.");
+        }
+        catch (Exception ex) {
+        }
+        
+        ccbs.clear();
+        ccus.clear();
+        
+        //test trail surrogate malform
+        ccus.put((char)0xDD01); 
+        ccbs.put((byte)0x00);
+        
+        ccus.limit(ccus.position());
+        ccus.position(0);
+        ccbs.limit(ccbs.position());
+        ccbs.position(0);
+           
+        try {
+            smBufEncode(encoder, "ISCII-CC-EN-5", ccus, ccbs, true);
+            errln("Exception while encoding ISCII should have been thrown.");
+        }
+        catch (Exception ex) {
+        }
+        
+        ccbs.clear();
+        ccus.clear();
+        
+        //test lead surrogates malform
+        ccus.put((char)0xD801); ccus.put((char)0xD802); 
+        ccbs.put((byte)0x00);
+        
+        ccus.limit(ccus.position());
+        ccus.position(0);
+        ccbs.limit(ccbs.position());
+        ccbs.position(0);
+           
+        try {
+            smBufEncode(encoder, "ISCII-CC-EN-6", ccus, ccbs, true);
+            errln("Exception while encoding ISCII should have been thrown.");
+        }
+        catch (Exception ex) {
+        }
+        
+        ccus.clear();
+        ccbs.clear();
+        
+        //test overflow buffer
+        ccus.put((char)0x0901); 
+        ccbs.put((byte)0x00);
+        
+        ccus.limit(ccus.position());
+        ccus.position(0);
+        ccbs.limit(ccbs.position());
+        ccbs.position(0);
+           
+        cs = provider.charsetForName("ISCII,version=0");
+        encoder = cs.newEncoder();
+        
+        try {
+            smBufEncode(encoder, "ISCII-CC-EN-7", ccus, ccbs, true);
+            errln("Exception while encoding ISCII should have been thrown.");
+        }
+        catch (Exception ex) {
+        }
+        //end of charset encoder code coverage code
     }
 }
