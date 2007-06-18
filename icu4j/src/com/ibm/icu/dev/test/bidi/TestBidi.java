@@ -21,8 +21,6 @@ public class TestBidi extends BidiTest {
     private static final int MAXLEN = 256;
     private static final String levelString = "............................";
 
-    private int testNumber;
-
     public void testBidi() {
         Bidi bidi;
         Bidi bidiLine;
@@ -51,15 +49,15 @@ public class TestBidi extends BidiTest {
                 bidi.setPara(string, paraLevel, null);
                 logln("Bidi.setPara(tests[" + testNumber + "] OK, direction "
                         + bidi.getDirection() + " paraLevel "
-                        + bidi.getBaseLevel());
+                        + paraLevel);
             } catch (Exception e) {
                 errln("Bidi.setPara(tests[" + testNumber + "] failed, direction "
                         + bidi.getDirection() + " paraLevel "
-                        + bidi.getBaseLevel());
+                        + paraLevel);
             }
             lineStart = test.lineStart;
             if (lineStart == -1) {
-                doTest(bidi, test, 0, countRunsFirst);
+                doTest(bidi, testNumber, test, 0, countRunsFirst);
             } else {
                 try {
                     bidiLine = bidi.setLine(lineStart, test.lineLimit);
@@ -67,7 +65,7 @@ public class TestBidi extends BidiTest {
                             + "), in tests[" + testNumber + "] OK, direction "
                             + bidiLine.getDirection() + " paraLevel "
                             + bidiLine.getBaseLevel());
-                    doTest(bidiLine, test, lineStart, countRunsFirst);
+                    doTest(bidiLine, testNumber, test, lineStart, countRunsFirst);
                 } catch (Exception e)  {
                     errln("Bidi.setLine(" + lineStart + ", " + test.lineLimit
                             + "), in runAll test[" + testNumber + "] failed, "
@@ -78,8 +76,8 @@ public class TestBidi extends BidiTest {
         }
     }
 
-    private void doTest(Bidi bidi, TestData test, int lineStart,
-                        boolean countRunsFirst) {
+    private void doTest(Bidi bidi, int testNumber, TestData test,
+                        int lineStart, boolean countRunsFirst) {
         short[] dirProps = test.dirProps;
         byte[] levels = test.levels;
         int[] visualMap = test.visualMap;
@@ -97,7 +95,7 @@ public class TestBidi extends BidiTest {
             logln("Calling Bidi.getLogicalMap() first.");
         }
 
-        _testReordering(bidi);
+        _testReordering(bidi, testNumber);
 
         for (i = 0; i < len; ++i) {
             logln(i + "  " + bidi.getLevelAt(i) + "  " + levelString
@@ -182,7 +180,7 @@ public class TestBidi extends BidiTest {
         log("\n\n");
     }
 
-    private void _testReordering(Bidi bidi) {
+    private void _testReordering(Bidi bidi, int testNumber) {
         int[] logicalMap1;
         int[] logicalMap2;
         int[] logicalMap3;
@@ -203,12 +201,14 @@ public class TestBidi extends BidiTest {
         logicalMap1 = bidi.getLogicalMap();
         if (logicalMap1 == null) {
             errln("getLogicalMap in test " + testNumber + " is null");
+            logicalMap1 = new int[0];
         }
 
         visualMap1 = bidi.getVisualMap();
 
         if (visualMap1 == null) {
             errln("getVisualMap() in test " + testNumber + " is null");
+            visualMap1 = new int[0];
         }
 
         /* invert them both */
