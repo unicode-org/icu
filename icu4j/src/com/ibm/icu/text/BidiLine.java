@@ -4,6 +4,9 @@
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
+/* Written by Simon Montagu, Matitiahu Allouche
+ * (ported from C code written by Markus W. Scherer)
+ */
 
 package com.ibm.icu.text;
 
@@ -79,7 +82,7 @@ final class BidiLine {
 
     static void setTrailingWSStart(Bidi bidi)
     {
-        short[] dirProps = bidi.dirProps;
+        byte[] dirProps = bidi.dirProps;
         byte[] levels = bidi.levels;
         int start = bidi.length;
         byte paraLevel = bidi.getParaLevel();
@@ -235,7 +238,7 @@ final class BidiLine {
                     Bidi.DIRECTION_RIGHT_TO_LEFT : Bidi.DIRECTION_LEFT_TO_RIGHT);
             lineBidi.trailingWSStart = lineBidi.runCount = 0;
 
-            lineBidi.dirProps = new short[0];
+            lineBidi.dirProps = new byte[0];
             lineBidi.levels = new byte[0];
         }
         lineBidi.paraBidi = paraBidi;     /* mark successful setLine */
@@ -293,7 +296,7 @@ final class BidiLine {
         /* this is done based on runs rather than on levels since levels have
            a special interpretation when REORDER_RUNS_ONLY
          */
-        BidiRun newRun = new BidiRun(), iRun = null;
+        BidiRun newRun = new BidiRun(), iRun = bidi.runs[0];
         int runCount = bidi.countRuns();
         int visualStart = 0, logicalLimit = 0;
 
@@ -336,7 +339,6 @@ final class BidiLine {
 
         /* fill and reorder the single run */
         bidi.runs[0] = new BidiRun(0, bidi.length, level);
-        bidi.logicalRuns = bidi.runs;
     }
 
     /* reorder the runs array (L2) ---------------------------------------------- */
@@ -373,7 +375,6 @@ final class BidiLine {
      * reordering, then runCount is adjusted accordingly.
      */
     private static void reorderLine(Bidi bidi, byte minLevel, byte maxLevel) {
-        bidi.logicalRuns = (BidiRun[])(bidi.runs.clone());
 
         /* nothing to do? */
         if (maxLevel<=(minLevel|1)) {

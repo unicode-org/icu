@@ -23,15 +23,7 @@
 
 //TODO: make sample program do something simple but real and complete
 
-//TODO: get rid of logicalRuns[]
-
 //TODO: make order in exceptions thrown and sync with doc
-
-//TODO: document that getLogical/VisualIndex/Map do not work with most
-//      writeReordered options
-
-//TODO: check why STREAMING is mentioned in writeReordered options in the doc.
-
 
 package com.ibm.icu.text;
 
@@ -41,6 +33,7 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.text.AttributedCharacterIterator;
 import java.util.MissingResourceException;
+import java.util.Arrays;
 
 import com.ibm.icu.impl.UBiDiProps;
 import com.ibm.icu.lang.UCharacter;
@@ -157,7 +150,7 @@ import com.ibm.icu.lang.UCharacterDirection;
  * </ul>
  *
  *
- * @author Simon Montagu (ported from C code written by Markus W. Scherer)
+ * @author Simon Montagu, Matitiahu Allouche (ported from C code written by Markus W. Scherer)
  * @draft ICU 3.8
  *
  *
@@ -446,7 +439,7 @@ public class Bidi {
     class InsertPoints {
         int size;
         int confirmed;
-        Point[] points;
+        Point[] points = new Point[0];
     }
 
     /** Paragraph level setting.
@@ -769,25 +762,25 @@ public class Bidi {
      *   is easier with the same names for the Bidi types in the code as there.
      *   See UCharacterDirection
      */
-    static final short L   = UCharacterDirection.LEFT_TO_RIGHT;
-    static final short R   = UCharacterDirection.RIGHT_TO_LEFT;
-    static final short EN  = UCharacterDirection.EUROPEAN_NUMBER;
-    static final short ES  = UCharacterDirection.EUROPEAN_NUMBER_SEPARATOR;
-    static final short ET  = UCharacterDirection.EUROPEAN_NUMBER_TERMINATOR;
-    static final short AN  = UCharacterDirection.ARABIC_NUMBER;
-    static final short CS  = UCharacterDirection.COMMON_NUMBER_SEPARATOR;
-    static final short B   = UCharacterDirection.BLOCK_SEPARATOR;
-    static final short S   = UCharacterDirection.SEGMENT_SEPARATOR;
-    static final short WS  = UCharacterDirection.WHITE_SPACE_NEUTRAL;
-    static final short ON  = UCharacterDirection.OTHER_NEUTRAL;
-    static final short LRE = UCharacterDirection.LEFT_TO_RIGHT_EMBEDDING;
-    static final short LRO = UCharacterDirection.LEFT_TO_RIGHT_OVERRIDE;
-    static final short AL  = UCharacterDirection.RIGHT_TO_LEFT_ARABIC;
-    static final short RLE = UCharacterDirection.RIGHT_TO_LEFT_EMBEDDING;
-    static final short RLO = UCharacterDirection.RIGHT_TO_LEFT_OVERRIDE;
-    static final short PDF = UCharacterDirection.POP_DIRECTIONAL_FORMAT;
-    static final short NSM = UCharacterDirection.DIR_NON_SPACING_MARK;
-    static final short BN  = UCharacterDirection.BOUNDARY_NEUTRAL;
+    static final byte L   = UCharacterDirection.LEFT_TO_RIGHT;
+    static final byte R   = UCharacterDirection.RIGHT_TO_LEFT;
+    static final byte EN  = UCharacterDirection.EUROPEAN_NUMBER;
+    static final byte ES  = UCharacterDirection.EUROPEAN_NUMBER_SEPARATOR;
+    static final byte ET  = UCharacterDirection.EUROPEAN_NUMBER_TERMINATOR;
+    static final byte AN  = UCharacterDirection.ARABIC_NUMBER;
+    static final byte CS  = UCharacterDirection.COMMON_NUMBER_SEPARATOR;
+    static final byte B   = UCharacterDirection.BLOCK_SEPARATOR;
+    static final byte S   = UCharacterDirection.SEGMENT_SEPARATOR;
+    static final byte WS  = UCharacterDirection.WHITE_SPACE_NEUTRAL;
+    static final byte ON  = UCharacterDirection.OTHER_NEUTRAL;
+    static final byte LRE = UCharacterDirection.LEFT_TO_RIGHT_EMBEDDING;
+    static final byte LRO = UCharacterDirection.LEFT_TO_RIGHT_OVERRIDE;
+    static final byte AL  = UCharacterDirection.RIGHT_TO_LEFT_ARABIC;
+    static final byte RLE = UCharacterDirection.RIGHT_TO_LEFT_EMBEDDING;
+    static final byte RLO = UCharacterDirection.RIGHT_TO_LEFT_OVERRIDE;
+    static final byte PDF = UCharacterDirection.POP_DIRECTIONAL_FORMAT;
+    static final byte NSM = UCharacterDirection.DIR_NON_SPACING_MARK;
+    static final byte BN  = UCharacterDirection.BOUNDARY_NEUTRAL;
 
     /**
      * Value returned by <code>BidiClassifier</code> when there is no need to
@@ -795,8 +788,8 @@ public class Bidi {
      * @see BidiClassifier
      * @draft ICU 3.8
      */
-    public static final short CLASS_DEFAULT = UCharacterDirection
-                                              .CHAR_DIRECTION_COUNT;
+    public static final int CLASS_DEFAULT = UCharacterDirection
+                                            .CHAR_DIRECTION_COUNT;
 
     private static final char CR = '\r';
     private static final char LF = '\n';
@@ -806,9 +799,6 @@ public class Bidi {
     static final int RLM_BEFORE = 4;
     static final int RLM_AFTER = 8;
 
-////    private static final char uLRM = '\u200e';
-////    private static final char uRLM = '\u200f';
-////    private static final char uLRE = '\u202a';
     /*
      * reference to parent paragraph object (reference to self if this object is
      * a paragraph object); set to null in a newly opened object; set to a
@@ -842,10 +832,9 @@ public class Bidi {
     boolean             mayAllocateRuns;
 
     /* arrays with one value per text-character */
-    short[]             dirPropsMemory = new short[1];
+    byte[]              dirPropsMemory = new byte[1];
     byte[]              levelsMemory = new byte[1];
-//TODO: change dirProps to array of bytes. Also all DirProp variables.
-    short[]             dirProps;
+    byte[]              dirProps;
     byte[]              levels;
 
     /* are we performing an approximation of the "inverse Bidi" algorithm? */
@@ -899,8 +888,10 @@ public class Bidi {
     /* for non-mixed text, we only need a tiny array of runs (no allocation) */
     BidiRun[]           simpleRuns = {new BidiRun()};
 
-    /* save the logical runs array for Java compatibility */
-    BidiRun[]           logicalRuns;
+    /* mapping of runs in logical order to visual order */
+    int[]               logicalToVisualRunsMap;
+    /* flag to indicate that the map has been updated */
+    boolean             isGoodLogicalToVisualRunsMap;
 
     /* customized class provider */
     BidiClassifier      customClassifier = null;
@@ -917,7 +908,7 @@ public class Bidi {
      * Abbreviations in these method names refer to names
      * used in the Bidi algorithm.
      */
-    static int DirPropFlag(short dir) {
+    static int DirPropFlag(byte dir) {
         return (1 << dir);
     }
 
@@ -929,21 +920,22 @@ public class Bidi {
      * The following bit is ORed to the property of characters in paragraphs
      * with contextual RTL direction when paraLevel is contextual.
      */
-    static short CONTEXT_RTL = (short)0x80;
-    static short NoContextRTL(short dir)
+    static final byte CONTEXT_RTL_SHIFT = 6;
+    static final byte CONTEXT_RTL = (byte)(1<<CONTEXT_RTL_SHIFT);   // 0x40
+    static byte NoContextRTL(byte dir)
     {
-        return (short)(dir & ~CONTEXT_RTL);
+        return (byte)(dir & ~CONTEXT_RTL);
     }
 
     /*
      * The following is a variant of DirProp.DirPropFlag() which ignores the
      * CONTEXT_RTL bit.
      */
-    static int DirPropFlagNC(short dir) {
+    static int DirPropFlagNC(byte dir) {
         return (1<<(NoContextRTL(dir)));
     }
 
-    static final int DirPropFlagMultiRuns = DirPropFlag((short)31);
+    static final int DirPropFlagMultiRuns = DirPropFlag((byte)31);
 
     /* to avoid some conditional statements, use tiny constant arrays */
     static final int DirPropFlagLR[] = { DirPropFlag(L), DirPropFlag(R) };
@@ -957,41 +949,41 @@ public class Bidi {
     /*
      *  are there any characters that are LTR?
      */
-    static int MASK_LTR =
+    static final int MASK_LTR =
         DirPropFlag(L)|DirPropFlag(EN)|DirPropFlag(AN)|DirPropFlag(LRE)|DirPropFlag(LRO);
 
     /*
      *  are there any characters that are RTL?
      */
-    static int MASK_RTL = DirPropFlag(R)|DirPropFlag(AL)|DirPropFlag(RLE)|DirPropFlag(RLO);
+    static final int MASK_RTL = DirPropFlag(R)|DirPropFlag(AL)|DirPropFlag(RLE)|DirPropFlag(RLO);
 
     /* explicit embedding codes */
-    static int MASK_LRX = DirPropFlag(LRE)|DirPropFlag(LRO);
-    static int MASK_RLX = DirPropFlag(RLE)|DirPropFlag(RLO);
-    static int MASK_OVERRIDE = DirPropFlag(LRO)|DirPropFlag(RLO);
-    static int MASK_EXPLICIT = MASK_LRX|MASK_RLX|DirPropFlag(PDF);
-    static int MASK_BN_EXPLICIT = DirPropFlag(BN)|MASK_EXPLICIT;
+    static final int MASK_LRX = DirPropFlag(LRE)|DirPropFlag(LRO);
+    static final int MASK_RLX = DirPropFlag(RLE)|DirPropFlag(RLO);
+    static final int MASK_OVERRIDE = DirPropFlag(LRO)|DirPropFlag(RLO);
+    static final int MASK_EXPLICIT = MASK_LRX|MASK_RLX|DirPropFlag(PDF);
+    static final int MASK_BN_EXPLICIT = DirPropFlag(BN)|MASK_EXPLICIT;
 
     /* paragraph and segment separators */
-    static int MASK_B_S = DirPropFlag(B)|DirPropFlag(S);
+    static final int MASK_B_S = DirPropFlag(B)|DirPropFlag(S);
 
     /* all types that are counted as White Space or Neutral in some steps */
-    static int MASK_WS = MASK_B_S|DirPropFlag(WS)|MASK_BN_EXPLICIT;
-    static int MASK_N = DirPropFlag(ON)|MASK_WS;
+    static final int MASK_WS = MASK_B_S|DirPropFlag(WS)|MASK_BN_EXPLICIT;
+    static final int MASK_N = DirPropFlag(ON)|MASK_WS;
 
     /* all types that are included in a sequence of
      * European Terminators for (W5) */
-    static int MASK_ET_NSM_BN = DirPropFlag(ET)|DirPropFlag(NSM)|MASK_BN_EXPLICIT;
+    static final int MASK_ET_NSM_BN = DirPropFlag(ET)|DirPropFlag(NSM)|MASK_BN_EXPLICIT;
 
     /* types that are neutrals or could becomes neutrals in (Wn) */
-    static int MASK_POSSIBLE_N = DirPropFlag(CS)|DirPropFlag(ES)|DirPropFlag(ET)|MASK_N;
+    static final int MASK_POSSIBLE_N = DirPropFlag(CS)|DirPropFlag(ES)|DirPropFlag(ET)|MASK_N;
 
     /*
      * These types may be changed to "e",
      * the embedding type (L or R) of the run,
      * in the Bidi algorithm (N2)
      */
-    static int MASK_EMBEDDING = DirPropFlag(NSM)|MASK_POSSIBLE_N;
+    static final int MASK_EMBEDDING = DirPropFlag(NSM)|MASK_POSSIBLE_N;
 
     /*
      *  the dirProp's L and R are defined to 0 and 1 values in UCharacterDirection.java
@@ -1008,11 +1000,8 @@ public class Bidi {
 
     byte GetParaLevelAt(int index)
     {
-//        if (index < 0 || index >= originalLength) {
-//            return getParaLevel();
-//        }
         return (defaultParaLevel != 0) ?
-                (byte)(dirProps[index]>>7) : paraLevel;
+                (byte)(dirProps[index]>>CONTEXT_RTL_SHIFT) : paraLevel;
     }
 
     static boolean IsBidiControlChar(int c)
@@ -1160,8 +1149,8 @@ public class Bidi {
             return sizeNeeded > length ? null : array;
         }
         /* we may try to grow or shrink */
-         /* TODO: when shrinking it should be possible to avoid the allocation altogether
-                 * and rely on this.length */
+        /* FOOD FOR THOUGHT: when shrinking it should be possible to avoid
+           the allocation altogether and rely on this.length */
         try {
             return Array.newInstance(arrayClass, sizeNeeded);
         } catch (Exception e) {
@@ -1172,11 +1161,11 @@ public class Bidi {
     /* helper methods for each allocated array */
     private boolean getDirPropsMemory(boolean mayAllocate, int length)
     {
-        Object array = getMemory(dirPropsMemory, Short.TYPE, mayAllocate, length);
+        Object array = getMemory(dirPropsMemory, Byte.TYPE, mayAllocate, length);
         if (array == null) {
             return false;
         } else {
-            dirPropsMemory = (short[]) array;
+            dirPropsMemory = (byte[]) array;
             return true;
         }
     }
@@ -1542,8 +1531,8 @@ public class Bidi {
         int i = 0, i0, i1;
         flags = 0;          /* collect all directionalities in the text */
         int uchar;
-        short dirProp;
-        short paraDirDefault = 0;   /* initialize to avoid compiler warnings */
+        byte dirProp;
+        byte paraDirDefault = 0;   /* initialize to avoid compiler warnings */
         boolean isDefaultLevel = IsDefaultLevel(paraLevel);
         /* for inverse BiDi, the default para level is set to RTL if there is a
            strong R or AL character at either end of the text                */
@@ -1560,9 +1549,9 @@ public class Bidi {
 
         int state;
         int paraStart = 0;                    /* index of first char in paragraph */
-        short paraDir;                        /* == CONTEXT_RTL within paragraphs
+        byte paraDir;                         /* == CONTEXT_RTL within paragraphs
                                                  starting with strong R char      */
-        short lastStrongDir=0;                /* for default level & inverse BiDi */
+        byte lastStrongDir=0;                 /* for default level & inverse BiDi */
         int lastStrongLTR=0;                  /* for STREAMING option             */
 
         if ((reorderingOptions & OPTION_STREAMING) > 0) {
@@ -1571,11 +1560,7 @@ public class Bidi {
         }
         if (isDefaultLevel) {
             paraDirDefault = ((paraLevel & 1) != 0) ? CONTEXT_RTL : 0;
-////            state = LOOKING_FOR_STRONG;
-////            paraStart = 0;
             paraDir = paraDirDefault;
-////            paraLevel &= 1;            /* set to default */
-////            paraLevelStillDefault = true;
             lastStrongDir = paraDirDefault;
             state = LOOKING_FOR_STRONG;
         } else {
@@ -1595,22 +1580,18 @@ public class Bidi {
             i += UTF16.getCharCount(uchar);
             i1 = i - 1; /* index of last code unit, gets the directional property */
 
-            dirProp = getCustomizedClass(uchar);
+            dirProp = (byte)getCustomizedClass(uchar);
             flags |= DirPropFlag(dirProp);
-            dirProps[i1] = (short)(dirProp | paraDir);
+            dirProps[i1] = (byte)(dirProp | paraDir);
             if (i1 > i0) {     /* set previous code units' properties to BN */
                 flags |= DirPropFlag(BN);
                 do {
-                    dirProps[--i1] = (short)(BN | paraDir);
+                    dirProps[--i1] = (byte)(BN | paraDir);
                 } while (i1 > i0);
             }
             if (state == LOOKING_FOR_STRONG) {
                 if (dirProp == L) {
                     state = FOUND_STRONG_CHAR;
-////                    if(paraLevelStillDefault) {
-////                        paraLevelStillDefault=false;
-////                        paraLevel=0;
-////                    }
                     if (paraDir != 0) {
                         paraDir = 0;
                         for (i1 = paraStart; i1 < i; i1++) {
@@ -1621,10 +1602,6 @@ public class Bidi {
                 }
                 if (dirProp == R || dirProp == AL) {
                     state = FOUND_STRONG_CHAR;
-////                    if (paraLevelStillDefault) {
-////                        paraLevelStillDefault=false;
-////                        paraLevel = 1;
-////                    }
                     if (paraDir == 0) {
                         paraDir = CONTEXT_RTL;
                         for (i1 = paraStart; i1 < i; i1++) {
@@ -1662,18 +1639,12 @@ public class Bidi {
                         state=LOOKING_FOR_STRONG;
                         paraStart = i;        /* i is index to next character */
                         paraDir = paraDirDefault;
-////                        /* keep the paraLevel of the first paragraph even if it
-////                         defaulted (no strong char was found)                 */
-////                        paraLevelStillDefault = false;
                         lastStrongDir = paraDirDefault;
                     }
                 }
             }
             if (removeBidiControls && IsBidiControlChar(uchar)) {
-////                if (((uchar - uLRM) & ~1) == 0
-////                        || ((uchar - uLRE) & 0xffffffffL) < 5) {
                 controlCount++;
-////                }
             }
         }
         if (isDefaultLevelInverse && (lastStrongDir==CONTEXT_RTL) &&(paraDir!=lastStrongDir)) {
@@ -1700,11 +1671,6 @@ public class Bidi {
         if (orderParagraphsLTR && (flags & DirPropFlag(B)) != 0) {
             flags |= DirPropFlag(L);
         }
-////        if ((reorderingOptions & OPTION_STREAMING) != 0) {
-////            if (length < originalLength) {
-////                paraCount--;
-////            }
-////        }
     }
 
     /* perform (X1)..(X9) ------------------------------------------------------- */
@@ -1777,7 +1743,7 @@ public class Bidi {
      */
     private byte resolveExplicitLevels() {
         int i = 0;
-        short dirProp;
+        byte dirProp;
         byte level = GetParaLevelAt(0);
 
         byte direction;
@@ -1944,7 +1910,7 @@ public class Bidi {
      * after taking the explicit embeddings into account.
      */
     private byte checkExplicitLevels() {
-        short dirProp;
+        byte dirProp;
         int i;
         this.flags = 0;     /* collect all directionalities in the text */
         byte level;
@@ -2096,16 +2062,16 @@ public class Bidi {
     /*********************************************************************/
     private static final int IMPTABLEVELS_COLUMNS = _B + 2;
     private static final int IMPTABLEVELS_RES = IMPTABLEVELS_COLUMNS - 1;
-    private static short GetState(short cell) { return (short)(cell & 0x0f); }
-    private static short GetAction(short cell) { return (short)(cell >> 4); }
+    private static short GetState(byte cell) { return (short)(cell & 0x0f); }
+    private static short GetAction(byte cell) { return (short)(cell >> 4); }
 
     private static class ImpTabPair {
-        short[][][] imptab;
+        byte[][][] imptab;
         short[][] impact;
 
-        ImpTabPair(short[][] table1, short[][] table2,
+        ImpTabPair(byte[][] table1, byte[][] table2,
                    short[] act1, short[] act2) {
-            imptab = new short[][][] {table1, table2};
+            imptab = new byte[][][] {table1, table2};
             impact = new short[][] {act1, act2};
         }
     }
@@ -2146,7 +2112,7 @@ public class Bidi {
     /*     to paragraph level in adjustWSLevels().                       */
     /*                                                                   */
 
-    private static final short impTabL_DEFAULT[][] = /* Even paragraph level */
+    private static final byte impTabL_DEFAULT[][] = /* Even paragraph level */
         /*  In this table, conditional sequences receive the higher possible level
             until proven otherwise.
         */
@@ -2160,7 +2126,7 @@ public class Bidi {
         /* 5 : AN+ON      */ {  0x20,     1,  0x20,     2,     5,     5,  0x20,  1 }
     };
 
-    private static final short impTabR_DEFAULT[][] = /* Odd  paragraph level */
+    private static final byte impTabR_DEFAULT[][] = /* Odd  paragraph level */
         /*  In this table, conditional sequences receive the lower possible level
             until proven otherwise.
         */
@@ -2179,7 +2145,7 @@ public class Bidi {
     private static final ImpTabPair impTab_DEFAULT = new ImpTabPair(
             impTabL_DEFAULT, impTabR_DEFAULT, impAct0, impAct0);
 
-    private static final short impTabL_NUMBERS_SPECIAL[][] = { /* Even paragraph level */
+    private static final byte impTabL_NUMBERS_SPECIAL[][] = { /* Even paragraph level */
         /* In this table, conditional sequences receive the higher possible
            level until proven otherwise.
         */
@@ -2193,7 +2159,7 @@ public class Bidi {
     private static final ImpTabPair impTab_NUMBERS_SPECIAL = new ImpTabPair(
             impTabL_NUMBERS_SPECIAL, impTabR_DEFAULT, impAct0, impAct0);
 
-    private static final short impTabL_GROUP_NUMBERS_WITH_R[][] = {
+    private static final byte impTabL_GROUP_NUMBERS_WITH_R[][] = {
         /* In this table, EN/AN+ON sequences receive levels as if associated with R
            until proven that there is L or sor/eor on both sides. AN is handled like EN.
         */
@@ -2205,7 +2171,7 @@ public class Bidi {
         /* 4 R+ON         */ {  0x20,     3,     5,     5,     4,  0x20,  0x20,  1 },
         /* 5 R+EN/AN      */ {     0,     3,     5,     5,  0x14,     0,     0,  2 }
     };
-    private static final short impTabR_GROUP_NUMBERS_WITH_R[][] = {
+    private static final byte impTabR_GROUP_NUMBERS_WITH_R[][] = {
         /*  In this table, EN/AN+ON sequences receive levels as if associated with R
             until proven that there is L on both sides. AN is handled like EN.
         */
@@ -2220,7 +2186,7 @@ public class Bidi {
             ImpTabPair(impTabL_GROUP_NUMBERS_WITH_R,
                        impTabR_GROUP_NUMBERS_WITH_R, impAct0, impAct0);
 
-    private static final short impTabL_INVERSE_NUMBERS_AS_L[][] = {
+    private static final byte impTabL_INVERSE_NUMBERS_AS_L[][] = {
         /* This table is identical to the Default LTR table except that EN and AN
            are handled like L.
         */
@@ -2232,7 +2198,7 @@ public class Bidi {
         /* 4 : R+ON       */ {  0x20,     1,  0x20,  0x20,     4,     4,  0x20,  1 },
         /* 5 : AN+ON      */ {  0x20,     1,  0x20,  0x20,     5,     5,  0x20,  1 }
     };
-    private static final short impTabR_INVERSE_NUMBERS_AS_L[][] = {
+    private static final byte impTabR_INVERSE_NUMBERS_AS_L[][] = {
         /* This table is identical to the Default RTL table except that EN and AN
            are handled like L.
         */
@@ -2248,7 +2214,7 @@ public class Bidi {
             (impTabL_INVERSE_NUMBERS_AS_L, impTabR_INVERSE_NUMBERS_AS_L,
              impAct0, impAct0);
 
-    private static final short impTabR_INVERSE_LIKE_DIRECT[][] = {  /* Odd  paragraph level */
+    private static final byte impTabR_INVERSE_LIKE_DIRECT[][] = {  /* Odd  paragraph level */
         /*  In this table, conditional sequences receive the lower possible level
             until proven otherwise.
         */
@@ -2265,7 +2231,7 @@ public class Bidi {
     private static final ImpTabPair impTab_INVERSE_LIKE_DIRECT = new ImpTabPair(
             impTabL_DEFAULT, impTabR_INVERSE_LIKE_DIRECT, impAct0, impAct1);
 
-    private static final short impTabL_INVERSE_LIKE_DIRECT_WITH_MARKS[][] = {
+    private static final byte impTabL_INVERSE_LIKE_DIRECT_WITH_MARKS[][] = {
         /* The case handled in this table is (visually):  R EN L
          */
         /*                         L,     R,    EN,    AN,    ON,     S,     B, Res */
@@ -2277,7 +2243,7 @@ public class Bidi {
         /* 5 : R+EN       */ {  0x30,  0x43,     5,  0x56,  0x14,  0x30,  0x30,  4 },
         /* 6 : R+AN       */ {  0x30,  0x43,  0x55,     6,  0x14,  0x30,  0x30,  4 }
     };
-    private static final short impTabR_INVERSE_LIKE_DIRECT_WITH_MARKS[][] = {
+    private static final byte impTabR_INVERSE_LIKE_DIRECT_WITH_MARKS[][] = {
         /* The cases handled in this table are (visually):  R EN L
                                                             R L AN L
         */
@@ -2298,7 +2264,7 @@ public class Bidi {
     private static final ImpTabPair impTab_INVERSE_FOR_NUMBERS_SPECIAL = new ImpTabPair(
             impTabL_NUMBERS_SPECIAL, impTabR_INVERSE_LIKE_DIRECT, impAct0, impAct1);
 
-    private static final short impTabL_INVERSE_FOR_NUMBERS_SPECIAL_WITH_MARKS[][] = {
+    private static final byte impTabL_INVERSE_FOR_NUMBERS_SPECIAL_WITH_MARKS[][] = {
         /*  The case handled in this table is (visually):  R EN L
         */
         /*                         L,     R,    EN,    AN,    ON,     S,     B, Res */
@@ -2313,7 +2279,7 @@ public class Bidi {
                        impTabR_INVERSE_LIKE_DIRECT_WITH_MARKS, impAct0, impAct2);
 
     private class LevState {
-        short[][] impTab;               /* level table pointer          */
+        byte[][] impTab;                /* level table pointer          */
         short[] impAct;                 /* action map array             */
         int startON;                    /* start of ON sequence         */
         int startL2EN;                  /* start of level 2 sequence    */
@@ -2333,15 +2299,16 @@ public class Bidi {
     {
         Point point = new Point();
 
-        if (insertPoints.points == null) {
+        int len = insertPoints.points.length;
+        if (len == 0) {
             insertPoints.points = new Point[FIRSTALLOC];
+            len = FIRSTALLOC;
         }
-        int l = insertPoints.points.length;
-        if (insertPoints.size >= l) { /* no room for new point */
+        if (insertPoints.size >= len) { /* no room for new point */
             Point[] savePoints = insertPoints.points;
             try {
-                insertPoints.points = new Point[l * 2];
-                System.arraycopy(savePoints, 0, insertPoints.points, 0, l);
+                insertPoints.points = new Point[len * 2];
+                System.arraycopy(savePoints, 0, insertPoints.points, 0, len);
             } catch (OutOfMemoryError e) {
                 insertPoints.points = savePoints;
                 throw e;
@@ -2370,9 +2337,10 @@ public class Bidi {
 
     private void processPropertySeq(LevState levState, short _prop,
             int start, int limit) {
-        short cell, oldStateSeq,actionSeq;
-        short[][] impTab = levState.impTab;
+        byte cell;
+        byte[][] impTab = levState.impTab;
         short[] impAct = levState.impAct;
+        short oldStateSeq,actionSeq;
         byte level, addLevel;
         int start0, k;
 
@@ -2431,7 +2399,7 @@ public class Bidi {
 
             case 4:                     /* R/AL after possible relevant EN/AN */
                 /* just clean up */
-                if (insertPoints.points != null && insertPoints.points.length > 0)
+                if (insertPoints.points.length > 0)
                     /* remove all non confirmed insert points */
                     insertPoints.size = insertPoints.confirmed;
                 levState.startON = -1;
@@ -2707,7 +2675,6 @@ public class Bidi {
     void setParaRunsOnly(char[] parmText, byte parmParaLevel) {
         int[] visualMap;
         String visualText;
-        //byte[] levels;
         int saveLength;
         byte[] saveLevels;
         int i, j, visualStart, logicalStart,
@@ -2840,16 +2807,16 @@ public class Bidi {
             runs[newI].level = (byte)(saveLevels[logicalPos] ^ indexOddBit);
         }
 
-//      cleanup1:
+//    cleanup1:
         /* restore initial paraLevel */
         this.paraLevel ^= 1;
-//      cleanup2:
+//    cleanup2:
         /* restore real text */
         this.text = parmText;
         /* free memory for mapping table and visual text */
         visualMap = null;
         visualText = null;
-//      cleanup3:
+//    cleanup3:
         reorderingMode = REORDER_RUNS_ONLY;
         this.length = saveLength;
         this.originalLength = parmLength;
@@ -2942,7 +2909,80 @@ public class Bidi {
         }
     }
 
-    private void setPara(char[] chars, byte paraLevel, byte[] embeddingLevels)
+    /**
+     * Perform the Unicode Bidi algorithm. It is defined in the
+     * <a href="http://www.unicode.org/unicode/reports/tr9/">Unicode Standard Annex #9</a>,
+     * version 13,
+     * also described in The Unicode Standard, Version 4.0 .<p>
+     *
+     * This method takes a piece of plain text containing one or more paragraphs,
+     * with or without externally specified embedding levels from <i>styled</i>
+     * text and computes the left-right-directionality of each character.<p>
+     *
+     * If the entire text is all of the same directionality, then
+     * the method may not perform all the steps described by the algorithm,
+     * i.e., some levels may not be the same as if all steps were performed.
+     * This is not relevant for unidirectional text.<br>
+     * For example, in pure LTR text with numbers the numbers would get
+     * a resolved level of 2 higher than the surrounding text according to
+     * the algorithm. This implementation may set all resolved levels to
+     * the same value in such a case.<p>
+     *
+     * The text can be composed of multiple paragraphs. Occurrence of a block
+     * separator in the text terminates a paragraph, and whatever comes next starts
+     * a new paragraph. The exception to this rule is when a Carriage Return (CR)
+     * is followed by a Line Feed (LF). Both CR and LF are block separators, but
+     * in that case, the pair of characters is considered as terminating the
+     * preceding paragraph, and a new paragraph will be started by a character
+     * coming after the LF.
+     *
+     * The text is stored internally as an array of characters. Therefore the
+     * documentation will refer to indexes of the characters in the text.
+     *
+     * @param chars contains the text that the Bidi algorithm will be performed
+     *        on. This text can be retrieved with <code>getText()</code> or
+     *        <code>getTextAsString</code>.<br>
+     *
+     * @param paraLevel specifies the default level for the text;
+     *        it is typically 0 (LTR) or 1 (RTL).
+     *        If the method shall determine the paragraph level from the text,
+     *        then <code>paraLevel</code> can be set to
+     *        either <code>LEVEL_DEFAULT_LTR</code>
+     *        or <code>LEVEL_DEFAULT_RTL</code>; if the text contains multiple
+     *        paragraphs, the paragraph level shall be determined separately for
+     *        each paragraph; if a paragraph does not include any strongly typed
+     *        character, then the desired default is used (0 for LTR or 1 for RTL).
+     *        Any other value between 0 and <code>MAX_EXPLICIT_LEVEL</code>
+     *        is also valid, with odd levels indicating RTL.
+     *
+     * @param embeddingLevels (in) may be used to preset the embedding and
+     *        override levels, ignoring characters like LRE and PDF in the text.
+     *        A level overrides the directional property of its corresponding
+     *        (same index) character if the level has the
+     *        <code>LEVEL_OVERRIDE</code> bit set.<br><br>
+     *        Except for that bit, it must be
+     *        <code>paraLevel<=embeddingLevels[]<=MAX_EXPLICIT_LEVEL</code>,
+     *        with one exception: a level of zero may be specified for a
+     *        paragraph separator even if <code>paraLevel&gt;0</code> when multiple
+     *        paragraphs are submitted in the same call to <code>setPara()</code>.<br><br>
+     *        <strong>Caution: </strong>A copy of this pointer, not of the levels,
+     *        will be stored in the <code>Bidi</code> object;
+     *        the <code>embeddingLevels</code>
+     *        should not be modified to avoid unexpected results on subsequent
+     *        Bidi operations. However, the <code>setPara()</code> and
+     *        <code>setLine()</code> methods may modify some or all of the
+     *        levels.<br><br>
+     *        <strong>Note:</strong> the <code>embeddingLevels</code> array must
+     *        have one entry for each character in <code>text</code>.
+     *
+     * @throws IllegalArgumentException
+     * @see #LEVEL_DEFAULT_LTR
+     * @see #LEVEL_DEFAULT_RTL
+     * @see #LEVEL_OVERRIDE
+     * @see #MAX_EXPLICIT_LEVEL
+     * @draft ICU 3.8
+     */
+    public void setPara(char[] chars, byte paraLevel, byte[] embeddingLevels)
     {
         /* check the argument values */
         if ((MAX_EXPLICIT_LEVEL < paraLevel && !IsDefaultLevel(paraLevel))) {
@@ -2970,9 +3010,10 @@ public class Bidi {
         /* Allocate zero-length arrays instead of setting to null here; then
          * checks for null in various places can be eliminated.
          */
-        dirProps = new short[0];
+        dirProps = new byte[0];
         levels = new byte[0];
         runs = new BidiRun[0];
+        isGoodLogicalToVisualRunsMap = false;
         insertPoints.size = 0;          /* clean up from last call */
         insertPoints.confirmed = 0;     /* clean up from last call */
 
@@ -3527,7 +3568,7 @@ public class Bidi {
      * @throws IllegalStateException if this call is not preceded by a successful
      *         call to <code>setPara</code> or <code>setLine</code>
      *
-     * @see BidiRun
+     * @see com.ibm.icu.text.BidiRun
      * @draft ICU 3.8
      */
     public BidiRun getParagraphByIndex(int paraIndex)
@@ -3573,7 +3614,7 @@ public class Bidi {
      * @throws IllegalStateException if this call is not preceded by a successful
      *         call to <code>setPara</code> or <code>setLine</code>
      *
-     * @see BidiRun
+     * @see com.ibm.icu.text.BidiRun
      *
      * @see #getParagraphByIndex
      * @see #getProcessedLength
@@ -3608,7 +3649,7 @@ public class Bidi {
      * @throws IllegalStateException if this call is not preceded by a successful
      *         call to <code>setPara</code> or <code>setLine</code>
      *
-     * @see BidiRun
+     * @see com.ibm.icu.text.BidiRun
      *
      * @see #getProcessedLength
      * @draft ICU 3.8
@@ -3668,12 +3709,12 @@ public class Bidi {
      * @see BidiClassifier
      * @draft ICU 3.8
      */
-    public short getCustomizedClass(int c) {
-        short dir;
+    public int getCustomizedClass(int c) {
+        int dir;
 
         if (customClassifier == null ||
             (dir = customClassifier.classify(c)) == Bidi.CLASS_DEFAULT) {
-            return (short)bdp.getClass(c);
+            return bdp.getClass(c);
         } else {
             return dir;
         }
@@ -3841,8 +3882,31 @@ public class Bidi {
      * <code>countRuns()</code> should be called
      * before the runs are retrieved.
      *
-     * <p>TODO - Add a Java version of the sample code from ubidi.h</p>
-     *
+     * <p>
+     *  Example:
+     * <pre>
+     *  Bidi bidi = new Bidi();
+     *  String text = "abc 123 DEFG xyz";
+     *  bidi.setPara(text, Bidi.RTL, null);
+     *  int i, count=bidi.countRuns(), logicalStart, visualIndex=0, length;
+     *  BidiRun run;
+     *  for (i = 0; i &lt; count; ++i) {
+     *      run = bidi.getVisualRun(i);
+     *      logicalStart = run.getStart();
+     *      length = run.getLength();
+     *      if (Bidi.LTR == run.getEmbeddingLevel()) {
+     *          do { // LTR
+     *              show_char(text.charAt(logicalStart++), visualIndex++);
+     *          } while (--length &gt; 0);
+     *      } else {
+     *          logicalStart += length;  // logicalLimit
+     *          do { // RTL
+     *              show_char(text.charAt(--logicalStart), visualIndex++);
+     *          } while (--length &gt; 0);
+     *      }
+     *  }
+     * </pre>
+     * <p>
      * Note that in right-to-left runs, code like this places
      * modifier letters before base characters and second surrogates
      * before first ones.
@@ -3884,6 +3948,13 @@ public class Bidi {
      * control removed from output by the option
      * <code>OPTION_REMOVE_CONTROLS</code>.
      * <p>
+     * When the visual output is altered by using options of
+     * <code>writeReordered()</code> such as <code>INSERT_LRM_FOR_NUMERIC</code>,
+     * <code>KEEP_BASE_COMBINING</code>, <code>OUTPUT_REVERSE</code>,
+     * <code>REMOVE_BIDI_CONTROLS</code>, the visual position returned may not
+     * be correct. It is advised to use, when possible, reordering options
+     * such as {@link #OPTION_INSERT_MARKS} and {@link #OPTION_REMOVE_CONTROLS}.
+     * <p>
      * Note that in right-to-left runs, this mapping places
      * modifier letters before base characters and second surrogates
      * before first ones.
@@ -3902,6 +3973,7 @@ public class Bidi {
      * @see #getProcessedLength
      * @see #MAP_NOWHERE
      * @see #OPTION_REMOVE_CONTROLS
+     * @see #writeReordered
      * @draft ICU 3.8
      */
     public int getVisualIndex(int logicalIndex)
@@ -3928,6 +4000,13 @@ public class Bidi {
      * <code>OPTION_INSERT_MARKS</code>.
      * <p>
      * This is the inverse method to <code>getVisualIndex()</code>.
+     * <p>
+     * When the visual output is altered by using options of
+     * <code>writeReordered()</code> such as <code>INSERT_LRM_FOR_NUMERIC</code>,
+     * <code>KEEP_BASE_COMBINING</code>, <code>OUTPUT_REVERSE</code>,
+     * <code>REMOVE_BIDI_CONTROLS</code>, the logical position returned may not
+     * be correct. It is advised to use, when possible, reordering options
+     * such as {@link #OPTION_INSERT_MARKS} and {@link #OPTION_REMOVE_CONTROLS}.
      *
      * @param visualIndex is the visual position of a character.
      *
@@ -3943,6 +4022,7 @@ public class Bidi {
      * @see #getResultLength
      * @see #MAP_NOWHERE
      * @see #OPTION_INSERT_MARKS
+     * @see #writeReordered
      * @draft ICU 3.8
      */
     public int getLogicalIndex(int visualIndex)
@@ -3974,6 +4054,13 @@ public class Bidi {
      * Some values in the map may be <code>MAP_NOWHERE</code> if the
      * corresponding text characters are Bidi controls removed from the visual
      * output by the option <code>OPTION_REMOVE_CONTROLS</code>.
+     * <p>
+     * When the visual output is altered by using options of
+     * <code>writeReordered()</code> such as <code>INSERT_LRM_FOR_NUMERIC</code>,
+     * <code>KEEP_BASE_COMBINING</code>, <code>OUTPUT_REVERSE</code>,
+     * <code>REMOVE_BIDI_CONTROLS</code>, the visual positions returned may not
+     * be correct. It is advised to use, when possible, reordering options
+     * such as {@link #OPTION_INSERT_MARKS} and {@link #OPTION_REMOVE_CONTROLS}.
      *
      * @return an array of <code>getProcessedLength()</code>
      *        indexes which will reflect the reordering of the characters.<br><br>
@@ -3990,6 +4077,7 @@ public class Bidi {
      * @see #getProcessedLength
      * @see #MAP_NOWHERE
      * @see #OPTION_REMOVE_CONTROLS
+     * @see #writeReordered
      * @draft ICU 3.8
      */
     public int[] getLogicalMap()
@@ -4008,6 +4096,13 @@ public class Bidi {
      * Some values in the map may be <code>MAP_NOWHERE</code> if the
      * corresponding text characters are Bidi marks inserted in the visual
      * output by the option <code>OPTION_INSERT_MARKS</code>.
+     * <p>
+     * When the visual output is altered by using options of
+     * <code>writeReordered()</code> such as <code>INSERT_LRM_FOR_NUMERIC</code>,
+     * <code>KEEP_BASE_COMBINING</code>, <code>OUTPUT_REVERSE</code>,
+     * <code>REMOVE_BIDI_CONTROLS</code>, the logical positions returned may not
+     * be correct. It is advised to use, when possible, reordering options
+     * such as {@link #OPTION_INSERT_MARKS} and {@link #OPTION_REMOVE_CONTROLS}.
      *
      * @return an array of <code>getResultLength()</code>
      *        indexes which will reflect the reordering of the characters.<br><br>
@@ -4024,6 +4119,7 @@ public class Bidi {
      * @see #getResultLength
      * @see #MAP_NOWHERE
      * @see #OPTION_INSERT_MARKS
+     * @see #writeReordered
      * @draft ICU 3.8
      */
     public int[] getVisualMap()
@@ -4366,6 +4462,32 @@ public class Bidi {
     }
 
     /**
+     * Compute the logical to visual run mapping
+     */
+     void getLogicalToVisualRunsMap()
+     {
+        if (isGoodLogicalToVisualRunsMap) {
+            return;
+        }
+        int count = countRuns();
+        if ((logicalToVisualRunsMap == null) ||
+            (logicalToVisualRunsMap.length < count)) {
+            logicalToVisualRunsMap = new int[count];
+        }
+        int i;
+        long[] keys = new long[count];
+        for (i = 0; i < count; i++) {
+            keys[i] = ((long)(runs[i].start)<<32) + i;
+        }
+        Arrays.sort(keys);
+        for (i = 0; i < count; i++) {
+            logicalToVisualRunsMap[i] = (int)(keys[i] & 0x00000000FFFFFFFF);
+        }
+        keys = null;
+        isGoodLogicalToVisualRunsMap = true;
+     }
+
+    /**
      * Return the level of the nth logical run in this line.
      *
      * @param run the index of the run, between 0 and <code>countRuns()</code>
@@ -4377,10 +4499,11 @@ public class Bidi {
         if (!IsValidParaOrLine() || run < 0 ||
                 (runCount < 0 && ! BidiLine.getRuns(this)) ||
                 run >= runCount) {
-            return 0;
-        } else {
-            return getLevelAt(logicalRuns[run].start);
         }
+        if (!isGoodLogicalToVisualRunsMap) {
+            getLogicalToVisualRunsMap();
+        }
+        return runs[logicalToVisualRunsMap[run]].level;
     }
 
     /**
@@ -4396,9 +4519,12 @@ public class Bidi {
         if (!IsValidParaOrLine() || run < 0 ||
                 (runCount < 0 && ! BidiLine.getRuns(this)) ||
                 run >= runCount) {
-            return 0;
+            throw new IllegalArgumentException("Invalid call to getRunStart()");
         }
-        return getLogicalRun(logicalRuns[run].start).start;
+        if (!isGoodLogicalToVisualRunsMap) {
+            getLogicalToVisualRunsMap();
+        }
+        return runs[logicalToVisualRunsMap[run]].start;
     }
 
     /**
@@ -4413,11 +4539,17 @@ public class Bidi {
     public int getRunLimit(int run)
     {
         if (!IsValidParaOrLine() || run < 0 ||
-                (runCount < 0 && ! BidiLine.getRuns(this)) ||
-                run >= runCount) {
-            return length;
+            (runCount < 0 && ! BidiLine.getRuns(this)) ||
+            run >= runCount) {
+            throw new IllegalArgumentException("Invalid call to getRunLimit()");
         }
-        return getLogicalRun(logicalRuns[run].start).limit;
+        if (!isGoodLogicalToVisualRunsMap) {
+            getLogicalToVisualRunsMap();
+        }
+        int idx = logicalToVisualRunsMap[run];
+        int length = idx == 0 ? runs[idx].limit :
+                                runs[idx].limit - runs[idx-1].limit;
+        return runs[idx].start + length;
     }
 
     /**
@@ -4490,8 +4622,8 @@ public class Bidi {
      * <code>setPara()</code> or for a line of text set by <code>setLine()</code>
      * and return a string containing the reordered text.
      *
-     * <p>The text was aliased (only the pointer was stored
-     * without copying the contents) and must not have been modified
+     * <p>The text may have been aliased (only a reference was stored
+     * without copying the contents), thus it must not have been modified
      * since the <code>setPara()</code> call.</p>
      *
      * This method preserves the integrity of characters with multiple
@@ -4502,7 +4634,7 @@ public class Bidi {
      * characters there are no Unicode characters as mirror-image equivalents.
      * There are also options to insert or remove Bidi control
      * characters; see the descriptions of the return value and the
-     * <code>options</code> parameters, and of the option bit flags.
+     * <code>options</code> parameter, and of the option bit flags.
      *
      * @param options A bit set of options for the reordering that control
      *                how the reordered text is written.
