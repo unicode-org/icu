@@ -4,6 +4,9 @@
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
+/* Written by Simon Montagu, Matitiahu Allouche
+ * (ported from C code written by Markus W. Scherer)
+ */
 
 package com.ibm.icu.text;
 
@@ -292,7 +295,7 @@ final class BidiWriter {
                 }
             } else {
                 /* insert Bidi controls for "inverse Bidi" */
-                short[] dirProps = bidi.dirProps;
+                byte[] dirProps = bidi.dirProps;
                 char uc;
                 int markFlag;
 
@@ -391,7 +394,7 @@ final class BidiWriter {
             } else {
                 /* insert Bidi controls for "inverse Bidi" */
 
-                short[] dirProps = bidi.dirProps;
+                byte[] dirProps = bidi.dirProps;
 
                 for (run = runCount; --run >= 0; ) {
                     /* reverse output */

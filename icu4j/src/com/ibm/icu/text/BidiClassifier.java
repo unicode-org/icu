@@ -4,6 +4,9 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
+/* Written by Simon Montagu, Matitiahu Allouche
+ * (ported from C code written by Markus W. Scherer)
+ */
 
 package com.ibm.icu.text;
 
@@ -87,7 +90,7 @@ public /*abstract*/ class BidiClassifier {
      * @see Bidi#CLASS_DEFAULT
      * @draft ICU 3.8
      */
-    public short classify(int c) {
+    public int classify(int c) {
         return Bidi.CLASS_DEFAULT;
     }
 }

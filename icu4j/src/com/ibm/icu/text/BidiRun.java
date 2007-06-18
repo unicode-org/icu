@@ -4,6 +4,9 @@
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
+/* Written by Simon Montagu, Matitiahu Allouche
+ * (ported from C code written by Markus W. Scherer)
+ */
 
 package com.ibm.icu.text;
 
@@ -28,7 +31,7 @@ public class BidiRun {
 
     int start;              /* first logical position of the run */
     int limit;              /* last visual position of the run +1 */
-    int insertRemove = 0;   /* if >0, flags for inserting LRM/RLM before/after run,
+    int insertRemove;       /* if >0, flags for inserting LRM/RLM before/after run,
                                if <0, count of bidi controls within run            */
     byte level;
 
