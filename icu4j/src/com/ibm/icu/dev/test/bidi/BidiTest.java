@@ -64,10 +64,8 @@ public class BidiTest extends TestFmwk {
         if (src != null) {
             errcontln("source            : \"" + Utility.escape(src) + "\"");
         }
-        if (expected != null)
-            errcontln("expected          : \"" + Utility.escape(expected) + "\"");
-        if (actual != null)
-            errcontln("actual            : \"" + Utility.escape(actual) + "\"");
+        errcontln("expected          : \"" + Utility.escape(expected) + "\"");
+        errcontln("actual            : \"" + Utility.escape(actual) + "\"");
         if (mode != null) {
             errcontln("reordering mode   : " + mode);
         }

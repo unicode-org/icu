@@ -63,9 +63,9 @@ public class TestClassOverride extends BidiTest {
         public CustomClassifier(Object context) {
           super(context);
         }
-        public short classify(int c) {
+        public int classify(int c) {
             // some (meaningless) action - just for testing purposes
-            return (short)(this.context != null ? ((Integer)context).intValue()
+            return (this.context != null ? ((Integer)context).intValue()
                             : c >= nEntries ? Bidi.CLASS_DEFAULT
                             : customClasses[c]);
         }
@@ -77,6 +77,9 @@ public class TestClassOverride extends BidiTest {
         if (this.classifier != null) {
             Class expectedClass = this.classifier.getClass();
             assertTrue("null Bidi classifier", actualClassifier != null);
+            if (actualClassifier == null) {
+                return;
+            }
             if (!expectedClass.isInstance(actualClassifier)) {
                 errln("Bidi object reports classifier is an instance of " +
                       actualClassifier.getClass().getName() +

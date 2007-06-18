@@ -7,10 +7,7 @@
 
 package com.ibm.icu.dev.test.bidi;
 
-import java.util.Arrays;
-import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.Bidi;
-import com.ibm.icu.text.BidiRun;
 
 
 /**

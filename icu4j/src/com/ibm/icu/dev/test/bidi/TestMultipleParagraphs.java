@@ -187,7 +187,8 @@ public class TestMultipleParagraphs extends BidiTest {
             gotLevels = bidi.getLevels();
         } catch (Exception e) {
             errln("Error on Bidi.getLevels");
-            gotLevels = null;
+            gotLevels = new byte[bidi.getLength()];
+            Arrays.fill(gotLevels, (byte)-1);
         }
         for (i = 26; i < 32; i++) {
             if (gotLevels[i] != Bidi.RTL) {
@@ -209,6 +210,8 @@ public class TestMultipleParagraphs extends BidiTest {
             gotLevels = bidiLine.getLevels();
         } catch (Exception e) {
             errln("Error on bidiLine.getLevels");
+            gotLevels = new byte[bidiLine.getLength()];
+            Arrays.fill(gotLevels, (byte)-1);
         }
         length = bidiLine.getLength();
         gotLevel = run.getEmbeddingLevel();
@@ -237,6 +240,8 @@ public class TestMultipleParagraphs extends BidiTest {
             gotLevels = bidi.getLevels();
         } catch (Exception e) {
             errln("Error on Bidi.getLevels");
+            gotLevels = new byte[bidi.getLength()];
+            Arrays.fill(gotLevels, (byte)-1);
         }
         for (i = 26; i < 32; i++) {
             if (gotLevels[i] != 0) {
@@ -261,6 +266,8 @@ public class TestMultipleParagraphs extends BidiTest {
             gotLevels = bidiLine.getLevels();
         } catch (Exception e) {
             errln("Error on bidiLine.getLevels");
+            gotLevels = new byte[bidiLine.getLength()];
+            Arrays.fill(gotLevels, (byte)-1);
         }
         length = bidiLine.getLength();
         gotLevel = run.getEmbeddingLevel();
@@ -292,6 +299,8 @@ public class TestMultipleParagraphs extends BidiTest {
             gotLevels = bidi.getLevels();
         } catch (Exception e) {
             errln("Error on bidiLine.getLevels");
+            gotLevels = new byte[bidi.getLength()];
+            Arrays.fill(gotLevels, (byte)-1);
         }
         for (i = 0; i < paraCount; i++) {
             /* use pLine for individual paragraphs */
@@ -328,6 +337,8 @@ public class TestMultipleParagraphs extends BidiTest {
             gotLevels = bidi.getLevels();
         } catch (Exception e) {
             errln("Error on Bidi.getLevels");
+            gotLevels = new byte[bidi.getLength()];
+            Arrays.fill(gotLevels, (byte)-1);
         }
         for (i = 0, length = src.length(); i < length; i++) {
             if (gotLevels[i] != levels2[i]) {
@@ -359,6 +370,8 @@ public class TestMultipleParagraphs extends BidiTest {
                         gotLevels = bidi.getLevels();
                     } catch (Exception e) {
                         errln("Error on Bidi.getLevels");
+                        gotLevels = new byte[bidi.getLength()];
+                        Arrays.fill(gotLevels, (byte)-1);
                     }
                     for (k = 1; k <= 3; k++) {
                         if (gotLevels[k] != gotLevel) {

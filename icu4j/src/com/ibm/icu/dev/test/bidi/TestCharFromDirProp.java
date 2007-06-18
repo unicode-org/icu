@@ -10,7 +10,6 @@ package com.ibm.icu.dev.test.bidi;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterDirection;
 import com.ibm.icu.impl.Utility;
-import com.ibm.icu.text.Bidi;
 
 /**
  * Regression test for Bidi charFromDirProp
