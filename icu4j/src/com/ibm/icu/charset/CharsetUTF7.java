@@ -77,12 +77,6 @@ class CharsetUTF7 extends CharsetICU {
     private static final byte COMMA=0x2c;
     private static final byte SLASH=0x2f;
     
-    private static boolean isLegalUTF7(char c) {
-        return (
-                ((char)(c - 32) < 94 && (c != BACKSLASH)) || isCRLFTAB(c)
-                );
-    }
-    
     // legal byte values: all US-ASCII graphic characters 0x20..0x7e
     private static boolean isLegal(char c, boolean useIMAP) {
         if (useIMAP) {
