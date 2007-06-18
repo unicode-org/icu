@@ -28,8 +28,8 @@ U_NAMESPACE_USE
 #define MAX_SPLIT_STRINGS 20
 
 const char *patternStrings[UPC_LIMIT]={
-    "^translate\\s*?(.*)",
-    "^note\\s*?(.*)"
+    "^translate\\s*(.*)",
+    "^note\\s*(.*)"
 };
 
 U_CFUNC int32_t 
