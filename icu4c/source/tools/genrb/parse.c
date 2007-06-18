@@ -1377,6 +1377,17 @@ parseImport(char *tag, uint32_t startline, const struct UString* comment, UError
     /* Open the input file for reading */
     if (inputdir == NULL)
     {
+#if 1
+        /* 
+         * Always save file file name, even if there's
+         * no input directory specified. MIGHT BREAK SOMETHING
+         */
+        int32_t filenameLength = uprv_strlen(filename);
+
+        fullname = (char *) uprv_malloc(filenameLength + 1);
+        uprv_strcpy(fullname, filename);
+#endif
+
         file = T_FileStream_open(filename, "rb");
     }
     else
