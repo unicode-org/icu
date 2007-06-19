@@ -132,14 +132,14 @@ public abstract class CharsetICU extends Charset{
         algorithmicCharsets.put("UTF-7",                 "com.ibm.icu.charset.CharsetUTF7" );
         algorithmicCharsets.put("ISCII,version=0",       "com.ibm.icu.charset.CharsetISCII" );
         algorithmicCharsets.put("ISCII,version=1",       "com.ibm.icu.charset.CharsetISCII" );
-        /*algorithmicCharsets.put("ISCII,version=2",       "com.ibm.icu.charset.CharsetISCII" );
+        algorithmicCharsets.put("ISCII,version=2",       "com.ibm.icu.charset.CharsetISCII" );
         algorithmicCharsets.put("ISCII,version=3",       "com.ibm.icu.charset.CharsetISCII" );
         algorithmicCharsets.put("ISCII,version=4",       "com.ibm.icu.charset.CharsetISCII" );
         algorithmicCharsets.put("ISCII,version=5",       "com.ibm.icu.charset.CharsetISCII" );
         algorithmicCharsets.put("ISCII,version=6",       "com.ibm.icu.charset.CharsetISCII" );
         algorithmicCharsets.put("ISCII,version=7",       "com.ibm.icu.charset.CharsetISCII" );
         algorithmicCharsets.put("ISCII,version=8",       "com.ibm.icu.charset.CharsetISCII" );
-        */algorithmicCharsets.put("IMAP-mailbox-name",      "com.ibm.icu.charset.CharsetUTF7" );
+        algorithmicCharsets.put("IMAP-mailbox-name",      "com.ibm.icu.charset.CharsetUTF7" );
         }
 
     /*public*/ static final Charset getCharset(String icuCanonicalName, String javaCanonicalName, String[] aliases){

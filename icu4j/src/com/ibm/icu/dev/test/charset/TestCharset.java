@@ -898,7 +898,7 @@ public class TestCharset extends TestFmwk {
         }
     }
      
-    private void smBufDecode(CharsetDecoder decoder, String encoding, ByteBuffer source, CharBuffer target, boolean throwException)  throws BufferOverflowException, Exception {
+    private void smBufDecode(CharsetDecoder decoder, String encoding, ByteBuffer source, CharBuffer target, boolean throwException, boolean flush)  throws BufferOverflowException, Exception {
 
         ByteBuffer mySource = source.duplicate();
         CharBuffer myTarget = CharBuffer.allocate(target.capacity());
@@ -909,6 +909,9 @@ public class TestCharset extends TestFmwk {
             mySource.position(source.position());
             CoderResult result = CoderResult.UNDERFLOW;
             result = decoder.decode(mySource, myTarget, true);
+            if (flush) {
+                decoder.flush(myTarget);
+            }
             if (result.isError()) {
                 if (throwException) {
                     throw new Exception();
@@ -1012,7 +1015,7 @@ public class TestCharset extends TestFmwk {
         }
     }
 
-    private void smBufEncode(CharsetEncoder encoder, String encoding, CharBuffer source, ByteBuffer target, boolean throwException) throws Exception, BufferOverflowException {
+    private void smBufEncode(CharsetEncoder encoder, String encoding, CharBuffer source, ByteBuffer target, boolean throwException, boolean flush) throws Exception, BufferOverflowException {
         logln("Running smBufEncode for "+ encoding + " with class " + encoder);
         CharBuffer mySource = source.duplicate();
         ByteBuffer myTarget = ByteBuffer.allocate(target.capacity());
@@ -1025,6 +1028,9 @@ public class TestCharset extends TestFmwk {
             CoderResult result=null;
             
             result = encoder.encode(mySource, myTarget, true);
+            if (flush) {
+                result = encoder.flush(myTarget);
+            }
 
             if (result.isError()) {
                 if (throwException) {
@@ -1620,14 +1626,14 @@ public class TestCharset extends TestFmwk {
      */
     private void smBufDecode(CharsetDecoder decoder, String encoding, ByteBuffer source, CharBuffer target) {
         try {
-            smBufDecode(decoder, encoding, source, target, false);
+            smBufDecode(decoder, encoding, source, target, false, false);
         }    
         catch (Exception ex) {           
         }
     }
     private void smBufEncode(CharsetEncoder encoder, String encoding, CharBuffer source, ByteBuffer target)  {
         try {
-            smBufEncode(encoder, encoding, source, target, false); 
+            smBufEncode(encoder, encoding, source, target, false, false); 
         }
         catch (Exception ex) {
         }
@@ -1722,13 +1728,13 @@ public class TestCharset extends TestFmwk {
         charBufferTest.limit(charBufferLimit - 5);
         charBufferTest.position(0);
         try {
-            smBufDecode(decoder, "ASCII", byteBuffer, charBufferTest, true);
+            smBufDecode(decoder, "ASCII", byteBuffer, charBufferTest, true, false);
             errln("Overflow exception while decoding ASCII should have been thrown.");
         }
         catch(Exception ex) {
         }
         try {
-            smBufEncode(encoder, "ASCII", charBuffer, byteBufferTest, true);
+            smBufEncode(encoder, "ASCII", charBuffer, byteBufferTest, true, false);
             errln("Overflow exception while encoding ASCII should have been thrown.");
         }
         catch (Exception ex) {
@@ -1774,7 +1780,7 @@ public class TestCharset extends TestFmwk {
         ccus.position(0);
 
         try {
-            smBufDecode(decoder, "UTF-7-CC-DE-1", ccbs, ccus, true);
+            smBufDecode(decoder, "UTF-7-CC-DE-1", ccbs, ccus, true, false);
             errln("Exception while decoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
@@ -1793,7 +1799,7 @@ public class TestCharset extends TestFmwk {
         ccus.position(0);
         
         try {
-            smBufDecode(decoder, "UTF-7-CC-DE-2", ccbs, ccus, true);
+            smBufDecode(decoder, "UTF-7-CC-DE-2", ccbs, ccus, true, false);
             errln("Exception while decoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
@@ -1812,7 +1818,7 @@ public class TestCharset extends TestFmwk {
         ccus.position(0);
         
         try {
-            smBufDecode(decoder, "UTF-7-CC-DE-3", ccbs, ccus, true);
+            smBufDecode(decoder, "UTF-7-CC-DE-3", ccbs, ccus, true, false);
             errln("Exception while decoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
@@ -1831,7 +1837,7 @@ public class TestCharset extends TestFmwk {
         ccus.position(0);
         
         try {
-            smBufDecode(decoder, "UTF-7-CC-DE-4", ccbs, ccus, true);
+            smBufDecode(decoder, "UTF-7-CC-DE-4", ccbs, ccus, true, false);
             errln("Exception while decoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
@@ -1850,7 +1856,7 @@ public class TestCharset extends TestFmwk {
         ccus.position(0);
         
         try {
-            smBufDecode(decoder, "UTF-7-CC-DE-5", ccbs, ccus, true);
+            smBufDecode(decoder, "UTF-7-CC-DE-5", ccbs, ccus, true, false);
             errln("Exception while decoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
@@ -1869,7 +1875,7 @@ public class TestCharset extends TestFmwk {
         ccus.position(0);
         
         try {
-            smBufDecode(decoder, "UTF-7-CC-DE-6", ccbs, ccus, true);
+            smBufDecode(decoder, "UTF-7-CC-DE-6", ccbs, ccus, true, false);
             errln("Exception while decoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
@@ -1887,7 +1893,7 @@ public class TestCharset extends TestFmwk {
         ccus.position(0);
         
         try {
-            smBufDecode(decoder, "UTF-7-CC-DE-7", ccbs, ccus, true);
+            smBufDecode(decoder, "UTF-7-CC-DE-7", ccbs, ccus, true, false);
             errln("Exception while decoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
@@ -1905,7 +1911,7 @@ public class TestCharset extends TestFmwk {
         ccus.position(0);
         
         try {
-            smBufDecode(decoder, "UTF-7-CC-DE-8", ccbs, ccus, true);
+            smBufDecode(decoder, "UTF-7-CC-DE-8", ccbs, ccus, true, false);
             errln("Exception while decoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
@@ -1925,7 +1931,7 @@ public class TestCharset extends TestFmwk {
         ccus.position(0);
         
         try {
-            smBufEncode(encoder, "UTF-7-CC-EN-1", ccus, ccbs, true);
+            smBufEncode(encoder, "UTF-7-CC-EN-1", ccus, ccbs, true, false);
             errln("Exception while encoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
@@ -1944,7 +1950,7 @@ public class TestCharset extends TestFmwk {
         ccus.position(0);
         
         try {
-            smBufEncode(encoder, "UTF-7-CC-EN-2", ccus, ccbs, true);
+            smBufEncode(encoder, "UTF-7-CC-EN-2", ccus, ccbs, true, false);
             errln("Exception while encoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
@@ -1962,7 +1968,7 @@ public class TestCharset extends TestFmwk {
         ccus.position(0);
         
         try {
-            smBufEncode(encoder, "UTF-7-CC-EN-3", ccus, ccbs, true);
+            smBufEncode(encoder, "UTF-7-CC-EN-3", ccus, ccbs, true, false);
             errln("Exception while encoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
@@ -1980,7 +1986,7 @@ public class TestCharset extends TestFmwk {
         ccus.position(0);
         
         try {
-            smBufEncode(encoder, "UTF-7-CC-EN-4", ccus, ccbs, true);
+            smBufEncode(encoder, "UTF-7-CC-EN-4", ccus, ccbs, true, false);
             errln("Exception while encoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
@@ -1998,7 +2004,7 @@ public class TestCharset extends TestFmwk {
         ccus.position(0);
         
         try {
-            smBufEncode(encoder, "UTF-7-CC-EN-5", ccus, ccbs, true);
+            smBufEncode(encoder, "UTF-7-CC-EN-5", ccus, ccbs, true, false);
             errln("Exception while encoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
@@ -2016,7 +2022,7 @@ public class TestCharset extends TestFmwk {
         ccus.position(0);
         
         try {
-            smBufEncode(encoder, "UTF-7-CC-EN-6", ccus, ccbs, true);
+            smBufEncode(encoder, "UTF-7-CC-EN-6", ccus, ccbs, true, false);
             errln("Exception while encoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
@@ -2035,7 +2041,7 @@ public class TestCharset extends TestFmwk {
         ccus.position(0);
         
         try {
-            smBufEncode(encoder, "UTF-7-CC-EN-7", ccus, ccbs, true);
+            smBufEncode(encoder, "UTF-7-CC-EN-7", ccus, ccbs, true, false);
             errln("Exception while encoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
@@ -2053,7 +2059,7 @@ public class TestCharset extends TestFmwk {
         ccus.position(0);
         
         try {
-            smBufEncode(encoder, "UTF-7-CC-EN-8", ccus, ccbs, true);
+            smBufEncode(encoder, "UTF-7-CC-EN-8", ccus, ccbs, true, false);
             errln("Exception while encoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
@@ -2071,7 +2077,7 @@ public class TestCharset extends TestFmwk {
         ccus.position(0);
         
         try {
-            smBufEncode(encoder, "UTF-7-CC-EN-9", ccus, ccbs, true);
+            smBufEncode(encoder, "UTF-7-CC-EN-9", ccus, ccbs, true, false);
             errln("Exception while encoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
@@ -2089,7 +2095,7 @@ public class TestCharset extends TestFmwk {
         ccus.position(0);
         
         try {
-            smBufEncode(encoder, "UTF-7-CC-EN-10", ccus, ccbs, true);
+            smBufEncode(encoder, "UTF-7-CC-EN-10", ccus, ccbs, true, false);
             errln("Exception while encoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
@@ -2106,7 +2112,10 @@ public class TestCharset extends TestFmwk {
         ccbs.position(0);
         ccus.limit(ccus.position());
         ccus.position(0);
-        smBufEncode(encoder, "UTF-7-CC-EN-11", ccus, ccbs);
+        try {
+            smBufEncode(encoder, "UTF-7-CC-EN-11", ccus, ccbs, false, true);
+        } catch (Exception ex) {
+        }
         //end of charset encoder code coverage code
     }
     //Test Charset ISCII
@@ -2267,9 +2276,14 @@ public class TestCharset extends TestFmwk {
         bsr.limit(bsr.position());
         bsr.position(0);
         
-        smBufDecode(decoder, "ISCII-part1", bsr, us);
-        smBufEncode(encoder, "ISCII-part2", us, bs);  
-        smBufDecode(decoder, "ISCII-part3", bs, us);
+        //round trip test
+        try {
+            smBufDecode(decoder, "ISCII-part1", bsr, us, false, true);
+            smBufEncode(encoder, "ISCII-part2", us, bs); 
+            smBufDecode(decoder, "ISCII-part3", bs, us, false, true);
+        } catch (Exception ex) {
+            errln("ISCII round trip test failed.");
+        }
         
         //The rest of the code in this method is to provide better code coverage
         CharBuffer ccus = CharBuffer.allocate(0x10);
@@ -2285,7 +2299,7 @@ public class TestCharset extends TestFmwk {
         ccus.position(0);
         
         try {
-            smBufDecode(decoder, "ISCII-CC-DE-1", ccbs, ccus, true);
+            smBufDecode(decoder, "ISCII-CC-DE-1", ccbs, ccus, true, false);
             errln("Exception while decoding ISCII should have been thrown.");
         }
         catch (Exception ex) {
@@ -2304,7 +2318,7 @@ public class TestCharset extends TestFmwk {
         ccus.position(0);
         
         try {
-            smBufDecode(decoder, "ISCII-CC-DE-2", ccbs, ccus, true);
+            smBufDecode(decoder, "ISCII-CC-DE-2", ccbs, ccus, true, false);
             errln("Exception while decoding ISCII should have been thrown.");
         }
         catch (Exception ex) {
@@ -2325,7 +2339,7 @@ public class TestCharset extends TestFmwk {
         ccbs.position(0);
            
         try {
-            smBufEncode(encoder, "ISCII-CC-EN-1", ccus, ccbs, true);
+            smBufEncode(encoder, "ISCII-CC-EN-1", ccus, ccbs, true, false);
             errln("Exception while encoding ISCII should have been thrown.");
         }
         catch (Exception ex) {
@@ -2344,7 +2358,7 @@ public class TestCharset extends TestFmwk {
         ccbs.position(0);
            
         try {
-            smBufEncode(encoder, "ISCII-CC-EN-2", ccus, ccbs, true);
+            smBufEncode(encoder, "ISCII-CC-EN-2", ccus, ccbs, true, false);
             errln("Exception while encoding ISCII should have been thrown.");
         }
         catch (Exception ex) {
@@ -2363,7 +2377,7 @@ public class TestCharset extends TestFmwk {
         ccbs.position(0);
            
         try {
-            smBufEncode(encoder, "ISCII-CC-EN-3", ccus, ccbs, true);
+            smBufEncode(encoder, "ISCII-CC-EN-3", ccus, ccbs, true, false);
             errln("Exception while encoding ISCII should have been thrown.");
         }
         catch (Exception ex) {
@@ -2382,7 +2396,7 @@ public class TestCharset extends TestFmwk {
         ccbs.position(0);
            
         try {
-            smBufEncode(encoder, "ISCII-CC-EN-4", ccus, ccbs, true);
+            smBufEncode(encoder, "ISCII-CC-EN-4", ccus, ccbs, true, false);
             errln("Exception while encoding ISCII should have been thrown.");
         }
         catch (Exception ex) {
@@ -2401,7 +2415,7 @@ public class TestCharset extends TestFmwk {
         ccbs.position(0);
            
         try {
-            smBufEncode(encoder, "ISCII-CC-EN-5", ccus, ccbs, true);
+            smBufEncode(encoder, "ISCII-CC-EN-5", ccus, ccbs, true, false);
             errln("Exception while encoding ISCII should have been thrown.");
         }
         catch (Exception ex) {
@@ -2420,7 +2434,7 @@ public class TestCharset extends TestFmwk {
         ccbs.position(0);
            
         try {
-            smBufEncode(encoder, "ISCII-CC-EN-6", ccus, ccbs, true);
+            smBufEncode(encoder, "ISCII-CC-EN-6", ccus, ccbs, true, false);
             errln("Exception while encoding ISCII should have been thrown.");
         }
         catch (Exception ex) {
@@ -2442,7 +2456,7 @@ public class TestCharset extends TestFmwk {
         encoder = cs.newEncoder();
         
         try {
-            smBufEncode(encoder, "ISCII-CC-EN-7", ccus, ccbs, true);
+            smBufEncode(encoder, "ISCII-CC-EN-7", ccus, ccbs, true, false);
             errln("Exception while encoding ISCII should have been thrown.");
         }
         catch (Exception ex) {

@@ -966,7 +966,7 @@ class CharsetISCII extends CharsetICU {
                 
             } //end of while
             
-            if (!cr.isError() && !cr.isOverflow() /* && flush --always flush */&& !source.hasRemaining()) {
+            if (!cr.isError() && !cr.isOverflow() && flush && !source.hasRemaining()) {
                 /*end of the input stream */
                 if (data.contextCharToUnicode == ATR || data.contextCharToUnicode == EXT || data.contextCharToUnicode == ISCII_INV) {
                     /* set toUBytes[] */
