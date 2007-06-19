@@ -2449,4 +2449,28 @@ public class TestCharset extends TestFmwk {
         }
         //end of charset encoder code coverage code
     }
+    
+    public void TestCharsetIMAP() {
+        CharsetProvider provider = new CharsetProviderICU();
+        Charset cs = provider.charsetForName("IMAP-mailbox-name");        
+        CharsetEncoder encoder = cs.newEncoder();
+        CharsetDecoder decoder = cs.newDecoder();
+        
+        CharBuffer us = CharBuffer.allocate(0x20);
+        ByteBuffer bs = ByteBuffer.allocate(0x20);
+        
+        us.put((char)0x00A3); us.put((char)0x2020); us.put((char)0x41);
+        
+        bs.put((byte)0x26); bs.put((byte)0x41); bs.put((byte)0x4B); bs.put((byte)0x4D); bs.put((byte)0x67); bs.put((byte)0x49);
+        bs.put((byte)0x41); bs.put((byte)0x2D); bs.put((byte)0x41);
+        
+        
+        bs.limit(bs.position());
+        bs.position(0);
+        us.limit(us.position());
+        us.position(0);
+
+        smBufDecode(decoder, "IMAP", bs, us);
+        smBufEncode(encoder, "IMAP", us, bs);
+    }
 }

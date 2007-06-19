@@ -20,7 +20,7 @@ import com.ibm.icu.text.UTF16;
  *
  */
 class CharsetUTF7 extends CharsetICU {
-    private final String IMAP_NAME="imapmailboxname";
+    private final String IMAP_NAME="IMAP-mailbox-name";
     private boolean useIMAP;
     protected byte[] fromUSubstitution=new byte[]{0x3F};
    
@@ -223,8 +223,8 @@ class CharsetUTF7 extends CharsetICU {
                     byteIndex=0;
                     length=source.remaining();
                     //targetCapacity=target.remaining();
-                    //Commented out because length of source may be larger than target when it comes to bytes
-                    /*if (length > targetCapacity) {
+                    //Commented out because length of source may be larger than target when it comes to bytes 
+                    /*if (useIMAP && length > targetCapacity) {
                         length=targetCapacity;
                     }*/
                     while (length > 0) {
@@ -298,7 +298,8 @@ class CharsetUTF7 extends CharsetICU {
                                         // illegal
                                         inDirectMode=1;
                                         cr=CoderResult.malformedForLength(sourceArrayIndex);
-                                        //TODO:goto endloop;
+                                        // goto endloop;
+                                        break directMode;
                                     }
                                     target.put(c);
                                     if (offsets != null) {
@@ -313,10 +314,11 @@ class CharsetUTF7 extends CharsetICU {
                                 case 5:
                                     c=(char)((bits<<2) | (base64Value>>4));
                                     if(useIMAP && isLegal(c, useIMAP)) {
-                                        //legal
+                                        // illegal
                                         inDirectMode=1;
                                         cr=CoderResult.malformedForLength(sourceArrayIndex);
-                                        //TODO:goto endloop;
+                                        // goto endloop;
+                                        break directMode;
                                     }
                                     target.put(c);
                                     if (offsets != null) {
@@ -331,10 +333,11 @@ class CharsetUTF7 extends CharsetICU {
                                 case 7:
                                     c=(char)((bits<<6) | base64Value);
                                     if (useIMAP && isLegal(c, useIMAP)) {
-//                                      legal
+                                        // illegal
                                         inDirectMode=1;
                                         cr=CoderResult.malformedForLength(sourceArrayIndex);
-                                        //TODO:goto endloop;
+                                        // goto endloop;
+                                        break directMode;
                                     }
                                     target.put(c);
                                     if (offsets != null) {
@@ -360,7 +363,7 @@ class CharsetUTF7 extends CharsetICU {
                                     }
                                 } else {
                                     /* absorb the minus and leave the Unicode Mode */
-                                    if (bits != 0 || (useIMAP && base64Counter!=0 && base64Counter!=3 && base64Counter!=6)) {
+                                    if (bits!=0 || (useIMAP && base64Counter!=0 && base64Counter!=3 && base64Counter!=6)) {
                                         /*bits are illegally left over, a unicode character is incomplete */
                                         cr=CoderResult.malformedForLength(sourceArrayIndex);
                                         break;
@@ -415,7 +418,7 @@ class CharsetUTF7 extends CharsetICU {
                 }
             }//end of direct mode label
             if (useIMAP) {
-                if (!cr.isError() && inDirectMode==0 /*&& flush (--always flush)*/ && byteIndex==0 && !source.hasRemaining()) {
+                if (!cr.isError() && inDirectMode==0 && flush && byteIndex==0 && !source.hasRemaining()) {
                     if (base64Counter==-1) {
                         /* & at the very end of the input */
                         /* make the ampersand the reported sequence */
@@ -423,7 +426,6 @@ class CharsetUTF7 extends CharsetICU {
                         byteIndex=1;
                     }
                     /* else if (base64Counter!=-1) byteIndex remains 0 because ther is no particular byte sequence */
-                    
                     inDirectMode=1;
                     cr=CoderResult.malformedForLength(sourceIndex);
                 }
@@ -442,7 +444,7 @@ class CharsetUTF7 extends CharsetICU {
                 }
             }
             /* set the converter state */
-            toUnicodeStatus=((int)inDirectMode<<24 | (int)base64Counter<<16 | (int)bits);
+            toUnicodeStatus=((int)inDirectMode<<24 | (int)(((short)base64Counter & UConverterConstants.UNSIGNED_BYTE_MASK)<<16) | (int)bits);
             toULength=byteIndex;
    
             return cr;
@@ -737,7 +739,7 @@ class CharsetUTF7 extends CharsetICU {
                 fromUnicodeStatus=((status&0xf0000000) | 0x1000000); /* keep version, inDirectMode=TRUE */
             } else {
                 /* set the converter state back */
-                fromUnicodeStatus=((status&0xf0000000) | ((int)inDirectMode<<24) | ((int)base64Counter<<16) | ((int)bits));
+                fromUnicodeStatus=((status&0xf0000000) | ((int)inDirectMode<<24) | (int)(((short)base64Counter & UConverterConstants.UNSIGNED_BYTE_MASK)<<16) | ((int)bits));
             }
             
             return cr;
