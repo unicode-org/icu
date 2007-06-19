@@ -431,7 +431,7 @@ class CharsetUTF7 extends CharsetICU {
                 }
                 
             } else {
-                if (!cr.isError() /*&& flush (--always flush)*/ && !source.hasRemaining() && bits  ==0) {
+                if (!cr.isError() && flush && !source.hasRemaining() && bits  ==0) {
                     /*
                      * if we are in Unicode Mode, then the byteIndex might not be 0,
                      * but that is ok if bits -- 0
@@ -708,7 +708,7 @@ class CharsetUTF7 extends CharsetICU {
             }
             } //end of directMode label
             
-            if (/*flush && always flush*/ !source.hasRemaining()) {
+            if (flush && !source.hasRemaining()) {
                 /* flush remaining bits to the target */
                 if (inDirectMode==0) {
                     if (base64Counter!=0) {
