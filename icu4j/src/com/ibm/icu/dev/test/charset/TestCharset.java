@@ -2464,6 +2464,7 @@ public class TestCharset extends TestFmwk {
         //end of charset encoder code coverage code
     }
     
+    //Test for the IMAP Charset
     public void TestCharsetIMAP() {
         CharsetProvider provider = new CharsetProviderICU();
         Charset cs = provider.charsetForName("IMAP-mailbox-name");        
