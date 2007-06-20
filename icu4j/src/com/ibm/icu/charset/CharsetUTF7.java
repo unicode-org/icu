@@ -80,9 +80,9 @@ class CharsetUTF7 extends CharsetICU {
     // legal byte values: all US-ASCII graphic characters 0x20..0x7e
     private static boolean isLegal(char c, boolean useIMAP) {
         if (useIMAP) {
-        return (
-                (0x20 <= c) && (c <= 0x7e)
-                );
+            return (
+                    (0x20 <= c) && (c <= 0x7e)
+                    );
         } else {
             return (
                     ((char)(c - 32) < 94 && (c != BACKSLASH)) || isCRLFTAB(c)
@@ -526,11 +526,7 @@ class CharsetUTF7 extends CharsetICU {
                     } else {
                         /* un-read this character and switch to unicode mode */
                         source.position(source.position() - 1);
-                        if (useIMAP) {
-                            target.put((byte)AMPERSAND);
-                        } else {
-                            target.put((byte)PLUS);
-                        }
+                        target.put(useIMAP ? (byte)AMPERSAND : (byte)PLUS);
                         if (offsets != null) {
                             offsets.put(sourceIndex);
                         }
