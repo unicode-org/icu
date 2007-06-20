@@ -152,6 +152,30 @@ public final class UTF16
      * @stable ICU 2.1
      */
     public static final int SURROGATE_MAX_VALUE = TRAIL_SURROGATE_MAX_VALUE;
+    /**
+     * Lead surrogate bitmask
+     */
+    public static final int LEAD_SURROGATE_BITMASK = 0xFC00;
+    /**
+     * Trail surrogate bitmask
+     */
+    public static final int TRAIL_SURROGATE_BITMASK = 0xFC00;
+    /**
+     * Surrogate bitmask
+     */
+    public static final int SURROGATE_BITMASK = 0xF800;
+    /**
+     * Lead surrogate bits
+     */
+    public static final int LEAD_SURROGATE_BITS = 0xD800;
+    /**
+     * Trail surrogate bits
+     */
+    public static final int TRAIL_SURROGATE_BITS = 0xDC00;
+    /**
+     * Surrogate bits
+     */
+    public static final int SURROGATE_BITS = 0xD800;
 
     // constructor --------------------------------------------------------
 
@@ -637,8 +661,7 @@ public final class UTF16
      */
     public static boolean isSurrogate(char char16)
     {
-        return LEAD_SURROGATE_MIN_VALUE <= char16 &&
-            char16 <= TRAIL_SURROGATE_MAX_VALUE;
+        return (char16 & SURROGATE_BITMASK) == SURROGATE_BITS;
     }
 
     /**
@@ -649,8 +672,7 @@ public final class UTF16
      */
     public static boolean isTrailSurrogate(char char16)
     {
-        return (TRAIL_SURROGATE_MIN_VALUE <= char16 &&
-                char16 <= TRAIL_SURROGATE_MAX_VALUE);
+        return (char16 & TRAIL_SURROGATE_BITMASK) == TRAIL_SURROGATE_BITS;
     }
 
     /**
@@ -661,8 +683,7 @@ public final class UTF16
      */
     public static boolean isLeadSurrogate(char char16)
     {
-        return LEAD_SURROGATE_MIN_VALUE <= char16 &&
-            char16 <= LEAD_SURROGATE_MAX_VALUE;
+        return (char16 & LEAD_SURROGATE_BITMASK) == LEAD_SURROGATE_BITS;
     }
 
     /**
@@ -677,12 +698,9 @@ public final class UTF16
      */
     public static char getLeadSurrogate(int char32)
     {
-        if (char32 >= SUPPLEMENTARY_MIN_VALUE) {
-            return (char)(LEAD_SURROGATE_OFFSET_ +
-                          (char32 >> LEAD_SURROGATE_SHIFT_));
-        }
-
-        return 0;
+        return (char32 >= SUPPLEMENTARY_MIN_VALUE)
+                ? (char) (LEAD_SURROGATE_OFFSET_ + (char32 >> LEAD_SURROGATE_SHIFT_))
+                : 0;
     }
 
     /**
@@ -697,24 +715,21 @@ public final class UTF16
      */
     public static char getTrailSurrogate(int char32)
     {
-        if (char32 >= SUPPLEMENTARY_MIN_VALUE) {
-            return (char)(TRAIL_SURROGATE_MIN_VALUE +
-                          (char32 & TRAIL_SURROGATE_MASK_));
-        }
-
-        return (char)char32;
+        return (char32 >= SUPPLEMENTARY_MIN_VALUE)
+                ? (char) (TRAIL_SURROGATE_MIN_VALUE + (char32 & TRAIL_SURROGATE_MASK_))
+                : (char) char32;
     }
 
     /**
-     * Convenience method corresponding to String.valueOf(char). Returns a one
-     * or two char string containing the UTF-32 value in UTF16 format. If a
-     * validity check is required, use
-     * <a href="../lang/UCharacter.html#isLegal(char)">isLegal()</a></code> on
-     * char32 before calling.
-     * @param char32 the input character.
+     * Convenience method corresponding to String.valueOf(char). Returns a one or two char string
+     * containing the UTF-32 value in UTF16 format. If a validity check is required, use <a
+     * href="../lang/UCharacter.html#isLegal(char)">isLegal()</a></code> on char32 before calling.
+     * 
+     * @param char32
+     *            the input character.
      * @return string value of char32 in UTF16 format
-     * @exception IllegalArgumentException thrown if char32 is a invalid
-     *            codepoint.
+     * @exception IllegalArgumentException
+     *                thrown if char32 is a invalid codepoint.
      * @stable ICU 2.1
      */
     public static String valueOf(int char32)
