@@ -12,8 +12,10 @@ package com.ibm.icu.impl;
 
 import java.text.ParsePosition;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.Set;
 import java.util.Vector;
 
 import com.ibm.icu.text.MessageFormat;
@@ -23,6 +25,7 @@ import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
+import com.ibm.icu.util.UResourceBundleIterator;
 
 /**
  * This class, not to be instantiated, implements the meta-data
@@ -214,22 +217,60 @@ public final class ZoneMeta {
     private static String[] getCanonicalInfo(String id) {
         if (canonicalMap == null) {
             Map m = new HashMap();
-            for (int i = 0; i < ZoneInfoExt.CLDR_INFO.length; ++i) {
-                String[] clist = ZoneInfoExt.CLDR_INFO[i];
-                String c = clist[0];
-                m.put(c, clist);
-                for (int j = 3; j < clist.length; ++j) {
-                    m.put(clist[j], clist);
+            Set s = new HashSet();
+            UResourceBundle supplementalDataBundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "supplementalData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+
+            UResourceBundle zoneFormatting = supplementalDataBundle.get("zoneFormatting");
+            UResourceBundleIterator it = zoneFormatting.getIterator();
+
+            while ( it.hasNext()) {
+                UResourceBundle temp = it.next();
+                int resourceType = temp.getType();
+
+                switch(resourceType) {
+                    case UResourceBundle.TABLE:
+                        String [] result = { "", "" };
+                        UResourceBundle zoneInfo = temp;
+                        String canonicalID = zoneInfo.getKey().replace(':','/');
+                        String territory = zoneInfo.get("territory").getString();
+                        result[0] = canonicalID;
+                        if ( territory.equals("001")) {
+                            result[1] = null;
+                        }
+                        else {
+                            result[1] = territory;
+                        }
+                        m.put(canonicalID,result);
+                        try {
+                            UResourceBundle aliasBundle = zoneInfo.get("aliases");
+                            String [] aliases = aliasBundle.getStringArray();
+                            for (int i=0 ; i<aliases.length; i++) {
+                               m.put(aliases[i],result);
+                            }
+                        } catch(MissingResourceException ex){
+                            // Disregard if there are no aliases
+                        }
+                        break;
+                    case UResourceBundle.ARRAY:
+                        String[] territoryList = temp.getStringArray();
+                        for (int i=0 ; i < territoryList.length; i++) {
+                            s.add(territoryList[i]);
+                        }
+                        break;
                 }
             }
+
             synchronized (ZoneMeta.class) {
                 canonicalMap = m;
+                multiZoneTerritories = s;
             }
         }
 
         return (String[])canonicalMap.get(id);
     }
+
     private static Map canonicalMap = null;
+    private static Set multiZoneTerritories = null;
 
     /**
      * Return the canonical id for this tzid, which might be the id itself.
@@ -263,7 +304,7 @@ public final class ZoneMeta {
      */
     public static String getSingleCountry(String tzid) {
         String[] info = getCanonicalInfo(tzid);
-        if (info != null && info[2] != null) {
+        if (info != null && info[1] != null && !multiZoneTerritories.contains(info[1])) {
             return info[1];
         }
         return null;
@@ -295,7 +336,7 @@ public final class ZoneMeta {
         
         // This is not behavior specified in tr35, but behavior added by Mark.  
         // TR35 says to display the country _only_ if there is a localization.
-        if (info[2] != null) { // single country
+        if (getSingleCountry(tzid) != null) { // single country
             return displayRegion(country, locale);
         }
 
