@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 1999-2006, International Business Machines
+#   Copyright (C) 1999-2007, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -45,7 +45,7 @@ dadrcoll.o dcfmapts.o decoll.o dtfmapts.o dtfmrgts.o dtfmtrtts.o dtfmttst.o	\
 encoll.o escoll.o ficoll.o frcoll.o g7coll.o intltest.o	\
 itercoll.o itformat.o itmajor.o itutil.o jacoll.o lcukocol.o	\
 loctest.o miscdtfm.o mnkytst.o msfmrgts.o nmfmapts.o nmfmtrt.o		\
-numfmtst.o numrgts.o pptest.o regcoll.o restest.o restsnew.o rndmcoll.o \
+numfmtst.o numrgts.o pptest.o regcoll.o restest.o restsnew.o \
 sdtfmtts.o svccoll.o tchcfmt.o	\
 tfsmalls.o tmsgfmt.o trcoll.o tscoll.o tsdate.o tsdcfmsy.o tsdtfmsy.o	\
 tsmthred.o tsnmfmt.o tsputil.o tstnrapi.o tstnorm.o tzbdtest.o		\
@@ -55,7 +55,7 @@ testutil.o transrt.o trnserr.o normconf.o sfwdchit.o \
 jamotest.o srchtest.o reptest.o regextst.o \
 itrbnf.o itrbnfrt.o itrbnfp.o ucaconf.o icusvtst.o \
 uobjtest.o idnaref.o idnaconf.o nptrans.o punyref.o testidn.o testidna.o incaltst.o \
-calcasts.o v32test.o uvectest.o textfile.o tokiter.o utxttest.o wbnf.o \
+calcasts.o v32test.o uvectest.o textfile.o tokiter.o utxttest.o \
 windttst.o winnmtst.o winutil.o csdetest.o
 
 
