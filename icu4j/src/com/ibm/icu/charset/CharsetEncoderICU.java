@@ -51,30 +51,30 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
     Object fromUContext;
     private CharsetCallback.Encoder onUnmappableInput = CharsetCallback.FROM_U_CALLBACK_STOP;
     private CharsetCallback.Encoder onMalformedInput = CharsetCallback.FROM_U_CALLBACK_STOP;
-    CharsetCallback.Encoder fromCharErrorBehaviour = new CharsetCallback.Encoder(){ 
-                                                                        public CoderResult call(CharsetEncoderICU encoder, Object context, 
-                                                                                                CharBuffer source, ByteBuffer target, IntBuffer offsets, 
-                                                                                                char[] buffer, int length, int cp, CoderResult cr) {
-                                                                                if(cr.isUnmappable()){
-                                                                                    return onUnmappableInput.call(encoder, context, 
-                                                                                                                  source, target, offsets, 
-                                                                                                                  buffer, length, cp, cr);
-                                                                                }else if(cr.isMalformed()){
-                                                                                    return onMalformedInput.call(encoder, context, 
-                                                                                                                 source, target, offsets, 
-                                                                                                                 buffer, length, cp, cr);    
-                                                                                }
-                                                                                return CharsetCallback.FROM_U_CALLBACK_STOP.call(encoder, context, 
-                                                                                                                                 source, target, offsets, 
-                                                                                                                                 buffer, length, cp, cr);
+    CharsetCallback.Encoder fromCharErrorBehaviour = new CharsetCallback.Encoder() {
+        public CoderResult call(CharsetEncoderICU encoder, Object context, CharBuffer source,
+                ByteBuffer target, IntBuffer offsets, char[] buffer, int length, int cp,
+                CoderResult cr) {
+            if (cr.isUnmappable()) {
+                return onUnmappableInput.call(encoder, context, source, target, offsets, buffer,
+                        length, cp, cr);
+            } else if (cr.isMalformed()) {
+                return onMalformedInput.call(encoder, context, source, target, offsets, buffer,
+                        length, cp, cr);
+            }
+            return CharsetCallback.FROM_U_CALLBACK_STOP.call(encoder, context, source, target,
+                    offsets, buffer, length, cp, cr);
 
-                                                                        }
-                                                                    };
+        }
+    };
 
-   /** 
+   /**
      * Construcs a new encoder for the given charset
-     * @param cs for which the decoder is created
-     * @param replacement the substitution bytes
+     * 
+     * @param cs
+     *            for which the decoder is created
+     * @param replacement
+     *            the substitution bytes
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
@@ -83,21 +83,25 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
     }
 
 	/**
-	 * Sets the action to be taken if an illegal sequence is encountered
-	 * @param newAction action to be taken
-	 * @exception IllegalArgumentException
+     * Sets the action to be taken if an illegal sequence is encountered
+     * 
+     * @param newAction
+     *            action to be taken
+     * @exception IllegalArgumentException
      * @stable ICU 3.6
-	 */
+     */
 	protected void implOnMalformedInput(CodingErrorAction newAction) {
 	    onMalformedInput = getCallback(newAction);
 	}
 
 	/**
-	 * Sets the action to be taken if an illegal sequence is encountered
-	 * @param newAction action to be taken
-	 * @exception IllegalArgumentException
+     * Sets the action to be taken if an illegal sequence is encountered
+     * 
+     * @param newAction
+     *            action to be taken
+     * @exception IllegalArgumentException
      * @stable ICU 3.6
-	 */
+     */
     protected void implOnUnmappableCharacter(CodingErrorAction newAction) {
         onUnmappableInput = getCallback(newAction);
 	}
