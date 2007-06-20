@@ -891,7 +891,7 @@ void TimeZoneTest::TestCustomParse()
     }
 }
 
-static const UVersionInfo ICU_37 = {3,7,2,0};
+static const UVersionInfo ICU_37 = {3,7,3,0};
 
 void
 TimeZoneTest::TestAliasedNames()

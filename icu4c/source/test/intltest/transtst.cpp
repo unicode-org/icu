@@ -192,7 +192,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
     }
 }
 
-static const UVersionInfo ICU_37 = {3,7,2,0};
+static const UVersionInfo ICU_37 = {3,7,3,0};
 /**
  * Make sure every system transliterator can be instantiated.
  * 
