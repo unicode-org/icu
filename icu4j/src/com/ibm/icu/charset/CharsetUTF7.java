@@ -503,13 +503,9 @@ class CharsetUTF7 extends CharsetICU {
                             offsets.put(sourceIndex++);
                         }
                     } else if ((!useIMAP && c==PLUS) || (useIMAP && c==AMPERSAND)) {
-                        if (useIMAP) {
-                            /* IMAP: output &- for & */
-                            target.put((byte)AMPERSAND);
-                        } else {
-                            /* UTF-7: output +- for + */
-                            target.put((byte)PLUS);
-                        }
+                        /* IMAP: output &- for & */
+                        /* UTF-7: output +- for + */
+                        target.put(useIMAP ? (byte)AMPERSAND : (byte)PLUS);
                         if (target.hasRemaining()) {
                             target.put((byte)MINUS);
                             if (offsets != null) {
