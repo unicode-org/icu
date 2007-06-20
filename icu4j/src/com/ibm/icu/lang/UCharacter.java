@@ -4075,8 +4075,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      *         selector
      * @stable ICU 2.4
      */
-    public static int getPropertyValueEnum(int property,
-                                           String valueAlias) {
+    public static int getPropertyValueEnum(int property, String valueAlias) {
         return PNAMES_.getPropertyValueEnum(property, valueAlias);
     }
       
@@ -4091,10 +4090,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static int getCodePoint(char lead, char trail) 
     {
-        if (lead >= UTF16.LEAD_SURROGATE_MIN_VALUE && 
-        lead <= UTF16.LEAD_SURROGATE_MAX_VALUE &&
-            trail >= UTF16.TRAIL_SURROGATE_MIN_VALUE && 
-        trail <= UTF16.TRAIL_SURROGATE_MAX_VALUE) {
+        if (UTF16.isLeadSurrogate(lead) && UTF16.isTrailSurrogate(trail)) {
             return UCharacterProperty.getRawSupplementary(lead, trail);
         }
         throw new IllegalArgumentException("Illegal surrogate characters");
