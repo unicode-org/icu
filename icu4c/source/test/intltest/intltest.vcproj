@@ -357,14 +357,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\rndmcoll.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\rndmcoll.h"
-				>
-			</File>
-			<File
 				RelativePath=".\srchtest.cpp"
 				>
 			</File>
@@ -410,14 +402,6 @@
 			</File>
 			<File
 				RelativePath=".\ucaconf.h"
-				>
-			</File>
-			<File
-				RelativePath=".\wbnf.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\wbnf.h"
 				>
 			</File>
 		</Filter>

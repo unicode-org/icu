@@ -71,15 +71,9 @@ static const char collationBNF[] =
     "$root = $command{0,5} $reset $mostRules{1,20};";
 
 
-static const UVersionInfo ICU_37 = {3,7,2,0};
-
 void RandomCollatorTest::Test2(){
-    if(!isICUVersionAtLeast(ICU_37)){
-        return;
-    }
-    else {
-        errln("TestWbnf is incorrectly implemented.\nThis test should be modeled to use the existing test frame work for naming tests.\n");
-    }
+    // See ticket 5747 about reenabling this test.
+    errln("TestWbnf is incorrectly implemented.\nThis test should be modeled to use the existing test frame work for naming tests.\n");
     TestWbnf();
 }
 
@@ -140,12 +134,9 @@ private:
 };*/
 
 void RandomCollatorTest::Test(){
-    if(!isICUVersionAtLeast(ICU_37)){
-        return;
-    }
-    else {
-        errln("This test needs to be fixed.\n");
-    }
+    // See ticket 5747 about reenabling this test.
+    errln("This test needs to be fixed.\n");
+
     LanguageGenerator test_rule;
     if (test_rule.parseBNF(collationBNF, "$root", TRUE) != LanguageGenerator::OK){
         errln("The test code itself is wrong.");
