@@ -42,7 +42,7 @@ public class TestAll extends TestGroup {
                   "CollationChineseTest",
                   "CollationServiceTest",
 //#ifndef FOUNDATION
-                  "RandomCollator",
+                  //"RandomCollator", //Disabled until the problem in the test case is resolved #5747
 //#endif
                   "UCAConformanceTest",
                   // don't test Search API twice!
