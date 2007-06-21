@@ -173,7 +173,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
                 if (GENERATE_TEST_DATA) {
                     logln("new String[] {\"" + testSkeleton + "\", \"" + Utility.escape(formatted) + "\"},");
                 } else if (!formatted.equals(testFormatted)) {
-                    if(skipIfBeforeICU(3,7,1)&& uLocale.equals("zh_Hans_CN")){
+                    if(skipIfBeforeICU(3,7,2)&& uLocale.equals("zh_Hans_CN")){
                         continue;
                     }
                         
