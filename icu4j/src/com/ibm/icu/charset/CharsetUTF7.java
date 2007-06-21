@@ -378,7 +378,7 @@ class CharsetUTF7 extends CharsetICU {
                                     /* illegal:  + immediately followed by something other than base64 minus sign */
                                     /* include the plus sign in the reported sequence */
                                     --sourceIndex;
-                                    toUBytesArray[0]=useIMAP ? (byte)AMPERSAND : (byte)PLUS;
+                                    toUBytesArray[0]=(byte)PLUS;
                                     toUBytesArray[1]=(byte)b;
                                     byteIndex=2;
                                     cr=CoderResult.malformedForLength(sourceArrayIndex);
