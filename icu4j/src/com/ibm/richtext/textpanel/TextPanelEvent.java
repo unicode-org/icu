@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2004.  All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2007.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or
  * implied, including the warranty of non-infringement and the implied
@@ -33,9 +33,11 @@ import java.util.EventObject;
  */
 public final class TextPanelEvent extends EventObject {
 
-    static final String COPYRIGHT =
-                "(C) Copyright IBM Corp. 1998-1999 - All Rights Reserved";
-    
+    /**
+     * For serialization
+     */
+    private static final long serialVersionUID = 6971512969738427763L;
+
     /**
      * The lower bound of TextPanelEvent ID's.
      */

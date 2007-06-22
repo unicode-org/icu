@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2004.  All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2007.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or
  * implied, including the warranty of non-infringement and the implied
@@ -39,6 +39,11 @@ import java.io.InvalidObjectException;
  * @see Map
  */
 public class TextAttribute extends Attribute {
+
+    /**
+     * For serialization
+     */
+    private static final long serialVersionUID = 1831947517687597324L;
 
     private static final Hashtable instanceMap = new Hashtable(9);
 

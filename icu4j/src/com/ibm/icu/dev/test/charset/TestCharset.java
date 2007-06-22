@@ -1690,12 +1690,13 @@ public class TestCharset extends TestFmwk {
         String charsetName = null;
         
         try {
-            Charset cs = CharsetICU.forNameICU(charsetName);
+            CharsetICU.forNameICU(charsetName);
             errln("CharsetICU.forName should have thown an exception after getting a null charsetName.");
         }
         catch(Exception ex) {          
         }
     }
+    
     //Test CharsetASCII
     public void TestCharsetASCIIOverFlow() {
         int byteBufferLimit;

@@ -13,8 +13,6 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
 
-import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.text.UTF16;
 /**
  * @author Michael Ow
  *
