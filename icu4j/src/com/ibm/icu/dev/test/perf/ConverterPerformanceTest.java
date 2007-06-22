@@ -1,3 +1,9 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 2002-2007, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ */
 package com.ibm.icu.dev.test.perf;
 
 import java.io.*;
@@ -9,9 +15,6 @@ import java.nio.charset.*;
 import java.nio.*;
 
 /**
- * Copyright (c) 2002-2005, International Business Machines Corporation
- * and others. All rights reserved.
- *
  * @author ram
  */
 public class ConverterPerformanceTest extends PerfTest {
@@ -82,12 +85,11 @@ public class ConverterPerformanceTest extends PerfTest {
     PerfTest.Function TestToUnicodeStream() {
         return new PerfTest.Function() {
             char[] dst = new char[encBuffer.length];
-            int numOut =0;
             public void call() {
                 try{
                     ByteArrayInputStream is = new ByteArrayInputStream(encBuffer, 0, encBuffer.length);
                     InputStreamReader reader = new InputStreamReader(is, testEncoderName);
-                    numOut = reader.read(dst, 0, dst.length);
+                    reader.read(dst, 0, dst.length);
                     reader.close();
                 }catch(Exception e){
                     e.printStackTrace();
