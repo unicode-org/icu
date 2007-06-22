@@ -1175,7 +1175,7 @@ UBool RegexCompile::doParseActions(int32_t action)
                     break;
                 }
                 c = peekCharLL();
-                if (RegexStaticSets::gStaticSets->fRuleDigits->contains(c) == FALSE) {
+                if (RegexStaticSets::gStaticSets->fRuleDigitsAlias->contains(c) == FALSE) {
                     break;
                 }
                 nextCharLL();
@@ -3375,7 +3375,7 @@ void RegexCompile::nextChar(RegexPatternChar &c) {
                 int32_t startX = fNextIndex;  // start and end positions of the
                 int32_t endX   = fNextIndex;  //   sequence following the '\'
         if (c.fChar == chBackSlash) {
-            if (RegexStaticSets::gStaticSets->fUnescapeCharSet->contains(peekCharLL())) {
+            if (RegexStaticSets::gStaticSets->fUnescapeCharSet.contains(peekCharLL())) {
                 //
                 // A '\' sequence that is handled by ICU's standard unescapeAt function.
                 //   Includes \uxxxx, \n, \r, many others.

@@ -55,7 +55,7 @@ RegexMatcher::RegexMatcher(const RegexPattern *pat)  {
         fDeferredStatus = U_MEMORY_ALLOCATION_ERROR;
     }
         
-    reset(*RegexStaticSets::gStaticSets->fEmptyString);
+    reset(RegexStaticSets::gStaticSets->fEmptyString);
 }
 
 
@@ -103,7 +103,7 @@ RegexMatcher::RegexMatcher(const UnicodeString &regexp,
     if (fStack == NULL || fData == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
     }
-    reset(*RegexStaticSets::gStaticSets->fEmptyString);
+    reset(RegexStaticSets::gStaticSets->fEmptyString);
 }
 
 
