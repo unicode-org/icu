@@ -136,10 +136,10 @@ public class ReplaceableTest extends TestFmwk {
             if (DEBUG) System.out.println(Utility.escape(toString()));
         }
         
-        public void replace(int start, int limit, char[] chars,
+        public void replace(int start, int limit, char[] charArray,
                             int charsStart, int charsLen) {
-            if (substring(start,limit).equals(new String(chars, charsStart, charsLen-charsStart))) return; // NO ACTION!
-            this.chars.replace(start, limit, chars, charsStart, charsLen);
+            if (substring(start,limit).equals(new String(charArray, charsStart, charsLen-charsStart))) return; // NO ACTION!
+            this.chars.replace(start, limit, charArray, charsStart, charsLen);
             fixStyles(start, limit, charsLen);
         }
 

@@ -590,8 +590,8 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
             endRange = -1;
             return this;
         }
-        public MapIterator reset(UnicodeMap map) {
-            this.map = map;
+        public MapIterator reset(UnicodeMap newMap) {
+            this.map = newMap;
             return reset();
         }
     }
@@ -664,14 +664,14 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
     public void writeExternal(ObjectOutput out1) throws IOException {
         DataOutputCompressor sc = new DataOutputCompressor(out1);
         // if all objects are strings
-        Collection availableValues = getAvailableValues();
-        boolean allStrings = allAreString(availableValues);
+        Collection availableVals = getAvailableValues();
+        boolean allStrings = allAreString(availableVals);
         sc.writeBoolean(allStrings);
         Map object_index = new LinkedHashMap();
-        if (allAreString(availableValues)) {
-            sc.writeStringSet(new TreeSet(availableValues), object_index);
+        if (allAreString(availableVals)) {
+            sc.writeStringSet(new TreeSet(availableVals), object_index);
         } else {
-            sc.writeCollection(availableValues, object_index);           
+            sc.writeCollection(availableVals, object_index);           
         }
         sc.writeUInt(length);
         int lastTransition = -1;

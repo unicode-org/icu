@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -198,11 +198,11 @@ public class ICUServiceTest extends TestFmwk
     // an anonymous factory than handles all ids
     {
         Factory factory = new Factory() {
-            public Object create(Key key, ICUService service) {
+            public Object create(Key key, ICUService unusedService) {
                 return new ULocale(key.currentID());
             }
 
-            public void updateVisibleIDs(Map result) {
+            public void updateVisibleIDs(Map unusedResult) {
             }
 
             public String getDisplayName(String id, ULocale l) {
@@ -790,9 +790,9 @@ public class ICUServiceTest extends TestFmwk
         logln("test one: " + service.get(greetingID));
 
         class WrapFactory implements Factory {
-            public Object create(Key key, ICUService service) {
+            public Object create(Key key, ICUService serviceArg) {
                 if (key.currentID().equals(greetingID)) {
-                    Object previous = service.getKey(key, null, this);
+                    Object previous = serviceArg.getKey(key, null, this);
                     return "A different greeting: \"" + previous + "\"";
                 }
                 return null;
