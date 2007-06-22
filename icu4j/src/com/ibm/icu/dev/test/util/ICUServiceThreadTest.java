@@ -67,8 +67,8 @@ public class ICUServiceThreadTest extends TestFmwk
             super(new ULocale(id), id, true);
         }
 
-        public String getDisplayName(String id, ULocale locale) {
-            return (visible && id.equals(this.id)) ? "(" + locale.toString() + ") " + id : null;
+        public String getDisplayName(String idForDisplay, ULocale locale) {
+            return (visible && idForDisplay.equals(this.id)) ? "(" + locale.toString() + ") " + idForDisplay : null;
         }
 
         public String toString() {

@@ -137,10 +137,10 @@ public class RandomCollator extends TestFmwk {
     protected void init()throws Exception{
         init(1,10, new UnicodeSet("[AZa-z<\\&\\[\\]]"));
     }
-    private void init(int minRuleCount, int maxRuleCount, UnicodeSet chars) {
-        this.chars = chars;
+    private void init(int minRuleCount, int maxRuleCount, UnicodeSet setOfChars) {
+        this.chars = setOfChars;
         bnf = new BNF(new Random(0), new Quoter.RuleQuoter())
-        .addSet("$chars", chars)
+        .addSet("$chars", setOfChars)
         .addRules(collationBNF)
         .complete();
     }

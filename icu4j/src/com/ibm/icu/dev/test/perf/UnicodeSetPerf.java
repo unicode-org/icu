@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2004, International Business Machines
+* Copyright (c) 2002-2007, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -147,9 +147,9 @@ public class UnicodeSetPerf extends PerfTest {
         return new PerfTest.Function() {
             public void call() {
                 int temp = 0;
-                Iterator it = hs.iterator();
-                while (it.hasNext()) {
-                    temp += ((Integer)it.next()).intValue();
+                Iterator itr = hs.iterator();
+                while (itr.hasNext()) {
+                    temp += ((Integer)itr.next()).intValue();
                 }
             }
 

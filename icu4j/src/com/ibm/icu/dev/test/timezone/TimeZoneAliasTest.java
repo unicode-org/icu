@@ -356,8 +356,8 @@ public class TimeZoneAliasTest extends TestFmwk {
             return new TreeSet(purportedAliases); // clone for safety
         }
         
-        public boolean isPurportedAlias(String id) {
-            return purportedAliases.contains(id);
+        public boolean isPurportedAlias(String zoneID) {
+            return purportedAliases.contains(zoneID);
         }
         
         public boolean isRealAlias(Zone z) {
