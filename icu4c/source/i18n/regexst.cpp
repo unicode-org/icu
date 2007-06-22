@@ -1,7 +1,7 @@
 //
 //  regexst.h
 //
-//  Copyright (C) 2004-2006, International Business Machines Corporation and others.
+//  Copyright (C) 2004-2007, International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains class RegexStaticSets
@@ -38,13 +38,13 @@
 U_NAMESPACE_BEGIN
 
 
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //
 // Unicode Set pattern strings for all of the required constant sets.
 //               Initialized with hex values for portability to EBCDIC based machines.
 //                Really ugly, but there's no good way to avoid it.
 //
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 // "Rule Char" Characters are those with no special meaning, and therefore do not
 //    need to be escaped to appear as literals in a regexp.  Expressed
@@ -99,7 +99,7 @@ static const UChar gIsWordPattern[] = {
 //
 //  Unicode Set Definitions for Regular Expression  \s
 //
-    static const UChar gIsSpacePattern[] = {
+static const UChar gIsSpacePattern[] = {
 //        [     \     p     {     W     h     i     t     e     S     p     a     c     e     }     ]
         0x5b, 0x5c, 0x70, 0x7b, 0x57, 0x68, 0x69, 0x74, 0x65, 0x53, 0x70, 0x61, 0x63, 0x65, 0x7d, 0x5d, 0};
 
@@ -107,7 +107,7 @@ static const UChar gIsWordPattern[] = {
 //
 //  UnicodeSets used in implementation of Grapheme Cluster detection, \X
 //
-    static const UChar gGC_ControlPattern[] = {
+static const UChar gGC_ControlPattern[] = {
 //    [     [     :     Z     l     :     ]     [     :     Z     p     :     ]    
     0x5b, 0x5b, 0x3a, 0x5A, 0x6c, 0x3a, 0x5d, 0x5b, 0x3a, 0x5A, 0x70, 0x3a, 0x5d, 
 //    [     :     C     c     :     ]     [     :     C     f     :     ]     -
@@ -117,37 +117,37 @@ static const UChar gIsWordPattern[] = {
 //    E     x     t     e     n     d     :     ]     ]
     0x45, 0x78, 0x74, 0x65, 0x6e, 0x64, 0x3a, 0x5d, 0x5d, 0};
 
-    static const UChar gGC_ExtendPattern[] = {
+static const UChar gGC_ExtendPattern[] = {
 //    [     \     p     {     G     r     a     p     h     e     m     e     _
     0x5b, 0x5c, 0x70, 0x7b, 0x47, 0x72, 0x61, 0x70, 0x68, 0x65, 0x6d, 0x65, 0x5f,
 //    E     x     t     e     n     d     }     ]
     0x45, 0x78, 0x74, 0x65, 0x6e, 0x64, 0x7d, 0x5d, 0};
 
-    static const UChar gGC_LPattern[] = {
+static const UChar gGC_LPattern[] = {
 //    [     \     p     {     H     a     n     g     u     l     _     S     y     l    
     0x5b, 0x5c, 0x70, 0x7b, 0x48, 0x61, 0x6e, 0x67, 0x75, 0x6c, 0x5f, 0x53, 0x79, 0x6c,
 //    l     a     b     l     e     _     T     y     p     e     =     L     }     ]
     0x6c, 0x61, 0x62, 0x6c, 0x65, 0x5f, 0x54, 0x79, 0x70, 0x65, 0x3d, 0x4c, 0x7d,  0x5d, 0}; 
 
-    static const UChar gGC_VPattern[] = {
+static const UChar gGC_VPattern[] = {
 //    [     \     p     {     H     a     n     g     u     l     _     S     y     l    
     0x5b, 0x5c, 0x70, 0x7b, 0x48, 0x61, 0x6e, 0x67, 0x75, 0x6c, 0x5f, 0x53, 0x79, 0x6c,
 //    l     a     b     l     e     _     T     y     p     e     =     V     }     ]
     0x6c, 0x61, 0x62, 0x6c, 0x65, 0x5f, 0x54, 0x79, 0x70, 0x65, 0x3d, 0x56, 0x7d,  0x5d, 0}; 
 
-    static const UChar gGC_TPattern[] = {
+static const UChar gGC_TPattern[] = {
 //    [     \     p     {     H     a     n     g     u     l     _     S     y     l    
     0x5b, 0x5c, 0x70, 0x7b, 0x48, 0x61, 0x6e, 0x67, 0x75, 0x6c, 0x5f, 0x53, 0x79, 0x6c,
 //    l     a     b     l     e     _     T     y     p     e     =     T     }    ]
     0x6c, 0x61, 0x62, 0x6c, 0x65, 0x5f, 0x54, 0x79, 0x70, 0x65, 0x3d, 0x54, 0x7d, 0x5d, 0}; 
 
-    static const UChar gGC_LVPattern[] = {
+static const UChar gGC_LVPattern[] = {
 //    [     \     p     {     H     a     n     g     u     l     _     S     y     l    
     0x5b, 0x5c, 0x70, 0x7b, 0x48, 0x61, 0x6e, 0x67, 0x75, 0x6c, 0x5f, 0x53, 0x79, 0x6c,
 //    l     a     b     l     e     _     T     y     p     e     =     L     V     }     ]
     0x6c, 0x61, 0x62, 0x6c, 0x65, 0x5f, 0x54, 0x79, 0x70, 0x65, 0x3d, 0x4c, 0x56, 0x7d, 0x5d, 0}; 
 
-    static const UChar gGC_LVTPattern[] = {
+static const UChar gGC_LVTPattern[] = {
 //    [     \     p     {     H     a     n     g     u     l     _     S     y     l    
     0x5b, 0x5c, 0x70, 0x7b, 0x48, 0x61, 0x6e, 0x67, 0x75, 0x6c, 0x5f, 0x53, 0x79, 0x6c,
 //    l     a     b     l     e     _     T     y     p     e     =     L     V     T     }     ]
@@ -155,29 +155,30 @@ static const UChar gIsWordPattern[] = {
 
 RegexStaticSets *RegexStaticSets::gStaticSets = NULL;
 
-RegexStaticSets::RegexStaticSets(UErrorCode *status) {
+RegexStaticSets::RegexStaticSets(UErrorCode *status)
+:
+fUnescapeCharSet(UnicodeString(TRUE, gUnescapeCharPattern, -1), *status),
+fRuleDigitsAlias(NULL)
+{
     // First zero out everything  
     int i;
     for (i=0; i<URX_LAST_SET; i++) {
         fPropSets[i] = NULL;
     }
-    for (i=0; i<10; i++) {
+    for (i=0; i<(int32_t)(sizeof(fRuleSets)/sizeof(fRuleSets[0])); i++) {
         fRuleSets[i] = NULL;
     }
-    fUnescapeCharSet = NULL;
-    fRuleDigits      = NULL;
-    fEmptyString     = NULL;
 
     // Then init the sets to their correct values.
-    fPropSets[URX_ISWORD_SET]  = new UnicodeSet(gIsWordPattern,     *status);
-    fPropSets[URX_ISSPACE_SET] = new UnicodeSet(gIsSpacePattern,    *status);    
-    fPropSets[URX_GC_EXTEND]   = new UnicodeSet(gGC_ExtendPattern,  *status);
-    fPropSets[URX_GC_CONTROL]  = new UnicodeSet(gGC_ControlPattern, *status);
-    fPropSets[URX_GC_L]        = new UnicodeSet(gGC_LPattern,       *status);
-    fPropSets[URX_GC_V]        = new UnicodeSet(gGC_VPattern,       *status);
-    fPropSets[URX_GC_T]        = new UnicodeSet(gGC_TPattern,       *status);
-    fPropSets[URX_GC_LV]       = new UnicodeSet(gGC_LVPattern,      *status);
-    fPropSets[URX_GC_LVT]      = new UnicodeSet(gGC_LVTPattern,     *status);
+    fPropSets[URX_ISWORD_SET]  = new UnicodeSet(UnicodeString(TRUE, gIsWordPattern, -1),     *status);
+    fPropSets[URX_ISSPACE_SET] = new UnicodeSet(UnicodeString(TRUE, gIsSpacePattern, -1),    *status);    
+    fPropSets[URX_GC_EXTEND]   = new UnicodeSet(UnicodeString(TRUE, gGC_ExtendPattern, -1),  *status);
+    fPropSets[URX_GC_CONTROL]  = new UnicodeSet(UnicodeString(TRUE, gGC_ControlPattern, -1), *status);
+    fPropSets[URX_GC_L]        = new UnicodeSet(UnicodeString(TRUE, gGC_LPattern, -1),       *status);
+    fPropSets[URX_GC_V]        = new UnicodeSet(UnicodeString(TRUE, gGC_VPattern, -1),       *status);
+    fPropSets[URX_GC_T]        = new UnicodeSet(UnicodeString(TRUE, gGC_TPattern, -1),       *status);
+    fPropSets[URX_GC_LV]       = new UnicodeSet(UnicodeString(TRUE, gGC_LVPattern, -1),      *status);
+    fPropSets[URX_GC_LVT]      = new UnicodeSet(UnicodeString(TRUE, gGC_LVTPattern, -1),     *status);
     if (U_FAILURE(*status)) {
         // Bail out if we were unable to create the above sets.
         // The rest of the initialization needs them, so we cannot proceed.
@@ -187,7 +188,7 @@ RegexStaticSets::RegexStaticSets(UErrorCode *status) {
     
     //
     // The following sets  are dynamically constructed, because their
-    //   intialization strings would be unreasonable.
+    //   initialization strings would be unreasonable.
     //
     
     
@@ -195,8 +196,7 @@ RegexStaticSets::RegexStaticSets(UErrorCode *status) {
     //  "Normal" is the set of characters that don't need special handling
     //            when finding grapheme cluster boundaries.
     //
-    fPropSets[URX_GC_NORMAL] = new UnicodeSet;
-    fPropSets[URX_GC_NORMAL]->complement();
+    fPropSets[URX_GC_NORMAL] = new UnicodeSet(0, UnicodeSet::MAX_VALUE);
     fPropSets[URX_GC_NORMAL]->remove(0xac00, 0xd7a4);
     fPropSets[URX_GC_NORMAL]->removeAll(*fPropSets[URX_GC_CONTROL]);
     fPropSets[URX_GC_NORMAL]->removeAll(*fPropSets[URX_GC_L]);
@@ -206,47 +206,46 @@ RegexStaticSets::RegexStaticSets(UErrorCode *status) {
     // Initialize the 8-bit fast bit sets from the parallel full
     //   UnicodeSets.
     for (i=0; i<URX_LAST_SET; i++) {
-        fPropSets8[i].init(fPropSets[i]);
+        if (fPropSets[i]) {
+            fPropSets[i]->compact();
+            fPropSets8[i].init(fPropSets[i]);
+        }
     }
 
     // Sets used while parsing rules, but not referenced from the parse state table
-    fRuleSets[kRuleSet_rule_char-128]   = new UnicodeSet(gRuleSet_rule_char_pattern,  *status);
-    fRuleSets[kRuleSet_white_space-128] = new UnicodeSet(gRuleWhiteSpacePattern,      *status);
-    fRuleSets[kRuleSet_digit_char-128]  = new UnicodeSet(gRuleSet_digit_char_pattern, *status);
-    fRuleDigits                         = new UnicodeSet(gRuleSet_digit_char_pattern, *status);
-    fUnescapeCharSet                    = new UnicodeSet(gUnescapeCharPattern,        *status);
-
-    // Empty UnicodeString, for use by matchers with NULL input.
-    fEmptyString = new UnicodeString;
+    fRuleSets[kRuleSet_rule_char-128]   = new UnicodeSet(UnicodeString(TRUE, gRuleSet_rule_char_pattern, -1),  *status);
+    fRuleSets[kRuleSet_white_space-128] = new UnicodeSet(UnicodeString(TRUE, gRuleWhiteSpacePattern, -1),      *status);
+    fRuleSets[kRuleSet_digit_char-128]  = new UnicodeSet(UnicodeString(TRUE, gRuleSet_digit_char_pattern, -1), *status);
+    fRuleDigitsAlias = fRuleSets[kRuleSet_digit_char-128];
+    for (i=0; i<(int32_t)(sizeof(fRuleSets)/sizeof(fRuleSets[0])); i++) {
+        if (fRuleSets[i]) {
+            fRuleSets[i]->compact();
+        }
+    }
 }
 
 
 RegexStaticSets::~RegexStaticSets() {
-    int i;
+    int32_t i;
 
     for (i=0; i<URX_LAST_SET; i++) {
         delete fPropSets[i];
         fPropSets[i] = NULL;
     }
-    for (i=0; i<10; i++) {
+    for (i=0; i<(int32_t)(sizeof(fRuleSets)/sizeof(fRuleSets[0])); i++) {
         delete fRuleSets[i];
         fRuleSets[i] = NULL;
     }
-    delete fUnescapeCharSet;
-    fUnescapeCharSet = NULL;
-    delete fRuleDigits;
-    fRuleDigits = NULL;
-    delete fEmptyString;
-    fEmptyString = NULL;
+    fRuleDigitsAlias = NULL;
 }
 
 
-//----------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //
 //   regex_cleanup      Memory cleanup function, free/delete all
 //                      cached memory.  Called by ICU's u_cleanup() function.
 //
-//----------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 UBool
 RegexStaticSets::cleanup(void) {
     delete RegexStaticSets::gStaticSets;
