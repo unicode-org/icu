@@ -332,6 +332,19 @@ void OpenTypeLayoutEngine::adjustGlyphPositions(const LEUnicode chars[], le_int3
         delete adjustments;
     }
 
+    LEGlyphID zwnj = fFontInstance->mapCharToGlyph(0x200C);
+    LEGlyphID nbsp = fFontInstance->mapCharToGlyph(0x00A0);
+
+    for (le_int32 g = 0; g < glyphCount; g += 1) {
+        LEGlyphID glyph = glyphStorage[g];
+
+        if (glyph == zwnj) {
+            glyphStorage[g] = LE_SET_GLYPH(glyph, 0xFFFF);
+        } else if (glyph == nbsp) {
+            glyphStorage[g] = LE_SET_GLYPH(glyph, 0x0003);
+        }
+    }
+
 #if 0
     // Don't know why this is here...
     LE_DELETE_ARRAY(fFeatureTags);

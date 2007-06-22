@@ -26,6 +26,7 @@
 
 #include "OpenTypeUtilities.h"
 #include "GlyphSubstitutionTables.h"
+#include "GlyphDefinitionTables.h"
 #include "MorphTables.h"
 
 #include "DefaultCharMapper.h"
@@ -86,6 +87,37 @@ CharSubstitutionFilter::~CharSubstitutionFilter()
     // nothing to do
 }
 
+class CanonMarkFilter : public UMemory, public LEGlyphFilter
+{
+private:
+    const GlyphClassDefinitionTable *classDefTable;
+
+    CanonMarkFilter(const CanonMarkFilter &other); // forbid copying of this class
+    CanonMarkFilter &operator=(const CanonMarkFilter &other); // forbid copying of this class
+
+public:
+    CanonMarkFilter(const GlyphDefinitionTableHeader *gdefTable);
+    virtual ~CanonMarkFilter();
+
+    virtual le_bool accept(LEGlyphID glyph) const;
+};
+
+CanonMarkFilter::CanonMarkFilter(const GlyphDefinitionTableHeader *gdefTable)
+{
+    classDefTable = gdefTable->getMarkAttachClassDefinitionTable();
+}
+
+CanonMarkFilter::~CanonMarkFilter()
+{
+    // nothing to do?
+}
+
+le_bool CanonMarkFilter::accept(LEGlyphID glyph) const
+{
+    le_int32 glyphClass = classDefTable->getGlyphClass(glyph);
+
+    return glyphClass != 0;
+}
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(LayoutEngine)
 
@@ -279,7 +311,7 @@ void LayoutEngine::positionGlyphs(LEGlyphStorage &glyphStorage, float x, float y
     glyphStorage.setPosition(glyphCount, x, y, success);
 }
 
-void LayoutEngine::adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool /*reverse*/,
+void LayoutEngine::adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool  reverse,
                                         LEGlyphStorage &glyphStorage, LEErrorCode &success)
 {
     if (LE_FAILURE(success)) {
@@ -290,6 +322,11 @@ void LayoutEngine::adjustGlyphPositions(const LEUnicode chars[], le_int32 offset
         success = LE_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
+
+    GlyphDefinitionTableHeader *gdefTable = (GlyphDefinitionTableHeader *) CanonShaping::glyphDefinitionTable;
+    CanonMarkFilter filter(gdefTable);
+
+    adjustMarkGlyphs(&chars[offset], count, reverse, glyphStorage, &filter, success);
 
     if (fTypoFlags & 0x1) { /* kerning enabled */
       static const le_uint32 kernTableTag = LE_KERN_TABLE_TAG;

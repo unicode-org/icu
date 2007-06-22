@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2007 - All Rights Reserved
  *
  */
 
@@ -63,6 +63,8 @@ public:
     void setCurrGlyphPositionAdjustment(float xPlacementAdjust, float yPlacementAdjust,
                                         float xAdvanceAdjust,   float yAdvanceAdjust);
 
+    void clearCursiveEntryPoint();
+    void clearCursiveExitPoint();
     void setCursiveEntryPoint(LEPoint &entryPoint);
     void setCursiveExitPoint(LEPoint &exitPoint);
     void setCursiveGlyph();

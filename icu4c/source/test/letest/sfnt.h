@@ -24,6 +24,10 @@ struct DirectoryEntry
     le_uint32   length;
 };
 
+#ifndef XP_CPLUSPLUS
+typedef struct DirectoryEntry DirectoryEntry;
+#endif
+
 struct SFNTDirectory
 {
     le_uint32       scalerType;
@@ -34,6 +38,10 @@ struct SFNTDirectory
     DirectoryEntry  tableDirectory[ANY_NUMBER];
 };
 
+#ifndef XP_CPLUSPLUS
+typedef struct SFNTDirectory SFNTDirectory;
+#endif
+
 
 struct CMAPEncodingSubtableHeader
 {
@@ -42,12 +50,20 @@ struct CMAPEncodingSubtableHeader
     le_uint32   encodingOffset;
 };
 
+#ifndef XP_CPLUSPLUS
+typedef struct CMAPEncodingSubtableHeader CMAPEncodingSubtableHeader;
+#endif
+
 struct CMAPTable
 {
     le_uint16   version;
     le_uint16   numberSubtables;
     CMAPEncodingSubtableHeader encodingSubtableHeaders[ANY_NUMBER];
 };
+
+#ifndef XP_CPLUSPLUS
+typedef struct CMAPTable CMAPTable;
+#endif
 
 struct CMAPEncodingSubtable
 {
@@ -56,10 +72,25 @@ struct CMAPEncodingSubtable
     le_uint16   language;
 };
 
+#ifndef XP_CPLUSPLUS
+typedef struct CMAPEncodingSubtable CMAPEncodingSubtable;
+#endif
+
+#ifdef XP_CPLUSPLUS
 struct CMAPFormat0Encoding : CMAPEncodingSubtable
 {
     le_uint8    glyphIndexArray[256];
 };
+#else
+struct CMAPFormat0Encoding
+{
+	CMAPEncodingSubtable base;
+
+	le_uint8 glyphIndexArray[256];
+};
+
+typedef struct CMAPFormat0Encoding CMAPFormat0Encoding;
+#endif
 
 struct CMAPFormat2Subheader
 {
@@ -69,12 +100,29 @@ struct CMAPFormat2Subheader
     le_uint16   idRangeOffset;
 };
 
+#ifndef XP_CPLUSPLUS
+typedef struct CMAPFormat2Subheader CMAPFormat2Subheader;
+#endif
+
+#ifdef XP_CPLUSPLUS
 struct CMAPFormat2Encoding : CMAPEncodingSubtable
 {
     le_uint16  subHeadKeys[256];
     CMAPFormat2Subheader subheaders[ANY_NUMBER];
 };
+#else
+struct CMAPFormat2Encoding
+{
+	CMAPEncodingSubtable base;
 
+    le_uint16  subHeadKeys[256];
+    CMAPFormat2Subheader subheaders[ANY_NUMBER];
+};
+
+typedef struct CMAPFormat2Encoding CMAPFormat2Encoding;
+#endif
+
+#ifdef XP_CPLUSPLUS
 struct CMAPFormat4Encoding : CMAPEncodingSubtable
 {
     le_uint16   segCountX2;
@@ -82,19 +130,55 @@ struct CMAPFormat4Encoding : CMAPEncodingSubtable
     le_uint16   entrySelector;
     le_uint16   rangeShift;
     le_uint16   endCodes[ANY_NUMBER];
+/*
+    le_uint16   reservedPad;
+    le_uint16   startCodes[ANY_NUMBER];
+    le_uint16   idDelta[ANY_NUMBER];
+    le_uint16   idRangeOffset[ANY_NUMBER];
+    le_uint16   glyphIndexArray[ANY_NUMBER];
+*/
+};
+#else
+struct CMAPFormat4Encoding
+{
+	CMAPEncodingSubtable base;
+
+    le_uint16   segCountX2;
+    le_uint16   searchRange;
+    le_uint16   entrySelector;
+    le_uint16   rangeShift;
+    le_uint16   endCodes[ANY_NUMBER];
+/*
 //  le_uint16   reservedPad;
 //  le_uint16   startCodes[ANY_NUMBER];
 //  le_uint16   idDelta[ANY_NUMBER];
 //  le_uint16   idRangeOffset[ANY_NUMBER];
 //  le_uint16   glyphIndexArray[ANY_NUMBER];
+*/
 };
 
+typedef struct CMAPFormat4Encoding CMAPFormat4Encoding;
+#endif
+
+#ifdef XP_CPLUSPLUS
 struct CMAPFormat6Encoding : CMAPEncodingSubtable
 {
     le_uint16   firstCode;
     le_uint16   entryCount;
     le_uint16   glyphIndexArray[ANY_NUMBER];
 };
+#else
+struct CMAPFormat6Encoding
+{
+	CMAPEncodingSubtable base;
+
+    le_uint16   firstCode;
+    le_uint16   entryCount;
+    le_uint16   glyphIndexArray[ANY_NUMBER];
+};
+
+typedef struct CMAPFormat6Encoding CMAPFormat6Encoding;
+#endif
 
 struct CMAPEncodingSubtable32
 {
@@ -103,6 +187,10 @@ struct CMAPEncodingSubtable32
     le_uint32   language;
 };
 
+#ifndef XP_CPLUSPLUS
+typedef struct CMAPEncodingSubtable32 CMAPEncodingSubtable32;
+#endif
+
 struct CMAPGroup
 {
     le_uint32   startCharCode;
@@ -110,25 +198,67 @@ struct CMAPGroup
     le_uint32   startGlyphCode;
 };
 
+#ifndef XP_CPLUSPLUS
+typedef struct CMAPGroup CMAPGroup;
+#endif
+
+#ifdef XP_CPLUSPLUS
 struct CMAPFormat8Encoding : CMAPEncodingSubtable32
 {
     le_uint32   is32[65536/32];
     le_uint32   nGroups;
     CMAPGroup   groups[ANY_NUMBER];
 };
+#else
+struct CMAPFormat8Encoding
+{
+	CMAPEncodingSubtable32 base;
 
+    le_uint32   is32[65536/32];
+    le_uint32   nGroups;
+    CMAPGroup   groups[ANY_NUMBER];
+};
+
+typedef struct CMAPFormat8Encoding CMAPFormat8Encoding;
+#endif
+
+#ifdef XP_CPLUSPLUS
 struct CMAPFormat10Encoding : CMAPEncodingSubtable32
 {
     le_uint32   startCharCode;
     le_uint32   numCharCodes;
     le_uint16   glyphs[ANY_NUMBER];
 };
+#else
+struct CMAPFormat10Encoding
+{
+	CMAPEncodingSubtable32 base;
 
+    le_uint32   startCharCode;
+    le_uint32   numCharCodes;
+    le_uint16   glyphs[ANY_NUMBER];
+};
+
+typedef struct CMAPFormat10Encoding CMAPFormat10Encoding;
+#endif
+
+#ifdef XP_CPLUSPLUS
 struct CMAPFormat12Encoding : CMAPEncodingSubtable32
 {
     le_uint32   nGroups;
     CMAPGroup   groups[ANY_NUMBER];
 };
+#else
+struct CMAPFormat12Encoding
+{
+	CMAPEncodingSubtable32 base;
+
+    le_uint32   nGroups;
+    CMAPGroup   groups[ANY_NUMBER];
+};
+
+typedef struct CMAPFormat12Encoding CMAPFormat12Encoding;
+#endif
 
 typedef le_int32 fixed;
 
@@ -137,6 +267,10 @@ struct BigDate
     le_uint32   bc;
     le_uint32   ad;
 };
+
+#ifndef XP_CPLUSPLUS
+typedef struct BigDate BigDate;
+#endif
 
 struct HEADTable
 {
@@ -158,6 +292,10 @@ struct HEADTable
     le_int16    glyphDataFormat;
 };
 
+#ifndef XP_CPLUSPLUS
+typedef struct HEADTable HEADTable;
+#endif
+
 struct MAXPTable
 {
     fixed       version;
@@ -176,6 +314,10 @@ struct MAXPTable
     le_uint16   maxComponentElements;
     le_uint16   maxComponentDepth;
 };
+
+#ifndef XP_CPLUSPLUS
+typedef struct MAXPTable MAXPTable;
+#endif
 
 struct HHEATable
 {
@@ -198,17 +340,29 @@ struct HHEATable
     le_uint16   numOfLongHorMetrics;
 };
 
+#ifndef XP_CPLUSPLUS
+typedef struct HHEATable HHEATable;
+#endif
+
 struct LongHorMetric
 {
     le_uint16   advanceWidth;
     le_int16    leftSideBearing;
 };
 
+#ifndef XP_CPLUSPLUS
+typedef struct LongHorMetric LongHorMetric;
+#endif
+
 struct HMTXTable
 {
-    LongHorMetric hMetrics[ANY_NUMBER];        // ANY_NUMBER = numOfLongHorMetrics from hhea table
-//  le_int16        leftSideBearing[ANY_NUMBER]; // ANY_NUMBER = numGlyphs - numOfLongHorMetrics
+    LongHorMetric hMetrics[ANY_NUMBER];       /* ANY_NUMBER = numOfLongHorMetrics from hhea table */
+/* le_int16        leftSideBearing[ANY_NUMBER];  ANY_NUMBER = numGlyphs - numOfLongHorMetrics     */
 };
+
+#ifndef XP_CPLUSPLUS
+typedef struct HMTXTable HMTXTable;
+#endif
 
 enum PlatformID
 {
@@ -264,6 +418,10 @@ struct NameRecord
     le_uint16 offset;
 };
 
+#ifndef XP_CPLUSPLUS
+typedef struct NameRecord NameRecord;
+#endif
+
 struct NAMETable
 {
     le_uint16 version;
@@ -271,6 +429,10 @@ struct NAMETable
     le_uint16 stringOffset;
     NameRecord nameRecords[ANY_NUMBER];
 };
+
+#ifndef XP_CPLUSPLUS
+typedef struct NAMETable NAMETable;
+#endif
 
 #endif
 

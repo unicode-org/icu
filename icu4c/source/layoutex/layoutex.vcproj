@@ -4,6 +4,7 @@
 	Version="8.00"
 	Name="layoutex"
 	ProjectGUID="{37FC2C7F-1904-4811-8955-2F478830EAD1}"
+	RootNamespace="layoutex"
 	>
 	<Platforms>
 		<Platform
@@ -220,6 +221,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\playout.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\plruns.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\RunArrays.cpp"
 				>
 			</File>
@@ -250,6 +259,32 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout&#x0D;&#x0A;"
+						Outputs="..\..\include\layout\$(InputFileName)"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\layout\playout.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout"
+						Outputs="..\..\include\layout\$(InputFileName)"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\layout\plruns.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout"
 						Outputs="..\..\include\layout\$(InputFileName)"
 					/>
 				</FileConfiguration>

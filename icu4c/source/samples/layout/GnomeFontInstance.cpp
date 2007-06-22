@@ -166,14 +166,12 @@ le_bool GnomeFontInstance::getGlyphPoint(LEGlyphID glyph, le_int32 pointNumber, 
         return FALSE;
     }
 
-    FT_OutlineGlyph oglyph = (FT_OutlineGlyph) fFace->glyph;
-    
-    if (pointNumber >= oglyph->outline.n_points) {
+    if (pointNumber >= fFace->glyph->outline.n_points) {
         return FALSE;
     }
 
-    point.fX = oglyph->outline.points[pointNumber].x >> 6;
-    point.fY = oglyph->outline.points[pointNumber].y >> 6;
+    point.fX = fFace->glyph->outline.points[pointNumber].x >> 6;
+    point.fY = fFace->glyph->outline.points[pointNumber].y >> 6;
 
     return TRUE;
 }
