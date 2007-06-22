@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2007 - All Rights Reserved
  *
  */
 
@@ -272,6 +272,36 @@ void GlyphIterator::setCurrGlyphPositionAdjustment(float xPlacementAdjust, float
     glyphPositionAdjustments->setYPlacement(position, yPlacementAdjust);
     glyphPositionAdjustments->setXAdvance(position, xAdvanceAdjust);
     glyphPositionAdjustments->setYAdvance(position, yAdvanceAdjust);
+}
+
+void GlyphIterator::clearCursiveEntryPoint()
+{
+    if (direction < 0) {
+        if (position <= nextLimit || position >= prevLimit) {
+            return;
+        }
+    } else {
+        if (position <= prevLimit || position >= nextLimit) {
+            return;
+        }
+    }
+
+    glyphPositionAdjustments->clearEntryPoint(position);
+}
+
+void GlyphIterator::clearCursiveExitPoint()
+{
+    if (direction < 0) {
+        if (position <= nextLimit || position >= prevLimit) {
+            return;
+        }
+    } else {
+        if (position <= prevLimit || position >= nextLimit) {
+            return;
+        }
+    }
+
+    glyphPositionAdjustments->clearExitPoint(position);
 }
 
 void GlyphIterator::setCursiveEntryPoint(LEPoint &entryPoint)

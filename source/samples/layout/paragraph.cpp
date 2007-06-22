@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2005, International Business Machines
+ *   Copyright (C) 1999-2007, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -19,11 +19,9 @@
 #include "layout/ParagraphLayout.h"
 
 #include "RenderingSurface.h"
-#include "ScriptCompositeFontInstance.h"
 
 #include "paragraph.h"
 #include "UnicodeReader.h"
-#include "FontMap.h"
 
 #define MARGIN 10
 #define LINE_GROW 32

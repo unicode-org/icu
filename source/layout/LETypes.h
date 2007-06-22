@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2007 - All Rights Reserved
  *
  */
 
@@ -12,7 +12,10 @@
 #endif
 
 #include "unicode/utypes.h"
+
+#ifdef XP_CPLUSPLUS
 #include "unicode/uobject.h"
+#endif
 
 #ifdef LE_USE_CMEMORY
 #include "cmemory.h"

@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2006, International Business Machines
+ *   Copyright (C) 1999-2007, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -657,7 +657,7 @@ static void U_CALLCONV DataDrivenTest(void)
             expected.glyphCount = glyphCount;
 
             if (glyphCount < charCount || indexCount != glyphCount || positionCount < glyphCount * 2 + 2) {
-                log_err("Test %s: inconsistent input data: charCount = %d, glyphCount = %d, glyphCount = %d, indexCount = %d, positionCount = %d\n",
+                log_err("Test %s: inconsistent input data: charCount = %d, glyphCount = %d, indexCount = %d, positionCount = %d\n",
                     id, charCount, glyphCount, indexCount, positionCount);
                 goto free_expected;
             };
@@ -707,12 +707,14 @@ free_c_strings:
 }
 U_CDECL_END
 
-static void addAllTests(TestNode** root)
+static void addAllTests(TestNode **root)
 {
     addTest(root, &ParamTest,      "api/ParameterTest");
     addTest(root, &FactoryTest,    "api/FactoryTest");
     addTest(root, &AccessTest,     "layout/AccessTest");
     addTest(root, &DataDrivenTest, "layout/DataDrivenTest");
+
+    addCTests(root);
 }
 
 /* returns the path to icu/source/data/out */

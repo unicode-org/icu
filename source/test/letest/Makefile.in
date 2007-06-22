@@ -1,5 +1,5 @@
 ## Makefile.in for ICU - test/letest
-## Copyright (c) 2001-2006, International Business Machines Corporation and
+## Copyright (c) 2001-2007, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -20,8 +20,8 @@ subdir = test/letest
 CLEANFILES = *~ $(DEPS)
 
 ## Target information
-TESTTARGET = letest
-GENTARGET  = gendata
+TESTTARGET  = letest
+GENTARGET   = gendata
 
 BUILDDIR := $(CURR_SRCCODE_FULL_DIR)/../../
 # Simplify the path for Unix
@@ -41,6 +41,7 @@ LIBS = $(LIBICULE) $(LIBICUUC) $(LIBICUI18N) $(LIBCTESTFW) $(LIBICUTOOLUTIL) @LI
 
 COMMONOBJECTS = letsutil.o cmaps.o FontTableCache.o SimpleFontInstance.o PortableFontInstance.o
 TESTOBJECTS   = letest.o
+CTESTOBJECTS  = cfonts.o xmlreader.o cletest.o
 GENOBJECTS    = gendata.o
 
 OBJECTS = $(COMMONOBJECTS) $(TESTOBJECTS) $(GENOBJECTS)
@@ -70,7 +71,7 @@ dist-local:
 
 clean-local:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
-	$(RMV) $(OBJECTS) $(TARGET)
+	$(RMV) $(COMMONOBJECTS) $(TESTOBJECTS) $(CTESTOBJECTS) $(GENOBJECTS) $(TARGET)
 
 distclean-local: clean-local
 	$(RMV) Makefile
@@ -82,7 +83,7 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-$(TESTTARGET) : $(COMMONOBJECTS) $(TESTOBJECTS)
+$(TESTTARGET) : $(COMMONOBJECTS) $(TESTOBJECTS) $(CTESTOBJECTS)
 	$(LINK.cc) -o $@ $^ $(LIBS)
 	$(POST_BUILD_STEP)
 

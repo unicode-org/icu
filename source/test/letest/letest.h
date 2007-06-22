@@ -15,6 +15,7 @@
 #define __LETEST_H
 
 #include "LETypes.h"
+#include "unicode/ctest.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -38,4 +39,11 @@ struct TestResult
     le_int32  *indices;
     float     *positions;
 };
+
+#ifndef XP_CPLUSPLUS
+typedef struct TestResult TestResult;
+#endif
+
+U_CFUNC void addCTests(TestNode **root);
+
 #endif

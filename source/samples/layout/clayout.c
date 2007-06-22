@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2005, International Business Machines
+ *   Copyright (C) 1999-2007, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -14,23 +14,24 @@
 #include <windows.h>
 #include <stdio.h>
 
-#include "paragraph.h"
+#include "playout.h"
+#include "pflow.h"
 
-#include "GDIGUISupport.h"
-#include "GDIFontMap.h"
-#include "UnicodeReader.h"
-#include "ScriptCompositeFontInstance.h"
+#include "gdiglue.h"
+#include "ucreader.h"
+
+#include "arraymem.h"
 
 #include "resource.h"
-
-#define ARRAY_LENGTH(array) (sizeof array / sizeof array[0])
 
 struct Context
 {
     le_int32 width;
     le_int32 height;
-    Paragraph *paragraph;
+    pf_flow *paragraph;
 };
+
+typedef struct Context Context;
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -55,14 +56,14 @@ void InitParagraph(HWND hwnd, Context *context)
         // FIXME: does it matter what we put in the ScrollInfo
         // if the window's been minimized?
         if (context->width > 0 && context->height > 0) {
-            context->paragraph->breakLines(context->width, context->height);
+            pf_breakLines(context->paragraph, context->width, context->height);
         }
 
         si.cbSize = sizeof si;
         si.fMask = SIF_RANGE | SIF_PAGE | SIF_DISABLENOSCROLL;
         si.nMin = 0;
-        si.nMax = context->paragraph->getLineCount() - 1;
-        si.nPage = context->height / context->paragraph->getLineHeight();
+        si.nMax = pf_getLineCount(context->paragraph) - 1;
+        si.nPage = context->height / pf_getLineHeight(context->paragraph);
         SetScrollInfo(hwnd, SB_VERT, &si, TRUE);
     }
 }
@@ -119,10 +120,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
     HDC hdc;
     Context *context;
     static le_int32 windowCount = 0;
-    static GDIFontMap *fontMap = NULL;
-    static GDISurface *surface = NULL;
-    static GDIGUISupport *guiSupport = new GDIGUISupport();
-    static ScriptCompositeFontInstance *font = NULL;
+    static fm_fontMap *fontMap = NULL;
+    static rs_surface *surface = NULL;
+    static gs_guiSupport *guiSupport = NULL;
+    static le_font *font = NULL;
 
     switch (message) {
     case WM_CREATE:
@@ -130,22 +131,23 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
         LEErrorCode fontStatus = LE_NO_ERROR;
 
         hdc = GetDC(hwnd);
-        surface = new GDISurface(hdc);
+        guiSupport = gs_gdiGuiSupportOpen();
+        surface = rs_gdiRenderingSurfaceOpen(hdc);
 
-        fontMap = new GDIFontMap(surface, "FontMap.GDI", 24, guiSupport, fontStatus);
-        font    = new ScriptCompositeFontInstance(fontMap);
+        fontMap = fm_gdiFontMapOpen(surface, "FontMap.GDI", 24, guiSupport, &fontStatus);
+        font    = le_scriptCompositeFontOpen(fontMap);
 
         if (LE_FAILURE(fontStatus)) {
             ReleaseDC(hwnd, hdc);
             return -1;
         }
 
-        context = new Context();
+        context = NEW_ARRAY(Context, 1);
 
         context->width  = 600;
         context->height = 400;
 
-        context->paragraph = Paragraph::paragraphFactory("Sample.txt", font, guiSupport);
+        context->paragraph = pf_factory("Sample.txt", font, guiSupport);
         SetWindowLongPtr(hwnd, 0, (LONG_PTR) context);
 
         windowCount += 1;
@@ -217,7 +219,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
         context = (Context *) GetWindowLongPtr(hwnd, 0);
 
         if (context->paragraph != NULL && si.nPos != vertPos) {
-            ScrollWindow(hwnd, 0, context->paragraph->getLineHeight() * (vertPos - si.nPos), NULL, NULL);
+            ScrollWindow(hwnd, 0, pf_getLineHeight(context->paragraph) * (vertPos - si.nPos), NULL, NULL);
             UpdateWindow(hwnd);
         }
 
@@ -242,14 +244,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
         context = (Context *) GetWindowLongPtr(hwnd, 0);
 
         if (context->paragraph != NULL) {
-            surface->setHDC(hdc);
+            rs_gdiRenderingSurfaceSetHDC(surface, hdc);
 
             // NOTE: si.nPos + si.nPage may include a partial line at the bottom
             // of the window. We need this because scrolling assumes that the
             // partial line has been painted.
-            lastLine  = min (si.nPos + (le_int32) si.nPage, context->paragraph->getLineCount() - 1);
+            lastLine  = min (si.nPos + (le_int32) si.nPage, pf_getLineCount(context->paragraph) - 1);
 
-            context->paragraph->draw(surface, firstLine, lastLine);
+            pf_draw(context->paragraph, surface, firstLine, lastLine);
         }
 
         EndPaint(hwnd, &ps);
@@ -289,16 +291,18 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
             szFileName[0] = '\0';
 
             if (GetOpenFileNameA(&ofn)) {
-                hdc = GetDC(hwnd);
-                surface->setHDC(hdc);
+                pf_flow *newParagraph;
 
-                Paragraph *newParagraph = Paragraph::paragraphFactory(szFileName, font, guiSupport);
+                hdc = GetDC(hwnd);
+                rs_gdiRenderingSurfaceSetHDC(surface, hdc);
+
+                newParagraph = pf_factory(szFileName, font, guiSupport);
 
                 if (newParagraph != NULL) {
                     context = (Context *) GetWindowLongPtr(hwnd, 0);
 
                     if (context->paragraph != NULL) {
-                        delete context->paragraph;
+                        pf_close(context->paragraph);
                     }
 
                     context->paragraph = newParagraph;
@@ -335,14 +339,15 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
         context = (Context *) GetWindowLongPtr(hwnd, 0);
 
         if (context != NULL && context->paragraph != NULL) {
-            delete context->paragraph;
+            pf_close(context->paragraph);
         }
 
-        delete context;
+        DELETE_ARRAY(context);
 
         if (--windowCount <= 0) {
-            delete font;
-            delete surface;
+            le_fontClose(font);
+            rs_gdiRenderingSurfaceClose(surface);
+            gs_gdiGuiSupportClose(guiSupport);
 
             PostQuitMessage(0);
         }
