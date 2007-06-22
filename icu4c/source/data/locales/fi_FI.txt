@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 fi_FI{
-    Version{"1.43"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

@@ -46,16 +46,9 @@ haw{
         "#,##0%",
         "#E0",
     }
-    Version{"1.31"}
+    Version{"1.91"}
     calendar{
         gregorian{
-            availableFormats{
-                MMMMd{"d MMMM"}
-                Md{"d/M"}
-                yyM{"M/yy"}
-                yyQ{"Q yy"}
-                yyyyMMMM{"MMMM yyyy"}
-            }
             dayNames{
                 format{
                     abbreviated{

@@ -13,7 +13,7 @@ de_BE{
             "Franken",
         }
     }
-    Version{"1.47"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -27,14 +27,9 @@ de_BE{
                 "HH:mm",
                 "EEEE d MMMM yyyy",
                 "d MMMM yyyy",
-                "d-MMM-yy",
+                "dd.MM.yyyy",
                 "d/MM/yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                MMMMd{"d MMMM"}
-                MMd{"d/MM"}
-                yyMM{"MM/yy"}
             }
             dayNames{
                 format{
@@ -52,18 +47,18 @@ de_BE{
             monthNames{
                 format{
                     abbreviated{
-                        "Januar",
+                        "Jan",
                         "Februar",
-                        "März",
+                        "Mär",
                         "Apr",
                         "Mai",
                         "Jun",
                         "Jul",
                         "August",
                         "September",
-                        "Okt",
-                        "Nov",
-                        "Dez",
+                        "Oktober",
+                        "November",
+                        "Dezember",
                     }
                 }
             }

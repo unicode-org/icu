@@ -123,22 +123,19 @@ sw{
         "#,##0%",
         "#E0",
     }
-    Version{"1.54"}
+    Version{"1.91"}
     calendar{
         gregorian{
-            availableFormats{
-                yyQ{"Q yy"}
-            }
             dayNames{
                 format{
                     abbreviated{
-                        "Jpi",
+                        "Jumapili",
                         "Jumatatu",
-                        "Jnn",
+                        "Jumanne",
                         "Jtn",
-                        "Alh",
+                        "Alhamisi",
                         "Ijumaa",
-                        "Jmo",
+                        "Jumamosi",
                     }
                     wide{
                         "Jumapili",
@@ -172,17 +169,17 @@ sw{
                 format{
                     abbreviated{
                         "Januari",
-                        "Februari",
-                        "Mar",
-                        "Apr",
+                        "Feb",
+                        "Machi",
+                        "Aprili",
                         "Mei",
                         "Juni",
                         "Jul",
-                        "Agosti",
+                        "Ago",
                         "Septemba",
                         "Oktoba",
                         "Novemba",
-                        "Des",
+                        "Desemba",
                     }
                     wide{
                         "Januari",
@@ -219,16 +216,16 @@ sw{
             quarters{
                 format{
                     abbreviated{
-                        "robo ya kwanza",
+                        "Q1",
                         "Q2",
-                        "robo ya tatu",
-                        "robo ya nne",
+                        "Q3",
+                        "Q4",
                     }
                     wide{
-                        "robo ya kwanza",
-                        "robo ya pili",
-                        "robo ya tatu",
-                        "robo ya nne",
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
                     }
                 }
             }

@@ -13,7 +13,7 @@ en_IN{
         "#,##,##0%",
         "#E0",
     }
-    Version{"1.47"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -23,14 +23,9 @@ en_IN{
                 "h:mm a",
                 "EEEE d MMMM yyyy",
                 "d MMMM yyyy",
-                "dd-MMM-yy",
+                "MMM d, yyyy",
                 "dd/MM/yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                MMMMd{"d MMMM"}
-                MMdd{"dd/MM"}
-                yyyyMMMM{"MMMM yyyy"}
             }
             weekend:intvector{
                 1,

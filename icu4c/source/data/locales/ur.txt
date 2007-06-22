@@ -21,30 +21,10 @@ ur{
     LocaleScript{
         "Arab",
     }
-    NumberPatterns{
-        "#,##0.###",
-        "¤ #,##0.00",
-        "#,##0%",
-        "#E0",
-    }
-    Version{"1.38"}
+    Version{"1.91"}
     calendar{
         gregorian{
-            availableFormats{
-                yyQ{"Q yy"}
-            }
             dayNames{
-                format{
-                    wide{
-                        "اتوار",
-                        "پير",
-                        "منگل",
-                        "بده",
-                        "جمعرات",
-                        "جمعہ",
-                        "ہفتہ",
-                    }
-                }
                 stand-alone{
                     narrow{
                         "1",
@@ -57,66 +37,10 @@ ur{
                     }
                 }
             }
-            fields{
-                day{
-                    relative{
-                        "-1"{"کل"}
-                        "0"{"آج"}
-                        "1"{"کل"}
-                    }
-                }
-                dayperiod{
-                    dn{"رات/صبح"}
-                }
-            }
-            monthNames{
-                format{
-                    wide{
-                        "جنوری",
-                        "فروری",
-                        "مار چ",
-                        "اپريل",
-                        "مئ",
-                        "جون",
-                        "جولائ",
-                        "اگست",
-                        "ستمبر",
-                        "اکتوبر",
-                        "نومبر",
-                        "دسمبر",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    wide{
-                        "پہلی سہ ماہی",
-                        "دوسری سہ ماہی",
-                        "تيسری سہ ماہی",
-                        "چوتهی سہ ماہی",
-                    }
-                }
-            }
         }
-        islamic{
-            monthNames{
-                format{
-                    wide{
-                        "محرم",
-                        "صفر",
-                        "ر بيع الاول",
-                        "ر بيع الثانی",
-                        "جمادی الاول",
-                        "جمادی الثانی",
-                        "رجب",
-                        "شعبان",
-                        "رمضان",
-                        "شوال",
-                        "ذيقعدہ",
-                        "دسمبر",
-                    }
-                }
-            }
-        }
+    }
+    layout{
+        characters{"right-to-left"}
+        lines{"top-to-bottom"}
     }
 }

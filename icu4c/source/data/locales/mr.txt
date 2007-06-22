@@ -175,19 +175,12 @@ mr{
         "#,##,##0%",
         "#E0",
     }
-    Version{"1.58"}
+    Version{"1.91"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "म.पू.",
                 "म.नं.",
-            }
-            availableFormats{
-                MMMMd{"d MMMM"}
-                MMdd{"dd-MM"}
-                yyQ{"Q yy"}
-                yyyyMM{"MM-yyyy"}
-                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{

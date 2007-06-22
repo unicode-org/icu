@@ -146,7 +146,7 @@ ps{
     Scripts{
         Arab{"عربي"}
     }
-    Version{"1.45"}
+    Version{"1.91"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -160,26 +160,18 @@ ps{
                 "H:mm",
                 "EEEE د yyyy د MMMM d",
                 "د yyyy د MMMM d",
-                "d MMMM yyyy",
+                "yyyy MMM d",
                 "yyyy/M/d",
                 "{1} {0}",
-            }
-            availableFormats{
-                MMMMd{"d MMMM"}
-                Md{"M/d"}
-                mmss{"mm:ss"}
-                yyQ{"Q yy"}
-                yyyyM{"yyyy/M"}
-                yyyyMMMM{"د yyyy د MMMM"}
             }
             dayNames{
                 format{
                     abbreviated{
-                        "1",
-                        "2",
+                        "یکشنبه",
+                        "دوشنبه",
                         "سه‌شنبه",
                         "چهارشنبه",
-                        "5",
+                        "پنجشنبه",
                         "جمعه",
                         "شنبه",
                     }
@@ -214,13 +206,13 @@ ps{
             monthNames{
                 format{
                     abbreviated{
-                        "1",
-                        "2",
+                        "جنوري",
+                        "فبروري",
                         "مارچ",
-                        "4",
-                        "مـی",
+                        "اپریل",
+                        "می",
                         "جون",
-                        "7",
+                        "جولای",
                         "اګست",
                         "سپتمبر",
                         "اکتوبر",

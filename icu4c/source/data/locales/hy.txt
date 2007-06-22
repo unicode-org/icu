@@ -230,7 +230,7 @@ hy{
         "#0%",
         "#E0",
     }
-    Version{"1.54"}
+    Version{"1.91"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -247,11 +247,6 @@ hy{
                 "MMM d, yyyy",
                 "MM/dd/yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                MMMMdd{"MMMM dd"}
-                MMdd{"MM/dd"}
-                yyQ{"Q yy"}
             }
             dayNames{
                 format{

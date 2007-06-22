@@ -1084,6 +1084,12 @@ hr{
         "NaN",
         "+",
     }
+    NumberPatterns{
+        "#,##0.###",
+        "¤ #,##0.00",
+        "#,##0%",
+        "#E0",
+    }
     Scripts{
         Latn{"Latinski"}
     }
@@ -1105,7 +1111,7 @@ hr{
             traditional{"Tradicionano poredavanje"}
         }
     }
-    Version{"1.73"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1113,24 +1119,11 @@ hr{
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "yyyy. MMMM dd",
-                "yyyy. MMMM dd",
+                "EEEE, dd MMMM yyyy.",
+                "dd. MMMM yyyy.",
                 "yyyy.MM.dd",
                 "yyyy.MM.dd",
                 "{1} {0}",
-            }
-            availableFormats{
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
-                MMMMdd{"MMMM dd"}
-                MMdd{"MM.dd"}
-                hhmm{"hh:mm a"}
-                hhmmss{"hh:mm:ss a"}
-                yyMMMEEEd{"EEE yy.MMM d"}
-                yyQ{"Q yy"}
-                yyQQQQ{"QQQQ yy"}
-                yyyyMM{"yyyy.MM"}
-                yyyyMMMM{"yyyy. MMMM"}
             }
             dayNames{
                 format{
@@ -1173,6 +1166,48 @@ hr{
                 wide{
                     "Prije Krista",
                     "Poslije Krista",
+                }
+            }
+            fields{
+                day{
+                    dn{"Dan"}
+                    relative{
+                        "-1"{"Jučer"}
+                        "-2"{"Prekjučer"}
+                        "0"{"Danas"}
+                        "1"{"Jučer"}
+                        "2"{"Prekosutra"}
+                    }
+                }
+                dayperiod{
+                    dn{"Dio dana"}
+                }
+                era{
+                    dn{"Era"}
+                }
+                hour{
+                    dn{"Sat"}
+                }
+                minute{
+                    dn{"Minuta"}
+                }
+                month{
+                    dn{"Mjesec"}
+                }
+                second{
+                    dn{"Sekunda"}
+                }
+                week{
+                    dn{"Tjedan"}
+                }
+                weekday{
+                    dn{"Dan u tjednu"}
+                }
+                year{
+                    dn{"Godina"}
+                }
+                zone{
+                    dn{"Zona"}
                 }
             }
             monthNames{

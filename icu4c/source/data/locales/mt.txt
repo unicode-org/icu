@@ -315,6 +315,7 @@ mt{
         am{"Amħariku"}
         an{"Aragonese"}
         ang{"Ingliż, Antik"}
+        anp{"Angika"}
         apa{"Lingwi Apaċi"}
         ar{"Għarbi"}
         arc{"Aramajk"}
@@ -364,6 +365,7 @@ mt{
         cai{"Amerika Ċentrali (Oħra)"}
         car{"Karib"}
         cau{"Kawkasu (Oħra)"}
+        cch{"Atsam"}
         ce{"Ċeċen"}
         ceb{"Sibwano"}
         cel{"Keltiku (Oħra)"}
@@ -782,6 +784,7 @@ mt{
     }
     Scripts{
         Arab{"Għarbi"}
+        Grek{"Grek"}
         Hans{"Ħan Sempliċi"}
         Hant{"Ħan Tradizzjonali"}
         Latn{"Latin"}
@@ -811,7 +814,7 @@ mt{
     Variants{
         REVISED{"Ortografija Irriveda"}
     }
-    Version{"1.62"}
+    Version{"1.91"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -828,13 +831,6 @@ mt{
                 "dd MMM yyyy",
                 "dd/MM/yyyy",
                 "{1} {0}",
-            }
-            availableFormats{
-                MMMMd{"d 'ta’' MMMM"}
-                MMdd{"dd/MM"}
-                yyQ{"Q yy"}
-                yyyyMM{"MM/yyyy"}
-                yyyyMMM{"MMM yyyy"}
             }
             dayNames{
                 format{
@@ -939,7 +935,7 @@ mt{
                         "3",
                         "4",
                         "5",
-                        "6",
+                        "Ġ",
                         "7",
                         "8",
                         "9",
@@ -958,10 +954,10 @@ mt{
                         "K4",
                     }
                     wide{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
+                        "K1",
+                        "K2",
+                        "K3",
+                        "K4",
                     }
                 }
             }

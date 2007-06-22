@@ -22,7 +22,7 @@ es_US{
         279,
         216,
     }
-    Version{"1.55"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -39,10 +39,6 @@ es_US{
                 "MMM d, yyyy",
                 "M/d/yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                MMMd{"MMM d"}
-                Md{"M/d"}
             }
         }
     }

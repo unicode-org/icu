@@ -479,7 +479,6 @@ sr_Latn{
         ro{"Rumunski"}
         ru{"Ruski"}
         sa{"Sanskrit"}
-        sh{"srpski"}
         sk{"Slovački"}
         sl{"Slovenački"}
         sq{"Albanski"}
@@ -497,7 +496,7 @@ sr_Latn{
     }
     NumberPatterns{
         "#,##0.###",
-        "#,##0.00 ¤",
+        "¤ #,##0.00",
         "#,##0%",
         "#E0",
     }
@@ -546,11 +545,11 @@ sr_Latn{
             traditional{"Tradicionalno sortiranje"}
         }
     }
-    Version{"1.59"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "HH 'časova', mm 'minuta', ss 'sekundi'",
+                "HH.mm.ss v",
                 "HH.mm.ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -559,13 +558,6 @@ sr_Latn{
                 "yyyy-MM-dd",
                 "yy-MM-dd",
                 "{1} {0}",
-            }
-            availableFormats{
-                MMMMdd{"dd. MMMM"}
-                mmss{"mm:ss"}
-                yyMMdd{"dd.MM.yy"}
-                yyyyMM{"yyyy-MM"}
-                yyyyMMMM{"MMMM yyyy."}
             }
             dayNames{
                 format{
@@ -605,9 +597,15 @@ sr_Latn{
                     "p. n. e.",
                     "n. e.",
                 }
-                wide{
-                    "Pre nove ere",
-                    "Nove ere",
+            }
+            fields{
+                day{
+                    relative{
+                        "-2"{"juče"}
+                        "-3"{"pre tri dana"}
+                        "2"{"prekosutra"}
+                        "3"{"za tri dana"}
+                    }
                 }
             }
             monthNames{
@@ -667,18 +665,14 @@ sr_Latn{
                         "K4",
                     }
                     wide{
-                        "Prvi kvartal",
-                        "Drugi kvartal",
-                        "Treći kvartal",
-                        "Četvrti kvartal",
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
                     }
                 }
             }
         }
-    }
-    messages{
-        nostr{"ne:n"}
-        yesstr{"da:d"}
     }
     zoneStrings{
         "Africa:Kinshasa"{

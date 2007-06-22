@@ -1032,7 +1032,7 @@ mk{
             traditional{"Традиционално"}
         }
     }
-    Version{"1.63"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1045,13 +1045,6 @@ mk{
                 "dd.M.yyyy",
                 "dd.M.yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                MMMMdd{"dd MMMM"}
-                Mdd{"dd.M"}
-                yyQ{"Q yy"}
-                yyyyM{"M.yyyy"}
-                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{
@@ -1133,9 +1126,9 @@ mk{
                         "ј",
                         "ј",
                         "а",
-                        "се",
+                        "9",
                         "о",
-                        "но",
+                        "11",
                         "д",
                     }
                 }

@@ -17,7 +17,7 @@ en_HK{
             "USD",
         }
     }
-    Version{"1.42"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -34,12 +34,6 @@ en_HK{
                 "d MMM yyyy",
                 "dd/MM/yyyy",
                 "{1} {0}",
-            }
-            availableFormats{
-                MMMMd{"d MMMM"}
-                MMdd{"dd/MM"}
-                yyyyMM{"MM/yyyy"}
-                yyyyMMMM{"MMMM yyyy"}
             }
         }
     }

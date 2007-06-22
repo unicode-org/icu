@@ -11,29 +11,48 @@
  */
 zh_Hant{
     Countries{
+        001{"世界"}
+        002{"非洲"}
+        003{"北美洲"}
+        005{"南美洲"}
+        009{"大洋洲"}
+        011{"西非"}
+        013{"中美洲"}
         014{"東非"}
+        015{"北非"}
+        017{"中非"}
+        018{"非洲南部"}
+        019{"美洲"}
+        029{"加勒比海"}
         030{"東亞"}
+        034{"南亞"}
         035{"東南亞"}
         039{"南歐"}
         053{"澳洲與紐西蘭"}
         054{"美拉尼西亞"}
         057{"密克羅尼西亞"}
         061{"玻里尼西亞"}
+        062{"中南亞"}
         142{"亞洲"}
+        143{"中亞"}
         145{"西亞"}
         150{"歐洲"}
         151{"東歐"}
         154{"北歐"}
         155{"西歐"}
+        419{"拉丁美洲和加勒比海"}
         830{"海峽群島"}
         AD{"安道爾"}
         AE{"阿拉伯聯合大公國"}
+        AF{"阿富汗"}
         AG{"安地卡及巴布達"}
         AI{"安圭拉島"}
         AL{"阿爾巴尼亞"}
         AM{"亞美尼亞"}
         AN{"荷屬安地列斯"}
+        AO{"安哥拉"}
         AQ{"南極洲"}
+        AR{"阿根廷"}
         AS{"美屬薩摩亞群島"}
         AT{"奧地利"}
         AU{"澳洲"}
@@ -46,27 +65,34 @@ zh_Hant{
         BE{"比利時"}
         BF{"布基納法索"}
         BG{"保加利亞"}
-        BI{"浦隆地"}
+        BH{"巴林"}
+        BI{"蒲隆地"}
         BJ{"貝南"}
         BM{"百慕達"}
         BN{"汶萊"}
         BO{"玻利維亞"}
+        BR{"巴西"}
         BS{"巴哈馬"}
+        BT{"不丹"}
         BV{"布威島"}
         BW{"波札那"}
         BY{"白俄羅斯"}
         BZ{"貝里斯"}
+        CA{"加拿大"}
         CC{"可可斯群島"}
         CD{"剛果民主共和國"}
         CF{"中非共和國"}
         CG{"剛果"}
+        CH{"瑞士"}
         CI{"科特迪瓦"}
         CK{"庫克群島"}
+        CL{"智利"}
         CM{"喀麥隆"}
         CN{"中華人民共和國"}
         CO{"哥倫比亞"}
         CR{"哥斯大黎加"}
         CS{"塞爾維亞和蒙特尼哥羅"}
+        CU{"古巴"}
         CV{"維德角"}
         CX{"聖誕島"}
         CY{"賽普勒斯"}
@@ -79,7 +105,10 @@ zh_Hant{
         DZ{"阿爾及利亞"}
         EC{"厄瓜多爾"}
         EE{"愛沙尼亞"}
+        EG{"埃及"}
+        EH{"西撒哈拉"}
         ER{"厄利垂亞"}
+        ES{"西班牙"}
         ET{"衣索比亞"}
         FI{"芬蘭"}
         FJ{"斐濟"}
@@ -109,14 +138,21 @@ zh_Hant{
         HM{"赫德與麥克當諾群島"}
         HN{"宏都拉斯"}
         HR{"克羅埃西亞"}
+        HT{"海地"}
+        HU{"匈牙利"}
         ID{"印尼"}
         IE{"愛爾蘭"}
+        IL{"以色列"}
         IM{"曼島"}
+        IN{"印度"}
         IO{"英屬印度洋領土"}
+        IQ{"伊拉克"}
+        IR{"伊朗"}
         IS{"冰島"}
         IT{"義大利"}
         JM{"牙買加"}
         JO{"約旦"}
+        JP{"日本"}
         KE{"肯亞"}
         KG{"吉爾吉斯"}
         KH{"高棉"}
@@ -125,17 +161,21 @@ zh_Hant{
         KN{"聖克里斯多福及尼維斯"}
         KP{"北韓"}
         KR{"南韓"}
+        KW{"科威特"}
         KY{"開曼群島"}
         KZ{"哈薩克"}
         LA{"寮國"}
+        LB{"黎巴嫩"}
         LC{"聖露西亞"}
         LI{"列支敦斯登"}
         LK{"斯里蘭卡"}
         LR{"賴比瑞亞"}
         LS{"賴索扥"}
+        LT{"立陶宛"}
         LU{"盧森堡"}
         LV{"拉脫維亞"}
         LY{"利比亞"}
+        MA{"摩洛哥"}
         MC{"摩納哥"}
         MD{"摩爾多瓦"}
         MG{"馬達加斯加"}
@@ -143,8 +183,9 @@ zh_Hant{
         MK{"馬其頓"}
         ML{"馬利"}
         MM{"緬甸"}
+        MN{"蒙古"}
         MO{"中華人民共和國澳門特別行政區"}
-        MP{"北馬里安納"}
+        MP{"北馬里亞納群島"}
         MQ{"馬丁尼克島"}
         MR{"茅利塔尼亞"}
         MS{"蒙特色拉特島"}
@@ -152,6 +193,7 @@ zh_Hant{
         MU{"模里西斯"}
         MV{"馬爾地夫"}
         MW{"馬拉威"}
+        MX{"墨西哥"}
         MY{"馬來西亞"}
         MZ{"莫三比克"}
         NA{"納米比亞"}
@@ -159,7 +201,9 @@ zh_Hant{
         NE{"尼日"}
         NF{"諾福克島"}
         NG{"奈及利亞"}
+        NI{"尼加拉瓜"}
         NL{"荷蘭"}
+        NO{"挪威"}
         NP{"尼泊爾"}
         NR{"諾魯"}
         NU{"紐威島"}
@@ -170,25 +214,33 @@ zh_Hant{
         PF{"法屬玻里尼西亞"}
         PG{"巴布亞紐幾內亞"}
         PH{"菲律賓"}
+        PK{"巴基斯坦"}
         PL{"波蘭"}
         PM{"聖彼德與密啟崙"}
         PN{"皮特康"}
-        PR{"玻多黎克"}
+        PR{"波多黎各"}
         PS{"巴勒斯坦"}
+        PT{"葡萄牙"}
         PW{"帛琉"}
+        PY{"巴拉圭"}
         QA{"卡達"}
         QO{"大洋洲邊疆群島"}
+        QU{"歐盟"}
         RE{"留尼旺"}
         RO{"羅馬尼亞"}
+        RS{"塞爾維亞"}
         RU{"俄羅斯"}
         RW{"盧安達"}
         SA{"沙烏地阿拉伯"}
         SB{"索羅門群島"}
         SC{"塞席爾"}
         SD{"蘇丹"}
+        SE{"瑞典"}
+        SG{"新加坡"}
         SH{"聖赫勒拿島"}
         SI{"斯洛維尼亞"}
         SJ{"冷岸及央麥恩群島"}
+        SK{"斯洛伐克"}
         SL{"獅子山"}
         SM{"聖馬利諾"}
         SN{"塞內加爾"}
@@ -205,10 +257,11 @@ zh_Hant{
         TH{"泰國"}
         TJ{"塔吉克"}
         TK{"托克勞群島"}
-        TL{"東帝文"}
+        TL{"東帝汶"}
         TM{"土庫曼"}
         TN{"突尼西亞"}
         TO{"東加"}
+        TR{"土耳其"}
         TT{"千里達及托巴哥"}
         TV{"吐瓦魯"}
         TW{"臺灣"}
@@ -219,16 +272,18 @@ zh_Hant{
         US{"美國"}
         UY{"烏拉圭"}
         UZ{"烏茲別克"}
-        VA{"梵帝岡"}
+        VA{"梵蒂岡"}
         VC{"聖文森及格瑞那丁"}
         VE{"委內瑞拉"}
         VG{"英屬維爾京群島"}
         VI{"美屬維爾京群島"}
+        VN{"越南"}
         VU{"萬那杜"}
         WF{"瓦利斯和福杜納群島"}
         WS{"薩摩亞群島"}
         YE{"葉門"}
         YT{"馬約特"}
+        ZA{"南非"}
         ZM{"尚比亞"}
         ZW{"辛巴威"}
     }
@@ -362,7 +417,7 @@ zh_Hant{
             "巴西克魯賽羅 (1990-1993)",
         }
         BRL{
-            "R$",
+            "BRL",
             "巴西里拉",
         }
         BRR{
@@ -410,7 +465,7 @@ zh_Hant{
             "智利披索",
         }
         CNY{
-            "￥",
+            "CNY",
             "人民幣",
         }
         COP{
@@ -622,7 +677,7 @@ zh_Hant{
             "約旦第納爾",
         }
         JPY{
-            "JP¥",
+            "JPY",
             "日圓",
         }
         KES{
@@ -870,7 +925,7 @@ zh_Hant{
             "盧安達法郎",
         }
         SAR{
-            "SRl",
+            "SAR",
             "沙烏地里雅",
         }
         SBD{
@@ -950,7 +1005,7 @@ zh_Hant{
             "東加潘加",
         }
         TWD{
-            "NT$",
+            "TWD",
             "新臺幣",
         }
         UAH{
@@ -964,6 +1019,10 @@ zh_Hant{
         UGX{
             "UGX",
             "烏干達先令",
+        }
+        USD{
+            "US$",
+            "USD",
         }
         USN{
             "USN",
@@ -1149,7 +1208,7 @@ zh_Hant{
         " 霹 露 響 顧 驅 魔 囉 彎 權 歡 聽 讀 鑑 韃 戀 變 邏 顯 驚 驗 體 讓 靂 靈 鷹 廳 灣 蠻 觀 讚 鬱 彞 敍 简]"
     }
     Keys{
-        calendar{"曆法"}
+        calendar{"日曆"}
         collation{"校對"}
         currency{"貨幣"}
     }
@@ -1222,6 +1281,7 @@ zh_Hant{
         dak{"達科他文"}
         dar{"達爾格瓦文"}
         day{"迪雅克文"}
+        de_AT{"德文 (奧地利)"}
         del{"德拉瓦"}
         den{"斯拉夫"}
         dgr{"多格里布文"}
@@ -1232,9 +1292,15 @@ zh_Hant{
         dv{"迪維西文"}
         ee{"埃緯文"}
         efi{"埃菲克文"}
+        egy{"古埃及文"}
         eka{"艾卡朱克文"}
         el{"希臘文"}
+        en_AU{"英文 (澳洲)"}
+        en_CA{"英文 (加拿大)"}
+        en_GB{"英文 (英國)"}
         eo{"世界語"}
+        es_419{"西班牙文 (拉丁美洲)"}
+        es_ES{"西班牙文 (西班牙)"}
         et{"愛沙尼亞文"}
         ewo{"依汪都文"}
         fan{"芳族文"}
@@ -1244,6 +1310,7 @@ zh_Hant{
         fj{"斐濟文"}
         fo{"法羅文"}
         fon{"豐文"}
+        fr_CA{"法文 (加拿大)"}
         fy{"弗里斯蘭文"}
         ga{"愛爾蘭文"}
         gaa{"加族文"}
@@ -1255,6 +1322,8 @@ zh_Hant{
         gl{"加里西亞文"}
         gon{"岡德文"}
         gor{"科隆達羅文"}
+        got{"哥德文"}
+        grc{"古希臘文"}
         gu{"吉亞拉塔文"}
         gv{"曼島文"}
         gwi{"圭契文"}
@@ -1286,7 +1355,7 @@ zh_Hant{
         iu{"因紐特文"}
         jbo{"邏輯文"}
         jpr{"猶太教-波斯文"}
-        jrb{"猶太教-阿拉伯文"}
+        jrb{"猶太阿拉伯文"}
         ka{"喬治亞文"}
         kaa{"卡拉卡爾帕克文"}
         kab{"卡比爾文"}
@@ -1294,6 +1363,7 @@ zh_Hant{
         kbd{"卡巴爾達文"}
         kg{"剛果文"}
         khi{"其他科伊桑文"}
+        kho{"和闐文"}
         ki{"吉庫尤人"}
         kj{"廣亞馬文"}
         kk{"哈薩克文"}
@@ -1373,6 +1443,7 @@ zh_Hant{
         nic{"其他尼日剛果語系"}
         niu{"紐埃文"}
         nl{"荷蘭文"}
+        nl_BE{"荷蘭文 (比利時)"}
         nn{"新挪威文"}
         nog{"諾蓋文"}
         non{"古諾爾斯文"}
@@ -1403,6 +1474,8 @@ zh_Hant{
         pon{"波那貝文"}
         pra{"印度古代及中世紀之中部及北部方言"}
         ps{"普什圖文"}
+        pt_BR{"葡萄牙文 (巴西)"}
+        pt_PT{"葡萄牙文 (葡萄牙)"}
         qu{"蓋丘亞文"}
         raj{"拉賈斯坦諸文"}
         rap{"復活島文"}
@@ -1513,6 +1586,20 @@ zh_Hant{
         "Hani",
         "Bopo",
     }
+    NumberElements{
+        ".",
+        ",",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
     Scripts{
         Arab{"阿拉伯文"}
         Armn{"亞美尼亞文"}
@@ -1530,11 +1617,13 @@ zh_Hant{
         Goth{"歌德文"}
         Grek{"希臘文"}
         Guru{"古爾穆奇文"}
-        Hang{"諺文"}
+        Hang{"韓文"}
         Hani{"漢語"}
-        Hant{"繁體漢語"}
+        Hans{"簡體中文"}
+        Hant{"繁體中文"}
         Hebr{"希伯來文"}
         Ital{"古意大利文"}
+        Jpan{"日文"}
         Khmr{"高棉文"}
         Knda{"坎那達文"}
         Laoo{"寮國文"}
@@ -1573,56 +1662,80 @@ zh_Hant{
             japanese{"日本曆法"}
         }
         collation{
+            big5han{"繁體中文 (Big5)"}
             direct{"直接順序"}
+            gb2312han{"簡體中文 (GB2312)"}
             phonebook{"電話簿順序"}
             pinyin{"拼音順序"}
+            stroke{"筆劃順序"}
             traditional{"傳統曆法"}
         }
     }
     Variants{
         1901{"1901"}
         1996{"1996"}
+        AREVELA{"亞美尼亞東部"}
+        AREVMDA{"亞美尼亞西部"}
         POLYTONI{"POLYTONI"}
+        POSIX{"電腦"}
         REVISED{"已修訂"}
         SAAHO{"SAAHO"}
     }
-    Version{"1.71"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimePatterns{
                 "ahh時mm分ss秒 v",
-                "ahh'時'mm'分'ss'秒'",
+                "HH:mm:ss z",
                 "a h:mm:ss",
                 "a h:mm",
-                "EEEE, yyyy MMMM dd",
-                "yyyy MMMM d",
+                "yyyy'年'M'月'd'日'EEEE",
+                "yyyy'年'M'月'd'日'",
                 "yyyy/M/d",
                 "yyyy/M/d",
                 "{1} {0}",
-            }
-            availableFormats{
-                Md{"M/d"}
-                yyyyM{"yyyy/M"}
             }
             dayNames{
                 format{
                     abbreviated{
                         "周日",
-                        "週一",
-                        "周二",
+                        "星期一",
+                        "星期二",
                         "周三",
-                        "周四",
+                        "星期四",
+                        "周五",
+                        "周六",
+                    }
+                    wide{
+                        "星期日",
+                        "星期一",
+                        "星期二",
+                        "星期三",
+                        "星期四",
                         "星期五",
                         "星期六",
                     }
                 }
             }
+            eras{
+                abbreviated{
+                    "公元前",
+                    "公元",
+                }
+            }
             fields{
                 day{
-                    dn{"整日"}
+                    dn{"日"}
+                    relative{
+                        "-1"{"昨天"}
+                        "-2"{"前天"}
+                        "0"{"今天"}
+                        "1"{"明天"}
+                        "2"{"後天"}
+                    }
                 }
                 dayperiod{
-                    dn{"日間"}
+                    dn{"上午/下午"}
                 }
                 era{
                     dn{"年代"}
@@ -1633,6 +1746,9 @@ zh_Hant{
                 minute{
                     dn{"分鐘"}
                 }
+                month{
+                    dn{"月"}
+                }
                 second{
                     dn{"秒"}
                 }
@@ -1642,17 +1758,72 @@ zh_Hant{
                 weekday{
                     dn{"週天"}
                 }
+                year{
+                    dn{"年"}
+                }
                 zone{
                     dn{"區域"}
                 }
             }
-            quarters{
+            monthNames{
                 format{
                     wide{
-                        "第1季",
-                        "第2季",
-                        "第3季",
-                        "第4季",
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "一月",
+                        "二月",
+                        "3",
+                        "四月",
+                        "五月",
+                        "六月",
+                        "7",
+                        "8",
+                        "九月",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    narrow{
+                        "1月",
+                        "2月",
+                        "3月",
+                        "4月",
+                        "5月",
+                        "6月",
+                        "7月",
+                        "8月",
+                        "9月",
+                        "10月",
+                        "11月",
+                        "12月",
+                    }
+                    wide{
+                        "一月",
+                        "二月",
+                        "3",
+                        "四月",
+                        "五月",
+                        "六月",
+                        "7",
+                        "8",
+                        "九月",
+                        "10",
+                        "11",
+                        "12",
                     }
                 }
             }
@@ -1663,6 +1834,9 @@ zh_Hant{
         alternateQuotationStart{"『"}
         quotationEnd{"」"}
         quotationStart{"「"}
+    }
+    measurementSystemNames{
+        metric{"公制"}
     }
     zoneStrings{
         "Africa:Bamako"{
@@ -2015,8 +2189,6 @@ zh_Hant{
         }
         "Asia:Tokyo"{
             ec{"東京"}
-            ld{"日本夏令時間"}
-            ls{"日本標準時間"}
         }
         "Asia:Ulaanbaatar"{
             ec{"烏蘭巴托"}
@@ -2147,59 +2319,562 @@ zh_Hant{
         "Pacific:Yap"{
             ec{"雅浦島"}
         }
+        "meta:Acre"{
+            ld{"艾克夏令時間"}
+            ls{"艾克時間"}
+            sd{"ACST"}
+            ss{"ACT"}
+        }
+        "meta:Africa_Central"{
+            ls{"中非時間"}
+            ss{"CAT"}
+        }
+        "meta:Africa_Eastern"{
+            ls{"東非時間"}
+            ss{"EAT"}
+        }
+        "meta:Africa_Southern"{
+            ls{"南非標準時間"}
+            ss{"SAST"}
+        }
+        "meta:Africa_Western"{
+            ld{"西非夏令時間"}
+            ls{"西非時間"}
+            sd{"WAST"}
+            ss{"WAT"}
+        }
+        "meta:Aktyubinsk"{
+            ld{"阿克秋賓斯克夏令時間"}
+            ls{"阿克秋賓斯克時間"}
+            sd{"AKTST"}
+            ss{"AKTT"}
+        }
         "meta:Alaska"{
             ld{"阿拉斯加夏令時間"}
+            lg{"阿拉斯加時間"}
             ls{"阿拉斯加標準時間"}
+            sd{"AKDT"}
+            ss{"AKST"}
+        }
+        "meta:Alaska_Hawaii"{
+            ld{"阿拉斯加-夏威夷夏令時間"}
+            ls{"阿拉斯加-夏威夷標準時間"}
+            sd{"AHDT"}
+            ss{"AHST"}
+        }
+        "meta:Amazon"{
+            ld{"亞馬遜夏令時間"}
+            ls{"亞馬遜時間"}
+            sd{"AMST"}
+            ss{"AMT"}
         }
         "meta:America_Central"{
             ld{"中部夏令時間"}
+            lg{"中部時間"}
             ls{"中部標準時間"}
+            sd{"CDT"}
+            sg{"CT"}
+            ss{"CST"}
         }
         "meta:America_Eastern"{
             ld{"東部夏令時間"}
+            lg{"東部時間"}
             ls{"東部標準時間"}
+            sd{"EDT"}
+            sg{"ET"}
+            ss{"EST"}
         }
         "meta:America_Mountain"{
             ld{"山區日光節約時間"}
+            lg{"山區時間"}
             ls{"山區標準時間"}
+            sd{"MDT"}
+            sg{"MT"}
+            ss{"MST"}
         }
         "meta:America_Pacific"{
             ld{"太平洋夏令時間"}
+            lg{"太平洋時間"}
             ls{"太平洋標準時間"}
             sd{"PDT"}
+            sg{"PT"}
             ss{"PST"}
+        }
+        "meta:Aqtau"{
+            ld{"阿克陶夏令時間"}
+            ls{"阿克陶夏令時間"}
+            sd{"AQTST (阿克陶)"}
+            ss{"AQTT (阿克陶)"}
+        }
+        "meta:Aqtobe"{
+            ld{"阿克托比夏令時間"}
+            ls{"阿克托比時間"}
+            sd{"AQTST (阿克托比)"}
+            ss{"AQTT (阿克托比)"}
+        }
+        "meta:Arabian"{
+            ld{"阿拉伯夏令時間"}
+            lg{"阿拉伯時間"}
+            ls{"阿拉伯標準時間"}
+            sd{"ADT (阿拉伯)"}
+            ss{"AST (阿拉伯)"}
+        }
+        "meta:Argentina"{
+            ld{"阿根廷夏令時間"}
+            ls{"阿根廷時間"}
+            sd{"ARST"}
+            ss{"ART"}
+        }
+        "meta:Argentina_Western"{
+            ls{"阿根廷西部時間"}
+            ss{"WART"}
+        }
+        "meta:Armenia"{
+            ld{"亞美尼亞夏令時間"}
+            ls{"亞美尼亞時間"}
+            sd{"AMST (亞美尼亞)"}
+            ss{"AMT (亞美尼亞)"}
+        }
+        "meta:Ashkhabad"{
+            ld{"阿什哈巴德夏令時間"}
+            ls{"阿什哈巴德時間"}
+            sd{"ASHST"}
+            ss{"ASHT"}
         }
         "meta:Atlantic"{
             ld{"大西洋夏令時間"}
+            lg{"大西洋時間"}
             ls{"大西洋標準時間"}
+            sd{"ADT"}
+            sg{"AT"}
+            ss{"AST"}
+        }
+        "meta:Australia_Central"{
+            ld{"澳洲中部夏令時間"}
+            lg{"澳洲中部時間"}
+            ls{"澳洲中部標準時間"}
+            sd{"ACDT"}
+            ss{"ACST"}
+        }
+        "meta:Australia_Eastern"{
+            ld{"澳洲東部夏令時間"}
+            lg{"澳洲東部時間"}
+            ls{"澳洲東部標準時間"}
+            sd{"AEDT"}
+            ss{"AEST"}
+        }
+        "meta:Australia_Western"{
+            ld{"澳洲西部夏令時間"}
+            lg{"澳洲西部時間"}
+            ls{"澳洲西部標準時間"}
+            sd{"AWDT"}
+            ss{"AWST"}
+        }
+        "meta:Azores"{
+            ld{"亞速爾群島夏令時間"}
+            ls{"亞速爾群島時間"}
+            sd{"AZOST"}
+            ss{"AZOT"}
+        }
+        "meta:Baku"{
+            ld{"巴庫夏令時間"}
+            ls{"巴庫時間"}
+            sd{"BAKST"}
+            ss{"BAKT"}
+        }
+        "meta:Bangladesh"{
+            ls{"孟加拉時間"}
+            ss{"BDT"}
+        }
+        "meta:Bering"{
+            ld{"白令夏令時間"}
+            lg{"白令時間"}
+            ls{"白令標準時間"}
+            sd{"BDT (白令)"}
+            ss{"BST (白令)"}
+        }
+        "meta:Bhutan"{
+            ls{"不丹時間"}
+            ss{"BTT"}
+        }
+        "meta:Borneo"{
+            ld{"婆羅洲夏令時間"}
+            ls{"婆羅洲時間"}
+            ss{"BORT"}
+        }
+        "meta:Brasilia"{
+            ld{"巴西利亞夏令時間"}
+            ls{"巴西利亞時間"}
+            sd{"BRST"}
+            ss{"BRT"}
+        }
+        "meta:Chamorro"{
+            ls{"查莫洛標準時間"}
+            ss{"ChST"}
+        }
+        "meta:Changbai"{
+            ls{"長白山時間"}
+            ss{"CHAT"}
+        }
+        "meta:Chile"{
+            ld{"智利夏令時間"}
+            ls{"智利時間"}
+            ss{"CLT"}
         }
         "meta:China"{
             ld{"中國夏令時間"}
             ls{"中國標準時間"}
+            sd{"CDT (中國)"}
+            ss{"CST (中國)"}
+        }
+        "meta:Choibalsan"{
+            ld{"喬巴山夏令時間"}
+            ls{"喬巴山時間"}
+            sd{"CHOST"}
+            ss{"CHOT"}
+        }
+        "meta:Dacca"{
+            ls{"達卡時間"}
+            ss{"DACT"}
+        }
+        "meta:Dushanbe"{
+            ld{"杜尚別夏令時間"}
+            ls{"杜尚別時間"}
+            sd{"DUSST"}
+            ss{"DUST"}
+        }
+        "meta:Dutch_Guiana"{
+            ls{"荷屬圭亞那時間"}
+            ss{"NEGT"}
+        }
+        "meta:East_Timor"{
+            ls{"東帝汶時間"}
+            ss{"TLT"}
+        }
+        "meta:Ecuador"{
+            ls{"厄瓜多爾時間"}
+            ss{"ECT"}
         }
         "meta:Europe_Central"{
             ld{"中歐夏令時間"}
             ls{"中歐標準時間"}
+            sd{"CEST"}
+            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"東歐夏令時間"}
             ls{"東歐標準時間"}
+            sd{"EEST"}
+            ss{"EET"}
+        }
+        "meta:Europe_Western"{
+            ld{"西歐夏令時間"}
+            ls{"西歐時間"}
+            sd{"WEST"}
+            ss{"WET"}
+        }
+        "meta:Frunze"{
+            ld{"福朗吉夏令時間"}
+            ls{"福朗吉時間"}
+            sd{"FRUST"}
+            ss{"FRUT"}
         }
         "meta:GMT"{
             ls{"格林威治標準時間"}
             ss{"GMT"}
         }
+        "meta:Galapagos"{
+            ls{"加拉帕戈群島時間"}
+            ss{"GALT"}
+        }
+        "meta:Georgia"{
+            ld{"喬治亞夏令時間"}
+            ls{"喬治亞時間"}
+            sd{"GEST"}
+            ss{"GET"}
+        }
+        "meta:Greenland_Central"{
+            ld{"格陵蘭中部夏令時間"}
+            ls{"格陵蘭中部時間"}
+            sd{"CGST"}
+            ss{"CGT"}
+        }
+        "meta:Greenland_Eastern"{
+            ld{"格陵蘭東部夏令時間"}
+            ls{"格陵蘭東部時間"}
+            sd{"EGST"}
+            ss{"EGT"}
+        }
+        "meta:Greenland_Western"{
+            ld{"格陵蘭西部夏令時間"}
+            ls{"格陵蘭西部時間"}
+            sd{"WGST"}
+            ss{"WGT"}
+        }
+        "meta:Guam"{
+            ls{"關島標準時間"}
+            ss{"GST (關島)"}
+        }
+        "meta:Gulf"{
+            ls{"海灣標準時間"}
+            ss{"GST"}
+        }
         "meta:Hawaii"{
             ld{"夏威夷夏令時間"}
+            lg{"夏威夷時間"}
             ls{"夏威夷標準時間"}
+            sd{"HDT"}
+            sg{"HT"}
+            ss{"HST"}
+        }
+        "meta:Hawaii_Aleutian"{
+            ld{"夏威夷-阿留申夏令時間"}
+            lg{"夏威夷-阿留申時間"}
+            ls{"夏威夷-阿留申標準時間"}
+            sd{"HADT"}
+            sg{"HAT"}
+            ss{"HAST"}
+        }
+        "meta:India"{
+            ls{"印度標準時間"}
+            ss{"IST"}
+        }
+        "meta:Indonesia_Central"{
+            ls{"印尼中部時間"}
+            ss{"CIT"}
+        }
+        "meta:Indonesia_Eastern"{
+            ls{"印尼東部時間"}
+            ss{"EIT"}
+        }
+        "meta:Indonesia_Western"{
+            ls{"印尼西部時間"}
+            ss{"WIT"}
         }
         "meta:Israel"{
             ld{"以色列夏令時間"}
             ls{"以色列標準時間"}
+            sd{"IDT"}
+            ss{"IST"}
+        }
+        "meta:Japan"{
+            ld{"日本夏令時間"}
+            ls{"日本標準時間"}
+        }
+        "meta:Karachi"{
+            ls{"喀拉蚩時間"}
+            ss{"KART"}
+        }
+        "meta:Kashgar"{
+            ls{"喀什時間"}
+            ss{"KAST"}
+        }
+        "meta:Kazakhstan_Eastern"{
+            ls{"東哈薩克標準時間"}
+            ss{"EKST"}
+        }
+        "meta:Kazakhstan_Western"{
+            ls{"西哈薩克標準時間"}
+            ss{"WKST"}
+        }
+        "meta:Kizilorda"{
+            ld{"吉力羅達夏令時間"}
+            ls{"吉力羅達時間"}
+            sd{"KIZST"}
+            ss{"KIZT"}
+        }
+        "meta:Korea"{
+            ld{"韓國夏令時間"}
+            lg{"韓國時間"}
+            ls{"韓國標準時間"}
+            sd{"KDT"}
+            ss{"KST"}
+        }
+        "meta:Kuybyshev"{
+            ld{"古比雪夫夏令時間"}
+            ls{"古比雪夫時間"}
+            sd{"KUYST"}
+            ss{"KUYT"}
+        }
+        "meta:Kwajalein"{
+            ls{"瓜加林環礁時間"}
+            ss{"KWAT"}
+        }
+        "meta:Kyrgystan"{
+            ls{"吉爾吉斯坦時間"}
+            ss{"KGT"}
+        }
+        "meta:Lanka"{
+            ls{"蘭卡時間"}
+            ss{"LKT"}
+        }
+        "meta:Long_Shu"{
+            ls{"隴蜀時間"}
+            ss{"LONT"}
+        }
+        "meta:Lord_Howe"{
+            ld{"豪勳爵島夏令時間"}
+            lg{"豪勳爵島時間"}
+            ls{"豪勳爵島標準時間"}
+            ss{"LHDT"}
+        }
+        "meta:Macau"{
+            ld{"澳門夏令時間"}
+            ls{"澳門時間"}
+            sd{"MOST"}
+            ss{"MOT"}
+        }
+        "meta:Malaya"{
+            ls{"馬來亞時間"}
+            ss{"MALT"}
+        }
+        "meta:Malaysia"{
+            ls{"馬來西亞時間"}
+            ss{"MYT"}
+        }
+        "meta:Marshall_Islands"{
+            ls{"馬紹爾群島時間"}
+            ss{"MHT"}
+        }
+        "meta:Mongolia"{
+            ld{"烏蘭巴托夏令時間"}
+            ls{"烏蘭巴托時間"}
+            sd{"ULAST"}
+            ss{"ULAT"}
+        }
+        "meta:New_Zealand"{
+            ld{"紐西蘭夏令時間"}
+            lg{"紐西蘭時間"}
+            ls{"紐西蘭標準時間"}
+            sd{"NZDT"}
+            ss{"NZST"}
         }
         "meta:Newfoundland"{
             ld{"紐芬蘭夏令時間"}
+            lg{"紐芬蘭時間"}
             ls{"紐芬蘭標準時間"}
+            sd{"NDT"}
+            sg{"NT"}
+            ss{"NST"}
+        }
+        "meta:North_Mariana"{
+            ls{"北馬里亞納群島時間"}
+            ss{"MPT"}
+        }
+        "meta:Pakistan"{
+            ld{"巴基斯坦夏令時間"}
+            ls{"巴基斯坦時間"}
+            sd{"PKST"}
+            ss{"PKT"}
+        }
+        "meta:Pierre_Miquelon"{
+            ld{"聖皮埃爾與密克隆夏令時間"}
+            lg{"聖皮埃爾與密克隆時間"}
+            ls{"聖皮埃爾與密克隆標準時間"}
+            sd{"PMDT"}
+            ss{"PMST"}
+        }
+        "meta:Qyzylorda"{
+            ld{"克孜勒奧爾達夏令時間"}
+            ls{"克孜勒奧爾達時間"}
+            sd{"QYZST"}
+            ss{"QYZT"}
+        }
+        "meta:Samara"{
+            ld{"薩馬拉夏令時間"}
+            ls{"薩馬拉時間"}
+            sd{"SAMST"}
+            ss{"SAMT"}
+        }
+        "meta:Samarkand"{
+            ld{"撒馬爾罕夏令時間"}
+            ls{"撒馬爾罕時間"}
+            sd{"SAMST (撒馬爾罕)"}
+            ss{"SAMT (撒馬爾罕)"}
+        }
+        "meta:Samoa"{
+            ls{"薩摩亞標準時間"}
+            ss{"SST"}
+        }
+        "meta:Shevchenko"{
+            ld{"舍甫琴科夏令時間"}
+            ls{"舍甫琴科時間"}
+            sd{"SHEST"}
+            ss{"SHET"}
+        }
+        "meta:Suriname"{
+            ls{"蘇利南時間"}
+            ss{"SRT"}
+        }
+        "meta:Sverdlovsk"{
+            ld{"斯維爾德洛夫斯克夏令時間"}
+            ls{"斯維爾德洛夫斯克時間"}
+            sd{"SVEST"}
+            ss{"SVET"}
+        }
+        "meta:Tajikistan"{
+            ls{"塔吉克時間"}
+            ss{"TJT"}
+        }
+        "meta:Tashkent"{
+            ld{"塔什干夏令時間"}
+            ls{"塔什干時間"}
+            sd{"TASST"}
+            ss{"TAST"}
+        }
+        "meta:Tbilisi"{
+            ld{"第比利斯夏令時間"}
+            ls{"第比利斯時間"}
+            sd{"TBIST"}
+            ss{"TBIT"}
+        }
+        "meta:Turkey"{
+            ld{"土耳其夏令時間"}
+            ls{"土耳其時間"}
+            sd{"TRST"}
+            ss{"TRT"}
+        }
+        "meta:Turkmenistan"{
+            ld{"土庫曼夏令時間"}
+            ls{"土庫曼時間"}
+            sd{"TMST"}
+            ss{"TMT"}
+        }
+        "meta:Uralsk"{
+            ld{"烏拉斯克夏令時間"}
+            ls{"烏拉斯克時間"}
+            sd{"URAST"}
+            ss{"URAT"}
+        }
+        "meta:Urumqi"{
+            ls{"烏魯木齊時間"}
+            ss{"URUT"}
+        }
+        "meta:Uzbekistan"{
+            ld{"烏茲別克夏令時間"}
+            ls{"烏茲別克時間"}
+            sd{"UZST"}
+            ss{"UZT"}
+        }
+        "meta:Yekaterinburg"{
+            ld{"葉卡德林堡夏令時間"}
+            ls{"葉卡德林堡時間"}
+            sd{"YEKST"}
+            ss{"YEKT"}
+        }
+        "meta:Yerevan"{
+            ld{"埃裏溫夏令時間"}
+            ls{"埃裏溫時間"}
+            sd{"YERST"}
+            ss{"YERT"}
+        }
+        "meta:Yukon"{
+            ld{"育空夏令時間"}
+            lg{"育空時間"}
+            ls{"育空標準時間"}
+            sd{"YDT"}
+            sg{"YT"}
+            ss{"YST"}
         }
         hourFormat{"+HH:mm;-HH:mm"}
     }

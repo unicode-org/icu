@@ -134,7 +134,7 @@ so{
         "#,##0%",
         "#E0",
     }
-    Version{"1.46"}
+    Version{"1.91"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -142,8 +142,8 @@ so{
                 "gn",
             }
             DateTimePatterns{
-                "h:mm:ss a",
-                "h:mm:ss a",
+                "HH:mm:ss v",
+                "HH:mm:ss z",
                 "h:mm:ss a",
                 "h:mm a",
                 "EEEE, MMMM dd, yyyy",
@@ -151,13 +151,6 @@ so{
                 "dd-MMM-yyyy",
                 "dd/MM/yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                MMMMdd{"dd MMMM"}
-                MMdd{"dd/MM"}
-                yyMM{"MM/yy"}
-                yyQ{"Q yy"}
-                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{
@@ -182,13 +175,13 @@ so{
                 }
                 stand-alone{
                     narrow{
-                        "A",
-                        "I",
-                        "S",
-                        "A",
-                        "K",
-                        "J",
-                        "S",
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
                     }
                 }
             }
@@ -231,29 +224,23 @@ so{
                 }
                 stand-alone{
                     narrow{
-                        "K",
-                        "L",
-                        "S",
-                        "A",
-                        "S",
-                        "L",
-                        "T",
-                        "S",
-                        "S",
-                        "T",
-                        "K",
-                        "L",
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
                     }
                 }
             }
             quarters{
                 format{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
                     wide{
                         "Q1",
                         "Q2",

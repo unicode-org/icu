@@ -3,13 +3,9 @@
 // * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/collation/sh.xml
+// * Source File:<path>/icu-config.xml & build.xml
 // *
 // ***************************************************************************
-/**
- *  ICU <specials> source: <path>/xml/collation/sh.xml
- */
 sh{
-    Version{"1.21"}
-    collations:alias{"hr/collations"}
+    "%%ALIAS"{"sr_Latn"}
 }

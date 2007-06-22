@@ -1355,21 +1355,25 @@ ga{
         "#,##0%",
         "#E0",
     }
-    Version{"1.57"}
+    Version{"1.91"}
     calendar{
+        buddhist{
+            DateTimePatterns{
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, MMMM d, yyyy G",
+                "MMMM d, yyyy G",
+                "MMM d, yyyy G",
+                "M/d/yyyy",
+                "{1} {0}",
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "a.m.",
                 "p.m.",
-            }
-            availableFormats{
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
-                MMMMd{"d MMMM"}
-                MMdd{"dd/MM"}
-                yyQ{"Q yy"}
-                yyyyMM{"MM/yyyy"}
-                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{
@@ -1408,6 +1412,48 @@ ga{
                 abbreviated{
                     "RC",
                     "AD",
+                }
+            }
+            fields{
+                day{
+                    dn{"Lá"}
+                    relative{
+                        "-1"{"Inné"}
+                        "-2"{"Arú inné"}
+                        "0"{"Inniu"}
+                        "1"{"Amárach"}
+                        "2"{"Arú amárach"}
+                    }
+                }
+                dayperiod{
+                    dn{"a.m./p.m."}
+                }
+                era{
+                    dn{"Ré"}
+                }
+                hour{
+                    dn{"Uair"}
+                }
+                minute{
+                    dn{"Nóiméad"}
+                }
+                month{
+                    dn{"Mí"}
+                }
+                second{
+                    dn{"Soicind"}
+                }
+                week{
+                    dn{"Seachtain"}
+                }
+                weekday{
+                    dn{"Lá na seachtaine"}
+                }
+                year{
+                    dn{"Bliain"}
+                }
+                zone{
+                    dn{"Crios"}
                 }
             }
             monthNames{

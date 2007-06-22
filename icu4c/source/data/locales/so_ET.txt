@@ -10,14 +10,14 @@ so_ET{
     Currencies{
         ETB{
             "$",
-            "Itoobiya Bir",
+            "Birta Itoobbiya",
         }
         SOS{
             "SOS",
-            "Somalia Schilling",
+            "Shilin soomaali",
         }
     }
-    Version{"1.44"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

@@ -146,19 +146,12 @@ bn{
         "#,##0%",
         "#E0",
     }
-    Version{"1.54"}
+    Version{"1.91"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "পূর্বাহ্ণ",
                 "অপরাহ্ণ",
-            }
-            availableFormats{
-                MMMMd{"d MMMM"}
-                MMdd{"dd-MM"}
-                yyQ{"Q yy"}
-                yyyyMM{"MM-yyyy"}
-                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{

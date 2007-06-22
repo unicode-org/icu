@@ -1022,7 +1022,7 @@ void NumberFormatRegressionTest::Test4071014 (void)
     */
     UnicodeString expectedDefault("-5.789,988");
     UnicodeString expectedCurrency("5.789,99 DM");
-    UnicodeString expectedPercent("-578.999%");
+    UnicodeString expectedPercent("-578.999 %");
 
     UErrorCode status = U_ZERO_ERROR;
     char loc[256]={0};

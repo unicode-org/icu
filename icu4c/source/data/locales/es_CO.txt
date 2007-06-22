@@ -31,7 +31,7 @@ es_CO{
         "NaN",
         "+",
     }
-    Version{"1.49"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimePatterns{

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 ja_JP{
-    Version{"1.41"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

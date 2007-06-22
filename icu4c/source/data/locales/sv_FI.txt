@@ -48,7 +48,7 @@ sv_FI{
             stroke{"kinesiska i streck-ordning"}
         }
     }
-    Version{"1.47"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -61,15 +61,10 @@ sv_FI{
                 "HH.mm.ss",
                 "HH.mm",
                 "EEEE, yyyy MMMM dd",
-                "EEEE d MMM yyyy",
+                "d MMMM yyyy",
                 "d MMM yyyy",
                 "yyyy-MM-dd",
                 "{1} {0}",
-            }
-            availableFormats{
-                hhmm{"hh:mm a"}
-                hhmmss{"hh:mm:ss a"}
-                yyyyQQQQ{"QQQQ',' yyyy"}
             }
             fields{
                 dayperiod{

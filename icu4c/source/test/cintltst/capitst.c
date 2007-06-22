@@ -1233,7 +1233,7 @@ void TestGetLocale() {
     const char* actualLocale;
   } testStruct[] = {
     { "sr_RS", "sr_Cyrl_RS", "ru" },
-    { "sh_YU", "sh_YU", "hr" }, /* this used to be sh, but now sh collation aliases hr */
+    { "sh_YU", "sr_Latn_RS", "hr" }, /* this used to be sh, but now sh collation aliases hr */
     { "en_BE_FOO", "en_BE", "en_BE" },
     { "fr_FR_NONEXISTANT", "fr_FR", "fr" }
   };

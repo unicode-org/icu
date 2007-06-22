@@ -249,7 +249,7 @@ sq{
     Scripts{
         Latn{"Latine"}
     }
-    Version{"1.60"}
+    Version{"1.91"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -266,13 +266,6 @@ sq{
                 "yyyy-MM-dd",
                 "yy-MM-dd",
                 "{1} {0}",
-            }
-            availableFormats{
-                MMMMdd{"dd MMMM"}
-                MMdd{"MM-dd"}
-                yyQ{"Q yy"}
-                yyyyMM{"yyyy-MM"}
-                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{
@@ -363,12 +356,6 @@ sq{
             }
             quarters{
                 format{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
                     wide{
                         "Q1",
                         "Q2",

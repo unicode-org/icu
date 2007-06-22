@@ -1226,6 +1226,10 @@ structLocale:table(nofallback){
             "",
             "",
         }
+        UYI{
+            "",
+            "",
+        }
         UYP{
             "",
             "",
@@ -1493,6 +1497,7 @@ structLocale:table(nofallback){
         day{""}
         de{""}
         de_AT{""}
+        de_CH{""}
         del{""}
         den{""}
         dgr{""}
@@ -1520,6 +1525,7 @@ structLocale:table(nofallback){
         eo{""}
         es{""}
         es_419{""}
+        es_ES{""}
         et{""}
         eu{""}
         ewo{""}
@@ -1755,6 +1761,7 @@ structLocale:table(nofallback){
         ps{""}
         pt{""}
         pt_BR{""}
+        pt_PT{""}
         qu{""}
         raj{""}
         rap{""}
@@ -2059,6 +2066,8 @@ structLocale:table(nofallback){
         }
     }
     Variants{
+        1606NICT{""}
+        1694ACAD{""}
         1901{""}
         1996{""}
         AREVELA{""}
@@ -2079,6 +2088,7 @@ structLocale:table(nofallback){
         SAAHO{""}
         ROZAJ{""}
         SCOUSE{""}
+        VALENCIA{""}
         XIANG{""}
     }
     Version{""}
@@ -2314,6 +2324,10 @@ structLocale:table(nofallback){
                     "",
                     "",
                 }
+                narrow{
+                    "",
+                    ""
+                }
                 wide{
                     "",
                     ""
@@ -2323,9 +2337,13 @@ structLocale:table(nofallback){
                 day{
                     dn{"Day"}
                     relative{
+                        "-3"{""}
+                        "-2"{""}
                         "-1"{""}
                         "0"{""}
                         "1"{""}
+                        "2"{""}
+                        "3"{""}
                     }
                 }
                 dayperiod{
@@ -2511,6 +2529,32 @@ structLocale:table(nofallback){
                         "",
                     }
                     wide{
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                    narrow{
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                    wide{
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                    narrow{
                         "",
                         "",
                         "",
@@ -3798,6 +3842,15 @@ structLocale:table(nofallback){
             ss{""}
             ec{""}
         }
+        "America:Blanc-Sablon"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            ec{""}
+        }
         "America:Boa_Vista"{
             ld{""}
             lg{""}
@@ -4230,6 +4283,15 @@ structLocale:table(nofallback){
             ss{""}
             ec{""}
         }
+        "America:Indiana:Winamac"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            ec{""}
+        }
         "America:Indianapolis"{
             ld{""}
             lg{""}
@@ -4528,6 +4590,15 @@ structLocale:table(nofallback){
             ec{""}
         }
         "America:North_Dakota:Center"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            ec{""}
+        }
+        "America:North_Dakota:New_Salem"{
             ld{""}
             lg{""}
             ls{""}
@@ -6939,6 +7010,15 @@ structLocale:table(nofallback){
             ss{""}
             ec{""}
         }
+        "Europe:Podgorica"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            ec{""}
+        }
         "Europe:Prague"{
             ld{""}
             lg{""}
@@ -8343,6 +8423,15 @@ structLocale:table(nofallback){
             ss{""}
             //ec{""} // Metazones have no exemplar city
         }
+        "meta:Afghanistan"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
         "meta:Africa_Central"{
             ld{""}
             lg{""}
@@ -8353,6 +8442,15 @@ structLocale:table(nofallback){
             //ec{""} // Metazones have no exemplar city
         }
         "meta:Africa_Eastern"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Africa_FarWestern"{
             ld{""}
             lg{""}
             ls{""}
@@ -8406,6 +8504,15 @@ structLocale:table(nofallback){
             ss{""}
             //ec{""} // Metazones have no exemplar city
         }
+        "meta:Almaty"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
         "meta:Amazon"{
             ld{""}
             lg{""}
@@ -8443,6 +8550,15 @@ structLocale:table(nofallback){
             //ec{""} // Metazones have no exemplar city
         }
         "meta:America_Pacific"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Anadyr"{
             ld{""}
             lg{""}
             ls{""}
@@ -8532,6 +8648,15 @@ structLocale:table(nofallback){
             ss{""}
             //ec{""} // Metazones have no exemplar city
         }
+        "meta:Australia_CentralWestern"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
         "meta:Australia_Eastern"{
             ld{""}
             lg{""}
@@ -8542,6 +8667,15 @@ structLocale:table(nofallback){
             //ec{""} // Metazones have no exemplar city
         }
         "meta:Australia_Western"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Azerbaijan"{
             ld{""}
             lg{""}
             ls{""}
@@ -8595,6 +8729,15 @@ structLocale:table(nofallback){
             ss{""}
             //ec{""} // Metazones have no exemplar city
         }
+        "meta:Bolivia"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
         "meta:Borneo"{
             ld{""}
             lg{""}
@@ -8613,6 +8756,24 @@ structLocale:table(nofallback){
             ss{""}
             //ec{""} // Metazones have no exemplar city
         }
+        "meta:Brunei"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Cape_Verde"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
         "meta:Chamorro"{
             ld{""}
             lg{""}
@@ -8623,6 +8784,15 @@ structLocale:table(nofallback){
             //ec{""} // Metazones have no exemplar city
         }
         "meta:Changbai"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Chatham"{
             ld{""}
             lg{""}
             ls{""}
@@ -8658,7 +8828,70 @@ structLocale:table(nofallback){
             ss{""}
             //ec{""} // Metazones have no exemplar city
         }
+        "meta:Christmas"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Cocos"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Colombia"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Cook"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Cuba"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
         "meta:Dacca"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Davis"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:DumontDUrville"{
             ld{""}
             lg{""}
             ls{""}
@@ -8677,6 +8910,15 @@ structLocale:table(nofallback){
             //ec{""} // Metazones have no exemplar city
         }
         "meta:Dutch_Guiana"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Easter"{
             ld{""}
             lg{""}
             ls{""}
@@ -8730,6 +8972,42 @@ structLocale:table(nofallback){
             ss{""}
             //ec{""} // Metazones have no exemplar city
         }
+        "meta:Falkland"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Fiji"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:French_Guiana"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:French_Southern"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
         "meta:Frunze"{
             ld{""}
             lg{""}
@@ -8749,6 +9027,15 @@ structLocale:table(nofallback){
             //ec{""} // Metazones have no exemplar city
         }
         "meta:Galapagos"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Gambier"{
             ld{""}
             lg{""}
             ls{""}
@@ -8793,6 +9080,15 @@ structLocale:table(nofallback){
             ss{""}
             //ec{""} // Metazones have no exemplar city
         }
+        "meta:Gilbert_Islands"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
         "meta:Guam"{
             ld{""}
             lg{""}
@@ -8803,6 +9099,15 @@ structLocale:table(nofallback){
             //ec{""} // Metazones have no exemplar city
         }
         "meta:Gulf"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Guyana"{
             ld{""}
             lg{""}
             ls{""}
@@ -8829,7 +9134,43 @@ structLocale:table(nofallback){
             ss{""}
             //ec{""} // Metazones have no exemplar city
         }
+        "meta:Hong_Kong"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Hovd"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
         "meta:India"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Indian_Ocean"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Indochina"{
             ld{""}
             lg{""}
             ls{""}
@@ -8865,7 +9206,43 @@ structLocale:table(nofallback){
             ss{""}
             //ec{""} // Metazones have no exemplar city
         }
+        "meta:Iran"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Irkutsk"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
         "meta:Israel"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Japan"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Kamchatka"{
             ld{""}
             lg{""}
             ls{""}
@@ -8928,6 +9305,24 @@ structLocale:table(nofallback){
             ss{""}
             //ec{""} // Metazones have no exemplar city
         }
+        "meta:Kosrae"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Krasnoyarsk"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
         "meta:Kuybyshev"{
             ld{""}
             lg{""}
@@ -8964,6 +9359,15 @@ structLocale:table(nofallback){
             ss{""}
             //ec{""} // Metazones have no exemplar city
         }
+        "meta:Line_Islands"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
         "meta:Long_Shu"{
             ld{""}
             lg{""}
@@ -8991,7 +9395,25 @@ structLocale:table(nofallback){
             ss{""}
             //ec{""} // Metazones have no exemplar city
         }
+        "meta:Magadan"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
         "meta:Malaya"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Maldives"{
             ld{""}
             lg{""}
             ls{""}
@@ -9009,6 +9431,15 @@ structLocale:table(nofallback){
             ss{""}
             //ec{""} // Metazones have no exemplar city
         }
+        "meta:Marquesas"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
         "meta:Marshall_Islands"{
             ld{""}
             lg{""}
@@ -9018,7 +9449,61 @@ structLocale:table(nofallback){
             ss{""}
             //ec{""} // Metazones have no exemplar city
         }
+        "meta:Mauritius"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
         "meta:Mongolia"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Moscow"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Mawson"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Myanmar"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Nauru"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:New_Caledonia"{
             ld{""}
             lg{""}
             ls{""}
@@ -9045,7 +9530,70 @@ structLocale:table(nofallback){
             ss{""}
             //ec{""} // Metazones have no exemplar city
         }
+        "meta:Nepal"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Niue"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Norfolk"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Noronha"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
         "meta:North_Mariana"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Novosibirsk"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Omsk"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Palau"{
             ld{""}
             lg{""}
             ls{""}
@@ -9063,6 +9611,51 @@ structLocale:table(nofallback){
             ss{""}
             //ec{""} // Metazones have no exemplar city
         }
+        "meta:Papua_New_Guinea"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Paraguay"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Peru"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Philippines"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Phoenix_Islands"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
         "meta:Pierre_Miquelon"{
             ld{""}
             lg{""}
@@ -9072,7 +9665,52 @@ structLocale:table(nofallback){
             ss{""}
             //ec{""} // Metazones have no exemplar city
         }
+        "meta:Pitcairn"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Ponape"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
         "meta:Qyzylorda"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Reunion"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Rothera"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Sakhalin"{
             ld{""}
             lg{""}
             ls{""}
@@ -9108,7 +9746,43 @@ structLocale:table(nofallback){
             ss{""}
             //ec{""} // Metazones have no exemplar city
         }
+        "meta:Seychelles"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
         "meta:Shevchenko"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Singapore"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Solomon"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:South_Georgia"{
             ld{""}
             lg{""}
             ls{""}
@@ -9127,6 +9801,24 @@ structLocale:table(nofallback){
             //ec{""} // Metazones have no exemplar city
         }
         "meta:Sverdlovsk"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Syowa"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Tahiti"{
             ld{""}
             lg{""}
             ls{""}
@@ -9162,6 +9854,33 @@ structLocale:table(nofallback){
             ss{""}
             //ec{""} // Metazones have no exemplar city
         }
+        "meta:Tokelau"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Tonga"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Truk"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
         "meta:Turkey"{
             ld{""}
             lg{""}
@@ -9180,7 +9899,25 @@ structLocale:table(nofallback){
             ss{""}
             //ec{""} // Metazones have no exemplar city
         }
+        "meta:Tuvalu"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
         "meta:Uralsk"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Uruguay"{
             ld{""}
             lg{""}
             ls{""}
@@ -9199,6 +9936,78 @@ structLocale:table(nofallback){
             //ec{""} // Metazones have no exemplar city
         }
         "meta:Uzbekistan"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Vanuatu"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Venezuela"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Vladivostok"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Volgograd"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Vostok"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Wake"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Wallis"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+        }
+        "meta:Yakutsk"{
             ld{""}
             lg{""}
             ls{""}

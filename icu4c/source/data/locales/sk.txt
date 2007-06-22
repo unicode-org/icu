@@ -1317,7 +1317,7 @@ sk{
             traditional{"Tradičné"}
         }
     }
-    Version{"1.72"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1330,15 +1330,6 @@ sk{
                 "d.M.yyyy",
                 "d.M.yyyy",
                 "{1} {0}",
-            }
-            availableFormats{
-                MMMMd{"d. MMMM"}
-                Md{"d.M"}
-                mmss{"mm:ss"}
-                yyQ{"Q yy"}
-                yyQQQQ{"QQQQ yy"}
-                yyyyM{"M.yyyy"}
-                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{
@@ -1429,12 +1420,6 @@ sk{
             }
             quarters{
                 format{
-                    abbreviated{
-                        "Q1",
-                        "2. štvrťrok",
-                        "Q3",
-                        "Q4",
-                    }
                     wide{
                         "1. štvrťrok",
                         "2. štvrťrok",

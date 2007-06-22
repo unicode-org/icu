@@ -17,13 +17,27 @@ en_NZ{
             "US Dollar",
         }
     }
+    NumberElements{
+        ".",
+        ",",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
     NumberPatterns{
         "#,##0.###",
         "¤#,##0.00",
         "#,##0%",
         "#E0",
     }
-    Version{"1.46"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -32,7 +46,7 @@ en_NZ{
             }
             DateTimePatterns{
                 "h:mm:ss a v",
-                "h:mm:ss a",
+                "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
                 "EEEE, d MMMM yyyy",
@@ -40,12 +54,6 @@ en_NZ{
                 "d/MM/yyyy",
                 "d/MM/yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                MMMMd{"d MMMM"}
-                MMd{"d/MM"}
-                yyyyMM{"MM/yyyy"}
-                yyyyMMMM{"MMMM yyyy"}
             }
         }
     }
