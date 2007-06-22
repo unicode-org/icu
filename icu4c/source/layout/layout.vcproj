@@ -370,6 +370,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\loengine.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\LookupProcessor.cpp"
 				>
 			</File>
@@ -871,6 +875,19 @@
 			<File
 				RelativePath=".\LigatureSubstSubtables.h"
 				>
+			</File>
+			<File
+				RelativePath=".\loengine.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout"
+						Outputs="..\..\include\layout\$(InputFileName)"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\LookupProcessor.h"

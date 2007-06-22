@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 1999-2006, International Business Machines
+#   Copyright (C) 1999-2007, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -132,10 +132,11 @@ KhmerReordering.o \
 TibetanLayoutEngine.o \
 TibetanReordering.o \
 HangulLayoutEngine.o \
-KernTable.o
+KernTable.o \
+loengine.o
 
 ## Header files to install
-HEADERS= $(srcdir)/LayoutEngine.h $(srcdir)/LE*.h
+HEADERS= $(srcdir)/LayoutEngine.h $(srcdir)/LE*.h $(srcdir)/loengine.h
 
 STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 

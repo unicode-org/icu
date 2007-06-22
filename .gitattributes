@@ -227,6 +227,9 @@ icu4c/source/i18n/persncal.cpp -text
 icu4c/source/i18n/persncal.h -text
 icu4c/source/i18n/reldtfmt.cpp -text
 icu4c/source/i18n/reldtfmt.h -text
+icu4c/source/samples/layout/cgnomelayout.c -text
+icu4c/source/samples/layout/gnomeglue.cpp -text
+icu4c/source/samples/layout/gnomeglue.h -text
 icu4c/source/samples/layout/readme.html svneol=native#text/html
 icu4c/source/samples/ucnv/data02.bin -text svneol=unset#application/octet-stream
 icu4c/source/test/compat/Makefile.in -text
