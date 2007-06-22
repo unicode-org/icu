@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2006, International Business Machines
+*   Copyright (C) 2001-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -201,7 +201,7 @@ final class NormalizationTransliterator extends Transliterator {
         }
         text.getChars(lastSafe, limit, buffer, 0);
         String input = new String(buffer, 0, len); // TODO: fix normalizer to take char[]
-        String output = Normalizer.normalize(input, mode);
+        String output = Normalizer.normalize(input, mode, options);
         
         // verify OK, if specified
         if (verify != null) {

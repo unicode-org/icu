@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004, International Business Machines Corporation and         *
+ * Copyright (C) 2004-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -650,6 +650,11 @@ public class TransliteratorInputMethod implements InputMethod {
 }
 
 class NameRenderer extends JLabel implements ListCellRenderer {
+
+    /**
+     * For serialization
+     */
+    private static final long serialVersionUID = -210152863798631747L;
 
     public Component getListCellRendererComponent(
         JList list,
