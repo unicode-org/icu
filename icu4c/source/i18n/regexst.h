@@ -1,7 +1,7 @@
 //
 //  regexst.h
 //
-//  Copyright (C) 2003-2004, International Business Machines Corporation and others.
+//  Copyright (C) 2003-2007, International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains declarations for the class RegexStaticSets
@@ -42,17 +42,16 @@ public:
     Regex8BitSet   fPropSets8[URX_LAST_SET];    // Fast bitmap sets for latin-1 range for above.
 
     UnicodeSet    *fRuleSets[10];               // Sets used while parsing regexp patterns.
-    UnicodeSet    *fUnescapeCharSet;            // Set of chars handled by unescape when
-                                                //   encountered with a \ in a pattern.
-    UnicodeSet    *fRuleDigits;
-    UnicodeString *fEmptyString;                // An empty string, to be used when a matcher
-                                                //   is created with no input.
+    UnicodeSet    fUnescapeCharSet;            // Set of chars handled by unescape when
+                                               //   encountered with a \ in a pattern.
+    UnicodeSet    *fRuleDigitsAlias;
+    UnicodeString fEmptyString;                // An empty string, to be used when a matcher
+                                               //   is created with no input.
 
 };
-
-
 
 
 U_NAMESPACE_END
 #endif   // !UCONFIG_NO_REGULAR_EXPRESSIONS
 #endif   // REGEXST_H
+
