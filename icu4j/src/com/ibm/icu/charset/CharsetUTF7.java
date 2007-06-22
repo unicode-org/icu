@@ -392,7 +392,7 @@ class CharsetUTF7 extends CharsetICU {
                                     break;
                                 }
                             } else { 
-                                if (useIMAP && base64Counter==-2) {
+                                if (useIMAP && base64Counter==-1) {
                                     // illegal: & immediately followed by something other than base64 or minus sign
                                     // include the ampersand in the reported sequence
                                     --sourceIndex;

@@ -2488,5 +2488,236 @@ public class TestCharset extends TestFmwk {
 
         smBufDecode(decoder, "IMAP", bs, us);
         smBufEncode(encoder, "IMAP", us, bs);
+        
+        //the rest of the code in this method is for better code coverage
+        us.clear();
+        bs.clear();
+        
+        //start of charset encoder code coverage
+        //test buffer overflow
+        us.put((char)0x0026); us.put((char)0x17A9); 
+        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);
+        
+        bs.limit(bs.position());
+        bs.position(0);
+        us.limit(us.position());
+        us.position(0);
+        
+        try {
+            smBufEncode(encoder, "IMAP-EN-1", us, bs, true, false);
+            errln("Exception while encoding IMAP (1) should have been thrown.");
+        } catch(Exception ex) {
+        }
+        
+        us.clear();
+        bs.clear();
+        
+        //test buffer overflow
+        us.put((char)0x17A9); us.put((char)0x0941);
+        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);
+        
+        bs.limit(bs.position());
+        bs.position(0);
+        us.limit(us.position());
+        us.position(0);
+        
+        try {
+            smBufEncode(encoder, "IMAP-EN-2", us, bs, true, false);
+            errln("Exception while encoding IMAP (2) should have been thrown.");
+        } catch(Exception ex) {
+        }
+        
+        us.clear();
+        bs.clear();
+        
+        //test buffer overflow
+        us.put((char)0x17A9); us.put((char)0x0941);
+        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);   
+        
+        bs.limit(bs.position());
+        bs.position(0);
+        us.limit(us.position());
+        us.position(0);
+        
+        try {
+            smBufEncode(encoder, "IMAP-EN-3", us, bs, true, false);
+            errln("Exception while encoding IMAP (3) should have been thrown.");
+        } catch(Exception ex) {
+        }
+        
+        us.clear();
+        bs.clear();
+        
+        //test buffer overflow
+        us.put((char)0x17A9); us.put((char)0x0941); us.put((char)0x0955);
+        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);      
+        bs.put((byte)0x00);
+        
+        bs.limit(bs.position());
+        bs.position(0);
+        us.limit(us.position());
+        us.position(0);
+        
+        try {
+            smBufEncode(encoder, "IMAP-EN-4", us, bs, true, false);
+            errln("Exception while encoding IMAP (4) should have been thrown.");
+        } catch(Exception ex) {
+        }
+        
+        us.clear();
+        bs.clear();
+        
+        //test buffer overflow
+        us.put((char)0x17A9); us.put((char)0x0941); us.put((char)0x0955);
+        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);  
+        bs.put((byte)0x00); bs.put((byte)0x00); 
+        
+        bs.limit(bs.position());
+        bs.position(0);
+        us.limit(us.position());
+        us.position(0);
+        
+        try {
+            smBufEncode(encoder, "IMAP-EN-5", us, bs, true, false);
+            errln("Exception while encoding IMAP (5) should have been thrown.");
+        } catch(Exception ex) {
+        }
+        
+        us.clear();
+        bs.clear();
+        
+        //test buffer overflow
+        us.put((char)0x17A9); us.put((char)0x0941); us.put((char)0x0955); us.put((char)0x0970);
+        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);  
+        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);
+        
+        bs.limit(bs.position());
+        bs.position(0);
+        us.limit(us.position());
+        us.position(0);
+        
+        try {
+            smBufEncode(encoder, "IMAP-EN-6", us, bs, true, false);
+            errln("Exception while encoding IMAP (6) should have been thrown.");
+        } catch(Exception ex) {
+        }
+        
+        us.clear();
+        bs.clear();
+        
+        //test buffer overflow
+        us.put((char)0x17A9); us.put((char)0x0941);
+        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);  bs.put((byte)0x00); bs.put((byte)0x00);
+        bs.put((byte)0x00); 
+        
+        bs.limit(bs.position());
+        bs.position(0);
+        us.limit(us.position());
+        us.position(0);
+        
+        try {
+            smBufEncode(encoder, "IMAP-EN-7", us, bs, true, true);
+            errln("Exception while encoding IMAP (7) should have been thrown.");
+        } catch(Exception ex) {
+        }
+        
+        us.clear();
+        bs.clear();
+        
+        //test flushing
+        us.put((char)0x17A9); us.put((char)0x0941); 
+        bs.put((byte)0x26); bs.put((byte)0x46); bs.put((byte)0x36); bs.put((byte)0x6b);  bs.put((byte)0x4a); bs.put((byte)0x51);
+        bs.put((byte)0x51); bs.put((byte)0x2d);
+        
+        bs.limit(bs.position());
+        bs.position(0);
+        us.limit(us.position());
+        us.position(0);
+        
+        try {
+            smBufEncode(encoder, "IMAP-EN-8", us, bs, true, true);
+        } catch(Exception ex) {
+            errln("Exception while encoding IMAP (8) should not have been thrown.");
+        }
+        
+        us = CharBuffer.allocate(0x08);
+        bs = ByteBuffer.allocate(0x08);
+        
+        //test flushing buffer overflow
+        us.put((char)0x0061);
+        bs.put((byte)0x61); bs.put((byte)0x00);
+        
+        bs.limit(bs.position());
+        bs.position(0);
+        us.limit(us.position());
+        us.position(0);
+        
+        try {
+            smBufEncode(encoder, "IMAP-EN-9", us, bs, true, true);
+        } catch(Exception ex) {
+            errln("Exception while encoding IMAP (9) should not have been thrown.");
+        }
+        //end of charset encoder code coverage
+        
+        us = CharBuffer.allocate(0x10);
+        bs = ByteBuffer.allocate(0x10);
+        
+        //start of charset decoder code coverage
+        //test malform case 2
+        us.put((char)0x0000); us.put((char)0x0000); 
+        bs.put((byte)0x26); bs.put((byte)0x41); bs.put((byte)0x43); bs.put((byte)0x41);  
+        
+        bs.limit(bs.position());
+        bs.position(0);
+        us.limit(us.position());
+        us.position(0);
+        
+        try {
+            smBufDecode(decoder, "IMAP-DE-1", bs, us, true, false);
+            errln("Exception while decoding IMAP (1) should have been thrown.");
+        } catch(Exception ex) {
+        }
+        
+        us.clear();
+        bs.clear();
+        
+        //test malform case 5
+        us.put((char)0x0000); us.put((char)0x0000); us.put((char)0x0000);
+        bs.put((byte)0x26); bs.put((byte)0x41); bs.put((byte)0x41); bs.put((byte)0x41); 
+        bs.put((byte)0x41); bs.put((byte)0x49); bs.put((byte)0x41);  
+        
+        bs.limit(bs.position());
+        bs.position(0);
+        us.limit(us.position());
+        us.position(0);
+        
+        try {
+            smBufDecode(decoder, "IMAP-DE-2", bs, us, true, false);
+            errln("Exception while decoding IMAP (2) should have been thrown.");
+        } catch(Exception ex) {
+        }
+        
+        us.clear();
+        bs.clear();
+        
+        //test malform case 7
+        us.put((char)0x0000); us.put((char)0x0000); us.put((char)0x0000); us.put((char)0x0000);
+        bs.put((byte)0x26); bs.put((byte)0x41); bs.put((byte)0x41); bs.put((byte)0x41); 
+        bs.put((byte)0x41); bs.put((byte)0x41); bs.put((byte)0x41); bs.put((byte)0x42); 
+        bs.put((byte)0x41);  
+        
+        bs.limit(bs.position());
+        bs.position(0);
+        us.limit(us.position());
+        us.position(0);
+        
+        try {
+            smBufDecode(decoder, "IMAP-DE-3", bs, us, true, false);
+            errln("Exception while decoding IMAP (3) should have been thrown.");
+        } catch(Exception ex) {
+        }
+        
+        //end of charset decoder coder coverage
+        
     }
 }
