@@ -33,19 +33,12 @@ kn{
         "#,##,##0%",
         "#E0",
     }
-    Version{"1.53"}
+    Version{"1.91"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "ಪೂರ್ವಾಹ್ನ",
                 "ಅಪರಾಹ್ನ",
-            }
-            availableFormats{
-                MMMMd{"d MMMM"}
-                MMdd{"dd-MM"}
-                yyQ{"Q yy"}
-                yyyyMM{"MM-yyyy"}
-                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{
@@ -134,13 +127,13 @@ kn{
                         "Q1",
                         "Q2",
                         "Q3",
-                        "ನಾಲೃಕ  4",
+                        "Q4",
                     }
                     wide{
-                        "ಒಂದು  1",
-                        "ಎರಡು 2",
-                        "ಮೂರು 3",
-                        "ನಾಲೃಕ  4",
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
                     }
                 }
             }

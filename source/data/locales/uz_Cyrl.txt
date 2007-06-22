@@ -13,5 +13,5 @@ uz_Cyrl{
     LocaleScript{
         "Cyrl",
     }
-    Version{"1.17"}
+    Version{"1.91"}
 }

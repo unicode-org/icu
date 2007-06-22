@@ -17,5 +17,5 @@ es_SV{
             "dólar estadounidense",
         }
     }
-    Version{"1.46"}
+    Version{"1.91"}
 }

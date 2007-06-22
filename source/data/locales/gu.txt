@@ -56,19 +56,12 @@ gu{
         "#,##,##0%",
         "#E0",
     }
-    Version{"1.51"}
+    Version{"1.91"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "પૂર્વ મધ્યાહ્ન",
                 "ઉત્તર મધ્યાહ્ન",
-            }
-            availableFormats{
-                MMMMd{"d MMMM"}
-                MMdd{"dd-MM"}
-                yyQ{"Q yy"}
-                yyyyMM{"MM-yyyy"}
-                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{
@@ -157,13 +150,13 @@ gu{
                         "Q1",
                         "Q2",
                         "Q3",
-                        "ચૌતા હંત 4",
+                        "Q4",
                     }
                     wide{
-                        "પેહલા હંત 1",
-                        "ડૂસઋા હંત 2",
-                        "તીસઋા હંત 3",
-                        "ચૌતા હંત 4",
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
                     }
                 }
             }

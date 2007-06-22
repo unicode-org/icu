@@ -19,7 +19,7 @@ en_MT{
         "#,##0%",
         "#E0",
     }
-    Version{"1.48"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -36,12 +36,6 @@ en_MT{
                 "dd MMM yyyy",
                 "dd/MM/yyyy",
                 "{1} {0}",
-            }
-            availableFormats{
-                MMMMdd{"dd MMMM"}
-                MMdd{"dd/MM"}
-                yyyyMM{"MM/yyyy"}
-                yyyyMMMM{"MMMM yyyy"}
             }
         }
     }

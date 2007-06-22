@@ -31,7 +31,7 @@ es_PE{
         "NaN",
         "+",
     }
-    Version{"1.48"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -41,7 +41,7 @@ es_PE{
                 "HH:mm",
                 "EEEE d' de 'MMMM' de 'yyyy",
                 "d' de 'MMMM' de 'yyyy",
-                "dd-MMM-yy",
+                "dd/MM/yyyy",
                 "d/MM/yy",
                 "{1} {0}",
             }

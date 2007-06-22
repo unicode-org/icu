@@ -47,7 +47,7 @@ kk{
         "#,##0%",
         "#E0",
     }
-    Version{"1.44"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -60,12 +60,6 @@ kk{
                 "dd.MM.yyyy",
                 "dd.MM.yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                MMdd{"dd.MM"}
-                yyQ{"Q yy"}
-                yyyyMM{"MM.yyyy"}
-                yyyyMMMM{"MMMM yyyy 'ж.'"}
             }
             dayNames{
                 format{

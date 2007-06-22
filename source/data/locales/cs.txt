@@ -1437,7 +1437,7 @@ cs{
             japanese{"Japonský kalendář"}
         }
     }
-    Version{"1.94"}
+    Version{"1.91"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1454,14 +1454,6 @@ cs{
                 "d.M.yyyy",
                 "d.M.yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                MMMMd{"d. MMMM"}
-                Md{"d.M"}
-                mmss{"mm:ss"}
-                yyQ{"Q yy"}
-                yyyyM{"M.yyyy"}
-                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{
@@ -1502,16 +1494,58 @@ cs{
                     "po Kr.",
                 }
             }
+            fields{
+                day{
+                    dn{"Den"}
+                    relative{
+                        "-1"{"Včera"}
+                        "-2"{"Předevčírem"}
+                        "0"{"Dnes"}
+                        "1"{"Zítra"}
+                        "2"{"Pozítří"}
+                    }
+                }
+                dayperiod{
+                    dn{"Část dne"}
+                }
+                era{
+                    dn{"Epocha"}
+                }
+                hour{
+                    dn{"Hodina"}
+                }
+                minute{
+                    dn{"Minuta"}
+                }
+                month{
+                    dn{"Měsíc"}
+                }
+                second{
+                    dn{"Sekunda"}
+                }
+                week{
+                    dn{"Týden"}
+                }
+                weekday{
+                    dn{"Den v týdnu"}
+                }
+                year{
+                    dn{"Rok"}
+                }
+                zone{
+                    dn{"Pásmo"}
+                }
+            }
             monthNames{
                 format{
                     abbreviated{
-                        "led",
-                        "úno",
+                        "ledna",
+                        "února",
                         "března",
-                        "dub",
-                        "kvě",
+                        "dubna",
+                        "května",
                         "června",
-                        "črc",
+                        "července",
                         "srpna",
                         "září",
                         "října",
@@ -1595,10 +1629,10 @@ cs{
             quarters{
                 format{
                     abbreviated{
-                        "Q1",
+                        "1. čtvrtletí",
                         "2. čtvrtletí",
-                        "Q3",
-                        "Q4",
+                        "3. čtvrtletí",
+                        "4. čtvrtletí",
                     }
                     wide{
                         "1. čtvrtletí",
@@ -1615,12 +1649,6 @@ cs{
         alternateQuotationStart{"‚"}
         quotationEnd{"“"}
         quotationStart{"„"}
-    }
-    layout{
-        /**
-         * Used for figuring out the casing of characters in a list.
-         */
-        casing{"titlecase-firstword"}
     }
     zoneStrings{
         "Africa:Casablanca"{
@@ -1661,10 +1689,6 @@ cs{
         }
         "Asia:Tokyo"{
             ec{"Tokio"}
-            ld{"Japonský letní čas"}
-            ls{"Japonský standardní čas"}
-            sd{"JDT"}
-            ss{"JST"}
         }
         "Asia:Ulaanbaatar"{
             ec{"Ulánbátar"}
@@ -1775,6 +1799,12 @@ cs{
             ls{"Izraelský standardní čas"}
             sd{"IDT"}
             ss{"IST"}
+        }
+        "meta:Japan"{
+            ld{"Japonský letní čas"}
+            ls{"Japonský standardní čas"}
+            sd{"JDT"}
+            ss{"JST"}
         }
         "meta:Newfoundland"{
             ld{"Newfoundlandský letní čas"}

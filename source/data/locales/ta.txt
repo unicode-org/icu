@@ -335,19 +335,12 @@ ta{
         "#,##,##0%",
         "#E0",
     }
-    Version{"1.60"}
+    Version{"1.91"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "காலை",
                 "மாலை",
-            }
-            availableFormats{
-                MMMMd{"d MMMM"}
-                MMdd{"dd-MM"}
-                yyQ{"Q yy"}
-                yyyyMM{"MM-yyyy"}
-                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{
@@ -442,13 +435,13 @@ ta{
                         "Q1",
                         "Q2",
                         "Q3",
-                        "நால்௪ 4",
+                        "Q4",
                     }
                     wide{
-                        "வந்ந௧  1",
-                        "ரெஂட௨ 2",
-                        "மூடு௩ 3",
-                        "நால்௪ 4",
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
                     }
                 }
             }

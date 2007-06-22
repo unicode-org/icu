@@ -13,7 +13,10 @@ ro{
     AuxExemplarCharacters{"[q w y]"}
     Countries{
         001{"Lume"}
+        002{"Africa"}
+        003{"America de Nord"}
         005{"America de Sud"}
+        009{"Oceania"}
         011{"Africa occidentală"}
         013{"America centrală"}
         014{"Africa orientală"}
@@ -31,11 +34,14 @@ ro{
         057{"Micronezia"}
         061{"Polinezia"}
         062{"Asia centrala și de Sud"}
+        142{"Asia"}
+        143{"Asia Centrală"}
         145{"Asia occidentală"}
         150{"Europa"}
         151{"Europa de Est"}
         154{"Europa septentrională"}
         155{"Europa occidentală"}
+        419{"America Latină și Caraibe"}
         830{"Insulele Anglo-Normande"}
         AD{"Andora"}
         AE{"Emiratele Arabe Unite"}
@@ -220,6 +226,7 @@ ro{
         QO{"Altă Oceania"}
         RE{"Reunion"}
         RO{"România"}
+        RS{"Serbia"}
         RU{"Federația Rusă"}
         RW{"Rwanda"}
         SA{"Arabia Saudită"}
@@ -280,36 +287,93 @@ ro{
     }
     ExemplarCharacters{"[a ă â b-i î j-p r s ș t ț u-x z]"}
     Languages{
+        af{"afrikaans"}
+        afa{"alte limbi afro-asiatice"}
+        ain{"ainu"}
+        an{"aragoneză"}
+        ang{"engleză veche"}
         ar{"arabă"}
+        aus{"limbi australiene"}
+        be{"bielorusă"}
         bg{"bulgară"}
+        bnt{"bantu"}
+        bo{"tibetană"}
+        br{"bretonă"}
+        cau{"alte limbi caucaziene"}
+        ce{"cecenă"}
+        cel{"alte limbi celtice"}
+        co{"corsicană"}
+        cop{"coptă"}
         cs{"cehă"}
+        cu{"slavonă"}
         da{"daneză"}
         de{"germană"}
+        dra{"alte limbi dravidiene"}
+        egy{"egipteană veche"}
         el{"greacă"}
         en{"engleză"}
         es{"spaniolă"}
         et{"estoniană"}
         fi{"finlandeză"}
+        fil{"filipineză"}
+        fj{"fijiană"}
+        fo{"feroeză"}
         fr{"franceză"}
+        fro{"franceză veche"}
+        gem{"alte limbi germanice"}
+        gl{"galiciană"}
+        grc{"greacă veche"}
         he{"ebraică"}
+        hit{"hitită"}
         hr{"croată"}
+        ht{"haitiană"}
         hu{"maghiară"}
+        ine{"alte limbi indo-europene"}
+        ira{"alte limbi iraniene"}
         it{"italiană"}
         ja{"japoneză"}
+        jpr{"iudeo-persană"}
+        jrb{"iudeo-arabă"}
+        ka{"georgiană"}
+        kk{"cazacă"}
         ko{"coreeană"}
+        la{"latină"}
+        lb{"luxemburgheză"}
         lt{"lituaniană"}
         lv{"letonă"}
+        mg{"malgașă"}
+        mi{"maori"}
+        mis{"limbi diverse"}
+        mul{"limbi multiple"}
+        ne{"nepaleză"}
         nl{"olandeză"}
         no{"norvegiană"}
+        ota{"turcă otomană"}
+        peo{"persană veche"}
         pl{"poloneză"}
         pt{"portugheză"}
         ro{"română"}
+        roa{"alte limbi romanice"}
         ru{"rusă"}
+        rup{"aromână"}
+        sa{"sanscrită"}
+        scn{"siciliană"}
+        sem{"alte limbi semitice"}
+        sga{"irlandeză veche"}
         sk{"slovacă"}
         sl{"slovenă"}
+        sla{"alte limbi slave"}
+        sux{"sumeriană"}
         sv{"suedeză"}
+        tg{"tadjică"}
         tr{"turcă"}
+        tt{"tătară"}
+        uk{"ucraineană"}
+        ur{"urdu"}
+        vi{"vietnameză"}
+        wa{"valonă"}
         zh{"chineză"}
+        zxx{"fară conținut lingvistic"}
     }
     LocaleScript{
         "Latn",
@@ -334,7 +398,25 @@ ro{
         "#,##0%",
         "#E0",
     }
-    Version{"1.74"}
+    Scripts{
+        Beng{"bengali"}
+        Bopo{"bopomofo"}
+        Egyp{"hieroglife egiptene"}
+        Hira{"hiragana"}
+        Hrkt{"katakana sau hiragana"}
+        Kana{"katakana"}
+    }
+    Types{
+        collation{
+            big5han{"sortare pentru chineza tradițională - Big5"}
+            direct{"sortare directă"}
+            gb2312han{"sortare pentru chineza simplificată - GB2312"}
+            phonebook{"sortare după cartea de telefon"}
+            pinyin{"sortare pinyin"}
+            traditional{"sortare tradițională"}
+        }
+    }
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -349,11 +431,7 @@ ro{
                 "{1} {0}",
             }
             availableFormats{
-                MMMMd{"d MMMM"}
-                MMdd{"dd.MM"}
-                yyQ{"Q yy"}
-                yyyyMM{"MM.yyyy"}
-                yyyyMMMM{"MMMM yyyy"}
+                Md{"d.M"}
             }
             dayNames{
                 format{
@@ -392,6 +470,50 @@ ro{
                 abbreviated{
                     "d.C.",
                     "î.d.C.",
+                }
+            }
+            fields{
+                day{
+                    dn{"zi"}
+                    relative{
+                        "-1"{"ieri"}
+                        "-2"{"alaltăieri"}
+                        "-3"{"răsalaltăieri"}
+                        "0"{"azi"}
+                        "1"{"mâine"}
+                        "2"{"poimâine"}
+                        "3"{"răspoimâine"}
+                    }
+                }
+                dayperiod{
+                    dn{"perioada zile"}
+                }
+                era{
+                    dn{"eră"}
+                }
+                hour{
+                    dn{"oră"}
+                }
+                minute{
+                    dn{"minut"}
+                }
+                month{
+                    dn{"lună"}
+                }
+                second{
+                    dn{"secundă"}
+                }
+                week{
+                    dn{"săptămână"}
+                }
+                weekday{
+                    dn{"zi a săptămânii"}
+                }
+                year{
+                    dn{"an"}
+                }
+                zone{
+                    dn{"zonă"}
                 }
             }
             monthNames{
@@ -442,23 +564,11 @@ ro{
                     }
                 }
             }
-            quarters{
-                format{
-                    abbreviated{
-                        "trimestrul 1",
-                        "Q2",
-                        "trimestrul 3",
-                        "trimestrul 4",
-                    }
-                    wide{
-                        "trimestrul 1",
-                        "trimestrul 2",
-                        "trimestrul 3",
-                        "trimestrul 4",
-                    }
-                }
-            }
         }
+    }
+    measurementSystemNames{
+        US{"american"}
+        metric{"metric"}
     }
     zoneStrings{
         "Antarctica:South_Pole"{

@@ -22,7 +22,7 @@ sr_Latn_RS{
         "#,##0%",
         "#E0",
     }
-    Version{"1.7"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -31,23 +31,20 @@ sr_Latn_RS{
                 "HH.mm.ss",
                 "HH.mm",
                 "EEEE, dd. MMMM yyyy.",
-                "EEEE, d.MM.yyyy.",
+                "dd. MMMM yyyy.",
                 "dd.MM.yyyy.",
                 "d.M.yy.",
                 "{1} {0}",
-            }
-            availableFormats{
-                mmss{"mm.ss"}
             }
             dayNames{
                 format{
                     abbreviated{
                         "ned",
                         "ponedeljak",
-                        "uto",
+                        "utorak",
                         "sre",
-                        "čet",
-                        "petak",
+                        "četvrtak",
+                        "pet",
                         "subota",
                     }
                     wide{

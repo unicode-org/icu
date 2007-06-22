@@ -23,7 +23,7 @@ en_SG{
         "#,##0%",
         "#E0",
     }
-    Version{"1.48"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -40,11 +40,6 @@ en_SG{
                 "MMM d, yyyy",
                 "M/d/yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                MMMMdd{"dd MMMM"}
-                MMdd{"dd/MM"}
-                yyyyMMMM{"MMMM yyyy"}
             }
         }
     }

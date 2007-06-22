@@ -759,13 +759,13 @@ void NumberFormatTest::TestCurrencyObject() {
     expectCurrency(*fmt, null, 1234.56, CharsToUnicodeString("1 234,56 \\u20AC"));
 
     expectCurrency(*fmt, Locale::getJapan(),
-                   1234.56, CharsToUnicodeString("1 235 JP\\u00A5")); // Yen
+                   1234.56, CharsToUnicodeString("1 235 \\u00A5JP")); // Yen
 
     expectCurrency(*fmt, Locale("fr", "CH", ""),
                    1234.56, "1 234,55 sFr."); // 0.05 rounding
 
     expectCurrency(*fmt, Locale::getUS(),
-                   1234.56, "1 234,56 US$");
+                   1234.56, "1 234,56 $US");
 
     expectCurrency(*fmt, Locale::getFrance(),
                    1234.56, CharsToUnicodeString("1 234,56 \\u20AC")); // Euro

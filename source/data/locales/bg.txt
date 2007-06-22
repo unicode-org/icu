@@ -41,6 +41,7 @@ bg{
         151{"Източна Европа"}
         154{"Северна Европа"}
         155{"Западна Европа"}
+        172{"Общност на независимите държави"}
         830{"Нормандски о-ви"}
         AD{"Андора"}
         AE{"Обединени Арабски Емирства"}
@@ -1365,6 +1366,7 @@ bg{
         Copt{"Коптска"}
         Cyrl{"Кирилица"}
         Deva{"Деванагари"}
+        Egyp{"Египетски йероглифи"}
         Ethi{"Етиопска"}
         Geor{"Грузинска"}
         Goth{"Готическа"}
@@ -1409,7 +1411,7 @@ bg{
             traditional{"Традиционно"}
         }
     }
-    Version{"1.82"}
+    Version{"1.91"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1418,7 +1420,7 @@ bg{
             }
             DateTimePatterns{
                 "HH:mm:ss v",
-                "HH:mm:ss",
+                "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
                 "dd MMMM yyyy, EEEE",
@@ -1426,18 +1428,6 @@ bg{
                 "dd.MM.yyyy",
                 "dd.MM.yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                HHmm{"HH:mm"}
-                MMMMdd{"dd MMMM"}
-                MMdd{"dd.MM"}
-                hmm{"h:mm a"}
-                hmmss{"h:mm:ss a"}
-                mmss{"mm:ss"}
-                yyQ{"Q yy"}
-                yyyyMM{"MM.yyyy"}
-                yyyyMMMM{"MMMM yyyy"}
-                yyyyQQQQ{"QQQQ yyyy 'г'."}
             }
             dayNames{
                 format{
@@ -1484,7 +1474,17 @@ bg{
             }
             fields{
                 day{
-                    dn{"Ден"}
+                    dn{"ден"}
+                    relative{
+                        "-1"{"Вчера"}
+                        "-2"{"Онзи ден"}
+                        "0"{"Днес"}
+                        "1"{"Утре"}
+                        "2"{"Вдругиден"}
+                    }
+                }
+                dayperiod{
+                    dn{"ден"}
                 }
                 era{
                     dn{"ера"}
@@ -1505,7 +1505,7 @@ bg{
                     dn{"седмица"}
                 }
                 weekday{
-                    dn{"Ден от седмицата"}
+                    dn{"ден от седмицата"}
                 }
                 year{
                     dn{"година"}
@@ -1974,10 +1974,6 @@ bg{
         }
         "Asia:Tokyo"{
             ec{"Токио"}
-            ld{"Японска часова зона"}
-            ls{"Японска часова зона"}
-            sd{"JDT"}
-            ss{"JST"}
         }
         "Asia:Ulaanbaatar"{
             ec{"Уланбатор"}
@@ -2138,8 +2134,6 @@ bg{
         "meta:Alaska"{
             ld{"Лятна часова зона Аляска"}
             ls{"Часова зона Аляска"}
-            sd{"AKDT"}
-            ss{"AKST"}
         }
         "meta:America_Central"{
             ld{"Американска централна лятна часова зона"}
@@ -2201,11 +2195,18 @@ bg{
             sd{"IDT"}
             ss{"IST"}
         }
+        "meta:Japan"{
+            ld{"Японска часова зона"}
+            ls{"Японска часова зона"}
+            sd{"JDT"}
+            ss{"JST"}
+        }
         "meta:Newfoundland"{
             ld{"Лятна часова зона Нюфаундленд"}
             ls{"Часова зона Нюфаундленд"}
         }
         gmtFormat{"Гриинуич{0}"}
         hourFormat{"+HHmm;-HHmm"}
+        regionFormat{"{0}"}
     }
 }

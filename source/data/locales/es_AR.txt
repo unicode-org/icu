@@ -31,11 +31,11 @@ es_AR{
         "NaN",
         "+",
     }
-    Version{"1.47"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "HH'h'''mm v",
+                "hh:mm:ss a v",
                 "H:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",

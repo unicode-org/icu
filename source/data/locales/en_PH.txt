@@ -13,26 +13,12 @@ en_PH{
             "Peso",
         }
     }
-    Version{"1.40"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
                 1,
                 1,
-            }
-            DateTimePatterns{
-                "h:mm:ss a v",
-                "h:mm:ss a z",
-                "h:mm:ss a",
-                "h:mm a",
-                "EEEE, MMMM d, yyyy",
-                "MMMM d, yyyy",
-                "MM d, yy",
-                "M/d/yy",
-                "{1} {0}",
-            }
-            availableFormats{
-                MMd{"MM d"}
             }
         }
     }

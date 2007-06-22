@@ -17,7 +17,7 @@ es_GT{
             "dólar estadounidense",
         }
     }
-    Version{"1.46"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimePatterns{

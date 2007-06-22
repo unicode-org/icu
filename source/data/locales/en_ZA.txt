@@ -13,7 +13,7 @@ en_ZA{
         "#,##0%",
         "#E0",
     }
-    Version{"1.45"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -21,8 +21,8 @@ en_ZA{
                 1,
             }
             DateTimePatterns{
-                "h:mm:ss a",
-                "h:mm:ss a",
+                "h:mm:ss a v",
+                "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
                 "EEEE dd MMMM yyyy",
@@ -30,12 +30,6 @@ en_ZA{
                 "dd MMM yyyy",
                 "yyyy/MM/dd",
                 "{1} {0}",
-            }
-            availableFormats{
-                MMMMdd{"dd MMMM"}
-                MMdd{"MM/dd"}
-                yyyyMM{"yyyy/MM"}
-                yyyyMMMM{"MMMM yyyy"}
             }
         }
     }

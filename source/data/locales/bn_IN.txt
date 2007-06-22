@@ -173,7 +173,7 @@ bn_IN{
         Sinh{"Sinh"}
         Sylo{"Sylo"}
     }
-    Version{"1.50"}
+    Version{"1.91"}
     calendar{
         gregorian{
             weekend:intvector{

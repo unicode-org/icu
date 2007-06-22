@@ -170,7 +170,7 @@ fo{
         "#,##0%",
         "#E0",
     }
-    Version{"1.49"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -183,13 +183,6 @@ fo{
                 "dd-MM-yyyy",
                 "dd-MM-yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                MMMd{"d. MMM"}
-                MMdd{"dd-MM"}
-                yyQ{"Q yy"}
-                yyyyMM{"MM-yyyy"}
-                yyyyMMM{"MMM yyyy"}
             }
             dayNames{
                 format{

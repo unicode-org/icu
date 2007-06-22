@@ -314,7 +314,7 @@ DateFormatMiscTests::test4117335()
 
     UnicodeString jstShort = "JST";
     
-    UnicodeString tzID = "Asia/Tokyo";
+    UnicodeString tzID = "meta/Japan";
 
     UnicodeString jdtLong(jdtLongC, 5, 5);
  

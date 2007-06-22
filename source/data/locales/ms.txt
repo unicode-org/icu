@@ -272,15 +272,19 @@ ms{
         "#,##0%",
         "#E0",
     }
-    Version{"1.50"}
+    Version{"1.91"}
     calendar{
         gregorian{
-            availableFormats{
-                MMMMdd{"dd MMMM"}
-                MMdd{"dd/MM"}
-                yyQ{"Q yy"}
-                yyyyMM{"MM/yyyy"}
-                yyyyMMMM{"MMMM yyyy"}
+            DateTimePatterns{
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, yyyy MMMM dd",
+                "yyyy MMMM d",
+                "yyyy MMM d",
+                "yyyy-MM-dd",
+                "{1} {0}",
             }
             dayNames{
                 format{
@@ -366,16 +370,16 @@ ms{
             quarters{
                 format{
                     abbreviated{
-                        "suku pertama",
+                        "Q1",
                         "Q2",
-                        "suku ketiga",
-                        "suku keempat",
+                        "Q3",
+                        "Q4",
                     }
                     wide{
-                        "suku pertama",
-                        "suku kedua",
-                        "suku ketiga",
-                        "suku keempat",
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
                     }
                 }
             }

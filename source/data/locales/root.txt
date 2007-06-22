@@ -70,7 +70,7 @@ root{
         297,
         210,
     }
-    Version{"1.110"}
+    Version{"1.91"}
     calendar{
         buddhist{
             AmPmMarkers{
@@ -296,14 +296,18 @@ root{
                 Year{"{0} {1}"}
             }
             availableFormats{
+                Ed{"E d"}
+                H{"H"}
                 HHmm{"HH:mm"}
                 HHmmss{"HH:mm:ss"}
+                MMMEd{"E MMM d"}
                 MMMMd{"MMMM d"}
                 Md{"M-d"}
                 mmss{"mm:ss"}
                 yyMM{"yy-MM"}
                 yyMMM{"yy MMM"}
                 yyQ{"yy Q"}
+                yyyy{"yyyy"}
             }
             dayNames{
                 default{"format"}
@@ -549,7 +553,7 @@ root{
                 format{
                     abbreviated:alias{"/LOCALE/calendar/islamic/monthNames/format/wide"}
                     default{"wide"}
-                    narrow:alias{"/LOCALE/calendar/gregorian/monthNames/stand-alone/narrow"}
+                    narrow:alias{"/LOCALE/calendar/islamic/monthNames/stand-alone/narrow"}
                     wide{
                         "Muharram",
                         "Safar",
@@ -565,7 +569,24 @@ root{
                         "Dhuʻl-Hijjah",
                     }
                 }
-                stand-alone:alias{"/LOCALE/calendar/gregorian/monthNames/stand-alone"}
+                stand-alone{
+                    abbreviated:alias{"/LOCALE/calendar/islamic/monthNames/format/abbreviated"}
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide:alias{"/LOCALE/calendar/islamic/monthNames/format/wide"}
+                }
             }
             quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
@@ -860,7 +881,7 @@ root{
                 format{
                     abbreviated:alias{"/LOCALE/calendar/persian/monthNames/format/wide"}
                     default{"wide"}
-                    narrow:alias{"/LOCALE/calendar/gregorian/monthNames/stand-alone/narrow"}
+                    narrow:alias{"/LOCALE/calendar/persian/monthNames/stand-alone/narrow"}
                     wide{
                         "Farvardin",
                         "Ordibehesht",
@@ -876,7 +897,24 @@ root{
                         "Esfand",
                     }
                 }
-                stand-alone:alias{"/LOCALE/calendar/gregorian/monthNames/stand-alone"}
+                stand-alone{
+                    abbreviated:alias{"/LOCALE/calendar/persian/monthNames/format/abbreviated"}
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide:alias{"/LOCALE/calendar/persian/monthNames/format/wide"}
+                }
             }
             quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
@@ -888,11 +926,8 @@ root{
         quotationStart{"“"}
     }
     layout{
-        /**
-         * Used for figuring out the casing of characters in a list.
-         */
-        casing{"mixed"}
         characters{"left-to-right"}
+        lines{"top-to-bottom"}
     }
     measurementSystemNames{
         US{"US"}
@@ -1701,6 +1736,16 @@ root{
                 }
             }
         }
+        "America:Asuncion"{
+            ec{"Asuncion"}
+            um{
+                mz0{
+                    "Paraguay",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
         "America:Bahia"{
             ec{"Bahia"}
             um{
@@ -1756,6 +1801,16 @@ root{
             um{
                 mz0{
                     "Amazon",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "America:Bogota"{
+            ec{"Bogota"}
+            um{
+                mz0{
+                    "Colombia",
                     "0000-00-00",
                     "9999-12-31",
                 }
@@ -1841,6 +1896,16 @@ root{
                 }
             }
         }
+        "America:Caracas"{
+            ec{"Caracas"}
+            um{
+                mz0{
+                    "Venezuela",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
         "America:Catamarca"{
             ec{"Catamarca"}
             um{
@@ -1867,6 +1932,16 @@ root{
                 mz4{
                     "Argentina",
                     "2004-06-20",
+                    "9999-12-31",
+                }
+            }
+        }
+        "America:Cayenne"{
+            ec{"Cayenne"}
+            um{
+                mz0{
+                    "French_Guiana",
+                    "0000-00-00",
                     "9999-12-31",
                 }
             }
@@ -2161,11 +2236,31 @@ root{
                 }
             }
         }
+        "America:Guyana"{
+            ec{"Guyana"}
+            um{
+                mz0{
+                    "Guyana",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
         "America:Halifax"{
             ec{"Halifax"}
             um{
                 mz0{
                     "Atlantic",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "America:Havana"{
+            ec{"Havana"}
+            um{
+                mz0{
+                    "Cuba",
                     "0000-00-00",
                     "9999-12-31",
                 }
@@ -2372,6 +2467,26 @@ root{
                 mz1{
                     "America_Eastern",
                     "2000-10-29 02:00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "America:La_Paz"{
+            ec{"La Paz"}
+            um{
+                mz0{
+                    "Bolivia",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "America:Lima"{
+            ec{"Lima"}
+            um{
+                mz0{
+                    "Peru",
+                    "0000-00-00",
                     "9999-12-31",
                 }
             }
@@ -2596,6 +2711,16 @@ root{
                 }
             }
         }
+        "America:Montevideo"{
+            ec{"Montevideo"}
+            um{
+                mz0{
+                    "Uruguay",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
         "America:Montreal"{
             ec{"Montreal"}
             um{
@@ -2662,6 +2787,16 @@ root{
                 mz2{
                     "Alaska",
                     "1983-11-30",
+                    "9999-12-31",
+                }
+            }
+        }
+        "America:Noronha"{
+            ec{"Noronha"}
+            um{
+                mz0{
+                    "Noronha",
+                    "0000-00-00",
                     "9999-12-31",
                 }
             }
@@ -3116,6 +3251,36 @@ root{
                 }
             }
         }
+        "Antarctica:Davis"{
+            ec{"Davis"}
+            um{
+                mz0{
+                    "Davis",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Antarctica:DumontDUrville"{
+            ec{"DumontDUrville"}
+            um{
+                mz0{
+                    "DumontDUrville",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Antarctica:Mawson"{
+            ec{"Mawson"}
+            um{
+                mz0{
+                    "Mawson",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
         "Antarctica:McMurdo"{
             ec{"McMurdo"}
             um{
@@ -3137,6 +3302,36 @@ root{
                 mz1{
                     "Chile",
                     "1982-01-01",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Antarctica:Rothera"{
+            ec{"Rothera"}
+            um{
+                mz0{
+                    "Rothera",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Antarctica:Syowa"{
+            ec{"Syowa"}
+            um{
+                mz0{
+                    "Syowa",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Antarctica:Vostok"{
+            ec{"Vostok"}
+            um{
+                mz0{
+                    "Vostok",
+                    "0000-00-00",
                     "9999-12-31",
                 }
             }
@@ -3171,6 +3366,16 @@ root{
             um{
                 mz0{
                     "Europe_Eastern",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Asia:Anadyr"{
+            ec{"Anadyr"}
+            um{
+                mz0{
+                    "Anadyr",
                     "0000-00-00",
                     "9999-12-31",
                 }
@@ -3302,6 +3507,16 @@ root{
                 mz1{
                     "Kyrgystan",
                     "1991-08-31 02:00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Asia:Brunei"{
+            ec{"Brunei"}
+            um{
+                mz0{
+                    "Brunei",
+                    "0000-00-00",
                     "9999-12-31",
                 }
             }
@@ -3466,6 +3681,36 @@ root{
                 }
             }
         }
+        "Asia:Hong_Kong"{
+            ec{"Hong Kong"}
+            um{
+                mz0{
+                    "Hong_Kong",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Asia:Hovd"{
+            ec{"Hovd"}
+            um{
+                mz0{
+                    "Hovd",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Asia:Irkutsk"{
+            ec{"Irkutsk"}
+            um{
+                mz0{
+                    "Irkutsk",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
         "Asia:Jakarta"{
             ec{"Jakarta"}
             um{
@@ -3491,6 +3736,26 @@ root{
             um{
                 mz0{
                     "Israel",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Asia:Kabul"{
+            ec{"Kabul"}
+            um{
+                mz0{
+                    "Afghanistan",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Asia:Kamchatka"{
+            ec{"Kamchatka"}
+            um{
+                mz0{
+                    "Kamchatka",
                     "0000-00-00",
                     "9999-12-31",
                 }
@@ -3522,6 +3787,26 @@ root{
                 mz1{
                     "China",
                     "1980-05-01",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Asia:Katmandu"{
+            ec{"Katmandu"}
+            um{
+                mz0{
+                    "Nepal",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Asia:Krasnoyarsk"{
+            ec{"Krasnoyarsk"}
+            um{
+                mz0{
+                    "Krasnoyarsk",
+                    "0000-00-00",
                     "9999-12-31",
                 }
             }
@@ -3581,11 +3866,31 @@ root{
                 }
             }
         }
+        "Asia:Magadan"{
+            ec{"Magadan"}
+            um{
+                mz0{
+                    "Magadan",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
         "Asia:Makassar"{
             ec{"Makassar"}
             um{
                 mz0{
                     "Indonesia_Central",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Asia:Manila"{
+            ec{"Manila"}
+            um{
+                mz0{
+                    "Philippines",
                     "0000-00-00",
                     "9999-12-31",
                 }
@@ -3606,6 +3911,26 @@ root{
             um{
                 mz0{
                     "Europe_Eastern",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Asia:Novosibirsk"{
+            ec{"Novosibirsk"}
+            um{
+                mz0{
+                    "Novosibirsk",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Asia:Omsk"{
+            ec{"Omsk"}
+            um{
+                mz0{
+                    "Omsk",
                     "0000-00-00",
                     "9999-12-31",
                 }
@@ -3696,6 +4021,16 @@ root{
                 }
             }
         }
+        "Asia:Rangoon"{
+            ec{"Rangoon"}
+            um{
+                mz0{
+                    "Myanmar",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
         "Asia:Riyadh"{
             ec{"Riyadh"}
             um{
@@ -3711,6 +4046,16 @@ root{
             um{
                 mz0{
                     "Indochina",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Asia:Sakhalin"{
+            ec{"Sakhalin"}
+            um{
+                mz0{
+                    "Sakhalin",
                     "0000-00-00",
                     "9999-12-31",
                 }
@@ -3761,6 +4106,16 @@ root{
                 }
             }
         }
+        "Asia:Singapore"{
+            ec{"Singapore"}
+            um{
+                mz0{
+                    "Singapore",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
         "Asia:Taipei"{
             ec{"Taipei"}
             um{
@@ -3801,6 +4156,16 @@ root{
                 }
             }
         }
+        "Asia:Tehran"{
+            ec{"Tehran"}
+            um{
+                mz0{
+                    "Iran",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
         "Asia:Thimphu"{
             ec{"Thimphu"}
             um{
@@ -3812,6 +4177,16 @@ root{
                 mz1{
                     "Bhutan",
                     "1987-10-01",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Asia:Tokyo"{
+            ec{"Tokyo"}
+            um{
+                mz0{
+                    "Japan",
+                    "0000-00-00",
                     "9999-12-31",
                 }
             }
@@ -3846,6 +4221,26 @@ root{
             um{
                 mz0{
                     "Indochina",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Asia:Vladivostok"{
+            ec{"Vladivostok"}
+            um{
+                mz0{
+                    "Vladivostok",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Asia:Yakutsk"{
+            ec{"Yakutsk"}
+            um{
+                mz0{
+                    "Yakutsk",
                     "0000-00-00",
                     "9999-12-31",
                 }
@@ -3921,6 +4316,16 @@ root{
                 }
             }
         }
+        "Atlantic:Cape_Verde"{
+            ec{"Cape Verde"}
+            um{
+                mz0{
+                    "Cape_Verde",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
         "Atlantic:Faeroe"{
             ec{"Faeroe"}
             um{
@@ -3951,11 +4356,31 @@ root{
                 }
             }
         }
+        "Atlantic:South_Georgia"{
+            ec{"South Georgia"}
+            um{
+                mz0{
+                    "South_Georgia",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
         "Atlantic:St_Helena"{
             ec{"St Helena"}
             um{
                 mz0{
                     "GMT",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Atlantic:Stanley"{
+            ec{"Stanley"}
+            um{
+                mz0{
+                    "Falkland",
                     "0000-00-00",
                     "9999-12-31",
                 }
@@ -4006,6 +4431,16 @@ root{
             um{
                 mz0{
                     "Australia_Central",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Australia:Eucla"{
+            ec{"Eucla"}
+            um{
+                mz0{
+                    "Australia_CentralWestern",
                     "0000-00-00",
                     "9999-12-31",
                 }
@@ -4616,6 +5051,16 @@ root{
                 }
             }
         }
+        "Europe:Volgograd"{
+            ec{"Volgograd"}
+            um{
+                mz0{
+                    "Volgograd",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
         "Europe:Warsaw"{
             ec{"Warsaw"}
             um{
@@ -4671,6 +5116,36 @@ root{
                 }
             }
         }
+        "Indian:Chagos"{
+            ec{"Chagos"}
+            um{
+                mz0{
+                    "Indian_Ocean",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Indian:Christmas"{
+            ec{"Christmas"}
+            um{
+                mz0{
+                    "Christmas",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Indian:Cocos"{
+            ec{"Cocos"}
+            um{
+                mz0{
+                    "Cocos",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
         "Indian:Comoro"{
             ec{"Comoro"}
             um{
@@ -4681,11 +5156,61 @@ root{
                 }
             }
         }
+        "Indian:Kerguelen"{
+            ec{"Kerguelen"}
+            um{
+                mz0{
+                    "French_Southern",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Indian:Mahe"{
+            ec{"Mahe"}
+            um{
+                mz0{
+                    "Seychelles",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Indian:Maldives"{
+            ec{"Maldives"}
+            um{
+                mz0{
+                    "Maldives",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Indian:Mauritius"{
+            ec{"Mauritius"}
+            um{
+                mz0{
+                    "Mauritius",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
         "Indian:Mayotte"{
             ec{"Mayotte"}
             um{
                 mz0{
                     "Africa_Eastern",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Indian:Reunion"{
+            ec{"Reunion"}
+            um{
+                mz0{
+                    "Reunion",
                     "0000-00-00",
                     "9999-12-31",
                 }
@@ -4711,6 +5236,76 @@ root{
                 }
             }
         }
+        "Pacific:Chatham"{
+            ec{"Chatham"}
+            um{
+                mz0{
+                    "Chatham",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Pacific:Easter"{
+            ec{"Easter"}
+            um{
+                mz0{
+                    "Easter",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Pacific:Efate"{
+            ec{"Efate"}
+            um{
+                mz0{
+                    "Vanuatu",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Pacific:Enderbury"{
+            ec{"Enderbury"}
+            um{
+                mz0{
+                    "Phoenix_Islands",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Pacific:Fakaofo"{
+            ec{"Fakaofo"}
+            um{
+                mz0{
+                    "Tokelau",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Pacific:Fiji"{
+            ec{"Fiji"}
+            um{
+                mz0{
+                    "Fiji",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Pacific:Funafuti"{
+            ec{"Funafuti"}
+            um{
+                mz0{
+                    "Tuvalu",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
         "Pacific:Galapagos"{
             ec{"Galapagos"}
             um{
@@ -4722,6 +5317,26 @@ root{
                 mz1{
                     "Galapagos",
                     "1986-01-01",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Pacific:Gambier"{
+            ec{"Gambier"}
+            um{
+                mz0{
+                    "Gambier",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Pacific:Guadalcanal"{
+            ec{"Guadalcanal"}
+            um{
+                mz0{
+                    "Solomon",
+                    "0000-00-00",
                     "9999-12-31",
                 }
             }
@@ -4761,6 +5376,26 @@ root{
                 }
             }
         }
+        "Pacific:Kiritimati"{
+            ec{"Kiritimati"}
+            um{
+                mz0{
+                    "Line_Islands",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Pacific:Kosrae"{
+            ec{"Kosrae"}
+            um{
+                mz0{
+                    "Kosrae",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
         "Pacific:Kwajalein"{
             ec{"Kwajalein"}
             um{
@@ -4786,6 +5421,16 @@ root{
                 }
             }
         }
+        "Pacific:Marquesas"{
+            ec{"Marquesas"}
+            um{
+                mz0{
+                    "Marquesas",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
         "Pacific:Midway"{
             ec{"Midway"}
             um{
@@ -4797,6 +5442,46 @@ root{
                 mz1{
                     "Samoa",
                     "1983-11-30",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Pacific:Nauru"{
+            ec{"Nauru"}
+            um{
+                mz0{
+                    "Nauru",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Pacific:Niue"{
+            ec{"Niue"}
+            um{
+                mz0{
+                    "Niue",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Pacific:Norfolk"{
+            ec{"Norfolk"}
+            um{
+                mz0{
+                    "Norfolk",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Pacific:Noumea"{
+            ec{"Noumea"}
+            um{
+                mz0{
+                    "New_Caledonia",
+                    "0000-00-00",
                     "9999-12-31",
                 }
             }
@@ -4816,6 +5501,56 @@ root{
                 }
             }
         }
+        "Pacific:Palau"{
+            ec{"Palau"}
+            um{
+                mz0{
+                    "Palau",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Pacific:Pitcairn"{
+            ec{"Pitcairn"}
+            um{
+                mz0{
+                    "Pitcairn",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Pacific:Ponape"{
+            ec{"Ponape"}
+            um{
+                mz0{
+                    "Ponape",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Pacific:Port_Moresby"{
+            ec{"Port Moresby"}
+            um{
+                mz0{
+                    "Papua_New_Guinea",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Pacific:Rarotonga"{
+            ec{"Rarotonga"}
+            um{
+                mz0{
+                    "Cook",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
         "Pacific:Saipan"{
             ec{"Saipan"}
             um{
@@ -4827,6 +5562,66 @@ root{
                 mz1{
                     "Chamorro",
                     "2000-12-23",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Pacific:Tahiti"{
+            ec{"Tahiti"}
+            um{
+                mz0{
+                    "Tahiti",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Pacific:Tarawa"{
+            ec{"Tarawa"}
+            um{
+                mz0{
+                    "Gilbert_Islands",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Pacific:Tongatapu"{
+            ec{"Tongatapu"}
+            um{
+                mz0{
+                    "Tonga",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Pacific:Truk"{
+            ec{"Truk"}
+            um{
+                mz0{
+                    "Truk",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Pacific:Wake"{
+            ec{"Wake"}
+            um{
+                mz0{
+                    "Wake",
+                    "0000-00-00",
+                    "9999-12-31",
+                }
+            }
+        }
+        "Pacific:Wallis"{
+            ec{"Wallis"}
+            um{
+                mz0{
+                    "Wallis",
+                    "0000-00-00",
                     "9999-12-31",
                 }
             }
