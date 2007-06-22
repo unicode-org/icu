@@ -21,7 +21,7 @@ de_LU{
             }
         }
     }
-    Version{"1.47"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -29,7 +29,7 @@ de_LU{
                 4,
             }
             DateTimePatterns{
-                "H:mm 'Uhr' v",
+                "HH:mm:ss v",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -38,9 +38,6 @@ de_LU{
                 "dd.MM.yyyy",
                 "dd.MM.yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                yyMMdd{"dd.MM.yy"}
             }
         }
     }

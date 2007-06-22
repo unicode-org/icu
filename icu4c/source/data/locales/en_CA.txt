@@ -17,7 +17,7 @@ en_CA{
             "US Dollar",
         }
     }
-    Version{"1.51"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -31,14 +31,9 @@ en_CA{
                 "h:mm a",
                 "EEEE, MMMM d, yyyy",
                 "MMMM d, yyyy",
-                "d-MMM-yy",
+                "MMM d, yyyy",
                 "dd/MM/yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                MMMd{"d-MMM"}
-                MMdd{"dd/MM"}
-                yyMMM{"MMM-yy"}
             }
         }
     }

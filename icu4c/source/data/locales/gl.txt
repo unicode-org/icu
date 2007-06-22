@@ -51,15 +51,19 @@ gl{
         "#,##0%",
         "#E0",
     }
-    Version{"1.45"}
+    Version{"1.91"}
     calendar{
         gregorian{
-            availableFormats{
-                MMMMdd{"dd MMMM"}
-                MMdd{"dd/MM"}
-                yyMM{"MM/yy"}
-                yyQ{"Q yy"}
-                yyyyMMMM{"MMMM yyyy"}
+            DateTimePatterns{
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, yyyy MMMM dd",
+                "yyyy MMMM d",
+                "yyyy MMM d",
+                "yyyy-MM-dd",
+                "{1} {0}",
             }
             dayNames{
                 format{
@@ -145,16 +149,16 @@ gl{
             quarters{
                 format{
                     abbreviated{
-                        "1er trimestre",
+                        "Q1",
                         "Q2",
-                        "3er trimestre",
-                        "4rt trimestre",
+                        "Q3",
+                        "Q4",
                     }
                     wide{
-                        "1er trimestre",
-                        "2on trimestre",
-                        "3er trimestre",
-                        "4rt trimestre",
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
                     }
                 }
             }

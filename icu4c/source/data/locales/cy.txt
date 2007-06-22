@@ -78,22 +78,9 @@ cy{
     Scripts{
         Latn{"Lladin"}
     }
-    Version{"1.48"}
+    Version{"1.91"}
     calendar{
         gregorian{
-            availableFormats{
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
-                MMMMdd{"dd MMMM"}
-                MMdd{"dd/MM"}
-                hhmm{"hh:mm a"}
-                hhmmss{"hh:mm:ss a"}
-                yyMMdd{"yy-MM-dd"}
-                yyQ{"Q yy"}
-                yyQQQQ{"QQQQ yy"}
-                yyyyMM{"MM/yyyy"}
-                yyyyMMMM{"MMMM yyyy"}
-            }
             dayNames{
                 format{
                     abbreviated{

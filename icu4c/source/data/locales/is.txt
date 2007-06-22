@@ -1398,7 +1398,7 @@ is{
             traditional{"Hefðbundin"}
         }
     }
-    Version{"1.69"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1411,13 +1411,6 @@ is{
                 "d.M.yyyy",
                 "d.M.yyyy",
                 "{1} {0}",
-            }
-            availableFormats{
-                MMMMd{"d. MMMM"}
-                Md{"d.M"}
-                yyQ{"Q yy"}
-                yyyyM{"M.yyyy"}
-                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{
@@ -1450,6 +1443,11 @@ is{
                         "f",
                         "l",
                     }
+                }
+            }
+            fields{
+                day{
+                    dn{"dagur"}
                 }
             }
             monthNames{
@@ -1510,12 +1508,24 @@ is{
                     }
                     wide{
                         "1st fjórðungur",
-                        "2nd fjórðungur",
-                        "3rd fjórðungur",
-                        "4th fjórðungur",
+                        "Q2",
+                        "Q3",
+                        "Q4",
                     }
                 }
             }
+        }
+    }
+    zoneStrings{
+        "meta:Europe_Central"{
+            sd{"CEST"}
+            sg{"CET"}
+            ss{"CET"}
+        }
+        "meta:Europe_Western"{
+            sd{"WEST"}
+            sg{"WET"}
+            ss{"WET"}
         }
     }
 }

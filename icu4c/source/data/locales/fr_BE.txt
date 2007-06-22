@@ -21,7 +21,7 @@ fr_BE{
         "NaN",
         "+",
     }
-    Version{"1.45"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -35,15 +35,9 @@ fr_BE{
                 "HH:mm",
                 "EEEE d MMMM yyyy",
                 "d MMMM yyyy",
-                "dd-MMM-yy",
+                "yyyy MMM d",
                 "d/MM/yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                MMMdd{"dd-MMM"}
-                MMd{"d/MM"}
-                yyMMM{"MMM-yy"}
-                yyMMMEEEd{"EEE d MMM yy"}
             }
         }
     }

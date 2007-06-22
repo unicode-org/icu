@@ -169,11 +169,19 @@ eu{
         "#,##0%",
         "#E0",
     }
-    Version{"1.56"}
+    Version{"1.91"}
     calendar{
         gregorian{
-            availableFormats{
-                yyQ{"Q yy"}
+            DateTimePatterns{
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, yyyy MMMM dd",
+                "yyyy MMMM d",
+                "yyyy MMM d",
+                "yyyy-MM-dd",
+                "{1} {0}",
             }
             dayNames{
                 format{
@@ -259,16 +267,16 @@ eu{
             quarters{
                 format{
                     abbreviated{
-                        "1. hiruhilekoa",
+                        "Q1",
                         "Q2",
-                        "3. hiruhilekoa",
-                        "4. hiruhilekoa",
+                        "Q3",
+                        "Q4",
                     }
                     wide{
-                        "1. hiruhilekoa",
-                        "2. hiruhilekoa",
-                        "3. hiruhilekoa",
-                        "4. hiruhilekoa",
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
                     }
                 }
             }

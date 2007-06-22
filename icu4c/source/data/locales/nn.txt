@@ -12,6 +12,7 @@
 nn{
     AuxExemplarCharacters{"[á ǎ č ç đ è ê ń ñ ŋ š ŧ ü ž ä ö]"}
     Countries{
+        001{"verda"}
         002{"Afrika"}
         005{"Sør-Amerika"}
         009{"Oseania"}
@@ -151,6 +152,7 @@ nn{
         IR{"Iran"}
         IS{"Island"}
         IT{"Italia"}
+        JE{"Jersey"}
         JM{"Jamaica"}
         JO{"Jordan"}
         JP{"Japan"}
@@ -287,6 +289,10 @@ nn{
         ZW{"Zimbabwe"}
     }
     Currencies{
+        EUR{
+            "EUR",
+            "euro",
+        }
         NOK{
             "kr",
             "NOK",
@@ -368,6 +374,7 @@ nn{
         cai{"sentralamerikansk indiansk (anna)"}
         car{"karibisk"}
         cau{"kaukasisk (anna)"}
+        cch{"atsam"}
         ce{"tsjetsjensk"}
         ceb{"cebuansk"}
         cel{"keltisk (anna)"}
@@ -777,10 +784,12 @@ nn{
         zap{"zapotec"}
         zen{"zenaga"}
         zh{"kinesisk"}
+        zh_Hans{"forenkla kinesisk"}
         znd{"zande"}
         zu{"zulu"}
         zun{"zuni"}
         zxx{"utan språkleg innhald"}
+        zza{"zaza"}
     }
     LocaleScript{
         "Latn",
@@ -818,6 +827,7 @@ nn{
         Bugi{"buginesisk"}
         Buhd{"buhid"}
         Cans{"felles kanadiske urspråksstavingar"}
+        Cari{"karisk"}
         Cham{"cham"}
         Cher{"cherokee"}
         Cirt{"cirth"}
@@ -851,11 +861,13 @@ nn{
         Inds{"indus (Harappan)"}
         Ital{"gammalitalisk"}
         Java{"javanesisk"}
+        Jpan{"japansk"}
         Kali{"kayah li"}
         Kana{"katakana"}
         Khar{"kharoshthi"}
         Khmr{"khmer"}
         Knda{"kannada"}
+        Lana{"lanna"}
         Laoo{"laotisk"}
         Latf{"latinsk (frakturvariant)"}
         Latg{"latinsk (gælisk variant)"}
@@ -864,14 +876,19 @@ nn{
         Limb{"lumbu"}
         Lina{"lineær A"}
         Linb{"lineær B"}
+        Lyci{"lykisk"}
+        Lydi{"lydisk"}
         Mand{"mandaisk"}
         Maya{"maya-hieroglyfar"}
         Mero{"meroitisk"}
         Mlym{"malayalam"}
         Mong{"mongolsk"}
+        Moon{"moon"}
+        Mtei{"meitei-mayek"}
         Mymr{"myanmar"}
         Nkoo{"n'ko"}
         Ogam{"ogham"}
+        Olck{"ol-chiki"}
         Orkh{"orkhon"}
         Orya{"oriya"}
         Osma{"osmanya"}
@@ -880,11 +897,15 @@ nn{
         Phnx{"fønikisk"}
         Plrd{"pollard-fonetisk"}
         Qaai{"nedarva"}
+        Rjng{"rejang"}
         Roro{"rongorongo"}
         Runr{"runer"}
         Sara{"sarati"}
+        Saur{"saurashtra"}
+        Sgnw{"teiknskrift"}
         Shaw{"shavisk"}
         Sinh{"sinhala"}
+        Sund{"sundanesisk"}
         Sylo{"syloti nagri"}
         Syrc{"syriakisk"}
         Syre{"syriakisk (estrangelo-variant)"}
@@ -934,10 +955,20 @@ nn{
     Variants{
         1901{"tradisjonell tysk ortografi"}
         1996{"tysk ortografi frå 1996"}
+        AREVELA{"austarmensk"}
+        AREVMDA{"vestarmensk"}
+        BOONT{"boontling"}
+        FONIPA{"det internasjonale fonetiske alfabetet (IPA)"}
+        MONOTON{"monotonisk rettskriving"}
+        POLYTON{"polytonisk rettskriving"}
         POLYTONI{"polytonisk"}
+        POSIX{"POSIX"}
         REVISED{"revidert ortografi"}
+        ROZAJ{"resisk dialekt"}
+        SAAHO{"saaho dialekt"}
+        SCOUSE{"scouse dialekt"}
     }
-    Version{"1.68"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -950,14 +981,6 @@ nn{
                 "d. MMM. yyyy",
                 "dd.MM.yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                MMMMd{"d. MMMM"}
-                MMdd{"dd.MM"}
-                mmss{"mm.ss"}
-                yyMM{"MM.yy"}
-                yyQ{"Q yy"}
-                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{
@@ -981,6 +1004,15 @@ nn{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "su",
+                        "måndag",
+                        "tysdag",
+                        "on",
+                        "torsdag",
+                        "fr",
+                        "laurdag",
+                    }
                     narrow{
                         "S",
                         "M",
@@ -1001,6 +1033,11 @@ nn{
             fields{
                 day{
                     dn{"dag"}
+                    relative{
+                        "-1"{"i går"}
+                        "0"{"i dag"}
+                        "1"{"i morgon"}
+                    }
                 }
                 dayperiod{
                     dn{"f.m./e.m.-val"}
@@ -1066,18 +1103,18 @@ nn{
                 }
                 stand-alone{
                     narrow{
-                        "J",
-                        "F",
-                        "M",
-                        "A",
-                        "M",
-                        "J",
-                        "J",
-                        "A",
-                        "S",
-                        "O",
-                        "N",
-                        "D",
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
                     }
                 }
             }
@@ -1118,6 +1155,12 @@ nn{
         }
         "Asia:Ulaanbaatar"{
             ec{"Ulan Bator"}
+        }
+        "Atlantic:Azores"{
+            ec{"Azorane"}
+        }
+        "Atlantic:Canary"{
+            ec{"Kanariøyane"}
         }
         "Europe:Lisbon"{
             ec{"Lisboa"}

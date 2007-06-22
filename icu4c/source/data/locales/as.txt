@@ -36,30 +36,12 @@ as{
         "#,##,##0%",
         "#E0",
     }
-    Version{"1.38"}
+    Version{"1.91"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "পূৰ্বা",
                 "অপ",
-            }
-            DateTimePatterns{
-                "h.mm.ss a v",
-                "h.mm.ss a z",
-                "h.mm.ss a",
-                "h.mm. a",
-                "EEEE, d MMMM, yyyy",
-                "d MMMM, yyyy",
-                "dd-MM-yyyy",
-                "d-M-yyyy",
-                "{1} {0}",
-            }
-            availableFormats{
-                MMMMd{"d MMMM"}
-                MMdd{"dd-MM"}
-                yyQ{"Q yy"}
-                yyyyMM{"MM-yyyy"}
-                yyyyMMMM{"MMMM, yyyy"}
             }
             dayNames{
                 format{
@@ -92,16 +74,6 @@ as{
                         "6",
                         "7",
                     }
-                }
-            }
-            eras{
-                abbreviated{
-                    "BCE",
-                    "CE",
-                }
-                wide{
-                    "BCE",
-                    "CE",
                 }
             }
             monthNames{
@@ -178,8 +150,5 @@ as{
             ls{"ভাৰতীয় সময়"}
             ss{"ভা. স."}
         }
-        gmtFormat{"GMT{0}"}
-        hourFormat{"+HH:mm;-HH:mm"}
-        regionFormat{"{0}"}
     }
 }

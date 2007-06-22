@@ -17,7 +17,7 @@ es_PR{
             "Dólar Americano",
         }
     }
-    Version{"1.48"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -30,9 +30,6 @@ es_PR{
                 "MM/dd/yyyy",
                 "MM/dd/yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                MMdd{"MM/dd"}
             }
         }
     }

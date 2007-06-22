@@ -10,6 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/de.xml
  */
 de{
+    AuxExemplarCharacters{"[á à ă â å ā æ ç é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ø ō œ ú ù ŭ û ū ÿ]"}
     Countries{
         001{"Welt"}
         002{"Afrika"}
@@ -20,6 +21,7 @@ de{
         014{"Ostafrika"}
         015{"Nordafrika"}
         017{"Zentralafrika"}
+        018{"Südliches Afrika"}
         019{"Nord-, Mittel- und Südamerika"}
         021{"Nordamerika"}
         029{"Karibik"}
@@ -29,6 +31,7 @@ de{
         039{"Südeuropa"}
         053{"Australien und Neuseeland"}
         054{"Melanesien"}
+        057{"Mikronesien"}
         061{"Polynesien"}
         062{"Süd-Zentralasien"}
         142{"Asien"}
@@ -38,6 +41,7 @@ de{
         151{"Osteuropa"}
         154{"Nordeuropa"}
         155{"Westeuropa"}
+        172{"Gemeinschaft Unabhängiger Staaten"}
         419{"Lateinamerika und Karibik"}
         830{"Kanalinseln"}
         AD{"Andorra"}
@@ -132,7 +136,7 @@ de{
         GU{"Guam"}
         GW{"Guinea-Bissau"}
         GY{"Guyana"}
-        HK{"Hong Kong S.A.R., China"}
+        HK{"Sonderverwaltungszone Hongkong"}
         HM{"Heard und McDonaldinseln"}
         HN{"Honduras"}
         HR{"Kroatien"}
@@ -148,6 +152,7 @@ de{
         IR{"Iran"}
         IS{"Island"}
         IT{"Italien"}
+        JE{"Jersey"}
         JM{"Jamaika"}
         JO{"Jordanien"}
         JP{"Japan"}
@@ -176,13 +181,14 @@ de{
         MA{"Marokko"}
         MC{"Monaco"}
         MD{"Republik Moldau"}
+        ME{"Montenegro"}
         MG{"Madagaskar"}
         MH{"Marshallinseln"}
         MK{"Mazedonien"}
         ML{"Mali"}
         MM{"Myanmar"}
         MN{"Mongolei"}
-        MO{"Macau S.A.R., China"}
+        MO{"Sonderverwaltungszone Macao"}
         MP{"Nördliche Marianen"}
         MQ{"Martinique"}
         MR{"Mauretanien"}
@@ -223,8 +229,10 @@ de{
         PY{"Paraguay"}
         QA{"Katar"}
         QO{"Äußeres Ozeanien"}
+        QU{"Europäische Union"}
         RE{"Réunion"}
         RO{"Rumänien"}
+        RS{"Serbien"}
         RU{"Russische Föderation"}
         RW{"Ruanda"}
         SA{"Saudi-Arabien"}
@@ -356,6 +364,10 @@ de{
             "AZM",
             "Aserbeidschan Manat",
         }
+        AZN{
+            "AZN",
+            "AZN",
+        }
         BAD{
             "BAD",
             "Bosnien und Herzegowina Dinar",
@@ -379,6 +391,10 @@ de{
         BEF{
             "BEF",
             "Belgischer Franc",
+        }
+        BEL{
+            "BEL",
+            "Belgischer Finanz-Franc",
         }
         BGL{
             "BGL",
@@ -516,6 +532,10 @@ de{
             "CZK",
             "Tschechische Krone",
         }
+        DDM{
+            "DDM",
+            "Mark der DDR",
+        }
         DEM{
             "DM",
             "Deutsche Mark",
@@ -552,6 +572,10 @@ de{
             "EGP",
             "Ägyptisches Pfund",
         }
+        EQE{
+            "EQE",
+            "Ekwele",
+        }
         ERN{
             "ERN",
             "Nakfa",
@@ -585,7 +609,7 @@ de{
             "Französischer Franc",
         }
         GBP{
-            "UK£",
+            "GBP",
             "Pfund Sterling",
         }
         GEK{
@@ -677,7 +701,7 @@ de{
             "Schekel",
         }
         INR{
-            "=0#Rs.|1#Re.|1<Rs.",
+            "INR",
             "Indische Rupie",
         }
         IQD{
@@ -693,7 +717,7 @@ de{
             "Isländische Krone",
         }
         ITL{
-            "IT₤",
+            "ITL",
             "Italienische Lire",
         }
         JMD{
@@ -705,7 +729,7 @@ de{
             "Jordanischer Dinar",
         }
         JPY{
-            "JP¥",
+            "JPY",
             "Yen",
         }
         KES{
@@ -1105,7 +1129,7 @@ de{
             "Uganda Schilling",
         }
         USD{
-            "US$",
+            "USD",
             "US Dollar",
         }
         USN{
@@ -1249,6 +1273,7 @@ de{
         am{"Amharisch"}
         an{"Aragonesisch"}
         ang{"Altenglisch"}
+        anp{"Angika"}
         apa{"Apachen-Sprache"}
         ar{"Arabisch"}
         arc{"Aramäisch"}
@@ -1262,7 +1287,7 @@ de{
         aus{"Australische Sprachen"}
         av{"Awarisch"}
         awa{"Awadhi"}
-        ay{"Aymará-Sprache"}
+        ay{"Aymara"}
         az{"Aserbaidschanisch"}
         ba{"Baschkirisch"}
         bad{"Banda-Sprache"}
@@ -1289,7 +1314,7 @@ de{
         br{"Bretonisch"}
         bra{"Braj-Bhakha"}
         bs{"Bosnisch"}
-        btk{"Batak (Indonesien)"}
+        btk{"Batak"}
         bua{"Burjatisch"}
         bug{"Buginesisch"}
         byn{"Blin"}
@@ -1298,6 +1323,7 @@ de{
         cai{"Indianersprachen, Zentralamerika (Andere)"}
         car{"Karibische Sprachen"}
         cau{"Kaukasische Sprachen (Andere)"}
+        cch{"Atsam"}
         ce{"Tschetschenisch"}
         ceb{"Cebuano"}
         cel{"Keltische Sprachen (Andere)"}
@@ -1353,6 +1379,7 @@ de{
         enm{"Mittelenglisch"}
         eo{"Esperanto"}
         es{"Spanisch"}
+        es_ES{"Spanisch (Spanien)"}
         et{"Estnisch"}
         eu{"Baskisch"}
         ewo{"Ewondo"}
@@ -1367,8 +1394,11 @@ de{
         fo{"Färöisch"}
         fon{"Fon-Sprache"}
         fr{"Französisch"}
+        fr_CH{"Schweizer Französisch"}
         frm{"Mittelfranzösisch"}
         fro{"Altfranzösisch"}
+        frr{"Nordfriesisch"}
+        frs{"Ostfriesisch"}
         fur{"Friulisch"}
         fy{"Friesisch"}
         ga{"Irisch"}
@@ -1387,7 +1417,8 @@ de{
         gor{"Mongondou"}
         got{"Gotisch"}
         grb{"Grebo-Sprache"}
-        grc{"Griechisch (bis 1453)"}
+        grc{"Altgriechisch"}
+        gsw{"Schweizerdeutsch"}
         gu{"Gujarati"}
         gv{"Manx"}
         gwi{"Kutchin-Sprache"}
@@ -1435,10 +1466,13 @@ de{
         kaa{"Karakalpakisch"}
         kab{"Kabylisch"}
         kac{"Kachin-Sprache"}
+        kaj{"Jju"}
         kam{"Kamba"}
         kar{"Karenisch"}
         kaw{"Kawi"}
         kbd{"Kabardinisch"}
+        kcg{"Tyap"}
+        kfo{"Koro"}
         kg{"Kongo"}
         kha{"Khasi-Sprache"}
         khi{"Khoisan-Sprachen (Andere)"}
@@ -1456,6 +1490,7 @@ de{
         kpe{"Kpelle-Sprache"}
         kr{"Kanuri-Sprache"}
         krc{"Karatschaiisch-Balkarisch"}
+        krl{"Karelisch"}
         kro{"Kru-Sprachen"}
         kru{"Oraon-Sprache"}
         ks{"Kaschmirisch"}
@@ -1490,7 +1525,7 @@ de{
         mai{"Maithili"}
         mak{"Makassarisch"}
         man{"Manding-Sprache"}
-        map{"Austronesische Sprachen (Andere)"}
+        map{"Austronesische Sprachen"}
         mas{"Massai-Sprache"}
         mdf{"Moksha"}
         mdr{"Mandaresisch"}
@@ -1518,6 +1553,7 @@ de{
         mul{"Polyglott"}
         mun{"Munda-Sprachen"}
         mus{"Muskogee-Sprachen"}
+        mwl{"Mirandesisch"}
         mwr{"Marwari"}
         my{"Birmanisch"}
         myn{"Maya-Sprachen"}
@@ -1536,14 +1572,17 @@ de{
         nic{"Nigerkordofanische Sprachen (Andere)"}
         niu{"Niue-Sprache"}
         nl{"Niederländisch"}
+        nl_BE{"Flämisch"}
         nn{"Norwegisch Nynorsk"}
         no{"Norwegisch"}
         nog{"Nogai"}
         non{"Altnordisch"}
+        nqo{"N’Ko"}
         nr{"Ndebele-Sprache (Süd)"}
         nso{"Sotho-Sprache (Nord)"}
         nub{"Nubische Sprachen"}
         nv{"Navajo-Sprache"}
+        nwc{"Alt-Newari"}
         ny{"Chewa-Sprache"}
         nym{"Nyamwezi-Sprache"}
         nyn{"Nyankole"}
@@ -1572,7 +1611,7 @@ de{
         pon{"Ponapeanisch"}
         pra{"Prakrit"}
         pro{"Altprovenzalisch"}
-        ps{"Afghanisch (Paschtu)"}
+        ps{"Paschtu"}
         pt{"Portugiesisch"}
         qu{"Quechua"}
         raj{"Rajasthani"}
@@ -1584,6 +1623,7 @@ de{
         roa{"Romanische Sprachen (Andere)"}
         rom{"Zigeunersprache"}
         ru{"Russisch"}
+        rup{"Aromunisch"}
         rw{"Ruandisch"}
         sa{"Sanskrit"}
         sad{"Sandawe-Sprache"}
@@ -1594,6 +1634,7 @@ de{
         sas{"Sasak"}
         sat{"Santali"}
         sc{"Sardisch"}
+        scn{"Sizilianisch"}
         sco{"Schottisch"}
         sd{"Sindhi"}
         se{"Nord-Samisch"}
@@ -1624,6 +1665,7 @@ de{
         son{"Songhai-Sprache"}
         sq{"Albanisch"}
         sr{"Serbisch"}
+        srn{"Srananisch"}
         srr{"Serer-Sprache"}
         ss{"Swazi"}
         ssa{"Nilosaharanische Sprachen (Andere)"}
@@ -1649,6 +1691,7 @@ de{
         tk{"Turkmenisch"}
         tkl{"Tokelauanisch"}
         tl{"Tagalog"}
+        tlh{"Klingonisch"}
         tli{"Tlingit-Sprache"}
         tmh{"Tamaseq"}
         tn{"Tswana-Sprache"}
@@ -1697,9 +1740,12 @@ de{
         zap{"Zapotekisch"}
         zen{"Zenaga"}
         zh{"Chinesisch"}
+        zh_Hant{"Traditionelles Chinesisch"}
         znd{"Zande-Sprache"}
         zu{"Zulu"}
         zun{"Zuni-Sprache"}
+        zxx{"Keine Sprachinhalte"}
+        zza{"Zaza"}
     }
     LocaleScript{
         "Latn",
@@ -1721,57 +1767,116 @@ de{
     NumberPatterns{
         "#,##0.###",
         "#,##0.00 ¤",
-        "#,##0%",
+        "#,##0 %",
         "#E0",
     }
     Scripts{
         Arab{"Arabisch"}
         Armn{"Armenisch"}
+        Bali{"Balinesisch"}
+        Batk{"Battakisch"}
         Beng{"Bengalisch"}
+        Blis{"Bliss-Symbole"}
         Bopo{"Bopomofo"}
+        Brah{"Brahmi"}
         Brai{"Blindenschrift"}
+        Bugi{"Buginesisch"}
+        Buhd{"Buhid"}
+        Cans{"UCAS"}
+        Cham{"Cham"}
         Cher{"Cherokee"}
+        Cirt{"Cirth"}
         Copt{"Koptisch"}
         Cprt{"Zypriotisch"}
         Cyrl{"Kyrillisch"}
         Deva{"Devanagari"}
+        Dsrt{"Deseret"}
+        Egyp{"Ägyptische Hieroglyphen"}
         Ethi{"Äthiopisch"}
         Geor{"Georgisch"}
+        Glag{"Glagolitisch"}
         Goth{"Gotisch"}
         Grek{"Griechisch"}
         Gujr{"Gujarati"}
         Guru{"Gurmukhi"}
         Hang{"Hangul"}
         Hani{"Chinesisch"}
+        Hano{"Hanunoo"}
         Hans{"Vereinfachte Chinesische Schrift"}
         Hant{"Traditionelle Chinesische Schrift"}
         Hebr{"Hebräisch"}
         Hira{"Hiragana"}
+        Hmng{"Pahawh Hmong"}
+        Hrkt{"Katakana oder Hiragana"}
+        Hung{"Altungarisch"}
         Ital{"Altitalisch"}
+        Java{"Javanesisch"}
+        Jpan{"Japanisch"}
+        Kali{"Kayah Li"}
         Kana{"Katakana"}
+        Khar{"Kharoshthi"}
         Khmr{"Khmer"}
         Knda{"Kannada"}
+        Lana{"Lanna"}
         Laoo{"Laotisch"}
+        Latf{"Lateinisch (Fraktur-Variante)"}
+        Latg{"Lateinisch (Gälische Variante)"}
         Latn{"Lateinisch"}
+        Lepc{"Lepcha"}
         Limb{"Limbu"}
+        Lina{"Linear A"}
         Linb{"Linear B"}
+        Lyci{"Lykisch"}
+        Lydi{"Lydisch"}
+        Maya{"Maya-Hieroglyphen"}
+        Mero{"Meroitisch"}
         Mlym{"Malaysisch"}
         Mong{"Mongolisch"}
+        Moon{"Moon"}
+        Mtei{"Meitei Mayek"}
         Mymr{"Burmesisch"}
+        Nkoo{"N’Ko"}
         Ogam{"Ogham"}
+        Olck{"Ol Chiki"}
+        Orkh{"Orchon-Runen"}
         Orya{"Oriya"}
         Osma{"Osmanisch"}
+        Perm{"Altpermisch"}
+        Phag{"Phags-pa"}
+        Phnx{"Phönizisch"}
+        Plrd{"Pollard Phonetisch"}
         Qaai{"Geerbter Schriftwert"}
+        Rjng{"Rejang"}
+        Roro{"Rongorongo"}
         Runr{"Runenschrift"}
+        Sara{"Sarati"}
+        Saur{"Saurashtra"}
+        Sgnw{"Gebärdensprache"}
+        Shaw{"Shaw-Alphabet"}
         Sinh{"Singhalesisch"}
+        Sund{"Sundanesisch"}
+        Sylo{"Syloti Nagri"}
         Syrc{"Syrisch"}
+        Tagb{"Tagbanwa"}
+        Tale{"Tai Le"}
+        Talu{"Tai Lue"}
         Taml{"Tamilisch"}
         Telu{"Telugu"}
+        Teng{"Tengwar"}
+        Tfng{"Tifinagh"}
         Tglg{"Tagalog"}
+        Thaa{"Thaana"}
+        Thai{"Thai"}
         Tibt{"Tibetisch"}
         Ugar{"Ugaritisch"}
+        Vaii{"Vai"}
+        Visp{"Visible Speech"}
+        Xpeo{"Altpersisch"}
+        Xsux{"Sumerisch-akkadische Keilschrift"}
         Yiii{"Yi"}
+        Zxxx{"Schriftlose Sprachen"}
         Zyyy{"Unbestimmt"}
+        Zzzz{"Uncodierte Schrift"}
     }
     Types{
         calendar{
@@ -1784,7 +1889,9 @@ de{
             japanese{"Japanischer Kalender"}
         }
         collation{
+            big5han{"Traditionelles Chinesisch (Big5)"}
             direct{"Direkte Sortierregeln"}
+            gb2312han{"Vereinfachtes Chinesisch (GB2312)"}
             phonebook{"Telefonbuch-Sortierregeln"}
             pinyin{"Pinyin-Sortierregeln"}
             stroke{"Strichfolge"}
@@ -1792,10 +1899,22 @@ de{
         }
     }
     Variants{
+        AREVELA{"Ostarmenisch"}
+        AREVMDA{"Westarmenisch"}
+        BOONT{"Boontling"}
+        FONIPA{"Phonetisch (IPA)"}
+        FONUPA{"Phonetisch (UPA)"}
+        MONOTON{"Monotonisch"}
+        NEDIS{"Natisone-Dialekt"}
+        POLYTON{"Polytonisch"}
+        POLYTONI{"Polytonisch"}
         POSIX{"Posix"}
-        REVISED{"Revidiert"}
+        REVISED{"Revidierte Rechtschreibung"}
+        ROZAJ{"Resianisch"}
+        SAAHO{"Saho"}
+        SCOUSE{"Scouse-Dialekt"}
     }
-    Version{"1.85"}
+    Version{"1.91"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1803,7 +1922,7 @@ de{
                 "nachm.",
             }
             DateTimePatterns{
-                "H:mm 'Uhr' v",
+                "HH:mm:ss v",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -1817,12 +1936,11 @@ de{
                 HHmm{"HH:mm"}
                 HHmmss{"HH:mm:ss"}
                 MMMMd{"d. MMMM"}
-                MMdd{"dd.MM"}
-                hhmm{"hh:mm a"}
-                hhmmss{"hh:mm:ss a"}
+                MMdd{"dd.MM."}
+                Md{"d.M."}
                 yyMM{"MM.yy"}
+                yyMMM{"MMM yy"}
                 yyQ{"Q yy"}
-                yyQQQQ{"QQQQ yy"}
                 yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
@@ -1871,15 +1989,26 @@ de{
             fields{
                 day{
                     dn{"Tag"}
+                    relative{
+                        "-1"{"Gestern"}
+                        "-2"{"Vorgestern"}
+                        "0"{"Heute"}
+                        "1"{"Morgen"}
+                        "2"{"Übermorgen"}
+                        "3"{"in drei Tagen"}
+                    }
                 }
                 dayperiod{
                     dn{"Tageshälfte"}
                 }
                 era{
-                    dn{"Epoche"}
+                    dn{"Ära"}
                 }
                 hour{
                     dn{"Stunde"}
+                }
+                minute{
+                    dn{"Minute"}
                 }
                 month{
                     dn{"Monat"}
@@ -1895,6 +2024,9 @@ de{
                 }
                 year{
                     dn{"Jahr"}
+                }
+                zone{
+                    dn{"Zone"}
                 }
             }
             monthNames{
@@ -1949,9 +2081,15 @@ de{
                 format{
                     abbreviated{
                         "Q1",
-                        "2. Quartal",
+                        "Q2",
                         "Q3",
                         "Q4",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
                     }
                     wide{
                         "1. Quartal",
@@ -1960,14 +2098,25 @@ de{
                         "4. Quartal",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                }
             }
         }
     }
     delimiters{
-        alternateQuotationEnd{"“"}
-        alternateQuotationStart{"„"}
-        quotationEnd{"‘"}
-        quotationStart{"‚"}
+        alternateQuotationEnd{"‘"}
+        alternateQuotationStart{"‚"}
+        quotationEnd{"“"}
+        quotationStart{"„"}
+    }
+    measurementSystemNames{
+        US{"angloamerikanisch"}
     }
     zoneStrings{
         "America:Mexico_City"{
@@ -2042,5 +2191,21 @@ de{
             sd{"MESZ"}
             ss{"MEZ"}
         }
+        "meta:Europe_Eastern"{
+            ld{"Osteuropäische Sommerzeit"}
+            ls{"Osteuropäische Zeit"}
+            sd{"OESZ"}
+            ss{"OEZ"}
+        }
+        "meta:Europe_Western"{
+            ld{"Westeuropäische Sommerzeit"}
+            ls{"Westeuropäische Zeit"}
+            sd{"WESZ"}
+            ss{"WEZ"}
+        }
+        fallbackFormat{"{1} ({0})"}
+        gmtFormat{"GMT{0}"}
+        hourFormat{"+HH:mm;−HH:mm"}
+        regionFormat{"{0}"}
     }
 }

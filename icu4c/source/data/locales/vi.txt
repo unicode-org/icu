@@ -294,7 +294,7 @@ vi{
         "#,##0%",
         "#E0",
     }
-    Version{"1.54"}
+    Version{"1.91"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -311,11 +311,6 @@ vi{
                 "dd-MM-yyyy",
                 "dd/MM/yyyy",
                 "{0} {1}",
-            }
-            availableFormats{
-                MMdd{"dd-MM"}
-                yyQ{"Q yy"}
-                yyyyMM{"MM-yyyy"}
             }
             dayNames{
                 format{

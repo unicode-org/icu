@@ -542,7 +542,7 @@ static void TestCurrencyObject(void)
     
     const char* result[]={
         "1\\u00A0234,56 \\u20AC",
-        "1\\u00A0235 JP\\u00A5",
+        "1\\u00A0235 \\u00A5JP",
     };
     
     log_verbose("\nTesting the number format with different currency codes\n");

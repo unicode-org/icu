@@ -12,7 +12,6 @@
 zh_Hans{
     LocaleScript{
         "Hani",
-        "Bopo",
     }
-    Version{"1.43"}
+    Version{"1.91"}
 }

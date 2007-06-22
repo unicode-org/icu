@@ -10,10 +10,10 @@ de_AT{
     NumberPatterns{
         "#,##0.###",
         "¤ #,##0.00",
-        "#,##0%",
+        "#,##0 %",
         "#E0",
     }
-    Version{"1.47"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -21,7 +21,7 @@ de_AT{
                 4,
             }
             DateTimePatterns{
-                "HH:mm 'Uhr' v",
+                "HH:mm:ss v",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -31,25 +31,21 @@ de_AT{
                 "dd.MM.yy",
                 "{1} {0}",
             }
-            availableFormats{
-                MMMMdd{"dd. MMMM"}
-                yyMMdd{"dd.MM.yy"}
-            }
             monthNames{
                 format{
                     abbreviated{
-                        "Jänner",
+                        "Jän",
                         "Februar",
-                        "März",
+                        "Mär",
                         "Apr",
                         "Mai",
                         "Jun",
                         "Jul",
                         "August",
                         "September",
-                        "Okt",
-                        "Nov",
-                        "Dez",
+                        "Oktober",
+                        "November",
+                        "Dezember",
                     }
                     wide{
                         "Jänner",

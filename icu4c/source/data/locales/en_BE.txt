@@ -38,7 +38,7 @@ en_BE{
         "#,##0%",
         "#E0",
     }
-    Version{"1.50"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -51,14 +51,10 @@ en_BE{
                 "HH:mm:ss",
                 "HH:mm",
                 "EEEE d MMMM yyyy",
-                "EEE d MMM yyyy",
+                "MMMM d, yyyy",
                 "dd MMM yyyy",
                 "dd/MM/yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                MMMdd{"dd MMM"}
-                MMdd{"dd/MM"}
             }
         }
     }

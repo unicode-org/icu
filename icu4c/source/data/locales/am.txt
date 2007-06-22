@@ -303,52 +303,19 @@ am{
         "#,##0%",
         "#E0",
     }
-    Version{"1.62"}
+    Version{"1.91"}
     calendar{
-        ethiopic{
-            monthNames{
-                format{
-                    abbreviated{
-                        "መስከ",
-                        "ጥቅምት",
-                        "ኅዳር",
-                        "ታኅሣሥ",
-                        "ጥር",
-                        "የካቲ",
-                        "መጋቢት",
-                        "ሚያዝያ",
-                        "ግንቦት",
-                        "ሰኔ",
-                        "ሐምሌ",
-                        "ነሐሴ",
-                        "ጳጉሜን",
-                    }
-                    wide{
-                        "መስከረም",
-                        "ጥቅምት",
-                        "ኅዳር",
-                        "ታኅሣሥ",
-                        "ጥር",
-                        "የካቲት",
-                        "መጋቢት",
-                        "ሚያዝያ",
-                        "ግንቦት",
-                        "ሰኔ",
-                        "ሐምሌ",
-                        "ነሐሴ",
-                        "ጳጉሜን",
-                    }
-                }
-            }
-        }
         gregorian{
-            availableFormats{
-                MMMMd{"MMMM d"}
-                MMMMdd{"dd MMMM"}
-                MMdd{"dd/MM"}
-                yyMM{"MM/yy"}
-                yyQ{"Q yy"}
-                yyyyMMMM{"MMMM yyyy"}
+            DateTimePatterns{
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, yyyy MMMM dd",
+                "yyyy MMMM d",
+                "yyyy MMM d",
+                "yyyy-MM-dd",
+                "{1} {0}",
             }
             dayNames{
                 format{
@@ -369,17 +336,6 @@ am{
                         "ሐሙስ",
                         "ዓርብ",
                         "ቅዳሜ",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "እ",
-                        "ሰ",
-                        "ማ",
-                        "ረ",
-                        "ሐ",
-                        "ዓ",
-                        "ቅ",
                     }
                 }
             }
@@ -441,58 +397,6 @@ am{
                         "ኦክተውበር",
                         "ኖቬምበር",
                         "ዲሴምበር",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "ጃ",
-                        "ፌ",
-                        "ማ",
-                        "ኤ",
-                        "ሜ",
-                        "ጁ",
-                        "ጁ",
-                        "ኦ",
-                        "ሴ",
-                        "ኦ",
-                        "ኖ",
-                        "ዲ",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                    wide{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                }
-            }
-        }
-        islamic{
-            monthNames{
-                format{
-                    wide{
-                        "ሙሀረም",
-                        "ሳፈር",
-                        "ረቢዑል አወል",
-                        "ረቢዑል አኺር",
-                        "ጀማደል አወል",
-                        "ጀማደል አኺር",
-                        "ረጀብ",
-                        "ሻእባን",
-                        "ረመዳን",
-                        "ሸዋል",
-                        "ዙልቂዳህ",
-                        "ዙልሂጃህ",
                     }
                 }
             }

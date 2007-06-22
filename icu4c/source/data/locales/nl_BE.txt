@@ -28,7 +28,7 @@ nl_BE{
             traditional{"Traditioneel"}
         }
     }
-    Version{"1.54"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -42,15 +42,9 @@ nl_BE{
                 "HH:mm",
                 "EEEE d MMMM yyyy",
                 "d MMMM yyyy",
-                "d-MMM-yy",
+                "d MMM yyyy",
                 "d/MM/yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                MMMd{"d-MMM"}
-                MMd{"d/MM"}
-                yyMM{"MM/yy"}
-                yyMMM{"MMM-yy"}
             }
         }
     }

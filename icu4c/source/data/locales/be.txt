@@ -107,7 +107,7 @@ be{
         Cyrl{"кірылічны"}
         Latn{"лацінскі"}
     }
-    Version{"1.57"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -120,14 +120,6 @@ be{
                 "d.M.yyyy",
                 "d.M.yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                MMMMd{"d MMMM"}
-                Md{"d.M"}
-                mmss{"mm.ss"}
-                yyQ{"Q yy"}
-                yyyyM{"M.yyyy"}
-                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{
@@ -166,6 +158,42 @@ be{
                 abbreviated{
                     "да н.е.",
                     "н.е.",
+                }
+            }
+            fields{
+                day{
+                    dn{"дзень"}
+                    relative{
+                        "-1"{"учора"}
+                        "-2"{"пазаўчора"}
+                        "0"{"сёння"}
+                        "1"{"заўтра"}
+                        "2"{"паслязаўтра"}
+                    }
+                }
+                era{
+                    dn{"эра"}
+                }
+                hour{
+                    dn{"гадзіна"}
+                }
+                minute{
+                    dn{"хвіліна"}
+                }
+                month{
+                    dn{"месяц"}
+                }
+                second{
+                    dn{"секунда"}
+                }
+                week{
+                    dn{"тыдзень"}
+                }
+                weekday{
+                    dn{"дзень тыдня"}
+                }
+                year{
+                    dn{"год"}
                 }
             }
             monthNames{
@@ -219,16 +247,16 @@ be{
             quarters{
                 format{
                     abbreviated{
-                        "1-ы квартал",
+                        "Q1",
                         "Q2",
-                        "3-ы квартал",
-                        "4-ы квартал",
+                        "Q3",
+                        "Q4",
                     }
                     wide{
-                        "1-ы квартал",
-                        "2-ы квартал",
-                        "3-ы квартал",
-                        "4-ы квартал",
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
                     }
                 }
             }

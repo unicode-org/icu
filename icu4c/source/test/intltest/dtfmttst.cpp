@@ -373,7 +373,7 @@ void DateFormatTest::TestFieldPosition() {
         "", "1997", "August", "13", "", "", "34", "12", "",
         "Wednesday", "", "", "", "", "PM", "2", "", "", "", "", "", "", "", "", "PT", "", "", "", "",
 
-        "", "1997", "ao\\u00FBt", "13", "", "14", "34", "", "",
+        "", "1997", "ao\\u00FBt", "13", "", "14", "34", "12", "",
         "mercredi", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "HP",  "", "", "", "",
 
         "AD", "1997", "8", "13", "14", "14", "34", "12", "5",
@@ -1048,7 +1048,7 @@ DateFormatTest::TestLocaleDateFormat() // Bug 495
         DateFormat::FULL, Locale::getFrench());
     DateFormat *dfUS = DateFormat::createDateTimeInstance(DateFormat::FULL, 
         DateFormat::FULL, Locale::getUS());
-    UnicodeString expectedFRENCH ( "lundi 15 septembre 1997 00 h 00 HP" );
+    UnicodeString expectedFRENCH ( "lundi 15 septembre 1997 00:00:00 HP" );
     expectedFRENCH = expectedFRENCH.unescape();
     //UnicodeString expectedUS ( "Monday, September 15, 1997 12:00:00 o'clock AM PDT" );
     UnicodeString expectedUS ( "Monday, September 15, 1997 12:00:00 AM PT" );
@@ -1886,15 +1886,15 @@ void DateFormatTest::TestTimeZoneStringsAPI() {
         errln("Could not iterate over the StringEnumeration. Error: %s", u_errorName(status)); 
         return;
     }
-    UnicodeString expectedKey("Pacific/Chatham");
+    UnicodeString expectedKey("meta/Hawaii");
     UnicodeString expectedStrs[DateFormatSymbols::TIMEZONE_COUNT];
-    expectedStrs[DateFormatSymbols::TIMEZONE_SHORT_GENERIC].setTo("");
-    expectedStrs[DateFormatSymbols::TIMEZONE_SHORT_STANDARD].setTo("CHAST");
-    expectedStrs[DateFormatSymbols::TIMEZONE_SHORT_DAYLIGHT].setTo("CHADT");
-    expectedStrs[DateFormatSymbols::TIMEZONE_LONG_GENERIC].setTo("");
-    expectedStrs[DateFormatSymbols::TIMEZONE_LONG_STANDARD].setTo("Chatham Standard Time");
-    expectedStrs[DateFormatSymbols::TIMEZONE_LONG_DAYLIGHT].setTo("Chatham Daylight Time");
-    expectedStrs[DateFormatSymbols::TIMEZONE_EXEMPLAR_CITY].setTo("Chatham");
+    expectedStrs[DateFormatSymbols::TIMEZONE_SHORT_GENERIC].setTo("HT");
+    expectedStrs[DateFormatSymbols::TIMEZONE_SHORT_STANDARD].setTo("HST");
+    expectedStrs[DateFormatSymbols::TIMEZONE_SHORT_DAYLIGHT].setTo("HDT");
+    expectedStrs[DateFormatSymbols::TIMEZONE_LONG_GENERIC].setTo("Hawaii Time");
+    expectedStrs[DateFormatSymbols::TIMEZONE_LONG_STANDARD].setTo("Hawaii Standard Time");
+    expectedStrs[DateFormatSymbols::TIMEZONE_LONG_DAYLIGHT].setTo("Hawaii Daylight Time");
+    expectedStrs[DateFormatSymbols::TIMEZONE_EXEMPLAR_CITY].setTo("");
     for(int32_t i=0; i<DateFormatSymbols::TIMEZONE_COUNT; i++){
         UnicodeString result;
         result = symbols.getZoneString(expectedKey, (DateFormatSymbols::TimeZoneTranslationType)i, result,status);

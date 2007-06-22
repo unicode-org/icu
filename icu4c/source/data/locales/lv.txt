@@ -12,6 +12,7 @@
 lv{
     AuxExemplarCharacters{"[y q w x]"}
     Countries{
+        172{"Neatkarīgo Valstu Savienība"}
         AD{"Andora"}
         AE{"Apvienotie Arābu Emirāti"}
         AF{"Afganistāna"}
@@ -90,6 +91,7 @@ lv{
         GD{"Grenāda"}
         GE{"Gruzija"}
         GF{"Franču Gviāna"}
+        GG{"Gērnsija"}
         GH{"Gana"}
         GI{"Gibraltārs"}
         GL{"Grenlande"}
@@ -118,6 +120,7 @@ lv{
         IR{"Irāna"}
         IS{"Islande"}
         IT{"Itālija"}
+        JE{"Džērsija"}
         JM{"Jamaika"}
         JO{"Jordānija"}
         JP{"Japāna"}
@@ -146,6 +149,7 @@ lv{
         MA{"Maroka"}
         MC{"Monako"}
         MD{"Moldova"}
+        ME{"Melnkalne"}
         MG{"Madagaskara"}
         MH{"Māršala salas"}
         MK{"Maķedonija"}
@@ -194,6 +198,7 @@ lv{
         QA{"Katara"}
         RE{"Reinjona"}
         RO{"Rumānija"}
+        RS{"Serbija"}
         RU{"Krievija"}
         RW{"Ruanda"}
         SA{"Saūda Arābija"}
@@ -259,9 +264,14 @@ lv{
         }
     }
     ExemplarCharacters{"[a ā b c č d e ē f g ģ h i ī j k ķ l ļ m n ņ o p r s š t u ū v z ž]"}
+    Keys{
+        calendar{"Kalendārs"}
+        currency{"Valūta"}
+    }
     Languages{
         ar{"arābu"}
         bg{"bulgāru"}
+        bn{"bengāļu"}
         cs{"čehu"}
         da{"dāņu"}
         de{"vācu"}
@@ -271,7 +281,9 @@ lv{
         et{"igauņu"}
         fi{"somu"}
         fr{"franču"}
+        ga{"īru"}
         he{"ivrits"}
+        hi{"hindi"}
         hr{"horvātu"}
         hu{"ungāru"}
         it{"itāliešu"}
@@ -279,6 +291,7 @@ lv{
         ko{"korejiešu"}
         lt{"lietuviešu"}
         lv{"latviešu"}
+        mt{"maltiešu"}
         nl{"holandiešu"}
         no{"norvēģu"}
         pl{"poļu"}
@@ -288,8 +301,11 @@ lv{
         sk{"slovāku"}
         sl{"slovēņu"}
         sv{"zviedru"}
+        th{"taju"}
         tr{"turku"}
         zh{"ķīniešu"}
+        zh_Hans{"ķīniešu vienkāršotā"}
+        zh_Hant{"ķīniešu tradicionālā"}
     }
     LocaleScript{
         "Latn",
@@ -314,7 +330,7 @@ lv{
         "#,##0%",
         "#E0",
     }
-    Version{"1.63"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -327,10 +343,6 @@ lv{
                 "yyyy.d.M",
                 "yy.d.M",
                 "{1} {0}",
-            }
-            availableFormats{
-                Md{"d.M"}
-                yyQ{"Q yy"}
             }
             dayNames{
                 format{
@@ -369,6 +381,53 @@ lv{
                 abbreviated{
                     "pmē",
                     "mē",
+                }
+                narrow{
+                    "p.m.ē.",
+                    "m.ē.",
+                }
+                wide{
+                    "pirms mūsu ēras",
+                    "mūsu ērā",
+                }
+            }
+            fields{
+                day{
+                    relative{
+                        "-1"{"vakar"}
+                        "-2"{"aizvakar"}
+                        "0"{"šodien"}
+                        "1"{"rīt"}
+                        "2"{"parīt"}
+                        "3"{"aizparīt"}
+                    }
+                }
+                era{
+                    dn{"Ēra"}
+                }
+                hour{
+                    dn{"Stundas"}
+                }
+                minute{
+                    dn{"Minūtes"}
+                }
+                month{
+                    dn{"Mēnesis"}
+                }
+                second{
+                    dn{"Sekundes"}
+                }
+                week{
+                    dn{"Nedēļa"}
+                }
+                weekday{
+                    dn{"Nedēļas diena"}
+                }
+                year{
+                    dn{"Gads"}
+                }
+                zone{
+                    dn{"Josla"}
                 }
             }
             monthNames{
@@ -428,13 +487,65 @@ lv{
                         "C4",
                     }
                     wide{
-                        "1. ceturksnis",
-                        "2. ceturksnis",
-                        "3. ceturksnis",
-                        "4. ceturksnis",
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
                     }
                 }
             }
+        }
+    }
+    delimiters{
+        quotationEnd{"”"}
+        quotationStart{"“"}
+    }
+    measurementSystemNames{
+        US{"britu"}
+        metric{"metriskā"}
+    }
+    messages{
+        nostr{"nē:ne:n"}
+    }
+    zoneStrings{
+        "America:Chicago"{
+            ec{"Čikāga"}
+        }
+        "America:Denver"{
+            ec{"Denvera"}
+        }
+        "America:Indianapolis"{
+            ec{"Indianapolisa"}
+        }
+        "America:Los_Angeles"{
+            ec{"Losandželosa"}
+        }
+        "America:New_York"{
+            ec{"Ņujorka"}
+        }
+        "America:Phoenix"{
+            ec{"Fīniksa"}
+        }
+        "America:Rio_Branco"{
+            ec{"Riobranko"}
+        }
+        "America:Sao_Paulo"{
+            ec{"Sanpaulu"}
+        }
+        "Asia:Almaty"{
+            ec{"Almati"}
+        }
+        "Asia:Anadyr"{
+            ec{"Anadira"}
+        }
+        "Australia:Adelaide"{
+            ec{"Adelaida"}
+        }
+        "Pacific:Auckland"{
+            ec{"Oklenda"}
+        }
+        "Pacific:Honolulu"{
+            ec{"Honolulu"}
         }
     }
 }

@@ -14,6 +14,7 @@ pl{
     Countries{
         001{"świat"}
         002{"Afryka"}
+        003{"Ameryka Północna"}
         005{"Ameryka Południowa"}
         009{"Oceania"}
         011{"Afryka Zachodnia"}
@@ -21,8 +22,10 @@ pl{
         014{"Afryka Wschodnia"}
         015{"Afryka Północna"}
         017{"Afryka Środkowa"}
+        018{"Afryka Południowa"}
         019{"Ameryka"}
         021{"Ameryka Północna"}
+        029{"Karaiby"}
         030{"Azja Wschodnia"}
         034{"Azja Południowa"}
         035{"Azja Południowo-Wschodnia"}
@@ -224,8 +227,10 @@ pl{
         PY{"Paragwaj"}
         QA{"Katar"}
         QO{"Oceania inne"}
+        QU{"Unia Europejska"}
         RE{"Reunion"}
         RO{"Rumunia"}
+        RS{"Serbia"}
         RU{"Federacja Rosyjska"}
         RW{"Rwanda"}
         SA{"Arabia Saudyjska"}
@@ -434,7 +439,7 @@ pl{
             "cruzeiro brazylijskie (1990-1993)",
         }
         BRL{
-            "R$",
+            "BRL",
             "real brazylijski",
         }
         BRN{
@@ -578,7 +583,7 @@ pl{
             "birr etiopski",
         }
         EUR{
-            "€",
+            "EUR",
             "euro",
         }
         FIM{
@@ -598,7 +603,7 @@ pl{
             "frank francuski ",
         }
         GBP{
-            "UK£",
+            "GBP",
             "funt szterling",
         }
         GEK{
@@ -710,7 +715,7 @@ pl{
             "korona islandzka",
         }
         ITL{
-            "IT₤",
+            "ITL",
             "lir włoski",
         }
         JMD{
@@ -722,7 +727,7 @@ pl{
             "dinar jordański",
         }
         JPY{
-            "JP¥",
+            "JPY",
             "jen japoński",
         }
         KES{
@@ -1126,7 +1131,7 @@ pl{
             "szyling ugandyjski",
         }
         USD{
-            "US$",
+            "USD",
             "dolar amerykański ",
         }
         UYP{
@@ -1710,7 +1715,7 @@ pl{
         1901{"Tradycyjna ortografia niemiecka"}
         1996{"Ortografia niemiecka z 1996 r."}
     }
-    Version{"1.78"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1723,17 +1728,6 @@ pl{
                 "yyyy-MM-dd",
                 "yy-MM-dd",
                 "{1} {0}",
-            }
-            availableFormats{
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
-                MMMMd{"d MMMM"}
-                MMdd{"MM-dd"}
-                hhmm{"hh:mm a"}
-                hhmmss{"hh:mm:ss a"}
-                yyQ{"Q yy"}
-                yyyyMM{"yyyy-MM"}
-                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{
@@ -1777,6 +1771,18 @@ pl{
             fields{
                 day{
                     dn{"Dzień"}
+                    relative{
+                        "-1"{"Wczoraj"}
+                        "-2"{"Przedwczoraj"}
+                        "-3"{"Trzy dni temu"}
+                        "0"{"Dzisiaj"}
+                        "1"{"Jutro"}
+                        "2"{"Pojutrze"}
+                        "3"{"Za trzy dni"}
+                    }
+                }
+                era{
+                    dn{"Era"}
                 }
                 hour{
                     dn{"Godzina"}
@@ -2074,6 +2080,24 @@ pl{
         }
         "Pacific:Easter"{
             ec{"Wyspy Wielkanocne"}
+        }
+        "meta:Europe_Central"{
+            ld{"Czas środkowoeuropejski letni"}
+            ls{"Czas środkowoeuropejski"}
+            sd{"CEST"}
+            ss{"CET"}
+        }
+        "meta:Europe_Eastern"{
+            ld{"Czas wschodnioeuropejski letni"}
+            ls{"Czas wschodnioeuropejski"}
+            sd{"EEST"}
+            ss{"EET"}
+        }
+        "meta:Europe_Western"{
+            ld{"Czas zachodnioeuropejski letni"}
+            ls{"Czas zachodnioeuropejski"}
+            sd{"WEST"}
+            ss{"WET"}
         }
     }
 }

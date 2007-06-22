@@ -223,6 +223,7 @@ ar{
         PW{"بالاو"}
         PY{"باراجواي"}
         QA{"قطر"}
+        QU{"الاتحاد الاوروبي"}
         RE{"روينيون"}
         RO{"رومانيا"}
         RU{"روسيا"}
@@ -1790,84 +1791,23 @@ ar{
     Variants{
         NEDIS{"لهجة ناتيسون"}
     }
-    Version{"1.74"}
+    Version{"1.91"}
     calendar{
         buddhist{
+            DateTimePatterns{
+                "v h:mm:ss a",
+                "HH:mm:ss z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, MMMM d, yyyy G",
+                "MMMM d, yyyy G",
+                "MMM d, yyyy G",
+                "M‏/d‏‏/yyyy",
+                "{1} {0}",
+            }
             eras{
                 abbreviated{
                     "التقويم البوذي",
-                }
-            }
-        }
-        coptic{
-            monthNames{
-                format{
-                    abbreviated{
-                        "Tout",
-                        "بابه",
-                        "Hator",
-                        "كياهك",
-                        "طوبة",
-                        "أمشير",
-                        "برامهات",
-                        "Baramouda",
-                        "Bashans",
-                        "بؤونة",
-                        "Epep",
-                        "مسرى",
-                        "نسيئ",
-                    }
-                    wide{
-                        "توت",
-                        "بابه",
-                        "هاتور",
-                        "كياهك",
-                        "طوبة",
-                        "أمشير",
-                        "برامهات",
-                        "برمودة",
-                        "بشنس",
-                        "بؤونة",
-                        "أبيب",
-                        "مسرى",
-                        "نسيئ",
-                    }
-                }
-            }
-        }
-        ethiopic{
-            monthNames{
-                format{
-                    abbreviated{
-                        "Meskerem",
-                        "تكمت",
-                        "Hedar",
-                        "تهساس",
-                        "تر",
-                        "يكتت",
-                        "مجابيت",
-                        "Miazia",
-                        "Genbot",
-                        "سين",
-                        "Hamle",
-                        "نهاس",
-                        "باجمن",
-                    }
-                    wide{
-                        "مسكريم",
-                        "تكمت",
-                        "هدار",
-                        "تهساس",
-                        "تر",
-                        "يكتت",
-                        "مجابيت",
-                        "ميازيا",
-                        "جنبت",
-                        "سين",
-                        "هامل",
-                        "نهاس",
-                        "باجمن",
-                    }
                 }
             }
         }
@@ -1878,21 +1818,18 @@ ar{
             }
             DateTimePatterns{
                 "v h:mm:ss a",
-                "h:mm:ss a",
+                "HH:mm:ss z",
                 "h:mm:ss a",
                 "h:mm a",
                 "EEEE, d MMMM, yyyy",
                 "d MMMM, yyyy",
-                "dd/MM/yyyy",
-                "d/M/yyyy",
+                "dd‏‏/MM‏/yyyy",
+                "d‏/M‏/yyyy",
                 "{1} {0}",
             }
             availableFormats{
-                MMMMd{"d MMMM"}
-                MMdd{"dd/MM"}
-                yyQ{"Q yy"}
-                yyyyMM{"MM/yyyy"}
-                yyyyMMMM{"MMMM, yyyy"}
+                MMdd{"dd‏/MM"}
+                yyyyMM{"MM‏/yyyy"}
             }
             dayNames{
                 format{
@@ -1935,7 +1872,16 @@ ar{
             }
             fields{
                 day{
-                    dn{"اليوم"}
+                    dn{"يوم"}
+                    relative{
+                        "-1"{"امس"}
+                        "0"{"اليوم"}
+                        "1"{"غدا"}
+                        "2"{"بعد الغد"}
+                    }
+                }
+                dayperiod{
+                    dn{"النهار"}
                 }
                 era{
                     dn{"العصر"}
@@ -2030,42 +1976,6 @@ ar{
                 }
             }
         }
-        hebrew{
-            monthNames{
-                format{
-                    abbreviated{
-                        "Tishri",
-                        "مرحشوان",
-                        "Kislev",
-                        "طيست",
-                        "شباط",
-                        "آذار الأول",
-                        "آذار الثاني",
-                        "Nisan",
-                        "Iyar",
-                        "سيوان",
-                        "Tamuz",
-                        "آب",
-                        "أيلول",
-                    }
-                    wide{
-                        "تشري",
-                        "مرحشوان",
-                        "كيسلو",
-                        "طيست",
-                        "شباط",
-                        "آذار الأول",
-                        "آذار الثاني",
-                        "نيسان",
-                        "أيار",
-                        "سيوان",
-                        "تموز",
-                        "آب",
-                        "Elul",
-                    }
-                }
-            }
-        }
         islamic{
             eras{
                 abbreviated{
@@ -2095,44 +2005,14 @@ ar{
             eras:alias{"/LOCALE/calendar/islamic/eras"}
             monthNames:alias{"/LOCALE/calendar/islamic/monthNames"}
         }
-        persian{
-            monthNames{
-                format{
-                    abbreviated{
-                        "Farvardin",
-                        "أذربيهشت",
-                        "Khordad",
-                        "تیر",
-                        "مرداد",
-                        "شهریار",
-                        "مهر",
-                        "Aban",
-                        "Azar",
-                        "دي",
-                        "Bahman",
-                        "اسفندار",
-                    }
-                    wide{
-                        "فروردین",
-                        "أذربيهشت",
-                        "خرداد",
-                        "تیر",
-                        "مرداد",
-                        "شهریار",
-                        "مهر",
-                        "آيان",
-                        "آذر",
-                        "دي",
-                        "بهمن",
-                        "اسفندار",
-                    }
-                }
-            }
-        }
     }
     layout{
         characters{"right-to-left"}
         lines{"top-to-bottom"}
+    }
+    measurementSystemNames{
+        US{"النظام الأمريكي"}
+        metric{"النظام المتري"}
     }
     zoneStrings{
         "America:Indiana:Petersburg"{

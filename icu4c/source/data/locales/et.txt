@@ -324,7 +324,7 @@ et{
         "#,##0%",
         "#E0",
     }
-    Version{"1.66"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -337,14 +337,6 @@ et{
                 "dd.MM.yyyy",
                 "dd.MM.yy",
                 "{1} {0}",
-            }
-            availableFormats{
-                MMMMd{"d MMMM"}
-                MMdd{"dd.MM"}
-                mmss{"mm:ss"}
-                yyQ{"Q yy"}
-                yyyyMM{"MM.yyyy"}
-                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{
@@ -436,16 +428,16 @@ et{
             quarters{
                 format{
                     abbreviated{
-                        "1. kvartal",
+                        "Q1",
                         "Q2",
-                        "3. kvartal",
-                        "4. kvartal",
+                        "Q3",
+                        "Q4",
                     }
                     wide{
-                        "1. kvartal",
-                        "2. kvartal",
-                        "3. kvartal",
-                        "4. kvartal",
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
                     }
                 }
             }

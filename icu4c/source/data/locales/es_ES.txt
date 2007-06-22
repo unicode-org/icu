@@ -10,7 +10,7 @@ es_ES{
     Currencies{
         ESP{
             "₧",
-            "peseta española",
+            "ESP",
             {
                 "#,##0 ¤;-#,##0 ¤",
                 ",",
@@ -49,7 +49,7 @@ es_ES{
     Scripts{
         Ethi{"etíope"}
     }
-    Version{"1.47"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -63,8 +63,46 @@ es_ES{
                 "dd/MM/yy",
                 "{1} {0}",
             }
-            availableFormats{
-                MMdd{"dd/MM"}
+            dayNames{
+                format{
+                    wide{
+                        "domingo",
+                        "lunes",
+                        "martes",
+                        "miércoles",
+                        "jueves",
+                        "viernes",
+                        "sábado",
+                    }
+                }
+            }
+            fields{
+                day{
+                    relative{
+                        "-2"{"anteayer"}
+                        "-3"{"hace tres días"}
+                        "2"{"pasado mañana"}
+                        "3"{"dentro de tres días"}
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    wide{
+                        "enero",
+                        "febrero",
+                        "marzo",
+                        "abril",
+                        "mayo",
+                        "junio",
+                        "julio",
+                        "agosto",
+                        "septiembre",
+                        "octubre",
+                        "noviembre",
+                        "diciembre",
+                    }
+                }
             }
         }
     }

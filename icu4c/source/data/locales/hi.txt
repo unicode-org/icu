@@ -399,33 +399,17 @@ hi{
     Scripts{
         Arab{"अरबिक"}
         Cyrl{"सिरिलिक"}
-        Deva{"देवनगरि"}
+        Deva{"देवनागरी"}
         Hans{"चीनी सरल लिपि"}
         Hant{"चीनी प्राचीन लिपि"}
         Latn{"लाटिन"}
     }
-    Version{"1.63"}
+    Version{"1.91"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "पूर्वाह्न",
                 "अपराह्न",
-            }
-            availableFormats{
-                GGGGyMMMMEEEEdd{"EEEE,dd MMMM GGGGy"}
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
-                MMMMd{"d MMMM"}
-                MMMdd{"MMM dd"}
-                MMdd{"dd-MM"}
-                hhmm{"hh:mm a"}
-                hhmmss{"hh:mm:ss a"}
-                yyMMMEEEd{"EEE, MMM d, yy"}
-                yyMMMd{"MMM d, yy"}
-                yyMMdd{"dd-MM-yy"}
-                yyQ{"Q yy"}
-                yyyyMM{"MM-yyyy"}
-                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{
@@ -520,13 +504,13 @@ hi{
                         "Q1",
                         "Q2",
                         "Q3",
-                        "चौता हंत 4",
+                        "Q4",
                     }
                     wide{
-                        "पॆहला हंत 1",
-                        "दूसरा हंत 2",
-                        "तीसरा हंत 3",
-                        "चौता हंत 4",
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
                     }
                 }
             }

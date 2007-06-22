@@ -539,7 +539,7 @@ sr{
             traditional{"Традиционално сортирање"}
         }
     }
-    Version{"1.77"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -552,17 +552,6 @@ sr{
                 "dd.MM.yyyy.",
                 "d.M.yy.",
                 "{1} {0}",
-            }
-            availableFormats{
-                MMMdd{"dd.MMM"}
-                MMdd{"MM-dd"}
-                hhmm{"hh:mm a"}
-                hhmmss{"hh:mm:ss a"}
-                mmss{"mm.ss"}
-                yyMM{"MM.yy"}
-                yyMMMd{"d. MMM yy"}
-                yyQ{"Q yy"}
-                yyQQQQ{"QQQQ yy"}
             }
             dayNames{
                 format{
@@ -601,6 +590,50 @@ sr{
                 abbreviated{
                     "п. н. е.",
                     "н. е",
+                }
+            }
+            fields{
+                day{
+                    dn{"дан"}
+                    relative{
+                        "-1"{"јуче"}
+                        "-2"{"прекјуче"}
+                        "-3"{"пре три дана"}
+                        "0"{"данас"}
+                        "1"{"сутра"}
+                        "2"{"прекосутра"}
+                        "3"{"за три дана"}
+                    }
+                }
+                dayperiod{
+                    dn{"доба дана"}
+                }
+                era{
+                    dn{"ера"}
+                }
+                hour{
+                    dn{"час"}
+                }
+                minute{
+                    dn{"минут"}
+                }
+                month{
+                    dn{"месец"}
+                }
+                second{
+                    dn{"секунд"}
+                }
+                week{
+                    dn{"недеља"}
+                }
+                weekday{
+                    dn{"дан у недељи"}
+                }
+                year{
+                    dn{"година"}
+                }
+                zone{
+                    dn{"зона"}
                 }
             }
             monthNames{
@@ -660,10 +693,10 @@ sr{
                         "К4",
                     }
                     wide{
-                        "Први квартал",
-                        "Други квартал",
-                        "Трећи квартал",
-                        "Четврти квартал",
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
                     }
                 }
             }

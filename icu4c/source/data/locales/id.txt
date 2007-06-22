@@ -504,16 +504,19 @@ id{
         "#,##0%",
         "#E0",
     }
-    Version{"1.58"}
+    Version{"1.91"}
     calendar{
         gregorian{
-            availableFormats{
-                MMMMdd{"dd MMMM"}
-                MMdd{"dd/MM"}
-                mmss{"mm:ss"}
-                yyMM{"MM/yy"}
-                yyQ{"Q yy"}
-                yyyyMMMM{"MMMM yyyy"}
+            DateTimePatterns{
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, yyyy MMMM dd",
+                "yyyy MMMM d",
+                "yyyy MMM d",
+                "yyyy-MM-dd",
+                "{1} {0}",
             }
             dayNames{
                 format{
@@ -599,16 +602,16 @@ id{
             quarters{
                 format{
                     abbreviated{
-                        "kuartal pertama",
+                        "Q1",
                         "Q2",
-                        "kuartal ketiga",
-                        "kuartal keempat",
+                        "Q3",
+                        "Q4",
                     }
                     wide{
-                        "kuartal pertama",
-                        "kuartal kedua",
-                        "kuartal ketiga",
-                        "kuartal keempat",
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
                     }
                 }
             }
