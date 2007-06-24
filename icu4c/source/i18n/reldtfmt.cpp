@@ -38,8 +38,8 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RelativeDateFormat)
 RelativeDateFormat::RelativeDateFormat(const RelativeDateFormat& other) :
 DateFormat(other), fDateFormat(NULL), fTimeFormat(NULL), fCombinedFormat(NULL),
 fDateStyle(other.fDateStyle), fTimeStyle(other.fTimeStyle), fLocale(other.fLocale),
-fDatesLen(other.fDatesLen), fDayMin(other.fDayMin), fDayMax(other.fDayMax),
-fDates(NULL)
+fDayMin(other.fDayMin), fDayMax(other.fDayMax),
+fDatesLen(other.fDatesLen), fDates(NULL)
 {
     if(other.fDateFormat != NULL) {
         fDateFormat = (DateFormat*)other.fDateFormat->clone();
