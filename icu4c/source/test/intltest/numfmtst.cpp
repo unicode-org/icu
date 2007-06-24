@@ -61,29 +61,29 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
 
         CASE(14,TestCurrencyObject);
         CASE(15,TestCurrencyPatterns);
-        CASE(16,TestDigitList);
-        CASE(17,TestWhiteSpaceParsing);
-        CASE(18,TestComplexCurrency);
-        CASE(19,TestRegCurrency);
-        CASE(20,TestSymbolsWithBadLocale);
-        CASE(21,TestAdoptDecimalFormatSymbols);
+        //CASE(16,TestDigitList);
+        CASE(16,TestWhiteSpaceParsing);
+        CASE(17,TestComplexCurrency);
+        CASE(18,TestRegCurrency);
+        CASE(19,TestSymbolsWithBadLocale);
+        CASE(20,TestAdoptDecimalFormatSymbols);
 
-        CASE(22,TestScientific2);
-        CASE(23,TestScientificGrouping);
-        CASE(24,TestInt64);
+        CASE(21,TestScientific2);
+        CASE(22,TestScientificGrouping);
+        CASE(23,TestInt64);
 
-        CASE(25,TestPerMill);
-        CASE(26,TestIllegalPatterns);
-        CASE(27,TestCases);
+        CASE(24,TestPerMill);
+        CASE(25,TestIllegalPatterns);
+        CASE(26,TestCases);
 
-        CASE(28,TestCurrencyNames);
-        CASE(29,TestCurrencyAmount);
-        CASE(30,TestCurrencyUnit);
-        CASE(31,TestCoverage);
-        CASE(32,TestJB3832);
-        CASE(33,TestHost);
-        CASE(34,TestHostClone);
-        CASE(35,TestCurrencyFormat);
+        CASE(27,TestCurrencyNames);
+        CASE(28,TestCurrencyAmount);
+        CASE(29,TestCurrencyUnit);
+        CASE(30,TestCoverage);
+        CASE(31,TestJB3832);
+        CASE(32,TestHost);
+        CASE(33,TestHostClone);
+        CASE(34,TestCurrencyFormat);
         default: name = ""; break;
     }
 }
@@ -199,15 +199,16 @@ NumberFormatTest::TestPatterns(void)
     }
 }
 
+/*
+icu_2_4::DigitList::operator== 0 0 2 icuuc24d.dll digitlst.cpp Doug  
+icu_2_4::DigitList::append 0 0 4 icuin24d.dll digitlst.h Doug  
+icu_2_4::DigitList::operator!= 0 0 1 icuuc24d.dll digitlst.h Doug 
+*/
+/*
 void 
 NumberFormatTest::TestDigitList(void)
 {
   // API coverage for DigitList
-  /*
-    icu_2_4::DigitList::operator== 0 0 2 icuuc24d.dll digitlst.cpp Doug  
-    icu_2_4::DigitList::append 0 0 4 icuin24d.dll digitlst.h Doug  
-    icu_2_4::DigitList::operator!= 0 0 1 icuuc24d.dll digitlst.h Doug 
-  */
   DigitList list1;
   list1.append('1');
   list1.fDecimalAt = 1;
@@ -220,6 +221,7 @@ NumberFormatTest::TestDigitList(void)
     errln("digitlist append, operator== or set failed ");
   }
 }
+*/
 
 // -------------------------------------
 
@@ -433,7 +435,7 @@ NumberFormatTest::TestScientificGrouping() {
     }
 }
 
-static void setFromString(DigitList& dl, const char* str) {
+/*static void setFromString(DigitList& dl, const char* str) {
     char c;
     UBool decimalSet = FALSE;
     dl.clear();
@@ -452,7 +454,7 @@ static void setFromString(DigitList& dl, const char* str) {
     if (!decimalSet) {
         dl.fDecimalAt = dl.fCount;
     }
-}
+}*/
 
 void
 NumberFormatTest::TestInt64() {
@@ -470,7 +472,7 @@ NumberFormatTest::TestInt64() {
     }
 
     // also test digitlist
-    int64_t int64max = U_INT64_MAX;
+/*    int64_t int64max = U_INT64_MAX;
     int64_t int64min = U_INT64_MIN;
     const char* int64maxstr = "9223372036854775807";
     const char* int64minstr = "-9223372036854775808";
@@ -531,7 +533,7 @@ NumberFormatTest::TestInt64() {
         if (dl.fitsIntoInt64(FALSE)) {
             errln(fail + "-(" + int64minstr + ") didn't fit");
         }
-    }
+    }*/
 }
 
 // -------------------------------------
