@@ -906,15 +906,15 @@ void RBBITableBuilder::sortedAdd(UVector **vector, int32_t val) {
 //
 //-----------------------------------------------------------------------------
 void RBBITableBuilder::setAdd(UVector *dest, UVector *source) {
-    int destOriginalSize = dest->size();
-    int sourceSize       = source->size();
+    int32_t destOriginalSize = dest->size();
+    int32_t sourceSize       = source->size();
     int32_t di           = 0;
     void *(destS[16]), *(sourceS[16]);  // Handle small cases without malloc
     void **destH = 0, **sourceH = 0;
     void **destBuff, **sourceBuff;
     void **destLim, **sourceLim;
 
-    if (destOriginalSize > sizeof(destS)/sizeof(destS[0])) {
+    if (destOriginalSize > (int32_t)(sizeof(destS)/sizeof(destS[0]))) {
         destH = (void **)uprv_malloc(sizeof(void *) * destOriginalSize);
         destBuff = destH;
     }
@@ -926,7 +926,7 @@ void RBBITableBuilder::setAdd(UVector *dest, UVector *source) {
     }
     destLim = destBuff + destOriginalSize;
 
-    if (sourceSize > sizeof(sourceS)/sizeof(sourceS[0])) {
+    if (sourceSize > (int32_t)(sizeof(sourceS)/sizeof(sourceS[0]))) {
         sourceH = (void **)uprv_malloc(sizeof(void *) * sourceSize);
         sourceBuff = sourceH;
     }
