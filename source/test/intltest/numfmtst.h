@@ -50,7 +50,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     /**
      * API coverage for DigitList
      **/
-    void TestDigitList(void);
+    //void TestDigitList(void);
     
     /**
      * Test localized currency patterns.
