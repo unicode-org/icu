@@ -1273,30 +1273,31 @@ find(UEnumeration* list, const char* str, UErrorCode* status){
 
 static void TestJ5298(void)
 {
-   UErrorCode status = U_ZERO_ERROR;
-   char input[256], output[256];
-   UBool isAvailable;
-   int32_t i = 0;
-   UEnumeration* values = NULL;
-   const char *keywordValue = NULL;
-   log_verbose("Number of collator locales returned : %i \n", ucol_countAvailable());
-   for (i = 0; i < ucol_countAvailable(); i++) {
-       values = ucol_getKeywordValues("collation", &status);
-       while ((keywordValue = uenum_next(values, NULL, &status)) != NULL) {
-           strcpy(input, ucol_getAvailable(i));
-           if (strcmp(keywordValue, "standard") != 0) {
-               strcat(input, "@collation=");
-               strcat(input, keywordValue);
-           }
-       
-           ucol_getFunctionalEquivalent(output, 256, "collation", input, &isAvailable, &status);
-           if (strcmp(input, output) == 0) { /* Unique locale, print it out */
-               log_verbose("%s, \n", output);
-           }
-       }
-       uenum_close(values);
-   }
-   log_verbose("\n");
+    UErrorCode status = U_ZERO_ERROR;
+    char input[256], output[256];
+    UBool isAvailable;
+    int32_t i = 0;
+    UEnumeration* values = NULL;
+    const char *keywordValue = NULL;
+    log_verbose("Number of collator locales returned : %i \n", ucol_countAvailable());
+    values = ucol_getKeywordValues("collation", &status);
+    for (i = 0; i < ucol_countAvailable(); i++) {
+        uenum_reset(values, &status);
+        while ((keywordValue = uenum_next(values, NULL, &status)) != NULL) {
+            strcpy(input, ucol_getAvailable(i));
+            if (strcmp(keywordValue, "standard") != 0) {
+                strcat(input, "@collation=");
+                strcat(input, keywordValue);
+            }
+
+            ucol_getFunctionalEquivalent(output, 256, "collation", input, &isAvailable, &status);
+            if (strcmp(input, output) == 0) { /* Unique locale, print it out */
+                log_verbose("%s, \n", output);
+            }
+        }
+    }
+    uenum_close(values);
+    log_verbose("\n");
 }
 #endif /* #if !UCONFIG_NO_COLLATION */
 
