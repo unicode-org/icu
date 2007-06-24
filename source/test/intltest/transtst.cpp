@@ -1942,8 +1942,8 @@ public:
     virtual Transliterator* clone(void) const {
         return new TestTrans(getID());
     }
-    virtual void handleTransliterate(Replaceable& text, UTransPosition& offsets,
-        UBool isIncremental) const
+    virtual void handleTransliterate(Replaceable& /*text*/, UTransPosition& offsets,
+        UBool /*isIncremental*/) const
     {
         offsets.start = offsets.limit;
     }
