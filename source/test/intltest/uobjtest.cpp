@@ -297,6 +297,7 @@ void UObjectTest::testIDs()
     TESTCLASSID_TRANSLIT(UppercaseTransliterator, "Upper");
     TESTCLASSID_CTOR(CaseMapTransliterator, (UnicodeString(), NULL));
     TESTCLASSID_ABSTRACT(Transliterator);
+    TESTCLASSID_FACTORY_HIDDEN(TransliteratorRegistry::Enumeration, Transliterator::getAvailableIDs(status));
 
 #if UOBJTEST_TEST_INTERNALS
     TESTCLASSID_CTOR(Quantifier, (NULL, 0, 0));
