@@ -256,11 +256,7 @@ int64_t DigitList::getInt64() /*const*/
         // be able to return a 64-bit number [grhoten]
         *fDecimalDigits = fIsPositive ? '+' : '-';
 
-        if (fCount < LONG_MIN_REP_LENGTH) {
-            return (int64_t)atol(fDecimalDigits);
-        }
-
-        // too big for atol, hand-roll atoi64
+        // emulate a platform independent atoi64()
         value = 0;
         for (int i = 0; i < fCount; ++i) {
             int v = fDigits[i] - kZero;
@@ -274,7 +270,7 @@ int64_t DigitList::getInt64() /*const*/
         return svalue;
     }
     else {
-        // todo: figure out best approach
+        // TODO: figure out best approach
 
         // This is 100% accurate in c++ because if we are representing
         // an integral value, we suffer nothing in the conversion to
