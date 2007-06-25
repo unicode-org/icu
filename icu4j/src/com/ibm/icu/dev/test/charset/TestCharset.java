@@ -2716,8 +2716,126 @@ public class TestCharset extends TestFmwk {
             errln("Exception while decoding IMAP (3) should have been thrown.");
         } catch(Exception ex) {
         }
+        //end of charset decoder coder coverage  
+    }
+    
+    //Test for charset UTF32LE to provide better code coverage
+    public void TestCharsetUTF32LE() {
+        CoderResult result = CoderResult.UNDERFLOW;
+        CharsetProvider provider = new CharsetProviderICU();
+        Charset cs = provider.charsetForName("UTF-32LE");        
+        CharsetEncoder encoder = cs.newEncoder();
+        CharsetDecoder decoder = cs.newDecoder();
         
-        //end of charset decoder coder coverage
+        CharBuffer us = CharBuffer.allocate(0x10);
+        ByteBuffer bs = ByteBuffer.allocate(0x10);
         
+        
+        //test malform surrogate
+        us.put((char)0xD901);
+        bs.put((byte)0x00);
+        
+        bs.limit(bs.position());
+        bs.position(0);
+        us.limit(us.position());
+        us.position(0);
+        
+        try {
+            smBufEncode(encoder, "UTF32LE-EN-1", us, bs, true, false);
+            errln("Exception while encoding UTF32LE (1) should have been thrown.");
+        } catch (Exception ex) {
+        }
+        
+        bs.clear();
+        us.clear();
+        
+        //test malform surrogate
+        us.put((char)0xD901); us.put((char)0xD902);
+        bs.put((byte)0x00);
+        
+        bs.limit(bs.position());
+        bs.position(0);
+        us.limit(us.position());
+        us.position(0);
+        
+        result = encoder.encode(us, bs, true);
+        
+        if (!result.isError() && !result.isOverflow()) {
+            errln("Error while encoding UTF32LE (2) should have occurred.");
+        }
+        
+        bs.clear();
+        us.clear();
+        
+        //test overflow trail surrogate
+        us.put((char)0xDD01); us.put((char)0xDD0E); us.put((char)0xDD0E);
+        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);
+        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); 
+        
+        bs.limit(bs.position());
+        bs.position(0);
+        us.limit(us.position());
+        us.position(0);
+        
+        result = encoder.encode(us, bs, true);
+        
+        if (!result.isError() && !result.isOverflow()) {
+            errln("Error while encoding UTF32LE (3) should have occurred.");
+        }
+        
+        bs.clear();
+        us.clear();
+        
+        //test malform lead surrogate
+        us.put((char)0xD90D); us.put((char)0xD90E);
+        bs.put((byte)0x00); 
+        
+        bs.limit(bs.position());
+        bs.position(0);
+        us.limit(us.position());
+        us.position(0);
+        
+        try {
+            smBufEncode(encoder, "UTF32LE-EN-4", us, bs, true, false);
+            errln("Exception while encoding UTF32LE (4) should have been thrown.");
+        } catch (Exception ex) {
+        }
+        
+        bs.clear();
+        us.clear();
+        
+        //test overflow buffer
+        us.put((char)0x0061);
+        bs.put((byte)0x00); 
+        
+        bs.limit(bs.position());
+        bs.position(0);
+        us.limit(us.position());
+        us.position(0);
+        
+        try {
+            smBufEncode(encoder, "UTF32LE-EN-5", us, bs, true, false);
+            errln("Exception while encoding UTF32LE (5) should have been thrown.");
+        } catch (Exception ex) {
+        }
+        
+        bs.clear();
+        us.clear();
+        
+        //test malform trail surrogate
+        us.put((char)0xDD01);
+        bs.put((byte)0x00); 
+        
+        bs.limit(bs.position());
+        bs.position(0);
+        us.limit(us.position());
+        us.position(0);
+        
+        try {
+            smBufEncode(encoder, "UTF32LE-EN-6", us, bs, true, false);
+            errln("Exception while encoding UTF32LE (6) should have been thrown.");
+        } catch (Exception ex) {
+        }
+   
     }
 }
