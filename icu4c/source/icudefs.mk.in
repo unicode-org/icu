@@ -125,8 +125,10 @@ LIBCXXFLAGS = @LIBCXXFLAGS@
 DEFAULT_LIBS = @LIBS@
 # LIB_M is for linking against the math library
 LIB_M = @LIB_M@
+# LIB_THREAD is for linking against the threading library
+LIB_THREAD = @LIB_THREAD@
 # OUTOPT is for creating a specific output name
-OUTOPT = -o 
+OUTOPT = -o # The extra space after the argument is needed.
 
 ENABLE_RPATH = @ENABLE_RPATH@
 ifeq ($(ENABLE_RPATH),YES)
