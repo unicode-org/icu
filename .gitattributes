@@ -340,7 +340,6 @@ icu4j/src/com/ibm/icu/dev/test/perf/unicodesetperf_r.pl -text
 icu4j/src/com/ibm/icu/dev/test/rbbi/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/test/rbbi/rbbitst.txt -text svneol=unset#application/octet-stream
 icu4j/src/com/ibm/icu/dev/test/search/package.html svneol=native#text/html
-icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.impl.JDKTimeZone.dat -text
 icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.impl.OlsonTimeZone.dat -text
 icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.impl.TimeZoneAdapter.dat -text
 icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.math.BigDecimal.dat -text
@@ -371,6 +370,7 @@ icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.Simple
 icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.TimeZone.dat -text
 icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.ULocale.dat -text
 icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.UResourceTypeMismatchException.dat -text
+icu4j/src/com/ibm/icu/dev/test/timezone/TimeZoneRuleTest.java -text
 icu4j/src/com/ibm/icu/dev/test/translit/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/tool/compression/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j28.api.gz -text svneol=unset#application/gzip
@@ -413,8 +413,17 @@ icu4j/src/com/ibm/icu/impl/data/th.brk -text
 icu4j/src/com/ibm/icu/lang/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/math/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/text/package.html svneol=native#text/html
+icu4j/src/com/ibm/icu/util/AnnualTimeZoneRule.java -text
+icu4j/src/com/ibm/icu/util/BasicTimeZone.java -text
 icu4j/src/com/ibm/icu/util/CalendarServiceShim.java -text
+icu4j/src/com/ibm/icu/util/DateTimeRule.java -text
+icu4j/src/com/ibm/icu/util/InitialTimeZoneRule.java -text
+icu4j/src/com/ibm/icu/util/RuleBasedTimeZone.java -text
+icu4j/src/com/ibm/icu/util/TimeArrayTimeZoneRule.java -text
+icu4j/src/com/ibm/icu/util/TimeZoneRule.java -text
+icu4j/src/com/ibm/icu/util/TimeZoneTransition.java -text
 icu4j/src/com/ibm/icu/util/UResourceBundleIterator.java -text
+icu4j/src/com/ibm/icu/util/VTimeZone.java -text
 icu4j/src/com/ibm/icu/util/package.html svneol=native#text/html
 icu4j/src/com/ibm/richtext/awtui/package.html svneol=native#text/html
 icu4j/src/com/ibm/richtext/demo/package.html svneol=native#text/html

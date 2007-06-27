@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.Locale;
 
+import com.ibm.icu.impl.Grego;
 import com.ibm.icu.impl.TimeZoneAdapter;
 import com.ibm.icu.impl.ZoneMeta;
 import com.ibm.icu.text.SimpleDateFormat;
@@ -185,7 +186,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
         // executed twice.
         for (int pass=0; ; ++pass) {
             int fields[] = new int[4];
-            long day = floorDivide(date, MILLIS_PER_DAY, fields);
+            long day = floorDivide(date, Grego.MILLIS_PER_DAY, fields);
             int millis = fields[0];
             
             computeGregorianFields(day, fields);
@@ -200,7 +201,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
                 break;
             }
             date += offsets[1];
-            if (floorDivide(date, MILLIS_PER_DAY) == day) {
+            if (floorDivide(date, Grego.MILLIS_PER_DAY) == day) {
                 break;
             }
         }
@@ -306,21 +307,6 @@ abstract public class TimeZone implements Serializable, Cloneable {
         //fields[4] = dayOfYear + 1; // Convert from 0-based to 1-based
     }
 
-
-    /**
-     * The number of milliseconds in an hour.
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    protected static final int MILLIS_PER_HOUR = 60*60*1000;
-
-    /**
-     * The number of milliseconds in one day.
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    protected static final int MILLIS_PER_DAY = 24*MILLIS_PER_HOUR;
-    
     /**
      * For each month, the days in a non-leap year before the start
      * the of month, and the days in a leap year before the start of

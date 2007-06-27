@@ -22,7 +22,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
 
-import com.ibm.icu.impl.JDKTimeZone;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.SimpleDateFormat;
@@ -129,14 +128,8 @@ public class ICUZDump {
     
     private long[] getCutOverTimes() {
         long[] cutovers = new long[2];
-        GregorianCalendar cal = tz.getCalendar();
-        cal.clear();
-        cal.set(loyear, 0, 1, 0, 0, 0);
-        cutovers[0] = cal.getTimeInMillis();
-
-        cal.clear();
-        cal.set(hiyear, 0, 1, 0, 0, 0);
-        cutovers[1] = cal.getTimeInMillis();
+        cutovers[0] = tz.getTime(loyear, 0, 1, 0, 0, 0);
+        cutovers[1] = tz.getTime(hiyear, 0, 1, 0, 0, 0);
         return cutovers;
     }
 
@@ -169,18 +162,24 @@ public class ICUZDump {
             return false;
         }
 
-        public GregorianCalendar getCalendar() {
-            GregorianCalendar cal = new GregorianCalendar();
-            com.ibm.icu.util.TimeZone icutz = null;
+        public long getTime(int year, int month, int dayOfMonth, int hour, int minute, int second) {
+            long time;
             if (tzobj instanceof com.ibm.icu.util.TimeZone) {
-                icutz = (com.ibm.icu.util.TimeZone)tzobj;
+                GregorianCalendar cal = new GregorianCalendar();
+                cal.setTimeZone((com.ibm.icu.util.TimeZone)tzobj);
+                cal.clear();
+                cal.set(year, month, dayOfMonth, hour, minute, second);
+                time = cal.getTimeInMillis();
             } else if (tzobj instanceof java.util.TimeZone) {
-                icutz = new JDKTimeZone((java.util.TimeZone)tzobj);
+                java.util.GregorianCalendar cal = new java.util.GregorianCalendar();
+                cal.setTimeZone((java.util.TimeZone)tzobj);
+                cal.clear();
+                cal.set(year, month, dayOfMonth, hour, minute, second);
+                time = cal.getTimeInMillis();
             } else {
                 throw new IllegalStateException("Unsupported TimeZone implementation");
             }
-            cal.setTimeZone(icutz);
-            return cal;
+            return time;
         }
     }
 

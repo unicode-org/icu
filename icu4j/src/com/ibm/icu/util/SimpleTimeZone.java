@@ -5,11 +5,10 @@
 
 package com.ibm.icu.util;
 
-import com.ibm.icu.impl.Grego;
-import com.ibm.icu.impl.JDKTimeZone;
-
 import java.io.IOException;
 import java.util.Date;
+
+import com.ibm.icu.impl.Grego;
 
 /**
  * <code>SimpleTimeZone</code> is a concrete subclass of <code>TimeZone</code>
@@ -28,7 +27,7 @@ import java.util.Date;
  * @author   David Goldsmith, Mark Davis, Chen-Lieh Huang, Alan Liu
  * @stable ICU 2.0
  */
-public class SimpleTimeZone extends JDKTimeZone {
+public class SimpleTimeZone extends BasicTimeZone {
     private static final long serialVersionUID = -7034676239311322769L;
 
     /**
@@ -65,7 +64,7 @@ public class SimpleTimeZone extends JDKTimeZone {
                 0, WALL_TIME,
                 0, 0, 0,
                 0, WALL_TIME,
-                MILLIS_PER_HOUR);
+                Grego.MILLIS_PER_HOUR);
         super.setID(ID);
     }
 
@@ -135,7 +134,7 @@ public class SimpleTimeZone extends JDKTimeZone {
                 startTime, WALL_TIME,
                 endMonth, endDay, endDayOfWeek,
                 endTime, WALL_TIME,
-                MILLIS_PER_HOUR);
+                Grego.MILLIS_PER_HOUR);
         super.setID(ID);
     }
 
@@ -234,6 +233,15 @@ public class SimpleTimeZone extends JDKTimeZone {
     }
     
 
+    /* (non-Javadoc)
+     * @see com.ibm.icu.impl.JDKTimeZone#setID(java.lang.String)
+     */
+    public void setID(String ID) {
+        super.setID(ID);
+
+        transitionRulesInitialized = false;
+    }
+
     /**
      * Overrides TimeZone
      * Sets the base time zone offset to GMT.
@@ -243,6 +251,8 @@ public class SimpleTimeZone extends JDKTimeZone {
      */
     public void setRawOffset(int offsetMillis) {
         raw = offsetMillis;
+
+        transitionRulesInitialized = false;
     }
   
     /**
@@ -266,6 +276,8 @@ public class SimpleTimeZone extends JDKTimeZone {
 
         getSTZInfo().sy = year;
         this.startYear = year;
+
+        transitionRulesInitialized = false;
     }
 
     /**
@@ -341,6 +353,8 @@ public class SimpleTimeZone extends JDKTimeZone {
         startTime      = time;
         startTimeMode  = mode;
         decodeStartRule();
+
+        transitionRulesInitialized = false;
     }
     /**
      * Sets the DST start rule to a fixed date within a month.
@@ -475,6 +489,8 @@ public class SimpleTimeZone extends JDKTimeZone {
         endTime      = time;
         endTimeMode  = mode;
         decodeEndRule();
+
+        transitionRulesInitialized = false;
     }
     /**
      * Sets the amount of time in ms that the clock is advanced during DST.
@@ -488,6 +504,8 @@ public class SimpleTimeZone extends JDKTimeZone {
             throw new IllegalArgumentException();
         }
         dst = millisSavedDuringDST;
+
+        transitionRulesInitialized = false;
     }
 
     /**
@@ -625,7 +643,7 @@ public class SimpleTimeZone extends JDKTimeZone {
                 || dayOfWeek < Calendar.SUNDAY
                 || dayOfWeek > Calendar.SATURDAY
                 || millis < 0
-                || millis >= MILLIS_PER_DAY
+                || millis >= Grego.MILLIS_PER_DAY
                 || monthLength < 28
                 || monthLength > 31
                 || prevMonthLength < 28
@@ -652,7 +670,7 @@ public class SimpleTimeZone extends JDKTimeZone {
                 throw new IllegalArgumentException("Illegal day of week " + dayOfWeek);
             }
             if (millis < 0
-                || millis >= MILLIS_PER_DAY) {
+                || millis >= Grego.MILLIS_PER_DAY) {
                 throw new IllegalArgumentException("Illegal millis " + millis);
             }
             if (monthLength < 28
@@ -737,8 +755,8 @@ public class SimpleTimeZone extends JDKTimeZone {
         
         millis += millisDelta;
         
-        while (millis >= MILLIS_PER_DAY) {
-            millis -= MILLIS_PER_DAY;
+        while (millis >= Grego.MILLIS_PER_DAY) {
+            millis -= Grego.MILLIS_PER_DAY;
             ++dayOfMonth;
             dayOfWeek = 1 + (dayOfWeek % 7); // dayOfWeek is one-based
             if (dayOfMonth > monthLen) {
@@ -751,7 +769,7 @@ public class SimpleTimeZone extends JDKTimeZone {
             }
         }
         while (millis < 0) {
-            millis += MILLIS_PER_DAY;
+            millis += Grego.MILLIS_PER_DAY;
             --dayOfMonth;
             dayOfWeek = 1 + ((dayOfWeek+5) % 7); // dayOfWeek is one-based
             if (dayOfMonth < 1) {
@@ -913,13 +931,13 @@ public class SimpleTimeZone extends JDKTimeZone {
 
         useDaylight = (boolean)((startDay != 0) && (endDay != 0) ? true : false  );
         if (useDaylight && dst == 0) {
-            dst = TimeZone.MILLIS_PER_DAY;
+            dst = Grego.MILLIS_PER_DAY;
         }
         if (startDay != 0) {
             if (startMonth < Calendar.JANUARY || startMonth > Calendar.DECEMBER) {
                 throw new IllegalArgumentException();
             }
-            if (startTime < 0 || startTime >= TimeZone.MILLIS_PER_DAY ||
+            if (startTime < 0 || startTime >= Grego.MILLIS_PER_DAY ||
                 startTimeMode < WALL_TIME || startTimeMode > UTC_TIME) {
                 throw new IllegalArgumentException();
             }
@@ -959,13 +977,13 @@ public class SimpleTimeZone extends JDKTimeZone {
     private void decodeEndRule() {
         useDaylight = (boolean)((startDay != 0) && (endDay != 0) ? true : false);
         if (useDaylight && dst == 0) {
-            dst = TimeZone.MILLIS_PER_DAY;
+            dst = Grego.MILLIS_PER_DAY;
         }
         if (endDay != 0) {
             if (endMonth < Calendar.JANUARY || endMonth > Calendar.DECEMBER) {
                 throw new IllegalArgumentException();
             }
-            if (endTime < 0 || endTime > TimeZone.MILLIS_PER_DAY ||
+            if (endTime < 0 || endTime > Grego.MILLIS_PER_DAY ||
                 endTimeMode < WALL_TIME || endTimeMode > UTC_TIME) {
                 throw new IllegalArgumentException();
             }
@@ -1123,6 +1141,157 @@ public class SimpleTimeZone extends JDKTimeZone {
              endTime        == other.endTime &&
              endTimeMode    == other.endTimeMode &&
              startYear      == other.startYear));
+    }
+
+    // BasicTimeZone methods
+
+    /**
+     * {@inheritDoc}
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
+    public TimeZoneTransition getNextTransition(long base, boolean inclusive) {
+        if (startMonth == 0) {
+            return null;
+        }
+
+        initTransitionRules();
+        long firstTransitionTime = firstTransition.getTime();
+        if (base < firstTransitionTime || (inclusive && base == firstTransitionTime)) {
+            return firstTransition;
+        }
+        Date stdDate = stdRule.getNextStart(base, dstRule.getRawOffset(), dstRule.getDSTSavings(), inclusive);
+        Date dstDate = dstRule.getNextStart(base, stdRule.getRawOffset(), stdRule.getDSTSavings(), inclusive);
+        if (stdDate != null && (dstDate == null || stdDate.before(dstDate))) {
+            return new TimeZoneTransition(stdDate.getTime(), dstRule, stdRule);
+        }
+        if (dstDate != null && (stdDate == null || dstDate.before(stdDate))) {
+            return new TimeZoneTransition(dstDate.getTime(), stdRule, dstRule);
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
+    public TimeZoneTransition getPreviousTransition(long base, boolean inclusive) {
+        if (startMonth == 0) {
+            return null;
+        }
+
+        initTransitionRules();
+        long firstTransitionTime = firstTransition.getTime();
+        if (base < firstTransitionTime || (!inclusive && base == firstTransitionTime)) {
+            return null;
+        }
+        Date stdDate = stdRule.getPreviousStart(base, dstRule.getRawOffset(), dstRule.getDSTSavings(), false);
+        Date dstDate = dstRule.getPreviousStart(base, stdRule.getRawOffset(), stdRule.getDSTSavings(), false);
+        if (stdDate != null && (dstDate == null || stdDate.after(dstDate))) {
+            return new TimeZoneTransition(stdDate.getTime(), dstRule, stdRule);
+        }
+        if (dstDate != null && (stdDate == null || dstDate.after(stdDate))) {
+            return new TimeZoneTransition(dstDate.getTime(), stdRule, dstRule);            
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
+    public TimeZoneRule[] getTimeZoneRules() {
+        initTransitionRules();
+
+        int size = (startMonth == 0) ? 1 : 3;
+        TimeZoneRule[] rules = new TimeZoneRule[size];
+        rules[0] = initialRule;
+        if (startMonth != 0) {
+            rules[1] = stdRule;
+            rules[2] = dstRule;
+        }
+        return rules;
+    }
+
+    private transient boolean transitionRulesInitialized;
+    private transient InitialTimeZoneRule initialRule;
+    private transient TimeZoneTransition firstTransition;
+    private transient AnnualTimeZoneRule stdRule;
+    private transient AnnualTimeZoneRule dstRule;
+
+    private synchronized void initTransitionRules() {
+        if (transitionRulesInitialized) {
+            return;
+        }
+        if (startMonth != 0) {
+            DateTimeRule dtRule = null;
+            int timeRuleType;
+            long firstStdStart, firstDstStart;
+
+            // Create a TimeZoneRule for daylight saving time
+            timeRuleType = (startTimeMode == STANDARD_TIME) ? DateTimeRule.STANDARD_TIME :
+                ((startTimeMode == UTC_TIME) ? DateTimeRule.UTC_TIME : DateTimeRule.WALL_TIME);
+            switch (startMode) {
+            case DOM_MODE:
+             dtRule = new DateTimeRule(startMonth, startDay, startTime, timeRuleType);
+             break;
+            case DOW_IN_MONTH_MODE:
+             dtRule = new DateTimeRule(startMonth, startDay, startDayOfWeek, startTime, timeRuleType);
+             break;
+            case DOW_GE_DOM_MODE:
+             dtRule = new DateTimeRule(startMonth, startDay, startDayOfWeek, true, startTime, timeRuleType);
+             break;
+            case DOW_LE_DOM_MODE:
+             dtRule = new DateTimeRule(startMonth, startDay, startDayOfWeek, false, startTime, timeRuleType);
+             break;
+            }
+            // For now, use ID + "(DST)" as the name
+            dstRule = new AnnualTimeZoneRule(getID() + "(DST)", getRawOffset(), getDSTSavings(),
+                 dtRule, startYear, AnnualTimeZoneRule.MAX_YEAR);
+     
+            // Calculate the first DST start time
+            firstDstStart = dstRule.getFirstStart(getRawOffset(), 0).getTime();
+
+            // Create a TimeZoneRule for standard time
+            timeRuleType = (endTimeMode == STANDARD_TIME) ? DateTimeRule.STANDARD_TIME :
+                ((endTimeMode == UTC_TIME) ? DateTimeRule.UTC_TIME : DateTimeRule.WALL_TIME);
+            switch (endMode) {
+            case DOM_MODE:
+                dtRule = new DateTimeRule(endMonth, endDay, endTime, timeRuleType);
+                break;
+            case DOW_IN_MONTH_MODE:
+                dtRule = new DateTimeRule(endMonth, endDay, endDayOfWeek, endTime, timeRuleType);
+                break;
+            case DOW_GE_DOM_MODE:
+                dtRule = new DateTimeRule(endMonth, endDay, endDayOfWeek, true, endTime, timeRuleType);
+                break;
+            case DOW_LE_DOM_MODE:
+                dtRule = new DateTimeRule(endMonth, endDay, endDayOfWeek, false, endTime, timeRuleType);
+                break;
+            }
+            // For now, use ID + "(STD)" as the name
+            stdRule = new AnnualTimeZoneRule(getID() + "(STD)", getRawOffset(), 0,
+                    dtRule, startYear, AnnualTimeZoneRule.MAX_YEAR);
+
+            // Calculate the first STD start time
+            firstStdStart = stdRule.getFirstStart(getRawOffset(), dstRule.getDSTSavings()).getTime();
+
+            // Create a TimeZoneRule for initial time
+            if (firstStdStart < firstDstStart) {
+                initialRule = new InitialTimeZoneRule(getID() + "(DST)", getRawOffset(), dstRule.getDSTSavings());                
+                firstTransition = new TimeZoneTransition(firstStdStart, initialRule, stdRule);
+            } else {
+                initialRule = new InitialTimeZoneRule(getID() + "(STD)", getRawOffset(), 0);
+                firstTransition = new TimeZoneTransition(firstDstStart, initialRule, dstRule);
+            }
+            
+        } else {
+            // Create a TimeZoneRule for initial time
+            initialRule = new InitialTimeZoneRule(getID(), getRawOffset(), 0);
+        }
+        transitionRulesInitialized = true;
     }
 }
 
