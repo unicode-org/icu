@@ -9,21 +9,29 @@
 
 package com.ibm.icu.dev.test.serializable;
 
-import java.util.Locale;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.JDKTimeZone;
-import com.ibm.icu.impl.LinkedHashMap;
 import com.ibm.icu.impl.LRUMap;
+import com.ibm.icu.impl.LinkedHashMap;
 import com.ibm.icu.impl.OlsonTimeZone;
 import com.ibm.icu.impl.TimeZoneAdapter;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
+import com.ibm.icu.util.AnnualTimeZoneRule;
+import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.Currency;
+import com.ibm.icu.util.DateTimeRule;
+import com.ibm.icu.util.InitialTimeZoneRule;
+import com.ibm.icu.util.RuleBasedTimeZone;
 import com.ibm.icu.util.SimpleTimeZone;
+import com.ibm.icu.util.TimeArrayTimeZoneRule;
 import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.TimeZoneRule;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.VTimeZone;
 
 /**
  * @author emader
@@ -64,8 +72,24 @@ public class SerializableTest extends TestFmwk.TestGroup
         {
             TimeZone zone_a = (TimeZone) a;
             TimeZone zone_b = (TimeZone) b;
-            
-            return zone_a.getDisplayName().equals(zone_b.getDisplayName()) && zone_a.hasSameRules(zone_b);
+
+            if (!(zone_a.getDisplayName().equals(zone_b.getDisplayName()))) {
+                return false;
+            }
+
+            int a_offsets[] = {0, 0};
+            int b_offsets[] = {0, 0};
+
+            boolean bSame = true;
+            for (int i = 0; i < sampleTimes.length; i++) {
+                zone_a.getOffset(sampleTimes[i], false, a_offsets);
+                zone_b.getOffset(sampleTimes[i], false, b_offsets);
+                if (a_offsets[0] != b_offsets[0] || a_offsets[1] != b_offsets[1]) {
+                    bSame = false;
+                    break;
+                }
+            }
+            return bSame;
         }
     }
     
@@ -149,7 +173,196 @@ public class SerializableTest extends TestFmwk.TestGroup
             return simpleTimeZones;
         }
     }
+
+    private static class VTimeZoneHandler extends TimeZoneHandler {
+        public Object[] getTestObjects() {
+            //TODO
+            VTimeZone[] vtzs = new VTimeZone[1];
+            vtzs[0] = VTimeZone.create("America/New_York");
+            return vtzs;
+        }
+    }
+
+    private static final int HOUR = 60*60*1000;
+    private static final AnnualTimeZoneRule[] TEST_US_EASTERN = {
+        new AnnualTimeZoneRule("EST", -5*HOUR, 0,
+                new DateTimeRule(Calendar.OCTOBER, -1, Calendar.SUNDAY, 2*HOUR, DateTimeRule.WALL_TIME),
+                1967, 2006),
+        
+        new AnnualTimeZoneRule("EST", -5*HOUR, 0,
+                new DateTimeRule(Calendar.NOVEMBER, 1, Calendar.SUNDAY, true, 2*HOUR, DateTimeRule.WALL_TIME),
+                2007, AnnualTimeZoneRule.MAX_YEAR),
+        
+        new AnnualTimeZoneRule("EDT", -5*HOUR, 1*HOUR,
+                new DateTimeRule(Calendar.APRIL, -1, Calendar.SUNDAY, 2*HOUR, DateTimeRule.WALL_TIME),
+                1967, 1973),
+
+        new AnnualTimeZoneRule("EDT", -5*HOUR, 1*HOUR,
+                new DateTimeRule(Calendar.JANUARY, 6, 2*HOUR, DateTimeRule.WALL_TIME),
+                1974, 1974),
+
+        new AnnualTimeZoneRule("EDT", -5*HOUR, 1*HOUR,
+                new DateTimeRule(Calendar.FEBRUARY, 23, 2*HOUR, DateTimeRule.WALL_TIME),
+                1975, 1975),
+
+        new AnnualTimeZoneRule("EDT", -5*HOUR, 1*HOUR,
+                new DateTimeRule(Calendar.APRIL, -1, Calendar.SUNDAY, 2*HOUR, DateTimeRule.WALL_TIME),
+                1976, 1986),
+
+        new AnnualTimeZoneRule("EDT", -5*HOUR, 1*HOUR,
+                new DateTimeRule(Calendar.APRIL, 1, Calendar.SUNDAY, true, 2*HOUR, DateTimeRule.WALL_TIME),
+                1987, 2006),
+
+        new AnnualTimeZoneRule("EDT", -5*HOUR, 1*HOUR,
+                new DateTimeRule(Calendar.MARCH, 8, Calendar.SUNDAY, true, 2*HOUR, DateTimeRule.WALL_TIME),
+                2007, AnnualTimeZoneRule.MAX_YEAR)
+    };
     
+
+    
+    private static class RuleBasedTimeZoneHandler extends TimeZoneHandler
+    {
+        public Object[] getTestObjects()
+        {
+            RuleBasedTimeZone ruleBasedTimeZones[] = new RuleBasedTimeZone[2];
+
+            InitialTimeZoneRule ir = new InitialTimeZoneRule("GMT-5", -5*HOUR, 0);
+
+            // GMT-5, no transition
+            ruleBasedTimeZones[0] = new RuleBasedTimeZone("GMT-5", ir);
+
+
+            // US Eastern since 1967
+            ruleBasedTimeZones[1] = new RuleBasedTimeZone("US_East", ir);
+            for (int i = 0; i < TEST_US_EASTERN.length; i++) {
+                ruleBasedTimeZones[1].addTransitionRule(TEST_US_EASTERN[i]);
+            }
+            return ruleBasedTimeZones;
+        }
+    }
+
+    private static class DateTimeRuleHandler implements Handler {
+        public Object[] getTestObjects() {
+            DateTimeRule[] rules = new DateTimeRule[4];
+
+            // DOM + UTC
+            rules[0] = new DateTimeRule(Calendar.OCTOBER, 10, 13*HOUR, DateTimeRule.UTC_TIME);
+
+            // DOW + WALL
+            rules[1] = new DateTimeRule(Calendar.MARCH, 2, Calendar.SUNDAY, 2*HOUR, DateTimeRule.WALL_TIME);
+
+            // DOW_GEQ_DOM + STD
+            rules[2] = new DateTimeRule(Calendar.MAY, 1, Calendar.MONDAY, true, 0*HOUR, DateTimeRule.STANDARD_TIME);
+
+            // DOW_LEQ_DOM + WALL
+            rules[3] = new DateTimeRule(Calendar.AUGUST, 31, Calendar.SATURDAY, false, 1*HOUR, DateTimeRule.WALL_TIME);
+
+            return rules;
+        }
+
+        public boolean hasSameBehavior(Object a, Object b) {
+            return hasSameRule((DateTimeRule)a, (DateTimeRule)b);
+        }
+
+        static boolean hasSameRule(DateTimeRule dtra, DateTimeRule dtrb) {
+            boolean bSame = false;
+            if (dtra.getDateRuleType() == dtrb.getDateRuleType()
+                    && dtra.getRuleMonth() == dtrb.getRuleMonth()
+                    && dtra.getTimeRuleType() == dtrb.getTimeRuleType()
+                    && dtra.getRuleMillisInDay() == dtrb.getRuleMillisInDay()) {
+                switch (dtra.getDateRuleType()) {
+                case DateTimeRule.DOM:
+                    bSame = (dtra.getRuleDayOfMonth() == dtrb.getRuleDayOfMonth());
+                    break;
+                case DateTimeRule.DOW:
+                    bSame = (dtra.getRuleDayOfWeek() == dtrb.getRuleDayOfWeek() &&
+                                dtra.getRuleWeekInMonth() == dtrb.getRuleWeekInMonth());
+                    break;
+                case DateTimeRule.DOW_GEQ_DOM:
+                case DateTimeRule.DOW_LEQ_DOM:
+                    bSame = (dtra.getRuleDayOfMonth() == dtrb.getRuleDayOfMonth() &&
+                                dtra.getRuleDayOfWeek() == dtrb.getRuleDayOfWeek());
+                    break;
+                }
+            }
+            return bSame;            
+        }
+    }
+
+    private static boolean compareTimeZoneRules(TimeZoneRule ra, TimeZoneRule rb) {
+        if (ra.getName().equals(rb.getName()) &&
+                ra.getRawOffset() == rb.getRawOffset() &&
+                ra.getDSTSavings() == rb.getDSTSavings()) {
+            return true;
+        }
+        return false;        
+    }
+
+    private static class AnnualTimeZoneRuleHandler implements Handler {
+        public Object[] getTestObjects() {
+            return TEST_US_EASTERN;
+        }
+
+        public boolean hasSameBehavior(Object a, Object b) {
+            AnnualTimeZoneRule ra = (AnnualTimeZoneRule)a;
+            AnnualTimeZoneRule rb = (AnnualTimeZoneRule)b;
+            if (DateTimeRuleHandler.hasSameRule(ra.getRule(), rb.getRule()) &&
+                    ra.getStartYear() == rb.getStartYear() &&
+                    ra.getEndYear() == rb.getEndYear()) {
+                return compareTimeZoneRules(ra, rb);
+            }
+            return false;
+        }
+    }
+
+    private static class InitialTimeZoneRuleHandler implements Handler {
+        public Object[] getTestObjects() {
+            TimeZoneRule[] rules = new TimeZoneRule[2];
+            rules[0] = new InitialTimeZoneRule("EST", -5*HOUR, 0);
+            rules[1] = new InitialTimeZoneRule("PST", -8*HOUR, 0);
+            return rules;
+        }
+
+        public boolean hasSameBehavior(Object a, Object b) {
+            return compareTimeZoneRules((TimeZoneRule)a, (TimeZoneRule)b);
+        }
+    }
+
+    private static class TimeArrayTimeZoneRuleHandler implements Handler {
+        public Object[] getTestObjects() {
+            TimeArrayTimeZoneRule[] rules = new TimeArrayTimeZoneRule[1];
+            long[] ttime = new long[] {-631152000000L, 0L, 946684800000L}; /* {1950-1-1, 1970-1-1, 2000-1-1} */
+            rules[0] = new TimeArrayTimeZoneRule("Foo", 1*HOUR, 1*HOUR, ttime, DateTimeRule.UTC_TIME);
+
+            return rules;
+        }
+        public boolean hasSameBehavior(Object a, Object b) {
+            TimeArrayTimeZoneRule ra = (TimeArrayTimeZoneRule)a;
+            TimeArrayTimeZoneRule rb = (TimeArrayTimeZoneRule)b;
+
+            Date da = ra.getFirstStart(0, 0);
+            Date db = rb.getFirstStart(0, 0);
+            long t = da.getTime();
+            if (da.equals(db)) {
+                da = ra.getFinalStart(0, 0);
+                db = rb.getFinalStart(0, 0);
+                long end = da.getTime();
+                if (da.equals(db)) {
+                    while (t < end) {
+                        da = ra.getNextStart(t, 0, 0, false);
+                        db = ra.getNextStart(t, 0, 0, false);
+                        if (da == null || db == null || !da.equals(db)) {
+                            break;
+                        }
+                        t = da.getTime();
+                    }
+                    return compareTimeZoneRules(ra, rb);
+                }
+            }
+            return false;
+        }
+    }
+
     private static class ULocaleHandler implements Handler
     {
         public Object[] getTestObjects()
@@ -252,40 +465,6 @@ public class SerializableTest extends TestFmwk.TestGroup
             return bSame;
         }
     }
-    
-    private static class JDKTimeZoneHandler implements Handler
-    {
-        public Object[] getTestObjects()
-        {
-            JDKTimeZone timeZones[] = new JDKTimeZone[zoneIDs.length];
-            
-            for (int i = 0; i < zoneIDs.length; i += 1) {
-                timeZones[i] = new JDKTimeZone(java.util.TimeZone.getTimeZone(zoneIDs[i]));
-            }
-            
-            return timeZones;
-                
-        }
-        
-        public boolean hasSameBehavior(Object a, Object b)
-        {
-            JDKTimeZone jtz_a = (JDKTimeZone) a;
-            JDKTimeZone jtz_b = (JDKTimeZone) b;
-            int a_offsets[] = {0, 0};
-            int b_offsets[] = {0, 0};
-
-            boolean bSame = true;
-            for (int i = 0; i < sampleTimes.length; i++) {
-                jtz_a.getOffset(sampleTimes[i], false, a_offsets);
-                jtz_b.getOffset(sampleTimes[i], false, b_offsets);
-                if (a_offsets[0] != b_offsets[0] || a_offsets[1] != b_offsets[1]) {
-                    bSame = false;
-                    break;
-                }
-            }
-            return bSame;
-        }
-    }
 
     private static class TimeZoneAdapterHandler implements Handler
     {
@@ -306,7 +485,21 @@ public class SerializableTest extends TestFmwk.TestGroup
             TimeZoneAdapter tza_a = (TimeZoneAdapter) a;
             TimeZoneAdapter tza_b = (TimeZoneAdapter) b;
             
-            return tza_a.hasSameRules(tza_b);
+            int a_offset, b_offset;
+            boolean a_dst, b_dst;
+            boolean bSame = true;
+            for (int i = 0; i < sampleTimes.length; i++) {
+                a_offset = tza_a.getOffset(sampleTimes[i]);
+                b_offset = tza_b.getOffset(sampleTimes[i]);
+                Date d = new Date(sampleTimes[i]);
+                a_dst = tza_a.inDaylightTime(d);
+                b_dst = tza_b.inDaylightTime(d);
+                if (a_offset != b_offset || a_dst != b_dst) {
+                    bSame = false;
+                    break;
+                }
+            }
+            return bSame;
         }
     }
     
@@ -423,9 +616,14 @@ public class SerializableTest extends TestFmwk.TestGroup
     static {
         map.put("com.ibm.icu.util.TimeZone", new TimeZoneHandler());
         map.put("com.ibm.icu.util.SimpleTimeZone", new SimpleTimeZoneHandler());
+        map.put("com.ibm.icu.util.RuleBasedTimeZone", new RuleBasedTimeZoneHandler());
+        map.put("com.ibm.icu.util.VTimeZone", new VTimeZoneHandler());
+        map.put("com.ibm.icu.util.DateTimeRule", new DateTimeRuleHandler());
+        map.put("com.ibm.icu.util.AnnualTimeZoneRule", new AnnualTimeZoneRuleHandler());
+        map.put("com.ibm.icu.util.InitialTimeZoneRule", new InitialTimeZoneRuleHandler());
+        map.put("com.ibm.icu.util.TimeArrayTimeZoneRule", new TimeArrayTimeZoneRuleHandler());
         map.put("com.ibm.icu.util.ULocale", new ULocaleHandler());
         map.put("com.ibm.icu.util.Currency", new CurrencyHandler());
-        map.put("com.ibm.icu.impl.JDKTimeZone", new JDKTimeZoneHandler());
         map.put("com.ibm.icu.impl.LinkedHashMap", new LinkedHashMapHandler());
         map.put("com.ibm.icu.impl.LRUMap", new LRUMapHandler());
         map.put("com.ibm.icu.impl.OlsonTimeZone", new OlsonTimeZoneHandler());

@@ -22,6 +22,7 @@ public class TestAll extends TestGroup {
             "TimeZoneRegression",
             "TimeZoneBoundaryTest",
 //             "TimeZoneAliasTest",
+            "TimeZoneRuleTest"
         });
     }
 

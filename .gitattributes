@@ -189,7 +189,6 @@ icu4j/src/com/ibm/icu/dev/test/perf/rbbiperf_r.pl -text
 icu4j/src/com/ibm/icu/dev/test/perf/ucharacterperf_r.pl -text
 icu4j/src/com/ibm/icu/dev/test/perf/unicodesetperf_r.pl -text
 icu4j/src/com/ibm/icu/dev/test/rbbi/rbbitst.txt -text
-icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.impl.JDKTimeZone.dat -text
 icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.impl.OlsonTimeZone.dat -text
 icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.impl.TimeZoneAdapter.dat -text
 icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.math.BigDecimal.dat -text
@@ -220,6 +219,7 @@ icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.Simple
 icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.TimeZone.dat -text
 icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.ULocale.dat -text
 icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.UResourceTypeMismatchException.dat -text
+icu4j/src/com/ibm/icu/dev/test/timezone/TimeZoneRuleTest.java -text
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j28.api.gz -text
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j30.api.gz -text
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j32.api.gz -text
@@ -254,8 +254,17 @@ icu4j/src/com/ibm/icu/impl/ICUCache.java -text
 icu4j/src/com/ibm/icu/impl/SimpleCache.java -text
 icu4j/src/com/ibm/icu/impl/data/icudata.jar -text
 icu4j/src/com/ibm/icu/impl/data/th.brk -text
+icu4j/src/com/ibm/icu/util/AnnualTimeZoneRule.java -text
+icu4j/src/com/ibm/icu/util/BasicTimeZone.java -text
 icu4j/src/com/ibm/icu/util/CalendarServiceShim.java -text
+icu4j/src/com/ibm/icu/util/DateTimeRule.java -text
+icu4j/src/com/ibm/icu/util/InitialTimeZoneRule.java -text
+icu4j/src/com/ibm/icu/util/RuleBasedTimeZone.java -text
+icu4j/src/com/ibm/icu/util/TimeArrayTimeZoneRule.java -text
+icu4j/src/com/ibm/icu/util/TimeZoneRule.java -text
+icu4j/src/com/ibm/icu/util/TimeZoneTransition.java -text
 icu4j/src/com/ibm/icu/util/UResourceBundleIterator.java -text
+icu4j/src/com/ibm/icu/util/VTimeZone.java -text
 icu4j/src/com/ibm/richtext/textapps/resources/unicode.arabic.red -text
 icu4j/src/com/ibm/richtext/textapps/resources/unicode.hebrew.red -text
 tools/unicodetools/com/ibm/rbm/docs/images/TitleLogo_transparent.gif -text
