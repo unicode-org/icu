@@ -176,8 +176,14 @@ public class TimeArrayTimeZoneRule extends TimeZoneRule {
         buf.append(super.toString());
         buf.append(", timeType=");
         buf.append(timeType);
-        buf.append(", startTimes=");
-        buf.append(Arrays.toString(startTimes));
+        buf.append(", startTimes=[");
+        for (int i = 0; i < startTimes.length; i++) {
+            if (i != 0) {
+                buf.append(", ");
+            }
+            buf.append(Long.toString(startTimes[i]));
+        }
+        buf.append("]");
         return buf.toString();
     }
 }
