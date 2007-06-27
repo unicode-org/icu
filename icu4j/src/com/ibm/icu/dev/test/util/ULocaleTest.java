@@ -191,6 +191,80 @@ public class ULocaleTest extends TestFmwk {
         }
     }
 
+    /*
+     * ticket#5060
+     */
+    public void TestJavaLocaleCompatibility() {
+        Locale backupDefault = Locale.getDefault();
+        
+        // Java Locale for ja_JP with Japanese calendar
+        Locale jaJPJP = new Locale("ja", "JP", "JP");
+        Locale jaJP = new Locale("ja", "JP");
+ 
+        Calendar cal = Calendar.getInstance(jaJPJP);
+        String caltype = cal.getType();
+        if (!caltype.equals("japanese")) {
+            errln("FAIL: Invalid calendar type: " + caltype + " /expected: japanese");
+        }
+
+        cal = Calendar.getInstance(jaJP);
+        caltype = cal.getType();
+        if (!caltype.equals("gregorian")) {
+            errln("FAIL: Invalid calendar type: " + caltype + " /expected: gregorian");
+        }
+
+        // Default locale
+        Locale.setDefault(jaJPJP);
+        ULocale defUloc = ULocale.getDefault();
+        if (!defUloc.toString().equals("ja_JP@calendar=japanese")) {
+            errln("FAIL: Invalid default ULocale: " + defUloc + " /expected: ja_JP@calendar=japanese");
+        }
+        // Check calendar type
+        cal = Calendar.getInstance();
+        caltype = cal.getType();
+        if (!caltype.equals("japanese")) {
+            errln("FAIL: Invalid calendar type: " + caltype + " /expected: japanese");
+        }
+        Locale.setDefault(backupDefault);
+
+        // Set default via ULocale
+        ULocale.setDefault(new ULocale("ja_JP@calendar=japanese"));
+        if (!Locale.getDefault().equals(jaJPJP)) {
+            errln("FAIL: ULocale#setDefault failed to set Java Locale ja_JP_JP /actual: " + Locale.getDefault());
+        }
+        Locale.setDefault(backupDefault);
+
+        // We also want to map ICU locale ja@calendar=japanese to Java ja_JP_JP
+        ULocale.setDefault(new ULocale("ja@calendar=japanese"));
+        if (!Locale.getDefault().equals(jaJPJP)) {
+            errln("FAIL: ULocale#setDefault failed to set Java Locale ja_JP_JP /actual: " + Locale.getDefault());
+        }
+        Locale.setDefault(backupDefault);
+
+        // Java no_NO_NY
+        Locale noNONY = new Locale("no", "NO", "NY");
+        Locale.setDefault(noNONY);
+        defUloc = ULocale.getDefault();
+        if (defUloc.toString().equals("nn_NY")) {
+            errln("FAIL: Invalid default ULocale: " + defUloc + " /expected: nn_NY");
+        }
+        Locale.setDefault(backupDefault);
+
+        // Set default via ULocale
+        ULocale.setDefault(new ULocale("nn_NO"));
+        if (!Locale.getDefault().equals(noNONY)) {
+            errln("FAIL: ULocale#setDefault failed to set Java Locale no_NO_NY /actual: " + Locale.getDefault());
+        }
+        Locale.setDefault(backupDefault);        
+
+        // We also want to map ICU locale nn to Java no_NO_NY
+        ULocale.setDefault(new ULocale("nn"));
+        if (!Locale.getDefault().equals(noNONY)) {
+            errln("FAIL: ULocale#setDefault failed to set Java Locale no_NO_NY /actual: " + Locale.getDefault());
+        }
+        Locale.setDefault(backupDefault);
+    }
+    
     // ================= Infrastructure =================
 
     /**

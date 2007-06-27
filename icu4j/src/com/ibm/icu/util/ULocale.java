@@ -697,6 +697,21 @@ public final class ULocale implements Serializable {
         }
     }
 
+    /*
+     * This table is used for mapping between ICU and special Java
+     * locales.  When an ICU locale matches <minumum base> with
+     * <keyword>/<value>, the ICU locale is mapped to <Java> locale.
+     * For example, both ja_JP@calendar=japanese and ja@calendar=japanese
+     * are mapped to Java locale "ja_JP_JP".  ICU locale "nn" is mapped
+     * to Java locale "no_NO_NY".
+     */
+    private static final String[][] _javaLocaleMap = {
+    //  { <Java>,       <ICU base>, <keyword>,  <value>,    <minimum base>
+        { "ja_JP_JP",   "ja_JP",    "calendar", "japanese", "ja"},
+        { "no_NO_NY",   "nn_NO",    null,       null,       "nn"},
+    //  { "th_TH_TH",   "th_TH",    ??,         ??,         "th"} //TODO
+    };    
+
     /**
      * Private constructor used by static initializers.
      */
@@ -712,7 +727,7 @@ public final class ULocale implements Serializable {
      * @internal
      */
     private ULocale(Locale loc) {
-        this.localeID = getName(loc.toString());
+        this.localeID = getName(forLocale(loc).toString());
         this.locale = loc;
     }
 
@@ -735,6 +750,14 @@ public final class ULocale implements Serializable {
                 if (locStr.length() == 0) {
                     result = ROOT;
                 } else {
+                    for (int i = 0; i < _javaLocaleMap.length; i++) {
+                        if (_javaLocaleMap[i][0].equals(locStr)) {
+                            IDParser p = new IDParser(_javaLocaleMap[i][1]);
+                            p.setKeywordValue(_javaLocaleMap[i][2], _javaLocaleMap[i][3]);
+                            locStr = p.getName();
+                            break;
+                        }
+                    }
                     result = new ULocale(locStr, loc);
                 }
             }
@@ -839,12 +862,28 @@ public final class ULocale implements Serializable {
      */
     public Locale toLocale() {
         if (locale == null) {
-            String[] names = new IDParser(localeID).getLanguageScriptCountryVariant();
+            IDParser p = new IDParser(localeID);
+            String base = p.getBaseName();
+            for (int i = 0; i < _javaLocaleMap.length; i++) {
+                if (base.equals(_javaLocaleMap[i][1]) || base.equals(_javaLocaleMap[i][4])) {
+                    if (_javaLocaleMap[i][2] != null) {
+                        String val = p.getKeywordValue(_javaLocaleMap[i][2]);
+                        if (val != null && val.equals(_javaLocaleMap[i][3])) {
+                            p = new IDParser(_javaLocaleMap[i][0]);
+                            break;
+                        }
+                    } else {
+                        p = new IDParser(_javaLocaleMap[i][0]);
+                        break;
+                    }
+                }
+            }
+            String[] names = p.getLanguageScriptCountryVariant();
             locale = new Locale(names[0], names[2], names[3]);
         }
         return locale;
     }
-    
+
     private static SoftReference nameCacheRef = new SoftReference(Collections.synchronizedMap(new HashMap()));
     /**
      * Keep our own default ULocale.
