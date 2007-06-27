@@ -1355,7 +1355,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         UResourceBundle r1 = supplementalDataBundle.get("mapTimezones");
         UResourceBundle metazoneMap = r1.get("metazones");
 
-        String  mzMapkey = zid.replaceAll("/",":");
+        String  mzMapkey = zid.replace('/',':');
 
         try {
             result = metazoneMap.getString(mzMapkey+"_"+country);

@@ -1949,7 +1949,9 @@
 
   <target name="eclipseTests" depends="eclipseCore,testdata,eclipseTestMangle" description="build tests trimmed for eclipse API">
     <!-- TODO: we should actually use ee.foundation.jar for eclipse env -->
-    <javac includes="com/ibm/icu/dev/test/**/*.java" excludes="**/CVS/**/*,com/ibm/icu/dev/test/charset/**/*.*,com/ibm/icu/dev/test/perf/**/*.*,com/ibm/icu/dev/test/translit/UnicodeMapTest.java" srcdir="${src.dir}" destdir="${build.dir}" source="1.3" target="1.3" classpathref="build.classpath" debug="on" deprecation="off" />
+    <javac includes="com/ibm/icu/dev/test/**/*.java"
+      excludes="**/CVS/**/*,com/ibm/icu/dev/test/charset/**/*.*,com/ibm/icu/dev/test/perf/**/*.*,com/ibm/icu/dev/test/translit/UnicodeMapTest.java,com/ibm/icu/dev/test/bidi/**/*.*"
+      srcdir="${src.dir}" destdir="${build.dir}" source="1.3" target="1.3" classpathref="build.classpath" debug="on" deprecation="off" />
     <antcall target="indices" />
     <jar jarfile="${testjar.file}" compress="true">
       <fileset dir="${build.dir}" includes="com/ibm/icu/dev/test/**/*" />

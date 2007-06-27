@@ -1,3 +1,5 @@
+//##header
+//#ifndef FOUNDATION
 /*
 *******************************************************************************
 *   Copyright (C) 2001-2007, International Business Machines
@@ -4744,3 +4746,4 @@ public class Bidi {
     }
 
 }
+//#endif
