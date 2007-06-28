@@ -78,7 +78,7 @@ es{
         BY{"Bielorrusia"}
         BZ{"Belice"}
         CA{"Canadá"}
-        CC{"Islas Cocos (Keeling)"}
+        CC{"Islas Cocos"}
         CD{"República Democrática del Congo"}
         CF{"República Centroafricana"}
         CG{"Congo"}
@@ -93,7 +93,7 @@ es{
         CS{"Serbia y Montenegro"}
         CU{"Cuba"}
         CV{"Cabo Verde"}
-        CX{"Isla Navidad"}
+        CX{"Isla Christmas"}
         CY{"Chipre"}
         CZ{"República Checa"}
         DE{"Alemania"}
@@ -111,7 +111,7 @@ es{
         ET{"Etiopía"}
         FI{"Finlandia"}
         FJ{"Fiyi"}
-        FK{"Islas Falkland (Malvinas)"}
+        FK{"Islas Malvinas"}
         FM{"Micronesia"}
         FO{"Islas Feroe"}
         FR{"Francia"}
@@ -120,6 +120,7 @@ es{
         GD{"Granada"}
         GE{"Georgia"}
         GF{"Guayana Francesa"}
+        GG{"Guernsey"}
         GH{"Ghana"}
         GI{"Gibraltar"}
         GL{"Groenlandia"}
@@ -142,12 +143,14 @@ es{
         ID{"Indonesia"}
         IE{"Irlanda"}
         IL{"Israel"}
+        IM{"Isla de Man"}
         IN{"India"}
         IO{"Territorio Británico del Océano Índico"}
         IQ{"Iraq"}
         IR{"Irán"}
         IS{"Islandia"}
         IT{"Italia"}
+        JE{"Jersey"}
         JM{"Jamaica"}
         JO{"Jordania"}
         JP{"Japón"}
@@ -161,14 +164,14 @@ es{
         KR{"Corea del Sur"}
         KW{"Kuwait"}
         KY{"Islas Caimán"}
-        KZ{"Kazajstán"}
+        KZ{"Kazajistán"}
         LA{"Laos"}
         LB{"Líbano"}
-        LC{"Saint Lucia"}
+        LC{"Santa Lucía"}
         LI{"Liechtenstein"}
         LK{"Sri Lanka"}
         LR{"Liberia"}
-        LS{"Lesotho"}
+        LS{"Lesoto"}
         LT{"Lituania"}
         LU{"Luxemburgo"}
         LV{"Letonia"}
@@ -176,10 +179,11 @@ es{
         MA{"Marruecos"}
         MC{"Mónaco"}
         MD{"Moldavia"}
+        ME{"Montenegro"}
         MG{"Madagascar"}
         MH{"Islas Marshall"}
         MK{"Macedonia"}
-        ML{"Malí"}
+        ML{"Mali"}
         MM{"Myanmar"}
         MN{"Mongolia"}
         MO{"Macao, Región administrativa especial de China"}
@@ -190,7 +194,7 @@ es{
         MT{"Malta"}
         MU{"Mauricio"}
         MV{"Maldivas"}
-        MW{"Malawi"}
+        MW{"Malaui"}
         MX{"México"}
         MY{"Malasia"}
         MZ{"Mozambique"}
@@ -223,8 +227,10 @@ es{
         PY{"Paraguay"}
         QA{"Qatar"}
         QO{"Territorios alejados de Oceanía"}
+        QU{"Unión Europea"}
         RE{"Reunión"}
         RO{"Rumanía"}
+        RS{"Serbia"}
         RU{"Rusia"}
         RW{"Ruanda"}
         SA{"Arabia Saudí"}
@@ -252,13 +258,13 @@ es{
         TG{"Togo"}
         TH{"Tailandia"}
         TJ{"Tayikistán"}
-        TK{"Islas Tokelau"}
+        TK{"Tokelau"}
         TL{"Timor Oriental"}
         TM{"Turkmenistán"}
         TN{"Túnez"}
         TO{"Tonga"}
         TR{"Turquía"}
-        TT{"Trinidad y Tabago"}
+        TT{"Trinidad y Tobago"}
         TV{"Tuvalu"}
         TW{"Taiwán"}
         TZ{"Tanzania"}
@@ -1012,6 +1018,10 @@ es{
             "RON",
             "leu rumano",
         }
+        RSD{
+            "RSD",
+            "dinar serbio",
+        }
         RUB{
             "RUB",
             "rublo ruso",
@@ -1333,7 +1343,7 @@ es{
     }
     Languages{
         aa{"afar"}
-        ab{"abjaso"}
+        ab{"abjasio"}
         ace{"acehnés"}
         ach{"acoli"}
         ada{"adangme"}
@@ -1364,7 +1374,7 @@ es{
         aus{"lenguas australianas"}
         av{"avar"}
         awa{"avadhi"}
-        ay{"aymara"}
+        ay{"aimara"}
         az{"azerí"}
         ba{"bashkir"}
         bad{"banda"}
@@ -1458,7 +1468,7 @@ es{
         et{"estonio"}
         eu{"vasco"}
         ewo{"ewondo"}
-        fa{"farsi"}
+        fa{"persa"}
         fan{"fang"}
         fat{"fanti"}
         ff{"fula"}
@@ -1516,7 +1526,7 @@ es{
         ie{"interlingue"}
         ig{"igbo"}
         ii{"sichuan yi"}
-        ik{"inupiak"}
+        ik{"inupiaq"}
         ilo{"ilocano"}
         inc{"índicas (otras)"}
         ine{"indoeuropeas (otras)"}
@@ -1679,7 +1689,7 @@ es{
         raj{"rajasthani"}
         rap{"rapanui"}
         rar{"rarotongano"}
-        rm{"reto-romance"}
+        rm{"retorrománico"}
         rn{"kiroundi"}
         ro{"rumano"}
         roa{"románicas (otras)"}
@@ -1910,7 +1920,7 @@ es{
     Variants{
         REVISED{"Ortografía revisada"}
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1970,13 +1980,6 @@ es{
             fields{
                 day{
                     dn{"día"}
-                    relative{
-                        "-1"{"ayer"}
-                        "-2"{"antes de ayer"}
-                        "0"{"hoy"}
-                        "1"{"mañana"}
-                        "2"{"pasado mañana"}
-                    }
                 }
                 dayperiod{
                     dn{"a.m./p.m."}
@@ -2095,11 +2098,17 @@ es{
         "America:Argentina:Tucuman"{
             ec{"Tucumán"}
         }
+        "America:Bahia"{
+            ec{"Bahía"}
+        }
         "America:Cancun"{
             ec{"Cancún"}
         }
         "America:Cordoba"{
             ec{"Córdoba"}
+        }
+        "America:Cuiaba"{
+            ec{"Cuiabá"}
         }
         "America:Indianapolis"{
             ec{"Indianápolis"}
@@ -2116,6 +2125,9 @@ es{
         "America:New_York"{
             ec{"Nueva York"}
         }
+        "America:Rio_Branco"{
+            ec{"Río Branco"}
+        }
         "America:St_Johns"{
             ec{"St. Johns"}
         }
@@ -2127,6 +2139,9 @@ es{
         }
         "Asia:Tokyo"{
             ec{"Tokio"}
+        }
+        "Asia:Ulaanbaatar"{
+            ec{"Ulán Bator"}
         }
         "Asia:Yekaterinburg"{
             ec{"Yekaterinburgo"}

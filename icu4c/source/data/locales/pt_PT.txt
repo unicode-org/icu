@@ -34,6 +34,7 @@ pt_PT{
         AM{"Arménia"}
         AQ{"Antárctica"}
         AZ{"Azerbeijão"}
+        BD{"Bangladeche"}
         BH{"Bareine"}
         BJ{"Benim"}
         BY{"Bielorrússia"}
@@ -221,6 +222,20 @@ pt_PT{
         zh_Hans{"chinês simplificado"}
         zh_Hant{"chinês tradicional"}
     }
+    NumberElements{
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
     NumberPatterns{
         "#,##0.###",
         "#,##0.00 ¤",
@@ -295,7 +310,7 @@ pt_PT{
             traditional{"Ordem Tradicional"}
         }
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -322,7 +337,87 @@ pt_PT{
                 "yy/MM/dd",
                 "{1} {0}",
             }
+            availableFormats{
+                Ed{"E d"}
+                H{"H"}
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                MMMEd{"E d MMM"}
+                MMMMd{"d MMMM"}
+                mmss{"mm:ss"}
+                yyMMM{"MMM yy"}
+                yyQ{"Q yy"}
+                yyyy{"yyyy"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "dom",
+                        "seg",
+                        "ter",
+                        "qua",
+                        "qui",
+                        "sex",
+                        "sáb",
+                    }
+                    narrow{
+                        "D",
+                        "S",
+                        "T",
+                        "Q",
+                        "Q",
+                        "S",
+                        "S",
+                    }
+                    wide{
+                        "domingo",
+                        "segunda-feira",
+                        "terça-feira",
+                        "quarta-feira",
+                        "quinta-feira",
+                        "sexta-feira",
+                        "sábado",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "dom",
+                        "segunda-feira",
+                        "terça-feira",
+                        "qua",
+                        "quinta-feira",
+                        "sex",
+                        "sábado",
+                    }
+                    narrow{
+                        "D",
+                        "S",
+                        "T",
+                        "Q",
+                        "Q",
+                        "S",
+                        "S",
+                    }
+                    wide{
+                        "domingo",
+                        "segunda-feira",
+                        "terça-feira",
+                        "quarta-feira",
+                        "quinta-feira",
+                        "sexta-feira",
+                        "sábado",
+                    }
+                }
+            }
             eras{
+                abbreviated{
+                    "a.C.",
+                    "d.C.",
+                }
+                narrow{
+                    "a.C.",
+                    "d.C.",
+                }
                 wide{
                     "a.C.",
                     "d.C.",
@@ -388,6 +483,20 @@ pt_PT{
                         "Nov",
                         "Dez",
                     }
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "J",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                    }
                     wide{
                         "Janeiro",
                         "Fevereiro",
@@ -418,6 +527,20 @@ pt_PT{
                         "Nov",
                         "Dez",
                     }
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "J",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                    }
                     wide{
                         "Janeiro",
                         "Fevereiro",
@@ -431,6 +554,22 @@ pt_PT{
                         "Outubro",
                         "Novembro",
                         "Dezembro",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "T1",
+                        "T2",
+                        "T3",
+                        "T4",
+                    }
+                    wide{
+                        "1º trimestre",
+                        "2º trimestre",
+                        "3º trimestre",
+                        "4º trimestre",
                     }
                 }
             }

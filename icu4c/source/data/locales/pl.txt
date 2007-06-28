@@ -98,7 +98,7 @@ pl{
         CV{"Wyspy Zielonego Przylądka"}
         CX{"Wyspa Bożego Narodzenia"}
         CY{"Cypr"}
-        CZ{"Republika Czeska"}
+        CZ{"Czechy"}
         DE{"Niemcy"}
         DJ{"Dżibuti"}
         DK{"Dania"}
@@ -114,8 +114,8 @@ pl{
         ET{"Etiopia"}
         FI{"Finlandia"}
         FJ{"Fidżi"}
-        FK{"Falklandy (Malwiny)"}
-        FM{"Mikronezja, Stany Sfederowane"}
+        FK{"Falklandy"}
+        FM{"Mikronezja"}
         FO{"Wyspy Owcze"}
         FR{"Francja"}
         GA{"Gabon"}
@@ -131,13 +131,13 @@ pl{
         GP{"Gwadelupa"}
         GQ{"Gwinea Równikowa"}
         GR{"Grecja"}
-        GS{"Wyspy Georgia Południowa i Sandwich Południowy"}
+        GS{"Georgia Południowa i Sandwich Południowy"}
         GT{"Gwatemala"}
         GU{"Guam"}
         GW{"Gwinea Bissau"}
         GY{"Gujana"}
         HK{"Hongkong, Specjalny Region Administracyjny Chin"}
-        HM{"Wyspy Heard i McDonald"}
+        HM{"Wyspy Heard i McDonalda"}
         HN{"Honduras"}
         HR{"Chorwacja"}
         HT{"Haiti"}
@@ -231,7 +231,7 @@ pl{
         RE{"Reunion"}
         RO{"Rumunia"}
         RS{"Serbia"}
-        RU{"Federacja Rosyjska"}
+        RU{"Rosja"}
         RW{"Rwanda"}
         SA{"Arabia Saudyjska"}
         SB{"Wyspy Salomona"}
@@ -241,7 +241,7 @@ pl{
         SG{"Singapur"}
         SH{"Święta Helena"}
         SI{"Słowenia"}
-        SJ{"Svalbard i Wyspy Jan Mayen"}
+        SJ{"Svalbard i Jan Mayen"}
         SK{"Słowacja"}
         SL{"Sierra Leone"}
         SM{"San Marino"}
@@ -592,7 +592,7 @@ pl{
         }
         FJD{
             "F$",
-            "dolar fidżijski",
+            "dolar fidżi",
         }
         FKP{
             "FKP",
@@ -1338,9 +1338,11 @@ pl{
         egy{"egipski (starożytny)"}
         el{"grecki"}
         en{"angielski"}
+        en_GB{"angielski (Wielka Brytania)"}
         enm{"średnioangielski"}
         eo{"esperanto"}
         es{"hiszpański"}
+        es_ES{"hiszpański (Hiszpania)"}
         et{"estoński"}
         eu{"baskijski"}
         fa{"perski"}
@@ -1352,6 +1354,7 @@ pl{
         fj{"fidżijski"}
         fo{"farerski"}
         fr{"francuski"}
+        fr_CA{"francuski (Kanada)"}
         frm{"średniofrancuski"}
         fro{"starofrancuski"}
         fur{"friulijski"}
@@ -1361,6 +1364,7 @@ pl{
         gem{"germański (inne)"}
         gez{"gyyz"}
         gil{"gilbertański"}
+        gl{"galicyjski"}
         gmh{"średnio-wysoko-niemiecki"}
         gn{"guarani"}
         goh{"staro-wysoko-niemiecki"}
@@ -1379,6 +1383,7 @@ pl{
         ho{"hiri motu"}
         hr{"chorwacki"}
         hsb{"górnołużycki"}
+        ht{"haitański"}
         hu{"węgierski"}
         hy{"ormiański"}
         hz{"herero"}
@@ -1394,10 +1399,13 @@ pl{
         inh{"inguski"}
         io{"ido"}
         ira{"irański"}
+        iro{"języki Irokezów"}
         is{"islandzki"}
         it{"włoski"}
         iu{"inuktitut"}
         ja{"japoński"}
+        jpr{"judeoperski"}
+        jrb{"judeoarabski"}
         jv{"jawajski"}
         ka{"gruziński"}
         kaa{"karakałpacki"}
@@ -1408,7 +1416,8 @@ pl{
         khi{"khoisan (inne)"}
         ki{"kikuju"}
         kj{"kwanyama"}
-        kk{"kazaski"}
+        kk{"kazachski"}
+        kl{"grenlandzki"}
         km{"khmerski"}
         kn{"kannada"}
         ko{"koreański"}
@@ -1417,6 +1426,7 @@ pl{
         kpe{"kpelle"}
         kr{"kanuri"}
         krc{"karaczajsko-bałkarski"}
+        krl{"karelski"}
         kru{"kurukh"}
         ks{"kaszmirski"}
         ku{"kurdyjski"}
@@ -1464,6 +1474,7 @@ pl{
         nic{"niger-kordofańskie (pozostałe)"}
         niu{"niue"}
         nl{"niderlandzki"}
+        nl_BE{"niderlandzki (Belgia)"}
         nn{"norweski Nynorsk"}
         no{"norweski"}
         nr{"ndebele południowy"}
@@ -1490,6 +1501,7 @@ pl{
         pro{"staroprowansalski"}
         ps{"paszto"}
         pt{"portugalski"}
+        pt_BR{"portugalski (Brazylia)"}
         qu{"keczua"}
         raj{"radźasthani"}
         rap{"rapanui"}
@@ -1518,6 +1530,7 @@ pl{
         sg{"sango"}
         sga{"staroirlandzki"}
         sgn{"migowy"}
+        sh{"serbsko - chorwacki"}
         si{"syngaleski"}
         sid{"sidamo"}
         sit{"chińsko-tybetańskie (pozostałe)"}
@@ -1534,7 +1547,7 @@ pl{
         so{"somali"}
         sq{"albański"}
         sr{"serbski"}
-        ss{"suazi"}
+        ss{"siswati"}
         ssa{"nilo-saharyjskie (pozostałe)"}
         st{"sotho południowy"}
         su{"sundajski"}
@@ -1557,7 +1570,7 @@ pl{
         tlh{"klingoński"}
         tli{"tlingit"}
         tmh{"tamaszek"}
-        tn{"tswana"}
+        tn{"setswana"}
         to{"tonga (wyspy Tonga)"}
         tog{"tonga (Niasa)"}
         tr{"turecki"}
@@ -1715,7 +1728,7 @@ pl{
         1901{"Tradycyjna ortografia niemiecka"}
         1996{"Ortografia niemiecka z 1996 r."}
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1728,6 +1741,9 @@ pl{
                 "yyyy-MM-dd",
                 "yy-MM-dd",
                 "{1} {0}",
+            }
+            availableFormats{
+                MMMMd{"d MMMM"}
             }
             dayNames{
                 format{
@@ -1907,11 +1923,25 @@ pl{
                         "K3",
                         "K4",
                     }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
                     wide{
                         "I kwartał",
                         "II kwartał",
                         "III kwartał",
                         "IV kwartał",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
                     }
                 }
             }
@@ -1928,6 +1958,12 @@ pl{
         metric{"metryczny"}
     }
     zoneStrings{
+        "Africa:Abidjan"{
+            ec{"Abidżan"}
+        }
+        "Africa:Accra"{
+            ec{"Akra"}
+        }
         "Africa:Kinshasa"{
             ec{"Kinszasa"}
         }
@@ -1968,7 +2004,7 @@ pl{
             ec{"Stacja Syowa"}
         }
         "Antarctica:Vostok"{
-            ec{"Wostok"}
+            ec{"Stacja Vostok"}
         }
         "Asia:Almaty"{
             ec{"Ałma Ata"}

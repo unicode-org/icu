@@ -1085,11 +1085,11 @@ en{
         }
         SDG{
             "SDG",
-            "Sudanese Dinar",
+            "Sudanese Pound",
         }
         SDP{
             "SDP",
-            "Sudanese Pound",
+            "Old Sudanese Pound",
         }
         SEK{
             "SKr",
@@ -1687,7 +1687,7 @@ en{
         mr{"Marathi"}
         ms{"Malay"}
         mt{"Maltese"}
-        mul{"Multiple Language"}
+        mul{"Multiple Languages"}
         mun{"Munda Language"}
         mus{"Creek"}
         mwl{"Mirandese"}
@@ -2036,6 +2036,7 @@ en{
         }
     }
     Variants{
+        1606NICT{"Late Middle French to 1606"}
         1901{"Traditional German orthography"}
         1996{"German orthography of 1996"}
         AREVELA{"Eastern Armenian"}
@@ -2057,9 +2058,13 @@ en{
         SCOUSE{"Scouse"}
         XIANG{"Xiang or Hunanese"}
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         gregorian{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
             DateTimePatterns{
                 "h:mm:ss a v",
                 "h:mm:ss a z",
@@ -2078,6 +2083,7 @@ en{
                 Md{"M/d"}
                 mmss{"mm:ss"}
                 yyMM{"MM/yy"}
+                yyQ{"Q yy"}
                 yyQQQQ{"QQQQ yy"}
                 yyyyMMM{"MMM yyyy"}
             }

@@ -1317,7 +1317,7 @@ sk{
             traditional{"Tradičné"}
         }
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1420,6 +1420,12 @@ sk{
             }
             quarters{
                 format{
+                    abbreviated{
+                        "1. štvrťrok",
+                        "2. štvrťrok",
+                        "3. štvrťrok",
+                        "4. štvrťrok",
+                    }
                     wide{
                         "1. štvrťrok",
                         "2. štvrťrok",

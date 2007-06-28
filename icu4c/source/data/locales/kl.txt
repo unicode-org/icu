@@ -46,7 +46,7 @@ kl{
         "#,##0%",
         "#E0",
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -122,22 +122,6 @@ kl{
                         "oktoberi",
                         "novemberi",
                         "decemberi",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
                     }
                 }
             }

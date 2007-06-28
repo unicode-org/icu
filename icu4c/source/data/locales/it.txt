@@ -14,6 +14,7 @@ it{
     Countries{
         001{"Mondo"}
         002{"Africa"}
+        003{"Nord America"}
         005{"America del Sud"}
         009{"Oceania"}
         011{"Africa occidentale"}
@@ -33,6 +34,7 @@ it{
         054{"Melanesia"}
         057{"Regione Micronesiana"}
         061{"Polinesia"}
+        062{"Asia centro-meridionale"}
         142{"Asia"}
         143{"Asia centrale"}
         145{"Asia occidentale"}
@@ -120,6 +122,7 @@ it{
         GD{"Grenada"}
         GE{"Georgia"}
         GF{"Guiana Francese"}
+        GG{"Guernsey"}
         GH{"Ghana"}
         GI{"Gibilterra"}
         GL{"Groenlandia"}
@@ -142,12 +145,14 @@ it{
         ID{"Indonesia"}
         IE{"Irlanda"}
         IL{"Israele"}
+        IM{"Isola di Man"}
         IN{"India"}
         IO{"Territorio Britannico dell’Oceano Indiano"}
         IQ{"Iraq"}
         IR{"Iran"}
         IS{"Islanda"}
         IT{"Italia"}
+        JE{"Jersey"}
         JM{"Giamaica"}
         JO{"Giordania"}
         JP{"Giappone"}
@@ -176,6 +181,7 @@ it{
         MA{"Marocco"}
         MC{"Monaco"}
         MD{"Moldavia"}
+        ME{"Montenegro"}
         MG{"Madagascar"}
         MH{"Isole Marshall"}
         MK{"Macedonia, Repubblica"}
@@ -223,8 +229,10 @@ it{
         PY{"Paraguay"}
         QA{"Qatar"}
         QO{"Oceania lontana"}
+        QU{"Unione Europea"}
         RE{"Réunion"}
         RO{"Romania"}
+        RS{"Serbia"}
         RU{"Federazione Russa"}
         RW{"Ruanda"}
         SA{"Arabia Saudita"}
@@ -989,6 +997,10 @@ it{
             "ROL",
             "Leu della Romania",
         }
+        RSD{
+            "RSD",
+            "Dinaro serbo",
+        }
         RUB{
             "RUB",
             "Rublo Russo",
@@ -1296,9 +1308,11 @@ it{
         akk{"accado"}
         ale{"aleuto"}
         alg{"lingue algonchine"}
+        alt{"altai del sud"}
         am{"amarico"}
         an{"aragonese"}
         ang{"inglese, antico (ca.450-1100)"}
+        anp{"angika"}
         apa{"lingue apache"}
         ar{"arabo"}
         arc{"aramaico"}
@@ -1348,6 +1362,7 @@ it{
         cai{"indiana dell’America Centrale (altra lingua)"}
         car{"caribico"}
         cau{"caucasica (altra lingua)"}
+        cch{"atsam"}
         ce{"ceceno"}
         ceb{"cebuano"}
         cel{"celtica altra lingua"}
@@ -1382,6 +1397,7 @@ it{
         day{"dayak"}
         de{"tedesco"}
         de_AT{"tedesco austriaco"}
+        de_CH{"alto tedesco svizzero"}
         del{"delaware"}
         den{"slave"}
         dgr{"dogrib"}
@@ -1424,6 +1440,7 @@ it{
         fr_CA{"francese canadese"}
         frm{"francese, medio (ca.1400-1600)"}
         fro{"francese, antico (842-ca.1400)"}
+        frr{"frisone settentrionale"}
         fur{"friulano"}
         fy{"frisone"}
         ga{"irlandese"}
@@ -1493,6 +1510,7 @@ it{
         kar{"karen"}
         kaw{"kawi"}
         kbd{"kabardia"}
+        kcg{"tyap"}
         kg{"kongo"}
         kha{"khasi"}
         khi{"khoisan (altra lingua)"}
@@ -1581,11 +1599,13 @@ it{
         nah{"nahuatl"}
         nai{"indiano del Nord America (altra lingua)"}
         nap{"napoletano"}
+        nb{"norvegese bokmal"}
         nd{"ndebele del nord"}
         nds{"basso tedesco; basso sassone"}
         ne{"nepalese"}
         new{"newari"}
         ng{"ndonga"}
+        nia{"nias"}
         nic{"niger - cordofan (altra lingua)"}
         niu{"niue"}
         nl{"olandese"}
@@ -1594,10 +1614,12 @@ it{
         no{"norvegese"}
         nog{"nogai"}
         non{"norse antico"}
+        nqo{"n'ko"}
         nr{"ndebele del sud"}
         nso{"sotho del nord"}
         nub{"nubiano"}
         nv{"navajo"}
+        nwc{"newari classico"}
         ny{"nyanja; chichewa; chewa"}
         nym{"nyamwezi"}
         nyn{"nyankole"}
@@ -1680,6 +1702,7 @@ it{
         son{"songhai"}
         sq{"albanese"}
         sr{"serbo"}
+        srn{"sranan tongo"}
         srr{"serer"}
         ss{"swati"}
         ssa{"nilo-sahariana (altra lingua)"}
@@ -1701,6 +1724,7 @@ it{
         th{"thai"}
         ti{"tigrinya"}
         tig{"tigre"}
+        tiv{"tiv"}
         tk{"turcomanno"}
         tkl{"tokelau"}
         tl{"tagalog"}
@@ -1730,6 +1754,7 @@ it{
         und{"lingua imprecisata"}
         ur{"urdu"}
         uz{"usbeco"}
+        vai{"vai"}
         ve{"venda"}
         vi{"vietnamita"}
         vo{"volapük"}
@@ -1755,6 +1780,7 @@ it{
         znd{"zande"}
         zu{"zulu"}
         zun{"zuni"}
+        zza{"zaza"}
     }
     LocaleScript{
         "Latn",
@@ -1786,6 +1812,7 @@ it{
         Bugi{"buginese"}
         Buhd{"buhid"}
         Cans{"simboli aborigeni canadesi unificati"}
+        Cari{"carian"}
         Cham{"cham"}
         Cher{"cherokee"}
         Cirt{"cirth"}
@@ -1819,36 +1846,70 @@ it{
         Inds{"indu"}
         Ital{"italico antico"}
         Java{"javanese"}
+        Jpan{"giapponese"}
+        Kali{"kayah li"}
         Kana{"katakana"}
+        Khar{"kharoshthi"}
         Khmr{"khmer"}
         Knda{"kannada"}
+        Lana{"lanna"}
         Laoo{"lao"}
         Latf{"latino (variante fraktur)"}
         Latg{"latino (variante gaelica)"}
         Latn{"latino"}
+        Lepc{"lepcha"}
         Limb{"limbu"}
         Lina{"lineare A"}
         Linb{"lineare B"}
+        Mand{"mandaico"}
+        Maya{"geroglifici maya"}
+        Mero{"meroitico"}
         Mlym{"malayalam"}
         Mong{"mongolo"}
+        Moon{"Moon"}
+        Mtei{"meetei mayek"}
         Mymr{"myanmar"}
+        Nkoo{"n'ko"}
         Ogam{"ogham"}
+        Olck{"ol chiki"}
+        Orkh{"orkhon"}
         Orya{"oriya"}
         Osma{"osmanya"}
+        Perm{"permico antico"}
+        Phag{"phags-pa"}
+        Phnx{"fenicio"}
+        Plrd{"fonetica di pollard"}
         Qaai{"ereditato"}
+        Rjng{"rejang"}
+        Roro{"rongorongo"}
         Runr{"runico"}
+        Sara{"sarati"}
+        Saur{"saurashtra"}
+        Sgnw{"lingua dei segni"}
         Shaw{"shaviano"}
         Sinh{"singalese"}
+        Sund{"sundanese"}
+        Sylo{"syloti nagri"}
         Syrc{"siriano"}
+        Syre{"siriaco estrangelo"}
+        Syrj{"siriaco occidentale"}
+        Syrn{"siriaco orientale"}
         Tagb{"tagbanwa"}
         Tale{"tai le"}
+        Talu{"tai lue"}
         Taml{"tamil"}
         Telu{"telugu"}
+        Teng{"tengwar"}
+        Tfng{"tifinagh"}
         Tglg{"tagalog"}
         Thaa{"thaana"}
         Thai{"tailandese"}
         Tibt{"tibetano"}
         Ugar{"ugarita"}
+        Vaii{"vaii"}
+        Visp{"parola visualizzata"}
+        Xpeo{"persiano antico"}
+        Xsux{"sumero-accadiano cuneiforme"}
         Yiii{"yi"}
         Zyyy{"comune"}
     }
@@ -1875,13 +1936,21 @@ it{
     Variants{
         1901{"ortografia tradizionale tedesca"}
         1996{"ortografia tedesca del 1996"}
+        AREVELA{"armeno orientale"}
+        AREVMDA{"armeno occidentale"}
+        BOONT{"boontling"}
+        FONIPA{"fonetica IPA"}
+        FONUPA{"fonetica UPA"}
+        MONOTON{"monotonico"}
         NEDIS{"dialetto del Natisone"}
+        POLYTON{"politonico"}
         POLYTONI{"politonico"}
+        POSIX{"computer"}
         REVISED{"ortografia revisionata"}
         ROZAJ{"resiano"}
         SAAHO{"saho"}
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2059,17 +2128,56 @@ it{
         metric{"metrico"}
     }
     zoneStrings{
+        "Africa:Addis_Ababa"{
+            ec{"Addis Abeba"}
+        }
+        "Africa:Algiers"{
+            ec{"Algeri"}
+        }
         "Africa:Casablanca"{
             ec{"Casablanca"}
+        }
+        "Africa:Djibouti"{
+            ec{"Gibuti"}
+        }
+        "Africa:Mogadishu"{
+            ec{"Mogadiscio"}
+        }
+        "Africa:Sao_Tome"{
+            ec{"Sao Tomè"}
         }
         "Africa:Timbuktu"{
             ec{"Timbuctu"}
         }
+        "Africa:Tunis"{
+            ec{"Tunisi"}
+        }
+        "America:Anchorage"{
+            ec{"Fuso orario Alaska"}
+        }
         "America:Cordoba"{
             ec{"Cordova"}
         }
+        "America:El_Salvador"{
+            ec{"Salvador"}
+        }
+        "America:Guadeloupe"{
+            ec{"Guadalupa"}
+        }
+        "America:Guyana"{
+            ec{"Guiana"}
+        }
+        "America:Jamaica"{
+            ec{"Giamaica"}
+        }
+        "America:Martinique"{
+            ec{"Martinica"}
+        }
         "America:Mexico_City"{
             ec{"Città del Messico"}
+        }
+        "America:Puerto_Rico"{
+            ec{"Portorico"}
         }
         "America:Sao_Paulo"{
             ec{"San Paolo"}
@@ -2077,8 +2185,29 @@ it{
         "America:St_Johns"{
             ec{"St. Johns"}
         }
+        "America:St_Kitts"{
+            ec{"St. Kitts"}
+        }
+        "America:St_Lucia"{
+            ec{"Santa Lucia"}
+        }
+        "America:St_Thomas"{
+            ec{"St. Thomas"}
+        }
+        "America:St_Vincent"{
+            ec{"St. Vincent"}
+        }
+        "Antarctica:DumontDUrville"{
+            ec{"Dumont D'Urville"}
+        }
         "Antarctica:South_Pole"{
             ec{"Polo Sud"}
+        }
+        "Asia:Bahrain"{
+            ec{"Bahrein"}
+        }
+        "Asia:Damascus"{
+            ec{"Damasco"}
         }
         "Asia:Jakarta"{
             ec{"Giacarta"}
@@ -2086,8 +2215,17 @@ it{
         "Asia:Jerusalem"{
             ec{"Gerusalemme"}
         }
+        "Asia:Macau"{
+            ec{"Macao"}
+        }
         "Asia:Samarkand"{
             ec{"Samarcanda"}
+        }
+        "Asia:Seoul"{
+            ec{"Seul"}
+        }
+        "Asia:Tehran"{
+            ec{"Teheran"}
         }
         "Asia:Tokyo"{
             ec{"Tokyo"}
@@ -2098,8 +2236,38 @@ it{
         "Atlantic:Canary"{
             ec{"Canarie"}
         }
+        "Atlantic:Cape_Verde"{
+            ec{"Capo Verde"}
+        }
+        "Atlantic:Faeroe"{
+            ec{"Isole Faeroe"}
+        }
+        "Atlantic:South_Georgia"{
+            ec{"Georgia meridionale"}
+        }
+        "Atlantic:St_Helena"{
+            ec{"Sant'Elena"}
+        }
+        "Europe:Athens"{
+            ec{"Atene"}
+        }
+        "Europe:Berlin"{
+            ec{"Berlino"}
+        }
+        "Europe:Brussels"{
+            ec{"Bruxelles"}
+        }
         "Europe:Bucharest"{
             ec{"Bucarest"}
+        }
+        "Europe:Copenhagen"{
+            ec{"Copenaghen"}
+        }
+        "Europe:Dublin"{
+            ec{"Dublino"}
+        }
+        "Europe:Gibraltar"{
+            ec{"Gibilterra"}
         }
         "Europe:Lisbon"{
             ec{"Lisbona"}
@@ -2107,14 +2275,50 @@ it{
         "Europe:London"{
             ec{"Londra"}
         }
+        "Europe:Luxembourg"{
+            ec{"Lussemburgo"}
+        }
         "Europe:Moscow"{
             ec{"Mosca"}
         }
         "Europe:Paris"{
             ec{"Parigi"}
         }
+        "Europe:Rome"{
+            ec{"Roma"}
+        }
+        "Europe:Stockholm"{
+            ec{"Stoccolma"}
+        }
+        "Europe:Tirane"{
+            ec{"Tirana"}
+        }
+        "Europe:Warsaw"{
+            ec{"Varsavia"}
+        }
+        "Europe:Zurich"{
+            ec{"Zurigo"}
+        }
+        "Indian:Christmas"{
+            ec{"Natale"}
+        }
+        "Indian:Comoro"{
+            ec{"Comore"}
+        }
+        "Indian:Maldives"{
+            ec{"Maldive"}
+        }
+        "Indian:Reunion"{
+            ec{"Riunione, isola di"}
+        }
         "Pacific:Easter"{
             ec{"Pasqua"}
+        }
+        "Pacific:Fiji"{
+            ec{"Figi"}
+        }
+        "Pacific:Pitcairn"{
+            ec{"Pitcairn, isole"}
         }
         "meta:Acre"{
             ld{"Acre Summer Time"}

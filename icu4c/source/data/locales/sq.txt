@@ -249,7 +249,7 @@ sq{
     Scripts{
         Latn{"Latine"}
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -356,6 +356,12 @@ sq{
             }
             quarters{
                 format{
+                    abbreviated{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
                     wide{
                         "Q1",
                         "Q2",

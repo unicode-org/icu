@@ -30,7 +30,7 @@ ar_TN{
     Scripts{
         Ital{"اللأيطالية القديمة"}
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -44,7 +44,7 @@ ar_TN{
                 "h:mm a",
                 "EEEE, d MMMM, yyyy",
                 "d MMMM, yyyy",
-                "dd‏‏/MM‏/yyyy",
+                "dd‏/MM‏/yyyy",
                 "d‏/M‏/yyyy",
                 "{1} {0}",
             }

@@ -486,7 +486,7 @@ lt{
         Mong{"Mongolų"}
         Runr{"Runų"}
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         gregorian{
             AmPmMarkers{

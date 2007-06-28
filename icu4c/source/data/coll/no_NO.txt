@@ -3,17 +3,9 @@
 // * Copyright (C) 2007 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/en_UM.xml
+// * Source File:<path>/icu-config.xml & build.xml
 // *
 // ***************************************************************************
-en_UM{
-    Version{"1.91"}
-    calendar{
-        gregorian{
-            DateTimeElements:intvector{
-                1,
-                1,
-            }
-        }
-    }
+no_NO{
+    "%%ALIAS"{"nb_NO"}
 }

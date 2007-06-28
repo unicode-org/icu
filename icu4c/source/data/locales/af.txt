@@ -184,7 +184,7 @@ af{
         "#,##0%",
         "#E0",
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         gregorian{
             AmPmMarkers{

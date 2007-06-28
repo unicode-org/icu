@@ -14,6 +14,7 @@ hu{
     Countries{
         001{"Világ"}
         002{"Afrika"}
+        003{"Észak-Amerika"}
         005{"Dél-Amerika"}
         009{"Óceánia"}
         011{"Nyugat-Afrika"}
@@ -21,20 +22,25 @@ hu{
         014{"Kelet-Afrika"}
         015{"Észak-Afrika"}
         017{"Közép-Afrika"}
+        018{"Afrika déli része"}
         019{"Amerika"}
         021{"Észak-Amerika"}
         030{"Kelet-Ázsia"}
+        034{"Dél-Ázsia"}
         035{"Délkelet-Ázsia"}
         039{"Dél-Európa"}
         053{"Ausztrália és Új-Zéland"}
         054{"Melanézia"}
         061{"Polinézia"}
+        062{"Délközép-Ázsia"}
         142{"Ázsia"}
+        143{"Közép-Ázsia"}
         145{"Nyugat-Ázsia"}
         150{"Európa"}
         151{"Kelet-Európa"}
         154{"Észak-Európa"}
         155{"Nyugat-Európa"}
+        172{"Független Államok Közössége"}
         830{"Csatorna-szigetek"}
         AD{"Andorra"}
         AE{"Egyesült Arab Emirátus"}
@@ -59,11 +65,11 @@ hu{
         BE{"Belgium"}
         BF{"Burkina Faso"}
         BG{"Bulgária"}
-        BH{"Bahrain"}
+        BH{"Bahrein"}
         BI{"Burundi"}
         BJ{"Benin"}
         BM{"Bermuda"}
-        BN{"Brunei Darussalam"}
+        BN{"Brunei"}
         BO{"Bolívia"}
         BR{"Brazília"}
         BS{"Bahamák"}
@@ -71,7 +77,7 @@ hu{
         BV{"Bouvet-sziget"}
         BW{"Botswana"}
         BY{"Fehéroroszország"}
-        BZ{"Beliz"}
+        BZ{"Belize"}
         CA{"Kanada"}
         CC{"Kókusz (Keeling)-szigetek"}
         CD{"Kongó, Demokratikus köztársaság"}
@@ -85,11 +91,12 @@ hu{
         CN{"Kína"}
         CO{"Kolumbia"}
         CR{"Costa Rica"}
+        CS{"Szerbia és Montenegró"}
         CU{"Kuba"}
         CV{"Zöld-foki Köztársaság"}
         CX{"Karácsony-szigetek"}
         CY{"Ciprus"}
-        CZ{"Cseh Köztársaság"}
+        CZ{"Csehország"}
         DE{"Németország"}
         DJ{"Dzsibuti"}
         DK{"Dánia"}
@@ -99,7 +106,7 @@ hu{
         EC{"Ecuador"}
         EE{"Észtország"}
         EG{"Egyiptom"}
-        EH{"Nyugat Szahara"}
+        EH{"Nyugat-Szahara"}
         ER{"Eritrea"}
         ES{"Spanyolország"}
         ET{"Etiópia"}
@@ -114,15 +121,15 @@ hu{
         GD{"Grenada"}
         GE{"Grúzia"}
         GF{"Francia Guyana"}
-        GH{"Ghana"}
+        GH{"Ghána"}
         GI{"Gibraltár"}
         GL{"Grönland"}
         GM{"Gambia"}
         GN{"Guinea"}
         GP{"Guadeloupe"}
-        GQ{"Egyenlítďi Guinea"}
+        GQ{"Egyenlítői-Guinea"}
         GR{"Görögország"}
-        GS{"Dél-Georgia és Dél-Sandwich Szigetek"}
+        GS{"Dél Grúzia és a Déli Szendvics-szigetek"}
         GT{"Guatemala"}
         GU{"Guam"}
         GW{"Guinea-Bissau"}
@@ -152,34 +159,34 @@ hu{
         KI{"Kiribati"}
         KM{"Comore-szigetek"}
         KN{"Saint Kitts és Nevis"}
-        KP{"Korea, Észak"}
-        KR{"Korea, Dél"}
-        KW{"Kuwait"}
+        KP{"Észak-Korea"}
+        KR{"Dél-Korea"}
+        KW{"Kuvait"}
         KY{"Kajmán-szigetek"}
         KZ{"Kazahsztán"}
-        LA{"Laoszi Népi Demokratikus Köztársaság"}
+        LA{"Laosz"}
         LB{"Libanon"}
-        LC{"Saint Lucia"}
+        LC{"Santa Lucia"}
         LI{"Liechtenstein"}
-        LK{"Sri Lanka"}
+        LK{"Srí Lanka"}
         LR{"Libéria"}
         LS{"Lesotho"}
         LT{"Litvánia"}
         LU{"Luxemburg"}
         LV{"Lettország"}
-        LY{"Líbiai Arab Jamahiriya"}
+        LY{"Líbia"}
         MA{"Marokkó"}
         MC{"Monaco"}
-        MD{"Moldáv Köztársaság"}
+        MD{"Moldova"}
         MG{"Madagaszkár"}
         MH{"Marshall-szigetek"}
-        MK{"Macedónia, Köztársaság"}
+        MK{"Macedónia"}
         ML{"Mali"}
         MM{"Mianmar"}
         MN{"Mongólia"}
         MO{"Macao S.A.R., China"}
         MP{"Északi Mariana-szigetek"}
-        MQ{"Martinique (francia)"}
+        MQ{"Martinique"}
         MR{"Mauritánia"}
         MS{"Montserrat"}
         MT{"Málta"}
@@ -190,7 +197,7 @@ hu{
         MY{"Malajzia"}
         MZ{"Mozambik"}
         NA{"Namíbia"}
-        NC{"Új Kaledónia (francia)"}
+        NC{"Új-Kaledónia"}
         NE{"Niger"}
         NF{"Norfolk-sziget"}
         NG{"Nigéria"}
@@ -204,7 +211,7 @@ hu{
         OM{"Omán"}
         PA{"Panama"}
         PE{"Peru"}
-        PF{"Polinézia (francia)"}
+        PF{"Francia Polinézia"}
         PG{"Pápua Új-Guinea"}
         PH{"Fülöp-szigetek"}
         PK{"Pakisztán"}
@@ -212,23 +219,24 @@ hu{
         PM{"Saint Pierre és Miquelon"}
         PN{"Pitcairn-sziget"}
         PR{"Puerto Rico"}
-        PS{"Palesztín Terület"}
+        PS{"Palesztin Terület"}
         PT{"Portugália"}
         PW{"Palau"}
         PY{"Paraguay"}
         QA{"Katar"}
         QO{"Külső-Óceánia"}
+        QU{"Európai Unió"}
         RE{"Reunion (francia)"}
         RO{"Románia"}
-        RU{"Orosz Köztársaság"}
+        RU{"Oroszország"}
         RW{"Ruanda"}
-        SA{"Szaud-Arábia"}
+        SA{"Szaúd-Arábia"}
         SB{"Salamon-szigetek"}
-        SC{"Seychelles"}
+        SC{"Seychelle-szigetek"}
         SD{"Szudán"}
         SE{"Svédország"}
         SG{"Szingapúr"}
-        SH{"Saint Helena"}
+        SH{"Szent Helena"}
         SI{"Szlovénia"}
         SJ{"Svalbard és Jan Mayen"}
         SK{"Szlovákia"}
@@ -237,11 +245,11 @@ hu{
         SN{"Szenegál"}
         SO{"Szomália"}
         SR{"Suriname"}
-        ST{"Saint Tome és Principe"}
-        SV{"El Salvador"}
-        SY{"Szíriai Arab Köztársaság"}
+        ST{"São Tomé és Príncipe"}
+        SV{"Salvador"}
+        SY{"Szíria"}
         SZ{"Szváziföld"}
-        TC{"Török és Caicos Szigetek"}
+        TC{"Turks- és Caicos-szigetek"}
         TD{"Csád"}
         TF{"Francia Déli Területek"}
         TG{"Togo"}
@@ -255,11 +263,11 @@ hu{
         TR{"Törökország"}
         TT{"Trinidad és Tobago"}
         TV{"Tuvalu"}
-        TW{"Taiwan"}
+        TW{"Tajvan"}
         TZ{"Tanzánia"}
         UA{"Ukrajna"}
         UG{"Uganda"}
-        UM{"United States Minor Outlying Islands"}
+        UM{"Amerikai Csendes-óceáni Szigetek"}
         US{"Egyesült Államok"}
         UY{"Uruguay"}
         UZ{"Üzbegisztán"}
@@ -267,10 +275,10 @@ hu{
         VC{"Saint Vincent és Grenadines"}
         VE{"Venezuela"}
         VG{"Brit Virgin-szigetek"}
-        VI{"U.S. Virgin-szigetek"}
-        VN{"Vietnám"}
+        VI{"Amerikai Virgin-szigetek"}
+        VN{"Vietnam"}
         VU{"Vanuatu"}
-        WF{"Wallis és Futuna Szigetek"}
+        WF{"Wallis és Futuna"}
         WS{"Szamoa"}
         YE{"Jemen"}
         YT{"Mayotte"}
@@ -428,7 +436,7 @@ hu{
             "Brazil cruzeiro (1990-1993)",
         }
         BRL{
-            "R$",
+            "BRL",
             "Brazil real",
         }
         BRN{
@@ -475,9 +483,17 @@ hu{
             "CDF",
             "Kongói frank",
         }
+        CHE{
+            "CHE",
+            "WIR euro",
+        }
         CHF{
             "SwF",
             "Svájci frank",
+        }
+        CHW{
+            "CHW",
+            "WIR frank",
         }
         CLF{
             "CLF",
@@ -498,6 +514,10 @@ hu{
         CRC{
             "C",
             "Costa Ricai colon",
+        }
+        CSD{
+            "CSD",
+            "szerb dinár",
         }
         CSK{
             "CSK",
@@ -559,9 +579,21 @@ hu{
             "EGP",
             "Egyiptomi font",
         }
+        EQE{
+            "EQE",
+            "ekwele",
+        }
         ERN{
             "ERN",
             "Eritreai nakfa",
+        }
+        ESA{
+            "ESA",
+            "spanyol peseta (A-kontó)",
+        }
+        ESB{
+            "ESB",
+            "spanyol peseta (konvertibilis kontó)",
         }
         ESP{
             "ESP",
@@ -687,6 +719,10 @@ hu{
             "ILS",
             "Izraeli új sékel",
         }
+        INR{
+            "INR",
+            "indiai rúpia",
+        }
         IQD{
             "ID",
             "Iraki dínár",
@@ -779,9 +815,17 @@ hu{
             "LTT",
             "Litvániai talonas",
         }
+        LUC{
+            "LUC",
+            "luxemburgi konvertibilis frank",
+        }
         LUF{
             "LUF",
             "Luxemburgi frank",
+        }
+        LUL{
+            "LUL",
+            "luxemburgi pénzügyi frank",
         }
         LVL{
             "LVL",
@@ -833,7 +877,7 @@ hu{
         }
         MOP{
             "MOP",
-            "Macaoi pataca",
+            "makaói pataca",
         }
         MRO{
             "UM",
@@ -967,9 +1011,17 @@ hu{
             "QR",
             "Katari rial",
         }
+        RHD{
+            "RHD",
+            "rhodéziai dollár",
+        }
         ROL{
             "leu",
             "Román lej",
+        }
+        RSD{
+            "RSD",
+            "Szerb Dínár",
         }
         RUB{
             "RUB",
@@ -1083,6 +1135,10 @@ hu{
             "TL",
             "Török líra",
         }
+        TRY{
+            "TRY",
+            "új török líra",
+        }
         TTD{
             "TT$",
             "Trinidad és tobagoi dollár",
@@ -1112,7 +1168,7 @@ hu{
             "Ugandai shilling",
         }
         USD{
-            "US$",
+            "USD",
             "USA dollár",
         }
         USN{
@@ -1155,6 +1211,10 @@ hu{
             "XAF",
             "CFA frank BEAC",
         }
+        XAG{
+            "XAG",
+            "Ezüst",
+        }
         XAU{
             "XAU",
             "Arany",
@@ -1185,7 +1245,7 @@ hu{
         }
         XEU{
             "XEU",
-            "European Currency Unit",
+            "európai pénznemegység",
         }
         XFO{
             "XFO",
@@ -1198,6 +1258,10 @@ hu{
         XOF{
             "XOF",
             "CFA frank BCEAO",
+        }
+        XPD{
+            "XPD",
+            "palládium",
         }
         XPF{
             "CFPF",
@@ -1261,140 +1325,288 @@ hu{
     Languages{
         aa{"afar"}
         ab{"abház"}
-        af{"afrikai"}
+        ace{"achinéz"}
+        ach{"akoli"}
+        ae{"avesztán"}
+        af{"afrikaans"}
+        afh{"afrihili"}
+        ain{"ainu"}
+        ak{"akan"}
+        akk{"akkád"}
+        ale{"aleut"}
+        alt{"dél-altaji"}
         am{"amhara"}
+        an{"aragonéz"}
+        ang{"óangol"}
+        anp{"angika"}
+        apa{"apacs nyelvek"}
         ar{"arab"}
+        arc{"arámi"}
+        arp{"arapaho"}
         as{"asszámi"}
+        ast{"asztúr"}
+        ath{"atapaszkan nyelvek"}
+        aus{"ausztrál nyelvek"}
+        av{"avar"}
         ay{"ajmara"}
         az{"azerbajdzsáni"}
         ba{"baskír"}
+        bad{"banda"}
+        bai{"bamileke nyelvek"}
+        ban{"balinéz"}
         be{"belorusz"}
+        bem{"bemba"}
+        ber{"berber"}
         bg{"bolgár"}
         bh{"bihari"}
         bi{"bislama"}
+        bik{"bikol"}
+        bin{"bini"}
+        bm{"bambara"}
         bn{"bengáli"}
+        bnt{"bantu"}
         bo{"tibeti"}
         br{"breton"}
+        bra{"braj"}
+        bs{"bosnyák"}
+        btk{"batak"}
+        bua{"burját"}
+        bug{"buginéz"}
+        byn{"blin"}
         ca{"katalán"}
+        cad{"caddo"}
+        car{"karib"}
+        ce{"csecsen"}
+        chk{"csukéz"}
+        cho{"csoktó"}
+        chp{"csipevé"}
+        chy{"csejen"}
         co{"korzikai"}
+        cop{"kopt"}
+        cr{"krí"}
         cs{"cseh"}
+        csb{"kasub"}
+        cu{"egyházi szláv"}
+        cv{"csuvas"}
         cy{"walesi"}
         da{"dán"}
+        dak{"dakota"}
         de{"német"}
+        del{"delavár"}
+        dra{"egyéb dravida"}
+        dsb{"alsó szorb"}
+        dua{"duala"}
+        dum{"közép holland"}
         dz{"butáni"}
         el{"görög"}
         en{"angol"}
+        en_CA{"kanadai angol"}
+        enm{"közép angol"}
         eo{"eszperantó"}
         es{"spanyol"}
         et{"észt"}
         eu{"baszk"}
         fa{"perzsa"}
+        fan{"fang"}
+        fat{"fanti"}
         fi{"finn"}
+        fil{"filippínó"}
         fj{"fidzsi"}
         fo{"feröeri"}
         fr{"francia"}
+        fr_CA{"kanadai francia"}
+        frm{"közép francia"}
+        fro{"ófrancia"}
+        fur{"friuli"}
         fy{"fríz"}
         ga{"ír"}
-        gd{"skót (gael)"}
+        gd{"skót gael"}
+        gil{"ikiribati"}
         gl{"galíciai"}
+        gmh{"közép felső német"}
         gn{"guarani"}
-        gu{"gudzsaráti"}
+        got{"gót"}
+        grc{"ógörög"}
+        gu{"gudzsarati"}
+        gv{"Man-szigeti"}
         ha{"hausza"}
+        haw{"hawaii"}
         he{"héber"}
         hi{"hindi"}
         hr{"horvát"}
+        hsb{"felső szorb"}
+        ht{"haiti"}
         hu{"magyar"}
         hy{"örmény"}
-        ia{"interlingua"}
+        ia{"interlingva"}
         id{"indonéz"}
         ie{"interlingue"}
+        ii{"szecsuán ji"}
         ik{"inupiak"}
+        inc{"egyéb indiai"}
+        inh{"ingus"}
+        ira{"iráni"}
+        iro{"irokéz nyelvek"}
         is{"izlandi"}
         it{"olasz"}
         iu{"inuktitut"}
         ja{"japán"}
+        jpr{"zsidó-perzsa"}
+        jrb{"zsidó-arab"}
         jv{"jávai"}
         ka{"grúz"}
+        kaa{"kara-kalpak"}
+        kab{"kabije"}
+        kac{"kacsin"}
+        kam{"kamba"}
+        kar{"karen"}
+        kaw{"kawi"}
+        ki{"kikuju"}
         kk{"kazah"}
         kl{"grönlandi"}
         km{"kambodzsai"}
+        kmb{"kimbundu"}
         kn{"kannada"}
         ko{"koreai"}
-        ks{"kasmíri"}
+        kr{"kanuri"}
+        krc{"karacsáj-balkár"}
+        krl{"karelai"}
+        kru{"kuruh"}
+        ks{"kásmíri"}
         ku{"kurd"}
+        kum{"kumük"}
         ky{"kirgiz"}
         la{"latin"}
+        lb{"luxemburgi"}
         ln{"lingala"}
         lo{"laoszi"}
+        lol{"mongo"}
         lt{"litván"}
+        lun{"lunda"}
+        luo{"luo"}
         lv{"lett"}
-        mg{"madagaszkári"}
+        mak{"makaszar"}
+        map{"ausztronéz"}
+        mas{"masai"}
+        mdf{"moksán"}
+        mdr{"mandar"}
+        men{"mende"}
+        mg{"málgas"}
+        mh{"marshalli"}
         mi{"maori"}
+        mic{"mikmak"}
+        min{"minangkabau"}
+        mis{"egyéb nyelvek"}
         mk{"macedón"}
-        ml{"malajalam"}
+        mkh{"egyéb mon-khmer"}
+        ml{"malajálam"}
         mn{"mongol"}
+        mnc{"mandzsu"}
         mo{"moldvai"}
-        mr{"marati"}
+        moh{"mohawk"}
+        mos{"moszi"}
+        mr{"marathi"}
         ms{"maláj"}
         mt{"máltai"}
+        mun{"munda nyelvek"}
+        mwl{"mirandéz"}
+        mwr{"marvari"}
         my{"burmai"}
+        myn{"maja nyelvek"}
         na{"naurui"}
+        nah{"nahuati"}
+        nb{"norvég bokmál"}
         ne{"nepáli"}
+        ng{"ndonga"}
         nl{"holland"}
         nl_BE{"flamand"}
+        nn{"norvég nynorsk"}
         no{"norvég"}
+        nqo{"n'ko"}
+        nv{"navaho"}
+        nwc{"klasszikus newari"}
         oc{"okszitán"}
         om{"oromói"}
         or{"orija"}
+        os{"oszét"}
+        ota{"ottomán török"}
         pa{"pandzsábi"}
+        peo{"óperzsa"}
+        phn{"főniciai"}
         pl{"lengyel"}
-        ps{"pastu (afgán)"}
+        ps{"pastu"}
         pt{"portugál"}
         qu{"kecsua"}
-        rm{"rétoromán"}
+        rm{"réto-román"}
         rn{"kirundi"}
         ro{"román"}
+        rom{"roma"}
         ru{"orosz"}
+        rup{"aromán"}
         rw{"kiruanda"}
         sa{"szanszkrit"}
-        sd{"szindi"}
+        sad{"szandave"}
+        sah{"jakut"}
+        sam{"szamaritánus arámi"}
+        sas{"sasak"}
+        sat{"szantáli"}
+        sc{"szardíniai"}
+        scn{"szicíliai"}
+        sco{"skót"}
+        sd{"szindhi"}
+        sel{"szölkup"}
+        sem{"egyéb szemita"}
         sg{"sango"}
-        sh{"szerb-horvát"}
+        sga{"óír"}
+        sh{"szerbhorvát"}
+        shn{"san"}
         si{"szingaléz"}
+        sio{"sziú nyelvek"}
         sk{"szlovák"}
         sl{"szlovén"}
         sm{"szamoai"}
+        smn{"inar sami"}
         sn{"sona"}
-        so{"szomáli"}
+        so{"szomáliai"}
         sq{"albán"}
         sr{"szerb"}
+        srr{"szerer"}
         ss{"sziszuati"}
         st{"szeszotó"}
         su{"szundanéz"}
+        sux{"sumér"}
         sv{"svéd"}
         sw{"szuahéli"}
         ta{"tamil"}
         te{"telugu"}
         tg{"tadzsik"}
         th{"thai"}
-        ti{"tigrinya"}
+        ti{"tigrinja"}
+        tiv{"tiv"}
         tk{"türkmén"}
         tl{"tagalog"}
+        tlh{"klingon"}
         tn{"szecsuáni"}
         to{"tonga"}
+        tpi{"tok pisin"}
         tr{"török"}
         ts{"conga"}
         tt{"tatár"}
-        tw{"tui"}
+        tvl{"tuvalu"}
+        tw{"twi"}
+        ty{"tahiti"}
         ug{"ujgur"}
         uk{"ukrán"}
         ur{"urdu"}
         uz{"üzbég"}
         vi{"vietnámi"}
         vo{"volapük"}
+        wa{"vallon"}
+        wen{"szorb nyelvek"}
         wo{"volof"}
+        xal{"kalmük"}
         xh{"hosza"}
-        yi{"zsidó"}
+        yi{"jiddis"}
         yo{"joruba"}
         za{"zsuang"}
         zh{"kínai"}
@@ -1425,38 +1637,85 @@ hu{
     }
     Scripts{
         Armn{"Örmény"}
+        Batk{"Batak"}
         Beng{"Bengáli"}
+        Blis{"Bliss jelképrendszer"}
         Bopo{"Bopomofo"}
         Brai{"Vakírás"}
+        Bugi{"Buginéz"}
         Cans{"Egyesített kanadai őslakos jelek"}
+        Cher{"Cseroki"}
+        Copt{"Kopt"}
         Cprt{"Ciprusi"}
         Cyrl{"Cirill"}
+        Deva{"Devanagári"}
+        Egyd{"Egyiptomi demotikus"}
+        Egyh{"Egyiptomi hieratikus"}
+        Egyp{"Egyiptomi hieroglifák"}
         Ethi{"Etióp"}
+        Geok{"Grúz kucsuri"}
         Geor{"Grúz"}
-        Goth{"Gótikus"}
+        Glag{"Glagolitikus"}
+        Goth{"Gót"}
         Grek{"Görög"}
+        Gujr{"Gudzsaráti"}
+        Guru{"Gurmuki"}
+        Hang{"Hangul"}
         Hani{"Han"}
         Hano{"Hanunoo"}
         Hans{"Egyszerűsített Han"}
         Hant{"Hagyományos Han"}
         Hebr{"Héber"}
+        Hira{"Hiragana"}
+        Hrkt{"Katakana vagy hiragana"}
+        Hung{"Ómagyar"}
+        Inds{"Indus"}
         Ital{"Régi olasz"}
+        Java{"Jávai"}
+        Jpan{"Japán"}
+        Kana{"Katakana"}
+        Khmr{"Khmer"}
         Knda{"Kannada"}
+        Lana{"Lanna"}
         Laoo{"Lao"}
+        Latf{"Fraktur latin"}
+        Latn{"Latin"}
         Limb{"Limbu"}
-        Mlym{"Malayalam"}
+        Lina{"Lineáris A"}
+        Linb{"Lineáris B"}
+        Lyci{"Líciai"}
+        Maya{"Maja hieroglifák"}
+        Mero{"Meroitikus"}
+        Mlym{"Malajálam"}
+        Mong{"Mongol"}
         Mymr{"Burmai"}
+        Nkoo{"N'ko"}
         Ogam{"Ogham"}
+        Orkh{"Orhon"}
         Orya{"Oriya"}
         Osma{"Oszmán"}
+        Phnx{"Főniciai"}
+        Runr{"Runikus"}
+        Sara{"Szarati"}
+        Sgnw{"Jelírás"}
+        Shaw{"Shaw ábécé"}
         Sinh{"Szingaléz"}
+        Sund{"Szundanéz"}
         Syrc{"Szíriai"}
+        Syrn{"Kelet-szíriai"}
         Tagb{"Tagbanwa"}
         Tale{"Tai Le"}
+        Taml{"Tamil"}
         Telu{"Telugu"}
+        Tglg{"Tagalog"}
         Thaa{"Thaana"}
+        Thai{"Thai"}
         Tibt{"Tibeti"}
         Ugar{"Ugari"}
+        Visp{"Látható beszéd"}
+        Xpeo{"Óperzsa"}
+        Yiii{"Ji"}
+        Zxxx{"Íratlan nyelvek kódja"}
         Zyyy{"Meghatározatlan"}
     }
     Types{
@@ -1472,10 +1731,21 @@ hu{
         collation{
             direct{"Közvetlen sorrend"}
             phonebook{"Telefonkönyv sorrend"}
+            pinyin{"Pinyin sorrend"}
+            stroke{"Vonássorrend"}
             traditional{"Hagyományos"}
         }
     }
-    Version{"1.91"}
+    Variants{
+        1901{"Hagyományos német helyesírás"}
+        1996{"1996-os német helyesírás"}
+        AREVELA{"Keleti örmény"}
+        AREVMDA{"Nyugati örmény"}
+        MONOTON{"Monoton"}
+        NEDIS{"Natisone dialektus"}
+        REVISED{"Átdolgozott helyesírás"}
+    }
+    Version{"1.92"}
     calendar{
         buddhist{
             eras{
@@ -1486,8 +1756,8 @@ hu{
         }
         gregorian{
             AmPmMarkers{
-                "DE",
-                "DU",
+                "de.",
+                "du.",
             }
             DateTimePatterns{
                 "H:mm:ss v",
@@ -1537,6 +1807,10 @@ hu{
                 abbreviated{
                     "i. e.",
                     "i. sz.",
+                }
+                wide{
+                    "időszámításunk előtt",
+                    "időszámításunk szerint",
                 }
             }
             fields{
@@ -1638,11 +1912,25 @@ hu{
                         "N3",
                         "N4",
                     }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
                     wide{
                         "I. negyedév",
                         "II. negyedév",
                         "III. negyedév",
                         "IV. negyedév",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
                     }
                 }
             }
@@ -1705,7 +1993,20 @@ hu{
         quotationEnd{"”"}
         quotationStart{"„"}
     }
+    measurementSystemNames{
+        US{"amerikai"}
+        metric{"metrikus"}
+    }
     zoneStrings{
+        "Africa:Cairo"{
+            ec{"Kairó"}
+        }
+        "Africa:Djibouti"{
+            ec{"Dzsibuti"}
+        }
+        "Africa:Tunis"{
+            ec{"Tunisz"}
+        }
         "America:Araguaina"{
             ec{"Araguaína"}
         }
@@ -1718,8 +2019,14 @@ hu{
         "America:Argentina:Tucuman"{
             ec{"Tucumán"}
         }
+        "America:Barbados"{
+            ec{"Barbadosz"}
+        }
         "America:Belem"{
             ec{"Belém"}
+        }
+        "America:Belize"{
+            ec{"Beliz"}
         }
         "America:Cancun"{
             ec{"Cancún"}
@@ -1733,11 +2040,23 @@ hu{
         "America:Danmarkshavn"{
             ec{"Danmarks Havn"}
         }
+        "America:Dominica"{
+            ec{"Dominika"}
+        }
         "America:Eirunepe"{
             ec{"Eirunepé"}
         }
+        "America:El_Salvador"{
+            ec{"Salvador"}
+        }
         "America:Godthab"{
             ec{"Godthåb"}
+        }
+        "America:Havana"{
+            ec{"Havanna"}
+        }
+        "America:Jamaica"{
+            ec{"Jamaika"}
         }
         "America:Maceio"{
             ec{"Maceió"}
@@ -1769,6 +2088,18 @@ hu{
         "America:St_Johns"{
             ec{"St. John's"}
         }
+        "America:St_Kitts"{
+            ec{"St. Kitts"}
+        }
+        "America:St_Lucia"{
+            ec{"St. Lucia"}
+        }
+        "America:St_Thomas"{
+            ec{"St. Thomas"}
+        }
+        "America:St_Vincent"{
+            ec{"St. Vincent"}
+        }
         "Antarctica:DumontDUrville"{
             ec{"Dumont d'Urville"}
         }
@@ -1790,11 +2121,23 @@ hu{
         "Asia:Aqtobe"{
             ec{"Aktöbe"}
         }
+        "Asia:Baghdad"{
+            ec{"Bagdad"}
+        }
+        "Asia:Bahrain"{
+            ec{"Bahrein"}
+        }
+        "Asia:Beirut"{
+            ec{"Bejrút"}
+        }
         "Asia:Choibalsan"{
             ec{"Csojbalszan"}
         }
         "Asia:Chongqing"{
             ec{"Csungking"}
+        }
+        "Asia:Damascus"{
+            ec{"Damaszkusz"}
         }
         "Asia:Irkutsk"{
             ec{"Irkutszk"}
@@ -1811,6 +2154,12 @@ hu{
         "Asia:Krasnoyarsk"{
             ec{"Krasznojarszk"}
         }
+        "Asia:Kuwait"{
+            ec{"Kuvait"}
+        }
+        "Asia:Macau"{
+            ec{"Makaó"}
+        }
         "Asia:Magadan"{
             ec{"Magadán"}
         }
@@ -1822,6 +2171,9 @@ hu{
         }
         "Asia:Omsk"{
             ec{"Omszk"}
+        }
+        "Asia:Qatar"{
+            ec{"Katar"}
         }
         "Asia:Qyzylorda"{
             ec{"Kizilorda"}
@@ -1835,8 +2187,20 @@ hu{
         "Asia:Shanghai"{
             ec{"Sanghaj"}
         }
+        "Asia:Singapore"{
+            ec{"Szingapúr"}
+        }
         "Asia:Tashkent"{
             ec{"Taskent"}
+        }
+        "Asia:Tehran"{
+            ec{"Teherán"}
+        }
+        "Asia:Tokyo"{
+            ec{"Tokio"}
+        }
+        "Asia:Ulaanbaatar"{
+            ec{"Ulánbátor"}
         }
         "Asia:Urumqi"{
             ec{"Ürümqi"}
@@ -1850,8 +2214,140 @@ hu{
         "Asia:Yekaterinburg"{
             ec{"Jekatyerinburg"}
         }
+        "Asia:Yerevan"{
+            ec{"Jereván"}
+        }
+        "Atlantic:Azores"{
+            ec{"Azori-szigetek"}
+        }
         "Atlantic:Canary"{
             ec{"Kanári-szigetek"}
+        }
+        "Atlantic:Cape_Verde"{
+            ec{"Zöld-Foki Szigetek"}
+        }
+        "Atlantic:South_Georgia"{
+            ec{"Dél-Georgia"}
+        }
+        "Australia:Eucla"{
+            ec{"Eucla"}
+        }
+        "Australia:Hobart"{
+            ec{"Hobart"}
+        }
+        "Australia:Lindeman"{
+            ec{"Lindeman"}
+        }
+        "Australia:Lord_Howe"{
+            ec{"Lord Howe"}
+        }
+        "Australia:Melbourne"{
+            ec{"Melbourne"}
+        }
+        "Australia:Perth"{
+            ec{"Perth"}
+        }
+        "Australia:Sydney"{
+            ec{"Sydney"}
+        }
+        "Etc:GMT"{
+            ec{"GMT"}
+        }
+        "Etc:GMT+1"{
+            ec{"GMT+1"}
+        }
+        "Etc:GMT+10"{
+            ec{"GMT+10"}
+        }
+        "Etc:GMT+11"{
+            ec{"GMT+11"}
+        }
+        "Etc:GMT+12"{
+            ec{"GMT+12"}
+        }
+        "Etc:GMT+2"{
+            ec{"GMT+2"}
+        }
+        "Etc:GMT+3"{
+            ec{"GMT+3"}
+        }
+        "Etc:GMT+4"{
+            ec{"GMT+4"}
+        }
+        "Etc:GMT+5"{
+            ec{"GMT+5"}
+        }
+        "Etc:GMT+6"{
+            ec{"GMT+6"}
+        }
+        "Etc:GMT+7"{
+            ec{"GMT+7"}
+        }
+        "Etc:GMT+8"{
+            ec{"GMT+8"}
+        }
+        "Etc:GMT+9"{
+            ec{"GMT+9"}
+        }
+        "Etc:GMT-1"{
+            ec{"GMT-1"}
+        }
+        "Etc:GMT-10"{
+            ec{"GMT-10"}
+        }
+        "Etc:GMT-11"{
+            ec{"GMT-11"}
+        }
+        "Etc:GMT-12"{
+            ec{"GMT-12"}
+        }
+        "Etc:GMT-13"{
+            ec{"GMT-13"}
+        }
+        "Etc:GMT-14"{
+            ec{"GMT-14"}
+        }
+        "Etc:GMT-2"{
+            ec{"GMT-2"}
+        }
+        "Etc:GMT-3"{
+            ec{"GMT-3"}
+        }
+        "Etc:GMT-4"{
+            ec{"GMT-4"}
+        }
+        "Etc:GMT-5"{
+            ec{"GMT-5"}
+        }
+        "Etc:GMT-6"{
+            ec{"GMT-6"}
+        }
+        "Etc:GMT-7"{
+            ec{"GMT-7"}
+        }
+        "Etc:GMT-8"{
+            ec{"GMT-8"}
+        }
+        "Etc:GMT-9"{
+            ec{"GMT-9"}
+        }
+        "Europe:Athens"{
+            ec{"Athén"}
+        }
+        "Europe:Brussels"{
+            ec{"Brüsszel"}
+        }
+        "Europe:Bucharest"{
+            ec{"Bukarest"}
+        }
+        "Europe:Copenhagen"{
+            ec{"Koppenhága"}
+        }
+        "Europe:Gibraltar"{
+            ec{"Gibraltár"}
+        }
+        "Europe:Istanbul"{
+            ec{"Isztanbul"}
         }
         "Europe:Kaliningrad"{
             ec{"Kalinyingrád"}
@@ -1862,11 +2358,26 @@ hu{
         "Europe:Lisbon"{
             ec{"Lisszabon"}
         }
+        "Europe:Luxembourg"{
+            ec{"Luxemburg"}
+        }
+        "Europe:Malta"{
+            ec{"Málta"}
+        }
+        "Europe:Minsk"{
+            ec{"Minszk"}
+        }
         "Europe:Moscow"{
             ec{"Moszkva"}
         }
         "Europe:Paris"{
             ec{"Paris"}
+        }
+        "Europe:Podgorica"{
+            ec{"Montenegró"}
+        }
+        "Europe:Rome"{
+            ec{"Róma"}
         }
         "Europe:Samara"{
             ec{"Szamara"}
@@ -1874,17 +2385,38 @@ hu{
         "Europe:Simferopol"{
             ec{"Szimferopol"}
         }
+        "Europe:Sofia"{
+            ec{"Szófia"}
+        }
         "Europe:Uzhgorod"{
             ec{"Ungvár"}
         }
+        "Europe:Vienna"{
+            ec{"Bécs"}
+        }
+        "Europe:Vilnius"{
+            ec{"Vilniusz"}
+        }
+        "Europe:Warsaw"{
+            ec{"Varsó"}
+        }
         "Europe:Zaporozhye"{
             ec{"Zaporozsje"}
+        }
+        "Europe:Zurich"{
+            ec{"Zürich"}
+        }
+        "Indian:Maldives"{
+            ec{"Maldív-szigetek"}
         }
         "Pacific:Chatham"{
             ec{"Chatham-szigetek"}
         }
         "Pacific:Easter"{
             ec{"Húsvét-szigetek"}
+        }
+        "Pacific:Fiji"{
+            ec{"Fidzsi"}
         }
         "Pacific:Galapagos"{
             ec{"Galapagos-szigetek"}
@@ -1910,8 +2442,17 @@ hu{
         "Pacific:Midway"{
             ec{"Midway-szigetek"}
         }
+        "Pacific:Pitcairn"{
+            ec{"Pitcairn-szigetek"}
+        }
         "Pacific:Ponape"{
             ec{"Ponape-szigetek"}
+        }
+        "Pacific:Tahiti"{
+            ec{"Tahiti"}
+        }
+        "Pacific:Tarawa"{
+            ec{"Tarawa"}
         }
         "Pacific:Truk"{
             ec{"Truk-szigetek"}

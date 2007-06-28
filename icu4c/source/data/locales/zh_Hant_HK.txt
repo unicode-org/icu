@@ -7,87 +7,6 @@
 // *
 // ***************************************************************************
 zh_Hant_HK{
-    Countries{
-        034{"034"}
-        MO{"澳門特別行政區"}
-    }
-    Currencies{
-        CSD{
-            "CSD",
-            "CSD",
-        }
-        EQE{
-            "EQE",
-            "EQE",
-        }
-        ESA{
-            "ESA",
-            "ESA",
-        }
-        ESB{
-            "ESB",
-            "ESB",
-        }
-        INR{
-            "=0#Rs.|1#Re.|1<Rs.",
-            "INR",
-        }
-        LSM{
-            "LSM",
-            "LSM",
-        }
-        LUC{
-            "LUC",
-            "LUC",
-        }
-        LUL{
-            "LUL",
-            "LUL",
-        }
-        MXV{
-            "MXV",
-            "墨西哥法律反轉(UDI)",
-        }
-        RHD{
-            "RHD",
-            "RHD",
-        }
-        SRD{
-            "SRD",
-            "SRD",
-        }
-        XPD{
-            "XPD",
-            "XPD",
-        }
-        XPT{
-            "XPT",
-            "XPT",
-        }
-        ZRN{
-            "ZRN",
-            "薩伊扎新伊爾",
-        }
-    }
-    Languages{
-        ban{"巴厘文"}
-        ceb{"宿務族文"}
-        crp{"克里奧爾文和皮欽文"}
-        elx{"埃蘭文"}
-        enm{"英文，中世紀 (1100-1500)"}
-        gmh{"德文, 中古全盛時期 (ca.1050-1500)"}
-        goh{"德文,上古全盛時期 (ca.750-1050)"}
-        got{"哥特文"}
-        grc{"古希臘文 (至 1453)"}
-        ia{"拉丁國際文 Interlingua"}
-        ie{"拉丁國際文 Interlingue"}
-        kho{"和闐[與闐]文"}
-        lez{"立陶宛文 Lezghian"}
-        mwl{"mwl"}
-        root{"root"}
-        rup{"rup"}
-        xh{"科薩語"}
-    }
     NumberElements{
         ".",
         ",",
@@ -109,11 +28,9 @@ zh_Hant_HK{
         "#E0",
     }
     Scripts{
-        Geok{"Geok"}
-        Hano{"哈努努文"}
         Hans{"簡體中文"}
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -142,15 +59,6 @@ zh_Hant_HK{
                         "週五",
                         "週六",
                     }
-                    wide{
-                        "星期日",
-                        "星期一",
-                        "星期二",
-                        "星期三",
-                        "星期四",
-                        "星期五",
-                        "星期六",
-                    }
                 }
                 stand-alone{
                     abbreviated{
@@ -162,27 +70,11 @@ zh_Hant_HK{
                         "週五",
                         "週六",
                     }
-                    narrow{
-                        "日",
-                        "一",
-                        "二",
-                        "三",
-                        "四",
-                        "五",
-                        "六",
-                    }
                 }
             }
             fields{
                 day{
                     dn{"日"}
-                    relative{
-                        "-1"{"昨天"}
-                        "-2"{"前天"}
-                        "0"{"今天"}
-                        "1"{"明天"}
-                        "2"{"後天"}
-                    }
                 }
                 dayperiod{
                     dn{"上午/下午"}
@@ -190,14 +82,8 @@ zh_Hant_HK{
                 era{
                     dn{"年代"}
                 }
-                hour{
-                    dn{"Hour"}
-                }
                 minute{
                     dn{"分鐘"}
-                }
-                month{
-                    dn{"Month"}
                 }
                 second{
                     dn{"秒"}
@@ -208,87 +94,8 @@ zh_Hant_HK{
                 weekday{
                     dn{"週天"}
                 }
-                year{
-                    dn{"Year"}
-                }
                 zone{
                     dn{"區域"}
-                }
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "1月",
-                        "2月",
-                        "3月",
-                        "4月",
-                        "5月",
-                        "6月",
-                        "7月",
-                        "8月",
-                        "9月",
-                        "10月",
-                        "11月",
-                        "12月",
-                    }
-                    wide{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "一月",
-                        "二月",
-                        "3",
-                        "四月",
-                        "五月",
-                        "六月",
-                        "7",
-                        "8",
-                        "九月",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                    narrow{
-                        "1月",
-                        "2月",
-                        "3月",
-                        "4月",
-                        "5月",
-                        "6月",
-                        "7月",
-                        "8月",
-                        "9月",
-                        "10月",
-                        "11月",
-                        "12月",
-                    }
-                    wide{
-                        "一月",
-                        "二月",
-                        "3",
-                        "四月",
-                        "五月",
-                        "六月",
-                        "7",
-                        "8",
-                        "九月",
-                        "10",
-                        "11",
-                        "12",
-                    }
                 }
             }
         }
@@ -473,8 +280,8 @@ zh_Hant_HK{
             ss{"BTT"}
         }
         "meta:Borneo"{
-            ld{"波羅洲夏令時間"}
-            ls{"波羅洲時間"}
+            ld{"婆羅洲夏令時間"}
+            ls{"婆羅洲時間"}
             sd{"BORST"}
             ss{"BORT"}
         }
@@ -578,7 +385,7 @@ zh_Hant_HK{
             ss{"CGT"}
         }
         "meta:Greenland_Eastern"{
-            ld{"格陵蘭東部時間"}
+            ld{"格陵蘭東部夏令時間"}
             ls{"格陵蘭東部時間"}
             sd{"EGST"}
             ss{"EGT"}

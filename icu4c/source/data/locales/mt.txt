@@ -32,6 +32,7 @@ mt{
         054{"Melanesja"}
         061{"Polinesja"}
         142{"Asja"}
+        143{"Asja Ċentrali"}
         145{"Asja tal-Punent"}
         150{"Ewropa"}
         151{"Ewropa tal-Lvant"}
@@ -814,7 +815,7 @@ mt{
     Variants{
         REVISED{"Ortografija Irriveda"}
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -870,10 +871,19 @@ mt{
                     "QK",
                     "WK",
                 }
+                wide{
+                    "Qabel Kristu",
+                    "Wara Kristu",
+                }
             }
             fields{
                 day{
                     dn{"Jum"}
+                    relative{
+                        "-1"{"il-bierah"}
+                        "0"{"Illum"}
+                        "1"{"Għada"}
+                    }
                 }
                 era{
                     dn{"Epoka"}
@@ -895,6 +905,9 @@ mt{
                 }
                 year{
                     dn{"Sena"}
+                }
+                zone{
+                    dn{"Żona"}
                 }
             }
             monthNames{
