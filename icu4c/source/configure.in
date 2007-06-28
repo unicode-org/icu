@@ -698,36 +698,6 @@ fi
 AC_SUBST(U_HAVE_TIMEZONE)
 AC_SUBST(U_TIMEZONE)
 
-U_HAVE_DAYLIGHT=0
-AC_CACHE_CHECK(for daylight,ac_cv_var_daylight,
-[AC_TRY_LINK(
-changequote(<<, >>)dnl
-<<#ifndef __USE_POSIX
-#define __USE_POSIX
-#endif
-#ifndef __USE_XOPEN
-#define __USE_XOPEN
-#endif
-#include <stdlib.h>
-#include <time.h>
->>,
-changequote([, ])dnl
-[daylight = 1;], ac_cv_var_daylight=yes, ac_cv_var_daylight=no)])
-if test $ac_cv_var_daylight = yes; then
-  U_DAYLIGHT=daylight
-  U_HAVE_DAYLIGHT=1
-else
-  AC_CACHE_CHECK(for __daylight,ac_cv_var___daylight,
-  [AC_TRY_LINK([#include <time.h>],
-  [__daylight = 1;], ac_cv_var___daylight=yes, ac_cv_var___daylight=no)])
-  if test $ac_cv_var___daylight = yes; then
-    U_DAYLIGHT=__daylight
-    U_HAVE_DAYLIGHT=1
-  fi
-fi
-AC_SUBST(U_HAVE_DAYLIGHT)
-AC_SUBST(U_DAYLIGHT)
-
 dnl Checks for typedefs
 AC_CHECK_TYPE(int8_t,signed char)
 AC_CHECK_TYPE(uint8_t,unsigned char)

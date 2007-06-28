@@ -52,7 +52,7 @@ THREADSCPPFLAGS = -D_OPEN_THREADS
 
 # For a dynamically called DLL module to share access to the POSIX external
 # variables, with its caller, the DLL module must define these _SHR_* macros.
-SHAREDLIBCPPFLAGS	= -D_SHR_TZNAME -D_SHR_TIMEZONE -D_SHR_DAYLIGHT
+SHAREDLIBCPPFLAGS	= -D_SHR_TZNAME -D_SHR_TIMEZONE
 
 # -Wc,expo is used to export all functions
 SHAREDLIBCFLAGS	= -Wc,expo
