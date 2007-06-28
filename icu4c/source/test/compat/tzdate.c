@@ -24,6 +24,8 @@
 #include "unicode/udat.h"
 #include "unicode/ucal.h"
 
+#include "putilimp.h"
+
 #define SIZE 80
 #define OFFSET_MONTH 1
 
@@ -53,13 +55,13 @@ int main(int argc, char** argv) {
     minute = atoi(argv[5]);
     useCurrentTime = atoi(argv[6]);
     
-    //format year for system time
+    /* format year for system time */
     sysyear = year - 1900;
     
     systemtime = getSystemCurrentTime(systime, sysyear, month, day, hour, minute, useCurrentTime);
     getICUCurrentTime(icutime, systemtime * U_MILLIS_PER_SECOND);
 
-    //print out the times if failed
+    /* print out the times if failed */
     if (strcmp(systime, icutime) != 0) {
         printf("Failed\n");
         printTime(systime, icutime);
@@ -75,6 +77,7 @@ void getICUCurrentTime(char* icutime, double timeToCheck) {
     UDateFormatStyle style = UDAT_RELATIVE;
     UErrorCode status = U_ZERO_ERROR;
     int32_t len = 0;
+    int i;
 
     fmt = udat_open(style, style, 0, tz, -1,NULL,0, &status);
 
@@ -93,7 +96,6 @@ void getICUCurrentTime(char* icutime, double timeToCheck) {
     if (U_FAILURE(status)) 
         goto finish;
 
-    int i;
     /* +1 to NULL terminate */
     for(i = 0; i < len+1; i++) {
         icutime[i] = (char)s[i];
@@ -133,5 +135,6 @@ int64_t getSystemCurrentTime(char* systime, int year, int month, int day, int ho
 void printTime(char* systime, char* icutime) {
     printf("System Time:  %s\n", systime);
     printf("ICU Time:     %s\n", icutime);
+    printf("STD=%s DST=%s OFFSET=%d\n", uprv_tzname(0), uprv_tzname(1), uprv_timezone());
 }
 
