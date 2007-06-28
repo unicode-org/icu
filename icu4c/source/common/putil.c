@@ -638,7 +638,9 @@ This list tries to disambiguate a set of abbreviated timezone IDs and offsets
 and maps it to an Olson ID.
 Before adding anything to this list, take a look at
 icu/source/tools/tzcode/tz.alias
-Sometimes no daylight savings is important to define due to aliases.
+Sometimes no daylight savings (0) is important to define due to aliases.
+This list can be tested with icu/source/test/compat/tzone.pl
+More values could be added to daylightType to increase precision.
 */
 static const struct OffsetZoneMapping OFFSET_ZONE_MAPPINGS[] = {
     {-45900, 2, "CHAST", "CHADT", "Pacific/Chatham"},
@@ -647,7 +649,7 @@ static const struct OffsetZoneMapping OFFSET_ZONE_MAPPINGS[] = {
     {-43200, 1, "ANAT", "ANAST", "Asia/Anadyr"},
     {-39600, 1, "MAGT", "MAGST", "Asia/Magadan"},
     {-37800, 2, "LHST", "LHST", "Australia/Lord_Howe"},
-    {-36000, 2, "EST", "EST", "Australia/Melbourne"},
+    {-36000, 2, "EST", "EST", "Australia/Sydney"},
     {-36000, 1, "SAKT", "SAKST", "Asia/Sakhalin"},
     {-36000, 1, "VLAT", "VLAST", "Asia/Vladivostok"},
     {-34200, 2, "CST", "CST", "Australia/South"},
@@ -669,7 +671,7 @@ static const struct OffsetZoneMapping OFFSET_ZONE_MAPPINGS[] = {
     {-10800, 1, "MSK", "MSD", "Europe/Moscow"},
     {-10800, 1, "VOLT", "VOLST", "Europe/Volgograd"},
     {-7200, 0, "EET", "CEST", "Africa/Tripoli"},
-    /*{-7200, 1, "EET", "EEST", "Egypt"},*/ /* Conflicts with Europe/Tiraspol */
+    {-7200, 1, "EET", "EEST", "Europe/Athens"}, /* Conflicts with Africa/Cairo */
     {-7200, 1, "IST", "IDT", "Asia/Jerusalem"},
     {-3600, 0, "CET", "WEST", "Africa/Algiers"},
     {-3600, 2, "WAT", "WAST", "Africa/Windhoek"},
@@ -684,12 +686,12 @@ static const struct OffsetZoneMapping OFFSET_ZONE_MAPPINGS[] = {
     {10800, 1, "WGT", "WGST", "America/Godthab"},
     {10800, 2, "BRT", "BRST", "Brazil/East"},
     {12600, 1, "NST", "NDT", "America/St_Johns"},
-    {14400, 1, "AST", "ADT", "America/Halifax"},
+    {14400, 1, "AST", "ADT", "Canada/Atlantic"},
     {14400, 2, "AMT", "AMST", "America/Cuiaba"},
     {14400, 2, "CLT", "CLST", "Chile/Continental"},
     {14400, 2, "FKT", "FKST", "Atlantic/Stanley"},
     {14400, 2, "PYT", "PYST", "America/Asuncion"},
-    {18000, 1, "CST", "CDT", "Cuba"},
+    {18000, 1, "CST", "CDT", "America/Havana"},
     {18000, 1, "EST", "EDT", "US/Eastern"}, /* Conflicts with America/Grand_Turk */
     {21600, 2, "EAST", "EASST", "Chile/EasterIsland"},
     {21600, 0, "CST", "MDT", "Canada/Saskatchewan"},
@@ -697,15 +699,19 @@ static const struct OffsetZoneMapping OFFSET_ZONE_MAPPINGS[] = {
     {21600, 1, "CST", "CDT", "US/Central"}, /* Conflicts with Mexico/General */
     {25200, 1, "MST", "MDT", "US/Mountain"}, /* Conflicts with Mexico/BajaSur */
     {28800, 0, "PST", "PST", "Pacific/Pitcairn"},
-    {28800, 1, "PST", "PDT", "US/Pacific"}, /* Conflicts with America/Ensenada */
-    {32400, 1, "AKST", "AKDT", "America/Juneau"},
-    {36000, 1, "HAST", "HADT", "America/Adak"}
+    {28800, 1, "PST", "PDT", "US/Pacific"}, /* Conflicts with Mexico/BajaNorte */
+    {32400, 1, "AKST", "AKDT", "US/Alaska"},
+    {36000, 1, "HAST", "HADT", "US/Aleutian"}
 };
+
+/*#define DEBUG_TZNAME*/
 
 static const char* remapShortTimeZone(const char *stdID, const char *dstID, int32_t daylightType, int32_t offset)
 {
     int32_t idx;
-    /*fprintf(stderr, "TZ=%s std=%s dst=%s daylight=%d offset=%d\n", getenv("TZ"), stdID, dstID, daylightType, offset);*/
+#ifdef DEBUG_TZNAME
+    fprintf(stderr, "TZ=%s std=%s dst=%s daylight=%d offset=%d\n", getenv("TZ"), stdID, dstID, daylightType, offset);
+#endif
     for (idx = 0; idx < (int32_t)sizeof(OFFSET_ZONE_MAPPINGS)/sizeof(OFFSET_ZONE_MAPPINGS[0]); idx++)
     {
         if (offset == OFFSET_ZONE_MAPPINGS[idx].offsetSeconds
@@ -741,7 +747,8 @@ uprv_tzname(int n)
     }
 #endif*/
 
-#if 1
+/* This code can be temporarily disabled to test tzname resolution later on. */
+#ifndef DEBUG_TZNAME
     tzid = getenv("TZ");
     if (tzid != NULL && isValidOlsonID(tzid))
     {
