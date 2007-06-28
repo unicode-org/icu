@@ -233,7 +233,7 @@ static void buildPseudoTables(void)
     - @ == LRM
     - & == RLM
     - A-F == Arabic Letters 0631-0636
-    - G-Z == Hebrew letters 05d7-05e6
+    - G-V == Hebrew letters 05d7-05e6
     - W-Z == Unassigned RTL 08d0-08d3
     - 0-5 == western digits 0030-0035
     - 6-9 == Arabic-Indic digits 0666-0669
@@ -1916,7 +1916,6 @@ doArabicShapingTestForBug5421() {
                          U_SHAPE_LETTERS_SHAPE|U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
                          &errorCode);
 
-    
     if(U_FAILURE(errorCode) || length!=LENGTHOF(untouched_presentation) || memcmp(dest, untouched_presentation, length*U_SIZEOF_UCHAR)!=0) {
         log_err("failure in u_shapeArabic(untouched_presentation)\n");
     }
