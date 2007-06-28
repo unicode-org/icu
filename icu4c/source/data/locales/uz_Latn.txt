@@ -15,7 +15,7 @@ uz_Latn{
         BR{"Braziliya"}
         CN{"Xitoy"}
         DE{"Olmoniya"}
-        FR{"Frantsiya"}
+        FR{"Fransiya"}
         GB{"Birlashgan Qirollik"}
         IN{"Hindiston"}
         IT{"Italiya"}
@@ -64,18 +64,18 @@ uz_Latn{
     }
     ExemplarCharacters{"[a-v x-z ʿ]"}
     Languages{
-        ar{"Arabcha"}
-        de{"Olmoncha"}
-        en{"Inglizcha"}
-        es{"Ispancha"}
-        fr{"Frantsuzcha"}
-        hi{"Hindcha"}
-        it{"Italyancha"}
-        ja{"Yaponcha"}
-        pt{"Portugalcha"}
-        ru{"Ruscha"}
-        uz{"oʿzbek"}
-        zh{"Xitoycha"}
+        ar{"arabcha"}
+        de{"olmoncha"}
+        en{"inglizcha"}
+        es{"ispancha"}
+        fr{"fransuzcha"}
+        hi{"hindcha"}
+        it{"italyancha"}
+        ja{"yaponcha"}
+        pt{"portugalcha"}
+        ru{"ruscha"}
+        uz{"o'zbekcha"}
+        zh{"xitoycha"}
     }
     LocaleScript{
         "Latn",
@@ -84,7 +84,7 @@ uz_Latn{
         Cyrl{"Kiril"}
         Latn{"Lotin"}
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         gregorian{
             dayNames{
@@ -116,7 +116,7 @@ uz_Latn{
                         "C",
                         "P",
                         "J",
-                        "7",
+                        "S",
                     }
                 }
             }
@@ -165,6 +165,20 @@ uz_Latn{
                         "O",
                         "N",
                         "D",
+                    }
+                    wide{
+                        "Yanvar",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
                     }
                 }
             }

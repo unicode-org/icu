@@ -1791,7 +1791,7 @@ ar{
     Variants{
         NEDIS{"لهجة ناتيسون"}
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -1823,7 +1823,7 @@ ar{
                 "h:mm a",
                 "EEEE, d MMMM, yyyy",
                 "d MMMM, yyyy",
-                "dd‏‏/MM‏/yyyy",
+                "dd‏/MM‏/yyyy",
                 "d‏/M‏/yyyy",
                 "{1} {0}",
             }

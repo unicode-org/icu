@@ -107,8 +107,34 @@ be{
         Cyrl{"кірылічны"}
         Latn{"лацінскі"}
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
+        buddhist{
+            DateTimePatterns{
+                "HH.mm.ss v",
+                "HH.mm.ss z",
+                "HH.mm.ss",
+                "HH.mm",
+                "EEEE, MMMM d, yyyy G",
+                "MMMM d, yyyy G",
+                "MMM d, yyyy G",
+                "M/d/yyyy",
+                "{1} {0}",
+            }
+        }
+        chinese{
+            DateTimePatterns{
+                "HH.mm.ss v",
+                "HH.mm.ss z",
+                "HH.mm.ss",
+                "HH.mm",
+                "EEEE y'x'G-Ml-d",
+                "y'x'G-Ml-d",
+                "y'x'G-Ml-d",
+                "y'x'G-Ml-d",
+                "{1} {0}",
+            }
+        }
         gregorian{
             DateTimePatterns{
                 "HH.mm.ss v",
@@ -163,13 +189,6 @@ be{
             fields{
                 day{
                     dn{"дзень"}
-                    relative{
-                        "-1"{"учора"}
-                        "-2"{"пазаўчора"}
-                        "0"{"сёння"}
-                        "1"{"заўтра"}
-                        "2"{"паслязаўтра"}
-                    }
                 }
                 era{
                     dn{"эра"}
@@ -241,22 +260,6 @@ be{
                         "к",
                         "л",
                         "с",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                    wide{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
                     }
                 }
             }

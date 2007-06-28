@@ -432,7 +432,7 @@ fi{
         }
         BOV{
             "BOV",
-            "Bolivian MVDOL",
+            "Bolivian mvdol",
         }
         BRB{
             "BRB",
@@ -532,7 +532,7 @@ fi{
         }
         CSD{
             "CSD",
-            "Serbian dinaari",
+            "Serbian vanha dinaari",
         }
         CSK{
             "CSK",
@@ -1046,6 +1046,10 @@ fi{
             "RON",
             "Romanian uusi leu",
         }
+        RSD{
+            "RSD",
+            "Serbian dinaari",
+        }
         RUB{
             "RUB",
             "Venäjän rupla",
@@ -1073,6 +1077,10 @@ fi{
         SDD{
             "SDD",
             "Sudanin dinaari",
+        }
+        SDG{
+            "SDG",
+            "Sudanin punta",
         }
         SDP{
             "SDP",
@@ -1209,6 +1217,10 @@ fi{
         USS{
             "USS",
             "Yhdysvaltain dollari (sama päivä)",
+        }
+        UYI{
+            "UYI",
+            "Uruguayn peso en unidades indexadas",
         }
         UYP{
             "UYP",
@@ -1592,6 +1604,7 @@ fi{
         kaw{"kavi"}
         kbd{"kabardi"}
         kcg{"tyap"}
+        kfo{"norsunluurannikonkoro"}
         kg{"kongo"}
         kha{"khasi"}
         khi{"muut khoisan-kielet"}
@@ -1632,8 +1645,8 @@ fi{
         lol{"mongo"}
         loz{"lozi"}
         lt{"liettua"}
-        lu{"Katangan luba"}
-        lua{"Luluan luba"}
+        lu{"katanganluba"}
+        lua{"luluanluba"}
         lui{"luiseño"}
         lun{"lunda"}
         luo{"luo"}
@@ -1733,6 +1746,7 @@ fi{
         ps{"paštu"}
         pt{"portugali"}
         pt_BR{"brasilianportugali"}
+        pt_PT{"portugalinportugali"}
         qu{"ketšua"}
         raj{"radžastani"}
         rap{"rapanui"}
@@ -1764,6 +1778,7 @@ fi{
         sg{"sango"}
         sga{"muinaisiiri"}
         sgn{"viittomakielet"}
+        sh{"serbokroaatti"}
         shn{"shan"}
         si{"sinhali"}
         sid{"sidamo"}
@@ -1815,8 +1830,8 @@ fi{
         tli{"tlingit"}
         tmh{"tamašek"}
         tn{"tswana"}
-        to{"Tongan tonga"}
-        tog{"Malawin tonga"}
+        to{"tongantonga"}
+        tog{"malawintonga"}
         tpi{"tok-pisin"}
         tr{"turkki"}
         ts{"tsonga"}
@@ -1887,7 +1902,7 @@ fi{
     }
     NumberPatterns{
         "#,##0.###",
-        "#,##0.00 ¤",
+        "#,##0.00 ¤",
         "#,##0 %",
         "#E0",
     }
@@ -1900,7 +1915,7 @@ fi{
         Blis{"Bliss-symbolit"}
         Bopo{"bopomofo"}
         Brah{"brahmi"}
-        Brai{"pistekirjoitus (Braille)"}
+        Brai{"Braille-pistekirjoitus"}
         Bugi{"bugilainen"}
         Buhd{"buhidilainen"}
         Cans{"Kanadan alkuperäiskansojen yhtenäistetty tavukirjoitus"}
@@ -1933,7 +1948,7 @@ fi{
         Hebr{"heprea"}
         Hira{"hiragana"}
         Hmng{"pahawh hmong"}
-        Hrkt{"hiragana+katakana"}
+        Hrkt{"hiragana tai katakana"}
         Hung{"muinaisunkarilainen"}
         Inds{"induslainen"}
         Ital{"muinaisitalialainen"}
@@ -2020,9 +2035,9 @@ fi{
             japanese{"japanilainen kalenteri"}
         }
         collation{
-            big5han{"perinteinen kiinalainen Big5"}
+            big5han{"perinteinen kiinalainen järjestys Big5"}
             direct{"suora järjestys"}
-            gb2312han{"yksinkertaistettu kiinalainen GB2312"}
+            gb2312han{"yksinkertaistettu kiinalainen järjestys GB2312"}
             phonebook{"puhelinluettelojärjestys"}
             pinyin{"pinyin-järjestys"}
             stroke{"piirtojärjestys"}
@@ -2037,6 +2052,8 @@ fi{
         AREVELA{"itäarmenialainen"}
         AREVMDA{"länsiarmenialainen"}
         BOONT{"englannin boontling-murre"}
+        FONIPA{"kansainvälinen foneettinen aakkosto IPA"}
+        FONUPA{"uralilainen foneettinen aakkosto UPA"}
         MONOTON{"monotoninen kreikka"}
         NEDIS{"sloveenin natisone-murre"}
         POLYTON{"polytoninen kreikka"}
@@ -2048,7 +2065,7 @@ fi{
         SCOUSE{"englannin scouse-murre"}
         VALENCIA{"katalaanin valencia-murre"}
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2057,14 +2074,27 @@ fi{
             }
             DateTimePatterns{
                 "H.mm.ss v",
-                "HH:mm:ss z",
+                "H.mm.ss z",
                 "H.mm.ss",
                 "H.mm",
-                "EEEE'na 'd. MMMM'ta 'yyyy",
+                "EEEE d. MMMM'ta' yyyy",
                 "d. MMMM'ta 'yyyy",
                 "d.M.yyyy",
                 "d.M.yyyy",
                 "{1} {0}",
+            }
+            availableFormats{
+                HHmm{"HH.mm"}
+                HHmmss{"HH.mm.ss"}
+                MMMMd{"d. MMMM'ta'"}
+                Md{"d.M."}
+                mmss{"mm.ss"}
+                yyMM{"MM/yy"}
+                yyMMM{"MMM yy"}
+                yyQ{"Q/yy"}
+                yyyyM{"M/yyyy"}
+                yyyyMEEEd{"EEE d.M.yyyy"}
+                yyyyMMMM{"MMMM' 'yyyy"}
             }
             dayNames{
                 format{
@@ -2205,13 +2235,27 @@ fi{
                         "1. nelj.",
                         "2. nelj.",
                         "3. nelj.",
-                        "4.nelj.",
+                        "4. nelj.",
+                    }
+                    narrow{
+                        "I",
+                        "2",
+                        "3",
+                        "4",
                     }
                     wide{
                         "1. neljännes",
                         "2. neljännes",
                         "3. neljännes",
                         "4. neljännes",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "I",
+                        "2",
+                        "3",
+                        "4",
                     }
                 }
             }
@@ -2287,8 +2331,20 @@ fi{
         metric{"metrinen"}
     }
     zoneStrings{
+        "Africa:Algiers"{
+            ec{"Alger"}
+        }
+        "Africa:Cairo"{
+            ec{"Kairo"}
+        }
         "Africa:Casablanca"{
             ec{"Casablanca"}
+        }
+        "Africa:Ceuta"{
+            ec{"Ceuta"}
+        }
+        "Africa:Kinshasa"{
+            ec{"Kinshasa"}
         }
         "America:Anchorage"{
             ec{"Anchorage"}
@@ -2317,8 +2373,17 @@ fi{
         "America:Edmonton"{
             ec{"Edmonton"}
         }
+        "America:El_Salvador"{
+            ec{"San Salvador"}
+        }
+        "America:Godthab"{
+            ec{"Nuuk"}
+        }
         "America:Halifax"{
             ec{"Halifax"}
+        }
+        "America:Havana"{
+            ec{"Havanna"}
         }
         "America:Hermosillo"{
             ec{"Hermosillo"}
@@ -2328,9 +2393,6 @@ fi{
         }
         "America:Los_Angeles"{
             ec{"Los Angeles"}
-        }
-        "America:Mexico_City"{
-            ec{"Mexico City"}
         }
         "America:New_York"{
             ec{"New York"}
@@ -2371,6 +2433,15 @@ fi{
         "Antarctica:South_Pole"{
             ec{"Etelänapa"}
         }
+        "Asia:Aqtobe"{
+            ec{"Aqtöbe"}
+        }
+        "Asia:Damascus"{
+            ec{"Damaskos"}
+        }
+        "Asia:Dushanbe"{
+            ec{"Dušanbe"}
+        }
         "Asia:Jerusalem"{
             ec{"Jerusalem"}
         }
@@ -2380,23 +2451,32 @@ fi{
         "Asia:Krasnoyarsk"{
             ec{"Krasnojarsk"}
         }
+        "Asia:Nicosia"{
+            ec{"Nikosia"}
+        }
         "Asia:Sakhalin"{
             ec{"Sahalin"}
         }
         "Asia:Tashkent"{
             ec{"Taškent"}
         }
+        "Asia:Tehran"{
+            ec{"Teheran"}
+        }
         "Asia:Tokyo"{
             ec{"Tokio"}
         }
         "Asia:Ulaanbaatar"{
-            ec{"Ulan Bator"}
+            ec{"Ulaanbaatar"}
         }
         "Asia:Yakutsk"{
             ec{"Jakutsk"}
         }
         "Asia:Yekaterinburg"{
             ec{"Jekaterinburg"}
+        }
+        "Asia:Yerevan"{
+            ec{"Jerevan"}
         }
         "Atlantic:Azores"{
             ec{"Azorit"}
@@ -2422,8 +2502,23 @@ fi{
         "Australia:Sydney"{
             ec{"Sydney"}
         }
+        "Europe:Athens"{
+            ec{"Ateena"}
+        }
+        "Europe:Belgrade"{
+            ec{"Belgrad"}
+        }
+        "Europe:Berlin"{
+            ec{"Berliini"}
+        }
+        "Europe:Brussels"{
+            ec{"Bryssel"}
+        }
         "Europe:Bucharest"{
             ec{"Bukarest"}
+        }
+        "Europe:Copenhagen"{
+            ec{"Kööpenhamina"}
         }
         "Europe:Kiev"{
             ec{"Kiova"}
@@ -2434,14 +2529,47 @@ fi{
         "Europe:London"{
             ec{"Lontoo"}
         }
+        "Europe:Mariehamn"{
+            ec{"Maarianhamina"}
+        }
         "Europe:Moscow"{
             ec{"Moskova"}
         }
         "Europe:Paris"{
             ec{"Pariisi"}
         }
+        "Europe:Riga"{
+            ec{"Riika"}
+        }
+        "Europe:Rome"{
+            ec{"Rooma"}
+        }
+        "Europe:Stockholm"{
+            ec{"Tukholma"}
+        }
+        "Europe:Tallinn"{
+            ec{"Tallinna"}
+        }
+        "Europe:Tirane"{
+            ec{"Tirana"}
+        }
         "Europe:Uzhgorod"{
             ec{"Užgorod"}
+        }
+        "Europe:Vienna"{
+            ec{"Wien"}
+        }
+        "Europe:Vilnius"{
+            ec{"Vilna"}
+        }
+        "Europe:Warsaw"{
+            ec{"Varsova"}
+        }
+        "Europe:Zaporozhye"{
+            ec{"Zaporižžja"}
+        }
+        "Europe:Zurich"{
+            ec{"Zürich"}
         }
         "Pacific:Easter"{
             ec{"Pääsiäissaari"}
@@ -2504,7 +2632,7 @@ fi{
             ss{"EET"}
         }
         "meta:GMT"{
-            ls{"Greenwichin keskiaika"}
+            ls{"Greenwichin normaaliaika"}
             ss{"GMT"}
         }
         "meta:Hawaii"{
@@ -2530,6 +2658,9 @@ fi{
             ls{"Newfoundlandin normaaliaika"}
             ss{"NST"}
         }
-        regionFormat{"{0}'-aikaa'"}
+        fallbackFormat{"{1} ({0})"}
+        gmtFormat{"UTC{0}"}
+        hourFormat{"+HH.mm;-HH.mm"}
+        regionFormat{"{0}"}
     }
 }

@@ -1990,7 +1990,7 @@ ja{
         POSIX{"コンピュータ"}
         REVISED{"改訂版"}
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         buddhist{
             DateTimePatterns{

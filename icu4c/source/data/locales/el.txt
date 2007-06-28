@@ -59,7 +59,7 @@ el{
         AT{"Αυστρία"}
         AU{"Αυστραλία"}
         AW{"Αρούμπα"}
-        AX{"Νήσοι Aland"}
+        AX{"Νήσοι Άλαντ"}
         AZ{"Αζερμπαϊτζάν"}
         BA{"Βοσνία - Ερζεγοβίνη"}
         BB{"Μπαρμπάντος"}
@@ -81,8 +81,8 @@ el{
         BY{"Λευκορωσία"}
         BZ{"Μπελίζ"}
         CA{"Καναδάς"}
-        CC{"Νήσοι Κόκος (Κήλινγκ)"}
-        CD{"Κονγκό, Λαϊκή Δημοκρατία του"}
+        CC{"Νήσοι Κόκος"}
+        CD{"Κονγκό - Κινσάσα"}
         CF{"Κεντροαφρικανική Δημοκρατία"}
         CG{"Κονγκό"}
         CH{"Ελβετία"}
@@ -115,7 +115,7 @@ el{
         FI{"Φινλανδία"}
         FJ{"Φίτζι"}
         FK{"Νήσοι Φώκλαντ"}
-        FM{"Μικρονησία, Ομόσπονδες Πολιτείες της"}
+        FM{"Μικρονησία"}
         FO{"Νήσοι Φερόες"}
         FR{"Γαλλία"}
         GA{"Γκαμπόν"}
@@ -123,6 +123,7 @@ el{
         GD{"Γρενάδα"}
         GE{"Γεωργία"}
         GF{"Γαλλική Γουιάνα"}
+        GG{"Γκερνσέι"}
         GH{"Γκάνα"}
         GI{"Γιβραλτάρ"}
         GL{"Γροιλανδία"}
@@ -149,14 +150,15 @@ el{
         IN{"Ινδία"}
         IO{"Βρετανικά Έδάφη Ινδικού Ωκεανού"}
         IQ{"Ιράκ"}
-        IR{"Ιράν, Ισλαμική Δημοκρατία του"}
+        IR{"Ιράν"}
         IS{"Ισλανδία"}
         IT{"Ιταλία"}
+        JE{"Υερσέη"}
         JM{"Τζαμάικα"}
         JO{"Ιορδανία"}
         JP{"Ιαπωνία"}
         KE{"Κένυα"}
-        KG{"Κιργιζία"}
+        KG{"Κιργκιζστάν"}
         KH{"Καμπότζη"}
         KI{"Κιριμπάτι"}
         KM{"Κομόρες"}
@@ -166,7 +168,7 @@ el{
         KW{"Κουβέιτ"}
         KY{"Νήσοι Κέιμαν"}
         KZ{"Καζακστάν"}
-        LA{"Λατινική Αμερική"}
+        LA{"Λάος"}
         LB{"Λίβανος"}
         LC{"Αγία Λουκία"}
         LI{"Λιχτενστάιν"}
@@ -242,7 +244,7 @@ el{
         SG{"Σιγκαπούρη"}
         SH{"Αγία Ελένη"}
         SI{"Σλοβενία"}
-        SJ{"Νήσοι Σβάλμπαρ και Γιαν Μαγιέν"}
+        SJ{"Σβαλμπάρντ και Γιαν Μαγιέν"}
         SK{"Σλοβακία"}
         SL{"Σιέρα Λεόνε"}
         SM{"Άγιος Μαρίνος"}
@@ -252,7 +254,7 @@ el{
         ST{"Σάο Τομέ και Πρίνσιπε"}
         SV{"Ελ Σαλβαδόρ"}
         SY{"Συρία"}
-        SZ{"Σουαζιλάνδη"}
+        SZ{"Ζουαζηλάνδη"}
         TC{"Νήσοι Τερκς και Κάικος"}
         TD{"Τσαντ"}
         TF{"Γαλλικά Νότια Εδάφη"}
@@ -305,7 +307,7 @@ el{
         }
         AMD{
             "dram",
-            "Dram Αρμενίας",
+            "Ντραμ Αρμενίας",
         }
         ANG{
             "NA f.",
@@ -393,11 +395,11 @@ el{
         }
         BHD{
             "BD",
-            "Δηνάριο Bahraini",
+            "Δηνάριο Μπαχρέιν",
         }
         BIF{
             "Fbu",
-            "Φράγκο Burundi",
+            "Φράγκο Μπουρούντι",
         }
         BMD{
             "Ber$",
@@ -405,7 +407,11 @@ el{
         }
         BND{
             "BND",
-            "Δολάριο Brunei",
+            "Δολάριο Μπρουνέι",
+        }
+        BOB{
+            "BOB",
+            "Μπολιβιάνο Βολιβίας",
         }
         BOP{
             "BOP",
@@ -429,7 +435,7 @@ el{
         }
         BRL{
             "R$",
-            "Real Βραζιλίας",
+            "Ρεάλ Βραζιλίας",
         }
         BRN{
             "BRN",
@@ -445,7 +451,7 @@ el{
         }
         BTN{
             "Nu",
-            "Ngultrum Μπουτάν",
+            "Νγκούλτρουμ Μπουτάν",
         }
         BUK{
             "BUK",
@@ -453,7 +459,7 @@ el{
         }
         BWP{
             "BWP",
-            "Pula Μποτσουάνα",
+            "Πούλα Μποτσουάνας",
         }
         BYB{
             "BYB",
@@ -465,7 +471,7 @@ el{
         }
         BZD{
             "BZ$",
-            "Δολάριο Belize",
+            "Δολάριο Μπελίζ",
         }
         CAD{
             "Can$",
@@ -473,7 +479,7 @@ el{
         }
         CDF{
             "CDF",
-            "Φράγκο Congolais Κονγκό",
+            "Φράγκο Κονγκό",
         }
         CHF{
             "SwF",
@@ -489,7 +495,7 @@ el{
         }
         CNY{
             "Y",
-            "Yuan Renminbi Κίνας",
+            "Γιουάν Ρενμίμπι Κίνας",
         }
         COP{
             "Col$",
@@ -497,7 +503,7 @@ el{
         }
         CRC{
             "C",
-            "Colon Κόστα Ρίκα",
+            "Κολόν Κόστα Ρίκα",
         }
         CSK{
             "CSK",
@@ -512,7 +518,7 @@ el{
             "Εσκούδο Πράσινου Ακρωτηρίου",
         }
         CYP{
-            "£",
+            "Κυπριακή Λίρα",
             "Λίρα Κύπρου",
         }
         CZK{
@@ -545,7 +551,7 @@ el{
         }
         ECS{
             "ECS",
-            "Sucre Ισημερινού",
+            "Σούκρε Εκουαδόρ",
         }
         ECV{
             "ECV",
@@ -561,7 +567,7 @@ el{
         }
         ERN{
             "ERN",
-            "Eritrean Nakfa",
+            "Νάκφα Ερυθραίας",
         }
         ESP{
             "ESP",
@@ -569,7 +575,7 @@ el{
         }
         ETB{
             "Br",
-            "Birr Αιθιοπίας",
+            "Μπιρ Αιθιοπίας",
         }
         EUR{
             "€",
@@ -597,15 +603,15 @@ el{
         }
         GEK{
             "GEK",
-            "Kupon Larit Γεωργίας",
+            "Κούπον Λάρι Γεωργίας",
         }
         GEL{
             "lari",
-            "Lari Γεωργίας",
+            "Λάρι Γεωργίας",
         }
         GHC{
             "GHC",
-            "Cedi Γκάνας",
+            "Σέντι Γκάνας",
         }
         GIP{
             "GIP",
@@ -613,7 +619,7 @@ el{
         }
         GMD{
             "GMD",
-            "Dalasi Γκάμπια",
+            "Νταλάσι Γκάμπιας",
         }
         GNF{
             "GF",
@@ -638,7 +644,7 @@ el{
         }
         GTQ{
             "Q",
-            "Quetzal Γουατεμάλα",
+            "Κουετσάλ Γουατεμάλας",
         }
         GWE{
             "GWE",
@@ -662,11 +668,11 @@ el{
         }
         HRK{
             "HRK",
-            "Kuna Δηνάριο",
+            "Κούνα Κροατίας",
         }
         HTG{
             "HTG",
-            "Gourde Αϊτής",
+            "Γκουρντ Αϊτής",
         }
         HUF{
             "Ft",
@@ -686,7 +692,7 @@ el{
         }
         ILS{
             "ILS",
-            "Νέο Sheqel Ισραήλ",
+            "Νέο Σέκελ Ισραήλ",
         }
         INR{
             "INR",
@@ -698,7 +704,7 @@ el{
         }
         IRR{
             "RI",
-            "Rial Ιράκ",
+            "Ριάλ Ιράν",
         }
         ISK{
             "ISK",
@@ -726,7 +732,7 @@ el{
         }
         KHR{
             "CR",
-            "Riel Καμπότζης",
+            "Ρίελ Καμπότζης",
         }
         KMF{
             "CF",
@@ -750,11 +756,11 @@ el{
         }
         KZT{
             "T",
-            "Tenge Καζακστάν",
+            "Τένγκε Καζακστάν",
         }
         LAK{
             "LAK",
-            "Kip Λάος",
+            "Κιπ Λάος",
         }
         LBP{
             "LL",
@@ -770,7 +776,7 @@ el{
         }
         LTL{
             "LTL",
-            "Lita Λιθουανίας",
+            "Λίτα Λιθουανίας",
         }
         LTT{
             "LTT",
@@ -822,19 +828,19 @@ el{
         }
         MMK{
             "MMK",
-            "Kyat Μιανμάρ",
+            "Κυάτ Μιανμάρ",
         }
         MNT{
             "Tug",
-            "Tugrik Μογγολίας",
+            "Τουγκρίκ Μογγολίας",
         }
         MOP{
             "MOP",
-            "Pataca Μακάο",
+            "Πατάκα Μακάο",
         }
         MRO{
             "UM",
-            "Ouguiya Μαυριτανίας",
+            "Ουγκουίγκα Μαυριτανίας",
         }
         MTL{
             "Lm",
@@ -850,11 +856,11 @@ el{
         }
         MVR{
             "MVR",
-            "Rufiyaa Νήσων Μαλδίβων",
+            "Ρουφίγια Νήσων Μαλδίβων",
         }
         MWK{
             "MK",
-            "Kwacha Μαλάουι",
+            "Κουάτσα Μαλάουι",
         }
         MXN{
             "MEX$",
@@ -870,7 +876,7 @@ el{
         }
         MYR{
             "RM",
-            "Ringgit Μαλαισίας",
+            "Ρινγκίτ Μαλαισίας",
         }
         MZE{
             "MZE",
@@ -878,7 +884,7 @@ el{
         }
         MZM{
             "Mt",
-            "Metical Μοζαμβίκης",
+            "Μετικάλ Μοζαμβίκης",
         }
         NAD{
             "N$",
@@ -886,7 +892,7 @@ el{
         }
         NGN{
             "NGN",
-            "Naira Νιγηρίας",
+            "Νάιρα Νιγηρίας",
         }
         NIC{
             "NIC",
@@ -914,7 +920,7 @@ el{
         }
         OMR{
             "RO",
-            "Rial Ομάν",
+            "Ριάλ Ομάν",
         }
         PAB{
             "PAB",
@@ -926,11 +932,11 @@ el{
         }
         PEN{
             "PEN",
-            "Sol Nuevo Περού",
+            "Νέο Σολ Περού",
         }
         PES{
             "PES",
-            "Sol Περού",
+            "Σολ Περού",
         }
         PGK{
             "PGK",
@@ -968,6 +974,10 @@ el{
             "leu",
             "Λέι Ρουμανίας",
         }
+        RSD{
+            "RSD",
+            "Δηνάριο Σερβίας",
+        }
         RUB{
             "RUB",
             "Ρούβλι Ρωσίας",
@@ -979,6 +989,10 @@ el{
         RWF{
             "RWF",
             "Φράγκο Ρουάντας",
+        }
+        SAR{
+            "SAR",
+            "Ριάλ Σαουδικής Αραβίας",
         }
         SBD{
             "SI$",
@@ -1010,7 +1024,7 @@ el{
         }
         SIT{
             "SIT",
-            "Tolar Σλοβενίας",
+            "Τόλαρ Σλοβενίας",
         }
         SKK{
             "Sk",
@@ -1018,7 +1032,7 @@ el{
         }
         SLL{
             "SLL",
-            "Leone Σιέρα Λεόνε",
+            "Λεόνε της Σιέρα Λεόνε",
         }
         SOS{
             "So. Sh.",
@@ -1034,7 +1048,7 @@ el{
         }
         SVC{
             "SVC",
-            "Colon Ελ Σαλβαδόρ",
+            "Κολόν Ελ Σαλβαδόρ",
         }
         SYP{
             "LS",
@@ -1042,7 +1056,7 @@ el{
         }
         SZL{
             "E",
-            "Lilangeni Ζουαζιλάνδη",
+            "Λιλανγκένι Σουαζιλάνδη",
         }
         THB{
             "THB",
@@ -1054,7 +1068,7 @@ el{
         }
         TJS{
             "TJS",
-            "Somoni Τατζικιστάν",
+            "Σομόν Τατζικιστάν",
         }
         TMM{
             "TMM",
@@ -1090,7 +1104,7 @@ el{
         }
         UAH{
             "UAH",
-            "Hryvnia Ουκρανίας",
+            "Χρίφνα Ουκρανίας",
         }
         UAK{
             "UAK",
@@ -1130,11 +1144,11 @@ el{
         }
         VEB{
             "Be",
-            "Μπολιβάλ Βενεζουέλας",
+            "Μπολιβάρ Βενεζουέλας",
         }
         VND{
             "VND",
-            "Dong Βιετνάμ",
+            "Ντογκ Βιετνάμ",
         }
         WST{
             "WST",
@@ -1244,12 +1258,19 @@ el{
         currency{"Νόμισμα"}
     }
     Languages{
+        af{"Αφρικάανς"}
+        am{"Αμαρικά"}
         ar{"Αραβικά"}
         arc{"Αραμαϊκά"}
+        as{"Ασαμέζικα"}
+        ay{"Αϊμάρα"}
+        az{"Αζερμπαϊτζανικά"}
         be{"Λευκορωσικά"}
         bg{"Βουλγαρικά"}
+        bh{"μπιχάρι"}
         bn{"μπενγκάλι"}
         bo{"Θιβετιανά"}
+        br{"Βρετονικά"}
         bs{"Βοσνιακά"}
         ca{"Καταλανικά"}
         co{"Κορσικανικά"}
@@ -1268,6 +1289,7 @@ el{
         en_CA{"Αγγλικά Καναδά"}
         en_GB{"Αγγλικά Ηνωμένου Βασιλείου"}
         en_US{"Αγγλικά Ηνωμένων Πολιτειών"}
+        eo{"Εσπεράντο"}
         es{"Ισπανικά"}
         es_419{"Ισπανικά Λατινικής Αμερικής"}
         es_ES{"Ισπανικά Ιβηρικής"}
@@ -1282,61 +1304,86 @@ el{
         gd{"Σκωτικά Κελτικά"}
         got{"Γοτθικά"}
         grc{"Αρχαία Ελληνικά"}
+        gu{"γκουτζαράτι"}
         haw{"Χαβανέζικα"}
         he{"Εβραϊκά"}
         hi{"Χίντι"}
         hr{"Κροατικά"}
         hu{"Ουγγρικά"}
         hy{"Αρμενικά"}
+        ia{"Ιντερλίνγκουα"}
         id{"Ινδονησιακά"}
-        ine{"Ινδοευρωπαϊκά (Άλλα)"}
+        ie{"Ιντερλίνγκουε"}
+        ine{"Ινδοευρωπαϊκά (¨Αλλη)"}
         ira{"ιρανικά"}
         is{"Ισλανδικά"}
         it{"Ιταλικά"}
         ja{"Ιαπωνικά"}
+        jv{"ιαβανέζικα"}
         ka{"Γεωργιανά"}
+        kn{"Κανάντα"}
         ko{"Κορεατικά"}
+        ks{"κασμίρι"}
         ku{"Κουρδικά"}
+        ky{"κιργκίζ"}
         la{"Λατινικά"}
+        ln{"λινγκάλα"}
         lt{"Λιθουανικά"}
         lv{"Λετονικά"}
         mk{"Σλαβομακεδονικά"}
         mn{"Μογγολικά"}
         mo{"Μολδαβικά"}
+        ms{"μαλάι"}
         mt{"Μαλτέζικα"}
         mul{"Πολλαπλές Γλώσσες"}
         nai{"Ινδιανικά Βόρειας Αμερικής (Άλλα)"}
+        ne{"νεπάλι"}
         nl{"Ολλανδικά"}
         nl_BE{"Φλαμανδικά"}
+        nn{"Νορβηγικά Νινόρσκ"}
         no{"Νορβηγικά"}
-        ota{"Τουρκικά, Οθωμανικά"}
+        oc{"Οκσιτανικά"}
+        ota{"Τουρκικά, Οθωμανικά (1500-1928)"}
+        pa{"πουντζάμπι"}
         peo{"Αρχαία Περσικά"}
         phi{"Φιλιππινέζικα (Άλλα)"}
         phn{"Φοινικικά"}
         pl{"Πολωνικά"}
+        ps{"Πάστο"}
         pt{"Πορτογαλικά"}
         pt_BR{"Πορτογαλικά Βραζιλίας"}
         pt_PT{"Πορτογαλικά Ιβηρικής"}
         ro{"Ρουμανικά"}
         rom{"Ρωμανικά"}
         ru{"Ρωσικά"}
+        sa{"Σανσκριτικά"}
         sem{"Σημιτικά (Άλλα)"}
         sh{"Σερβοκροατικά"}
         sk{"Σλοβακικά"}
         sl{"Σλοβενικά"}
         sla{"Σλαβικά (Άλλα)"}
+        so{"σομάλι"}
         sq{"Αλβανικά"}
         sr{"Σερβικά"}
         sv{"Σουηδικά"}
+        sw{"σουαχίλι"}
         syr{"Συριακά"}
+        ta{"ταμίλ"}
+        te{"Τελούγκου"}
         th{"Ταϊλανδικά"}
+        ti{"τιγκρίνυα"}
+        tlh{"κλίνγκον"}
         tr{"Τουρκικά"}
+        tw{"τούι"}
         uk{"Ουκρανικά"}
+        ur{"Ουρντού"}
         vi{"Βιετναμέζικα"}
+        wo{"γουόλοφ"}
         yi{"Ιουδαϊκά"}
         zh{"Κινεζικά"}
         zh_Hans{"Κινεζικά Απλοποιημένα"}
         zh_Hant{"Κινεζικά Παραδοσιακά"}
+        zu{"ζουλού"}
     }
     LocaleScript{
         "Grek",
@@ -1375,11 +1422,15 @@ el{
         Geor{"Γεωργιανό"}
         Goth{"Γοτθικό"}
         Grek{"Ελληνικό"}
+        Gujr{"Γκουγιαράτι"}
         Hans{"Κινεζικό Απλοποιημένο"}
         Hant{"Κινεζικό Παραδοσιακό"}
         Hebr{"Εβραϊκό"}
         Jpan{"Ιαπωνικό"}
         Latn{"Λατινικό"}
+        Lina{"Γραμμική Α"}
+        Linb{"Γραμμική Β"}
+        Mlym{"Μαλαϊκό"}
         Mong{"Μογγολικό"}
         Phnx{"Φοινικικό"}
         Syrc{"Συριακό"}
@@ -1399,7 +1450,9 @@ el{
             japanese{"Ιαπωνικό Ημερολόγιο"}
         }
         collation{
+            big5han{"Κινεζική Παραδοσιακή Σειρά - Big5"}
             direct{"Σειρά Direct"}
+            gb2312han{"Κινεζική Απλουστευμένη Σειρά - GB2312"}
             phonebook{"Σειρά Τηλεφωνικού Καταλόγου"}
             pinyin{"Σειρά Pinyin"}
             stroke{"Σειρά Stroke"}
@@ -1407,11 +1460,27 @@ el{
         }
     }
     Variants{
+        1901{"Παραδοσιακή Γερμανική Ορθογραφία"}
+        1996{"Γερμανική Ορθογραφία του 1996"}
         MONOTON{"Μονοτονικό"}
         POLYTON{"Πολυτονικό"}
+        REVISED{"Αναθεωρημένη Ορθογραφία"}
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
+        buddhist{
+            DateTimePatterns{
+                "h:mm:ss a v",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, MMMM d, yyyy G",
+                "MMMM d, yyyy G",
+                "MMM d, yyyy G",
+                "M/d/yyyy",
+                "{1} {0}",
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "ΠΜ",
@@ -1427,6 +1496,20 @@ el{
                 "dd MMM yyyy",
                 "dd/MM/yyyy",
                 "{1} {0}",
+            }
+            availableFormats{
+                Ed{"E d"}
+                H{"H"}
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                MMMEd{"E d MMM"}
+                MMMMdd{"dd MMMM"}
+                MMdd{"dd/MM"}
+                mmss{"mm:ss"}
+                yyQ{"Q yy"}
+                yyyy{"yyyy"}
+                yyyyMM{"MM/yyyy"}
+                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{
@@ -1620,14 +1703,6 @@ el{
                         "4ο τρίμηνο",
                     }
                 }
-                stand-alone{
-                    abbreviated{
-                        "Τ1",
-                        "2ο τρίμηνο",
-                        "Τ3",
-                        "4ο τρίμηνο",
-                    }
-                }
             }
         }
     }
@@ -1642,32 +1717,263 @@ el{
         metric{"Μετρικό"}
     }
     zoneStrings{
+        "Africa:Abidjan"{
+            ec{"Ακτή Ελεφαντοστού"}
+        }
+        "Africa:Accra"{
+            ec{"Γκάνα"}
+        }
+        "Africa:Addis_Ababa"{
+            ec{"Αιθιοπία"}
+        }
+        "Africa:Algiers"{
+            ec{"Αλγερία"}
+        }
+        "Africa:Asmera"{
+            ec{"Ερυθραία"}
+        }
         "Africa:Bamako"{
             ec{"Μπαμάκο"}
+        }
+        "Africa:Bangui"{
+            ec{"Κεντροαφρικανική Δημοκρατία"}
+        }
+        "Africa:Banjul"{
+            ec{"Γκάμπια"}
+        }
+        "Africa:Bissau"{
+            ec{"Γουινέα Μπισσάου"}
+        }
+        "Africa:Blantyre"{
+            ec{"Μαλάουι"}
+        }
+        "Africa:Brazzaville"{
+            ec{"Μπράζαβιλ"}
+        }
+        "Africa:Bujumbura"{
+            ec{"Μπουρούντι"}
+        }
+        "Africa:Cairo"{
+            ec{"Αίγυπτος"}
+        }
+        "Africa:Casablanca"{
+            ec{"Μαρόκο"}
+        }
+        "Africa:Ceuta"{
+            ec{"Κέουτα"}
+        }
+        "Africa:Conakry"{
+            ec{"Γουινέα"}
+        }
+        "Africa:Dakar"{
+            ec{"Σενεγάλη"}
+        }
+        "Africa:Dar_es_Salaam"{
+            ec{"Τανζανία"}
+        }
+        "Africa:Djibouti"{
+            ec{"Τζιμπουτί"}
+        }
+        "Africa:Douala"{
+            ec{"Καμερούν"}
+        }
+        "Africa:El_Aaiun"{
+            ec{"Δυτική Σαχάρα"}
+        }
+        "Africa:Freetown"{
+            ec{"Σιέρα Λεόνε"}
+        }
+        "Africa:Gaborone"{
+            ec{"Μποτσουάνα"}
+        }
+        "Africa:Harare"{
+            ec{"Ζιμπάμπουε"}
+        }
+        "Africa:Johannesburg"{
+            ec{"Νότια Αφρική"}
+        }
+        "Africa:Kampala"{
+            ec{"Ουγκάντα"}
+        }
+        "Africa:Khartoum"{
+            ec{"Σουδάν"}
+        }
+        "Africa:Kigali"{
+            ec{"Ρουάντα"}
         }
         "Africa:Kinshasa"{
             ec{"Κινσάσα"}
         }
+        "Africa:Lagos"{
+            ec{"Νιγηρία"}
+        }
+        "Africa:Libreville"{
+            ec{"Γκαμπόν"}
+        }
+        "Africa:Lome"{
+            ec{"Τόγκο"}
+        }
+        "Africa:Luanda"{
+            ec{"Αγκόλα"}
+        }
+        "Africa:Lubumbashi"{
+            ec{"Λουμπουμπάσι"}
+        }
+        "Africa:Lusaka"{
+            ec{"Ζάμπια"}
+        }
+        "Africa:Malabo"{
+            ec{"Ισημερινή Γουινέα"}
+        }
+        "Africa:Maputo"{
+            ec{"Μοζαμβίκη"}
+        }
+        "Africa:Maseru"{
+            ec{"Λεσόθο"}
+        }
+        "Africa:Mogadishu"{
+            ec{"Σομαλία"}
+        }
+        "Africa:Monrovia"{
+            ec{"Λιβερία"}
+        }
+        "Africa:Nairobi"{
+            ec{"Κένυα"}
+        }
+        "Africa:Ndjamena"{
+            ec{"Τσαντ"}
+        }
+        "Africa:Niamey"{
+            ec{"Νίγηρας"}
+        }
+        "Africa:Nouakchott"{
+            ec{"Μαυριτανία"}
+        }
+        "Africa:Ouagadougou"{
+            ec{"Μπουρκίνα Φάσο"}
+        }
+        "Africa:Porto-Novo"{
+            ec{"Μπενίν"}
+        }
         "Africa:Timbuktu"{
             ec{"Τιμπουκτού"}
+        }
+        "Africa:Tripoli"{
+            ec{"Λιβύη"}
+        }
+        "Africa:Tunis"{
+            ec{"Τυνησία"}
+        }
+        "Africa:Windhoek"{
+            ec{"Ναμίμπια"}
         }
         "America:Anchorage"{
             ec{"Άνκορατζ"}
         }
+        "America:Anguilla"{
+            ec{"Ανγκουίλλα"}
+        }
+        "America:Antigua"{
+            ec{"Αντίγκουα και Μπαρμπούντα"}
+        }
+        "America:Araguaina"{
+            ec{"Αραγκουάινα"}
+        }
+        "America:Aruba"{
+            ec{"Αρούμπα"}
+        }
+        "America:Asuncion"{
+            ec{"Ασουνσιόν"}
+        }
+        "America:Bahia"{
+            ec{"Μπάχια"}
+        }
+        "America:Barbados"{
+            ec{"Μπαρμπέιντος"}
+        }
+        "America:Belem"{
+            ec{"Μπέλεμ"}
+        }
+        "America:Belize"{
+            ec{"Μπελίζ"}
+        }
+        "America:Boa_Vista"{
+            ec{"Μπόα Βίστα"}
+        }
+        "America:Bogota"{
+            ec{"Μπογκοτά"}
+        }
         "America:Buenos_Aires"{
             ec{"Μπουένος Άιρες"}
+        }
+        "America:Campo_Grande"{
+            ec{"Κάμπο Γκράντε"}
         }
         "America:Cancun"{
             ec{"Κανκούν"}
         }
+        "America:Caracas"{
+            ec{"Καράκας"}
+        }
+        "America:Cayenne"{
+            ec{"Καγιένε"}
+        }
+        "America:Cayman"{
+            ec{"Κέυμαν"}
+        }
         "America:Chicago"{
             ec{"Σικάγο"}
+        }
+        "America:Costa_Rica"{
+            ec{"Κόστα Ρίκα"}
+        }
+        "America:Cuiaba"{
+            ec{"Κουϊάμπα"}
+        }
+        "America:Curacao"{
+            ec{"Κουρακάο"}
+        }
+        "America:Danmarkshavn"{
+            ec{"Ντανμαρκσάβν"}
         }
         "America:Denver"{
             ec{"Ντένβερ"}
         }
         "America:Detroit"{
             ec{"Ντητρόιτ"}
+        }
+        "America:Dominica"{
+            ec{"Δομινίκα"}
+        }
+        "America:El_Salvador"{
+            ec{"Σαλβαδόρ"}
+        }
+        "America:Fortaleza"{
+            ec{"Φορταλέζα"}
+        }
+        "America:Godthab"{
+            ec{"Γκόνθαμπ"}
+        }
+        "America:Grand_Turk"{
+            ec{"Γραντ Τουρκ"}
+        }
+        "America:Grenada"{
+            ec{"Γρενάδα"}
+        }
+        "America:Guadeloupe"{
+            ec{"Γουαδελούπη"}
+        }
+        "America:Guatemala"{
+            ec{"Γουατεμάλα"}
+        }
+        "America:Guayaquil"{
+            ec{"Γκουαγιακύλ"}
+        }
+        "America:Guyana"{
+            ec{"Γουιάνα"}
+        }
+        "America:Havana"{
+            ec{"Αβάνα"}
         }
         "America:Indianapolis"{
             ec{"Ινδιανάπολη"}
@@ -1726,20 +2032,65 @@ el{
         "Asia:Shanghai"{
             ec{"Σανγκάη"}
         }
+        "Asia:Singapore"{
+            ec{"Σιγκαπούρη"}
+        }
+        "Asia:Taipei"{
+            ec{"Ταϊπέι"}
+        }
+        "Asia:Tashkent"{
+            ec{"Τασκένδη"}
+        }
+        "Asia:Tbilisi"{
+            ec{"Τμπιλίσι"}
+        }
+        "Asia:Tehran"{
+            ec{"Τεχεράνη"}
+        }
+        "Asia:Thimphu"{
+            ec{"Τρίμφου"}
+        }
+        "Asia:Tokyo"{
+            ec{"Τόκυο"}
+        }
         "Asia:Ulaanbaatar"{
             ec{"Ουλάν Μπατόρ"}
+        }
+        "Asia:Vientiane"{
+            ec{"Βιεντιάνε"}
         }
         "Asia:Vladivostok"{
             ec{"Βλαδιβοστόκ"}
         }
+        "Asia:Yerevan"{
+            ec{"Γερεβάν"}
+        }
         "Atlantic:Azores"{
             ec{"Αζόρες"}
+        }
+        "Atlantic:Bermuda"{
+            ec{"Βερμούδα"}
         }
         "Atlantic:Canary"{
             ec{"Κανάρια"}
         }
+        "Atlantic:Faeroe"{
+            ec{"Φερόες"}
+        }
         "Atlantic:Madeira"{
             ec{"Μαδέρα"}
+        }
+        "Atlantic:Reykjavik"{
+            ec{"Ρέυκιαβικ"}
+        }
+        "Atlantic:South_Georgia"{
+            ec{"Νότια Γεωργία"}
+        }
+        "Atlantic:St_Helena"{
+            ec{"Αγ. Ελένη"}
+        }
+        "Atlantic:Stanley"{
+            ec{"Στάνλεϋ"}
         }
         "Australia:Adelaide"{
             ec{"Αδελαΐδα"}
@@ -1750,8 +2101,47 @@ el{
         "Australia:Sydney"{
             ec{"Σύδνεϊ"}
         }
+        "Europe:Amsterdam"{
+            ec{"Άμστερνταμ"}
+        }
+        "Europe:Andorra"{
+            ec{"Ανδόρα"}
+        }
+        "Europe:Athens"{
+            ec{"Αθήνα"}
+        }
         "Europe:Belfast"{
             ec{"Μπέλφαστ"}
+        }
+        "Europe:Berlin"{
+            ec{"Βερολίνο"}
+        }
+        "Europe:Brussels"{
+            ec{"Βρυξέλλες"}
+        }
+        "Europe:Bucharest"{
+            ec{"Βουκουρέστι"}
+        }
+        "Europe:Budapest"{
+            ec{"Βουδαπέστη"}
+        }
+        "Europe:Chisinau"{
+            ec{"Τσισινάου"}
+        }
+        "Europe:Copenhagen"{
+            ec{"Κοπεγχάγη"}
+        }
+        "Europe:Dublin"{
+            ec{"Δουβλίνο"}
+        }
+        "Europe:Gibraltar"{
+            ec{"Γιβραλτάρ"}
+        }
+        "Europe:Helsinki"{
+            ec{"Ελσίνκι"}
+        }
+        "Europe:Istanbul"{
+            ec{"Κωνσταντινούπολη"}
         }
         "Europe:Kaliningrad"{
             ec{"Καλλίπολη"}
@@ -1765,27 +2155,207 @@ el{
         "Europe:London"{
             ec{"Λονδίνο"}
         }
+        "Europe:Luxembourg"{
+            ec{"Λουξεμβούργο"}
+        }
         "Europe:Madrid"{
             ec{"Μαδρίτη"}
+        }
+        "Europe:Malta"{
+            ec{"Μάλτα"}
+        }
+        "Europe:Minsk"{
+            ec{"Μινσκ"}
+        }
+        "Europe:Monaco"{
+            ec{"Μονακό"}
         }
         "Europe:Moscow"{
             ec{"Μόσχα"}
         }
+        "Europe:Oslo"{
+            ec{"Όσλο"}
+        }
+        "Europe:Paris"{
+            ec{"Παρίσι"}
+        }
+        "Europe:Riga"{
+            ec{"Ρίγα"}
+        }
+        "Europe:Rome"{
+            ec{"Ρώμη"}
+        }
         "Europe:Samara"{
             ec{"Σαμάρα"}
+        }
+        "Europe:Sofia"{
+            ec{"Σόφια"}
+        }
+        "Europe:Stockholm"{
+            ec{"Στοκχόλμη"}
+        }
+        "Europe:Tallinn"{
+            ec{"Ταλίν"}
+        }
+        "Europe:Tirane"{
+            ec{"Τίρανα"}
+        }
+        "Europe:Vaduz"{
+            ec{"Βαντούζ"}
+        }
+        "Europe:Vienna"{
+            ec{"Βιέννη"}
+        }
+        "Europe:Vilnius"{
+            ec{"Βίλνιους"}
+        }
+        "Europe:Warsaw"{
+            ec{"Βαρσοβία"}
+        }
+        "Europe:Zurich"{
+            ec{"Ζυρίχη"}
+        }
+        "Indian:Antananarivo"{
+            ec{"Ανταναναρίβο"}
+        }
+        "Indian:Chagos"{
+            ec{"Τσάγκος"}
+        }
+        "Indian:Christmas"{
+            ec{"Χριστούγεννα"}
+        }
+        "Indian:Cocos"{
+            ec{"Κόκος"}
+        }
+        "Indian:Comoro"{
+            ec{"Κομόρο"}
+        }
+        "Indian:Kerguelen"{
+            ec{"Κέργκουελεν"}
+        }
+        "Indian:Mahe"{
+            ec{"Μάχε"}
+        }
+        "Indian:Maldives"{
+            ec{"Μαλδίβες"}
+        }
+        "Indian:Mauritius"{
+            ec{"Μαυρίκιος"}
+        }
+        "Indian:Mayotte"{
+            ec{"Μαγιότε"}
+        }
+        "Pacific:Apia"{
+            ec{"Άπια"}
         }
         "Pacific:Auckland"{
             ec{"Όκλαντ"}
         }
+        "Pacific:Easter"{
+            ec{"Ανατολική Νήσος"}
+        }
+        "Pacific:Efate"{
+            ec{"Εφάτε"}
+        }
+        "Pacific:Enderbury"{
+            ec{"Εντερμπέρυ"}
+        }
+        "Pacific:Fakaofo"{
+            ec{"Φακαόφο"}
+        }
+        "Pacific:Fiji"{
+            ec{"Φίτζι"}
+        }
+        "Pacific:Funafuti"{
+            ec{"Φουναφούτι"}
+        }
         "Pacific:Galapagos"{
             ec{"Γκαλαπάγκος"}
+        }
+        "Pacific:Gambier"{
+            ec{"Γκάμπιερ"}
+        }
+        "Pacific:Guadalcanal"{
+            ec{"Γκουανταλκανάλ"}
+        }
+        "Pacific:Guam"{
+            ec{"Γκουάμ"}
         }
         "Pacific:Honolulu"{
             ec{"Χονολουλού"}
         }
+        "Pacific:Johnston"{
+            ec{"Τζόνστον"}
+        }
+        "Pacific:Kiritimati"{
+            ec{"Κιριτιμάτι"}
+        }
+        "Pacific:Kosrae"{
+            ec{"Κοσράη"}
+        }
+        "Pacific:Majuro"{
+            ec{"Μαχούρο"}
+        }
+        "Pacific:Marquesas"{
+            ec{"Μαρκέσας"}
+        }
+        "Pacific:Midway"{
+            ec{"Μίντγουεϊ"}
+        }
+        "Pacific:Nauru"{
+            ec{"Ναούρου"}
+        }
+        "Pacific:Niue"{
+            ec{"Νιούε"}
+        }
+        "Pacific:Norfolk"{
+            ec{"Νόρφολκ"}
+        }
+        "Pacific:Noumea"{
+            ec{"Νουμέα"}
+        }
+        "Pacific:Pago_Pago"{
+            ec{"Πάγκο Πάγκο"}
+        }
+        "Pacific:Palau"{
+            ec{"Παλάου"}
+        }
+        "Pacific:Pitcairn"{
+            ec{"Πιτκέιρν"}
+        }
+        "Pacific:Ponape"{
+            ec{"Πονάπε"}
+        }
+        "Pacific:Port_Moresby"{
+            ec{"Πορτ Μόρεσμπυ"}
+        }
+        "Pacific:Rarotonga"{
+            ec{"Ραροτόνγκα"}
+        }
+        "Pacific:Saipan"{
+            ec{"Σάιπαν"}
+        }
         "Pacific:Tahiti"{
             ec{"Αϊτή"}
         }
+        "Pacific:Tarawa"{
+            ec{"Ταράουα"}
+        }
+        "Pacific:Tongatapu"{
+            ec{"Τονγκατάπου"}
+        }
+        "Pacific:Truk"{
+            ec{"Τρουκ"}
+        }
+        "Pacific:Wake"{
+            ec{"Γουέικ"}
+        }
+        "Pacific:Wallis"{
+            ec{"Γουόλις"}
+        }
+        fallbackFormat{"{1} ({0})"}
+        gmtFormat{"GMT{0}"}
         hourFormat{"+HHmm;-HHmm"}
+        regionFormat{"{0}"}
     }
 }

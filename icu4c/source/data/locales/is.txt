@@ -1398,7 +1398,7 @@ is{
             traditional{"Hefðbundin"}
         }
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         gregorian{
             DateTimePatterns{

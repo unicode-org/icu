@@ -6722,6 +6722,15 @@ structLocale:table(nofallback){
             ss{""}
             ec{""}
         }
+        "Etc:Unknown"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            ec{""}
+        }
         "Etc:Zulu"{
             ld{""}
             lg{""}

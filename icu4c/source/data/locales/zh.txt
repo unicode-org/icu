@@ -1488,6 +1488,7 @@ zh{
         dar{"达尔格瓦文"}
         day{"达雅克文"}
         de{"德文"}
+        de_AT{"德文 (奥地利)"}
         del{"特拉华文"}
         den{"司雷夫文"}
         dgr{"多格里布文"}
@@ -1507,6 +1508,8 @@ zh{
         el{"希腊文"}
         elx{"艾拉米特文"}
         en{"英文"}
+        en_AU{"英文 (澳大利亚)"}
+        en_CA{"英文 (加拿大)"}
         enm{"中古英文"}
         eo{"世界文"}
         es{"西班牙文"}
@@ -1524,8 +1527,10 @@ zh{
         fo{"法罗文"}
         fon{"丰文"}
         fr{"法文"}
+        fr_CA{"法文 (加拿大)"}
         frm{"中古法文"}
         fro{"古法文"}
+        frs{"东弗里西亚文"}
         fur{"弗留利文"}
         fy{"弗里斯兰文"}
         ga{"爱尔兰文"}
@@ -1733,6 +1738,7 @@ zh{
         pro{"普罗文斯文"}
         ps{"普什图文"}
         pt{"葡萄牙文"}
+        pt_BR{"葡萄牙文 (巴西)"}
         qu{"盖丘亚文"}
         raj{"拉贾斯坦文"}
         rap{"拉帕努伊文"}
@@ -1966,6 +1972,7 @@ zh{
         Sara{"沙拉堤文"}
         Shaw{"萧伯纳式语"}
         Sinh{"辛哈拉语"}
+        Sund{"巽他文"}
         Sylo{"Syloti Nagri 书写体"}
         Syrc{"叙利亚语"}
         Tagb{"塔格班瓦语"}
@@ -1977,6 +1984,7 @@ zh{
         Thai{"泰语"}
         Tibt{"藏语"}
         Ugar{"乌加里特语"}
+        Xsux{"苏美尔-阿卡德楔形文字"}
         Yiii{"彝语"}
     }
     Types{
@@ -2006,7 +2014,7 @@ zh{
         REVISED{"已修订的拼字学"}
         SAAHO{"萨霍"}
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2069,13 +2077,6 @@ zh{
             fields{
                 day{
                     dn{"日"}
-                    relative{
-                        "-1"{"昨天"}
-                        "-2"{"前天"}
-                        "0"{"今天"}
-                        "1"{"明天"}
-                        "2"{"后天"}
-                    }
                 }
                 dayperiod{
                     dn{"上午/下午"}
@@ -2110,6 +2111,20 @@ zh{
             }
             monthNames{
                 format{
+                    abbreviated{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "八月",
+                        "九月",
+                        "10",
+                        "11",
+                        "12",
+                    }
                     wide{
                         "1",
                         "2",
@@ -2118,8 +2133,8 @@ zh{
                         "5",
                         "6",
                         "7",
-                        "8",
-                        "9",
+                        "八月",
+                        "九月",
                         "10",
                         "11",
                         "12",
@@ -2170,6 +2185,36 @@ zh{
                     }
                 }
             }
+            quarters{
+                format{
+                    abbreviated{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                    wide{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                }
+            }
         }
     }
     delimiters{
@@ -2177,6 +2222,10 @@ zh{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    measurementSystemNames{
+        US{"美制"}
+        metric{"公制"}
     }
     zoneStrings{
         "Africa:Bamako"{

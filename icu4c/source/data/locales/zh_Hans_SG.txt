@@ -8,16 +8,7 @@
 // ***************************************************************************
 zh_Hans_SG{
     Countries{
-        AU{"澳洲"}
-        CZ{"捷克"}
-        ID{"印尼"}
         KR{"韩国"}
-        NZ{"纽西兰"}
-        SA{"沙地阿拉伯"}
-    }
-    Languages{
-        root{"根 源"}
-        sh{"塞尔维亚克罗地亚文"}
     }
     NumberElements{
         ".",
@@ -33,7 +24,7 @@ zh_Hans_SG{
         "NaN",
         "+",
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -87,13 +78,6 @@ zh_Hans_SG{
             fields{
                 day{
                     dn{"日"}
-                    relative{
-                        "-1"{"昨天"}
-                        "-2"{"前天"}
-                        "0"{"今天"}
-                        "1"{"明天"}
-                        "2"{"后天"}
-                    }
                 }
                 dayperiod{
                     dn{"上午/下午"}
@@ -128,6 +112,34 @@ zh_Hans_SG{
             }
             monthNames{
                 format{
+                    abbreviated{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "八月",
+                        "九月",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    narrow{
+                        "1月",
+                        "2月",
+                        "3月",
+                        "4月",
+                        "5月",
+                        "6月",
+                        "7月",
+                        "8月",
+                        "9月",
+                        "10月",
+                        "11月",
+                        "12月",
+                    }
                     wide{
                         "1",
                         "2",
@@ -136,8 +148,8 @@ zh_Hans_SG{
                         "5",
                         "6",
                         "7",
-                        "8",
-                        "9",
+                        "八月",
+                        "九月",
                         "10",
                         "11",
                         "12",
@@ -152,7 +164,7 @@ zh_Hans_SG{
                         "五月",
                         "六月",
                         "7",
-                        "8",
+                        "八月",
                         "九月",
                         "10",
                         "11",
@@ -180,7 +192,7 @@ zh_Hans_SG{
                         "五月",
                         "六月",
                         "7",
-                        "8",
+                        "八月",
                         "九月",
                         "10",
                         "11",
@@ -188,48 +200,19 @@ zh_Hans_SG{
                     }
                 }
             }
+            quarters{
+                stand-alone{
+                    wide{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                }
+            }
         }
     }
     zoneStrings{
-        "Antarctica:Palmer"{
-            ec{"帕默"}
-        }
-        "Asia:Aqtau"{
-            ec{"阿克套"}
-        }
-        "Asia:Kamchatka"{
-            ec{"堪察加半岛"}
-        }
-        "Asia:Novosibirsk"{
-            ec{"新西伯利亚"}
-        }
-        "Asia:Sakhalin"{
-            ec{"库页岛"}
-        }
-        "Atlantic:Azores"{
-            ec{"亚速尔群岛"}
-        }
-        "Atlantic:Canary"{
-            ec{"加那利群岛"}
-        }
-        "Atlantic:Jan_Mayen"{
-            ec{"扬马延岛"}
-        }
-        "Atlantic:Madeira"{
-            ec{"马德拉群岛"}
-        }
-        "Pacific:Easter"{
-            ec{"复活节岛"}
-        }
-        "Pacific:Kwajalein"{
-            ec{"卡瓦加兰"}
-        }
-        "Pacific:Wake"{
-            ec{"威克岛"}
-        }
-        "Pacific:Yap"{
-            ec{"雅浦岛"}
-        }
         "meta:Acre"{
             ld{"Acre 夏令时间"}
             lg{"Acre 时间"}

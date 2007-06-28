@@ -1229,12 +1229,14 @@ ga{
         ab{"Abcáisis"}
         ae{"Aivéistis"}
         af{"Afracáinis"}
+        am{"Amarais"}
         ar{"Araibis"}
         as{"Asaimis"}
         az{"Asarbaiseáinis"}
         ba{"Baiscíris"}
         be{"Bealarúisis"}
         bg{"Bulgáiris"}
+        bh{"Bihairis"}
         bn{"Beangálais"}
         bo{"Tibéadais"}
         br{"Briotáinis"}
@@ -1355,7 +1357,7 @@ ga{
         "#,##0%",
         "#E0",
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -1417,13 +1419,6 @@ ga{
             fields{
                 day{
                     dn{"Lá"}
-                    relative{
-                        "-1"{"Inné"}
-                        "-2"{"Arú inné"}
-                        "0"{"Inniu"}
-                        "1"{"Amárach"}
-                        "2"{"Arú amárach"}
-                    }
                 }
                 dayperiod{
                     dn{"a.m./p.m."}

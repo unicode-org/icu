@@ -397,7 +397,7 @@ sl{
             traditional{"Tradicionano zlaganje"}
         }
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -447,21 +447,12 @@ sl{
             eras{
                 abbreviated{
                     "pr.n.š.",
-                    "AD",
+                    "po Kr.",
                 }
             }
             fields{
                 day{
-                    dn{"Dan"}
-                    relative{
-                        "-1"{"Včeraj"}
-                        "-2"{"predvčerajšnjim"}
-                        "-3"{"pred tremi dnevi"}
-                        "0"{"Danes"}
-                        "1"{"Jutri"}
-                        "2"{"pojutrišnjem"}
-                        "3"{"čez tri dni"}
-                    }
+                    dn{"dan"}
                 }
                 dayperiod{
                     dn{"Čas dneva"}
@@ -539,16 +530,6 @@ sl{
                         "o",
                         "n",
                         "d",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    wide{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
                     }
                 }
             }

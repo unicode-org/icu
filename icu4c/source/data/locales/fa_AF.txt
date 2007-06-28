@@ -208,7 +208,7 @@ fa_AF{
     Scripts{
         Mong{"مغلی"}
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

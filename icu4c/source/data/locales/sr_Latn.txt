@@ -14,6 +14,7 @@ sr_Latn{
     Countries{
         001{"Svet"}
         002{"Afrika"}
+        003{"Severna Amerika"}
         005{"Južna Amerika"}
         009{"Okeanija"}
         011{"Zapadna Afrika"}
@@ -26,6 +27,7 @@ sr_Latn{
         021{"Severna Amerika"}
         029{"Karibi"}
         030{"Istočna Azija"}
+        034{"Južna Azija"}
         035{"Jugoistočna Azija"}
         039{"Južna Evropa"}
         053{"Australija i Novi Zeland"}
@@ -39,6 +41,7 @@ sr_Latn{
         151{"Istočna Evropa"}
         154{"Severna Evropa"}
         155{"Zapadna Evropa"}
+        419{"Latinska Amerika i Karibi"}
         830{"Kanalska ostrva"}
         AD{"Andora"}
         AE{"Ujedinjeni Arapski Emirati"}
@@ -119,6 +122,7 @@ sr_Latn{
         GD{"Grenada"}
         GE{"Gruzija"}
         GF{"Francuska Gvajana"}
+        GG{"Gurnsi"}
         GH{"Gana"}
         GI{"Gibraltar"}
         GL{"Grenland"}
@@ -143,11 +147,12 @@ sr_Latn{
         IL{"Izrael"}
         IM{"Ostrvo Man"}
         IN{"Indija"}
-        IO{"British Indian Ocean Territory"}
+        IO{"Britansko Indijska Okeanska Teritorija"}
         IQ{"Irak"}
         IR{"Iran"}
         IS{"Island"}
         IT{"Italija"}
+        JE{"Džersi"}
         JM{"Jamajka"}
         JO{"Jordan"}
         JP{"Japan"}
@@ -224,6 +229,7 @@ sr_Latn{
         PY{"Paragvaj"}
         QA{"Katar"}
         QO{"Ostala okeanija"}
+        QU{"Evropska unija"}
         RE{"Rejunion"}
         RO{"Rumunija"}
         RS{"Srbija"}
@@ -255,7 +261,7 @@ sr_Latn{
         TH{"Tajland"}
         TJ{"Tadžikistan"}
         TK{"Tokelau"}
-        TL{"Timor-Leste"}
+        TL{"Istočni Timor"}
         TM{"Turkmenistan"}
         TN{"Tunis"}
         TO{"Tonga"}
@@ -284,6 +290,7 @@ sr_Latn{
         ZA{"Južnoafrička Republika"}
         ZM{"Zambija"}
         ZW{"Zimbabve"}
+        ZZ{"Nepoznat ili nevažeći region"}
     }
     Currencies{
         ATS{
@@ -418,6 +425,10 @@ sr_Latn{
             "US$",
             "Američki dolar",
         }
+        XXX{
+            "XXX",
+            "Nepoznata ili nevažeća valuta",
+        }
         YUN{
             "Din",
             "YUN",
@@ -431,10 +442,15 @@ sr_Latn{
     }
     Languages{
         af{"Afrikanerski"}
+        am{"Amharski"}
         ar{"Arapski"}
+        az{"Azerbejdžanski"}
         be{"Beloruski"}
         bg{"Bugarski"}
+        bh{"Biharski"}
+        bn{"Bengalski"}
         br{"Bretonski"}
+        bs{"Bosanski"}
         ca{"Katalonski"}
         co{"Korzikanski"}
         cs{"Češki"}
@@ -442,6 +458,8 @@ sr_Latn{
         de{"Nemački"}
         el{"Grčki"}
         en{"Engleski"}
+        en_AU{"Engleski (Australija)"}
+        en_GB{"en_GB"}
         eo{"Esperanto"}
         es{"Španski"}
         et{"Estonski"}
@@ -454,7 +472,7 @@ sr_Latn{
         hi{"Hindi"}
         hr{"Hrvatski"}
         hu{"Mađarski"}
-        hy{"Armenski"}
+        hy{"Jermenski"}
         id{"Indonezijski"}
         is{"Islandski"}
         it{"Italijanski"}
@@ -475,10 +493,12 @@ sr_Latn{
         no{"Norveški"}
         pl{"Poljski"}
         pt{"Portugalski"}
+        pt_BR{"Portugalski (Brazil)"}
         rm{"Reto-Romanski"}
         ro{"Rumunski"}
         ru{"Ruski"}
         sa{"Sanskrit"}
+        sh{"Srpsko-Hrvatski"}
         sk{"Slovački"}
         sl{"Slovenački"}
         sq{"Albanski"}
@@ -487,6 +507,7 @@ sr_Latn{
         sw{"Svahili"}
         tr{"Turski"}
         uk{"Ukrajinski"}
+        und{"Nepoznat ili nevažeći jezik"}
         vi{"Vijetnamski"}
         yi{"Jidiš"}
         zh{"Kineski"}
@@ -524,6 +545,8 @@ sr_Latn{
         Latf{"Latinica (Fraktur varijanta)"}
         Latn{"Latinica"}
         Runr{"runsko pismo"}
+        Zxxx{"Nepisani jezik"}
+        Zzzz{"Nepoznato ili nevažeće pismo"}
     }
     Types{
         calendar{
@@ -539,13 +562,13 @@ sr_Latn{
             big5han{"Tradicionalni kineski"}
             direct{"Direktno sortiranje"}
             gb2312han{"Pojednostavljeni kineski"}
-            phonebook{"Sortiranje po azbuci"}
+            phonebook{"Sortiranje kao telefonski imenik"}
             pinyin{"Pinjin sortiranje"}
             stroke{"Sortiranje po broju crta"}
             traditional{"Tradicionalno sortiranje"}
         }
     }
-    Version{"1.91"}
+    Version{"1.93"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -559,13 +582,17 @@ sr_Latn{
                 "yy-MM-dd",
                 "{1} {0}",
             }
+            availableFormats{
+                mmss{"mm:ss"}
+                yyMMdd{"dd.MM.yy"}
+            }
             dayNames{
                 format{
                     abbreviated{
                         "ned",
                         "pon",
                         "uto",
-                        "sri",
+                        "sre",
                         "čet",
                         "pet",
                         "sub",
@@ -574,7 +601,7 @@ sr_Latn{
                         "nedelja",
                         "ponedeljak",
                         "utorak",
-                        "srijeda",
+                        "sreda",
                         "četvrtak",
                         "petak",
                         "subota",
@@ -596,6 +623,10 @@ sr_Latn{
                 abbreviated{
                     "p. n. e.",
                     "n. e.",
+                }
+                wide{
+                    "Pre nove ere",
+                    "Nove ere",
                 }
             }
             fields{
@@ -630,8 +661,8 @@ sr_Latn{
                         "mart",
                         "april",
                         "maj",
-                        "juni",
-                        "juli",
+                        "jun",
+                        "jul",
                         "avgust",
                         "septembar",
                         "oktobar",
@@ -665,14 +696,26 @@ sr_Latn{
                         "K4",
                     }
                     wide{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
+                        "Prvo tromesečje",
+                        "Drugo tromesečje",
+                        "Treće tromesečje",
+                        "Četvrto tromesečje",
+                    }
+                }
+                stand-alone{
+                    wide{
+                        "Prvo tromesečje",
+                        "Drugo tromesečje",
+                        "Treće tromesečje",
+                        "Četvrto tromesečje",
                     }
                 }
             }
         }
+    }
+    measurementSystemNames{
+        US{"SAD"}
+        metric{"Metrički"}
     }
     zoneStrings{
         "Africa:Kinshasa"{
@@ -698,6 +741,9 @@ sr_Latn{
         }
         "Asia:Tashkent"{
             ec{"Taškent"}
+        }
+        "Etc:Unknown"{
+            ec{"Nepoznata vremenska zona"}
         }
         "Europe:Kiev"{
             ec{"Kijev"}

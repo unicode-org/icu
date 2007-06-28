@@ -48,7 +48,7 @@ sv_FI{
             stroke{"kinesiska i streck-ordning"}
         }
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

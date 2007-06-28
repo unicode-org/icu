@@ -18,7 +18,7 @@ ko{
         142{"아시아"}
         150{"유럽"}
         AD{"안도라"}
-        AE{"아랍에미리트"}
+        AE{"아랍에미리트 연합"}
         AF{"아프가니스탄"}
         AG{"앤티가 바부다"}
         AI{"안길라"}
@@ -55,7 +55,7 @@ ko{
         BZ{"벨리즈"}
         CA{"캐나다"}
         CC{"코코스제도"}
-        CD{"콩고민주공화국"}
+        CD{"콩고 민주공화국"}
         CG{"콩고"}
         CH{"스위스"}
         CI{"코트디부와르"}
@@ -130,7 +130,7 @@ ko{
         KG{"키르기스스탄"}
         KH{"캄보디아"}
         KI{"키리바시"}
-        KM{"코모르"}
+        KM{"코모로스"}
         KN{"세인트크리스토퍼 네비스"}
         KP{"조선 민주주의 인민 공화국"}
         KR{"대한민국"}
@@ -250,6 +250,7 @@ ko{
         WS{"사모아"}
         YE{"예멘"}
         YT{"마요티"}
+        ZA{"남아프리카"}
         ZM{"잠비아"}
         ZW{"짐바브웨"}
     }
@@ -914,6 +915,10 @@ ko{
             "ROL",
             "루마니아 레이",
         }
+        RSD{
+            "RSD",
+            "세르비아 디나르",
+        }
         RUB{
             "RUB",
             "러시아 루블",
@@ -1366,10 +1371,10 @@ ko{
         hu{"헝가리어"}
         hup{"후파어"}
         hy{"아르메니아어"}
-        ia{"인터링거"}
+        ia{"인테르링구아(국제보조어협회)"}
         iba{"이반어"}
         id{"인도네시아어"}
-        ie{"인터링게어"}
+        ie{"인테르링구에"}
         ig{"이그보어"}
         ijo{"이조어"}
         ik{"이누피아크어"}
@@ -1499,6 +1504,7 @@ ko{
         nyn{"니안콜어"}
         nyo{"뉴로어"}
         nzi{"느지마어"}
+        oc{"오크어"}
         oj{"오지브웨이어"}
         om{"오로모어 (아판)"}
         or{"오리야어"}
@@ -1569,7 +1575,7 @@ ko{
         sr{"세르비아어"}
         ss{"시스와티어"}
         ssa{"니로-사하람어 (기타)"}
-        su{"순단어"}
+        su{"순다어"}
         suk{"수쿠마족어"}
         sus{"수수어"}
         sux{"수메르어"}
@@ -1626,7 +1632,7 @@ ko{
         wen{"소르브어"}
         wo{"올로프어"}
         xal{"칼미크어"}
-        xh{"반투어(남아프리카)"}
+        xh{"코사어"}
         yao{"야오족어"}
         yap{"얍페세어"}
         yi{"이디시어"}
@@ -1736,7 +1742,7 @@ ko{
     Variants{
         REVISED{"개정"}
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1800,12 +1806,6 @@ ko{
             fields{
                 day{
                     dn{"일"}
-                    relative{
-                        "-1"{"어제"}
-                        "0"{"오늘"}
-                        "1"{"내일"}
-                        "2"{"모레"}
-                    }
                 }
                 dayperiod{
                     dn{"오전/오후"}
@@ -1886,6 +1886,36 @@ ko{
                     }
                 }
             }
+            quarters{
+                format{
+                    abbreviated{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "제 4사분기",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                    wide{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "제 4사분기",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                }
+            }
         }
     }
     delimiters{
@@ -1898,14 +1928,56 @@ ko{
         "Africa:Casablanca"{
             ec{"카사블랑카"}
         }
+        "Africa:Ceuta"{
+            ec{"세우타"}
+        }
+        "Africa:Kinshasa"{
+            ec{"킨샤사"}
+        }
+        "Africa:Lubumbashi"{
+            ec{"루붐바시"}
+        }
         "America:Anchorage"{
             ec{"앵커리지"}
+        }
+        "America:Araguaina"{
+            ec{"아라과이나"}
+        }
+        "America:Bahia"{
+            ec{"바히아"}
+        }
+        "America:Belem"{
+            ec{"벨렘"}
+        }
+        "America:Boa_Vista"{
+            ec{"보아 비스타"}
+        }
+        "America:Buenos_Aires"{
+            ec{"부에노스 아이레스"}
+        }
+        "America:Campo_Grande"{
+            ec{"캄포 그란데"}
         }
         "America:Chicago"{
             ec{"시카고"}
         }
+        "America:Cuiaba"{
+            ec{"쿠이아바"}
+        }
+        "America:Danmarkshavn"{
+            ec{"덴마크샤븐"}
+        }
         "America:Denver"{
             ec{"덴버"}
+        }
+        "America:Fortaleza"{
+            ec{"포르탈레자"}
+        }
+        "America:Godthab"{
+            ec{"고드호프"}
+        }
+        "America:Guayaquil"{
+            ec{"과야킬"}
         }
         "America:Halifax"{
             ec{"핼리팩스"}
@@ -1922,11 +1994,89 @@ ko{
         "America:Phoenix"{
             ec{"피닉스"}
         }
+        "America:Porto_Velho"{
+            ec{"포르토 벨로"}
+        }
+        "America:Recife"{
+            ec{"레시페"}
+        }
+        "America:Rio_Branco"{
+            ec{"리오 브랑코"}
+        }
+        "America:Santiago"{
+            ec{"산티아고"}
+        }
+        "America:Sao_Paulo"{
+            ec{"상파울로"}
+        }
+        "America:Scoresbysund"{
+            ec{"스코레스바이선드"}
+        }
         "America:St_Johns"{
             ec{"St. Johns"}
         }
+        "America:Thule"{
+            ec{"툴레"}
+        }
+        "Antarctica:Casey"{
+            ec{"케이시"}
+        }
+        "Antarctica:Davis"{
+            ec{"데이비스"}
+        }
+        "Antarctica:DumontDUrville"{
+            ec{"뒤몽 뒤르빌"}
+        }
+        "Antarctica:Mawson"{
+            ec{"모슨"}
+        }
+        "Antarctica:McMurdo"{
+            ec{"맥머도"}
+        }
+        "Antarctica:Palmer"{
+            ec{"파머"}
+        }
+        "Antarctica:Rothera"{
+            ec{"로데라"}
+        }
+        "Antarctica:South_Pole"{
+            ec{"남극"}
+        }
+        "Antarctica:Syowa"{
+            ec{"쇼와"}
+        }
+        "Antarctica:Vostok"{
+            ec{"보스토크"}
+        }
+        "Asia:Almaty"{
+            ec{"알마티"}
+        }
+        "Asia:Aqtau"{
+            ec{"아크타우"}
+        }
+        "Asia:Aqtobe"{
+            ec{"악토브"}
+        }
+        "Asia:Choibalsan"{
+            ec{"초이발산"}
+        }
+        "Asia:Hovd"{
+            ec{"호브드"}
+        }
+        "Asia:Jakarta"{
+            ec{"자카르타"}
+        }
+        "Asia:Jayapura"{
+            ec{"자야푸라"}
+        }
         "Asia:Jerusalem"{
             ec{"예루살렘"}
+        }
+        "Asia:Kuala_Lumpur"{
+            ec{"쿠알라룸푸르"}
+        }
+        "Asia:Makassar"{
+            ec{"마카사르"}
         }
         "Asia:Seoul"{
             ec{"서울"}
@@ -1934,8 +2084,17 @@ ko{
         "Asia:Shanghai"{
             ec{"상하이"}
         }
+        "Asia:Tashkent"{
+            ec{"타슈켄트"}
+        }
         "Asia:Tokyo"{
             ec{"도쿄"}
+        }
+        "Asia:Ulaanbaatar"{
+            ec{"울란바토르"}
+        }
+        "Atlantic:Azores"{
+            ec{"아조레스"}
         }
         "Europe:Bucharest"{
             ec{"부쿠레슈티"}
@@ -1943,8 +2102,59 @@ ko{
         "Europe:Paris"{
             ec{"파리"}
         }
+        "Pacific:Auckland"{
+            ec{"오클랜드"}
+        }
+        "Pacific:Easter"{
+            ec{"이스터 섬"}
+        }
+        "Pacific:Enderbury"{
+            ec{"엔더베리"}
+        }
+        "Pacific:Galapagos"{
+            ec{"갈라파고스"}
+        }
+        "Pacific:Gambier"{
+            ec{"감비어"}
+        }
         "Pacific:Honolulu"{
             ec{"호놀룰루"}
+        }
+        "Pacific:Johnston"{
+            ec{"존스톤"}
+        }
+        "Pacific:Kiritimati"{
+            ec{"키리티마티"}
+        }
+        "Pacific:Kosrae"{
+            ec{"코스레"}
+        }
+        "Pacific:Kwajalein"{
+            ec{"콰잘렌"}
+        }
+        "Pacific:Majuro"{
+            ec{"마주로"}
+        }
+        "Pacific:Marquesas"{
+            ec{"마퀘사스"}
+        }
+        "Pacific:Midway"{
+            ec{"미드웨이"}
+        }
+        "Pacific:Ponape"{
+            ec{"포나페"}
+        }
+        "Pacific:Tahiti"{
+            ec{"타히티"}
+        }
+        "Pacific:Tarawa"{
+            ec{"타라와"}
+        }
+        "Pacific:Truk"{
+            ec{"트루크"}
+        }
+        "Pacific:Wake"{
+            ec{"웨이크"}
         }
         "meta:Alaska"{
             ld{"알래스카 서머타임"}

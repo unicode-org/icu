@@ -22,18 +22,19 @@ sv{
         014{"Östafrika"}
         015{"Nordafrika"}
         017{"Centralafrika"}
-        018{"Södra Afrika"}
+        018{"södra Afrika"}
         019{"Nord- och Sydamerika"}
-        021{"Nordamerika"}
+        021{"norra Amerika"}
         029{"Karibien"}
-        030{"Ostasien"}
-        034{"Södra Asien"}
+        030{"Östasien"}
+        034{"södra Asien"}
         035{"Sydostasien"}
         039{"Sydeuropa"}
         053{"Australien och Nya Zeeland"}
         054{"Melanesien"}
         057{"Mikronesiska öarna"}
         061{"Polynesien"}
+        062{"södra Centralasien"}
         142{"Asien"}
         143{"Centralasien"}
         145{"Västasien"}
@@ -41,7 +42,7 @@ sv{
         151{"Östeuropa"}
         154{"Nordeuropa"}
         155{"Västeuropa"}
-        172{"Samväldet av oberoende stater"}
+        172{"Oberoende staters samvälde"}
         419{"Latinamerika och Karibien"}
         830{"Kanalöarna"}
         AD{"Andorra"}
@@ -108,6 +109,7 @@ sv{
         EC{"Ecuador"}
         EE{"Estland"}
         EG{"Egypten"}
+        EH{"Västsahara"}
         ER{"Eritrea"}
         ES{"Spanien"}
         ET{"Etiopien"}
@@ -136,7 +138,7 @@ sv{
         GU{"Guam"}
         GW{"Guinea-Bissau"}
         GY{"Guyana"}
-        HK{"Hongkong (S.A.R. Kina)"}
+        HK{"Honkong S.A.R. Kina"}
         HM{"Heard- och McDonaldöarna"}
         HN{"Honduras"}
         HR{"Kroatien"}
@@ -188,7 +190,7 @@ sv{
         ML{"Mali"}
         MM{"Myanmar"}
         MN{"Mongoliet"}
-        MO{"Macao (S.A.R. Kina)"}
+        MO{"Macao S.A.R. Kina"}
         MP{"Nordmarianerna"}
         MQ{"Martinique"}
         MR{"Mauretanien"}
@@ -363,6 +365,10 @@ sv{
         AZM{
             "AZM",
             "Azerbajdzjansk manat",
+        }
+        AZN{
+            "AZN",
+            "AZN",
         }
         BAD{
             "BAD",
@@ -1000,6 +1006,14 @@ sv{
             "leu",
             "Rumänsk leu",
         }
+        RON{
+            "RON",
+            "RON",
+        }
+        RSD{
+            "RSD",
+            "Serbisk dinar",
+        }
         RUB{
             "RUB",
             "Rysk rubel",
@@ -1220,6 +1234,14 @@ sv{
             "CFPF",
             "CFP-franc",
         }
+        XTS{
+            "XTS",
+            "test-valutakod",
+        }
+        XXX{
+            "XXX",
+            "XXX",
+        }
         YDD{
             "YDD",
             "Jemenitisk dinar",
@@ -1280,28 +1302,28 @@ sv{
         ady{"adygeiska"}
         ae{"avestiska"}
         af{"afrikaans"}
-        afa{"annat afroasiatiskt språk"}
+        afa{"afroasiatiskt (annat)"}
         afh{"afrihili"}
         ain{"ainu"}
         ak{"akan"}
         akk{"akkadiska"}
         ale{"aleutiska"}
-        alg{"algonkinskt språk (annat)"}
+        alg{"annat algonkinskt språk"}
         alt{"sydaltaiska"}
         am{"amhariska"}
         an{"aragonesiska"}
-        ang{"fornengelska (ca 450-1100)"}
+        ang{"fornengelska"}
         anp{"angika"}
         apa{"apachespråk"}
         ar{"arabiska"}
         arc{"arameiska"}
         arn{"araukanska"}
         arp{"arapaho"}
-        art{"annat konstgjort språk"}
+        art{"konstgjort språk (annat)"}
         arw{"arawakiska"}
         as{"assamesiska"}
         ast{"asturiska"}
-        ath{"athapaskiskt språk (annat)"}
+        ath{"annat athapaskiskt språk"}
         aus{"australiskt språk"}
         av{"avariskt språk"}
         awa{"awadhi"}
@@ -1312,12 +1334,12 @@ sv{
         bai{"bamilekespråk"}
         bal{"baluchi"}
         ban{"balinesiska"}
-        bas{"basa (bantuspråk)"}
-        bat{"annat baltiskt språk"}
+        bas{"basa"}
+        bat{"baltiskt språk (annat)"}
         be{"vitryska"}
         bej{"beyja"}
         bem{"bemba"}
-        ber{"berberspråk (annat)"}
+        ber{"annat berberspråk"}
         bg{"bulgariska"}
         bh{"bihari"}
         bho{"bhojpuri"}
@@ -1338,13 +1360,13 @@ sv{
         byn{"blin"}
         ca{"katalanska"}
         cad{"caddo"}
-        cai{"annat centralamerikanskt indianspråk"}
+        cai{"centralamerikanskt indianspråk (annat)"}
         car{"karibiska"}
-        cau{"annat kaukasiskt språk"}
+        cau{"kaukasiskt språk (annat)"}
         cch{"atsam"}
         ce{"tjetjenska"}
         ceb{"cebuano"}
-        cel{"annat keltiskt språk"}
+        cel{"keltiskt språk (annat)"}
         ch{"chamorro"}
         chb{"chibcha"}
         chg{"chagatai"}
@@ -1358,16 +1380,16 @@ sv{
         cmc{"chamispråk"}
         co{"korsikanska"}
         cop{"koptiska"}
-        cpe{"annat engelskbaserat kreol- eller pidginspråk"}
-        cpf{"annat franskbaserat kreol- eller pidginspråk"}
-        cpp{"annat portugisiskbaserat kreol- eller pidginspråk"}
+        cpe{"kreol- och pidginspråk, engelskbaserade (övriga)"}
+        cpf{"kreol- och pidginspråk, franskbaserade (övriga)"}
+        cpp{"kreol- och pidginspråk, portugisiskbaserade (övriga)"}
         cr{"cree"}
         crh{"krimtatariska"}
-        crp{"annat kreol- eller pidginspråk"}
+        crp{"kreol- och pidginspråk (annat)"}
         cs{"tjeckiska"}
         csb{"kasjubiska"}
         cu{"kyrkslaviska"}
-        cus{"annat kusjitiskt språk"}
+        cus{"kusjitiskt språk (annat)"}
         cv{"tjuvasjiska"}
         cy{"walesiska"}
         da{"danska"}
@@ -1382,10 +1404,10 @@ sv{
         dgr{"dogrib"}
         din{"dinka"}
         doi{"dogri"}
-        dra{"annat dravidiskt språk"}
+        dra{"dravidiskt språk (annat)"}
         dsb{"lågsorbiska"}
         dua{"duala"}
-        dum{"medelnederländska (ca 1050-1350)"}
+        dum{"medelnederländska"}
         dv{"divehi"}
         dyu{"dyula"}
         dz{"bhutanesiska"}
@@ -1400,9 +1422,10 @@ sv{
         en_CA{"kanadensisk engelska"}
         en_GB{"brittisk engelska"}
         en_US{"amerikansk engelska"}
-        enm{"medelengelska (ca 1100-1500)"}
+        enm{"medelengelska"}
         eo{"esperanto"}
         es{"spanska"}
+        es_419{"latinamerikansk spanska"}
         es_ES{"europeisk spanska"}
         et{"estniska"}
         eu{"baskiska"}
@@ -1413,15 +1436,15 @@ sv{
         ff{"fulani"}
         fi{"finska"}
         fil{"filippinska"}
-        fiu{"annat finskugriskt språk"}
+        fiu{"finsk-ugriskt språk (annat)"}
         fj{"fidjianska"}
         fo{"färöiska"}
         fon{"fonspråket"}
         fr{"franska"}
         fr_CA{"kanadensisk franska"}
         fr_CH{"schweizisk franska"}
-        frm{"medelfranska (ca 1400-1600)"}
-        fro{"fornfranska (842- ca 1400)"}
+        frm{"medelfranska"}
+        fro{"fornfranska"}
         frr{"nordfrisiska"}
         frs{"östfrisiska"}
         fur{"friulianska"}
@@ -1431,12 +1454,13 @@ sv{
         gay{"gayo"}
         gba{"gbaya"}
         gd{"höglandsskotska"}
-        gem{"annat germanskt språk"}
+        gem{"germanskt språk (annat)"}
         gez{"etiopiska"}
         gil{"gilbertiska"}
         gl{"galiciska"}
-        gmh{"medelhögtyska (ca 1050-1500)"}
+        gmh{"medelhögtyska"}
         gn{"guaraní"}
+        goh{"fornhögtyska"}
         gon{"gondi"}
         gor{"gorontalo"}
         got{"gotiska"}
@@ -1472,12 +1496,12 @@ sv{
         ijo{"ijospråket"}
         ik{"inupiak"}
         ilo{"iloko"}
-        inc{"annat indiskt språk"}
-        ine{"annat indoeuropeiskt språk"}
+        inc{"indiskt språk (annat)"}
+        ine{"indo-europeiskt språk (annat)"}
         inh{"ingusjiska"}
         io{"ido"}
-        ira{"annat iranskt språk"}
-        iro{"irokesiska språk"}
+        ira{"iranska"}
+        iro{"irokesiskt språk"}
         is{"isländska"}
         it{"italienska"}
         iu{"inuktitut"}
@@ -1499,13 +1523,13 @@ sv{
         kfo{"koro"}
         kg{"kikongo"}
         kha{"khasi"}
-        khi{"annat khoisanspråk"}
+        khi{"khoisanska (annat)"}
         kho{"khotanesiska"}
         ki{"kikuyu"}
         kj{"kuanyama"}
         kk{"kazakstanska"}
         kl{"grönländska"}
-        km{"kambodjanska, khmeriska"}
+        km{"kambodjanska"}
         kmb{"kimbundu"}
         kn{"kannada"}
         ko{"koreanska"}
@@ -1539,8 +1563,9 @@ sv{
         lt{"litauiska"}
         lu{"luba-katanga"}
         lua{"luba-lulua"}
+        lui{"luiseño"}
         lun{"lunda"}
-        luo{"doluo"}
+        luo{"luo"}
         lus{"lushai"}
         lv{"lettiska"}
         mad{"maduresiska"}
@@ -1554,14 +1579,14 @@ sv{
         mdr{"mandar"}
         men{"mende"}
         mg{"malagassiska"}
-        mga{"medeliriska (ca 900-1200)"}
+        mga{"medeliriska"}
         mh{"marshalliska"}
         mi{"maori"}
         mic{"mic-mac"}
         min{"minangkabau"}
-        mis{"blandade språk"}
+        mis{"annat språk"}
         mk{"makedonska"}
-        mkh{"annat mon-khmeriskt språk"}
+        mkh{"mon-khmeriskt språk (annat)"}
         ml{"malayalam"}
         mn{"mongoliska"}
         mnc{"manchuriska"}
@@ -1582,8 +1607,8 @@ sv{
         myn{"mayaspråk"}
         myv{"erjya"}
         na{"nauru"}
-        nah{"nahuatl, aztekiska"}
-        nai{"annat nordamerikanskt indianspråk"}
+        nah{"aztekiska"}
+        nai{"nordamerikanskt indianspråk (annat)"}
         nap{"napolitanska"}
         nb{"norskt bokmål"}
         nd{"nordndebele"}
@@ -1592,7 +1617,7 @@ sv{
         new{"newariska"}
         ng{"ndonga"}
         nia{"nias"}
-        nic{"annat Niger-Kongospråk"}
+        nic{"kordofanspråk (annat)"}
         niu{"niueanska"}
         nl{"nederländska"}
         nl_BE{"flamländska"}
@@ -1600,7 +1625,6 @@ sv{
         no{"norska"}
         nog{"nogai"}
         non{"fornnordiska"}
-        nqo{"n-ko"}
         nr{"sydndebele"}
         nso{"nordsotho"}
         nub{"nubiskt språk"}
@@ -1620,20 +1644,20 @@ sv{
         ota{"ottomanska"}
         oto{"otomispråk"}
         pa{"punjabi"}
-        paa{"annat papuanskt språk"}
+        paa{"papuanskt språk (annat)"}
         pag{"pangasinan"}
         pal{"medelpersiska"}
         pam{"pampanga"}
         pap{"papiamento"}
         pau{"palau"}
-        peo{"fornpersiska (ca 600-400 f.Kr.)"}
-        phi{"annat filippinskt språk"}
+        peo{"fornpersiska"}
+        phi{"filippinskt språk (annat)"}
         phn{"feniciska"}
         pi{"pali"}
         pl{"polska"}
         pon{"ponape"}
         pra{"prakritspråk"}
-        pro{"fornprovensalska (till 1500)"}
+        pro{"fornprovensalska"}
         ps{"afghanska"}
         pt{"portugisiska"}
         pt_BR{"brasiliansk portugisiska"}
@@ -1645,7 +1669,7 @@ sv{
         rm{"rätoromanska"}
         rn{"rundi"}
         ro{"rumänska"}
-        roa{"annat romanskt språk"}
+        roa{"romanskt språk (annat)"}
         rom{"romani"}
         root{"rot"}
         ru{"ryska"}
@@ -1654,7 +1678,7 @@ sv{
         sa{"sanskrit"}
         sad{"sandawe"}
         sah{"jakutiska"}
-        sai{"annat sydamerikanskt indianspråk"}
+        sai{"sydamerikanskt indianspråk (annat)"}
         sal{"salikiskt språk"}
         sam{"samaritanska"}
         sas{"sasak"}
@@ -1665,22 +1689,22 @@ sv{
         sd{"sindhi"}
         se{"nordsamiska"}
         sel{"selkup"}
-        sem{"annat semitiskt språk"}
+        sem{"semitiskt språk (annat)"}
         sg{"sango"}
-        sga{"forniriska (till 900)"}
+        sga{"forniriska"}
         sgn{"teckenspråk"}
         sh{"serbokroatiska"}
         shn{"shan"}
         si{"singalesiska"}
         sid{"sidamo"}
         sio{"siouxspråk"}
-        sit{"annat sinotibetanskt språk"}
+        sit{"sinotibetanskt (annat)"}
         sk{"slovakiska"}
         sl{"slovenska"}
-        sla{"annat slaviskt språk"}
+        sla{"slaviskt språk (annat)"}
         sm{"samoanska"}
         sma{"sydsamiska"}
-        smi{"annat samiskt språk"}
+        smi{"samiska språk (övriga)"}
         smj{"lulesamiska"}
         smn{"enaresamiska"}
         sms{"skoltsamiska"}
@@ -1694,7 +1718,7 @@ sv{
         srn{"sranan tongo"}
         srr{"serer"}
         ss{"swati"}
-        ssa{"annat nilosahariskt språk"}
+        ssa{"nilosahariskt (annat)"}
         st{"sydsotho"}
         su{"sundanesiska"}
         suk{"sukuma"}
@@ -1704,7 +1728,7 @@ sv{
         sw{"swahili"}
         syr{"syriska"}
         ta{"tamil"}
-        tai{"annat thaispråk"}
+        tai{"thaispråk (annat)"}
         te{"telugiska"}
         tem{"temne"}
         ter{"tereno"}
@@ -1722,7 +1746,7 @@ sv{
         tmh{"tamashek"}
         tn{"tswana"}
         to{"tonganska"}
-        tog{"tonganska (Nyasa)"}
+        tog{"nyasatonganska"}
         tpi{"tok pisin"}
         tr{"turkiska"}
         ts{"tsonga"}
@@ -1730,7 +1754,7 @@ sv{
         tt{"tatariska"}
         tum{"tumbuka"}
         tup{"tupíspråk"}
-        tut{"annat altaiskt språk"}
+        tut{"altaiskt språk (annat)"}
         tvl{"tuvaluanska"}
         tw{"twi"}
         ty{"tahitiska"}
@@ -1766,6 +1790,8 @@ sv{
         zap{"zapotek"}
         zen{"zenaga"}
         zh{"kinesiska"}
+        zh_Hans{"förenklad kinesiska"}
+        zh_Hant{"traditionell kinesiska"}
         znd{"zandé"}
         zu{"zulu"}
         zun{"zuni"}
@@ -1781,7 +1807,7 @@ sv{
         ",",
         "%",
         "0",
-        "#",
+        "nr",
         "−",
         "×10^",
         "‰",
@@ -1891,7 +1917,7 @@ sv{
         Syrc{"syriska"}
         Syre{"estrangelosyriska"}
         Syrj{"västsyriska"}
-        Syrn{"syriska (östlig variant)"}
+        Syrn{"östsyriska"}
         Tagb{"tagbanwa"}
         Tale{"tai le"}
         Talu{"tai lue"}
@@ -1934,22 +1960,27 @@ sv{
         }
     }
     Variants{
-        1901{"traditionell tysk ortografi"}
-        1996{"1996 års reformerad tysk ortografi"}
+        1606NICT{"1606 års stavning"}
+        1694ACAD{"1694 års stavning"}
+        1901{"traditionell tysk stavning"}
+        1996{"1996 års reformerad tysk stavning"}
         AREVELA{"östarmeniska"}
         AREVMDA{"västarmeniska"}
         BOONT{"boontling"}
         FONIPA{"internationell fonetisk notation - IPA"}
         FONUPA{"uralisk fonetisk notation"}
+        MONOTON{"monotonisk stavning"}
         NEDIS{"natisonsk dialekt"}
+        POLYTON{"polytonisk stavning"}
         POLYTONI{"polytonisk ortografi"}
         POSIX{"POSIX"}
         REVISED{"reformerad stavning"}
-        ROZAJ{"resiska"}
-        SAAHO{"saho"}
+        ROZAJ{"resisk dialekt"}
+        SAAHO{"saho-dialekt"}
         SCOUSE{"scouse"}
+        VALENCIA{"valensisk dialekt"}
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -1988,6 +2019,8 @@ sv{
                 MMd{"d/MM"}
                 Md{"d/M"}
                 mmss{"mm.ss"}
+                yyMM{"yy-MM"}
+                yyyyMM{"yyyy-MM"}
                 yyyyMMM{"MMM yyyy"}
             }
             dayNames{
@@ -2131,11 +2164,25 @@ sv{
                         "K3",
                         "K4",
                     }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
                     wide{
                         "1:a kvartalet",
                         "2:a kvartalet",
                         "3:e kvartalet",
                         "4:e kvartalet",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
                     }
                 }
             }
@@ -2284,7 +2331,7 @@ sv{
             ec{"Niamey"}
         }
         "Africa:Nouakchott"{
-            ec{"Nuoachott"}
+            ec{"Nouakchott"}
         }
         "Africa:Ouagadougou"{
             ec{"Ouagadougou"}
@@ -2414,6 +2461,9 @@ sv{
         }
         "America:Eirunepe"{
             ec{"Eirunepe"}
+        }
+        "America:El_Salvador"{
+            ec{"San Salvador"}
         }
         "America:Fortaleza"{
             ec{"Fortaleza"}
@@ -2601,9 +2651,6 @@ sv{
         "America:St_Johns"{
             ec{"St. Johns"}
         }
-        "America:St_Kitts"{
-            ec{"Saint Kitts"}
-        }
         "America:St_Thomas"{
             ec{"Saint Thomas"}
         }
@@ -2683,13 +2730,13 @@ sv{
             ec{"Aden"}
         }
         "Asia:Almaty"{
-            ec{"Almaty"}
+            ec{"Alma-Ata"}
         }
         "Asia:Amman"{
             ec{"Amman"}
         }
         "Asia:Anadyr"{
-            ec{"Anadyr"}
+            ec{"Anadir"}
         }
         "Asia:Aqtau"{
             ec{"Aqtau"}
@@ -2746,7 +2793,7 @@ sv{
             ec{"Dubai"}
         }
         "Asia:Dushanbe"{
-            ec{"Dushanbe"}
+            ec{"Dusjanbe"}
         }
         "Asia:Gaza"{
             ec{"Gaza"}
@@ -2792,6 +2839,9 @@ sv{
         }
         "Asia:Kuching"{
             ec{"Kuching"}
+        }
+        "Asia:Macau"{
+            ec{"Macao"}
         }
         "Asia:Magadan"{
             ec{"Magadan"}
@@ -2886,11 +2936,20 @@ sv{
         "Asia:Yekaterinburg"{
             ec{"Jekaterinburg"}
         }
+        "Asia:Yerevan"{
+            ec{"Jerevan"}
+        }
         "Atlantic:Azores"{
             ec{"Azorerna"}
         }
         "Atlantic:Canary"{
             ec{"Kanarieöarna"}
+        }
+        "Atlantic:Cape_Verde"{
+            ec{"Kap Verde"}
+        }
+        "Atlantic:Faeroe"{
+            ec{"Torshamn"}
         }
         "Atlantic:Jan_Mayen"{
             ec{"Jan Mayen"}
@@ -2997,6 +3056,9 @@ sv{
         "Europe:London"{
             ec{"London"}
         }
+        "Europe:Luxembourg"{
+            ec{"Luxemburg"}
+        }
         "Europe:Madrid"{
             ec{"Madrid"}
         }
@@ -3087,11 +3149,20 @@ sv{
         "Indian:Chagos"{
             ec{"Chagos"}
         }
+        "Indian:Christmas"{
+            ec{"Julön"}
+        }
         "Indian:Kerguelen"{
             ec{"Kerguelen"}
         }
         "Indian:Mahe"{
             ec{"Mahe"}
+        }
+        "Indian:Maldives"{
+            ec{"Maldiverna"}
+        }
+        "Indian:Reunion"{
+            ec{"Réunion"}
         }
         "Pacific:Apia"{
             ec{"Apia"}
@@ -3253,7 +3324,6 @@ sv{
             ld{"saudiarabisk sommartid"}
             lg{"saudiarabisk tid"}
             ls{"saudiarabisk normaltid"}
-            sd{"ADT"}
             sg{"AT"}
             ss{"AST"}
         }
@@ -3270,7 +3340,6 @@ sv{
             ld{"Atlantic, sommartid"}
             lg{"nordamerikansk atlanttid"}
             ls{"Atlantic, normaltid"}
-            sd{"ADT"}
             sg{"AT"}
             ss{"AST"}
         }

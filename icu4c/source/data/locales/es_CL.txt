@@ -53,7 +53,7 @@ es_CL{
     Variants{
         1996{"Ortografía alemana de 1996"}
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         gregorian{
             DateTimePatterns{

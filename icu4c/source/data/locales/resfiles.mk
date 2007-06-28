@@ -50,11 +50,10 @@ GENRB_SOURCE = af.txt af_NA.txt af_ZA.txt am.txt\
  cs.txt cs_CZ.txt cy.txt cy_GB.txt da.txt\
  da_DK.txt de.txt de_AT.txt de_BE.txt de_CH.txt\
  de_DE.txt de_LI.txt de_LU.txt el.txt el_CY.txt\
- el_GR.txt en.txt en_AS.txt en_AU.txt en_BE.txt\
- en_BW.txt en_BZ.txt en_CA.txt en_GB.txt en_GU.txt\
- en_HK.txt en_IE.txt en_IN.txt en_JM.txt en_MH.txt\
- en_MP.txt en_MT.txt en_NA.txt en_NZ.txt en_PH.txt\
- en_PK.txt en_SG.txt en_TT.txt en_UM.txt en_US.txt\
+ el_GR.txt en.txt en_AU.txt en_BE.txt en_BW.txt\
+ en_BZ.txt en_CA.txt en_GB.txt en_HK.txt en_IE.txt\
+ en_IN.txt en_JM.txt en_MH.txt en_MT.txt en_NZ.txt\
+ en_PH.txt en_PK.txt en_SG.txt en_TT.txt en_US.txt\
  en_US_POSIX.txt en_VI.txt en_ZA.txt en_ZW.txt es.txt\
  es_AR.txt es_BO.txt es_CL.txt es_CO.txt es_CR.txt\
  es_DO.txt es_EC.txt es_ES.txt es_GT.txt es_HN.txt\
@@ -81,17 +80,16 @@ GENRB_SOURCE = af.txt af_NA.txt af_ZA.txt am.txt\
  or_IN.txt pa.txt pa_Guru.txt pa_Guru_IN.txt pl.txt\
  pl_PL.txt ps.txt ps_AF.txt pt.txt pt_BR.txt\
  pt_PT.txt ro.txt ro_RO.txt ru.txt ru_RU.txt\
- ru_UA.txt se.txt se_FI.txt se_NO.txt sk.txt\
- sk_SK.txt sl.txt sl_SI.txt so.txt so_DJ.txt\
- so_ET.txt so_KE.txt so_SO.txt sq.txt sq_AL.txt\
- sr.txt sr_Cyrl.txt sr_Cyrl_BA.txt sr_Cyrl_ME.txt sr_Cyrl_RS.txt\
- sr_Latn.txt sr_Latn_BA.txt sr_Latn_ME.txt sr_Latn_RS.txt sv.txt\
- sv_FI.txt sv_SE.txt sw.txt sw_KE.txt sw_TZ.txt\
- ta.txt ta_IN.txt te.txt te_IN.txt th.txt\
- th_TH.txt ti.txt ti_ER.txt ti_ET.txt tr.txt\
- tr_TR.txt uk.txt uk_UA.txt ur.txt ur_IN.txt\
- ur_PK.txt uz.txt uz_Arab.txt uz_Arab_AF.txt uz_Cyrl.txt\
- uz_Cyrl_UZ.txt uz_Latn.txt uz_Latn_UZ.txt vi.txt vi_VN.txt\
- zh.txt zh_Hans.txt zh_Hans_CN.txt zh_Hans_SG.txt zh_Hant.txt\
- zh_Hant_HK.txt zh_Hant_MO.txt zh_Hant_TW.txt
+ ru_UA.txt sk.txt sk_SK.txt sl.txt sl_SI.txt\
+ so.txt so_DJ.txt so_ET.txt so_KE.txt so_SO.txt\
+ sq.txt sq_AL.txt sr.txt sr_Cyrl.txt sr_Cyrl_BA.txt\
+ sr_Cyrl_ME.txt sr_Cyrl_RS.txt sr_Latn.txt sr_Latn_BA.txt sr_Latn_ME.txt\
+ sr_Latn_RS.txt sv.txt sv_FI.txt sv_SE.txt sw.txt\
+ sw_KE.txt sw_TZ.txt ta.txt ta_IN.txt te.txt\
+ te_IN.txt th.txt th_TH.txt ti.txt ti_ER.txt\
+ ti_ET.txt tr.txt tr_TR.txt uk.txt uk_UA.txt\
+ ur.txt ur_IN.txt ur_PK.txt uz.txt uz_Arab.txt\
+ uz_Arab_AF.txt uz_Cyrl.txt uz_Cyrl_UZ.txt uz_Latn.txt uz_Latn_UZ.txt\
+ vi.txt vi_VN.txt zh.txt zh_Hans.txt zh_Hans_CN.txt\
+ zh_Hans_SG.txt zh_Hant.txt zh_Hant_HK.txt zh_Hant_MO.txt zh_Hant_TW.txt
 
