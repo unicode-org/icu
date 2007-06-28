@@ -4501,6 +4501,7 @@ public class Bidi {
         if (!IsValidParaOrLine() || run < 0 ||
                 (runCount < 0 && ! BidiLine.getRuns(this)) ||
                 run >= runCount) {
+            throw new IllegalArgumentException("Invalid call to getRunLevel()");
         }
         if (!isGoodLogicalToVisualRunsMap) {
             getLogicalToVisualRunsMap();
