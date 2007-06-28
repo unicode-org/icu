@@ -134,7 +134,7 @@ so{
         "#,##0%",
         "#E0",
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -241,6 +241,12 @@ so{
             }
             quarters{
                 format{
+                    abbreviated{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
                     wide{
                         "Q1",
                         "Q2",

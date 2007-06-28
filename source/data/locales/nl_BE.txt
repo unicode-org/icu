@@ -28,7 +28,7 @@ nl_BE{
             traditional{"Traditioneel"}
         }
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

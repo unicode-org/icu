@@ -27,7 +27,7 @@ en_GB{
         "#,##0%",
         "#E0",
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -41,18 +41,42 @@ en_GB{
                 "dd/MM/yyyy",
                 "{1} {0}",
             }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Sun",
+                        "Monday",
+                        "Tuesday",
+                        "Wed",
+                        "Thursday",
+                        "Fri",
+                        "Sat",
+                    }
+                    wide{
+                        "Sunday",
+                        "Monday",
+                        "Tuesday",
+                        "Wednesday",
+                        "Thursday",
+                        "Friday",
+                        "Saturday",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "S",
+                        "M",
+                        "T",
+                        "W",
+                        "T",
+                        "F",
+                        "S",
+                    }
+                }
+            }
             fields{
                 day{
                     dn{"Day"}
-                    relative{
-                        "-1"{"Yesterday"}
-                        "-2"{"The day before yesterday"}
-                        "-3"{"Three days ago"}
-                        "0"{"Today"}
-                        "1"{"Tomorrow"}
-                        "2"{"The day after tomorrow"}
-                        "3"{"Three days from now"}
-                    }
                 }
                 dayperiod{
                     dn{"AM/PM"}
@@ -83,6 +107,96 @@ en_GB{
                 }
                 zone{
                     dn{"Zone"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Jan",
+                        "February",
+                        "Mar",
+                        "Apr",
+                        "May",
+                        "Jun",
+                        "Jul",
+                        "August",
+                        "September",
+                        "October",
+                        "November",
+                        "December",
+                    }
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "J",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                    }
+                    wide{
+                        "January",
+                        "February",
+                        "March",
+                        "April",
+                        "May",
+                        "June",
+                        "July",
+                        "August",
+                        "September",
+                        "October",
+                        "November",
+                        "December",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Jan",
+                        "February",
+                        "Mar",
+                        "Apr",
+                        "May",
+                        "Jun",
+                        "Jul",
+                        "August",
+                        "September",
+                        "October",
+                        "November",
+                        "December",
+                    }
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "J",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                    }
+                    wide{
+                        "January",
+                        "February",
+                        "March",
+                        "April",
+                        "May",
+                        "June",
+                        "July",
+                        "August",
+                        "September",
+                        "October",
+                        "November",
+                        "December",
+                    }
                 }
             }
         }

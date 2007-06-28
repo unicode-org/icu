@@ -283,7 +283,6 @@ lv{
         fr{"franču"}
         ga{"īru"}
         he{"ivrits"}
-        hi{"hindi"}
         hr{"horvātu"}
         hu{"ungāru"}
         it{"itāliešu"}
@@ -330,7 +329,7 @@ lv{
         "#,##0%",
         "#E0",
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -506,6 +505,7 @@ lv{
     }
     messages{
         nostr{"nē:ne:n"}
+        yesstr{"jā:ja:j"}
     }
     zoneStrings{
         "America:Chicago"{

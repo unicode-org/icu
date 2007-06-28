@@ -1411,7 +1411,7 @@ bg{
             traditional{"Традиционно"}
         }
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1846,6 +1846,12 @@ bg{
         "America:Toronto"{
             ec{"Торонто"}
         }
+        "America:Vancouver"{
+            ec{"Ванкувър"}
+        }
+        "America:Whitehorse"{
+            ec{"Уайтхорс"}
+        }
         "America:Winnipeg"{
             ec{"Уинипег"}
         }
@@ -2033,7 +2039,7 @@ bg{
             ec{"Сидни"}
         }
         "Europe:Belfast"{
-            ec{"Белфастt"}
+            ec{"Белфаст"}
         }
         "Europe:Bucharest"{
             ec{"Букурещ"}

@@ -14,6 +14,7 @@ nn{
     Countries{
         001{"verda"}
         002{"Afrika"}
+        003{"Nord-Amerika"}
         005{"Sør-Amerika"}
         009{"Oseania"}
         011{"Vest-Afrika"}
@@ -965,10 +966,8 @@ nn{
         POSIX{"POSIX"}
         REVISED{"revidert ortografi"}
         ROZAJ{"resisk dialekt"}
-        SAAHO{"saaho dialekt"}
-        SCOUSE{"scouse dialekt"}
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         gregorian{
             DateTimePatterns{

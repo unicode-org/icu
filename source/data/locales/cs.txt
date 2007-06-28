@@ -1437,7 +1437,7 @@ cs{
             japanese{"Japonský kalendář"}
         }
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1497,13 +1497,6 @@ cs{
             fields{
                 day{
                     dn{"Den"}
-                    relative{
-                        "-1"{"Včera"}
-                        "-2"{"Předevčírem"}
-                        "0"{"Dnes"}
-                        "1"{"Zítra"}
-                        "2"{"Pozítří"}
-                    }
                 }
                 dayperiod{
                     dn{"Část dne"}

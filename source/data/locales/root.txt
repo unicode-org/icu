@@ -70,7 +70,7 @@ root{
         297,
         210,
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         buddhist{
             AmPmMarkers{

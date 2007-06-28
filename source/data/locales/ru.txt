@@ -116,7 +116,7 @@ ru{
         FI{"Финляндия"}
         FJ{"Фиджи"}
         FK{"Фолклендские острова"}
-        FM{"Федеративное Государство Микронезия"}
+        FM{"Федеративные Штаты Микронезии"}
         FO{"Фарерские острова"}
         FR{"Франция"}
         GA{"Габон"}
@@ -137,7 +137,7 @@ ru{
         GU{"Гуам"}
         GW{"Гвинея-Биссау"}
         GY{"Гайана"}
-        HK{"Гонконг (Область с Особым Административным Управлением, Китай)"}
+        HK{"Гонконг, Особый Административный Район Китая"}
         HM{"Острова Херд и Мак-Дональд"}
         HN{"Гондурас"}
         HR{"Хорватия"}
@@ -188,7 +188,7 @@ ru{
         ML{"Мали"}
         MM{"Мьянма"}
         MN{"Монголия"}
-        MO{"Макао (Область с Особым Административным Управлением, Китай)"}
+        MO{"Макао, Особый Административный Район Китая"}
         MP{"Северные Марианские Острова"}
         MQ{"Мартиник"}
         MR{"Мавритания"}
@@ -229,6 +229,7 @@ ru{
         PY{"Парагвай"}
         QA{"Катар"}
         QO{"Внешняя Океания"}
+        QU{"Европейский Союз"}
         RE{"Реюньон"}
         RO{"Румыния"}
         RS{"Сербия"}
@@ -431,9 +432,17 @@ ru{
             "BOV",
             "Боливийский мвдол",
         }
+        BRB{
+            "BRB",
+            "Бразильский новый крузейро (1967-1986)",
+        }
         BRC{
             "BRC",
             "Бразильское крузадо",
+        }
+        BRE{
+            "BRE",
+            "Бразильский крузейро (1990-1993)",
         }
         BRL{
             "R$",
@@ -909,7 +918,7 @@ ru{
         }
         MWK{
             "MK",
-            "Квача (малавийская)",
+            "Малавийская квача",
         }
         MXN{
             "MEX$",
@@ -1022,6 +1031,10 @@ ru{
         ROL{
             "leu",
             "Румынский лей",
+        }
+        RSD{
+            "RSD",
+            "Сербский динар",
         }
         RUB{
             "руб.",
@@ -1226,6 +1239,10 @@ ru{
         XAU{
             "XAU",
             "Золото",
+        }
+        XBB{
+            "XBB",
+            "Европейская денежная единица",
         }
         XBC{
             "XBC",
@@ -1829,6 +1846,8 @@ ru{
     Scripts{
         Arab{"Арабская"}
         Armn{"Армянская"}
+        Bali{"Балийская"}
+        Batk{"Батакская"}
         Beng{"Бенгальская"}
         Bopo{"Бопомофо"}
         Brai{"Брайля"}
@@ -1869,7 +1888,7 @@ ru{
         Latn{"Латиница"}
         Limb{"Лимбу"}
         Lina{"Линейное письмо А"}
-        Linb{"Линейная Б"}
+        Linb{"Линейное письмо Б"}
         Lydi{"Лидийская"}
         Mlym{"Малаяльская"}
         Mong{"Монгольская"}
@@ -1914,7 +1933,7 @@ ru{
             traditional{"традиционный"}
         }
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1929,11 +1948,21 @@ ru{
                 "{1} {0}",
             }
             availableFormats{
+                Ed{"E d"}
+                H{"H"}
                 HHmm{"HH:mm"}
                 HHmmss{"HH:mm:ss"}
-                MMMMd{"d MMMM"}
+                MMMEd{"E MMM d"}
+                MMMd{"d\u00a0MMM"}
+                MMdd{"dd.MM"}
                 Md{"d.M"}
+                mmss{"mm:ss"}
+                yyMM{"MM/yy"}
                 yyMMM{"MMM yy"}
+                yyMMMEEEd{"EEE, d MMM yy"}
+                yyQ{"Q yy"}
+                yyyy{"yyyy"}
+                yyyyMM{"MM.yyyy"}
             }
             dayNames{
                 format{
@@ -2005,16 +2034,16 @@ ru{
                     dn{"Эра"}
                 }
                 hour{
-                    dn{"Часы"}
+                    dn{"Час"}
                 }
                 minute{
-                    dn{"Минуты"}
+                    dn{"Минута"}
                 }
                 month{
                     dn{"Месяц"}
                 }
                 second{
-                    dn{"Секунды"}
+                    dn{"Секунда"}
                 }
                 week{
                     dn{"Неделя"}
@@ -2134,6 +2163,14 @@ ru{
                         "4-й квартал",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                }
             }
         }
         hebrew{
@@ -2145,7 +2182,7 @@ ru{
                         "Кислев",
                         "Тевет",
                         "Шеват",
-                        "Adar I",
+                        "Адар 1",
                         "Адар",
                         "Нисан",
                         "Ияр",
@@ -2160,7 +2197,7 @@ ru{
                         "Кислев",
                         "Тевет",
                         "Шеват",
-                        "Adar I",
+                        "Адар 1",
                         "Адар",
                         "Нисан",
                         "Ияр",
@@ -2263,26 +2300,173 @@ ru{
         metric{"Метрическая"}
     }
     zoneStrings{
+        "Africa:Abidjan"{
+            ec{"Абиджан"}
+        }
+        "Africa:Accra"{
+            ec{"Аккра"}
+        }
+        "Africa:Addis_Ababa"{
+            ec{"Аддис-Абеба"}
+        }
+        "Africa:Algiers"{
+            ec{"Алжир"}
+        }
+        "Africa:Asmera"{
+            ec{"Асмера"}
+        }
         "Africa:Bamako"{
             ec{"Бамако"}
+        }
+        "Africa:Bangui"{
+            ec{"Банги"}
+        }
+        "Africa:Banjul"{
+            ec{"Банжул"}
+        }
+        "Africa:Bissau"{
+            ec{"Бисау"}
+        }
+        "Africa:Blantyre"{
+            ec{"Блантайр"}
+        }
+        "Africa:Brazzaville"{
+            ec{"Браззавиль"}
+        }
+        "Africa:Bujumbura"{
+            ec{"Бужумбура"}
+        }
+        "Africa:Cairo"{
+            ec{"Каир"}
+        }
+        "Africa:Casablanca"{
+            ec{"Касабланка"}
         }
         "Africa:Ceuta"{
             ec{"Сеута"}
         }
+        "Africa:Conakry"{
+            ec{"Конакри"}
+        }
+        "Africa:Dakar"{
+            ec{"Дакар"}
+        }
+        "Africa:Dar_es_Salaam"{
+            ec{"Дар-эс-Салам"}
+        }
+        "Africa:Djibouti"{
+            ec{"Джибути"}
+        }
+        "Africa:Douala"{
+            ec{"Дуала"}
+        }
+        "Africa:El_Aaiun"{
+            ec{"Эль-Аюн"}
+        }
+        "Africa:Freetown"{
+            ec{"Фритаун"}
+        }
+        "Africa:Gaborone"{
+            ec{"Габороне"}
+        }
+        "Africa:Harare"{
+            ec{"Хараре"}
+        }
+        "Africa:Johannesburg"{
+            ec{"Йоханнесбург"}
+        }
+        "Africa:Kampala"{
+            ec{"Кампала"}
+        }
+        "Africa:Khartoum"{
+            ec{"Хартум"}
+        }
+        "Africa:Kigali"{
+            ec{"Кигали"}
+        }
         "Africa:Kinshasa"{
             ec{"Киншаса"}
+        }
+        "Africa:Lagos"{
+            ec{"Лагос"}
+        }
+        "Africa:Libreville"{
+            ec{"Либревиль"}
+        }
+        "Africa:Lome"{
+            ec{"Ломе"}
+        }
+        "Africa:Luanda"{
+            ec{"Луанда"}
         }
         "Africa:Lubumbashi"{
             ec{"Лубумбаши"}
         }
+        "Africa:Lusaka"{
+            ec{"Лусака"}
+        }
+        "Africa:Malabo"{
+            ec{"Малабо"}
+        }
+        "Africa:Maputo"{
+            ec{"Мапуту"}
+        }
+        "Africa:Maseru"{
+            ec{"Масеру"}
+        }
+        "Africa:Mbabane"{
+            ec{"Мбабане"}
+        }
+        "Africa:Mogadishu"{
+            ec{"Могадишо"}
+        }
+        "Africa:Monrovia"{
+            ec{"Монровия"}
+        }
+        "Africa:Nairobi"{
+            ec{"Найроби"}
+        }
+        "Africa:Ndjamena"{
+            ec{"Нджамена"}
+        }
+        "Africa:Niamey"{
+            ec{"Ниамей"}
+        }
+        "Africa:Nouakchott"{
+            ec{"Нуакшот"}
+        }
+        "Africa:Ouagadougou"{
+            ec{"Уагадугу"}
+        }
+        "Africa:Porto-Novo"{
+            ec{"Порто-Ново"}
+        }
+        "Africa:Sao_Tome"{
+            ec{"Сан-Томе"}
+        }
         "Africa:Timbuktu"{
             ec{"Тимбукту"}
+        }
+        "Africa:Tripoli"{
+            ec{"Триполи"}
+        }
+        "Africa:Tunis"{
+            ec{"Тунис"}
+        }
+        "Africa:Windhoek"{
+            ec{"Виндхук"}
         }
         "America:Adak"{
             ec{"Адак, о-в"}
         }
         "America:Anchorage"{
             ec{"Анкоридж"}
+        }
+        "America:Anguilla"{
+            ec{"Ангилья"}
+        }
+        "America:Antigua"{
+            ec{"Антигуа"}
         }
         "America:Araguaina"{
             ec{"Арагуаина"}
@@ -2305,14 +2489,29 @@ ru{
         "America:Argentina:Ushuaia"{
             ec{"Ушуая"}
         }
+        "America:Aruba"{
+            ec{"Аруба"}
+        }
+        "America:Asuncion"{
+            ec{"Асунсьон"}
+        }
         "America:Bahia"{
             ec{"Баия"}
+        }
+        "America:Barbados"{
+            ec{"Барбадос"}
         }
         "America:Belem"{
             ec{"Белен"}
         }
+        "America:Belize"{
+            ec{"Белиз"}
+        }
         "America:Boa_Vista"{
             ec{"Боа-Виста"}
+        }
+        "America:Bogota"{
+            ec{"Богота"}
         }
         "America:Boise"{
             ec{"Бойсе"}
@@ -2329,8 +2528,14 @@ ru{
         "America:Cancun"{
             ec{"Канкун"}
         }
+        "America:Caracas"{
+            ec{"Каракас"}
+        }
         "America:Catamarca"{
             ec{"Катамарка"}
+        }
+        "America:Cayenne"{
+            ec{"Кайенна"}
         }
         "America:Chicago"{
             ec{"Чикаго"}
@@ -2347,6 +2552,9 @@ ru{
         "America:Cuiaba"{
             ec{"Куяба"}
         }
+        "America:Curacao"{
+            ec{"Кюрасао"}
+        }
         "America:Danmarkshavn"{
             ec{"Денмарксхавн"}
         }
@@ -2361,6 +2569,9 @@ ru{
         }
         "America:Detroit"{
             ec{"Детройт"}
+        }
+        "America:Dominica"{
+            ec{"Доминика"}
         }
         "America:Edmonton"{
             ec{"Эдмонтон"}
@@ -2380,11 +2591,23 @@ ru{
         "America:Goose_Bay"{
             ec{"Гус-Бей"}
         }
+        "America:Grenada"{
+            ec{"Гренада"}
+        }
+        "America:Guadeloupe"{
+            ec{"Гваделупа"}
+        }
+        "America:Guatemala"{
+            ec{"Гватемала"}
+        }
         "America:Guayaquil"{
             ec{"Гуаякиль"}
         }
         "America:Halifax"{
             ec{"Галифакс"}
+        }
+        "America:Havana"{
+            ec{"Гавана"}
         }
         "America:Hermosillo"{
             ec{"Эрмосильо"}
@@ -2416,6 +2639,9 @@ ru{
         "America:Iqaluit"{
             ec{"Икалуит"}
         }
+        "America:Jamaica"{
+            ec{"Ямайка"}
+        }
         "America:Jujuy"{
             ec{"Жужуй"}
         }
@@ -2424,6 +2650,12 @@ ru{
         }
         "America:Kentucky:Monticello"{
             ec{"Монтиселло"}
+        }
+        "America:La_Paz"{
+            ec{"Ла-Пас"}
+        }
+        "America:Lima"{
+            ec{"Лима"}
         }
         "America:Los_Angeles"{
             ec{"Лос-Анджелес"}
@@ -2434,8 +2666,14 @@ ru{
         "America:Maceio"{
             ec{"Масейо"}
         }
+        "America:Managua"{
+            ec{"Манагуа"}
+        }
         "America:Manaus"{
             ec{"Манаус"}
+        }
+        "America:Martinique"{
+            ec{"Мартиника"}
         }
         "America:Mazatlan"{
             ec{"Масатлан"}
@@ -2452,14 +2690,26 @@ ru{
         "America:Mexico_City"{
             ec{"Мехико"}
         }
+        "America:Miquelon"{
+            ec{"Микелон"}
+        }
         "America:Moncton"{
             ec{"Монктон"}
         }
         "America:Monterrey"{
             ec{"Монтеррей"}
         }
+        "America:Montevideo"{
+            ec{"Монтевидео"}
+        }
         "America:Montreal"{
             ec{"Монреаль"}
+        }
+        "America:Montserrat"{
+            ec{"Монсеррат"}
+        }
+        "America:Nassau"{
+            ec{"Нассау"}
         }
         "America:New_York"{
             ec{"Нью-Йорк"}
@@ -2479,11 +2729,23 @@ ru{
         "America:North_Dakota:New_Salem"{
             ec{"Нью-Салем"}
         }
+        "America:Panama"{
+            ec{"Панама"}
+        }
         "America:Pangnirtung"{
             ec{"Пангниртанг"}
         }
+        "America:Paramaribo"{
+            ec{"Парамарибо"}
+        }
         "America:Phoenix"{
             ec{"Финикс"}
+        }
+        "America:Port-au-Prince"{
+            ec{"Порт-о-Пренс"}
+        }
+        "America:Port_of_Spain"{
+            ec{"Порт-оф-Спейн"}
         }
         "America:Porto_Velho"{
             ec{"Порту-Велью"}
@@ -2509,6 +2771,9 @@ ru{
         "America:Santiago"{
             ec{"Сантьяго"}
         }
+        "America:Santo_Domingo"{
+            ec{"Санто-Доминго"}
+        }
         "America:Sao_Paulo"{
             ec{"Сан-Паулу"}
         }
@@ -2520,6 +2785,9 @@ ru{
         }
         "America:St_Johns"{
             ec{"Сент-Джонс"}
+        }
+        "America:St_Thomas"{
+            ec{"Сент-Томас"}
         }
         "America:Swift_Current"{
             ec{"Свифт-Карент"}
@@ -2584,6 +2852,9 @@ ru{
         "Arctic:Longyearbyen"{
             ec{"Лонгйир"}
         }
+        "Asia:Aden"{
+            ec{"Аден"}
+        }
         "Asia:Almaty"{
             ec{"Алматы"}
         }
@@ -2596,11 +2867,29 @@ ru{
         "Asia:Aqtobe"{
             ec{"Актобе (Актюбинск)"}
         }
+        "Asia:Ashgabat"{
+            ec{"Ашгабат"}
+        }
+        "Asia:Bahrain"{
+            ec{"Бахрейн"}
+        }
+        "Asia:Baku"{
+            ec{"Баку"}
+        }
+        "Asia:Beirut"{
+            ec{"Бейрут"}
+        }
+        "Asia:Bishkek"{
+            ec{"Бишкек"}
+        }
         "Asia:Choibalsan"{
             ec{"Чойбалсан"}
         }
         "Asia:Chongqing"{
             ec{"Чунцин"}
+        }
+        "Asia:Gaza"{
+            ec{"Газа"}
         }
         "Asia:Harbin"{
             ec{"Харбин"}
@@ -2617,11 +2906,17 @@ ru{
         "Asia:Jayapura"{
             ec{"Джайпур"}
         }
+        "Asia:Kabul"{
+            ec{"Кабул"}
+        }
         "Asia:Kamchatka"{
             ec{"Петропавловск-Камчатский"}
         }
         "Asia:Kashgar"{
             ec{"Кашгар"}
+        }
+        "Asia:Katmandu"{
+            ec{"Катманду"}
         }
         "Asia:Krasnoyarsk"{
             ec{"Красноярск"}
@@ -2638,6 +2933,9 @@ ru{
         "Asia:Makassar"{
             ec{"Макасар"}
         }
+        "Asia:Nicosia"{
+            ec{"Никосия"}
+        }
         "Asia:Novosibirsk"{
             ec{"Новосибирск"}
         }
@@ -2650,8 +2948,17 @@ ru{
         "Asia:Pontianak"{
             ec{"Понтианак"}
         }
+        "Asia:Pyongyang"{
+            ec{"Пхеньян"}
+        }
         "Asia:Qyzylorda"{
             ec{"Кызылорда"}
+        }
+        "Asia:Rangoon"{
+            ec{"Рангун"}
+        }
+        "Asia:Riyadh"{
+            ec{"Эр-Рияд"}
         }
         "Asia:Sakhalin"{
             ec{"Сахалин, о-в"}
@@ -2662,14 +2969,29 @@ ru{
         "Asia:Shanghai"{
             ec{"Шанхай"}
         }
+        "Asia:Singapore"{
+            ec{"Сингапур"}
+        }
         "Asia:Tashkent"{
             ec{"Ташкент"}
+        }
+        "Asia:Tbilisi"{
+            ec{"Тбилиси"}
+        }
+        "Asia:Tehran"{
+            ec{"Тегеран"}
+        }
+        "Asia:Tokyo"{
+            ec{"Токио"}
         }
         "Asia:Ulaanbaatar"{
             ec{"Улан-Батор"}
         }
         "Asia:Urumqi"{
             ec{"Урумчи"}
+        }
+        "Asia:Vientiane"{
+            ec{"Вьентьян"}
         }
         "Asia:Vladivostok"{
             ec{"Владивосток"}
@@ -2691,6 +3013,9 @@ ru{
         }
         "Atlantic:Madeira"{
             ec{"Мадейра, о-в"}
+        }
+        "Atlantic:Reykjavik"{
+            ec{"Рейкьявик"}
         }
         "Australia:Adelaide"{
             ec{"Аделаида"}
@@ -2728,6 +3053,15 @@ ru{
         "Europe:Belfast"{
             ec{"Белфаст"}
         }
+        "Europe:Berlin"{
+            ec{"Берлин"}
+        }
+        "Europe:Brussels"{
+            ec{"Брюссель"}
+        }
+        "Europe:Bucharest"{
+            ec{"Бухарест"}
+        }
         "Europe:Kaliningrad"{
             ec{"Калининград"}
         }
@@ -2743,8 +3077,20 @@ ru{
         "Europe:Madrid"{
             ec{"Мадрид"}
         }
+        "Europe:Minsk"{
+            ec{"Минск"}
+        }
         "Europe:Moscow"{
             ec{"Москва"}
+        }
+        "Europe:Paris"{
+            ec{"Париж"}
+        }
+        "Europe:Riga"{
+            ec{"Рига"}
+        }
+        "Europe:Rome"{
+            ec{"Рим"}
         }
         "Europe:Samara"{
             ec{"Самара"}
@@ -2752,14 +3098,50 @@ ru{
         "Europe:Simferopol"{
             ec{"Симферополь"}
         }
+        "Europe:Stockholm"{
+            ec{"Стокгольм"}
+        }
+        "Europe:Tirane"{
+            ec{"Тирана"}
+        }
         "Europe:Uzhgorod"{
             ec{"Ужгород"}
+        }
+        "Europe:Vienna"{
+            ec{"Вена"}
+        }
+        "Europe:Vilnius"{
+            ec{"Вильнюс"}
         }
         "Europe:Volgograd"{
             ec{"Волгоград"}
         }
+        "Europe:Warsaw"{
+            ec{"Варшава"}
+        }
         "Europe:Zaporozhye"{
             ec{"Запорожье"}
+        }
+        "Indian:Chagos"{
+            ec{"Чагос"}
+        }
+        "Indian:Cocos"{
+            ec{"Кокосовые острова"}
+        }
+        "Indian:Comoro"{
+            ec{"Коморские острова"}
+        }
+        "Indian:Mahe"{
+            ec{"Маэ"}
+        }
+        "Indian:Maldives"{
+            ec{"Мальдивы"}
+        }
+        "Indian:Mayotte"{
+            ec{"Майорка"}
+        }
+        "Indian:Reunion"{
+            ec{"Реюньон"}
         }
         "Pacific:Auckland"{
             ec{"Окленд"}
@@ -2773,11 +3155,17 @@ ru{
         "Pacific:Enderbury"{
             ec{"Эндербери, о-в"}
         }
+        "Pacific:Fakaofo"{
+            ec{"Факаофо"}
+        }
         "Pacific:Galapagos"{
             ec{"Галапагос, о-ва"}
         }
         "Pacific:Gambier"{
             ec{"Гамбье, о-ва"}
+        }
+        "Pacific:Guadalcanal"{
+            ec{"Гвадалканал"}
         }
         "Pacific:Honolulu"{
             ec{"Гонолулу"}
@@ -2803,14 +3191,32 @@ ru{
         "Pacific:Midway"{
             ec{"Мидуэй, о-ва"}
         }
+        "Pacific:Norfolk"{
+            ec{"Норфолк"}
+        }
+        "Pacific:Noumea"{
+            ec{"Нумеа"}
+        }
+        "Pacific:Pago_Pago"{
+            ec{"Паго-Паго"}
+        }
         "Pacific:Ponape"{
             ec{"Понапе, о-в"}
+        }
+        "Pacific:Rarotonga"{
+            ec{"Раротонга"}
+        }
+        "Pacific:Saipan"{
+            ec{"Сайпан"}
         }
         "Pacific:Tahiti"{
             ec{"Таити, о-в"}
         }
         "Pacific:Tarawa"{
             ec{"Тарава"}
+        }
+        "Pacific:Tongatapu"{
+            ec{"Тонгатапу"}
         }
         "Pacific:Truk"{
             ec{"Трук, о-ва"}
