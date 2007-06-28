@@ -551,15 +551,6 @@ uprv_tzset()
 #endif
 }
 
-static int32_t uprv_daylight() {
-#ifdef U_DAYLIGHT
-    return U_DAYLIGHT;
-#else
-    /* Windows documentation says the default is 1. */
-    return 1;
-#endif
-}
-
 U_CAPI int32_t U_EXPORT2
 uprv_timezone()
 {
@@ -636,7 +627,7 @@ static UBool isValidOlsonID(const char *id) {
 #define CONVERT_HOURS_TO_SECONDS(offset) (int32_t)(offset*3600)
 typedef struct OffsetZoneMapping {
     int32_t offsetSeconds;
-    int32_t daylightUsed;
+    int32_t daylightType; /* 1=daylight in June, 2=daylight in December*/
     const char *stdID;
     const char *dstID;
     const char *olsonID;
@@ -647,21 +638,25 @@ This list tries to disambiguate a set of abbreviated timezone IDs and offsets
 and maps it to an Olson ID.
 Before adding anything to this list, take a look at
 icu/source/tools/tzcode/tz.alias
+Sometimes no daylight savings is important to define due to aliases.
 */
 static const struct OffsetZoneMapping OFFSET_ZONE_MAPPINGS[] = {
-    {-45900, 1, "CHAST", "CHADT", "Pacific/Chatham"},
+    {-45900, 2, "CHAST", "CHADT", "Pacific/Chatham"},
     {-43200, 1, "PETT", "PETST", "Asia/Kamchatka"},
-    {-43200, 1, "NZST", "NZDT", "Pacific/Auckland"},
+    {-43200, 2, "NZST", "NZDT", "Pacific/Auckland"},
     {-43200, 1, "ANAT", "ANAST", "Asia/Anadyr"},
     {-39600, 1, "MAGT", "MAGST", "Asia/Magadan"},
-    /*{-36000, 1, "EST", "EST", "Australia/Melbourne"},*/
+    {-37800, 2, "LHST", "LHST", "Australia/Lord_Howe"},
+    {-36000, 2, "EST", "EST", "Australia/Melbourne"},
     {-36000, 1, "SAKT", "SAKST", "Asia/Sakhalin"},
     {-36000, 1, "VLAT", "VLAST", "Asia/Vladivostok"},
-    /*{-34200, 1, "CST", "CST", "Australia/Adelaide"},*/
+    {-34200, 2, "CST", "CST", "Australia/South"},
     {-32400, 1, "YAKT", "YAKST", "Asia/Yakutsk"},
     {-32400, 1, "CHOT", "CHOST", "Asia/Choibalsan"},
+    {-31500, 2, "CWST", "CWST", "Australia/Eucla"},
     {-28800, 1, "IRKT", "IRKST", "Asia/Irkutsk"},
     {-28800, 1, "ULAT", "ULAST", "Asia/Ulaanbaatar"},
+    {-28800, 2, "WST", "WST", "Australia/West"},
     {-25200, 1, "HOVT", "HOVST", "Asia/Hovd"},
     {-25200, 1, "KRAT", "KRAST", "Asia/Krasnoyarsk"},
     {-21600, 1, "NOVT", "NOVST", "Asia/Novosibirsk"},
@@ -672,43 +667,49 @@ static const struct OffsetZoneMapping OFFSET_ZONE_MAPPINGS[] = {
     {-14400, 1, "AZT", "AZST", "Asia/Baku"},
     {-10800, 1, "AST", "ADT", "Asia/Baghdad"},
     {-10800, 1, "MSK", "MSD", "Europe/Moscow"},
+    {-10800, 1, "VOLT", "VOLST", "Europe/Volgograd"},
     {-7200, 0, "EET", "CEST", "Africa/Tripoli"},
-    /*{-7200, 1, "EET", "EEST", "Africa/Cairo"},*/
+    /*{-7200, 1, "EET", "EEST", "Egypt"},*/ /* Conflicts with Europe/Tiraspol */
     {-7200, 1, "IST", "IDT", "Asia/Jerusalem"},
     {-3600, 0, "CET", "WEST", "Africa/Algiers"},
-    /*{-3600, 1, "WAT", "WAST", "Africa/Windhoek"},*/
+    {-3600, 2, "WAT", "WAST", "Africa/Windhoek"},
     {0, 1, "GMT", "IST", "Europe/Dublin"},
     {0, 1, "GMT", "BST", "Europe/London"},
-    /*{0, 1, "WET", "WEST", "Africa/Casablanca"},*/
+    {0, 0, "WET", "WEST", "Africa/Casablanca"},
     {0, 0, "WET", "WET", "Africa/El_Aaiun"},
     {3600, 1, "AZOT", "AZOST", "Atlantic/Azores"},
     {3600, 1, "EGT", "EGST", "America/Scoresbysund"},
     {10800, 1, "PMST", "PMDT", "America/Miquelon"},
-    {10800, 1, "UYT", "UYST", "America/Montevideo"},
+    {10800, 2, "UYT", "UYST", "America/Montevideo"},
     {10800, 1, "WGT", "WGST", "America/Godthab"},
+    {10800, 2, "BRT", "BRST", "Brazil/East"},
     {12600, 1, "NST", "NDT", "America/St_Johns"},
-    /*{14400, 1, "AST", "ADT", "America/Halifax"},*/
-    {14400, 1, "CLT", "CLST", "America/Santiago"},
-    {14400, 1, "FKT", "FKST", "Atlantic/Stanley"},
-    {14400, 1, "PYT", "PYST", "America/Asuncion"},
-    {18000, 1, "CST", "CDT", "America/Havana"},
-    /*{18000, 1, "EST", "EDT", "America/New_York"},*/ /* This doesn't work for America/Indianapolis, America/Jamaica, and some other non-US regions. */
-    {21600, 1, "EAST", "EASST", "Chile/EasterIsland"},
-    {21600, 0, "CST", "MDT", "America/Regina"},
-    /*{25200, 1, "MST", "MDT", "America/Denver"},*/ /* This doesn't work for America/Phoenix and some places in Mexico */
+    {14400, 1, "AST", "ADT", "America/Halifax"},
+    {14400, 2, "AMT", "AMST", "America/Cuiaba"},
+    {14400, 2, "CLT", "CLST", "Chile/Continental"},
+    {14400, 2, "FKT", "FKST", "Atlantic/Stanley"},
+    {14400, 2, "PYT", "PYST", "America/Asuncion"},
+    {18000, 1, "CST", "CDT", "Cuba"},
+    {18000, 1, "EST", "EDT", "US/Eastern"}, /* Conflicts with America/Grand_Turk */
+    {21600, 2, "EAST", "EASST", "Chile/EasterIsland"},
+    {21600, 0, "CST", "MDT", "Canada/Saskatchewan"},
+    {21600, 0, "CST", "CDT", "America/Guatemala"},
+    {21600, 1, "CST", "CDT", "US/Central"}, /* Conflicts with Mexico/General */
+    {25200, 1, "MST", "MDT", "US/Mountain"}, /* Conflicts with Mexico/BajaSur */
     {28800, 0, "PST", "PST", "Pacific/Pitcairn"},
+    {28800, 1, "PST", "PDT", "US/Pacific"}, /* Conflicts with America/Ensenada */
     {32400, 1, "AKST", "AKDT", "America/Juneau"},
     {36000, 1, "HAST", "HADT", "America/Adak"}
 };
 
-static const char* remapShortTimeZone(const char *stdID, const char *dstID, int32_t daylightUsed, int32_t offset)
+static const char* remapShortTimeZone(const char *stdID, const char *dstID, int32_t daylightType, int32_t offset)
 {
     int32_t idx;
-    /*fprintf(stderr, "std=%s dst=%s daylight=%d offset=%d\n", stdID, dstID, daylightUsed, offset);*/
+    fprintf(stderr, "TZ=%s std=%s dst=%s daylight=%d offset=%d\n", getenv("TZ"), stdID, dstID, daylightType, offset);
     for (idx = 0; idx < (int32_t)sizeof(OFFSET_ZONE_MAPPINGS)/sizeof(OFFSET_ZONE_MAPPINGS[0]); idx++)
     {
         if (offset == OFFSET_ZONE_MAPPINGS[idx].offsetSeconds
-            && daylightUsed == OFFSET_ZONE_MAPPINGS[idx].daylightUsed
+            && daylightType == OFFSET_ZONE_MAPPINGS[idx].daylightType
             && strcmp(OFFSET_ZONE_MAPPINGS[idx].stdID, stdID) == 0
             && strcmp(OFFSET_ZONE_MAPPINGS[idx].dstID, dstID) == 0)
         {
@@ -740,6 +741,7 @@ uprv_tzname(int n)
     }
 #endif*/
 
+#if 1
     tzid = getenv("TZ");
     if (tzid != NULL && isValidOlsonID(tzid))
     {
@@ -753,6 +755,7 @@ uprv_tzname(int n)
         return tzid;
     }
     /* else U_TZNAME will give a better result. */
+#endif
 
 #if defined(CHECK_LOCALTIME_LINK)
     /* Caller must handle threading issues */
@@ -786,12 +789,23 @@ uprv_tzname(int n)
     So we remap the abbreviation to an olson ID.
 
     Since Windows exposes a little more timezone information,
-    we normally don't use this code on Windows because uprv_detectWindowsTimeZone
-    should have already given the correct answer.
+    we normally don't use this code on Windows because
+    uprv_detectWindowsTimeZone should have already given the correct answer.
     */
-    tzid = remapShortTimeZone(U_TZNAME[0], U_TZNAME[1], uprv_daylight(), uprv_timezone());
-    if (tzid != NULL) {
-        return tzid;
+    {
+        struct tm juneSol, decemberSol;
+        int daylightType;
+        static const time_t juneSolstice=1182478260; /*2007-06-21 18:11 UT*/
+        static const time_t decemberSolstice=1198332540; /*2007-12-22 06:09 UT*/
+
+        /* This probing will tell us when daylight savings occurs.  */
+        localtime_r(&juneSolstice, &juneSol);
+        localtime_r(&decemberSolstice, &decemberSol);
+        daylightType = ((decemberSol.tm_isdst > 0) << 1) | (juneSol.tm_isdst > 0);
+        tzid = remapShortTimeZone(U_TZNAME[0], U_TZNAME[1], daylightType, uprv_timezone());
+        if (tzid != NULL) {
+            return tzid;
+        }
     }
 #endif
     return U_TZNAME[n];
