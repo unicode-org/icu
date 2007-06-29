@@ -579,6 +579,12 @@ public abstract class DateFormat extends UFormat {
     }
 
     /**
+     * Constant for empty style pattern.
+     * @draft ICU 3.8
+     */
+    public static final int NONE = -1;
+    
+    /**
      * Constant for full style pattern.
      * @stable ICU 2.0
      */
@@ -607,6 +613,43 @@ public abstract class DateFormat extends UFormat {
      * @stable ICU 2.0
      */
     public static final int DEFAULT = MEDIUM;
+    
+    /**
+     * Constant for relative style mask.
+     * @draft ICU 3.8
+     */
+    public static final int RELATIVE = (1 << 7);
+
+    /**
+     * Constant for relative full style pattern.
+     * @draft ICU 3.8
+     */
+    public static final int RELATIVE_FULL = RELATIVE | FULL;
+
+    /**
+     * Constant for relative style pattern.
+     * @draft ICU 3.8
+     */
+    public static final int RELATIVE_LONG = RELATIVE | LONG;
+
+    /**
+     * Constant for relative style pattern.
+     * @draft ICU 3.8
+     */
+    public static final int RELATIVE_MEDIUM = RELATIVE | MEDIUM;
+
+    /**
+     * Constant for relative style pattern.
+     * @draft ICU 3.8
+     */
+    public static final int RELATIVE_SHORT = RELATIVE | SHORT;
+
+    /**
+     * Constant for relative default style pattern.
+     * @draft ICU 3.8
+     */
+    public static final int RELATIVE_DEFAULT = RELATIVE | DEFAULT;
+
 
     /**
      * Gets the time formatter with the default formatting style
@@ -941,6 +984,10 @@ public abstract class DateFormat extends UFormat {
      * @param loc the locale for the format
      */
     private static DateFormat get(int dateStyle, int timeStyle, ULocale loc) {
+        if((timeStyle & RELATIVE)>0 || (dateStyle & RELATIVE)>0) {
+            throw new UnsupportedOperationException("Relative Date is not implemented yet");
+        }
+    
         if (timeStyle < -1 || timeStyle > 3) {
             throw new IllegalArgumentException("Illegal time style " + timeStyle);
         }
