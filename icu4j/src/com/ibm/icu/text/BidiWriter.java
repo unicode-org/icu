@@ -1,5 +1,3 @@
-//##header
-//#ifndef FOUNDATION
 /*
 *******************************************************************************
 *   Copyright (C) 2001-2007, International Business Machines
@@ -431,4 +429,3 @@ final class BidiWriter {
         return dest.toString();
     }
 }
-//#endif
