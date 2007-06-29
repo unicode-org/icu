@@ -1099,7 +1099,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
 
         logln("Currency symbol[USD]: " + name1 + " | " + name2 + " | " + name3);
         String dollar = "$";
-        String us_dollar = "US$";
+        String us_dollar = "$US";
         if (!name1.equals(dollar) || !name2.equals(us_dollar) || !name3.equals(us_dollar)) {
             errln("FAIL: Currency symbol ID");
         }
@@ -1408,8 +1408,8 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         logln("PERCENT type");
         nf = gp.getNumberFormat(GlobalizationPreferences.NF_PERCENT);
         numStr = nf.format(num);
-        if (!numStr.equals("12.345.679%")) {
-            errln("FAIL: Number string is " + numStr + " Expected: 12.345.679%");
+        if (!numStr.equals("12.345.679 %")) {
+            errln("FAIL: Number string is " + numStr + " Expected: 12.345.679 %");
         }
 
         // NF_SCIENTIFIC
@@ -1456,8 +1456,8 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         gp.setTerritory("US");
         nf = gp.getNumberFormat(GlobalizationPreferences.NF_CURRENCY);
         numStr = nf.format(num);
-        if (!numStr.equals("123.456,79 US$")) {
-            errln("FAIL: Number string is " + numStr + " Expected: 123.456,79 US$");
+        if (!numStr.equals("123.456,79 USD")) {
+            errln("FAIL: Number string is " + numStr + " Expected: 123.456,79 USD");
         }
 
         // Set explicit currency
@@ -1465,8 +1465,8 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         gp.setCurrency(Currency.getInstance("GBP"));
         nf = gp.getNumberFormat(GlobalizationPreferences.NF_CURRENCY);
         numStr = nf.format(num);
-        if (!numStr.equals("123.456,79 UK\u00A3")) {
-            errln("FAIL: Number string is " + numStr + " Expected: 123.456,79 UK\u00A3");
+        if (!numStr.equals("123.456,79 GBP")) {
+            errln("FAIL: Number string is " + numStr + " Expected: 123.456,79 GBP");
         }
 
         // Set exliplicit NumberFormat

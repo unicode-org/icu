@@ -568,7 +568,7 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
         */
         String expectedDefault = "-5.789,988";
         String expectedCurrency = "5.789,99 " + EURO;
-        String expectedPercent = "-578.999%";
+        String expectedPercent = "-578.999 %";
 
         formatter = NumberFormat.getNumberInstance(Locale.GERMANY);
         tempString = formatter.format (-5789.9876);

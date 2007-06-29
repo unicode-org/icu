@@ -57,12 +57,12 @@ public class DateTimeGeneratorTest extends TestFmwk {
       format = (SimpleDateFormat)DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, locale);
       format.setTimeZone(zone);
       String pattern = format.toPattern();
-      assertEquals("full-date", "Donnerstag, 14. Oktober 1999 8:58 Uhr Frankreich", format.format(sampleDate));
+      assertEquals("full-date", "Donnerstag, 14. Oktober 1999 08:58:59 Frankreich", format.format(sampleDate));
       
       // modify it to change the zone.
       String newPattern = gen.replaceFieldTypes(pattern, "vvvv");
       format.applyPattern(newPattern);
-      assertEquals("full-date: modified zone", "Donnerstag, 14. Oktober 1999 8:58 Uhr Frankreich", format.format(sampleDate));
+      assertEquals("full-date: modified zone", "Donnerstag, 14. Oktober 1999 08:58:59 Frankreich", format.format(sampleDate));
     }
     
     public void TestPatternParser() {
