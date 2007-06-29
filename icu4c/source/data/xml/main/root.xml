@@ -37,6 +37,60 @@
                 </icu:isLeapMonth>
             </special>
         </calendar>
+        <calendar type="taiwan">
+            <months>
+                <alias source="locale" path="../../calendar[@type='gregorian']/months"/>
+            </months>
+            <days>
+                <alias source="locale" path="../../calendar[@type='gregorian']/days"/>
+            </days>
+            <quarters>
+                <alias source="locale" path="../../calendar[@type='gregorian']/quarters"/>
+            </quarters>
+            <am>AM</am>
+            <pm>PM</pm>
+            <eras>
+                <eraNames>
+                    <alias source="locale" path="../eraAbbr"/>
+                </eraNames>
+                <eraAbbr>
+                    <era type="0">míngúo</era>
+                    <!-- = 1912 AD	 gregorian. See: http://en.wikipedia.org/wiki/Minguo_calendar -->
+                </eraAbbr>
+                <eraNarrow>
+                    <alias source="locale" path="../eraAbbr"/>
+                </eraNarrow>
+            </eras>
+            <dateFormats>
+                <default choice="medium"/>
+                <dateFormatLength type="full">
+                    <dateFormat>
+                        <pattern>EEEE, MMMM d, yyyy G</pattern>
+                    </dateFormat>
+                </dateFormatLength>
+                <dateFormatLength type="long">
+                    <dateFormat>
+                        <pattern>MMMM d, yyyy G</pattern>
+                    </dateFormat>
+                </dateFormatLength>
+                <dateFormatLength type="medium">
+                    <dateFormat>
+                        <pattern>MMM d, yyyy G</pattern>
+                    </dateFormat>
+                </dateFormatLength>
+                <dateFormatLength type="short">
+                    <dateFormat>
+                        <pattern>M/d/yyyy</pattern>
+                    </dateFormat>
+                </dateFormatLength>
+            </dateFormats>
+            <timeFormats>
+                <alias source="locale" path="../../calendar[@type='gregorian']/timeFormats"/>
+            </timeFormats>
+            <dateTimeFormats>
+                <alias source="locale" path="../../calendar[@type='gregorian']/dateTimeFormats"/>
+            </dateTimeFormats>
+        </calendar>
     </calendars>
     <timeZoneNames>
       <zone type="">

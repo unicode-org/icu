@@ -531,6 +531,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\taiwncal.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\taiwncal.h"
+				>
+			</File>
+			<File
 				RelativePath=".\buddhcal.cpp"
 				>
 			</File>
