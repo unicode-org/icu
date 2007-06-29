@@ -18,6 +18,7 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.net.URLConnection;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -612,7 +613,9 @@ public class ICUFile {
         try {
             jar = new JarFile(inputFile);
             ostream = new JarOutputStream(new FileOutputStream(outputFile));
-            istream = inputURL.openStream();
+            URLConnection con = inputURL.openConnection();
+            con.setRequestProperty("user-agent", System.getProperty("http.agent"));
+            istream = con.getInputStream();
 
             Enumeration e = jar.entries();
             while (e.hasMoreElements()) {
@@ -841,7 +844,9 @@ public class ICUFile {
                 logger.loglnToBoth("Downloading from " + url + " to "
                         + outputFile.getPath() + ".");
 
-                istream = url.openStream();
+                URLConnection con = url.openConnection();
+                con.setRequestProperty("user-agent", System.getProperty("http.agent"));
+                istream = con.getInputStream();
                 ostream = new FileOutputStream(outputFile);
 
                 while ((bytesRead = istream.read(buffer)) != -1)

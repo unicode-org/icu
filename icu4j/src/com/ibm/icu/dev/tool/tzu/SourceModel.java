@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Iterator;
 import java.util.TreeMap;
 
@@ -145,8 +146,9 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
     public void findSources() {
         BufferedReader reader = null;
         try {
-            reader = new BufferedReader(new InputStreamReader(TZ_BASE_URL
-                    .openStream()));
+            URLConnection con = TZ_BASE_URL.openConnection();
+            con.setRequestProperty("user-agent", System.getProperty("http.agent"));
+            reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
 
             // create an html callback function to parse through every list item
             // (every list item

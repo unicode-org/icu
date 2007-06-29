@@ -66,6 +66,7 @@ public class ICUTZUMain {
      */
     public static void main(String[] args) {
         try {
+            // TODO: fix this to properly set the user agent
             String agent = "ICUTZU/1.0 (" + System.getProperty("os.name") + " "
                     + System.getProperty("os.version") + "; "
                     + Locale.getDefault().toString() + ")";
