@@ -297,11 +297,11 @@ private:
     UBool findNext(UDate base, UBool inclusive, UDate& time, TimeZoneRule*& from, TimeZoneRule*& to) const;
     UBool findPrev(UDate base, UBool inclusive, UDate& time, TimeZoneRule*& from, TimeZoneRule*& to) const;
 
-    UBool               fUpToDate;
     InitialTimeZoneRule *fInitialRule;
     UVector             *fHistoricRules;
     UVector             *fFinalRules;
     UVector             *fHistoricTransitions;
+    UBool               fUpToDate;
 
 public:
     /**
