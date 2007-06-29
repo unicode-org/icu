@@ -191,6 +191,37 @@ class Grego {
                                    int32_t& dom, int32_t& dow);
 
     /**
+     * Convert a 1970-epoch milliseconds to proleptic Gregorian year,
+     * month, day-of-month, and day-of-week, day of year and millis-in-day.
+     * @param time 1970-epoch milliseconds
+     * @param year output parameter to receive year
+     * @param month output parameter to receive month (0-based, 0==Jan)
+     * @param dom output parameter to receive day-of-month (1-based)
+     * @param dow output parameter to receive day-of-week (1-based, 1==Sun)
+     * @param doy output parameter to receive day-of-year (1-based)
+     * @param mid output parameter to recieve millis-in-day
+     */
+    static void timeToFields(UDate time, int32_t& year, int32_t& month,
+                            int32_t& dom, int32_t& dow, int32_t& doy, int32_t& mid);
+
+    /**
+     * Return the day of week on the 1970-epoch day
+     * @param day the 1970-epoch day (integral value)
+     * @return the day of week
+     */
+    static int32_t dayOfWeek(double day);
+
+    /**
+     * Returns the ordinal number for the specified day of week within the month.
+     * The valid return value is 1, 2, 3, 4 or -1.
+     * @param year Gregorian year, with 0 == 1 BCE, -1 == 2 BCE, etc.
+     * @param month 0-based month, with 0==Jan
+     * @param dom 1-based day of month
+     * @return The ordinal number for the specified day of week within the month
+     */
+    static int32_t dayOfWeekInMonth(int32_t year, int32_t month, int32_t dom);
+
+    /**
      * Converts Julian day to time as milliseconds.
      * @param julian the given Julian day number.
      * @return time as milliseconds.

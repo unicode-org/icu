@@ -130,6 +130,32 @@ void Grego::dayToFields(double day, int32_t& year, int32_t& month,
     doy++; // one-based doy
 }
 
+void Grego::timeToFields(UDate time, int32_t& year, int32_t& month,
+                        int32_t& dom, int32_t& dow, int32_t& doy, int32_t& mid) {
+    double millisInDay;
+    double day = Math::floorDivide((double)time, (double)U_MILLIS_PER_DAY, millisInDay);
+    mid = (int32_t)millisInDay;
+    dayToFields(day, year, month, dom, dow, doy);
+}
+
+int32_t Grego::dayOfWeek(double day) {
+    int32_t dow;
+    Math::floorDivide(day + UCAL_THURSDAY, 7, dow);
+    return (dow == 0) ? UCAL_SATURDAY : dow;
+}
+
+int32_t Grego::dayOfWeekInMonth(int32_t year, int32_t month, int32_t dom) {
+    int32_t weekInMonth = (dom + 6)/7;
+    if (weekInMonth == 4) {
+        if (dom + 7 > monthLength(year, month)) {
+            weekInMonth = -1;
+        }
+    } else if (weekInMonth == 5) {
+        weekInMonth = -1;
+    }
+    return weekInMonth;
+}
+
 /* ---- CalendarData ------ */
 
 #define U_CALENDAR_KEY "calendar"
