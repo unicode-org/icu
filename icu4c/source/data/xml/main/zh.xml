@@ -21,5 +21,17 @@
 			</icu:scripts>
 		</special>
 	</characters>
+    <dates>
+        <calendars>
+            <calendar type="taiwan">
+                <eras>
+                    <eraAbbr>
+                        <era type="0">民國</era>
+                        <!-- = 1912 AD	 gregorian. See: http://en.wikipedia.org/wiki/Minguo_calendar -->
+                    </eraAbbr>
+                </eras>
+            </calendar>
+        </calendars>
+    </dates>
 </ldml>
 

@@ -27,6 +27,9 @@ public:
     void TestBuddhist(void);
     void TestBuddhistFormat(void);
 
+    void TestTaiwan(void);
+    void TestTaiwanFormat(void);
+
     void TestJapanese(void);
     void TestJapaneseFormat(void);
     void TestJapanese3860(void);
