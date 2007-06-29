@@ -24,7 +24,11 @@ import com.ibm.icu.impl.Grego;
  * With the <code>VTimeZone</code> instance created from the ID, you can write out the rule
  * in RFC2445 VTIMEZONE format.  Also, you can create a <code>VTimeZone</code> instance
  * from RFC2445 VTIMEZONE data stream, which allows you to calculate time
- * zone offset by the rules defined by the data.
+ * zone offset by the rules defined by the data.<br><br>
+ * 
+ * Note: The consumer of this class reading or writing VTIMEZONE data is responsible to
+ * decode or encode Non-ASCII text.  Methods reading/writing VTIMEZONE data in this class
+ * do nothing with MIME encoding.
  * 
  * @draft ICU 3.8
  * @provisional This API might change or be removed in a future release.
@@ -53,7 +57,7 @@ public class VTimeZone extends BasicTimeZone {
     }
     
     /**
-     * Create a <code>VTimeZone</code> instance by RFC2445 VTIMEZONE data
+     * Create a <code>VTimeZone</code> instance by RFC2445 VTIMEZONE data.
      * 
      * @param reader The Reader for VTIMEZONE data input stream
      * @return A <code>VTimeZone</code> initialized by the VTIMEZONE data or
