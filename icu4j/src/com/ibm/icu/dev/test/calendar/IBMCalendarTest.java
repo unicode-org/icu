@@ -288,7 +288,113 @@ public class IBMCalendarTest extends CalendarTest {
     }
 
     /**
-     * Verify that JapaneseCalendar shifts years to Buddhist Era but otherwise
+     * Verify that TaiwanCalendar shifts years to Minguo Era but otherwise
+     * behaves like GregorianCalendar.
+     */
+    public void TestTaiwan() {
+        quasiGregorianTest(new TaiwanCalendar(),
+                           new int[] {
+                               0, 1, 1912, Calendar.JUNE, 4,
+                               0, 3, 1914, Calendar.FEBRUARY, 12,
+                               0, 96,2007, Calendar.FEBRUARY, 12,
+                           });
+    }
+
+    public void TestTaiwanCoverage() {
+    {
+        // new TaiwanCalendar(ULocale)
+        TaiwanCalendar cal = new TaiwanCalendar(ULocale.getDefault());
+        if(cal == null){
+            errln("could not create TaiwanCalendar with ULocale");
+        }
+    }
+
+    {
+        // new TaiwanCalendar(TimeZone,ULocale)
+        TaiwanCalendar cal = new TaiwanCalendar(TimeZone.getDefault(),ULocale.getDefault());
+        if(cal == null){
+            errln("could not create TaiwanCalendar with TimeZone ULocale");
+        }
+    }
+
+    {
+        // new TaiwanCalendar(TimeZone)
+        TaiwanCalendar cal = new TaiwanCalendar(TimeZone.getDefault());
+        if(cal == null){
+            errln("could not create TaiwanCalendar with TimeZone");
+        }
+    }
+
+    {
+        // new TaiwanCalendar(Locale)
+        TaiwanCalendar cal = new TaiwanCalendar(Locale.getDefault());
+        if(cal == null){
+            errln("could not create TaiwanCalendar with Locale");
+        }
+    }
+
+    {
+        // new TaiwanCalendar(TimeZone, Locale)
+        TaiwanCalendar cal = new TaiwanCalendar(TimeZone.getDefault(), Locale.getDefault());
+        if(cal == null){
+            errln("could not create TaiwanCalendar with TimeZone and Locale");
+        }
+    }
+
+    {
+        // new TaiwanCalendar(Date)
+        TaiwanCalendar cal = new TaiwanCalendar(new Date());
+        if(cal == null){
+            errln("could not create TaiwanCalendar with Date");
+        }
+    }
+
+    {
+        // new TaiwanCalendar(int year, int month, int date)
+        TaiwanCalendar cal = new TaiwanCalendar(34, Calendar.MAY, 22);
+        if(cal == null){
+            errln("could not create TaiwanCalendar with year,month,data");
+        }
+    }
+
+    {
+        // new TaiwanCalendar(int year, int month, int date, int hour, int minute, int second)
+        TaiwanCalendar cal = new TaiwanCalendar(34, Calendar.MAY, 22, 1, 1, 1);
+        if(cal == null){
+            errln("could not create TaiwanCalendar with year,month,date,hour,minute,second");
+        }
+    }
+
+    {
+        // data
+        TaiwanCalendar cal = new TaiwanCalendar(34, Calendar.MAY, 22);
+        Date time = cal.getTime();
+
+        String[] calendarLocales = {
+        "en","zh"
+        };
+
+        String[] formatLocales = {
+        "en", "ar", "hu", "th"
+        };
+
+        for (int i = 0; i < calendarLocales.length; ++i) {
+        String calLocName = calendarLocales[i];
+        Locale calLocale = LocaleUtility.getLocaleFromName(calLocName);
+        cal = new TaiwanCalendar(calLocale);
+
+        for (int j = 0; j < formatLocales.length; ++j) {
+            String locName = formatLocales[j];
+            Locale formatLocale = LocaleUtility.getLocaleFromName(locName);
+            DateFormat format = DateFormat.getDateTimeInstance(cal, DateFormat.FULL, DateFormat.FULL, formatLocale);
+            logln(calLocName + "/" + locName + " --> " + format.format(time));
+        }
+        }
+    }
+    }
+
+    /**
+     * Verify that JapaneseCalendar shifts years to Japanese Eras but otherwise
      * behaves like GregorianCalendar.
      */
     public void TestJapanese() {
@@ -809,7 +915,7 @@ public class IBMCalendarTest extends CalendarTest {
         // String[] calTypes = Calendar.getAvailableTypes();
         final String[] calTypes = {
             "buddhist", "chinese", "coptic", "ethiopic", "gregorian", "hebrew", 
-            "islamic", "islamic-civil", "japanese",
+            "islamic", "islamic-civil", "japanese", "taiwan"
         };
         
         // constructing a DateFormat with a locale indicating a calendar type should construct a
