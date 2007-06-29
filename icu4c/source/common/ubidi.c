@@ -1695,6 +1695,9 @@ setParaRunsOnly(UBiDi *pBiDi, const UChar *text, int32_t length,
     uprv_free(runsOnlyMemory);
   cleanup3:
     pBiDi->reorderingMode=UBIDI_REORDER_RUNS_ONLY;
+    if(pBiDi->runCount>1) {
+        pBiDi->direction=UBIDI_MIXED;
+    }
 }
 
 /* ubidi_setPara ------------------------------------------------------------ */
