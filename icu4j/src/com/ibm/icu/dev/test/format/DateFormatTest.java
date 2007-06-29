@@ -1678,6 +1678,26 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     }
 
     /**
+     * Test the formatting of dates with the 'NONE' keyword.
+     */
+    public void TestDateFormatNone() {
+    
+        Date testDate = new Date(874306800000l); //Mon Sep 15 00:00:00 PDT 1997
+        DateFormat dfFrench = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.NONE, Locale.FRENCH);
+        //Set TimeZone = PDT
+        TimeZone tz = TimeZone.getTimeZone("PST");
+        dfFrench.setTimeZone(tz);
+        String expectedFRENCH_JDK12 = "lundi 15 septembre 1997";
+        //String expectedFRENCH = "lundi 15 septembre 1997 00 h 00 PDT";
+        logln("Date set to : " + testDate);
+        String out = dfFrench.format(testDate);
+        logln("Date Formated with French Locale " + out);
+        if (!out.equals(expectedFRENCH_JDK12))
+            errln("FAIL: Expected " + expectedFRENCH_JDK12+" Got "+out);
+    }
+
+
+    /**
      * Test DateFormat(Calendar) API
      */
     public void TestDateFormatCalendar() {
