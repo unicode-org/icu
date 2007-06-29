@@ -1,0 +1,268 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2007 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/be.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/be.xml
+ */
+be{
+    Countries{
+        BR{"Бразілія"}
+        BY{"Беларусь"}
+        CN{"Кітай"}
+        DE{"Германія"}
+        FR{"Францыя"}
+        GB{"Велікабрытанія"}
+        IN{"Індыя"}
+        IT{"Італія"}
+        JP{"Японія"}
+        RU{"Расія"}
+        US{"Злучаныя Штаты"}
+    }
+    Currencies{
+        BRL{
+            "R$",
+            "бразільскі рэал",
+        }
+        BYB{
+            "Руб",
+            "BYB",
+        }
+        BYR{
+            "BYR",
+            "беларускі рубель",
+        }
+        CNY{
+            "CNY",
+            "кітайскі юань Renminbi",
+        }
+        EUR{
+            "€",
+            "еўра",
+        }
+        GBP{
+            "UK£",
+            "англійскі фунт",
+        }
+        INR{
+            "=0#Rs.|1#Re.|1<Rs.",
+            "індыйская рупія",
+        }
+        JPY{
+            "JP¥",
+            "японская іена",
+        }
+        RUB{
+            "RUB",
+            "рускі рубель",
+        }
+        USD{
+            "US$",
+            "долар ЗША",
+        }
+    }
+    ExemplarCharacters{"[’ а-д {дж} {дз} е ё ж з й і к-у ў ф-ш ы-я]"}
+    Languages{
+        ar{"арабскі"}
+        be{"Беларускі"}
+        de{"нямецкі"}
+        en{"англійскі"}
+        es{"іспанскі"}
+        fr{"французскі"}
+        hi{"хіндзі"}
+        it{"італьянскі"}
+        ja{"японскі"}
+        pt{"партугальскі"}
+        ru{"рускі"}
+        zh{"кітайскі"}
+    }
+    LocaleScript{
+        "Cyrl",
+    }
+    NumberElements{
+        ",",
+        " ",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "¤#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    Scripts{
+        Cyrl{"кірылічны"}
+        Latn{"лацінскі"}
+    }
+    Version{"1.92"}
+    calendar{
+        buddhist{
+            DateTimePatterns{
+                "HH.mm.ss v",
+                "HH.mm.ss z",
+                "HH.mm.ss",
+                "HH.mm",
+                "EEEE, MMMM d, yyyy G",
+                "MMMM d, yyyy G",
+                "MMM d, yyyy G",
+                "M/d/yyyy",
+                "{1} {0}",
+            }
+        }
+        chinese{
+            DateTimePatterns{
+                "HH.mm.ss v",
+                "HH.mm.ss z",
+                "HH.mm.ss",
+                "HH.mm",
+                "EEEE y'x'G-Ml-d",
+                "y'x'G-Ml-d",
+                "y'x'G-Ml-d",
+                "y'x'G-Ml-d",
+                "{1} {0}",
+            }
+        }
+        gregorian{
+            DateTimePatterns{
+                "HH.mm.ss v",
+                "HH.mm.ss z",
+                "HH.mm.ss",
+                "HH.mm",
+                "EEEE, d MMMM yyyy",
+                "d MMMM yyyy",
+                "d.M.yyyy",
+                "d.M.yy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "нд",
+                        "пн",
+                        "аў",
+                        "ср",
+                        "чц",
+                        "пт",
+                        "сб",
+                    }
+                    wide{
+                        "нядзеля",
+                        "панядзелак",
+                        "аўторак",
+                        "серада",
+                        "чацвер",
+                        "пятніца",
+                        "субота",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "н",
+                        "п",
+                        "а",
+                        "с",
+                        "ч",
+                        "п",
+                        "с",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "да н.е.",
+                    "н.е.",
+                }
+            }
+            fields{
+                day{
+                    dn{"дзень"}
+                }
+                era{
+                    dn{"эра"}
+                }
+                hour{
+                    dn{"гадзіна"}
+                }
+                minute{
+                    dn{"хвіліна"}
+                }
+                month{
+                    dn{"месяц"}
+                }
+                second{
+                    dn{"секунда"}
+                }
+                week{
+                    dn{"тыдзень"}
+                }
+                weekday{
+                    dn{"дзень тыдня"}
+                }
+                year{
+                    dn{"год"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "сту",
+                        "лют",
+                        "сак",
+                        "кра",
+                        "май",
+                        "чэр",
+                        "ліп",
+                        "жні",
+                        "вер",
+                        "кас",
+                        "ліс",
+                        "сне",
+                    }
+                    wide{
+                        "студзень",
+                        "люты",
+                        "сакавік",
+                        "красавік",
+                        "май",
+                        "чэрвень",
+                        "ліпень",
+                        "жнівень",
+                        "верасень",
+                        "кастрычнік",
+                        "лістапад",
+                        "снежань",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "с",
+                        "л",
+                        "с",
+                        "к",
+                        "м",
+                        "ч",
+                        "л",
+                        "ж",
+                        "в",
+                        "к",
+                        "л",
+                        "с",
+                    }
+                }
+            }
+        }
+    }
+}

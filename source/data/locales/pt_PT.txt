@@ -1,0 +1,658 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2007 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/pt_PT.xml
+// *
+// ***************************************************************************
+pt_PT{
+    Countries{
+        001{"Mundo"}
+        002{"África"}
+        003{"América do Norte"}
+        005{"América do Sul"}
+        011{"África Ocidental"}
+        013{"América Central"}
+        014{"África Oriental"}
+        019{"Américas"}
+        030{"Ásia Oriental"}
+        034{"Ásia do Sul"}
+        035{"Sudeste Asiático"}
+        039{"Europa do Sul"}
+        053{"Austrália e Nova Zelândia"}
+        054{"Melanésia"}
+        061{"Polinésia"}
+        142{"Ásia"}
+        143{"Ásia Central"}
+        145{"Ásia Ocidental"}
+        150{"Europa"}
+        154{"Europa do Norte"}
+        155{"Europa Ocidental"}
+        172{"Comunidade dos Estados Independentes"}
+        AE{"Emiratos Árabes Unidos"}
+        AM{"Arménia"}
+        AQ{"Antárctica"}
+        AZ{"Azerbeijão"}
+        BD{"Bangladeche"}
+        BH{"Bareine"}
+        BJ{"Benim"}
+        BY{"Bielorrússia"}
+        CD{"República Democrática do Congo"}
+        CM{"República dos Camarões"}
+        CX{"Ilha do Natal"}
+        CZ{"República Checa"}
+        EE{"Estónia"}
+        EG{"Egipto"}
+        EH{"Saara Ocidental"}
+        ER{"Eritreia"}
+        FK{"Ilhas Malvinas"}
+        FM{"Estados Federados da Micronésia"}
+        GG{"Guernsey"}
+        GL{"Gronelândia"}
+        GS{"Geórgia do Sul e Ilhas Sandwich do Sul"}
+        GW{"Guiné-Bissau"}
+        HK{"Hong Kong - Região Administrativa Especial da China"}
+        IM{"Ilha de Man"}
+        IR{"Irão"}
+        KE{"Quénia"}
+        KG{"Quirguizistão"}
+        KN{"Saint Kitts e Nevis"}
+        KP{"Coreia do Norte"}
+        KR{"Coreia do Sul"}
+        KY{"Ilhas Caimão"}
+        KZ{"Cazaquistão"}
+        LA{"Lao, República Popular Democrática"}
+        LV{"Letónia"}
+        MC{"Mónaco"}
+        MD{"Moldávia, República da"}
+        ME{"Montenegro"}
+        MG{"Madagáscar"}
+        MK{"Macedónia, República da"}
+        MO{"Macau - Região Administrativa Especial da China"}
+        MP{"Ilhas Mariana do Norte"}
+        MU{"Maurícias"}
+        NC{"Nova Caledónia"}
+        NL{"Países Baixos"}
+        PG{"Papua Nova Guiné"}
+        PL{"Polónia"}
+        PS{"Território Palestiniano"}
+        QO{"Oceania Insular"}
+        QU{"União Europeia"}
+        RE{"Reunião"}
+        RO{"Roménia"}
+        RS{"Sérvia"}
+        SC{"Seicheles"}
+        SG{"Singapura"}
+        SI{"Eslovénia"}
+        SM{"São Marino"}
+        TC{"Ilhas Turcas e Caicos"}
+        TD{"Chade"}
+        TF{"Territórios Franceses do Sul"}
+        TJ{"Tajiquistão"}
+        TM{"Turquemenistão"}
+        TW{"Taiwan"}
+        UM{"Ilhas Minor Outlying (E.U.A)"}
+        UZ{"Uzbaquistão"}
+        VA{"Vaticano"}
+        VC{"São Vicente e Granadinas"}
+        VG{"Ilhas Virgens Britânicas"}
+        VI{"Ilhas Virgin E.U.A."}
+        VN{"Vietname"}
+        YE{"Iémen"}
+        ZA{"África do Sul"}
+    }
+    Currencies{
+        AFA{
+            "AFA",
+            "Afeghani (1927-2002)",
+        }
+        BAD{
+            "BAD",
+            "Dinar da Bósnia-Herzegóvina",
+        }
+        BAM{
+            "KM",
+            "Marco bósnio-herzegóvino conversível",
+        }
+        CYP{
+            "£C",
+            "Libra de Chipre",
+        }
+        CZK{
+            "CZK",
+            "Coroa da República Checa",
+        }
+        ECV{
+            "ECV",
+            "Unidad de Valor Constante (UVC) do Equador",
+        }
+        KYD{
+            "KYD",
+            "Dólar das Ilhas Caimão",
+        }
+        MXP{
+            "MXP",
+            "Peso Plata mexicano (1861-1992)",
+        }
+        MXV{
+            "MXV",
+            "Unidad de Inversion (UDI) mexicana",
+        }
+        NIC{
+            "NIC",
+            "Córdoba nicaraguano",
+        }
+        NIO{
+            "NIO",
+            "Córdoba Ouro nicaraguano",
+        }
+        PTE{
+            "Esc.",
+            "Escudo português",
+            {
+                "#,##0.00 ¤;-#,##0.00 ¤",
+                "$",
+                ",",
+            }
+        }
+        TZS{
+            "T Sh",
+            "Xelim de Tanzânia",
+        }
+        WST{
+            "WST",
+            "Tala de Samoa Ocidental",
+        }
+    }
+    Keys{
+        calendar{"Calendário"}
+        currency{"Moeda"}
+    }
+    Languages{
+        ang{"inglês, arcaico (aprox. 450-1100)"}
+        awa{"Awadhi"}
+        bai{"bamileke Languages"}
+        bug{"Buginese"}
+        ce{"chechene"}
+        cs{"checo"}
+        de_AT{"alemão (Áustria)"}
+        dum{"holandês, medieval (aprox. 1050-1350)"}
+        en{"inglês"}
+        en_AU{"inglês (Austrália)"}
+        en_CA{"inglês (Canadá)"}
+        en_GB{"inglês (Reino Unido)"}
+        en_US{"inglês (Estados Unidos)"}
+        enm{"inglês, medieval (1100-1500)"}
+        es_419{"espanhol (América Latina)"}
+        es_ES{"espanhol (Espanha)"}
+        et{"estónio"}
+        fr_CA{"francês (Canadá)"}
+        fr_CH{"francês (Suíça)"}
+        frm{"francês, medieval (aprox.1400-1600)"}
+        fro{"francês, arcaico (842-aprox.1400)"}
+        gmh{"alemão, medieval alto (aprox.1050-1500)"}
+        goh{"alemão, arcaico alto (aprox.750-1050)"}
+        grc{"grego, arcaico (até 1453)"}
+        gsw{"alemão (Suíça)"}
+        iba{"Iban"}
+        ijo{"ijo"}
+        ik{"Inupiaq"}
+        jv{"jv"}
+        luo{"luo"}
+        mga{"irlandês, medieval (900-1200)"}
+        mkh{"mon-khmer (other)"}
+        nd{"ndebele do norte"}
+        nl{"holandês"}
+        non{"norse, old"}
+        nso{"soto, setentrional"}
+        ota{"turco otomano"}
+        peo{"persa arcaico (aprox. 600-400 a.C.)"}
+        pl{"polaco"}
+        pro{"provençal, arcaico (até 1500)"}
+        pt{"português"}
+        pt_PT{"português (Portugal)"}
+        sal{"salishan languages"}
+        sgn{"linguages de sinais"}
+        sl{"esloveno"}
+        tiv{"tiv"}
+        to{"tonga"}
+        vai{"vai"}
+        wak{"wakashan languages"}
+        zh_Hans{"chinês simplificado"}
+        zh_Hant{"chinês tradicional"}
+    }
+    NumberElements{
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "#,##0.00 ¤",
+        "#,##0%",
+        "#E0",
+    }
+    Scripts{
+        Armn{"arménio"}
+        Bali{"balinês"}
+        Batk{"bataque"}
+        Blis{"símbolos Bliss"}
+        Bugi{"buginês"}
+        Cham{"cham"}
+        Cirt{"cirth"}
+        Egyp{"hieróglifos egípcios"}
+        Glag{"glagolítico"}
+        Hmng{"pahawh hmong"}
+        Hrkt{"katakana ou hiragana"}
+        Hung{"húngaro antigo"}
+        Inds{"indus"}
+        Java{"javanês"}
+        Jpan{"japonês"}
+        Kali{"kayah li"}
+        Khar{"kharoshthi"}
+        Lana{"lanna"}
+        Lepc{"lepcha"}
+        Lina{"linear A"}
+        Linb{"linear B"}
+        Lyci{"lício"}
+        Lydi{"lídio"}
+        Maya{"hieróglifos maias"}
+        Moon{"moon"}
+        Mtei{"meitei mayek"}
+        Olck{"ol chiki"}
+        Orkh{"orkhon"}
+        Osma{"osmania"}
+        Perm{"pérmico antigo"}
+        Phag{"phags-pa"}
+        Phnx{"fenício"}
+        Rjng{"rejang"}
+        Roro{"rongorongo"}
+        Sara{"sarati"}
+        Saur{"saurashtra"}
+        Sund{"sundanês"}
+        Sylo{"siloti nagri"}
+        Syre{"siríaco estrangelo"}
+        Syrj{"siríaco ocidental"}
+        Syrn{"siríaco oriental"}
+        Tale{"tai le"}
+        Taml{"tamil"}
+        Telu{"telugu"}
+        Tfng{"tifinagh"}
+        Vaii{"vai"}
+        Xpeo{"persa antigo"}
+        Xsux{"cuneiforme sumero-acadiano"}
+    }
+    Types{
+        calendar{
+            buddhist{"Calendário Budista"}
+            chinese{"Calendário Chinês"}
+            gregorian{"Calendário Gregoriano"}
+            hebrew{"Calendário Hebraico"}
+            islamic{"Calendário Islâmico"}
+            islamic-civil{"Calendário Civil Islâmico"}
+            japanese{"Calendário Japonês"}
+        }
+        collation{
+            direct{"Ordem Directa"}
+            phonebook{"Ordem da Lista Telefónica"}
+            pinyin{"Ordem Pin-yin"}
+            stroke{"Ordem dos Traços"}
+            traditional{"Ordem Tradicional"}
+        }
+    }
+    Version{"1.92"}
+    calendar{
+        buddhist{
+            DateTimePatterns{
+                "HH'H'mm'm'ss's' v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, MMMM d, yyyy G",
+                "MMMM d, yyyy G",
+                "MMM d, yyyy G",
+                "M/d/yyyy",
+                "{1} {0}",
+            }
+        }
+        gregorian{
+            DateTimePatterns{
+                "HH'H'mm'm'ss's' v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d' de 'MMMM' de 'yyyy",
+                "d' de 'MMMM' de 'yyyy",
+                "yyyy/MM/dd",
+                "yy/MM/dd",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"E d"}
+                H{"H"}
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                MMMEd{"E d MMM"}
+                MMMMd{"d MMMM"}
+                mmss{"mm:ss"}
+                yyMMM{"MMM yy"}
+                yyQ{"Q yy"}
+                yyyy{"yyyy"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "dom",
+                        "seg",
+                        "ter",
+                        "qua",
+                        "qui",
+                        "sex",
+                        "sáb",
+                    }
+                    narrow{
+                        "D",
+                        "S",
+                        "T",
+                        "Q",
+                        "Q",
+                        "S",
+                        "S",
+                    }
+                    wide{
+                        "domingo",
+                        "segunda-feira",
+                        "terça-feira",
+                        "quarta-feira",
+                        "quinta-feira",
+                        "sexta-feira",
+                        "sábado",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "dom",
+                        "segunda-feira",
+                        "terça-feira",
+                        "qua",
+                        "quinta-feira",
+                        "sex",
+                        "sábado",
+                    }
+                    narrow{
+                        "D",
+                        "S",
+                        "T",
+                        "Q",
+                        "Q",
+                        "S",
+                        "S",
+                    }
+                    wide{
+                        "domingo",
+                        "segunda-feira",
+                        "terça-feira",
+                        "quarta-feira",
+                        "quinta-feira",
+                        "sexta-feira",
+                        "sábado",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "a.C.",
+                    "d.C.",
+                }
+                narrow{
+                    "a.C.",
+                    "d.C.",
+                }
+                wide{
+                    "a.C.",
+                    "d.C.",
+                }
+            }
+            fields{
+                day{
+                    dn{"Dia"}
+                    relative{
+                        "-1"{"Ontem"}
+                        "-2"{"Anteontem"}
+                        "-3"{"Trás-anteontem"}
+                        "0"{"Hoje"}
+                        "1"{"Amanhã"}
+                        "2"{"Depois de amanhã"}
+                        "3"{"Em três dias"}
+                    }
+                }
+                dayperiod{
+                    dn{"Período do dia"}
+                }
+                era{
+                    dn{"Era"}
+                }
+                hour{
+                    dn{"Hora"}
+                }
+                minute{
+                    dn{"Minuto"}
+                }
+                month{
+                    dn{"Mês"}
+                }
+                second{
+                    dn{"Segundo"}
+                }
+                week{
+                    dn{"Semana"}
+                }
+                weekday{
+                    dn{"Dia da semana"}
+                }
+                year{
+                    dn{"Ano"}
+                }
+                zone{
+                    dn{"Fuso"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Jan",
+                        "Fev",
+                        "Mar",
+                        "Abr",
+                        "Mai",
+                        "Jun",
+                        "Jul",
+                        "Ago",
+                        "Set",
+                        "Out",
+                        "Nov",
+                        "Dez",
+                    }
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "J",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                    }
+                    wide{
+                        "Janeiro",
+                        "Fevereiro",
+                        "Março",
+                        "Abril",
+                        "Maio",
+                        "Junho",
+                        "Julho",
+                        "Agosto",
+                        "Setembro",
+                        "Outubro",
+                        "Novembro",
+                        "Dezembro",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Jan",
+                        "Fev",
+                        "Mar",
+                        "Abr",
+                        "Mai",
+                        "Jun",
+                        "Jul",
+                        "Ago",
+                        "Set",
+                        "Out",
+                        "Nov",
+                        "Dez",
+                    }
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "J",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                    }
+                    wide{
+                        "Janeiro",
+                        "Fevereiro",
+                        "Março",
+                        "Abril",
+                        "Maio",
+                        "Junho",
+                        "Julho",
+                        "Agosto",
+                        "Setembro",
+                        "Outubro",
+                        "Novembro",
+                        "Dezembro",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "T1",
+                        "T2",
+                        "T3",
+                        "T4",
+                    }
+                    wide{
+                        "1º trimestre",
+                        "2º trimestre",
+                        "3º trimestre",
+                        "4º trimestre",
+                    }
+                }
+            }
+        }
+        japanese{
+            DateTimePatterns{
+                "HH'H'mm'm'ss's' v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, MMMM d, y G",
+                "MMMM d, y G",
+                "MMM d, y G",
+                "M/d/yy",
+                "{1} {0}",
+            }
+        }
+    }
+    delimiters{
+        alternateQuotationEnd{"”"}
+        alternateQuotationStart{"“"}
+        quotationEnd{"’"}
+        quotationStart{"‘"}
+    }
+    messages{
+        nostr{"não:n"}
+    }
+    zoneStrings{
+        "America:Araguaina"{
+            ec{"Araguaina"}
+        }
+        "America:Argentina:Tucuman"{
+            ec{"Tucumán"}
+        }
+        "America:Bahia"{
+            ec{"Baía"}
+        }
+        "America:Cancun"{
+            ec{"Cancun"}
+        }
+        "America:Cuiaba"{
+            ec{"Cuibá"}
+        }
+        "America:North_Dakota:Center"{
+            ec{"Center"}
+        }
+        "America:Phoenix"{
+            ec{"Phoenix"}
+        }
+        "Asia:Sakhalin"{
+            ec{"Sacalina"}
+        }
+        "Asia:Ulaanbaatar"{
+            ec{"Ulan Bator"}
+        }
+        "Europe:Kaliningrad"{
+            ec{"Kaliningrado"}
+        }
+        "Europe:Madrid"{
+            ec{"Madrid"}
+        }
+        "Europe:Moscow"{
+            ec{"Moscovo"}
+        }
+        "meta:America_Mountain"{
+            ld{"Horário de Verão da Montanha"}
+            ls{"Horário Padrão da Montanha"}
+        }
+        "meta:Atlantic"{
+            ld{"Horário de Verão do Atlântico"}
+            ls{"Horário Padrão do Atlântico"}
+        }
+        "meta:Europe_Central"{
+            ld{"Horário de Verão da Europa Central"}
+            ls{"Horário Padrão da Europa Central"}
+        }
+        "meta:Hawaii"{
+            ld{"Horário de Verão do Havai"}
+            ls{"Horário Padrão do Havai"}
+        }
+        "meta:Newfoundland"{
+            ld{"Horário de Verão da Terra Nova"}
+            ls{"Horário Padrão da Terra Nova"}
+        }
+    }
+}

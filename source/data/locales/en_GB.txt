@@ -1,0 +1,312 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2007 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/en_GB.xml
+// *
+// ***************************************************************************
+en_GB{
+    NumberElements{
+        ".",
+        ",",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "¤#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.92"}
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d MMMM yyyy",
+                "d MMMM yyyy",
+                "d MMM yyyy",
+                "dd/MM/yyyy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Sun",
+                        "Monday",
+                        "Tuesday",
+                        "Wed",
+                        "Thursday",
+                        "Fri",
+                        "Sat",
+                    }
+                    wide{
+                        "Sunday",
+                        "Monday",
+                        "Tuesday",
+                        "Wednesday",
+                        "Thursday",
+                        "Friday",
+                        "Saturday",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "S",
+                        "M",
+                        "T",
+                        "W",
+                        "T",
+                        "F",
+                        "S",
+                    }
+                }
+            }
+            fields{
+                day{
+                    dn{"Day"}
+                }
+                dayperiod{
+                    dn{"AM/PM"}
+                }
+                era{
+                    dn{"Era"}
+                }
+                hour{
+                    dn{"Hour"}
+                }
+                minute{
+                    dn{"Minute"}
+                }
+                month{
+                    dn{"Month"}
+                }
+                second{
+                    dn{"Second"}
+                }
+                week{
+                    dn{"Week"}
+                }
+                weekday{
+                    dn{"Day of the Week"}
+                }
+                year{
+                    dn{"Year"}
+                }
+                zone{
+                    dn{"Zone"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Jan",
+                        "February",
+                        "Mar",
+                        "Apr",
+                        "May",
+                        "Jun",
+                        "Jul",
+                        "August",
+                        "September",
+                        "October",
+                        "November",
+                        "December",
+                    }
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "J",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                    }
+                    wide{
+                        "January",
+                        "February",
+                        "March",
+                        "April",
+                        "May",
+                        "June",
+                        "July",
+                        "August",
+                        "September",
+                        "October",
+                        "November",
+                        "December",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Jan",
+                        "February",
+                        "Mar",
+                        "Apr",
+                        "May",
+                        "Jun",
+                        "Jul",
+                        "August",
+                        "September",
+                        "October",
+                        "November",
+                        "December",
+                    }
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "J",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                    }
+                    wide{
+                        "January",
+                        "February",
+                        "March",
+                        "April",
+                        "May",
+                        "June",
+                        "July",
+                        "August",
+                        "September",
+                        "October",
+                        "November",
+                        "December",
+                    }
+                }
+            }
+        }
+    }
+    delimiters{
+        alternateQuotationEnd{"”"}
+        alternateQuotationStart{"“"}
+        quotationEnd{"’"}
+        quotationStart{"‘"}
+    }
+    zoneStrings{
+        "meta:Acre"{
+            ld{"Acre Summer Time"}
+            ls{"Acre Time"}
+            sd{"ACST"}
+            ss{"ACT"}
+        }
+        "meta:Afghanistan"{
+            ls{"Afghanistan Time"}
+            ss{"AFT"}
+        }
+        "meta:Africa_Central"{
+            ls{"Central Africa Time"}
+            ss{"CAT"}
+        }
+        "meta:Africa_Eastern"{
+            ls{"East Africa Time"}
+            ss{"EAT"}
+        }
+        "meta:Africa_Southern"{
+            lg{"South Africa Time"}
+            sg{"SAT"}
+        }
+        "meta:Alaska_Hawaii"{
+            lg{"Alaska-Hawaii Time"}
+            sg{"AHT"}
+        }
+        "meta:Almaty"{
+            ld{"Almaty Summer Time"}
+            ls{"Almaty Time"}
+            sd{"ALMST"}
+            ss{"ALMT"}
+        }
+        "meta:Arabian"{
+            sg{"AT (Arabian)"}
+        }
+        "meta:Australia_CentralWestern"{
+            ld{"Australian Central Western Daylight Time"}
+            sd{"ACWDT"}
+        }
+        "meta:Australia_Western"{
+            sg{"AWT"}
+        }
+        "meta:Azerbaijan"{
+            ld{"Azerbaijan Summer Time"}
+            ls{"Azerbaijan Time"}
+            sd{"AZST"}
+            ss{"AZT"}
+        }
+        "meta:Bering"{
+            sg{"BT (Bering)"}
+        }
+        "meta:Chamorro"{
+            lg{"Chamorro Time"}
+            sg{"ChT"}
+        }
+        "meta:China"{
+            lg{"China Time"}
+            sg{"CT (China)"}
+        }
+        "meta:Gulf"{
+            lg{"Gulf Time"}
+            sg{"GT"}
+        }
+        "meta:Indochina"{
+            ls{"Indochina Time"}
+            ss{"ICT"}
+        }
+        "meta:Israel"{
+            lg{"Israel Time"}
+        }
+        "meta:Japan"{
+            lg{"Japan Time"}
+            sg{"JT"}
+        }
+        "meta:Kazakhstan_Eastern"{
+            lg{"East Kazakhstan Time"}
+        }
+        "meta:Kazakhstan_Western"{
+            lg{"West Kazakhstan Time"}
+        }
+        "meta:Korea"{
+            sg{"KT"}
+        }
+        "meta:Lord_Howe"{
+            sd{"LHDT"}
+            sg{"LHT"}
+        }
+        "meta:Moscow"{
+            ld{"Moscow Summer Time"}
+            lg{"Moscow Time"}
+            ls{"Moscow Standard Time"}
+            sd{"MSKS"}
+            ss{"MSK"}
+        }
+        "meta:New_Zealand"{
+            sg{"NZT"}
+        }
+        "meta:Pierre_Miquelon"{
+            sg{"PMT"}
+        }
+    }
+}

@@ -1,0 +1,167 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2007 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/gl.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/gl.xml
+ */
+gl{
+    Countries{
+        ES{"España"}
+    }
+    Currencies{
+        ESP{
+            "₧",
+            "ESP",
+            {
+                "¤ #,##0;-¤ #,##0",
+                ",",
+                ".",
+            }
+        }
+    }
+    ExemplarCharacters{"[a á b-e é f-i í j-n ñ o ó p-u ú ü v-z]"}
+    Languages{
+        gl{"galego"}
+    }
+    LocaleScript{
+        "Latn",
+    }
+    NumberElements{
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "#,##0.00 ¤",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.92"}
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, yyyy MMMM dd",
+                "yyyy MMMM d",
+                "yyyy MMM d",
+                "yyyy-MM-dd",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Dom",
+                        "Lun",
+                        "Mar",
+                        "Mér",
+                        "Xov",
+                        "Ven",
+                        "Sáb",
+                    }
+                    wide{
+                        "Domingo",
+                        "Luns",
+                        "Martes",
+                        "Mércores",
+                        "Xoves",
+                        "Venres",
+                        "Sábado",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Xan",
+                        "Feb",
+                        "Mar",
+                        "Abr",
+                        "Mai",
+                        "Xuñ",
+                        "Xul",
+                        "Ago",
+                        "Set",
+                        "Out",
+                        "Nov",
+                        "Dec",
+                    }
+                    wide{
+                        "Xaneiro",
+                        "Febreiro",
+                        "Marzo",
+                        "Abril",
+                        "Maio",
+                        "Xuño",
+                        "Xullo",
+                        "Agosto",
+                        "Setembro",
+                        "Outubro",
+                        "Novembro",
+                        "Decembro",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                    wide{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                }
+            }
+        }
+    }
+}

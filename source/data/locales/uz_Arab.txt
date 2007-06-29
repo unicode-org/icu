@@ -1,0 +1,125 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2007 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/uz_Arab.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/uz_Arab.xml
+ */
+uz_Arab{
+    AuxExemplarCharacters{"[\u200C \u200D]"}
+    Countries{
+        AF{"افغانستان"}
+    }
+    Currencies{
+        AFN{
+            "AFN",
+            "افغانی",
+        }
+    }
+    ExemplarCharacters{
+        "[ً-ْ ٔ ٰ ء-ؤ ئ-ب پ ة-ث ټ ج چ ح خ ځ څ د ذ ډ ر ز ړ ږ ژ س ش ښ ص-غ ف ق ک ګ گ ل-ن"
+        " ڼ ه و ۇ ۉ ي ی ۍ ې]"
+    }
+    Languages{
+        fa{"دری"}
+        ps{"پشتو"}
+        uz{"اۉزبېک"}
+    }
+    LocaleScript{
+        "Arab",
+    }
+    NumberElements{
+        "٫",
+        "٬",
+        ";",
+        "٪",
+        "۰",
+        "#",
+        "−",
+        "×۱۰^",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "¤ #,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.92"}
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, yyyy MMMM dd",
+                "yyyy MMMM d",
+                "yyyy MMM d",
+                "yyyy-MM-dd",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                    }
+                    wide{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
+            }
+        }
+    }
+}

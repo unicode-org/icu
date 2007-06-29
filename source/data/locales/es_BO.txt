@@ -1,0 +1,35 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2007 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/es_BO.xml
+// *
+// ***************************************************************************
+es_BO{
+    Currencies{
+        MXN{
+            "MEX$",
+            "peso mexicano",
+        }
+        USD{
+            "US$",
+            "dólar estadounidense",
+        }
+    }
+    NumberElements{
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    Version{"1.92"}
+}

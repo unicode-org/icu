@@ -1,0 +1,146 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2007 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/kl.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/kl.xml
+ */
+kl{
+    Countries{
+        GL{"Kalaallit Nunaat"}
+    }
+    Currencies{
+        DKK{
+            "kr",
+            "DKK",
+        }
+    }
+    ExemplarCharacters{"[a á-ã b-e é ê f-i í î ĩ j-o ô p q ĸ r-u ú û ũ v-z æ ø å]"}
+    Languages{
+        kl{"kalaallisut"}
+    }
+    LocaleScript{
+        "Latn",
+    }
+    NumberElements{
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "¤#,##0.00;¤ -#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.92"}
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, yyyy MMMM dd",
+                "yyyy MMMM d",
+                "yyyy MMM d",
+                "yyyy-MM-dd",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "sab",
+                        "ata",
+                        "mar",
+                        "pin",
+                        "sis",
+                        "tal",
+                        "arf",
+                    }
+                    wide{
+                        "sabaat",
+                        "ataasinngorneq",
+                        "marlunngorneq",
+                        "pingasunngorneq",
+                        "sisamanngorneq",
+                        "tallimanngorneq",
+                        "arfininngorneq",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "jan",
+                        "feb",
+                        "mar",
+                        "apr",
+                        "maj",
+                        "jun",
+                        "jul",
+                        "aug",
+                        "sep",
+                        "okt",
+                        "nov",
+                        "dec",
+                    }
+                    wide{
+                        "januari",
+                        "februari",
+                        "martsi",
+                        "aprili",
+                        "maji",
+                        "juni",
+                        "juli",
+                        "augustusi",
+                        "septemberi",
+                        "oktoberi",
+                        "novemberi",
+                        "decemberi",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                    wide{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,152 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2007 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/kw.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/kw.xml
+ */
+kw{
+    Countries{
+        GB{"Rywvaneth Unys"}
+    }
+    ExemplarCharacters{"[a-z]"}
+    Languages{
+        kw{"kernewek"}
+    }
+    LocaleScript{
+        "Latn",
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "¤#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.92"}
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "a.m.",
+                "p.m.",
+            }
+            DateTimePatterns{
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, yyyy MMMM dd",
+                "yyyy MMMM d",
+                "yyyy MMM d",
+                "yyyy-MM-dd",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Sul",
+                        "Lun",
+                        "Mth",
+                        "Mhr",
+                        "Yow",
+                        "Gwe",
+                        "Sad",
+                    }
+                    wide{
+                        "De Sul",
+                        "De Lun",
+                        "De Merth",
+                        "De Merher",
+                        "De Yow",
+                        "De Gwener",
+                        "De Sadorn",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "RC",
+                    "AD",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Gen",
+                        "Whe",
+                        "Mer",
+                        "Ebr",
+                        "Me",
+                        "Efn",
+                        "Gor",
+                        "Est",
+                        "Gwn",
+                        "Hed",
+                        "Du",
+                        "Kev",
+                    }
+                    wide{
+                        "Mys Genver",
+                        "Mys Whevrel",
+                        "Mys Merth",
+                        "Mys Ebrel",
+                        "Mys Me",
+                        "Mys Efan",
+                        "Mys Gortheren",
+                        "Mye Est",
+                        "Mys Gwyngala",
+                        "Mys Hedra",
+                        "Mys Du",
+                        "Mys Kevardhu",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                    wide{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                }
+            }
+        }
+    }
+}

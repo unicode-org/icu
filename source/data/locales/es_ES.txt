@@ -1,0 +1,78 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2007 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/es_ES.xml
+// *
+// ***************************************************************************
+es_ES{
+    Currencies{
+        ESP{
+            "₧",
+            "ESP",
+            {
+                "#,##0 ¤;-#,##0 ¤",
+                ",",
+                ".",
+            }
+        }
+        MXN{
+            "MEX$",
+            "peso mexicano",
+        }
+        USD{
+            "US$",
+            "dólar estadounidense",
+        }
+    }
+    NumberElements{
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "#,##0.00 ¤",
+        "#,##0%",
+        "#E0",
+    }
+    Scripts{
+        Ethi{"etíope"}
+    }
+    Version{"1.92"}
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "HH'H'mm''ss\" v",
+                "HH:mm:ss z",
+                "H:mm:ss",
+                "H:mm",
+                "EEEE d' de 'MMMM' de 'yyyy",
+                "d' de 'MMMM' de 'yyyy",
+                "dd/MM/yyyy",
+                "dd/MM/yy",
+                "{1} {0}",
+            }
+            fields{
+                day{
+                    relative{
+                        "-2"{"anteayer"}
+                        "-3"{"hace tres días"}
+                        "2"{"pasado mañana"}
+                        "3"{"dentro de tres días"}
+                    }
+                }
+            }
+        }
+    }
+}
