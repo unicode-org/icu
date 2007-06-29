@@ -101,6 +101,7 @@
         <include locales="en_VI"/>
         <include locales="en_ZA"/> 
         <include locales="en_ZW"/>
+        <include locales="eo"/>
         <include locales="es"/>
         <include locales="es_AR"/> 
         <include locales="es_BO"/> 

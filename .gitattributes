@@ -48,6 +48,7 @@ README text !eol
 *.spp -text
 *.tri2 -text
 
+icu4c/source/data/coll/eo.txt -text
 icu4c/source/data/coll/km.txt -text
 icu4c/source/data/coll/no.txt -text
 icu4c/source/data/coll/no_NO.txt -text
@@ -71,6 +72,7 @@ icu4c/source/data/locales/en_JM.txt -text
 icu4c/source/data/locales/en_MH.txt -text
 icu4c/source/data/locales/en_NA.txt -text
 icu4c/source/data/locales/en_TT.txt -text
+icu4c/source/data/locales/eo.txt -text
 icu4c/source/data/locales/fr_MC.txt -text
 icu4c/source/data/locales/gl.txt -text
 icu4c/source/data/locales/gl_ES.txt -text
@@ -117,6 +119,7 @@ icu4c/source/data/mappings/ibm-954_P101-2007.ucm -text
 icu4c/source/data/mappings/ibm-964_P110-1999.ucm -text
 icu4c/source/data/mappings/ibm-970_P110_P110-2006_U2.ucm -text
 icu4c/source/data/xml/collation/sr_Latn.xml -text
+icu4c/source/data/xml/main/eo.xml -text
 icu4c/source/data/xml/main/ii.xml -text
 icu4c/source/data/xml/main/my.xml -text
 icu4c/source/data/xml/main/nr.xml -text
