@@ -1637,6 +1637,9 @@ void RegexTest::Errors() {
     // UnicodeSet containing a string
     REGEX_ERR("abc[{def}]xyz", 1, 10, U_REGEX_SET_CONTAINS_STRING);
 
+    // Ticket 5389
+    REGEX_ERR("*c", 1, 1, U_REGEX_RULE_SYNTAX);
+
 }
 
 
