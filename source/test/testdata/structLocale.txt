@@ -3096,6 +3096,13 @@ structLocale:table(nofallback){
                 }
             }
         }
+        taiwan{
+            eras {
+                abbreviated{
+                    ""
+                }
+            }
+        }
     }
     layout{
         casing{""}
