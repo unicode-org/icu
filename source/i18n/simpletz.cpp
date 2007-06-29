@@ -1038,6 +1038,9 @@ SimpleTimeZone::initTransitionRules(UErrorCode& status) {
         case DOW_LE_DOM_MODE:
             dtRule = new DateTimeRule(startMonth, startDay, startDayOfWeek, false, startTime, timeRuleType);
             break;
+        default:
+            status = U_INVALID_STATE_ERROR;
+            return;
         }
         // For now, use ID + "(DST)" as the name
         dstRule = new AnnualTimeZoneRule(tzid+"(DST)", getRawOffset(), getDSTSavings(),

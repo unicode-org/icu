@@ -378,7 +378,7 @@ static void parseRRULE(const UnicodeString& rrule, int32_t& month, int32_t& dow,
     until = MIN_MILLIS;
 
     UBool yearly = FALSE;
-    UBool parseError = FALSE;
+    //UBool parseError = FALSE;
 
     int32_t prop_start = 0;
     int32_t prop_end;
