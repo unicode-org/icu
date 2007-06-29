@@ -744,7 +744,7 @@ public class TimeZoneRuleTest extends TestFmwk {
     };
 
     private String[] getTestZIDs() {
-        if (isVerbose()) {
+        if (getInclusion() > 5) {
             return TimeZone.getAvailableIDs();
         }
         return TESTZIDS;
@@ -761,7 +761,7 @@ public class TimeZoneRuleTest extends TestFmwk {
         if (idx < TESTYEARS.length) {
             loyear = TESTYEARS[idx][0];
             hiyear = TESTYEARS[idx][1];
-        } else if (idx == TESTYEARS.length && isVerbose()) {
+        } else if (idx == TESTYEARS.length && getInclusion() > 5) {
             loyear = 1850;
             hiyear = 2050;
         } else {
