@@ -206,13 +206,13 @@ public:
     int32_t getRuleMillisInDay(void) const;
 
 private:
-    DateRuleType fDateRuleType;
-    TimeRuleType fTimeRuleType;
     int32_t fMonth;
     int32_t fDayOfMonth;
     int32_t fDayOfWeek;
     int32_t fWeekInMonth;
     int32_t fMillisInDay;
+    DateRuleType fDateRuleType;
+    TimeRuleType fTimeRuleType;
 
 public:
     /**

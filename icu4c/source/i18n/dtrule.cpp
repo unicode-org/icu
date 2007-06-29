@@ -19,8 +19,7 @@ DateTimeRule::DateTimeRule(int32_t month,
                            int32_t dayOfMonth,
                            int32_t millisInDay,
                            TimeRuleType timeType)
-: UObject(),
-  fMonth(month), fDayOfMonth(dayOfMonth), fDayOfWeek(0), fWeekInMonth(0), fMillisInDay(millisInDay),
+: fMonth(month), fDayOfMonth(dayOfMonth), fDayOfWeek(0), fWeekInMonth(0), fMillisInDay(millisInDay),
   fDateRuleType(DateTimeRule::DOM), fTimeRuleType(timeType) {
 }
 
@@ -29,8 +28,7 @@ DateTimeRule::DateTimeRule(int32_t month,
                            int32_t dayOfWeek,
                            int32_t millisInDay,
                            TimeRuleType timeType)
-: UObject(),
-  fMonth(month), fDayOfMonth(0), fDayOfWeek(dayOfWeek), fWeekInMonth(weekInMonth), fMillisInDay(millisInDay),
+: fMonth(month), fDayOfMonth(0), fDayOfWeek(dayOfWeek), fWeekInMonth(weekInMonth), fMillisInDay(millisInDay),
   fDateRuleType(DateTimeRule::DOW), fTimeRuleType(timeType) {
 }
 
