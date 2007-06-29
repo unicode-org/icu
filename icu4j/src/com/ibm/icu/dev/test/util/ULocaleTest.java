@@ -1182,14 +1182,14 @@ public class ULocaleTest extends TestFmwk {
         h[1] = new Hashtable();
 
         //display in English
-        h[0].put("collation", "Collation");
-        h[0].put("calendar", "Calendar");
+        h[0].put("collation", "collation");
+        h[0].put("calendar", "calendar");
         h[0].put("currency", "Currency");
         h[0].put("phonebook", "Phonebook Order");
-        h[0].put("pinyin", "Pinyin Order");
-        h[0].put("traditional", "Traditional");
+        h[0].put("pinyin", "Pinyin Sort Order");
+        h[0].put("traditional", "Traditional Sort Order");
         h[0].put("stroke", "Stroke Order");
-        h[0].put("direct", "Direct Order");
+        h[0].put("direct", "Direct Sort Order");
         h[0].put("japanese", "Japanese Calendar");
         h[0].put("buddhist", "Buddhist Calendar");
         h[0].put("islamic", "Islamic Calendar");

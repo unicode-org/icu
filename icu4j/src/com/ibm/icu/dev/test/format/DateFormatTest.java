@@ -212,7 +212,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
              "", "1997", "August", "13", "", "", "34", "12", "",
             "Wednesday", "", "", "", "", "PM", "2", "", "", "", "", "", "", "", "", "PT","","","","",
 
-            "", "1997", "ao\u00FBt", "13", "", "14", "34", "", "",
+            "", "1997", "ao\u00FBt", "13", "", "14", "34", "12", "",
             "mercredi", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "HP","","","","",
 
             "AD", "1997", "8", "13", "14", "14", "34", "12", "5",
@@ -510,7 +510,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "en", "Australia/ACT", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+10:00", "+10:00" },
         { "en", "Australia/ACT", "2004-07-15T00:00:00Z", "z", "AEST", "+10:00" },
         { "en", "Australia/ACT", "2004-07-15T00:00:00Z", "zzzz", "Australian Eastern Standard Time", "+10:00" },
-        { "en", "Australia/ACT", "2004-07-15T00:00:00Z", "v", "Australia (Sydney)", "Australia/Sydney" },
+        { "en", "Australia/ACT", "2004-07-15T00:00:00Z", "v", "AET", "Australia/Sydney" },
         { "en", "Australia/ACT", "2004-07-15T00:00:00Z", "vvvv", "Eastern Australia Time", "Australia/Sydney" },
 
         { "en", "Australia/Sydney", "2004-01-15T00:00:00Z", "Z", "+1100", "+11:00" },
@@ -521,7 +521,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "en", "Australia/Sydney", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+10:00", "+10:00" },
         { "en", "Australia/Sydney", "2004-07-15T00:00:00Z", "z", "AEST", "+10:00" },
         { "en", "Australia/Sydney", "2004-07-15T00:00:00Z", "zzzz", "Australian Eastern Standard Time", "+10:00" },
-        { "en", "Australia/Sydney", "2004-07-15T00:00:00Z", "v", "Australia (Sydney)", "Australia/Sydney" },
+        { "en", "Australia/Sydney", "2004-07-15T00:00:00Z", "v", "AET", "Australia/Sydney" },
         { "en", "Australia/Sydney", "2004-07-15T00:00:00Z", "vvvv", "Eastern Australia Time", "Australia/Sydney" },
 
         { "en", "Europe/London", "2004-01-15T00:00:00Z", "Z", "+0000", "+0:00" },
@@ -668,39 +668,38 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
         { "zh", "America/Los_Angeles", "2004-01-15T00:00:00Z", "Z", "-0800", "-8:00" },
         { "zh", "America/Los_Angeles", "2004-01-15T00:00:00Z", "ZZZZ", "GMT-0800", "-8:00" },
-        { "zh", "America/Los_Angeles", "2004-01-15T00:00:00Z", "z", "\u592a\u5e73\u6d0b\u6807\u51c6\u65f6\u95f4", "America/Los_Angeles" },
+        { "zh", "America/Los_Angeles", "2004-01-15T00:00:00Z", "z", "PST", "America/Los_Angeles" },
         { "zh", "America/Los_Angeles", "2004-01-15T00:00:00Z", "zzzz", "\u592a\u5e73\u6d0b\u6807\u51c6\u65f6\u95f4", "America/Los_Angeles" },
         { "zh", "America/Los_Angeles", "2004-07-15T00:00:00Z", "Z", "-0700", "-7:00" },
         { "zh", "America/Los_Angeles", "2004-07-15T00:00:00Z", "ZZZZ", "GMT-0700", "-7:00" },
-        { "zh", "America/Los_Angeles", "2004-07-15T00:00:00Z", "z", "\u592a\u5e73\u6d0b\u590f\u4ee4\u65f6\u95f4", "America/Los_Angeles" },
+        { "zh", "America/Los_Angeles", "2004-07-15T00:00:00Z", "z", "PDT", "America/Los_Angeles" },
         { "zh", "America/Los_Angeles", "2004-07-15T00:00:00Z", "zzzz", "\u592a\u5e73\u6d0b\u590f\u4ee4\u65f6\u95f4", "America/Los_Angeles" },
     // icu zh.txt has exemplar city for this time zone
-        { "zh", "America/Los_Angeles", "2004-07-15T00:00:00Z", "v", "\u7f8e\u56fd (\u6d1b\u6749\u77f6)", "America/Los_Angeles" },
-        { "zh", "America/Los_Angeles", "2004-07-15T00:00:00Z", "vvvv", "\u7f8e\u56fd (\u6d1b\u6749\u77f6)", "America/Los_Angeles" },
+        { "zh", "America/Los_Angeles", "2004-07-15T00:00:00Z", "v", "PT", "America/Los_Angeles" },
+        { "zh", "America/Los_Angeles", "2004-07-15T00:00:00Z", "vvvv", "\u7f8e\u56fd\u592a\u5e73\u6d0b\u65f6\u95f4", "America/Los_Angeles" },
 
         { "zh", "America/Argentina/Buenos_Aires", "2004-01-15T00:00:00Z", "Z", "-0300", "-3:00" },
         { "zh", "America/Argentina/Buenos_Aires", "2004-01-15T00:00:00Z", "ZZZZ", "GMT-0300", "-3:00" },
-        { "zh", "America/Argentina/Buenos_Aires", "2004-01-15T00:00:00Z", "z", "GMT-0300", "-3:00" },
-        { "zh", "America/Argentina/Buenos_Aires", "2004-01-15T00:00:00Z", "zzzz", "GMT-0300", "-3:00" },
+        { "zh", "America/Argentina/Buenos_Aires", "2004-01-15T00:00:00Z", "z", "ARST", "-3:00" },
+        { "zh", "America/Argentina/Buenos_Aires", "2004-01-15T00:00:00Z", "zzzz", "\u963f\u6839\u5ef7\u6807\u51c6\u65f6\u95f4", "-3:00" },
         { "zh", "America/Argentina/Buenos_Aires", "2004-07-15T00:00:00Z", "Z", "-0300", "-3:00" },
         { "zh", "America/Argentina/Buenos_Aires", "2004-07-15T00:00:00Z", "ZZZZ", "GMT-0300", "-3:00" },
-        { "zh", "America/Argentina/Buenos_Aires", "2004-07-15T00:00:00Z", "z", "GMT-0300", "-3:00" },
-        { "zh", "America/Argentina/Buenos_Aires", "2004-07-15T00:00:00Z", "zzzz", "GMT-0300", "-3:00" },
+        { "zh", "America/Argentina/Buenos_Aires", "2004-07-15T00:00:00Z", "z", "ARST", "-3:00" },
+        { "zh", "America/Argentina/Buenos_Aires", "2004-07-15T00:00:00Z", "zzzz", "\u963f\u6839\u5ef7\u6807\u51c6\u65f6\u95f4", "-3:00" },
     // icu zh.txt does not have info for this time zone
-        { "zh", "America/Argentina/Buenos_Aires", "2004-07-15T00:00:00Z", "v", "\u963f\u6839\u5ef7 (\u5E03\u5B9C\u8BFA\u65AF\u827E\u5229\u65AF)", "America/Buenos_Aires" },
-        { "zh", "America/Argentina/Buenos_Aires", "2004-07-15T00:00:00Z", "vvvv", "\u963f\u6839\u5ef7 (\u5E03\u5B9C\u8BFA\u65AF\u827E\u5229\u65AF)", "America/Buenos_Aires" },
+        { "zh", "America/Argentina/Buenos_Aires", "2004-07-15T00:00:00Z", "v", "ART", "America/Buenos_Aires" },
+        { "zh", "America/Argentina/Buenos_Aires", "2004-07-15T00:00:00Z", "vvvv", "\u963f\u6839\u5ef7\u65f6\u95f4", "America/Buenos_Aires" },
 
         { "zh", "America/Buenos_Aires", "2004-01-15T00:00:00Z", "Z", "-0300", "-3:00" },
         { "zh", "America/Buenos_Aires", "2004-01-15T00:00:00Z", "ZZZZ", "GMT-0300", "-3:00" },
-        { "zh", "America/Buenos_Aires", "2004-01-15T00:00:00Z", "z", "GMT-0300", "-3:00" },
-        { "zh", "America/Buenos_Aires", "2004-01-15T00:00:00Z", "zzzz", "GMT-0300", "-3:00" },
+        { "zh", "America/Buenos_Aires", "2004-01-15T00:00:00Z", "z", "ARST", "-3:00" },
+        { "zh", "America/Buenos_Aires", "2004-01-15T00:00:00Z", "zzzz", "\u963f\u6839\u5ef7\u6807\u51c6\u65f6\u95f4", "-3:00" },
         { "zh", "America/Buenos_Aires", "2004-07-15T00:00:00Z", "Z", "-0300", "-3:00" },
         { "zh", "America/Buenos_Aires", "2004-07-15T00:00:00Z", "ZZZZ", "GMT-0300", "-3:00" },
-        { "zh", "America/Buenos_Aires", "2004-07-15T00:00:00Z", "z", "GMT-0300", "-3:00" },
-        { "zh", "America/Buenos_Aires", "2004-07-15T00:00:00Z", "zzzz", "GMT-0300", "-3:00" },
-    // icu zh.txt does not have info for this time zone
-        { "zh", "America/Buenos_Aires", "2004-07-15T00:00:00Z", "v", "\u963f\u6839\u5ef7 (\u5E03\u5B9C\u8BFA\u65AF\u827E\u5229\u65AF)", "America/Buenos_Aires" },
-        { "zh", "America/Buenos_Aires", "2004-07-15T00:00:00Z", "vvvv", "\u963f\u6839\u5ef7 (\u5E03\u5B9C\u8BFA\u65AF\u827E\u5229\u65AF)", "America/Buenos_Aires" },
+        { "zh", "America/Buenos_Aires", "2004-07-15T00:00:00Z", "z", "ARST", "-3:00" },
+        { "zh", "America/Buenos_Aires", "2004-07-15T00:00:00Z", "zzzz", "\u963f\u6839\u5ef7\u6807\u51c6\u65f6\u95f4", "-3:00" },
+        { "zh", "America/Buenos_Aires", "2004-07-15T00:00:00Z", "v", "ART", "America/Buenos_Aires" },
+        { "zh", "America/Buenos_Aires", "2004-07-15T00:00:00Z", "vvvv", "\u963f\u6839\u5ef7\u65f6\u95f4", "America/Buenos_Aires" },
 
         { "zh", "America/Havana", "2004-01-15T00:00:00Z", "Z", "-0500", "-5:00" },
         { "zh", "America/Havana", "2004-01-15T00:00:00Z", "ZZZZ", "GMT-0500", "-5:00" },
@@ -715,37 +714,37 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
         { "zh", "Australia/ACT", "2004-01-15T00:00:00Z", "Z", "+1100", "+11:00" },
         { "zh", "Australia/ACT", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+1100", "+11:00" },
-        { "zh", "Australia/ACT", "2004-01-15T00:00:00Z", "z", "GMT+1100", "+11:00" },
-        { "zh", "Australia/ACT", "2004-01-15T00:00:00Z", "zzzz", "GMT+1100", "+11:00" },
+        { "zh", "Australia/ACT", "2004-01-15T00:00:00Z", "z", "AEDT", "+11:00" },
+        { "zh", "Australia/ACT", "2004-01-15T00:00:00Z", "zzzz", "\u6fb3\u5927\u5229\u4e9a\u4e1c\u90e8\u590f\u4ee4\u65f6\u95f4", "+11:00" },
         { "zh", "Australia/ACT", "2004-07-15T00:00:00Z", "Z", "+1000", "+10:00" },
         { "zh", "Australia/ACT", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+1000", "+10:00" },
-        { "zh", "Australia/ACT", "2004-07-15T00:00:00Z", "z", "GMT+1000", "+10:00" },
-        { "zh", "Australia/ACT", "2004-07-15T00:00:00Z", "zzzz", "GMT+1000", "+10:00" },
+        { "zh", "Australia/ACT", "2004-07-15T00:00:00Z", "z", "AEST", "+10:00" },
+        { "zh", "Australia/ACT", "2004-07-15T00:00:00Z", "zzzz", "\u6fb3\u5927\u5229\u4e9a\u4e2d\u90e8\u6807\u51c6\u65f6\u95f4", "+10:00" },
     // icu zh.txt does not have info for this time zone
-        { "zh", "Australia/ACT", "2004-07-15T00:00:00Z", "v", "\u6fb3\u5927\u5229\u4e9a (\u6089\u5C3C)", "Australia/Sydney" },
-        { "zh", "Australia/ACT", "2004-07-15T00:00:00Z", "vvvv", "\u6fb3\u5927\u5229\u4e9a (\u6089\u5C3C)", "Australia/Sydney" },
+        { "zh", "Australia/ACT", "2004-07-15T00:00:00Z", "v", "AET", "Australia/Sydney" },
+        { "zh", "Australia/ACT", "2004-07-15T00:00:00Z", "vvvv", "\u6fb3\u5927\u5229\u4e9a\u4e1c\u90e8\u65f6\u95f4", "Australia/Sydney" },
 
         { "zh", "Australia/Sydney", "2004-01-15T00:00:00Z", "Z", "+1100", "+11:00" },
         { "zh", "Australia/Sydney", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+1100", "+11:00" },
-        { "zh", "Australia/Sydney", "2004-01-15T00:00:00Z", "z", "GMT+1100", "+11:00" },
-        { "zh", "Australia/Sydney", "2004-01-15T00:00:00Z", "zzzz", "GMT+1100", "+11:00" },
+        { "zh", "Australia/Sydney", "2004-01-15T00:00:00Z", "z", "AEDT", "+11:00" },
+        { "zh", "Australia/Sydney", "2004-01-15T00:00:00Z", "zzzz", "\u6fb3\u5927\u5229\u4e9a\u4e1c\u90e8\u590f\u4ee4\u65f6\u95f4", "+11:00" },
         { "zh", "Australia/Sydney", "2004-07-15T00:00:00Z", "Z", "+1000", "+10:00" },
         { "zh", "Australia/Sydney", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+1000", "+10:00" },
-        { "zh", "Australia/Sydney", "2004-07-15T00:00:00Z", "z", "GMT+1000", "+10:00" },
-        { "zh", "Australia/Sydney", "2004-07-15T00:00:00Z", "zzzz", "GMT+1000", "+10:00" },
-        { "zh", "Australia/Sydney", "2004-07-15T00:00:00Z", "v", "\u6fb3\u5927\u5229\u4e9a (\u6089\u5C3C)", "Australia/Sydney" },
-        { "zh", "Australia/Sydney", "2004-07-15T00:00:00Z", "vvvv", "\u6fb3\u5927\u5229\u4e9a (\u6089\u5C3C)", "Australia/Sydney" },
+        { "zh", "Australia/Sydney", "2004-07-15T00:00:00Z", "z", "AEST", "+10:00" },
+        { "zh", "Australia/Sydney", "2004-07-15T00:00:00Z", "zzzz", "\u6fb3\u5927\u5229\u4e9a\u4e2d\u90e8\u6807\u51c6\u65f6\u95f4", "+10:00" },
+        { "zh", "Australia/Sydney", "2004-07-15T00:00:00Z", "v", "AET", "Australia/Sydney" },
+        { "zh", "Australia/Sydney", "2004-07-15T00:00:00Z", "vvvv", "\u6fb3\u5927\u5229\u4e9a\u4e1c\u90e8\u65f6\u95f4", "Australia/Sydney" },
 
         { "zh", "Europe/London", "2004-01-15T00:00:00Z", "Z", "+0000", "+0:00" },
         { "zh", "Europe/London", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+0000", "+0:00" },
-        { "zh", "Europe/London", "2004-01-15T00:00:00Z", "z", "\u683C\u6797\u5C3C\u6CBB\u6807\u51C6\u65F6\u95F4", "+0:00" },
+        { "zh", "Europe/London", "2004-01-15T00:00:00Z", "z", "GMT", "+0:00" },
         { "zh", "Europe/London", "2004-01-15T00:00:00Z", "zzzz", "\u683C\u6797\u5C3C\u6CBB\u6807\u51C6\u65F6\u95F4", "+0:00" },
         { "zh", "Europe/London", "2004-07-15T00:00:00Z", "Z", "+0100", "+1:00" },
         { "zh", "Europe/London", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+0100", "+1:00" },
-        { "zh", "Europe/London", "2004-07-15T00:00:00Z", "z", "GMT+0100", "+1:00" },
-        { "zh", "Europe/London", "2004-07-15T00:00:00Z", "zzzz", "GMT+0100", "+1:00" },
-        { "zh", "Europe/London", "2004-07-15T00:00:00Z", "v", "\u82f1\u56fd", "Europe/London" },
-        { "zh", "Europe/London", "2004-07-15T00:00:00Z", "vvvv", "\u82f1\u56fd", "Europe/London" },
+        { "zh", "Europe/London", "2004-07-15T00:00:00Z", "z", "GDT", "+1:00" },
+        { "zh", "Europe/London", "2004-07-15T00:00:00Z", "zzzz", "\u683c\u6797\u5c3c\u6cbb\u590f\u4ee4\u65f6\u95f4", "+1:00" },
+        { "zh", "Europe/London", "2004-07-15T00:00:00Z", "v", "GMT", "Europe/London" },
+        { "zh", "Europe/London", "2004-07-15T00:00:00Z", "vvvv", "\u683c\u6797\u5c3c\u6cbb\u65f6\u95f4", "Europe/London" },
 
         { "zh", "Etc/GMT+3", "2004-01-15T00:00:00Z", "Z", "-0300", "-3:00" },
         { "zh", "Etc/GMT+3", "2004-01-15T00:00:00Z", "ZZZZ", "GMT-0300", "-3:00" },
@@ -761,14 +760,14 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         // JB#5150
         { "zh", "Asia/Calcutta", "2004-01-15T00:00:00Z", "Z", "+0530", "+5:30" },
         { "zh", "Asia/Calcutta", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+0530", "+5:30" },
-        { "zh", "Asia/Calcutta", "2004-01-15T00:00:00Z", "z", "GMT+0530", "+5:30" },
-        { "zh", "Asia/Calcutta", "2004-01-15T00:00:00Z", "zzzz", "GMT+0530", "+5:30" },
+        { "zh", "Asia/Calcutta", "2004-01-15T00:00:00Z", "z", "IST", "+5:30" },
+        { "zh", "Asia/Calcutta", "2004-01-15T00:00:00Z", "zzzz", "\u5370\u5ea6\u6807\u51c6\u65f6\u95f4", "+5:30" },
         { "zh", "Asia/Calcutta", "2004-07-15T00:00:00Z", "Z", "+0530", "+5:30" },
         { "zh", "Asia/Calcutta", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+0530", "+5:30" },
-        { "zh", "Asia/Calcutta", "2004-07-15T00:00:00Z", "z", "GMT+0530", "+05:30" },
-        { "zh", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "GMT+0530", "+5:30" },
-        { "zh", "Asia/Calcutta", "2004-07-15T00:00:00Z", "v", "\u5370\u5EA6", "Asia/Calcutta" },
-        { "zh", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "\u5370\u5EA6", "Asia/Calcutta" },
+        { "zh", "Asia/Calcutta", "2004-07-15T00:00:00Z", "z", "IST", "+05:30" },
+        { "zh", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "\u5370\u5ea6\u6807\u51c6\u65f6\u95f4", "+5:30" },
+        { "zh", "Asia/Calcutta", "2004-07-15T00:00:00Z", "v", "IT", "Asia/Calcutta" },
+        { "zh", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "\u5370\u5EA6\u65f6\u95f4", "Asia/Calcutta" },
 
         // ==========
 
@@ -986,8 +985,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "ja", "America/Los_Angeles", "2004-07-15T00:00:00Z", "z", "PDT", "America/Los_Angeles" },
         { "ja", "America/Los_Angeles", "2004-07-15T00:00:00Z", "zzzz", "\u592a\u5e73\u6d0b\u590f\u6642\u9593", "America/Los_Angeles" },
     // icu ja.txt has exemplar city for this time zone
-        { "ja", "America/Los_Angeles", "2004-07-15T00:00:00Z", "v", "\u30ed\u30b5\u30f3\u30bc\u30eb\u30b9 (\u30A2\u30E1\u30EA\u30AB\u5408\u8846\u56FD)\u6642\u9593", "America/Los_Angeles" },
-        { "ja", "America/Los_Angeles", "2004-07-15T00:00:00Z", "vvvv", "\u30ed\u30b5\u30f3\u30bc\u30eb\u30b9 (\u30A2\u30E1\u30EA\u30AB\u5408\u8846\u56FD)\u6642\u9593", "America/Los_Angeles" },
+        { "ja", "America/Los_Angeles", "2004-07-15T00:00:00Z", "v", "\u30A2\u30E1\u30EA\u30AB\u5408\u8846\u56FD (\u30ed\u30b5\u30f3\u30bc\u30eb\u30b9)", "America/Los_Angeles" },
+        { "ja", "America/Los_Angeles", "2004-07-15T00:00:00Z", "vvvv", "\u30A2\u30E1\u30EA\u30AB\u5408\u8846\u56FD (\u30ed\u30b5\u30f3\u30bc\u30eb\u30b9)", "America/Los_Angeles" },
 
         { "ja", "America/Argentina/Buenos_Aires", "2004-01-15T00:00:00Z", "Z", "-0300", "-3:00" },
         { "ja", "America/Argentina/Buenos_Aires", "2004-01-15T00:00:00Z", "ZZZZ", "GMT-0300", "-3:00" },
@@ -998,8 +997,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "ja", "America/Argentina/Buenos_Aires", "2004-07-15T00:00:00Z", "z", "GMT-0300", "-3:00" },
         { "ja", "America/Argentina/Buenos_Aires", "2004-07-15T00:00:00Z", "zzzz", "GMT-0300", "-3:00" },
     // icu ja.txt does not have info for this time zone
-        { "ja", "America/Argentina/Buenos_Aires", "2004-07-15T00:00:00Z", "v", "\u30A2\u30E1\u30EA\u30AB/\u30D6\u30A8\u30CE\u30B9\u30A2\u30A4\u30EC\u30B9 (\u30a2\u30eb\u30bc\u30f3\u30c1\u30f3)\u6642\u9593", "America/Buenos_Aires" },
-        { "ja", "America/Argentina/Buenos_Aires", "2004-07-15T00:00:00Z", "vvvv", "\u30A2\u30E1\u30EA\u30AB/\u30D6\u30A8\u30CE\u30B9\u30A2\u30A4\u30EC\u30B9 (\u30a2\u30eb\u30bc\u30f3\u30c1\u30f3)\u6642\u9593", "America/Buenos_Aires" },
+        { "ja", "America/Argentina/Buenos_Aires", "2004-07-15T00:00:00Z", "v", "\u30a2\u30eb\u30bc\u30f3\u30c1\u30f3 (\u30A2\u30E1\u30EA\u30AB/\u30D6\u30A8\u30CE\u30B9\u30A2\u30A4\u30EC\u30B9)", "America/Buenos_Aires" },
+        { "ja", "America/Argentina/Buenos_Aires", "2004-07-15T00:00:00Z", "vvvv", "\u30a2\u30eb\u30bc\u30f3\u30c1\u30f3 (\u30A2\u30E1\u30EA\u30AB/\u30D6\u30A8\u30CE\u30B9\u30A2\u30A4\u30EC\u30B9)", "America/Buenos_Aires" },
 
         { "ja", "America/Buenos_Aires", "2004-01-15T00:00:00Z", "Z", "-0300", "-3:00" },
         { "ja", "America/Buenos_Aires", "2004-01-15T00:00:00Z", "ZZZZ", "GMT-0300", "-3:00" },
@@ -1010,8 +1009,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "ja", "America/Buenos_Aires", "2004-07-15T00:00:00Z", "z", "GMT-0300", "-3:00" },
         { "ja", "America/Buenos_Aires", "2004-07-15T00:00:00Z", "zzzz", "GMT-0300", "-3:00" },
     // icu ja.txt does not have info for this time zone
-        { "ja", "America/Buenos_Aires", "2004-07-15T00:00:00Z", "v", "\u30A2\u30E1\u30EA\u30AB/\u30D6\u30A8\u30CE\u30B9\u30A2\u30A4\u30EC\u30B9 (\u30a2\u30eb\u30bc\u30f3\u30c1\u30f3)\u6642\u9593", "America/Buenos_Aires" },
-        { "ja", "America/Buenos_Aires", "2004-07-15T00:00:00Z", "vvvv", "\u30A2\u30E1\u30EA\u30AB/\u30D6\u30A8\u30CE\u30B9\u30A2\u30A4\u30EC\u30B9 (\u30a2\u30eb\u30bc\u30f3\u30c1\u30f3)\u6642\u9593", "America/Buenos_Aires" },
+        { "ja", "America/Buenos_Aires", "2004-07-15T00:00:00Z", "v", "\u30a2\u30eb\u30bc\u30f3\u30c1\u30f3 (\u30A2\u30E1\u30EA\u30AB/\u30D6\u30A8\u30CE\u30B9\u30A2\u30A4\u30EC\u30B9)", "America/Buenos_Aires" },
+        { "ja", "America/Buenos_Aires", "2004-07-15T00:00:00Z", "vvvv", "\u30a2\u30eb\u30bc\u30f3\u30c1\u30f3 (\u30A2\u30E1\u30EA\u30AB/\u30D6\u30A8\u30CE\u30B9\u30A2\u30A4\u30EC\u30B9)", "America/Buenos_Aires" },
 
         { "ja", "America/Havana", "2004-01-15T00:00:00Z", "Z", "-0500", "-5:00" },
         { "ja", "America/Havana", "2004-01-15T00:00:00Z", "ZZZZ", "GMT-0500", "-5:00" },
@@ -1033,8 +1032,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "ja", "Australia/ACT", "2004-07-15T00:00:00Z", "z", "GMT+1000", "+10:00" },
         { "ja", "Australia/ACT", "2004-07-15T00:00:00Z", "zzzz", "GMT+1000", "+10:00" },
     // icu ja.txt does not have info for this time zone
-        { "ja", "Australia/ACT", "2004-07-15T00:00:00Z", "v", "\u30AA\u30FC\u30B9\u30C8\u30E9\u30EA\u30A2/\u30B7\u30C9\u30CB\u30FC (\u30aa\u30fc\u30b9\u30c8\u30e9\u30ea\u30a2)\u6642\u9593", "Australia/Sydney" },
-        { "ja", "Australia/ACT", "2004-07-15T00:00:00Z", "vvvv", "\u30AA\u30FC\u30B9\u30C8\u30E9\u30EA\u30A2/\u30B7\u30C9\u30CB\u30FC (\u30aa\u30fc\u30b9\u30c8\u30e9\u30ea\u30a2)\u6642\u9593", "Australia/Sydney" },
+        { "ja", "Australia/ACT", "2004-07-15T00:00:00Z", "v", "\u30aa\u30fc\u30b9\u30c8\u30e9\u30ea\u30a2 (\u30AA\u30FC\u30B9\u30C8\u30E9\u30EA\u30A2/\u30B7\u30C9\u30CB\u30FC)", "Australia/Sydney" },
+        { "ja", "Australia/ACT", "2004-07-15T00:00:00Z", "vvvv", "\u30aa\u30fc\u30b9\u30c8\u30e9\u30ea\u30a2 (\u30AA\u30FC\u30B9\u30C8\u30E9\u30EA\u30A2/\u30B7\u30C9\u30CB\u30FC)", "Australia/Sydney" },
 
         { "ja", "Australia/Sydney", "2004-01-15T00:00:00Z", "Z", "+1100", "+11:00" },
         { "ja", "Australia/Sydney", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+1100", "+11:00" },
@@ -1044,8 +1043,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "ja", "Australia/Sydney", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+1000", "+10:00" },
         { "ja", "Australia/Sydney", "2004-07-15T00:00:00Z", "z", "GMT+1000", "+10:00" },
         { "ja", "Australia/Sydney", "2004-07-15T00:00:00Z", "zzzz", "GMT+1000", "+10:00" },
-        { "ja", "Australia/Sydney", "2004-07-15T00:00:00Z", "v", "\u30AA\u30FC\u30B9\u30C8\u30E9\u30EA\u30A2/\u30B7\u30C9\u30CB\u30FC (\u30aa\u30fc\u30b9\u30c8\u30e9\u30ea\u30a2)\u6642\u9593", "Australia/Sydney" },
-        { "ja", "Australia/Sydney", "2004-07-15T00:00:00Z", "vvvv", "\u30AA\u30FC\u30B9\u30C8\u30E9\u30EA\u30A2/\u30B7\u30C9\u30CB\u30FC (\u30aa\u30fc\u30b9\u30c8\u30e9\u30ea\u30a2)\u6642\u9593", "Australia/Sydney" },
+        { "ja", "Australia/Sydney", "2004-07-15T00:00:00Z", "v", "\u30aa\u30fc\u30b9\u30c8\u30e9\u30ea\u30a2 (\u30AA\u30FC\u30B9\u30C8\u30E9\u30EA\u30A2/\u30B7\u30C9\u30CB\u30FC)", "Australia/Sydney" },
+        { "ja", "Australia/Sydney", "2004-07-15T00:00:00Z", "vvvv", "\u30aa\u30fc\u30b9\u30c8\u30e9\u30ea\u30a2 (\u30AA\u30FC\u30B9\u30C8\u30E9\u30EA\u30A2/\u30B7\u30C9\u30CB\u30FC)", "Australia/Sydney" },
 
         { "ja", "Europe/London", "2004-01-15T00:00:00Z", "Z", "+0000", "+0:00" },
         { "ja", "Europe/London", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+0000", "+0:00" },
@@ -1653,7 +1652,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         TimeZone tz = TimeZone.getTimeZone("PST");
         dfFrench.setTimeZone(tz);
         dfUS.setTimeZone(tz);
-        String expectedFRENCH_JDK12 = "lundi 15 septembre 1997 00 h 00 HP";
+        String expectedFRENCH_JDK12 = "lundi 15 septembre 1997 00:00:00 HP";
         //String expectedFRENCH = "lundi 15 septembre 1997 00 h 00 PDT";
         String expectedUS = "Monday, September 15, 1997 12:00:00 AM PT";
         logln("Date set to : " + testDate);
