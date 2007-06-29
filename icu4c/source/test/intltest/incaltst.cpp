@@ -317,6 +317,12 @@ void IntlCalendarTest::TestTaiwan() {
         UCAL_FEBRUARY, // month
         12,          // day
 
+        0,           // B. era   [-79204842000000]
+        96,           // B. year
+        2007,        // G. year
+        UCAL_FEBRUARY, // month
+        12,          // day
+
         -1,-1,-1,-1,-1,-1,-1,-1,-1,-1
     };
     Calendar *cal;
