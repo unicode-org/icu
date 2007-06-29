@@ -1,5 +1,4 @@
 //##header
-//#ifndef FOUNDATION
 /*
 *******************************************************************************
 *   Copyright (C) 2001-2007, International Business Machines
@@ -29,8 +28,10 @@
 
 package com.ibm.icu.text;
 
+//#ifndef FOUNDATION
 import java.awt.font.NumericShaper;
 import java.awt.font.TextAttribute;
+//#endif
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.text.AttributedCharacterIterator;
@@ -3240,6 +3241,7 @@ public class Bidi {
         paraBidi = this;             /* mark successful setPara */
     }
 
+//#ifndef FOUNDATION
     /**
      * Perform the Unicode Bidi algorithm on a given paragraph, as defined in the
      * <a href="http://www.unicode.org/unicode/reports/tr9/">Unicode Standard Annex #9</a>,
@@ -3322,6 +3324,7 @@ public class Bidi {
         }
         setPara(text, paraLevel, levels);
     }
+//#endif
 
     /**
      * Specify whether block separators must be allocated level zero,
@@ -4275,6 +4278,7 @@ public class Bidi {
         this(paragraph.toCharArray(), 0, null, 0, paragraph.length(), flags);
     }
 
+//#ifndef FOUNDATION
     /**
      * Create Bidi from the given paragraph of text.<p>
      *
@@ -4304,6 +4308,7 @@ public class Bidi {
         this();
         setPara(paragraph);
     }
+//#endif
 
     /**
      * Create Bidi from the given text, embedding, and direction information.
@@ -4747,4 +4752,3 @@ public class Bidi {
     }
 
 }
-//#endif

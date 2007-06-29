@@ -258,7 +258,7 @@ public final class UTF16 {
         return single; // return unmatched surrogate
     }
 
-    // #ifndef FOUNDATION
+//#ifndef FOUNDATION
     /**
      * Extract a single UTF-32 value from a string. Used when iterating forwards or backwards (with
      * <code>UTF16.getCharCount()</code>, as well as random access. If a validity check is
@@ -318,7 +318,7 @@ public final class UTF16 {
         return single; // return unmatched surrogate
     }
 
-    // #endif
+//#endif
 
     /**
      * Extract a single UTF-32 value from a string. Used when iterating forwards or backwards (with

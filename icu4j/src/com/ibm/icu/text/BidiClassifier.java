@@ -1,5 +1,3 @@
-//##header
-//#ifndef FOUNDATION
 /*
  *******************************************************************************
  * Copyright (C) 2000-2007, International Business Machines Corporation and    *
@@ -96,4 +94,3 @@ public /*abstract*/ class BidiClassifier {
         return Bidi.CLASS_DEFAULT;
     }
 }
-//#endif

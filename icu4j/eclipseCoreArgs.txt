@@ -12,9 +12,6 @@ src/com/ibm/icu/impl/ByteBuffer.java
 src/com/ibm/icu/lang/UCharacter.java
 src/com/ibm/icu/math/BigDecimal.java
 src/com/ibm/icu/text/Bidi.java
-src/com/ibm/icu/text/BidiClassifier.java
-src/com/ibm/icu/text/BidiLine.java
-src/com/ibm/icu/text/BidiWriter.java
 src/com/ibm/icu/text/DateTimePatternGenerator.java
 src/com/ibm/icu/text/DecimalFormat.java
 src/com/ibm/icu/text/DigitList.java

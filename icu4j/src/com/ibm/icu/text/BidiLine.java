@@ -1,5 +1,3 @@
-//##header
-//#ifndef FOUNDATION
 /*
 *******************************************************************************
 *   Copyright (C) 2001-2007, International Business Machines
@@ -1262,4 +1260,3 @@ final class BidiLine {
         return destMap;
     }
 }
-//#endif
