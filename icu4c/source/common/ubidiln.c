@@ -1140,8 +1140,9 @@ ubidi_getLogicalMap(UBiDi *pBiDi, int32_t *indexMap, UErrorCode *pErrorCode) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
     } else {
         /* fill a logical-to-visual index map using the runs[] */
+        int32_t visualStart, visualLimit, i, j, k;
+        int32_t logicalStart, logicalEnd;
         Run *runs=pBiDi->runs;
-        int32_t logicalStart, visualStart, logicalLimit, visualLimit, j;
         if (pBiDi->length>pBiDi->resultLength) {
             uprv_memset(indexMap, 0xFF, pBiDi->resultLength*sizeof(int32_t));
         }
@@ -1165,8 +1166,8 @@ ubidi_getLogicalMap(UBiDi *pBiDi, int32_t *indexMap, UErrorCode *pErrorCode) {
 
         if(pBiDi->insertPoints.size>0) {
             int32_t markFound=0, runCount=pBiDi->runCount;
-            int32_t visualStart=0, length, insertRemove, i, j;
-            Run *runs=pBiDi->runs;
+            int32_t length, insertRemove;
+            visualStart=0;
             /* add number of marks found until each index */
             for(i=0; i<runCount; i++, visualStart+=length) {
                 length=runs[i].visualLimit-visualStart;
@@ -1175,8 +1176,9 @@ ubidi_getLogicalMap(UBiDi *pBiDi, int32_t *indexMap, UErrorCode *pErrorCode) {
                     markFound++;
                 }
                 if(markFound>0) {
-                    int32_t logicalStart=GET_INDEX(runs[i].logicalStart);
-                    int32_t limit=logicalStart+length;
+                    int32_t limit;
+                    logicalStart=GET_INDEX(runs[i].logicalStart);
+                    limit=logicalStart+length;
                     for(j=logicalStart; j<limit; j++) {
                         indexMap[j]+=markFound;
                     }
@@ -1188,11 +1190,10 @@ ubidi_getLogicalMap(UBiDi *pBiDi, int32_t *indexMap, UErrorCode *pErrorCode) {
         }
         else if(pBiDi->controlCount>0) {
             int32_t controlFound=0, runCount=pBiDi->runCount;
-            int32_t visualStart=0, length, insertRemove, i, j, k;
-            int32_t logicalStart, logicalEnd;
+            int32_t length, insertRemove;
             UBool evenRun;
             UChar uchar;
-            Run *runs=pBiDi->runs;
+            visualStart=0;
             /* subtract number of controls found until each index */
             for(i=0; i<runCount; i++, visualStart+=length) {
                 length=runs[i].visualLimit-visualStart;
