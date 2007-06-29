@@ -523,6 +523,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\basictz.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\unicode\basictz.h"
+				>
+			</File>
+			<File
 				RelativePath=".\buddhcal.cpp"
 				>
 			</File>
@@ -753,6 +761,14 @@
 						Outputs="..\..\include\unicode\$(InputFileName)"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\dtrule.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\unicode\dtrule.h"
+				>
 			</File>
 			<File
 				RelativePath=".\unicode\fieldpos.h"
@@ -1087,6 +1103,14 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\rbtz.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\unicode\rbtz.h"
+				>
+			</File>
+			<File
 				RelativePath=".\reldtfmt.cpp"
 				>
 			</File>
@@ -1171,6 +1195,22 @@
 						Outputs="..\..\include\unicode\$(InputFileName)"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\tzrule.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\unicode\tzrule.h"
+				>
+			</File>
+			<File
+				RelativePath=".\tztrans.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\unicode\tztrans.h"
+				>
 			</File>
 			<File
 				RelativePath=".\ucal.cpp"
@@ -1352,6 +1392,14 @@
 						Outputs="..\..\include\unicode\$(InputFileName)"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\vtzone.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\unicode\vtzone.h"
+				>
 			</File>
 			<File
 				RelativePath=".\windtfmt.cpp"
