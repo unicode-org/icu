@@ -765,6 +765,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\tzrulets.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\tzrulets.h"
+				>
+			</File>
+			<File
 				RelativePath=".\tztest.cpp"
 				>
 			</File>
