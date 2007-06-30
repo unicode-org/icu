@@ -76,7 +76,7 @@ root{
         taiwan{
             eras {
                 abbreviated{
-                    "míngúo"
+                    "míngúo",
                 }
             }
         }
