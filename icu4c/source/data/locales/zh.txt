@@ -2020,7 +2020,7 @@ zh{
         taiwan{
             eras {
                 abbreviated{
-                    "民國"
+                    "民國",
                 }
             }
         }
