@@ -19,6 +19,7 @@ import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.HebrewCalendar;
 import com.ibm.icu.util.IslamicCalendar;
 import com.ibm.icu.util.JapaneseCalendar;
+import com.ibm.icu.util.TaiwanCalendar;
 import com.ibm.icu.util.TimeZone;
 
 /**
@@ -181,6 +182,20 @@ public class CalendarTests
             
             for (int i = 0; i < locales.length; i += 1) {
                 calendars[i] = new JapaneseCalendar(jst, locales[i]);
+            }
+            
+            return calendars; 
+        }
+    }
+
+    static class TaiwanCalendarHandler extends CalendarHandler {
+        public Object[] getTestObjects() {
+            Locale locales[] = SerializableTest.getLocales();
+            TimeZone cst = TimeZone.getTimeZone("Asia/Shanghai");
+            TaiwanCalendar calendars[] = new TaiwanCalendar[locales.length];
+            
+            for (int i = 0; i < locales.length; i += 1) {
+                calendars[i] = new TaiwanCalendar(cst, locales[i]);
             }
             
             return calendars; 
