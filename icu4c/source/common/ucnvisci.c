@@ -41,6 +41,7 @@
 #define ISCII_HALANT        0xE8
 #define ISCII_DANDA         0xEA
 #define ISCII_INV           0xD9
+#define ISCII_VOWEL_SIGN_E  0xE0
 #define INDIC_BLOCK_BEGIN   0x0900
 #define INDIC_BLOCK_END     0x0D7F
 #define INDIC_RANGE         (INDIC_BLOCK_END - INDIC_BLOCK_BEGIN)
@@ -244,7 +245,7 @@ static const uint8_t validityTable[128] = {
 /*0xa1 : 0xb8: 0x901  */ DEV_MASK + ZERO     + GJR_MASK + ORI_MASK + BNG_MASK + ZERO     + ZERO     + ZERO     ,
 /*0xa2 : 0xfe: 0x902  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xa3 : 0xbf: 0x903  */ DEV_MASK + ZERO     + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
-/*0x00 : 0x00: 0x904  */ ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
+/*0x00 : 0x00: 0x904  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
 /*0xa4 : 0xff: 0x905  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xa5 : 0xff: 0x906  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xa6 : 0xff: 0x907  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
@@ -367,7 +368,7 @@ static const uint16_t fromUnicodeTable[128]={
     0x00a1 ,/* 0x0901 */
     0x00a2 ,/* 0x0902 */
     0x00a3 ,/* 0x0903 */
-    0xFFFF ,/* 0x0904 */
+    0xa4e0 ,/* 0x0904 */
     0x00a4 ,/* 0x0905 */
     0x00a5 ,/* 0x0906 */
     0x00a6 ,/* 0x0907 */
@@ -751,6 +752,11 @@ static const uint16_t toUnicodeTable[256]={
     0xFFFF /* 0xff */
 };
 
+static const uint16_t vowelSignESpecialCases[][2]={
+	{ 2 /*length of array*/    , 0      },
+	{ 0xA4 , 0x0904 },
+};
+
 static const uint16_t nuktaSpecialCases[][2]={
     { 16 /*length of array*/   , 0      },
     { 0xA6 , 0x090c },
@@ -1083,6 +1089,8 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
     UConverterDataISCII* data;
     UChar32* toUnicodeStatus=NULL;
     UChar* contextCharToUnicode = NULL;
+    UBool found;
+    int i;
 
     if ((args->converter == NULL) || (target < args->target) || (source < args->source)){
         *err = U_ILLEGAL_ARGUMENT_ERROR;
@@ -1220,7 +1228,30 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                 GET_MAPPING(sourceChar,targetUniChar,data);
                 *contextCharToUnicode = sourceChar;
                 break;
-
+                
+         	case ISCII_VOWEL_SIGN_E:
+         		i=1;
+         		found=FALSE;
+         		for( ;i<vowelSignESpecialCases[0][0];i++){
+         			if(vowelSignESpecialCases[i][0]==(uint8_t)*contextCharToUnicode){
+         				targetUniChar=vowelSignESpecialCases[i][1];
+         				found=TRUE;
+         				break;
+         			}
+         		}
+         		if(found) {
+                    /* find out if the mapping is valid in this state */
+                    if(validityTable[(uint8_t)targetUniChar] & data->currentMaskToUnicode){
+                        /*targetUniChar += data->currentDeltaToUnicode ;*/
+                        *contextCharToUnicode= NO_CHAR_MARKER;
+                        *toUnicodeStatus = missingCharMarker;
+                        break;
+                    }
+         		}
+         		GET_MAPPING(sourceChar,targetUniChar,data);
+                *contextCharToUnicode = sourceChar;
+                break;
+            	
             case ISCII_NUKTA:
                 /* handle soft halant */
                 if(*contextCharToUnicode == ISCII_HALANT){
@@ -1230,8 +1261,8 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                     break;
                 }else{
                     /* try to handle <CHAR> + ISCII_NUKTA special mappings */
-                    int i=1;
-                    UBool found =FALSE;
+                    i=1;
+                    found =FALSE;
                     for( ;i<nuktaSpecialCases[0][0];i++){
                         if(nuktaSpecialCases[i][0]==(uint8_t)*contextCharToUnicode){
                             targetUniChar=nuktaSpecialCases[i][1];
