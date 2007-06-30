@@ -172,9 +172,9 @@ class CharsetISCII extends CharsetICU {
         /* Note:  This table was edited to mirror the Windows XP implementation */
         /* ISCII: Valid: Unicode */
         /* 0xa0: 0x00: 0x900 */ MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO,
-        /* 0xa1: 0xb8: 0x901 */ MaskEnum.DEV_MASK + MaskEnum.ZERO + MaskEnum.GJR_MASK + MaskEnum.ORI_MASK + MaskEnum.BNG_MASK + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO,
+        /* 0xa1: 0xb8: 0x901 */ MaskEnum.DEV_MASK + MaskEnum.PNJ_MASK + MaskEnum.GJR_MASK + MaskEnum.ORI_MASK + MaskEnum.BNG_MASK + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO,
         /* 0xa2: 0xfe: 0x902 */ MaskEnum.DEV_MASK + MaskEnum.PNJ_MASK + MaskEnum.GJR_MASK + MaskEnum.ORI_MASK + MaskEnum.BNG_MASK + MaskEnum.KND_MASK + MaskEnum.MLM_MASK + MaskEnum.TML_MASK, 
-        /* 0xa3: 0xbf: 0x903 */ MaskEnum.DEV_MASK + MaskEnum.ZERO + MaskEnum.GJR_MASK + MaskEnum.ORI_MASK + MaskEnum.BNG_MASK + MaskEnum.KND_MASK + MaskEnum.MLM_MASK + MaskEnum.TML_MASK,
+        /* 0xa3: 0xbf: 0x903 */ MaskEnum.DEV_MASK + MaskEnum.PNJ_MASK + MaskEnum.GJR_MASK + MaskEnum.ORI_MASK + MaskEnum.BNG_MASK + MaskEnum.KND_MASK + MaskEnum.MLM_MASK + MaskEnum.TML_MASK,
         /* 0x00: 0x00: 0x904 */ MaskEnum.DEV_MASK + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO,
         /* 0xa4: 0xff: 0x905 */ MaskEnum.DEV_MASK + MaskEnum.PNJ_MASK + MaskEnum.GJR_MASK + MaskEnum.ORI_MASK + MaskEnum.BNG_MASK + MaskEnum.KND_MASK + MaskEnum.MLM_MASK + MaskEnum.TML_MASK,
         /* 0xa5: 0xff: 0x906 */ MaskEnum.DEV_MASK + MaskEnum.PNJ_MASK + MaskEnum.GJR_MASK + MaskEnum.ORI_MASK + MaskEnum.BNG_MASK + MaskEnum.KND_MASK + MaskEnum.MLM_MASK + MaskEnum.TML_MASK,
@@ -283,7 +283,7 @@ class CharsetISCII extends CharsetICU {
         /* 0xf8: 0xff: 0x96d */ MaskEnum.DEV_MASK + MaskEnum.PNJ_MASK + MaskEnum.GJR_MASK + MaskEnum.ORI_MASK + MaskEnum.BNG_MASK + MaskEnum.KND_MASK + MaskEnum.MLM_MASK + MaskEnum.TML_MASK,
         /* 0xf9: 0xff: 0x96e */ MaskEnum.DEV_MASK + MaskEnum.PNJ_MASK + MaskEnum.GJR_MASK + MaskEnum.ORI_MASK + MaskEnum.BNG_MASK + MaskEnum.KND_MASK + MaskEnum.MLM_MASK + MaskEnum.TML_MASK,
         /* 0xfa: 0xff: 0x96f */ MaskEnum.DEV_MASK + MaskEnum.PNJ_MASK + MaskEnum.GJR_MASK + MaskEnum.ORI_MASK + MaskEnum.BNG_MASK + MaskEnum.KND_MASK + MaskEnum.MLM_MASK + MaskEnum.TML_MASK,
-        /* 0x00: 0x80: 0x970 */ MaskEnum.DEV_MASK + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO,
+        /* 0x00: 0x80: 0x970 */ MaskEnum.DEV_MASK + MaskEnum.PNJ_MASK + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO,
         /* 0x00: 0x00: 0x9yz */ MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO,
     };
     
@@ -901,6 +901,28 @@ class CharsetISCII extends CharsetICU {
                             targetUniChar = GetMapping(sourceChar, targetUniChar, data);
                             data.contextCharToUnicode = (char)sourceChar;
                             break;
+                        case ISCII_VOWEL_SIGN_E:
+                            /* find <CHAR> + SIGN_VOWEL_E special mapping */
+                            int n = 1;
+                            boolean find = false;
+                            for (; n < vowelSignESpecialCases[0][0]; n++) {
+                                if (vowelSignESpecialCases[n][0] == ((short)data.contextCharToUnicode & UConverterConstants.UNSIGNED_BYTE_MASK)) {
+                                    targetUniChar = vowelSignESpecialCases[n][1];
+                                    find = true;
+                                    break;
+                                }
+                            }
+                            if (find) {
+                                /* find out if the mapping is valid in this state */
+                                if ((validityTable[(byte)targetUniChar] & data.currentMaskFromUnicode) > 0) {
+                                    data.contextCharToUnicode = NO_CHAR_MARKER;
+                                    this.toUnicodeStatus = UConverterConstants.missingCharMarker;
+                                    break;
+                                }
+                            }
+                            targetUniChar = GetMapping(sourceChar, targetUniChar, data);
+                            data.contextCharToUnicode = (char)sourceChar;
+                            break;                         
                         case ISCII_NUKTA:
                             /* handle soft halant */
                             if (data.contextCharToUnicode == ISCII_HALANT) {
@@ -930,25 +952,7 @@ class CharsetISCII extends CharsetICU {
                                 }
                                 /* else fall through to default */
                             }
-                        case ISCII_VOWEL_SIGN_E:
-                            /* find <CHAR> + SIGN_VOWEL_E special mapping */
-                            int i = 1;
-                            boolean found = false;
-                            for (; i < vowelSignESpecialCases[0][0]; i++) {
-                                if (vowelSignESpecialCases[i][0] == ((short)data.contextCharToUnicode & UConverterConstants.UNSIGNED_BYTE_MASK)) {
-                                    targetUniChar = vowelSignESpecialCases[i][1];
-                                    found = true;
-                                    break;
-                                }
-                            }
-                            if (found) {
-                                /* find out if the mapping is valid in this state */
-                                if ((validityTable[(byte)targetUniChar] & data.currentMaskFromUnicode) > 0) {
-                                    data.contextCharToUnicode = NO_CHAR_MARKER;
-                                    this.toUnicodeStatus = UConverterConstants.missingCharMarker;
-                                    break;
-                                }
-                            }
+                        
                         default:
                             targetUniChar = GetMapping(sourceChar, targetUniChar, data);
                             data.contextCharToUnicode = (char)sourceChar;
