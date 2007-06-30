@@ -984,7 +984,7 @@ public abstract class DateFormat extends UFormat {
      * @param loc the locale for the format
      */
     private static DateFormat get(int dateStyle, int timeStyle, ULocale loc) {
-        if((timeStyle & RELATIVE)>0 || (dateStyle & RELATIVE)>0) {
+        if((timeStyle != -1 && (timeStyle & RELATIVE)>0) || (dateStyle != -1 && (dateStyle & RELATIVE)>0)) {
             throw new UnsupportedOperationException("Relative Date is not implemented yet");
         }
     
