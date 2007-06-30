@@ -652,6 +652,7 @@ public class SerializableTest extends TestFmwk.TestGroup
         map.put("com.ibm.icu.util.HebrewCalendar", new CalendarTests.HebrewCalendarHandler());
         map.put("com.ibm.icu.util.IslamicCalendar", new CalendarTests.IslamicCalendarHandler());
         map.put("com.ibm.icu.util.JapaneseCalendar", new CalendarTests.JapaneseCalendarHandler());
+        map.put("com.ibm.icu.util.TaiwanCalendar", new CalendarTests.TaiwanCalendarHandler());
         
         map.put("com.ibm.icu.text.ArabicShapingException", new ExceptionTests.ArabicShapingExceptionHandler());
         map.put("com.ibm.icu.text.StringPrepParseException", new ExceptionTests.StringPrepParseExceptionHandler());
