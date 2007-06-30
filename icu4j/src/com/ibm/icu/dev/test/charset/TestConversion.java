@@ -1014,7 +1014,7 @@ public class TestConversion extends ModuleTest {
         len = len - target.position();
 
         if (len != source.remaining()) {
-            if (cc.caseNr == 6 && skipIfBeforeICU(3,7,2)) {
+            if ((cc.caseNr == 6 || cc.caseNr == 87 || cc.caseNr == 88) && skipIfBeforeICU(3,7,2)) {
                 logln("Ticket#5765: output length does not match expected for charset: "+cc.charset+ " [" + cc.caseNr + "]");
             } else {
                 errln("Test failed: output length does not match expected for charset: "+cc.charset+ " [" + cc.caseNr + "]");
