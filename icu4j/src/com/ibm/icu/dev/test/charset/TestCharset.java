@@ -2286,6 +2286,34 @@ public class TestCharset extends TestFmwk {
             errln("ISCII round trip test failed.");
         }
         
+        //Test new characters in the ISCII charset
+        encoder = cs.newEncoder();
+        decoder = cs.newDecoder();
+        char u_pts[] = {
+                (char)0x0904
+            };
+        byte b_pts[] = {
+                /*(byte)0xef, (byte)0x42, */(byte)0xa4, (byte)0xe0
+            };
+        us = CharBuffer.allocate(u_pts.length);
+        bs = ByteBuffer.allocate(b_pts.length);
+        us.put(u_pts);
+        bs.put(b_pts);
+        
+        bs.limit(bs.position());
+        bs.position(0);
+        us.limit(us.position());
+        us.position(0);
+        
+        try {
+            smBufDecode(decoder, "ISCII-update", bs, us, true, true);         
+            bs.position(0);
+            us.position(0);
+            smBufEncode(encoder, "ISCII-update", us, bs, true, true);
+        } catch (Exception ex) {
+            errln("Error occurred while encoding/decoding ISCII with the new characters.");
+        }
+        
         //The rest of the code in this method is to provide better code coverage
         CharBuffer ccus = CharBuffer.allocate(0x10);
         ByteBuffer ccbs = ByteBuffer.allocate(0x10);
@@ -2836,6 +2864,75 @@ public class TestCharset extends TestFmwk {
             errln("Exception while encoding UTF32LE (6) should have been thrown.");
         } catch (Exception ex) {
         }
-   
+    }
+    
+    //Test for charset UTF16LE to provide better code coverage
+    public void TestCharsetUTF16LE() {
+        CoderResult result = CoderResult.UNDERFLOW;
+        CharsetProvider provider = new CharsetProviderICU();
+        Charset cs = provider.charsetForName("UTF-16LE");        
+        CharsetEncoder encoder = cs.newEncoder();
+        CharsetDecoder decoder = cs.newDecoder();
+        
+        // Test for malform and change fromUChar32 for next call
+        char u_pts1[] = {
+                (char)0xD805, 
+                (char)0xDC01, (char)0xDC02, (char)0xDC03,
+                (char)0xD901, (char)0xD902
+                };
+        byte b_pts1[] = {
+                (byte)0x00, 
+                (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00
+                };
+        
+        CharBuffer us = CharBuffer.allocate(u_pts1.length);
+        ByteBuffer bs = ByteBuffer.allocate(b_pts1.length);
+        
+        us.put(u_pts1);
+        bs.put(b_pts1);
+        
+        us.limit(1);
+        us.position(0);
+        bs.limit(1);
+        bs.position(0);
+       
+        result = encoder.encode(us, bs, true);
+        
+        if (!result.isMalformed()) {
+            errln("Error while encoding UTF-16LE (1) should have occured.");
+        }
+        
+        // Test for malform surrogate from previous buffer
+        us.limit(4);
+        us.position(1);
+        bs.limit(7);
+        bs.position(1);
+        
+        result = encoder.encode(us, bs, true);
+        
+        if (!result.isMalformed()) {
+            errln("Error while encoding UTF-16LE (2) should have occured.");
+        }       
+        
+        // Test for malform trail surrogate
+        encoder.reset();
+        
+        us.limit(1);
+        us.position(0);
+        bs.limit(1);
+        bs.position(0);
+       
+        result = encoder.encode(us, bs, true);    
+        
+        us.limit(6);
+        us.position(4);
+        bs.limit(4);
+        bs.position(1);
+        
+        result = encoder.encode(us, bs, true);
+        
+        if (!result.isMalformed()) {
+            errln("Error while encoding UTF-16LE (3) should have occured.");
+        }          
     }
 }

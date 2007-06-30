@@ -34,6 +34,7 @@ class CharsetISCII extends CharsetICU {
     private final short ISCII_NUKTA = 0xe9;
     private final short ISCII_HALANT = 0xe8;
     private final short ISCII_DANDA = 0xea;
+    private final short ISCII_VOWEL_SIGN_E = 0xe0;
     private final short ISCII_INV = 0xd9;
     private final short INDIC_BLOCK_BEGIN = 0x0900;
     private final short INDIC_BLOCK_END = 0x0d7f;
@@ -174,7 +175,7 @@ class CharsetISCII extends CharsetICU {
         /* 0xa1: 0xb8: 0x901 */ MaskEnum.DEV_MASK + MaskEnum.ZERO + MaskEnum.GJR_MASK + MaskEnum.ORI_MASK + MaskEnum.BNG_MASK + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO,
         /* 0xa2: 0xfe: 0x902 */ MaskEnum.DEV_MASK + MaskEnum.PNJ_MASK + MaskEnum.GJR_MASK + MaskEnum.ORI_MASK + MaskEnum.BNG_MASK + MaskEnum.KND_MASK + MaskEnum.MLM_MASK + MaskEnum.TML_MASK, 
         /* 0xa3: 0xbf: 0x903 */ MaskEnum.DEV_MASK + MaskEnum.ZERO + MaskEnum.GJR_MASK + MaskEnum.ORI_MASK + MaskEnum.BNG_MASK + MaskEnum.KND_MASK + MaskEnum.MLM_MASK + MaskEnum.TML_MASK,
-        /* 0x00: 0x00: 0x904 */ MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO,
+        /* 0x00: 0x00: 0x904 */ MaskEnum.DEV_MASK + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO,
         /* 0xa4: 0xff: 0x905 */ MaskEnum.DEV_MASK + MaskEnum.PNJ_MASK + MaskEnum.GJR_MASK + MaskEnum.ORI_MASK + MaskEnum.BNG_MASK + MaskEnum.KND_MASK + MaskEnum.MLM_MASK + MaskEnum.TML_MASK,
         /* 0xa5: 0xff: 0x906 */ MaskEnum.DEV_MASK + MaskEnum.PNJ_MASK + MaskEnum.GJR_MASK + MaskEnum.ORI_MASK + MaskEnum.BNG_MASK + MaskEnum.KND_MASK + MaskEnum.MLM_MASK + MaskEnum.TML_MASK,
         /* 0xa6: 0xff: 0x907 */ MaskEnum.DEV_MASK + MaskEnum.PNJ_MASK + MaskEnum.GJR_MASK + MaskEnum.ORI_MASK + MaskEnum.BNG_MASK + MaskEnum.KND_MASK + MaskEnum.MLM_MASK + MaskEnum.TML_MASK,
@@ -296,7 +297,7 @@ class CharsetISCII extends CharsetICU {
       0x00a1, /* 0x0901 */
       0x00a2, /* 0x0902 */
       0x00a3, /* 0x0903 */
-      0xFFFF, /* 0x0904 */
+      0xa4e0, /* 0x0904 */
       0x00a4, /* 0x0905 */
       0x00a5, /* 0x0906 */
       0x00a6, /* 0x0907 */
@@ -697,6 +698,10 @@ class CharsetISCII extends CharsetICU {
         { 0xDB, 0x0962 },
         { 0xDC, 0x0963 }
     };
+    private static final char vowelSignESpecialCases[][] = {
+        { 2 /* length of array */ , 0 },
+        { 0xA4, 0x0904 }
+    };
     
     private static final short lookupTable[][] = {
         { MaskEnum.ZERO, MaskEnum.ZERO }, /* DEFAULT */
@@ -925,6 +930,25 @@ class CharsetISCII extends CharsetICU {
                                 }
                                 /* else fall through to default */
                             }
+                        case ISCII_VOWEL_SIGN_E:
+                            /* find <CHAR> + SIGN_VOWEL_E special mapping */
+                            int i = 1;
+                            boolean found = false;
+                            for (; i < vowelSignESpecialCases[0][0]; i++) {
+                                if (vowelSignESpecialCases[i][0] == ((short)data.contextCharToUnicode & UConverterConstants.UNSIGNED_BYTE_MASK)) {
+                                    targetUniChar = vowelSignESpecialCases[i][1];
+                                    found = true;
+                                    break;
+                                }
+                            }
+                            if (found) {
+                                /* find out if the mapping is valid in this state */
+                                if ((validityTable[(byte)targetUniChar] & data.currentMaskFromUnicode) > 0) {
+                                    data.contextCharToUnicode = NO_CHAR_MARKER;
+                                    this.toUnicodeStatus = UConverterConstants.missingCharMarker;
+                                    break;
+                                }
+                            }
                         default:
                             targetUniChar = GetMapping(sourceChar, targetUniChar, data);
                             data.contextCharToUnicode = (char)sourceChar;
@@ -979,7 +1003,7 @@ class CharsetISCII extends CharsetICU {
                     toULength = 0;
                 }
                 
-                if (toUnicodeStatus != UConverterConstants.missingCharMarker) {
+                if (this.toUnicodeStatus != UConverterConstants.missingCharMarker) {
                     /* output a remaining target character */
                     WriteToTargetToU(offsets, (source.position() - 2), source, target, this.toUnicodeStatus, data.currentDeltaToUnicode);
                     this.toUnicodeStatus = UConverterConstants.missingCharMarker;    
