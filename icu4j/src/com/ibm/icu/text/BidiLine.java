@@ -85,7 +85,7 @@ final class BidiLine {
         byte[] dirProps = bidi.dirProps;
         byte[] levels = bidi.levels;
         int start = bidi.length;
-        byte paraLevel = bidi.getParaLevel();
+        byte paraLevel = bidi.paraLevel;
 
         /* If the line is terminated by a block separator, all preceding WS etc...
            are already set to paragraph level.
@@ -248,11 +248,7 @@ final class BidiLine {
     static byte getLevelAt(Bidi bidi, int charIndex)
     {
         /* return paraLevel if in the trailing WS run, otherwise the real level */
-        if (!bidi.IsValidParaOrLine()) {
-            return 0;
-        } else if (charIndex < 0 || bidi.length <= charIndex) {
-            return bidi.getParaLevel();
-        } else if (bidi.direction != Bidi.MIXED || charIndex >= bidi.trailingWSStart) {
+        if (bidi.direction != Bidi.MIXED || charIndex >= bidi.trailingWSStart) {
             return bidi.GetParaLevelAt(charIndex);
         } else {
             return bidi.levels[charIndex];
@@ -473,7 +469,7 @@ final class BidiLine {
             visualStart += length;
         }
         /* we should never get here */
-        throw new IllegalStateException();
+        throw new IllegalStateException("Internal ICU error in getRunFromLogicalIndex");
     }
 
     /*
@@ -487,11 +483,17 @@ final class BidiLine {
      * If option OPTION_REMOVE_CONTROLS is set, insertRemove will contain the
      * negative number of BiDi control characters within this run.
      */
-    static boolean getRuns(Bidi bidi) {
+    static void getRuns(Bidi bidi) {
         /*
-         * This method should not be called if the runs are already set.
-         * This can be checked based on whether runCount >= 0
+         * This method returns immediately if the runs are already set.
          */
+        if (bidi.runCount >= 0) {
+            return;
+        }
+        if (bidi.length == 0) {
+            getSingleRun(bidi, bidi.paraLevel);
+            bidi.runCount = 0;
+        }
         if (bidi.direction != Bidi.MIXED) {
             /* simple, single-run case - this covers length==0 */
             /* bidi.paraLevel is ok even for contextual multiple paragraphs */
@@ -553,7 +555,7 @@ final class BidiLine {
                     if (bidi.getRunsMemory(runCount)) {
                         runs = bidi.runsMemory;
                     } else {
-                        return false;
+                        throw new OutOfMemoryError("Failed to allocate Runs memory");
                     }
 
                     /* set the runs */
@@ -644,8 +646,6 @@ final class BidiLine {
                 }
             }
         }
-
-        return true;
     }
 
     static int[] prepareReorder(byte[] levels, byte[] pMinLevel, byte[] pMaxLevel)
@@ -835,31 +835,28 @@ final class BidiLine {
             visualIndex = bidi.length - logicalIndex - 1;
             break;
         default:
-            if(bidi.runCount < 0 && !getRuns(bidi)) {
-                throw new InternalError();
-            } else {
-                BidiRun[] runs = bidi.runs;
-                int i, visualStart = 0, offset, length;
+            getRuns(bidi);
+            BidiRun[] runs = bidi.runs;
+            int i, visualStart = 0, offset, length;
 
-                /* linear search for the run, search on the visual runs */
-                for (i = 0; i < bidi.runCount; ++i) {
-                    length = runs[i].limit - visualStart;
-                    offset = logicalIndex - runs[i].start;
-                    if (offset >= 0 && offset < length) {
-                        if (runs[i].isEvenRun()) {
-                            /* LTR */
-                            visualIndex = visualStart + offset;
-                        } else {
-                            /* RTL */
-                            visualIndex = visualStart + length - offset - 1;
-                        }
-                        break;                  /* exit for loop */
+            /* linear search for the run, search on the visual runs */
+            for (i = 0; i < bidi.runCount; ++i) {
+                length = runs[i].limit - visualStart;
+                offset = logicalIndex - runs[i].start;
+                if (offset >= 0 && offset < length) {
+                    if (runs[i].isEvenRun()) {
+                        /* LTR */
+                        visualIndex = visualStart + offset;
+                    } else {
+                        /* RTL */
+                        visualIndex = visualStart + length - offset - 1;
                     }
-                    visualStart += length;
+                    break;                  /* exit for loop */
                 }
-                if (i >= bidi.runCount) {
-                    return Bidi.MAP_NOWHERE;
-                }
+                visualStart += length;
+            }
+            if (i >= bidi.runCount) {
+                return Bidi.MAP_NOWHERE;
             }
         }
 

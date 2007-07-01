@@ -24,8 +24,6 @@
 
 //TODO: make sample program do something simple but real and complete
 
-//TODO: make order in exceptions thrown and sync with doc
-
 package com.ibm.icu.text;
 
 //#ifndef FOUNDATION
@@ -1014,19 +1012,31 @@ public class Bidi {
         return (((c & 0xfffffffc) == 0x200c) || ((c >= 0x202a) && (c <= 0x202e)));
     }
 
-    boolean isValidPara()
+    void verifyValidPara()
     {
-        return (this == this.paraBidi);
+        if (!(this == this.paraBidi)) {
+            throw new IllegalStateException();
+        }
     }
 
-    boolean isValidLine()
+    void verifyValidParaOrLine()
     {
-        return (this.paraBidi != null && this.paraBidi.isValidPara());
+        Bidi para = this.paraBidi;
+        /* verify Para */
+        if (this == para) {
+            return;
+        }
+        /* verify Line */
+        if ((para == null) || (para != para.paraBidi)) {
+            throw new IllegalStateException();
+        }
     }
 
-    boolean IsValidParaOrLine()
+    void verifyRange(int index, int start, int limit)
     {
-        return (isValidPara() || isValidLine());
+        if (index < start || index >= limit) {
+            throw new IllegalArgumentException();
+        }
     }
 
     /**
@@ -1110,8 +1120,8 @@ public class Bidi {
         /* allocate memory for arrays as requested */
         if (maxLength > 0) {
             if (!getInitialDirPropsMemory(maxLength) ||
-                    !getInitialLevelsMemory(maxLength)) {
-                throw new InternalError("Failed to allocate arrays");
+                !getInitialLevelsMemory(maxLength)) {
+                throw new OutOfMemoryError("Failed to allocate arrays");
             }
         } else {
             mayAllocateText = true;
@@ -1121,7 +1131,7 @@ public class Bidi {
             // if maxRunCount == 1, use simpleRuns[]
             if (maxRunCount > 1) {
                 if (!getInitialRunsMemory(maxRunCount)) {
-                    throw new InternalError("Failed to allocate arrays");
+                    throw new OutOfMemoryError("Failed to allocate Runs memory");
                 }
             }
         } else {
@@ -1157,7 +1167,7 @@ public class Bidi {
         try {
             return Array.newInstance(arrayClass, sizeNeeded);
         } catch (Exception e) {
-            throw new InternalError("Failed to create array");
+            return null;
         }
     }
 
@@ -1485,6 +1495,7 @@ public class Bidi {
      * What is the requested reordering mode for a given Bidi object?
      *
      * @return the current reordering mode of the Bidi object
+     *
      * @see #setReorderingMode
      * @draft ICU 3.8
      */
@@ -1520,6 +1531,7 @@ public class Bidi {
      * What are the reordering options applied to a given Bidi object?
      *
      * @return the current reordering options of the Bidi object
+     *
      * @see #setReorderingOptions
      * @draft ICU 3.8
      */
@@ -1934,7 +1946,7 @@ public class Bidi {
                     !((0 == level) && (dirProp == B))) ||
                     (MAX_EXPLICIT_LEVEL <level)) {
                 /* level out of bounds */
-                throw new IllegalStateException("level out of bounds at " + i);
+                throw new IllegalArgumentException("level out of bounds at " + i);
             }
             if ((dirProp == B) && ((i + 1) < length)) {
                 if (!((text[i] == CR) && (text[i + 1] == LF))) {
@@ -2507,7 +2519,7 @@ public class Bidi {
                 break;
 
             default:                        /* we should never get here */
-                throw new IllegalStateException();
+                throw new IllegalStateException("Internal ICU error in processPropertySeq");
             }
         }
         if ((addLevel) != 0 || (start < start0)) {
@@ -2617,7 +2629,7 @@ public class Bidi {
                     start2 = i;
                     break;
                 default:            /* we should never get here */
-                    throw new IllegalStateException();
+                    throw new IllegalStateException("Internal ICU error in resolveImplicitLevels");
                 }
             }
         }
@@ -2751,7 +2763,7 @@ public class Bidi {
                 runs = runsMemory;
                 runCount += addedRuns;
             } else {
-                throw new InternalError();
+                throw new OutOfMemoryError("Failed to allocate Runs memory");
             }
             for (i = oldRunCount; i < runCount; i++) {
                 if (runs[i] == null) {
@@ -2896,7 +2908,9 @@ public class Bidi {
      *        <strong>Note:</strong> the <code>embeddingLevels</code> array must
      *        have one entry for each character in <code>text</code>.
      *
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException if the values in embeddingLevels are
+     *         not within the allowed range
+     *
      * @see #LEVEL_DEFAULT_LTR
      * @see #LEVEL_DEFAULT_RTL
      * @see #LEVEL_OVERRIDE
@@ -2978,7 +2992,9 @@ public class Bidi {
      *        <strong>Note:</strong> the <code>embeddingLevels</code> array must
      *        have one entry for each character in <code>text</code>.
      *
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException if the values in embeddingLevels are
+     *         not within the allowed range
+     *
      * @see #LEVEL_DEFAULT_LTR
      * @see #LEVEL_DEFAULT_RTL
      * @see #LEVEL_OVERRIDE
@@ -3063,7 +3079,7 @@ public class Bidi {
             dirProps = dirPropsMemory;
             getDirProps();
         } else {
-            throw new InternalError();
+            throw new OutOfMemoryError("Failed to allocate dirProps memory");
         }
         /* the processed length may have changed if OPTION_STREAMING is set */
         trailingWSStart = length;  /* the levels[] will reflect the WS run */
@@ -3074,7 +3090,7 @@ public class Bidi {
                 paras = parasMemory;
                 paras[paraCount - 1] = length;
             } else {
-                throw new InternalError();
+                throw new OutOfMemoryError("Failed to allocate Paras memory");
             }
         } else {
             /* initialize paras for single paragraph */
@@ -3089,7 +3105,7 @@ public class Bidi {
                 levels = levelsMemory;
                 direction = resolveExplicitLevels();
             } else {
-                throw new InternalError();
+                throw new OutOfMemoryError("Failed to allocate Levels memory");
             }
         } else {
             /* set BN for all explicit codes, check that all levels are 0 or paraLevel..MAX_EXPLICIT_LEVEL */
@@ -3132,7 +3148,7 @@ public class Bidi {
                 break;
             case REORDER_RUNS_ONLY:
                 /* we should never get here */
-                throw new InternalError();
+                throw new InternalError("Internal ICU error in setPara");
                 /* break; */
             case REORDER_INVERSE_NUMBERS_AS_L:
                 this.impTabPair = impTab_INVERSE_NUMBERS_AS_L;
@@ -3370,6 +3386,9 @@ public class Bidi {
      *         represented by this object is unidirectional,
      *         and which direction, or if it is mixed-directional.
      *
+     * @throws IllegalStateException if this call is not preceded by a successful
+     *         call to <code>setPara</code> or <code>setLine</code>
+     *
      * @see #LTR
      * @see #RTL
      * @see #MIXED
@@ -3377,11 +3396,8 @@ public class Bidi {
      */
     public byte getDirection()
     {
-        if (IsValidParaOrLine()) {
-            return direction;
-        } else {
-            return LTR;
-        }
+        verifyValidParaOrLine();
+        return direction;
     }
 
     /**
@@ -3390,17 +3406,17 @@ public class Bidi {
      * @return A <code>String</code> containing the text that the
      *         <code>Bidi</code> object was created for.
      *
+     * @throws IllegalStateException if this call is not preceded by a successful
+     *         call to <code>setPara</code> or <code>setLine</code>
+     *
      * @see #setPara
      * @see #setLine
      * @draft ICU 3.8
      */
     public String getTextAsString()
     {
-        if (IsValidParaOrLine()) {
-            return new String(text);
-        } else {
-            return null;
-        }
+        verifyValidParaOrLine();
+        return new String(text);
     }
 
     /**
@@ -3409,17 +3425,17 @@ public class Bidi {
      * @return A <code>char</code> array containing the text that the
      *         <code>Bidi</code> object was created for.
      *
+     * @throws IllegalStateException if this call is not preceded by a successful
+     *         call to <code>setPara</code> or <code>setLine</code>
+     *
      * @see #setPara
      * @see #setLine
      * @draft ICU 3.8
      */
     public char[] getText()
     {
-        if (IsValidParaOrLine()) {
-            return text;
-        } else {
-            return null;
-        }
+        verifyValidParaOrLine();
+        return text;
     }
 
     /**
@@ -3427,15 +3443,15 @@ public class Bidi {
      *
      * @return The length of the text that the <code>Bidi</code> object was
      *         created for.
+     *
+     * @throws IllegalStateException if this call is not preceded by a successful
+     *         call to <code>setPara</code> or <code>setLine</code>
      * @draft ICU 3.8
      */
     public int getLength()
     {
-        if (IsValidParaOrLine()) {
-            return originalLength;
-        } else {
-            return 0;
-        }
+        verifyValidParaOrLine();
+        return originalLength;
     }
 
     /**
@@ -3470,16 +3486,17 @@ public class Bidi {
      *
      * @return The length of the part of the source text processed by
      *         the last call to <code>setPara</code>.
+     *
+     * @throws IllegalStateException if this call is not preceded by a successful
+     *         call to <code>setPara</code> or <code>setLine</code>
+     *
      * @see #setPara
      * @see #OPTION_STREAMING
      * @draft ICU 3.8
      */
     public int getProcessedLength() {
-        if (IsValidParaOrLine()) {
-            return length;
-        } else {
-            return 0;
-        }
+        verifyValidParaOrLine();
+        return length;
     }
 
     /**
@@ -3501,6 +3518,10 @@ public class Bidi {
      *
      * @return The length of the reordered text resulting from
      *         the last call to <code>setPara</code>.
+     *
+     * @throws IllegalStateException if this call is not preceded by a successful
+     *         call to <code>setPara</code> or <code>setLine</code>
+     *
      * @see #setPara
      * @see #OPTION_INSERT_MARKS
      * @see #OPTION_REMOVE_CONTROLS
@@ -3508,11 +3529,8 @@ public class Bidi {
      * @draft ICU 3.8
      */
     public int getResultLength() {
-        if (IsValidParaOrLine()) {
-            return resultLength;
-        } else {
-            return 0;
-        }
+        verifyValidParaOrLine();
+        return resultLength;
     }
 
     /* paragraphs API methods ------------------------------------------------- */
@@ -3525,6 +3543,9 @@ public class Bidi {
      *         LEVEL_DEFAULT_RTL.  In that case, the level of the first paragraph
      *         is returned.
      *
+     * @throws IllegalStateException if this call is not preceded by a successful
+     *         call to <code>setPara</code> or <code>setLine</code>
+     *
      * @see #LEVEL_DEFAULT_LTR
      * @see #LEVEL_DEFAULT_RTL
      * @see #getParagraph
@@ -3533,26 +3554,23 @@ public class Bidi {
      */
     public byte getParaLevel()
     {
-        if (IsValidParaOrLine()) {
-            return paraLevel;
-        } else {
-            return 0;
-        }
+        verifyValidParaOrLine();
+        return paraLevel;
     }
 
     /**
      * Get the number of paragraphs.
      *
      * @return The number of paragraphs.
+     *
+     * @throws IllegalStateException if this call is not preceded by a successful
+     *         call to <code>setPara</code> or <code>setLine</code>
      * @draft ICU 3.8
      */
     public int countParagraphs()
     {
-        if (!IsValidParaOrLine()) {
-            return 0;
-        } else {
-            return paraCount;
-        }
+        verifyValidParaOrLine();
+        return paraCount;
     }
 
     /**
@@ -3568,23 +3586,18 @@ public class Bidi {
      *        <code>limit</code> will receive the limit of the paragraph.<br>
      *        <code>embeddingLevel</code> will receive the level of the paragraph.
      *
-     * @throws IllegalArgumentException if paraIndex is not in the range
-     *        <code>[0..countParagraphs()-1]</code>
      * @throws IllegalStateException if this call is not preceded by a successful
      *         call to <code>setPara</code> or <code>setLine</code>
+     * @throws IllegalArgumentException if paraIndex is not in the range
+     *        <code>[0..countParagraphs()-1]</code>
      *
      * @see com.ibm.icu.text.BidiRun
      * @draft ICU 3.8
      */
     public BidiRun getParagraphByIndex(int paraIndex)
     {
-        /* check the argument values */
-        if (!IsValidParaOrLine()) {  /* no valid setPara/setLine */
-            throw new IllegalStateException();
-        }
-        if (paraIndex < 0 || paraIndex >= paraCount ) {
-            throw new IllegalArgumentException();
-        }
+        verifyValidParaOrLine();
+        verifyRange(paraIndex, 0, paraCount);
 
         Bidi bidi = paraBidi;             /* get Para object if Line object */
         int paraStart;
@@ -3615,26 +3628,20 @@ public class Bidi {
      *        <code>limit</code> will receive the limit of the paragraph.<br>
      *        <code>embeddingLevel</code> will receive the level of the paragraph.
      *
-     * @throws IllegalArgumentException if charIndex is not within the legal range
      * @throws IllegalStateException if this call is not preceded by a successful
      *         call to <code>setPara</code> or <code>setLine</code>
+     * @throws IllegalArgumentException if charIndex is not within the legal range
      *
      * @see com.ibm.icu.text.BidiRun
-     *
      * @see #getParagraphByIndex
      * @see #getProcessedLength
      * @draft ICU 3.8
      */
     public BidiRun getParagraph(int charIndex)
     {
-    /* check the argument values */
-        if (!IsValidParaOrLine()) {/* no valid setPara/setLine */
-            throw new IllegalStateException();
-        }
+        verifyValidParaOrLine();
         Bidi bidi = paraBidi;             /* get Para object if Line object */
-        if (charIndex < 0 || charIndex >= bidi.length) {
-            throw new IllegalArgumentException();
-        }
+        verifyRange(charIndex, 0, bidi.length);
         int paraIndex;
         for (paraIndex = 0; charIndex >= bidi.paras[paraIndex]; paraIndex++) {
         }
@@ -3650,25 +3657,19 @@ public class Bidi {
      * @return The index of the paragraph containing the specified position,
      *         starting from 0.
      *
-     * @throws IllegalArgumentException if charIndex is not within the legal range
      * @throws IllegalStateException if this call is not preceded by a successful
      *         call to <code>setPara</code> or <code>setLine</code>
+     * @throws IllegalArgumentException if charIndex is not within the legal range
      *
      * @see com.ibm.icu.text.BidiRun
-     *
      * @see #getProcessedLength
      * @draft ICU 3.8
      */
     public int getParagraphIndex(int charIndex)
     {
-    /* check the argument values */
-        if (!IsValidParaOrLine()) {/* no valid setPara/setLine */
-            throw new IllegalStateException();
-        }
+        verifyValidParaOrLine();
         Bidi bidi = paraBidi;             /* get Para object if Line object */
-        if (charIndex < 0 || charIndex >= bidi.length) {
-            throw new IllegalArgumentException();
-        }
+        verifyRange(charIndex, 0, bidi.length);
         int paraIndex;
         for (paraIndex = 0; charIndex >= bidi.paras[paraIndex]; paraIndex++) {
         }
@@ -3711,6 +3712,7 @@ public class Bidi {
      *
      * @return The Bidi class for the character <code>c</code> that is in effect
      *         for this <code>Bidi</code> instance.
+     *
      * @see BidiClassifier
      * @draft ICU 3.8
      */
@@ -3759,12 +3761,11 @@ public class Bidi {
      *
      * @return a <code>Bidi</code> object that will now represent a line of the text.
      *
-     * @throws IllegalArgumentException if the specified line crosses a paragraph
-     *         boundary
-     * @throws IndexOutOfBoundsException if start and limit are not in the range
-     *         <code>0<=start<=limit<=</code>containing paragraph limit.
      * @throws IllegalStateException if this call is not preceded by a successful
      *         call to <code>setPara</code>
+     * @throws IllegalArgumentException if start and limit are not in the range
+     *         <code>0&lt;=start&lt;limit&lt;=getProcessedLength()</code>,
+     *         or if the specified line crosses a paragraph boundary
      *
      * @see #setPara
      * @see #getProcessedLength
@@ -3772,16 +3773,13 @@ public class Bidi {
      */
     public Bidi setLine(int start, int limit)
     {
-        /* check the argument values */
-        if (!isValidPara()) {
-            throw new IllegalStateException();
-        } else if (start < 0 || start > limit || limit > getLength()) {
-            throw new IndexOutOfBoundsException();
-        } else if (getParagraphIndex(start) != getParagraphIndex(limit - 1)) {
+        verifyValidPara();
+        verifyRange(start, 0, limit);
+        verifyRange(limit, 0, length);
+        if (getParagraphIndex(start) != getParagraphIndex(limit - 1)) {
             /* the line crosses a paragraph boundary */
             throw new IllegalArgumentException();
         }
-
         return BidiLine.setLine(this, start, limit);
     }
 
@@ -3791,14 +3789,21 @@ public class Bidi {
      * @param charIndex the index of a character.
      *
      * @return The level for the character at <code>charIndex</code. If
-     * <code>charIndex</code> is <0 or >= the length of the line, return the
-     * base direction level.
+     *         <code>charIndex</code> is <0 or >= the length of the line,
+     *         return the base direction level.
+     *
+     * @throws IllegalStateException if this call is not preceded by a successful
+     *         call to <code>setPara</code> or <code>setLine</code>
+     * @throws IllegalArgumentException if charIndex is not in the range
+     *         <code>0&lt;=charIndex&lt;getProcessedLength()</code>
      *
      * @see #getProcessedLength
      * @draft ICU 3.8
      */
     public byte getLevelAt(int charIndex)
     {
+        verifyValidParaOrLine();
+        verifyRange(charIndex, 0, length);
         return BidiLine.getLevelAt(this, charIndex);
     }
 
@@ -3812,17 +3817,15 @@ public class Bidi {
      *         or <code>null</code> if an error occurs.
      *
      * @throws IllegalStateException if this call is not preceded by a successful
-     *         call to <code>setPara</code> or <code>setLine</code> or
-     *         <code>getLength()</code> is not strictly positive.
-     * @see #getProcessedLength
+     *         call to <code>setPara</code> or <code>setLine</code>
      * @draft ICU 3.8
      */
     public byte[] getLevels()
     {
-        if (!IsValidParaOrLine() || length <= 0) {
-            throw new IllegalStateException();
+        verifyValidParaOrLine();
+        if (length <= 0) {
+            return new byte[0];
         }
-
         return BidiLine.getLevels(this);
     }
 
@@ -3839,6 +3842,11 @@ public class Bidi {
      *        the limit of the run, and <code>embeddingLevel</code> containing
      *        the level of the run.
      *
+     * @throws IllegalStateException if this call is not preceded by a successful
+     *         call to <code>setPara</code> or <code>setLine</code>
+     * @throws IllegalArgumentException if logicalPosition is not in the range
+     *         <code>0&lt;=logicalPosition&lt;=getProcessedLength()</code>
+     *
      * @see com.ibm.icu.text.BidiRun
      * @see com.ibm.icu.text.BidiRun#getStart()
      * @see com.ibm.icu.text.BidiRun#getLimit()
@@ -3848,9 +3856,8 @@ public class Bidi {
      */
     public BidiRun getLogicalRun(int logicalPosition)
     {
-        if (!IsValidParaOrLine() || logicalPosition < 0 || length <= logicalPosition)
-            return null;
-
+        verifyValidParaOrLine();
+        verifyRange(logicalPosition, 0, length);
         return BidiLine.getLogicalRun(this, logicalPosition);
     }
 
@@ -3863,18 +3870,16 @@ public class Bidi {
      * and may throw an exception if it fails to do so.
      *
      * @return The number of runs.
+     *
      * @throws IllegalStateException if this call is not preceded by a successful
-     *         call to <code>setPara</code> or <code>setLine</code> or
-     *         <code>runCount</code> is not strictly positive.
+     *         call to <code>setPara</code> or <code>setLine</code>
      * @draft ICU 3.8
      */
     public int countRuns()
     {
-        if (!IsValidParaOrLine() || (runCount < 0 && !BidiLine.getRuns(this))) {
-            throw new IllegalStateException();
-        } else {
-            return runCount;
-        }
+        verifyValidParaOrLine();
+        BidiLine.getRuns(this);
+        return runCount;
     }
 
     /**
@@ -3884,7 +3889,7 @@ public class Bidi {
      * In an RTL run, the character at the logical start is
      * visually on the right of the displayed run.
      * The length is the number of characters in the run.<p>
-     * <code>countRuns()</code> should be called
+     * <code>countRuns()</code> is normally called
      * before the runs are retrieved.
      *
      * <p>
@@ -3924,6 +3929,11 @@ public class Bidi {
      *         <code>LTR==0</code> or <code>RTL==1</code>,
      *         never <code>MIXED</code>.
      *
+     * @throws IllegalStateException if this call is not preceded by a successful
+     *         call to <code>setPara</code> or <code>setLine</code>
+     * @throws IllegalArgumentException if <code>runIndex</code> is not in
+     *         the range <code>0&lt;=runIndex&lt;countRuns()</code>
+     *
      * @see #countRuns()
      * @see com.ibm.icu.text.BidiRun
      * @see com.ibm.icu.text.BidiRun#getStart()
@@ -3933,13 +3943,10 @@ public class Bidi {
      */
     public BidiRun getVisualRun(int runIndex)
     {
-        if (!IsValidParaOrLine() || runIndex < 0 ||
-                (runCount < 0 && ! BidiLine.getRuns(this)) ||
-                runIndex >= runCount) {
-            return null;
-        } else {
-            return BidiLine.getVisualRun(this, runIndex);
-        }
+        verifyValidParaOrLine();
+        BidiLine.getRuns(this);
+        verifyRange(runIndex, 0, runCount);
+        return BidiLine.getVisualRun(this, runIndex);
     }
 
     /**
@@ -3970,8 +3977,8 @@ public class Bidi {
      *
      * @throws IllegalStateException if this call is not preceded by a successful
      *         call to <code>setPara</code> or <code>setLine</code>
-     * @throws IndexOutOfBoundsException if <code>logicalIndex</code> is not in
-     *         the range <code>0<=logicalIndex<=getProcessedLength()</code>
+     * @throws IllegalArgumentException if <code>logicalIndex</code> is not in
+     *         the range <code>0&lt;=logicalIndex&lt;getProcessedLength()</code>
      *
      * @see #getLogicalMap
      * @see #getLogicalIndex
@@ -3983,13 +3990,9 @@ public class Bidi {
      */
     public int getVisualIndex(int logicalIndex)
     {
-        if (!IsValidParaOrLine()) {
-            throw new IllegalArgumentException();
-        } else if (logicalIndex < 0 || length <= logicalIndex) {
-            throw new IndexOutOfBoundsException();
-        } else {
-            return BidiLine.getVisualIndex(this, logicalIndex);
-        }
+        verifyValidParaOrLine();
+        verifyRange(logicalIndex, 0, length);
+        return BidiLine.getVisualIndex(this, logicalIndex);
     }
 
 
@@ -4019,8 +4022,8 @@ public class Bidi {
      *
      * @throws IllegalStateException if this call is not preceded by a successful
      *         call to <code>setPara</code> or <code>setLine</code>
-     * @throws IndexOutOfBoundsException if <code>visualIndex</code> is not in
-     *         the range <code>0<=visualIndex<=getResultLength()</code>
+     * @throws IllegalArgumentException if <code>visualIndex</code> is not in
+     *         the range <code>0&lt;=visualIndex&lt;getResultLength()</code>
      *
      * @see #getVisualMap
      * @see #getVisualIndex
@@ -4032,11 +4035,8 @@ public class Bidi {
      */
     public int getLogicalIndex(int visualIndex)
     {
-        if (!IsValidParaOrLine()) {
-            throw new IllegalArgumentException();
-        } else if (visualIndex < 0 || resultLength <= visualIndex) {
-            throw new IndexOutOfBoundsException();
-        }
+        verifyValidParaOrLine();
+        verifyRange(visualIndex, 0, resultLength);
         /* we can do the trivial cases without the runs array */
         if (insertPoints.size == 0 && controlCount == 0) {
             if (direction == LTR) {
@@ -4046,9 +4046,7 @@ public class Bidi {
                 return length - visualIndex - 1;
             }
         }
-        if (runCount < 0 && !BidiLine.getRuns(this)) {
-            throw new InternalError();
-        }
+        BidiLine.getRuns(this);
         return BidiLine.getLogicalIndex(this, visualIndex);
     }
 
@@ -4074,8 +4072,7 @@ public class Bidi {
      *        <code>indexMap</code> represents the returned array.
      *
      * @throws IllegalStateException if this call is not preceded by a successful
-     *         call to <code>setPara</code> or <code>setLine</code> or
-     *         <code>getLength()</code> is not strictly positive.
+     *         call to <code>setPara</code> or <code>setLine</code>
      *
      * @see #getVisualMap
      * @see #getVisualIndex
@@ -4087,9 +4084,10 @@ public class Bidi {
      */
     public int[] getLogicalMap()
     {
-        /* countRuns() checks all of its and our arguments */
-        if (countRuns() <= 0) {
-            throw new IllegalStateException();
+        /* countRuns() checks successful call to setPara/setLine */
+        countRuns();
+        if (length <= 0) {
+            return new int[0];
         }
         return BidiLine.getLogicalMap(this);
     }
@@ -4116,8 +4114,7 @@ public class Bidi {
      *        <code>indexMap</code> represents the returned array.
      *
      * @throws IllegalStateException if this call is not preceded by a successful
-     *         call to <code>setPara</code> or <code>setLine</code> or
-     *         <code>getResultLength()</code> is not strictly positive.
+     *         call to <code>setPara</code> or <code>setLine</code>
      *
      * @see #getLogicalMap
      * @see #getLogicalIndex
@@ -4129,9 +4126,10 @@ public class Bidi {
      */
     public int[] getVisualMap()
     {
-        /* countRuns() checks all of its and our arguments */
-        if (countRuns() <= 0) {
-            throw new IllegalStateException();
+        /* countRuns() checks successful call to setPara/setLine */
+        countRuns();
+        if (length <= 0) {
+            return new int[0];
         }
         return BidiLine.getVisualMap(this);
     }
@@ -4297,7 +4295,9 @@ public class Bidi {
      *
      * The NUMERIC_SHAPING attribute in the text, if present, converts European
      * digits to other decimal digits before running the bidi algorithm. This
-     * attribute, if present, must be applied to all the text in the paragraph.
+     * attribute, if present, must be applied to all the text in the paragraph.<p>
+     *
+     * Note: this constructor calls setPara() internally.
      *
      * @param paragraph a paragraph of text with optional character and
      *        paragraph attribute information
@@ -4316,7 +4316,9 @@ public class Bidi {
      * embedding level information. Negative values from -1 to -61 indicate
      * overrides at the absolute value of the level. Positive values from 1 to
      * 61 indicate embeddings. Where values are zero, the base embedding level
-     * as determined by the base direction is assumed.
+     * as determined by the base direction is assumed.<p>
+     *
+     * Note: this constructor calls setPara() internally.
      *
      * @param text an array containing the paragraph of text to process.
      * @param textStart the index into the text array of the start of the
@@ -4332,6 +4334,10 @@ public class Bidi {
      *        algorithm understands the flags DIRECTION_LEFT_TO_RIGHT,
      *        DIRECTION_RIGHT_TO_LEFT, DIRECTION_DEFAULT_LEFT_TO_RIGHT, and
      *        DIRECTION_DEFAULT_RIGHT_TO_LEFT. Other values are reserved.
+     *
+     * @throws IllegalArgumentException if the values in embeddings are
+     *         not within the allowed range
+     *
      * @see #DIRECTION_LEFT_TO_RIGHT
      * @see #DIRECTION_RIGHT_TO_LEFT
      * @see #DIRECTION_DEFAULT_LEFT_TO_RIGHT
@@ -4389,9 +4395,14 @@ public class Bidi {
      *        of the line.
      * @param lineLimit the offset from the start of the paragraph to the limit
      *        of the line.
+     *
+     * @throws IllegalStateException if this call is not preceded by a successful
+     *         call to <code>setPara</code>
+     * @throws IllegalArgumentException if lineStart and lineLimit are not in the range
+     *         <code>0&lt;=lineStart&lt;lineLimit&lt;=getProcessedLength()</code>,
+     *         or if the specified line crosses a paragraph boundary
      */
-    public Bidi createLineBidi(int lineStart,
-            int lineLimit)
+    public Bidi createLineBidi(int lineStart, int lineLimit)
     {
         return setLine(lineStart, lineLimit);
     }
@@ -4402,11 +4413,14 @@ public class Bidi {
      * base direction differs from the direction of the only run of text.
      *
      * @return true if the line is not left-to-right or right-to-left.
+     *
+     * @throws IllegalStateException if this call is not preceded by a successful
+     *         call to <code>setPara</code>
      * @draft ICU 3.8
      */
     public boolean isMixed()
     {
-        return (getDirection() == MIXED);
+        return (!isLeftToRight() && !isRightToLeft());
     }
 
     /**
@@ -4415,11 +4429,14 @@ public class Bidi {
      *
      * @return true if the line is all left-to-right text and the base direction
      *         is left-to-right.
+     *
+     * @throws IllegalStateException if this call is not preceded by a successful
+     *         call to <code>setPara</code>
      * @draft ICU 3.8
      */
     public boolean isLeftToRight()
     {
-        return (getDirection() == LTR);
+        return (getDirection() == LTR && (paraLevel & 1) == 0);
     }
 
     /**
@@ -4428,17 +4445,24 @@ public class Bidi {
      *
      * @return true if the line is all right-to-left text, and the base
      *         direction is right-to-left
+     *
+     * @throws IllegalStateException if this call is not preceded by a successful
+     *         call to <code>setPara</code>
      * @draft ICU 3.8
      */
     public boolean isRightToLeft()
     {
-        return (getDirection() == RTL);
+        return (getDirection() == RTL && (paraLevel & 1) == 1);
     }
 
     /**
      * Return true if the base direction is left-to-right
      *
      * @return true if the base direction is left-to-right
+     *
+     * @throws IllegalStateException if this call is not preceded by a successful
+     *         call to <code>setPara</code> or <code>setLine</code>
+     *
      * @draft ICU 3.8
      */
     public boolean baseIsLeftToRight()
@@ -4450,6 +4474,10 @@ public class Bidi {
      * Return the base level (0 if left-to-right, 1 if right-to-left).
      *
      * @return the base level
+     *
+     * @throws IllegalStateException if this call is not preceded by a successful
+     *         call to <code>setPara</code> or <code>setLine</code>
+     *
      * @draft ICU 3.8
      */
     public int getBaseLevel()
@@ -4461,6 +4489,10 @@ public class Bidi {
      * Return the number of level runs.
      *
      * @return the number of level runs
+     *
+     * @throws IllegalStateException if this call is not preceded by a successful
+     *         call to <code>setPara</code> or <code>setLine</code>
+     *
      * @draft ICU 3.8
      */
     public int getRunCount()
@@ -4497,17 +4529,21 @@ public class Bidi {
     /**
      * Return the level of the nth logical run in this line.
      *
-     * @param run the index of the run, between 0 and <code>countRuns()</code>
+     * @param run the index of the run, between 0 and <code>countRuns()-1</code>
+     *
      * @return the level of the run
+     *
+     * @throws IllegalStateException if this call is not preceded by a successful
+     *         call to <code>setPara</code> or <code>setLine</code>
+     * @throws IllegalArgumentException if <code>run</code> is not in
+     *         the range <code>0&lt;=run&lt;countRuns()</code>
      * @draft ICU 3.8
      */
     public int getRunLevel(int run)
     {
-        if (!IsValidParaOrLine() || run < 0 ||
-                (runCount < 0 && ! BidiLine.getRuns(this)) ||
-                run >= runCount) {
-            throw new IllegalArgumentException("Invalid call to getRunLevel()");
-        }
+        verifyValidParaOrLine();
+        BidiLine.getRuns(this);
+        verifyRange(run, 0, runCount);
         if (!isGoodLogicalToVisualRunsMap) {
             getLogicalToVisualRunsMap();
         }
@@ -4519,16 +4555,20 @@ public class Bidi {
      * this line, as an offset from the start of the line.
      *
      * @param run the index of the run, between 0 and <code>countRuns()</code>
+     *
      * @return the start of the run
+     *
+     * @throws IllegalStateException if this call is not preceded by a successful
+     *         call to <code>setPara</code> or <code>setLine</code>
+     * @throws IllegalArgumentException if <code>run</code> is not in
+     *         the range <code>0&lt;=run&lt;countRuns()</code>
      * @draft ICU 3.8
      */
     public int getRunStart(int run)
     {
-        if (!IsValidParaOrLine() || run < 0 ||
-                (runCount < 0 && ! BidiLine.getRuns(this)) ||
-                run >= runCount) {
-            throw new IllegalArgumentException("Invalid call to getRunStart()");
-        }
+        verifyValidParaOrLine();
+        BidiLine.getRuns(this);
+        verifyRange(run, 0, runCount);
         if (!isGoodLogicalToVisualRunsMap) {
             getLogicalToVisualRunsMap();
         }
@@ -4541,16 +4581,20 @@ public class Bidi {
      * will return the length of the line for the last run on the line.
      *
      * @param run the index of the run, between 0 and <code>countRuns()</code>
+     *
      * @return the limit of the run
+     *
+     * @throws IllegalStateException if this call is not preceded by a successful
+     *         call to <code>setPara</code> or <code>setLine</code>
+     * @throws IllegalArgumentException if <code>run</code> is not in
+     *         the range <code>0&lt;=run&lt;countRuns()</code>
      * @draft ICU 3.8
      */
     public int getRunLimit(int run)
     {
-        if (!IsValidParaOrLine() || run < 0 ||
-            (runCount < 0 && ! BidiLine.getRuns(this)) ||
-            run >= runCount) {
-            throw new IllegalArgumentException("Invalid call to getRunLimit()");
-        }
+        verifyValidParaOrLine();
+        BidiLine.getRuns(this);
+        verifyRange(run, 0, runCount);
         if (!isGoodLogicalToVisualRunsMap) {
             getLogicalToVisualRunsMap();
         }
@@ -4570,7 +4614,9 @@ public class Bidi {
      * @param text the text containing the characters to test
      * @param start the start of the range of characters to test
      * @param limit the limit of the range of characters to test
+     *
      * @return true if the range of characters requires bidi analysis
+     *
      * @draft ICU 3.8
      */
     public static boolean requiresBidi(char[] text,
@@ -4671,8 +4717,7 @@ public class Bidi {
      *         string will be exactly <code>getLength()</code>.
      *
      * @throws IllegalStateException if this call is not preceded by a successful
-     *         call to <code>setPara</code> or <code>setLine</code> or
-     *         <code>getLength()</code> is not positive.
+     *         call to <code>setPara</code> or <code>setLine</code>
      *
      * @see #DO_MIRRORING
      * @see #INSERT_LRM_FOR_NUMERIC
@@ -4695,7 +4740,7 @@ public class Bidi {
             return new String("");
         }
 
-        return BidiWriter.doWriteReordered(this, options);
+        return BidiWriter.writeReordered(this, options);
     }
 
     /**
@@ -4733,7 +4778,6 @@ public class Bidi {
      *         <code>src.length()</code>.
      *
      * @throws IllegalArgumentException if <code>src</code> is null.
-     *
      * @draft ICU 3.8
      */
     public static String writeReverse(String src, short options)
@@ -4744,7 +4788,7 @@ public class Bidi {
         }
 
         if (src.length() > 0) {
-            return BidiWriter.doWriteReverse(src, options);
+            return BidiWriter.writeReverse(src, options);
         } else {
             /* nothing to do */
             return new String("");
