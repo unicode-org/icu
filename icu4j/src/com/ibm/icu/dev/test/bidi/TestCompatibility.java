@@ -1,3 +1,5 @@
+//##header
+//#ifndef FOUNDATION
 /*
 *******************************************************************************
 *   Copyright (C) 2007, International Business Machines
@@ -17,11 +19,191 @@ import com.ibm.icu.text.Bidi;
 
 public class TestCompatibility extends BidiTest {
 
+    void compareBidi(Bidi bidi, java.text.Bidi jbidi)
+    {
+        byte paraLevel = bidi.getParaLevel();
+        if (bidi.baseIsLeftToRight() != jbidi.baseIsLeftToRight()) {
+            errln("Discrepancy in baseIsLeftToRight for case " +
+                  "(level=" + paraLevel + "): " +
+                  u16ToPseudo(bidi.getTextAsString()) +
+                  "\n    bidi: " + bidi.baseIsLeftToRight() +
+                  "\n   jbidi: " + jbidi.baseIsLeftToRight());
+        }
+        if (bidi.getBaseLevel() != jbidi.getBaseLevel()) {
+            errln("Discrepancy in getBaseLevel for case " +
+                  "(level=" + paraLevel + "): " +
+                  u16ToPseudo(bidi.getTextAsString()) +
+                  "\n    bidi: " + bidi.getBaseLevel() +
+                  "\n   jbidi: " + jbidi.getBaseLevel());
+        }
+        if (bidi.getLength() != jbidi.getLength()) {
+            errln("Discrepancy in getLength for case " +
+                  "(level=" + paraLevel + "): " +
+                  u16ToPseudo(bidi.getTextAsString()) +
+                  "\n    bidi: " + bidi.getLength() +
+                  "\n   jbidi: " + jbidi.getLength());
+        }
+        int len = bidi.getLength();
+        for (int i = 0; i < len; i++) {
+            if (bidi.getLevelAt(i) != jbidi.getLevelAt(i)) {
+                errln("Discrepancy in getLevelAt for offset " + i +
+                      " of case " +
+                      "(level=" + paraLevel + "): " +
+                      u16ToPseudo(bidi.getTextAsString()) +
+                      "\n    bidi: " + bidi.getLevelAt(i) +
+                      "\n   jbidi: " + jbidi.getLevelAt(i));
+            }
+        }
+        if (bidi.getRunCount() != jbidi.getRunCount()) {
+            if (!(len == 0 && jbidi.getRunCount() == 1)) {
+                errln("Discrepancy in getRunCount for case " +
+                      "(level=" + paraLevel + "): " +
+                      u16ToPseudo(bidi.getTextAsString()) +
+                      "\n    bidi: " + bidi.getRunCount() +
+                      "\n   jbidi: " + jbidi.getRunCount());
+            }
+        }
+        int runCount = bidi.getRunCount();
+        for (int i = 0; i < runCount; i++) {
+            if (bidi.getRunLevel(i) != jbidi.getRunLevel(i)) {
+                errln("Discrepancy in getRunLevel for run " + i +
+                      " of case " +
+                      "(level=" + paraLevel + "): " +
+                      u16ToPseudo(bidi.getTextAsString()) +
+                      "\n    bidi: " + bidi.getRunLevel(i) +
+                      "\n   jbidi: " + jbidi.getRunLevel(i));
+            }
+            if (bidi.getRunLimit(i) != jbidi.getRunLimit(i)) {
+                errln("Discrepancy in getRunLimit for run " + i +
+                      " of case " +
+                      "(level=" + paraLevel + "): " +
+                      u16ToPseudo(bidi.getTextAsString()) +
+                      "\n    bidi: " + bidi.getRunLimit(i) +
+                      "\n   jbidi: " + jbidi.getRunLimit(i));
+            }
+            if (bidi.getRunStart(i) != jbidi.getRunStart(i)) {
+                errln("Discrepancy in getRunStart for run " + i +
+                      " of case " +
+                      "(level=" + paraLevel + "): " +
+                      u16ToPseudo(bidi.getTextAsString()) +
+                      "\n    bidi: " + bidi.getRunStart(i) +
+                      "\n   jbidi: " + jbidi.getRunStart(i));
+            }
+        }
+        if (bidi.isLeftToRight() != jbidi.isLeftToRight()) {
+            errln("Discrepancy in isLeftToRight for case " +
+                  "(level=" + paraLevel + "): " +
+                  u16ToPseudo(bidi.getTextAsString()) +
+                  "\n    bidi: " + bidi.isLeftToRight() +
+                  "\n   jbidi: " + jbidi.isLeftToRight());
+        }
+        if (bidi.isMixed() != jbidi.isMixed()) {
+            errln("Discrepancy in isMixed for case " +
+                  "(level=" + paraLevel + "): " +
+                  u16ToPseudo(bidi.getTextAsString()) +
+                  "\n    bidi: " + bidi.isMixed() +
+                  "\n   jbidi: " + jbidi.isMixed());
+        }
+        if (bidi.isRightToLeft() != jbidi.isRightToLeft()) {
+            errln("Discrepancy in isRightToLeft for case " +
+                  "(level=" + paraLevel + "): " +
+                  u16ToPseudo(bidi.getTextAsString()) +
+                  "\n    bidi: " + bidi.isRightToLeft() +
+                  "\n   jbidi: " + jbidi.isRightToLeft());
+        }
+        char[] text = bidi.getText();
+        if (Bidi.requiresBidi(text, 0, text.length) !=
+            java.text.Bidi.requiresBidi(text, 0, text.length)) {
+            errln("Discrepancy in requiresBidi for case " +
+                  u16ToPseudo(bidi.getTextAsString()) +
+                  "\n    bidi: " + Bidi.requiresBidi(text, 0, text.length) +
+                  "\n   jbidi: " + java.text.Bidi.requiresBidi(text, 0, text.length));
+        }
+        /* skip the next test, since the toString implementation are
+         * not compatible
+        if (!bidi.toString().equals(jbidi.toString())) {
+            errln("Discrepancy in toString for case " +
+                  "(level=" + paraLevel + "): " +
+                  u16ToPseudo(bidi.getTextAsString() +
+                  "\n    bidi: " + bidi.toString() +
+                  "\n   jbidi: " + jbidi.toString()));
+        }
+         */
+    }
+
     public void testCompatibility()
     {
         logln("\nEntering TestCompatibility\n");
+        /* check constant field values */
+        int val;
+        val = Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT;
+        val = Bidi.DIRECTION_DEFAULT_RIGHT_TO_LEFT;
+        val = Bidi.DIRECTION_LEFT_TO_RIGHT;
+        val = Bidi.DIRECTION_RIGHT_TO_LEFT;
+        logln("last val = " + val);
 
-        logln("We should really do something here!\n");
+        String[] data = {"",
+                         /* the following 2 cases are skipped, because
+                          * java.text.Bidi has bugs which cause discrepancies
+                         "abc",
+                         "ABC",
+                          */
+                         "abc def",
+                         "ABC DEF",
+                         "abc 123 def",
+                         "ABC 123 DEF",
+                         "abc DEF ghi",
+                         "abc DEF 123 xyz",
+                         "abc GHIJ 12345 def KLM"
+                        };
+        int dataCnt = data.length;
+        Bidi bidi;
+        java.text.Bidi jbidi;
+        for (int i = 0; i < dataCnt; i++) {
+            String src = pseudoToU16(data[i]);
+            bidi = new Bidi(src, Bidi.DIRECTION_LEFT_TO_RIGHT);
+            jbidi = new java.text.Bidi(src, java.text.Bidi.DIRECTION_LEFT_TO_RIGHT);
+            compareBidi(bidi, jbidi);
+            bidi = new Bidi(src, Bidi.DIRECTION_RIGHT_TO_LEFT);
+            jbidi = new java.text.Bidi(src, java.text.Bidi.DIRECTION_RIGHT_TO_LEFT);
+            compareBidi(bidi, jbidi);
+            char[] chars = src.toCharArray();
+            bidi = new Bidi(chars, 0, null, 0, chars.length, Bidi.DIRECTION_LEFT_TO_RIGHT);
+            jbidi = new java.text.Bidi(chars, 0, null, 0, chars.length, java.text.Bidi.DIRECTION_LEFT_TO_RIGHT);
+            compareBidi(bidi, jbidi);
+            //TODO: add test with constructors Bidi(AttributedCharacterIterator)
+        }
+        /* test reorderVisually */
+        byte[] myLevels = new byte[] {1,2,0,1,2,1,2,0,1,2};
+        Character[] objects = new Character[10];
+        byte[] levels = new byte[objects.length];
+        for (int i = 0; i < objects.length; i++) {
+            objects[i] = new Character((char)('a'+i));
+            levels[i] = myLevels[i];
+        }
+        Bidi.reorderVisually(levels, 3, objects, 3, 7);
+        String strbidi = "";
+        for (int i = 0; i < objects.length; i++) {
+            strbidi += objects[i].toString();
+        }
+        for (int i = 0; i < objects.length; i++) {
+            objects[i] = new Character((char)('a'+i));
+            levels[i] = myLevels[i];
+        }
+        java.text.Bidi.reorderVisually(levels, 3, objects, 3, 7);
+        String strjbidi = "";
+        for (int i = 0; i < objects.length; i++) {
+            strjbidi += objects[i].toString();
+        }
+        if (!strjbidi.equals(strbidi)) {
+            errln("Discrepancy in reorderVisually " +
+                  "\n      bidi: " + strbidi +
+                  "\n     jbidi: " + strjbidi);
+        } else {
+            logln("Correct match in reorderVisually " +
+                  "\n      bidi: " + strbidi +
+                  "\n     jbidi: " + strjbidi);
+        }
 
         logln("\nExiting TestCompatibility\n");
     }
@@ -35,3 +217,4 @@ public class TestCompatibility extends BidiTest {
         }
     }
 }
+//#endif

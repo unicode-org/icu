@@ -203,6 +203,7 @@ public class TestMultipleParagraphs extends BidiTest {
             bidiLine = bidi.setLine(i, k);
         } catch (Exception e) {
             errln("For line limits " + i + "-" + k + " got failure");
+            return;
         }
         paraIndex = bidiLine.getParagraphIndex(i);
         run = bidiLine.getParagraph(i);

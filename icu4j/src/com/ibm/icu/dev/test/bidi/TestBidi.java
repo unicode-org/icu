@@ -68,9 +68,7 @@ public class TestBidi extends BidiTest {
                     doTest(bidiLine, testNumber, test, lineStart, countRunsFirst);
                 } catch (Exception e)  {
                     errln("Bidi.setLine(" + lineStart + ", " + test.lineLimit
-                            + "), in runAll test[" + testNumber + "] failed, "
-                            + "direction " + bidiLine.getDirection()
-                            + " paraLevel " + bidiLine.getBaseLevel());
+                            + "), in runAll test[" + testNumber + "] failed");
                 }
             }
         }
