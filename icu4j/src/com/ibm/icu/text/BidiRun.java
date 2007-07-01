@@ -1,3 +1,5 @@
+//##header
+//#ifndef FOUNDATION
 /*
 *******************************************************************************
 *   Copyright (C) 2001-2007, International Business Machines
@@ -182,3 +184,4 @@ public class BidiRun {
         return new String("BidiRun " + start + " - " + limit + " @ " + level);
     }
 }
+//#endif

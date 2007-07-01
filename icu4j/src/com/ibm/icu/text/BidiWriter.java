@@ -97,7 +97,7 @@ final class BidiWriter {
         return doWriteForward(new String(text, start, limit - start), options);
     }
 
-    static String doWriteReverse(String src, int options) {
+    static String writeReverse(String src, int options) {
         /*
          * RTL run -
          *
@@ -231,10 +231,10 @@ final class BidiWriter {
 
     static String doWriteReverse(char[] text, int start, int limit, int options)
     {
-        return doWriteReverse(new String(text, start, limit - start), options);
+        return writeReverse(new String(text, start, limit - start), options);
     }
 
-    static String doWriteReordered(Bidi bidi, short options)
+    static String writeReordered(Bidi bidi, short options)
     {
         int run, runCount;
         StringBuffer dest;
