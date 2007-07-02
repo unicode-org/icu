@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -131,9 +131,9 @@ public class AnyTransliterator extends Transliterator {
         private boolean done = true;
         
 
-        public void reset(Replaceable text, Position expanse) {
-            set(this.expanse, expanse);
-            this.text = text;
+        public void reset(Replaceable repText, Position expansePos) {
+            set(this.expanse, expansePos);
+            this.text = repText;
             reset();
         }
             

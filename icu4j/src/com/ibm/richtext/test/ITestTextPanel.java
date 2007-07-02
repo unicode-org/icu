@@ -146,7 +146,7 @@ public class ITestTextPanel extends Frame implements ActionListener {
     private static final int OP_COUNT = 15;
 
     public void selectOperation(Frame frame,
-                                Clipboard fClipboard) {
+                                Clipboard clipboard) {
 
         int op = fTest.randInt(OP_COUNT);
 
@@ -162,7 +162,7 @@ public class ITestTextPanel extends Frame implements ActionListener {
                 break;
 
             case 2:
-                fTest._testEditMenuOperations(fClipboard);
+                fTest._testEditMenuOperations(clipboard);
                 break;
 
             case 3:

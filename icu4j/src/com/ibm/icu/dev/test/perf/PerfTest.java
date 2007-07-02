@@ -759,12 +759,12 @@ public abstract class PerfTest {
         return data;
     }
 
-    public String[] readLines(String fileName, String encoding, boolean bulkMode) {
+    public String[] readLines(String filename, String encoding, boolean bulkMode) {
         FileInputStream fis = null;
         InputStreamReader isr = null;
         BufferedReader br = null;
         try {
-            fis = new FileInputStream(fileName);
+            fis = new FileInputStream(filename);
             isr = new InputStreamReader(fis, encoding);
             br = new BufferedReader(isr);
         } catch (Exception e) {
