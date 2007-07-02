@@ -1,5 +1,7 @@
 # Copyright (C) 2005-2006, International Business Machines Corporation and
 # others. All Rights Reserved.
+src/com/ibm/icu/dev/test/bidi/TestAll.java
+src/com/ibm/icu/dev/test/bidi/TestCompatibility.java
 src/com/ibm/icu/dev/test/bigdec/DiagBigDecimal.java
 src/com/ibm/icu/dev/test/cldr/TestCLDRVsICU.java
 src/com/ibm/icu/dev/test/charsetdet/TestCharsetDetector.java
