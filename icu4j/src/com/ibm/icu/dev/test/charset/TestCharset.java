@@ -9,6 +9,7 @@
 
 package com.ibm.icu.dev.test.charset;
 
+import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.CharacterCodingException;
@@ -24,8 +25,9 @@ import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.SortedMap;
 
-import java.nio.BufferOverflowException;
-import com.ibm.icu.charset.*;
+import com.ibm.icu.charset.CharsetEncoderICU;
+import com.ibm.icu.charset.CharsetICU;
+import com.ibm.icu.charset.CharsetProviderICU;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.UTF16;
 
@@ -247,46 +249,242 @@ public class TestCharset extends TestFmwk {
         }
         
     }
-    public void TestASCIIConverter(){
+    public void TestASCIIConverter() {
+        runASCIIBasedConverterTest("ASCII", 0x80);
+    }    
+    public void Test88591Converter() {
+        runASCIIBasedConverterTest("iso-8859-1", 0x100);
+    }
+    public void runASCIIBasedConverterTest(String converter, int limit){
         CharsetProvider icu = new CharsetProviderICU();
-        Charset icuChar = icu.charsetForName("ASCII");
+        Charset icuChar = icu.charsetForName(converter);
         CharsetEncoder encoder = icuChar.newEncoder();
         CharsetDecoder decoder = icuChar.newDecoder();
 
-        CharBuffer us = CharBuffer.allocate(0x90);
-        ByteBuffer bs = ByteBuffer.allocate(0x90);
-        for(int j=0;j<=0x7f; j++){
-           us.put((char)j);
-           bs.put((byte)j);
-        }
-        bs.limit(bs.position());
-        bs.position(0);
-        us.limit(us.position());
-        us.position(0);
-        smBufDecode(decoder, "ASCII", bs, us);
-        smBufEncode(encoder, "ASCII", us, bs);
+        /* test with and without array-backed buffers */ 
         
-    }
-    public void Test88591Converter(){
-        CharsetProvider icu = new CharsetProviderICU();
-        Charset icuChar = icu.charsetForName("iso-8859-1");
-        CharsetEncoder encoder = icuChar.newEncoder();
-        CharsetDecoder decoder = icuChar.newDecoder();
+        byte[] bytes = new byte[0x10000];
+        char[] chars = new char[0x10000];
+        for (int j = 0; j <= 0xffff; j++) {
+            bytes[j] = (byte) j;
+            chars[j] = (char) j;
+        }
 
-        CharBuffer us = CharBuffer.allocate(0x100);
-        ByteBuffer bs = ByteBuffer.allocate(0x100);
-        for(int j=0;j<=0xFf; j++){
-           us.put((char)j);
-           bs.put((byte)j);
-        }
-        bs.limit(bs.position());
-        bs.position(0);
-        us.limit(us.position());
-        us.position(0);
-        smBufDecode(decoder, "iso-8859-1", bs, us);
-        smBufEncode(encoder, "iso-8859-1", us, bs);
+        boolean fail = false;
+        boolean arrays = false;
+        boolean decoding = false;
+        int i;
         
+        // 0 thru limit - 1
+        ByteBuffer bs = ByteBuffer.wrap(bytes, 0, limit);
+        CharBuffer us = CharBuffer.wrap(chars, 0, limit);
+        smBufDecode(decoder, converter, bs, us, true);
+        smBufDecode(decoder, converter, bs, us, false);
+        smBufEncode(encoder, converter, us, bs, true);
+        smBufEncode(encoder, converter, us, bs, false);
+        for (i = 0; i < limit; i++) {
+            bs = ByteBuffer.wrap(bytes, i, 1).slice();
+            us = CharBuffer.wrap(chars, i, 1).slice();
+            try {
+                decoding = true;
+                arrays = true;
+                smBufDecode(decoder, converter, bs, us, true, false, true);
+                
+                decoding = true;
+                arrays = false;
+                smBufDecode(decoder, converter, bs, us, true, false, false);
+                
+                decoding = false;
+                arrays = true;
+                smBufEncode(encoder, converter, us, bs, true, false, true);
+                
+                decoding = false;
+                arrays = false;
+                smBufEncode(encoder, converter, us, bs, true, false, false);
+                
+            } catch (Exception ex) {
+                errln("Failed to fail to " + (decoding ? "decode" : "encode") + " 0x"
+                        + Integer.toHexString(i) + (arrays ? " with arrays" : " without arrays") + " in " + converter);
+                return;
+            }
+        }
+        
+        // decode limit thru 255
+        for (i = limit; i <= 0xff; i++) {
+            bs = ByteBuffer.wrap(bytes, i, 1).slice();
+            us = CharBuffer.wrap(chars, i, 1).slice();
+            try {
+                smBufDecode(decoder, converter, bs, us, true, false, true);
+                fail = true;
+                arrays = true;
+                break;
+            } catch (Exception ex) {
+            }
+            try {
+                smBufDecode(decoder, converter, bs, us, true, false, false);
+                fail = true;
+                arrays = false;
+                break;
+            } catch (Exception ex) {
+            }
+        }
+        if (fail) {
+            errln("Failed to fail to decode 0x" + Integer.toHexString(i)
+                    + (arrays ? " with arrays" : " without arrays") + " in " + converter);
+            return;
+        }
+        
+        // encode limit thru 0xffff, skipping through much of the 1ff to feff range to save
+        // time (it would take too much time to test every possible case)
+        for (i = limit; i <= 0xffff; i = ((i>=0x1ff && i<0xfeff) ? i+0xfd : i+1)) {
+            bs = ByteBuffer.wrap(bytes, i, 1).slice();
+            us = CharBuffer.wrap(chars, i, 1).slice();
+            try {
+                smBufEncode(encoder, converter, us, bs, true, false, true);
+                fail = true;
+                arrays = true;
+                break;
+            } catch (Exception ex) {
+            }
+            try {
+                smBufEncode(encoder, converter, us, bs, true, false, false);
+                fail = true;
+                arrays = false;
+                break;
+            } catch (Exception ex) {
+            }
+        }
+        if (fail) {
+            errln("Failed to fail to encode 0x" + Integer.toHexString(i)
+                    + (arrays ? " with arrays" : " without arrays") + " in " + converter);
+            return;
+        }
+        
+        // test overflow / underflow edge cases
+        outer: for (int n = 1; n <= 3; n++) {
+            for (int m = 0; m < n; m++) {
+                // expecting underflow
+                try {
+                    bs = ByteBuffer.wrap(bytes, 'a', m).slice();
+                    us = CharBuffer.wrap(chars, 'a', m).slice();
+                    smBufDecode(decoder, converter, bs, us, true, false, true);
+                    smBufDecode(decoder, converter, bs, us, true, false, false);
+                    smBufEncode(encoder, converter, us, bs, true, false, true);
+                    smBufEncode(encoder, converter, us, bs, true, false, false);
+                    bs = ByteBuffer.wrap(bytes, 'a', m).slice();
+                    us = CharBuffer.wrap(chars, 'a', n).slice();
+                    smBufDecode(decoder, converter, bs, us, true, false, true, m);
+                    smBufDecode(decoder, converter, bs, us, true, false, false, m);
+                    bs = ByteBuffer.wrap(bytes, 'a', n).slice();
+                    us = CharBuffer.wrap(chars, 'a', m).slice();
+                    smBufEncode(encoder, converter, us, bs, true, false, true, m);
+                    smBufEncode(encoder, converter, us, bs, true, false, false, m);
+                    bs = ByteBuffer.wrap(bytes, 'a', n).slice();
+                    us = CharBuffer.wrap(chars, 'a', n).slice();
+                    smBufDecode(decoder, converter, bs, us, true, false, true);
+                    smBufDecode(decoder, converter, bs, us, true, false, false);
+                    smBufEncode(encoder, converter, us, bs, true, false, true);
+                    smBufEncode(encoder, converter, us, bs, true, false, false);
+                } catch (Exception ex) {
+                    fail = true;
+                    break outer;
+                }
+                
+                // expecting overflow
+                try {
+                    bs = ByteBuffer.wrap(bytes, 'a', n).slice();
+                    us = CharBuffer.wrap(chars, 'a', m).slice();
+                    smBufDecode(decoder, converter, bs, us, true, false, true);
+                    fail = true;
+                    break;
+                } catch (Exception ex) {
+                    if (!(ex instanceof BufferOverflowException)) {
+                        fail = true;
+                        break outer;
+                    }
+                }
+                try {
+                    bs = ByteBuffer.wrap(bytes, 'a', n).slice();
+                    us = CharBuffer.wrap(chars, 'a', m).slice();
+                    smBufDecode(decoder, converter, bs, us, true, false, false);
+                    fail = true;
+                } catch (Exception ex) {
+                    if (!(ex instanceof BufferOverflowException)) {
+                        fail = true;
+                        break outer;
+                    }
+                }
+                try {
+                    bs = ByteBuffer.wrap(bytes, 'a', m).slice();
+                    us = CharBuffer.wrap(chars, 'a', n).slice();
+                    smBufEncode(encoder, converter, us, bs, true, false, true);
+                    fail = true;
+                } catch (Exception ex) {
+                    if (!(ex instanceof BufferOverflowException)) {
+                        fail = true;
+                        break outer;
+                    }
+                }
+                try {
+                    bs = ByteBuffer.wrap(bytes, 'a', m).slice();
+                    us = CharBuffer.wrap(chars, 'a', n).slice();
+                    smBufEncode(encoder, converter, us, bs, true, false, false);
+                    fail = true;
+                } catch (Exception ex) {
+                    if (!(ex instanceof BufferOverflowException)) {
+                        fail = true;
+                        break outer;
+                    }
+                }
+            }
+        }
+        if (fail) {
+            errln("Incorrect result in " + converter + " for underflow / overflow edge cases");
+            return;
+        }
+        
+        // test surrogate combinations in encoding
+        String lead = "" + (char)0xd888;
+        String trail = "" + (char)0xdc88;
+        String norm = "a";
+        String end = "";
+        bs = ByteBuffer.wrap(new byte[] { 0 });
+        String[] input = new String[] { //
+                lead + lead,   // malf(1)
+                lead + trail,  // unmap(2)
+                lead + norm,   // malf(1)
+                lead + end,    // malf(1)
+                trail + lead,  // unmap(1)
+                trail + trail, // unmap(1)
+                trail + norm,  // unmap(1)
+                trail + end,   // unmap(1)
+        };
+        CoderResult[] result = new CoderResult[] {
+                CoderResult.malformedForLength(1),
+                CoderResult.unmappableForLength(2),
+                CoderResult.malformedForLength(1),
+                CoderResult.malformedForLength(1),
+                CoderResult.unmappableForLength(1),
+                CoderResult.unmappableForLength(1),
+                CoderResult.unmappableForLength(1),
+                CoderResult.unmappableForLength(1),
+        };
+        for (int index = 0; index < input.length; index++) {
+            CoderResult cr = encoder.encode(CharBuffer.wrap(input[index]), bs, true);
+            bs.rewind();
+            encoder.reset();
+
+            // if cr != results[x]
+            if (!((cr.isUnderflow() && result[index].isUnderflow())
+                    || (cr.isOverflow() && result[index].isOverflow())
+                    || (cr.isMalformed() && result[index].isMalformed())
+                    || (cr.isUnmappable() && result[index].isUnmappable()))
+                    || (cr.isError() && cr.length() != result[index].length())) {
+                errln("Incorrect result in " + converter + " for \"" + input[index] + "\"");
+            }
+        }
     }
+    
 
     public void TestAPISemantics(/*String encoding*/) 
                 throws Exception {
@@ -527,7 +725,21 @@ public class TestCharset extends TestFmwk {
         return equals(buf, str.toCharArray());
     }
     public boolean equals(CharBuffer buf, CharBuffer str) {
-        return equals(buf.array(), str.array());
+        if (buf.limit() != str.limit())
+            return false;
+        int limit = buf.limit();
+        for (int i = 0; i < limit; i++)
+            if (buf.get(i) != str.get(i))
+                return false;
+        return true;
+    }
+    public boolean equals(CharBuffer buf, CharBuffer str, int limit) {
+        if (limit > buf.limit() || limit > str.limit())
+            return false;
+        for (int i = 0; i < limit; i++)
+            if (buf.get(i) != str.get(i))
+                return false;
+        return true;
     }
     public boolean equals(CharBuffer buf, char[] compareTo) {
         char[] chars = new char[buf.limit()];
@@ -577,7 +789,21 @@ public class TestCharset extends TestFmwk {
         return equals(chars, compareTo);
     }
     public boolean equals(ByteBuffer buf, ByteBuffer compareTo) {
-        return equals(buf.array(), compareTo.array());
+        if (buf.limit() != compareTo.limit())
+            return false;
+        int limit = buf.limit();
+        for (int i = 0; i < limit; i++)
+            if (buf.get(i) != compareTo.get(i))
+                return false;
+        return true;
+    }
+    public boolean equals(ByteBuffer buf, ByteBuffer compareTo, int limit) {
+        if (limit > buf.limit() || limit > compareTo.limit())
+            return false;
+        for (int i = 0; i < limit; i++)
+            if (buf.get(i) != compareTo.get(i))
+                return false;
+        return true;
     }
     public boolean equals(byte[] chars, byte[] compareTo) {
         if (false/*chars.length != compareTo.length*/) {
@@ -898,10 +1124,33 @@ public class TestCharset extends TestFmwk {
         }
     }
      
-    private void smBufDecode(CharsetDecoder decoder, String encoding, ByteBuffer source, CharBuffer target, boolean throwException, boolean flush)  throws BufferOverflowException, Exception {
-
-        ByteBuffer mySource = source.duplicate();
-        CharBuffer myTarget = CharBuffer.allocate(target.capacity());
+    private void smBufDecode(CharsetDecoder decoder, String encoding, ByteBuffer source,
+            CharBuffer target, boolean throwException, boolean flush)
+            throws BufferOverflowException, Exception {
+      smBufDecode(decoder, encoding, source, target, throwException, flush, true);
+    }
+    private void smBufDecode(CharsetDecoder decoder, String encoding, ByteBuffer source,
+            CharBuffer target, boolean throwException, boolean flush, boolean backedByArray)
+            throws BufferOverflowException, Exception {
+      smBufDecode(decoder, encoding, source, target, throwException, flush, backedByArray, -1);
+    }
+    private void smBufDecode(CharsetDecoder decoder, String encoding, ByteBuffer source,
+            CharBuffer target, boolean throwException, boolean flush, boolean backedByArray,
+            int targetLimit) throws BufferOverflowException, Exception {
+        ByteBuffer mySource;
+        CharBuffer myTarget;
+        if (backedByArray) {
+            mySource = ByteBuffer.allocate(source.capacity());
+            myTarget = CharBuffer.allocate(target.capacity());
+        } else {
+            // this does not guarantee by any means that mySource and myTarget are not backed by arrays
+            mySource = ByteBuffer.allocateDirect(source.capacity());
+            myTarget = ByteBuffer.allocateDirect(target.capacity() * 2).asCharBuffer();
+        }
+        mySource.position(source.position());
+        for (int i=source.position(); i<source.limit(); i++)
+            mySource.put(i, source.get(i));
+        
         {            
             decoder.reset();
             myTarget.limit(target.limit());
@@ -929,7 +1178,7 @@ public class TestCharset extends TestFmwk {
             myTarget.limit(myTarget.position());
             myTarget.position(0);
             target.position(0);
-            if (result.isUnderflow()&&!equals(myTarget,target)) {
+            if (result.isUnderflow() && !equals(myTarget, target, targetLimit)) {
                 errln(
                     " Test complete buffers while decoding  "
                         + encoding
@@ -970,10 +1219,7 @@ public class TestCharset extends TestFmwk {
                 }
 
             }
-            myTarget.limit(myTarget.position());
-            myTarget.position(0);
-            target.position(0);
-            if (result.isUnderflow()&&!equals(myTarget,target)) {
+            if (result.isUnderflow() && !equals(myTarget, target, targetLimit)) {
                 errln(
                     "Test small input buffers while decoding "
                         + encoding
@@ -1006,7 +1252,7 @@ public class TestCharset extends TestFmwk {
                 }
             }
 
-            if (!equals(myTarget,target)) {
+            if (!equals(myTarget, target, targetLimit)) {
                 errln(
                     "Test small output buffers "
                         + encoding
@@ -1015,10 +1261,35 @@ public class TestCharset extends TestFmwk {
         }
     }
 
-    private void smBufEncode(CharsetEncoder encoder, String encoding, CharBuffer source, ByteBuffer target, boolean throwException, boolean flush) throws Exception, BufferOverflowException {
+    private void smBufEncode(CharsetEncoder encoder, String encoding, CharBuffer source,
+            ByteBuffer target, boolean throwException, boolean flush) throws Exception,
+            BufferOverflowException {
+        smBufEncode(encoder, encoding, source, target, throwException, flush, true); 
+    }
+    private void smBufEncode(CharsetEncoder encoder, String encoding, CharBuffer source,
+            ByteBuffer target, boolean throwException, boolean flush, boolean backedByArray)
+            throws Exception, BufferOverflowException {
+        smBufEncode(encoder, encoding, source, target, throwException, flush, true, -1); 
+    }
+    private void smBufEncode(CharsetEncoder encoder, String encoding, CharBuffer source,
+            ByteBuffer target, boolean throwException, boolean flush, boolean backedByArray,
+            int targetLimit) throws Exception, BufferOverflowException {
         logln("Running smBufEncode for "+ encoding + " with class " + encoder);
-        CharBuffer mySource = source.duplicate();
-        ByteBuffer myTarget = ByteBuffer.allocate(target.capacity());
+        
+        CharBuffer mySource;
+        ByteBuffer myTarget;
+        if (backedByArray) {
+            mySource = CharBuffer.allocate(source.capacity());
+            myTarget = ByteBuffer.allocate(target.capacity());
+        } else {
+            mySource = ByteBuffer.allocateDirect(source.capacity() * 2).asCharBuffer();
+            myTarget = ByteBuffer.allocateDirect(target.capacity());
+        }
+        mySource.position(source.position());
+        for (int i=source.position(); i<source.limit(); i++)
+            mySource.put(i, source.get(i));
+        
+        myTarget.clear();
         {
             logln("Running tests on small input buffers for "+ encoding);
             encoder.reset();
@@ -1044,8 +1315,10 @@ public class TestCharset extends TestFmwk {
                 }
                 errln("Test complete while encoding threw overflow exception");
             }
-            if (!equals(myTarget,target)) {
-
+            if (!equals(myTarget, target, targetLimit)) {
+                // TODO: REMOVE output
+                System.out.println(source.limit() + " " + mySource.limit() + " " + target.limit() + " " + myTarget.limit() + " " + targetLimit);
+                System.out.println((char)target.get(0) + " " + myTarget.get(0) + " " + targetLimit);
                 errln("Test complete buffers while encoding for "+ encoding+ " failed");
 
             }
@@ -1078,7 +1351,7 @@ public class TestCharset extends TestFmwk {
                     errln("Test small input buffers while encoding threw overflow exception");
                 }
             }
-            if (!equals(myTarget,target)) {
+            if (!equals(myTarget, target, targetLimit)) {
                 errln("Test small input buffers "+ encoding+ " From Unicode failed");
             }else{
                 logln("Tests on small input buffers for "+ encoding +" passed");
@@ -1120,7 +1393,7 @@ public class TestCharset extends TestFmwk {
                     break;
                 }
             }
-            if (!equals(target,myTarget)) {
+            if (!equals(myTarget, target, targetLimit)) {
                 errln("Test small output buffers "+ encoding+ " From Unicode failed.");
             }
             logln("Tests on small output buffers for "+ encoding +" passed");
@@ -1625,17 +1898,25 @@ public class TestCharset extends TestFmwk {
      * and Encoding if needed for testing purposes.
      */
     private void smBufDecode(CharsetDecoder decoder, String encoding, ByteBuffer source, CharBuffer target) {
+        smBufDecode(decoder, encoding, source, target, true);
+    }
+    private void smBufDecode(CharsetDecoder decoder, String encoding, ByteBuffer source, CharBuffer target, boolean backedByArray) {
         try {
-            smBufDecode(decoder, encoding, source, target, false, false);
+            smBufDecode(decoder, encoding, source, target, false, false, backedByArray);
         }    
         catch (Exception ex) {           
+            System.out.println("!exception!");
         }
     }
     private void smBufEncode(CharsetEncoder encoder, String encoding, CharBuffer source, ByteBuffer target)  {
+        smBufEncode(encoder, encoding, source, target, true);
+    }
+    private void smBufEncode(CharsetEncoder encoder, String encoding, CharBuffer source, ByteBuffer target, boolean backedByArray)  {
         try {
             smBufEncode(encoder, encoding, source, target, false, false); 
         }
         catch (Exception ex) {
+            System.out.println("!exception!");
         }
     }
     //Test CharsetICUProvider
@@ -2866,7 +3147,7 @@ public class TestCharset extends TestFmwk {
             errln("Exception while encoding UTF32LE (6) should have been thrown.");
         } catch (Exception ex) {
         }
-    }
+    }			
     
     //Test for charset UTF16LE to provide better code coverage
     public void TestCharsetUTF16LE() {
