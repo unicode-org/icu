@@ -86,7 +86,7 @@ RuleBasedTimeZone::operator=(const RuleBasedTimeZone& right) {
 }
 
 UBool
-RuleBasedTimeZone::operator==(const RuleBasedTimeZone& that) const {
+RuleBasedTimeZone::operator==(const TimeZone& that) const {
     if (this == &that) {
         return TRUE;
     }
@@ -94,18 +94,19 @@ RuleBasedTimeZone::operator==(const RuleBasedTimeZone& that) const {
         || BasicTimeZone::operator==(that) == FALSE) {
         return FALSE;
     }
-    if (*fInitialRule != *(that.fInitialRule)) {
+    RuleBasedTimeZone *rbtz = (RuleBasedTimeZone*)&that;
+    if (*fInitialRule != *(rbtz->fInitialRule)) {
         return FALSE;
     }
-    if (compareRules(fHistoricRules, that.fHistoricRules)
-        && compareRules(fFinalRules, that.fFinalRules)) {
+    if (compareRules(fHistoricRules, rbtz->fHistoricRules)
+        && compareRules(fFinalRules, rbtz->fFinalRules)) {
         return TRUE;
     }
     return FALSE;
 }
 
 UBool
-RuleBasedTimeZone::operator!=(const RuleBasedTimeZone& that) const {
+RuleBasedTimeZone::operator!=(const TimeZone& that) const {
     return !operator==(that);
 }
 

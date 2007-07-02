@@ -306,7 +306,6 @@ BasicTimeZone::getTimeZoneRulesAfter(UDate start, InitialTimeZoneRule*& initial,
     }
     getTimeZoneRules(orgini, orgtrs, ruleCount, status);
     if (U_FAILURE(status)) {
-        delete orgtrs;
         goto error;
     }
     for (i = 0; i < ruleCount; i++) {
@@ -316,6 +315,7 @@ BasicTimeZone::getTimeZoneRulesAfter(UDate start, InitialTimeZoneRule*& initial,
         }
     }
     uprv_free(orgtrs);
+    orgtrs = NULL;
 
     avail = getPreviousTransition(start, TRUE, tzt);
     if (!avail) {
