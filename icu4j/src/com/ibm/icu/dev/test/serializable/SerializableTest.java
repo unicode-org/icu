@@ -24,6 +24,7 @@ import com.ibm.icu.util.AnnualTimeZoneRule;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.DateTimeRule;
+import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.InitialTimeZoneRule;
 import com.ibm.icu.util.RuleBasedTimeZone;
 import com.ibm.icu.util.SimpleTimeZone;
@@ -482,6 +483,7 @@ public class SerializableTest extends TestFmwk.TestGroup
         
         public boolean hasSameBehavior(Object a, Object b)
         {
+            GregorianCalendar cal = new GregorianCalendar();
             TimeZoneAdapter tza_a = (TimeZoneAdapter) a;
             TimeZoneAdapter tza_b = (TimeZoneAdapter) b;
             
@@ -489,8 +491,15 @@ public class SerializableTest extends TestFmwk.TestGroup
             boolean a_dst, b_dst;
             boolean bSame = true;
             for (int i = 0; i < sampleTimes.length; i++) {
-                a_offset = tza_a.getOffset(sampleTimes[i]);
-                b_offset = tza_b.getOffset(sampleTimes[i]);
+                cal.setTimeInMillis(sampleTimes[i]);
+                int era = cal.get(Calendar.ERA);
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+                int dow = cal.get(Calendar.DAY_OF_WEEK);
+                int mid = cal.get(Calendar.MILLISECONDS_IN_DAY);
+                a_offset = tza_a.getOffset(era, year, month, day, dow, mid);
+                b_offset = tza_b.getOffset(era, year, month, day, dow, mid);
                 Date d = new Date(sampleTimes[i]);
                 a_dst = tza_a.inDaylightTime(d);
                 b_dst = tza_b.inDaylightTime(d);
