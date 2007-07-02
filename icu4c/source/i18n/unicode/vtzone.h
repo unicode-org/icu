@@ -59,24 +59,24 @@ public:
     VTimeZone& operator=(const VTimeZone& right);
 
     /**
-     * Return true if the given <code>VTimeZone</code> objects are
+     * Return true if the given <code>TimeZone</code> objects are
      * semantically equal. Objects of different subclasses are considered unequal.
      * @param that  The object to be compared with.
-     * @return  true if the given <code>VTimeZone</code> objects are
+     * @return  true if the given <code>TimeZone</code> objects are
       *semantically equal.
      * @draft ICU 3.8
      */
-    virtual UBool operator==(const VTimeZone& that) const;
+    virtual UBool operator==(const TimeZone& that) const;
 
     /**
-     * Return true if the given <code>VTimeZone</code> objects are
+     * Return true if the given <code>TimeZone</code> objects are
      * semantically unequal. Objects of different subclasses are considered unequal.
      * @param that  The object to be compared with.
-     * @return  true if the given <code>VTimeZone</code> objects are
+     * @return  true if the given <code>TimeZone</code> objects are
      * semantically unequal.
      * @draft ICU 3.8
      */
-    virtual UBool operator!=(const VTimeZone& that) const;
+    virtual UBool operator!=(const TimeZone& that) const;
 
     /**
      * Create a <code>VTimeZone</code> instance by the time zone ID.

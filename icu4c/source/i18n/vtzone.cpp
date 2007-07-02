@@ -998,7 +998,7 @@ VTimeZone::operator=(const VTimeZone& right) {
 }
 
 UBool
-VTimeZone::operator==(const VTimeZone& that) const {
+VTimeZone::operator==(const TimeZone& that) const {
     if (this == &that) {
         return TRUE;
     }
@@ -1006,9 +1006,10 @@ VTimeZone::operator==(const VTimeZone& that) const {
         || !BasicTimeZone::operator==(that)) {
         return FALSE;
     }
-    if (*tz == *(that.tz)
-        && tzurl == that.tzurl
-        && lastmod == that.lastmod
+    VTimeZone *vtz = (VTimeZone*)&that;
+    if (*tz == *(vtz->tz)
+        && tzurl == vtz->tzurl
+        && lastmod == vtz->lastmod
         /* && olsonzid = that.olsonzid */
         /* && icutzver = that.icutzver */) {
         return TRUE;
@@ -1017,7 +1018,7 @@ VTimeZone::operator==(const VTimeZone& that) const {
 }
 
 UBool
-VTimeZone::operator!=(const VTimeZone& that) const {
+VTimeZone::operator!=(const TimeZone& that) const {
     return !operator==(that);
 }
 
