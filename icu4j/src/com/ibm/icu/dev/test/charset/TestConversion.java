@@ -146,9 +146,9 @@ public class TestConversion extends ModuleTest {
         //         ----for debugging only
         // TODO: ***Currently skipping test for charset ibm-1390, gb18030,
         // ibm-930 due to external mapping need to be fix
-        if (cc.charset.equalsIgnoreCase("ibm-1390")
+        if ((cc.charset.equalsIgnoreCase("ibm-1390")
                 || cc.charset.equalsIgnoreCase("gb18030")
-                || cc.charset.equalsIgnoreCase("ibm-970")) {
+                || cc.charset.equalsIgnoreCase("ibm-970")) && skipIfBeforeICU(3,7,2)) {
             logln("Skipping test:("
                     + cc.charset
                     + ") due to ICU Charset external mapping not supported at this time");
@@ -464,7 +464,7 @@ public class TestConversion extends ModuleTest {
         // decoder replacement
         // { "ibm-1363", :bin{ a2aea2 }, "\u00a1\u001a", :intvector{ 0, 2 },
         // :int{1}, :int{0}, "", "?", :bin{""} }
-        if (cc.caseNr == 63) {
+        if (cc.caseNr == 63 && skipIfBeforeICU(3,7,2)) {
             logln("TestToUnicode[" + cc.caseNr + "] " + cc.charset);
             logln("Skipping test due to limitation in Java API - callback replacement value");
             return;
