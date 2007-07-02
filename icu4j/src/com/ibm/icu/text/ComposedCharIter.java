@@ -67,7 +67,7 @@ public final class ComposedCharIter {
      */
     public ComposedCharIter() {
         compat = false;
-        options =0;
+        //options =0;
     }
     
     
@@ -87,7 +87,7 @@ public final class ComposedCharIter {
      */
     public ComposedCharIter(boolean compat, int options) {
         this.compat = compat;
-        this.options = options;
+        //this.options = options;
     }
     
     /**
@@ -153,7 +153,7 @@ public final class ComposedCharIter {
         nextChar=c;  
     }
     
-    private int options;
+    //private int options;
     private boolean compat;
     private char[] decompBuf = new char[100];
     private int bufLen=0;

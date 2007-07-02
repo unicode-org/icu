@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -48,12 +48,12 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
      */
     private BreakDictionary dictionary;
 
-    /**
+    /*
      * a list of flags indicating which character categories are contained in
      * the dictionary file (this is used to determine which ranges of characters
      * to apply the dictionary to)
      */
-    private boolean[] categoryFlags;
+    //private boolean[] categoryFlags;
 
 
     /**

@@ -950,7 +950,7 @@ public final class RuleBasedCollator extends Collator
         }
         int strength = getStrength();
         m_utilCompare0_ = m_isCaseLevel_;
-        m_utilCompare1_ = true;
+        //m_utilCompare1_ = true;
         m_utilCompare2_ = strength >= SECONDARY;
         m_utilCompare3_ = strength >= TERTIARY;
         m_utilCompare4_ = strength >= QUATERNARY;
@@ -961,13 +961,13 @@ public final class RuleBasedCollator extends Collator
         m_utilBytesCount2_ = 0;
         m_utilBytesCount3_ = 0;
         m_utilBytesCount4_ = 0;
-        m_utilBytesCount5_ = 0;
-        m_utilCount0_ = 0;
-        m_utilCount1_ = 0;
+        //m_utilBytesCount5_ = 0;
+        //m_utilCount0_ = 0;
+        //m_utilCount1_ = 0;
         m_utilCount2_ = 0;
         m_utilCount3_ = 0;
         m_utilCount4_ = 0;
-        m_utilCount5_ = 0;
+        //m_utilCount5_ = 0;
         boolean doFrench = m_isFrenchCollation_ && m_utilCompare2_;
         // TODO: UCOL_COMMON_BOT4 should be a function of qShifted.
         // If we have no qShifted, we don't need to set UCOL_COMMON_BOT4 so
@@ -2212,7 +2212,7 @@ public final class RuleBasedCollator extends Collator
      * Utility comparison flags
      */
     private boolean m_utilCompare0_;
-    private boolean m_utilCompare1_;
+    //private boolean m_utilCompare1_;
     private boolean m_utilCompare2_;
     private boolean m_utilCompare3_;
     private boolean m_utilCompare4_;
@@ -2225,7 +2225,7 @@ public final class RuleBasedCollator extends Collator
     private byte m_utilBytes2_[];
     private byte m_utilBytes3_[];
     private byte m_utilBytes4_[];
-    private byte m_utilBytes5_[];
+    //private byte m_utilBytes5_[];
     private RawCollationKey m_utilRawCollationKey_;
 
     private int m_utilBytesCount0_;
@@ -2233,13 +2233,13 @@ public final class RuleBasedCollator extends Collator
     private int m_utilBytesCount2_;
     private int m_utilBytesCount3_;
     private int m_utilBytesCount4_;
-    private int m_utilBytesCount5_;
-    private int m_utilCount0_;
-    private int m_utilCount1_;
+    //private int m_utilBytesCount5_;
+    //private int m_utilCount0_;
+    //private int m_utilCount1_;
     private int m_utilCount2_;
     private int m_utilCount3_;
     private int m_utilCount4_;
-    private int m_utilCount5_;
+    //private int m_utilCount5_;
 
     private int m_utilFrenchStart_;
     private int m_utilFrenchEnd_;
@@ -2278,7 +2278,7 @@ public final class RuleBasedCollator extends Collator
         int strength = getStrength();
         // setting up the collator parameters
         m_utilCompare0_ = m_isCaseLevel_;
-        m_utilCompare1_ = true;
+        //m_utilCompare1_ = true;
         m_utilCompare2_ = strength >= SECONDARY;
         m_utilCompare3_ = strength >= TERTIARY;
         m_utilCompare4_ = strength >= QUATERNARY;
