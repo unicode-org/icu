@@ -978,30 +978,28 @@ public class TestConversion extends ModuleTest {
         return null;
     }
 
-    void printbytes(ByteBuffer buf, int pos) {
+    String printbytes(ByteBuffer buf, int pos) {
         int cur = buf.position();
-        log(" (" + pos + ")==[");
+        String res = " (" + pos + ")==[";
         for (int i = 0; i < pos; i++) {
-            log("(" + i + ")" + hex(buf.get(i) & 0xff) + " ");
+            res += "(" + i + ")" + hex(buf.get(i) & 0xff).substring(2) + " ";
         }
-        log("]");
         buf.position(cur);
+        return res + "]";
     }
 
-    void printchar(CharBuffer buf, int pos) {
+    String printchars(CharBuffer buf, int pos) {
         int cur = buf.position();
-        log(" (" + pos + ")==[");
+        String res = " (" + pos + ")==[";
         for (int i = 0; i < pos; i++) {
-            log("(" + i + ")" + hex(buf.get(i)) + " ");
+            res += "(" + i + ")" + hex(buf.get(i)) + " ";
         }
-        log("]");
         buf.position(cur);
+        return res + "]";
     }
 
     private boolean checkResultsFromUnicode(ConversionCase cc,
-            ByteBuffer source,
-
-            ByteBuffer target) {
+            ByteBuffer source, ByteBuffer target) {
 
         int len = target.position();
         target.limit(len); //added to stop where data ends
@@ -1014,13 +1012,19 @@ public class TestConversion extends ModuleTest {
         len = len - target.position();
 
         if (len != source.remaining()) {
-            if ((cc.caseNr == 6 || cc.caseNr == 87 || cc.caseNr == 88) && skipIfBeforeICU(3,7,2)) {
+            if ((cc.caseNr == 6) && skipIfBeforeICU(3,7,2)) {
+                //TODO: remove when #5765 gets fixed
                 logln("Ticket#5765: output length does not match expected for charset: "+cc.charset+ " [" + cc.caseNr + "]");
             } else {
                 errln("Test failed: output length does not match expected for charset: "+cc.charset+ " [" + cc.caseNr + "]");
+//                        "Input:       " + toHexString(cc.unicode) + "\n" + 
+//                        "Output:      " + toHexString(target) + "\n" + 
+//                        "Expected:    " + toHexString(source) + "\n");
             }
-            logln("[" + cc.caseNr + "]:" + cc.charset + "output=");
-            printbytes(target, len);
+            logln("[" + cc.caseNr + "]:" + cc.charset);
+            logln("Input:       " + printchars(CharBuffer.wrap(cc.unicode), cc.unicode.length()));
+            logln("Output:      " + printbytes(target, len));
+            logln("Expected:    " + printbytes(source, source.limit()));
             logln("");
             return false;
         }
@@ -1028,16 +1032,20 @@ public class TestConversion extends ModuleTest {
         for (int i = 0; i < source.remaining(); i++) {
             if (target.get() != source.get()) {
                 errln("Test failed: output does not match expected for charset: "+cc.charset+ " [" + cc.caseNr + "]");
-                logln("[" + cc.caseNr + "]:" + cc.charset + "output=");
-                printbytes(target, len);
+                logln("[" + cc.caseNr + "]:" + cc.charset);
+                logln("Input:       " + printchars(CharBuffer.wrap(cc.unicode), cc.unicode.length()));
+                logln("Output:      " + printbytes(target, len));
+                logln("Expected:    " + printbytes(source, source.limit()));
                 logln("");
                 return false;
             }
         }
         logln("[" + cc.caseNr + "]:" + cc.charset);
-        log("output=");
-        printbytes(target, len);
+        logln("Input:       " + printchars(CharBuffer.wrap(cc.unicode), cc.unicode.length()));
+        logln("Output:      " + printbytes(target, len));
+        logln("Expected:    " + printbytes(source, source.limit()));
         logln("Passed");
+        logln("");
         return true;
     }
 
@@ -1050,22 +1058,30 @@ public class TestConversion extends ModuleTest {
         // test to see if the conversion matches actual results
         if (len != source.length()) {
             errln("Test failed: output length does not match expected for charset: "+cc.charset+ " [" + cc.caseNr + "]");
-            logln("[" + cc.caseNr + "]:" + cc.charset + "output=");
-            printchar(target, len);
+            logln("[" + cc.caseNr + "]:" + cc.charset);
+            logln("Input:       " + printbytes(cc.bytes, cc.bytes.limit()));
+            logln("Output:      " + printchars(target, len));
+            logln("Expected:    " + printchars(CharBuffer.wrap(source), source.length()));
+            logln("");
             return false;
         }
         for (int i = 0; i < source.length(); i++) {
             if (!(hex(target.get(i)).equals(hex(source.charAt(i))))) {
                 errln("Test failed: output does not match expected for charset: "+cc.charset+ " [" + cc.caseNr + "]");
-                logln("[" + cc.caseNr + "]:" + cc.charset + "output=");
-                printchar(target, len);
+                logln("[" + cc.caseNr + "]:" + cc.charset);
+                logln("Input:       " + printbytes(cc.bytes, cc.bytes.limit()));
+                logln("Output:      " + printchars(target, len));
+                logln("Expected:    " + printchars(CharBuffer.wrap(source), source.length()));
+                logln("");
                 return false;
             }
         }
         logln("[" + cc.caseNr + "]:" + cc.charset);
-        log("output=");
-        printchar(target, len);
+        logln("Input:       " + printbytes(cc.bytes, cc.bytes.limit()));
+        logln("Output:      " + printchars(target, len));
+        logln("Expected:    " + printchars(CharBuffer.wrap(source), source.length()));
         logln("Passed");
+        logln("");
         return true;
     }
 
