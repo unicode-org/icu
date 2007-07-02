@@ -58,24 +58,24 @@ public:
     RuleBasedTimeZone& operator=(const RuleBasedTimeZone& right);
 
     /**
-     * Return true if the given <code>RuleBasedTimeZone</code> objects are
+     * Return true if the given <code>TimeZone</code> objects are
      * semantically equal. Objects of different subclasses are considered unequal.
      * @param that  The object to be compared with.
-     * @return  true if the given <code>RuleBasedTimeZone</code> objects are
+     * @return  true if the given <code>TimeZone</code> objects are
       *semantically equal.
      * @draft ICU 3.8
      */
-    virtual UBool operator==(const RuleBasedTimeZone& that) const;
+    virtual UBool operator==(const TimeZone& that) const;
 
     /**
-     * Return true if the given <code>RuleBasedTimeZone</code> objects are
+     * Return true if the given <code>TimeZone</code> objects are
      * semantically unequal. Objects of different subclasses are considered unequal.
      * @param that  The object to be compared with.
-     * @return  true if the given <code>RuleBasedTimeZone</code> objects are
+     * @return  true if the given <code>TimeZone</code> objects are
      * semantically unequal.
      * @draft ICU 3.8
      */
-    virtual UBool operator!=(const RuleBasedTimeZone& that) const;
+    virtual UBool operator!=(const TimeZone& that) const;
 
     /**
      * Adds the <code>TimeZoneRule</code> which represents time transitions.
