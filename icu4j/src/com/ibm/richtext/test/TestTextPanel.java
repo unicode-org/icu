@@ -90,11 +90,11 @@ public class TestTextPanel /*extends TestFmwk*/ {
             assertNotExpectingEvents(false, 0, false);
         }
         
-        void assertNotExpectingEvents(int iterationCount, boolean exp) {
-            assertNotExpectingEvents(true, iterationCount, exp);
+        void assertNotExpectingEvents(int iterCount, boolean exp) {
+            assertNotExpectingEvents(true, iterCount, exp);
         }
         
-        private void assertNotExpectingEvents(boolean logDetails, int iterationCount, boolean exp) {
+        private void assertNotExpectingEvents(boolean logDetails, int iterCount, boolean exp) {
             
             boolean e = false;
             for (int i=0; i < status.length; i++) {
@@ -102,7 +102,7 @@ public class TestTextPanel /*extends TestFmwk*/ {
                     if (logDetails) {
                         logMessage("Expecting event " +
                                         (i+TextPanelEvent.TEXT_PANEL_FIRST));
-                        logMessage("iterationCount="+iterationCount+";  expexting="+exp);
+                        logMessage("iterationCount="+iterCount+";  expexting="+exp);
                     }
                     e = true;
                 }

@@ -207,8 +207,8 @@ public class ICUService extends ICUNotifier {
          * If a key created from id would eventually fallback to match the
          * canonical ID of this key, return true.
          */
-        public boolean isFallbackOf(String id) {
-            return canonicalID().equals(id);
+        public boolean isFallbackOf(String idToCheck) {
+            return canonicalID().equals(idToCheck);
         }
     }
 
@@ -760,11 +760,11 @@ public class ICUService extends ICUNotifier {
         }
 
 
-        SortedMap get(ULocale locale, Comparator com) {
+        SortedMap get(ULocale loc, Comparator comp) {
             SortedMap m = (SortedMap)ref.get();
             if (m != null &&
-                this.locale.equals(locale) &&
-                (this.com == com || (this.com != null && this.com.equals(com)))) {
+                this.locale.equals(loc) &&
+                (this.com == comp || (this.com != null && this.com.equals(comp)))) {
 
                 return m;
             }

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1998-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1998-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -69,8 +69,8 @@ public class LigatureTreeWalker extends TreeWalker implements LookupSubtable
     }
     protected int firstComponentChar(int ligatureSetIndex)
     {
-        Vector ligatureSet = (Vector) ligatureSets.elementAt(ligatureSetIndex);
-        LigatureEntry firstEntry = (LigatureEntry) ligatureSet.elementAt(0);
+        Vector aLigatureSet = (Vector) ligatureSets.elementAt(ligatureSetIndex);
+        LigatureEntry firstEntry = (LigatureEntry) aLigatureSet.elementAt(0);
 
         return firstEntry.getComponentChar(0);
     }
@@ -110,8 +110,8 @@ public class LigatureTreeWalker extends TreeWalker implements LookupSubtable
         for (int set = 0; set < ligatureSetCount; set += 1) {
             System.out.print(Utility.hex(firstComponentChar(set), 6) + ": ");
             
-            Vector ligatureSet = (Vector) ligatureSets.elementAt(set);
-            int ligatureCount = ligatureSet.size();
+            Vector aLigatureSet = (Vector) ligatureSets.elementAt(set);
+            int ligatureCount = aLigatureSet.size();
             int ligatureSetAddress = writer.getOutputIndex();
             
             System.out.println(ligatureCount + " ligatures.");
@@ -125,14 +125,14 @@ public class LigatureTreeWalker extends TreeWalker implements LookupSubtable
             }
             
             for (int lig = 0; lig < ligatureCount; lig += 1) {
-                LigatureEntry entry = (LigatureEntry) ligatureSet.elementAt(lig);
-                int componentCount = entry.getComponentCount();
+                LigatureEntry entry = (LigatureEntry) aLigatureSet.elementAt(lig);
+                int compCount = entry.getComponentCount();
                 
                 writer.fixOffset(ligatureTableOffset++, ligatureSetAddress);
                 writer.writeData(entry.getLigature());
-                writer.writeData(componentCount);
+                writer.writeData(compCount);
                 
-                for (int comp = 1; comp < componentCount; comp += 1) {
+                for (int comp = 1; comp < compCount; comp += 1) {
                     writer.writeData(entry.getComponentChar(comp));
                 }
             }
