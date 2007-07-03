@@ -103,6 +103,13 @@ public class CollationServiceTest extends TestFmwk {
             // coverage after return to default 
             ULocale[] locales = Collator.getAvailableULocales();
     
+            for (int i = 0; i < locales.length; ++i) {
+                if (locales[i].equals(fu_FU)) {
+                    errln("new locale fu_FU not reported as supported locale");
+                    break;
+                }
+            }
+
             Collator ncol = Collator.getInstance(ULocale.US);
             if (!ncol.getLocale(ULocale.VALID_LOCALE).equals(ULocale.US)) {
                 errln("Collation from US is really " + ncol.getLocale(ULocale.VALID_LOCALE));

@@ -3036,7 +3036,7 @@ public class TestCharset extends TestFmwk {
         CharsetProvider provider = new CharsetProviderICU();
         Charset cs = provider.charsetForName("UTF-32LE");        
         CharsetEncoder encoder = cs.newEncoder();
-        CharsetDecoder decoder = cs.newDecoder();
+        //CharsetDecoder decoder = cs.newDecoder();
         
         CharBuffer us = CharBuffer.allocate(0x10);
         ByteBuffer bs = ByteBuffer.allocate(0x10);
@@ -3155,7 +3155,7 @@ public class TestCharset extends TestFmwk {
         CharsetProvider provider = new CharsetProviderICU();
         Charset cs = provider.charsetForName("UTF-16LE");        
         CharsetEncoder encoder = cs.newEncoder();
-        CharsetDecoder decoder = cs.newDecoder();
+        //CharsetDecoder decoder = cs.newDecoder();
         
         // Test for malform and change fromUChar32 for next call
         char u_pts1[] = {
