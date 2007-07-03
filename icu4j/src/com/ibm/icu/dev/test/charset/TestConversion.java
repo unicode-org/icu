@@ -144,10 +144,9 @@ public class TestConversion extends ModuleTest {
         logln("...............................................");
 
         //         ----for debugging only
-        // TODO: ***Currently skipping test for charset ibm-1390, gb18030,
-        // ibm-930 due to external mapping need to be fix
+        // TODO: ***Currently skipping test for charset ibm-1390,
+        // ibm-970 due to external mapping need to be fix
         if ((cc.charset.equalsIgnoreCase("ibm-1390")
-                || cc.charset.equalsIgnoreCase("gb18030")
                 || cc.charset.equalsIgnoreCase("ibm-970")) && skipIfBeforeICU(3,7,2)) {
             logln("Skipping test:("
                     + cc.charset
