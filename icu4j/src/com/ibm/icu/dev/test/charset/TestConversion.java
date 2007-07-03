@@ -1017,9 +1017,6 @@ public class TestConversion extends ModuleTest {
                 logln("Ticket#5765: output length does not match expected for charset: "+cc.charset+ " [" + cc.caseNr + "]");
             } else {
                 errln("Test failed: output length does not match expected for charset: "+cc.charset+ " [" + cc.caseNr + "]");
-//                        "Input:       " + toHexString(cc.unicode) + "\n" + 
-//                        "Output:      " + toHexString(target) + "\n" + 
-//                        "Expected:    " + toHexString(source) + "\n");
             }
             logln("[" + cc.caseNr + "]:" + cc.charset);
             logln("Input:       " + printchars(CharBuffer.wrap(cc.unicode), cc.unicode.length()));
