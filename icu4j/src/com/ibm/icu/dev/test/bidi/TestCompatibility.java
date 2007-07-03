@@ -1,5 +1,4 @@
 //##header
-//#ifndef FOUNDATION
 /*
 *******************************************************************************
 *   Copyright (C) 2007, International Business Machines
@@ -9,7 +8,9 @@
 
 package com.ibm.icu.dev.test.bidi;
 
+//#ifndef FOUNDATION
 import com.ibm.icu.text.Bidi;
+//#endif
 
 /**
  * Regression test for java.text.Bidi compatibility
@@ -19,6 +20,7 @@ import com.ibm.icu.text.Bidi;
 
 public class TestCompatibility extends BidiTest {
 
+//#ifndef FOUNDATION
     void compareBidi(Bidi bidi, java.text.Bidi jbidi)
     {
         byte paraLevel = bidi.getParaLevel();
@@ -130,10 +132,12 @@ public class TestCompatibility extends BidiTest {
         }
          */
     }
+//#endif
 
     public void testCompatibility()
     {
         logln("\nEntering TestCompatibility\n");
+//#ifndef FOUNDATION
         /* check constant field values */
         int val;
         val = Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT;
@@ -204,6 +208,7 @@ public class TestCompatibility extends BidiTest {
                   "\n      bidi: " + strbidi +
                   "\n     jbidi: " + strjbidi);
         }
+//#endif
 
         logln("\nExiting TestCompatibility\n");
     }
@@ -217,4 +222,3 @@ public class TestCompatibility extends BidiTest {
         }
     }
 }
-//#endif
