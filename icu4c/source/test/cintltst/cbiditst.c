@@ -29,10 +29,10 @@
 /* prototypes ---------------------------------------------------------------*/
 
 static void
-charFromDirPropTest(void);
+testCharFromDirProp(void);
 
 static void
-doBiDiTest(void);
+testBidi(void);
 
 static void
 doTests(UBiDi *pBiDi, UBiDi *pLine, UBool countRunsFirst);
@@ -41,19 +41,19 @@ static void
 doTest(UBiDi *pBiDi, int testNumber, const BiDiTestData *test, int32_t lineStart, UBool countRunsFirst);
 
 static void
-testReordering(UBiDi *pBiDi, int testNumber);
+_testReordering(UBiDi *pBiDi, int testNumber);
 
 static void
-doInverseBiDiTest(void);
+testInverseBidi(void);
 
 static void
-testManyInverseBiDi(UBiDi *pBiDi, UBiDiLevel direction);
+_testManyInverseBidi(UBiDi *pBiDi, UBiDiLevel direction);
 
 static void
-testInverseBiDi(UBiDi *pBiDi, const UChar *src, int32_t srcLength, UBiDiLevel direction, UErrorCode *pErrorCode);
+_testInverseBidi(UBiDi *pBiDi, const UChar *src, int32_t srcLength, UBiDiLevel direction, UErrorCode *pErrorCode);
 
 static void
-testWriteReverse(void);
+_testWriteReverse(void);
 
 static void
 doArabicShapingTest(void);
@@ -70,17 +70,17 @@ doLOGICALArabicDeShapingTest(void);
 static void
 doArabicShapingTestForBug5421(void);
 
-static void TestReorder(void);
+static void testReorder(void);
 
-static void TestFailureRecovery(void);
+static void testFailureRecovery(void);
 
-static void TestMultipleParagraphs(void);
+static void testMultipleParagraphs(void);
 
 /* new BIDI API */
-static void doReorderingModeBidiTest(void);
-static void doReorderRunsTest(void);
-static void doBidiStreamingTest(void);
-static void doBidiClassOverrideTest(void);
+static void testReorderingMode(void);
+static void testReorderRunsOnly(void);
+static void testStreaming(void);
+static void testClassOverride(void);
 static const char* inverseBasic(UBiDi *pBiDi, const UChar *src, int32_t srcLen,
                                 uint32_t option, UBiDiLevel level, char *result);
 static UBool assertRoundTrip(UBiDi *pBiDi, int32_t tc, int32_t outIndex,
@@ -114,16 +114,16 @@ void addComplexTest(TestNode** root);
 
 void
 addComplexTest(TestNode** root) {
-    addTest(root, charFromDirPropTest, "complex/bidi/charFromDirPropTest");
-    addTest(root, doBiDiTest, "complex/bidi/BiDiTest");
-    addTest(root, doInverseBiDiTest, "complex/bidi/inverse");
-    addTest(root, TestReorder,"complex/bidi/TestReorder");
-    addTest(root, TestFailureRecovery,"complex/bidi/TestFailureRecovery");
-    addTest(root, TestMultipleParagraphs,"complex/bidi/multipleParagraphs");
-    addTest(root, doReorderingModeBidiTest, "complex/bidi/TestReorderingMode");
-    addTest(root, doReorderRunsTest, "complex/bidi/TestReorderRunsOnly");
-    addTest(root, doBidiStreamingTest, "complex/bidi/TestStreamingMode");
-    addTest(root, doBidiClassOverrideTest, "complex/bidi/TestClassOverride");
+    addTest(root, testCharFromDirProp, "complex/bidi/TestCharFromDirProp");
+    addTest(root, testBidi, "complex/bidi/TestBidi");
+    addTest(root, testInverseBidi, "complex/bidi/TestInverse");
+    addTest(root, testReorder,"complex/bidi/TestReorder");
+    addTest(root, testFailureRecovery,"complex/bidi/TestFailureRecovery");
+    addTest(root, testMultipleParagraphs,"complex/bidi/TestMultipleParagraphs");
+    addTest(root, testReorderingMode, "complex/bidi/TestReorderingMode");
+    addTest(root, testReorderRunsOnly, "complex/bidi/TestReorderRunsOnly");
+    addTest(root, testStreaming, "complex/bidi/TestStreaming");
+    addTest(root, testClassOverride, "complex/bidi/TestClassOverride");
 
     addTest(root, doArabicShapingTest, "complex/arabic-shaping/ArabicShapingTest");
     addTest(root, doLamAlefSpecialVLTRArabicShapingTest, "complex/arabic-shaping/lamalef");
@@ -134,7 +134,7 @@ addComplexTest(TestNode** root) {
 
 /* verify that the exemplar characters have the expected bidi classes */
 static void
-charFromDirPropTest(void) {
+testCharFromDirProp(void) {
     int32_t i;
 
     initCharFromDirProps();
@@ -148,7 +148,7 @@ charFromDirPropTest(void) {
 }
 
 static void
-doBiDiTest() {
+testBidi() {
     UBiDi *pBiDi, *pLine=NULL;
     UErrorCode errorCode=U_ZERO_ERROR;
 
@@ -390,7 +390,7 @@ static char * formatLevels(UBiDi *bidi, char *buffer) {
     return buffer;
 }
 
-static void TestReorder(){
+static void testReorder(){
     static const char* const logicalOrder[] ={
             "del(KC)add(K.C.&)",
             "del(QDVT) add(BVDL)",
@@ -663,7 +663,7 @@ doTest(UBiDi *pBiDi, int testNumber, const BiDiTestData *test, int32_t lineStart
         log_verbose("Calling ubidi_getLogicalMap() first.\n");
     }
 
-    testReordering(pBiDi, testNumber);
+    _testReordering(pBiDi, testNumber);
 
     for(i=0; i<len; ++i) {
         log_verbose("%3d %3d %.*s%-3s @%d\n",
@@ -744,7 +744,7 @@ doTest(UBiDi *pBiDi, int testNumber, const BiDiTestData *test, int32_t lineStart
 }
 
 static void
-testReordering(UBiDi *pBiDi, int testNumber) {
+_testReordering(UBiDi *pBiDi, int testNumber) {
     int32_t
         logicalMap1[MAXLEN], logicalMap2[MAXLEN], logicalMap3[MAXLEN],
         visualMap1[MAXLEN], visualMap2[MAXLEN], visualMap3[MAXLEN], visualMap4[MAXLEN];
@@ -886,7 +886,7 @@ testReordering(UBiDi *pBiDi, int testNumber) {
     }
 }
 
-static void TestFailureRecovery(void) {
+static void testFailureRecovery(void) {
     UErrorCode status;
 
     status = U_FILE_ACCESS_ERROR;
@@ -906,7 +906,7 @@ static void TestFailureRecovery(void) {
     }
 }
 
-static void TestMultipleParagraphs(void) {
+static void testMultipleParagraphs(void) {
     static const char* const text = "__ABC\\u001c"          /* Para #0 offset 0 */
                                     "__\\u05d0DE\\u001c"    /*       1        6 */
                                     "__123\\u001c"          /*       2       12 */
@@ -1186,7 +1186,7 @@ static int countRoundtrips=0, countNonRoundtrips=0;
 #define STRING_TEST_CASE(s) { (s), LENGTHOF(s) }
 
 static void
-doInverseBiDiTest() {
+testInverseBidi() {
     static const UChar
         string0[]={ 0x6c, 0x61, 0x28, 0x74, 0x69, 0x6e, 0x20, 0x5d0, 0x5d1, 0x29, 0x5d2, 0x5d3 },
         string1[]={ 0x6c, 0x61, 0x74, 0x20, 0x5d0, 0x5d1, 0x5d2, 0x20, 0x31, 0x32, 0x33 },
@@ -1215,26 +1215,26 @@ doInverseBiDiTest() {
         return;
     }
 
-    log_verbose("inverse BiDi: testInverseBiDi(L) with %u test cases ---\n", LENGTHOF(testCases));
+    log_verbose("inverse BiDi: testInverseBidi(L) with %u test cases ---\n", LENGTHOF(testCases));
      for(i=0; i<LENGTHOF(testCases); ++i) {
         errorCode=U_ZERO_ERROR;
-        testInverseBiDi(pBiDi, testCases[i].s, testCases[i].length, 0, &errorCode);
+        _testInverseBidi(pBiDi, testCases[i].s, testCases[i].length, 0, &errorCode);
     }
 
-    log_verbose("inverse BiDi: testInverseBiDi(R) with %u test cases ---\n", LENGTHOF(testCases));
+    log_verbose("inverse BiDi: testInverseBidi(R) with %u test cases ---\n", LENGTHOF(testCases));
     for(i=0; i<LENGTHOF(testCases); ++i) {
         errorCode=U_ZERO_ERROR;
-        testInverseBiDi(pBiDi, testCases[i].s, testCases[i].length, 1, &errorCode);
+        _testInverseBidi(pBiDi, testCases[i].s, testCases[i].length, 1, &errorCode);
     }
 
-    testManyInverseBiDi(pBiDi, 0);
-    testManyInverseBiDi(pBiDi, 1);
+    _testManyInverseBidi(pBiDi, 0);
+    _testManyInverseBidi(pBiDi, 1);
 
     ubidi_close(pBiDi);
 
     log_verbose("inverse BiDi: rountrips: %5u\nnon-roundtrips: %5u\n", countRoundtrips, countNonRoundtrips);
 
-    testWriteReverse();
+    _testWriteReverse();
 }
 
 #define COUNT_REPEAT_SEGMENTS 6
@@ -1249,12 +1249,12 @@ static const UChar repeatSegments[COUNT_REPEAT_SEGMENTS][2]={
 };
 
 static void
-testManyInverseBiDi(UBiDi *pBiDi, UBiDiLevel direction) {
+_testManyInverseBidi(UBiDi *pBiDi, UBiDiLevel direction) {
     UChar text[8]={ 0, 0, 0x20, 0, 0, 0x20, 0, 0 };
     int i, j, k;
     UErrorCode errorCode;
 
-    log_verbose("inverse BiDi: testManyInverseBiDi(%c) - test permutations of text snippets ---\n", direction==0 ? 'L' : 'R');
+    log_verbose("inverse Bidi: testManyInverseBidi(%c) - test permutations of text snippets ---\n", direction==0 ? 'L' : 'R');
     for(i=0; i<COUNT_REPEAT_SEGMENTS; ++i) {
         text[0]=repeatSegments[i][0];
         text[1]=repeatSegments[i][1];
@@ -1266,21 +1266,21 @@ testManyInverseBiDi(UBiDi *pBiDi, UBiDiLevel direction) {
                 text[7]=repeatSegments[k][1];
 
                 errorCode=U_ZERO_ERROR;
-                log_verbose("inverse BiDi: testManyInverseBiDi()[%u %u %u]\n", i, j, k);
-                testInverseBiDi(pBiDi, text, 8, direction, &errorCode);
+                log_verbose("inverse Bidi: testManyInverseBidi()[%u %u %u]\n", i, j, k);
+                _testInverseBidi(pBiDi, text, 8, direction, &errorCode);
             }
         }
     }
 }
 
 static void
-testInverseBiDi(UBiDi *pBiDi, const UChar *src, int32_t srcLength,
+_testInverseBidi(UBiDi *pBiDi, const UChar *src, int32_t srcLength,
                 UBiDiLevel direction, UErrorCode *pErrorCode) {
     UChar visualLTR[MAXLEN], logicalDest[MAXLEN], visualDest[MAXLEN];
     int32_t ltrLength, logicalLength, visualLength;
 
     if(direction==0) {
-        log_verbose("inverse BiDi: testInverseBiDi(L)\n");
+        log_verbose("inverse Bidi: testInverseBidi(L)\n");
 
         /* convert visual to logical */
         ubidi_setInverse(pBiDi, TRUE);
@@ -1306,7 +1306,7 @@ testInverseBiDi(UBiDi *pBiDi, const UChar *src, int32_t srcLength,
         visualLength=ubidi_writeReordered(pBiDi, visualDest, LENGTHOF(visualDest),
                                           UBIDI_DO_MIRRORING|UBIDI_REMOVE_BIDI_CONTROLS, pErrorCode);
     } else {
-        log_verbose("inverse BiDi: testInverseBiDi(R)\n");
+        log_verbose("inverse Bidi: testInverseBidi(R)\n");
 
         /* reverse visual from RTL to LTR */
         ltrLength=ubidi_writeReverse(src, srcLength, visualLTR, LENGTHOF(visualLTR), 0, pErrorCode);
@@ -1352,7 +1352,7 @@ testInverseBiDi(UBiDi *pBiDi, const UChar *src, int32_t srcLength,
 }
 
 static void
-testWriteReverse() {
+_testWriteReverse() {
     /* U+064e and U+0650 are combining marks (Mn) */
     static const UChar forward[]={
         0x200f, 0x627, 0x64e, 0x650, 0x20, 0x28, 0x31, 0x29
@@ -2507,7 +2507,7 @@ checkResultLength(UBiDi *pBiDi, const char *srcChars, const char *destChars,
 }
 
 static void
-doReorderRunsTest(void) {
+testReorderRunsOnly(void) {
     static const struct {
         const char* textIn;
         const char* textOut[2][2];
@@ -2608,7 +2608,7 @@ doReorderRunsTest(void) {
 }
 
 static void
-doReorderingModeBidiTest() {
+testReorderingMode() {
 
     UChar src[MAXLEN], dest[MAXLEN];
     char destChars[MAXLEN];
@@ -2738,7 +2738,7 @@ static const char* inverseBasic(UBiDi *pBiDi, const UChar *src, int32_t srcLen,
 #define NULL_CHAR '\0'
 
 static void
-doBidiStreamingTest() {
+testStreaming() {
 #define MAXPORTIONS 10
 
     static const struct {
@@ -2886,7 +2886,7 @@ static void verifyCallbackParams(UBiDiClassCallback* fn, const void* context,
     }
 }
 
-static void doBidiClassOverrideTest(void) {
+static void testClassOverride(void) {
     static const char* const textSrc  = "JIH.>12->a \\u05D0\\u05D1 6 ABC78";
     static const char* const textResult = "12<.HIJ->a 78CBA 6 \\u05D1\\u05D0";
 
