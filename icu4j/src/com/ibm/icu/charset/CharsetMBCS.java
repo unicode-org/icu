@@ -29,9 +29,9 @@ import com.ibm.icu.text.UTF16;
 
 class CharsetMBCS extends CharsetICU {
 
-    protected byte[]                fromUSubstitution = null;
-    protected UConverterSharedData  sharedData = null;
-    static final int MAX_VERSION_LENGTH=4;
+    private byte[]                fromUSubstitution = null;
+    private UConverterSharedData  sharedData = null;
+    private static final int MAX_VERSION_LENGTH=4;
     /**
      * Fallbacks to Unicode are stored outside the normal state table and code point structures
      * in a vector of items of this type. They are sorted by offset.
@@ -152,7 +152,7 @@ class CharsetMBCS extends CharsetICU {
         }
     }
 
-    protected UConverterSharedData loadConverter(LoadArguments args) throws InvalidFormatException
+    private UConverterSharedData loadConverter(LoadArguments args) throws InvalidFormatException
     {        
         // Read converter data from file        
         UConverterStaticData staticData = new UConverterStaticData();
@@ -495,26 +495,26 @@ class CharsetMBCS extends CharsetICU {
      * These per-converter types determine the storage method in stage 3 of the lookup table,
      * mostly how many bytes are stored per entry.
      */
-    protected static final int MBCS_OUTPUT_1 = 0;          /* 0 */
-    protected static final int MBCS_OUTPUT_2 = MBCS_OUTPUT_1 + 1;          /* 1 */
-    protected static final int MBCS_OUTPUT_3 = MBCS_OUTPUT_2 + 1;          /* 2 */
-    protected static final int MBCS_OUTPUT_4 = MBCS_OUTPUT_3 + 1;          /* 3 */
-    protected static final int MBCS_OUTPUT_3_EUC=8;    /* 8 */
-    protected static final int MBCS_OUTPUT_4_EUC = MBCS_OUTPUT_3_EUC + 1;      /* 9 */
-    protected static final int MBCS_OUTPUT_2_SISO=12;  /* c */
-    protected static final int MBCS_OUTPUT_2_HZ = MBCS_OUTPUT_2_SISO + 1;       /* d */
-    protected static final int MBCS_OUTPUT_EXT_ONLY = MBCS_OUTPUT_2_HZ + 1;   /* e */
-    protected static final int MBCS_OUTPUT_COUNT = MBCS_OUTPUT_EXT_ONLY + 1;
-    protected static final int MBCS_OUTPUT_DBCS_ONLY=0xdb;  /* runtime-only type for DBCS-only handling of SISO tables */
+    private static final int MBCS_OUTPUT_1 = 0;          /* 0 */
+    private static final int MBCS_OUTPUT_2 = MBCS_OUTPUT_1 + 1;          /* 1 */
+    private static final int MBCS_OUTPUT_3 = MBCS_OUTPUT_2 + 1;          /* 2 */
+    private static final int MBCS_OUTPUT_4 = MBCS_OUTPUT_3 + 1;          /* 3 */
+    private static final int MBCS_OUTPUT_3_EUC=8;    /* 8 */
+    private static final int MBCS_OUTPUT_4_EUC = MBCS_OUTPUT_3_EUC + 1;      /* 9 */
+    private static final int MBCS_OUTPUT_2_SISO=12;  /* c */
+    private static final int MBCS_OUTPUT_2_HZ = MBCS_OUTPUT_2_SISO + 1;       /* d */
+    private static final int MBCS_OUTPUT_EXT_ONLY = MBCS_OUTPUT_2_HZ + 1;   /* e */
+    //private static final int MBCS_OUTPUT_COUNT = MBCS_OUTPUT_EXT_ONLY + 1;
+    private static final int MBCS_OUTPUT_DBCS_ONLY=0xdb;  /* runtime-only type for DBCS-only handling of SISO tables */
     
     /* GB 18030 data ------------------------------------------------------------ */
     
     /* helper macros for linear values for GB 18030 four-byte sequences */
-    protected static long LINEAR_18030(long a, long b, long c, long d) {return ((((a)*10+(b))*126L+(c))*10L+(d));}
+    private static long LINEAR_18030(long a, long b, long c, long d) {return ((((a)*10+(b))*126L+(c))*10L+(d));}
     
-    protected static long LINEAR_18030_BASE = LINEAR_18030(0x81, 0x30, 0x81, 0x30);
+    private static long LINEAR_18030_BASE = LINEAR_18030(0x81, 0x30, 0x81, 0x30);
     
-    protected static long LINEAR(long x) {return LINEAR_18030(x>>>24, (x>>>16)&0xff, (x>>>8)&0xff, x&0xff);}
+    private static long LINEAR(long x) {return LINEAR_18030(x>>>24, (x>>>16)&0xff, (x>>>8)&0xff, x&0xff);}
     
     /*
      * Some ranges of GB 18030 where both the Unicode code points and the
@@ -525,7 +525,7 @@ class CharsetMBCS extends CharsetICU {
      * Note that single surrogates are not mapped by GB 18030
      * as of the re-released mapping tables from 2000-nov-30.
      */
-    protected static final long gb18030Ranges[][] = new long[/*13*/][/*4*/]{
+    private static final long gb18030Ranges[][] = new long[/*13*/][/*4*/]{
         {0x10000L, 0x10FFFFL, LINEAR(0x90308130L), LINEAR(0xE3329A35L)},
         {0x9FA6L, 0xD7FFL, LINEAR(0x82358F33L), LINEAR(0x8336C738L)},
         {0x0452L, 0x200FL, LINEAR(0x8130D330L), LINEAR(0x8136A531L)},
@@ -542,34 +542,34 @@ class CharsetMBCS extends CharsetICU {
     };
     
     /* bit flag for UConverter.options indicating GB 18030 special handling */
-    protected static final int MBCS_OPTION_GB18030 = 0x8000;
+    private static final int MBCS_OPTION_GB18030 = 0x8000;
     
     /**
      * MBCS action codes for conversions to Unicode.
      * These values are in bits 23..20 of the state table entries.
      */
-    protected static final int MBCS_STATE_VALID_DIRECT_16 = 0;
-    protected static final int MBCS_STATE_VALID_DIRECT_20 = MBCS_STATE_VALID_DIRECT_16 + 1;
-    protected static final int MBCS_STATE_FALLBACK_DIRECT_16 = MBCS_STATE_VALID_DIRECT_20 + 1;
-    protected static final int MBCS_STATE_FALLBACK_DIRECT_20 = MBCS_STATE_FALLBACK_DIRECT_16 + 1;
-    protected static final int MBCS_STATE_VALID_16 = MBCS_STATE_FALLBACK_DIRECT_20 + 1;
-    protected static final int MBCS_STATE_VALID_16_PAIR = MBCS_STATE_VALID_16 + 1;
-    protected static final int MBCS_STATE_UNASSIGNED = MBCS_STATE_VALID_16_PAIR + 1;
-    protected static final int MBCS_STATE_ILLEGAL = MBCS_STATE_UNASSIGNED + 1;
-    protected static final int MBCS_STATE_CHANGE_ONLY = MBCS_STATE_ILLEGAL + 1;
+    private static final int MBCS_STATE_VALID_DIRECT_16 = 0;
+    private static final int MBCS_STATE_VALID_DIRECT_20 = MBCS_STATE_VALID_DIRECT_16 + 1;
+    private static final int MBCS_STATE_FALLBACK_DIRECT_16 = MBCS_STATE_VALID_DIRECT_20 + 1;
+    private static final int MBCS_STATE_FALLBACK_DIRECT_20 = MBCS_STATE_FALLBACK_DIRECT_16 + 1;
+    private static final int MBCS_STATE_VALID_16 = MBCS_STATE_FALLBACK_DIRECT_20 + 1;
+    private static final int MBCS_STATE_VALID_16_PAIR = MBCS_STATE_VALID_16 + 1;
+    private static final int MBCS_STATE_UNASSIGNED = MBCS_STATE_VALID_16_PAIR + 1;
+    private static final int MBCS_STATE_ILLEGAL = MBCS_STATE_UNASSIGNED + 1;
+    private static final int MBCS_STATE_CHANGE_ONLY = MBCS_STATE_ILLEGAL + 1;
     
     /* Methods for state table entries */
-    protected static int MBCS_ENTRY_TRANSITION(int state, int offset) {return (state<<24L)|offset; }
-    protected static int MBCS_ENTRY_FINAL(int state, int action, int value) {return (int)(0x80000000|((int)(state)<<24L)|((action)<<20L)|(value));}
-    protected static boolean MBCS_ENTRY_IS_TRANSITION(int entry) {return (entry)>=0; }
-    protected static boolean MBCS_ENTRY_IS_FINAL(int entry) {return (entry)<0;}
-    protected static int MBCS_ENTRY_TRANSITION_STATE(int entry) {return ((entry)>>>24);}
-    protected static int MBCS_ENTRY_TRANSITION_OFFSET(int entry) {return ((entry)&0xffffff);}
-    protected static int MBCS_ENTRY_FINAL_STATE(int entry) {return ((entry)>>>24)&0x7f;}
-    protected static boolean MBCS_ENTRY_FINAL_IS_VALID_DIRECT_16(int entry) {return ((entry)<0x80100000);}
-    protected static int MBCS_ENTRY_FINAL_ACTION(int entry) {return ((entry)>>>20)&0xf;}
-    protected static int MBCS_ENTRY_FINAL_VALUE(int entry) {return ((entry)&0xfffff); }
-    protected static char MBCS_ENTRY_FINAL_VALUE_16(int entry) {return (char)(entry);}
+    private static int MBCS_ENTRY_TRANSITION(int state, int offset) {return (state<<24L)|offset; }
+    private static int MBCS_ENTRY_FINAL(int state, int action, int value) {return (int)(0x80000000|((int)(state)<<24L)|((action)<<20L)|(value));}
+    private static boolean MBCS_ENTRY_IS_TRANSITION(int entry) {return (entry)>=0; }
+    private static boolean MBCS_ENTRY_IS_FINAL(int entry) {return (entry)<0;}
+    private static int MBCS_ENTRY_TRANSITION_STATE(int entry) {return ((entry)>>>24);}
+    private static int MBCS_ENTRY_TRANSITION_OFFSET(int entry) {return ((entry)&0xffffff);}
+    private static int MBCS_ENTRY_FINAL_STATE(int entry) {return ((entry)>>>24)&0x7f;}
+    private static boolean MBCS_ENTRY_FINAL_IS_VALID_DIRECT_16(int entry) {return ((entry)<0x80100000);}
+    private static int MBCS_ENTRY_FINAL_ACTION(int entry) {return ((entry)>>>20)&0xf;}
+    private static int MBCS_ENTRY_FINAL_VALUE(int entry) {return ((entry)&0xfffff); }
+    private static char MBCS_ENTRY_FINAL_VALUE_16(int entry) {return (char)(entry);}
     
     /**
      * This macro version of _MBCSSingleSimpleGetNextUChar() gets a code point from a byte.
@@ -577,13 +577,13 @@ class CharsetMBCS extends CharsetICU {
      * to and from BMP code points, and it always
      * returns fallback values.
      */
-    protected static char MBCS_SINGLE_SIMPLE_GET_NEXT_BMP(UConverterMBCSTable mbcs, final int b)
+    static char MBCS_SINGLE_SIMPLE_GET_NEXT_BMP(UConverterMBCSTable mbcs, final int b)
     {
         return MBCS_ENTRY_FINAL_VALUE_16(mbcs.stateTable[0][b & UConverterConstants.UNSIGNED_BYTE_MASK]);
     }
     
     /* single-byte fromUnicode: get the 16-bit result word */
-    protected static char MBCS_SINGLE_RESULT_FROM_U(char[] table, byte[] results, int c) 
+    private static char MBCS_SINGLE_RESULT_FROM_U(char[] table, byte[] results, int c) 
     {
         int i1 = table[c>>>10] +((c>>>4)&0x3f);
         int i = 2* (table[i1] +(c&0xf)); // used as index into byte[] array treated as char[] array
@@ -591,21 +591,21 @@ class CharsetMBCS extends CharsetICU {
     }
     
     /* multi-byte fromUnicode: get the 32-bit stage 2 entry */
-    protected static int MBCS_STAGE_2_FROM_U(char[] table, int c)
+    private static int MBCS_STAGE_2_FROM_U(char[] table, int c)
     {
         int i = 2 * (table[(c)>>>10] +((c>>>4)&0x3f)); // 2x because used as index into char[] array treated as int[] array
         return ((table[i] & UConverterConstants.UNSIGNED_SHORT_MASK) <<16) | (table[i+1] & UConverterConstants.UNSIGNED_SHORT_MASK);
     }
     
-    protected static boolean MBCS_FROM_U_IS_ROUNDTRIP(int stage2Entry, int c) {return ( ((stage2Entry) & (1<< (16+((c)&0xf)) )) !=0);}
+    private static boolean MBCS_FROM_U_IS_ROUNDTRIP(int stage2Entry, int c) {return ( ((stage2Entry) & (1<< (16+((c)&0xf)) )) !=0);}
     
-    protected static char MBCS_VALUE_2_FROM_STAGE_2(byte[] bytes, int stage2Entry, int c)
+    private static char MBCS_VALUE_2_FROM_STAGE_2(byte[] bytes, int stage2Entry, int c)
     {
         int i = 2 * (16*((char)stage2Entry & UConverterConstants.UNSIGNED_SHORT_MASK)+(c&0xf));
         return (char)(((bytes[i] & UConverterConstants.UNSIGNED_BYTE_MASK) <<8) | (bytes[i+1] & UConverterConstants.UNSIGNED_BYTE_MASK));
     }
     
-    protected static int MBCS_VALUE_4_FROM_STAGE_2(byte[] bytes, int stage2Entry, int c)
+    private static int MBCS_VALUE_4_FROM_STAGE_2(byte[] bytes, int stage2Entry, int c)
     {
         int i = 4 * (16*((char)stage2Entry & UConverterConstants.UNSIGNED_SHORT_MASK)+(c&0xf));
         return ((bytes[i] & UConverterConstants.UNSIGNED_BYTE_MASK) <<24) | 
@@ -614,109 +614,109 @@ class CharsetMBCS extends CharsetICU {
             (bytes[i+3] & UConverterConstants.UNSIGNED_BYTE_MASK);
     }
     
-    protected static int MBCS_POINTER_3_FROM_STAGE_2(byte[] bytes, int stage2Entry, int c)
+    private static int MBCS_POINTER_3_FROM_STAGE_2(byte[] bytes, int stage2Entry, int c)
     {
         return ((16*((char)(stage2Entry) & UConverterConstants.UNSIGNED_SHORT_MASK)+((c)&0xf))*3);
     }
     
     //------------UConverterExt-------------------------------------------------------
     
-    protected static final int EXT_INDEXES_LENGTH = 0;            /* 0 */
+    private static final int EXT_INDEXES_LENGTH = 0;            /* 0 */
 
-    protected static final int EXT_TO_U_INDEX = EXT_INDEXES_LENGTH + 1;                /* 1 */
-    protected static final int EXT_TO_U_LENGTH = EXT_TO_U_INDEX + 1;
-    protected static final int EXT_TO_U_UCHARS_INDEX = EXT_TO_U_LENGTH + 1;
-    protected static final int EXT_TO_U_UCHARS_LENGTH = EXT_TO_U_UCHARS_INDEX + 1;
+    private static final int EXT_TO_U_INDEX = EXT_INDEXES_LENGTH + 1;                /* 1 */
+    private static final int EXT_TO_U_LENGTH = EXT_TO_U_INDEX + 1;
+    private static final int EXT_TO_U_UCHARS_INDEX = EXT_TO_U_LENGTH + 1;
+    private static final int EXT_TO_U_UCHARS_LENGTH = EXT_TO_U_UCHARS_INDEX + 1;
 
-    protected static final int EXT_FROM_U_UCHARS_INDEX = EXT_TO_U_UCHARS_LENGTH + 1;       /* 5 */
-    protected static final int EXT_FROM_U_VALUES_INDEX = EXT_FROM_U_UCHARS_INDEX + 1;
-    protected static final int EXT_FROM_U_LENGTH = EXT_FROM_U_VALUES_INDEX + 1;
-    protected static final int EXT_FROM_U_BYTES_INDEX = EXT_FROM_U_LENGTH + 1;
-    protected static final int EXT_FROM_U_BYTES_LENGTH = EXT_FROM_U_BYTES_INDEX + 1;
+    private static final int EXT_FROM_U_UCHARS_INDEX = EXT_TO_U_UCHARS_LENGTH + 1;       /* 5 */
+    private static final int EXT_FROM_U_VALUES_INDEX = EXT_FROM_U_UCHARS_INDEX + 1;
+    private static final int EXT_FROM_U_LENGTH = EXT_FROM_U_VALUES_INDEX + 1;
+    private static final int EXT_FROM_U_BYTES_INDEX = EXT_FROM_U_LENGTH + 1;
+    private static final int EXT_FROM_U_BYTES_LENGTH = EXT_FROM_U_BYTES_INDEX + 1;
 
-    protected static final int EXT_FROM_U_STAGE_12_INDEX = EXT_FROM_U_BYTES_LENGTH + 1;     /* 10 */
-    protected static final int EXT_FROM_U_STAGE_1_LENGTH = EXT_FROM_U_STAGE_12_INDEX + 1;
-    protected static final int EXT_FROM_U_STAGE_12_LENGTH = EXT_FROM_U_STAGE_1_LENGTH + 1;
-    protected static final int EXT_FROM_U_STAGE_3_INDEX = EXT_FROM_U_STAGE_12_LENGTH + 1;
-    protected static final int EXT_FROM_U_STAGE_3_LENGTH = EXT_FROM_U_STAGE_3_INDEX + 1;
-    protected static final int EXT_FROM_U_STAGE_3B_INDEX = EXT_FROM_U_STAGE_3_LENGTH + 1;
-    protected static final int EXT_FROM_U_STAGE_3B_LENGTH = EXT_FROM_U_STAGE_3B_INDEX + 1;
+    private static final int EXT_FROM_U_STAGE_12_INDEX = EXT_FROM_U_BYTES_LENGTH + 1;     /* 10 */
+    private static final int EXT_FROM_U_STAGE_1_LENGTH = EXT_FROM_U_STAGE_12_INDEX + 1;
+    private static final int EXT_FROM_U_STAGE_12_LENGTH = EXT_FROM_U_STAGE_1_LENGTH + 1;
+    private static final int EXT_FROM_U_STAGE_3_INDEX = EXT_FROM_U_STAGE_12_LENGTH + 1;
+    private static final int EXT_FROM_U_STAGE_3_LENGTH = EXT_FROM_U_STAGE_3_INDEX + 1;
+    private static final int EXT_FROM_U_STAGE_3B_INDEX = EXT_FROM_U_STAGE_3_LENGTH + 1;
+    private static final int EXT_FROM_U_STAGE_3B_LENGTH = EXT_FROM_U_STAGE_3B_INDEX + 1;
 
-    protected static final int EXT_COUNT_BYTES = EXT_FROM_U_STAGE_3B_LENGTH + 1;               /* 17 */
-    protected static final int EXT_COUNT_UCHARS = EXT_COUNT_BYTES + 1;
-    protected static final int EXT_FLAGS = EXT_COUNT_UCHARS + 1;
+    private static final int EXT_COUNT_BYTES = EXT_FROM_U_STAGE_3B_LENGTH + 1;               /* 17 */
+    //private static final int EXT_COUNT_UCHARS = EXT_COUNT_BYTES + 1;
+    //private static final int EXT_FLAGS = EXT_COUNT_UCHARS + 1;
 
-    protected static final int EXT_RESERVED_INDEX = EXT_FLAGS + 1;            /* 20, moves with additional indexes */
+    //private static final int EXT_RESERVED_INDEX = EXT_FLAGS + 1;            /* 20, moves with additional indexes */
 
-    protected static final int EXT_SIZE=31;
-    protected static final int EXT_INDEXES_MIN_LENGTH=32;
+    //private static final int EXT_SIZE=31;
+    //private static final int EXT_INDEXES_MIN_LENGTH=32;
     
     /* toUnicode helpers -------------------------------------------------------- */
     
-    protected static final int TO_U_BYTE_SHIFT = 24;
-    protected static final int TO_U_VALUE_MASK = 0xffffff;
-    protected static final int TO_U_MIN_CODE_POINT = 0x1f0000;
-    protected static final int TO_U_MAX_CODE_POINT = 0x2fffff;
-    protected static final int TO_U_ROUNDTRIP_FLAG = (1<<23);
-    protected static final int TO_U_INDEX_MASK = 0x3ffff;
-    protected static final int TO_U_LENGTH_SHIFT = 18;
-    protected static final int TO_U_LENGTH_OFFSET = 12;
+    private static final int TO_U_BYTE_SHIFT = 24;
+    private static final int TO_U_VALUE_MASK = 0xffffff;
+    private static final int TO_U_MIN_CODE_POINT = 0x1f0000;
+    private static final int TO_U_MAX_CODE_POINT = 0x2fffff;
+    private static final int TO_U_ROUNDTRIP_FLAG = (1<<23);
+    private static final int TO_U_INDEX_MASK = 0x3ffff;
+    private static final int TO_U_LENGTH_SHIFT = 18;
+    private static final int TO_U_LENGTH_OFFSET = 12;
     
     /* maximum number of indexed UChars */
-    protected static final int MAX_UCHARS = 19;
+    private static final int MAX_UCHARS = 19;
     
-    protected static int TO_U_GET_BYTE(int word)
+    private static int TO_U_GET_BYTE(int word)
     {
         return word>>>TO_U_BYTE_SHIFT;
     }
     
-    protected static int TO_U_GET_VALUE(int word)
+    private static int TO_U_GET_VALUE(int word)
     {
         return word&TO_U_VALUE_MASK;
     }
     
-    protected static boolean TO_U_IS_ROUNDTRIP(int value)
+    private static boolean TO_U_IS_ROUNDTRIP(int value)
     {
         return (value&TO_U_ROUNDTRIP_FLAG)!=0;
     }
     
-    protected static boolean TO_U_IS_PARTIAL(int value)
+    private static boolean TO_U_IS_PARTIAL(int value)
     {
         return (value&UConverterConstants.UNSIGNED_INT_MASK)<TO_U_MIN_CODE_POINT;
     }
     
-    protected static int TO_U_GET_PARTIAL_INDEX(int value)
+    private static int TO_U_GET_PARTIAL_INDEX(int value)
     {
         return value;
     }
     
-    protected static int TO_U_MASK_ROUNDTRIP(int value)
+    private static int TO_U_MASK_ROUNDTRIP(int value)
     {
         return value&~TO_U_ROUNDTRIP_FLAG;
     }
     
-    protected static int TO_U_MAKE_WORD(byte b, int value)
+    private static int TO_U_MAKE_WORD(byte b, int value)
     {
         return ((b&UConverterConstants.UNSIGNED_BYTE_MASK)<<TO_U_BYTE_SHIFT)|value;
     }
     
     /* use after masking off the roundtrip flag */
-    protected static boolean TO_U_IS_CODE_POINT(int value)
+    private static boolean TO_U_IS_CODE_POINT(int value)
     {
         return (value&UConverterConstants.UNSIGNED_INT_MASK)<=TO_U_MAX_CODE_POINT;
     }
     
-    protected static int TO_U_GET_CODE_POINT(int value)
+    private static int TO_U_GET_CODE_POINT(int value)
     {
         return (int)((value&UConverterConstants.UNSIGNED_INT_MASK)-TO_U_MIN_CODE_POINT);
     }
     
-    protected static int TO_U_GET_INDEX(int value)
+    private static int TO_U_GET_INDEX(int value)
     {
         return value&TO_U_INDEX_MASK;
     }
     
-    protected static int TO_U_GET_LENGTH(int value)
+    private static int TO_U_GET_LENGTH(int value)
     {
         return (value>>>TO_U_LENGTH_SHIFT)-TO_U_LENGTH_OFFSET;
     }
@@ -724,43 +724,43 @@ class CharsetMBCS extends CharsetICU {
     /* fromUnicode helpers ------------------------------------------------------ */
     
     /* most trie constants are shared with ucnvmbcs.h */
-    protected static final int STAGE_2_LEFT_SHIFT = 2;
-    protected static final int STAGE_3_GRANULARITY = 4;
+    private static final int STAGE_2_LEFT_SHIFT = 2;
+    //private static final int STAGE_3_GRANULARITY = 4;
     
     /* trie access, returns the stage 3 value=index to stage 3b; s1Index=c>>10 */
-    protected static int FROM_U(CharBuffer stage12, CharBuffer stage3, int s1Index, int c)
+    private static int FROM_U(CharBuffer stage12, CharBuffer stage3, int s1Index, int c)
     {
         return stage3.get(stage3.position() + ((int)stage12.get( stage12.position() + (stage12.get(stage12.position()+s1Index) +((c>>>4)&0x3f)) )<<STAGE_2_LEFT_SHIFT) +(c&0xf) );
     }
     
-    protected static final int FROM_U_LENGTH_SHIFT = 24;
-    protected static final int FROM_U_ROUNDTRIP_FLAG = 1<<31;
-    protected static final int FROM_U_RESERVED_MASK = 0x60000000;
-    protected static final int FROM_U_DATA_MASK = 0xffffff;
+    private static final int FROM_U_LENGTH_SHIFT = 24;
+    private static final int FROM_U_ROUNDTRIP_FLAG = 1<<31;
+    private static final int FROM_U_RESERVED_MASK = 0x60000000;
+    private static final int FROM_U_DATA_MASK = 0xffffff;
     
     /* special value for "no mapping" to <subchar1> (impossible roundtrip to 0 bytes, value 01) */
-    protected static final int FROM_U_SUBCHAR1 = 0x80000001;
+    private static final int FROM_U_SUBCHAR1 = 0x80000001;
     
     /* at most 3 bytes in the lower part of the value */
-    protected static final int FROM_U_MAX_DIRECT_LENGTH = 3;
+    private static final int FROM_U_MAX_DIRECT_LENGTH = 3;
     
     /* maximum number of indexed bytes */
-    protected static final int MAX_BYTES = 0x1f;
+    private static final int MAX_BYTES = 0x1f;
     
-    protected static boolean FROM_U_IS_PARTIAL(int value) {return (value>>>FROM_U_LENGTH_SHIFT)==0;}
-    protected static int FROM_U_GET_PARTIAL_INDEX(int value) {return value;}
+    private static boolean FROM_U_IS_PARTIAL(int value) {return (value>>>FROM_U_LENGTH_SHIFT)==0;}
+    private static int FROM_U_GET_PARTIAL_INDEX(int value) {return value;}
     
-    protected static boolean FROM_U_IS_ROUNDTRIP(int value) {return (value&FROM_U_ROUNDTRIP_FLAG)!=0;}
-    protected static int FROM_U_MASK_ROUNDTRIP(int value) {return value&~FROM_U_ROUNDTRIP_FLAG;}
+    private static boolean FROM_U_IS_ROUNDTRIP(int value) {return (value&FROM_U_ROUNDTRIP_FLAG)!=0;}
+    private static int FROM_U_MASK_ROUNDTRIP(int value) {return value&~FROM_U_ROUNDTRIP_FLAG;}
     
     /* use after masking off the roundtrip flag */
-    protected static int FROM_U_GET_LENGTH(int value) {return (value>>>FROM_U_LENGTH_SHIFT)&MAX_BYTES;}
+    private static int FROM_U_GET_LENGTH(int value) {return (value>>>FROM_U_LENGTH_SHIFT)&MAX_BYTES;}
     
     /* get bytes or bytes index */
-    protected static int FROM_U_GET_DATA(int value) {return value&FROM_U_DATA_MASK;}
+    private static int FROM_U_GET_DATA(int value) {return value&FROM_U_DATA_MASK;}
     
     /* get the pointer to an extension array from indexes[index] */
-    protected static Buffer ARRAY(ByteBuffer indexes, int index, Class itemType)
+    private static Buffer ARRAY(ByteBuffer indexes, int index, Class itemType)
     {
         int oldpos = indexes.position();
         Buffer b;
@@ -780,7 +780,7 @@ class CharsetMBCS extends CharsetICU {
         return b;
     }
     
-    protected static int GET_MAX_BYTES_PER_UCHAR(ByteBuffer indexes) 
+    private static int GET_MAX_BYTES_PER_UCHAR(ByteBuffer indexes) 
     {
         indexes.position(0);        
         return indexes.getInt(EXT_COUNT_BYTES)&0xff; 
@@ -789,7 +789,7 @@ class CharsetMBCS extends CharsetICU {
     /*
      * @return index of the UChar, if found; else <0
      */
-    protected static int findFromU(CharBuffer fromUSection, int length, char u)
+    private static int findFromU(CharBuffer fromUSection, int length, char u)
     {
         int i, start, limit;
     
@@ -838,7 +838,7 @@ class CharsetMBCS extends CharsetICU {
     /*
      * @return lookup value for the byte, if found; else 0
      */
-    protected static int findToU(IntBuffer toUSection, int length, short byt)
+    private static int findToU(IntBuffer toUSection, int length, short byt)
     {
         long word0, word;
         int i, start, limit;
@@ -915,7 +915,7 @@ class CharsetMBCS extends CharsetICU {
      * TRUE if not an SI/SO stateful converter,
      * or if the match length fits with the current converter state
      */
-    protected static boolean TO_U_VERIFY_SISO_MATCH(byte sisoState, int match)
+    private static boolean TO_U_VERIFY_SISO_MATCH(byte sisoState, int match)
     {
         return sisoState<0 || (sisoState==0) == (match==1);
     }
@@ -928,7 +928,7 @@ class CharsetMBCS extends CharsetICU {
      * Note: For SI/SO stateful converters getting here,
      * cnv->mode==0 is equivalent to firstLength==1.
      */
-    protected static int SISO_STATE(UConverterSharedData sharedData, int mode)
+    private static int SISO_STATE(UConverterSharedData sharedData, int mode)
     {
        return sharedData.mbcs.outputType==MBCS_OUTPUT_2_SISO ? (byte)mode :
          sharedData.mbcs.outputType==MBCS_OUTPUT_DBCS_ONLY ? 1 : -1;
@@ -1341,7 +1341,7 @@ class CharsetMBCS extends CharsetICU {
          * continue partial match with new input
          * never called for simple, single-character conversion
          */
-        protected CoderResult continueMatchToU(ByteBuffer source, CharBuffer target, IntBuffer offsets, int srcIndex, boolean flush)
+        private CoderResult continueMatchToU(ByteBuffer source, CharBuffer target, IntBuffer offsets, int srcIndex, boolean flush)
         {
             CoderResult cr = CoderResult.UNDERFLOW;
             
@@ -1423,7 +1423,7 @@ class CharsetMBCS extends CharsetICU {
          * - no trie is used
          * - the returned matchLength is not offset by 2
          */
-        protected int matchToU(byte sisoState, byte[] preArray, int preArrayBegin, int preLength, ByteBuffer source, int[] pMatchValue, boolean flush)
+        private int matchToU(byte sisoState, byte[] preArray, int preArrayBegin, int preLength, ByteBuffer source, int[] pMatchValue, boolean flush)
         {
             ByteBuffer cx = sharedData.mbcs.extIndexes;
             IntBuffer toUTable, toUSection;
@@ -1538,7 +1538,7 @@ class CharsetMBCS extends CharsetICU {
             return matchLength;
         }
         
-        protected CoderResult writeToU(int value, CharBuffer target, IntBuffer offsets, int srcIndex)
+        private CoderResult writeToU(int value, CharBuffer target, IntBuffer offsets, int srcIndex)
         {
             ByteBuffer cx = sharedData.mbcs.extIndexes;
             /* output the result */
@@ -1556,7 +1556,7 @@ class CharsetMBCS extends CharsetICU {
             }
         }
         
-        protected CoderResult toUWriteCodePoint(int c, CharBuffer target, IntBuffer offsets, int sourceIndex) 
+        private CoderResult toUWriteCodePoint(int c, CharBuffer target, IntBuffer offsets, int sourceIndex) 
         {
             CoderResult cr = CoderResult.UNDERFLOW;
             int tBeginIndex = target.position();
@@ -1597,7 +1597,7 @@ class CharsetMBCS extends CharsetICU {
          * @return if(U_FAILURE) return the length (toULength, byteIndex) for the input
          *         else return 0 after output has been written to the target
          */
-        protected int toU(int length, ByteBuffer source, CharBuffer target, IntBuffer offsets, int sourceIndex, boolean flush, CoderResult[] cr)
+        private int toU(int length, ByteBuffer source, CharBuffer target, IntBuffer offsets, int sourceIndex, boolean flush, CoderResult[] cr)
         {
             //ByteBuffer cx;
         
@@ -1638,7 +1638,7 @@ class CharsetMBCS extends CharsetICU {
         /*
          * target<targetLimit; set error code for overflow
          */
-        protected boolean initialMatchToU(int firstLength, ByteBuffer source, CharBuffer target, IntBuffer offsets, int srcIndex, boolean flush, CoderResult[] cr)
+        private boolean initialMatchToU(int firstLength, ByteBuffer source, CharBuffer target, IntBuffer offsets, int srcIndex, boolean flush, CoderResult[] cr)
         {
             int[] value = new int[1];
             int match = 0;
@@ -1688,7 +1688,7 @@ class CharsetMBCS extends CharsetICU {
          * In addition to single-byte optimizations, the offset calculations
          * become much easier.
          */
-        protected CoderResult cnvMBCSSingleToBMPWithOffsets(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush)
+        private CoderResult cnvMBCSSingleToBMPWithOffsets(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush)
         {
             CoderResult[] cr = {CoderResult.UNDERFLOW};
             
@@ -1821,7 +1821,7 @@ class CharsetMBCS extends CharsetICU {
         }
        
         /* This version of cnvMBCSToUnicodeWithOffsets() is optimized for single-byte, single-state codepages. */
-        protected CoderResult cnvMBCSSingleToUnicodeWithOffsets(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush)
+        private CoderResult cnvMBCSSingleToUnicodeWithOffsets(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush)
         {
             CoderResult[] cr = {CoderResult.UNDERFLOW};
             
@@ -1962,7 +1962,7 @@ class CharsetMBCS extends CharsetICU {
             return cr[0];
         }
 
-        protected int getFallback(UConverterMBCSTable mbcsTable, int offset) 
+        private int getFallback(UConverterMBCSTable mbcsTable, int offset) 
         {
             MBCSToUFallback[] toUFallbacks;
             int i, start, limit;
@@ -2512,7 +2512,7 @@ class CharsetMBCS extends CharsetICU {
          * continue partial match with new input, requires cnv->preFromUFirstCP>=0
          * never called for simple, single-character conversion
          */
-        protected CoderResult continueMatchFromU(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush, int srcIndex)
+        private CoderResult continueMatchFromU(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush, int srcIndex)
         {
             CoderResult cr = CoderResult.UNDERFLOW;
             int[] value = new int[1];
@@ -2611,7 +2611,7 @@ class CharsetMBCS extends CharsetICU {
          *         further code units matched
          */
         //static int32_t ucnv_extMatchFromU(const int32_t *cx, UChar32 firstCP, const UChar *pre, int32_t preLength, const UChar *src, int32_t srcLength, uint32_t *pMatchValue, UBool useFallback, UBool flush)
-        protected int matchFromU(int firstCP, char[] preArray, int preArrayBegin, int preLength, CharBuffer source, ByteBuffer target, int[] pMatchValue, boolean flush)
+        private int matchFromU(int firstCP, char[] preArray, int preArrayBegin, int preLength, CharBuffer source, ByteBuffer target, int[] pMatchValue, boolean flush)
         {
             ByteBuffer cx = sharedData.mbcs.extIndexes;
             
@@ -2756,7 +2756,7 @@ class CharsetMBCS extends CharsetICU {
             return matchLength;
         }
         
-        protected CoderResult writeFromU(int value, ByteBuffer target, IntBuffer offsets, int srcIndex)
+        private CoderResult writeFromU(int value, ByteBuffer target, IntBuffer offsets, int srcIndex)
         {
             ByteBuffer cx = sharedData.mbcs.extIndexes;            
             
@@ -2841,7 +2841,7 @@ class CharsetMBCS extends CharsetICU {
          * @return if(U_FAILURE) return the code point for cnv->fromUChar32
          *         else return 0 after output has been written to the target
          */
-        protected int fromU(int cp_, CharBuffer source, ByteBuffer target, IntBuffer offsets, int sourceIndex, boolean flush, CoderResult[] cr)
+        private int fromU(int cp_, CharBuffer source, ByteBuffer target, IntBuffer offsets, int sourceIndex, boolean flush, CoderResult[] cr)
         {
             //ByteBuffer cx;
             long cp = cp_ & UConverterConstants.UNSIGNED_INT_MASK;
@@ -2890,7 +2890,7 @@ class CharsetMBCS extends CharsetICU {
         /*
          * target<targetLimit; set error code for overflow
          */
-        protected boolean initialMatchFromU(int cp, CharBuffer source, ByteBuffer target, IntBuffer offsets, int srcIndex, boolean flush, CoderResult[] cr)
+        private boolean initialMatchFromU(int cp, CharBuffer source, ByteBuffer target, IntBuffer offsets, int srcIndex, boolean flush, CoderResult[] cr)
         {
             int[] value = new int[1];
             int match;
@@ -2941,7 +2941,7 @@ class CharsetMBCS extends CharsetICU {
          * In addition to single-byte/state optimizations, the offset calculations
          * become much easier.
          */
-        protected CoderResult cnvMBCSSingleFromBMPWithOffsets(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush){
+        private CoderResult cnvMBCSSingleFromBMPWithOffsets(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush){
             
             CoderResult[] cr = {CoderResult.UNDERFLOW};
             
@@ -3112,7 +3112,7 @@ class CharsetMBCS extends CharsetICU {
         }
 
         /* This version of ucnv_MBCSFromUnicodeWithOffsets() is optimized for single-byte codepages. */
-        protected CoderResult cnvMBCSSingleFromUnicodeWithOffsets(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush){
+        private CoderResult cnvMBCSSingleFromUnicodeWithOffsets(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush){
             
             CoderResult[] cr = {CoderResult.UNDERFLOW};
             
@@ -3254,7 +3254,7 @@ class CharsetMBCS extends CharsetICU {
         }
 
         /* This version of ucnv_MBCSFromUnicodeWithOffsets() is optimized for double-byte codepages. */
-        protected CoderResult cnvMBCSDoubleFromUnicodeWithOffsets(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush){
+        private CoderResult cnvMBCSDoubleFromUnicodeWithOffsets(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush){
             CoderResult[] cr = {CoderResult.UNDERFLOW};
             
             int sourceArrayIndex;
@@ -3437,7 +3437,7 @@ class CharsetMBCS extends CharsetICU {
             return cr[0];
         }
         
-        protected final class SideEffectsSingleBMP {
+        private final class SideEffectsSingleBMP {
             int c, sourceArrayIndex;
             SideEffectsSingleBMP(int c_, int sourceArrayIndex_)
             {
@@ -3448,7 +3448,7 @@ class CharsetMBCS extends CharsetICU {
         
         // function made out of block labeled getTrail in ucnv_MBCSSingleFromUnicodeWithOffsets
         // assumes input c is lead surrogate
-        protected final boolean getTrailSingleBMP(CharBuffer source, SideEffectsSingleBMP x, CoderResult[] cr)
+        private final boolean getTrailSingleBMP(CharBuffer source, SideEffectsSingleBMP x, CoderResult[] cr)
         {
             if(x.sourceArrayIndex<source.limit()) {
                 /* test the following code unit */
@@ -3473,7 +3473,7 @@ class CharsetMBCS extends CharsetICU {
             //return true;
         }
         
-        protected final class SideEffects {
+        private final class SideEffects {
             int c, sourceArrayIndex, sourceIndex, nextSourceIndex, prevSourceIndex, prevLength;
             SideEffects(int c_, int sourceArrayIndex_, int sourceIndex_, int nextSourceIndex_, int prevSourceIndex_, int prevLength_)
             {
@@ -3488,7 +3488,7 @@ class CharsetMBCS extends CharsetICU {
         
         // function made out of block labeled getTrail in ucnv_MBCSFromUnicodeWithOffsets
         // assumes input c is lead surrogate
-        protected final boolean getTrail(CharBuffer source, ByteBuffer target, int unicodeMask, SideEffects x, boolean flush, CoderResult[] cr)
+        private final boolean getTrail(CharBuffer source, ByteBuffer target, int unicodeMask, SideEffects x, boolean flush, CoderResult[] cr)
         {
             if(x.sourceArrayIndex<source.limit()) {
                 /* test the following code unit */
@@ -3519,7 +3519,7 @@ class CharsetMBCS extends CharsetICU {
         }
         
         // function made out of block labeled unassigned in ucnv_MBCSFromUnicodeWithOffsets
-        protected final boolean unassigned(CharBuffer source, ByteBuffer target, IntBuffer offsets, SideEffects x, boolean flush, CoderResult[] cr)
+        private final boolean unassigned(CharBuffer source, ByteBuffer target, IntBuffer offsets, SideEffects x, boolean flush, CoderResult[] cr)
         {
             /* try an extension mapping */
             int sourceBegin = x.sourceArrayIndex;
@@ -3547,7 +3547,7 @@ class CharsetMBCS extends CharsetICU {
             }
         }
         
-        protected final class SideEffectsDouble {
+        private final class SideEffectsDouble {
             int c, sourceArrayIndex, sourceIndex, nextSourceIndex;
             SideEffectsDouble(int c_, int sourceArrayIndex_, int sourceIndex_, int nextSourceIndex_)
             {
@@ -3560,7 +3560,7 @@ class CharsetMBCS extends CharsetICU {
         
         // function made out of block labeled getTrail in ucnv_MBCSDoubleFromUnicodeWithOffsets
         // assumes input c is lead surrogate
-        protected final boolean getTrailDouble(CharBuffer source, ByteBuffer target, int unicodeMask, SideEffectsDouble x, boolean flush, CoderResult[] cr)
+        private final boolean getTrailDouble(CharBuffer source, ByteBuffer target, int unicodeMask, SideEffectsDouble x, boolean flush, CoderResult[] cr)
         {
             if(x.sourceArrayIndex<source.limit()) {
                 /* test the following code unit */
@@ -3590,7 +3590,7 @@ class CharsetMBCS extends CharsetICU {
         }
 
         // function made out of block labeled unassigned in ucnv_MBCSDoubleFromUnicodeWithOffsets
-        protected final boolean unassignedDouble(CharBuffer source, ByteBuffer target, SideEffectsDouble x, boolean flush, CoderResult[] cr)
+        private final boolean unassignedDouble(CharBuffer source, ByteBuffer target, SideEffectsDouble x, boolean flush, CoderResult[] cr)
         {
             /* try an extension mapping */
             int sourceBegin = x.sourceArrayIndex;
