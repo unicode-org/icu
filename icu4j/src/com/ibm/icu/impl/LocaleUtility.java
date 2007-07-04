@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and   *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and   *
  * others. All Rights Reserved.                                               *
  ******************************************************************************
  *
@@ -67,21 +67,21 @@ public class LocaleUtility {
     }
 
 
-    /**
+    /*
      * Convenience method that calls canonicalLocaleString(String) with
      * locale.toString();
      */
-    public static String canonicalLocaleString(Locale locale) {
+    /*public static String canonicalLocaleString(Locale locale) {
         return canonicalLocaleString(locale.toString());
-    }
+    }*/
 
-    /**
+    /*
      * You'd think that Locale canonicalizes, since it munges the
      * renamed languages, but it doesn't quite.  It forces the region
      * to be upper case but doesn't do anything about the language or
      * variant.  Our canonical form is 'lower_UPPER_UPPER'.  
      */
-    public static String canonicalLocaleString(String id) {
+    /*public static String canonicalLocaleString(String id) {
         if (id != null) {
 			int x = id.indexOf("_");
 			if (x == -1) {
@@ -102,7 +102,7 @@ public class LocaleUtility {
 			}
 		}
 		return id;
-    }
+    }*/
 
     /**
 	 * Fallback from the given locale name by removing the rightmost _-delimited
