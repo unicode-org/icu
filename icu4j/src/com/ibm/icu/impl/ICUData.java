@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2005, International Business Machines Corporation and         *
+ * Copyright (C) 2004-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -79,9 +79,9 @@ public final class ICUData {
         return getStream(loader,resourceName, false);   
     }
 
-    public static InputStream getRequiredStream(ClassLoader loader, String resourceName){
+    /*public static InputStream getRequiredStream(ClassLoader loader, String resourceName){
         return getStream(loader,resourceName, true);   
-    }
+    }*/
 
     /*
      * Convenience override that calls getStream(ICUData.class, resourceName, false);
@@ -107,8 +107,8 @@ public final class ICUData {
     /*
      * Convenience method that calls getStream(root, resourceName, true).
      */
-    public static InputStream getRequiredStream(Class root, String resourceName) {
+    /*public static InputStream getRequiredStream(Class root, String resourceName) {
         return getStream(root, resourceName, true);
-    }
+    }*/
 }
 
