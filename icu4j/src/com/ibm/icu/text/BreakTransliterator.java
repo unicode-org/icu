@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -141,7 +141,6 @@ final class BreakTransliterator extends Transliterator {
     }
 
     // Hack, just to get a real character iterator.
-
     static final class ReplaceableCharacterIterator implements CharacterIterator
     {
         private Replaceable text;
@@ -153,10 +152,10 @@ final class BreakTransliterator extends Transliterator {
         /**
         * Constructs an iterator with an initial index of 0.
         */
-        public ReplaceableCharacterIterator(Replaceable text)
+        /*public ReplaceableCharacterIterator(Replaceable text)
         {
             this(text, 0);
-        }
+        }*/
 
         /**
         * Constructs an iterator with the specified initial index.
@@ -164,10 +163,10 @@ final class BreakTransliterator extends Transliterator {
         * @param  text   The String to be iterated over
         * @param  pos    Initial iterator position
         */
-        public ReplaceableCharacterIterator(Replaceable text, int pos)
+        /*public ReplaceableCharacterIterator(Replaceable text, int pos)
         {
-        this(text, 0, text.length(), pos);
-        }
+            this(text, 0, text.length(), pos);
+        }*/
 
         /**
         * Constructs an iterator over the given range of the given string, with the

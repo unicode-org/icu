@@ -286,7 +286,7 @@ public class RuleBasedTransliterator extends Transliterator {
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    public RuleBasedTransliterator(String ID, String rules, int direction,
+    /*public RuleBasedTransliterator(String ID, String rules, int direction,
                                    UnicodeFilter filter) {
         super(ID, filter);
         if (direction != FORWARD && direction != REVERSE) {
@@ -302,7 +302,7 @@ public class RuleBasedTransliterator extends Transliterator {
 
         data = (Data)parser.dataVector.get(0);
         setMaximumContextLength(data.ruleSet.getMaximumContextLength());
-    }
+    }*/
 
     /**
      * Constructs a new transliterator from the given rules in the
@@ -313,9 +313,9 @@ public class RuleBasedTransliterator extends Transliterator {
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    public RuleBasedTransliterator(String ID, String rules) {
+    /*public RuleBasedTransliterator(String ID, String rules) {
         this(ID, rules, FORWARD, null);
-    }
+    }*/
 
     RuleBasedTransliterator(String ID, Data data, UnicodeFilter filter) {
         super(ID, filter);
@@ -467,178 +467,4 @@ public class RuleBasedTransliterator extends Transliterator {
     }
 }
 
-/**
- * Revision 1.61  2004/02/25 01:26:23  alan
- * jitterbug 3517: make concrete transilterators package private and @internal
- *
- * Revision 1.60  2003/06/03 18:49:35  alan
- * jitterbug 2959: update copyright dates to include 2003
- *
- * Revision 1.59  2003/05/14 19:03:30  rviswanadha
- * jitterbug 2836: fix compiler warnings
- *
- * Revision 1.58  2002/12/03 18:57:36  alan
- * jitterbug 2087: fix @ tags
- *
- * Revision 1.57  2002/07/26 21:12:36  alan
- * jitterbug 1997: use UCharacterProperty.isRuleWhiteSpace() in parsers
- *
- * Revision 1.56  2002/06/28 19:15:52  alan
- * jitterbug 1434: improve method names; minor cleanup
- *
- * Revision 1.55  2002/06/26 18:12:39  alan
- * jitterbug 1434: initial public implementation of getSourceSet and getTargetSet
- *
- * Revision 1.54  2002/02/25 22:43:58  ram
- * Move Utility class to icu.impl
- *
- * Revision 1.53  2002/02/16 03:06:13  Mohan
- * ICU4J reorganization
- *
- * Revision 1.52  2002/02/07 00:53:54  alan
- * jitterbug 1234: make output side of RBTs object-oriented; rewrite ID parsers and modularize them; implement &Any-Lower() support
- *
- * Revision 1.51  2001/11/29 22:31:18  alan
- * jitterbug 1560: add source-set methods and TransliteratorUtility class
- *
- * Revision 1.50  2001/11/27 22:07:33  alan
- * jitterbug 1389: incorporate Mark's review comments - comments only
- *
- * Revision 1.49  2001/10/10 20:26:27  alan
- * jitterbug 81: initial implementation of compound filters in IDs and ::ID blocks
- *
- * Revision 1.48  2001/10/05 18:15:54  alan
- * jitterbug 74: finish port of Source-Target/Variant code incl. TransliteratorRegistry and tests
- *
- * Revision 1.47  2001/10/03 00:14:22  alan
- * jitterbug 73: finish quantifier and supplemental char support
- *
- * Revision 1.46  2001/09/26 18:00:06  alan
- * jitterbug 67: sync parser with icu4c, allow unlimited, nested segments
- *
- * Revision 1.45  2001/09/24 19:57:17  alan
- * jitterbug 60: implement toPattern in UnicodeSet; update UnicodeFilter.contains to take an int; update UnicodeSet to support code points to U+10FFFF
- *
- * Revision 1.44  2001/09/21 21:24:04  alan
- * jitterbug 64: allow ::ID blocks in rules
- *
- * Revision 1.43  2001/09/19 17:43:37  alan
- * jitterbug 60: initial implementation of toRules()
- *
- * Revision 1.42  2001/02/20 17:59:40  alan4j
- * Remove backslash-u from log
- *
- * Revision 1.41  2001/02/16 18:53:55  alan4j
- * Handle backslash-u escapes
- *
- * Revision 1.40  2001/02/03 00:46:21  alan4j
- * Load RuleBasedTransliterator files from UTF8 files instead of ResourceBundles
- *
- * Revision 1.39  2000/08/31 17:11:42  alan4j
- * Implement anchors.
- *
- * Revision 1.38  2000/08/30 20:40:30  alan4j
- * Implement anchors.
- *
- * Revision 1.37  2000/07/12 16:31:36  alan4j
- * Simplify loop limit logic
- *
- * Revision 1.36  2000/06/29 21:59:23  alan4j
- * Fix handling of Transliterator.Position fields
- *
- * Revision 1.35  2000/06/28 20:49:54  alan4j
- * Fix handling of Positions fields
- *
- * Revision 1.34  2000/06/28 20:36:32  alan4j
- * Clean up Transliterator::Position - rename temporary names
- *
- * Revision 1.33  2000/06/28 20:31:43  alan4j
- * Clean up Transliterator::Position and rename fields (related to jitterbug 450)
- *
- * Revision 1.32  2000/05/24 22:21:00  alan4j
- * Compact UnicodeSets
- *
- * Revision 1.31  2000/05/23 16:48:27  alan4j
- * Fix doc; remove unused auto
- *
- * Revision 1.30  2000/05/18 22:49:51  alan
- * Update docs
- *
- * Revision 1.29  2000/04/28 00:25:42  alan
- * Improve error reporting
- *
- * Revision 1.28  2000/04/25 17:38:00  alan
- * Minor parser cleanup.
- *
- * Revision 1.27  2000/04/25 01:42:58  alan
- * Allow arbitrary length variable values. Clean up Data API. Update javadocs.
- *
- * Revision 1.26  2000/04/22 01:25:10  alan
- * Add support for cursor positioner '@'; update javadoc
- *
- * Revision 1.25  2000/04/22 00:08:43  alan
- * Narrow range to 21 - 7E for mandatory quoting.
- *
- * Revision 1.24  2000/04/22 00:03:54  alan
- * Disallow unquoted special chars. Report multiple errors at once.
- *
- * Revision 1.23  2000/04/21 22:23:40  alan
- * Clean up parseReference. Previous log should read 'delegate', not 'delete'.
- *
- * Revision 1.22  2000/04/21 22:16:29  alan
- * Delete variable name parsing to SymbolTable interface to consolidate parsing code.
- *
- * Revision 1.21  2000/04/21 21:16:40  alan
- * Modify rule syntax
- *
- * Revision 1.20  2000/04/19 17:35:23  alan
- * Update javadoc; fix compile error
- *
- * Revision 1.19  2000/04/19 16:34:18  alan
- * Add segment support.
- *
- * Revision 1.18  2000/04/12 20:17:45  alan
- * Delegate replace operation to rule object
- *
- * Revision 1.17  2000/03/10 04:07:23  johnf
- * Copyright update
- *
- * Revision 1.16  2000/02/24 20:46:49  liu
- * Add infinite loop check
- *
- * Revision 1.15  2000/02/10 07:36:25  johnf
- * fixed imports for com.ibm.icu.impl.Utility
- *
- * Revision 1.14  2000/02/03 18:18:42  Alan
- * Use array rather than hashtable for char-to-set map
- *
- * Revision 1.13  2000/01/27 18:59:19  Alan
- * Use Position rather than int[] and move all subclass overrides to one method (handleTransliterate)
- *
- * Revision 1.12  2000/01/18 17:51:09  Alan
- * Remove "keyboard" from method names. Make maximum context a field of Transliterator, and have subclasses set it.
- *
- * Revision 1.11  2000/01/18 02:30:49  Alan
- * Add Jamo-Hangul, Hangul-Jamo, fix rules, add compound ID support
- *
- * Revision 1.10  2000/01/13 23:53:23  Alan
- * Fix bugs found during ICU port
- *
- * Revision 1.9  2000/01/11 04:12:06  Alan
- * Cleanup, embellish comments
- *
- * Revision 1.8  2000/01/11 02:25:03  Alan
- * Rewrite UnicodeSet and RBT parsers for better performance and new syntax
- *
- * Revision 1.7  2000/01/06 01:36:36  Alan
- * Allow string arrays in rule resource bundles
- *
- * Revision 1.6  2000/01/04 21:43:57  Alan
- * Add rule indexing, and move masking check to TransliterationRuleSet.
- *
- * Revision 1.5  1999/12/22 01:40:54  Alan
- * Consolidate rule pattern anteContext, key, and postContext into one string.
- *
- * Revision 1.4  1999/12/22 01:05:54  Alan
- * Improve masking checking; turn it off by default, for better performance
- */
+
