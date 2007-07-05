@@ -1112,6 +1112,22 @@ public class TimeZoneRegression extends TestFmwk {
                     + tzid + ") [13-arg constructor]");
         }
     }
+    
+    // test bug #4265
+    public void TestJohannesburg() {
+        String j_id="Africa/Johannesburg";
+        TimeZone johannesburg = TimeZone.getTimeZone(j_id);
+        final int ONE_HOUR = 60*60*1000;
+        int offset = johannesburg.getOffset(GregorianCalendar.AD,2007,Calendar.JULY,5,Calendar.THURSDAY,0);
+        
+        int expectedOffset = ONE_HOUR*2;  // GMT+2 - NO DST
+        
+        if(offset != expectedOffset) {
+            errln("FAIL: zone " + j_id +" returned offset " + offset +", expected "+expectedOffset);
+        } else {
+            logln("OK: zone " + j_id +" returned offset " + offset);
+        }
+    }
 }
 
 //eof
