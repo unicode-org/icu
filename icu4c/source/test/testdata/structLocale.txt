@@ -2054,6 +2054,7 @@ structLocale:table(nofallback){
             islamic{""}
             islamic-civil{""}
             japanese{""}
+            taiwan{""}
         }
         collation{
             big5han{""}
@@ -3097,8 +3098,23 @@ structLocale:table(nofallback){
             }
         }
         taiwan{
-            eras {
+            DateTimePatterns{
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+            }
+            eras{
                 abbreviated{
+                    "",
+                }
+                wide{
+                    "",
                     ""
                 }
             }
