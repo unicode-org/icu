@@ -1038,6 +1038,7 @@ VTimeZone::createVTimeZoneByID(const UnicodeString& ID) {
     if (U_SUCCESS(status)) {
         vtz->icutzver.setTo(versionStr, len);
     }
+    ures_close(bundle);
     return vtz;
 }
 
