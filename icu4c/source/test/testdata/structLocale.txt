@@ -662,6 +662,10 @@ structLocale:table(nofallback){
             "",
             "",
         }
+        GHS{
+            "",
+            "",
+        }
         GIP{
             "",
             "",
@@ -1243,6 +1247,10 @@ structLocale:table(nofallback){
             "",
         }
         VEB{
+            "",
+            "",
+        }
+        VEF{
             "",
             "",
         }
