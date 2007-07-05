@@ -1118,15 +1118,23 @@ public class TimeZoneRegression extends TestFmwk {
         String j_id="Africa/Johannesburg";
         TimeZone johannesburg = TimeZone.getTimeZone(j_id);
         final int ONE_HOUR = 60*60*1000;
-        int offset = johannesburg.getOffset(GregorianCalendar.AD,2007,Calendar.JULY,5,Calendar.THURSDAY,0);
-        
         int expectedOffset = ONE_HOUR*2;  // GMT+2 - NO DST
+        int offset = johannesburg.getOffset(GregorianCalendar.AD,2007,Calendar.JULY,5,Calendar.THURSDAY,0);        
         
         if(offset != expectedOffset) {
-            errln("FAIL: zone " + j_id +" returned offset " + offset +", expected "+expectedOffset);
+            errln("FAIL: zone " + j_id +" returned offset in July " + offset +", expected "+expectedOffset);
         } else {
-            logln("OK: zone " + j_id +" returned offset " + offset);
+            logln("OK: zone " + j_id +" returned offset in July: " + offset);
         }
+
+        int offset2 = johannesburg.getOffset(GregorianCalendar.AD,2007,Calendar.DECEMBER,12,Calendar.WEDNESDAY,0);
+
+        if(offset2 != expectedOffset) {
+            errln("FAIL: zone " + j_id +" returned offset in December " + offset2 +", expected "+expectedOffset);
+        } else {
+            logln("OK: zone " + j_id +" returned offset in December: " + offset2);
+        }
+
     }
 }
 
