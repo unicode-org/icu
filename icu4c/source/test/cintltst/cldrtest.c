@@ -112,6 +112,7 @@ TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
                     locale,
                     ures_getType(subRootBundle),
                     ures_getType(subBundle));
+            ures_close(subBundle);
             continue;
         }
         else if (ures_getType(subBundle) == URES_INT_VECTOR) {
