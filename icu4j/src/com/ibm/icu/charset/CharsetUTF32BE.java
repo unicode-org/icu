@@ -30,7 +30,7 @@ class CharsetUTF32BE extends CharsetUTF32 {
         protected int getChar(byte[] bytes, int length){
             int i=0, ch=0;
             while (i<length){
-                ch |= (bytes[i] & UConverterConstants.UNSIGNED_BYTE_MASK) << (i * 8);
+                ch |= (bytes[i] & UConverterConstants.UNSIGNED_BYTE_MASK) << ((3-i) * 8);
                 i++;
             }
             return ch;
