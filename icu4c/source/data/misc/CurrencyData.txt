@@ -138,7 +138,7 @@ CurrencyData:table(nofallback){
         GE { "GEL" } // GEORGIA: Lari
         GF { "EUR" } // FRENCH GUIANA: Euro
         GG { "GBP" } // GUERNSEY: Pound Sterling
-        GH { "GHC" } // GHANA: Cedi
+        GH { "GHS" } // GHANA: Cedi
         GI { "GIP" } // GIBRALTAR: Gibraltar Pound
         GL { "DKK" } // GREENLAND: Danish Krone
         GM { "GMD" } // GAMBIA: Dalasi
@@ -297,7 +297,7 @@ CurrencyData:table(nofallback){
         UZ { "UZS" } // UZBEKISTAN: Uzbekistan Sum
         VA { "EUR" } // HOLY SEE (VATICAN CITY STATE): Euro
         VC { "XCD" } // SAINT VINCENT AND THE GRENADINES: East Caribbean Dollar
-        VE { "VEB" } // VENEZUELA: Bolivar
+        VE { "VEF" } // VENEZUELA: Bolivar Fuerte
         VG { "USD" } // VIRGIN ISLANDS, BRITISH: US Dollar
         VI { "USD" } // VIRGIN ISLANDS, U.S.: US Dollar
         VN { "VND" } // VIET NAM: Dong
