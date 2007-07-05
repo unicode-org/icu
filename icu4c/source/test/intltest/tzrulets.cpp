@@ -45,7 +45,7 @@ public:
     TestZIDEnumeration(UBool all = FALSE);
     ~TestZIDEnumeration();
 
-    virtual int32_t count(UErrorCode& status) const {
+    virtual int32_t count(UErrorCode& /*status*/) const {
         return len;
     }
     virtual const UnicodeString *snext(UErrorCode& status);
