@@ -1075,7 +1075,7 @@ SimpleTimeZone::initTransitionRules(UErrorCode& status) {
 
         // Create a TimeZoneRule for initial time
         if (firstStdStart < firstDstStart) {
-            initialRule = new InitialTimeZoneRule(tzid+"(DST)", getRawOffset(), dstRule->getDSTSavings());                
+            initialRule = new InitialTimeZoneRule(tzid+"(DST)", getRawOffset(), dstRule->getDSTSavings());
             firstTransition = new TimeZoneTransition(firstStdStart, initialRule->clone(), stdRule->clone());
         } else {
             initialRule = new InitialTimeZoneRule(tzid+"(STD)", getRawOffset(), 0);
@@ -1090,7 +1090,7 @@ SimpleTimeZone::initTransitionRules(UErrorCode& status) {
 }
 
 int32_t
-SimpleTimeZone::countTransitionRules(UErrorCode& status) /*const*/ {
+SimpleTimeZone::countTransitionRules(UErrorCode& /*status*/) /*const*/ {
     return (startMonth == 0) ? 0 : 2;
 }
 

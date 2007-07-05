@@ -130,34 +130,34 @@ InitialTimeZoneRule::isEquivalentTo(const TimeZoneRule& other) const {
 }
 
 UBool
-InitialTimeZoneRule::getFirstStart(int32_t prevRawOffset,
-                                  int32_t prevDSTSavings,
-                                  UDate& result) const {
+InitialTimeZoneRule::getFirstStart(int32_t /*prevRawOffset*/,
+                                  int32_t /*prevDSTSavings*/,
+                                  UDate& /*result*/) const {
     return FALSE;
 }
 
 UBool
-InitialTimeZoneRule::getFinalStart(int32_t prevRawOffset,
-                                  int32_t prevDSTSavings,
-                                  UDate& result) const {
+InitialTimeZoneRule::getFinalStart(int32_t /*prevRawOffset*/,
+                                  int32_t /*prevDSTSavings*/,
+                                  UDate& /*result*/) const {
     return FALSE;
 }
 
 UBool
-InitialTimeZoneRule::getNextStart(const UDate base,
-                                 int32_t prevRawOffset,
-                                 int32_t prevDSTSavings,
-                                 UBool inclusive,
-                                 UDate& result) const {
+InitialTimeZoneRule::getNextStart(const UDate /*base*/,
+                                 int32_t /*prevRawOffset*/,
+                                 int32_t /*prevDSTSavings*/,
+                                 UBool /*inclusive*/,
+                                 UDate& /*result*/) const {
     return FALSE;
 }
 
 UBool
-InitialTimeZoneRule::getPreviousStart(const UDate base,
-                                     int32_t prevRawOffset,
-                                     int32_t prevDSTSavings,
-                                     UBool inclusive,
-                                     UDate& result) const {
+InitialTimeZoneRule::getPreviousStart(const UDate /*base*/,
+                                     int32_t /*prevRawOffset*/,
+                                     int32_t /*prevDSTSavings*/,
+                                     UBool /*inclusive*/,
+                                     UDate& /*result*/) const {
     return FALSE;
 }
 
