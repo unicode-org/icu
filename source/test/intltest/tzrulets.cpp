@@ -66,12 +66,13 @@ private:
 const char TestZIDEnumeration::fgClassID = 0;
 
 TestZIDEnumeration::TestZIDEnumeration(UBool all)
-: tzenum(NULL), idx(0) {
+: idx(0) {
     UErrorCode status = U_ZERO_ERROR;
     if (all) {
         tzenum = TimeZone::createEnumeration();
         len = tzenum->count(status);
     } else {
+        tzenum = NULL;
         len = (int32_t)sizeof(TESTZIDS)/sizeof(TESTZIDS[0]);
     }
 }
@@ -760,7 +761,7 @@ TimeZoneRuleTest::TestVTimeZoneHeaderProps(void) {
     // Roundtrip conversion
     UnicodeString vtzdata;
     vtz->write(vtzdata, status);
-    VTimeZone *newvtz1;
+    VTimeZone *newvtz1 = NULL;
     if (U_FAILURE(status)) {
         errln("FAIL: error returned while writing VTIMEZONE data 1");
     } else {

@@ -713,7 +713,7 @@ unsupportedRRule:
  * Create a TimeZoneRule by the RDATE definition
  */
 static TimeZoneRule* createRuleByRDATE(const UnicodeString& tzname, int32_t rawOffset, int32_t dstSavings,
-                                       UDate start, UVector* dates, int32_t fromOffset, UErrorCode& status) {
+                                       UDate /*start*/, UVector* dates, int32_t fromOffset, UErrorCode& status) {
     if (U_FAILURE(status)) {
         return NULL;
     }
