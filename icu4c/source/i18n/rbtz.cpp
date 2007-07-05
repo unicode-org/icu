@@ -356,8 +356,8 @@ RuleBasedTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t d
 
 int32_t
 RuleBasedTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
-                             uint8_t dayOfWeek, int32_t millis,
-                             int32_t monthLength, UErrorCode& status) const {
+                             uint8_t /*dayOfWeek*/, int32_t millis,
+                             int32_t /*monthLength*/, UErrorCode& status) const {
     // dayOfWeek and monthLength are unused
     if (U_FAILURE(status)) {
         return 0;
@@ -427,7 +427,7 @@ RuleBasedTimeZone::getOffset(UDate date, UBool local, int32_t& rawOffset,
 }
 
 void
-RuleBasedTimeZone::setRawOffset(int32_t offsetMillis) {
+RuleBasedTimeZone::setRawOffset(int32_t /*offsetMillis*/) {
     // We don't support this operation at this moment.
     // Nothing to do!
 }
@@ -536,7 +536,7 @@ RuleBasedTimeZone::getPreviousTransition(UDate base, UBool inclusive, TimeZoneTr
 }
 
 int32_t
-RuleBasedTimeZone::countTransitionRules(UErrorCode& status) /*const*/ {
+RuleBasedTimeZone::countTransitionRules(UErrorCode& /*status*/) /*const*/ {
     int32_t count = 0;
     if (fHistoricRules != NULL) {
         count += fHistoricRules->size();
@@ -700,7 +700,10 @@ RuleBasedTimeZone::findNext(UDate base, UBool inclusive, UDate& transitionTime,
                 UBool avail0 = r0->getNextStart(base, r1->getRawOffset(), r1->getDSTSavings(), inclusive, start0);
                 UBool avail1 = r1->getNextStart(base, r0->getRawOffset(), r0->getDSTSavings(), inclusive, start1);
                 //  avail0/avail1 should be always TRUE
-                if (start0 < start1) {
+                if (!avail0 && !avail1) {
+                    return FALSE;
+                }
+                if (!avail1 || start0 < start1) {
                     result.time = start0;
                     result.from = r1;
                     result.to = r0;
@@ -776,7 +779,10 @@ RuleBasedTimeZone::findPrev(UDate base, UBool inclusive, UDate& transitionTime,
                 UBool avail0 = r0->getPreviousStart(base, r1->getRawOffset(), r1->getDSTSavings(), inclusive, start0);
                 UBool avail1 = r1->getPreviousStart(base, r0->getRawOffset(), r0->getDSTSavings(), inclusive, start1);
                 //  avail0/avail1 should be always TRUE
-                if (start0 > start1) {
+                if (!avail0 && !avail1) {
+                    return FALSE;
+                }
+                if (!avail1 || start0 > start1) {
                     result.time = start0;
                     result.from = r1;
                     result.to = r0;
