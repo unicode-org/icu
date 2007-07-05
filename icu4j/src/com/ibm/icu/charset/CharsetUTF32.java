@@ -53,7 +53,7 @@ class CharsetUTF32 extends CharsetICU {
             offsetDelta=0;
             int pos = source.position();
             if(isFirstBuffer && toULength<SIGNATURE_LENGTH){
-                while(pos < source.limit() && pos < toULength) {
+                while(pos < source.limit() && pos < SIGNATURE_LENGTH) {
                     toUBytesArray[toULength++] = source.get(pos++);
                 }
                 if(toULength==SIGNATURE_LENGTH){
