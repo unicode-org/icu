@@ -1067,13 +1067,13 @@ public class TestCharset extends TestFmwk {
         }
         buf.rewind();
     }
-
+*/
     public void TestUTF8() throws CharacterCodingException{
            try{
                CharsetEncoder encoderICU = new CharsetProviderICU().charsetForName("utf-8").newEncoder();
                encoderICU.encode(CharBuffer.wrap("\ud800"));
                errln("\\ud800 is OK for ICU4JNI utf-8 encoder");
-           }catch (MalformedInputException e) {
+           }catch (Exception e) {
                logln("\\ud800 is malformed for JDK utf-8 encoder");
               //e.printStackTrace();
            }
@@ -1082,12 +1082,12 @@ public class TestCharset extends TestFmwk {
            try {
                encoderJDK.encode(CharBuffer.wrap("\ud800"));
                errln("\\ud800 is OK for JDK utf-8 encoder");
-           } catch (MalformedInputException e) {
+           } catch (Exception e) {
                logln("\\ud800 is malformed for JDK utf-8 encoder");
                //e.printStackTrace();
            }         
     }
-    */
+    
     public void TestUTF16Bom(){
 
         Charset cs = (new CharsetProviderICU()).charsetForName("UTF-16");
@@ -1437,18 +1437,18 @@ public class TestCharset extends TestFmwk {
     }
     //TODO
     /*
-    public void TestString(ByteBuffer bSource, CharBuffer uSource) {
+    public void TestString(ByteBuffer bSource, CharBuffer uSource) throws Exception {
         try {
             {
-                String source = new String(uSource);
-                byte[] target = source.getBytes(encoding);
-                if (!equals(target, bSource)) {
+                String source = uSource.toString();
+                byte[] target = source.getBytes(m_encoding);
+                if (!equals(target, bSource.array())) {
                     errln("encode using string API failed");
                 }
             }
             {
 
-                String target = new String(getByteArray(gbSource), encoding);
+                String target = new String(bSource.array(), m_encoding);
                 if (!equals(uSource, target.toCharArray())) {
                     errln("decode using string API failed");
                 }
@@ -1459,7 +1459,7 @@ public class TestCharset extends TestFmwk {
         }
     }
 
-    private void fromUnicodeTest() throws Exception {
+    /*private void fromUnicodeTest() throws Exception {
         
         logln("Loaded Charset: " + charset.getClass().toString());
         logln("Loaded CharsetEncoder: " + encoder.getClass().toString());
