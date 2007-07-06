@@ -23,6 +23,7 @@ class CharsetUTF32BE extends CharsetUTF32 {
         
         public CharsetDecoderUTF32BE(CharsetICU cs) {
             super(cs);
+            mode=1;
         }
         protected CoderResult decodeLoopImpl(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush){
             return decodeLoopUTF32BE(source, target, offsets, flush);

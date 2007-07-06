@@ -57,17 +57,17 @@ class CharsetUTF32 extends CharsetICU {
                     toUBytesArray[toULength++] = source.get(pos++);
                 }
                 if(toULength==SIGNATURE_LENGTH){
-                    if(toUBytesArray[0]==0x00 && toUBytesArray[1]==0x00 && toUBytesArray[2]==0xFE && toUBytesArray[3]==0xFF){
+                    if(toUBytesArray[0]==(byte)0x00 && toUBytesArray[1]==(byte)0x00 && toUBytesArray[2]==(byte)0xFE && toUBytesArray[3]==(byte)0xFF){
                         // may be BE
                         state = 1;
                         offsetDelta=4;
-                    }else if(toUBytesArray[0]==0xFF && toUBytesArray[1]==0xFE && toUBytesArray[2]==0x00 && toUBytesArray[3]==0x00){
+                    }else if(toUBytesArray[0]==(byte)0xFF && toUBytesArray[1]==(byte)0xFE && toUBytesArray[2]==(byte)0x00 && toUBytesArray[3]==(byte)0x00){
                         //may be LE
                         state = 2;
                         offsetDelta=4;
                     }else{
                         //default to the subclass charset
-                        state = 3;
+                        //state = 3;
                         toUnicodeStatus = getChar(toUBytesArray, toULength)+1;  
                     }
                     isFirstBuffer = false;
@@ -83,11 +83,12 @@ class CharsetUTF32 extends CharsetICU {
                 }
             }
             
+            mode=state;
             source.position(pos);
             if(!cr.isError() && source.hasRemaining()){
                 cr = decodeLoopImpl(source, target, offsets, flush);
             }
-            mode=state;
+
             return cr;
         }
         protected int getChar(byte[] bytes, int length){
@@ -97,14 +98,15 @@ class CharsetUTF32 extends CharsetICU {
             
             CoderResult cr = CoderResult.UNDERFLOW;
             if(mode==1){
-                /* call UTF-16BE */
+                /* call UTF-32BE */
                 cr = decodeLoopUTF32BE(source, target, offsets, flush);
             }else if(mode==2){
-                /* call UTF-16LE */
+                /* call UTF-32LE */
                 cr =decodeLoopUTF32LE(source, target, offsets, flush);
             }else{
                 /* should not occur */
-                cr = decodeLoopUTF32BE(source, target, offsets, flush);
+                //cr = decodeLoopUTF32BE(source, target, offsets, flush);
+                cr = CoderResult.malformedForLength(source.position());
             }
             return cr;
         }
