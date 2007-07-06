@@ -235,8 +235,8 @@ public class AnnualTimeZoneRule extends TimeZoneRule {
         }
         AnnualTimeZoneRule otherRule = (AnnualTimeZoneRule)other;
         if (startYear == otherRule.startYear
-                || endYear == otherRule.endYear
-                || dateTimeRule.equals(otherRule.dateTimeRule)) {
+                && endYear == otherRule.endYear
+                && dateTimeRule.equals(otherRule.dateTimeRule)) {
             return super.isEquivalentTo(other);
         }
         return false;
