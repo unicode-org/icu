@@ -222,12 +222,12 @@ public class TestCharset extends TestFmwk {
              
 
             ByteBuffer newBS = ByteBuffer.allocate(bs1.capacity());
-            /*
+            
             newBS.put((byte)0x00);
             newBS.put((byte)0x00);
             newBS.put((byte)0xFE);
             newBS.put((byte)0xFF);
-            */
+            
             newBS.put(bs1);
             bs1.position(0);
             smBufDecode(d1, "UTF-32", bs1, us);
@@ -235,12 +235,12 @@ public class TestCharset extends TestFmwk {
             
             
             newBS.clear();
-            /*
+            
             newBS.put((byte)0xFF);
             newBS.put((byte)0xFE);
             newBS.put((byte)0x00);
             newBS.put((byte)0x00);
-            */
+            
             newBS.put(bs2);    
             bs2.position(0);
             smBufDecode(d2, "UTF-32LE", bs2, us);
@@ -3217,5 +3217,98 @@ public class TestCharset extends TestFmwk {
         if (!result.isMalformed()) {
             errln("Error while encoding UTF-16LE (3) should have occured.");
         }          
+    }
+    
+    //provide better code coverage for the generic charset UTF32
+    public void TestCharsetUTF32() {
+        CoderResult result = CoderResult.UNDERFLOW;
+        CharsetProvider provider = new CharsetProviderICU();
+        Charset cs = provider.charsetForName("UTF-32");        
+        CharsetDecoder decoder = cs.newDecoder();
+        
+        char us_array[] = {
+                0x0000, 0x0000, 0x0000, 0x0000,
+            };
+        
+        byte bs_array1[] = {
+                (byte)0x00, (byte)0x00, (byte)0xFE, (byte)0xFF,
+                (byte)0x00, (byte)0x00, (byte)0x04, (byte)0x43,
+                (byte)0xFF, (byte)0xFE, (byte)0x00, (byte)0x00,
+                (byte)0x43, (byte)0x04, (byte)0x00, (byte)0x00,
+            };
+        
+        byte bs_array2[] = {
+                (byte)0xFF, (byte)0xFE, (byte)0x00, (byte)0x00,
+                (byte)0x43, (byte)0x04, (byte)0x00, (byte)0x00,
+            };
+        
+        CharBuffer us = CharBuffer.allocate(us_array.length);
+        ByteBuffer bs = ByteBuffer.allocate(bs_array1.length);
+        
+        us.put(us_array);
+        bs.put(bs_array1);
+        
+        us.limit(us.position());
+        us.position(0);
+        bs.limit(bs.position());
+        bs.position(0);
+            
+        try {
+            smBufDecode(decoder, "UTF32-DE-1", bs, us, true, false);
+            errln("Malform exception while decoding UTF32 charset (1) should have been thrown.");
+        } catch (Exception ex) {
+        }
+        
+        decoder = cs.newDecoder();
+        
+        bs = ByteBuffer.allocate(bs_array2.length);
+        bs.put(bs_array2);
+        
+        us.limit(4);
+        us.position(0);
+        bs.limit(bs.position());
+        bs.position(0);
+            
+        try {
+            smBufDecode(decoder, "UTF32-DE-2", bs, us, true, false);
+            errln("Malform exception while decoding UTF32 charset (2) should have been thrown.");
+        } catch (Exception ex) {
+        }
+        
+        //Test malform exception
+        bs.clear();
+        us.clear();
+        
+        bs.put((byte)0x00); bs.put((byte)0xFE); bs.put((byte)0xFF); bs.put((byte)0x00); bs.put((byte)0x00);
+        us.put((char)0x0000);
+        
+        us.limit(us.position());
+        us.position(0);
+        bs.limit(bs.position());
+        bs.position(0);
+        
+        try {
+            smBufDecode(decoder, "UTF32-DE-3", bs, us, true, false);
+            errln("Malform exception while decoding UTF32 charset (3) should have been thrown.");
+        } catch (Exception ex) {
+        }
+        
+        //Test BOM testing
+        bs.clear();
+        us.clear();
+        
+        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0xFF); bs.put((byte)0xFE); 
+        us.put((char)0x0000);
+        
+        us.limit(us.position());
+        us.position(0);
+        bs.limit(bs.position());
+        bs.position(0);
+        
+        try {
+            smBufDecode(decoder, "UTF32-DE-4", bs, us, true, false);
+            errln("Malform exception while decoding UTF32 charset (4) should have been thrown.");
+        } catch (Exception ex) {
+        }
     }
 }
