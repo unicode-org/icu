@@ -22,6 +22,7 @@ import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.InitialTimeZoneRule;
 import com.ibm.icu.util.RuleBasedTimeZone;
 import com.ibm.icu.util.SimpleTimeZone;
+import com.ibm.icu.util.TimeArrayTimeZoneRule;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.TimeZoneRule;
 import com.ibm.icu.util.TimeZoneTransition;
@@ -108,6 +109,18 @@ public class TimeZoneRuleTest extends TestFmwk {
         if (!(stz.hasEquivalentTransitions(rbtz3, start, until))) {
             errln("FAIL: rbtz3 must be equivalent to the SimpleTimeZone in the time range.");
         }
+
+        // hasSameRules
+        if (rbtz1.hasSameRules(rbtz2)) {
+            errln("FAIL: rbtz1 and rbtz2 have different rules, but returned true.");
+        }
+        if (rbtz1.hasSameRules(rbtz3)) {
+            errln("FAIL: rbtz1 and rbtz3 have different rules, but returned true.");
+        }
+        RuleBasedTimeZone rbtz1c = (RuleBasedTimeZone)rbtz1.clone();
+        if (!rbtz1.hasSameRules(rbtz1c)) {
+            errln("FAIL: Cloned RuleBasedTimeZone must have the same rules with the original.");
+        }
     }
 
     /*
@@ -187,7 +200,35 @@ public class TimeZoneRuleTest extends TestFmwk {
             errln("FAIL: The RBTZ must not be equivalent to America/New_York between 1950 and 2010");
         }
 
-    
+        // TimeZone APIs
+        if (ny.hasSameRules(rbtz) || rbtz.hasSameRules(ny)) {
+            errln("FAIL: hasSameRules must return false");
+        }
+
+        long times[] = {
+           getUTCMillis(2006, Calendar.MARCH, 15),
+           getUTCMillis(2006, Calendar.NOVEMBER, 1),
+           getUTCMillis(2007, Calendar.MARCH, 15),
+           getUTCMillis(2007, Calendar.NOVEMBER, 1),
+           getUTCMillis(2008, Calendar.MARCH, 15),
+           getUTCMillis(2008, Calendar.NOVEMBER, 1)
+        };
+        int[] offsets1 = new int[2];
+        int[] offsets2 = new int[2];
+
+        for (int i = 0; i < times.length; i++) {
+            // Check getOffset - must return the same results for these time data
+            rbtz.getOffset(times[i], false, offsets1);
+            ny.getOffset(times[i], false, offsets2);
+            if (offsets1[0] != offsets2[0] || offsets1[1] != offsets2[1]) {
+                errln("FAIL: Incompatible time zone offsets for ny and rbtz");
+            }
+            // Check inDaylightTime
+            Date d = new Date(times[i]);
+            if (rbtz.inDaylightTime(d) != ny.inDaylightTime(d)) {
+                errln("FAIL: Incompatible daylight saving time for ny and rbtz");
+            }
+        }
     }
 
     /*
@@ -272,17 +313,33 @@ public class TimeZoneRuleTest extends TestFmwk {
         long jan1_2011 = getUTCMillis(2010, Calendar.JANUARY, 1);
         
         if (((BasicTimeZone)newyork).hasEquivalentTransitions(indianapolis, jan1_2005, jan1_2011)) {
-            errln("FAIL: New_York is not equivalent to Indianapolis between 2005 and 2010");
+            errln("FAIL: New_York is not equivalent to Indianapolis between 2005 and 2010, but returned true");
         }
         if (!((BasicTimeZone)newyork).hasEquivalentTransitions(indianapolis, jan1_2006, jan1_2011)) {
-            errln("FAIL: New_York is equivalent to Indianapolis between 2006 and 2010");
+            errln("FAIL: New_York is equivalent to Indianapolis between 2006 and 2010, but returned false");
         }
 
         if (!((BasicTimeZone)indianapolis).hasEquivalentTransitions(gmt_5, jan1_1971, jan1_2006)) {
-            errln("FAIL: Indianapolis is equivalent to GMT+5 between 1971 and 2005");
+            errln("FAIL: Indianapolis is equivalent to GMT+5 between 1971 and 2005, but returned false");
         }
         if (((BasicTimeZone)indianapolis).hasEquivalentTransitions(gmt_5, jan1_1971, jan1_2007)) {
-            errln("FAIL: Indianapolis is not equivalent to GMT+5 between 1971 and 2006");
+            errln("FAIL: Indianapolis is not equivalent to GMT+5 between 1971 and 2006, but returned true");
+        }
+
+        // Cloned TimeZone
+        TimeZone newyork2 = (TimeZone)newyork.clone();
+        if (!((BasicTimeZone)newyork).hasEquivalentTransitions(newyork2, jan1_1971, jan1_2011)) {
+            errln("FAIL: Cloned TimeZone must have the same transitions");
+        }
+        if (!((BasicTimeZone)newyork).hasEquivalentTransitions(newyork2, jan1_1971, jan1_2011, true /*ignoreDstAmount*/)) {
+            errln("FAIL: Cloned TimeZone must have the same transitions");
+        }
+
+        // America/New_York and America/Los_Angeles has same DST start rules, but
+        // raw offsets are different
+        TimeZone losangeles = TimeZone.getTimeZone("America/Los_Angeles");
+        if (((BasicTimeZone)newyork).hasEquivalentTransitions(losangeles, jan1_2006, jan1_2011)) {
+            errln("FAIL: New_York is not equivalent to Los Angeles, but returned true");
         }
     }
 
@@ -328,12 +385,15 @@ public class TimeZoneRuleTest extends TestFmwk {
                 if (!vtz_new.hasEquivalentTransitions(olsontz, tzt.getTime(), endTime, true)) {
                     errln("FAIL: VTimeZone for " + tzids[i] + " is not equivalent to its OlsonTimeZone corresponding.");
                 }
+                if (!vtz_new.hasEquivalentTransitions(olsontz, tzt.getTime(), endTime, false)) {
+                    logln("VTimeZone for " + tzids[i] + " is not equivalent to its OlsonTimeZone corresponding in strict comparison mode.");
+                }
             }
         }
     }
 
     /*
-     * Write out time zone rules of OlsonTimeZone after a cutover date into VTIMEZONE format,
+     * Write out time zone rules of OlsonTimeZone after a cutoff date into VTIMEZONE format,
      * create a new VTimeZone from the VTIMEZONE data, then compare transitions
      */
     public void TestVTimeZoneRoundTripPartial() {
@@ -479,7 +539,7 @@ public class TimeZoneRuleTest extends TestFmwk {
             errln("FAIL: IO error while writing/reading VTIMEZONE data");
         }
 
-        // Second roundtrip, with a cutover
+        // Second roundtrip, with a cutoff
         VTimeZone newvtz2 = null;
         try {
             // Set different tzurl
@@ -559,7 +619,382 @@ public class TimeZoneRuleTest extends TestFmwk {
             }
         }
     }
+
+    /*
+     * API coverage tests for TimeZoneRule 
+     */
+    public void TestTimeZoneRuleCoverage() {
+        long time1 = getUTCMillis(2005, Calendar.JULY, 4);
+        long time2 = getUTCMillis(2015, Calendar.JULY, 4);
+        long time3 = getUTCMillis(1950, Calendar.JULY, 4);
+
+        DateTimeRule dtr1 = new DateTimeRule(Calendar.FEBRUARY, 29, Calendar.SUNDAY, false,
+                3*HOUR, DateTimeRule.WALL_TIME); // Last Sunday on or before Feb 29, at 3 AM, wall time
+        DateTimeRule dtr2 = new DateTimeRule(Calendar.MARCH, 11, 2*HOUR,
+                DateTimeRule.STANDARD_TIME); // Mar 11, at 2 AM, standard time
+        DateTimeRule dtr3 = new DateTimeRule(Calendar.OCTOBER, -1, Calendar.SATURDAY,
+                6*HOUR, DateTimeRule.UTC_TIME); //Last Saturday in Oct, at 6 AM, UTC
+        DateTimeRule dtr4 = new DateTimeRule(Calendar.MARCH, 8, Calendar.SUNDAY, true,
+                2*HOUR, DateTimeRule.WALL_TIME); // First Sunday on or after Mar 8, at 2 AM, wall time
+
+        AnnualTimeZoneRule a1 = new AnnualTimeZoneRule("a1", -3*HOUR, 1*HOUR, dtr1,
+                2000, AnnualTimeZoneRule.MAX_YEAR);
+        AnnualTimeZoneRule a2 = new AnnualTimeZoneRule("a2", -3*HOUR, 1*HOUR, dtr1,
+                2000, AnnualTimeZoneRule.MAX_YEAR);
+        AnnualTimeZoneRule a3 = new AnnualTimeZoneRule("a3", -3*HOUR, 1*HOUR, dtr1,
+                2000, 2010);
+        
+        InitialTimeZoneRule i1 = new InitialTimeZoneRule("i1", -3*HOUR, 0);
+        InitialTimeZoneRule i2 = new InitialTimeZoneRule("i2", -3*HOUR, 0);
+        InitialTimeZoneRule i3 = new InitialTimeZoneRule("i3", -3*HOUR, 1*HOUR);
+        
+        long[] emptytimes = {};
+        long[] trtimes1 = {0};
+        long[] trtimes2 = {0, 10000000};
+
+        TimeArrayTimeZoneRule t0 = null;
+        try {
+            // Try to construct TimeArrayTimeZoneRule with null transition times
+            t0 = new TimeArrayTimeZoneRule("nulltimes", -3*HOUR, 0,
+                    null, DateTimeRule.UTC_TIME);
+        } catch (IllegalArgumentException iae) {
+            logln("TimeArrayTimeZoneRule constructor throws IllegalArgumentException as expected.");
+            t0 = null;
+        }
+        if (t0 != null) {
+            errln("FAIL: TimeArrayTimeZoneRule constructor did not throw IllegalArgumentException for null times");
+        }
+        
+        try {
+            // Try to construct TimeArrayTimeZoneRule with empty transition times
+            t0 = new TimeArrayTimeZoneRule("nulltimes", -3*HOUR, 0,
+                    emptytimes, DateTimeRule.UTC_TIME);
+        } catch (IllegalArgumentException iae) {
+            logln("TimeArrayTimeZoneRule constructor throws IllegalArgumentException as expected.");
+            t0 = null;
+        }
+        if (t0 != null) {
+            errln("FAIL: TimeArrayTimeZoneRule constructor did not throw IllegalArgumentException for empty times");
+        }
+
+        TimeArrayTimeZoneRule t1 = new TimeArrayTimeZoneRule("t1", -3*HOUR, 0, trtimes1, DateTimeRule.UTC_TIME);
+        TimeArrayTimeZoneRule t2 = new TimeArrayTimeZoneRule("t2", -3*HOUR, 0, trtimes1, DateTimeRule.UTC_TIME);
+        TimeArrayTimeZoneRule t3 = new TimeArrayTimeZoneRule("t3", -3*HOUR, 0, trtimes2, DateTimeRule.UTC_TIME);
+        TimeArrayTimeZoneRule t4 = new TimeArrayTimeZoneRule("t4", -3*HOUR, 0, trtimes1, DateTimeRule.STANDARD_TIME);
+        TimeArrayTimeZoneRule t5 = new TimeArrayTimeZoneRule("t5", -4*HOUR, 1*HOUR, trtimes1, DateTimeRule.WALL_TIME);
+
+        // AnnualTimeZoneRule#getRule
+        if (!a1.getRule().equals(a2.getRule())) {
+            errln("FAIL: The same DateTimeRule must be returned from AnnualTimeZoneRule a1 and a2");
+        }
     
+        // AnnualTimeZoneRule#getStartYear
+        int startYear = a1.getStartYear();
+        if (startYear != 2000) {
+            errln("FAIL: The start year of AnnualTimeZoneRule a1 must be 2000 - returned: " + startYear);
+        }
+
+        // AnnualTimeZoneRule#getEndYear
+        int endYear = a1.getEndYear();
+        if (endYear != AnnualTimeZoneRule.MAX_YEAR) {
+            errln("FAIL: The start year of AnnualTimeZoneRule a1 must be MAX_YEAR - returned: " + endYear);
+        }
+        endYear = a3.getEndYear();
+        if (endYear != 2010) {
+            errln("FAIL: The start year of AnnualTimeZoneRule a3 must be 2010 - returned: " + endYear);
+        }
+        
+        // AnnualTimeZone#getStartInYear
+        Date d1 = a1.getStartInYear(2005, -3*HOUR, 0);
+        Date d2 = a3.getStartInYear(2005, -3*HOUR, 0);
+        if (d1 == null || d2 == null || !d1.equals(d2)) {
+            errln("FAIL: AnnualTimeZoneRule#getStartInYear did not work as expected");
+        }
+        d2 = a3.getStartInYear(2015, -3*HOUR, 0);
+        if (d2 != null) {
+            errln("FAIL: AnnualTimeZoneRule#getSTartInYear returned non-null date for 2015 which is out of rule range");
+        }
+
+        // AnnualTimeZone#getFirstStart
+        d1 = a1.getFirstStart(-3*HOUR, 0);
+        d2 = a1.getFirstStart(-4*HOUR, 1*HOUR);
+        if (d1 == null || d2 == null || !d1.equals(d2)) {
+            errln("FAIL: The same start time should be returned by getFirstStart");
+        }
+
+        // AnnualTimeZone#getFinalStart
+        d1 = a1.getFinalStart(-3*HOUR, 0);
+        if (d1 != null) {
+            errln("FAIL: Non-null Date is returned by getFinalStart for a1");
+        }
+        d1 = a1.getStartInYear(2010, -3*HOUR, 0);
+        d2 = a3.getFinalStart(-3*HOUR, 0);
+        if (d1 == null || d2 == null || !d1.equals(d2)) {
+            errln("FAIL: Bad date is returned by getFinalStart");
+        }
+
+        // AnnualTimeZone#getNextStart / getPreviousStart
+        d1 = a1.getNextStart(time1, -3*HOUR, 0, false);
+        if (d1 == null) {
+            errln("FAIL: Null Date is returned by getNextStart");
+        } else {
+            d2 = a1.getPreviousStart(d1.getTime(), -3*HOUR, 0, true);
+            if (d2 == null || !d1.equals(d2)) {
+                errln("FAIL: Bad Date is returned by getPreviousStart");
+            }
+        }
+        d1 = a3.getNextStart(time2, -3*HOUR, 0, false);
+        if (d1 != null) {
+            errln("FAIL: getNextStart must return null when no start time is available after the base time");
+        }
+        d1 = a3.getFinalStart(-3*HOUR, 0);
+        d2 = a3.getPreviousStart(time2, -3*HOUR, 0, false);
+        if (d1 == null || d2 == null || !d1.equals(d2)) {
+            errln("FAIL: getPreviousStart does not match with getFinalStart after the end year");
+        }
+
+        // AnnualTimeZone#isEquavalentTo
+        if (!a1.isEquivalentTo(a2)) {
+            errln("FAIL: AnnualTimeZoneRule a1 is equivalent to a2, but returned false");
+        }
+        if (a1.isEquivalentTo(a3)) {
+            errln("FAIL: AnnualTimeZoneRule a1 is not equivalent to a3, but returned true");
+        }
+        if (!a1.isEquivalentTo(a1)) {
+            errln("FAIL: AnnualTimeZoneRule a1 is equivalent to itself, but returned false");
+        }
+        if (a1.isEquivalentTo(t1)) {
+            errln("FAIL: AnnualTimeZoneRule is not equivalent to TimeArrayTimeZoneRule, but returned true");
+        }
+
+        // AnnualTimeZone#isTransitionRule
+        if (!a1.isTransitionRule()) {
+            errln("FAIL: An AnnualTimeZoneRule is a transition rule, but returned false");
+        }
+
+        // AnnualTimeZone#toString
+        String str = a1.toString();
+        if (str == null || str.length() == 0) {
+            errln("FAIL: AnnualTimeZoneRule#toString for a1 returns null or empty string");
+        } else {
+            logln("AnnualTimeZoneRule a1 : " + str);
+        }
+        str = a3.toString();
+        if (str == null || str.length() == 0) {
+            errln("FAIL: AnnualTimeZoneRule#toString for a3 returns null or empty string");
+        } else {
+            logln("AnnualTimeZoneRule a3 : " + str);
+        }
+
+        // InitialTimeZoneRule#isEquivalentRule
+        if (!i1.isEquivalentTo(i2)) {
+            errln("FAIL: InitialTimeZoneRule i1 is equivalent to i2, but returned false");
+        }
+        if (i1.isEquivalentTo(i3)) {
+            errln("FAIL: InitialTimeZoneRule i1 is not equivalent to i3, but returned true");
+        }
+        if (i1.isEquivalentTo(a1)) {
+            errln("FAIL: An InitialTimeZoneRule is not equivalent to an AnnualTimeZoneRule, but returned true");
+        }
+
+        // InitialTimeZoneRule#getFirstStart/getFinalStart/getNextStart/getPreviousStart
+        d1 = i1.getFirstStart(0, 0);
+        if (d1 != null) {
+            errln("FAIL: Non-null Date is returned by InitialTimeZone#getFirstStart");
+        }
+        d1 = i1.getFinalStart(0, 0);
+        if (d1 != null) {
+            errln("FAIL: Non-null Date is returned by InitialTimeZone#getFinalStart");
+        }
+        d1 = i1.getNextStart(time1, 0, 0, false);
+        if (d1 != null) {
+            errln("FAIL: Non-null Date is returned by InitialTimeZone#getNextStart");
+        }
+        d1 = i1.getPreviousStart(time1, 0, 0, false);
+        if (d1 != null) {
+            errln("FAIL: Non-null Date is returned by InitialTimeZone#getPreviousStart");
+        }
+
+        // InitialTimeZoneRule#isTransitionRule
+        if (i1.isTransitionRule()) {
+            errln("FAIL: An InitialTimeZoneRule is not a transition rule, but returned true");
+        }
+
+        // InitialTimeZoneRule#toString
+        str = i1.toString();
+        if (str == null || str.length() == 0) {
+            errln("FAIL: InitialTimeZoneRule#toString returns null or empty string");
+        } else {
+            logln("InitialTimeZoneRule i1 : " + str);
+        }
+        
+        
+        // TimeArrayTimeZoneRule#getStartTimes
+        long[] times = t1.getStartTimes();
+        if (times == null || times.length == 0 || times[0] != 0) {
+            errln("FAIL: Bad start times are returned by TimeArrayTimeZoneRule#getStartTimes");
+        }
+
+        // TimeArrayTimeZoneRule#getTimeType
+        if (t1.getTimeType() != DateTimeRule.UTC_TIME) {
+            errln("FAIL: TimeArrayTimeZoneRule t1 uses UTC_TIME, but different type is returned");
+        }
+        if (t4.getTimeType() != DateTimeRule.STANDARD_TIME) {
+            errln("FAIL: TimeArrayTimeZoneRule t4 uses STANDARD_TIME, but different type is returned");
+        }
+        if (t5.getTimeType() != DateTimeRule.WALL_TIME) {
+            errln("FAIL: TimeArrayTimeZoneRule t5 uses WALL_TIME, but different type is returned");
+        }
+
+        // TimeArrayTimeZoneRule#getFirstStart/getFinalStart
+        d1 = t1.getFirstStart(0, 0);
+        if (d1 == null || d1.getTime() != trtimes1[0]) {
+            errln("FAIL: Bad first start time returned from TimeArrayTimeZoneRule t1");
+        }
+        d1 = t1.getFinalStart(0, 0);
+        if (d1 == null || d1.getTime() != trtimes1[0]) {
+            errln("FAIL: Bad final start time returned from TimeArrayTimeZoneRule t1");
+        }
+        d1 = t4.getFirstStart(-4*HOUR, 1*HOUR);
+        if (d1 == null || (d1.getTime() != trtimes1[0] + 4*HOUR)) {
+            errln("FAIL: Bad first start time returned from TimeArrayTimeZoneRule t4");
+        }
+        d1 = t5.getFirstStart(-4*HOUR, 1*HOUR);
+        if (d1 == null || (d1.getTime() != trtimes1[0] + 3*HOUR)) {
+            errln("FAIL: Bad first start time returned from TimeArrayTimeZoneRule t5");
+        }
+
+        // TimeArrayTimeZoneRule#getNextStart/getPreviousStart
+        d1 = t3.getNextStart(time1, -3*HOUR, 1*HOUR, false);
+        if (d1 != null) {
+            errln("FAIL: Non-null Date is returned by getNextStart after the final transition for t3");
+        }
+        d1 = t3.getPreviousStart(time1, -3*HOUR, 1*HOUR, false);
+        if (d1 == null || d1.getTime() != trtimes2[1]) {
+            errln("FAIL: Bad start time returned by getPreviousStart for t3");
+        } else {
+            d2 = t3.getPreviousStart(d1.getTime(), -3*HOUR, 1*HOUR, false);
+            if (d2 == null || d2.getTime() != trtimes2[0]) {
+                errln("FAIL: Bad start time returned by getPreviousStart for t3");
+            }
+        }
+        d1 = t3.getPreviousStart(time3, -3*HOUR, 1*HOUR, false); //time3 - year 1950, no result expected
+        if (d1 != null) {
+            errln("FAIL: Non-null Date is returned by getPrevoousStart for t3");
+        }
+
+        // TimeArrayTimeZoneRule#isEquivalentTo
+        if (!t1.isEquivalentTo(t2)) {
+            errln("FAIL: TimeArrayTimeZoneRule t1 is equivalent to t2, but returned false");
+        }
+        if (t1.isEquivalentTo(t3)) {
+            errln("FAIL: TimeArrayTimeZoneRule t1 is not equivalent to t3, but returned true");
+        }
+        if (t1.isEquivalentTo(t4)) {
+            errln("FAIL: TimeArrayTimeZoneRule t1 is not equivalent to t4, but returned true");
+        }
+        if (t1.isEquivalentTo(a1)) {
+            errln("FAIL: TimeArrayTimeZoneRule is not equivalent to AnnualTimeZoneRule, but returned true");
+        }
+
+        // TimeArrayTimeZoneRule#isTransitionRule
+        if (!t1.isTransitionRule()) {
+            errln("FAIL: A TimeArrayTimeZoneRule is a transition rule, but returned false");
+        }
+
+        // TimeArrayTimeZoneRule#toString
+        str = t3.toString();
+        if (str == null || str.length() == 0) {
+            errln("FAIL: TimeArrayTimeZoneRule#toString returns null or empty string");
+        } else {
+            logln("TimeArrayTimeZoneRule t3 : " + str);
+        }
+
+        // DateTimeRule#toString
+        str = dtr1.toString();
+        if (str == null || str.length() == 0) {
+            errln("FAIL: DateTimeRule#toString for dtr1 returns null or empty string");
+        } else {
+            logln("DateTimeRule dtr1 : " + str);
+        }
+        str = dtr2.toString();
+        if (str == null || str.length() == 0) {
+            errln("FAIL: DateTimeRule#toString for dtr2 returns null or empty string");
+        } else {
+            logln("DateTimeRule dtr1 : " + str);
+        }
+        str = dtr3.toString();
+        if (str == null || str.length() == 0) {
+            errln("FAIL: DateTimeRule#toString for dtr3 returns null or empty string");
+        } else {
+            logln("DateTimeRule dtr1 : " + str);
+        }
+        str = dtr4.toString();
+        if (str == null || str.length() == 0) {
+            errln("FAIL: DateTimeRule#toString for dtr4 returns null or empty string");
+        } else {
+            logln("DateTimeRule dtr1 : " + str);
+        }
+    }
+
+    /*
+     * API coverage test for BasicTimeZone APIs in SimpleTimeZone
+     */
+    public void TestSimpleTimeZoneCoverage() {
+
+        long time1 = getUTCMillis(1990, Calendar.JUNE, 1);
+        long time2 = getUTCMillis(2000, Calendar.JUNE, 1);
+
+        TimeZoneTransition tzt1, tzt2;
+
+        // BasicTimeZone API implementation in SimpleTimeZone
+        SimpleTimeZone stz1 = new SimpleTimeZone(-5*HOUR, "GMT-5");
+
+        tzt1 = stz1.getNextTransition(time1, false);
+        if (tzt1 != null) {
+            errln("FAIL: No transition must be returned by getNextTranstion for SimpleTimeZone with no DST rule");
+        }
+        tzt1 = stz1.getPreviousTransition(time1, false);
+        if (tzt1 != null) {
+            errln("FAIL: No transition must be returned by getPreviousTransition  for SimpleTimeZone with no DST rule");
+        }
+        TimeZoneRule[] tzrules = stz1.getTimeZoneRules();
+        if (tzrules.length != 1 || !(tzrules[0] instanceof InitialTimeZoneRule)) {
+            errln("FAIL: Invalid results returned by SimpleTimeZone#getTimeZoneRules");
+        }
+
+        // Set DST rule
+        stz1.setStartRule(Calendar.MARCH, 11, 2*HOUR); // March 11
+        stz1.setEndRule(Calendar.NOVEMBER, 1, Calendar.SUNDAY, 2*HOUR); // First Sunday in November
+        tzt1 = stz1.getNextTransition(time1, false);
+        if (tzt1 == null) {
+            errln("FAIL: Non-null transition must be returned by getNextTranstion for SimpleTimeZone with a DST rule");
+        }
+        tzt1 = stz1.getPreviousTransition(time1, false);
+        if (tzt1 == null) {
+            errln("FAIL: Non-null transition must be returned by getPreviousTransition  for SimpleTimeZone with a DST rule");
+        }
+        tzrules = stz1.getTimeZoneRules();
+        if (tzrules.length != 3 || !(tzrules[0] instanceof InitialTimeZoneRule)
+                || !(tzrules[1] instanceof AnnualTimeZoneRule)
+                || !(tzrules[2] instanceof AnnualTimeZoneRule)) {
+            errln("FAIL: Invalid results returned by SimpleTimeZone#getTimeZoneRules for a SimpleTimeZone with DST");
+        }
+        // Set DST start year
+        stz1.setStartYear(2007);
+        tzt1 = stz1.getPreviousTransition(time1, false);
+        if (tzt1 != null) {
+            errln("FAIL: No transition must be returned before 1990");
+        }
+        tzt1 = stz1.getNextTransition(time1, false); // transition after 1990-06-01
+        tzt2 = stz1.getNextTransition(time2, false); // transition after 2000-06-01
+        if (tzt1 == null || tzt2 == null || !tzt1.equals(tzt2)) {
+            errln("FAIL: Bad transition returned by SimpleTimeZone#getNextTransition");
+        }
+    }
+
+    // Internal utility methods -----------------------------------------
+
     /*
      * Check if a time shift really happens on each transition returned by getNextTransition or
      * getPreviousTransition in the specified time range

@@ -179,10 +179,12 @@ public class RuleBasedTimeZone extends BasicTimeZone {
      * @draft ICU 3.8
      * @provisional This API might change or be removed in a future release.
      */
+    ///CLOVER:OFF
     public void setRawOffset(int offsetMillis) {
         // TODO: Do nothing for now..
         throw new UnsupportedOperationException("setRawOffset in RuleBasedTimeZone is not supported.");
     }
+    ///CLOVER:ON
 
     /**
      * {@inheritDoc}
