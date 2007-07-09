@@ -41,7 +41,7 @@ public class TimeZoneRuleTest extends TestFmwk {
     }
 
     /*
-     * Compare SimpleTimeZone with equivalent RBTZ
+     * RuleBasedTimeZone test cases
      */
     public void TestSimpleRuleBasedTimeZone() {
         SimpleTimeZone stz = new SimpleTimeZone(-1*HOUR, "TestSTZ",
@@ -59,7 +59,7 @@ public class TimeZoneRuleTest extends TestFmwk {
                 -1*HOUR,        // Raw offset
                 1*HOUR);        // DST saving amount
         
-        // Original rules
+        // RBTZ
         RuleBasedTimeZone rbtz1 = new RuleBasedTimeZone("RBTZ1", ir);
         dtr = new DateTimeRule(Calendar.SEPTEMBER, 30, Calendar.SATURDAY, false,
                 1*HOUR, DateTimeRule.WALL_TIME); // SUN<=30 in September, at 1AM wall time
@@ -120,6 +120,83 @@ public class TimeZoneRuleTest extends TestFmwk {
         RuleBasedTimeZone rbtz1c = (RuleBasedTimeZone)rbtz1.clone();
         if (!rbtz1.hasSameRules(rbtz1c)) {
             errln("FAIL: Cloned RuleBasedTimeZone must have the same rules with the original.");
+        }
+
+        // getOffset
+        GregorianCalendar cal = new GregorianCalendar();
+        int[] offsets = new int[2];
+        int offset;
+        boolean dst;
+
+        cal.setTimeZone(rbtz1);
+        cal.clear();
+
+        // Jan 1, 1000 BC
+        cal.set(Calendar.ERA, GregorianCalendar.BC);
+        cal.set(1000, Calendar.JANUARY, 1);
+
+        offset = rbtz1.getOffset(cal.get(Calendar.ERA), cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.DAY_OF_WEEK), cal.get(Calendar.MILLISECONDS_IN_DAY));
+        if (offset != 0) {
+            errln("FAIL: Invalid time zone offset: " + offset + " /expected: 0");
+        }
+        dst = rbtz1.inDaylightTime(cal.getTime());
+        if (!dst) {
+            errln("FAIL: Invalid daylight saving time");
+        }
+        rbtz1.getOffset(cal.getTimeInMillis(), true, offsets);
+        if (offsets[0] != -3600000) {
+            errln("FAIL: Invalid time zone raw offset: " + offsets[0] + " /expected: -3600000");
+        }
+        if (offsets[1] != 3600000) {            
+            errln("FAIL: Invalid DST amount: " + offsets[1] + " /expected: 3600000");
+        }
+
+        // July 1, 2000, AD
+        cal.set(Calendar.ERA, GregorianCalendar.AD);
+        cal.set(2000, Calendar.JULY, 1);
+
+        offset = rbtz1.getOffset(cal.get(Calendar.ERA), cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.DAY_OF_WEEK), cal.get(Calendar.MILLISECONDS_IN_DAY));
+        if (offset != -3600000) {
+            errln("FAIL: Invalid time zone offset: " + offset + " /expected: -3600000");
+        }
+        dst = rbtz1.inDaylightTime(cal.getTime());
+        if (dst) {
+            errln("FAIL: Invalid daylight saving time");
+        }
+        rbtz1.getOffset(cal.getTimeInMillis(), true, offsets);
+        if (offsets[0] != -3600000) {
+            errln("FAIL: Invalid time zone raw offset: " + offsets[0] + " /expected: -3600000");
+        }
+        if (offsets[1] != 0) {            
+            errln("FAIL: Invalid DST amount: " + offsets[1] + " /expected: 0");
+        }
+
+        // July 1, 2000, AD
+
+        // Try to add 3rd final rule
+        dtr = new DateTimeRule(Calendar.OCTOBER, 15, 1*HOUR, DateTimeRule.WALL_TIME);
+        atzr = new AnnualTimeZoneRule("3RD_ATZ", -1*HOUR, 2*HOUR, dtr, STARTYEAR, AnnualTimeZoneRule.MAX_YEAR);
+        boolean bException = false;
+        try {
+            rbtz1.addTransitionRule(atzr);
+        } catch (IllegalStateException ise) {
+            bException = true;
+        }
+        if (!bException) {
+            errln("FAIL: 3rd final rule must be rejected");
+        }
+
+        // Try to add an initial rule
+        bException = false;
+        try {
+            rbtz1.addTransitionRule(new InitialTimeZoneRule("Test Initial", 2*HOUR, 0));
+        } catch (IllegalArgumentException iae) {
+            bException = true;
+        }
+        if (!bException) {
+            errln("FAIL: InitialTimeZoneRule must be rejected");
         }
     }
 
@@ -203,6 +280,10 @@ public class TimeZoneRuleTest extends TestFmwk {
         // TimeZone APIs
         if (ny.hasSameRules(rbtz) || rbtz.hasSameRules(ny)) {
             errln("FAIL: hasSameRules must return false");
+        }
+        RuleBasedTimeZone rbtzc = (RuleBasedTimeZone)rbtz.clone();
+        if (!rbtz.hasSameRules(rbtzc) || !rbtz.hasEquivalentTransitions(rbtzc, jan1_1950, jan1_2010)) {
+            errln("FAIL: hasSameRules/hasEquivalentTransitions must return true for cloned RBTZs");
         }
 
         long times[] = {
@@ -369,6 +450,23 @@ public class TimeZoneRuleTest extends TestFmwk {
                 vtz_new = VTimeZone.create(reader);
                 reader.close();
 
+                // Write out VTIMEZONE one more time
+                ByteArrayOutputStream baos1 = new ByteArrayOutputStream();
+                OutputStreamWriter writer1 = new OutputStreamWriter(baos1);
+                vtz_new.write(writer1);
+                writer1.close();
+                byte[] vtzdata1 = baos1.toByteArray();
+
+                // Make sure VTIMEZONE data is exactly same with the first one
+                if (vtzdata.length != vtzdata1.length) {
+                    errln("FAIL: different VTIMEZONE data length");
+                }
+                for (int j = 0; j < vtzdata.length; j++) {
+                    if (vtzdata[j] != vtzdata1[j]) {
+                        errln("FAIL: different VTIMEZONE data");
+                        break;
+                    }
+                }
             } catch (IOException ioe) {
                 errln("FAIL: IO error while writing/reading VTIMEZONE data");
             }
@@ -969,6 +1067,13 @@ public class TimeZoneRuleTest extends TestFmwk {
         tzt1 = stz1.getNextTransition(time1, false);
         if (tzt1 == null) {
             errln("FAIL: Non-null transition must be returned by getNextTranstion for SimpleTimeZone with a DST rule");
+        } else {
+            String str = tzt1.toString();
+            if (str == null || str.length() == 0) {
+                errln("FAIL: TimeZoneTransition#toString returns null or empty string");
+            } else {
+                logln(str);
+            }
         }
         tzt1 = stz1.getPreviousTransition(time1, false);
         if (tzt1 == null) {
@@ -990,6 +1095,112 @@ public class TimeZoneRuleTest extends TestFmwk {
         tzt2 = stz1.getNextTransition(time2, false); // transition after 2000-06-01
         if (tzt1 == null || tzt2 == null || !tzt1.equals(tzt2)) {
             errln("FAIL: Bad transition returned by SimpleTimeZone#getNextTransition");
+        }
+    }
+    
+    /*
+     * API coverage test for VTimeZone
+     */
+    public void TestVTimeZoneCoverage() {
+        final String TZID = "Europe/Moscow";
+        BasicTimeZone otz = (BasicTimeZone)TimeZone.getTimeZone(TZID);
+        VTimeZone vtz = VTimeZone.create(TZID);
+
+        // getOffset(era, year, month, day, dayOfWeek, milliseconds)
+        int offset1 = otz.getOffset(GregorianCalendar.AD, 2007, Calendar.JULY, 1, Calendar.SUNDAY, 0);
+        int offset2 = vtz.getOffset(GregorianCalendar.AD, 2007, Calendar.JULY, 1, Calendar.SUNDAY, 0);
+        if (offset1 != offset2) {
+            errln("FAIL: getOffset(int,int,int,int,int,int) returned different results in VTimeZone and OlsonTimeZone");
+        }
+
+        // getOffset(date, local, offsets)
+        int[] offsets1 = new int[2];
+        int[] offsets2 = new int[2];
+        long t = System.currentTimeMillis();
+        otz.getOffset(t, false, offsets1);
+        vtz.getOffset(t, false, offsets2);
+        if (offsets1[0] != offsets2[0] || offsets1[1] != offsets2[1]) {
+            errln("FAIL: getOffset(long,boolean,int[]) returned different results in VTimeZone and OlsonTimeZone");
+        }
+
+        // getRawOffset
+        if (otz.getRawOffset() != vtz.getRawOffset()) {
+            errln("FAIL: getRawOffset returned different results in VTimeZone and OlsonTimeZone");
+        }
+
+        // inDaylightTime
+        Date d = new Date();
+        if (otz.inDaylightTime(d) != vtz.inDaylightTime(d)) {
+            errln("FAIL: inDaylightTime returned different results in VTimeZone and OlsonTimeZone");
+        }
+
+        // useDaylightTime
+        if (otz.useDaylightTime() != vtz.useDaylightTime()) {
+            errln("FAIL: useDaylightTime returned different results in VTimeZone and OlsonTimeZone");
+        }
+
+        // setRawOffset
+        final int RAW = -10*HOUR;
+        VTimeZone tmpvtz = (VTimeZone)vtz.clone();
+        tmpvtz.setRawOffset(RAW);
+        if (tmpvtz.getRawOffset() != RAW) {
+            logln("setRawOffset is implemented");
+        }
+
+        // hasSameRules
+        boolean bSame = otz.hasSameRules(vtz);
+        logln("OlsonTimeZone#hasSameRules(VTimeZone) should return false always for now - actual: " + bSame);
+
+        // getTZURL/setTZURL
+        final String TZURL = "http://icu-project.org/timezone";
+        String tzurl = vtz.getTZURL();
+        if (tzurl != null) {
+            errln("FAIL: getTZURL returned non-null value");
+        }
+        vtz.setTZURL(TZURL);
+        tzurl = vtz.getTZURL();
+        if (!TZURL.equals(tzurl)) {
+            errln("FAIL: URL returned by getTZURL does not match the one set by setTZURL");
+        }
+
+        // getLastModified/setLastModified
+        Date lastmod = vtz.getLastModified();
+        if (lastmod != null) {
+            errln("FAIL: getLastModified returned non-null value");
+        }
+        Date newdate = new Date();
+        vtz.setLastModified(newdate);
+        lastmod = vtz.getLastModified();
+        if (!newdate.equals(lastmod)) {
+            errln("FAIL: Date returned by getLastModified does not match the one set by setLastModified");
+        }
+
+        // getNextTransition/getPreviousTransition
+        long base = getUTCMillis(2007, Calendar.JULY, 1);
+        TimeZoneTransition tzt1 = otz.getNextTransition(base, true);
+        TimeZoneTransition tzt2 = vtz.getNextTransition(base, true);
+        if (tzt1.equals(tzt2)) {
+            errln("FAIL: getNextTransition returned different results in VTimeZone and OlsonTimeZone");
+        }
+        tzt1 = otz.getPreviousTransition(base, false);
+        tzt2 = vtz.getPreviousTransition(base, false);
+        if (tzt1.equals(tzt2)) {
+            errln("FAIL: getPreviousTransition returned different results in VTimeZone and OlsonTimeZone");
+        }
+
+        // hasEquivalentTransitions
+        long time1 = getUTCMillis(1950, Calendar.JANUARY, 1);
+        long time2 = getUTCMillis(2020, Calendar.JANUARY, 1);
+        if (!vtz.hasEquivalentTransitions(otz, time1, time2)) {
+            errln("FAIL: hasEquivalentTransitons returned false for the same time zone");
+        }
+
+        // getTimeZoneRules
+        TimeZoneRule[] rulesetAll = vtz.getTimeZoneRules();
+        TimeZoneRule[] ruleset1 = vtz.getTimeZoneRules(time1);
+        TimeZoneRule[] ruleset2 = vtz.getTimeZoneRules(time2);
+        if (rulesetAll.length < ruleset1.length || ruleset1.length < ruleset2.length) {
+            errln("FAIL: Number of rules returned by getRules is invalid");
         }
     }
 
