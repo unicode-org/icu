@@ -214,6 +214,7 @@ public class VTimeZone extends BasicTimeZone {
                     }
                 } else {
                     bw.write(line);
+                    bw.write(NEWLINE);
                 }
             }
             bw.flush();
@@ -337,6 +338,17 @@ public class VTimeZone extends BasicTimeZone {
      */
     public TimeZoneRule[] getTimeZoneRules(long start) {
         return tz.getTimeZoneRules(start);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
+    public Object clone() {
+        VTimeZone other = (VTimeZone)super.clone();
+        other.tz = (BasicTimeZone)tz.clone();
+        return other;
     }
 
     // private stuff ------------------------------------------------------

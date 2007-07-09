@@ -451,6 +451,22 @@ public class RuleBasedTimeZone extends BasicTimeZone {
         return result;
     }
     
+    /**
+     * {@inheritDoc}
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
+    public Object clone() {
+        RuleBasedTimeZone other = (RuleBasedTimeZone)super.clone();
+        if (historicRules != null) {
+            other.historicRules = (List)((ArrayList)historicRules).clone(); // rules are immutable
+        }
+        if (finalRules != null) {
+            other.finalRules = (AnnualTimeZoneRule[])finalRules.clone();
+        }
+        return other;
+    }
+
     // private stuff
 
     /*
