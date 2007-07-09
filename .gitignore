@@ -139,6 +139,7 @@ icu4c/source/samples/coll/Debug
 icu4c/source/samples/coll/coll.vcproj.*.*.user
 icu4c/source/samples/coll/release
 icu4c/source/samples/csdet/Debug
+icu4c/source/samples/csdet/Makefile
 icu4c/source/samples/csdet/csdet.vcproj.*.*.user
 icu4c/source/samples/csdet/release
 icu4c/source/samples/date/*.d
@@ -230,6 +231,7 @@ icu4c/source/test/cintltst/cintltst.exe
 icu4c/source/test/cintltst/cintltst.vcproj.*.*.user
 icu4c/source/test/cintltst/debug
 icu4c/source/test/cintltst/release
+icu4c/source/test/compat/Makefile
 icu4c/source/test/hdrtst/Makefile
 icu4c/source/test/intltest/*.d
 icu4c/source/test/intltest/*.o
@@ -423,6 +425,7 @@ icu4c/source/tools/gencmn/Makefile
 icu4c/source/tools/gencmn/Release
 icu4c/source/tools/gencmn/debug
 icu4c/source/tools/gencmn/gencmn
+icu4c/source/tools/gencmn/gencmn.8
 icu4c/source/tools/gencmn/gencmn.[0-9]
 icu4c/source/tools/gencmn/gencmn.vcproj.*.*.user
 icu4c/source/tools/gencmn/release
@@ -437,6 +440,7 @@ icu4c/source/tools/gencnval/Makefile
 icu4c/source/tools/gencnval/Release
 icu4c/source/tools/gencnval/debug
 icu4c/source/tools/gencnval/gencnval
+icu4c/source/tools/gencnval/gencnval.1
 icu4c/source/tools/gencnval/gencnval.[0-9]
 icu4c/source/tools/gencnval/gencnval.vcproj.*.*.user
 icu4c/source/tools/gencnval/release
@@ -503,6 +507,7 @@ icu4c/source/tools/genprops/genprops
 icu4c/source/tools/genprops/genprops.[0-9]
 icu4c/source/tools/genprops/genprops.vcproj.*.*.user
 icu4c/source/tools/genprops/release
+icu4c/source/tools/genrb/*.1
 icu4c/source/tools/genrb/*.d
 icu4c/source/tools/genrb/*.o
 icu4c/source/tools/genrb/*.pdb
@@ -519,6 +524,7 @@ icu4c/source/tools/genrb/genrb
 icu4c/source/tools/genrb/genrb.[0-9]
 icu4c/source/tools/genrb/genrb.vcproj.*.*.user
 icu4c/source/tools/genrb/release
+icu4c/source/tools/gensprep/*.8
 icu4c/source/tools/gensprep/*.d
 icu4c/source/tools/gensprep/*.o
 icu4c/source/tools/gensprep/*.pdb
@@ -553,6 +559,7 @@ icu4c/source/tools/genuca/genuca
 icu4c/source/tools/genuca/genuca.8
 icu4c/source/tools/genuca/genuca.vcproj.*.*.user
 icu4c/source/tools/genuca/release
+icu4c/source/tools/icupkg/*.8
 icu4c/source/tools/icupkg/*.d
 icu4c/source/tools/icupkg/*.ncb
 icu4c/source/tools/icupkg/*.o
@@ -581,6 +588,7 @@ icu4c/source/tools/icuswap/icuswap
 icu4c/source/tools/icuswap/icuswap.[0-9]
 icu4c/source/tools/icuswap/icuswap.vcproj.*.*.user
 icu4c/source/tools/icuswap/release
+icu4c/source/tools/makeconv/*.1
 icu4c/source/tools/makeconv/*.d
 icu4c/source/tools/makeconv/*.o
 icu4c/source/tools/makeconv/*.pdb
@@ -593,6 +601,7 @@ icu4c/source/tools/makeconv/makeconv
 icu4c/source/tools/makeconv/makeconv.[0-9]
 icu4c/source/tools/makeconv/makeconv.vcproj.*.*.user
 icu4c/source/tools/makeconv/release
+icu4c/source/tools/pkgdata/*.1
 icu4c/source/tools/pkgdata/*.d
 icu4c/source/tools/pkgdata/*.ncb
 icu4c/source/tools/pkgdata/*.o
