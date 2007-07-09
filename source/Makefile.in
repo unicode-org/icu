@@ -59,7 +59,7 @@ EXTRA_DATA =
 install-recursive clean clean-local clean-recursive distclean		\
 distclean-local distclean-recursive doc dist dist-local dist-recursive	\
 check check-local check-recursive clean-recursive-with-twist install-icu \
-doc install-doc
+doc install-doc tests
 
 ## Clear suffix list
 .SUFFIXES :
@@ -143,6 +143,10 @@ endif
 
 $(DESTDIR)$(pkglibdir)/%: $(top_srcdir)/../data/%
 	$(INSTALL_DATA) $< $@
+
+# Build the tests, but don't run them.
+tests: all
+	$(MAKE) -C $(top_builddir)/test
 
 dist-local:
 
