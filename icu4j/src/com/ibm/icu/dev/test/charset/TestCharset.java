@@ -3221,7 +3221,6 @@ public class TestCharset extends TestFmwk {
     
     //provide better code coverage for the generic charset UTF32
     public void TestCharsetUTF32() {
-        CoderResult result = CoderResult.UNDERFLOW;
         CharsetProvider provider = new CharsetProviderICU();
         Charset cs = provider.charsetForName("UTF-32");        
         CharsetDecoder decoder = cs.newDecoder();
