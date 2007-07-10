@@ -412,6 +412,13 @@ void RBBIAPITest::TestIteration()
     delete bi;
 
     status=U_ZERO_ERROR;
+    bi  = (RuleBasedBreakIterator*)RuleBasedBreakIterator::
+            createXGraphemeClusterInstance(Locale::getDefault(), status);
+    TEST_ASSERT_SUCCESS(status);
+    TEST_ASSERT(bi != NULL);
+    delete bi;
+
+    status=U_ZERO_ERROR;
     bi  = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status);
     if (U_FAILURE(status) || bi == NULL)  {
         errln("Failure creating character break iterator.  Status = %s", u_errorName(status));

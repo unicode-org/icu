@@ -1502,6 +1502,13 @@ void RBBITest::TestExtended() {
                 charIdx += 6;
                 break;
             }
+            if (testString.compare(charIdx-1, 5, "<xgc>") == 0) {
+                delete tp.bi;
+                tp.bi = BreakIterator::createXGraphemeClusterInstance(locale,  status);
+                charIdx += 4;
+                break;
+            }
+                
             // <locale  loc_name>
             localeMatcher.reset(testString);
             if (localeMatcher.lookingAt(charIdx-1, status)) {
