@@ -11,6 +11,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.Date;
 
 import com.ibm.icu.dev.test.TestFmwk;
@@ -436,6 +438,8 @@ public class TimeZoneRuleTest extends TestFmwk {
         for (int i = 0; i < tzids.length; i++) {
             BasicTimeZone olsontz = (BasicTimeZone)TimeZone.getTimeZone(tzids[i]);
             VTimeZone vtz_org = VTimeZone.create(tzids[i]);
+            vtz_org.setTZURL("http://source.icu-project.org/timezone");
+            vtz_org.setLastModified(new Date());
             VTimeZone vtz_new = null;
             try {
                 // Write out VTIMEZONE
@@ -1201,6 +1205,78 @@ public class TimeZoneRuleTest extends TestFmwk {
         TimeZoneRule[] ruleset2 = vtz.getTimeZoneRules(time2);
         if (rulesetAll.length < ruleset1.length || ruleset1.length < ruleset2.length) {
             errln("FAIL: Number of rules returned by getRules is invalid");
+        }
+    }
+
+    public void TestVTimeZoneParse() {
+        // Trying to create VTimeZone from empty data
+        StringReader r = new StringReader("");
+        VTimeZone empty = VTimeZone.create(r);
+        if (empty != null) {
+            errln("FAIL: Non-null VTimeZone is returned for empty VTIMEZONE data");
+        }
+
+        // Create VTimeZone for Asia/Tokyo
+        String asiaTokyo =
+                "BEGIN:VTIMEZONE\r\n" +
+                "TZID:Asia\r\n" +
+                "\t/Tokyo\r\n" +
+                "BEGIN:STANDARD\r\n" +
+                "TZOFFSETFROM:+0900\r\n" +
+                "TZOFFSETTO:+0900\r\n" +
+                "TZNAME:JST\r\n" +
+                "DTSTART:19700101\r\n" +
+                " T000000\r\n" +
+                "END:STANDARD\r\n" +
+                "END:VTIMEZONE";
+        r = new StringReader(asiaTokyo);
+        VTimeZone tokyo = VTimeZone.create(r);
+        if (tokyo == null) {
+            errln("FAIL: Failed to create a VTimeZone tokyo");
+        } else {
+            // Make sure offsets are correct
+            int[] offsets = new int[2];
+            tokyo.getOffset(System.currentTimeMillis(), false, offsets);
+            if (offsets[0] != 9*HOUR || offsets[1] != 0) {
+                errln("FAIL: Bad offsets returned by a VTimeZone created for Tokyo");
+            }
+        }        
+
+        // Create VTimeZone from VTIMEZONE data
+        String fooData = 
+            "BEGIN:VCALENDAR\r\n" +
+            "BEGIN:VTIMEZONE\r\n" +
+            "TZID:FOO\r\n" +
+            "BEGIN:STANDARD\r\n" +
+            "TZOFFSETFROM:-0700\r\n" +
+            "TZOFFSETTO:-0800\r\n" +
+            "TZNAME:FST\r\n" +
+            "DTSTART:20071010T010000\r\n" +
+            "RRULE:FREQ=YEARLY;BYDAY=WE;BYMONTHDAY=10,11,12,13,14,15,16;BYMONTH=10\r\n" +
+            "END:STANDARD\r\n" +
+            "BEGIN:DAYLIGHT\r\n" +
+            "TZOFFSETFROM:-0800\r\n" +
+            "TZOFFSETTO:-0700\r\n" +
+            "TZNAME:FDT\r\n" +
+            "DTSTART:20070415T010000\r\n" +
+            "RRULE:FREQ=YEARLY;BYMONTHDAY=15;BYMONTH=4\r\n" +
+            "END:DAYLIGHT\r\n" +
+            "END:VTIMEZONE\r\n" +
+            "END:VCALENDAR";
+
+        r = new StringReader(fooData);
+        VTimeZone foo = VTimeZone.create(r);
+        if (foo == null) {
+            errln("FAIL: Failed to create a VTimeZone foo");
+        } else {
+            // Write VTIMEZONE data
+            StringWriter w = new StringWriter();
+            try {
+                foo.write(w, getUTCMillis(2005, Calendar.JANUARY, 1));
+            } catch (IOException ioe) {
+                errln("FAIL: IOException is thrown while writing VTIMEZONE data for foo");
+            }
+            logln(w.toString());
         }
     }
 
