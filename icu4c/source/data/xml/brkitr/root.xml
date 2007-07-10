@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
- Copyright (c) 2006 International Business Machines Corporation and others. All rights reserved.
+ Copyright (c) 2007 International Business Machines Corporation and others. All rights reserved.
 -->
 <!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd"
 [
@@ -22,6 +22,7 @@
                 <icu:line     icu:dependency="line.brk"/>
                 <icu:sentence icu:dependency="sent.brk"/>
                 <icu:title    icu:dependency="title.brk"/>
+                <icu:xgc      icu:dependency="xgc.brk"/>
             </icu:boundaries>
             <icu:dictionaries>
                 <icu:dictionary type="Thai" icu:dependency="thaidict.ctd"/>

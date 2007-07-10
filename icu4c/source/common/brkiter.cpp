@@ -189,6 +189,15 @@ BreakIterator::createTitleInstance(const Locale& key, UErrorCode& status)
 
 // -------------------------------------
 
+// Creates a break iterator for Extended Grapheme Cluster breaks.
+BreakIterator* U_EXPORT2
+BreakIterator::createXGraphemeClusterInstance(const Locale& key, UErrorCode& status)
+{
+    return createInstance(key, UBRK_X_GRAPHEME_CLUSTER, status);
+}
+
+// -------------------------------------
+
 // Gets all the available locales that has localized text boundary data.
 const Locale* U_EXPORT2
 BreakIterator::getAvailableLocales(int32_t& count)
@@ -423,6 +432,9 @@ BreakIterator::makeInstance(const Locale& loc, int32_t kind, UErrorCode& status)
         break;
     case UBRK_TITLE:
         result = BreakIterator::buildInstance(loc, "title", kind, status);
+        break;
+    case UBRK_X_GRAPHEME_CLUSTER:
+        result = BreakIterator::buildInstance(loc, "xgc", kind, status);
         break;
     default:
         status = U_ILLEGAL_ARGUMENT_ERROR;
