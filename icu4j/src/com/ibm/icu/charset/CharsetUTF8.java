@@ -706,7 +706,7 @@ class CharsetUTF8 extends CharsetICU {
      */
     // static final boolean isLead(byte c) {return ((((c)-0xc0) &
     // UConverterConstants.UNSIGNED_BYTE_MASK)<0x3e);}
-    /**
+    /*
      * Is this code unit (byte) a UTF-8 trail byte?
      * 
      * @param c
@@ -714,24 +714,9 @@ class CharsetUTF8 extends CharsetICU {
      * @return TRUE or FALSE
      * @draft ICU 3.6
      */
-    public static final boolean isTrail(byte c) {
+    /*private static final boolean isTrail(byte c) {
         return (((c) & 0xc0) == 0x80);
-    }
-
-    /**
-     * How many code units (bytes) are used for the UTF-8 encoding of this Unicode code point?
-     * 
-     * @param c
-     *            32-bit code point
-     * @return 1..4, or 0 if c is a surrogate or not a Unicode code point
-     * @draft ICU 3.6
-     */
-    public static final int length(int c) {
-        long uc = c & UConverterConstants.UNSIGNED_INT_MASK;
-        return (uc <= 0x7f ? 1 : (uc <= 0x7ff ? 2 : (uc <= 0xd7ff
-                ? 3
-                : ((uc <= 0xdfff || uc > 0x10ffff) ? 0 : (uc <= 0xffff ? 3 : 4)))));
-    }
+    }*/
 
     public CharsetDecoder newDecoder() {
         return new CharsetDecoderUTF8(this);
