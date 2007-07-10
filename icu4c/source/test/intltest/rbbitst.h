@@ -69,6 +69,7 @@ public:
     void TestJapaneseWordBreak();
     void TestTrieDict();
     void TestUnicodeFiles();
+    void TestBug5775();
 
     void TestDebug();
 
