@@ -397,6 +397,22 @@ public:
     static BreakIterator* U_EXPORT2
     createTitleInstance(const Locale& where, UErrorCode& status);
 
+   /**
+    * Create BreakIterator for Extended Grapheme Clusters using specified locale
+    * Returns an instance of a BreakIterator for locating XGC booundaries
+    * Extended Grapheme Clusters are combining character sequences and other
+    *   sequences that should remain unbroken when iterating over
+    *   "characters" from a user perspective.
+    * @param loc the locale.
+    * @param status Receive information regarding any errors or warnings that
+    *   occurred in creating the break iterator.
+    * @return A BreakIterator for Extended Grapheme Clusters.
+    * The caller owns the returned object and is responsible for deleting it.
+    * @draft ICU 3.8
+    */
+   static BreakIterator* U_EXPORT2
+   createXGraphemeClusterInstance(const Locale& loc, UErrorCode& status);
+   
     /**
      * Get the set of Locales for which TextBoundaries are installed.
      * <p><b>Note:</b> this will not return locales added through the register
