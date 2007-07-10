@@ -143,17 +143,6 @@ public class TestConversion extends ModuleTest {
         logln("Callback: (" + cc.cbopt + ")");
         logln("...............................................");
 
-        //         ----for debugging only
-        // TODO: ***Currently skipping test for charset ibm-1390,
-        // ibm-970 due to external mapping need to be fix
-        if ((cc.charset.equalsIgnoreCase("ibm-1390")
-                || cc.charset.equalsIgnoreCase("ibm-970")) && skipIfBeforeICU(3,7,2)) {
-            logln("Skipping test:("
-                    + cc.charset
-                    + ") due to ICU Charset external mapping not supported at this time");
-            return;
-        }
-
         // process the retrieved test data case
         if (cc.offsets.length == 0) {
             cc.offsets = null;
