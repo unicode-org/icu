@@ -41,6 +41,75 @@
     errln("Failure in file %s, line %d, status = \"%s\"", __FILE__, __LINE__, u_errorName(errcode));}}
 
 
+//---------------------------------------------
+// runIndexedTest
+//---------------------------------------------
+
+void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* params )
+{
+    if (exec) logln("TestSuite RuleBasedBreakIterator: ");
+
+    switch (index) {
+        case 0: name = "TestBug4153072";
+            if(exec) TestBug4153072();                         break;
+        case 1: name = "TestJapaneseLineBreak";
+            if(exec) TestJapaneseLineBreak();                  break;
+        case 2: name = "TestStatusReturn";
+            if(exec) TestStatusReturn();                       break;
+        case 3: name = "TestUnicodeFiles";
+            if(exec) TestUnicodeFiles();                       break;
+        case 4: name = "TestEmptyString";
+            if(exec) TestEmptyString();                        break;
+
+        case 5: name = "TestGetAvailableLocales";
+            if(exec) TestGetAvailableLocales();                break;
+
+        case 6: name = "TestGetDisplayName";
+            if(exec) TestGetDisplayName();                     break;
+
+        case 7: name = "TestEndBehaviour";
+            if(exec) TestEndBehaviour();                       break;
+        case 8: name = "TestMixedThaiLineBreak";
+             if(exec) TestMixedThaiLineBreak();                break;
+        case 9: name = "TestThaiLineBreak";
+             if(exec) TestThaiLineBreak();                     break;
+        case 10: name = "TestMaiyamok";
+             if(exec) TestMaiyamok();                          break;
+        case 11: name = "TestWordBreaks";
+             if(exec) TestWordBreaks();                        break;
+        case 12: name = "TestWordBoundary";
+             if(exec) TestWordBoundary();                      break;
+        case 13: name = "TestLineBreaks";
+             if(exec) TestLineBreaks();                        break;
+        case 14: name = "TestSentBreaks";
+             if(exec) TestSentBreaks();                        break;
+        case 15: name = "TestExtended";
+             if(exec) TestExtended();                          break;
+        case 16: name = "TestMonkey";
+             if(exec) {
+ #if !UCONFIG_NO_REGULAR_EXPRESSIONS
+               TestMonkey(params);
+ #else
+               logln("skipping TestMonkey (UCONFIG_NO_REGULAR_EXPRESSIONS)");
+ #endif
+             }
+                                                               break;
+        case 17: name = "TestBug3818";
+            if(exec) TestBug3818();                            break;
+        case 18: name = "TestJapaneseWordBreak";
+            if(exec) TestJapaneseWordBreak();                  break;
+        case 19: name = "TestDebug";
+            if(exec) TestDebug();                              break;
+        case 20: name = "TestTrieDict";
+            if(exec) TestTrieDict();                           break;
+        case 21: name = "TestBug5775()";
+            if (exec) TestBug5775();                        break;
+
+        default: name = ""; break; //needed to end loop
+    }
+}
+
+
 //---------------------------------------------------------------------------
 //
 //   class BITestData   Holds a set of Break iterator test data and results
@@ -739,72 +808,6 @@ cleanup:
     delete compact2;
 }
 
-//---------------------------------------------
-// runIndexedTest
-//---------------------------------------------
-
-void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* params )
-{
-    if (exec) logln("TestSuite RuleBasedBreakIterator: ");
-
-    switch (index) {
-        case 0: name = "TestBug4153072";
-            if(exec) TestBug4153072();                         break;
-        case 1: name = "TestJapaneseLineBreak";
-            if(exec) TestJapaneseLineBreak();                  break;
-        case 2: name = "TestStatusReturn";
-            if(exec) TestStatusReturn();                       break;
-        case 3: name = "TestUnicodeFiles";
-            if(exec) TestUnicodeFiles();                       break;
-        case 4: name = "TestEmptyString";
-            if(exec) TestEmptyString();                        break;
-
-        case 5: name = "TestGetAvailableLocales";
-            if(exec) TestGetAvailableLocales();                break;
-
-        case 6: name = "TestGetDisplayName";
-            if(exec) TestGetDisplayName();                     break;
-
-        case 7: name = "TestEndBehaviour";
-            if(exec) TestEndBehaviour();                       break;
-        case 8: name = "TestMixedThaiLineBreak";
-             if(exec) TestMixedThaiLineBreak();                break;
-        case 9: name = "TestThaiLineBreak";
-             if(exec) TestThaiLineBreak();                     break;
-        case 10: name = "TestMaiyamok";
-             if(exec) TestMaiyamok();                          break;
-        case 11: name = "TestWordBreaks";
-             if(exec) TestWordBreaks();                        break;
-        case 12: name = "TestWordBoundary";
-             if(exec) TestWordBoundary();                      break;
-        case 13: name = "TestLineBreaks";
-             if(exec) TestLineBreaks();                        break;
-        case 14: name = "TestSentBreaks";
-             if(exec) TestSentBreaks();                        break;
-        case 15: name = "TestExtended";
-             if(exec) TestExtended();                          break;
-        case 16: name = "TestMonkey";
-             if(exec) {
- #if !UCONFIG_NO_REGULAR_EXPRESSIONS
-               TestMonkey(params);
- #else
-               logln("skipping TestMonkey (UCONFIG_NO_REGULAR_EXPRESSIONS)");
- #endif
-             }
-                                                               break;
-        case 17: name = "TestBug3818";
-            if(exec) TestBug3818();                            break;
-        case 18: name = "TestJapaneseWordBreak";
-            if(exec) TestJapaneseWordBreak();                  break;
-        case 19: name = "TestDebug";
-            if(exec) TestDebug();                              break;
-        case 20: name = "TestTrieDict";
-            if(exec) TestTrieDict();                           break;
-
-        default: name = ""; break; //needed to end loop
-    }
-}
-
 
 //----------------------------------------------------------------------------
 //
@@ -1164,6 +1167,35 @@ void RBBITest::TestBug4153072() {
     delete iter;
 }
 
+
+//
+// Test for problem reported by Ashok Matoria on 9 July 2007
+//    One.<kSoftHyphen><kSpace>Two.
+//
+//    Sentence break at start (0) and then on calling next() it breaks at
+//   ‘T’ of “Two”. Now, at this point if I do next() and
+//    then previous(), it breaks at <kSOftHyphen> instead of ‘T’ of Two.
+//
+void RBBITest::TestBug5775() {
+    UErrorCode status = U_ZERO_ERROR;
+    BreakIterator *bi = BreakIterator::createSentenceInstance(Locale::getEnglish(), status);
+    TEST_ASSERT_SUCCESS(status);
+    TEST_ASSERT(bi != NULL);
+
+    UnicodeString s("One.\\u00ad Two.");
+    //               01234      56789
+    s = s.unescape();
+    bi->setText(s);
+    int pos = bi->next();
+    TEST_ASSERT(pos == 6);
+    pos = bi->next();
+    TEST_ASSERT(pos == 10);
+    pos = bi->previous();
+    TEST_ASSERT(pos == 6);
+    delete bi;
+}
+    
+    
 
 /**
  * Test Japanese Line Break
