@@ -417,7 +417,9 @@ public class VTimeZone extends BasicTimeZone {
                     "com/ibm/icu/impl/data/icudt" + VersionInfo.ICU_DATA_VERSION, "zoneinfo");
                 ICU_TZVERSION = tzbundle.getString("TZVersion");
         } catch (MissingResourceException e) {
+            ///CLOVER:OFF
             ICU_TZVERSION = null;
+            ///CLOVER:ON
         }
     }
     
@@ -499,7 +501,9 @@ public class VTimeZone extends BasicTimeZone {
                 return false;
             }
         } catch (IOException ioe) {
+            ///CLOVER:OFF
             return false;
+            ///CLOVER:ON
         }
         return parse();
     }
@@ -514,9 +518,11 @@ public class VTimeZone extends BasicTimeZone {
      * Parse VTIMEZONE data and create a RuleBasedTimeZone
      */
     private boolean parse() {
+        ///CLOVER:OFF
         if (vtzlines == null || vtzlines.size() == 0) {
             return false;
         }
+        ///CLOVER:ON
 
         // timezone ID
         String tzid = null;
@@ -625,7 +631,7 @@ public class VTimeZone extends BasicTimeZone {
                     dates.add(value);
                 } else if (name.equals(ICAL_END)) {
                     // Mandatory properties
-                    if (dtstart == null || from == null || to == null || dates == null) {
+                    if (dtstart == null || from == null || to == null) {
                         state = ERR;
                         break;
                     }
@@ -1105,19 +1111,24 @@ public class VTimeZone extends BasicTimeZone {
      */
     private static TimeZoneRule createRuleByRDATE(String tzname,
             int rawOffset, int dstSavings, long start, List dates, int fromOffset) {
-        if (dates == null || dates.size() == 0) {
-            return null;
-        }
         // Create an array of transition times
-        long[] times = new long[dates.size()];
-        Iterator it = dates.iterator();
-        int idx = 0;
-        try {
-            while(it.hasNext()) {
-                times[idx++] = parseDateTimeString((String)it.next(), fromOffset);
+        long[] times;
+        if (dates == null || dates.size() == 0) {
+            // When no RDATE line is provided, use start (DTSTART)
+            // as the transition time
+            times = new long[1];
+            times[0] = start;
+        } else {
+            times = new long[dates.size()];
+            Iterator it = dates.iterator();
+            int idx = 0;
+            try {
+                while(it.hasNext()) {
+                    times[idx++] = parseDateTimeString((String)it.next(), fromOffset);
+                }
+            } catch (IllegalArgumentException iae) {
+                return null;
             }
-        } catch (IllegalArgumentException iae) {
-            return null;
         }
         return new TimeArrayTimeZoneRule(tzname, rawOffset, dstSavings, times, DateTimeRule.UTC_TIME);
     }
@@ -1209,7 +1220,8 @@ public class VTimeZone extends BasicTimeZone {
                     }
                     if (!sameRule) {
                         if (dstCount == 1) {
-                            writeZonePropsByTime(w, true, dstName, dstFromOffset, dstToOffset, dstStartTime);
+                            writeZonePropsByTime(w, true, dstName, dstFromOffset, dstToOffset,
+                                    dstStartTime, true);
                         } else {
                             writeZonePropsByDOW(w, true, dstName, dstFromOffset, dstToOffset,
                                     dstMonth, dstWeekInMonth, dstDayOfWeek, dstStartTime, dstUntilTime);
@@ -1255,7 +1267,8 @@ public class VTimeZone extends BasicTimeZone {
                     }
                     if (!sameRule) {
                         if (stdCount == 1) {
-                            writeZonePropsByTime(w, false, stdName, stdFromOffset, stdToOffset, stdStartTime);
+                            writeZonePropsByTime(w, false, stdName, stdFromOffset, stdToOffset,
+                                    stdStartTime, true);
                         } else {
                             writeZonePropsByDOW(w, false, stdName, stdFromOffset, stdToOffset,
                                     stdMonth, stdWeekInMonth, stdDayOfWeek, stdStartTime, stdUntilTime);
@@ -1286,12 +1299,13 @@ public class VTimeZone extends BasicTimeZone {
             int offset = basictz.getOffset(0 /* any time */);
             boolean isDst = (offset != basictz.getRawOffset());
             writeZonePropsByTime(w, isDst, getDefaultTZName(basictz.getID(), isDst),
-                    offset, offset, DEF_TZSTARTTIME - offset);                
+                    offset, offset, DEF_TZSTARTTIME - offset, false);                
         } else {
             if (dstCount > 0) {
                 if (finalDstRule == null) {
                     if (dstCount == 1) {
-                        writeZonePropsByTime(w, true, dstName, dstFromOffset, dstToOffset, dstStartTime);
+                        writeZonePropsByTime(w, true, dstName, dstFromOffset, dstToOffset,
+                                dstStartTime, true);
                     } else {
                         writeZonePropsByDOW(w, true, dstName, dstFromOffset, dstToOffset,
                                 dstMonth, dstWeekInMonth, dstDayOfWeek, dstStartTime, dstUntilTime);
@@ -1318,7 +1332,8 @@ public class VTimeZone extends BasicTimeZone {
             if (stdCount > 0) {
                 if (finalStdRule == null) {
                     if (stdCount == 1) {
-                        writeZonePropsByTime(w, false, stdName, stdFromOffset, stdToOffset, stdStartTime);
+                        writeZonePropsByTime(w, false, stdName, stdFromOffset, stdToOffset,
+                                stdStartTime, true);
                     } else {
                         writeZonePropsByDOW(w, false, stdName, stdFromOffset, stdToOffset,
                                 stdMonth, stdWeekInMonth, stdDayOfWeek, stdStartTime, stdUntilTime);
@@ -1385,14 +1400,17 @@ public class VTimeZone extends BasicTimeZone {
     }
 
     /*
-     * Write a single start time using VTIMEZONE RDATE
+     * Write a single start time
      */
-    private static void writeZonePropsByTime(Writer writer, boolean isDst, String tzname, int fromOffset, int toOffset, long time) throws IOException {
+    private static void writeZonePropsByTime(Writer writer, boolean isDst, String tzname,
+            int fromOffset, int toOffset, long time, boolean withRDATE) throws IOException {
         beginZoneProps(writer, isDst, tzname, fromOffset, toOffset, time);
-        writer.write(ICAL_RDATE);
-        writer.write(COLON);
-        writer.write(getDateTimeString(time + fromOffset));
-        writer.write(NEWLINE);
+        if (withRDATE) {
+            writer.write(ICAL_RDATE);
+            writer.write(COLON);
+            writer.write(getDateTimeString(time + fromOffset));
+            writer.write(NEWLINE);
+        }
         endZoneProps(writer, isDst);
     }
 
