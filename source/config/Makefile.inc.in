@@ -137,6 +137,7 @@ MIDDLE_SO_TARGET = $(SO_TARGET).$(SO_TARGET_VERSION_MAJOR)
 INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(libdir):$$$(LDLIBRARYPATH_ENVVAR) $(LEAK_CHECKER)
 GENCCODE = $(sbindir)/genccode
 ICUPKG   = $(sbindir)/icupkg
+GENCMN   = $(sbindir)/gencmn
 GENRB    = $(bindir)/genrb
 PKGDATA  = $(bindir)/pkgdata
 
