@@ -510,7 +510,7 @@ class CharsetMBCS extends CharsetICU {
     /* GB 18030 data ------------------------------------------------------------ */
     
     /* helper macros for linear values for GB 18030 four-byte sequences */
-    private static long LINEAR_18030(long a, long b, long c, long d) {return ((((a)*10+(b))*126L+(c))*10L+(d));}
+    private static long LINEAR_18030(long a, long b, long c, long d) {return ((((a&0xff)*10+(b&0xff))*126L+(c&0xff))*10L+(d&0xff));}
     
     private static long LINEAR_18030_BASE = LINEAR_18030(0x81, 0x30, 0x81, 0x30);
     
@@ -1613,8 +1613,8 @@ class CharsetMBCS extends CharsetICU {
                 int i;
         
                 linear = LINEAR_18030(toUBytesArray[0], toUBytesArray[1], toUBytesArray[2], toUBytesArray[3]);
-                range = gb18030Ranges[0];
-                for(i=0; i<gb18030Ranges.length/gb18030Ranges[0].length; range=gb18030Ranges[++i]) {
+                for(i=0; i<gb18030Ranges.length; ++i) {
+                    range = gb18030Ranges[i];
                     if(range[2]<=linear && linear<=range[3]) {
                         /* found the sequence, output the Unicode code point for it */
                         cr[0] = CoderResult.UNDERFLOW;
