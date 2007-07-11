@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006, International Business Machines Corporation and    *
+* Copyright (C) 2006-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -14,10 +14,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
 
 import java.lang.reflect.InvocationTargetException;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
-import java.nio.charset.IllegalCharsetNameException;
-import java.nio.charset.UnsupportedCharsetException;
+import java.nio.charset.*;
 import java.util.HashMap;
 
 import com.ibm.icu.lang.UCharacter;
@@ -247,91 +244,92 @@ public abstract class CharsetICU extends Charset{
      * 0 is returned when no Unicode signature is recognized.
      * 
      */
-    static String detectUnicodeSignature(ByteBuffer source) {
-        int signatureLength = 0; // number of bytes of the signature
-        final int SIG_MAX_LEN = 5;
-        String sigUniCharset = null; // states what unicode charset is the BOM
-        int i = 0;
-
-        /*
-         * initial 0xa5 bytes: make sure that if we read <SIG_MAX_LEN bytes we
-         * don't misdetect something
-         */
-        byte start[] = { (byte) 0xa5, (byte) 0xa5, (byte) 0xa5, (byte) 0xa5,
-                (byte) 0xa5 };
-
-        while (i < source.remaining() && i < SIG_MAX_LEN) {
-            start[i] = source.get(i);
-            i++;
-        }
-
-        if (start[0] == (byte) 0xFE && start[1] == (byte) 0xFF) {
-            signatureLength = 2;
-            sigUniCharset = "UTF-16BE";
-            source.position(signatureLength);
-            return sigUniCharset;
-        } else if (start[0] == (byte) 0xFF && start[1] == (byte) 0xFE) {
-            if (start[2] == (byte) 0x00 && start[3] == (byte) 0x00) {
-                signatureLength = 4;
-                sigUniCharset = "UTF-32LE";
-                source.position(signatureLength);
-                return sigUniCharset;
-            } else {
-                signatureLength = 2;
-                sigUniCharset = "UTF-16LE";
-                source.position(signatureLength);
-                return sigUniCharset;
-            }
-        } else if (start[0] == (byte) 0xEF && start[1] == (byte) 0xBB
-                && start[2] == (byte) 0xBF) {
-            signatureLength = 3;
-            sigUniCharset = "UTF-8";
-            source.position(signatureLength);
-            return sigUniCharset;
-        } else if (start[0] == (byte) 0x00 && start[1] == (byte) 0x00
-                && start[2] == (byte) 0xFE && start[3] == (byte) 0xFF) {
-            signatureLength = 4;
-            sigUniCharset = "UTF-32BE";
-            source.position(signatureLength);
-            return sigUniCharset;
-        } else if (start[0] == (byte) 0x0E && start[1] == (byte) 0xFE
-                && start[2] == (byte) 0xFF) {
-            signatureLength = 3;
-            sigUniCharset = "SCSU";
-            source.position(signatureLength);
-            return sigUniCharset;
-        } else if (start[0] == (byte) 0xFB && start[1] == (byte) 0xEE
-                && start[2] == (byte) 0x28) {
-            signatureLength = 3;
-            sigUniCharset = "BOCU-1";
-            source.position(signatureLength);
-            return sigUniCharset;
-        } else if (start[0] == (byte) 0x2B && start[1] == (byte) 0x2F
-                && start[2] == (byte) 0x76) {
-
-            if (start[3] == (byte) 0x38 && start[4] == (byte) 0x2D) {
-                signatureLength = 5;
-                sigUniCharset = "UTF-7";
-                source.position(signatureLength);
-                return sigUniCharset;
-            } else if (start[3] == (byte) 0x38 || start[3] == (byte) 0x39
-                    || start[3] == (byte) 0x2B || start[3] == (byte) 0x2F) {
-                signatureLength = 4;
-                sigUniCharset = "UTF-7";
-                source.position(signatureLength);
-                return sigUniCharset;
-            }
-        } else if (start[0] == (byte) 0xDD && start[2] == (byte) 0x73
-                && start[2] == (byte) 0x66 && start[3] == (byte) 0x73) {
-            signatureLength = 4;
-            sigUniCharset = "UTF-EBCDIC";
-            source.position(signatureLength);
-            return sigUniCharset;
-        }
-
-        /* no known Unicode signature byte sequence recognized */
-        return null;
-    }
+    // TODO This should be proposed as CharsetDecoderICU API.
+//    static String detectUnicodeSignature(ByteBuffer source) {
+//        int signatureLength = 0; // number of bytes of the signature
+//        final int SIG_MAX_LEN = 5;
+//        String sigUniCharset = null; // states what unicode charset is the BOM
+//        int i = 0;
+//
+//        /*
+//         * initial 0xa5 bytes: make sure that if we read <SIG_MAX_LEN bytes we
+//         * don't misdetect something
+//         */
+//        byte start[] = { (byte) 0xa5, (byte) 0xa5, (byte) 0xa5, (byte) 0xa5,
+//                (byte) 0xa5 };
+//
+//        while (i < source.remaining() && i < SIG_MAX_LEN) {
+//            start[i] = source.get(i);
+//            i++;
+//        }
+//
+//        if (start[0] == (byte) 0xFE && start[1] == (byte) 0xFF) {
+//            signatureLength = 2;
+//            sigUniCharset = "UTF-16BE";
+//            source.position(signatureLength);
+//            return sigUniCharset;
+//        } else if (start[0] == (byte) 0xFF && start[1] == (byte) 0xFE) {
+//            if (start[2] == (byte) 0x00 && start[3] == (byte) 0x00) {
+//                signatureLength = 4;
+//                sigUniCharset = "UTF-32LE";
+//                source.position(signatureLength);
+//                return sigUniCharset;
+//            } else {
+//                signatureLength = 2;
+//                sigUniCharset = "UTF-16LE";
+//                source.position(signatureLength);
+//                return sigUniCharset;
+//            }
+//        } else if (start[0] == (byte) 0xEF && start[1] == (byte) 0xBB
+//                && start[2] == (byte) 0xBF) {
+//            signatureLength = 3;
+//            sigUniCharset = "UTF-8";
+//            source.position(signatureLength);
+//            return sigUniCharset;
+//        } else if (start[0] == (byte) 0x00 && start[1] == (byte) 0x00
+//                && start[2] == (byte) 0xFE && start[3] == (byte) 0xFF) {
+//            signatureLength = 4;
+//            sigUniCharset = "UTF-32BE";
+//            source.position(signatureLength);
+//            return sigUniCharset;
+//        } else if (start[0] == (byte) 0x0E && start[1] == (byte) 0xFE
+//                && start[2] == (byte) 0xFF) {
+//            signatureLength = 3;
+//            sigUniCharset = "SCSU";
+//            source.position(signatureLength);
+//            return sigUniCharset;
+//        } else if (start[0] == (byte) 0xFB && start[1] == (byte) 0xEE
+//                && start[2] == (byte) 0x28) {
+//            signatureLength = 3;
+//            sigUniCharset = "BOCU-1";
+//            source.position(signatureLength);
+//            return sigUniCharset;
+//        } else if (start[0] == (byte) 0x2B && start[1] == (byte) 0x2F
+//                && start[2] == (byte) 0x76) {
+//
+//            if (start[3] == (byte) 0x38 && start[4] == (byte) 0x2D) {
+//                signatureLength = 5;
+//                sigUniCharset = "UTF-7";
+//                source.position(signatureLength);
+//                return sigUniCharset;
+//            } else if (start[3] == (byte) 0x38 || start[3] == (byte) 0x39
+//                    || start[3] == (byte) 0x2B || start[3] == (byte) 0x2F) {
+//                signatureLength = 4;
+//                sigUniCharset = "UTF-7";
+//                source.position(signatureLength);
+//                return sigUniCharset;
+//            }
+//        } else if (start[0] == (byte) 0xDD && start[2] == (byte) 0x73
+//                && start[2] == (byte) 0x66 && start[3] == (byte) 0x73) {
+//            signatureLength = 4;
+//            sigUniCharset = "UTF-EBCDIC";
+//            source.position(signatureLength);
+//            return sigUniCharset;
+//        }
+//
+//        /* no known Unicode signature byte sequence recognized */
+//        return null;
+//    }
 
 }
 
