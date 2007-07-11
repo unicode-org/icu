@@ -83,6 +83,10 @@ import com.ibm.icu.util.ULocale;
  * v        time zone (generic)     (Text)              Pacific Time
  * g*       Julian day              (Number)            2451334
  * A*       milliseconds in day     (Number)            69540000
+ * Q*       quarter in year         (Text & Number)     Q1 & 01
+ * c*       stand alone day of week (Text & Number)     Tuesday & 2
+ * L*       stand alone month       (Text & Number)     July & 07
+ * q*       stand alone quarter     (Text & Number)     Q1 & 01
  * '        escape for text         (Delimiter)         'Date='
  * ''       single quote            (Literal)           'o''clock'
  * </pre>
