@@ -1540,7 +1540,7 @@ public abstract class NumberFormat extends UFormat {
 
 //#ifndef FOUNDATION
     /**
-     * [Spark/CDL] The instances of this inner class are used as attribute keys and values
+     * The instances of this inner class are used as attribute keys and values
      * in AttributedCharacterIterator that
      * NumberFormat.formatToCharacterIterator() method returns.
      * <p>
