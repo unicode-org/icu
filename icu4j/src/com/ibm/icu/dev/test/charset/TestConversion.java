@@ -1017,11 +1017,11 @@ public class TestConversion extends ModuleTest {
         for (int i = 0; i < source.remaining(); i++) {
             if (target.get() != source.get()) {
                 errln("Test failed: output does not match expected for charset: "+cc.charset+ " [" + cc.caseNr + "]");
-                logln("[" + cc.caseNr + "]:" + cc.charset);
-                logln("Input:       " + printchars(CharBuffer.wrap(cc.unicode), cc.unicode.length()));
-                logln("Output:      " + printbytes(target, len));
-                logln("Expected:    " + printbytes(source, source.limit()));
-                logln("");
+                errln("[" + cc.caseNr + "]:" + cc.charset);
+                errln("Input:       " + printchars(CharBuffer.wrap(cc.unicode), cc.unicode.length()));
+                errln("Output:      " + printbytes(target, len));
+                errln("Expected:    " + printbytes(source, source.limit()));
+                errln("");
                 return false;
             }
         }
@@ -1053,11 +1053,11 @@ public class TestConversion extends ModuleTest {
         for (int i = 0; i < source.length(); i++) {
             if (!(hex(target.get(i)).equals(hex(source.charAt(i))))) {
                 errln("Test failed: output does not match expected for charset: "+cc.charset+ " [" + cc.caseNr + "]");
-                logln("[" + cc.caseNr + "]:" + cc.charset);
-                logln("Input:       " + printbytes(cc.bytes, cc.bytes.limit()));
-                logln("Output:      " + printchars(target, len));
-                logln("Expected:    " + printchars(CharBuffer.wrap(source), source.length()));
-                logln("");
+                errln("[" + cc.caseNr + "]:" + cc.charset);
+                errln("Input:       " + printbytes(cc.bytes, cc.bytes.limit()));
+                errln("Output:      " + printchars(target, len));
+                errln("Expected:    " + printchars(CharBuffer.wrap(source), source.length()));
+                errln("");
                 return false;
             }
         }
