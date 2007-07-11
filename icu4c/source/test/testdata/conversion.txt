@@ -480,6 +480,13 @@ conversion:table(nofallback) {
           :intvector{ 0, 2 },
           :int{1}, :int{0}, "", "?", :bin{""}
         }
+        { // Verify gb18030 enumeration
+          "gb18030",
+          :bin{ 8130D2398130D3308136A5318136A532 },
+          "\u0450\u0452\u200F\u2011",
+          :intvector{ 0, 4, 8, 12 },
+          :int{1}, :int{0}, "", "?", :bin{""}
+        }
       }
     }
 
