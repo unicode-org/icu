@@ -573,7 +573,7 @@ final class UConverterDataReader implements ICUBinary.Authenticate {
         return b;
     }
 
-    protected byte[] readExtTables(int n) throws IOException
+    /*protected byte[] readExtTables(int n) throws IOException
     {
         byte[] tables = new byte[n];
         int len =dataInputStream.read(tables);
@@ -582,7 +582,7 @@ final class UConverterDataReader implements ICUBinary.Authenticate {
         }
         bytesRead += len;
         return tables;
-    }
+    }*/
 
     byte[] getDataFormatVersion(){
         return DATA_FORMAT_VERSION;

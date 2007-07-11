@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006, International Business Machines Corporation and    *
+* Copyright (C) 2006-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.				                                  *
 *******************************************************************************
 *
@@ -517,7 +517,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
             }
         }
     }
-	/**
+	/*
 	 * Ascertains if a given Unicode code point (32bit value for handling surrogates)
 	 * can be converted to the target encoding. If the caller wants to test if a
 	 * surrogate pair can be converted to target encoding then the
@@ -556,9 +556,14 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      * @draft ICU 3.6
 	 * @provisional This API might change or be removed in a future release.
 	 */
-	public boolean canEncode(int codepoint) {
+    /* TODO This is different from Java's canEncode(char) API.
+     * ICU's API should implement getUnicodeSet,
+     * and override canEncode(char) which queries getUnicodeSet.
+     * The getUnicodeSet should return a frozen UnicodeSet or use a fillin parameter, like ICU4C.
+     */
+	/*public boolean canEncode(int codepoint) {
 	    return true;
-    }
+    }*/
 	/**
      * Overrides super class method
      * @stable ICU 3.6 
