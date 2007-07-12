@@ -52,6 +52,8 @@ public:
     virtual void TestGenericAPI(void); // New to C++ -- needs to be back ported to Java
 
     virtual void TestWOY(void);
+    
+    virtual void TestDebug(void);
  
 public: // package
     /**
