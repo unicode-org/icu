@@ -43,6 +43,7 @@
 #include "incaltst.h"       // IntlCalendarTest
 #include "calcasts.h"       // CalendarCaseTest
 #include "tzrulets.h"       // TimeZoneRuleTest
+#include "dadrcal.h"        // DataDrivenCalendarTest
 
 #define TESTCLASS(id, TestClass)          \
     case id:                              \
@@ -103,6 +104,7 @@ void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCLASS(27,AstroTest);
         TESTCLASS(28,CalendarCaseTest);
         TESTCLASS(29,TimeZoneRuleTest);
+        TESTCLASS(30,DataDrivenCalendarTest);
 
         default: name = ""; break; //needed to end loop
     }

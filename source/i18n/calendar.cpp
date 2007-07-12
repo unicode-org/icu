@@ -81,36 +81,13 @@ U_CDECL_END
 * @return static string to the field name
 * @internal
 */
+#error fldName() has been removed. Please use udbg_ucal_fieldName()  from libctestfw instead. The following code might work.
+
 static const char* fldName(UCalendarDateFields f) {
-    switch (f) {
-#define FIELD_NAME_STR(x) case x: return (#x+5)
-        FIELD_NAME_STR( UCAL_ERA );
-        FIELD_NAME_STR( UCAL_YEAR );
-        FIELD_NAME_STR( UCAL_MONTH );
-        FIELD_NAME_STR( UCAL_WEEK_OF_YEAR );
-        FIELD_NAME_STR( UCAL_WEEK_OF_MONTH );
-        FIELD_NAME_STR( UCAL_DATE );
-        FIELD_NAME_STR( UCAL_DAY_OF_YEAR );
-        FIELD_NAME_STR( UCAL_DAY_OF_WEEK );
-        FIELD_NAME_STR( UCAL_DAY_OF_WEEK_IN_MONTH );
-        FIELD_NAME_STR( UCAL_AM_PM );
-        FIELD_NAME_STR( UCAL_HOUR );
-        FIELD_NAME_STR( UCAL_HOUR_OF_DAY );
-        FIELD_NAME_STR( UCAL_MINUTE );
-        FIELD_NAME_STR( UCAL_SECOND );
-        FIELD_NAME_STR( UCAL_MILLISECOND );
-        FIELD_NAME_STR( UCAL_ZONE_OFFSET );
-        FIELD_NAME_STR( UCAL_DST_OFFSET );
-        FIELD_NAME_STR( UCAL_YEAR_WOY );
-        FIELD_NAME_STR( UCAL_DOW_LOCAL );
-        FIELD_NAME_STR( UCAL_EXTENDED_YEAR );
-        FIELD_NAME_STR( UCAL_JULIAN_DAY );
-        FIELD_NAME_STR( UCAL_MILLISECONDS_IN_DAY );
-#undef FIELD_NAME_STR
-    default:
-        return "??";
-    }
+	const char *udbg_ucal_fieldName(int32_t fld);
+	return udbg_ucal_fieldName((int32_t)f);
 }
+
 
 
 #if UCAL_DEBUG_DUMP
