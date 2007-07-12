@@ -3221,10 +3221,13 @@ public class TestCharset extends TestFmwk {
     
     //provide better code coverage for the generic charset UTF32
     public void TestCharsetUTF32() {
+        CoderResult result = CoderResult.UNDERFLOW;
         CharsetProvider provider = new CharsetProviderICU();
         Charset cs = provider.charsetForName("UTF-32");        
         CharsetDecoder decoder = cs.newDecoder();
+        CharsetEncoder encoder = cs.newEncoder();
         
+        //start of decoding code coverage
         char us_array[] = {
                 0x0000, 0x0000, 0x0000, 0x0000,
             };
@@ -3309,5 +3312,114 @@ public class TestCharset extends TestFmwk {
             errln("Malform exception while decoding UTF32 charset (4) should have been thrown.");
         } catch (Exception ex) {
         }
+        //end of decoding code coverage
+        
+        //start of encoding code coverage
+        us = CharBuffer.allocate(0x10);
+        bs = ByteBuffer.allocate(0x10);
+        
+        //test wite BOM overflow error
+        us.put((char)0xDC01);
+        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);
+        
+        us.limit(us.position());
+        us.position(0);
+        bs.limit(bs.position());
+        bs.position(0);
+        
+        result = encoder.encode(us, bs, true);
+        if (!result.isOverflow()) {
+            errln("Buffer overflow error while encoding UTF32 charset (1) should have occurred.");
+        }
+        
+        us.clear();
+        bs.clear();
+        
+        //test malform surrogate and store value in fromChar32
+        us.put((char)0xD801); us.put((char)0xD802);
+        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);
+        
+        us.limit(us.position());
+        us.position(0);
+        bs.limit(bs.position());
+        bs.position(0);
+        
+        result = encoder.encode(us, bs, true);
+        if (!result.isOverflow()) {
+            errln("Overflow error while encoding UTF32 charset (2) should have occurred.");
+        }    
+        
+        us.clear();
+        bs.clear();
+        
+        //test malform surrogate
+        us.put((char)0x0000); us.put((char)0xD902);
+        bs.put((byte)0x00); 
+        
+        us.limit(us.position());
+        us.position(0);
+        bs.limit(bs.position());
+        bs.position(0);
+        
+        result = encoder.encode(us, bs, true);
+        if (!result.isOverflow()) {
+            errln("Overflow error while encoding UTF32 charset (3) should have occurred.");
+        } 
+        
+        us.clear();
+        bs.clear();
+        
+        //test malform surrogate
+        encoder.reset();
+        us.put((char)0xD801);
+        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);
+   
+        us.limit(us.position());
+        us.position(0);
+        bs.limit(bs.position());
+        bs.position(0);
+        
+        result = encoder.encode(us, bs, true);
+        if (!result.isMalformed()) {
+            errln("Malform error while encoding UTF32 charset (4) should have occurred.");
+        } 
+        
+        us.clear();
+        bs.clear();
+        
+        //test overflow surrogate
+        us.put((char)0x0000); us.put((char)0xDDE1); us.put((char)0xD915); us.put((char)0xDDF2);
+        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); 
+   
+        us.limit(us.position());
+        us.position(0);
+        bs.limit(bs.position());
+        bs.position(0);
+        
+        result = encoder.encode(us, bs, true);
+        if (!result.isOverflow()) {
+            errln("Overflow error while encoding UTF32 charset (5) should have occurred.");
+        } 
+        
+        us.clear();
+        bs.clear();
+        
+        //test malform surrogate
+        encoder.reset();
+        us.put((char)0xDDE1);
+        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);
+   
+        us.limit(us.position());
+        us.position(0);
+        bs.limit(bs.position());
+        bs.position(0);
+        
+        result = encoder.encode(us, bs, true);
+        if (!result.isMalformed()) {
+            errln("Malform error while encoding UTF32 charset (6) should have occurred.");
+        } 
+        
+        
+        //end of encoding code coverage
     }
 }
