@@ -155,6 +155,9 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
 	 */
     protected CoderResult encodeLoop(CharBuffer in, ByteBuffer out) {
         if(!in.hasRemaining()){
+            // We were called a second time by the framework.
+            // We should have already handled this state.
+            fromUChar32 = 0;
             return CoderResult.UNDERFLOW;
         }
         in.position(in.position()+fromUCountPending());
@@ -163,6 +166,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
         setSourcePosition(in);
         return ret;
     }
+
     /**
      * Implements ICU semantics of buffer management
      * @param source
