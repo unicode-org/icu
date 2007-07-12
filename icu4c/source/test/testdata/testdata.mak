@@ -23,12 +23,17 @@ ALL : "$(TESTDATAOUT)\testdata.dat"
 # icu26e_testtypes.res is the same, but icuswapped to big-endian EBCDIC
 # markus 2003nov21
 
+# the following file has $(TEST_RES_SOURCE)
+!INCLUDE "$(TESTDATA)\tstfiles.mk"
+
+TEST_RES_FILES = $(TEST_RES_SOURCE:.txt=.res)
+
 "$(TESTDATAOUT)\testdata.dat" : "$(TESTDATABLD)\casing.res" "$(TESTDATABLD)\conversion.res" "$(TESTDATABLD)\icuio.res" "$(TESTDATABLD)\mc.res" "$(TESTDATABLD)\structLocale.res" "$(TESTDATABLD)\root.res" "$(TESTDATABLD)\sh.res" "$(TESTDATABLD)\sh_YU.res"  "$(TESTDATABLD)\te.res" "$(TESTDATABLD)\te_IN.res" "$(TESTDATABLD)\te_IN_REVISED.res" "$(TESTDATABLD)\testaliases.res" "$(TESTDATABLD)\testtypes.res" "$(TESTDATABLD)\testempty.res" "$(TESTDATABLD)\iscii.res" "$(TESTDATABLD)\idna_rules.res" "$(TESTDATABLD)\DataDrivenCollationTest.res" "$(TESTDATABLD)\test.icu" "$(TESTDATABLD)\testtable32.res" "$(TESTDATABLD)\test1.cnv" "$(TESTDATABLD)\test3.cnv" "$(TESTDATABLD)\test4.cnv" "$(TESTDATABLD)\test4x.cnv" "$(TESTDATABLD)\ibm9027.cnv" "$(TESTDATABLD)\nfscsi.spp" "$(TESTDATABLD)\nfscss.spp" "$(TESTDATABLD)\nfscis.spp" "$(TESTDATABLD)\nfsmxs.spp" "$(TESTDATABLD)\nfsmxp.spp"
 	@echo Building test data
 	@copy "$(TESTDATABLD)\te.res" "$(TESTDATAOUT)\$(TESTDT)\nam.typ"
 	@copy "$(TESTDATA)\icu26_testtypes.res" "$(TESTDATABLD)"
 	@copy "$(TESTDATA)\icu26e_testtypes.res" "$(TESTDATABLD)"
-	"$(ICUP)\bin\pkgdata" -f -v -m common -c -p"$(TESTPKG)" -d "$(TESTDATAOUT)" -T "$(TESTDATABLD)" -s "$(TESTDATABLD)" <<
+	"$(ICUP)\bin\pkgdata" -f -v -m common -c -p"$(TESTPKG)" -d "$(TESTDATAOUT)" -T "$(TESTDATABLD)" -s "$(TESTDATABLD)" "$(TEST_RES_FILES)" <<
 casing.res
 conversion.res
 mc.res
@@ -47,7 +52,6 @@ testaliases.res
 structLocale.res
 icuio.res
 iscii.res
-DataDrivenCollationTest.res
 test.icu
 test1.cnv
 test3.cnv

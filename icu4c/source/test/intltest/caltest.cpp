@@ -13,6 +13,7 @@
 #include "unicode/gregocal.h"
 #include "unicode/smpdtfmt.h"
 #include "unicode/simpletz.h"
+#include "unicode/dbgutil.h"
 
 // *****************************************************************************
 // class CalendarTest
@@ -193,6 +194,13 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
           if(exec) {
             logln("TestJD---"); logln("");
             TestJD();
+          }
+          break;
+        case 21:
+          name = "TestDebug";
+          if(exec) {
+            logln("TestDebug---"); logln("");
+            TestDebug();
           }
           break;
            
@@ -1880,6 +1888,36 @@ void CalendarTest::TestJD()
 
 }
 
+// make sure the ctestfw utilities are in sync with the Calendar
+void CalendarTest::TestDebug()
+{
+	for(int32_t  t=0;t<=UDBG_ENUM_COUNT;t++) {
+		int32_t count = udbg_enumCount((UDebugEnumType)t);
+		if(count == -1) {
+			logln("enumCount(%d) returned -1", count);
+			continue;
+		}
+	    for(int32_t i=0;i<=count;i++) {
+	  	  if(i<count) {
+	  		  if( i!=udbg_enumArrayValue((UDebugEnumType)t, i)) {
+	  			  errln("FAIL: udbg_enumArrayValue(%d,%d) returned %d, expected %d", t, i, udbg_enumArrayValue((UDebugEnumType)t,i), i);
+	  		  }
+	  	  } else {
+	  		  logln("Testing count+1:");
+	  	  }
+		  logln("udbg_enumArrayValue(%d,%d) = %s, returned %d", t, i, 
+				  	udbg_enumName((UDebugEnumType)t,i), udbg_enumArrayValue((UDebugEnumType)t,i));
+	  	  logln("udbg_enumString = " + udbg_enumString((UDebugEnumType)t,i));
+	    }
+	    if(udbg_enumExpectedCount((UDebugEnumType)t) != count) {
+	  	  errln("FAIL: udbg_enumExpectedCount(%d): %d, != UCAL_FIELD_COUNT=%d ", t, udbg_enumExpectedCount((UDebugEnumType)t), count);
+	    } else {
+	  	  logln("udbg_ucal_fieldCount: %d, UCAL_FIELD_COUNT=udbg_enumCount %d ", udbg_enumExpectedCount((UDebugEnumType)t), count);
+	    }
+	}
+}
+
+
 #undef CHECK
 
 // List of interesting locales
@@ -1938,6 +1976,7 @@ UDate CalendarTest::minDateOfCalendar(const Calendar& cal, UBool &isGregorian, U
   if(U_FAILURE(status)) return 0.0;
   return doMinDateOfCalendar(cal.clone(), isGregorian, status);
 }
+
 
 
 
