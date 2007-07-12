@@ -183,10 +183,8 @@ public class TestConversion extends ModuleTest {
         }
         logln("TestFromUnicode[" + cc.caseNr + "] " + cc.charset);
         FromUnicodeCase(cc);
-
-        return;
-
     }
+
     private void FromUnicodeCase(ConversionCase cc) {
 
         // create charset encoder for conversion test
@@ -201,8 +199,14 @@ public class TestConversion extends ModuleTest {
 
         } catch (Exception e) {
 
-            logln("Skipping test:(" + cc.charset
-                    + ") due to ICU Charset not supported at this time");
+            // TODO implement loading of test data.
+            if (skipIfBeforeICU(3,7,2)) {
+                logln("Skipping test:(" + cc.charset
+                        + ") due to ICU Charset not supported at this time");
+            }
+            else {
+                errln(cc.charset + " was not found");
+            }
             return;
 
         }
@@ -513,8 +517,15 @@ public class TestConversion extends ModuleTest {
 
         } catch (Exception e) {
 
-            logln("Skipping test:(" + cc.charset
-                    + ") due to ICU Charset not supported at this time");
+            // TODO implement loading of test data.
+            if (skipIfBeforeICU(3,7,2)) {
+                logln("Skipping test:(" + cc.charset
+                        + ") due to ICU Charset not supported at this time");
+            }
+            else {
+                errln(cc.charset + " was not found");
+            }
+                    
             return;
         }
 
@@ -1000,17 +1011,12 @@ public class TestConversion extends ModuleTest {
         len = len - target.position();
 
         if (len != source.remaining()) {
-            if ((cc.caseNr == 6) && skipIfBeforeICU(3,7,2)) {
-                //TODO: remove when #5765 gets fixed
-                logln("Ticket#5765: output length does not match expected for charset: "+cc.charset+ " [" + cc.caseNr + "]");
-            } else {
-                errln("Test failed: output length does not match expected for charset: "+cc.charset+ " [" + cc.caseNr + "]");
-            }
-            logln("[" + cc.caseNr + "]:" + cc.charset);
-            logln("Input:       " + printchars(CharBuffer.wrap(cc.unicode), cc.unicode.length()));
-            logln("Output:      " + printbytes(target, len));
-            logln("Expected:    " + printbytes(source, source.limit()));
-            logln("");
+            errln("Test failed: output length does not match expected for charset: "+cc.charset+ " [" + cc.caseNr + "]");
+            errln("[" + cc.caseNr + "]:" + cc.charset);
+            errln("Input:       " + printchars(CharBuffer.wrap(cc.unicode), cc.unicode.length()));
+            errln("Output:      " + printbytes(target, len));
+            errln("Expected:    " + printbytes(source, source.limit()));
+            errln("");
             return false;
         }
         source.rewind();
