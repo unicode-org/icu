@@ -549,6 +549,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\dadrcal.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\dadrcal.h"
+				>
+			</File>
+			<File
 				RelativePath=".\dcfmapts.cpp"
 				>
 			</File>

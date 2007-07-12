@@ -108,6 +108,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\test\testdata\tstfiles.mk"
+				>
+			</File>
+			<File
 				RelativePath=".\mappings\ucmcore.mk"
 				>
 			</File>
