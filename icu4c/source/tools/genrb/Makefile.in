@@ -41,6 +41,9 @@ DERB_OBJ = derb.o
 DEPS = $(OBJECTS:.o=.d)
 DERB_DEPS = $(DERB_OBJ:.o=.d)
 
+-include Makefile.local
+
+
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local	\
 distclean distclean-local dist dist-local check check-local install-man
