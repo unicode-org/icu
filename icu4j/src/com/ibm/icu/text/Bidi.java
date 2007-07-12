@@ -2690,8 +2690,9 @@ public class Bidi {
     void setParaRunsOnly(char[] parmText, byte parmParaLevel) {
         int[] visualMap;
         String visualText;
-        int saveLength;
+        int saveLength, saveTrailingWSStart;
         byte[] saveLevels;
+        byte saveDirection;
         int i, j, visualStart, logicalStart,
             oldRunCount, runLength, addedRuns, insertRemove,
             start, limit, step, indexOddBit, logicalPos,
@@ -2699,10 +2700,6 @@ public class Bidi {
         int saveOptions;
 
         reorderingMode = REORDER_DEFAULT;
-
-        if (parmText == null) {
-            parmText = new char[0];
-        }
         int parmLength = parmText.length;
         if (parmLength == 0) {
             setPara(parmText, parmParaLevel, null);
@@ -2717,6 +2714,12 @@ public class Bidi {
         }
         parmParaLevel &= 1;             /* accept only 0 or 1 */
         setPara(parmText, parmParaLevel, null);
+        /* we cannot access directly pBiDi->levels since it is not yet set if
+         * direction is not MIXED
+         */
+        saveLevels = new byte[this.length];
+        System.arraycopy(getLevels(), 0, saveLevels, 0, this.length);
+        saveTrailingWSStart = trailingWSStart;
 
         /* FOOD FOR THOUGHT: instead of writing the visual text, we could use
          * the visual map and the dirProps array to drive the second call
@@ -2725,18 +2728,18 @@ public class Bidi {
          * customized classifier callback.
          */
         visualText = writeReordered(DO_MIRRORING);
-        reorderingOptions = saveOptions;
         visualMap = getVisualMap();
+        this.reorderingOptions = saveOptions;
         saveLength = this.length;
-        saveLevels = new byte[this.length];
-        System.arraycopy(getLevels(), 0, saveLevels, 0, this.length);
+        saveDirection=this.direction;
 
-        reorderingMode = REORDER_INVERSE_LIKE_DIRECT;
+        this.reorderingMode = REORDER_INVERSE_LIKE_DIRECT;
         parmParaLevel ^= 1;
         setPara(visualText, parmParaLevel, null);
-        oldRunCount = countRuns();
+        BidiLine.getRuns(this);
         /* check if some runs must be split, count how many splits */
         addedRuns = 0;
+        oldRunCount = this.runCount;
         visualStart = 0;
         for (i = 0; i < oldRunCount; i++, visualStart += runLength) {
             runLength = runs[i].limit - visualStart;
@@ -2828,17 +2831,19 @@ public class Bidi {
 //    cleanup2:
         /* restore real text */
         this.text = parmText;
+        this.length = saveLength;
+        this.originalLength = parmLength;
+        this.direction=saveDirection;
+        this.levels = saveLevels;
+        this.trailingWSStart = saveTrailingWSStart;
         /* free memory for mapping table and visual text */
         visualMap = null;
         visualText = null;
-//    cleanup3:
-        reorderingMode = REORDER_RUNS_ONLY;
-        this.length = saveLength;
-        this.originalLength = parmLength;
-        this.levels = saveLevels;
         if (runCount > 1) {
             this.direction = MIXED;
         }
+//    cleanup3:
+        this.reorderingMode = REORDER_RUNS_ONLY;
     }
 
     /**
@@ -3007,6 +3012,9 @@ public class Bidi {
         if ((MAX_EXPLICIT_LEVEL < paraLevel && !IsDefaultLevel(paraLevel))) {
             throw new IllegalArgumentException();
         }
+        if (chars == null) {
+            chars = new char[0];
+        }
 
         /* special treatment for RUNS_ONLY mode */
         if (reorderingMode == REORDER_RUNS_ONLY) {
@@ -3016,11 +3024,7 @@ public class Bidi {
 
         /* initialize the Bidi object */
         this.paraBidi = null;          /* mark unfinished setPara */
-        if (chars == null) {
-            this.text = new char[0];
-        } else {
-            this.text = chars;
-        }
+        this.text = chars;
         this.length = this.originalLength = this.resultLength = text.length;
         this.paraLevel = paraLevel;
         this.direction = LTR;
@@ -3884,8 +3888,8 @@ public class Bidi {
 
     /**
      *
-     * Get one run's logical start, length, and directionality,
-     * which can be 0 for LTR or 1 for RTL.
+     * Get one run's logical start, length, and level,
+     * which can be even for an LTR run or odd for an RTL run.
      * In an RTL run, the character at the logical start is
      * visually on the right of the displayed run.
      * The length is the number of characters in the run.<p>
