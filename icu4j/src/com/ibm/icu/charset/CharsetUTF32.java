@@ -85,8 +85,10 @@ class CharsetUTF32 extends CharsetICU {
             
             mode=state;
             source.position(pos);
-            if(!cr.isError() && source.hasRemaining()){
+            if(!isFirstBuffer){
                 cr = decodeLoopImpl(source, target, offsets, flush);
+            } else {
+                cr = CoderResult.malformedForLength(pos);
             }
 
             return cr;
@@ -126,7 +128,8 @@ class CharsetUTF32 extends CharsetICU {
                     toUnicodeStatus = 0;
                     toULength =0;
                     
-                    while (i < 4) {
+                    //this while loop is not entered because of the byte order mark checking
+                    /*while (i < 4) {
                         if (sourceArrayIndex < source.limit()) {
                             ch = (ch << 8) | ((byte)(source.get(sourceArrayIndex)) & UConverterConstants.UNSIGNED_BYTE_MASK);
                             toUBytesArray[i++] = (byte) source.get(sourceArrayIndex++);
@@ -134,11 +137,11 @@ class CharsetUTF32 extends CharsetICU {
                         else {
                             /* stores a partially calculated target*/
                             /* + 1 to make 0 a valid character */
-                            toUnicodeStatus = ch + 1;
+                            /*toUnicodeStatus = ch + 1;
                             toULength = (byte) i;
                             break donefornow;
                         }
-                    }
+                    }*/
             
                     if (ch <= UConverterConstants.MAXIMUM_UTF && !isSurrogate(ch)) {
                         /* Normal valid byte when the loop has not prematurely terminated (i < inBytes) */
@@ -243,7 +246,8 @@ class CharsetUTF32 extends CharsetICU {
                     toUnicodeStatus = 0;
                     toULength=0;
                     
-                    while (i < 4) {
+                    //this while loop is not entered because of the byte order mark checking
+                    /*while (i < 4) {
                         if (sourceArrayIndex < source.limit()) {
                             ch |= (source.get(sourceArrayIndex) & UConverterConstants.UNSIGNED_BYTE_MASK) << (i * 8);
                             toUBytesArray[i++] = (byte) source.get(sourceArrayIndex++);
@@ -251,11 +255,11 @@ class CharsetUTF32 extends CharsetICU {
                         else {
                             /* stores a partially calculated target*/
                             /* + 1 to make 0 a valid character */
-                            toUnicodeStatus = ch + 1;
+                       /*     toUnicodeStatus = ch + 1;
                             toULength = (byte) i;
                             break donefornow;
                         }
-                    }
+                    }*/
             
                     if (ch <= UConverterConstants.MAXIMUM_UTF && !isSurrogate(ch)) {
                         /* Normal valid byte when the loop has not prematurely terminated (i < inBytes) */

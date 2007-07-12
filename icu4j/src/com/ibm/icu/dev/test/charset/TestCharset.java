@@ -3418,8 +3418,195 @@ public class TestCharset extends TestFmwk {
         if (!result.isMalformed()) {
             errln("Malform error while encoding UTF32 charset (6) should have occurred.");
         } 
-        
-        
         //end of encoding code coverage
+    }
+    
+    //this method provides better code coverage decoding UTF32 LE/BE
+    public void TestDecodeUTF32LEBE() {
+        CoderResult result = CoderResult.UNDERFLOW;
+        CharsetProvider provider = new CharsetProviderICU();       
+        CharsetDecoder decoder;
+        CharBuffer us = CharBuffer.allocate(0x10);
+        ByteBuffer bs = ByteBuffer.allocate(0x10);
+        
+        //decode UTF32LE
+        decoder = provider.charsetForName("UTF-32LE").newDecoder();
+        //test overflow buffer
+        bs.put((byte)0x41); bs.put((byte)0xFF); bs.put((byte)0x01); bs.put((byte)0x00);
+        us.put((char)0x0000);
+        
+        us.limit(us.position());
+        us.position(0);
+        bs.limit(bs.position());
+        bs.position(0);
+        
+        try {
+            smBufDecode(decoder, "UTF-32LE", bs, us, true, false);
+            errln("Overflow exception while decoding UTF32LE (1) should have been thrown.");
+        } catch (Exception ex) {
+        }
+        
+        us.clear();
+        bs.clear();
+        //test malform buffer
+        bs.put((byte)0x02); bs.put((byte)0xD9); bs.put((byte)0x00); bs.put((byte)0x00);
+        us.put((char)0x0000);
+        
+        us.limit(us.position());
+        us.position(0);
+        bs.limit(bs.position());
+        bs.position(0);
+        
+        try {
+            smBufDecode(decoder, "UTF-32LE", bs, us, true, false);
+            errln("Malform exception while decoding UTF32LE (2) should have been thrown.");
+        } catch (Exception ex) {
+        }
+        
+        us.clear();
+        bs.clear();
+        //test malform buffer
+        bs.put((byte)0xFF); bs.put((byte)0xFE); bs.put((byte)0x00); bs.put((byte)0x00);
+        bs.put((byte)0xFF); bs.put((byte)0xDF); bs.put((byte)0x10); 
+        us.put((char)0x0000);
+        
+        us.limit(us.position());
+        us.position(0);
+        bs.limit(bs.position());
+        bs.position(0);
+        
+        try {
+            smBufDecode(decoder, "UTF-32LE", bs, us, true, false);
+            errln("Malform exception while decoding UTF32LE (3) should have been thrown.");
+        } catch (Exception ex) {
+        }
+        
+        us.clear();
+        bs.clear();
+        //test malform buffer
+        bs.put((byte)0xFF); bs.put((byte)0xFE); bs.put((byte)0x00); bs.put((byte)0x00);
+        bs.put((byte)0x02); bs.put((byte)0xD9); bs.put((byte)0x00); bs.put((byte)0x00);
+        us.put((char)0x0000);
+        
+        us.limit(us.position());
+        us.position(0);
+        bs.limit(bs.position());
+        bs.position(0);
+        
+        try {
+            smBufDecode(decoder, "UTF-32LE", bs, us, true, false);
+            errln("Malform exception while decoding UTF32LE (4) should have been thrown.");
+        } catch (Exception ex) {
+        }
+        
+        us.clear();
+        bs.clear();
+        //test overflow buffer
+        bs.put((byte)0xFF); bs.put((byte)0xFE); bs.put((byte)0x00); bs.put((byte)0x00);
+        bs.put((byte)0xDD); bs.put((byte)0xFF); bs.put((byte)0x10); bs.put((byte)0x00);
+        us.put((char)0x0000);
+        
+        us.limit(us.position());
+        us.position(0);
+        bs.limit(bs.position());
+        bs.position(0);
+        
+        try {
+            smBufDecode(decoder, "UTF-32LE", bs, us, true, false);
+            errln("Overflow exception while decoding UTF32LE (5) should have been thrown.");
+        } catch (Exception ex) {
+        }
+        //end of decode UTF32LE
+        
+        bs.clear();
+        us.clear();
+        
+        //decode UTF32BE
+        decoder = provider.charsetForName("UTF-32BE").newDecoder();
+        //test overflow buffer
+        bs.put((byte)0x00); bs.put((byte)0x01); bs.put((byte)0xFF); bs.put((byte)0x41);
+        us.put((char)0x0000);
+        
+        us.limit(us.position());
+        us.position(0);
+        bs.limit(bs.position());
+        bs.position(0);
+        
+        try {
+            smBufDecode(decoder, "UTF-32BE", bs, us, true, false);
+            errln("Overflow exception while decoding UTF32BE (1) should have been thrown.");
+        } catch (Exception ex) {
+        }
+        
+        bs.clear();
+        us.clear();
+        //test malform buffer
+        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0xD9); bs.put((byte)0x02);
+        us.put((char)0x0000);
+        
+        us.limit(us.position());
+        us.position(0);
+        bs.limit(bs.position());
+        bs.position(0);
+        
+        try {
+            smBufDecode(decoder, "UTF-32BE", bs, us, true, false);
+            errln("Malform exception while decoding UTF32BE (2) should have been thrown.");
+        } catch (Exception ex) {
+        }
+        
+        bs.clear();
+        us.clear();
+        //test malform buffer
+        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0xFE); bs.put((byte)0xFF);
+        bs.put((byte)0x10); bs.put((byte)0xFF); bs.put((byte)0xDF);
+        us.put((char)0x0000);
+        
+        us.limit(us.position());
+        us.position(0);
+        bs.limit(bs.position());
+        bs.position(0);
+        
+        try {
+            smBufDecode(decoder, "UTF-32BE", bs, us, true, false);
+            errln("Malform exception while decoding UTF32BE (3) should have been thrown.");
+        } catch (Exception ex) {
+        }
+        
+        bs.clear();
+        us.clear();
+        //test overflow buffer
+        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0xFE); bs.put((byte)0xFF);
+        bs.put((byte)0x00); bs.put((byte)0x10); bs.put((byte)0xFF); bs.put((byte)0xDD);
+        us.put((char)0x0000);
+        
+        us.limit(us.position());
+        us.position(0);
+        bs.limit(bs.position());
+        bs.position(0);
+        
+        try {
+            smBufDecode(decoder, "UTF-32BE", bs, us, true, false);
+            errln("Overflow exception while decoding UTF32BE (4) should have been thrown.");
+        } catch (Exception ex) {
+        }
+        
+        bs.clear();
+        us.clear();
+        //test malform buffer
+        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0xFE); 
+        us.put((char)0x0000);
+        
+        us.limit(us.position());
+        us.position(0);
+        bs.limit(bs.position());
+        bs.position(0);
+        
+        try {
+            smBufDecode(decoder, "UTF-32BE", bs, us, true, false);
+            errln("Malform exception while decoding UTF32BE (5) should have been thrown.");
+        } catch (Exception ex) {
+        }
+        //end of decode UTF32BE
     }
 }
