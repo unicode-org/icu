@@ -3004,7 +3004,7 @@ fi;
 echo $ECHO_N "checking for 64-bit executable support... $ECHO_C" >&6
     if test "$ENABLE_64BIT_LIBS" != no; then
         case "${host}" in
-        *-*-solaris*)
+        sparc*-*-solaris*)
             SPARCV9=`isainfo -n 2>&1 | grep sparcv9`
             if test "$GCC" = yes; then
                 # We could add a check for -m64 depending on the gcc version.
@@ -3015,6 +3015,23 @@ echo $ECHO_N "checking for 64-bit executable support... $ECHO_C" >&6
                     CFLAGS="${CFLAGS} -xtarget=ultra -xarch=v9"
                     CXXFLAGS="${CXXFLAGS} -xtarget=ultra -xarch=v9"
                     LDFLAGS="${LDFLAGS} -xtarget=ultra -xarch=v9"
+                    ENABLE_64BIT_LIBS=yes
+                else
+                    ENABLE_64BIT_LIBS=no
+                fi
+            fi
+            ;;
+        i386-*-solaris*)
+            AMD64=`isainfo -n 2>&1 | grep amd64`
+            if test "$GCC" = yes; then
+                # We could add a check for -m64 depending on the gcc version.
+                ENABLE_64BIT_LIBS=no
+            else
+                SOL64=`$CXX -xtarget=generic64 2>&1 && $CC -xtarget=generic64 2>&1 | grep -v usage:`
+                if test -z "$SOL64" && test -n "$AMD64"; then
+                    CFLAGS="${CFLAGS} -xtarget=generic64"
+                    CXXFLAGS="${CXXFLAGS} -xtarget=generic64"
+                    LDFLAGS="${LDFLAGS} -xtarget=generic64"
                     ENABLE_64BIT_LIBS=yes
                 else
                     ENABLE_64BIT_LIBS=no

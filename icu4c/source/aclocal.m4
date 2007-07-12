@@ -14,14 +14,14 @@ AC_DEFUN(ICU_CHECK_MH_FRAG, [
 case "${host}" in
 *-*-solaris*)
 	if test "$GCC" = yes; then	
-		icu_cv_host_frag=mh-solaris-gcc 
+		icu_cv_host_frag=mh-solaris-gcc
 	else
 		icu_cv_host_frag=mh-solaris
 	fi ;;
 alpha*-*-linux-gnu)
 	if test "$GCC" = yes; then
 		icu_cv_host_frag=mh-alpha-linux-gcc
-	else  
+	else
 		icu_cv_host_frag=mh-alpha-linux-cc
 	fi ;;
 powerpc*-*-linux*)
@@ -97,7 +97,7 @@ esac])
 dnl AC_SEARCH_LIBS_FIRST(FUNCTION, SEARCH-LIBS [, ACTION-IF-FOUND
 dnl            [, ACTION-IF-NOT-FOUND [, OTHER-LIBRARIES]]])
 dnl Search for a library defining FUNC, then see if it's not already available.
- 
+
 AC_DEFUN(AC_SEARCH_LIBS_FIRST,
 [AC_PREREQ([2.13])
 AC_CACHE_CHECK([for library containing $1], [ac_cv_search_$1],
@@ -132,7 +132,7 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
     AC_MSG_CHECKING([for 64-bit executable support])
     if test "$ENABLE_64BIT_LIBS" != no; then
         case "${host}" in
-        *-*-solaris*)
+        sparc*-*-solaris*)
             SPARCV9=`isainfo -n 2>&1 | grep sparcv9`
             if test "$GCC" = yes; then
                 # We could add a check for -m64 depending on the gcc version.
@@ -143,6 +143,23 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
                     CFLAGS="${CFLAGS} -xtarget=ultra -xarch=v9"
                     CXXFLAGS="${CXXFLAGS} -xtarget=ultra -xarch=v9"
                     LDFLAGS="${LDFLAGS} -xtarget=ultra -xarch=v9"
+                    ENABLE_64BIT_LIBS=yes
+                else
+                    ENABLE_64BIT_LIBS=no
+                fi
+            fi
+            ;;
+        i386-*-solaris*)
+            AMD64=`isainfo -n 2>&1 | grep amd64`
+            if test "$GCC" = yes; then
+                # We could add a check for -m64 depending on the gcc version.
+                ENABLE_64BIT_LIBS=no
+            else
+                SOL64=`$CXX -xtarget=generic64 2>&1 && $CC -xtarget=generic64 2>&1 | grep -v usage:`
+                if test -z "$SOL64" && test -n "$AMD64"; then
+                    CFLAGS="${CFLAGS} -xtarget=generic64"
+                    CXXFLAGS="${CXXFLAGS} -xtarget=generic64"
+                    LDFLAGS="${LDFLAGS} -xtarget=generic64"
                     ENABLE_64BIT_LIBS=yes
                 else
                     ENABLE_64BIT_LIBS=no
