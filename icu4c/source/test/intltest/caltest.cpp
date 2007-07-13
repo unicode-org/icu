@@ -1905,8 +1905,17 @@ void CalendarTest::TestDebug()
 	  	  } else {
 	  		  logln("Testing count+1:");
 	  	  }
+                  const char *name = udbg_enumName((UDebugEnumType)t,i);
+                  if(name==NULL) {
+                          if(i==count) {
+                                logln(" null name - expected.\n");
+                          } else {
+                                errln("FAIL: udbg_enumName(%d,%d) returned NULL", t, i);
+                          }
+                          name = "(null)";
+                  }
 		  logln("udbg_enumArrayValue(%d,%d) = %s, returned %d", t, i, 
-				  	udbg_enumName((UDebugEnumType)t,i), udbg_enumArrayValue((UDebugEnumType)t,i));
+				  	name, udbg_enumArrayValue((UDebugEnumType)t,i));
 	  	  logln("udbg_enumString = " + udbg_enumString((UDebugEnumType)t,i));
 	    }
 	    if(udbg_enumExpectedCount((UDebugEnumType)t) != count) {
