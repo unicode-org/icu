@@ -5,6 +5,7 @@
  ********************************************************************/
 
 #include "unicode/udbgutil.h"
+#include "unicode/dbgutil.h"
 
 #if !UCONFIG_NO_FORMATTING
 
