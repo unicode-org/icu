@@ -58,7 +58,7 @@ T_CTEST_API const UnicodeString& T_CTEST_EXPORT2 udbg_enumString(UDebugEnumType 
 	}
 }
 
-T_CTEST_API extern int32_t  T_CTEST_EXPORT2 udbg_enumByString(UDebugEnumType type, const UnicodeString& string) {
+T_CTEST_API int32_t  T_CTEST_EXPORT2 udbg_enumByString(UDebugEnumType type, const UnicodeString& string) {
 	if(type<0||type>=UDBG_ENUM_COUNT) {
 		return -1;
 	}
@@ -74,7 +74,7 @@ T_CTEST_API extern int32_t  T_CTEST_EXPORT2 udbg_enumByString(UDebugEnumType typ
 }
 
 // from DataMap::utoi
-T_CTEST_API extern int32_t 
+T_CTEST_API int32_t 
 udbg_stoi(const UnicodeString &s)
 {
   char ch[256];
