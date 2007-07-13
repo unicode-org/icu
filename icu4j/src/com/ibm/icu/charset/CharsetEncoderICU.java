@@ -18,6 +18,7 @@ import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
 
 import com.ibm.icu.impl.Assert;
+import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UTF16;
 
 /**
@@ -39,6 +40,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
     int fromUnicodeStatus;
     int fromUChar32;
     boolean useSubChar1;
+    boolean useFallback;
     
     /* store previous UChars/chars to continue partial matches */
     int preFromUFirstCP; /* >=0: partial match */
@@ -82,7 +84,41 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
         super(cs, (cs.minBytesPerChar+cs.maxBytesPerChar)/2, cs.maxBytesPerChar, replacement);
     }
 
-	/**
+    /**
+     * Is this Encoder allowed to use fallbacks? A fallback mapping is a mapping
+     * that will convert a Unicode codepoint sequence to a byte sequence, but
+     * the encoded byte sequence will round trip convert to a different
+     * Unicode codepoint sequence.
+     * @return true if the converter uses fallback, false otherwise.
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
+    public boolean isFallbackUsed() {
+        return useFallback;
+    }
+    
+    /**
+     * Sets whether this Encoder can use fallbacks?
+     * @param usesFallback true if the user wants the converter to take
+     *  advantage of the fallback mapping, false otherwise.
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
+    public void setFallbackUsed(boolean usesFallback) {
+        useFallback = usesFallback;
+    }
+
+    /**
+     * Use fallbacks from Unicode to codepage when useFallback or for private-use code points
+     * @param c A codepoint
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    final boolean isFromUUseFallback(int c) {
+        return (useFallback) || (UCharacter.getType(c) == UCharacter.PRIVATE_USE);
+    }
+    
+    /**
      * Sets the action to be taken if an illegal sequence is encountered
      * 
      * @param newAction

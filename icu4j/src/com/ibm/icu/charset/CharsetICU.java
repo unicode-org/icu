@@ -17,7 +17,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.*;
 import java.util.HashMap;
 
-import com.ibm.icu.lang.UCharacter;
 /**
  * <p>A subclass of java.nio.Charset for providing implementation of ICU's charset converters.
  * This API is used to convert codepage or character encoded data to and
@@ -38,8 +37,6 @@ public abstract class CharsetICU extends Charset{
      int options;
 
      float  maxCharsPerByte;
-    
-     boolean useFallback;
     
      String name; /* +4: 60  internal name of the converter- invariant chars */
 
@@ -175,25 +172,6 @@ public abstract class CharsetICU extends Charset{
     }
     
     /**
-     * Always use fallbacks from codepage to Unicode?
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
-     */
-    final boolean isToUUseFallback() {
-        return true;
-    }    
-    
-    /**
-     * Use fallbacks from Unicode to codepage when useFallback or for private-use code points
-     * @param c A codepoint
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
-     */
-    final boolean isFromUUseFallback(int c) {
-        return (useFallback) || isPrivateUse(c);
-    }
-    
-    /**
      * Returns the default charset name 
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
@@ -201,10 +179,6 @@ public abstract class CharsetICU extends Charset{
      static final String getDefaultCharsetName(){
         String defaultEncoding = new InputStreamReader(new ByteArrayInputStream(new byte[0])).getEncoding();
         return defaultEncoding;
-    }
-    
-    static final boolean isPrivateUse(int c) {
-        return (UCharacter.getType(c) == UCharacter.PRIVATE_USE);
     }
 
     /**
