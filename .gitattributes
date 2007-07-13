@@ -270,6 +270,7 @@ icu4c/source/test/perf/convperf/ConvPerf_r.pl -text
 icu4c/source/test/perf/normperf/NormPerf_r.pl -text
 icu4c/source/test/perf/ubrkperf/UBrkPerf_r.pl -text
 icu4c/source/test/perf/ustrperf/StringPerf_r.pl -text
+icu4c/source/test/testdata/TestFont1.otf -text
 icu4c/source/test/testdata/calendar.txt -text
 icu4c/source/test/testdata/csdetest.xml svneol=native#text/xml
 icu4c/source/test/testdata/icu26_testtypes.res -text
