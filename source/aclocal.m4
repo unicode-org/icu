@@ -218,6 +218,8 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
                 if test "$ENABLE_64BIT_LIBS" = no; then
                     CPPFLAGS="${OLD_CPPFLAGS}"
                     LDFLAGS="${OLD_LDFLAGS}"
+                else
+                    ARFLAGS="${ARFLAGS} /MACHINE:AMD64"
                 fi
             fi
             ;;

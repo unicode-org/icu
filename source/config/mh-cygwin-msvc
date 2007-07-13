@@ -75,6 +75,12 @@ OUTOPT = /out:
 LIBSICU = $(STATIC_PREFIX)$(ICUPREFIX)
 A = lib
 
+# Cygwin's ar can't handle Win64 right now. So we use Microsoft's tool instead.
+AR = LIB.EXE
+ARFLAGS := /nologo $(ARFLAGS:r=)
+RANLIB = ls -s
+AR_OUTOPT = /OUT:
+
 ## An import library is needed for z/OS and MSVC
 IMPORT_LIB_EXT = .lib
 
@@ -88,7 +94,11 @@ I18N_STUBNAME = in
 LIBICU = $(STATIC_PREFIX_WHEN_USED)$(ICUPREFIX)
 
 ## Link commands to link to ICU libs
+ifeq ($(wildcard $(LIBDIR)/$(LIBICU)$(DATA_STUBNAME)$(ICULIBSUFFIX).lib),)
 LIBICUDT=	$(top_builddir)/stubdata/$(LIBICU)$(DATA_STUBNAME)$(ICULIBSUFFIX).lib
+else
+LIBICUDT=	$(LIBDIR)/$(LIBICU)$(DATA_STUBNAME)$(ICULIBSUFFIX).lib
+endif
 LIBICUUC=	$(LIBDIR)/$(LIBICU)$(COMMON_STUBNAME)$(ICULIBSUFFIX).lib $(LIBICUDT)
 LIBICUI18N=	$(LIBDIR)/$(LIBICU)$(I18N_STUBNAME)$(ICULIBSUFFIX).lib
 LIBICULE=	$(LIBDIR)/$(LIBICU)$(LAYOUT_STUBNAME)$(ICULIBSUFFIX).lib
