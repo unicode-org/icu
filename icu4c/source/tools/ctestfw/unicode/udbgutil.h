@@ -14,8 +14,6 @@
 #include "unicode/utypes.h"
 
 
-// Calendar
-
 enum UDebugEnumType {
 	UDBG_UDebugEnumType = 0, // Self-referential, strings for UDebugEnumType. Count=ENUM_COUNT.
 	UDBG_UCalendarDateFields, // UCalendarDateFields. Count=UCAL_FIELD_COUNT.  Unsupported if UCONFIG_NO_FORMATTING.
