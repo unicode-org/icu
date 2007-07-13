@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2002-2005, International Business Machines Corporation and
+ * Copyright (c) 2002-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -15,7 +15,8 @@
 
 #include "unicode/regex.h"
 #include "unicode/uchar.h"
-#include "unicode/ucnv.h"
+#include "unicode/ustring.h"
+#include "cstring.h"
 #include "regextst.h"
 #include "uvector.h"
 #include "util.h"
@@ -1652,7 +1653,6 @@ void RegexTest::Errors() {
 UChar *RegexTest::ReadAndConvertFile(const char *fileName, int &ulen, UErrorCode &status) {
     UChar       *retPtr  = NULL;
     char        *fileBuf = NULL;
-    UConverter* conv     = NULL;
     FILE        *f       = NULL;
 
     ulen = 0;
@@ -1672,8 +1672,9 @@ UChar *RegexTest::ReadAndConvertFile(const char *fileName, int &ulen, UErrorCode
     //
     //  Read it in
     //
-    int   fileSize;
-    int   amt_read;
+    int            fileSize;
+    int            amt_read;
+    const char    *fileBufC = NULL;
 
     fseek( f, 0, SEEK_END);
     fileSize = ftell(f);
@@ -1686,57 +1687,34 @@ UChar *RegexTest::ReadAndConvertFile(const char *fileName, int &ulen, UErrorCode
     }
 
     //
-    // Look for a Unicode Signature (BOM) on the data just read
+    // The regexp test data files are utf-8, but may or may not have a BOM, depending on
+    //    what editor on what platform was most recently used.
+    //    If a BOM is present, skip over it before converting.
     //
-    int32_t        signatureLength;
-    const char *   fileBufC;
-    const char*    encoding;
-
     fileBufC = fileBuf;
-    encoding = ucnv_detectUnicodeSignature(
-        fileBuf, fileSize, &signatureLength, &status);
-    if(encoding!=NULL ){
-        fileBufC  += signatureLength;
-        fileSize  -= signatureLength;
+    static const char UTF8BOM[3] = {(char)0xef, (char)0xbb, (char)0xbf};
+    if (uprv_strncmp(fileBufC, UTF8BOM, 3)==0) {
+        fileBufC += 3;
+        fileSize -= 3;
     }
 
+    // Convert the data from UTF-8 to UTF-16 in a UChar * string.
+    //   Preflight first, to find the required buffer size.
     //
-    // Open a converter to take the rule file to UTF-16
-    //
-    conv = ucnv_open(encoding, &status);
-    if (U_FAILURE(status)) {
-        goto cleanUpAndReturn;
-    }
-
-    //
-    // Convert the rules to UChar.
-    //  Preflight first to determine required buffer size.
-    //
-    ulen = ucnv_toUChars(conv,
-        NULL,           //  dest,
-        0,              //  destCapacity,
-        fileBufC,
-        fileSize,
-        &status);
+    u_strFromUTF8(NULL, 0, &ulen, fileBufC, fileSize, &status);
     if (status == U_BUFFER_OVERFLOW_ERROR) {
         // Buffer Overflow is expected from the preflight operation.
         status = U_ZERO_ERROR;
-
         retPtr = new UChar[ulen+1];
-        ucnv_toUChars(conv,
-            retPtr,       //  dest,
-            ulen+1,
-            fileBufC,
-            fileSize,
-            &status);
+        u_strFromUTF8(retPtr, ulen+1, &ulen, fileBufC, fileSize, &status);
     }
+    
 
 cleanUpAndReturn:
     fclose(f);
     delete[] fileBuf;
-    ucnv_close(conv);
     if (U_FAILURE(status)) {
-        errln("ucnv_toUChars: ICU Error \"%s\"\n", u_errorName(status));
+        errln("u_strFromUTF8(): ICU Error \"%s\"\n", u_errorName(status));
         delete retPtr;
         retPtr = 0;
         ulen   = 0;
