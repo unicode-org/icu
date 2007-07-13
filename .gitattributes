@@ -262,7 +262,6 @@ icu4c/source/test/compat/tzone.pl -text
 icu4c/source/test/intltest/dadrcal.cpp -text
 icu4c/source/test/intltest/dadrcal.h -text
 icu4c/source/test/intltest/tzrulets.h -text
-icu4c/source/test/letest/TestFont1.otf -text
 icu4c/source/test/letest/gendata.xml svneol=native#text/xml
 icu4c/source/test/letest/readme.html svneol=native#text/html
 icu4c/source/test/perf/charperf/CharPerf_r.pl -text
