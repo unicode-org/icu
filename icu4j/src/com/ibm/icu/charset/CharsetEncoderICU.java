@@ -42,9 +42,12 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
     boolean useSubChar1;
     boolean useFallback;
     
+    /* maximum number of indexed UChars */
+    private static final int EXT_MAX_UCHARS = 19;
+    
     /* store previous UChars/chars to continue partial matches */
     int preFromUFirstCP; /* >=0: partial match */
-    char[] preFromUArray;
+    char[] preFromUArray = new char[EXT_MAX_UCHARS];
     int preFromUBegin;
     int preFromULength;    /* negative: replay */
     
@@ -294,8 +297,6 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
         return fromUnicodeWithCallback(source, target, offsets, flush);
 
     }
-    /* maximum number of indexed UChars */
-    private static final int EXT_MAX_UCHARS = 19;
 
     /**
      * Implementation note for m:n conversions

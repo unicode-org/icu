@@ -116,11 +116,11 @@ class CharsetMBCS extends CharsetICU {
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
-    public CharsetMBCS(String icuCanonicalName, String javaCanonicalName, String[] aliases) throws InvalidFormatException{
+    public CharsetMBCS(String icuCanonicalName, String javaCanonicalName, String[] aliases, String classPath, ClassLoader loader) throws InvalidFormatException{
         super(icuCanonicalName, javaCanonicalName, aliases);
         
         // now try to load the data   
-        LoadArguments args = new LoadArguments(1, icuCanonicalName);
+        LoadArguments args = new LoadArguments(1, icuCanonicalName, classPath, loader);
         sharedData = loadConverter(args);
            
         maxBytesPerChar = sharedData.staticData.maxBytesPerChar;
@@ -136,6 +136,15 @@ class CharsetMBCS extends CharsetICU {
         // Todo: pass options
         initializeConverter(0);
     }
+
+    /**
+     * Tags for pacifying the check tags tool
+     * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public CharsetMBCS(String icuCanonicalName, String javaCanonicalName, String[] aliases) throws InvalidFormatException{
+        this(icuCanonicalName, javaCanonicalName, aliases, ICUResourceBundle.ICU_BUNDLE, null);
+    }
     
     class LoadArguments
     {
@@ -144,11 +153,15 @@ class CharsetMBCS extends CharsetICU {
         // long options;
         // String pkg;
         String name;
+        String classPath;
+        ClassLoader loader;
         
-        LoadArguments(int nestedLoads, String name)
+        LoadArguments(int nestedLoads, String name, String classPath, ClassLoader loader)
         {
             this.nestedLoads = nestedLoads;
             this.name = name;
+            this.loader = loader;
+            this.classPath = classPath;
         }
     }
 
@@ -158,7 +171,14 @@ class CharsetMBCS extends CharsetICU {
         UConverterStaticData staticData = new UConverterStaticData();
         UConverterDataReader reader = null;
         try {
-            InputStream i = ICUData.getRequiredStream(ICUResourceBundle.ICU_BUNDLE + "/" + args.name + "." + UConverterSharedData.DATA_TYPE);
+            String resourceName = args.classPath + "/" + args.name + "." + UConverterSharedData.DATA_TYPE;
+            InputStream i;
+            
+            if (args.loader != null) {
+                i = ICUData.getRequiredStream(args.loader, resourceName);
+            } else {
+                i = ICUData.getRequiredStream(resourceName);
+            }
             BufferedInputStream b = new BufferedInputStream(i, UConverterConstants.CNV_DATA_BUFFER_SIZE);
             reader = new UConverterDataReader(b);
             reader.readStaticData(staticData);
@@ -267,7 +287,7 @@ class CharsetMBCS extends CharsetICU {
     
             /* TODO parse package name out of the prefix of the base name in the extension .cnv file? */
             //agljport:fix args.size=sizeof(UConverterLoadArgs);
-            LoadArguments args2 = new LoadArguments(2, baseName);
+            LoadArguments args2 = new LoadArguments(2, baseName, ICUResourceBundle.ICU_BUNDLE, null);
             baseSharedData=loadConverter(args2);
             
             if( baseSharedData.staticData.conversionType!=UConverterType.MBCS ||
@@ -2019,6 +2039,7 @@ class CharsetMBCS extends CharsetICU {
             
             try{
                 
+                //TODO: remove this todo
                 if(preFromUFirstCP>=0) {
                     /*
                      * pass sourceIndex=-1 because we continue from an earlier buffer
@@ -2090,8 +2111,10 @@ class CharsetMBCS extends CharsetICU {
                  */
                 boolean doloop = true;
                 boolean doread = true;
-                if(c!=0 && target.hasRemaining()) {
-                    SideEffects x = new SideEffects(c, sourceArrayIndex, sourceIndex, nextSourceIndex, prevSourceIndex, prevLength);
+                if (c != 0 && target.hasRemaining()) {
+                    if(UTF16.isSurrogate((char)c) && (unicodeMask&UConverterConstants.HAS_SURROGATES) == 0 && UTF16.isLeadSurrogate((char)c)) {
+                    SideEffects x = new SideEffects(c, sourceArrayIndex, sourceIndex,
+                            nextSourceIndex, prevSourceIndex, prevLength);
                     doloop = getTrail(source, target, unicodeMask, x, flush, cr);
                     doread = x.doread;
                     c = x.c;
@@ -2100,6 +2123,9 @@ class CharsetMBCS extends CharsetICU {
                     nextSourceIndex = x.nextSourceIndex;
                     prevSourceIndex = x.prevSourceIndex;
                     prevLength = x.prevLength;
+                    } else {
+                        doread = false;
+                    }
                 }
             
                 if(doloop) {
@@ -2154,6 +2180,8 @@ class CharsetMBCS extends CharsetICU {
                                         break;
                                     }
                                 }
+                            } else {
+                                doread = true;
                             }
             
                             /* convert the Unicode code point in c into codepage bytes */
@@ -2594,7 +2622,8 @@ class CharsetMBCS extends CharsetICU {
                 preFromULength = (byte) - preFromULength;
         
                 /* set the error code for unassigned */
-                cr = CoderResult.unmappableForLength(source.position());
+                //TODO: figure out what the unmappable length really should be
+                cr = CoderResult.unmappableForLength(1);
             }
             return cr;
         }
@@ -3516,15 +3545,18 @@ class CharsetMBCS extends CharsetICU {
                 if(UTF16.isTrailSurrogate(trail)) {
                     ++x.sourceArrayIndex;
                     ++x.nextSourceIndex;
+                    /* convert this supplementary code point */
                     x.c = UCharacter.getCodePoint((char)x.c, trail);
                     if((unicodeMask&UConverterConstants.HAS_SUPPLEMENTARY) == 0) {
                         /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
                         fromUnicodeStatus = x.prevLength; /* save the old state */
                         /* callback(unassigned) */
+                        x.doread = true;
                         return unassigned(source, target, null, x, flush, cr);
+                    } else {
+                        x.doread = false;
+                        return true;
                     }
-                    /* convert this supplementary code point */
-                    /* exit this condition tree */
                 } else {
                     /* this is an unmatched lead code unit (1st surrogate) */
                     /* callback(illegal) */
@@ -3535,8 +3567,6 @@ class CharsetMBCS extends CharsetICU {
                 /* no more input */
                 return false;
             }
-            x.doread = false;
-            return true;
         }
         
         // function made out of block labeled unassigned in ucnv_MBCSFromUnicodeWithOffsets
@@ -3590,14 +3620,17 @@ class CharsetMBCS extends CharsetICU {
                 if(UTF16.isTrailSurrogate(trail)) {
                     ++x.sourceArrayIndex;
                     ++x.nextSourceIndex;
+                    /* convert this supplementary code point */
                     x.c = UCharacter.getCodePoint((char)x.c, trail);
                     if((unicodeMask&UConverterConstants.HAS_SUPPLEMENTARY) == 0) {
                         /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
                         /* callback(unassigned) */
+                        x.doread = true;
                         return unassignedDouble(source, target, x, flush, cr);
+                    } else {
+                        x.doread = false;
+                        return true;
                     }
-                    /* convert this supplementary code point */
-                    /* exit this condition tree */
                 } else {
                     /* this is an unmatched lead code unit (1st surrogate) */
                     /* callback(illegal) */
@@ -3608,8 +3641,6 @@ class CharsetMBCS extends CharsetICU {
                 /* no more input */
                 return false;
             }
-            x.doread = false;
-            return true;
         }
 
         // function made out of block labeled unassigned in ucnv_MBCSDoubleFromUnicodeWithOffsets
