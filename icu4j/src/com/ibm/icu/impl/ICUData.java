@@ -79,9 +79,9 @@ public final class ICUData {
         return getStream(loader,resourceName, false);   
     }
 
-    /*public static InputStream getRequiredStream(ClassLoader loader, String resourceName){
-        return getStream(loader,resourceName, true);   
-    }*/
+    public static InputStream getRequiredStream(ClassLoader loader, String resourceName){
+        return getStream(loader, resourceName, true);
+    }
 
     /*
      * Convenience override that calls getStream(ICUData.class, resourceName, false);
@@ -103,7 +103,7 @@ public final class ICUData {
     public static InputStream getStream(Class root, String resourceName) {
         return getStream(root, resourceName, false);
     }
-        
+    
     /*
      * Convenience method that calls getStream(root, resourceName, true).
      */

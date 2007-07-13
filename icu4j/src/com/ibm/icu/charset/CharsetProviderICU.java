@@ -16,6 +16,10 @@ import java.nio.charset.spi.CharsetProvider;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.MissingResourceException;
+
+import com.ibm.icu.impl.InvalidFormatException;
+import com.ibm.icu.util.UResourceBundle;
 
 
 /**
@@ -58,6 +62,32 @@ public final class CharsetProviderICU extends CharsetProvider{
         }
         return null;
     }
+    
+    public final Charset charsetForName(String charsetName, String classPath) {
+        try {
+            CharsetMBCS cs = new CharsetMBCS(charsetName, charsetName, new String[0], classPath, null);
+            return cs;
+        } catch (InvalidFormatException e) {
+            return null;
+        }
+    }
+    
+    public Charset charsetForName(String charsetName, String classPath, ClassLoader testLoader) {
+        try {
+            CharsetMBCS cs = new CharsetMBCS(charsetName, charsetName, new String[0], classPath, testLoader);
+            return cs;
+        } catch (InvalidFormatException e) {
+            return null;
+        }
+
+        // UResourceBundle bundle = null;
+        // try {
+        // bundle = (UResourceBundle) UResourceBundle.getBundleInstance(classPath, charsetName,
+        // testLoader);
+        // } catch (MissingResourceException e) {
+        //        }
+    }
+    
     /**
      * Gets the canonical name of the converter as defined by Java
      * @param enc converter name
