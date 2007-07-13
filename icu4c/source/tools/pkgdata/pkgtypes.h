@@ -1,6 +1,6 @@
 /**************************************************************************
 *
-*   Copyright (C) 2000-2006, International Business Machines
+*   Copyright (C) 2000-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ***************************************************************************
@@ -141,12 +141,12 @@ char * convertToNativePathSeparators(char *path);
 
 #ifdef U_WINDOWS
 # ifndef UDATA_SO_SUFFIX
-#  define UDATA_SO_SUFFIX ".DLL"
+#  define UDATA_SO_SUFFIX ".dll"
 # endif
 # define LIB_PREFIX ""
 # define LIB_STATIC_PREFIX ""
 # define OBJ_SUFFIX ".obj"
-# define UDATA_LIB_SUFFIX ".LIB"
+# define UDATA_LIB_SUFFIX ".lib"
 
 #elif defined(U_CYGWIN)
 # define LIB_PREFIX "cyg"

@@ -1,6 +1,6 @@
 /******************************************************************************
 *
-*   Copyright (C) 2002-2006, International Business Machines
+*   Copyright (C) 2002-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -31,17 +31,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
-/** set if AR is NOT to be called implicitly by gnumake 
- ** (i.e. if  the form   libblah.a($(OBJECTS) doesnt work) 
- **/
-#if !defined(NO_IMPLICIT_AR)
-#if defined(OS400) || defined(OS390)
-#    define NO_IMPLICIT_AR  1
-#else
-#    define NO_IMPLICIT_AR  0
-#endif
-#endif
 
 void pkg_sttc_writeReadme(struct UPKGOptions_ *o, const char *libName, UErrorCode *status)
 {
@@ -242,14 +231,9 @@ void pkg_mode_static(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
 
     T_FileStream_writeLine(makefile,"$(TEMP_PATH)%.$(STATIC_O): $(TEMP_PATH)%.c\n\t  $(COMPILE.c) -o $@ $<\n\n");
 
-#if NO_IMPLICIT_AR
-    T_FileStream_writeLine(makefile, "$(TARG_PATH)$(LIB_TARGET):$(TARG_PATH)$(LIB_TARGET) $(OBJECTS) $(LISTFILES)\n"
-                           "\t$(AR) $(ARFLAGS) $(TARG_PATH)$(LIB_TARGET) $(OBJECTS)\n"
+    T_FileStream_writeLine(makefile, "$(TARG_PATH)$(LIB_TARGET): $(OBJECTS) $(LISTFILES)\n"
+                            "\t$(AR) $(ARFLAGS) $(AR_OUTOPT)$@ $(OBJECTS)\n"
                             "\t$(RANLIB) $@\n\n");
-#else
-    T_FileStream_writeLine(makefile, "$(TARG_PATH)$(LIB_TARGET):$(TARG_PATH)$(LIB_TARGET)($(OBJECTS)) $(LISTFILES)\n"
-                            "\t$(RANLIB) $@\n\n");
-#endif
 
 
     T_FileStream_writeLine(makefile, "CLEANFILES= $(CMNLIST) $(OBJECTS) $(TARG_PATH)$(LIB_TARGET) $(TARG_PATH)$(MIDDLE_STATIC_LIB_TARGET) $(TARG_PATH)$(TARGET)\n\nclean:\n\t-$(RMV) $(CLEANFILES) $(MAKEFILE)");
