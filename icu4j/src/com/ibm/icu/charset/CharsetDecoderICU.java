@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006, International Business Machines Corporation and    *
+* Copyright (C) 2006-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -26,7 +26,6 @@ import com.ibm.icu.impl.Assert;
  * @draft ICU 3.6
  * @provisional This API might change or be removed in a future release.
  */
-
 public abstract class CharsetDecoderICU extends CharsetDecoder{ 
 
     int    toUnicodeStatus;
@@ -80,6 +79,18 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
         super(cs, (float) (1/(float)cs.maxCharsPerByte), cs.maxCharsPerByte);
     }
 
+    /**
+     * Is this Decoder allowed to use fallbacks? A fallback mapping is a mapping
+     * that will convert a byte sequence to a Unicode codepoint sequence, but
+     * the encoded Unicode codepoint sequence will round trip convert to a different
+     * byte sequence. In ICU, this is can be called a reverse fallback.
+     * @return A boolean
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
+    final boolean isFallbackUsed() {
+        return true;
+    }
     
     /**
      * Sets the action to be taken if an illegal sequence is encountered

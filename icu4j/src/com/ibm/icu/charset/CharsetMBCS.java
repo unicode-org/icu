@@ -1165,7 +1165,7 @@ class CharsetMBCS extends CharsetICU {
                         byteIndex = 0;
                     }
                     else if(c==0xfffe) {
-                        if(isToUUseFallback() && (entry=(int)getFallback(sharedData.mbcs, offset))!=0xfffe) {
+                        if(isFallbackUsed() && (entry=(int)getFallback(sharedData.mbcs, offset))!=0xfffe) {
                             /* output fallback BMP code point */
                             target.put((char)entry);
                             if(offsets!=null) {
@@ -1198,7 +1198,7 @@ class CharsetMBCS extends CharsetICU {
                         }
                         byteIndex = 0;
                     }
-                    else if(isToUUseFallback() ? c<=0xdfff : c<=0xdbff) {
+                    else if(isFallbackUsed() ? c<=0xdfff : c<=0xdbff) {
                         /* output roundtrip or fallback surrogate pair */
                         target.put((char)(c&0xdbff));
                         if(offsets!=null) {
@@ -1221,7 +1221,7 @@ class CharsetMBCS extends CharsetICU {
                             break;
                         }
                     } 
-                    else if(isToUUseFallback() ? (c&0xfffe)==0xe000 : c==0xe000) {
+                    else if(isFallbackUsed() ? (c&0xfffe)==0xe000 : c==0xe000) {
                         /* output roundtrip BMP code point above 0xd800 or fallback BMP code point */
                         target.put(unicodeCodeUnits[offset]);
                         if(offsets!=null) {
@@ -1235,7 +1235,7 @@ class CharsetMBCS extends CharsetICU {
                     }
                 } 
                 else if(action==MBCS_STATE_VALID_DIRECT_20 ||
-                        (action==MBCS_STATE_FALLBACK_DIRECT_20 && isToUUseFallback())) {
+                        (action==MBCS_STATE_FALLBACK_DIRECT_20 && isFallbackUsed())) {
                     entry = MBCS_ENTRY_FINAL_VALUE(entry);
                     /* output surrogate pair */
                     target.put((char)(0xd800|(char)(entry>>10)));
@@ -1280,7 +1280,7 @@ class CharsetMBCS extends CharsetICU {
                     }
                 }
                 else if(action==MBCS_STATE_FALLBACK_DIRECT_16) {
-                    if(isToUUseFallback()) {
+                    if(isFallbackUsed()) {
                         /* output BMP code point */
                         target.put((char)MBCS_ENTRY_FINAL_VALUE_16(entry));
                         if(offsets!=null) {
@@ -1474,7 +1474,7 @@ class CharsetMBCS extends CharsetICU {
                 length = TO_U_GET_BYTE(value);
                 value =TO_U_GET_VALUE(value);
                 if(value!=0 &&
-                   (TO_U_IS_ROUNDTRIP(value) || isToUUseFallback()) &&
+                   (TO_U_IS_ROUNDTRIP(value) || isFallbackUsed()) &&
                    TO_U_VERIFY_SISO_MATCH(sisoState, i+j)) {
                     /* remember longest match so far */
                     matchValue=value;
@@ -1514,7 +1514,7 @@ class CharsetMBCS extends CharsetICU {
                         /* partial match, continue */
                         index = TO_U_GET_PARTIAL_INDEX(value);
                     } else {
-                        if((TO_U_IS_ROUNDTRIP(value) || isToUUseFallback()) &&
+                        if((TO_U_IS_ROUNDTRIP(value) || isFallbackUsed()) &&
                            TO_U_VERIFY_SISO_MATCH(sisoState, i+j)) {
                             /* full match, stop with result */
                             matchValue = value;
@@ -1744,7 +1744,7 @@ class CharsetMBCS extends CharsetICU {
                  */
                 action = (byte)(MBCS_ENTRY_FINAL_ACTION(entry));
                 if(action==MBCS_STATE_FALLBACK_DIRECT_16) {
-                    if(isToUUseFallback()) {
+                    if(isFallbackUsed()) {
                         /* output BMP code point */
                         target.put((char)MBCS_ENTRY_FINAL_VALUE_16(entry));
                         --targetCapacity;
@@ -1885,7 +1885,7 @@ class CharsetMBCS extends CharsetICU {
                  */
                 action = (byte)(MBCS_ENTRY_FINAL_ACTION(entry));
                 if(action==MBCS_STATE_VALID_DIRECT_20 ||
-                   (action==MBCS_STATE_FALLBACK_DIRECT_20 && isToUUseFallback())) {
+                   (action==MBCS_STATE_FALLBACK_DIRECT_20 && isFallbackUsed())) {
                     
                     entry = MBCS_ENTRY_FINAL_VALUE(entry);
                     /* output surrogate pair */
@@ -1912,7 +1912,7 @@ class CharsetMBCS extends CharsetICU {
                     continue;
                 } 
                 else if(action==MBCS_STATE_FALLBACK_DIRECT_16) {
-                    if(isToUUseFallback()) {
+                    if(isFallbackUsed()) {
                         /* output BMP code point */
                         target.put((char)MBCS_ENTRY_FINAL_VALUE_16(entry));
                         if(offsets!=null) {
