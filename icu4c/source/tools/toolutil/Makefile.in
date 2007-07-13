@@ -83,9 +83,6 @@ install-local: install-library
 
 install-library: all-local
 	$(MKINSTALLDIRS) $(DESTDIR)$(libdir)
-ifneq ($(ENABLE_STATIC),)
-	$(INSTALL-L) $(TARGET) $(DESTDIR)$(libdir)
-endif
 ifneq ($(ENABLE_SHARED),)
 	$(INSTALL-L) $(FINAL_SO_TARGET) $(DESTDIR)$(libdir)
 ifneq ($(FINAL_SO_TARGET),$(SO_TARGET))
