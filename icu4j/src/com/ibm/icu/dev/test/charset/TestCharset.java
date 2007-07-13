@@ -3609,4 +3609,102 @@ public class TestCharset extends TestFmwk {
         }
         //end of decode UTF32BE
     }
+    
+    //provide better code coverage for UTF8
+    public void TestCharsetUTF8() {
+        CoderResult result = CoderResult.UNDERFLOW;
+        CharsetProvider provider = new CharsetProviderICU();       
+        CharsetDecoder decoder = provider.charsetForName("UTF-8").newDecoder();
+        CharsetEncoder encoder = provider.charsetForName("UTF-8").newEncoder();
+        
+        CharBuffer us = CharBuffer.allocate(0x10);
+        ByteBuffer bs = ByteBuffer.allocate(0x10);
+        ByteBuffer bs2;
+        CharBuffer us2;
+        int limit_us;
+        int limit_bs;
+        
+        //encode and decode using read only buffer
+        encoder.reset();
+        decoder.reset();
+        us.put((char)0x0041); us.put((char)0x0081); us.put((char)0xEF65); us.put((char)0xD902);
+        bs.put((byte)0x41); bs.put((byte)0xc2); bs.put((byte)0x81); bs.put((byte)0xee); bs.put((byte)0xbd); bs.put((byte)0xa5);
+        bs.put((byte)0x00); 
+        limit_us = us.position();
+        limit_bs = bs.position();
+        
+        us.limit(limit_us);
+        us.position(0);
+        bs.limit(limit_bs);
+        bs.position(0);
+        bs2 = bs.asReadOnlyBuffer();
+        us2 = us.asReadOnlyBuffer();
+        
+        result = decoder.decode(bs2, us, true);
+        if (!result.isUnderflow() || !equals(us, us2)) {
+            errln("Error while decoding UTF-8 (1) should not have occured.");
+        }
+        
+        us2.limit(limit_us);
+        us2.position(0);
+        bs.limit(limit_bs);
+        bs.position(0);
+        
+        result = encoder.encode(us2, bs, true); 
+        if (!result.isUnderflow() || !equals(bs, bs2)) {
+            errln("Error while encoding UTF-8 (1) should not have occured.");
+        }  
+        
+        us.clear();
+        bs.clear();
+        
+        //test overflow buffer while encoding
+        encoder.reset();
+        us.put((char)0x0081); us.put((char)0xEF65); 
+        bs.put((byte)0x00); bs.put((byte)0x00);
+        limit_us = us.position();
+        us2 = us.asReadOnlyBuffer();
+        us2.limit(limit_us);
+        us2.position(0);
+        bs.limit(1);
+        bs.position(0);
+        result = encoder.encode(us2, bs, true);
+        if (!result.isOverflow()) {
+            errln("Overflow Error should have occured while encoding UTF-8 (2).");
+        }
+        
+        encoder.reset();
+        
+        us2.limit(limit_us);
+        us2.position(1);
+        bs.limit(1);
+        bs.position(0);
+        result = encoder.encode(us2, bs, true);
+        if (!result.isOverflow()) {
+            errln("Overflow Error should have occured while encoding UTF-8 (3).");
+        }
+        
+        encoder.reset();
+        
+        us2.limit(limit_us);
+        us2.position(1);
+        bs.limit(2);
+        bs.position(0);
+        result = encoder.encode(us2, bs, true);
+        if (!result.isOverflow()) {
+            errln("Overflow Error should have occured while encoding UTF-8 (4).");
+        }
+        
+        encoder.reset();
+        
+        us2.limit(limit_us);
+        us2.position(0);
+        bs.limit(2);
+        bs.position(0);
+        result = encoder.encode(us2, bs, true);
+        if (!result.isOverflow()) {
+            errln("Overflow Error should have occured while encoding UTF-8 (5).");
+        }   
+
+    }
 }
