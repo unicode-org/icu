@@ -579,6 +579,10 @@ LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstan
                 result = new ThaiLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags);
                 break;
 
+            case hangScriptCode:
+                result = new HangulOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags);
+                break;
+
             default:
                 result = new LayoutEngine(fontInstance, scriptCode, languageCode, typoFlags);
                 break;
