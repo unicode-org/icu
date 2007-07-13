@@ -1,5 +1,5 @@
 ## -*-makefile-*-
-## Copyright (c) 2003-2006 IBM, Ken Foskey, and others. All rights reserved.
+## Copyright (c) 2003-2007 IBM, Ken Foskey, and others. All rights reserved.
 ##
 ## Aix-specific setup (for gcc)
 ##
@@ -19,8 +19,6 @@ LINK.cc=	$(AIX_PREDELETE) $(CXX) $(CXXFLAGS) $(LDFLAGS)
 ## Commands to make a shared library
 SHLIB.c=    $(AIX_PREDELETE) $(CC) $(CFLAGS) $(LDFLAGS) -shared -Wl,-bexpall
 SHLIB.cc=   $(AIX_PREDELETE) $(CXX) $(CXXFLAGS) $(LDFLAGS) -shared -Wl,-bexpall
-#SHLIB.c=	$(AIX_PREDELETE) $(AIX_SHLIB) -p 5000 $(LDFLAGS) -bexpall 
-#SHLIB.cc=	$(AIX_PREDELETE) $(AIX_SHLIB) -p 5000 $(LDFLAGS) -bexpall 
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	-I

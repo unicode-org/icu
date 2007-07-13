@@ -1,9 +1,8 @@
-
 # Make definitions that are shared by the different subprojects of ICU.
 #
 # Yves Arrouye.
 #
-# Copyright (C) 2000-2006, International Business Machines Corporation and others.
+# Copyright (C) 2000-2007, International Business Machines Corporation and others.
 # All Rights Reserved.
 
 #
@@ -99,9 +98,8 @@ ENABLE_RELEASE = @ENABLE_RELEASE@
 EXEEXT = @EXEEXT@
 CC = @CC@
 CXX = @CXX@
-AIX_SHLIB = @AIX_SHLIB@
 AR = @AR@
-ARFLAGS := @ARFLAGS@ $(ARFLAGS)
+ARFLAGS = @ARFLAGS@ r
 RANLIB = @RANLIB@
 COMPILE_LINK_ENVVAR = @COMPILE_LINK_ENVVAR@
 
@@ -129,6 +127,8 @@ LIB_M = @LIB_M@
 LIB_THREAD = @LIB_THREAD@
 # OUTOPT is for creating a specific output name
 OUTOPT = -o # The extra space after the argument is needed.
+# AR_OUTOPT is for creating a specific output name for static libraries.
+AR_OUTOPT =
 
 ENABLE_RPATH = @ENABLE_RPATH@
 ifeq ($(ENABLE_RPATH),YES)
