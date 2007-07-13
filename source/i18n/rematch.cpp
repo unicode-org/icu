@@ -942,8 +942,7 @@ UBool RegexMatcher::isWordBoundary(int32_t pos) {
     // If we're off the end of the string, behave as though we're not at a word char.
     if (pos < fInput->length()) {
         UChar32  c = fInput->char32At(pos);
-        int8_t ctype = u_charType(c);
-        if (ctype==U_NON_SPACING_MARK || ctype==U_ENCLOSING_MARK) {
+        if (u_hasBinaryProperty(c, UCHAR_GRAPHEME_EXTEND) || u_charType(c) == U_FORMAT_CHAR) {
             // Current char is a combining one.  Not a boundary.
             return FALSE;
         }
@@ -960,8 +959,8 @@ UBool RegexMatcher::isWordBoundary(int32_t pos) {
         }
         prevPos = fInput->moveIndex32(prevPos, -1);
         UChar32 prevChar = fInput->char32At(prevPos);
-        int8_t prevCType = u_charType(prevChar);
-        if (!(prevCType==U_NON_SPACING_MARK || prevCType==U_ENCLOSING_MARK)) {
+        if (!(u_hasBinaryProperty(prevChar, UCHAR_GRAPHEME_EXTEND)
+              || u_charType(prevChar) == U_FORMAT_CHAR)) {
             prevCIsWord = fPattern->fStaticSets[URX_ISWORD_SET]->contains(prevChar);
             break;
         }
