@@ -197,6 +197,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
             // We were called a second time by the framework.
             // We should have already handled this state.
             fromUChar32 = 0;
+            preFromUFirstCP = UConverterConstants.U_SENTINEL;
             return CoderResult.UNDERFLOW;
         }
         in.position(in.position()+fromUCountPending());
@@ -502,7 +503,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
                 {
     
                     if( calledCallback || cr.isOverflow() ||
-                        (cr.isMalformed() && cr.isUnmappable())
+                        (!cr.isMalformed() && !cr.isUnmappable())
                       ){
                         /*
                          * the callback did not or cannot resolve the error:
