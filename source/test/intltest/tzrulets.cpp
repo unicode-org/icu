@@ -466,7 +466,7 @@ TimeZoneRuleTest::TestRBTZTransition(void) {
             // Descending/inclusive
             compareTransitionsDescending(*tz, *rbtz, start + 1, until, TRUE);
         }
-        delete trsrules;
+        delete [] trsrules;
         delete rbtz;
         delete tz;
     }
