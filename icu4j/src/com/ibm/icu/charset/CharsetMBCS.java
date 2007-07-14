@@ -111,11 +111,7 @@ class CharsetMBCS extends CharsetICU {
             version = new byte[MAX_VERSION_LENGTH];
         }
     }
-    /**
-     * Tags for pacifying the check tags tool
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
-     */
+
     public CharsetMBCS(String icuCanonicalName, String javaCanonicalName, String[] aliases, String classPath, ClassLoader loader) throws InvalidFormatException{
         super(icuCanonicalName, javaCanonicalName, aliases);
         
@@ -137,11 +133,6 @@ class CharsetMBCS extends CharsetICU {
         initializeConverter(0);
     }
 
-    /**
-     * Tags for pacifying the check tags tool
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
-     */
     public CharsetMBCS(String icuCanonicalName, String javaCanonicalName, String[] aliases) throws InvalidFormatException{
         this(icuCanonicalName, javaCanonicalName, aliases, ICUResourceBundle.ICU_BUNDLE, null);
     }
@@ -2041,7 +2032,6 @@ class CharsetMBCS extends CharsetICU {
             
             try{
                 
-                //TODO: remove this todo
                 if(preFromUFirstCP>=0) {
                     /*
                      * pass sourceIndex=-1 because we continue from an earlier buffer
@@ -2115,16 +2105,16 @@ class CharsetMBCS extends CharsetICU {
                 boolean doread = true;
                 if (c != 0 && target.hasRemaining()) {
                     if(UTF16.isSurrogate((char)c) && (unicodeMask&UConverterConstants.HAS_SURROGATES) == 0 && UTF16.isLeadSurrogate((char)c)) {
-                    SideEffects x = new SideEffects(c, sourceArrayIndex, sourceIndex,
-                            nextSourceIndex, prevSourceIndex, prevLength);
-                    doloop = getTrail(source, target, unicodeMask, x, flush, cr);
-                    doread = x.doread;
-                    c = x.c;
-                    sourceArrayIndex = x.sourceArrayIndex;
-                    sourceIndex = x.sourceIndex;
-                    nextSourceIndex = x.nextSourceIndex;
-                    prevSourceIndex = x.prevSourceIndex;
-                    prevLength = x.prevLength;
+                        SideEffects x = new SideEffects(c, sourceArrayIndex, sourceIndex,
+                                nextSourceIndex, prevSourceIndex, prevLength);
+                        doloop = getTrail(source, target, unicodeMask, x, flush, cr);
+                        doread = x.doread;
+                        c = x.c;
+                        sourceArrayIndex = x.sourceArrayIndex;
+                        sourceIndex = x.sourceIndex;
+                        nextSourceIndex = x.nextSourceIndex;
+                        prevSourceIndex = x.prevSourceIndex;
+                        prevLength = x.prevLength;
                     } else {
                         doread = false;
                     }

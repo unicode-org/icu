@@ -69,8 +69,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
     /**
      * Construct a CharsetDecorderICU based on the information provided from a CharsetICU object.
      * 
-     * @param cs
-     *            The CharsetICU object containing information about how to charset to decode.
+     * @param cs The CharsetICU object containing information about how to charset to decode.
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
@@ -94,8 +93,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
     /**
      * Sets the action to be taken if an illegal sequence is encountered
      * 
-     * @param newAction
-     *            action to be taken
+     * @param newAction action to be taken
      * @exception IllegalArgumentException
      * @stable ICU 3.6
      */
@@ -106,8 +104,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
     /**
      * Sets the action to be taken if an illegal sequence is encountered
      * 
-     * @param newAction
-     *            action to be taken
+     * @param newAction action to be taken
      * @exception IllegalArgumentException
      * @stable ICU 3.6
      */
