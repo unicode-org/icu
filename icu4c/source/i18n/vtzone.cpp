@@ -737,8 +737,10 @@ static TimeZoneRule* createRuleByRDATE(const UnicodeString& tzname, int32_t rawO
             return NULL;
         }
     }
-    return new TimeArrayTimeZoneRule(tzname, rawOffset, dstSavings,
+    TimeArrayTimeZoneRule *retVal = new TimeArrayTimeZoneRule(tzname, rawOffset, dstSavings,
         times, size, DateTimeRule::UTC_TIME);
+    uprv_free(times);
+    return retVal;
 }
 
 /*
@@ -1595,10 +1597,9 @@ VTimeZone::write(UDate start, VTZWriter& writer, UErrorCode& status) /*const*/ {
     if (U_FAILURE(status)) {
         return;
     }
-    RuleBasedTimeZone *rbtz = NULL;
     InitialTimeZoneRule *initial = NULL;
     UVector *transitionRules = NULL;
-    UVector *customProps = NULL;
+    UVector customProps(uhash_deleteUnicodeString, uhash_compareUnicodeString, status);
     UnicodeString tzid;
 
     // Extract rules applicable to dates after the start time
@@ -1609,11 +1610,11 @@ VTimeZone::write(UDate start, VTZWriter& writer, UErrorCode& status) /*const*/ {
 
     // Create a RuleBasedTimeZone with the subset rule
     getID(tzid);
-    rbtz = new RuleBasedTimeZone(tzid, initial);
+    RuleBasedTimeZone rbtz(tzid, initial);
     if (transitionRules != NULL) {
         while (!transitionRules->isEmpty()) {
             TimeZoneRule *tr = (TimeZoneRule*)transitionRules->orphanElementAt(0);
-            rbtz->addTransitionRule(tr, status);
+            rbtz.addTransitionRule(tr, status);
             if (U_FAILURE(status)) {
                 goto cleanupWritePartial;
             }
@@ -1621,16 +1622,12 @@ VTimeZone::write(UDate start, VTZWriter& writer, UErrorCode& status) /*const*/ {
         delete transitionRules;
         transitionRules = NULL;
     }
-    rbtz->complete(status);
+    rbtz.complete(status);
     if (U_FAILURE(status)) {
         goto cleanupWritePartial;
     }
 
     if (olsonzid.length() > 0 && icutzver.length() > 0) {
-        customProps = new UVector(uhash_deleteUnicodeString, uhash_compareUnicodeString, status);
-        if (U_FAILURE(status)) {
-            goto cleanupWritePartial;
-        }
         UnicodeString *icutzprop = new UnicodeString(ICU_TZINFO_PROP);
         icutzprop->append(olsonzid);
         icutzprop->append((UChar)0x005B/*'['*/);
@@ -1638,22 +1635,18 @@ VTimeZone::write(UDate start, VTZWriter& writer, UErrorCode& status) /*const*/ {
         icutzprop->append(ICU_TZINFO_PARTIAL);
         appendMillis(start, *icutzprop);
         icutzprop->append((UChar)0x005D/*']'*/);
-        customProps->addElement(icutzprop, status);
+        customProps.addElement(icutzprop, status);
         if (U_FAILURE(status)) {
             delete icutzprop;
             goto cleanupWritePartial;
         }
     }
-    writeZone(writer, *rbtz, customProps, status);
+    writeZone(writer, rbtz, &customProps, status);
     return;
 
 cleanupWritePartial:
-    if (rbtz != NULL) {
-        delete rbtz;
-    } else {
-        if (initial != NULL) {
-            delete initial;
-        }
+    if (initial != NULL) {
+        delete initial;
     }
     if (transitionRules != NULL) {
         while (!transitionRules->isEmpty()) {
@@ -1661,9 +1654,6 @@ cleanupWritePartial:
             delete tr;
         }
         delete transitionRules;
-    }
-    if (customProps != NULL) {
-        delete customProps;
     }
 }
 
@@ -1673,66 +1663,52 @@ VTimeZone::writeSimple(UDate time, VTZWriter& writer, UErrorCode& status) /*cons
         return;
     }
 
-    UVector *customProps = NULL;
-    RuleBasedTimeZone *rbtz = NULL;
+    UVector customProps(uhash_deleteUnicodeString, uhash_compareUnicodeString, status);
     UnicodeString tzid;
 
     // Extract simple rules
     InitialTimeZoneRule *initial = NULL;
     AnnualTimeZoneRule *std = NULL, *dst = NULL;
     getSimpleRulesNear(time, initial, std, dst, status);
-    if (U_FAILURE(status)) {
-        goto cleanupWriteSimple;
-    }
-
-    // Create a RuleBasedTimeZone with the subset rule
-    getID(tzid);
-    rbtz = new RuleBasedTimeZone(tzid, initial);
-    if (std != NULL && dst != NULL) {
-        rbtz->addTransitionRule(std, status);
-        rbtz->addTransitionRule(dst, status);
-    }
-    if (U_FAILURE(status)) {
-        goto cleanupWriteSimple;
-    }
-
-    if (olsonzid.length() > 0 && icutzver.length() > 0) {
-        customProps = new UVector(uhash_deleteUnicodeString, uhash_compareUnicodeString, status);
+    if (U_SUCCESS(status)) {
+        // Create a RuleBasedTimeZone with the subset rule
+        getID(tzid);
+        RuleBasedTimeZone rbtz(tzid, initial);
+        if (std != NULL && dst != NULL) {
+            rbtz.addTransitionRule(std, status);
+            rbtz.addTransitionRule(dst, status);
+        }
         if (U_FAILURE(status)) {
             goto cleanupWriteSimple;
         }
-        UnicodeString *icutzprop = new UnicodeString(ICU_TZINFO_PROP);
-        icutzprop->append(olsonzid);
-        icutzprop->append((UChar)0x005B/*'['*/);
-        icutzprop->append(icutzver);
-        icutzprop->append(ICU_TZINFO_SIMPLE);
-        appendMillis(time, *icutzprop);
-        icutzprop->append((UChar)0x005D/*']'*/);
-        customProps->addElement(icutzprop, status);
-        if (U_FAILURE(status)) {
-            delete icutzprop;
-            goto cleanupWriteSimple;
+
+        if (olsonzid.length() > 0 && icutzver.length() > 0) {
+            UnicodeString *icutzprop = new UnicodeString(ICU_TZINFO_PROP);
+            icutzprop->append(olsonzid);
+            icutzprop->append((UChar)0x005B/*'['*/);
+            icutzprop->append(icutzver);
+            icutzprop->append(ICU_TZINFO_SIMPLE);
+            appendMillis(time, *icutzprop);
+            icutzprop->append((UChar)0x005D/*']'*/);
+            customProps.addElement(icutzprop, status);
+            if (U_FAILURE(status)) {
+                delete icutzprop;
+                goto cleanupWriteSimple;
+            }
         }
+        writeZone(writer, rbtz, &customProps, status);
     }
-    writeZone(writer, *rbtz, customProps, status);
     return;
 
 cleanupWriteSimple:
-    if (rbtz != NULL) {
-        delete rbtz;
-    } else {
-        if (initial != NULL) {
-            delete initial;
-        }
-        if (std != NULL) {
-            delete std;
-        }
-        if (dst != NULL) {
-            delete dst;
-        }
+    if (initial != NULL) {
+        delete initial;
     }
-    if (customProps != NULL) {
-        delete customProps;
+    if (std != NULL) {
+        delete std;
+    }
+    if (dst != NULL) {
+        delete dst;
     }
 }
 
