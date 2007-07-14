@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006, International Business Machines Corporation and    *
+* Copyright (C) 2006-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -16,10 +16,8 @@ import java.nio.charset.spi.CharsetProvider;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.InvalidFormatException;
-import com.ibm.icu.util.UResourceBundle;
 
 
 /**
@@ -63,29 +61,34 @@ public final class CharsetProviderICU extends CharsetProvider{
         return null;
     }
     
+    /**
+     * Constructs a charset for the given ICU conversion table from the specified class path.
+     * Example use: <code>cnv = CharsetProviderICU.charsetForName("com/myCompany/myDataPackage", "myConverter");</code>.
+     * In this example myConverter.cnv would exist in the com/myCompany/myDataPackage Java package.
+     * Conversion tables can be made with ICU4C's makeconv tool.
+     * @param charsetName The name of the charset conversion table.
+     * @return charset object for the given charset name, null if unsupported
+     * @draft ICU 3.8
+     */
     public final Charset charsetForName(String charsetName, String classPath) {
-        try {
-            CharsetMBCS cs = new CharsetMBCS(charsetName, charsetName, new String[0], classPath, null);
-            return cs;
-        } catch (InvalidFormatException e) {
-            return null;
-        }
+        return charsetForName(charsetName, classPath, null);
     }
     
-    public Charset charsetForName(String charsetName, String classPath, ClassLoader testLoader) {
+    /**
+     * Constructs a charset for the given ICU conversion table from the specified class path. 
+     * @param charsetName The name of the charset conversion table.
+     * @param loader the class object from which to load the charset conversion table
+     * @return charset object for the given charset name, null if unsupported
+     * @draft ICU 3.8
+     */
+    public Charset charsetForName(String charsetName, String classPath, ClassLoader loader) {
+        CharsetMBCS cs = null;
         try {
-            CharsetMBCS cs = new CharsetMBCS(charsetName, charsetName, new String[0], classPath, testLoader);
-            return cs;
+             cs = new CharsetMBCS(charsetName, charsetName, new String[0], classPath, loader);
         } catch (InvalidFormatException e) {
-            return null;
+            // return null;
         }
-
-        // UResourceBundle bundle = null;
-        // try {
-        // bundle = (UResourceBundle) UResourceBundle.getBundleInstance(classPath, charsetName,
-        // testLoader);
-        // } catch (MissingResourceException e) {
-        //        }
+        return cs;
     }
     
     /**
