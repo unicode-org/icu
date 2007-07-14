@@ -174,8 +174,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
      */
     protected CoderResult decodeLoop(ByteBuffer in,CharBuffer out){
         if(!in.hasRemaining()){
-            //TODO: do we want to reset the decoder state?
-            //toULength = 0;
+            toULength = 0;
             return CoderResult.UNDERFLOW;
         }
         in.position(in.position()+toUCountPending());

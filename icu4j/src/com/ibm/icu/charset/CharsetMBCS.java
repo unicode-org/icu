@@ -2028,8 +2028,8 @@ class CharsetMBCS extends CharsetICU {
         protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush){
       
             CoderResult[] cr = {CoderResult.UNDERFLOW};
-            if (!source.hasRemaining())
-                return cr[0];
+//            if (!source.hasRemaining() && fromUChar32 == 0)
+//                return cr[0];
 
             int sourceArrayIndex;
             char[] table;
@@ -3734,7 +3734,6 @@ class CharsetMBCS extends CharsetICU {
                 subchar = buffer;
                 length = i;
             }
-//          return super.cbFromUWriteSub(encoder, source, target, offsets);
             return CharsetEncoderICU.fromUWriteBytes(encoder, subchar, 0, length, target, offsets,
                     source.position());
         }
