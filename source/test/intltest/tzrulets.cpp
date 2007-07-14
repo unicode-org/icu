@@ -582,10 +582,10 @@ TimeZoneRuleTest::TestVTimeZoneRoundTrip(void) {
                     }
                 }
             }
+            delete vtz_new;
         }
         delete tz;
         delete vtz_org;
-        delete vtz_new;
     }
 }
 
@@ -805,8 +805,11 @@ TimeZoneRuleTest::TestVTimeZoneHeaderProps(void) {
                     errln("FAIL: LAST-MODIFIED was not preserved in the second roundtrip");
                 }
             }
+            delete newvtz2;
         }
     }
+    delete newvtz1;
+    delete vtz;
 }
 
 void
