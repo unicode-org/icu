@@ -3659,9 +3659,10 @@ public class TestCharset extends TestFmwk {
         bs.clear();
         
         //test overflow buffer while encoding
+        //readonly buffer
         encoder.reset();
         us.put((char)0x0081); us.put((char)0xEF65); 
-        bs.put((byte)0x00); bs.put((byte)0x00);
+        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);
         limit_us = us.position();
         us2 = us.asReadOnlyBuffer();
         us2.limit(limit_us);
@@ -3705,6 +3706,103 @@ public class TestCharset extends TestFmwk {
         if (!result.isOverflow()) {
             errln("Overflow Error should have occured while encoding UTF-8 (5).");
         }   
+        
+        //not readonly buffer
+        encoder.reset();
+        
+        us.limit(limit_us);
+        us.position(0);
+        bs.limit(1);
+        bs.position(0);
+        result = encoder.encode(us, bs, true);
+        if (!result.isOverflow()) {
+            errln("Overflow Error should have occured while encoding UTF-8 (6).");
+        }
+        
+        encoder.reset();
+        
+        us.limit(limit_us);
+        us.position(0);
+        bs.limit(3);
+        bs.position(0);
+        result = encoder.encode(us, bs, true);
+        if (!result.isOverflow()) {
+            errln("Overflow Error should have occured while encoding UTF-8 (7).");
+        }
+        
+        encoder.reset();
+        
+        us.limit(limit_us);
+        us.position(1);
+        bs.limit(2);
+        bs.position(0);
+        result = encoder.encode(us, bs, true);
+        if (!result.isOverflow()) {
+            errln("Overflow Error should have occured while encoding UTF-8 (8).");
+        }   
+        
+        encoder.reset();
+        
+        us.limit(limit_us + 1);
+        us.position(1);
+        bs.limit(3);
+        bs.position(0);
+        result = encoder.encode(us, bs, true);
+        if (!result.isOverflow()) {
+            errln("Overflow Error should have occured while encoding UTF-8 (9).");
+        }  
+        
+        us.clear();
+        bs.clear();
+        
+        //test encoding 4 byte characters
+        encoder.reset();
+        us.put((char)0xD902); us.put((char)0xDD02); us.put((char)0x0041);
+        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);
+        limit_us = us.position();
+        us2 = us.asReadOnlyBuffer();
+        us2.limit(limit_us);
+        us2.position(0);
+        bs.limit(1);
+        bs.position(0);
+        result = encoder.encode(us2, bs, true);
+        if (!result.isOverflow()) {
+            errln("Overflow Error should have occured while encoding UTF-8 (10).");
+        }
+        
+        encoder.reset();
+        
+        us2.limit(limit_us);
+        us2.position(0);
+        bs.limit(2);
+        bs.position(0);
+        result = encoder.encode(us2, bs, true);
+        if (!result.isOverflow()) {
+            errln("Overflow Error should have occured while encoding UTF-8 (11).");
+        }
+        
+        encoder.reset();
+        
+        us2.limit(limit_us);
+        us2.position(0);
+        bs.limit(3);
+        bs.position(0);
+        result = encoder.encode(us2, bs, true);
+        if (!result.isOverflow()) {
+            errln("Overflow Error should have occured while encoding UTF-8 (12).");
+        }
+        
+        encoder.reset();
+        
+        us2.limit(limit_us);
+        us2.position(0);
+        bs.limit(4);
+        bs.position(0);
+        result = encoder.encode(us2, bs, true);
+        if (!result.isOverflow()) {
+            errln("Overflow Error should have occured while encoding UTF-8 (13).");
+        }
+
 
     }
 }
