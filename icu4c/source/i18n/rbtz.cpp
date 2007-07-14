@@ -324,6 +324,9 @@ RuleBasedTimeZone::complete(UErrorCode& status) {
         }
     }
     fUpToDate = TRUE;
+    if (done != NULL) {
+        uprv_free(done);
+    }
     return;
 
 cleanup:

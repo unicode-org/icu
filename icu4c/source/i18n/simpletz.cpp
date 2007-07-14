@@ -1045,6 +1045,8 @@ SimpleTimeZone::initTransitionRules(UErrorCode& status) {
         // For now, use ID + "(DST)" as the name
         dstRule = new AnnualTimeZoneRule(tzid+"(DST)", getRawOffset(), getDSTSavings(),
             *dtRule, startYear, AnnualTimeZoneRule::MAX_YEAR);
+        delete dtRule;
+        dtRule = NULL;
  
         // Calculate the first DST start time
         dstRule->getFirstStart(getRawOffset(), 0, firstDstStart);
@@ -1069,6 +1071,8 @@ SimpleTimeZone::initTransitionRules(UErrorCode& status) {
         // For now, use ID + "(STD)" as the name
         stdRule = new AnnualTimeZoneRule(tzid+"(STD)", getRawOffset(), 0,
             *dtRule, startYear, AnnualTimeZoneRule::MAX_YEAR);
+        delete dtRule;
+        dtRule = NULL;
 
         // Calculate the first STD start time
         stdRule->getFirstStart(getRawOffset(), dstRule->getDSTSavings(), firstStdStart);
