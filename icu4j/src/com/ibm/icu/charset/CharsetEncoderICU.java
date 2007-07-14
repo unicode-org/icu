@@ -175,12 +175,16 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
 	 */
     protected void implReset() {
 	    errorBufferLength=0;
-        fromUChar32=0;
         fromUnicodeStatus = 0;
-        preFromUBegin = 0;
-        preFromUFirstCP = 0;
-        preFromULength = 0;
+        fromUnicodeReset();
 	}
+    
+    private void fromUnicodeReset() {
+        fromUChar32=0;
+        preFromUBegin = 0;
+        preFromUFirstCP = UConverterConstants.U_SENTINEL;
+        preFromULength = 0;
+    }
 
 	/**
 	 * Encodes one or more chars. The default behaviour of the
@@ -194,16 +198,16 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
 	 */
     protected CoderResult encodeLoop(CharBuffer in, ByteBuffer out) {
         if(!in.hasRemaining()){
-            // We were called a second time by the framework.
-            // We should have already handled this state.
-            fromUChar32 = 0;
-            preFromUFirstCP = UConverterConstants.U_SENTINEL;
             return CoderResult.UNDERFLOW;
         }
         in.position(in.position()+fromUCountPending());
         /* do the conversion */
         CoderResult ret = encode(in, out, null, false);
         setSourcePosition(in);
+        if(ret.isUnderflow() && in.hasRemaining()){
+            // The Java framework is going to substitute what is left.
+            fromUnicodeReset();
+        }
         return ret;
     }
 
