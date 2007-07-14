@@ -2028,6 +2028,8 @@ class CharsetMBCS extends CharsetICU {
         protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush){
       
             CoderResult[] cr = {CoderResult.UNDERFLOW};
+            if (!source.hasRemaining())
+                return cr[0];
 
             int sourceArrayIndex;
             char[] table;
