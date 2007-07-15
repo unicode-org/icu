@@ -176,11 +176,11 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
     protected void implReset() {
 	    errorBufferLength=0;
         fromUnicodeStatus = 0;
+        fromUChar32 = 0;
         fromUnicodeReset();
 	}
     
     private void fromUnicodeReset() {
-        fromUChar32=0;
         preFromUBegin = 0;
         preFromUFirstCP = UConverterConstants.U_SENTINEL;
         preFromULength = 0;
@@ -198,6 +198,9 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
 	 */
     protected CoderResult encodeLoop(CharBuffer in, ByteBuffer out) {
         if(!in.hasRemaining()){
+            // The Java framework should have already substituted what was left.
+            fromUChar32 = 0;
+            //fromUnicodeReset();
             return CoderResult.UNDERFLOW;
         }
         in.position(in.position()+fromUCountPending());
