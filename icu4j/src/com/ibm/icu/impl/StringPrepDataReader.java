@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 2003, International Business Machines Corporation and   *
+ * Copyright (C) 2003-2007, International Business Machines Corporation and   *
  * others. All Rights Reserved.                                               *
  ******************************************************************************
  *
@@ -50,7 +50,7 @@ public final class StringPrepDataReader implements ICUBinary.Authenticate {
                         throws IOException{
 
         //Read the bytes that make up the idnaTrie  
-        dataInputStream.read(idnaBytes);
+        dataInputStream.readFully(idnaBytes);
         
         //Read the extra data
         for(int i=0;i<mappingTable.length;i++){

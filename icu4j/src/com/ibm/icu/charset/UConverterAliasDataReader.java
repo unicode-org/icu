@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006, International Business Machines Corporation and    *
+* Copyright (C) 2006-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -182,8 +182,8 @@ final class UConverterAliasDataReader implements ICUBinary.Authenticate {
         for(i = 0; i < optionTable.length; ++i)
             optionTable[i] = dataInputStream.readUnsignedShort();
 
-		dataInputStream.read(stringTable);
-        dataInputStream.read(normalizedStringTable);
+		dataInputStream.readFully(stringTable);
+        dataInputStream.readFully(normalizedStringTable);
     }
     
     public boolean isDataVersionAcceptable(byte version[])

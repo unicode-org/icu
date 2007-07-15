@@ -440,12 +440,9 @@ final class UConverterDataReader implements ICUBinary.Authenticate {
         sd.structSize = dataInputStream.readInt();
         bRead +=4;
         byte[] name = new byte[UConverterConstants.MAX_CONVERTER_NAME_LENGTH];
-        int len = dataInputStream.read(name);
-        if(len==-1){
-            throw new IOException("Read failed");
-        }
-        bRead +=len;
-        sd.name = new String(name, 0, len);
+        dataInputStream.readFully(name);
+        bRead +=name.length;
+        sd.name = new String(name, 0, name.length);
         sd.codepage = dataInputStream.readInt();
         bRead +=4;
         sd.platform = dataInputStream.readByte();
@@ -456,11 +453,8 @@ final class UConverterDataReader implements ICUBinary.Authenticate {
         bRead++;
         sd.maxBytesPerChar = dataInputStream.readByte();
         bRead++;
-        len=dataInputStream.read(sd.subChar);
-        if(len==-1){
-            throw new IOException("Read failed");
-        }
-        bRead += len;
+        dataInputStream.readFully(sd.subChar);
+        bRead += sd.subChar.length;
         sd.subCharLen = dataInputStream.readByte();
         bRead++;
         sd.hasToUnicodeFallback = dataInputStream.readByte();
@@ -471,22 +465,16 @@ final class UConverterDataReader implements ICUBinary.Authenticate {
         bRead++;
         sd.subChar1 = dataInputStream.readByte();
         bRead++;
-        len = dataInputStream.read(sd.reserved);
-        if(len==-1){
-            throw new IOException("Read failed");
-        }
-        bRead += len;
+        dataInputStream.readFully(sd.reserved);
+        bRead += sd.reserved.length;
         staticDataBytesRead = bRead;
         bytesRead += bRead;
     }
 
     protected void readMBCSHeader(CharsetMBCS.MBCSHeader h) throws IOException
     {
-        int len =dataInputStream.read(h.version);
-        if(len==-1){
-            throw new IOException("Read failed");
-        }
-        bytesRead += len;
+        dataInputStream.readFully(h.version);
+        bytesRead += h.version.length;
         h.countStates = dataInputStream.readInt();
         bytesRead+=4;
         h.countToUFallbacks = dataInputStream.readInt();
