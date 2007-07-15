@@ -3802,7 +3802,60 @@ public class TestCharset extends TestFmwk {
         if (!result.isOverflow()) {
             errln("Overflow Error should have occured while encoding UTF-8 (13).");
         }
-
-
+        
+        us.clear();
+        bs.clear();
+        
+        //decoding code coverage
+        //test malform error
+        decoder.reset();
+        bs.put((byte)0xC0); bs.put((byte)0xC0);
+        us.put((char)0x0000);
+        bs2 = bs.asReadOnlyBuffer();
+        
+        us.limit(1);
+        us.position(0);
+        bs2.limit(1);
+        bs2.position(0);
+        
+        result = decoder.decode(bs2, us, true);
+        result = decoder.flush(us);
+        if (!result.isMalformed()) {
+            errln("Malform error should have occurred while decoding UTF-8 (1).");
+        }    
+        
+        us.limit(1);
+        us.position(0);
+        bs2.limit(1);
+        bs2.position(0);
+        
+        decoder.reset();
+        
+        result = decoder.decode(bs2, us, true);
+        us.limit(1);
+        us.position(0);
+        bs2.limit(2);
+        bs2.position(0);
+        result = decoder.decode(bs2, us, true);
+        if (!result.isMalformed()) {
+            errln("Malform error should have occurred while decoding UTF-8 (2).");
+        }  
+        
+        us.clear();
+        bs.clear();
+        
+        //test overflow buffer
+        bs.put((byte)0x01); bs.put((byte)0x41);
+        us.put((char)0x0000);
+        bs2 = bs.asReadOnlyBuffer();
+        us.limit(1);
+        us.position(0);
+        bs2.limit(2);
+        bs2.position(0);
+        
+        result = decoder.decode(bs2, us, true);
+        if (!result.isOverflow()) {
+            errln("Overflow error should have occurred while decoding UTF-8 (3).");
+        }
     }
 }
