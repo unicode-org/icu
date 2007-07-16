@@ -514,6 +514,7 @@ icu4c/source/tools/genrb/*.pdb
 icu4c/source/tools/genrb/*.plg
 icu4c/source/tools/genrb/Debug
 icu4c/source/tools/genrb/Makefile
+icu4c/source/tools/genrb/Makefile.local
 icu4c/source/tools/genrb/Release
 icu4c/source/tools/genrb/debug
 icu4c/source/tools/genrb/derb
@@ -524,6 +525,7 @@ icu4c/source/tools/genrb/genrb
 icu4c/source/tools/genrb/genrb.[0-9]
 icu4c/source/tools/genrb/genrb.vcproj.*.*.user
 icu4c/source/tools/genrb/release
+icu4c/source/tools/genrb/temp
 icu4c/source/tools/gensprep/*.8
 icu4c/source/tools/gensprep/*.d
 icu4c/source/tools/gensprep/*.o
