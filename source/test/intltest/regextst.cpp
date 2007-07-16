@@ -1651,6 +1651,7 @@ void RegexTest::Errors() {
 //
 //--------------------------------------------------------------------------------
 UChar *RegexTest::ReadAndConvertFile(const char *fileName, int &ulen, UErrorCode &status) {
+    static const char UTF8BOM[3] = {(char)0xef, (char)0xbb, (char)0xbf};
     UChar       *retPtr  = NULL;
     char        *fileBuf = NULL;
     FILE        *f       = NULL;
@@ -1692,10 +1693,9 @@ UChar *RegexTest::ReadAndConvertFile(const char *fileName, int &ulen, UErrorCode
     //    If a BOM is present, skip over it before converting.
     //
     fileBufC = fileBuf;
-    static const char UTF8BOM[3] = {(char)0xef, (char)0xbb, (char)0xbf};
-    if (uprv_strncmp(fileBufC, UTF8BOM, 3)==0) {
-        fileBufC += 3;
-        fileSize -= 3;
+    if (uprv_strncmp(fileBufC, UTF8BOM, sizeof(UTF8BOM))==0) {
+        fileBufC += sizeof(UTF8BOM);
+        fileSize -= sizeof(UTF8BOM);
     }
 
     // Convert the data from UTF-8 to UTF-16 in a UChar * string.
