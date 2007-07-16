@@ -1,5 +1,3 @@
-//##header
-//#ifndef FOUNDATION
 /*
 *******************************************************************************
 *   Copyright (C) 2001-2007, International Business Machines
@@ -91,30 +89,12 @@ public class BidiRun {
     }
 
     /**
-     * Set start of run
-     * @draft ICU 3.8
-     */
-    void setStart(int start)
-    {
-        this.start = start;
-    }
-
-    /**
      * Get position of one character after the end of the run in the source text
      * @draft ICU 3.8
      */
     public int getLimit()
     {
         return limit;
-    }
-
-    /**
-     * Set limit of run
-     * @draft ICU 3.8
-     */
-    void setLimit(int limit)
-    {
-        this.limit = limit;
     }
 
     /**
@@ -133,15 +113,6 @@ public class BidiRun {
     public byte getEmbeddingLevel()
     {
         return level;
-    }
-
-    /**
-     * Set level of run
-     * @draft ICU 3.8
-     */
-    void setEmbeddingLevel(byte embeddingLevel)
-    {
-        this.level = embeddingLevel;
     }
 
     /**
@@ -184,4 +155,3 @@ public class BidiRun {
         return new String("BidiRun " + start + " - " + limit + " @ " + level);
     }
 }
-//#endif
