@@ -153,7 +153,7 @@ sub buildICU{
         cmd("make uni-core-data", $verbose);
         if(chdir($icuTestDataSrcDir)){
             print("Invoking make in directory $icuTestDataSrcDir\n");
-	    cmd("make", $verbose);
+            cmd("make JAVA_OUT_DIR=\"$icu4jDir/src/com/ibm/icu/dev/test/util/\" all java-output", $verbose);
         }else{
 	    die "Could not cd to $icuTestDataSrcDir\n";
         }
@@ -163,14 +163,14 @@ sub buildICU{
         chdir($icuSrcDataDir);
         cmd("gmake uni-core-data", $verbose);
         chdir($icuTestDataDir."../../");
-        cmd("gmake", $verbose);
+        cmd("gmake JAVA_OUT_DIR=\"$icu4jDir/src/com/ibm/icu/dev/test/util/\" all java-output", $verbose);
     }elsif($platform eq "MSWin32"){
         #devenv.com $projectFileName \/build $configurationName > \"$cLogFile\" 2>&1
         cmd("devenv.com allinone/allinone.sln /useenv /build Debug", $verbose);
         # build required data. this is required coz building icu will not build all the data
         chdir($icuSrcDataDir);
         cmd("NMAKE /f makedata.mak ICUMAKE=\"$icuSrcDataDir\" CFG=debug uni-core-data", $verbose);
-
+        print "WARNING: Don't know how to build java-output on $platform. \n";
     }else{
         print "ERROR: Could not build ICU unknown platform $platform. \n";
         exit(-1);
