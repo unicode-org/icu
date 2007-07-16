@@ -3857,5 +3857,79 @@ public class TestCharset extends TestFmwk {
         if (!result.isOverflow()) {
             errln("Overflow error should have occurred while decoding UTF-8 (3).");
         }
+        
+        us.clear();
+        bs.clear();
+        
+        //test malform string
+        decoder.reset();
+        bs.put((byte)0xF5); bs.put((byte)0xB4); bs.put((byte)0x8A); bs.put((byte)0x8C);
+        us.put((char)0x0000);
+        bs2 = bs.asReadOnlyBuffer();
+        us.limit(1);
+        us.position(0);
+        bs2.limit(4);
+        bs2.position(0);
+        
+        result = decoder.decode(bs2, us, true);
+        if (!result.isMalformed()) {
+            errln("Malform error should have occurred while decoding UTF-8 (4).");
+        }
+        
+        bs.clear();
+        
+        //test overflow
+        decoder.reset();
+        bs.put((byte)0xF3); bs.put((byte)0xB4); bs.put((byte)0x8A); bs.put((byte)0x8C);
+        bs2 = bs.asReadOnlyBuffer();
+        us.limit(1);
+        us.position(0);
+        bs2.limit(4);
+        bs2.position(0);
+        
+        result = decoder.decode(bs2, us, true);
+        if (!result.isOverflow()) {
+            errln("Overflow error should have occurred while decoding UTF-8 (5).");
+        }
+        
+        //test overflow
+        decoder.reset();
+        us.limit(2);
+        us.position(0);
+        bs2.limit(5);
+        bs2.position(0);
+        
+        result = decoder.decode(bs2, us, true);
+        if (!result.isOverflow()) {
+            errln("Overflow error should have occurred while decoding UTF-8 (5).");
+        }
+        
+        //test overflow
+        decoder.reset();
+        us.limit(1);
+        us.position(0);
+        bs.limit(5);
+        bs.position(0);
+        
+        result = decoder.decode(bs, us, true);
+        if (!result.isOverflow()) {
+            errln("Overflow error should have occurred while decoding UTF-8 (6).");
+        }
+      
+        bs.clear();
+        
+        //test overflow
+        decoder.reset();
+        bs.put((byte)0x41); bs.put((byte)0x42);
+        us.limit(1);
+        us.position(0);
+        bs.limit(2);
+        bs.position(0);
+        
+        result = decoder.decode(bs, us, true);
+        if (!result.isOverflow()) {
+            errln("Overflow error should have occurred while decoding UTF-8 (7).");
+        }
+        
     }
 }
