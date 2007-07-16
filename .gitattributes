@@ -374,6 +374,9 @@ icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.ULocal
 icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.UResourceTypeMismatchException.dat -text
 icu4j/src/com/ibm/icu/dev/test/timezone/TimeZoneRuleTest.java -text
 icu4j/src/com/ibm/icu/dev/test/translit/package.html svneol=native#text/html
+icu4j/src/com/ibm/icu/dev/test/util/DebugUtilities.java -text
+icu4j/src/com/ibm/icu/dev/test/util/DebugUtilitiesData.java -text
+icu4j/src/com/ibm/icu/dev/test/util/DebugUtilitiesTest.java -text
 icu4j/src/com/ibm/icu/dev/tool/compression/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j28.api.gz -text svneol=unset#application/gzip
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j30.api.gz -text svneol=unset#application/gzip
