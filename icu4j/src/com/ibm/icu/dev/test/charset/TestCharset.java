@@ -3932,4 +3932,69 @@ public class TestCharset extends TestFmwk {
         }
         
     }
+    
+    //provide better code coverage for Charset UTF16
+    public void TestCharsetUTF16() {
+        CoderResult result = CoderResult.UNDERFLOW;
+        CharsetProvider provider = new CharsetProviderICU();       
+        CharsetDecoder decoder = provider.charsetForName("UTF-16").newDecoder();
+        CharsetEncoder encoder = provider.charsetForName("UTF-16").newEncoder();
+        
+        CharBuffer us = CharBuffer.allocate(0x10);
+        ByteBuffer bs = ByteBuffer.allocate(0x10);
+        
+        //test flush buffer and malform string
+        bs.put((byte)0xFF); 
+        us.put((char)0x0000);
+        
+        us.limit(us.position());
+        us.position(0);
+        bs.limit(bs.position());
+        bs.position(0);
+        
+        result = decoder.decode(bs, us, true);
+        result = decoder.flush(us);
+        if (!result.isMalformed()) {
+            errln("Malform error while decoding UTF-16 should have occurred.");
+        }
+        
+        us.clear();
+        bs.clear();
+        
+        us.put((char)0xD902); us.put((char)0xDD01); us.put((char)0x0041);
+        
+        us.limit(1);
+        us.position(0);
+        bs.limit(4);
+        bs.position(0);
+        
+        result = encoder.encode(us, bs, true);
+        us.limit(3);
+        us.position(0);
+        bs.limit(3);
+        bs.position(0);
+        result = encoder.encode(us, bs, true);
+        if (!result.isOverflow()) {
+            errln("Overflow buffer while encoding UTF-16 should have occurred.");
+        }   
+        
+        us.clear();
+        bs.clear();
+        
+        //test overflow buffer
+        decoder.reset();
+        decoder = provider.charsetForName("UTF-16BE").newDecoder();
+        
+        bs.put((byte)0xFF); bs.put((byte)0xFE); bs.put((byte)0x41);
+        
+        us.limit(0);
+        us.position(0);
+        bs.limit(3);
+        bs.position(0);
+        
+        result = decoder.decode(bs, us, true);
+        if (!result.isOverflow()) {
+            errln("Overflow buffer while decoding UTF-16 should have occurred.");
+        }        
+    }
 }
