@@ -113,7 +113,7 @@ if (status!=errcode) {errln("RegexTest failure at line %d.  Expected status=%s, 
 
 #define REGEX_TESTLM(pat, text, looking, match) doRegexLMTest(pat, text, looking, match, __LINE__);
 
-UBool RegexTest::doRegexLMTest(const char *pat, const char *text, UBool looking, UBool match, int line) {
+UBool RegexTest::doRegexLMTest(const char *pat, const char *text, UBool looking, UBool match, int32_t line) {
     const UnicodeString pattern(pat);
     const UnicodeString inputText(text);
     UErrorCode          status  = U_ZERO_ERROR;
@@ -195,11 +195,11 @@ UBool RegexTest::doRegexLMTest(const char *pat, const char *text, UBool looking,
 //  Set a value into a UVector at position specified by a decimal number in
 //   a UnicodeString.   This is a utility function needed by the actual test function,
 //   which follows.
-static void set(UVector &vec, int val, UnicodeString index) {
+static void set(UVector &vec, int32_t val, UnicodeString index) {
     UErrorCode  status=U_ZERO_ERROR;
-    int  idx = 0;
-    for (int i=0; i<index.length(); i++) {
-        int d=u_charDigitValue(index.charAt(i));
+    int32_t  idx = 0;
+    for (int32_t i=0; i<index.length(); i++) {
+        int32_t d=u_charDigitValue(index.charAt(i));
         if (d<0) {return;}
         idx = idx*10 + d;
     }
@@ -210,7 +210,7 @@ static void set(UVector &vec, int val, UnicodeString index) {
 void RegexTest::regex_find(const UnicodeString &pattern,
                            const UnicodeString &flags,
                            const UnicodeString &inputString,
-                           int line) {
+                           int32_t line) {
     UnicodeString       unEscapedInput;
     UnicodeString       deTaggedInput;
 
@@ -224,8 +224,8 @@ void RegexTest::regex_find(const UnicodeString &pattern,
     UVector             groupEnds(status);
     UBool               isMatch        = FALSE;
     UBool               failed         = FALSE;
-    int                 numFinds;
-    int                 i;
+    int32_t                 numFinds;
+    int32_t                 i;
 
     //
     //  Compile the caller's pattern
@@ -392,7 +392,7 @@ cleanupAndReturn:
 #define REGEX_ERR(pat, line, col, status) regex_err(pat, line, col, status, __LINE__);
 
 void RegexTest::regex_err(const char *pat, int32_t errLine, int32_t errCol,
-                          UErrorCode expectedStatus, int line) {
+                          UErrorCode expectedStatus, int32_t line) {
     UnicodeString       pattern(pat);
 
     UErrorCode          status         = U_ZERO_ERROR;
@@ -733,9 +733,9 @@ void RegexTest::API_Match() {
         RegexMatcher *matcher = pat->matcher(data, status);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(matcher->lookingAt(status) == TRUE);
-        int  matchStarts[] = {0,  2, 4, 8};
-        int  matchEnds[]   = {10, 8, 6, 10};
-        int i;
+        static const int32_t matchStarts[] = {0,  2, 4, 8};
+        static const int32_t matchEnds[]   = {10, 8, 6, 10};
+        int32_t i;
         for (i=0; i<4; i++) {
             int32_t actualStart = matcher->start(i, status);
             REGEX_CHECK_STATUS;
@@ -866,7 +866,7 @@ void RegexTest::API_Match() {
     //     to prevent loops.
     //
     {
-        int                 i;
+        int32_t                 i;
         UErrorCode          status=U_ZERO_ERROR;
         RegexMatcher        m("(?= ?)", 0, status);   // This pattern will zero-length matches anywhere,
                                                       //   using an always-true look-ahead.
@@ -899,7 +899,7 @@ void RegexTest::API_Match() {
         // find() loop breaking test.
         //        with pattern of /.?/, should see a series of one char matches, then a single
         //        match of zero length at the end of the input string.
-        int                 i;
+        int32_t                 i;
         UErrorCode          status=U_ZERO_ERROR;
         RegexMatcher        m(".?", 0, status);
         REGEX_CHECK_STATUS;
@@ -1470,7 +1470,7 @@ void RegexTest::Extended() {
         return; /* something went wrong, error already output */
     }
 
-    int    len;
+    int32_t    len;
     UChar *testData = ReadAndConvertFile(srcPath, len, status);
     if (U_FAILURE(status)) {
         return; /* something went wrong, error already output */
@@ -1650,7 +1650,7 @@ void RegexTest::Errors() {
 //    in one big UChar * buffer, which the caller must delete.
 //
 //--------------------------------------------------------------------------------
-UChar *RegexTest::ReadAndConvertFile(const char *fileName, int &ulen, UErrorCode &status) {
+UChar *RegexTest::ReadAndConvertFile(const char *fileName, int32_t &ulen, UErrorCode &status) {
     static const char UTF8BOM[3] = {(char)0xef, (char)0xbb, (char)0xbf};
     UChar       *retPtr  = NULL;
     char        *fileBuf = NULL;
@@ -1673,8 +1673,8 @@ UChar *RegexTest::ReadAndConvertFile(const char *fileName, int &ulen, UErrorCode
     //
     //  Read it in
     //
-    int            fileSize;
-    int            amt_read;
+    int32_t            fileSize;
+    int32_t            amt_read;
     const char    *fileBufC = NULL;
 
     fseek( f, 0, SEEK_END);
@@ -1781,7 +1781,7 @@ void RegexTest::PerlTests() {
         return; /* something went wrong, error already output */
     }
 
-    int    len;
+    int32_t    len;
     UChar *testData = ReadAndConvertFile(srcPath, len, status);
     if (U_FAILURE(status)) {
         return; /* something went wrong, error already output */
@@ -2009,7 +2009,7 @@ void RegexTest::PerlTests() {
             }
 
             else if (perlExpr.startsWith("@-")) {
-                int i;
+                int32_t i;
                 for (i=0; i<=testMat->groupCount(); i++) {
                     if (i>0) {
                         resultString.append(" ");
@@ -2020,7 +2020,7 @@ void RegexTest::PerlTests() {
             }
 
             else if (perlExpr.startsWith("@+")) {
-                int i;
+                int32_t i;
                 for (i=0; i<=testMat->groupCount(); i++) {
                     if (i>0) {
                         resultString.append(" ");
