@@ -200,7 +200,7 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
                 ENABLE_64BIT_LIBS=no
             fi
             ;;
-        x86_64-*-cygwin)
+        *-*-cygwin)
             if test "$GCC" = yes; then
                 if test -n "`$CXX -dumpspecs 2>&1 && $CC -dumpspecs 2>&1 | grep -v __LP64__`"; then
                     ENABLE_64BIT_LIBS=yes
