@@ -76,19 +76,19 @@ class CharsetUTF16 extends CharsetICU {
                         if(pos!=source.position()) {
                             /* just reset the source */
                             pos=source.position();
-                        } else {
+                        } /*else { //this code is unreachable
                             boolean oldFlush=flush;
                             int bomIndex = state&4;
                             ByteBuffer oldSource = source;
                             source = utf16BOM;
-                            utf16BOM.position(bomIndex);/* select the correct BOM */
-                            source.limit(bomIndex+1);/* replay previous byte */
-                            flush = false; /* this sourceLimit is not the real source stream limit */
+                            utf16BOM.position(bomIndex);// select the correct BOM 
+                            source.limit(bomIndex+1);// replay previous byte 
+                            flush = false; // this sourceLimit is not the real source stream limit 
                             cr = decodeLoopUTF16BE(source, target, offsets, flush);
-                            /* restore real pointers; pArgs->source will be set in case 8/9 */
+                            // restore real pointers; pArgs->source will be set in case 8/9 
                             flush = oldFlush;
                             source = oldSource;
-                        }
+                        }*/
                         state=8;
                         continue;
                     }
@@ -100,7 +100,7 @@ class CharsetUTF16 extends CharsetICU {
                     cr = decodeLoopImpl(source, target, offsets, flush);
                     pos = source.position();
                     break;
-                default:
+                /*default:
                     break; /* does not occur */
                 }
                 if(cr.isOverflow() || cr.isError()){
