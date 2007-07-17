@@ -106,13 +106,10 @@ int32_t
 TaiwanCalendar::getGregorianYear(UErrorCode &status)  const
 {
     int32_t year = (fStamp[UCAL_YEAR] != kUnset) ? internalGet(UCAL_YEAR) : kGregorianEpoch+kTaiwanEraStart;
-    int32_t era = MINGUO;
-    if (fStamp[UCAL_ERA] != kUnset) {
-        era = internalGet(UCAL_ERA);
-        if (era != MINGUO) {
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-            return kGregorianEpoch + kTaiwanEraStart;
-        }
+    int32_t era = internalGetEra();
+    if (era != MINGUO) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return kGregorianEpoch + kTaiwanEraStart;
     }
     return year + kTaiwanEraStart;
 }
