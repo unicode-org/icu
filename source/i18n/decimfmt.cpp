@@ -2096,10 +2096,13 @@ int32_t DecimalFormat::getMultiplier() const
 void
 DecimalFormat::setMultiplier(int32_t newValue)
 {
-    // This shouldn't be set to 0.
-    // Due to compatibility with ICU4J we cannot set an error code and refuse 0.
-    // So the rest of the code should ignore fMultiplier when it's 0. [grhoten]
-    fMultiplier = newValue;
+//    if (newValue <= 0) {
+//        throw new IllegalArgumentException("Bad multiplier: " + newValue);
+//    }
+    if (newValue > 0) {
+        fMultiplier = newValue;
+    }
+    // else No way to return an error.
 }
 
 /**
