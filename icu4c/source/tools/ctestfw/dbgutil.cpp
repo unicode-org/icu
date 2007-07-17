@@ -28,6 +28,7 @@ static const UnicodeString&  _fieldString(UDebugEnumType type, int32_t field, Un
     }
 }
 
+U_CDECL_BEGIN
 static void udbg_cleanup(void) {
     if(strs != NULL) {
         for(int t=0;t<=UDBG_ENUM_COUNT;t++) {
@@ -47,6 +48,7 @@ static UBool ctestfw_cleanup(void)
 static void udbg_register_cleanup(void) {
    ucln_registerCleanup(UCLN_CTESTFW, ctestfw_cleanup);
 }
+U_CDECL_END
 
 static void udbg_setup(void) {
     if(strs == NULL) {
