@@ -181,7 +181,7 @@ protected:
      * @param right The object to be copied.
      * @draft ICU 3.8
      */
-    virtual TimeZoneRule& operator=(const TimeZoneRule& right);
+    TimeZoneRule& operator=(const TimeZoneRule& right);
 
 private:
     UnicodeString fName; // time name
