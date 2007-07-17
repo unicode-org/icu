@@ -533,6 +533,7 @@ static const CanonicalizationMap CANONICALIZE_MAP[] = {
     { "zh_XIANG",       "zh__XIANG", NULL, NULL }, /* registered name */
     { "zh_YUE",         "zh__YUE", NULL, NULL }, /* registered name */
     { "th_TH_TRADITIONAL", "th_TH", "calendar", "buddhist" },
+    { "hi_IN_TRADITIONAL", "hi_IN", "calendar", "indian" },
     { "zh_TW_STROKE",   "zh_Hant_TW", "collation", "stroke" },
     { "zh__PINYIN",     "zh", "collation", "pinyin" }
 };
