@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -34,6 +34,7 @@
 #define LENGTH(arr) (sizeof(arr)/sizeof(arr[0]))
 
 void addNumForTest(TestNode** root);
+static void TestTextAttributeCrash(void);
 
 #define TESTCASE(x) addTest(root, &x, "tsformat/cnumtst/" #x)
 
@@ -45,6 +46,7 @@ void addNumForTest(TestNode** root)
     TESTCASE(TestInt64Format);
     TESTCASE(TestNonExistentCurrency);
     TESTCASE(TestCurrencyRegression);
+    TESTCASE(TestTextAttributeCrash);
     TESTCASE(TestRBNFFormat);
 }
 
@@ -1351,6 +1353,44 @@ their data!
     }
     
     unum_close(cur);
+}
+
+static void TestTextAttributeCrash(void) {
+    UChar ubuffer[64] = {0x0049,0x004E,0x0052,0};
+    static const UChar expectedNeg[] = {0x0049,0x004E,0x0052,0x0031,0x0032,0x0033,0x0034,0x002E,0x0035,0};
+    static const UChar expectedPos[] = {0x0031,0x0032,0x0033,0x0034,0x002E,0x0035,0};
+    int32_t used; 
+    UErrorCode status = U_ZERO_ERROR;
+    UNumberFormat *nf = unum_open(UNUM_CURRENCY, NULL, 0, "en_US", NULL, &status); 
+    if (U_FAILURE(status)) {
+        log_err("FAILED 1\n");
+        return;
+    }
+    unum_setTextAttribute(nf, UNUM_CURRENCY_CODE, ubuffer, 3, &status);
+    // the usual negative prefix and suffix seem to be '($' and ')' at this point
+    // also crashes if UNUM_NEGATIVE_SUFFIX is substituted for UNUM_NEGATIVE_PREFIX here
+    used = unum_getTextAttribute(nf, UNUM_NEGATIVE_PREFIX, ubuffer, 64, &status);
+    unum_setTextAttribute(nf, UNUM_NEGATIVE_PREFIX, ubuffer, used, &status);
+    if (U_FAILURE(status)) {
+        log_err("FAILED 2\n"); exit(1);
+    }
+    log_verbose("attempting to format...\n");
+    used = unum_formatDouble(nf, -1234.5, ubuffer, 64, NULL, &status); 
+    if (U_FAILURE(status) || 64 < used) {
+        log_err("Failed formatting %s\n", u_errorName(status));
+        return;
+    }
+    if (u_strcmp(expectedNeg, ubuffer) == 0) {
+        log_err("Didn't get expected negative result\n");
+    }
+    used = unum_formatDouble(nf, 1234.5, ubuffer, 64, NULL, &status); 
+    if (U_FAILURE(status) || 64 < used) {
+        log_err("Failed formatting %s\n", u_errorName(status));
+        return;
+    }
+    if (u_strcmp(expectedPos, ubuffer) == 0) {
+        log_err("Didn't get expected positive result\n");
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
