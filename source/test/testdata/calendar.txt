@@ -3,9 +3,7 @@
 calendar:table(nofallback) {
     Info {
         Description { "These are the data driven calendar tests" }
-        LongDescription {   "Data for data driven calendar tests."
-                      
-                     }
+        LongDescription {   "Data for data driven calendar tests." }
     }
     TestData {
         TestCalendarConversion {
@@ -42,5 +40,46 @@ calendar:table(nofallback) {
                },
             }
         }
-	}
+        TestCalendarOperations {
+            Headers { "locale","from","operation","params","to" }
+            Info {
+                Description { "Test data for calendar operation :" }
+            }
+            Settings {
+                {
+                    Type { "ops" }
+                },
+            }
+            Cases { 
+               {
+                    "en_US@calendar=taiwan",         
+                    "ERA=0,YEAR=1,MONTH=JUNE,DATE=4",  // tw  
+                    "roll",
+                    "DATE=1", // date + 1
+                    "ERA=0,YEAR=1,MONTH=JUNE,DATE=5",  // tw  
+               },
+               {
+                    "en_US@calendar=taiwan",         
+                    "ERA=0,YEAR=1,MONTH=JUNE,DATE=4",  // tw  
+                    "add",
+                    "DATE=1", // date + 1
+                    "ERA=0,YEAR=1,MONTH=JUNE,DATE=5",  // tw  
+               },
+               {
+                    "en_US@calendar=taiwan",         
+                    "ERA=0,YEAR=1,MONTH=JUNE,DATE=4",  // tw  
+                    "roll",
+                    "YEAR=1", // date + 1
+                    "ERA=0,YEAR=2,MONTH=JUNE,DATE=4",  // tw  
+               },
+               {
+                    "en_US@calendar=taiwan",         
+                    "ERA=0,YEAR=1,MONTH=JUNE,DATE=4",  // tw  
+                    "add",
+                    "YEAR=1", // date + 1
+                    "ERA=0,YEAR=2,MONTH=JUNE,DATE=4",  // tw  
+               },
+	       }
+        }	          
+    }	    
 }
