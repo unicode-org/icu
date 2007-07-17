@@ -3072,7 +3072,7 @@ echo $ECHO_N "checking for 64-bit executable support... $ECHO_C" >&6
                 ENABLE_64BIT_LIBS=no
             fi
             ;;
-        *-*-cygwin)
+        x86_64-*-cygwin)
             if test "$GCC" = yes; then
                 if test -n "`$CXX -dumpspecs 2>&1 && $CC -dumpspecs 2>&1 | grep -v __LP64__`"; then
                     ENABLE_64BIT_LIBS=yes
