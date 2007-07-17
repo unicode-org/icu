@@ -23,7 +23,7 @@
 # USAGE OF THIS OPTION IS DEPRECATED. You should look into using  #
 # Link Pack Area (LPA), library lookaside facility (LLA) or other #
 # z/OS options that enable page fault based loading of read-only  #
-# code/data instead of this option.								  #
+# code/data instead of this option.                               #
 # This option will be removed in a future version of ICU.         #
 #                                                                 #
 #   export OS390_STUBDATA=1                                       #
@@ -98,7 +98,7 @@ GEN_DEPS.cc=	makedep
 ## Commands to compile
 # _CXX_STEPS="-1" is a prelink step when compiling C and C++, and
 # it's only needed for long function names
-COMPILE.c       = $(COMPILE_LINK_ENVVAR) $(CXX) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(ICU_XPLINK_C) -c
+COMPILE.c       = $(COMPILE_LINK_ENVVAR) $(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(ICU_XPLINK_C) -c
 COMPILE.cc      = $(COMPILE_LINK_ENVVAR) $(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(ICU_XPLINK_CXX) -c
 
 # Commands to link
