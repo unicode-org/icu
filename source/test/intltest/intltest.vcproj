@@ -4,6 +4,7 @@
 	Version="8.00"
 	Name="intltest"
 	ProjectGUID="{73632960-B3A6-464D-83A3-4B43365F19B8}"
+	RootNamespace="intltest"
 	>
 	<Platforms>
 		<Platform
