@@ -2590,19 +2590,22 @@ void DecimalFormat::expandAffix(const UnicodeString& pattern,
 int32_t DecimalFormat::appendAffix(UnicodeString& buf, double number,
                                    UBool isNegative, UBool isPrefix) const {
     if (fCurrencyChoice != 0) {
-        const UnicodeString* affixPat = 0;
+        const UnicodeString* affixPat;
         if (isPrefix) {
             affixPat = isNegative ? fNegPrefixPattern : fPosPrefixPattern;
         } else {
             affixPat = isNegative ? fNegSuffixPattern : fPosSuffixPattern;
         }
-        UnicodeString affixBuf;
-        expandAffix(*affixPat, affixBuf, number, TRUE);
-        buf.append(affixBuf);
-        return affixBuf.length();
+        if (affixPat) {
+            UnicodeString affixBuf;
+            expandAffix(*affixPat, affixBuf, number, TRUE);
+            buf.append(affixBuf);
+            return affixBuf.length();
+        }
+        // else someone called a function that reset the pattern.
     }
     
-    const UnicodeString* affix = NULL;
+    const UnicodeString* affix;
     if (isPrefix) {
         affix = isNegative ? &fNegativePrefix : &fPositivePrefix;
     } else {
