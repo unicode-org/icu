@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2006, International Business Machines
+*   Copyright (C) 1998-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -179,6 +179,18 @@ printf modifier
 
 scanf modifier
 %*  N/A         This field is scanned, but not stored
+
+<p>If you are using this C API instead of the ustream.h API for C++,
+you can use one of the following u_fprintf examples to display a UnicodeString.</p>
+
+<pre><code>
+    UFILE *out = u_finit(stdout, NULL, NULL);
+    UnicodeString string1("string 1");
+    UnicodeString string2("string 2");
+    u_fprintf(out, "%S\n", string1.getTerminatedBuffer());
+    u_fprintf(out, "%.*S\n", string2.length(), string2.getBuffer());
+    u_fclose(out);
+</code></pre>
 
  */
 
