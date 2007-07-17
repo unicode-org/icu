@@ -531,14 +531,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\taiwncal.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\taiwncal.h"
-				>
-			</File>
-			<File
 				RelativePath=".\buddhcal.cpp"
 				>
 			</File>
@@ -899,6 +891,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\indiancal.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\indiancal.h"
+				>
+			</File>
+			<File
 				RelativePath=".\islamcal.cpp"
 				>
 			</File>
@@ -1177,6 +1177,14 @@
 						Outputs="..\..\include\unicode\$(InputFileName)"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\taiwncal.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\taiwncal.h"
+				>
 			</File>
 			<File
 				RelativePath=".\timezone.cpp"
