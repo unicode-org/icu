@@ -17,7 +17,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-UnicodeString **strs = NULL;
+static UnicodeString **strs = NULL;
 
 static const UnicodeString&  _fieldString(UDebugEnumType type, int32_t field, UnicodeString& fillin) {
     const char *str = udbg_enumName(type, field);
@@ -110,12 +110,12 @@ T_CTEST_API int32_t  T_CTEST_EXPORT2 udbg_enumByString(UDebugEnumType type, cons
 T_CTEST_API int32_t 
 udbg_stoi(const UnicodeString &s)
 {
-  char ch[256];
-  const UChar *u = s.getBuffer();
-  int32_t len = s.length();
-  u_UCharsToChars(u, ch, len);
-  ch[len] = 0; /* include terminating \0 */
-  return atoi(ch);
+    char ch[256];
+    const UChar *u = s.getBuffer();
+    int32_t len = s.length();
+    u_UCharsToChars(u, ch, len);
+    ch[len] = 0; /* include terminating \0 */
+    return atoi(ch);
 }
 
 
