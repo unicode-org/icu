@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2006, International Business Machines Corporation and    *
+* Copyright (C) 1997-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -36,6 +36,7 @@
 #include "islamcal.h"
 #include "hebrwcal.h"
 #include "persncal.h"
+#include "indiancal.h"
 //#include "chnsecal.h"
 #include "unicode/calendar.h"
 #include "cpputils.h"
@@ -140,6 +141,7 @@ static const char * const gCalendarKeywords[] = {
         "islamic",
         "hebrew",
         "chinese",
+        "indian",
         NULL
 };
 
@@ -196,6 +198,8 @@ static Calendar *createStandardCalendar(char *calType, const Locale &canLoc, UEr
         return new PersianCalendar(canLoc, status);
         //} else if(!uprv_strcmp(calType, "chinese")) {
         //return new ChineseCalendar(canLoc, status);
+    } else if(!uprv_strcmp(calType, "indian")) {
+        return new IndianCalendar(canLoc, status);
     } else { 
         status = U_UNSUPPORTED_ERROR;
         return NULL;
