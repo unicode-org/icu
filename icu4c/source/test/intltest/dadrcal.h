@@ -36,18 +36,15 @@ protected:
 
     void DataDrivenTest(char *par);
     void processSequence(Calendar* cal, const UnicodeString &sequence);
-    void processTest(TestData *testData);
+    void processTest(TestData *testData, UErrorCode status);
     void processArguments(Calendar *cal, const UChar *start, int32_t optLen);
 private:
     void testConvert(TestData *testData, const DataMap *settings, UBool fwd);
     void testConvert(int32_t n, const CalendarFieldsSet &fromSet, Calendar *fromCal, 
-    							const CalendarFieldsSet &toSet, Calendar *toCal, UBool fwd);
+                                const CalendarFieldsSet &toSet, Calendar *toCal, UBool fwd);
 private:
-  TestDataModule *driver;
-  UErrorCode status;
+    TestDataModule *driver;
 };
-
-
 
 #endif /* #if !UCONFIG_NO_COLLATION */
 

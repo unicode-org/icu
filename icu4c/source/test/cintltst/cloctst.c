@@ -2278,7 +2278,7 @@ static void TestLocDataErrorCodeChaining(void) {
     UErrorCode ec = U_USELESS_COLLATOR_ERROR;
     ulocdata_open(NULL, &ec);
     ulocdata_getExemplarSet(NULL, NULL, 0, ULOCDATA_ES_STANDARD, &ec);
-    ulocdata_getDelimiter(NULL, ULOCDATA_ES_STANDARD, NULL, -1, &ec);
+    ulocdata_getDelimiter(NULL, ULOCDATA_DELIMITER_COUNT, NULL, -1, &ec);
     ulocdata_getMeasurementSystem(NULL, &ec);
     ulocdata_getPaperSize(NULL, NULL, NULL, &ec);
     if (ec != U_USELESS_COLLATOR_ERROR) {
