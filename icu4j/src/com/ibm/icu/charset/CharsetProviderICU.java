@@ -63,10 +63,13 @@ public final class CharsetProviderICU extends CharsetProvider{
     
     /**
      * Constructs a charset for the given ICU conversion table from the specified class path.
-     * Example use: <code>cnv = CharsetProviderICU.charsetForName("com/myCompany/myDataPackage", "myConverter");</code>.
+     * Example use: <code>cnv = CharsetProviderICU.charsetForName("myConverter", "com/myCompany/myDataPackage");</code>.
      * In this example myConverter.cnv would exist in the com/myCompany/myDataPackage Java package.
      * Conversion tables can be made with ICU4C's makeconv tool.
+     * This function allows you to allows you to load user defined conversion
+     * tables that are outside of ICU's core data.
      * @param charsetName The name of the charset conversion table.
+     * @param classPath The class path that contain the conversion table.
      * @return charset object for the given charset name, null if unsupported
      * @draft ICU 3.8
      */
@@ -75,8 +78,10 @@ public final class CharsetProviderICU extends CharsetProvider{
     }
     
     /**
-     * Constructs a charset for the given ICU conversion table from the specified class path. 
+     * Constructs a charset for the given ICU conversion table from the specified class path.
+     * This function is similar to {@link #charsetForName(String, String)}.
      * @param charsetName The name of the charset conversion table.
+     * @param classPath The class path that contain the conversion table.
      * @param loader the class object from which to load the charset conversion table
      * @return charset object for the given charset name, null if unsupported
      * @draft ICU 3.8
