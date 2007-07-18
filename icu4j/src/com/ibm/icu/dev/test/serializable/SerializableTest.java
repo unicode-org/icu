@@ -672,6 +672,9 @@ public class SerializableTest extends TestFmwk.TestGroup
 
 //#ifndef FOUNDATION
         map.put("com.ibm.icu.text.NumberFormat$Field", new FormatTests.NumberFormatFieldHandler());
+        map.put("com.ibm.icu.text.DateFormat$Field", new FormatTests.DateFormatFieldHandler());
+        map.put("com.ibm.icu.text.ChineseDateFormat$Field", new FormatTests.ChineseDateFormatFieldHandler());
+        map.put("com.ibm.icu.text.MessageFormat$Field", new FormatTests.MessageFormatFieldHandler());
 //#endif
     }
     

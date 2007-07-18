@@ -1,3 +1,4 @@
+//##header
 /*
 **********************************************************************
 * Copyright (c) 2004-2007, International Business Machines
@@ -10,20 +11,24 @@
 */
 package com.ibm.icu.dev.test.format;
 
+import java.text.AttributedCharacterIterator;
+import java.text.AttributedString;
 import java.text.ChoiceFormat;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
+import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.text.NumberFormat;
-import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.UFormat;
 import com.ibm.icu.util.ULocale;
 
@@ -195,7 +200,6 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
             assertEquals("format", testResultStrings[i], result.toString());
 
             //it_out << "Result:  " << result);
-    //#if 0
     //        /* TODO: Look at this test and see if this is still a valid test */
     //        logln("---------------- test parse ----------------");
     //
@@ -221,7 +225,6 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
     //        }
     //        if (failed)
     //            errln("MessageFormat failed test #6");
-    //#endif
         }
     }
 
@@ -1224,4 +1227,139 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
+//#ifndef FOUNDATION
+    // Test case for formatToCharacterIterator
+    public void TestFormatToCharacterIterator() {
+        MessageFormat[] msgfmts = {
+            new MessageFormat("The {3,ordinal} folder ''{0}'' contains {2,number} file(s), created at {1,time} on {1,date}."),
+            new MessageFormat("The {arg3,ordinal} folder ''{arg0}'' contains {arg2,number} file(s), created at {arg1,time} on {arg1,date}."), // same as above, but named args
+            new MessageFormat("The folder contains {0}.")
+        };
+
+        double filelimits[] = {0,1,2};
+        String filepart[] = {"no files","one file","{0,number} files"};
+        ChoiceFormat fileform = new ChoiceFormat(filelimits, filepart);
+        msgfmts[2].setFormat(0, fileform);
+
+        
+        Object[] args0 = new Object[] {"tmp", new Date(1184777888000L), new Integer(15), new Integer(2)};
+
+        HashMap args1 = new HashMap();
+        args1.put("arg0", "tmp");
+        args1.put("arg1", new Date(1184777888000L));
+        args1.put("arg2", new Integer(15));
+        args1.put("arg3", new Integer(2));
+
+        Object[] args2 = new Object[] {new Integer(34)};
+
+        Object[] args = {
+            args0,
+            args1,
+            args2
+        };
+        
+        String[] expectedStrings = {
+            "The 2nd folder 'tmp' contains 15 file(s), created at 9:58:08 AM on Jul 18, 2007.",
+            "The 2nd folder 'tmp' contains 15 file(s), created at 9:58:08 AM on Jul 18, 2007.",
+            "The folder contains 34 files."
+        };
+
+        AttributedString[] expectedAttributedStrings = {
+            new AttributedString(expectedStrings[0]),
+            new AttributedString(expectedStrings[1]),
+            new AttributedString(expectedStrings[2])
+        };
+
+        // Add expected attributes to the expectedAttributedStrings[0]
+        expectedAttributedStrings[0].addAttribute(MessageFormat.Field.ARGUMENT, new Integer(3), 4, 7);
+        expectedAttributedStrings[0].addAttribute(MessageFormat.Field.ARGUMENT, new Integer(0), 16, 19);
+        expectedAttributedStrings[0].addAttribute(MessageFormat.Field.ARGUMENT, new Integer(2), 30, 32);
+        expectedAttributedStrings[0].addAttribute(NumberFormat.Field.INTEGER, NumberFormat.Field.INTEGER, 30, 32);
+        expectedAttributedStrings[0].addAttribute(MessageFormat.Field.ARGUMENT, new Integer(1), 53, 63);
+        expectedAttributedStrings[0].addAttribute(DateFormat.Field.HOUR1, DateFormat.Field.HOUR1, 53, 54);
+        expectedAttributedStrings[0].addAttribute(DateFormat.Field.MINUTE, DateFormat.Field.MINUTE, 55, 57);
+        expectedAttributedStrings[0].addAttribute(DateFormat.Field.SECOND, DateFormat.Field.SECOND, 58, 60);
+        expectedAttributedStrings[0].addAttribute(DateFormat.Field.AM_PM, DateFormat.Field.AM_PM, 61, 63);
+        expectedAttributedStrings[0].addAttribute(MessageFormat.Field.ARGUMENT, new Integer(1), 67, 79);
+        expectedAttributedStrings[0].addAttribute(DateFormat.Field.MONTH, DateFormat.Field.MONTH, 67, 70);
+        expectedAttributedStrings[0].addAttribute(DateFormat.Field.DAY_OF_MONTH, DateFormat.Field.DAY_OF_MONTH, 71, 73);
+        expectedAttributedStrings[0].addAttribute(DateFormat.Field.YEAR, DateFormat.Field.YEAR, 75, 79);
+
+        // Add expected attributes to the expectedAttributedStrings[1]
+        expectedAttributedStrings[1].addAttribute(MessageFormat.Field.ARGUMENT, "arg3", 4, 7);
+        expectedAttributedStrings[1].addAttribute(MessageFormat.Field.ARGUMENT, "arg0", 16, 19);
+        expectedAttributedStrings[1].addAttribute(MessageFormat.Field.ARGUMENT, "arg2", 30, 32);
+        expectedAttributedStrings[1].addAttribute(NumberFormat.Field.INTEGER, NumberFormat.Field.INTEGER, 30, 32);
+        expectedAttributedStrings[1].addAttribute(MessageFormat.Field.ARGUMENT, "arg1", 53, 63);
+        expectedAttributedStrings[1].addAttribute(DateFormat.Field.HOUR1, DateFormat.Field.HOUR1, 53, 54);
+        expectedAttributedStrings[1].addAttribute(DateFormat.Field.MINUTE, DateFormat.Field.MINUTE, 55, 57);
+        expectedAttributedStrings[1].addAttribute(DateFormat.Field.SECOND, DateFormat.Field.SECOND, 58, 60);
+        expectedAttributedStrings[1].addAttribute(DateFormat.Field.AM_PM, DateFormat.Field.AM_PM, 61, 63);
+        expectedAttributedStrings[1].addAttribute(MessageFormat.Field.ARGUMENT, "arg1", 67, 79);
+        expectedAttributedStrings[1].addAttribute(DateFormat.Field.MONTH, DateFormat.Field.MONTH, 67, 70);
+        expectedAttributedStrings[1].addAttribute(DateFormat.Field.DAY_OF_MONTH, DateFormat.Field.DAY_OF_MONTH, 71, 73);
+        expectedAttributedStrings[1].addAttribute(DateFormat.Field.YEAR, DateFormat.Field.YEAR, 75, 79);
+
+        // Add expected attributes to the expectedAttributedStrings[2]
+        expectedAttributedStrings[2].addAttribute(MessageFormat.Field.ARGUMENT, new Integer(0), 20, 28);
+        expectedAttributedStrings[2].addAttribute(NumberFormat.Field.INTEGER, NumberFormat.Field.INTEGER, 20, 22);
+
+        for (int i = 0; i < msgfmts.length; i++) {
+            AttributedCharacterIterator acit = msgfmts[i].formatToCharacterIterator(args[i]);
+            AttributedCharacterIterator expectedAcit = expectedAttributedStrings[i].getIterator();
+
+            // Check available attributes
+            Set attrSet = acit.getAllAttributeKeys();
+            Set expectedAttrSet = expectedAcit.getAllAttributeKeys();
+            if (attrSet.size() != expectedAttrSet.size()) {
+                errln("FAIL: Number of attribute keys is " + attrSet.size() + " expected: " + expectedAttrSet.size());
+            }
+            Iterator attrIterator = attrSet.iterator();
+            while (attrIterator.hasNext()) {
+                AttributedCharacterIterator.Attribute attr = (AttributedCharacterIterator.Attribute)attrIterator.next();
+                if (!expectedAttrSet.contains(attr)) {
+                    errln("FAIL: The attribute " + attr + " is not expected.");
+                }
+            }
+
+            StringBuffer buf = new StringBuffer();
+            int index = acit.getBeginIndex();
+            int end = acit.getEndIndex();
+            int indexExp = expectedAcit.getBeginIndex();
+            int expectedLen = expectedAcit.getEndIndex() - indexExp;
+            if (end - index != expectedLen) {
+                errln("FAIL: Length of the result attributed string is " + (end - index) + " expected: " + expectedLen);
+            } else {
+                // Check attributes associated with each character
+                while (index < end) {
+                    char c = acit.setIndex(index);
+                    buf.append(c);
+                    expectedAcit.setIndex(indexExp);
+
+                    Map attrs = acit.getAttributes();
+                    Map attrsExp = expectedAcit.getAttributes();
+                    if (attrs.size() != attrsExp.size()) {
+                        errln("FAIL: Number of attributes associated with index " + index + " is " + attrs.size()
+                                + " expected: " + attrsExp.size());
+                    } else {
+                        // Check all attributes at the index
+                        Iterator entryIterator = attrsExp.entrySet().iterator();
+                        while (entryIterator.hasNext()) {
+                            Map.Entry entry = (Map.Entry)entryIterator.next();
+                            if (attrs.containsKey(entry.getKey())) {
+                                Object value = attrs.get(entry.getKey());
+                                assertEquals("Attribute value at index " + index, entry.getValue(), value);
+                            } else {
+                                errln("FAIL: Attribute " + entry.getKey() + " is missing at index " + index);
+                            }
+                        }
+                    }
+                    index++;
+                    indexExp++;
+                }
+                assertEquals("AttributedString contents", expectedStrings[i], buf.toString());
+            }
+        }
+    }
+//#endif
 }

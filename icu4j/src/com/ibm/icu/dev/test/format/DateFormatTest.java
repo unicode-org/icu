@@ -1,4 +1,5 @@
- /*
+//##header
+/*
  *******************************************************************************
  * Copyright (C) 2001-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
@@ -12,15 +13,32 @@
 
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.text.*;
-import com.ibm.icu.util.*;
-import com.ibm.icu.impl.*;
-import java.util.Date;
+import java.text.AttributedCharacterIterator;
+import java.text.CharacterIterator;
+import java.text.FieldPosition;
 import java.text.ParseException;
 import java.text.ParsePosition;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.Locale;
-import java.text.FieldPosition;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
+
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.text.ChineseDateFormat;
+import com.ibm.icu.text.ChineseDateFormatSymbols;
+import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.DateFormatSymbols;
+import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.ChineseCalendar;
+import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
+import com.ibm.icu.util.VersionInfo;
 
 public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     
@@ -253,7 +271,45 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
      * This MUST be kept in sync with DateFormatSymbols.patternChars.
      */
     static final String PATTERN_CHARS = "GyMdkHmsSEDFwWahKzYeugAZvcLQq";
-        
+
+//#ifndef FOUNDATION
+    /**
+     * A list of the DateFormat.Field.
+     * This MUST be kept in sync with PATTERN_CHARS above.
+     */
+    static final DateFormat.Field[] DATEFORMAT_FIELDS = {
+        DateFormat.Field.ERA,           // G
+        DateFormat.Field.YEAR,          // y
+        DateFormat.Field.MONTH,         // M
+        DateFormat.Field.DAY_OF_MONTH,  // d
+        DateFormat.Field.HOUR_OF_DAY1,  // k
+        DateFormat.Field.HOUR_OF_DAY0,  // H
+        DateFormat.Field.MINUTE,        // m
+        DateFormat.Field.SECOND,        // s
+        DateFormat.Field.MILLISECOND,   // S
+        DateFormat.Field.DAY_OF_WEEK,   // E
+        DateFormat.Field.DAY_OF_YEAR,   // D
+        DateFormat.Field.DAY_OF_WEEK_IN_MONTH,  // F
+        DateFormat.Field.WEEK_OF_YEAR,  // w
+        DateFormat.Field.WEEK_OF_MONTH, // W
+        DateFormat.Field.AM_PM,         // a
+        DateFormat.Field.HOUR1,         // h
+        DateFormat.Field.HOUR0,         // K
+        DateFormat.Field.TIME_ZONE,     // z
+        DateFormat.Field.YEAR_WOY,      // Y
+        DateFormat.Field.DOW_LOCAL,     // e
+        DateFormat.Field.EXTENDED_YEAR, // u
+        DateFormat.Field.JULIAN_DAY,    // g
+        DateFormat.Field.MILLISECONDS_IN_DAY,   // A
+        DateFormat.Field.TIME_ZONE,     // Z
+        DateFormat.Field.TIME_ZONE,     // v
+        DateFormat.Field.DAY_OF_WEEK,   // c
+        DateFormat.Field.MONTH,         // L
+        DateFormat.Field.QUARTER,       // Q
+        DateFormat.Field.QUARTER,       // q
+    };
+//#endif
+
     /**
      * A list of the names of all the fields in DateFormat.
      * This MUST be kept in sync with DateFormat.
@@ -289,7 +345,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         "QUARTER_FIELD",
         "STAND_ALONE_QUARTER_FIELD",
     };
-    
+
     /**
      * General parse/format tests.  Add test cases as needed.
      */
@@ -2816,4 +2872,183 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         DateFormat dfmt = DateFormat.getDateInstance(DateFormat.FULL, ULocale.ROOT);
     }
     */
+
+//#ifndef FOUNDATION
+    /*
+     * Test case for formatToCharacterIterator
+     */
+    public void TestFormatToCharacterIterator() {
+        // Generate pattern string including all pattern letters with various length
+        AttributedCharacterIterator acit;
+        final char SEPCHAR = '~';
+        String[] patterns = new String[5];
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < patterns.length; i++) {
+            sb.setLength(0);
+            for (int j = 0; j < PATTERN_CHARS.length(); j++) {
+                if (j != 0) {
+                    for (int k = 0; k <= i; k++) {
+                        sb.append(SEPCHAR);
+                    }
+                }
+                char letter = PATTERN_CHARS.charAt(j);
+                for (int k = 0; k <= i; k++) {
+                    sb.append(letter);
+                }
+            }
+            patterns[i] = sb.toString();
+        }
+        if (isVerbose()) {
+            for (int i = 0; i < patterns.length; i++) {
+                logln("patterns[" + i + "] = " + patterns[i]);
+            }
+        }
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(2007, Calendar.JULY, 16, 8, 20, 25);
+        cal.set(Calendar.MILLISECOND, 567);
+        final Date d = cal.getTime();
+
+        // Test AttributedCharacterIterator returned by SimpleDateFormat
+        for (int i = 0; i < patterns.length; i++) {
+            SimpleDateFormat sdf = new SimpleDateFormat(patterns[i]);
+            acit = sdf.formatToCharacterIterator(d);
+            int patidx = 0;
+
+            while (true) {
+                Map map = acit.getAttributes();
+                int limit = acit.getRunLimit();
+                if (map.isEmpty()) {
+                    // Must be pattern literal - '~'
+                    while (acit.getIndex() < limit) {
+                        if (acit.current() != SEPCHAR) {
+                            errln("FAIL: Invalid pattern literal at " + acit.current() + " in patterns[" + i + "]");
+                        }
+                        acit.next();
+                    }
+                } else {
+                    Set keySet = map.keySet();
+                    if (keySet.size() == 1) {
+                        // Check the attribute
+                        Iterator keyIterator = keySet.iterator();
+                        DateFormat.Field attr = (DateFormat.Field)keyIterator.next();
+                        if (!DATEFORMAT_FIELDS[patidx].equals(attr)) {
+                            errln("FAIL: The attribute at " + acit.getIndex() + " in patterns[" + i + "" +
+                            		"] is " + attr + " - Expexted: " + DATEFORMAT_FIELDS[patidx]);
+                        }
+                    } else {
+                        // SimpleDateFormat#formatToCharacterIterator never set multiple
+                        // attributes to a single text run.
+                        errln("FAIL: Multiple attributes were set");
+                    }
+                    patidx++;
+                    // Move to the run limit
+                    acit.setIndex(limit);
+                }
+                if (acit.current() == CharacterIterator.DONE) {
+                    break;
+                }
+            }
+        }
+
+        // ChineseDateFormat has pattern letter 'l' for leap month marker in addition to regular DateFormat
+        cal.clear();
+        cal.set(2009, Calendar.JUNE, 22); // 26x78-5-30
+        Date nonLeapMonthDate = cal.getTime(); // non-leap month
+        cal.set(2009, Calendar.JUNE, 23); // 26x78-5*-1
+        Date leapMonthDate = cal.getTime(); // leap month
+
+        ChineseDateFormat cdf = new ChineseDateFormat("y'x'G-Ml-d", ULocale.US);
+        acit = cdf.formatToCharacterIterator(nonLeapMonthDate);
+        Set keys = acit.getAllAttributeKeys();
+        if (keys.contains(ChineseDateFormat.Field.IS_LEAP_MONTH)) {
+            errln("FAIL: IS_LEAP_MONTH attribute must not present for Chinese calendar date "
+                    + cdf.format(nonLeapMonthDate));
+        }
+        acit = cdf.formatToCharacterIterator(leapMonthDate);
+        keys = acit.getAllAttributeKeys();
+        if (!keys.contains(ChineseDateFormat.Field.IS_LEAP_MONTH)) {
+            errln("FAIL: IS_LEAP_MONTH attribute must present for Chinese calendar date "
+                    + cdf.format(leapMonthDate));
+        }
+    }
+
+    /*
+     * API coverage test case for formatToCharacterIterator
+     */
+    public void TestFormatToCharacterIteratorCoverage() {
+        // Calling formatToCharacterIterator, using various argument types
+        DateFormat df = DateFormat.getDateTimeInstance();
+        AttributedCharacterIterator acit = null;
+
+        Calendar cal = Calendar.getInstance();
+        try {
+            acit = df.formatToCharacterIterator(cal);
+        } catch (IllegalArgumentException iae) {
+            errln("FAIL: Calendar must be accepted by formatToCharacterIterator");
+        }
+
+        Date d = cal.getTime();
+        try {
+            acit = df.formatToCharacterIterator(d);
+        } catch (IllegalArgumentException iae) {
+            errln("FAIL: Date must be accepted by formatToCharacterIterator");
+        }
+
+        Number num = new Long(d.getTime());
+        try {
+            acit = df.formatToCharacterIterator(num);
+        } catch (IllegalArgumentException iae) {
+            errln("FAIL: Number must be accepted by formatToCharacterIterator");
+        }
+
+        boolean isException = false;
+        String str = df.format(d);
+        try {
+            acit = df.formatToCharacterIterator(str);
+        } catch (IllegalArgumentException iae) {
+            logln("IllegalArgumentException is thrown by formatToCharacterIterator");
+            isException = true;
+        }
+        if (!isException) {
+            errln("FAIL: String must not be accepted by formatToCharacterIterator");
+        }
+
+        // DateFormat.Field#ofCalendarField and getCalendarField
+        for (int i = 0; i < DATEFORMAT_FIELDS.length; i++) {
+            int calField = DATEFORMAT_FIELDS[i].getCalendarField();
+            if (calField != -1) {
+                DateFormat.Field field = DateFormat.Field.ofCalendarField(calField);
+                if (field != DATEFORMAT_FIELDS[i]) {
+                    errln("FAIL: " + field + " is returned for a Calendar field " + calField
+                            + " - Expected: " + DATEFORMAT_FIELDS[i]);
+                }
+            }
+        }
+
+        // IllegalArgument for ofCalendarField
+        isException = false;
+        try {
+            DateFormat.Field.ofCalendarField(-1);
+        } catch (IllegalArgumentException iae) {
+            logln("IllegalArgumentException is thrown by ofCalendarField");
+            isException = true;
+        }
+        if (!isException) {
+            errln("FAIL: IllegalArgumentException must be thrown by ofCalendarField for calendar field value -1");
+        }
+
+        // ChineseDateFormat.Field#ofCalendarField and getCalendarField
+        int ccalField = ChineseDateFormat.Field.IS_LEAP_MONTH.getCalendarField();
+        if (ccalField != ChineseCalendar.IS_LEAP_MONTH) {
+            errln("FAIL: ChineseCalendar field " + ccalField + " is returned for ChineseDateFormat.Field.IS_LEAP_MONTH.getCalendarField()");
+        } else {
+            DateFormat.Field cfield = ChineseDateFormat.Field.ofCalendarField(ccalField);
+            if (cfield != ChineseDateFormat.Field.IS_LEAP_MONTH) {
+                errln("FAIL: " + cfield + " is returned for a ChineseCalendar field " + ccalField
+                        + " - Expected: " + ChineseDateFormat.Field.IS_LEAP_MONTH);
+            }
+        }
+    }
+//#endif
 }

@@ -1,23 +1,28 @@
+//##header
 /*
-*   Copyright (C) 1996-2006, International Business Machines
+*   Copyright (C) 1996-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 */
 
 package com.ibm.icu.text;
 
 //import com.ibm.icu.impl.ICULocaleData;
-import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.TimeZone;
-import com.ibm.icu.util.ULocale;
-import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.text.UFormat;
-
+import java.io.InvalidObjectException;
 import java.text.FieldPosition;
+import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.MissingResourceException;
+
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.ULocale;
 
 /**
  * DateFormat is an abstract class for date/time formatting subclasses which
@@ -1210,4 +1215,280 @@ public abstract class DateFormat extends UFormat {
     static final public DateFormat getDateTimeInstance(Calendar cal, int dateStyle, int timeStyle) {
         return getDateTimeInstance(cal, dateStyle, timeStyle, ULocale.getDefault());
     }
+
+//#ifndef FOUNDATION
+    /**
+     * The instances of this inner class are used as attribute keys and values
+     * in AttributedCharacterIterator that
+     * DateFormat.formatToCharacterIterator() method returns.
+     * <p>
+     * There is no public constructor to this class, the only instances are the
+     * constants defined here.
+     * <p>
+     * @stable ICU 3.8
+     */
+    public static class Field extends Format.Field {
+
+        private static final long serialVersionUID = -3627456821000730829L;
+
+        // Max number of calendar fields
+        private static final int CAL_FIELD_COUNT;
+
+        // Table for mapping calendar field number to DateFormat.Field
+        private static final Field[] CAL_FIELDS;
+ 
+        // Map for resolving DateFormat.Field by name
+        private static final Map FIELD_NAME_MAP;
+
+        static {
+            GregorianCalendar cal = new GregorianCalendar();
+            CAL_FIELD_COUNT = cal.getFieldCount();
+            CAL_FIELDS = new Field[CAL_FIELD_COUNT];
+            FIELD_NAME_MAP = new HashMap(CAL_FIELD_COUNT);
+        }
+
+        // Java fields -------------------
+
+        /**
+         * Constant identifying the time of day indicator(am/pm).
+         * @stable ICU 3.8
+         */
+        public static final Field AM_PM = new Field("am pm", Calendar.AM_PM);
+
+        /**
+         * Constant identifying the day of month field.
+         * @stable ICU 3.8
+         */
+        public static final Field DAY_OF_MONTH = new Field("day of month", Calendar.DAY_OF_MONTH);
+
+        /**
+         * Constant identifying the day of week field.
+         * @stable ICU 3.8
+         */
+        public static final Field DAY_OF_WEEK = new Field("day of week", Calendar.DAY_OF_WEEK);
+
+        /**
+         * Constant identifying the day of week in month field.
+         * @stable ICU 3.8
+         */
+        public static final Field DAY_OF_WEEK_IN_MONTH = new Field("day of week in month", Calendar.DAY_OF_WEEK_IN_MONTH);
+
+        /**
+         * Constant identifying the day of year field.
+         * @stable ICU 3.8
+         */
+        public static final Field DAY_OF_YEAR = new Field("day of year", Calendar.DAY_OF_YEAR);
+
+        /**
+         * Constant identifying the era field.
+         * @stable ICU 3.8
+         */
+        public static final Field ERA = new Field("era", Calendar.ERA);
+
+        /**
+         * Constant identifying the hour(0-23) of day field.
+         * @stable ICU 3.8
+         */
+        public static final Field HOUR_OF_DAY0 = new Field("hour of day", Calendar.HOUR_OF_DAY);
+
+        /**
+         * Constant identifying the hour(1-24) of day field.
+         * @stable ICU 3.8
+         */
+        public static final Field HOUR_OF_DAY1 = new Field("hour of day 1", -1);
+
+        /**
+         * Constant identifying the hour(0-11) field.
+         * @stable ICU 3.8
+         */
+        public static final Field HOUR0 = new Field("hour", Calendar.HOUR);
+
+        /**
+         * Constant identifying the hour(1-12) field.
+         * @stable ICU 3.8
+         */
+        public static final Field HOUR1 = new Field("hour 1", -1);
+
+        /**
+         * Constant identifying the millisecond field.
+         * @stable ICU 3.8
+         */
+        public static final Field MILLISECOND = new Field("millisecond", Calendar.MILLISECOND);
+
+        /**
+         * Constant identifying the minute field.
+         * @stable ICU 3.8
+         */
+        public static final Field MINUTE = new Field("minute", Calendar.MINUTE);
+
+        /**
+         * Constant identifying the month field.
+         * @stable ICU 3.8
+         */
+        public static final Field MONTH = new Field("month", Calendar.MONTH);
+
+        /**
+         * Constant identifying the second field.
+         * @stable ICU 3.8
+         */
+        public static final Field SECOND = new Field("second", Calendar.SECOND);
+
+        /**
+         * Constant identifying the time zone field.
+         * @stable ICU 3.8
+         */
+        public static final Field TIME_ZONE = new Field("time zone", -1);
+
+        /**
+         * Constant identifying the week of month field.
+         * @stable ICU 3.8
+         */
+        public static final Field WEEK_OF_MONTH = new Field("week of month", Calendar.WEEK_OF_MONTH);
+
+        /**
+         * Constant identifying the week of year field.
+         * @stable ICU 3.8
+         */
+        public static final Field WEEK_OF_YEAR = new Field("week of year", Calendar.WEEK_OF_YEAR);
+
+        /**
+         * Constant identifying the year field.
+         * @stable ICU 3.8
+         */
+        public static final Field YEAR = new Field("year", Calendar.YEAR);
+
+
+        // ICU only fields -------------------
+
+        /**
+         * Constant identifying the local day of week field.
+         * @draft ICU 3.8
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final Field DOW_LOCAL = new Field("local day of week", Calendar.DOW_LOCAL);
+
+        /**
+         * Constant identifying the extended year field.
+         * @draft ICU 3.8
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final Field EXTENDED_YEAR = new Field("extended year", Calendar.EXTENDED_YEAR);
+
+        /**
+         * Constant identifying the Julian day field.
+         * @draft ICU 3.8
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final Field JULIAN_DAY = new Field("Julian day", Calendar.JULIAN_DAY);
+
+        /**
+         * Constant identifying the milliseconds in day field.
+         * @draft ICU 3.8
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final Field MILLISECONDS_IN_DAY = new Field("milliseconds in day", Calendar.MILLISECONDS_IN_DAY);
+
+        /**
+         * Constant identifying the year used with week of year field.
+         * @draft ICU 3.8
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final Field YEAR_WOY = new Field("year for week of year", Calendar.YEAR_WOY);
+
+        /**
+         * Constant identifying the quarter field.
+         * @draft ICU 3.8
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final Field QUARTER = new Field("quarter", -1);
+
+        // Stand alone types are variants for its base types.  So we do not define Field for
+        // them.
+        /*
+        public static final Field STANDALONE_DAY = new Field("stand alone day of week", Calendar.DAY_OF_WEEK);
+        public static final Field STANDALONE_MONTH = new Field("stand alone month", Calendar.MONTH);
+        public static final Field STANDALONE_QUARTER = new Field("stand alone quarter", -1);
+        */
+
+        // Corresponding calendar field
+        private final int calendarField;
+
+        /**
+         * Constructs a <code>DateFormat.Field</code> with the given name and
+         * the <code>Calendar</code> field which this attribute represents.  Use -1 for
+         * <code>calendarField</code> if this field does not have a corresponding
+         * <code>Calendar</code> field.
+         * 
+         * @param name          Name of the attribute
+         * @param calendarField <code>Calendar</code> field constant
+         * 
+         * @stable ICU 3.8
+         */
+        protected Field(String name, int calendarField) {
+            super(name);
+            this.calendarField = calendarField;
+            if (this.getClass() == DateFormat.Field.class) {
+                FIELD_NAME_MAP.put(name, this);
+                if (calendarField >= 0 && calendarField < CAL_FIELD_COUNT) {
+                    CAL_FIELDS[calendarField] = this;
+                }
+            }
+        }
+
+        /**
+         * Returns the <code>Field</code> constant that corresponds to the <code>
+         * Calendar</code> field <code>calendarField</code>.  If there is no
+         * corresponding <code>Field</code> is available, null is returned.
+         * 
+         * @param calendarField <code>Calendar</code> field constant
+         * @return <code>Field</code> associated with the <code>calendarField</code>,
+         * or null if no associated <code>Field</code> is available.
+         * @throws IllegalArgumentException if <code>calendarField</code> is not
+         * a valid <code>Calendar</code> field constant.
+         * 
+         * @stable ICU 3.8
+         */
+        public static DateFormat.Field ofCalendarField(int calendarField) {
+            if (calendarField < 0 || calendarField >= CAL_FIELD_COUNT) {
+                throw new IllegalArgumentException("Calendar field number is out of range");
+            }
+            return CAL_FIELDS[calendarField];
+        }
+        
+        /**
+         * Returns the <code>Calendar</code> field associated with this attribute.
+         * If there is no corresponding <code>Calendar</code> available, this will
+         * return -1.
+         * 
+         * @return <code>Calendar</code> constant for this attribute.
+         * 
+         * @stable ICU 3.8
+         */
+        public int getCalendarField() {
+            return calendarField;
+        }
+        
+        /**
+         * Resolves instances being deserialized to the predefined constants.
+         * 
+         * @throws InvalidObjectException if the constant could not be resolved.
+         * 
+         * @stable ICU 3.8
+         */
+        protected Object readResolve() throws InvalidObjectException {
+            ///CLOVER:OFF
+            if (this.getClass() != DateFormat.Field.class) {
+                throw new InvalidObjectException("A subclass of DateFormat.Field must implement readResolve.");
+            }
+            ///CLOVER:ON
+            Object o = FIELD_NAME_MAP.get(this.getName());
+            ///CLOVER:OFF
+            if (o == null) {
+                throw new InvalidObjectException("Unknown attribute name.");
+            }
+            ///CLOVER:ON
+            return o;
+        }
+    }
+//#endif
 }

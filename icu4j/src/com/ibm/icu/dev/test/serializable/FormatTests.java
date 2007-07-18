@@ -899,7 +899,22 @@ public class FormatTests
             return mfa.format(arguments) != mfb.format(arguments);
         }
     }
-    
+
+//#ifndef FOUNDATION
+    public static class MessageFormatFieldHandler implements SerializableTest.Handler
+    {
+        public Object[] getTestObjects()
+        {
+            return new Object[] {MessageFormat.Field.ARGUMENT};
+        }
+
+        public boolean hasSameBehavior(Object a, Object b)
+        {
+            return (a == b);
+        }
+    }
+//#endif
+
     public static class DateFormatHandler implements SerializableTest.Handler
     {
         public Object[] getTestObjects()
@@ -926,7 +941,45 @@ public class FormatTests
         }
         
     }
-    
+
+//#ifndef FOUNDATION
+    public static class DateFormatFieldHandler implements SerializableTest.Handler
+    {
+        public Object[] getTestObjects() {
+            return new Object[] {
+                    DateFormat.Field.AM_PM,
+                    DateFormat.Field.DAY_OF_MONTH,
+                    DateFormat.Field.DAY_OF_WEEK,
+                    DateFormat.Field.DAY_OF_WEEK_IN_MONTH,
+                    DateFormat.Field.DAY_OF_YEAR,
+                    DateFormat.Field.ERA,
+                    DateFormat.Field.HOUR_OF_DAY0,
+                    DateFormat.Field.HOUR_OF_DAY1,
+                    DateFormat.Field.HOUR0,
+                    DateFormat.Field.HOUR1,
+                    DateFormat.Field.MILLISECOND,
+                    DateFormat.Field.MINUTE,
+                    DateFormat.Field.MONTH,
+                    DateFormat.Field.SECOND,
+                    DateFormat.Field.TIME_ZONE,
+                    DateFormat.Field.WEEK_OF_MONTH,
+                    DateFormat.Field.WEEK_OF_YEAR,
+                    DateFormat.Field.YEAR,
+                    DateFormat.Field.DOW_LOCAL,
+                    DateFormat.Field.EXTENDED_YEAR,
+                    DateFormat.Field.JULIAN_DAY,
+                    DateFormat.Field.MILLISECONDS_IN_DAY,
+                    DateFormat.Field.YEAR_WOY,
+                    DateFormat.Field.QUARTER
+            };
+        }
+        public boolean hasSameBehavior(Object a, Object b)
+        {
+            return (a == b);
+        }
+    }
+//#endif
+
     public static class DateFormatSymbolsHandler implements SerializableTest.Handler
     {
         /*
@@ -1337,7 +1390,22 @@ public class FormatTests
             return dateFormats;
         }
     }
-    
+
+//#ifndef FOUNDATION
+    public static class ChineseDateFormatFieldHandler implements SerializableTest.Handler
+    {
+        public Object[] getTestObjects() {
+            return new Object[] {
+                    ChineseDateFormat.Field.IS_LEAP_MONTH
+            };
+        }
+        public boolean hasSameBehavior(Object a, Object b)
+        {
+            return (a == b);
+        }
+    }
+//#endif
+
     public static class ChineseDateFormatSymbolsHandler extends DateFormatSymbolsHandler
     {
         public Object[] getTestObjects()

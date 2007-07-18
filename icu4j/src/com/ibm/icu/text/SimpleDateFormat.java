@@ -1,3 +1,4 @@
+//##header
 /*
  *******************************************************************************
  * Copyright (C) 1996-2007, International Business Machines Corporation and    *
@@ -10,11 +11,15 @@ package com.ibm.icu.text;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.text.AttributedCharacterIterator;
+import java.text.AttributedString;
 import java.text.FieldPosition;
+import java.text.Format;
 import java.text.MessageFormat;
 import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -521,6 +526,13 @@ public class SimpleDateFormat extends DateFormat {
      */
     public StringBuffer format(Calendar cal, StringBuffer toAppendTo,
                                FieldPosition pos) {
+        return format(cal, toAppendTo, pos, null);
+    }
+
+    // The actual method to format date. If List attributes is not null,
+    // then attribute information will be recorded.
+    private StringBuffer format(Calendar cal, StringBuffer toAppendTo,
+            FieldPosition pos, List attributes) {
         // Initialize
         pos.setBeginIndex(0);
         pos.setEndIndex(0);
@@ -535,14 +547,36 @@ public class SimpleDateFormat extends DateFormat {
                 toAppendTo.append((String)items[i]);
             } else {
                 PatternItem item = (PatternItem)items[i];
+//#ifndef FOUNDATION
+                int start = 0;
+                if (attributes != null) {
+                    // Save the current length
+                    start = toAppendTo.length();
+                }
+//#endif
                 if (useFastFormat) {
                     subFormat(toAppendTo, item.type, item.length, toAppendTo.length(), pos, cal);
                 } else {
                     toAppendTo.append(subFormat(item.type, item.length, toAppendTo.length(), pos, formatData, cal));
                 }
+//#ifndef FOUNDATION
+                if (attributes != null) {
+                    // Check the sub format length
+                    int end = toAppendTo.length();
+                    DateFormat.Field attr = patternCharToDateFormatField(item.type);
+                    if (end - start > 0) {
+                        // Append the attribute to the list
+                        FieldPosition fp = new FieldPosition(attr);
+                        fp.setBeginIndex(start);
+                        fp.setEndIndex(end);
+                        attributes.add(fp);
+                    }
+                }
+//#endif
             }
         }
         return toAppendTo;
+        
     }
 
     // Map pattern character to index
@@ -559,7 +593,7 @@ public class SimpleDateFormat extends DateFormat {
         -1, 28, -1,  7, -1, 20, 24, 12, -1,  1, 17, -1, -1, -1, -1, -1
     };
     
-    // Map index into pattern character string to Calendar field number
+    // Map pattern character index to Calendar field number
     private static final int[] PATTERN_INDEX_TO_CALENDAR_FIELD =
     {
         /*GyM*/ Calendar.ERA, Calendar.YEAR, Calendar.MONTH,
@@ -576,7 +610,7 @@ public class SimpleDateFormat extends DateFormat {
         /*Qq*/  Calendar.MONTH, Calendar.MONTH,
     };
 
-    // Map index into pattern character string to DateFormat field number
+    // Map pattern character index to DateFormat field number
     private static final int[] PATTERN_INDEX_TO_DATE_FORMAT_FIELD = {
         /*GyM*/ DateFormat.ERA_FIELD, DateFormat.YEAR_FIELD, DateFormat.MONTH_FIELD,
         /*dkH*/ DateFormat.DATE_FIELD, DateFormat.HOUR_OF_DAY1_FIELD, DateFormat.HOUR_OF_DAY0_FIELD,
@@ -589,9 +623,47 @@ public class SimpleDateFormat extends DateFormat {
         /*v*/   DateFormat.TIMEZONE_GENERIC_FIELD, 
         /*c*/   DateFormat.STANDALONE_DAY_FIELD,
         /*L*/   DateFormat.STANDALONE_MONTH_FIELD,
-        /*Q*/   DateFormat.QUARTER_FIELD,
-        /*q*/   DateFormat.STANDALONE_QUARTER_FIELD,
+        /*Qq*/  DateFormat.QUARTER_FIELD, DateFormat.STANDALONE_QUARTER_FIELD,
     };
+
+//#ifndef FOUNDATION
+    // Map pattern character index to DateFormat.Field
+    private static final DateFormat.Field[] PATTERN_INDEX_TO_DATE_FORMAT_ATTRIBUTE = {
+        /*GyM*/ DateFormat.Field.ERA, DateFormat.Field.YEAR, DateFormat.Field.MONTH,
+        /*dkH*/ DateFormat.Field.DAY_OF_MONTH, DateFormat.Field.HOUR_OF_DAY1, DateFormat.Field.HOUR_OF_DAY0,
+        /*msS*/ DateFormat.Field.MINUTE, DateFormat.Field.SECOND, DateFormat.Field.MILLISECOND,
+        /*EDF*/ DateFormat.Field.DAY_OF_WEEK, DateFormat.Field.DAY_OF_YEAR, DateFormat.Field.DAY_OF_WEEK_IN_MONTH,
+        /*wWa*/ DateFormat.Field.WEEK_OF_YEAR, DateFormat.Field.WEEK_OF_MONTH, DateFormat.Field.AM_PM,
+        /*hKz*/ DateFormat.Field.HOUR1, DateFormat.Field.HOUR0, DateFormat.Field.TIME_ZONE,
+        /*Yeu*/ DateFormat.Field.YEAR_WOY, DateFormat.Field.DOW_LOCAL, DateFormat.Field.EXTENDED_YEAR,
+        /*gAZ*/ DateFormat.Field.JULIAN_DAY, DateFormat.Field.MILLISECONDS_IN_DAY, DateFormat.Field.TIME_ZONE,
+        /*v*/   DateFormat.Field.TIME_ZONE,
+        /*c*/   DateFormat.Field.DAY_OF_WEEK,
+        /*L*/   DateFormat.Field.MONTH,
+        /*Qq*/  DateFormat.Field.QUARTER, DateFormat.Field.QUARTER,
+    };
+
+    /**
+     * Return a DateFormat.Field constant associated with the specified format pattern
+     * character.
+     * 
+     * @param ch The pattern character
+     * @return DateFormat.Field associated with the pattern character
+     * 
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
+    protected DateFormat.Field patternCharToDateFormatField(char ch) {
+        int patternCharIndex = -1;
+        if ('A' <= ch && ch <= 'z') {
+            patternCharIndex = PATTERN_CHAR_TO_INDEX[(int)ch - PATTERN_CHAR_BASE];
+        }
+        if (patternCharIndex != -1) {
+            return PATTERN_INDEX_TO_DATE_FORMAT_ATTRIBUTE[patternCharIndex];
+        }
+        return null;
+    }
+//#endif
 
     /**
      * Format a single field, given its pattern character.  Subclasses may
@@ -1915,11 +1987,11 @@ public class SimpleDateFormat extends DateFormat {
      * Translate a pattern, mapping each character in the from string to the
      * corresponding character in the to string.
      */
-    private String translatePattern(String pattern, String from, String to) {
+    private String translatePattern(String pat, String from, String to) {
         StringBuffer result = new StringBuffer();
         boolean inQuote = false;
-        for (int i = 0; i < pattern.length(); ++i) {
-            char c = pattern.charAt(i);
+        for (int i = 0; i < pat.length(); ++i) {
+            char c = pat.charAt(i);
             if (inQuote) {
                 if (c == '\'')
                     inQuote = false;
@@ -1965,9 +2037,9 @@ public class SimpleDateFormat extends DateFormat {
      * Apply the given unlocalized pattern string to this date format.
      * @stable ICU 2.0
      */
-    public void applyPattern(String pattern)
+    public void applyPattern(String pat)
     {
-        this.pattern = pattern;
+        this.pattern = pat;
         setLocale(null, null);
         // reset parsed pattern items
         patternItems = null;
@@ -1977,8 +2049,8 @@ public class SimpleDateFormat extends DateFormat {
      * Apply the given localized pattern string to this date format.
      * @stable ICU 2.0
      */
-    public void applyLocalizedPattern(String pattern) {
-        this.pattern = translatePattern(pattern,
+    public void applyLocalizedPattern(String pat) {
+        this.pattern = translatePattern(pat,
                                         formatData.localPatternChars,
                                         DateFormatSymbols.patternChars);
         setLocale(null, null);
@@ -2080,4 +2152,43 @@ public class SimpleDateFormat extends DateFormat {
 
         initLocalZeroPaddingNumberFormat();
     }
+
+//#ifndef FOUNDATION
+    /**
+     * Format the object to an attributed string, and return the corresponding iterator
+     * Overrides superclass method.
+     * 
+     * @param obj The object to format
+     * @return <code>AttributedCharacterIterator</code> describing the formatted value.
+     * 
+     * @stable ICU 3.8
+     */
+    public AttributedCharacterIterator formatToCharacterIterator(Object obj) {
+        Calendar cal = calendar;
+        if (obj instanceof Calendar) {
+            cal = (Calendar)obj;
+        } else if (obj instanceof Date) {
+            calendar.setTime((Date)obj);
+        } else if (obj instanceof Number) {
+            calendar.setTimeInMillis(((Number)obj).longValue());
+        } else { 
+            throw new IllegalArgumentException("Cannot format given Object as a Date");
+        }
+        StringBuffer toAppendTo = new StringBuffer();
+        FieldPosition pos = new FieldPosition(0);
+        List attributes = new LinkedList();
+        format(cal, toAppendTo, pos, attributes);
+
+        AttributedString as = new AttributedString(toAppendTo.toString());
+        
+        // add DateFormat field attributes to the AttributedString
+        for (int i = 0; i < attributes.size(); i++) {
+            FieldPosition fp = (FieldPosition) attributes.get(i);
+            Format.Field attribute = fp.getFieldAttribute();
+            as.addAttribute(attribute, attribute, fp.getBeginIndex(), fp.getEndIndex());
+        }
+        // return the CharacterIterator from AttributedString
+        return as.getIterator();
+    }
+//#endif
 }
