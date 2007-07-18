@@ -1367,8 +1367,10 @@ static void TestTextAttributeCrash(void) {
         return;
     }
     unum_setTextAttribute(nf, UNUM_CURRENCY_CODE, ubuffer, 3, &status);
-    // the usual negative prefix and suffix seem to be '($' and ')' at this point
-    // also crashes if UNUM_NEGATIVE_SUFFIX is substituted for UNUM_NEGATIVE_PREFIX here
+    /*
+     * the usual negative prefix and suffix seem to be '($' and ')' at this point
+     * also crashes if UNUM_NEGATIVE_SUFFIX is substituted for UNUM_NEGATIVE_PREFIX here
+     */
     used = unum_getTextAttribute(nf, UNUM_NEGATIVE_PREFIX, ubuffer, 64, &status);
     unum_setTextAttribute(nf, UNUM_NEGATIVE_PREFIX, ubuffer, used, &status);
     if (U_FAILURE(status)) {
