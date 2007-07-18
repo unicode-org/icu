@@ -173,6 +173,7 @@ icu4j/src/com/ibm/icu/charset/CharsetUTF7.java -text
 icu4j/src/com/ibm/icu/dev/data/rbbi/english.dict -text
 icu4j/src/com/ibm/icu/dev/data/testdata.jar -text
 icu4j/src/com/ibm/icu/dev/data/thai6.ucs -text
+icu4j/src/com/ibm/icu/dev/test/calendar/IndianTest.java -text
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Asian.txt -text
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Chinese.txt -text
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Japanese.txt -text
@@ -263,6 +264,7 @@ icu4j/src/com/ibm/icu/util/AnnualTimeZoneRule.java -text
 icu4j/src/com/ibm/icu/util/BasicTimeZone.java -text
 icu4j/src/com/ibm/icu/util/CalendarServiceShim.java -text
 icu4j/src/com/ibm/icu/util/DateTimeRule.java -text
+icu4j/src/com/ibm/icu/util/IndianCalendar.java -text
 icu4j/src/com/ibm/icu/util/InitialTimeZoneRule.java -text
 icu4j/src/com/ibm/icu/util/RuleBasedTimeZone.java -text
 icu4j/src/com/ibm/icu/util/TaiwanCalendar.java -text
