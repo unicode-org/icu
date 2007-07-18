@@ -107,8 +107,8 @@ public final class ICUData {
     /*
      * Convenience method that calls getStream(root, resourceName, true).
      */
-    /*public static InputStream getRequiredStream(Class root, String resourceName) {
+    public static InputStream getRequiredStream(Class root, String resourceName) {
         return getStream(root, resourceName, true);
-    }*/
+    }
 }
 
