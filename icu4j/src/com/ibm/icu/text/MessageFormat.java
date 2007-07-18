@@ -1,3 +1,4 @@
+//##header
 /*
 **********************************************************************
 * Copyright (c) 2004-2007, International Business Machines
@@ -13,19 +14,23 @@ package com.ibm.icu.text;
 import java.io.IOException;
 import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
+import java.text.AttributedCharacterIterator;
+import java.text.AttributedString;
+import java.text.CharacterIterator;
 import java.text.ChoiceFormat;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.HashMap;
 
 import com.ibm.icu.impl.Utility;
-import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.ULocale;
 
@@ -889,12 +894,12 @@ public class MessageFormat extends UFormat {
                   "This method is not available in MessageFormat objects " +
                   "that use alphanumeric argument names.");
         }
-        return subformat(arguments, result, pos);
+        return subformat(arguments, result, pos, null);
     }
 
     public final StringBuffer format(Map arguments, StringBuffer result,
                                      FieldPosition pos) {
-        return subformat(arguments, result, pos);
+        return subformat(arguments, result, pos, null);
     }
     
     /**
@@ -943,70 +948,74 @@ public class MessageFormat extends UFormat {
     public final StringBuffer format(Object arguments, StringBuffer result,
                                      FieldPosition pos)
     {
-        
         if ((arguments == null || arguments instanceof Map)) {
-            return subformat((Map) arguments, result, pos);
+            return subformat((Map) arguments, result, pos, null);
         } else {
             if (!argumentNamesAreNumeric) {
                 throw new IllegalArgumentException(
                         "This method is not available in MessageFormat objects " + 
                         "that use alphanumeric argument names.");
             }
-            return subformat((Object[]) arguments, result, pos);
+            return subformat((Object[]) arguments, result, pos, null);
         }
     }
 
-// TODO Do not remove, this is API in JDK that we need to implement
-//    /**
-//     * Formats an array of objects and inserts them into the
-//     * <code>MessageFormat</code>'s pattern, producing an
-//     * <code>AttributedCharacterIterator</code>.
-//     * You can use the returned <code>AttributedCharacterIterator</code>
-//     * to build the resulting String, as well as to determine information
-//     * about the resulting String.
-//     * <p>
-//     * The text of the returned <code>AttributedCharacterIterator</code> is
-//     * the same that would be returned by
-//     * <blockquote>
-//     *     <code>{@link #format(java.lang.Object[], java.lang.StringBuffer, java.text.FieldPosition) format}(arguments, new StringBuffer(), null).toString()</code>
-//     * </blockquote>
-//     * <p>
-//     * In addition, the <code>AttributedCharacterIterator</code> contains at
-//     * least attributes indicating where text was generated from an
-//     * argument in the <code>arguments</code> array. The keys of these attributes are of
-//     * type <code>MessageFormat.Field</code>, their values are
-//     * <code>Integer</code> objects indicating the index in the <code>arguments</code>
-//     * array of the argument from which the text was generated.
-//     * <p>
-//     * The attributes/value from the underlying <code>Format</code>
-//     * instances that <code>MessageFormat</code> uses will also be
-//     * placed in the resulting <code>AttributedCharacterIterator</code>.
-//     * This allows you to not only find where an argument is placed in the
-//     * resulting String, but also which fields it contains in turn.
-//     *
-//     * @param arguments an array of objects to be formatted and substituted.
-//     * @return AttributedCharacterIterator describing the formatted value.
-//     * @exception NullPointerException if <code>arguments</code> is null.
-//     * @exception IllegalArgumentException if an argument in the
-//     *            <code>arguments</code> array is not of the type
-//     *            expected by the format element(s) that use it.
-//     */
-//    public AttributedCharacterIterator formatToCharacterIterator(Object arguments) {
-//        StringBuffer result = new StringBuffer();
-//        ArrayList iterators = new ArrayList();
-//
-//        if (arguments == null) {
-//            throw new NullPointerException(
-//                   "formatToCharacterIterator must be passed non-null object");
-//        }
-//        subformat((Object[]) arguments, result, null, iterators);
-//        if (iterators.size() == 0) {
-//            return createAttributedCharacterIterator("");
-//        }
-//        return createAttributedCharacterIterator(
-//                     (AttributedCharacterIterator[])iterators.toArray(
-//                     new AttributedCharacterIterator[iterators.size()]));
-//    }
+//#ifndef FOUNDATION
+    /**
+     * Formats an array of objects and inserts them into the
+     * <code>MessageFormat</code>'s pattern, producing an
+     * <code>AttributedCharacterIterator</code>.
+     * You can use the returned <code>AttributedCharacterIterator</code>
+     * to build the resulting String, as well as to determine information
+     * about the resulting String.
+     * <p>
+     * The text of the returned <code>AttributedCharacterIterator</code> is
+     * the same that would be returned by
+     * <blockquote>
+     *     <code>{@link #format(java.lang.Object[], java.lang.StringBuffer, java.text.FieldPosition) format}(arguments, new StringBuffer(), null).toString()</code>
+     * </blockquote>
+     * <p>
+     * In addition, the <code>AttributedCharacterIterator</code> contains at
+     * least attributes indicating where text was generated from an
+     * argument in the <code>arguments</code> array. The keys of these attributes are of
+     * type <code>MessageFormat.Field</code>, their values are
+     * <code>Integer</code> objects indicating the index in the <code>arguments</code>
+     * array of the argument from which the text was generated.
+     * <p>
+     * The attributes/value from the underlying <code>Format</code>
+     * instances that <code>MessageFormat</code> uses will also be
+     * placed in the resulting <code>AttributedCharacterIterator</code>.
+     * This allows you to not only find where an argument is placed in the
+     * resulting String, but also which fields it contains in turn.
+     *
+     * @param arguments an array of objects to be formatted and substituted.
+     * @return AttributedCharacterIterator describing the formatted value.
+     * @exception NullPointerException if <code>arguments</code> is null.
+     * @exception IllegalArgumentException if an argument in the
+     *            <code>arguments</code> array is not of the type
+     *            expected by the format element(s) that use it.
+     */
+    public AttributedCharacterIterator formatToCharacterIterator(Object arguments) {
+        StringBuffer result = new StringBuffer();
+        ArrayList iterators = new ArrayList();
+
+        if (arguments == null) {
+            throw new NullPointerException(
+                   "formatToCharacterIterator must be passed non-null object");
+        }
+        if (arguments instanceof Map) {
+            subformat((Map)arguments, result, null, iterators);
+        } else {
+            subformat((Object[]) arguments, result, null, iterators);
+        }
+        if (iterators.size() == 0) {
+            return _createAttributedCharacterIterator("");
+        }
+        return _createAttributedCharacterIterator(
+                     (AttributedCharacterIterator[])iterators.toArray(
+                     new AttributedCharacterIterator[iterators.size()]));
+    }
+//#endif
 
     /**
      * Parses the string.
@@ -1279,53 +1288,61 @@ public class MessageFormat extends UFormat {
         return pattern.hashCode(); // enough for reasonable distribution
     }
 
-// TODO Do not remove, this is API in JDK that we need to implement
-//    /**
-//     * Defines constants that are used as attribute keys in the
-//     * <code>AttributedCharacterIterator</code> returned
-//     * from <code>MessageFormat.formatToCharacterIterator</code>.
-//     * @draft ICU 3.0
-//     * @provisional This API might change or be removed in a future release.
-//     */
-//    public static class Field extends Format.Field {
-//        /**
-//         * Creates a Field with the specified name.
-//         *
-//         * @param name Name of the attribute
-//         */
-//        protected Field(String name) {
-//            super(name);
-//        }
-//
-//        /**
-//         * Resolves instances being deserialized to the predefined constants.
-//         *
-//         * @throws InvalidObjectException if the constant could not be
-//         *         resolved.
-//         * @return resolved MessageFormat.Field constant
-//         */
-//        protected Object readResolve() throws InvalidObjectException {
-//            if (this.getClass() != MessageFormat.Field.class) {
-//                throw new InvalidObjectException("subclass didn't correctly implement readResolve");
-//            }
-//
-//            return ARGUMENT;
-//        }
-//
-//        //
-//        // The constants
-//        //
-//
-//        /**
-//         * Constant identifying a portion of a message that was generated
-//         * from an argument passed into <code>formatToCharacterIterator</code>.
-//         * The value associated with the key will be an <code>Integer</code>
-//         * indicating the index in the <code>arguments</code> array of the
-//         * argument from which the text was generated.
-//         */
-//        public final static Field ARGUMENT =
-//                           new Field("message argument field");
-//    }
+//#ifndef FOUNDATION
+    /**
+     * Defines constants that are used as attribute keys in the
+     * <code>AttributedCharacterIterator</code> returned
+     * from <code>MessageFormat.formatToCharacterIterator</code>.
+     * 
+     * @stable ICU 3.8
+     */
+    public static class Field extends Format.Field {
+
+        private static final long serialVersionUID = 7510380454602616157L;
+
+        /**
+         * Create a <code>Field</code> with the specified name.
+         * 
+         * @param name The name of the attribute
+         * 
+         * @stable ICU 3.8
+         */
+        protected Field(String name) {
+            super(name);
+        }
+
+        /**
+         * Resolves instances being deserialized to the predefined constants.
+         * 
+         * @return resolved MessageFormat.Field constant
+         * @throws InvalidObjectException if the constant could not be resolved.
+         * 
+         * @stable ICU 3.8
+         */
+        protected Object readResolve() throws InvalidObjectException {
+            if (this.getClass() != MessageFormat.Field.class) {
+                throw new InvalidObjectException("A subclass of MessageFormat.Field must implement readResolve.");
+            }
+            if (this.getName().equals(ARGUMENT.getName())) {
+                return ARGUMENT;
+            } else {
+                throw new InvalidObjectException("Unknown attribute name.");
+            }
+        }
+
+        /**
+         * Constant identifying a portion of a message that was generated
+         * from an argument passed into <code>formatToCharacterIterator</code>.
+         * The value associated with the key will be an <code>Integer</code>
+         * indicating the index in the <code>arguments</code> array of the
+         * argument from which the text was generated.
+         * 
+         * @stable ICU 3.8
+         */
+        public static final Field ARGUMENT = new Field("message argument field");
+
+    }
+//#endif
 
     // ===========================privates============================
 
@@ -1413,17 +1430,16 @@ public class MessageFormat extends UFormat {
      *            expected by the format element(s) that use it.
      */
     private StringBuffer subformat(Object[] arguments, StringBuffer result,
-                                   FieldPosition fp) {
-        return subformat(arrayToMap(arguments), result, fp);
+                                   FieldPosition fp, List characterIterators) {
+        return subformat(arrayToMap(arguments), result, fp, characterIterators);
     }
 
     private StringBuffer subformat(Map arguments, StringBuffer result,
-                                   FieldPosition fp
-                                   /* , List characterIterators */) {
+                                   FieldPosition fp, List characterIterators) {
         // note: this implementation assumes a fast substring & index.
         // if this is not true, would be better to append chars one by one.
         int lastOffset = 0;
-        //int last = result.length();
+        int last = result.length();
         for (int i = 0; i <= maxOffset; ++i) {
             result.append(pattern.substring(lastOffset, offsets[i]));
             lastOffset = offsets[i];
@@ -1474,80 +1490,83 @@ public class MessageFormat extends UFormat {
                 // is non-null indicating we should format obj using it,
                 // or arg is non-null and we should use it as the value.
 
-// TODO Do not remove, this is API in JDK that we need to implement
-//                if (characterIterators != null) {
-//                    // If characterIterators is non-null, it indicates we need
-//                    // to get the CharacterIterator from the child formatter.
-//                    if (last != result.length()) {
-//                        characterIterators.add(
-//                            createAttributedCharacterIterator(result.substring
-//                                                              (last)));
-//                        last = result.length();
-//                    }
-//                    if (subFormatter != null) {
-//                        AttributedCharacterIterator subIterator =
-//                                   subFormatter.formatToCharacterIterator(obj);
-//
-//                        append(result, subIterator);
-//                        if (last != result.length()) {
-//                            characterIterators.add(
-//                                         createAttributedCharacterIterator(
-//                                         subIterator, Field.ARGUMENT,
-//                                         new Integer(argumentNumber)));
-//                            last = result.length();
-//                        }
-//                        arg = null;
-//                    }
-//                    if (arg != null && arg.length() > 0) {
-//                        result.append(arg);
-//                        characterIterators.add(
-//                                 createAttributedCharacterIterator(
-//                                 arg, Field.ARGUMENT,
-//                                 new Integer(argumentNumber)));
-//                        last = result.length();
-//                    }
-//                }
-//                else
-                {
+//#ifndef FOUNDATION
+                if (characterIterators != null) {
+                    // If characterIterators is non-null, it indicates we need
+                    // to get the CharacterIterator from the child formatter.
+                    if (last != result.length()) {
+                        characterIterators.add(
+                            _createAttributedCharacterIterator(result.substring
+                                                              (last)));
+                        last = result.length();
+                    }
+                    if (subFormatter != null) {
+                        AttributedCharacterIterator subIterator =
+                                   subFormatter.formatToCharacterIterator(obj);
+
+                        append(result, subIterator);
+                        if (last != result.length()) {
+                            characterIterators.add(
+                                         _createAttributedCharacterIterator(
+                                         subIterator, Field.ARGUMENT,
+                                         argumentNamesAreNumeric ? (Object)new Integer(argumentName) : (Object)argumentName));
+                            last = result.length();
+                        }
+                        arg = null;
+                    }
+                    if (arg != null && arg.length() > 0) {
+                        result.append(arg);
+                        characterIterators.add(
+                                 _createAttributedCharacterIterator(
+                                 arg, Field.ARGUMENT,
+                                 argumentNamesAreNumeric ? (Object)new Integer(argumentName) : (Object)argumentName));
+                        last = result.length();
+                    }
+                } else {
                     if (subFormatter != null) {
                         arg = subFormatter.format(obj);
                     }
-//                    last = result.length(); // Useless? [alan]
+                    last = result.length();
                     result.append(arg);
-// TODO Do not remove, this is JDK API we need to implement.
-//                    if (i == 0 && fp != null && Field.ARGUMENT.equals(
-//                                  fp.getFieldAttribute())) {
-//                        fp.setBeginIndex(last);
-//                        fp.setEndIndex(result.length());
-//                    }
-//                    last = result.length();
+                    if (i == 0 && fp != null && Field.ARGUMENT.equals(
+                                  fp.getFieldAttribute())) {
+                        fp.setBeginIndex(last);
+                        fp.setEndIndex(result.length());
+                    }
+                    last = result.length();
                 }
+//#else
+//##                if (subFormatter != null) {
+//##                    arg = subFormatter.format(obj);
+//##                }
+//##                result.append(arg);
+//#endif
             }
         }
         result.append(pattern.substring(lastOffset, pattern.length()));
-// TODO Do not remove, this is JDK API we need to implement.
-//        if (characterIterators != null && last != result.length()) {
-//            characterIterators.add(createAttributedCharacterIterator(
-//                                   result.substring(last)));
-//        }
+//#ifndef FOUNDATION
+        if (characterIterators != null && last != result.length()) {
+            characterIterators.add(_createAttributedCharacterIterator(
+                                   result.substring(last)));
+        }
+//#endif
         return result;
     }
 
-// TODO Do not remove, this is JDK API we need to implement.
-//    /**
-//     * Convenience method to append all the characters in
-//     * <code>iterator</code> to the StringBuffer <code>result</code>.
-//     */
-//    private void append(StringBuffer result, CharacterIterator iterator) {
-//        if (iterator.first() != CharacterIterator.DONE) {
-//            char aChar;
-//
-//            result.append(iterator.first());
-//            while ((aChar = iterator.next()) != CharacterIterator.DONE) {
-//                result.append(aChar);
-//            }
-//        }
-//    }
+    /**
+     * Convenience method to append all the characters in
+     * <code>iterator</code> to the StringBuffer <code>result</code>.
+     */
+    private void append(StringBuffer result, CharacterIterator iterator) {
+        if (iterator.first() != CharacterIterator.DONE) {
+            char aChar;
+
+            result.append(iterator.first());
+            while ((aChar = iterator.next()) != CharacterIterator.DONE) {
+                result.append(aChar);
+            }
+        }
+    }
 
     private static final String[] typeList =
         {"", "number", "date", "time", "choice", "spellout", "ordinal",
@@ -1993,4 +2012,78 @@ public class MessageFormat extends UFormat {
         }
         return new String(buf);
     }
+
+//#ifndef FOUNDATION
+    //
+    // private methods for AttributedCharacterIterator support
+    //
+    // Note: The equivalent methods are defined as package local methods in
+    //       java.text.Format.  ICU cannot access these methods, so we have
+    //       these methods locally, with "_" prefix for avoiding name collision.
+    //       (The collision itself is not a problem, but Eclipse displays warnings
+    //       by the default warning level.)  We may move these utility methods
+    //       up to com.ibm.icu.text.UFormat later.  Yoshito
+
+    private static AttributedCharacterIterator _createAttributedCharacterIterator(String text) {
+        AttributedString as = new AttributedString(text);
+        return as.getIterator();
+    }
+
+    private static AttributedCharacterIterator _createAttributedCharacterIterator(AttributedCharacterIterator[] iterators) {
+        if (iterators == null || iterators.length == 0) {
+            return _createAttributedCharacterIterator("");
+        }
+        // Create a single AttributedString
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < iterators.length; i++) {
+            int index = iterators[i].getBeginIndex();
+            int end = iterators[i].getEndIndex();
+            while (index < end) {
+                sb.append(iterators[i].setIndex(index++));
+            }
+        }
+        AttributedString as = new AttributedString(sb.toString());
+
+        // Set attributes
+        int offset = 0;
+        for (int i = 0; i < iterators.length; i++) {
+            iterators[i].first();
+            int start = iterators[i].getBeginIndex();
+            while (true) {
+                Map map = iterators[i].getAttributes();
+                int len = iterators[i].getRunLimit() - start; // run length
+                if (map.size() > 0) {
+                    Iterator eit = map.entrySet().iterator();
+                    while (eit.hasNext()) {
+                        Map.Entry entry = (Map.Entry)eit.next();
+                        as.addAttribute((AttributedCharacterIterator.Attribute)entry.getKey(), entry.getValue(),
+                                offset, offset + len);
+                    }
+                }
+                offset += len;
+                start += len;
+                iterators[i].setIndex(start);
+                if (iterators[i].current() == CharacterIterator.DONE) {
+                    break;
+                }
+            }
+        }
+
+        return as.getIterator();
+    }
+
+    private static AttributedCharacterIterator _createAttributedCharacterIterator(AttributedCharacterIterator iterator,
+            AttributedCharacterIterator.Attribute key, Object value) {
+        AttributedString as = new AttributedString(iterator);
+        as.addAttribute(key, value);
+        return as.getIterator();
+    }
+
+    private static AttributedCharacterIterator _createAttributedCharacterIterator(String text,
+            AttributedCharacterIterator.Attribute key, Object value) {
+        AttributedString as = new AttributedString(text);
+        as.addAttribute(key, value);
+        return as.getIterator();
+    }
+//#endif
 }

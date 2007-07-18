@@ -1,4 +1,4 @@
-# Copyright (C) 2005-2006, International Business Machines Corporation and
+# Copyright (C) 2005-2007, International Business Machines Corporation and
 # others. All Rights Reserved.
 src/com/ibm/icu/dev/test/bidi/TestAll.java
 src/com/ibm/icu/dev/test/bidi/TestCompatibility.java
@@ -8,6 +8,7 @@ src/com/ibm/icu/dev/test/charsetdet/TestCharsetDetector.java
 src/com/ibm/icu/dev/test/collator/RandomCollator.java
 src/com/ibm/icu/dev/test/collator/TestAll.java
 src/com/ibm/icu/dev/test/format/BigNumberFormatTest.java
+src/com/ibm/icu/dev/test/format/DateFormatTest.java
 src/com/ibm/icu/dev/test/format/DateTimeGeneratorTest.java
 src/com/ibm/icu/dev/test/format/GlobalizationPreferencesTest.java
 src/com/ibm/icu/dev/test/format/IntlTestDecimalFormatAPIC.java
@@ -16,6 +17,7 @@ src/com/ibm/icu/dev/test/format/NumberFormatTest.java
 src/com/ibm/icu/dev/test/format/NumberRegression.java
 src/com/ibm/icu/dev/test/format/RbnfTest.java
 src/com/ibm/icu/dev/test/format/TestAll.java
+src/com/ibm/icu/dev/test/format/TestMessageFormat.java
 src/com/ibm/icu/dev/test/timezone/TimeZoneAliasTest.java
 src/com/ibm/icu/dev/test/timezone/TimeZoneRegression.java
 src/com/ibm/icu/dev/test/util/ICUResourceBundleTest.java
