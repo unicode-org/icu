@@ -55,7 +55,7 @@ public abstract class CharsetICU extends Charset{
      byte hasFromUnicodeFallback; /* +78: 1 */
      short unicodeMask;            /* +79: 1  bit 0: has supplementary  bit 1: has single surrogates */
      byte subChar1;               /* +80: 1  single-byte substitution character for IBM MBCS (0 if none) */
-     byte reserved[/*19*/];           /* +81: 19 to round out the structure */
+     //byte reserved[/*19*/];           /* +81: 19 to round out the structure */
      
      
     /**
