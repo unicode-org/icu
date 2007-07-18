@@ -1647,14 +1647,15 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
     private static final int ETHIOPIC = 3;
     private static final int GREGORIAN = 4;
     private static final int HEBREW = 5;
-    private static final int ISLAMIC = 6;
-    private static final int ISLAMIC_CIVIL = 7;
-    private static final int JAPANESE = 8;
-    private static final int TAIWAN = 9;
+    private static final int INDIAN = 6;
+    private static final int ISLAMIC = 7;
+    private static final int ISLAMIC_CIVIL = 8;
+    private static final int JAPANESE = 9;
+    private static final int TAIWAN = 10;
 
     private static final String[] calTypes = {
         "buddhist", "chinese", "coptic", "ethiopic", "gregorian", "hebrew", 
-        "islamic", "islamic-civil", "japanese","taiwan"
+        "indian", "islamic", "islamic-civil", "japanese", "taiwan"
     };
 
     private static int getCalendarType(ULocale l) {
@@ -1782,6 +1783,8 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
             return new JapaneseCalendar(zone, locale);
         case TAIWAN:
             return new TaiwanCalendar(zone, locale);
+        case INDIAN:
+            return new IndianCalendar(zone, locale);
         default:
             throw new IllegalStateException();
         }

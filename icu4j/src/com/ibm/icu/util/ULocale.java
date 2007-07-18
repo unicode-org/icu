@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2003-2006, International Business Machines Corporation and   *
+* Copyright (C) 2003-2007, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -685,6 +685,7 @@ public final class ULocale implements Serializable {
                 { "zh_XIANG",       "zh__XIANG", null, null }, /* registered name */
                 { "zh_YUE",         "zh__YUE", null, null }, /* registered name */
                 { "th_TH_TRADITIONAL", "th_TH", "calendar", "buddhist" },
+                { "hi_IN_TRADITIONAL", "hi_IN", "calendar", "indian" },
                 { "zh_TW_STROKE",   "zh_TW", "collation", "stroke" },
                 { "zh__PINYIN",     "zh", "collation", "pinyin" }
             };

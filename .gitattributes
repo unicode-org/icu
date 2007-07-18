@@ -317,6 +317,7 @@ icu4j/src/com/ibm/icu/dev/eclipse/com.ibm.icu-feature/feature.xml svneol=native#
 icu4j/src/com/ibm/icu/dev/eclipse/com.ibm.icu.base-feature/feature.xml svneol=native#text/xml
 icu4j/src/com/ibm/icu/dev/eclipse/misc/about.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/eclipse/misc/about_icu.html svneol=native#text/html
+icu4j/src/com/ibm/icu/dev/test/calendar/IndianTest.java -text
 icu4j/src/com/ibm/icu/dev/test/calendar/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/test/charsetdet/CharsetDetectionTests.xml svneol=native#text/xml
 icu4j/src/com/ibm/icu/dev/test/compression/package.html svneol=native#text/html
@@ -422,6 +423,7 @@ icu4j/src/com/ibm/icu/util/AnnualTimeZoneRule.java -text
 icu4j/src/com/ibm/icu/util/BasicTimeZone.java -text
 icu4j/src/com/ibm/icu/util/CalendarServiceShim.java -text
 icu4j/src/com/ibm/icu/util/DateTimeRule.java -text
+icu4j/src/com/ibm/icu/util/IndianCalendar.java -text
 icu4j/src/com/ibm/icu/util/InitialTimeZoneRule.java -text
 icu4j/src/com/ibm/icu/util/RuleBasedTimeZone.java -text
 icu4j/src/com/ibm/icu/util/TaiwanCalendar.java -text
