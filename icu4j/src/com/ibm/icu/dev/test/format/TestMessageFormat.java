@@ -17,6 +17,8 @@ import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Date;
 import java.util.Locale;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.MessageFormat;
@@ -504,6 +506,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
             if (fmt_arr.length != 2) {
                 errln("*** MSG parse (ustring, count, err) count err.");
             } else {
+                // TODO: This if statement seems to be redundant. [tschumann]
                 if (fmt_arr.length != 2) {
                     errln("*** MSG parse (ustring, parsepos., count) count err.");
                 } else {
@@ -539,9 +542,13 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
             if (fmta.length != 2) {
                 errln("*** MSG parse (ustring, count, err) count err.");
             } else {
+                // TODO: Don't we want to check fmta?
+                //       In this case this if statement would be redundant, too.
+                //       [tschumann]
                 if (fmt_arr.length != 2) {
                     errln("*** MSG parse (ustring, parsepos., count) count err.");
                 } else {
+                    // TODO: Don't we want to check fmta? [tschumann]
                     assertEquals("parse()[0]", "abc", fmt_arr[0]);
                     assertEquals("parse()[1]", "def", fmt_arr[1]);
                 }
@@ -929,4 +936,292 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
             assertEquals("[" + (i/2) + "] \"" + patterns[i] + "\"", patterns[i+1], MessageFormat.autoQuoteApostrophe(patterns[i]));
         }
     }
+    
+    // This tests passing named arguments instead of numbers to format(). 
+    public void testFormatNamedArguments() {
+        Map arguments = new HashMap();
+        arguments.put("startDate", new Date(871068000000L));
+
+        StringBuffer result = new StringBuffer();
+        
+        String formatStr = "On {startDate,date}, it began.";
+        String compareStr = "On Aug 8, 1997, it began.";
+
+        MessageFormat msg = new MessageFormat(formatStr);
+        FieldPosition fp = new FieldPosition(0);
+
+        try {
+            msg.format(arguments.get("startDate"), result, fp);
+            errln("*** MSG format without expected error code.");
+        } catch (Exception e1) {
+        }
+
+        result.setLength(0);
+        result = msg.format(
+            arguments,
+            result,
+            fp);
+        assertEquals("format", compareStr, result.toString());
+    }
+    
+    // This tests parsing formatted messages with named arguments instead of
+    // numbers. 
+    public void testParseNamedArguments() {
+        String msgFormatString = "{foo} =sep= {bar}";
+        MessageFormat msg = new MessageFormat(msgFormatString);
+        String source = "abc =sep= def";
+
+        try {
+            Map fmt_map = msg.parseToMap(source);
+            if (fmt_map.keySet().size() != 2) {
+                errln("*** MSG parse (ustring, count, err) count err.");
+            } else {
+                assertEquals("parse()[0]", "abc", fmt_map.get("foo"));
+                assertEquals("parse()[1]", "def", fmt_map.get("bar"));
+            }
+        } catch (ParseException e1) {
+            errln("*** MSG parse (ustring, count, err) error.");
+        }
+
+        ParsePosition pp = new ParsePosition(0);
+        Map fmt_map = msg.parseToMap(source, pp); 
+        if (pp.getIndex()==0 || fmt_map==null) {
+            errln("*** MSG parse (ustring, parsepos., count) error.");
+        } else {
+            if (fmt_map.keySet().size() != 2) {
+                errln("*** MSG parse (ustring, parsepos., count) count err.");
+            } else {
+                assertEquals("parse()[0]", "abc", fmt_map.get("foo"));
+                assertEquals("parse()[1]", "def", fmt_map.get("bar"));
+            }
+        }
+
+        pp.setIndex(0);
+       
+        Map fmta = (Map) msg.parseObject( source, pp );
+        if (pp.getIndex() == 0) {
+            errln("*** MSG parse (ustring, Object, parsepos ) error.");
+        } else {
+            if (fmta.keySet().size() != 2) {
+                errln("*** MSG parse (ustring, count, err) count err.");
+            } else {
+                assertEquals("parse()[0]", "abc", fmta.get("foo"));
+                assertEquals("parse()[1]", "def", fmta.get("bar"));
+            }
+        }
+    }
+    
+    // Ensure that methods designed for numeric arguments only, will throw
+    // an exception when called on MessageFormat objects created with
+    // named arguments.
+    public void testNumericOnlyMethods() {
+        MessageFormat msg = new MessageFormat("Number of files: {numfiles}");
+        boolean gotException = false;
+        try {
+            Format fmts[] = {new DecimalFormat()};
+            msg.setFormatsByArgumentIndex(fmts);
+        } catch (IllegalArgumentException e) {
+            gotException = true;
+        }
+        if (!gotException) {
+            errln("MessageFormat.setFormatsByArgumentIndex() should throw an " +
+                  "IllegalArgumentException when called on formats with " + 
+                  "named arguments but did not!");
+        }
+        
+        gotException = false;
+        try {
+            msg.setFormatByArgumentIndex(0, new DecimalFormat());
+        } catch (IllegalArgumentException e) {
+            gotException = true;
+        }
+        if (!gotException) {
+            errln("MessageFormat.setFormatByArgumentIndex() should throw an " +
+                  "IllegalArgumentException when called on formats with " + 
+                  "named arguments but did not!");
+        }
+        
+        gotException = false;
+        try {
+            msg.getFormatsByArgumentIndex();
+        } catch (IllegalArgumentException e) {
+            gotException = true;
+        }
+        if (!gotException) {
+            errln("MessageFormat.getFormatsByArgumentIndex() should throw an " +
+                  "IllegalArgumentException when called on formats with " + 
+                  "named arguments but did not!");
+        }
+        
+        gotException = false;
+        try {
+            Object args[] = {new Long(42)};
+            msg.format(args, new StringBuffer(), new FieldPosition(0));
+        } catch (IllegalArgumentException e) {
+            gotException = true;
+        }
+        if (!gotException) {
+            errln("MessageFormat.format(Object[], StringBuffer, FieldPosition) " +
+                  "should throw an IllegalArgumentException when called on " + 
+                  "formats with named arguments but did not!");
+        }
+        
+        gotException = false;
+        try {
+            Object args[] = {new Long(42)};
+            msg.format((Object) args, new StringBuffer(), new FieldPosition(0));
+        } catch (IllegalArgumentException e) {
+            gotException = true;
+        }
+        if (!gotException) {
+            errln("MessageFormat.format(Object, StringBuffer, FieldPosition) " +
+                  "should throw an IllegalArgumentException when called with " +
+                  "non-Map object as argument on formats with named " + 
+                  "arguments but did not!");
+        }
+        
+        gotException = false;
+        try {
+            msg.parse("Number of files: 5", new ParsePosition(0));
+        } catch (IllegalArgumentException e) {
+            gotException = true;
+        }
+        if (!gotException) {
+            errln("MessageFormat.parse(String, ParsePosition) " +
+                  "should throw an IllegalArgumentException when called with " +
+                  "non-Map object as argument on formats with named " + 
+                  "arguments but did not!");
+        }
+        
+        gotException = false;
+        try {
+            msg.parse("Number of files: 5");
+        } catch (IllegalArgumentException e) {
+            gotException = true;
+        } catch (ParseException e) {
+            errln("Wrong exception thrown.");
+        }
+        if (!gotException) {
+            errln("MessageFormat.parse(String) " +
+                  "should throw an IllegalArgumentException when called with " +
+                  "non-Map object as argument on formats with named " + 
+                  "arguments but did not!");
+        }
+    }
+    
+    public void testNamedArguments() {
+        // Ensure that mixed argument types are not allowed.
+        // Either all arguments have to be numeric or valid identifiers.
+        try {
+            new MessageFormat("Number of files in folder {0}: {numfiles}");
+            errln("Creating a MessageFormat with mixed argument types " + 
+                    "(named and numeric) should throw an " + 
+                    "IllegalArgumentException but did not!");
+        } catch (IllegalArgumentException e) {}
+        
+        try {
+            new MessageFormat("Number of files in folder {folder}: {1}");
+            errln("Creating a MessageFormat with mixed argument types " + 
+                    "(named and numeric) should throw an " + 
+                    "IllegalArgumentException but did not!");
+        } catch (IllegalArgumentException e) {}
+        
+        // Test named arguments.
+        new MessageFormat("Number of files in folder {folder}: {numfiles}");
+        new MessageFormat("Wavelength:  {\u028EValue\uFF14}");
+        
+        // Test argument names with invalid start characters.
+        try {
+            new MessageFormat("Wavelength:  {_\u028EValue\uFF14}");
+            errln("Creating a MessageFormat with invalid argument names " + 
+            "should throw an IllegalArgumentException but did not!");
+        } catch (IllegalArgumentException e) {}
+        
+        try {
+            new MessageFormat("Wavelength:  {\uFF14\u028EValue}");
+            errln("Creating a MessageFormat with invalid argument names " + 
+            "should throw an IllegalArgumentException but did not!");
+        } catch (IllegalArgumentException e) {}
+        
+        // Test argument names with invalid continue characters.
+        try {
+            new MessageFormat("Wavelength:  {Value@\uFF14}");
+            errln("Creating a MessageFormat with invalid argument names " + 
+            "should throw an IllegalArgumentException but did not!");
+        } catch (IllegalArgumentException e) {}
+        
+        try {
+            new MessageFormat("Wavelength:  {Value(\uFF14)}");
+            errln("Creating a MessageFormat with invalid argument names " + 
+            "should throw an IllegalArgumentException but did not!");
+        } catch (IllegalArgumentException e) {}        
+    }
+    // This tests nested Formats inside PluralFormat.
+    public void testNestedFormatsInPluralFormat() {
+      try {
+        MessageFormat msgFmt = new MessageFormat(
+                "{0, plural, one {{0, number,C''''est #,##0.0# fichier}} " +
+                  "other {Ce sont # fichiers}} dans la liste.",
+                new ULocale("fr"));
+        Object objArray[] = {new Long(0)};
+        HashMap objMap = new HashMap();
+        objMap.put("argument", objArray[0]);
+        String result = msgFmt.format(objArray);
+        if (!result.equals("C'est 0,0 fichier dans la liste.")) {
+            errln("PluralFormat produced wrong message string.");
+        }
+      } catch (Exception e) {
+        e.printStackTrace();
+        throw new RuntimeException(e);
+      }
+    }
+    
+    // This tests PluralFormats used inside MessageFormats.
+    public void testPluralFormat() {
+        {
+            MessageFormat mfNum = new MessageFormat(
+                    "{0, plural, one{C''est # fichier} other " + 
+                      "{Ce sont # fichiers}} dans la liste.",
+                    new ULocale("fr"));
+            MessageFormat mfAlpha = new MessageFormat(
+                    "{argument, plural, one{C''est # fichier} other {Ce " +
+                      "sont # fichiers}} dans la liste.",
+                    new ULocale("fr"));
+            Object objArray[] = {new Long(0)};
+            HashMap objMap = new HashMap();
+            objMap.put("argument", objArray[0]);
+            String result = mfNum.format(objArray);
+            if (!result.equals(mfAlpha.format(objMap))) {
+                errln("PluralFormat's output differs when using named " + 
+                        "arguments instead of numbers!");
+            }
+            if (!result.equals("C'est 0 fichier dans la liste.")) {
+                errln("PluralFormat produced wrong message string.");
+            }
+        }
+        {
+            MessageFormat mfNum = new MessageFormat (
+                    "There {0, plural, one{is # zavod}few{are {0, " +
+                      "number,###.0} zavoda} other{are # zavodov}} in the " +
+                      "directory.",
+                    new ULocale("ru"));
+            MessageFormat mfAlpha = new MessageFormat (
+                    "There {argument, plural, one{is # zavod}few{" +
+                      "are {argument, number,###.0} zavoda} other{are # " + 
+                      "zavodov}} in the directory.",
+                    new ULocale("ru"));
+            Object objArray[] = {new Long(4)};
+            HashMap objMap = new HashMap();
+            objMap.put("argument", objArray[0]);
+            String result = mfNum.format(objArray);
+            if (!result.equals(mfAlpha.format(objMap))) {
+                errln("PluralFormat's output differs when using named " + 
+                        "arguments instead of numbers!");
+            }
+            if (!result.equals("There are 4,0 zavoda in the directory.")) {
+                errln("PluralFormat produced wrong message string.");
+            }
+        }
+    }
+
 }

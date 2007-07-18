@@ -169,8 +169,10 @@ public class CoverageTest extends CompatibilityTest implements URLHandler.URLVis
                     }
                 }
             } catch (Exception e) {
+                e.printStackTrace();
                 warnln("coverage of " + className + ": " + e.toString());
             } catch (Throwable e) {
+                e.printStackTrace();
                 warnln("coverage of " + className + ": " + e.toString());
             }
         }

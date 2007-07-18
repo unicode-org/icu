@@ -22,6 +22,8 @@ import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.text.PluralFormat;
+import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.GregorianCalendar;
@@ -1409,6 +1411,45 @@ public class FormatTests
             return a.equals(b);
         }
     }
+
+  public static class PluralFormatHandler implements SerializableTest.Handler {
+    public Object[] getTestObjects() {
+      Locale[] locales = { Locale.US }; // main test is in plural rules handler
+      PluralFormat[] plfmts = new PluralFormat[locales.length];
+      for (int i = 0; i < locales.length; i++) {
+        ULocale uloc = ULocale.forLocale(locales[i]);
+        try {
+          plfmts[i] = new PluralFormat(uloc, "one{1 foo} other{# foo}");
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
+      return plfmts;
+    }
+    public boolean hasSameBehavior(Object a, Object b) {
+      return a.equals(b);
+    }
+  }
+
+  public static class PluralRulesHandler implements SerializableTest.Handler {
+    public Object[] getTestObjects() {
+      
+      String[] localeNames = "ja,da,fr,lv,ga,ro,lt,hr,cs,pl,sl".split(",");
+      PluralRules[] plrulz = new PluralRules[localeNames.length];
+      for (int i = 0; i < localeNames.length; i++) {
+        ULocale uloc = ULocale.createCanonical(localeNames[i]);
+        try {
+          plrulz[i] = PluralRules.forLocale(uloc);
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
+      return plrulz;
+    }
+    public boolean hasSameBehavior(Object a, Object b) {
+      return a.equals(b);
+    }
+  }
     
     public static void main(String[] args)
     {

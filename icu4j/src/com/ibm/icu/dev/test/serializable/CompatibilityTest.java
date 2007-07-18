@@ -115,7 +115,9 @@ public class CompatibilityTest extends TestFmwk
                 }catch (MissingResourceException e){
                     warnln("Could not load the data. "+e.getMessage());
                 } catch (Exception e) {
+                  e.printStackTrace();
                     errln("Exception: " + e.toString());
+                    
                 }
             }
         }
