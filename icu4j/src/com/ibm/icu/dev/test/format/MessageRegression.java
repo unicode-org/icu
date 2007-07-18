@@ -38,8 +38,12 @@ import java.io.ObjectOutputStream;
 import java.text.ChoiceFormat;
 import java.text.ParsePosition;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
+import java.util.HashMap;
 
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.MessageFormat;
 
 public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
@@ -167,6 +171,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
         pos.setErrorIndex(4);
         if (pos.getErrorIndex() != 4)
             errln("setErrorIndex failed, got " + pos.getErrorIndex() + " instead of 4");
+        
         if (objs != null) {
             errln("objs should be null");
         }
@@ -628,5 +633,206 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
                     expected + "\", got \"" + result + "\"");
         }
     }
+     
+    // This test basically ensures that the tests defined above also work with
+    // valid named arguments.
+    public void testBugTestsWithNamesArguments() {
+        
+      { // Taken from Test4031438().
+        String pattern1 = "Impossible {arg1} has occurred -- status code is {arg0} and message is {arg2}.";
+        String pattern2 = "Double '' Quotes {ARG_ZERO} test and quoted '{ARG_ONE}' test plus 'other {ARG_TWO} stuff'.";
+
+        MessageFormat messageFormatter = new MessageFormat("");
+
+        try {
+            logln("Apply with pattern : " + pattern1);
+            messageFormatter.applyPattern(pattern1);
+            HashMap params = new HashMap();
+            params.put("arg0", new Integer(7));
+            String tempBuffer = messageFormatter.format(params);
+            if (!tempBuffer.equals("Impossible {arg1} has occurred -- status code is 7 and message is {arg2}."))
+                errln("Tests arguments < substitution failed");
+            logln("Formatted with 7 : " + tempBuffer);
+            ParsePosition status = new ParsePosition(0);
+            Map objs = messageFormatter.parseToMap(tempBuffer, status);
+            if (objs.get("arg1") != null || objs.get("arg2") != null)
+                errln("Parse failed with more than expected arguments");
+            for (Iterator keyIter = objs.keySet().iterator();
+                 keyIter.hasNext();) {
+                String key = (String) keyIter.next();
+                if (objs.get(key) != null && !objs.get(key).toString().equals(params.get(key).toString())) {
+                    errln("Parse failed on object " + objs.get(key) + " with argument name : " + key );
+                }
+            }
+            tempBuffer = messageFormatter.format(null);
+            if (!tempBuffer.equals("Impossible {arg1} has occurred -- status code is {arg0} and message is {arg2}."))
+                errln("Tests with no arguments failed");
+            logln("Formatted with null : " + tempBuffer);
+            logln("Apply with pattern : " + pattern2);
+            messageFormatter.applyPattern(pattern2);
+            params.clear();
+            params.put("ARG_ZERO", new Integer(7));
+            tempBuffer = messageFormatter.format(params);
+            if (!tempBuffer.equals("Double ' Quotes 7 test and quoted {ARG_ONE} test plus other {ARG_TWO} stuff."))
+                errln("quote format test (w/ params) failed.");
+            logln("Formatted with params : " + tempBuffer);
+            tempBuffer = messageFormatter.format(null);
+            if (!tempBuffer.equals("Double ' Quotes {ARG_ZERO} test and quoted {ARG_ONE} test plus other {ARG_TWO} stuff."))
+                errln("quote format test (w/ null) failed.");
+            logln("Formatted with null : " + tempBuffer);
+            logln("toPattern : " + messageFormatter.toPattern());
+        } catch (Exception foo) {
+            warnln("Exception when formatting in bug 4031438. "+foo.getMessage());
+        }
+      }{ // Taken from Test4052223().
+        ParsePosition pos = new ParsePosition(0);
+        if (pos.getErrorIndex() != -1) {
+            errln("ParsePosition.getErrorIndex initialization failed.");
+        }
+        MessageFormat fmt = new MessageFormat("There are {numberOfApples} apples growing on the {whatKindOfTree} tree.");
+        String str = new String("There is one apple growing on the peach tree.");
+        Map objs = fmt.parseToMap(str, pos);
+        logln("unparsable string , should fail at " + pos.getErrorIndex());
+        if (pos.getErrorIndex() == -1)
+            errln("Bug 4052223 failed : parsing string " + str);
+        pos.setErrorIndex(4);
+        if (pos.getErrorIndex() != 4)
+            errln("setErrorIndex failed, got " + pos.getErrorIndex() + " instead of 4");
+    }{ // Taken from Test4111739().
+        MessageFormat format1 = null;
+        MessageFormat format2 = null;
+        ObjectOutputStream ostream = null;
+        ByteArrayOutputStream baos = null;
+        ObjectInputStream istream = null;
+
+        try {
+            baos = new ByteArrayOutputStream();
+            ostream = new ObjectOutputStream(baos);
+        } catch(IOException e) {
+            errln("Unexpected exception : " + e.getMessage());
+            return;
+        }
+
+        try {
+            format1 = new MessageFormat("pattern{argument}");
+            ostream.writeObject(format1);
+            ostream.flush();
+
+            byte bytes[] = baos.toByteArray();
+
+            istream = new ObjectInputStream(new ByteArrayInputStream(bytes));
+            format2 = (MessageFormat)istream.readObject();
+        } catch(Exception e) {
+            errln("Unexpected exception : " + e.getMessage());
+        }
+
+        if (!format1.equals(format2)) {
+            errln("MessageFormats before and after serialization are not" +
+                " equal\nformat1 = " + format1 + "(" + format1.toPattern() + ")\nformat2 = " +
+                format2 + "(" + format2.toPattern() + ")");
+        } else {
+            logln("Serialization for MessageFormat is OK.");
+        }
+    }{ // Taken from Test4116444().
+        String[] patterns = {"", "one", "{namedArgument,date,short}"};
+        MessageFormat mf = new MessageFormat("");
+
+        for (int i = 0; i < patterns.length; i++) {
+            String pattern = patterns[i];
+            mf.applyPattern(pattern);
+            try {
+                Map objs = mf.parseToMap(null, new ParsePosition(0));
+                logln("pattern: \"" + pattern + "\"");
+                log(" parsedObjects: ");
+                if (objs != null) {
+                    log("{");
+                    for (Iterator keyIter = objs.keySet().iterator();
+                         keyIter.hasNext();) {
+                        String key = (String)keyIter.next();
+                        if (objs.get(key) != null) {
+                            err("\"" + objs.get(key).toString() + "\"");
+                        } else {
+                            log("null");
+                        }
+                        if (keyIter.hasNext()) {
+                            log(",");
+                        }
+                    }
+                    log("}") ;
+                } else {
+                    log("null");
+                }
+                logln("");
+            } catch (Exception e) {
+                errln("pattern: \"" + pattern + "\"");
+                errln("  Exception: " + e.getMessage());
+            }
+        }
+    }{ // Taken from Test4114739().
+        MessageFormat mf = new MessageFormat("<{arg}>");
+        Map objs1 = null;
+        Map objs2 = new HashMap();
+        Map objs3 = new HashMap();
+        objs3.put("arg", null);
+        try {
+            logln("pattern: \"" + mf.toPattern() + "\"");
+            log("format(null) : ");
+            logln("\"" + mf.format(objs1) + "\"");
+            log("format({})   : ");
+            logln("\"" + mf.format(objs2) + "\"");
+            log("format({null}) :");
+            logln("\"" + mf.format(objs3) + "\"");
+        } catch (Exception e) {
+            errln("Exception thrown for null argument tests.");
+        } 
+    }{ // Taken from Test4118594().
+        String argName = "something_stupid";
+        MessageFormat mf = new MessageFormat("{"+ argName + "}, {" + argName + "}, {" + argName + "}");
+        String forParsing = "x, y, z";
+        Map objs = mf.parseToMap(forParsing, new ParsePosition(0));
+        logln("pattern: \"" + mf.toPattern() + "\"");
+        logln("text for parsing: \"" + forParsing + "\"");
+        if (!objs.get(argName).toString().equals("z"))
+            errln("argument0: \"" + objs.get(argName) + "\"");
+        mf.setLocale(Locale.US);
+        mf.applyPattern("{" + argName + ",number,#.##}, {" + argName + ",number,#.#}");
+        Map oldobjs = new HashMap();
+        oldobjs.put(argName, new Double(3.1415));
+        String result = mf.format( oldobjs );
+        logln("pattern: \"" + mf.toPattern() + "\"");
+        logln("text for parsing: \"" + result + "\"");
+        // result now equals "3.14, 3.1"
+        if (!result.equals("3.14, 3.1"))
+            errln("result = " + result);
+        Map newobjs = mf.parseToMap(result, new ParsePosition(0));
+        // newobjs now equals {new Double(3.1)}
+        if (((Number)newobjs.get(argName)).doubleValue() != 3.1) // was (Double) [alan]
+            errln( "newobjs.get(argName) = " + newobjs.get(argName));
+    }{ // Taken from Test4105380().
+        String patternText1 = "The disk \"{diskName}\" contains {numberOfFiles}.";
+        String patternText2 = "There are {numberOfFiles} on the disk \"{diskName}\"";
+        MessageFormat form1 = new MessageFormat(patternText1);
+        MessageFormat form2 = new MessageFormat(patternText2);
+        double[] filelimits = {0,1,2};
+        String[] filepart = {"no files","one file","{numberOfFiles,number} files"};
+        ChoiceFormat fileform = new ChoiceFormat(filelimits, filepart);
+        form1.setFormat(1, fileform);
+        form2.setFormat(0, fileform);
+        Map testArgs = new HashMap();
+        testArgs.put("diskName", "MyDisk");
+        testArgs.put("numberOfFiles", new Long(12373));
+        logln(form1.format(testArgs));
+        logln(form2.format(testArgs));
+    }{ // Taken from test4293229().
+        MessageFormat format = new MessageFormat("'''{'myNamedArgument}'' '''{myNamedArgument}'''");
+        Map args = new HashMap();
+        String expected = "'{myNamedArgument}' '{myNamedArgument}'";
+        String result = format.format(args);
+        if (!result.equals(expected)) {
+            throw new RuntimeException("wrong format result - expected \"" +
+                    expected + "\", got \"" + result + "\"");
+        }
+    }
+  }
 }
 

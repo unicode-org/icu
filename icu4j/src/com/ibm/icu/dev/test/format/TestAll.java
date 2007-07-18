@@ -25,6 +25,7 @@ public class TestAll extends TestGroup {
                   "TestAll$NumberFormat",
                   "TestAll$DateFormat",
                   "TestAll$MessageFormat",
+                  "TestAll$PluralFormat",
                   "com.ibm.icu.dev.test.format.BigNumberFormatTest",
                   "com.ibm.icu.dev.test.format.GlobalizationPreferencesTest",
               },
@@ -75,6 +76,16 @@ public class TestAll extends TestGroup {
 //#endif
                 "IntlTestSimpleDateFormatAPI",
                 "DateFormatRegressionTestJ",
+            });
+        }
+    }
+    
+    public static class PluralFormat extends TestGroup {
+        public PluralFormat() {
+            super(new String[] {
+                "PluralFormatUnitTest",
+                "PluralFormatTest",
+                "PluralRulesTest",
             });
         }
     }
