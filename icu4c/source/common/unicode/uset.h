@@ -293,8 +293,6 @@ uset_openPatternOptions(const UChar* pattern, int32_t patternLength,
 U_STABLE void U_EXPORT2
 uset_close(USet* set);
 
-#ifndef U_HIDE_DRAFT_API
-
 /**
  * Returns a copy of this object.
  * If this set is frozen, then the clone will be frozen as well.
@@ -306,12 +304,6 @@ uset_close(USet* set);
  */
 U_DRAFT USet * U_EXPORT2
 uset_clone(const USet *set);
-
-/*
- *----------------------------------------------------------------
- * Freezable API
- * ----------------------------------------------------------------
- */
 
 /**
  * Determines whether the set has been frozen (made immutable) or not.
@@ -355,8 +347,6 @@ uset_freeze(USet *set);
 U_DRAFT USet * U_EXPORT2
 uset_cloneAsThawed(const USet *set);
 
-#endif /* U_HIDE_DRAFT_API */
-
 /**
  * Causes the USet object to represent the range <code>start - end</code>.
  * If <code>start > end</code> then this USet is set to an empty range.
@@ -388,7 +378,7 @@ uset_set(USet* set,
  *                          of the parsed pattern.
  *                          If the status code indicates failure, then the return value 
  *                          is the index of the error in the source.
- *                                  
+ *
  * @stable ICU 2.8
  */
 U_STABLE int32_t U_EXPORT2 
