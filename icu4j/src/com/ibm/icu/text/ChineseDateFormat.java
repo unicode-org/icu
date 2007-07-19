@@ -196,7 +196,7 @@ public class ChineseDateFormat extends SimpleDateFormat {
      * There is no public constructor to this class, the only instances are the
      * constants defined here.
      * <p>
-     * @draft ICU 3.8
+     * @stable ICU 3.8
      */
     public static class Field extends DateFormat.Field {
 
@@ -204,7 +204,7 @@ public class ChineseDateFormat extends SimpleDateFormat {
 
         /**
          * Constant identifying the leap month marker.
-         * @draft ICU 3.8
+         * @stable ICU 3.8
          */
         public static final Field IS_LEAP_MONTH = new Field("is leap month", ChineseCalendar.IS_LEAP_MONTH);
 
@@ -217,7 +217,7 @@ public class ChineseDateFormat extends SimpleDateFormat {
          * @param name          Name of the attribute
          * @param calendarField <code>Calendar</code> field constant
          * 
-         * @draft ICU 3.8
+         * @stable ICU 3.8
          */
         protected Field(String name, int calendarField) {
             super(name, calendarField);
@@ -234,7 +234,7 @@ public class ChineseDateFormat extends SimpleDateFormat {
          * @throws IllegalArgumentException if <code>calendarField</code> is not
          * a valid <code>Calendar</code> field constant.
          * 
-         * @draft ICU 3.8
+         * @stable ICU 3.8
          */
         public static DateFormat.Field ofCalendarField(int calendarField) {
             if (calendarField == ChineseCalendar.IS_LEAP_MONTH) {
@@ -246,7 +246,7 @@ public class ChineseDateFormat extends SimpleDateFormat {
         /**
          * {@inheritDoc}
          * 
-         * @draft ICU 3.8
+         * @stable ICU 3.8
          */
         protected Object readResolve() throws InvalidObjectException {
             if (this.getClass() != ChineseDateFormat.Field.class) {
