@@ -2180,7 +2180,7 @@ static void TestResourceLevelAliasing(void) {
             got = tres_getString(tb, -1, "word", &gotLen, &status);
                 
             if(U_FAILURE(status)) {
-                log_err("%s trying to read str boundaries\n");
+                log_err("%s trying to read str boundaries\n", u_errorName(status));
             } else if(gotLen != expLen || u_strncmp(exp, got, gotLen) != 0) {
                 log_err("Referencing alias didn't get the right data\n");
             }
