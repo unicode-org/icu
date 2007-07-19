@@ -40,7 +40,7 @@
 
 #define MAX_TOKEN_LEN 16
 
-typedef int tst_strcoll(void *collator, const int object,
+typedef UCollationResult tst_strcoll(void *collator, const int object,
                         const UChar *source, const int sLen,
                         const UChar *target, const int tLen);
 
@@ -153,7 +153,7 @@ const static char shifted[][20] = {
 };
 
 const static UCollationResult shiftedTert[] = {
-  0,
+  UCOL_EQUAL,
   UCOL_EQUAL,
   UCOL_EQUAL,
   UCOL_LESS,
@@ -2035,20 +2035,18 @@ static void TestCase(void)
 
     const static UCollationResult caseTestResults[][9] =
     {
-            { UCOL_LESS, UCOL_LESS, UCOL_LESS, 0, UCOL_LESS, UCOL_LESS, 0, 0, UCOL_LESS },
-            { UCOL_GREATER, UCOL_LESS, UCOL_LESS, 0, UCOL_LESS, UCOL_LESS, 0, 0, UCOL_GREATER },
-            { UCOL_LESS, UCOL_LESS, UCOL_LESS, 0, UCOL_GREATER, UCOL_LESS, 0, 0, UCOL_LESS },
-            { UCOL_GREATER, UCOL_LESS, UCOL_GREATER, 0, UCOL_LESS, UCOL_LESS, 0, 0, UCOL_GREATER }
-
+        { UCOL_LESS,    UCOL_LESS, UCOL_LESS,    UCOL_EQUAL, UCOL_LESS,    UCOL_LESS, UCOL_EQUAL, UCOL_EQUAL, UCOL_LESS },
+        { UCOL_GREATER, UCOL_LESS, UCOL_LESS,    UCOL_EQUAL, UCOL_LESS,    UCOL_LESS, UCOL_EQUAL, UCOL_EQUAL, UCOL_GREATER },
+        { UCOL_LESS,    UCOL_LESS, UCOL_LESS,    UCOL_EQUAL, UCOL_GREATER, UCOL_LESS, UCOL_EQUAL, UCOL_EQUAL, UCOL_LESS },
+        { UCOL_GREATER, UCOL_LESS, UCOL_GREATER, UCOL_EQUAL, UCOL_LESS,    UCOL_LESS, UCOL_EQUAL, UCOL_EQUAL, UCOL_GREATER }
     };
 
     const static UColAttributeValue caseTestAttributes[][2] =
     {
-            { UCOL_LOWER_FIRST, UCOL_OFF},
-            { UCOL_UPPER_FIRST, UCOL_OFF},
-            { UCOL_LOWER_FIRST, UCOL_ON},
-            { UCOL_UPPER_FIRST, UCOL_ON}
-
+        { UCOL_LOWER_FIRST, UCOL_OFF},
+        { UCOL_UPPER_FIRST, UCOL_OFF},
+        { UCOL_LOWER_FIRST, UCOL_ON},
+        { UCOL_UPPER_FIRST, UCOL_ON}
     };
     int32_t i,j,k;
     UErrorCode status = U_ZERO_ERROR;

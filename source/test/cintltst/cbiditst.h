@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*   file name:  cbiditst.h
@@ -32,34 +32,31 @@ extern "C" {
     is easier with the same names for the BiDi types in the code as there.
     See UCharDirection in uchar.h .
 */
-enum { 
-    L=  U_LEFT_TO_RIGHT,
-    R=  U_RIGHT_TO_LEFT,
-    EN= U_EUROPEAN_NUMBER,
-    ES= U_EUROPEAN_NUMBER_SEPARATOR,
-    ET= U_EUROPEAN_NUMBER_TERMINATOR,
-    AN= U_ARABIC_NUMBER,
-    CS= U_COMMON_NUMBER_SEPARATOR,
-    B=  U_BLOCK_SEPARATOR,
-    S=  U_SEGMENT_SEPARATOR,
-    WS= U_WHITE_SPACE_NEUTRAL,
-    ON= U_OTHER_NEUTRAL,
-    LRE=U_LEFT_TO_RIGHT_EMBEDDING,
-    LRO=U_LEFT_TO_RIGHT_OVERRIDE,
-    AL= U_RIGHT_TO_LEFT_ARABIC,
-    RLE=U_RIGHT_TO_LEFT_EMBEDDING,
-    RLO=U_RIGHT_TO_LEFT_OVERRIDE,
-    PDF=U_POP_DIRECTIONAL_FORMAT,
-    NSM=U_DIR_NON_SPACING_MARK,
-    BN= U_BOUNDARY_NEUTRAL,
-    dirPropCount
-};
+#define L   U_LEFT_TO_RIGHT
+#define R   U_RIGHT_TO_LEFT
+#define EN  U_EUROPEAN_NUMBER
+#define ES  U_EUROPEAN_NUMBER_SEPARATOR
+#define ET  U_EUROPEAN_NUMBER_TERMINATOR
+#define AN  U_ARABIC_NUMBER
+#define CS  U_COMMON_NUMBER_SEPARATOR
+#define B   U_BLOCK_SEPARATOR
+#define S   U_SEGMENT_SEPARATOR
+#define WS  U_WHITE_SPACE_NEUTRAL
+#define ON  U_OTHER_NEUTRAL
+#define LRE U_LEFT_TO_RIGHT_EMBEDDING
+#define LRO U_LEFT_TO_RIGHT_OVERRIDE
+#define AL  U_RIGHT_TO_LEFT_ARABIC
+#define RLE U_RIGHT_TO_LEFT_EMBEDDING
+#define RLO U_RIGHT_TO_LEFT_OVERRIDE
+#define PDF U_POP_DIRECTIONAL_FORMAT
+#define NSM U_DIR_NON_SPACING_MARK
+#define BN  U_BOUNDARY_NEUTRAL
 
 extern const char * const
-dirPropNames[dirPropCount];
+dirPropNames[U_CHAR_DIRECTION_COUNT];
 
 extern UChar
-charFromDirProp[dirPropCount];
+charFromDirProp[U_CHAR_DIRECTION_COUNT];
 
 typedef struct {
     const uint8_t *text;

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*   file name:  cbididat.c
@@ -18,13 +18,13 @@
 #include "cbiditst.h"
 
 const char * const
-dirPropNames[dirPropCount]={
+dirPropNames[U_CHAR_DIRECTION_COUNT]={
     "L", "R", "EN", "ES", "ET", "AN", "CS", "B", "S", "WS", "ON",
     "LRE", "LRO", "AL", "RLE", "RLO", "PDF", "NSM", "BN"
 };
 
 UChar
-charFromDirProp[dirPropCount]={
+charFromDirProp[U_CHAR_DIRECTION_COUNT]={
  /* L     R      EN    ES    ET    AN     CS    B    S    WS    ON */
     0x61, 0x5d0, 0x30, 0x2f, 0x25, 0x660, 0x2c, 0xa, 0x9, 0x20, 0x26,
  /* LRE     LRO     AL     RLE     RLO     PDF     NSM    BN */

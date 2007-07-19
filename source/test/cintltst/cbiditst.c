@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*   file name:  cbiditst.cpp
@@ -2028,7 +2028,7 @@ getBiDiObject(void) {
 #define MAKE_ITEMS(val) val, #val
 
 static const struct {
-    uint32_t value;
+    UBiDiReorderingMode value;
     const char* description;
 }
 modes[] = {
@@ -2037,7 +2037,11 @@ modes[] = {
     { MAKE_ITEMS(UBIDI_REORDER_NUMBERS_SPECIAL) },
     { MAKE_ITEMS(UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL) },
     { MAKE_ITEMS(UBIDI_REORDER_INVERSE_NUMBERS_AS_L) }
-},
+};
+static const struct {
+    uint32_t value;
+    const char* description;
+}
 options[] = {
     { MAKE_ITEMS(UBIDI_OPTION_INSERT_MARKS) },
     { MAKE_ITEMS(0) }
@@ -2615,7 +2619,8 @@ testReorderingMode() {
     UBiDi *pBiDi = NULL, *pBiDi2 = NULL, *pBiDi3 = NULL;
     UErrorCode rc;
     int tc, mode, option, level;
-    uint32_t modeValue, modeBack, optionValue, optionBack;
+    uint32_t modeBack, optionValue, optionBack;
+    UBiDiReorderingMode modeValue;
     int32_t srcLen, destLen, index;
     const char *expectedChars;
     UBool testOK = TRUE;
