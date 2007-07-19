@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -2479,7 +2479,7 @@ TestAdditionalProperties() {
     if( u_getIntPropertyMaxValue(UCHAR_ID_CONTINUE)!=1) {
         log_err("error: u_getIntPropertyMaxValue(UCHAR_ID_CONTINUE) wrong\n");
     }
-    if( u_getIntPropertyMaxValue(UCHAR_BINARY_LIMIT-1)!=1) {
+    if( u_getIntPropertyMaxValue((UProperty)(UCHAR_BINARY_LIMIT-1))!=1) {
         log_err("error: u_getIntPropertyMaxValue(UCHAR_BINARY_LIMIT-1) wrong\n");
     }
     if( u_getIntPropertyMaxValue(UCHAR_BIDI_CLASS)!=(int32_t)U_CHAR_DIRECTION_COUNT-1 ) {
@@ -2671,6 +2671,7 @@ TestPropertyNames(void) {
     UBool atLeastSomething = FALSE;
 
     for (p=0; ; ++p) {
+        UProperty propEnum = (UProperty)p;
         UBool sawProp = FALSE;
         if(p > 10 && !atLeastSomething) {
           log_data_err("Never got anything after 10 tries.\nYour data is probably fried. Quitting this test\n", p, choice);
@@ -2678,9 +2679,10 @@ TestPropertyNames(void) {
         }
 
         for (choice=0; ; ++choice) {
-            const char* name = u_getPropertyName(p, choice);
+            const char* name = u_getPropertyName(propEnum, (UPropertyNameChoice)choice);
             if (name) {
-                if (!sawProp) log_verbose("prop 0x%04x+%2d:", p&~0xfff, p&0xfff);
+                if (!sawProp)
+                    log_verbose("prop 0x%04x+%2d:", p&~0xfff, p&0xfff);
                 log_verbose("%d=\"%s\"", choice, name);
                 sawProp = TRUE;
                 atLeastSomething = TRUE;
@@ -2696,7 +2698,7 @@ TestPropertyNames(void) {
         }
         if (sawProp) {
             /* looks like a valid property; check the values */
-            const char* pname = u_getPropertyName(p, U_LONG_PROPERTY_NAME);
+            const char* pname = u_getPropertyName(propEnum, U_LONG_PROPERTY_NAME);
             int32_t max = 0;
             if (p == UCHAR_CANONICAL_COMBINING_CLASS) {
                 max = 255;
@@ -2712,7 +2714,7 @@ TestPropertyNames(void) {
             for (v=-1; ; ++v) {
                 UBool sawValue = FALSE;
                 for (choice=0; ; ++choice) {
-                    const char* vname = u_getPropertyValueName(p, v, choice);
+                    const char* vname = u_getPropertyValueName(propEnum, v, (UPropertyNameChoice)choice);
                     if (vname) {
                         if (!sawValue) log_verbose(" %s, value %d:", pname, v);
                         log_verbose("%d=\"%s\"", choice, vname);
@@ -2760,15 +2762,17 @@ TestPropertyValues(void) {
     /* Min should be 0 for everything. */
     /* Until JB#2478 is fixed, the one exception is UCHAR_BLOCK. */
     for (p=UCHAR_INT_START; p<UCHAR_INT_LIMIT; ++p) {
-        min = u_getIntPropertyMinValue(p);
+        UProperty propEnum = (UProperty)p;
+        min = u_getIntPropertyMinValue(propEnum);
         if (min != 0) {
             if (p == UCHAR_BLOCK) {
                 /* This is okay...for now.  See JB#2487.
                    TODO Update this for JB#2487. */
             } else {
                 const char* name;
-                name = u_getPropertyName(p, U_LONG_PROPERTY_NAME);
-                if (name == NULL) name = "<ERROR>";
+                name = u_getPropertyName(propEnum, U_LONG_PROPERTY_NAME);
+                if (name == NULL)
+                    name = "<ERROR>";
                 log_err("FAIL: u_getIntPropertyMinValue(%s) = %d, exp. 0\n",
                         name, min);
             }
@@ -2781,7 +2785,7 @@ TestPropertyValues(void) {
     }
 
     /* Max should be -1 for invalid properties. */
-    max = u_getIntPropertyMaxValue(-1);
+    max = u_getIntPropertyMaxValue(UCHAR_INVALID_CODE);
     if (max != -1) {
         log_err("FAIL: u_getIntPropertyMaxValue(-1) = %d, exp. -1\n",
                 max);
