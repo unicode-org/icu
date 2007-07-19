@@ -18,6 +18,7 @@ import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
 import java.util.Iterator;
 
+import com.ibm.icu.charset.CharsetEncoderICU;
 import com.ibm.icu.charset.CharsetProviderICU;
 import com.ibm.icu.dev.test.ModuleTest;
 import com.ibm.icu.dev.test.TestDataModule.DataMap;
@@ -107,26 +108,18 @@ public class TestConversion extends ModuleTest {
     private void TestFromUnicode(DataMap testcase, int caseNr) {
 
         ConversionCase cc = new ConversionCase();
-        cc.caseNr = caseNr;
-
+        
         try {
             // retrieve test case data
-            cc.charset = ((ICUResourceBundle) testcase.getObject("charset"))
-                    .getString();
-            cc.unicode = ((ICUResourceBundle) testcase.getObject("unicode"))
-                    .getString();
-            cc.bytes = ((ICUResourceBundle) testcase.getObject("bytes"))
-                    .getBinary();
-            cc.offsets = ((ICUResourceBundle) testcase.getObject("offsets"))
-                    .getIntVector();
-            cc.finalFlush = ((ICUResourceBundle) testcase.getObject("flush"))
-                    .getUInt() != 0;
-            cc.fallbacks = ((ICUResourceBundle) testcase.getObject("fallbacks"))
-                    .getUInt() != 0;
-            cc.outErrorCode = ((ICUResourceBundle) testcase
-                    .getObject("errorCode")).getString();
-            cc.cbopt = ((ICUResourceBundle) testcase.getObject("callback"))
-                    .getString();
+            cc.caseNr = caseNr;
+            cc.charset = ((ICUResourceBundle) testcase.getObject("charset")).getString();
+            cc.unicode = ((ICUResourceBundle) testcase.getObject("unicode")).getString();
+            cc.bytes = ((ICUResourceBundle) testcase.getObject("bytes")).getBinary();
+            cc.offsets = ((ICUResourceBundle) testcase.getObject("offsets")).getIntVector();
+            cc.finalFlush = ((ICUResourceBundle) testcase.getObject("flush")).getUInt() != 0;
+            cc.fallbacks = ((ICUResourceBundle) testcase.getObject("fallbacks")).getUInt() != 0;
+            cc.outErrorCode = ((ICUResourceBundle) testcase.getObject("errorCode")).getString();
+            cc.cbopt = ((ICUResourceBundle) testcase.getObject("callback")).getString();
 
         } catch (Exception e) {
             errln("Skipping test:");
@@ -135,12 +128,12 @@ public class TestConversion extends ModuleTest {
         }
 
         // ----for debugging only
-        logln("TestFromUnicode[" + caseNr + "] " + cc.charset + " ");
-        logln("Unicode: " + cc.unicode);
-        logln("Bytes:");
-        printbytes(cc.bytes, cc.bytes.limit());
         logln("");
-        logln("Callback: (" + cc.cbopt + ")");
+        logln("TestFromUnicode[" + caseNr + "] " + cc.charset + " ");
+        logln("Unicode:   " + cc.unicode);
+        logln("Bytes:    " + printbytes(cc.bytes, cc.bytes.limit()));
+        ByteBuffer c = ByteBuffer.wrap(cc.cbopt.getBytes());
+        logln("Callback: " + printbytes(c, c.limit()) + " (" + cc.cbopt + ")");
         logln("...............................................");
 
         // process the retrieved test data case
@@ -181,10 +174,10 @@ public class TestConversion extends ModuleTest {
                 cc.option = null;
             }
         }
-        logln("TestFromUnicode[" + cc.caseNr + "] " + cc.charset);
         FromUnicodeCase(cc);
     }
 
+    
     private void FromUnicodeCase(ConversionCase cc) {
 
         // create charset encoder for conversion test
@@ -192,25 +185,29 @@ public class TestConversion extends ModuleTest {
         CharsetEncoder encoder = null;
         Charset charset = null;
         try {
-            charset = (Charset) provider.charsetForName(cc.charset);
+            // if cc.charset starts with '*', obtain it from com/ibm/icu/dev/data/testdata
+            charset = (cc.charset != null && cc.charset.length() > 0 && cc.charset.charAt(0) == '*')
+                    ? (Charset) provider.charsetForName(cc.charset.substring(1), "../dev/data/testdata")
+                    : (Charset) provider.charsetForName(cc.charset);
             encoder = (CharsetEncoder) charset.newEncoder();
             encoder.onMalformedInput(CodingErrorAction.REPLACE);
             encoder.onUnmappableCharacter(CodingErrorAction.REPLACE);
-
+            if (encoder instanceof CharsetEncoderICU)
+                ((CharsetEncoderICU)encoder).setFallbackUsed(cc.fallbacks);
+            
         } catch (Exception e) {
-
             // TODO implement loading of test data.
             if (skipIfBeforeICU(3,7,2)) {
-                logln("Skipping test:(" + cc.charset
-                        + ") due to ICU Charset not supported at this time");
-            }
-            else {
+                logln("Skipping test:(" + cc.charset + ") due to ICU Charset not supported at this time");
+            } else {
                 errln(cc.charset + " was not found");
             }
             return;
-
         }
-
+        
+        
+        
+        
         // set the callback for the encoder 
         if (cc.cbErrorAction != null) {
             encoder.onUnmappableCharacter(cc.cbErrorAction);
@@ -264,8 +261,14 @@ public class TestConversion extends ModuleTest {
             step = Integer.parseInt(steps[i][0]);
 
             logln("Testing step:[" + step + "]");
-            resultLength = stepFromUnicode(cc, encoder, step);
-            ok = checkFromUnicode(cc, resultLength);
+            try {
+                resultLength = stepFromUnicode(cc, encoder, step);
+                ok = checkFromUnicode(cc, resultLength);
+            } catch (Exception ex) {
+                errln("Test failed: " + ex.getClass().getName() + " thrown: " + cc.charset+ " [" + cc.caseNr + "]");
+                ex.printStackTrace(System.out);
+                return;
+            }
 
         }
         // testing by whole buffer using out = charset.encoder(in)
@@ -302,9 +305,6 @@ public class TestConversion extends ModuleTest {
             }
             break;
         }
-
-        return;
-
     }
     private int stepFromUnicode(ConversionCase cc, CharsetEncoder encoder,
             int step) {
@@ -384,25 +384,7 @@ public class TestConversion extends ModuleTest {
         return target.position();
     }
     private boolean checkFromUnicode(ConversionCase cc, int resultLength) {
-
-        // check everything that might have gone wrong
-        if (cc.bytes.limit() != resultLength) {
-            if (checkResultsFromUnicode(cc, cc.bytes, cc.fromUnicodeResult)) {
-                return true;
-            }
-            logln("fromUnicode[" + cc.caseNr + "](" + cc.charset
-                    + ") callback:" + cc.cbopt + " failed: +"
-                    + "wrong result length" + "");
-            return false;
-        }
-        if (!checkResultsFromUnicode(cc, cc.bytes, cc.fromUnicodeResult)) {
-            logln("fromUnicode[" + cc.caseNr + "](" + cc.charset
-                    + ") callback:" + cc.cbopt + " failed: +"
-                    + "wrong result string" + "");
-            return false;
-        }
-
-        return true;
+        return checkResultsFromUnicode(cc, cc.bytes, cc.fromUnicodeResult);
     }
 
     // toUnicode test worker functions ----------------------------------------- ***
@@ -414,40 +396,27 @@ public class TestConversion extends ModuleTest {
         try {
             // retrieve test case data
             cc.caseNr = caseNr;
-            cc.charset = ((ICUResourceBundle) testcase.getObject("charset"))
-                    .getString();
-            cc.bytes = ((ICUResourceBundle) testcase.getObject("bytes"))
-                    .getBinary();
-            cc.unicode = ((ICUResourceBundle) testcase.getObject("unicode"))
-                    .getString();
-            cc.offsets = ((ICUResourceBundle) testcase.getObject("offsets"))
-                    .getIntVector();
-            cc.finalFlush = ((ICUResourceBundle) testcase.getObject("flush"))
-                    .getUInt() != 0;
-            cc.fallbacks = ((ICUResourceBundle) testcase.getObject("fallbacks"))
-                    .getUInt() != 0;
-            cc.outErrorCode = ((ICUResourceBundle) testcase
-                    .getObject("errorCode")).getString();
-            cc.cbopt = ((ICUResourceBundle) testcase.getObject("callback"))
-                    .getString();
+            cc.charset = ((ICUResourceBundle) testcase.getObject("charset")).getString();
+            cc.bytes = ((ICUResourceBundle) testcase.getObject("bytes")).getBinary();
+            cc.unicode = ((ICUResourceBundle) testcase.getObject("unicode")).getString();
+            cc.offsets = ((ICUResourceBundle) testcase.getObject("offsets")).getIntVector();
+            cc.finalFlush = ((ICUResourceBundle) testcase.getObject("flush")).getUInt() != 0;
+            cc.fallbacks = ((ICUResourceBundle) testcase.getObject("fallbacks")).getUInt() != 0;
+            cc.outErrorCode = ((ICUResourceBundle) testcase.getObject("errorCode")).getString();
+            cc.cbopt = ((ICUResourceBundle) testcase.getObject("callback")).getString();
 
         } catch (Exception e) {
-            errln("Skipping test: error parsing conversion/toUnicode test case "
-                    +
-
-                    cc.caseNr);
+            errln("Skipping test: error parsing conversion/toUnicode test case " + cc.caseNr);
             return;
         }
 
         // ----for debugging only
-        logln("TestToUnicode[" + caseNr + "] " + cc.charset + " ");
-        logln("Bytes:");
-        printbytes(cc.bytes, cc.bytes.limit());
         logln("");
-        logln("Unicode: " + hex(cc.unicode));
-        logln("Callback: (" + cc.cbopt + ")");
+        logln("TestToUnicode[" + caseNr + "] " + cc.charset + " ");
+        logln("Unicode:   " + hex(cc.unicode));
+        logln("Bytes:    " + printbytes(cc.bytes, cc.bytes.limit()));
         ByteBuffer c = ByteBuffer.wrap(cc.cbopt.getBytes());
-        printbytes(c, c.limit());
+        logln("Callback: " + printbytes(c, c.limit()) + " (" + cc.cbopt + ")");
         logln("...............................................");
 
         // ----for debugging only
@@ -461,6 +430,7 @@ public class TestConversion extends ModuleTest {
             logln("Skipping test due to limitation in Java API - callback replacement value");
             return;
         }
+        
         // process the retrieved test data case
         if (cc.offsets.length == 0) {
             cc.offsets = null;
@@ -497,7 +467,6 @@ public class TestConversion extends ModuleTest {
             cc.option = null;
         }
 
-        logln("TestToUnicode[" + cc.caseNr + "] " + cc.charset);
         ToUnicodeCase(cc);
 
     }
@@ -510,22 +479,21 @@ public class TestConversion extends ModuleTest {
         Charset charset = null;
 
         try {
-            charset = (Charset) provider.charsetForName(cc.charset);
+            // if cc.charset starts with '*', obtain it from com/ibm/icu/dev/data/testdata
+            charset = (cc.charset != null && cc.charset.length() > 0 && cc.charset.charAt(0) == '*')
+                    ? (Charset) provider.charsetForName(cc.charset.substring(1), "../dev/data/testdata")
+                    : (Charset) provider.charsetForName(cc.charset);
             decoder = (CharsetDecoder) charset.newDecoder();
             decoder.onMalformedInput(CodingErrorAction.REPLACE);
             decoder.onUnmappableCharacter(CodingErrorAction.REPLACE);
 
         } catch (Exception e) {
-
             // TODO implement loading of test data.
             if (skipIfBeforeICU(3,7,2)) {
-                logln("Skipping test:(" + cc.charset
-                        + ") due to ICU Charset not supported at this time");
-            }
-            else {
+                logln("Skipping test:(" + cc.charset + ") due to ICU Charset not supported at this time");
+            } else {
                 errln(cc.charset + " was not found");
             }
-                    
             return;
         }
 
@@ -559,7 +527,6 @@ public class TestConversion extends ModuleTest {
                                 decoder.replaceWith(cc.cbopt);
                             } catch (Exception e) {
                                 logln("Skipping test due to limitation in Java API - substitution character sequence size error");
-
                             }
                         }
                     }
@@ -592,8 +559,15 @@ public class TestConversion extends ModuleTest {
                 continue;
             }
             logln("Testing step:[" + step + "]");
-            resultLength = stepToUnicode(cc, decoder, step);
-            ok = checkToUnicode(cc, resultLength);
+            
+            try {
+                resultLength = stepToUnicode(cc, decoder, step);
+                ok = checkToUnicode(cc, resultLength);
+            } catch (Exception ex) {
+                errln("Test failed: " + ex.getClass().getName() + " thrown: " + cc.charset+ " [" + cc.caseNr + "]");
+                ex.printStackTrace(System.out);
+                return;
+            }
         }
 
         //testing the java's out = charset.decoder(in) api
@@ -840,22 +814,7 @@ public class TestConversion extends ModuleTest {
 
    
     private boolean checkToUnicode(ConversionCase cc, int resultLength) {
-
-        // check everything that might have gone wrong
-        if (cc.unicode.length() != resultLength) {
-            logln("toUnicode[" + cc.caseNr + "](" + cc.charset + ") callback:"
-                    + cc.cbopt + " failed: +" + "wrong result length" + "");
-            checkResultsToUnicode(cc, cc.unicode, cc.toUnicodeResult);
-            return false;
-        }
-        if (!checkResultsToUnicode(cc, cc.unicode, cc.toUnicodeResult)) {
-            logln("toUnicode[" + cc.caseNr + "](" + cc.charset + ") callback:"
-                    + cc.cbopt + " failed: +" + "wrong result string" + "");
-            return false;
-        }
-
-        return true;
-
+        return checkResultsToUnicode(cc, cc.unicode, cc.toUnicodeResult);
     }
 
     private void TestGetUnicodeSet(DataMap testcase) {
@@ -876,7 +835,7 @@ public class TestConversion extends ModuleTest {
         cc.which = ((ICUResourceBundle) testcase.getObject("which")).getUInt();
 
         // create charset and encoder for each test case
-        logln("Test not supported at this time");
+        logln("TestGetUnicodeSet not supported at this time");
 
     }
 
@@ -904,7 +863,7 @@ public class TestConversion extends ModuleTest {
         byte start[] = { (byte) 0xa5, (byte) 0xa5, (byte) 0xa5, (byte) 0xa5,
                 (byte) 0xa5 };
 
-        while (i < source.remaining() && i < SIG_MAX_LEN) {
+        while (i < source.limit() && i < SIG_MAX_LEN) {
             start[i] = source.get(i);
             i++;
         }
@@ -997,83 +956,68 @@ public class TestConversion extends ModuleTest {
         return res + "]";
     }
 
-    private boolean checkResultsFromUnicode(ConversionCase cc,
-            ByteBuffer source, ByteBuffer target) {
+    private boolean checkResultsFromUnicode(ConversionCase cc, ByteBuffer expected,
+            ByteBuffer output) {
 
-        int len = target.position();
-        target.limit(len); //added to stop where data ends
-        source.rewind();
-        target.rewind();
-
+        boolean res = true;
+        expected.rewind();
+        output.limit(output.position());
+        output.rewind();
+        
         // remove any BOM signature before checking
-        /* String BOM =*/detectUnicodeSignature(target);
+        detectUnicodeSignature(output); // sets the position to after the BOM
+        output = output.slice(); // removes anything before the current position
 
-        len = len - target.position();
-
-        if (len != source.remaining()) {
-            errln("Test failed: output length does not match expected for charset: "+cc.charset+ " [" + cc.caseNr + "]");
-            errln("[" + cc.caseNr + "]:" + cc.charset);
-            errln("Input:       " + printchars(CharBuffer.wrap(cc.unicode), cc.unicode.length()));
-            errln("Output:      " + printbytes(target, len));
-            errln("Expected:    " + printbytes(source, source.limit()));
-            errln("");
-            return false;
-        }
-        source.rewind();
-        for (int i = 0; i < source.remaining(); i++) {
-            if (target.get() != source.get()) {
-                errln("Test failed: output does not match expected for charset: "+cc.charset+ " [" + cc.caseNr + "]");
-                errln("[" + cc.caseNr + "]:" + cc.charset);
-                errln("Input:       " + printchars(CharBuffer.wrap(cc.unicode), cc.unicode.length()));
-                errln("Output:      " + printbytes(target, len));
-                errln("Expected:    " + printbytes(source, source.limit()));
-                errln("");
-                return false;
+        if (output.limit() != expected.limit()) {
+            errln("Test failed: output length does not match expected for charset: " + cc.charset
+                    + " [" + cc.caseNr + "]");
+            res = false;
+        } else {
+            while (output.hasRemaining()) {
+                if (output.get() != expected.get()) {
+                    errln("Test failed: output does not match expected for charset: " + cc.charset
+                            + " [" + cc.caseNr + "]");
+                    res = false;
+                    break;
+                }
             }
         }
+        
         logln("[" + cc.caseNr + "]:" + cc.charset);
         logln("Input:       " + printchars(CharBuffer.wrap(cc.unicode), cc.unicode.length()));
-        logln("Output:      " + printbytes(target, len));
-        logln("Expected:    " + printbytes(source, source.limit()));
-        logln("Passed");
-        logln("");
-        return true;
+        logln("Output:      " + printbytes(output, output.limit()));
+        logln("Expected:    " + printbytes(expected, expected.limit()));
+        logln(res ? "Passed" : "Failed");
+        return res;
     }
 
-    private boolean checkResultsToUnicode(ConversionCase cc, String source,
-            CharBuffer target) {
+    private boolean checkResultsToUnicode(ConversionCase cc, String expected, CharBuffer output) {
 
-        int len = target.position();
-        target.rewind();
+        boolean res = true;
+        output.limit(output.position());
+        output.rewind();
 
         // test to see if the conversion matches actual results
-        if (len != source.length()) {
+        if (output.limit() != expected.length()) {
             errln("Test failed: output length does not match expected for charset: "+cc.charset+ " [" + cc.caseNr + "]");
-            logln("[" + cc.caseNr + "]:" + cc.charset);
-            logln("Input:       " + printbytes(cc.bytes, cc.bytes.limit()));
-            logln("Output:      " + printchars(target, len));
-            logln("Expected:    " + printchars(CharBuffer.wrap(source), source.length()));
-            logln("");
-            return false;
-        }
-        for (int i = 0; i < source.length(); i++) {
-            if (!(hex(target.get(i)).equals(hex(source.charAt(i))))) {
-                errln("Test failed: output does not match expected for charset: "+cc.charset+ " [" + cc.caseNr + "]");
-                errln("[" + cc.caseNr + "]:" + cc.charset);
-                errln("Input:       " + printbytes(cc.bytes, cc.bytes.limit()));
-                errln("Output:      " + printchars(target, len));
-                errln("Expected:    " + printchars(CharBuffer.wrap(source), source.length()));
-                errln("");
-                return false;
+            res = false;
+        } else {
+            for (int i = 0; i < expected.length(); i++) {
+                if (output.get(i) != expected.charAt(i)) {
+                    errln("Test failed: output does not match expected for charset: " + cc.charset
+                            + " [" + cc.caseNr + "]");
+                    res = false;
+                    break;
+                }
             }
         }
+        
         logln("[" + cc.caseNr + "]:" + cc.charset);
         logln("Input:       " + printbytes(cc.bytes, cc.bytes.limit()));
-        logln("Output:      " + printchars(target, len));
-        logln("Expected:    " + printchars(CharBuffer.wrap(source), source.length()));
-        logln("Passed");
-        logln("");
-        return true;
+        logln("Output:      " + printchars(output, output.limit()));
+        logln("Expected:    " + printchars(CharBuffer.wrap(expected), expected.length()));
+        logln(res ? "Passed" : "Failed");
+        return res;
     }
 
     private byte[] toByteArray(String str) {
@@ -1083,8 +1027,7 @@ public class TestConversion extends ModuleTest {
             if (ch <= 0xFF) {
                 ret[i] = (byte) ch;
             } else {
-                throw new IllegalArgumentException(" byte value out of range: "
-                        + ch);
+                throw new IllegalArgumentException(" byte value out of range: " + ch);
             }
         }
         return ret;
