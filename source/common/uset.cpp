@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2006, International Business Machines
+*   Copyright (C) 2002-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -41,6 +41,26 @@ uset_close(USet* set) {
     delete (UnicodeSet*) set;
 }
 
+U_DRAFT USet * U_EXPORT2
+uset_clone(const USet *set) {
+    return (USet*) (((UnicodeSet*) set)->UnicodeSet::clone());
+}
+
+U_DRAFT UBool U_EXPORT2
+uset_isFrozen(const USet *set) {
+    return ((UnicodeSet*) set)->UnicodeSet::isFrozen();
+}
+
+U_DRAFT void U_EXPORT2
+uset_freeze(USet *set) {
+    ((UnicodeSet*) set)->UnicodeSet::freeze();
+}
+
+U_DRAFT USet * U_EXPORT2
+uset_cloneAsThawed(const USet *set) {
+    return (USet*) (((UnicodeSet*) set)->UnicodeSet::cloneAsThawed());
+}
+
 U_CAPI void U_EXPORT2
 uset_set(USet* set,
      UChar32 start, UChar32 end) {
@@ -64,12 +84,8 @@ uset_addRange(USet* set, UChar32 start, UChar32 end) {
 
 U_CAPI void U_EXPORT2
 uset_addString(USet* set, const UChar* str, int32_t strLen) {
-    // WRONG! Do not alias, it will stay aliased, even after 
-    // copying. TODO: do we need a copy ctor that unaliases
-    //UnicodeString s(strLen==-1, str, strLen);
-
     // UnicodeString handles -1 for strLen
-    UnicodeString s(str, strLen);
+    UnicodeString s(strLen<0, str, strLen);
     ((UnicodeSet*) set)->UnicodeSet::add(s);
 }
 
@@ -172,6 +188,26 @@ uset_containsNone(const USet* set1, const USet* set2) {
 U_CAPI UBool U_EXPORT2
 uset_containsSome(const USet* set1, const USet* set2) {
     return ((const UnicodeSet*) set1)->UnicodeSet::containsSome(* (const UnicodeSet*) set2);
+}
+
+U_DRAFT int32_t U_EXPORT2
+uset_span(const USet *set, const UChar *s, int32_t length, USetSpanCondition spanCondition) {
+    return ((UnicodeSet*) set)->UnicodeSet::span(s, length, spanCondition);
+}
+
+U_DRAFT int32_t U_EXPORT2
+uset_spanBack(const USet *set, const UChar *s, int32_t length, USetSpanCondition spanCondition) {
+    return ((UnicodeSet*) set)->UnicodeSet::spanBack(s, length, spanCondition);
+}
+
+U_DRAFT int32_t U_EXPORT2
+uset_spanUTF8(const USet *set, const char *s, int32_t length, USetSpanCondition spanCondition) {
+    return ((UnicodeSet*) set)->UnicodeSet::spanUTF8(s, length, spanCondition);
+}
+
+U_DRAFT int32_t U_EXPORT2
+uset_spanBackUTF8(const USet *set, const char *s, int32_t length, USetSpanCondition spanCondition) {
+    return ((UnicodeSet*) set)->UnicodeSet::spanBackUTF8(s, length, spanCondition);
 }
 
 U_CAPI UBool U_EXPORT2

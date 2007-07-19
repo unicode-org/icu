@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2005, International Business Machines
+* Copyright (c) 2002-2007, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -19,6 +19,8 @@ static void Testj2269(void);
 static void TestSerialized(void);
 static void TestNonInvariantPattern(void);
 static void TestBadPattern(void);
+static void TestFreezable(void);
+static void TestSpan(void);
 
 void addUSetTest(TestNode** root);
 
@@ -40,6 +42,8 @@ addUSetTest(TestNode** root) {
     TEST(TestSerialized);
     TEST(TestNonInvariantPattern);
     TEST(TestBadPattern);
+    TEST(TestFreezable);
+    TEST(TestSpan);
 }
 
 /*------------------------------------------------------------------
@@ -527,6 +531,82 @@ static void TestBadPattern(void) {
     if (pat != NULL || U_SUCCESS(status)) {
         log_err("uset_openPatternOptions did not fail as expected %s\n", u_errorName(status));
     }
+}
+
+static USet *openIDSet() {
+    UErrorCode errorCode = U_ZERO_ERROR;
+    U_STRING_DECL(pattern, "[:ID_Continue:]", 15);
+    U_STRING_INIT(pattern, "[:ID_Continue:]", 15);
+    return uset_openPattern(pattern, 15, &errorCode);
+}
+
+static void TestFreezable() {
+    USet *idSet=openIDSet();
+    USet *frozen=uset_clone(idSet);
+    USet *thawed;
+    if(!uset_equals(frozen, idSet)) {
+        log_err("uset_clone() did not make an equal copy\n");
+    }
+    uset_freeze(frozen);
+    uset_addRange(frozen, 0xd802, 0xd805);
+    if(uset_isFrozen(idSet) || !uset_isFrozen(frozen) || !uset_equals(frozen, idSet)) {
+        log_err("uset_freeze() or uset_isFrozen() does not work\n");
+    }
+    thawed=uset_cloneAsThawed(frozen);
+    uset_addRange(thawed, 0xd802, 0xd805);
+    if(uset_isFrozen(thawed) || uset_equals(thawed, idSet) || !uset_containsRange(thawed, 0xd802, 0xd805)) {
+        log_err("uset_cloneAsThawed() does not work\n");
+    }
+    uset_close(idSet);
+    uset_close(frozen);
+    uset_close(thawed);
+}
+
+static void TestSpan() {
+    static const UChar s16[2]={ 0xe01, 0x3000 };
+    static const char* s8="\xE0\xB8\x81\xE3\x80\x80";
+
+    USet *idSet=openIDSet();
+
+    if(
+        1!=uset_span(idSet, s16, 2, USET_SPAN_CONTAINED) ||
+        0!=uset_span(idSet, s16, 2, USET_SPAN_NOT_CONTAINED) ||
+        2!=uset_spanBack(idSet, s16, 2, USET_SPAN_CONTAINED) ||
+        1!=uset_spanBack(idSet, s16, 2, USET_SPAN_NOT_CONTAINED)
+    ) {
+        log_err("uset_span() or uset_spanBack() does not work\n");
+    }
+
+    if(
+        3!=uset_spanUTF8(idSet, s8, 6, USET_SPAN_CONTAINED) ||
+        0!=uset_spanUTF8(idSet, s8, 6, USET_SPAN_NOT_CONTAINED) ||
+        6!=uset_spanBackUTF8(idSet, s8, 6, USET_SPAN_CONTAINED) ||
+        3!=uset_spanBackUTF8(idSet, s8, 6, USET_SPAN_NOT_CONTAINED)
+    ) {
+        log_err("uset_spanUTF8() or uset_spanBackUTF8() does not work\n");
+    }
+
+    uset_freeze(idSet);
+
+    if(
+        1!=uset_span(idSet, s16, 2, USET_SPAN_CONTAINED) ||
+        0!=uset_span(idSet, s16, 2, USET_SPAN_NOT_CONTAINED) ||
+        2!=uset_spanBack(idSet, s16, 2, USET_SPAN_CONTAINED) ||
+        1!=uset_spanBack(idSet, s16, 2, USET_SPAN_NOT_CONTAINED)
+    ) {
+        log_err("uset_span(frozen) or uset_spanBack(frozen) does not work\n");
+    }
+
+    if(
+        3!=uset_spanUTF8(idSet, s8, 6, USET_SPAN_CONTAINED) ||
+        0!=uset_spanUTF8(idSet, s8, 6, USET_SPAN_NOT_CONTAINED) ||
+        6!=uset_spanBackUTF8(idSet, s8, 6, USET_SPAN_CONTAINED) ||
+        3!=uset_spanBackUTF8(idSet, s8, 6, USET_SPAN_NOT_CONTAINED)
+    ) {
+        log_err("uset_spanUTF8(frozen) or uset_spanBackUTF8(frozen) does not work\n");
+    }
+
+    uset_close(idSet);
 }
 
 /*eof*/
