@@ -53,6 +53,43 @@ import com.ibm.icu.util.ULocale;
  * behavior is defined by the pattern that you provide as well as the
  * subformats used for inserted arguments.
  *
+ * <p>
+ * <strong>Note:</strong>
+ * In ICU 3.8 MessageFormat supports named arguments.  If a named argument
+ * is used, all arguments must be named.  Names start with a character in 
+ * <code>:ID_START:</code> and continue with characters in <code>:ID_CONTINUE:</code>, 
+ * in particular they do not start with a digit.  If named arguments
+ * are used, {@link #usesNamedArguments()} will return true.
+ * <p>
+ * The other new APIs supporting named arguments are 
+ * {@link #setFormatsByArgumentName(Map)},
+ * {@link #setFormatByArgumentName(String, Format)},
+ * {@link #format(Map, StringBuffer, FieldPosition)},
+ * {@link #format(String, Map)}, {@link #parseToMap(String, ParsePosition)},
+ * and {@link #parseToMap(String)}.  These APIs are all compatible 
+ * with patterns that do not used named arguments-- in these cases
+ * the keys in the input or output <code>Map</code>s use 
+ * <code>String</code>s that name the argument indices, e.g. "0", 
+ * "1", "2"... etc.
+ * <p>
+ * When named arguments are used, certain APIs on Message that take or
+ * return arrays will throw an exception, since it is not possible to
+ * identify positions in an array using a name.  These APIs are {@link
+ * #setFormatsByArgumentIndex(Format[])}, {@link#getFormatsByArgumentIndex()}, 
+ * {@link #format(Object[], StringBuffer, FieldPosition)}, 
+ * {@link #format(String, Object[])},{@link #parse(String, ParsePosition)}, 
+ * and {@link #parse(String)}.
+ * These APIs all have corresponding new versions as listed above.
+ * <p>
+
+ * The API {@link #format(Object, StringBuffer, FieldPosition)} has
+ * been modified so that the <code>Object</code> argument can be
+ * either an <code>Object</code> array or a <code>Map</code>.  If this
+ * format uses named arguments, this argument must not be an
+ * <code>Object</code> array otherwise an exception will be thrown.
+ * If the argument is a <code>Map</code> it can be used with Strings that
+ * represent indices as described above.
+ *
  * <h4><a name="patterns">Patterns and Their Interpretation</a></h4>
  *
  * <code>MessageFormat</code> uses patterns of the following form:
@@ -62,9 +99,13 @@ import com.ibm.icu.util.ULocale;
  *         <i>MessageFormatPattern</i> <i>FormatElement</i> <i>String</i>
  *
  * <i>FormatElement:</i>
- *         { <i>ArgumentIndex</i> }
- *         { <i>ArgumentIndex</i> , <i>FormatType</i> }
- *         { <i>ArgumentIndex</i> , <i>FormatType</i> , <i>FormatStyle</i> }
+ *         { <i>ArgumentIndexOrName</i> }
+ *         { <i>ArgumentIndexOrName</i> , <i>FormatType</i> }
+ *         { <i>ArgumentIndexOrName</i> , <i>FormatType</i> , <i>FormatStyle</i> }
+ *
+ * <i>ArgumentIndexOrName: one of </i>
+ *         ['0'-'9']+
+ *         [:ID_START:][:ID_CONTINUE:]*
  *
  * <i>FormatType: one of </i>
  *         number date time choice
@@ -211,6 +252,10 @@ import com.ibm.icu.util.ULocale;
  *       <td><code>choice</code>
  *       <td><i>SubformatPattern</i>
  *       <td><code>new ChoiceFormat(subformatPattern)</code>
+ *    <tr>
+ *       <td><code>plural</code>
+ *       <td><i>SubformatPattern</i>
+ *       <td><code>new PluralFormat(subformatPattern)</code>
  * </table>
  * <p>
  *
@@ -452,9 +497,12 @@ public class MessageFormat extends UFormat {
      * for the format elements contained in it.
      * Patterns and their interpretation are specified in the
      * <a href="#patterns">class description</a>.
-     * 
+     * <p>
+     * The pattern must contain only named or only numeric arguments,
+     * mixing them is not allowed.
+     *
      * @param pattern the pattern for this message format
-     * @exception IllegalArgumentException if the pattern is invalid
+     * @throws IllegalArgumentException if the pattern is invalid
      * @stable ICU 3.0
      */
     public void applyPattern(String pattern) {
@@ -620,15 +668,15 @@ public class MessageFormat extends UFormat {
      * than needed, then only the formats for argument indices less
      * than <code>newFormats.length</code> are replaced.
      * 
-     * This method is only supported when exclusively numbers are used for
-     * argument names. Otherwise an IllegalArgumentException is thrown.
+     * This method is only supported if the format does not use
+     * named arguments, otherwise an IllegalArgumentException is thrown.
      * 
      * @param newFormats
      *            the new formats to use
-     * @exception NullPointerException
+     * @throws NullPointerException
      *                if <code>newFormats</code> is null
-     * @exception IllegalArgumentException
-     *                if alphanumeric arguments where used in MessageFormat.
+     * @throws IllegalArgumentException
+     *                if this formatter uses named arguments
      * @stable ICU 3.0
      */ 
     public void setFormatsByArgumentIndex(Format[] newFormats) {
@@ -644,9 +692,37 @@ public class MessageFormat extends UFormat {
             }
         }
     }
-    // TODO: provide method public void setFormatsByArgumentName(Map newFormats).
-    // Where Map is: String argumentName --> Format newFormat.
     
+    /**
+     * Sets the formats to use for the values passed into
+     * <code>format</code> methods or returned from <code>parse</code>
+     * methods. The keys in <code>newFormats</code> are the argument
+     * names in the previously set pattern string, and the values
+     * are the formats.
+     * <p>
+     * Only argument names from the pattern string are considered.
+     * Extra keys in <code>newFormats</code> that do not correspond
+     * to an argument name are ignored.  Similarly, if there is no
+     * format in newFormats for an argument name, the formatter
+     * for that argument remains unchanged.
+     * <p>
+     * This may be called on formats that do not use named arguments.
+     * In this case the map will be queried for key Strings that
+     * represent argument indices, e.g. "0", "1", "2" etc.
+     *
+     * @param newFormats a map from String to Format providing new
+     *        formats for named arguments.
+     * @draft ICU 3.8
+     */
+    public void setFormatsByArgumentName(Map newFormats) {
+	for (int i = 0; i <= maxOffset; i++) {
+	    if (newFormats.containsKey(argumentNames[i])) {
+		Format f = (Format)newFormats.get(argumentNames[i]);
+		formats[i] = f;
+	    }
+	}
+    }		
+		
     /**
      * Sets the formats to use for the format elements in the
      * previously set pattern string.
@@ -717,9 +793,33 @@ public class MessageFormat extends UFormat {
             }
         }
     }
-    // TODO: provide method
-    // public void setFormatByArgumentName(String argumentName, Format newFormat).
 
+    /**
+     * Sets the format to use for the format elements within the
+     * previously set pattern string that use the given argument
+     * name.
+     * <p>
+     * If the argument name is used for more than one format element
+     * in the pattern string, then the new format is used for all such
+     * format elements. If the argument name is not used for any format
+     * element in the pattern string, then the new format is ignored.
+     * <p>
+     * This API may be used on formats that do not use named arguments.
+     * In this case <code>argumentName</code> should be a String that names
+     * an argument index, e.g. "0", "1", "2"... etc.  If it does not name
+     * a valid index, the format will be ignored.  No error is thrown.
+     *
+     * @param argumentName the name of the argument to change
+     * @param newFormat the new format to use
+     * @draft ICU 3.8
+     */
+    public void setFormatByArgumentName(String argumentName, Format newFormat) {
+	for (int i = 0; i < maxOffset; ++i) {
+	    if (argumentName.equals(argumentNames[i])) {
+		formats[i] = newFormat;
+	    }
+	}
+    }
 
     /**
      * Sets the format to use for the format element with the given
@@ -764,8 +864,8 @@ public class MessageFormat extends UFormat {
      * argument names. Otherwise an IllegalArgumentException is thrown.
      * 
      * @return the formats used for the arguments within the pattern
-     * @exception IllegalArgumentException
-     *                if alphanumeric arguments where used in MessageFormat.
+     * @throws IllegalArgumentException
+     *         if this format uses named arguments
      * @stable ICU 3.0
      */
     public Format[] getFormatsByArgumentIndex() {
@@ -815,6 +915,7 @@ public class MessageFormat extends UFormat {
         System.arraycopy(formats, 0, resultArray, 0, maxOffset + 1);
         return resultArray;
     }
+
     /**
      * Formats an array of objects and appends the <code>MessageFormat</code>'s
      * pattern, with format elements replaced by the formatted objects, to the
@@ -825,7 +926,8 @@ public class MessageFormat extends UFormat {
      * <code>arguments</code> element at the format element's argument index
      * as indicated by the first matching line of the following table. An
      * argument is <i>unavailable</i> if <code>arguments</code> is
-     * <code>null</code> or has fewer than argumentIndex+1 elements.
+     * <code>null</code> or has fewer than argumentIndex+1 elements.  When
+     * an argument is unavailable no substitution is performed.
      * <p>
      * <table border=1>
      *    <tr>
@@ -872,18 +974,18 @@ public class MessageFormat extends UFormat {
      * <code>Field.ARGUMENT</code>, the location of the first formatted
      * string will be returned.
      *
-     * This method is only supported when exclusively numbers are used for
-     * argument names. Otherwise an IllegalArgumentException is thrown.
+     * This method is only supported when the format does not use named
+     * arguments, otherwise an IllegalArgumentException is thrown.
      * 
      * @param arguments an array of objects to be formatted and substituted.
      * @param result where text is appended.
      * @param pos On input: an alignment field, if desired.
      *            On output: the offsets of the alignment field.
-     * @exception IllegalArgumentException if an argument in the
+     * @throws IllegalArgumentException if an argument in the
      *            <code>arguments</code> array is not of the type
      *            expected by the format element(s) that use it.
-     * @exception IllegalArgumentException
-     *            if alphanumeric arguments where used in MessageFormat.
+     * @throws IllegalArgumentException
+     *            if this format uses named arguments
      * @stable ICU 3.0
      */
     public final StringBuffer format(Object[] arguments, StringBuffer result,
@@ -897,6 +999,35 @@ public class MessageFormat extends UFormat {
         return subformat(arguments, result, pos, null);
     }
 
+    /**
+     * Formats a map of objects and appends the <code>MessageFormat</code>'s
+     * pattern, with format elements replaced by the formatted objects, to the
+     * provided <code>StringBuffer</code>.
+     * <p>
+     * The text substituted for the individual format elements is derived from
+     * the current subformat of the format element and the
+     * <code>arguments</code> value corresopnding to the format element's 
+     * argument name.
+     * <p>
+     * This API may be called on formats that do not use named arguments.
+     * In this case the the keys in <code>arguments</code> must be numeric
+     * strings (e.g. "0", "1", "2"...).
+     * <p>
+     * An argument is <i>unavailable</i> if <code>arguments</code> is
+     * <code>null</code> or does not have a value corresponding to an argument
+     * name in the pattern.  When an argument is unavailable no substitution
+     * is performed.
+     *
+     * @param arguments a map of objects to be formatted and substituted.
+     * @param result where text is appended.
+     * @param pos On input: an alignment field, if desired.
+     *            On output: the offsets of the alignment field.
+     * @throws IllegalArgumentException if an argument in the
+     *         <code>arguments</code> array is not of the type
+     *         expected by the format element(s) that use it.
+     * @return the passed-in StringBuffer
+     * @draft ICU 3.8
+     */
     public final StringBuffer format(Map arguments, StringBuffer result,
                                      FieldPosition pos) {
         return subformat(arguments, result, pos, null);
@@ -909,10 +1040,12 @@ public class MessageFormat extends UFormat {
      *     <code>(new {@link #MessageFormat(String) MessageFormat}(pattern)).{@link #format(java.lang.Object[], java.lang.StringBuffer, java.text.FieldPosition) format}(arguments, new StringBuffer(), null).toString()</code>
      * </blockquote>
      *
-     * @exception IllegalArgumentException if the pattern is invalid,
+     * @throws IllegalArgumentException if the pattern is invalid,
      *            or if an argument in the <code>arguments</code> array
      *            is not of the type expected by the format element(s)
      *            that use it.
+     * @throws IllegalArgumentException
+     *            if this format uses named arguments
      * @stable ICU 3.0
      */
     public static String format(String pattern, Object[] arguments) {
@@ -920,29 +1053,56 @@ public class MessageFormat extends UFormat {
         return temp.format(arguments);
     }
 
+    /**
+     * Creates a MessageFormat with the given pattern and uses it to
+     * format the given arguments.  The pattern must identifyarguments
+     * by name instead of by number.
+     * <p>
+     * @throws IllegalArgumentException if the pattern is invalid,
+     *         or if an argument in the <code>arguments</code> map
+     *         is not of the type expected by the format element(s)
+     *         that use it.
+     * @see #format(Map, StringBuffer, FieldPosition)
+     * @see #format(String, Object[])
+     * @draft ICU 3.8
+     */
     public static String format(String pattern, Map arguments) {
         MessageFormat temp = new MessageFormat(pattern);
         return temp.format(arguments);
     }
 
-    // Overrides
-    // TODO: Update this documentation with regards to named arguments
-    //       (Map of objects).
     /**
-     * Formats an array of objects and appends the <code>MessageFormat</code>'s
+     * Returns true if this MessageFormat uses named arguments,
+     * and false otherwise.  See class description.
+     *
+     * @return true if named arguments are used.
+     * @draft ICU 3.8
+     */
+    public boolean usesNamedArguments() {
+	return !argumentNamesAreNumeric;
+    }
+
+    // Overrides
+    /**
+     * Formats a map or array of objects and appends the <code>MessageFormat</code>'s
      * pattern, with format elements replaced by the formatted objects, to the
      * provided <code>StringBuffer</code>.
-     * This is equivalent to
+     * This is equivalent to either of 
      * <blockquote>
      *     <code>{@link #format(java.lang.Object[], java.lang.StringBuffer, java.text.FieldPosition) format}((Object[]) arguments, result, pos)</code>
+     *     <code>{@link #format(java.util.Map, java.lang.StringBuffer, java.text.FieldPosition) format}((Map) arguments, result, pos)</code>
      * </blockquote>
-     * @param arguments an array of objects to be formatted and substituted.
-     * @param result where text is appended.
-     * @param pos On input: an alignment field, if desired.
-     *            On output: the offsets of the alignment field.
-     * @exception IllegalArgumentException if an argument in the
-     *            <code>arguments</code> array is not of the type
-     *            expected by the format element(s) that use it.
+     * A map must be provided if this format uses named arguments, otherwise
+     * an IllegalArgumentException will be thrown.
+     * @param arguments a map or array of objects to be formatted
+     * @param result where text is appended
+     * @param pos On input: an alignment field, if desired
+     *            On output: the offsets of the alignment field
+     * @throws IllegalArgumentException if an argument in
+     *         <code>arguments</code> is not of the type
+     *         expected by the format element(s) that use it
+     * @throws IllegalArgumentException if <code>arguments<code> is
+     *         an arry of Object and this format uses named arguments
      * @stable ICU 3.0
      */
     public final StringBuffer format(Object arguments, StringBuffer result,
@@ -1043,19 +1203,19 @@ public class MessageFormat extends UFormat {
      * is comparing against the pattern "AAD {0} BBB", the error index is
      * 0. When an error occurs, the call to this method will return null.
      * If the source is null, return an empty array.
+     * <p>
+     * This method is only supported with numbered arguments.  If
+     * the format pattern used named argument an
+     * IllegalArgumentException is thrown.
      * 
-     * This method is only supported when exclusively numbers are used for
-     * argument names. Otherwise an IllegalArgumentException is thrown.
-     * 
-     * @exception IllegalArgumentException
-     *                if alphanumeric arguments where used in MessageFormat.
+     * @throws IllegalArgumentException if this format uses named arguments
      * @stable ICU 3.0
      */
     public Object[] parse(String source, ParsePosition pos) {
         if (!argumentNamesAreNumeric) {
             throw new IllegalArgumentException(
                     "This method is not available in MessageFormat objects " +
-                    "that use alphanumeric argument names.");
+                    "that use named argument.");
         }
         Map objectMap = parseToMap(source, pos);
         int maximumArgumentNumber = -1;
@@ -1080,6 +1240,19 @@ public class MessageFormat extends UFormat {
         return resultArray;
     }
         
+    /**
+     * Parses the string, returning the results in a Map.
+     * This is similar to the version that returns an array
+     * of Object.  This supports both named and numbered
+     * arguments-- if numbered, the keys in the map are the
+     * corresponding Strings (e.g. "0", "1", "2"...).
+     *
+     * @param source the text to parse
+     * @param pos the position at which to start parsing.  on return,
+     *        contains the result of the parse.
+     * @return a Map containing key/value pairs for each parsed argument.
+     * @draft ICU 3.8
+     */
     public Map parseToMap(String source, ParsePosition pos) {
         if (source == null) {
             Map empty = new HashMap();
@@ -1173,7 +1346,7 @@ public class MessageFormat extends UFormat {
      * @exception ParseException
      *                if the beginning of the specified string cannot be parsed.
      * @exception IllegalArgumentException
-     *                if alphanumeric arguments where used in MessageFormat.
+     *                if this format uses named arguments
      * @stable ICU 3.0
      */
     public Object[] parse(String source) throws ParseException {
@@ -1186,6 +1359,20 @@ public class MessageFormat extends UFormat {
         return result;
     }
     
+    /**
+     * Parses text from the beginning of the given string to produce a map from
+     * argument to values. The method may not use the entire text of the given string.
+     * <p>
+     * See the {@link #parse(String, ParsePosition)} method for more information
+     * on message parsing.
+     *
+     * @param source A <code>String</code> whose beginning should be parsed.
+     * @return A <code>Map</code> parsed from the string.
+     * @throws ParseException if the beginning of the specified string cannot 
+     *         be parsed.
+     * @see #parseToMap(String, ParsePosition)
+     * @draft ICU 3.8
+     */
     public Map parseToMap(String source) throws ParseException {
         
         ParsePosition pos = new ParsePosition(0);
@@ -1198,7 +1385,7 @@ public class MessageFormat extends UFormat {
     }
     
     /**
-     * Parses text from a string to produce an object array.
+     * Parses text from a string to produce an object array or Map.
      * <p>
      * The method attempts to parse text starting at the index given by
      * <code>pos</code>.
@@ -1217,10 +1404,10 @@ public class MessageFormat extends UFormat {
      * @param source A <code>String</code>, part of which should be parsed.
      * @param pos A <code>ParsePosition</code> object with index and error
      *            index information as described above.
-     * @return An <code>Object</code> array parsed from the string. In case of
-     *         error, returns null.
-     * @exception NullPointerException
-     *                if <code>pos</code> is null.
+     * @return An <code>Object</code> parsed from the string, either an
+     *         array of Object, or a Map, depending on whether named
+     *         arguments were used.  In case of error, returns null.
+     * @throws NullPointerException if <code>pos</code> is null.
      * @stable ICU 3.0
      */
     public Object parseObject(String source, ParsePosition pos) {
@@ -1434,6 +1621,13 @@ public class MessageFormat extends UFormat {
         return subformat(arrayToMap(arguments), result, fp, characterIterators);
     }
 
+    /**
+     * Internal routine used by format.
+     *
+     * @throws IllegalArgumentException if an argument in the
+     *         <code>arguments</code> map is not of the type
+     *         expected by the format element(s) that use it.
+     */
     private StringBuffer subformat(Map arguments, StringBuffer result,
                                    FieldPosition fp, List characterIterators) {
         // note: this implementation assumes a fast substring & index.
