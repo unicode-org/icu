@@ -9,20 +9,13 @@ package com.ibm.icu.text;
 
 import com.ibm.icu.util.ULocale;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Locale;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -84,21 +77,21 @@ public class PluralRules implements Serializable {
     private final Set keywords;
     private int repeatLimit; // for equality test
 
-  // Standard keywords.
+    // Standard keywords.
 
-  /** Common name for the 'zero' plural form. */
+    /** Common name for the 'zero' plural form. */
     public static final String KEYWORD_ZERO = "zero";
 
-  /** Common name for the 'singular' plural form. */
+    /** Common name for the 'singular' plural form. */
     public static final String KEYWORD_ONE = "one";
 
-  /** Common name for the 'dual' plural form. */
+    /** Common name for the 'dual' plural form. */
     public static final String KEYWORD_TWO = "two";
 
-  /** Common name for the 'paucal' or other special plural form. */
+    /** Common name for the 'paucal' or other special plural form. */
     public static final String KEYWORD_FEW = "few";
 
-  /** Common name for the arabic (11 to 99) plural form. */
+    /** Common name for the arabic (11 to 99) plural form. */
     public static final String KEYWORD_MANY = "many";
 
     /**
@@ -125,6 +118,8 @@ public class PluralRules implements Serializable {
      * The default constraint that is always satisfied.
      */
     private static final Constraint NO_CONSTRAINT = new Constraint() {
+        private static final long serialVersionUID = 9163464945387899416L;
+
         public boolean isFulfilled(long n) {
             return true;
         }
@@ -141,6 +136,8 @@ public class PluralRules implements Serializable {
      * The default rule that always returns "other".
      */
     private static final Rule DEFAULT_RULE = new Rule() {
+        private static final long serialVersionUID = -5677499073940822149L;
+
         public String getKeyword() {
             return KEYWORD_OTHER;
         }
@@ -525,6 +522,8 @@ public class PluralRules implements Serializable {
       
     /** A constraint representing the logical and of two constraints. */
     private static class AndConstraint extends BinaryConstraint {
+        private static final long serialVersionUID = 7766999779862263523L;
+
         AndConstraint(Constraint a, Constraint b) {
             super(a, b, " && ");
         }
@@ -536,6 +535,8 @@ public class PluralRules implements Serializable {
 
     /** A constraint representing the logical or of two constraints. */
     private static class OrConstraint extends BinaryConstraint {
+        private static final long serialVersionUID = 1405488568664762222L;
+
         OrConstraint(Constraint a, Constraint b) {
             super(a, b, " || ");
         }
