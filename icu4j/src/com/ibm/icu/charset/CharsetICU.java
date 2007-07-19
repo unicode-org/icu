@@ -207,6 +207,19 @@ public abstract class CharsetICU extends Charset{
         }
         return Charset.forName(charsetName);
     }
+
+//#ifndef FOUNDATION
+//##    /**
+//##     * @see java.lang.Comparable#compareTo(java.lang.Object)
+//##     * @stable 3.8
+//##     */
+//##    public int compareTo(Object otherObj) {
+//##        if (!(otherObj instanceof CharsetICU)) {
+//##            return -1;
+//##        }
+//##        return icuCanonicalName.compareTo(((CharsetICU)otherObj).icuCanonicalName);
+//##    }
+//#endif
     
     /**
      * This follows ucnv.c method ucnv_detectUnicodeSignature() to detect the
