@@ -47,7 +47,9 @@ icu4c/source/config/Makefile.inc
 icu4c/source/config/icu-config
 icu4c/source/config/icu-config.1
 icu4c/source/data/*.plg
+icu4c/source/data/Debug
 icu4c/source/data/Makefile
+icu4c/source/data/Release
 icu4c/source/data/icupkg.inc
 icu4c/source/data/in
 icu4c/source/data/makedata.vcproj.*.*.user
@@ -305,6 +307,15 @@ icu4c/source/test/perf/ubrkperf/debug
 icu4c/source/test/perf/ubrkperf/release
 icu4c/source/test/perf/ubrkperf/ubrkperf
 icu4c/source/test/perf/ubrkperf/ubrkperf.vcproj.*.*.user
+icu4c/source/test/perf/unisetperf/*.d
+icu4c/source/test/perf/unisetperf/*.o
+icu4c/source/test/perf/unisetperf/Debug
+icu4c/source/test/perf/unisetperf/Makefile
+icu4c/source/test/perf/unisetperf/Release
+icu4c/source/test/perf/unisetperf/debug
+icu4c/source/test/perf/unisetperf/release
+icu4c/source/test/perf/unisetperf/unisetperf
+icu4c/source/test/perf/unisetperf/unisetperf.vcproj.*.*.user
 icu4c/source/test/perf/usetperf/*.d
 icu4c/source/test/perf/usetperf/*.o
 icu4c/source/test/perf/usetperf/Debug

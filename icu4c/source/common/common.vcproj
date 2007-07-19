@@ -1772,6 +1772,14 @@
 			Name="properties &amp; sets"
 			>
 			<File
+				RelativePath=".\bmpset.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\bmpset.h"
+				>
+			</File>
+			<File
 				RelativePath=".\propname.cpp"
 				>
 			</File>
@@ -1949,6 +1957,14 @@
 			</File>
 			<File
 				RelativePath=".\uniset_props.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\unisetspan.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\unisetspan.h"
 				>
 			</File>
 			<File

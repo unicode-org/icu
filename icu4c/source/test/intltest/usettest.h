@@ -1,7 +1,7 @@
 
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
 **********************************************************************
@@ -16,16 +16,21 @@
 
 #include "unicode/unistr.h"
 #include "unicode/uniset.h"
+#include "unicode/ucnv_err.h"
 #include "intltest.h"
+
+class UnicodeSetWithStrings;
 
 /**
  * UnicodeSet test
  */
 class UnicodeSetTest: public IntlTest {
+public:
+    UnicodeSetTest();
+    ~UnicodeSetTest();
 
-    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=NULL);
-    
 private:
+    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=NULL);
 
     void Testj2268();
 
@@ -75,6 +80,12 @@ private:
     void TestSurrogate();
 
     void TestPosixClasses();
+
+    void TestFreezable();
+
+    void TestSpan();
+
+    void TestStringSpan();
 
 private:
 
@@ -152,6 +163,26 @@ private:
                      const UnicodeSet& set,
                      UChar32 start, UChar32 end);
     void doAssert(UBool, const char*);
+
+    void testSpan(const UnicodeSetWithStrings *sets[4], const void *s, int32_t length, UBool isUTF16,
+                  uint32_t whichSpans,
+                  int32_t expectLimits[], int32_t &expectCount,
+                  const char *testName, int32_t index);
+    void testSpan(const UnicodeSetWithStrings *sets[4], const void *s, int32_t length, UBool isUTF16,
+                  uint32_t whichSpans,
+                  const char *testName, int32_t index);
+    void testSpanBothUTFs(const UnicodeSetWithStrings *sets[4],
+                          const UChar *s16, int32_t length16,
+                          uint32_t whichSpans,
+                          const char *testName, int32_t index);
+    void testSpanContents(const UnicodeSetWithStrings *sets[4], uint32_t whichSpans, const char *testName);
+    void testSpanUTF16String(const UnicodeSetWithStrings *sets[4], uint32_t whichSpans, const char *testName);
+    void testSpanUTF8String(const UnicodeSetWithStrings *sets[4], uint32_t whichSpans, const char *testName);
+
+    UConverter *openUTF8Converter();
+
+    UConverter *utf8Cnv;
+
 public:
     static UnicodeString escape(const UnicodeString& s);
 };

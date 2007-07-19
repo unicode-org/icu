@@ -70,7 +70,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="../../../lib/icule.lib ../../../lib/icuuc.lib odbc32.lib odbccp32.lib"
+				AdditionalDependencies="../../../lib/icule.lib ../../../lib/icuuc.lib"
 				OutputFile=".\Release/letest.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
