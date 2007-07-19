@@ -645,16 +645,16 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
   }
 }
 
-static int ucaTest(void *collator, const int object, const UChar *source, const int sLen, const UChar *target, const int tLen) {
+static UCollationResult ucaTest(void *collator, const int object, const UChar *source, const int sLen, const UChar *target, const int tLen) {
   UCollator *UCA = (UCollator *)collator;
   return ucol_strcoll(UCA, source, sLen, target, tLen);
 }
 
 /*
-static int winTest(void *collator, const int object, const UChar *source, const int sLen, const UChar *target, const int tLen) {
+static UCollationResult winTest(void *collator, const int object, const UChar *source, const int sLen, const UChar *target, const int tLen) {
 #ifdef U_WINDOWS
   LCID lcid = (LCID)collator;
-  return CompareString(lcid, 0, source, sLen, target, tLen);
+  return (UCollationResult)CompareString(lcid, 0, source, sLen, target, tLen);
 #else
   return 0;
 #endif
