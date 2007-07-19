@@ -1362,36 +1362,31 @@ public abstract class DateFormat extends UFormat {
 
         /**
          * Constant identifying the local day of week field.
-         * @draft ICU 3.8
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 3.8
          */
         public static final Field DOW_LOCAL = new Field("local day of week", Calendar.DOW_LOCAL);
 
         /**
          * Constant identifying the extended year field.
-         * @draft ICU 3.8
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 3.8
          */
         public static final Field EXTENDED_YEAR = new Field("extended year", Calendar.EXTENDED_YEAR);
 
         /**
          * Constant identifying the Julian day field.
-         * @draft ICU 3.8
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 3.8
          */
         public static final Field JULIAN_DAY = new Field("Julian day", Calendar.JULIAN_DAY);
 
         /**
          * Constant identifying the milliseconds in day field.
-         * @draft ICU 3.8
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 3.8
          */
         public static final Field MILLISECONDS_IN_DAY = new Field("milliseconds in day", Calendar.MILLISECONDS_IN_DAY);
 
         /**
          * Constant identifying the year used with week of year field.
-         * @draft ICU 3.8
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 3.8
          */
         public static final Field YEAR_WOY = new Field("year for week of year", Calendar.YEAR_WOY);
 
