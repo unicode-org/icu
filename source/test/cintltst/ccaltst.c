@@ -27,6 +27,7 @@
 #include "cintltst.h"
 #include "ccaltst.h"
 #include "cformtst.h"
+#include "cstring.h"
 
 void TestGregorianChange(void);
 
@@ -67,6 +68,7 @@ static void TestCalendar()
     int32_t resultlength, resultlengthneeded;
     char tempMsgBuf[256];
     UChar zone1[32], zone2[32];
+    const char *tzver = 0;
 
 #ifdef U_USE_UCAL_OBSOLETE_2_8
     /*Testing countAvailableTimeZones*/
@@ -177,8 +179,21 @@ static void TestCalendar()
         status = U_ZERO_ERROR;
         ucal_setDefaultTimeZone(zone1, &status);
     }
+    
+    /*Test ucal_getTZDataVersion*/
+    status = U_ZERO_ERROR;
+    tzver = ucal_getTZDataVersion(&status);
+    if (U_FAILURE(status)) {
+        log_err("FAIL: ucal_getTZDataVersion() => %s\n", u_errorName(status));
+    } else if (uprv_strlen(tzver) != 5 /*4 digits + 1 letter*/) {
+        log_err("FAIL: Bad version string was returned by ucal_getTZDataVersion\n");
+    } else {
+        log_verbose("PASS: ucal_getTZDataVersion returned %s\n", tzver);
+    }
+    
 
     /*Testing the  ucal_open() function*/
+    status = U_ZERO_ERROR;
     log_verbose("\nTesting the ucal_open()\n");
     tzID=(UChar*)malloc(sizeof(UChar) * 4);
     u_uastrcpy(tzID, "PST");
@@ -361,7 +376,6 @@ static void TestCalendar()
     free(tzID);
     free(result);
     free(tzdname);
-    
 }
 
 /*------------------------------------------------------*/

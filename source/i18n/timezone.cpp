@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2006, International Business Machines Corporation and    *
+* Copyright (C) 1997-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -101,6 +101,9 @@ static const UChar         CUSTOM_ID[] =
 static UMTX                             LOCK;
 static U_NAMESPACE_QUALIFIER TimeZone*  DEFAULT_ZONE = NULL;
 static U_NAMESPACE_QUALIFIER TimeZone*  _GMT = NULL; // cf. TimeZone::GMT
+
+static char TZDATA_VERSION[8] = "";
+static UErrorCode TZDATA_VERSION_STATUS = U_ZERO_ERROR;
 
 #ifdef U_USE_TIMEZONE_OBSOLETE_2_8
 static U_NAMESPACE_QUALIFIER UnicodeString* OLSON_IDS = 0;
@@ -1238,6 +1241,31 @@ TimeZone::hasSameRules(const TimeZone& other) const
 {
     return (getRawOffset() == other.getRawOffset() && 
             useDaylightTime() == other.useDaylightTime());
+}
+
+const char*
+TimeZone::getTZDataVersion(UErrorCode& status)
+{
+    /* This is here to prevent race conditions. */
+    UBool needsInit;
+    UMTX_CHECK(&LOCK, (TZDATA_VERSION[0] == 0), needsInit);
+    if (needsInit) {
+        umtx_lock(&LOCK);
+        int32_t len = sizeof(TZDATA_VERSION);
+        UResourceBundle *bundle = ures_openDirect(NULL, "zoneinfo", &TZDATA_VERSION_STATUS);
+        const char *tzver = ures_getUTF8StringByKey(bundle, "TZVersion",
+            TZDATA_VERSION, &len, FALSE, &TZDATA_VERSION_STATUS);
+        if (U_FAILURE(TZDATA_VERSION_STATUS)) {
+            TZDATA_VERSION[0] = 0;
+        }
+        ures_close(bundle);
+        umtx_unlock(&LOCK);
+    }
+    status = TZDATA_VERSION_STATUS;
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+    return (const char*)TZDATA_VERSION;
 }
 
 U_NAMESPACE_END
