@@ -1350,7 +1350,7 @@ private:
     // Implementation: Clone as thawed (see ICU4J Freezable)
     //----------------------------------------------------------------
 
-    UnicodeSet::UnicodeSet(const UnicodeSet& o, UBool /* asThawed */);
+    UnicodeSet(const UnicodeSet& o, UBool /* asThawed */);
 
     //----------------------------------------------------------------
     // Implementation: Pattern parsing
