@@ -1397,7 +1397,7 @@ TestQuickCheckPerCP() {
     UChar32 c, lead, trail;
     UChar s[U16_MAX_LENGTH], nfd[16];
     int32_t length, lccc1, lccc2, tccc1, tccc2;
-    UNormalizationCheckResult qc1, qc2;
+    int32_t qc1, qc2;
 
     if(
         u_getIntPropertyMaxValue(UCHAR_NFD_QUICK_CHECK)!=(int32_t)UNORM_YES ||

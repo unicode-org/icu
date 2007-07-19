@@ -265,8 +265,8 @@ static void TestToInt64(void)
         int64_t toMin, toMax;
 
         status = U_ZERO_ERROR;
-        toMin = utmscale_getTimeScaleValue(scale, UTSV_TO_MIN_VALUE, &status);
-        toMax = utmscale_getTimeScaleValue(scale, UTSV_TO_MAX_VALUE, &status);
+        toMin = utmscale_getTimeScaleValue((UDateTimeScale)scale, UTSV_TO_MIN_VALUE, &status);
+        toMax = utmscale_getTimeScaleValue((UDateTimeScale)scale, UTSV_TO_MAX_VALUE, &status);
 
         status = U_ZERO_ERROR;
         result = utmscale_toInt64(0, (UDateTimeScale)scale, &status);
