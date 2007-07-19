@@ -1102,6 +1102,15 @@ ucal_countAvailableTZIDs(int32_t rawOffset);
 U_STABLE const char * U_EXPORT2
 ucal_getLocaleByType(const UCalendar *cal, ULocDataLocaleType type, UErrorCode* status);
 
+/**
+ * Returns the timezone data version currently used by ICU.
+ * @param status error code for the operation
+ * @return the version string, such as "2007f"
+ * @draft ICU 3.8
+ */
+U_DRAFT const char * U_EXPORT2
+ucal_getTZDataVersion(UErrorCode* status);
+
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif

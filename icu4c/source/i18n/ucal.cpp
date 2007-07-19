@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-2006, International Business Machines
+*   Copyright (C) 1996-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -509,6 +509,12 @@ ucal_getLocaleByType(const UCalendar *cal, ULocDataLocaleType type, UErrorCode* 
         return NULL;
     }
     return ((Calendar*)cal)->getLocaleID(type, *status);
+}
+
+U_CAPI const char * U_EXPORT2
+ucal_getTZDataVersion(UErrorCode* status)
+{
+    return TimeZone::getTZDataVersion(*status);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

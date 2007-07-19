@@ -326,6 +326,14 @@ public:
     static void U_EXPORT2 setDefault(const TimeZone& zone);
 
     /**
+     * Returns the timezone data version currently used by ICU.
+     * @param status Output param to filled in with a success or an error.
+     * @return the version string, such as "2007f"
+     * @draft ICU 3.8
+     */
+    static const char* U_EXPORT2 getTZDataVersion(UErrorCode& status);
+
+    /**
      * Returns true if the two TimeZones are equal.  (The TimeZone version only compares
      * IDs, but subclasses are expected to also compare the fields they add.)
      *
@@ -620,6 +628,7 @@ public:
      * @draft ICU 3.6
      */
     virtual int32_t getDSTSavings() const;
+
 protected:
 
     /**

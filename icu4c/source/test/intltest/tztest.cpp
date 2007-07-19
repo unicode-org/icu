@@ -17,6 +17,7 @@
 #include "tztest.h"
 #include "cmemory.h"
 #include "putilimp.h"
+#include "cstring.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
@@ -118,6 +119,16 @@ TimeZoneTest::TestGenericAPI()
     delete defaultzone;
     delete zoneclone;
     delete pstZone;
+
+    UErrorCode status;
+    const char* tzver = TimeZone::getTZDataVersion(status);
+    if (U_FAILURE(status)) {
+        errln("FAIL: getTZDataVersion failed");
+    } else if (uprv_strlen(tzver) != 5 /* 4 digits + 1 letter */) {
+        errln((UnicodeString)"FAIL: getTZDataVersion returned " + tzver);
+    } else {
+        logln((UnicodeString)"tzdata version: " + tzver);
+    }
 }
 
 // ---------------------------------------------------------------------------------
