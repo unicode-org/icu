@@ -171,6 +171,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
      */
     protected CoderResult decodeLoop(ByteBuffer in,CharBuffer out){
         if(!in.hasRemaining()){
+            toULength = 0;
             return CoderResult.UNDERFLOW;
         }
         in.position(in.position()+toUCountPending());
@@ -180,7 +181,6 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
         setSourcePosition(in);
         //if(ret.isUnderflow() && in.hasRemaining()){
             // The Java framework is going to substitute what is left.
-            //toULength = 0;
             //fromUnicodeReset();
         //}
         return ret;
