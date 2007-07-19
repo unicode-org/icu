@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -25,141 +25,41 @@
 #include "v32test.h"
 #include "uvectest.h" 
 #include "aliastst.h"
+#include "usettest.h"
 //#include "custrtest.h"
 //#include "ccitrtst.h"
 //#include "cloctest.h"
 //#include "ctres.h"
 //#include "ctucd.h"
 
+#define CASE(id, test) case id:                               \
+                          name = #test;                       \
+                          if (exec) {                         \
+                              logln(#test "---"); logln();    \
+                              test t;                         \
+                              callTest(t, par);               \
+                          }                                   \
+                          break
+
 void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     if (exec) logln("TestSuite Utilities: ");
     switch (index) {
-        case 0:
-            name = "MultithreadTest"; 
-            if (exec) {
-                logln("MultithreadTest---"); logln("");
-                MultithreadTest test;
-                callTest( test, par );
-            }
-            break;
-
-        case 1:
-            name = "StringTest"; 
-            if (exec) {
-                logln("StringTest---"); logln("");
-                StringTest test;
-                callTest( test, par );
-            }
-            break;
-
-        case 2:
-            name = "UnicodeStringTest"; 
-            if (exec) {
-                logln("UnicodeStringTest---"); logln("");
-                UnicodeStringTest test;
-                callTest( test, par );
-            }
-            break;
-
-        case 3:
-            name = "LocaleTest"; 
-            if (exec) {
-                logln("LocaleTest---"); logln("");
-                LocaleTest test;
-                callTest( test, par );
-            }
-            break;
-
-        case 4:
-            name = "CharIterTest"; 
-            if (exec) {
-                logln("CharIterTest---"); logln("");
-                CharIterTest test;
-                callTest( test, par );
-            }
-            break;
-
-        case 5:
-            name = "UnicodeTest"; 
-            if (exec) {
-                logln("UnicodeTest---"); logln("");
-                UnicodeTest test;
-                callTest( test, par );
-            }
-            break;
-
-        case 6:
-            name = "ResourceBundleTest"; 
-            if (exec) {
-                logln("ResourceBundleTest---"); logln("");
-                ResourceBundleTest test;
-                callTest( test, par );
-            }
-            break;
-        case 7:
-            name = "NewResourceBundleTest"; 
-            if (exec) {
-                logln("NewResourceBundleTest---"); logln("");
-                NewResourceBundleTest test;
-                callTest( test, par );
-            }
-            break;
-
-        case 8:
-            name = "PUtilTest"; 
-            if (exec) {
-                logln("PUtilTest---"); logln("");
-                PUtilTest test;
-                callTest( test, par );
-            }
-            break;
-            
-        case 9:
-            name = "UObjectTest";
-            if(exec) {
-                logln ("UObjectTest---"); logln("");
-                UObjectTest test;
-                callTest( test, par );
-            }
-            break;;
-
-        case 10:
-            name = "UVector32Test";
-            if(exec) {
-                logln ("UVector32Test---"); logln("");
-                UVector32Test test;
-                callTest( test, par );
-            }
-            break;;
-
-        case 11:
-            name = "UVectorTest";
-            if(exec) {
-                logln ("UVectorTest---"); logln("");
-                UVectorTest test;
-                callTest( test, par );
-            }
-            break;;
-
-        case 12:
-            name = "UTextTest";
-            if(exec) {
-                logln ("UTextTest---"); logln("");
-                UTextTest test;
-                callTest( test, par );
-            }
-            break;
-
-         case 13:
-            name = "LocaleAliasTest"; 
-            if (exec) {
-                logln("LocaleAliasTest---"); logln("");
-                LocaleAliasTest test;
-                callTest( test, par );
-            }
-            break;
-
+        CASE(0, MultithreadTest); 
+        CASE(1, StringTest); 
+        CASE(2, UnicodeStringTest); 
+        CASE(3, LocaleTest); 
+        CASE(4, CharIterTest); 
+        CASE(5, UnicodeTest); 
+        CASE(6, ResourceBundleTest); 
+        CASE(7, NewResourceBundleTest); 
+        CASE(8, PUtilTest); 
+        CASE(9, UObjectTest); 
+        CASE(10, UVector32Test); 
+        CASE(11, UVectorTest); 
+        CASE(12, UTextTest); 
+        CASE(13, MultithreadTest); 
+        CASE(14, UnicodeSetTest); 
         default: name = ""; break; //needed to end loop
     }
 }

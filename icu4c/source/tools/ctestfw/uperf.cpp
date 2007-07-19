@@ -341,6 +341,7 @@ UBool UPerfTest::runTestLoop( char* testname, char* par )
     int32_t loops = 0;
     double t=0;
     int32_t n = 1;
+    long ops;
     do {
         this->runIndexedTest( index, FALSE, name );
         if (!name || (name[0] == 0))
@@ -358,7 +359,8 @@ UBool UPerfTest::runTestLoop( char* testname, char* par )
                 fprintf(stderr,"%s function returned NULL", name);
                 return FALSE;
             }
-            if (testFunction->getOperationsPerIteration() < 1) {
+            ops = testFunction->getOperationsPerIteration();
+            if (ops < 1) {
                 fprintf(stderr, "%s returned an illegal operations/iteration()\n", name);
                 return FALSE;
             }
@@ -396,8 +398,10 @@ UBool UPerfTest::runTestLoop( char* testname, char* par )
                 loops = iterations;
             }
 
+            double min_t=1000000.0, sum_t=0.0;
+            long events = -1;
+
             for(int32_t ps =0; ps < passes; ps++){
-                long events = -1;
                 fprintf(stdout,"= %s begin " ,name);
                 if(verbose==TRUE){
                     if(iterations > 0) {
@@ -413,34 +417,38 @@ UBool UPerfTest::runTestLoop( char* testname, char* par )
                     printf("Performance test failed with error: %s \n", u_errorName(status));
                     break;
                 }
+                sum_t+=t;
+                if(t<min_t) {
+                    min_t=t;
+                }
                 events = testFunction->getEventsPerIteration();
                 //print info only in verbose mode
                 if(verbose==TRUE){
-/*
                     if(events == -1){
-                        fprintf(stdout,"= %s end %f %i %i\n",name , t , loops, testFunction->getOperationsPerIteration());
+                        fprintf(stdout, "= %s end: %f loops: %i operations: %li \n", name, t, (int)loops, ops);
                     }else{
-                        fprintf(stdout,"= %s end %f %i %i %i\n",name , t , loops, testFunction->getOperationsPerIteration(), events);
-                    }
-*/
-                    if(events == -1){
-                        fprintf(stdout, "= %s end: %f loops: %i operations: %li \n", name, t, (int)loops, testFunction->getOperationsPerIteration());
-                    }else{
-                        fprintf(stdout, "= %s end: %f loops: %i operations: %li events: %li\n", name, t, (int)loops, testFunction->getOperationsPerIteration(), events);
+                        fprintf(stdout, "= %s end: %f loops: %i operations: %li events: %li\n", name, t, (int)loops, ops, events);
                     }
                 }else{
-/*
                     if(events == -1){
-                        fprintf(stdout,"= %f %i %i \n", t , loops, testFunction->getOperationsPerIteration());
+                        fprintf(stdout,"= %s end %f %i %li\n", name, t, (int)loops, ops);
                     }else{
-                        fprintf(stdout,"= %f %i %i %i\n", t , loops, testFunction->getOperationsPerIteration(), events);
+                        fprintf(stdout,"= %s end %f %i %li %li\n", name, t, (int)loops, ops, events);
                     }
-*/
-                    if(events == -1){
-                        fprintf(stdout,"= %s end %f %i %li\n", name, t, (int)loops, testFunction->getOperationsPerIteration());
-                    }else{
-                        fprintf(stdout,"= %s end %f %i %li %li\n", name, t, (int)loops, testFunction->getOperationsPerIteration(), events);
-                    }
+                }
+            }
+            if(verbose && U_SUCCESS(status)) {
+                double avg_t = sum_t/passes;
+                if(events == -1) {
+                    fprintf(stdout, "%%= %s avg: %.4g loops: %i avg/op: %.4g ns\n",
+                            name, avg_t, (int)loops, (avg_t*1E9)/(loops*ops));
+                    fprintf(stdout, "_= %s min: %.4g loops: %i min/op: %.4g ns\n",
+                            name, min_t, (int)loops, (min_t*1E9)/(loops*ops));
+                } else {
+                    fprintf(stdout, "%%= %s avg: %.4g loops: %i avg/op: %.4g ns avg/event: %.4g ns\n",
+                            name, avg_t, (int)loops, (avg_t*1E9)/(loops*ops), (avg_t*1E9)/(loops*events));
+                    fprintf(stdout, "_= %s min: %.4g loops: %i min/op: %.4g ns min/event: %.4g ns\n",
+                            name, min_t, (int)loops, (min_t*1E9)/(loops*ops), (min_t*1E9)/(loops*events));
                 }
             }
             delete testFunction;
