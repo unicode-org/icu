@@ -761,6 +761,26 @@ abstract public class TimeZone implements Serializable, Cloneable {
     	return ID.hashCode();
     }
 
+    /**
+     * Returns the timezone data version currently used by ICU.
+     * 
+     * @param status error code for the operation
+     * @return the version string, such as "2007f"
+     * @throws MissingResourceException if ICU timezone resource bundle
+     * is missing or the version information is not available.
+     * 
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static synchronized String getTZDataVersion() {
+        if (TZDATA_VERSION == null) {
+            UResourceBundle tzbundle = UResourceBundle.getBundleInstance(
+                    "com/ibm/icu/impl/data/icudt" + VersionInfo.ICU_DATA_VERSION, "zoneinfo");
+            TZDATA_VERSION = tzbundle.getString("TZVersion");
+        }
+        return TZDATA_VERSION;
+    }
+
     // =======================privates===============================
 
     /**
@@ -777,6 +797,11 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * The default time zone, or null if not set.
      */
     private static TimeZone  defaultZone = null;
+
+    /**
+     * The tzdata version
+     */
+    private static String TZDATA_VERSION = null;
 
 }
 

@@ -500,6 +500,13 @@ public class TimeZoneTest extends TestFmwk
 //          errln("FAIL: SimpleTimeZoneAdapter.equals");
 //      }
 //      logln(stza.toString());
+
+        String tzver = TimeZone.getTZDataVersion();
+        if (tzver.length() != 5 /* 4 digits + 1 letter */) {
+            errln("FAIL: getTZDataVersion returned " + tzver);
+        } else {
+            logln("PASS: tzdata version: " + tzver);
+        }
     }
 
     public void TestRuleAPI()
