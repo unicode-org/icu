@@ -778,13 +778,11 @@ class CharsetMBCS extends CharsetICU {
         indexes.position(indexes.getInt(index*4));
         if(itemType == int.class)
             b = indexes.asIntBuffer();
-        else if(itemType == short.class)
-            b = indexes.asShortBuffer();
-        else if(itemType == byte.class)
-            b = indexes.slice();
         else if(itemType == char.class)
             b = indexes.asCharBuffer();
-        else
+        else if(itemType == short.class)
+            b = indexes.asShortBuffer();
+        else // default or (itemType == byte.class)
             b = indexes.slice();
         indexes.position(oldpos);
         return b;
