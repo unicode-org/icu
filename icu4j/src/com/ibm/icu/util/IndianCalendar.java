@@ -68,9 +68,6 @@ public class IndianCalendar extends Calendar {
 	// jdk1.4.2 serialver
 	private static final long serialVersionUID = 3617859668165014834L;
 
-    private static String copyright = "Copyright \u00a9 1998-2007 IBM Corp. All Rights Reserved.";
-
-
     /** 
      * Constant for Chaitra, the 1st month of the Indian year. 
      * @draft ICU 3.8 
