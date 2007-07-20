@@ -33,6 +33,7 @@ import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.Freezable;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.util.UResourceBundle;
 
 /**
@@ -147,19 +148,69 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
                 hackPattern = df.toPattern();
             }
         }
-        UResourceBundle rb = UResourceBundle.getBundleInstance("com.ibm.icu.impl.data.DateData$MyDateResources", uLocale);
-        //ResourceBundle rb = ResourceBundle.getBundle("com.ibm.icu.impl.data.DateData$MyDateResources", ULocale.FRENCH.toLocale());
-        for (Enumeration en = rb.getKeys(); en.hasMoreElements();) {
-            String key = (String) en.nextElement();
-            String value = rb.getString(key);
-            String [] keyParts = key.split("/");
-            if (keyParts[0].equals("pattern")) {
-                result.add(value, false, returnInfo);
-            } else if  (keyParts[0].equals("append")) {
-                result.setAppendItemFormats(getAppendFormatNumber(keyParts[1]), value);
-            } else if  (keyParts[0].equals("field")) {
-                result.setAppendItemNames(getAppendNameNumber(keyParts[1]), value);
-            }
+
+        ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, uLocale);
+        rb = rb.getWithFallback("calendar");
+        ICUResourceBundle gregorianBundle = rb.getWithFallback("gregorian");
+        // CLDR item formats
+        
+        ICUResourceBundle itemBundle = gregorianBundle.getWithFallback("appendItems");
+        for (int i=0; i<itemBundle.getSize(); ++i) {
+        	ICUResourceBundle formatBundle = (ICUResourceBundle)itemBundle.get(i);
+        	String formatName = itemBundle.get(i).getKey();
+            String value = formatBundle.getString();
+            result.setAppendItemFormats(getAppendFormatNumber(formatName), value);
+        }
+        
+        // CLDR item names
+        itemBundle = gregorianBundle.getWithFallback("fields");
+        ICUResourceBundle fieldBundle, dnBundle;
+        for (int i=0; i<TYPE_LIMIT; ++i) {
+        	if ( isCLDRFieldName(i) ) {
+        		fieldBundle = itemBundle.getWithFallback(CLDR_FIELD_NAME[i]);
+            	dnBundle = fieldBundle.getWithFallback("dn");
+                String value = dnBundle.getString();
+                //System.out.println("Field name:"+value);
+                result.setAppendItemNames(i, value);      		
+        	}
+        }
+          
+        // set the AvailableFormat in CLDR
+        try {
+           ICUResourceBundle formatBundle =  gregorianBundle.getWithFallback("availableFormats");
+           //System.out.println("available format from current locale:"+uLocale.getName());
+           for (int i=0; i<formatBundle.getSize(); ++i) { 
+               String formatKey = formatBundle.get(i).getKey();
+               String formatValue = formatBundle.get(i).getString();
+               //System.out.println(" availableFormat:"+formatValue);
+               result.setAvailableFormat(formatKey);
+               result.add(formatValue, false, returnInfo);
+           } 
+        }catch(Exception e) {
+        }
+       
+        ULocale parentLocale=uLocale;
+        while ( (parentLocale=parentLocale.getFallback()) != null) {
+            ICUResourceBundle prb = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, parentLocale);
+            prb = prb.getWithFallback("calendar");
+            ICUResourceBundle pGregorianBundle = prb.getWithFallback("gregorian");
+            try {
+                ICUResourceBundle formatBundle =  pGregorianBundle.getWithFallback("availableFormats");
+                //System.out.println("available format from parent locale:"+parentLocale.getName());
+                for (int i=0; i<formatBundle.getSize(); ++i) { 
+                    String formatKey = formatBundle.get(i).getKey();
+                    String formatValue = formatBundle.get(i).getString();
+                    //System.out.println(" availableFormat:"+formatValue);
+                    if (!result.isAvailableFormatSet(formatKey)) {
+                        result.setAvailableFormat(formatKey);
+                        result.add(formatValue, false, returnInfo);
+                        //System.out.println(" availableFormat:"+formatValue);
+                    }
+                } 
+              
+             }catch(Exception e) {
+             }
+             
         }
         
         // assume it is always big endian (ok for CLDR right now)
@@ -258,6 +309,19 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         return -1;
         
     }
+
+    private static boolean isCLDRFieldName(int index) {
+    	if ((index<0) && (index>=TYPE_LIMIT)) {
+    		return false;
+    	}
+    	if (CLDR_FIELD_NAME[index].charAt(0) == '*') {
+    		return false;
+    	}
+    	else {
+    		return true;
+    	}
+    }
+    
     
     /**
      * Return the best pattern matching the input skeleton. It is guaranteed to
@@ -777,6 +841,34 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         return true;
     }
     
+     /**
+     * Add key to HashSet cldrAvailableFormatKeys.
+     * 
+     * @param key of the availableFormats in CLDR
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
+    private void setAvailableFormat(String key) {
+        checkFrozen();
+        cldrAvailableFormatKeys.add(key);
+    }
+    
+    /**
+     * This function checks the corresponding slot of CLDR_AVAIL_FORMAT_KEY[]
+     * has been added to DateTimePatternGenerator.
+     * The function is to avoid the duplicate availableFomats added to
+     * the pattern map from parent locales.
+     * 
+     * @param key of the availableFormatMask in CLDR
+     * @return TRUE if the corresponding slot of CLDR_AVAIL_FORMAT_KEY[]
+     * has been added to DateTimePatternGenerator.
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
+    private boolean isAvailableFormatSet(String key) {
+        return cldrAvailableFormatKeys.contains(key);
+    }
+
     /**
      * Boilerplate for Freezable
      * @draft ICU 3.6
@@ -1333,7 +1425,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     };
     
     static private String[] CLDR_FIELD_NAME = {
-        "era", "year", "quarter", "month", "week", "*", "weekday", 
+        "era", "year", "*", "month", "week", "*", "weekday", 
         "day", "*", "*", "dayperiod", 
         "hour", "minute", "second", "*", "zone"
     };
@@ -1352,6 +1444,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     };
     
     static private Set CANONICAL_SET = new HashSet(Arrays.asList(CANONICAL_ITEMS));
+    private Set cldrAvailableFormatKeys = new HashSet(20);
     
     static final private int 
     DATE_MASK = (1<<DAYPERIOD) - 1,

@@ -228,20 +228,20 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"yMMM", "Jan 1999"},
         new String[] {"yMd", "13.1.1999"},
         new String[] {"yMMMd", "13. Jan 1999"},
-        new String[] {"Md", "13.1"},
+        new String[] {"Md", "13.1."},   // 13.1
         new String[] {"MMMd", "13. Jan"},
         new String[] {"yQQQ", "Q1 1999"},
-        new String[] {"hhmm", "11:58 nachm."},
+        new String[] {"hhmm", "23:58"},  // 11:58 nachm.
         new String[] {"HHmm", "23:58"},
         new String[] {"mmss", "58:59"},
         new ULocale("fi"),
-        new String[] {"yM", "1.1999"},
-        new String[] {"yMMM", "tammita 1999"},
+        new String[] {"yM", "1/1999"},   // 1.1999
+        new String[] {"yMMM", "tammi 1999"},  // tammita 1999
         new String[] {"yMd", "13.1.1999"},
         new String[] {"yMMMd", "13. tammita 1999"},
-        new String[] {"Md", "13.1"},
+        new String[] {"Md", "13.1."},
         new String[] {"MMMd", "13. tammita"},
-        new String[] {"yQQQ", "1. nelj. 1999"},
+        new String[] {"yQQQ", "1. nelj./1999"},  // 1. nelj. 1999
         new String[] {"hhmm", "23.58"},
         new String[] {"HHmm", "23.58"},
         new String[] {"mmss", "58.59"},
