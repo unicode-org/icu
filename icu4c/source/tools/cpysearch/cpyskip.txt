@@ -133,7 +133,15 @@ icu4j/src/com/ibm/icu/dev/tool/ime/indic/services/java.awt.im.spi.InputMethodDes
 icu4j/src/com/ibm/icu/dev/tool/ime/translit/services/java.awt.im.spi.InputMethodDescriptor
 icu4j/src/com/ibm/richtext/textapps/resources/unicode.arabic.red
 icu4j/src/com/ibm/richtext/textapps/resources/unicode.hebrew.red
-icu4j/src/com/ibm/icu/dev/test/perf/data/conversion/*.txt
+icu4j/src/com/ibm/icu/dev/test/perf/data/conversion/arabic.txt
+icu4j/src/com/ibm/icu/dev/test/perf/data/conversion/english.txt
+icu4j/src/com/ibm/icu/dev/test/perf/data/conversion/french.txt
+icu4j/src/com/ibm/icu/dev/test/perf/data/conversion/greek.txt
+icu4j/src/com/ibm/icu/dev/test/perf/data/conversion/hebrew.txt
+icu4j/src/com/ibm/icu/dev/test/perf/data/conversion/hindi.txt
+icu4j/src/com/ibm/icu/dev/test/perf/data/conversion/japanese.txt
+icu4j/src/com/ibm/icu/dev/test/perf/data/conversion/korean.txt
+icu4j/src/com/ibm/icu/dev/test/perf/data/conversion/s-chinese.txt
 #Userguide html template file.  Skip because adding one would cause multiple 
 #copyright notices to appear in each generated userguide html file.
 icuhtml/userguide/html-template/ugtemplate.html
