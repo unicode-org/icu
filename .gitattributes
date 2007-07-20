@@ -335,6 +335,15 @@ icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_SerbianSH.txt -text
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_SerbianSR.txt -text svneol=unset#application/octet-stream
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Simplified_Chinese.txt -text svneol=unset#application/octet-stream
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Thai.txt -text svneol=unset#application/octet-stream
+icu4j/src/com/ibm/icu/dev/test/perf/data/conversion/arabic.txt svneol=native#text/html%3B+charset%3DUTF-8
+icu4j/src/com/ibm/icu/dev/test/perf/data/conversion/english.txt svneol=native#text/html%3B+charset%3DUTF-8
+icu4j/src/com/ibm/icu/dev/test/perf/data/conversion/french.txt svneol=native#text/html%3B+charset%3DUTF-8
+icu4j/src/com/ibm/icu/dev/test/perf/data/conversion/greek.txt svneol=native#text/html%3B+charset%3DUTF-8
+icu4j/src/com/ibm/icu/dev/test/perf/data/conversion/hebrew.txt svneol=native#text/html%3B+charset%3DUTF-8
+icu4j/src/com/ibm/icu/dev/test/perf/data/conversion/hindi.txt svneol=native#text/html%3B+charset%3DUTF-8
+icu4j/src/com/ibm/icu/dev/test/perf/data/conversion/japanese.txt svneol=native#text/html%3B+charset%3DUTF-8
+icu4j/src/com/ibm/icu/dev/test/perf/data/conversion/korean.txt svneol=native#text/html%3B+charset%3DUTF-8
+icu4j/src/com/ibm/icu/dev/test/perf/data/conversion/s-chinese.txt svneol=native#text/html%3B+charset%3DUTF-8
 icu4j/src/com/ibm/icu/dev/test/perf/normalizationperf_r_b.pl -text
 icu4j/src/com/ibm/icu/dev/test/perf/normalizationperf_r_l.pl -text
 icu4j/src/com/ibm/icu/dev/test/perf/rbbiperf_r.pl -text
