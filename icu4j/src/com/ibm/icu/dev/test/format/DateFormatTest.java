@@ -2341,6 +2341,40 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 errln("FAIL: getDateFormatBundle failed!");            
             */
         }
+
+        {
+            //cover DateFormatSymbols.getInstance
+            DateFormatSymbols datsym1 = DateFormatSymbols.getInstance();
+            DateFormatSymbols datsym2 = new DateFormatSymbols();
+            if (!datsym1.equals(datsym2)) {
+                errln("FAIL: DateFormatSymbols returned by getInstance()" +
+                		"does not match new DateFormatSymbols().");
+            }
+            datsym1 = DateFormatSymbols.getInstance(Locale.JAPAN);
+            datsym2 = DateFormatSymbols.getInstance(ULocale.JAPAN);
+            if (!datsym1.equals(datsym2)) {
+                errln("FAIL: DateFormatSymbols returned by getInstance(Locale.JAPAN)" +
+                		"does not match the one returned by getInstance(ULocale.JAPAN).");
+            }
+        }
+        {
+            //cover DateFormatSymbols.getAvailableLocales/getAvailableULocales
+            Locale[] allLocales = DateFormatSymbols.getAvailableLocales();
+            if (allLocales.length == 0) {
+                errln("FAIL: Got a empty list for DateFormatSymbols.getAvailableLocales");
+            } else {
+                logln("PASS: " + allLocales.length +
+                        " available locales returned by DateFormatSymbols.getAvailableLocales");            
+            }
+
+            ULocale[] allULocales = DateFormatSymbols.getAvailableULocales();
+            if (allULocales.length == 0) {
+                errln("FAIL: Got a empty list for DateFormatSymbols.getAvailableLocales");
+            } else {
+                logln("PASS: " + allULocales.length +
+                        " available locales returned by DateFormatSymbols.getAvailableULocales");            
+            }
+        }
     }
 
     public void TestStandAloneMonths()

@@ -899,6 +899,36 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                   df.getSecondaryGroupingSize() + ", expect 0");
         }
         expect2(df, 3.14159, "3.14159E+00");
+
+        // DecimalFormatSymbols#getInstance
+        DecimalFormatSymbols decsym1 = DecimalFormatSymbols.getInstance();
+        DecimalFormatSymbols decsym2 = new DecimalFormatSymbols();
+        if (!decsym1.equals(decsym2)) {
+            errln("FAIL: DecimalFormatSymbols returned by getInstance()" +
+            "does not match new DecimalFormatSymbols().");
+        }
+        decsym1 = DecimalFormatSymbols.getInstance(Locale.JAPAN);
+        decsym2 = DecimalFormatSymbols.getInstance(ULocale.JAPAN);
+        if (!decsym1.equals(decsym2)) {
+            errln("FAIL: DecimalFormatSymbols returned by getInstance(Locale.JAPAN)" +
+            "does not match the one returned by getInstance(ULocale.JAPAN).");
+        }
+
+        // DecimalFormatSymbols#getAvailableLocales/#getAvailableULocales
+        Locale[] allLocales = DecimalFormatSymbols.getAvailableLocales();
+        if (allLocales.length == 0) {
+            errln("FAIL: Got a empty list for DecimalFormatSymbols.getAvailableLocales");
+        } else {
+            logln("PASS: " + allLocales.length +
+                    " available locales returned by DecimalFormatSymbols.getAvailableLocales");            
+        }
+        ULocale[] allULocales = DecimalFormatSymbols.getAvailableULocales();
+        if (allULocales.length == 0) {
+            errln("FAIL: Got a empty list for DecimalFormatSymbols.getAvailableLocales");
+        } else {
+            logln("PASS: " + allULocales.length +
+                    " available locales returned by DecimalFormatSymbols.getAvailableULocales");            
+        }
     }
 
     public void TestWhiteSpaceParsing() {
