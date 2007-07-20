@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006, International Business Machines Corporation and    *
+* Copyright (C) 2006-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -37,6 +37,8 @@ class CharsetUTF16LE extends CharsetUTF16 {
         }
     }
     
+    private static final byte UTF16LE_BOM[]={ (byte)0xff, (byte)0xfe };
+
     class CharsetEncoderUTF16LE extends CharsetEncoderICU{
         
         public CharsetEncoderUTF16LE(CharsetICU cs) {
@@ -58,8 +60,7 @@ class CharsetUTF16LE extends CharsetUTF16 {
             char c;
             /* write the BOM if necessary */
             if(fromUnicodeStatus==NEED_TO_WRITE_BOM && writeBOM) {
-                byte bom[]={ (byte)0xff, (byte)0xfe };
-                cr = fromUWriteBytes(this,bom, 0, bom.length, target, offsets, -1);
+                cr = fromUWriteBytes(this, UTF16LE_BOM, 0, UTF16LE_BOM.length, target, offsets, -1);
                 if(cr.isError()){
                     return cr;
                 }
