@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006, International Business Machines Corporation and    *
+* Copyright (C) 2006-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -179,18 +179,18 @@ final class UConverterAlias {
 
     // U_CFUNC const char * io_getConverterName(const char *alias, UErrorCode
     // *pErrorCode)
-    public static final String io_getConverterName(String alias)
-                                    throws IOException{
-        if (haveAliasData() && isAlias(alias)) {
-            boolean[] isAmbigous = new boolean[1];
-            int convNum = findConverter(alias, isAmbigous);
-            if (convNum < gConverterList.length) {
-                return GET_STRING(gConverterList[(int) convNum]);
-            }
-            /* else converter not found */
-        }
-        return null;
-    }
+//    public static final String io_getConverterName(String alias)
+//                                    throws IOException{
+//        if (haveAliasData() && isAlias(alias)) {
+//            boolean[] isAmbigous = new boolean[1];
+//            int convNum = findConverter(alias, isAmbigous);
+//            if (convNum < gConverterList.length) {
+//                return GET_STRING(gConverterList[(int) convNum]);
+//            }
+//            /* else converter not found */
+//        }
+//        return null;
+//    }
 
     /*
      * search for an alias return the converter number index for gConverterList
@@ -437,12 +437,12 @@ final class UConverterAlias {
      * @return the number of all aliases
      */
     // U_CFUNC uint16_t io_countTotalAliases(UErrorCode *pErrorCode);
-    static int io_countTotalAliases() throws IOException{
-        if (haveAliasData()) {
-            return (int) gAliasList.length;
-        }
-        return 0;
-    }
+//    static int io_countTotalAliases() throws IOException{
+//        if (haveAliasData()) {
+//            return (int) gAliasList.length;
+//        }
+//        return 0;
+//    }
 
     // U_CFUNC const char * io_getAlias(const char *alias, uint16_t n,
     // UErrorCode *pErrorCode)
@@ -472,21 +472,21 @@ final class UConverterAlias {
     }
 
     // U_CFUNC uint16_t io_countStandards(UErrorCode *pErrorCode) {
-    static int io_countStandards() throws IOException{
-        if (haveAliasData()) {
-            return (int) (gTagList.length - NUM_HIDDEN_TAGS);
-        }
-        return 0;
-    }
+//    static int io_countStandards() throws IOException{
+//        if (haveAliasData()) {
+//            return (int) (gTagList.length - NUM_HIDDEN_TAGS);
+//        }
+//        return 0;
+//    }
 
     // U_CAPI const char * U_EXPORT2getStandard(uint16_t n, UErrorCode
     // *pErrorCode)
-    static String getStandard(int n) throws IOException{
-        if (haveAliasData()) {
-            return GET_STRING(gTagList[n]);
-        }
-        return null;
-    }
+//    static String getStandard(int n) throws IOException{
+//        if (haveAliasData()) {
+//            return GET_STRING(gTagList[n]);
+//        }
+//        return null;
+//    }
 
     // U_CAPI const char * U_EXPORT2 getStandardName(const char *alias, const
     // char *standard, UErrorCode *pErrorCode)
@@ -518,9 +518,9 @@ final class UConverterAlias {
     }
 
     // U_CFUNC uint16_t countStandards(void)
-    static int countStandards()throws IOException{
-        return io_countStandards();
-    }
+//    static int countStandards()throws IOException{
+//        return io_countStandards();
+//    }
     
     /*returns a single Name from the list, will return NULL if out of bounds
      */
@@ -791,41 +791,41 @@ final class UConverterAlias {
      */
 
     // U_CFUNC const char * getDefaultName()
-    static final synchronized String getDefaultName() {
-        /* local variable to be thread-safe */
-        String name;
-
-        //agljport:todo umtx_lock(null);
-        name = gDefaultConverterName;
-        //agljport:todo umtx_unlock(null);
-
-        if (name == null) {
-            //UConverter cnv = null;
-            int length = 0;
-
-            name = CharsetICU.getDefaultCharsetName();
-
-            /* if the name is there, test it out and get the canonical name with options */
-            if (name != null) {
-               // cnv = UConverter.open(name); 
-               // name = cnv.getName(cnv);
-                // TODO: fix me
-            }
-
-            if (name == null || name.length() == 0 ||/* cnv == null ||*/
-                     length >= gDefaultConverterNameBuffer.length) {
-                /* Panic time, let's use a fallback. */
-                name = new String("US-ASCII");
-            }
-
-            //length=(int32_t)(strlen(name));
-
-            /* Copy the name before we close the converter. */
-            name = gDefaultConverterName;
-        }
-
-        return name;
-    }
+//    static final synchronized String getDefaultName() {
+//        /* local variable to be thread-safe */
+//        String name;
+//
+//        //agljport:todo umtx_lock(null);
+//        name = gDefaultConverterName;
+//        //agljport:todo umtx_unlock(null);
+//
+//        if (name == null) {
+//            //UConverter cnv = null;
+//            int length = 0;
+//
+//            name = CharsetICU.getDefaultCharsetName();
+//
+//            /* if the name is there, test it out and get the canonical name with options */
+//            if (name != null) {
+//               // cnv = UConverter.open(name); 
+//               // name = cnv.getName(cnv);
+//                // TODO: fix me
+//            }
+//
+//            if (name == null || name.length() == 0 ||/* cnv == null ||*/
+//                     length >= gDefaultConverterNameBuffer.length) {
+//                /* Panic time, let's use a fallback. */
+//                name = new String("US-ASCII");
+//            }
+//
+//            //length=(int32_t)(strlen(name));
+//
+//            /* Copy the name before we close the converter. */
+//            name = gDefaultConverterName;
+//        }
+//
+//        return name;
+//    }
 
     //end bld.c
 }
