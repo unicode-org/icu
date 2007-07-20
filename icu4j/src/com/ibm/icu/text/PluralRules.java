@@ -26,7 +26,7 @@ import java.util.Set;
  * of a series of keywords and conditions.  The {@link #select} method
  * examines each condition in order and returns the keyword for the
  * first condition that matches the number.  If none match,
- * {@link KEYWORD_OTHER} is returned.</p>
+ * {@link #KEYWORD_OTHER} is returned.</p>
  * <p>
  * Examples:<pre>
  *   "one: n is 1; few: n in 2..4"</pre></p>
@@ -665,7 +665,7 @@ public class PluralRules implements Serializable {
      * Provides access to the predefined <code>PluralRules</code> for a given
      * locale.
      * 
-     * @param ulocale The locale for which a <code>PluralRules</code> object is
+     * @param locale The locale for which a <code>PluralRules</code> object is
      *   returned.
      * @return The predefined <code>PluralRules</code> object for this locale.
      *   If there's no predefined rules for this locale, the rules
