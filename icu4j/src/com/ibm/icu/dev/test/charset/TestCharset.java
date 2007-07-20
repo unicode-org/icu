@@ -250,16 +250,17 @@ public class TestCharset extends TestFmwk {
         
     }
     public void TestASCIIConverter() {
-        runASCIIBasedConverterTest("ASCII", 0x80);
+        runTestASCIIBasedConverter("ASCII", 0x80);
     }    
     public void Test88591Converter() {
-        runASCIIBasedConverterTest("iso-8859-1", 0x100);
+        runTestASCIIBasedConverter("iso-8859-1", 0x100);
     }
-    public void runASCIIBasedConverterTest(String converter, int limit){
+    public void runTestASCIIBasedConverter(String converter, int limit){
         CharsetProvider icu = new CharsetProviderICU();
         Charset icuChar = icu.charsetForName(converter);
         CharsetEncoder encoder = icuChar.newEncoder();
         CharsetDecoder decoder = icuChar.newDecoder();
+        CoderResult cr;
 
         /* test with and without array-backed buffers */ 
         
@@ -470,7 +471,7 @@ public class TestCharset extends TestFmwk {
                 CoderResult.unmappableForLength(1),
         };
         for (int index = 0; index < input.length; index++) {
-            CoderResult cr = encoder.encode(CharBuffer.wrap(input[index]), bs, true);
+            cr = encoder.encode(CharBuffer.wrap(input[index]), bs, true);
             bs.rewind();
             encoder.reset();
 
@@ -481,6 +482,147 @@ public class TestCharset extends TestFmwk {
                     || (cr.isUnmappable() && result[index].isUnmappable()))
                     || (cr.isError() && cr.length() != result[index].length())) {
                 errln("Incorrect result in " + converter + " for \"" + input[index] + "\"");
+                break;
+            }
+
+            cr = encoder.encode(CharBuffer.wrap(input[index].toCharArray()), bs, true);
+            bs.rewind();
+            encoder.reset();
+
+            // if cr != results[x]
+            if (!((cr.isUnderflow() && result[index].isUnderflow())
+                    || (cr.isOverflow() && result[index].isOverflow())
+                    || (cr.isMalformed() && result[index].isMalformed())
+                    || (cr.isUnmappable() && result[index].isUnmappable()))
+                    || (cr.isError() && cr.length() != result[index].length())) {
+                errln("Incorrect result in " + converter + " for \"" + input[index] + "\"");
+                break;
+            }
+        }
+    }
+    public void TestUTF8Converter() {
+        String converter = "UTF-8";
+        CharsetProvider icu = new CharsetProviderICU();
+        Charset icuChar = icu.charsetForName(converter);
+        CharsetEncoder encoder = icuChar.newEncoder();
+        CharsetDecoder decoder = icuChar.newDecoder();
+        ByteBuffer bs;
+        CharBuffer us;
+        CoderResult cr;
+
+        
+        int[] size = new int[] { 1<<7, 1<<11, 1<<16 }; // # of 1,2,3 byte combinations
+        byte[] bytes = new byte[size[0] + size[1]*2 + size[2]*3];
+        char[] chars = new char[size[0] + size[1] + size[2]];
+        int i = 0;
+        int x, y;
+
+        // 0 to 1 << 7 (1 byters)
+        for (; i < size[0]; i++) {
+            bytes[i] = (byte) i;
+            chars[i] = (char) i;
+            bs = ByteBuffer.wrap(bytes, i, 1).slice();
+            us = CharBuffer.wrap(chars, i, 1).slice();
+            try {
+                smBufDecode(decoder, converter, bs, us, true, false, true);
+                smBufDecode(decoder, converter, bs, us, true, false, false);
+                smBufEncode(encoder, converter, us, bs, true, false, true);
+                smBufEncode(encoder, converter, us, bs, true, false, false);
+            } catch (Exception ex) {
+                errln("Incorrect result in " + converter + " for 0x"
+                        + Integer.toHexString(i));
+                break;
+            }
+        }
+
+        // 1 << 7 to 1 << 11 (2 byters)
+        for (; i < size[1]; i++) {
+            x = size[0] + i*2;
+            y = size[0] + i;
+            bytes[x + 0] = (byte) (0xc0 | ((i >> 6) & 0x1f));
+            bytes[x + 1] = (byte) (0x80 | ((i >> 0) & 0x3f));
+            chars[y] = (char) i;
+            bs = ByteBuffer.wrap(bytes, x, 2).slice();
+            us = CharBuffer.wrap(chars, y, 1).slice();
+            try {
+                smBufDecode(decoder, converter, bs, us, true, false, true);
+                smBufDecode(decoder, converter, bs, us, true, false, false);
+                smBufEncode(encoder, converter, us, bs, true, false, true);
+                smBufEncode(encoder, converter, us, bs, true, false, false);
+            } catch (Exception ex) {
+                errln("Incorrect result in " + converter + " for 0x"
+                        + Integer.toHexString(i));
+                break;
+            }
+        }
+
+        // 1 << 11 to 1 << 16 (3 byters and surrogates)
+        for (; i < size[2]; i++) {
+            x = size[0] + size[1] * 2 + i * 3;
+            y = size[0] + size[1] + i;
+            bytes[x + 0] = (byte) (0xe0 | ((i >> 12) & 0x0f));
+            bytes[x + 1] = (byte) (0x80 | ((i >> 6) & 0x3f));
+            bytes[x + 2] = (byte) (0x80 | ((i >> 0) & 0x3f));
+            chars[y] = (char) i;
+            if (!UTF16.isSurrogate((char)i)) {
+                bs = ByteBuffer.wrap(bytes, x, 3).slice();
+                us = CharBuffer.wrap(chars, y, 1).slice();
+                try {
+                    smBufDecode(decoder, converter, bs, us, true, false, true);
+                    smBufDecode(decoder, converter, bs, us, true, false, false);
+                    smBufEncode(encoder, converter, us, bs, true, false, true);
+                    smBufEncode(encoder, converter, us, bs, true, false, false);
+                } catch (Exception ex) {
+                    errln("Incorrect result in " + converter + " for 0x"
+                            + Integer.toHexString(i));
+                    break;
+                }
+            } else {
+                bs = ByteBuffer.wrap(bytes, x, 3).slice();
+                us = CharBuffer.wrap(chars, y, 1).slice();
+                
+                cr = decoder.decode(bs, us, true);
+                decoder.reset();
+                bs.rewind();
+                us.rewind();
+                if (!cr.isMalformed() || cr.length() != 3) {
+                    errln("Incorrect result in " + converter + " decoder for 0x"
+                            + Integer.toHexString(i) + " received " + cr);
+                    break;
+                }
+                cr = encoder.encode(us, bs, true);
+                encoder.reset();
+                bs.rewind();
+                us.rewind();
+                if (!cr.isMalformed() || cr.length() != 1) {
+                    errln("Incorrect result in " + converter + " encoder for 0x"
+                            + Integer.toHexString(i) + " received " + cr);
+                    break;
+                }
+                
+                bs = ByteBuffer.wrap(bytes, x, 3).slice();
+                us = CharBuffer.wrap(new String(chars, y, 1));
+                
+                cr = decoder.decode(bs, us, true);
+                decoder.reset();
+                bs.rewind();
+                us.rewind();
+                if (!cr.isMalformed() || cr.length() != 3) {
+                    errln("Incorrect result in " + converter + " decoder for 0x"
+                            + Integer.toHexString(i) + " received " + cr);
+                    break;
+                }
+                cr = encoder.encode(us, bs, true);
+                encoder.reset();
+                bs.rewind();
+                us.rewind();
+                if (!cr.isMalformed() || cr.length() != 1) {
+                    errln("Incorrect result in " + converter + " encoder for 0x"
+                            + Integer.toHexString(i) + " received " + cr);
+                    break;
+                }
+                
+                
             }
         }
     }
@@ -1039,11 +1181,11 @@ public class TestCharset extends TestFmwk {
         }
         
     }
-    public  void TestUTF8Encode() {
+    public void TestUTF8Encode() {
         CharsetEncoder encoderICU = new CharsetProviderICU().charsetForName("utf-8").newEncoder();
         ByteBuffer out = ByteBuffer.allocate(30);
         CoderResult result = encoderICU.encode(CharBuffer.wrap("\ud800"), out, true);
-       
+        
         if (result.isMalformed()) {
             logln("\\ud800 is malformed for ICU4JNI utf-8 encoder");
         } else if (result.isUnderflow()) {
