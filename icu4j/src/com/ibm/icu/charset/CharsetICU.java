@@ -171,15 +171,15 @@ public abstract class CharsetICU extends Charset{
         return (((c)&0xfffff800)==0xd800);
     }
     
-    /**
+    /*
      * Returns the default charset name 
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
-     static final String getDefaultCharsetName(){
-        String defaultEncoding = new InputStreamReader(new ByteArrayInputStream(new byte[0])).getEncoding();
-        return defaultEncoding;
-    }
+//    static final String getDefaultCharsetName(){
+//        String defaultEncoding = new InputStreamReader(new ByteArrayInputStream(new byte[0])).getEncoding();
+//        return defaultEncoding;
+//    }
 
     /**
      * Returns a charset object for the named charset.
