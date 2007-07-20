@@ -764,7 +764,6 @@ abstract public class TimeZone implements Serializable, Cloneable {
     /**
      * Returns the timezone data version currently used by ICU.
      * 
-     * @param status error code for the operation
      * @return the version string, such as "2007f"
      * @throws MissingResourceException if ICU timezone resource bundle
      * is missing or the version information is not available.
