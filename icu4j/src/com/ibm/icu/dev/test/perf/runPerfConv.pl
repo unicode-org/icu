@@ -1,9 +1,13 @@
 #!/usr/local/bin/perl
+# *******************************************************************************
+# * Copyright (C) 2006-2007 International Business Machines Corporation and     *
+# * others. All Rights Reserved.                                                *
+# *******************************************************************************
 
 use strict;
 
-# Assume we are running within the icu4jni root directory
-use lib 'c:/svn/icu4j/src/com/ibm/icu/dev/test/perf';
+# Assume we are running within the icu4j root directory
+use lib 'src/com/ibm/icu/dev/test/perf';
 use Dataset;
 
 # Copyright (c) 2002-2004, International Business Machines Corporation
@@ -16,46 +20,46 @@ my $TESTCLASS = 'com.ibm.icu.dev.test.perf.ConverterPerformanceTest';
 # Methods to be tested.  Each pair represents a test method and
 # a baseline method which is used for comparison.
 my @METHODS  = (
-##              ['TestByteToCharConverter', 'TestByteToCharConverterICU'],
-##              ['TestCharToByteConverter', 'TestCharToByteConverterICU'],
-                ['TestCharsetDecoder',      'TestCharsetDecoderICU'],
-                ['TestCharsetEncoder',      'TestCharsetEncoderICU']
+##               ['TestByteToCharConverter', 'TestByteToCharConverterICU'],
+##               ['TestCharToByteConverter', 'TestCharToByteConverterICU'],
+                 ['TestCharsetDecoder',      'TestCharsetDecoderICU'],
+                 ['TestCharsetEncoder',      'TestCharsetEncoderICU']
                );
 
 # Patterns which define the set of characters used for testing.
 
-my $SOURCEDIR ="C:\\src\\perf\\data\\";
+my $SOURCEDIR ="src/classes/com/ibm/icu4jni/test/perf/data/conversion/";
 
 my @OPTIONS = (
 #                                 src text          src encoding    test encoding  
-#                               [ "arabic.txt",     "UTF-8",        "csisolatinarabic"],
+                                [ "arabic.txt",     "UTF-8",        "csisolatinarabic"],
                                 [ "french.txt",     "UTF-8",        "csisolatin1"],
-#                               [ "greek.txt",      "UTF-8",        "csisolatingreek"],
-#                               [ "hebrew.txt",     "UTF-8",        "csisolatinhebrew"],
+                                [ "greek.txt",      "UTF-8",        "csisolatingreek"],
+                                [ "hebrew.txt",     "UTF-8",        "csisolatinhebrew"],
 #                               [ "hindi.txt" ,     "UTF-8",        "iscii"],
-#                               [ "japanese.txt",   "UTF-8",        "EUC-JP"],
+                                [ "japanese.txt",   "UTF-8",        "EUC-JP"],
 #                               [ "japanese.txt",   "UTF-8",        "csiso2022jp"],
-#                               [ "japanese.txt",   "UTF-8",        "shift_jis"],
+                                [ "japanese.txt",   "UTF-8",        "shift_jis"],
 #                               [ "korean.txt",     "UTF-8",        "csiso2022kr"],
-#                               [ "korean.txt",     "UTF-8",        "EUC-KR"],
-#                               [ "s-chinese.txt",  "UTF-8",        "EUC_CN"],
-#                               [ "arabic.txt",     "UTF-8",        "UTF-8"],
-#                               [ "french.txt",     "UTF-8",        "UTF-8"],                                
-#                               [ "greek.txt",      "UTF-8",        "UTF-8"],
-#                               [ "hebrew.txt",     "UTF-8",        "UTF-8"],
-#                               [ "hindi.txt" ,     "UTF-8",        "UTF-8"],
-#                               [ "japanese.txt",   "UTF-8",        "UTF-8"],
-#                               [ "korean.txt",     "UTF-8",        "UTF-8"],
-#                               [ "s-chinese.txt",  "UTF-8",        "UTF-8"],
-#                               [ "french.txt",     "UTF-8",        "UTF-16BE"],
-#                               [ "french.txt",     "UTF-8",        "UTF-16LE"],
+                                [ "korean.txt",     "UTF-8",        "EUC-KR"],
+                                [ "s-chinese.txt",  "UTF-8",        "EUC_CN"],
+                                [ "arabic.txt",     "UTF-8",        "UTF-8"],
+                                [ "french.txt",     "UTF-8",        "UTF-8"],                                
+                                [ "greek.txt",      "UTF-8",        "UTF-8"],
+                                [ "hebrew.txt",     "UTF-8",        "UTF-8"],
+                                [ "hindi.txt" ,     "UTF-8",        "UTF-8"],
+                                [ "japanese.txt",   "UTF-8",        "UTF-8"],
+                                [ "korean.txt",     "UTF-8",        "UTF-8"],
+                                [ "s-chinese.txt",  "UTF-8",        "UTF-8"],
+                                [ "french.txt",     "UTF-8",        "UTF-16BE"],
+                                [ "french.txt",     "UTF-8",        "UTF-16LE"],
                                 [ "english.txt",    "UTF-8",        "US-ASCII"],
                           );
 
-my $CALIBRATE = 2; # duration in seconds for initial calibration
+my $CALIBRATE = 2;  # duration in seconds for initial calibration
 my $DURATION  = 10; # duration in seconds for each pass
-my $NUMPASSES = 4; # number of passes.  If > 1 then the first pass
-                   # is discarded as a JIT warm-up pass.
+my $NUMPASSES = 4;  # number of passes.  If > 1 then the first pass
+                    # is discarded as a JIT warm-up pass.
 
 my $TABLEATTR = 'BORDER="1" CELLPADDING="4" CELLSPACING="0"';
 
@@ -290,7 +294,7 @@ sub callJava {
     my $passes = shift;
     my $fileName = $SOURCEDIR.@$pat[0] ;
     my $n = ($n < 0) ? "-t ".(-$n) : "-i ".$n;
-    my $cmd = "c:\\j2sdk1.4.2_14\\bin\\java -classpath ;c:\\svn\\icu4j\\classes; $TESTCLASS $method $n -p $passes file_name $fileName src_encoding @$pat[1] test @$pat[2]";
+    my $cmd = "java -classpath classes $TESTCLASS $method $n -p $passes file_name $fileName src_encoding @$pat[1] test @$pat[2]";
     print "[$cmd]\n"; # for debugging
     open(PIPE, "$cmd|") or die "Can't run \"$cmd\"";
     my @out;
