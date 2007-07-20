@@ -233,7 +233,7 @@ public class VTimeZone extends BasicTimeZone {
      * the specified start time.
      * 
      * @param writer    The <code>Writer</code> used for the output
-     * @param cutover   The start time
+     * @param start     The start time
      * 
      * @throws IOException
      * 
