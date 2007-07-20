@@ -392,30 +392,6 @@ public class IndianCalendar extends Calendar {
        internalSet(MONTH, IndianMonth);
        internalSet(DAY_OF_MONTH, IndianDayOfMonth );
    }
-
-    private static final int[][] MONTH_COUNT = {
-       //len len2   st  st2
-       {  31,  31,   0,   0 }, // Jan
-       {  28,  29,  31,  31 }, // Feb
-       {  31,  31,  59,  60 }, // Mar
-       {  30,  30,  90,  91 }, // Apr
-       {  31,  31, 120, 121 }, // May
-       {  30,  30, 151, 152 }, // Jun
-       {  31,  31, 181, 182 }, // Jul
-       {  31,  31, 212, 213 }, // Aug
-       {  30,  30, 243, 244 }, // Sep
-       {  31,  31, 273, 274 }, // Oct
-       {  30,  30, 304, 305 }, // Nov
-       {  31,  31, 334, 335 }  // Dec
-       // len  length of month
-       // len2 length of month in a leap year
-       // st   days in year before start of month
-       // st2  days in year before month in leap year
-    };
-
-
-
-
     
     private static final int LIMITS[][] = {
        // Minimum  Greatest    Least  Maximum
