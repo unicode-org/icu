@@ -192,8 +192,12 @@ public class TestConversion extends ModuleTest {
             encoder = (CharsetEncoder) charset.newEncoder();
             encoder.onMalformedInput(CodingErrorAction.REPLACE);
             encoder.onUnmappableCharacter(CodingErrorAction.REPLACE);
-            if (encoder instanceof CharsetEncoderICU)
+            if (encoder instanceof CharsetEncoderICU) {
                 ((CharsetEncoderICU)encoder).setFallbackUsed(cc.fallbacks);
+                if (((CharsetEncoderICU)encoder).isFallbackUsed() != cc.fallbacks) {
+                    errln("Fallback could not be set for " + cc.charset);
+                }
+            }
             
         } catch (Exception e) {
             // TODO implement loading of test data.
@@ -983,11 +987,20 @@ public class TestConversion extends ModuleTest {
             }
         }
         
-        logln("[" + cc.caseNr + "]:" + cc.charset);
-        logln("Input:       " + printchars(CharBuffer.wrap(cc.unicode), cc.unicode.length()));
-        logln("Output:      " + printbytes(output, output.limit()));
-        logln("Expected:    " + printbytes(expected, expected.limit()));
-        logln(res ? "Passed" : "Failed");
+        if (res) {
+            logln("[" + cc.caseNr + "]:" + cc.charset);
+            logln("Input:       " + printchars(CharBuffer.wrap(cc.unicode), cc.unicode.length()));
+            logln("Output:      " + printbytes(output, output.limit()));
+            logln("Expected:    " + printbytes(expected, expected.limit()));
+            logln("Passed");
+        }
+        else {
+            errln("[" + cc.caseNr + "]:" + cc.charset);
+            errln("Input:       " + printchars(CharBuffer.wrap(cc.unicode), cc.unicode.length()));
+            errln("Output:      " + printbytes(output, output.limit()));
+            errln("Expected:    " + printbytes(expected, expected.limit()));
+            errln("Failed");
+        }
         return res;
     }
 
@@ -1012,11 +1025,20 @@ public class TestConversion extends ModuleTest {
             }
         }
         
-        logln("[" + cc.caseNr + "]:" + cc.charset);
-        logln("Input:       " + printbytes(cc.bytes, cc.bytes.limit()));
-        logln("Output:      " + printchars(output, output.limit()));
-        logln("Expected:    " + printchars(CharBuffer.wrap(expected), expected.length()));
-        logln(res ? "Passed" : "Failed");
+        if (res) {
+            logln("[" + cc.caseNr + "]:" + cc.charset);
+            logln("Input:       " + printbytes(cc.bytes, cc.bytes.limit()));
+            logln("Output:      " + printchars(output, output.limit()));
+            logln("Expected:    " + printchars(CharBuffer.wrap(expected), expected.length()));
+            logln("Passed");
+        }
+        else {
+            errln("[" + cc.caseNr + "]:" + cc.charset);
+            errln("Input:       " + printbytes(cc.bytes, cc.bytes.limit()));
+            errln("Output:      " + printchars(output, output.limit()));
+            errln("Expected:    " + printchars(CharBuffer.wrap(expected), expected.length()));
+            errln("Failed");
+        }
         return res;
     }
 
