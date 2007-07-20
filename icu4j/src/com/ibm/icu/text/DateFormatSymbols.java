@@ -176,6 +176,87 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
+     * Gets a DateFormatSymbols instance for the default locale.
+     * <br><br>
+     * <b>Note:</b> Unlike <code>java.text.DateFormatSymbols#getInstance</code>,
+     * this method simply returns <code>new com.ibm.icu.text.DateFormatSymbols()</code>.
+     * ICU does not support <code>DateFormatSymbolsProvider</code> introduced in Java 6
+     * or its equivalent implementation for now.
+     * 
+     * @return A DateFormatSymbols instance.
+     * @stable ICU 3.8
+     */
+    public static DateFormatSymbols getInstance() {
+        return new DateFormatSymbols();
+    }
+
+    /**
+     * Gets a DateFormatSymbols instance for the given locale.
+     * <br><br>
+     * <b>Note:</b> Unlike <code>java.text.DateFormatSymbols#getInstance</code>,
+     * this method simply returns <code>new com.ibm.icu.text.DateFormatSymbols(locale)</code>.
+     * ICU does not support <code>DateFormatSymbolsProvider</code> introduced in Java 6
+     * or its equivalent implementation for now.
+     * 
+     * @param locale the locale.
+     * @return A DateFormatSymbols instance.
+     * @stable ICU 3.8
+     */
+    public static DateFormatSymbols getInstance(Locale locale) {
+        return new DateFormatSymbols(locale);
+    }
+
+    /**
+     * Gets a DateFormatSymbols instance for the given locale.
+     * <br><br>
+     * <b>Note:</b> Unlike <code>java.text.DateFormatSymbols#getInstance</code>,
+     * this method simply returns <code>new com.ibm.icu.text.DateFormatSymbols(locale)</code>.
+     * ICU does not support <code>DateFormatSymbolsProvider</code> introduced in Java 6
+     * or its equivalent implementation for now.
+     * 
+     * @param locale the locale.
+     * @return A DateFormatSymbols instance.
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static DateFormatSymbols getInstance(ULocale locale) {
+        return new DateFormatSymbols(locale);
+    }
+
+    /**
+     * Returns an array of all locales for which the <code>getInstance</code> methods of this
+     * class can return localized instances.
+     * <br><br>
+     * <b>Note:</b> Unlike <code>java.text.DateFormatSymbols#getAvailableLocales</code>,
+     * this method simply returns the array of <code>Locale</code>s available in this class.
+     * ICU does not support <code>DateFormatSymbolsProvider</code> introduced in Java 6
+     * or its equivalent implementation for now.
+     * 
+     * @return An array of <code>Locale</code>s for which localized <code>DateFormatSymbols</code> instances are available.
+     * @stable ICU 3.8
+     */
+    public static Locale[] getAvailableLocales() {
+        return ICUResourceBundle.getAvailableLocales(ICUResourceBundle.ICU_BASE_NAME);
+    }
+
+    /**
+     * Returns an array of all locales for which the <code>getInstance</code> methods of this
+     * class can return localized instances.
+     * <br><br>
+     * <b>Note:</b> Unlike <code>java.text.DateFormatSymbols#getAvailableLocales</code>,
+     * this method simply returns the array of <code>ULocale</code>s available in this class.
+     * ICU does not support <code>DateFormatSymbolsProvider</code> introduced in Java 6
+     * or its equivalent implementation for now.
+     * 
+     * @return An array of <code>ULocale</code>s for which localized <code>DateFormatSymbols</code> instances are available.
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static ULocale[] getAvailableULocales() {
+        return ICUResourceBundle.getAvailableULocales(ICUResourceBundle.ICU_BASE_NAME);        
+    }
+    
+    /**
      * Era strings. For example: "AD" and "BC".  An array of 2 strings,
      * indexed by <code>Calendar.BC</code> and <code>Calendar.AD</code>.
      * @serial
