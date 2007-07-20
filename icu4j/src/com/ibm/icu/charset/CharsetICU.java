@@ -9,8 +9,8 @@
 
 package com.ibm.icu.charset;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStreamReader;
+//import java.io.ByteArrayInputStream;
+//import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
 
 import java.lang.reflect.InvocationTargetException;
