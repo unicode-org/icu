@@ -1946,7 +1946,8 @@ public class Bidi {
                     !((0 == level) && (dirProp == B))) ||
                     (MAX_EXPLICIT_LEVEL <level)) {
                 /* level out of bounds */
-                throw new IllegalArgumentException("level out of bounds at " + i);
+                throw new IllegalArgumentException("level " + level +
+                                                   " out of bounds at " + i);
             }
             if ((dirProp == B) && ((i + 1) < length)) {
                 if (!((text[i] == CR) && (text[i + 1] == LF))) {
@@ -4381,11 +4382,21 @@ public class Bidi {
                 paraEmbeddings = null;
             } else {
                 paraEmbeddings = new byte[paragraphLength];
-                for (int i = 0; i < paragraphLength; ++i) {
-                    paraText[i] = text[i + textStart];
-                    paraEmbeddings[i] = embeddings[i + embStart];
+                byte lev;
+                for (int i = 0; i < paragraphLength; i++) {
+                    lev = embeddings[i + embStart];
+                    if (lev < 0) {
+                        lev = (byte)((- lev) | LEVEL_OVERRIDE);
+                    } else if (lev == 0) {
+                        lev = paraLevel;
+                        if (paraLevel > MAX_EXPLICIT_LEVEL) {
+                            lev &= 1;
+                        }
+                    }
+                    paraEmbeddings[i] = lev;
                 }
             }
+            System.arraycopy(text, textStart, paraText, 0, paragraphLength);
             setPara(paraText, paraLevel, paraEmbeddings);
         }
     }
@@ -4548,9 +4559,7 @@ public class Bidi {
         verifyValidParaOrLine();
         BidiLine.getRuns(this);
         verifyRange(run, 0, runCount);
-        if (!isGoodLogicalToVisualRunsMap) {
-            getLogicalToVisualRunsMap();
-        }
+        getLogicalToVisualRunsMap();
         return runs[logicalToVisualRunsMap[run]].level;
     }
 
@@ -4573,9 +4582,7 @@ public class Bidi {
         verifyValidParaOrLine();
         BidiLine.getRuns(this);
         verifyRange(run, 0, runCount);
-        if (!isGoodLogicalToVisualRunsMap) {
-            getLogicalToVisualRunsMap();
-        }
+        getLogicalToVisualRunsMap();
         return runs[logicalToVisualRunsMap[run]].start;
     }
 
@@ -4599,9 +4606,7 @@ public class Bidi {
         verifyValidParaOrLine();
         BidiLine.getRuns(this);
         verifyRange(run, 0, runCount);
-        if (!isGoodLogicalToVisualRunsMap) {
-            getLogicalToVisualRunsMap();
-        }
+        getLogicalToVisualRunsMap();
         int idx = logicalToVisualRunsMap[run];
         int length = idx == 0 ? runs[idx].limit :
                                 runs[idx].limit - runs[idx-1].limit;
@@ -4734,11 +4739,7 @@ public class Bidi {
      */
     public String writeReordered(short options)
     {
-        /* error checking */
-        if (text == null || length < 0) {
-            throw new IllegalStateException();
-        }
-
+        verifyValidParaOrLine();
         if (length == 0) {
             /* nothing to do */
             return new String("");
