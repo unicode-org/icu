@@ -108,10 +108,10 @@ public class Currency extends MeasureUnit implements Serializable {
      * @provisional This API might change or be removed in a future release.
      */
     public static Currency getInstance(ULocale locale) {
-    String currency = locale.getKeywordValue("currency");
-    if (currency != null) {
-        return getInstance(currency);
-    }
+        String currency = locale.getKeywordValue("currency");
+        if (currency != null) {
+            return getInstance(currency);
+        }
 
         if (shim == null) {
             return createCurrency(locale);
@@ -120,6 +120,7 @@ public class Currency extends MeasureUnit implements Serializable {
         return shim.createInstance(locale);
     }
 
+    private static final String EUR_STR = "EUR";
     /**
      * Instantiate a currency from a resource bundle found in Locale loc.
      */
@@ -127,10 +128,9 @@ public class Currency extends MeasureUnit implements Serializable {
         // TODO: check, this munging might not be required for ULocale
         String country = loc.getCountry();
         String variant = loc.getVariant();
-        if (variant.equals("PREEURO") || variant.equals("EURO")) {
-            country = country + '_' + variant;
-        }
-        ICUResourceBundle bundle = (ICUResourceBundle) ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,"CurrencyData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        boolean isPreEuro = variant.equals("PREEURO");
+        boolean isEuro = variant.equals("EURO");
+        ICUResourceBundle bundle = (ICUResourceBundle) ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,"supplementalData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         if(bundle==null){
             //throw new MissingResourceException()
         }
@@ -139,12 +139,24 @@ public class Currency extends MeasureUnit implements Serializable {
         // Do a linear search
         String curriso = null;
         try {
-            curriso = cm.getString(country);
+            UResourceBundle countryArray = cm.get(country);
+            UResourceBundle currencyReq = countryArray.get(0);
+            curriso = currencyReq.getString("id");
+            if (isPreEuro && curriso.equals(EUR_STR)) {
+                currencyReq = countryArray.get(1);
+                curriso = currencyReq.getString("id");
+            }
+            else if (isEuro) {
+                curriso = EUR_STR;
+            }
             if (curriso != null) {
                 return new Currency(curriso);
             }
         } catch (MissingResourceException ex) {
             try{
+                if (isPreEuro || isEuro) {
+                    country = country + '_' + variant;
+                }
                 // a deprecated ISO code may have been passed
                 // try to get the current country code
                 String rep = ULocale.getCurrentCountryID(country);
@@ -621,7 +633,7 @@ public class Currency extends MeasureUnit implements Serializable {
             // Get CurrencyMeta resource out of root locale file.  [This may
             // move out of the root locale file later; if it does, update this
             // code.]
-            UResourceBundle root = ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,"CurrencyData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+            UResourceBundle root = ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "supplementalData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
             UResourceBundle currencyMeta = root.get("CurrencyMeta");
 
             //Integer[] i = null;
