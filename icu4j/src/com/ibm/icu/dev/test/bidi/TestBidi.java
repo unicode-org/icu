@@ -31,6 +31,7 @@ public class TestBidi extends BidiTest {
 
         doTests(bidi, bidiLine, false);
         doTests(bidi, bidiLine, true);
+        doMisc(bidi);
         logln("\nExiting TestBidi");
     }
 
@@ -68,6 +69,18 @@ public class TestBidi extends BidiTest {
                     doTest(bidiLine, testNumber, test, lineStart, countRunsFirst);
                 } catch (Exception e)  {
                     errln("Bidi.setLine(" + lineStart + ", " + test.lineLimit
+                            + "), in runAll test[" + testNumber + "] failed");
+                }
+                /* do it again using createLineBidi instead of setLine */
+                try {
+                    bidiLine = bidi.createLineBidi(lineStart, test.lineLimit);
+                    logln("Bidi.createLineBidi(" + lineStart + ", " + test.lineLimit
+                            + "), in tests[" + testNumber + "] OK, direction "
+                            + bidiLine.getDirection() + " paraLevel "
+                            + bidiLine.getBaseLevel());
+                    doTest(bidiLine, testNumber, test, lineStart, countRunsFirst);
+                } catch (Exception e)  {
+                    errln("Bidi.createLineBidi(" + lineStart + ", " + test.lineLimit
                             + "), in runAll test[" + testNumber + "] failed");
                 }
             }
@@ -159,14 +172,14 @@ public class TestBidi extends BidiTest {
             logicalIndex = run.getLimit();
             level2 = run.getEmbeddingLevel();
             if (level != level2) {
-                assertEquals("Logical run ending at index " + logicalIndex +
+                assertEquals("Logical " + run.toString() +
                              " in test[" + testNumber + "]: wrong level",
                              level, level2);
             }
             if (--runCount < 0) {
-                errln("Bidi.getLogicalRun(test[" + testNumber +
-                      "]): wrong number of runs compared to " +
-                      bidi.countRuns());
+                errln("Bidi.getLogicalRun(test[" + testNumber
+                      + "]): wrong number of runs compared to Bidi.countRuns() = "
+                      + bidi.countRuns());
             }
         }
         if (runCount != 0) {
@@ -357,6 +370,26 @@ public class TestBidi extends BidiTest {
             buffer[i] = charFromDirProp[dirProps[i]];
         }
         return new String(buffer);
+    }
+
+    private void doMisc(Bidi bidi) {
+    /* Miscellaneous tests to exercize less popular code paths */
+
+        assertEquals("\nwriteReverse should return an empty string",
+                     "", Bidi.writeReverse("", (short)0));
+
+        bidi.setPara("", Bidi.LTR, null);
+        assertEquals("\nwriteReordered should return an empty string",
+                     "", bidi.writeReordered((short)0));
+
+        bidi.setPara("abc", Bidi.LTR, null);
+        assertEquals("\ngetRunStart should return 0",
+                     0, bidi.getRunStart(0));
+
+        bidi.setPara("abc", Bidi.LTR, null);
+        assertEquals("\ngetRunLimit should return 3",
+                     3, bidi.getRunLimit(0));
+
     }
 
 

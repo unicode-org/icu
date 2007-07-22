@@ -13,6 +13,7 @@ import com.ibm.icu.util.VersionInfo;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.Bidi;
+import com.ibm.icu.text.BidiRun;
 
 /**
  * A base class for the Bidi test suite.
@@ -323,11 +324,13 @@ public class BidiTest extends TestFmwk {
 
     void printCaseInfo(Bidi bidi, String src, String dst)
     {
-        errcontln("========================================");
         int length = bidi.getProcessedLength();
         byte[] levels = bidi.getLevels();
         char[] levelChars  = new char[length];
         byte lev;
+        int runCount = bidi.countRuns();
+        errcontln("========================================");
+        errcontln("Processed length: " + length);
         for (int i = 0; i < length; i++) {
             lev = levels[i];
             if (lev < 0) {
@@ -341,9 +344,18 @@ public class BidiTest extends TestFmwk {
         errcontln("Levels: " + new String(levelChars));
         errcontln("Source: " + src);
         errcontln("Result: " + dst);
+        errcontln("Direction: " + bidi.getDirection());
         errcontln("paraLevel: " + Byte.toString(bidi.getParaLevel()));
-        errcontln("orderingMode: " + modeToString(bidi.getReorderingMode()));
-        errcontln("orderingOptions: " + spOptionsToString(bidi.getReorderingOptions()));
+        errcontln("reorderingMode: " + modeToString(bidi.getReorderingMode()));
+        errcontln("reorderingOptions: " + spOptionsToString(bidi.getReorderingOptions()));
+        errcont("Runs: " + runCount + " => logicalStart.length/level: ");
+        for (int i = 0; i < runCount; i++) {
+            BidiRun run;
+            run = bidi.getVisualRun(i);
+            errcont(" " + run.getStart() + "." + run.getLength() + "/" +
+                    run.getEmbeddingLevel());
+        }
+        errcont("\n");
     }
 
     static final String mates1 = "<>()[]{}";
@@ -359,7 +371,7 @@ public class BidiTest extends TestFmwk {
         /* For REORDER_RUNS_ONLY, it would not be correct to check levels[i],
            so we use the appropriate run's level, which is good for all cases.
          */
-        if ((bidi.getLogicalRun(i).getEmbeddingLevel() & 1) == 0) {
+        if (bidi.getLogicalRun(i).getDirection() == 0) {
             return false;
         }
         for (int k = 0; k < mates1Chars.length; k++) {
@@ -413,8 +425,8 @@ public class BidiTest extends TestFmwk {
         if (errMap) {
             if (testOK) {
                 printCaseInfo(bidi, src, dst);
+                testOK = false;
             }
-            testOK = false;
             errln("Mismatch between getLogicalMap() and getVisualIndex()");
             errcont("Map    :" + valueOf(logMap));
             errcont("\n");
@@ -427,8 +439,8 @@ public class BidiTest extends TestFmwk {
         if (errDst) {
             if (testOK) {
                 printCaseInfo(bidi, src, dst);
+                testOK = false;
             }
-            testOK = false;
             errln("Source does not map to Result");
             errcontln("We got: " + new String(accumDst));
         }
@@ -456,8 +468,8 @@ public class BidiTest extends TestFmwk {
         if (errMap) {
             if (testOK) {
                 printCaseInfo(bidi, src, dst);
+                testOK = false;
             }
-            testOK = false;
             errln("Mismatch between getVisualMap() and getLogicalIndex()");
             errcont("Map    :" + valueOf(visMap));
             errcont("\n");
@@ -470,8 +482,8 @@ public class BidiTest extends TestFmwk {
         if (errDst) {
             if (testOK) {
                 printCaseInfo(bidi, src, dst);
+                testOK = false;
             }
-            testOK = false;
             errln("Result does not map to Source");
             errcontln("We got: " + new String(accumSrc));
         }

@@ -30,22 +30,23 @@ public class TestInverse extends BidiTest {
         "\u0061\u0062\u0020\u0061\u0062\u0020\u0661\u0662"
     };
 
-    public void testInverseBidi() {
+    public void testInverse() {
         Bidi bidi;
         int i;
 
         logln("\nEntering TestInverse\n");
         bidi = new Bidi();
-        log("inverse Bidi: testInverseBidi(L) with " + testCases.length +
+        log("inverse Bidi: testInverse(L) with " + testCases.length +
             " test cases ---\n");
         for(i = 0; i < testCases.length; ++i) {
+            logln("Testing case " + i);
             _testInverseBidi(bidi, testCases[i], Bidi.DIRECTION_LEFT_TO_RIGHT);
         }
 
-        log("inverse BiDi: testInverseBiDi(R) with " + testCases.length +
+        log("inverse Bidi: testInverse(R) with " + testCases.length +
             " test cases ---\n");
         for (i = 0; i < testCases.length; ++i) {
-        logln("Testing case " + i);
+            logln("Testing case " + i);
             _testInverseBidi(bidi, testCases[i], Bidi.DIRECTION_RIGHT_TO_LEFT);
         }
 
@@ -75,10 +76,9 @@ public class TestInverse extends BidiTest {
         int i, j, k;
 
         log("inverse Bidi: testManyInverseBiDi(" +
-              (direction == Bidi.DIRECTION_LEFT_TO_RIGHT ? 'L' : 'R') +
-              " - test permutations of text snippets ---\n");
+            (direction == Bidi.DIRECTION_LEFT_TO_RIGHT ? 'L' : 'R') +
+            ") - test permutations of text snippets ---\n");
         for (i = 0; i < COUNT_REPEAT_SEGMENTS; ++i) {
-            logln("Testing case " + i);
             text[0] = repeatSegments[i][0];
             text[1] = repeatSegments[i][1];
             for (j = 0; j < COUNT_REPEAT_SEGMENTS; ++j) {
@@ -100,7 +100,7 @@ public class TestInverse extends BidiTest {
         String visualLTR, logicalDest, visualDest;
         try {
             if (direction == Bidi.DIRECTION_LEFT_TO_RIGHT) {
-                log("inverse BiDi: testInverseBiDi(L)\n");
+                log("inverse Bidi: testInverse(L)\n");
 
                 /* convert visual to logical */
                 bidi.setInverse(true);
@@ -129,7 +129,7 @@ public class TestInverse extends BidiTest {
                 visualDest = bidi.writeReordered((short)(Bidi.DO_MIRRORING |
                                                    Bidi.REMOVE_BIDI_CONTROLS));
             } else {
-                logln("inverse BiDi: testInverseBiDi(R)\n");
+                logln("inverse Bidi: testInverse(R)\n");
 
                 /* reverse visual from RTL to LTR */
                 visualLTR = Bidi.writeReverse(src, (short)0);

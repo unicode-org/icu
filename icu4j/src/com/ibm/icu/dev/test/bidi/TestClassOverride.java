@@ -35,7 +35,7 @@ public class TestClassOverride extends BidiTest {
     private static final int BN  = TestData.BN;
 
     private static final int[] customClasses = {
-        /* 0/8    1/9    2/A    3/B    4/C    5/D    6/E    7/F  */
+    /*  0/8    1/9    2/A    3/B    4/C    5/D    6/E    7/F  */
         DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF, //00-07
         DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF, //08-0F
         DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF,   DEF, //10-17
@@ -66,7 +66,7 @@ public class TestClassOverride extends BidiTest {
         public int classify(int c) {
             // some (meaningless) action - just for testing purposes
             return (this.context != null ? ((Integer)context).intValue()
-                            : c >= nEntries ? Bidi.CLASS_DEFAULT
+                            : c >= nEntries ? super.classify(c)
                             : customClasses[c]);
         }
     }
@@ -74,31 +74,35 @@ public class TestClassOverride extends BidiTest {
     private void verifyClassifier(Bidi bidi) {
         BidiClassifier actualClassifier = bidi.getCustomClassifier();
 
-        if (this.classifier != null) {
+        if (this.classifier == null) {
+            if (actualClassifier != null) {
+                errln("Bidi classifier is not yet set, but reported as not null");
+            }
+        } else {
             Class expectedClass = this.classifier.getClass();
             assertTrue("null Bidi classifier", actualClassifier != null);
             if (actualClassifier == null) {
                 return;
             }
-            if (!expectedClass.isInstance(actualClassifier)) {
-                errln("Bidi object reports classifier is an instance of " +
-                      actualClassifier.getClass().getName() +
-                      ",\nwhile the expected classifier should be an " +
-                      "instance of " + expectedClass);
-            } else {
+            if (expectedClass.isInstance(actualClassifier)) {
                 Object context = classifier.getContext();
-                if (context != null) {
+                if (context == null) {
+                    if (actualClassifier.getContext() != null) {
+                        errln("Unexpected context, should be null");
+                    }
+                } else {
                     assertEquals("Unexpected classifier context", context,
                                  actualClassifier.getContext());
                     assertEquals("Unexpected context's content",
                                  ((Integer)context).intValue(),
                                  bidi.getCustomizedClass('a'));
-                } else if (actualClassifier.getContext() != null) {
-                    errln("Unexpected context, should be null");
                 }
+            } else {
+                errln("Bidi object reports classifier is an instance of " +
+                      actualClassifier.getClass().getName() +
+                      ",\nwhile the expected classifier should be an " +
+                      "instance of " + expectedClass);
             }
-        } else if (actualClassifier != null) {
-            errln("Bidi classifier is not yet set, but reported as not null");
         }
     }
 
