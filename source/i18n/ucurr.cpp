@@ -45,7 +45,7 @@ static const int32_t MAX_POW10 = (sizeof(POW10)/sizeof(POW10[0])) - 1;
 // Resource tags
 //
 
-static const char CURRENCY_DATA[] = "CurrencyData";
+static const char CURRENCY_DATA[] = "supplementalData";
 // Tag for meta-data, in root.
 static const char CURRENCY_META[] = "CurrencyMeta";
 
@@ -62,10 +62,11 @@ static const char VAR_PRE_EURO[] = "PREEURO";
 static const char VAR_EURO[] = "EURO";
 
 // Variant delimiter
-static const char VAR_DELIM[] = "_";
+static const char VAR_DELIM = '_';
+static const char VAR_DELIM_STR[] = "_";
 
 // Variant for legacy euro mapping in CurrencyMap
-static const char VAR_DELIM_EURO[] = "_EURO";
+//static const char VAR_DELIM_EURO[] = "_EURO";
 
 #define VARIANT_IS_EMPTY    0
 #define VARIANT_IS_EURO     0x1
@@ -79,6 +80,8 @@ static const char CURRENCIES[] = "Currencies";
 // patterns.  Strings that start with 2 marks are static strings, and
 // the first mark is deleted.
 static const UChar CHOICE_FORMAT_MARK = 0x003D; // Equals sign
+
+static const UChar EUR_STR[] = {0x0045,0x0055,0x0052,0};
 
 //------------------------------------------------------------
 // Code
@@ -175,7 +178,7 @@ idForLocale(const char* locale, char* countryAndVariant, int capacity, UErrorCod
                    | ((0 == uprv_strcmp(variant, VAR_PRE_EURO)) << 1);
         if (variantType)
         {
-            uprv_strcat(countryAndVariant, VAR_DELIM);
+            uprv_strcat(countryAndVariant, VAR_DELIM_STR);
             uprv_strcat(countryAndVariant, variant);
         }
     }
@@ -362,25 +365,44 @@ ucurr_forLocale(const char* locale,
                     return u_strlen(result);
                 }
 #endif
+                // Remove variants, which is only needed for registration.
+                char *idDelim = strchr(id, VAR_DELIM);
+                if (idDelim) {
+                    idDelim[0] = 0;
+                }
 
                 // Look up the CurrencyMap element in the root bundle.
                 UResourceBundle *rb = ures_openDirect(NULL, CURRENCY_DATA, &localStatus);
                 UResourceBundle *cm = ures_getByKey(rb, CURRENCY_MAP, rb, &localStatus);
-                s = ures_getStringByKey(cm, id, &resLen, &localStatus);
+                UResourceBundle *countryArray = ures_getByKey(rb, id, cm, &localStatus);
+                UResourceBundle *currencyReq = ures_getByIndex(countryArray, 0, NULL, &localStatus);
+                s = ures_getStringByKey(currencyReq, "id", &resLen, &localStatus);
 
-                if ((s == NULL || U_FAILURE(localStatus)) && variantType != VARIANT_IS_EMPTY
-                    && (id[0] != 0))
+                /*
+                Get the second item when PREEURO is requested, and this is a known Euro country.
+                If the requested variant is PREEURO, and this isn't a Euro country, assume
+                that the country changed over to the Euro in the future. This is probably
+                an old version of ICU that hasn't been updated yet. The latest currency is
+                probably correct.
+                */
+                if (U_SUCCESS(localStatus)) {
+                    if ((variantType & VARIANT_IS_PREEURO) && u_strcmp(s, EUR_STR) == 0) {
+                        currencyReq = ures_getByIndex(countryArray, 1, currencyReq, &localStatus);
+                        s = ures_getStringByKey(currencyReq, "id", &resLen, &localStatus);
+                    }
+                    else if ((variantType & VARIANT_IS_EURO)) {
+                        s = EUR_STR;
+                    }
+                }
+                ures_close(countryArray);
+                ures_close(currencyReq);
+
+                if ((U_FAILURE(localStatus)) && strchr(id, '_') != 0)
                 {
                     // We don't know about it.  Check to see if we support the variant.
-                    if (variantType & VARIANT_IS_EURO) {
-                        s = ures_getStringByKey(cm, VAR_DELIM_EURO, &resLen, ec);
-                    }
-                    else {
-                        uloc_getParent(locale, id, sizeof(id), ec);
-                        *ec = U_USING_FALLBACK_WARNING;
-                        ures_close(cm);
-                        return ucurr_forLocale(id, buff, buffCapacity, ec);
-                    }
+                    uloc_getParent(locale, id, sizeof(id), ec);
+                    *ec = U_USING_FALLBACK_WARNING;
+                    return ucurr_forLocale(id, buff, buffCapacity, ec);
                 }
                 else if (*ec == U_ZERO_ERROR || localStatus != U_ZERO_ERROR) {
                     // There is nothing to fallback to. Report the failure/warning if possible.
@@ -391,7 +413,6 @@ ucurr_forLocale(const char* locale,
                         u_strcpy(buff, s);
                     }
                 }
-                ures_close(cm);
             }
             return u_terminateUChars(buff, buffCapacity, resLen, ec);
         } else {
