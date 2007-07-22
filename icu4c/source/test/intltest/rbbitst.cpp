@@ -102,7 +102,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
             if(exec) TestDebug();                              break;
         case 20: name = "TestTrieDict";
             if(exec) TestTrieDict();                           break;
-        case 21: name = "TestBug5775()";
+        case 21: name = "TestBug5775";
             if (exec) TestBug5775();                        break;
 
         default: name = ""; break; //needed to end loop
