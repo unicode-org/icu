@@ -120,7 +120,7 @@ TimeZoneTest::TestGenericAPI()
     delete zoneclone;
     delete pstZone;
 
-    UErrorCode status;
+    UErrorCode status = U_ZERO_ERROR;
     const char* tzver = TimeZone::getTZDataVersion(status);
     if (U_FAILURE(status)) {
         errln("FAIL: getTZDataVersion failed");
