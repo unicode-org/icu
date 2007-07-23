@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## HP/UX-specific setup using aCC
-## Copyright (c) 1999-2006, International Business Machines Corporation and
+## Copyright (c) 1999-2007, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Commands to generate dependency files
@@ -17,15 +17,14 @@ SHAREDLIBCXXFLAGS = +z
 THREADSCPPFLAGS = -D_REENTRANT -D_THREAD_SAFE
 
 # Use Extended ANSI mode, which is useful for 64-bit numbers
-# +Olibcalls uses intrinsic functions for strlen and others
 # +W ignores some warnings
 #    740 Unsafe cast between pointers/references to incomplete classes...
 #    749 This operation is non-portable and potentially unsafe.
 #        (Ironically the solution to fix this warning is non-portable)
 #    823 Redundant preprocessing concatenation operation results in two valid
 #        preprocessing tokens. This comes from INT64_C in <inttypes.h>
-CFLAGS += +Olibcalls -Ae +ESlit
-CXXFLAGS += +Olibcalls +W740 +W749 +W823
+CFLAGS += -Ae +ESlit
+CXXFLAGS += +W740 +W749 +W823
 
 ## Commands to compile
 COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
