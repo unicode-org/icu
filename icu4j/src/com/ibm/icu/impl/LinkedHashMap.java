@@ -1,6 +1,6 @@
 /*
  * *****************************************************************************
- * Copyright (C) 2006, International Business Machines Corporation and others.
+ * Copyright (C) 2006-2007, International Business Machines Corporation and others.
  * All Rights Reserved.
  * *****************************************************************************
  */
@@ -29,13 +29,13 @@ public class LinkedHashMap extends HashMap {
         super();
     }
 
-    public LinkedHashMap(int initialCapacity) {
+    /*public LinkedHashMap(int initialCapacity) {
         super(initialCapacity);
     }
     
     public LinkedHashMap(int initialCapacity, float loadFactor) {
         super(initialCapacity, loadFactor);
-    }
+    }*/
 
     public LinkedHashMap(int initialCapacity, float loadFactor, boolean accessOrder) {
         super(initialCapacity, loadFactor);
