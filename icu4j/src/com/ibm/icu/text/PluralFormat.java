@@ -316,7 +316,7 @@ public class PluralFormat extends UFormat {
         // 0: Reading keyword.
         // 1: Reading value for preceeding keyword.
         int state = 0;
-        StringBuilder token = new StringBuilder();
+        StringBuffer token = new StringBuffer();
         String currentKeyword = null;
         boolean readSpaceAfterKeyword = false;
         for (int i = 0; i < pattern.length(); ++i) {

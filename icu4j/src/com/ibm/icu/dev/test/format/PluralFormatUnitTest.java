@@ -197,7 +197,7 @@ public class PluralFormatUnitTest extends TestFmwk {
             plFmt.applyPattern("odd__{odd} other{even}");
             errln("SetLocale should reset rules but did not.");
         } catch (IllegalArgumentException e) {
-            if (!e.getMessage().contains("Unknown keyword")){
+            if (e.getMessage().indexOf("Unknown keyword") < 0){
                 errln("Wrong exception thrown");
             }
         }
