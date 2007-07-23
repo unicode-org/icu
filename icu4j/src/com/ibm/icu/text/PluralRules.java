@@ -8,6 +8,7 @@
 package com.ibm.icu.text;
 
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.impl.Utility;
 
 import java.io.Serializable;
 
@@ -67,6 +68,8 @@ import java.util.Set;
  * digit         = 0|1|2|3|4|5|6|7|8|9
  * range         = value'..'value
  * </pre></p>
+ * @draft ICU 3.8
+ * @provisional This API might change or be removed in a future release.
  */
 public class PluralRules implements Serializable {
     private static final long serialVersionUID = 1;
@@ -79,25 +82,41 @@ public class PluralRules implements Serializable {
 
     // Standard keywords.
 
-    /** Common name for the 'zero' plural form. */
+    /** 
+     * Common name for the 'zero' plural form. 
+     * @draft ICU 3.8 
+     */
     public static final String KEYWORD_ZERO = "zero";
 
-    /** Common name for the 'singular' plural form. */
+    /** 
+     * Common name for the 'singular' plural form. 
+     * @draft ICU 3.8
+     */
     public static final String KEYWORD_ONE = "one";
 
-    /** Common name for the 'dual' plural form. */
+    /**
+     * Common name for the 'dual' plural form.
+     * @draft ICU 3.8
+     */
     public static final String KEYWORD_TWO = "two";
 
-    /** Common name for the 'paucal' or other special plural form. */
+    /**
+     * Common name for the 'paucal' or other special plural form.
+     * @draft ICU 3.8
+     */
     public static final String KEYWORD_FEW = "few";
 
-    /** Common name for the arabic (11 to 99) plural form. */
+    /**
+     * Common name for the arabic (11 to 99) plural form.
+     * @draft ICU 3.8
+     */
     public static final String KEYWORD_MANY = "many";
 
     /**
      * Common name for the default plural form.  This name is returned
      * for values to which no other form in the rule applies.  It 
      * can additionally be assigned rules of its own.
+     * @draft ICU 3.8
      */
     public static final String KEYWORD_OTHER = "other";
 
@@ -159,6 +178,7 @@ public class PluralRules implements Serializable {
     /**
      * The default rules that accept any number and return 
      * {@link #KEYWORD_OTHER}.
+     * @draft ICU 3.8
      */
     public static final PluralRules DEFAULT =
         new PluralRules(new RuleChain(DEFAULT_RULE));
@@ -168,6 +188,7 @@ public class PluralRules implements Serializable {
      * @param description the rule description.
      * @throws ParseException if the description cannot be parsed.
      *    The exception index is typically not set, it will be -1.
+     * @draft ICU 3.8
      */
     public static PluralRules parseDescription(String description) 
         throws ParseException {
@@ -185,6 +206,7 @@ public class PluralRules implements Serializable {
      * otherwise returns null.
      * @param description the rule description.
      * @return the PluralRules
+     * @draft ICU 3.8
      */
     public static PluralRules createRules(String description) {
         try {
@@ -265,10 +287,10 @@ public class PluralRules implements Serializable {
 
         HashMap map = new HashMap();
         for (int i = 0; i < ruledata.length; ++i) {
-            String[] data = ruledata[i].split("/");
+            String[] data = Utility.split(ruledata[i], '/');
             try {
               PluralRules pluralRules = parseDescription(data[0]);
-              String[] locales = data[1].split(",");
+              String[] locales = Utility.split(data[1], ',');
               for (int j = 0; j < locales.length; ++j) {
                 map.put(locales[j].trim(), pluralRules);
               }
@@ -307,15 +329,15 @@ public class PluralRules implements Serializable {
         description = description.trim().toLowerCase(Locale.ENGLISH);
 
         Constraint result = null;
-        String[] or_together = description.split("or");
+        String[] or_together = Utility.splitString(description, "or");
         for (int i = 0; i < or_together.length; ++i) {
             Constraint andConstraint = null;
-            String[] and_together = or_together[i].split("and");
+            String[] and_together = Utility.splitString(or_together[i], "and");
             for (int j = 0; j < and_together.length; ++j) {
                 Constraint newConstraint = NO_CONSTRAINT;
 
                 String condition = and_together[j].trim();
-                String[] tokens = condition.split("\\s+");
+                String[] tokens = Utility.splitWhitespace(condition);
 
                 int mod = 0;
                 boolean within = true;
@@ -355,7 +377,7 @@ public class PluralRules implements Serializable {
                     }
 
                     if (isRange) {
-                        String[] pair = t.split("\\.\\.");
+                        String[] pair = Utility.splitString(t, "..");
                         if (pair.length == 2) {
                             lowBound = Long.parseLong(pair[0]);
                             highBound = Long.parseLong(pair[1]);
@@ -446,7 +468,7 @@ public class PluralRules implements Serializable {
         throws ParseException {
 
         RuleChain rc = null;
-        String[] rules = description.split(";");
+        String[] rules = Utility.split(description, ';');
         for (int i = 0; i < rules.length; ++i) {
             Rule r = parseRule(rules[i].trim());
             if (rc == null) {
@@ -550,7 +572,7 @@ public class PluralRules implements Serializable {
      * Implementation of Rule that uses a constraint.
      * Provides 'and' and 'or' to combine constraints.  Immutable.
      */
-  private static class ConstrainedRule implements Rule, Serializable {
+    private static class ConstrainedRule implements Rule, Serializable {
         private static final long serialVersionUID = 1;
         private final String keyword;
         private final Constraint constraint;
@@ -589,7 +611,7 @@ public class PluralRules implements Serializable {
      * Implementation of RuleList that is itself a node in a linked list.
      * Immutable, but supports chaining with 'addRule'.
      */
-  private static class RuleChain implements RuleList, Serializable {
+    private static class RuleChain implements RuleList, Serializable {
         private static final long serialVersionUID = 1;
         private final Rule rule;
         private final RuleChain next;
@@ -672,6 +694,7 @@ public class PluralRules implements Serializable {
      *   for the closest parent in the locale hierarchy that has one will
      *   be returned.  The final fallback always returns the default
      *   rules.
+     * @draft ICU 3.8
      */
     public static PluralRules forLocale(ULocale locale) {
         PluralRules result = null;
@@ -716,6 +739,7 @@ public class PluralRules implements Serializable {
      * 
      * @param number The number for which the rule has to be determined.
      * @return The keyword of the selected rule.
+     * @draft ICU 3.8
      */
      public String select(long number) {
          return rules.select(number);
@@ -726,6 +750,7 @@ public class PluralRules implements Serializable {
      * object.  The rule "other" is always present by default.
      * 
      * @return The set of keywords.
+     * @draft ICU 3.8
      */
     public Set getKeywords() {
         return keywords;
@@ -748,6 +773,7 @@ public class PluralRules implements Serializable {
    * Return tif rhs is equal to this.
    * @param rhs the PluralRules to compare to.
    * @return true if this and rhs are equal.
+   * @draft ICU 3.8
    */
     public boolean equals(PluralRules rhs) {
       if (rhs == null) {

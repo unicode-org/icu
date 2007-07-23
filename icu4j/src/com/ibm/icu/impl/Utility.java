@@ -1,7 +1,7 @@
 //##header
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1843,7 +1843,7 @@ public final class Utility {
     }
 
     
-    // !!! 1.3 compatibiliy
+    // !!! 1.3 compatibility
     public static int indexOf(StringBuffer buf, String s) {
 //#ifndef FOUNDATION
         return buf.indexOf(s);
@@ -1852,7 +1852,7 @@ public final class Utility {
 //#endif
     }
     
-    // !!! 1.3 compatibiliy
+    // !!! 1.3 compatibility
     public static int lastIndexOf(StringBuffer buf, String s) {
 //#ifndef FOUNDATION
         return buf.lastIndexOf(s);
@@ -1861,7 +1861,7 @@ public final class Utility {
 //#endif
     }
     
-    // !!! 1.3 compatibiliy
+    // !!! 1.3 compatibility
     public static int indexOf(StringBuffer buf, String s, int i) {
 //#ifndef FOUNDATION
         return buf.indexOf(s, i);
@@ -1870,7 +1870,7 @@ public final class Utility {
 //#endif
     }
     
-    // !!! 1.3 compatibiliy
+    // !!! 1.3 compatibility
    public static int lastIndexOf(StringBuffer buf, String s, int i) {
 //#ifndef FOUNDATION
         return buf.lastIndexOf(s, i);
@@ -1879,7 +1879,7 @@ public final class Utility {
 //#endif
     }
    
-   // !!! 1.3 compatibiliy
+   // !!! 1.3 compatibility
    public static String replaceAll(String src, String target, String replacement) {
 //#ifndef FOUNDATION
        return src.replaceAll(target, replacement);
@@ -1900,6 +1900,65 @@ public final class Utility {
 //##           buf.append(src.substring(n));
 //##       }
 //##       return buf.toString();
+//#endif
+   }
+
+   // !!! 1.3 compatability
+   public static String[] splitString(String src, String target) {
+//#ifndef FOUNDATION
+       return src.split(target);
+//#else
+//##       int i = src.indexOf(target);
+//##       if (i == -1) {
+//##           return new String[] { src };
+//##       }
+//##       ArrayList output = new ArrayList();
+//##       int n = 0;
+//##       do {
+//##           output.add(src.substring(n, i));
+//##           n = i + target.length();
+//##           i = src.indexOf(target, n);
+//##       } while (i != -1);
+//##       if (n < src.length()) {
+//##           output.add(src.substring(n));
+//##       }
+//##       return (String[]) output.toArray(new String[output.size()]);
+//#endif
+   }
+
+   // !!! 1.3 compatability
+  /**
+   * Split the string at runs of ascii whitespace characters.
+   */
+   public static String[] splitWhitespace(String src) {
+//#ifndef FOUNDATION
+       return src.split("\\s+");
+//#else
+//##        char ws[] = "\u0020\u0009\n\u000b\u000c\r".toCharArray();
+//##        ArrayList output = new ArrayList();
+//##        boolean inWhitespace = true;
+//##        int n = 0;
+//##  loop:
+//##        for (int i = 0; i < src.length(); ++i) {
+//##          char c = src.charAt(i);
+//##          for (int j = 0; j < ws.length; ++j) {
+//##            if (ws[j] == c) {
+//##              if (!inWhitespace) {
+//##                output.add(src.substring(n, i));
+//##                inWhitespace = true;
+//##              }
+//##              continue loop;
+//##            }
+//##          }
+//##          if (inWhitespace) {
+//##            n = i;
+//##            inWhitespace = false;
+//##          }
+//##        }
+//##        if (n < src.length()) {
+//##          output.add(src.substring(n));
+//##        }
+//##        return (String[]) output.toArray(new String[output.size()]);
 //#endif
    }
 }
