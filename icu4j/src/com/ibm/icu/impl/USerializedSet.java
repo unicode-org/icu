@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- *   Copyright (C) 2002-2004, International Business Machines
+ *   Copyright (C) 2002-2007, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
 */
@@ -151,7 +151,6 @@ public final class USerializedSet {
      * @return true if set contains c
      * @draft ICU 2.4
      */
-    ///CLOVER:OFF
     public final boolean contains(int c) {
         
         if(c>0x10ffff) {
@@ -175,7 +174,7 @@ public final class USerializedSet {
             return (boolean)(((i+bmpLength)&2)!=0);
         }
     }
-    ///CLOVER:ON
+
     /**
      * Returns the number of disjoint ranges of characters contained in
      * the given serialized set.  Ignores any strings contained in the
