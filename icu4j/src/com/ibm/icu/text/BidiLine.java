@@ -117,22 +117,21 @@ final class BidiLine {
         Bidi lineBidi = new Bidi();
 
         /* set the values in lineBidi from its paraBidi parent */
-        lineBidi.paraBidi = null;          /* mark unfinished setLine */
+        /* class members are already initialized to 0 */
+        // lineBidi.paraBidi = null;        /* mark unfinished setLine */
+        // lineBidi.flags = 0;
+        // lineBidi.controlCount = 0;
 
         length = lineBidi.length = lineBidi.originalLength =
                 lineBidi.resultLength = limit - start;
 
-        if (paraBidi.text != null) {
-            lineBidi.text = new char[length];
-            System.arraycopy(paraBidi.text, start, lineBidi.text, 0, length);
-        }
+        lineBidi.text = new char[length];
+        System.arraycopy(paraBidi.text, start, lineBidi.text, 0, length);
         lineBidi.paraLevel = paraBidi.GetParaLevelAt(start);
         lineBidi.paraCount = paraBidi.paraCount;
         lineBidi.runs = new BidiRun[0];
-        lineBidi.flags = 0;
         lineBidi.reorderingMode = paraBidi.reorderingMode;
         lineBidi.reorderingOptions = paraBidi.reorderingOptions;
-        lineBidi.controlCount = 0;
         if (paraBidi.controlCount > 0) {
             int j;
             for (j = start; j < limit; j++) {
@@ -140,106 +139,99 @@ final class BidiLine {
                     lineBidi.controlCount++;
                 }
             }
+            lineBidi.resultLength -= lineBidi.controlCount;
         }
 
-        if (length > 0) {
-            if (paraBidi.dirProps != null && lineBidi.getDirPropsMemory(length)) {
-                lineBidi.dirProps = lineBidi.dirPropsMemory;
-                System.arraycopy(paraBidi.dirProps, start, lineBidi.dirProps, 0,
-                                 length);
-            }
-            if (paraBidi.levels != null && lineBidi.getLevelsMemory(length)) {
-                lineBidi.levels = lineBidi.levelsMemory;
-                System.arraycopy(paraBidi.levels, start, lineBidi.levels, 0,
-                                 length);
-            }
-            lineBidi.runCount = -1;
+        if (paraBidi.dirProps != null) {
+            lineBidi.getDirPropsMemory(length);
+            lineBidi.dirProps = lineBidi.dirPropsMemory;
+            System.arraycopy(paraBidi.dirProps, start, lineBidi.dirProps, 0,
+                             length);
+        }
+        if (paraBidi.levels != null) {
+            lineBidi.getLevelsMemory(length);
+            lineBidi.levels = lineBidi.levelsMemory;
+            System.arraycopy(paraBidi.levels, start, lineBidi.levels, 0,
+                             length);
+        }
+        lineBidi.runCount = -1;
 
-            if (paraBidi.direction != Bidi.MIXED) {
-                /* the parent is already trivial */
-                lineBidi.direction = paraBidi.direction;
+        if (paraBidi.direction != Bidi.MIXED) {
+            /* the parent is already trivial */
+            lineBidi.direction = paraBidi.direction;
 
-                /*
-                 * The parent's levels are all either
-                 * implicitly or explicitly ==paraLevel;
-                 * do the same here.
-                 */
-                if (paraBidi.trailingWSStart <= start) {
-                    lineBidi.trailingWSStart = 0;
-                } else if (paraBidi.trailingWSStart < limit) {
-                    lineBidi.trailingWSStart = paraBidi.trailingWSStart - start;
-                } else {
-                    lineBidi.trailingWSStart = length;
-                }
+            /*
+             * The parent's levels are all either
+             * implicitly or explicitly ==paraLevel;
+             * do the same here.
+             */
+            if (paraBidi.trailingWSStart <= start) {
+                lineBidi.trailingWSStart = 0;
+            } else if (paraBidi.trailingWSStart < limit) {
+                lineBidi.trailingWSStart = paraBidi.trailingWSStart - start;
             } else {
-                byte[] levels = lineBidi.levels;
-                int i, trailingWSStart;
-                byte level;
+                lineBidi.trailingWSStart = length;
+            }
+        } else {
+            byte[] levels = lineBidi.levels;
+            int i, trailingWSStart;
+            byte level;
 
-                setTrailingWSStart(lineBidi);
-                trailingWSStart = lineBidi.trailingWSStart;
+            setTrailingWSStart(lineBidi);
+            trailingWSStart = lineBidi.trailingWSStart;
 
-                /* recalculate lineBidi.direction */
-                if (trailingWSStart == 0) {
-                    /* all levels are at paraLevel */
-                    lineBidi.direction = (byte)(lineBidi.paraLevel & 1);
+            /* recalculate lineBidi.direction */
+            if (trailingWSStart == 0) {
+                /* all levels are at paraLevel */
+                lineBidi.direction = (byte)(lineBidi.paraLevel & 1);
+            } else {
+                /* get the level of the first character */
+                level = (byte)(levels[0] & 1);
+
+                /* if there is anything of a different level, then the line
+                   is mixed */
+                if (trailingWSStart < length &&
+                    (lineBidi.paraLevel & 1) != level) {
+                    /* the trailing WS is at paraLevel, which differs from
+                       levels[0] */
+                    lineBidi.direction = Bidi.MIXED;
                 } else {
-                    /* get the level of the first character */
-                    level = (byte)(levels[0] & 1);
-
-                    /* if there is anything of a different level, then the line
-                       is mixed */
-                    if (trailingWSStart < length &&
-                        (lineBidi.paraLevel & 1) != level) {
-                        /* the trailing WS is at paraLevel, which differs from
-                           levels[0] */
-                        lineBidi.direction = Bidi.MIXED;
-                    } else {
-                        /* see if levels[1..trailingWSStart-1] have the same
-                           direction as levels[0] and paraLevel */
-                        for (i = 1; ; i++) {
-                            if (i == trailingWSStart) {
-                                /* the direction values match those in level */
-                                lineBidi.direction = level;
-                                break;
-                            } else if ((levels[i] & 1) != level) {
-                                lineBidi.direction = Bidi.MIXED;
-                                break;
-                            }
+                    /* see if levels[1..trailingWSStart-1] have the same
+                       direction as levels[0] and paraLevel */
+                    for (i = 1; ; i++) {
+                        if (i == trailingWSStart) {
+                            /* the direction values match those in level */
+                            lineBidi.direction = level;
+                            break;
+                        } else if ((levels[i] & 1) != level) {
+                            lineBidi.direction = Bidi.MIXED;
+                            break;
                         }
                     }
                 }
-
-                switch(lineBidi.direction) {
-                    case Bidi.DIRECTION_LEFT_TO_RIGHT:
-                        /* make sure paraLevel is even */
-                        lineBidi.paraLevel = (byte)
-                            ((lineBidi.paraLevel + 1) & ~1);
-
-                        /* all levels are implicitly at paraLevel (important for
-                           getLevels()) */
-                        lineBidi.trailingWSStart = 0;
-                        break;
-                    case Bidi.DIRECTION_RIGHT_TO_LEFT:
-                        /* make sure paraLevel is odd */
-                        lineBidi.paraLevel |= 1;
-
-                        /* all levels are implicitly at paraLevel (important for
-                           getLevels()) */
-                        lineBidi.trailingWSStart = 0;
-                        break;
-                    default:
-                        break;
-                }
             }
-        } else {
-            /* create an object for a zero-length line */
-            lineBidi.direction = (byte)((lineBidi.paraLevel & 1) == 1 ?
-                    Bidi.DIRECTION_RIGHT_TO_LEFT : Bidi.DIRECTION_LEFT_TO_RIGHT);
-            lineBidi.trailingWSStart = lineBidi.runCount = 0;
 
-            lineBidi.dirProps = new byte[0];
-            lineBidi.levels = new byte[0];
+            switch(lineBidi.direction) {
+                case Bidi.DIRECTION_LEFT_TO_RIGHT:
+                    /* make sure paraLevel is even */
+                    lineBidi.paraLevel = (byte)
+                        ((lineBidi.paraLevel + 1) & ~1);
+
+                    /* all levels are implicitly at paraLevel (important for
+                       getLevels()) */
+                    lineBidi.trailingWSStart = 0;
+                    break;
+                case Bidi.DIRECTION_RIGHT_TO_LEFT:
+                    /* make sure paraLevel is odd */
+                    lineBidi.paraLevel |= 1;
+
+                    /* all levels are implicitly at paraLevel (important for
+                       getLevels()) */
+                    lineBidi.trailingWSStart = 0;
+                    break;
+                default:
+                    break;
+            }
         }
         lineBidi.paraBidi = paraBidi;     /* mark successful setLine */
         return lineBidi;
@@ -552,11 +544,8 @@ final class BidiLine {
                     }
 
                     /* runCount > 1 */
-                    if (bidi.getRunsMemory(runCount)) {
-                        runs = bidi.runsMemory;
-                    } else {
-                        throw new OutOfMemoryError("Failed to allocate Runs memory");
-                    }
+                    bidi.getRunsMemory(runCount);
+                    runs = bidi.runsMemory;
 
                     /* set the runs */
                     /* FOOD FOR THOUGHT: this could be optimized, e.g.:

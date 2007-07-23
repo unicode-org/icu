@@ -304,7 +304,7 @@ final class BidiWriter {
                     markFlag=0;
                     /* check if something relevant in insertPoints */
                     markFlag = bidi.runs[run].insertRemove;
-                    if (markFlag < 0) { /* insert count */
+                    if (markFlag < 0) { /* bidi controls count */
                         markFlag = 0;
                     }
                     if (bidiRun.isEvenRun()) {
