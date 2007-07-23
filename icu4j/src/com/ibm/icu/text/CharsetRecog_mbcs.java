@@ -59,13 +59,15 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
                 if (iter.error) {
                     badCharCount++; 
                 } else {
-                    
-                    if (iter.charValue <= 0xff) {
+                    long cv = iter.charValue & 0xFFFFFFFF;
+                                        
+                    if (cv <= 0xff) {
                         singleByteCharCount++;
                     } else {
                         doubleByteCharCount++;
                         if (commonChars != null) {
-                            if (Arrays.binarySearch(commonChars, iter.charValue) >= 0) {
+                            // NOTE: This assumes that there are no 4-byte common chars.
+                            if (Arrays.binarySearch(commonChars, (int) cv) >= 0) {
                                 commonCharCount++;
                             }
                         }
