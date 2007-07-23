@@ -12,7 +12,6 @@ import com.ibm.icu.lang.*;
 
 import java.io.IOException;
 
-import com.ibm.icu.impl.CollectionUtilities;
 import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.UCharacterProperty;
@@ -941,7 +940,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
             }
             // now keep checking string until we get the longest one
             for (;;) {
-                int tempLen = CollectionUtilities.matchesAt(text, offset, trial);
+                int tempLen = matchesAt(text, offset, trial);
                 if (lastLen > tempLen) break strings;
                 lastLen = tempLen;
                 if (!it.hasNext()) break;
@@ -955,6 +954,26 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
             }
         }
         return offset+lastLen;
+    }
+
+    /**
+     * Does one string contain another, starting at a specific offset?
+     * @param text
+     * @param offset
+     * @param other
+     * @return
+     */
+    // Note: This method was moved from CollectionUtilities
+    private static int matchesAt(CharSequence text, int offset, CharSequence other) {
+        int len = other.length();
+        int i = 0;
+        int j = offset;
+        for (; i < len; ++i, ++j) {
+            char pc = other.charAt(i);
+            char tc = text.charAt(j);
+            if (pc != tc) return -1;
+        }
+        return i;
     }
 //#endif
 

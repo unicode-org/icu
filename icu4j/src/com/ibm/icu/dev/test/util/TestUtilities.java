@@ -26,7 +26,6 @@ import java.util.TreeSet;
 
 import com.ibm.icu.dev.test.TestBoilerplate;
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.CollectionUtilities;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
