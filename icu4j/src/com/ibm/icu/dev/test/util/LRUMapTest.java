@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2006, International Business Machines Corporation and         *
+ * Copyright (C) 2006-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -22,9 +22,9 @@ public class LRUMapTest extends TestFmwk {
         execute(map, 64);
 
         // max size - 16
-        logln("Testing LRUMap with initial/max size - 4/16");
+        /*logln("Testing LRUMap with initial/max size - 4/16");
         map = new LRUMap(4, 16);
-        execute(map, 16);
+        execute(map, 16);*/
     }
 
     private void execute(LRUMap map, int maxSize /* maxSize > 6 */) {

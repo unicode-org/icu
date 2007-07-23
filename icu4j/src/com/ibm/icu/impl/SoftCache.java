@@ -1,6 +1,6 @@
 /*
  * *****************************************************************************
- * Copyright (C) 2006, International Business Machines Corporation and others.
+ * Copyright (C) 2006-2007, International Business Machines Corporation and others.
  * All Rights Reserved.
  * *****************************************************************************
  */
@@ -29,9 +29,9 @@ public class SoftCache {
      * @param initialSize the initial cache size
      * @param maxSize the maximum cache size
      */
-    public SoftCache(int initialSize, int maxSize) {
+    /*public SoftCache(int initialSize, int maxSize) {
         map = new LRUMap(initialSize, maxSize);
-    }
+    }*/
 
     /**
      * Put an object to the cache

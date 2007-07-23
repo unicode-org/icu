@@ -1,7 +1,7 @@
 //##header
 /*
  * *****************************************************************************
- * Copyright (C) 2006, International Business Machines Corporation and others.
+ * Copyright (C) 2006-2007, International Business Machines Corporation and others.
  * All Rights Reserved.
  * *****************************************************************************
  */
@@ -40,10 +40,10 @@ public class LRUMap extends LinkedHashMap {
      * @param initialCapacity initial capacity of the map
      * @param maxCapacity maximum capacity of the map
      */
-    public LRUMap(int initialCapacity, int maxCapacity) {
+    /*public LRUMap(int initialCapacity, int maxCapacity) {
         super(initialCapacity, DEFAULT_LOADFACTOR, true);
         this.maxCapacity = maxCapacity;
-    }
+    }*/
 
     /*
      * Delete the eldest entry when the size exceeds the limit
