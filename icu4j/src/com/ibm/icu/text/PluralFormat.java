@@ -186,6 +186,7 @@ public class PluralFormat extends UFormat {
      * This locale will be used to get the set of plural rules and for standard
      * number formatting.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public PluralFormat() {
         init(null, ULocale.getDefault());
@@ -197,6 +198,7 @@ public class PluralFormat extends UFormat {
      *        rules for this locale. This locale will also be used for standard
      *        number formatting.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public PluralFormat(ULocale ulocale) {
         init(null, ulocale);
@@ -208,6 +210,7 @@ public class PluralFormat extends UFormat {
      * @param rules defines the behavior of the <code>PluralFormat</code>
      *        object.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public PluralFormat(PluralRules rules) {
         init(rules, ULocale.getDefault());
@@ -221,6 +224,7 @@ public class PluralFormat extends UFormat {
      * @param rules defines the behavior of the <code>PluralFormat</code>
      *        object.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public PluralFormat(ULocale ulocale, PluralRules rules) {
         init(rules, ulocale);
@@ -233,6 +237,7 @@ public class PluralFormat extends UFormat {
      * @param  pattern the pattern for this <code>PluralFormat</code>.
      * @throws IllegalArgumentException if the pattern is invalid.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public PluralFormat(String pattern) {
         init(null, ULocale.getDefault());
@@ -250,6 +255,7 @@ public class PluralFormat extends UFormat {
      * @param  pattern the pattern for this <code>PluralFormat</code>.
      * @throws IllegalArgumentException if the pattern is invalid.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public PluralFormat(ULocale ulocale, String pattern) {
         init(null, ulocale);
@@ -265,6 +271,7 @@ public class PluralFormat extends UFormat {
      * @param  pattern the pattern for this <code>PluralFormat</code>.
      * @throws IllegalArgumentException if the pattern is invalid.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */    
     public PluralFormat(PluralRules rules, String pattern) {
         init(rules, ULocale.getDefault());
@@ -282,6 +289,7 @@ public class PluralFormat extends UFormat {
      * @param  pattern the pattern for this <code>PluralFormat</code>.
      * @throws IllegalArgumentException if the pattern is invalid.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public PluralFormat(ULocale ulocale, PluralRules rules, String pattern) {
         init(rules, ulocale);
@@ -319,6 +327,7 @@ public class PluralFormat extends UFormat {
      * @param pattern the pattern for this plural format
      * @throws IllegalArgumentException if the pattern is invalid.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public void applyPattern(String pattern) {
         this.pattern = pattern;
@@ -414,6 +423,7 @@ public class PluralFormat extends UFormat {
      *        be returned.
      * @return the string containing the formatted plural message.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public final String format(long number) {
         // If no pattern was applied, return the formatted number.
@@ -450,6 +460,7 @@ public class PluralFormat extends UFormat {
      * @return the string buffer passed in as toAppendTo, with formatted text
      *         appended.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public StringBuffer format(Object number, StringBuffer toAppendTo,
             FieldPosition pos) {
@@ -471,6 +482,7 @@ public class PluralFormat extends UFormat {
      * @throws UnsupportedOperationException
      *     will always be thrown by this method.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public Number parse(String text, ParsePosition parsePosition) {
         throw new UnsupportedOperationException();
@@ -486,6 +498,7 @@ public class PluralFormat extends UFormat {
      * @throws UnsupportedOperationException
      *     will always be thrown by this method.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public Object parseObject(String source, ParsePosition pos) {
         throw new UnsupportedOperationException();
@@ -502,6 +515,7 @@ public class PluralFormat extends UFormat {
      *     formatter. If <code>ulocale</code> is <code>null</code>, the
      *     default locale will be used.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public void setLocale(ULocale ulocale) {
         if (ulocale == null) {
@@ -516,6 +530,7 @@ public class PluralFormat extends UFormat {
      * formatter for the locale.
      * @param format the number format to use
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public void setNumberFormat(NumberFormat format) {
         numberFormat = format;
@@ -592,38 +607,40 @@ public class PluralFormat extends UFormat {
         return result.toString();
     }
 
-  public boolean equals(Object rhs) {
-    return rhs instanceof PluralFormat && equals((PluralFormat) rhs);
-  }
+    public boolean equals(Object rhs) {
+        return rhs instanceof PluralFormat && equals((PluralFormat) rhs);
+    }
 
-  /**
-   * Returns true if this equals the provided PluralFormat.
-   * @param rhs the PluralFormat to compare against
-   * @return true if this equals rhs
-   * @draft ICU 3.8
-   */
-  public boolean equals(PluralFormat rhs) {
-    return pluralRules.equals(rhs.pluralRules) &&
-        parsedValues.equals(rhs.parsedValues) &&
-        numberFormat.equals(rhs.numberFormat);
-  }
+    /**
+     * Returns true if this equals the provided PluralFormat.
+     * @param rhs the PluralFormat to compare against
+     * @return true if this equals rhs
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
+    public boolean equals(PluralFormat rhs) {
+      return pluralRules.equals(rhs.pluralRules) &&
+          parsedValues.equals(rhs.parsedValues) &&
+          numberFormat.equals(rhs.numberFormat);
+    }
         
-  public int hashCode() {
-    return pluralRules.hashCode() ^ parsedValues.hashCode();
-  }
+    public int hashCode() {
+        return pluralRules.hashCode() ^ parsedValues.hashCode();
+    }
 
-  /**
-   * For debugging purposes only
-   * @return a text representation of the format data.
-   * @draft ICU 3.8
-   */
-  public String toString() {
-    StringBuffer buf = new StringBuffer();
-    buf.append("locale=" + ulocale);
-    buf.append(", rules='" + pluralRules + "'");
-    buf.append(", pattern='" + pattern + "'");
-    buf.append(", parsedValues='" + parsedValues + "'");
-    buf.append(", format='" + numberFormat + "'");
-    return buf.toString();
-  }
+    /**
+     * For debugging purposes only
+     * @return a text representation of the format data.
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
+    public String toString() {
+        StringBuffer buf = new StringBuffer();
+        buf.append("locale=" + ulocale);
+        buf.append(", rules='" + pluralRules + "'");
+        buf.append(", pattern='" + pattern + "'");
+        buf.append(", parsedValues='" + parsedValues + "'");
+        buf.append(", format='" + numberFormat + "'");
+        return buf.toString();
+    }
 }
