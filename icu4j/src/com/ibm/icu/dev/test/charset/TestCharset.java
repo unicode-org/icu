@@ -9,13 +9,9 @@
 
 package com.ibm.icu.dev.test.charset;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-import java.nio.IntBuffer;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
@@ -24,14 +20,11 @@ import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
 import java.nio.charset.UnsupportedCharsetException;
 import java.nio.charset.spi.CharsetProvider;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.SortedMap;
 
-import com.ibm.icu.charset.CharsetDecoderICU;
 import com.ibm.icu.charset.CharsetEncoderICU;
 import com.ibm.icu.charset.CharsetICU;
 import com.ibm.icu.charset.CharsetProviderICU;
@@ -635,273 +628,273 @@ public class TestCharset extends TestFmwk {
     }
     
     
-    public void TestCharsetCallback() {
-        String currentTest = "initialization";
-        try {
-            Class[] params;
-            
-            // get the classes
-            Class CharsetCallback = Class.forName("com.ibm.icu.charset.CharsetCallback");
-            Class Decoder = Class.forName("com.ibm.icu.charset.CharsetCallback$Decoder");
-            Class Encoder = Class.forName("com.ibm.icu.charset.CharsetCallback$Encoder");
-            
-            // set up encoderCall
-            params = new Class[] {CharsetEncoderICU.class, Object.class, 
-                    CharBuffer.class, ByteBuffer.class, IntBuffer.class, 
-                    char[].class, int.class, int.class, CoderResult.class };
-            Method encoderCall = Encoder.getDeclaredMethod("call", params);
-            
-            // set up decoderCall
-            params = new Class[] {CharsetDecoderICU.class, Object.class, 
-                    ByteBuffer.class, CharBuffer.class, IntBuffer.class,
-                    char[].class, int.class, CoderResult.class};
-            Method decoderCall = Decoder.getDeclaredMethod("call", params);
-            
-            // get relevant fields
-            Object SUB_STOP_ON_ILLEGAL = getFieldValue(CharsetCallback, "SUB_STOP_ON_ILLEGAL", null);
-            
-            // set up a few arguments
-            CharsetProvider provider = new CharsetProviderICU();
-            Charset charset = provider.charsetForName("UTF-8");
-            CharsetEncoderICU encoder = (CharsetEncoderICU)charset.newEncoder();
-            CharsetDecoderICU decoder = (CharsetDecoderICU)charset.newDecoder();
-            CharBuffer chars = CharBuffer.allocate(10);
-            chars.put('o');
-            chars.put('k');
-            ByteBuffer bytes = ByteBuffer.allocate(10);
-            bytes.put((byte)'o');
-            bytes.put((byte)'k');
-            IntBuffer offsets = IntBuffer.allocate(10);
-            offsets.put(0);
-            offsets.put(1);
-            char[] buffer = null;
-            Integer length = new Integer(2);
-            Integer cp = new Integer(0);
-            CoderResult unmap = CoderResult.unmappableForLength(2);
-            CoderResult malf = CoderResult.malformedForLength(2);
-            CoderResult under = CoderResult.UNDERFLOW;
-            
-            // set up error arrays
-            Integer invalidCharLength = new Integer(1);
-            Byte subChar1 = new Byte((byte)0);
-            Byte subChar1_alternate = new Byte((byte)1); // for TO_U_CALLBACK_SUBSTITUTE
-            
-            // set up chars and bytes backups and expected values for certain cases
-            CharBuffer charsBackup = bufferCopy(chars);
-            ByteBuffer bytesBackup = bufferCopy(bytes);
-            IntBuffer offsetsBackup = bufferCopy(offsets);
-            CharBuffer encoderCharsExpected = bufferCopy(chars);
-            ByteBuffer encoderBytesExpected = bufferCopy(bytes);
-            IntBuffer encoderOffsetsExpected = bufferCopy(offsets);
-            CharBuffer decoderCharsExpected1 = bufferCopy(chars);
-            CharBuffer decoderCharsExpected2 = bufferCopy(chars);
-            IntBuffer decoderOffsetsExpected1 = bufferCopy(offsets);
-            IntBuffer decoderOffsetsExpected2 = bufferCopy(offsets);
-            
-            // initialize fields to obtain expected data
-            setFieldValue(CharsetDecoderICU.class, "invalidCharLength", decoder, invalidCharLength);
-            setFieldValue(CharsetICU.class, "subChar1", ((CharsetICU) decoder.charset()), subChar1);
-            
-            // run cbFromUWriteSub
-            Method cbFromUWriteSub = CharsetEncoderICU.class.getDeclaredMethod("cbFromUWriteSub", new Class[] { CharsetEncoderICU.class, CharBuffer.class, ByteBuffer.class, IntBuffer.class});
-            cbFromUWriteSub.setAccessible(true);
-            CoderResult encoderResultExpected = (CoderResult)cbFromUWriteSub.invoke(encoder, new Object[] {encoder, encoderCharsExpected, encoderBytesExpected, encoderOffsetsExpected});
-            
-            // run toUWriteUChars with normal data
-            Method toUWriteUChars = CharsetDecoderICU.class.getDeclaredMethod("toUWriteUChars", new Class[] { CharsetDecoderICU.class, char[].class, int.class, int.class, CharBuffer.class, IntBuffer.class, int.class});
-            toUWriteUChars.setAccessible(true);
-            CoderResult decoderResultExpected1 = (CoderResult)toUWriteUChars.invoke(decoder, new Object[] {decoder, new char[] {0xFFFD}, new Integer(0), new Integer(1), decoderCharsExpected1, decoderOffsetsExpected1, new Integer(bytes.position())});
-            
-            // reset certain fields
-            setFieldValue(CharsetDecoderICU.class, "invalidCharLength", decoder, invalidCharLength);
-            setFieldValue(CharsetICU.class, "subChar1", ((CharsetICU) decoder.charset()), subChar1_alternate);
-            
-            // run toUWriteUChars again
-            CoderResult decoderResultExpected2 = (CoderResult)toUWriteUChars.invoke(decoder, new Object[] {decoder, new char[] {0x1A}, new Integer(0), new Integer(1), decoderCharsExpected2, decoderOffsetsExpected2, new Integer(bytes.position())});
-            
-            // begin creating the tests array
-            ArrayList tests = new ArrayList();
-            
-            // create tests for FROM_U_CALLBACK_SKIP   0
-            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_SKIP", new Object[] { encoder, null, chars, bytes, offsets, buffer, length, cp, null }, under, charsBackup, bytesBackup, offsetsBackup, new Object[] { }});
-            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_SKIP", new Object[] { encoder, SUB_STOP_ON_ILLEGAL, chars, bytes, offsets, buffer, length, cp, malf }, malf, charsBackup, bytesBackup, offsetsBackup, new Object[] { }});
-            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_SKIP", new Object[] { encoder, SUB_STOP_ON_ILLEGAL, chars, bytes, offsets, buffer, length, cp, unmap }, under, charsBackup, bytesBackup, offsetsBackup, new Object[] { }});
-            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_SKIP", new Object[] { encoder, SUB_STOP_ON_ILLEGAL + "xx", chars, bytes, offsets, buffer, length, cp, null }, null, charsBackup, bytesBackup, offsetsBackup, new Object[] { }});
-            
-            // create tests for TO_U_CALLBACK_SKIP    4
-            tests.add(new Object[] {decoderCall, "TO_U_CALLBACK_SKIP", new Object[] { decoder, null, bytes, chars, offsets, buffer, length, null }, under, charsBackup, bytesBackup, offsetsBackup, new Object[] { invalidCharLength, subChar1 }});
-            tests.add(new Object[] {decoderCall, "TO_U_CALLBACK_SKIP", new Object[] { decoder, SUB_STOP_ON_ILLEGAL, bytes, chars, offsets, buffer, length, malf }, malf, charsBackup, bytesBackup, offsetsBackup, new Object[] { invalidCharLength, subChar1 }});
-            tests.add(new Object[] {decoderCall, "TO_U_CALLBACK_SKIP", new Object[] { decoder, SUB_STOP_ON_ILLEGAL, bytes, chars, offsets, buffer, length, unmap }, under, charsBackup, bytesBackup, offsetsBackup, new Object[] { invalidCharLength, subChar1 }});
-            tests.add(new Object[] {decoderCall, "TO_U_CALLBACK_SKIP", new Object[] { decoder, SUB_STOP_ON_ILLEGAL + "xx", bytes, chars, offsets, buffer, length, null }, null, charsBackup, bytesBackup, offsetsBackup, new Object[] { invalidCharLength, subChar1 }});
-            
-            // create tests for FROM_U_CALLBACK_STOP   8
-            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_STOP", new Object[] { encoder, null, chars, bytes, offsets, buffer, length, cp, null }, null, charsBackup, bytesBackup, offsetsBackup, new Object[] { }});
-            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_STOP", new Object[] { encoder, SUB_STOP_ON_ILLEGAL, chars, bytes, offsets, buffer, length, cp, malf }, malf, charsBackup, bytesBackup, offsetsBackup, new Object[] { }});
-            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_STOP", new Object[] { encoder, SUB_STOP_ON_ILLEGAL, chars, bytes, offsets, buffer, length, cp, unmap }, unmap, charsBackup, bytesBackup, offsetsBackup, new Object[] { }});
-            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_STOP", new Object[] { encoder, SUB_STOP_ON_ILLEGAL + "xx", chars, bytes, offsets, buffer, length, cp, null }, null, charsBackup, bytesBackup, offsetsBackup, new Object[] { }});
-            
-            // create tests for TO_U_CALLBACK_STOP   12
-            tests.add(new Object[] {decoderCall, "TO_U_CALLBACK_STOP", new Object[] { decoder, null, bytes, chars, offsets, buffer, length, null }, null, charsBackup, bytesBackup, offsetsBackup, new Object[] { invalidCharLength, subChar1 }});
-            tests.add(new Object[] {decoderCall, "TO_U_CALLBACK_STOP", new Object[] { decoder, SUB_STOP_ON_ILLEGAL, bytes, chars, offsets, buffer, length, malf }, malf, charsBackup, bytesBackup, offsetsBackup, new Object[] { invalidCharLength, subChar1 }});
-            tests.add(new Object[] {decoderCall, "TO_U_CALLBACK_STOP", new Object[] { decoder, SUB_STOP_ON_ILLEGAL, bytes, chars, offsets, buffer, length, unmap }, unmap, charsBackup, bytesBackup, offsetsBackup, new Object[] { invalidCharLength, subChar1 }});
-            tests.add(new Object[] {decoderCall, "TO_U_CALLBACK_STOP", new Object[] { decoder, SUB_STOP_ON_ILLEGAL + "xx", bytes, chars, offsets, buffer, length, null }, null, charsBackup, bytesBackup, offsetsBackup, new Object[] { invalidCharLength, subChar1 }});
-            
-            // create tests for FROM_U_CALLBACK_SUBSTITUTE  16
-            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_SUBSTITUTE", new Object[] { encoder, null, chars, bytes, offsets, buffer, length, cp, null }, encoderResultExpected, encoderCharsExpected, encoderBytesExpected, encoderOffsetsExpected, new Object[] { }});
-            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_SUBSTITUTE", new Object[] { encoder, SUB_STOP_ON_ILLEGAL, chars, bytes, offsets, buffer, length, cp, malf }, malf, charsBackup, bytesBackup, offsetsBackup, new Object[] { }});
-            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_SUBSTITUTE", new Object[] { encoder, SUB_STOP_ON_ILLEGAL, chars, bytes, offsets, buffer, length, cp, unmap }, encoderResultExpected, encoderCharsExpected, encoderBytesExpected, encoderOffsetsExpected, new Object[] { }});
-            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_SUBSTITUTE", new Object[] { encoder, SUB_STOP_ON_ILLEGAL + "xx", chars, bytes, offsets, buffer, length, cp, null }, null, charsBackup, bytesBackup, offsetsBackup, new Object[] { }});
-            
-            // create tests for TO_U_CALLBACK_SUBSTITUTE   20
-            tests.add(new Object[] {decoderCall, "TO_U_CALLBACK_SUBSTITUTE", new Object[] { decoder, null, bytes, chars, offsets, buffer, length, null }, decoderResultExpected1, decoderCharsExpected1, bytesBackup, decoderOffsetsExpected1, new Object[] { invalidCharLength, subChar1 }});
-            tests.add(new Object[] {decoderCall, "TO_U_CALLBACK_SUBSTITUTE", new Object[] { decoder, null, bytes, chars, offsets, buffer, length, null }, decoderResultExpected2, decoderCharsExpected2, bytesBackup, decoderOffsetsExpected2, new Object[] { invalidCharLength, subChar1_alternate }});
-            
-            Iterator iter = tests.iterator();
-            for (int i=0; iter.hasNext(); i++) {
-                // get the data out of the map
-                Object[] next = (Object[])iter.next();
-                
-                Method method = (Method)next[0];
-                String fieldName = (String)next[1];
-                Object field = getFieldValue(CharsetCallback, fieldName, null);
-                Object[] args = (Object[])next[2];
-                CoderResult expected = (CoderResult)next[3];
-                CharBuffer charsExpected = (CharBuffer)next[4];
-                ByteBuffer bytesExpected = (ByteBuffer)next[5];
-                IntBuffer offsetsExpected = (IntBuffer)next[6];
-                
-                // set up error arrays and certain fields
-                Object[] values = (Object[])next[7];
-                if (method == decoderCall) {
-                    decoder.reset();
-                    setFieldValue(CharsetDecoderICU.class, "invalidCharLength", decoder, values[0]);
-                    setFieldValue(CharsetICU.class, "subChar1", ((CharsetICU) decoder.charset()), values[1]);
-                } else if (method == encoderCall) {
-                    encoder.reset();
-                }
-                
-                try {
-                    // invoke the method
-                    CoderResult actual = (CoderResult)method.invoke(field, args);
-                    
-                    // if expected != actual
-                    if (!coderResultsEqual(expected, actual)) {
-                        // case #i refers to the index in the arraylist tests
-                        errln(fieldName + " failed to return the correct result for case #" + i + ".");
-                    }
-                    // if the expected buffers != actual buffers
-                    else if (!(buffersEqual(chars, charsExpected) && 
-                            buffersEqual(bytes, bytesExpected) &&
-                            buffersEqual(offsets, offsetsExpected))) {
-                        // case #i refers to the index in the arraylist tests
-                        errln(fieldName + " did not perform the correct operation on the buffers for case #" + i + ".");
-                    }
-                } catch (InvocationTargetException ex)  {
-                    // case #i refers to the index in the arraylist tests
-                    errln(fieldName + " threw an exception for case #" + i + ": " + ex.getCause());
-                    //ex.getCause().printStackTrace();
-                }
-                
-                // reset the buffers
-                System.arraycopy(bytesBackup.array(), 0, bytes.array(), 0, 10);
-                System.arraycopy(charsBackup.array(), 0, chars.array(), 0, 10);
-                System.arraycopy(offsetsBackup.array(), 0, offsets.array(), 0, 10);
-                bytes.position(bytesBackup.position());
-                chars.position(charsBackup.position());
-                offsets.position(offsetsBackup.position());
-            }
-            
-        } catch (Exception ex) {
-            errln("TestCharsetCallback skipped due to " + ex.toString());
-            ex.printStackTrace();
-        }
-    }
-    
-    private Object getFieldValue(Class c, String name, Object instance) throws Exception {
-        Field field = c.getDeclaredField(name);
-        field.setAccessible(true);
-        return field.get(instance);
-    }
-    private void setFieldValue(Class c, String name, Object instance, Object value) throws Exception {
-        Field field = c.getDeclaredField(name);
-        field.setAccessible(true);
-        if (value instanceof Boolean)
-            field.setBoolean(instance, ((Boolean)value).booleanValue());
-        else if (value instanceof Byte)
-            field.setByte(instance, ((Byte)value).byteValue());
-        else if (value instanceof Character)
-            field.setChar(instance, ((Character)value).charValue());
-        else if (value instanceof Double)
-            field.setDouble(instance, ((Double)value).doubleValue());
-        else if (value instanceof Float)
-            field.setFloat(instance, ((Float)value).floatValue());
-        else if (value instanceof Integer)
-            field.setInt(instance, ((Integer)value).intValue());
-        else if (value instanceof Long)
-            field.setLong(instance, ((Long)value).longValue());
-        else if (value instanceof Short)
-            field.setShort(instance, ((Short)value).shortValue());
-        else
-            field.set(instance, value);
-    }
-    private boolean coderResultsEqual(CoderResult a, CoderResult b) {
-        if (a == null && b == null)
-            return true;
-        if (a == null || b == null)
-            return false;
-        if ((a.isUnderflow() && b.isUnderflow()) || (a.isOverflow() && b.isOverflow()))
-            return true;
-        if (a.length() != b.length())
-            return false;
-        if ((a.isMalformed() && b.isMalformed()) || (a.isUnmappable() && b.isUnmappable()))
-            return true;
-        return false;
-    }
-    private boolean buffersEqual(ByteBuffer a, ByteBuffer b) {
-        if (a.position() != b.position())
-            return false;
-        int limit = a.position();
-        for (int i=0; i<limit; i++)
-            if (a.get(i) != b.get(i))
-                return false;
-        return true;
-    }
-    private boolean buffersEqual(CharBuffer a, CharBuffer b) {
-        if (a.position() != b.position())
-            return false;
-        int limit = a.position();
-        for (int i=0; i<limit; i++)
-            if (a.get(i) != b.get(i))
-                return false;
-        return true;
-    }
-    private boolean buffersEqual(IntBuffer a, IntBuffer b) {
-        if (a.position() != b.position())
-            return false;
-        int limit = a.position();
-        for (int i=0; i<limit; i++)
-            if (a.get(i) != b.get(i))
-                return false;
-        return true;
-    }
-    private ByteBuffer bufferCopy(ByteBuffer src) {
-        ByteBuffer dest = ByteBuffer.allocate(src.limit());
-        System.arraycopy(src.array(), 0, dest.array(), 0, src.limit());
-        dest.position(src.position());
-        return dest;
-    }
-    private CharBuffer bufferCopy(CharBuffer src) {
-        CharBuffer dest = CharBuffer.allocate(src.limit());
-        System.arraycopy(src.array(), 0, dest.array(), 0, src.limit());
-        dest.position(src.position());
-        return dest;
-    }
-    private IntBuffer bufferCopy(IntBuffer src) {
-        IntBuffer dest = IntBuffer.allocate(src.limit());
-        System.arraycopy(src.array(), 0, dest.array(), 0, src.limit());
-        dest.position(src.position());
-        return dest;
-    }
+//    public void TestCharsetCallback() {
+//        String currentTest = "initialization";
+//        try {
+//            Class[] params;
+//            
+//            // get the classes
+//            Class CharsetCallback = Class.forName("com.ibm.icu.charset.CharsetCallback");
+//            Class Decoder = Class.forName("com.ibm.icu.charset.CharsetCallback$Decoder");
+//            Class Encoder = Class.forName("com.ibm.icu.charset.CharsetCallback$Encoder");
+//            
+//            // set up encoderCall
+//            params = new Class[] {CharsetEncoderICU.class, Object.class, 
+//                    CharBuffer.class, ByteBuffer.class, IntBuffer.class, 
+//                    char[].class, int.class, int.class, CoderResult.class };
+//            Method encoderCall = Encoder.getDeclaredMethod("call", params);
+//            
+//            // set up decoderCall
+//            params = new Class[] {CharsetDecoderICU.class, Object.class, 
+//                    ByteBuffer.class, CharBuffer.class, IntBuffer.class,
+//                    char[].class, int.class, CoderResult.class};
+//            Method decoderCall = Decoder.getDeclaredMethod("call", params);
+//            
+//            // get relevant fields
+//            Object SUB_STOP_ON_ILLEGAL = getFieldValue(CharsetCallback, "SUB_STOP_ON_ILLEGAL", null);
+//            
+//            // set up a few arguments
+//            CharsetProvider provider = new CharsetProviderICU();
+//            Charset charset = provider.charsetForName("UTF-8");
+//            CharsetEncoderICU encoder = (CharsetEncoderICU)charset.newEncoder();
+//            CharsetDecoderICU decoder = (CharsetDecoderICU)charset.newDecoder();
+//            CharBuffer chars = CharBuffer.allocate(10);
+//            chars.put('o');
+//            chars.put('k');
+//            ByteBuffer bytes = ByteBuffer.allocate(10);
+//            bytes.put((byte)'o');
+//            bytes.put((byte)'k');
+//            IntBuffer offsets = IntBuffer.allocate(10);
+//            offsets.put(0);
+//            offsets.put(1);
+//            char[] buffer = null;
+//            Integer length = new Integer(2);
+//            Integer cp = new Integer(0);
+//            CoderResult unmap = CoderResult.unmappableForLength(2);
+//            CoderResult malf = CoderResult.malformedForLength(2);
+//            CoderResult under = CoderResult.UNDERFLOW;
+//            
+//            // set up error arrays
+//            Integer invalidCharLength = new Integer(1);
+//            Byte subChar1 = new Byte((byte)0);
+//            Byte subChar1_alternate = new Byte((byte)1); // for TO_U_CALLBACK_SUBSTITUTE
+//            
+//            // set up chars and bytes backups and expected values for certain cases
+//            CharBuffer charsBackup = bufferCopy(chars);
+//            ByteBuffer bytesBackup = bufferCopy(bytes);
+//            IntBuffer offsetsBackup = bufferCopy(offsets);
+//            CharBuffer encoderCharsExpected = bufferCopy(chars);
+//            ByteBuffer encoderBytesExpected = bufferCopy(bytes);
+//            IntBuffer encoderOffsetsExpected = bufferCopy(offsets);
+//            CharBuffer decoderCharsExpected1 = bufferCopy(chars);
+//            CharBuffer decoderCharsExpected2 = bufferCopy(chars);
+//            IntBuffer decoderOffsetsExpected1 = bufferCopy(offsets);
+//            IntBuffer decoderOffsetsExpected2 = bufferCopy(offsets);
+//            
+//            // initialize fields to obtain expected data
+//            setFieldValue(CharsetDecoderICU.class, "invalidCharLength", decoder, invalidCharLength);
+//            setFieldValue(CharsetICU.class, "subChar1", ((CharsetICU) decoder.charset()), subChar1);
+//            
+//            // run cbFromUWriteSub
+//            Method cbFromUWriteSub = CharsetEncoderICU.class.getDeclaredMethod("cbFromUWriteSub", new Class[] { CharsetEncoderICU.class, CharBuffer.class, ByteBuffer.class, IntBuffer.class});
+//            cbFromUWriteSub.setAccessible(true);
+//            CoderResult encoderResultExpected = (CoderResult)cbFromUWriteSub.invoke(encoder, new Object[] {encoder, encoderCharsExpected, encoderBytesExpected, encoderOffsetsExpected});
+//            
+//            // run toUWriteUChars with normal data
+//            Method toUWriteUChars = CharsetDecoderICU.class.getDeclaredMethod("toUWriteUChars", new Class[] { CharsetDecoderICU.class, char[].class, int.class, int.class, CharBuffer.class, IntBuffer.class, int.class});
+//            toUWriteUChars.setAccessible(true);
+//            CoderResult decoderResultExpected1 = (CoderResult)toUWriteUChars.invoke(decoder, new Object[] {decoder, new char[] {0xFFFD}, new Integer(0), new Integer(1), decoderCharsExpected1, decoderOffsetsExpected1, new Integer(bytes.position())});
+//            
+//            // reset certain fields
+//            setFieldValue(CharsetDecoderICU.class, "invalidCharLength", decoder, invalidCharLength);
+//            setFieldValue(CharsetICU.class, "subChar1", ((CharsetICU) decoder.charset()), subChar1_alternate);
+//            
+//            // run toUWriteUChars again
+//            CoderResult decoderResultExpected2 = (CoderResult)toUWriteUChars.invoke(decoder, new Object[] {decoder, new char[] {0x1A}, new Integer(0), new Integer(1), decoderCharsExpected2, decoderOffsetsExpected2, new Integer(bytes.position())});
+//            
+//            // begin creating the tests array
+//            ArrayList tests = new ArrayList();
+//            
+//            // create tests for FROM_U_CALLBACK_SKIP   0
+//            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_SKIP", new Object[] { encoder, null, chars, bytes, offsets, buffer, length, cp, null }, under, charsBackup, bytesBackup, offsetsBackup, new Object[] { }});
+//            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_SKIP", new Object[] { encoder, SUB_STOP_ON_ILLEGAL, chars, bytes, offsets, buffer, length, cp, malf }, malf, charsBackup, bytesBackup, offsetsBackup, new Object[] { }});
+//            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_SKIP", new Object[] { encoder, SUB_STOP_ON_ILLEGAL, chars, bytes, offsets, buffer, length, cp, unmap }, under, charsBackup, bytesBackup, offsetsBackup, new Object[] { }});
+//            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_SKIP", new Object[] { encoder, SUB_STOP_ON_ILLEGAL + "xx", chars, bytes, offsets, buffer, length, cp, null }, null, charsBackup, bytesBackup, offsetsBackup, new Object[] { }});
+//            
+//            // create tests for TO_U_CALLBACK_SKIP    4
+//            tests.add(new Object[] {decoderCall, "TO_U_CALLBACK_SKIP", new Object[] { decoder, null, bytes, chars, offsets, buffer, length, null }, under, charsBackup, bytesBackup, offsetsBackup, new Object[] { invalidCharLength, subChar1 }});
+//            tests.add(new Object[] {decoderCall, "TO_U_CALLBACK_SKIP", new Object[] { decoder, SUB_STOP_ON_ILLEGAL, bytes, chars, offsets, buffer, length, malf }, malf, charsBackup, bytesBackup, offsetsBackup, new Object[] { invalidCharLength, subChar1 }});
+//            tests.add(new Object[] {decoderCall, "TO_U_CALLBACK_SKIP", new Object[] { decoder, SUB_STOP_ON_ILLEGAL, bytes, chars, offsets, buffer, length, unmap }, under, charsBackup, bytesBackup, offsetsBackup, new Object[] { invalidCharLength, subChar1 }});
+//            tests.add(new Object[] {decoderCall, "TO_U_CALLBACK_SKIP", new Object[] { decoder, SUB_STOP_ON_ILLEGAL + "xx", bytes, chars, offsets, buffer, length, null }, null, charsBackup, bytesBackup, offsetsBackup, new Object[] { invalidCharLength, subChar1 }});
+//            
+//            // create tests for FROM_U_CALLBACK_STOP   8
+//            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_STOP", new Object[] { encoder, null, chars, bytes, offsets, buffer, length, cp, null }, null, charsBackup, bytesBackup, offsetsBackup, new Object[] { }});
+//            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_STOP", new Object[] { encoder, SUB_STOP_ON_ILLEGAL, chars, bytes, offsets, buffer, length, cp, malf }, malf, charsBackup, bytesBackup, offsetsBackup, new Object[] { }});
+//            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_STOP", new Object[] { encoder, SUB_STOP_ON_ILLEGAL, chars, bytes, offsets, buffer, length, cp, unmap }, unmap, charsBackup, bytesBackup, offsetsBackup, new Object[] { }});
+//            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_STOP", new Object[] { encoder, SUB_STOP_ON_ILLEGAL + "xx", chars, bytes, offsets, buffer, length, cp, null }, null, charsBackup, bytesBackup, offsetsBackup, new Object[] { }});
+//            
+//            // create tests for TO_U_CALLBACK_STOP   12
+//            tests.add(new Object[] {decoderCall, "TO_U_CALLBACK_STOP", new Object[] { decoder, null, bytes, chars, offsets, buffer, length, null }, null, charsBackup, bytesBackup, offsetsBackup, new Object[] { invalidCharLength, subChar1 }});
+//            tests.add(new Object[] {decoderCall, "TO_U_CALLBACK_STOP", new Object[] { decoder, SUB_STOP_ON_ILLEGAL, bytes, chars, offsets, buffer, length, malf }, malf, charsBackup, bytesBackup, offsetsBackup, new Object[] { invalidCharLength, subChar1 }});
+//            tests.add(new Object[] {decoderCall, "TO_U_CALLBACK_STOP", new Object[] { decoder, SUB_STOP_ON_ILLEGAL, bytes, chars, offsets, buffer, length, unmap }, unmap, charsBackup, bytesBackup, offsetsBackup, new Object[] { invalidCharLength, subChar1 }});
+//            tests.add(new Object[] {decoderCall, "TO_U_CALLBACK_STOP", new Object[] { decoder, SUB_STOP_ON_ILLEGAL + "xx", bytes, chars, offsets, buffer, length, null }, null, charsBackup, bytesBackup, offsetsBackup, new Object[] { invalidCharLength, subChar1 }});
+//            
+//            // create tests for FROM_U_CALLBACK_SUBSTITUTE  16
+//            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_SUBSTITUTE", new Object[] { encoder, null, chars, bytes, offsets, buffer, length, cp, null }, encoderResultExpected, encoderCharsExpected, encoderBytesExpected, encoderOffsetsExpected, new Object[] { }});
+//            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_SUBSTITUTE", new Object[] { encoder, SUB_STOP_ON_ILLEGAL, chars, bytes, offsets, buffer, length, cp, malf }, malf, charsBackup, bytesBackup, offsetsBackup, new Object[] { }});
+//            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_SUBSTITUTE", new Object[] { encoder, SUB_STOP_ON_ILLEGAL, chars, bytes, offsets, buffer, length, cp, unmap }, encoderResultExpected, encoderCharsExpected, encoderBytesExpected, encoderOffsetsExpected, new Object[] { }});
+//            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_SUBSTITUTE", new Object[] { encoder, SUB_STOP_ON_ILLEGAL + "xx", chars, bytes, offsets, buffer, length, cp, null }, null, charsBackup, bytesBackup, offsetsBackup, new Object[] { }});
+//            
+//            // create tests for TO_U_CALLBACK_SUBSTITUTE   20
+//            tests.add(new Object[] {decoderCall, "TO_U_CALLBACK_SUBSTITUTE", new Object[] { decoder, null, bytes, chars, offsets, buffer, length, null }, decoderResultExpected1, decoderCharsExpected1, bytesBackup, decoderOffsetsExpected1, new Object[] { invalidCharLength, subChar1 }});
+//            tests.add(new Object[] {decoderCall, "TO_U_CALLBACK_SUBSTITUTE", new Object[] { decoder, null, bytes, chars, offsets, buffer, length, null }, decoderResultExpected2, decoderCharsExpected2, bytesBackup, decoderOffsetsExpected2, new Object[] { invalidCharLength, subChar1_alternate }});
+//            
+//            Iterator iter = tests.iterator();
+//            for (int i=0; iter.hasNext(); i++) {
+//                // get the data out of the map
+//                Object[] next = (Object[])iter.next();
+//                
+//                Method method = (Method)next[0];
+//                String fieldName = (String)next[1];
+//                Object field = getFieldValue(CharsetCallback, fieldName, null);
+//                Object[] args = (Object[])next[2];
+//                CoderResult expected = (CoderResult)next[3];
+//                CharBuffer charsExpected = (CharBuffer)next[4];
+//                ByteBuffer bytesExpected = (ByteBuffer)next[5];
+//                IntBuffer offsetsExpected = (IntBuffer)next[6];
+//                
+//                // set up error arrays and certain fields
+//                Object[] values = (Object[])next[7];
+//                if (method == decoderCall) {
+//                    decoder.reset();
+//                    setFieldValue(CharsetDecoderICU.class, "invalidCharLength", decoder, values[0]);
+//                    setFieldValue(CharsetICU.class, "subChar1", ((CharsetICU) decoder.charset()), values[1]);
+//                } else if (method == encoderCall) {
+//                    encoder.reset();
+//                }
+//                
+//                try {
+//                    // invoke the method
+//                    CoderResult actual = (CoderResult)method.invoke(field, args);
+//                    
+//                    // if expected != actual
+//                    if (!coderResultsEqual(expected, actual)) {
+//                        // case #i refers to the index in the arraylist tests
+//                        errln(fieldName + " failed to return the correct result for case #" + i + ".");
+//                    }
+//                    // if the expected buffers != actual buffers
+//                    else if (!(buffersEqual(chars, charsExpected) && 
+//                            buffersEqual(bytes, bytesExpected) &&
+//                            buffersEqual(offsets, offsetsExpected))) {
+//                        // case #i refers to the index in the arraylist tests
+//                        errln(fieldName + " did not perform the correct operation on the buffers for case #" + i + ".");
+//                    }
+//                } catch (InvocationTargetException ex)  {
+//                    // case #i refers to the index in the arraylist tests
+//                    errln(fieldName + " threw an exception for case #" + i + ": " + ex.getCause());
+//                    //ex.getCause().printStackTrace();
+//                }
+//                
+//                // reset the buffers
+//                System.arraycopy(bytesBackup.array(), 0, bytes.array(), 0, 10);
+//                System.arraycopy(charsBackup.array(), 0, chars.array(), 0, 10);
+//                System.arraycopy(offsetsBackup.array(), 0, offsets.array(), 0, 10);
+//                bytes.position(bytesBackup.position());
+//                chars.position(charsBackup.position());
+//                offsets.position(offsetsBackup.position());
+//            }
+//            
+//        } catch (Exception ex) {
+//            errln("TestCharsetCallback skipped due to " + ex.toString());
+//            ex.printStackTrace();
+//        }
+//    }
+//    
+//    private Object getFieldValue(Class c, String name, Object instance) throws Exception {
+//        Field field = c.getDeclaredField(name);
+//        field.setAccessible(true);
+//        return field.get(instance);
+//    }
+//    private void setFieldValue(Class c, String name, Object instance, Object value) throws Exception {
+//        Field field = c.getDeclaredField(name);
+//        field.setAccessible(true);
+//        if (value instanceof Boolean)
+//            field.setBoolean(instance, ((Boolean)value).booleanValue());
+//        else if (value instanceof Byte)
+//            field.setByte(instance, ((Byte)value).byteValue());
+//        else if (value instanceof Character)
+//            field.setChar(instance, ((Character)value).charValue());
+//        else if (value instanceof Double)
+//            field.setDouble(instance, ((Double)value).doubleValue());
+//        else if (value instanceof Float)
+//            field.setFloat(instance, ((Float)value).floatValue());
+//        else if (value instanceof Integer)
+//            field.setInt(instance, ((Integer)value).intValue());
+//        else if (value instanceof Long)
+//            field.setLong(instance, ((Long)value).longValue());
+//        else if (value instanceof Short)
+//            field.setShort(instance, ((Short)value).shortValue());
+//        else
+//            field.set(instance, value);
+//    }
+//    private boolean coderResultsEqual(CoderResult a, CoderResult b) {
+//        if (a == null && b == null)
+//            return true;
+//        if (a == null || b == null)
+//            return false;
+//        if ((a.isUnderflow() && b.isUnderflow()) || (a.isOverflow() && b.isOverflow()))
+//            return true;
+//        if (a.length() != b.length())
+//            return false;
+//        if ((a.isMalformed() && b.isMalformed()) || (a.isUnmappable() && b.isUnmappable()))
+//            return true;
+//        return false;
+//    }
+//    private boolean buffersEqual(ByteBuffer a, ByteBuffer b) {
+//        if (a.position() != b.position())
+//            return false;
+//        int limit = a.position();
+//        for (int i=0; i<limit; i++)
+//            if (a.get(i) != b.get(i))
+//                return false;
+//        return true;
+//    }
+//    private boolean buffersEqual(CharBuffer a, CharBuffer b) {
+//        if (a.position() != b.position())
+//            return false;
+//        int limit = a.position();
+//        for (int i=0; i<limit; i++)
+//            if (a.get(i) != b.get(i))
+//                return false;
+//        return true;
+//    }
+//    private boolean buffersEqual(IntBuffer a, IntBuffer b) {
+//        if (a.position() != b.position())
+//            return false;
+//        int limit = a.position();
+//        for (int i=0; i<limit; i++)
+//            if (a.get(i) != b.get(i))
+//                return false;
+//        return true;
+//    }
+//    private ByteBuffer bufferCopy(ByteBuffer src) {
+//        ByteBuffer dest = ByteBuffer.allocate(src.limit());
+//        System.arraycopy(src.array(), 0, dest.array(), 0, src.limit());
+//        dest.position(src.position());
+//        return dest;
+//    }
+//    private CharBuffer bufferCopy(CharBuffer src) {
+//        CharBuffer dest = CharBuffer.allocate(src.limit());
+//        System.arraycopy(src.array(), 0, dest.array(), 0, src.limit());
+//        dest.position(src.position());
+//        return dest;
+//    }
+//    private IntBuffer bufferCopy(IntBuffer src) {
+//        IntBuffer dest = IntBuffer.allocate(src.limit());
+//        System.arraycopy(src.array(), 0, dest.array(), 0, src.limit());
+//        dest.position(src.position());
+//        return dest;
+//    }
     
 
     public void TestAPISemantics(/*String encoding*/) 
