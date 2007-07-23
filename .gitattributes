@@ -393,6 +393,7 @@ icu4j/src/com/ibm/icu/dev/test/translit/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/test/util/DebugUtilities.java -text
 icu4j/src/com/ibm/icu/dev/test/util/DebugUtilitiesData.java -text
 icu4j/src/com/ibm/icu/dev/test/util/DebugUtilitiesTest.java -text
+icu4j/src/com/ibm/icu/dev/test/util/PrettyPrinter.java -text
 icu4j/src/com/ibm/icu/dev/tool/compression/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j28.api.gz -text svneol=unset#application/gzip
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j30.api.gz -text svneol=unset#application/gzip

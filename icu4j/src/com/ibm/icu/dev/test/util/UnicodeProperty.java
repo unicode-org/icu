@@ -21,9 +21,9 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
 
+import com.ibm.icu.dev.test.util.CollectionUtilities.InverseMatcher;
+import com.ibm.icu.dev.test.util.CollectionUtilities.ObjectMatcher;
 import com.ibm.icu.impl.Utility;
-import com.ibm.icu.impl.CollectionUtilities.InverseMatcher;
-import com.ibm.icu.impl.CollectionUtilities.ObjectMatcher;
 import com.ibm.icu.text.SymbolTable;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeMatcher;
