@@ -386,6 +386,28 @@ public class TestMultipleParagraphs extends BidiTest {
                 }
             }
         }
+
+        /* check default orientation when inverse bidi and paragraph starts
+         * with LTR strong char and ends with RTL strong char, with and without
+         * a terminating B
+         */
+        bidi.setReorderingMode(Bidi.REORDER_INVERSE_LIKE_DIRECT);
+        bidi.setPara("abc \u05d2\u05d1\n", Bidi.LEVEL_DEFAULT_LTR, null);
+        String out = bidi.writeReordered((short)0);
+        assertEquals("\nInvalid output", "\u05d1\u05d2 abc\n", out);
+        bidi.setPara("abc \u05d2\u05d1", Bidi.LEVEL_DEFAULT_LTR, null);
+        out = bidi.writeReordered((short)0);
+        assertEquals("\nInvalid output #1", "\u05d1\u05d2 abc", out);
+
+        /* check multiple paragraphs together with explicit levels
+         */
+        bidi.setReorderingMode(Bidi.REORDER_DEFAULT);
+        gotLevels = new byte[] {0,0,0,0,0,0,0,0,0,0};
+        bidi.setPara("ab\u05d1\u05d2\n\u05d3\u05d4123", Bidi.LTR, gotLevels);
+        out = bidi.writeReordered((short)0);
+        assertEquals("\nInvalid output #2", "ab\u05d2\u05d1\n123\u05d4\u05d3", out);
+        assertEquals("\nInvalid number of paras", 2, bidi.countParagraphs());
+
         logln("\nExiting TestMultipleParagraphs\n");
     }
 

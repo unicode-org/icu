@@ -210,6 +210,11 @@ public class TestCompatibility extends BidiTest {
         compareBidi(bidi, jbidi);
         out = bidi.writeReordered((short)0);
         logln("Output of Bidi(abc==(123)==>def,3,levels,0,10, LTR): " + out);
+        bidi = new Bidi(text, 3, levels, 0, 10, Bidi.DIRECTION_DEFAULT_RIGHT_TO_LEFT);
+        jbidi = new java.text.Bidi(text, 3, levels, 0, 10, java.text.Bidi.DIRECTION_DEFAULT_RIGHT_TO_LEFT);
+        compareBidi(bidi, jbidi);
+        out = bidi.writeReordered((short)0);
+        logln("Output of Bidi(abc==(123)==>def,3,levels,0,10, DEFAULT_RTL): " + out);
 
         /* test reorderVisually */
         byte[] myLevels = new byte[] {1,2,0,1,2,1,2,0,1,2};

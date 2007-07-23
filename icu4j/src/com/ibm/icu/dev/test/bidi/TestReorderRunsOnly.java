@@ -100,7 +100,11 @@ public class TestReorderRunsOnly extends BidiTest {
         new TestCase("123->JKL&MN&P",   // 17
                      new String[][] {{"JKLMNP<-123", "123->JKLMNP"},
                                      {"JKLMNP<-123", "JKLMNP<-@123"}},
-                     new int[] {0, 1})
+                     new int[] {0, 1}),
+        new TestCase("123",             // 18   just one run
+                     new String[][] {{"123", "123"},
+                                     {"123", "123"}},
+                     new int[] {0, 0})
     };
 
     public void testReorderRunsOnly() {
@@ -153,6 +157,22 @@ public class TestReorderRunsOnly extends BidiTest {
                 }
             }
         }
+
+        /* test with null or empty text */
+        int paras;
+        bidi.setPara((String)null, Bidi.LTR, null);
+        paras = bidi.countParagraphs();
+        assertEquals("\nInvalid number of paras #1 (should be 0): ", 0, paras);
+        bidi.setPara((char[])null, Bidi.LTR, null);
+        paras = bidi.countParagraphs();
+        assertEquals("\nInvalid number of paras #2 (should be 0): ", 0, paras);
+        bidi.setPara("", Bidi.LTR, null);
+        paras = bidi.countParagraphs();
+        assertEquals("\nInvalid number of paras #3 (should be 0): ", 0, paras);
+        bidi.setPara(new char[0], Bidi.LTR, null);
+        paras = bidi.countParagraphs();
+        assertEquals("\nInvalid number of paras #4 (should be 0): ", 0, paras);
+
         logln("\nExiting TestReorderRunsOnly\n");
     }
 

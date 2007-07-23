@@ -7,6 +7,7 @@
 
 package com.ibm.icu.dev.test.bidi;
 
+import java.util.Arrays;
 import com.ibm.icu.text.Bidi;
 import com.ibm.icu.text.BidiRun;
 
@@ -374,6 +375,7 @@ public class TestBidi extends BidiTest {
 
     private void doMisc(Bidi bidi) {
     /* Miscellaneous tests to exercize less popular code paths */
+        Bidi bidiLine;
 
         assertEquals("\nwriteReverse should return an empty string",
                      "", Bidi.writeReverse("", (short)0));
@@ -390,6 +392,41 @@ public class TestBidi extends BidiTest {
         assertEquals("\ngetRunLimit should return 3",
                      3, bidi.getRunLimit(0));
 
+        bidi.setPara("abc       def", Bidi.RTL, null);
+        bidiLine = bidi.setLine(0, 6);
+        for (int i = 3; i < 6; i++) {
+            assertEquals("\nTrailing space at " + i + " should get paragraph level",
+                         Bidi.RTL, bidiLine.getLevelAt(i));
+        }
+
+        bidi.setReorderingOptions(Bidi.OPTION_REMOVE_CONTROLS);
+        bidi.setPara("\u200eabc       def", Bidi.RTL, null);
+        bidiLine = bidi.setLine(0, 6);
+        assertEquals("\nWrong result length", 5, bidiLine.getResultLength());
+
+        bidi.setPara("abcdefghi", Bidi.LTR, null);
+        bidiLine = bidi.setLine(0, 6);
+        assertEquals("\nWrong direction", Bidi.LTR, bidiLine.getDirection());
+
+        bidi.setPara("", Bidi.LTR, null);
+        byte[] levels = bidi.getLevels();
+        assertEquals("\nWrong number of level elements", 0, levels.length);
+        assertEquals("\nWrong number of runs", 0, bidi.countRuns());
+
+        bidi.setPara("          ", Bidi.RTL, null);
+        bidiLine = bidi.setLine(0, 6);
+        assertEquals("\nWrong number of runs", 1, bidiLine.countRuns());
+
+        int[] map = Bidi.reorderLogical(null);
+        assertTrue("\nWe should have got a null map #1", map == null);
+        map = Bidi.reorderLogical(new byte[] {0,99,99});
+        assertTrue("\nWe should have got a null map #2", map == null);
+        map = Bidi.reorderVisual(null);
+        assertTrue("\nWe should have got a null map #3", map == null);
+
+        map = Bidi.invertMap(new int[] {0,1,-1,5,4});
+        assertTrue("\nUnexpected inverted Map",
+                   Arrays.equals(map, new int[] {0,1,-1,-1,4,3}));
     }
 
 

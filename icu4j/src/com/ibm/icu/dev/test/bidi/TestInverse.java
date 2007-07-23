@@ -58,6 +58,8 @@ public class TestInverse extends BidiTest {
 
         _testWriteReverse();
 
+        _testManyAddedPoints();
+
         logln("\nExiting TestInverse\n");
     }
 
@@ -221,6 +223,29 @@ public class TestInverse extends BidiTest {
             log("   ");
         }
         log(" }");
+    }
+
+    private void _testManyAddedPoints() {
+        Bidi bidi = new Bidi();
+        char[] text = new char[90];
+        for (int i = 0; i < text.length; i+=3) {
+            text[i] = 'a';
+            text[i+1] = '\u05d0';
+            text[i+2] = '3';
+        }
+        bidi.setReorderingMode(Bidi.REORDER_INVERSE_LIKE_DIRECT);
+        bidi.setReorderingOptions(Bidi.OPTION_INSERT_MARKS);
+        bidi.setPara(text, Bidi.LTR, null);
+        String out = bidi.writeReordered((short)0);
+        char[] expected = new char[120];
+        for (int i = 0; i < expected.length; i+=4) {
+            expected[i] = 'a';
+            expected[i+1] = '\u05d0';
+            expected[i+2] = '\u200e';
+            expected[i+3] = '3';
+        }
+        assertEquals("\nInvalid output with many added points",
+                     new String(expected), out);
     }
 
 
