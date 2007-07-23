@@ -1035,7 +1035,8 @@ public class Bidi {
     void verifyRange(int index, int start, int limit)
     {
         if (index < start || index >= limit) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Value " + index +
+                      " is out of range " + start + " to " + limit);
         }
     }
 
@@ -1097,7 +1098,11 @@ public class Bidi {
         }
 
         /* reset the object, all reference variables null, all flags false,
-           all sizes 0 */
+           all sizes 0.
+           In fact, we don't need to do anything, since class members are
+           initialized as zero when an instance is created.
+         */
+        /*
         mayAllocateText = false;
         mayAllocateRuns = false;
         orderParagraphsLTR = false;
@@ -1108,7 +1113,7 @@ public class Bidi {
         paraLevel = 0;
         defaultParaLevel = 0;
         direction = 0;
-
+        */
         /* get Bidi properties */
         try {
             bdp = UBiDiProps.getSingleton();
@@ -1119,10 +1124,8 @@ public class Bidi {
 
         /* allocate memory for arrays as requested */
         if (maxLength > 0) {
-            if (!getInitialDirPropsMemory(maxLength) ||
-                !getInitialLevelsMemory(maxLength)) {
-                throw new OutOfMemoryError("Failed to allocate arrays");
-            }
+            getInitialDirPropsMemory(maxLength);
+            getInitialLevelsMemory(maxLength);
         } else {
             mayAllocateText = true;
         }
@@ -1130,9 +1133,7 @@ public class Bidi {
         if (maxRunCount > 0) {
             // if maxRunCount == 1, use simpleRuns[]
             if (maxRunCount > 1) {
-                if (!getInitialRunsMemory(maxRunCount)) {
-                    throw new OutOfMemoryError("Failed to allocate Runs memory");
-                }
+                getInitialRunsMemory(maxRunCount);
             }
         } else {
             mayAllocateRuns = true;
@@ -1146,11 +1147,9 @@ public class Bidi {
      * Assume sizeNeeded>0.
      * If object != null, then assume size > 0.
      */
-    private Object getMemory(Object array, Class arrayClass,
-            boolean mayAllocate, int sizeNeeded) {
-        if (array == null) {
-            return null;
-        }
+    private Object getMemory(String label, Object array, Class arrayClass,
+            boolean mayAllocate, int sizeNeeded)
+    {
         int length = Array.getLength(array);
 
         /* we have at least enough memory and must not allocate */
@@ -1159,7 +1158,11 @@ public class Bidi {
         }
         if (!mayAllocate) {
             /* we must not allocate */
-            return sizeNeeded > length ? null : array;
+            if (sizeNeeded <= length) {
+                return array;
+            }
+            throw new OutOfMemoryError("Failed to allocate memory for "
+                                       + label);
         }
         /* we may try to grow or shrink */
         /* FOOD FOR THOUGHT: when shrinking it should be possible to avoid
@@ -1167,84 +1170,65 @@ public class Bidi {
         try {
             return Array.newInstance(arrayClass, sizeNeeded);
         } catch (Exception e) {
-            return null;
+            throw new OutOfMemoryError("Failed to allocate memory for "
+                                       + label);
         }
     }
 
     /* helper methods for each allocated array */
-    private boolean getDirPropsMemory(boolean mayAllocate, int length)
+    private void getDirPropsMemory(boolean mayAllocate, int length)
     {
-        Object array = getMemory(dirPropsMemory, Byte.TYPE, mayAllocate, length);
-        if (array == null) {
-            return false;
-        } else {
-            dirPropsMemory = (byte[]) array;
-            return true;
-        }
+        Object array = getMemory("DirProps", dirPropsMemory, Byte.TYPE, mayAllocate, length);
+        dirPropsMemory = (byte[]) array;
     }
 
-    boolean getDirPropsMemory(int length)
+    void getDirPropsMemory(int length)
     {
-        return getDirPropsMemory(mayAllocateText, length);
+        getDirPropsMemory(mayAllocateText, length);
     }
 
-    private boolean getLevelsMemory(boolean mayAllocate, int length)
+    private void getLevelsMemory(boolean mayAllocate, int length)
     {
-        Object array = getMemory(levelsMemory, Byte.TYPE, mayAllocate, length);
-        if (array == null) {
-            return false;
-        } else {
-            levelsMemory = (byte[]) array;
-            return true;
-        }
+        Object array = getMemory("Levels", levelsMemory, Byte.TYPE, mayAllocate, length);
+        levelsMemory = (byte[]) array;
     }
 
-    boolean getLevelsMemory(int length)
+    void getLevelsMemory(int length)
     {
-        return getLevelsMemory(mayAllocateText, length);
+        getLevelsMemory(mayAllocateText, length);
     }
 
-    private boolean getRunsMemory(boolean mayAllocate, int length)
+    private void getRunsMemory(boolean mayAllocate, int length)
     {
-        Object array = getMemory(runsMemory, BidiRun.class, mayAllocate, length);
-        if (array == null) {
-            return false;
-        } else {
-            runsMemory = (BidiRun[]) array;
-            return true;
-        }
+        Object array = getMemory("Runs", runsMemory, BidiRun.class, mayAllocate, length);
+        runsMemory = (BidiRun[]) array;
     }
 
-    boolean getRunsMemory(int length)
+    void getRunsMemory(int length)
     {
-        return getRunsMemory(mayAllocateRuns, length);
+        getRunsMemory(mayAllocateRuns, length);
     }
 
     /* additional methods used by constructor - always allow allocation */
-    private boolean getInitialDirPropsMemory(int length)
+    private void getInitialDirPropsMemory(int length)
     {
-        return getDirPropsMemory(true, length);
+        getDirPropsMemory(true, length);
     }
 
-    private boolean getInitialLevelsMemory(int length)
+    private void getInitialLevelsMemory(int length)
     {
-        return getLevelsMemory(true, length);
+        getLevelsMemory(true, length);
     }
 
-    private boolean getInitialParasMemory(int length)
+    private void getInitialParasMemory(int length)
     {
-        Object array = getMemory(parasMemory, Integer.TYPE, true, length);
-        if (array == null) {
-            return false;
-        } else {
-            parasMemory = (int[]) array;
-            return true;
-        }
+        Object array = getMemory("Paras", parasMemory, Integer.TYPE, true, length);
+        parasMemory = (int[]) array;
     }
 
-    private boolean getInitialRunsMemory(int length)
+    private void getInitialRunsMemory(int length)
     {
-        return getRunsMemory(true, length);
+        getRunsMemory(true, length);
     }
 
     /**
@@ -2757,18 +2741,15 @@ public class Bidi {
             }
         }
         if (addedRuns > 0) {
-            if (getRunsMemory(oldRunCount + addedRuns)) {
-                if (runCount == 1) {
-                    /* because we switch from UBiDi.simpleRuns to UBiDi.runs */
-                    runsMemory[0] = runs[0];
-                } else {
-                    System.arraycopy(runs, 0, runsMemory, 0, runCount);
-                }
-                runs = runsMemory;
-                runCount += addedRuns;
+            getRunsMemory(oldRunCount + addedRuns);
+            if (runCount == 1) {
+                /* because we switch from UBiDi.simpleRuns to UBiDi.runs */
+                runsMemory[0] = runs[0];
             } else {
-                throw new OutOfMemoryError("Failed to allocate Runs memory");
+                System.arraycopy(runs, 0, runsMemory, 0, runCount);
             }
+            runs = runsMemory;
+            runCount += addedRuns;
             for (i = oldRunCount; i < runCount; i++) {
                 if (runs[i] == null) {
                     runs[i] = new BidiRun(0, 0, (byte)0);
@@ -3010,8 +2991,8 @@ public class Bidi {
     public void setPara(char[] chars, byte paraLevel, byte[] embeddingLevels)
     {
         /* check the argument values */
-        if ((MAX_EXPLICIT_LEVEL < paraLevel && !IsDefaultLevel(paraLevel))) {
-            throw new IllegalArgumentException();
+        if (paraLevel < LEVEL_DEFAULT_LTR) {
+            verifyRange(paraLevel, 0, MAX_EXPLICIT_LEVEL + 1);
         }
         if (chars == null) {
             chars = new char[0];
@@ -3069,6 +3050,7 @@ public class Bidi {
             }
 
             runCount = 0;
+            paraCount = 0;
             paraBidi = this;         /* mark successful setPara */
             return;
         }
@@ -3080,23 +3062,17 @@ public class Bidi {
          * the flags bit-set, and
          * determine the paragraph level if necessary.
          */
-        if (getDirPropsMemory(length)) {
-            dirProps = dirPropsMemory;
-            getDirProps();
-        } else {
-            throw new OutOfMemoryError("Failed to allocate dirProps memory");
-        }
+        getDirPropsMemory(length);
+        dirProps = dirPropsMemory;
+        getDirProps();
         /* the processed length may have changed if OPTION_STREAMING is set */
         trailingWSStart = length;  /* the levels[] will reflect the WS run */
 
         /* allocate paras memory */
         if (paraCount > 1) {
-            if (getInitialParasMemory(paraCount)) {
-                paras = parasMemory;
-                paras[paraCount - 1] = length;
-            } else {
-                throw new OutOfMemoryError("Failed to allocate Paras memory");
-            }
+            getInitialParasMemory(paraCount);
+            paras = parasMemory;
+            paras[paraCount - 1] = length;
         } else {
             /* initialize paras for single paragraph */
             paras = simpleParas;
@@ -3106,12 +3082,9 @@ public class Bidi {
         /* are explicit levels specified? */
         if (embeddingLevels == null) {
             /* no: determine explicit levels according to the (Xn) rules */
-            if (getLevelsMemory(length)) {
-                levels = levelsMemory;
-                direction = resolveExplicitLevels();
-            } else {
-                throw new OutOfMemoryError("Failed to allocate Levels memory");
-            }
+            getLevelsMemory(length);
+            levels = levelsMemory;
+            direction = resolveExplicitLevels();
         } else {
             /* set BN for all explicit codes, check that all levels are 0 or paraLevel..MAX_EXPLICIT_LEVEL */
             levels = embeddingLevels;
@@ -3749,15 +3722,11 @@ public class Bidi {
      * trailing WS and for reordering are performed on
      * a <code>Bidi</code> object that represents a line.<p>
      *
-     * <strong>Important: </strong><code>pLineBiDi</code> shares data with
-     * <code>pParaBiDi</code>.
+     * <strong>Important: </strong><code>pLineBiDi</code> references data
+     * within <code>pParaBiDi</code>.
      * You must destroy or reuse <code>pLineBiDi</code> before <code>pParaBiDi</code>.
      * In other words, you must destroy or reuse the <code>Bidi</code>
-     * object for a line before the object for its parent paragraph.<p>
-     *
-     * The text pointer that was stored in <code>pParaBiDi</code> is copied
-     * to the new object, and an internal offset pointer is set to point
-     * to the beginning of the line for this object.
+     * object for a line before the object for its parent paragraph.
      *
      * @param start is the line's first index into the text.
      *
