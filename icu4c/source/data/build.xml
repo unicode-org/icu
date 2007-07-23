@@ -72,6 +72,32 @@
     <!-- target for generating ICU data -->
     <target name="all" depends="locales, resfiles, collation, colfiles, supplementalData, brkitr, brkfiles" />
 
+    <!-- parallel target -->
+    <target name="pall" depends="init">
+        <parallel threadsPerProcessor ="1">
+          <sequential>
+            <ant target='locales'>
+            </ant>
+            <ant target='resfiles'>
+            </ant>
+          </sequential>
+          <sequential>
+            <ant target='collation'>
+            </ant>
+            <ant target='colfiles'>
+            </ant>
+          </sequential>
+          <ant target='supplementalData'>
+          </ant>
+          <sequential>
+            <ant target='brkitr'>
+            </ant>
+            <ant target='brkfiles'>
+            </ant>
+          </sequential>
+        </parallel>
+     </target>
+
     <target name="locales" depends="init,setup" description="builds locale files in ICU text format">
         <cldr-build toolName="org.unicode.cldr.icu.LDML2ICUConverter" srcFile=".*xml" destFile=".*txt">
             <!-- launch the tool and generate the data after reading the config file -->
