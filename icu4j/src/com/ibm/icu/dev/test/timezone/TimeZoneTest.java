@@ -232,6 +232,15 @@ public class TimeZoneTest extends TestFmwk
         min = min%60;
         return "" + sign + (h<10?"0":"") + h + ":" + (min<10?"0":"") + min;
     }
+    /* Returns RFC822 time zone string for the given offset in minutes */
+    static final String formatMinutesRFC822(int min) {
+        char sign = '+';
+        if (min < 0) { sign = '-'; min = -min; }
+        int h = min/60;
+        min = min%60;
+        return "GMT" + sign + (h<10?"0":"") + h + (min<10?"0":"") + min;
+    }
+
     /**
      * As part of the VM fix (see CCC approved RFE 4028006, bug
      * 4044013), TimeZone.getTimeZone() has been modified to recognize
@@ -279,7 +288,7 @@ public class TimeZoneTest extends TestFmwk
             else {
                 int ioffset = zone.getRawOffset()/60000;
                 String offset = formatMinutes(ioffset);
-                String genID = "GMT"+ offset;
+                String genID = formatMinutesRFC822(ioffset);
                 logln(id + " -> " + zone.getID() + " " + genID);
                 String gotID = zone.getID();
                 if (exp == null) {
@@ -289,9 +298,8 @@ public class TimeZoneTest extends TestFmwk
                 }
                 // JDK 1.3 creates custom zones with the ID "Custom"
                 // JDK 1.4 creates custom zones with IDs of the form "GMT+02:00"
-                else if (ioffset != exp.intValue() ||
-                         !(gotID.equals(EXPECTED_CUSTOM_ID) /*||
-                           gotID.equals(genID)*/)) {
+                // ICU creates custom zones with IDs of the form "GMT+0200" (RFC822 style)
+                else if (ioffset != exp.intValue() || !(gotID.equals(genID))) {
                     errln("Expected offset of " + formatMinutes(exp.intValue()) +
                           ", id Custom, for " + id +
                           ", got offset of " + offset +
