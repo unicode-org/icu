@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2005-2006, International Business Machines
+ *   Copyright (C) 2005-2007, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -30,11 +30,11 @@ U_NAMESPACE_BEGIN
 class IteratedChar : public UMemory
 {
 public:
-    int32_t charValue;             // 1-4 bytes from the raw input data
-    int32_t index;
-    int32_t nextIndex;
-    UBool   error;
-    UBool   done;
+    uint32_t charValue;             // 1-4 bytes from the raw input data
+    int32_t  index;
+    int32_t  nextIndex;
+    UBool    error;
+    UBool    done;
 
 public:
     IteratedChar();
