@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006, International Business Machines Corporation and    *
+* Copyright (C) 2006-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -186,6 +186,8 @@ import java.nio.charset.CoderResult;
             return cr;
         }
     };
+    private static final char[] kSubstituteChar1 = new char[]{0x1A};
+    private static final char[] kSubstituteChar = new char[] {0xFFFD};
     /**
      * Skip callback
      * @draft ICU 3.6
@@ -196,8 +198,6 @@ import java.nio.charset.CoderResult;
                 ByteBuffer source, CharBuffer target, IntBuffer offsets,
                 char[] buffer, int length, CoderResult cr){
 
-            char[] kSubstituteChar1 = new char[]{0x1A};
-            char[] kSubstituteChar = new char[] {0xFFFD};
             CharsetICU cs = (CharsetICU) decoder.charset();
             /* could optimize this case, just one uchar */
             if(decoder.invalidCharLength == 1 && cs.subChar1 != 0) {
