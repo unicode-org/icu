@@ -79,10 +79,13 @@ icu4c/source/data/xml/brkitr/en_US_POSIX.xml svneol=native#text/xml
 icu4c/source/data/xml/brkitr/ja.xml svneol=native#text/xml
 icu4c/source/data/xml/brkitr/root.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/ar.xml svneol=native#text/xml
+icu4c/source/data/xml/collation/as.xml -text
 icu4c/source/data/xml/collation/be.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/bg.xml svneol=native#text/xml
+icu4c/source/data/xml/collation/bn.xml -text
 icu4c/source/data/xml/collation/ca.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/cs.xml svneol=native#text/xml
+icu4c/source/data/xml/collation/cy.xml -text
 icu4c/source/data/xml/collation/da.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/de.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/dz.xml svneol=native#text/xml
@@ -98,6 +101,7 @@ icu4c/source/data/xml/collation/fi.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/fo.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/fr.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/gu.xml svneol=native#text/xml
+icu4c/source/data/xml/collation/haw.xml -text
 icu4c/source/data/xml/collation/he.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/hi.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/hr.xml svneol=native#text/xml
@@ -107,8 +111,10 @@ icu4c/source/data/xml/collation/it.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/ja.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/kk.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/kl.xml svneol=native#text/xml
+icu4c/source/data/xml/collation/km.xml -text
 icu4c/source/data/xml/collation/kn.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/ko.xml svneol=native#text/xml
+icu4c/source/data/xml/collation/kok.xml -text
 icu4c/source/data/xml/collation/lt.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/lv.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/mk.xml svneol=native#text/xml
