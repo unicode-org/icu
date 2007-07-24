@@ -1759,7 +1759,7 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
                     if(src->copySet == NULL) {
                         src->copySet = newSet;
                     } else {
-                        ((UnicodeSet *)src->copySet)->addAll(*((UnicodeSet *)newSet));
+                        uset_addAll(src->copySet, newSet);
                         uset_close(newSet);
                     }
                 } else {
@@ -1771,7 +1771,7 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
                     if(src->removeSet == NULL) {
                         src->removeSet = newSet;
                     } else {
-                        ((UnicodeSet *)src->removeSet)->addAll(*((UnicodeSet *)newSet));
+                        uset_addAll(src->removeSet, newSet);
                         uset_close(newSet);
                     }
                 } else {

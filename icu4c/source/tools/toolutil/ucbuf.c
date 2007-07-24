@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2006, International Business Machines
+*   Copyright (C) 1998-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -350,7 +350,8 @@ ucbuf_getc32(UCHARBUF* buf,UErrorCode* error){
         }
     }
     if(UTF_IS_LEAD(*(buf->currentPos))){
-        retVal=UTF16_GET_PAIR_VALUE(*(buf->currentPos++),*(buf->currentPos++));
+        retVal=UTF16_GET_PAIR_VALUE(buf->currentPos[0],buf->currentPos[1]);
+        buf->currentPos+=2;
     }else{
         retVal = *(buf->currentPos++);
     }
