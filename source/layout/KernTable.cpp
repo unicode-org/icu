@@ -10,6 +10,7 @@
 #include "LEGlyphStorage.h"
 
 #include "LESwaps.h"
+#include "OpenTypeUtilities.h"
 
 #include <stdio.h>
 
@@ -102,9 +103,17 @@ KernTable::KernTable(const LEFontInstance* font, const void* tableData)
         const Subtable_0* table = (const Subtable_0*)((char*)subhead + KERN_SUBTABLE_HEADER_SIZE);
 
         nPairs        = SWAPW(table->nPairs);
+
+#if 0   // some old fonts have bad values here...
         searchRange   = SWAPW(table->searchRange);
         entrySelector = SWAPW(table->entrySelector);
         rangeShift    = SWAPW(table->rangeShift);
+#else
+        entrySelector = OpenTypeUtilities::highBit(nPairs);
+        searchRange   = (1 << entrySelector) * KERN_PAIRINFO_SIZE;
+        rangeShift    = (nPairs * KERN_PAIRINFO_SIZE) - searchRange;
+#endif
+
         pairs         = (const PairInfo*)((char*)table + KERN_SUBTABLE_0_HEADER_SIZE);
 
 #if DEBUG
