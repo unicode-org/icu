@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2006, International Business Machines
+*   Copyright (C) 1999-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -236,8 +236,9 @@ haveAliasData(UErrorCode *pErrorCode) {
 
     /* load converter alias data from file if necessary */
     if (needInit) {
-        UDataMemory *data = NULL;
-        const uint16_t *table = NULL;
+        UDataMemory *data;
+        const uint16_t *table;
+        const uint32_t *sectionSizes;
         uint32_t tableStart;
         uint32_t currOffset;
 
@@ -246,9 +247,10 @@ haveAliasData(UErrorCode *pErrorCode) {
             return FALSE;
         }
 
-        table = (const uint16_t *)udata_getMemory(data);
+        sectionSizes = (const uint32_t *)udata_getMemory(data);
+        table = (const uint16_t *)sectionSizes;
 
-        tableStart      = ((const uint32_t *)(table))[0];
+        tableStart      = sectionSizes[0];
         if (tableStart < minTocLength) {
             *pErrorCode = U_INVALID_FORMAT_ERROR;
             udata_close(data);
@@ -260,17 +262,17 @@ haveAliasData(UErrorCode *pErrorCode) {
             gAliasData = data;
             data=NULL;
 
-            gMainTable.converterListSize      = ((const uint32_t *)(table))[1];
-            gMainTable.tagListSize            = ((const uint32_t *)(table))[2];
-            gMainTable.aliasListSize          = ((const uint32_t *)(table))[3];
-            gMainTable.untaggedConvArraySize  = ((const uint32_t *)(table))[4];
-            gMainTable.taggedAliasArraySize   = ((const uint32_t *)(table))[5];
-            gMainTable.taggedAliasListsSize   = ((const uint32_t *)(table))[6];
-            gMainTable.optionTableSize        = ((const uint32_t *)(table))[7];
-            gMainTable.stringTableSize        = ((const uint32_t *)(table))[8];
+            gMainTable.converterListSize      = sectionSizes[1];
+            gMainTable.tagListSize            = sectionSizes[2];
+            gMainTable.aliasListSize          = sectionSizes[3];
+            gMainTable.untaggedConvArraySize  = sectionSizes[4];
+            gMainTable.taggedAliasArraySize   = sectionSizes[5];
+            gMainTable.taggedAliasListsSize   = sectionSizes[6];
+            gMainTable.optionTableSize        = sectionSizes[7];
+            gMainTable.stringTableSize        = sectionSizes[8];
 
-            if (((const uint32_t *)(table))[0] > 8) {
-                gMainTable.normalizedStringTableSize = ((const uint32_t *)(table))[9];
+            if (tableStart > 8) {
+                gMainTable.normalizedStringTableSize = sectionSizes[9];
             }
 
             currOffset = tableStart * (sizeof(uint32_t)/sizeof(uint16_t)) + (sizeof(uint32_t)/sizeof(uint16_t));
@@ -1122,6 +1124,7 @@ ucnv_swapAliases(const UDataSwapper *ds,
     int32_t headerSize;
 
     const uint16_t *inTable;
+    const uint32_t *inSectionSizes;
     uint32_t toc[offsetsCount];
     uint32_t offsets[offsetsCount]; /* 16-bit-addressed offsets from inTable/outTable */
     uint32_t i, count, tocLength, topOffset;
@@ -1161,9 +1164,10 @@ ucnv_swapAliases(const UDataSwapper *ds,
         return 0;
     }
 
-    inTable=(const uint16_t *)((const char *)inData+headerSize);
+    inSectionSizes=(const uint32_t *)((const char *)inData+headerSize);
+    inTable=(const uint16_t *)inSectionSizes;
     uprv_memset(toc, 0, sizeof(toc));
-    toc[tocLengthIndex]=tocLength=ds->readUInt32(((const uint32_t *)inTable)[tocLengthIndex]);
+    toc[tocLengthIndex]=tocLength=ds->readUInt32(inSectionSizes[tocLengthIndex]);
     if(tocLength<minTocLength || offsetsCount<=tocLength) {
         udata_printError(ds, "ucnv_swapAliases(): table of contents contains unsupported number of sections (%u sections)\n", tocLength);
         *pErrorCode=U_INVALID_FORMAT_ERROR;
@@ -1172,7 +1176,7 @@ ucnv_swapAliases(const UDataSwapper *ds,
 
     /* read the known part of the table of contents */
     for(i=converterListIndex; i<=tocLength; ++i) {
-        toc[i]=ds->readUInt32(((const uint32_t *)inTable)[i]);
+        toc[i]=ds->readUInt32(inSectionSizes[i]);
     }
 
     /* compute offsets */
