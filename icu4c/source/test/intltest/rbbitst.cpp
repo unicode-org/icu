@@ -1563,9 +1563,9 @@ void RBBITest::TestExtended() {
             }
 
             errln("line %d: Tag expected in test file.", lineNum);
-            goto end_test;
             parseState = PARSE_COMMENT;
             savedState = PARSE_DATA;
+            goto end_test; // Stop the test.
             }
             break;
 
@@ -1742,8 +1742,8 @@ void RBBITest::TestExtended() {
 
             errln("Syntax Error in test file at line %d, col %d",
                 lineNum, column);
-            goto end_test;
             parseState = PARSE_COMMENT;
+            goto end_test; // Stop the test
             break;
         }
 
@@ -1751,8 +1751,8 @@ void RBBITest::TestExtended() {
         if (U_FAILURE(status)) {
             errln("ICU Error %s while parsing test file at line %d.",
                 u_errorName(status), lineNum);
-            goto end_test;
             status = U_ZERO_ERROR;
+            goto end_test; // Stop the test
         }
 
     }
