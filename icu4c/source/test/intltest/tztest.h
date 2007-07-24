@@ -93,7 +93,8 @@ public:
 
 private:
     // internal functions
-    static UnicodeString& formatMinutes(int32_t min, UnicodeString& rv);
+    static UnicodeString& formatMinutes(int32_t min, UnicodeString& rv, UBool insertSep = TRUE);
+    static UnicodeString& formatRFC822TZ(int32_t min, UnicodeString& rv);
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
