@@ -165,14 +165,14 @@ public final class Utility {
     }
     public final static boolean arrayRegionMatches(byte[] source, int sourceStart,
             byte[] target, int targetStart, int len){
-		int sourceEnd = sourceStart + len;
-		int delta = targetStart - sourceStart;
-		for (int i = sourceStart; i < sourceEnd; i++) {
-			if (source[i] != target[i + delta])
-				return false;
-		}
-		return true;
-	}
+        int sourceEnd = sourceStart + len;
+        int delta = targetStart - sourceStart;
+        for (int i = sourceStart; i < sourceEnd; i++) {
+            if (source[i] != target[i + delta])
+                return false;
+            }
+        return true;
+    }
     ///CLOVER:ON
 
     /**
@@ -1848,7 +1848,7 @@ public final class Utility {
 //#ifndef FOUNDATION
         return buf.indexOf(s);
 //#else
-//##    	return buf.toString().indexOf(s);
+//##        return buf.toString().indexOf(s);
 //#endif
     }
     
@@ -1857,7 +1857,7 @@ public final class Utility {
 //#ifndef FOUNDATION
         return buf.lastIndexOf(s);
 //#else
-//##    	return buf.toString().lastIndexOf(s);
+//##        return buf.toString().lastIndexOf(s);
 //#endif
     }
     
@@ -1866,7 +1866,7 @@ public final class Utility {
 //#ifndef FOUNDATION
         return buf.indexOf(s, i);
 //#else
-//##    	return buf.toString().indexOf(s, i);
+//##        return buf.toString().indexOf(s, i);
 //#endif
     }
     
@@ -1875,7 +1875,7 @@ public final class Utility {
 //#ifndef FOUNDATION
         return buf.lastIndexOf(s, i);
 //#else
-//##    	return buf.toString().lastIndexOf(s, i);
+//##        return buf.toString().lastIndexOf(s, i);
 //#endif
     }
    
@@ -1903,10 +1903,13 @@ public final class Utility {
 //#endif
    }
 
-   // !!! 1.3 compatability
+   private static final String REGEX_SPECIALS = ".^$[]*+?|()";
+
+   // !!! 1.3 compatibility
+   // Note: target is not a string literal, not a regular expression.
    public static String[] splitString(String src, String target) {
 //#ifndef FOUNDATION
-       return src.split(target);
+       return src.split("\\Q" + target + "\\E");
 //#else
 //##       int i = src.indexOf(target);
 //##       if (i == -1) {
@@ -1926,7 +1929,7 @@ public final class Utility {
 //#endif
    }
 
-   // !!! 1.3 compatability
+   // !!! 1.3 compatibility
   /**
    * Split the string at runs of ascii whitespace characters.
    */
