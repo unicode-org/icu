@@ -764,7 +764,7 @@ void TimeZoneTest::TestShortZoneIDs()
 /**
  * Utility function for TestCustomParse
  */
-UnicodeString& TimeZoneTest::formatMinutes(int32_t min, UnicodeString& rv)
+UnicodeString& TimeZoneTest::formatMinutes(int32_t min, UnicodeString& rv, UBool insertSep/*=TRUE*/)
 {
         rv.remove();
 
@@ -774,13 +774,17 @@ UnicodeString& TimeZoneTest::formatMinutes(int32_t min, UnicodeString& rv)
         min = min%60;
 
         rv += UChar(sign);
-        if(h > 10)
+        if(h >= 10)
             rv += UChar(0x0030 + (h/10));
+        else
+            rv += "0";
+
         rv += UChar(0x0030 + (h%10));
 
-        rv += ":";
+        if (insertSep)
+            rv += ":";
 
-        if(min > 10)
+        if(min >= 10)
             rv += UChar(0x0030 + (min/10));
         else
             rv += "0";
@@ -790,6 +794,19 @@ UnicodeString& TimeZoneTest::formatMinutes(int32_t min, UnicodeString& rv)
         return rv;
 }
 
+/**
+ * Utility function for TestCustomParse, generating RFC822 style
+ * time zone string for the give offset in minutes
+ */
+UnicodeString& TimeZoneTest::formatRFC822TZ(int32_t min, UnicodeString& rv)
+{
+    UnicodeString offsetStr;
+    formatMinutes(min, offsetStr, FALSE);
+    rv.remove();
+    rv += "GMT";
+    rv += offsetStr;
+    return rv;
+}
 
 /**
  * As part of the VM fix (see CCC approved RFE 4028006, bug
@@ -803,7 +820,6 @@ void TimeZoneTest::TestCustomParse()
 {
     int32_t i;
     const int32_t kUnparseable = 604800; // the number of seconds in a week. More than any offset should be.
-    const UnicodeString kExpectedCustomID = "Custom";
 
     struct
     {
@@ -819,7 +835,7 @@ void TimeZoneTest::TestCustomParse()
         // {"GMT+0",     (0)}, // ICU 2.8: An Olson zone ID
         {"GMT+1",     (60)},
         {"GMT-0030",  (-30)},
-        {"GMT+15:99", (15*60+99)},
+        {"GMT+15:99", kUnparseable},
         {"GMT+",      kUnparseable},
         {"GMT-",      kUnparseable},
         {"GMT+0:",    kUnparseable},
@@ -880,8 +896,9 @@ void TimeZoneTest::TestCustomParse()
         {
             zone->getID(itsID);
             int32_t ioffset = zone->getRawOffset()/60000;
-            UnicodeString offset;
+            UnicodeString offset, expectedID;
             formatMinutes(ioffset, offset);
+            formatRFC822TZ(ioffset, expectedID);
             logln(id + " -> " + itsID + " GMT" + offset);
             if (exp == kUnparseable)
             {
@@ -890,10 +907,11 @@ void TimeZoneTest::TestCustomParse()
                                     ", id " + itsID);
             }
             else if (ioffset != exp ||
-                     (itsID.compare(kExpectedCustomID) != 0))
+                     (itsID.compare(expectedID) != 0))
             {
                 errln("Expected offset of " + formatMinutes(exp,temp) +
-                                    ", id Custom, for " + id +
+                                    ", id " + expectedID +
+                                    ", for " + id +
                                     ", got offset of " + offset +
                                     ", id " + itsID);
             }

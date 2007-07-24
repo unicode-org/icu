@@ -86,6 +86,8 @@ static char gStrBuf[256];
 #define kRULES    "Rules"
 #define kNAMES    "Names"
 #define kDEFAULT  "Default"
+#define kMAX_CUSTOM_HOUR    23
+#define kMAX_CUSTOM_MIN     59
 
 // Static data and constants
 
@@ -93,10 +95,6 @@ static const UChar         GMT_ID[] = {0x47, 0x4D, 0x54, 0x00}; /* "GMT" */
 static const UChar         Z_STR[] = {0x7A, 0x00}; /* "z" */
 static const UChar         ZZZZ_STR[] = {0x7A, 0x7A, 0x7A, 0x7A, 0x00}; /* "zzzz" */
 static const int32_t       GMT_ID_LENGTH = 3;
-static const UChar         CUSTOM_ID[] = 
-{
-    0x43, 0x75, 0x73, 0x74, 0x6F, 0x6D, 0x00 /* "Custom" */
-};
 
 static UMTX                             LOCK;
 static U_NAMESPACE_QUALIFIER TimeZone*  DEFAULT_ZONE = NULL;
@@ -1168,7 +1166,8 @@ TimeZone::createCustomTimeZone(const UnicodeString& id)
     {
         ParsePosition pos(GMT_ID_LENGTH);
         UBool negative = FALSE;
-        int32_t offset;
+        int32_t hour = 0;
+        int32_t min = 0;
 
         if (id[pos.getIndex()] == 0x002D /*'-'*/)
             negative = TRUE;
@@ -1194,13 +1193,12 @@ TimeZone::createCustomTimeZone(const UnicodeString& id)
             delete numberFormat;
             return 0;
         }
-        offset = n.getLong();
+        hour = n.getLong();
 
         if (pos.getIndex() < id.length() &&
             id[pos.getIndex()] == 0x003A /*':'*/)
         {
             // hh:mm
-            offset *= 60;
             pos.setIndex(pos.getIndex() + 1);
             int32_t oldPos = pos.getIndex();
             n.setLong(kParseFailed);
@@ -1209,27 +1207,57 @@ TimeZone::createCustomTimeZone(const UnicodeString& id)
                 delete numberFormat;
                 return 0;
             }
-            offset += n.getLong();
+            min = n.getLong();
         }
         else 
         {
             // hhmm or hh
 
             // Be strict about interpreting something as hh; it must be
-            // an offset < 30, and it must be one or two digits. Thus
+            // an offset < 23, and it must be one or two digits. Thus
             // 0010 is interpreted as 00:10, but 10 is interpreted as
             // 10:00.
-            if (offset < 30 && (pos.getIndex() - start) <= 2)
-                offset *= 60; // hh, from 00 to 29; 30 is 00:30
-            else
-                offset = offset % 100 + offset / 100 * 60; // hhmm
+            if (hour > kMAX_CUSTOM_HOUR || (pos.getIndex() - start) > 2) {
+                min = hour % 100;
+                hour /= 100;
+            }
         }
 
-        if(negative)
-            offset = -offset;
-
         delete numberFormat;
-        return new SimpleTimeZone(offset * 60000, CUSTOM_ID);
+
+        if (hour > kMAX_CUSTOM_HOUR || min > kMAX_CUSTOM_MIN) {
+            return 0;
+        }
+
+        // Create time zone ID in RFC822 format - GMT[+|-]hhmm
+        UnicodeString tzRFC(GMT_ID);
+        if (hour|min) {
+            if (negative) {
+                tzRFC += (UChar)'-';
+            } else {
+                tzRFC += (UChar)'+';
+            }
+
+            if (hour < 10) {
+                tzRFC += (UChar)'0';
+            } else {
+                tzRFC += (UChar)('0' + hour/10);
+            }
+            tzRFC += (UChar)('0' + hour%10);
+
+            if (min < 10) {
+                tzRFC += (UChar)'0';
+            } else {
+                tzRFC += (UChar)('0' + min/10);
+            }
+            tzRFC += (UChar)('0' + min%10);
+        }
+
+        int32_t offset = (hour * 60 + min) * 60 * 1000;
+        if(negative) {
+            offset = -offset;
+        }
+        return new SimpleTimeZone(offset, tzRFC);
     }
     return 0;
 }
