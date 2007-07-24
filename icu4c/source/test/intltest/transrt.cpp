@@ -1066,7 +1066,6 @@ void TransliteratorRoundTripTest::TestHan() {
     USetExemplars = uset_open(0, 0);
     USetExemplars = ulocdata_getExemplarSet(uld, USetExemplars, 0, ULOCDATA_ES_STANDARD, &status);
     ASSERT_SUCCESS(status);
-    UnicodeSet *exemplars = (UnicodeSet *)USetExemplars;
     ulocdata_close(uld);
 
     UnicodeString source;
@@ -1074,7 +1073,7 @@ void TransliteratorRoundTripTest::TestHan() {
     int           i;
     for (i=0; ;i++) {
         // Add all of the Chinese exemplar chars to the string "source".
-        c = exemplars->charAt(i);
+        c = uset_charAt(USetExemplars, i);
         if (c == (UChar32)-1) {
             break;
         }
