@@ -36,7 +36,7 @@ U_CDECL_BEGIN
 // Does not use uset.h to reduce code dependencies
 static void U_CALLCONV
 _set_add(USet *set, UChar32 c) {
-    ((UnicodeSet *)set)->add(c);
+    uset_add(set, c);
 }
 
 // These functions aren't used.
