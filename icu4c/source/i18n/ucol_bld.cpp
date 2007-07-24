@@ -241,7 +241,7 @@ U_CFUNC uint32_t U_EXPORT2 ucol_getCEStrengthDifference(uint32_t CE, uint32_t co
 }
 
 
-static
+/*static
 inline int32_t ucol_inv_getPrevious(UColTokenParser *src, UColTokListHeader *lh, uint32_t strength) {
 
     uint32_t CE = lh->baseCE;
@@ -271,7 +271,7 @@ inline int32_t ucol_inv_getPrevious(UColTokenParser *src, UColTokListHeader *lh,
     lh->previousContCE = previousContCE;
 
     return iCE;
-}
+}*/
 
 static
 inline int32_t ucol_inv_getNext(UColTokenParser *src, UColTokListHeader *lh, uint32_t strength) {

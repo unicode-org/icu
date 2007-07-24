@@ -303,7 +303,7 @@ inline UBool collIter_bos(collIterate *source) {
   return FALSE;
 }
 
-static
+/*static
 inline UBool collIter_SimpleBos(collIterate *source) {
   // if we're going backwards, we need to know whether there is more in the
   // iterator, even if we are in the side buffer
@@ -314,7 +314,7 @@ inline UBool collIter_SimpleBos(collIterate *source) {
     return TRUE;
   }
   return FALSE;
-}
+}*/
     //return (data->pos == data->string) ||
 
 
@@ -1272,7 +1272,7 @@ void collIterNormalize(collIterate *collationSource)
 // This function takes the iterator and extracts normalized stuff up to the next boundary
 // It is similar in the end results to the collIterNormalize, but for the cases when we
 // use an iterator
-static
+/*static
 inline void normalizeIterator(collIterate *collationSource) {
   UErrorCode status = U_ZERO_ERROR;
   UBool wasNormalized = FALSE;
@@ -1307,7 +1307,7 @@ inline void normalizeIterator(collIterate *collationSource) {
   collationSource->origFlags  = collationSource->flags;
   collationSource->flags     |= UCOL_ITER_INNORMBUF;
   collationSource->flags     &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN | UCOL_USE_ITERATOR);
-}
+}*/
 
 
 /* Incremental FCD check and normalize                                                    */
