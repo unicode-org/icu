@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -1691,17 +1691,17 @@ U_CDECL_BEGIN
 // Does not use uset.h to reduce code dependencies
 static void U_CALLCONV
 _set_add(USet *set, UChar32 c) {
-    ((UnicodeSet *)set)->add(c);
+    uset_add(set, c);
 }
 
 static void U_CALLCONV
 _set_addRange(USet *set, UChar32 start, UChar32 end) {
-    ((UnicodeSet *)set)->add(start, end);
+    uset_addRange(set, start, end);
 }
 
 static void U_CALLCONV
 _set_addString(USet *set, const UChar *str, int32_t length) {
-    ((UnicodeSet *)set)->add(UnicodeString((UBool)(length<0), str, length));
+    uset_addString(set, str, length);
 }
 
 U_CDECL_END
