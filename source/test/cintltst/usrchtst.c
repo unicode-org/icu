@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 2001-2004 International Business Machines 
+ * Copyright (c) 2001-2007 International Business Machines 
  * Corporation and others. All Rights Reserved.
  ********************************************************************
  * File usrchtst.c
@@ -356,7 +356,7 @@ static UBool assertEqualWithUStringSearch(      UStringSearch *strsrch,
         matchindex = search.offset[count];
     }
     usearch_next(strsrch, &status);
-    if ((uint32_t)usearch_getMatchedStart(strsrch) != USEARCH_DONE ||
+    if (usearch_getMatchedStart(strsrch) != USEARCH_DONE ||
         usearch_getMatchedLength(strsrch) != 0) {
         char *str = toCharString(usearch_getText(strsrch, &textlength));
         log_err("Text: %s\n", str);
@@ -399,7 +399,7 @@ static UBool assertEqualWithUStringSearch(      UStringSearch *strsrch,
         count --;
     }
     usearch_previous(strsrch, &status);
-    if ((uint32_t)usearch_getMatchedStart(strsrch) != USEARCH_DONE ||
+    if (usearch_getMatchedStart(strsrch) != USEARCH_DONE ||
         usearch_getMatchedLength(strsrch) != 0) {
         char *str = toCharString(usearch_getText(strsrch, &textlength));
         log_err("Text: %s\n", str);
@@ -1120,7 +1120,7 @@ static void TestGetSetOffset(void)
             count += 2;
         }
         usearch_next(strsrch, &status);
-        if ((uint32_t)usearch_getMatchedStart(strsrch) != USEARCH_DONE) {
+        if (usearch_getMatchedStart(strsrch) != USEARCH_DONE) {
             char *str = toCharString(usearch_getText(strsrch, &textlength));
             log_err("Text: %s\n", str);
             str = toCharString(usearch_getPattern(strsrch, &textlength));
@@ -2036,7 +2036,7 @@ static void TestGetSetOffsetCanonical(void)
             count += 2;
         }
         usearch_next(strsrch, &status);
-        if ((uint32_t)usearch_getMatchedStart(strsrch) != USEARCH_DONE) {
+        if (usearch_getMatchedStart(strsrch) != USEARCH_DONE) {
             char *str = toCharString(usearch_getText(strsrch, &textlength));
             log_err("Text: %s\n", str);
             str = toCharString(usearch_getPattern(strsrch, &textlength));

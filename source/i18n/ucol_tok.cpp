@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2006, International Business Machines
+*   Copyright (C) 2001-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -91,10 +91,10 @@ uhash_compareTokens(const UHashTok key1, const UHashTok key2)
 }
 U_CDECL_END
 
-static inline void U_CALLCONV
+/*static inline void U_CALLCONV
 uhash_freeBlockWrapper(void *obj) {
     uhash_freeBlock(obj);
-}
+}*/
 
 
 typedef struct {
