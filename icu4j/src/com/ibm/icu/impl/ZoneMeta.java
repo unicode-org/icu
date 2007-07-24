@@ -597,25 +597,29 @@ public final class ZoneMeta {
                 return null;
             }
 
+            // Create time zone ID in RFC822 format - GMT[+|-]hhmm
+            StringBuffer zid = new StringBuffer(kRFC_TZ_PREFIX);
+            if (hour != 0 || min != 0) {
+                if(negative) {
+                    zid.append('-');
+                } else {
+                    zid.append('+');
+                }
+                // Always use US-ASCII digits
+                if (hour < 10) {
+                    zid.append('0');
+                }
+                zid.append(hour);
+                if (min < 10) {
+                    zid.append('0');
+                }
+                zid.append(min);
+            }
+
             int offset = (hour * 60 + min) * 60 * 1000;
             if(negative) {
                 offset = -offset;
             }
-
-            // Create time zone ID in RFC822 format - GMT[+|-]HHMM
-            StringBuffer zid = new StringBuffer(kRFC_TZ_PREFIX);
-            if (negative) {
-                zid.append('-');
-            } else {
-                zid.append('+');
-            }
-            // Always use US-ASCII digits
-            String offsetStr = Integer.toString(hour * 100 + min);
-            for (int i = 0; i < 4 - offsetStr.length(); i++) {
-                zid.append('0'); // zero padding
-            }
-            zid.append(offsetStr);
-
             TimeZone z = new SimpleTimeZone(offset, zid.toString());
             return z;
         }

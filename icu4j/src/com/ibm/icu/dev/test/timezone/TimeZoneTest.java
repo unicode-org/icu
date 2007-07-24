@@ -233,7 +233,7 @@ public class TimeZoneTest extends TestFmwk
         return "" + sign + (h<10?"0":"") + h + ":" + (min<10?"0":"") + min;
     }
     /* Returns RFC822 time zone string for the given offset in minutes */
-    static final String formatMinutesRFC822(int min) {
+    static final String formatRFC822TZ(int min) {
         char sign = '+';
         if (min < 0) { sign = '-'; min = -min; }
         int h = min/60;
@@ -255,11 +255,11 @@ public class TimeZoneTest extends TestFmwk
             "GMT",       null,
             "GMT-YOUR.AD.HERE", null,
             // "GMT0",      null, // ICU 3.6: An Olson zone IDThis is parsed by some JDKs (Sun 1.4.1), but not by others
-          //  "GMT+0",     new Integer(0),// ICU 3.6: An Olson zone ID
+            // "GMT+0",     new Integer(0),// ICU 3.6: An Olson zone ID
             "GMT+1",     new Integer(60),
             "GMT-0030",  new Integer(-30),
             // Parsed in 1.3, parse failure in 1.4:
-            //"GMT+15:99", new Integer(15*60+99),
+            "GMT+15:99", null,
             "GMT+",      null,
             "GMT-",      null,
             "GMT+0:",    null,
@@ -288,8 +288,8 @@ public class TimeZoneTest extends TestFmwk
             else {
                 int ioffset = zone.getRawOffset()/60000;
                 String offset = formatMinutes(ioffset);
-                String genID = formatMinutesRFC822(ioffset);
-                logln(id + " -> " + zone.getID() + " " + genID);
+                String expectedID = formatRFC822TZ(ioffset);
+                logln(id + " -> " + zone.getID() + " " + offset);
                 String gotID = zone.getID();
                 if (exp == null) {
                     errln("Expected parse failure for " + id +
@@ -299,9 +299,10 @@ public class TimeZoneTest extends TestFmwk
                 // JDK 1.3 creates custom zones with the ID "Custom"
                 // JDK 1.4 creates custom zones with IDs of the form "GMT+02:00"
                 // ICU creates custom zones with IDs of the form "GMT+0200" (RFC822 style)
-                else if (ioffset != exp.intValue() || !(gotID.equals(genID))) {
+                else if (ioffset != exp.intValue() || !(gotID.equals(expectedID))) {
                     errln("Expected offset of " + formatMinutes(exp.intValue()) +
-                          ", id Custom, for " + id +
+                          ", id " + expectedID +
+                          ", for " + id +
                           ", got offset of " + offset +
                           ", id " + zone.getID());
                 }
