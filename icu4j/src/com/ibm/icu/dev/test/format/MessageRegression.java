@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 20052007, International Business Machines
+* Copyright (c) 2005-2007, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -43,7 +43,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.HashMap;
 
-import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.MessageFormat;
 
 public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {

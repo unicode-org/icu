@@ -9,10 +9,7 @@ package com.ibm.icu.dev.test.format;
 
 import com.ibm.icu.dev.test.TestFmwk;
 
-import com.ibm.icu.text.DecimalFormat;
-import com.ibm.icu.text.NumberFormat;
-import com.ibm.icu.text.PluralFormat;
-import com.ibm.icu.text.PluralRules;
+import com.ibm.icu.text.*;
 import com.ibm.icu.util.ULocale;
 
 import java.text.ParsePosition;
