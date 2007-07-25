@@ -236,6 +236,9 @@ UnicodeSet::~UnicodeSet() {
  * Assigns this object to be a copy of another.
  */
 UnicodeSet& UnicodeSet::operator=(const UnicodeSet& o) {
+    if (this == &o) {
+        return *this;
+    }
     if (isFrozen()) {
         return *this;
     }

@@ -230,6 +230,9 @@ SimpleDateFormat::SimpleDateFormat(const SimpleDateFormat& other)
 
 SimpleDateFormat& SimpleDateFormat::operator=(const SimpleDateFormat& other)
 {
+    if (this == &other) {
+        return *this;
+    }
     DateFormat::operator=(other);
 
     delete fSymbols;
