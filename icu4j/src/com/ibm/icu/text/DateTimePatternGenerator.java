@@ -8,32 +8,20 @@
  */
 package com.ibm.icu.text;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.BitSet;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 
 //import org.unicode.cldr.util.Utility;
 
 import com.ibm.icu.impl.CalendarData;
 import com.ibm.icu.impl.PatternTokenizer;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.text.Transliterator;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.Freezable;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.util.UResourceBundle;
 
 /**
@@ -295,12 +283,12 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         return result;
     }
     
-    private static int getAppendNameNumber(String string) {
+    /*private static int getAppendNameNumber(String string) {
         for (int i = 0; i < CLDR_FIELD_NAME.length; ++i) {
             if (CLDR_FIELD_NAME[i].equals(string)) return i;
         }
         return -1;
-    }
+    }*/
     
     private static int getAppendFormatNumber(String string) {
         for (int i = 0; i < CLDR_FIELD_APPEND.length; ++i) {
