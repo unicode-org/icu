@@ -95,6 +95,11 @@
             <ant target='brkfiles'>
             </ant>
           </sequential>
+          <sequential>
+            <ant target='translit'>
+            </ant>
+            <!--<ant target='trnsfiles'></ant>    Not ANT-built - see note below. -->
+          </sequential>
         </parallel>
      </target>
 
@@ -273,35 +278,20 @@
             </run>
         </cldr-build>
     </target>
-    <target name="trnsfiles" depends="init, setup" description="builds colfiles.mk">
-        <cldr-build toolName="org.unicode.cldr.icu.LDML2ICUConverter" destFile="colfiles.mk" noArgs="true">
-            <!-- launch the tool and generate the data after reading the config file -->
+    <!-- we don't generate en.txt or el.txt - so don't change trnsfiles.mk for now. -->
+<!--   
+     <target name="trnsfiles" depends="init, setup" description="builds trnsfiles.mk">
+        <cldr-build toolName="org.unicode.cldr.icu.ConvertTransforms" srcFile=".*xml" destFile="trnsfiles.mk" noArgs="true">
             <run>
-                <args>
-                    <arg name="-s" value="${env.CLDR_DIR}/common/collation" />
-                    <arg name="-d" value="${env.ICU4C_DIR}/source/data/coll"/>
-                    <arg name="-p" value="${env.ICU4C_DIR}/source/data/xml/collation"/>
-                    <arg name="-m" value="${env.CLDR_DIR}/common/supplemental" />
-                    <arg name="-w" value="${env.CLDR_DIR}/common/collation" />
+                <args>   [ double hyphen not allowed in comments - transpose -" to fix below ]
+                    <arg name=-"-sourcedir" value="${env.CLDR_DIR}/common/transforms" />
+                    <arg name=-"-destdir"   value="${env.ICU4C_DIR}/source/data/translit"/>
+                    <arg name=-"-commentSkip"/>
+                    <arg name=-"-writeIndex"/>
                 </args>
-                 <deprecates>
-                    <alias from="de__PHONEBOOK" to="de@collation=phonebook"  xpath="//ldml/collations/default[@type='phonebook']"/>
-                    <alias from="es__TRADITIONAL" to="es@collation=traditional" xpath="//ldml/collations/default[@type='traditional']"/>
-                    <alias from="hi__DIRECT" to="hi@collation=direct" xpath="//ldml/collations/default[@type='direct']"/>
-                    <alias from="zh__PINYIN" to="zh@collation=pinyin" xpath="//ldml/collations/default[@type='pinyin']"/>
-                    <alias from="zh_TW_STROKE" to="zh@collation=stroke" xpath="//ldml/collations/default[@type='stroke']"/>
-                    <alias from="in" to="id" />
-                    <alias from="in_ID" to="id_ID" />
-                    <alias from="iw" to="he" />
-                    <alias from="iw_IL" to="he_IL" />
-                    <emptyLocale locale="de_" />
-                    <emptyLocale locale="es_" />
-                    <emptyLocale locale="hi_" />
-                    <emptyLocale locale="zh_" />
-                </deprecates>
             </run>
         </cldr-build>
-    </target>
+    </target> -->
     <target name="clean" depends="init, setup" description="deletes all txt files and mk files from coll and locales directories">
         <delete>
             <fileset id="locales" dir="${env.ICU4C_DIR}/source/data/locales">
@@ -311,6 +301,10 @@
             <fileset id="locales" dir="${env.ICU4C_DIR}/source/data/coll">
                 <include name="*.txt" />
                 <include name="colfiles.mk" />
+            </fileset>
+            <fileset id="locales" dir="${env.ICU4C_DIR}/source/data/translit">
+                <include name="*_*.txt" />
+                <include name="root.txt" />
             </fileset>
             <fileset id="locales" dir="${env.ICU4C_DIR}/source/data/brkitr">
                 <!-- brkitr directory contains bunch of txt files that are not produced by LDML2ICUConverter.
