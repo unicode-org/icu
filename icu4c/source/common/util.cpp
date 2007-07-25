@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2006, International Business Machines
+*   Copyright (c) 2001-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -10,6 +10,7 @@
 
 #include "util.h"
 #include "unicode/unimatch.h"
+#include "unicode/uniset.h"
 
 // Define UChar constants using hex for EBCDIC compatibility
 
@@ -425,6 +426,18 @@ uprv_isRuleWhiteSpace(UChar32 c) {
     return (c >= 0x0009 && c <= 0x2029 &&
             (c <= 0x000D || c == 0x0020 || c == 0x0085 ||
              c == 0x200E || c == 0x200F || c >= 0x2028));
+}
+
+U_CAPI UnicodeSet* U_EXPORT2
+uprv_openRuleWhiteSpaceSet(UErrorCode* ec) {
+    if(U_FAILURE(*ec)) {
+        return NULL;
+    }
+    // create a set with the Pattern_White_Space characters,
+    // without a pattern for fewer code dependencies
+    UnicodeSet *set=new UnicodeSet(9, 0xd);
+    set->UnicodeSet::add(0x20).add(0x85).add(0x200e, 0x200f).add(0x2028, 0x2029);
+    return set;
 }
 
 //eof
