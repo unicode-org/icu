@@ -972,6 +972,9 @@ VTimeZone::~VTimeZone() {
 
 VTimeZone&
 VTimeZone::operator=(const VTimeZone& right) {
+    if (this == &right) {
+        return *this;
+    }
     if (*this != right) {
         BasicTimeZone::operator=(right);
         if (right.vtzlines != NULL) {
