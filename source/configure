@@ -3072,7 +3072,7 @@ echo $ECHO_N "checking for 64-bit executable support... $ECHO_C" >&6
                 ENABLE_64BIT_LIBS=no
             fi
             ;;
-        x86_64-*-cygwin)
+        *-*-cygwin)
             if test "$GCC" = yes; then
                 if test -n "`$CXX -dumpspecs 2>&1 && $CC -dumpspecs 2>&1 | grep -v __LP64__`"; then
                     ENABLE_64BIT_LIBS=yes
@@ -3081,9 +3081,7 @@ echo $ECHO_N "checking for 64-bit executable support... $ECHO_C" >&6
                 fi
             else
                 ENABLE_64BIT_LIBS=no
-                OLD_CPPFLAGS="${CPPFLAGS}"
                 OLD_LDFLAGS="${LDFLAGS}"
-                CPPFLAGS="${CPPFLAGS} /DWIN64"
                 LDFLAGS="${LDFLAGS} /MACHINE:AMD64"
                 if test "$cross_compiling" = yes; then
   ENABLE_64BIT_LIBS=no
@@ -3118,13 +3116,8 @@ ENABLE_64BIT_LIBS=no
 fi
 rm -f core *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
 fi
-                if test "$ENABLE_64BIT_LIBS" = no; then
-                    CPPFLAGS="${OLD_CPPFLAGS}"
-                    LDFLAGS="${OLD_LDFLAGS}"
-                else
-                    ARFLAGS="${ARFLAGS} /MACHINE:AMD64"
-                fi
-            fi
+                LDFLAGS="${OLD_LDFLAGS}"
+                                            fi
             ;;
         *-*-aix*|powerpc64-*-linux*)
             if test "$ac_cv_c_compiler_gnu" = no; then

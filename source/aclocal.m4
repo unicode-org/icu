@@ -200,7 +200,7 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
                 ENABLE_64BIT_LIBS=no
             fi
             ;;
-        x86_64-*-cygwin)
+        *-*-cygwin)
             if test "$GCC" = yes; then
                 if test -n "`$CXX -dumpspecs 2>&1 && $CC -dumpspecs 2>&1 | grep -v __LP64__`"; then
                     ENABLE_64BIT_LIBS=yes
@@ -209,18 +209,13 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
                 fi
             else
                 ENABLE_64BIT_LIBS=no
-                OLD_CPPFLAGS="${CPPFLAGS}"
                 OLD_LDFLAGS="${LDFLAGS}"
-                CPPFLAGS="${CPPFLAGS} /DWIN64"
                 LDFLAGS="${LDFLAGS} /MACHINE:AMD64"
                 AC_TRY_RUN(int main(void) {return 0;},
                    ENABLE_64BIT_LIBS=yes, ENABLE_64BIT_LIBS=no, ENABLE_64BIT_LIBS=no)
-                if test "$ENABLE_64BIT_LIBS" = no; then
-                    CPPFLAGS="${OLD_CPPFLAGS}"
-                    LDFLAGS="${OLD_LDFLAGS}"
-                else
-                    ARFLAGS="${ARFLAGS} /MACHINE:AMD64"
-                fi
+                LDFLAGS="${OLD_LDFLAGS}"
+                dnl These flags aren't required.
+                dnl vcvarsamd64.bat should have been used to enable 64-bit builds.
             fi
             ;;
         *-*-aix*|powerpc64-*-linux*)
