@@ -303,18 +303,6 @@ uset_getItem(const USet* uset, int32_t itemIndex,
 //    return TRUE;
 //}
 
-U_CAPI USet* U_EXPORT2
-uprv_openRuleWhiteSpaceSet(UErrorCode* ec) {
-    if(U_FAILURE(*ec)) {
-        return NULL;
-    }
-    // create a set with the Pattern_White_Space characters,
-    // without a pattern for fewer code dependencies
-    UnicodeSet *set=new UnicodeSet(9, 0xd);
-    set->UnicodeSet::add(0x20).add(0x85).add(0x200e, 0x200f).add(0x2028, 0x2029);
-    return (USet *)set;
-}
-
 /*
  * Serialize a USet into 16-bit units.
  * Store BMP code points as themselves with one 16-bit unit each.

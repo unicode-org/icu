@@ -2,7 +2,7 @@
 //
 //  file:  rbbiscan.cpp
 //
-//  Copyright (C) 2002-2006, International Business Machines Corporation and others.
+//  Copyright (C) 2002-2007, International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains the Rule Based Break Iterator Rule Builder functions for
@@ -23,7 +23,7 @@
 #include "unicode/uchriter.h"
 #include "unicode/parsepos.h"
 #include "unicode/parseerr.h"
-#include "uprops.h"
+#include "util.h"
 #include "cmemory.h"
 #include "cstring.h"
 
@@ -127,7 +127,7 @@ RBBIRuleScanner::RBBIRuleScanner(RBBIRuleBuilder *rb)
     //            and the time to build these few sets should be small compared to a
     //            full break iterator build.
     fRuleSets[kRuleSet_rule_char-128]       = new UnicodeSet(gRuleSet_rule_char_pattern,       *rb->fStatus);
-    fRuleSets[kRuleSet_white_space-128]     = (UnicodeSet*) uprv_openRuleWhiteSpaceSet(rb->fStatus);
+    fRuleSets[kRuleSet_white_space-128]     = uprv_openRuleWhiteSpaceSet(rb->fStatus);
     fRuleSets[kRuleSet_name_char-128]       = new UnicodeSet(gRuleSet_name_char_pattern,       *rb->fStatus);
     fRuleSets[kRuleSet_name_start_char-128] = new UnicodeSet(gRuleSet_name_start_char_pattern, *rb->fStatus);
     fRuleSets[kRuleSet_digit_char-128]      = new UnicodeSet(gRuleSet_digit_char_pattern,      *rb->fStatus);
