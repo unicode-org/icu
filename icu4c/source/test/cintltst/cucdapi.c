@@ -86,6 +86,7 @@ void TestUScriptCodeAPI(){
     {
         UErrorCode err = U_ZERO_ERROR;
         int32_t capacity=0;
+        int32_t j;
         UScriptCode jaCode[]={USCRIPT_KATAKANA, USCRIPT_HIRAGANA, USCRIPT_HAN };
         UScriptCode script[10]={USCRIPT_INVALID_CODE};
         int32_t num = uscript_getCode("ja",script,capacity, &err);
@@ -94,8 +95,17 @@ void TestUScriptCodeAPI(){
             err = U_ZERO_ERROR;
             capacity = 10;
             num = uscript_getCode("ja",script,capacity, &err);
-            if(num!=(sizeof(jaCode)/sizeof(UScriptCode)) || script[0]!=jaCode[0] || script[1]!=jaCode[1]){
-                log_err("Errors uscript_getScriptCode() for Japaneese locale \n");
+            if(num!=(sizeof(jaCode)/sizeof(UScriptCode))){
+                log_err("Errors uscript_getScriptCode() for Japanese locale: num=%d, expected %d \n",
+                        num, (sizeof(jaCode)/sizeof(UScriptCode)));
+            }
+            for(j=0;j<sizeof(jaCode)/sizeof(UScriptCode);j++) {
+                if(script[j]!=jaCode[j]) {
+                    log_err("Japanese locale: code #%d was %d (%s) but expected %d (%s)\n", j,
+                            script[j], uscript_getName(script[j]),
+                            jaCode[j], uscript_getName(jaCode[j]));
+                    
+                }
             }
         }else{
             log_data_err("Errors in uscript_getScriptCode() expected error : %s got: %s \n", 

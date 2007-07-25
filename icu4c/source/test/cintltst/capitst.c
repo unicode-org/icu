@@ -1937,7 +1937,7 @@ static void TestShortString(void)
 }
 
 static void
-doSetsTest(const USet *ref, USet *set, const char* inSet, const char* outSet, UErrorCode *status) {
+doSetsTest(const char *locale, const USet *ref, USet *set, const char* inSet, const char* outSet, UErrorCode *status) {
     UChar buffer[512];
     int32_t bufLen;
 
@@ -1945,22 +1945,22 @@ doSetsTest(const USet *ref, USet *set, const char* inSet, const char* outSet, UE
     bufLen = u_unescape(inSet, buffer, 512); 
     uset_applyPattern(set, buffer, bufLen, 0, status);
     if(U_FAILURE(*status)) {
-        log_err("Failure setting pattern %s\n", u_errorName(*status));
+        log_err("%s: Failure setting pattern %s\n", locale, u_errorName(*status));
     }
 
     if(!uset_containsAll(ref, set)) {
-        log_err("Some stuff from %s is not present in the set\n", inSet);
+        log_err("%s: Some stuff from %s is not present in the set\n", locale, inSet);
     }
 
     uset_clear(set);
     bufLen = u_unescape(outSet, buffer, 512); 
     uset_applyPattern(set, buffer, bufLen, 0, status);
     if(U_FAILURE(*status)) {
-        log_err("Failure setting pattern %s\n", u_errorName(*status));
+        log_err("%s: Failure setting pattern %s\n", locale, u_errorName(*status));
     }
 
     if(!uset_containsNone(ref, set)) {
-        log_err("Some stuff from %s is present in the set\n", outSet);
+        log_err("%s: Some stuff from %s is present in the set\n", locale, outSet);
     }
 }
 
@@ -2032,7 +2032,7 @@ TestGetContractionsAndUnsafes(void)
         log_verbose("Testing locale: %s\n", tests[i].locale);
         coll = ucol_open(tests[i].locale, &status);
         ucol_getContractionsAndExpansions(coll, conts, exp, TRUE, &status);
-        doSetsTest(conts, set, tests[i].inConts, tests[i].outConts, &status);
+        doSetsTest(tests[i].locale, conts, set, tests[i].inConts, tests[i].outConts, &status);
         setLen = uset_toPattern(conts, buffer, setBufferLen, TRUE, &status);
         if(U_SUCCESS(status)) {
             /*log_verbose("Contractions %i: %s\n", uset_getItemCount(conts), aescstrdup(buffer, setLen));*/
@@ -2040,7 +2040,7 @@ TestGetContractionsAndUnsafes(void)
             log_err("error %s. %i\n", u_errorName(status), setLen);
             status = U_ZERO_ERROR;
         }
-        doSetsTest(exp, set, tests[i].inExp, tests[i].outExp, &status);
+        doSetsTest(tests[i].locale, exp, set, tests[i].inExp, tests[i].outExp, &status);
         setLen = uset_toPattern(exp, buffer, setBufferLen, TRUE, &status);
         if(U_SUCCESS(status)) {
             /*log_verbose("Expansions %i: %s\n", uset_getItemCount(exp), aescstrdup(buffer, setLen));*/
@@ -2050,7 +2050,7 @@ TestGetContractionsAndUnsafes(void)
         }
 
         noConts = ucol_getUnsafeSet(coll, conts, &status);
-        doSetsTest(conts, set, tests[i].unsafeCodeUnits, tests[i].safeCodeUnits, &status);
+        doSetsTest(tests[i].locale, conts, set, tests[i].unsafeCodeUnits, tests[i].safeCodeUnits, &status);
         setLen = uset_toPattern(conts, buffer, setBufferLen, TRUE, &status);
         if(U_SUCCESS(status)) {
             log_verbose("Unsafe %i: %s\n", uset_getItemCount(exp), aescstrdup(buffer, setLen));
