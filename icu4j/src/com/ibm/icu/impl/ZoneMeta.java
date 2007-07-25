@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-20067 International Business Machines
+* Copyright (c) 2003-2007 International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -18,7 +18,6 @@ import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.Vector;
 
-import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.SimpleDateFormat;
