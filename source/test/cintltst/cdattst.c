@@ -186,11 +186,20 @@ static void TestDateFormat()
     /*format using it */
     u_uastrcpy(temp, "1996 lug 10 16:05:28");
     
-    if(u_strcmp(myDateFormat(it,d), temp)==0)
-        log_verbose("PASS: Date Format for italian locale successful uisng udat_format()\n");
-    else
-        log_data_err("FAIL: Date Format for italian locale failed using udat_format().\n");
-
+    { 
+        UChar *fmtted;
+        char g[100];
+        char x[100];
+        
+        fmtted = myDateFormat(it,d);
+        u_austrcpy(g, fmtted);
+        u_austrcpy(x, temp);
+        if(u_strcmp(fmtted, temp)==0) {
+            log_verbose("PASS: Date Format for italian locale successful uisng udat_format() - wanted %s, got %s\n", x, g);
+        } else {
+            log_data_err("FAIL: Date Format for italian locale failed using udat_format() - wanted %s, got %s\n", x, g);
+        }
+    }
     
     /*Testing parsing using udat_parse()*/
     log_verbose("\nTesting parsing using udat_parse()\n");
