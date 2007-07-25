@@ -16,13 +16,13 @@ public class DebugUtilitiesData extends Object {
     };
 
     public static final String [][] NAMES = { 
-        /* UDebugEnumType */
+        /* UDebugEnumType, 0 */
         { 
            "UDebugEnumType", /* 0 */ 
            "UCalendarDateFields", /* 1 */ 
            "UCalendarMonths", /* 2 */ 
         },
-        /* UCalendarDateFields */
+        /* UCalendarDateFields, 1 */
         { 
            "ERA", /* 0 */ 
            "YEAR", /* 1 */ 
@@ -47,7 +47,7 @@ public class DebugUtilitiesData extends Object {
            "JULIAN_DAY", /* 20 */ 
            "MILLISECONDS_IN_DAY", /* 21 */ 
         },
-        /* UCalendarMonths */
+        /* UCalendarMonths, 2 */
         { 
            "JANUARY", /* 0 */ 
            "FEBRUARY", /* 1 */ 
@@ -66,13 +66,13 @@ public class DebugUtilitiesData extends Object {
     };
 
     public static final int [][] VALUES = { 
-        /* UDebugEnumType */
+        /* UDebugEnumType, 0 */
         { 
            0, /* UDebugEnumType */
            1, /* UCalendarDateFields */
            2, /* UCalendarMonths */
         },
-        /* UCalendarDateFields */
+        /* UCalendarDateFields, 1 */
         { 
            com.ibm.icu.util.Calendar.ERA, /* 0 */
            com.ibm.icu.util.Calendar.YEAR, /* 1 */
@@ -97,7 +97,7 @@ public class DebugUtilitiesData extends Object {
            com.ibm.icu.util.Calendar.JULIAN_DAY, /* 20 */
            com.ibm.icu.util.Calendar.MILLISECONDS_IN_DAY, /* 21 */
         },
-        /* UCalendarMonths */
+        /* UCalendarMonths, 2 */
         { 
            com.ibm.icu.util.Calendar.JANUARY, /* 0 */
            com.ibm.icu.util.Calendar.FEBRUARY, /* 1 */
