@@ -8,13 +8,10 @@ package com.ibm.icu.dev.test.calendar;
 
 import java.util.Date;
 import java.util.Locale;
-import java.util.MissingResourceException;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.text.DateFormat;
-import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.IndianCalendar;
-import com.ibm.icu.util.HebrewCalendar;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
@@ -188,7 +185,6 @@ public class IndianTest extends CalendarTest
         {
             // data
             IndianCalendar cal = new IndianCalendar(-1039, 9, 21);
-            Date time = cal.getTime();
             String[] calendarLocales = {
                 "bn_IN", "gu_IN", "hi_IN", "kn_IN", "ml_IN", "or_IN", "pa_IN", "ta_IN", "te_IN"
             };

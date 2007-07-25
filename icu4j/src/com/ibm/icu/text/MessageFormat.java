@@ -1781,7 +1781,7 @@ public class MessageFormat extends UFormat {
         TYPE_SPELLOUT = 5,
         TYPE_ORDINAL = 6,
         TYPE_DURATION = 7,
-        TYPE_PLURAL = 8;;
+        TYPE_PLURAL = 8;
 
     private static final String[] modifierList =
         {"", "currency", "percent", "integer"};
