@@ -78,7 +78,7 @@
  * file brkiter.h.
  * <p>
  * Code snippits illustrating the use of the Break Iterator APIs
- * are available in the ICU User Guide, 
+ * are available in the ICU User Guide,
  * http://icu-project.org/userguide/boundaryAnalysis.html
  * and in the sample program icu/source/samples/break/break.cpp"
  */
@@ -95,9 +95,9 @@ typedef enum UBreakIteratorType {
   UBRK_SENTENCE = 3,
 
 #ifndef U_HIDE_DEPRECATED_API
-  /** 
-   * Title Case breaks 
-   * The iterator created using this type locates title boundaries as described for 
+  /**
+   * Title Case breaks
+   * The iterator created using this type locates title boundaries as described for
    * Unicode 3.2 only. For Unicode 4.0 and above title boundary iteration,
    * please use Word Boundary iterator.
    *
@@ -106,12 +106,12 @@ typedef enum UBreakIteratorType {
   UBRK_TITLE = 4,
 #endif /* U_HIDE_DEPRECATED_API */
   /** Extended Grapheme Cluster breaks  @draft ICU 3.8 */
-  UBRK_X_GRAPHEME_CLUSTER=6,
+  UBRK_X_GRAPHEME_CLUSTER=5,
   UBRK_COUNT = 6
 } UBreakIteratorType;
 
 /** Value indicating all text boundaries have been returned.
- *  @stable ICU 2.0 
+ *  @stable ICU 2.0
  */
 #define UBRK_DONE ((int32_t) -1)
 
@@ -125,7 +125,7 @@ typedef enum UBreakIteratorType {
  *  @stable ICU 2.2
 */
 typedef enum UWordBreak {
-    /** Tag value for "words" that do not fit into any of other categories. 
+    /** Tag value for "words" that do not fit into any of other categories.
      *  Includes spaces and most punctuation. */
     UBRK_WORD_NONE           = 0,
     /** Upper bound for tags for uncategorized words. */
@@ -188,7 +188,7 @@ typedef enum USentenceBreakTag {
     /** Upper bound for tags for sentences ended by sentence terminators.    */
     UBRK_SENTENCE_TERM_LIMIT = 100,
     /** Tag value for for sentences that do not contain an ending
-      * sentence terminator ('.', '?', '!', etc.) character, but 
+      * sentence terminator ('.', '?', '!', etc.) character, but
       * are ended only by a hard separator (CR, LF, PS, etc.) or end of input.
       */
     UBRK_SENTENCE_SEP        = 100,
@@ -450,12 +450,12 @@ ubrk_getRuleStatus(UBreakIterator *bi);
  * <p>
  * For word break iterators, the possible values are defined in enum UWordBreak.
  * @param bi        The break iterator to use
- * @param fillInVec an array to be filled in with the status values.  
+ * @param fillInVec an array to be filled in with the status values.
  * @param capacity  the length of the supplied vector.  A length of zero causes
  *                  the function to return the number of status values, in the
  *                  normal way, without attemtping to store any values.
- * @param status    receives error codes.  
- * @return          The number of rule status values from rules that determined 
+ * @param status    receives error codes.
+ * @return          The number of rule status values from rules that determined
  *                  the most recent boundary returned by the break iterator.
  * @stable ICU 3.0
  */
