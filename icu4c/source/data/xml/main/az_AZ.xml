@@ -8,7 +8,7 @@
    %icu;
 ]
 >
-<ldml draft="true">
+<ldml>
 	<identity>
 		<version number="$Revision: 1.19 $"/>
 		<generation date="$Date: 2007/05/25 01:05:50 $"/>
