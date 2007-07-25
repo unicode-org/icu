@@ -2055,7 +2055,7 @@ static void TestFallback()
         UResourceBundle* resLocID = ures_getByKey(myResB, "Version", NULL, &err);
         UResourceBundle* tResB;
         const UChar* version = NULL;
-        static const UChar versionStr[] = { 0x0031, 0x002E, 0x0039, 0x0032, 0x0000};
+        static const UChar versionStr[] = { 0x0031, 0x002E, 0x0039, 0x0032, 0x0000}; /* will need to change for CLDR 1.5. */
 
         if(err != U_ZERO_ERROR){
             log_data_err("Expected U_ZERO_ERROR when trying to test no_NO_NY aliased to nn_NO for Version err=%s\n",u_errorName(err));
@@ -2063,7 +2063,12 @@ static void TestFallback()
         }
         version = tres_getString(resLocID, -1, NULL, &resultLen, &err);
         if(u_strcmp(version, versionStr) != 0){
-            log_data_err("ures_getString(resLocID, &resultLen, &err) returned an unexpected version value\n");
+            char x[100];
+            char g[100];
+            u_austrcpy(x, versionStr);
+            u_austrcpy(g, version);
+            log_data_err("ures_getString(resLocID, &resultLen, &err) returned an unexpected version value. Expected '%s', but got '%s'\n",
+                    x, g);
         }
         tResB = ures_getByKey(myResB, "zoneStrings", NULL, &err);
         if(err != U_USING_FALLBACK_WARNING){
