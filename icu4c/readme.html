@@ -31,11 +31,11 @@
 
   <body>
     <h1>International Components for Unicode<br />
-     <abbr title="International Components for Unicode">ICU</abbr> 3.7
+     <abbr title="International Components for Unicode">ICU</abbr> 3.8
     ReadMe</h1>
 
-    <p>Version: 2007-July-17<br />
-     Copyright &copy; 1997-2006 International Business Machines Corporation and
+    <p>Version: 2007-July-24<br />
+     Copyright &copy; 1997-2007 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
     <hr />
@@ -158,59 +158,52 @@
       </caption>
 
       <tr>
-        <td>ICU, ICU4C, ICU4J &amp; ICU4JNI Official Homepage</td>
+        <td>ICU, ICU4C &amp; ICU4J Homepage</td>
 
         <td><a href=
-        "http://www.ibm.com/software/globalization/icu/index.jsp">http://www.ibm.com/software/globalization/icu/index.jsp</a></td>
-      </tr>
-
-      <tr>
-        <td>ICU, ICU4C, ICU4J &amp; ICU4JNI Unofficial Homepage</td>
-
-        <td><a href=
-        "http://icu.sourceforge.net/">http://icu.sourceforge.net/</a></td>
+        "http://www.icu-project.org/">http://www.icu-project.org/</a></td>
       </tr>
 
       <tr>
         <td>FAQ - Frequently Asked Questions about ICU</td>
 
         <td><a href=
-        "http://icu.sourceforge.net/userguide/icufaq.html">http://icu.sourceforge.net/userguide/icufaq.html</a></td>
+        "http://www.icu-project.org/userguide/icufaq.html">http://www.icu-project.org/userguide/icufaq.html</a></td>
       </tr>
 
       <tr>
         <td>ICU User's Guide</td>
 
         <td><a href=
-        "http://icu.sourceforge.net/userguide/">http://icu.sourceforge.net/userguide/</a></td>
+        "http://www.icu-project.org/userguide/">http://www.icu-project.org/userguide/</a></td>
       </tr>
 
       <tr>
         <td>Download ICU Releases</td>
 
         <td><a href=
-        "http://www.ibm.com/software/globalization/icu/downloads.jsp">http://www.ibm.com/software/globalization/icu/downloads.jsp</a></td>
+        "http://www.icu-project.org/download/">http://www.icu-project.org/download/</a></td>
       </tr>
 
       <tr>
-        <td>API Documentation Online</td>
+        <td>ICU4C API Documentation Online</td>
 
         <td><a href=
-        "http://icu.sourceforge.net/apiref/index.html">http://icu.sourceforge.net/apiref/index.html</a></td>
+        "http://www.icu-project.org/apiref/icu4c/index.html">http://www.icu-project.org/apiref/icu4c/</a></td>
       </tr>
 
       <tr>
         <td>Online ICU Demos</td>
 
         <td><a href=
-        "http://www.ibm.com/software/globalization/icu/chartsdemostools.jsp">http://www.ibm.com/software/globalization/icu/chartsdemostools.jsp</a></td>
+        "http://demo.icu-project.org/icu-bin/icudemos">http://demo.icu-project.org/icu-bin/icudemos</a></td>
       </tr>
 
       <tr>
         <td>Contacts and Bug Reports/Feature Requests</td>
 
         <td><a href=
-        "http://icu.sourceforge.net/contacts.html">http://icu.sourceforge.net/contacts.html</a></td>
+        "http://www.icu-project.org/contacts.html">http://www.icu-project.org/contacts.html</a></td>
       </tr>
     </table>
 
@@ -222,8 +215,7 @@
 
     <p>The following list concentrates on <em>changes that affect existing
     applications migrating from previous ICU releases</em>. For more news about
-    this release, see the <a href=
-    "http://www.ibm.com/software/globalization/icu/downloads.jsp">ICU 3.6
+    this release, see the <a href="http://www.icu-project.org/download/">ICU 3.8
     download page</a>.</p>
 
     <h3><a name="News_app_packaging" id="News_app_packaging">Changes to packaging
@@ -295,12 +287,11 @@
     <h3><a name="News_data_package" id="News_data_package">Source download
     contains .dat package for ICU data</a></h3>
 
-    <p>The ICU4C 3.6 source downloads contain a pre-built .dat package with ICU's
+    <p>The ICU4C 3.8 source downloads contain a pre-built .dat package with ICU's
     data rather than the data source files. This is to simplify the build process
     for the majority of users and to reduce platform porting issues. If you need
     the data source files for customization, then please download the ICU source
-    code from <a href=
-    "http://www.ibm.com/software/globalization/icu/repository.jsp">CVS</a>.</p>
+    code from <a href="http://www.icu-project.org/repository/">subversion</a>.</p>
 
     <h2><a name="Download" href="#Download" id="Download">How To Download the
     Source Code</a></h2>
@@ -314,7 +305,7 @@
       tested more thoroughly than day-to-day development builds of the system,
       and they are packaged in zip and tar files for convenient download. These
       packaged files can be found at <a href=
-      "http://www.ibm.com/software/globalization/icu/downloads.jsp">http://www.ibm.com/software/globalization/icu/downloads.jsp</a>.<br />
+      "http://www.icu-project.org/download/">http://www.icu-project.org/download/</a>.<br />
        The packaged snapshots are named <strong>icu-nnnn.zip</strong> or
       <strong>icu-nnnn.tgz</strong>, where nnnn is the version number. The .zip
       file is used for Windows platforms, while the .tgz file is preferred on
@@ -327,8 +318,8 @@
       ICU, you should probably be working with the latest version of the ICU
       source code. You will need to check the code out of our CVS repository to
       ensure that you have the most recent version of all of the files. See our
-      <a href="http://www.ibm.com/software/globalization/icu/repository.jsp">CVS
-      page</a> for details.</li>
+      <a href="http://www.icu-project.org/repository/">source
+      repository</a> for details.</li>
     </ul>
 
     <h2><a name="SourceCode" href="#SourceCode" id="SourceCode">ICU Source Code
@@ -337,7 +328,7 @@
     <p>In the descriptions below, <strong><i>&lt;ICU&gt;</i></strong> is the full
     path name of the ICU directory (the top level directory from the distribution
     archives) in your file system. You can also view the <a href=
-    "http://icu.sourceforge.net/userguide/design.html">ICU Architectural
+    "http://www.icu-project.org/userguide/design.html">ICU Architectural
     Design</a> section of the User's Guide to see which libraries you need for
     your software product. You need at least the data (<code>[lib]icudt</code>)
     and the common (<code>[lib]icuuc</code>) libraries in order to use ICU.</p>
@@ -424,8 +415,7 @@
           <p>If some of the following directories are missing, it's probably
           because you got an official download. If you need the data source files
           for customization, then please download the ICU source code from <a
-          href=
-          "http://www.ibm.com/software/globalization/icu/repository.jsp">CVS</a>.</p>
+          href="http://www.icu-project.org/repository/">subversion</a>.</p>
 
           <ul>
             <li><b>in/</b> A directory that contains a pre-built data library for
@@ -479,7 +469,7 @@
           environment variable to the out/ or the out/build/ directories, but
           this is generally discouraged because most people set it incorrectly.
           You can view the <a href=
-          "http://icu.sourceforge.net/userguide/icudata.html">ICU Data
+          "http://www.icu-project.org/userguide/icudata.html">ICU Data
           Management</a> section of the ICU User's Guide for details.</p>
         </td>
       </tr>
@@ -604,17 +594,49 @@
       <tr>
         <td>Windows XP</td>
 
-        <td>Microsoft Visual C++ .NET 2003 (7.1)</td>
+        <td>Microsoft Visual C++ .NET 2005 (8.0)</td>
 
         <td>Reference platform</td>
       </tr>
 
       <tr>
-        <td>Red Hat Enterprise Linux 4 Update 2</td>
+        <td>Red Hat Enterprise Linux 5</td>
+
+        <td>gcc 4.1.1</td>
+
+        <td>Reference platform</td>
+      </tr>
+
+      <tr>
+        <td>AIX 5.3</td>
+
+        <td>Visual Age C++ 8.0</td>
+
+        <td>Reference platform</td>
+      </tr>
+
+      <tr>
+        <td>Solaris 10 (SunOS 5.10)</td>
+
+        <td>Sun Studio 11 (Sun C++ 5.8)</td>
+
+        <td>Reference platform</td>
+      </tr>
+
+      <tr>
+        <td>HP-UX 11.23 (IA64)</td>
+
+        <td>aCC A.06.10</td>
+
+        <td>Reference platform</td>
+      </tr>
+
+      <tr>
+        <td>Red Hat Enterprise Linux 4 Update 4</td>
 
         <td>gcc 3.4.4</td>
 
-        <td>Reference platform</td>
+        <td>Regularly tested</td>
       </tr>
 
       <tr>
@@ -622,7 +644,7 @@
 
         <td>Visual Age C++ 6.0</td>
 
-        <td>Reference platform</td>
+        <td>Regularly tested</td>
       </tr>
 
       <tr>
@@ -630,22 +652,14 @@
 
         <td>Sun Studio 8 (Sun C++ 5.5)</td>
 
-        <td>Reference platform</td>
+        <td>Regularly tested</td>
       </tr>
 
       <tr>
-        <td>HP-UX 11.11</td>
+        <td>HP-UX 11.11 (PA-RISC)</td>
 
         <td>aCC A.03.50<br />
          cc B.11.11.08</td>
-
-        <td>Reference platform</td>
-      </tr>
-
-      <tr>
-        <td>Red Hat Enterprise Linux 3 Update 4</td>
-
-        <td>gcc 3.2.3</td>
 
         <td>Regularly tested</td>
       </tr>
@@ -661,15 +675,7 @@
       <tr>
         <td>Mac OS X (10.4)</td>
 
-        <td>gcc 3.3</td>
-
-        <td>Regularly tested</td>
-      </tr>
-
-      <tr>
-        <td>Solaris 7 (SunOS 5.7)</td>
-
-        <td>Workshop Pro (Forte) CC 6.0</td>
+        <td>gcc 4.0.1</td>
 
         <td>Regularly tested</td>
       </tr>
@@ -677,15 +683,7 @@
       <tr>
         <td>Solaris 10</td>
 
-        <td>gcc 4.0.2</td>
-
-        <td>Regularly tested</td>
-      </tr>
-
-      <tr>
-        <td>AIX 5.1.0 L</td>
-
-        <td>Visual Age C++ 5.0</td>
+        <td>gcc 4.0.3</td>
 
         <td>Regularly tested</td>
       </tr>
@@ -696,22 +694,6 @@
         <td>Intel C++ Compiler 9.0</td>
 
         <td>Regularly tested</td>
-      </tr>
-
-      <tr>
-        <td>SUSE Linux Enterprise Server 9 (PowerPC)</td>
-
-        <td>Visual Age 8.0</td>
-
-        <td>Regularly tested</td>
-      </tr>
-
-      <tr>
-        <td>Windows XP</td>
-
-        <td>Microsoft Visual C++ .NET 2005</td>
-
-        <td>Rarely tested</td>
       </tr>
 
       <tr>
@@ -739,9 +721,9 @@
       </tr>
 
       <tr>
-        <td>Windows 98</td>
+        <td>Windows Vista x64</td>
 
-        <td>Microsoft Visual C++ 6.0</td>
+        <td>Microsoft Visual C++ .NET 2005 (8.0)</td>
 
         <td>Rarely tested</td>
       </tr>
@@ -758,6 +740,14 @@
         <td>NetBSD, OpenBSD, FreeBSD</td>
 
         <td>gcc</td>
+
+        <td>Rarely tested</td>
+      </tr>
+
+      <tr>
+        <td>SUSE Linux Enterprise Server 9 (PowerPC)</td>
+
+        <td>Visual Age 8.0</td>
 
         <td>Rarely tested</td>
       </tr>
@@ -920,9 +910,9 @@
     requires:</p>
 
     <ul>
-      <li>Microsoft NT 4.0 or above, or Windows 98 or above</li>
+      <li>Microsoft 2000 or above</li>
 
-      <li>Microsoft Visual C++ 6.0 or above (when gcc isn't used).</li>
+      <li>Microsoft Visual C++ 2003 or above (when gcc isn't used).</li>
 
       <li>
         Cygwin with the following installed: 
@@ -953,8 +943,11 @@
       Visual C++ compiler will not work with a bash command prompt.</li>
 
       <li>If the computer isn't set up to use Visual C++ from the command line,
-      you need to run VCVARS32.BAT (for example: "<tt>C:\Program Files\Microsoft
-      Visual Studio\VC98\Bin\VCVARS32.BAT</tt>").</li>
+      you need to run vcvars32.bat. For example "<tt>C:\Program Files\Microsoft
+      Visual Studio 8\VC\bin\vcvars32.bat</tt>" can be used for 32-bit builds
+      <strong>or</strong> "<tt>C:\Program Files (x86)\Microsoft Visual Studio
+      8\VC\bin\amd64\vcvarsamd64.bat</tt>" can be used for 64-bit builds on
+      Windows x64.</li>
 
       <li>Unzip the icu-XXXX.zip file into any convenient location. Using command
       line zip, type "unzip -a icu-XXXX.zip -d drive:\directory", or just use
@@ -1339,7 +1332,7 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
     operating systems that do not have a standard C++ ABI (name mangling) for
     compilers, it is recommended to do this special packaging anyway. More
     details on customizing ICU are available in the <a href=
-    "http://icu.sourceforge.net/userguide/">User's Guide</a>. The <a href=
+    "http://www.icu-project.org/userguide/">User's Guide</a>. The <a href=
     "#SourceCode">ICU Source Code Organization</a> section of this readme.html
     gives a more complete description of the libraries.</p>
 
@@ -1368,7 +1361,7 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
 
         <td>Data required by the Common and I18n libraries. There are many ways
         to package and <a href=
-        "http://icu.sourceforge.net/userguide/icudata.html">customize this
+        "http://www.icu-project.org/userguide/icudata.html">customize this
         data</a>, but by default this is all you need.</td>
       </tr>
 
@@ -1614,7 +1607,7 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
     <p>If you are using ICU's Makefiles to build ICU on a new platform, there are
     a few places where you will need to add or modify some files. If you need
     more help, you can always ask the <a href=
-    "http://icu.sourceforge.net/contacts.html">icu-support mailing list</a>. Once
+    "http://www.icu-project.org/contacts.html">icu-support mailing list</a>. Once
     you have finished porting ICU to a new platform, it is recommended that you
     contribute your changes back to ICU via the icu-support mailing list. This
     will make it easier for everyone to benefit from your work.</p>
@@ -1629,7 +1622,7 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
     <p>Data files can be built on a different platform when both platforms share
     the same endianness and the same charset family. This assertion does not
     include platform dependent DLLs/shared/static libraries. For details see the
-    User Guide <a href="http://icu.sourceforge.net/userguide/icudata.html">ICU
+    User Guide <a href="http://www.icu-project.org/userguide/icudata.html">ICU
     Data</a> chapter.</p>
 
     <p>ICU 3.6 removes the requirement that ICU be completely built in the native
