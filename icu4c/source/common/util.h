@@ -22,6 +22,7 @@
 U_NAMESPACE_BEGIN
 
 class UnicodeMatcher;
+class UnicodeSet;
 
 class U_COMMON_API ICU_Utility /* not : public UObject because all methods are static */ {
  public:
@@ -233,6 +234,17 @@ private:
 };
 
 U_NAMESPACE_END
+
+/**
+ * Get the set of "white space" characters in the sense of ICU rule
+ * parsers.  Caller must close/delete result.
+ * Equivalent to the set of characters with the Pattern_White_Space Unicode property.
+ * Stable set of characters, won't change.
+ * See UAX #31 Identifier and Pattern Syntax: http://www.unicode.org/reports/tr31/
+ * @internal
+ */
+U_CAPI UnicodeSet* U_EXPORT2
+uprv_openRuleWhiteSpaceSet(UErrorCode* ec);
 
 /**
  * Is this character a "white space" in the sense of ICU rule parsers?
