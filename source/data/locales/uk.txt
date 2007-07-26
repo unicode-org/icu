@@ -23,7 +23,6 @@ uk{
         017{"Центральна Африка"}
         018{"Південна Африка"}
         019{"Америки"}
-        021{"Північна Америка"}
         029{"Карибський басейн"}
         030{"Східна Азія"}
         034{"Південна Азія"}
@@ -150,6 +149,7 @@ uk{
         IR{"Іран"}
         IS{"Ісландія"}
         IT{"Італія"}
+        JE{"Джерсі"}
         JM{"Ямайка"}
         JO{"Йорданія"}
         JP{"Японія"}
@@ -178,6 +178,7 @@ uk{
         MA{"Марокко"}
         MC{"Монако"}
         MD{"Молдова"}
+        ME{"Чорногорія"}
         MG{"Мадагаскар"}
         MH{"Маршаллові Острови"}
         MK{"Македонія"}
@@ -247,7 +248,7 @@ uk{
         SR{"Суринам"}
         ST{"Сан-Томе і Прінсіпі"}
         SV{"Сальвадор"}
-        SY{"Сирійська Арабська Республіка"}
+        SY{"Сирія"}
         SZ{"Свазіленд"}
         TC{"Теркс і Кайкос"}
         TD{"Чад"}
@@ -351,10 +352,6 @@ uk{
             "AWG",
             "Арубський гульден",
         }
-        AZM{
-            "AZM",
-            "Азербайджанський манат",
-        }
         BAD{
             "BAD",
             "Динар (Боснія і Герцеговина)",
@@ -432,7 +429,7 @@ uk{
             "Бразильське крузейро (1990-1993)",
         }
         BRL{
-            "BRL",
+            "R$",
             "Бразильський реал",
         }
         BRN{
@@ -997,7 +994,7 @@ uk{
         }
         ROL{
             "leu",
-            "Румунський лей",
+            "Старий румунський лей",
         }
         RUB{
             "руб.",
@@ -1842,7 +1839,7 @@ uk{
         REVISED{"Нова орфографія"}
         SAAHO{"Сахо"}
     }
-    Version{"1.92"}
+    Version{"1.95"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1850,8 +1847,8 @@ uk{
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE, d MMMM yyyy 'р.'",
-                "d MMMM yyyy 'р.'",
+                "EEEE, d MMMM yyyy 'р'.",
+                "d MMMM yyyy 'р'.",
                 "d MMM yyyy",
                 "dd.MM.yy",
                 "{1} {0}",
@@ -1863,7 +1860,8 @@ uk{
                 MMdd{"dd.MM"}
                 mmss{"mm:ss"}
                 yyMM{"MM.yy"}
-                yyyyQQQQ{"QQQQ yyyy 'р.'"}
+                yyMMM{"LLL yy"}
+                yyyyQQQQ{"QQQQ yyyy 'р'."}
             }
             dayNames{
                 format{
@@ -2214,6 +2212,9 @@ uk{
         "Africa:Tripoli"{
             ec{"Тріполі"}
         }
+        "Africa:Tunis"{
+            ec{"Туніс"}
+        }
         "Africa:Windhoek"{
             ec{"Віндхук"}
         }
@@ -2247,8 +2248,14 @@ uk{
         "America:Argentina:Ushuaia"{
             ec{"Ушуая"}
         }
+        "America:Aruba"{
+            ec{"Аруба"}
+        }
         "America:Bahia"{
             ec{"Байя"}
+        }
+        "America:Barbados"{
+            ec{"Барбадос"}
         }
         "America:Belem"{
             ec{"Белен"}
@@ -2325,6 +2332,9 @@ uk{
         "America:Detroit"{
             ec{"Детройт"}
         }
+        "America:Dominica"{
+            ec{"Домініка"}
+        }
         "America:Edmonton"{
             ec{"Едмонтон"}
         }
@@ -2391,6 +2401,9 @@ uk{
         "America:Iqaluit"{
             ec{"Ікалуіт"}
         }
+        "America:Jamaica"{
+            ec{"Ямайка"}
+        }
         "America:Jujuy"{
             ec{"Жужуй"}
         }
@@ -2420,6 +2433,9 @@ uk{
         }
         "America:Manaus"{
             ec{"Манаус"}
+        }
+        "America:Martinique"{
+            ec{"Мартініка"}
         }
         "America:Mazatlan"{
             ec{"Масатлан"}
@@ -2471,6 +2487,9 @@ uk{
         }
         "America:North_Dakota:Center"{
             ec{"Центр"}
+        }
+        "America:Panama"{
+            ec{"Панама"}
         }
         "America:Pangnirtung"{
             ec{"Панґніртунґ"}
@@ -2628,6 +2647,9 @@ uk{
         "Asia:Baghdad"{
             ec{"Багдад"}
         }
+        "Asia:Bahrain"{
+            ec{"Бахрейн"}
+        }
         "Asia:Baku"{
             ec{"Баку"}
         }
@@ -2639,6 +2661,9 @@ uk{
         }
         "Asia:Bishkek"{
             ec{"Бішкек"}
+        }
+        "Asia:Brunei"{
+            ec{"Бруней"}
         }
         "Asia:Choibalsan"{
             ec{"Чойбалсан"}
@@ -2748,6 +2773,9 @@ uk{
         "Asia:Pyongyang"{
             ec{"Пхеньян"}
         }
+        "Asia:Qatar"{
+            ec{"Катар"}
+        }
         "Asia:Qyzylorda"{
             ec{"Кзил-Орда"}
         }
@@ -2813,6 +2841,9 @@ uk{
         }
         "Atlantic:Azores"{
             ec{"Азорські острови"}
+        }
+        "Atlantic:Bermuda"{
+            ec{"Бермуди"}
         }
         "Atlantic:Canary"{
             ec{"Канари"}
@@ -2934,6 +2965,9 @@ uk{
         "Europe:Minsk"{
             ec{"Мінськ"}
         }
+        "Europe:Monaco"{
+            ec{"Монако"}
+        }
         "Europe:Moscow"{
             ec{"Москва"}
         }
@@ -3006,11 +3040,17 @@ uk{
         "Indian:Mahe"{
             ec{"Махе"}
         }
+        "Indian:Maldives"{
+            ec{"Мальдіви"}
+        }
         "Indian:Mauritius"{
             ec{"Маврикій"}
         }
         "Indian:Mayotte"{
             ec{"Майорка"}
+        }
+        "Indian:Reunion"{
+            ec{"Реюньйон"}
         }
         "Pacific:Apia"{
             ec{"Апіа"}
@@ -3022,7 +3062,7 @@ uk{
             ec{"Чатем"}
         }
         "Pacific:Easter"{
-            ec{"Пасхи, острів"}
+            ec{"Острів Пасхи"}
         }
         "Pacific:Efate"{
             ec{"Ефате"}
@@ -3071,6 +3111,9 @@ uk{
         }
         "Pacific:Midway"{
             ec{"Мідуей"}
+        }
+        "Pacific:Nauru"{
+            ec{"Науру"}
         }
         "Pacific:Niue"{
             ec{"Ніуе"}
@@ -3124,7 +3167,7 @@ uk{
             ec{"Яп"}
         }
         gmtFormat{"GMT{0}"}
-        hourFormat{"+HHmm;-HHmm"}
+        hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0}"}
     }
 }

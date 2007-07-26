@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 ps_AF{
-    Version{"1.92"}
+    Version{"1.43"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

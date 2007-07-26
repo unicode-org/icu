@@ -7,31 +7,7 @@
 // *
 // ***************************************************************************
 es_PE{
-    Currencies{
-        MXN{
-            "MEX$",
-            "peso mexicano",
-        }
-        USD{
-            "US$",
-            "dólar estadounidense",
-        }
-    }
-    NumberElements{
-        ",",
-        ".",
-        ";",
-        "%",
-        "0",
-        "#",
-        "-",
-        "E",
-        "‰",
-        "∞",
-        "NaN",
-        "+",
-    }
-    Version{"1.92"}
+    Version{"1.51"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -39,8 +15,8 @@ es_PE{
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE d' de 'MMMM' de 'yyyy",
-                "d' de 'MMMM' de 'yyyy",
+                "EEEE d 'de' MMMM 'de' yyyy",
+                "d 'de' MMMM 'de' yyyy",
                 "dd/MM/yyyy",
                 "d/MM/yy",
                 "{1} {0}",

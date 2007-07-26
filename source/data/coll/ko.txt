@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/ko.xml
  */
 ko{
-    Version{"1.21"}
+    Version{"1.26"}
     collations{
         standard{
             Sequence{

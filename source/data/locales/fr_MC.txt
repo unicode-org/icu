@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 fr_MC{
-    Version{"1.92"}
+    Version{"1.36"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

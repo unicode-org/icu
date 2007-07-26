@@ -13,17 +13,11 @@ sr_Cyrl_BA{
             "Конвертибилна Марка",
         }
     }
-    NumberPatterns{
-        "#,##0.###",
-        "¤ #,##0.00",
-        "#,##0%",
-        "#E0",
-    }
-    Version{"1.92"}
+    Version{"1.29"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "HH.mm.ss v",
+                "HH 'часова', mm 'минута', ss 'секунди' v",
                 "HH.mm.ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -37,12 +31,12 @@ sr_Cyrl_BA{
                 format{
                     abbreviated{
                         "нед",
-                        "понедељак",
-                        "уторак",
+                        "пон",
+                        "уто",
                         "сри",
-                        "четвртак",
+                        "чет",
                         "пет",
-                        "субота",
+                        "суб",
                     }
                     wide{
                         "недеља",

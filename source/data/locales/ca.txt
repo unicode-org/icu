@@ -209,6 +209,14 @@ ca{
         ZW{"Zimbabwe"}
     }
     Currencies{
+        ADP{
+            "ADP",
+            "Pesseta d'Andorra",
+        }
+        ARS{
+            "ARS",
+            "Peso argentí",
+        }
         BRL{
             "R$",
             "Real brasiler",
@@ -221,7 +229,10 @@ ca{
             "₧",
             "ESP",
             {
-                "¤ #,##0;-¤ #,##0",
+                /**
+                 * Duplicated from NumberPatterns resource
+                 */
+                "#,##0.00 ¤",
                 ",",
                 ".",
             }
@@ -235,7 +246,7 @@ ca{
             "Lliura esterlina britànica",
         }
         INR{
-            "=0#Rs.|1#Re.|1<Rs.",
+            "=0#Rs.|1#Re.|1<Rs." /** (choice)  */,
             "Rupia índia",
         }
         JPY{
@@ -419,7 +430,7 @@ ca{
     Scripts{
         Latn{"Llatí"}
     }
-    Version{"1.92"}
+    Version{"1.78"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -452,17 +463,6 @@ ca{
                         "dijous",
                         "divendres",
                         "dissabte",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
                     }
                 }
             }
@@ -503,22 +503,6 @@ ca{
                         "desembre",
                     }
                 }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                }
             }
             quarters{
                 format{
@@ -543,5 +527,10 @@ ca{
         alternateQuotationStart{"“"}
         quotationEnd{"’"}
         quotationStart{"‘"}
+    }
+    zoneStrings{
+        "Pacific:Galapagos"{
+            ec{"Galápagos"}
+        }
     }
 }

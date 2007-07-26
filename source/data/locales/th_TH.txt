@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 th_TH{
-    Version{"1.92"}
+    Version{"1.45"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

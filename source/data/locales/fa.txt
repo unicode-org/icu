@@ -222,7 +222,6 @@ fa{
         PW{"پالائو"}
         PY{"پاراگوئه"}
         QA{"قطر"}
-        QU{"اتحادیه ا روبا"}
         RE{"ریونیون"}
         RO{"رومانی"}
         RS{"صربستان"}
@@ -426,7 +425,7 @@ fa{
             "فورینت مجارستان",
         }
         INR{
-            "=0#Rs.|1#Re.|1<Rs.",
+            "=0#Rs.|1#Re.|1<Rs." /** (choice)  */,
             "روپیهٔ هند",
         }
         IQD{
@@ -1057,7 +1056,7 @@ fa{
         1996{"رسم‌الخط آلمانی ۱۹۹۶ میلادی"}
         REVISED{"رسم‌الخط تجدیدنظرشده"}
     }
-    Version{"1.92"}
+    Version{"1.78"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1072,7 +1071,7 @@ fa{
                 "EEEE d MMMM yyyy GGGG",
                 "d MMMM yyyy",
                 "yyyy/M/d",
-                "yyyy-MM-dd",
+                "yy/M/d",
                 "{0}، ساعت {1}",
             }
             appendItems{

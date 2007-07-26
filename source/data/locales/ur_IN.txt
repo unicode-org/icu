@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ur_IN.xml
  */
 ur_IN{
-    Version{"1.92"}
+    Version{"1.11"}
     calendar{
         gregorian{
             weekend:intvector{

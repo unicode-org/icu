@@ -230,7 +230,7 @@ hy{
         "#0%",
         "#E0",
     }
-    Version{"1.92"}
+    Version{"1.59"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -269,17 +269,6 @@ hy{
                         "Շաբաթ",
                     }
                 }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                    }
-                }
             }
             eras{
                 abbreviated{
@@ -316,38 +305,6 @@ hy{
                         "Հոկտեմբեր",
                         "Նոյեմբեր",
                         "Դեկտեմբեր",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                    wide{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
                     }
                 }
             }

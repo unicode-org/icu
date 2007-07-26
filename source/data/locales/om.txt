@@ -17,7 +17,7 @@ om{
     Currencies{
         ETB{
             "$",
-            "ETB",
+            "Itoophiyaa Birrii",
         }
         KES{
             "Ksh",
@@ -37,20 +37,9 @@ om{
         "#,##0%",
         "#E0",
     }
-    Version{"1.92"}
+    Version{"1.50"}
     calendar{
         gregorian{
-            DateTimePatterns{
-                "HH:mm:ss v",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, yyyy MMMM dd",
-                "yyyy MMMM d",
-                "yyyy MMM d",
-                "yyyy-MM-dd",
-                "{1} {0}",
-            }
             dayNames{
                 format{
                     abbreviated{
@@ -70,17 +59,6 @@ om{
                         "Kamiisa",
                         "Jimaata",
                         "Sanbata",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
                     }
                 }
             }
@@ -119,38 +97,6 @@ om{
                         "Onkololeessa",
                         "Sadaasa",
                         "Muddee",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                    wide{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
                     }
                 }
             }

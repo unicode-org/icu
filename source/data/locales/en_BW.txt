@@ -7,13 +7,19 @@
 // *
 // ***************************************************************************
 en_BW{
+    Currencies{
+        XXX{
+            "XXX",
+            "Unknown or Invalid Currency",
+        }
+    }
     NumberPatterns{
         "#,##0.###",
         "¤#,##0.00",
         "#,##0%",
         "#E0",
     }
-    Version{"1.92"}
+    Version{"1.42"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

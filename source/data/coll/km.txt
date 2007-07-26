@@ -6,8 +6,11 @@
 // * Source File:<path>/common/collation/km.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/collation/km.xml
+ */
 km{
-    Version{"1.8"}
+    Version{"1.9"}
     collations{
         standard{
             Sequence{

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 sv_SE{
-    Version{"1.92"}
+    Version{"1.49"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

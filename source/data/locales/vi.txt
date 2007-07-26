@@ -294,7 +294,7 @@ vi{
         "#,##0%",
         "#E0",
     }
-    Version{"1.92"}
+    Version{"1.60"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -333,17 +333,6 @@ vi{
                         "Thứ bảy",
                     }
                 }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                    }
-                }
             }
             eras{
                 abbreviated{
@@ -380,38 +369,6 @@ vi{
                         "tháng mười",
                         "tháng mười một",
                         "tháng mười hai",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                    wide{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
                     }
                 }
             }

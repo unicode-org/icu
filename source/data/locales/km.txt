@@ -324,7 +324,7 @@ km{
         "#,##0%",
         "#E0",
     }
-    Version{"1.92"}
+    Version{"1.58"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -333,12 +333,12 @@ km{
             }
             DateTimePatterns{
                 "H ម៉ោង m នាទី ss វិនាទី​ v",
-                "HH:mm:ss z",
+                "H ម៉ោង m នាទី ss វិនាទី​z",
                 "H:mm:ss",
                 "H:mm",
-                "EEEE, yyyy MMMM dd",
-                "yyyy MMMM d",
-                "yyyy MMM d",
+                "EEEE ថ្ងៃ d ខែ MMMM ឆ្នាំ  yyyy",
+                "d ខែ MMMM ឆ្នាំ  yyyy",
+                "d MMM yyyy",
                 "d/M/yyyy",
                 "{1}, {0}",
             }
@@ -352,26 +352,6 @@ km{
                         "ព្រ",
                         "សុ",
                         "ស",
-                    }
-                    wide{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
                     }
                 }
             }

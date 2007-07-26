@@ -6,8 +6,11 @@
 // * Source File:<path>/common/collation/haw.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/collation/haw.xml
+ */
 haw{
-    Version{"1.5"}
+    Version{"1.6"}
     collations{
         standard{
             Sequence{
