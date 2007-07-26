@@ -1,6 +1,6 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2006, International Business Machines
+# *  Copyright (C) 2004-2007, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
@@ -270,5 +270,5 @@ x > | ks ;
 '~' > ; # delete stray tildes between letters
 [:Katakana:] { '' } [:Latin:] > ; # delete stray quotes between letters
 :: NFC (NFD) ;
-:: ([:Katakana:] halfwidth-fullwidth);
-:: ( [[\ -~¢-£¥-¦¬\u0304₩｡-ﾾￂ-ￇￊ-ￏￒ-ￗￚ-ￜ￨-￮][~、-。がぎぐげござじずぜぞだぢづでどば-ぱび-ぴぶ-ぷべ-ぺぼ-ぽゔ\u3099-゛ゞァ-ヺー-ヾ]] ) ;
+:: ([[:Katakana:][\u309B\u309C\u30A0\u30FC\uFF70\uFF9E\uFF9F]] halfwidth-fullwidth);
+:: ( [[\ -~¢-£¥-¦¬\u0304₩｡-ﾾￂ-ￇￊ-ￏￒ-ￗￚ-ￜ￨-￮][~、-。がぎぐげござじずぜぞだぢづでどば-ぱび-ぴぶ-ぷべ-ぺぼ-ぽゔ\u3099-゛ゞァ-ヺー-ヾ][\u309B\u309C\u30A0\u30FC\uFF70\uFF9E\uFF9F]] ) ;

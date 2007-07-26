@@ -1,6 +1,6 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2006, International Business Machines
+# *  Copyright (C) 2004-2007, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
@@ -107,7 +107,7 @@
 \uE063>\u0BC0; # FALLBACK VOWEL SIGN VOCALIC LL
 \uE064>'.'   ; # FALLBACK FOR DANDA
 \uE065>'.'   ; # FALLBACK FOR DOUBLE DANDA
-\uE066>\u0030; # FALLBACK DIGIT ZERO
+\uE066>\u0BE6; # FALLBACK DIGIT ZERO
 \uE067\uE066\uE066\uE066>௲;
 \uE067\uE066\uE066>௱;
 \uE067\uE066>௰;
