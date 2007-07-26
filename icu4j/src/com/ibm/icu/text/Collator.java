@@ -185,8 +185,7 @@ public abstract class Collator implements Comparator, Cloneable
      * This is for backwards compatibility with Java APIs only.  It
      * should not be used, IDENTICAL should be used instead.  ICU's
      * collation does not support Java's FULL_DECOMPOSITION mode.
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public final static int FULL_DECOMPOSITION = IDENTICAL;
 
@@ -355,8 +354,7 @@ public abstract class Collator implements Comparator, Cloneable
          * this method instead of createCollator(Locale).
          * @param loc the locale for which this collator is to be created.
          * @return the newly created collator.
-         * @draft ICU 3.2
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 3.8
          */
         public Collator createCollator(ULocale loc) {
             return createCollator(loc.toLocale());
@@ -395,8 +393,7 @@ public abstract class Collator implements Comparator, Cloneable
          * @param objectLocale the locale identifying the collator
          * @param displayLocale the locale for which the display name of the collator should be localized
          * @return the display name
-         * @draft ICU 3.2
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 3.8
          */
         public String getDisplayName(ULocale objectLocale, ULocale displayLocale) {
             if (visible()) {
@@ -506,8 +503,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @param locale the locale for which this is the default collator
      * @return an object that can be used to unregister the registered collator.
      *
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final Object registerInstance(Collator collator, ULocale locale) {
         return getShim().registerInstance(collator, locale);
@@ -680,8 +676,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @param objectLocale the locale of the collator
      * @param displayLocale the locale for the collator's display name
      * @return the display name
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     static public String getDisplayName(ULocale objectLocale, ULocale displayLocale) {
         return getShim().getDisplayName(objectLocale, displayLocale);
@@ -701,8 +696,7 @@ public abstract class Collator implements Comparator, Cloneable
      * Get the name of the collator for the objectLocale, localized for the current locale.
      * @param objectLocale the locale of the collator
      * @return the display name
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     static public String getDisplayName(ULocale objectLocale) {
         return getShim().getDisplayName(objectLocale, ULocale.getDefault());

@@ -1520,8 +1520,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * Constructs a calendar with the specified time zone and locale.
      * @param zone the time zone to use
      * @param locale the ulocale for the week data
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     protected Calendar(TimeZone zone, ULocale locale)
     {
@@ -1591,8 +1590,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * Gets a calendar using the default time zone and specified locale.  
      * @param locale the ulocale for the week data
      * @return a Calendar.
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static synchronized Calendar getInstance(ULocale locale)
     {
@@ -1616,8 +1614,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * @param zone the time zone to use
      * @param locale the ulocale for the week data
      * @return a Calendar.
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static synchronized Calendar getInstance(TimeZone zone,
                                                     ULocale locale) {
@@ -2925,8 +2922,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
 
     /**
      * Return the name of this calendar in the language of the given locale.
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public String getDisplayName(ULocale loc) {
         return this.getClass().getName();
@@ -2949,8 +2945,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * @throws IllegalArgumentException if the time of that 
      * <code>Calendar</code> can't be obtained because of invalid
      * calendar values.
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public int compareTo(Calendar that) {
         long v = getTimeInMillis() - that.getTimeInMillis();
@@ -2960,8 +2955,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
     /**
      * Implement comparable API as a convenience override of
      * {@link #compareTo(Calendar)}.
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public int compareTo(Object that) {
         return compareTo((Calendar)that);
@@ -2987,8 +2981,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * Subclasses wishing to specialize this behavior should override
      * <code>handleGetDateFormat()</code>
      * @see #handleGetDateFormat
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public DateFormat getDateTimeFormat(int dateStyle, int timeStyle, ULocale loc) {
         return formatHelper(this, loc, dateStyle, timeStyle);

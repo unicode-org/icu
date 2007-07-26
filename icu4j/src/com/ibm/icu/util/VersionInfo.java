@@ -97,22 +97,19 @@ public final class VersionInfo
 
     /**
      * Unicode 4.0.1 version
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final VersionInfo UNICODE_4_0_1;
 
     /**
      * Unicode 4.1 version
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final VersionInfo UNICODE_4_1;
 
     /**
      * Unicode 5.0 version
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final VersionInfo UNICODE_5_0;
 

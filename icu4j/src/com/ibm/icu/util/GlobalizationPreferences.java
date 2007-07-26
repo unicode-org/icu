@@ -147,7 +147,7 @@ public class GlobalizationPreferences implements Freezable {
     /**
      * Break iterator types
      * @draft ICU 3.6
-     * @deprecated This API is ICU internal only
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int
         BI_CHARACTER = BreakIterator.KIND_CHARACTER,    // 0

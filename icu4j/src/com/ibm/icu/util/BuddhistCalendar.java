@@ -92,8 +92,7 @@ public class BuddhistCalendar extends GregorianCalendar {
      * in the default time zone with the given locale.
      *
      * @param locale the given ulocale.
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public BuddhistCalendar(ULocale locale) {
         super(locale);
@@ -119,8 +118,7 @@ public class BuddhistCalendar extends GregorianCalendar {
      * @param zone the given time zone.
      *
      * @param locale the given ulocale.
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public BuddhistCalendar(TimeZone zone, ULocale locale) {
         super(zone, locale);

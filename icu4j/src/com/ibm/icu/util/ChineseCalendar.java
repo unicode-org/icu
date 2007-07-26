@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (C) 2000-2006, International Business Machines Corporation and
+ * Copyright (C) 2000-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  *********************************************************************
  */
@@ -156,8 +156,7 @@ public class ChineseCalendar extends Calendar {
      * Construct a Chinese calendar with the given time zone and locale.
      * @param zone time zone for this calendar
      * @param locale ulocale for this calendar
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public ChineseCalendar(TimeZone zone, ULocale locale) {
         super(zone, locale);

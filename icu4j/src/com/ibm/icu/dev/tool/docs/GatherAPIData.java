@@ -61,6 +61,7 @@ public class GatherAPIData {
     boolean zip;
     boolean gzip;
     boolean internal;
+    boolean version;
 
     public static int optionLength(String option) {
         if (option.equals("-name")) {
@@ -76,8 +77,10 @@ public class GatherAPIData {
         } else if (option.equals("-gzip")) {
             return 1;
         } else if (option.equals("-internal")) {
-	    return 1;
-	}
+            return 1;
+        } else if (option.equals("-version")) {
+            return 1;
+        }
         return 0;
     }
 
@@ -104,8 +107,10 @@ public class GatherAPIData {
             } else if (opt.equals("-gzip")) {
                 this.gzip = true;
             } else if (opt.equals("-internal")) {
-		this.internal = true;
-	    }
+                this.internal = true;
+            } else if (opt.equals("-version")) {
+                this.version = true;
+            }
         }
 
         results = new TreeSet(APIInfo.defaultComparator());
@@ -235,9 +240,14 @@ public class GatherAPIData {
         // MethodDoc isAbstract, returnType
 
         APIInfo info = new APIInfo();
+        if (version) {
+            info.includeStatusVersion(true);
+        }
             
         // status
-        info.setType(APIInfo.STA, tagStatus(doc));
+        String[] version = new String[1];
+        info.setType(APIInfo.STA, tagStatus(doc, version));
+        info.setStatusVersion(version[0]);
 
         // visibility
         if (doc.isPublic()) {
@@ -280,7 +290,7 @@ public class GatherAPIData {
                           ? "" 
                           : trimBase(doc.containingClass().name()));
         info.setName(trimBase(doc.name()));
-    
+
         if (doc instanceof FieldDoc) {
             FieldDoc fdoc = (FieldDoc)doc;
             info.setSignature(trimBase(fdoc.type().toString()));
@@ -333,7 +343,7 @@ public class GatherAPIData {
         return info;
     }
 
-    private int tagStatus(final Doc doc) {
+    private int tagStatus(final Doc doc, String[] version) {
         class Result {
             int res = -1;
             void set(int val) { 
@@ -343,8 +353,8 @@ public class GatherAPIData {
                         return;
                     } else if (res != APIInfo.STA_DEPRECATED) {
                         // if already not deprecated, this is an error
-			System.err.println("bad doc: " + doc + " both: " + APIInfo.getTypeValName(APIInfo.STA, res) + " and: " + APIInfo.getTypeValName(APIInfo.STA, val)); 
-			return;
+                        System.err.println("bad doc: " + doc + " both: " + APIInfo.getTypeValName(APIInfo.STA, res) + " and: " + APIInfo.getTypeValName(APIInfo.STA, val)); 
+                        return;
                     }
                 }
                 // ok to replace with new tag
@@ -361,6 +371,7 @@ public class GatherAPIData {
 
         Tag[] tags = doc.tags();
         Result result = new Result();
+        String statusVer = "";
         for (int i = 0; i < tags.length; ++i) {
             Tag tag = tags[i];
 
@@ -370,22 +381,27 @@ public class GatherAPIData {
             switch (ix) {
             case INTERNAL:
                 result.set(internal ? APIInfo.STA_INTERNAL : -2); // -2 for legacy compatibility
+                statusVer = getStatusVersion(tag);
                 break;
 
             case DRAFT:
                 result.set(APIInfo.STA_DRAFT);
+                statusVer = getStatusVersion(tag);
                 break;
 
             case STABLE:
                 result.set(APIInfo.STA_STABLE);
+                statusVer = getStatusVersion(tag);
                 break;
 
             case DEPRECATED:
                 result.set(APIInfo.STA_DEPRECATED);
+                statusVer = getStatusVersion(tag);
                 break;
 
             case OBSOLETE:
                 result.set(APIInfo.STA_OBSOLETE);
+                statusVer = getStatusVersion(tag);
                 break;
 
             case SINCE:
@@ -405,7 +421,33 @@ public class GatherAPIData {
             }
         }
 
+        if (version != null) {
+            version[0] = statusVer;
+        }
         return result.get();
+    }
+
+    private String getStatusVersion(Tag tag) {
+        String text = tag.text();
+        if (text != null && text.length() > 0) {
+            // Extract version string
+            int start = -1;
+            int i = 0;
+            for (; i < text.length(); i++) {
+                char ch = text.charAt(i);
+                if (ch == '.' || (ch >= '0' && ch <= '9')) {
+                    if (start == -1) {
+                        start = i;
+                    }
+                } else if (start != -1) {
+                    break;
+                }
+            }
+            if (start != -1) {
+                return text.substring(start, i);
+            }
+        }
+        return "";
     }
 
     private static final int UNKNOWN = -1;

@@ -26,57 +26,49 @@ public final class LocaleData {
 
     /**
      * EXType for {@link #getExemplarSet(int, int)}.
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int ES_STANDARD = 0;
 
     /**
      * EXType for {@link #getExemplarSet(int, int)}.
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int ES_AUXILIARY = 1;
 
     /**
      * Count of EXTypes for {@link #getExemplarSet(int, int)}.
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int ES_COUNT = 2;
     
     /**
      * Delimiter type for {@link #getDelimiter(int)}.
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int QUOTATION_START = 0;
 
     /**
      * Delimiter type for {@link #getDelimiter(int)}.
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int QUOTATION_END = 1;
 
     /**
      * Delimiter type for {@link #getDelimiter(int)}.
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int ALT_QUOTATION_START = 2;
 
     /**
      * Delimiter type for {@link #getDelimiter(int)}.
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int ALT_QUOTATION_END = 3;
 
     /**
      * Count of delimiter types for {@link #getDelimiter(int)}.
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int DELIMITER_COUNT = 4;
 
@@ -121,8 +113,7 @@ public final class LocaleData {
      * @param extype      The type of exemplar set to be retrieved,
      *                  ES_STANDARD or ES_AUXILIARY
      * @return          The set of exemplar characters for the given locale.
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public UnicodeSet getExemplarSet(int options, int extype) {
         String [] exemplarSetTypes = { "ExemplarCharacters", "AuxExemplarCharacters" };
@@ -146,8 +137,7 @@ public final class LocaleData {
      *
      * @param locale    Locale with thich the locale data object is associated.
      * @return          A locale data object.
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final LocaleData getInstance(ULocale locale) {
        LocaleData ld = new LocaleData();
@@ -160,8 +150,7 @@ public final class LocaleData {
      * Gets the LocaleData object associated with the default locale
      *
      * @return          A locale data object.
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final LocaleData getInstance() {
        return LocaleData.getInstance(ULocale.getDefault());
@@ -174,8 +163,7 @@ public final class LocaleData {
      *                  methods of this locale data object will return
      *                  an error when no data is available for that method,
      *                  given the locale ID supplied to the constructor.
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public void setNoSubstitute(boolean setting) {
        noSubstitute = setting;
@@ -188,8 +176,7 @@ public final class LocaleData {
      *                  methods of this locale data object will return
      *                  an error when no data is available for that method,
      *                  given the locale ID supplied to the constructor.
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public boolean getNoSubstitute() {
        return noSubstitute;
@@ -202,8 +189,7 @@ public final class LocaleData {
      *                  the valid choices are QUOTATION_START, QUOTATION_END,
      *                  ALT_QUOTATION_START, or ALT_QUOTATION_END.
      * @return          The desired delimiter string.
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public String getDelimiter(int type) {
         String [] delimiterTypes = { "quotationStart", 

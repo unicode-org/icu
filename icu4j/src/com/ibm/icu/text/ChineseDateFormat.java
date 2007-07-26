@@ -61,8 +61,7 @@ public class ChineseDateFormat extends SimpleDateFormat {
      * Construct a ChineseDateFormat from a date format pattern and locale
      * @param pattern the pattern
      * @param locale the locale
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
    public ChineseDateFormat(String pattern, ULocale locale) {
        super(pattern, new ChineseDateFormatSymbols(locale), 
@@ -93,6 +92,7 @@ public class ChineseDateFormat extends SimpleDateFormat {
 //  }    
 
     /**
+     * {@inheritDoc}
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -120,6 +120,7 @@ public class ChineseDateFormat extends SimpleDateFormat {
     }
 
     /**
+     * {@inheritDoc}
      * @stable ICU 2.0
      */
     protected int subParse(String text, int start, char ch, int count,

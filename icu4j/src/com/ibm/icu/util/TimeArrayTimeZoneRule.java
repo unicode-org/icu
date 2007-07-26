@@ -57,6 +57,8 @@ public class TimeArrayTimeZoneRule extends TimeZoneRule {
      * 
      * @return  An array of the start times in milliseconds since the base time
      *          (January 1, 1970, 00:00:00 GMT).
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public long[] getStartTimes() {
         return (long[])startTimes.clone();
@@ -68,6 +70,8 @@ public class TimeArrayTimeZoneRule extends TimeZoneRule {
      * or <code>DateTimeRule.UNIVERSAL_TIME</code>.
      * 
      * @return The time type used of the start times used by this rule.
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public int getTimeType() {
         return timeType;

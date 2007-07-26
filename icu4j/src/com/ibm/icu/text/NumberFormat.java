@@ -497,8 +497,7 @@ public abstract class NumberFormat extends UFormat {
      * The default format is one of the styles provided by the other
      * factory methods: getNumberInstance, getCurrencyInstance or getPercentInstance.
      * Exactly which one is locale-dependent.
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static NumberFormat getInstance(ULocale inLocale) {
         return getInstance(inLocale, NUMBERSTYLE);
@@ -522,8 +521,7 @@ public abstract class NumberFormat extends UFormat {
 
     /**
      * Returns a general-purpose number format for the specified locale.
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static NumberFormat getNumberInstance(ULocale inLocale) {
         return getInstance(inLocale, NUMBERSTYLE);
@@ -572,8 +570,7 @@ public abstract class NumberFormat extends UFormat {
      *
      * @param inLocale the locale for which a number format is needed
      * @return a number format for integer values
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static NumberFormat getIntegerInstance(ULocale inLocale) {
         return getInstance(inLocale, INTEGERSTYLE);
@@ -600,8 +597,7 @@ public abstract class NumberFormat extends UFormat {
     /**
      * Returns a currency format for the specified locale.
      * @return a number format for currency
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static NumberFormat getCurrencyInstance(ULocale inLocale) {
         return getInstance(inLocale, CURRENCYSTYLE);
@@ -628,8 +624,7 @@ public abstract class NumberFormat extends UFormat {
     /**
      * Returns a percentage format for the specified locale.
      * @return a number format for percents
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static NumberFormat getPercentInstance(ULocale inLocale) {
         return getInstance(inLocale, PERCENTSTYLE);
@@ -659,8 +654,7 @@ public abstract class NumberFormat extends UFormat {
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Returns a scientific format for the specified locale.
      * @return a scientific number format
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static NumberFormat getScientificInstance(ULocale inLocale) {
         return getInstance(inLocale, SCIENTIFICSTYLE);
@@ -742,8 +736,7 @@ public abstract class NumberFormat extends UFormat {
          * @param loc the locale for which to create the format
          * @param formatType the type of format
          * @return the NumberFormat, or null.
-         * @draft ICU 3.2
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 3.8
          */
         public NumberFormat createFormat(ULocale loc, int formatType) {
             return createFormat(loc.toLocale(), formatType);
@@ -782,6 +775,7 @@ public abstract class NumberFormat extends UFormat {
         final boolean visible;
 
         /**
+         * Constructs a SimpleNumberFormatFactory with the given locale.
          * @stable ICU 2.6
          */
         public SimpleNumberFormatFactory(Locale locale) {
@@ -789,6 +783,8 @@ public abstract class NumberFormat extends UFormat {
         }
         
         /**
+         * Constructs a SimpleNumberFormatFactory with the given locale and the
+         * visibility.
          * @stable ICU 2.6
          */
         public SimpleNumberFormatFactory(Locale locale, boolean visible) {
@@ -797,16 +793,17 @@ public abstract class NumberFormat extends UFormat {
         }
 
         /**
-         * @draft ICU 3.2
-         * @provisional This API might change or be removed in a future release.
+         * Constructs a SimpleNumberFormatFactory with the given locale.
+         * @stable ICU 3.8
          */
         public SimpleNumberFormatFactory(ULocale locale) {
             this(locale, true);
         }
         
         /**
-         * @draft ICU 3.2
-         * @provisional This API might change or be removed in a future release.
+         * Constructs a SimpleNumberFormatFactory with the given locale and the
+         * visibility.
+         * @stable ICU 3.8
          */
         public SimpleNumberFormatFactory(ULocale locale, boolean visible) {
             localeNames = Collections.singleton(locale.getBaseName());
@@ -814,6 +811,7 @@ public abstract class NumberFormat extends UFormat {
         }
 
         /**
+         * {@inheritDoc}
          * @stable ICU 2.6
          */
         public final boolean visible() {
@@ -821,6 +819,7 @@ public abstract class NumberFormat extends UFormat {
         }
 
         /**
+         * {@inheritDoc}
          * @stable ICU 2.6
          */
         public final Set getSupportedLocaleNames() {
@@ -1227,8 +1226,7 @@ public abstract class NumberFormat extends UFormat {
      * @param forLocale the locale of the data.
      * @param choice the pattern format.
      * @return the pattern
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     protected static String getPattern(ULocale forLocale, int choice) {
 

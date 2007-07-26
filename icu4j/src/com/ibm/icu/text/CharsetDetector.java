@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2005-2006, International Business Machines Corporation and    *
+* Copyright (C) 2005-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -32,8 +32,7 @@ import java.util.Arrays;
  * in the language are needed.  The detection process will attempt to
  * ignore html or xml style markup that could otherwise obscure the content.
  * <p/>
- * @draft ICU 3.4
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 3.8
  */
 public class CharsetDetector {
 
@@ -50,8 +49,7 @@ public class CharsetDetector {
     /**
      *   Constructor
      * 
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public CharsetDetector() {
     }
@@ -70,8 +68,7 @@ public class CharsetDetector {
      * 
      *  @param encoding The declared encoding 
      *
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public CharsetDetector setDeclaredEncoding(String encoding) {
         fDeclaredEncoding = encoding;
@@ -85,8 +82,7 @@ public class CharsetDetector {
      * 
      * @return This CharsetDetector
      *
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public CharsetDetector setText(byte [] in) {
         fRawInput  = in;
@@ -112,8 +108,7 @@ public class CharsetDetector {
      * 
      * @return This CharsetDetector
      *
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     
     public CharsetDetector setText(InputStream in) throws IOException {
@@ -157,8 +152,7 @@ public class CharsetDetector {
      * @return a CharsetMatch object representing the best matching charset, or
      *         <code>null</code> if there are no matches.
      *
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public CharsetMatch detect() {
 //   TODO:  A better implementation would be to copy the detect loop from
@@ -187,8 +181,7 @@ public class CharsetDetector {
      * 
      * @return An array of CharsetMatch objects representing possibly matching charsets.
      *
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public CharsetMatch[] detectAll() {
         CharsetRecognizer csr;
@@ -236,8 +229,7 @@ public class CharsetDetector {
      * @param declaredEncoding  A declared encoding for the data, if available,
      *           or null or an empty string if none is available.
      *
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public Reader getReader(InputStream in, String declaredEncoding) {
         fDeclaredEncoding = declaredEncoding;
@@ -271,8 +263,7 @@ public class CharsetDetector {
      * @param declaredEncoding  A declared encoding for the data, if available,
      *           or null or an empty string if none is available.
      *
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public String getString(byte[] in, String declaredEncoding)
     {
@@ -300,8 +291,7 @@ public class CharsetDetector {
      * @return an array of the names of all charsets that can be recognized
      * by the charset detector.
      *
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static String[] getAllDetectableCharsets() {
         return fCharsetNames;
@@ -314,8 +304,7 @@ public class CharsetDetector {
      * 
      * @see #enableInputFilter
      *
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public boolean inputFilterEnabled()
     {
@@ -331,8 +320,7 @@ public class CharsetDetector {
      * 
      * @return The previous setting.
      *
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public boolean enableInputFilter(boolean filter)
     {
@@ -343,11 +331,9 @@ public class CharsetDetector {
         return previous;
     }
     
-    /**
+    /*
      *  MungeInput - after getting a set of raw input data to be analyzed, preprocess
      *               it by removing what appears to be html markup.
-     * 
-     * @internal
      */
     private void MungeInput() {
         int srci = 0;
@@ -424,11 +410,10 @@ public class CharsetDetector {
         }
      }
 
-    /**
+    /*
      *  The following items are accessed by individual CharsetRecongizers during
      *     the recognition process
      * 
-     * @internal
      */
     byte[]      fInputBytes =       // The text to be checked.  Markup will have been
                    new byte[kBufSize];  //   removed if appropriate.
@@ -462,18 +447,14 @@ public class CharsetDetector {
                            false;
     
     
-    /**
-     *  List of recognizers for all charsets known to the implementation.
-     *
-     * @internal
+    /*
+     * List of recognizers for all charsets known to the implementation.
      */
     private static ArrayList fCSRecognizers = createRecognizers();
     private static String [] fCharsetNames;
     
-   /**
+    /*
      * Create the singleton instances of the CharsetRecognizer classes
-     * 
-     * @internal
      */
     private static ArrayList createRecognizers() {
         ArrayList recognizers = new ArrayList();

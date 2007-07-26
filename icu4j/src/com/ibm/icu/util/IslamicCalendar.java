@@ -199,8 +199,7 @@ public class IslamicCalendar extends Calendar {
      * in the default time zone with the given locale.
      *
      * @param locale the given ulocale.
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public IslamicCalendar(ULocale locale)
     {
@@ -227,8 +226,7 @@ public class IslamicCalendar extends Calendar {
      *
      * @param zone the given time zone.
      * @param locale the given ulocale.
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public IslamicCalendar(TimeZone zone, ULocale locale)
     {
@@ -639,8 +637,7 @@ public class IslamicCalendar extends Calendar {
     }    
 
     /**
-     * Return the current Calendar type.
-     * @return type of calendar
+     * {@inheritDoc}
      * @draft ICU 3.8
      * @provisional This API might change or be removed in a future release.
      */

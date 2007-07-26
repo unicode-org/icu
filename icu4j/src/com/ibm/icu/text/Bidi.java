@@ -153,6 +153,7 @@ import com.ibm.icu.lang.UCharacterDirection;
  *
  * @author Simon Montagu, Matitiahu Allouche (ported from C code written by Markus W. Scherer)
  * @draft ICU 3.8
+ * @provisional This API might change or be removed in a future release.
  *
  *
  * <h4> Sample code for the ICU Bidi API </h4>
@@ -446,12 +447,14 @@ public class Bidi {
     /** Paragraph level setting.
      *  If there is no strong character, then set the paragraph level to 0 (left-to-right).
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final byte LEVEL_DEFAULT_LTR = (byte)0x7e;
 
     /** Paragraph level setting.
      *  If there is no strong character, then set the paragraph level to 1 (right-to-left).
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final byte LEVEL_DEFAULT_RTL = (byte)0x7f;
 
@@ -459,6 +462,7 @@ public class Bidi {
      * Maximum explicit embedding level.
      * (The maximum resolved level can be up to <code>MAX_EXPLICIT_LEVEL+1</code>).
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final byte MAX_EXPLICIT_LEVEL = 61;
 
@@ -466,6 +470,7 @@ public class Bidi {
      * Bit flag for level input.
      * Overrides directional properties.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final byte LEVEL_OVERRIDE = (byte)0x80;
 
@@ -484,22 +489,26 @@ public class Bidi {
      * @see #OPTION_INSERT_MARKS
      * @see #OPTION_REMOVE_CONTROLS
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int MAP_NOWHERE = -1;
 
     /**
      * All left-to-right text.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final byte LTR = 0;
     /**
      * All right-to-left text.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final byte RTL = 1;
     /**
      * Mixed-directional text.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final byte MIXED = 2;
 
@@ -509,6 +518,7 @@ public class Bidi {
      *
      * @see #writeReordered
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final short KEEP_BASE_COMBINING = 1;
 
@@ -519,6 +529,7 @@ public class Bidi {
      *
      * @see #writeReordered
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final short DO_MIRRORING = 2;
 
@@ -533,6 +544,7 @@ public class Bidi {
      * @see #setInverse
      * @see #writeReordered
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final short INSERT_LRM_FOR_NUMERIC = 4;
 
@@ -547,6 +559,7 @@ public class Bidi {
      * @see #writeReordered
      * @see #INSERT_LRM_FOR_NUMERIC
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final short REMOVE_BIDI_CONTROLS = 8;
 
@@ -563,24 +576,31 @@ public class Bidi {
      *
      * @see #writeReordered
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final short OUTPUT_REVERSE = 16;
 
     /** Reordering mode: Regular Logical to Visual Bidi algorithm according to Unicode.
      * @see #setReorderingMode
-     * @draft ICU 3.8 */
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
     public static final short REORDER_DEFAULT = 0;
 
     /** Reordering mode: Logical to Visual algorithm which handles numbers in
      * a way which mimicks the behavior of Windows XP.
      * @see #setReorderingMode
-     * @draft ICU 3.8 */
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
     public static final short REORDER_NUMBERS_SPECIAL = 1;
 
     /** Reordering mode: Logical to Visual algorithm grouping numbers with
      * adjacent R characters (reversible algorithm).
      * @see #setReorderingMode
-     * @draft ICU 3.8 */
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
     public static final short REORDER_GROUP_NUMBERS_WITH_R = 2;
 
     /** Reordering mode: Reorder runs only to transform a Logical LTR string
@@ -591,26 +611,34 @@ public class Bidi {
      * minimum combination which has the required display.
      * @see #OPTION_INSERT_MARKS
      * @see #setReorderingMode
-     * @draft ICU 3.8 */
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
     public static final short REORDER_RUNS_ONLY = 3;
 
     /** Reordering mode: Visual to Logical algorithm which handles numbers
      * like L (same algorithm as selected by * <code>setInverse(true)</code>.
      * @see #setInverse
      * @see #setReorderingMode
-     * @draft ICU 3.8 */
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
     public static final short REORDER_INVERSE_NUMBERS_AS_L = 4;
 
     /** Reordering mode: Visual to Logical algorithm equivalent to the regular
      * Logical to Visual algorithm.
      * @see #setReorderingMode
-     * @draft ICU 3.8 */
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
     public static final short REORDER_INVERSE_LIKE_DIRECT = 5;
 
     /** Reordering mode: Inverse Bidi (Visual to Logical) algorithm for the
      * <code>REORDER_NUMBERS_SPECIAL</code> BiDi algorithm.
      * @see #setReorderingMode
-     * @draft ICU 3.8 */
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
     public static final short REORDER_INVERSE_FOR_NUMBERS_SPECIAL = 6;
 
     /*  Number of values for reordering mode. */
@@ -627,6 +655,7 @@ public class Bidi {
      * disable all the options which can be set with this method
      * @see #setReorderingOptions
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int OPTION_DEFAULT = 0;
 
@@ -681,6 +710,7 @@ public class Bidi {
      * @see #REORDER_INVERSE_LIKE_DIRECT
      * @see #REORDER_INVERSE_FOR_NUMBERS_SPECIAL
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int OPTION_INSERT_MARKS = 1;
 
@@ -706,6 +736,7 @@ public class Bidi {
      * @see #INSERT_LRM_FOR_NUMERIC
      * @see #REMOVE_BIDI_CONTROLS
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int OPTION_REMOVE_CONTROLS = 2;
 
@@ -755,6 +786,7 @@ public class Bidi {
      * @see #getProcessedLength
      * @see #orderParagraphsLTR
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int OPTION_STREAMING = 4;
 
@@ -788,6 +820,7 @@ public class Bidi {
      * override the standard Bidi class for a given code point.
      * @see BidiClassifier
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int CLASS_DEFAULT = UCharacterDirection
                                             .CHAR_DIRECTION_COUNT;
@@ -1052,6 +1085,7 @@ public class Bidi {
      * additional memory for internal structures as necessary.
      *
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public Bidi()
     {
@@ -1089,6 +1123,7 @@ public class Bidi {
      *
      * @throws IllegalArgumentException if maxLength or maxRunCount is less than 0
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public Bidi(int maxLength, int maxRunCount)
     {
@@ -1276,6 +1311,7 @@ public class Bidi {
      * @see #REORDER_INVERSE_NUMBERS_AS_L
      * @see #REORDER_DEFAULT
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public void setInverse(boolean isInverse) {
         this.isInverse = (isInverse);
@@ -1299,6 +1335,7 @@ public class Bidi {
      * @see #setReorderingMode
      * @see #REORDER_INVERSE_NUMBERS_AS_L
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean isInverse() {
         return isInverse;
@@ -1465,6 +1502,7 @@ public class Bidi {
      * @see #REORDER_INVERSE_LIKE_DIRECT
      * @see #REORDER_INVERSE_FOR_NUMBERS_SPECIAL
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public void setReorderingMode(short reorderingMode) {
         if ((reorderingMode < REORDER_DEFAULT) ||
@@ -1482,6 +1520,7 @@ public class Bidi {
      *
      * @see #setReorderingMode
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public short getReorderingMode() {
         return this.reorderingMode;
@@ -1502,6 +1541,7 @@ public class Bidi {
      * @see #OPTION_REMOVE_CONTROLS
      * @see #OPTION_STREAMING
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public void setReorderingOptions(int options) {
         if ((options & OPTION_REMOVE_CONTROLS) != 0) {
@@ -1518,6 +1558,7 @@ public class Bidi {
      *
      * @see #setReorderingOptions
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public int getReorderingOptions() {
         return this.reorderingOptions;
@@ -2903,6 +2944,7 @@ public class Bidi {
      * @see #LEVEL_OVERRIDE
      * @see #MAX_EXPLICIT_LEVEL
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public void setPara(String text, byte paraLevel, byte[] embeddingLevels)
     {
@@ -2987,6 +3029,7 @@ public class Bidi {
      * @see #LEVEL_OVERRIDE
      * @see #MAX_EXPLICIT_LEVEL
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public void setPara(char[] chars, byte paraLevel, byte[] embeddingLevels)
     {
@@ -3275,6 +3318,7 @@ public class Bidi {
      * @param paragraph a paragraph of text with optional character and
      *        paragraph attribute information
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public void setPara(AttributedCharacterIterator paragraph)
     {
@@ -3337,6 +3381,7 @@ public class Bidi {
      *
      * @see #setPara
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public void orderParagraphsLTR(boolean orderParagraphsLTR) {
         this.orderParagraphsLTR = orderParagraphsLTR;
@@ -3351,6 +3396,7 @@ public class Bidi {
      *
      * @see #orderParagraphsLTR
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean isOrderParagraphsLTR() {
         return orderParagraphsLTR;
@@ -3371,6 +3417,7 @@ public class Bidi {
      * @see #RTL
      * @see #MIXED
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public byte getDirection()
     {
@@ -3390,6 +3437,7 @@ public class Bidi {
      * @see #setPara
      * @see #setLine
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public String getTextAsString()
     {
@@ -3409,6 +3457,7 @@ public class Bidi {
      * @see #setPara
      * @see #setLine
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public char[] getText()
     {
@@ -3425,6 +3474,7 @@ public class Bidi {
      * @throws IllegalStateException if this call is not preceded by a successful
      *         call to <code>setPara</code> or <code>setLine</code>
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public int getLength()
     {
@@ -3471,6 +3521,7 @@ public class Bidi {
      * @see #setPara
      * @see #OPTION_STREAMING
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public int getProcessedLength() {
         verifyValidParaOrLine();
@@ -3505,6 +3556,7 @@ public class Bidi {
      * @see #OPTION_REMOVE_CONTROLS
      * @see #REORDER_INVERSE_NUMBERS_AS_L
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public int getResultLength() {
         verifyValidParaOrLine();
@@ -3529,6 +3581,7 @@ public class Bidi {
      * @see #getParagraph
      * @see #getParagraphByIndex
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public byte getParaLevel()
     {
@@ -3544,6 +3597,7 @@ public class Bidi {
      * @throws IllegalStateException if this call is not preceded by a successful
      *         call to <code>setPara</code> or <code>setLine</code>
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public int countParagraphs()
     {
@@ -3571,6 +3625,7 @@ public class Bidi {
      *
      * @see com.ibm.icu.text.BidiRun
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public BidiRun getParagraphByIndex(int paraIndex)
     {
@@ -3614,6 +3669,7 @@ public class Bidi {
      * @see #getParagraphByIndex
      * @see #getProcessedLength
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public BidiRun getParagraph(int charIndex)
     {
@@ -3642,6 +3698,7 @@ public class Bidi {
      * @see com.ibm.icu.text.BidiRun
      * @see #getProcessedLength
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public int getParagraphIndex(int charIndex)
     {
@@ -3662,6 +3719,7 @@ public class Bidi {
      *
      * @see #getCustomClassifier
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public void setCustomClassifier(BidiClassifier classifier) {
         this.customClassifier = classifier;
@@ -3675,6 +3733,7 @@ public class Bidi {
      *
      * @see #setCustomClassifier
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public BidiClassifier getCustomClassifier() {
         return this.customClassifier;
@@ -3693,6 +3752,7 @@ public class Bidi {
      *
      * @see BidiClassifier
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public int getCustomizedClass(int c) {
         int dir;
@@ -3744,6 +3804,7 @@ public class Bidi {
      * @see #setPara
      * @see #getProcessedLength
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public Bidi setLine(int start, int limit)
     {
@@ -3773,6 +3834,7 @@ public class Bidi {
      *
      * @see #getProcessedLength
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public byte getLevelAt(int charIndex)
     {
@@ -3793,6 +3855,7 @@ public class Bidi {
      * @throws IllegalStateException if this call is not preceded by a successful
      *         call to <code>setPara</code> or <code>setLine</code>
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public byte[] getLevels()
     {
@@ -3827,6 +3890,7 @@ public class Bidi {
      * @see com.ibm.icu.text.BidiRun#getEmbeddingLevel()
      *
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public BidiRun getLogicalRun(int logicalPosition)
     {
@@ -3848,6 +3912,7 @@ public class Bidi {
      * @throws IllegalStateException if this call is not preceded by a successful
      *         call to <code>setPara</code> or <code>setLine</code>
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public int countRuns()
     {
@@ -3914,6 +3979,7 @@ public class Bidi {
      * @see com.ibm.icu.text.BidiRun#getLength()
      * @see com.ibm.icu.text.BidiRun#getEmbeddingLevel()
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public BidiRun getVisualRun(int runIndex)
     {
@@ -3961,6 +4027,7 @@ public class Bidi {
      * @see #OPTION_REMOVE_CONTROLS
      * @see #writeReordered
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public int getVisualIndex(int logicalIndex)
     {
@@ -4006,6 +4073,7 @@ public class Bidi {
      * @see #OPTION_INSERT_MARKS
      * @see #writeReordered
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public int getLogicalIndex(int visualIndex)
     {
@@ -4055,6 +4123,7 @@ public class Bidi {
      * @see #OPTION_REMOVE_CONTROLS
      * @see #writeReordered
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public int[] getLogicalMap()
     {
@@ -4097,6 +4166,7 @@ public class Bidi {
      * @see #OPTION_INSERT_MARKS
      * @see #writeReordered
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public int[] getVisualMap()
     {
@@ -4125,6 +4195,7 @@ public class Bidi {
      *        <code>indexMap</code> represents the returned array.
      *
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static int[] reorderLogical(byte[] levels)
     {
@@ -4148,6 +4219,7 @@ public class Bidi {
      *        <code>indexMap</code> represents the returned array.
      *
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static int[] reorderVisual(byte[] levels)
     {
@@ -4187,6 +4259,7 @@ public class Bidi {
      *
      * @see #MAP_NOWHERE
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static int[] invertMap(int[] srcMap)
     {
@@ -4204,12 +4277,14 @@ public class Bidi {
     /**
      * Constant indicating base direction is left-to-right.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int DIRECTION_LEFT_TO_RIGHT = LTR;
 
     /**
      * Constant indicating base direction is right-to-left.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int DIRECTION_RIGHT_TO_LEFT = RTL;
 
@@ -4219,6 +4294,7 @@ public class Bidi {
      * Algorithm. If no strong directional character is present, the base
      * direction is left-to-right.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int DIRECTION_DEFAULT_LEFT_TO_RIGHT = LEVEL_DEFAULT_LTR;
 
@@ -4228,6 +4304,7 @@ public class Bidi {
      * Algorithm. If no strong directional character is present, the base
      * direction is right-to-left.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int DIRECTION_DEFAULT_RIGHT_TO_LEFT = LEVEL_DEFAULT_RTL;
 
@@ -4244,6 +4321,7 @@ public class Bidi {
      * @see #DIRECTION_DEFAULT_LEFT_TO_RIGHT
      * @see #DIRECTION_DEFAULT_RIGHT_TO_LEFT
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public Bidi(String paragraph, int flags)
     {
@@ -4276,6 +4354,7 @@ public class Bidi {
      * @param paragraph a paragraph of text with optional character and
      *        paragraph attribute information
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public Bidi(AttributedCharacterIterator paragraph)
     {
@@ -4317,6 +4396,7 @@ public class Bidi {
      * @see #DIRECTION_DEFAULT_LEFT_TO_RIGHT
      * @see #DIRECTION_DEFAULT_RIGHT_TO_LEFT
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public Bidi(char[] text,
             int textStart,
@@ -4385,6 +4465,8 @@ public class Bidi {
      * @throws IllegalArgumentException if lineStart and lineLimit are not in the range
      *         <code>0&lt;=lineStart&lt;lineLimit&lt;=getProcessedLength()</code>,
      *         or if the specified line crosses a paragraph boundary
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public Bidi createLineBidi(int lineStart, int lineLimit)
     {
@@ -4401,6 +4483,7 @@ public class Bidi {
      * @throws IllegalStateException if this call is not preceded by a successful
      *         call to <code>setPara</code>
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean isMixed()
     {
@@ -4417,6 +4500,7 @@ public class Bidi {
      * @throws IllegalStateException if this call is not preceded by a successful
      *         call to <code>setPara</code>
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean isLeftToRight()
     {
@@ -4433,6 +4517,7 @@ public class Bidi {
      * @throws IllegalStateException if this call is not preceded by a successful
      *         call to <code>setPara</code>
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean isRightToLeft()
     {
@@ -4448,6 +4533,7 @@ public class Bidi {
      *         call to <code>setPara</code> or <code>setLine</code>
      *
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean baseIsLeftToRight()
     {
@@ -4463,6 +4549,7 @@ public class Bidi {
      *         call to <code>setPara</code> or <code>setLine</code>
      *
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public int getBaseLevel()
     {
@@ -4478,6 +4565,7 @@ public class Bidi {
      *         call to <code>setPara</code> or <code>setLine</code>
      *
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public int getRunCount()
     {
@@ -4522,6 +4610,7 @@ public class Bidi {
      * @throws IllegalArgumentException if <code>run</code> is not in
      *         the range <code>0&lt;=run&lt;countRuns()</code>
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public int getRunLevel(int run)
     {
@@ -4545,6 +4634,7 @@ public class Bidi {
      * @throws IllegalArgumentException if <code>run</code> is not in
      *         the range <code>0&lt;=run&lt;countRuns()</code>
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public int getRunStart(int run)
     {
@@ -4569,6 +4659,7 @@ public class Bidi {
      * @throws IllegalArgumentException if <code>run</code> is not in
      *         the range <code>0&lt;=run&lt;countRuns()</code>
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public int getRunLimit(int run)
     {
@@ -4596,6 +4687,7 @@ public class Bidi {
      * @return true if the range of characters requires bidi analysis
      *
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static boolean requiresBidi(char[] text,
             int start,
@@ -4631,6 +4723,7 @@ public class Bidi {
      * @param objectStart the start position in the objects array
      * @param count the number of objects to reorder
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static void reorderVisually(byte[] levels,
             int levelStart,
@@ -4705,6 +4798,7 @@ public class Bidi {
      * @see #OPTION_STREAMING
      * @see #getProcessedLength
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public String writeReordered(short options)
     {
@@ -4753,6 +4847,7 @@ public class Bidi {
      *
      * @throws IllegalArgumentException if <code>src</code> is null.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static String writeReverse(String src, short options)
     {

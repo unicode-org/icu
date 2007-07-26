@@ -171,6 +171,9 @@ public abstract class TimeZoneRule implements Serializable {
      * Returns if this <code>TimeZoneRule</code> has one or more start times.
      * 
      * @return true if this <TimeZoneRule</code> has one or more start times.
+     * 
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public abstract boolean isTransitionRule();
 

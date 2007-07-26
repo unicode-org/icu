@@ -1159,6 +1159,7 @@ public class MessageFormat extends UFormat {
      * @exception IllegalArgumentException if an argument in the
      *            <code>arguments</code> array is not of the type
      *            expected by the format element(s) that use it.
+     * @stable ICU 3.8
      */
     public AttributedCharacterIterator formatToCharacterIterator(Object arguments) {
         StringBuffer result = new StringBuffer();
@@ -2147,8 +2148,7 @@ public class MessageFormat extends UFormat {
      *
      * @param pattern the 'apostrophe-friendly' patttern to convert
      * @return the standard equivalent of the original pattern
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static String autoQuoteApostrophe(String pattern) {
         StringBuffer buf = new StringBuffer(pattern.length() * 2);

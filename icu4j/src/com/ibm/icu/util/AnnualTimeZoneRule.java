@@ -24,6 +24,8 @@ public class AnnualTimeZoneRule extends TimeZoneRule {
 
     /**
      * The constant representing the maximum year used for designating a rule is permanent.
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int MAX_YEAR = Integer.MAX_VALUE;
 

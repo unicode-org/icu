@@ -2630,7 +2630,7 @@ public final class ULocale implements Serializable {
      * @provisional This API might change or be removed in a future release.
      */
     public static Type ACTUAL_LOCALE = new Type(0);
- 
+
     /** 
      * Selector for <tt>getLocale()</tt> indicating the most specific
      * locale for which any data exists.  This is always at or above
@@ -2646,7 +2646,7 @@ public final class ULocale implements Serializable {
      * @provisional This API might change or be removed in a future release.
      */ 
     public static Type VALID_LOCALE = new Type(1);
-    
+
     /**
      * Opaque selector enum for <tt>getLocale()</tt>.
      * @see com.ibm.icu.util.ULocale
@@ -2659,8 +2659,7 @@ public final class ULocale implements Serializable {
         private int localeType;
         private Type(int type) { localeType = type; }
     }
-    
-    
+
   /**
     * Based on a HTTP formatted list of acceptable locales, determine an available locale for the user.
     * NullPointerException is thrown if acceptLanguageList or availableLocales is
@@ -2674,8 +2673,7 @@ public final class ULocale implements Serializable {
     * @param availableLocales list of available locales. One of these will be returned.
     * @param fallback if non-null, a 1-element array containing a boolean to be set with the fallback status
     * @return one of the locales from the availableLocales list, or null if none match
-    * @draft ICU 3.4
-    * @provisional This API might change or be removed in a future release.
+    * @stable ICU 3.8
     */
 
     public static ULocale acceptLanguage(String acceptLanguageList, ULocale[] availableLocales, 
@@ -2777,8 +2775,7 @@ public final class ULocale implements Serializable {
     * @param availableLocales list of available locales. One of these will be returned.
     * @param fallback if non-null, a 1-element array containing a boolean to be set with the fallback status
     * @return one of the locales from the availableLocales list, or null if none match
-    * @draft ICU 3.4
-    * @provisional This API might change or be removed in a future release.
+    * @stable ICU 3.8
     */
 
     public static ULocale acceptLanguage(ULocale[] acceptLanguageList, ULocale[]
@@ -2826,13 +2823,12 @@ public final class ULocale implements Serializable {
     * @param acceptLanguageList list in HTTP "Accept-Language:" format of acceptable locales
     * @param fallback if non-null, a 1-element array containing a boolean to be set with the fallback status
     * @return one of the locales from the ULocale.getAvailableLocales() list, or null if none match
-    * @draft ICU 3.4
-    * @provisional This API might change or be removed in a future release.
+    * @stable ICU 3.8
     */
 
     public static ULocale acceptLanguage(String acceptLanguageList, boolean[] fallback) {
         return acceptLanguage(acceptLanguageList, ULocale.getAvailableLocales(),
-                				fallback);
+                                fallback);
     }
 
    /**
@@ -2848,8 +2844,7 @@ public final class ULocale implements Serializable {
     * @param acceptLanguageList ordered array of acceptable locales (preferred are listed first)
     * @param fallback if non-null, a 1-element array containing a boolean to be set with the fallback status
     * @return one of the locales from the ULocale.getAvailableLocales() list, or null if none match
-    * @draft ICU 3.4
-    * @provisional This API might change or be removed in a future release.
+    * @stable ICU 3.8
     */
 
     public static ULocale acceptLanguage(ULocale[] acceptLanguageList, boolean[]

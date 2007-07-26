@@ -233,8 +233,10 @@ public class SimpleTimeZone extends BasicTimeZone {
     }
     
 
-    /* (non-Javadoc)
-     * @see com.ibm.icu.impl.JDKTimeZone#setID(java.lang.String)
+    /**
+     * {@inheritDoc}
+     * 
+     * @stable ICU 3.8
      */
     public void setID(String ID) {
         super.setID(ID);
@@ -558,8 +560,7 @@ public class SimpleTimeZone extends BasicTimeZone {
     /**
      * Returns a string representation of this object.
      * @return  a string representation of this object
-     * @draft ICU 3.4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public String toString() {
         return "SimpleTimeZone: " + getID();
@@ -1018,8 +1019,7 @@ public class SimpleTimeZone extends BasicTimeZone {
     /**
      * Return true if obj is a SimpleTimeZone equivalent to this.
      * @return true if obj is a SimpleTimeZone equivalent to this
-     * @draft ICU 3.4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public boolean equals(Object obj){
         if (this == obj) return true;
@@ -1059,8 +1059,7 @@ public class SimpleTimeZone extends BasicTimeZone {
     /**
      * Return the hash code.
      * @return the hash code
-     * @draft ICU 3.4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public int hashCode(){
         int ret = (int)( super.hashCode() +
@@ -1088,10 +1087,10 @@ public class SimpleTimeZone extends BasicTimeZone {
     /**
      * Return a clone of this time zone.
      * @return a clone of this time zone
-     * @draft ICU 3.4.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public Object clone() {
+        //TODO: We should not call SimpleTimeZone constructor below.
         SimpleTimeZone clone = new SimpleTimeZone( raw, getID());
         clone.startMonth     = startMonth;
         clone.startDay       = startDay;

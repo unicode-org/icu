@@ -620,8 +620,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * syntax.
      * @param localizations a list of localizations for the rule set
      * names in the description.
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public RuleBasedNumberFormat(String description, String[][] localizations) {
         locale = ULocale.getDefault();
@@ -656,8 +655,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @param locale A locale, which governs which characters are used for
      * formatting values in numerals, and which characters are equivalent in
      * lenient parsing.
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public RuleBasedNumberFormat(String description, ULocale locale) {
         this.locale = locale;
@@ -687,8 +685,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @param locale A ulocale that governs which characters are used for
      * formatting values in numerals, and determines which characters are equivalent in
      * lenient parsing.
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public RuleBasedNumberFormat(String description, String[][] localizations, ULocale locale) {
         this.locale = locale;
@@ -721,8 +718,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * spells out a value in words in the desired language, ORDINAL, which attaches
      * an ordinal suffix from the desired language to the end of a number (e.g. "123rd"),
      * and DURATION, which formats a duration in seconds as hours, minutes, and seconds.
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public RuleBasedNumberFormat(ULocale locale, int format) {
         this.locale = locale;
@@ -901,8 +897,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * Return a list of locales for which there are locale-specific display names
      * for the rule sets in this formatter.  If there are no localized display names, return null.
      * @return an array of the ulocales for which there is rule set display name information
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public ULocale[] getRuleSetDisplayNameLocales() {
         if (ruleSetDisplayNames != null) {
@@ -943,8 +938,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * the leading '%'.)
      * @return an array of the locales that have display name information
      * @see #getRuleSetNames
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public String[] getRuleSetDisplayNames(ULocale locale) {
         String[] names = getNameListForLocale(locale);
@@ -961,9 +955,8 @@ public class RuleBasedNumberFormat extends NumberFormat {
     /**
      * Return the rule set display names for the current default locale.
      * @return an array of the display names
-     * @draft ICU 3.2
      * @see #getRuleSetDisplayNames(ULocale)
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public String[] getRuleSetDisplayNames() {
         return getRuleSetDisplayNames(ULocale.getDefault());
@@ -974,10 +967,9 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * The locale is matched against the locales for which there is display name data, using
      * normal fallback rules.  If no locale matches, the default display name is returned.
      * @return the display name for the rule set
-     * @draft ICU 3.2
      * @see #getRuleSetDisplayNames
      * @throws IllegalArgumentException if ruleSetName is not a valid rule set name for this format
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public String getRuleSetDisplayName(String ruleSetName, ULocale locale) {
         String[] rsnames = publicRuleSetNames;
@@ -996,9 +988,8 @@ public class RuleBasedNumberFormat extends NumberFormat {
     /**
      * Return the rule set display name for the provided rule set in the current default locale.
      * @return the display name for the rule set
-     * @draft ICU 3.2
      * @see #getRuleSetDisplayName(String,ULocale)
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public String getRuleSetDisplayName(String ruleSetName) {
         return getRuleSetDisplayName(ruleSetName, ULocale.getDefault());
