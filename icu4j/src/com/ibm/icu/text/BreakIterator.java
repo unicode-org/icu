@@ -457,8 +457,7 @@ public abstract class BreakIterator implements Cloneable
      * @param where A locale specifying the language of the text to be
      * analyzed.
      * @return An instance of BreakIterator that locates word boundaries.
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static BreakIterator getWordInstance(ULocale where)
     {
@@ -497,8 +496,7 @@ public abstract class BreakIterator implements Cloneable
      * @param where A Locale specifying the language of the text being broken.
      * @return A new instance of BreakIterator that locates legal
      * line-wrapping positions.
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static BreakIterator getLineInstance(ULocale where)
     {
@@ -537,8 +535,7 @@ public abstract class BreakIterator implements Cloneable
      * @param where A Locale specifying the language of the text being analyzed.
      * @return A new instance of BreakIterator that locates logical-character
      * boundaries.
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static BreakIterator getCharacterInstance(ULocale where)
     {
@@ -572,8 +569,7 @@ public abstract class BreakIterator implements Cloneable
      * Returns a new instance of BreakIterator that locates sentence boundaries.
      * @param where A Locale specifying the language of the text being analyzed.
      * @return A new instance of BreakIterator that locates sentence boundaries.
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static BreakIterator getSentenceInstance(ULocale where)
     {
@@ -615,9 +611,8 @@ public abstract class BreakIterator implements Cloneable
      * please use Word Boundary iterator.{@link #getWordInstance}
      * @param where A Locale specifying the language of the text being analyzed.
      * @return A new instance of BreakIterator that locates title boundaries.
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
-     */
+     * @stable ICU 3.8
+s     */
     public static BreakIterator getTitleInstance(ULocale where)
     {
         return getBreakInstance(where, KIND_TITLE);
@@ -647,8 +642,7 @@ public abstract class BreakIterator implements Cloneable
      * @param locale the Locale for which this instance is to be registered
      * @param kind the type of iterator for which this instance is to be registered
      * @return a registry key that can be used to unregister this instance
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static Object registerInstance(BreakIterator iter, ULocale locale, int kind) {
         // If the registered object matches the one in the cache, then

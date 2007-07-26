@@ -327,44 +327,37 @@ public final class UScript {
 
     /**
      * Script in Unicode 4.1
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int BUGINESE = 55;           /* Bugi */
     /**
      * Script in Unicode 4.1
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int GLAGOLITIC = 56;         /* Glag */
     /**
      * Script in Unicode 4.1
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int KHAROSHTHI = 57;         /* Khar */
     /**
      * Script in Unicode 4.1
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int SYLOTI_NAGRI = 58;       /* Sylo */
     /**
      * Script in Unicode 4.1
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int NEW_TAI_LUE = 59;        /* Talu */
     /**
      * Script in Unicode 4.1
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int TIFINAGH = 60;           /* Tfng */
     /**
      * Script in Unicode 4.1
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int OLD_PERSIAN = 61;        /* Xpeo */
 

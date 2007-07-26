@@ -606,6 +606,11 @@ public class PluralFormat extends UFormat {
         return result.toString();
     }
 
+    /**
+     * {@inheritDoc}
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
     public boolean equals(Object rhs) {
         return rhs instanceof PluralFormat && equals((PluralFormat) rhs);
     }
@@ -623,6 +628,11 @@ public class PluralFormat extends UFormat {
           numberFormat.equals(rhs.numberFormat);
     }
         
+    /**
+     * {@inheritDoc}
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
     public int hashCode() {
         return pluralRules.hashCode() ^ parsedValues.hashCode();
     }

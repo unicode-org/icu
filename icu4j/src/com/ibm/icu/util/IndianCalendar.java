@@ -70,73 +70,85 @@ public class IndianCalendar extends Calendar {
 
     /** 
      * Constant for Chaitra, the 1st month of the Indian year. 
-     * @draft ICU 3.8 
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int CHAITRA = 0;
 
     /** 
      * Constant for Vaisakha, the 2nd month of the Indian year. 
-     * @draft ICU 3.8 
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int VAISAKHA = 1;
 
     /** 
      * Constant for Jyaistha, the 3rd month of the Indian year. 
-     * @draft ICU 3.8 
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int JYAISTHA = 2;
 
     /** 
      * Constant for Asadha, the 4th month of the Indian year. 
-     * @draft ICU 3.8 
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int ASADHA = 3; 
 
     /** 
      * Constant for Sravana, the 5th month of the Indian year. 
-     * @draft ICU 3.8 
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int SRAVANA = 4 ;
 
     /** 
      * Constant for Bhadra, the 6th month of the Indian year. 
-     * @draft ICU 3.8 
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int BHADRA = 5 ;
 
     /** 
      * Constant for Asvina, the 7th month of the Indian year. 
-     * @draft ICU 3.8 
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int ASVINA = 6 ;
 
     /** 
      * Constant for Kartika, the 8th month of the Indian year. 
-     * @draft ICU 3.8 
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int KARTIKA = 7 ;
 
     /** 
      * Constant for Agrahayana, the 9th month of the Indian year. 
-     * @draft ICU 3.8 
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int AGRAHAYANA = 8 ;
 
     /** 
      * Constant for Pausa, the 10th month of the Indian year. 
-     * @draft ICU 3.8 
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int PAUSA = 9 ;
 
     /** 
      * Constant for Magha, the 11th month of the Indian year. 
-     * @draft ICU 3.8 
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int MAGHA = 10;
 
     /** 
      * Constant for Phalguna, the 12th month of the Indian year. 
-     * @draft ICU 3.8 
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int PHALGUNA = 11;
     
@@ -309,8 +321,10 @@ public class IndianCalendar extends Calendar {
     private static final int INDIAN_YEAR_START = 80;
 
     /**
-     * @stable ICU 2.8
-     */    
+     * {@inheritDoc}
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
     protected int handleGetExtendedYear() {
         int year;
         
@@ -325,13 +339,19 @@ public class IndianCalendar extends Calendar {
     }
 
     /**
-     * @stable ICU 2.8
-     */    
+     * {@inheritDoc}
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
     protected int handleGetYearLength(int extendedYear) {
        return super.handleGetYearLength(extendedYear);
     }
 
-    
+    /**
+     * {@inheritDoc}
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
     protected int handleGetMonthLength(int extendedYear, int month) {
        if(isGregorianLeap(extendedYear) && month == 0) {
            return 31;
@@ -344,12 +364,11 @@ public class IndianCalendar extends Calendar {
        return 30;
     }
 
-
-
     /**
-     * @stable ICU 2.8
-     */    
-    
+     * {@inheritDoc}
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
     protected void handleComputeFields(int julianDay){
        double jdAtStartOfGregYear;
        int leapMonth, IndianYear, yday, IndianMonth, IndianDayOfMonth, mday;
@@ -419,16 +438,18 @@ public class IndianCalendar extends Calendar {
 
 
     /**
-     * Override Calendar.  
-     * @stable ICU 2.8
+     * {@inheritDoc}
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     protected int handleGetLimit(int field, int limitType) {
        return LIMITS[field][limitType];
     }
 
     /**
-     * Return JD of start of given month/year
-     * @stable ICU 2.0
+     * {@inheritDoc}
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     protected int handleComputeMonthStart(int year, int month, boolean useMonth) {
 
@@ -448,13 +469,13 @@ public class IndianCalendar extends Calendar {
 
 
    
-    /**
+    /*
      * This routine converts an Indian date to the corresponding Julian date"
      * @param year   The year in Saka Era according to Indian calendar.
      * @param month  The month according to Indian calendar (between 1 to 12)
      * @param date   The date in month 
      */
-    protected static double IndianToJD(int year, int month, int date) {
+    private static double IndianToJD(int year, int month, int date) {
        int leapMonth, gyear, m;
        double start, jd;
 
@@ -493,8 +514,7 @@ public class IndianCalendar extends Calendar {
      * @param month  The month according to Gregorian calendar (between 0 to 11)
      * @param date   The date in month 
      */
-
-    protected static double gregorianToJD(int year, int month, int date) {
+    private static double gregorianToJD(int year, int month, int date) {
        double JULIAN_EPOCH = 1721425.5;
        double jd = (JULIAN_EPOCH - 1) +
           (365 * (year - 1)) +
@@ -515,8 +535,7 @@ public class IndianCalendar extends Calendar {
      * This routine converts a julian day (jd) to the corresponding date in Gregorian calendar"
      * @param jd The Julian date in Julian Calendar which is to be converted to Indian date"
      */
-
-    protected static int[] jdToGregorian(double jd) {
+    private static int[] jdToGregorian(double jd) {
        double JULIAN_EPOCH = 1721425.5;
        double wjd, depoch, quadricent, dqc, cent, dcent, quad, dquad, yindex, yearday, leapadj;
        int year, month, day;
@@ -559,8 +578,7 @@ public class IndianCalendar extends Calendar {
      * This routine checks if the Gregorian year is a leap year"
      * @param year      The year in Gregorian Calendar
      */
-
-    protected static boolean isGregorianLeap(int year)
+    private static boolean isGregorianLeap(int year)
     {
        return ((year % 4) == 0) &&
           (!(((year % 100) == 0) && ((year % 400) != 0)));
@@ -568,9 +586,9 @@ public class IndianCalendar extends Calendar {
 
     
     /**
-     * Return the current Calendar type.
-     * @return type of calendar (gregorian, etc.)
-     * @internal ICU 3.0
+     * {@inheritDoc}
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public String getType() {
         return "indian";

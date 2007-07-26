@@ -360,8 +360,7 @@ public class GregorianCalendar extends Calendar {
      * Constructs a GregorianCalendar based on the current time
      * in the default time zone with the given locale.
      * @param locale the given ulocale.
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public GregorianCalendar(ULocale locale) {
         this(TimeZone.getDefault(), locale);
@@ -384,8 +383,7 @@ public class GregorianCalendar extends Calendar {
      * in the given time zone with the given locale.
      * @param zone the given time zone.
      * @param locale the given ulocale.
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public GregorianCalendar(TimeZone zone, ULocale locale) {
         super(zone, locale);

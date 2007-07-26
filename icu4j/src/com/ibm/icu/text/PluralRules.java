@@ -768,15 +768,30 @@ public class PluralRules implements Serializable {
         return keywords;
     }
 
+    /**
+     * {@inheritDoc}
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
     public String toString() {
       return "keywords: " + keywords + " rules: " + rules.toString() + 
           " limit: " + getRepeatLimit();
     }
 
+    /**
+     * {@inheritDoc}
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
     public int hashCode() {
       return keywords.hashCode();
     }
 
+    /**
+     * {@inheritDoc}
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
     public boolean equals(Object rhs) {
         return rhs instanceof PluralRules && equals((PluralRules)rhs);
     }

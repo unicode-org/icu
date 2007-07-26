@@ -335,8 +335,7 @@ public class SimpleDateFormat extends DateFormat {
      * Construct a SimpleDateFormat using the given pattern and locale.
      * <b>Note:</b> Not all locales support SimpleDateFormat; for full
      * generality, use the factory methods in the DateFormat class.
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public SimpleDateFormat(String pattern, ULocale loc)
     {
@@ -388,6 +387,13 @@ public class SimpleDateFormat extends DateFormat {
         initialize();
     }
 
+    /**
+     * Create an instance of SimpleDateForamt for the given format configuration
+     * @param formatConfig the format configuration
+     * @return A SimpleDateFormat instance
+     * @internal ICU 3.8
+     * @deprecated This API is for internal ICU use only
+     */
     public static SimpleDateFormat getInstance(Calendar.FormatConfiguration formatConfig) {
         return new SimpleDateFormat(formatConfig.getPatternString(),
                     formatConfig.getDateFormatSymbols(),

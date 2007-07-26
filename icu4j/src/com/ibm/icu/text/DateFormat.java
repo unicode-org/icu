@@ -321,8 +321,7 @@ public abstract class DateFormat extends UFormat {
      * corresponding to the {@link Calendar#ZONE_OFFSET} and
      * {@link Calendar#DST_OFFSET} fields.  This displays the generic zone
      * name, if available.
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public final static int TIMEZONE_GENERIC_FIELD = 24;
  
@@ -332,8 +331,7 @@ public abstract class DateFormat extends UFormat {
      * FieldPosition selector for 'c' field alignment,
      * corresponding to the {@link Calendar#DAY_OF_WEEK} field. 
      * This displays the stand alone day name, if available.
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public final static int STANDALONE_DAY_FIELD = 25;
     
@@ -341,8 +339,7 @@ public abstract class DateFormat extends UFormat {
      * FieldPosition selector for 'L' field alignment,
      * corresponding to the {@link Calendar#MONTH} field.  
      * This displays the stand alone month name, if available.
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public final static int STANDALONE_MONTH_FIELD = 26;
     
@@ -702,8 +699,7 @@ public abstract class DateFormat extends UFormat {
      * SHORT for "h:mm a" in the US locale.
      * @param locale the given ulocale.
      * @return a time formatter.
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public final static DateFormat getTimeInstance(int style,
                                                  ULocale locale)
@@ -757,8 +753,7 @@ public abstract class DateFormat extends UFormat {
      * SHORT for "M/d/yy" in the US locale.
      * @param locale the given ulocale.
      * @return a date formatter.
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public final static DateFormat getDateInstance(int style,
                                                  ULocale locale)
@@ -1055,8 +1050,7 @@ public abstract class DateFormat extends UFormat {
      *              etc.
      *
      * @param locale The locale for which the date format is desired.
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     static final public DateFormat getDateInstance(Calendar cal, int dateStyle, ULocale locale)
     {
@@ -1102,8 +1096,7 @@ public abstract class DateFormat extends UFormat {
      * @param locale The locale for which the time format is desired.
      *
      * @see DateFormat#getTimeInstance
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     static final public DateFormat getTimeInstance(Calendar cal, int timeStyle, ULocale locale)
     {
@@ -1158,8 +1151,7 @@ public abstract class DateFormat extends UFormat {
      * @param locale The locale for which the date/time format is desired.
      *
      * @see DateFormat#getDateTimeInstance
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     static final public DateFormat getDateTimeInstance(Calendar cal, int dateStyle,
                                                  int timeStyle, ULocale locale)

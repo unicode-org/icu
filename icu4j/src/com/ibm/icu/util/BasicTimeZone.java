@@ -501,4 +501,12 @@ public abstract class BasicTimeZone extends TimeZone {
 
         return result;
     }
+
+    /**
+     * Protected no arg constructor.
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
+    protected BasicTimeZone() {
+    }
 }

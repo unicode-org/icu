@@ -426,8 +426,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
      * Valid options are IGNORE_SPACE and CASE.
      * @exception java.lang.IllegalArgumentException if the pattern
      * contains a syntax error.
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public UnicodeSet(String pattern, ParsePosition pos, SymbolTable symbols, int options) {
         this();
@@ -3178,8 +3177,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
      * @param symbols if not null, then symbols are first called to see if a property
      * is available. If true, then everything else is skipped.
      * @return this set
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public UnicodeSet applyPropertyAlias(String propertyAlias,
                                          String valueAlias, SymbolTable symbols) {
@@ -3531,8 +3529,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
      * Alias for UnicodeSet.CASE, for ease of porting from C++ where ICU4C
      * also has both USET_CASE and USET_CASE_INSENSITIVE (see uset.h).
      * @see #CASE
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int CASE_INSENSITIVE = 2;
 
@@ -3546,8 +3543,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
      * match all except 'a', 'A', 'b', and 'B'. This adds the lower-,
      * title-, and uppercase mappings as well as the case folding
      * of each existing element in the set.
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int ADD_CASE_MAPPINGS = 4;
 

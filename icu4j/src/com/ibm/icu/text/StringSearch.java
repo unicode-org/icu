@@ -243,8 +243,7 @@ public final class StringSearch extends SearchIterator
      * @see BreakIterator
      * @see RuleBasedCollator
      * @see SearchIterator
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public StringSearch(String pattern, CharacterIterator target, ULocale locale)
     {

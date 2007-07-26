@@ -62,8 +62,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Create a DecimalFormatSymbols object for the given locale.
      * @param locale the locale
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public DecimalFormatSymbols( ULocale locale ) {
         initialize( locale );
@@ -406,8 +405,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * Returns the currency symbol, for JDK 1.4 compatibility only.
      * ICU clients should use the Currency API directly.
      * @return the currency used, or null
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public Currency getCurrency() {
         return currency;
@@ -427,8 +425,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @see #setCurrencySymbol
      * @see #setInternationalCurrencySymbol
      *
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public void setCurrency(Currency currency) {
         if (currency == null) {
@@ -589,8 +586,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Returns the locale for which this object was constructed.
      * @return the locale for which this object was constructed
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public ULocale getULocale() {
         return ulocale;
