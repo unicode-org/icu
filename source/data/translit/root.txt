@@ -124,6 +124,7 @@ root {
             }
         }
 
+/*
         CanadianAboriginal-Latin {
             file {
                 resource:process(transliterator) {"CanadianAboriginal_Latin.txt"}
@@ -136,6 +137,7 @@ root {
                 direction {"REVERSE"}
             }
         }
+*/
 
         Cyrillic-Latin {
             file {
