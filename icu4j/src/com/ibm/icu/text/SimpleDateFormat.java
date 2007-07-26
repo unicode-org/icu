@@ -563,9 +563,9 @@ public class SimpleDateFormat extends DateFormat {
                 if (attributes != null) {
                     // Check the sub format length
                     int end = toAppendTo.length();
-                    DateFormat.Field attr = patternCharToDateFormatField(item.type);
                     if (end - start > 0) {
                         // Append the attribute to the list
+                        DateFormat.Field attr = patternCharToDateFormatField(item.type);
                         FieldPosition fp = new FieldPosition(attr);
                         fp.setBeginIndex(start);
                         fp.setEndIndex(end);
