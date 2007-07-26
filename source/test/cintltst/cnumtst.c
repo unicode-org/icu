@@ -1393,6 +1393,7 @@ static void TestTextAttributeCrash(void) {
     if (u_strcmp(expectedPos, ubuffer) == 0) {
         log_err("Didn't get expected positive result\n");
     }
+    unum_close(nf);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
