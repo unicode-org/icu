@@ -228,8 +228,8 @@ public abstract class UResourceBundle extends ResourceBundle{
      *                If null the bundle for default locale is opened.
      * @param loader  the loader to use
      * @return a resource bundle for the given base name and locale               
-     * @internal revisit for ICU 3.6
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static UResourceBundle getBundleInstance(String baseName, ULocale locale, ClassLoader loader){
          return getBundleInstance(baseName, locale.toString(),loader);  
