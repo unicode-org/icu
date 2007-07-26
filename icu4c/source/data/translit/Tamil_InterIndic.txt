@@ -1,6 +1,6 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2006, International Business Machines
+# *  Copyright (C) 2004-2007, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
@@ -70,4 +70,4 @@
 ௰>\uE067\uE066;          # UNMAPPED Tamil-InterIndic: NUMBER TEN
 ௱>\uE067\uE066\uE066;     # UNMAPPED Tamil-InterIndic: NUMBER ONE HUNDRED
 ௲>\uE067\uE066\uE066\uE066;# UNMAPPED Tamil-InterIndic: NUMBER ONE THOUSAND
-0>\uE066;
+\u0BE6>\uE066;

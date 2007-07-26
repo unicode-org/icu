@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// *  Copyright (C) 2004-2006, International Business Machines
+// *  Copyright (C) 2004-2007, International Business Machines
 // *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 // *
 // ***************************************************************************
@@ -121,6 +121,19 @@ root {
             file {
                 resource:process(transliterator) {"Bengali_Telugu.txt"}
                 direction {"FORWARD"}
+            }
+        }
+
+        CanadianAboriginal-Latin {
+            file {
+                resource:process(transliterator) {"CanadianAboriginal_Latin.txt"}
+                direction {"FORWARD"}
+            }
+        }
+        Latin-CanadianAboriginal {
+            file {
+                resource:process(transliterator) {"CanadianAboriginal_Latin.txt"}
+                direction {"REVERSE"}
             }
         }
 
@@ -657,6 +670,22 @@ root {
                 direction {"FORWARD"}
             }
         }
+/*
+	broken.
+
+        Latin-Ethiopic {
+            file {
+                resource:process(transliterator) {"Latin_Ethiopic.txt"}
+                direction {"FORWARD"}
+            }
+        }
+        Ethiopic-Latin {
+            file {
+                resource:process(transliterator) {"Latin_Ethiopic.txt"}
+                direction {"REVERSE"}
+            }
+        }
+*/
 
         Latin-Gujarati {
             file {
@@ -910,6 +939,19 @@ root {
         NumericPinyin-Pinyin {
             file {
                 resource:process(transliterator) {"Pinyin_NumericPinyin.txt"}
+                direction {"REVERSE"}
+            }
+        }
+
+        Simplified-Traditional {
+            file {
+                resource:process(transliterator) {"Simplified_Traditional.txt"}
+                direction {"FORWARD"}
+            }
+        }
+        Traditional-Simplified {
+            file {
+                resource:process(transliterator) {"Simplified_Traditional.txt"}
                 direction {"REVERSE"}
             }
         }
