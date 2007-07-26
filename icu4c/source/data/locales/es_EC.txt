@@ -8,28 +8,10 @@
 // ***************************************************************************
 es_EC{
     Currencies{
-        MXN{
-            "MEX$",
-            "peso mexicano",
-        }
         USD{
             "$",
             "dólar estadounidense",
         }
-    }
-    NumberElements{
-        ",",
-        ".",
-        ";",
-        "%",
-        "0",
-        "#",
-        "-",
-        "E",
-        "‰",
-        "∞",
-        "NaN",
-        "+",
     }
     NumberPatterns{
         "#,##0.###",
@@ -37,7 +19,7 @@ es_EC{
         "#,##0%",
         "#E0",
     }
-    Version{"1.92"}
+    Version{"1.53"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -45,8 +27,8 @@ es_EC{
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
-                "EEEE d' de 'MMMM' de 'yyyy",
-                "d' de 'MMMM' de 'yyyy",
+                "EEEE d 'de' MMMM 'de' yyyy",
+                "d 'de' MMMM 'de' yyyy",
                 "dd/MM/yyyy",
                 "dd/MM/yy",
                 "{1} {0}",

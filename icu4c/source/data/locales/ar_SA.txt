@@ -7,20 +7,6 @@
 // *
 // ***************************************************************************
 ar_SA{
-    NumberElements{
-        "٫",
-        "٬",
-        ";",
-        "٪",
-        "٠",
-        "#",
-        "-",
-        "E",
-        "‰",
-        "∞",
-        "NaN",
-        "+",
-    }
     NumberPatterns{
         "#0.###;#0.###-",
         "¤#0.00",
@@ -30,26 +16,12 @@ ar_SA{
     Scripts{
         Ital{"اللأيطالية القديمة"}
     }
-    Version{"1.92"}
+    Version{"1.47"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
                 7,
                 1,
-            }
-            DateTimePatterns{
-                "v h:mm:ss a",
-                "HH:mm:ss z",
-                "h:mm:ss a",
-                "h:mm a",
-                "EEEE, d MMMM, yyyy",
-                "d MMMM, yyyy",
-                "dd‏/MM‏/yyyy",
-                "d‏/M‏/yyyy",
-                "{1} {0}",
-            }
-            availableFormats{
-                MMdd{"dd‏/MM"}
             }
             dayNames{
                 format{

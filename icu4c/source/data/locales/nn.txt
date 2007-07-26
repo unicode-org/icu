@@ -24,8 +24,8 @@ nn{
         017{"Sentral-Afrika"}
         018{"Sørlege Afrika"}
         019{"Amerika"}
-        021{"Nord-Amerika"}
-        029{"Karibiske hav"}
+        021{"nordlege Amerika"}
+        029{"Karibia"}
         030{"Aust-Asia"}
         034{"Sør-Asia"}
         035{"Søraust-Asia"}
@@ -82,10 +82,10 @@ nn{
         BY{"Kviterussland"}
         BZ{"Belize"}
         CA{"Canada"}
-        CC{"Kokosøyane (Keelingøyane)"}
-        CD{"Kongo, Den demokratiske republikken"}
-        CF{"Den sentralafrikanske republikk"}
-        CG{"Kongo"}
+        CC{"Kokosøyane"}
+        CD{"Kongo-Kinshasa"}
+        CF{"Den sentralafrikanske republikken"}
+        CG{"Kongo-Brazzaville"}
         CH{"Sveits"}
         CI{"Elfenbeinskysten"}
         CK{"Cookøyane"}
@@ -94,7 +94,7 @@ nn{
         CN{"Kina"}
         CO{"Colombia"}
         CR{"Costa Rica"}
-        CS{"Serbia Montenegro"}
+        CS{"Serbia og Montenegro"}
         CU{"Cuba"}
         CV{"Kapp Verde"}
         CX{"Christmasøya"}
@@ -104,7 +104,7 @@ nn{
         DJ{"Djibouti"}
         DK{"Danmark"}
         DM{"Dominica"}
-        DO{"Den dominikanske republikk"}
+        DO{"Den dominikanske republikken"}
         DZ{"Algerie"}
         EC{"Ecuador"}
         EE{"Estland"}
@@ -124,6 +124,7 @@ nn{
         GD{"Grenada"}
         GE{"Georgia"}
         GF{"Fransk Guyana"}
+        GG{"Guernsey"}
         GH{"Ghana"}
         GI{"Gibraltar"}
         GL{"Grønland"}
@@ -148,7 +149,7 @@ nn{
         IL{"Israel"}
         IM{"Man"}
         IN{"India"}
-        IO{"Britiske områder i det indiske hav"}
+        IO{"Britiske område i Det indiske hav"}
         IQ{"Irak"}
         IR{"Iran"}
         IS{"Island"}
@@ -168,7 +169,7 @@ nn{
         KW{"Kuwait"}
         KY{"Caymanøyane"}
         KZ{"Kasakhstan"}
-        LA{"Laos, Den folkedemokratiske republikken"}
+        LA{"Laos"}
         LB{"Libanon"}
         LC{"St. Lucia"}
         LI{"Liechtenstein"}
@@ -182,9 +183,10 @@ nn{
         MA{"Marokko"}
         MC{"Monaco"}
         MD{"Moldova"}
+        ME{"Montenegro"}
         MG{"Madagaskar"}
         MH{"Marshalløyane"}
-        MK{"Makedonia, Republikken"}
+        MK{"Makedonia"}
         ML{"Mali"}
         MM{"Myanmar"}
         MN{"Mongolia"}
@@ -195,7 +197,7 @@ nn{
         MS{"Montserrat"}
         MT{"Malta"}
         MU{"Mauritius"}
-        MV{"Maldivene"}
+        MV{"Maldivane"}
         MW{"Malawi"}
         MX{"Mexico"}
         MY{"Malaysia"}
@@ -229,9 +231,10 @@ nn{
         PY{"Paraguay"}
         QA{"Qatar"}
         QO{"Ytre Oseania"}
-        RE{"Reunion"}
+        RE{"Réunion"}
         RO{"Romania"}
-        RU{"Den russiske føderasjon"}
+        RS{"Serbia"}
+        RU{"Russland"}
         RW{"Rwanda"}
         SA{"Saudi Arabia"}
         SB{"Salomonøyane"}
@@ -248,13 +251,13 @@ nn{
         SN{"Senegal"}
         SO{"Somalia"}
         SR{"Surinam"}
-        ST{"Sao Tome og Principe"}
+        ST{"São Tomé og Príncipe"}
         SV{"El Salvador"}
         SY{"Syria"}
         SZ{"Swaziland"}
         TC{"Turks- og Caicosøyane"}
         TD{"Tchad"}
-        TF{"Franske sørområder"}
+        TF{"Franske sørområde"}
         TG{"Togo"}
         TH{"Thailand"}
         TJ{"Tadsjikistan"}
@@ -296,7 +299,11 @@ nn{
         }
         NOK{
             "kr",
-            "NOK",
+            "norsk krone",
+        }
+        XXX{
+            "XXX",
+            "ukjend eller ugyldig valuta",
         }
     }
     ExemplarCharacters{"[a à b-e é f-o ó ò ô p-z æ ø å]"}
@@ -324,7 +331,7 @@ nn{
         alt{"sør-altai"}
         am{"amharisk"}
         an{"aragonsk"}
-        ang{"gammalengelsk (ca. 450-1100)"}
+        ang{"gammalengelsk"}
         anp{"angika"}
         apa{"apache-språk"}
         ar{"arabisk"}
@@ -366,8 +373,8 @@ nn{
         br{"bretonsk"}
         bra{"braj"}
         bs{"bosnisk"}
-        btk{"batak (Indonesia)"}
-        bua{"buriat"}
+        btk{"batak"}
+        bua{"burjatisk"}
         bug{"buginesisk"}
         byn{"blin"}
         ca{"katalansk"}
@@ -423,12 +430,12 @@ nn{
         dz{"dzongkha"}
         ee{"ewe"}
         efi{"efik"}
-        egy{"egyptisk (historisk)"}
+        egy{"gammalegyptisk"}
         eka{"ekajuk"}
         el{"gresk"}
         elx{"elamittisk"}
         en{"engelsk"}
-        enm{"mellomengelsk (1100-1500)"}
+        enm{"mellomengelsk"}
         eo{"esperanto"}
         es{"spansk"}
         et{"estisk"}
@@ -445,8 +452,8 @@ nn{
         fo{"færøysk"}
         fon{"fon"}
         fr{"fransk"}
-        frm{"mellomfransk (ca.1400-1600)"}
-        fro{"gammalfransk (842 til ca.1400)"}
+        frm{"mellomfransk"}
+        fro{"gammalfransk"}
         frr{"nordfrisisk"}
         frs{"austfrisisk"}
         fur{"friuliansk"}
@@ -458,16 +465,16 @@ nn{
         gd{"skotsk-gælisk"}
         gem{"germansk språk (anna)"}
         gez{"ges"}
-        gil{"kiribatisk; gilbertesisk"}
+        gil{"kiribatisk"}
         gl{"galicisk"}
-        gmh{"mellomhøgtysk (ca.1050-1500)"}
+        gmh{"mellomhøgtysk"}
         gn{"guarani"}
-        goh{"gammalhøgtysk (ca.750-1050)"}
+        goh{"gammalhøgtysk"}
         gon{"gondi"}
         gor{"gorontalo"}
         got{"gotisk"}
         grb{"grebo"}
-        grc{"gammalgresk (til 1453)"}
+        grc{"gammalgresk"}
         gsw{"sveitsertysk"}
         gu{"gujarati"}
         gv{"manx"}
@@ -578,12 +585,12 @@ nn{
         mdr{"mandar"}
         men{"mende"}
         mg{"madagassisk"}
-        mga{"mellomirsk (900-1200)"}
+        mga{"mellomirsk"}
         mh{"marshallesisk"}
         mi{"maori"}
         mic{"micmac"}
         min{"minangkabau"}
-        mis{"ulike språk"}
+        mis{"anna språk"}
         mk{"makedonsk"}
         mkh{"mon-khmerspråk (anna)"}
         ml{"malayalam"}
@@ -611,7 +618,7 @@ nn{
         nap{"napolitansk"}
         nb{"bokmål"}
         nd{"nord-ndebele"}
-        nds{"lågtysk; lågsaksisk"}
+        nds{"lågtysk"}
         ne{"nepalsk"}
         new{"newari"}
         ng{"ndonga"}
@@ -633,7 +640,7 @@ nn{
         nyn{"nyankole"}
         nyo{"nyoro"}
         nzi{"nzima"}
-        oc{"oksitansk (etter 1500)"}
+        oc{"oksitansk"}
         oj{"ojibwa"}
         om{"oromo"}
         or{"oriya"}
@@ -648,7 +655,7 @@ nn{
         pam{"pampanga"}
         pap{"papiamento"}
         pau{"palauisk"}
-        peo{"gammalpersisk (ca. 600-400 f. kr.)"}
+        peo{"gammalpersisk"}
         phi{"filippinsk språk (anna)"}
         phn{"fønikisk"}
         pi{"pali"}
@@ -687,7 +694,7 @@ nn{
         sel{"selkupisk"}
         sem{"semittisk språk (anna)"}
         sg{"sango"}
-        sga{"gammalirsk (til 900)"}
+        sga{"gammalirsk"}
         sgn{"teiknspråk"}
         shn{"shan"}
         si{"singalesisk"}
@@ -785,7 +792,7 @@ nn{
         zap{"zapotec"}
         zen{"zenaga"}
         zh{"kinesisk"}
-        zh_Hans{"forenkla kinesisk"}
+        zh_Hant{"tradisjonell kinesisk"}
         znd{"zande"}
         zu{"zulu"}
         zun{"zuni"}
@@ -802,8 +809,8 @@ nn{
         "%",
         "0",
         "#",
-        "-",
-        "E",
+        "−",
+        "×10^",
         "‰",
         "∞",
         "NaN",
@@ -852,8 +859,8 @@ nn{
         Hang{"hangul"}
         Hani{"han"}
         Hano{"hanunoo"}
-        Hans{"forenkla han"}
-        Hant{"tradisjonell han"}
+        Hans{"forenkla kinesisk"}
+        Hant{"tradisjonell kinesisk"}
         Hebr{"hebraisk"}
         Hira{"hiragana"}
         Hmng{"pahawk hmong"}
@@ -931,7 +938,7 @@ nn{
         Yiii{"yi"}
         Zxxx{"kode for språk utan skrift"}
         Zyyy{"felles"}
-        Zzzz{"kode for ukoda skrift"}
+        Zzzz{"ukjend eller ugyldig skrift"}
     }
     Types{
         calendar{
@@ -944,9 +951,9 @@ nn{
             japanese{"japansk kalender"}
         }
         collation{
-            big5han{"tradisjonell kinesisk (Big5)"}
+            big5han{"tradisjonell kinesisk sortering"}
             direct{"direkte sortering"}
-            gb2312han{"forenkla kinesisk"}
+            gb2312han{"forenkla kinesisk sortering"}
             phonebook{"telefonkatalogsortering"}
             pinyin{"pinyin-sortering"}
             stroke{"streksortering"}
@@ -962,12 +969,10 @@ nn{
         FONIPA{"det internasjonale fonetiske alfabetet (IPA)"}
         MONOTON{"monotonisk rettskriving"}
         POLYTON{"polytonisk rettskriving"}
-        POLYTONI{"polytonisk"}
-        POSIX{"POSIX"}
-        REVISED{"revidert ortografi"}
+        REVISED{"revidert rettskriving"}
         ROZAJ{"resisk dialekt"}
     }
-    Version{"1.92"}
+    Version{"1.77"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1003,15 +1008,6 @@ nn{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "su",
-                        "måndag",
-                        "tysdag",
-                        "on",
-                        "torsdag",
-                        "fr",
-                        "laurdag",
-                    }
                     narrow{
                         "S",
                         "M",
@@ -1030,43 +1026,8 @@ nn{
                 }
             }
             fields{
-                day{
-                    dn{"dag"}
-                    relative{
-                        "-1"{"i går"}
-                        "0"{"i dag"}
-                        "1"{"i morgon"}
-                    }
-                }
                 dayperiod{
                     dn{"f.m./e.m.-val"}
-                }
-                era{
-                    dn{"æra"}
-                }
-                hour{
-                    dn{"time"}
-                }
-                minute{
-                    dn{"minutt"}
-                }
-                month{
-                    dn{"månad"}
-                }
-                second{
-                    dn{"sekund"}
-                }
-                week{
-                    dn{"veke"}
-                }
-                weekday{
-                    dn{"vekedag"}
-                }
-                year{
-                    dn{"år"}
-                }
-                zone{
-                    dn{"sone"}
                 }
             }
             monthNames{
@@ -1098,22 +1059,6 @@ nn{
                         "oktober",
                         "november",
                         "desember",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
                     }
                 }
             }

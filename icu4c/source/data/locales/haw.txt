@@ -33,7 +33,7 @@ haw{
         RU{"Lūkia"}
         US{"ʻAmelika Hui Pū ʻIa"}
     }
-    ExemplarCharacters{"[a ā e ē h ʻ i ī k-o ō p u ū w]"}
+    ExemplarCharacters{"[a ā e ē i ī o ō u ū h k-n p w ʻ]"}
     Languages{
         haw{"ʻōlelo Hawaiʻi"}
     }
@@ -46,7 +46,7 @@ haw{
         "#,##0%",
         "#E0",
     }
-    Version{"1.92"}
+    Version{"1.35"}
     calendar{
         gregorian{
             dayNames{
@@ -68,17 +68,6 @@ haw{
                         "Poʻahā",
                         "Poʻalima",
                         "Poʻaono",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
                     }
                 }
             }
@@ -111,38 +100,6 @@ haw{
                         "ʻOkakopa",
                         "Nowemapa",
                         "Kekemapa",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                    wide{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
                     }
                 }
             }

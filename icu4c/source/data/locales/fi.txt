@@ -292,6 +292,7 @@ fi{
         ZA{"Etelä-Afrikka"}
         ZM{"Sambia"}
         ZW{"Zimbabwe"}
+        ZZ{"tuntematon tai virheellinen alue"}
     }
     Currencies{
         ADP{
@@ -652,6 +653,10 @@ fi{
         }
         GHC{
             "GHC",
+            "Ghanan cedi (1979–2007)",
+        }
+        GHS{
+            "GHS",
             "Ghanan cedi",
         }
         GIP{
@@ -1084,7 +1089,7 @@ fi{
         }
         SDP{
             "SDP",
-            "Sudanin punta",
+            "Sudanin punta (1957–1999)",
         }
         SEK{
             "Rkr",
@@ -1324,7 +1329,7 @@ fi{
         }
         XXX{
             "XXX",
-            "ei rahayksikköä",
+            "tuntematon tai virheellinen rahayksikkö",
         }
         YDD{
             "YDD",
@@ -1386,44 +1391,44 @@ fi{
         ady{"adyge"}
         ae{"avesta"}
         af{"afrikaans"}
-        afa{"muut afroaasialaiset kielet"}
+        afa{"afro-aasialainen kieli"}
         afh{"afrihili"}
         ain{"ainu"}
         ak{"akan"}
         akk{"akkadi"}
         ale{"aleutti"}
-        alg{"algonkin-kielet"}
+        alg{"algonkin-kieli"}
         alt{"altai"}
         am{"amhara"}
         an{"aragonia"}
         ang{"muinaisenglanti"}
         anp{"angika"}
-        apa{"apaššikielet"}
+        apa{"apaššikieli"}
         ar{"arabia"}
         arc{"aramea"}
         arn{"araukaani"}
         arp{"arapaho"}
-        art{"muut keinotekoiset kielet"}
+        art{"keinotekoinen kieli"}
         arw{"arawak"}
         as{"assami"}
         ast{"asturia"}
-        ath{"athabasca-kielet"}
-        aus{"australialaiset kielet"}
+        ath{"athabasca-kieli"}
+        aus{"australialainen kieli"}
         av{"avaari"}
         awa{"awadhi"}
         ay{"aimara"}
         az{"azeri"}
         ba{"baškiiri"}
         bad{"banda"}
-        bai{"bamileke-kielet"}
+        bai{"bamileke-kieli"}
         bal{"belutši"}
         ban{"bali"}
         bas{"basa"}
-        bat{"muut balttilaiset kielet"}
+        bat{"balttilainen kieli"}
         be{"valkovenäjä"}
         bej{"bedža"}
         bem{"bemba"}
-        ber{"muut berberikielet"}
+        ber{"berberikieli"}
         bg{"bulgaria"}
         bh{"bihari"}
         bho{"bhodžpuri"}
@@ -1433,7 +1438,7 @@ fi{
         bla{"mustajalka"}
         bm{"bambara"}
         bn{"bengali"}
-        bnt{"muut bantukielet"}
+        bnt{"bantukieli"}
         bo{"tiibet"}
         br{"bretoni"}
         bra{"bradž"}
@@ -1444,13 +1449,13 @@ fi{
         byn{"bilin"}
         ca{"katalaani"}
         cad{"caddo"}
-        cai{"muut Keski-Amerikan intiaanikielet"}
+        cai{"keskiamerikkalainen intiaanikieli"}
         car{"karibi"}
-        cau{"muut kaukasialaiset kielet"}
+        cau{"kaukasialainen kieli"}
         cch{"atsam"}
         ce{"tšetšeeni"}
         ceb{"cebuano"}
-        cel{"muut kelttiläiset kielet"}
+        cel{"kelttiläinen kieli"}
         ch{"tšamorro"}
         chb{"tšibtša"}
         chg{"tšagatai"}
@@ -1461,19 +1466,19 @@ fi{
         chp{"chipewyan"}
         chr{"cherokee"}
         chy{"cheyenne"}
-        cmc{"tšam-kielet"}
+        cmc{"tšam-kieli"}
         co{"korsika"}
         cop{"kopti"}
-        cpe{"muut englantiin perustuvat kreolit ja pidginit"}
-        cpf{"muut ranskaan perustuvat kreolit ja pidginit"}
-        cpp{"muut portugaliin perustuvat kreolit ja pidginit"}
+        cpe{"englantiin perustuva kreoli- tai pidgin-kieli"}
+        cpf{"ranskaan perustuva kreoli- tai pidgin-kieli"}
+        cpp{"portugaliin perustuva kreoli- tai pidgin-kieli"}
         cr{"cree"}
         crh{"krimintataari"}
-        crp{"muut kreolit ja pidginit"}
+        crp{"kreoli- tai pidgin-kieli"}
         cs{"tšekki"}
         csb{"kašubi"}
         cu{"kirkkoslaavi"}
-        cus{"muut kuušilaiset kielet"}
+        cus{"kuušilainen kieli"}
         cv{"tšuvassi"}
         cy{"kymri"}
         da{"tanska"}
@@ -1488,7 +1493,7 @@ fi{
         dgr{"dogrib"}
         din{"dinka"}
         doi{"dogri"}
-        dra{"muut dravidakielet"}
+        dra{"dravidakieli"}
         dsb{"alasorbi"}
         dua{"duala"}
         dum{"keskihollanti"}
@@ -1520,7 +1525,7 @@ fi{
         ff{"fulani"}
         fi{"suomi"}
         fil{"filipino"}
-        fiu{"muut suomalais-ugrilaiset kielet"}
+        fiu{"suomalais-ugrilainen kieli"}
         fj{"fidži"}
         fo{"fääri"}
         fon{"fon"}
@@ -1538,7 +1543,7 @@ fi{
         gay{"gajo"}
         gba{"gbaja"}
         gd{"gaeli"}
-        gem{"muut germaaniset kielet"}
+        gem{"germaaninen kieli"}
         gez{"ge’ez"}
         gil{"kiribati"}
         gl{"galicia"}
@@ -1580,12 +1585,12 @@ fi{
         ijo{"idžo"}
         ik{"inupiatun"}
         ilo{"iloko"}
-        inc{"muut indoarjalaiset kielet"}
-        ine{"muut indoeurooppalaiset kielet"}
+        inc{"indoarjalainen kieli"}
+        ine{"indoeurooppalainen kieli"}
         inh{"inguuši"}
         io{"ido"}
-        ira{"muut iranilaiset kielet"}
-        iro{"irokeesikielet"}
+        ira{"iranilainen kieli"}
+        iro{"irokeesikieli"}
         is{"islanti"}
         it{"italia"}
         iu{"inuktitut"}
@@ -1607,7 +1612,7 @@ fi{
         kfo{"norsunluurannikonkoro"}
         kg{"kongo"}
         kha{"khasi"}
-        khi{"muut khoisan-kielet"}
+        khi{"khoisan-kieli"}
         kho{"khotani"}
         ki{"kikuju"}
         kj{"kuanjama"}
@@ -1623,7 +1628,7 @@ fi{
         kr{"kanuri"}
         krc{"karatšai-balkaari"}
         krl{"karjala"}
-        kro{"kru-kielet"}
+        kro{"kru-kieli"}
         kru{"kurukh"}
         ks{"kašmiri"}
         ku{"kurdi"}
@@ -1657,7 +1662,7 @@ fi{
         mai{"maithili"}
         mak{"makassar"}
         man{"mandingo"}
-        map{"muut austronesialaiset kielet"}
+        map{"austronesialainen kieli"}
         mas{"maasai"}
         mdf{"mokša"}
         mdr{"mandar"}
@@ -1668,14 +1673,14 @@ fi{
         mi{"maori"}
         mic{"micmac"}
         min{"minangkabau"}
-        mis{"luokittelemattomat kielet"}
+        mis{"luokittelematon kieli"}
         mk{"makedonia"}
-        mkh{"muut mon-khmer-kielet"}
+        mkh{"mon-khmer-kieli"}
         ml{"malajalam"}
         mn{"mongoli"}
         mnc{"mantšu"}
         mni{"manipuri"}
-        mno{"manobo-kielet"}
+        mno{"manobo-kieli"}
         mo{"moldavia"}
         moh{"mohawk"}
         mos{"mossi"}
@@ -1683,16 +1688,16 @@ fi{
         ms{"malaiji"}
         mt{"malta"}
         mul{"monia kieliä"}
-        mun{"mundakielet"}
+        mun{"mundakieli"}
         mus{"creek"}
         mwl{"mirandeesi"}
         mwr{"marwari"}
         my{"burma"}
-        myn{"maya-kielet"}
+        myn{"maya-kieli"}
         myv{"ersä"}
         na{"nauru"}
         nah{"nahuatl"}
-        nai{"muut Pohjois-Amerikan intiaanikielet"}
+        nai{"pohjoisamerikkalainen intiaanikieli"}
         nap{"napoli"}
         nb{"norjan bokmål"}
         nd{"pohjois-ndebele"}
@@ -1701,7 +1706,7 @@ fi{
         new{"newari"}
         ng{"ndonga"}
         nia{"nias"}
-        nic{"muut nigeriläis-kongolaiset kielet"}
+        nic{"nigeriläis-kongolainen kieli"}
         niu{"niue"}
         nl{"hollanti"}
         nl_BE{"flaami"}
@@ -1712,7 +1717,7 @@ fi{
         nqo{"n’ko"}
         nr{"etelä-ndebele"}
         nso{"pohjoissotho"}
-        nub{"nubialaiset kielet"}
+        nub{"nubialainen kieli"}
         nv{"navajo"}
         nwc{"klassinen newari"}
         ny{"njandža"}
@@ -1727,21 +1732,21 @@ fi{
         os{"osseetti"}
         osa{"osage"}
         ota{"osmani"}
-        oto{"otomi-kielet"}
+        oto{"otomi-kieli"}
         pa{"pandžabi"}
-        paa{"muut papualaiskielet"}
+        paa{"papualaiskieli"}
         pag{"pangasinan"}
         pal{"pahlavi"}
         pam{"pampanga"}
         pap{"papiamentu"}
         pau{"palau"}
         peo{"muinaispersia"}
-        phi{"muut filippiiniläiset kielet"}
+        phi{"filippiiniläinen kieli"}
         phn{"foinikia"}
         pi{"paali"}
         pl{"puola"}
         pon{"pohnpei"}
-        pra{"prakrit-kielet"}
+        pra{"prakrit-kieli"}
         pro{"muinaisprovensaali"}
         ps{"paštu"}
         pt{"portugali"}
@@ -1754,7 +1759,7 @@ fi{
         rm{"retoromaani"}
         rn{"rundi"}
         ro{"romania"}
-        roa{"muut romaaniset kielet"}
+        roa{"romaaninen kieli"}
         rom{"romani"}
         root{"juuri"}
         ru{"venäjä"}
@@ -1763,8 +1768,8 @@ fi{
         sa{"sanskrit"}
         sad{"sandawe"}
         sah{"jakuutti"}
-        sai{"muut Etelä-Amerikan intiaanikielet"}
-        sal{"sališilaiset kielet"}
+        sai{"eteläamerikkalainen intiaanikieli"}
+        sal{"sališilainen kieli"}
         sam{"samarianaramea"}
         sas{"sasak"}
         sat{"santali"}
@@ -1774,22 +1779,22 @@ fi{
         sd{"sindhi"}
         se{"pohjoissaame"}
         sel{"selkuppi"}
-        sem{"muut seemiläiset kielet"}
+        sem{"seemiläinen kieli"}
         sg{"sango"}
         sga{"muinaisiiri"}
-        sgn{"viittomakielet"}
+        sgn{"viittomakieli"}
         sh{"serbokroaatti"}
         shn{"shan"}
         si{"sinhali"}
         sid{"sidamo"}
-        sio{"sioux-kielet"}
-        sit{"muut sinotiibetiläiset kielet"}
+        sio{"sioux-kieli"}
+        sit{"sinotiibetiläinen kieli"}
         sk{"slovakki"}
         sl{"sloveeni"}
-        sla{"muut slaavilaiset kielet"}
+        sla{"slaavilainen kieli"}
         sm{"samoa"}
         sma{"eteläsaame"}
-        smi{"muut saamelaiskielet"}
+        smi{"saamelaiskieli"}
         smj{"luulajansaame"}
         smn{"inarinsaame"}
         sms{"koltansaame"}
@@ -1803,7 +1808,7 @@ fi{
         srn{"sranan"}
         srr{"serer"}
         ss{"swazi"}
-        ssa{"muut niililäis-saharalaiset kielet"}
+        ssa{"niililäis-saharalainen kieli"}
         st{"eteläsotho"}
         su{"sunda"}
         suk{"sukuma"}
@@ -1813,7 +1818,7 @@ fi{
         sw{"swahili"}
         syr{"syyria"}
         ta{"tamil"}
-        tai{"muut thaikielet"}
+        tai{"thaikieli"}
         te{"telugu"}
         tem{"temne"}
         ter{"tereno"}
@@ -1838,8 +1843,8 @@ fi{
         tsi{"tsimši"}
         tt{"tataari"}
         tum{"tumbuka"}
-        tup{"tupi-kielet"}
-        tut{"muut altailaiset kielet"}
+        tup{"tupi-kieli"}
+        tut{"altailainen kieli"}
         tvl{"tuvalu"}
         tw{"twi"}
         ty{"tahiti"}
@@ -1858,11 +1863,11 @@ fi{
         vo{"volapük"}
         vot{"vatja"}
         wa{"valloni"}
-        wak{"wakash-kielet"}
+        wak{"wakash-kieli"}
         wal{"walamo"}
         war{"waray"}
         was{"washo"}
-        wen{"sorbin kielet"}
+        wen{"sorbin kieli"}
         wo{"wolof"}
         xal{"kalmukki"}
         xh{"xhosa"}
@@ -1870,7 +1875,7 @@ fi{
         yap{"japi"}
         yi{"jiddiš"}
         yo{"joruba"}
-        ypk{"jupikkikielet"}
+        ypk{"jupikkikieli"}
         za{"zhuang"}
         zap{"sapoteekki"}
         zen{"zenaga"}
@@ -1945,7 +1950,7 @@ fi{
         Hano{"hanunoolainen"}
         Hans{"kiinalainen yksinkertaistettu han"}
         Hant{"kiinalainen perinteinen han"}
-        Hebr{"heprea"}
+        Hebr{"heprealainen"}
         Hira{"hiragana"}
         Hmng{"pahawh hmong"}
         Hrkt{"hiragana tai katakana"}
@@ -2057,7 +2062,6 @@ fi{
         MONOTON{"monotoninen kreikka"}
         NEDIS{"sloveenin natisone-murre"}
         POLYTON{"polytoninen kreikka"}
-        POLYTONI{"polytoninen kreikka"}
         POSIX{"tietokonemäärittely POSIX"}
         REVISED{"uudistettu oikeinkirjoitus"}
         ROZAJ{"sloveenin resia-murre"}
@@ -2065,7 +2069,7 @@ fi{
         SCOUSE{"englannin scouse-murre"}
         VALENCIA{"katalaanin valencia-murre"}
     }
-    Version{"1.92"}
+    Version{"1.94"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2078,7 +2082,7 @@ fi{
                 "H.mm.ss",
                 "H.mm",
                 "EEEE d. MMMM'ta' yyyy",
-                "d. MMMM'ta 'yyyy",
+                "d. MMMM'ta' yyyy",
                 "d.M.yyyy",
                 "d.M.yyyy",
                 "{1} {0}",
@@ -2094,7 +2098,7 @@ fi{
                 yyQ{"Q/yy"}
                 yyyyM{"M/yyyy"}
                 yyyyMEEEd{"EEE d.M.yyyy"}
-                yyyyMMMM{"MMMM' 'yyyy"}
+                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{
@@ -2178,7 +2182,7 @@ fi{
                     dn{"vuosi"}
                 }
                 zone{
-                    dn{"vyöhyke"}
+                    dn{"aikavyöhyke"}
                 }
             }
             monthNames{
@@ -2237,12 +2241,6 @@ fi{
                         "3. nelj.",
                         "4. nelj.",
                     }
-                    narrow{
-                        "I",
-                        "2",
-                        "3",
-                        "4",
-                    }
                     wide{
                         "1. neljännes",
                         "2. neljännes",
@@ -2252,7 +2250,7 @@ fi{
                 }
                 stand-alone{
                     narrow{
-                        "I",
+                        "1",
                         "2",
                         "3",
                         "4",
@@ -2337,41 +2335,11 @@ fi{
         "Africa:Cairo"{
             ec{"Kairo"}
         }
-        "Africa:Casablanca"{
-            ec{"Casablanca"}
-        }
-        "Africa:Ceuta"{
-            ec{"Ceuta"}
-        }
-        "Africa:Kinshasa"{
-            ec{"Kinshasa"}
-        }
-        "America:Anchorage"{
-            ec{"Anchorage"}
-        }
         "America:Argentina:ComodRivadavia"{
             ec{"Comodoro Rivadavia"}
         }
-        "America:Buenos_Aires"{
-            ec{"Buenos Aires"}
-        }
-        "America:Campo_Grande"{
-            ec{"Campo Grande"}
-        }
         "America:Cancun"{
             ec{"Cancún"}
-        }
-        "America:Chicago"{
-            ec{"Chicago"}
-        }
-        "America:Chihuahua"{
-            ec{"Chihuahua"}
-        }
-        "America:Denver"{
-            ec{"Denver"}
-        }
-        "America:Edmonton"{
-            ec{"Edmonton"}
         }
         "America:El_Salvador"{
             ec{"San Salvador"}
@@ -2379,53 +2347,20 @@ fi{
         "America:Godthab"{
             ec{"Nuuk"}
         }
-        "America:Halifax"{
-            ec{"Halifax"}
-        }
         "America:Havana"{
             ec{"Havanna"}
         }
-        "America:Hermosillo"{
-            ec{"Hermosillo"}
-        }
-        "America:Indianapolis"{
-            ec{"Indianapolis"}
-        }
-        "America:Los_Angeles"{
-            ec{"Los Angeles"}
-        }
-        "America:New_York"{
-            ec{"New York"}
-        }
         "America:North_Dakota:Center"{
-            ec{"keskinen North Dakota"}
-        }
-        "America:Phoenix"{
-            ec{"Phoenix"}
-        }
-        "America:Regina"{
-            ec{"Regina"}
-        }
-        "America:Rio_Branco"{
-            ec{"Rio Branco"}
+            ec{"keskinen Pohjois-Dakota"}
         }
         "America:Sao_Paulo"{
             ec{"São Paulo"}
         }
+        "America:Scoresbysund"{
+            ec{"Ittoqqortoormiit"}
+        }
         "America:St_Johns"{
             ec{"St. Johns"}
-        }
-        "America:Tijuana"{
-            ec{"Tijuana"}
-        }
-        "America:Toronto"{
-            ec{"Toronto"}
-        }
-        "America:Vancouver"{
-            ec{"Vancouver"}
-        }
-        "America:Winnipeg"{
-            ec{"Winnipeg"}
         }
         "Antarctica:DumontDUrville"{
             ec{"Dumont d'Urville"}
@@ -2441,9 +2376,6 @@ fi{
         }
         "Asia:Dushanbe"{
             ec{"Dušanbe"}
-        }
-        "Asia:Jerusalem"{
-            ec{"Jerusalem"}
         }
         "Asia:Kamchatka"{
             ec{"Kamtšatka"}
@@ -2466,9 +2398,6 @@ fi{
         "Asia:Tokyo"{
             ec{"Tokio"}
         }
-        "Asia:Ulaanbaatar"{
-            ec{"Ulaanbaatar"}
-        }
         "Asia:Yakutsk"{
             ec{"Jakutsk"}
         }
@@ -2484,23 +2413,8 @@ fi{
         "Atlantic:Canary"{
             ec{"Kanariansaaret"}
         }
-        "Australia:Adelaide"{
-            ec{"Adelaide"}
-        }
-        "Australia:Brisbane"{
-            ec{"Brisbane"}
-        }
-        "Australia:Darwin"{
-            ec{"Darwin"}
-        }
-        "Australia:Hobart"{
-            ec{"Hobart"}
-        }
-        "Australia:Perth"{
-            ec{"Perth"}
-        }
-        "Australia:Sydney"{
-            ec{"Sydney"}
+        "Etc:Unknown"{
+            ec{"tuntematon"}
         }
         "Europe:Athens"{
             ec{"Ateena"}
@@ -2573,9 +2487,6 @@ fi{
         }
         "Pacific:Easter"{
             ec{"Pääsiäissaari"}
-        }
-        "Pacific:Honolulu"{
-            ec{"Honolulu"}
         }
         "meta:Alaska"{
             ld{"Alaskan kesäaika"}
@@ -2658,7 +2569,6 @@ fi{
             ls{"Newfoundlandin normaaliaika"}
             ss{"NST"}
         }
-        fallbackFormat{"{1} ({0})"}
         gmtFormat{"UTC{0}"}
         hourFormat{"+HH.mm;-HH.mm"}
         regionFormat{"{0}"}

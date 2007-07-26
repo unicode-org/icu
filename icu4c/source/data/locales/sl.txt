@@ -301,7 +301,7 @@ sl{
             "Britanski Funt Sterling",
         }
         INR{
-            "=0#Rs.|1#Re.|1<Rs.",
+            "=0#Rs.|1#Re.|1<Rs." /** (choice)  */,
             "Indijski Rupi",
         }
         JPY{
@@ -397,7 +397,7 @@ sl{
             traditional{"Tradicionano zlaganje"}
         }
     }
-    Version{"1.92"}
+    Version{"1.84"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -410,6 +410,9 @@ sl{
                 "d.M.yyyy",
                 "d.M.yy",
                 "{1} {0}",
+            }
+            availableFormats{
+                MMMMd{"d MMMM"}
             }
             dayNames{
                 format{
@@ -448,41 +451,6 @@ sl{
                 abbreviated{
                     "pr.n.š.",
                     "po Kr.",
-                }
-            }
-            fields{
-                day{
-                    dn{"dan"}
-                }
-                dayperiod{
-                    dn{"Čas dneva"}
-                }
-                era{
-                    dn{"Doba"}
-                }
-                hour{
-                    dn{"Ura"}
-                }
-                minute{
-                    dn{"Minuta"}
-                }
-                month{
-                    dn{"Mesec"}
-                }
-                second{
-                    dn{"Sekunda"}
-                }
-                week{
-                    dn{"Teden"}
-                }
-                weekday{
-                    dn{"Dan v tednu"}
-                }
-                year{
-                    dn{"Leto"}
-                }
-                zone{
-                    dn{"Območje"}
                 }
             }
             monthNames{

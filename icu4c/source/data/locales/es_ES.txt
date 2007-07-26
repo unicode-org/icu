@@ -10,35 +10,16 @@ es_ES{
     Currencies{
         ESP{
             "₧",
-            "ESP",
+            "peseta española",
             {
-                "#,##0 ¤;-#,##0 ¤",
+                /**
+                 * Duplicated from NumberPatterns resource
+                 */
+                "#,##0.00 ¤",
                 ",",
                 ".",
             }
         }
-        MXN{
-            "MEX$",
-            "peso mexicano",
-        }
-        USD{
-            "US$",
-            "dólar estadounidense",
-        }
-    }
-    NumberElements{
-        ",",
-        ".",
-        ";",
-        "%",
-        "0",
-        "#",
-        "-",
-        "E",
-        "‰",
-        "∞",
-        "NaN",
-        "+",
     }
     NumberPatterns{
         "#,##0.###",
@@ -49,7 +30,7 @@ es_ES{
     Scripts{
         Ethi{"etíope"}
     }
-    Version{"1.92"}
+    Version{"1.50"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -57,21 +38,11 @@ es_ES{
                 "HH:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
-                "EEEE d' de 'MMMM' de 'yyyy",
-                "d' de 'MMMM' de 'yyyy",
+                "EEEE d 'de' MMMM 'de' yyyy",
+                "d 'de' MMMM 'de' yyyy",
                 "dd/MM/yyyy",
                 "dd/MM/yy",
                 "{1} {0}",
-            }
-            fields{
-                day{
-                    relative{
-                        "-2"{"anteayer"}
-                        "-3"{"hace tres días"}
-                        "2"{"pasado mañana"}
-                        "3"{"dentro de tres días"}
-                    }
-                }
             }
         }
     }

@@ -14,7 +14,7 @@ sr_Latn{
     Countries{
         001{"Svet"}
         002{"Afrika"}
-        003{"Severna Amerika"}
+        003{"Severnoamerički kontinent"}
         005{"Južna Amerika"}
         009{"Okeanija"}
         011{"Zapadna Afrika"}
@@ -95,7 +95,7 @@ sr_Latn{
         CS{"Srbija i Crna Gora"}
         CU{"Kuba"}
         CV{"Kape Verde"}
-        CX{"Uskršnja Ostrva"}
+        CX{"Božićna Ostrva"}
         CY{"Kipar"}
         CZ{"Češka"}
         DE{"Nemačka"}
@@ -293,6 +293,10 @@ sr_Latn{
         ZZ{"Nepoznat ili nevažeći region"}
     }
     Currencies{
+        ARS{
+            "ARS",
+            "Argentinski pezo",
+        }
         ATS{
             "ATS",
             "Austrijski šiling",
@@ -302,12 +306,24 @@ sr_Latn{
             "Australijski dolar",
         }
         BAM{
-            "KM.",
-            "Konvertibilna Marka",
+            "KM",
+            "Konvertibilna marka",
         }
         BEF{
             "BF",
             "Belgijski franak",
+        }
+        BGN{
+            "BGN",
+            "Bugarski lev",
+        }
+        BND{
+            "BND",
+            "Brunejski dolar",
+        }
+        BOB{
+            "BOB",
+            "Bolivijski Boliviano",
         }
         BRL{
             "R$",
@@ -321,13 +337,25 @@ sr_Latn{
             "SwF",
             "Švajcarski franak",
         }
+        CLP{
+            "CLP",
+            "Čileanski pezo",
+        }
         CNY{
             "U",
             "Kineski Juan Renminbi",
         }
+        COP{
+            "COP",
+            "Kolumbijski pezo",
+        }
         CSD{
             "CSD",
-            "Srpski Dinar",
+            "Srpski Dinar (Srbija i Crna Gora)",
+        }
+        CZK{
+            "CZK",
+            "Češka kruna",
         }
         DEM{
             "DEM",
@@ -336,6 +364,14 @@ sr_Latn{
         DKK{
             "DKr",
             "Danska kruna",
+        }
+        EEK{
+            "EEK",
+            "Estonska kroon",
+        }
+        EGP{
+            "EGP",
+            "Egipatska funta",
         }
         ESP{
             "ESP",
@@ -349,6 +385,10 @@ sr_Latn{
             "FIM",
             "Finska marka",
         }
+        FJD{
+            "FJD",
+            "Fidži dolar",
+        }
         FRF{
             "FRF",
             "Francuski franak",
@@ -361,6 +401,10 @@ sr_Latn{
             "GRD",
             "Drahma",
         }
+        HKD{
+            "HKD",
+            "Hong Kongski Dolari",
+        }
         HRD{
             "HRD",
             "Hrvatski dinar",
@@ -369,9 +413,17 @@ sr_Latn{
             "HRK",
             "Kuna",
         }
+        HUF{
+            "HUF",
+            "Mađarska forinta",
+        }
         IEP{
             "IR£",
             "Irska funta",
+        }
+        ILS{
+            "ILS",
+            "Izraelski šekel",
         }
         INR{
             "INR",
@@ -385,13 +437,37 @@ sr_Latn{
             "JP¥",
             "Jen",
         }
+        KES{
+            "KES",
+            "Kenijski šiling",
+        }
         KWD{
             "KD",
             "Kuvajtski dinar",
         }
+        LTL{
+            "LTL",
+            "Litvanski litas",
+        }
         LUF{
             "LUF",
             "Luksemburški franak",
+        }
+        MAD{
+            "MAD",
+            "Marokanski dirham",
+        }
+        MTL{
+            "MTL",
+            "Malteška lira",
+        }
+        MXN{
+            "MXN",
+            "Meksički peso",
+        }
+        MYR{
+            "MYR",
+            "Malezijski ringgit",
         }
         NLG{
             "NLG",
@@ -401,9 +477,17 @@ sr_Latn{
             "NKr",
             "Norveška kruna",
         }
+        NZD{
+            "NZD",
+            "Novozelandski dolar",
+        }
         PTE{
             "PTE",
             "Portugalski eskudo",
+        }
+        RSD{
+            "RSD",
+            "Srpski Dinar",
         }
         RUB{
             "RUB",
@@ -420,6 +504,10 @@ sr_Latn{
         SIT{
             "SIT",
             "Tolar",
+        }
+        TRY{
+            "TRY",
+            "Nova turska lira",
         }
         USD{
             "US$",
@@ -444,6 +532,7 @@ sr_Latn{
         af{"Afrikanerski"}
         am{"Amharski"}
         ar{"Arapski"}
+        as{"Asemijski"}
         az{"Azerbejdžanski"}
         be{"Beloruski"}
         bg{"Bugarski"}
@@ -452,74 +541,116 @@ sr_Latn{
         br{"Bretonski"}
         bs{"Bosanski"}
         ca{"Katalonski"}
+        ce{"Čečenski"}
+        chr{"Čeroki"}
         co{"Korzikanski"}
         cs{"Češki"}
+        cu{"Staroslovenski"}
+        cy{"Velški"}
         da{"Danski"}
         de{"Nemački"}
         el{"Grčki"}
         en{"Engleski"}
         en_AU{"Engleski (Australija)"}
-        en_GB{"en_GB"}
+        en_US{"Engleski (SAD)"}
         eo{"Esperanto"}
         es{"Španski"}
         et{"Estonski"}
         eu{"Baskijski"}
         fa{"Persijski"}
         fi{"Finski"}
+        fil{"Tagalog"}
+        fo{"Farski"}
         fr{"Francuski"}
+        fr_CH{"Francuski (Švajcarska)"}
+        fy{"Frizijski"}
         ga{"Irski"}
+        gd{"Škotski Galski"}
+        gl{"Galski"}
+        gn{"Gvarani"}
+        gu{"Gudžarati"}
+        haw{"Havajski"}
         he{"Hebrejski"}
         hi{"Hindi"}
         hr{"Hrvatski"}
         hu{"Mađarski"}
         hy{"Jermenski"}
+        ia{"Interlingva"}
         id{"Indonezijski"}
+        ie{"Međujezički"}
         is{"Islandski"}
         it{"Italijanski"}
         ja{"Japanski"}
+        jv{"Javanski"}
         ka{"Gruzijski"}
         km{"Kmerski"}
+        kn{"Kanada"}
         ko{"Korejski"}
         ku{"Kurdski"}
         ky{"Kirgiski"}
         la{"Latinski"}
+        ln{"Lingala"}
+        lo{"Laoški"}
         lt{"Litvanski"}
         lv{"Letonski"}
         mk{"Makedonski"}
+        ml{"Malajalam"}
         mn{"Mongolski"}
         mo{"Moldavski"}
+        mr{"Marati"}
+        ms{"Malajski"}
+        mt{"Melteški"}
         my{"Burmanski"}
+        ne{"Nepalski"}
         nl{"Holandski"}
         no{"Norveški"}
+        oc{"Provansalski"}
+        or{"Orijski"}
+        pa{"Pandžabski"}
         pl{"Poljski"}
+        ps{"Paštunski"}
         pt{"Portugalski"}
         pt_BR{"Portugalski (Brazil)"}
+        pt_PT{"Portugalski (Portugalija)"}
         rm{"Reto-Romanski"}
         ro{"Rumunski"}
         ru{"Ruski"}
         sa{"Sanskrit"}
+        sd{"Sindi"}
         sh{"Srpsko-Hrvatski"}
+        si{"Singaleski"}
         sk{"Slovački"}
         sl{"Slovenački"}
+        so{"Somalski"}
         sq{"Albanski"}
         sr{"Srpski"}
+        st{"Sesoto"}
+        su{"Sudanski"}
+        sux{"Sumerski"}
         sv{"Švedski"}
         sw{"Svahili"}
+        ta{"Tamilski"}
+        te{"Telugu"}
+        th{"Tajlandski"}
+        ti{"Tigrinja"}
+        tk{"Turkmenski"}
+        tl{"Tagalski"}
+        tlh{"Klingonski"}
         tr{"Turski"}
+        ug{"Ujgurski"}
         uk{"Ukrajinski"}
         und{"Nepoznat ili nevažeći jezik"}
+        ur{"Urdu"}
+        uz{"Uzbečki"}
         vi{"Vijetnamski"}
         yi{"Jidiš"}
         zh{"Kineski"}
+        zh_Hans{"Kineski (pojednostavljen)"}
+        zh_Hant{"Kineski (tradicionalni)"}
+        zu{"Zulu"}
     }
     LocaleScript{
         "Latn",
-    }
-    NumberPatterns{
-        "#,##0.###",
-        "¤ #,##0.00",
-        "#,##0%",
-        "#E0",
     }
     Scripts{
         Arab{"arapsko pismo"}
@@ -529,7 +660,7 @@ sr_Latn{
         Cher{"Čeroki"}
         Copt{"koptičko pismo"}
         Cyrl{"Ćirilica"}
-        Cyrs{"ćirilica (crkveno slovenska varijanta)"}
+        Cyrs{"Staroslovenska crkvena ćirilica"}
         Deva{"Devanagari"}
         Dsrt{"Dezeret"}
         Ethi{"etiopsko pismo"}
@@ -537,6 +668,8 @@ sr_Latn{
         Glag{"glagoljica"}
         Goth{"Gotika"}
         Grek{"grčko pismo"}
+        Hans{"pojednostavljeno kinesko pismo"}
+        Hant{"tradicionalno kinesko pismo"}
         Hebr{"hebrejsko pismo"}
         Hira{"Hiragana"}
         Hrkt{"Katakana ili Hiragana"}
@@ -544,6 +677,7 @@ sr_Latn{
         Khmr{"kmersko pismo"}
         Latf{"Latinica (Fraktur varijanta)"}
         Latn{"Latinica"}
+        Phnx{"Feničansko pismo"}
         Runr{"runsko pismo"}
         Zxxx{"Nepisani jezik"}
         Zzzz{"Nepoznato ili nevažeće pismo"}
@@ -559,32 +693,28 @@ sr_Latn{
             japanese{"Japanski kalendar"}
         }
         collation{
-            big5han{"Tradicionalni kineski"}
+            big5han{"Tradicionalno kinesko sortiranje"}
             direct{"Direktno sortiranje"}
-            gb2312han{"Pojednostavljeni kineski"}
+            gb2312han{"Pojednostavljeno kinesko sortiranje"}
             phonebook{"Sortiranje kao telefonski imenik"}
             pinyin{"Pinjin sortiranje"}
             stroke{"Sortiranje po broju crta"}
             traditional{"Tradicionalno sortiranje"}
         }
     }
-    Version{"1.93"}
+    Version{"1.65"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "HH.mm.ss v",
+                "HH 'časova', mm 'minuta', ss 'sekundi' vvvv",
                 "HH.mm.ss z",
-                "HH:mm:ss",
-                "HH:mm",
+                "HH.mm.ss",
+                "HH.mm",
                 "EEEE, dd. MMMM yyyy.",
                 "dd. MMMM yyyy.",
-                "yyyy-MM-dd",
-                "yy-MM-dd",
+                "dd.MM.yyyy.",
+                "d.M.yy.",
                 "{1} {0}",
-            }
-            availableFormats{
-                mmss{"mm:ss"}
-                yyMMdd{"dd.MM.yy"}
             }
             dayNames{
                 format{
@@ -622,6 +752,10 @@ sr_Latn{
             eras{
                 abbreviated{
                     "p. n. e.",
+                    "n. e",
+                }
+                narrow{
+                    "p.n.e.",
                     "n. e.",
                 }
                 wide{
@@ -631,12 +765,46 @@ sr_Latn{
             }
             fields{
                 day{
+                    dn{"dan"}
                     relative{
-                        "-2"{"juče"}
+                        "-1"{"juče"}
+                        "-2"{"prekjuče"}
                         "-3"{"pre tri dana"}
+                        "0"{"danas"}
+                        "1"{"sutra"}
                         "2"{"prekosutra"}
                         "3"{"za tri dana"}
                     }
+                }
+                dayperiod{
+                    dn{"doba dana"}
+                }
+                era{
+                    dn{"era"}
+                }
+                hour{
+                    dn{"čas"}
+                }
+                minute{
+                    dn{"minut"}
+                }
+                month{
+                    dn{"mesec"}
+                }
+                second{
+                    dn{"sekund"}
+                }
+                week{
+                    dn{"nedelja"}
+                }
+                weekday{
+                    dn{"dan u nedelji"}
+                }
+                year{
+                    dn{"godina"}
+                }
+                zone{
+                    dn{"zona"}
                 }
             }
             monthNames{
@@ -718,23 +886,485 @@ sr_Latn{
         metric{"Metrički"}
     }
     zoneStrings{
+        "Africa:Abidjan"{
+            ec{"Abidžan"}
+        }
+        "Africa:Accra"{
+            ec{"Akra"}
+        }
+        "Africa:Addis_Ababa"{
+            ec{"Adis Abeba"}
+        }
+        "Africa:Algiers"{
+            ec{"Alžir"}
+        }
+        "Africa:Asmera"{
+            ec{"Asmera"}
+        }
+        "Africa:Bamako"{
+            ec{"Bamako"}
+        }
+        "Africa:Bangui"{
+            ec{"Bangui"}
+        }
+        "Africa:Banjul"{
+            ec{"Banžul"}
+        }
+        "Africa:Bissau"{
+            ec{"Bisao"}
+        }
+        "Africa:Blantyre"{
+            ec{"Blantir"}
+        }
+        "Africa:Brazzaville"{
+            ec{"Brazavil"}
+        }
+        "Africa:Bujumbura"{
+            ec{"Budžumbura"}
+        }
+        "Africa:Cairo"{
+            ec{"Kairo"}
+        }
+        "Africa:Casablanca"{
+            ec{"Kazablanka"}
+        }
+        "Africa:Ceuta"{
+            ec{"Seuta"}
+        }
+        "Africa:Conakry"{
+            ec{"Konakri"}
+        }
+        "Africa:Dakar"{
+            ec{"Dakar"}
+        }
+        "Africa:Dar_es_Salaam"{
+            ec{"Dar-es-Salam"}
+        }
+        "Africa:Djibouti"{
+            ec{"Džibuti"}
+        }
+        "Africa:Douala"{
+            ec{"Duala"}
+        }
+        "Africa:El_Aaiun"{
+            ec{"El Ajun"}
+        }
+        "Africa:Freetown"{
+            ec{"Fritaun"}
+        }
+        "Africa:Gaborone"{
+            ec{"Gaboron"}
+        }
+        "Africa:Harare"{
+            ec{"Harare"}
+        }
+        "Africa:Johannesburg"{
+            ec{"Johanesburg"}
+        }
+        "Africa:Kampala"{
+            ec{"Kampala"}
+        }
+        "Africa:Khartoum"{
+            ec{"Kartum"}
+        }
+        "Africa:Kigali"{
+            ec{"Kigali"}
+        }
         "Africa:Kinshasa"{
             ec{"Kinšasa"}
+        }
+        "Africa:Lagos"{
+            ec{"Lagos"}
+        }
+        "Africa:Libreville"{
+            ec{"Librevil"}
+        }
+        "Africa:Lome"{
+            ec{"Lome"}
+        }
+        "Africa:Luanda"{
+            ec{"Luanda"}
         }
         "Africa:Lubumbashi"{
             ec{"Lumumbaši"}
         }
+        "Africa:Lusaka"{
+            ec{"Lusaka"}
+        }
+        "Africa:Malabo"{
+            ec{"Malabo"}
+        }
+        "Africa:Maputo"{
+            ec{"Maputo"}
+        }
+        "Africa:Maseru"{
+            ec{"Maseru"}
+        }
+        "Africa:Mbabane"{
+            ec{"Mbabane"}
+        }
+        "Africa:Mogadishu"{
+            ec{"Mogadiš"}
+        }
+        "Africa:Monrovia"{
+            ec{"Monrovija"}
+        }
+        "Africa:Nairobi"{
+            ec{"Najrobi"}
+        }
+        "Africa:Ndjamena"{
+            ec{"Ndžamena"}
+        }
+        "Africa:Niamey"{
+            ec{"Nijamej"}
+        }
+        "Africa:Nouakchott"{
+            ec{"Navakšut"}
+        }
+        "Africa:Ouagadougou"{
+            ec{"Uagadugu"}
+        }
+        "Africa:Porto-Novo"{
+            ec{"Porto Novo"}
+        }
+        "Africa:Sao_Tome"{
+            ec{"Sao Tome"}
+        }
+        "Africa:Tripoli"{
+            ec{"Tripoli"}
+        }
+        "Africa:Tunis"{
+            ec{"Tunis"}
+        }
+        "Africa:Windhoek"{
+            ec{"Vindhuk"}
+        }
+        "America:Anchorage"{
+            ec{"Enkoridž"}
+        }
+        "America:Anguilla"{
+            ec{"Angvila"}
+        }
+        "America:Antigua"{
+            ec{"Antigva"}
+        }
+        "America:Araguaina"{
+            ec{"Aragvajana"}
+        }
+        "America:Aruba"{
+            ec{"Aruba"}
+        }
+        "America:Asuncion"{
+            ec{"Asunsion"}
+        }
+        "America:Barbados"{
+            ec{"Barbados"}
+        }
+        "America:Belem"{
+            ec{"Belem"}
+        }
+        "America:Belize"{
+            ec{"Belize"}
+        }
+        "America:Boa_Vista"{
+            ec{"Boa Vista"}
+        }
+        "America:Bogota"{
+            ec{"Bogota"}
+        }
+        "America:Buenos_Aires"{
+            ec{"Buenos Aires"}
+        }
+        "America:Campo_Grande"{
+            ec{"Kampo Grande"}
+        }
+        "America:Caracas"{
+            ec{"Karakas"}
+        }
+        "America:Cayenne"{
+            ec{"Kajen"}
+        }
+        "America:Cayman"{
+            ec{"Kajmanska ostrva"}
+        }
+        "America:Costa_Rica"{
+            ec{"Kostarika"}
+        }
+        "America:Cuiaba"{
+            ec{"Kuiaba"}
+        }
+        "America:Curacao"{
+            ec{"Kiraso"}
+        }
+        "America:Danmarkshavn"{
+            ec{"Danmarkshagen"}
+        }
+        "America:Dominica"{
+            ec{"Dominika"}
+        }
+        "America:El_Salvador"{
+            ec{"Salvador"}
+        }
+        "America:Fortaleza"{
+            ec{"Fortaleza"}
+        }
+        "America:Grand_Turk"{
+            ec{"Grand Turk"}
+        }
+        "America:Grenada"{
+            ec{"Grenada"}
+        }
+        "America:Guadeloupe"{
+            ec{"Gvadalupe"}
+        }
+        "America:Guatemala"{
+            ec{"Gvatemala"}
+        }
+        "America:Guayaquil"{
+            ec{"Gvajakil"}
+        }
+        "America:Guyana"{
+            ec{"Guana"}
+        }
+        "America:Havana"{
+            ec{"Havana"}
+        }
+        "America:Jamaica"{
+            ec{"Jamajka"}
+        }
+        "America:La_Paz"{
+            ec{"La Paz"}
+        }
+        "America:Lima"{
+            ec{"Lima"}
+        }
+        "America:Maceio"{
+            ec{"Masejo"}
+        }
+        "America:Managua"{
+            ec{"Managva"}
+        }
+        "America:Manaus"{
+            ec{"Manaus"}
+        }
+        "America:Martinique"{
+            ec{"Martinik"}
+        }
+        "America:Miquelon"{
+            ec{"Mikelon"}
+        }
+        "America:Montevideo"{
+            ec{"Montevideo"}
+        }
+        "America:Montserrat"{
+            ec{"Montserat"}
+        }
+        "America:Nassau"{
+            ec{"Nasau"}
+        }
+        "America:Noronha"{
+            ec{"Noronja"}
+        }
+        "America:Panama"{
+            ec{"Panama"}
+        }
+        "America:Paramaribo"{
+            ec{"Paramirbo"}
+        }
+        "America:Port-au-Prince"{
+            ec{"Port-o-Prens"}
+        }
+        "America:Porto_Velho"{
+            ec{"Porto Veljo"}
+        }
+        "America:Puerto_Rico"{
+            ec{"Porto Riko"}
+        }
+        "America:Recife"{
+            ec{"Resife"}
+        }
+        "America:Rio_Branco"{
+            ec{"Rio Branko"}
+        }
+        "America:Santiago"{
+            ec{"Santijago"}
+        }
+        "America:Santo_Domingo"{
+            ec{"Santo Domingo"}
+        }
+        "America:Sao_Paulo"{
+            ec{"Sao Paolo"}
+        }
+        "America:Scoresbysund"{
+            ec{"Skorezbisund"}
+        }
+        "America:St_Kitts"{
+            ec{"Sent Kits"}
+        }
+        "America:St_Lucia"{
+            ec{"Sv. Lucija"}
+        }
+        "America:St_Thomas"{
+            ec{"Sv. Toma"}
+        }
+        "America:St_Vincent"{
+            ec{"Sent Vinsent"}
+        }
+        "America:Thule"{
+            ec{"Tule"}
+        }
+        "America:Tortola"{
+            ec{"Tortola"}
+        }
+        "Antarctica:Casey"{
+            ec{"Kasej"}
+        }
+        "Antarctica:Davis"{
+            ec{"Dejvis"}
+        }
+        "Antarctica:DumontDUrville"{
+            ec{"Dimon d’Urvil"}
+        }
+        "Antarctica:Mawson"{
+            ec{"Moson"}
+        }
+        "Antarctica:McMurdo"{
+            ec{"MakMurdo"}
+        }
+        "Antarctica:Palmer"{
+            ec{"Palmer"}
+        }
+        "Antarctica:Rothera"{
+            ec{"Rotera"}
+        }
         "Antarctica:South_Pole"{
             ec{"Južni pol"}
+        }
+        "Antarctica:Syowa"{
+            ec{"Šova"}
+        }
+        "Antarctica:Vostok"{
+            ec{"Vostok"}
+        }
+        "Asia:Aden"{
+            ec{"Aden"}
+        }
+        "Asia:Almaty"{
+            ec{"Alma-Ata"}
+        }
+        "Asia:Amman"{
+            ec{"Aman"}
         }
         "Asia:Anadyr"{
             ec{"Anadir"}
         }
+        "Asia:Aqtau"{
+            ec{"Aktau"}
+        }
+        "Asia:Aqtobe"{
+            ec{"Akutobe"}
+        }
+        "Asia:Ashgabat"{
+            ec{"Ašhabad"}
+        }
+        "Asia:Baghdad"{
+            ec{"Bagdad"}
+        }
+        "Asia:Bahrain"{
+            ec{"Bahrein"}
+        }
+        "Asia:Baku"{
+            ec{"Baku"}
+        }
+        "Asia:Bangkok"{
+            ec{"Bankok"}
+        }
+        "Asia:Beirut"{
+            ec{"Bejrut"}
+        }
+        "Asia:Bishkek"{
+            ec{"Biškek"}
+        }
+        "Asia:Brunei"{
+            ec{"Bruneji"}
+        }
+        "Asia:Choibalsan"{
+            ec{"Čojbalsan"}
+        }
+        "Asia:Colombo"{
+            ec{"Kolombo"}
+        }
+        "Asia:Damascus"{
+            ec{"Damask"}
+        }
+        "Asia:Dhaka"{
+            ec{"Daka"}
+        }
+        "Asia:Dili"{
+            ec{"Dili"}
+        }
+        "Asia:Dubai"{
+            ec{"Dubai"}
+        }
+        "Asia:Dushanbe"{
+            ec{"Dušanbe"}
+        }
+        "Asia:Gaza"{
+            ec{"Gaza"}
+        }
+        "Asia:Hong_Kong"{
+            ec{"Hong Kong"}
+        }
+        "Asia:Hovd"{
+            ec{"Hovd"}
+        }
+        "Asia:Jakarta"{
+            ec{"Džakarta"}
+        }
+        "Asia:Jayapura"{
+            ec{"Džajapura"}
+        }
+        "Asia:Kabul"{
+            ec{"Kabul"}
+        }
         "Asia:Kamchatka"{
             ec{"Kamčatka"}
         }
+        "Asia:Karachi"{
+            ec{"Karači"}
+        }
+        "Asia:Katmandu"{
+            ec{"Katmandu"}
+        }
         "Asia:Krasnoyarsk"{
             ec{"Krasnojarsk"}
+        }
+        "Asia:Kuala_Lumpur"{
+            ec{"Kuala Lumpur"}
+        }
+        "Asia:Kuwait"{
+            ec{"Kuvajt"}
+        }
+        "Asia:Macau"{
+            ec{"Makau"}
+        }
+        "Asia:Makassar"{
+            ec{"Makasar"}
+        }
+        "Asia:Manila"{
+            ec{"Manila"}
+        }
+        "Asia:Muscat"{
+            ec{"Muskat"}
+        }
+        "Asia:Nicosia"{
+            ec{"Nikozija"}
+        }
+        "Asia:Phnom_Penh"{
+            ec{"Pnom Pen"}
+        }
+        "Asia:Pyongyang"{
+            ec{"Pjongjang"}
         }
         "Asia:Shanghai"{
             ec{"Šangaj"}
@@ -743,7 +1373,7 @@ sr_Latn{
             ec{"Taškent"}
         }
         "Etc:Unknown"{
-            ec{"Nepoznata vremenska zona"}
+            ec{"Nepoznat ili nevažeći grad"}
         }
         "Europe:Kiev"{
             ec{"Kijev"}
@@ -752,8 +1382,7 @@ sr_Latn{
             ec{"Moskva"}
         }
         "Europe:Sarajevo"{
-            ec{"Sarajevo"}
-            ls{"Srednje Evropsko Vrijeme"}
+            ls{"Srednje Evropsko Vreme"}
         }
         "Europe:Uzhgorod"{
             ec{"Užgorod"}
@@ -761,9 +1390,84 @@ sr_Latn{
         "Europe:Zaporozhye"{
             ec{"Zaporožje"}
         }
+        "Pacific:Guam"{
+            ec{"Guam"}
+        }
+        "Pacific:Johnston"{
+            ec{"Džonston"}
+        }
+        "Pacific:Kiritimati"{
+            ec{"Kiritimati"}
+        }
+        "Pacific:Kosrae"{
+            ec{"Košre"}
+        }
+        "Pacific:Kwajalein"{
+            ec{"Kvadžalejin"}
+        }
+        "Pacific:Majuro"{
+            ec{"Majuro"}
+        }
+        "Pacific:Marquesas"{
+            ec{"Markiz"}
+        }
+        "Pacific:Midway"{
+            ec{"Midvej"}
+        }
+        "Pacific:Nauru"{
+            ec{"Nauru"}
+        }
+        "Pacific:Niue"{
+            ec{"Niue"}
+        }
+        "Pacific:Norfolk"{
+            ec{"Norfolk"}
+        }
+        "Pacific:Noumea"{
+            ec{"Numea"}
+        }
+        "Pacific:Pago_Pago"{
+            ec{"Pago Pago"}
+        }
+        "Pacific:Palau"{
+            ec{"Palau"}
+        }
+        "Pacific:Pitcairn"{
+            ec{"Pitkairn"}
+        }
+        "Pacific:Ponape"{
+            ec{"Ponape"}
+        }
+        "Pacific:Port_Moresby"{
+            ec{"Port Morzbi"}
+        }
+        "Pacific:Rarotonga"{
+            ec{"Rarotonga"}
+        }
+        "Pacific:Saipan"{
+            ec{"Sajpan"}
+        }
+        "Pacific:Tahiti"{
+            ec{"Tahiti"}
+        }
+        "Pacific:Tarawa"{
+            ec{"Tarava"}
+        }
+        "Pacific:Tongatapu"{
+            ec{"Tongatapu"}
+        }
+        "Pacific:Truk"{
+            ec{"Truk"}
+        }
+        "Pacific:Wake"{
+            ec{"Vake"}
+        }
+        "Pacific:Wallis"{
+            ec{"Valis"}
+        }
         "meta:Europe_Central"{
             ld{"Centralno Evropsko Letnje Vreme"}
-            ls{"Centralno Evropsko Vreme"}
+            ls{"Srednje Evropsko Vreme"}
         }
     }
 }

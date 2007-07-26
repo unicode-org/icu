@@ -42,7 +42,7 @@ uz_Latn{
             "Ingliz funt sterlingi",
         }
         INR{
-            "=0#Rs.|1#Re.|1<Rs.",
+            "=0#Rs.|1#Re.|1<Rs." /** (choice)  */,
             "Hind rupiyasi",
         }
         JPY{
@@ -84,7 +84,7 @@ uz_Latn{
         Cyrl{"Kiril"}
         Latn{"Lotin"}
     }
-    Version{"1.92"}
+    Version{"1.17"}
     calendar{
         gregorian{
             dayNames{
@@ -168,17 +168,17 @@ uz_Latn{
                     }
                     wide{
                         "Yanvar",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
+                        "Safar",
+                        "Rabiul-avval",
+                        "Rabiul-oxir",
+                        "Jumodiul-ulo",
+                        "Jumodiul-uxro",
+                        "Rajab",
+                        "Shaʿbon",
+                        "Ramazon",
+                        "Shavvol",
+                        "Zil-qaʿda",
+                        "Zil-hijja",
                     }
                 }
             }

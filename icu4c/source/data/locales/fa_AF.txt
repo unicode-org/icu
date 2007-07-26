@@ -208,7 +208,7 @@ fa_AF{
     Scripts{
         Mong{"مغلی"}
     }
-    Version{"1.92"}
+    Version{"1.55"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -218,18 +218,18 @@ fa_AF{
             monthNames{
                 format{
                     abbreviated{
-                        "جنوری",
-                        "فبروری",
-                        "مارچ",
-                        "اپریل",
-                        "می",
+                        "جنو",
+                        "2",
+                        "3",
+                        "4",
+                        "مـی",
                         "جون",
                         "جول",
-                        "اگست",
-                        "سپتمبر",
-                        "اکتوبر",
-                        "نومبر",
-                        "دسمبر",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "دسم",
                     }
                     wide{
                         "جنوری",

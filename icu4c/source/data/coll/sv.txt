@@ -10,8 +10,9 @@
  *  ICU <specials> source: <path>/xml/collation/sv.xml
  */
 sv{
-    Version{"1.22"}
+    Version{"1.24"}
     collations{
+        default{"reformed"}
         standard{
             Sequence{
                 "&D<<đ<<<Đ<<ð<<<Ð"

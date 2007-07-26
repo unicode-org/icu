@@ -10,13 +10,59 @@
  *  ICU <specials> source: <path>/xml/main/ko.xml
  */
 ko{
+    AuxExemplarCharacters{
+        "[> 丘 串 乃 久 乖 九 乞 乫 乾 亂 亘 交 京 仇 今 介 件 价 企 伋 伎 伽 佳 佶 侃 來 侊 供 係 俓 俱 個 倞 倦 倨 假 偈"
+        " 健 傀 傑 傾 僅 僑 價 儆 儉 儺 光 克 兢 內 公 共 其 具 兼 冀 冠 凱 刊 刮 券 刻 剋 剛 劇 劍 劒 功 加 劤 劫 勁 勍 勘"
+        " 勤 勸 勻 勾 匡 匣 區 南 卦 却 卵 卷 卿 厥 去 及 口-句 叩 叫 可 各 吉 君 告 呱 呵 咎 咬 哥 哭 啓 喀 喇 喝 喫 喬 嗜"
+        " 嘉 嘔 器 囊 困 固 圈 國 圭 圻 均 坎 坑 坤 坰 坵 垢 基 埼 堀 堅 堈 堪 堺 塊 塏 境 墾 壙 壞 夔 奇 奈 奎 契 奸 妓 妗"
+        " 姑 姜 姦 娘 娜 嫁 嬌 孔 季 孤 宏 官 客 宮 家 寄 寇 寡 寬 尻 局 居 屆 屈 岐 岡 岬 崎 崑 崗 嵌 嵐 嶇 嶠 工 巧 巨 己"
+        " 巾 干 幹 幾 庚 庫 康 廊 廐 廓 廣 建 弓 强 彊 徑 忌 急 怪 怯 恐 恝 恪 恭 悸 愆 感 愧 愷 愾 慊 慣 慤 慨 慶 慷 憩 憬"
+        " 憾 懃 懇 懦 懶 懼 戈 戒 戟 戡 扱 技 抉 拉 拏 拐 拒 拘 括 拮 拱 拳 拷 拿 捏 据 捲 捺 掘 掛 控 揀 揆 揭 擊 擎 擒 據"
+        " 擧 攪 攷 改 攻 故 敎 救 敢 敬 敲 斛 斤 旗 旣 昆 昑 景 晷 暇 暖 暠 暻 曠 曲 更 曷 朗 朞 期 机 杆 杞 杰 枏 果 枯 架"
+        "-枸 柑 柩 柬 柯 校 根 格 桀 桂 桔 桿 梏 梗 械 梱 棄 棋 棍 棘 棨 棺 楗 楠 極 槁 構 槐 槨 槪 槻 槿 樂 橄 橋 橘 機 檄"
+        " 檎 檢 櫃 欄 權 欺 款 歌 歐 歸 殼 毆 毬 氣 求 江 汨 汲 決 汽 沂 沽 洛 洸 浪 涇 淃 淇 減 渠 渴 湳 溝 溪 滑 滾 漑 潔"
+        " 潰 澗 激 濫 灌 灸 炅 炚 炬 烙 烱 煖 爛 牽 犬 狂 狗 狡 狼 獗 玖 玘 珂 珏 珖 珙 珞 珪 球 琦 琨 琪 琯 琴 瑾 璂 璟 璣"
+        " 璥 瓊 瓘 瓜 甄 甘 甲 男 畇 界 畸 畺 畿 疆 疥 疳 痂 痙 痼 癎 癩 癸 皆 皎 皐 盖 監 看 眷 睾 瞰 瞼 瞿 矜 矩 矯 硅 硬"
+        " 碁 碣 磎 磬 磯 磵 祁 祇 祈 祛 祺 禁 禽 科 稈 稼 稽 稿 穀 究 穹 空 窘 窟 窮 窺 竅 竟 竭 競 竿 筋 筐 筠 箇 箕 箝 管"
+        " 簡 粳 糠 系 糾 紀 納 紘 級 紺 絅 結 絞 給 絳 絹 絿 經 綱 綺 緊 繫 繭 繼 缺 罐 罫 羅 羈 羌 羔 群 羹 翹 考 耆 耉 耕"
+        " 耭 耿 肌 肝 股 肩 肯 肱 胛 胱 脚 脛 腔 腱 膈 膏 膠 臘 臼 舅 舊 舡 艮 艱 芎 芥 芩 芹 苛 苟 苦 苽 茄 莖 菅 菊 菌 菓"
+        " 菫 菰 落 葛 葵 蓋 蕎 蕨 薑 藁 藍 藿 蘭 蘿 虔 蚣 蛟 蝎 螺 蠟 蠱 街 衢 衲 衾 衿 袈 袞 袴 裙 裸 褐 襁 襟 襤 見 規 覡"
+        " 覲 覺 觀 角 計 記 訣 訶 詭 誇 誡 誥 課 諫 諾 謙 講 謳 謹 譏 警 譴 谷 谿 豈 貢 貫 貴 賈 購 赳 起 跏 距 跨 踞 蹇 蹶"
+        " 躬 軀 車 軌 軍 軻 較 輕 轎 轟 辜 近 迦 迲 适 逑 逕 逵 過 遣 遽 邏 那 邯 邱 郊 郎 郡 郭 酪 醵 金 鈐 鈞 鉀 鉅 鉗 鉤"
+        " 銶 鋸 鋼 錡 錤 錦 錮 鍋 鍵 鎌 鎧 鏡 鑑 鑒 鑛 開 間 閘 閣 閨 闕 關 降 階 隔 隙 雇 難 鞏 鞠 鞨 鞫 頃 頸 顆 顧 飢 餃"
+        " 館 饉 饋 饑 駒 駕 駱 騎 騏 騫 驅 驕 驚 驥 骨 高 鬼 魁 鮫 鯤 鯨 鱇 鳩 鵑 鵠 鷄 鷗 鸞 麒 麴 黔 鼓 龕 龜]"
+    }
     Countries{
         001{"세계"}
         002{"아프리카"}
         005{"남아메리카[남미]"}
         009{"오세아니아, 대양주"}
+        011{"서아프리카"}
+        013{"중앙 아메리카"}
+        014{"동부 아프리카"}
+        015{"북부 아프리카"}
+        017{"중부 아프리카"}
+        018{"남부 아프리카"}
+        019{"아메리카 대륙"}
+        029{"카리브 해 제도"}
+        030{"동아시아"}
+        034{"남아시아"}
+        035{"동남 아시아"}
+        039{"남유럽"}
+        053{"오스트레일리아와 뉴질랜드"}
+        054{"멜라네시아"}
+        057{"미크로네시아 지역"}
+        061{"폴리네시아"}
+        062{"중남 아시아"}
         142{"아시아"}
+        143{"중앙 아시아"}
+        145{"서아시아"}
         150{"유럽"}
+        151{"동유럽"}
+        154{"북유럽"}
+        155{"서유럽"}
+        172{"독립 국가 연합"}
+        419{"라틴 아메리카 및 카리브 해 제도"}
         AD{"안도라"}
         AE{"아랍에미리트 연합"}
         AF{"아프가니스탄"}
@@ -42,7 +88,7 @@ ko{
         BG{"불가리아"}
         BH{"바레인"}
         BI{"부룬디"}
-        BJ{"베넹"}
+        BJ{"베냉"}
         BM{"버뮤다"}
         BN{"브루나이"}
         BO{"볼리비아"}
@@ -56,9 +102,10 @@ ko{
         CA{"캐나다"}
         CC{"코코스제도"}
         CD{"콩고 민주공화국"}
+        CF{"중앙 아프리카 공화국"}
         CG{"콩고"}
         CH{"스위스"}
-        CI{"코트디부와르"}
+        CI{"코트디부아르"}
         CK{"쿡제도"}
         CL{"칠레"}
         CM{"카메룬"}
@@ -77,7 +124,7 @@ ko{
         DM{"도미니카"}
         DO{"도미니카 공화국"}
         DZ{"알제리"}
-        EC{"에쿠아도르"}
+        EC{"에콰도르"}
         EE{"에스토니아"}
         EG{"이집트"}
         EH{"서사하라"}
@@ -86,7 +133,7 @@ ko{
         ET{"이디오피아"}
         FI{"핀란드"}
         FJ{"피지"}
-        FK{"포클랜드제도"}
+        FK{"포클랜드 군도"}
         FM{"마이크로네시아"}
         FO{"페로제도"}
         FR{"프랑스"}
@@ -95,6 +142,7 @@ ko{
         GD{"그레나다"}
         GE{"그루지야"}
         GF{"프랑스령 기아나"}
+        GG{"건지"}
         GH{"가나"}
         GI{"지브롤터"}
         GL{"그린란드"}
@@ -112,17 +160,19 @@ ko{
         HM{"허드섬-맥도널드제도"}
         HN{"온두라스"}
         HR{"크로아티아"}
-        HT{"하이티"}
+        HT{"아이티"}
         HU{"헝가리"}
         ID{"인도네시아"}
         IE{"아일랜드"}
         IL{"이스라엘"}
+        IM{"맨 섬"}
         IN{"인도"}
         IO{"영국령인도양식민지"}
         IQ{"이라크"}
         IR{"이란"}
         IS{"아이슬란드"}
         IT{"이탈리아"}
+        JE{"저지"}
         JM{"자메이카"}
         JO{"요르단"}
         JP{"일본"}
@@ -151,8 +201,10 @@ ko{
         MA{"모로코"}
         MC{"모나코"}
         MD{"몰도바"}
+        ME{"몬테네그로"}
         MG{"마다가스카르"}
         MH{"마샬 군도"}
+        MK{"마케도니아"}
         ML{"말리"}
         MM{"미얀마"}
         MN{"몽골"}
@@ -166,7 +218,7 @@ ko{
         MV{"몰디브"}
         MW{"말라위"}
         MX{"멕시코"}
-        MY{"말레이지아"}
+        MY{"말레이시아"}
         MZ{"모잠비크"}
         NA{"나미비아"}
         NC{"뉴 칼레도니아"}
@@ -192,14 +244,19 @@ ko{
         PN{"핏케언섬"}
         PR{"푸에르토리코"}
         PS{"팔레스타인 지구"}
+        PT{"포르투갈"}
         PW{"팔라우"}
         PY{"파라과이"}
         QA{"카타르"}
+        QO{"오세아니아 외곽"}
+        QU{"유럽 연합"}
         RE{"리유니온"}
         RO{"루마니아"}
+        RS{"세르비아"}
         RU{"러시아"}
         RW{"르완다"}
         SA{"사우디아라비아"}
+        SB{"솔로몬 제도"}
         SC{"쉐이쉘"}
         SD{"수단"}
         SE{"스웨덴"}
@@ -259,6 +316,10 @@ ko{
             "ADP",
             "안도라 페세타",
         }
+        AED{
+            "AED",
+            "아랍에미레이트 디르함",
+        }
         AFA{
             "AFA",
             "아프가니 (1927-2002)",
@@ -283,6 +344,10 @@ ko{
             "AOK",
             "앙골라 콴자 (1977-1990)",
         }
+        AON{
+            "AON",
+            "앙골라 신콴자 (1990-2000)",
+        }
         AOR{
             "AOR",
             "앙골라 콴자 Reajustado (1995-1999)",
@@ -304,7 +369,7 @@ ko{
             "호주 실링",
         }
         AUD{
-            "AUD",
+            "A$",
             "호주 달러",
         }
         AWG{
@@ -315,6 +380,10 @@ ko{
             "AZM",
             "아제르바이젠 마나트",
         }
+        AZN{
+            "AZN",
+            "아제르바이잔 마나트",
+        }
         BAD{
             "BAD",
             "보스니아-헤르체고비나 디나르",
@@ -324,7 +393,7 @@ ko{
             "보스니아-헤르체고비나 태환 마르크",
         }
         BBD{
-            "BBD",
+            "Bds$",
             "바베이도스 달러",
         }
         BDT{
@@ -360,11 +429,11 @@ ko{
             "부룬디 프랑",
         }
         BMD{
-            "BMD",
+            "BM$",
             "버뮤다 달러",
         }
         BND{
-            "BND",
+            "B$",
             "부루나이 달러",
         }
         BOB{
@@ -424,11 +493,11 @@ ko{
             "벨라루스 루블",
         }
         BZD{
-            "BZD",
+            "BZ$",
             "벨리즈 달러",
         }
         CAD{
-            "CAD",
+            "Can$",
             "캐나다 달러",
         }
         CDF{
@@ -436,15 +505,15 @@ ko{
             "콩고 프랑 콩골라스",
         }
         CLP{
-            "CLP",
+            "Ch$",
             "칠레 페소",
         }
         CNY{
-            "CNY",
+            "¥",
             "중국 위안 인민폐",
         }
         COP{
-            "COP",
+            "Col$",
             "콜롬비아 페소",
         }
         CRC{
@@ -464,7 +533,7 @@ ko{
             "카보베르데 에스쿠도",
         }
         CYP{
-            "CYP",
+            "￡C",
             "싸이프러스 파운드",
         }
         CZK{
@@ -488,7 +557,7 @@ ko{
             "덴마크 크로네",
         }
         DOP{
-            "DOP",
+            "RD$",
             "도미니카 페소",
         }
         DZD{
@@ -520,7 +589,7 @@ ko{
             "이디오피아 비르",
         }
         EUR{
-            "EUR",
+            "€",
             "유로화",
         }
         FIM{
@@ -528,7 +597,7 @@ ko{
             "핀란드 마르카",
         }
         FJD{
-            "FJD",
+            "F$",
             "피지 달러",
         }
         FKP{
@@ -536,11 +605,11 @@ ko{
             "포클랜드제도 파운드",
         }
         FRF{
-            "FRF",
+            "₣",
             "프랑스 프랑",
         }
         GBP{
-            "GBP",
+            "UK£",
             "영국령 파운드 스털링",
         }
         GEK{
@@ -588,11 +657,11 @@ ko{
             "기네비쏘 페소",
         }
         GYD{
-            "GYD",
+            "G$",
             "가이아나 달러",
         }
         HKD{
-            "HKD",
+            "HK$",
             "홍콩 달러",
         }
         HNL{
@@ -632,7 +701,7 @@ ko{
             "이스라엘 신권 세켈",
         }
         INR{
-            "INR",
+            "=0#Rs.|1#Re.|1<Rs." /** (choice)  */,
             "인도 루피",
         }
         IQD{
@@ -648,7 +717,7 @@ ko{
             "아이슬란드 크로나",
         }
         ITL{
-            "ITL",
+            "₤",
             "이탈리아 리라",
         }
         JMD{
@@ -680,7 +749,7 @@ ko{
             "코모르 프랑",
         }
         KPW{
-            "KPW",
+            "₩",
             "조선 민주주의 인민 공화국 원",
         }
         KRW{
@@ -719,6 +788,10 @@ ko{
             "LSL",
             "레소토 로티",
         }
+        LSM{
+            "LSM",
+            "로티",
+        }
         LTL{
             "LTL",
             "리투아니아 리타",
@@ -727,9 +800,17 @@ ko{
             "LTT",
             "룩셈부르크 타로나",
         }
+        LUC{
+            "LUC",
+            "룩셈부르크 변환 프랑",
+        }
         LUF{
             "LUF",
             "룩셈부르크 프랑",
+        }
+        LUL{
+            "LUL",
+            "룩셈부르크 재정 프랑",
         }
         LVL{
             "LVL",
@@ -823,8 +904,8 @@ ko{
             "MZE",
             "모잠비크 에스쿠도",
         }
-        MZM{
-            "MZM",
+        MZN{
+            "MZN",
             "모잠비크 메티칼",
         }
         NAD{
@@ -915,6 +996,10 @@ ko{
             "ROL",
             "루마니아 레이",
         }
+        RON{
+            "RON",
+            "루마니아 레우",
+        }
         RSD{
             "RSD",
             "세르비아 디나르",
@@ -956,7 +1041,7 @@ ko{
             "스웨덴 크로나",
         }
         SGD{
-            "SGD",
+            "S$",
             "싱가폴 달러",
         }
         SHP{
@@ -1036,7 +1121,7 @@ ko{
             "트리니다드 토바고 달러",
         }
         TWD{
-            "TWD",
+            "NT$",
             "대만 신권 달러",
         }
         TZS{
@@ -1056,7 +1141,7 @@ ko{
             "우간다 실링",
         }
         USD{
-            "USD",
+            "US$",
             "미국 달러",
         }
         UYP{
@@ -1087,9 +1172,29 @@ ko{
             "WST",
             "서 사모아 탈라",
         }
+        XAF{
+            "XAF",
+            "CFA 프랑 BEAC",
+        }
         XAU{
             "XAU",
             "금",
+        }
+        XBA{
+            "XBA",
+            "유르코 (유럽 회계 단위)",
+        }
+        XBB{
+            "XBB",
+            "유럽 통화 동맹",
+        }
+        XBC{
+            "XBC",
+            "유럽 계산 단위 (XBC)",
+        }
+        XBD{
+            "XBD",
+            "유럽 계산 단위 (XBD)",
         }
         XCD{
             "XCD",
@@ -1110,6 +1215,14 @@ ko{
         XFU{
             "XFU",
             "프랑스 UIC-프랑",
+        }
+        XOF{
+            "XOF",
+            "CFA 프랑 BCEAO",
+        }
+        XPF{
+            "XPF",
+            "CFP 프랑",
         }
         YDD{
             "YDD",
@@ -1218,7 +1331,7 @@ ko{
     }
     Keys{
         calendar{"달력"}
-        collation{"조합"}
+        collation{"정렬"}
         currency{"통화"}
     }
     Languages{
@@ -1231,9 +1344,12 @@ ko{
         af{"남아공 공용어"}
         afa{"아시아-아프리카어 (기타)"}
         afh{"아프리히리어"}
+        ain{"아이누어"}
         ak{"아칸어"}
         akk{"아카드어"}
         ale{"알류트어"}
+        alg{"알공킨어족"}
+        alt{"남부 알타이어"}
         am{"암하라어"}
         an{"아라곤어"}
         apa{"아파치어"}
@@ -1245,6 +1361,8 @@ ko{
         arw{"아라와크어"}
         as{"아샘어"}
         ast{"아스투리아어"}
+        ath{"아타파스카어군"}
+        aus{"오스트레일리아어족"}
         av{"아바릭어"}
         awa{"아와히어"}
         ay{"아이마라어"}
@@ -1281,23 +1399,31 @@ ko{
         cai{"중앙 아메리카 인디안어 (기타)"}
         car{"카리브어"}
         cau{"카프카스어 (기타)"}
+        ce{"체첸어"}
         ceb{"세부아노어"}
         cel{"켈트어 (기타)"}
         ch{"차모로어"}
         chb{"치브차어"}
         chg{"차가타이어"}
+        chk{"추크어"}
         chm{"마리어"}
         chn{"치누크어와 영어 프랑스어의 혼성어"}
         cho{"촉토어"}
         chp{"치페우얀"}
         chr{"체로키어"}
         chy{"샤이엔어"}
+        cmc{"참어군"}
         co{"코르시카어"}
         cop{"콥트어"}
+        cpe{"크리올어 및 피진어 (영어를 기반으로 한 기타)"}
+        cpf{"크리올어 및 피진어 (프랑스어를 기반으로 한 기타)"}
+        cpp{"크리올어 및 피진어 (포르투갈어를 기반으로 한 기타)"}
         cr{"크리어"}
         crh{"크리민 터키어; 크리민 타타르어"}
+        crp{"크리올어 및 피진어 (기타)"}
         cs{"체코어"}
         csb{"카슈비아어"}
+        cu{"교회 슬라브어"}
         cv{"추바시어"}
         cy{"웨일스어"}
         da{"덴마크어"}
@@ -1311,9 +1437,12 @@ ko{
         din{"딩카어"}
         doi{"도그리어"}
         dra{"드라비다어 (기타)"}
+        dsb{"저지 소르비아어"}
         dua{"드와라어"}
+        dum{"중세 네덜란드어"}
         dv{"디베히어"}
         dyu{"드율라어"}
+        dz{"종카어"}
         ee{"에웨어"}
         efi{"이픽어"}
         egy{"이집트어 (고대)"}
@@ -1321,12 +1450,15 @@ ko{
         el{"그리스어"}
         elx{"엘람어"}
         en{"영어"}
+        en_AU{"영어(호주)"}
         enm{"영어, 중세 (1100-1500)"}
         eo{"에스페란토어"}
         es{"스페인어"}
+        es_419{"중남미 스페인어"}
         et{"에스토니아어"}
         eu{"바스크어"}
         ewo{"이원도어"}
+        fa{"페르시아어"}
         fan{"팡그어"}
         fat{"판티어"}
         ff{"풀라어"}
@@ -1334,20 +1466,27 @@ ko{
         fil{"필리핀어"}
         fiu{"피노우그리아어 (기타)"}
         fj{"피지어"}
-        fo{"페로스어"}
+        fo{"페로어"}
         fon{"폰어"}
         fr{"프랑스어"}
+        frm{"중세 프랑스어"}
+        fro{"고대 프랑스어"}
+        frr{"북부 프리슬란드어"}
+        frs{"동부 프리슬란드어"}
         fur{"프리우리안어"}
         fy{"프리지아어"}
         ga{"아일랜드어"}
         gaa{"가어"}
         gay{"가요어"}
         gba{"그바야어"}
+        gd{"스코틀랜드 게일어"}
         gem{"독일어 (기타)"}
         gez{"게이즈어"}
         gil{"키리바시어"}
         gl{"갈리시아어"}
-        gn{"구아라니어"}
+        gmh{"중세 고지 독일어"}
+        gn{"과라니어"}
+        goh{"고대 고지 독일어"}
         gon{"곤디어"}
         gor{"고론탈로어"}
         got{"고트어"}
@@ -1356,7 +1495,7 @@ ko{
         gu{"구자라트어"}
         gv{"맹크스어"}
         gwi{"그위친어"}
-        ha{"하우자어"}
+        ha{"하우사어"}
         hai{"하이다어"}
         haw{"하와이어"}
         he{"히브리어"}
@@ -1376,6 +1515,7 @@ ko{
         id{"인도네시아어"}
         ie{"인테르링구에"}
         ig{"이그보어"}
+        ii{"쓰촨 이어"}
         ijo{"이조어"}
         ik{"이누피아크어"}
         ilo{"이로코어"}
@@ -1401,23 +1541,28 @@ ko{
         kar{"카렌어"}
         kaw{"카위어"}
         kbd{"카바르디어"}
+        kfo{"코로어"}
         kg{"콩고어"}
         kha{"카시어"}
         khi{"코이산어 (기타)"}
+        kho{"호탄어"}
         ki{"키쿠유어"}
         kj{"쿠안야마어"}
         kk{"카자흐어"}
-        kl{"그린랜드어"}
+        kl{"그린란드어"}
         km{"캄보디아어"}
+        kmb{"킴분두어"}
         ko{"한국어"}
         kok{"코카니어"}
         kos{"코스라이엔어"}
+        kpe{"크펠레어"}
         kr{"칸누리어"}
         krc{"카라챠이-발카르어"}
+        krl{"카렐리야어"}
         kro{"크루어"}
         kru{"쿠르크어"}
         ks{"카슈미르어"}
-        ku{"크르드어"}
+        ku{"쿠르드어"}
         kum{"쿠믹어"}
         kut{"쿠테네어"}
         kv{"코미어"}
@@ -1443,6 +1588,7 @@ ko{
         luo{"루오어"}
         lus{"루샤이어"}
         lv{"라트비아어"}
+        mad{"마두라어"}
         mag{"마가히"}
         mai{"마이틸리"}
         mak{"마카사어"}
@@ -1462,11 +1608,11 @@ ko{
         mk{"마케도니아어"}
         mkh{"몬크메르어 (기타)"}
         ml{"말라얄람어"}
-        mn{"몽골어"}
+        mn{"몽고어"}
         mnc{"만주어"}
         mni{"마니푸리어"}
         mno{"마노보어"}
-        mo{"몰다비아어"}
+        mo{"몰도바어"}
         moh{"모호크어"}
         mos{"모시어"}
         mr{"마라티어"}
@@ -1485,13 +1631,15 @@ ko{
         nap{"나폴리어"}
         nb{"보크말 노르웨이어"}
         nd{"은데벨레어, 북부"}
+        nds{"저지 독일어"}
         ne{"네팔어"}
+        new{"네와르어"}
         ng{"느동가어"}
         nia{"니아스어"}
         nic{"니제르 - 코르도파니아어 (기타)"}
         niu{"니웨언어"}
         nl{"네덜란드어"}
-        nn{"뉘노르스크 노르웨이어"}
+        nn{"노르웨이어(뉴노시크)"}
         no{"노르웨이어"}
         nog{"노가이어"}
         non{"노르웨이, 고대"}
@@ -1499,6 +1647,7 @@ ko{
         nso{"소토어, 북부"}
         nub{"누비안어"}
         nv{"나바호어"}
+        nwc{"네와르어 (고전)"}
         ny{"니안자어; 치츄어; 츄어"}
         nym{"니암웨지어"}
         nyn{"니안콜어"}
@@ -1515,9 +1664,11 @@ ko{
         pa{"펀잡어"}
         paa{"파푸아어 (기타)"}
         pag{"판가시난어"}
+        pal{"팔레비어"}
         pam{"팜팡가어"}
         pap{"파피아먼토어"}
         pau{"파라우안어"}
+        peo{"고대 페르시아어"}
         phi{"필리핀어 (기타)"}
         phn{"페니키아어"}
         pi{"팔리어"}
@@ -1525,15 +1676,19 @@ ko{
         pon{"폼페이어"}
         pra{"프라크리트어"}
         ps{"파시토어 (푸시토)"}
+        pt{"포르투갈어"}
+        pt_PT{"포르투갈어(포르투갈)"}
         qu{"케추아어"}
         raj{"라자스탄어"}
         rap{"라파뉴이"}
+        rar{"라로통가어"}
         rm{"레토로만어"}
+        rn{"룬디어"}
         ro{"루마니아어"}
         roa{"로망스어 (기타)"}
         rom{"집시어"}
         ru{"러시아어"}
-        rw{"반투어(루완다)"}
+        rw{"르완다어"}
         sa{"산스크리트어"}
         sad{"산다웨어"}
         sah{"야큐트어"}
@@ -1543,6 +1698,7 @@ ko{
         sas{"사사크어"}
         sat{"산탈리어"}
         sc{"사르디니아어"}
+        scn{"시칠리아어"}
         sco{"스코틀랜드어"}
         sd{"신디어"}
         se{"북부 사미어"}
@@ -1551,7 +1707,7 @@ ko{
         sg{"산고어"}
         sga{"아일랜드, 고대 (900년 까지)"}
         sgn{"수화"}
-        sh{"세르보크로아티아어"}
+        sh{"세르비아-크로아티아어"}
         shn{"샨어"}
         si{"스리랑카어"}
         sid{"시다모어"}
@@ -1573,8 +1729,10 @@ ko{
         son{"송가이족어"}
         sq{"알바니아어"}
         sr{"세르비아어"}
+        srn{"스라난 통가어"}
         ss{"시스와티어"}
         ssa{"니로-사하람어 (기타)"}
+        st{"소토어 (남부)"}
         su{"순다어"}
         suk{"수쿠마족어"}
         sus{"수수어"}
@@ -1596,6 +1754,7 @@ ko{
         tk{"투르크멘어"}
         tkl{"토켈라우제도어"}
         tl{"타갈로그어"}
+        tlh{"클링온어"}
         tli{"틀링깃족어"}
         tmh{"타마섹어"}
         tn{"세츠와나어"}
@@ -1607,6 +1766,7 @@ ko{
         tt{"타타르어"}
         tum{"툼부카어"}
         tup{"투피어"}
+        tut{"알타이어족 (기타)"}
         tvl{"투발루어"}
         tw{"트위어"}
         ty{"타히티어"}
@@ -1642,6 +1802,7 @@ ko{
         zap{"사포테크어"}
         zen{"제나가어"}
         zh{"중국어"}
+        zh_Hans{"중국어(간체)"}
         znd{"아잔데족어"}
         zu{"줄루어"}
         zun{"주니어"}
@@ -1650,20 +1811,6 @@ ko{
         "Hang",
         "Hani",
     }
-    NumberElements{
-        ".",
-        ",",
-        ";",
-        "%",
-        "0",
-        "#",
-        "-",
-        "E",
-        "‰",
-        "∞",
-        "NaN",
-        "+",
-    }
     NumberPatterns{
         "#,##0.###",
         "¤#,##0.00",
@@ -1671,33 +1818,44 @@ ko{
         "#E0",
     }
     Scripts{
-        Arab{"아랍어"}
-        Armn{"아르메니아어"}
-        Beng{"벵골어"}
+        Arab{"아랍 문자"}
+        Armn{"아르메니아 문자"}
+        Bali{"발리 문자"}
+        Batk{"바타크 문자"}
+        Beng{"벵골 문자"}
         Bopo{"주음부호"}
-        Buhd{"부히드어"}
+        Bugi{"부기 문자"}
+        Buhd{"부히드 문자"}
         Cans{"통합 캐나다 토착어"}
-        Cher{"체로키어"}
-        Copt{"콥트어"}
-        Cprt{"키프로스어"}
-        Cyrl{"키릴어"}
-        Dsrt{"디저렛어"}
-        Ethi{"에티오피아어"}
-        Goth{"고트어"}
-        Grek{"그리스어"}
-        Gujr{"구쟈라티어"}
-        Guru{"구루묵히"}
-        Hani{"한족어"}
+        Cher{"체로키 문자"}
+        Copt{"콥트 문자"}
+        Cprt{"키프로스 문자"}
+        Cyrl{"키릴 문자"}
+        Deva{"데바나가리"}
+        Dsrt{"디저렛 문자"}
+        Ethi{"에티오피아 문자"}
+        Geor{"그루지야 문자"}
+        Goth{"고트 문자"}
+        Grek{"그리스 문자"}
+        Gujr{"구쟈라티 문자"}
+        Guru{"구르무키 문자"}
+        Hani{"한자"}
         Hano{"하누누어"}
         Hans{"중국어 간체"}
         Hant{"중국어 번체"}
         Hebr{"히브리어"}
         Hira{"히라카나"}
+        Hrkt{"가나"}
+        Hung{"고대 헝가리 문자"}
+        Inds{"인더스 문자"}
         Ital{"고이탈리아어"}
+        Java{"자바 문자"}
         Kana{"가타카나"}
         Khmr{"크메르어"}
         Knda{"칸나다"}
         Laoo{"라오어"}
+        Latf{"독일식 로마자"}
+        Latg{"아일랜드식 로마자"}
         Latn{"라틴어"}
         Limb{"림부어"}
         Linb{"선형 문자 B"}
@@ -1710,6 +1868,9 @@ ko{
         Shaw{"샤비안어"}
         Sinh{"신할라어"}
         Syrc{"시리아어"}
+        Syre{"에스트랑겔로식 시리아 문자"}
+        Syrj{"서부 시리아 문자"}
+        Syrn{"동부 시리아 문자"}
         Tagb{"타반와어"}
         Tale{"타이 레어"}
         Taml{"타밀어"}
@@ -1719,6 +1880,7 @@ ko{
         Thai{"태국어"}
         Tibt{"티벳어"}
         Ugar{"우가릿어"}
+        Xpeo{"고대 페르시아 문자"}
         Yiii{"이어"}
     }
     Types{
@@ -1732,7 +1894,9 @@ ko{
             japanese{"일본력"}
         }
         collation{
+            big5han{"중국어 번체 정렬 순서 - Big5"}
             direct{"순서"}
+            gb2312han{"중국어 간체 정렬 순서 - GB2312"}
             phonebook{"전화번호부순"}
             pinyin{"병음순"}
             stroke{"자획순"}
@@ -1742,8 +1906,15 @@ ko{
     Variants{
         REVISED{"개정"}
     }
-    Version{"1.92"}
+    Version{"1.95"}
     calendar{
+        buddhist{
+            eras{
+                abbreviated{
+                    "불기",
+                }
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "오전",
@@ -1751,14 +1922,27 @@ ko{
             }
             DateTimePatterns{
                 "a hh시 mm분 ss초 v",
-                "HH:mm:ss z",
+                "a hh시 mm분 ss초 z",
                 "a h:mm:ss",
                 "a h:mm",
-                "yyyy'년' M'월' d'일' EEEE",
-                "yyyy'년' M'월' d'일'",
-                "yyyy. MM. dd",
-                "yy. MM. dd",
+                "yyyy년 M월 d일 EEEE",
+                "yyyy년 M월 d일",
+                "yyyy. M. d.",
+                "yy. M. d.",
                 "{1} {0}",
+            }
+            availableFormats{
+                Ed{"d일 (E)"}
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                Hms{"H시 m분 s초"}
+                MMMEd{"MMM d일 (E)"}
+                MMMMd{"MMMM d일"}
+                Md{"M.  d."}
+                mmss{"mm:ss"}
+                yyMMM{"yy년 MMM"}
+                yyQ{"yy년 Q분기"}
+                yyyyMM{"yyyy. MM"}
             }
             dayNames{
                 format{
@@ -1806,12 +1990,20 @@ ko{
             fields{
                 day{
                     dn{"일"}
+                    relative{
+                        "-1"{"어제"}
+                        "-2"{"그제"}
+                        "-3"{"그끄제"}
+                        "0"{"오늘"}
+                        "1"{"내일"}
+                        "2"{"모레"}
+                    }
                 }
                 dayperiod{
                     dn{"오전/오후"}
                 }
                 era{
-                    dn{"연대"}
+                    dn{"연호"}
                 }
                 hour{
                     dn{"시"}
@@ -1820,7 +2012,7 @@ ko{
                     dn{"분"}
                 }
                 month{
-                    dn{"달"}
+                    dn{"월"}
                 }
                 second{
                     dn{"초"}
@@ -1835,7 +2027,7 @@ ko{
                     dn{"년"}
                 }
                 zone{
-                    dn{"지역"}
+                    dn{"시간대"}
                 }
             }
             monthNames{
@@ -1889,22 +2081,16 @@ ko{
             quarters{
                 format{
                     abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "제 4사분기",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
+                        "1분기",
+                        "2분기",
+                        "3분기",
+                        "4분기",
                     }
                     wide{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "제 4사분기",
+                        "제 1/4분기",
+                        "제 2/4분기",
+                        "제 3/4분기",
+                        "제 4/4분기",
                     }
                 }
                 stand-alone{
@@ -1924,33 +2110,183 @@ ko{
         quotationEnd{"’"}
         quotationStart{"‘"}
     }
+    measurementSystemNames{
+        metric{"미터법"}
+    }
     zoneStrings{
+        "Africa:Abidjan"{
+            ec{"아비장"}
+        }
+        "Africa:Accra"{
+            ec{"아크라"}
+        }
+        "Africa:Addis_Ababa"{
+            ec{"아디스아바바"}
+        }
+        "Africa:Asmera"{
+            ec{"아스메라"}
+        }
+        "Africa:Bamako"{
+            ec{"바마코"}
+        }
+        "Africa:Bangui"{
+            ec{"방기"}
+        }
+        "Africa:Banjul"{
+            ec{"반줄"}
+        }
+        "Africa:Blantyre"{
+            ec{"블랜타이어"}
+        }
+        "Africa:Brazzaville"{
+            ec{"브라자빌"}
+        }
+        "Africa:Bujumbura"{
+            ec{"부줌부라"}
+        }
+        "Africa:Cairo"{
+            ec{"카이로"}
+        }
         "Africa:Casablanca"{
             ec{"카사블랑카"}
         }
         "Africa:Ceuta"{
             ec{"세우타"}
         }
+        "Africa:Conakry"{
+            ec{"코나크리"}
+        }
+        "Africa:Dakar"{
+            ec{"다카르"}
+        }
+        "Africa:Dar_es_Salaam"{
+            ec{"다르에스살람"}
+        }
+        "Africa:Djibouti"{
+            ec{"지부티"}
+        }
+        "Africa:Douala"{
+            ec{"두알라"}
+        }
+        "Africa:El_Aaiun"{
+            ec{"엘아이운"}
+        }
+        "Africa:Freetown"{
+            ec{"프리타운"}
+        }
+        "Africa:Harare"{
+            ec{"하라레"}
+        }
+        "Africa:Johannesburg"{
+            ec{"요하네스버그"}
+        }
+        "Africa:Kampala"{
+            ec{"캄팔라"}
+        }
+        "Africa:Khartoum"{
+            ec{"카르툼"}
+        }
+        "Africa:Kigali"{
+            ec{"키갈리"}
+        }
         "Africa:Kinshasa"{
             ec{"킨샤사"}
+        }
+        "Africa:Lagos"{
+            ec{"라고스"}
+        }
+        "Africa:Libreville"{
+            ec{"리브르빌"}
+        }
+        "Africa:Lome"{
+            ec{"로메"}
+        }
+        "Africa:Luanda"{
+            ec{"루안다"}
         }
         "Africa:Lubumbashi"{
             ec{"루붐바시"}
         }
+        "Africa:Lusaka"{
+            ec{"루사카"}
+        }
+        "Africa:Malabo"{
+            ec{"말라보"}
+        }
+        "Africa:Maputo"{
+            ec{"마푸토"}
+        }
+        "Africa:Maseru"{
+            ec{"마세루"}
+        }
+        "Africa:Mbabane"{
+            ec{"음바바네"}
+        }
+        "Africa:Mogadishu"{
+            ec{"모가디슈"}
+        }
+        "Africa:Monrovia"{
+            ec{"몬로비아"}
+        }
+        "Africa:Nairobi"{
+            ec{"나이로비"}
+        }
+        "Africa:Ndjamena"{
+            ec{"엔자메나"}
+        }
+        "Africa:Niamey"{
+            ec{"니아메"}
+        }
+        "Africa:Nouakchott"{
+            ec{"누악쇼트"}
+        }
+        "Africa:Ouagadougou"{
+            ec{"와가두구"}
+        }
+        "Africa:Porto-Novo"{
+            ec{"포르토노보"}
+        }
+        "Africa:Tripoli"{
+            ec{"트리폴리"}
+        }
+        "Africa:Tunis"{
+            ec{"튀니스"}
+        }
         "America:Anchorage"{
             ec{"앵커리지"}
+        }
+        "America:Anguilla"{
+            ec{"앙귈라"}
+        }
+        "America:Antigua"{
+            ec{"안티과"}
         }
         "America:Araguaina"{
             ec{"아라과이나"}
         }
+        "America:Aruba"{
+            ec{"아루바"}
+        }
+        "America:Asuncion"{
+            ec{"아순시온"}
+        }
         "America:Bahia"{
             ec{"바히아"}
+        }
+        "America:Barbados"{
+            ec{"바베이도스"}
         }
         "America:Belem"{
             ec{"벨렘"}
         }
+        "America:Belize"{
+            ec{"벨리즈"}
+        }
         "America:Boa_Vista"{
             ec{"보아 비스타"}
+        }
+        "America:Bogota"{
+            ec{"보고타"}
         }
         "America:Buenos_Aires"{
             ec{"부에노스 아이레스"}
@@ -1958,8 +2294,14 @@ ko{
         "America:Campo_Grande"{
             ec{"캄포 그란데"}
         }
+        "America:Caracas"{
+            ec{"카라카스"}
+        }
         "America:Chicago"{
             ec{"시카고"}
+        }
+        "America:Costa_Rica"{
+            ec{"코스타리카"}
         }
         "America:Cuiaba"{
             ec{"쿠이아바"}
@@ -1970,11 +2312,23 @@ ko{
         "America:Denver"{
             ec{"덴버"}
         }
+        "America:Dominica"{
+            ec{"도미니카"}
+        }
+        "America:El_Salvador"{
+            ec{"엘살바도르"}
+        }
         "America:Fortaleza"{
             ec{"포르탈레자"}
         }
         "America:Godthab"{
             ec{"고드호프"}
+        }
+        "America:Grand_Turk"{
+            ec{"그랜드 터크"}
+        }
+        "America:Guatemala"{
+            ec{"과테말라"}
         }
         "America:Guayaquil"{
             ec{"과야킬"}
@@ -1982,20 +2336,65 @@ ko{
         "America:Halifax"{
             ec{"핼리팩스"}
         }
+        "America:Havana"{
+            ec{"하바나"}
+        }
         "America:Indianapolis"{
             ec{"인디애나폴리스"}
+        }
+        "America:Jamaica"{
+            ec{"자메이카"}
+        }
+        "America:La_Paz"{
+            ec{"라파스"}
+        }
+        "America:Lima"{
+            ec{"리마"}
         }
         "America:Los_Angeles"{
             ec{"로스앤젤레스"}
         }
+        "America:Maceio"{
+            ec{"마세이오"}
+        }
+        "America:Managua"{
+            ec{"마나과"}
+        }
+        "America:Manaus"{
+            ec{"마나우스"}
+        }
+        "America:Martinique"{
+            ec{"마티니크"}
+        }
+        "America:Montevideo"{
+            ec{"몬테비데오"}
+        }
+        "America:Nassau"{
+            ec{"나소"}
+        }
         "America:New_York"{
             ec{"뉴욕"}
+        }
+        "America:Panama"{
+            ec{"파나마"}
+        }
+        "America:Paramaribo"{
+            ec{"파라마리보"}
         }
         "America:Phoenix"{
             ec{"피닉스"}
         }
+        "America:Port-au-Prince"{
+            ec{"포르토프랭스"}
+        }
+        "America:Port_of_Spain"{
+            ec{"포트오브스페인"}
+        }
         "America:Porto_Velho"{
             ec{"포르토 벨로"}
+        }
+        "America:Puerto_Rico"{
+            ec{"푸에르토리코"}
         }
         "America:Recife"{
             ec{"레시페"}
@@ -2006,6 +2405,9 @@ ko{
         "America:Santiago"{
             ec{"산티아고"}
         }
+        "America:Santo_Domingo"{
+            ec{"산토도밍고"}
+        }
         "America:Sao_Paulo"{
             ec{"상파울로"}
         }
@@ -2015,8 +2417,23 @@ ko{
         "America:St_Johns"{
             ec{"St. Johns"}
         }
+        "America:St_Kitts"{
+            ec{"세인트 키츠"}
+        }
+        "America:St_Lucia"{
+            ec{"세인트 루시아"}
+        }
+        "America:St_Thomas"{
+            ec{"세인트 토마스"}
+        }
+        "America:St_Vincent"{
+            ec{"세인트 빈센트"}
+        }
         "America:Thule"{
             ec{"툴레"}
+        }
+        "America:Tortola"{
+            ec{"토르톨라"}
         }
         "Antarctica:Casey"{
             ec{"케이시"}
@@ -2048,8 +2465,14 @@ ko{
         "Antarctica:Vostok"{
             ec{"보스토크"}
         }
+        "Asia:Aden"{
+            ec{"아덴"}
+        }
         "Asia:Almaty"{
             ec{"알마티"}
+        }
+        "Asia:Amman"{
+            ec{"암만"}
         }
         "Asia:Aqtau"{
             ec{"아크타우"}
@@ -2057,8 +2480,53 @@ ko{
         "Asia:Aqtobe"{
             ec{"악토브"}
         }
+        "Asia:Baghdad"{
+            ec{"바그다드"}
+        }
+        "Asia:Bahrain"{
+            ec{"바레인"}
+        }
+        "Asia:Baku"{
+            ec{"바쿠"}
+        }
+        "Asia:Bangkok"{
+            ec{"방콕"}
+        }
+        "Asia:Beirut"{
+            ec{"베이루트"}
+        }
+        "Asia:Bishkek"{
+            ec{"비슈케크"}
+        }
+        "Asia:Brunei"{
+            ec{"브루나이"}
+        }
         "Asia:Choibalsan"{
             ec{"초이발산"}
+        }
+        "Asia:Colombo"{
+            ec{"콜롬보"}
+        }
+        "Asia:Damascus"{
+            ec{"다마스쿠스"}
+        }
+        "Asia:Dhaka"{
+            ec{"다카"}
+        }
+        "Asia:Dili"{
+            ec{"딜리"}
+        }
+        "Asia:Dubai"{
+            ec{"두바이"}
+        }
+        "Asia:Dushanbe"{
+            ec{"두샨베"}
+        }
+        "Asia:Gaza"{
+            ec{"가자"}
+        }
+        "Asia:Hong_Kong"{
+            ec{"홍콩"}
         }
         "Asia:Hovd"{
             ec{"호브드"}
@@ -2072,11 +2540,53 @@ ko{
         "Asia:Jerusalem"{
             ec{"예루살렘"}
         }
+        "Asia:Kabul"{
+            ec{"카불"}
+        }
+        "Asia:Karachi"{
+            ec{"카라치"}
+        }
+        "Asia:Katmandu"{
+            ec{"카트만두"}
+        }
         "Asia:Kuala_Lumpur"{
             ec{"쿠알라룸푸르"}
         }
+        "Asia:Kuwait"{
+            ec{"쿠웨이트"}
+        }
+        "Asia:Macau"{
+            ec{"마카오"}
+        }
         "Asia:Makassar"{
             ec{"마카사르"}
+        }
+        "Asia:Manila"{
+            ec{"마닐라"}
+        }
+        "Asia:Muscat"{
+            ec{"무스카트"}
+        }
+        "Asia:Nicosia"{
+            ec{"니코시아"}
+        }
+        "Asia:Phnom_Penh"{
+            ec{"프놈펜"}
+        }
+        "Asia:Pyongyang"{
+            ec{"평양"}
+        }
+        "Asia:Qatar"{
+            ec{"카타르"}
+        }
+        "Asia:Rangoon"{
+            ec{"랑군"}
+        }
+        "Asia:Riyadh"{
+            ec{"리야드"}
+        }
+        "Asia:Saigon"{
+            ec{"사이공"}
         }
         "Asia:Seoul"{
             ec{"서울"}
@@ -2084,8 +2594,23 @@ ko{
         "Asia:Shanghai"{
             ec{"상하이"}
         }
+        "Asia:Singapore"{
+            ec{"싱가포르"}
+        }
+        "Asia:Taipei"{
+            ec{"타이베이"}
+        }
         "Asia:Tashkent"{
             ec{"타슈켄트"}
+        }
+        "Asia:Tbilisi"{
+            ec{"트빌리시"}
+        }
+        "Asia:Tehran"{
+            ec{"테헤란"}
+        }
+        "Asia:Thimphu"{
+            ec{"팀부"}
         }
         "Asia:Tokyo"{
             ec{"도쿄"}
@@ -2093,14 +2618,161 @@ ko{
         "Asia:Ulaanbaatar"{
             ec{"울란바토르"}
         }
+        "Asia:Vientiane"{
+            ec{"비엔티안"}
+        }
+        "Asia:Yerevan"{
+            ec{"예레반"}
+        }
         "Atlantic:Azores"{
             ec{"아조레스"}
+        }
+        "Atlantic:Bermuda"{
+            ec{"버뮤다"}
+        }
+        "Atlantic:Canary"{
+            ec{"카나리아 제도"}
+        }
+        "Atlantic:Cape_Verde"{
+            ec{"카보 베르데"}
+        }
+        "Atlantic:Reykjavik"{
+            ec{"레이캬비크"}
+        }
+        "Atlantic:St_Helena"{
+            ec{"세인트 헬레나"}
+        }
+        "Atlantic:Stanley"{
+            ec{"스탠리"}
+        }
+        "Europe:Amsterdam"{
+            ec{"암스텔담"}
+        }
+        "Europe:Andorra"{
+            ec{"안도라"}
+        }
+        "Europe:Athens"{
+            ec{"아테네"}
+        }
+        "Europe:Berlin"{
+            ec{"베를린"}
+        }
+        "Europe:Brussels"{
+            ec{"브뤼셀"}
         }
         "Europe:Bucharest"{
             ec{"부쿠레슈티"}
         }
+        "Europe:Budapest"{
+            ec{"부다페스트"}
+        }
+        "Europe:Chisinau"{
+            ec{"키시나우"}
+        }
+        "Europe:Copenhagen"{
+            ec{"코펜하겐"}
+        }
+        "Europe:Dublin"{
+            ec{"더블린"}
+        }
+        "Europe:Helsinki"{
+            ec{"헬싱키"}
+        }
+        "Europe:Istanbul"{
+            ec{"이스탄불"}
+        }
+        "Europe:Kiev"{
+            ec{"키예프"}
+        }
+        "Europe:Lisbon"{
+            ec{"리스본"}
+        }
+        "Europe:London"{
+            ec{"런던"}
+        }
+        "Europe:Luxembourg"{
+            ec{"룩셈부르크"}
+        }
+        "Europe:Madrid"{
+            ec{"마드리드"}
+        }
+        "Europe:Malta"{
+            ec{"몰타"}
+        }
+        "Europe:Minsk"{
+            ec{"민스크"}
+        }
+        "Europe:Monaco"{
+            ec{"모나코"}
+        }
+        "Europe:Oslo"{
+            ec{"오슬로"}
+        }
         "Europe:Paris"{
             ec{"파리"}
+        }
+        "Europe:Riga"{
+            ec{"리가"}
+        }
+        "Europe:Rome"{
+            ec{"로마"}
+        }
+        "Europe:Sofia"{
+            ec{"소피아"}
+        }
+        "Europe:Stockholm"{
+            ec{"스톡홀름"}
+        }
+        "Europe:Tallinn"{
+            ec{"탈린"}
+        }
+        "Europe:Tirane"{
+            ec{"티라나"}
+        }
+        "Europe:Vaduz"{
+            ec{"파두츠"}
+        }
+        "Europe:Vienna"{
+            ec{"비엔나"}
+        }
+        "Europe:Vilnius"{
+            ec{"빌니우스"}
+        }
+        "Europe:Warsaw"{
+            ec{"바르샤바"}
+        }
+        "Europe:Zurich"{
+            ec{"취리히"}
+        }
+        "Indian:Antananarivo"{
+            ec{"안타나나리보"}
+        }
+        "Indian:Chagos"{
+            ec{"차고스"}
+        }
+        "Indian:Comoro"{
+            ec{"코모로"}
+        }
+        "Indian:Kerguelen"{
+            ec{"케르켈렌"}
+        }
+        "Indian:Mahe"{
+            ec{"마헤"}
+        }
+        "Indian:Maldives"{
+            ec{"몰디브"}
+        }
+        "Indian:Mauritius"{
+            ec{"모리셔스"}
+        }
+        "Indian:Mayotte"{
+            ec{"메요트"}
+        }
+        "Indian:Reunion"{
+            ec{"불령 리유니온"}
+        }
+        "Pacific:Apia"{
+            ec{"아피아"}
         }
         "Pacific:Auckland"{
             ec{"오클랜드"}
@@ -2108,14 +2780,32 @@ ko{
         "Pacific:Easter"{
             ec{"이스터 섬"}
         }
+        "Pacific:Efate"{
+            ec{"에파테"}
+        }
         "Pacific:Enderbury"{
             ec{"엔더베리"}
+        }
+        "Pacific:Fakaofo"{
+            ec{"파카오푸"}
+        }
+        "Pacific:Fiji"{
+            ec{"피지"}
+        }
+        "Pacific:Funafuti"{
+            ec{"푸나푸티"}
         }
         "Pacific:Galapagos"{
             ec{"갈라파고스"}
         }
         "Pacific:Gambier"{
             ec{"감비어"}
+        }
+        "Pacific:Guadalcanal"{
+            ec{"과달카날"}
+        }
+        "Pacific:Guam"{
+            ec{"괌"}
         }
         "Pacific:Honolulu"{
             ec{"호놀룰루"}
@@ -2141,8 +2831,32 @@ ko{
         "Pacific:Midway"{
             ec{"미드웨이"}
         }
+        "Pacific:Nauru"{
+            ec{"나우루"}
+        }
+        "Pacific:Niue"{
+            ec{"니우에"}
+        }
+        "Pacific:Noumea"{
+            ec{"누메아"}
+        }
+        "Pacific:Pago_Pago"{
+            ec{"파고파고"}
+        }
+        "Pacific:Palau"{
+            ec{"팔라우"}
+        }
         "Pacific:Ponape"{
             ec{"포나페"}
+        }
+        "Pacific:Port_Moresby"{
+            ec{"포트모르즈비"}
+        }
+        "Pacific:Rarotonga"{
+            ec{"라로통가"}
+        }
+        "Pacific:Saipan"{
+            ec{"사이판"}
         }
         "Pacific:Tahiti"{
             ec{"타히티"}
@@ -2150,14 +2864,20 @@ ko{
         "Pacific:Tarawa"{
             ec{"타라와"}
         }
+        "Pacific:Tongatapu"{
+            ec{"통가타푸"}
+        }
         "Pacific:Truk"{
             ec{"트루크"}
         }
         "Pacific:Wake"{
             ec{"웨이크"}
         }
+        "Pacific:Wallis"{
+            ec{"월리스"}
+        }
         "meta:Alaska"{
-            ld{"알래스카 서머타임"}
+            ld{"알래스카 하계 표준시"}
             ls{"알래스카 표준시"}
             sd{"AKDT"}
             ss{"AKST"}
@@ -2169,7 +2889,7 @@ ko{
             ss{"CST"}
         }
         "meta:America_Eastern"{
-            ld{"동부 서머타임"}
+            ld{"미 동부 하계 표준시"}
             ls{"동부 표준시"}
             sd{"EDT"}
             ss{"EST"}
@@ -2187,24 +2907,23 @@ ko{
             ss{"PST"}
         }
         "meta:Atlantic"{
-            ld{"대서양 서머타임"}
+            ld{"미 대서양 하계 표준시"}
             ls{"대서양 표준시"}
             sd{"ADT"}
             ss{"AST"}
         }
         "meta:China"{
-            ld{"중국 서머타임"}
+            ld{"중국 하계 표준시"}
             ls{"중국 표준시"}
             ss{"CTT"}
         }
         "meta:Europe_Central"{
-            ld{"중부유럽 서머타임"}
+            ld{"중부유럽 하계 표준시"}
             ls{"중부유럽 표준시"}
             sd{"CEST"}
             ss{"CET"}
         }
         "meta:Europe_Eastern"{
-            ld{"동부유럽 서머타임"}
             ls{"동부유럽 표준시"}
             sd{"EEST"}
             ss{"EET"}
@@ -2214,31 +2933,31 @@ ko{
             ss{"GMT"}
         }
         "meta:Hawaii"{
-            ld{"하와이 서머타임"}
+            ld{"하와이 하계 표준시"}
             ls{"하와이 표준시"}
             sd{"HDT"}
             ss{"HST"}
         }
         "meta:Israel"{
-            ld{"이스라엘 서머타임"}
+            ld{"이스라엘 하계 표준시"}
             ls{"이스라엘 표준시"}
             sd{"IDT"}
             ss{"IST"}
         }
         "meta:Japan"{
-            ld{"일본 서머타임"}
+            ld{"일본 하계 표준시"}
             ls{"일본 표준시"}
             sd{"JDT"}
             ss{"JST"}
         }
         "meta:Korea"{
-            ld{"한국 서머타임"}
+            ld{"한국 하계 표준시"}
             ls{"한국 표준시"}
             sd{"KDT"}
             ss{"KST"}
         }
         "meta:Newfoundland"{
-            ld{"뉴펀들랜드 서머타임"}
+            ld{"뉴펀들랜드 하계 표준시"}
             ls{"뉴펀들랜드 표준시"}
             sd{"NDT"}
             ss{"NST"}

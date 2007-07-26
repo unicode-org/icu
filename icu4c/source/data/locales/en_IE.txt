@@ -23,7 +23,7 @@ en_IE{
         "#,##0%",
         "#E0",
     }
-    Version{"1.92"}
+    Version{"1.52"}
     calendar{
         gregorian{
             AmPmMarkers{

@@ -47,7 +47,7 @@ kk{
         "#,##0%",
         "#E0",
     }
-    Version{"1.92"}
+    Version{"1.50"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -55,8 +55,8 @@ kk{
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE, d MMMM yyyy 'ж.'",
-                "d MMMM yyyy 'ж.'",
+                "EEEE, d MMMM yyyy 'ж'.",
+                "d MMMM yyyy 'ж'.",
                 "dd.MM.yyyy",
                 "dd.MM.yy",
                 "{1} {0}",
@@ -80,17 +80,6 @@ kk{
                         "бейсенбі",
                         "жұма",
                         "сенбі",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
                     }
                 }
             }
@@ -123,22 +112,6 @@ kk{
                         "қазан",
                         "қараша",
                         "желтоқсан",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                    wide{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
                     }
                 }
             }

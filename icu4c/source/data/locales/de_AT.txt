@@ -13,7 +13,7 @@ de_AT{
         "#,##0 %",
         "#E0",
     }
-    Version{"1.92"}
+    Version{"1.49"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -35,17 +35,17 @@ de_AT{
                 format{
                     abbreviated{
                         "Jän",
-                        "Februar",
+                        "Feb",
                         "Mär",
                         "Apr",
                         "Mai",
                         "Jun",
                         "Jul",
-                        "August",
-                        "September",
-                        "Oktober",
-                        "November",
-                        "Dezember",
+                        "Aug",
+                        "Sep",
+                        "Okt",
+                        "Nov",
+                        "Dez",
                     }
                     wide{
                         "Jänner",

@@ -34,7 +34,7 @@ CollationFinnishTest::CollationFinnishTest()
 : myCollation(0)
 {
     UErrorCode status = U_ZERO_ERROR;
-    myCollation = Collator::createInstance(Locale("fi", "FI", ""),status);
+    myCollation = Collator::createInstance(Locale("fi", "FI", "", "collation=standard"),status);
 }
 
 CollationFinnishTest::~CollationFinnishTest()

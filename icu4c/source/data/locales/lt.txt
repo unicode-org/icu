@@ -10,11 +10,12 @@
  *  ICU <specials> source: <path>/xml/main/lt.xml
  */
 lt{
-    AuxExemplarCharacters{"[{i̇} {į̇} {j̇} {i̇̀} {i̇́} {i̇̃} q w x]"}
+    AuxExemplarCharacters{"[{į̇} {i̇} {i̇́} {i̇̀} {i̇̃} {j̇} q w x]"}
     Countries{
         001{"Pasaulis"}
         002{"Afrika"}
         005{"Pietų Amerika"}
+        009{"Okeanija"}
         011{"Vakarų Afrika"}
         013{"Centrinė Amerika"}
         014{"Rytų Afrika"}
@@ -22,6 +23,7 @@ lt{
         017{"Vidurio Afrika"}
         018{"Pietų Afrika [018]"}
         019{"Amerika"}
+        021{"Šiaurės Amerika"}
         029{"Karibai"}
         030{"Rytų Azija"}
         034{"Pietų Azija"}
@@ -119,6 +121,7 @@ lt{
         GD{"Grenada"}
         GE{"Gruzija"}
         GF{"Prancūzijos Gviana"}
+        GG{"Guernsey"}
         GH{"Gana"}
         GI{"Gibraltaras"}
         GL{"Grenlandija"}
@@ -141,12 +144,14 @@ lt{
         ID{"Indonezija"}
         IE{"Airija"}
         IL{"Izraelis"}
+        IM{"Isle of Man"}
         IN{"Indija"}
         IO{"Indijos vandenyno britų sritis"}
         IQ{"Irakas"}
         IR{"Iranas"}
         IS{"Islandija"}
         IT{"Italija"}
+        JE{"Džersis"}
         JM{"Jamaika"}
         JO{"Jordanija"}
         JP{"Japonija"}
@@ -175,6 +180,7 @@ lt{
         MA{"Marokas"}
         MC{"Monakas"}
         MD{"Moldova"}
+        ME{"Juodkalnija"}
         MG{"Madagaskaras"}
         MH{"Maršalo Salos"}
         MK{"Makedonija"}
@@ -221,7 +227,9 @@ lt{
         PW{"Palau"}
         PY{"Paragvajus"}
         QA{"Kataras"}
+        RE{"Reunionas"}
         RO{"Rumunija"}
+        RS{"Serbija"}
         RU{"Rusijos Federacija"}
         RW{"Ruanda"}
         SA{"Saudo Arabija"}
@@ -233,7 +241,7 @@ lt{
         SH{"Šventoji Elena"}
         SI{"Slovėnija"}
         SJ{"Svalbardo ir Jan Majen salos"}
-        SK{"Slovakia"}
+        SK{"Slovakija"}
         SL{"Siera Leonė"}
         SM{"San Marinas"}
         SN{"Senegalas"}
@@ -298,7 +306,7 @@ lt{
             "Svaras sterlingų",
         }
         INR{
-            "=0#Rs.|1#Re.|1<Rs.",
+            "=0#Rs.|1#Re.|1<Rs." /** (choice)  */,
             "Indijos rupija",
         }
         JPY{
@@ -453,8 +461,8 @@ lt{
         "%",
         "0",
         "#",
-        "-",
-        "E",
+        "−",
+        "×10^",
         "‰",
         "∞",
         "NaN",
@@ -486,7 +494,7 @@ lt{
         Mong{"Mongolų"}
         Runr{"Runų"}
     }
-    Version{"1.92"}
+    Version{"1.86"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -498,8 +506,8 @@ lt{
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "yyyy 'm.' MMMM d 'd.',EEEE",
-                "yyyy 'm.' MMMM d 'd.'",
+                "yyyy 'm'. MMMM d 'd'.,EEEE",
+                "yyyy 'm'. MMMM d 'd'.",
                 "yyyy.MM.dd",
                 "yyyy-MM-dd",
                 "{1} {0}",
@@ -665,20 +673,158 @@ lt{
         quotationStart{"„"}
     }
     zoneStrings{
+        "Africa:Abidjan"{
+            ec{"Abidžanas"}
+        }
+        "Africa:Addis_Ababa"{
+            ec{"Addis Abeba"}
+        }
+        "Africa:Asmera"{
+            ec{"Asmara"}
+        }
+        "Africa:Brazzaville"{
+            ec{"Brazavilis"}
+        }
+        "Africa:Cairo"{
+            ec{"Kairas"}
+        }
+        "Africa:Casablanca"{
+            ec{"Kasablanka"}
+        }
+        "Africa:Conakry"{
+            ec{"Konakris"}
+        }
+        "Africa:Dakar"{
+            ec{"Dakaras"}
+        }
+        "Africa:Djibouti"{
+            ec{"Džibutis"}
+        }
+        "Africa:Freetown"{
+            ec{"Frytaunas"}
+        }
+        "Africa:Gaborone"{
+            ec{"Gaboronas"}
+        }
+        "Africa:Johannesburg"{
+            ec{"Johanesburgas"}
+        }
+        "Africa:Khartoum"{
+            ec{"Chartumas"}
+        }
+        "Africa:Kinshasa"{
+            ec{"Kinšasa"}
+        }
+        "Africa:Libreville"{
+            ec{"Librevilis"}
+        }
+        "Africa:Mogadishu"{
+            ec{"Mogadišas"}
+        }
+        "Africa:Monrovia"{
+            ec{"Monrovija"}
+        }
+        "Africa:Nairobi"{
+            ec{"Nairobis"}
+        }
+        "Africa:Ndjamena"{
+            ec{"Ndžamena"}
+        }
+        "Africa:Porto-Novo"{
+            ec{"Porto Novas"}
+        }
+        "Africa:Sao_Tome"{
+            ec{"San Tomė"}
+        }
+        "Africa:Tripoli"{
+            ec{"Tripolis"}
+        }
+        "Africa:Tunis"{
+            ec{"Tunisas"}
+        }
+        "America:Asuncion"{
+            ec{"Asunsjonas"}
+        }
+        "America:Barbados"{
+            ec{"Barbadosas"}
+        }
+        "America:Belem"{
+            ec{"Belemas"}
+        }
+        "America:Belize"{
+            ec{"Belizas"}
+        }
+        "America:Buenos_Aires"{
+            ec{"Buenos Airės"}
+        }
+        "America:Caracas"{
+            ec{"Karakasas"}
+        }
+        "America:Cayenne"{
+            ec{"Kajenas"}
+        }
+        "America:Cayman"{
+            ec{"Kaimanas"}
+        }
         "America:Chicago"{
             ec{"Čikaga"}
+        }
+        "America:Costa_Rica"{
+            ec{"Kosta Rika"}
+        }
+        "America:Cuiaba"{
+            ec{"Kujaba"}
+        }
+        "America:Danmarkshavn"{
+            ec{"Danmarkshavn’as"}
         }
         "America:Denver"{
             ec{"Denveris"}
         }
+        "America:Dominica"{
+            ec{"Dominika"}
+        }
+        "America:El_Salvador"{
+            ec{"Salvadoras"}
+        }
+        "America:Godthab"{
+            ec{"Godthabas"}
+        }
+        "America:Grand_Turk"{
+            ec{"Grand Terkas"}
+        }
+        "America:Guatemala"{
+            ec{"Gvatemala"}
+        }
+        "America:Guyana"{
+            ec{"Gajana"}
+        }
         "America:Indiana:Petersburg"{
             ec{"Peterburgas"}
+        }
+        "America:Jamaica"{
+            ec{"Jamaika"}
+        }
+        "America:La_Paz"{
+            ec{"La Pasas"}
         }
         "America:Los_Angeles"{
             ec{"Los Andželas"}
         }
+        "America:Managua"{
+            ec{"Managva"}
+        }
+        "America:Martinique"{
+            ec{"Martinika"}
+        }
         "America:Moncton"{
             ec{"Monktonas"}
+        }
+        "America:Montevideo"{
+            ec{"Montevidëjas"}
+        }
+        "America:Montserrat"{
+            ec{"Montseratas"}
         }
         "America:New_York"{
             ec{"Niujorkas"}
@@ -686,8 +832,314 @@ lt{
         "America:Phoenix"{
             ec{"Fyniksas"}
         }
+        "America:Port_of_Spain"{
+            ec{"Port of Speinas"}
+        }
+        "America:Puerto_Rico"{
+            ec{"Puerto Rikas"}
+        }
+        "America:Santiago"{
+            ec{"Santjagas"}
+        }
+        "America:Santo_Domingo"{
+            ec{"Santo Domingas"}
+        }
         "America:Sao_Paulo"{
             ec{"San Paulas"}
+        }
+        "America:St_Kitts"{
+            ec{"St. Kitsas"}
+        }
+        "America:St_Lucia"{
+            ec{"St. Lucia"}
+        }
+        "America:St_Thomas"{
+            ec{"St. Thomas"}
+        }
+        "America:St_Vincent"{
+            ec{"Sant Vincentė"}
+        }
+        "America:Thule"{
+            ec{"Tūla"}
+        }
+        "Antarctica:DumontDUrville"{
+            ec{"Dumont D'Urville"}
+        }
+        "Antarctica:South_Pole"{
+            ec{"Pietų ašigalis"}
+        }
+        "Asia:Aden"{
+            ec{"Adenas"}
+        }
+        "Asia:Almaty"{
+            ec{"Alma Ata"}
+        }
+        "Asia:Amman"{
+            ec{"Amanas"}
+        }
+        "Asia:Aqtobe"{
+            ec{"Aktiubinskas"}
+        }
+        "Asia:Ashgabat"{
+            ec{"Ašchabadas"}
+        }
+        "Asia:Baghdad"{
+            ec{"Bagdadas"}
+        }
+        "Asia:Bahrain"{
+            ec{"Bahreinas"}
+        }
+        "Asia:Bangkok"{
+            ec{"Bankokas"}
+        }
+        "Asia:Beirut"{
+            ec{"Beirutas"}
+        }
+        "Asia:Bishkek"{
+            ec{"Biškekas"}
+        }
+        "Asia:Brunei"{
+            ec{"Brunėjus"}
+        }
+        "Asia:Colombo"{
+            ec{"Kolombo"}
+        }
+        "Asia:Damascus"{
+            ec{"Damaskas"}
+        }
+        "Asia:Dhaka"{
+            ec{"Daka"}
+        }
+        "Asia:Dili"{
+            ec{"Dilis"}
+        }
+        "Asia:Dubai"{
+            ec{"Dubajus"}
+        }
+        "Asia:Dushanbe"{
+            ec{"Dušanbė"}
+        }
+        "Asia:Gaza"{
+            ec{"Gazos ruožas"}
+        }
+        "Asia:Hong_Kong"{
+            ec{"Honkongas"}
+        }
+        "Asia:Jakarta"{
+            ec{"Džakarta"}
+        }
+        "Asia:Kabul"{
+            ec{"Kabulas"}
+        }
+        "Asia:Kuwait"{
+            ec{"Kuveitas"}
+        }
+        "Asia:Macau"{
+            ec{"Makao"}
+        }
+        "Asia:Muscat"{
+            ec{"Maskatas"}
+        }
+        "Asia:Nicosia"{
+            ec{"Nikosija"}
+        }
+        "Asia:Qatar"{
+            ec{"Kataras"}
+        }
+        "Asia:Rangoon"{
+            ec{"Rangūnas"}
+        }
+        "Asia:Riyadh"{
+            ec{"Rijadas"}
+        }
+        "Asia:Seoul"{
+            ec{"Seulas"}
+        }
+        "Asia:Singapore"{
+            ec{"Singapūras"}
+        }
+        "Asia:Tashkent"{
+            ec{"Taškentas"}
+        }
+        "Asia:Tbilisi"{
+            ec{"Tbilisis"}
+        }
+        "Asia:Tehran"{
+            ec{"Teheranas"}
+        }
+        "Asia:Ulaanbaatar"{
+            ec{"Ulan-Batoras"}
+        }
+        "Asia:Vientiane"{
+            ec{"Vientianas"}
+        }
+        "Asia:Yerevan"{
+            ec{"Jerevanas"}
+        }
+        "Atlantic:Azores"{
+            ec{"Azorai"}
+        }
+        "Atlantic:Bermuda"{
+            ec{"Bermudų salos"}
+        }
+        "Atlantic:Canary"{
+            ec{"Kanarų salos"}
+        }
+        "Atlantic:Faeroe"{
+            ec{"Farerai"}
+        }
+        "Atlantic:Reykjavik"{
+            ec{"Reikjavikas"}
+        }
+        "Atlantic:St_Helena"{
+            ec{"Šv. Helena"}
+        }
+        "Atlantic:Stanley"{
+            ec{"Stenlis"}
+        }
+        "Europe:Amsterdam"{
+            ec{"Amsterdamas"}
+        }
+        "Europe:Berlin"{
+            ec{"Berlynas"}
+        }
+        "Europe:Brussels"{
+            ec{"Briuselis"}
+        }
+        "Europe:Bucharest"{
+            ec{"Bukareštas"}
+        }
+        "Europe:Budapest"{
+            ec{"Budapeštas"}
+        }
+        "Europe:Copenhagen"{
+            ec{"Kopenhaga"}
+        }
+        "Europe:Dublin"{
+            ec{"Dublinas"}
+        }
+        "Europe:Gibraltar"{
+            ec{"Gibraltaras"}
+        }
+        "Europe:Helsinki"{
+            ec{"Helsinkis"}
+        }
+        "Europe:Istanbul"{
+            ec{"Stambulas"}
+        }
+        "Europe:Kiev"{
+            ec{"Kijevas"}
+        }
+        "Europe:Lisbon"{
+            ec{"Lisabona"}
+        }
+        "Europe:London"{
+            ec{"Londonas"}
+        }
+        "Europe:Luxembourg"{
+            ec{"Liuksemburgas"}
+        }
+        "Europe:Madrid"{
+            ec{"Madridas"}
+        }
+        "Europe:Minsk"{
+            ec{"Minskas"}
+        }
+        "Europe:Monaco"{
+            ec{"Monakas"}
+        }
+        "Europe:Oslo"{
+            ec{"Oslas"}
+        }
+        "Europe:Paris"{
+            ec{"Paryžius"}
+        }
+        "Europe:Riga"{
+            ec{"Ryga"}
+        }
+        "Europe:Rome"{
+            ec{"Roma"}
+        }
+        "Europe:Sofia"{
+            ec{"Sofija"}
+        }
+        "Europe:Stockholm"{
+            ec{"Stokholmas"}
+        }
+        "Europe:Tallinn"{
+            ec{"Talinas"}
+        }
+        "Europe:Tirane"{
+            ec{"Tirana"}
+        }
+        "Europe:Vaduz"{
+            ec{"Vaducas"}
+        }
+        "Europe:Vienna"{
+            ec{"Viena"}
+        }
+        "Europe:Warsaw"{
+            ec{"Varšuva"}
+        }
+        "Europe:Zurich"{
+            ec{"Ciurichas"}
+        }
+        "Indian:Antananarivo"{
+            ec{"Antananarivas"}
+        }
+        "Indian:Comoro"{
+            ec{"Komoras"}
+        }
+        "Indian:Mauritius"{
+            ec{"Mauricijus"}
+        }
+        "Indian:Mayotte"{
+            ec{"Majotas"}
+        }
+        "Indian:Reunion"{
+            ec{"Reunionas"}
+        }
+        "Pacific:Apia"{
+            ec{"Apija"}
+        }
+        "Pacific:Easter"{
+            ec{"Velykų sala"}
+        }
+        "Pacific:Efate"{
+            ec{"Efatas"}
+        }
+        "Pacific:Enderbury"{
+            ec{"Enderburis"}
+        }
+        "Pacific:Fiji"{
+            ec{"Fidžis"}
+        }
+        "Pacific:Galapagos"{
+            ec{"Galapagai"}
+        }
+        "Pacific:Guadalcanal"{
+            ec{"Gvadalkanalas"}
+        }
+        "Pacific:Guam"{
+            ec{"Guamas"}
+        }
+        "Pacific:Johnston"{
+            ec{"Džonstonas"}
+        }
+        "Pacific:Norfolk"{
+            ec{"Norfolkas"}
+        }
+        "Pacific:Ponape"{
+            ec{"Ponapė"}
+        }
+        "Pacific:Saipan"{
+            ec{"Saipanas"}
+        }
+        "Pacific:Tahiti"{
+            ec{"Taitis"}
+        }
+        "Pacific:Tarawa"{
+            ec{"Tarava"}
         }
     }
 }

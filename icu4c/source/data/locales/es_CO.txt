@@ -12,26 +12,8 @@ es_CO{
             "$",
             "Peso de Colombia",
         }
-        MXN{
-            "MEX$",
-            "peso mexicano",
-        }
     }
-    NumberElements{
-        ",",
-        ".",
-        ";",
-        "%",
-        "0",
-        "#",
-        "-",
-        "E",
-        "‰",
-        "∞",
-        "NaN",
-        "+",
-    }
-    Version{"1.92"}
+    Version{"1.52"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -39,8 +21,8 @@ es_CO{
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
-                "EEEE d' de 'MMMM' de 'yyyy",
-                "d' de 'MMMM' de 'yyyy",
+                "EEEE d 'de' MMMM 'de' yyyy",
+                "d 'de' MMMM 'de' yyyy",
                 "d/MM/yyyy",
                 "d/MM/yy",
                 "{1} {0}",

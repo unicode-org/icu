@@ -7,15 +7,5 @@
 // *
 // ***************************************************************************
 es_SV{
-    Currencies{
-        MXN{
-            "MEX$",
-            "peso mexicano",
-        }
-        USD{
-            "US$",
-            "dólar estadounidense",
-        }
-    }
-    Version{"1.92"}
+    Version{"1.49"}
 }

@@ -8,16 +8,12 @@
 // ***************************************************************************
 es_PR{
     Currencies{
-        MXN{
-            "MEX$",
-            "peso mexicano",
-        }
         USD{
             "$",
-            "Dólar Americano",
+            "dólar estadounidense",
         }
     }
-    Version{"1.92"}
+    Version{"1.51"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -25,8 +21,8 @@ es_PR{
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE d' de 'MMMM' de 'yyyy",
-                "d' de 'MMMM' de 'yyyy",
+                "EEEE d 'de' MMMM 'de' yyyy",
+                "d 'de' MMMM 'de' yyyy",
                 "MM/dd/yyyy",
                 "MM/dd/yy",
                 "{1} {0}",

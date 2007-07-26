@@ -32,7 +32,7 @@ cy{
             "Punt Sterling Prydain",
         }
         INR{
-            "=0#Rs.|1#Re.|1<Rs.",
+            "=0#Rs.|1#Re.|1<Rs." /** (choice)  */,
             "Rwpî India",
         }
         JPY{
@@ -69,16 +69,10 @@ cy{
     LocaleScript{
         "Latn",
     }
-    NumberPatterns{
-        "#,##0.###",
-        "¤ #,##0.00",
-        "#,##0%",
-        "#E0",
-    }
     Scripts{
         Latn{"Lladin"}
     }
-    Version{"1.92"}
+    Version{"1.52"}
     calendar{
         gregorian{
             dayNames{
@@ -159,22 +153,6 @@ cy{
                         "H",
                         "T",
                         "R",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                    wide{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
                     }
                 }
             }

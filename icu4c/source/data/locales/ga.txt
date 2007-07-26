@@ -12,10 +12,25 @@
 ga{
     AuxExemplarCharacters{"[ḃ ċ ḋ ḟ ġ ṁ ṗ ṡ ṫ]"}
     Countries{
+        001{"An Domhan"}
+        002{"An Afraic"}
+        009{"An Aigéine"}
+        013{"Meiriceá Láir"}
+        017{"An Afraic Láir"}
+        019{"Na Meiriceánna"}
+        053{"An Astráil agus an Nua-Shéalainn"}
+        054{"An Mheilinéis"}
+        057{"An Réigiún Micrinéiseach"}
+        061{"An Pholainéis"}
+        142{"An Áise"}
+        143{"An Áise Láir"}
+        150{"An Eoraip"}
+        172{"Comhlathas na Stát Neamhspleácha"}
+        419{"Meiriceá Laidineach agus an Mhuir Chairib"}
         AD{"Andóra"}
         AE{"Aontas na nÉimíríochtaí Arabacha"}
         AF{"An Afganastáin"}
-        AG{"Antigua agus Barbuda"}
+        AG{"Aintíge agus Barbúda"}
         AI{"Anguilla"}
         AL{"An Albáin"}
         AM{"An Airméin"}
@@ -26,9 +41,10 @@ ga{
         AS{"Samó Meiriceánach"}
         AT{"An Ostair"}
         AU{"An Astráil"}
-        AW{"Aruba"}
+        AW{"Arúba"}
+        AX{"Oileáin Alaind"}
         AZ{"An Asarbaiseáin"}
-        BA{"An Bhoisnia-Heirseagaivéin"}
+        BA{"An Bhoisnia agus Heirseagóvéin"}
         BB{"Barbadós"}
         BD{"An Bhanglaidéis"}
         BE{"An Bheilg"}
@@ -43,12 +59,12 @@ ga{
         BR{"An Bhrasaíl"}
         BS{"Na Bahámaí"}
         BT{"An Bhútáin"}
-        BV{"Oileáin Bouvet"}
+        BV{"Oileán Bouvet"}
         BW{"An Bhotsuáin"}
         BY{"An Bhealarúis"}
         BZ{"An Bheilís"}
         CA{"Ceanada"}
-        CC{"Oileáin Cocos (Keeling)"}
+        CC{"Oileáin na gCócónna"}
         CD{"Poblacht Dhaonlathach an Chongó"}
         CF{"Poblacht na hAfraice Láir"}
         CG{"An Congó"}
@@ -60,8 +76,9 @@ ga{
         CN{"An tSín"}
         CO{"An Cholóim"}
         CR{"Cósta Ríce"}
+        CS{"An tSeirbia agus Montainéagró"}
         CU{"Cúba"}
-        CV{"Rinn Verde"}
+        CV{"An Rinn Ghlas"}
         CX{"Oileán na Nollag"}
         CY{"An Chipir"}
         CZ{"Poblacht na Seice"}
@@ -75,7 +92,7 @@ ga{
         EE{"An Eastóin"}
         EG{"An Éigipt"}
         EH{"An Sahára Thiar"}
-        ER{"Eritrea"}
+        ER{"An Eiritré"}
         ES{"An Spáinn"}
         ET{"An Aetóip"}
         FI{"An Fhionlainn"}
@@ -89,6 +106,7 @@ ga{
         GD{"Grenada"}
         GE{"An tSeoirsia"}
         GF{"An Ghuáin Fhrancach"}
+        GG{"Geansaí"}
         GH{"Gána"}
         GI{"Giobráltar"}
         GL{"An Ghraonlainn"}
@@ -102,6 +120,7 @@ ga{
         GU{"Guam"}
         GW{"An Ghuine-Bhissau"}
         GY{"An Ghuáin"}
+        HK{"R.R.S. na Síne Hong Cong"}
         HM{"Oileán Heard agus Oileáin McDonald"}
         HN{"Hondúras"}
         HR{"An Chróit"}
@@ -110,29 +129,31 @@ ga{
         ID{"An Indinéis"}
         IE{"Éire"}
         IL{"Iosrael"}
+        IM{"Oileán Mhanann"}
         IN{"An India"}
         IO{"Críocha Briotanacha an Aigéin Indiagh"}
         IQ{"An Iaráic"}
         IR{"An Iaráin"}
         IS{"An Íoslainn"}
         IT{"An Iodáil"}
+        JE{"Geirsí"}
         JM{"Iamáice"}
         JO{"An Iordáin"}
         JP{"An tSeapáin"}
         KE{"An Chéinia"}
         KG{"An Chirgeastáin"}
         KH{"An Chambóid"}
-        KI{"Cireabaití"}
+        KI{"Ciribeas"}
         KM{"Oileáin Chomóra"}
         KN{"Saint Kitts agus Nevis"}
         KP{"An Chóiré Thuaidh"}
         KR{"An Chóiré Theas"}
         KW{"Cuáit"}
-        KY{"Oileáin Cayman"}
+        KY{"Oileáin na gCadhman"}
         KZ{"An Chasacstáin"}
         LA{"Laos"}
         LB{"An Liobáin"}
-        LC{"Saint Lucia"}
+        LC{"San Lúisia"}
         LI{"Lichtinstéin"}
         LK{"Srí Lanca"}
         LR{"An Libéir"}
@@ -144,19 +165,21 @@ ga{
         MA{"Maracó"}
         MC{"Monacó"}
         MD{"An Mholdóiv"}
+        ME{"Montainéagró"}
         MG{"Madagascar"}
         MH{"Oileáin Marshall"}
         MK{"An Mhacadóin"}
         ML{"Mailí"}
         MM{"Maenmar"}
         MN{"An Mhongóil"}
+        MO{"R.R.S. na Síne Macáó"}
         MP{"Oileáin Mariana Thuaidh"}
-        MQ{"Martinique"}
+        MQ{"Martainíc"}
         MR{"An Mharatáin"}
         MS{"Montsarat"}
         MT{"Málta"}
         MU{"Oileán Mhuirís"}
-        MV{"Mhaildiví"}
+        MV{"Na Maildiví"}
         MW{"An Mhaláiv"}
         MX{"Meicsiceo"}
         MY{"An Mhalaeisia"}
@@ -171,9 +194,9 @@ ga{
         NO{"An Iorua"}
         NP{"Neipeal"}
         NR{"Nárú"}
-        NU{"Niue"}
+        NU{"Nívé"}
         NZ{"An Nua-Shéalainn"}
-        OM{"Oman"}
+        OM{"Óman"}
         PA{"Panama"}
         PE{"Peiriú"}
         PF{"An Pholainéis Fhrancach"}
@@ -189,12 +212,15 @@ ga{
         PW{"Palau"}
         PY{"Paragua"}
         QA{"Catar"}
+        QO{"An Aigéine Imeallach"}
+        QU{"An tAontas Eorpach"}
         RE{"Réunion"}
         RO{"An Rómáin"}
+        RS{"An tSeirbia"}
         RU{"Cónaidhm na Rúise"}
         RW{"Ruanda"}
         SA{"An Araib Shádach"}
-        SB{"Oileáin Solomon"}
+        SB{"Oileáin Sholaimh"}
         SC{"Na Séiséil"}
         SD{"An tSúdáin"}
         SE{"An tSualainn"}
@@ -214,32 +240,32 @@ ga{
         SZ{"An tSuasalainn"}
         TC{"Oileáin Turks agus Caicos"}
         TD{"Sead"}
-        TF{"Críocha Francacha Theas"}
+        TF{"Críocha Deisceartacha na Fraince"}
         TG{"Tóga"}
         TH{"An Téalainn"}
         TJ{"An Táidsíceastáin"}
         TK{"Tócalá"}
-        TL{"Tíomór-Leste"}
+        TL{"Tíomór Thoir"}
         TM{"An Tuircméanastáin"}
         TN{"An Túinéis"}
         TO{"Tonga"}
         TR{"An Tuirc"}
         TT{"Oileáin na Tríonóide agus Tobága"}
-        TV{"Tuvalú"}
+        TV{"Túválú"}
         TW{"An Téaváin"}
         TZ{"An Tansáin"}
         UA{"An Úcráin"}
-        UG{"Uganda"}
+        UG{"Úganda"}
         UM{"Mion-Oileáin Imeallacha S.A.M."}
         US{"Stáit Aontaithe Mheiriceá"}
         UY{"Urugua"}
         UZ{"Úisbéiceastáin"}
-        VA{"An Chathaoir Naofa (Stát Chathair na Vatacáine)"}
+        VA{"An Vatacáin"}
         VC{"Saint Vincent agus na Grenadines"}
         VE{"Veiniséala"}
         VG{"Oileáin Bhriotanacha na Maighdean"}
         VI{"Oileáin na Maighdean S.A.M."}
-        VN{"Vítneam"}
+        VN{"Vít Neam"}
         VU{"Vanuatú"}
         WF{"Oileáin Vailís agus Futúna"}
         WS{"Samó"}
@@ -248,6 +274,7 @@ ga{
         ZA{"An Afraic Theas"}
         ZM{"An tSaimbia"}
         ZW{"An tSiombáib"}
+        ZZ{"Réigiún Anaithnid nó Neamhbhailí"}
     }
     Currencies{
         ADP{
@@ -655,7 +682,7 @@ ga{
             "Sheqel Nua Iosraelach",
         }
         INR{
-            "=0#Rs.|1#Re.|1<Rs.",
+            "=0#Rs.|1#Re.|1<Rs." /** (choice)  */,
             "Rúipí India",
         }
         IQD{
@@ -1225,7 +1252,7 @@ ga{
     }
     ExemplarCharacters{"[a á b-e é f-i í j-o ó p-u ú v-z]"}
     Languages{
-        aa{"Afar"}
+        aa{"aa"}
         ab{"Abcáisis"}
         ae{"Aivéistis"}
         af{"Afracáinis"}
@@ -1237,7 +1264,7 @@ ga{
         be{"Bealarúisis"}
         bg{"Bulgáiris"}
         bh{"Bihairis"}
-        bn{"Beangálais"}
+        bn{"Beangáilis"}
         bo{"Tibéadais"}
         br{"Briotáinis"}
         bs{"Boisnis"}
@@ -1258,13 +1285,16 @@ ga{
         et{"Eastóinis"}
         eu{"Bascais"}
         fa{"Peirsis"}
-        fi{"Fionnlainnis"}
+        fi{"Fionlainnis"}
+        fil{"fil"}
         fj{"Fidsis"}
         fo{"Faróis"}
         fr{"Fraincis"}
-        fy{"Freaslainnais"}
+        fy{"Freaslainnis Iartharach"}
         ga{"Gaeilge"}
         gd{"Gaeilge na hAlban"}
+        gl{"Gailísis"}
+        gn{"Guaráinis"}
         gu{"Gúisearáitis"}
         gv{"Mannainis"}
         haw{"Haváíais"}
@@ -1278,20 +1308,23 @@ ga{
         ie{"Interlingue"}
         ik{"Inupiaq"}
         io{"Ido"}
-        is{"Íoslainnais"}
+        is{"Íoslainnis"}
         it{"Iodáilis"}
         iu{"Ionúitis"}
         ja{"Seapáinis"}
         jv{"Iávais"}
         ka{"Seoirsis"}
         kk{"Casachais"}
+        km{"Cambóidis"}
         kn{"Cannadais"}
         ko{"Cóiréis"}
         ks{"Caismíris"}
+        ku{"Coirdis"}
         kw{"Cornais"}
         ky{"Cirgeasais"}
         la{"Laidin"}
         lb{"Leitseabuirgis"}
+        ln{"ln"}
         lo{"Laosais"}
         lt{"Liotuáinis"}
         lv{"Laitvis"}
@@ -1302,50 +1335,67 @@ ga{
         mn{"Mongóilis"}
         mo{"Moldáivis"}
         mr{"Maraitis"}
+        ms{"Malaeis"}
         mt{"Maltais"}
         my{"Burmais"}
         na{"Nárúis"}
         nb{"Ioruais Bokmål"}
         ne{"Neipealais"}
-        nl{"Ollainnais"}
+        nl{"Ollainnis"}
         nn{"Ioruais Nynorsk"}
         no{"Ioruais"}
         nv{"Navachóis"}
-        oc{"Ocatáinis (tar éis 1500); Provençal"}
+        oc{"Ocatáinis"}
+        or{"Oraisis"}
         os{"Óiséitis"}
-        pa{"Puinseaibis"}
+        pa{"Puinseáibis"}
         pl{"Polainnis"}
-        ps{"Paisteo"}
+        ps{"Paistis"}
         pt{"Portaingéilis"}
+        pt_BR{"Portaingéilis Bhrasaíleach"}
+        pt_PT{"Portaingéilis Ibéireach"}
         qu{"Ceatsuais"}
-        ro{"Romáinis"}
+        ro{"Rómáinis"}
         ru{"Rúisis"}
         sa{"Sanscrait"}
         sc{"Sairdínis"}
         sd{"Sindis"}
         se{"Sáimis Thuaidh"}
         sh{"Seirbea-Chróitis"}
-        sk{"Slóvacais"}
-        sl{"Slóvéinis"}
+        si{"Siolóinis"}
+        sk{"Slóvaicis"}
+        sl{"Slóivéinis"}
         sm{"Samóis"}
-        so{"Somálais"}
+        so{"Somáilis"}
         sq{"Albáinis"}
         sr{"Seirbis"}
+        st{"Sótais Dheisceartach"}
+        su{"Sundais"}
         sv{"Sualainnis"}
         sw{"Svahaílis"}
         ta{"Tamailis"}
+        te{"Teileagúis"}
         th{"Téalainnis"}
+        ti{"Tigrinis"}
+        tk{"Tuircméinis"}
         tl{"Tagálaigis"}
+        tlh{"Klingon"}
         tr{"Tuircis"}
         tt{"Tatarais"}
+        tw{"Tvís"}
         ty{"Taihítis"}
+        ug{"ug"}
         uk{"Úcráinis"}
+        und{"Teanga Anaithnid nó Neamhbhailí"}
         ur{"Urdais"}
         uz{"Úisbéicis"}
         vi{"Vítneamais"}
         wa{"Vallúnais"}
+        xh{"Cósais"}
         yi{"Giúdais"}
         zh{"Sínis"}
+        zh_Hans{"Sínis Shimplithe"}
+        zh_Hant{"Sínis Thraidisiúnta"}
         zu{"Súlúis"}
     }
     LocaleScript{
@@ -1357,21 +1407,8 @@ ga{
         "#,##0%",
         "#E0",
     }
-    Version{"1.92"}
+    Version{"1.61"}
     calendar{
-        buddhist{
-            DateTimePatterns{
-                "HH:mm:ss v",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, MMMM d, yyyy G",
-                "MMMM d, yyyy G",
-                "MMM d, yyyy G",
-                "M/d/yyyy",
-                "{1} {0}",
-            }
-        }
         gregorian{
             AmPmMarkers{
                 "a.m.",
@@ -1398,57 +1435,11 @@ ga{
                         "Dé Sathairn",
                     }
                 }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                    }
-                }
             }
             eras{
                 abbreviated{
                     "RC",
                     "AD",
-                }
-            }
-            fields{
-                day{
-                    dn{"Lá"}
-                }
-                dayperiod{
-                    dn{"a.m./p.m."}
-                }
-                era{
-                    dn{"Ré"}
-                }
-                hour{
-                    dn{"Uair"}
-                }
-                minute{
-                    dn{"Nóiméad"}
-                }
-                month{
-                    dn{"Mí"}
-                }
-                second{
-                    dn{"Soicind"}
-                }
-                week{
-                    dn{"Seachtain"}
-                }
-                weekday{
-                    dn{"Lá na seachtaine"}
-                }
-                year{
-                    dn{"Bliain"}
-                }
-                zone{
-                    dn{"Crios"}
                 }
             }
             monthNames{

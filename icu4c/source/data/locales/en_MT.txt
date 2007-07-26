@@ -19,7 +19,7 @@ en_MT{
         "#,##0%",
         "#E0",
     }
-    Version{"1.92"}
+    Version{"1.50"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

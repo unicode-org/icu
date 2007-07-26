@@ -110,6 +110,7 @@ so{
         ZA{"Koonfur Afrika"}
         ZM{"Saambiya"}
         ZW{"Simbaabwe"}
+        ZZ{"Far aan la aqoon amase aan saxnayn"}
     }
     Currencies{
         KES{
@@ -118,15 +119,36 @@ so{
         }
         SOS{
             "$",
-            "SOS",
+            "Shilin soomaali",
         }
     }
     ExemplarCharacters{"[a-z]"}
     Languages{
+        ar{"Carabi"}
+        de{"Jarmal"}
+        es{"Isbaanish"}
+        fa{"Faarisi"}
+        fr{"Faransiis"}
+        fy{"Firiisiyan Galbeed"}
+        it{"Talyaani"}
         so{"Soomaali"}
     }
     LocaleScript{
         "Latn",
+    }
+    NumberElements{
+        ".",
+        ",",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
     }
     NumberPatterns{
         "#,##0.###",
@@ -134,7 +156,11 @@ so{
         "#,##0%",
         "#E0",
     }
-    Version{"1.92"}
+    Scripts{
+        Zxxx{"Aan la qorin"}
+        Zzzz{"Far aan la aqoon amase aan saxnayn"}
+    }
+    Version{"1.52"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -142,8 +168,8 @@ so{
                 "gn",
             }
             DateTimePatterns{
-                "HH:mm:ss v",
-                "HH:mm:ss z",
+                "h:mm:ss a v",
+                "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
                 "EEEE, MMMM dd, yyyy",
@@ -171,17 +197,6 @@ so{
                         "Khamiis",
                         "Jimco",
                         "Sabti",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
                     }
                 }
             }
@@ -222,39 +237,12 @@ so{
                         "Bisha Laba iyo Tobnaad",
                     }
                 }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                }
             }
-            quarters{
-                format{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                    wide{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                }
-            }
+        }
+    }
+    zoneStrings{
+        "Etc:Unknown"{
+            ec{"Far aan la aqoon amase aan saxnayn"}
         }
     }
 }

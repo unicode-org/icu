@@ -17,7 +17,7 @@ en_HK{
             "USD",
         }
     }
-    Version{"1.92"}
+    Version{"1.44"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

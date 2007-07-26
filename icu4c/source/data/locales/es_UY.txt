@@ -8,32 +8,10 @@
 // ***************************************************************************
 es_UY{
     Currencies{
-        MXN{
-            "MEX$",
-            "peso mexicano",
-        }
-        USD{
-            "US$",
-            "dólar estadounidense",
-        }
         UYU{
             "$U",
             "peso uruguayo",
         }
-    }
-    NumberElements{
-        ",",
-        ".",
-        ";",
-        "%",
-        "0",
-        "#",
-        "-",
-        "E",
-        "‰",
-        "∞",
-        "NaN",
-        "+",
     }
     NumberPatterns{
         "#,##0.###",
@@ -41,5 +19,5 @@ es_UY{
         "#,##0%",
         "#E0",
     }
-    Version{"1.92"}
+    Version{"1.50"}
 }

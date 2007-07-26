@@ -48,6 +48,7 @@ README text !eol
 *.spp -text
 *.tri2 -text
 
+icu4c/source/data/coll/cy.txt -text
 icu4c/source/data/coll/eo.txt -text
 icu4c/source/data/coll/km.txt -text
 icu4c/source/data/coll/no.txt -text
