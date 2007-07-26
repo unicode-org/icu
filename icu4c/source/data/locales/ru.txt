@@ -24,7 +24,6 @@ ru{
         017{"Центральная Африка"}
         018{"Южная Африка [018]"}
         019{"Центральная и Южная Америка"}
-        021{"Северная Америка"}
         029{"Карибы"}
         030{"Восточная Азия"}
         034{"Южная Азия"}
@@ -83,7 +82,7 @@ ru{
         BZ{"Белиз"}
         CA{"Канада"}
         CC{"Кокосовые Острова (Киилинг)"}
-        CD{"Конго, Демократическая Республика"}
+        CD{"Демократическая Республика Конго"}
         CF{"Центрально-Африканская Республика"}
         CG{"Конго"}
         CH{"Швейцария"}
@@ -146,13 +145,14 @@ ru{
         ID{"Индонезия"}
         IE{"Ирландия"}
         IL{"Израиль"}
-        IM{"Мэн, остров"}
+        IM{"Остров Мэн"}
         IN{"Индия"}
         IO{"Британские Территории в Индийском Океане"}
         IQ{"Ирак"}
         IR{"Иран"}
         IS{"Исландия"}
         IT{"Италия"}
+        JE{"Джерси"}
         JM{"Ямайка"}
         JO{"Иордания"}
         JP{"Япония"}
@@ -290,6 +290,7 @@ ru{
         ZA{"Южная Африка"}
         ZM{"Замбия"}
         ZW{"Зимбабве"}
+        ZZ{"Неизвестный или недействительный регион"}
     }
     Currencies{
         ADP{
@@ -514,7 +515,7 @@ ru{
         }
         CNY{
             "Y",
-            "Китайский юань",
+            "Юань Ренминби",
         }
         COP{
             "Col$",
@@ -530,7 +531,7 @@ ru{
         }
         CSD{
             "CSD",
-            "Сербский динар",
+            "Старый Сербский динар",
         }
         CSK{
             "CSK",
@@ -617,7 +618,7 @@ ru{
             "Эфиопский быр",
         }
         EUR{
-            "EUR",
+            "€",
             "Евро",
         }
         FIM{
@@ -637,7 +638,7 @@ ru{
             "Французский франк",
         }
         GBP{
-            "GBP",
+            "£",
             "Английский фунт стерлингов",
         }
         GEK{
@@ -761,7 +762,7 @@ ru{
             "Иорданский динар",
         }
         JPY{
-            "JPY",
+            "¥",
             "Японская иена",
         }
         KES{
@@ -770,7 +771,7 @@ ru{
         }
         KGS{
             "som",
-            "Сом (киргизский)",
+            "Киргизский сом",
         }
         KHR{
             "CR",
@@ -858,7 +859,7 @@ ru{
         }
         MAD{
             "MAD",
-            "Марокканский франк",
+            "Марокканский дирхам",
         }
         MAF{
             "MAF",
@@ -944,6 +945,10 @@ ru{
             "Mt",
             "Старый мозамбикский метикал",
         }
+        MZN{
+            "MZN",
+            "Метикал",
+        }
         NAD{
             "N$",
             "Доллар Намибии",
@@ -951,6 +956,10 @@ ru{
         NGN{
             "NGN",
             "Нигерийская найра",
+        }
+        NIC{
+            "NIC",
+            "Никарагуанская кордоба",
         }
         NIO{
             "NIO",
@@ -1030,6 +1039,10 @@ ru{
         }
         ROL{
             "leu",
+            "Старый Румынский лей",
+        }
+        RON{
+            "RON",
             "Румынский лей",
         }
         RSD{
@@ -1189,7 +1202,7 @@ ru{
             "Угандийский шиллинг",
         }
         USD{
-            "USD",
+            "$",
             "Доллар США",
         }
         USN{
@@ -1239,6 +1252,10 @@ ru{
         XAU{
             "XAU",
             "Золото",
+        }
+        XBA{
+            "XBA",
+            "Европейская составная единица",
         }
         XBB{
             "XBB",
@@ -1295,6 +1312,10 @@ ru{
         XTS{
             "XTS",
             "тестовый валютный код",
+        }
+        XXX{
+            "XXX",
+            "Неизвестная или недействительная валюта",
         }
         YDD{
             "YDD",
@@ -1411,11 +1432,13 @@ ru{
         btk{"батакский"}
         bua{"бурятский"}
         bug{"бугийский"}
+        byn{"билин"}
         ca{"каталанский"}
         cad{"каддо"}
         cai{"Центральной Америки индейцев (другие)"}
         car{"кариб"}
         cau{"кавказские (другие)"}
+        cch{"атсам"}
         ce{"чеченский"}
         ceb{"кебуано"}
         cel{"кельтские другие"}
@@ -1449,7 +1472,10 @@ ru{
         dar{"даргва"}
         day{"даяк"}
         de{"немецкий"}
+        de_AT{"Австрийский немецкий"}
+        de_CH{"Швейцарский верхненемецкий"}
         del{"делаварский"}
+        den{"славянский"}
         dgr{"догриб"}
         din{"динка"}
         doi{"догри"}
@@ -1457,6 +1483,7 @@ ru{
         dsb{"нижнелужицкий"}
         dua{"дуала"}
         dum{"нидерландский средневековый"}
+        dv{"мальдивский"}
         dyu{"диула (дьюла)"}
         dz{"дзонг-кэ"}
         ee{"эве"}
@@ -1466,10 +1493,15 @@ ru{
         el{"греческий"}
         elx{"эламский"}
         en{"английский"}
+        en_AU{"Австралийский английский"}
+        en_CA{"Канадский английский"}
+        en_GB{"Британский английский"}
         en_US{"английский (США)"}
         enm{"среднеанглийский"}
         eo{"эсперанто"}
         es{"испанский"}
+        es_419{"Латино-американский испанский"}
+        es_ES{"Испанский иберийский"}
         et{"эстонский"}
         eu{"баскский"}
         ewo{"эвондо"}
@@ -1484,6 +1516,8 @@ ru{
         fo{"фарерский"}
         fon{"фон"}
         fr{"французский"}
+        fr_CA{"Канадский французский"}
+        fr_CH{"Швейцарский французский"}
         frm{"среднефранцузский"}
         fro{"старофранцузский"}
         frr{"фризский северный"}
@@ -1507,6 +1541,7 @@ ru{
         got{"готский"}
         grb{"гребо"}
         grc{"древнегреческий"}
+        gsw{"Швейцарский немецкий"}
         gu{"гуджарати"}
         gv{"мэнский"}
         gwi{"гвичин"}
@@ -1519,6 +1554,7 @@ ru{
         him{"химачали"}
         hit{"хетский"}
         hmn{"хмонг"}
+        ho{"хиримоту"}
         hr{"хорватский"}
         hsb{"верхнелужицкий"}
         ht{"гаитянский"}
@@ -1553,11 +1589,13 @@ ru{
         kaa{"каракалпакский"}
         kab{"кабильский"}
         kac{"качин"}
+        kaj{"каджи"}
         kam{"камба"}
         kar{"каренский"}
         kaw{"кави"}
         kbd{"кабардинский"}
         kcg{"тьяп"}
+        kfo{"коро"}
         kg{"конго"}
         kha{"кхаси"}
         khi{"койсанские (другие)"}
@@ -1571,6 +1609,7 @@ ru{
         kn{"каннада"}
         ko{"корейский"}
         kok{"конкани"}
+        kos{"косраенский"}
         kpe{"кпелле"}
         kr{"канури"}
         krc{"карачаево-балкарский"}
@@ -1616,6 +1655,7 @@ ru{
         men{"менде"}
         mg{"малагасийский"}
         mga{"среднеирландский"}
+        mh{"маршаллийский"}
         mi{"маори"}
         mic{"микмак"}
         min{"минангкабау"}
@@ -1645,6 +1685,7 @@ ru{
         nah{"ацтекский"}
         nai{"Северной Америки индейцев (другие)"}
         nap{"неаполитанский"}
+        nb{"норвежский букмол"}
         nd{"ндебели (северный)"}
         nds{"нижнегерманский"}
         ne{"непальский"}
@@ -1654,6 +1695,7 @@ ru{
         nic{"нигер-кордофанские (другие)"}
         niu{"ниуэ"}
         nl{"голландский"}
+        nl_BE{"Бельгийский фламандский"}
         nn{"новонорвежский"}
         no{"норвежский"}
         nog{"ногайский"}
@@ -1694,6 +1736,8 @@ ru{
         pro{"старопровансальский"}
         ps{"пашто (пушту)"}
         pt{"португальский"}
+        pt_BR{"Бразильский португальский"}
+        pt_PT{"Португальский иберийский"}
         qu{"кечуа"}
         raj{"раджастхани"}
         rap{"рапануи"}
@@ -1736,6 +1780,9 @@ ru{
         sm{"самоанский"}
         sma{"саамский (южный)"}
         smi{"саамские языки"}
+        smj{"луле-саамский"}
+        smn{"энаре-саамский"}
+        sms{"скольт-саамский"}
         sn{"шона"}
         snk{"сонинкийский"}
         so{"сомали"}
@@ -1758,7 +1805,9 @@ ru{
         ta{"тамильский"}
         tai{"тайские (другие)"}
         te{"телугу"}
+        tem{"темне"}
         ter{"терено"}
+        tet{"тетум"}
         tg{"таджикский"}
         th{"тайский"}
         ti{"тигринья"}
@@ -1773,6 +1822,7 @@ ru{
         tn{"тсвана"}
         to{"тонга"}
         tog{"тонга (ньяса)"}
+        tpi{"ток-писин"}
         tr{"турецкий"}
         ts{"тсонга"}
         tsi{"цимшиан"}
@@ -1814,6 +1864,8 @@ ru{
         zap{"сапотекский"}
         zen{"зенагский"}
         zh{"китайский"}
+        zh_Hans{"Упрощенный китайский"}
+        zh_Hant{"Традиционный китайский"}
         znd{"занди"}
         zu{"зулу"}
         zun{"зуньи"}
@@ -1912,7 +1964,9 @@ ru{
         Xpeo{"Староперсидская"}
         Xsux{"Шумеро-аккадская клинопись"}
         Yiii{"Йи (ицзу)"}
+        Zxxx{"Ненаписанная"}
         Zyyy{"Неопределенная"}
+        Zzzz{"Неизвестная или недействительная письменность"}
     }
     Types{
         calendar{
@@ -1930,19 +1984,24 @@ ru{
             gb2312han{"упрощенный китайский - GB2312"}
             phonebook{"порядок телефонной книги"}
             pinyin{"пиньинь"}
+            stroke{"по чертам"}
             traditional{"традиционный"}
         }
     }
-    Version{"1.92"}
+    Version{"1.110"}
     calendar{
         gregorian{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
             DateTimePatterns{
                 "H:mm:ss v",
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
-                "d MMMM yyyy\u00a0'г.'",
-                "d MMMM yyyy\u00a0'г.'",
+                "d MMMM yyyy 'г'.",
+                "d MMMM yyyy 'г'.",
                 "dd.MM.yyyy",
                 "dd.MM.yy",
                 "{1} {0}",
@@ -1953,7 +2012,8 @@ ru{
                 HHmm{"HH:mm"}
                 HHmmss{"HH:mm:ss"}
                 MMMEd{"E MMM d"}
-                MMMd{"d\u00a0MMM"}
+                MMMMd{"d MMMM"}
+                MMMd{"d MMM"}
                 MMdd{"dd.MM"}
                 Md{"d.M"}
                 mmss{"mm:ss"}
@@ -1962,6 +2022,7 @@ ru{
                 yyMMMEEEd{"EEE, d MMM yy"}
                 yyQ{"Q yy"}
                 yyyy{"yyyy"}
+                yyyyLLLL{"LLLL yyyy"}
                 yyyyMM{"MM.yyyy"}
             }
             dayNames{
@@ -2028,7 +2089,7 @@ ru{
                     }
                 }
                 dayperiod{
-                    dn{"n/a"}
+                    dn{"AM/PM"}
                 }
                 era{
                     dn{"Эра"}
@@ -2049,7 +2110,7 @@ ru{
                     dn{"Неделя"}
                 }
                 weekday{
-                    dn{"Будний день"}
+                    dn{"День недели"}
                 }
                 year{
                     dn{"Год"}
@@ -2182,7 +2243,7 @@ ru{
                         "Кислев",
                         "Тевет",
                         "Шеват",
-                        "Адар 1",
+                        "Adar I",
                         "Адар",
                         "Нисан",
                         "Ияр",
@@ -2197,7 +2258,7 @@ ru{
                         "Кислев",
                         "Тевет",
                         "Шеват",
-                        "Адар 1",
+                        "Adar I",
                         "Адар",
                         "Нисан",
                         "Ияр",
@@ -2248,9 +2309,9 @@ ru{
                 "H:mm:ss v",
                 "H:mm:ss z",
                 "H:mm:ss",
-                "Эсфанд",
-                "d MMMM yyyy\u00a0'г.'",
-                "d MMMM yyyy\u00a0'г.'",
+                "'Эсфанд'",
+                "d MMMM yyyy 'г'.",
+                "d MMMM yyyy 'г'.",
                 "dd.MM.yyyy",
                 "dd.MM.yy",
                 "{1} {0}",
@@ -2537,6 +2598,9 @@ ru{
         "America:Cayenne"{
             ec{"Кайенна"}
         }
+        "America:Cayman"{
+            ec{"Каймановы острова"}
+        }
         "America:Chicago"{
             ec{"Чикаго"}
         }
@@ -2548,6 +2612,9 @@ ru{
         }
         "America:Cordoba"{
             ec{"Кордова"}
+        }
+        "America:Costa_Rica"{
+            ec{"Коста-Рика"}
         }
         "America:Cuiaba"{
             ec{"Куяба"}
@@ -2579,6 +2646,9 @@ ru{
         "America:Eirunepe"{
             ec{"Эйрунепе"}
         }
+        "America:El_Salvador"{
+            ec{"Сальвадор"}
+        }
         "America:Fortaleza"{
             ec{"Форталеза"}
         }
@@ -2591,6 +2661,9 @@ ru{
         "America:Goose_Bay"{
             ec{"Гус-Бей"}
         }
+        "America:Grand_Turk"{
+            ec{"Гранд Турк"}
+        }
         "America:Grenada"{
             ec{"Гренада"}
         }
@@ -2602,6 +2675,9 @@ ru{
         }
         "America:Guayaquil"{
             ec{"Гуаякиль"}
+        }
+        "America:Guyana"{
+            ec{"Гайана"}
         }
         "America:Halifax"{
             ec{"Галифакс"}
@@ -2786,8 +2862,17 @@ ru{
         "America:St_Johns"{
             ec{"Сент-Джонс"}
         }
+        "America:St_Kitts"{
+            ec{"Сент-Китс"}
+        }
+        "America:St_Lucia"{
+            ec{"Сент-Люсия"}
+        }
         "America:St_Thomas"{
             ec{"Сент-Томас"}
+        }
+        "America:St_Vincent"{
+            ec{"Сент-Винсент"}
         }
         "America:Swift_Current"{
             ec{"Свифт-Карент"}
@@ -2803,6 +2888,9 @@ ru{
         }
         "America:Toronto"{
             ec{"Торонто"}
+        }
+        "America:Tortola"{
+            ec{"Тортола"}
         }
         "America:Vancouver"{
             ec{"Ванкувер"}
@@ -2858,6 +2946,9 @@ ru{
         "Asia:Almaty"{
             ec{"Алматы"}
         }
+        "Asia:Amman"{
+            ec{"Амман"}
+        }
         "Asia:Anadyr"{
             ec{"Анадырь"}
         }
@@ -2870,11 +2961,17 @@ ru{
         "Asia:Ashgabat"{
             ec{"Ашгабат"}
         }
+        "Asia:Baghdad"{
+            ec{"Багдад"}
+        }
         "Asia:Bahrain"{
             ec{"Бахрейн"}
         }
         "Asia:Baku"{
             ec{"Баку"}
+        }
+        "Asia:Bangkok"{
+            ec{"Бангкок"}
         }
         "Asia:Beirut"{
             ec{"Бейрут"}
@@ -2882,17 +2979,44 @@ ru{
         "Asia:Bishkek"{
             ec{"Бишкек"}
         }
+        "Asia:Brunei"{
+            ec{"Бруней"}
+        }
+        "Asia:Calcutta"{
+            ec{"Калькутта"}
+        }
         "Asia:Choibalsan"{
             ec{"Чойбалсан"}
         }
         "Asia:Chongqing"{
             ec{"Чунцин"}
         }
+        "Asia:Colombo"{
+            ec{"Коломбо"}
+        }
+        "Asia:Damascus"{
+            ec{"Дамаск"}
+        }
+        "Asia:Dhaka"{
+            ec{"Дакка"}
+        }
+        "Asia:Dili"{
+            ec{"Дили"}
+        }
+        "Asia:Dubai"{
+            ec{"Дубай"}
+        }
+        "Asia:Dushanbe"{
+            ec{"Душанбе"}
+        }
         "Asia:Gaza"{
             ec{"Газа"}
         }
         "Asia:Harbin"{
             ec{"Харбин"}
+        }
+        "Asia:Hong_Kong"{
+            ec{"Гонконг"}
         }
         "Asia:Hovd"{
             ec{"Ховд"}
@@ -2906,11 +3030,17 @@ ru{
         "Asia:Jayapura"{
             ec{"Джайпур"}
         }
+        "Asia:Jerusalem"{
+            ec{"Иерусалим"}
+        }
         "Asia:Kabul"{
             ec{"Кабул"}
         }
         "Asia:Kamchatka"{
             ec{"Петропавловск-Камчатский"}
+        }
+        "Asia:Karachi"{
+            ec{"Карачи"}
         }
         "Asia:Kashgar"{
             ec{"Кашгар"}
@@ -2927,11 +3057,17 @@ ru{
         "Asia:Kuching"{
             ec{"Кучинг"}
         }
+        "Asia:Kuwait"{
+            ec{"Кувейт"}
+        }
         "Asia:Magadan"{
             ec{"Магадан"}
         }
         "Asia:Makassar"{
             ec{"Макасар"}
+        }
+        "Asia:Manila"{
+            ec{"Манила"}
         }
         "Asia:Nicosia"{
             ec{"Никосия"}
@@ -2945,11 +3081,17 @@ ru{
         "Asia:Oral"{
             ec{"Орал (Уральск)"}
         }
+        "Asia:Phnom_Penh"{
+            ec{"Пномпень"}
+        }
         "Asia:Pontianak"{
             ec{"Понтианак"}
         }
         "Asia:Pyongyang"{
             ec{"Пхеньян"}
+        }
+        "Asia:Qatar"{
+            ec{"Катар"}
         }
         "Asia:Qyzylorda"{
             ec{"Кызылорда"}
@@ -2960,17 +3102,26 @@ ru{
         "Asia:Riyadh"{
             ec{"Эр-Рияд"}
         }
+        "Asia:Saigon"{
+            ec{"Сайгон"}
+        }
         "Asia:Sakhalin"{
             ec{"Сахалин, о-в"}
         }
         "Asia:Samarkand"{
             ec{"Самарканд"}
         }
+        "Asia:Seoul"{
+            ec{"Сеул"}
+        }
         "Asia:Shanghai"{
             ec{"Шанхай"}
         }
         "Asia:Singapore"{
             ec{"Сингапур"}
+        }
+        "Asia:Taipei"{
+            ec{"Тайбэй"}
         }
         "Asia:Tashkent"{
             ec{"Ташкент"}
@@ -2980,6 +3131,9 @@ ru{
         }
         "Asia:Tehran"{
             ec{"Тегеран"}
+        }
+        "Asia:Thimphu"{
+            ec{"Тимпу"}
         }
         "Asia:Tokyo"{
             ec{"Токио"}
@@ -3002,11 +3156,23 @@ ru{
         "Asia:Yekaterinburg"{
             ec{"Екатеринбург"}
         }
+        "Asia:Yerevan"{
+            ec{"Ереван"}
+        }
         "Atlantic:Azores"{
             ec{"Азорские о-ва"}
         }
+        "Atlantic:Bermuda"{
+            ec{"Бермуды"}
+        }
         "Atlantic:Canary"{
             ec{"Канарские о-ва"}
+        }
+        "Atlantic:Cape_Verde"{
+            ec{"Острова Зеленого Мыса"}
+        }
+        "Atlantic:Faeroe"{
+            ec{"Фарерские острова"}
         }
         "Atlantic:Jan_Mayen"{
             ec{"Ян-Майен, о-в"}
@@ -3016,6 +3182,15 @@ ru{
         }
         "Atlantic:Reykjavik"{
             ec{"Рейкьявик"}
+        }
+        "Atlantic:South_Georgia"{
+            ec{"Ю.Джорджия и Ю.Сэндвинчевы о-ва"}
+        }
+        "Atlantic:St_Helena"{
+            ec{"Св. Елены, о-в"}
+        }
+        "Atlantic:Stanley"{
+            ec{"Стэнли"}
         }
         "Australia:Adelaide"{
             ec{"Аделаида"}
@@ -3050,17 +3225,56 @@ ru{
         "Australia:Sydney"{
             ec{"Сидней"}
         }
+        "Etc:Unknown"{
+            ec{"Неизвестный"}
+        }
+        "Europe:Amsterdam"{
+            ec{"Амстердам"}
+        }
+        "Europe:Andorra"{
+            ec{"Андорра"}
+        }
+        "Europe:Athens"{
+            ec{"Афины"}
+        }
         "Europe:Belfast"{
             ec{"Белфаст"}
         }
+        "Europe:Belgrade"{
+            ec{"Белград"}
+        }
         "Europe:Berlin"{
             ec{"Берлин"}
+        }
+        "Europe:Bratislava"{
+            ec{"Братислава"}
         }
         "Europe:Brussels"{
             ec{"Брюссель"}
         }
         "Europe:Bucharest"{
             ec{"Бухарест"}
+        }
+        "Europe:Budapest"{
+            ec{"Будапешт"}
+        }
+        "Europe:Chisinau"{
+            ec{"Кишинев"}
+        }
+        "Europe:Copenhagen"{
+            ec{"Копенгаген"}
+        }
+        "Europe:Dublin"{
+            ec{"Дублин"}
+        }
+        "Europe:Gibraltar"{
+            ec{"Гибралтар"}
+        }
+        "Europe:Helsinki"{
+            ec{"Хельсинки"}
+        }
+        "Europe:Istanbul"{
+            ec{"Стамбул"}
         }
         "Europe:Kaliningrad"{
             ec{"Калининград"}
@@ -3071,20 +3285,38 @@ ru{
         "Europe:Lisbon"{
             ec{"Лиссабон"}
         }
+        "Europe:Ljubljana"{
+            ec{"Любляна"}
+        }
         "Europe:London"{
             ec{"Лондон"}
+        }
+        "Europe:Luxembourg"{
+            ec{"Люксембург"}
         }
         "Europe:Madrid"{
             ec{"Мадрид"}
         }
+        "Europe:Malta"{
+            ec{"Мальта"}
+        }
         "Europe:Minsk"{
             ec{"Минск"}
+        }
+        "Europe:Monaco"{
+            ec{"Монако"}
         }
         "Europe:Moscow"{
             ec{"Москва"}
         }
+        "Europe:Oslo"{
+            ec{"Осло"}
+        }
         "Europe:Paris"{
             ec{"Париж"}
+        }
+        "Europe:Prague"{
+            ec{"Прага"}
         }
         "Europe:Riga"{
             ec{"Рига"}
@@ -3095,8 +3327,20 @@ ru{
         "Europe:Samara"{
             ec{"Самара"}
         }
+        "Europe:San_Marino"{
+            ec{"Сан-Марино"}
+        }
+        "Europe:Sarajevo"{
+            ec{"Сараево"}
+        }
         "Europe:Simferopol"{
             ec{"Симферополь"}
+        }
+        "Europe:Skopje"{
+            ec{"Скопье"}
+        }
+        "Europe:Sofia"{
+            ec{"София"}
         }
         "Europe:Stockholm"{
             ec{"Стокгольм"}
@@ -3106,6 +3350,12 @@ ru{
         }
         "Europe:Uzhgorod"{
             ec{"Ужгород"}
+        }
+        "Europe:Vaduz"{
+            ec{"Вадуц"}
+        }
+        "Europe:Vatican"{
+            ec{"Ватикан"}
         }
         "Europe:Vienna"{
             ec{"Вена"}
@@ -3119,8 +3369,17 @@ ru{
         "Europe:Warsaw"{
             ec{"Варшава"}
         }
+        "Europe:Zagreb"{
+            ec{"Загреб"}
+        }
         "Europe:Zaporozhye"{
             ec{"Запорожье"}
+        }
+        "Europe:Zurich"{
+            ec{"Цюрих"}
+        }
+        "Indian:Antananarivo"{
+            ec{"Антананариву"}
         }
         "Indian:Chagos"{
             ec{"Чагос"}
@@ -3131,17 +3390,26 @@ ru{
         "Indian:Comoro"{
             ec{"Коморские острова"}
         }
+        "Indian:Kerguelen"{
+            ec{"Кергелен"}
+        }
         "Indian:Mahe"{
             ec{"Маэ"}
         }
         "Indian:Maldives"{
             ec{"Мальдивы"}
         }
+        "Indian:Mauritius"{
+            ec{"Маврикий"}
+        }
         "Indian:Mayotte"{
             ec{"Майорка"}
         }
         "Indian:Reunion"{
             ec{"Реюньон"}
+        }
+        "Pacific:Apia"{
+            ec{"Апия"}
         }
         "Pacific:Auckland"{
             ec{"Окленд"}
@@ -3152,11 +3420,20 @@ ru{
         "Pacific:Easter"{
             ec{"Пасхи, о-в"}
         }
+        "Pacific:Efate"{
+            ec{"Эфате"}
+        }
         "Pacific:Enderbury"{
             ec{"Эндербери, о-в"}
         }
         "Pacific:Fakaofo"{
             ec{"Факаофо"}
+        }
+        "Pacific:Fiji"{
+            ec{"Фиджи"}
+        }
+        "Pacific:Funafuti"{
+            ec{"Фунафути"}
         }
         "Pacific:Galapagos"{
             ec{"Галапагос, о-ва"}
@@ -3166,6 +3443,9 @@ ru{
         }
         "Pacific:Guadalcanal"{
             ec{"Гвадалканал"}
+        }
+        "Pacific:Guam"{
+            ec{"Гуам"}
         }
         "Pacific:Honolulu"{
             ec{"Гонолулу"}
@@ -3191,6 +3471,12 @@ ru{
         "Pacific:Midway"{
             ec{"Мидуэй, о-ва"}
         }
+        "Pacific:Nauru"{
+            ec{"Науру"}
+        }
+        "Pacific:Niue"{
+            ec{"Ниуэ"}
+        }
         "Pacific:Norfolk"{
             ec{"Норфолк"}
         }
@@ -3200,8 +3486,17 @@ ru{
         "Pacific:Pago_Pago"{
             ec{"Паго-Паго"}
         }
+        "Pacific:Palau"{
+            ec{"Палау"}
+        }
+        "Pacific:Pitcairn"{
+            ec{"Питкерн"}
+        }
         "Pacific:Ponape"{
             ec{"Понапе, о-в"}
+        }
+        "Pacific:Port_Moresby"{
+            ec{"Порт-Морсби"}
         }
         "Pacific:Rarotonga"{
             ec{"Раротонга"}
@@ -3223,6 +3518,9 @@ ru{
         }
         "Pacific:Wake"{
             ec{"Уэйк, о-в"}
+        }
+        "Pacific:Wallis"{
+            ec{"Уоллис"}
         }
         "Pacific:Yap"{
             ec{"Яп, о-ва"}

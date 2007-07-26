@@ -13,7 +13,7 @@ en_IN{
         "#,##,##0%",
         "#E0",
     }
-    Version{"1.92"}
+    Version{"1.49"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -23,7 +23,7 @@ en_IN{
                 "h:mm a",
                 "EEEE d MMMM yyyy",
                 "d MMMM yyyy",
-                "MMM d, yyyy",
+                "dd-MMM-yyyy",
                 "dd/MM/yy",
                 "{1} {0}",
             }

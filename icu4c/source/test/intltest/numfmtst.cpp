@@ -642,13 +642,13 @@ NumberFormatTest::escape(UnicodeString& s)
 // -------------------------------------
 static const char* testCases[][2]= {
      /* locale ID */  /* expected */
-    {"ca_ES_PREEURO", "\\u20A7 1.150" },
+    {"ca_ES_PREEURO", "1.150 \\u20A7" },
     {"de_LU_PREEURO", "1,150 F" },
-    {"el_GR_PREEURO", "1.150,50 \\u0394\\u03C1\\u03C7" },
+    {"el_GR_PREEURO", "1.150,50\\u0394\\u03C1\\u03C7" },
     {"en_BE_PREEURO", "1.150,50 BF" },
     {"es_ES_PREEURO", "1.150 \\u20A7" },
-    {"eu_ES_PREEURO", "\\u20A7 1.150" }, 
-    {"gl_ES_PREEURO", "\\u20A7 1.150" },
+    {"eu_ES_PREEURO", "1.150 \\u20A7" }, 
+    {"gl_ES_PREEURO", "1.150 \\u20A7" },
     {"it_IT_PREEURO", "\\u20A4 1.150" },
     {"pt_PT_PREEURO", "1,150$50 Esc."},
     {"en_US@currency=JPY", "\\u00A51,150"}

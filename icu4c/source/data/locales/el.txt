@@ -23,7 +23,6 @@ el{
         017{"Μέση Αφρική"}
         018{"Νότια Αφρική [018]"}
         019{"Αμερική"}
-        021{"Βόρεια Αμερική"}
         029{"Καραϊβική"}
         030{"Ανατολική Ασία"}
         034{"Νότια Ασία"}
@@ -158,7 +157,7 @@ el{
         JO{"Ιορδανία"}
         JP{"Ιαπωνία"}
         KE{"Κένυα"}
-        KG{"Κιργκιζστάν"}
+        KG{"Κιργιζία"}
         KH{"Καμπότζη"}
         KI{"Κιριμπάτι"}
         KM{"Κομόρες"}
@@ -637,7 +636,10 @@ el{
             "Δρχ",
             "Δραχμή Ελλάδας",
             {
-                "#,##0.00 ¤;-#,##0.00 ¤",
+                /**
+                 * Duplicated from NumberPatterns resource
+                 */
+                "#,##0.00¤;-¤#,##0.00",
                 ",",
                 ".",
             }
@@ -974,6 +976,10 @@ el{
             "leu",
             "Λέι Ρουμανίας",
         }
+        RON{
+            "RON",
+            "Λεβ Ρουμανίας",
+        }
         RSD{
             "RSD",
             "Δηνάριο Σερβίας",
@@ -1148,7 +1154,7 @@ el{
         }
         VND{
             "VND",
-            "Ντογκ Βιετνάμ",
+            "Dong Βιετνάμ",
         }
         WST{
             "WST",
@@ -1267,7 +1273,7 @@ el{
         az{"Αζερμπαϊτζανικά"}
         be{"Λευκορωσικά"}
         bg{"Βουλγαρικά"}
-        bh{"μπιχάρι"}
+        bh{"Μπιχάρι"}
         bn{"μπενγκάλι"}
         bo{"Θιβετιανά"}
         br{"Βρετονικά"}
@@ -1297,14 +1303,16 @@ el{
         eu{"Βασκικά"}
         fa{"Περσικά"}
         fi{"Φινλανδικά"}
+        fil{"Φιλιππινέζικα"}
         fr{"Γαλλικά"}
         fr_CA{"Γαλλικά Καναδά"}
         fr_CH{"Γαλλικά Ελβετίας"}
+        fy{"Φριζιανά"}
         ga{"Ιρλανδικά"}
         gd{"Σκωτικά Κελτικά"}
+        gn{"Γκουαράνι"}
         got{"Γοτθικά"}
         grc{"Αρχαία Ελληνικά"}
-        gu{"γκουτζαράτι"}
         haw{"Χαβανέζικα"}
         he{"Εβραϊκά"}
         hi{"Χίντι"}
@@ -1319,32 +1327,31 @@ el{
         is{"Ισλανδικά"}
         it{"Ιταλικά"}
         ja{"Ιαπωνικά"}
-        jv{"ιαβανέζικα"}
         ka{"Γεωργιανά"}
+        km{"Καμποτζιανά"}
         kn{"Κανάντα"}
         ko{"Κορεατικά"}
-        ks{"κασμίρι"}
+        ks{"Κασμίρι"}
         ku{"Κουρδικά"}
-        ky{"κιργκίζ"}
         la{"Λατινικά"}
-        ln{"λινγκάλα"}
+        ln{"Λινγκάλα"}
+        lo{"Λαοθιανά"}
         lt{"Λιθουανικά"}
         lv{"Λετονικά"}
         mk{"Σλαβομακεδονικά"}
         mn{"Μογγολικά"}
         mo{"Μολδαβικά"}
-        ms{"μαλάι"}
         mt{"Μαλτέζικα"}
         mul{"Πολλαπλές Γλώσσες"}
         nai{"Ινδιανικά Βόρειας Αμερικής (Άλλα)"}
-        ne{"νεπάλι"}
+        ne{"Νεπάλι"}
         nl{"Ολλανδικά"}
         nl_BE{"Φλαμανδικά"}
         nn{"Νορβηγικά Νινόρσκ"}
         no{"Νορβηγικά"}
         oc{"Οκσιτανικά"}
-        ota{"Τουρκικά, Οθωμανικά (1500-1928)"}
-        pa{"πουντζάμπι"}
+        or{"Ορίγια"}
+        ota{"Τουρκικά Οθωμανικά"}
         peo{"Αρχαία Περσικά"}
         phi{"Φιλιππινέζικα (Άλλα)"}
         phn{"Φοινικικά"}
@@ -1357,33 +1364,38 @@ el{
         rom{"Ρωμανικά"}
         ru{"Ρωσικά"}
         sa{"Σανσκριτικά"}
+        sd{"Σίντι"}
         sem{"Σημιτικά (Άλλα)"}
         sh{"Σερβοκροατικά"}
+        si{"Σινχαλέζικα"}
         sk{"Σλοβακικά"}
         sl{"Σλοβενικά"}
         sla{"Σλαβικά (Άλλα)"}
-        so{"σομάλι"}
+        so{"Σομάλι"}
         sq{"Αλβανικά"}
         sr{"Σερβικά"}
+        su{"Σουδανικά"}
         sv{"Σουηδικά"}
-        sw{"σουαχίλι"}
+        sw{"Σουαχίλι"}
         syr{"Συριακά"}
-        ta{"ταμίλ"}
         te{"Τελούγκου"}
         th{"Ταϊλανδικά"}
-        ti{"τιγκρίνυα"}
-        tlh{"κλίνγκον"}
+        ti{"Τιγκρίνυα"}
+        tk{"Τουρκμενικά"}
+        tlh{"Κλίνγκον"}
         tr{"Τουρκικά"}
-        tw{"τούι"}
+        tw{"Τούι"}
+        ug{"Ουιγουρικά"}
         uk{"Ουκρανικά"}
         ur{"Ουρντού"}
         vi{"Βιετναμέζικα"}
-        wo{"γουόλοφ"}
+        wo{"Γουόλοφ"}
+        xh{"Ζόσα"}
         yi{"Ιουδαϊκά"}
         zh{"Κινεζικά"}
         zh_Hans{"Κινεζικά Απλοποιημένα"}
         zh_Hant{"Κινεζικά Παραδοσιακά"}
-        zu{"ζουλού"}
+        zu{"Ζουλού"}
     }
     LocaleScript{
         "Grek",
@@ -1466,21 +1478,8 @@ el{
         POLYTON{"Πολυτονικό"}
         REVISED{"Αναθεωρημένη Ορθογραφία"}
     }
-    Version{"1.92"}
+    Version{"1.84"}
     calendar{
-        buddhist{
-            DateTimePatterns{
-                "h:mm:ss a v",
-                "h:mm:ss a z",
-                "h:mm:ss a",
-                "h:mm a",
-                "EEEE, MMMM d, yyyy G",
-                "MMMM d, yyyy G",
-                "MMM d, yyyy G",
-                "M/d/yyyy",
-                "{1} {0}",
-            }
-        }
         gregorian{
             AmPmMarkers{
                 "ΠΜ",
@@ -1503,10 +1502,15 @@ el{
                 HHmm{"HH:mm"}
                 HHmmss{"HH:mm:ss"}
                 MMMEd{"E d MMM"}
+                MMMMd{"d MMMM"}
                 MMMMdd{"dd MMMM"}
                 MMdd{"dd/MM"}
+                Md{"d/M"}
                 mmss{"mm:ss"}
+                yyMM{"MM/yy"}
+                yyMMM{"MMM yy"}
                 yyQ{"Q yy"}
+                yyQQQQ{"QQQQ yy"}
                 yyyy{"yyyy"}
                 yyyyMM{"MM/yyyy"}
                 yyyyMMMM{"MMMM yyyy"}
@@ -1703,6 +1707,14 @@ el{
                         "4ο τρίμηνο",
                     }
                 }
+                stand-alone{
+                    abbreviated{
+                        "Τ1",
+                        "Τ2",
+                        "Τ3",
+                        "Τ4",
+                    }
+                }
             }
         }
     }
@@ -1720,161 +1732,35 @@ el{
         "Africa:Abidjan"{
             ec{"Ακτή Ελεφαντοστού"}
         }
-        "Africa:Accra"{
-            ec{"Γκάνα"}
-        }
-        "Africa:Addis_Ababa"{
-            ec{"Αιθιοπία"}
-        }
-        "Africa:Algiers"{
-            ec{"Αλγερία"}
-        }
-        "Africa:Asmera"{
-            ec{"Ερυθραία"}
-        }
         "Africa:Bamako"{
             ec{"Μπαμάκο"}
-        }
-        "Africa:Bangui"{
-            ec{"Κεντροαφρικανική Δημοκρατία"}
-        }
-        "Africa:Banjul"{
-            ec{"Γκάμπια"}
-        }
-        "Africa:Bissau"{
-            ec{"Γουινέα Μπισσάου"}
-        }
-        "Africa:Blantyre"{
-            ec{"Μαλάουι"}
         }
         "Africa:Brazzaville"{
             ec{"Μπράζαβιλ"}
         }
-        "Africa:Bujumbura"{
-            ec{"Μπουρούντι"}
-        }
-        "Africa:Cairo"{
-            ec{"Αίγυπτος"}
-        }
-        "Africa:Casablanca"{
-            ec{"Μαρόκο"}
-        }
         "Africa:Ceuta"{
             ec{"Κέουτα"}
-        }
-        "Africa:Conakry"{
-            ec{"Γουινέα"}
-        }
-        "Africa:Dakar"{
-            ec{"Σενεγάλη"}
-        }
-        "Africa:Dar_es_Salaam"{
-            ec{"Τανζανία"}
         }
         "Africa:Djibouti"{
             ec{"Τζιμπουτί"}
         }
-        "Africa:Douala"{
-            ec{"Καμερούν"}
-        }
-        "Africa:El_Aaiun"{
-            ec{"Δυτική Σαχάρα"}
-        }
-        "Africa:Freetown"{
-            ec{"Σιέρα Λεόνε"}
-        }
-        "Africa:Gaborone"{
-            ec{"Μποτσουάνα"}
-        }
-        "Africa:Harare"{
-            ec{"Ζιμπάμπουε"}
-        }
-        "Africa:Johannesburg"{
-            ec{"Νότια Αφρική"}
-        }
-        "Africa:Kampala"{
-            ec{"Ουγκάντα"}
-        }
-        "Africa:Khartoum"{
-            ec{"Σουδάν"}
-        }
-        "Africa:Kigali"{
-            ec{"Ρουάντα"}
-        }
         "Africa:Kinshasa"{
             ec{"Κινσάσα"}
-        }
-        "Africa:Lagos"{
-            ec{"Νιγηρία"}
-        }
-        "Africa:Libreville"{
-            ec{"Γκαμπόν"}
-        }
-        "Africa:Lome"{
-            ec{"Τόγκο"}
-        }
-        "Africa:Luanda"{
-            ec{"Αγκόλα"}
         }
         "Africa:Lubumbashi"{
             ec{"Λουμπουμπάσι"}
         }
-        "Africa:Lusaka"{
-            ec{"Ζάμπια"}
-        }
-        "Africa:Malabo"{
-            ec{"Ισημερινή Γουινέα"}
-        }
-        "Africa:Maputo"{
-            ec{"Μοζαμβίκη"}
-        }
-        "Africa:Maseru"{
-            ec{"Λεσόθο"}
-        }
-        "Africa:Mogadishu"{
-            ec{"Σομαλία"}
-        }
-        "Africa:Monrovia"{
-            ec{"Λιβερία"}
-        }
-        "Africa:Nairobi"{
-            ec{"Κένυα"}
-        }
-        "Africa:Ndjamena"{
-            ec{"Τσαντ"}
-        }
-        "Africa:Niamey"{
-            ec{"Νίγηρας"}
-        }
-        "Africa:Nouakchott"{
-            ec{"Μαυριτανία"}
-        }
-        "Africa:Ouagadougou"{
-            ec{"Μπουρκίνα Φάσο"}
-        }
-        "Africa:Porto-Novo"{
-            ec{"Μπενίν"}
+        "Africa:Sao_Tome"{
+            ec{"Σάο Τόμε"}
         }
         "Africa:Timbuktu"{
             ec{"Τιμπουκτού"}
-        }
-        "Africa:Tripoli"{
-            ec{"Λιβύη"}
-        }
-        "Africa:Tunis"{
-            ec{"Τυνησία"}
-        }
-        "Africa:Windhoek"{
-            ec{"Ναμίμπια"}
         }
         "America:Anchorage"{
             ec{"Άνκορατζ"}
         }
         "America:Anguilla"{
             ec{"Ανγκουίλλα"}
-        }
-        "America:Antigua"{
-            ec{"Αντίγκουα και Μπαρμπούντα"}
         }
         "America:Araguaina"{
             ec{"Αραγκουάινα"}
@@ -2101,6 +1987,9 @@ el{
         "Australia:Sydney"{
             ec{"Σύδνεϊ"}
         }
+        "Etc:Unknown"{
+            ec{"Άγνωστη"}
+        }
         "Europe:Amsterdam"{
             ec{"Άμστερνταμ"}
         }
@@ -2221,9 +2110,6 @@ el{
         "Indian:Chagos"{
             ec{"Τσάγκος"}
         }
-        "Indian:Christmas"{
-            ec{"Χριστούγεννα"}
-        }
         "Indian:Cocos"{
             ec{"Κόκος"}
         }
@@ -2245,14 +2131,14 @@ el{
         "Indian:Mayotte"{
             ec{"Μαγιότε"}
         }
+        "Indian:Reunion"{
+            ec{"Ρεϋνιόν"}
+        }
         "Pacific:Apia"{
             ec{"Άπια"}
         }
         "Pacific:Auckland"{
             ec{"Όκλαντ"}
-        }
-        "Pacific:Easter"{
-            ec{"Ανατολική Νήσος"}
         }
         "Pacific:Efate"{
             ec{"Εφάτε"}
@@ -2353,7 +2239,6 @@ el{
         "Pacific:Wallis"{
             ec{"Γουόλις"}
         }
-        fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
         hourFormat{"+HHmm;-HHmm"}
         regionFormat{"{0}"}

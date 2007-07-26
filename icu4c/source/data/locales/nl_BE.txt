@@ -8,13 +8,11 @@
 // ***************************************************************************
 nl_BE{
     Countries{
-        172{"Gemenebest van Onafhankelijke Staten"}
         IM{"Het Eiland Man"}
     }
     Languages{
         lv{"Lets"}
         oc{"Occitaans (na 1500); Provençaals"}
-        sa{"Sanskriet"}
         sh{"Servo-Kroatisch"}
     }
     NumberPatterns{
@@ -28,7 +26,7 @@ nl_BE{
             traditional{"Traditioneel"}
         }
     }
-    Version{"1.92"}
+    Version{"1.57"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -42,7 +40,7 @@ nl_BE{
                 "HH:mm",
                 "EEEE d MMMM yyyy",
                 "d MMMM yyyy",
-                "d MMM yyyy",
+                "d-MMM-yyyy",
                 "d/MM/yy",
                 "{1} {0}",
             }

@@ -28,6 +28,7 @@ lv{
         AT{"Austrija"}
         AU{"Austrālija"}
         AW{"Aruba"}
+        AX{"Olandes salas"}
         AZ{"Azerbaidžāna"}
         BA{"Bosnija un Hercegovina"}
         BB{"Barbadosa"}
@@ -114,6 +115,7 @@ lv{
         ID{"Indonēzija"}
         IE{"Īrija"}
         IL{"Izraēla"}
+        IM{"Mena"}
         IN{"Indija"}
         IO{"Britu Indijas okeāna teritorija"}
         IQ{"Irāka"}
@@ -283,6 +285,7 @@ lv{
         fr{"franču"}
         ga{"īru"}
         he{"ivrits"}
+        hi{"hindi"}
         hr{"horvātu"}
         hu{"ungāru"}
         it{"itāliešu"}
@@ -302,6 +305,7 @@ lv{
         sv{"zviedru"}
         th{"taju"}
         tr{"turku"}
+        und{"nezināma vai nederīga valoda"}
         zh{"ķīniešu"}
         zh_Hans{"ķīniešu vienkāršotā"}
         zh_Hant{"ķīniešu tradicionālā"}
@@ -329,7 +333,7 @@ lv{
         "#,##0%",
         "#E0",
     }
-    Version{"1.92"}
+    Version{"1.70"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -337,8 +341,8 @@ lv{
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE, yyyy'. gada 'd. MMMM",
-                "yyyy'. gada 'd. MMMM",
+                "EEEE, yyyy. 'gada' d. MMMM",
+                "yyyy. 'gada' d. MMMM",
                 "yyyy.d.M",
                 "yy.d.M",
                 "{1} {0}",
@@ -362,17 +366,6 @@ lv{
                         "ceturtdiena",
                         "piektdiena",
                         "sestdiena",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
                     }
                 }
             }
@@ -400,33 +393,6 @@ lv{
                         "2"{"parīt"}
                         "3"{"aizparīt"}
                     }
-                }
-                era{
-                    dn{"Ēra"}
-                }
-                hour{
-                    dn{"Stundas"}
-                }
-                minute{
-                    dn{"Minūtes"}
-                }
-                month{
-                    dn{"Mēnesis"}
-                }
-                second{
-                    dn{"Sekundes"}
-                }
-                week{
-                    dn{"Nedēļa"}
-                }
-                weekday{
-                    dn{"Nedēļas diena"}
-                }
-                year{
-                    dn{"Gads"}
-                }
-                zone{
-                    dn{"Josla"}
                 }
             }
             monthNames{
@@ -460,22 +426,6 @@ lv{
                         "decembris",
                     }
                 }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                }
             }
             quarters{
                 format{
@@ -484,12 +434,6 @@ lv{
                         "C2",
                         "C3",
                         "C4",
-                    }
-                    wide{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
                     }
                 }
             }
@@ -502,10 +446,6 @@ lv{
     measurementSystemNames{
         US{"britu"}
         metric{"metriskā"}
-    }
-    messages{
-        nostr{"nē:ne:n"}
-        yesstr{"jā:ja:j"}
     }
     zoneStrings{
         "America:Chicago"{
@@ -541,11 +481,11 @@ lv{
         "Australia:Adelaide"{
             ec{"Adelaida"}
         }
+        "Etc:Unknown"{
+            ec{"Nezināma"}
+        }
         "Pacific:Auckland"{
             ec{"Oklenda"}
-        }
-        "Pacific:Honolulu"{
-            ec{"Honolulu"}
         }
     }
 }

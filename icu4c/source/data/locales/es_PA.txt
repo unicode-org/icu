@@ -7,17 +7,7 @@
 // *
 // ***************************************************************************
 es_PA{
-    Currencies{
-        MXN{
-            "MEX$",
-            "peso mexicano",
-        }
-        USD{
-            "US$",
-            "dólar estadounidense",
-        }
-    }
-    Version{"1.92"}
+    Version{"1.50"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -25,8 +15,8 @@ es_PA{
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE d' de 'MMMM' de 'yyyy",
-                "d' de 'MMMM' de 'yyyy",
+                "EEEE d 'de' MMMM 'de' yyyy",
+                "d 'de' MMMM 'de' yyyy",
                 "MM/dd/yyyy",
                 "MM/dd/yy",
                 "{1} {0}",

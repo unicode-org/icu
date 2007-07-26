@@ -10,8 +10,9 @@
  *  ICU <specials> source: <path>/xml/collation/fi.xml
  */
 fi{
-    Version{"1.22"}
+    Version{"1.24"}
     collations{
+        default{"phonebook"}
         standard{
             Sequence{
                 "&D<<ð<<<Ð<<đ<<<Đ"

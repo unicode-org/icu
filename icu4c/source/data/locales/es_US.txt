@@ -7,22 +7,12 @@
 // *
 // ***************************************************************************
 es_US{
-    Currencies{
-        MXN{
-            "MEX$",
-            "peso mexicano",
-        }
-        USD{
-            "US$",
-            "dólar estadounidense",
-        }
-    }
     MeasurementSystem:int{1}
     PaperSize:intvector{
         279,
         216,
     }
-    Version{"1.92"}
+    Version{"1.58"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -34,8 +24,8 @@ es_US{
                 "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
-                "EEEE d' de 'MMMM' de 'yyyy",
-                "d' de 'MMMM' de 'yyyy",
+                "EEEE d 'de' MMMM 'de' yyyy",
+                "d 'de' MMMM 'de' yyyy",
                 "MMM d, yyyy",
                 "M/d/yy",
                 "{1} {0}",

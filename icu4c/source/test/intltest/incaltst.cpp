@@ -291,7 +291,7 @@ void IntlCalendarTest::TestBuddhist() {
     // end sanity check
 
 
-    quasiGregorianTest(*cal,Locale("th_TH"),data);
+    quasiGregorianTest(*cal,Locale("th_TH@calendar=gregorian"),data);
     delete cal;
 }
 

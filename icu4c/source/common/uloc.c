@@ -163,7 +163,7 @@ static const char * const LANGUAGES[] = {
     "sk",  "sl",  "sla", "sm",  "sma", "smi", "smj", "smn",
     "sms", "sn",  "snk", "so",  "sog", "son", "sq",  "sr",
     "srn", "srr", "ss",  "ssa", "st",  "su",  "suk", "sus", "sux",
-    "sv",  "sw",  "syr", "ta",  "tai", "te",  "tem", "ter",
+    "sv",  "sw",  "syc", "syr", "ta",  "tai", "te",  "tem", "ter",
     "tet", "tg",  "th",  "ti",  "tig", "tiv", "tk",  "tkl",
     "tl",  "tlh", "tli", "tmh", "tn",  "to",  "tog", "tpi", "tr",
     "ts",  "tsi", "tt",  "tum", "tup", "tut", "tvl", "tw",
@@ -296,8 +296,8 @@ static const char * const LANGUAGES_3[] = {
     "sms", "sna", "snk", "som", "sog", "son", "sqi", "srp",
 /*  "srn", "srr", "ss",  "ssa", "st",  "su",  "suk", "sus", "sux",    */
     "srn", "srr", "ssw", "ssa", "sot", "sun", "suk", "sus", "sux",
-/*  "sv",  "sw",  "syr", "ta",  "tai", "te",  "tem", "ter",    */
-    "swe", "swa", "syr", "tam", "tai", "tel", "tem", "ter",
+/*  "sv",  "sw",  "syc", "syr", "ta",  "tai", "te",  "tem", "ter",    */
+    "swe", "swa", "syc", "syr", "tam", "tai", "tel", "tem", "ter",
 /*  "tet", "tg",  "th",  "ti",  "tig", "tiv", "tk",  "tkl",    */
     "tet", "tgk", "tha", "tir", "tig", "tiv", "tuk", "tkl",
 /*  "tl",  "tlh", "tli", "tmh", "tn",  "to",  "tog", "tpi", "tr",     */

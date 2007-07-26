@@ -27,23 +27,12 @@ ti{
         "#,##0%",
         "#E0",
     }
-    Version{"1.93"}
+    Version{"1.55"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "ንጉሆ ሰዓተ",
                 "ድሕር ሰዓት",
-            }
-            DateTimePatterns{
-                "HH:mm:ss v",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, yyyy MMMM dd",
-                "yyyy MMMM d",
-                "yyyy MMM d",
-                "yyyy-MM-dd",
-                "{1} {0}",
             }
             dayNames{
                 format{

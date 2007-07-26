@@ -98,7 +98,7 @@ en{
         CN{"China"}
         CO{"Colombia"}
         CR{"Costa Rica"}
-        CS{"Serbia And Montenegro"}
+        CS{"Serbia and Montenegro"}
         CU{"Cuba"}
         CV{"Cape Verde"}
         CX{"Christmas Island"}
@@ -657,6 +657,10 @@ en{
         }
         GHC{
             "GHC",
+            "Ghana Cedi (1979-2007)",
+        }
+        GHS{
+            "GH¢",
             "Ghana Cedi",
         }
         GIP{
@@ -705,7 +709,7 @@ en{
         }
         HNL{
             "L",
-            "Hoduras Lempira",
+            "Honduras Lempira",
         }
         HRD{
             "HRD",
@@ -740,7 +744,7 @@ en{
             "Israeli New Sheqel",
         }
         INR{
-            "=0#Rs.|1#Re.|1<Rs.",
+            "=0#Rs.|1#Re.|1<Rs." /** (choice)  */,
             "Indian Rupee",
         }
         IQD{
@@ -1044,11 +1048,11 @@ en{
             "Rhodesian Dollar",
         }
         ROL{
-            "=0#Old lei|1#Old leu|1<Old lei",
+            "==0#Old lei|1#Old leu|1<Old lei" /** (choice)  */,
             "Old Romanian Leu",
         }
         RON{
-            "=0#lei|1#leu|1<lei",
+            "==0#lei|1#leu|1<lei" /** (choice)  */,
             "Romanian Leu",
         }
         RSD{
@@ -1243,6 +1247,10 @@ en{
             "Be",
             "Venezuelan Bolivar",
         }
+        VEF{
+            "BsF",
+            "Venezuelan Bolivar Fuerte",
+        }
         VND{
             "VND",
             "Vietnamese Dong",
@@ -1377,11 +1385,6 @@ en{
         }
     }
     ExemplarCharacters{"[a-z]"}
-    Keys{
-        calendar{"calendar"}
-        collation{"collation"}
-        currency{"currency"}
-    }
     Languages{
         aa{"Afar"}
         ab{"Abkhazian"}
@@ -1816,6 +1819,7 @@ en{
         sux{"Sumerian"}
         sv{"Swedish"}
         sw{"Swahili"}
+        syc{"Classical Syriac"}
         syr{"Syriac"}
         ta{"Tamil"}
         tai{"Tai Language"}
@@ -1891,6 +1895,20 @@ en{
     LocaleScript{
         "Latn",
     }
+    NumberElements{
+        ".",
+        ",",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
     NumberPatterns{
         "#,##0.###",
         "¤#,##0.00;(¤#,##0.00)",
@@ -1909,7 +1927,7 @@ en{
         Brai{"Braille"}
         Bugi{"Buginese"}
         Buhd{"Buhid"}
-        Cans{"Unified Canadian Aboriginal Symbols"}
+        Cans{"Unified Canadian Aboriginal Syllabics"}
         Cari{"Carian"}
         Cham{"Cham"}
         Cher{"Cherokee"}
@@ -1950,6 +1968,7 @@ en{
         Khar{"Kharoshthi"}
         Khmr{"Khmer"}
         Knda{"Kannada"}
+        Kore{"Korean"}
         Lana{"Lanna"}
         Laoo{"Lao"}
         Latf{"Fraktur Latin"}
@@ -2040,7 +2059,8 @@ en{
         1901{"Traditional German orthography"}
         1996{"German orthography of 1996"}
         AREVELA{"Eastern Armenian"}
-        AREVMDA{"Western Armenian"}
+        BAKU1926{"Unified Turkic Latin Alphabet"}
+        BISKE{"San Giorgio/Bila dialect"}
         BOONT{"Boontling"}
         FONIPA{"IPA Phonetics"}
         FONUPA{"UPA Phonetics"}
@@ -2050,15 +2070,19 @@ en{
         LOJBAN{"Lojban"}
         MONOTON{"Monotonic"}
         NEDIS{"Natisone dialect"}
+        NJIVA{"Gniva/Njiva dialect"}
+        OSOJS{"Oseacco/Osojane dialect"}
         POLYTON{"Polytonic"}
         POSIX{"Computer"}
         REVISED{"Revised Orthography"}
         ROZAJ{"Resian"}
         SAAHO{"Saho"}
         SCOUSE{"Scouse"}
+        SOLBA{"Stolvizza/Solbica dialect"}
+        TARASK{"Taraskievica orthography"}
         XIANG{"Xiang or Hunanese"}
     }
-    Version{"1.92"}
+    Version{"1.156"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2215,13 +2239,14 @@ en{
         "Antarctica:DumontDUrville"{
             ec{"Dumont-d'Urville"}
         }
+        "Etc:Unknown"{
+            ec{"Unknown"}
+        }
         "Europe:Dublin"{
-            ec{"Dublin"}
             ld{"Irish Summer Time"}
             sd{"IST (Irish)"}
         }
         "Europe:London"{
-            ec{"London"}
             ld{"British Summer Time"}
             sd{"BST"}
         }

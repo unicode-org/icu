@@ -1834,6 +1834,7 @@ structLocale:table(nofallback){
         sux{""}
         sv{""}
         sw{""}
+        syc{""}
         syr{""}
         ta{""}
         tai{""}
@@ -1987,6 +1988,7 @@ structLocale:table(nofallback){
         Khar{""}
         Khmr{""}
         Knda{""}
+        Kore{""}
         Lana{""}
         Laoo{""}
         Latf{""}
@@ -2081,9 +2083,8 @@ structLocale:table(nofallback){
         1996{""}
         AREVELA{""}
         AREVMDA{""}
-        POSIX{""}
-        POLYTONI{""}
-        REVISED{""}
+        BAKU1926{""}
+        BISKE{""}
         BOONT{""}
         FONIPA{""}
         FONUPA{""}
@@ -2093,10 +2094,17 @@ structLocale:table(nofallback){
         LOJBAN{""}
         MONOTON{""}
         NEDIS{""}
+        NJIVA{""}
+        OSOJS{""}
+        POSIX{""}
         POLYTON{""}
-        SAAHO{""}
+        POLYTONI{""}
+        REVISED{""}
         ROZAJ{""}
+        SAAHO{""}
         SCOUSE{""}
+        SOLBA{""}
+        TARASK{""}
         VALENCIA{""}
         XIANG{""}
     }
@@ -2127,7 +2135,6 @@ structLocale:table(nofallback){
                 }
                 wide{
                     "",
-                    ""
                 }
             }
         }
@@ -2142,6 +2149,99 @@ structLocale:table(nofallback){
                 "",
                 "",
                 "",
+            }
+            monthNames{
+                default{""}
+                format{
+                    abbreviated{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                    default{""}
+                    narrow{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                    wide{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                    default{""}
+                    narrow{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                    wide{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                }
             }
         }
         coptic{

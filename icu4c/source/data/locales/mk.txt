@@ -1032,7 +1032,7 @@ mk{
             traditional{"Традиционално"}
         }
     }
-    Version{"1.92"}
+    Version{"1.69"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1126,26 +1126,10 @@ mk{
                         "ј",
                         "ј",
                         "а",
-                        "9",
+                        "с",
                         "о",
-                        "11",
+                        "н",
                         "д",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                    wide{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
                     }
                 }
             }

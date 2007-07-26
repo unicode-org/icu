@@ -10,7 +10,7 @@ ar_TN{
     NumberElements{
         "٫",
         "٬",
-        ";",
+        "؛",
         "٪",
         "0",
         "#",
@@ -18,7 +18,7 @@ ar_TN{
         "E",
         "‰",
         "∞",
-        "NaN",
+        "ليس رقم",
         "+",
     }
     NumberPatterns{
@@ -30,23 +30,12 @@ ar_TN{
     Scripts{
         Ital{"اللأيطالية القديمة"}
     }
-    Version{"1.92"}
+    Version{"1.45"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
                 7,
                 1,
-            }
-            DateTimePatterns{
-                "v h:mm:ss a",
-                "HH:mm:ss z",
-                "h:mm:ss a",
-                "h:mm a",
-                "EEEE, d MMMM, yyyy",
-                "d MMMM, yyyy",
-                "dd‏/MM‏/yyyy",
-                "d‏/M‏/yyyy",
-                "{1} {0}",
             }
             availableFormats{
                 MMdd{"dd/MM"}

@@ -8,10 +8,6 @@
 // ***************************************************************************
 ru_UA{
     Currencies{
-        BAM{
-            "BAM",
-            "Конвертируемая марка Боснии и Герцеговины",
-        }
         ESB{
             "ESB",
             "ESB",
@@ -31,21 +27,12 @@ ru_UA{
         mh{"маршальский"}
         tlh{"клингон"}
     }
-    NumberPatterns{
-        "#,##0.###",
-        "#,##0.00 ¤",
-        "#,##0 %",
-        "#E0",
-    }
-    Scripts{
-        Xsux{"Шумеро-аккадская клинопись"}
-    }
     Types{
         calendar{
             buddhist{"Буддийский календарь"}
         }
     }
-    Version{"1.92"}
+    Version{"1.48"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -53,7 +40,7 @@ ru_UA{
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE, d MMMM yyyy 'г.'",
+                "EEEE, d MMMM yyyy 'г'.",
                 "d MMMM yyyy",
                 "d MMM yyyy",
                 "dd.MM.yy",

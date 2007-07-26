@@ -30,6 +30,7 @@ mt{
         039{"Ewropa t’Isfel"}
         053{"Awstralja u New Zealand"}
         054{"Melanesja"}
+        057{"Reġjun ta’ Mikroneżja"}
         061{"Polinesja"}
         142{"Asja"}
         143{"Asja Ċentrali"}
@@ -40,6 +41,7 @@ mt{
         155{"Ewropa tal-Punent"}
         172{"Commonwealth tal-Istati Independenti"}
         419{"Amerika Latina u l-Karibew"}
+        830{"Gżejjer tal-Kanal Ingliż"}
         AD{"Andorra"}
         AE{"Emirati Għarab Maqgħuda"}
         AF{"Afganistan"}
@@ -55,6 +57,7 @@ mt{
         AT{"Awstrija"}
         AU{"Awstralja"}
         AW{"Aruba"}
+        AX{"Gżejjer Aland"}
         AZ{"Ażerbajġan"}
         BA{"Bożnija Ħerżegovina"}
         BB{"Barbados"}
@@ -159,7 +162,7 @@ mt{
         KP{"Koreja ta’ Fuq"}
         KR{"Koreja t’Isfel"}
         KW{"Kuwajt"}
-        KY{"Cayman Islands"}
+        KY{"Gżejjer Kajmani"}
         KZ{"Każakstan"}
         LA{"Laos"}
         LB{"Libanu"}
@@ -280,6 +283,7 @@ mt{
         ZA{"Afrika t’Isfel"}
         ZM{"Żambja"}
         ZW{"Żimbabwe"}
+        ZZ{"Reġjun Mhux Magħruf jew Mhux Validu"}
     }
     Currencies{
         EUR{
@@ -289,6 +293,10 @@ mt{
         MTL{
             "Lm",
             "Lira Maltija",
+        }
+        XXX{
+            "XXX",
+            "Munita Mhux Magħruf jew Mhux Validu",
         }
     }
     ExemplarCharacters{"[a à b ċ d e è f ġ g {għ} h ħ i ì j-o ò p-u ù v-x ż z]"}
@@ -430,6 +438,7 @@ mt{
         fat{"Fanti"}
         ff{"Fulaħ"}
         fi{"Finlandiż"}
+        fil{"Filippino"}
         fiu{"Finno - Ugrijan"}
         fj{"Fiġi"}
         fo{"Fawriż"}
@@ -619,7 +628,7 @@ mt{
         nyn{"Nyankole"}
         nyo{"Njoro"}
         nzi{"Nżima"}
-        oc{"Provenzal (wara 1500)"}
+        oc{"Oċċitan"}
         oj{"Oġibwa"}
         om{"Oromo (Afan)"}
         or{"Orija"}
@@ -777,6 +786,20 @@ mt{
     LocaleScript{
         "Latn",
     }
+    NumberElements{
+        ".",
+        ",",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
     NumberPatterns{
         "#,##0.###",
         "¤#,##0.00",
@@ -785,12 +808,14 @@ mt{
     }
     Scripts{
         Arab{"Għarbi"}
-        Grek{"Grek"}
+        Grek{"Grieg"}
         Hans{"Ħan Sempliċi"}
         Hant{"Ħan Tradizzjonali"}
         Latn{"Latin"}
         Xpeo{"Persjan Antik"}
+        Zxxx{"Mhux Miktub"}
         Zyyy{"Komuni"}
+        Zzzz{"Skritt Mhux Magħruf jew Mhux Validu"}
     }
     Types{
         calendar{
@@ -815,7 +840,7 @@ mt{
     Variants{
         REVISED{"Ortografija Irriveda"}
     }
-    Version{"1.92"}
+    Version{"1.71"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -827,8 +852,8 @@ mt{
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE, d 'ta’' MMMM yyyy",
-                "d 'ta’' MMMM yyyy",
+                "EEEE, d 'ta'’ MMMM yyyy",
+                "d 'ta'’ MMMM yyyy",
                 "dd MMM yyyy",
                 "dd/MM/yyyy",
                 "{1} {0}",
@@ -880,7 +905,7 @@ mt{
                 day{
                     dn{"Jum"}
                     relative{
-                        "-1"{"il-bierah"}
+                        "-1"{"Lbieraħ"}
                         "0"{"Illum"}
                         "1"{"Għada"}
                     }
@@ -902,6 +927,9 @@ mt{
                 }
                 week{
                     dn{"Ġimgħa"}
+                }
+                weekday{
+                    dn{"Jum tal-Ġimgħa"}
                 }
                 year{
                     dn{"Sena"}
@@ -943,18 +971,18 @@ mt{
                 }
                 stand-alone{
                     narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
                         "Ġ",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
+                        "L",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
                     }
                 }
             }
@@ -980,6 +1008,9 @@ mt{
         metric{"Metriku"}
     }
     zoneStrings{
+        "Etc:Unknown"{
+            ec{"Mhux Magħruf"}
+        }
         "Europe:London"{
             ec{"Londra"}
         }
@@ -992,5 +1023,8 @@ mt{
             sd{"CEST"}
             ss{"CET"}
         }
+        gmtFormat{"GMT{0}"}
+        hourFormat{"+HH:mm;-HH:mm"}
+        regionFormat{"Ħin ta’ {0}"}
     }
 }

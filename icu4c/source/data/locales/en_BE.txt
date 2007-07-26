@@ -12,7 +12,10 @@ en_BE{
             "BF",
             "Belgian Franc",
             {
-                "#,##0.00 ¤;-#,##0.00 ¤",
+                /**
+                 * Duplicated from NumberPatterns resource
+                 */
+                "#,##0.00 ¤",
                 ",",
                 ".",
             }
@@ -38,7 +41,7 @@ en_BE{
         "#,##0%",
         "#E0",
     }
-    Version{"1.92"}
+    Version{"1.52"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -51,7 +54,7 @@ en_BE{
                 "HH:mm:ss",
                 "HH:mm",
                 "EEEE d MMMM yyyy",
-                "MMMM d, yyyy",
+                "d MMM yyyy",
                 "dd MMM yyyy",
                 "dd/MM/yy",
                 "{1} {0}",

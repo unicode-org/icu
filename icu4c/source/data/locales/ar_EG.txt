@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 ar_EG{
-    Version{"1.92"}
+    Version{"1.46"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

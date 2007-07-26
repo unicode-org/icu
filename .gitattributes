@@ -2,6 +2,7 @@
 icu4c/license.html svneol=native#text/html
 icu4c/readme.html svneol=native#text/html
 icu4c/source/data/build.xml svneol=native#text/xml
+icu4c/source/data/coll/cy.txt -text
 icu4c/source/data/coll/eo.txt -text
 icu4c/source/data/coll/km.txt -text
 icu4c/source/data/coll/no.txt -text

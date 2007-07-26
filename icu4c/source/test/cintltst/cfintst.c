@@ -78,7 +78,7 @@ static void TestTertiary( )
     
     int32_t i;
     UErrorCode status = U_ZERO_ERROR;
-    myCollation = ucol_open("fi_FI", &status);
+    myCollation = ucol_open("fi_FI@collation=standard", &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
     }
@@ -96,7 +96,7 @@ static void TestPrimary()
     
     int32_t i;
     UErrorCode status = U_ZERO_ERROR;
-    myCollation = ucol_open("fi_FI", &status);
+    myCollation = ucol_open("fi_FI@collation=standard", &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
     }

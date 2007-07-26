@@ -12,35 +12,17 @@ es_AR{
             "$",
             "Peso Argentino",
         }
-        MXN{
-            "MEX$",
-            "peso mexicano",
-        }
     }
-    NumberElements{
-        ",",
-        ".",
-        ";",
-        "%",
-        "0",
-        "#",
-        "-",
-        "E",
-        "‰",
-        "∞",
-        "NaN",
-        "+",
-    }
-    Version{"1.92"}
+    Version{"1.52"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "hh:mm:ss a v",
+                "HH'h'''mm:ss v",
                 "H:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE d' de 'MMMM' de 'yyyy",
-                "d' de 'MMMM' de 'yyyy",
+                "EEEE d 'de' MMMM 'de' yyyy",
+                "d 'de' MMMM 'de' yyyy",
                 "dd/MM/yyyy",
                 "dd/MM/yy",
                 "{1} {0}",
