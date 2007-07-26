@@ -73,6 +73,9 @@ icu4c/source/data/mappings/ibm-950_P110-1999.ucm -text
 icu4c/source/data/mappings/ibm-954_P101-2007.ucm -text
 icu4c/source/data/mappings/ibm-964_P110-1999.ucm -text
 icu4c/source/data/mappings/ibm-970_P110_P110-2006_U2.ucm -text
+icu4c/source/data/translit/CanadianAboriginal_Latin.txt -text
+icu4c/source/data/translit/Latin_Ethiopic.txt -text
+icu4c/source/data/translit/Simplified_Traditional.txt -text
 icu4c/source/data/xml/brkitr/en.xml svneol=native#text/xml
 icu4c/source/data/xml/brkitr/en_US.xml svneol=native#text/xml
 icu4c/source/data/xml/brkitr/en_US_POSIX.xml svneol=native#text/xml
