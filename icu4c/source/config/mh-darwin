@@ -1,7 +1,7 @@
 ## -*-makefile-*-
 ## Darwin-specific setup (Darwin is the Mac OS X developer preview, successor
 ## to Rhapsody, aka Mac OS X Server)
-## Copyright (c) 1999-2006 International Business Machines Corporation and
+## Copyright (c) 1999-2007 International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Flags for position independent code
@@ -41,6 +41,10 @@ SO=		dylib
 ## Non-shared intermediate object suffix
 STATIC_O = ao
 
+## Override Versioned target for a shared library.
+FINAL_SO_TARGET=  $(basename $(SO_TARGET)).$(SO_TARGET_VERSION).$(SO)
+MIDDLE_SO_TARGET= $(basename $(SO_TARGET)).$(SO_TARGET_VERSION_MAJOR).$(SO)
+
 ## Compilation rules
 %.$(STATIC_O): $(srcdir)/%.c
 	$(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS) -o $@ $<
@@ -72,9 +76,9 @@ STATIC_O = ao
 
 ## Versioned libraries rules
 
-%.$(SO).$(SO_TARGET_VERSION_MAJOR): %.$(SO).$(SO_TARGET_VERSION)
+%.$(SO_TARGET_VERSION_MAJOR).$(SO): %.$(SO_TARGET_VERSION).$(SO)
 	$(RM) $@ && ln -s ${<F} $@
-%.$(SO): %.$(SO).$(SO_TARGET_VERSION_MAJOR)
-	$(RM) $@ && ln -s ${*F}.$(SO).$(SO_TARGET_VERSION) $@
+%.$(SO): %.$(SO_TARGET_VERSION_MAJOR).$(SO)
+	$(RM) $@ && ln -s ${*F}.$(SO_TARGET_VERSION).$(SO) $@
 
 ## End Darwin-specific setup
