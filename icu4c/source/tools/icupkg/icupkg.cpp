@@ -334,6 +334,12 @@ isPackageName(const char *filename) {
     return (UBool)(len>0 && 0==strcmp(filename+len, ".dat"));
 }
 
+/*
+This line is required by MinGW because it incorrectly globs the arguments.
+So when \* is used, it turns into a list of files instead of a literal "*"
+*/
+int _CRT_glob = 0;
+
 extern int
 main(int argc, char *argv[]) {
     const char *pname, *sourcePath, *destPath, *inFilename, *outFilename, *outComment;
