@@ -26,22 +26,19 @@ alpha*-*-linux-gnu)
 	fi ;;
 powerpc*-*-linux*)
 	if test "$GCC" = yes; then
-	  	icu_cv_host_frag=mh-linux
+		icu_cv_host_frag=mh-linux
 	else
-	  	icu_cv_host_frag=mh-linux-va
+		icu_cv_host_frag=mh-linux-va
 	fi ;;
 *-*-linux*) icu_cv_host_frag=mh-linux ;;
-*-*-cygwin)
+*-*-cygwin|*-*-mingw32)
 	if test "$GCC" = yes; then
-	  	icu_cv_host_frag=mh-cygwin
+		AC_TRY_COMPILE([
+#ifndef __MINGW32__
+#error This is not MinGW
+#endif], [], icu_cv_host_frag=mh-mingw, icu_cv_host_frag=mh-cygwin)
 	else
-	  	icu_cv_host_frag=mh-cygwin-msvc
-	fi ;;
-*-*-mingw32)
-	if test "$GCC" = yes; then
-	  	icu_cv_host_frag=mh-mingw
-	else
-	  	icu_cv_host_frag=mh-cygwin-msvc
+		icu_cv_host_frag=mh-cygwin-msvc
 	fi ;;
 *-*-*bsd*|*-*-dragonfly*) 	icu_cv_host_frag=mh-bsd-gcc ;;
 *-*-aix*)
