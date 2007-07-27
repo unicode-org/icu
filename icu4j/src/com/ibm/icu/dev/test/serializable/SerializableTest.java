@@ -14,8 +14,6 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.LRUMap;
-import com.ibm.icu.impl.LinkedHashMap;
 import com.ibm.icu.impl.OlsonTimeZone;
 import com.ibm.icu.impl.TimeZoneAdapter;
 import com.ibm.icu.math.BigDecimal;
@@ -580,45 +578,6 @@ public class SerializableTest extends TestFmwk.TestGroup
             return mca.toString().equals(mcb.toString());
         }
     }
-    
-    private static class LRUMapHandler implements Handler
-    {
-        public Object[] getTestObjects()
-        {
-            LRUMap[] maps = new LRUMap[1];
-            maps[0] = new LRUMap();
-            maps[0].put("1", "a");
-            maps[0].put("2", "b");
-            return maps;
-        }
-        public boolean hasSameBehavior(Object a, Object b)
-        {
-            LRUMap mapA = (LRUMap) a;
-            LRUMap mapB = (LRUMap) b;
-            return mapA.equals(mapB);
-        }
-    }
-
-    private static class LinkedHashMapHandler implements Handler
-    {
-        public Object[] getTestObjects()
-        {
-            LinkedHashMap[] maps = new LinkedHashMap[2];
-            maps[0] = new LinkedHashMap();
-            maps[1] = new LinkedHashMap(16, 0.75F, true);
-            for (int i = 0; i < 2; i++) {
-                maps[i].put("1", "a");
-                maps[i].put("2", "b");
-            }
-            return maps;
-        }
-        public boolean hasSameBehavior(Object a, Object b)
-        {
-            LinkedHashMap mapA = (LinkedHashMap) a;
-            LinkedHashMap mapB = (LinkedHashMap) b;
-            return mapA.equals(mapB);
-        }
-    }
 
     private static HashMap map = new HashMap();
     
@@ -633,8 +592,6 @@ public class SerializableTest extends TestFmwk.TestGroup
         map.put("com.ibm.icu.util.TimeArrayTimeZoneRule", new TimeArrayTimeZoneRuleHandler());
         map.put("com.ibm.icu.util.ULocale", new ULocaleHandler());
         map.put("com.ibm.icu.util.Currency", new CurrencyHandler());
-        map.put("com.ibm.icu.impl.LinkedHashMap", new LinkedHashMapHandler());
-        map.put("com.ibm.icu.impl.LRUMap", new LRUMapHandler());
         map.put("com.ibm.icu.impl.OlsonTimeZone", new OlsonTimeZoneHandler());
         map.put("com.ibm.icu.impl.TimeZoneAdapter", new TimeZoneAdapterHandler());
         map.put("com.ibm.icu.math.BigDecimal", new BigDecimalHandler());
