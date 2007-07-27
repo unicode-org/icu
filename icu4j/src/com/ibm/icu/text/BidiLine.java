@@ -93,7 +93,7 @@ final class BidiLine {
            level of B chars from 0 to paraLevel in getLevels when
            orderParagraphsLTR==TRUE
         */
-        if (dirProps == null || Bidi.NoContextRTL(dirProps[start - 1]) == Bidi.B) {
+        if (Bidi.NoContextRTL(dirProps[start - 1]) == Bidi.B) {
             bidi.trailingWSStart = start;   /* currently == bidi.length */
             return;
         }
@@ -141,19 +141,16 @@ final class BidiLine {
             }
             lineBidi.resultLength -= lineBidi.controlCount;
         }
-
-        if (paraBidi.dirProps != null) {
-            lineBidi.getDirPropsMemory(length);
-            lineBidi.dirProps = lineBidi.dirPropsMemory;
-            System.arraycopy(paraBidi.dirProps, start, lineBidi.dirProps, 0,
-                             length);
-        }
-        if (paraBidi.levels != null) {
-            lineBidi.getLevelsMemory(length);
-            lineBidi.levels = lineBidi.levelsMemory;
-            System.arraycopy(paraBidi.levels, start, lineBidi.levels, 0,
-                             length);
-        }
+        /* copy proper subset of DirProps */
+        lineBidi.getDirPropsMemory(length);
+        lineBidi.dirProps = lineBidi.dirPropsMemory;
+        System.arraycopy(paraBidi.dirProps, start, lineBidi.dirProps, 0,
+                         length);
+        /* copy proper subset of Levels */
+        lineBidi.getLevelsMemory(length);
+        lineBidi.levels = lineBidi.levelsMemory;
+        System.arraycopy(paraBidi.levels, start, lineBidi.levels, 0,
+                         length);
         lineBidi.runCount = -1;
 
         if (paraBidi.direction != Bidi.MIXED) {
@@ -249,9 +246,6 @@ final class BidiLine {
 
     static byte[] getLevels(Bidi bidi)
     {
-        if (bidi.levels == null || bidi.length <= 0) {
-            return new byte[0];
-        }
         int start = bidi.trailingWSStart;
         int length = bidi.length;
 
@@ -284,9 +278,10 @@ final class BidiLine {
         /* this is done based on runs rather than on levels since levels have
            a special interpretation when REORDER_RUNS_ONLY
          */
-        BidiRun newRun = new BidiRun(), iRun = bidi.runs[0];
+        BidiRun newRun = new BidiRun(), iRun;
         int runCount = bidi.countRuns();
         int visualStart = 0, logicalLimit = 0;
+        iRun = bidi.runs[0];
 
         for (int i = 0; i < runCount; i++) {
             iRun = bidi.runs[i];
@@ -477,14 +472,11 @@ final class BidiLine {
      */
     static void getRuns(Bidi bidi) {
         /*
-         * This method returns immediately if the runs are already set.
+         * This method returns immediately if the runs are already set. This
+         * includes the case of length==0 (handled in setPara)..
          */
         if (bidi.runCount >= 0) {
             return;
-        }
-        if (bidi.length == 0) {
-            getSingleRun(bidi, bidi.paraLevel);
-            bidi.runCount = 0;
         }
         if (bidi.direction != Bidi.MIXED) {
             /* simple, single-run case - this covers length==0 */
@@ -493,7 +485,9 @@ final class BidiLine {
         } else /* Bidi.MIXED, length>0 */ {
             /* mixed directionality */
             int length = bidi.length, limit;
-
+            byte[] levels = bidi.levels;
+            int i, runCount;
+            byte level = Bidi.LEVEL_DEFAULT_LTR;   /* initialize with no valid level */
             /*
              * If there are WS characters at the end of the line
              * and the run preceding them has a level different from
@@ -506,108 +500,99 @@ final class BidiLine {
              * levels[]!=paraLevel but we have to treat it like it were so.
              */
             limit = bidi.trailingWSStart;
-            if (limit == 0) {
-                /* there is only WS on this line */
-                getSingleRun(bidi, bidi.GetParaLevelAt(0));
-            } else {
-                byte[] levels = bidi.levels;
-                int i, runCount;
-                byte level = Bidi.LEVEL_DEFAULT_LTR;   /* initialize with no valid level */
+            /* count the runs, there is at least one non-WS run, and limit>0 */
+            runCount = 0;
+            for (i = 0; i < limit; ++i) {
+                /* increment runCount at the start of each run */
+                if (levels[i] != level) {
+                    ++runCount;
+                    level = levels[i];
+                }
+            }
 
-                /* count the runs, there is at least one non-WS run, and limit>0 */
-                runCount = 0;
-                for (i = 0; i < limit; ++i) {
-                    /* increment runCount at the start of each run */
-                    if (levels[i] != level) {
-                        ++runCount;
-                        level = levels[i];
+            /*
+             * We don't need to see if the last run can be merged with a trailing
+             * WS run because setTrailingWSStart() would have done that.
+             */
+            if (runCount == 1 && limit == length) {
+                /* There is only one non-WS run and no trailing WS-run. */
+                getSingleRun(bidi, levels[0]);
+            } else /* runCount>1 || limit<length */ {
+                /* allocate and set the runs */
+                BidiRun[] runs;
+                int runIndex, start;
+                byte minLevel = Bidi.MAX_EXPLICIT_LEVEL + 1;
+                byte maxLevel=0;
+
+                /* now, count a (non-mergeable) WS run */
+                if (limit < length) {
+                    ++runCount;
+                }
+
+                /* runCount > 1 */
+                bidi.getRunsMemory(runCount);
+                runs = bidi.runsMemory;
+
+                /* set the runs */
+                /* FOOD FOR THOUGHT: this could be optimized, e.g.:
+                 * 464->444, 484->444, 575->555, 595->555
+                 * However, that would take longer. Check also how it would
+                 * interact with BiDi control removal and inserting Marks.
+                 */
+                runIndex = 0;
+
+                /* search for the run limits and initialize visualLimit values with the run lengths */
+                i = 0;
+                do {
+                    /* prepare this run */
+                    start = i;
+                    level = levels[i];
+                    if (level < minLevel) {
+                        minLevel = level;
+                    }
+                    if (level > maxLevel) {
+                        maxLevel = level;
+                    }
+
+                    /* look for the run limit */
+                    while (++i < limit && levels[i] == level) {}
+
+                    /* i is another run limit */
+                    runs[runIndex] = new BidiRun(start, i - start, level);
+                    ++runIndex;
+                } while (i < limit);
+
+                if (limit < length) {
+                    /* there is a separate WS run */
+                    runs[runIndex] = new BidiRun(limit, length - limit, bidi.paraLevel);
+                    /* For the trailing WS run, bidi.paraLevel is ok even
+                       if contextual multiple paragraphs.                   */
+                    if (bidi.paraLevel < minLevel) {
+                        minLevel = bidi.paraLevel;
                     }
                 }
 
-                /*
-                 * We don't need to see if the last run can be merged with a trailing
-                 * WS run because setTrailingWSStart() would have done that.
-                 */
-                if (runCount == 1 && limit == length) {
-                    /* There is only one non-WS run and no trailing WS-run. */
-                    getSingleRun(bidi, levels[0]);
-                } else /* runCount>1 || limit<length */ {
-                    /* allocate and set the runs */
-                    BidiRun[] runs;
-                    int runIndex, start;
-                    byte minLevel = Bidi.MAX_EXPLICIT_LEVEL + 1;
-                    byte maxLevel=0;
+                /* set the object fields */
+                bidi.runs = runs;
+                bidi.runCount = runCount;
 
-                    /* now, count a (non-mergeable) WS run */
-                    if (limit < length) {
-                        ++runCount;
-                    }
+                reorderLine(bidi, minLevel, maxLevel);
 
-                    /* runCount > 1 */
-                    bidi.getRunsMemory(runCount);
-                    runs = bidi.runsMemory;
+                /* now add the direction flags and adjust the visualLimit's to be just that */
+                /* this loop will also handle the trailing WS run */
+                limit = 0;
+                for (i = 0; i < runCount; ++i) {
+                    runs[i].level = levels[runs[i].start];
+                    limit = (runs[i].limit += limit);
+                }
 
-                    /* set the runs */
-                    /* FOOD FOR THOUGHT: this could be optimized, e.g.:
-                     * 464->444, 484->444, 575->555, 595->555
-                     * However, that would take longer. Check also how it would
-                     * interact with BiDi control removal and inserting Marks.
-                     */
-                    runIndex = 0;
-
-                    /* search for the run limits and initialize visualLimit values with the run lengths */
-                    i = 0;
-                    do {
-                        /* prepare this run */
-                        start = i;
-                        level = levels[i];
-                        if (level < minLevel) {
-                            minLevel = level;
-                        }
-                        if (level > maxLevel) {
-                            maxLevel = level;
-                        }
-
-                        /* look for the run limit */
-                        while (++i < limit && levels[i] == level) {}
-
-                        /* i is another run limit */
-                        runs[runIndex] = new BidiRun(start, i - start, level);
-                        ++runIndex;
-                    } while (i < limit);
-
-                    if (limit < length) {
-                        /* there is a separate WS run */
-                        runs[runIndex] = new BidiRun(limit, length - limit, bidi.paraLevel);
-                        /* For the trailing WS run, bidi.paraLevel is ok even
-                           if contextual multiple paragraphs.                   */
-                        if (bidi.paraLevel < minLevel) {
-                            minLevel = bidi.paraLevel;
-                        }
-                    }
-
-                    /* set the object fields */
-                    bidi.runs = runs;
-                    bidi.runCount = runCount;
-
-                    reorderLine(bidi, minLevel, maxLevel);
-
-                    /* now add the direction flags and adjust the visualLimit's to be just that */
-                    /* this loop will also handle the trailing WS run */
-                    limit = 0;
-                    for (i = 0; i < runCount; ++i) {
-                        runs[i].level = levels[runs[i].start];
-                        limit = (runs[i].limit += limit);
-                    }
-
-                    /* Set the embedding level for the trailing WS run. */
-                    /* For a RTL paragraph, it will be the *first* run in visual order. */
-                    /* For the trailing WS run, bidi.paraLevel is ok even if
-                       contextual multiple paragraphs.                          */
-                    if (runIndex < runCount) {
-                        int trailingRun = ((bidi.paraLevel & 1) != 0)? 0 : runIndex;
-                        runs[trailingRun].level = bidi.paraLevel;
-                    }
+                /* Set the embedding level for the trailing WS run. */
+                /* For a RTL paragraph, it will be the *first* run in visual order. */
+                /* For the trailing WS run, bidi.paraLevel is ok even if
+                   contextual multiple paragraphs.                          */
+                if (runIndex < runCount) {
+                    int trailingRun = ((bidi.paraLevel & 1) != 0)? 0 : runIndex;
+                    runs[trailingRun].level = bidi.paraLevel;
                 }
             }
         }
