@@ -37,10 +37,6 @@ ar_TN{
                 7,
                 1,
             }
-            availableFormats{
-                MMdd{"dd/MM"}
-                yyyyMM{"MM/yyyy"}
-            }
             dayNames{
                 format{
                     abbreviated{
