@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -138,28 +138,6 @@ UnicodeString::caseMap(BreakIterator *titleIter,
     return *this;
   }
 
-#if !UCONFIG_NO_BREAK_ITERATION
-  // set up the titlecasing break iterator
-  UBreakIterator *cTitleIter = 0;
-
-  if(toWhichCase == TO_TITLE) {
-    errorCode = U_ZERO_ERROR;
-    if(titleIter != 0) {
-      cTitleIter = (UBreakIterator *)titleIter;
-      ubrk_setText(cTitleIter, oldArray, oldLength, &errorCode);
-    } else {
-      cTitleIter = ubrk_open(UBRK_WORD, locale,
-                             oldArray, oldLength,
-                             &errorCode);
-    }
-    if(U_FAILURE(errorCode)) {
-      uprv_free(bufferToDelete);
-      setToBogus();
-      return *this;
-    }
-  }
-#endif
-
   // Case-map, and if the result is too long, then reallocate and repeat.
   do {
     errorCode = U_ZERO_ERROR;
@@ -177,7 +155,7 @@ UnicodeString::caseMap(BreakIterator *titleIter,
 #else
       fLength = ustr_toTitle(csp, fArray, fCapacity,
                              oldArray, oldLength,
-                             cTitleIter, locale, &errorCode);
+                             (UBreakIterator *)titleIter, locale, options, &errorCode);
 #endif
     } else {
       fLength = ustr_foldCase(csp, fArray, fCapacity,
@@ -186,12 +164,6 @@ UnicodeString::caseMap(BreakIterator *titleIter,
                               &errorCode);
     }
   } while(errorCode==U_BUFFER_OVERFLOW_ERROR && cloneArrayIfNeeded(fLength, fLength, FALSE));
-
-#if !UCONFIG_NO_BREAK_ITERATION
-  if(cTitleIter != 0 && titleIter == 0) {
-    ubrk_close(cTitleIter);
-  }
-#endif
 
   if (bufferToDelete) {
     uprv_free(bufferToDelete);
@@ -232,6 +204,11 @@ UnicodeString::toTitle(BreakIterator *titleIter) {
 UnicodeString &
 UnicodeString::toTitle(BreakIterator *titleIter, const Locale &locale) {
   return caseMap(titleIter, locale.getName(), 0, TO_TITLE);
+}
+
+UnicodeString &
+UnicodeString::toTitle(BreakIterator *titleIter, const Locale &locale, uint32_t options) {
+  return caseMap(titleIter, locale.getName(), options, TO_TITLE);
 }
 
 #endif

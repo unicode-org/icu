@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 1999-2006, International Business Machines
+*   Copyright (C) 1999-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ustr_imp.h
@@ -101,6 +101,42 @@ u_growBufferFromStatic(void *context,
 /**
  * @internal
  */
+struct UCaseMap {
+    const UCaseProps *csp;
+#if !UCONFIG_NO_BREAK_ITERATION
+    UBreakIterator *iter;  /* We adopt the iterator, so we own it. */
+#endif
+    char locale[32];
+    int32_t locCache;
+    uint32_t options;
+};
+
+#ifndef __UCASEMAP_H__
+typedef struct UCaseMap UCaseMap;
+#endif
+
+/**
+ * @internal
+ */
+enum {
+    TO_LOWER,
+    TO_UPPER,
+    TO_TITLE,
+    FOLD_CASE
+};
+
+/**
+ * @internal
+ */
+typedef int32_t U_CALLCONV
+UCaseMapFull(const UCaseProps *csp, UChar32 c,
+             UCaseContextIterator *iter, void *context,
+             const UChar **pString,
+             const char *locale, int32_t *locCache);
+
+/**
+ * @internal
+ */
 U_CFUNC int32_t
 ustr_toLower(const UCaseProps *csp,
              UChar *dest, int32_t destCapacity,
@@ -128,7 +164,7 @@ ustr_toTitle(const UCaseProps *csp,
              UChar *dest, int32_t destCapacity,
              const UChar *src, int32_t srcLength,
              UBreakIterator *titleIter,
-             const char *locale,
+             const char *locale, uint32_t options,
              UErrorCode *pErrorCode);
 
 #endif

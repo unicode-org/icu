@@ -2430,7 +2430,7 @@ public:
    * The standard titlecase iterator for the root locale implements the
    * algorithm of Unicode TR 21.
    *
-   * This function uses only the first() and next() methods of the
+   * This function uses only the setText(), first() and next() methods of the
    * provided break iterator.
    *
    * @param titleIter A break iterator to find the first characters of words
@@ -2458,7 +2458,7 @@ public:
    * The standard titlecase iterator for the root locale implements the
    * algorithm of Unicode TR 21.
    *
-   * This function uses only the first() and next() methods of the
+   * This function uses only the setText(), first() and next() methods of the
    * provided break iterator.
    *
    * @param titleIter A break iterator to find the first characters of words
@@ -2471,6 +2471,37 @@ public:
    * @stable ICU 2.1
    */
   UnicodeString &toTitle(BreakIterator *titleIter, const Locale &locale);
+
+  /**
+   * Titlecase this string, with options.
+   *
+   * Casing is locale-dependent and context-sensitive.
+   * Titlecasing uses a break iterator to find the first characters of words
+   * that are to be titlecased. It titlecases those characters and lowercases
+   * all others. (This can be modified with options.)
+   *
+   * The titlecase break iterator can be provided to customize for arbitrary
+   * styles, using rules and dictionaries beyond the standard iterators.
+   * It may be more efficient to always provide an iterator to avoid
+   * opening and closing one for each string.
+   * The standard titlecase iterator for the root locale implements the
+   * algorithm of Unicode TR 21.
+   *
+   * This function uses only the setText(), first() and next() methods of the
+   * provided break iterator.
+   *
+   * @param titleIter A break iterator to find the first characters of words
+   *                  that are to be titlecased.
+   *                  If none is provided (0), then a standard titlecase
+   *                  break iterator is opened.
+   *                  Otherwise the provided iterator is set to the string's text.
+   * @param locale    The locale to consider.
+   * @return A reference to this.
+   * @see U_TITLECASE_NO_LOWERCASE
+   * @see U_TITLECASE_NO_BREAK_ADJUSTMENT
+   * @draft ICU 3.8
+   */
+  UnicodeString &toTitle(BreakIterator *titleIter, const Locale &locale, uint32_t options);
 
 #endif
 

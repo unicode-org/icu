@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2005, International Business Machines
+*   Copyright (C) 2005-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -30,10 +30,9 @@
  * for the attributes, as usual.
  *
  * Currently, the functionality provided here does not overlap with uchar.h
- * and ustring.h.
+ * and ustring.h, except for ucasemap_toTitle().
  *
- * ucasemap_utf8ToLower() and ucasemap_utf8ToUpper() operate directly on
- * UTF-8 strings.
+ * ucasemap_utf8XYZ() functions operate directly on UTF-8 strings.
  */
 
 /**
@@ -60,6 +59,10 @@ typedef struct UCaseMap UCaseMap; /**< C typedef for struct UCaseMap. @draft ICU
  *                   which must not indicate a failure before the function call.
  * @return Pointer to a UCaseMap service object, if successful.
  *
+ * @see U_FOLD_CASE_DEFAULT
+ * @see U_FOLD_CASE_EXCLUDE_SPECIAL_I
+ * @see U_TITLECASE_NO_LOWERCASE
+ * @see U_TITLECASE_NO_BREAK_ADJUSTMENT
  * @draft ICU 3.4
  */
 U_DRAFT UCaseMap * U_EXPORT2
@@ -119,6 +122,135 @@ ucasemap_setLocale(UCaseMap *csm, const char *locale, UErrorCode *pErrorCode);
 U_DRAFT void U_EXPORT2
 ucasemap_setOptions(UCaseMap *csm, uint32_t options, UErrorCode *pErrorCode);
 
+#ifndef U_HIDE_DRAFT_API
+
+/**
+ * Do not lowercase non-initial parts of words when titlecasing.
+ * Option bit for titlecasing APIs that take an options bit set.
+ *
+ * By default, titlecasing will titlecase the first cased character
+ * of a word and lowercase all other characters.
+ * With this option, the other characters will not be modified.
+ *
+ * @see ucasemap_setOptions
+ * @see ucasemap_toTitle
+ * @see ucasemap_utf8ToTitle
+ * @see UnicodeString::toTitle
+ * @draft ICU 3.8
+ */
+#define U_TITLECASE_NO_LOWERCASE 0x100
+
+/**
+ * Do not adjust the titlecasing indexes from BreakIterator::next() indexes;
+ * titlecase exactly the characters at breaks from the iterator.
+ * Option bit for titlecasing APIs that take an options bit set.
+ *
+ * By default, titlecasing will take each break iterator index,
+ * adjust it by looking for the next cased character, and titlecase that one.
+ * Other characters are lowercased.
+ *
+ * This follows Unicode 4 & 5 section 3.13 Default Case Operations:
+ *
+ * R3  toTitlecase(X): Find the word boundaries based on Unicode Standard Annex
+ * #29, "Text Boundaries." Between each pair of word boundaries, find the first
+ * cased character F. If F exists, map F to default_title(F); then map each
+ * subsequent character C to default_lower(C).
+ *
+ * @see ucasemap_setOptions
+ * @see ucasemap_toTitle
+ * @see ucasemap_utf8ToTitle
+ * @see UnicodeString::toTitle
+ * @see U_TITLECASE_NO_LOWERCASE
+ * @draft ICU 3.8
+ */
+#define U_TITLECASE_NO_BREAK_ADJUSTMENT 0x200
+
+#endif
+
+#if !UCONFIG_NO_BREAK_ITERATION
+
+/**
+ * Get the break iterator that is used for titlecasing.
+ * Do not modify the returned break iterator.
+ * @param csm UCaseMap service object.
+ * @return titlecasing break iterator
+ * @draft ICU 3.8
+ */
+U_DRAFT const UBreakIterator * U_EXPORT2
+ucasemap_getBreakIterator(const UCaseMap *csm);
+
+/**
+ * Set the break iterator that is used for titlecasing.
+ * The UCaseMap service object releases a previously set break iterator
+ * and "adopts" this new one, taking ownership of it.
+ * It will be released in a subsequent call to ucasemap_setBreakIterator()
+ * or ucasemap_close().
+ *
+ * Break iterator operations are not thread-safe. Therefore, titlecasing
+ * functions use non-const UCaseMap objects. It is not possible to titlecase
+ * strings concurrently using the same UCaseMap.
+ *
+ * @param csm UCaseMap service object.
+ * @param iterToAdopt Break iterator to be adopted for titlecasing.
+ * @param pErrorCode Must be a valid pointer to an error code value,
+ *                   which must not indicate a failure before the function call.
+ *
+ * @see ucasemap_toTitle
+ * @see ucasemap_utf8ToTitle
+ * @draft ICU 3.8
+ */
+U_DRAFT void U_EXPORT2
+ucasemap_setBreakIterator(UCaseMap *csm, UBreakIterator *iterToAdopt, UErrorCode *pErrorCode);
+
+/**
+ * Titlecase a UTF-16 string. This function is almost a duplicate of u_strToTitle(),
+ * except that it takes ucasemap_setOptions() into account and has performance
+ * advantages from being able to use a UCaseMap object for multiple case mapping
+ * operations, saving setup time.
+ *
+ * Casing is locale-dependent and context-sensitive.
+ * Titlecasing uses a break iterator to find the first characters of words
+ * that are to be titlecased. It titlecases those characters and lowercases
+ * all others. (This can be modified with ucasemap_setOptions().)
+ *
+ * The titlecase break iterator can be provided to customize for arbitrary
+ * styles, using rules and dictionaries beyond the standard iterators.
+ * It may be more efficient to always provide an iterator to avoid
+ * opening and closing one for each string.
+ * The standard titlecase iterator for the root locale implements the
+ * algorithm of Unicode TR 21.
+ *
+ * This function uses only the setText(), first() and next() methods of the
+ * provided break iterator.
+ *
+ * The result may be longer or shorter than the original.
+ * The source string and the destination buffer must not overlap.
+ *
+ * @param csm       UCaseMap service object.
+ * @param dest      A buffer for the result string. The result will be NUL-terminated if
+ *                  the buffer is large enough.
+ *                  The contents is undefined in case of failure.
+ * @param destCapacity The size of the buffer (number of bytes). If it is 0, then
+ *                  dest may be NULL and the function will only return the length of the result
+ *                  without writing any of the result string.
+ * @param src       The original string.
+ * @param srcLength The length of the original string. If -1, then src must be NUL-terminated.
+ * @param pErrorCode Must be a valid pointer to an error code value,
+ *                  which must not indicate a failure before the function call.
+ * @return The length of the result string, if successful - or in case of a buffer overflow,
+ *         in which case it will be greater than destCapacity.
+ *
+ * @see u_strToTitle
+ * @draft ICU 3.8
+ */
+U_DRAFT int32_t U_EXPORT2
+ucasemap_toTitle(UCaseMap *csm,
+                 UChar *dest, int32_t destCapacity,
+                 const UChar *src, int32_t srcLength,
+                 UErrorCode *pErrorCode);
+
+#endif
+
 /**
  * Lowercase the characters in a UTF-8 string.
  * Casing is locale-dependent and context-sensitive.
@@ -132,7 +264,7 @@ ucasemap_setOptions(UCaseMap *csm, uint32_t options, UErrorCode *pErrorCode);
  * @param destCapacity The size of the buffer (number of bytes). If it is 0, then
  *                  dest may be NULL and the function will only return the length of the result
  *                  without writing any of the result string.
- * @param src       The original string
+ * @param src       The original string.
  * @param srcLength The length of the original string. If -1, then src must be NUL-terminated.
  * @param pErrorCode Must be a valid pointer to an error code value,
  *                  which must not indicate a failure before the function call.
@@ -161,7 +293,7 @@ ucasemap_utf8ToLower(const UCaseMap *csm,
  * @param destCapacity The size of the buffer (number of bytes). If it is 0, then
  *                  dest may be NULL and the function will only return the length of the result
  *                  without writing any of the result string.
- * @param src       The original string
+ * @param src       The original string.
  * @param srcLength The length of the original string. If -1, then src must be NUL-terminated.
  * @param pErrorCode Must be a valid pointer to an error code value,
  *                  which must not indicate a failure before the function call.
@@ -176,5 +308,88 @@ ucasemap_utf8ToUpper(const UCaseMap *csm,
                      char *dest, int32_t destCapacity,
                      const char *src, int32_t srcLength,
                      UErrorCode *pErrorCode);
+
+#if !UCONFIG_NO_BREAK_ITERATION
+
+/**
+ * Titlecase a UTF-8 string.
+ * Casing is locale-dependent and context-sensitive.
+ * Titlecasing uses a break iterator to find the first characters of words
+ * that are to be titlecased. It titlecases those characters and lowercases
+ * all others. (This can be modified with ucasemap_setOptions().)
+ *
+ * The titlecase break iterator can be provided to customize for arbitrary
+ * styles, using rules and dictionaries beyond the standard iterators.
+ * It may be more efficient to always provide an iterator to avoid
+ * opening and closing one for each string.
+ * The standard titlecase iterator for the root locale implements the
+ * algorithm of Unicode TR 21.
+ *
+ * This function uses only the setText(), first() and next() methods of the
+ * provided break iterator.
+ *
+ * The result may be longer or shorter than the original.
+ * The source string and the destination buffer must not overlap.
+ *
+ * @param csm       UCaseMap service object.
+ * @param dest      A buffer for the result string. The result will be NUL-terminated if
+ *                  the buffer is large enough.
+ *                  The contents is undefined in case of failure.
+ * @param destCapacity The size of the buffer (number of bytes). If it is 0, then
+ *                  dest may be NULL and the function will only return the length of the result
+ *                  without writing any of the result string.
+ * @param src       The original string.
+ * @param srcLength The length of the original string. If -1, then src must be NUL-terminated.
+ * @param pErrorCode Must be a valid pointer to an error code value,
+ *                  which must not indicate a failure before the function call.
+ * @return The length of the result string, if successful - or in case of a buffer overflow,
+ *         in which case it will be greater than destCapacity.
+ *
+ * @see u_strToTitle
+ * @see U_TITLECASE_NO_LOWERCASE
+ * @see U_TITLECASE_NO_BREAK_ADJUSTMENT
+ * @draft ICU 3.8
+ */
+U_DRAFT int32_t U_EXPORT2
+ucasemap_utf8ToTitle(UCaseMap *csm,
+                    char *dest, int32_t destCapacity,
+                    const char *src, int32_t srcLength,
+                    UErrorCode *pErrorCode);
+
+#endif
+
+/**
+ * Case-fold the characters in a UTF-8 string.
+ * Case-folding is locale-independent and not context-sensitive,
+ * but there is an option for whether to include or exclude mappings for dotted I
+ * and dotless i that are marked with 'I' in CaseFolding.txt.
+ * The result may be longer or shorter than the original.
+ * The source string and the destination buffer must not overlap.
+ *
+ * @param csm       UCaseMap service object.
+ * @param dest      A buffer for the result string. The result will be NUL-terminated if
+ *                  the buffer is large enough.
+ *                  The contents is undefined in case of failure.
+ * @param destCapacity The size of the buffer (number of bytes). If it is 0, then
+ *                  dest may be NULL and the function will only return the length of the result
+ *                  without writing any of the result string.
+ * @param src       The original string.
+ * @param srcLength The length of the original string. If -1, then src must be NUL-terminated.
+ * @param pErrorCode Must be a valid pointer to an error code value,
+ *                  which must not indicate a failure before the function call.
+ * @return The length of the result string, if successful - or in case of a buffer overflow,
+ *         in which case it will be greater than destCapacity.
+ *
+ * @see u_strFoldCase
+ * @see ucasemap_setOptions
+ * @see U_FOLD_CASE_DEFAULT
+ * @see U_FOLD_CASE_EXCLUDE_SPECIAL_I
+ * @draft ICU 3.8
+ */
+U_DRAFT int32_t U_EXPORT2
+ucasemap_utf8FoldCase(const UCaseMap *csm,
+                      char *dest, int32_t destCapacity,
+                      const char *src, int32_t srcLength,
+                      UErrorCode *pErrorCode);
 
 #endif
