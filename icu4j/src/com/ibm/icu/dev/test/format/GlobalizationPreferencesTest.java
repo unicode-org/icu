@@ -1456,8 +1456,8 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         gp.setTerritory("US");
         nf = gp.getNumberFormat(GlobalizationPreferences.NF_CURRENCY);
         numStr = nf.format(num);
-        if (!numStr.equals("123.456,79 USD")) {
-            errln("FAIL: Number string is " + numStr + " Expected: 123.456,79 USD");
+        if (!numStr.equals("123.456,79 $")) {
+            errln("FAIL: Number string is " + numStr + " Expected: 123.456,79 $");
         }
 
         // Set explicit currency
@@ -1465,8 +1465,8 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         gp.setCurrency(Currency.getInstance("GBP"));
         nf = gp.getNumberFormat(GlobalizationPreferences.NF_CURRENCY);
         numStr = nf.format(num);
-        if (!numStr.equals("123.456,79 GBP")) {
-            errln("FAIL: Number string is " + numStr + " Expected: 123.456,79 GBP");
+        if (!numStr.equals("123.456,79 \u00A3")) {
+            errln("FAIL: Number string is " + numStr + " Expected: 123.456,79 \u00A3");
         }
 
         // Set exliplicit NumberFormat
