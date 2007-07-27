@@ -26,16 +26,6 @@
 #include "unicode/translit.h"
 #include "ucase.h"
 
-U_CDECL_BEGIN
-
-typedef int32_t U_CALLCONV
-UCaseMapFull(const UCaseProps *csp, UChar32 c,
-             UCaseContextIterator *iter, void *context,
-             const UChar **pString,
-             const char *locale, int32_t *locCache);
-
-U_CDECL_END
-
 U_NAMESPACE_BEGIN
 
 /**
