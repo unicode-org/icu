@@ -1105,7 +1105,7 @@ u_strToLower(UChar *dest, int32_t destCapacity,
  * The standard titlecase iterator for the root locale implements the
  * algorithm of Unicode TR 21.
  *
- * This function uses only the first() and next() methods of the
+ * This function uses only the setText(), first() and next() methods of the
  * provided break iterator.
  *
  * The result may be longer or shorter than the original.
