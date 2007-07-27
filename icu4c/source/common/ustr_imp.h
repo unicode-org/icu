@@ -128,15 +128,6 @@ enum {
 /**
  * @internal
  */
-typedef int32_t U_CALLCONV
-UCaseMapFull(const UCaseProps *csp, UChar32 c,
-             UCaseContextIterator *iter, void *context,
-             const UChar **pString,
-             const char *locale, int32_t *locCache);
-
-/**
- * @internal
- */
 U_CFUNC int32_t
 ustr_toLower(const UCaseProps *csp,
              UChar *dest, int32_t destCapacity,
