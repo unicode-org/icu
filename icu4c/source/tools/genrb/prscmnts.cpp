@@ -1,19 +1,18 @@
 /*
-*******************************************************************************
-*
-*   Copyright (C) 2003-2006, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-*
-*******************************************************************************
-*
-* File prscmnts.cpp
-*
-* Modification History:
-*
-*   Date          Name        Description
-*   08/22/2003    ram         Creation.
-*******************************************************************************
-*/
+ *******************************************************************************
+ *   Copyright (C) 2003-2007, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *******************************************************************************
+ *
+ * File prscmnts.cpp
+ *
+ * Modification History:
+ *
+ *   Date          Name        Description
+ *   08/22/2003    ram         Creation.
+ *******************************************************************************
+ */
+
 #include "unicode/regex.h"
 #include "unicode/unistr.h"
 #include "unicode/parseerr.h"

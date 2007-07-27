@@ -127,10 +127,10 @@ sub main(){
     
     convertData($icuDataDir, $icupkg, $tempDir, $icu4jDataDir, $verbose);
     #convertData($icuDataDir."/coll/", $icupkg, $tempDir, $icu4jDataDir."/coll");
-    createJar("$jarDir/jar", "icudata.jar", $tempDir, $icu4jDataDir, $verbose);
+    createJar("\"$jarDir/jar\"", "icudata.jar", $tempDir, $icu4jDataDir, $verbose);
     
     convertTestData($icuTestDataDir, $icupkg, $tempDir, $icu4jTestDataDir, $verbose);
-    createJar("$jarDir/jar", "testdata.jar", $tempDir, $icu4jTestDataDir, $verbose);
+    createJar("\"$jarDir/jar\"", "testdata.jar", $tempDir, $icu4jTestDataDir, $verbose);
     copyData($icu4jDir, $icu4jImpl, $icu4jDevDataDir, $tempDir, $verbose);
 }
 

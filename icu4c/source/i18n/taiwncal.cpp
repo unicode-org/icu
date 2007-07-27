@@ -1,16 +1,16 @@
 /*
-*******************************************************************************
-* Copyright (C) 2003-2006, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
-*******************************************************************************
-*
-* File TAIWNCAL.CPP
-*
-* Modification History:
-*  05/13/2003    srl     copied from gregocal.cpp
-*  06/29/2007    srl     copied from buddhcal.cpp
-*
-*/
+ *******************************************************************************
+ * Copyright (C) 2003-2007, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * File TAIWNCAL.CPP
+ *
+ * Modification History:
+ *  05/13/2003    srl     copied from gregocal.cpp
+ *  06/29/2007    srl     copied from buddhcal.cpp
+ *
+ */
 
 #include "unicode/utypes.h"
 

@@ -1,18 +1,18 @@
 /*
-******************************************************************************
-*
-*   Copyright (C) 1999-2006, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-*
-******************************************************************************
-*   file name:  ubidiimp.h
-*   encoding:   US-ASCII
-*   tab size:   8 (not used)
-*   indentation:4
-*
-*   created on: 1999aug06
-*   created by: Markus W. Scherer
-*/
+ ******************************************************************************
+ *
+ *   Copyright (C) 1999-2007, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *
+ ******************************************************************************
+ *   file name:  ubidiimp.h
+ *   encoding:   US-ASCII
+ *   tab size:   8 (not used)
+ *   indentation:4
+ *
+ *   created on: 1999aug06
+ *   created by: Markus W. Scherer
+ */
 
 #ifndef UBIDIIMP_H
 #define UBIDIIMP_H

@@ -19,13 +19,13 @@ my $options = {
 	       "passes"=>"10",
 	       "time"=>"5",
 	       #"outputType"=>"HTML",
-	       "dataDir"=>"c:/src/perf/data",
+	       "dataDir"=>"c:/LocalCVS/icu4c/collation-perf-data",
 	       "outputDir"=>"../results"
 	      };
 
 # programs
 # tests will be done for all the programs. Results will be stored and connected
-my $p = "normperf.exe -b -u";
+my $p = "Release/normperf.exe -b -u";
 
 my $tests = { 
 	     "NFC_NFD_Text",  ["$p TestWin_NFC_NFD_Text"  ,  "$p TestICU_NFC_NFD_Text" ],
