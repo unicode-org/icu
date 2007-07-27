@@ -31,10 +31,6 @@ ar_MA{
                 7,
                 1,
             }
-            availableFormats{
-                MMdd{"dd/MM"}
-                yyyyMM{"MM/yyyy"}
-            }
             weekend:intvector{
                 5,
                 0,
