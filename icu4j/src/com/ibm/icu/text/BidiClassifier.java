@@ -33,6 +33,7 @@ package com.ibm.icu.text;
  *
  * @see Bidi#setCustomClassifier
  * @draft ICU 3.8
+ * @provisional This API might change or be removed in a future release.
  */
 
 public /*abstract*/ class BidiClassifier {
@@ -45,6 +46,7 @@ public /*abstract*/ class BidiClassifier {
      * a previous custom BidiClassifier while setting a new one, so as to
      * allow chaining between them.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     protected Object context;
 
@@ -52,6 +54,7 @@ public /*abstract*/ class BidiClassifier {
      * @param context Context for this classifier instance.
      *                May be null.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public BidiClassifier(Object context) {
         this.context = context;
@@ -64,6 +67,7 @@ public /*abstract*/ class BidiClassifier {
      * @param context Context for this classifier instance.
      *                May be null.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public void setContext(Object context) {
         this.context = context;
@@ -72,6 +76,7 @@ public /*abstract*/ class BidiClassifier {
     /**
      * Returns the current classifier context.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public Object getContext() {
         return this.context;
@@ -89,6 +94,7 @@ public /*abstract*/ class BidiClassifier {
      *         the given code point.
      * @see Bidi#CLASS_DEFAULT
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public int classify(int c) {
         return Bidi.CLASS_DEFAULT;

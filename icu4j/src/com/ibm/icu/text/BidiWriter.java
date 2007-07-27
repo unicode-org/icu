@@ -234,7 +234,7 @@ final class BidiWriter {
         return writeReverse(new String(text, start, limit - start), options);
     }
 
-    static String writeReordered(Bidi bidi, short options)
+    static String writeReordered(Bidi bidi, int options)
     {
         int run, runCount;
         StringBuffer dest;
@@ -267,8 +267,8 @@ final class BidiWriter {
             (bidi.reorderingMode != Bidi.REORDER_RUNS_ONLY)) {
             options &= ~Bidi.INSERT_LRM_FOR_NUMERIC;
         }
-        dest = new StringBuffer((options & Bidi.INSERT_LRM_FOR_NUMERIC) != 0
-            ? bidi.getLength() * 2 : bidi.getLength());
+        dest = new StringBuffer((options & Bidi.INSERT_LRM_FOR_NUMERIC) != 0 ?
+                                 bidi.length * 2 : bidi.length);
         /*
          * Iterate through all visual runs and copy the run text segments to
          * the destination, according to the options.
