@@ -3,6 +3,7 @@
  * others. All Rights Reserved.
  ****************************************************************************
  */
+
 package com.ibm.icu.text;
 
 import com.ibm.icu.impl.CalendarData;
