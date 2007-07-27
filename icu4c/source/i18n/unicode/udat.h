@@ -1,8 +1,8 @@
 /*
-*******************************************************************************
-* Copyright (C) 1996-2006, International Business Machines Corporation and others.
-* All Rights Reserved.
-*******************************************************************************
+ *******************************************************************************
+ * Copyright (C) 1996-2007, International Business Machines
+ * Corporation and others. All Rights Reserved.
+ *******************************************************************************
 */
 
 #ifndef UDAT_H

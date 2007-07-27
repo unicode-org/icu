@@ -1,58 +1,58 @@
 /*
-******************************************************************************
-* Copyright (C) 1996-2006, International Business Machines Corporation and   *
-* others. All Rights Reserved.                                               *
-******************************************************************************
-*/
+ ******************************************************************************
+ * Copyright (C) 1996-2007, International Business Machines Corporation and   *
+ * others. All Rights Reserved.                                               *
+ ******************************************************************************
+ */
 
 /**
-* File tblcoll.cpp
-*
-* Created by: Helena Shih
-*
-* Modification History:
-*
-*  Date        Name        Description
-*  2/5/97      aliu        Added streamIn and streamOut methods.  Added
-*                          constructor which reads RuleBasedCollator object from
-*                          a binary file.  Added writeToFile method which streams
-*                          RuleBasedCollator out to a binary file.  The streamIn
-*                          and streamOut methods use istream and ostream objects
-*                          in binary mode.
-*  2/11/97     aliu        Moved declarations out of for loop initializer.
-*                          Added Mac compatibility #ifdef for ios::nocreate.
-*  2/12/97     aliu        Modified to use TableCollationData sub-object to
-*                          hold invariant data.
-*  2/13/97     aliu        Moved several methods into this class from Collation.
-*                          Added a private RuleBasedCollator(Locale&) constructor,
-*                          to be used by Collator::getInstance().  General
-*                          clean up.  Made use of UErrorCode variables consistent.
-*  2/20/97     helena      Added clone, operator==, operator!=, operator=, and copy
-*                          constructor and getDynamicClassID.
-*  3/5/97      aliu        Changed compaction cycle to improve performance.  We
-*                          use the maximum allowable value which is kBlockCount.
-*                          Modified getRules() to load rules dynamically.  Changed
-*                          constructFromFile() call to accomodate this (added
-*                          parameter to specify whether binary loading is to
-*                          take place).
-* 05/06/97     helena      Added memory allocation error check.
-*  6/20/97     helena      Java class name change.
-*  6/23/97     helena      Adding comments to make code more readable.
-* 09/03/97     helena      Added createCollationKeyValues().
-* 06/26/98     erm         Changes for CollationKeys using byte arrays.
-* 08/10/98     erm         Synched with 1.2 version of RuleBasedCollator.java
-* 04/23/99     stephen     Removed EDecompositionMode, merged with
-*                          Normalizer::EMode
-* 06/14/99     stephen     Removed kResourceBundleSuffix
-* 06/22/99     stephen     Fixed logic in constructFromFile() since .ctx
-*                          files are no longer used.
-* 11/02/99     helena      Collator performance enhancements.  Special case
-*                          for NO_OP situations.
-* 11/17/99     srl         More performance enhancements. Inlined some internal functions.
-* 12/15/99     aliu        Update to support Thai collation.  Move NormalizerIterator
-*                          to implementation file.
-* 01/29/01     synwee      Modified into a C++ wrapper calling C APIs (ucol.h)
-*/
+ * File tblcoll.cpp
+ *
+ * Created by: Helena Shih
+ *
+ * Modification History:
+ *
+ *  Date        Name        Description
+ *  2/5/97      aliu        Added streamIn and streamOut methods.  Added
+ *                          constructor which reads RuleBasedCollator object from
+ *                          a binary file.  Added writeToFile method which streams
+ *                          RuleBasedCollator out to a binary file.  The streamIn
+ *                          and streamOut methods use istream and ostream objects
+ *                          in binary mode.
+ *  2/11/97     aliu        Moved declarations out of for loop initializer.
+ *                          Added Mac compatibility #ifdef for ios::nocreate.
+ *  2/12/97     aliu        Modified to use TableCollationData sub-object to
+ *                          hold invariant data.
+ *  2/13/97     aliu        Moved several methods into this class from Collation.
+ *                          Added a private RuleBasedCollator(Locale&) constructor,
+ *                          to be used by Collator::getInstance().  General
+ *                          clean up.  Made use of UErrorCode variables consistent.
+ *  2/20/97     helena      Added clone, operator==, operator!=, operator=, and copy
+ *                          constructor and getDynamicClassID.
+ *  3/5/97      aliu        Changed compaction cycle to improve performance.  We
+ *                          use the maximum allowable value which is kBlockCount.
+ *                          Modified getRules() to load rules dynamically.  Changed
+ *                          constructFromFile() call to accomodate this (added
+ *                          parameter to specify whether binary loading is to
+ *                          take place).
+ * 05/06/97     helena      Added memory allocation error check.
+ *  6/20/97     helena      Java class name change.
+ *  6/23/97     helena      Adding comments to make code more readable.
+ * 09/03/97     helena      Added createCollationKeyValues().
+ * 06/26/98     erm         Changes for CollationKeys using byte arrays.
+ * 08/10/98     erm         Synched with 1.2 version of RuleBasedCollator.java
+ * 04/23/99     stephen     Removed EDecompositionMode, merged with
+ *                          Normalizer::EMode
+ * 06/14/99     stephen     Removed kResourceBundleSuffix
+ * 06/22/99     stephen     Fixed logic in constructFromFile() since .ctx
+ *                          files are no longer used.
+ * 11/02/99     helena      Collator performance enhancements.  Special case
+ *                          for NO_OP situations.
+ * 11/17/99     srl         More performance enhancements. Inlined some internal functions.
+ * 12/15/99     aliu        Update to support Thai collation.  Move NormalizerIterator
+ *                          to implementation file.
+ * 01/29/01     synwee      Modified into a C++ wrapper calling C APIs (ucol.h)
+ */
 
 #include "unicode/utypes.h"
 

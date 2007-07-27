@@ -1,19 +1,16 @@
 /********************************************************************
- * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
- * others. All Rights Reserved.
- ********************************************************************/
-/*
-* File TMSGFMT.CPP
-*
-* Modification History:
-*
-*   Date        Name        Description
-*   03/24/97    helena      Converted from Java.
-*   07/11/97    helena      Updated to work on AIX.
-*   08/04/97    jfitz       Updated to intltest
-********************************************************************************
-*/
+ * Copyright (c) 1997-2007, International Business Machines
+ * Corporation and others. All Rights Reserved.
+ ********************************************************************
+ * File TMSGFMT.CPP
+ *
+ * Modification History:
+ *
+ *   Date        Name        Description
+ *   03/24/97    helena      Converted from Java.
+ *   07/11/97    helena      Updated to work on AIX.
+ *   08/04/97    jfitz       Updated to intltest
+ *******************************************************************/
 
 #include "unicode/utypes.h"
 

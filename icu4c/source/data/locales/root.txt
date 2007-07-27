@@ -530,6 +530,59 @@ root{
             }
             quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
+        // added by hand by Eric Mader on 07/19/2007
+        indian{
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
+            eras{
+                abbreviated{
+                    "SAKA",
+                }
+                narrow:alias{"/LOCALE/calendar/indian/eras/abbreviated"}
+                wide:alias{"/LOCALE/calendar/indian/eras/abbreviated"}
+            }
+            monthNames{
+                default{"format"}
+                format{
+                    abbreviated:alias{"/LOCALE/calendar/indian/monthNames/format/wide"}
+                    default{"wide"}
+                    narrow:alias{"/LOCALE/calendar/indian/monthNames/stand-alone/narrow"}
+					wide{
+						"Chaitra",
+						 "Vaisakha",
+						 "Jyaistha",
+						 "Asadha",
+						 "Sravana",
+						 "Bhadra",
+						 "Asvina",
+						 "Kartika",
+						 "Agrahayana",
+						 "Pausa",
+						 "Magha",
+						 "Phalguna",
+					 }
+					  
+				}
+				stand-alone{
+					abbreviated:alias{"/LOCALE/calendar/indian/monthNames/format/abbreviated"}
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide:alias{"/LOCALE/calendar/islamic/monthNames/format/wide"}
+                }
+            }
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
+        }
         islamic{
             AmPmMarkers{
                 "AM",

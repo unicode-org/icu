@@ -1,24 +1,22 @@
 /******************************************************************************
-*
-*   Copyright (C) 2000-2006, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-*
-*******************************************************************************
-*   file name:  pkgdata.c
-*   encoding:   ANSI X3.4 (1968)
-*   tab size:   8 (not used)
-*   indentation:4
-*
-*   created on: 2000may15
-*   created by: Steven \u24C7 Loomis
-*
-*   This program packages the ICU data into different forms
-*   (DLL, common data, etc.)
-*/
+ *   Copyright (C) 2000-2007, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *******************************************************************************
+ *   file name:  pkgdata.c
+ *   encoding:   ANSI X3.4 (1968)
+ *   tab size:   8 (not used)
+ *   indentation:4
+ *
+ *   created on: 2000may15
+ *   created by: Steven \u24C7 Loomis
+ *
+ *   This program packages the ICU data into different forms
+ *   (DLL, common data, etc.)
+ */
 
 /*
-  We define _XOPEN_SOURCE so that we can get popen and pclose.
-*/
+ * We define _XOPEN_SOURCE so that we can get popen and pclose.
+ */
 #if !defined(_XOPEN_SOURCE)
 #if __STDC_VERSION__ >= 199901L
 /* It is invalid to compile an XPG3, XPG4, XPG4v2 or XPG5 application using c99 on Solaris */

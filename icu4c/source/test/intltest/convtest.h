@@ -1,20 +1,20 @@
 /*
-*******************************************************************************
-*
-*   Copyright (C) 2003-2006, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-*
-*******************************************************************************
-*   file name:  convtest.h
-*   encoding:   US-ASCII
-*   tab size:   8 (not used)
-*   indentation:4
-*
-*   created on: 2003jul15
-*   created by: Markus W. Scherer
-*
-*   Test file for data-driven conversion tests.
-*/
+ *******************************************************************************
+ *
+ *   Copyright (C) 2003-2007, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *
+ *******************************************************************************
+ *   file name:  convtest.h
+ *   encoding:   US-ASCII
+ *   tab size:   8 (not used)
+ *   indentation:4
+ *
+ *   created on: 2003jul15
+ *   created by: Markus W. Scherer
+ *
+ *   Test file for data-driven conversion tests.
+ */
 
 #ifndef __CONVTEST_H__
 #define __CONVTEST_H__

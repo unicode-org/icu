@@ -1,13 +1,11 @@
 /********************************************************************
- * COPYRIGHT: 
- * Copyright (c) 1999-2006, International Business Machines Corporation and
- * others. All Rights Reserved.
+ * Copyright (c) 1999-2007, International Business Machines
+ * Corporation and others. All Rights Reserved.
+ ********************************************************************
+ *   Date        Name        Description
+ *   12/14/99    Madhu        Creation.
+ *   01/12/2000  Madhu        updated for changed API
  ********************************************************************/
-/************************************************************************
-*   Date        Name        Description
-*   12/14/99    Madhu        Creation.
-*   01/12/2000  Madhu        updated for changed API
-************************************************************************/
 
 #include "unicode/utypes.h"
 

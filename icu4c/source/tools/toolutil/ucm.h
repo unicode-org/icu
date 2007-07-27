@@ -1,20 +1,18 @@
 /*
-*******************************************************************************
-*
-*   Copyright (C) 2003-2006, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-*
-*******************************************************************************
-*   file name:  ucm.h
-*   encoding:   US-ASCII
-*   tab size:   8 (not used)
-*   indentation:4
-*
-*   created on: 2003jun20
-*   created by: Markus W. Scherer
-*
-*   Definitions for the .ucm file parser and handler module ucm.c.
-*/
+ *******************************************************************************
+ *   Copyright (C) 2003-2007, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *******************************************************************************
+ *   file name:  ucm.h
+ *   encoding:   US-ASCII
+ *   tab size:   8 (not used)
+ *   indentation:4
+ *
+ *   created on: 2003jun20
+ *   created by: Markus W. Scherer
+ *
+ *   Definitions for the .ucm file parser and handler module ucm.c.
+ */
 
 #ifndef __UCM_H__
 #define __UCM_H__

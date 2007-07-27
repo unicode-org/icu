@@ -1,19 +1,19 @@
 /*  
-**********************************************************************
-*   Copyright (C) 2002-2006, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-**********************************************************************
-*   file name:  utfperf.cpp
-*   encoding:   US-ASCII
-*   tab size:   8 (not used)
-*   indentation:4
-*
-*   created on: 2005Nov17
-*   created by: Raymond Yang
-*
-*   Ported from utfper.c created by Markus W. Scherer
-*   Performance test program for Unicode converters
-*/
+ **********************************************************************
+ *   Copyright (C) 2002-2007, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ **********************************************************************
+ *   file name:  utfperf.cpp
+ *   encoding:   US-ASCII
+ *   tab size:   8 (not used)
+ *   indentation:4
+ *
+ *   created on: 2005Nov17
+ *   created by: Raymond Yang
+ *
+ *   Ported from utfper.c created by Markus W. Scherer
+ *   Performance test program for Unicode converters
+ */
 
 #include <stdio.h>
 #include <stdlib.h>

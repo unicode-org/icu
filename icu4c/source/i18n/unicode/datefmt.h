@@ -1,20 +1,20 @@
 /*
-********************************************************************************
-*   Copyright (C) 1997-2005, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-********************************************************************************
-*
-* File DATEFMT.H
-*
-* Modification History:
-*
-*   Date        Name        Description
-*   02/19/97    aliu        Converted from java.
-*   04/01/97    aliu        Added support for centuries.
-*   07/23/98    stephen     JDK 1.2 sync
-*   11/15/99    weiv        Added support for week of year/day of week formatting
-********************************************************************************
-*/
+ ********************************************************************************
+ *   Copyright (C) 1997-2007, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ ********************************************************************************
+ *
+ * File DATEFMT.H
+ *
+ * Modification History:
+ *
+ *   Date        Name        Description
+ *   02/19/97    aliu        Converted from java.
+ *   04/01/97    aliu        Added support for centuries.
+ *   07/23/98    stephen     JDK 1.2 sync
+ *   11/15/99    weiv        Added support for week of year/day of week formatting
+ ********************************************************************************
+ */
 
 #ifndef DATEFMT_H
 #define DATEFMT_H

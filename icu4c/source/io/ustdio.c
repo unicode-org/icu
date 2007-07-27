@@ -1,21 +1,21 @@
 /*
-******************************************************************************
-*
-*   Copyright (C) 1998-2006, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-*
-******************************************************************************
-*
-* File ustdio.c
-*
-* Modification History:
-*
-*   Date        Name        Description
-*   11/18/98    stephen     Creation.
-*   03/12/99    stephen     Modified for new C API.
-*   07/19/99    stephen     Fixed read() and gets()
-******************************************************************************
-*/
+ ******************************************************************************
+ *
+ *   Copyright (C) 1998-2007, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *
+ ******************************************************************************
+ *
+ * File ustdio.c
+ *
+ * Modification History:
+ *
+ *   Date        Name        Description
+ *   11/18/98    stephen     Creation.
+ *   03/12/99    stephen     Modified for new C API.
+ *   07/19/99    stephen     Fixed read() and gets()
+ ******************************************************************************
+ */
 
 #include "unicode/ustdio.h"
 #include "unicode/putil.h"

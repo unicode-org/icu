@@ -3,7 +3,6 @@ icu4c/license.html svneol=native#text/html
 icu4c/readme.html svneol=native#text/html
 icu4c/source/data/build.xml svneol=native#text/xml
 icu4c/source/data/coll/cy.txt -text
-icu4c/source/data/coll/eo.txt -text
 icu4c/source/data/coll/km.txt -text
 icu4c/source/data/coll/no.txt -text
 icu4c/source/data/coll/no_NO.txt -text
@@ -30,8 +29,6 @@ icu4c/source/data/locales/en_NA.txt -text
 icu4c/source/data/locales/en_TT.txt -text
 icu4c/source/data/locales/eo.txt -text
 icu4c/source/data/locales/fr_MC.txt -text
-icu4c/source/data/locales/gl.txt -text
-icu4c/source/data/locales/gl_ES.txt -text
 icu4c/source/data/locales/ka.txt -text
 icu4c/source/data/locales/ka_GE.txt -text
 icu4c/source/data/locales/km.txt -text

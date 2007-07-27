@@ -1,16 +1,16 @@
 /********************************************************************
- * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation
- * and others. All Rights Reserved.
- ********************************************************************/
-/********************************************************************************
-*
-* File CFINTST.C
-*
-* Modification History:
-*        Name                     Description            
-*     Madhu Katragadda            Ported for C API
-*********************************************************************************/
+ * Copyright (c) 1997-2007, International Business Machines
+ * Corporation and others. All Rights Reserved.
+ ********************************************************************
+ *
+ * File CFINTST.C
+ *
+ * Modification History:
+ *        Name                     Description            
+ *     Madhu Katragadda            Ported for C API
+ ********************************************************************
+ */
+
 /**
  * CollationFinnishTest is a third level test class.  This tests the locale
  * specific primary, secondary and tertiary rules.  For example, the ignorable

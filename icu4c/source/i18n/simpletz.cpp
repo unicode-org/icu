@@ -1,25 +1,25 @@
 /*
-*******************************************************************************
-* Copyright (C) 1997-2006, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
-*******************************************************************************
-*
-* File SIMPLETZ.H
-*
-* Modification History:
-*
-*   Date        Name        Description
-*   12/05/96    clhuang     Creation.
-*   04/21/97    aliu        Fixed miscellaneous bugs found by inspection and
-*                           testing.
-*   07/29/97    aliu        Ported source bodies back from Java version with
-*                           numerous feature enhancements and bug fixes.
-*   08/10/98    stephen     JDK 1.2 sync.
-*   09/17/98    stephen     Fixed getOffset() for last hour of year and DST
-*   12/02/99    aliu        Added TimeMode and constructor and setStart/EndRule
-*                           methods that take TimeMode. Whitespace cleanup.
-********************************************************************************
-*/
+ *******************************************************************************
+ * Copyright (C) 1997-2007, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * File SIMPLETZ.H
+ *
+ * Modification History:
+ *
+ *   Date        Name        Description
+ *   12/05/96    clhuang     Creation.
+ *   04/21/97    aliu        Fixed miscellaneous bugs found by inspection and
+ *                           testing.
+ *   07/29/97    aliu        Ported source bodies back from Java version with
+ *                           numerous feature enhancements and bug fixes.
+ *   08/10/98    stephen     JDK 1.2 sync.
+ *   09/17/98    stephen     Fixed getOffset() for last hour of year and DST
+ *   12/02/99    aliu        Added TimeMode and constructor and setStart/EndRule
+ *                           methods that take TimeMode. Whitespace cleanup.
+ ********************************************************************************
+ */
 
 #include "unicode/utypes.h"
 

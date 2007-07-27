@@ -1,21 +1,21 @@
 /*
-*******************************************************************************
-* Copyright (C) 1997-2006, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
-*******************************************************************************
-*
-* File DATEFMT.CPP
-*
-* Modification History:
-*
-*   Date        Name        Description
-*   02/19/97    aliu        Converted from java.
-*   03/31/97    aliu        Modified extensively to work with 50 locales.
-*   04/01/97    aliu        Added support for centuries.
-*   08/12/97    aliu        Fixed operator== to use Calendar::equivalentTo.
-*   07/20/98    stephen     Changed ParsePosition initialization
-********************************************************************************
-*/
+ *******************************************************************************
+ * Copyright (C) 1997-2007, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * File DATEFMT.CPP
+ *
+ * Modification History:
+ *
+ *   Date        Name        Description
+ *   02/19/97    aliu        Converted from java.
+ *   03/31/97    aliu        Modified extensively to work with 50 locales.
+ *   04/01/97    aliu        Added support for centuries.
+ *   08/12/97    aliu        Fixed operator== to use Calendar::equivalentTo.
+ *   07/20/98    stephen     Changed ParsePosition initialization
+ ********************************************************************************
+ */
 
 #include "unicode/utypes.h"
 

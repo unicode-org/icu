@@ -1,24 +1,25 @@
 /*
-* Copyright (C) {1997-2005}, International Business Machines Corporation and others. All Rights Reserved.
-*                                                                              *
-********************************************************************************
-*
-* File SIMPLETZ.H
-*
-* Modification History:
-*
-*   Date        Name        Description
-*   04/21/97    aliu        Overhauled header.
-*    08/10/98    stephen        JDK 1.2 sync
-*                            Added setStartRule() / setEndRule() overloads
-*                            Added hasSameRules()
-*    09/02/98    stephen        Added getOffset(monthLen)
-*                            Changed getOffset() to take UErrorCode
-*    07/09/99    stephen     Removed millisPerHour (unused, for HP compiler)
-*   12/02/99    aliu        Added TimeMode and constructor and setStart/EndRule
-*                           methods that take TimeMode. Added to docs.
-********************************************************************************
-*/
+ ********************************************************************************
+ * Copyright (C) 1997-2007, International Business Machines                     *
+ * Corporation and others. All Rights Reserved.                                 *
+ ********************************************************************************
+ *
+ * File SIMPLETZ.H
+ *
+ * Modification History:
+ *
+ *   Date        Name        Description
+ *   04/21/97    aliu        Overhauled header.
+ *   08/10/98    stephen     JDK 1.2 sync
+ *                           Added setStartRule() / setEndRule() overloads
+ *                           Added hasSameRules()
+ *   09/02/98    stephen     Added getOffset(monthLen)
+ *                           Changed getOffset() to take UErrorCode
+ *   07/09/99    stephen     Removed millisPerHour (unused, for HP compiler)
+ *   12/02/99    aliu        Added TimeMode and constructor and setStart/EndRule
+ *                           methods that take TimeMode. Added to docs.
+ ********************************************************************************
+ */
 
 #ifndef SIMPLETZ_H
 #define SIMPLETZ_H
