@@ -1,9 +1,9 @@
 /**
-*******************************************************************************
-* Copyright (C) 2005-2006, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
-*******************************************************************************
-*/
+ *******************************************************************************
+ * Copyright (C) 2005-2007, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ */
 
 /**
  * Represents the API information on a doc element.
