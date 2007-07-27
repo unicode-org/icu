@@ -11,6 +11,7 @@
 *.ico
 *.jar
 *.jpg
+*.otf
 *.pdf
 *.png
 *.ppt
@@ -20,6 +21,8 @@
 *.sxd
 *.sxg
 *.sxw
+*.ttf
+*.TTF
 *.vcproj
 *.zip
 *.cvsignore
@@ -33,6 +36,7 @@ icu/source/config.guess
 icu/source/config.sub
 icu/source/configure
 icu/source/data/brkitr/thaidict.brk
+icu/source/data/misc/NamePrepProfile.txt
 icu/source/data/unidata/UnicodeData.txt
 icu/source/data/unidata/FractionalUCA.txt
 icu/source/data/unidata/UCARules.txt
@@ -68,6 +72,7 @@ icu/source/samples/ucnv/data01.txt
 icu/source/samples/ufortune/resources/res-file-list.txt
 icu/source/test/testdata/CollationTest_NON_IGNORABLE_STUB.txt
 icu/source/test/testdata/CollationTest_SHIFTED_STUB.txt
+icu/source/test/testdata/GraphemeBreakTest.txt
 icu/source/test/testdata/GraphemeClusterBreakTest.txt
 icu/source/test/testdata/ra.xlf
 icu/source/test/testdata/re_tests.txt
@@ -77,6 +82,7 @@ icu/source/test/testdata/WordBreakTest.txt
 icu/source/test/testdata/idna_conf.txt
 icu/source/test/thaitest/space.txt
 icu/source/tools/tzcode/patch-icu-tzcode
+icu/unicode-license.txt
 # Following are Public Domain
 icu/source/tools/tzcode/asctime.c
 icu/source/tools/tzcode/ialloc.c
@@ -85,6 +91,7 @@ icu/source/tools/tzcode/private.h
 icu/source/tools/tzcode/scheck.c
 icu/source/tools/tzcode/tzfile.h
 icu/source/tools/tzcode/tzselect.ksh
+icu/source/tools/tzcode/zdump.c
 icu/source/tools/tzcode/zic.c
 #ICU4JNI files that don't need an IBM copyright
 icu4jni/src/classes/com/ibm/icu4jni/test/text/NormalizationTest.txt
