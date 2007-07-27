@@ -3,9 +3,8 @@
  * Copyright (C) 2006-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- *******************************************************************************
  */
+
 package com.ibm.icu.charset;
 
 import java.nio.BufferOverflowException;
