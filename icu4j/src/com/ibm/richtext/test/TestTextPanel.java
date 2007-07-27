@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2004.  All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2007.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or
  * implied, including the warranty of non-infringement and the implied
@@ -10,6 +10,7 @@
  * IBM has been advised of the possibility of their occurrence. IBM
  * will not be liable for any third party claims against you.
  */
+
 package com.ibm.richtext.test;
 
 import java.util.Random;
