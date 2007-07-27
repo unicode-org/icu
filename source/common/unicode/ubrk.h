@@ -298,7 +298,11 @@ ubrk_setText(UBreakIterator* bi,
 /**
  * Sets an existing iterator to point to a new piece of text
  * @param bi The iterator to use
- * @param text The text to be set
+ * @param text The text to be set.
+ *             This function makes a shallow clone of the supplied UText.  This means
+ *             that the caller is free to immediately close or otherwise reuse the
+ *             UText that was passed as a parameter, but that the underlying text itself
+ *             must not be altered while being referenced by the break iterator.
  * @param status The error code
  * @draft ICU 3.4
  */
