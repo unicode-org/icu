@@ -13,6 +13,17 @@ sv{
     Version{"1.24"}
     collations{
         default{"reformed"}
+        reformed{
+            Sequence{
+                "&D<<đ<<<Đ<<ð<<<Ð"
+                "&t<<<þ/h"
+                "&T<<<Þ/H"
+                "&Y<<ü<<<Ü<<ű<<<Ű"
+                "&[before 1]ʒ<å<<<Å<ä<<<Ä<<æ<<<Æ<<ę<<<Ę<ö<<<Ö<<ø<<<Ø<<ő<<<Ő<<œ<<<Œ<<ô"
+                "<<<Ô"
+            }
+            Version{"1.5"}
+        }
         standard{
             Sequence{
                 "&D<<đ<<<Đ<<ð<<<Ð"
