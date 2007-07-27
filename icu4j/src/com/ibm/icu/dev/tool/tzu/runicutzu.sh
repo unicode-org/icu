@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Copyright (c) 2007 International Business Machines Corporation and others.
+# All rights reserved
+
 MissingICUTZUJAR() {
   echo "The ICU4J Time Zone Update Utility (icutzu.jar) doesn't exist in $ICUTZU_HOME"
   Failure
