@@ -1,13 +1,14 @@
 /*
-**********************************************************************
-* Copyright (c) 2002-2005, International Business Machines
-* Corporation and others.  All Rights Reserved.
-**********************************************************************
-* Author: Alan Liu
-* Created: December 18 2002
-* Since: ICU 2.4
-**********************************************************************
-*/
+ **********************************************************************
+ * Copyright (c) 2002-2007, International Business Machines
+ * Corporation and others.  All Rights Reserved.
+ **********************************************************************
+ * Author: Alan Liu
+ * Created: December 18 2002
+ * Since: ICU 2.4
+ **********************************************************************
+ */
+
 package com.ibm.icu.dev.test.util;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.util.*;

@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2003-2006, International Business Machines Corporation and
+ * Copyright (C) 2003-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  * Partial port from ICU4C's Grego class in i18n/gregoimp.h.
@@ -13,6 +13,7 @@
  *
  * These utilities are used by both OlsonTimeZone and SimpleTimeZone.
  */
+
 package com.ibm.icu.impl;
 
 import com.ibm.icu.util.Calendar;

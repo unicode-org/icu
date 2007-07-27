@@ -1,3 +1,10 @@
+/*
+ ***************************************************************************
+ * Copyright (c) 2007 International Business Macines Corporation and Others.
+ * All rights reserved.
+ ***************************************************************************
+*/
+
 package com.ibm.icu.impl;
 
 public interface ICUCache {
