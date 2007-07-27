@@ -1,23 +1,21 @@
 /*
-*******************************************************************************
-*
-*   Copyright (C) 1999-2006, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-*
-*******************************************************************************
-*   file name:  gennames.c
-*   encoding:   US-ASCII
-*   tab size:   8 (not used)
-*   indentation:4
-*
-*   created on: 1999nov01
-*   created by: Markus W. Scherer
-*
-*   This program reads a binary file and creates a C source code file
-*   with a byte array that contains the data of the binary file.
-*
-*   12/09/1999  weiv    Added multiple file handling
-*/
+ *******************************************************************************
+ *   Copyright (C) 1999-2007, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *******************************************************************************
+ *   file name:  gennames.c
+ *   encoding:   US-ASCII
+ *   tab size:   8 (not used)
+ *   indentation:4
+ *
+ *   created on: 1999nov01
+ *   created by: Markus W. Scherer
+ *
+ *   This program reads a binary file and creates a C source code file
+ *   with a byte array that contains the data of the binary file.
+ *
+ *   12/09/1999  weiv    Added multiple file handling
+ */
 
 #include "unicode/utypes.h"
 

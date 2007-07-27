@@ -1,13 +1,14 @@
 /*
-**********************************************************************
-* Copyright (c) 2003-2006, International Business Machines
-* Corporation and others.  All Rights Reserved.
-**********************************************************************
-* Author: Alan Liu
-* Created: September 2 2003
-* Since: ICU 2.8
-**********************************************************************
-*/
+ **********************************************************************
+ * Copyright (c) 2003-2007, International Business Machines
+ * Corporation and others.  All Rights Reserved.
+ **********************************************************************
+ * Author: Alan Liu
+ * Created: September 2 2003
+ * Since: ICU 2.8
+ **********************************************************************
+ */
+
 #include "gregoimp.h"
 
 #if !UCONFIG_NO_FORMATTING

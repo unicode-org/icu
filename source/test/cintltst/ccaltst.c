@@ -1,16 +1,15 @@
 /********************************************************************
- * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
- * others. All Rights Reserved.
- ********************************************************************/
-/******************************************************************************
-*
-* File CCALTST.C
-*
-* Modification History:
-*        Name                     Description            
-*     Madhu Katragadda               Creation
-*******************************************************************************/
+ * Copyright (c) 1997-2007, International Business Machines
+ * Corporation and others. All Rights Reserved.
+ ********************************************************************
+ *
+ * File CCALTST.C
+ *
+ * Modification History:
+ *        Name                     Description            
+ *     Madhu Katragadda               Creation
+ ********************************************************************
+ */
 
 /* C API AND FUNCTIONALITY TEST FOR CALENDAR (ucol.h)*/
 

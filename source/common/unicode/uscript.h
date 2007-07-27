@@ -1,17 +1,18 @@
 /*
-**********************************************************************
-*   Copyright (C) 1997-2006, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-**********************************************************************
-*
-* File USCRIPT.H
-*
-* Modification History:
-*
-*   Date        Name        Description
-*   07/06/2001    Ram         Creation.
-******************************************************************************
-*/
+ **********************************************************************
+ *   Copyright (C) 1997-2007, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ **********************************************************************
+ *
+ * File USCRIPT.H
+ *
+ * Modification History:
+ *
+ *   Date        Name        Description
+ *   07/06/2001    Ram         Creation.
+ ******************************************************************************
+ */
+
 #ifndef USCRIPT_H
 #define USCRIPT_H
 #include "unicode/utypes.h"

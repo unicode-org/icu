@@ -1,8 +1,7 @@
 
 /********************************************************************
- * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
- * others. All Rights Reserved.
+ * Copyright (c) 1997-2007, International Business Machines
+ * Corporation and others. All Rights Reserved.
  ********************************************************************/
  
 #ifndef __TimeZoneTest__

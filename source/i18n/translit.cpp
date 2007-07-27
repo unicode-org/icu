@@ -1,12 +1,12 @@
 /*
-**********************************************************************
-*   Copyright (C) 1999-2006, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-**********************************************************************
-*   Date        Name        Description
-*   11/17/99    aliu        Creation.
-**********************************************************************
-*/
+ **********************************************************************
+ *   Copyright (C) 1999-2007, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ **********************************************************************
+ *   Date        Name        Description
+ *   11/17/99    aliu        Creation.
+ **********************************************************************
+ */
 
 #include "unicode/utypes.h"
 

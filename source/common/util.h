@@ -1,12 +1,13 @@
 /*
-**********************************************************************
-*   Copyright (c) 2001-2005, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-**********************************************************************
-*   Date        Name        Description
-*   11/19/2001  aliu        Creation.
-**********************************************************************
-*/
+ **********************************************************************
+ *   Copyright (c) 2001-2007, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ **********************************************************************
+ *   Date        Name        Description
+ *   11/19/2001  aliu        Creation.
+ **********************************************************************
+ */
+
 #ifndef ICU_UTIL_H
 #define ICU_UTIL_H
 

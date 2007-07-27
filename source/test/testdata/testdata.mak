@@ -1,5 +1,5 @@
 #**********************************************************************
-#* Copyright (C) 1999-2006, International Business Machines Corporation
+#* Copyright (C) 1999-2007, International Business Machines Corporation
 #* and others.  All Rights Reserved.
 #**********************************************************************
 #

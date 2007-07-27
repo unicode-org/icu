@@ -1,22 +1,22 @@
 /*
-*******************************************************************************
-*
-*   Copyright (C) 2001-2006, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-*
-*******************************************************************************
-*   file name:  ucol_cnt.cpp
-*   encoding:   US-ASCII
-*   tab size:   8 (not used)
-*   indentation:4
-*
-*   created 02/22/2001
-*   created by: Vladimir Weinstein
-*
-* This module maintains a contraction table structure in expanded form
-* and provides means to flatten this structure
-* 
-*/
+ *******************************************************************************
+ *
+ *   Copyright (C) 2001-2007, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *
+ *******************************************************************************
+ *   file name:  ucol_cnt.cpp
+ *   encoding:   US-ASCII
+ *   tab size:   8 (not used)
+ *   indentation:4
+ *
+ *   created 02/22/2001
+ *   created by: Vladimir Weinstein
+ *
+ * This module maintains a contraction table structure in expanded form
+ * and provides means to flatten this structure
+ * 
+ */
 
 #include "unicode/utypes.h"
 
