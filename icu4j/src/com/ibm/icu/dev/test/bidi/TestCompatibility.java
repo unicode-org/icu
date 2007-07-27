@@ -180,6 +180,10 @@ public class TestCompatibility extends BidiTest {
             jbidi = new java.text.Bidi(chars, 0, null, 0, chars.length, java.text.Bidi.DIRECTION_LEFT_TO_RIGHT);
             compareBidi(bidi, jbidi);
         }
+        /* check bogus flags */
+        bidi = new Bidi("abc", 999);
+        assertEquals("\nDirection should be LTR", Bidi.LTR, bidi.getDirection());
+
         AttributedString as = new AttributedString("HEBREW 123 english MOREHEB");
         as.addAttribute(TextAttribute.RUN_DIRECTION, TextAttribute.RUN_DIRECTION_RTL);
         as.addAttribute(TextAttribute.NUMERIC_SHAPING, NumericShaper.getShaper(NumericShaper.ARABIC));
@@ -190,30 +194,48 @@ public class TestCompatibility extends BidiTest {
         bidi = new Bidi(aci);
         jbidi = new java.text.Bidi(aci);
         compareBidi(bidi, jbidi);
-        String out = bidi.writeReordered((short)0);
-        logln("Output of Bidi(AttributedCharacterIterator): " + out);
+        String out = bidi.writeReordered(0);
+        logln("Output #1 of Bidi(AttributedCharacterIterator): " + out);
+
+        as = new AttributedString("HEBREW 123 english MOREHEB");
+        as.addAttribute(TextAttribute.RUN_DIRECTION, TextAttribute.RUN_DIRECTION_RTL);
+        as.addAttribute(TextAttribute.BIDI_EMBEDDING, new Integer(0), 0, 26);
+        aci = as.getIterator();
+        bidi = new Bidi(aci);
+        jbidi = new java.text.Bidi(aci);
+        compareBidi(bidi, jbidi);
+        out = bidi.writeReordered(0);
+        logln("Output #2 of Bidi(AttributedCharacterIterator): " + out);
+
+        as = new AttributedString("HEBREW 123 english MOREHEB");
+        aci = as.getIterator();
+        bidi = new Bidi(aci);
+        jbidi = new java.text.Bidi(aci);
+        compareBidi(bidi, jbidi);
+        out = bidi.writeReordered(0);
+        logln("Output #3 of Bidi(AttributedCharacterIterator): " + out);
 
         char[] text = "abc==(123)==>def".toCharArray();
         bidi = new Bidi(text, 3, null, 0, 10, Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT);
         jbidi = new java.text.Bidi(text, 3, null, 0, 10, java.text.Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT);
         compareBidi(bidi, jbidi);
-        out = bidi.writeReordered((short)0);
+        out = bidi.writeReordered(0);
         logln("Output of Bidi(abc==(123)==>def,3,null,0,10, DEFAULT_LTR): " + out);
         bidi = new Bidi(text, 3, null, 0, 10, Bidi.DIRECTION_DEFAULT_RIGHT_TO_LEFT);
         jbidi = new java.text.Bidi(text, 3, null, 0, 10, java.text.Bidi.DIRECTION_DEFAULT_RIGHT_TO_LEFT);
         compareBidi(bidi, jbidi);
-        out = bidi.writeReordered((short)0);
+        out = bidi.writeReordered(0);
         logln("Output of Bidi(abc==(123)==>def,3,null,0,10, DEFAULT_RTL): " + out);
         byte[] levels = new byte[] {0,0,0,-1,-1,-1,0,0,0,0};
         bidi = new Bidi(text, 3, levels, 0, 10, Bidi.DIRECTION_LEFT_TO_RIGHT);
         jbidi = new java.text.Bidi(text, 3, levels, 0, 10, java.text.Bidi.DIRECTION_LEFT_TO_RIGHT);
         compareBidi(bidi, jbidi);
-        out = bidi.writeReordered((short)0);
+        out = bidi.writeReordered(0);
         logln("Output of Bidi(abc==(123)==>def,3,levels,0,10, LTR): " + out);
         bidi = new Bidi(text, 3, levels, 0, 10, Bidi.DIRECTION_DEFAULT_RIGHT_TO_LEFT);
         jbidi = new java.text.Bidi(text, 3, levels, 0, 10, java.text.Bidi.DIRECTION_DEFAULT_RIGHT_TO_LEFT);
         compareBidi(bidi, jbidi);
-        out = bidi.writeReordered((short)0);
+        out = bidi.writeReordered(0);
         logln("Output of Bidi(abc==(123)==>def,3,levels,0,10, DEFAULT_RTL): " + out);
 
         /* test reorderVisually */
