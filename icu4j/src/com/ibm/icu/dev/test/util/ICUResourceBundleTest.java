@@ -176,9 +176,10 @@ public final class ICUResourceBundleTest extends TestFmwk {
         if(bundle==null){
             errln("could not load the stream");
         }
-        bundle = (UResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "my_very_very_very_long_bogus_bundle");
+        bundle = (UResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zzz_ZZ_very_very_very_long_bogus_bundle");
         if(!bundle.getULocale().equals(ULocale.getDefault())){
-            errln("UResourceBundle did not load the default bundle when bundle was not found");
+            errln("UResourceBundle did not load the default bundle when bundle was not found. Default: " + ULocale.getDefault() + 
+                        ", Bundle locale: " + bundle.getULocale());
         }
 
 
