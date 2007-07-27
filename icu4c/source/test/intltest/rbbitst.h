@@ -1,13 +1,11 @@
-/********************************************************************
- * COPYRIGHT:
- * Copyright (c) 1999-2006, International Business Machines Corporation and
- * others. All Rights Reserved.
- ********************************************************************/
-/************************************************************************
-*   Date        Name        Description
-*   12/15/99    Madhu        Creation.
-*   01/12/2000  Madhu        Updated for changed API and added new tests
-************************************************************************/
+/*************************************************************************
+ * Copyright (c) 1999-2007, International Business Machines
+ * Corporation and others. All Rights Reserved.
+ *************************************************************************
+ *   Date        Name        Description
+ *   12/15/99    Madhu        Creation.
+ *   01/12/2000  Madhu        Updated for changed API and added new tests
+ ************************************************************************/
 
 
 #ifndef RBBITEST_H
