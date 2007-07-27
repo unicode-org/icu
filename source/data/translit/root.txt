@@ -124,21 +124,6 @@ root {
             }
         }
 
-/*
-        CanadianAboriginal-Latin {
-            file {
-                resource:process(transliterator) {"CanadianAboriginal_Latin.txt"}
-                direction {"FORWARD"}
-            }
-        }
-        Latin-CanadianAboriginal {
-            file {
-                resource:process(transliterator) {"CanadianAboriginal_Latin.txt"}
-                direction {"REVERSE"}
-            }
-        }
-*/
-
         Cyrillic-Latin {
             file {
                 resource:process(transliterator) {"Cyrillic_Latin.txt"}
@@ -672,22 +657,6 @@ root {
                 direction {"FORWARD"}
             }
         }
-/*
-	broken.
-
-        Latin-Ethiopic {
-            file {
-                resource:process(transliterator) {"Latin_Ethiopic.txt"}
-                direction {"FORWARD"}
-            }
-        }
-        Ethiopic-Latin {
-            file {
-                resource:process(transliterator) {"Latin_Ethiopic.txt"}
-                direction {"REVERSE"}
-            }
-        }
-*/
 
         Latin-Gujarati {
             file {
