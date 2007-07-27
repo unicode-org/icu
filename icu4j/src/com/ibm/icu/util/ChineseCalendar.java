@@ -1,9 +1,11 @@
 /*********************************************************************
- * Copyright (C) 2000-2007, International Business Machines Corporation and
- * others. All Rights Reserved.
+ * Copyright (C) 2000-2007, International Business Machines
+ * Corporation and others. All Rights Reserved.
  *********************************************************************
  */
+
 package com.ibm.icu.util;
+
 import com.ibm.icu.text.*;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.impl.CalendarAstronomer;
