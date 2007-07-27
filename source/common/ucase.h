@@ -241,6 +241,20 @@ ucase_toFullFolding(const UCaseProps *csp, UChar32 c,
 U_CFUNC int32_t U_EXPORT2
 ucase_hasBinaryProperty(UChar32 c, UProperty which);
 
+
+U_CDECL_BEGIN
+
+/**
+ * @internal
+ */
+typedef int32_t U_CALLCONV
+UCaseMapFull(const UCaseProps *csp, UChar32 c,
+             UCaseContextIterator *iter, void *context,
+             const UChar **pString,
+             const char *locale, int32_t *locCache);
+
+U_CDECL_END
+
 /* file definitions --------------------------------------------------------- */
 
 #define UCASE_DATA_NAME "ucase"
