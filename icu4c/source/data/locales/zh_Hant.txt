@@ -1563,20 +1563,6 @@ zh_Hant{
         "Hani",
         "Bopo",
     }
-    NumberElements{
-        ".",
-        "，",
-        "；",
-        "%",
-        "0",
-        "#",
-        "-",
-        "E",
-        "‰",
-        "∞",
-        "NaN",
-        "+",
-    }
     Scripts{
         Arab{"阿拉伯文"}
         Armn{"亞美尼亞文"}
