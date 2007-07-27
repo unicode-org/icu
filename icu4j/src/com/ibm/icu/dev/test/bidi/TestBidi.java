@@ -32,7 +32,7 @@ public class TestBidi extends BidiTest {
 
         doTests(bidi, bidiLine, false);
         doTests(bidi, bidiLine, true);
-        doMisc(bidi);
+        doMisc();
         logln("\nExiting TestBidi");
     }
 
@@ -172,11 +172,9 @@ public class TestBidi extends BidiTest {
             run = bidi.getLogicalRun(logicalIndex);
             logicalIndex = run.getLimit();
             level2 = run.getEmbeddingLevel();
-            if (level != level2) {
-                assertEquals("Logical " + run.toString() +
-                             " in test[" + testNumber + "]: wrong level",
-                             level, level2);
-            }
+            assertEquals("Logical " + run.toString() +
+                         " in test[" + testNumber + "]: wrong level",
+                         level, level2);
             if (--runCount < 0) {
                 errln("Bidi.getLogicalRun(test[" + testNumber
                       + "]): wrong number of runs compared to Bidi.countRuns() = "
@@ -373,30 +371,42 @@ public class TestBidi extends BidiTest {
         return new String(buffer);
     }
 
-    private void doMisc(Bidi bidi) {
+    private void doMisc() {
     /* Miscellaneous tests to exercize less popular code paths */
-        Bidi bidiLine;
+        Bidi bidi = new Bidi(120, 66), bidiLine;
 
         assertEquals("\nwriteReverse should return an empty string",
-                     "", Bidi.writeReverse("", (short)0));
+                     "", Bidi.writeReverse("", 0));
 
         bidi.setPara("", Bidi.LTR, null);
         assertEquals("\nwriteReordered should return an empty string",
-                     "", bidi.writeReordered((short)0));
+                     "", bidi.writeReordered(0));
 
         bidi.setPara("abc", Bidi.LTR, null);
         assertEquals("\ngetRunStart should return 0",
                      0, bidi.getRunStart(0));
-
-        bidi.setPara("abc", Bidi.LTR, null);
         assertEquals("\ngetRunLimit should return 3",
                      3, bidi.getRunLimit(0));
+
+        bidi.setPara("abc          ", Bidi.RTL, null);
+        bidiLine = bidi.setLine(0, 6);
+        for (int i = 3; i < 6; i++) {
+            assertEquals("\nTrailing space at " + i + " should get paragraph level",
+                         Bidi.RTL, bidiLine.getLevelAt(i));
+        }
 
         bidi.setPara("abc       def", Bidi.RTL, null);
         bidiLine = bidi.setLine(0, 6);
         for (int i = 3; i < 6; i++) {
             assertEquals("\nTrailing space at " + i + " should get paragraph level",
                          Bidi.RTL, bidiLine.getLevelAt(i));
+        }
+
+        bidi.setPara("abcdefghi    ", Bidi.RTL, null);
+        bidiLine = bidi.setLine(0, 6);
+        for (int i = 3; i < 6; i++) {
+            assertEquals("\nTrailing char at " + i + " should get level 2",
+                         2, bidiLine.getLevelAt(i));
         }
 
         bidi.setReorderingOptions(Bidi.OPTION_REMOVE_CONTROLS);
@@ -406,16 +416,22 @@ public class TestBidi extends BidiTest {
 
         bidi.setPara("abcdefghi", Bidi.LTR, null);
         bidiLine = bidi.setLine(0, 6);
-        assertEquals("\nWrong direction", Bidi.LTR, bidiLine.getDirection());
+        assertEquals("\nWrong direction #1", Bidi.LTR, bidiLine.getDirection());
 
         bidi.setPara("", Bidi.LTR, null);
         byte[] levels = bidi.getLevels();
         assertEquals("\nWrong number of level elements", 0, levels.length);
-        assertEquals("\nWrong number of runs", 0, bidi.countRuns());
+        assertEquals("\nWrong number of runs #1", 0, bidi.countRuns());
 
         bidi.setPara("          ", Bidi.RTL, null);
         bidiLine = bidi.setLine(0, 6);
-        assertEquals("\nWrong number of runs", 1, bidiLine.countRuns());
+        assertEquals("\nWrong number of runs #2", 1, bidiLine.countRuns());
+
+        bidi.setPara("a\u05d0        bc", Bidi.RTL, null);
+        bidiLine = bidi.setLine(0, 6);
+        assertEquals("\nWrong direction #2", Bidi.MIXED, bidi.getDirection());
+        assertEquals("\nWrong direction #3", Bidi.MIXED, bidiLine.getDirection());
+        assertEquals("\nWrong number of runs #3", 2, bidiLine.countRuns());
 
         int[] map = Bidi.reorderLogical(null);
         assertTrue("\nWe should have got a null map #1", map == null);
@@ -424,9 +440,84 @@ public class TestBidi extends BidiTest {
         map = Bidi.reorderVisual(null);
         assertTrue("\nWe should have got a null map #3", map == null);
 
+        map = Bidi.invertMap(null);
+        assertTrue("\nWe should have got a null map #4", map == null);
         map = Bidi.invertMap(new int[] {0,1,-1,5,4});
         assertTrue("\nUnexpected inverted Map",
                    Arrays.equals(map, new int[] {0,1,-1,-1,4,3}));
+
+        bidi.setPara("", Bidi.LTR, null);
+        map = bidi.getLogicalMap();
+        assertTrue("\nMap should have length==0 #1", map.length == 0);
+        map = bidi.getVisualMap();
+        assertTrue("\nMap should have length==0 #2", map.length == 0);
+
+        /* test BidiRun.toString and allocation of run memory > 1 */
+        bidi.setPara("abc", Bidi.LTR, null);
+        assertEquals("\nWrong run display", "BidiRun 0 - 3 @ 0",
+                     bidi.getLogicalRun(0).toString());
+
+        /* test REMOVE_BIDI_CONTROLS together with DO_MIRRORING */
+        bidi.setPara("abc\u200e", Bidi.LTR, null);
+        String out = bidi.writeReordered(Bidi.REMOVE_BIDI_CONTROLS | Bidi.DO_MIRRORING);
+        assertEquals("\nWrong result #1", "abc", out);
+
+        /* test inverse Bidi with marks and contextual orientation */
+        bidi.setReorderingMode(Bidi.REORDER_INVERSE_LIKE_DIRECT);
+        bidi.setReorderingOptions(Bidi.OPTION_INSERT_MARKS);
+        bidi.setPara("", Bidi.LEVEL_DEFAULT_RTL, null);
+        out = bidi.writeReordered(0);
+        assertEquals("\nWrong result #2", "", out);
+        bidi.setPara("   ", Bidi.LEVEL_DEFAULT_RTL, null);
+        out = bidi.writeReordered(0);
+        assertEquals("\nWrong result #3", "   ", out);
+        bidi.setPara("abc", Bidi.LEVEL_DEFAULT_RTL, null);
+        out = bidi.writeReordered(0);
+        assertEquals("\nWrong result #4", "abc", out);
+        bidi.setPara("\u05d0\u05d1", Bidi.LEVEL_DEFAULT_RTL, null);
+        out = bidi.writeReordered(0);
+        assertEquals("\nWrong result #5", "\u05d1\u05d0", out);
+        bidi.setPara("abc \u05d0\u05d1", Bidi.LEVEL_DEFAULT_RTL, null);
+        out = bidi.writeReordered(0);
+        assertEquals("\nWrong result #6", "\u05d1\u05d0 abc", out);
+        bidi.setPara("\u05d0\u05d1 abc", Bidi.LEVEL_DEFAULT_RTL, null);
+        out = bidi.writeReordered(0);
+        assertEquals("\nWrong result #7", "\u200fabc \u05d1\u05d0", out);
+        bidi.setPara("\u05d0\u05d1 abc .-=", Bidi.LEVEL_DEFAULT_RTL, null);
+        out = bidi.writeReordered(0);
+        assertEquals("\nWrong result #8", "\u200f=-. abc \u05d1\u05d0", out);
+        bidi.orderParagraphsLTR(true);
+        bidi.setPara("\n\r   \n\rabc\n\u05d0\u05d1\rabc \u05d2\u05d3\n\r" +
+                     "\u05d4\u05d5 abc\n\u05d6\u05d7 abc .-=\r\n" +
+                     "-* \u05d8\u05d9 abc .-=", Bidi.LEVEL_DEFAULT_RTL, null);
+        out = bidi.writeReordered(0);
+        assertEquals("\nWrong result #9",
+                     "\n\r   \n\rabc\n\u05d1\u05d0\r\u05d3\u05d2 abc\n\r" +
+                     "\u200fabc \u05d5\u05d4\n\u200f=-. abc \u05d7\u05d6\r\n" +
+                     "\u200f=-. abc \u05d9\u05d8 *-", out);
+
+        bidi.setPara("\u05d0 \t", Bidi.LTR, null);
+        out = bidi.writeReordered(0);
+        assertEquals("\nWrong result #10", "\u05D0\u200e \t", out);
+        bidi.setPara("\u05d0 123 \t\u05d1 123 \u05d2", Bidi.LTR, null);
+        out = bidi.writeReordered(0);
+        assertEquals("\nWrong result #11", "\u05d0 \u200e123\u200e \t\u05d2 123 \u05d1", out);
+        bidi.setPara("\u05d0 123 \u0660\u0661 ab", Bidi.LTR, null);
+        out = bidi.writeReordered(0);
+        assertEquals("\nWrong result #12", "\u05d0 \u200e123 \u200e\u0660\u0661 ab", out);
+        bidi.setPara("ab \t", Bidi.RTL, null);
+        out = bidi.writeReordered(0);
+        assertEquals("\nWrong result #13", "\u200f\t ab", out);
+
+        /* check exceeding para level */
+        bidi = new Bidi();
+        bidi.setPara("A\u202a\u05d0\u202aC\u202c\u05d1\u202cE", (byte)(Bidi.MAX_EXPLICIT_LEVEL - 1), null);
+        assertEquals("\nWrong level at index 2", 61, bidi.getLevelAt(2));
+
+        /* check 1-char runs with RUNS_ONLY */
+        bidi.setReorderingMode(Bidi.REORDER_RUNS_ONLY);
+        bidi.setPara("a \u05d0 b \u05d1 c \u05d2 d ", Bidi.LTR, null);
+        assertEquals("\nWrong number of runs #4", 14, bidi.countRuns());
     }
 
 

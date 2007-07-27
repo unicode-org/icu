@@ -201,7 +201,7 @@ public class TestReorderingMode extends BidiTest {
         Bidi bidi2 = new Bidi();
         Bidi bidi3 = new Bidi();
         int tc, mode, option, level;
-        short modeValue, modeBack;
+        int modeValue, modeBack;
         int optionValue, optionBack;
         int index;
         String expected;

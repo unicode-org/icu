@@ -98,7 +98,7 @@ public class BidiTest extends TestFmwk {
         "REORDER_INVERSE_FOR_NUMBERS_SPECIAL"
     };
 
-    protected static String modeToString(short mode) {
+    protected static String modeToString(int mode) {
         if (mode < Bidi.REORDER_DEFAULT ||
             mode > Bidi.REORDER_INVERSE_FOR_NUMBERS_SPECIAL) {
             return "INVALID";
@@ -130,7 +130,7 @@ public class BidiTest extends TestFmwk {
         "OUTPUT_REVERSE"            // 16
     };
 
-    public static String wrOptionsToString(short option) {
+    public static String wrOptionsToString(int option) {
         return optionToString(option, REORDER_MASK, writeReorderedDescriptions);
     }
     public static String optionToString(int option, int mask,

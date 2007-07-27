@@ -36,7 +36,7 @@ public class TestFailureRecovery extends BidiTest {
                     + " as expected: " + e.getMessage());
         }
         try {
-            Bidi.writeReverse(null, (short)0);
+            Bidi.writeReverse(null, 0);
             errln("Bidi.writeReverse did not fail when passed a null string");
         } catch (IllegalArgumentException e) {
             logln("OK: Got exception for Bidi.writeReverse(null) as expected: "
@@ -88,12 +88,12 @@ public class TestFailureRecovery extends BidiTest {
             logln("OK: Got exception for countRuns as expected: "
                   + e.getMessage());
         }
-        short rm = bidi.getReorderingMode();
-        bidi.setReorderingMode((short)(Bidi.REORDER_DEFAULT - 1));
+        int rm = bidi.getReorderingMode();
+        bidi.setReorderingMode(Bidi.REORDER_DEFAULT - 1);
         if (rm != bidi.getReorderingMode()) {
             errln("setReorderingMode with bad argument #1 should have no effect");
         }
-        bidi.setReorderingMode((short)9999);
+        bidi.setReorderingMode(9999);
         if (rm != bidi.getReorderingMode()) {
             errln("setReorderingMode with bad argument #2 should have no effect");
         }

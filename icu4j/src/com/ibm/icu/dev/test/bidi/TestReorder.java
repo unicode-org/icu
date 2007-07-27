@@ -151,8 +151,8 @@ public class TestReorder extends BidiTest {
                       Bidi.LEVEL_DEFAULT_LTR + " failed.");
             }
             try {
-                dest = u16ToPseudo(bidi.writeReordered((short)(Bidi.DO_MIRRORING +
-                                                               Bidi.OUTPUT_REVERSE)));
+                dest = u16ToPseudo(bidi.writeReordered(Bidi.DO_MIRRORING +
+                                                       Bidi.OUTPUT_REVERSE));
             } catch (Exception e) {
                 errln("Bidi.writeReordered(test[" + testNumber + "], paraLevel "
                         + Bidi.LEVEL_DEFAULT_LTR + " failed.");
@@ -176,8 +176,8 @@ public class TestReorder extends BidiTest {
                       Bidi.LEVEL_DEFAULT_LTR + " failed.");
             }
             try {
-                dest = u16ToPseudo(bidi.writeReordered((short)
-                           (Bidi.INSERT_LRM_FOR_NUMERIC | Bidi.OUTPUT_REVERSE)));
+                dest = u16ToPseudo(bidi.writeReordered(Bidi.OUTPUT_REVERSE |
+                                                       Bidi.INSERT_LRM_FOR_NUMERIC));
             } catch (Exception e) {
                 errln("Bidi.writeReordered(test[" + testNumber + "], paraLevel " +
                       Bidi.LEVEL_DEFAULT_LTR + " failed.");
@@ -232,8 +232,8 @@ public class TestReorder extends BidiTest {
                       Bidi.MAX_EXPLICIT_LEVEL + " failed.");
             }
             try {
-                dest = u16ToPseudo(bidi.writeReordered((short)
-                              (Bidi.DO_MIRRORING | Bidi.REMOVE_BIDI_CONTROLS)));
+                dest = u16ToPseudo(bidi.writeReordered(Bidi.DO_MIRRORING |
+                                                       Bidi.REMOVE_BIDI_CONTROLS));
             } catch (Exception e) {
                 errln("Bidi.writeReordered(test[" + testNumber + "], paraLevel "
                         + Bidi.LEVEL_DEFAULT_LTR + " failed.");
