@@ -1686,8 +1686,8 @@ public class DateFormatSymbols implements Serializable, Cloneable {
                                    LONG_DAYLIGHT  = "ld",
                                    EXEMPLAR_CITY  = "ec",
                                    USES_METAZONE  = "um",
-                                   METAZONE       = "mz",
-                                   COMMONLY_USED  = "cu";
+                                   METAZONE       = "mz";
+                                   //COMMONLY_USED  = "cu";
     /*
      * The translation type of the translated zone strings
      */
