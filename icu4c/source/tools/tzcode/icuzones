@@ -26,13 +26,13 @@ Link America/Chicago SystemV/CST6CDT
 Link America/Denver SystemV/MST7MDT
 Link America/Los_Angeles SystemV/PST8PDT
 Link America/Anchorage SystemV/YST9YDT
-Link America/Puerto_Rico SystemV/AST4
-Link America/Indiana/Indianapolis SystemV/EST5
-Link America/Regina SystemV/CST6
-Link America/Phoenix SystemV/MST7
-Link Pacific/Pitcairn SystemV/PST8
-Link Pacific/Gambier SystemV/YST9
-Link Pacific/Honolulu SystemV/HST10
+Link Etc/GMT+4 SystemV/AST4
+Link Etc/GMT+5 SystemV/EST5
+Link Etc/GMT+6 SystemV/CST6
+Link Etc/GMT+7 SystemV/MST7
+Link Etc/GMT+8 SystemV/PST8
+Link Etc/GMT+9 SystemV/YST9
+Link Etc/GMT+10 SystemV/HST10
 
 
 # The list below is for supporting legacy ICU zone aliases.
