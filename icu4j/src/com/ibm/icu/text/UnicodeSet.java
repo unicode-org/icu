@@ -3716,8 +3716,8 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
     /**
      * Is this frozen, according to the Freezable interface?
      * @return value
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean isFrozen() {
         return frozen;
@@ -3726,8 +3726,8 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
     /**
      * Freeze this class, according to the Freezable interface.
      * @return this
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public Object freeze() {
         frozen = true;
@@ -3737,8 +3737,8 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
     /**
      * Clone a thawed version of this class, according to the Freezable interface.
      * @return this
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public Object cloneAsThawed() {
         UnicodeSet result = (UnicodeSet) clone();

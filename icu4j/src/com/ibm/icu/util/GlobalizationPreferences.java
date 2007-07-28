@@ -65,14 +65,6 @@ import com.ibm.icu.text.SimpleDateFormat;
  * <p>
  * <b>This is at a prototype stage, and has not incorporated all the design
  * changes that we would like yet; further feedback is welcome.</b></p>
- * <p>
- * TODO:<ul>
- * <li>Add Holidays</li>
- * <li>Add convenience to get/take Locale as well as ULocale.</li>
- * <li>Add Lenient datetime formatting when that is available.</li>
- * <li>Should this be serializable?</li>
- * <li>Other utilities?</li>
- * </ul>
  * Note:
  * <ul>
  * <li>to get the display name for the first day of the week, use the calendar +
@@ -89,6 +81,14 @@ import com.ibm.icu.text.SimpleDateFormat;
  * @draft ICU 3.6
  * @provisional This API might change or be removed in a future release.
  */
+
+//TODO:
+// - Add Holidays
+// - Add convenience to get/take Locale as well as ULocale.
+// - Add Lenient datetime formatting when that is available.
+// - Should this be serializable?
+// - Other utilities?
+
 public class GlobalizationPreferences implements Freezable {
     
     /**
@@ -98,7 +98,7 @@ public class GlobalizationPreferences implements Freezable {
      */
     public GlobalizationPreferences(){}
     /**
-     * Number Format types
+     * Number Format type
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
@@ -112,7 +112,7 @@ public class GlobalizationPreferences implements Freezable {
     private static final int NF_LIMIT = NF_INTEGER + 1;
 
     /**
-     * Date Format types
+     * Date Format type
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
@@ -145,7 +145,7 @@ public class GlobalizationPreferences implements Freezable {
     //private static final int ID_LIMIT = ID_TIMEZONE + 1;
 
     /**
-     * Break iterator types
+     * Break iterator type
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
