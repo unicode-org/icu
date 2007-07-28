@@ -633,13 +633,7 @@ void TimeZoneTest::TestShortZoneIDs()
         {"SystemV/PST8PDT", -480, TRUE},
         {"SystemV/YST9YDT", -540, TRUE},
         {"SystemV/AST4", -240, FALSE},
-#if U_ICU_VERSION_MAJOR_NUM>3 || U_ICU_VERSION_MINOR_NUM>=8
-        // CLDR 1.4.1 has an alias from SystemV/EST5 to America/Indianapolis
-        // which is incorrect because Indiana has started to observe DST.
-        // Re-enable this test once CLDR has fixed the alias.
-        // (For example, it could alias SystemV/EST5 to Etc/GMT+5.)
         {"SystemV/EST5", -300, FALSE},
-#endif
         {"SystemV/CST6", -360, FALSE},
         {"SystemV/MST7", -420, FALSE},
         {"SystemV/PST8", -480, FALSE},
