@@ -11,8 +11,7 @@ import java.util.ArrayList;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.impl.UCharacterProperty;
-// This class contains utility functions so testing not needed
-///CLOVER:OFF
+
 public final class Utility {
 
     private static final char APOSTROPHE = '\'';
@@ -35,7 +34,6 @@ public final class Utility {
      * Convenience utility to compare two int[]s
      * Ought to be in System
      */
-    ///CLOVER:OFF
     public final static boolean arrayEquals(int[] source, Object target) {
         if (source == null) return (target == null);
         if (!(target instanceof int[])) return false;
@@ -43,13 +41,11 @@ public final class Utility {
         return (source.length == targ.length
                 && arrayRegionMatches(source, 0, targ, 0, source.length));
     }
-    ///CLOVER:ON
 
     /**
      * Convenience utility to compare two double[]s
      * Ought to be in System
      */
-    ///CLOVER:OFF
     public final static boolean arrayEquals(double[] source, Object target) {
         if (source == null) return (target == null);
         if (!(target instanceof double[])) return false;
@@ -64,7 +60,6 @@ public final class Utility {
         return (source.length == targ.length
                 && arrayRegionMatches(source, 0, targ, 0, source.length));
     }
-    ///CLOVER:ON
 
     /**
      * Convenience utility to compare two Object[]s
@@ -129,7 +124,6 @@ public final class Utility {
      * The start indices and start+len must be valid.
      * Ought to be in System
      */
-    ///CLOVER:OFF
     public final static boolean arrayRegionMatches(int[] source, int sourceStart,
                                             int[] target, int targetStart,
                                             int len)
@@ -142,7 +136,6 @@ public final class Utility {
         }
         return true;
     }
-    ///CLOVER:ON
 
     /**
      * Convenience utility to compare two arrays of doubles.
@@ -150,7 +143,6 @@ public final class Utility {
      * The start indices and start+len must be valid.
      * Ought to be in System
      */
-    ///CLOVER:OFF
     public final static boolean arrayRegionMatches(double[] source, int sourceStart,
                                             double[] target, int targetStart,
                                             int len)
@@ -173,7 +165,6 @@ public final class Utility {
             }
         return true;
     }
-    ///CLOVER:ON
 
     /**
      * Convenience utility. Does null checks on objects, then calls equals.
@@ -210,7 +201,6 @@ public final class Utility {
      * The ESCAPE value is chosen so as not to collide with commonly
      * seen values.
      */
-    ///CLOVER:OFF
     static public final String arrayToRLEString(int[] a) {
         StringBuffer buffer = new StringBuffer();
 
@@ -230,7 +220,6 @@ public final class Utility {
         encodeRun(buffer, runValue, runLength);
         return buffer.toString();
     }
-    ///CLOVER:ON
 
     /**
      * Construct a string representing a short array.  Use run-length encoding.
@@ -245,7 +234,6 @@ public final class Utility {
      * The ESCAPE value is chosen so as not to collide with commonly
      * seen values.
      */
-    ///CLOVER:OFF
     static public final String arrayToRLEString(short[] a) {
         StringBuffer buffer = new StringBuffer();
         // for (int i=0; i<a.length; ++i) buffer.append((char) a[i]);
@@ -265,7 +253,6 @@ public final class Utility {
         encodeRun(buffer, runValue, runLength);
         return buffer.toString();
     }
-    ///CLOVER:ON
 
     /**
      * Construct a string representing a char array.  Use run-length encoding.
@@ -342,7 +329,6 @@ public final class Utility {
      * Encode a run, possibly a degenerate run (of < 4 values).
      * @param length The length of the run; must be > 0 && <= 0xFFFF.
      */
-    ///CLOVER:OFF
     private static final void encodeRun(StringBuffer buffer, int value, int length) {
         if (length < 4) {
             for (int j=0; j<length; ++j) {
@@ -365,14 +351,11 @@ public final class Utility {
             appendInt(buffer, value); // Don't need to escape this value
         }
     }
-    ///CLOVER:ON
     
-    ///CLOVER:OFF
     private static final void appendInt(StringBuffer buffer, int value) {
         buffer.append((char)(value >>> 16));
         buffer.append((char)(value & 0xFFFF));
     }
-    ///CLOVER:ON
 
     /**
      * Encode a run, possibly a degenerate run (of < 4 values).
@@ -441,7 +424,7 @@ public final class Utility {
             state[1] = value;
         }
     }
-    ///CLOVER:OFF
+
     /**
      * Construct an array of ints from a run-length encoded string.
      */
@@ -480,12 +463,10 @@ public final class Utility {
     static final int getInt(String s, int i) {
         return (((int) s.charAt(2*i)) << 16) | (int) s.charAt(2*i+1);
     }
-    ///CLOVER:ON
 
     /**
      * Construct an array of shorts from a run-length encoded string.
      */
-    ///CLOVER:OFF
     static public final short[] RLEStringToShortArray(String s) {
         int length = (((int) s.charAt(0)) << 16) | ((int) s.charAt(1));
         short[] array = new short[length];
@@ -512,7 +493,6 @@ public final class Utility {
 
         return array;
     }
-    ///CLOVER:ON
 
     /**
      * Construct an array of shorts from a run-length encoded string.
@@ -915,7 +895,6 @@ public final class Utility {
      * Convert all escapes in a given string using unescapeAt().
      * Leave invalid escape sequences unchanged.
      */
-    ///CLOVER:OFF
     public static String unescapeLeniently(String s) {
         StringBuffer buf = new StringBuffer();
         int[] pos = new int[1];
@@ -936,49 +915,40 @@ public final class Utility {
         }
         return buf.toString();
     }
-    ///CLOVER:ON
 
     /**
      * Convert a char to 4 hex uppercase digits.  E.g., hex('a') =>
      * "0041".
      */
-    ///CLOVER:OFF
     public static String hex(char ch) {
         StringBuffer temp = new StringBuffer();
         return hex(ch, temp).toString();
     }
-    ///CLOVER:ON
 
     /**
      * Convert a string to comma-separated groups of 4 hex uppercase
      * digits.  E.g., hex('ab') => "0041,0042".
      */
-    ///CLOVER:OFF
     public static String hex(String s) {
         StringBuffer temp = new StringBuffer();
         return hex(s, temp).toString();
     }
-    ///CLOVER:ON
 
     /**
      * Convert a string to comma-separated groups of 4 hex uppercase
      * digits.  E.g., hex('ab') => "0041,0042".
      */
-    ///CLOVER:OFF
     public static String hex(StringBuffer s) {
         return hex(s.toString());
     }
-    ///CLOVER:ON
 
     /**
      * Convert a char to 4 hex uppercase digits.  E.g., hex('a') =>
      * "0041".  Append the output to the given StringBuffer.
      */
-    ///CLOVER:OFF
     public static StringBuffer hex(char ch, StringBuffer output) {
         return appendNumber(output, ch, 16, 4);
     }
-    ///CLOVER:ON
 
     /**
      * Convert a integer to size width hex uppercase digits.
@@ -1027,7 +997,6 @@ public final class Utility {
      * digits.  E.g., hex('ab') => "0041,0042".  Append the output
      * to the given StringBuffer.
      */
-    ///CLOVER:OFF
     public static StringBuffer hex(String s, StringBuffer result) {
         for (int i = 0; i < s.length(); ++i) {
             if (i != 0) result.append(',');
@@ -1035,7 +1004,6 @@ public final class Utility {
         }
         return result;
     }
-    ///CLOVER:ON
 
     /**
      * Split a string into pieces based on the given divider character
@@ -1048,7 +1016,6 @@ public final class Utility {
      * character will place empty strings into output.  Before
      * returning, output is padded out with empty strings.
      */
-    ///CLOVER:OFF
     public static void split(String s, char divider, String[] output) {
         int last = 0;
         int current = 0;
@@ -1064,6 +1031,7 @@ public final class Utility {
             output[current++] = "";
         }
     }
+
     /**
      * Split a string into pieces based on the given divider character
      * @param s the string to split
@@ -1087,8 +1055,6 @@ public final class Utility {
         return (String[]) output.toArray(new String[output.size()]);
     }
     
-    ///CLOVER:ON
-    
     /**
      * Look up a given string in a string array.  Returns the index at
      * which the first occurrence of the string was found in the
@@ -1099,14 +1065,12 @@ public final class Utility {
      * @return the index of target at which source first occurs, or -1
      * if not found
      */
-    ///CLOVER:OFF
     public static int lookup(String source, String[] target) {
         for (int i = 0; i < target.length; ++i) {
             if (source.equals(target[i])) return i;
         }
         return -1;
     }
-    ///CLOVER:ON
 
     /**
      * Skip over a sequence of zero or more white space characters
@@ -1391,7 +1355,6 @@ public final class Utility {
     /**
      * Trim whitespace from ends of a StringBuffer.
      */
-    ///CLOVER:OFF
     public static StringBuffer trim(StringBuffer b) {
         // TODO update to handle surrogates
         int i;
@@ -1400,7 +1363,6 @@ public final class Utility {
         for (i=b.length()-1; i>=0 && Character.isWhitespace(b.charAt(i)); --i) {}
         return b.delete(i+1, b.length());
     }
-    ///CLOVER:ON
 
     static final char DIGITS[] = {
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
@@ -1413,11 +1375,9 @@ public final class Utility {
      * Append a number to the given StringBuffer in the radix 10
      * generating at least one digit.
      */
-    ///CLOVER:OFF
     public static StringBuffer appendNumber(StringBuffer result, int n) {
         return appendNumber(result, n, 10, 1);
     }
-    ///CLOVER:ON
 
     /**
      * Append the digits of a positive integer to the given
@@ -1903,7 +1863,7 @@ public final class Utility {
 //#endif
    }
 
-   private static final String REGEX_SPECIALS = ".^$[]*+?|()";
+   //private static final String REGEX_SPECIALS = ".^$[]*+?|()";
 
    // !!! 1.3 compatibility
    // Note: target is not a string literal, not a regular expression.
@@ -1965,4 +1925,3 @@ public final class Utility {
 //#endif
    }
 }
-///CLOVER:ON
