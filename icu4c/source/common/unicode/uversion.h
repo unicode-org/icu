@@ -67,32 +67,32 @@
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.6
  */
-#define U_ICU_VERSION_MINOR_NUM 7
+#define U_ICU_VERSION_MINOR_NUM 8
 
 /** The current ICU patchlevel version as an integer.  
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.4
  */
-#define U_ICU_VERSION_PATCHLEVEL_NUM 2
+#define U_ICU_VERSION_PATCHLEVEL_NUM 0
 
 /** Glued version suffix for renamers 
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.6
  */
-#define U_ICU_VERSION_SUFFIX _3_7
+#define U_ICU_VERSION_SUFFIX _3_8
 
 /** The current ICU library version as a dotted-decimal string. The patchlevel
  *  only appears in this string if it non-zero. 
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.4
  */
-#define U_ICU_VERSION "3.7.2"
+#define U_ICU_VERSION "3.8"
 
 /** The current ICU library major/minor version as a string without dots, for library name suffixes. 
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.6
  */
-#define U_ICU_VERSION_SHORT "37"
+#define U_ICU_VERSION_SHORT "38"
 
 /** An ICU version consists of up to 4 numbers from 0..255.
  *  @stable ICU 2.4
@@ -154,7 +154,7 @@ typedef uint8_t UVersionInfo[U_MAX_VERSION_LENGTH];
 #       define U_ICU_NAMESPACE icu
         namespace U_ICU_NAMESPACE { }
 #   else
-#       define U_ICU_NAMESPACE icu_3_7
+#       define U_ICU_NAMESPACE icu_3_8
         namespace U_ICU_NAMESPACE { }
         namespace icu = U_ICU_NAMESPACE;
 #   endif
@@ -256,16 +256,6 @@ u_getVersion(UVersionInfo versionArray);
  * @stable ICU 2.4
  */
 #define UCOL_BUILDER_VERSION 7
-
-/** *** Removed *** Instead we use the data we read from FractionalUCA.txt
- * This is the version of FractionalUCA.txt tailoring rules
- * Version 1 was in ICU 1.8.1. Version two contains canonical closure for
- * supplementary code points 
- * Version 4 in ICU 2.2, following UCA=3.1.1d6, UCD=3.2.0 
- * This value may change in the subsequent releases of ICU
- * @stable ICU 2.4
- */
-/*#define UCOL_FRACTIONAL_UCA_VERSION 4*/
 
 /** This is the version of the tailorings 
  *  This value may change in the subsequent releases of ICU
