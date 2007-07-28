@@ -74,12 +74,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\icudt37.dll"
+				OutputFile="..\..\bin\icudt38.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				GenerateManifest="false"
 				IgnoreAllDefaultLibraries="true"
-				ProgramDatabaseFile=".\Release/icudt37.pdb"
+				ProgramDatabaseFile=".\Release/icudt38.pdb"
 				ResourceOnlyDLL="true"
 				SetChecksum="true"
 				BaseAddress="0x4ad00000"
@@ -173,10 +173,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\icudt37.dll"
+				OutputFile="..\..\bin\icudt38.dll"
 				SuppressStartupBanner="true"
 				GenerateManifest="false"
-				ProgramDatabaseFile=".\Debug/icudt37.pdb"
+				ProgramDatabaseFile=".\Debug/icudt38.pdb"
 				ResourceOnlyDLL="true"
 				SetChecksum="true"
 				BaseAddress="0x4ad00000"
