@@ -16,12 +16,14 @@ import com.ibm.icu.util.ULocale;
  * This class implements a formatter over a duration in time
  * such as "2 days from now" or "3 hours ago".
  * @draft ICU 3.8
+ * @provisional This API might change or be removed in a future release.
  */
 public abstract class DurationFormat extends UFormat {
     
     /**
      * Construct a duration format for the specified locale
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static DurationFormat getInstance(ULocale locale) {
         throw new UnsupportedOperationException();
@@ -31,6 +33,7 @@ public abstract class DurationFormat extends UFormat {
     /**
      * Subclass interface
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     protected DurationFormat() {
     }
@@ -43,6 +46,7 @@ public abstract class DurationFormat extends UFormat {
      * @param pos the field position, may contain additional error messages.
      * @return the toAppend buffer
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public StringBuffer format(Object object, StringBuffer toAppend,
             FieldPosition pos) {
@@ -60,6 +64,7 @@ public abstract class DurationFormat extends UFormat {
     /**
      * DurationFormat cannot parse, by default. This method will throw an UnsupportedOperationException.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public Object parseObject(String source, ParsePosition pos) {
        throw new UnsupportedOperationException();
@@ -76,6 +81,7 @@ public abstract class DurationFormat extends UFormat {
      * @param targetDate the ending date
      * @return the formatted time
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public abstract String formatDurationFromNowTo(Date targetDate);
 
@@ -88,6 +94,7 @@ public abstract class DurationFormat extends UFormat {
      * @param duration the duration in milliseconds
      * @return the formatted time
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public abstract String formatDurationFromNow(long duration);
 
@@ -105,6 +112,7 @@ public abstract class DurationFormat extends UFormat {
      * @param referenceDate the date from which to compute the duration
      * @return the formatted time
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public abstract String formatDurationFrom(long duration, long referenceDate);
     

@@ -76,7 +76,8 @@ public class VTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * @stable ICU 2.0
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public int getOffset(int era, int year, int month, int day, int dayOfWeek,
             int milliseconds) {
@@ -85,7 +86,8 @@ public class VTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * @stable ICU 2.8
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public void getOffset(long date, boolean local, int[] offsets) {
         tz.getOffset(date, local, offsets);
@@ -93,7 +95,8 @@ public class VTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * @stable ICU 2.0
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public int getRawOffset() {
         return tz.getRawOffset();
@@ -101,7 +104,8 @@ public class VTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * @stable ICU 2.0
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean inDaylightTime(Date date) {
         return tz.inDaylightTime(date);
@@ -109,7 +113,8 @@ public class VTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * @stable ICU 2.0
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public void setRawOffset(int offsetMillis) {
         tz.setRawOffset(offsetMillis);
@@ -117,7 +122,8 @@ public class VTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * @stable ICU 2.0
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean useDaylightTime() {
         return tz.useDaylightTime();
@@ -125,7 +131,8 @@ public class VTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * @stable ICU 2.0
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean hasSameRules(TimeZone other) {
         return tz.hasSameRules(other);

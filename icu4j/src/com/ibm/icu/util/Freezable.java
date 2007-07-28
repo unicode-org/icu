@@ -306,29 +306,29 @@ package com.ibm.icu.util;
  * 
  * </blockquote>
  *
- * @internal revisit for ICU 3.6
- * @deprecated This API is ICU internal only.
+ * @draft ICU 3.8
+ * @provisional This API might change or be removed in a future release.
  */
 public interface Freezable extends Cloneable {
     /**
      * Determines whether the object has been locked or not.
-     * @internal revisit for ICU 3.6
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean isFrozen();
 
     /**
      * Locks the object.
      * @return the object itself.
-     * @internal revisit for ICU 3.6
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public Object freeze();
 
     /**
      * Provides for the clone operation. Any clone is initially unlocked.
-     * @internal revisit for ICU 3.6
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public Object cloneAsThawed();
 }
