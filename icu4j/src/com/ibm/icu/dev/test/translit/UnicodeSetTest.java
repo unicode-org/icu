@@ -78,10 +78,10 @@ public class UnicodeSetTest extends TestFmwk {
             // HACK for now
             
             if (propNum == 4098 && e1 instanceof NullPointerException) {
-              if (skipIfBeforeICU(3,7,2)) continue;
+              if (skipIfBeforeICU(3,8,0)) continue;
             }
             if (propNum == 4112 || propNum == 4113) {
-              if (skipIfBeforeICU(3,7,2)) continue;
+              if (skipIfBeforeICU(3,8,0)) continue;
             }
             
             errln("Can't get property value name for: "
@@ -110,7 +110,7 @@ public class UnicodeSetTest extends TestFmwk {
             }
           }
           if (collectedErrors.size() != 0) {
-            if (propNum == 4107 && valueNum == 0 && skipIfBeforeICU(3,7,2)) {
+            if (propNum == 4107 && valueNum == 0 && skipIfBeforeICU(3,8,0)) {
               continue; 
             }
             errln("Property Value Differs: " 

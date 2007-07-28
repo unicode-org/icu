@@ -201,7 +201,7 @@ public class TestConversion extends ModuleTest {
             
         } catch (Exception e) {
             // TODO implement loading of test data.
-            if (skipIfBeforeICU(3,7,2)) {
+            if (skipIfBeforeICU(3,8,0)) {
                 logln("Skipping test:(" + cc.charset + ") due to ICU Charset not supported at this time");
             } else {
                 errln(cc.charset + " was not found");
@@ -429,7 +429,7 @@ public class TestConversion extends ModuleTest {
         // decoder replacement
         // { "ibm-1363", :bin{ a2aea2 }, "\u00a1\u001a", :intvector{ 0, 2 },
         // :int{1}, :int{0}, "", "?", :bin{""} }
-        if (cc.caseNr == 63 && skipIfBeforeICU(3,7,2)) {
+        if (cc.caseNr == 63 && skipIfBeforeICU(3,8,0)) {
             logln("TestToUnicode[" + cc.caseNr + "] " + cc.charset);
             logln("Skipping test due to limitation in Java API - callback replacement value");
             return;
@@ -493,7 +493,7 @@ public class TestConversion extends ModuleTest {
 
         } catch (Exception e) {
             // TODO implement loading of test data.
-            if (skipIfBeforeICU(3,7,2)) {
+            if (skipIfBeforeICU(3,8,0)) {
                 logln("Skipping test:(" + cc.charset + ") due to ICU Charset not supported at this time");
             } else {
                 errln(cc.charset + " was not found");
