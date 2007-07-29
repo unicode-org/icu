@@ -7,7 +7,7 @@
 # File: Tamil_Telugu.txt
 # Generated from CLDR 
 #
-::[0\u0B82-ஃஅ-ஊஎ-ஐஒ-கங-சஜஞ-டண-தந-பம-வஷ-ஹா-ூெ-ைொ-\u0BCDௗ௧-௲ஶ];
+::[\u0BE6\u0B82-ஃஅ-ஊஎ-ஐஒ-கங-சஜஞ-டண-தந-பம-வஷ-ஹா-ூெ-ைொ-\u0BCDௗ௧-௲ஶ];
 ::NFD;
 ::Tamil-InterIndic;
 ::InterIndic-Telugu;
