@@ -444,15 +444,56 @@ public class Bidi {
         Point[] points = new Point[0];
     }
 
-    /** Paragraph level setting.
-     *  If there is no strong character, then set the paragraph level to 0 (left-to-right).
+    /** Paragraph level setting<p>
+     *
+     * Constant indicating that the base direction depends on the first strong
+     * directional character in the text according to the Unicode Bidirectional
+     * Algorithm. If no strong directional character is present,
+     * then set the paragraph level to 0 (left-to-right).<p>
+     *
+     * If this value is used in conjunction with reordering modes
+     * <code>REORDER_INVERSE_LIKE_DIRECT</code> or
+     * <code>REORDER_INVERSE_FOR_NUMBERS_SPECIAL</code>, the text to reorder
+     * is assumed to be visual LTR, and the text after reordering is required
+     * to be the corresponding logical string with appropriate contextual
+     * direction. The direction of the result string will be RTL if either
+     * the righmost or leftmost strong character of the source text is RTL
+     * or Arabic Letter, the direction will be LTR otherwise.<p>
+     *
+     * If reordering option <code>OPTION_INSERT_MARKS</code> is set, an RLM may
+     * be added at the beginning of the result string to ensure round trip
+     * (that the result string, when reordered back to visual, will produce
+     * the original source text).
+     * @see #REORDER_INVERSE_LIKE_DIRECT
+     * @see #REORDER_INVERSE_FOR_NUMBERS_SPECIAL
      * @draft ICU 3.8
      * @provisional This API might change or be removed in a future release.
      */
     public static final byte LEVEL_DEFAULT_LTR = (byte)0x7e;
 
-    /** Paragraph level setting.
-     *  If there is no strong character, then set the paragraph level to 1 (right-to-left).
+    /** Paragraph level setting<p>
+     *
+     * Constant indicating that the base direction depends on the first strong
+     * directional character in the text according to the Unicode Bidirectional
+     * Algorithm. If no strong directional character is present,
+     * then set the paragraph level to 1 (right-to-left).<p>
+     *
+     * If this value is used in conjunction with reordering modes
+     * <code>REORDER_INVERSE_LIKE_DIRECT</code> or
+     * <code>REORDER_INVERSE_FOR_NUMBERS_SPECIAL</code>, the text to reorder
+     * is assumed to be visual LTR, and the text after reordering is required
+     * to be the corresponding logical string with appropriate contextual
+     * direction. The direction of the result string will be RTL if either
+     * the righmost or leftmost strong character of the source text is RTL
+     * or Arabic Letter, or if the text contains no strong character;
+     * the direction will be LTR otherwise.<p>
+     *
+     * If reordering option <code>OPTION_INSERT_MARKS</code> is set, an RLM may
+     * be added at the beginning of the result string to ensure round trip
+     * (that the result string, when reordered back to visual, will produce
+     * the original source text).
+     * @see #REORDER_INVERSE_LIKE_DIRECT
+     * @see #REORDER_INVERSE_FOR_NUMBERS_SPECIAL
      * @draft ICU 3.8
      * @provisional This API might change or be removed in a future release.
      */
