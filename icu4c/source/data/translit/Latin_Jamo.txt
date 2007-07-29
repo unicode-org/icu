@@ -7,7 +7,7 @@
 # File: Latin_Jamo.txt
 # Generated from CLDR 
 #
-::[[:script=Latin:][:M:]'];
+::[[:script=Latin:][:M:]-];
 ::NFD;
 ::Lower;
 ::Latin-ConjoiningJamo;
