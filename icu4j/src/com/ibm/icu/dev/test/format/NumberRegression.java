@@ -30,7 +30,6 @@ import com.ibm.icu.text.*;
 import com.ibm.icu.util.*;
 
 import java.io.*;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.FieldPosition;
 import java.text.ParseException;
@@ -323,7 +322,7 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
         df.setMinimumFractionDigits(10);
         df.setGroupingUsed(false);
         double d = 1.000000000000001E7;
-        BigDecimal bd = new BigDecimal(d);
+        java.math.BigDecimal bd = new java.math.BigDecimal(d);
         StringBuffer sb = new StringBuffer("");
         FieldPosition fp = new FieldPosition(0);
         logln("d = " + d);
@@ -1115,7 +1114,7 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
     public void Test4141750() {
         try {
             String str = "12345.67";
-            BigDecimal bd = new BigDecimal(str);
+            java.math.BigDecimal bd = new java.math.BigDecimal(str);
             String sd = NumberFormat.getInstance(Locale.US).format(bd);
             if (!sd.endsWith("67")) errln("Fail: " + str + " x format -> " + sd);
         }
@@ -1845,9 +1844,11 @@ class MyNumberFormatTest extends NumberFormat {
     public Number parse(String text, ParsePosition parsePosition) {
         return new Integer(0);
     }
-    public StringBuffer format(BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
+//#ifndef FOUNDATION
+    public StringBuffer format(java.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
         return new StringBuffer("");
     }
+//#endif
     public StringBuffer format(BigInteger number, StringBuffer toAppendTo, FieldPosition pos) {
         return new StringBuffer("");
     }

@@ -1502,7 +1502,7 @@ public class FormatTests
   public static class PluralRulesHandler implements SerializableTest.Handler {
     public Object[] getTestObjects() {
       
-      String[] localeNames = "ja,da,fr,lv,ga,ro,lt,hr,cs,pl,sl".split(",");
+      String[] localeNames = {"ja","da","fr","lv","ga","ro","lt","hr","cs","pl","sl"};
       PluralRules[] plrulz = new PluralRules[localeNames.length];
       for (int i = 0; i < localeNames.length; i++) {
         ULocale uloc = ULocale.createCanonical(localeNames[i]);

@@ -12,7 +12,6 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.util.ULocale;
 
 import java.math.BigInteger;
-import java.math.BigDecimal;
 import java.util.Locale;
 import java.util.Random;
 import java.text.DecimalFormat;
@@ -721,7 +720,7 @@ public class RbnfTest extends TestFmwk {
 
 //#ifndef FOUNDATION
         buf.setLength(0);
-        BigDecimal bigD = new BigDecimal(bigI);
+        java.math.BigDecimal bigD = new java.math.BigDecimal(bigI);
         fmt.format(bigD, buf, null);
         logln("big dec: " + buf.toString());
 //#endif
