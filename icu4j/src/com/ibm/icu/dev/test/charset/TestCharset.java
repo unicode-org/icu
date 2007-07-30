@@ -579,8 +579,8 @@ public class TestCharset extends TestFmwk {
                 bs = ByteBuffer.wrap(bytes, x, 3).slice();
                 us = CharBuffer.wrap(chars, y, 1).slice();
                 
-                cr = decoder.decode(bs, us, true);
                 decoder.reset();
+                cr = decoder.decode(bs, us, true);
                 bs.rewind();
                 us.rewind();
                 if (!cr.isMalformed() || cr.length() != 3) {
@@ -588,8 +588,8 @@ public class TestCharset extends TestFmwk {
                             + Integer.toHexString(i) + " received " + cr);
                     break;
                 }
-                cr = encoder.encode(us, bs, true);
                 encoder.reset();
+                cr = encoder.encode(us, bs, true);
                 bs.rewind();
                 us.rewind();
                 if (!cr.isMalformed() || cr.length() != 1) {
@@ -601,8 +601,8 @@ public class TestCharset extends TestFmwk {
                 bs = ByteBuffer.wrap(bytes, x, 3).slice();
                 us = CharBuffer.wrap(new String(chars, y, 1));
                 
-                cr = decoder.decode(bs, us, true);
                 decoder.reset();
+                cr = decoder.decode(bs, us, true);
                 bs.rewind();
                 us.rewind();
                 if (!cr.isMalformed() || cr.length() != 3) {
@@ -610,8 +610,8 @@ public class TestCharset extends TestFmwk {
                             + Integer.toHexString(i) + " received " + cr);
                     break;
                 }
-                cr = encoder.encode(us, bs, true);
                 encoder.reset();
+                cr = encoder.encode(us, bs, true);
                 bs.rewind();
                 us.rewind();
                 if (!cr.isMalformed() || cr.length() != 1) {
@@ -623,6 +623,8 @@ public class TestCharset extends TestFmwk {
                 
             }
         }
+        if (true)
+            return;
     }
     
     
@@ -1661,7 +1663,6 @@ public class TestCharset extends TestFmwk {
             if (!equals(myTarget, target, targetLimit)) {
                 errln("Test small output buffers " + encoding + " TO Unicode failed");
             }
-            decoder.reset();
         }
     }
 
@@ -1797,8 +1798,6 @@ public class TestCharset extends TestFmwk {
                 errln("Test small output buffers " + encoding + " From Unicode failed.");
             }
             logln("Tests on small output buffers for " + encoding + " passed");
-
-            encoder.reset();
         }
     }
 
