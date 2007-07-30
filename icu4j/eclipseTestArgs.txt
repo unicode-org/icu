@@ -12,6 +12,7 @@ src/com/ibm/icu/dev/test/format/DateFormatTest.java
 src/com/ibm/icu/dev/test/format/DateTimeGeneratorTest.java
 src/com/ibm/icu/dev/test/format/GlobalizationPreferencesTest.java
 src/com/ibm/icu/dev/test/format/IntlTestDecimalFormatAPIC.java
+src/com/ibm/icu/dev/test/format/IntlTestNumberFormatAPI.java
 src/com/ibm/icu/dev/test/format/NumberFormatRegressionTest.java
 src/com/ibm/icu/dev/test/format/NumberFormatTest.java
 src/com/ibm/icu/dev/test/format/NumberRegression.java

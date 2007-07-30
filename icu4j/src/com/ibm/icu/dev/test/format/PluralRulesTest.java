@@ -7,7 +7,7 @@
 package com.ibm.icu.dev.test.format;
 
 import com.ibm.icu.dev.test.TestFmwk;
-
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.PluralRules;
 
 import java.text.ParseException;
@@ -41,11 +41,11 @@ public class PluralRulesTest extends TestFmwk {
 
     private String[] getTargetStrings(String targets) {
         List list = new ArrayList(50);
-        String[] valSets = targets.split(";");
+        String[] valSets = Utility.split(targets, ';');
         for (int i = 0; i < valSets.length; ++i) {
-            String[] temp = valSets[i].split(":");
+            String[] temp = Utility.split(valSets[i], ':');
             String key = temp[0].trim();
-            String[] vals = temp[1].split(",");
+            String[] vals = Utility.split(temp[1], ',');
             for (int j = 0; j < vals.length; ++j) {
                 String valString = vals[j].trim();
                 int val = Integer.parseInt(valString);
@@ -91,7 +91,7 @@ public class PluralRulesTest extends TestFmwk {
                 checkTargets(rules, targets);
             } catch (Exception e) {
                 e.printStackTrace();
-                throw new RuntimeException(e);
+                throw new RuntimeException(e.getMessage());
             }
         }
     }

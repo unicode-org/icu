@@ -1227,24 +1227,24 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
 
     // This tests nested Formats inside PluralFormat.
     public void testNestedFormatsInPluralFormat() {
-      try {
-        MessageFormat msgFmt = new MessageFormat(
-                "{0, plural, one {{0, number,C''''est #,##0.0# fichier}} " +
-                  "other {Ce sont # fichiers}} dans la liste.",
-                new ULocale("fr"));
-        Object objArray[] = {new Long(0)};
-        HashMap objMap = new HashMap();
-        objMap.put("argument", objArray[0]);
-        String result = msgFmt.format(objArray);
-        if (!result.equals("C'est 0,0 fichier dans la liste.")) {
-            errln("PluralFormat produced wrong message string.");
+        try {
+            MessageFormat msgFmt = new MessageFormat(
+                    "{0, plural, one {{0, number,C''''est #,##0.0# fichier}} " +
+                    "other {Ce sont # fichiers}} dans la liste.",
+                    new ULocale("fr"));
+            Object objArray[] = {new Long(0)};
+            HashMap objMap = new HashMap();
+            objMap.put("argument", objArray[0]);
+            String result = msgFmt.format(objArray);
+            if (!result.equals("C'est 0,0 fichier dans la liste.")) {
+                errln("PluralFormat produced wrong message string.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
-      } catch (Exception e) {
-        e.printStackTrace();
-        throw new RuntimeException(e);
-      }
     }
-    
+
     // This tests PluralFormats used inside MessageFormats.
     public void testPluralFormat() {
         {

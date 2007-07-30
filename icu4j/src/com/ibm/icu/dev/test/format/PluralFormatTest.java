@@ -7,6 +7,7 @@
 package com.ibm.icu.dev.test.format;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.PluralFormat;
 import com.ibm.icu.util.ULocale;
 
@@ -24,7 +25,7 @@ public class PluralFormatTest extends TestFmwk {
   }
   
   private void helperTestRules(String localeIDs, String testPattern, Map changes) {
-    String[] locales = localeIDs.split(",");
+    String[] locales = Utility.split(localeIDs, ',');
     
     // Create example outputs for all supported locales.
     /*
