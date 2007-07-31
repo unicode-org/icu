@@ -1439,7 +1439,7 @@ static const char * const interIndicArray[] = {
     "[\\u0901\\u0904\\u093c\\u0943-\\u094a\\u0951-\\u0954\\u0962\\u0963\\u090B\\u090C\\u090D\\u0911\\u0916\\u0917\\u0918\\u091B\\u091D\\u0920\\u0921\\u0922\\u0925\\u0926\\u0927\\u092B\\u092C\\u092D\\u0936\\u093d\\u0950[\\u0958-\\u0961]\\u097d]", /*roundtrip exclusions*/
 
     "DEVANAGARI-Tamil", "[:Devanagari:]", "[:tamil:]", 
-    "[\\u0bd7]", /*roundtrip exclusions*/
+    "[\\u0bd7\\u0BF0\\u0BF1\\u0BF2]", /*roundtrip exclusions*/
 
     "Telugu-DEVANAGARI", "[:telugu:]", "[:Devanagari:]", 
     "[\\u0904\\u093c\\u0950\\u0945\\u0949\\u0951-\\u0954\\u0962\\u0963\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]\\u097d]", /*roundtrip exclusions*/
@@ -1481,7 +1481,7 @@ static const char * const interIndicArray[] = {
     "[\\u0981\\u09bc\\u09c3\\u09c4\\u09e2\\u09e3\\u09f0\\u09f1\\u098B\\u098C\\u0996\\u0997\\u0998\\u099B\\u099D\\u09A0\\u09A1\\u09A2\\u09A5\\u09A6\\u09A7\\u09AB\\u09AC\\u09AD\\u09B6\\u09DC\\u09DD\\u09DF\\u09E0\\u09E1\\u09f2-\\u09fa\\u09ce]", /*roundtrip exclusions*/
 
     "BENGALI-Tamil", "[:BENGALI:]", "[:tamil:]",
-    "[\\u0bc6\\u0bc7\\u0bca\\u0B8E\\u0B92\\u0BA9\\u0BB1\\u0BB3\\u0BB4\\u0BB5]", /*roundtrip exclusions*/
+    "[\\u0bc6\\u0bc7\\u0bca\\u0B8E\\u0B92\\u0BA9\\u0BB1\\u0BB3\\u0BB4\\u0BB5\\u0BF0\\u0BF1\\u0BF2]", /*roundtrip exclusions*/
 
     "Telugu-BENGALI", "[:telugu:]", "[:BENGALI:]", 
     "[\\u09e2\\u09e3\\u09bc\\u09d7\\u09f0\\u09f1\\u09dc\\u09dd\\u09df\\u09f2-\\u09fa\\u09ce]", /*roundtrip exclusions*/
@@ -1500,7 +1500,7 @@ static const char * const interIndicArray[] = {
 
     "BENGALI-MALAYALAM", "[:BENGALI:]", "[:MALAYALAM:]",
     "[\\u0d46\\u0d4a\\u0d47\\u0d31-\\u0d35\\u0d0e\\u0d12]", /*roundtrip exclusions*/
-       
+
     "GUJARATI-GURMUKHI", "[:GUJARATI:]", "[:GURMUKHI:]", 
     "[\\u0A02\\u0ab3\\u0ab6\\u0A70\\u0a71\\u0a82\\u0a83\\u0ac3\\u0ac4\\u0ac5\\u0ac9\\u0a5c\\u0a72\\u0a73\\u0a74\\u0a8b\\u0a8d\\u0a91\\u0abd]", /*roundtrip exclusions*/
 
@@ -1517,7 +1517,7 @@ static const char * const interIndicArray[] = {
     "[\\u0A01\\u0A02\\u0a33\\u0a36\\u0a3c\\u0a70\\u0a71\\u0a47\\u0A16\\u0A17\\u0A18\\u0A1B\\u0A1D\\u0A20\\u0A21\\u0A22\\u0A25\\u0A26\\u0A27\\u0A2B\\u0A2C\\u0A2D\\u0A59\\u0A5A\\u0A5B\\u0A5C\\u0A5E\\u0A72\\u0A73\\u0A74]", /*roundtrip exclusions*/
 
     "GURMUKHI-TAMIL", "[:GURMUKHI:]", "[:TAMIL:]",
-    "[\\u0b82\\u0bc6\\u0bca\\u0bd7\\u0bb7\\u0bb3\\u0b83\\u0B8E\\u0B92\\u0BA9\\u0BB1\\u0BB4\\u0bb6]", /*roundtrip exclusions*/
+    "[\\u0b82\\u0bc6\\u0bca\\u0bd7\\u0bb7\\u0bb3\\u0b83\\u0B8E\\u0B92\\u0BA9\\u0BB1\\u0BB4\\u0bb6\\u0BF0\\u0BF1\\u0BF2]", /*roundtrip exclusions*/
 
     "TELUGU-GURMUKHI", "[:TELUGU:]", "[:GURMUKHI:]", 
     "[\\u0A02\\u0a33\\u0a36\\u0a3c\\u0a70\\u0a71\\u0A59\\u0A5A\\u0A5B\\u0A5C\\u0A5E\\u0A72\\u0A73\\u0A74]", /*roundtrip exclusions*/
@@ -1547,7 +1547,7 @@ static const char * const interIndicArray[] = {
     "[\\u0A81\\u0a8c\\u0abc\\u0ac3\\u0Ac4\\u0Ac5\\u0Ac9\\u0Ac7\\u0A8B\\u0A8D\\u0A91\\u0A96\\u0A97\\u0A98\\u0A9B\\u0A9D\\u0AA0\\u0AA1\\u0AA2\\u0AA5\\u0AA6\\u0AA7\\u0AAB\\u0AAC\\u0AAD\\u0AB6\\u0ABD\\u0AD0\\u0AE0\\u0AE1]", /*roundtrip exclusions*/
 
     "GUJARATI-TAMIL", "[:GUJARATI:]", "[:TAMIL:]",
-    "[\\u0Bc6\\u0Bca\\u0Bd7\\u0B8E\\u0B92\\u0BA9\\u0BB1\\u0BB4]", /*roundtrip exclusions*/
+    "[\\u0Bc6\\u0Bca\\u0Bd7\\u0B8E\\u0B92\\u0BA9\\u0BB1\\u0BB4\\u0BF0\\u0BF1\\u0BF2]", /*roundtrip exclusions*/
 
     "TELUGU-GUJARATI", "[:TELUGU:]", "[:GUJARATI:]", 
     "[\\u0abc\\u0Ac5\\u0Ac9\\u0A8D\\u0A91\\u0ABD\\u0Ad0]", /*roundtrip exclusions*/
@@ -1571,7 +1571,7 @@ static const char * const interIndicArray[] = {
     "[\\u0B01\\u0b3c\\u0b43\\u0b56\\u0B0B\\u0B0C\\u0B16\\u0B17\\u0B18\\u0B1B\\u0B1D\\u0B20\\u0B21\\u0B22\\u0B25\\u0B26\\u0B27\\u0B2B\\u0B2C\\u0B2D\\u0B36\\u0B3D\\u0B5C\\u0B5D\\u0B5F\\u0B60\\u0B61\\u0b70\\u0b71]", /*roundtrip exclusions*/
 
     "ORIYA-TAMIL", "[:ORIYA:]", "[:TAMIL:]",
-    "[\\u0bc6\\u0bca\\u0bc7\\u0B8E\\u0B92\\u0BA9\\u0BB1\\u0BB4\\u0BB5]", /*roundtrip exclusions*/
+    "[\\u0bc6\\u0bca\\u0bc7\\u0B8E\\u0B92\\u0BA9\\u0BB1\\u0BB4\\u0BB5\\u0BF0\\u0BF1\\u0BF2]", /*roundtrip exclusions*/
 
     "TELUGU-ORIYA", "[:TELUGU:]", "[:ORIYA:]", 
     "[\\u0b3c\\u0b57\\u0b56\\u0B3D\\u0B5C\\u0B5D\\u0B5F\\u0b70\\u0b71]", /*roundtrip exclusions*/
@@ -1592,19 +1592,19 @@ static const char * const interIndicArray[] = {
     "[\\u0D47\\u0D46\\u0D4a\\u0D0E\\u0D12\\u0D31\\u0D34\\u0D35]", /*roundtrip exclusions*/
 
     "TELUGU-TAMIL", "[:TELUGU:]", "[:TAMIL:]", 
-    "[\\u0bd7\\u0ba9\\u0bb4]", /*roundtrip exclusions*/
+    "[\\u0bd7\\u0ba9\\u0bb4\\u0BF0\\u0BF1\\u0BF2]", /*roundtrip exclusions*/
 
     "TAMIL-TELUGU", "[:TAMIL:]", "[:TELUGU:]",
     "[\\u0C01\\u0c43\\u0c44\\u0c46\\u0c47\\u0c55\\u0c56\\u0c66\\u0C0B\\u0C0C\\u0C16\\u0C17\\u0C18\\u0C1B\\u0C1D\\u0C20\\u0C21\\u0C22\\u0C25\\u0C26\\u0C27\\u0C2B\\u0C2C\\u0C2D\\u0C36\\u0C60\\u0C61]", /*roundtrip exclusions*/
 
     "KANNADA-TAMIL", "[:KANNADA:]", "[:TAMIL:]", 
-    "[\\u0bd7\\u0bc6\\u0ba9\\u0bb4]", /*roundtrip exclusions*/
+    "[\\u0bd7\\u0bc6\\u0ba9\\u0bb4\\u0BF0\\u0BF1\\u0BF2]", /*roundtrip exclusions*/
 
     "TAMIL-KANNADA", "[:TAMIL:]", "[:KANNADA:]",
     "[\\u0cc3\\u0cc4\\u0cc6\\u0cc7\\u0cd5\\u0cd6\\u0C8B\\u0C8C\\u0C96\\u0C97\\u0C98\\u0C9B\\u0C9D\\u0CA0\\u0CA1\\u0CA2\\u0CA5\\u0CA6\\u0CA7\\u0CAB\\u0CAC\\u0CAD\\u0CB6\\u0cbc\\u0cbd\\u0CDE\\u0CE0\\u0CE1]", /*roundtrip exclusions*/
 
     "MALAYALAM-TAMIL", "[:MALAYALAM:]", "[:TAMIL:]", 
-    "[\\u0ba9]", /*roundtrip exclusions*/
+    "[\\u0ba9\\u0BF0\\u0BF1\\u0BF2]", /*roundtrip exclusions*/
 
     "TAMIL-MALAYALAM", "[:TAMIL:]", "[:MALAYALAM:]",
     "[\\u0d43\\u0d12\\u0D0B\\u0D0C\\u0D16\\u0D17\\u0D18\\u0D1B\\u0D1D\\u0D20\\u0D21\\u0D22\\u0D25\\u0D26\\u0D27\\u0D2B\\u0D2C\\u0D2D\\u0D36\\u0D60\\u0D61]", /*roundtrip exclusions*/
@@ -1626,31 +1626,30 @@ static const char * const interIndicArray[] = {
 
     "KANNADA-MALAYALAM", "[:KANNADA:]", "[:MALAYALAM:]",
     "[\\u0d4c\\u0d57\\u0d46\\u0D34]", /*roundtrip exclusions*/
-    
+
     "Latin-Bengali",latinForIndic, "[[:Bengali:][\\u0964\\u0965]]", 
     "[\\u0965\\u09f0-\\u09fa\\u09ce]" /*roundtrip exclusions*/ ,
-    
+
     "Latin-Gurmukhi", latinForIndic, "[[:Gurmukhi:][\\u0964\\u0965]]", 
     "[\\u0a01\\u0965\\u0a02\\u0a72\\u0a73\\u0a74]" /*roundtrip exclusions*/,
-    
+
     "Latin-Gujarati",latinForIndic, "[[:Gujarati:][\\u0964\\u0965]]", 
     "[\\u0965]" /*roundtrip exclusions*/,
-    
+
     "Latin-Oriya",latinForIndic, "[[:Oriya:][\\u0964\\u0965]]", 
     "[\\u0965\\u0b70]" /*roundtrip exclusions*/,
-    
+
     "Latin-Tamil",latinForIndic, "[:Tamil:]", 
-    NULL /*roundtrip exclusions*/,
-    
+    "[\\u0BF0\\u0BF1\\u0BF2]" /*roundtrip exclusions*/,
+
     "Latin-Telugu",latinForIndic, "[:Telugu:]", 
     NULL /*roundtrip exclusions*/,
-    
+
     "Latin-Kannada",latinForIndic, "[:Kannada:]", 
     NULL /*roundtrip exclusions*/,
-    
+
     "Latin-Malayalam",latinForIndic, "[:Malayalam:]", 
     NULL /*roundtrip exclusions*/  
-
 };
 
 void TransliteratorRoundTripTest::TestDebug(const char* name,const char fromSet[],
