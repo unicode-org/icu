@@ -42,7 +42,7 @@ public final class IDNA {
 
     /* IDNA ACE Prefix is "xn--" */
     private static char[] ACE_PREFIX                = new char[]{ 0x0078,0x006E,0x002d,0x002d } ;
-    private static final int ACE_PREFIX_LENGTH      = ACE_PREFIX.length;
+    //private static final int ACE_PREFIX_LENGTH      = ACE_PREFIX.length;
 
     private static final int MAX_LABEL_LENGTH       = 63;
     private static final int HYPHEN                 = 0x002D;
@@ -96,10 +96,10 @@ public final class IDNA {
     private static boolean startsWithPrefix(StringBuffer src){
         boolean startsWithPrefix = true;
 
-        if(src.length() < ACE_PREFIX_LENGTH){
+        if(src.length() < ACE_PREFIX.length){
             return false;
         }
-        for(int i=0; i<ACE_PREFIX_LENGTH;i++){
+        for(int i=0; i<ACE_PREFIX.length;i++){
             if(toASCIILower(src.charAt(i)) != ACE_PREFIX[i]){
                 startsWithPrefix = false;
             }
@@ -390,7 +390,7 @@ public final class IDNA {
                 StringBuffer lowerOut = toASCIILower(punyout);
 
                 //Step 7: prepend the ACE prefix
-                dest.append(ACE_PREFIX,0,ACE_PREFIX_LENGTH);
+                dest.append(ACE_PREFIX,0,ACE_PREFIX.length);
                 //Step 6: copy the contents in b2 into dest
                 dest.append(lowerOut);
             }else{
@@ -632,21 +632,21 @@ public final class IDNA {
         // the source contains all ascii codepoints
         boolean srcIsASCII  = true;
         // assume the source contains all LDH codepoints
-        boolean srcIsLDH = true; 
+        //boolean srcIsLDH = true; 
         
         //get the options
         //boolean useSTD3ASCIIRules = ((options & USE_STD3_RULES) != 0);
         
-        int failPos = -1;
+        //int failPos = -1;
         int ch;
         int saveIndex = src.getIndex();
         // step 1: find out if all the codepoints in src are ASCII  
         while((ch=src.next())!= UCharacterIterator.DONE){
             if(ch>0x7F){
                 srcIsASCII = false;
-            }else if((srcIsLDH = isLDHChar(ch))==false){
+            }/*else if((srcIsLDH = isLDHChar(ch))==false){
                 failPos = src.getIndex();
-            }
+            }*/
         }
         StringBuffer processOut;
         
@@ -675,7 +675,7 @@ public final class IDNA {
             StringBuffer decodeOut = null;
 
             //step 4: Remove the ACE Prefix
-            String temp = processOut.substring(ACE_PREFIX_LENGTH,processOut.length());
+            String temp = processOut.substring(ACE_PREFIX.length,processOut.length());
 
             //step 5: Decode using punycode
             try {
@@ -843,10 +843,11 @@ public final class IDNA {
             if(sepIndex==srcArr.length){
                 break;
             }
+            // Unlike the ToASCII operation we don't normalize the label separators
+            result.append(srcArr[sepIndex]);
             // increment the sepIndex to skip past the separator
             sepIndex++;
             oldSepIndex =sepIndex;
-            result.append((char)FULL_STOP);
         }
         if(result.length() > MAX_DOMAIN_NAME_LENGTH){
             throw new StringPrepParseException("The output exceed the max allowed length.", StringPrepParseException.DOMAIN_NAME_TOO_LONG_ERROR);
