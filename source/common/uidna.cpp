@@ -198,8 +198,10 @@ _internal_toASCII(const UChar* src, int32_t srcLength,
                   int32_t options,
                   UStringPrepProfile* nameprep,
                   UParseError* parseError,
-                  UErrorCode* status){
+                  UErrorCode* status)
+{
 
+    // TODO Revisit buffer handling. The label should not be over 63 ASCII characters. ICU4J may need to be updated too.
     UChar b1Stack[MAX_LABEL_BUFFER_SIZE], b2Stack[MAX_LABEL_BUFFER_SIZE];
     //initialize pointers to stack buffers
     UChar  *b1 = b1Stack, *b2 = b2Stack;
@@ -402,7 +404,8 @@ _internal_toUnicode(const UChar* src, int32_t srcLength,
     //get the options
     //UBool useSTD3ASCIIRules = (UBool)((options & UIDNA_USE_STD3_RULES) != 0);
     int32_t namePrepOptions = ((options & UIDNA_ALLOW_UNASSIGNED) != 0) ? USPREP_ALLOW_UNASSIGNED: 0; 
-    
+
+    // TODO Revisit buffer handling. The label should not be over 63 ASCII characters. ICU4J may need to be updated too.
     UChar b1Stack[MAX_LABEL_BUFFER_SIZE], b2Stack[MAX_LABEL_BUFFER_SIZE], b3Stack[MAX_LABEL_BUFFER_SIZE];
 
     //initialize pointers to stack buffers
