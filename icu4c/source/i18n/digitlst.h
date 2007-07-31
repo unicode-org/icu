@@ -24,8 +24,9 @@
 #ifndef DIGITLST_H
 #define DIGITLST_H
  
-#include "unicode/utypes.h"
 #include "unicode/uobject.h"
+
+#if !UCONFIG_NO_FORMATTING
 #include "unicode/decimfmt.h"
 #include <float.h>
 
@@ -259,6 +260,8 @@ DigitList::operator!=(const DigitList& other) const {
 #endif
 
 U_NAMESPACE_END
+
+#endif // #if !UCONFIG_NO_FORMATTING
 #endif // _DIGITLST
 
 //eof
