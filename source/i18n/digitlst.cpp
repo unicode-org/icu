@@ -24,8 +24,10 @@
 ******************************************************************************
 */
 
-#include "unicode/putil.h"
 #include "digitlst.h"
+
+#if !UCONFIG_NO_FORMATTING
+#include "unicode/putil.h"
 #include "cstring.h"
 #include "putilimp.h"
 #include <stdlib.h>
@@ -658,5 +660,6 @@ DigitList::isZero() const
 }
 
 U_NAMESPACE_END
+#endif // #if !UCONFIG_NO_FORMATTING
 
 //eof
