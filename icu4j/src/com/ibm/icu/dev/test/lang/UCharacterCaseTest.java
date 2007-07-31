@@ -14,6 +14,7 @@ import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.text.RuleBasedBreakIterator;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.impl.Utility;
 import java.util.Locale;
@@ -296,16 +297,36 @@ public final class UCharacterCaseTest extends TestFmwk
                 String expected = TITLE_DATA_[i++];
                 ULocale locale = new ULocale(TITLE_DATA_[i++]);
                 int breakType = Integer.parseInt(TITLE_DATA_[i++]);
+                String optionsString = TITLE_DATA_[i++];
                 BreakIterator iter =
                     breakType >= 0 ?
                         BreakIterator.getBreakInstance(locale, breakType) :
-                        null;
-                String result = UCharacter.toTitleCase(locale, test, iter);
+                        breakType == -2 ?
+                            // Open a trivial break iterator that only delivers { 0, length }
+                            // or even just { 0 } as boundaries.
+                            new RuleBasedBreakIterator(".*;") :
+                            null;
+                int options = 0;
+                if (optionsString.indexOf('L') >= 0) {
+                    options |= UCharacter.TITLECASE_NO_LOWERCASE;
+                }
+                if (optionsString.indexOf('A') >= 0) {
+                    options |= UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT;
+                }
+                String result = UCharacter.toTitleCase(locale, test, iter, options);
                 if (!expected.equals(result)) {
-                    errln("titlecasing for " + prettify(test) + " should be " +
+                    errln("titlecasing for " + prettify(test) + " (options " + options + ") should be " +
                           prettify(expected) + " but got " +
                           prettify(result));
-                }                
+                }
+                if (options == 0) {
+                    result = UCharacter.toTitleCase(locale, test, iter);
+                    if (!expected.equals(result)) {
+                        errln("titlecasing for " + prettify(test) + " should be " +
+                              prettify(expected) + " but got " +
+                              prettify(result));
+                    }
+                }
             }
          }catch(Exception ex){
             warnln("Could not find data for BreakIterators");
@@ -705,9 +726,10 @@ public final class UCharacterCaseTest extends TestFmwk
                       "\u0061\u0062\u0131\u03c3\u00df\u03c2\u002f\ud93f\udfff";
 
     /**
-     * each item is an array with input string, result string, locale ID, break iterator
+     * each item is an array with input string, result string, locale ID, break iterator, options
      * the break iterator is specified as an int, same as in BreakIterator.KIND_*:
-     * 0=KIND_CHARACTER  1=KIND_WORD  2=KIND_LINE  3=KIND_SENTENCE  4=KIND_TITLE  -1=default
+     * 0=KIND_CHARACTER  1=KIND_WORD  2=KIND_LINE  3=KIND_SENTENCE  4=KIND_TITLE  -1=default (NULL=words)  -2=no breaks (.*)
+     * options: T=U_FOLD_CASE_EXCLUDE_SPECIAL_I  L=U_TITLECASE_NO_LOWERCASE  A=U_TITLECASE_NO_BREAK_ADJUSTMENT
      * see ICU4C source/test/testdata/casing.txt
      */
     private static final String TITLE_DATA_[] = {
@@ -715,32 +737,82 @@ public final class UCharacterCaseTest extends TestFmwk
         "\u0041\u0042\u0020\u0049\u03a3\u0020\u0053\u0073\u03a3\u002f\u0046\u0066\u0069\ud93f\udfff",
         "",
         "0",
+        "",
 
         "\u0061\u0042\u0020\u0069\u03c2\u0020\u00df\u03c3\u002f\ufb03\ud93f\udfff",
         "\u0041\u0062\u0020\u0049\u03c2\u0020\u0053\u0073\u03c3\u002f\u0046\u0066\u0069\ud93f\udfff",
         "",
         "1",
+        "",
 
         "\u02bbaMeLikA huI P\u016b \u02bb\u02bb\u02bbiA", "\u02bbAmelika Hui P\u016b \u02bb\u02bb\u02bbIa", // titlecase first _cased_ letter, j4933
         "",
         "-1",
+        "",
 
         " tHe QUIcK bRoWn", " The Quick Brown",
         "",
         "4",
+        "",
 
         "\u01c4\u01c5\u01c6\u01c7\u01c8\u01c9\u01ca\u01cb\u01cc", 
         "\u01c5\u01c5\u01c5\u01c8\u01c8\u01c8\u01cb\u01cb\u01cb", // UBRK_CHARACTER
         "",
         "0",
+        "",
 
         "\u01c9ubav ljubav", "\u01c8ubav Ljubav", // Lj vs. L+j
         "",
         "-1",
+        "",
 
         "'oH dOn'T tItLeCaSe AfTeR lEtTeR+'",  "'Oh Don't Titlecase After Letter+'",
         "",
-        "-1"
+        "-1",
+        "",
+
+        "a \u02bbCaT. A \u02bbdOg! \u02bbeTc.",
+        "A \u02bbCat. A \u02bbDog! \u02bbEtc.",
+        "",
+        "-1",
+        "", // default
+
+        "a \u02bbCaT. A \u02bbdOg! \u02bbeTc.",
+        "A \u02bbcat. A \u02bbdog! \u02bbetc.",
+        "",
+        "-1",
+        "A", // U_TITLECASE_NO_BREAK_ADJUSTMENT
+
+        "a \u02bbCaT. A \u02bbdOg! \u02bbeTc.",
+        "A \u02bbCaT. A \u02bbdOg! \u02bbETc.",
+        "",
+        "3",
+        "L", // UBRK_SENTENCE and U_TITLECASE_NO_LOWERCASE
+
+
+        "\u02bbcAt! \u02bbeTc.",
+        "\u02bbCat! \u02bbetc.",
+        "",
+        "-2",
+        "", // -2=Trivial break iterator
+
+        "\u02bbcAt! \u02bbeTc.",
+        "\u02bbcat! \u02bbetc.",
+        "",
+        "-2",
+        "A", // U_TITLECASE_NO_BREAK_ADJUSTMENT
+
+        "\u02bbcAt! \u02bbeTc.",
+        "\u02bbCAt! \u02bbeTc.",
+        "",
+        "-2",
+        "L", // U_TITLECASE_NO_LOWERCASE
+
+        "\u02bbcAt! \u02bbeTc.",
+        "\u02bbcAt! \u02bbeTc.",
+        "",
+        "-2",
+        "AL" // Both options
     };
 
 
