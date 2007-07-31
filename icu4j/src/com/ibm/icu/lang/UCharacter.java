@@ -2731,6 +2731,43 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static final int MAX_RADIX = java.lang.Character.MAX_RADIX;
 
+    /**
+     * Do not lowercase non-initial parts of words when titlecasing.
+     * Option bit for titlecasing APIs that take an options bit set.
+     *
+     * By default, titlecasing will titlecase the first cased character
+     * of a word and lowercase all other characters.
+     * With this option, the other characters will not be modified.
+     *
+     * @see toTitleCase
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int TITLECASE_NO_LOWERCASE = 0x100;
+
+    /**
+     * Do not adjust the titlecasing indexes from BreakIterator::next() indexes;
+     * titlecase exactly the characters at breaks from the iterator.
+     * Option bit for titlecasing APIs that take an options bit set.
+     *
+     * By default, titlecasing will take each break iterator index,
+     * adjust it by looking for the next cased character, and titlecase that one.
+     * Other characters are lowercased.
+     *
+     * This follows Unicode 4 & 5 section 3.13 Default Case Operations:
+     *
+     * R3  toTitlecase(X): Find the word boundaries based on Unicode Standard Annex
+     * #29, "Text Boundaries." Between each pair of word boundaries, find the first
+     * cased character F. If F exists, map F to default_title(F); then map each
+     * subsequent character C to default_lower(C).
+     *
+     * @see toTitleCase
+     * @see TITLECASE_NO_LOWERCASE
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int TITLECASE_NO_BREAK_ADJUSTMENT = 0x200;
+
     // public methods ----------------------------------------------------
       
     /**
@@ -4063,6 +4100,13 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
 
         /**
+         * Move to the iteration limit without fetching code points up to there.
+         */
+        public void moveToLimit() {
+            cpStart=cpLimit=limit;
+        }
+
+        /**
          * Iterate forward through the string to fetch the next code point
          * to be case-mapped, and set the context indexes for it.
          * Performance optimization, to save on function calls and redundant
@@ -4103,6 +4147,14 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          */
         public int getCPStart() {
             return cpStart;
+        }
+
+        /**
+         * Get the limit of the code point that was last returned
+         * by nextCaseMapCP().
+         */
+        public int getCPLimit() {
+            return cpLimit;
         }
 
         // implement UCaseProps.ContextIterator
@@ -4170,7 +4222,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     /**
      * <p>Gets the titlecase version of the argument string.</p>
      * <p>Position for titlecasing is determined by the argument break 
-     * iterator, hence the user can customized his break iterator for 
+     * iterator, hence the user can customize his break iterator for 
      * a specialized titlecasing. In this case only the forward iteration 
      * needs to be implemented.
      * If the break iterator passed in is null, the default Unicode algorithm
@@ -4299,7 +4351,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     /**
      * <p>Gets the titlecase version of the argument string.</p>
      * <p>Position for titlecasing is determined by the argument break 
-     * iterator, hence the user can customized his break iterator for 
+     * iterator, hence the user can customize his break iterator for 
      * a specialized titlecasing. In this case only the forward iteration 
      * needs to be implemented.
      * If the break iterator passed in is null, the default Unicode algorithm
@@ -4324,7 +4376,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     /**
      * <p>Gets the titlecase version of the argument string.</p>
      * <p>Position for titlecasing is determined by the argument break 
-     * iterator, hence the user can customized his break iterator for 
+     * iterator, hence the user can customize his break iterator for 
      * a specialized titlecasing. In this case only the forward iteration 
      * needs to be implemented.
      * If the break iterator passed in is null, the default Unicode algorithm
@@ -4342,6 +4394,35 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static String toTitleCase(ULocale locale, String str, 
                                      BreakIterator titleIter) {
+        return toTitleCase(locale, str, titleIter, 0);
+    }
+
+    /**
+     * <p>Gets the titlecase version of the argument string.</p>
+     * <p>Position for titlecasing is determined by the argument break 
+     * iterator, hence the user can customize his break iterator for 
+     * a specialized titlecasing. In this case only the forward iteration 
+     * needs to be implemented.
+     * If the break iterator passed in is null, the default Unicode algorithm
+     * will be used to determine the titlecase positions.
+     * </p>
+     * <p>Only positions returned by the break iterator will be title cased,
+     * character in between the positions will all be in lower case.</p>
+     * <p>Casing is dependent on the argument locale and context-sensitive</p>
+     * @param locale which string is to be converted in
+     * @param str source string to be performed on
+     * @param titleIter break iterator to determine the positions in which
+     *        the character should be title cased.
+     * @param options bit set to modify the titlecasing operation
+     * @return lowercase version of the argument string
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     * @see TITLECASE_NO_LOWERCASE
+     * @see TITLECASE_NO_BREAK_ADJUSTMENT
+     */
+    public static String toTitleCase(ULocale locale, String str, 
+                                     BreakIterator titleIter,
+                                     int options) {
         StringContextIterator iter = new StringContextIterator(str);
         StringBuffer result = new StringBuffer(str.length());
         int[] locCache = new int[1];
@@ -4393,11 +4474,16 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             if(prev<index) {
                 /* find and copy uncased characters [prev..titleStart[ */
                 iter.setLimit(index);
-                while((c=iter.nextCaseMapCP())>=0 && UCaseProps.NONE==gCsp.getType(c)) {}
-                titleStart=iter.getCPStart();
-                if(prev<titleStart) {
-                    // TODO: With Java 5, this would want to be result.append(str, prev, titleStart);
-                    result.append(str.substring(prev, titleStart));
+                c=iter.nextCaseMapCP();
+                if((options&TITLECASE_NO_BREAK_ADJUSTMENT)==0 && UCaseProps.NONE==gCsp.getType(c)) {
+                    while((c=iter.nextCaseMapCP())>=0 && UCaseProps.NONE==gCsp.getType(c)) {}
+                    titleStart=iter.getCPStart();
+                    if(prev<titleStart) {
+                        // TODO: With Java 5, this would want to be result.append(str, prev, titleStart);
+                        result.append(str.substring(prev, titleStart));
+                    }
+                } else {
+                    titleStart=prev;
                 }
 
                 if(titleStart<index) {
@@ -4424,8 +4510,18 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                                 UTF16.append(result, c);
                             }
                         }
-                        
-                        if((c=iter.nextCaseMapCP())>=0) {
+
+                        if((options&TITLECASE_NO_LOWERCASE)!=0) {
+                            /* Optionally just copy the rest of the word unchanged. */
+                            int titleLimit=iter.getCPLimit();
+                            if(titleLimit<index) {
+                                // TODO: With Java 5, this would want to be result.append(str, titleLimit, index);
+                                result.append(str.substring(titleLimit, index));
+                                iter.moveToLimit();
+                                break;
+                            }
+                        } else if((c=iter.nextCaseMapCP())>=0) {
+                            /* Normal operation: Lowercase the rest of the word. */
                             c=gCsp.toFullLower(c, iter, result, locale, locCache);
                         } else {
                             break;
