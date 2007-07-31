@@ -2969,13 +2969,14 @@ public class TestCharset extends TestFmwk {
         }
         
         //Test new characters in the ISCII charset
-        encoder = cs.newEncoder();
-        decoder = cs.newDecoder();
+        encoder = provider.charsetForName("ISCII,version=0").newEncoder();
+        decoder = provider.charsetForName("ISCII,version=0").newDecoder();
         char u_pts[] = {
                 /* DEV */ (char)0x0904,
                 /* PNJ */ (char)0x0A01, (char)0x0A03, (char)0x0A33, (char)0x0A70
             };
         byte b_pts[] = {
+                                (byte)0xef, (byte)0x42,
                 /* DEV */ (byte)0xa4, (byte)0xe0,
                 /* PNJ */ (byte)0xef, (byte)0x4b, (byte)0xa1, (byte)0xa3, (byte)0xd2, (byte)0xf0, (byte)0xbf
             };
