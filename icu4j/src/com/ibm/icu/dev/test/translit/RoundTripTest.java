@@ -427,7 +427,7 @@ public class RoundTripTest extends TestFmwk {
                   },
         new String [] {  "DEVANAGARI-Tamil",
            "[:Devanagari:]", "[:tamil:]",
-                  "[\u0bd7]", /*roundtrip exclusions*/
+                  "[\u0bd7\u0BF0\u0BF1\u0BF2]", /*roundtrip exclusions*/
                   },
 
         new String [] {  "Telugu-DEVANAGARI",
@@ -490,7 +490,7 @@ public class RoundTripTest extends TestFmwk {
                   },
         new String [] {  "BENGALI-Tamil",
            "[:BENGALI:]", "[:tamil:]",
-                  "[\u0bc6\u0bc7\u0bca\u0B8E\u0B92\u0BA9\u0BB1\u0BB3\u0BB4\u0BB5]", /*roundtrip exclusions*/
+                  "[\u0bc6\u0bc7\u0bca\u0B8E\u0B92\u0BA9\u0BB1\u0BB3\u0BB4\u0BB5\u0BF0\u0BF1\u0BF2]", /*roundtrip exclusions*/
                   },
 
         new String [] {  "Telugu-BENGALI",
@@ -544,7 +544,7 @@ public class RoundTripTest extends TestFmwk {
                 },
         new String [] {  "GURMUKHI-TAMIL",
            "[:GURMUKHI:]", "[:TAMIL:]",
-                  "[\u0b82\u0bc6\u0bca\u0bd7\u0bb7\u0bb3\u0b83\u0B8E\u0B92\u0BA9\u0BB1\u0BB4\u0bb6]", /*roundtrip exclusions*/
+                  "[\u0b82\u0bc6\u0bca\u0bd7\u0bb7\u0bb3\u0b83\u0B8E\u0B92\u0BA9\u0BB1\u0BB4\u0bb6\u0BF0\u0BF1\u0BF2]", /*roundtrip exclusions*/
                   },
 
         new String [] {  "TELUGU-GURMUKHI",
@@ -588,7 +588,7 @@ public class RoundTripTest extends TestFmwk {
                 },
         new String [] {  "GUJARATI-TAMIL",
            "[:GUJARATI:]", "[:TAMIL:]",
-                  "[\u0Bc6\u0Bca\u0Bd7\u0B8E\u0B92\u0BA9\u0BB1\u0BB4]", /*roundtrip exclusions*/
+                  "[\u0Bc6\u0Bca\u0Bd7\u0B8E\u0B92\u0BA9\u0BB1\u0BB4\u0BF0\u0BF1\u0BF2]", /*roundtrip exclusions*/
                   },
 
         new String [] {  "TELUGU-GUJARATI",
@@ -624,7 +624,7 @@ public class RoundTripTest extends TestFmwk {
                 },
         new String [] {  "ORIYA-TAMIL",
            "[:ORIYA:]", "[:TAMIL:]",
-                  "[\u0bc6\u0bca\u0bc7\u0B8E\u0B92\u0BA9\u0BB1\u0BB4\u0BB5]", /*roundtrip exclusions*/
+                  "[\u0bc6\u0bca\u0bc7\u0B8E\u0B92\u0BA9\u0BB1\u0BB4\u0BB5\u0BF0\u0BF1\u0BF2]", /*roundtrip exclusions*/
                   },
 
         new String [] {  "TELUGU-ORIYA",
@@ -656,7 +656,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "TELUGU-TAMIL",
           "[:TELUGU:]", "[:TAMIL:]",
-                "[\u0bd7\u0ba9\u0bb4]", /*roundtrip exclusions*/
+                "[\u0bd7\u0ba9\u0bb4\u0BF0\u0BF1\u0BF2\u0BF0\u0BF1\u0BF2]", /*roundtrip exclusions*/
                 },
         new String [] {  "TAMIL-TELUGU",
            "[:TAMIL:]", "[:TELUGU:]",
@@ -665,7 +665,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "KANNADA-TAMIL",
           "[:KANNADA:]", "[:TAMIL:]",
-                "[\u0bd7\u0bc6\u0ba9\u0bb4]", /*roundtrip exclusions*/
+                "[\u0bd7\u0bc6\u0ba9\u0bb4\u0BF0\u0BF1\u0BF2]", /*roundtrip exclusions*/
                 },
         new String [] {  "TAMIL-KANNADA",
            "[:TAMIL:]", "[:KANNADA:]",
@@ -674,7 +674,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "MALAYALAM-TAMIL",
           "[:MALAYALAM:]", "[:TAMIL:]",
-                "[\u0ba9]", /*roundtrip exclusions*/
+                "[\u0ba9\u0BF0\u0BF1\u0BF2]", /*roundtrip exclusions*/
                 },
         new String [] {  "TAMIL-MALAYALAM",
            "[:TAMIL:]", "[:MALAYALAM:]",
@@ -721,7 +721,7 @@ public class RoundTripTest extends TestFmwk {
                 },
         new String [] {  "Latin-Tamil",
             latinForIndic, "[:Tamil:]",
-               null, /*roundtrip exclusions*/
+               "[\u0BF0\u0BF1\u0BF2]", /*roundtrip exclusions*/
                 },
         new String [] {  "Latin-Telugu",
             latinForIndic, "[:Telugu:]",
