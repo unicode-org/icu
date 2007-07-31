@@ -34,6 +34,7 @@ class CharsetUTF32LE extends CharsetUTF32 {
         public CharsetDecoderUTF32LE(CharsetICU cs) {
             super(cs);
             mode=2;
+            bom=2;
         }
         protected CoderResult decodeLoopImpl(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush){
             return decodeLoopUTF32LE(source, target, offsets, flush);

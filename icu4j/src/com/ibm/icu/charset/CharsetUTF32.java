@@ -22,12 +22,14 @@ import com.ibm.icu.text.UTF16;
 class CharsetUTF32 extends CharsetICU {
     
     protected byte[] fromUSubstitution = new byte[]{(byte)0, (byte)0, (byte)0xff, (byte)0xfd};
+    protected int bom;
     
     public CharsetUTF32(String icuCanonicalName, String javaCanonicalName, String[] aliases){
         super(icuCanonicalName, javaCanonicalName, aliases);
         maxBytesPerChar = 4;
         minBytesPerChar = 4;
         maxCharsPerByte = 1;
+        bom=0;
     }
     
     
@@ -51,8 +53,8 @@ class CharsetUTF32 extends CharsetICU {
              * offsetDelta will have the number of the BOM bytes that are in the current buffer.
              */
             offsetDelta=0;
-            int pos = source.position();
-            if(isFirstBuffer && toULength<SIGNATURE_LENGTH){
+            int pos = source.position(); 
+            if(isFirstBuffer && toULength<SIGNATURE_LENGTH && source.remaining()>=SIGNATURE_LENGTH){
                 while(pos < source.limit() && pos < SIGNATURE_LENGTH) {
                     toUBytesArray[toULength++] = source.get(pos++);
                 }
@@ -85,7 +87,10 @@ class CharsetUTF32 extends CharsetICU {
             
             mode=state;
             source.position(pos);
-            if(!isFirstBuffer){
+            if (!source.hasRemaining()) {
+                return cr;
+            }
+            else if(!isFirstBuffer || bom!=0){
                 cr = decodeLoopImpl(source, target, offsets, flush);
             } else {
                 cr = CoderResult.malformedForLength(pos);
@@ -128,8 +133,7 @@ class CharsetUTF32 extends CharsetICU {
                     toUnicodeStatus = 0;
                     toULength =0;
                     
-                    //this while loop is not entered because of the byte order mark checking
-                    /*while (i < 4) {
+                    while (i < 4) {
                         if (sourceArrayIndex < source.limit()) {
                             ch = (ch << 8) | ((byte)(source.get(sourceArrayIndex)) & UConverterConstants.UNSIGNED_BYTE_MASK);
                             toUBytesArray[i++] = (byte) source.get(sourceArrayIndex++);
@@ -137,11 +141,11 @@ class CharsetUTF32 extends CharsetICU {
                         else {
                             /* stores a partially calculated target*/
                             /* + 1 to make 0 a valid character */
-                            /*toUnicodeStatus = ch + 1;
+                            toUnicodeStatus = ch + 1;
                             toULength = (byte) i;
                             break donefornow;
                         }
-                    }*/
+                    }
             
                     if (ch <= UConverterConstants.MAXIMUM_UTF && !isSurrogate(ch)) {
                         /* Normal valid byte when the loop has not prematurely terminated (i < inBytes) */
@@ -246,8 +250,7 @@ class CharsetUTF32 extends CharsetICU {
                     toUnicodeStatus = 0;
                     toULength=0;
                     
-                    //this while loop is not entered because of the byte order mark checking
-                    /*while (i < 4) {
+                    while (i < 4) {
                         if (sourceArrayIndex < source.limit()) {
                             ch |= (source.get(sourceArrayIndex) & UConverterConstants.UNSIGNED_BYTE_MASK) << (i * 8);
                             toUBytesArray[i++] = (byte) source.get(sourceArrayIndex++);
@@ -255,11 +258,11 @@ class CharsetUTF32 extends CharsetICU {
                         else {
                             /* stores a partially calculated target*/
                             /* + 1 to make 0 a valid character */
-                       /*     toUnicodeStatus = ch + 1;
+                            toUnicodeStatus = ch + 1;
                             toULength = (byte) i;
                             break donefornow;
                         }
-                    }*/
+                    }
             
                     if (ch <= UConverterConstants.MAXIMUM_UTF && !isSurrogate(ch)) {
                         /* Normal valid byte when the loop has not prematurely terminated (i < inBytes) */
