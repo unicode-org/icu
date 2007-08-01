@@ -25,6 +25,7 @@ public class PatternTokenizer {
     // settings used in the interpretation of the pattern
     private UnicodeSet ignorableCharacters = new UnicodeSet();
     private UnicodeSet syntaxCharacters = new UnicodeSet();
+    private UnicodeSet extraQuotingCharacters = new UnicodeSet();
     private UnicodeSet escapeCharacters = new UnicodeSet();
     private boolean usingSlash = false;
     private boolean usingQuote = false;
@@ -53,6 +54,9 @@ public class PatternTokenizer {
     public UnicodeSet getSyntaxCharacters() {
         return (UnicodeSet) syntaxCharacters.clone();
     }
+    public UnicodeSet getExtraQuotingCharacters() {
+        return (UnicodeSet) extraQuotingCharacters.clone();
+    }
     /**
      *  Sets the characters to be interpreted as syntax characters in parsing, eg new UnicodeSet("[:pattern_syntax:]")
      * @param syntaxCharacters
@@ -63,6 +67,17 @@ public class PatternTokenizer {
         needingQuoteCharacters = null;
         return this;
     }   
+    /**
+     *  Sets the extra characters to be quoted in literals
+     * @param syntaxCharacters
+     * @return
+     */
+    public PatternTokenizer setExtraQuotingCharacters(UnicodeSet syntaxCharacters) {
+        this.extraQuotingCharacters = (UnicodeSet) syntaxCharacters.clone();
+        needingQuoteCharacters = null;
+        return this;
+    }   
+    
     public UnicodeSet getEscapeCharacters() {
         return (UnicodeSet) escapeCharacters.clone();
     }
@@ -133,7 +148,7 @@ public class PatternTokenizer {
      */
     public String quoteLiteral(CharSequence string) {
         if (needingQuoteCharacters == null) {
-            needingQuoteCharacters = new UnicodeSet().addAll(syntaxCharacters).addAll(ignorableCharacters); // .addAll(quoteCharacters)
+            needingQuoteCharacters = new UnicodeSet().addAll(syntaxCharacters).addAll(ignorableCharacters).addAll(extraQuotingCharacters); // .addAll(quoteCharacters)
             if (usingSlash) needingQuoteCharacters.add(BACK_SLASH);
             if (usingQuote) needingQuoteCharacters.add(SINGLE_QUOTE);
         }
