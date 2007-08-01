@@ -944,6 +944,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     static public class FormatParser {
         private transient PatternTokenizer tokenizer = new PatternTokenizer()
         .setSyntaxCharacters(new UnicodeSet("[a-zA-Z]"))
+        .setExtraQuotingCharacters(new UnicodeSet("[[[:script=Latn:][:script=Cyrl:]]&[[:L:][:M:]]]"))
         //.setEscapeCharacters(new UnicodeSet("[^\\u0020-\\u007E]")) // WARNING: DateFormat doesn't accept \\uXXXX
         .setUsingQuote(true);
         private List items = new ArrayList();
@@ -1053,7 +1054,13 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         public String toString(int start, int limit) {
             StringBuffer result = new StringBuffer();
             for (int i = start; i < limit; ++i) {
-                result.append(items.get(i).toString());
+                Object item = items.get(i);
+                if (item instanceof String) {
+                    String itemString = (String) item;
+                    result.append(tokenizer.quoteLiteral(itemString));
+                } else {
+                    result.append(items.get(i).toString());
+                }
             }
             return result.toString();
         }
