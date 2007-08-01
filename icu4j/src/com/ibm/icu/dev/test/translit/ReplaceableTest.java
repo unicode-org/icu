@@ -178,4 +178,14 @@ public class ReplaceableTest extends TestFmwk {
 
         static final boolean DEBUG = false;
     }
+    
+    public void Test5789() {
+        String rules =
+            "IETR > IET | \\' R; # (1) do split ietr between t and r\r\n" +
+            "I[EH] > I; # (2) friedrich";
+        Transliterator trans = Transliterator.createFromRules("foo", rules, Transliterator.FORWARD);
+        Transliterator.DEBUG = true;
+        String result =  trans.transliterate("BLENKDIETRICH");
+        assertEquals("Rule breakage", "BLENKDIET'RICH", result);
+    }
 }
