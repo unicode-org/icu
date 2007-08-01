@@ -3825,7 +3825,6 @@ public class TestCharset extends TestFmwk {
     
     //this method provides better code coverage decoding UTF32 LE/BE
     public void TestDecodeUTF32LEBE() {
-        CoderResult result = CoderResult.UNDERFLOW;
         CharsetProvider provider = new CharsetProviderICU();       
         CharsetDecoder decoder;
         CharBuffer us = CharBuffer.allocate(0x10);

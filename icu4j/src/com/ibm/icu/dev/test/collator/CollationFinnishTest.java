@@ -14,8 +14,6 @@ package com.ibm.icu.dev.test.collator;
  
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.text.*;
-
-import java.util.Locale;
 import com.ibm.icu.util.ULocale;
  
 public class CollationFinnishTest extends TestFmwk {
