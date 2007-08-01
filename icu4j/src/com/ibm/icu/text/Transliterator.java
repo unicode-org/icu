@@ -244,7 +244,7 @@ import java.util.Vector;
  * @author Alan Liu
  * @stable ICU 2.0
  */
-public abstract class Transliterator {
+public abstract class Transliterator implements StringTransform  {
     /**
      * Direction constant indicating the forward direction in a transliterator,
      * e.g., the forward rules of a RuleBasedTransliterator.  An "A-B"
@@ -1896,5 +1896,14 @@ public abstract class Transliterator {
          * @stable ICU 2.0
          */
         Transliterator getInstance(String ID);
+    }
+    
+    /**
+     * Implements StringTransform via this method.
+     * @input source text to be transformed (eg lowercased)
+     * @return result
+     */
+    public String transform(String source) {
+        return transliterate(source);
     }
 }
