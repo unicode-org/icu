@@ -213,7 +213,7 @@ public class CharsetMatch implements Comparable {
      * @param o the CharsetMatch object to compare against.
      * @return  a negative integer, zero, or a positive integer as the 
      *          confidence level of this CharsetMatch
-     *		is less than, equal to, or greater than that of
+     *          is less than, equal to, or greater than that of
      *          the argument.
      * @throws ClassCastException if the argument is not a CharsetMatch.
      * @stable ICU 3.8

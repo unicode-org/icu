@@ -976,7 +976,7 @@ public class GlobalizationPreferences implements Freezable {
         DateFormat result;
         ULocale dfLocale = getAvailableLocale(TYPE_DATEFORMAT);
         if (dfLocale == null) {
-        	dfLocale = ULocale.ROOT;
+            dfLocale = ULocale.ROOT;
         }
         if (timeStyle == DF_NONE) {
             result = DateFormat.getDateInstance(getCalendar(), dateStyle, dfLocale);
@@ -1001,7 +1001,7 @@ public class GlobalizationPreferences implements Freezable {
         NumberFormat result;
         ULocale nfLocale = getAvailableLocale(TYPE_NUMBERFORMAT);
         if (nfLocale == null) {
-        	nfLocale = ULocale.ROOT;
+            nfLocale = ULocale.ROOT;
         }
         switch (style) {
         case NF_NUMBER:
@@ -1098,11 +1098,11 @@ public class GlobalizationPreferences implements Freezable {
      * @provisional This API might change or be removed in a future release.
      */
     protected Collator guessCollator() {
-    	ULocale collLocale = getAvailableLocale(TYPE_COLLATOR);
-    	if (collLocale == null) {
-    		collLocale = ULocale.ROOT;
-    	}
-    	return Collator.getInstance(collLocale);
+        ULocale collLocale = getAvailableLocale(TYPE_COLLATOR);
+        if (collLocale == null) {
+            collLocale = ULocale.ROOT;
+        }
+        return Collator.getInstance(collLocale);
     }
 
     /**
@@ -1118,7 +1118,7 @@ public class GlobalizationPreferences implements Freezable {
         BreakIterator bitr = null;
         ULocale brkLocale = getAvailableLocale(TYPE_BREAKITERATOR);
         if (brkLocale == null) {
-        	brkLocale = ULocale.ROOT;
+            brkLocale = ULocale.ROOT;
         }
         switch (type) {
         case BI_CHARACTER:
@@ -1185,11 +1185,11 @@ public class GlobalizationPreferences implements Freezable {
      * @provisional This API might change or be removed in a future release.
      */
     protected Calendar guessCalendar() {
-    	ULocale calLocale = getAvailableLocale(TYPE_CALENDAR);
-    	if (calLocale == null) {
-    		calLocale = ULocale.US;
-    	}
-    	return Calendar.getInstance(getTimeZone(), calLocale);
+        ULocale calLocale = getAvailableLocale(TYPE_CALENDAR);
+        if (calLocale == null) {
+            calLocale = ULocale.US;
+        }
+        return Calendar.getInstance(getTimeZone(), calLocale);
     }
     
     // PRIVATES
@@ -1211,16 +1211,16 @@ public class GlobalizationPreferences implements Freezable {
 
 
     private ULocale getAvailableLocale(int type) {
-    	List locs = getLocales();
-    	ULocale result = null;
-    	for (int i = 0; i < locs.size(); i++) {
-    		ULocale l = (ULocale)locs.get(i);
+        List locs = getLocales();
+        ULocale result = null;
+        for (int i = 0; i < locs.size(); i++) {
+            ULocale l = (ULocale)locs.get(i);
             if (isAvailableLocale(l, type)) {
                 result = l;
                 break;
             }
-    	}
-    	return result;
+        }
+        return result;
     }
 
     private boolean isAvailableLocale(ULocale loc, int type) {
@@ -1237,67 +1237,67 @@ public class GlobalizationPreferences implements Freezable {
     private static final HashMap available_locales = new HashMap();
     private static final int
         TYPE_GENERIC = 0,
-    	TYPE_CALENDAR = 1,
-    	TYPE_DATEFORMAT= 2,
-    	TYPE_NUMBERFORMAT = 3,
-    	TYPE_COLLATOR = 4,
-    	TYPE_BREAKITERATOR = 5,
-    	TYPE_LIMIT = TYPE_BREAKITERATOR + 1;
-    	
+        TYPE_CALENDAR = 1,
+        TYPE_DATEFORMAT= 2,
+        TYPE_NUMBERFORMAT = 3,
+        TYPE_COLLATOR = 4,
+        TYPE_BREAKITERATOR = 5,
+        TYPE_LIMIT = TYPE_BREAKITERATOR + 1;
+
     static {
         BitSet bits;
-    	ULocale[] allLocales = ULocale.getAvailableLocales();
-    	for (int i = 0; i < allLocales.length; i++) {
-    		bits = new BitSet(TYPE_LIMIT);
-    		available_locales.put(allLocales[i], bits);
+        ULocale[] allLocales = ULocale.getAvailableLocales();
+        for (int i = 0; i < allLocales.length; i++) {
+            bits = new BitSet(TYPE_LIMIT);
+            available_locales.put(allLocales[i], bits);
             bits.set(TYPE_GENERIC);
-    	}
+        }
 
-    	ULocale[] calLocales = Calendar.getAvailableULocales();
-    	for (int i = 0; i < calLocales.length; i++) {
-    		bits = (BitSet)available_locales.get(calLocales[i]);
-    		if (bits == null) {
-        		bits = new BitSet(TYPE_LIMIT);
-        		available_locales.put(allLocales[i], bits);
-    		}
-    		bits.set(TYPE_CALENDAR);
-    	}
+        ULocale[] calLocales = Calendar.getAvailableULocales();
+        for (int i = 0; i < calLocales.length; i++) {
+            bits = (BitSet)available_locales.get(calLocales[i]);
+            if (bits == null) {
+                bits = new BitSet(TYPE_LIMIT);
+                available_locales.put(allLocales[i], bits);
+            }
+            bits.set(TYPE_CALENDAR);
+        }
 
-    	ULocale[] dateLocales = DateFormat.getAvailableULocales();
-    	for (int i = 0; i < dateLocales.length; i++) {
-    		bits = (BitSet)available_locales.get(dateLocales[i]);
-    		if (bits == null) {
-        		bits = new BitSet(TYPE_LIMIT);
-        		available_locales.put(allLocales[i], bits);
-    		}
-    		bits.set(TYPE_DATEFORMAT);
-    	}
+        ULocale[] dateLocales = DateFormat.getAvailableULocales();
+        for (int i = 0; i < dateLocales.length; i++) {
+            bits = (BitSet)available_locales.get(dateLocales[i]);
+            if (bits == null) {
+                bits = new BitSet(TYPE_LIMIT);
+                available_locales.put(allLocales[i], bits);
+            }
+            bits.set(TYPE_DATEFORMAT);
+        }
 
-    	ULocale[] numLocales = NumberFormat.getAvailableULocales();
-    	for (int i = 0; i < numLocales.length; i++) {
-    		bits = (BitSet)available_locales.get(numLocales[i]);
-    		if (bits == null) {
-        		bits = new BitSet(TYPE_LIMIT);
-        		available_locales.put(allLocales[i], bits);
-    		}
-    		bits.set(TYPE_NUMBERFORMAT);
-    	}
+        ULocale[] numLocales = NumberFormat.getAvailableULocales();
+        for (int i = 0; i < numLocales.length; i++) {
+            bits = (BitSet)available_locales.get(numLocales[i]);
+            if (bits == null) {
+                bits = new BitSet(TYPE_LIMIT);
+                available_locales.put(allLocales[i], bits);
+            }
+            bits.set(TYPE_NUMBERFORMAT);
+        }
 
-    	ULocale[] collLocales = Collator.getAvailableULocales();
-    	for (int i = 0; i < collLocales.length; i++) {
-    		bits = (BitSet)available_locales.get(collLocales[i]);
-    		if (bits == null) {
-        		bits = new BitSet(TYPE_LIMIT);
-        		available_locales.put(allLocales[i], bits);
-    		}
-    		bits.set(TYPE_COLLATOR);
-    	}
+        ULocale[] collLocales = Collator.getAvailableULocales();
+        for (int i = 0; i < collLocales.length; i++) {
+            bits = (BitSet)available_locales.get(collLocales[i]);
+            if (bits == null) {
+                bits = new BitSet(TYPE_LIMIT);
+                available_locales.put(allLocales[i], bits);
+            }
+            bits.set(TYPE_COLLATOR);
+        }
 
-    	ULocale[] brkLocales = BreakIterator.getAvailableULocales();
-    	for (int i = 0; i < brkLocales.length; i++) {
-    		bits = (BitSet)available_locales.get(brkLocales[i]);
-    		bits.set(TYPE_BREAKITERATOR);
-    	}
+        ULocale[] brkLocales = BreakIterator.getAvailableULocales();
+        for (int i = 0; i < brkLocales.length; i++) {
+            bits = (BitSet)available_locales.get(brkLocales[i]);
+            bits.set(TYPE_BREAKITERATOR);
+        }
     }
 
     /** WARNING: All of this data is temporary, until we start importing from CLDR!!!

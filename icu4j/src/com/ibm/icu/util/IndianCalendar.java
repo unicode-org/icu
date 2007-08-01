@@ -65,8 +65,8 @@ import java.util.Locale;
  * @provisional This API might change or be removed in a future release.
  */
 public class IndianCalendar extends Calendar {
-	// jdk1.4.2 serialver
-	private static final long serialVersionUID = 3617859668165014834L;
+    // jdk1.4.2 serialver
+    private static final long serialVersionUID = 3617859668165014834L;
 
     /** 
      * Constant for Chaitra, the 1st month of the Indian year. 

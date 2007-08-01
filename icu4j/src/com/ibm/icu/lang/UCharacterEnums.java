@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2004-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -14,7 +14,7 @@ package com.ibm.icu.lang;
 public class UCharacterEnums {
 
     /** This is just a namespace, it is not instantiatable. */
-	///CLOVER:OFF
+    ///CLOVER:OFF
     private UCharacterEnums() {}
 
     /**

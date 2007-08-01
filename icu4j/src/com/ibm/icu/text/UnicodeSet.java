@@ -1991,8 +1991,8 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
         if (strings.size() == 0) return true;
         // do a last check to make sure no strings are in.
         for (Iterator it = strings.iterator(); it.hasNext();) {
-        	String item = (String)it.next();
-        	if (s.indexOf(item) >= 0) return false;
+            String item = (String)it.next();
+            if (s.indexOf(item) >= 0) return false;
         }
         return true;
     }
@@ -3682,30 +3682,30 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
          */
         public XSymbolTable(){}
         /**
-    	 * @internal
-    	 * @deprecated This API is ICU internal only.
-    	 */
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         public UnicodeMatcher lookupMatcher(int i) {
             return null;
         }
-    	/**
-    	 * @internal
-    	 * @deprecated This API is ICU internal only.
-    	 */
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         public boolean applyPropertyAlias(String propertyName, String propertyValue, UnicodeSet result) {
             return false;
         }
-    	/**
-    	 * @internal
-    	 * @deprecated This API is ICU internal only.
-    	 */
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         public char[] lookup(String s) {
             return null;
         }
-    	/**
-    	 * @internal
-    	 * @deprecated This API is ICU internal only.
-    	 */
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         public String parseReference(String text, ParsePosition pos, int limit) {
             return null;
         }

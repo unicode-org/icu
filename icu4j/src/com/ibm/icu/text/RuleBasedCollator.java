@@ -1756,7 +1756,7 @@ public final class RuleBasedCollator extends Collator
             iUCA_CONTRACTIONS_ = CollatorReader.read(iUCA_, iUCA_CONSTANTS_);
 
             // called before doing canonical closure for the UCA.
-         	iimpCEGen_ = new ImplicitCEGenerator(minImplicitPrimary, maxImplicitPrimary);
+            iimpCEGen_ = new ImplicitCEGenerator(minImplicitPrimary, maxImplicitPrimary);
             //iimpCEGen_ = new ImplicitCEGenerator(iUCA_CONSTANTS_.PRIMARY_IMPLICIT_MIN_, iUCA_CONSTANTS_.PRIMARY_IMPLICIT_MAX_);
             iUCA_.init();
             ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_COLLATION_BASE_NAME, ULocale.ENGLISH);
@@ -3637,8 +3637,8 @@ public final class RuleBasedCollator extends Collator
                                     == CollationElementIterator.IGNORABLE) {
                 sorder = m_srcUtilCEBuffer_[soffset ++];
                 if (!isContinuation(sorder) && ((sorder & CE_PRIMARY_MASK_) != 0 || m_utilCompare2_ == true)) {
-                	// primary ignorables should not be considered on the case level when the strength is primary
-                	// otherwise, the CEs stop being well-formed
+                    // primary ignorables should not be considered on the case level when the strength is primary
+                    // otherwise, the CEs stop being well-formed
                     sorder &= CE_CASE_MASK_3_;
                     sorder ^= m_caseSwitch_;
                 }
@@ -3651,8 +3651,8 @@ public final class RuleBasedCollator extends Collator
                                     == CollationElementIterator.IGNORABLE) {
                 torder = m_tgtUtilCEBuffer_[toffset ++];
                 if (!isContinuation(torder) && ((torder & CE_PRIMARY_MASK_) != 0 || m_utilCompare2_ == true)) {
-                   	// primary ignorables should not be considered on the case level when the strength is primary
-                	// otherwise, the CEs stop being well-formed
+                    // primary ignorables should not be considered on the case level when the strength is primary
+                    // otherwise, the CEs stop being well-formed
                     torder &= CE_CASE_MASK_3_;
                     torder ^= m_caseSwitch_;
                 }

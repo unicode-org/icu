@@ -235,11 +235,11 @@ public class ICULocaleData {
                     i = name.length();
                 }
 
-        		ClassLoader cl = ICULocaleData.class.getClassLoader();
-        		if (cl == null) {
-        		    // we're on the bootstrap
-        		    cl = ClassLoader.getSystemClassLoader();
-        		}
+                ClassLoader cl = ICULocaleData.class.getClassLoader();
+                if (cl == null) {
+                    // we're on the bootstrap
+                    cl = ClassLoader.getSystemClassLoader();
+                }
                 Class cls = cl.loadClass(name);
                 if (ICUListResourceBundle.class.isAssignableFrom(cls)) {
                     ICUListResourceBundle bx = (ICUListResourceBundle)cls.newInstance();

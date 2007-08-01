@@ -335,11 +335,10 @@ public class OlsonTimeZone extends BasicTimeZone {
      * to get local wall clock time.
      */
     public int getDSTSavings() {
-    	if(finalZone!=null){
-    		return finalZone.getDSTSavings();
-    	}
-    	return super.getDSTSavings();
-    	
+        if(finalZone!=null){
+            return finalZone.getDSTSavings();
+        }
+        return super.getDSTSavings();
     }
     /* (non-Javadoc)
      * @see com.ibm.icu.util.TimeZone#inDaylightTime(java.util.Date)
@@ -531,7 +530,7 @@ public class OlsonTimeZone extends BasicTimeZone {
     }
     private static final int UNSIGNED_BYTE_MASK =0xFF;
     private int getInt(byte val){
-    	return (int)(UNSIGNED_BYTE_MASK & val); 
+        return (int)(UNSIGNED_BYTE_MASK & val); 
     }
     private void getHistoricalOffset(double time, boolean local, int[] offsets) {
         if (transitionCount != 0) {
@@ -604,43 +603,43 @@ public class OlsonTimeZone extends BasicTimeZone {
     
     // temp
     public String toString() {
-    	StringBuffer buf = new StringBuffer();
-    	buf.append(super.toString());
-    	buf.append('[');
-    	buf.append("transitionCount=" + transitionCount);
-    	buf.append(",typeCount=" + typeCount);
-    	buf.append(",transitionTimes=");
-    	if (transitionTimes != null) {
-    		buf.append('[');
-    		for (int i = 0; i < transitionTimes.length; ++i) {
-    			if (i > 0) {
-    				buf.append(',');
-    			}
-    			buf.append(Integer.toString(transitionTimes[i]));
-    		}
-    		buf.append(']');
-    	} else {
-    		buf.append("null");
-    	}
-    	buf.append(",typeOffsets=");
-    	if (typeOffsets != null) {
-    		buf.append('[');
-    		for (int i = 0; i < typeOffsets.length; ++i) {
-    			if (i > 0) {
-    				buf.append(',');
-    			}
-    			buf.append(Integer.toString(typeOffsets[i]));
-    		}
-    		buf.append(']');
-    	} else {
-    		buf.append("null");
-    	}
-    	buf.append(",finalYear=" + finalYear);
-    	buf.append(",finalMillis=" + finalMillis);
-    	buf.append(",finalZone=" + finalZone);
-    	buf.append(']');
-    	
-    	return buf.toString();
+        StringBuffer buf = new StringBuffer();
+        buf.append(super.toString());
+        buf.append('[');
+        buf.append("transitionCount=" + transitionCount);
+        buf.append(",typeCount=" + typeCount);
+        buf.append(",transitionTimes=");
+        if (transitionTimes != null) {
+            buf.append('[');
+            for (int i = 0; i < transitionTimes.length; ++i) {
+                if (i > 0) {
+                    buf.append(',');
+                }
+                buf.append(Integer.toString(transitionTimes[i]));
+            }
+            buf.append(']');
+        } else {
+            buf.append("null");
+        }
+        buf.append(",typeOffsets=");
+        if (typeOffsets != null) {
+            buf.append('[');
+            for (int i = 0; i < typeOffsets.length; ++i) {
+                if (i > 0) {
+                    buf.append(',');
+                }
+                buf.append(Integer.toString(typeOffsets[i]));
+            }
+            buf.append(']');
+        } else {
+            buf.append("null");
+        }
+        buf.append(",finalYear=" + finalYear);
+        buf.append(",finalMillis=" + finalMillis);
+        buf.append(",finalZone=" + finalZone);
+        buf.append(']');
+        
+        return buf.toString();
     }
     /**
      * Number of transitions, 0..~370
@@ -808,22 +807,22 @@ public class OlsonTimeZone extends BasicTimeZone {
 
     }
     public int hashCode(){
-    	int ret =   (int)  (finalYear ^ (finalYear>>>4) +
-    			   transitionCount ^ (transitionCount>>>6) +
-    			   typeCount ^ (typeCount>>>8) + 
-    			   Double.doubleToLongBits(finalMillis)+
-    			   (finalZone == null ? 0 : finalZone.hashCode()) + 
-    			   super.hashCode());
-    	for(int i=0; i<transitionTimes.length; i++){
-    		ret+=transitionTimes[i]^(transitionTimes[i]>>>8);
-    	}
-	    for(int i=0; i<typeOffsets.length; i++){
-    		ret+=typeOffsets[i]^(typeOffsets[i]>>>8);
-    	}
-	    for(int i=0; i<typeData.length; i++){
-    		ret+=typeData[i] & UNSIGNED_BYTE_MASK;
-    	} 
-	    return ret;
+        int ret =   (int)  (finalYear ^ (finalYear>>>4) +
+                   transitionCount ^ (transitionCount>>>6) +
+                   typeCount ^ (typeCount>>>8) + 
+                   Double.doubleToLongBits(finalMillis)+
+                   (finalZone == null ? 0 : finalZone.hashCode()) + 
+                   super.hashCode());
+        for(int i=0; i<transitionTimes.length; i++){
+            ret+=transitionTimes[i]^(transitionTimes[i]>>>8);
+        }
+        for(int i=0; i<typeOffsets.length; i++){
+            ret+=typeOffsets[i]^(typeOffsets[i]>>>8);
+        }
+        for(int i=0; i<typeData.length; i++){
+            ret+=typeData[i] & UNSIGNED_BYTE_MASK;
+        } 
+        return ret;
     }
     /*
     private void readObject(ObjectInputStream s) throws IOException  {

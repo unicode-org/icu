@@ -975,14 +975,14 @@ public class SimpleDateFormat extends DateFormat {
      * PatternItem store parsed date/time field pattern information.
      */
     private static class PatternItem {
-    	final char type;
-    	final int length;
+        final char type;
+        final int length;
         final boolean isNumeric;
 
         PatternItem(char type, int length) {
-    		this.type = type;
-    		this.length = length;
-    		isNumeric = isNumeric(type, length);
+            this.type = type;
+            this.length = length;
+            isNumeric = isNumeric(type, length);
         }
     }
 
@@ -1030,11 +1030,11 @@ public class SimpleDateFormat extends DateFormat {
                 if (inQuote) {
                     text.append(ch);
                 } else {
-                	if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) {
-                    	// a date/time pattern character
-                    	if (ch == itemType) {
-                    		itemLength++;
-                    	} else {
+                    if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) {
+                        // a date/time pattern character
+                        if (ch == itemType) {
+                            itemLength++;
+                        } else {
                             if (itemType == 0) {
                                 if (text.length() > 0) {
                                     items.add(text.toString());
@@ -1047,7 +1047,7 @@ public class SimpleDateFormat extends DateFormat {
                             itemLength = 1;
                         }
                     } else {
-                    	// a string literal
+                        // a string literal
                         if (itemType != 0) {
                             items.add(new PatternItem(itemType, itemLength));
                             itemType = 0;

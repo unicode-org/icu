@@ -95,6 +95,6 @@ public class CaseInsensitiveString {
      * @stable ICU 3.6
      */
     public String toString() {
-    	return string;
+        return string;
     }
 }
