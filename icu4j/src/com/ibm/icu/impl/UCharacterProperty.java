@@ -411,12 +411,12 @@ public final class UCharacterProperty
                     }
                 } else if(column==SRC_BIDI) {
                     /* bidi/shaping properties */
-					UBiDiProps bdp;
-					try {
-						bdp = UBiDiProps.getSingleton();
-					} catch (IOException e) {
-						return false;
-					}
+                    UBiDiProps bdp;
+                    try {
+                        bdp = UBiDiProps.getSingleton();
+                    } catch (IOException e) {
+                        return false;
+                    }
                     switch(property) {
                     case UProperty.BIDI_MIRRORED:
                         return bdp.isMirrored(codepoint);

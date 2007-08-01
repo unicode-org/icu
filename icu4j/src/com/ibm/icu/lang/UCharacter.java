@@ -3003,8 +3003,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @deprecated ICU 3.4 (Java)
      */
     public static boolean isSpace(int ch) {
-    	return ch <= 0x20 &&
-    		(ch == 0x20 || ch == 0x09 || ch == 0x0a || ch == 0x0c || ch == 0x0d);
+        return ch <= 0x20 &&
+            (ch == 0x20 || ch == 0x09 || ch == 0x0a || ch == 0x0c || ch == 0x0d);
     }
 
     /**
@@ -3122,7 +3122,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @deprecated ICU 3.4 (Java)
      */
     public static boolean isJavaLetter(int cp) {
-	return isJavaIdentifierStart(cp);
+        return isJavaIdentifierStart(cp);
     }
 
     /**
@@ -3134,7 +3134,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @deprecated ICU 3.4 (Java)
      */
     public static boolean isJavaLetterOrDigit(int cp) {
-	return isJavaIdentifierPart(cp);
+        return isJavaIdentifierPart(cp);
     }
 
     /**
@@ -3145,8 +3145,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @stable ICU 3.8
      */
     public static boolean isJavaIdentifierStart(int cp) {
-	// note, downcast to char for jdk 1.4 compatibility
-	return java.lang.Character.isJavaIdentifierStart((char)cp);
+        // note, downcast to char for jdk 1.4 compatibility
+        return java.lang.Character.isJavaIdentifierStart((char)cp);
     }
 
     /**
@@ -3157,8 +3157,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @stable ICU 3.8
      */
     public static boolean isJavaIdentifierPart(int cp) {
-	// note, downcast to char for jdk 1.4 compatibility
-	return java.lang.Character.isJavaIdentifierPart((char)cp);
+        // note, downcast to char for jdk 1.4 compatibility
+        return java.lang.Character.isJavaIdentifierPart((char)cp);
     }
 
     /**

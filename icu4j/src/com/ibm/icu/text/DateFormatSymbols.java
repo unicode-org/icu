@@ -930,11 +930,11 @@ public class DateFormatSymbols implements Serializable, Cloneable {
             tzStrings = zii.tzStrings;
         }
         for(int i = 0; i < tzStrings.length; i++) {
-        	for (int j = 0; j < tzStrings[i].length; j++) {
-        		if (tzStrings[i][j] != null) {
-            		hashcode ^= tzStrings[i][j].hashCode();
-        		}
-        	}
+            for (int j = 0; j < tzStrings[i].length; j++) {
+                if (tzStrings[i][j] != null) {
+                    hashcode ^= tzStrings[i][j].hashCode();
+                }
+            }
         }
         return hashcode;
     }
@@ -1346,7 +1346,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         String theTime = df.format(cal.getTime());
         int mz_index = 8;
         while ( mz_index < names.length ) {
-	   if ( names[mz_index] != null && 
+       if ( names[mz_index] != null && 
                 names[mz_index+1].compareTo(theTime) <= 0 &&  
                 names[mz_index+2].compareTo(theTime) >  0 ) {
                  mzid = "meta/"+names[mz_index];

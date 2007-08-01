@@ -144,8 +144,8 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         
         ICUResourceBundle itemBundle = gregorianBundle.getWithFallback("appendItems");
         for (int i=0; i<itemBundle.getSize(); ++i) {
-        	ICUResourceBundle formatBundle = (ICUResourceBundle)itemBundle.get(i);
-        	String formatName = itemBundle.get(i).getKey();
+            ICUResourceBundle formatBundle = (ICUResourceBundle)itemBundle.get(i);
+            String formatName = itemBundle.get(i).getKey();
             String value = formatBundle.getString();
             result.setAppendItemFormats(getAppendFormatNumber(formatName), value);
         }
@@ -154,13 +154,13 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         itemBundle = gregorianBundle.getWithFallback("fields");
         ICUResourceBundle fieldBundle, dnBundle;
         for (int i=0; i<TYPE_LIMIT; ++i) {
-        	if ( isCLDRFieldName(i) ) {
-        		fieldBundle = itemBundle.getWithFallback(CLDR_FIELD_NAME[i]);
-            	dnBundle = fieldBundle.getWithFallback("dn");
+            if ( isCLDRFieldName(i) ) {
+                fieldBundle = itemBundle.getWithFallback(CLDR_FIELD_NAME[i]);
+                dnBundle = fieldBundle.getWithFallback("dn");
                 String value = dnBundle.getString();
                 //System.out.println("Field name:"+value);
-                result.setAppendItemNames(i, value);      		
-        	}
+                result.setAppendItemNames(i, value);
+            }
         }
           
         // set the AvailableFormat in CLDR
@@ -299,15 +299,15 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     }
 
     private static boolean isCLDRFieldName(int index) {
-    	if ((index<0) && (index>=TYPE_LIMIT)) {
-    		return false;
-    	}
-    	if (CLDR_FIELD_NAME[index].charAt(0) == '*') {
-    		return false;
-    	}
-    	else {
-    		return true;
-    	}
+        if ((index<0) && (index>=TYPE_LIMIT)) {
+            return false;
+        }
+        if (CLDR_FIELD_NAME[index].charAt(0) == '*') {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
     
     

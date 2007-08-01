@@ -119,7 +119,7 @@ public final class EthiopicCalendar extends CECalendar
     // applying the birth of Christ reference and Ethiopian time conventions.  This is
     // 6 hours less than the Julian epoch reference point (noon).  In Gregorian
     // the date and time was July 18th -5493 BC 06:00 AM.
-	
+
     // Julian Days relative to the 
     // \u12d3\u1218\u1270\u1361\u121d\u1215\u1228\u1275 epoch
     private static final int JD_EPOCH_OFFSET_AMETE_ALEM = -285019;
@@ -130,7 +130,7 @@ public final class EthiopicCalendar extends CECalendar
 
     // initialize base class constant, common to all constructors
     {
-    	jdEpochOffset = JD_EPOCH_OFFSET_AMETE_MIHRET;
+        jdEpochOffset = JD_EPOCH_OFFSET_AMETE_MIHRET;
     }
 
     /**
@@ -140,7 +140,7 @@ public final class EthiopicCalendar extends CECalendar
      * @stable ICU 3.8
      */
     public EthiopicCalendar() {
-    	super();
+        super();
     }
 
     /**
@@ -216,7 +216,7 @@ public final class EthiopicCalendar extends CECalendar
      * @stable ICU 3.8
      */
     public EthiopicCalendar(int year, int month, int date) {
-    	super(year, month, date);
+        super(year, month, date);
     }
 
     /**
@@ -228,7 +228,7 @@ public final class EthiopicCalendar extends CECalendar
      * @stable ICU 3.8
      */
     public EthiopicCalendar(Date date) {
-    	super(date);
+        super(date);
     }
 
     /**
@@ -248,7 +248,7 @@ public final class EthiopicCalendar extends CECalendar
     public EthiopicCalendar(int year, int month, int date, int hour,
                             int minute, int second)
     {
-    	super(year, month, date, hour, minute, second);
+        super(year, month, date, hour, minute, second);
     }
 
     /**
@@ -262,7 +262,7 @@ public final class EthiopicCalendar extends CECalendar
      * @provisional This API might change or be removed in a future release.
      */
     public static int EthiopicToJD(long year, int month, int date) {
-    	return ceToJD(year, month, date, JD_EPOCH_OFFSET_AMETE_MIHRET);
+        return ceToJD(year, month, date, JD_EPOCH_OFFSET_AMETE_MIHRET);
     }
     
     /**
@@ -270,7 +270,7 @@ public final class EthiopicCalendar extends CECalendar
      * @deprecated This API is ICU internal only.
      */
     public static Integer[] getDateFromJD(int julianDay) {
-    	return getDateFromJD(julianDay, JD_EPOCH_OFFSET_AMETE_MIHRET);
+        return getDateFromJD(julianDay, JD_EPOCH_OFFSET_AMETE_MIHRET);
     }
     
     /**
@@ -281,9 +281,9 @@ public final class EthiopicCalendar extends CECalendar
      * @stable ICU 3.8
      */
     public void setAmeteAlemEra(boolean onOff) {
-    	this.jdEpochOffset = onOff 
-	    ? JD_EPOCH_OFFSET_AMETE_ALEM 
-	    : JD_EPOCH_OFFSET_AMETE_MIHRET;
+        this.jdEpochOffset = onOff 
+            ? JD_EPOCH_OFFSET_AMETE_ALEM 
+            : JD_EPOCH_OFFSET_AMETE_MIHRET;
     }
     
     /**
@@ -294,7 +294,7 @@ public final class EthiopicCalendar extends CECalendar
      * @stable ICU 3.8
      */
     public boolean isAmeteAlemEra() {
-    	return this.jdEpochOffset == JD_EPOCH_OFFSET_AMETE_ALEM;
+        return this.jdEpochOffset == JD_EPOCH_OFFSET_AMETE_ALEM;
     }
 
     /**

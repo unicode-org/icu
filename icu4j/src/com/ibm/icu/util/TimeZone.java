@@ -147,9 +147,9 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @stable ICU 2.8
      */
     public int getOffset(long date) {
-	int[] result = new int[2];
-	getOffset(date, false, result);
-	return result[0]+result[1];
+        int[] result = new int[2];
+        getOffset(date, false, result);
+        return result[0]+result[1];
     }
 
     /**
@@ -529,10 +529,10 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @stable ICU 2.8
      */
     public int getDSTSavings() {
-    	if (useDaylightTime()) {
-    	    return 3600000;
-    	}
-    	return 0;
+        if (useDaylightTime()) {
+            return 3600000;
+        }
+        return 0;
     }
 
     /**
@@ -754,7 +754,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @stable ICU 3.8
      */
     public int hashCode(){
-    	return ID.hashCode();
+        return ID.hashCode();
     }
 
     /**

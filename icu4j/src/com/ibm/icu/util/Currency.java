@@ -304,7 +304,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * @stable ICU 3.8
      */
     public String getSymbol() {
-	return getSymbol(ULocale.getDefault());
+        return getSymbol(ULocale.getDefault());
     }
 
     /**
@@ -315,7 +315,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * @stable ICU 3.8
      */
     public String getSymbol(Locale loc) {
-	return getSymbol(ULocale.forLocale(loc));
+        return getSymbol(ULocale.forLocale(loc));
     }
 
     /**
@@ -326,7 +326,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * @stable ICU 3.8
      */
     public String getSymbol(ULocale uloc) {
-	return getName(uloc, SYMBOL_NAME, new boolean[1]);
+        return getName(uloc, SYMBOL_NAME, new boolean[1]);
     }
 
     /**
@@ -347,7 +347,7 @@ public class Currency extends MeasureUnit implements Serializable {
     public String getName(Locale locale,
                           int nameStyle,
                           boolean[] isChoiceFormat) {
-	return getName(ULocale.forLocale(locale), nameStyle, isChoiceFormat);
+        return getName(ULocale.forLocale(locale), nameStyle, isChoiceFormat);
     }
 
     /**
@@ -703,7 +703,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * @deprecated This API is obsolete.
      */
     public final ULocale getLocale(ULocale.Type type) {
-	return ULocale.ROOT;
+        return ULocale.ROOT;
     }
 
     /**

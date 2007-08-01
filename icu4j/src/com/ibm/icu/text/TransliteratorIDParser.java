@@ -441,7 +441,7 @@ class TransliteratorIDParser {
             } else {
                 t = single.getInstance();
                 if (t == null) {
-                	t = single.getInstance();
+                    t = single.getInstance();
                     throw new IllegalArgumentException("Illegal ID " + single.canonID);
                 }
                 list.setElementAt(t, i);

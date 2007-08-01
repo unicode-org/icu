@@ -997,9 +997,9 @@ public abstract class DateFormat extends UFormat {
         try {
             Calendar cal = Calendar.getInstance(loc);
             DateFormat result = cal.getDateTimeFormat(dateStyle, timeStyle, loc);
-	    result.setLocale(cal.getLocale(ULocale.VALID_LOCALE),
-			     cal.getLocale(ULocale.ACTUAL_LOCALE));
-	    return result;
+            result.setLocale(cal.getLocale(ULocale.VALID_LOCALE),
+                 cal.getLocale(ULocale.ACTUAL_LOCALE));
+            return result;
         } catch (MissingResourceException e) {
             ///CLOVER:OFF
             // coverage requires separate run with no data, so skip

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2001-2006, International Business Machines Corporation and
+ * Copyright (c) 2001-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -101,165 +101,165 @@ class RBBINode {
     static int    gLastSerial;
 
     RBBINode(int t) {
-		Assert.assrt(t < nodeTypeLimit);
-		fSerialNum = ++gLastSerial;
-		fType = t;
+        Assert.assrt(t < nodeTypeLimit);
+        fSerialNum = ++gLastSerial;
+        fType = t;
 
-		fFirstPosSet = new HashSet();
-		fLastPosSet = new HashSet();
-		fFollowPos = new HashSet();
-		if (t == opCat) {
-			fPrecedence = precOpCat;
-		} else if (t == opOr) {
-			fPrecedence = precOpOr;
-		} else if (t == opStart) {
-			fPrecedence = precStart;
-		} else if (t == opLParen) {
-			fPrecedence = precLParen;
-		} else {
-			fPrecedence = precZero;
+        fFirstPosSet = new HashSet();
+        fLastPosSet = new HashSet();
+        fFollowPos = new HashSet();
+        if (t == opCat) {
+            fPrecedence = precOpCat;
+        } else if (t == opOr) {
+            fPrecedence = precOpOr;
+        } else if (t == opStart) {
+            fPrecedence = precStart;
+        } else if (t == opLParen) {
+            fPrecedence = precLParen;
+        } else {
+            fPrecedence = precZero;
         }
-	}
+    }
 
-	RBBINode(RBBINode other) {
-		fSerialNum = ++gLastSerial;
-		fType = other.fType;
-		fInputSet = other.fInputSet;
-		fPrecedence = other.fPrecedence;
-		fText = other.fText;
-		fFirstPos = other.fFirstPos;
-		fLastPos = other.fLastPos;
-		fNullable = other.fNullable;
-		fVal = other.fVal;
-		fFirstPosSet = new HashSet(other.fFirstPosSet);
-		fLastPosSet = new HashSet(other.fLastPosSet);
-		fFollowPos = new HashSet(other.fFollowPos);
-	}
+    RBBINode(RBBINode other) {
+        fSerialNum = ++gLastSerial;
+        fType = other.fType;
+        fInputSet = other.fInputSet;
+        fPrecedence = other.fPrecedence;
+        fText = other.fText;
+        fFirstPos = other.fFirstPos;
+        fLastPos = other.fLastPos;
+        fNullable = other.fNullable;
+        fVal = other.fVal;
+        fFirstPosSet = new HashSet(other.fFirstPosSet);
+        fLastPosSet = new HashSet(other.fLastPosSet);
+        fFollowPos = new HashSet(other.fFollowPos);
+    }
 
-	//-------------------------------------------------------------------------
-	//
-	//        cloneTree Make a copy of the subtree rooted at this node.
-	//                      Discard any variable references encountered along the way,
-	//                      and replace with copies of the variable's definitions.
-	//                      Used to replicate the expression underneath variable
-	//                      references in preparation for generating the DFA tables.
-	//
-	//-------------------------------------------------------------------------
-	RBBINode cloneTree() {
-		RBBINode n;
+    //-------------------------------------------------------------------------
+    //
+    //        cloneTree Make a copy of the subtree rooted at this node.
+    //                      Discard any variable references encountered along the way,
+    //                      and replace with copies of the variable's definitions.
+    //                      Used to replicate the expression underneath variable
+    //                      references in preparation for generating the DFA tables.
+    //
+    //-------------------------------------------------------------------------
+    RBBINode cloneTree() {
+        RBBINode n;
 
-		if (fType == RBBINode.varRef) {
-			// If the current node is a variable reference, skip over it
-			//   and clone the definition of the variable instead.
-			n = fLeftChild.cloneTree();
-		} else if (fType == RBBINode.uset) {
-			n = this;
-		} else {
-			n = new RBBINode(this);
-			if (fLeftChild != null) {
-				n.fLeftChild = fLeftChild.cloneTree();
-				n.fLeftChild.fParent = n;
-			}
-			if (fRightChild != null) {
-				n.fRightChild = fRightChild.cloneTree();
-				n.fRightChild.fParent = n;
-			}
-		}
-		return n;
-	}
+        if (fType == RBBINode.varRef) {
+            // If the current node is a variable reference, skip over it
+            //   and clone the definition of the variable instead.
+            n = fLeftChild.cloneTree();
+        } else if (fType == RBBINode.uset) {
+            n = this;
+        } else {
+            n = new RBBINode(this);
+            if (fLeftChild != null) {
+                n.fLeftChild = fLeftChild.cloneTree();
+                n.fLeftChild.fParent = n;
+            }
+            if (fRightChild != null) {
+                n.fRightChild = fRightChild.cloneTree();
+                n.fRightChild.fParent = n;
+            }
+        }
+        return n;
+    }
 
 
 
-	//-------------------------------------------------------------------------
-	//
-	//       flattenVariables Walk a parse tree, replacing any variable
-	//                          references with a copy of the variable's definition.
-	//                          Aside from variables, the tree is not changed.
-	//
-	//                          Return the root of the tree. If the root was not a variable
-	//                          reference, it remains unchanged - the root we started with
-	//                          is the root we return. If, however, the root was a variable
-	//                          reference, the root of the newly cloned replacement tree will
-	//                          be returned, and the original tree deleted.
-	//
-	//                          This function works by recursively walking the tree
-	//                          without doing anything until a variable reference is
-	//                          found, then calling cloneTree() at that point. Any
-	//                          nested references are handled by cloneTree(), not here.
-	//
-	//-------------------------------------------------------------------------
-	RBBINode flattenVariables() {
-		if (fType == varRef) {
-			RBBINode retNode = fLeftChild.cloneTree();
-			// delete this;
-			return retNode;
-		}
+    //-------------------------------------------------------------------------
+    //
+    //       flattenVariables Walk a parse tree, replacing any variable
+    //                          references with a copy of the variable's definition.
+    //                          Aside from variables, the tree is not changed.
+    //
+    //                          Return the root of the tree. If the root was not a variable
+    //                          reference, it remains unchanged - the root we started with
+    //                          is the root we return. If, however, the root was a variable
+    //                          reference, the root of the newly cloned replacement tree will
+    //                          be returned, and the original tree deleted.
+    //
+    //                          This function works by recursively walking the tree
+    //                          without doing anything until a variable reference is
+    //                          found, then calling cloneTree() at that point. Any
+    //                          nested references are handled by cloneTree(), not here.
+    //
+    //-------------------------------------------------------------------------
+    RBBINode flattenVariables() {
+        if (fType == varRef) {
+            RBBINode retNode = fLeftChild.cloneTree();
+            // delete this;
+            return retNode;
+        }
 
-		if (fLeftChild != null) {
-			fLeftChild = fLeftChild.flattenVariables();
-			fLeftChild.fParent = this;
-		}
-		if (fRightChild != null) {
-			fRightChild = fRightChild.flattenVariables();
-			fRightChild.fParent = this;
-		}
-		return this;
-	}
+        if (fLeftChild != null) {
+            fLeftChild = fLeftChild.flattenVariables();
+            fLeftChild.fParent = this;
+        }
+        if (fRightChild != null) {
+            fRightChild = fRightChild.flattenVariables();
+            fRightChild.fParent = this;
+        }
+        return this;
+    }
 
-	//-------------------------------------------------------------------------
-	//
-	//      flattenSets Walk the parse tree, replacing any nodes of type setRef
-	//                     with a copy of the expression tree for the set. A set's
-	//                     equivalent expression tree is precomputed and saved as
-	//                     the left child of the uset node.
-	//
-	//-------------------------------------------------------------------------
-	void flattenSets() {
-		Assert.assrt(fType != setRef);
+    //-------------------------------------------------------------------------
+    //
+    //      flattenSets Walk the parse tree, replacing any nodes of type setRef
+    //                     with a copy of the expression tree for the set. A set's
+    //                     equivalent expression tree is precomputed and saved as
+    //                     the left child of the uset node.
+    //
+    //-------------------------------------------------------------------------
+    void flattenSets() {
+        Assert.assrt(fType != setRef);
 
-		if (fLeftChild != null) {
-			if (fLeftChild.fType == setRef) {
-				RBBINode setRefNode = fLeftChild;
-				RBBINode usetNode = setRefNode.fLeftChild;
-				RBBINode replTree = usetNode.fLeftChild;
-				fLeftChild = replTree.cloneTree();
-				fLeftChild.fParent = this;
-			} else {
-				fLeftChild.flattenSets();
-			}
-		}
+        if (fLeftChild != null) {
+            if (fLeftChild.fType == setRef) {
+                RBBINode setRefNode = fLeftChild;
+                RBBINode usetNode = setRefNode.fLeftChild;
+                RBBINode replTree = usetNode.fLeftChild;
+                fLeftChild = replTree.cloneTree();
+                fLeftChild.fParent = this;
+            } else {
+                fLeftChild.flattenSets();
+            }
+        }
 
-		if (fRightChild != null) {
-			if (fRightChild.fType == setRef) {
-				RBBINode setRefNode = fRightChild;
-				RBBINode usetNode = setRefNode.fLeftChild;
-				RBBINode replTree = usetNode.fLeftChild;
-				fRightChild = replTree.cloneTree();
-				fRightChild.fParent = this;
-				// delete setRefNode;
-			} else {
-				fRightChild.flattenSets();
-			}
-		}
-	}
+        if (fRightChild != null) {
+            if (fRightChild.fType == setRef) {
+                RBBINode setRefNode = fRightChild;
+                RBBINode usetNode = setRefNode.fLeftChild;
+                RBBINode replTree = usetNode.fLeftChild;
+                fRightChild = replTree.cloneTree();
+                fRightChild.fParent = this;
+                // delete setRefNode;
+            } else {
+                fRightChild.flattenSets();
+            }
+        }
+    }
 
-	//-------------------------------------------------------------------------
-	//
-	//       findNodes() Locate all the nodes of the specified type, starting
-	//                       at the specified root.
-	//
-	//-------------------------------------------------------------------------
-	void findNodes(List dest, int kind) {
-		if (fType == kind) {
-			dest.add(this);
-		}
-		if (fLeftChild != null) {
-			fLeftChild.findNodes(dest, kind);
-		}
-		if (fRightChild != null) {
-			fRightChild.findNodes(dest, kind);
-		}
-	}
+    //-------------------------------------------------------------------------
+    //
+    //       findNodes() Locate all the nodes of the specified type, starting
+    //                       at the specified root.
+    //
+    //-------------------------------------------------------------------------
+    void findNodes(List dest, int kind) {
+        if (fType == kind) {
+            dest.add(this);
+        }
+        if (fLeftChild != null) {
+            fLeftChild.findNodes(dest, kind);
+        }
+        if (fRightChild != null) {
+            fRightChild.findNodes(dest, kind);
+        }
+    }
 
     
  
@@ -292,39 +292,39 @@ class RBBINode {
  
 
     // Print a String in a fixed field size.
-	// Debugging function.
+    // Debugging function.
     ///CLOVER:OFF
-	static void printString(String s, int minWidth) {
-		for (int i = minWidth; i < 0; i++) {
-			// negative width means pad leading spaces, not fixed width.
-			System.out.print(' ');
-		}
-		for (int i = s.length(); i < minWidth; i++) {
-			System.out.print(' ');
-		}
-		System.out.print(s);
-	}
+    static void printString(String s, int minWidth) {
+        for (int i = minWidth; i < 0; i++) {
+            // negative width means pad leading spaces, not fixed width.
+            System.out.print(' ');
+        }
+        for (int i = s.length(); i < minWidth; i++) {
+            System.out.print(' ');
+        }
+        System.out.print(s);
+    }
     ///CLOVER:ON
 
-	//
-	//  Print an int in a fixed size field.
-	//  Debugging function.
-	//
+    //
+    //  Print an int in a fixed size field.
+    //  Debugging function.
+    //
     ///CLOVER:OFF
-	static void printInt(int i, int minWidth) {
-		String s = Integer.toString(i);
-		printString(s, Math.max(minWidth, s.length() + 1));
-	}
+    static void printInt(int i, int minWidth) {
+        String s = Integer.toString(i);
+        printString(s, Math.max(minWidth, s.length() + 1));
+    }
     ///CLOVER:ON
 
     ///CLOVER:OFF
-	static void printHex(int i, int minWidth) {
-		String s = Integer.toString(i, 16);
-		String leadingZeroes = "00000"
-				.substring(0, Math.max(0, 5 - s.length()));
-		s = leadingZeroes + s;
-		printString(s, minWidth);
-	}
+    static void printHex(int i, int minWidth) {
+        String s = Integer.toString(i, 16);
+        String leadingZeroes = "00000"
+                .substring(0, Math.max(0, 5 - s.length()));
+        s = leadingZeroes + s;
+        printString(s, minWidth);
+    }
     ///CLOVER:ON
 
 

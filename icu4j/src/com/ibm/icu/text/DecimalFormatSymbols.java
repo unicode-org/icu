@@ -459,7 +459,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     
     /**
      * Internal API for NumberFormat
-     * @return String currency pattern string	
+     * @return String currency pattern string
      * @internal
      */
     String getCurrencyPattern(){
@@ -795,15 +795,15 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
         if (serialVersionOnStream < 4) {
             // use same default behavior as for versions with no Locale
             ulocale = ULocale.forLocale(requestedLocale);
-        }		   
-		if (serialVersionOnStream < 5) {
-			// use the same one for groupingSeparator
-			monetaryGroupingSeparator = groupingSeparator;
+        }
+        if (serialVersionOnStream < 5) {
+            // use the same one for groupingSeparator
+            monetaryGroupingSeparator = groupingSeparator;
         }
         serialVersionOnStream = currentSerialVersion;
 
-	// recreate
-	currency = Currency.getInstance(intlCurrencySymbol);
+    // recreate
+    currency = Currency.getInstance(intlCurrencySymbol);
     }
 
     /**

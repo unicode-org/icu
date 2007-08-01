@@ -525,7 +525,7 @@ public final class ULocale implements Serializable {
                 "TW",  "TZ",  "UA",  "UG",  "UM",  "US",  "UY",  "UZ",
                 "VA",  "VC",  "VE",  "VG",  "VI",  "VN",  "VU",  "WF",
                 "WS",  "YE",  "YT",  "YU",  "ZA",  "ZM",  "ZW",  
-            };	
+            };
 
             /* this table is used for 3 letter codes */
             String[] tempObsoleteCountries = {
@@ -794,7 +794,7 @@ public final class ULocale implements Serializable {
      * @stable ICU 3.4
      */
     public ULocale(String a, String b) {
-	this(a, b, null);
+        this(a, b, null);
     }
 
     /**
@@ -1549,7 +1549,7 @@ public final class ULocale implements Serializable {
             }
 
             return blen;
-        }	  
+        }  
 
         /**
          * Advance index past country.
@@ -2252,7 +2252,7 @@ public final class ULocale implements Serializable {
      */
     public static String getDisplayLanguage(String localeID, ULocale displayLocale) {
         return getDisplayLanguageInternal(localeID, displayLocale.localeID);
-    }	 
+    } 
 
     static String getCurrentCountryID(String oldID){
         initCountryTables();
@@ -2270,7 +2270,7 @@ public final class ULocale implements Serializable {
         }
         return oldID;        
     }
-	
+
 
     // displayLocaleID is canonical, localeID need not be since parsing will fix this.
     private static String getDisplayLanguageInternal(String localeID, String displayLocaleID) {
@@ -2850,6 +2850,6 @@ public final class ULocale implements Serializable {
     public static ULocale acceptLanguage(ULocale[] acceptLanguageList, boolean[]
                                          fallback) {
         return acceptLanguage(acceptLanguageList, ULocale.getAvailableLocales(),
-				fallback);
+                fallback);
     }    
 }
