@@ -204,6 +204,10 @@ class TransliterationRuleSet {
                                        UtilityExtensions.formatInput(text, pos));
                 }
                 return false;
+                default:
+                    if (Transliterator.DEBUG) {
+                        System.out.println("Rule: no match " + rules[i]);
+                    }
             }
         }
         // No match or partial match from any rule
