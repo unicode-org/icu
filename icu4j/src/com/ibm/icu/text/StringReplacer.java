@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2002, International Business Machines Corporation
+*   Copyright (c) 2002-2007, International Business Machines Corporation
 *   and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -165,7 +165,12 @@ class StringReplacer implements UnicodeReplacer {
             for (oOutput=0; oOutput<output.length(); ) {
                 if (oOutput == cursorPos) {
                     // Record the position of the cursor
-                    newStart = destLimit - destStart; // relative to start
+                    newStart = buf.length() + destLimit - destStart; // relative to start
+                    // the buf.length() was inserted for bug 5789
+                    // the problem is that if we are accumulating into a buffer (when r == null below)
+                    // then the actual length of the text at that point needs to add the buf length.
+                    // there was an alternative suggested in #5789, but that looks like it won't work
+                    // if we have accumulated some stuff in the dest part AND have a non-zero buffer.
                 }
                 int c = UTF16.charAt(output, oOutput);
 
