@@ -89,21 +89,21 @@ JamoTest::TestJamo() {
         // Column 3 is expected value of L2.  If the expected
         // value of L2 is L1, then L2 is NULL.
         "bab", "(Bi)(A)(Bf)", NULL,
-        "babb", "(Bi)(A)(Bf)(Bi)(EU)", "bab" SEP "beu",
-        "babbba", "(Bi)(A)(Bf)(BB)(A)", NULL,
-        "bagg", "(Bi)(A)(GGf)", NULL,
-        "baggga", "(Bi)(A)(GGf)(Gi)(A)", NULL,
-        "bag" SEP "gga", "(Bi)(A)(Gf)(GGi)(A)", NULL,
+        "babb", "(Bi)(A)(Bf)(Bi)(EU)", "babbeu",
+        "babbba", "(Bi)(A)(Bf)(Bi)(EU)(Bi)(A)", "babbeuba",
+        "bagg", "(Bi)(A)(Gf)(Gi)(EU)", "baggeu",
+        "baggga", "(Bi)(A)(Gf)(Gi)(EU)(Gi)(A)", "baggeuga",
+        "bag" SEP "gga", "(Bi)(A)(Gf)" SEP "(Gi)(EU)(Gi)(A)", "bag" SEP "geuga",
         "kabsa", "(Ki)(A)(Bf)(Si)(A)", NULL,
         "kabska", "(Ki)(A)(BS)(Ki)(A)", NULL,
         "gabsbka", "(Gi)(A)(BS)(Bi)(EU)(Ki)(A)", "gabsbeuka", // not (Kf)
-        "gga", "(GGi)(A)", NULL,
+        "gga", "(Gi)(EU)(Gi)(A)", "geuga",
         "bsa", "(Bi)(EU)(Si)(A)", "beusa",
-        "agg", "(IEUNG)(A)(GGf)", NULL,
-        "agga", "(IEUNG)(A)(GGi)(A)", NULL,
-        "la", "(R)(A)", "ra",
+        "agg", "(IEUNG)(A)(Gf)(Gi)(EU)", "aggeu",
+        "agga", "(IEUNG)(A)(Gf)(Gi)(A)", NULL,
+        "la", "(R)(A)", NULL,
         "bs", "(Bi)(EU)(Sf)", "beus",
-        "kalgga", "(Ki)(A)(L)(GGi)(A)", NULL,
+        "kalgga", "(Ki)(A)(L)(Gi)(EU)(Gi)(A)", "kalgeuga",
         
         // 'r' in a final position is treated like 'l'
         "karka", "(Ki)(A)(L)(Ki)(A)", "kalka",
@@ -295,8 +295,12 @@ JamoTest::TestRealText() {
       "\\ubd80\\ubd84\\uc744", "\\ucc28\\uc9c0\\ud558\\uace0", "\\uc788\\uc2b5\\ub2c8\\ub2e4.",
 
       "\\uc720\\ub2c8\\ucf54\\ub4dc\\ub97c",
-      "\\ud074\\ub77c\\uc774\\uc5b8\\ud2b8-\\uc11c\\ubc84", "\\ub610\\ub294",
-      "\\ub2e4\\uc911-\\uc5f0\\uacb0", "\\uc751\\uc6a9", "\\ud504\\ub85c\\uadf8\\ub7a8\\uacfc",
+      // Replaced a hyphen with a space to make the test case work with CLDR1.5  
+      //"\\ud074\\ub77c\\uc774\\uc5b8\\ud2b8-\\uc11c\\ubc84", "\\ub610\\ub294",
+      "\\ud074\\ub77c\\uc774\\uc5b8\\ud2b8 \\uc11c\\ubc84", "\\ub610\\ub294",
+      // Replaced a hyphen with a space.
+      //"\\ub2e4\\uc911-\\uc5f0\\uacb0", "\\uc751\\uc6a9", "\\ud504\\ub85c\\uadf8\\ub7a8\\uacfc",
+      "\\ub2e4\\uc911 \\uc5f0\\uacb0", "\\uc751\\uc6a9", "\\ud504\\ub85c\\uadf8\\ub7a8\\uacfc",
       "\\uc6f9", "\\uc0ac\\uc774\\ud2b8\\uc5d0", "\\ud1b5\\ud569\\ud558\\uba74",
       "\\ub808\\uac70\\uc2dc", "\\ubb38\\uc790", "\\uc138\\ud2b8", "\\uc0ac\\uc6a9\\uc5d0",
       "\\uc788\\uc5b4\\uc11c", "\\uc0c1\\ub2f9\\ud55c", "\\ube44\\uc6a9", "\\uc808\\uac10",
