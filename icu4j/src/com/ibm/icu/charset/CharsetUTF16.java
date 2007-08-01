@@ -76,7 +76,7 @@ class CharsetUTF16 extends CharsetICU {
                         if(pos!=source.position()) {
                             /* just reset the source */
                             pos=source.position();
-                        } /*else { //this code is unreachable
+                        } else {
                             boolean oldFlush=flush;
                             int bomIndex = state&4;
                             ByteBuffer oldSource = source;
@@ -88,7 +88,7 @@ class CharsetUTF16 extends CharsetICU {
                             // restore real pointers; pArgs->source will be set in case 8/9 
                             flush = oldFlush;
                             source = oldSource;
-                        }*/
+                        }
                         state=8;
                         continue;
                     }
