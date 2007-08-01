@@ -705,121 +705,6 @@
     <delete file="${tzu.src.zip.file}" />
   </target>
 
-  <!--
-        Targets to copy the required *.icu files
-     -->
-  <target name="normalizerData" depends="init">
-    <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
-      <patternset>
-        <!-- arrgh, includes attributes of patternset does not work here in ant 1.5.3 -->
-        <include name="**/unorm.icu" />
-        <include name="**/uprops.icu" />
-        <include name="**/pnames.icu" />
-        <include name="**/unames.icu" />
-      </patternset>
-    </unjar>
-    <touch file="${build.dir}/${icu4j.data.path}/uprops.icu" />
-  </target>
-
-  <target name="copyFullPropsData" depends="init">
-    <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
-      <patternset>
-        <!-- arrgh, includes attributes of patternset does not work here in ant 1.5.3 -->
-        <include name="**/unorm.icu" />
-        <include name="**/uprops.icu" />
-        <include name="**/ubidi.icu" />
-        <include name="**/ucase.icu" />
-        <include name="**/unames.icu" />
-        <include name="**/pnames.icu" />
-        <include name="**/*.res" />
-        <include name="**/*.brk" />
-        <exclude name="**/coll/*.res" />
-        <exclude name="**/translit/*.res" />
-        <exclude name="**/rbnf/*.res" />
-      </patternset>
-    </unjar>
-    <touch file="${build.dir}/${icu4j.data.path}/uprops.icu" />
-  </target>
-
-  <target name="copyBasicPropsData" depends="init">
-    <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
-      <patternset>
-        <!-- arrgh, includes attributes of patternset does not work here in ant 1.5.3 -->
-        <include name="**/unorm.icu" />
-        <include name="**/uprops.icu" />
-        <include name="**/ubidi.icu" />
-        <include name="**/ucase.icu" />
-        <include name="**/pnames.icu" />
-        <include name="**/unames.icu" />
-      </patternset>
-    </unjar>
-    <touch file="${build.dir}/${icu4j.data.path}/uprops.icu" />
-  </target>
-
-  <target name="copyCollatorData" depends="init">
-    <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
-      <patternset>
-        <!-- arrgh, includes attributes of patternset does not work here in ant 1.5.3 -->
-        <include name="**/*.icu" />
-        <include name="**/coll/*.res" />
-        <include name="**/*.brk" />
-      </patternset>
-    </unjar>
-    <touch file="${build.dir}/${icu4j.data.path}/uprops.icu" />
-  </target>
-
-  <target name="copyCalendarData" depends="init">
-    <!-- Calendar does not require Collation data, BreakIterator data -->
-    <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
-      <patternset>
-        <!-- arrgh, includes attributes of patternset does not work here in ant 1.5.3 -->
-        <include name="**/unorm.icu" />
-        <include name="**/uprops.icu" />
-        <include name="**/pnames.icu" />
-        <include name="**/unames.icu" />
-        <include name="**/*.res" />
-        <exclude name="**/coll/*.res" />
-        <exclude name="**/translit/*.res" />
-        <exclude name="**/rbnf/*.res" />
-      </patternset>
-    </unjar>
-    <touch file="${build.dir}/${icu4j.data.path}/uprops.icu" />
-  </target>
-  <target name="copyTranslitData" depends="init">
-    <!-- Calendar does not require Collation data, BreakIterator data -->
-    <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
-      <patternset>
-        <!-- arrgh, includes attributes of patternset does not work here in ant 1.5.3 -->
-        <include name="**/unorm.icu" />
-        <include name="**/uprops.icu" />
-        <include name="**/ubidi.icu" />
-        <include name="**/ucase.icu" />
-        <include name="**/unames.icu" />
-        <include name="**/pnames.icu" />
-        <include name="**/*.brk" />
-        <include name="**/translit/*.res" />
-      </patternset>
-    </unjar>
-    <touch file="${build.dir}/${icu4j.data.path}/uprops.icu" />
-  </target>
-
-  <target name="copyFormatData" depends="init" if="icu4j.module.resources">
-    <!-- Format does not require BreakIterator data -->
-    <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
-      <patternset>
-        <!-- arrgh, includes attributes of patternset does not work here in ant 1.5.3 -->
-        <include name="**/*.icu" />
-        <include name="**/*.res" />
-        <exclude name="**/translit/*.res" />
-      </patternset>
-    </unjar>
-    <touch file="${build.dir}/${icu4j.data.path}/uprops.icu" />
-  </target>
-
-  <target name="copyAllICUData" depends="init">
-    <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}" />
-  </target>
-
   <target name="moduleJar" depends="init" description="modular build of 'icu4j.jar' jar file">
     <jar jarfile="${jar.file}" compress="true" includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*" basedir="${build.dir}">
       <manifest>
@@ -839,878 +724,397 @@
     </jar>
   </target>
 
-  <!--
-         Targets to build only Normalization API and Normalization tests
-     -->
+  <patternset id="common.test.sources">
+    <include name="com/ibm/icu/dev/test/TestFmwk.java" />
+    <include name="com/ibm/icu/dev/test/TestLog.java" />
+    <include name="com/ibm/icu/dev/test/TestUtil.java" />
+    <include name="com/ibm/icu/dev/test/UTF16Util.java" />
+    <include name="com/ibm/icu/dev/test/TestAll.java" />
+  </patternset>
+
+  <!-- Module: BreakIterator -->
+  <target name="breakIterator" depends="init,copyFullPropsData" description="modular build of break iterator services">
+    <javac srcdir="${src.dir}"
+           destdir="${build.dir}"
+           source="${icu4j.javac.source}"
+           target="${icu4j.javac.target}"
+           classpathref="build.classpath"
+           debug="on"
+           deprecation="off">
+      <include name="com/ibm/icu/impl/UCharacterName.java"/>
+      <include name="com/ibm/icu/impl/data/*Break*.java"/>
+      <include name="com/ibm/icu/lang/**/*.java"/>
+      <include name="com/ibm/icu/text/*BreakIterator*.java"/>
+      <include name="com/ibm/icu/text/UnicodeSetIterator.java"/>
+    </javac>
+    <copy file="${src.dir}/com/ibm/icu/impl/data/th.brk"
+          todir="${build.dir}/com/ibm/icu/impl/data/"/>
+  </target>
+
+  <target name="breakIteratorTests" depends="breakIterator" description="test breakIterator modular build target">
+    <javac srcdir="${src.dir}"
+           destdir="${build.dir}"
+           classpathref="build.classpath"
+           source="${icu4j.javac.source}"
+           target="${icu4j.javac.target}"
+           debug="on" deprecation="off">
+      <patternset refid="common.test.sources" />
+      <include name="com/ibm/icu/dev/test/rbbi/**/*.java"/>
+    </javac>
+    <copy file="${src.dir}/com/ibm/icu/dev/test/rbbi/rbbitst.txt"
+          todir="${build.dir}/com/ibm/icu/dev/test/rbbi"/>
+  </target>
+
+  <!-- Module: Calendar -->
+  <target name="copyCalendarData" depends="init">
+    <!-- Calendar does not require Collation data, BreakIterator data -->
+    <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
+      <patternset>
+        <include name="**/pnames.icu" />
+        <include name="**/ucase.icu" />
+        <include name="**/unorm.icu" />
+        <include name="**/uprops.icu" />
+        <include name="**/unames.icu" />
+        <include name="**/*.res" />
+        <exclude name="**/coll/*.res" />
+        <exclude name="**/translit/*.res" />
+        <exclude name="**/rbnf/*.res" />
+      </patternset>
+    </unjar>
+    <touch file="${build.dir}/${icu4j.data.path}/uprops.icu" />
+  </target>
+
+  <target name="calendar" depends="init,copyCalendarData" description="modular build of calendar services">
+    <javac srcdir="${src.dir}"
+           destdir="${build.dir}"
+           source="${icu4j.javac.source}"
+           target="${icu4j.javac.target}"
+           classpathref="build.classpath"
+           debug="on"
+           deprecation="off">
+      <include name="com/ibm/icu/impl/data/*Holiday*.java"/>
+      <include name="com/ibm/icu/lang/UCharacter.java"/>
+      <include name="com/ibm/icu/text/UnicodeSetIterator.java"/>
+      <include name="com/ibm/icu/text/NumberFormatServiceShim.java"/>
+      <include name="com/ibm/icu/util/*Calendar*.java"/>
+    </javac>
+  </target>
+
+  <target name="calendarTests" depends="calendar" description="test calendar modular build target">
+    <javac srcdir="${src.dir}"
+           destdir="${build.dir}"
+           classpathref="build.classpath"
+           source="${icu4j.javac.source}"
+           target="${icu4j.javac.target}"
+           debug="on"
+           deprecation="off">
+      <patternset refid="common.test.sources" />
+      <include name="com/ibm/icu/dev/test/calendar/**/*.java" />
+    </javac>
+  </target>
+
+  <target name="copyCollatorData" depends="init">
+    <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
+      <patternset>
+        <include name="**/*.icu" />
+        <include name="**/coll/*.res" />
+        <include name="**/*.brk" />
+      </patternset>
+    </unjar>
+    <touch file="${build.dir}/${icu4j.data.path}/uprops.icu" />
+  </target>
+
+  <!-- Module: Collator -->
+  <target name="collator" depends="init,copyCollatorData" description="modular build of collator services">
+    <javac srcdir="${src.dir}"
+           destdir="${build.dir}"
+           classpathref="build.classpath"
+           source="${icu4j.javac.source}"
+           target="${icu4j.javac.target}"
+           debug="on"
+           deprecation="off">
+      <include name="com/ibm/icu/impl/data/*Break*.java"/>
+      <include name="com/ibm/icu/text/*BreakIterator*.java"/>
+      <include name="com/ibm/icu/text/*Collation*.java"/>
+      <include name="com/ibm/icu/text/*Collator*.java"/>
+      <include name="com/ibm/icu/text/Normalizer.java"/>
+      <include name="com/ibm/icu/text/Replaceable.java"/>
+      <include name="com/ibm/icu/text/ReplaceableString.java"/>
+      <include name="com/ibm/icu/text/UnicodeFilter.java"/>
+      <include name="com/ibm/icu/text/UnicodeSetIterator.java"/>
+      <include name="com/ibm/icu/text/UTF16.java"/>
+    </javac>
+  </target>
+
+  <target name="collatorTests" depends="collator,testdata" description="test collator modular build target">
+    <javac srcdir="${src.dir}"
+           destdir="${build.dir}"
+           classpathref="build.classpath"
+           source="${icu4j.javac.source}"
+           target="${icu4j.javac.target}"
+           debug="on"
+           deprecation="off">
+      <patternset refid="common.test.sources" />
+      <include name="com/ibm/icu/dev/test/collator/**/*.java"/>
+      <include name="java,com/ibm/icu/dev/test/search/**/*.java"/>
+      <exclude name="com/ibm/icu/dev/test/collator/RandomCollator.java"/>
+    </javac>
+  </target>
+
+  <!-- Module: Compression -->
+  <target name="compression" depends="init" description="modular build of compression services">
+    <javac srcdir="${src.dir}"
+           destdir="${build.dir}"
+           source="${icu4j.javac.source}"
+           target="${icu4j.javac.target}"
+           classpathref="build.classpath"
+           debug="on"
+           deprecation="off">
+      <include name="com/ibm/icu/text/SCSU.java"/>
+      <include name="com/ibm/icu/text/UnicodeCompressor.java"/>
+      <include name="com/ibm/icu/text/UnicodeDecompressor.java"/>
+    </javac>
+  </target>
+
+  <target name="compressionTests" depends="compression" description="test compression modular build target">
+    <javac srcdir="${src.dir}"
+           destdir="${build.dir}"
+           classpathref="build.classpath"
+           source="${icu4j.javac.source}"
+           target="${icu4j.javac.target}"
+           debug="on"
+           deprecation="off">
+      <patternset refid="common.test.sources" />
+      <include name="com/ibm/icu/dev/test/compression/**/*.java"/>
+    </javac>
+  </target>
+
+  <!-- Module: Format -->
+  <target name="copyFormatData" depends="init" if="icu4j.module.resources">
+    <!-- Format does not require BreakIterator data -->
+    <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
+      <patternset>
+        <include name="**/*.icu" />
+        <include name="**/*.res" />
+        <exclude name="**/translit/*.res" />
+      </patternset>
+    </unjar>
+    <touch file="${build.dir}/${icu4j.data.path}/uprops.icu" />
+  </target>
+
+  <target name="format" depends="init,copyFormatData" description="modular build of formatting services">
+    <javac srcdir="${src.dir}"
+           destdir="${build.dir}"
+           source="${icu4j.javac.source}"
+           target="${icu4j.javac.target}"
+           classpathref="build.classpath"
+           debug="on"
+           deprecation="off">
+      <include name="com/ibm/icu/lang/UCharacter.java"/>
+      <include name="com/ibm/icu/text/*Collator*.java"/>
+      <include name="com/ibm/icu/text/*Format*.java"/>
+      <include name="com/ibm/icu/text/UnicodeSetIterator.java"/>
+      <include name="com/ibm/icu/util/CalendarServiceShim.java"/>    </javac>
+  </target>
+
+  <target name="formatTests" depends="format" description="test format modular build target">
+    <javac srcdir="${src.dir}"
+           destdir="${build.dir}"
+           classpathref="build.classpath"
+           source="${icu4j.javac.source}"
+           target="${icu4j.javac.target}"
+           debug="on"
+           deprecation="off">
+      <patternset refid="common.test.sources" />
+      <include name="com/ibm/icu/dev/test/format/**/*.java"/>
+      <exclude name="com/ibm/icu/dev/test/format/GlobalizationPreferencesTest.java"/>
+    </javac>
+    <copy file="${src.dir}/com/ibm/icu/dev/test/format/NumberFormatTestCases.txt"
+          todir="${build.dir}/com/ibm/icu/dev/test/format"/>
+  </target>
+
+  <!-- Module: Normalizer -->
+  <target name="normalizerData" depends="init">
+    <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
+      <patternset>
+        <include name="**/ucase.icu" />
+        <include name="**/unorm.icu" />
+        <include name="**/uprops.icu" />
+        <include name="**/pnames.icu" />
+        <include name="**/unames.icu" />
+      </patternset>
+    </unjar>
+    <touch file="${build.dir}/${icu4j.data.path}/uprops.icu" />
+  </target>
 
   <target name="normalizer" depends="init,normalizerData" description="modular build of normalizer services">
-    <javac sourcepath="" srcdir="${src.dir}" destdir="${build.dir}" source="${icu4j.javac.source}" target="${icu4j.javac.target}" classpathref="build.classpath" debug="on" deprecation="off">
-
-      <exclude name="**/CVS/**/*" />
-      <exclude name="com/ibm/icu/lang/UScriptRun.java" />
-      <exclude name="com/ibm/icu/impl/ICUListResourceBundle.java" />
-      <exclude name="com/ibm/icu/impl/UtilityExtensions.java" />
-      <exclude name="com/ibm/icu/impl/TrieBuilder.java" />
-      <exclude name="com/ibm/icu/impl/IntTrieBuilder.java" />
-      <exclude name="com/ibm/icu/impl/BOCU.java" />
-      <exclude name="com/ibm/icu/impl/UnicodeCharacterIterator.java" />
-
-      <include name="com/ibm/icu/impl/Assert.java" />
-      <include name="com/ibm/icu/impl/CharacterIteratorWrapper.java" />
-      <include name="com/ibm/icu/impl/CharTrie.java" />
-      <include name="com/ibm/icu/impl/ICUBinary.java" />
-      <include name="com/ibm/icu/impl/ICUBinaryStream.java" />
-      <include name="com/ibm/icu/impl/ICUCache.java" />
-      <include name="com/ibm/icu/impl/ICUData.java" />
-      <include name="com/ibm/icu/impl/ICUDebug.java" />
-      <include name="com/ibm/icu/impl/ICUListResourceBundle.java" />
-      <include name="com/ibm/icu/impl/ICUResourceBundle.java" />
-      <include name="com/ibm/icu/impl/ICUResourceBundleImpl.java" />
-      <include name="com/ibm/icu/impl/ICUResourceBundleIterator.java" />
-      <include name="com/ibm/icu/impl/ICUResourceBundleReader.java" />
-      <include name="com/ibm/icu/impl/IntTrie.java" />
-      <include name="com/ibm/icu/impl/LocaleUtility.java" />
-      <include name="com/ibm/icu/impl/NormalizerImpl.java" />
-      <include name="com/ibm/icu/impl/NormalizerDataReader.java" />
-      <include name="com/ibm/icu/impl/ReplaceableUCharacterIterator.java" />
-      <include name="com/ibm/icu/impl/ResourceBundleWrapper.java" />
-      <include name="com/ibm/icu/impl/RuleCharacterIterator.java" />
-      <include name="com/ibm/icu/impl/SortedSetRelation.java" />
-      <include name="com/ibm/icu/impl/SimpleCache.java" />
-      <include name="com/ibm/icu/impl/Trie.java" />
-      <include name="com/ibm/icu/impl/TrieIterator.java" />
-      <include name="com/ibm/icu/impl/UBiDiProps.java" />
-      <include name="com/ibm/icu/impl/UCaseProps.java" />
-      <include name="com/ibm/icu/impl/UCharacter*.java" />
-      <include name="com/ibm/icu/impl/UCharArrayIterator.java" />
-      <include name="com/ibm/icu/impl/UPropertyAliases.java" />
-      <include name="com/ibm/icu/impl/URLHandler.java" />
-      <include name="com/ibm/icu/impl/USerializedSet.java" />
-      <include name="com/ibm/icu/impl/Utility.java" />
-      <include name="com/ibm/icu/lang/**" />
-      <include name="com/ibm/icu/text/BreakIterator.java" />
-      <include name="com/ibm/icu/text/CanonicalIterator.java" />
-      <include name="com/ibm/icu/text/Normalizer.java" />
-      <include name="com/ibm/icu/text/UCharacterIterator.java" />
-      <include name="com/ibm/icu/text/UForwardCharacterIterator.java" />
-      <include name="com/ibm/icu/text/UTF16.java" />
-      <include name="com/ibm/icu/text/Replaceable.java" />
-      <include name="com/ibm/icu/text/ReplaceableString.java" />
-      <include name="com/ibm/icu/text/SymbolTable.java" />
-      <include name="com/ibm/icu/text/UnicodeFilter.java" />
-      <include name="com/ibm/icu/text/UnicodeMatcher.java" />
-      <include name="com/ibm/icu/text/UnicodeSet.java" />
-      <include name="com/ibm/icu/text/UnicodeSetIterator.java" />
-      <include name="com/ibm/icu/util/Freezable.java" />
-      <include name="com/ibm/icu/util/RangeValueIterator.java" />
-      <include name="com/ibm/icu/util/StringTokenizer.java" />
-      <include name="com/ibm/icu/util/ULocale.java" />
-      <include name="com/ibm/icu/util/UResourceBundle.java" />
-      <include name="com/ibm/icu/util/UResourceBundleIterator.java" />
-      <include name="com/ibm/icu/util/UResourceTypeMismatchException.java" />
-      <include name="com/ibm/icu/util/ValueIterator.java" />
-      <include name="com/ibm/icu/util/VersionInfo.java" />
-
-    </javac>
-
-  </target>
-
-  <target name="normalizerTests" depends="normalizer, testdata">
-    <javac srcdir="${src.dir}" destdir="${build.dir}" source="${icu4j.javac.source}" target="${icu4j.javac.target}" classpathref="build.classpath" debug="on" deprecation="off">
-
-      <exclude name="**/CVS/**/*" />
-      <exclude name="com/ibm/icu/dev/test/normalizer/TestDeprecatedNormalizerAPI.java" />
-
-      <include name="com/ibm/icu/dev/test/normalizer/**/*.java" />
-      <include name="com/ibm/icu/dev/test/TestAll.java" />
-      <include name="com/ibm/icu/dev/test/TestFmwk.java" />
-      <include name="com/ibm/icu/dev/test/TestLog.java" />
-      <include name="com/ibm/icu/dev/test/TestUtil.java" />
-      <include name="com/ibm/icu/dev/test/UTF16Util.java" />
-
+    <javac includes="com/ibm/icu/text/Normalizer.java,com/ibm/icu/text/CanonicalIterator.java,com/ibm/icu/text/UTF16.java,com/ibm/icu/text/UCharacterIterator.java,com/ibm/icu/text/UForwardCharacterIterator.java,com/ibm/icu/text/Replaceable.java,com/ibm/icu/text/ReplaceableString.java,com/ibm/icu/text/UnicodeFilter.java,com/ibm/icu/text/UnicodeSetIterator.java,com/ibm/icu/lang/**/*"
+            excludes="**/CVS/**/*,com/ibm/icu/lang/UScriptRun.java, com/ibm/icu/impl/ICUListResourceBundle.java, com/ibm/icu/impl/UtilityExtensions.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/UnicodeCharacterIterator.java"
+           srcdir="${src.dir}"
+           destdir="${build.dir}"
+           source="${icu4j.javac.source}"
+           target="${icu4j.javac.target}"
+           classpathref="build.classpath"
+           debug="on"
+           deprecation="off">
+      <include name="com/ibm/icu/lang/**/*"/>
+      <include name="com/ibm/icu/text/CanonicalIterator.java"/>
+      <include name="com/ibm/icu/text/Normalizer.java"/>
+      <include name="com/ibm/icu/text/Replaceable.java"/>
+      <include name="com/ibm/icu/text/ReplaceableString.java"/>
+      <include name="com/ibm/icu/text/UCharacterIterator.java"/>
+      <include name="com/ibm/icu/text/UForwardCharacterIterator.java"/>
+      <include name="com/ibm/icu/text/UnicodeFilter.java"/>
+      <include name="com/ibm/icu/text/UnicodeSetIterator.java"/>
+      <include name="com/ibm/icu/text/UTF16.java"/>
     </javac>
   </target>
 
-  <!--
-            Targets to build only Collation API and Collation tests
-     -->
-
-  <target name="collator" depends="init,copyCollatorData" description="modular build of collator services">
-    <javac sourcepath="" srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}" debug="on" deprecation="off">
-
-      <exclude name="**/CVS/**/*" />
-      <exclude name="com/ibm/icu/impl/UnicodeCharacterIterator.java" />
-      <exclude name="com/ibm/icu/impl/UtilityExtensions.java" />
-      <exclude name="com/ibm/icu/lang/UScriptRun.java" />
-
-      <include name="com/ibm/icu/impl/Assert.java" />
-      <include name="com/ibm/icu/impl/BOCU.java" />
-      <include name="com/ibm/icu/impl/CharacterIteratorWrapper.java" />
-      <include name="com/ibm/icu/impl/CharTrie.java" />
-      <include name="com/ibm/icu/impl/data/*Break*.java" />
-      <include name="com/ibm/icu/impl/ICUBinary.java" />
-      <include name="com/ibm/icu/impl/ICUBinaryStream.java" />
-      <include name="com/ibm/icu/impl/ICUCache.java" />
-      <include name="com/ibm/icu/impl/ICUData.java" />
-      <include name="com/ibm/icu/impl/ICUDebug.java" />
-      <include name="com/ibm/icu/impl/ICULocaleService.java" />
-      <include name="com/ibm/icu/impl/ICUNotifier.java" />
-      <include name="com/ibm/icu/impl/ICUResourceBundle.java" />
-      <include name="com/ibm/icu/impl/ICUResourceBundleImpl.java" />
-      <include name="com/ibm/icu/impl/ICUResourceBundleIterator.java" />
-      <include name="com/ibm/icu/impl/ICUResourceBundleReader.java" />
-      <include name="com/ibm/icu/impl/ICURWLock.java" />
-      <include name="com/ibm/icu/impl/ICUService.java" />
-      <include name="com/ibm/icu/impl/ImplicitCEGenerator.java" />
-      <include name="com/ibm/icu/impl/IntTrie.java" />
-      <include name="com/ibm/icu/impl/IntTrieBuilder.java" />
-      <include name="com/ibm/icu/impl/LocaleUtility.java" />
-      <include name="com/ibm/icu/impl/NormalizerDataReader.java" />
-      <include name="com/ibm/icu/impl/NormalizerImpl.java" />
-      <include name="com/ibm/icu/impl/ReplaceableUCharacterIterator.java" />
-      <include name="com/ibm/icu/impl/ResourceBundleWrapper.java" />
-      <include name="com/ibm/icu/impl/RuleCharacterIterator.java" />
-      <include name="com/ibm/icu/impl/SimpleCache.java" />
-      <include name="com/ibm/icu/impl/SortedSetRelation.java" />
-      <include name="com/ibm/icu/impl/StringUCharacterIterator.java" />
-      <include name="com/ibm/icu/impl/Trie.java" />
-      <include name="com/ibm/icu/impl/TrieBuilder.java" />
-      <include name="com/ibm/icu/impl/TrieIterator.java" />
-      <include name="com/ibm/icu/impl/UBiDiProps.java" />
-      <include name="com/ibm/icu/impl/UCaseProps.java" />
-      <include name="com/ibm/icu/impl/UCharArrayIterator.java" />
-      <include name="com/ibm/icu/impl/UCharacterIteratorWrapper.java" />
-      <include name="com/ibm/icu/impl/UCharacterName.java" />
-      <include name="com/ibm/icu/impl/UCharacterNameChoice.java" />
-      <include name="com/ibm/icu/impl/UCharacterNameReader.java" />
-      <include name="com/ibm/icu/impl/UCharacterProperty.java" />
-      <include name="com/ibm/icu/impl/UCharacterPropertyReader.java" />
-      <include name="com/ibm/icu/impl/UCharacterUtility.java" />
-      <include name="com/ibm/icu/impl/URLHandler.java" />
-      <include name="com/ibm/icu/impl/UPropertyAliases.java" />
-      <include name="com/ibm/icu/impl/USerializedSet.java" />
-      <include name="com/ibm/icu/impl/Utility.java" />
-      <include name="com/ibm/icu/lang/*.java" />
-      <include name="com/ibm/icu/text/BreakDictionary.java" />
-      <include name="com/ibm/icu/text/BreakIterator.java" />
-      <include name="com/ibm/icu/text/BreakIteratorFactory.java" />
-      <include name="com/ibm/icu/text/CanonicalIterator.java" />
-      <include name="com/ibm/icu/text/Collation.java" />
-      <include name="com/ibm/icu/text/CollationElementIterator.java" />
-      <include name="com/ibm/icu/text/CollationKey.java" />
-      <include name="com/ibm/icu/text/CollationParsedRuleBuilder.java" />
-      <include name="com/ibm/icu/text/CollationRuleParser.java" />
-      <include name="com/ibm/icu/text/Collator.java" />
-      <include name="com/ibm/icu/text/CollatorReader.java" />
-      <include name="com/ibm/icu/text/CollatorServiceShim.java" />
-      <include name="com/ibm/icu/text/DictionaryBasedBreakIterator.java" />
-      <include name="com/ibm/icu/text/Normalizer.java" />
-      <include name="com/ibm/icu/text/RawCollationKey.java" />
-      <include name="com/ibm/icu/text/RBBINode.java" />
-      <include name="com/ibm/icu/text/RBBIDataWrapper.java" />
-      <include name="com/ibm/icu/text/RBBINode.java" />
-      <include name="com/ibm/icu/text/RBBIRuleBuilder.java" />
-      <include name="com/ibm/icu/text/RBBIRuleParseTable.java" />
-      <include name="com/ibm/icu/text/RBBIRuleScanner.java" />
-      <include name="com/ibm/icu/text/RBBISetBuilder.java" />
-      <include name="com/ibm/icu/text/RBBISymbolTable.java" />
-      <include name="com/ibm/icu/text/RBBITableBuilder.java" />
-      <include name="com/ibm/icu/text/Replaceable.java" />
-      <include name="com/ibm/icu/text/ReplaceableString.java" />
-      <include name="com/ibm/icu/text/RuleBasedBreakIterator.java" />
-      <include name="com/ibm/icu/text/RuleBasedBreakIterator_Old.java" />
-      <include name="com/ibm/icu/text/RuleBasedBreakIterator_New.java" />
-      <include name="com/ibm/icu/text/RuleBasedCollator.java" />
-      <include name="com/ibm/icu/text/SymbolTable.java" />
-      <include name="com/ibm/icu/text/UCharacterIterator.java" />
-      <include name="com/ibm/icu/text/UForwardCharacterIterator.java" />
-      <include name="com/ibm/icu/text/UnicodeFilter.java" />
-      <include name="com/ibm/icu/text/UnicodeMatcher.java" />
-      <include name="com/ibm/icu/text/UnicodeSet.java" />
-      <include name="com/ibm/icu/text/UnicodeSetIterator.java" />
-      <include name="com/ibm/icu/text/UTF16.java" />
-      <include name="com/ibm/icu/util/ByteArrayWrapper.java" />
-      <include name="com/ibm/icu/util/CompactByteArray.java" />
-      <include name="com/ibm/icu/util/Freezable.java" />
-      <include name="com/ibm/icu/util/RangeValueIterator.java" />
-      <include name="com/ibm/icu/util/StringTokenizer.java" />
-      <include name="com/ibm/icu/util/ULocale.java" />
-      <include name="com/ibm/icu/util/UResourceBundle.java" />
-      <include name="com/ibm/icu/util/UResourceBundleIterator.java" />
-      <include name="com/ibm/icu/util/UResourceTypeMismatchException.java" />
-      <include name="com/ibm/icu/util/ValueIterator.java" />
-      <include name="com/ibm/icu/util/VersionInfo.java" />
-
+  <target name="normalizerTests" depends="normalizer">
+    <javac srcdir="${src.dir}"
+           destdir="${build.dir}"
+           classpathref="build.classpath"
+           source="${icu4j.javac.source}"
+           target="${icu4j.javac.target}"
+           debug="on"
+           deprecation="off">
+      <patternset refid="common.test.sources" />
+      <include name="com/ibm/icu/dev/test/normalizer/**/*.java"/>
+      <exclude name="com/ibm/icu/dev/test/normalizer/TestDeprecatedNormalizerAPI.java"/>
     </javac>
   </target>
 
-  <target name="collatorTests" depends="collator, testdata" description="test collator modular build target">
-    <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}" debug="on" deprecation="off">
-
-      <exclude name="**/CVS/**/*" />
-      <exclude name="com/ibm/icu/dev/test/collator/RandomCollator.java" />
-
-      <include name="com/ibm/icu/dev/test/collator/**/*.java" />
-      <include name="com/ibm/icu/dev/test/search/**/*.java" />
-      <include name="com/ibm/icu/dev/test/TestAll.java" />
-      <include name="com/ibm/icu/dev/test/TestFmwk.java" />
-      <include name="com/ibm/icu/dev/test/TestLog.java" />
-      <include name="com/ibm/icu/dev/test/TestUtil.java" />
-      <include name="com/ibm/icu/dev/test/UTF16Util.java" />
-    </javac>
+  <!-- Module: Basic Properties / Full Properties -->
+  <target name="copyBasicPropsData" depends="init">
+    <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
+      <patternset>
+        <include name="**/unorm.icu" />
+        <include name="**/uprops.icu" />
+        <include name="**/ubidi.icu" />
+        <include name="**/ucase.icu" />
+        <include name="**/pnames.icu" />
+        <include name="**/unames.icu" />
+      </patternset>
+    </unjar>
+    <touch file="${build.dir}/${icu4j.data.path}/uprops.icu" />
   </target>
 
-  <!--
-            Targets to build only Character properties API and tests
-     -->
+  <target name="copyFullPropsData" depends="init">
+    <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
+      <patternset>
+        <include name="**/unorm.icu" />
+        <include name="**/uprops.icu" />
+        <include name="**/ubidi.icu" />
+        <include name="**/ucase.icu" />
+        <include name="**/unames.icu" />
+        <include name="**/pnames.icu" />
+        <include name="**/*.res" />
+        <include name="**/*.brk" />
+        <exclude name="**/coll/*.res" />
+        <exclude name="**/translit/*.res" />
+        <exclude name="**/rbnf/*.res" />
+      </patternset>
+    </unjar>
+    <touch file="${build.dir}/${icu4j.data.path}/uprops.icu" />
+  </target>
 
-  <target name="propertiesBasic" depends="init, propertiesClasses, copyBasicPropsData" description="modular build of basic character properties">
+  <target name="propertiesBasic" depends="init,propertiesClasses,copyBasicPropsData" description="modular build of basic character properties">
   </target>
 
   <target name="propertiesFull" depends="init,propertiesClasses,copyFullPropsData" description="modular build of full character properties">
   </target>
 
+  <target name="propertiesBasicTests" depends="propertiesBasic,propertiesTests" description="modular build of basic character properties">
+  </target>
+
+  <target name="propertiesFullTests" depends="propertiesFull,propertiesTests" description="modular build of full character properties">
+  </target>
+
   <target name="propertiesClasses">
-    <javac sourcepath="" srcdir="${src.dir}" destdir="${build.dir}" source="${icu4j.javac.source}" target="${icu4j.javac.target}" classpathref="build.classpath" debug="on" deprecation="off">
-
-      <exclude name="**/CVS/**/*" />
-      <exclude name="com/ibm/icu/impl/UtilityExtensions.java" />
-
-      <include name="com/ibm/icu/lang/**/*" />
-      <include name="com/ibm/icu/impl/data/*Break*.java" />
-      <include name="com/ibm/icu/impl/Assert.java" />
-      <include name="com/ibm/icu/impl/CharTrie.java" />
-      <include name="com/ibm/icu/impl/CharacterIteratorWrapper.java" />
-      <include name="com/ibm/icu/impl/ICUBinary.java" />
-      <include name="com/ibm/icu/impl/ICUBinaryStream.java" />
-      <include name="com/ibm/icu/impl/ICUCache.java" />
-      <include name="com/ibm/icu/impl/ICUData.java" />
-      <include name="com/ibm/icu/impl/ICUDebug.java" />
-      <include name="com/ibm/icu/impl/ICUResourceBundle.java" />
-      <include name="com/ibm/icu/impl/ICUResourceBundleImpl.java" />
-      <include name="com/ibm/icu/impl/ICUResourceBundleIterator.java" />
-      <include name="com/ibm/icu/impl/ICUResourceBundleReader.java" />
-      <include name="com/ibm/icu/impl/IntTrie.java" />
-      <include name="com/ibm/icu/impl/LocaleUtility.java" />
-      <include name="com/ibm/icu/impl/NormalizerDataReader.java" />
-      <include name="com/ibm/icu/impl/NormalizerImpl.java" />
-      <include name="com/ibm/icu/impl/ResourceBundleWrapper.java" />
-      <include name="com/ibm/icu/impl/ReplaceableUCharacterIterator.java" />
-      <include name="com/ibm/icu/impl/RuleCharacterIterator.java" />
-      <include name="com/ibm/icu/impl/SimpleCache.java" />
-      <include name="com/ibm/icu/impl/SortedSetRelation.java" />
-      <include name="com/ibm/icu/impl/Trie.java" />
-      <include name="com/ibm/icu/impl/TrieBuilder.java" />
-      <include name="com/ibm/icu/impl/TrieIterator.java" />
-      <include name="com/ibm/icu/impl/UBiDiProps.java" />
-      <include name="com/ibm/icu/impl/UCaseProps.java" />
-      <include name="com/ibm/icu/impl/UCharArrayIterator.java" />
-      <include name="com/ibm/icu/impl/UCharacterIteratorWrapper.java" />
-      <include name="com/ibm/icu/impl/UCharacterName.java" />
-      <include name="com/ibm/icu/impl/UCharacterNameChoice.java" />
-      <include name="com/ibm/icu/impl/UCharacterNameReader.java" />
-      <include name="com/ibm/icu/impl/UCharacterProperty.java" />
-      <include name="com/ibm/icu/impl/UCharacterPropertyReader.java" />
-      <include name="com/ibm/icu/impl/UCharacterUtility.java" />
-      <include name="com/ibm/icu/impl/UPropertyAliases.java" />
-      <include name="com/ibm/icu/impl/URLHandler.java" />
-      <include name="com/ibm/icu/impl/USerializedSet.java" />
-      <include name="com/ibm/icu/impl/Utility.java" />
-      <include name="com/ibm/icu/text/BreakIterator.java" />
-      <include name="com/ibm/icu/text/BreakDictionary.java" />
-      <include name="com/ibm/icu/text/Normalizer.java" />
-      <include name="com/ibm/icu/text/Replaceable.java" />
-      <include name="com/ibm/icu/text/ReplaceableString.java" />
-      <include name="com/ibm/icu/text/SymbolTable.java" />
-      <include name="com/ibm/icu/text/UCharacterIterator.java" />
-      <include name="com/ibm/icu/text/UForwardCharacterIterator.java" />
-      <include name="com/ibm/icu/text/UnicodeFilter.java" />
-      <include name="com/ibm/icu/text/UnicodeMatcher.java" />
-      <include name="com/ibm/icu/text/UnicodeSet.java" />
-      <include name="com/ibm/icu/text/UnicodeSetIterator.java" />
-      <include name="com/ibm/icu/text/UTF16.java" />
-      <include name="com/ibm/icu/util/CompactByteArray.java" />
-      <include name="com/ibm/icu/util/Freezable.java" />
-      <include name="com/ibm/icu/util/RangeValueIterator.java" />
-      <include name="com/ibm/icu/util/StringTokenizer.java" />
-      <include name="com/ibm/icu/util/ULocale.java" />
-      <include name="com/ibm/icu/util/UResourceBundle.java" />
-      <include name="com/ibm/icu/util/UResourceBundleIterator.java" />
-      <include name="com/ibm/icu/util/UResourceTypeMismatchException.java" />
-      <include name="com/ibm/icu/util/ValueIterator.java" />
-      <include name="com/ibm/icu/util/VersionInfo.java" />
+    <javac srcdir="${src.dir}"
+           destdir="${build.dir}"
+           source="${icu4j.javac.source}"
+           target="${icu4j.javac.target}"
+           classpathref="build.classpath"
+           debug="on"
+           deprecation="off">
+      <include name="com/ibm/icu/impl/data/*Break*.java"/>
+      <include name="com/ibm/icu/lang/**/*"/>
+      <include name="com/ibm/icu/text/*BreakDictionary*.java"/>
+      <include name="com/ibm/icu/text/*BreakIterator*.java"/>
+      <include name="com/ibm/icu/text/UnicodeSetIterator.java"/>
     </javac>
   </target>
 
-  <target name="propertiesBasicTests" depends="propertiesBasic" description="test propertiesBasic modular build target">
-    <copy file="${src.dir}/com/ibm/icu/dev/data/unicode/SpecialCasing.txt" todir="${build.dir}/com/ibm/icu/dev/data/unicode/" />
-
-    <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}" debug="on" deprecation="off">
-
-      <exclude name="**/CVS/**/*" />
-      <exclude name="com/ibm/icu/dev/test/lang/TestUScriptRun.java" />
-
-      <include name="com/ibm/icu/dev/test/lang/**/*.java" />
-      <include name="com/ibm/icu/dev/test/TestAll.java" />
-      <include name="com/ibm/icu/dev/test/TestFmwk.java" />
-      <include name="com/ibm/icu/dev/test/TestLog.java" />
-      <include name="com/ibm/icu/dev/test/TestUtil.java" />
-      <include name="com/ibm/icu/dev/test/UTF16Util.java" />
+  <target name="propertiesTests">
+    <javac srcdir="${src.dir}"
+           destdir="${build.dir}"
+           classpathref="build.classpath"
+           source="${icu4j.javac.source}"
+           target="${icu4j.javac.target}"
+           debug="on"
+           deprecation="off">
+      <patternset refid="common.test.sources" />
+      <include name="com/ibm/icu/dev/test/lang/**/*.java"/>
+      <exclude name="com/ibm/icu/dev/test/lang/TestUScriptRun.java"/>
     </javac>
+    <copy file="${src.dir}/com/ibm/icu/dev/data/unicode/SpecialCasing.txt"
+          todir="${build.dir}/com/ibm/icu/dev/data/unicode/" />
   </target>
 
-  <target name="propertiesFullTests" depends="propertiesFull" description="test propertiesFull modular build target">
-    <copy file="${src.dir}/com/ibm/icu/dev/data/unicode/SpecialCasing.txt" todir="${build.dir}/com/ibm/icu/dev/data/unicode/" />
-    <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}" debug="on" deprecation="off">
-
-      <exclude name="**/CVS/**/*" />
-      <exclude name="com/ibm/icu/dev/test/lang/TestUScriptRun.java" />
-
-      <include name="com/ibm/icu/dev/test/lang/**/*.java" />
-      <include name="com/ibm/icu/dev/test/TestAll.java" />
-      <include name="com/ibm/icu/dev/test/TestFmwk.java" />
-      <include name="com/ibm/icu/dev/test/TestLog.java" />
-      <include name="com/ibm/icu/dev/test/TestUtil.java" />
-      <include name="com/ibm/icu/dev/test/UTF16Util.java" />
-      <include name="com/ibm/icu/impl/data/*Break*.java" />
-      <include name="com/ibm/icu/text/*BreakDictionary*.java" />
-      <include name="com/ibm/icu/text/*BreakIterator*.java" />
-    </javac>
+  <!-- Module: Transliterator -->
+  <target name="copyTranslitData" depends="init">
+    <!-- Calendar does not require Collation data, BreakIterator data -->
+    <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
+      <patternset>
+        <include name="**/unorm.icu" />
+        <include name="**/uprops.icu" />
+        <include name="**/ubidi.icu" />
+        <include name="**/ucase.icu" />
+        <include name="**/unames.icu" />
+        <include name="**/pnames.icu" />
+        <include name="**/*.brk" />
+        <include name="**/translit/*.res" />
+      </patternset>
+    </unjar>
+    <touch file="${build.dir}/${icu4j.data.path}/uprops.icu" />
   </target>
-
-  <!--
-            Targets to build only Compression API API and tests
-     -->
-  <target name="compression" depends="init" description="modular build of compression services">
-    <javac sourcepath="" srcdir="${src.dir}" destdir="${build.dir}" source="${icu4j.javac.source}" target="${icu4j.javac.target}" classpathref="build.classpath" debug="on" deprecation="off">
-
-      <exclude name="**/CVS/**/*" />
-      <include name="com/ibm/icu/text/SCSU.java" />
-      <include name="com/ibm/icu/text/UnicodeCompressor.java" />
-      <include name="com/ibm/icu/text/UnicodeDecompressor.java" />
-
-    </javac>
-  </target>
-
-  <target name="compressionTests" depends="compression" description="test compression modular build target">
-    <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}" debug="on" deprecation="off">
-
-      <exclude name="**/CVS/**/*" />
-
-      <include name="com/ibm/icu/dev/test/TestAll.java" />
-      <include name="com/ibm/icu/dev/test/TestFmwk.java" />
-      <include name="com/ibm/icu/dev/test/TestLog.java" />
-      <include name="com/ibm/icu/dev/test/TestUtil.java" />
-      <include name="com/ibm/icu/dev/test/UTF16Util.java" />
-      <include name="com/ibm/icu/dev/test/compression/**/*.java" />
-    </javac>
-  </target>
-
-  <!--
-            Targets to build only Calendar API and Calendar tests
-     -->
-  <target name="calendar" depends="init,copyCalendarData" description="modular build of calendar services">
-    <javac sourcepath="" srcdir="${src.dir}" destdir="${build.dir}" source="${icu4j.javac.source}" target="${icu4j.javac.target}" classpathref="build.classpath" debug="on" deprecation="off">
-
-      <exclude name="**/CVS/**/*" />
-      <exclude name="com/ibm/icu/impl/UtilityExtensions.java" />
-      <exclude name="com/ibm/icu/lang/UScriptRun.java" />
-
-      <include name="com/ibm/icu/impl/data/*Calendar*.java" />
-      <include name="com/ibm/icu/impl/data/*Holiday*.java" />
-      <include name="com/ibm/icu/impl/Assert.java" />
-      <include name="com/ibm/icu/impl/BOCU.java" />
-      <include name="com/ibm/icu/impl/CalendarAstronomer.java" />
-      <include name="com/ibm/icu/impl/CalendarCache.java" />
-      <include name="com/ibm/icu/impl/CalendarData.java" />
-      <include name="com/ibm/icu/impl/CharacterIteratorWrapper.java" />
-      <include name="com/ibm/icu/impl/CharTrie.java" />
-      <include name="com/ibm/icu/impl/DateNumberFormat.java" />
-      <include name="com/ibm/icu/impl/Grego.java" />
-      <include name="com/ibm/icu/impl/ICUBinary.java" />
-      <include name="com/ibm/icu/impl/ICUBinaryStream.java" />
-      <include name="com/ibm/icu/impl/ICUCache.java" />
-      <include name="com/ibm/icu/impl/ICUData.java" />
-      <include name="com/ibm/icu/impl/ICUDebug.java" />
-      <include name="com/ibm/icu/impl/ICUListResourceBundle.java" />
-      <include name="com/ibm/icu/impl/ICULocaleData.java" />
-      <include name="com/ibm/icu/impl/ICULocaleService.java" />
-      <include name="com/ibm/icu/impl/ICUNotifier.java" />
-      <include name="com/ibm/icu/impl/ICUResourceBundle.java" />
-      <include name="com/ibm/icu/impl/ICUResourceBundleImpl.java" />
-      <include name="com/ibm/icu/impl/ICUResourceBundleIterator.java" />
-      <include name="com/ibm/icu/impl/ICUResourceBundleReader.java" />
-      <include name="com/ibm/icu/impl/ICURWLock.java" />
-      <include name="com/ibm/icu/impl/ICUService.java" />
-      <include name="com/ibm/icu/impl/ImplicitCEGenerator.java" />
-      <include name="com/ibm/icu/impl/IntTrie.java" />
-      <include name="com/ibm/icu/impl/IntTrieBuilder.java" />
-      <include name="com/ibm/icu/impl/JDKTimeZone.java" />
-      <include name="com/ibm/icu/impl/LocaleUtility.java" />
-      <include name="com/ibm/icu/impl/NormalizerDataReader.java" />
-      <include name="com/ibm/icu/impl/NormalizerImpl.java" />
-      <include name="com/ibm/icu/impl/OlsonTimeZone.java" />
-      <include name="com/ibm/icu/impl/ReplaceableUCharacterIterator.java" />
-      <include name="com/ibm/icu/impl/ResourceBundleReader.java" />
-      <include name="com/ibm/icu/impl/ResourceBundleWrapper.java" />
-      <include name="com/ibm/icu/impl/RuleCharacterIterator.java" />
-      <include name="com/ibm/icu/impl/SimpleCache.java" />
-      <include name="com/ibm/icu/impl/SortedSetRelation.java" />
-      <include name="com/ibm/icu/impl/StringUCharacterIterator.java" />
-      <include name="com/ibm/icu/impl/TextTrieMap.java" />
-      <include name="com/ibm/icu/impl/TimeZoneAdapter.java" />
-      <include name="com/ibm/icu/impl/Trie.java" />
-      <include name="com/ibm/icu/impl/TrieBuilder.java" />
-      <include name="com/ibm/icu/impl/TrieIterator.java" />
-      <include name="com/ibm/icu/impl/UBiDiProps.java" />
-      <include name="com/ibm/icu/impl/UCaseProps.java" />
-      <include name="com/ibm/icu/impl/UCharArrayIterator.java" />
-      <include name="com/ibm/icu/impl/UCharacterIteratorWrapper.java" />
-      <include name="com/ibm/icu/impl/UCharacterName.java" />
-      <include name="com/ibm/icu/impl/UCharacterNameChoice.java" />
-      <include name="com/ibm/icu/impl/UCharacterNameReader.java" />
-      <include name="com/ibm/icu/impl/UCharacterProperty.java" />
-      <include name="com/ibm/icu/impl/UCharacterPropertyReader.java" />
-      <include name="com/ibm/icu/impl/UCharacterUtility.java" />
-      <include name="com/ibm/icu/impl/URLHandler.java" />
-      <include name="com/ibm/icu/impl/USerializedSet.java" />
-      <include name="com/ibm/icu/impl/Utility.java" />
-      <include name="com/ibm/icu/impl/UPropertyAliases.java" />
-      <include name="com/ibm/icu/impl/ZoneInfoExt.java" />
-      <include name="com/ibm/icu/impl/ZoneMeta.java" />
-      <include name="com/ibm/icu/lang/*" />
-      <include name="com/ibm/icu/math/BigDecimal.java" />
-      <include name="com/ibm/icu/math/MathContext.java" />
-      <include name="com/ibm/icu/text/BreakIterator.java" />
-      <include name="com/ibm/icu/text/CanonicalIterator.java" />
-      <include name="com/ibm/icu/text/ChineseDateFormat.java" />
-      <include name="com/ibm/icu/text/ChineseDateFormatSymbols.java" />
-      <include name="com/ibm/icu/text/CollationElementIterator.java" />
-      <include name="com/ibm/icu/text/CollationKey.java" />
-      <include name="com/ibm/icu/text/CollationRuleParser.java" />
-      <include name="com/ibm/icu/text/CollationParsedRuleBuilder.java" />
-      <include name="com/ibm/icu/text/Collator.java" />
-      <include name="com/ibm/icu/text/CollatorReader.java" />
-      <include name="com/ibm/icu/text/DateFormat.java" />
-      <include name="com/ibm/icu/text/DateFormatSymbols.java" />
-      <include name="com/ibm/icu/text/DecimalFormat.java" />
-      <include name="com/ibm/icu/text/DecimalFormatSymbols.java" />
-      <include name="com/ibm/icu/text/DigitList.java" />
-      <include name="com/ibm/icu/text/MessageFormat.java" />
-      <include name="com/ibm/icu/text/NFRule.java" />
-      <include name="com/ibm/icu/text/NFRuleSet.java" />
-      <include name="com/ibm/icu/text/NFSubstitution.java" />
-      <include name="com/ibm/icu/text/Normalizer.java" />
-      <include name="com/ibm/icu/text/NumberFormat.java" />
-      <include name="com/ibm/icu/text/NumberFormat*Shim.java" />
-      <include name="com/ibm/icu/text/PluralFormat.java" />
-      <include name="com/ibm/icu/text/PluralRules.java" />
-      <include name="com/ibm/icu/text/RawCollationKey.java" />
-      <include name="com/ibm/icu/text/RBNFPostProcessor.java" />
-      <include name="com/ibm/icu/text/Replaceable.java" />
-      <include name="com/ibm/icu/text/ReplaceableString.java" />
-      <include name="com/ibm/icu/text/RuleBasedCollator.java" />
-      <include name="com/ibm/icu/text/RuleBasedNumberFormat.java" />
-      <include name="com/ibm/icu/text/SimpleDateFormat.java" />
-      <include name="com/ibm/icu/text/SymbolTable.java" />
-      <include name="com/ibm/icu/text/UCharacterIterator.java" />
-      <include name="com/ibm/icu/text/UFormat.java" />
-      <include name="com/ibm/icu/text/UForwardCharacterIterator.java" />
-      <include name="com/ibm/icu/text/UnicodeFilter.java" />
-      <include name="com/ibm/icu/text/UnicodeMatcher.java" />
-      <include name="com/ibm/icu/text/UnicodeSet.java" />
-      <include name="com/ibm/icu/text/UnicodeSetIterator.java" />
-      <include name="com/ibm/icu/text/UTF16.java" />
-      <include name="com/ibm/icu/util/AnnualTimeZoneRule.java" />
-      <include name="com/ibm/icu/util/BasicTimeZone.java" />
-      <include name="com/ibm/icu/util/ByteArrayWrapper.java" />
-      <include name="com/ibm/icu/util/Currency.java" />
-      <include name="com/ibm/icu/util/CurrencyAmount.java" />
-      <include name="com/ibm/icu/util/*Calendar*.java" />
-      <include name="com/ibm/icu/util/DateRule.java" />
-      <include name="com/ibm/icu/util/DateTimeRule.java" />
-      <include name="com/ibm/icu/util/Freezable.java" />
-      <include name="com/ibm/icu/util/*Holiday*.java" />
-      <include name="com/ibm/icu/util/InitialTimeZoneRule.java" />
-      <include name="com/ibm/icu/util/Measure.java" />
-      <include name="com/ibm/icu/util/MeasureUnit.java" />
-      <include name="com/ibm/icu/util/RangeDateRule.java" />
-      <include name="com/ibm/icu/util/RangeValueIterator.java" />
-      <include name="com/ibm/icu/util/SimpleDateRule.java" />
-      <include name="com/ibm/icu/util/SimpleTimeZone.java" />
-      <include name="com/ibm/icu/util/StringTokenizer.java" />
-      <include name="com/ibm/icu/util/STZInfo.java" />
-      <include name="com/ibm/icu/util/TimeArrayTimeZoneRule.java" />
-      <include name="com/ibm/icu/util/TimeZone.java" />
-      <include name="com/ibm/icu/util/TimeZoneRule.java" />
-      <include name="com/ibm/icu/util/TimeZoneTransition.java" />
-      <include name="com/ibm/icu/util/ULocale.java" />
-      <include name="com/ibm/icu/util/UResourceBundle.java" />
-      <include name="com/ibm/icu/util/UResourceBundleIterator.java" />
-      <include name="com/ibm/icu/util/UResourceTypeMismatchException.java" />
-      <include name="com/ibm/icu/util/ValueIterator.java" />
-      <include name="com/ibm/icu/util/VersionInfo.java" />
-
-    </javac>
-  </target>
-
-  <target name="calendarTests" depends="calendar" description="test calendar modular build target">
-    <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}" debug="on" deprecation="off">
-
-      <exclude name="**/CVS/**/*" />
-
-      <include name="com/ibm/icu/dev/test/calendar/**/*" />
-      <include name="com/ibm/icu/dev/test/TestAll.java" />
-      <include name="com/ibm/icu/dev/test/TestFmwk.java" />
-      <include name="com/ibm/icu/dev/test/TestLog.java" />
-      <include name="com/ibm/icu/dev/test/TestUtil.java" />
-      <include name="com/ibm/icu/dev/test/UTF16Util.java" />
-    </javac>
-  </target>
-
-  <!--
-            Targets to build only Transliterator API and  tests
-     -->
 
   <target name="transliterator" depends="init,propertiesClasses,copyTranslitData" description="modular build of unicode transform services">
-    <javac sourcepath="" srcdir="${src.dir}" destdir="${build.dir}" source="${icu4j.javac.source}" target="${icu4j.javac.target}" classpathref="build.classpath" debug="on" deprecation="off">
-
-      <exclude name="**/CVS/**/*" />
-      <exclude name="com/ibm/icu/impl/BOCU.java" />
-      <exclude name="com/ibm/icu/impl/TrieBuilder.java" />
-      <exclude name="com/ibm/icu/lang/UScriptRun.java" />
-      <exclude name="com/ibm/icu/text/UnicodeFilterLogic*.java" />
-
-      <include name="com/ibm/icu/impl/data/ResourceReader.java" />
-      <include name="com/ibm/icu/impl/*Iterator*.java" />
-      <include name="com/ibm/icu/impl/*Property*.java" />
-      <include name="com/ibm/icu/impl/ICULocaleService.java" />
-      <include name="com/ibm/icu/impl/ICUNotifier.java" />
-      <include name="com/ibm/icu/impl/ICURWLock.java" />
-      <include name="com/ibm/icu/impl/ICUService.java" />
-      <include name="com/ibm/icu/impl/IntTrieBuilder.java" />
-      <include name="com/ibm/icu/impl/UtilityExtensions.java" />
-      <include name="com/ibm/icu/text/BreakIteratorFactory.java" />
-      <include name="com/ibm/icu/text/*Transliterator*.java" />
-      <include name="com/ibm/icu/text/DictionaryBasedBreakIterator.java" />
-      <include name="com/ibm/icu/text/FunctionReplacer.java" />
-      <include name="com/ibm/icu/text/Quantifier.java" />
-      <include name="com/ibm/icu/text/RBBIDataWrapper.java" />
-      <include name="com/ibm/icu/text/RBBINode.java" />
-      <include name="com/ibm/icu/text/RBBIRuleBuilder.java" />
-      <include name="com/ibm/icu/text/RBBIRuleParseTable.java" />
-      <include name="com/ibm/icu/text/RBBIRuleScanner.java" />
-      <include name="com/ibm/icu/text/RBBISetBuilder.java" />
-      <include name="com/ibm/icu/text/RBBISymbolTable.java" />
-      <include name="com/ibm/icu/text/RBBITableBuilder.java" />
-      <include name="com/ibm/icu/text/ReplaceableContextIterator.java" />
-      <include name="com/ibm/icu/text/RuleBasedBreakIterator.java" />
-      <include name="com/ibm/icu/text/RuleBasedBreakIterator_New.java" />
-      <include name="com/ibm/icu/text/RuleBasedBreakIterator_Old.java" />
-      <include name="com/ibm/icu/text/StringMatcher.java" />
-      <include name="com/ibm/icu/text/StringReplacer.java" />
-      <include name="com/ibm/icu/text/TransliterationRule.java" />
-      <include name="com/ibm/icu/text/TransliterationRuleSet.java" />
-      <include name="com/ibm/icu/text/UnicodeReplacer.java" />
-      <include name="com/ibm/icu/text/UnicodeSetIterator.java" />
-      <include name="com/ibm/icu/util/CaseInsensitiveString.java" />
+    <javac srcdir="${src.dir}"
+           destdir="${build.dir}"
+           source="${icu4j.javac.source}"
+           target="${icu4j.javac.target}"
+           classpathref="build.classpath"
+           debug="on"
+           deprecation="off">
+      <include name="com/ibm/icu/impl/*Iterator*.java"/>
+      <include name="com/ibm/icu/impl/*Property*.java"/>
+      <include name="com/ibm/icu/impl/data/ResourceReader.java"/>
+      <include name="com/ibm/icu/impl/UtilityExtensions.java"/>
+      <include name="com/ibm/icu/text/*Transliterator*.java"/>
+      <include name="com/ibm/icu/text/UnicodeSetIterator.java"/>
     </javac>
   </target>
 
-  <target name="transliteratorTests" depends="transliterator" description="test transliterator modular build target">
-    <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}" debug="on" deprecation="off">
-
-      <exclude name="**/CVS/**/*" />
-      <exclude name="com/ibm/icu/dev/test/translit/UnicodeFilterLogic*.java" />
-
-      <include name="com/ibm/icu/dev/test/TestAll.java" />
-      <include name="com/ibm/icu/dev/test/TestFmwk.java" />
-      <include name="com/ibm/icu/dev/test/TestLog.java" />
-      <include name="com/ibm/icu/dev/test/TestUtil.java" />
-      <include name="com/ibm/icu/dev/test/translit/**/*" />
-      <include name="com/ibm/icu/dev/test/UTF16Util.java" />
+  <target name="transliteratorTests" depends="transliterator" description = "test transliterator modular build target">
+    <javac srcdir="${src.dir}"
+           destdir="${build.dir}"
+           classpathref="build.classpath"
+           source="${icu4j.javac.source}"
+           target="${icu4j.javac.target}"
+           debug="on"
+           deprecation="off">
+      <patternset refid="common.test.sources" />
+      <include name="com/ibm/icu/dev/test/translit/**/*.java"/>
+      <exclude name="com/ibm/icu/dev/test/translit/UnicodeFilterLogic*.java"/>
     </javac>
   </target>
 
-  <!--
-            Targets to build only Format API
-     -->
-
-  <target name="format" depends="init,copyFormatData" description="modular build of formatting services">
-    <javac sourcepath="" srcdir="${src.dir}" destdir="${build.dir}" source="${icu4j.javac.source}" target="${icu4j.javac.target}" classpathref="build.classpath" debug="on" deprecation="off">
-
-      <exclude name="**/CVS/**/*" />
-      <exclude name="com/ibm/icu/impl/UtilityExtensions.java" />
-      <exclude name="com/ibm/icu/lang/UScriptRun.java" />
-
-      <include name="com/ibm/icu/impl/data/CalendarData*.java" />
-      <include name="com/ibm/icu/impl/Assert.java" />
-      <include name="com/ibm/icu/impl/BOCU.java" />
-      <include name="com/ibm/icu/impl/CalendarAstronomer.java" />
-      <include name="com/ibm/icu/impl/CalendarCache.java" />
-      <include name="com/ibm/icu/impl/CalendarData.java" />
-      <include name="com/ibm/icu/impl/CharacterIteratorWrapper.java" />
-      <include name="com/ibm/icu/impl/CharTrie.java" />
-      <include name="com/ibm/icu/impl/DateNumberFormat.java" />
-      <include name="com/ibm/icu/impl/Grego.java" />
-      <include name="com/ibm/icu/impl/ICUBinary.java" />
-      <include name="com/ibm/icu/impl/ICUBinaryStream.java" />
-      <include name="com/ibm/icu/impl/ICUData.java" />
-      <include name="com/ibm/icu/impl/ICUDebug.java" />
-      <include name="com/ibm/icu/impl/ICUCache.java" />
-      <include name="com/ibm/icu/impl/ICUListResourceBundle.java" />
-      <include name="com/ibm/icu/impl/ICULocaleData.java" />
-      <include name="com/ibm/icu/impl/ICULocaleService.java" />
-      <include name="com/ibm/icu/impl/ICUNotifier.java" />
-      <include name="com/ibm/icu/impl/ICUResourceBundle.java" />
-      <include name="com/ibm/icu/impl/ICUResourceBundleImpl.java" />
-      <include name="com/ibm/icu/impl/ICUResourceBundleIterator.java" />
-      <include name="com/ibm/icu/impl/ICUResourceBundleReader.java" />
-      <include name="com/ibm/icu/impl/ICURWLock.java" />
-      <include name="com/ibm/icu/impl/ICUService.java" />
-      <include name="com/ibm/icu/impl/ImplicitCEGenerator.java" />
-      <include name="com/ibm/icu/impl/IntTrie.java" />
-      <include name="com/ibm/icu/impl/IntTrieBuilder.java" />
-      <include name="com/ibm/icu/impl/JDKTimeZone.java" />
-      <include name="com/ibm/icu/impl/LocaleUtility.java" />
-      <include name="com/ibm/icu/impl/NormalizerDataReader.java" />
-      <include name="com/ibm/icu/impl/NormalizerImpl.java" />
-      <include name="com/ibm/icu/impl/OlsonTimeZone.java" />
-      <include name="com/ibm/icu/impl/ReplaceableUCharacterIterator.java" />
-      <include name="com/ibm/icu/impl/ResourceBundleWrapper.java" />
-      <include name="com/ibm/icu/impl/RuleCharacterIterator.java" />
-      <include name="com/ibm/icu/impl/SimpleCache.java" />
-      <include name="com/ibm/icu/impl/SortedSetRelation.java" />
-      <include name="com/ibm/icu/impl/StringUCharacterIterator.java" />
-      <include name="com/ibm/icu/impl/TextTrieMap.java" />
-      <include name="com/ibm/icu/impl/TimeZoneAdapter.java" />
-      <include name="com/ibm/icu/impl/Trie.java" />
-      <include name="com/ibm/icu/impl/TrieBuilder.java" />
-      <include name="com/ibm/icu/impl/TrieIterator.java" />
-      <include name="com/ibm/icu/impl/UBiDiProps.java" />
-      <include name="com/ibm/icu/impl/UCaseProps.java" />
-      <include name="com/ibm/icu/impl/UCharArrayIterator.java" />
-      <include name="com/ibm/icu/impl/UCharacterIteratorWrapper.java" />
-      <include name="com/ibm/icu/impl/UCharacterName.java" />
-      <include name="com/ibm/icu/impl/UCharacterNameChoice.java" />
-      <include name="com/ibm/icu/impl/UCharacterNameReader.java" />
-      <include name="com/ibm/icu/impl/UCharacterProperty.java" />
-      <include name="com/ibm/icu/impl/UCharacterPropertyReader.java" />
-      <include name="com/ibm/icu/impl/UCharacterUtility.java" />
-      <include name="com/ibm/icu/impl/UPropertyAliases.java" />
-      <include name="com/ibm/icu/impl/URLHandler.java" />
-      <include name="com/ibm/icu/impl/UResourceTypeMismatchException.java" />
-      <include name="com/ibm/icu/impl/USerializedSet.java" />
-      <include name="com/ibm/icu/impl/Utility.java" />
-      <include name="com/ibm/icu/impl/ZoneInfoExt.java" />
-      <include name="com/ibm/icu/impl/ZoneMeta.java" />
-      <include name="com/ibm/icu/lang/*" />
-      <include name="com/ibm/icu/math/BigDecimal.java" />
-      <include name="com/ibm/icu/math/MathContext.java" />
-      <include name="com/ibm/icu/text/BreakIterator.java" />
-      <include name="com/ibm/icu/text/*Collator*.java" />
-      <include name="com/ibm/icu/text/CanonicalIterator.java" />
-      <include name="com/ibm/icu/text/ChineseDateFormat.java" />
-      <include name="com/ibm/icu/text/CollationElementIterator.java" />
-      <include name="com/ibm/icu/text/CollationKey.java" />
-      <include name="com/ibm/icu/text/CollationParsedRuleBuilder.java" />
-      <include name="com/ibm/icu/text/CollationRuleParser.java" />
-      <include name="com/ibm/icu/text/CollatorReader.java" />
-      <include name="com/ibm/icu/text/DateTimeRule.java" />
-      <include name="com/ibm/icu/text/*Format*.java" />
-      <include name="com/ibm/icu/text/NFRule.java" />
-      <include name="com/ibm/icu/text/NFRuleSet.java" />
-      <include name="com/ibm/icu/text/NFSubstitution.java" />
-      <include name="com/ibm/icu/text/Normalizer.java" />
-      <include name="com/ibm/icu/text/DigitList.java" />
-      <include name="com/ibm/icu/text/PluralRules.java" />
-      <include name="com/ibm/icu/text/RawCollationKey.java" />
-      <include name="com/ibm/icu/text/RBNFPostProcessor.java" />
-      <include name="com/ibm/icu/text/Replaceable.java" />
-      <include name="com/ibm/icu/text/ReplaceableString.java" />
-      <include name="com/ibm/icu/text/SymbolTable.java" />
-      <include name="com/ibm/icu/text/UForwardCharacterIterator.java" />
-      <include name="com/ibm/icu/text/UCharacterIterator.java" />
-      <include name="com/ibm/icu/text/UnicodeFilter.java" />
-      <include name="com/ibm/icu/text/UnicodeMatcher.java" />
-      <include name="com/ibm/icu/text/UnicodeSet.java" />
-      <include name="com/ibm/icu/text/UnicodeSetIterator.java" />
-      <include name="com/ibm/icu/text/UTF16.java" />
-      <include name="com/ibm/icu/util/AnnualTimeZoneRule.java" />
-      <include name="com/ibm/icu/util/BasicTimeZone.java" />
-      <include name="com/ibm/icu/util/ByteArrayWrapper.java" />
-      <include name="com/ibm/icu/util/BuddhistCalendar.java" />
-      <include name="com/ibm/icu/util/Calendar.java" />
-      <include name="com/ibm/icu/util/CalendarData.java" />
-      <include name="com/ibm/icu/util/CalendarServiceShim.java" />
-      <include name="com/ibm/icu/util/CECalendar.java" />
-      <include name="com/ibm/icu/util/ChineseCalendar.java" />
-      <include name="com/ibm/icu/util/CopticCalendar.java" />
-      <include name="com/ibm/icu/util/Currency.java" />
-      <include name="com/ibm/icu/util/CurrencyAmount.java" />
-      <include name="com/ibm/icu/util/DateTimeRule.java" />
-      <include name="com/ibm/icu/util/EthiopicCalendar.java" />
-      <include name="com/ibm/icu/util/Freezable.java" />
-      <include name="com/ibm/icu/util/GregorianCalendar.java" />
-      <include name="com/ibm/icu/util/HebrewCalendar.java" />
-      <include name="com/ibm/icu/util/IndianCalendar.java" />
-      <include name="com/ibm/icu/util/InitialTimeZoneRule.java" />
-      <include name="com/ibm/icu/util/IslamicCalendar.java" />
-      <include name="com/ibm/icu/util/JapaneseCalendar.java" />
-      <include name="com/ibm/icu/util/Measure.java" />
-      <include name="com/ibm/icu/util/MeasureUnit.java" />
-      <include name="com/ibm/icu/util/RangeValueIterator.java" />
-      <include name="com/ibm/icu/util/SimpleTimeZone.java" />
-      <include name="com/ibm/icu/util/STZInfo.java" />
-      <include name="com/ibm/icu/util/StringTokenizer.java" />
-      <include name="com/ibm/icu/util/TaiwanCalendar.java" />
-      <include name="com/ibm/icu/util/TimeArrayTimeZoneRule.java" />
-      <include name="com/ibm/icu/util/TimeZone.java" />
-      <include name="com/ibm/icu/util/TimeZoneRule.java" />
-      <include name="com/ibm/icu/util/TimeZoneTransition.java" />
-      <include name="com/ibm/icu/util/ULocale.java" />
-      <include name="com/ibm/icu/util/UResourceBundle.java" />
-      <include name="com/ibm/icu/util/UResourceBundleIterator.java" />
-      <include name="com/ibm/icu/util/UResourceTypeMismatchException.java" />
-      <include name="com/ibm/icu/util/ValueIterator.java" />
-      <include name="com/ibm/icu/util/VersionInfo.java" />
-    </javac>
-  </target>
-
-  <target name="formatTests" depends="format" description="test format modular build target">
-    <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}" debug="on" deprecation="off">
-
-      <exclude name="**/CVS/**/*" />
-
-      <include name="com/ibm/icu/dev/test/format/**/*" />
-      <include name="com/ibm/icu/dev/test/TestAll.java" />
-      <include name="com/ibm/icu/dev/test/TestFmwk.java" />
-      <include name="com/ibm/icu/dev/test/TestLog.java" />
-      <include name="com/ibm/icu/dev/test/TestUtil.java" />
-      <include name="com/ibm/icu/dev/test/UTF16Util.java" />
-    </javac>
-    <copy file="${src.dir}/com/ibm/icu/dev/test/format/NumberFormatTestCases.txt" todir="${build.dir}/com/ibm/icu/dev/test/format" />
-  </target>
-
-  <!--
-            Targets to build only BreakIterator API
-     -->
-
-  <target name="breakIterator" depends="init,copyFullPropsData" description="modular build of break iterator services">
-    <javac sourcepath="" srcdir="${src.dir}" destdir="${build.dir}" source="${icu4j.javac.source}" target="${icu4j.javac.target}" classpathref="build.classpath" debug="on" deprecation="off">
-
-      <exclude name="**/CVS/**/*" />
-      <exclude name="com/ibm/icu/impl/BOCU.java" />
-      <exclude name="com/ibm/icu/impl/UtilityExtensions.java" />
-      <exclude name="com/ibm/icu/lang/UScriptRun.java" />
-
-      <include name="com/ibm/icu/impl/data/*Break*.java" />
-      <include name="com/ibm/icu/impl/Assert.java" />
-      <include name="com/ibm/icu/impl/CharacterIteratorWrapper.java" />
-      <include name="com/ibm/icu/impl/CharTrie.java" />
-      <include name="com/ibm/icu/impl/ICUBinary.java" />
-      <include name="com/ibm/icu/impl/ICUBinaryStream.java" />
-      <include name="com/ibm/icu/impl/ICUCache.java" />
-      <include name="com/ibm/icu/impl/ICUDebug.java" />
-      <include name="com/ibm/icu/impl/ICUData.java" />
-      <include name="com/ibm/icu/impl/ICUListResourceBundle.java" />
-      <include name="com/ibm/icu/impl/ICUListResourceBundleImpl.java" />
-      <include name="com/ibm/icu/impl/ICULocaleData.java" />
-      <include name="com/ibm/icu/impl/ICULocaleService.java" />
-      <include name="com/ibm/icu/impl/ICUNotifier.java" />
-      <include name="com/ibm/icu/impl/ICUResourceBundle.java" />
-      <include name="com/ibm/icu/impl/ICUResourceBundleImpl.java" />
-      <include name="com/ibm/icu/impl/ICUResourceBundleIterator.java" />
-      <include name="com/ibm/icu/impl/ICUResourceBundleReader.java" />
-      <include name="com/ibm/icu/impl/ICURWLock.java" />
-      <include name="com/ibm/icu/impl/ICUService.java" />
-      <include name="com/ibm/icu/impl/IntTrie.java" />
-      <include name="com/ibm/icu/impl/IntTrieBuilder.java" />
-      <include name="com/ibm/icu/impl/LocaleUtility.java" />
-      <include name="com/ibm/icu/impl/NormalizerDataReader.java" />
-      <include name="com/ibm/icu/impl/NormalizerImpl.java" />
-      <include name="com/ibm/icu/impl/ReplaceableUCharacterIterator.java" />
-      <include name="com/ibm/icu/impl/ResourceBundleWrapper.java" />
-      <include name="com/ibm/icu/impl/RuleCharacterIterator.java" />
-      <include name="com/ibm/icu/impl/SortedSetRelation.java" />
-      <include name="com/ibm/icu/impl/SimpleCache.java" />
-      <include name="com/ibm/icu/impl/Trie.java" />
-      <include name="com/ibm/icu/impl/TrieIterator.java" />
-      <include name="com/ibm/icu/impl/TrieBuilder.java" />
-      <include name="com/ibm/icu/impl/UBiDiProps.java" />
-      <include name="com/ibm/icu/impl/UCaseProps.java" />
-      <include name="com/ibm/icu/impl/UCharacterIteratorWrapper.java" />
-      <include name="com/ibm/icu/impl/UCharacterName.java" />
-      <include name="com/ibm/icu/impl/UCharacterNameChoice.java" />
-      <include name="com/ibm/icu/impl/UCharacterNameReader.java" />
-      <include name="com/ibm/icu/impl/UCharacterProperty.java" />
-      <include name="com/ibm/icu/impl/UCharacterPropertyReader.java" />
-      <include name="com/ibm/icu/impl/UCharacterUtility.java" />
-      <include name="com/ibm/icu/impl/UCharArrayIterator.java" />
-      <include name="com/ibm/icu/impl/UPropertyAliases.java" />
-      <include name="com/ibm/icu/impl/URLHandler.java" />
-      <include name="com/ibm/icu/impl/USerializedSet.java" />
-      <include name="com/ibm/icu/impl/Utility.java" />
-      <include name="com/ibm/icu/lang/**/*" />
-      <include name="com/ibm/icu/text/*BreakIterator*.java" />
-      <include name="com/ibm/icu/text/BreakDictionary.java" />
-      <include name="com/ibm/icu/text/Normalizer.java" />
-      <include name="com/ibm/icu/text/RBBINode.java" />
-      <include name="com/ibm/icu/text/RBBIDataWrapper.java" />
-      <include name="com/ibm/icu/text/RBBINode.java" />
-      <include name="com/ibm/icu/text/RBBIRuleBuilder.java" />
-      <include name="com/ibm/icu/text/RBBIRuleParseTable.java" />
-      <include name="com/ibm/icu/text/RBBIRuleScanner.java" />
-      <include name="com/ibm/icu/text/RBBISetBuilder.java" />
-      <include name="com/ibm/icu/text/RBBISymbolTable.java" />
-      <include name="com/ibm/icu/text/RBBITableBuilder.java" />
-      <include name="com/ibm/icu/text/Replaceable.java" />
-      <include name="com/ibm/icu/text/ReplaceableString.java" />
-      <include name="com/ibm/icu/text/SymbolTable.java" />
-      <include name="com/ibm/icu/text/UCharacterIterator.java" />
-      <include name="com/ibm/icu/text/UForwardCharacterIterator.java" />
-      <include name="com/ibm/icu/text/UnicodeFilter.java" />
-      <include name="com/ibm/icu/text/UnicodeMatcher.java" />
-      <include name="com/ibm/icu/text/UnicodeSet.java" />
-      <include name="com/ibm/icu/text/UnicodeSetIterator.java" />
-      <include name="com/ibm/icu/text/UTF16.java" />
-      <include name="com/ibm/icu/util/CompactByteArray.java" />
-      <include name="com/ibm/icu/util/Freezable.java" />
-      <include name="com/ibm/icu/util/RangeValueIterator.java" />
-      <include name="com/ibm/icu/util/StringTokenizer.java" />
-      <include name="com/ibm/icu/util/UResourceBundle.java" />
-      <include name="com/ibm/icu/util/UResourceBundleIterator.java" />
-      <include name="com/ibm/icu/util/UResourceTypeMismatchException.java" />
-      <include name="com/ibm/icu/util/ULocale.java" />
-      <include name="com/ibm/icu/util/ValueIterator.java" />
-      <include name="com/ibm/icu/util/VersionInfo.java" />
-    </javac>
-
-    <copy file="${src.dir}/com/ibm/icu/impl/data/th.brk" todir="${build.dir}/com/ibm/icu/impl/data/" />
-  </target>
-
-  <target name="breakIteratorTests" depends="breakIterator" description="test breakIterator modular build target">
-    <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}" debug="on" deprecation="off">
-
-      <exclude name="**/CVS/**/*" />
-
-      <include name="com/ibm/icu/dev/test/rbbi/**/*" />
-      <include name="com/ibm/icu/dev/test/TestAll.java" />
-      <include name="com/ibm/icu/dev/test/TestFmwk.java" />
-      <include name="com/ibm/icu/dev/test/TestLog.java" />
-      <include name="com/ibm/icu/dev/test/TestUtil.java" />
-      <include name="com/ibm/icu/dev/test/UTF16Util.java" />
-    </javac>
-    <copy file="${src.dir}/com/ibm/icu/dev/test/rbbi/rbbitst.txt" todir="${build.dir}/com/ibm/icu/dev/test/rbbi" />
-  </target>
-
-  <!--
-            Targets to build only StringPrep and IDNA API
-     -->
+  <!-- Module: StringPrep, IDNA -->
   <target name="copyStringPrepData" depends="init">
     <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
       <patternset>
-        <!-- arrgh, includes attributes of patternset does not work here in ant 1.5.3 -->
         <include name="**/*.spp" />
         <include name="**/ubidi.icu" />
         <include name="**/ucase.icu" />
@@ -1723,42 +1127,39 @@
   </target>
 
   <target name="stringPrep" depends="init,normalizer,copyStringPrepData" description="modular build of stringprep services">
-    <javac sourcepath="" srcdir="${src.dir}" destdir="${build.dir}" source="${icu4j.javac.source}" target="${icu4j.javac.target}" classpathref="build.classpath" debug="on" deprecation="off">
-
-      <exclude name="**/CVS/**/*" />
-      <exclude name="com/ibm/icu/impl/BOCU.java" />
-      <exclude name="com/ibm/icu/impl/Calendar*.java" />
-      <exclude name="com/ibm/icu/impl/IntTrieBuilder.java" />
-      <exclude name="com/ibm/icu/impl/TrieBuilder.java" />
-      <exclude name="com/ibm/icu/impl/UtilityExtensions.java" />
-      <exclude name="com/ibm/icu/lang/UScriptRun.java" />
-
-      <include name="com/ibm/icu/impl/*StringPrep*.java" />
-      <include name="com/ibm/icu/text/*StringPrep*.java" />
-      <include name="com/ibm/icu/text/*IDNA*.java" />
-      <include name="com/ibm/icu/text/Punycode.java" />
-
+    <javac srcdir="${src.dir}"
+           destdir="${build.dir}"
+           source="${icu4j.javac.source}"
+           target="${icu4j.javac.target}"
+           classpathref="build.classpath"
+           debug="on"
+           deprecation="off">
+      <include name="com/ibm/icu/impl/*StringPrep*.java"/>
+      <include name="com/ibm/icu/text/*IDNA*.java"/>
+      <include name="com/ibm/icu/text/*StringPrep*.java"/>
     </javac>
   </target>
 
   <target name="stringPrepTests" depends="stringPrep" description="test stringPrep modular build target">
-    <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}" debug="on" deprecation="off">
-
-      <exclude name="**/CVS/**/*" />
-      <include name="com/ibm/icu/dev/test/stringprep/**/*" />
-      <include name="com/ibm/icu/dev/test/TestAll.java" />
-      <include name="com/ibm/icu/dev/test/TestFmwk.java" />
-      <include name="com/ibm/icu/dev/test/TestLog.java" />
-      <include name="com/ibm/icu/dev/test/TestUtil.java" />
-      <include name="com/ibm/icu/dev/test/UTF16Util.java" />
+    <javac srcdir="${src.dir}"
+           destdir="${build.dir}"
+           classpathref="build.classpath"
+           source="${icu4j.javac.source}"
+           target="${icu4j.javac.target}"
+           debug="on"
+           deprecation="off">
+      <patternset refid="common.test.sources" />
+      <include name="com/ibm/icu/dev/test/stringprep/**/*.java"/>
     </javac>
     <unjar src="${src.dir}/com/ibm/icu/dev/data/testdata.jar" dest="${build.dir}">
       <patternset>
-        <include name="**/*.spp" />
-        <include name="**/idna_rules.res" />
+        <include name="**/*.spp"/>
+        <include name="**/idna_rules.res"/>
       </patternset>
     </unjar>
   </target>
+
+
 
   <target name="excludeCharset" depends="core" description="excludes charset module from ICU4J">
     <delete failonerror="yes">
