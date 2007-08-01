@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1998-2000, International Business Machines
+*   Copyright (C) 1998-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -43,7 +43,7 @@ int main(int argc, char **argv)
 /* Protos */
 static void usage(void);
 static void version(void);
-static void date(const UChar *tz, UDateFormatStyle style, UErrorCode *status);
+static void date(const UChar *tz, UDateFormatStyle style, char *format, UErrorCode *status);
 
 
 /* The version of date */
@@ -64,6 +64,7 @@ main(int argc,
   const UChar *tz = 0;
   UDateFormatStyle style = UDAT_DEFAULT;
   UErrorCode status = U_ZERO_ERROR;
+  char *format = NULL;
 
 
   /* parse the options */
@@ -98,6 +99,12 @@ main(int argc,
     else if(strcmp(arg, "-s") == 0 || strcmp(arg, "--short") == 0) {
       style = UDAT_SHORT;
     }
+    else if(strcmp(arg, "-F") == 0 || strcmp(arg, "--format") == 0) {
+      if ( optind + 1 < argc ) { 
+         optind++;
+         format = argv[optind];
+      }
+    }
     /* POSIX.1 says all arguments after -- are not options */
     else if(strcmp(arg, "--") == 0) {
       /* skip the -- */
@@ -128,7 +135,7 @@ main(int argc,
   }
 
   /* print the date */
-  date(tz, style, &status);
+  date(tz, style, format, &status);
 
   u_cleanup();
   return (U_FAILURE(status) ? 1 : 0);
@@ -162,13 +169,19 @@ version()
 static void
 date(const UChar *tz,
      UDateFormatStyle style,
+     char *format,
      UErrorCode *status)
 {
   UChar *s = 0;
   int32_t len = 0;
   UDateFormat *fmt;
+  UChar uFormat[100];
 
   fmt = udat_open(style, style, 0, tz, -1,NULL,0, status);
+  if ( format != NULL ) {
+     u_charsToUChars(format,uFormat,strlen(format)),
+     udat_applyPattern(fmt,FALSE,uFormat,strlen(format));
+  }
   len = udat_format(fmt, ucal_getNow(), 0, len, 0, status);
   if(*status == U_BUFFER_OVERFLOW_ERROR) {
     *status = U_ZERO_ERROR;
