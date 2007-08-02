@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 
@@ -42,8 +42,10 @@ public class IDNAConformanceTest extends TestFmwk {
             inputData = ReadInput.getInputData();
         } catch (UnsupportedEncodingException e) {
             errln(e.getMessage());
+            return;
         } catch (IOException e) {
             errln(e.getMessage());
+            return;
         }
         
         Set keyMap = inputData.keySet();

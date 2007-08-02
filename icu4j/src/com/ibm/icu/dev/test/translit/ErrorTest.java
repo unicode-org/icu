@@ -159,11 +159,8 @@ public class ErrorTest extends TestFmwk {
             logln("Test applying with the bad pattern.");
         }
         try {
-            UnicodeSet set1 = new UnicodeSet(badPattern);
+            new UnicodeSet(badPattern);
             errln("FAIL: Created a UnicodeSet based on bad patterns.");
-            if (set1 != null) {
-                errln("FAIL: Created a UnicodeSet based on bad patterns.");
-            }
         } catch (IllegalArgumentException e) {
             logln("Test constructing with the bad pattern.");
         }

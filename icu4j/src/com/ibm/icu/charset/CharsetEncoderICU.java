@@ -663,12 +663,10 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
         //write overflow 
         cnv.errorBufferLength = bytesLimit - bytesBegin;
         if(cnv.errorBufferLength >0) {
-            if(cnv!=null) {
-                int index = 0;     
-                while(bytesBegin<bytesLimit) {
-                    cnv.errorBuffer[index++]=bytesArray[bytesBegin++];
-                } 
-            }
+            int index = 0;     
+            while(bytesBegin<bytesLimit) {
+                cnv.errorBuffer[index++]=bytesArray[bytesBegin++];
+            } 
             cr = CoderResult.OVERFLOW;
         }
         return  cr;

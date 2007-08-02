@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -71,11 +71,6 @@ public class G7CollationTest extends TestFmwk{
             myCollation = new RuleBasedCollator(newRules);
         } catch(Exception e) {
             errln("Fail to create RuleBasedCollator with rules:" + newRules);
-            return;
-        }
-        
-        if (myCollation == null) {
-            errln("Demo Test 2 Table Collation object creation failed.");
             return;
         }
         
