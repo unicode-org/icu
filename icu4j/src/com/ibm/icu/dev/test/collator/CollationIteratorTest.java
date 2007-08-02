@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -252,6 +252,7 @@ public class CollationIteratorTest extends TestFmwk {
             tailored = new RuleBasedCollator("& a < ch");
         } catch (Exception e) {
             errln("Error: in creation of Spanish collator");
+            return;
         }
         iter = tailored.getCollationElementIterator(contraction);
         int order[] = CollationTest.getOrders(iter);
@@ -379,6 +380,7 @@ public class CollationIteratorTest extends TestFmwk {
             c5 = Collator.getInstance(new Locale("ja", "JP", ""));
         } catch (Exception e) {
             errln("Couldn't create Japanese collator\n");
+            return;
         }
         iter = ((RuleBasedCollator)c5).getCollationElementIterator(source);
         
