@@ -48,7 +48,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
       
       // modify the generator by adding patterns
       DateTimePatternGenerator.PatternInfo returnInfo = new DateTimePatternGenerator.PatternInfo();
-      gen.add("d'. von' MMMM", true, returnInfo); 
+      gen.addPattern("d'. von' MMMM", true, returnInfo); 
       // the returnInfo is mostly useful for debugging problem cases
       format.applyPattern(gen.getBestPattern("MMMMddHmm"));
       assertEquals("modified format: MMMddHmm", "8:58 14. von Oktober", format.format(sampleDate));
