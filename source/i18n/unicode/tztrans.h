@@ -31,10 +31,15 @@ class TimeZoneRule;
 class U_I18N_API TimeZoneTransition : public UObject {
 public:
     /**
-     *
+     * Constructs a <code>TimeZoneTransition</code> with the time and the rules before/after
+     * the transition.
+     * 
+     * @param time  The time of transition in milliseconds since the base time.
+     * @param from  The time zone rule used before the transition.
+     * @param to    The time zone rule used after the transition.
+     * @draft ICU 3.8
      */
-    TimeZoneTransition(const UDate& time, const TimeZoneRule& from, const TimeZoneRule& to);
-    TimeZoneTransition(const UDate& time, TimeZoneRule* from, TimeZoneRule* to);
+    TimeZoneTransition(UDate time, const TimeZoneRule& from, const TimeZoneRule& to);
 
     /**
      * Constructs an empty <code>TimeZoneTransition</code>

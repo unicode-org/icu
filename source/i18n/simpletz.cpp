@@ -1076,10 +1076,10 @@ SimpleTimeZone::initTransitionRules(UErrorCode& status) {
         // Create a TimeZoneRule for initial time
         if (firstStdStart < firstDstStart) {
             initialRule = new InitialTimeZoneRule(tzid+"(DST)", getRawOffset(), dstRule->getDSTSavings());
-            firstTransition = new TimeZoneTransition(firstStdStart, initialRule->clone(), stdRule->clone());
+            firstTransition = new TimeZoneTransition(firstStdStart, *initialRule, *stdRule);
         } else {
             initialRule = new InitialTimeZoneRule(tzid+"(STD)", getRawOffset(), 0);
-            firstTransition = new TimeZoneTransition(firstDstStart, initialRule->clone(), dstRule->clone());
+            firstTransition = new TimeZoneTransition(firstDstStart, *initialRule, *dstRule);
         }
         
     } else {
