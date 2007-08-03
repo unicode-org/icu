@@ -688,7 +688,7 @@ OlsonTimeZone::initTransitionRules(UErrorCode& status) {
             // Create initial transition
             typeIdx = (int16_t)typeData[firstTZTransitionIdx];
             firstTZTransition = new TimeZoneTransition(((UDate)transitionTimes[firstTZTransitionIdx]) * U_MILLIS_PER_SECOND,
-                    initialRule->clone(), historicRules[typeIdx]->clone());
+                    *initialRule, *historicRules[typeIdx]);
         }
     }
     if (initialRule == NULL) {
