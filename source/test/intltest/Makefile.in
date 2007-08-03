@@ -42,7 +42,7 @@ LIBS = $(LIBCTESTFW) $(LIBICUI18N) $(LIBICUUC) $(LIBICUTOOLUTIL) $(DEFAULT_LIBS)
 OBJECTS = aliastst.o allcoll.o apicoll.o astrotst.o callimts.o calregts.o caltest.o \
 caltztst.o canittst.o citrtest.o cntabcol.o convtest.o currcoll.o \
 dadrcal.o dadrcoll.o dcfmapts.o decoll.o dtfmapts.o dtfmrgts.o dtfmtrtts.o dtfmttst.o	\
-encoll.o escoll.o ficoll.o frcoll.o g7coll.o intltest.o	\
+dtptngts.o encoll.o escoll.o ficoll.o frcoll.o g7coll.o intltest.o	\
 itercoll.o itformat.o itmajor.o itutil.o jacoll.o lcukocol.o	\
 loctest.o miscdtfm.o mnkytst.o msfmrgts.o nmfmapts.o nmfmtrt.o		\
 numfmtst.o numrgts.o pptest.o regcoll.o restest.o restsnew.o \

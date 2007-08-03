@@ -598,6 +598,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\dtptngts.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\dtptngts.h"
+				>
+			</File>
+			<File
 				RelativePath=".\incaltst.cpp"
 				>
 			</File>
