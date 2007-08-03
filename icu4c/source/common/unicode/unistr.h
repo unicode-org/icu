@@ -2496,9 +2496,11 @@ public:
    *                  break iterator is opened.
    *                  Otherwise the provided iterator is set to the string's text.
    * @param locale    The locale to consider.
+   * @param options Options bit set, see ucasemap_open().
    * @return A reference to this.
    * @see U_TITLECASE_NO_LOWERCASE
    * @see U_TITLECASE_NO_BREAK_ADJUSTMENT
+   * @see ucasemap_open
    * @draft ICU 3.8
    */
   UnicodeString &toTitle(BreakIterator *titleIter, const Locale &locale, uint32_t options);

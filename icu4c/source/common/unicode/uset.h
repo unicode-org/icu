@@ -154,7 +154,7 @@ enum {
  *
  * @draft ICU 3.8
  */
-enum USetSpanCondition {
+typedef enum USetSpanCondition {
     /**
      * Continue a span() while there is no set element at the current position.
      * Stops before the first set element (character or string).
@@ -206,8 +206,7 @@ enum USetSpanCondition {
      * @draft ICU 3.8
      */
     USET_SPAN_CONDITION_COUNT
-};
-typedef enum USetSpanCondition USetSpanCondition;
+} USetSpanCondition;
 
 #endif /* U_HIDE_DRAFT_API */
 
@@ -839,8 +838,6 @@ uset_containsNone(const USet* set1, const USet* set2);
 U_STABLE UBool U_EXPORT2
 uset_containsSome(const USet* set1, const USet* set2);
 
-#ifndef U_HIDE_DRAFT_API
-
 /**
  * Returns the length of the initial substring of the input string which
  * consists only of characters and strings that are contained in this set
@@ -854,7 +851,7 @@ uset_containsSome(const USet* set1, const USet* set2);
  * @param set the set
  * @param s start of the string
  * @param length of the string; can be -1 for NUL-terminated
- * @spanCondition specifies the containment condition
+ * @param spanCondition specifies the containment condition
  * @return the length of the initial substring according to the spanCondition;
  *         0 if the start of the string does not fit the spanCondition
  * @draft ICU 3.8
@@ -875,7 +872,7 @@ uset_span(const USet *set, const UChar *s, int32_t length, USetSpanCondition spa
  * @param set the set
  * @param s start of the string
  * @param length of the string; can be -1 for NUL-terminated
- * @spanCondition specifies the containment condition
+ * @param spanCondition specifies the containment condition
  * @return the start of the trailing substring according to the spanCondition;
  *         the string length if the end of the string does not fit the spanCondition
  * @draft ICU 3.8
@@ -897,7 +894,7 @@ uset_spanBack(const USet *set, const UChar *s, int32_t length, USetSpanCondition
  * @param set the set
  * @param s start of the string (UTF-8)
  * @param length of the string; can be -1 for NUL-terminated
- * @spanCondition specifies the containment condition
+ * @param spanCondition specifies the containment condition
  * @return the length of the initial substring according to the spanCondition;
  *         0 if the start of the string does not fit the spanCondition
  * @draft ICU 3.8
@@ -918,7 +915,7 @@ uset_spanUTF8(const USet *set, const char *s, int32_t length, USetSpanCondition 
  * @param set the set
  * @param s start of the string (UTF-8)
  * @param length of the string; can be -1 for NUL-terminated
- * @spanCondition specifies the containment condition
+ * @param spanCondition specifies the containment condition
  * @return the start of the trailing substring according to the spanCondition;
  *         the string length if the end of the string does not fit the spanCondition
  * @draft ICU 3.8
@@ -926,8 +923,6 @@ uset_spanUTF8(const USet *set, const char *s, int32_t length, USetSpanCondition 
  */
 U_DRAFT int32_t U_EXPORT2
 uset_spanBackUTF8(const USet *set, const char *s, int32_t length, USetSpanCondition spanCondition);
-
-#endif /* U_HIDE_DRAFT_API */
 
 /**
  * Returns true if set1 contains all of the characters and strings

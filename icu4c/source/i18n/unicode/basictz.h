@@ -147,7 +147,7 @@ protected:
      */
     BasicTimeZone();
 
-    /*
+    /**
      * Construct a timezone with a given ID.
      * @param id a system time zone ID
      * @draft ICU 3.8

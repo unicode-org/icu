@@ -1674,7 +1674,6 @@ protected:
     /**
      * Return the extended year on the Gregorian calendar as computed by
      * <code>computeGregorianFields()</code>.
-     * @see #computeGregorianFields
      * @internal
      */
     int32_t getGregorianYear() const {
@@ -1684,7 +1683,6 @@ protected:
     /**
      * Return the month (0-based) on the Gregorian calendar as computed by
      * <code>computeGregorianFields()</code>.
-     * @see #computeGregorianFields
      * @internal
      */
     int32_t getGregorianMonth() const {
@@ -1694,7 +1692,6 @@ protected:
     /**
      * Return the day of year (1-based) on the Gregorian calendar as
      * computed by <code>computeGregorianFields()</code>.
-     * @see #computeGregorianFields
      * @internal
      */
     int32_t getGregorianDayOfYear() const {
@@ -1704,7 +1701,6 @@ protected:
     /**
      * Return the day of month (1-based) on the Gregorian calendar as
      * computed by <code>computeGregorianFields()</code>.
-     * @see #computeGregorianFields
      * @internal
      */
     int32_t getGregorianDayOfMonth() const {
@@ -1907,24 +1903,28 @@ private:
     /**
      * The Gregorian year, as computed by computeGregorianFields() and
      * returned by getGregorianYear().
+     * @see #computeGregorianFields
      */
     int32_t fGregorianYear;
 
     /**
      * The Gregorian month, as computed by computeGregorianFields() and
      * returned by getGregorianMonth().
+     * @see #computeGregorianFields
      */
     int32_t fGregorianMonth;
 
     /**
      * The Gregorian day of the year, as computed by
      * computeGregorianFields() and returned by getGregorianDayOfYear().
+     * @see #computeGregorianFields
      */
     int32_t fGregorianDayOfYear;
 
     /**
      * The Gregorian day of the month, as computed by
      * computeGregorianFields() and returned by getGregorianDayOfMonth().
+     * @see #computeGregorianFields
      */
     int32_t fGregorianDayOfMonth;
 

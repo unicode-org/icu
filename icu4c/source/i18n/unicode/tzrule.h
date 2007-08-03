@@ -630,7 +630,6 @@ public:
      * @param timeRuleType  The time type of the start times, which is one of
      *                      <code>DataTimeRule::WALL_TIME</code>, <code>STANDARD_TIME</code>
      *                      and <code>UNIVERSAL_TIME</code>.
-     * @param status        An UErrorCode to receive the stauts.
      * @draft ICU 3.8
      */
     TimeArrayTimeZoneRule(const UnicodeString& name, int32_t rawOffset, int32_t dstSavings,
