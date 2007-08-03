@@ -213,7 +213,7 @@ static void TestBuilder() {
     UEnumeration *en;
     UChar result[20];
     int32_t length, pLength;  
-    UChar *s, *p;
+    const UChar *s, *p;
     
     /* test create an empty DateTimePatternGenerator */
     dtpg=udatpg_openEmpty(&errorCode);
@@ -266,7 +266,7 @@ static void TestBuilder() {
         log_err("udatpg_openSkeletons failed!\n");
         return;
     }
-    while ( (s=uenum_next(en, &length, &errorCode))!= NULL) {
+    while ( (s=uenum_unext(en, &length, &errorCode))!= NULL) {
         p = udatpg_getPatternForSkeleton(dtpg, s, length, &pLength);
         if (U_FAILURE(errorCode) || p==NULL ) {
             log_err("udatpg_getPatternForSkeleton failed!\n");
