@@ -948,15 +948,16 @@ void RBBITableBuilder::setAdd(UVector *dest, UVector *source) {
     dest->setSize(sourceSize+destOriginalSize);
 
     while (sourceBuff < sourceLim && destBuff < destLim) {
-        if (*destBuff < *sourceBuff) {
-            dest->setElementAt(*destBuff++, di++);
-        }
-        else if (*sourceBuff < *destBuff) {
-            dest->setElementAt(*sourceBuff++, di++);
-        }
-        else {
+        if (*destBuff == *sourceBuff) {
             dest->setElementAt(*sourceBuff++, di++);
             destBuff++;
+        }
+        // This check may not work on machines with segmented memory, like i5/OS.
+        else if (*destBuff < *sourceBuff) {
+            dest->setElementAt(*destBuff++, di++);
+        }
+        else { /* *sourceBuff < *destBuff */
+            dest->setElementAt(*sourceBuff++, di++);
         }
     }
 
