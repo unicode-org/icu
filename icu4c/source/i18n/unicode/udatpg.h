@@ -128,7 +128,7 @@ udatpg_openEmpty(UErrorCode *pErrorCode);
 
 /**
   * Close a generator.
-  * @param a pointer to UDateTimePatternGenerator.
+  * @param dtpg a pointer to UDateTimePatternGenerator.
   * @draft ICU 3.8
   */
 U_DRAFT void U_EXPORT2
@@ -136,7 +136,7 @@ udatpg_close(UDateTimePatternGenerator *dtpg);
 
 /**
   * Create a copy pf a generator.
-  * @param a pointer to UDateTimePatternGenerator to be copied.
+  * @param dtpg a pointer to UDateTimePatternGenerator to be copied.
   * @param pErrorCode a pointer to the UErrorCode which must not indicate a
   *                   failure before the function call.
   * @return a pointer to a new UDateTimePatternGenerator.
@@ -284,13 +284,14 @@ U_DRAFT void U_EXPORT2
 udatpg_setAppendItemFormat(UDateTimePatternGenerator *dtpg,
                            UDateTimePatternField field,
                            const UChar *value, int32_t length);
+
 /**
  * Getter corresponding to setAppendItemFormat. Values below 0 or at or
  * above UDATPG_FIELD_COUNT are illegal arguments.
  *
- * @param dtpg   a pointer to UDateTimePatternGenerator.
+ * @param dtpg   A pointer to UDateTimePatternGenerator.
  * @param field  UDateTimePatternField, such as UDATPG_ERA_FIELD
- * @param length pointer of the length of appendItemFormat.
+ * @param pLength A pointer that will receive the length of appendItemFormat.
  * @return appendItemFormat for field.
  * @draft ICU 3.8
  */
@@ -323,7 +324,7 @@ udatpg_setAppendItemName(UDateTimePatternGenerator *dtpg,
  *
  * @param dtpg   a pointer to UDateTimePatternGenerator.
  * @param field  UDateTimePatternField, such as UDATPG_ERA_FIELD
- * @param length pointer of the length of name for field.
+ * @param pLength A pointer that will receive the length of the name for field.
  * @return name for field
  * @draft ICU 3.8
  */
@@ -331,6 +332,7 @@ U_DRAFT const UChar * U_EXPORT2
 udatpg_getAppendItemName(const UDateTimePatternGenerator *dtpg,
                          UDateTimePatternField field,
                          int32_t *pLength);
+
 /**
  * The date time format is a message format pattern used to compose date and
  * time patterns. The default value is "{0} {1}", where {0} will be replaced
@@ -357,11 +359,12 @@ udatpg_setDateTimeFormat(const UDateTimePatternGenerator *dtpg,
                          const UChar *dtFormat, int32_t length);
 
 /**
-  * Getter corresponding to setDateTimeFormat.
-  * @param dtpg   a pointer to UDateTimePatternGenerator.
-  * @return dateTimeFormat.
-  * @draft ICU 3.8
-  */
+ * Getter corresponding to setDateTimeFormat.
+ * @param dtpg   a pointer to UDateTimePatternGenerator.
+ * @param pLength A pointer that will receive the length of the format
+ * @return dateTimeFormat.
+ * @draft ICU 3.8
+ */
 U_DRAFT const UChar * U_EXPORT2
 udatpg_getDateTimeFormat(const UDateTimePatternGenerator *dtpg,
                          int32_t *pLength);
@@ -384,13 +387,13 @@ udatpg_setDecimal(UDateTimePatternGenerator *dtpg,
                   const UChar *decimal, int32_t length);
 
 /**
-  * Getter corresponding to setDecimal.
-  * 
-  * @param dtpg a pointer to UDateTimePatternGenerator.
-  * @param length a pointer to the length of decimal.
-  * @return corresponding to the decimal point.
-  * @draft ICU 3.8
-  */
+ * Getter corresponding to setDecimal.
+ * 
+ * @param dtpg a pointer to UDateTimePatternGenerator.
+ * @param pLength A pointer that will receive the length of the decimal string.
+ * @return corresponding to the decimal point.
+ * @draft ICU 3.8
+ */
 U_DRAFT const UChar * U_EXPORT2
 udatpg_getDecimal(const UDateTimePatternGenerator *dtpg,
                   int32_t *pLength);
@@ -414,7 +417,7 @@ udatpg_getDecimal(const UDateTimePatternGenerator *dtpg,
  * @param skeleton
  * @param skeletonLength the length of input skeleton.
  * @param dest  pattern adjusted to match the skeleton fields widths and subtypes.
- * @param capacity the capacity of dest.
+ * @param destCapacity the capacity of dest.
  * @param pErrorCode a pointer to the UErrorCode which must not indicate a
  *                  failure before the function call.
  * @return the length of dest.
@@ -454,16 +457,16 @@ udatpg_openSkeletons(const UDateTimePatternGenerator *dtpg, UErrorCode *pErrorCo
 U_DRAFT UEnumeration * U_EXPORT2
 udatpg_openBaseSkeletons(const UDateTimePatternGenerator *dtpg, UErrorCode *pErrorCode);
 
- /**
-   * Get the pattern corresponding to a given skeleton.
-   * 
-   * @param dtpg a pointer to UDateTimePatternGenerator.
-   * @param skeleton 
-   * @param skeletonLength pointer to the length of skeleton.
-   * @param pLength pointer to the length of return pattern.
-   * @return pattern corresponding to a given skeleton.
-   * @draft ICU 3.8
-   */
+/**
+ * Get the pattern corresponding to a given skeleton.
+ * 
+ * @param dtpg a pointer to UDateTimePatternGenerator.
+ * @param skeleton 
+ * @param skeletonLength pointer to the length of skeleton.
+ * @param pLength pointer to the length of return pattern.
+ * @return pattern corresponding to a given skeleton.
+ * @draft ICU 3.8
+ */
 U_DRAFT const UChar * U_EXPORT2
 udatpg_getPatternForSkeleton(const UDateTimePatternGenerator *dtpg,
                              const UChar *skeleton, int32_t skeletonLength,

@@ -923,7 +923,7 @@ uloc_acceptLanguage(char *result, int32_t resultAvailable,
  * @draft ICU 3.8
  */
 U_DRAFT int32_t U_EXPORT2
-uloc_getLocaleForLCID(uint32_t hostid, char *locale, int32_t localeCapacity,
+uloc_getLocaleForLCID(uint32_t hostID, char *locale, int32_t localeCapacity,
                     UErrorCode *status);
 
 #endif /*_ULOC*/

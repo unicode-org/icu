@@ -50,7 +50,7 @@ class U_I18N_API DateTimePatternGenerator : public UObject {
 public:
     /**
      * Construct a flexible generator according to default locale.
-     * @param status Must be a reference to an error code value,
+     * @param status  Output param set to success/failure code on exit,
      *               which must not indicate a failure before the function call.
      * @draft ICU 3.8
      */
@@ -59,7 +59,7 @@ public:
     /**
      * Construct a flexible generator according to data for a given locale.
      * @param uLocale
-     * @param status Must be a reference to an error code value,
+     * @param status  Output param set to success/failure code on exit,
      *               which must not indicate a failure before the function call.
      * @draft ICU 3.8
      */
@@ -67,7 +67,7 @@ public:
 
     /**
      * Create an empty generator, to be constructed with add(...) etc.
-     * @param status Must be a reference to an error code value,
+     * @param status  Output param set to success/failure code on exit,
      *               which must not indicate a failure before the function call.
      * @draft ICU 3.8
      */
@@ -99,7 +99,7 @@ public:
      * both "MMM-dd" and "dd/MMM" produce the skeleton "MMMdd".
      *
      * @param pattern   Input pattern, such as "dd/MMM"
-     * @param status    Must be a reference to an error code value,
+     * @param status  Output param set to success/failure code on exit,
      *                  which must not indicate a failure before the function call.
      * @return skeleton such as "MMMdd"
      * @draft ICU 3.8
@@ -114,7 +114,7 @@ public:
      * (notice the single d).
      *
      * @param pattern  Input pattern, such as "dd/MMM"
-     * @param status Must be a reference to an error code value,
+     * @param status  Output param set to success/failure code on exit,
      *               which must not indicate a failure before the function call.
      * @return base skeleton, such as "Md"
      * @draft ICU 3.8
@@ -134,8 +134,8 @@ public:
      * @param pattern   Input pattern, such as "dd/MMM"
      * @param override  When existing values are to be overridden use true, 
      *                   otherwise use false.
-     * @param conflicting pattern  Previous pattern with the same skeleton.
-     * @param status Must be a reference to an error code value,
+     * @param conflictingPattern  Previous pattern with the same skeleton.
+     * @param status  Output param set to success/failure code on exit,
      *               which must not indicate a failure before the function call.
      * @return conflicting status.  The value could be UDATPG_NO_CONFLICT, 
      *                             UDATPG_BASE_CONFLICT or UDATPG_CONFLICT.
@@ -218,7 +218,7 @@ public:
      *            pattern and {1} will be replaced by the time pattern.
      * @draft ICU 3.8
      */
-    void setDateTimeFormat(const UnicodeString& dtFormat);
+    void setDateTimeFormat(const UnicodeString& dateTimeFormat);
 
     /**
      * Getter corresponding to setDateTimeFormat.
@@ -234,6 +234,8 @@ public:
      * @param skeleton
      *            The skeleton is a pattern containing only the variable fields.
      *            For example, "MMMdd" and "mmhh" are skeletons.
+     * @param status  Output param set to success/failure code on exit,
+     *               which must not indicate a failure before the function call.
      * @return bestPattern
      *            The best pattern found from the given skeleton.
      * @draft ICU 3.8
@@ -252,7 +254,7 @@ public:
      * @param skeleton
      *            The skeleton is a pattern containing only the variable fields.
      *            For example, "MMMdd" and "mmhh" are skeletons.
-     * @param status Must be a reference to an error code value,
+     * @param status  Output param set to success/failure code on exit,
      *               which must not indicate a failure before the function call.
      * @return pattern adjusted to match the skeleton fields widths and subtypes.
      * @draft ICU 3.8
@@ -266,7 +268,7 @@ public:
      *
      * Call getPatternForSkeleton() to get the corresponding pattern.
      *
-     * @param status Must be a reference to an error code value,
+     * @param status  Output param set to success/failure code on exit,
      *               which must not indicate a failure before the function call.
      * @return StringEnumeration with the skeletons.
      *         The caller must delete the object.
@@ -277,8 +279,6 @@ public:
      /**
       * Get the pattern corresponding to a given skeleton.
       * @param skeleton 
-      * @param status Must be a reference to an error code value,
-      *               which must not indicate a failure before the function call.
       * @return pattern corresponding to a given skeleton.
       * @draft ICU 3.8
       */
@@ -287,7 +287,7 @@ public:
     /**
      * Return a list of all the base skeletons (in canonical form) from this class.
      *
-     * @param status Must be a reference to an error code value,
+     * @param status  Output param set to success/failure code on exit,
      *               which must not indicate a failure before the function call.
      * @return a StringEnumeration with the base skeletons.
      *         The caller must delete the object.
@@ -301,7 +301,7 @@ public:
       * list of them, to help check the consistency of the patterns used to build 
       * this generator.
       * 
-      * @param status Must be a reference to an error code value,
+      * @param status  Output param set to success/failure code on exit,
       *               which must not indicate a failure before the function call.
       * @return a StringEnumeration with the redundant pattern.
       *         The caller must delete the object.

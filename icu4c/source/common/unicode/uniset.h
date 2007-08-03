@@ -769,7 +769,7 @@ public:
      * This function works faster with a frozen set and with a non-negative string length argument.
      * @param s start of the string
      * @param length of the string; can be -1 for NUL-terminated
-     * @spanCondition specifies the containment condition
+     * @param spanCondition specifies the containment condition
      * @return the length of the initial substring according to the spanCondition;
      *         0 if the start of the string does not fit the spanCondition
      * @draft ICU 3.8
@@ -788,7 +788,7 @@ public:
      * This function works faster with a frozen set and with a non-negative string length argument.
      * @param s start of the string
      * @param length of the string; can be -1 for NUL-terminated
-     * @spanCondition specifies the containment condition
+     * @param spanCondition specifies the containment condition
      * @return the start of the trailing substring according to the spanCondition;
      *         the string length if the end of the string does not fit the spanCondition
      * @draft ICU 3.8
@@ -808,7 +808,7 @@ public:
      * This function works faster with a frozen set and with a non-negative string length argument.
      * @param s start of the string (UTF-8)
      * @param length of the string; can be -1 for NUL-terminated
-     * @spanCondition specifies the containment condition
+     * @param spanCondition specifies the containment condition
      * @return the length of the initial substring according to the spanCondition;
      *         0 if the start of the string does not fit the spanCondition
      * @draft ICU 3.8
@@ -827,7 +827,7 @@ public:
      * This function works faster with a frozen set and with a non-negative string length argument.
      * @param s start of the string (UTF-8)
      * @param length of the string; can be -1 for NUL-terminated
-     * @spanCondition specifies the containment condition
+     * @param spanCondition specifies the containment condition
      * @return the start of the trailing substring according to the spanCondition;
      *         the string length if the end of the string does not fit the spanCondition
      * @draft ICU 3.8
@@ -1135,7 +1135,7 @@ public:
      * A frozen set will not be modified.
      *
      * @param c set whose elements are to be added to this set.
-     * @see #add(char, char)
+     * @see #add(UChar32, UChar32)
      * @stable ICU 2.0
      */
     virtual UnicodeSet& addAll(const UnicodeSet& c);
