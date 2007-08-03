@@ -535,6 +535,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\udatpg_test.c"
+				>
+			</File>
+			<File
 				RelativePath=".\utmstest.c"
 				>
 			</File>
