@@ -16,12 +16,8 @@ U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(TimeZoneTransition)
 
-TimeZoneTransition::TimeZoneTransition(const UDate& time, const TimeZoneRule& from, const TimeZoneRule& to)
+TimeZoneTransition::TimeZoneTransition(UDate time, const TimeZoneRule& from, const TimeZoneRule& to)
 : UObject(), fTime(time), fFrom(from.clone()), fTo(to.clone()) {
-}
-
-TimeZoneTransition::TimeZoneTransition(const UDate& time, TimeZoneRule* from, TimeZoneRule* to)
-: UObject(), fTime(time), fFrom(from), fTo(to) {
 }
 
 TimeZoneTransition::TimeZoneTransition()
