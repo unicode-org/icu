@@ -3003,86 +3003,14 @@ fi;
         echo "$as_me:$LINENO: checking for 64-bit executable support" >&5
 echo $ECHO_N "checking for 64-bit executable support... $ECHO_C" >&6
     if test "$ENABLE_64BIT_LIBS" != no; then
-        case "${host}" in
-        sparc*-*-solaris*)
-            SPARCV9=`isainfo -n 2>&1 | grep sparcv9`
-            if test "$GCC" = yes; then
-                # We could add a check for -m64 depending on the gcc version.
-                ENABLE_64BIT_LIBS=no
+        if test "$GCC" = yes; then
+                        if test -n "`$CXX -dumpspecs 2>&1 && $CC -dumpspecs 2>&1 | grep -v __LP64__`"; then
+                ENABLE_64BIT_LIBS=yes
             else
-                SOL64=`$CXX -xarch=v9 2>&1 && $CC -xarch=v9 2>&1 | grep -v usage:`
-                if test -z "$SOL64" && test -n "$SPARCV9"; then
-                    CFLAGS="${CFLAGS} -xtarget=ultra -xarch=v9"
-                    CXXFLAGS="${CXXFLAGS} -xtarget=ultra -xarch=v9"
-                    LDFLAGS="${LDFLAGS} -xtarget=ultra -xarch=v9"
-                    ENABLE_64BIT_LIBS=yes
-                else
-                    ENABLE_64BIT_LIBS=no
-                fi
-            fi
-            ;;
-        i386-*-solaris*)
-            AMD64=`isainfo -n 2>&1 | grep amd64`
-            if test "$GCC" = yes; then
-                # We could add a check for -m64 depending on the gcc version.
-                ENABLE_64BIT_LIBS=no
-            else
-                SOL64=`$CXX -xtarget=generic64 2>&1 && $CC -xtarget=generic64 2>&1 | grep -v usage:`
-                if test -z "$SOL64" && test -n "$AMD64"; then
-                    CFLAGS="${CFLAGS} -xtarget=generic64"
-                    CXXFLAGS="${CXXFLAGS} -xtarget=generic64"
-                    LDFLAGS="${LDFLAGS} -xtarget=generic64"
-                    ENABLE_64BIT_LIBS=yes
-                else
-                    ENABLE_64BIT_LIBS=no
-                fi
-            fi
-            ;;
-        ia64-*-linux*)
-            if test "$GCC" = yes; then
-                # gcc compiler support
-                if test -n "`$CXX -dumpspecs 2>&1 && $CC -dumpspecs 2>&1 | grep -v __LP64__`"; then
-                    ENABLE_64BIT_LIBS=yes
-                else
-                    ENABLE_64BIT_LIBS=no
-                fi
-            else
-                # check for ecc/ecpc compiler support
-                if test -n "`$CXX --help 2>&1 && $CC --help 2>&1 | grep -v Intel`"; then
-                    if test -n "`$CXX --help 2>&1 && $CC --help 2>&1 | grep -v Itanium`"; then
-                        ENABLE_64BIT_LIBS=yes
-                    else
-                        ENABLE_64BIT_LIBS=no
-                    fi
-                else
-                    # unknown
-                    ENABLE_64BIT_LIBS=no
-                fi
-            fi
-            ;;
-        x86_64-*-linux*)
-            if test "$GCC" = yes; then
-                if test -n "`$CXX -dumpspecs 2>&1 && $CC -dumpspecs 2>&1 | grep -v __LP64__`"; then
-                    ENABLE_64BIT_LIBS=yes
-                else
-                    ENABLE_64BIT_LIBS=no
-                fi
-            else
-                # unknown
-                ENABLE_64BIT_LIBS=no
-            fi
-            ;;
-        *-*-cygwin)
-            if test "$GCC" = yes; then
-                if test -n "`$CXX -dumpspecs 2>&1 && $CC -dumpspecs 2>&1 | grep -v __LP64__`"; then
-                    ENABLE_64BIT_LIBS=yes
-                else
-                    ENABLE_64BIT_LIBS=no
-                fi
-            else
-                ENABLE_64BIT_LIBS=no
-                OLD_LDFLAGS="${LDFLAGS}"
-                LDFLAGS="${LDFLAGS} /MACHINE:AMD64"
+                                                OLD_CFLAGS="${CFLAGS}"
+                OLD_CXXFLAGS="${CXXFLAGS}"
+                CFLAGS="${CFLAGS} -m64"
+                CXXFLAGS="${CXXFLAGS} -m64"
                 if test "$cross_compiling" = yes; then
   ENABLE_64BIT_LIBS=no
 else
@@ -3116,13 +3044,68 @@ ENABLE_64BIT_LIBS=no
 fi
 rm -f core *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
 fi
-                LDFLAGS="${OLD_LDFLAGS}"
-                                            fi
-            ;;
-        *-*-aix*|powerpc64-*-linux*)
-            if test "$ac_cv_c_compiler_gnu" = no; then
-                # Note: Have not tested 64-bitness with gcc.
-                # Maybe the flag "-maix64" could be used with gcc?
+                if test "$ENABLE_64BIT_LIBS" = no; then
+                    # Nope. We're on a 32-bit machine with a 32-bit compiler.
+                    CFLAGS="${OLD_CFLAGS}"
+                    CXXFLAGS="${OLD_CXXFLAGS}"
+                fi
+            fi
+        else
+            case "${host}" in
+            sparc*-*-solaris*)
+                SPARCV9=`isainfo -n 2>&1 | grep sparcv9`
+                SOL64=`$CXX -xarch=v9 2>&1 && $CC -xarch=v9 2>&1 | grep -v usage:`
+                if test -z "$SOL64" && test -n "$SPARCV9"; then
+                    CFLAGS="${CFLAGS} -xtarget=ultra -xarch=v9"
+                    CXXFLAGS="${CXXFLAGS} -xtarget=ultra -xarch=v9"
+                    LDFLAGS="${LDFLAGS} -xtarget=ultra -xarch=v9"
+                    ENABLE_64BIT_LIBS=yes
+                else
+                    ENABLE_64BIT_LIBS=no
+                fi
+                ;;
+            i386-*-solaris*)
+                AMD64=`isainfo -n 2>&1 | grep amd64`
+                # The new compiler option
+                SOL64=`$CXX -m64 2>&1 && $CC -m64 2>&1 | grep -v usage:`
+                if test -z "$SOL64" && test -n "$AMD64"; then
+                    CFLAGS="${CFLAGS} -m64"
+                    CXXFLAGS="${CXXFLAGS} -m64"
+                    ENABLE_64BIT_LIBS=yes
+                else
+                    # The older compiler option
+                    SOL64=`$CXX -xtarget=generic64 2>&1 && $CC -xtarget=generic64 2>&1 | grep -v usage:`
+                    if test -z "$SOL64" && test -n "$AMD64"; then
+                        CFLAGS="${CFLAGS} -xtarget=generic64"
+                        CXXFLAGS="${CXXFLAGS} -xtarget=generic64"
+                        ENABLE_64BIT_LIBS=yes
+                    else
+                        ENABLE_64BIT_LIBS=no
+                    fi
+                fi
+                ;;
+            ia64-*-linux*)
+                # check for ecc/ecpc compiler support
+                if test -n "`$CXX --help 2>&1 && $CC --help 2>&1 | grep -v Intel`"; then
+                    if test -n "`$CXX --help 2>&1 && $CC --help 2>&1 | grep -v Itanium`"; then
+                        ENABLE_64BIT_LIBS=yes
+                    else
+                        ENABLE_64BIT_LIBS=no
+                    fi
+                else
+                    # unknown
+                    ENABLE_64BIT_LIBS=no
+                fi
+                ;;
+            *-*-cygwin)
+                                                if test -n "`$CXX -help 2>&1 | grep 'for x64'`"; then
+                    ENABLE_64BIT_LIBS=yes
+                else
+                    # unknown
+                    ENABLE_64BIT_LIBS=no
+                fi
+                ;;
+            *-*-aix*|powerpc64-*-linux*)
                 OLD_CFLAGS="${CFLAGS}"
                 OLD_CXXFLAGS="${CXXFLAGS}"
                 OLD_LDFLAGS="${LDFLAGS}"
@@ -3172,52 +3155,13 @@ fi
                         ARFLAGS="${ARFLAGS} -X64"
                     esac
                 fi
-            fi
-            ;;
-        *-*-hpux*)
+                ;;
+            *-*-hpux*)
 
-            OLD_CFLAGS="${CFLAGS}"
-            OLD_CXXFLAGS="${CXXFLAGS}"
-            CFLAGS="${CFLAGS} +DD64"
-            CXXFLAGS="${CXXFLAGS} +DD64"
-            if test "$cross_compiling" = yes; then
-  ENABLE_64BIT_LIBS=no
-else
-  cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-int main(void) {return 0;}
-_ACEOF
-rm -f conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && { ac_try='./conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ENABLE_64BIT_LIBS=yes
-else
-  echo "$as_me: program exited with status $ac_status" >&5
-echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-( exit $ac_status )
-ENABLE_64BIT_LIBS=no
-fi
-rm -f core *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
-fi
-            if test "$ENABLE_64BIT_LIBS" = no; then
-                CFLAGS="${OLD_CFLAGS}"
-                CXXFLAGS="${OLD_CXXFLAGS}"
-                CFLAGS="${CFLAGS} +DA2.0W"
-                CXXFLAGS="${CXXFLAGS} +DA2.0W"
+                OLD_CFLAGS="${CFLAGS}"
+                OLD_CXXFLAGS="${CXXFLAGS}"
+                CFLAGS="${CFLAGS} +DD64"
+                CXXFLAGS="${CXXFLAGS} +DD64"
                 if test "$cross_compiling" = yes; then
   ENABLE_64BIT_LIBS=no
 else
@@ -3254,17 +3198,9 @@ fi
                 if test "$ENABLE_64BIT_LIBS" = no; then
                     CFLAGS="${OLD_CFLAGS}"
                     CXXFLAGS="${OLD_CXXFLAGS}"
-                fi
-            fi
-            ;;
-        *-*ibm-openedition*|*-*-os390*)
-            OLD_CFLAGS="${CFLAGS}"
-            OLD_CXXFLAGS="${CXXFLAGS}"
-            OLD_LDFLAGS="${LDFLAGS}"
-            CFLAGS="${CFLAGS} -Wc,lp64"
-            CXXFLAGS="${CXXFLAGS} -Wc,lp64"
-            LDFLAGS="${LDFLAGS} -Wl,lp64"
-            if test "$cross_compiling" = yes; then
+                    CFLAGS="${CFLAGS} +DA2.0W"
+                    CXXFLAGS="${CXXFLAGS} +DA2.0W"
+                    if test "$cross_compiling" = yes; then
   ENABLE_64BIT_LIBS=no
 else
   cat >conftest.$ac_ext <<_ACEOF
@@ -3297,16 +3233,63 @@ ENABLE_64BIT_LIBS=no
 fi
 rm -f core *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
 fi
-            if test "$ENABLE_64BIT_LIBS" = no; then
-                CFLAGS="${OLD_CFLAGS}"
-                CXXFLAGS="${OLD_CXXFLAGS}"
-                LDFLAGS="${OLD_LDFLAGS}"
-            fi
-            ;;
-        *)
-            ENABLE_64BIT_LIBS=no
-            ;;
-        esac
+                    if test "$ENABLE_64BIT_LIBS" = no; then
+                        CFLAGS="${OLD_CFLAGS}"
+                        CXXFLAGS="${OLD_CXXFLAGS}"
+                    fi
+                fi
+                ;;
+            *-*ibm-openedition*|*-*-os390*)
+                OLD_CFLAGS="${CFLAGS}"
+                OLD_CXXFLAGS="${CXXFLAGS}"
+                OLD_LDFLAGS="${LDFLAGS}"
+                CFLAGS="${CFLAGS} -Wc,lp64"
+                CXXFLAGS="${CXXFLAGS} -Wc,lp64"
+                LDFLAGS="${LDFLAGS} -Wl,lp64"
+                if test "$cross_compiling" = yes; then
+  ENABLE_64BIT_LIBS=no
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+int main(void) {return 0;}
+_ACEOF
+rm -f conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && { ac_try='./conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ENABLE_64BIT_LIBS=yes
+else
+  echo "$as_me: program exited with status $ac_status" >&5
+echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+( exit $ac_status )
+ENABLE_64BIT_LIBS=no
+fi
+rm -f core *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
+fi
+                if test "$ENABLE_64BIT_LIBS" = no; then
+                    CFLAGS="${OLD_CFLAGS}"
+                    CXXFLAGS="${OLD_CXXFLAGS}"
+                    LDFLAGS="${OLD_LDFLAGS}"
+                fi
+                ;;
+            *)
+                ENABLE_64BIT_LIBS=no
+                ;;
+            esac
+        fi
     else
         if test "$GCC" = yes; then
             OLD_CFLAGS="${CFLAGS}"
