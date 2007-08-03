@@ -15,7 +15,7 @@ import java.util.*;
  */
 public class JamoTest extends TransliteratorTest {
 
-    private static final char SEP = '\'';
+    private static final char SEP = '-';
 
     public static void main(String[] args) throws Exception {
         new JamoTest().run(args);
@@ -34,12 +34,31 @@ public class JamoTest extends TransliteratorTest {
 
             // Column 3 is expected value of L2.  If the expected
             // value of L2 is L1, then L2 is null.
+                
+                // add tests for the update to fix problems where it didn't follow the standard
+                // see also http://www.unicode.org/cldr/data/charts/transforms/Latin-Hangul.html
+                "gach", "(Gi)(A)(Ci)", "gach",
+                "geumhui", "(Gi)(EU)(Mf)(Hi)(YI)", "geumhui",
+                "choe", "(Ci)(OE)", "choe",
+                "wo", "(IEUNG)(WEO)", "wo",
+                "Wonpil", "(IEUNG)(WEO)(Nf)(Pi)(I)(L)", "wonpil",
+                "GIPPEUM", "(Gi)(I)(BB)(EU)(Mf)", "gippeum",
+                "EUTTEUM", "(IEUNG)(EU)(DD)(EU)(Mf)", "eutteum",
+                "KKOTNAE", "(GGi)(O)(Tf)(Ni)(AE)", "kkotnae",
+                "gaga", "(Gi)(A)(Gi)(A)", "gaga",
+                "gag-a", "(Gi)(A)(Gf)(IEUNG)(A)", "gag-a",
+                "gak-ka", "(Gi)(A)(Kf)(Ki)(A)", "gak-ka",
+                "gakka", "(Gi)(A)(GGi)(A)", "gakka",
+                "gakk-a", "(Gi)(A)(GGf)(IEUNG)(A)", "gakk-a",
+                "gakkka", "(Gi)(A)(GGf)(Ki)(A)", "gakkka",
+                "gak-kka", "(Gi)(A)(Kf)(GGi)(A)", "gak-kka",
+                
             "bab", "(Bi)(A)(Bf)", null,
             "babb", "(Bi)(A)(Bf)(Bi)(EU)", "babbeu",
             "babbba", "(Bi)(A)(Bf)(Bi)(EU)(Bi)(A)", "babbeuba",
             "bagg", "(Bi)(A)(Gf)(Gi)(EU)", "baggeu",
             "baggga", "(Bi)(A)(Gf)(Gi)(EU)(Gi)(A)", "baggeuga",
-            "bag"+SEP+"gga", "(Bi)(A)(Gf)"+SEP+"(Gi)(EU)(Gi)(A)", "bag"+SEP+"geuga",
+            //"bag"+SEP+"gga", "(Bi)(A)(Gf)"+SEP+"(Gi)(EU)(Gi)(A)", "bag"+SEP+"geuga",
             "kabsa", "(Ki)(A)(Bf)(Si)(A)", null,
             "kabska", "(Ki)(A)(BS)(Ki)(A)", null,
             "gabsbka", "(Gi)(A)(BS)(Bi)(EU)(Ki)(A)", "gabsbeuka", // not (Kf)
@@ -53,6 +72,7 @@ public class JamoTest extends TransliteratorTest {
 
             // 'r' in a final position is treated like 'l'
             "karka", "(Ki)(A)(L)(Ki)(A)", "kalka",
+            
         };
 
         for (int i=0; i<CASE.length; i+=3) {
