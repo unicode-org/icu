@@ -365,7 +365,7 @@ typedef enum UDateFormatField {
     UDAT_TIMEZONE_GENERIC_FIELD = 24,
     /**
      * FieldPosition selector for 'c' field alignment,
-     * corresponding to the {@link Calendar#DAY} field. 
+     * corresponding to the {@link #UCAL_DAY} field. 
      * This displays the stand alone day name, if available.
      * @draft ICU 3.4
      */
@@ -373,7 +373,7 @@ typedef enum UDateFormatField {
     
     /**
      * FieldPosition selector for 'L' field alignment,
-     * corresponding to the {@link Calendar#MONTH} field.  
+     * corresponding to the {@link #UCAL_MONTH} field.  
      * This displays the stand alone month name, if available.
      * @draft ICU 3.4
      */
@@ -382,7 +382,7 @@ typedef enum UDateFormatField {
     /**
      * FieldPosition selector for "Q" field alignment,
      * corresponding to quarters. This is implemented
-     * using the {@link Calendar#MONTH} field. This
+     * using the {@link #UCAL_MONTH} field. This
      * displays the quarter.
      * @draft ICU 3.6
      */
@@ -391,7 +391,7 @@ typedef enum UDateFormatField {
     /**
      * FieldPosition selector for the "q" field alignment,
      * corresponding to stand-alone quarters. This is
-     * implemented using the {@link Calendar#MONTH} field.
+     * implemented using the {@link #UCAL_MONTH} field.
      * This displays the stand-alone quarter.
      * @draft ICU 3.6
      */

@@ -190,10 +190,10 @@
  *    Defined as a literal, not a string.
  *    Tricky Preprocessor use - ## operator replaces macro paramters with the literal string
  *                              from the corresponding macro invocation, _before_ other macro substitutions.
- *                              Need a nested #defines to get the actual version numbers rather than
+ *                              Need a nested \#defines to get the actual version numbers rather than
  *                              the literal text U_ICU_VERSION_MAJOR_NUM into the name.
  *                              The net result will be something of the form
- *                                  #define U_ICU_ENTRY_POINT icudt19_dat
+ *                                  \#define U_ICU_ENTRY_POINT icudt19_dat
  * @stable ICU 2.4
  */
 #define U_ICUDATA_ENTRY_POINT  U_DEF2_ICUDATA_ENTRY_POINT(U_ICU_VERSION_MAJOR_NUM, U_ICU_VERSION_MINOR_NUM)

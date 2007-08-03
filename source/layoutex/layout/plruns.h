@@ -231,7 +231,7 @@ pl_resetValueRuns(pl_valueRuns *valueRuns);
  * Get the limit index for the last value run. This is the
  * number of characters in the text.
  *
- * @param valuetRuns is the <code>pl_valueRuns</code> object.
+ * @param valueRuns is the <code>pl_valueRuns</code> object.
  *
  * @return the last limit index.
  *
