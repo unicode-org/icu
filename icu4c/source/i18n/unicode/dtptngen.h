@@ -401,8 +401,8 @@ private:
     UnicodeString adjustFieldTypes(const UnicodeString& pattern, UBool fixFractionalSeconds);
     UnicodeString getBestAppending(const int32_t missingFields);
     int32_t getTopBitNumber(int32_t foundMask);
-    void setAvailableFormat(const char* key, UErrorCode& status);
-    UBool isAvailableFormatSet(const char* key);
+    void setAvailableFormat(const UnicodeString &key, UErrorCode& status);
+    UBool isAvailableFormatSet(const UnicodeString &key);
     void copyHashtable(Hashtable *other);
     UBool isCanonicalItem(const UnicodeString& item);
     UErrorCode getStatus() {  return fStatus; } ;
