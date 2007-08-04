@@ -208,12 +208,7 @@ DateTimePatternGenerator::operator==(const DateTimePatternGenerator& other) cons
     if (this == &other) {
         return TRUE;
     }
-    if ((pLocale==other.pLocale) && (patternMap->equals(*other.patternMap))) {
-        return TRUE;
-    }
-    else {
-        return FALSE;
-    }
+    return (UBool)((pLocale==other.pLocale) && (patternMap->equals(*other.patternMap)));
 }
 
 DateTimePatternGenerator::~DateTimePatternGenerator() {
@@ -277,15 +272,13 @@ DateTimePatternGenerator::addICUPatterns(const Locale& locale) {
     UErrorCode status = U_ZERO_ERROR;
     
     // Load with ICU patterns
-    for (DateFormat::EStyle i=DateFormat::kFull; i<=DateFormat::kShort; i=(DateFormat::EStyle)(i+1)) {
-        dfPattern.remove();
-        if ((df = (SimpleDateFormat*)DateFormat::createDateInstance(i, locale))!= NULL) {
+    for (int32_t i=DateFormat::kFull; i<=DateFormat::kShort; i++) {
+        if ((df = (SimpleDateFormat*)DateFormat::createDateInstance((DateFormat::EStyle)i, locale))!= NULL) {
             conflictingStatus = addPattern(df->toPattern(dfPattern), FALSE, conflictingString, status);
             delete df;
         }
 
-        dfPattern.remove();
-        if ((df = (SimpleDateFormat*)DateFormat::createTimeInstance(i, locale)) != NULL) {
+        if ((df = (SimpleDateFormat*)DateFormat::createTimeInstance((DateFormat::EStyle)i, locale)) != NULL) {
             conflictingStatus = addPattern(df->toPattern(dfPattern), FALSE, conflictingString, status);
             if (U_FAILURE(status)) {
                 delete df;
@@ -298,7 +291,6 @@ DateTimePatternGenerator::addICUPatterns(const Locale& locale) {
             delete df;
         }
     }
-
 }
 
 void
@@ -500,7 +492,8 @@ DateTimePatternGenerator::initHashtable(UErrorCode& err) {
     if (fAvailableFormatKeyHash!=NULL) {
         return;
     }
-    if ((fAvailableFormatKeyHash = new Hashtable(FALSE, err))!=NULL) {
+    if ((fAvailableFormatKeyHash = new Hashtable(FALSE, err))==NULL) {
+        err=U_MEMORY_ALLOCATION_ERROR;
         return;
     }
 }
@@ -541,7 +534,6 @@ UnicodeString
 DateTimePatternGenerator::getBestPattern(const UnicodeString& patternForm, UErrorCode& status) {
     const UnicodeString *bestPattern=NULL;
     UnicodeString dtFormat;
-    UErrorCode err = U_ZERO_ERROR;
     UnicodeString resultPattern;
 
     int32_t dateMask=(1<<UDATPG_DAYPERIOD_FIELD) - 1;
@@ -561,12 +553,11 @@ DateTimePatternGenerator::getBestPattern(const UnicodeString& patternForm, UErro
     if (datePattern.length()==0) {
         if (timePattern.length()==0) {
             resultPattern.remove();
-            return resultPattern;
         }
         else {
             resultPattern=timePattern;
-            return resultPattern;
         }
+        return resultPattern;
     }
     if (timePattern.length()==0) {
         resultPattern=datePattern;
@@ -575,7 +566,7 @@ DateTimePatternGenerator::getBestPattern(const UnicodeString& patternForm, UErro
     resultPattern.remove();
     dtFormat=getDateTimeFormat();
     Formattable dateTimeObject[] = { datePattern, timePattern };
-    resultPattern = MessageFormat::format(dtFormat, dateTimeObject, 2, resultPattern, err );
+    resultPattern = MessageFormat::format(dtFormat, dateTimeObject, 2, resultPattern, status );
     return resultPattern;
 }
 
@@ -862,15 +853,7 @@ DateTimePatternGenerator::setAvailableFormat(const UnicodeString &key, UErrorCod
 
 UBool
 DateTimePatternGenerator::isAvailableFormatSet(const UnicodeString &key) {
-    int32_t i=0;
-
-    i=fAvailableFormatKeyHash->geti(key);
-    if ( i==1 ) {
-        return TRUE;
-    }
-    else{
-        return FALSE;
-    }
+    return (UBool)(fAvailableFormatKeyHash->geti(key) == 1);
 }
 
 void
@@ -1138,7 +1121,7 @@ PatternMap::getPatternFromBasePattern(UnicodeString& basePattern) { // key to se
 
    // the baseChar must be A-Z or a-z
    if ( (baseChar >= CAP_A) && (baseChar <= CAP_Z) ) {
-     curElem = boot[26 + (baseChar-CAP_A)];
+       curElem = boot[26 + (baseChar-CAP_A)];
    }
    else {
       if ( (baseChar >=LOW_A) && (baseChar <= LOW_Z) ) {
@@ -1149,14 +1132,14 @@ PatternMap::getPatternFromBasePattern(UnicodeString& basePattern) { // key to se
    }
 
    if ( curElem == NULL ) {
-     return NULL;  // no match
+       return NULL;  // no match
    }
 
    do  {
-     if ( basePattern.compare(curElem->basePattern)==0 ) {
-        return &(curElem->pattern);
-     }
-     curElem=curElem->next;
+       if ( basePattern.compare(curElem->basePattern)==0 ) {
+          return &(curElem->pattern);
+       }
+       curElem=curElem->next;
    }while (curElem != NULL);
 
    return NULL;
@@ -1190,7 +1173,7 @@ PatternMap::getPatternFromSkeleton(PtnSkeleton& skeleton) { // key to search for
    }
 
    if ( curElem == NULL ) {
-     return NULL;  // no match
+       return NULL;  // no match
    }
 
    do  {
@@ -1530,13 +1513,8 @@ FormatParser::getCanonicalIndex(const UnicodeString& s) {
 
 UBool
 FormatParser::isQuoteLiteral(UnicodeString s) {
-    if ((s.charAt(0)==SINGLE_QUOTE)||(s.charAt(0)==FORWARDSLASH)||(s.charAt(0)==BACKSLASH) ||
-        (s.charAt(0)==SPACE) ||(s.charAt(0)==COMMA) ||(s.charAt(0)==HYPHEN) ||(s.charAt(0)==DOT) ) {
-        return TRUE;
-    }
-    else {
-        return FALSE;
-    }
+    return (UBool)((s.charAt(0)==SINGLE_QUOTE)||(s.charAt(0)==FORWARDSLASH)||(s.charAt(0)==BACKSLASH) ||
+        (s.charAt(0)==SPACE) ||(s.charAt(0)==COMMA) ||(s.charAt(0)==HYPHEN) ||(s.charAt(0)==DOT) );
 }
 
 // This function aussumes the current itemIndex points to the quote literal.
