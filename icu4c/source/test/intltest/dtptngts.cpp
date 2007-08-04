@@ -302,8 +302,8 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
             resultDate = "";
             resultDate = sdf->format(testDate, resultDate);
             if ( resultDate != patternResults[resultIndex] ) {
-//                errln(UnicodeString("\nERROR: Test various skeletons[") + (dataIndex-1)
-//                    + UnicodeString("]. Got: ") + resultDate + UnicodeString(" Expected: ") + patternResults[resultIndex] );
+                errln(UnicodeString("\nERROR: Test various skeletons[") + (dataIndex-1)
+                    + UnicodeString("]. Got: ") + resultDate + UnicodeString(" Expected: ") + patternResults[resultIndex] );
                 // TODO Remove printf once ICU pick up CLDR 1.5
                 /*
                 printf("\nUnmatched result!\n TestPattern:");
