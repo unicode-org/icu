@@ -1900,7 +1900,7 @@ public abstract class Transliterator implements StringTransform  {
     
     /**
      * Implements StringTransform via this method.
-     * @input source text to be transformed (eg lowercased)
+     * @param source text to be transformed (eg lowercased)
      * @return result
      */
     public String transform(String source) {

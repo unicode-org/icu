@@ -2739,7 +2739,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * of a word and lowercase all other characters.
      * With this option, the other characters will not be modified.
      *
-     * @see toTitleCase
+     * @see #toTitleCase
      * @draft ICU 3.8
      * @provisional This API might change or be removed in a future release.
      */
@@ -2761,8 +2761,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * cased character F. If F exists, map F to default_title(F); then map each
      * subsequent character C to default_lower(C).
      *
-     * @see toTitleCase
-     * @see TITLECASE_NO_LOWERCASE
+     * @see #toTitleCase
+     * @see #TITLECASE_NO_LOWERCASE
      * @draft ICU 3.8
      * @provisional This API might change or be removed in a future release.
      */
@@ -4417,8 +4417,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @return lowercase version of the argument string
      * @draft ICU 3.8
      * @provisional This API might change or be removed in a future release.
-     * @see TITLECASE_NO_LOWERCASE
-     * @see TITLECASE_NO_BREAK_ADJUSTMENT
+     * @see #TITLECASE_NO_LOWERCASE
+     * @see #TITLECASE_NO_BREAK_ADJUSTMENT
      */
     public static String toTitleCase(ULocale locale, String str, 
                                      BreakIterator titleIter,

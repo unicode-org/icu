@@ -3681,33 +3681,33 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
         public XSymbolTable(){}
         /**
          * Supplies default implementation for SymbolTable (no action).
-    	 * @draft ICU3.8
+         * @draft ICU3.8
          * @provisional This API might change or be removed in a future release.
-    	 */
+         */
         public UnicodeMatcher lookupMatcher(int i) {
             return null;
         }
-    	/**
+        /**
          * Apply a new property alias. Is called when parsing [:xxx=yyy:]. Results are to put into result.
-         * @param property name, the xxx in [:xxx=yyy:]
-         * @param propertyValue, the yyy in [:xxx=yyy:]
+         * @param propertyName the xxx in [:xxx=yyy:]
+         * @param propertyValue the yyy in [:xxx=yyy:]
          * @param result where the result is placed
          * @return true if handled
-    	 * @draft ICU3.8
+         * @draft ICU3.8
          * @provisional This API might change or be removed in a future release.
-    	 */
+         */
         public boolean applyPropertyAlias(String propertyName, String propertyValue, UnicodeSet result) {
             return false;
         }
-    	/**
+        /**
          * Supplies default implementation for SymbolTable (no action).
          * @draft ICU3.8
          * @provisional This API might change or be removed in a future release.
-       	 */
+            */
         public char[] lookup(String s) {
             return null;
         }
-    	/**
+        /**
          * Supplies default implementation for SymbolTable (no action).
          * @draft ICU3.8
          * @provisional This API might change or be removed in a future release.
