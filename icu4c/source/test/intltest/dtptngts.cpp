@@ -99,20 +99,7 @@ void IntlTestDateTimePatternGeneratorAPI::runIndexedTest( int32_t index, UBool e
 {
     if (exec) logln("TestSuite DateTimePatternGeneratorAPI");
     switch (index) {
-        case 0: name = "DateTimePatternGenerator API test"; 
-                if (exec) {
-                    logln("DateTimePatternGenerator API test---"); logln("");
-                    UErrorCode status = U_ZERO_ERROR;
-                    Locale saveLocale;
-                    Locale::setDefault(Locale::getEnglish(), status);
-                    if(U_FAILURE(status)) {
-                        errln("ERROR: Could not set default locale, test may not give correct results");
-                    }
-                    testAPI(/*par*/);
-                    Locale::setDefault(saveLocale, status);
-                }
-                break;
-
+        TESTCASE(0, testAPI);
         default: name = ""; break;
     }
 }
@@ -319,7 +306,8 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
             resultDate = "";
             resultDate = sdf->format(testDate, resultDate);
             if ( resultDate != patternResults[resultIndex] ) {
-                errln("\nERROR: Test various skeletons[%d] .", dataIndex-1);
+                errln(UnicodeString("\nERROR: Test various skeletons[") + (dataIndex-1)
+                    + UnicodeString("]. Got: ") + resultDate + UnicodeString(" Expected: ") + patternResults[resultIndex] );
                 // TODO Remove printf once ICU pick up CLDR 1.5
                 /*
                 printf("\nUnmatched result!\n TestPattern:");
