@@ -92,8 +92,8 @@ const int32_t UDATPG_SECOND_AND_FRACTIONAL_MASK = (1<<UDATPG_SECOND_FIELD) | (1<
 typedef enum dtStrEnum {
     DT_BASESKELETON,
     DT_SKELETON,
-    DT_PATTERN,
-}dtStrEnum ;
+    DT_PATTERN
+}dtStrEnum;
 
 typedef struct dtTypeElem {
     UChar                  patternChar;
@@ -135,12 +135,12 @@ public:
 
 class U_I18N_API PtnElem : public UObject {
 public:
-    UnicodeString *basePattern;
+    UnicodeString basePattern;
     PtnSkeleton   *skeleton;
-    UnicodeString *pattern;
+    UnicodeString pattern;
     PtnElem       *next;
 
-    PtnElem();
+    PtnElem(const UnicodeString &basePattern, const UnicodeString &pattern);
     virtual ~PtnElem();
 
     /**
@@ -292,8 +292,8 @@ public:
     virtual  ~PatternMap();
     void  add(const UnicodeString& basePattern, const PtnSkeleton& skeleton, const UnicodeString& value, UErrorCode& status);
     UErrorCode status;
-    UnicodeString* getPatternFromBasePattern(UnicodeString& basePattern);
-    UnicodeString* getPatternFromSkeleton(PtnSkeleton& skeleton);
+    const UnicodeString* getPatternFromBasePattern(UnicodeString& basePattern);
+    const UnicodeString* getPatternFromSkeleton(PtnSkeleton& skeleton);
     void copyFrom(const PatternMap& other, UErrorCode& status);
     UBool equals(const PatternMap& other);
     /**
