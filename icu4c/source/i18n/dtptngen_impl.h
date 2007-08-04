@@ -103,7 +103,7 @@ typedef struct dtTypeElem {
     int32_t                weight;
 }dtTypeElem;
 
-class U_I18N_API PtnSkeleton : public UObject {
+class PtnSkeleton : public UMemory {
 public:
     int32_t type[UDATPG_FIELD_COUNT];
     UnicodeString original[UDATPG_FIELD_COUNT];
@@ -114,26 +114,10 @@ public:
     UBool equals(PtnSkeleton& other);
     UnicodeString getSkeleton();
     virtual ~PtnSkeleton();
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for this class.
-     *
-     * @draft ICU 3.8
-     *
-    */
-    static UClassID U_EXPORT2 getStaticClassID(void);
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @draft ICU 3.8
-     */
-    virtual UClassID getDynamicClassID() const;
-
 };
 
 
-class U_I18N_API PtnElem : public UObject {
+class PtnElem : public UMemory {
 public:
     UnicodeString basePattern;
     PtnSkeleton   *skeleton;
@@ -143,24 +127,9 @@ public:
     PtnElem(const UnicodeString &basePattern, const UnicodeString &pattern);
     virtual ~PtnElem();
 
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for this class.
-     *
-     * @draft ICU 3.8
-     *
-    */
-    static UClassID U_EXPORT2 getStaticClassID(void);
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @draft ICU 3.8
-     */
-    virtual UClassID getDynamicClassID() const;
-
 };
 
-class U_I18N_API FormatParser : public UObject{
+class FormatParser : public UMemory {
 public:
     UnicodeString items[MAX_DT_TOKEN];
     int32_t  itemNumber;
@@ -193,20 +162,6 @@ public:
      * @internal
      */
     void getQuoteLiteral(UnicodeString& quote, int32_t *itemIndex);
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for this class.
-     *
-     * @draft ICU 3.8
-     *
-    */
-    static UClassID U_EXPORT2 getStaticClassID(void);
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @draft ICU 3.8
-     */
-    virtual UClassID getDynamicClassID() const;
     int32_t getCanonicalIndex(const UnicodeString& s);
     UBool isPatternSeparator(UnicodeString& field);
     void setFilter(UErrorCode &status);
@@ -226,7 +181,7 @@ private:
 };
 
 
-class U_I18N_API DistanceInfo : public UObject {
+class DistanceInfo : public UMemory {
 public:
     int32_t missingFieldMask;
     int32_t extraFieldMask;
@@ -237,23 +192,9 @@ public:
     void setTo(DistanceInfo& other);
     void addMissing(int32_t field) { missingFieldMask |= (1<<field); };
     void addExtra(int32_t field) { extraFieldMask |= (1<<field); };
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for this class.
-     *
-     * @draft ICU 3.8
-     *
-    */
-    static UClassID U_EXPORT2 getStaticClassID(void);
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @draft ICU 3.8
-     */
-    virtual UClassID getDynamicClassID() const;
 };
 
-class U_I18N_API DateTimeMatcher: public UObject {
+class DateTimeMatcher: public UMemory {
 public:
     PtnSkeleton skeleton;
 
@@ -269,23 +210,9 @@ public:
     DateTimeMatcher();
     virtual ~DateTimeMatcher() {};
     int32_t getFieldMask();
-   /**
-     * ICU "poor man's RTTI", returns a UClassID for this class.
-     *
-     * @draft ICU 3.8
-     */
-    static UClassID U_EXPORT2 getStaticClassID();
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @draft ICU 3.8
-     */
-    virtual UClassID getDynamicClassID() const;
-
 };
 
-class U_I18N_API PatternMap : public UObject{
+class PatternMap : public UMemory {
 public:
     PtnElem *boot[MAX_PATTERN_ENTRIES];
     PatternMap();
@@ -296,27 +223,12 @@ public:
     const UnicodeString* getPatternFromSkeleton(PtnSkeleton& skeleton);
     void copyFrom(const PatternMap& other, UErrorCode& status);
     UBool equals(const PatternMap& other);
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for this class.
-     *
-     * @draft ICU 3.8
-     *
-    */
-    static UClassID U_EXPORT2 getStaticClassID(void);
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @draft ICU 3.8
-     */
-    virtual UClassID getDynamicClassID() const;
-
 private:
     UBool isDupAllowed;
     PtnElem*  getDuplicateElem(const UnicodeString &basePattern, const PtnSkeleton& skeleton, PtnElem *baseElem);
 }; // end  PatternMap
 
-class U_I18N_API PatternMapIterator : public UObject {
+class PatternMapIterator : public UMemory {
 public:
     PatternMapIterator();
     virtual ~PatternMapIterator();
@@ -324,20 +236,6 @@ public:
     PtnSkeleton* getSkeleton();
     UBool hasNext();
     DateTimeMatcher& next();
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for this class.
-     *
-     * @draft ICU 3.8
-     *
-    */
-    static UClassID U_EXPORT2 getStaticClassID(void);
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @draft ICU 3.8
-     */
-    virtual UClassID getDynamicClassID() const;
 private:
     int32_t bootIndex;
     PtnElem *nodePtr;
