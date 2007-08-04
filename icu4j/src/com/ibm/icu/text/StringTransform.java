@@ -14,7 +14,7 @@ package com.ibm.icu.text;
 public interface StringTransform {
     /**
      * Transform the text in some way, to be determined by the subclass.
-     * @input source text to be transformed (eg lowercased)
+     * @param source text to be transformed (eg lowercased)
      * @return result
      */
     public String transform(String source);
