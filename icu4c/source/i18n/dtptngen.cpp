@@ -1086,13 +1086,8 @@ PatternMap::add(const UnicodeString& basePattern,
             }
         }
         if ( curElem != NULL ) {
-            PtnSkeleton* pNewSkeleton = curElem->skeleton = new PtnSkeleton;
+            curElem->skeleton = new PtnSkeleton(skeleton);
 
-            for (int32_t i=0; i<UDATPG_FIELD_COUNT; ++i ) {
-                pNewSkeleton->type[i] = skeleton.type[i];
-                pNewSkeleton->original[i] = skeleton.original[i];
-                pNewSkeleton->baseOriginal[i] = skeleton.baseOriginal[i];
-            }
             curElem->next = NULL;
         }
     }
@@ -1718,7 +1713,7 @@ PtnSkeleton::PtnSkeleton() {
 }
 
 
-PtnSkeleton::PtnSkeleton(PtnSkeleton& other) {
+PtnSkeleton::PtnSkeleton(const PtnSkeleton& other) {
     for (int32_t i=0; i<UDATPG_FIELD_COUNT; ++i) {
         this->type[i]=other.type[i];
         this->original[i]=other.original[i];
@@ -1727,7 +1722,7 @@ PtnSkeleton::PtnSkeleton(PtnSkeleton& other) {
 }
 
 UBool
-PtnSkeleton::equals(PtnSkeleton& other)  {
+PtnSkeleton::equals(const PtnSkeleton& other)  {
     for (int32_t i=0; i<UDATPG_FIELD_COUNT; ++i) {
         if ( (type[i]!= other.type[i]) ||
              (original[i]!=other.original[i]) ||

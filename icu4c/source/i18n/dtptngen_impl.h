@@ -110,8 +110,8 @@ public:
     UnicodeString baseOriginal[UDATPG_FIELD_COUNT];
 
     PtnSkeleton();
-    PtnSkeleton(PtnSkeleton& other);
-    UBool equals(PtnSkeleton& other);
+    PtnSkeleton(const PtnSkeleton& other);
+    UBool equals(const PtnSkeleton& other);
     UnicodeString getSkeleton();
     virtual ~PtnSkeleton();
 };
