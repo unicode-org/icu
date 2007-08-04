@@ -251,12 +251,6 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     if ( zone != NULL )  delete zone;
     
     // ======== Test getSkeletons and getBaseSkeletons
-    UnicodeString patterns[40];
-    UnicodeString skeletons[40];
-    UnicodeString baseSkeletons[40];
-    int32_t cntSkeletons=0;
-    int32_t cntBaseSktns=0;
-    
     StringEnumeration* ptrSkeletonEnum = gen->getSkeletons(status);
     if(U_FAILURE(status)) {
          errln("ERROR: Fail to get skeletons !\n");
@@ -348,11 +342,11 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
 
 
     // ======= Test random skeleton 
-    const char randomChars[80] = {
+    /*const char randomChars[80] = {
      '1','2','3','4','5','6','7','8','9','0','!','@','#','$','%','^','&','*','(',')',
      '`',' ','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r',
      's','t','u','v','w','x','y','z','A','B','C','D','F','G','H','I','J','K','L','M',
-     'N','O','P','Q','R','S','T','U','V','W','X','Y','Z',':',';','<','.','?',';','\\'};
+     'N','O','P','Q','R','S','T','U','V','W','X','Y','Z',':',';','<','.','?',';','\\'};*/
     DateTimePatternGenerator *randDTGen= DateTimePatternGenerator::createInstance(status);
     if (U_FAILURE(status)) {
         dataerrln("ERROR: Could not create DateTimePatternGenerator (Locale::getFrench()) - exitting");
@@ -410,6 +404,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
                 errln("ERROR: Fail in getRedundants !\n");
         }
     }
+    delete output;
     
     if (test!=NULL) {
         delete test;

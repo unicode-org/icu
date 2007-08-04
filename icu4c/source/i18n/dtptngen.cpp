@@ -55,39 +55,39 @@ static const UChar Canonical_Items[] = {
 static const dtTypeElem dtTypes[] = {
     // patternChar, field, type, minLen, weight
     {CAP_G, UDATPG_ERA_FIELD, DT_SHORT, 1, 3,},
-    {CAP_G, UDATPG_ERA_FIELD, DT_LONG, 4},
+    {CAP_G, UDATPG_ERA_FIELD, DT_LONG, 4, 0},
     {LOW_Y, UDATPG_YEAR_FIELD, DT_NUMERIC, 1, 20},
     {CAP_Y, UDATPG_YEAR_FIELD, DT_NUMERIC + DT_DELTA, 1, 20},
     {LOW_U, UDATPG_YEAR_FIELD, DT_NUMERIC + 2*DT_DELTA, 1, 20},
     {CAP_Q, UDATPG_QUARTER_FIELD, DT_NUMERIC, 1, 2},
-    {CAP_Q, UDATPG_QUARTER_FIELD, DT_SHORT, 3},
-    {CAP_Q, UDATPG_QUARTER_FIELD, DT_LONG, 4},
+    {CAP_Q, UDATPG_QUARTER_FIELD, DT_SHORT, 3, 0},
+    {CAP_Q, UDATPG_QUARTER_FIELD, DT_LONG, 4, 0},
     {CAP_M, UDATPG_MONTH_FIELD, DT_NUMERIC, 1, 2},
-    {CAP_M, UDATPG_MONTH_FIELD, DT_SHORT, 3},
-    {CAP_M, UDATPG_MONTH_FIELD, DT_LONG, 4},
-    {CAP_M, UDATPG_MONTH_FIELD, DT_NARROW, 5},
+    {CAP_M, UDATPG_MONTH_FIELD, DT_SHORT, 3, 0},
+    {CAP_M, UDATPG_MONTH_FIELD, DT_LONG, 4, 0},
+    {CAP_M, UDATPG_MONTH_FIELD, DT_NARROW, 5, 0},
     {CAP_L, UDATPG_MONTH_FIELD, DT_NUMERIC + DT_DELTA, 1, 2},
-    {CAP_L, UDATPG_MONTH_FIELD, DT_SHORT - DT_DELTA, 3},
-    {CAP_L, UDATPG_MONTH_FIELD, DT_LONG - DT_DELTA, 4},
-    {CAP_L, UDATPG_MONTH_FIELD, DT_NARROW - DT_DELTA, 5},
+    {CAP_L, UDATPG_MONTH_FIELD, DT_SHORT - DT_DELTA, 3, 0},
+    {CAP_L, UDATPG_MONTH_FIELD, DT_LONG - DT_DELTA, 4, 0},
+    {CAP_L, UDATPG_MONTH_FIELD, DT_NARROW - DT_DELTA, 5, 0},
     {LOW_W, UDATPG_WEEK_OF_YEAR_FIELD, DT_NUMERIC, 1, 2},
-    {CAP_W, UDATPG_WEEK_OF_MONTH_FIELD, DT_NUMERIC + DT_DELTA, 1},
+    {CAP_W, UDATPG_WEEK_OF_MONTH_FIELD, DT_NUMERIC + DT_DELTA, 1, 0},
     {LOW_E, UDATPG_WEEKDAY_FIELD, DT_NUMERIC + DT_DELTA, 1, 2},
-    {LOW_E, UDATPG_WEEKDAY_FIELD, DT_SHORT - DT_DELTA, 3},
-    {LOW_E, UDATPG_WEEKDAY_FIELD, DT_LONG - DT_DELTA, 4},
-    {LOW_E, UDATPG_WEEKDAY_FIELD, DT_NARROW - DT_DELTA, 5},
+    {LOW_E, UDATPG_WEEKDAY_FIELD, DT_SHORT - DT_DELTA, 3, 0},
+    {LOW_E, UDATPG_WEEKDAY_FIELD, DT_LONG - DT_DELTA, 4, 0},
+    {LOW_E, UDATPG_WEEKDAY_FIELD, DT_NARROW - DT_DELTA, 5, 0},
     {CAP_E, UDATPG_WEEKDAY_FIELD, DT_SHORT, 1, 3},
-    {CAP_E, UDATPG_WEEKDAY_FIELD, DT_LONG, 4},
-    {CAP_E, UDATPG_WEEKDAY_FIELD, DT_NARROW, 5},
+    {CAP_E, UDATPG_WEEKDAY_FIELD, DT_LONG, 4, 0},
+    {CAP_E, UDATPG_WEEKDAY_FIELD, DT_NARROW, 5, 0},
     {LOW_C, UDATPG_WEEKDAY_FIELD, DT_NUMERIC + 2*DT_DELTA, 1, 2},
-    {LOW_C, UDATPG_WEEKDAY_FIELD, DT_SHORT - 2*DT_DELTA, 3},
-    {LOW_C, UDATPG_WEEKDAY_FIELD, DT_LONG - 2*DT_DELTA, 4},
-    {LOW_C, UDATPG_WEEKDAY_FIELD, DT_NARROW - 2*DT_DELTA, 5},
+    {LOW_C, UDATPG_WEEKDAY_FIELD, DT_SHORT - 2*DT_DELTA, 3, 0},
+    {LOW_C, UDATPG_WEEKDAY_FIELD, DT_LONG - 2*DT_DELTA, 4, 0},
+    {LOW_C, UDATPG_WEEKDAY_FIELD, DT_NARROW - 2*DT_DELTA, 5, 0},
     {LOW_D, UDATPG_DAY_FIELD, DT_NUMERIC, 1, 2},
     {CAP_D, UDATPG_DAY_OF_YEAR_FIELD, DT_NUMERIC + DT_DELTA, 1, 3},
-    {CAP_F, UDATPG_DAY_OF_WEEK_IN_MONTH_FIELD, DT_NUMERIC + 2*DT_DELTA, 1},
+    {CAP_F, UDATPG_DAY_OF_WEEK_IN_MONTH_FIELD, DT_NUMERIC + 2*DT_DELTA, 1, 0},
     {LOW_G, UDATPG_DAY_FIELD, DT_NUMERIC + 3*DT_DELTA, 1, 20}, // really internal use, so we d'ont care
-    {LOW_A, UDATPG_DAYPERIOD_FIELD, DT_SHORT, 1},
+    {LOW_A, UDATPG_DAYPERIOD_FIELD, DT_SHORT, 1, 0},
     {CAP_H, UDATPG_HOUR_FIELD, DT_NUMERIC + 10*DT_DELTA, 1, 2}, // 24 hour
     {LOW_K, UDATPG_HOUR_FIELD, DT_NUMERIC + 11*DT_DELTA, 1, 2},
     {LOW_H, UDATPG_HOUR_FIELD, DT_NUMERIC, 1, 2}, // 12 hour
@@ -96,13 +96,13 @@ static const dtTypeElem dtTypes[] = {
     {LOW_S, UDATPG_SECOND_FIELD, DT_NUMERIC, 1, 2},
     {CAP_S, UDATPG_FRACTIONAL_SECOND_FIELD, DT_NUMERIC + DT_DELTA, 1, 1000},
     {CAP_A, UDATPG_SECOND_FIELD, DT_NUMERIC + 2*DT_DELTA, 1, 1000},
-    {LOW_V, UDATPG_ZONE_FIELD, DT_SHORT - 2*DT_DELTA, 1},
-    {LOW_V, UDATPG_ZONE_FIELD, DT_LONG - 2*DT_DELTA, 4},
+    {LOW_V, UDATPG_ZONE_FIELD, DT_SHORT - 2*DT_DELTA, 1, 0},
+    {LOW_V, UDATPG_ZONE_FIELD, DT_LONG - 2*DT_DELTA, 4, 0},
     {LOW_Z, UDATPG_ZONE_FIELD, DT_SHORT, 1, 3},
-    {LOW_Z, UDATPG_ZONE_FIELD, DT_LONG, 4},
+    {LOW_Z, UDATPG_ZONE_FIELD, DT_LONG, 4, 0},
     {CAP_Z, UDATPG_ZONE_FIELD, DT_SHORT - DT_DELTA, 1, 3},
-    {CAP_Z, UDATPG_ZONE_FIELD, DT_LONG - DT_DELTA, 4},
-    {'\0'} , // last row of dtTypes[] 
+    {CAP_Z, UDATPG_ZONE_FIELD, DT_LONG - DT_DELTA, 4, 0},
+    {0, UDATPG_FIELD_COUNT, 0, 0, 0} , // last row of dtTypes[] 
  };
 
 static const char* CLDR_FIELD_APPEND[] = {
@@ -360,7 +360,6 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale) {
     UErrorCode err = U_ZERO_ERROR;
     UResourceBundle *rb, *gregorianBundle, *calBundle;
     UResourceBundle *patBundle, *fieldBundle, *fBundle;
-    int32_t len=0;
     UnicodeString rbPattern, value, field;
     UnicodeString conflictingPattern;
     UDateTimePatternConflict conflictingStatus;
@@ -547,7 +546,7 @@ DateTimePatternGenerator::getAppendName(UDateTimePatternField field, UnicodeStri
 
 UnicodeString
 DateTimePatternGenerator::getBestPattern(const UnicodeString& patternForm, UErrorCode& status) {
-    UnicodeString *bestPattern=NULL;
+    const UnicodeString *bestPattern=NULL;
     UnicodeString dtFormat;
     UErrorCode err = U_ZERO_ERROR;
     UnicodeString resultPattern;
@@ -678,7 +677,7 @@ DateTimePatternGenerator::addPattern(
     DateTimeMatcher matcher;
     matcher.set(pattern, fp, skeleton);
     matcher.getBasePattern(basePattern);
-    UnicodeString *duplicatePattern = patternMap->getPatternFromBasePattern(basePattern);
+    const UnicodeString *duplicatePattern = patternMap->getPatternFromBasePattern(basePattern);
     if (duplicatePattern != NULL ) {
         conflictingStatus = UDATPG_BASE_CONFLICT;
         conflictingPattern = *duplicatePattern;
@@ -723,15 +722,14 @@ DateTimePatternGenerator::getAppendNameNumber(const char* field) {
     return UDATPG_FIELD_COUNT;
 }
 
-UnicodeString*
+const UnicodeString*
 DateTimePatternGenerator::getBestRaw(DateTimeMatcher& source,
                                      int32_t includeMask,
                                      DistanceInfo* missingFields) {
     int32_t bestDistance = 0x7fffffff;
     DistanceInfo tempInfo;
-    UnicodeString *bestPattern=NULL;
+    const UnicodeString *bestPattern=NULL;
 
-    bestPattern = '\0';
     PatternMapIterator it;
     for (it.set(*patternMap); it.hasNext(); ) {
         DateTimeMatcher trial = it.next();
@@ -940,7 +938,7 @@ DateTimePatternGenerator::getPatternForSkeleton(const UnicodeString& skeleton) c
     }
     while ( curElem != NULL ) {
         if ( curElem->skeleton->getSkeleton()==skeleton ) {
-            return *(curElem->pattern);
+            return curElem->pattern;
         }
         curElem=curElem->next;
     }
@@ -956,7 +954,7 @@ DateTimePatternGenerator::getBaseSkeletons(UErrorCode& status) const {
 StringEnumeration*
 DateTimePatternGenerator::getRedundants(UErrorCode& status) {
     StringEnumeration* output = new DTRedundantEnumeration();
-    UnicodeString *pattern;
+    const UnicodeString *pattern;
 
     PatternMapIterator it;
     for (it.set(*patternMap); it.hasNext(); ) {
@@ -1010,13 +1008,12 @@ PatternMap::copyFrom(const PatternMap& other, UErrorCode& status) {
         PtnElem *curElem, *otherElem, *prevElem=NULL;
         otherElem = other.boot[bootIndex];
         while (otherElem!=NULL) {
-            if ((curElem=this->boot[bootIndex]= new PtnElem()) == NULL ) {
+            curElem = new PtnElem(otherElem->basePattern, otherElem->pattern);
+            if ((this->boot[bootIndex]= curElem) == NULL ) {
                 // out of memory
                 status = U_MEMORY_ALLOCATION_ERROR;
                 return;
             }
-            curElem->basePattern = new UnicodeString(*(otherElem->basePattern));
-            curElem->pattern = new UnicodeString(*(otherElem->pattern));
 
             if ((curElem->skeleton=new PtnSkeleton(*(otherElem->skeleton))) == NULL ) {
                 // out of memory
@@ -1068,7 +1065,7 @@ PatternMap::add(const UnicodeString& basePattern,
     }
 
     if (baseElem == NULL) {
-        if ((curElem = new PtnElem()) == NULL ) {
+        if ((curElem = new PtnElem(basePattern, value)) == NULL ) {
             // out of memory
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
@@ -1096,8 +1093,6 @@ PatternMap::add(const UnicodeString& basePattern,
             }
         }
         if ( curElem != NULL ) {
-            curElem->basePattern = new UnicodeString(basePattern);
-            curElem->pattern = new UnicodeString(value);
             PtnSkeleton* pNewSkeleton = curElem->skeleton = new PtnSkeleton;
 
             for (int32_t i=0; i<UDATPG_FIELD_COUNT; ++i ) {
@@ -1120,15 +1115,13 @@ PatternMap::add(const UnicodeString& basePattern,
                 {
                     curElem = curElem->next;
                 }
-                if ((curElem->next = new PtnElem()) == NULL ) {
+                if ((curElem->next = new PtnElem(basePattern, value)) == NULL ) {
                     // out of memory
                     status = U_MEMORY_ALLOCATION_ERROR;
                     return;
                 }
                 curElem=curElem->next;
             }
-            curElem->basePattern = new UnicodeString(basePattern);
-            curElem->pattern = new UnicodeString(value);
             PtnSkeleton* pNewSkeleton = curElem->skeleton = new PtnSkeleton;
             for (int32_t i=0; i<UDATPG_FIELD_COUNT; ++i ) {
                 pNewSkeleton->type[i] = skeleton.type[i];
@@ -1143,16 +1136,16 @@ PatternMap::add(const UnicodeString& basePattern,
                 return;
             }
             // Overwrite the value.
-            *(curElem->pattern)= value;
+            curElem->pattern = value;
         }
     }
 }  // PatternMap::add
 
 // Find the pattern from the given basePattern string.
-UnicodeString *
+const UnicodeString *
 PatternMap::getPatternFromBasePattern(UnicodeString& basePattern) { // key to search for
    UChar baseChar = basePattern.charAt(0);
-   PtnElem *curElem, baseElem;
+   PtnElem *curElem;
 
    // the baseChar must be A-Z or a-z
    if ( (baseChar >= CAP_A) && (baseChar <= CAP_Z) ) {
@@ -1171,8 +1164,8 @@ PatternMap::getPatternFromBasePattern(UnicodeString& basePattern) { // key to se
    }
 
    do  {
-     if ( basePattern.compare(*(curElem->basePattern))==0 ) {
-        return curElem->pattern;
+     if ( basePattern.compare(curElem->basePattern)==0 ) {
+        return &(curElem->pattern);
      }
      curElem=curElem->next;
    }while (curElem != NULL);
@@ -1182,9 +1175,9 @@ PatternMap::getPatternFromBasePattern(UnicodeString& basePattern) { // key to se
 
 
 // Find the pattern from the given skeleton.
-UnicodeString *
+const UnicodeString *
 PatternMap::getPatternFromSkeleton(PtnSkeleton& skeleton) { // key to search for
-   PtnElem *curElem, baseElem;
+   PtnElem *curElem;
 
    // find boot entry
    UChar baseChar='\0';
@@ -1220,7 +1213,7 @@ PatternMap::getPatternFromSkeleton(PtnSkeleton& skeleton) { // key to search for
            }
        }
        if (i == UDATPG_FIELD_COUNT) {
-           return curElem->pattern;
+           return &(curElem->pattern);
        }
        curElem=curElem->next;
    }while (curElem != NULL);
@@ -1249,8 +1242,8 @@ PatternMap::equals(const PatternMap& other) {
             if ((otherElem==NULL) || (myElem==NULL)) {
                 return FALSE;
             }
-            if ( (*(myElem->basePattern) != *(otherElem->basePattern)) ||
-                 (*(myElem->pattern) != *(otherElem->pattern) ) ) {
+            if ( (myElem->basePattern != otherElem->basePattern) ||
+                 (myElem->pattern != otherElem->pattern) ) {
                 return FALSE;
             }
             if ((myElem->skeleton!=otherElem->skeleton)&&
@@ -1280,7 +1273,7 @@ PatternMap::getDuplicateElem(
          curElem = baseElem;
    }
    do {
-     if ( basePattern.compare(*(curElem->basePattern))==0 ) {
+     if ( basePattern.compare(curElem->basePattern)==0 ) {
         UBool isEqual=TRUE;
         for (int32_t i=0; i<UDATPG_FIELD_COUNT; ++i) {
             if (curElem->skeleton->type[i] != skeleton.type[i] ) {
@@ -1638,7 +1631,7 @@ PatternMapIterator::PatternMapIterator() {
 
 
 PatternMapIterator::~PatternMapIterator() {
-    //delete matcher;
+    delete matcher;
 }
 
 void
@@ -1767,9 +1760,10 @@ PtnSkeleton::getSkeleton() {
 PtnSkeleton::~PtnSkeleton() {
 }
 
-PtnElem::PtnElem() : UObject() {
-    basePattern=NULL;
-    pattern=NULL;
+PtnElem::PtnElem(const UnicodeString &basePat, const UnicodeString &pat) : 
+basePattern(basePat),
+pattern(pat)
+{
     skeleton=NULL;
     next=NULL;
 }
@@ -1779,8 +1773,6 @@ PtnElem::~PtnElem() {
     if (next!=NULL) {
         delete next;
     }
-    delete basePattern;
-    delete pattern;
     delete skeleton;
 }
 
@@ -1801,10 +1793,10 @@ DTSkeletonEnumeration::DTSkeletonEnumeration(PatternMap &patternMap, dtStrEnum t
         while (curElem!=NULL) {
             switch(type) {
                 case DT_BASESKELETON:
-                    s=*(curElem->basePattern);
+                    s=curElem->basePattern;
                     break;
                 case DT_PATTERN:
-                    s=*(curElem->pattern);
+                    s=curElem->pattern;
                     break;
                 case DT_SKELETON:
                     curSkeleton=curElem->skeleton;
