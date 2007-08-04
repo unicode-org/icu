@@ -12,20 +12,13 @@
 #ifndef __DTPTNGEN_H__
 #define __DTPTNGEN_H__
 
-#include "unicode/utypes.h"
-#include "unicode/format.h"
 #include "unicode/datefmt.h"
-#include "unicode/calendar.h"
-#include "unicode/ustring.h"
 #include "unicode/locid.h"
 #include "unicode/udat.h"
 #include "unicode/udatpg.h"
-#include "unicode/uniset.h"
 
 U_NAMESPACE_BEGIN
 
-class DateFormatSymbols;
-class DateFormat;
 class Hashtable;
 class FormatParser;
 class DateTimeMatcher;
