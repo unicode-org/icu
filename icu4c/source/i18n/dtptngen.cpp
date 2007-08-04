@@ -127,13 +127,6 @@ static const char* CLDR_AVAILABLE_FORMAT[MAX_AVAILABLE_FORMATS] = {
 static const UnicodeString quotingPattern= UNICODE_STRING_SIMPLE("[[[:script=Latin:][:script=Cyrl:]]&[[:L:][:M:]]]");
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DateTimePatternGenerator)
-UOBJECT_DEFINE_RTTI_IMPLEMENTATION(PtnSkeleton)
-UOBJECT_DEFINE_RTTI_IMPLEMENTATION(PtnElem)
-UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DateTimeMatcher)
-UOBJECT_DEFINE_RTTI_IMPLEMENTATION(PatternMap)
-UOBJECT_DEFINE_RTTI_IMPLEMENTATION(PatternMapIterator)
-UOBJECT_DEFINE_RTTI_IMPLEMENTATION(FormatParser)
-UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DistanceInfo)
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DTSkeletonEnumeration)
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DTRedundantEnumeration)
 
@@ -1721,11 +1714,11 @@ PatternMapIterator::next() {
     return *matcher;
 }
 
-PtnSkeleton::PtnSkeleton() : UObject() {
+PtnSkeleton::PtnSkeleton() {
 }
 
 
-PtnSkeleton::PtnSkeleton(PtnSkeleton& other) : UObject() {
+PtnSkeleton::PtnSkeleton(PtnSkeleton& other) {
     for (int32_t i=0; i<UDATPG_FIELD_COUNT; ++i) {
         this->type[i]=other.type[i];
         this->original[i]=other.original[i];
