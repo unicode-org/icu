@@ -359,7 +359,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString randomSkeleton="";
         int32_t len = rand() % 20;
         for (int32_t j=0; j<len; ++j ) {
-           randomSkeleton += rand()%80;
+           randomSkeleton += (UChar)(rand()%80);
         }
         UnicodeString bestPattern = randDTGen->getBestPattern(randomSkeleton, status);
     }
