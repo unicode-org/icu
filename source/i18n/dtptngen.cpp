@@ -361,7 +361,7 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale) {
             appendItemNames[i]+=(i+0x30); 
         }
         else {
-            appendItemNames[i]+=0x31;
+            appendItemNames[i]+=(UChar)0x31;
             appendItemNames[i]+=(i-10 + 0x30);
         }
         // NUL-terminate for the C API.
@@ -1488,7 +1488,7 @@ FormatParser::set(const UnicodeString& pattern) {
     } while (result==ADD_TOKEN && itemNumber < MAX_DT_TOKEN);
 }
 
-int
+int32_t
 FormatParser::getCanonicalIndex(const UnicodeString& s) {
     int32_t len = s.length();
     UChar ch = s.charAt(0);
