@@ -650,6 +650,13 @@ private:
                                 UErrorCode& status) const; // in case of illegal argument
 
     /**
+     * Used to resolve Time Zone aliases
+     *
+     * @param zid       Time Zone ID to Canonicalize ( resolve aliases )
+     */
+    void zoneIDCanonicalize( UnicodeString & ) const;
+
+    /**
      * Used by subFormat() to format a numeric value.
      * Appends to toAppendTo a string representation of "value"
      * having a number of digits between "minDigits" and

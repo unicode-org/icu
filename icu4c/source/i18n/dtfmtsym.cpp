@@ -19,13 +19,13 @@
 *   10/12/05    emmons      Added setters for eraNames, month/day by width/context
 *******************************************************************************
 */
- 
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
 #include "unicode/ustring.h"
 #include "unicode/dtfmtsym.h"
 #include "unicode/smpdtfmt.h"
+#include "unicode/msgfmt.h"
 #include "cpputils.h"
 #include "ucln_in.h"
 #include "umutex.h"
@@ -173,6 +173,12 @@ static const char gAmPmMarkersTag[]="AmPmMarkers";
 static const char gQuartersTag[]="quarters";
 static const char gMaptimezonesTag[]="mapTimezones";
 static const char gMetazonesTag[]="metazones";
+static const char gTerritoryTag[]="territory";
+static const char gCountriesTag[]="Countries";
+static const char gZoneFormattingTag[]="zoneFormatting";
+static const char gMultizoneTag[]="multizone";
+static const char gRegionFormatTag[]="zoneStrings/regionFormat";
+static const char gFallbackFormatTag[]="zoneStrings/fallbackFormat";
 
 /**
  * These are the tags we expect to see in time zone data resource bundle files
@@ -1977,6 +1983,106 @@ DateFormatSymbols::getMetazoneString(const UnicodeString &zid, const TimeZoneTra
     ures_close(um);
     return result;
 }
+
+UnicodeString&
+DateFormatSymbols::getFallbackString(const UnicodeString &zid, UnicodeString &result, UErrorCode &status)
+{
+    UnicodeString exemplarCity;
+    char zidkey[ZID_KEY_MAX];
+    char zoneTerritoryChars[ULOC_COUNTRY_CAPACITY];
+    UnicodeString displayCountry;
+    UnicodeString solidus = UNICODE_STRING_SIMPLE("/");
+    UnicodeString und = UNICODE_STRING_SIMPLE("_");
+    UnicodeString spc = UNICODE_STRING_SIMPLE(" ");
+    const UChar* aZone = NULL;
+    UBool IsMultiZone = FALSE;
+
+   
+    int32_t len = zid.length();
+    len = (len >= (ZID_KEY_MAX-1) ? ZID_KEY_MAX-1 : len);
+    u_UCharsToChars(zid.getBuffer(), zidkey, len);
+    zidkey[len] = 0; // NULL terminate
+
+    // Replace / with : for zid
+    len = (int32_t)uprv_strlen(zidkey);
+    for (int i = 0; i < len; i++) {
+        if (zidkey[i] == '/') {
+            zidkey[i] = ':';
+        }
+    }
+
+    result.remove();
+
+    UResourceBundle* supplementalDataBundle = ures_openDirect(NULL, kSUPPLEMENTAL, &status);
+    if (U_FAILURE(status) || fResourceBundle == NULL ) {
+        return result;
+    }
+       
+    UResourceBundle* zoneFormatting = ures_getByKey(supplementalDataBundle, gZoneFormattingTag, NULL, &status);
+    UResourceBundle* thisZone = ures_getByKey(zoneFormatting, zidkey, NULL, &status);
+    if (U_FAILURE(status)) {
+        ures_close(zoneFormatting);
+        ures_close(supplementalDataBundle);
+        return result; 
+    }
+
+    UResourceBundle* multiZone = ures_getByKey(zoneFormatting, gMultizoneTag, NULL, &status);
+    const UChar *zoneTerritory = ures_getStringByKey(thisZone,gTerritoryTag,&len,&status);
+    u_UCharsToChars(zoneTerritory, zoneTerritoryChars, u_strlen(zoneTerritory));
+    zoneTerritoryChars[u_strlen(zoneTerritory)] = 0; // NULL terminate
+
+    UResourceBundle* countries = ures_getByKey(fResourceBundle, gCountriesTag, NULL, &status);
+    if ( u_strlen(zoneTerritory) > 0 && countries != NULL ) {
+        displayCountry = ures_getStringByKeyWithFallback(countries,zoneTerritoryChars,&len,&status);
+    }
+
+    if ( U_FAILURE(status) ) {
+        status = U_ZERO_ERROR;
+        displayCountry = UnicodeString(zoneTerritory);
+    }
+
+    while ( ures_hasNext(multiZone) ) {
+        aZone = ures_getNextString(multiZone,&len,NULL,&status);
+        if ( u_strcmp(aZone,zoneTerritory) == 0 ) {
+            IsMultiZone = TRUE;
+            continue;
+        }
+    }
+    
+    if ( IsMultiZone ) {
+        getZoneString(zid, TIMEZONE_EXEMPLAR_CITY, exemplarCity, status);
+        if ( exemplarCity.length()==0 ) {
+	    exemplarCity.setTo(UnicodeString(zid,zid.lastIndexOf(solidus)+1));
+            exemplarCity.findAndReplace(und,spc);
+        }
+        Formattable cityCountryArray[2];
+        UnicodeString pattern = UnicodeString(ures_getStringByKeyWithFallback(fResourceBundle,gFallbackFormatTag,&len,&status));
+        if ( U_FAILURE(status) ) {
+            pattern = UNICODE_STRING_SIMPLE("{1} ({0})");
+            status = U_ZERO_ERROR;
+        }
+        cityCountryArray[0].adoptString(new UnicodeString(exemplarCity));
+        cityCountryArray[1].adoptString(new UnicodeString(displayCountry));
+        MessageFormat::format(pattern,cityCountryArray, 2, result, status);
+    } else {
+        Formattable countryArray[1];
+        UnicodeString pattern = UnicodeString(ures_getStringByKeyWithFallback(fResourceBundle,gRegionFormatTag,&len,&status));
+        if ( U_FAILURE(status) ) {
+            pattern = UNICODE_STRING_SIMPLE("{0}");
+            status = U_ZERO_ERROR;
+        }
+        countryArray[0].adoptString(new UnicodeString(displayCountry));
+        MessageFormat::format(pattern,countryArray, 1, result, status);
+    }
+    
+    if (thisZone) ures_close(thisZone);
+    if (zoneFormatting) ures_close(zoneFormatting);
+    if (supplementalDataBundle) ures_close(supplementalDataBundle);
+    if (countries) ures_close(countries);
+
+    return result;
+}
+
 StringEnumeration* 
 DateFormatSymbols::createZoneStringIDs(UErrorCode &status){
     if(U_FAILURE(status)){
@@ -2132,11 +2238,36 @@ DateFormatSymbols::findZoneIDTypeValue( UnicodeString& zid, const UnicodeString&
                     if (myKey->startsWith(UNICODE_STRING_SIMPLE("meta"))) {
                        zid.setTo(resolveParsedMetazone(*myKey));
                     }
-                    else
+                    else {
                        zid.setTo(*myKey);
+                    }
                     return;
                 }
             }
+        }
+    }
+
+    // Check for generic tz fallback strings if we have gone through all zone strings and haven't found
+    // anything.  
+
+    UnicodeString fbString;
+    StringEnumeration *tzKeys = TimeZone::createEnumeration();
+
+    tzKeys->reset(status);
+    while( (myKey=tzKeys->snext(status))!= NULL){
+        char outpt[1000];
+        status = U_ZERO_ERROR;
+        this->getFallbackString(*myKey,fbString,status);
+        if ( U_FAILURE(status) ) {
+           status = U_ZERO_ERROR;
+           continue;
+        }
+        
+        if(fbString.length()>0 && text.compare(start, fbString.length(), fbString)==0){
+            type = (TimeZoneTranslationType) TIMEZONE_LONG_GENERIC;
+            value.setTo(fbString);
+            zid.setTo(*myKey);
+            return;
         }
     }
 }

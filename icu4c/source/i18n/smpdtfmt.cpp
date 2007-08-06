@@ -24,6 +24,8 @@
 ********************************************************************************
 */
 
+#define ZID_KEY_MAX 128
+
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
@@ -81,6 +83,9 @@ static const UChar SUPPRESS_NEGATIVE_PREFIX[] = {0xAB00, 0};
  * These are the tags we expect to see in normal resource bundle files associated
  * with a locale.
  */
+static const char kSUPPLEMENTAL[]="supplementalData";
+static const char gZoneFormattingTag[]="zoneFormatting";
+static const char gAliases[]="aliases";
 static const char gDateTimePatternsTag[]="DateTimePatterns";
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(SimpleDateFormat)
@@ -780,16 +785,20 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
             appendGMT(appendTo, cal, status);
         }
         else {
-
+            zoneIDCanonicalize(zid);
             if (patternCharIndex == UDAT_TIMEZONE_GENERIC_FIELD) {
                 if(count < 4){
                     fSymbols->getZoneString(zid, DateFormatSymbols::TIMEZONE_SHORT_GENERIC, displayString, status);
                     if(displayString.length()==0)
                        fSymbols->getMetazoneString(zid, DateFormatSymbols::TIMEZONE_SHORT_GENERIC, cal, displayString, status);
+                    if(displayString.length()==0)
+                       fSymbols->getFallbackString(zid, displayString, status);
                 }else{
                     fSymbols->getZoneString(zid, DateFormatSymbols::TIMEZONE_LONG_GENERIC, displayString, status);
                     if(displayString.length()==0)
                        fSymbols->getMetazoneString(zid, DateFormatSymbols::TIMEZONE_LONG_GENERIC, cal, displayString, status);
+                    if(displayString.length()==0)
+                       fSymbols->getFallbackString(zid, displayString, status);
                 }
             } else {
                 if (cal.get(UCAL_DST_OFFSET, status) != 0) {
@@ -876,7 +885,86 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         pos.setEndIndex(appendTo.length());
     }
 }
+//----------------------------------------------------------------------
 
+void
+SimpleDateFormat::zoneIDCanonicalize(UnicodeString &zid) const
+{
+    UnicodeString colon = UNICODE_STRING_SIMPLE(":");
+    UnicodeString solidus = UNICODE_STRING_SIMPLE("/");
+    char zidkey[ZID_KEY_MAX];
+    int32_t len;
+
+    UErrorCode status = U_ZERO_ERROR;
+    UResourceBundle* supplementalDataBundle = ures_openDirect(NULL, kSUPPLEMENTAL, &status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+       
+    UResourceBundle* zoneFormatting = ures_getByKey(supplementalDataBundle, gZoneFormattingTag, NULL, &status);
+
+    // First try to lookup the zone itself, since most of the time the canonical ID and the ID itself
+    // will be the same.  This should save us a significant amount of time.
+
+    len = zid.length();
+    len = (len >= (ZID_KEY_MAX-1) ? ZID_KEY_MAX-1 : len);
+    u_UCharsToChars(zid.getBuffer(), zidkey, len);
+    zidkey[len] = 0; // NULL terminate
+
+    // Replace / with : for zid
+    len = (int32_t)uprv_strlen(zidkey);
+    for (int i = 0; i < len; i++) {
+        if (zidkey[i] == '/') {
+            zidkey[i] = ':';
+        }
+    }
+
+    UResourceBundle* tryThisZone = ures_getByKey(zoneFormatting,zidkey,NULL,&status);
+    if (U_SUCCESS(status)) {
+       ures_close(tryThisZone);
+       ures_close(zoneFormatting);
+       ures_close(supplementalDataBundle);
+       return;
+    }
+
+    // Didn't find it, so go searching for an alias
+
+    while ( ures_hasNext(zoneFormatting)) {
+        UResourceBundle *currentZone = ures_getNextResource(zoneFormatting,NULL,&status);
+        if (U_FAILURE(status)) {
+             ures_close(supplementalDataBundle);
+             return;
+        }
+        
+        const char *currentZoneString= ures_getKey(currentZone);
+
+        UResourceBundle *zoneAliases = ures_getByKey(currentZone,gAliases,NULL, &status);
+        if (U_FAILURE(status)) {
+            status = U_ZERO_ERROR;
+            ures_close(currentZone);
+            continue;
+        }
+        while ( ures_hasNext(zoneAliases)) {
+            int32_t len;
+            const UChar* alias = ures_getNextString(zoneAliases,&len,NULL,&status);
+            if ( zid.compare(alias)==0 ) {
+                zid.setTo(UnicodeString(currentZoneString,(const char *)0));
+                zid.findAndReplace(colon,solidus);
+                ures_close(zoneAliases);
+                ures_close(currentZone);
+                ures_close(zoneFormatting);
+                ures_close(supplementalDataBundle);
+                return;
+            }     
+        }   
+        ures_close(zoneAliases);
+        ures_close(currentZone);
+    }
+    ures_close(zoneFormatting);
+    ures_close(supplementalDataBundle);
+
+    return;
+}
 //----------------------------------------------------------------------
 
 void
