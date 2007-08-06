@@ -498,6 +498,18 @@ public:
     UnicodeString& getMetazoneString(const UnicodeString &ID, const TimeZoneTranslationType type, Calendar &cal, UnicodeString &result, UErrorCode &status);
 
     /**
+     * Gets fallback string given the key
+     * @param ID       The ID of zone strings,  e.g: "America/Los_Angeles".
+     *                 The time zone ID is  for programmatic lookup.
+     * @param result   Output parameter to recieve the translation string
+     * @param status   Input/output parameter, set to success or
+     *                 failure code upon return.
+     * @return the input UnicodeString parameter for chaining
+     * @internal ICU 3.8
+     */
+    UnicodeString& getFallbackString(const UnicodeString &ID, UnicodeString &result, UErrorCode &status);
+
+    /**
      * Sets timezone string for the given the ID and translation type
      * @param ID       The ID of zone strings,  e.g: "America/Los_Angeles".
      *                 The time zone ID is for programmatic lookup.

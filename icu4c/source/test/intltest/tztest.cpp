@@ -914,8 +914,6 @@ void TimeZoneTest::TestCustomParse()
     }
 }
 
-static const UVersionInfo ICU_39 = {3,9,0,0};
-
 void
 TimeZoneTest::TestAliasedNames()
 {
@@ -1047,10 +1045,6 @@ TimeZoneTest::TestAliasedNames()
     UBool useDst[] = { FALSE, TRUE };
     int32_t noLoc = uloc_countAvailable();
 
-    if(isICUVersionAtLeast(ICU_39)) {
-        errln("This test needs to be fixed. This test fails in exhaustive mode because we need to implement generic timezones.\n");
-    }
-
     int32_t i, j, k, loc;
     UnicodeString fromName, toName;
     TimeZone *from = NULL, *to = NULL;
@@ -1060,8 +1054,7 @@ TimeZoneTest::TestAliasedNames()
         if(!from->hasSameRules(*to)) {
             errln("different at %i\n", i);
         }
-        if(!quick && isICUVersionAtLeast(ICU_39)) {
-            errln("This test needs to be fixed. This test fails in exhaustive mode because we need to implement generic timezones.\n");
+        if(!quick) {
             for(loc = 0; loc < noLoc; loc++) {
                 const char* locale = uloc_getAvailable(loc); 
                 for(j = 0; j < (int32_t)(sizeof(styles)/sizeof(styles[0])); j++) {
