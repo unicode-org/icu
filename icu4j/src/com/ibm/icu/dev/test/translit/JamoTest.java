@@ -34,25 +34,25 @@ public class JamoTest extends TransliteratorTest {
 
             // Column 3 is expected value of L2.  If the expected
             // value of L2 is L1, then L2 is null.
-                
+ 
                 // add tests for the update to fix problems where it didn't follow the standard
                 // see also http://www.unicode.org/cldr/data/charts/transforms/Latin-Hangul.html
-                "gach", "(Gi)(A)(Ci)", "gach",
-                "geumhui", "(Gi)(EU)(Mf)(Hi)(YI)", "geumhui",
-                "choe", "(Ci)(OE)", "choe",
-                "wo", "(IEUNG)(WEO)", "wo",
+                "gach", "(Gi)(A)(Cf)", null,
+                "geumhui", "(Gi)(EU)(Mf)(Hi)(YI)", null,
+                "choe", "(Ci)(OE)", null,
+                "wo", "(IEUNG)(WEO)", null,
                 "Wonpil", "(IEUNG)(WEO)(Nf)(Pi)(I)(L)", "wonpil",
                 "GIPPEUM", "(Gi)(I)(BB)(EU)(Mf)", "gippeum",
                 "EUTTEUM", "(IEUNG)(EU)(DD)(EU)(Mf)", "eutteum",
                 "KKOTNAE", "(GGi)(O)(Tf)(Ni)(AE)", "kkotnae",
-                "gaga", "(Gi)(A)(Gi)(A)", "gaga",
-                "gag-a", "(Gi)(A)(Gf)(IEUNG)(A)", "gag-a",
-                "gak-ka", "(Gi)(A)(Kf)(Ki)(A)", "gak-ka",
-                "gakka", "(Gi)(A)(GGi)(A)", "gakka",
-                "gakk-a", "(Gi)(A)(GGf)(IEUNG)(A)", "gakk-a",
-                "gakkka", "(Gi)(A)(GGf)(Ki)(A)", "gakkka",
-                "gak-kka", "(Gi)(A)(Kf)(GGi)(A)", "gak-kka",
-                
+                "gaga", "(Gi)(A)(Gi)(A)", null,
+                "gag-a", "(Gi)(A)(Gf)(IEUNG)(A)", null,
+                "gak-ka", "(Gi)(A)(Kf)(Ki)(A)", null,
+                "gakka", "(Gi)(A)(GGi)(A)", null,
+                "gakk-a", "(Gi)(A)(GGf)(IEUNG)(A)", null,
+                "gakkka", "(Gi)(A)(GGf)(Ki)(A)", null,
+                "gak-kka", "(Gi)(A)(Kf)(GGi)(A)", null,
+
             "bab", "(Bi)(A)(Bf)", null,
             "babb", "(Bi)(A)(Bf)(Bi)(EU)", "babbeu",
             "babbba", "(Bi)(A)(Bf)(Bi)(EU)(Bi)(A)", "babbeuba",
@@ -76,11 +76,6 @@ public class JamoTest extends TransliteratorTest {
         };
 
         for (int i=0; i<CASE.length; i+=3) {
-            if (skipIfBeforeICU(3,8,0) && i == 0) {
-                // Disable the test case only for 3.8d01.
-                // After d01, Latin-Jamo transliterator data must be fixed #5820
-                continue;
-            }
             String jamo = nameToJamo(CASE[i+1]);
             if (CASE[i+2] == null) {
                 expect(latinJamo, CASE[i], jamo, jamoLatin);
@@ -134,6 +129,7 @@ public class JamoTest extends TransliteratorTest {
         String hangul = "\uBC0F";
         String jamo = nameToJamo("(Mi)(I)(Cf)");
         String latin = "mic";
+        String latin2 = "mich";
 
         Transliterator t = null;
 
@@ -147,10 +143,10 @@ public class JamoTest extends TransliteratorTest {
         expect(t, latin, jamo);
 
         t = Transliterator.getInstance("Jamo-Latin");
-        expect(t, jamo, latin);
+        expect(t, jamo, latin2);
 
         t = Transliterator.getInstance("Hangul-Latin");
-        expect(t, hangul, latin);
+        expect(t, hangul, latin2);
 
         t = Transliterator.getInstance("Latin-Hangul");
         expect(t, latin, hangul);
