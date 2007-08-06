@@ -19,7 +19,7 @@
 #include "cpdtrans.h"
 
 // SEP is the disambiguation separator used by Latin-Jamo and Jamo-Latin
-#define SEP "'"
+#define SEP "-"
 
 JamoTest::JamoTest()
 {
@@ -88,12 +88,31 @@ JamoTest::TestJamo() {
         
         // Column 3 is expected value of L2.  If the expected
         // value of L2 is L1, then L2 is NULL.
+
+                // add tests for the update to fix problems where it didn't follow the standard
+                // see also http://www.unicode.org/cldr/data/charts/transforms/Latin-Hangul.html
+                "gach", "(Gi)(A)(Cf)", NULL,
+                "geumhui", "(Gi)(EU)(Mf)(Hi)(YI)", NULL,
+                "choe", "(Ci)(OE)", NULL,
+                "wo", "(IEUNG)(WEO)", NULL,
+                "Wonpil", "(IEUNG)(WEO)(Nf)(Pi)(I)(L)", "wonpil",
+                "GIPPEUM", "(Gi)(I)(BB)(EU)(Mf)", "gippeum",
+                "EUTTEUM", "(IEUNG)(EU)(DD)(EU)(Mf)", "eutteum",
+                "KKOTNAE", "(GGi)(O)(Tf)(Ni)(AE)", "kkotnae",
+                "gaga", "(Gi)(A)(Gi)(A)", NULL,
+                "gag-a", "(Gi)(A)(Gf)(IEUNG)(A)", NULL,
+                "gak-ka", "(Gi)(A)(Kf)(Ki)(A)", NULL,
+                "gakka", "(Gi)(A)(GGi)(A)", NULL,
+                "gakk-a", "(Gi)(A)(GGf)(IEUNG)(A)", NULL,
+                "gakkka", "(Gi)(A)(GGf)(Ki)(A)", NULL,
+                "gak-kka", "(Gi)(A)(Kf)(GGi)(A)", NULL,
+
         "bab", "(Bi)(A)(Bf)", NULL,
         "babb", "(Bi)(A)(Bf)(Bi)(EU)", "babbeu",
         "babbba", "(Bi)(A)(Bf)(Bi)(EU)(Bi)(A)", "babbeuba",
         "bagg", "(Bi)(A)(Gf)(Gi)(EU)", "baggeu",
         "baggga", "(Bi)(A)(Gf)(Gi)(EU)(Gi)(A)", "baggeuga",
-        "bag" SEP "gga", "(Bi)(A)(Gf)" SEP "(Gi)(EU)(Gi)(A)", "bag" SEP "geuga",
+        //"bag" SEP "gga", "(Bi)(A)(Gf)" SEP "(Gi)(EU)(Gi)(A)", "bag" SEP "geuga",
         "kabsa", "(Ki)(A)(Bf)(Si)(A)", NULL,
         "kabska", "(Ki)(A)(BS)(Ki)(A)", NULL,
         "gabsbka", "(Gi)(A)(BS)(Bi)(EU)(Ki)(A)", "gabsbeuka", // not (Kf)
@@ -135,6 +154,7 @@ void JamoTest::TestPiecemeal(void) {
     UnicodeString hangul; hangul.append((UChar)0xBC0F);
     UnicodeString jamo = nameToJamo("(Mi)(I)(Cf)");
     UnicodeString latin("mic");
+    UnicodeString latin2("mich");
 
     Transliterator *t = NULL;
     UErrorCode status = U_ZERO_ERROR;
@@ -168,7 +188,7 @@ void JamoTest::TestPiecemeal(void) {
         errln("FAIL: createInstance failed");
         return;
     }
-    expect(*t, jamo, latin);
+    expect(*t, jamo, latin2);
     delete t;
 
     t = Transliterator::createInstance("Hangul-Latin", UTRANS_FORWARD, status);
@@ -176,7 +196,7 @@ void JamoTest::TestPiecemeal(void) {
         errln("FAIL: createInstance failed");
         return;
     }
-    expect(*t, hangul, latin);
+    expect(*t, hangul, latin2);
     delete t;
 
     t = Transliterator::createInstance("Latin-Hangul", UTRANS_FORWARD, status);
