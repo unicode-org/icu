@@ -358,11 +358,11 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale) {
     for (int32_t i=0; i<UDATPG_FIELD_COUNT; ++i ) {
         appendItemNames[i]=CAP_F;
         if (i<10) {
-            appendItemNames[i]+=(i+0x30); 
+            appendItemNames[i]+=(UChar)(i+0x30);
         }
         else {
             appendItemNames[i]+=(UChar)0x31;
-            appendItemNames[i]+=(i-10 + 0x30);
+            appendItemNames[i]+=(UChar)(i-10 + 0x30);
         }
         // NUL-terminate for the C API.
         appendItemNames[i].getTerminatedBuffer();
