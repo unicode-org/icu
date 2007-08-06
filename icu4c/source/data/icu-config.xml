@@ -91,6 +91,7 @@
         <include locales="en_IE"/> 
         <include locales="en_IN"/> 
         <include locales="en_MT"/>
+        <include locales="en_NA"/>
         <include locales="en_NZ"/> 
         <include locales="en_PH"/> 
         <include locales="en_PK"/>

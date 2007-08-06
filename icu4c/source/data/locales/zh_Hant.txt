@@ -1662,7 +1662,7 @@ zh_Hant{
         REVISED{"已修訂"}
         SAAHO{"SAAHO"}
     }
-    Version{"1.88"}
+    Version{"1.89"}
     calendar{
         gregorian{
             DateTimePatterns{
