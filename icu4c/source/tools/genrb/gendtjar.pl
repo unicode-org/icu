@@ -116,7 +116,7 @@ sub main(){
     $tempDir = $cwd."/temp";
     $version =~ s/\.//;
     $icu4jImpl = "com/ibm/icu/impl/data/";
-    $icu4jDataDir = $icu4jImpl."/icudt".$version."b";
+    $icu4jDataDir = $icu4jImpl."icudt".$version."b";
     $icu4jDevDataDir = "com/ibm/icu/dev/data/";
     $icu4jTestDataDir = "$icu4jDevDataDir/testdata";
     
@@ -208,12 +208,18 @@ sub createJar{
     chdir($tempDir);
     $command="";
     print "INFO: Creating $jarFile\n";
+    if($platform eq "cygwin") {
+        $jar = `cygpath -au $jar`;
+        chop($jar);
+        $tempDir = `cygpath -aw $tempDir`;
+        chop($tempDir);
+        $tempDir =~ s/\\/\\\\/g;
+    }
     if(defined $verbose){
         $command = "$jar cvf $jarFile -C $tempDir $dirToJar";
     }else{
         $command = "$jar cf $jarFile -C $tempDir $dirToJar";
     }
-    
     cmd($command, $verbose);
 }
 #-----------------------------------------------------------------------
