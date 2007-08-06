@@ -10,6 +10,7 @@ import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.Date;
 
+import com.ibm.icu.impl.duration.BasicDurationFormat;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -26,7 +27,7 @@ public abstract class DurationFormat extends UFormat {
      * @provisional This API might change or be removed in a future release.
      */
     public static DurationFormat getInstance(ULocale locale) {
-        throw new UnsupportedOperationException();
+        return (DurationFormat)BasicDurationFormat.getInstance(locale);
     }
     
 
@@ -36,6 +37,15 @@ public abstract class DurationFormat extends UFormat {
      * @deprecated This API is ICU internal only.
      */
     protected DurationFormat() {
+    }
+    
+    /**
+     * Subclass interface
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    protected DurationFormat(ULocale locale) {
+        setLocale(locale,locale);
     }
 
     /**

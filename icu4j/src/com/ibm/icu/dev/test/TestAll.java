@@ -40,6 +40,7 @@ public class TestAll extends TestGroup {
                   "com.ibm.icu.dev.test.timescale.TestAll",
                   "com.ibm.icu.dev.test.charsetdet.TestCharsetDetector",
                   "com.ibm.icu.dev.test.bidi.TestAll",
+                  "com.ibm.icu.dev.test.duration.TestAll",
 //#ifndef FOUNDATION
                   "com.ibm.icu.dev.test.charset.TestAll",
                   "com.ibm.icu.dev.test.serializable.SerializableTest" // *is* a group

@@ -173,6 +173,12 @@
     </copy>
   </target>
 
+  <target name="durationdata" depends="init">
+    <copy todir="${build.dir}/com/ibm/icu/impl/duration/impl/data">
+      <fileset dir="${src.dir}/com/ibm/icu/impl/duration/impl/data" includes="index.txt, pfd*.xml"/>
+    </copy>
+  </target>
+
   <!--
     use this target to conditionally build resources only if icu4j.resources is set
     <target name="icu" depends="init" if="icu4j.resources">
@@ -182,7 +188,7 @@
  -->
 
   <!-- core does not build richedit or tests -->
-  <target name="core" depends="init,coreData,icudata" description="build core classes and data">
+  <target name="core" depends="init,coreData,icudata,durationdata" description="build core classes and data">
     <javac sourcepath="" srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}" debug="on" deprecation="off" encoding="ascii">
 
       <exclude name="**/CVS/**/*" />
@@ -357,6 +363,9 @@
     <copy todir="${build.dir}/com/ibm/icu/dev/data/resources/">
       <fileset dir="${src.dir}/com/ibm/icu/dev/data/resources/" includes="*.properties" />
     </copy>
+    <copy todir="${build.dir}/com/ibm/icu/dev/test/duration/testdata">
+      <fileset dir="${src.dir}/com/ibm/icu/dev/test/duration/testdata/" includes="testdata*.txt" />
+    </copy>
     <!-- use this target to force resources to be rebuilt -->
     <unjar src="${src.dir}/com/ibm/icu/dev/data/testdata.jar" dest="${build.dir}" />
     <touch file="${build.dir}/${icu4j.testdata.path}/root.res" />
@@ -381,6 +390,7 @@
     <jar jarfile="${jar.file}" compress="true">
       <fileset dir="${basedir}" includes="license.html, unicode-license.txt" />
       <fileset dir="${build.dir}" includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*" excludes="META-INF/services/**/*,com/ibm/icu/charset/**/*,${icu4j.data.path}/*.cnv,${icu4j.data.path}/cnvalias.icu" />
+      <fileset dir="${src.dir}" includes="com/ibm/icu/impl/duration/impl/data/*.xml" />
       <manifest>
         <attribute name="Built-By" value="${corp}" />
         <section name="common">
@@ -1554,7 +1564,7 @@
 
 
   <target name="core13" depends="init,coreData,icudata" description="build core classes and data">
-    <javac includes="com/ibm/icu/util/**/*.java,com/ibm/icu/text/**/*.java,com/ibm/icu/math/**/*.java,com/ibm/icu/impl/**/*.java,com/ibm/icu/lang/*.java,com/ibm/icu/charset/**/*.java" excludes="**/CVS/**/*,com/ibm/icu/charset/**/*.*" srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}" debug="on" deprecation="off" encoding="ascii" />
+    <javac includes="com/ibm/icu/util/**/*.java,com/ibm/icu/text/**/*.java,com/ibm/icu/math/**/*.java,com/ibm/icu/impl/**/*.java,com/ibm/icu/lang/*.java,com/ibm/icu/charset/**/*.java" excludes="**/CVS/**/*,com/ibm/icu/charset/**/*.*" srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" compiler="javac1.3" source="1.3" target="1.3" debug="on" deprecation="off" encoding="ascii" />
   </target>
 
   <target name="jar13" depends="core13,indices" description="build full 'icu4j.jar' jar file for jdk1.3">

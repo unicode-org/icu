@@ -296,6 +296,15 @@ public class TestFmwk extends AbstractTestLog {
             return next;
         }
 
+        public Target append(Target targets) {
+            Target t = this;
+            while(t.next != null) {
+                t = t.next;
+            }
+            t.next = targets;
+            return this;
+        }
+
         public void run() throws Exception {
             int f = filter();
             if (f == -1) {
@@ -372,6 +381,7 @@ public class TestFmwk extends AbstractTestLog {
                 }catch (ExceptionInInitializerError e){
                     handleException(e);
                 } catch (InvocationTargetException e) {
+                    e.printStackTrace();
                     handleException(e);
                 }catch (MissingResourceException e) {
                     handleException(e);
@@ -674,18 +684,27 @@ public class TestFmwk extends AbstractTestLog {
      * of the object's class whose name starts with "Test" or "test".
      */
     protected Target getTargets(String targetName) {
-        Class cls = getClass();
+        return getClassTargets(getClass(), targetName);
+    }
+
+    protected Target getClassTargets(Class cls, String targetName) {
+        if (cls == null) {
+            return null;
+        }
+
+        Target target = null;
         if (targetName != null) {
             try {
                 Method method = cls.getMethod(targetName, (Class[])null);
-                return new MethodTarget(targetName, method);
+                target = new MethodTarget(targetName, method);
             } catch (NoSuchMethodException e) {
-                return new Target(targetName); // invalid target
+        if (!inheritTargets()) {
+            return new Target(targetName); // invalid target
+        }
             } catch (SecurityException e) {
                 return null;
             }
         } else {
-            Target target = null;
             if (params.doMethods()) {
                 Method[] methods = cls.getDeclaredMethods();
                 for (int i = methods.length; --i >= 0;) {
@@ -696,8 +715,24 @@ public class TestFmwk extends AbstractTestLog {
                     }
                 }
             }
-            return target;
         }
+
+        if (inheritTargets()) {
+          Target parentTarget = getClassTargets(cls.getSuperclass(), targetName);
+          if (parentTarget == null) {
+            return target;
+          }
+          if (target == null) {
+            return parentTarget;
+          }
+          return parentTarget.append(target);
+        }
+
+        return target;
+    }
+
+    protected boolean inheritTargets() {
+        return false;
     }
 
     protected String getDescription() {
@@ -1742,8 +1777,8 @@ public class TestFmwk extends AbstractTestLog {
                 logln("OK" + message + ": "
                         + (flip ? expected + relation + actual : expected));
             } else {
-		// assert must assume errors are true errors and not just warnings
-		// so cannot warnln here
+                // assert must assume errors are true errors and not just warnings
+                // so cannot warnln here
                 errln(message
                         + ": expected"
                         + (flip ? relation + expected : " " + expected
