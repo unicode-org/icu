@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/sv.xml
  */
 sv{
-    Version{"1.24"}
+    Version{"1.25"}
     collations{
         default{"reformed"}
         reformed{
