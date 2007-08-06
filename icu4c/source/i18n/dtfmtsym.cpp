@@ -2255,7 +2255,6 @@ DateFormatSymbols::findZoneIDTypeValue( UnicodeString& zid, const UnicodeString&
 
     tzKeys->reset(status);
     while( (myKey=tzKeys->snext(status))!= NULL){
-        char outpt[1000];
         status = U_ZERO_ERROR;
         this->getFallbackString(*myKey,fbString,status);
         if ( U_FAILURE(status) ) {
