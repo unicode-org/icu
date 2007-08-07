@@ -17,7 +17,7 @@ om{
     Currencies{
         ETB{
             "$",
-            "Itoophiyaa Birrii",
+            "ETB",
         }
         KES{
             "Ksh",

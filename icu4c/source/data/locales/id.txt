@@ -248,7 +248,7 @@ id{
     Currencies{
         IDR{
             "Rp",
-            "Rupiah Indonesia",
+            "IDR",
         }
     }
     ExemplarCharacters{"[a-n {ng} {ny} o p r-w y]"}

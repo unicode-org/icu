@@ -42,9 +42,9 @@ ms_BN{
                 "H:mm:ss",
                 "H:mm",
                 "dd MMMM yyyy",
-                "dd MMMM yyyy",
+                "yyyy MMMM d",
                 "dd/MM/yyyy",
-                "dd/MM/yyyy",
+                "yyyy-MM-dd",
                 "{1} {0}",
             }
         }

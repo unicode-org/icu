@@ -19,10 +19,10 @@ en_PK{
                 "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
-                "EEEE d MMMM yyyy",
-                "d MMMM yyyy",
+                "EEEE, MMMM d, yyyy",
+                "MMMM d, yyyy",
                 "dd-MMM-yyyy",
-                "dd/MM/yy",
+                "M/d/yy",
                 "{1} {0}",
             }
         }

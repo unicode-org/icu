@@ -439,7 +439,7 @@ hu{
             "Brazil cruzeiro (1990-1993)",
         }
         BRL{
-            "BRL",
+            "R$",
             "Brazil real",
         }
         BRN{
@@ -607,7 +607,7 @@ hu{
             "Etiópiai birr",
         }
         EUR{
-            "EUR",
+            "€",
             "Euro",
         }
         FIM{
@@ -627,7 +627,7 @@ hu{
             "Francia frank",
         }
         GBP{
-            "GBP",
+            "UK£",
             "Brit font sterling",
         }
         GEK{
@@ -723,7 +723,7 @@ hu{
             "Izraeli új sékel",
         }
         INR{
-            "INR",
+            "=0#Rs.|1#Re.|1<Rs." /** (choice)  */,
             "indiai rúpia",
         }
         IQD{
@@ -739,7 +739,7 @@ hu{
             "Izlandi korona",
         }
         ITL{
-            "LIT",
+            "IT₤",
             "Olasz líra",
         }
         JMD{
@@ -751,7 +751,7 @@ hu{
             "Jordániai dínár",
         }
         JPY{
-            "JPY",
+            "JP¥",
             "Japán jen",
         }
         KES{
@@ -1171,7 +1171,7 @@ hu{
             "Ugandai shilling",
         }
         USD{
-            "USD",
+            "US$",
             "USA dollár",
         }
         USN{

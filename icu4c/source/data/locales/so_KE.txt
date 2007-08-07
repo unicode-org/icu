@@ -10,7 +10,7 @@ so_KE{
     Currencies{
         SOS{
             "SOS",
-            "Shilin soomaali",
+            "SOS",
         }
     }
     Version{"1.44"}

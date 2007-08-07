@@ -591,7 +591,7 @@ de{
             "Nakfa",
         }
         ESP{
-            "₧",
+            "ESP",
             "Spanische Pesete",
         }
         ETB{
@@ -619,7 +619,7 @@ de{
             "Französischer Franc",
         }
         GBP{
-            "£",
+            "UK£",
             "Pfund Sterling",
         }
         GEK{
@@ -727,7 +727,7 @@ de{
             "Isländische Krone",
         }
         ITL{
-            "₤",
+            "IT₤",
             "Italienische Lire",
         }
         JMD{
@@ -739,7 +739,7 @@ de{
             "Jordanischer Dinar",
         }
         JPY{
-            "¥",
+            "JP¥",
             "Yen",
         }
         KES{

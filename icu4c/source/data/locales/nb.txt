@@ -2046,7 +2046,7 @@ nb{
     calendar{
         buddhist{
             DateTimePatterns{
-                "HH.mm.ss v",
+                "'kl'. HH.mm.ss v",
                 "HH.mm.ss z",
                 "HH.mm.ss",
                 "HH.mm",

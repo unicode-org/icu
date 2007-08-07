@@ -10,11 +10,11 @@ so_DJ{
     Currencies{
         DJF{
             "$",
-            "Faran Jabbuuti",
+            "DJF",
         }
         SOS{
             "SOS",
-            "Shilin soomaali",
+            "SOS",
         }
     }
     Version{"1.45"}

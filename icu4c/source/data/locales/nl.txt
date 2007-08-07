@@ -438,7 +438,7 @@ nl{
             "Braziliaanse cruzeiro (1990-1993)",
         }
         BRL{
-            "BRL",
+            "R$",
             "Braziliaanse real",
         }
         BRN{
@@ -750,7 +750,7 @@ nl{
             "Jordaanse dinar",
         }
         JPY{
-            "JPY",
+            "JP¥",
             "Japanse yen",
         }
         KES{
@@ -927,7 +927,7 @@ nl{
         }
         MZM{
             "Mt",
-            "Oude Mozambikaanse metical",
+            "MZM",
         }
         NAD{
             "N$",
@@ -1015,7 +1015,7 @@ nl{
         }
         ROL{
             "leu",
-            "Oude Roemeense leu",
+            "ROL",
         }
         RUB{
             "RUB",

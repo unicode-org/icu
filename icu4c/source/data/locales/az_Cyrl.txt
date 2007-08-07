@@ -26,7 +26,7 @@ az_Cyrl{
     Currencies{
         AZM{
             "ман.",
-            "манат",
+            "Manat",
         }
     }
     ExemplarCharacters{"[а ә б-г ғ д-й ј к ҝ л-о ө п-у ү ф х һ ч ҹ ш ы]"}

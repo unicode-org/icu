@@ -98,7 +98,7 @@ sw{
         }
         TZS{
             "TSh",
-            "Shilingi ya Tanzania",
+            "TZS",
         }
     }
     ExemplarCharacters{"[a-d {dh} e-n {ng} {ng'} {ny} o p r s {sh} t {th} u-w y z]"}
