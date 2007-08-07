@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2000-2006, International Business Machines
+*   Copyright (C) 2000-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -11,7 +11,7 @@
 *   indentation:4
 *
 *   created on: 1999aug06
-*   created by: Markus W. Scherer
+*   created by: Markus W. Scherer, updated by Matitiahu Allouche
 *
 * This file contains implementations for BiDi functions that use
 * the core algorithm and core API to write reordered text.
@@ -348,8 +348,6 @@ ubidi_writeReverse(const UChar *src, int32_t srcLength,
     return u_terminateUChars(dest, destSize, destLength, pErrorCode);
 }
 
-#define MASK_R_AL (1UL<<U_RIGHT_TO_LEFT|1UL<<U_RIGHT_TO_LEFT_ARABIC)
-
 U_CAPI int32_t U_EXPORT2
 ubidi_writeReordered(UBiDi *pBiDi,
                      UChar *dest, int32_t destSize,
@@ -464,7 +462,7 @@ ubidi_writeReordered(UBiDi *pBiDi,
                 src=text+logicalStart;
                 /* check if something relevant in insertPoints */
                 markFlag=pBiDi->runs[run].insertRemove;
-                if(markFlag<0) {        /* insert count */
+                if(markFlag<0) {        /* BiDi controls count */
                     markFlag=0;
                 }
 

@@ -1,18 +1,18 @@
 /*
- ******************************************************************************
- *
- *   Copyright (C) 1999-2007, International Business Machines
- *   Corporation and others.  All Rights Reserved.
- *
- ******************************************************************************
- *   file name:  ubidiimp.h
- *   encoding:   US-ASCII
- *   tab size:   8 (not used)
- *   indentation:4
- *
- *   created on: 1999aug06
- *   created by: Markus W. Scherer
- */
+******************************************************************************
+*
+*   Copyright (C) 1999-2007, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+******************************************************************************
+*   file name:  ubidiimp.h
+*   encoding:   US-ASCII
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 1999aug06
+*   created by: Markus W. Scherer, updated by Matitiahu Allouche
+*/
 
 #ifndef UBIDIIMP_H
 #define UBIDIIMP_H
@@ -70,6 +70,7 @@ enum {
 /* are there any characters that are LTR or RTL? */
 #define MASK_LTR (DIRPROP_FLAG(L)|DIRPROP_FLAG(EN)|DIRPROP_FLAG(AN)|DIRPROP_FLAG(LRE)|DIRPROP_FLAG(LRO))
 #define MASK_RTL (DIRPROP_FLAG(R)|DIRPROP_FLAG(AL)|DIRPROP_FLAG(RLE)|DIRPROP_FLAG(RLO))
+#define MASK_R_AL (DIRPROP_FLAG(R)|DIRPROP_FLAG(AL))
 
 /* explicit embedding codes */
 #define MASK_LRX (DIRPROP_FLAG(LRE)|DIRPROP_FLAG(LRO))
@@ -299,7 +300,6 @@ struct UBiDi {
 };
 
 #define IS_VALID_PARA(x) ((x) && ((x)->pParaBiDi==(x)))
-#define IS_VALID_LINE(x) ((x) && ((x)->pParaBiDi) && ((x)->pParaBiDi->pParaBiDi==(x)->pParaBiDi))
 #define IS_VALID_PARA_OR_LINE(x) ((x) && ((x)->pParaBiDi==(x) || (((x)->pParaBiDi) && (x)->pParaBiDi->pParaBiDi==(x)->pParaBiDi)))
 
 typedef union {
@@ -308,6 +308,25 @@ typedef union {
     Para *parasMemory;
     Run *runsMemory;
 } BidiMemoryForAllocation;
+
+/* Macros for initial checks at function entry */
+#define RETURN_IF_NULL_OR_FAILING_ERRCODE(pErrcode, retvalue)   \
+        if((pErrcode)==NULL || U_FAILURE(*pErrcode)) return retvalue
+#define RETURN_IF_NOT_VALID_PARA(bidi, errcode, retvalue)   \
+        if(!IS_VALID_PARA(bidi)) {  \
+            errcode=U_INVALID_STATE_ERROR;  \
+            return retvalue;                \
+        }
+#define RETURN_IF_NOT_VALID_PARA_OR_LINE(bidi, errcode, retvalue)   \
+        if(!IS_VALID_PARA_OR_LINE(bidi)) {  \
+            errcode=U_INVALID_STATE_ERROR;  \
+            return retvalue;                \
+        }
+#define RETURN_IF_BAD_RANGE(arg, start, limit, errcode, retvalue)   \
+        if((arg)<(start) || (arg)>=(limit)) {       \
+            (errcode)=U_ILLEGAL_ARGUMENT_ERROR;     \
+            return retvalue;                        \
+        }
 
 /* helper function to (re)allocate memory if allowed */
 U_CFUNC UBool

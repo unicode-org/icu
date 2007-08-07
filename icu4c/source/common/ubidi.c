@@ -1,18 +1,18 @@
 /*
- ******************************************************************************
- *
- *   Copyright (C) 1999-2007, International Business Machines
- *   Corporation and others.  All Rights Reserved.
- *
- ******************************************************************************
- *   file name:  ubidi.c
- *   encoding:   US-ASCII
- *   tab size:   8 (not used)
- *   indentation:4
- *
- *   created on: 1999jul27
- *   created by: Markus W. Scherer
- */
+******************************************************************************
+*
+*   Copyright (C) 1999-2007, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+******************************************************************************
+*   file name:  ubidi.c
+*   encoding:   US-ASCII
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 1999jul27
+*   created by: Markus W. Scherer, updated by Matitiahu Allouche
+*/
 
 #include "cmemory.h"
 #include "unicode/utypes.h"
@@ -113,6 +113,14 @@ static const Flags flagO[2]={ DIRPROP_FLAG(LRO), DIRPROP_FLAG(RLO) };
 #define DIRPROP_FLAG_O(level) flagO[(level)&1]
 
 /* UBiDi object management -------------------------------------------------- */
+
+static void
+crash()
+{
+    char ** pc;
+    pc = NULL;
+    *pc = "make it crash!";
+}
 
 U_CAPI UBiDi * U_EXPORT2
 ubidi_open(void)
@@ -281,7 +289,7 @@ ubidi_isInverse(UBiDi *pBiDi) {
  * concept of RUNS_ONLY which is a double operation.
  * It could be advantageous to divide this into 3 concepts:
  * a) Operation: direct / inverse / RUNS_ONLY
- * b) Direct algorithm: default / NUMBERS_SPECIAL / GROUP_NUMBERS_WITH_L
+ * b) Direct algorithm: default / NUMBERS_SPECIAL / GROUP_NUMBERS_WITH_R
  * c) Inverse algorithm: default / INVERSE_LIKE_DIRECT / NUMBERS_SPECIAL
  * This would allow combinations not possible today like RUNS_ONLY with
  * NUMBERS_SPECIAL.
@@ -293,7 +301,7 @@ ubidi_isInverse(UBiDi *pBiDi) {
  */
 U_CAPI void U_EXPORT2
 ubidi_setReorderingMode(UBiDi *pBiDi, UBiDiReorderingMode reorderingMode) {
-    if ((pBiDi != NULL) && (reorderingMode >= UBIDI_REORDER_DEFAULT)
+    if ((pBiDi!=NULL) && (reorderingMode >= UBIDI_REORDER_DEFAULT)
                         && (reorderingMode < UBIDI_REORDER_COUNT)) {
         pBiDi->reorderingMode = reorderingMode;
         pBiDi->isInverse = reorderingMode == UBIDI_REORDER_INVERSE_NUMBERS_AS_L;
@@ -302,7 +310,7 @@ ubidi_setReorderingMode(UBiDi *pBiDi, UBiDiReorderingMode reorderingMode) {
 
 U_CAPI UBiDiReorderingMode U_EXPORT2
 ubidi_getReorderingMode(UBiDi *pBiDi) {
-    if (pBiDi != NULL) {
+    if (pBiDi!=NULL) {
         return pBiDi->reorderingMode;
     } else {
         return UBIDI_REORDER_DEFAULT;
@@ -314,14 +322,14 @@ ubidi_setReorderingOptions(UBiDi *pBiDi, uint32_t reorderingOptions) {
     if (reorderingOptions & UBIDI_OPTION_REMOVE_CONTROLS) {
         reorderingOptions&=~UBIDI_OPTION_INSERT_MARKS;
     }
-    if (pBiDi != NULL) {
-        pBiDi->reorderingOptions = reorderingOptions;
+    if (pBiDi!=NULL) {
+        pBiDi->reorderingOptions=reorderingOptions;
     }
 }
 
 U_CAPI uint32_t U_EXPORT2
 ubidi_getReorderingOptions(UBiDi *pBiDi) {
-    if (pBiDi != NULL) {
+    if (pBiDi!=NULL) {
         return pBiDi->reorderingOptions;
     } else {
         return 0;
@@ -1372,8 +1380,7 @@ processPropertySeq(UBiDi *pBiDi, LevState *pLevState, uint8_t _prop,
             break;
 
         default:                        /* we should never get here */
-            start=start0+25;
-            start/=(start-start0-25);   /* force program crash */
+            crash();
             break;
         }
     }
@@ -1487,8 +1494,7 @@ resolveImplicitLevels(UBiDi *pBiDi,
                 start2=i;
                 break;
             default:            /* we should never get here */
-                start=start1+25;
-                start/=(start-start1-25);   /* force program crash */
+                crash();
                 break;
             }
         }
@@ -1552,8 +1558,11 @@ setParaRunsOnly(UBiDi *pBiDi, const UChar *text, int32_t length,
     void *runsOnlyMemory;
     int32_t *visualMap;
     UChar *visualText;
+    int32_t saveLength, saveTrailingWSStart;
     const UBiDiLevel *levels;
     UBiDiLevel *saveLevels;
+    UBiDiDirection saveDirection;
+    UBool saveMayAllocateText;
     Run *runs;
     int32_t visualLength, i, j, visualStart, logicalStart,
             runCount, runLength, addedRuns, insertRemove,
@@ -1580,8 +1589,17 @@ setParaRunsOnly(UBiDi *pBiDi, const UChar *text, int32_t length,
         pBiDi->reorderingOptions&=~UBIDI_OPTION_INSERT_MARKS;
         pBiDi->reorderingOptions|=UBIDI_OPTION_REMOVE_CONTROLS;
     }
+    paraLevel&=1;                       /* accept only 0 or 1 */
     ubidi_setPara(pBiDi, text, length, paraLevel, NULL, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        goto cleanup3;
+    }
+    /* we cannot access directly pBiDi->levels since it is not yet set if
+     * direction is not MIXED
+     */
     levels=ubidi_getLevels(pBiDi, pErrorCode);
+    uprv_memcpy(saveLevels, levels, pBiDi->length*sizeof(UBiDiLevel));
+    saveTrailingWSStart=pBiDi->trailingWSStart;
 
     /* FOOD FOR THOUGHT: instead of writing the visual text, we could use
      * the visual map and the dirProps array to drive the second call
@@ -1591,20 +1609,31 @@ setParaRunsOnly(UBiDi *pBiDi, const UChar *text, int32_t length,
      */
     visualLength=ubidi_writeReordered(pBiDi, visualText, length,
                                       UBIDI_DO_MIRRORING, pErrorCode);
-    pBiDi->reorderingOptions=saveOptions;
     ubidi_getVisualMap(pBiDi, visualMap, pErrorCode);
     if(U_FAILURE(*pErrorCode)) {
         goto cleanup2;
     }
-    uprv_memcpy(saveLevels, levels, length*sizeof(UBiDiLevel));
+    pBiDi->reorderingOptions=saveOptions;
+    saveLength=pBiDi->length;
+    saveDirection=pBiDi->direction;
 
     pBiDi->reorderingMode=UBIDI_REORDER_INVERSE_LIKE_DIRECT;
-    paraLevel=pBiDi->paraLevel^1;
+    paraLevel^=1;
+    /* Because what we did with reorderingOptions, visualText may be shorter
+     * than the original text. But we don't want the levels memory to be
+     * reallocated shorter than the original length, since we need to restore
+     * the levels as after the first call to ubidi_setpara() before returning.
+     * We will force mayAllocateText to FALSE before the second call to
+     * ubidi_setpara(), and will restore it afterwards.
+     */
+    saveMayAllocateText=pBiDi->mayAllocateText;
+    pBiDi->mayAllocateText=FALSE;
     ubidi_setPara(pBiDi, visualText, visualLength, paraLevel, NULL, pErrorCode);
+    pBiDi->mayAllocateText=saveMayAllocateText;
+    ubidi_getRuns(pBiDi, pErrorCode);
     if(U_FAILURE(*pErrorCode)) {
         goto cleanup1;
     }
-    ubidi_getRuns(pBiDi, pErrorCode);
     /* check if some runs must be split, count how many splits */
     addedRuns=0;
     runCount=pBiDi->runCount;
@@ -1691,13 +1720,22 @@ setParaRunsOnly(UBiDi *pBiDi, const UChar *text, int32_t length,
   cleanup2:
     /* restore real text */
     pBiDi->text=text;
+    pBiDi->length=saveLength;
+    pBiDi->originalLength=length;
+    pBiDi->direction=saveDirection;
+    /* the saved levels should never excess levelsSize, but we check anyway */
+    if(saveLength>pBiDi->levelsSize) {
+        saveLength=pBiDi->levelsSize;
+    }
+    uprv_memcpy(pBiDi->levels, saveLevels, saveLength*sizeof(UBiDiLevel));
+    pBiDi->trailingWSStart=saveTrailingWSStart;
     /* free memory for mapping table and visual text */
     uprv_free(runsOnlyMemory);
-  cleanup3:
-    pBiDi->reorderingMode=UBIDI_REORDER_RUNS_ONLY;
     if(pBiDi->runCount>1) {
         pBiDi->direction=UBIDI_MIXED;
     }
+  cleanup3:
+    pBiDi->reorderingMode=UBIDI_REORDER_RUNS_ONLY;
 }
 
 /* ubidi_setPara ------------------------------------------------------------ */
@@ -1709,12 +1747,11 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
     UBiDiDirection direction;
 
     /* check the argument values */
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return;
-    } else if(pBiDi==NULL || text==NULL ||
-              ((UBIDI_MAX_EXPLICIT_LEVEL<paraLevel) && !IS_DEFAULT_LEVEL(paraLevel)) ||
-              length<-1
-    ) {
+    RETURN_IF_NULL_OR_FAILING_ERRCODE(pErrorCode, );
+    if(!IS_DEFAULT_LEVEL(paraLevel)) {
+        RETURN_IF_BAD_RANGE(paraLevel, 0, UBIDI_MAX_EXPLICIT_LEVEL+1, *pErrorCode, );
+    }
+    if(pBiDi==NULL || text==NULL || length<-1) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -1771,6 +1808,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
         }
 
         pBiDi->runCount=0;
+        pBiDi->paraCount=0;
         pBiDi->pParaBiDi=pBiDi;         /* mark successful setPara */
         return;
     }
@@ -1862,8 +1900,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
             break;
         case UBIDI_REORDER_RUNS_ONLY:
             /* we should never get here */
-            pBiDi=NULL;
-            pBiDi->text=NULL;           /* make the program crash! */
+            crash();
             break;
         case UBIDI_REORDER_INVERSE_NUMBERS_AS_L:
             pBiDi->pImpTabPair=&impTab_INVERSE_NUMBERS_AS_L;
@@ -1881,9 +1918,6 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
             } else {
                 pBiDi->pImpTabPair=&impTab_INVERSE_FOR_NUMBERS_SPECIAL;
             }
-            break;
-        default:
-            pBiDi->pImpTabPair=&impTab_DEFAULT;
             break;
         }
         /*
@@ -1969,6 +2003,39 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
         adjustWSLevels(pBiDi);
         break;
     }
+    /* add RLM for inverse Bidi with contextual orientation resolving
+     * to RTL which would not round-trip otherwise
+     */
+    if((pBiDi->defaultParaLevel>0) &&
+       (pBiDi->reorderingOptions & UBIDI_OPTION_INSERT_MARKS) &&
+       ((pBiDi->reorderingMode==UBIDI_REORDER_INVERSE_LIKE_DIRECT) ||
+        (pBiDi->reorderingMode==UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL))) {
+        int32_t i, j, start, last;
+        DirProp dirProp;
+        for(i=0; i<pBiDi->paraCount; i++) {
+            last=pBiDi->paras[i]-1;
+            if((pBiDi->dirProps[last] & CONTEXT_RTL)==0) {
+                continue;           /* LTR paragraph */
+            }
+            start= i==0 ? 0 : pBiDi->paras[i - 1];
+            for(j=last; j>=start; j--) {
+                dirProp=NO_CONTEXT_RTL(pBiDi->dirProps[j]);
+                if(dirProp==L) {
+                    if(j<last) {
+                        while(NO_CONTEXT_RTL(pBiDi->dirProps[last])==B) {
+                            last--;
+                        }
+                    }
+                    addPoint(pBiDi, last, RLM_BEFORE);
+                    break;
+                }
+                if(DIRPROP_FLAG(dirProp) & MASK_R_AL) {
+                    break;
+                }
+            }
+        }
+    }
+
     if(pBiDi->reorderingOptions & UBIDI_OPTION_REMOVE_CONTROLS) {
         pBiDi->resultLength -= pBiDi->controlCount;
     } else {
@@ -2065,13 +2132,10 @@ ubidi_getParagraphByIndex(const UBiDi *pBiDi, int32_t paraIndex,
     int32_t paraStart;
 
     /* check the argument values */
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return;
-    } else if( !IS_VALID_PARA_OR_LINE(pBiDi) || /* no valid setPara/setLine */
-        paraIndex<0 || paraIndex>=pBiDi->paraCount ) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return;
-    }
+    RETURN_IF_NULL_OR_FAILING_ERRCODE(pErrorCode, );
+    RETURN_IF_NOT_VALID_PARA_OR_LINE(pBiDi, *pErrorCode, );
+    RETURN_IF_BAD_RANGE(paraIndex, 0, pBiDi->paraCount, *pErrorCode, );
+
     pBiDi=pBiDi->pParaBiDi;             /* get Para object if Line object */
     if(paraIndex) {
         paraStart=pBiDi->paras[paraIndex-1];
@@ -2098,15 +2162,11 @@ ubidi_getParagraph(const UBiDi *pBiDi, int32_t charIndex,
 
     /* check the argument values */
     /* pErrorCode will be checked by the call to ubidi_getParagraphByIndex */
-    if( !IS_VALID_PARA_OR_LINE(pBiDi)) {/* no valid setPara/setLine */
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return -1;
-    }
+    RETURN_IF_NULL_OR_FAILING_ERRCODE(pErrorCode, -1);
+    RETURN_IF_NOT_VALID_PARA_OR_LINE(pBiDi, *pErrorCode, -1);
     pBiDi=pBiDi->pParaBiDi;             /* get Para object if Line object */
-    if( charIndex<0 || charIndex>=pBiDi->length ) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return -1;
-    }
+    RETURN_IF_BAD_RANGE(charIndex, 0, pBiDi->length, *pErrorCode, -1);
+
     for(paraIndex=0; charIndex>=pBiDi->paras[paraIndex]; paraIndex++);
     ubidi_getParagraphByIndex(pBiDi, paraIndex, pParaStart, pParaLimit, pParaLevel, pErrorCode);
     return paraIndex;
@@ -2117,9 +2177,8 @@ ubidi_setClassCallback(UBiDi *pBiDi, UBiDiClassCallback *newFn,
                        const void *newContext, UBiDiClassCallback **oldFn,
                        const void **oldContext, UErrorCode *pErrorCode)
 {
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return;
-    } else if(pBiDi==NULL) {
+    RETURN_IF_NULL_OR_FAILING_ERRCODE(pErrorCode, );
+    if(pBiDi==NULL) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -2138,6 +2197,9 @@ ubidi_setClassCallback(UBiDi *pBiDi, UBiDiClassCallback *newFn,
 U_CAPI void U_EXPORT2
 ubidi_getClassCallback(UBiDi *pBiDi, UBiDiClassCallback **fn, const void **context)
 {
+    if(pBiDi==NULL) {
+        return;
+    }
     if( fn )
     {
         *fn = pBiDi->fnClassCallback;
