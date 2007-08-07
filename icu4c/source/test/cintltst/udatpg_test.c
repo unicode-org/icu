@@ -217,6 +217,8 @@ static void TestBuilder() {
     UChar result[20];
     int32_t length, pLength;  
     const UChar *s, *p;
+    const UChar* ptrResult[2]; 
+    int32_t count=0;
     
     /* test create an empty DateTimePatternGenerator */
     dtpg=udatpg_openEmpty(&errorCode);
@@ -264,8 +266,9 @@ static void TestBuilder() {
     }
     
     /* Get all skeletons and the crroespong pattern for each skeleton. */
-    const UChar* ptrResult[2] = {testPattern2, redundantPattern}; 
-    int32_t count=0;
+    ptrResult[0] = testPattern2;
+    ptrResult[1] = redundantPattern; 
+    count=0;
     en = udatpg_openSkeletons(dtpg, &errorCode);  
     if (U_FAILURE(errorCode) || (length==0) ) {
         log_err("udatpg_openSkeletons failed!\n");
