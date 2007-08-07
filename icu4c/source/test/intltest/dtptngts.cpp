@@ -17,89 +17,6 @@
 #include "unicode/utypes.h"
 #include "loctest.h"
 
-static const UnicodeString patternData[] = {
-    UnicodeString("yM"),
-    UnicodeString("yMMM"),
-    UnicodeString("yMd"),
-    UnicodeString("yMMMd"),
-    UnicodeString("Md"),
-    UnicodeString("MMMd"),
-    UnicodeString("yQQQ"),
-    UnicodeString("hhmm"),
-    UnicodeString("HHmm"),
-    UnicodeString("mmss"),
-    UnicodeString(""),
- };
- 
-#define MAX_LOCALE   4  
-static const char* testLocale[MAX_LOCALE][3] = {
-    {"en", "US","\0"},
-    {"zh", "Hans", "CN"},
-    {"de","DE", "\0"},
-    {"fi","\0", "\0"},
- };
- 
-static const UnicodeString patternResults[] = {
-    UnicodeString("1/1999"),  // en_US
-    UnicodeString("Jan 1999"),
-    UnicodeString("1/13/1999"),
-    UnicodeString("Jan/13/1999"),
-    UnicodeString("1/13"),
-    UnicodeString("Jan 13"),
-    UnicodeString("Q1 1999"),
-    UnicodeString("11:58 PM"),
-    UnicodeString("23:58"),
-    UnicodeString("58:59"),
-    UnicodeString("1999-1"),  // zh_Hans_CN
-    UnicodeString("1999 1"),
-    CharsToUnicodeString("1999\\u5E741\\u670813\\u65E5"),
-    CharsToUnicodeString("1999\\u5E741\\u670813\\u65E5"),
-    UnicodeString("1-13"),
-    UnicodeString("1 13"),
-    CharsToUnicodeString("1999 Q1"),
-    CharsToUnicodeString("\\u4E0B\\u534811:58"),
-    CharsToUnicodeString("23:58"),
-    UnicodeString("58:59"),
-    UnicodeString("1.1999"),  // de_DE
-    UnicodeString("Jan 1999"),
-    UnicodeString("13.1.1999"),
-    UnicodeString("13. Jan 1999"),
-    UnicodeString("13.1."),
-    UnicodeString("13. Jan"),
-    UnicodeString("Q1 1999"),
-    UnicodeString("23:58"),
-    UnicodeString("23:58"),
-    UnicodeString("58:59"),
-    UnicodeString("1/1999"),  // fi
-    UnicodeString("tammi 1999"),
-    UnicodeString("13.1.1999"),
-    UnicodeString("13. tammita 1999"),
-    UnicodeString("13.1."),
-    UnicodeString("13. tammita"),
-    UnicodeString("1. nelj./1999"),
-    UnicodeString("23.58"),
-    UnicodeString("23.58"),
-    UnicodeString("58.59"),
-    UnicodeString(""),
-};
-
-// results for getSkeletons() and getPatternForSkeleton()
-static const UnicodeString testSkeletonsResults[] = { 
-    UnicodeString("HH:mm"), 
-    UnicodeString("MMMMd"), 
-    UnicodeString("MMMMMd"), 
-};
-      
-static const UnicodeString testBaseSkeletonsResults[] = {        
-    UnicodeString("Hm"),  
-    UnicodeString("MMMd"), 
-    UnicodeString("MMMd"),
-};
-
-static const UnicodeString newDecimal=UnicodeString(" "); // space
-static const UnicodeString newAppendItemName = UnicodeString("hrs.");
-static const UnicodeString newAppendItemFormat = UnicodeString("{1} {0}");
-static const UnicodeString newDateTimeFormat = UnicodeString("{1} {0}");
 
 // This is an API test, not a unit test.  It doesn't test very many cases, and doesn't
 // try to test the full functionality.  It just calls each function in the class and
@@ -114,11 +31,95 @@ void IntlTestDateTimePatternGeneratorAPI::runIndexedTest( int32_t index, UBool e
     }
 }
 
+#define MAX_LOCALE   4  
+
 /**
  * Test various generic API methods of DateTimePatternGenerator for API coverage.
  */
 void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
 {
+    UnicodeString patternData[] = {
+        UnicodeString("yM"),
+        UnicodeString("yMMM"),
+        UnicodeString("yMd"),
+        UnicodeString("yMMMd"),
+        UnicodeString("Md"),
+        UnicodeString("MMMd"),
+        UnicodeString("yQQQ"),
+        UnicodeString("hhmm"),
+        UnicodeString("HHmm"),
+        UnicodeString("mmss"),
+        UnicodeString(""),
+     };
+     
+    const char* testLocale[MAX_LOCALE][3] = {
+        {"en", "US", ""},
+        {"zh", "Hans", "CN"},
+        {"de", "DE", ""},
+        {"fi", "", ""},
+     };
+     
+    UnicodeString patternResults[] = {
+        UnicodeString("1/1999"),  // en_US
+        UnicodeString("Jan 1999"),
+        UnicodeString("1/13/1999"),
+        UnicodeString("Jan/13/1999"),
+        UnicodeString("1/13"),
+        UnicodeString("Jan 13"),
+        UnicodeString("Q1 1999"),
+        UnicodeString("11:58 PM"),
+        UnicodeString("23:58"),
+        UnicodeString("58:59"),
+        UnicodeString("1999-1"),  // zh_Hans_CN
+        UnicodeString("1999 1"),
+        CharsToUnicodeString("1999\\u5E741\\u670813\\u65E5"),
+        CharsToUnicodeString("1999\\u5E741\\u670813\\u65E5"),
+        UnicodeString("1-13"),
+        UnicodeString("1 13"),
+        CharsToUnicodeString("1999 Q1"),
+        CharsToUnicodeString("\\u4E0B\\u534811:58"),
+        CharsToUnicodeString("23:58"),
+        UnicodeString("58:59"),
+        UnicodeString("1.1999"),  // de_DE
+        UnicodeString("Jan 1999"),
+        UnicodeString("13.1.1999"),
+        UnicodeString("13. Jan 1999"),
+        UnicodeString("13.1."),
+        UnicodeString("13. Jan"),
+        UnicodeString("Q1 1999"),
+        UnicodeString("23:58"),
+        UnicodeString("23:58"),
+        UnicodeString("58:59"),
+        UnicodeString("1/1999"),  // fi
+        UnicodeString("tammi 1999"),
+        UnicodeString("13.1.1999"),
+        UnicodeString("13. tammita 1999"),
+        UnicodeString("13.1."),
+        UnicodeString("13. tammita"),
+        UnicodeString("1. nelj./1999"),
+        UnicodeString("23.58"),
+        UnicodeString("23.58"),
+        UnicodeString("58.59"),
+        UnicodeString(""),
+    };
+
+    // results for getSkeletons() and getPatternForSkeleton()
+    const UnicodeString testSkeletonsResults[] = { 
+        UnicodeString("HH:mm"), 
+        UnicodeString("MMMMd"), 
+        UnicodeString("MMMMMd"), 
+    };
+          
+    const UnicodeString testBaseSkeletonsResults[] = {        
+        UnicodeString("Hm"),  
+        UnicodeString("MMMd"), 
+        UnicodeString("MMMd"),
+    };
+
+    UnicodeString newDecimal(" "); // space
+    UnicodeString newAppendItemName("hrs.");
+    UnicodeString newAppendItemFormat("{1} {0}");
+    UnicodeString newDateTimeFormat("{1} {0}");
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString conflictingPattern;
     UDateTimePatternConflict conflictingStatus;
@@ -282,16 +283,15 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         while (patternData[dataIndex].length() > 0) {
             bestPattern = patGen->getBestPattern(patternData[dataIndex++], status);
             
-            SimpleDateFormat* sdf = new SimpleDateFormat(bestPattern, loc, status);
+            SimpleDateFormat sdf(bestPattern, loc, status);
             resultDate = "";
-            resultDate = sdf->format(testDate, resultDate);
+            resultDate = sdf.format(testDate, resultDate);
             if ( resultDate != patternResults[resultIndex] ) {
                 errln(UnicodeString("\nERROR: Test various skeletons[") + (dataIndex-1)
                     + UnicodeString("]. Got: ") + resultDate + UnicodeString(" Expected: ") + patternResults[resultIndex] );
             }
             
             resultIndex++;
-            delete sdf;
         }
         delete patGen;
         localeIndex++;
@@ -373,7 +373,9 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
          ptrSkeleton = (UnicodeString *)ptrSkeletonEnum->snext(status);
          returnPattern = test->getPatternForSkeleton(*ptrSkeleton);
          if ( returnPattern != testSkeletonsResults[i] ) {
-             errln("ERROR: Unexpected result from getSkeletons() and getPatternForSkeleton() !\n");
+             errln(UnicodeString("ERROR: Unexpected result from getSkeletons and getPatternForSkeleton\nGot: ") + returnPattern
+                + UnicodeString("\nExpected: ") + testSkeletonsResults[i]
+                + UnicodeString("\n"));
          }
      }
      StringEnumeration* ptrBaseSkeletonEnum = test->getBaseSkeletons(status);
