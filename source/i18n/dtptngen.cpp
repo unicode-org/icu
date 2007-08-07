@@ -1023,6 +1023,7 @@ PatternMap::getHeader(UChar baseChar) {
             return NULL;
         }
     }
+    return curElem;
 }
      
 PatternMap::~PatternMap() {
