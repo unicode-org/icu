@@ -12,6 +12,8 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ibm.icu.lang.UCharacter;
+
 public class XMLRecordReader implements RecordReader {
   private Reader r;
   private List nameStack;
@@ -188,7 +190,7 @@ public class XMLRecordReader implements RecordReader {
   }
 
   private String readData() {
-    StringBuilder sb = new StringBuilder();
+    StringBuffer sb = new StringBuffer();
     boolean inWhitespace = false;
     boolean inAmp = false;
     while (true) {
@@ -200,7 +202,7 @@ public class XMLRecordReader implements RecordReader {
       if (c == '&') {
         c = readChar();
         if (c == '#') {
-          StringBuilder numBuf = new StringBuilder();
+          StringBuffer numBuf = new StringBuffer();
           int radix = 10;
           c = readChar();
           if (c == 'x') {
@@ -219,7 +221,7 @@ public class XMLRecordReader implements RecordReader {
             throw ex;
           }
         } else {
-          StringBuilder charBuf = new StringBuilder();
+          StringBuffer charBuf = new StringBuffer();
           while (c != ';' && c != -1) {
             charBuf.append((char)c);
             c = readChar();
@@ -243,7 +245,7 @@ public class XMLRecordReader implements RecordReader {
         }
       }
             
-      if (Character.isWhitespace(c)) {
+      if (UCharacter.isWhitespace(c)) {
         if (inWhitespace) {
           continue;
         }
@@ -268,7 +270,7 @@ public class XMLRecordReader implements RecordReader {
         }
         break;
       }
-      if (!Character.isWhitespace(c)) {
+      if (!UCharacter.isWhitespace(c)) {
         System.err.println("Unexpected non-whitespace character " + 
                            Integer.toHexString(c));
         break;
@@ -277,7 +279,7 @@ public class XMLRecordReader implements RecordReader {
 
     if (atTag) {
       atTag = false;
-      StringBuilder sb = new StringBuilder();
+      StringBuffer sb = new StringBuffer();
       while (true) {
         c = readChar();
         if (c == '>' || c == -1) {

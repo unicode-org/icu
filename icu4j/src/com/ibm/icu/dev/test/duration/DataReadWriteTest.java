@@ -30,7 +30,7 @@ public class DataReadWriteTest extends TestFmwk {
 
   // strip line ends and trailing spaces
   private String normalize(String str) {
-    StringBuilder sb = new StringBuilder();
+    StringBuffer sb = new StringBuffer();
     boolean inLine = true;
     for (int i = 0; i < str.length(); ++i) {
       char c = str.charAt(i);

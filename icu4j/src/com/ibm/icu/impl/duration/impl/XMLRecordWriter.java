@@ -12,6 +12,8 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ibm.icu.lang.UCharacter;
+
 public class XMLRecordWriter implements RecordWriter {
   private Writer w;
   private List nameStack;
@@ -117,15 +119,15 @@ public class XMLRecordWriter implements RecordWriter {
     if (str == null) {
       return null;
     }
-    StringBuilder sb = null;
+    StringBuffer sb = null;
     boolean inWhitespace = false;
     char c = '\0';
     boolean special = false;
     for (int i = 0; i < str.length(); ++i) {
       c = str.charAt(i);
-      if (Character.isWhitespace(c)) {
+      if (UCharacter.isWhitespace(c)) {
         if (sb == null && (inWhitespace || c != ' ')) {
-          sb = new StringBuilder(str.substring(0, i));
+          sb = new StringBuffer(str.substring(0, i));
         }
         if (inWhitespace) {
           continue;
@@ -137,7 +139,7 @@ public class XMLRecordWriter implements RecordWriter {
         inWhitespace = false;
         special = c == '<' || c == '&';
         if (special && sb == null) {
-          sb = new StringBuilder(str.substring(0, i));
+          sb = new StringBuffer(str.substring(0, i));
         }
       }
       if (sb != null) {
