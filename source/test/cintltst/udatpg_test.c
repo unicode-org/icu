@@ -61,6 +61,9 @@ static const UChar testFormat[]= {0x7B, 0x31, 0x7D, 0x20, 0x7B, 0x30, 0x7D, 0}; 
 static const UChar appendItemName[]= {0x68, 0x72, 0};  /* hr */
 static const UChar testPattern2[]={ 0x48, 0x48, 0x3a, 0x6d, 0x6d, 0x20, 0x76, 0 }; /* HH:mm v */
 static const UChar replacedStr[]={ 0x76, 0x76, 0x76, 0x76, 0 }; /* vvvv */
+// results for getBaseSkeletons() - {Hmv}, {yMMM}
+static const UChar resultBaseSkeletons[2][10] = {{0x48,0x6d, 0x76, 0}, {0x79, 0x4d, 0x4d, 0x4d, 0 } };
+
 
 static void TestOpenClose() {
     UErrorCode errorCode=U_ZERO_ERROR;
@@ -261,6 +264,8 @@ static void TestBuilder() {
     }
     
     /* Get all skeletons and the crroespong pattern for each skeleton. */
+    const UChar* ptrResult[2] = {testPattern2, redundantPattern}; 
+    int32_t count=0;
     en = udatpg_openSkeletons(dtpg, &errorCode);  
     if (U_FAILURE(errorCode) || (length==0) ) {
         log_err("udatpg_openSkeletons failed!\n");
@@ -268,15 +273,25 @@ static void TestBuilder() {
     }
     while ( (s=uenum_unext(en, &length, &errorCode))!= NULL) {
         p = udatpg_getPatternForSkeleton(dtpg, s, length, &pLength);
-        if (U_FAILURE(errorCode) || p==NULL ) {
+        if (U_FAILURE(errorCode) || p==NULL || u_memcmp(p, ptrResult[count], pLength)!=0 ) {
             log_err("udatpg_getPatternForSkeleton failed!\n");
             return;
         }
+        count++;
     }
     uenum_close(en);
     
     /* Get all baseSkeletons */
-    en = udatpg_openBaseSkeletons(dtpg, &errorCode);  
+    en = udatpg_openBaseSkeletons(dtpg, &errorCode);
+    count=0;
+    while ( (s=uenum_unext(en, &length, &errorCode))!= NULL) {
+        p = udatpg_getPatternForSkeleton(dtpg, s, length, &pLength);
+        if (U_FAILURE(errorCode) || p==NULL || u_memcmp(p, resultBaseSkeletons[count], pLength)!=0 ) {
+            log_err("udatpg_getPatternForSkeleton failed!\n");
+            return;
+        }
+        count++;
+    }
     if (U_FAILURE(errorCode) || (length==0) ) {
         log_err("udatpg_openSkeletons failed!\n");
         return;
@@ -285,6 +300,5 @@ static void TestBuilder() {
     
     udatpg_close(dtpg);
 }
-
 
 #endif
