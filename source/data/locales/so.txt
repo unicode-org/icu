@@ -119,7 +119,7 @@ so{
         }
         SOS{
             "$",
-            "Shilin soomaali",
+            "SOS",
         }
     }
     ExemplarCharacters{"[a-z]"}

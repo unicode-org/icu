@@ -75,11 +75,11 @@ pt_PT{
             "Dinar da Bósnia-Herzegóvina",
         }
         BAM{
-            "KM",
+            "BAM",
             "Marco bósnio-herzegóvino conversível",
         }
         CYP{
-            "£C",
+            "CYP",
             "Libra de Chipre",
         }
         CZK{
@@ -123,7 +123,7 @@ pt_PT{
             }
         }
         TZS{
-            "T Sh",
+            "TZS",
             "Xelim de Tanzânia",
         }
         WST{
@@ -205,7 +205,7 @@ pt_PT{
             DateTimePatterns{
                 "HH'H'mm'm'ss's' v",
                 "HH:mm:ss z",
-                "HH'h'mm'min'ss's'",
+                "HH:mm:ss",
                 "HH:mm",
                 "EEEE, MMMM d, yyyy G",
                 "MMMM d, yyyy G",

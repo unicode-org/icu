@@ -289,12 +289,12 @@ am{
             DateTimePatterns{
                 "hh:mm:ss a v",
                 "hh:mm:ss a z",
-                "h:mm:ss a",
-                "h:mm a",
-                "EEEE፣ dd MMMM ቀን yyyy G",
-                "dd MMMM yyyy",
-                "MMM d yyyy",
-                "dd/MM/yy",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, yyyy MMMM dd",
+                "yyyy MMMM d",
+                "yyyy MMM d",
+                "yyyy-MM-dd",
                 "{1} {0}",
             }
             dayNames{

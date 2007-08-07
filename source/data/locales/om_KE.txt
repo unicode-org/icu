@@ -10,7 +10,7 @@ om_KE{
     Currencies{
         ETB{
             "ETB",
-            "Itoophiyaa Birrii",
+            "ETB",
         }
     }
     Version{"1.44"}

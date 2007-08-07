@@ -1882,7 +1882,7 @@ sv{
         "E",
         "‰",
         "∞",
-        "¤¤¤",
+        "NaN",
         "+",
     }
     NumberPatterns{
@@ -2060,7 +2060,7 @@ sv{
                 "HH.mm.ss z",
                 "HH.mm.ss",
                 "HH.mm",
-                "EEEE'en' 'den' d:'e' MMMM yyyy",
+                "EEEE, yyyy MMMM dd",
                 "d MMMM yyyy",
                 "d MMM yyyy",
                 "yyyy-MM-dd",
