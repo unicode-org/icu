@@ -199,12 +199,12 @@ af{
             DateTimePatterns{
                 "h:mm:ss a v",
                 "h:mm:ss a z",
-                "h:mm:ss a",
-                "h:mm a",
-                "EEEE dd MMMM yyyy",
-                "dd MMMM yyyy",
-                "dd MMM yyyy",
-                "yyyy/MM/dd",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, yyyy MMMM dd",
+                "yyyy MMMM d",
+                "yyyy MMM d",
+                "yyyy-MM-dd",
                 "{1} {0}",
             }
             dayNames{

@@ -10,11 +10,11 @@ so_ET{
     Currencies{
         ETB{
             "$",
-            "Birta Itoobbiya",
+            "ETB",
         }
         SOS{
             "SOS",
-            "Shilin soomaali",
+            "SOS",
         }
     }
     Version{"1.45"}

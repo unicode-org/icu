@@ -252,12 +252,12 @@ ml{
     calendar{
         gregorian{
             DateTimePatterns{
-                "h:mm:ss a v",
-                "h:mm:ss a z",
-                "h:mm:ss a",
-                "h:mm a",
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
                 "yyyy, MMMM d, EEEE",
-                "yyyy, MMMM d",
+                "yyyy MMMM d",
                 "yyyy, MMM d",
                 "dd-MM-yy",
                 "{1} {0}",

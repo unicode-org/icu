@@ -294,12 +294,12 @@ nn{
     }
     Currencies{
         EUR{
-            "EUR",
+            "€",
             "euro",
         }
         NOK{
             "kr",
-            "norsk krone",
+            "NOK",
         }
         XXX{
             "XXX",
@@ -809,8 +809,8 @@ nn{
         "%",
         "0",
         "#",
-        "−",
-        "×10^",
+        "-",
+        "E",
         "‰",
         "∞",
         "NaN",

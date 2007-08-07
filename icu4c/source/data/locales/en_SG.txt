@@ -34,11 +34,11 @@ en_SG{
                 "a hh:mm:ss v",
                 "a hh:mm:ss z",
                 "a hh:mm:ss",
-                "a hh:mm",
-                "EEEE, dd MMMM yyyy",
-                "dd MMM yyyy",
+                "h:mm a",
+                "EEEE, MMMM d, yyyy",
+                "MMMM d, yyyy",
                 "dd-MMM-yyyy",
-                "dd/MM/yy",
+                "M/d/yy",
                 "{1} {0}",
             }
         }

@@ -14,7 +14,7 @@ ti_ER{
         }
         ETB{
             "ETB",
-            "የኢትዮጵያ ብር",
+            "ETB",
         }
     }
     Version{"1.45"}
@@ -25,14 +25,14 @@ ti_ER{
                 1,
             }
             DateTimePatterns{
-                "h:mm:ss a v",
-                "h:mm:ss a z",
-                "h:mm:ss a",
-                "h:mm a",
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
                 "EEEE፡ dd MMMM መዓልቲ yyyy G",
-                "dd MMMM yyyy",
-                "dd-MMM-yyyy",
-                "dd/MM/yy",
+                "yyyy MMMM d",
+                "yyyy MMM d",
+                "yyyy-MM-dd",
                 "{1} {0}",
             }
             dayNames{
