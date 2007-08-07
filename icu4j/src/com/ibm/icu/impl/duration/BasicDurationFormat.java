@@ -22,16 +22,21 @@ public class BasicDurationFormat extends DurationFormat {
      */
     private static final long serialVersionUID = -3146984141909457700L;
     
-    DurationFormatter formatter;
+    transient DurationFormatter formatter;
 
     public static DurationFormat getInstance(ULocale locale) {
         return new BasicDurationFormat(locale);
     }
     
+    
+    
+    public BasicDurationFormat() {
+        formatter = BasicPeriodFormatterService.getInstance().newDurationFormatterFactory().getFormatter();
+    }
     /**
      * 
      */
-    private BasicDurationFormat(ULocale locale) {
+    public BasicDurationFormat(ULocale locale) {
         super(locale);
         formatter  = BasicPeriodFormatterService.getInstance().newDurationFormatterFactory().setLocale(locale.getName()).getFormatter();
     }
