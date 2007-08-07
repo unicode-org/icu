@@ -380,11 +380,11 @@ private:
 
     void initData(const Locale &locale);
     void addCanonicalItems();
-    void addICUPatterns(const Locale& locale);
+    void addICUPatterns(const Locale& locale, UErrorCode& status);
     void hackTimes(UnicodeString& hackPattern, UErrorCode& status);
     void addCLDRData(const Locale& locale);
     void initHashtable(UErrorCode& status);
-    void setDateTimeFromCalendar(const Locale& locale);
+    void setDateTimeFromCalendar(const Locale& locale, UErrorCode& status);
     void setDecimalSymbols(const Locale& locale, UErrorCode& status);
     UDateTimePatternField getAppendFormatNumber(const char* field);
     UDateTimePatternField getAppendNameNumber(const char* field);
