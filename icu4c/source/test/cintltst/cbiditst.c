@@ -9,7 +9,7 @@
 *   indentation:4
 *
 *   created on: 1999sep27
-*   created by: Markus W. Scherer
+*   created by: Markus W. Scherer, updated by Matitiahu Allouche
 */
 
 #include "cintltst.h"
@@ -28,47 +28,41 @@
 
 /* prototypes ---------------------------------------------------------------*/
 
-static void
-testCharFromDirProp(void);
+static void testCharFromDirProp(void);
 
-static void
-testBidi(void);
+static void testBidi(void);
 
-static void
-doTests(UBiDi *pBiDi, UBiDi *pLine, UBool countRunsFirst);
+static void doTests(UBiDi *pBiDi, UBiDi *pLine, UBool countRunsFirst);
 
-static void
-doTest(UBiDi *pBiDi, int testNumber, const BiDiTestData *test, int32_t lineStart, UBool countRunsFirst);
+static void doMisc(void);
 
-static void
-_testReordering(UBiDi *pBiDi, int testNumber);
+static void doTest(UBiDi *pBiDi, int testNumber, const BiDiTestData *test,
+                   int32_t lineStart, UBool countRunsFirst);
 
-static void
-testInverseBidi(void);
+static void _testReordering(UBiDi *pBiDi, int testNumber);
 
-static void
-_testManyInverseBidi(UBiDi *pBiDi, UBiDiLevel direction);
+static void testInverse(void);
 
-static void
-_testInverseBidi(UBiDi *pBiDi, const UChar *src, int32_t srcLength, UBiDiLevel direction, UErrorCode *pErrorCode);
+static void _testManyInverseBidi(UBiDi *pBiDi, UBiDiLevel direction);
 
-static void
-_testWriteReverse(void);
+static void _testInverseBidi(UBiDi *pBiDi, const UChar *src, int32_t srcLength,
+                             UBiDiLevel direction, UErrorCode *pErrorCode);
 
-static void
-doArabicShapingTest(void);
+static void _testWriteReverse(void);
 
-static void
-doLamAlefSpecialVLTRArabicShapingTest(void);
+static void _testManyAddedPoints(void);
 
-static void
-doTashkeelSpecialVLTRArabicShapingTest(void);
+static void _testMisc(void);
 
-static void
-doLOGICALArabicDeShapingTest(void);
+static void doArabicShapingTest(void);
 
-static void
-doArabicShapingTestForBug5421(void);
+static void doLamAlefSpecialVLTRArabicShapingTest(void);
+
+static void doTashkeelSpecialVLTRArabicShapingTest(void);
+
+static void doLOGICALArabicDeShapingTest(void);
+
+static void doArabicShapingTestForBug5421(void);
 
 static void testReorder(void);
 
@@ -81,42 +75,38 @@ static void testReorderingMode(void);
 static void testReorderRunsOnly(void);
 static void testStreaming(void);
 static void testClassOverride(void);
-static const char* inverseBasic(UBiDi *pBiDi, const UChar *src, int32_t srcLen,
+static const char* inverseBasic(UBiDi *pBiDi, const char *src, int32_t srcLen,
                                 uint32_t option, UBiDiLevel level, char *result);
 static UBool assertRoundTrip(UBiDi *pBiDi, int32_t tc, int32_t outIndex,
                              const char *srcChars, const char *destChars,
                              const UChar *dest, int32_t destLen, int mode,
                              int option, UBiDiLevel level);
 static UBool checkResultLength(UBiDi *pBiDi, const char *srcChars,
-                               const char *destChars, const UChar *dest,
+                               const char *destChars,
                                int32_t destLen, const char *mode,
                                const char *option, UBiDiLevel level);
-static UBool testMaps(UBiDi *pBiDi, int32_t stringIndex, const char *src,
-                      const char *dest, const char *mode, const char* option,
-                      UBiDiLevel level, UBool forward);
+static UBool checkMaps(UBiDi *pBiDi, int32_t stringIndex, const char *src,
+                       const char *dest, const char *mode, const char* option,
+                       UBiDiLevel level, UBool forward);
 
 /* helpers ------------------------------------------------------------------ */
 
 static const char *levelString="...............................................................";
 
-static void
-initCharFromDirProps(void);
+static void initCharFromDirProps(void);
 
 static UChar *
 getStringFromDirProps(const uint8_t *dirProps, int32_t length, UChar *buffer);
 
-static void
-printUnicode(const UChar *s, int32_t length, const UBiDiLevel *levels);
+static void printUnicode(const UChar *s, int32_t length, const UBiDiLevel *levels);
 
 /* regression tests ---------------------------------------------------------*/
-
-void addComplexTest(TestNode** root);
 
 void
 addComplexTest(TestNode** root) {
     addTest(root, testCharFromDirProp, "complex/bidi/TestCharFromDirProp");
     addTest(root, testBidi, "complex/bidi/TestBidi");
-    addTest(root, testInverseBidi, "complex/bidi/TestInverse");
+    addTest(root, testInverse, "complex/bidi/TestInverse");
     addTest(root, testReorder,"complex/bidi/TestReorder");
     addTest(root, testFailureRecovery,"complex/bidi/TestFailureRecovery");
     addTest(root, testMultipleParagraphs,"complex/bidi/TestMultipleParagraphs");
@@ -132,11 +122,12 @@ addComplexTest(TestNode** root) {
     addTest(root, doArabicShapingTestForBug5421, "complex/arabic-shaping/bug-5421");
 }
 
-/* verify that the exemplar characters have the expected bidi classes */
 static void
 testCharFromDirProp(void) {
+    /* verify that the exemplar characters have the expected bidi classes */
     int32_t i;
 
+    log_verbose("\nEntering TestCharFromDirProp\n\n");
     initCharFromDirProps();
 
     for(i=0; i<U_CHAR_DIRECTION_COUNT; ++i) {
@@ -145,14 +136,15 @@ testCharFromDirProp(void) {
                     i, charFromDirProp[i], u_charDirection(charFromDirProp[i]), i);
         }
     }
+    log_verbose("\nExiting TestCharFromDirProp\n\n");
 }
 
 static void
-testBidi() {
+testBidi(void) {
     UBiDi *pBiDi, *pLine=NULL;
     UErrorCode errorCode=U_ZERO_ERROR;
 
-    log_verbose("\n*** bidi regression test ***\n");
+    log_verbose("\nEntering TestBidi\n\n");
 
     pBiDi=ubidi_openSized(MAXLEN, 0, &errorCode);
     if(pBiDi!=NULL) {
@@ -166,6 +158,7 @@ testBidi() {
     } else {
         log_err("ubidi_openSized() returned NULL, errorCode %s\n", myErrorName(errorCode));
     }
+    doMisc();
 
     if(pLine!=NULL) {
         ubidi_close(pLine);
@@ -174,42 +167,42 @@ testBidi() {
         ubidi_close(pBiDi);
     }
 
-    log_verbose("\n*** bidi regression test finished ***\n");
+    log_verbose("\nExiting TestBidi\n\n");
 }
 
 static void
 doTests(UBiDi *pBiDi, UBiDi *pLine, UBool countRunsFirst) {
-    int i;
+    int testNumber;
     UChar string[MAXLEN];
     UErrorCode errorCode;
     int32_t lineStart;
     UBiDiLevel paraLevel;
 
-    for(i=0; i<bidiTestCount; ++i) {
+    for(testNumber=0; testNumber<bidiTestCount; ++testNumber) {
         errorCode=U_ZERO_ERROR;
-        getStringFromDirProps(tests[i].text, tests[i].length, string);
-        paraLevel=tests[i].paraLevel;
+        getStringFromDirProps(tests[testNumber].text, tests[testNumber].length, string);
+        paraLevel=tests[testNumber].paraLevel;
         ubidi_setPara(pBiDi, string, -1, paraLevel, NULL, &errorCode);
         if(U_SUCCESS(errorCode)) {
             log_verbose("ubidi_setPara(tests[%d], paraLevel %d) ok, direction %d paraLevel=%d\n",
-                    i, paraLevel, ubidi_getDirection(pBiDi), ubidi_getParaLevel(pBiDi));
-            lineStart=tests[i].lineStart;
+                    testNumber, paraLevel, ubidi_getDirection(pBiDi), paraLevel);
+            lineStart=tests[testNumber].lineStart;
             if(lineStart==-1) {
-                doTest(pBiDi, i, tests+i, 0, countRunsFirst);
+                doTest(pBiDi, testNumber, tests+testNumber, 0, countRunsFirst);
             } else {
-                ubidi_setLine(pBiDi, lineStart, tests[i].lineLimit, pLine, &errorCode);
+                ubidi_setLine(pBiDi, lineStart, tests[testNumber].lineLimit, pLine, &errorCode);
                 if(U_SUCCESS(errorCode)) {
                     log_verbose("ubidi_setLine(%d, %d) ok, direction %d paraLevel=%d\n",
-                            lineStart, tests[i].lineLimit, ubidi_getDirection(pLine), ubidi_getParaLevel(pLine));
-                    doTest(pLine, i, tests+i, lineStart, countRunsFirst);
+                            lineStart, tests[testNumber].lineLimit, ubidi_getDirection(pLine), ubidi_getParaLevel(pLine));
+                    doTest(pLine, testNumber, tests+testNumber, lineStart, countRunsFirst);
                 } else {
                     log_err("ubidi_setLine(tests[%d], %d, %d) failed with errorCode %s\n",
-                            i, lineStart, tests[i].lineLimit, myErrorName(errorCode));
+                            testNumber, lineStart, tests[testNumber].lineLimit, myErrorName(errorCode));
                 }
             }
         } else {
             log_err("ubidi_setPara(tests[%d], paraLevel %d) failed with errorCode %s\n",
-                    i, paraLevel, myErrorName(errorCode));
+                    testNumber, paraLevel, myErrorName(errorCode));
         }
     }
 }
@@ -331,7 +324,7 @@ static void buildPseudoTables(void)
 
 /*----------------------------------------------------------------------*/
 
-static int pseudoToU16( const int length, const char * input, UChar * output )
+static int pseudoToU16(const int length, const char * input, UChar * output)
 /*  This function converts a pseudo-Bidi string into a UChar string.
     It returns the length of the UChar string.
 */
@@ -347,7 +340,7 @@ static int pseudoToU16( const int length, const char * input, UChar * output )
 
 /*----------------------------------------------------------------------*/
 
-static int u16ToPseudo( const int length, const UChar * input, char * output )
+static int u16ToPseudo(const int length, const UChar * input, char * output)
 /*  This function converts a UChar string into a pseudo-Bidi string.
     It returns the length of the pseudo-Bidi string.
 */
@@ -389,8 +382,238 @@ static char * formatLevels(UBiDi *bidi, char *buffer) {
     buffer[len] = '\0';
     return buffer;
 }
+static char *reorderingModeNames[] = {
+    "UBIDI_REORDER_DEFAULT",
+    "UBIDI_REORDER_NUMBERS_SPECIAL",
+    "UBIDI_REORDER_GROUP_NUMBERS_WITH_R",
+    "UBIDI_REORDER_RUNS_ONLY",
+    "UBIDI_REORDER_INVERSE_NUMBERS_AS_L",
+    "UBIDI_REORDER_INVERSE_LIKE_DIRECT",
+    "UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL"};
 
-static void testReorder(){
+static char *reorderingOptionNames(char *buffer, int options) {
+    buffer[0] = 0;
+    if (options & UBIDI_OPTION_INSERT_MARKS) {
+        strcat(buffer, " UBIDI_OPTION_INSERT_MARKS");
+    }
+    if (options & UBIDI_OPTION_REMOVE_CONTROLS) {
+        strcat(buffer, " UBIDI_OPTION_REMOVE_CONTROLS");
+    }
+    if (options & UBIDI_OPTION_STREAMING) {
+        strcat(buffer, " UBIDI_OPTION_STREAMING");
+    }
+    return buffer;
+}
+
+static void printCaseInfo(UBiDi *bidi, const char *src, const char *dst)
+/* src and dst are char arrays encoded as pseudo Bidi */
+{
+    /* Since calls to log_err with a \n within the pattern increment the
+     * error count, new lines are issued via fputs, except when we want the
+     * increment to happen.
+     */
+    UErrorCode errorCode=U_ZERO_ERROR;
+    int32_t i, length = ubidi_getProcessedLength(bidi);
+    const UBiDiLevel *levels;
+    char levelChars[MAXLEN];
+    UBiDiLevel lev;
+    int32_t runCount;
+    char buffer[100];
+    log_err("========================================"); fputs("\n", stderr);
+    levels = ubidi_getLevels(bidi, &errorCode);
+    if (U_FAILURE(errorCode)) {
+        strcpy(levelChars, "BAD LEVELS");
+    } else {
+        log_err("Processed length: %d", length); fputs("\n", stderr);
+        for (i = 0; i < length; i++) {
+            lev = levels[i];
+            if (lev < 0) {
+                levelChars[i] = '-';
+            } else if (lev < sizeof columns) {
+                levelChars[i] = columns[lev];
+            } else {
+                levelChars[i] = '+';
+            }
+        }
+        levelChars[length] = 0;
+    }
+    log_err("Levels: %s", levelChars); fputs("\n", stderr);
+    log_err("Source: %s", src); fputs("\n", stderr);
+    log_err("Result: %s", dst); fputs("\n", stderr);
+    log_err("Direction: %d", ubidi_getDirection(bidi)); fputs("\n", stderr);
+    log_err("paraLevel: %d", ubidi_getParaLevel(bidi)); fputs("\n", stderr);
+    i = ubidi_getReorderingMode(bidi);
+    log_err("reorderingMode: %d = %s", i, reorderingModeNames[i]);
+    fputs("\n", stderr);
+    i = ubidi_getReorderingOptions(bidi);
+    log_err("reorderingOptions: %d = %s", i, reorderingOptionNames(buffer, i));
+    fputs("\n", stderr);
+    runCount = ubidi_countRuns(bidi, &errorCode);
+    if (U_FAILURE(errorCode)) {
+        log_err( "BAD RUNS");
+    } else {
+        log_err("Runs: %d => logicalStart.length/level: ", runCount);
+        for (i = 0; i < runCount; i++) {
+            UBiDiDirection dir;
+            int32_t start, len;
+            dir = ubidi_getVisualRun(bidi, i, &start, &len);
+            log_err(" %d.%d/%d", start, len, dir);
+        }
+    }
+    fputs("\n", stderr);
+}
+
+static UBool matchingPair(UBiDi *bidi, int32_t i, char c1, char c2)
+{
+    /* No test for []{} since they have special meaning for pseudo Bidi */
+    static char mates1Chars[] = "<>()";
+    static char mates2Chars[] = "><)(";
+    UBiDiLevel level;
+    int k, len;
+
+    if (c1 == c2) {
+        return TRUE;
+    }
+    /* For UBIDI_REORDER_RUNS_ONLY, it would not be correct to check levels[i],
+       so we use the appropriate run's level, which is good for all cases.
+     */
+    ubidi_getLogicalRun(bidi, i, NULL, &level);
+    if ((level & 1) == 0) {
+        return FALSE;
+    }
+    len = strlen(mates1Chars);
+    for (k = 0; k < len; k++) {
+        if ((c1 == mates1Chars[k]) && (c2 == mates2Chars[k])) {
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+static UBool checkWhatYouCan(UBiDi *bidi, const char *srcChars, const char *dstChars)
+/* srcChars and dstChars are char arrays encoded as pseudo Bidi */
+{
+    int32_t i, idx, logLimit, visLimit;
+    UBool testOK, errMap, errDst;
+    UErrorCode errorCode=U_ZERO_ERROR;
+    int32_t visMap[MAXLEN];
+    int32_t logMap[MAXLEN];
+    char accumSrc[MAXLEN];
+    char accumDst[MAXLEN];
+    ubidi_getVisualMap(bidi, visMap, &errorCode);
+    ubidi_getLogicalMap(bidi, logMap, &errorCode);
+    if (U_FAILURE(errorCode)) {
+        log_err("Error #1 invoking ICU within checkWhatYouCan\n");
+        return FALSE;
+    }
+
+    testOK = TRUE;
+    errMap = errDst = FALSE;
+    logLimit = ubidi_getProcessedLength(bidi);
+    visLimit = ubidi_getResultLength(bidi);
+    memset(accumSrc, '?', logLimit);
+    memset(accumDst, '?', visLimit);
+
+    for (i = 0; i < logLimit; i++) {
+        idx = ubidi_getVisualIndex(bidi, i, &errorCode);
+        if (idx != logMap[i]) {
+            errMap = TRUE;
+        }
+        if (idx == UBIDI_MAP_NOWHERE) {
+            continue;
+        }
+        if (idx >= visLimit) {
+            continue;
+        }
+        accumDst[idx] = srcChars[i];
+        if (!matchingPair(bidi, i, srcChars[i], dstChars[idx])) {
+            errDst = TRUE;
+        }
+    }
+    accumDst[visLimit] = 0;
+    if (U_FAILURE(errorCode)) {
+        log_err("Error #2 invoking ICU within checkWhatYouCan\n");
+        return FALSE;
+    }
+    if (errMap) {
+        if (testOK) {
+            printCaseInfo(bidi, srcChars, dstChars);
+            testOK = FALSE;
+        }
+        log_err("Mismatch between getLogicalMap() and getVisualIndex()\n");
+        log_err("Map    :");
+        for (i = 0; i < logLimit; i++) {
+            log_err(" %d", logMap[i]);
+        }
+        fputs("\n", stderr);
+        log_err("Indexes:");
+        for (i = 0; i < logLimit; i++) {
+            log_err(" %d", ubidi_getVisualIndex(bidi, i, &errorCode));
+        }
+        fputs("\n", stderr);
+    }
+    if (errDst) {
+        if (testOK) {
+            printCaseInfo(bidi, srcChars, dstChars);
+            testOK = FALSE;
+        }
+        log_err("Source does not map to Result\n");
+        log_err("We got: %s", accumDst); fputs("\n", stderr);
+    }
+
+    errMap = errDst = FALSE;
+    for (i = 0; i < visLimit; i++) {
+        idx = ubidi_getLogicalIndex(bidi, i, &errorCode);
+        if (idx != visMap[i]) {
+            errMap = TRUE;
+        }
+        if (idx == UBIDI_MAP_NOWHERE) {
+            continue;
+        }
+        if (idx >= logLimit) {
+            continue;
+        }
+        accumSrc[idx] = dstChars[i];
+        if (!matchingPair(bidi, idx, srcChars[idx], dstChars[i])) {
+            errDst = TRUE;
+        }
+    }
+    accumSrc[logLimit] = 0;
+    if (U_FAILURE(errorCode)) {
+        log_err("Error #3 invoking ICU within checkWhatYouCan\n");
+        return FALSE;
+    }
+    if (errMap) {
+        if (testOK) {
+            printCaseInfo(bidi, srcChars, dstChars);
+            testOK = FALSE;
+        }
+        log_err("Mismatch between getVisualMap() and getLogicalIndex()\n");
+        log_err("Map    :");
+        for (i = 0; i < visLimit; i++) {
+            log_err(" %d", visMap[i]);
+        }
+        fputs("\n", stderr);
+        log_err("Indexes:");
+        for (i = 0; i < visLimit; i++) {
+            log_err(" %d", ubidi_getLogicalIndex(bidi, i, &errorCode));
+        }
+        fputs("\n", stderr);
+    }
+    if (errDst) {
+        if (testOK) {
+            printCaseInfo(bidi, srcChars, dstChars);
+            testOK = FALSE;
+        }
+        log_err("Result does not map to Source\n");
+        log_err("We got: %s", accumSrc);
+        fputs("\n", stderr);
+    }
+    return testOK;
+}
+
+static void
+testReorder(void) {
     static const char* const logicalOrder[] ={
             "del(KC)add(K.C.&)",
             "del(QDVT) add(BVDL)",
@@ -480,12 +703,16 @@ static void testReorder(){
     UErrorCode ec = U_ZERO_ERROR;
     UBiDi* bidi = ubidi_open();
     int i;
+
+    log_verbose("\nEntering TestReorder\n\n");
+
     for(i=0;i<LENGTHOF(logicalOrder);i++){
         int32_t srcSize = (int32_t)strlen(logicalOrder[i]);
         int32_t destSize = srcSize*2;
         UChar src[MAXLEN];
         UChar dest[MAXLEN];
         char chars[MAXLEN];
+        log_verbose("Testing L2V #1 for case %d\n", i);
         pseudoToU16(srcSize,logicalOrder[i],src);
         ec = U_ZERO_ERROR;
         ubidi_setPara(bidi,src,srcSize,UBIDI_DEFAULT_LTR ,NULL,&ec);
@@ -511,6 +738,7 @@ static void testReorder(){
                     "Input   : %s\nExpected: %s\nGot     : %s\nLevels  : %s\nAt Index: %d\n",
                     logicalOrder[i],visualOrder[i],chars,formatLevels(bidi, formatChars),i);
         }
+        checkWhatYouCan(bidi, logicalOrder[i], chars);
     }
 
     for(i=0;i<LENGTHOF(logicalOrder);i++){
@@ -519,6 +747,7 @@ static void testReorder(){
         UChar src[MAXLEN];
         UChar dest[MAXLEN];
         char chars[MAXLEN];
+        log_verbose("Testing L2V #2 for case %d\n", i);
         pseudoToU16(srcSize,logicalOrder[i],src);
         ec = U_ZERO_ERROR;
         ubidi_setPara(bidi,src,srcSize,UBIDI_DEFAULT_LTR ,NULL,&ec);
@@ -552,6 +781,7 @@ static void testReorder(){
         UChar src[MAXLEN];
         UChar dest[MAXLEN];
         char chars[MAXLEN];
+        log_verbose("Testing V2L #3 for case %d\n", i);
         pseudoToU16(srcSize,logicalOrder[i],src);
         ec = U_ZERO_ERROR;
         ubidi_setInverse(bidi,TRUE);
@@ -583,6 +813,7 @@ static void testReorder(){
         UChar dest[MAXLEN];
         char chars[MAXLEN];
         UBiDiLevel levels[UBIDI_MAX_EXPLICIT_LEVEL]={1,2,3,4,5,6,7,8,9,10};
+        log_verbose("Testing V2L #4 for case %d\n", i);
         pseudoToU16(srcSize,logicalOrder[i],src);
         ec = U_ZERO_ERROR;
         ubidi_setPara(bidi,src,srcSize,UBIDI_DEFAULT_LTR,levels,&ec);
@@ -616,6 +847,7 @@ static void testReorder(){
         UChar dest[MAXLEN];
         char chars[MAXLEN];
         UBiDiLevel levels[UBIDI_MAX_EXPLICIT_LEVEL]={1,2,3,4,5,6,7,8,9,10};
+        log_verbose("Testing V2L #5 for case %d\n", i);
         pseudoToU16(srcSize,logicalOrder[i],src);
         ec = U_ZERO_ERROR;
         ubidi_setPara(bidi,src,srcSize,UBIDI_DEFAULT_LTR,levels,&ec);
@@ -639,6 +871,8 @@ static void testReorder(){
         }
     }
     ubidi_close(bidi);
+
+    log_verbose("\nExiting TestReorder\n\n");
 }
 
 static void
@@ -728,15 +962,21 @@ doTest(UBiDi *pBiDi, int testNumber, const BiDiTestData *test, int32_t lineStart
         level=ubidi_getLevelAt(pBiDi, logicalIndex);
         ubidi_getLogicalRun(pBiDi, logicalIndex, &logicalIndex, &level2);
         if(level!=level2) {
-            log_err("ubidi_getLogicalRun(tests[%d], run ending at index %d): wrong level %d\n", testNumber, logicalIndex, level2);
+            log_err("ubidi_getLogicalRun(tests[%d], run ending at index %d): "
+                    "wrong level %d instead of %d\n",
+                    testNumber, logicalIndex, level, level2);
         }
         if(--runCount<0) {
-            log_err("\nubidi_getLogicalRun(tests[%d]): wrong number of runs compared to %d=ubidi_getRunCount()\n", testNumber, ubidi_countRuns(pBiDi, &errorCode));
+            log_err("\nubidi_getLogicalRun(tests[%d]): wrong number of runs "
+                    "compared to %d=ubidi_countRuns()\n",
+                    testNumber, ubidi_countRuns(pBiDi, &errorCode));
             return;
         }
     }
     if(runCount!=0) {
-        log_err("\nubidi_getLogicalRun(tests[%d]): wrong number of runs compared to %d=ubidi_getRunCount()\n", testNumber, ubidi_countRuns(pBiDi, &errorCode));
+        log_err("\nubidi_getLogicalRun(tests[%d]): wrong number of runs "
+                "compared to %d=ubidi_getRunCount()\n",
+                testNumber, ubidi_countRuns(pBiDi, &errorCode));
         return;
     }
 
@@ -886,27 +1126,403 @@ _testReordering(UBiDi *pBiDi, int testNumber) {
     }
 }
 
-static void testFailureRecovery(void) {
-    UErrorCode status;
+#define RETURN_IF_BAD_ERRCODE(x)    \
+    if (U_FAILURE(errorCode)) {      \
+        log_err("\nbad errorCode %d at %s\n", errorCode, (x));  \
+        return;     \
+    }               \
 
-    status = U_FILE_ACCESS_ERROR;
-    if (ubidi_writeReordered(NULL, NULL, 0, 0, &status) != 0) {
-        log_err("ubidi_writeReordered did not return 0 when passed a failing UErrorCode\n");
+
+static void doMisc(void) {
+/* Miscellaneous tests to exercize less popular code paths */
+    UBiDi *bidi, *bidiLine;
+    UChar src[MAXLEN], dest[MAXLEN];
+    int32_t srcLen, destLen, runStart, runCount, i;
+    UBiDiLevel level;
+    const UBiDiLevel *levels;
+    UBiDiDirection dir;
+    int32_t map[MAXLEN];
+    UErrorCode errorCode=U_ZERO_ERROR;
+    static uint32_t srcMap[6] = {0,1,-1,5,4};
+    static uint32_t dstMap[6] = {0,1,-1,-1,4,3};
+
+    bidi = ubidi_openSized(120, 66, &errorCode);
+    if (bidi == NULL) {
+        log_err("Error with openSized(120, 66)\n");
+        return;
     }
-    if (ubidi_writeReverse(NULL, 0, NULL, 0, 0, &status) != 0) {
-        log_err("ubidi_writeReverse did not return 0 when passed a failing UErrorCode\n");
+    bidiLine = ubidi_open();
+    if (bidi == NULL) {
+        log_err("Error with open()\n");
+        return;
     }
-    status = U_ZERO_ERROR;
-    if (ubidi_writeReordered(NULL, NULL, 0, 0, &status) != 0 || status != U_ILLEGAL_ARGUMENT_ERROR) {
-        log_err("ubidi_writeReordered did not fail as expected\n");
+
+    destLen = ubidi_writeReverse(src, 0, dest, MAXLEN, 0, &errorCode);
+    if (destLen != 0) {
+        log_err("\nwriteReverse should return zero length, ",
+                "returned %d instead\n", destLen);
     }
-    status = U_ZERO_ERROR;
-    if (ubidi_writeReverse(NULL, 0, NULL, 0, 0, &status) != 0 || status != U_ILLEGAL_ARGUMENT_ERROR) {
-        log_err("ubidi_writeReverse did not fail as expected\n");
+    RETURN_IF_BAD_ERRCODE("#1#");
+
+    ubidi_setPara(bidi, src, 0, UBIDI_LTR, NULL, &errorCode);
+    destLen = ubidi_writeReordered(bidi, dest, MAXLEN, 0, &errorCode);
+    if (destLen != 0) {
+        log_err("\nwriteReordered should return zero length, ",
+                "returned %d instead\n", destLen);
     }
+    RETURN_IF_BAD_ERRCODE("#2#");
+
+    srcLen = u_unescape("abc       ", src, MAXLEN);
+    ubidi_setPara(bidi, src, srcLen, UBIDI_RTL, NULL, &errorCode);
+    ubidi_setLine(bidi, 0, 6, bidiLine, &errorCode);
+    for (i = 3; i < 6; i++) {
+        level = ubidi_getLevelAt(bidiLine, i);
+        if (level != UBIDI_RTL) {
+            log_err("\nTrailing space at index %d should get paragraph level"
+                    "%d, got %d instead\n", i, UBIDI_RTL, level);
+        }
+    }
+    RETURN_IF_BAD_ERRCODE("#3#");
+
+    srcLen = u_unescape("abc       def", src, MAXLEN);
+    ubidi_setPara(bidi, src, srcLen, UBIDI_RTL, NULL, &errorCode);
+    ubidi_setLine(bidi, 0, 6, bidiLine, &errorCode);
+    for (i = 3; i < 6; i++) {
+        level = ubidi_getLevelAt(bidiLine, i);
+        if (level != UBIDI_RTL) {
+            log_err("\nTrailing space at index %d should get paragraph level"
+                    "%d, got %d instead\n", i, UBIDI_RTL, level);
+        }
+    }
+    RETURN_IF_BAD_ERRCODE("#4#");
+
+    srcLen = u_unescape("abcdefghi    ", src, MAXLEN);
+    ubidi_setPara(bidi, src, srcLen, UBIDI_RTL, NULL, &errorCode);
+    ubidi_setLine(bidi, 0, 6, bidiLine, &errorCode);
+    for (i = 3; i < 6; i++) {
+        level = ubidi_getLevelAt(bidiLine, i);
+        if (level != 2) {
+            log_err("\nTrailing char at index %d should get level 2, "
+                    "got %d instead\n", i, level);
+        }
+    }
+    RETURN_IF_BAD_ERRCODE("#5#");
+
+    ubidi_setReorderingOptions(bidi, UBIDI_OPTION_REMOVE_CONTROLS);
+    srcLen = u_unescape("\\u200eabc       def", src, MAXLEN);
+    ubidi_setPara(bidi, src, srcLen, UBIDI_RTL, NULL, &errorCode);
+    ubidi_setLine(bidi, 0, 6, bidiLine, &errorCode);
+    destLen = ubidi_getResultLength(bidiLine);
+    if (destLen != 5) {
+        log_err("\nWrong result length, should be 5, got %d\n", destLen);
+    }
+    RETURN_IF_BAD_ERRCODE("#6#");
+
+    srcLen = u_unescape("abcdefghi", src, MAXLEN);
+    ubidi_setPara(bidi, src, srcLen, UBIDI_LTR, NULL, &errorCode);
+    ubidi_setLine(bidi, 0, 6, bidiLine, &errorCode);
+    dir = ubidi_getDirection(bidiLine);
+    if (dir != UBIDI_LTR) {
+        log_err("\nWrong direction #1, should be %d, got %d\n",
+                UBIDI_LTR, dir);
+    }
+    RETURN_IF_BAD_ERRCODE("#7#");
+
+    ubidi_setPara(bidi, src, 0, UBIDI_LTR, NULL, &errorCode);
+    runCount = ubidi_countRuns(bidi, &errorCode);
+    if (runCount != 0) {
+        log_err("\nWrong number of runs #1, should be 0, got %d\n", runCount);
+    }
+    RETURN_IF_BAD_ERRCODE("#8#");
+
+    srcLen = u_unescape("          ", src, MAXLEN);
+    ubidi_setPara(bidi, src, srcLen, UBIDI_RTL, NULL, &errorCode);
+    ubidi_setLine(bidi, 0, 6, bidiLine, &errorCode);
+    runCount = ubidi_countRuns(bidiLine, &errorCode);
+    if (runCount != 1) {
+        log_err("\nWrong number of runs #2, should be 1, got %d\n", runCount);
+    }
+    RETURN_IF_BAD_ERRCODE("#9#");
+
+    srcLen = u_unescape("a\\u05d0        bc", src, MAXLEN);
+    ubidi_setPara(bidi, src, srcLen, UBIDI_RTL, NULL, &errorCode);
+    ubidi_setLine(bidi, 0, 6, bidiLine, &errorCode);
+    dir = ubidi_getDirection(bidi);
+    if (dir != UBIDI_MIXED) {
+        log_err("\nWrong direction #2, should be %d, got %d\n",
+                UBIDI_MIXED, dir);
+    }
+    dir = ubidi_getDirection(bidiLine);
+    if (dir != UBIDI_MIXED) {
+        log_err("\nWrong direction #3, should be %d, got %d\n",
+                UBIDI_MIXED, dir);
+    }
+    runCount = ubidi_countRuns(bidiLine, &errorCode);
+    if (runCount != 2) {
+        log_err("\nWrong number of runs #3, should be 2, got %d\n", runCount);
+    }
+    RETURN_IF_BAD_ERRCODE("#10#");
+
+    ubidi_invertMap(srcMap, map, 5);
+    if (memcmp(dstMap, map, sizeof dstMap)) {
+        log_err("\nUnexpected inverted Map, got ");
+        for (i = 0; i < 6; i++) {
+            log_err("%d ", map[i]);
+        }
+        log_err("\n");
+    }
+
+    /* test REMOVE_BIDI_CONTROLS together with DO_MIRRORING */
+    srcLen = u_unescape("abc\\u200e", src, MAXLEN);
+    ubidi_setPara(bidi, src, srcLen, UBIDI_LTR, NULL, &errorCode);
+    destLen = ubidi_writeReordered(bidi, dest, MAXLEN,
+              UBIDI_REMOVE_BIDI_CONTROLS | UBIDI_DO_MIRRORING, &errorCode);
+    if (destLen != 3 || memcmp(dest, src, 3 * sizeof(UChar))) {
+        log_err("\nWrong result #1, should be 'abc', got '%s'\n",
+                aescstrdup(dest, destLen));
+    }
+    RETURN_IF_BAD_ERRCODE("#11#");
+
+    /* test inverse Bidi with marks and contextual orientation */
+    ubidi_setReorderingMode(bidi, UBIDI_REORDER_INVERSE_LIKE_DIRECT);
+    ubidi_setReorderingOptions(bidi, UBIDI_OPTION_INSERT_MARKS);
+    ubidi_setPara(bidi, src, 0, UBIDI_DEFAULT_RTL, NULL, &errorCode);
+    destLen = ubidi_writeReordered(bidi, dest, MAXLEN, 0, &errorCode);
+    if (destLen != 0) {
+        log_err("\nWrong result #2, length should be 0, got %d\n", destLen);
+    }
+    RETURN_IF_BAD_ERRCODE("#12#");
+    srcLen = u_unescape("   ", src, MAXLEN);
+    ubidi_setPara(bidi, src, srcLen, UBIDI_DEFAULT_RTL, NULL, &errorCode);
+    destLen = ubidi_writeReordered(bidi, dest, MAXLEN, 0, &errorCode);
+    if (destLen != 3 || memcmp(dest, src, destLen * sizeof(UChar))) {
+        log_err("\nWrong result #3, should be '   ', got '%s'\n",
+                aescstrdup(dest, destLen));
+    }
+    RETURN_IF_BAD_ERRCODE("#13#");
+    srcLen = u_unescape("abc", src, MAXLEN);
+    ubidi_setPara(bidi, src, srcLen, UBIDI_DEFAULT_RTL, NULL, &errorCode);
+    destLen = ubidi_writeReordered(bidi, dest, MAXLEN, 0, &errorCode);
+    if (destLen != 3 || memcmp(dest, src, destLen * sizeof(UChar))) {
+        log_err("\nWrong result #4, should be 'abc', got '%s'\n",
+                aescstrdup(dest, destLen));
+    }
+    RETURN_IF_BAD_ERRCODE("#14#");
+    srcLen = u_unescape("\\u05d0\\u05d1", src, MAXLEN);
+    ubidi_setPara(bidi, src, srcLen, UBIDI_DEFAULT_RTL, NULL, &errorCode);
+    destLen = ubidi_writeReordered(bidi, dest, MAXLEN, 0, &errorCode);
+    srcLen = u_unescape("\\u05d1\\u05d0", src, MAXLEN);
+    if (destLen != 2 || memcmp(dest, src, destLen * sizeof(UChar))) {
+        log_err("\nWrong result #5, should be '%s', got '%s'\n",
+                aescstrdup(src, srcLen), aescstrdup(dest, destLen));
+    }
+    RETURN_IF_BAD_ERRCODE("#15#");
+    srcLen = u_unescape("abc \\u05d0\\u05d1", src, MAXLEN);
+    ubidi_setPara(bidi, src, srcLen, UBIDI_DEFAULT_RTL, NULL, &errorCode);
+    destLen = ubidi_writeReordered(bidi, dest, MAXLEN, 0, &errorCode);
+    srcLen = u_unescape("\\u05d1\\u05d0 abc", src, MAXLEN);
+    if (destLen != 6 || memcmp(dest, src, destLen * sizeof(UChar))) {
+        log_err("\nWrong result #6, should be '%s', got '%s'\n",
+                aescstrdup(src, srcLen), aescstrdup(dest, destLen));
+    }
+    RETURN_IF_BAD_ERRCODE("#16#");
+    srcLen = u_unescape("\\u05d0\\u05d1 abc", src, MAXLEN);
+    ubidi_setPara(bidi, src, srcLen, UBIDI_DEFAULT_RTL, NULL, &errorCode);
+    destLen = ubidi_writeReordered(bidi, dest, MAXLEN, 0, &errorCode);
+    srcLen = u_unescape("\\u200fabc \\u05d1\\u05d0", src, MAXLEN);
+    if (destLen != 7 || memcmp(dest, src, destLen * sizeof(UChar))) {
+        log_err("\nWrong result #7, should be '%s', got '%s'\n",
+                aescstrdup(src, srcLen), aescstrdup(dest, destLen));
+    }
+    RETURN_IF_BAD_ERRCODE("#17#");
+    srcLen = u_unescape("\\u05d0\\u05d1 abc .-=", src, MAXLEN);
+    ubidi_setPara(bidi, src, srcLen, UBIDI_DEFAULT_RTL, NULL, &errorCode);
+    destLen = ubidi_writeReordered(bidi, dest, MAXLEN, 0, &errorCode);
+    srcLen = u_unescape("\\u200f=-. abc \\u05d1\\u05d0", src, MAXLEN);
+    if (destLen != 11 || memcmp(dest, src, destLen * sizeof(UChar))) {
+        log_err("\nWrong result #8, should be '%s', got '%s'\n",
+                aescstrdup(src, srcLen), aescstrdup(dest, destLen));
+    }
+    RETURN_IF_BAD_ERRCODE("#18#");
+    ubidi_orderParagraphsLTR(bidi, TRUE);
+    srcLen = u_unescape("\n\r   \n\rabc\n\\u05d0\\u05d1\rabc \\u05d2\\u05d3\n\r"
+                        "\\u05d4\\u05d5 abc\n\\u05d6\\u05d7 abc .-=\r\n"
+                        "-* \\u05d8\\u05d9 abc .-=", src, MAXLEN);
+    ubidi_setPara(bidi, src, srcLen, UBIDI_DEFAULT_RTL, NULL, &errorCode);
+    destLen = ubidi_writeReordered(bidi, dest, MAXLEN, 0, &errorCode);
+    srcLen = u_unescape("\n\r   \n\rabc\n\\u05d1\\u05d0\r\\u05d3\\u05d2 abc\n\r"
+                        "\\u200fabc \\u05d5\\u05d4\n\\u200f=-. abc \\u05d7\\u05d6\r\n"
+                        "\\u200f=-. abc \\u05d9\\u05d8 *-", src, MAXLEN);
+    if (destLen != 57 || memcmp(dest, src, destLen * sizeof(UChar))) {
+        log_err("\nWrong result #9, should be '%s', got '%s'\n",
+                aescstrdup(src, srcLen), aescstrdup(dest, destLen));
+    }
+    RETURN_IF_BAD_ERRCODE("#19#");
+    srcLen = u_unescape("\\u05d0 \t", src, MAXLEN);
+    ubidi_setPara(bidi, src, srcLen, UBIDI_LTR, NULL, &errorCode);
+    destLen = ubidi_writeReordered(bidi, dest, MAXLEN, 0, &errorCode);
+    srcLen = u_unescape("\\u05D0\\u200e \t", src, MAXLEN);
+    if (destLen != 4 || memcmp(dest, src, destLen * sizeof(UChar))) {
+        log_err("\nWrong result #10, should be '%s', got '%s'\n",
+                aescstrdup(src, srcLen), aescstrdup(dest, destLen));
+    }
+    RETURN_IF_BAD_ERRCODE("#20#");
+    srcLen = u_unescape("\\u05d0 123 \t\\u05d1 123 \\u05d2", src, MAXLEN);
+    ubidi_setPara(bidi, src, srcLen, UBIDI_LTR, NULL, &errorCode);
+    destLen = ubidi_writeReordered(bidi, dest, MAXLEN, 0, &errorCode);
+    srcLen = u_unescape("\\u05d0 \\u200e123\\u200e \t\\u05d2 123 \\u05d1", src, MAXLEN);
+    if (destLen != 16 || memcmp(dest, src, destLen * sizeof(UChar))) {
+        log_err("\nWrong result #11, should be '%s', got '%s'\n",
+                aescstrdup(src, srcLen), aescstrdup(dest, destLen));
+    }
+    RETURN_IF_BAD_ERRCODE("#21#");
+    srcLen = u_unescape("\\u05d0 123 \\u0660\\u0661 ab", src, MAXLEN);
+    ubidi_setPara(bidi, src, srcLen, UBIDI_LTR, NULL, &errorCode);
+    destLen = ubidi_writeReordered(bidi, dest, MAXLEN, 0, &errorCode);
+    srcLen = u_unescape("\\u05d0 \\u200e123 \\u200e\\u0660\\u0661 ab", src, MAXLEN);
+    if (destLen != 13 || memcmp(dest, src, destLen * sizeof(UChar))) {
+        log_err("\nWrong result #12, should be '%s', got '%s'\n",
+                aescstrdup(src, srcLen), aescstrdup(dest, destLen));
+    }
+    RETURN_IF_BAD_ERRCODE("#22#");
+    srcLen = u_unescape("ab \t", src, MAXLEN);
+    ubidi_setPara(bidi, src, srcLen, UBIDI_RTL, NULL, &errorCode);
+    destLen = ubidi_writeReordered(bidi, dest, MAXLEN, 0, &errorCode);
+    srcLen = u_unescape("\\u200f\t ab", src, MAXLEN);
+    if (destLen != 5 || memcmp(dest, src, destLen * sizeof(UChar))) {
+        log_err("\nWrong result #13, should be '%s', got '%s'\n",
+                aescstrdup(src, srcLen), aescstrdup(dest, destLen));
+    }
+    RETURN_IF_BAD_ERRCODE("#23#");
+
+    /* check exceeding para level */
+    ubidi_close(bidi);
+    bidi = ubidi_open();
+    srcLen = u_unescape("A\\u202a\\u05d0\\u202aC\\u202c\\u05d1\\u202cE", src, MAXLEN);
+    ubidi_setPara(bidi, src, srcLen, UBIDI_MAX_EXPLICIT_LEVEL - 1, NULL, &errorCode);
+    level = ubidi_getLevelAt(bidi, 2);
+    if (level != 61) {
+        log_err("\nWrong level at index 2\n, should be 61, got %d\n", level);
+    }
+    RETURN_IF_BAD_ERRCODE("#24#");
+
+    /* check 1-char runs with RUNS_ONLY */
+    ubidi_setReorderingMode(bidi, UBIDI_REORDER_RUNS_ONLY);
+    srcLen = u_unescape("a \\u05d0 b \\u05d1 c \\u05d2 d ", src, MAXLEN);
+    ubidi_setPara(bidi, src, srcLen, UBIDI_LTR, NULL, &errorCode);
+    runCount = ubidi_countRuns(bidi, &errorCode);
+    if (runCount != 14) {
+        log_err("\nWrong number of runs #3, should be 14, got %d\n", runCount);
+    }
+    RETURN_IF_BAD_ERRCODE("#25#");
+
+    ubidi_close(bidi);
+    ubidi_close(bidiLine);
 }
 
-static void testMultipleParagraphs(void) {
+static void
+testFailureRecovery(void) {
+    UErrorCode errorCode;
+    UBiDi *bidi, *bidiLine;
+    UChar src[MAXLEN], dest[MAXLEN];
+    int32_t srcLen, destLen, runStart, runCount, i;
+    UBiDiLevel level;
+    const UBiDiLevel *levels;
+    UBiDiDirection dir;
+    UBiDiReorderingMode rm;
+    static UBiDiLevel myLevels[3] = {6,5,4};
+
+    log_verbose("\nEntering TestFailureRecovery\n\n");
+    errorCode = U_FILE_ACCESS_ERROR;
+    if (ubidi_writeReordered(NULL, NULL, 0, 0, &errorCode) != 0) {
+        log_err("ubidi_writeReordered did not return 0 when passed a failing UErrorCode\n");
+    }
+    if (ubidi_writeReverse(NULL, 0, NULL, 0, 0, &errorCode) != 0) {
+        log_err("ubidi_writeReverse did not return 0 when passed a failing UErrorCode\n");
+    }
+    errorCode = U_ZERO_ERROR;
+    if (ubidi_writeReordered(NULL, NULL, 0, 0, &errorCode) != 0 || errorCode != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("ubidi_writeReordered did not fail as expected\n");
+    }
+
+    bidi = ubidi_open();
+    srcLen = u_unescape("abc", src, MAXLEN);
+    errorCode = U_ZERO_ERROR;
+    ubidi_setPara(bidi, src, srcLen, UBIDI_DEFAULT_LTR - 1, NULL, &errorCode);
+    if (U_SUCCESS(errorCode)) {
+        log_err("\nubidi_setPara did not fail when passed too big para level\n");
+    }
+    errorCode = U_ZERO_ERROR;
+    if (ubidi_writeReverse(NULL, 0, NULL, 0, 0, &errorCode) != 0 || errorCode != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("ubidi_writeReverse did not fail as expected\n");
+    }
+    bidiLine = ubidi_open();
+    errorCode = U_ZERO_ERROR;
+    ubidi_setLine(bidi, 0, 6, bidiLine, &errorCode);
+    if (U_SUCCESS(errorCode)) {
+        log_err("\nubidi_setLine did not fail when called before valid setPara()\n");
+    }
+    errorCode = U_ZERO_ERROR;
+    srcLen = u_unescape("abc", src, MAXLEN);
+    ubidi_setPara(bidi, src, srcLen, UBIDI_LTR + 4, NULL, &errorCode);
+    level = ubidi_getLevelAt(bidi, 3);
+    if (level != 0) {
+        log_err("\nubidi_getLevelAt did not fail when called with bad argument\n");
+    }
+    errorCode = U_ZERO_ERROR;
+    ubidi_close(bidi);
+    bidi = ubidi_openSized(-1, 0, &errorCode);
+    if (U_SUCCESS(errorCode)) {
+        log_err("\nubidi_openSized did not fail when called with bad argument\n");
+    }
+    ubidi_close(bidi);
+    bidi = ubidi_openSized(2, 1, &errorCode);
+    errorCode = U_ZERO_ERROR;
+    srcLen = u_unescape("abc", src, MAXLEN);
+    ubidi_setPara(bidi, src, srcLen, UBIDI_LTR, NULL, &errorCode);
+    if (U_SUCCESS(errorCode)) {
+        log_err("\nsetPara did not fail when called with text too long\n");
+    }
+    errorCode = U_ZERO_ERROR;
+    srcLen = u_unescape("=2", src, MAXLEN);
+    ubidi_setPara(bidi, src, srcLen, UBIDI_RTL, NULL, &errorCode);
+    ubidi_countRuns(bidi, &errorCode);
+    if (U_SUCCESS(errorCode)) {
+        log_err("\nsetPara did not fail when called for too many runs\n");
+    }
+    ubidi_close(bidi);
+    bidi = ubidi_open();
+    rm = ubidi_getReorderingMode(bidi);
+    ubidi_setReorderingMode(bidi, UBIDI_REORDER_DEFAULT - 1);
+    if (rm != ubidi_getReorderingMode(bidi)) {
+        log_err("\nsetReorderingMode with bad argument #1 should have no effect\n");
+    }
+    ubidi_setReorderingMode(bidi, 9999);
+    if (rm != ubidi_getReorderingMode(bidi)) {
+        log_err("\nsetReorderingMode with bad argument #2 should have no effect\n");
+    }
+
+    /* Try a surrogate char */
+    errorCode = U_ZERO_ERROR;
+    srcLen = u_unescape("\\uD800\\uDC00", src, MAXLEN);
+    ubidi_setPara(bidi, src, srcLen, UBIDI_RTL, NULL, &errorCode);
+    if (ubidi_getDirection(bidi) != UBIDI_MIXED) {
+        log_err("\ngetDirection for 1st surrogate char should be MIXED\n");
+    }
+    errorCode = U_ZERO_ERROR;
+    srcLen = u_unescape("abc", src, MAXLEN);
+    ubidi_setPara(bidi, src, srcLen, 5, myLevels, &errorCode);
+    if (U_SUCCESS(errorCode)) {
+        log_err("\nsetPara did not fail when called with bad levels\n");
+    }
+    ubidi_close(bidi);
+    ubidi_close(bidiLine);
+
+    log_verbose("\nExiting TestFailureRecovery\n\n");
+}
+
+static void
+testMultipleParagraphs(void) {
     static const char* const text = "__ABC\\u001c"          /* Para #0 offset 0 */
                                     "__\\u05d0DE\\u001c"    /*       1        6 */
                                     "__123\\u001c"          /*       2       12 */
@@ -929,16 +1545,19 @@ static void testMultipleParagraphs(void) {
                                                   {23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23}};
     static const char* const text2 = "\\u05d0 1-2\\u001c\\u0630 1-2\\u001c1-2";
     static const UBiDiLevel levels2[] = {1,1,2,2,2,0, 1,1,2,1,2,0, 2,2,2};
+    static UBiDiLevel myLevels[10] = {0,0,0,0,0,0,0,0,0,0};
     UBiDiLevel gotLevel;
     const UBiDiLevel* gotLevels;
     UBool orderParagraphsLTR;
-    UChar src[MAXLEN];
+    UChar src[MAXLEN], dest[MAXLEN];
     UErrorCode errorCode=U_ZERO_ERROR;
     UBiDi* pBidi=ubidi_open();
     UBiDi* pLine;
     int32_t srcSize, count, paraStart, paraLimit, paraIndex, length;
+    int32_t srcLen, destLen;
     int i, j, k;
 
+    log_verbose("\nEntering TestMultipleParagraphs\n\n");
     u_unescape(text, src, MAXLEN);
     srcSize=u_strlen(src);
     ubidi_setPara(pBidi, src, srcSize, UBIDI_LTR, NULL, &errorCode);
@@ -1174,8 +1793,47 @@ static void testMultipleParagraphs(void) {
         }
     }
 
+    /* check default orientation when inverse bidi and paragraph starts
+     * with LTR strong char and ends with RTL strong char, with and without
+     * a terminating B
+     */
+    ubidi_setReorderingMode(pBidi, UBIDI_REORDER_INVERSE_LIKE_DIRECT);
+    srcLen = u_unescape("abc \\u05d2\\u05d1\n", src, MAXLEN);
+    ubidi_setPara(pBidi, src, srcLen, UBIDI_DEFAULT_LTR, NULL, &errorCode);
+    destLen = ubidi_writeReordered(pBidi, dest, MAXLEN, 0, &errorCode);
+    srcLen = u_unescape("\\u05d1\\u05d2 abc\n", src, MAXLEN);
+    if (memcmp(src, dest, destLen * sizeof(UChar))) {
+        log_err("\nInvalid output #0, should be '%s', got '%s'\n",
+                aescstrdup(src, srcLen), aescstrdup(dest, destLen));
+    }
+    srcLen = u_unescape("abc \\u05d2\\u05d1", src, MAXLEN);
+    ubidi_setPara(pBidi, src, srcLen, UBIDI_DEFAULT_LTR, NULL, &errorCode);
+    destLen = ubidi_writeReordered(pBidi, dest, MAXLEN, 0, &errorCode);
+    srcLen = u_unescape("\\u05d1\\u05d2 abc", src, MAXLEN);
+    if (memcmp(src, dest, destLen * sizeof(UChar))) {
+        log_err("\nInvalid output #1, should be '%s', got '%s'\n",
+                aescstrdup(src, srcLen), aescstrdup(dest, destLen));
+    }
+
+    /* check multiple paragraphs together with explicit levels
+     */
+    ubidi_setReorderingMode(pBidi, UBIDI_REORDER_DEFAULT);
+    srcLen = u_unescape("ab\\u05d1\\u05d2\n\\u05d3\\u05d4123", src, MAXLEN);
+    ubidi_setPara(pBidi, src, srcLen, UBIDI_LTR, myLevels, &errorCode);
+    destLen = ubidi_writeReordered(pBidi, dest, MAXLEN, 0, &errorCode);
+    srcLen = u_unescape("ab\\u05d2\\u05d1\\n123\\u05d4\\u05d3", src, MAXLEN);
+    if (memcmp(src, dest, destLen * sizeof(UChar))) {
+        log_err("\nInvalid output #2, should be '%s', got '%s'\n",
+                aescstrdup(src, srcLen), aescstrdup(dest, destLen));
+    }
+    count = ubidi_countParagraphs(pBidi);
+    if (count != 2) {
+        log_err("\nInvalid number of paras, should be 2, got %d\n", count);
+    }
+
     ubidi_close(pLine);
     ubidi_close(pBidi);
+    log_verbose("\nExiting TestMultipleParagraphs\n\n");
 }
 
 
@@ -1186,7 +1844,7 @@ static int countRoundtrips=0, countNonRoundtrips=0;
 #define STRING_TEST_CASE(s) { (s), LENGTHOF(s) }
 
 static void
-testInverseBidi() {
+testInverse(void) {
     static const UChar
         string0[]={ 0x6c, 0x61, 0x28, 0x74, 0x69, 0x6e, 0x20, 0x5d0, 0x5d1, 0x29, 0x5d2, 0x5d3 },
         string1[]={ 0x6c, 0x61, 0x74, 0x20, 0x5d0, 0x5d1, 0x5d2, 0x20, 0x31, 0x32, 0x33 },
@@ -1209,20 +1867,23 @@ testInverseBidi() {
     UErrorCode errorCode;
     int i;
 
+    log_verbose("\nEntering TestInverse\n\n");
     pBiDi=ubidi_open();
     if(pBiDi==NULL) {
         log_err("unable to open a UBiDi object (out of memory)\n");
         return;
     }
 
-    log_verbose("inverse BiDi: testInverseBidi(L) with %u test cases ---\n", LENGTHOF(testCases));
+    log_verbose("inverse Bidi: testInverse(L) with %u test cases ---\n", LENGTHOF(testCases));
      for(i=0; i<LENGTHOF(testCases); ++i) {
+        log_verbose("Testing case %d\n", i);
         errorCode=U_ZERO_ERROR;
         _testInverseBidi(pBiDi, testCases[i].s, testCases[i].length, 0, &errorCode);
     }
 
-    log_verbose("inverse BiDi: testInverseBidi(R) with %u test cases ---\n", LENGTHOF(testCases));
+    log_verbose("inverse Bidi: testInverse(R) with %u test cases ---\n", LENGTHOF(testCases));
     for(i=0; i<LENGTHOF(testCases); ++i) {
+        log_verbose("Testing case %d\n", i);
         errorCode=U_ZERO_ERROR;
         _testInverseBidi(pBiDi, testCases[i].s, testCases[i].length, 1, &errorCode);
     }
@@ -1232,9 +1893,15 @@ testInverseBidi() {
 
     ubidi_close(pBiDi);
 
-    log_verbose("inverse BiDi: rountrips: %5u\nnon-roundtrips: %5u\n", countRoundtrips, countNonRoundtrips);
+    log_verbose("inverse Bidi: rountrips: %5u\nnon-roundtrips: %5u\n", countRoundtrips, countNonRoundtrips);
 
     _testWriteReverse();
+
+    _testManyAddedPoints();
+
+    _testMisc();
+
+    log_verbose("\nExiting TestInverse\n\n");
 }
 
 #define COUNT_REPEAT_SEGMENTS 6
@@ -1254,7 +1921,8 @@ _testManyInverseBidi(UBiDi *pBiDi, UBiDiLevel direction) {
     int i, j, k;
     UErrorCode errorCode;
 
-    log_verbose("inverse Bidi: testManyInverseBidi(%c) - test permutations of text snippets ---\n", direction==0 ? 'L' : 'R');
+    log_verbose("inverse Bidi: testManyInverseBidi(%c) - test permutations of text snippets ---\n",
+                 direction==0 ? 'L' : 'R');
     for(i=0; i<COUNT_REPEAT_SEGMENTS; ++i) {
         text[0]=repeatSegments[i][0];
         text[1]=repeatSegments[i][1];
@@ -1280,7 +1948,7 @@ _testInverseBidi(UBiDi *pBiDi, const UChar *src, int32_t srcLength,
     int32_t ltrLength, logicalLength, visualLength;
 
     if(direction==0) {
-        log_verbose("inverse Bidi: testInverseBidi(L)\n");
+        log_verbose("inverse Bidi: testInverse(L)\n");
 
         /* convert visual to logical */
         ubidi_setInverse(pBiDi, TRUE);
@@ -1306,7 +1974,7 @@ _testInverseBidi(UBiDi *pBiDi, const UChar *src, int32_t srcLength,
         visualLength=ubidi_writeReordered(pBiDi, visualDest, LENGTHOF(visualDest),
                                           UBIDI_DO_MIRRORING|UBIDI_REMOVE_BIDI_CONTROLS, pErrorCode);
     } else {
-        log_verbose("inverse Bidi: testInverseBidi(R)\n");
+        log_verbose("inverse Bidi: testInverse(R)\n");
 
         /* reverse visual from RTL to LTR */
         ltrLength=ubidi_writeReverse(src, srcLength, visualLTR, LENGTHOF(visualLTR), 0, pErrorCode);
@@ -1352,7 +2020,7 @@ _testInverseBidi(UBiDi *pBiDi, const UChar *src, int32_t srcLength,
 }
 
 static void
-_testWriteReverse() {
+_testWriteReverse(void) {
     /* U+064e and U+0650 are combining marks (Mn) */
     static const UChar forward[]={
         0x200f, 0x627, 0x64e, 0x650, 0x20, 0x28, 0x31, 0x29
@@ -1389,10 +2057,56 @@ _testWriteReverse() {
     }
 }
 
+static void _testManyAddedPoints(void) {
+    UErrorCode errorCode = U_ZERO_ERROR;
+    UBiDi *bidi = ubidi_open();
+    UChar text[90], dest[MAXLEN], expected[120];
+    int destLen, i;
+    for (i = 0; i < 90; i+=3) {
+        text[i] = 'a';
+        text[i+1] = 0x05d0;
+        text[i+2] = '3';
+    }
+    ubidi_setReorderingMode(bidi, UBIDI_REORDER_INVERSE_LIKE_DIRECT);
+    ubidi_setReorderingOptions(bidi, UBIDI_OPTION_INSERT_MARKS);
+    ubidi_setPara(bidi, text, sizeof text, UBIDI_LTR, NULL, &errorCode);
+    destLen = ubidi_writeReordered(bidi, dest, MAXLEN, 0, &errorCode);
+    for (i = 0; i < 120; i+=4) {
+        expected[i] = 'a';
+        expected[i+1] = 0x05d0;
+        expected[i+2] = 0x200e;
+        expected[i+3] = '3';
+    }
+    if (memcmp(dest, expected, destLen * sizeof(UChar))) {
+        log_err("\nInvalid output with many added points, "
+                "expected '%s', got '%s'\n",
+                aescstrdup(expected, 120), aescstrdup(dest, destLen));
+    }
+}
+
+static void _testMisc(void) {
+    UErrorCode errorCode = U_ZERO_ERROR;
+    UBiDi *bidi = ubidi_open();
+    UChar src[3], dest[MAXLEN],expected[5];
+    int destLen;
+    ubidi_setInverse(bidi, TRUE);
+    src[0] = src[1] = src[2] = ' ';
+    ubidi_setPara(bidi, src, 3, UBIDI_RTL, NULL, &errorCode);
+    destLen = ubidi_writeReordered(bidi, dest, MAXLEN,
+              UBIDI_OUTPUT_REVERSE | UBIDI_INSERT_LRM_FOR_NUMERIC,
+              &errorCode);
+    u_unescape("\\u200f   \\u200f", expected, 5);
+    if (memcmp(dest, expected, destLen * sizeof(UChar))) {
+        log_err("\nInvalid output with RLM at both sides, "
+                "expected '%s', got '%s'\n",
+                aescstrdup(expected, 5), aescstrdup(dest, destLen));
+    }
+}
+
 /* arabic shaping ----------------------------------------------------------- */
 
 static void
-doArabicShapingTest() {
+doArabicShapingTest(void) {
     static const UChar
     source[]={
         0x31,   /* en:1 */
@@ -1577,7 +2291,7 @@ doArabicShapingTest() {
 }
 
 static void
-doLamAlefSpecialVLTRArabicShapingTest() {
+doLamAlefSpecialVLTRArabicShapingTest(void) {
     static const UChar
     source[]={
 /*a*/   0x20 ,0x646,0x622,0x644,0x627,0x20,
@@ -1728,7 +2442,7 @@ doLamAlefSpecialVLTRArabicShapingTest() {
 }
 
 static void
-doTashkeelSpecialVLTRArabicShapingTest() {
+doTashkeelSpecialVLTRArabicShapingTest(void) {
     static const UChar
     source[]={
         0x64A,0x628,0x631,0x639,0x20,
@@ -1780,7 +2494,7 @@ doTashkeelSpecialVLTRArabicShapingTest() {
 }
 
 static void
-doLOGICALArabicDeShapingTest() {
+doLOGICALArabicDeShapingTest(void) {
     static const UChar
     source[]={
         0x0020,0x0020,0x0020,0xFE8D,0xFEF5,0x0020,0xFEE5,0x0020,0xFE8D,0xFEF7,0x0020,
@@ -1859,7 +2573,7 @@ doLOGICALArabicDeShapingTest() {
 }
 
 static void
-doArabicShapingTestForBug5421() {
+doArabicShapingTestForBug5421(void) {
     static const UChar
     persian_letters_source[]={
         0x0020, 0x0698, 0x067E, 0x0686, 0x06AF, 0x0020
@@ -1935,8 +2649,7 @@ doArabicShapingTestForBug5421() {
 
 /* helpers ------------------------------------------------------------------ */
 
-static void
-initCharFromDirProps() {
+static void initCharFromDirProps(void) {
     static const UVersionInfo ucd401={ 4, 0, 1, 0 };
     static UVersionInfo ucdVersion={ 0, 0, 0, 0 };
 
@@ -1967,8 +2680,7 @@ getStringFromDirProps(const uint8_t *dirProps, int32_t length, UChar *buffer) {
     return buffer;
 }
 
-static void
-printUnicode(const UChar *s, int32_t length, const UBiDiLevel *levels) {
+static void printUnicode(const UChar *s, int32_t length, const UBiDiLevel *levels) {
     int32_t i;
 
     log_verbose("{ ");
@@ -2452,6 +3164,7 @@ assertRoundTrip(UBiDi *pBiDi, int32_t tc, int32_t outIndex, const char *srcChars
 
     u16ToPseudo(destLen, dest, destChars3);
     u16ToPseudo(destLen2, dest2, destChars2);
+    checkWhatYouCan(pBiDi, destChars3, destChars2);
     if (strcmp(srcChars, destChars2)) {
         if (roundtrip[tc][mode][option][level]) {
             log_err("\nRound trip failed for case=%d mode=%d option=%d.\n"
@@ -2477,13 +3190,13 @@ assertRoundTrip(UBiDi *pBiDi, int32_t tc, int32_t outIndex, const char *srcChars
         }
         return FALSE;
     }
-    if (!checkResultLength(pBiDi, destChars, destChars2, dest2, destLen2,
+    if (!checkResultLength(pBiDi, destChars, destChars2, destLen2,
                            desc, "UBIDI_OPTION_REMOVE_CONTROLS", level)) {
         return FALSE;
     }
-    if (outIndex > -1 && !testMaps(pBiDi, outIndex, srcChars, destChars,
-                                      desc, "UBIDI_OPTION_REMOVE_CONTROLS",
-                                      level, FALSE)) {
+    if (outIndex > -1 && !checkMaps(pBiDi, outIndex, srcChars, destChars,
+                                    desc, "UBIDI_OPTION_REMOVE_CONTROLS",
+                                    level, FALSE)) {
         return FALSE;
     }
     return TRUE;
@@ -2491,7 +3204,7 @@ assertRoundTrip(UBiDi *pBiDi, int32_t tc, int32_t outIndex, const char *srcChars
 
 static UBool
 checkResultLength(UBiDi *pBiDi, const char *srcChars, const char *destChars,
-                  const UChar *dest, int32_t destLen, const char* mode,
+                  int32_t destLen, const char* mode,
                   const char* option, UBiDiLevel level) {
     int32_t actualLen;
     if (strcmp(mode, "UBIDI_REORDER_INVERSE_NUMBERS_AS_L") == 0)
@@ -2517,48 +3230,53 @@ testReorderRunsOnly(void) {
         const char* textOut[2][2];
         const char noroundtrip[2];
     } testCases[] = {
-        {"ab 234 896 de", {{"de 896 ab 234", "de 896 ab 234"},
+        {"ab 234 896 de", {{"de 896 ab 234", "de 896 ab 234"},                   /*0*/
                            {"ab 234 @896@ de", "de 896 ab 234"}}, {0, 0}},
-        {"abcGHI", {{"GHIabc", "GHIabc"}, {"GHIabc", "GHIabc"}}, {0, 0}},
-        {"a.>67->", {{"<-67<.a", "<-67<.a"}, {"<-67<.a", "<-67<.a"}}, {0, 0}},
-        {"-=%$123/ *", {{"* /%$123=-", "* /%$123=-"},
+        {"abcGHI", {{"GHIabc", "GHIabc"}, {"GHIabc", "GHIabc"}}, {0, 0}},        /*1*/
+        {"a.>67->", {{"<-67<.a", "<-67<.a"}, {"<-67<.a", "<-67<.a"}}, {0, 0}},   /*2*/
+        {"-=%$123/ *", {{"* /%$123=-", "* /%$123=-"},                            /*3*/
                         {"* /%$123=-", "* /%$123=-"}}, {0, 0}},
-        {"abc->12..>JKL", {{"JKL<..12<-abc", "JKL<..abc->12"},
+        {"abc->12..>JKL", {{"JKL<..12<-abc", "JKL<..abc->12"},                   /*4*/
                            {"JKL<..12<-abc", "JKL<..abc->12"}}, {0, 0}},
-        {"JKL->12..>abc", {{"abc<..JKL->12", "abc<..12<-JKL"},
+        {"JKL->12..>abc", {{"abc<..JKL->12", "abc<..12<-JKL"},                   /*5*/
                            {"abc<..JKL->12", "abc<..12<-JKL"}}, {0, 0}},
-        {"123->abc", {{"abc<-123", "abc<-123"},
+        {"123->abc", {{"abc<-123", "abc<-123"},                                  /*6*/
                       {"abc&<-123", "abc<-123"}}, {1, 0}},
-        {"123->JKL", {{"JKL<-123", "123->JKL"},
+        {"123->JKL", {{"JKL<-123", "123->JKL"},                                  /*7*/
                       {"JKL<-123", "JKL<-@123"}}, {0, 1}},
-        {"*>12.>34->JKL", {{"JKL<-34<.12<*", "12.>34->JKL<*"},
+        {"*>12.>34->JKL", {{"JKL<-34<.12<*", "12.>34->JKL<*"},                   /*8*/
                            {"JKL<-34<.12<*", "JKL<-@34<.12<*"}}, {0, 1}},
-        {"*>67.>89->JKL", {{"67.>89->JKL<*", "67.>89->JKL<*"},
+        {"*>67.>89->JKL", {{"67.>89->JKL<*", "67.>89->JKL<*"},                   /*9*/
                            {"67.>89->JKL<*", "67.>89->JKL<*"}}, {0, 0}},
-        {"* /abc-=$%123", {{"$%123=-abc/ *", "abc-=$%123/ *"},
+        {"* /abc-=$%123", {{"$%123=-abc/ *", "abc-=$%123/ *"},                   /*10*/
                            {"$%123=-abc/ *", "abc-=$%123/ *"}}, {0, 0}},
-        {"* /$%def-=123", {{"123=-def%$/ *", "def-=123%$/ *"},
+        {"* /$%def-=123", {{"123=-def%$/ *", "def-=123%$/ *"},                   /*11*/
                            {"123=-def%$/ *", "def-=123%$/ *"}}, {0, 0}},
-        {"-=GHI* /123%$", {{"GHI* /123%$=-", "123%$/ *GHI=-"},
+        {"-=GHI* /123%$", {{"GHI* /123%$=-", "123%$/ *GHI=-"},                   /*12*/
                            {"GHI* /123%$=-", "123%$/ *GHI=-"}}, {0, 0}},
-        {"-=%$JKL* /123", {{"JKL* /%$123=-", "123/ *JKL$%=-"},
+        {"-=%$JKL* /123", {{"JKL* /%$123=-", "123/ *JKL$%=-"},                   /*13*/
                            {"JKL* /%$123=-", "123/ *JKL$%=-"}}, {0, 0}},
-        {"ab =#CD *?450", {{"CD *?450#= ab", "450?* CD#= ab"},
+        {"ab =#CD *?450", {{"CD *?450#= ab", "450?* CD#= ab"},                   /*14*/
                            {"CD *?450#= ab", "450?* CD#= ab"}}, {0, 0}},
-        {"ab 234 896 de", {{"de 896 ab 234", "de 896 ab 234"},
+        {"ab 234 896 de", {{"de 896 ab 234", "de 896 ab 234"},                   /*15*/
                            {"ab 234 @896@ de", "de 896 ab 234"}}, {0, 0}},
-        {"abc-=%$LMN* /123", {{"LMN* /%$123=-abc", "123/ *LMN$%=-abc"},
+        {"abc-=%$LMN* /123", {{"LMN* /%$123=-abc", "123/ *LMN$%=-abc"},          /*16*/
                               {"LMN* /%$123=-abc", "123/ *LMN$%=-abc"}}, {0, 0}},
-        {"123->JKL&MN&P", {{"JKLMNP<-123", "123->JKLMNP"},
-                           {"JKLMNP<-123", "JKLMNP<-@123"}}, {0, 1}}
+        {"123->JKL&MN&P", {{"JKLMNP<-123", "123->JKLMNP"},                       /*17*/
+                           {"JKLMNP<-123", "JKLMNP<-@123"}}, {0, 1}},
+        {"123", {{"123", "123"},                /* just one run */               /*18*/
+                 {"123", "123"}}, {0, 0}}
     };
     UBiDi *pBiDi = getBiDiObject();
     UBiDi *pL2VBiDi = getBiDiObject();
     UChar src[MAXLEN], dest[MAXLEN], visual1[MAXLEN], visual2[MAXLEN];
     char destChars[MAXLEN], vis1Chars[MAXLEN], vis2Chars[MAXLEN];
-    int32_t srcLen, destLen, vis1Len, vis2Len, option, i, j, nCases;
+    int32_t srcLen, destLen, vis1Len, vis2Len, option, i, j, nCases, paras;
     UErrorCode rc = U_ZERO_ERROR;
     UBiDiLevel level;
+
+    log_verbose("\nEntering TestReorderRunsOnly\n\n");
+
     if(!pL2VBiDi) {
         ubidi_close(pBiDi);             /* in case this one was allocated */
         return;
@@ -2573,6 +3291,8 @@ testReorderRunsOnly(void) {
             srcLen = strlen(testCases[i].textIn);
             pseudoToU16(srcLen, testCases[i].textIn, src);
             for(j = 0; j < 2; j++) {
+                log_verbose("Now doing test for option %d, case %d, level %d\n",
+                            i, option, j);
                 level = paraLevels[j];
                 ubidi_setPara(pBiDi, src, srcLen, level, NULL, &rc);
                 assertSuccessful("ubidi_setPara", &rc);
@@ -2580,6 +3300,7 @@ testReorderRunsOnly(void) {
                 destLen = ubidi_writeReordered(pBiDi, dest, MAXLEN, UBIDI_DO_MIRRORING, &rc);
                 assertSuccessful("ubidi_writeReordered", &rc);
                 u16ToPseudo(destLen, dest, destChars);
+                checkWhatYouCan(pBiDi, testCases[i].textIn, destChars);
                 assertStringsEqual(testCases[i].textOut[option][level], destChars,
                         testCases[i].textIn, "UBIDI_REORDER_RUNS_ONLY",
                         option==0 ? "0" : "UBIDI_OPTION_INSERT_MARKS",
@@ -2594,12 +3315,14 @@ testReorderRunsOnly(void) {
                 vis1Len = ubidi_writeReordered(pL2VBiDi, visual1, MAXLEN, UBIDI_DO_MIRRORING, &rc);
                 assertSuccessful("ubidi_writeReordered1", &rc);
                 u16ToPseudo(vis1Len, visual1, vis1Chars);
+                checkWhatYouCan(pL2VBiDi, testCases[i].textIn, vis1Chars);
                 ubidi_setPara(pL2VBiDi, dest, destLen, level^1, NULL, &rc);
                 assertSuccessful("ubidi_setPara2", &rc);
                 *visual2 = 0;
                 vis2Len = ubidi_writeReordered(pL2VBiDi, visual2, MAXLEN, UBIDI_DO_MIRRORING, &rc);
                 assertSuccessful("ubidi_writeReordered2", &rc);
                 u16ToPseudo(vis2Len, visual2, vis2Chars);
+                checkWhatYouCan(pL2VBiDi, destChars, vis2Chars);
                 assertStringsEqual(vis1Chars, vis2Chars,
                         testCases[i].textIn, "UBIDI_REORDER_RUNS_ONLY (2)",
                         option==0 ? "0" : "UBIDI_OPTION_INSERT_MARKS",
@@ -2607,12 +3330,23 @@ testReorderRunsOnly(void) {
             }
         }
     }
+
+    /* test with null or empty text */
+    ubidi_setPara(pBiDi, src, 0, UBIDI_LTR, NULL, &rc);
+    assertSuccessful("ubidi_setPara3", &rc);
+    paras = ubidi_countParagraphs(pBiDi);
+    if (paras != 0) {
+        log_err("\nInvalid number of paras (should be 0): %d\n", paras);
+    }
+
     ubidi_close(pBiDi);
     ubidi_close(pL2VBiDi);
+
+    log_verbose("\nExiting TestReorderRunsOnly\n\n");
 }
 
 static void
-testReorderingMode() {
+testReorderingMode(void) {
 
     UChar src[MAXLEN], dest[MAXLEN];
     char destChars[MAXLEN];
@@ -2625,7 +3359,7 @@ testReorderingMode() {
     const char *expectedChars;
     UBool testOK = TRUE;
 
-    log_verbose("\n*** Bidi reordering mode test ***\n");
+    log_verbose("\nEntering TestReorderingMode\n\n");
 
     pBiDi = getBiDiObject();
     pBiDi2 = getBiDiObject();
@@ -2639,7 +3373,7 @@ testReorderingMode() {
     ubidi_setInverse(pBiDi2, TRUE);
 
     for (tc = 0; tc < TC_COUNT; tc++) {
-        const char* srcChars = textIn[tc];
+        const char *srcChars = textIn[tc];
         srcLen = strlen(srcChars);
         pseudoToU16(srcLen, srcChars, src);
 
@@ -2673,10 +3407,14 @@ testReorderingMode() {
                                                    UBIDI_DO_MIRRORING, &rc);
                     assertSuccessful("ubidi_writeReordered", &rc);
                     u16ToPseudo(destLen, dest, destChars);
+                    if (!((modes[mode].value == UBIDI_REORDER_INVERSE_NUMBERS_AS_L) &&
+                          (options[option].value == UBIDI_OPTION_INSERT_MARKS))) {
+                        checkWhatYouCan(pBiDi, srcChars, destChars);
+                    }
 
                     if (modes[mode].value == UBIDI_REORDER_INVERSE_NUMBERS_AS_L) {
                         index = -1;
-                        expectedChars = inverseBasic(pBiDi2, src, srcLen,
+                        expectedChars = inverseBasic(pBiDi2, srcChars, srcLen,
                                 options[option].value, paraLevels[level], destChars);
                     }
                     else {
@@ -2689,19 +3427,19 @@ testReorderingMode() {
                                 pBiDi)) {
                         testOK = FALSE;
                     }
-                    else if (options[option].value == UBIDI_OPTION_INSERT_MARKS &&
+                    if (options[option].value == UBIDI_OPTION_INSERT_MARKS &&
                              !assertRoundTrip(pBiDi3, tc, index, srcChars,
                                               destChars, dest, destLen,
                                               mode, option, paraLevels[level])) {
                         testOK = FALSE;
                     }
                     else if (!checkResultLength(pBiDi, srcChars, destChars,
-                                dest, destLen, modes[mode].description,
+                                destLen, modes[mode].description,
                                 options[option].description,
                                 paraLevels[level])) {
                         testOK = FALSE;
                     }
-                    else if (index > -1 && !testMaps(pBiDi, index, srcChars,
+                    else if (index > -1 && !checkMaps(pBiDi, index, srcChars,
                             destChars, modes[mode].description,
                             options[option].description, paraLevels[level],
                             TRUE)) {
@@ -2717,18 +3455,21 @@ testReorderingMode() {
     ubidi_close(pBiDi3);
     ubidi_close(pBiDi2);
     ubidi_close(pBiDi);
+
+    log_verbose("\nExiting TestReorderingMode\n\n");
 }
 
-static const char* inverseBasic(UBiDi *pBiDi, const UChar *src, int32_t srcLen,
+static const char* inverseBasic(UBiDi *pBiDi, const char *srcChars, int32_t srcLen,
                                 uint32_t option, UBiDiLevel level, char *result) {
     UErrorCode rc = U_ZERO_ERROR;
     int32_t destLen;
-    UChar dest2 [MAXLEN];
+    UChar src[MAXLEN], dest2[MAXLEN];
 
     if (pBiDi == NULL || src == NULL) {
         return NULL;
     }
     ubidi_setReorderingOptions(pBiDi, option);
+    pseudoToU16(srcLen, srcChars, src);
     ubidi_setPara(pBiDi, src, srcLen, level, NULL, &rc);
     assertSuccessful("ubidi_setPara", &rc);
 
@@ -2737,13 +3478,16 @@ static const char* inverseBasic(UBiDi *pBiDi, const UChar *src, int32_t srcLen,
                                    UBIDI_DO_MIRRORING, &rc);
     assertSuccessful("ubidi_writeReordered", &rc);
     u16ToPseudo(destLen, dest2, result);
+    if (!(option == UBIDI_OPTION_INSERT_MARKS)) {
+        checkWhatYouCan(pBiDi, srcChars, result);
+    }
     return result;
 }
 
 #define NULL_CHAR '\0'
 
 static void
-testStreaming() {
+testStreaming(void) {
 #define MAXPORTIONS 10
 
     static const struct {
@@ -2786,7 +3530,7 @@ testStreaming() {
     UBool mismatch, testOK = TRUE;
     char processedLenStr[MAXPORTIONS * 5];
 
-    log_verbose("\n*** Bidi streaming test ***\n");
+    log_verbose("\nEntering TestStreaming\n\n");
 
     pBiDi = getBiDiObject();
 
@@ -2799,6 +3543,7 @@ testStreaming() {
             nPortions = testData[i].nPortions[levelIndex];
             level = paraLevels[levelIndex];
             *processedLenStr = NULL_CHAR;
+            log_verbose("Testing level %d, case %d\n", level, i);
 
             mismatch = FALSE;
 
@@ -2840,6 +3585,7 @@ testStreaming() {
     if (testOK == TRUE) {
         log_verbose("\nBiDi streaming test OK\n");
     }
+    log_verbose("\nExiting TestStreaming\n\n");
 }
 
 U_CDECL_BEGIN
@@ -2891,7 +3637,8 @@ static void verifyCallbackParams(UBiDiClassCallback* fn, const void* context,
     }
 }
 
-static void testClassOverride(void) {
+static void
+testClassOverride(void) {
     static const char* const textSrc  = "JIH.>12->a \\u05D0\\u05D1 6 ABC78";
     static const char* const textResult = "12<.HIJ->a 78CBA 6 \\u05D1\\u05D0";
 
@@ -2904,7 +3651,7 @@ static void testClassOverride(void) {
     int32_t srcLen, destLen, textSrcSize = (int32_t)uprv_strlen(textSrc);
     char* destChars = NULL;
 
-    log_verbose("\n*** Bidi class override test ***\n");
+    log_verbose("\nEntering TestClassOverride\n\n");
 
     pBiDi = getBiDiObject();
     if(!pBiDi) {
@@ -2950,6 +3697,7 @@ static void testClassOverride(void) {
         log_verbose("\nClass override test OK\n");
     }
     ubidi_close(pBiDi);
+    log_verbose("\nExiting TestClassOverride\n\n");
 }
 
 static char * formatMap(const int32_t * map, int len, char * buffer)
@@ -2971,8 +3719,8 @@ static char * formatMap(const int32_t * map, int len, char * buffer)
 }
 
 static UBool
-testMaps(UBiDi *pBiDi, int32_t stringIndex, const char *src, const char *dest,
-         const char *mode, const char* option, UBiDiLevel level, UBool forward)
+checkMaps(UBiDi *pBiDi, int32_t stringIndex, const char *src, const char *dest,
+          const char *mode, const char* option, UBiDiLevel level, UBool forward)
 {
     int32_t actualLogicalMap[MAX_MAP_LENGTH];
     int32_t actualVisualMap[MAX_MAP_LENGTH];
