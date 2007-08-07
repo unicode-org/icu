@@ -165,7 +165,7 @@ public class LanguageTestRoot extends TestFmwk implements TimeUnitConstants {
   }
 
   protected static String timestring(Period ts) {
-    StringBuilder buf = new StringBuilder();
+    StringBuffer buf = new StringBuffer();
     if (ts.isMoreThan()) {
       buf.append("mt");
     } else if (ts.isLessThan()) {
@@ -183,12 +183,12 @@ public class LanguageTestRoot extends TestFmwk implements TimeUnitConstants {
   }
 
   protected static String asciify(String s) {
-    StringBuilder sb = null;
+    StringBuffer sb = null;
     for (int i = 0, e = s.length(); i < e; ++i) {
       char c = s.charAt(i);
       if (c < 0x20 || c > 0x7e) {
         if (sb == null) {
-          sb = new StringBuilder();
+          sb = new StringBuffer();
           sb.append(s.substring(0, i));
         }
         sb.append("\\u");

@@ -124,7 +124,7 @@ class BasicPeriodFormatter implements PeriodFormatter {
       }
     }
 
-    StringBuilder sb = new StringBuilder();
+    StringBuffer sb = new StringBuffer();
 
     // if we've been requested to not display a limit, or there are
     // no non-zero units, do not display the limit.

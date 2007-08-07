@@ -98,7 +98,7 @@ public class PeriodFormatterData {
    * @param sb the string builder to which to append the text
    * @return true if a following digit will require a digit prefix
    */
-  public boolean appendPrefix(int tl, int td, StringBuilder sb) {
+  public boolean appendPrefix(int tl, int td, StringBuffer sb) {
     if (dr.scopeData != null) {
       int ix = tl * 3 + td;
       ScopeData sd = dr.scopeData[ix];
@@ -121,7 +121,7 @@ public class PeriodFormatterData {
    * @param td how and whether to display the time direction
    * @param sb the string builder to which to append the text
    */
-  public void appendSuffix(int tl, int td, StringBuilder sb) {
+  public void appendSuffix(int tl, int td, StringBuffer sb) {
     if (dr.scopeData != null) {
       int ix = tl * 3 + td;
       ScopeData sd = dr.scopeData[ix];
@@ -156,7 +156,7 @@ public class PeriodFormatterData {
                             int uv, boolean useCountSep, 
                             boolean useDigitPrefix, boolean multiple, 
                             boolean last, boolean wasSkipped, 
-                            StringBuilder sb) {
+                            StringBuffer sb) {
     int px = unit.ordinal();
 
     boolean willRequireSkipMarker = false;
@@ -261,7 +261,7 @@ public class PeriodFormatterData {
   public int appendCount(TimeUnit unit, boolean omitCount, 
                          boolean useDigitPrefix, 
                          int count, int cv, boolean useSep, 
-                         String name, boolean last, StringBuilder sb) {
+                         String name, boolean last, StringBuffer sb) {
     if (cv == ECountVariant.HALF_FRACTION && dr.halves == null) {
       cv = ECountVariant.INTEGER;
     }
@@ -390,7 +390,7 @@ public class PeriodFormatterData {
    * @param sb the string builder to which to append the text
    */
   public void appendCountValue(int count, int integralDigits, 
-                               int decimalDigits, StringBuilder sb) {
+                               int decimalDigits, StringBuffer sb) {
     int ival = count / 1000;
     if (decimalDigits == 0) {
       appendInteger(ival, integralDigits, 10, sb);
@@ -415,7 +415,7 @@ public class PeriodFormatterData {
   }
 
   public void appendInteger(int num, int mindigits, int maxdigits, 
-                            StringBuilder sb) {
+                            StringBuffer sb) {
     if (dr.numberNames != null && num < dr.numberNames.length) {
       String name = dr.numberNames[num];
       if (name != null) {
@@ -450,7 +450,7 @@ public class PeriodFormatterData {
    * @param sb the string builder to which to append the text
    */
   public void appendDigits(long num, int mindigits, int maxdigits,  
-                           StringBuilder sb) {
+                           StringBuffer sb) {
     char[] buf = new char[maxdigits];
     int ix = maxdigits;
     while (ix > 0 && num > 0) {
@@ -467,7 +467,7 @@ public class PeriodFormatterData {
    * Append a marker for skipped units internal to a string.
    * @param sb the string builder to which to append the text
    */
-  public void appendSkippedUnit(StringBuilder sb) {
+  public void appendSkippedUnit(StringBuffer sb) {
     if (dr.skippedUnitMarker != null) {
       sb.append(dr.skippedUnitMarker);
     }
@@ -484,7 +484,7 @@ public class PeriodFormatterData {
    */
   public boolean appendUnitSeparator(TimeUnit unit, boolean longSep, 
                                      boolean afterFirst, boolean beforeLast, 
-                                     StringBuilder sb) {
+                                     StringBuffer sb) {
     // long seps
     // false, false "...b', '...d"
     // false, true  "...', and 'c"
