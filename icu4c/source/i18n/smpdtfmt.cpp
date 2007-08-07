@@ -921,10 +921,10 @@ SimpleDateFormat::zoneIDCanonicalize(UnicodeString &zid) const
 
     UResourceBundle* tryThisZone = ures_getByKey(zoneFormatting,zidkey,NULL,&status);
     if (U_SUCCESS(status)) {
-       ures_close(tryThisZone);
-       ures_close(zoneFormatting);
-       ures_close(supplementalDataBundle);
-       return;
+         ures_close(tryThisZone);
+         ures_close(zoneFormatting);
+         ures_close(supplementalDataBundle);
+         return;
     }
 
     // Didn't find it, so go searching for an alias
@@ -932,8 +932,7 @@ SimpleDateFormat::zoneIDCanonicalize(UnicodeString &zid) const
     while ( ures_hasNext(zoneFormatting)) {
         UResourceBundle *currentZone = ures_getNextResource(zoneFormatting,NULL,&status);
         if (U_FAILURE(status)) {
-             ures_close(supplementalDataBundle);
-             return;
+             break;
         }
         
         const char *currentZoneString= ures_getKey(currentZone);
@@ -962,8 +961,6 @@ SimpleDateFormat::zoneIDCanonicalize(UnicodeString &zid) const
     }
     ures_close(zoneFormatting);
     ures_close(supplementalDataBundle);
-
-    return;
 }
 //----------------------------------------------------------------------
 
