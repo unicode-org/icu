@@ -159,6 +159,14 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     if (decimalSymbol != newDecimalSymbol) {
         errln("ERROR: inconsistency is found in cloned object.");
     }
+    if ( !(*cloneDTPatternGen == *instFromLocale) ) {
+        errln("ERROR: inconsistency is found in cloned object.");
+    }
+    /*
+    if ( *cloneDTPatternGen != *instFromLocale ) {
+        errln("ERROR: inconsistency is found in cloned object.");
+    }
+    */
     delete instFromLocale;
     delete cloneDTPatternGen;
     
@@ -255,7 +263,36 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     if (newDateTimeFormat != gen->getDateTimeFormat()) {
         errln("ERROR: unexpected result from setDateTimeFormat() and getDateTimeFormat()!.\n");
     }
+    
+    // ======== Test getSkeleton and getBaseSkeleton
+    status = U_ZERO_ERROR;
+    pattern = UnicodeString("dd-MMM");
+    UnicodeString expectedSkeleton = UnicodeString("MMMdd");
+    UnicodeString expectedBaseSkeleton = UnicodeString("MMMd");
+    UnicodeString retSkeleton = gen->getSkeleton(pattern, status);
+    if(U_FAILURE(status) || retSkeleton != expectedSkeleton ) {
+         errln("ERROR: Unexpected result from getSkeleton().\n");
+         errln(UnicodeString(" Got: ") + retSkeleton + UnicodeString(" Expected: ") + expectedSkeleton );
+    }
+    retSkeleton = gen->getBaseSkeleton(pattern, status);
+    if(U_FAILURE(status) || retSkeleton !=  expectedBaseSkeleton) {
+         errln("ERROR: Unexpected result from getBaseSkeleton().\n");
+         errln(UnicodeString(" Got: ") + retSkeleton + UnicodeString(" Expected:")+ expectedBaseSkeleton);
+    }
 
+    pattern = UnicodeString("dd/MMMM/yy");
+    expectedSkeleton = UnicodeString("yyMMMMdd");
+    expectedBaseSkeleton = UnicodeString("yMMMd");
+    retSkeleton = gen->getSkeleton(pattern, status);
+    if(U_FAILURE(status) || retSkeleton != expectedSkeleton ) {
+         errln("ERROR: Unexpected result from getSkeleton().\n");
+         errln(UnicodeString(" Got: ") + retSkeleton + UnicodeString(" Expected: ") + expectedSkeleton );
+    }
+    retSkeleton = gen->getBaseSkeleton(pattern, status);
+    if(U_FAILURE(status) || retSkeleton !=  expectedBaseSkeleton) {
+         errln("ERROR: Unexpected result from getBaseSkeleton().\n");
+         errln(UnicodeString(" Got: ") + retSkeleton + UnicodeString(" Expected:")+ expectedBaseSkeleton);
+    }
     delete format;
     delete zone;
     delete gen;
@@ -274,7 +311,8 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString bestPattern;
         
         Locale loc(testLocale[localeIndex][0], testLocale[localeIndex][1], testLocale[localeIndex][2], "");
-        //printf("\n\n Locale: %s_%s_%s", testLocale[localeIndex][0], testLocale[localeIndex][1], testLocale[localeIndex][2]);
+        // TODO: Remove printf if all test cases passed on AIX.
+        //dirprintf("\n\n Locale: %s_%s_%s", testLocale[localeIndex][0], testLocale[localeIndex][1], testLocale[localeIndex][2]);
         DateTimePatternGenerator *patGen=DateTimePatternGenerator::createInstance(loc, status);
         if(U_FAILURE(status)) {
             dataerrln("ERROR: Could not create DateTimePatternGenerator with locale index:%d . - exitting\n", localeIndex);
@@ -300,22 +338,19 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
 
 
     // ======= Test random skeleton 
-    /*const char randomChars[80] = {
-     '1','2','3','4','5','6','7','8','9','0','!','@','#','$','%','^','&','*','(',')',
-     '`',' ','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r',
-     's','t','u','v','w','x','y','z','A','B','C','D','F','G','H','I','J','K','L','M',
-     'N','O','P','Q','R','S','T','U','V','W','X','Y','Z',':',';','<','.','?',';','\\'};*/
     DateTimePatternGenerator *randDTGen= DateTimePatternGenerator::createInstance(status);
     if (U_FAILURE(status)) {
         dataerrln("ERROR: Could not create DateTimePatternGenerator (Locale::getFrench()) - exitting");
         return;
     }
-
+    UChar newChar;
     for (int32_t i=0; i<10; ++i) {
         UnicodeString randomSkeleton="";
         int32_t len = rand() % 20;
         for (int32_t j=0; j<len; ++j ) {
-           randomSkeleton += (UChar)(rand()%80);
+            while ((newChar== (UChar)(rand()%0x7f))>=(UChar)0x20) {
+                randomSkeleton += newChar;
+            }
         }
         UnicodeString bestPattern = randDTGen->getBestPattern(randomSkeleton, status);
     }
