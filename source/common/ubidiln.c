@@ -1,18 +1,18 @@
 /*
- ******************************************************************************
- *
- *   Copyright (C) 1999-2007, International Business Machines
- *   Corporation and others.  All Rights Reserved.
- *
- ******************************************************************************
- *   file name:  ubidiln.c
- *   encoding:   US-ASCII
- *   tab size:   8 (not used)
- *   indentation:4
- *
- *   created on: 1999aug06
- *   created by: Markus W. Scherer
- */
+******************************************************************************
+*
+*   Copyright (C) 1999-2007, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+******************************************************************************
+*   file name:  ubidiln.c
+*   encoding:   US-ASCII
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 1999aug06
+*   created by: Markus W. Scherer, updated by Matitiahu Allouche
+*/
 
 /* set import/export definitions */
 #ifndef U_COMMON_IMPLEMENTATION
@@ -133,16 +133,16 @@ ubidi_setLine(const UBiDi *pParaBiDi,
     int32_t length;
 
     /* check the argument values */
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return;
-    } else if(!IS_VALID_PARA(pParaBiDi) || pLineBiDi==NULL) {
+    RETURN_IF_NULL_OR_FAILING_ERRCODE(pErrorCode, );
+    RETURN_IF_NOT_VALID_PARA(pParaBiDi, *pErrorCode, );
+    RETURN_IF_BAD_RANGE(start, 0, limit, *pErrorCode, );
+    RETURN_IF_BAD_RANGE(limit, 0, pParaBiDi->length+1, *pErrorCode, );
+    if(pLineBiDi==NULL) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return;
-    } else if(start<0 || start>limit || limit>pParaBiDi->length) {
-        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-        return;
-    } else if(ubidi_getParagraph(pParaBiDi, start, NULL, NULL, NULL, pErrorCode) !=
-              ubidi_getParagraph(pParaBiDi, limit-1, NULL, NULL, NULL, pErrorCode)) {
+    }
+    if(ubidi_getParagraph(pParaBiDi, start, NULL, NULL, NULL, pErrorCode) !=
+       ubidi_getParagraph(pParaBiDi, limit-1, NULL, NULL, NULL, pErrorCode)) {
         /* the line crosses a paragraph boundary */
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return;
@@ -167,92 +167,84 @@ ubidi_setLine(const UBiDi *pParaBiDi,
                 pLineBiDi->controlCount++;
             }
         }
+        pLineBiDi->resultLength-=pLineBiDi->controlCount;
     }
 
-    if(length>0) {
-        pLineBiDi->dirProps=pParaBiDi->dirProps+start;
-        pLineBiDi->levels=pParaBiDi->levels+start;
-        pLineBiDi->runCount=-1;
+    pLineBiDi->dirProps=pParaBiDi->dirProps+start;
+    pLineBiDi->levels=pParaBiDi->levels+start;
+    pLineBiDi->runCount=-1;
 
-        if(pParaBiDi->direction!=UBIDI_MIXED) {
-            /* the parent is already trivial */
-            pLineBiDi->direction=pParaBiDi->direction;
+    if(pParaBiDi->direction!=UBIDI_MIXED) {
+        /* the parent is already trivial */
+        pLineBiDi->direction=pParaBiDi->direction;
 
-            /*
-             * The parent's levels are all either
-             * implicitly or explicitly ==paraLevel;
-             * do the same here.
-             */
-            if(pParaBiDi->trailingWSStart<=start) {
-                pLineBiDi->trailingWSStart=0;
-            } else if(pParaBiDi->trailingWSStart<limit) {
-                pLineBiDi->trailingWSStart=pParaBiDi->trailingWSStart-start;
-            } else {
-                pLineBiDi->trailingWSStart=length;
-            }
+        /*
+         * The parent's levels are all either
+         * implicitly or explicitly ==paraLevel;
+         * do the same here.
+         */
+        if(pParaBiDi->trailingWSStart<=start) {
+            pLineBiDi->trailingWSStart=0;
+        } else if(pParaBiDi->trailingWSStart<limit) {
+            pLineBiDi->trailingWSStart=pParaBiDi->trailingWSStart-start;
         } else {
-            const UBiDiLevel *levels=pLineBiDi->levels;
-            int32_t i, trailingWSStart;
-            UBiDiLevel level;
-
-            setTrailingWSStart(pLineBiDi);
-            trailingWSStart=pLineBiDi->trailingWSStart;
-
-            /* recalculate pLineBiDi->direction */
-            if(trailingWSStart==0) {
-                /* all levels are at paraLevel */
-                pLineBiDi->direction=(UBiDiDirection)(pLineBiDi->paraLevel&1);
-            } else {
-                /* get the level of the first character */
-                level=(UBiDiLevel)(levels[0]&1);
-
-                /* if there is anything of a different level, then the line is mixed */
-                if(trailingWSStart<length && (pLineBiDi->paraLevel&1)!=level) {
-                    /* the trailing WS is at paraLevel, which differs from levels[0] */
-                    pLineBiDi->direction=UBIDI_MIXED;
-                } else {
-                    /* see if levels[1..trailingWSStart-1] have the same direction as levels[0] and paraLevel */
-                    i=1;
-                    for(;;) {
-                        if(i==trailingWSStart) {
-                            /* the direction values match those in level */
-                            pLineBiDi->direction=(UBiDiDirection)level;
-                            break;
-                        } else if((levels[i]&1)!=level) {
-                            pLineBiDi->direction=UBIDI_MIXED;
-                            break;
-                        }
-                        ++i;
-                    }
-                }
-            }
-
-            switch(pLineBiDi->direction) {
-            case UBIDI_LTR:
-                /* make sure paraLevel is even */
-                pLineBiDi->paraLevel=(UBiDiLevel)((pLineBiDi->paraLevel+1)&~1);
-
-                /* all levels are implicitly at paraLevel (important for ubidi_getLevels()) */
-                pLineBiDi->trailingWSStart=0;
-                break;
-            case UBIDI_RTL:
-                /* make sure paraLevel is odd */
-                pLineBiDi->paraLevel|=1;
-
-                /* all levels are implicitly at paraLevel (important for ubidi_getLevels()) */
-                pLineBiDi->trailingWSStart=0;
-                break;
-            default:
-                break;
-            }
+            pLineBiDi->trailingWSStart=length;
         }
     } else {
-        /* create an object for a zero-length line */
-        pLineBiDi->direction=pLineBiDi->paraLevel&1 ? UBIDI_RTL : UBIDI_LTR;
-        pLineBiDi->trailingWSStart=pLineBiDi->runCount=0;
+        const UBiDiLevel *levels=pLineBiDi->levels;
+        int32_t i, trailingWSStart;
+        UBiDiLevel level;
 
-        pLineBiDi->dirProps=NULL;
-        pLineBiDi->levels=NULL;
+        setTrailingWSStart(pLineBiDi);
+        trailingWSStart=pLineBiDi->trailingWSStart;
+
+        /* recalculate pLineBiDi->direction */
+        if(trailingWSStart==0) {
+            /* all levels are at paraLevel */
+            pLineBiDi->direction=(UBiDiDirection)(pLineBiDi->paraLevel&1);
+        } else {
+            /* get the level of the first character */
+            level=(UBiDiLevel)(levels[0]&1);
+
+            /* if there is anything of a different level, then the line is mixed */
+            if(trailingWSStart<length && (pLineBiDi->paraLevel&1)!=level) {
+                /* the trailing WS is at paraLevel, which differs from levels[0] */
+                pLineBiDi->direction=UBIDI_MIXED;
+            } else {
+                /* see if levels[1..trailingWSStart-1] have the same direction as levels[0] and paraLevel */
+                i=1;
+                for(;;) {
+                    if(i==trailingWSStart) {
+                        /* the direction values match those in level */
+                        pLineBiDi->direction=(UBiDiDirection)level;
+                        break;
+                    } else if((levels[i]&1)!=level) {
+                        pLineBiDi->direction=UBIDI_MIXED;
+                        break;
+                    }
+                    ++i;
+                }
+            }
+        }
+
+        switch(pLineBiDi->direction) {
+        case UBIDI_LTR:
+            /* make sure paraLevel is even */
+            pLineBiDi->paraLevel=(UBiDiLevel)((pLineBiDi->paraLevel+1)&~1);
+
+            /* all levels are implicitly at paraLevel (important for ubidi_getLevels()) */
+            pLineBiDi->trailingWSStart=0;
+            break;
+        case UBIDI_RTL:
+            /* make sure paraLevel is odd */
+            pLineBiDi->paraLevel|=1;
+
+            /* all levels are implicitly at paraLevel (important for ubidi_getLevels()) */
+            pLineBiDi->trailingWSStart=0;
+            break;
+        default:
+            break;
+        }
     }
     pLineBiDi->pParaBiDi=pParaBiDi;     /* mark successful setLine */
     return;
@@ -274,13 +266,12 @@ U_CAPI const UBiDiLevel * U_EXPORT2
 ubidi_getLevels(UBiDi *pBiDi, UErrorCode *pErrorCode) {
     int32_t start, length;
 
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return NULL;
-    } else if(!IS_VALID_PARA_OR_LINE(pBiDi) || (length=pBiDi->length)<=0) {
+    RETURN_IF_NULL_OR_FAILING_ERRCODE(pErrorCode, NULL);
+    RETURN_IF_NOT_VALID_PARA_OR_LINE(pBiDi, *pErrorCode, NULL);
+    if((length=pBiDi->length)<=0) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
-
     if((start=pBiDi->trailingWSStart)==length) {
         /* the current levels array reflects the WS run */
         return pBiDi->levels;
@@ -293,7 +284,6 @@ ubidi_getLevels(UBiDi *pBiDi, UErrorCode *pErrorCode) {
      * This must be a UBiDi object for a line, and
      * we need to create a new levels array.
      */
-
     if(getLevelsMemory(pBiDi, length)) {
         UBiDiLevel *levels=pBiDi->levelsMemory;
 
@@ -321,18 +311,16 @@ ubidi_getLogicalRun(const UBiDi *pBiDi, int32_t logicalStart,
     int32_t length, runCount, visualStart, logicalLimit, logicalFirst, i;
     Run iRun;
 
-    if(!IS_VALID_PARA_OR_LINE(pBiDi) || logicalStart<0 ||
-       (length=pBiDi->length)<=logicalStart) {
+    errorCode=U_ZERO_ERROR;
+    RETURN_IF_BAD_RANGE(logicalStart, 0, pBiDi->length, errorCode, );
+    /* ubidi_countRuns will check VALID_PARA_OR_LINE */
+    runCount=ubidi_countRuns((UBiDi *)pBiDi, &errorCode);
+    if(U_FAILURE(errorCode)) {
         return;
     }
     /* this is done based on runs rather than on levels since levels have
        a special interpretation when UBIDI_REORDER_RUNS_ONLY
      */
-    errorCode=U_ZERO_ERROR;
-    runCount=ubidi_countRuns((UBiDi *)pBiDi, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        return;
-    }
     visualStart=logicalLimit=0;
 
     for(i=0; i<runCount; i++) {
@@ -349,7 +337,10 @@ ubidi_getLogicalRun(const UBiDi *pBiDi, int32_t logicalStart,
         *pLogicalLimit=logicalLimit;
     }
     if(pLevel) {
-        if(pBiDi->direction!=UBIDI_MIXED || logicalStart>=pBiDi->trailingWSStart) {
+        if(pBiDi->reorderingMode==UBIDI_REORDER_RUNS_ONLY) {
+            *pLevel=GET_ODD_BIT(iRun.logicalStart);
+        }
+        else if(pBiDi->direction!=UBIDI_MIXED || logicalStart>=pBiDi->trailingWSStart) {
             *pLevel=GET_PARALEVEL(pBiDi, logicalStart);
         } else {
         *pLevel=pBiDi->levels[logicalStart];
@@ -361,42 +352,41 @@ ubidi_getLogicalRun(const UBiDi *pBiDi, int32_t logicalStart,
 
 U_CAPI int32_t U_EXPORT2
 ubidi_countRuns(UBiDi *pBiDi, UErrorCode *pErrorCode) {
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+    RETURN_IF_NULL_OR_FAILING_ERRCODE(pErrorCode, -1);
+    RETURN_IF_NOT_VALID_PARA_OR_LINE(pBiDi, *pErrorCode, -1);
+    ubidi_getRuns(pBiDi, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
         return -1;
-    } else if(!IS_VALID_PARA_OR_LINE(pBiDi) ||
-              (pBiDi->runCount<0 && !ubidi_getRuns(pBiDi, pErrorCode))) {
-        *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-        return -1;
-    } else {
-        return pBiDi->runCount;
     }
+    return pBiDi->runCount;
 }
 
 U_CAPI UBiDiDirection U_EXPORT2
 ubidi_getVisualRun(UBiDi *pBiDi, int32_t runIndex,
                    int32_t *pLogicalStart, int32_t *pLength)
 {
-    UErrorCode status = U_ZERO_ERROR;
-    if( !IS_VALID_PARA_OR_LINE(pBiDi) || runIndex<0 ||
-        (pBiDi->runCount==-1 && !ubidi_getRuns(pBiDi, &status)) ||
-        runIndex>=pBiDi->runCount
-    ) {
+    int32_t start;
+    UErrorCode errorCode = U_ZERO_ERROR;
+    RETURN_IF_NOT_VALID_PARA_OR_LINE(pBiDi, errorCode, UBIDI_LTR);
+    ubidi_getRuns(pBiDi, &errorCode);
+    if(U_FAILURE(errorCode)) {
         return UBIDI_LTR;
-    } else {
-        int32_t start=pBiDi->runs[runIndex].logicalStart;
-        if(pLogicalStart!=NULL) {
-            *pLogicalStart=GET_INDEX(start);
-        }
-        if(pLength!=NULL) {
-            if(runIndex>0) {
-                *pLength=pBiDi->runs[runIndex].visualLimit-
-                         pBiDi->runs[runIndex-1].visualLimit;
-            } else {
-                *pLength=pBiDi->runs[0].visualLimit;
-            }
-        }
-        return (UBiDiDirection)GET_ODD_BIT(start);
     }
+    RETURN_IF_BAD_RANGE(runIndex, 0, pBiDi->runCount, errorCode, UBIDI_LTR);
+
+    start=pBiDi->runs[runIndex].logicalStart;
+    if(pLogicalStart!=NULL) {
+        *pLogicalStart=GET_INDEX(start);
+    }
+    if(pLength!=NULL) {
+        if(runIndex>0) {
+            *pLength=pBiDi->runs[runIndex].visualLimit-
+                     pBiDi->runs[runIndex-1].visualLimit;
+        } else {
+            *pLength=pBiDi->runs[0].visualLimit;
+        }
+    }
+    return (UBiDiDirection)GET_ODD_BIT(start);
 }
 
 /* in trivial cases there is only one trivial run; called by ubidi_getRuns() */
@@ -529,7 +519,7 @@ reorderLine(UBiDi *pBiDi, UBiDiLevel minLevel, UBiDiLevel maxLevel) {
 
 /* compute the runs array --------------------------------------------------- */
 
-static int32_t getRunFromLogicalIndex(UBiDi *pBiDi, int32_t logicalIndex, UErrorCode *status) {
+static int32_t getRunFromLogicalIndex(UBiDi *pBiDi, int32_t logicalIndex, UErrorCode *pErrorCode) {
     Run *runs=pBiDi->runs;
     int32_t runCount=pBiDi->runCount, visualStart=0, i, length, logicalStart;
 
@@ -543,7 +533,7 @@ static int32_t getRunFromLogicalIndex(UBiDi *pBiDi, int32_t logicalIndex, UError
     }
     /* we should never get here */
     U_ASSERT(FALSE);
-    *status = U_INDEX_OUTOFBOUNDS_ERROR;
+    *pErrorCode = U_INVALID_STATE_ERROR;
     return 0;
 }
 
@@ -560,6 +550,14 @@ static int32_t getRunFromLogicalIndex(UBiDi *pBiDi, int32_t logicalIndex, UError
  */
 U_CFUNC UBool
 ubidi_getRuns(UBiDi *pBiDi, UErrorCode *pErrorCode) {
+    /*
+     * This method returns immediately if the runs are already set. This
+     * includes the case of length==0 (handled in setPara)..
+     */
+    if (pBiDi->runCount>=0) {
+        return TRUE;
+    }
+
     if(pBiDi->direction!=UBIDI_MIXED) {
         /* simple, single-run case - this covers length==0 */
         /* pBiDi->paraLevel is ok even for contextual multiple paragraphs */
@@ -567,7 +565,9 @@ ubidi_getRuns(UBiDi *pBiDi, UErrorCode *pErrorCode) {
     } else /* UBIDI_MIXED, length>0 */ {
         /* mixed directionality */
         int32_t length=pBiDi->length, limit;
-
+        UBiDiLevel *levels=pBiDi->levels;
+        int32_t i, runCount;
+        UBiDiLevel level=UBIDI_DEFAULT_LTR;   /* initialize with no valid level */
         /*
          * If there are WS characters at the end of the line
          * and the run preceding them has a level different from
@@ -580,114 +580,105 @@ ubidi_getRuns(UBiDi *pBiDi, UErrorCode *pErrorCode) {
          * levels[]!=paraLevel but we have to treat it like it were so.
          */
         limit=pBiDi->trailingWSStart;
-        if(limit==0) {
-            /* there is only WS on this line */
-            getSingleRun(pBiDi, GET_PARALEVEL(pBiDi, 0));
-        } else {
-            UBiDiLevel *levels=pBiDi->levels;
-            int32_t i, runCount;
-            UBiDiLevel level=UBIDI_DEFAULT_LTR;   /* initialize with no valid level */
+        /* count the runs, there is at least one non-WS run, and limit>0 */
+        runCount=0;
+        for(i=0; i<limit; ++i) {
+            /* increment runCount at the start of each run */
+            if(levels[i]!=level) {
+                ++runCount;
+                level=levels[i];
+            }
+        }
 
-            /* count the runs, there is at least one non-WS run, and limit>0 */
-            runCount=0;
-            for(i=0; i<limit; ++i) {
-                /* increment runCount at the start of each run */
-                if(levels[i]!=level) {
-                    ++runCount;
-                    level=levels[i];
+        /*
+         * We don't need to see if the last run can be merged with a trailing
+         * WS run because setTrailingWSStart() would have done that.
+         */
+        if(runCount==1 && limit==length) {
+            /* There is only one non-WS run and no trailing WS-run. */
+            getSingleRun(pBiDi, levels[0]);
+        } else /* runCount>1 || limit<length */ {
+            /* allocate and set the runs */
+            Run *runs;
+            int32_t runIndex, start;
+            UBiDiLevel minLevel=UBIDI_MAX_EXPLICIT_LEVEL+1, maxLevel=0;
+
+            /* now, count a (non-mergeable) WS run */
+            if(limit<length) {
+                ++runCount;
+            }
+
+            /* runCount>1 */
+            if(getRunsMemory(pBiDi, runCount)) {
+                runs=pBiDi->runsMemory;
+            } else {
+                return FALSE;
+            }
+
+            /* set the runs */
+            /* FOOD FOR THOUGHT: this could be optimized, e.g.:
+             * 464->444, 484->444, 575->555, 595->555
+             * However, that would take longer. Check also how it would
+             * interact with BiDi control removal and inserting Marks.
+             */
+            runIndex=0;
+
+            /* search for the run limits and initialize visualLimit values with the run lengths */
+            i=0;
+            do {
+                /* prepare this run */
+                start=i;
+                level=levels[i];
+                if(level<minLevel) {
+                    minLevel=level;
+                }
+                if(level>maxLevel) {
+                    maxLevel=level;
+                }
+
+                /* look for the run limit */
+                while(++i<limit && levels[i]==level) {}
+
+                /* i is another run limit */
+                runs[runIndex].logicalStart=start;
+                runs[runIndex].visualLimit=i-start;
+                runs[runIndex].insertRemove=0;
+                ++runIndex;
+            } while(i<limit);
+
+            if(limit<length) {
+                /* there is a separate WS run */
+                runs[runIndex].logicalStart=limit;
+                runs[runIndex].visualLimit=length-limit;
+                /* For the trailing WS run, pBiDi->paraLevel is ok even
+                   if contextual multiple paragraphs.                   */
+                if(pBiDi->paraLevel<minLevel) {
+                    minLevel=pBiDi->paraLevel;
                 }
             }
 
-            /*
-             * We don't need to see if the last run can be merged with a trailing
-             * WS run because setTrailingWSStart() would have done that.
-             */
-            if(runCount==1 && limit==length) {
-                /* There is only one non-WS run and no trailing WS-run. */
-                getSingleRun(pBiDi, levels[0]);
-            } else /* runCount>1 || limit<length */ {
-                /* allocate and set the runs */
-                Run *runs;
-                int32_t runIndex, start;
-                UBiDiLevel minLevel=UBIDI_MAX_EXPLICIT_LEVEL+1, maxLevel=0;
+            /* set the object fields */
+            pBiDi->runs=runs;
+            pBiDi->runCount=runCount;
 
-                /* now, count a (non-mergeable) WS run */
-                if(limit<length) {
-                    ++runCount;
-                }
+            reorderLine(pBiDi, minLevel, maxLevel);
 
-                /* runCount>1 */
-                if(getRunsMemory(pBiDi, runCount)) {
-                    runs=pBiDi->runsMemory;
-                } else {
-                    return FALSE;
-                }
+            /* now add the direction flags and adjust the visualLimit's to be just that */
+            /* this loop will also handle the trailing WS run */
+            limit=0;
+            for(i=0; i<runCount; ++i) {
+                ADD_ODD_BIT_FROM_LEVEL(runs[i].logicalStart, levels[runs[i].logicalStart]);
+                limit=runs[i].visualLimit+=limit;
+            }
 
-                /* set the runs */
-                /* FOOD FOR THOUGHT: this could be optimized, e.g.:
-                 * 464->444, 484->444, 575->555, 595->555
-                 * However, that would take longer. Check also how it would
-                 * interact with BiDi control removal and inserting Marks.
-                 */
-                runIndex=0;
+            /* Set the "odd" bit for the trailing WS run. */
+            /* For a RTL paragraph, it will be the *first* run in visual order. */
+            /* For the trailing WS run, pBiDi->paraLevel is ok even if
+               contextual multiple paragraphs.                          */
+            if(runIndex<runCount) {
+                int32_t trailingRun = ((pBiDi->paraLevel & 1) != 0)? 0 : runIndex;
 
-                /* search for the run limits and initialize visualLimit values with the run lengths */
-                i=0;
-                do {
-                    /* prepare this run */
-                    start=i;
-                    level=levels[i];
-                    if(level<minLevel) {
-                        minLevel=level;
-                    }
-                    if(level>maxLevel) {
-                        maxLevel=level;
-                    }
-
-                    /* look for the run limit */
-                    while(++i<limit && levels[i]==level) {}
-
-                    /* i is another run limit */
-                    runs[runIndex].logicalStart=start;
-                    runs[runIndex].visualLimit=i-start;
-                    runs[runIndex].insertRemove=0;
-                    ++runIndex;
-                } while(i<limit);
-
-                if(limit<length) {
-                    /* there is a separate WS run */
-                    runs[runIndex].logicalStart=limit;
-                    runs[runIndex].visualLimit=length-limit;
-                    /* For the trailing WS run, pBiDi->paraLevel is ok even
-                       if contextual multiple paragraphs.                   */
-                    if(pBiDi->paraLevel<minLevel) {
-                        minLevel=pBiDi->paraLevel;
-                    }
-                }
-
-                /* set the object fields */
-                pBiDi->runs=runs;
-                pBiDi->runCount=runCount;
-
-                reorderLine(pBiDi, minLevel, maxLevel);
-
-                /* now add the direction flags and adjust the visualLimit's to be just that */
-                /* this loop will also handle the trailing WS run */
-                limit=0;
-                for(i=0; i<runCount; ++i) {
-                    ADD_ODD_BIT_FROM_LEVEL(runs[i].logicalStart, levels[runs[i].logicalStart]);
-                    limit=runs[i].visualLimit+=limit;
-                }
-
-                /* Set the "odd" bit for the trailing WS run. */
-                /* For a RTL paragraph, it will be the *first* run in visual order. */
-                /* For the trailing WS run, pBiDi->paraLevel is ok even if
-                   contextual multiple paragraphs.                          */
-                if(runIndex<runCount) {
-                    int32_t trailingRun = ((pBiDi->paraLevel & 1) != 0)? 0 : runIndex;
-
-                    ADD_ODD_BIT_FROM_LEVEL(runs[trailingRun].logicalStart, pBiDi->paraLevel);
-                }
+                ADD_ODD_BIT_FROM_LEVEL(runs[trailingRun].logicalStart, pBiDi->paraLevel);
             }
         }
     }
@@ -885,51 +876,45 @@ ubidi_reorderVisual(const UBiDiLevel *levels, int32_t length, int32_t *indexMap)
 
 U_CAPI int32_t U_EXPORT2
 ubidi_getVisualIndex(UBiDi *pBiDi, int32_t logicalIndex, UErrorCode *pErrorCode) {
-    int32_t visualIndex;
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return 0;
-    } else if(!IS_VALID_PARA_OR_LINE(pBiDi)) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    } else if(logicalIndex<0 || pBiDi->length<=logicalIndex) {
-        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-        return 0;
-    } else {
-        /* we can do the trivial cases without the runs array */
-        switch(pBiDi->direction) {
-        case UBIDI_LTR:
-            visualIndex=logicalIndex;
-            break;
-        case UBIDI_RTL:
-            visualIndex=pBiDi->length-logicalIndex-1;
-            break;
-        default:
-            if(pBiDi->runCount<0 && !ubidi_getRuns(pBiDi, pErrorCode)) {
-                *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-                return 0;
-            } else {
-                Run *runs=pBiDi->runs;
-                int32_t i, visualStart=0, offset, length;
+    int32_t visualIndex=UBIDI_MAP_NOWHERE;
+    RETURN_IF_NULL_OR_FAILING_ERRCODE(pErrorCode, -1);
+    RETURN_IF_NOT_VALID_PARA_OR_LINE(pBiDi, *pErrorCode, -1);
+    RETURN_IF_BAD_RANGE(logicalIndex, 0, pBiDi->length, *pErrorCode, -1);
 
-                /* linear search for the run, search on the visual runs */
-                for(i=0; i<pBiDi->runCount; ++i) {
-                    length=runs[i].visualLimit-visualStart;
-                    offset=logicalIndex-GET_INDEX(runs[i].logicalStart);
-                    if(offset>=0 && offset<length) {
-                        if(IS_EVEN_RUN(runs[i].logicalStart)) {
-                            /* LTR */
-                            visualIndex=visualStart+offset;
-                        } else {
-                            /* RTL */
-                            visualIndex=visualStart+length-offset-1;
-                        }
-                        break;          /* exit for loop */
+    /* we can do the trivial cases without the runs array */
+    switch(pBiDi->direction) {
+    case UBIDI_LTR:
+        visualIndex=logicalIndex;
+        break;
+    case UBIDI_RTL:
+        visualIndex=pBiDi->length-logicalIndex-1;
+        break;
+    default:
+        if(!ubidi_getRuns(pBiDi, pErrorCode)) {
+            *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+            return -1;
+        } else {
+            Run *runs=pBiDi->runs;
+            int32_t i, visualStart=0, offset, length;
+
+            /* linear search for the run, search on the visual runs */
+            for(i=0; i<pBiDi->runCount; ++i) {
+                length=runs[i].visualLimit-visualStart;
+                offset=logicalIndex-GET_INDEX(runs[i].logicalStart);
+                if(offset>=0 && offset<length) {
+                    if(IS_EVEN_RUN(runs[i].logicalStart)) {
+                        /* LTR */
+                        visualIndex=visualStart+offset;
+                    } else {
+                        /* RTL */
+                        visualIndex=visualStart+length-offset-1;
                     }
-                    visualStart+=length;
+                    break;          /* exit for loop */
                 }
-                if(i>=pBiDi->runCount) {
-                    return UBIDI_MAP_NOWHERE;
-                }
+                visualStart+=length;
+            }
+            if(i>=pBiDi->runCount) {
+                return UBIDI_MAP_NOWHERE;
             }
         }
     }
@@ -984,7 +969,7 @@ ubidi_getVisualIndex(UBiDi *pBiDi, int32_t logicalIndex, UErrorCode *pErrorCode)
             } else {
                 /* RTL: check from logical index to run end */
                 start=logicalIndex+1;
-                limit=runs[i].logicalStart+length;
+                limit=GET_INDEX(runs[i].logicalStart)+length;
             }
             for(j=start; j<limit; j++) {
                 uchar=pBiDi->text[j];
@@ -1003,15 +988,9 @@ U_CAPI int32_t U_EXPORT2
 ubidi_getLogicalIndex(UBiDi *pBiDi, int32_t visualIndex, UErrorCode *pErrorCode) {
     Run *runs;
     int32_t i, runCount, start;
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return 0;
-    } else if(!IS_VALID_PARA_OR_LINE(pBiDi)) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    } else if(visualIndex<0 || pBiDi->resultLength<=visualIndex) {
-        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-        return 0;
-    }
+    RETURN_IF_NULL_OR_FAILING_ERRCODE(pErrorCode, -1);
+    RETURN_IF_NOT_VALID_PARA_OR_LINE(pBiDi, *pErrorCode, -1);
+    RETURN_IF_BAD_RANGE(visualIndex, 0, pBiDi->resultLength, *pErrorCode, -1);
     /* we can do the trivial cases without the runs array */
     if(pBiDi->insertPoints.size==0 && pBiDi->controlCount==0) {
         if(pBiDi->direction==UBIDI_LTR) {
@@ -1021,9 +1000,9 @@ ubidi_getLogicalIndex(UBiDi *pBiDi, int32_t visualIndex, UErrorCode *pErrorCode)
             return pBiDi->length-visualIndex-1;
         }
     }
-    if(pBiDi->runCount<0 && !ubidi_getRuns(pBiDi, pErrorCode)) {
+    if(!ubidi_getRuns(pBiDi, pErrorCode)) {
         *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-        return 0;
+        return -1;
     }
 
     runs=pBiDi->runs;
@@ -1132,7 +1111,8 @@ ubidi_getLogicalIndex(UBiDi *pBiDi, int32_t visualIndex, UErrorCode *pErrorCode)
 
 U_CAPI void U_EXPORT2
 ubidi_getLogicalMap(UBiDi *pBiDi, int32_t *indexMap, UErrorCode *pErrorCode) {
-    /* ubidi_countRuns() checks all of its and our arguments */
+    RETURN_IF_NULL_OR_FAILING_ERRCODE(pErrorCode, );
+    /* ubidi_countRuns() checks for VALID_PARA_OR_LINE */
     ubidi_countRuns(pBiDi, pErrorCode);
     if(U_FAILURE(*pErrorCode)) {
         /* no op */
@@ -1141,10 +1121,13 @@ ubidi_getLogicalMap(UBiDi *pBiDi, int32_t *indexMap, UErrorCode *pErrorCode) {
     } else {
         /* fill a logical-to-visual index map using the runs[] */
         int32_t visualStart, visualLimit, i, j, k;
-        int32_t logicalStart, logicalEnd;
+        int32_t logicalStart, logicalLimit;
         Run *runs=pBiDi->runs;
+        if (pBiDi->length<=0) {
+            return;
+        }
         if (pBiDi->length>pBiDi->resultLength) {
-            uprv_memset(indexMap, 0xFF, pBiDi->resultLength*sizeof(int32_t));
+            uprv_memset(indexMap, 0xFF, pBiDi->length*sizeof(int32_t));
         }
 
         visualStart=0;
@@ -1176,10 +1159,10 @@ ubidi_getLogicalMap(UBiDi *pBiDi, int32_t *indexMap, UErrorCode *pErrorCode) {
                     markFound++;
                 }
                 if(markFound>0) {
-                    int32_t limit;
+                    int32_t logicalLimit;
                     logicalStart=GET_INDEX(runs[i].logicalStart);
-                    limit=logicalStart+length;
-                    for(j=logicalStart; j<limit; j++) {
+                    logicalLimit=logicalStart+length;
+                    for(j=logicalStart; j<logicalLimit; j++) {
                         indexMap[j]+=markFound;
                     }
                 }
@@ -1205,16 +1188,16 @@ ubidi_getLogicalMap(UBiDi *pBiDi, int32_t *indexMap, UErrorCode *pErrorCode) {
                 logicalStart=runs[i].logicalStart;
                 evenRun=IS_EVEN_RUN(logicalStart);
                 REMOVE_ODD_BIT(logicalStart);
-                logicalEnd=logicalStart+length-1;
+                logicalLimit=logicalStart+length;
                 /* if no control within this run */
                 if(insertRemove==0) {
-                    for(j=logicalStart; j<=logicalEnd; j++) {
+                    for(j=logicalStart; j<logicalLimit; j++) {
                         indexMap[j]-=controlFound;
                     }
                     continue;
                 }
                 for(j=0; j<length; j++) {
-                    k= evenRun ? logicalStart+j : logicalEnd-j;
+                    k= evenRun ? logicalStart+j : logicalLimit-j-1;
                     uchar=pBiDi->text[k];
                     if(IS_BIDI_CONTROL_CHAR(uchar)) {
                         controlFound++;
@@ -1230,8 +1213,10 @@ ubidi_getLogicalMap(UBiDi *pBiDi, int32_t *indexMap, UErrorCode *pErrorCode) {
 
 U_CAPI void U_EXPORT2
 ubidi_getVisualMap(UBiDi *pBiDi, int32_t *indexMap, UErrorCode *pErrorCode) {
-    /* ubidi_countRuns() checks all of its and our arguments */
-    if(ubidi_countRuns(pBiDi, pErrorCode)<=0) {
+    RETURN_IF_NULL_OR_FAILING_ERRCODE(pErrorCode, );
+    /* ubidi_countRuns() checks for VALID_PARA_OR_LINE */
+    ubidi_countRuns(pBiDi, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
         /* no op */
     } else if(indexMap==NULL) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
@@ -1240,6 +1225,9 @@ ubidi_getVisualMap(UBiDi *pBiDi, int32_t *indexMap, UErrorCode *pErrorCode) {
         Run *runs=pBiDi->runs, *runsLimit=runs+pBiDi->runCount;
         int32_t logicalStart, visualStart, visualLimit, *pi=indexMap;
 
+        if (pBiDi->resultLength<=0) {
+            return;
+        }
         visualStart=0;
         for(; runs<runsLimit; ++runs) {
             logicalStart=runs->logicalStart;
