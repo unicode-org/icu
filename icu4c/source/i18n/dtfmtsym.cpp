@@ -2253,7 +2253,6 @@ DateFormatSymbols::findZoneIDTypeValue( UnicodeString& zid, const UnicodeString&
     UnicodeString fbString;
     StringEnumeration *tzKeys = TimeZone::createEnumeration();
 
-    tzKeys->reset(status);
     while( (myKey=tzKeys->snext(status))!= NULL){
         status = U_ZERO_ERROR;
         this->getFallbackString(*myKey,fbString,status);
@@ -2266,9 +2265,10 @@ DateFormatSymbols::findZoneIDTypeValue( UnicodeString& zid, const UnicodeString&
             type = (TimeZoneTranslationType) TIMEZONE_LONG_GENERIC;
             value.setTo(fbString);
             zid.setTo(*myKey);
-            return;
+            break;
         }
     }
+    delete tzKeys;
 }
 
 UnicodeString
