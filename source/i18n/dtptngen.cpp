@@ -34,9 +34,10 @@
 #include "uresimp.h"
 #include "dtptngen_impl.h"
 
-#if defined U_DEBUG_DTPTN
+//TODO
+//#if defined U_DEBUG_DTPTN
 #include <stdio.h>
-#endif
+//#endif
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
@@ -738,6 +739,13 @@ DateTimePatternGenerator::getBestRaw(DateTimeMatcher& source,
         if (distance<bestDistance) {
             bestDistance=distance;
             bestPattern=patternMap->getPatternFromSkeleton(*trial.getSkeletonPtr());
+            // TODO : remove printf if all test cases passed on AIX.
+            /*
+            printf("\n Distance:%x Best pattern:", bestDistance);
+            for(int32_t i=0; i<bestPattern->length(); ++i) {
+                printf("%c", bestPattern->charAt(i));
+            }
+            */
             missingFields->setTo(tempInfo);
             if (distance==0) {
                 break;
@@ -753,6 +761,13 @@ DateTimePatternGenerator::adjustFieldTypes(const UnicodeString& pattern,
                                            UBool fixFractionalSeconds) {
     UnicodeString newPattern;
     fp->set(pattern);
+    // TODO : remove printf if all test cases passed on AIX.
+    /*
+    printf("\n Picked pattern:");
+    for(int32_t i=0; i<pattern.length(); ++i) {
+        printf("%c", pattern.charAt(i));
+    }
+    */
     for (int32_t i=0; i < fp->itemNumber; i++) {
         UnicodeString field = fp->items[i];
         if ( fp->isQuoteLiteral(field) ) {
@@ -984,13 +999,14 @@ PatternMap::copyFrom(const PatternMap& other, UErrorCode& status) {
         PtnElem *curElem, *otherElem, *prevElem=NULL;
         otherElem = other.boot[bootIndex];
         while (otherElem!=NULL) {
-            curElem = new PtnElem(otherElem->basePattern, otherElem->pattern);
-            if ((this->boot[bootIndex]= curElem) == NULL ) {
+            if ((curElem = new PtnElem(otherElem->basePattern, otherElem->pattern))==NULL) {
                 // out of memory
                 status = U_MEMORY_ALLOCATION_ERROR;
                 return;
             }
-
+            if ( this->boot[bootIndex]== NULL ) {
+                this->boot[bootIndex] = curElem;
+            }
             if ((curElem->skeleton=new PtnSkeleton(*(otherElem->skeleton))) == NULL ) {
                 // out of memory
                 status = U_MEMORY_ALLOCATION_ERROR;
