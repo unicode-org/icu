@@ -113,6 +113,7 @@ public:
     PtnSkeleton(const PtnSkeleton& other);
     UBool equals(const PtnSkeleton& other);
     UnicodeString getSkeleton();
+    UnicodeString getBaseSkeleton();
     virtual ~PtnSkeleton();
 };
 
@@ -222,6 +223,7 @@ public:
     const UnicodeString* getPatternFromBasePattern(UnicodeString& basePattern);
     const UnicodeString* getPatternFromSkeleton(PtnSkeleton& skeleton);
     void copyFrom(const PatternMap& other, UErrorCode& status);
+    PtnElem* getHeader(UChar baseChar);
     UBool equals(const PatternMap& other);
 private:
     UBool isDupAllowed;
