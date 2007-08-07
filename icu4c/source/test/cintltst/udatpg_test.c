@@ -61,7 +61,7 @@ static const UChar testFormat[]= {0x7B, 0x31, 0x7D, 0x20, 0x7B, 0x30, 0x7D, 0}; 
 static const UChar appendItemName[]= {0x68, 0x72, 0};  /* hr */
 static const UChar testPattern2[]={ 0x48, 0x48, 0x3a, 0x6d, 0x6d, 0x20, 0x76, 0 }; /* HH:mm v */
 static const UChar replacedStr[]={ 0x76, 0x76, 0x76, 0x76, 0 }; /* vvvv */
-// results for getBaseSkeletons() - {Hmv}, {yMMM}
+/* results for getBaseSkeletons() - {Hmv}, {yMMM} */
 static const UChar resultBaseSkeletons[2][10] = {{0x48,0x6d, 0x76, 0}, {0x79, 0x4d, 0x4d, 0x4d, 0 } };
 
 
