@@ -1694,7 +1694,7 @@ UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
 
         targetUniChar =missingCharMarker;
 
-        {
+        if(myTarget < args->targetLimit){
 
             mySourceChar= (unsigned char) *mySource++;
 
