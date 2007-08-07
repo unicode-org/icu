@@ -2075,10 +2075,11 @@ DateFormatSymbols::getFallbackString(const UnicodeString &zid, UnicodeString &re
         MessageFormat::format(pattern,countryArray, 1, result, status);
     }
     
-    if (thisZone) ures_close(thisZone);
-    if (zoneFormatting) ures_close(zoneFormatting);
-    if (supplementalDataBundle) ures_close(supplementalDataBundle);
-    if (countries) ures_close(countries);
+    ures_close(thisZone);
+    ures_close(zoneFormatting);
+    ures_close(supplementalDataBundle);
+    ures_close(countries);
+    ures_close(multiZone);
 
     return result;
 }
