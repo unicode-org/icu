@@ -120,6 +120,8 @@ static UBool U_CALLCONV timeZone_cleanup(void)
     delete _GMT;
     _GMT = NULL;
 
+    uprv_memset(TZDATA_VERSION, 0, sizeof(TZDATA_VERSION));
+
     if (LOCK) {
         umtx_destroy(&LOCK);
         LOCK = NULL;
@@ -1277,16 +1279,19 @@ TimeZone::getTZDataVersion(UErrorCode& status)
     UBool needsInit;
     UMTX_CHECK(&LOCK, (TZDATA_VERSION[0] == 0), needsInit);
     if (needsInit) {
-        umtx_lock(&LOCK);
         int32_t len = sizeof(TZDATA_VERSION);
         UResourceBundle *bundle = ures_openDirect(NULL, "zoneinfo", &status);
-        const char *tzver = ures_getUTF8StringByKey(bundle, "TZVersion",
-            TZDATA_VERSION, &len, FALSE, &status);
-        if (U_FAILURE(status)) {
-            TZDATA_VERSION[0] = 0;
+        const UChar *tzver = ures_getStringByKey(bundle, "TZVersion",
+            &len, &status);
+
+        umtx_lock(&LOCK);
+        if (U_SUCCESS(status)) {
+            u_UCharsToChars(tzver, TZDATA_VERSION, len+1);
+            ucln_i18n_registerCleanup(UCLN_I18N_TIMEZONE, timeZone_cleanup);
         }
-        ures_close(bundle);
         umtx_unlock(&LOCK);
+
+        ures_close(bundle);
     }
     if (U_FAILURE(status)) {
         return NULL;
