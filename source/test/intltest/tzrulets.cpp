@@ -325,7 +325,7 @@ TimeZoneRuleTest::TestSimpleRuleBasedTimeZone(void) {
         errln("FAIL: getOffset(7 args) failed.");
     }
     if (offset != -3600000) {
-        errln(UnicodeString("FAIL: Invalid time zone offset: ") + offset + " /expected: -3600000");
+        errln((UnicodeString)"FAIL: Invalid time zone offset: " + offset + " /expected: -3600000");
     }
     dst = rbtz1->inDaylightTime(time, status);
     if (U_FAILURE(status)) {
@@ -339,10 +339,39 @@ TimeZoneRuleTest::TestSimpleRuleBasedTimeZone(void) {
         errln("FAIL: getOffset(5 args) failed.");
     }
     if (offset != -3600000) {
-        errln(UnicodeString("FAIL: Invalid time zone raw offset: ") + offset + " /expected: -3600000");
+        errln((UnicodeString)"FAIL: Invalid time zone raw offset: " + offset + " /expected: -3600000");
     }
     if (dstSavings != 0) {            
-        errln(UnicodeString("FAIL: Invalid DST amount: ") + dstSavings + " /expected: 0");
+        errln((UnicodeString)"FAIL: Invalid DST amount: " + dstSavings + " /expected: 0");
+    }
+
+    // getRawOffset
+    offset = rbtz1->getRawOffset();
+    if (offset != -1*HOUR) {
+        errln((UnicodeString)"FAIL: Invalid time zone raw offset returned by getRawOffset: "
+            + offset + " /expected: -3600000");
+    }
+
+    // operator=/==/!=
+    RuleBasedTimeZone rbtz0("RBTZ1", ir->clone());
+    if (rbtz0 == *rbtz1 || !(rbtz0 != *rbtz1)) {
+        errln("FAIL: RuleBasedTimeZone rbtz0 is not equal to rbtz1, but got wrong result");
+    }
+    rbtz0 = *rbtz1;
+    if (rbtz0 != *rbtz1 || !(rbtz0 == *rbtz1)) {
+        errln("FAIL: RuleBasedTimeZone rbtz0 is equal to rbtz1, but got wrong result");
+    }
+
+    // setRawOffset
+    const int32_t RAW = -10*HOUR;
+    rbtz0.setRawOffset(RAW);
+    if (rbtz0.getRawOffset() != RAW) {
+        logln("setRawOffset is implemented in RuleBasedTimeZone");
+    }
+
+    // useDaylightTime
+    if (!rbtz1->useDaylightTime()) {
+        errln("FAIL: useDaylightTime returned FALSE");
     }
 
     // Try to add 3rd final rule
@@ -1171,6 +1200,36 @@ TimeZoneRuleTest::TestTimeZoneRuleCoverage(void) {
     TimeArrayTimeZoneRule *t4 = new TimeArrayTimeZoneRule("t4", -3*HOUR, 0, trtimes1, 1, DateTimeRule::STANDARD_TIME);
     TimeArrayTimeZoneRule *t5 = new TimeArrayTimeZoneRule("t5", -4*HOUR, 1*HOUR, trtimes1, 1, DateTimeRule::WALL_TIME);
 
+    // DateTimeRule::operator=/clone
+    DateTimeRule dtr0(UCAL_MAY, 31, 2*HOUR, DateTimeRule::WALL_TIME);
+    if (dtr0 == *dtr1 || !(dtr0 != *dtr1)) {
+        errln("FAIL: DateTimeRule dtr0 is not equal to dtr1, but got wrong result");
+    }
+    dtr0 = *dtr1;
+    if (dtr0 != *dtr1 || !(dtr0 == *dtr1)) {
+        errln("FAIL: DateTimeRule dtr0 is equal to dtr1, but got wrong result");
+    }
+    DateTimeRule *dtr0c = dtr0.clone();
+    if (*dtr0c != *dtr1 || !(*dtr0c == *dtr1)) {
+        errln("FAIL: DateTimeRule dtr0c is equal to dtr1, but got wrong result");
+    }
+    delete dtr0c;
+
+    // AnnualTimeZonerule::operator=/clone
+    AnnualTimeZoneRule a0("a0", 5*HOUR, 1*HOUR, *dtr1, 1990, AnnualTimeZoneRule::MAX_YEAR);
+    if (a0 == *a1 || !(a0 != *a1)) {
+        errln("FAIL: AnnualTimeZoneRule a0 is not equal to a1, but got wrong result");
+    }
+    a0 = *a1;
+    if (a0 != *a1 || !(a0 == *a1)) {
+        errln("FAIL: AnnualTimeZoneRule a0 is equal to a1, but got wrong result");
+    }
+    AnnualTimeZoneRule *a0c = a0.clone();
+    if (*a0c != *a1 || !(*a0c == *a1)) {
+        errln("FAIL: AnnualTimeZoneRule a0c is equal to a1, but got wrong result");
+    }
+    delete a0c;
+
     // AnnualTimeZoneRule::getRule
     if (*(a1->getRule()) != *(a2->getRule())) {
         errln("FAIL: The same DateTimeRule must be returned from AnnualTimeZoneRule a1 and a2");
@@ -1257,6 +1316,21 @@ TimeZoneRuleTest::TestTimeZoneRuleCoverage(void) {
         errln("FAIL: AnnualTimeZoneRule is not equivalent to TimeArrayTimeZoneRule, but returned TRUE");
     }
 
+    // InitialTimezoneRule::operator=/clone
+    InitialTimeZoneRule i0("i0", 10*HOUR, 0);
+    if (i0 == *i1 || !(i0 != *i1)) {
+        errln("FAIL: InitialTimeZoneRule i0 is not equal to i1, but got wrong result");
+    }
+    i0 = *i1;
+    if (i0 != *i1 || !(i0 == *i1)) {
+        errln("FAIL: InitialTimeZoneRule i0 is equal to i1, but got wrong result");
+    }
+    InitialTimeZoneRule *i0c = i0.clone();
+    if (*i0c != *i1 || !(*i0c == *i1)) {
+        errln("FAIL: InitialTimeZoneRule i0c is equal to i1, but got wrong result");
+    }
+    delete i0c;
+
     // InitialTimeZoneRule::isEquivalentRule
     if (!i1->isEquivalentTo(*i2)) {
         errln("FAIL: InitialTimeZoneRule i1 is equivalent to i2, but returned FALSE");
@@ -1285,6 +1359,21 @@ TimeZoneRuleTest::TestTimeZoneRuleCoverage(void) {
     if (b1) {
         errln("FAIL: InitialTimeZone::getPreviousStart returned TRUE");
     }
+
+    // TimeArrayTimeZoneRule::operator=/clone
+    TimeArrayTimeZoneRule t0("t0", 4*HOUR, 0, trtimes1, 1, DateTimeRule::UTC_TIME);
+    if (t0 == *t1 || !(t0 != *t1)) {
+        errln("FAIL: TimeArrayTimeZoneRule t0 is not equal to t1, but got wrong result");
+    }
+    t0 = *t1;
+    if (t0 != *t1 || !(t0 == *t1)) {
+        errln("FAIL: TimeArrayTimeZoneRule t0 is equal to t1, but got wrong result");
+    }
+    TimeArrayTimeZoneRule *t0c = t0.clone();
+    if (*t0c != *t1 || !(*t0c == *t1)) {
+        errln("FAIL: TimeArrayTimeZoneRule t0c is equal to t1, but got wrong result");
+    }
+    delete t0c;
 
     // TimeArrayTimeZoneRule::countStartTimes
     if (t1->countStartTimes() != 1) {
@@ -1511,6 +1600,20 @@ TimeZoneRuleTest::TestVTimeZoneCoverage(void) {
         errln("FAIL: getOffset(7 args) returned different results in VTimeZone and OlsonTimeZone");
     }
 
+    // getOffset(era, year, month, day, dayOfWeek, milliseconds, monthLength, ec)
+    offset1 = otz->getOffset(GregorianCalendar::AD, 2007, UCAL_JULY, 1, UCAL_SUNDAY, 0, 31, status);
+    if (U_FAILURE(status)) {
+        errln("FAIL: getOffset(8 args) failed for otz");
+    }
+    offset2 = vtz->getOffset(GregorianCalendar::AD, 2007, UCAL_JULY, 1, UCAL_SUNDAY, 0, 31, status);
+    if (U_FAILURE(status)) {
+        errln("FAIL: getOffset(8 args) failed for vtz");
+    }
+    if (offset1 != offset2) {
+        errln("FAIL: getOffset(8 args) returned different results in VTimeZone and OlsonTimeZone");
+    }
+
+
     // getOffset(date, local, rawOffset, dstOffset, ec)
     UDate t = Calendar::getNow();
     int32_t rawOffset1, dstSavings1;
@@ -1599,6 +1702,17 @@ TimeZoneRuleTest::TestVTimeZoneCoverage(void) {
         errln("FAIL: getPreviousTransition returned different results in VTimeZone and OlsonTimeZone");
     }
 
+    // TimeZoneTransition constructor/clone
+    TimeZoneTransition *tzt1c = tzt1.clone();
+    if (*tzt1c != tzt1 || !(*tzt1c == tzt1)) {
+        errln("FAIL: TimeZoneTransition tzt1c is equal to tzt1, but got wrong result");
+    }
+    delete tzt1c;
+    TimeZoneTransition tzt3(tzt1);
+    if (tzt3 != tzt1 || !(tzt3 == tzt1)) {
+        errln("FAIL: TimeZoneTransition tzt3 is equal to tzt1, but got wrong result");
+    }
+
     // hasEquivalentTransitions
     UDate time1 = getUTCMillis(1950, UCAL_JANUARY, 1);
     UDate time2 = getUTCMillis(2020, UCAL_JANUARY, 1);
@@ -1610,9 +1724,20 @@ TimeZoneRuleTest::TestVTimeZoneCoverage(void) {
         errln("FAIL: hasEquivalentTransitons returned false for the same time zone");
     }
 
+    // operator=/operator==/operator!=
+    VTimeZone *vtz1 = VTimeZone::createVTimeZoneByID("America/Los_Angeles");
+    if (*vtz1 == *vtz || !(*vtz1 != *vtz)) {
+        errln("FAIL: VTimeZone vtz1 is not equal to vtz, but got wrong result");
+    }
+    *vtz1 = *vtz;
+    if (*vtz1 != *vtz || !(*vtz1 == *vtz)) {
+        errln("FAIL: VTimeZone vtz1 is equal to vtz, but got wrong result");
+    }
+
     delete otz;
     delete vtz;
     delete tmpvtz;
+    delete vtz1;
 }
 
 
