@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 #*
 #*******************************************************************************
-#*   Copyright (C) 2001-2006, International Business Machines
+#*   Copyright (C) 2001-2007, International Business Machines
 #*   Corporation and others.  All Rights Reserved.
 #*******************************************************************************
 #*
@@ -60,7 +60,7 @@ $HEADERDEF =~ s/\./_/;
 print HEADER <<"EndOfHeaderComment";
 /*
 *******************************************************************************
-*   Copyright (C) 2002-2006, International Business Machines
+*   Copyright (C) 2002-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *

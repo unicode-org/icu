@@ -334,7 +334,7 @@ inline ULocRuns::ULocRuns(const ULocRuns & /*other*/)
     // nothing else to do...
 }
 
-const Locale **getLocales(const char **localeNames, le_int32 count)
+static const Locale **getLocales(const char **localeNames, le_int32 count)
 {
     Locale **locales = LE_NEW_ARRAY(Locale *, count);
 
