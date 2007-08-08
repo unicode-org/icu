@@ -1106,13 +1106,15 @@ SimpleTimeZone::getTimeZoneRules(const InitialTimeZoneRule*& initial,
     if (U_FAILURE(status)) {
         return;
     }
-    int32_t cnt = 0;
     initial = initialRule;
-    if (trscount > 0) {
-        trsrules[cnt++] = stdRule;
-    }
-    if (trscount > 1) {
-        trsrules[cnt++] = dstRule;
+    int32_t cnt = 0;
+    if (stdRule != NULL) {
+        if (cnt < trscount) {
+            trsrules[cnt++] = stdRule;
+        }
+        if (cnt < trscount) {
+            trsrules[cnt++] = dstRule;
+        }
     }
     trscount = cnt;
 }

@@ -302,7 +302,9 @@ static int32_t offsetStrToMillis(const UnicodeString& str, UErrorCode& status) {
         }
         hour = parseAsciiDigits(str, 1, 2, status);
         min = parseAsciiDigits(str, 3, 2, status);
-        sec = parseAsciiDigits(str, 5, 2, status);
+        if (length == 7) {
+            sec = parseAsciiDigits(str, 5, 2, status);
+        }
         if (U_FAILURE(status)) {
             break;
         }
@@ -697,7 +699,7 @@ static TimeZoneRule* createRuleByRRULE(const UnicodeString& tzname, int rawOffse
     } else if (dayOfWeek != 0 && nthDayOfWeek == 0 && dayOfMonth != 0) {
         // First day of week after day of month rule, for example,
         // first Sunday after 15th day in the month
-        adtr = new DateTimeRule(month, dayOfMonth, dayOfWeek, true, startMID, DateTimeRule::WALL_TIME);
+        adtr = new DateTimeRule(month, dayOfMonth, dayOfWeek, TRUE, startMID, DateTimeRule::WALL_TIME);
     }
     if (adtr == NULL) {
         goto unsupportedRRule;
@@ -713,33 +715,36 @@ unsupportedRRule:
  * Create a TimeZoneRule by the RDATE definition
  */
 static TimeZoneRule* createRuleByRDATE(const UnicodeString& tzname, int32_t rawOffset, int32_t dstSavings,
-                                       UDate /*start*/, UVector* dates, int32_t fromOffset, UErrorCode& status) {
+                                       UDate start, UVector* dates, int32_t fromOffset, UErrorCode& status) {
     if (U_FAILURE(status)) {
         return NULL;
     }
+    TimeArrayTimeZoneRule *retVal = NULL;
     if (dates == NULL || dates->size() == 0) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
-    }
-
-    // Create an array of transition times
-    int32_t size = dates->size();
-    UDate* times = (UDate*)uprv_malloc(sizeof(UDate) * size);
-    if (times == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
-    }
-    for (int32_t i = 0; i < size; i++) {
-        UnicodeString *datestr = (UnicodeString*)dates->elementAt(i);
-        times[i] = parseDateTimeString(*datestr, fromOffset, status);
-        if (U_FAILURE(status)) {
-            uprv_free(times);
+        // When no RDATE line is provided, use start (DTSTART)
+        // as the transition time
+        retVal = new TimeArrayTimeZoneRule(tzname, rawOffset, dstSavings,
+            &start, 1, DateTimeRule::UTC_TIME);
+    } else {
+        // Create an array of transition times
+        int32_t size = dates->size();
+        UDate* times = (UDate*)uprv_malloc(sizeof(UDate) * size);
+        if (times == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
             return NULL;
         }
+        for (int32_t i = 0; i < size; i++) {
+            UnicodeString *datestr = (UnicodeString*)dates->elementAt(i);
+            times[i] = parseDateTimeString(*datestr, fromOffset, status);
+            if (U_FAILURE(status)) {
+                uprv_free(times);
+                return NULL;
+            }
+        }
+        retVal = new TimeArrayTimeZoneRule(tzname, rawOffset, dstSavings,
+            times, size, DateTimeRule::UTC_TIME);
+        uprv_free(times);
     }
-    TimeArrayTimeZoneRule *retVal = new TimeArrayTimeZoneRule(tzname, rawOffset, dstSavings,
-        times, size, DateTimeRule::UTC_TIME);
-    uprv_free(times);
     return retVal;
 }
 
@@ -1257,6 +1262,9 @@ VTimeZone::load(VTZReader& reader, UErrorCode& status) {
         }
     }
     if (!success) {
+        if (U_SUCCESS(status)) {
+            status = U_INVALID_STATE_ERROR;
+        }
         goto cleanupVtzlines;
     }
     parse(status);
@@ -1415,7 +1423,7 @@ VTimeZone::parse(UErrorCode& status) {
                 }
             } else if (name.compare(ICAL_END) == 0) {
                 // Mandatory properties
-                if (dtstart.length() == 0 || from.length() == 0 || to.length() == 0 || dates == NULL) {
+                if (dtstart.length() == 0 || from.length() == 0 || to.length() == 0) {
                     goto cleanupParse;
                 }
                 // if tzname is not available, create one from tzid
@@ -1526,6 +1534,7 @@ VTimeZone::parse(UErrorCode& status) {
     delete dates;
 
     tz = rbtz;
+    setID(tzid);
     return;
 
 cleanupParse:
@@ -1809,7 +1818,8 @@ VTimeZone::writeZone(VTZWriter& w, BasicTimeZone& basictz,
                 }
                 if (!sameRule) {
                     if (dstCount == 1) {
-                        writeZonePropsByTime(w, TRUE, dstName, dstFromOffset, dstToOffset, dstStartTime, status);
+                        writeZonePropsByTime(w, TRUE, dstName, dstFromOffset, dstToOffset, dstStartTime,
+                                TRUE, status);
                     } else {
                         writeZonePropsByDOW(w, TRUE, dstName, dstFromOffset, dstToOffset,
                                 dstMonth, dstWeekInMonth, dstDayOfWeek, dstStartTime, dstUntilTime, status);
@@ -1859,7 +1869,8 @@ VTimeZone::writeZone(VTZWriter& w, BasicTimeZone& basictz,
                 }
                 if (!sameRule) {
                     if (stdCount == 1) {
-                        writeZonePropsByTime(w, FALSE, stdName, stdFromOffset, stdToOffset, stdStartTime, status);
+                        writeZonePropsByTime(w, FALSE, stdName, stdFromOffset, stdToOffset, stdStartTime,
+                                TRUE, status);
                     } else {
                         writeZonePropsByDOW(w, FALSE, stdName, stdFromOffset, stdToOffset,
                                 stdMonth, stdWeekInMonth, stdDayOfWeek, stdStartTime, stdUntilTime, status);
@@ -1901,7 +1912,7 @@ VTimeZone::writeZone(VTZWriter& w, BasicTimeZone& basictz,
         basictz.getID(tzid);
         getDefaultTZName(tzid, isDst, name);        
         writeZonePropsByTime(w, isDst, name,
-                offset, offset, DEF_TZSTARTTIME - offset, status);    
+                offset, offset, DEF_TZSTARTTIME - offset, FALSE, status);    
         if (U_FAILURE(status)) {
             goto cleanupWriteZone;
         }
@@ -1909,7 +1920,8 @@ VTimeZone::writeZone(VTZWriter& w, BasicTimeZone& basictz,
         if (dstCount > 0) {
             if (finalDstRule == NULL) {
                 if (dstCount == 1) {
-                    writeZonePropsByTime(w, TRUE, dstName, dstFromOffset, dstToOffset, dstStartTime, status);
+                    writeZonePropsByTime(w, TRUE, dstName, dstFromOffset, dstToOffset, dstStartTime,
+                            TRUE, status);
                 } else {
                     writeZonePropsByDOW(w, TRUE, dstName, dstFromOffset, dstToOffset,
                             dstMonth, dstWeekInMonth, dstDayOfWeek, dstStartTime, dstUntilTime, status);
@@ -1945,7 +1957,8 @@ VTimeZone::writeZone(VTZWriter& w, BasicTimeZone& basictz,
         if (stdCount > 0) {
             if (finalStdRule == NULL) {
                 if (stdCount == 1) {
-                    writeZonePropsByTime(w, FALSE, stdName, stdFromOffset, stdToOffset, stdStartTime, status);
+                    writeZonePropsByTime(w, FALSE, stdName, stdFromOffset, stdToOffset, stdStartTime,
+                            TRUE, status);
                 } else {
                     writeZonePropsByDOW(w, FALSE, stdName, stdFromOffset, stdToOffset,
                             stdMonth, stdWeekInMonth, stdDayOfWeek, stdStartTime, stdUntilTime, status);
@@ -2037,11 +2050,12 @@ VTimeZone::writeFooter(VTZWriter& writer, UErrorCode& status) const {
 }
 
 /*
- * Write a single start time using VTIMEZONE RDATE
+ * Write a single start time
  */
 void
 VTimeZone::writeZonePropsByTime(VTZWriter& writer, UBool isDst, const UnicodeString& tzname,
-                                int32_t fromOffset, int32_t toOffset, UDate time, UErrorCode& status) const {
+                                int32_t fromOffset, int32_t toOffset, UDate time, UBool withRDATE,
+                                UErrorCode& status) const {
     if (U_FAILURE(status)) {
         return;
     }
@@ -2049,11 +2063,13 @@ VTimeZone::writeZonePropsByTime(VTZWriter& writer, UBool isDst, const UnicodeStr
     if (U_FAILURE(status)) {
         return;
     }
-    writer.write(ICAL_RDATE);
-    writer.write(COLON);
-    UnicodeString timestr;
-    writer.write(getDateTimeString(time + fromOffset, timestr));
-    writer.write(ICAL_NEWLINE);
+    if (withRDATE) {
+        writer.write(ICAL_RDATE);
+        writer.write(COLON);
+        UnicodeString timestr;
+        writer.write(getDateTimeString(time + fromOffset, timestr));
+        writer.write(ICAL_NEWLINE);
+    }
     endZoneProps(writer, isDst, status);
     if (U_FAILURE(status)) {
         return;

@@ -314,7 +314,7 @@ AnnualTimeZoneRule::isEquivalentTo(const TimeZoneRule& other) const {
         return FALSE;
     }
     AnnualTimeZoneRule* that = (AnnualTimeZoneRule*)&other;
-    return (fDateTimeRule == that->fDateTimeRule &&
+    return (*fDateTimeRule == *(that->fDateTimeRule) &&
             fStartYear == that->fStartYear &&
             fEndYear == that->fEndYear);
 }
