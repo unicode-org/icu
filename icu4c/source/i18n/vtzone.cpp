@@ -876,7 +876,7 @@ public:
 
     void write(const UnicodeString& str);
     void write(UChar ch);
-    void write(const UChar* str, int32_t length);
+    //void write(const UChar* str, int32_t length);
 private:
     UnicodeString* out;
 };
@@ -898,10 +898,12 @@ VTZWriter::write(UChar ch) {
     out->append(ch);
 }
 
+/*
 void
 VTZWriter::write(const UChar* str, int32_t length) {
     out->append(str, length);
 }
+*/
 
 class VTZReader {
 public:
@@ -982,6 +984,16 @@ VTimeZone::operator=(const VTimeZone& right) {
     }
     if (*this != right) {
         BasicTimeZone::operator=(right);
+        if (tz != NULL) {
+            delete tz;
+            tz = NULL;
+        }
+        if (right.tz != NULL) {
+            tz = (BasicTimeZone*)right.tz->clone();
+        }
+        if (vtzlines != NULL) {
+            delete vtzlines;
+        }
         if (right.vtzlines != NULL) {
             UErrorCode status = U_ZERO_ERROR;
             int32_t size = right.vtzlines->size();
@@ -997,6 +1009,7 @@ VTimeZone::operator=(const VTimeZone& right) {
             }
             if (U_FAILURE(status) && vtzlines != NULL) {
                 delete vtzlines;
+                vtzlines = NULL;
             }
         }
         tzurl = right.tzurl;
