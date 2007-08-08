@@ -308,7 +308,7 @@ U_CAPI void U_EXPORT2
 ubidi_getLogicalRun(const UBiDi *pBiDi, int32_t logicalStart,
                     int32_t *pLogicalLimit, UBiDiLevel *pLevel) {
     UErrorCode errorCode;
-    int32_t length, runCount, visualStart, logicalLimit, logicalFirst, i;
+    int32_t runCount, visualStart, logicalLimit, logicalFirst, i;
     Run iRun;
 
     errorCode=U_ZERO_ERROR;
@@ -1159,7 +1159,6 @@ ubidi_getLogicalMap(UBiDi *pBiDi, int32_t *indexMap, UErrorCode *pErrorCode) {
                     markFound++;
                 }
                 if(markFound>0) {
-                    int32_t logicalLimit;
                     logicalStart=GET_INDEX(runs[i].logicalStart);
                     logicalLimit=logicalStart+length;
                     for(j=logicalStart; j<logicalLimit; j++) {
