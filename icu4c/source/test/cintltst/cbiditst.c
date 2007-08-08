@@ -2101,6 +2101,7 @@ static void _testMisc(void) {
                 "expected '%s', got '%s'\n",
                 aescstrdup(expected, 5), aescstrdup(dest, destLen));
     }
+    ubidi_close(bidi);
 }
 
 /* arabic shaping ----------------------------------------------------------- */
