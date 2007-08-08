@@ -39,7 +39,7 @@ static UBool compareRules(UVector* rules1, UVector* rules2) {
     for (int32_t i = 0; i < size; i++) {
         TimeZoneRule *r1 = (TimeZoneRule*)rules1->elementAt(i);
         TimeZoneRule *r2 = (TimeZoneRule*)rules2->elementAt(i);
-        if (r1 != r2) {
+        if (*r1 != *r2) {
             return FALSE;
         }
     }
@@ -63,7 +63,13 @@ RuleBasedTimeZone::RuleBasedTimeZone(const UnicodeString& id, InitialTimeZoneRul
 
 RuleBasedTimeZone::RuleBasedTimeZone(const RuleBasedTimeZone& source)
 : BasicTimeZone(source), fInitialRule(source.fInitialRule->clone()),
-  fHistoricRules(NULL), fFinalRules(NULL), fHistoricTransitions(NULL), fUpToDate(FALSE) {
+  fHistoricTransitions(NULL), fUpToDate(FALSE) {
+    fHistoricRules = copyRules(source.fHistoricRules);
+    fFinalRules = copyRules(source.fFinalRules);
+    if (source.fUpToDate) {
+        UErrorCode status = U_ZERO_ERROR;
+        complete(status);
+    }
 }
 
 RuleBasedTimeZone::~RuleBasedTimeZone() {
@@ -568,14 +574,14 @@ RuleBasedTimeZone::getTimeZoneRules(const InitialTimeZoneRule*& initial,
         int32_t historicCount = fHistoricRules->size();
         idx = 0;
         while (cnt < trscount && idx < historicCount) {
-            trsrules[cnt++] = (const TimeZoneRule*)fHistoricRules->elementAt(idx);
+            trsrules[cnt++] = (const TimeZoneRule*)fHistoricRules->elementAt(idx++);
         }
     }
     if (fFinalRules != NULL && cnt < trscount) {
         int32_t finalCount = fFinalRules->size();
         idx = 0;
         while (cnt < trscount && idx < finalCount) {
-            trsrules[cnt++] = (const TimeZoneRule*)fFinalRules->elementAt(idx);
+            trsrules[cnt++] = (const TimeZoneRule*)fFinalRules->elementAt(idx++);
         }
     }
     // Set the result length
@@ -741,9 +747,13 @@ RuleBasedTimeZone::findNext(UDate base, UBool inclusive, UDate& transitionTime,
         // For now, this implementation ignore transitions with only zone name changes.
         if (result.from->getRawOffset() == result.to->getRawOffset()
             && result.from->getDSTSavings() == result.to->getDSTSavings()) {
-            // No offset changes.  Try next one if not final
-            return findNext(result.time, FALSE /* always exclusive */,
-                transitionTime, fromRule, toRule);
+            if (isFinal) {
+                return FALSE;
+            } else {
+                // No offset changes.  Try next one if not final
+                return findNext(result.time, FALSE /* always exclusive */,
+                    transitionTime, fromRule, toRule);
+            }
         }
         transitionTime = result.time;
         fromRule = result.from;

@@ -369,7 +369,8 @@ private:
     void writeFooter(VTZWriter& writer, UErrorCode& status) const;
 
     void writeZonePropsByTime(VTZWriter& writer, UBool isDst, const UnicodeString& tzname,
-                              int32_t fromOffset, int32_t toOffset, UDate time, UErrorCode& status) const;
+                              int32_t fromOffset, int32_t toOffset, UDate time, UBool withRDATE,
+                              UErrorCode& status) const;
     void writeZonePropsByDOM(VTZWriter& writer, UBool isDst, const UnicodeString& tzname,
                              int32_t fromOffset, int32_t toOffset,
                              int32_t month, int32_t dayOfMonth, UDate startTime, UDate untilTime,

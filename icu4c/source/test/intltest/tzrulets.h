@@ -30,6 +30,10 @@ public:
     void TestVTimeZoneSimpleWrite(void);
     void TestVTimeZoneHeaderProps(void);
     void TestGetSimpleRules(void);
+    void TestTimeZoneRuleCoverage(void);
+    void TestSimpleTimeZoneCoverage(void);
+    void TestVTimeZoneCoverage(void);
+    void TestVTimeZoneParse(void);
 
 private:
     void verifyTransitions(BasicTimeZone& icutz, UDate start, UDate end);
