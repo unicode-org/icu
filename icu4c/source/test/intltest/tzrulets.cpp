@@ -1484,6 +1484,7 @@ TimeZoneRuleTest::TestSimpleTimeZoneCoverage(void) {
     if (!avail1 || !avail2 || tzt1 != tzt2) {
         errln("FAIL: Bad transition returned by SimpleTimeZone::getNextTransition");
     }
+    delete stz1;
 }
 
 /*
