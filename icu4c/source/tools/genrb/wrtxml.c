@@ -953,7 +953,6 @@ bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* outpu
     const char* fileStart = "<file xml:space = \"preserve\" source-language = \"";
     const char* file1 = "\" datatype = \"x-icu-resource-bundle\" ";
     const char* file2 = "original = \"";
-    const char* file3 = "\" tool = \"genrb\" ";
     const char* file4 = "\" date = \"";
     const char* fileEnd = "</file>\n";
     const char* headerStart = "<header>\n";
