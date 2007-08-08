@@ -36,6 +36,7 @@ class BMPSet : public UMemory {
 public:
     BMPSet(const int32_t *parentList, int32_t parentListLength);
     BMPSet(const BMPSet &otherBMPSet, const int32_t *newParentList, int32_t newParentListLength);
+    virtual ~BMPSet();
 
     virtual UBool contains(UChar32 c) const;
 
