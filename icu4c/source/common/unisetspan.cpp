@@ -62,7 +62,7 @@ public:
 
     // Call exactly once if the list is to be used.
     void setMaxLength(int32_t maxLength) {
-        if(maxLength<=sizeof(staticList)) {
+        if(maxLength<=(int32_t)sizeof(staticList)) {
             capacity=(int32_t)sizeof(staticList);
         } else {
             UBool *l=(UBool *)uprv_malloc(maxLength);
@@ -272,7 +272,7 @@ UnicodeSetStringSpan::UnicodeSetStringSpan(const UnicodeSet &set,
             allocSize+=stringsLength*4+utf8Length;
         }
     }
-    if(allocSize<=sizeof(staticLengths)) {
+    if(allocSize<=(int32_t)sizeof(staticLengths)) {
         utf8Lengths=staticLengths;
     } else {
         utf8Lengths=(int32_t *)uprv_malloc(allocSize);
@@ -403,7 +403,7 @@ UnicodeSetStringSpan::UnicodeSetStringSpan(const UnicodeSetStringSpan &otherStri
     // UTF-8 lengths, 4 sets of span lengths, UTF-8 strings.
     int32_t stringsLength=strings.size();
     int32_t allocSize=stringsLength*(4+1+1+1+1)+utf8Length;
-    if(allocSize<=sizeof(staticLengths)) {
+    if(allocSize<=(int32_t)sizeof(staticLengths)) {
         utf8Lengths=staticLengths;
     } else {
         utf8Lengths=(int32_t *)uprv_malloc(allocSize);

@@ -394,7 +394,7 @@ _toTitle(UCaseMap *csm,
 
 #endif
 
-U_CFUNC int32_t
+static int32_t
 utf8_foldCase(const UCaseProps *csp,
               uint8_t *dest, int32_t destCapacity,
               const uint8_t *src, int32_t srcLength,

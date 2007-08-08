@@ -53,6 +53,9 @@ BMPSet::BMPSet(const BMPSet &otherBMPSet, const int32_t *newParentList, int32_t 
     uprv_memcpy(list4kStarts, otherBMPSet.list4kStarts, sizeof(list4kStarts));
 }
 
+BMPSet::~BMPSet() {
+}
+
 /*
  * Set bits in a bit rectangle in "vertical" bit organization.
  * start<limit<=0x800
@@ -577,7 +580,7 @@ BMPSet::spanUTF8(const uint8_t *s, int32_t length, USetSpanCondition spanConditi
                     if(twoBits<=1) {
                         // All 64 code points with this lead byte and middle trail byte
                         // are either in the set or not.
-                        if(twoBits!=spanCondition) {
+                        if(twoBits!=(uint32_t)spanCondition) {
                             return s-1;
                         }
                     } else {
@@ -693,7 +696,7 @@ BMPSet::spanBackUTF8(const uint8_t *s, int32_t length, USetSpanCondition spanCon
             if(twoBits<=1) {
                 // All 64 code points with the same bits 15..6
                 // are either in the set or not.
-                if(twoBits!=spanCondition) {
+                if(twoBits!=(uint32_t)spanCondition) {
                     return prev+1;
                 }
             } else {
