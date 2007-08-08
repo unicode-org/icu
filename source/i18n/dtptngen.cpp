@@ -193,7 +193,6 @@ DateTimePatternGenerator::operator=(const DateTimePatternGenerator& other) {
         appendItemNames[i].getTerminatedBuffer();
     }
     patternMap->copyFrom(*other.patternMap, fStatus);
-    fAvailableFormatKeyHash=NULL;
     copyHashtable(other.fAvailableFormatKeyHash);
     return *this;
 }
@@ -910,8 +909,7 @@ DateTimePatternGenerator::copyHashtable(Hashtable *other) {
     while((elem = other->nextElement(pos))!= NULL){
         const UHashTok otherKeyTok = elem->key;
         UnicodeString* otherKey = (UnicodeString*)otherKeyTok.pointer;
-        UnicodeString *key = new UnicodeString(*otherKey);
-        fAvailableFormatKeyHash->puti(*key, 1, fStatus);
+        fAvailableFormatKeyHash->puti(*otherKey, 1, fStatus);
         if(U_FAILURE(fStatus)){
             return;
         }
@@ -1521,7 +1519,6 @@ FormatParser::isQuoteLiteral(UnicodeString s) {
 // Please call isQuoteLiteral prior to this function.
 void
 FormatParser::getQuoteLiteral(UnicodeString& quote, int32_t *itemIndex) {
-    UErrorCode status = U_ZERO_ERROR;
     int32_t i=*itemIndex;
     
     if (items[i].charAt(0)==SINGLE_QUOTE) {
@@ -1546,7 +1543,6 @@ FormatParser::getQuoteLiteral(UnicodeString& quote, int32_t *itemIndex) {
         ++i;
     }
     *itemIndex=i;
-    return;
 }
 
 UBool
