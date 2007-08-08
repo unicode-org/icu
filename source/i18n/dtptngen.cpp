@@ -219,6 +219,11 @@ DateTimePatternGenerator::operator==(const DateTimePatternGenerator& other) cons
     }
 }
 
+UBool
+DateTimePatternGenerator::operator!=(const DateTimePatternGenerator& other) const {
+    return  !operator==(other);
+}
+
 DateTimePatternGenerator::~DateTimePatternGenerator() {
     if (fAvailableFormatKeyHash!=NULL) {
         delete fAvailableFormatKeyHash;

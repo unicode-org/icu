@@ -162,11 +162,11 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     if ( !(*cloneDTPatternGen == *instFromLocale) ) {
         errln("ERROR: inconsistency is found in cloned object.");
     }
-    /*
+    
     if ( *cloneDTPatternGen != *instFromLocale ) {
         errln("ERROR: inconsistency is found in cloned object.");
     }
-    */
+    
     delete instFromLocale;
     delete cloneDTPatternGen;
     

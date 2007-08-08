@@ -86,6 +86,15 @@ public:
       * @draft ICU 3.8
       */
     UBool operator==(const DateTimePatternGenerator& other) const;
+    
+    /**
+     * Return true if another object is semantically unequal to this one.
+     *
+     * @param other    the DateTimePatternGenerator object to be compared with.
+     * @return         true if other is semantically unequal to this.
+     * @draft ICU 3.8
+     */
+    UBool operator!=(const DateTimePatternGenerator& other) const;
 
     /**
      * Utility to return a unique skeleton from a given pattern. For example,
