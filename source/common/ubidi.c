@@ -21,6 +21,7 @@
 #include "unicode/ubidi.h"
 #include "ubidi_props.h"
 #include "ubidiimp.h"
+#include "uassert.h"
 
 /*
  * General implementation notes:
@@ -113,14 +114,6 @@ static const Flags flagO[2]={ DIRPROP_FLAG(LRO), DIRPROP_FLAG(RLO) };
 #define DIRPROP_FLAG_O(level) flagO[(level)&1]
 
 /* UBiDi object management -------------------------------------------------- */
-
-static void
-crash()
-{
-    char ** pc;
-    pc = NULL;
-    *pc = "make it crash!";
-}
 
 U_CAPI UBiDi * U_EXPORT2
 ubidi_open(void)
@@ -1380,7 +1373,7 @@ processPropertySeq(UBiDi *pBiDi, LevState *pLevState, uint8_t _prop,
             break;
 
         default:                        /* we should never get here */
-            crash();
+            U_ASSERT(FALSE);
             break;
         }
     }
@@ -1494,7 +1487,7 @@ resolveImplicitLevels(UBiDi *pBiDi,
                 start2=i;
                 break;
             default:            /* we should never get here */
-                crash();
+                U_ASSERT(FALSE);
                 break;
             }
         }
@@ -1898,10 +1891,6 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
         case UBIDI_REORDER_GROUP_NUMBERS_WITH_R:
             pBiDi->pImpTabPair=&impTab_GROUP_NUMBERS_WITH_R;
             break;
-        case UBIDI_REORDER_RUNS_ONLY:
-            /* we should never get here */
-            crash();
-            break;
         case UBIDI_REORDER_INVERSE_NUMBERS_AS_L:
             pBiDi->pImpTabPair=&impTab_INVERSE_NUMBERS_AS_L;
             break;
@@ -1918,6 +1907,11 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
             } else {
                 pBiDi->pImpTabPair=&impTab_INVERSE_FOR_NUMBERS_SPECIAL;
             }
+            break;
+        case UBIDI_REORDER_RUNS_ONLY:
+        case UBIDI_REORDER_COUNT:
+            /* we should never get here */
+            U_ASSERT(FALSE);
             break;
         }
         /*
