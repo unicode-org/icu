@@ -80,11 +80,8 @@
 #define _UTF32LEData _UTF32LEData_3_8
 #define _UTF7Data _UTF7Data_3_8
 #define _UTF8Data _UTF8Data_3_8
-#define _fini _fini_3_8
-#define _init _init_3_8
 #define cmemory_cleanup cmemory_cleanup_3_8
 #define cmemory_inUse cmemory_inUse_3_8
-#define compareDates compareDates_3_8
 #define le_close le_close_3_8
 #define le_create le_create_3_8
 #define le_getCharIndices le_getCharIndices_3_8
@@ -1693,6 +1690,7 @@
 #define TrieWordDictionary TrieWordDictionary_3_8
 #define TrimmedArrayProcessor TrimmedArrayProcessor_3_8
 #define UCharCharacterIterator UCharCharacterIterator_3_8
+#define ULocRuns ULocRuns_3_8
 #define UMemory UMemory_3_8
 #define UObject UObject_3_8
 #define URegularExpression URegularExpression_3_8

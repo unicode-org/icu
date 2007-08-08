@@ -207,6 +207,7 @@ pl_addValueRun(pl_valueRuns *valueRuns,
     return vr->add(value, limit);
 }
 
+U_NAMESPACE_BEGIN
 class ULocRuns : public LocaleRuns
 {
 public:
@@ -291,14 +292,14 @@ public:
      *
      * @draft ICU 3.8
      */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+    static inline UClassID getStaticClassID();
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
      * @draft ICU 3.8
      */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+    virtual inline UClassID getDynamicClassID() const;
 
 protected:
     virtual void init(le_int32 capacity);
@@ -410,6 +411,8 @@ const char *ULocRuns::getLocaleName(le_int32 run) const
 
     return fLocaleNames[run];
 }
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(ULocRuns)
+U_NAMESPACE_END
 
 U_CAPI pl_localeRuns * U_EXPORT2
 pl_openLocaleRuns(const char **locales,
