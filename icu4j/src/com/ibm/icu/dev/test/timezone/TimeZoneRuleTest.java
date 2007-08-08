@@ -499,7 +499,7 @@ public class TimeZoneRuleTest extends TestFmwk {
      * create a new VTimeZone from the VTIMEZONE data, then compare transitions
      */
     public void TestVTimeZoneRoundTripPartial() {
-        long[] cutoverTimes = new long[] {
+        long[] startTimes = new long[] {
             getUTCMillis(1900, Calendar.JANUARY, 1),
             getUTCMillis(1950, Calendar.JANUARY, 1),
             getUTCMillis(2020, Calendar.JANUARY, 1)
@@ -507,8 +507,8 @@ public class TimeZoneRuleTest extends TestFmwk {
         long endTime = getUTCMillis(2050, Calendar.JANUARY, 1);
 
         String[] tzids = getTestZIDs();
-        for (int n = 0; n < cutoverTimes.length; n++) {
-            long startTime = cutoverTimes[n];
+        for (int n = 0; n < startTimes.length; n++) {
+            long startTime = startTimes[n];
             for (int i = 0; i < tzids.length; i++) {
                 BasicTimeZone olsontz = (BasicTimeZone)TimeZone.getTimeZone(tzids[i]);
                 VTimeZone vtz_org = VTimeZone.create(tzids[i]);

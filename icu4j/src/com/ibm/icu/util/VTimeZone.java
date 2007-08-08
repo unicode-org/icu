@@ -742,6 +742,7 @@ public class VTimeZone extends BasicTimeZone {
             rbtz.addTransitionRule((TimeZoneRule)rit.next());
         }
         tz = rbtz;
+        setID(tzid);
         return true;
     }
 
