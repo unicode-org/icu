@@ -102,6 +102,8 @@ static void printUnicode(const UChar *s, int32_t length, const UBiDiLevel *level
 
 /* regression tests ---------------------------------------------------------*/
 
+void addComplexTest(TestNode** root);
+
 void
 addComplexTest(TestNode** root) {
     addTest(root, testCharFromDirProp, "complex/bidi/TestCharFromDirProp");
@@ -373,7 +375,7 @@ static char * formatLevels(UBiDi *bidi, char *buffer) {
     }
     for (i=0; i<len; i++) {
         k = gotLevels[i];
-        if (k >= sizeof columns)
+        if (k >= sizeof(columns))
             c = '+';
         else
             c = columns[k];
@@ -382,7 +384,7 @@ static char * formatLevels(UBiDi *bidi, char *buffer) {
     buffer[len] = '\0';
     return buffer;
 }
-static char *reorderingModeNames[] = {
+static const char *reorderingModeNames[] = {
     "UBIDI_REORDER_DEFAULT",
     "UBIDI_REORDER_NUMBERS_SPECIAL",
     "UBIDI_REORDER_GROUP_NUMBERS_WITH_R",
@@ -429,7 +431,7 @@ static void printCaseInfo(UBiDi *bidi, const char *src, const char *dst)
             lev = levels[i];
             if (lev < 0) {
                 levelChars[i] = '-';
-            } else if (lev < sizeof columns) {
+            } else if (lev < sizeof(columns)) {
                 levelChars[i] = columns[lev];
             } else {
                 levelChars[i] = '+';
@@ -1137,14 +1139,13 @@ static void doMisc(void) {
 /* Miscellaneous tests to exercize less popular code paths */
     UBiDi *bidi, *bidiLine;
     UChar src[MAXLEN], dest[MAXLEN];
-    int32_t srcLen, destLen, runStart, runCount, i;
+    int32_t srcLen, destLen, runCount, i;
     UBiDiLevel level;
-    const UBiDiLevel *levels;
     UBiDiDirection dir;
     int32_t map[MAXLEN];
     UErrorCode errorCode=U_ZERO_ERROR;
-    static uint32_t srcMap[6] = {0,1,-1,5,4};
-    static uint32_t dstMap[6] = {0,1,-1,-1,4,3};
+    static const int32_t srcMap[6] = {0,1,-1,5,4};
+    static const int32_t dstMap[6] = {0,1,-1,-1,4,3};
 
     bidi = ubidi_openSized(120, 66, &errorCode);
     if (bidi == NULL) {
@@ -1264,7 +1265,7 @@ static void doMisc(void) {
     RETURN_IF_BAD_ERRCODE("#10#");
 
     ubidi_invertMap(srcMap, map, 5);
-    if (memcmp(dstMap, map, sizeof dstMap)) {
+    if (memcmp(dstMap, map, sizeof(dstMap))) {
         log_err("\nUnexpected inverted Map, got ");
         for (i = 0; i < 6; i++) {
             log_err("%d ", map[i]);
@@ -1424,11 +1425,9 @@ static void
 testFailureRecovery(void) {
     UErrorCode errorCode;
     UBiDi *bidi, *bidiLine;
-    UChar src[MAXLEN], dest[MAXLEN];
-    int32_t srcLen, destLen, runStart, runCount, i;
+    UChar src[MAXLEN];
+    int32_t srcLen;
     UBiDiLevel level;
-    const UBiDiLevel *levels;
-    UBiDiDirection dir;
     UBiDiReorderingMode rm;
     static UBiDiLevel myLevels[3] = {6,5,4};
 
@@ -2069,7 +2068,7 @@ static void _testManyAddedPoints(void) {
     }
     ubidi_setReorderingMode(bidi, UBIDI_REORDER_INVERSE_LIKE_DIRECT);
     ubidi_setReorderingOptions(bidi, UBIDI_OPTION_INSERT_MARKS);
-    ubidi_setPara(bidi, text, sizeof text, UBIDI_LTR, NULL, &errorCode);
+    ubidi_setPara(bidi, text, sizeof(text)/sizeof(text[0]), UBIDI_LTR, NULL, &errorCode);
     destLen = ubidi_writeReordered(bidi, dest, MAXLEN, 0, &errorCode);
     for (i = 0; i < 120; i+=4) {
         expected[i] = 'a';
@@ -2082,6 +2081,7 @@ static void _testManyAddedPoints(void) {
                 "expected '%s', got '%s'\n",
                 aescstrdup(expected, 120), aescstrdup(dest, destLen));
     }
+    ubidi_close(bidi);
 }
 
 static void _testMisc(void) {
@@ -3708,7 +3708,7 @@ static char * formatMap(const int32_t * map, int len, char * buffer)
         k = map[i];
         if (k < 0)
             c = '-';
-        else if (k >= sizeof columns)
+        else if (k >= sizeof(columns))
             c = '+';
         else
             c = columns[k];
