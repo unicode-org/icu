@@ -387,7 +387,7 @@ AnnualTimeZoneRule::getPreviousStart(const UDate base,
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(TimeArrayTimeZoneRule)
 
 // UComparator function for sorting start times
-U_CFUNC int32_t
+static int32_t
 compareDates(const void * /*context*/, const void *left, const void *right) {
     UDate l = *((UDate*)left);
     UDate r = *((UDate*)right);
