@@ -88,6 +88,9 @@ static char gStrBuf[256];
 #define kDEFAULT  "Default"
 #define kMAX_CUSTOM_HOUR    23
 #define kMAX_CUSTOM_MIN     59
+#define MINUS 0x002D
+#define PLUS 0x002B
+#define ZERO_DIGIT 0x0030
 
 // Static data and constants
 
@@ -1171,9 +1174,9 @@ TimeZone::createCustomTimeZone(const UnicodeString& id)
         int32_t hour = 0;
         int32_t min = 0;
 
-        if (id[pos.getIndex()] == 0x002D /*'-'*/)
+        if (id[pos.getIndex()] == MINUS /*'-'*/)
             negative = TRUE;
-        else if (id[pos.getIndex()] != 0x002B /*'+'*/)
+        else if (id[pos.getIndex()] != PLUS /*'+'*/)
             return 0;
         pos.setIndex(pos.getIndex() + 1);
 
@@ -1235,24 +1238,24 @@ TimeZone::createCustomTimeZone(const UnicodeString& id)
         UnicodeString tzRFC(GMT_ID);
         if (hour|min) {
             if (negative) {
-                tzRFC += (UChar)'-';
+                tzRFC += (UChar)MINUS;
             } else {
-                tzRFC += (UChar)'+';
+                tzRFC += (UChar)PLUS;
             }
 
             if (hour < 10) {
-                tzRFC += (UChar)'0';
+                tzRFC += (UChar)ZERO_DIGIT;
             } else {
-                tzRFC += (UChar)('0' + hour/10);
+                tzRFC += (UChar)(ZERO_DIGIT + hour/10);
             }
-            tzRFC += (UChar)('0' + hour%10);
+            tzRFC += (UChar)(ZERO_DIGIT + hour%10);
 
             if (min < 10) {
-                tzRFC += (UChar)'0';
+                tzRFC += (UChar)ZERO_DIGIT;
             } else {
-                tzRFC += (UChar)('0' + min/10);
+                tzRFC += (UChar)(ZERO_DIGIT + min/10);
             }
-            tzRFC += (UChar)('0' + min%10);
+            tzRFC += (UChar)(ZERO_DIGIT + min%10);
         }
 
         int32_t offset = (hour * 60 + min) * 60 * 1000;
