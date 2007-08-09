@@ -1,14 +1,13 @@
 /*
-******************************************************************************
-* Copyright (C) 2003-2007, International Business Machines Corporation and   *
-* others. All Rights Reserved.                                               *
-******************************************************************************
-*/
+ ******************************************************************************
+ * Copyright (C) 2003-2007, International Business Machines Corporation and   *
+ * others. All Rights Reserved.                                               *
+ ******************************************************************************
+ */
 
 package com.ibm.icu.dev.tool.localeconverter;
 
 import com.ibm.icu.dev.tool.UOption;
-import com.ibm.icu.text.MessageFormat;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -26,6 +25,7 @@ import javax.xml.XMLConstants;
 
 import java.io.*;
 import java.util.*;
+import java.text.*;
 
 public final class XLIFF2ICUConverter {
     
@@ -981,31 +981,40 @@ public final class XLIFF2ICUConverter {
     }
 
     private void parseBinUnit(Node node, Resource[] set){
-        ResourceBinary[] bins = new ResourceBinary[2];
-        bins[0] = new ResourceBinary();
-        bins[1] = new ResourceBinary();
-        Resource currentSource = bins[0];
-        Resource currentTarget = bins[1];
-        String resName   = getAttributeValue(node, RESNAME);
-        String translate = getAttributeValue(node, TRANSLATE);
-        currentTarget.name = currentSource.name = resName;
-        currentSource.translate = currentTarget.translate = translate;
-        for(Node child = node.getFirstChild(); child != null; child = child.getNextSibling()){
-            short type = child.getNodeType();
-            String name = child.getNodeName();
-            if(type == Node.COMMENT_NODE){
-                currentSource.comment = currentTarget.comment = child.getNodeValue();
-            }else if(type == Node.ELEMENT_NODE){
-                if(name.equals(BINSOURCE)){
-                    parseResourceBinary(child, bins);
-                }else if(name.equals(NOTE)){
-                    String note =  child.getFirstChild().getNodeValue();
-                    currentSource.note[currentSource.noteLen++] = currentTarget.note[currentTarget.noteLen++] = note;
+        if (getAttributeValue(node, RESTYPE).equals(resources[BINARY_RESOURCE])) {
+            ResourceBinary[] bins = new ResourceBinary[2];
+            
+            bins[0] = new ResourceBinary();
+            bins[1] = new ResourceBinary();
+            
+            Resource currentSource = bins[0];
+            Resource currentTarget = bins[1];
+            String resName   = getAttributeValue(node, RESNAME);
+            String translate = getAttributeValue(node, TRANSLATE);
+            
+            currentTarget.name = currentSource.name = resName;
+            currentSource.translate = currentTarget.translate = translate;
+            
+            for(Node child = node.getFirstChild(); child != null; child = child.getNextSibling()){
+                short type = child.getNodeType();
+                String name = child.getNodeName();
+                
+                if(type == Node.COMMENT_NODE){
+                    currentSource.comment = currentTarget.comment = child.getNodeValue();
+                }else if(type == Node.ELEMENT_NODE){
+                    if(name.equals(BINSOURCE)){
+                        parseResourceBinary(child, bins);
+                    }else if(name.equals(NOTE)){
+                        String note =  child.getFirstChild().getNodeValue();
+                        
+                        currentSource.note[currentSource.noteLen++] = currentTarget.note[currentTarget.noteLen++] = note;
+                    }
                 }
             }
+            
+            set[0] = bins[0];
+            set[1] = bins[1];
         }
-        set[0] = bins[0];
-        set[1] = bins[1];
     }
     
     private void parseArray(Node node, Resource[] set){
