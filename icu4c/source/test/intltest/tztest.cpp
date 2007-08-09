@@ -762,28 +762,31 @@ UnicodeString& TimeZoneTest::formatMinutes(int32_t min, UnicodeString& rv, UBool
 {
         rv.remove();
 
-        char sign = '+';
-        if (min < 0) { sign = '-'; min = -min; }
+        UChar sign = 0x002B;
+        if (min < 0) {
+            sign = 0x002D;
+            min = -min;
+        }
         int h = min/60;
         min = min%60;
 
-        rv += UChar(sign);
+        rv += (UChar)(sign);
         if(h >= 10)
-            rv += UChar(0x0030 + (h/10));
+            rv += (UChar)(0x0030 + (h/10));
         else
             rv += "0";
 
-        rv += UChar(0x0030 + (h%10));
+        rv += (UChar)(0x0030 + (h%10));
 
         if (insertSep)
             rv += ":";
 
         if(min >= 10)
-            rv += UChar(0x0030 + (min/10));
+            rv += (UChar)(0x0030 + (min/10));
         else
             rv += "0";
 
-        rv += UChar(0x0030 + (min%10));
+        rv += (UChar)(0x0030 + (min%10));
 
         return rv;
 }

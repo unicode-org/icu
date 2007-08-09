@@ -952,8 +952,9 @@ void RBBITableBuilder::setAdd(UVector *dest, UVector *source) {
             dest->setElementAt(*sourceBuff++, di++);
             destBuff++;
         }
-        // This check may not work on machines with segmented memory, like i5/OS.
-        else if (*destBuff < *sourceBuff) {
+        // This check is required for machines with segmented memory, like i5/OS.
+        // Direct pointer comparison is not recommended.
+        else if (uprv_memcmp(destBuff, sourceBuff, sizeof(void *)) < 0) {
             dest->setElementAt(*destBuff++, di++);
         }
         else { /* *sourceBuff < *destBuff */
