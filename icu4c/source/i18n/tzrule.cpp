@@ -15,6 +15,17 @@
 #include "cmemory.h"
 #include "uarrsort.h"
 
+U_CDECL_BEGIN
+// UComparator function for sorting start times
+static int32_t U_CALLCONV
+compareDates(const void * /*context*/, const void *left, const void *right) {
+    UDate l = *((UDate*)left);
+    UDate r = *((UDate*)right);
+    int32_t res = l < r ? -1 : (l == r ? 0 : 1);
+    return res;
+}
+U_CDECL_END
+
 U_NAMESPACE_BEGIN
 
 TimeZoneRule::TimeZoneRule(const UnicodeString& name, int32_t rawOffset, int32_t dstSavings)
@@ -385,15 +396,6 @@ AnnualTimeZoneRule::getPreviousStart(const UDate base,
 }
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(TimeArrayTimeZoneRule)
-
-// UComparator function for sorting start times
-static int32_t
-compareDates(const void * /*context*/, const void *left, const void *right) {
-    UDate l = *((UDate*)left);
-    UDate r = *((UDate*)right);
-    int32_t res = l < r ? -1 : (l == r ? 0 : 1);
-    return res;
-}
 
 TimeArrayTimeZoneRule::TimeArrayTimeZoneRule(const UnicodeString& name,
                                              int32_t rawOffset,
