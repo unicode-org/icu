@@ -525,8 +525,8 @@ public class RbnfTest extends TestFmwk {
             { "1", "uno" },
             { "15", "quindici" },
             { "20", "venti" },
-            { "23", "ventitre" },
-            { "73", "settantatre" },
+            { "23", "ventitr\u00E9" },
+            { "73", "settantatr\u00E9" },
             { "88", "ottantotto" },
             { "100", "cento" },
             { "106", "centosei" },
@@ -539,9 +539,9 @@ public class RbnfTest extends TestFmwk {
             { "2,000", "duemila" },
             { "3,004", "tremilaquattro" },
             { "4,567", "quattromilacinquecentosessantasette" },
-            { "15,943", "quindicimilanovecentoquarantatre" },
-            { "-36", "meno trentisei" },
-            { "234.567", "duecentotrentiquattro virgola cinque sei sette" }
+            { "15,943", "quindicimilanovecentoquarantatr\u00E9" },
+            { "-36", "meno trentasei" },
+            { "234.567", "duecentotrentaquattro virgola cinque sei sette" }
         };
 
         doTest(formatter, testData, true);
