@@ -421,12 +421,14 @@ StringCaseTest::TestCasingImpl(const UnicodeString &input,
                     utf8Out, (int32_t)sizeof(utf8Out),
                     utf8In, utf8InLength, &errorCode);
         break;
+#if !UCONFIG_NO_BREAK_ITERATION
     case TEST_TITLE:
         name="ucasemap_utf8ToTitle";
         utf8OutLength=ucasemap_utf8ToTitle(csm,
                     utf8Out, (int32_t)sizeof(utf8Out),
                     utf8In, utf8InLength, &errorCode);
         break;
+#endif
     case TEST_FOLD:
         name="ucasemap_utf8FoldCase";
         utf8OutLength=ucasemap_utf8FoldCase(csm,
