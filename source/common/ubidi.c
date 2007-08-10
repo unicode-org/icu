@@ -1741,10 +1741,8 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
 
     /* check the argument values */
     RETURN_IF_NULL_OR_FAILING_ERRCODE(pErrorCode, );
-    if(!IS_DEFAULT_LEVEL(paraLevel)) {
-        RETURN_IF_BAD_RANGE(paraLevel, 0, UBIDI_MAX_EXPLICIT_LEVEL+1, *pErrorCode, );
-    }
-    if(pBiDi==NULL || text==NULL || length<-1) {
+    if(pBiDi==NULL || text==NULL || length<-1 ||
+       (paraLevel>UBIDI_MAX_EXPLICIT_LEVEL && paraLevel<UBIDI_DEFAULT_LTR)) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -1908,8 +1906,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
                 pBiDi->pImpTabPair=&impTab_INVERSE_FOR_NUMBERS_SPECIAL;
             }
             break;
-        case UBIDI_REORDER_RUNS_ONLY:
-        case UBIDI_REORDER_COUNT:
+        default:
             /* we should never get here */
             U_ASSERT(FALSE);
             break;
