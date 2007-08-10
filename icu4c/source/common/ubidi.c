@@ -297,7 +297,7 @@ ubidi_setReorderingMode(UBiDi *pBiDi, UBiDiReorderingMode reorderingMode) {
     if ((pBiDi!=NULL) && (reorderingMode >= UBIDI_REORDER_DEFAULT)
                         && (reorderingMode < UBIDI_REORDER_COUNT)) {
         pBiDi->reorderingMode = reorderingMode;
-        pBiDi->isInverse = reorderingMode == UBIDI_REORDER_INVERSE_NUMBERS_AS_L;
+        pBiDi->isInverse = (UBool)(reorderingMode == UBIDI_REORDER_INVERSE_NUMBERS_AS_L);
     }
 }
 
@@ -348,13 +348,13 @@ getDirProps(UBiDi *pBiDi) {
     UBool isDefaultLevel=IS_DEFAULT_LEVEL(pBiDi->paraLevel);
     /* for inverse BiDi, the default para level is set to RTL if there is a
        strong R or AL character at either end of the text                           */
-    UBool isDefaultLevelInverse=isDefaultLevel &&
+    UBool isDefaultLevelInverse=isDefaultLevel && (UBool)
             (pBiDi->reorderingMode==UBIDI_REORDER_INVERSE_LIKE_DIRECT ||
              pBiDi->reorderingMode==UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL);
     int32_t lastArabicPos=-1;
     int32_t controlCount=0;
-    UBool removeBiDiControls = pBiDi->reorderingOptions &
-                               UBIDI_OPTION_REMOVE_CONTROLS;
+    UBool removeBiDiControls = (UBool)(pBiDi->reorderingOptions &
+                                       UBIDI_OPTION_REMOVE_CONTROLS);
 
     typedef enum {
          NOT_CONTEXTUAL,                /* 0: not contextual paraLevel */
@@ -392,12 +392,12 @@ getDirProps(UBiDi *pBiDi) {
         i0=i;           /* index of first code unit */
         UTF_NEXT_CHAR(text, i, length, uchar);
         i1=i-1;         /* index of last code unit, gets the directional property */
-        flags|=DIRPROP_FLAG(dirProp=ubidi_getCustomizedClass(pBiDi, uchar));
+        flags|=DIRPROP_FLAG(dirProp=(DirProp)ubidi_getCustomizedClass(pBiDi, uchar));
         dirProps[i1]=dirProp|paraDir;
         if(i1>i0) {     /* set previous code units' properties to BN */
             flags|=DIRPROP_FLAG(BN);
             do {
-                dirProps[--i1]=BN|paraDir;
+                dirProps[--i1]=(DirProp)(BN|paraDir);
             } while(i1>i0);
         }
         if(state==LOOKING_FOR_STRONG) {
@@ -1204,7 +1204,7 @@ processPropertySeq(UBiDi *pBiDi, LevState *pLevState, uint8_t _prop,
     int32_t start0, k;
 
     start0=start;                           /* save original start position */
-    oldStateSeq=pLevState->state;
+    oldStateSeq=(uint8_t)pLevState->state;
     cell=(*pImpTab)[oldStateSeq][_prop];
     pLevState->state=GET_STATE(cell);       /* isolate the new state */
     actionSeq=(*pImpAct)[GET_ACTION(cell)]; /* isolate the action */
@@ -1406,9 +1406,10 @@ resolveImplicitLevels(UBiDi *pBiDi,
      * actions) and different levels state tables (maybe very similar to the
      * LTR corresponding ones.
      */
-    inverseRTL=((start<pBiDi->lastArabicPos) && (GET_PARALEVEL(pBiDi, start) & 1) &&
-                (pBiDi->reorderingMode==UBIDI_REORDER_INVERSE_LIKE_DIRECT  ||
-                 pBiDi->reorderingMode==UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL));
+    inverseRTL=(UBool)
+        ((start<pBiDi->lastArabicPos) && (GET_PARALEVEL(pBiDi, start) & 1) &&
+         (pBiDi->reorderingMode==UBIDI_REORDER_INVERSE_LIKE_DIRECT  ||
+          pBiDi->reorderingMode==UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL));
     /* initialize for levels state table */
     levState.startL2EN=-1;              /* used for INVERSE_LIKE_DIRECT_WITH_MARKS */
     levState.lastStrongRTL=-1;          /* used for INVERSE_LIKE_DIRECT_WITH_MARKS */
@@ -1593,6 +1594,8 @@ setParaRunsOnly(UBiDi *pBiDi, const UChar *text, int32_t length,
     levels=ubidi_getLevels(pBiDi, pErrorCode);
     uprv_memcpy(saveLevels, levels, pBiDi->length*sizeof(UBiDiLevel));
     saveTrailingWSStart=pBiDi->trailingWSStart;
+    saveLength=pBiDi->length;
+    saveDirection=pBiDi->direction;
 
     /* FOOD FOR THOUGHT: instead of writing the visual text, we could use
      * the visual map and the dirProps array to drive the second call
@@ -1607,8 +1610,6 @@ setParaRunsOnly(UBiDi *pBiDi, const UChar *text, int32_t length,
         goto cleanup2;
     }
     pBiDi->reorderingOptions=saveOptions;
-    saveLength=pBiDi->length;
-    saveDirection=pBiDi->direction;
 
     pBiDi->reorderingMode=UBIDI_REORDER_INVERSE_LIKE_DIRECT;
     paraLevel^=1;
