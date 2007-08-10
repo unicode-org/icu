@@ -6,6 +6,8 @@
 */
 
 #include "fldset.h"
+
+#if !UCONFIG_NO_FORMATTING
 #include <stdio.h>
 #include "unicode/regex.h"
 
@@ -68,11 +70,37 @@ UnicodeString FieldsSet::diffFrom(const FieldsSet& other, UErrorCode& status) co
     return str;
 }
 
+static UnicodeString *split(const UnicodeString &src, UChar ch, int32_t &splits)
+{
+    int32_t offset = -1;
+
+    splits = 1;
+    while((offset = src.indexOf(ch, offset + 1)) >= 0) {
+        splits += 1;
+    }
+
+    UnicodeString *result = new UnicodeString[splits];
+
+    int32_t start = 0;
+    int32_t split = 0;
+    int32_t end;
+
+    while((end = src.indexOf(ch, start)) >= 0) {
+        src.extractBetween(start, end, result[split++]);
+        start = end + 1;
+    }
+
+    src.extractBetween(start, src.length(), result[split]);
+
+    return result;
+}
+
 int32_t FieldsSet::parseFrom(const UnicodeString& str, const 
         FieldsSet* inheritFrom, UErrorCode& status) {
 
     int goodFields = 0;
-    
+
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS    
     UnicodeString pattern(",", "");
     RegexMatcher matcher(pattern, 0, status);
     UnicodeString pattern2("=", "");
@@ -117,6 +145,55 @@ int32_t FieldsSet::parseFrom(const UnicodeString& str, const
             goodFields++;
         }
     }
+#else
+    if(U_FAILURE(status)) {
+      return -1;
+    }
+
+    int32_t destCount = 0;
+    UnicodeString *dest = split(str, ',', destCount);
+
+    for(int i = 0; i < destCount; i += 1) {
+      int32_t dc = 0;
+      UnicodeString *kv = split(dest[i], '=', dc);
+
+      if(dc != 2) {
+	fprintf(stderr, "dc == %d?\n");
+      }
+
+      int32_t field = handleParseName(inheritFrom, kv[0], kv[1], status);
+
+      if(U_FAILURE(status)) {
+            char ch[256];
+            const UChar *u = kv[0].getBuffer();
+            int32_t len = kv[0].length();
+            u_UCharsToChars(u, ch, len);
+            ch[len] = 0; /* include terminating \0 */
+            fprintf(stderr,"Parse Failed: Field %s, err %s\n", ch, u_errorName(status));
+            return -1;
+      }
+
+      if(field != -1) {
+            handleParseValue(inheritFrom, field, kv[1], status);
+
+            if(U_FAILURE(status)) {
+                char ch[256];
+                const UChar *u = kv[1].getBuffer();
+                int32_t len = kv[1].length();
+                u_UCharsToChars(u, ch, len);
+                ch[len] = 0; /* include terminating \0 */
+                fprintf(stderr,"Parse Failed: Value %s, err %s\n", ch, u_errorName(status));
+                return -1;
+            }
+
+            goodFields += 1;
+        }
+
+      delete[] kv;
+    }
+
+    delete[] dest;
+#endif
 
     return goodFields;
 }
@@ -313,3 +390,4 @@ int32_t DateTimeStyleSet::handleParseName(const FieldsSet* /* inheritFrom */, co
     }
 }
 
+#endif /*!UCONFIG_NO_FORMAT*/

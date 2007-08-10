@@ -1,41 +1,41 @@
 /*
-******************************************************************************
-* Copyright (C) 1996-2006, International Business Machines Corporation and   *
-* others. All Rights Reserved.                                               *
-******************************************************************************
-*/
+ ******************************************************************************
+ * Copyright (C) 1996-2007, International Business Machines Corporation and   *
+ * others. All Rights Reserved.                                               *
+ ******************************************************************************
+ */
 
 /**
-* File coll.cpp
-*
-* Created by: Helena Shih
-*
-* Modification History:
-*
-*  Date        Name        Description
-*  2/5/97      aliu        Modified createDefault to load collation data from
-*                          binary files when possible.  Added related methods
-*                          createCollationFromFile, chopLocale, createPathName.
-*  2/11/97     aliu        Added methods addToCache, findInCache, which implement
-*                          a Collation cache.  Modified createDefault to look in
-*                          cache first, and also to store newly created Collation
-*                          objects in the cache.  Modified to not use gLocPath.
-*  2/12/97     aliu        Modified to create objects from RuleBasedCollator cache.
-*                          Moved cache out of Collation class.
-*  2/13/97     aliu        Moved several methods out of this class and into
-*                          RuleBasedCollator, with modifications.  Modified
-*                          createDefault() to call new RuleBasedCollator(Locale&)
-*                          constructor.  General clean up and documentation.
-*  2/20/97     helena      Added clone, operator==, operator!=, operator=, and copy
-*                          constructor.
-* 05/06/97     helena      Added memory allocation error detection.
-* 05/08/97     helena      Added createInstance().
-*  6/20/97     helena      Java class name change.
-* 04/23/99     stephen     Removed EDecompositionMode, merged with 
-*                          Normalizer::EMode
-* 11/23/9      srl         Inlining of some critical functions
-* 01/29/01     synwee      Modified into a C++ wrapper calling C APIs (ucol.h)
-*/
+ * File coll.cpp
+ *
+ * Created by: Helena Shih
+ *
+ * Modification History:
+ *
+ *  Date        Name        Description
+ *  2/5/97      aliu        Modified createDefault to load collation data from
+ *                          binary files when possible.  Added related methods
+ *                          createCollationFromFile, chopLocale, createPathName.
+ *  2/11/97     aliu        Added methods addToCache, findInCache, which implement
+ *                          a Collation cache.  Modified createDefault to look in
+ *                          cache first, and also to store newly created Collation
+ *                          objects in the cache.  Modified to not use gLocPath.
+ *  2/12/97     aliu        Modified to create objects from RuleBasedCollator cache.
+ *                          Moved cache out of Collation class.
+ *  2/13/97     aliu        Moved several methods out of this class and into
+ *                          RuleBasedCollator, with modifications.  Modified
+ *                          createDefault() to call new RuleBasedCollator(Locale&)
+ *                          constructor.  General clean up and documentation.
+ *  2/20/97     helena      Added clone, operator==, operator!=, operator=, and copy
+ *                          constructor.
+ * 05/06/97     helena      Added memory allocation error detection.
+ * 05/08/97     helena      Added createInstance().
+ *  6/20/97     helena      Java class name change.
+ * 04/23/99     stephen     Removed EDecompositionMode, merged with 
+ *                          Normalizer::EMode
+ * 11/23/9      srl         Inlining of some critical functions
+ * 01/29/01     synwee      Modified into a C++ wrapper calling C APIs (ucol.h)
+ */
 
 #include "unicode/utypes.h"
 
@@ -77,8 +77,9 @@ static UBool U_CALLCONV collator_cleanup(void) {
 
 U_CDECL_END
 
-#if !UCONFIG_NO_SERVICE
 U_NAMESPACE_BEGIN
+
+#if !UCONFIG_NO_SERVICE
 
 // ------------------------------------------
 //

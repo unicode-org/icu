@@ -86,8 +86,7 @@ T_CTEST_API const UnicodeString& T_CTEST_EXPORT2 udbg_enumString(UDebugEnumType 
     //fflush(stderr);
     if(field<0 || field > count) {
         return strs[type][count];
-    } else {
-        return strs[type][field];
+    } else {        return strs[type][field];
     }
 }
 

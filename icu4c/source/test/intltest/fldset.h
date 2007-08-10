@@ -8,6 +8,8 @@
 #define FLDSET_H_
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
 #include "unicode/calendar.h"
 #include "unicode/ucal.h"
 #include "unicode/udat.h"
@@ -180,5 +182,5 @@ class DateTimeStyleSet : public FieldsSet {
 };
 
 
-
+#endif /*!UCONFIG_NO_FORMAT*/
 #endif /*FLDSET_H_*/
