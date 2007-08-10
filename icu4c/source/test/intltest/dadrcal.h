@@ -20,6 +20,7 @@
 #include "tsdate.h"
 #include "uvector.h"
 #include "unicode/calendar.h"
+#include "fldset.h"
 
 class TestDataModule;
 class TestData;

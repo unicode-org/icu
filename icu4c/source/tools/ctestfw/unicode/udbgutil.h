@@ -18,6 +18,7 @@ enum UDebugEnumType {
     UDBG_UDebugEnumType = 0, /* Self-referential, strings for UDebugEnumType. Count=ENUM_COUNT. */
     UDBG_UCalendarDateFields, /* UCalendarDateFields. Count=UCAL_FIELD_COUNT.  Unsupported if UCONFIG_NO_FORMATTING. */
     UDBG_UCalendarMonths, /* UCalendarMonths. Count= (UCAL_UNDECIMBER+1) */
+    UDBG_UDateFormatStyle, /* Count = UDAT_SHORT=1 */
     UDBG_ENUM_COUNT
 };
 
