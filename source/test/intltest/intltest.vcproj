@@ -558,6 +558,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\dadrfmt.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\dadrfmt.h"
+				>
+			</File>
+			<File
 				RelativePath=".\dcfmapts.cpp"
 				>
 			</File>
@@ -603,6 +611,14 @@
 			</File>
 			<File
 				RelativePath=".\dtptngts.h"
+				>
+			</File>
+			<File
+				RelativePath=".\fldset.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\fldset.h"
 				>
 			</File>
 			<File
