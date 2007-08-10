@@ -9,10 +9,12 @@ public class DebugUtilitiesData extends Object {
     public static final int UDebugEnumType = 0;
     public static final int UCalendarDateFields = 1;
     public static final int UCalendarMonths = 2;
+    public static final int UDateFormatStyle = 3;
     public static final String [] TYPES = { 
         "UDebugEnumType", /* 0 */
         "UCalendarDateFields", /* 1 */
         "UCalendarMonths", /* 2 */
+        "UDateFormatStyle", /* 3 */
     };
 
     public static final String [][] NAMES = { 
@@ -21,6 +23,7 @@ public class DebugUtilitiesData extends Object {
            "UDebugEnumType", /* 0 */ 
            "UCalendarDateFields", /* 1 */ 
            "UCalendarMonths", /* 2 */ 
+           "UDateFormatStyle", /* 3 */ 
         },
         /* UCalendarDateFields, 1 */
         { 
@@ -63,6 +66,13 @@ public class DebugUtilitiesData extends Object {
            "DECEMBER", /* 11 */ 
            "UNDECIMBER", /* 12 */ 
         },
+        /* UDateFormatStyle, 3 */
+        { 
+           "FULL", /* 0 */ 
+           "LONG", /* 1 */ 
+           "MEDIUM", /* 2 */ 
+           "SHORT", /* 3 */ 
+        },
     };
 
     public static final int [][] VALUES = { 
@@ -71,6 +81,7 @@ public class DebugUtilitiesData extends Object {
            0, /* UDebugEnumType */
            1, /* UCalendarDateFields */
            2, /* UCalendarMonths */
+           3, /* UDateFormatStyle */
         },
         /* UCalendarDateFields, 1 */
         { 
@@ -112,6 +123,13 @@ public class DebugUtilitiesData extends Object {
            com.ibm.icu.util.Calendar.NOVEMBER, /* 10 */
            com.ibm.icu.util.Calendar.DECEMBER, /* 11 */
            com.ibm.icu.util.Calendar.UNDECIMBER, /* 12 */
+        },
+        /* UDateFormatStyle, 3 */
+        { 
+           0, /* FULL */
+           1, /* LONG */
+           2, /* MEDIUM */
+           3, /* SHORT */
         },
     };
 

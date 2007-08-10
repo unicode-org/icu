@@ -23,7 +23,7 @@ import com.ibm.icu.dev.test.TestDataModule.TestData;
  * Tests can implement this if they make extensive use of information in a
  * TestDataModule.
  * 
- * Subclasses can allow for test methods that don't use data from the modeul by
+ * Subclasses can allow for test methods that don't use data from the module by
  * overriding validateMethod to return true for these methods. Tests are also
  * free to instantiate their own modules and run from them, though care should
  * be taken not to interfere with the methods in this class.

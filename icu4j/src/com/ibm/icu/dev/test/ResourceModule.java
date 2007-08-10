@@ -405,7 +405,14 @@ class ResourceModule implements TestDataModule {
         }
         
         public String getString(String key) {
-            return (String)theMap.get(key);
+            Object o = theMap.get(key);
+            UResourceBundle rb;
+            if(o instanceof UResourceBundle) {
+                // unpack ResourceBundle strings
+                rb = (UResourceBundle)o;
+                return rb.getString();
+            }
+            return (String)o;
         }
         public Object getObject(String key) {
             return theMap.get(key);

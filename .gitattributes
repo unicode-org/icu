@@ -205,6 +205,7 @@ icu4j/src/com/ibm/icu/charset/CharsetUTF7.java -text
 icu4j/src/com/ibm/icu/dev/data/rbbi/english.dict -text
 icu4j/src/com/ibm/icu/dev/data/testdata.jar -text
 icu4j/src/com/ibm/icu/dev/data/thai6.ucs -text
+icu4j/src/com/ibm/icu/dev/test/calendar/DataDrivenCalendarTest.java -text
 icu4j/src/com/ibm/icu/dev/test/calendar/IndianTest.java -text
 icu4j/src/com/ibm/icu/dev/test/duration/DataReadWriteTest.java -text
 icu4j/src/com/ibm/icu/dev/test/duration/ICUDurationTest.java -text
@@ -293,9 +294,11 @@ icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.TimeZo
 icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.ULocale.dat -text
 icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.UResourceTypeMismatchException.dat -text
 icu4j/src/com/ibm/icu/dev/test/timezone/TimeZoneRuleTest.java -text
+icu4j/src/com/ibm/icu/dev/test/util/CalendarFieldsSet.java -text
 icu4j/src/com/ibm/icu/dev/test/util/DebugUtilities.java -text
 icu4j/src/com/ibm/icu/dev/test/util/DebugUtilitiesData.java -text
 icu4j/src/com/ibm/icu/dev/test/util/DebugUtilitiesTest.java -text
+icu4j/src/com/ibm/icu/dev/test/util/FieldsSet.java -text
 icu4j/src/com/ibm/icu/dev/test/util/PrettyPrinter.java -text
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j28.api.gz -text
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j30.api.gz -text
