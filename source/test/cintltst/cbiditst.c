@@ -28,6 +28,8 @@
 
 /* prototypes ---------------------------------------------------------------*/
 
+void addComplexTest(TestNode** root);
+
 static void testCharFromDirProp(void);
 
 static void testBidi(void);
@@ -101,8 +103,6 @@ getStringFromDirProps(const uint8_t *dirProps, int32_t length, UChar *buffer);
 static void printUnicode(const UChar *s, int32_t length, const UBiDiLevel *levels);
 
 /* regression tests ---------------------------------------------------------*/
-
-void addComplexTest(TestNode** root);
 
 void
 addComplexTest(TestNode** root) {
@@ -2061,16 +2061,16 @@ static void _testManyAddedPoints(void) {
     UBiDi *bidi = ubidi_open();
     UChar text[90], dest[MAXLEN], expected[120];
     int destLen, i;
-    for (i = 0; i < 90; i+=3) {
+    for (i = 0; i < LENGTHOF(text); i+=3) {
         text[i] = 'a';
         text[i+1] = 0x05d0;
         text[i+2] = '3';
     }
     ubidi_setReorderingMode(bidi, UBIDI_REORDER_INVERSE_LIKE_DIRECT);
     ubidi_setReorderingOptions(bidi, UBIDI_OPTION_INSERT_MARKS);
-    ubidi_setPara(bidi, text, sizeof(text)/sizeof(text[0]), UBIDI_LTR, NULL, &errorCode);
+    ubidi_setPara(bidi, text, LENGTHOF(text), UBIDI_LTR, NULL, &errorCode);
     destLen = ubidi_writeReordered(bidi, dest, MAXLEN, 0, &errorCode);
-    for (i = 0; i < 120; i+=4) {
+    for (i = 0; i < LENGTHOF(expected); i+=4) {
         expected[i] = 'a';
         expected[i+1] = 0x05d0;
         expected[i+2] = 0x200e;
@@ -2079,7 +2079,8 @@ static void _testManyAddedPoints(void) {
     if (memcmp(dest, expected, destLen * sizeof(UChar))) {
         log_err("\nInvalid output with many added points, "
                 "expected '%s', got '%s'\n",
-                aescstrdup(expected, 120), aescstrdup(dest, destLen));
+                aescstrdup(expected, LENGTHOF(expected)),
+                aescstrdup(dest, destLen));
     }
     ubidi_close(bidi);
 }
@@ -2087,11 +2088,11 @@ static void _testManyAddedPoints(void) {
 static void _testMisc(void) {
     UErrorCode errorCode = U_ZERO_ERROR;
     UBiDi *bidi = ubidi_open();
-    UChar src[3], dest[MAXLEN],expected[5];
+    UChar src[3], dest[MAXLEN], expected[5];
     int destLen;
     ubidi_setInverse(bidi, TRUE);
     src[0] = src[1] = src[2] = ' ';
-    ubidi_setPara(bidi, src, 3, UBIDI_RTL, NULL, &errorCode);
+    ubidi_setPara(bidi, src, LENGTHOF(src), UBIDI_RTL, NULL, &errorCode);
     destLen = ubidi_writeReordered(bidi, dest, MAXLEN,
               UBIDI_OUTPUT_REVERSE | UBIDI_INSERT_LRM_FOR_NUMERIC,
               &errorCode);
@@ -2099,7 +2100,8 @@ static void _testMisc(void) {
     if (memcmp(dest, expected, destLen * sizeof(UChar))) {
         log_err("\nInvalid output with RLM at both sides, "
                 "expected '%s', got '%s'\n",
-                aescstrdup(expected, 5), aescstrdup(dest, destLen));
+                aescstrdup(expected, LENGTHOF(expected)),
+                aescstrdup(dest, destLen));
     }
     ubidi_close(bidi);
 }
