@@ -1,5 +1,5 @@
 ## Makefile.in for ICU tests
-## Copyright (c) 1999-2004, International Business Machines Corporation and
+## Copyright (c) 1999-2007, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -40,6 +40,7 @@ install: install-recursive install-local
 clean: clean-recursive clean-local
 distclean : distclean-recursive distclean-local
 	$(RMV) hdrtst/Makefile
+	$(RMV) perf/convperf/Makefile
 
 dist: dist-recursive dist-local
 check: everything check-recursive check-local
