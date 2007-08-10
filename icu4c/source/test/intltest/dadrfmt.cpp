@@ -89,7 +89,7 @@ void DataDrivenFormatTest::runIndexedTest(int32_t index, UBool exec,
 
 
 void DataDrivenFormatTest::testConvertDate(TestData *testData,
-        const DataMap */* settings */, UBool fmt) {
+        const DataMap * /* settings */, UBool fmt) {
     UnicodeString kPATTERN("PATTERN="); // TODO: static
     UnicodeString kMILLIS("MILLIS="); // TODO: static
     
