@@ -78,6 +78,27 @@ static const Field names_UCalendarMonths[] =
   FIELD_NAME_STR( LEN_UCAL, UCAL_UNDECIMBER)
 };
 
+#include "unicode/udat.h"
+
+#define LEN_UDAT 5 /* "UDAT_" */
+
+static const int32_t count_UDateFormatStyle = UDAT_SHORT+1;
+
+static const Field names_UDateFormatStyle[] = 
+{
+        FIELD_NAME_STR( LEN_UDAT, UDAT_FULL ),
+        FIELD_NAME_STR( LEN_UDAT, UDAT_LONG ),
+        FIELD_NAME_STR( LEN_UDAT, UDAT_MEDIUM ),
+        FIELD_NAME_STR( LEN_UDAT, UDAT_SHORT ),
+        /* end regular */
+    /*
+     *  negative enums.. leave out for now.
+        FIELD_NAME_STR( LEN_UDAT, UDAT_NONE ),
+        FIELD_NAME_STR( LEN_UDAT, UDAT_IGNORE ),
+     */
+};
+ 
+
 
 #endif
 
@@ -90,6 +111,7 @@ static const Field names_UDebugEnumType[] =
     FIELD_NAME_STR( LEN_UDBG, UDBG_UDebugEnumType ),
     FIELD_NAME_STR( LEN_UDBG, UDBG_UCalendarDateFields ),
     FIELD_NAME_STR( LEN_UDBG, UDBG_UCalendarMonths ),
+    FIELD_NAME_STR( LEN_UDBG, UDBG_UDateFormatStyle ),
 };
 
 
@@ -110,6 +132,7 @@ static int32_t _udbg_enumCount(UDebugEnumType type, UBool actual) {
 		COUNT_CASE(UDebugEnumType)
 		COUNT_CASE(UCalendarDateFields)
 		COUNT_CASE(UCalendarMonths)
+		COUNT_CASE(UDateFormatStyle)
 		// COUNT_FAIL_CASE(UNonExistentEnum)
 	default:
 		return -1;
@@ -121,6 +144,7 @@ static const Field* _udbg_enumFields(UDebugEnumType type) {
 		FIELD_CASE(UDebugEnumType)
 		FIELD_CASE(UCalendarDateFields)
 		FIELD_CASE(UCalendarMonths)
+		FIELD_CASE(UDateFormatStyle)
 		// FIELD_FAIL_CASE(UNonExistentEnum)
 	default:
 		return NULL;

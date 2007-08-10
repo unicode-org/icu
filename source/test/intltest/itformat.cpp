@@ -44,6 +44,7 @@
 #include "calcasts.h"       // CalendarCaseTest
 #include "tzrulets.h"       // TimeZoneRuleTest
 #include "dadrcal.h"        // DataDrivenCalendarTest
+#include "dadrfmt.h"        // DataDrivenFormatTest
 #include "dtptngts.h"       // IntlTestDateTimePatternGeneratorAPI
 
 
@@ -107,7 +108,8 @@ void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCLASS(28,CalendarCaseTest);
         TESTCLASS(29,TimeZoneRuleTest);
         TESTCLASS(30,DataDrivenCalendarTest);
-        TESTCLASS(31,IntlTestDateTimePatternGeneratorAPI);
+        TESTCLASS(31,DataDrivenFormatTest);
+        TESTCLASS(32,IntlTestDateTimePatternGeneratorAPI);
 
 
         default: name = ""; break; //needed to end loop
