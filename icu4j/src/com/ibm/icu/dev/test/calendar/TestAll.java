@@ -29,7 +29,8 @@ public class TestAll extends TestGroup {
                   "JapaneseTest",
                   "ChineseTest",
                   "IndianTest",
-                  "HolidayTest"
+                  "HolidayTest",
+                  "DataDrivenCalendarTest"
               },
               "Calendars, Holiday, and Astro tests"
               );
