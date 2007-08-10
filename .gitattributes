@@ -266,6 +266,10 @@ icu4c/source/test/compat/tzdate.c -text
 icu4c/source/test/compat/tzone.pl -text
 icu4c/source/test/intltest/dadrcal.cpp -text
 icu4c/source/test/intltest/dadrcal.h -text
+icu4c/source/test/intltest/dadrfmt.cpp -text
+icu4c/source/test/intltest/dadrfmt.h -text
+icu4c/source/test/intltest/fldset.cpp -text
+icu4c/source/test/intltest/fldset.h -text
 icu4c/source/test/intltest/tzrulets.h -text
 icu4c/source/test/letest/gendata.xml svneol=native#text/xml
 icu4c/source/test/letest/readme.html svneol=native#text/html
@@ -299,6 +303,7 @@ icu4c/source/test/perf/ustrperf/StringPerf_r.pl -text
 icu4c/source/test/testdata/TestFont1.otf -text
 icu4c/source/test/testdata/calendar.txt -text
 icu4c/source/test/testdata/csdetest.xml svneol=native#text/xml
+icu4c/source/test/testdata/format.txt -text
 icu4c/source/test/testdata/icu26_testtypes.res -text
 icu4c/source/test/testdata/icu26e_testtypes.res -text
 icu4c/source/test/testdata/importtest.bin -text

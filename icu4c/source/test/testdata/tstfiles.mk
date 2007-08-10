@@ -6,4 +6,5 @@
 # Not everything has been moved to this file yet, as this is a new facility.
 #
 
-TEST_RES_SOURCE=DataDrivenCollationTest.txt calendar.txt
+TEST_RES_SOURCE=DataDrivenCollationTest.txt calendar.txt format.txt
+
