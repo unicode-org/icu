@@ -4,6 +4,8 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
+#include "unicode/utypes.h"
+
 #if !UCONFIG_NO_FORMATTING
 
 #include <stdio.h>
@@ -14,7 +16,6 @@
 #include "unicode/smpdtfmt.h"
 #include "unicode/dtfmtsym.h"
 #include "unicode/dtptngen.h"
-#include "unicode/utypes.h"
 #include "loctest.h"
 
 

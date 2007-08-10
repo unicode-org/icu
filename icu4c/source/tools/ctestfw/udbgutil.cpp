@@ -100,8 +100,6 @@ static const Field names_UDateFormatStyle[] =
  
 
 
-#endif
-
 #define LEN_UDBG 5 /* "UDBG_" */
 
 static const int32_t count_UDebugEnumType = UDBG_ENUM_COUNT;
@@ -120,6 +118,16 @@ static const Field names_UDebugEnumType[] =
 
 #define FIELD_CASE(x)  case UDBG_##x: return names_##x;
 #define FIELD_FAIL_CASE(x) case UDBG_##x: return NULL;
+
+#else
+
+#define COUNT_CASE(x)
+#define COUNT_FAIL_CASE(x)
+
+#define FIELD_CASE(X)
+#define FIELD_FAIL_CASE(x)
+
+#endif
 
 // low level
 

@@ -469,6 +469,8 @@ LocaleTest::TestDisplayNames()
 
     UnicodeString s;
     UErrorCode status = U_ZERO_ERROR;
+
+#if !UCONFIG_NO_FORMATTING
     DecimalFormatSymbols symb(status);
     /* Check to see if ICU supports this locale */
     if (symb.getLocale(ULOC_VALID_LOCALE, status) != Locale("root")) {
@@ -494,6 +496,8 @@ LocaleTest::TestDisplayNames()
         logln("Default locale %s is unsupported by ICU\n", Locale().getName());
     }
     s.remove();
+#endif
+
     french.getDisplayCountry(s);
     if(s.isEmpty()) {
         errln("unable to get any default-locale display string for the country of fr_FR\n");
