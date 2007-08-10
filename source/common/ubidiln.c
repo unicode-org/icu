@@ -322,6 +322,7 @@ ubidi_getLogicalRun(const UBiDi *pBiDi, int32_t logicalStart,
        a special interpretation when UBIDI_REORDER_RUNS_ONLY
      */
     visualStart=logicalLimit=0;
+    iRun=pBiDi->runs[0];
 
     for(i=0; i<runCount; i++) {
         iRun = pBiDi->runs[i];
@@ -338,7 +339,7 @@ ubidi_getLogicalRun(const UBiDi *pBiDi, int32_t logicalStart,
     }
     if(pLevel) {
         if(pBiDi->reorderingMode==UBIDI_REORDER_RUNS_ONLY) {
-            *pLevel=GET_ODD_BIT(iRun.logicalStart);
+            *pLevel=(UBiDiLevel)GET_ODD_BIT(iRun.logicalStart);
         }
         else if(pBiDi->direction!=UBIDI_MIXED || logicalStart>=pBiDi->trailingWSStart) {
             *pLevel=GET_PARALEVEL(pBiDi, logicalStart);

@@ -150,8 +150,8 @@ typedef struct Run {
 
 #define GET_INDEX(x)   ((x)&~INDEX_ODD_BIT)
 #define GET_ODD_BIT(x) ((uint32_t)(x)>>31)
-#define IS_ODD_RUN(x)  (((x)&INDEX_ODD_BIT)!=0)
-#define IS_EVEN_RUN(x) (((x)&INDEX_ODD_BIT)==0)
+#define IS_ODD_RUN(x)  ((UBool)(((x)&INDEX_ODD_BIT)!=0))
+#define IS_EVEN_RUN(x) ((UBool)(((x)&INDEX_ODD_BIT)==0))
 
 U_CFUNC UBool
 ubidi_getRuns(UBiDi *pBiDi, UErrorCode *pErrorCode);
