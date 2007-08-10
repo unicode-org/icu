@@ -286,6 +286,7 @@ icu4c/source/test/perf/collperf/collperf
 icu4c/source/test/perf/collperf/collperf.vcproj.*.*.user
 icu4c/source/test/perf/collperf/debug
 icu4c/source/test/perf/collperf/release
+icu4c/source/test/perf/convperf/Makefile
 icu4c/source/test/perf/convperf/convperf.vcproj.*.*.user
 icu4c/source/test/perf/convperf/debug
 icu4c/source/test/perf/convperf/release
