@@ -1,6 +1,6 @@
 // ***************************************************************************
 // *
-// *   Copyright (C) 2004, International Business Machines
+// *   Copyright (C) 2004, 2007 International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
@@ -40,6 +40,8 @@ de {
             "100: hundert[>%alt-ones>];\n"
             "200: <<hundert[>%alt-ones>];\n"
             "1000: tausend[>%alt-ones>];\n"
+            "1100: tausendein[>%alt-ones>];\n"
+            "1200: tausend[>%alt-ones>];\n"
             "2000: <<tausend[>%alt-ones>];\n"
             "1,000,000: eine Million[ >%alt-ones>];\n"
             "2,000,000: << Millionen[ >%alt-ones>];\n"
