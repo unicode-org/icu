@@ -4,6 +4,10 @@
  *
  */
 
+/*
+ * paragraphLayout doesn't make much sense without
+ * BreakIterator...
+ */
 #include "layout/LETypes.h"
 #include "layout/loengine.h"
 #include "layout/plruns.h"
@@ -13,6 +17,8 @@
 
 #include "layout/LayoutEngine.h"
 #include "layout/ParagraphLayout.h"
+
+#if ! UCONFIG_NO_BREAK_ITERATION
 
 U_NAMESPACE_USE
 
@@ -321,3 +327,4 @@ pl_getVisualRunLeading(const pl_visualRun *run)
     return vr->getLeading();
 }
 
+#endif

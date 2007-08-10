@@ -7,7 +7,13 @@
 #ifndef __PLAYOUT_H
 #define __PLAYOUT_H
 
+/*
+ * ParagraphLayout doesn't make much sense without
+ * BreakIterator...
+ */
 #include "unicode/ubidi.h"
+#if ! UCONFIG_NO_BREAK_ITERATION
+
 #include "layout/LETypes.h"
 #include "plruns.h"
 
@@ -455,4 +461,5 @@ pl_getVisualRunDescent(const pl_visualRun *run);
 U_DRAFT le_int32 U_EXPORT2
 pl_getVisualRunLeading(const pl_visualRun *run);
 
+#endif
 #endif
