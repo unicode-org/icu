@@ -1774,9 +1774,9 @@ testMultipleParagraphs(void) {
     srcSize = 5;
     ubidi_orderParagraphsLTR(pBidi, TRUE);
     for (i=0x001c; i<=0x0020; i+=(0x0020-0x001c)) {
-        src[4]=i;                       /* with and without terminating B */
+        src[4]=(UChar)i;                /* with and without terminating B */
         for (j=0x0041; j<=0x05d0; j+=(0x05d0-0x0041)) {
-            src[0]=j;                   /* leading 'A' or Alef */
+            src[0]=(UChar)j;            /* leading 'A' or Alef */
             for (gotLevel=4; gotLevel<=5; gotLevel++) {
                 /* test even and odd paraLevel */
                 ubidi_setPara(pBidi, src, srcSize, gotLevel, NULL, &errorCode);
@@ -3356,8 +3356,8 @@ testReorderingMode(void) {
     UBiDi *pBiDi = NULL, *pBiDi2 = NULL, *pBiDi3 = NULL;
     UErrorCode rc;
     int tc, mode, option, level;
-    uint32_t modeBack, optionValue, optionBack;
-    UBiDiReorderingMode modeValue;
+    uint32_t optionValue, optionBack;
+    UBiDiReorderingMode modeValue, modeBack;
     int32_t srcLen, destLen, index;
     const char *expectedChars;
     UBool testOK = TRUE;
@@ -3565,8 +3565,8 @@ testStreaming(void) {
                 }
                 ubidi_setReorderingOptions(pBiDi, UBIDI_OPTION_STREAMING);
 
-                mismatch = j >= nPortions ||
-                           processedLen != testData[i].portionLens[levelIndex][j];
+                mismatch = (UBool)(j >= nPortions ||
+                           processedLen != testData[i].portionLens[levelIndex][j]);
 
                 sprintf(processedLenStr + j * 4, "%4d", processedLen);
                 srcLen -= processedLen, pSrc += processedLen;
@@ -3618,6 +3618,8 @@ overrideBidiClass(const void *context, UChar32 c) {
           DEF,   DEF,   DEF,   LRO,     B,   RLO,    BN,   DEF  /* 78-7F */
     };
     static const int nEntries = LENGTHOF(customClasses);
+    const char *dummy = context;        /* just to avoid a compiler warning */
+    dummy++;
 
     return c >= nEntries ? U_BIDI_CLASS_DEFAULT : customClasses[c];
 }
