@@ -35,9 +35,9 @@
 #include "dtptngen_impl.h"
 
 //TODO
-//#if defined U_DEBUG_DTPTN
+#if defined U_DEBUG_DTPTN
 #include <stdio.h>
-//#endif
+#endif
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
@@ -282,31 +282,22 @@ DateTimePatternGenerator::addICUPatterns(const Locale& locale, UErrorCode& statu
     for (int32_t i=DateFormat::kFull; i<=DateFormat::kShort; i++) {
         if ((df = (SimpleDateFormat*)DateFormat::createDateInstance((DateFormat::EStyle)i, locale))!= NULL) {
             conflictingStatus = addPattern(df->toPattern(dfPattern), FALSE, conflictingString, status);
+            delete df;
             if (U_FAILURE(status)) {
-                delete df;
                 return;
             }
-            // TODO remove the printf after picking up CLDR 1.5 data
-            /*
-            printf("\n ICU Date format:");
-            for (int32_t j=0; j < newPattern.length(); ++j) {
-                printf("%c", newPattern.charAt(j));
-            }
-            */
-            delete df;
         }
 
         if ((df = (SimpleDateFormat*)DateFormat::createTimeInstance((DateFormat::EStyle)i, locale)) != NULL) {
             conflictingStatus = addPattern(df->toPattern(dfPattern), FALSE, conflictingString, status);
+            delete df;
             if (U_FAILURE(status)) {
-                delete df;
                 return;
             }
             // HACK for hh:ss
             if ( i==DateFormat::kMedium ) {
                 hackPattern = dfPattern;
             }
-            delete df;
         }
     }
 }
@@ -1288,7 +1279,7 @@ DateTimeMatcher::set(const UnicodeString& pattern, FormatParser* fp) {
 void
 DateTimeMatcher::set(const UnicodeString& pattern, FormatParser* fp, PtnSkeleton& skeleton) {
 
-    const UChar repeatedPatterns[6]={CAP_G, CAP_E, LOW_Z, LOW_V, CAP_Q, 0}; // "GEzvQ"
+    static const UChar repeatedPatterns[6]={CAP_G, CAP_E, LOW_Z, LOW_V, CAP_Q, 0}; // "GEzvQ"
     UnicodeString repeatedPattern=UnicodeString(repeatedPatterns);
 
     for (int32_t i=0; i<UDATPG_FIELD_COUNT; ++i) {
@@ -1322,7 +1313,7 @@ DateTimeMatcher::set(const UnicodeString& pattern, FormatParser* fp, PtnSkeleton
         if ( row->type > 0) {
             subTypeValue += field.length();
         }
-        skeleton.type[typeValue] = (char)subTypeValue;
+        skeleton.type[typeValue] = (int8_t)subTypeValue;
     }
     {
         Mutex mutex;
