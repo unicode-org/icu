@@ -123,6 +123,13 @@ static const char* Resource_Fields[] = {
 static const UChar UDATPG_ItemFormat[]= {0x7B, 0x30, 0x7D, 0x20, 0x251C, 0x7B, 0x32, 0x7D, 0x3A,
     0x20, 0x7B, 0x31, 0x7D, 0x2524, 0};  // {0} \u251C{2}: {1}\u2524
 
+static const char DT_DateTimePatternsTag[]="DateTimePatterns";
+static const char DT_DateTimeCalendarTag[]="calendar";
+static const char DT_DateTimeGregorianTag[]="gregorian";
+static const char DT_DateTimeAppendItemsTag[]="appendItems";
+static const char DT_DateTimeFieldsTag[]="fields";
+static const char DT_DateTimeAvailableFormatsTag[]="availableFormats";
+
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DateTimePatternGenerator)
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DTSkeletonEnumeration)
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DTRedundantEnumeration)
@@ -377,12 +384,12 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale) {
     }
 
     rb = ures_open(NULL, locale.getName(), &err);
-    calBundle = ures_getByKey(rb, "calendar", NULL, &err);
-    gregorianBundle = ures_getByKey(calBundle, "gregorian", NULL, &err);
+    calBundle = ures_getByKey(rb, DT_DateTimeCalendarTag, NULL, &err);
+    gregorianBundle = ures_getByKey(calBundle, DT_DateTimeGregorianTag, NULL, &err);
 
     key=NULL;
     int32_t dtCount=0;
-    patBundle = ures_getByKeyWithFallback(gregorianBundle, "DateTimePatterns", NULL, &err);
+    patBundle = ures_getByKeyWithFallback(gregorianBundle, DT_DateTimePatternsTag, NULL, &err);
     while (U_SUCCESS(err)) {
         rbPattern = ures_getNextUnicodeString(patBundle, &key, &err);
         dtCount++;
@@ -398,7 +405,7 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale) {
     ures_close(patBundle);
     
     err = U_ZERO_ERROR;
-    patBundle = ures_getByKeyWithFallback(gregorianBundle, "appendItems", NULL, &err);
+    patBundle = ures_getByKeyWithFallback(gregorianBundle, DT_DateTimeAppendItemsTag, NULL, &err);
     key=NULL;
     UnicodeString itemKey;
     while (U_SUCCESS(err)) {
@@ -414,7 +421,7 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale) {
     
     key=NULL;
     err = U_ZERO_ERROR;
-    fBundle = ures_getByKeyWithFallback(gregorianBundle, "fields", NULL, &err);
+    fBundle = ures_getByKeyWithFallback(gregorianBundle, DT_DateTimeFieldsTag, NULL, &err);
     for (int32_t i=0; i<MAX_RESOURCE_FIELD; ++i) {
         err = U_ZERO_ERROR;
         patBundle = ures_getByKeyWithFallback(fBundle, Resource_Fields[i], NULL, &err);
@@ -434,7 +441,7 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale) {
     // add available formats
     err = U_ZERO_ERROR;
     initHashtable(err);
-    patBundle = ures_getByKeyWithFallback(gregorianBundle, "availableFormats", NULL, &err);
+    patBundle = ures_getByKeyWithFallback(gregorianBundle, DT_DateTimeAvailableFormatsTag, NULL, &err);
     if (U_SUCCESS(err)) {
         int32_t numberKeys = ures_getSize(patBundle);
         //printf ("\n available formats from current locale:%s", locale.getName());
@@ -467,9 +474,9 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale) {
     uprv_strcpy(parentLocale, curLocaleName);
     while((localeNameLen=uloc_getParent(parentLocale, parentLocale, 50, &err))>=0 ) {
         rb = ures_open(NULL, parentLocale, &err);
-        calBundle = ures_getByKey(rb, "calendar", NULL, &err);
-        gregorianBundle = ures_getByKey(calBundle, "gregorian", NULL, &err);
-        patBundle = ures_getByKeyWithFallback(gregorianBundle, "availableFormats", NULL, &err);
+        calBundle = ures_getByKey(rb, DT_DateTimeCalendarTag, NULL, &err);
+        gregorianBundle = ures_getByKey(calBundle, DT_DateTimeGregorianTag, NULL, &err);
+        patBundle = ures_getByKeyWithFallback(gregorianBundle, DT_DateTimeAvailableFormatsTag, NULL, &err);
         if (U_SUCCESS(err)) {
             int32_t numberKeys = ures_getSize(patBundle);
             int32_t len;
@@ -633,26 +640,24 @@ DateTimePatternGenerator::getDateTimeFormat() const {
 }
 
 void
-DateTimePatternGenerator::setDateTimeFromCalendar(const Locale& locale, UErrorCode& err) {
-    UResourceBundle *patBundle;
-    UnicodeString rbPattern;
-    const char *key=NULL;
+DateTimePatternGenerator::setDateTimeFromCalendar(const Locale& locale, UErrorCode& status) {
+    const UChar *resStr;
+    int32_t resStrLen = 0;
+    
+    Calendar* fCalendar = Calendar::createInstance(locale, status);
+    CalendarData calData(locale, fCalendar?fCalendar->getType():NULL, status);
+    UResourceBundle *dateTimePatterns = calData.getByKey(DT_DateTimePatternsTag, status);
+    if (U_FAILURE(status)) return;
 
-     // Set the datetime pattern
-    CalendarData calData(locale, NULL, err );
-    if (U_FAILURE(err)) return;
-
-    // load the first data item
-    patBundle = calData.getByKey("DateTimePatterns", err);
-    UnicodeString dtFormat;
-    while (U_SUCCESS(err)) {
-        dtFormat = ures_getNextUnicodeString(patBundle, &key, &err);
-        if (rbPattern.length()==0 ) {
-            break;  // no more pattern
-        }
-        setDateTimeFormat(dtFormat);
-    };
-    //ures_close(patBundle);
+    if (ures_getSize(dateTimePatterns) <= DateFormat::kDateTime)
+    {
+        status = U_INVALID_FORMAT_ERROR;
+        return;
+    }
+    resStr = ures_getStringByIndex(dateTimePatterns, (int32_t)DateFormat::kDateTime, &resStrLen, &status);
+    setDateTimeFormat(UnicodeString(TRUE, resStr, resStrLen));
+    
+    delete fCalendar;
 }
 
 void
