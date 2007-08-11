@@ -100,23 +100,19 @@ int32_t FieldsSet::parseFrom(const UnicodeString& str, const
 
     int goodFields = 0;
 
-#if !UCONFIG_NO_REGULAR_EXPRESSIONS    
-    UnicodeString pattern(",", "");
-    RegexMatcher matcher(pattern, 0, status);
-    UnicodeString pattern2("=", "");
-    RegexMatcher matcher2(pattern2, 0, status);
-    if (U_FAILURE(status))
+    if(U_FAILURE(status)) {
         return -1;
+    }
 
-    UnicodeString dest[U_FIELDS_SET_MAX+2]; // TODO: dynamicize
-    int32_t destCount = matcher.split(str, dest, sizeof(dest)/sizeof(dest[0]), status);
-    if(U_FAILURE(status)) return -1;
-    for(int i=0;i<destCount;i++) {
-        UnicodeString kv[2];
-        matcher2.split(dest[i],kv,2,status);
-        if(U_FAILURE(status)) {
-            fprintf(stderr, "Parse failed: splitting\n");
-            return -1;
+    int32_t destCount = 0;
+    UnicodeString *dest = split(str, ',', destCount);
+
+    for(int i = 0; i < destCount; i += 1) {
+        int32_t dc = 0;
+        UnicodeString *kv = split(dest[i], '=', dc);
+
+        if(dc != 2) {
+	    fprintf(stderr, "dc == %d?\n");
         }
 
         int32_t field = handleParseName(inheritFrom, kv[0], kv[1], status);
@@ -133,48 +129,6 @@ int32_t FieldsSet::parseFrom(const UnicodeString& str, const
 
         if(field != -1) {
             handleParseValue(inheritFrom, field, kv[1], status);
-            if(U_FAILURE(status)) {
-                char ch[256];
-                const UChar *u = kv[1].getBuffer();
-                int32_t len = kv[1].length();
-                u_UCharsToChars(u, ch, len);
-                ch[len] = 0; /* include terminating \0 */
-                fprintf(stderr,"Parse Failed: Value %s, err %s\n", ch, u_errorName(status));
-                return -1;
-            }
-            goodFields++;
-        }
-    }
-#else
-    if(U_FAILURE(status)) {
-      return -1;
-    }
-
-    int32_t destCount = 0;
-    UnicodeString *dest = split(str, ',', destCount);
-
-    for(int i = 0; i < destCount; i += 1) {
-      int32_t dc = 0;
-      UnicodeString *kv = split(dest[i], '=', dc);
-
-      if(dc != 2) {
-	fprintf(stderr, "dc == %d?\n");
-      }
-
-      int32_t field = handleParseName(inheritFrom, kv[0], kv[1], status);
-
-      if(U_FAILURE(status)) {
-            char ch[256];
-            const UChar *u = kv[0].getBuffer();
-            int32_t len = kv[0].length();
-            u_UCharsToChars(u, ch, len);
-            ch[len] = 0; /* include terminating \0 */
-            fprintf(stderr,"Parse Failed: Field %s, err %s\n", ch, u_errorName(status));
-            return -1;
-      }
-
-      if(field != -1) {
-            handleParseValue(inheritFrom, field, kv[1], status);
 
             if(U_FAILURE(status)) {
                 char ch[256];
@@ -189,11 +143,10 @@ int32_t FieldsSet::parseFrom(const UnicodeString& str, const
             goodFields += 1;
         }
 
-      delete[] kv;
+        delete[] kv;
     }
 
     delete[] dest;
-#endif
 
     return goodFields;
 }
