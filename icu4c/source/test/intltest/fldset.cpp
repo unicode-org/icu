@@ -6,9 +6,9 @@
 */
 
 #include "fldset.h"
+#include "intltest.h"
 
 #if !UCONFIG_NO_FORMATTING
-#include <stdio.h>
 #include "unicode/regex.h"
 
 
@@ -55,13 +55,8 @@ UnicodeString FieldsSet::diffFrom(const FieldsSet& other, UErrorCode& status) co
             if(fEnum != -1) {
                 const UnicodeString& fieldName = udbg_enumString(
                         fEnum, i);
-                
-                char aval[200];
-                char bval[200];
-                sprintf(aval,"%d",myVal);
-                sprintf(bval,"%d",theirVal);
-    
-                str = str + fieldName +"="+aval+" not "+bval+", ";
+
+                str = str + fieldName + UnicodeString("=")+myVal+UnicodeString(" not ")+theirVal+UnicodeString(", ");
             } else {
                 str = str + UnicodeString("some field") + "=" + myVal+" not " + theirVal+", ";
             }
@@ -112,7 +107,7 @@ int32_t FieldsSet::parseFrom(const UnicodeString& str, const
         UnicodeString *kv = split(dest[i], '=', dc);
 
         if(dc != 2) {
-	    fprintf(stderr, "dc == %d?\n");
+            it_errln(UnicodeString("dc == ") + dc + UnicodeString("?"));
         }
 
         int32_t field = handleParseName(inheritFrom, kv[0], kv[1], status);
@@ -123,7 +118,7 @@ int32_t FieldsSet::parseFrom(const UnicodeString& str, const
             int32_t len = kv[0].length();
             u_UCharsToChars(u, ch, len);
             ch[len] = 0; /* include terminating \0 */
-            fprintf(stderr,"Parse Failed: Field %s, err %s\n", ch, u_errorName(status));
+            it_errln(UnicodeString("Parse Failed: Field ") + UnicodeString(ch) + UnicodeString(", err ") + UnicodeString(u_errorName(status)));
             return -1;
         }
 
@@ -136,7 +131,7 @@ int32_t FieldsSet::parseFrom(const UnicodeString& str, const
                 int32_t len = kv[1].length();
                 u_UCharsToChars(u, ch, len);
                 ch[len] = 0; /* include terminating \0 */
-                fprintf(stderr,"Parse Failed: Value %s, err %s\n", ch, u_errorName(status));
+                it_errln(UnicodeString("Parse Failed: Value ") + UnicodeString(ch) + UnicodeString(", err ") + UnicodeString(u_errorName(status)));
                 return -1;
             }
 
@@ -207,7 +202,7 @@ void FieldsSet::parseValueDefault(const FieldsSet* inheritFrom, int32_t field, c
         // inherit
         if((inheritFrom == NULL) || !inheritFrom->isSet((UCalendarDateFields)field)) {
             // couldn't inherit from field 
-            fprintf(stderr,"Parse Failed: Couldn't inherit field %d [%s]\n", field, udbg_enumName(fEnum, field));
+            it_errln(UnicodeString("Parse Failed: Couldn't inherit field ") + field + UnicodeString(" [") + UnicodeString(udbg_enumName(fEnum, field)) + UnicodeString("]"));
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
