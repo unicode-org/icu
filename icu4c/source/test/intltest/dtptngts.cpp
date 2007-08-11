@@ -50,7 +50,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("hhmm"),
         UnicodeString("HHmm"),
         UnicodeString("mmss"),
-        UnicodeString(""),
+        UnicodeString(),
      };
      
     const char* testLocale[MAX_LOCALE][3] = {
@@ -101,7 +101,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("23.58"),
         UnicodeString("23.58"),
         UnicodeString("58.59"),
-        UnicodeString(""),
+        UnicodeString(),
     };
 
     // results for getSkeletons() and getPatternForSkeleton()
@@ -192,7 +192,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     }
     format->setTimeZone(*zone);
     UnicodeString dateReturned, expectedResult;
-    dateReturned="";
+    dateReturned.remove();
     dateReturned = format->format(sampleDate, dateReturned, status);
     expectedResult=UnicodeString("8:58 14. Okt");
     if ( dateReturned != expectedResult ) {
@@ -208,7 +208,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     UnicodeString testPattern=gen->getBestPattern(UnicodeString("MMMMdd"), status);
     testPattern=gen->getBestPattern(UnicodeString("MMMddHmm"), status);
     format->applyPattern(gen->getBestPattern(UnicodeString("MMMMddHmm"), status));
-    dateReturned="";
+    dateReturned.remove();
     dateReturned = format->format(sampleDate, dateReturned, status);
     expectedResult=UnicodeString("8:58 14. von Oktober");
     if ( dateReturned != expectedResult ) {
@@ -222,7 +222,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     format->setTimeZone(*zone);
     UnicodeString pattern;
     pattern = format->toPattern(pattern);
-    dateReturned="";
+    dateReturned.remove();
     dateReturned = format->format(sampleDate, dateReturned, status);
     expectedResult=UnicodeString("Donnerstag, 14. Oktober 1999 08:58:59 Frankreich");
     if ( dateReturned != expectedResult ) {
@@ -233,7 +233,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     // modify it to change the zone.  
     UnicodeString newPattern = gen->replaceFieldTypes(pattern, UnicodeString("vvvv"), status);
     format->applyPattern(newPattern);
-    dateReturned="";
+    dateReturned.remove();
     dateReturned = format->format(sampleDate, dateReturned, status);
     expectedResult=UnicodeString("Donnerstag, 14. Oktober 1999 08:58:59 Frankreich");
     if ( dateReturned != expectedResult ) {
@@ -312,18 +312,19 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString bestPattern;
         
         Locale loc(testLocale[localeIndex][0], testLocale[localeIndex][1], testLocale[localeIndex][2], "");
-        // TODO: Remove printf if all test cases passed on AIX.
-        //dirprintf("\n\n Locale: %s_%s_%s", testLocale[localeIndex][0], testLocale[localeIndex][1], testLocale[localeIndex][2]);
+        logln("\n\n Locale: %s_%s_%s", testLocale[localeIndex][0], testLocale[localeIndex][1], testLocale[localeIndex][2]);
         DateTimePatternGenerator *patGen=DateTimePatternGenerator::createInstance(loc, status);
         if(U_FAILURE(status)) {
             dataerrln("ERROR: Could not create DateTimePatternGenerator with locale index:%d . - exitting\n", localeIndex);
             return;
         }
         while (patternData[dataIndex].length() > 0) {
+            log(patternData[dataIndex]);
             bestPattern = patGen->getBestPattern(patternData[dataIndex++], status);
+            logln(UnicodeString(" -> ") + bestPattern);
             
             SimpleDateFormat sdf(bestPattern, loc, status);
-            resultDate = "";
+            resultDate.remove();
             resultDate = sdf.format(testDate, resultDate);
             if ( resultDate != patternResults[resultIndex] ) {
                 errln(UnicodeString("\nERROR: Test various skeletons[") + (dataIndex-1)
@@ -346,10 +347,10 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     }
     UChar newChar;
     for (int32_t i=0; i<10; ++i) {
-        UnicodeString randomSkeleton="";
+        UnicodeString randomSkeleton;
         int32_t len = rand() % 20;
         for (int32_t j=0; j<len; ++j ) {
-            while ((newChar== (UChar)(rand()%0x7f))>=(UChar)0x20) {
+            while ((newChar = (UChar)(rand()%0x7f))>=(UChar)0x20) {
                 randomSkeleton += newChar;
             }
         }
