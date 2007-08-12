@@ -204,7 +204,18 @@ static const struct AssemblyType {
 
         ".long "
     },
-    {"aCC",
+    {"aCC-ia64",
+        "\t.file   \"%s.s\"\n"
+        "\t.type   %s,@object\n"
+        "\t.global %s\n"
+        "\t.secalias .abe$0.rodata, \".rodata\"\n"
+        "\t.section .abe$0.rodata = \"a\", \"progbits\"\n"
+        "\t.align  16\n"
+        "%s::\t",
+
+        "data4 "
+    },
+    {"aCC-parisc",
         "\t.SPACE  $TEXT$\n"
         "\t.SUBSPA $LIT$\n"
         "%s\n"
