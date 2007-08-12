@@ -276,6 +276,8 @@ typedef unsigned int uint32_t;
 
 #if @U_USE_GCC_VISIBILITY_ATTRIBUTE@
 #define U_EXPORT __attribute__((visibility("default")))
+/*#elif defined(__HP_aCC) || defined(__HP_cc)
+#define U_EXPORT __declspec(dllexport)*/
 #else
 #define U_EXPORT
 #endif

@@ -27,6 +27,10 @@ THREADSCPPFLAGS = -D_REENTRANT -D_THREAD_SAFE
 CFLAGS += -Ae +ESlit
 CXXFLAGS += +W740 +W749 +W823 +W4232
 
+# -Bhidden_def Hides all symbols defined in the module.
+#LIBCFLAGS = -Bhidden_def
+#LIBCXXFLAGS = -Bhidden_def
+
 ## Commands to compile
 COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
 COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
