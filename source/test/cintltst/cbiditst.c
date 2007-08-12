@@ -429,9 +429,7 @@ static void printCaseInfo(UBiDi *bidi, const char *src, const char *dst)
         log_err("Processed length: %d", length); fputs("\n", stderr);
         for (i = 0; i < length; i++) {
             lev = levels[i];
-            if (lev < 0) {
-                levelChars[i] = '-';
-            } else if (lev < sizeof(columns)) {
+            if (lev < sizeof(columns)) {
                 levelChars[i] = columns[lev];
             } else {
                 levelChars[i] = '+';
