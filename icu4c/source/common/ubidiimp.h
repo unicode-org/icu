@@ -328,6 +328,24 @@ typedef union {
             return retvalue;                        \
         }
 
+#define RETURN_VOID_IF_NULL_OR_FAILING_ERRCODE(pErrcode)   \
+        if((pErrcode)==NULL || U_FAILURE(*pErrcode)) return
+#define RETURN_VOID_IF_NOT_VALID_PARA(bidi, errcode)   \
+        if(!IS_VALID_PARA(bidi)) {  \
+            errcode=U_INVALID_STATE_ERROR;  \
+            return;                \
+        }
+#define RETURN_VOID_IF_NOT_VALID_PARA_OR_LINE(bidi, errcode)   \
+        if(!IS_VALID_PARA_OR_LINE(bidi)) {  \
+            errcode=U_INVALID_STATE_ERROR;  \
+            return;                \
+        }
+#define RETURN_VOID_IF_BAD_RANGE(arg, start, limit, errcode)   \
+        if((arg)<(start) || (arg)>=(limit)) {       \
+            (errcode)=U_ILLEGAL_ARGUMENT_ERROR;     \
+            return;                        \
+        }
+
 /* helper function to (re)allocate memory if allowed */
 U_CFUNC UBool
 ubidi_getMemory(BidiMemoryForAllocation *pMemory, int32_t *pSize, UBool mayAllocate, int32_t sizeNeeded);

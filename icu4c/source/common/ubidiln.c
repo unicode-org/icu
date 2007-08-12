@@ -14,11 +14,6 @@
 *   created by: Markus W. Scherer, updated by Matitiahu Allouche
 */
 
-/* set import/export definitions */
-#ifndef U_COMMON_IMPLEMENTATION
-#   define U_COMMON_IMPLEMENTATION
-#endif
-
 #include "cmemory.h"
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
@@ -133,10 +128,10 @@ ubidi_setLine(const UBiDi *pParaBiDi,
     int32_t length;
 
     /* check the argument values */
-    RETURN_IF_NULL_OR_FAILING_ERRCODE(pErrorCode, );
-    RETURN_IF_NOT_VALID_PARA(pParaBiDi, *pErrorCode, );
-    RETURN_IF_BAD_RANGE(start, 0, limit, *pErrorCode, );
-    RETURN_IF_BAD_RANGE(limit, 0, pParaBiDi->length+1, *pErrorCode, );
+    RETURN_VOID_IF_NULL_OR_FAILING_ERRCODE(pErrorCode);
+    RETURN_VOID_IF_NOT_VALID_PARA(pParaBiDi, *pErrorCode);
+    RETURN_VOID_IF_BAD_RANGE(start, 0, limit, *pErrorCode);
+    RETURN_VOID_IF_BAD_RANGE(limit, 0, pParaBiDi->length+1, *pErrorCode);
     if(pLineBiDi==NULL) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return;
@@ -312,7 +307,7 @@ ubidi_getLogicalRun(const UBiDi *pBiDi, int32_t logicalStart,
     Run iRun;
 
     errorCode=U_ZERO_ERROR;
-    RETURN_IF_BAD_RANGE(logicalStart, 0, pBiDi->length, errorCode, );
+    RETURN_VOID_IF_BAD_RANGE(logicalStart, 0, pBiDi->length, errorCode);
     /* ubidi_countRuns will check VALID_PARA_OR_LINE */
     runCount=ubidi_countRuns((UBiDi *)pBiDi, &errorCode);
     if(U_FAILURE(errorCode)) {
@@ -1112,7 +1107,7 @@ ubidi_getLogicalIndex(UBiDi *pBiDi, int32_t visualIndex, UErrorCode *pErrorCode)
 
 U_CAPI void U_EXPORT2
 ubidi_getLogicalMap(UBiDi *pBiDi, int32_t *indexMap, UErrorCode *pErrorCode) {
-    RETURN_IF_NULL_OR_FAILING_ERRCODE(pErrorCode, );
+    RETURN_VOID_IF_NULL_OR_FAILING_ERRCODE(pErrorCode);
     /* ubidi_countRuns() checks for VALID_PARA_OR_LINE */
     ubidi_countRuns(pBiDi, pErrorCode);
     if(U_FAILURE(*pErrorCode)) {
@@ -1213,14 +1208,14 @@ ubidi_getLogicalMap(UBiDi *pBiDi, int32_t *indexMap, UErrorCode *pErrorCode) {
 
 U_CAPI void U_EXPORT2
 ubidi_getVisualMap(UBiDi *pBiDi, int32_t *indexMap, UErrorCode *pErrorCode) {
-    RETURN_IF_NULL_OR_FAILING_ERRCODE(pErrorCode, );
+    RETURN_VOID_IF_NULL_OR_FAILING_ERRCODE(pErrorCode);
+    if(indexMap==NULL) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
     /* ubidi_countRuns() checks for VALID_PARA_OR_LINE */
     ubidi_countRuns(pBiDi, pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        /* no op */
-    } else if(indexMap==NULL) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-    } else {
+    if(U_SUCCESS(*pErrorCode)) {
         /* fill a visual-to-logical index map using the runs[] */
         Run *runs=pBiDi->runs, *runsLimit=runs+pBiDi->runCount;
         int32_t logicalStart, visualStart, visualLimit, *pi=indexMap;

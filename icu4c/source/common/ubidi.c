@@ -1741,7 +1741,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
     UBiDiDirection direction;
 
     /* check the argument values */
-    RETURN_IF_NULL_OR_FAILING_ERRCODE(pErrorCode, );
+    RETURN_VOID_IF_NULL_OR_FAILING_ERRCODE(pErrorCode);
     if(pBiDi==NULL || text==NULL || length<-1 ||
        (paraLevel>UBIDI_MAX_EXPLICIT_LEVEL && paraLevel<UBIDI_DEFAULT_LTR)) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
@@ -2124,9 +2124,9 @@ ubidi_getParagraphByIndex(const UBiDi *pBiDi, int32_t paraIndex,
     int32_t paraStart;
 
     /* check the argument values */
-    RETURN_IF_NULL_OR_FAILING_ERRCODE(pErrorCode, );
-    RETURN_IF_NOT_VALID_PARA_OR_LINE(pBiDi, *pErrorCode, );
-    RETURN_IF_BAD_RANGE(paraIndex, 0, pBiDi->paraCount, *pErrorCode, );
+    RETURN_VOID_IF_NULL_OR_FAILING_ERRCODE(pErrorCode);
+    RETURN_VOID_IF_NOT_VALID_PARA_OR_LINE(pBiDi, *pErrorCode);
+    RETURN_VOID_IF_BAD_RANGE(paraIndex, 0, pBiDi->paraCount, *pErrorCode);
 
     pBiDi=pBiDi->pParaBiDi;             /* get Para object if Line object */
     if(paraIndex) {
@@ -2143,7 +2143,6 @@ ubidi_getParagraphByIndex(const UBiDi *pBiDi, int32_t paraIndex,
     if(pParaLevel!=NULL) {
         *pParaLevel=GET_PARALEVEL(pBiDi, paraStart);
     }
-    return;
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -2169,7 +2168,7 @@ ubidi_setClassCallback(UBiDi *pBiDi, UBiDiClassCallback *newFn,
                        const void *newContext, UBiDiClassCallback **oldFn,
                        const void **oldContext, UErrorCode *pErrorCode)
 {
-    RETURN_IF_NULL_OR_FAILING_ERRCODE(pErrorCode, );
+    RETURN_VOID_IF_NULL_OR_FAILING_ERRCODE(pErrorCode);
     if(pBiDi==NULL) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return;
