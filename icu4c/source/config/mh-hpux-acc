@@ -23,8 +23,9 @@ THREADSCPPFLAGS = -D_REENTRANT -D_THREAD_SAFE
 #        (Ironically the solution to fix this warning is non-portable)
 #    823 Redundant preprocessing concatenation operation results in two valid
 #        preprocessing tokens. This comes from INT64_C in <inttypes.h>
+#   4232 conversion to a more strictly aligned type may cause misaligned access.
 CFLAGS += -Ae +ESlit
-CXXFLAGS += +W740 +W749 +W823
+CXXFLAGS += +W740 +W749 +W823 +W4232
 
 ## Commands to compile
 COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
