@@ -60,7 +60,7 @@ LD_SONAME = -Wl,+h,$(notdir $(MIDDLE_SO_TARGET))
 
 ## The type of assembly needed when pkgdata is used for generating shared libraries.
 # Commented out for now because the hp1 test machine runs out of memory.
-#GENCCODE_ASSEMBLY=-a aCC
+#GENCCODE_ASSEMBLY=-a aCC-parisc
 
 ## Shared object suffix
 SO=		sl

@@ -413,6 +413,9 @@ i*86-*-solaris*)
 sparc-*-solaris*)
     GENCCODE_ASSEMBLY="-a sun"
     ;;
+ia64-*-hpux*)
+    GENCCODE_ASSEMBLY="-a aCC-ia64"
+    ;;
 esac
 AC_SUBST(GENCCODE_ASSEMBLY)
 
