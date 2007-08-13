@@ -1,23 +1,15 @@
 #!/usr/bin/perl
-
 #/**
 # *******************************************************************************
-# * Copyright (C) 2006, International Business Machines Corporation and         *
+# * Copyright (C) 2006-2007, International Business Machines Corporation and    *
 # * others. All Rights Reserved.                                                *
 # *******************************************************************************
 # */
-usage() unless defined ($ENV{'ICU4J_ROOT'});
-use lib "$ENV{'ICU4J_ROOT'}/src/com/ibm/icu/dev/test/perf/perldriver";
+use lib 'src/com/ibm/icu/dev/test/perf';
+use lib 'src/com/ibm/icu/dev/test/perf/perldriver';
 use PerfFramework4j;
 
-my $ICU4J_ROOT = $ENV{'ICU4J_ROOT'};
-$TEST_DATA="$ICU4J_ROOT/src/com/ibm/icu/dev/test/perf/data/collation";
-
-#----------------------------------------------------------------
-sub usage{
-    print "Please define ICU4J_ROOT env variable.\n";
-    exit -1;
-}
+$TEST_DATA="src/com/ibm/icu/dev/test/perf/data/collation";
 
 #---------------------------------------------------------------------
 # Test class
@@ -26,20 +18,20 @@ my $TESTCLASS = "com.ibm.icu.dev.test.perf.ResourceBundlePerf";
 mkdir "results_ICU4J";
 
 my $options = {
-	       "title"=>"ResourceBunlde performance test",
+	       "title"=>"ResourceBundle performance test",
 	       "headers"=>"Java ICU",
 	       "operationIs"=>"various",
 	       "timePerOperationIs"=>"Time per each fetch",
-	       "passes"=>"10",
-	       "time"=>"60",
-	       #"outputType"=>"HTML",
+	       "passes"=>"1",
+	       "time"=>"1",
+	       "outputType"=>"HTML",
 	       "dataDir"=>$TEST_DATA,
 	       "outputDir"=>"results_ICU4J"
 	      };
 
 # programs
 
-my $cmd = "java -cp \"$ICU4J_ROOT/classes\" $TESTCLASS";
+my $cmd = "java -classpath classes $TESTCLASS";
 
 my $dataFiles = "";
 

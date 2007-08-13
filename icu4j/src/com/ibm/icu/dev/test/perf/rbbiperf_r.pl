@@ -7,20 +7,20 @@
 
 use strict;
 
-use lib './icu4jsrc_3_4/src/com/ibm/icu/dev/test/perf/perldriver';
+use lib 'svn-icu4j/src/com/ibm/icu/dev/test/perf/perldriver';
 
 use PerfFramework4j;
 
 my $options = {
-	       "title"=>"Rule Based BreakIterator performance regression (ICU4J 3.2 and 3.4)",
-	       "headers"=>"ICU4J32 ICU4J34",
+	       "title"=>"Rule Based BreakIterator performance regression (ICU4J 3.6 and 3.8)",
+	       "headers"=>"ICU4J36 ICU4J38",
 	       "operationIs"=>"code point",
 	       "eventIs"=>"break",
 	       "passes"=>"10",
 	       "time"=>"5",
-	       #"outputType"=>"HTML",
-	       "dataDir"=>"c:/src/perf/data",
-	       "outputDir"=>"./results_ICU4J"
+	       "outputType"=>"HTML",
+	       "dataDir"=>"svn-icu4j/src/com/ibm/icu/dev/test/perf/data/collation",
+	       "outputDir"=>"svn-icu4j/results_ICU4J"
 	      };
 
 # programs
@@ -40,8 +40,8 @@ if(@_ >= 0) {
   $m = $m1;
 }
 
-my $jvm1 = "java -cp ./icu4jsrc_3_2/icu4j32.jar;./icu4jsrc_3_2/perf32.jar; $TESTCLASS";
-my $jvm2 = "java -cp ./icu4jsrc_3_4/icu4j34.jar;./icu4jsrc_3_4/perf34.jar; $TESTCLASS";
+my $jvm1 = "java -classpath svn-icu4j_3-6/classes $TESTCLASS";
+my $jvm2 = "java -classpath svn-icu4j/classes $TESTCLASS";
 
 my $dataFiles = {
 "en", [

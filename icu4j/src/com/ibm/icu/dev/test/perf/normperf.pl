@@ -1,6 +1,6 @@
 #!/usr/local/bin/perl
 # *******************************************************************************
-# * Copyright (C) 2002-2004, International Business Machines Corporation and    *
+# * Copyright (C) 2002-2007 International Business Machines Corporation and     *
 # * others. All Rights Reserved.                                                *
 # *******************************************************************************
 
@@ -8,7 +8,6 @@ use strict;
 
 # Assume we are running within the icu4j root directory
 use lib 'src/com/ibm/icu/dev/test/perf';
-
 use Dataset;
 
 #---------------------------------------------------------------------
@@ -18,82 +17,82 @@ my $TESTCLASS = 'com.ibm.icu.dev.test.perf.NormalizerPerformanceTest';
 # Methods to be tested.  Each pair represents a test method and
 # a baseline method which is used for comparison.
 my @METHODS  = (
-  		['TestICU_NFD_NFC_Text',  'TestJDK_NFD_NFC_Text'],
-		['TestICU_NFC_NFC_Text',  'TestJDK_NFC_NFC_Text'],
-                ['TestICU_NFC_NFD_Text',  'TestJDK_NFC_NFD_Text'],
-                ['TestICU_NFC_Orig_Text', 'TestJKD_NFC_Orig_Text'],
-		['TestICU_NFD_NFC_Text',  'TestJDK_NFD_NFC_Text'],
-                ['TestICU_NFD_NFD_Text',  'TestJDK_NFD_NFD_Text'],
-                ['TestICU_NFD_Orig_Text', 'TestJDK_NFD_Orig_Text'], 
+                ['TestJDK_NFD_NFC_Text',  'TestICU_NFD_NFC_Text'],
+                ['TestJDK_NFC_NFC_Text',  'TestICU_NFC_NFC_Text'],
+#               ['TestJDK_NFC_NFD_Text',  'TestICU_NFC_NFD_Text'],
+                ['TestJDK_NFC_Orig_Text', 'TestICU_NFC_Orig_Text'],
+                ['TestJDK_NFD_NFC_Text',  'TestICU_NFD_NFC_Text'],
+                ['TestJDK_NFD_NFD_Text',  'TestICU_NFD_NFD_Text'],
+                ['TestJDK_NFD_Orig_Text', 'TestICU_NFD_Orig_Text'], 
                );
 
 # Patterns which define the set of characters used for testing.
 
-my $SOURCEDIR ="C:\\work\\icu4j\\src\\com\\ibm\\icu\\dev\\test\\perf\\data\\collation\\";
+my $SOURCEDIR ="src/com/ibm/icu/dev/test/perf/data/collation/";
 
 my @OPTIONS = (
-#                      src text          	  src encoding  mode  
-		    [ "TestNames_SerbianSH.txt",    "UTF-8", "b"],
-                    [ "arabic.txt",                 "UTF-8", "b"],
-                    [ "french.txt",                 "UTF-8", "b"],
-                    [ "greek.txt",                  "UTF-8", "b"],
-                    [ "hebrew.txt",                 "UTF-8", "b"],
-                    [ "hindi.txt" ,                 "UTF-8", "b"],
-                    [ "japanese.txt",               "UTF-8", "b"],
-                    [ "korean.txt",                 "UTF-8", "b"],
-                    [ "s-chinese.txt",              "UTF-8", "b"],
-                    [ "french.txt",                 "UTF-8", "b"],
-                    [ "greek.txt",                  "UTF-8", "b"],
-                    [ "hebrew.txt",                 "UTF-8", "b"],
-                    [ "hindi.txt" ,                 "UTF-8", "b"],
-                    [ "japanese.txt",               "UTF-8", "b"],
-                    [ "korean.txt",                 "UTF-8", "b"],
-                    [ "s-chinese.txt",              "UTF-8", "b"],
-                    [ "arabic.html",                "UTF-8", "b"],
-					[ "czech.html",                 "UTF-8", "b"],
-					[ "danish.html",                "UTF-8", "b"],
-					[ "english.html",               "UTF-8", "b"],
-					[ "esperanto.html",             "UTF-8", "b"],
-					[ "french.html",                "UTF-8", "b"],
-					[ "georgian.html",              "UTF-8", "b"],
-					[ "german.html",                "UTF-8", "b"],
-					[ "greek.html",                 "UTF-8", "b"],
-					[ "hebrew.html",                "UTF-8", "b"],
-					[ "hindi.html",                 "UTF-8", "b"],
-					[ "icelandic.html",             "UTF-8", "b"],
-					[ "interlingua.html",           "UTF-8", "b"],
-					[ "italian.html",               "UTF-8", "b"],
-					[ "japanese.html",              "UTF-8", "b"],
-					[ "korean.html",                "UTF-8", "b"],
-					[ "lithuanian.html",            "UTF-8", "b"],
-					[ "maltese.html",               "UTF-8", "b"],
-					[ "persian.html",               "UTF-8", "b"],
-					[ "polish.html",                "UTF-8", "b"],
-					[ "portuguese.html",            "UTF-8", "b"],
-					[ "romanian.html",              "UTF-8", "b"],
-					[ "russian.html",               "UTF-8", "b"],
-					[ "s-chinese.html",             "UTF-8", "b"],
-					[ "spanish.html",               "UTF-8", "b"],
-					[ "swedish.html",               "UTF-8", "b"],
-					[ "t-chinese.html",             "UTF-8", "b"],
-					[ "welsh.html",                 "UTF-8", "b"],
-					[ "TestNames_Asian.txt",        "UTF-8", "l"],
-					[ "TestNames_Chinese.txt",      "UTF-8", "l"],
-					[ "TestNames_Japanese.txt",     "UTF-8", "l"],
-					[ "TestNames_Japanese_h.txt",   "UTF-8", "l"],
-					[ "TestNames_Japanese_k.txt",   "UTF-8", "l"],
-					[ "TestNames_Korean.txt",       "UTF-8", "l"],
-					[ "TestNames_Latin.txt",        "UTF-8", "l"],
-					[ "TestNames_SerbianSH.txt",    "UTF-8", "l"],
-					[ "TestNames_SerbianSR.txt",    "UTF-8", "l"],
-					[ "TestNames_Thai.txt",         "UTF-8", "l"],
-					[ "Testnames_Russian.txt",      "UTF-8", "l"], 
+#                      src text                     src encoding  mode  
+                    [ "TestNames_SerbianSH.txt",    "UTF-8", "b"],
+#                   [ "arabic.txt",                 "UTF-8", "b"],
+#                   [ "french.txt",                 "UTF-8", "b"],
+#                   [ "greek.txt",                  "UTF-8", "b"],
+#                   [ "hebrew.txt",                 "UTF-8", "b"],
+#                   [ "hindi.txt" ,                 "UTF-8", "b"],
+#                   [ "japanese.txt",               "UTF-8", "b"],
+#                   [ "korean.txt",                 "UTF-8", "b"],
+#                   [ "s-chinese.txt",              "UTF-8", "b"],
+#                   [ "french.txt",                 "UTF-8", "b"],
+#                   [ "greek.txt",                  "UTF-8", "b"],
+#                   [ "hebrew.txt",                 "UTF-8", "b"],
+#                   [ "hindi.txt" ,                 "UTF-8", "b"],
+#                   [ "japanese.txt",               "UTF-8", "b"],
+#                   [ "korean.txt",                 "UTF-8", "b"],
+#                   [ "s-chinese.txt",              "UTF-8", "b"],
+#                   [ "arabic.html",                "UTF-8", "b"],
+#                   [ "czech.html",                 "UTF-8", "b"],
+#                   [ "danish.html",                "UTF-8", "b"],
+#                   [ "english.html",               "UTF-8", "b"],
+#                   [ "esperanto.html",             "UTF-8", "b"],
+#                   [ "french.html",                "UTF-8", "b"],
+#                   [ "georgian.html",              "UTF-8", "b"],
+#                   [ "german.html",                "UTF-8", "b"],
+#                   [ "greek.html",                 "UTF-8", "b"],
+#                   [ "hebrew.html",                "UTF-8", "b"],
+#                   [ "hindi.html",                 "UTF-8", "b"],
+#                   [ "icelandic.html",             "UTF-8", "b"],
+#                   [ "interlingua.html",           "UTF-8", "b"],
+#                   [ "italian.html",               "UTF-8", "b"],
+#                   [ "japanese.html",              "UTF-8", "b"],
+#                   [ "korean.html",                "UTF-8", "b"],
+#                   [ "lithuanian.html",            "UTF-8", "b"],
+#                   [ "maltese.html",               "UTF-8", "b"],
+#                   [ "persian.html",               "UTF-8", "b"],
+#                   [ "polish.html",                "UTF-8", "b"],
+#                   [ "portuguese.html",            "UTF-8", "b"],
+#                   [ "romanian.html",              "UTF-8", "b"],
+#                   [ "russian.html",               "UTF-8", "b"],
+#                   [ "s-chinese.html",             "UTF-8", "b"],
+#                   [ "spanish.html",               "UTF-8", "b"],
+#                   [ "swedish.html",               "UTF-8", "b"],
+#                   [ "t-chinese.html",             "UTF-8", "b"],
+#                   [ "welsh.html",                 "UTF-8", "b"],
+                    [ "TestNames_Asian.txt",        "UTF-8", "l"],
+                    [ "TestNames_Chinese.txt",      "UTF-8", "l"],
+                    [ "TestNames_Japanese.txt",     "UTF-8", "l"],
+                    [ "TestNames_Japanese_h.txt",   "UTF-8", "l"],
+                    [ "TestNames_Japanese_k.txt",   "UTF-8", "l"],
+                    [ "TestNames_Korean.txt",       "UTF-8", "l"],
+                    [ "TestNames_Latin.txt",        "UTF-8", "l"],
+                    [ "TestNames_SerbianSH.txt",    "UTF-8", "l"],
+                    [ "TestNames_SerbianSR.txt",    "UTF-8", "l"],
+                    [ "TestNames_Thai.txt",         "UTF-8", "l"],
+                    [ "Testnames_Russian.txt",      "UTF-8", "l"], 
               );
 
-my $CALIBRATE = 2; # duration in seconds for initial calibration
-my $DURATION = 10; # duration in seconds for each pass
-my $NUMPASSES = 4; # number of passes.  If > 1 then the first pass
-                   # is discarded as a JIT warm-up pass.
+my $CALIBRATE = 2;  # duration in seconds for initial calibration
+my $DURATION  = 10; # duration in seconds for each pass
+my $NUMPASSES = 4;  # number of passes.  If > 1 then the first pass
+                    # is discarded as a JIT warm-up pass.
 
 my $TABLEATTR = 'BORDER="1" CELLPADDING="4" CELLSPACING="0"';
 
@@ -111,7 +110,7 @@ main();
 # ...
 sub main {
     my $date = localtime;
-    my $title = "ICU4JNI Performance Test $date";
+    my $title = "ICU4J Performance Test $date";
 
     my $html = $date;
     $html =~ s/://g; # ':' illegal
@@ -165,7 +164,7 @@ EOF
 
             # measure baseline method
             out("<TR><TD>");
-            print "\nBegin $baselineMethod [@$pat]\n";
+            print "\n$baselineMethod [@$pat]\n";
             my $b = measure2($baselineMethod, $pat, -$DURATION);
             out("</TD></TR>");
             print HTML "<TD>", formatSeconds(4, $b->getMean(), $t->getError);
@@ -175,8 +174,10 @@ EOF
 
             # output ratio
             my $r = $t->divide($b);
-            print HTML "<TD><B>", formatPercent(3, $r->getMean(), $r->getError);
-            print HTML "</B></TD></TR>\n";
+            my $mean = $r->getMean() - 1;
+            my $color = $mean < 0 ? "RED" : "BLACK";
+            print HTML "<TD><B><FONT COLOR=\"$color\">", formatPercent(3, $mean, $r->getError);
+            print HTML "</FONT></B></TD></TR>\n";
         }
 
         print HTML "</TABLE></P>\n";
@@ -255,41 +256,43 @@ sub measure1 {
         out(-$iterCount, " seconds/pass, $NUMPASSES passes</P>\n");
     }
 
-    # is $iterCount actually -seconds?
+    # is $iterCount actually -seconds/pass?
     if ($iterCount < 0) {
 
         # calibrate: estimate ms/iteration
         print "Calibrating...";
-        my @t = callJava($method, $pat, $CALIBRATE );
+        my @t = callJava($method, $pat, -$CALIBRATE, 1);
         print "done.\n";
 
         my @data = split(/\s+/, $t[0]->[2]);
-        my $timePerIter = 1.0e-3 * $data[0] / $data[2];
+        $data[0] *= 1.0e+3;
+
+        my $timePerIter = 1.0e-3 * $data[0] / $data[1];
     
         # determine iterations/pass
         $iterCount = int(-$iterCount / $timePerIter + 0.5);
 
         out("<P>Calibration pass ($CALIBRATE sec): ");
         out("$data[0] ms, ");
-        out("$data[2] iterations = ");
+        out("$data[1] iterations = ");
         out(formatSeconds(4, $timePerIter), "/iteration<BR>\n");
     }
     
     # run passes
     print "Measuring $iterCount iterations x $NUMPASSES passes...";
-    my @t = callJava($method, $pat, "$iterCount " x $NUMPASSES);
+    my @t = callJava($method, $pat, $iterCount, $NUMPASSES);
     print "done.\n";
     my @ms = ();
     my @b; # scratch
     for my $a (@t) {
         # $a->[0]: method name, corresponds to $method
         # $a->[1]: 'begin' data, == $iterCount
-        # $a->[2]: 'end' data, of the form <ms> <eventsPerIter>
+        # $a->[2]: 'end' data, of the form <ms> <loops> <eventsPerIter>
         # $a->[3...]: gc messages from JVM during pass
         @b = split(/\s+/, $a->[2]);
-        push(@ms, $b[0]);
+        push(@ms, $b[0] * 1.0e+3);
     }
-    my $eventsPerIter = $b[1];
+    my $eventsPerIter = $b[2];
 
     out("Iterations per pass: $iterCount<BR>\n");
     out("Events per iteration: $eventsPerIter<BR>\n");
@@ -321,8 +324,12 @@ sub callJava {
     my $method = shift;
     my $pat = shift;
     my $n = shift;
+    my $passes = shift;
+    
     my $fileName = $SOURCEDIR . @$pat[0] ; 
-    my $cmd = "c:\\jdk1.4.2_04\\bin\\java -classpath ;classes; $TESTCLASS $method -t $n -f $fileName -e @$pat[1] -@$pat[2]";
+    my $n = ($n < 0) ? "-t ".(-$n) : "-i ".$n;
+    
+    my $cmd = "java -classpath classes $TESTCLASS $method $n -p $passes -f $fileName -e @$pat[1] -@$pat[2]";
     print "[$cmd]\n"; # for debugging
     open(PIPE, "$cmd|") or die "Can't run \"$cmd\"";
     my @out;
@@ -356,6 +363,7 @@ sub callJava {
                 $data->[1] = $d; # insert end data at [1]
                 #print "#$method:", join(";",@$data), "\n";
                 unshift(@$data, $method); # add method to start
+
                 push(@results, $data);
                 $method = '';
                 $data = [];
