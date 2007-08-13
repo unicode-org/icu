@@ -1107,7 +1107,7 @@ public class MessageFormat extends UFormat {
      *         <code>arguments</code> is not of the type
      *         expected by the format element(s) that use it
      * @throws IllegalArgumentException if <code>arguments<code> is
-     *         an arry of Object and this format uses named arguments
+     *         an array of Object and this format uses named arguments
      * @stable ICU 3.0
      */
     public final StringBuffer format(Object arguments, StringBuffer result,
@@ -1414,18 +1414,12 @@ public class MessageFormat extends UFormat {
      *            index information as described above.
      * @return An <code>Object</code> parsed from the string, either an
      *         array of Object, or a Map, depending on whether named
-     *         arguments were used.  In case of error, returns null.
+     *         arguments are used.  This can be queried using <code>usesNamedArguments</code>.
+     *         In case of error, returns null.
      * @throws NullPointerException if <code>pos</code> is null.
      * @stable ICU 3.0
      */
     public Object parseObject(String source, ParsePosition pos) {
-        // TODO That's a bit tricky.
-        // This method is defined in java.text.Format, so we have to implement
-        // it for formats using number arguments and formats using named
-        // arguments.
-        // The bad thing of the current solution is, that the pattern defines
-        // which kind of object is returned.
-        // --> Add a method like public boolean hasNumericArguments()
         if (argumentNamesAreNumeric) {
             return parse(source, pos);
         } else {

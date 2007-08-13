@@ -36,7 +36,7 @@ import java.util.Set;
  * each message and selects the message whose interval contains a
  * given number. This can only handle a finite number of
  * intervals. But in some languages, like Polish, one plural case
- * applies to infinitely many intervals (e.g., paucal applies for to
+ * applies to infinitely many intervals (e.g., paucal applies to
  * numbers ending with 2, 3, or 4 except those ending with 12, 13, or
  * 14). Thus <code>ChoiceFormat</code> is not adequate.
  * </p><p>
@@ -47,7 +47,7 @@ import java.util.Set;
  *     conditions for a plural case than just a single interval. These plural
  *     rules define both what plural cases exist in a language, and to
  *     which numbers these cases apply.
- * <li>It provides predfined plural rules for many locales. Thus, the programmer
+ * <li>It provides predefined plural rules for many locales. Thus, the programmer
  *     need not worry about the plural cases of a language. On the flip side,
  *     the localizer does not have to specify the plural cases; he can simply
  *     use the predefined keywords. The whole plural formatting of messages can
@@ -120,7 +120,7 @@ import java.util.Set;
  * <code>Ce sont 3 fichiers dans la liste."</code>
  * <p>
  * <strong>Note:</strong><br />
- *   Currently (as of Mar 2007), <code>PluralFormat</code>
+ *   Currently <code>PluralFormat</code>
  *   does not make use of quotes like <code>MessageFormat</code>.
  *   If you use plural format strings with <code>MessageFormat</code> and want
  *   to use a quote sign "<code>'</code>", you have to write "<code>''</code>".
@@ -323,7 +323,7 @@ public class PluralFormat extends UFormat {
      * for the plural rules.
      * Patterns and their interpretation are specified in the class description.
      * 
-     * @param pattern the pattern for this plural format
+     * @param pattern the pattern for this plural format.
      * @throws IllegalArgumentException if the pattern is invalid.
      * @draft ICU 3.8
      * @provisional This API might change or be removed in a future release.
@@ -337,7 +337,7 @@ public class PluralFormat extends UFormat {
         // Format string has to include keywords.
         // states:
         // 0: Reading keyword.
-        // 1: Reading value for preceeding keyword.
+        // 1: Reading value for preceding keyword.
         int state = 0;
         StringBuffer token = new StringBuffer();
         String currentKeyword = null;
@@ -416,8 +416,8 @@ public class PluralFormat extends UFormat {
     /**
      * Formats a plural message for a given number.
      * 
-     * @param number a number for which the plural message should be formatted
-     *        for. If no pattern has been applied to this
+     * @param number a number for which the plural message should be formatted.
+     *        If no pattern has been applied to this
      *        <code>PluralFormat</code> object yet, the formatted number will
      *        be returned.
      * @return the string containing the formatted plural message.
@@ -448,7 +448,7 @@ public class PluralFormat extends UFormat {
      * Formats a plural message for a given number and appends the formatted
      * message to the given <code>StringBuffer</code>.
      * @param number a number object (instance of <code>Number</code> for which
-     *        the plural message should be formatted for. If no pattern has been
+     *        the plural message should be formatted. If no pattern has been
      *        applied to this <code>PluralFormat</code> object yet, the
      *        formatted number will be returned.
      *        Note: If this object is not an instance of <code>Number</code>,
@@ -510,7 +510,7 @@ public class PluralFormat extends UFormat {
      *     and the NumberFormat is set to the default number format for
      *     the locale.  The resulting format behaves the same as one
      *     constructed from {@link #PluralFormat(ULocale)}.
-     * @param ulocale the <code>ULocale</code> to use to configure the
+     * @param ulocale the <code>ULocale</code> used to configure the
      *     formatter. If <code>ulocale</code> is <code>null</code>, the
      *     default locale will be used.
      * @draft ICU 3.8
@@ -527,7 +527,7 @@ public class PluralFormat extends UFormat {
      * Sets the number format used by this formatter.  You only need to
      * call this if you want a different number format than the default
      * formatter for the locale.
-     * @param format the number format to use
+     * @param format the number format to use.
      * @draft ICU 3.8
      * @provisional This API might change or be removed in a future release.
      */
