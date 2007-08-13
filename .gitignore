@@ -651,5 +651,6 @@ icu4c/source/tools/tzcode/zic
 icu4j/*.jar
 icu4j/.clover
 icu4j/classes
+icu4j/classes.wrapper
 icu4j/doc
 tools/unicodetools/com/ibm/rbm/lib
