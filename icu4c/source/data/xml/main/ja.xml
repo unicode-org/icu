@@ -23,5 +23,40 @@
             </icu:scripts>
         </special>
     </characters>
+    <dates>
+        <calendars>
+            <calendar type="taiwan">
+                <eras>
+                    <eraAbbr>
+                        <!-- pre-minguo: 民国前 -->
+                        <era type="0">民国</era>
+                        <!-- = 1912 AD	 gregorian. See: http://en.wikipedia.org/wiki/Minguo_calendar -->
+                    </eraAbbr>
+                </eras>
+                <dateFormats>
+                    <dateFormatLength type="full">
+                        <dateFormat>
+                            <pattern>Gy'年'M'月'd'日'EEEE</pattern>
+                        </dateFormat>
+                    </dateFormatLength>
+                    <dateFormatLength type="long">
+                        <dateFormat>
+                            <pattern>Gy'年'M'月'd'日'EEEE</pattern>
+                        </dateFormat>
+                    </dateFormatLength>
+                    <dateFormatLength type="medium">
+                        <dateFormat>
+                            <pattern>G yy/MM/dd(EE)</pattern>
+                        </dateFormat>
+                    </dateFormatLength>
+                    <dateFormatLength type="short">
+                        <dateFormat>
+                            <pattern>G yy/MM/dd(E)</pattern>
+                        </dateFormat>
+                    </dateFormatLength>
+                </dateFormats>
+            </calendar>
+        </calendars>
+    </dates>
 </ldml>
 

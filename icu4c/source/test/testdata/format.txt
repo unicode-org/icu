@@ -1,4 +1,4 @@
-// Copyright (c) 2007 International Business Machines
+﻿// Copyright (c) 2007 International Business Machines
 // Corporation and others. All Rights Reserved.
 format:table(nofallback) {
     Info {
@@ -30,6 +30,12 @@ format:table(nofallback) {
                     "DATE=SHORT,TIME=SHORT",
                     "ERA=1,YEAR=2007,MONTH=AUGUST,DATE=8,HOUR_OF_DAY=18,MINUTE=54,SECOND=0",
                     "8/8/07 6:54 PM"
+               },
+               {
+                    "zh_TW@calendar=taiwan",
+                    "DATE=LONG",
+                    "ERA=0,YEAR=98,MONTH=0,DATE=24",
+                    "民國98年1月24日",
                },
             }
         }

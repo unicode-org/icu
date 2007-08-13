@@ -1192,19 +1192,15 @@ root{
             quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
         taiwan{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
             DateTimePatterns{
                 "HH:mm:ss v" /**  fallback from 'gregorian'   */,
                 "HH:mm:ss z" /**  fallback from 'gregorian'   */,
                 "HH:mm:ss" /**  fallback from 'gregorian'   */,
                 "HH:mm" /**  fallback from 'gregorian'   */,
-                "EEEE, MMMM d, yyyy G",
-                "MMMM d, yyyy G",
-                "MMM d, yyyy G",
-                "M/d/yyyy",
+                "EEEE, MMMM d, G y",
+                "MMMM d, G y",
+                "MMM d, G y",
+                "G y/M/d",
                 "{1} {0}" /**  fallback from 'gregorian'   */,
             }
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
