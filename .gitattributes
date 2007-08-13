@@ -248,6 +248,7 @@ icu4j/src/com/ibm/icu/dev/test/duration/testdata/testdata_zh_Hant_HK.txt -text
 icu4j/src/com/ibm/icu/dev/test/format/DataDrivenFormatTest.java -text
 icu4j/src/com/ibm/icu/dev/test/perf/DateFormatPerformanceTest.java -text
 icu4j/src/com/ibm/icu/dev/test/perf/DecimalFormatPerformanceTest.java -text
+icu4j/src/com/ibm/icu/dev/test/perf/converterperf.pl -text
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Asian.txt -text
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Chinese.txt -text
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Japanese.txt -text
