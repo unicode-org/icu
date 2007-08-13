@@ -20,28 +20,28 @@ class CECalendar extends Calendar {
     private static final int LIMITS[][] = {
         // Minimum  Greatest    Least  Maximum
         //           Minimum  Maximum
-        {0, 0, 1, 1                          }, // ERA
-        {1, 1, 5828963, 5838270              }, // YEAR
-        {0, 0, 13, 13                        }, // MONTH
-        {1, 1, 52, 53                        }, // WEEK_OF_YEAR
-        {0, 0, 1, 6                          }, // WEEK_OF_MONTH
-        {1, 1, 5, 30                         }, // DAY_OF_MONTH
-        {1, 1, 365, 366                      }, // DAY_OF_YEAR
-        {/*                                */}, // DAY_OF_WEEK
-        {-1, -1, 4, 6                        }, // DAY_OF_WEEK_IN_MONTH
-        {/*                                */}, // AM_PM
-        {/*                                */}, // HOUR
-        {/*                                */}, // HOUR_OF_DAY
-        {/*                                */}, // MINUTE
-        {/*                                */}, // SECOND
-        {/*                                */}, // MILLISECOND
-        {/*                                */}, // ZONE_OFFSET
-        {/*                                */}, // DST_OFFSET
-        {-5838270, -5838270, 5828964, 5838271}, // YEAR_WOY
-        {/*                                */}, // DOW_LOCAL
-        {-5838269, -5838269, 5828963, 5838270}, // EXTENDED_YEAR
-        {/*                                */}, // JULIAN_DAY
-        {/*                                */}, // MILLISECONDS_IN_DAY
+        {        0,        0,       1,       1 }, // ERA
+        {        1,        1, 5828963, 5838270 }, // YEAR
+        {        0,        0,      12,      12 }, // MONTH
+        {        1,        1,      52,      53 }, // WEEK_OF_YEAR
+        {        0,        0,       0,       6 }, // WEEK_OF_MONTH
+        {        1,        1,       5,      30 }, // DAY_OF_MONTH
+        {        1,        1,     365,     366 }, // DAY_OF_YEAR
+        {/*                                  */}, // DAY_OF_WEEK
+        {       -1,       -1,       1,       5 }, // DAY_OF_WEEK_IN_MONTH
+        {/*                                  */}, // AM_PM
+        {/*                                  */}, // HOUR
+        {/*                                  */}, // HOUR_OF_DAY
+        {/*                                  */}, // MINUTE
+        {/*                                  */}, // SECOND
+        {/*                                  */}, // MILLISECOND
+        {/*                                  */}, // ZONE_OFFSET
+        {/*                                  */}, // DST_OFFSET
+        { -5838270, -5838270, 5828964, 5838271 }, // YEAR_WOY
+        {/*                                  */}, // DOW_LOCAL
+        { -5838269, -5838269, 5828963, 5838270}, // EXTENDED_YEAR
+        {/*                                  */}, // JULIAN_DAY
+        {/*                                  */}, // MILLISECONDS_IN_DAY
     };
 
     /* ceToJD() doesn't use this data */

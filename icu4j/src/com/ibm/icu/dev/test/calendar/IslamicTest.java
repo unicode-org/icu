@@ -134,6 +134,17 @@ public class IslamicTest extends CalendarTest {
               cal.get(DATE));
     }
 
+    /**
+     * Test limits of the Islamic calendar
+     */
+    public void TestLimits() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(2007, Calendar.JANUARY, 1);
+        IslamicCalendar islamic = newCivil();
+        doLimitsTest(islamic, null, cal.getTime());
+        doTheoreticalLimitsTest(islamic, true);
+    }
+
     public void TestCoverage() {
     {
         // new IslamicCalendar(TimeZone)

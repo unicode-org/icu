@@ -8,11 +8,12 @@ package com.ibm.icu.dev.test.calendar;
 
 import java.util.Date;
 import java.util.Locale;
+
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.IndianCalendar;
 import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.IndianCalendar;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 
@@ -227,5 +228,18 @@ public class IndianTest extends CalendarTest
         logln("Indian calendar: " + iDF.format(iToday) +
               " + 2 months = " + iDF.format(iFuture));
 
+    }
+
+    /**
+     * Test limits of the Indian calendar
+     */
+    public void TestLimits() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(2007, Calendar.JANUARY, 1);
+        IndianCalendar indian = new IndianCalendar();
+        if (!skipIfBeforeICU(3,8,0)) {
+            doLimitsTest(indian, null, cal.getTime());
+        }
+        doTheoreticalLimitsTest(indian, true);
     }
 }

@@ -420,7 +420,7 @@ public class IndianCalendar extends Calendar {
        {        1,        1,      30,      31 }, // DAY_OF_MONTH
        {        1,        1,     365,     366 }, // DAY_OF_YEAR
        {/*                                  */}, // DAY_OF_WEEK
-       {       -1,       -1,       4,       6 }, // DAY_OF_WEEK_IN_MONTH
+       {       -1,       -1,       5,       5 }, // DAY_OF_WEEK_IN_MONTH
        {/*                                  */}, // AM_PM
        {/*                                  */}, // HOUR
        {/*                                  */}, // HOUR_OF_DAY

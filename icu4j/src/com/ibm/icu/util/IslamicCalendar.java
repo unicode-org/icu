@@ -332,12 +332,12 @@ public class IslamicCalendar extends Calendar {
         {        0,        0,       0,       0 }, // ERA
         {        1,        1, 5000000, 5000000 }, // YEAR
         {        0,        0,      11,      11 }, // MONTH
-        {        1,        1,      51,      52 }, // WEEK_OF_YEAR
-        {        0,        0,       5,       6 }, // WEEK_OF_MONTH
+        {        1,        1,      50,      51 }, // WEEK_OF_YEAR
+        {        0,        0,       4,       6 }, // WEEK_OF_MONTH
         {        1,        1,      29,      30 }, // DAY_OF_MONTH
         {        1,        1,     354,     355 }, // DAY_OF_YEAR
         {/*                                  */}, // DAY_OF_WEEK
-        {       -1,       -1,       4,       5 }, // DAY_OF_WEEK_IN_MONTH
+        {       -1,       -1,       5,       5 }, // DAY_OF_WEEK_IN_MONTH
         {/*                                  */}, // AM_PM
         {/*                                  */}, // HOUR
         {/*                                  */}, // HOUR_OF_DAY

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -384,7 +384,18 @@ public class HebrewTest extends CalendarTest {
             warnln("could not load the locale data");
         }
     }
-    
+
+    /**
+     * Test limits of the Hebrew calendar
+     */
+    public void TestLimits() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(2007, Calendar.JANUARY, 1);
+        HebrewCalendar hebrew = new HebrewCalendar();
+        doLimitsTest(hebrew, null, cal.getTime());
+        doTheoreticalLimitsTest(hebrew, true);
+    }
+
     public void TestCoverage() {
         try{
             {
