@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -217,7 +217,7 @@ public class CalendarTest extends TestFmwk {
      * @param testDuration if positive, the number of days to be tested.
      * If negative, the number of seconds to run the test.
      */
-    protected void doLimitsTest(Calendar cal, int[] fieldsToTest,
+    public void doLimitsTest(Calendar cal, int[] fieldsToTest,
                                 Date startDate, int testDuration) {
         GregorianCalendar greg = new GregorianCalendar();
         greg.setTime(startDate);
@@ -335,6 +335,79 @@ public class CalendarTest extends TestFmwk {
         logln("End: " + greg.getTime());
     }
 
+    /**
+     * doLimitsTest with default test duration
+     */
+    public void doLimitsTest(Calendar cal, int[] fieldsToTest, Date startDate) {
+        int testTime = getInclusion() <= 5 ? -3 : -60; // in seconds
+        doLimitsTest(cal, fieldsToTest, startDate, testTime);
+    }
+    
+    /**
+     * Test the functions getMaximum/getGeratestMinimum logically correct.
+     * This method assumes day of week cycle is consistent.
+     * @param cal The calendar instance to be tested.
+     * @param leapMonth true if the calendar system has leap months
+     */
+    public void doTheoreticalLimitsTest(Calendar cal, boolean leapMonth) {
+        int nDOW = cal.getMaximum(Calendar.DAY_OF_WEEK);
+        int maxDOY = cal.getMaximum(Calendar.DAY_OF_YEAR);
+        int lmaxDOW = cal.getLeastMaximum(Calendar.DAY_OF_YEAR);
+        int maxWOY = cal.getMaximum(Calendar.WEEK_OF_YEAR);
+        int lmaxWOY = cal.getLeastMaximum(Calendar.WEEK_OF_YEAR);
+        int maxM = cal.getMaximum(Calendar.MONTH) + 1;
+        int lmaxM = cal.getLeastMaximum(Calendar.MONTH) + 1;
+        int maxDOM = cal.getMaximum(Calendar.DAY_OF_MONTH);
+        int lmaxDOM = cal.getLeastMaximum(Calendar.DAY_OF_MONTH);
+        int maxDOWIM = cal.getMaximum(Calendar.DAY_OF_WEEK_IN_MONTH);
+        int lmaxDOWIM = cal.getLeastMaximum(Calendar.DAY_OF_WEEK_IN_MONTH);
+        int maxWOM = cal.getMaximum(Calendar.WEEK_OF_MONTH);
+        int lmaxWOM = cal.getLeastMaximum(Calendar.WEEK_OF_MONTH);
+
+        // Day of year
+        int expected;
+        if (!leapMonth) {
+            expected = maxM*maxDOM;
+            if (maxDOY > expected) {
+                errln("FAIL: Maximum value of DAY_OF_YEAR is too big: " + maxDOY + "/expected: <=" + expected);
+            }
+            expected = lmaxM*lmaxDOM;
+            if (lmaxDOW < expected) {
+                errln("FAIL: Least maximum value of DAY_OF_YEAR is too small: " + lmaxDOW + "/expected: >=" + expected);
+            }
+        }
+
+        // Week of year
+        expected = maxDOY/nDOW + 1;
+        if (maxWOY > expected) {
+            errln("FAIL: Maximum value of WEEK_OF_YEAR is too big: " + maxWOY + "/expected: <=" + expected);
+        }
+        expected = lmaxDOW/nDOW;
+        if (lmaxWOY < expected) {
+            errln("FAIL: Least maximum value of WEEK_OF_YEAR is too small: " + lmaxWOY + "/expected >=" + expected);
+        }
+
+        // Day of week in month
+        expected = (maxDOM + nDOW - 1)/nDOW;
+        if (maxDOWIM != expected) {
+            errln("FAIL: Maximum value of DAY_OF_WEEK_IN_MONTH is incorrect: " + maxDOWIM + "/expected: " + expected);
+        }
+        expected = (lmaxDOM + nDOW - 1)/nDOW;
+        if (lmaxDOWIM != expected) {
+            errln("FAIL: Least maximum value of DAY_OF_WEEK_IN_MONTH is incorrect: " + lmaxDOWIM + "/expected: " + expected);
+        }
+
+        // Week of month
+        expected = (maxDOM + nDOW - 2)/nDOW + 1;
+        if (maxWOM != expected) {
+            errln("FAIL: Maximum value of WEEK_OF_MONTH is incorrect: " + maxWOM + "/expected: " + expected);
+        }
+        expected = lmaxDOM/nDOW;
+        if (lmaxWOM != expected) {
+            errln("FAIL: Least maximum value of WEEK_OF_MONTH is incorrect: " + lmaxWOM + "/expected: " + expected);
+        }
+    }
+    
     /**
      * Convert year,month,day values to the form "year/month/day".
      * On input the month value is zero-based, but in the result string it is one-based.

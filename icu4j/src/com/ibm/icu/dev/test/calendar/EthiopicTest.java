@@ -13,8 +13,8 @@ import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.EthiopicCalendar;
+import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 
@@ -218,6 +218,20 @@ public class EthiopicTest extends CalendarTest
         }
     }
 
+    /**
+     * Test limits of the Coptic calendar
+     */
+    public void TestLimits() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(2007, Calendar.JANUARY, 1);
+        EthiopicCalendar ethiopic = new EthiopicCalendar();
+        if (!skipIfBeforeICU(3,8,0)) {
+            doLimitsTest(ethiopic, null, cal.getTime());
+        }
+        doTheoreticalLimitsTest(ethiopic, true);
+    }
+
+    
     public void TestCoverage() {
 
         {

@@ -288,6 +288,19 @@ public class IBMCalendarTest extends CalendarTest {
     }
 
     /**
+     * Test limits of the Buddhist calendar.
+     */
+    public void TestBuddhistLimits() {
+        // Final parameter is either number of days, if > 0, or test
+        // duration in seconds, if < 0.
+        Calendar cal = Calendar.getInstance();
+        cal.set(2007, Calendar.JANUARY, 1);
+        BuddhistCalendar buddhist = new BuddhistCalendar();
+        doLimitsTest(buddhist, null, cal.getTime());
+        doTheoreticalLimitsTest(buddhist, false);
+    }
+
+    /**
      * Verify that TaiwanCalendar shifts years to Minguo Era but otherwise
      * behaves like GregorianCalendar.
      */
@@ -298,6 +311,19 @@ public class IBMCalendarTest extends CalendarTest {
                                0, 3, 1914, Calendar.FEBRUARY, 12,
                                0, 96,2007, Calendar.FEBRUARY, 12,
                            });
+    }
+
+    /**
+     * Test limits of the Taiwan calendar.
+     */
+    public void TestTaiwanLimits() {
+        // Final parameter is either number of days, if > 0, or test
+        // duration in seconds, if < 0.
+        Calendar cal = Calendar.getInstance();
+        cal.set(2007, Calendar.JANUARY, 1);
+        TaiwanCalendar taiwan = new TaiwanCalendar();
+        doLimitsTest(taiwan, null, cal.getTime());
+        doTheoreticalLimitsTest(taiwan, false);
     }
 
     public void TestTaiwanCoverage() {
@@ -428,7 +454,9 @@ public class IBMCalendarTest extends CalendarTest {
         // duration in seconds, if < 0.
         Calendar cal = Calendar.getInstance();
         cal.set(2004, Calendar.JANUARY, 1);
-        doLimitsTest(new GregorianCalendar(), null, cal.getTime(), -10);
+        GregorianCalendar gregorian = new GregorianCalendar();
+        doLimitsTest(gregorian, null, cal.getTime());
+        doTheoreticalLimitsTest(gregorian, false);
     }
 
     /**
