@@ -2089,7 +2089,7 @@ static void _testMisc(void) {
     UChar src[3], dest[MAXLEN], expected[5];
     int destLen;
     ubidi_setInverse(bidi, TRUE);
-    src[0] = src[1] = src[2] = ' ';
+    src[0] = src[1] = src[2] = 0x0020;
     ubidi_setPara(bidi, src, LENGTHOF(src), UBIDI_RTL, NULL, &errorCode);
     destLen = ubidi_writeReordered(bidi, dest, MAXLEN,
               UBIDI_OUTPUT_REVERSE | UBIDI_INSERT_LRM_FOR_NUMERIC,
