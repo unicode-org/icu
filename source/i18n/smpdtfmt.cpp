@@ -926,6 +926,9 @@ SimpleDateFormat::zoneIDCanonicalize(UnicodeString &zid) const
          ures_close(supplementalDataBundle);
          return;
     }
+    else {
+        status = U_ZERO_ERROR;
+    }
 
     // Didn't find it, so go searching for an alias
 
