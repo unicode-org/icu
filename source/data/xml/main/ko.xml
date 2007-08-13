@@ -22,5 +22,40 @@
 			</icu:scripts>
 		</special>
 	</characters>
+    <dates>
+        <calendars>
+            <calendar type="taiwan">
+                <eras>
+                    <eraAbbr>
+                        <!-- pre-minguo: 중화민국전 -->
+                        <era type="0">중화민국</era>
+                        <!-- = 1912 AD	 gregorian. See: http://en.wikipedia.org/wiki/Minguo_calendar -->
+                    </eraAbbr>
+                </eras>
+                <dateFormats>
+                    <dateFormatLength type="full">
+                        <dateFormat>
+                            <pattern>G y'년' M'월' d'일'</pattern>
+                        </dateFormat>
+                    </dateFormatLength>
+                    <dateFormatLength type="long">
+                        <dateFormat>
+                            <pattern>G y'년' M'월' d'일'</pattern>
+                        </dateFormat>
+                    </dateFormatLength>
+                    <dateFormatLength type="medium">
+                        <dateFormat>
+                            <pattern>G y. M. d</pattern>
+                        </dateFormat>
+                    </dateFormatLength>
+                    <dateFormatLength type="short">
+                        <dateFormat>
+                            <pattern>G y. M. d</pattern>
+                        </dateFormat>
+                    </dateFormatLength>
+                </dateFormats>
+            </calendar>
+        </calendars>
+    </dates>
 </ldml>
 

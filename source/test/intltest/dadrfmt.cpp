@@ -192,6 +192,7 @@ void DataDrivenFormatTest::testConvertDate(TestData *testData,
 //                    +to);
             cal->clear();
             UnicodeString output;
+            output.remove();
             
             if(useDate) {
 //                cal->setTime(fromDate, status);
@@ -220,7 +221,7 @@ void DataDrivenFormatTest::testConvertDate(TestData *testData,
             if(output == expectStr) {
                 logln(caseString+": format: SUCCESS! "+UnicodeString("expect=output=")+output);
             } else {
-                errln(caseString+": format:  output!=expectStr, got " + output + " expected " + expectStr);
+                errln(caseString+": format:  output!=expectStr, got " + udbg_escape(output) + " expected " + udbg_escape(expectStr));
             }
         } else {
             cal->clear();

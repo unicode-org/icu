@@ -31,6 +31,8 @@ T_CTEST_API int32_t  T_CTEST_EXPORT2 udbg_enumByString(UDebugEnumType type, cons
  */
 T_CTEST_API int32_t T_CTEST_EXPORT2 udbg_stoi(const UnicodeString &s);
 
+T_CTEST_API UnicodeString udbg_escape(const UnicodeString &s);
+
 #endif
 
 #endif
