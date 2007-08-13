@@ -194,8 +194,9 @@ public class BuddhistCalendar extends GregorianCalendar {
         if (newerField(EXTENDED_YEAR, YEAR) == EXTENDED_YEAR) {
             year = internalGet(EXTENDED_YEAR, 1);
         } else {
-            // Ignore the era, as there is only one
-            year = internalGet(YEAR, 1);
+            // extended year is a gregorian year, where 1 = 1AD,  0 = 1BC, -1 = 2BC, etc 
+            year = internalGet(YEAR, 1)                       // pin to minimum of year 1 (first year)
+                    + BUDDHIST_ERA_START;                     // add gregorian starting year
         }
         return year;
     }
@@ -205,7 +206,7 @@ public class BuddhistCalendar extends GregorianCalendar {
      * @stable ICU 2.8
      */    
     protected int handleComputeMonthStart(int eyear, int month, boolean useMonth) {
-        return super.handleComputeMonthStart(eyear + BUDDHIST_ERA_START, month, useMonth);
+        return super.handleComputeMonthStart(eyear, month, useMonth);
     }
 
     /**
@@ -214,7 +215,6 @@ public class BuddhistCalendar extends GregorianCalendar {
     protected void handleComputeFields(int julianDay) {
         super.handleComputeFields(julianDay);
         int y = internalGet(EXTENDED_YEAR) - BUDDHIST_ERA_START;
-        internalSet(EXTENDED_YEAR, y);
         internalSet(ERA, 0);
         internalSet(YEAR, y);
     }
