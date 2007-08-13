@@ -28,6 +28,7 @@ public class TestAll extends TestGroup {
                   "TestAll$PluralFormat",
                   "com.ibm.icu.dev.test.format.BigNumberFormatTest",
                   "com.ibm.icu.dev.test.format.GlobalizationPreferencesTest",
+                  "DataDrivenFormatTest"
               },
               "Formatting Tests");
     }

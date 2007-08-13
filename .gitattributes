@@ -392,6 +392,7 @@ icu4j/src/com/ibm/icu/dev/test/duration/testdata/testdata_zh_Hans.txt -text
 icu4j/src/com/ibm/icu/dev/test/duration/testdata/testdata_zh_Hans_SG.txt -text
 icu4j/src/com/ibm/icu/dev/test/duration/testdata/testdata_zh_Hant.txt -text
 icu4j/src/com/ibm/icu/dev/test/duration/testdata/testdata_zh_Hant_HK.txt -text
+icu4j/src/com/ibm/icu/dev/test/format/DataDrivenFormatTest.java -text
 icu4j/src/com/ibm/icu/dev/test/normalizer/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/test/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Asian.txt -text svneol=unset#application/octet-stream
@@ -456,6 +457,7 @@ icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.UResou
 icu4j/src/com/ibm/icu/dev/test/timezone/TimeZoneRuleTest.java -text
 icu4j/src/com/ibm/icu/dev/test/translit/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/test/util/CalendarFieldsSet.java -text
+icu4j/src/com/ibm/icu/dev/test/util/DateTimeStyleSet.java -text
 icu4j/src/com/ibm/icu/dev/test/util/DebugUtilities.java -text
 icu4j/src/com/ibm/icu/dev/test/util/DebugUtilitiesData.java -text
 icu4j/src/com/ibm/icu/dev/test/util/DebugUtilitiesTest.java -text
