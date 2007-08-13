@@ -1751,6 +1751,24 @@ zh_Hant{
                 }
             }
         }
+        taiwan{
+            DateTimePatterns{
+                "ahh時mm分ss秒 v" /**  fallback from 'gregorian'   */,
+                "ahh時mm分ss秒 z" /**  fallback from 'gregorian'   */,
+                "a h:mm:ss" /**  fallback from 'gregorian'   */,
+                "a h:mm" /**  fallback from 'gregorian'   */,
+                "Gy'年'M'月'd'日'EEEE",
+                "Gy'年'M'月'd'日'",
+                "G y/M/d",
+                "G y/M/d",
+                "{1} {0}" /**  fallback from 'gregorian'   */,
+            }
+            eras{
+                abbreviated{
+                    "民國",
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationEnd{"』"}

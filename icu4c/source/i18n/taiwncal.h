@@ -36,7 +36,7 @@ U_NAMESPACE_BEGIN
  * except for the year and era.  Years are numbered since 1912 AD (Gregorian),
  * so that 1912 AD (Gregorian) is equivalent to 1 MINGUO (Minguo Era) and 1998 AD is 87 MINGUO.
  * <p>
- * The Taiwan Calendar has only one allowable era: <code>MINGUO</code>.  If the
+ * The Taiwan Calendar has two era: <code>MINGUO</code>.  If the
  * calendar is not in lenient mode (see <code>setLenient</code>), dates before
  * 1/1/1 MINGUO are rejected as an illegal argument.
  * <p>
@@ -50,7 +50,7 @@ public:
      * @internal
      */
     enum EEras {
-       MINGUO
+       MINGUO  = 0
     };
 
     /**

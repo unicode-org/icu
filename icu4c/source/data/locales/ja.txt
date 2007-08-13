@@ -2408,6 +2408,24 @@ ja{
                 }
             }
         }
+        taiwan{
+            DateTimePatterns{
+                "H時mm分ss秒v" /**  fallback from 'gregorian'   */,
+                "H:mm:ss:z" /**  fallback from 'gregorian'   */,
+                "H:mm:ss" /**  fallback from 'gregorian'   */,
+                "H:mm" /**  fallback from 'gregorian'   */,
+                "Gy'年'M'月'd'日'EEEE",
+                "Gy'年'M'月'd'日'EEEE",
+                "G yy/MM/dd(EE)",
+                "G yy/MM/dd(E)",
+                "{1} {0}" /**  fallback from 'gregorian'   */,
+            }
+            eras{
+                abbreviated{
+                    "民国",
+                }
+            }
+        }
     }
     zoneStrings{
         "Africa:Bamako"{

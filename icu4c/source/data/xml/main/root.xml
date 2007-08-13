@@ -47,13 +47,12 @@
             <quarters>
                 <alias source="locale" path="../../calendar[@type='gregorian']/quarters"/>
             </quarters>
-            <am>AM</am>
-            <pm>PM</pm>
             <eras>
                 <eraNames>
                     <alias source="locale" path="../eraAbbr"/>
                 </eraNames>
                 <eraAbbr>
+                    <!-- type="-1" 'before míngúo' -->
                     <era type="0">míngúo</era>
                     <!-- = 1912 AD     gregorian. See: http://en.wikipedia.org/wiki/Minguo_calendar -->
                 </eraAbbr>
@@ -65,31 +64,31 @@
                 <default choice="medium"/>
                 <dateFormatLength type="full">
                     <dateFormat>
-                        <pattern>EEEE, MMMM d, yyyy G</pattern>
+                        <pattern>EEEE, MMMM d, G y</pattern>
                     </dateFormat>
                 </dateFormatLength>
                 <dateFormatLength type="long">
                     <dateFormat>
-                        <pattern>MMMM d, yyyy G</pattern>
+                        <pattern>MMMM d, G y</pattern>
                     </dateFormat>
                 </dateFormatLength>
                 <dateFormatLength type="medium">
                     <dateFormat>
-                        <pattern>MMM d, yyyy G</pattern>
+                        <pattern>MMM d, G y</pattern>
                     </dateFormat>
                 </dateFormatLength>
                 <dateFormatLength type="short">
                     <dateFormat>
-                        <pattern>M/d/yyyy</pattern>
+                        <pattern>G y/M/d</pattern>
                     </dateFormat>
                 </dateFormatLength>
             </dateFormats>
-            <timeFormats>
+<!--            <timeFormats>
                 <alias source="locale" path="../../calendar[@type='gregorian']/timeFormats"/>
             </timeFormats>
             <dateTimeFormats>
                 <alias source="locale" path="../../calendar[@type='gregorian']/dateTimeFormats"/>
-            </dateTimeFormats>
+            </dateTimeFormats> -->
         </calendar>
         <calendar type="indian">
             <!-- we rely on ICU behavior that falls back to Gregorian rather than putting in explicit

@@ -2103,6 +2103,24 @@ ko{
                 }
             }
         }
+        taiwan{
+            DateTimePatterns{
+                "a hh시 mm분 ss초 v" /**  fallback from 'gregorian'   */,
+                "a hh시 mm분 ss초 z" /**  fallback from 'gregorian'   */,
+                "a h:mm:ss" /**  fallback from 'gregorian'   */,
+                "a h:mm" /**  fallback from 'gregorian'   */,
+                "G y'년' M'월' d'일'",
+                "G y'년' M'월' d'일'",
+                "G y. M. d",
+                "G y. M. d",
+                "{1} {0}" /**  fallback from 'gregorian'   */,
+            }
+            eras{
+                abbreviated{
+                    "중화민국",
+                }
+            }
+        }
     }
     delimiters{
         alternateQuotationEnd{"”"}

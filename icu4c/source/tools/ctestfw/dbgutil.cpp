@@ -117,5 +117,28 @@ udbg_stoi(const UnicodeString &s)
     return atoi(ch);
 }
 
+// from incaltst.cpp
+T_CTEST_API UnicodeString
+udbg_escape(const UnicodeString &src)
+{
+  UnicodeString dst;
+    dst.remove();
+    for (int32_t i = 0; i < src.length(); ++i) {
+        UChar c = src[i];
+        if(c < 0x0080)
+            dst += c;
+        else {
+            dst += UnicodeString("[");
+            char buf [8];
+            sprintf(buf, "%#x", c);
+            dst += UnicodeString(buf);
+            dst += UnicodeString("]");
+        }
+    }
+
+    return dst;
+}
+
+
 
 #endif
