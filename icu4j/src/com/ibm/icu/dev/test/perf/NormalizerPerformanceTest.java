@@ -19,12 +19,6 @@ public class NormalizerPerformanceTest extends PerfTest {
     }
     
     protected void setup(String[] args) {
-        if(bulk_mode == line_mode){
-            printUsage();
-        }
-        if (fileName.equalsIgnoreCase("")){
-            printUsage();
-        }
         fileLines = readLines(fileName, encoding, bulk_mode);
         NFDFileLines = normalizeInput(fileLines, Normalizer.NFD);
         NFCFileLines = normalizeInput(fileLines, Normalizer.NFC);
@@ -139,13 +133,13 @@ public class NormalizerPerformanceTest extends PerfTest {
             }
         };
     }
-/** I really wish there was conditional compilation in Java      
-        // Test NFC Performance
+
+    // Test NFC Performance
     PerfTest.Function TestJDK_NFC_NFD_Text() {
         return new PerfTest.Function() {
             public void call() {
                 for (int i = 0; i < NFDFileLines.length; i++) {
-                    String nfc = sun.text.Normalizer.normalize(NFDFileLines[i], sun.text.Normalizer.COMPOSE,0);
+                    sun.text.Normalizer.normalize(NFDFileLines[i], sun.text.Normalizer.COMPOSE,0);
                 }
             }
             
@@ -163,7 +157,7 @@ public class NormalizerPerformanceTest extends PerfTest {
         return new PerfTest.Function() {
             public void call() {
                 for (int i = 0; i < NFCFileLines.length; i++) {
-                    String nfc = sun.text.Normalizer.normalize(NFCFileLines[i], sun.text.Normalizer.COMPOSE,0);
+                    sun.text.Normalizer.normalize(NFCFileLines[i], sun.text.Normalizer.COMPOSE,0);
                 }
             }
             
@@ -181,7 +175,7 @@ public class NormalizerPerformanceTest extends PerfTest {
         return new PerfTest.Function() {
             public void call() {
                 for (int i = 0; i < fileLines.length; i++) {
-                    String nfc = sun.text.Normalizer.normalize(fileLines[i], sun.text.Normalizer.COMPOSE,0);
+                    sun.text.Normalizer.normalize(fileLines[i], sun.text.Normalizer.COMPOSE,0);
                 }
             }
             
@@ -200,7 +194,7 @@ public class NormalizerPerformanceTest extends PerfTest {
         return new PerfTest.Function() {
             public void call() {
                 for (int i = 0; i < NFDFileLines.length; i++) {
-                    String nfc = sun.text.Normalizer.normalize(NFDFileLines[i], sun.text.Normalizer.DECOMP,0);
+                    sun.text.Normalizer.normalize(NFDFileLines[i], sun.text.Normalizer.DECOMP,0);
                 }
             }
             
@@ -218,7 +212,7 @@ public class NormalizerPerformanceTest extends PerfTest {
         return new PerfTest.Function() {
             public void call() {
                 for (int i = 0; i < NFCFileLines.length; i++) {
-                    String nfc = sun.text.Normalizer.normalize(NFCFileLines[i], sun.text.Normalizer.DECOMP,0);
+                    sun.text.Normalizer.normalize(NFCFileLines[i], sun.text.Normalizer.DECOMP,0);
                 }
             }
             
@@ -236,7 +230,7 @@ public class NormalizerPerformanceTest extends PerfTest {
         return new PerfTest.Function() {
             public void call() {
                 for (int i = 0; i < fileLines.length; i++) {
-                    String nfc = sun.text.Normalizer.normalize(fileLines[i], sun.text.Normalizer.DECOMP,0);
+                    sun.text.Normalizer.normalize(fileLines[i], sun.text.Normalizer.DECOMP,0);
                 }
             }
             
@@ -254,7 +248,7 @@ public class NormalizerPerformanceTest extends PerfTest {
         return new PerfTest.Function() {
             public void call() {
                 for (int i = 0; i < NFDFileLines.length; i++) {
-                    String nfc = Normalizer.normalize(NFDFileLines[i], Normalizer.FCD);
+                    Normalizer.normalize(NFDFileLines[i], Normalizer.FCD);
                 }
             }
             
@@ -267,7 +261,7 @@ public class NormalizerPerformanceTest extends PerfTest {
             }
         };
     }
-**/    
+
     PerfTest.Function TestICU_FCD_NFC_Text() {
         return new PerfTest.Function() {
             public void call() {
@@ -630,7 +624,8 @@ public class NormalizerPerformanceTest extends PerfTest {
         };
     }
       
-    private void printUsage() {
+    /*
+      private void printUsage() {
         System.out.println("Usage: " + this.getClass().getName() + " [OPTIONS] fileName\n"
                             + "\t-f or --fileName  \tfile to be used as test data\n"
                             + "\t-s or --sourceDir \tsource directory for files followed by path\n"
@@ -640,6 +635,8 @@ public class NormalizerPerformanceTest extends PerfTest {
             );
         System.exit(1);
     }
+    */
+    
     String[] normalizeInput(String[] src, Normalizer.Mode mode) {
         String[] dest = new String[src.length];
         for (int i = 0; i < src.length; i++) {

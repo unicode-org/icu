@@ -6,13 +6,20 @@
  */
 package com.ibm.icu.dev.test.perf;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CharsetEncoder;
 
-import sun.io.*;
-//import com.ibm.icu.converters.*;
-import com.ibm.icu.charset.*;
-import java.nio.charset.*;
-import java.nio.*;
+import sun.io.CharToByteConverter;
+
+import com.ibm.icu.charset.CharsetProviderICU;
 
 /**
  * @author ram
@@ -21,40 +28,18 @@ public class ConverterPerformanceTest extends PerfTest {
    public static void main(String[] args) throws Exception {
        new ConverterPerformanceTest().run(args);
    }
-   String fileName=null;
-   String srcEncoding=null;
-   String testEncoderName=null;
    char unicodeBuffer[] = null;
    byte encBuffer[] = null;
 
    protected void setup(String[] args) {
         try{
-            // We only take 3 arguments file name and encoding,
-            if (args.length < 6 ) {
-                System.err.println("args.length = " + args.length);
-                for (int i=0; i<args.length; i++)
-                    System.err.println(" : " + args[i]);
-                throw new RuntimeException("Please supply file_name <name> src_encoding <enc> test <converter name>");
-            }
-            for(int i=0; i<args.length; i++){
-                if(args[i].equals("file_name")){
-                    fileName = args[++i];
-                }
-                if(args[i].equals("src_encoding")){
-                    srcEncoding = args[++i];
-                }
-                if(args[i].equals("test")){
-                    testEncoderName = args[++i];
-                }
-            }
-
             FileInputStream in = new FileInputStream(fileName);
-            InputStreamReader reader = new InputStreamReader(in,srcEncoding);
+            BOMFreeReader reader = new BOMFreeReader(in, encoding);
             unicodeBuffer = readToEOS(reader);
             //encBuffer = new String(unicodeBuffer).getBytes(testEncoderName);
 
             // TODO: should use built in nio converters (this is just for setup, not for the actual performance test)
-            CharToByteConverter cbConv = CharToByteConverter.getConverter(testEncoderName);
+            CharToByteConverter cbConv = CharToByteConverter.getConverter(testName);
             cbConv.setSubstitutionMode(false);
             encBuffer = cbConv.convertAll(unicodeBuffer);
         }catch(Exception e){
@@ -69,7 +54,7 @@ public class ConverterPerformanceTest extends PerfTest {
             public void call() {
                 try{
                     ByteArrayOutputStream out = new ByteArrayOutputStream(unicodeBuffer.length * 10);
-                    OutputStreamWriter writer = new OutputStreamWriter(out, testEncoderName);
+                    OutputStreamWriter writer = new OutputStreamWriter(out, testName);
                     writer.write(unicodeBuffer, 0, unicodeBuffer.length);
                     writer.flush();
                 }catch(Exception e){
@@ -88,7 +73,7 @@ public class ConverterPerformanceTest extends PerfTest {
             public void call() {
                 try{
                     ByteArrayInputStream is = new ByteArrayInputStream(encBuffer, 0, encBuffer.length);
-                    InputStreamReader reader = new InputStreamReader(is, testEncoderName);
+                    InputStreamReader reader = new InputStreamReader(is, testName);
                     reader.read(dst, 0, dst.length);
                     reader.close();
                 }catch(Exception e){
@@ -210,7 +195,7 @@ public class ConverterPerformanceTest extends PerfTest {
         try{
             return new PerfTest.Function() {
                 CharBuffer outBuf = CharBuffer.allocate(unicodeBuffer.length);
-                Charset myCharset = Charset.forName(testEncoderName);
+                Charset myCharset = Charset.forName(testName);
                 ByteBuffer srcBuf = ByteBuffer.wrap(encBuffer,0,encBuffer.length);
                 CharsetDecoder decoder = myCharset.newDecoder();
 
@@ -239,7 +224,7 @@ public class ConverterPerformanceTest extends PerfTest {
         try{
             return new PerfTest.Function() {
                 ByteBuffer outBuf = ByteBuffer.allocate(encBuffer.length);
-                Charset myCharset = Charset.forName(testEncoderName);
+                Charset myCharset = Charset.forName(testName);
                 CharBuffer srcBuf = CharBuffer.wrap(unicodeBuffer,0,unicodeBuffer.length);
                 CharsetEncoder encoder = myCharset.newEncoder();
 
@@ -268,7 +253,7 @@ public class ConverterPerformanceTest extends PerfTest {
         try{
             return new PerfTest.Function() {
                 CharBuffer outBuf = CharBuffer.allocate(unicodeBuffer.length);
-                Charset myCharset = new CharsetProviderICU().charsetForName(testEncoderName);
+                Charset myCharset = new CharsetProviderICU().charsetForName(testName);
                 ByteBuffer srcBuf = ByteBuffer.wrap(encBuffer,0,encBuffer.length);
                 CharsetDecoder decoder = myCharset.newDecoder();
 
@@ -297,7 +282,7 @@ public class ConverterPerformanceTest extends PerfTest {
         try{
             return new PerfTest.Function() {
                 ByteBuffer outBuf = ByteBuffer.allocate(encBuffer.length);
-                Charset myCharset = new CharsetProviderICU().charsetForName(testEncoderName);
+                Charset myCharset = new CharsetProviderICU().charsetForName(testName);
                 CharBuffer srcBuf = CharBuffer.wrap(unicodeBuffer,0,unicodeBuffer.length);
                 CharsetEncoder encoder = myCharset.newEncoder();
 

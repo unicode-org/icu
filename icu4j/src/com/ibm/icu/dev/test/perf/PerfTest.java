@@ -11,8 +11,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PushbackInputStream;
+import java.io.Reader;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -27,26 +30,26 @@ import com.ibm.icu.impl.LocaleUtility;
  * Base class for performance testing framework. To use, the subclass can simply
  * define one or more instance methods with names beginning with "test" (case
  * ignored). The prototype of the method is
- * 
+ *
  * PerfTest.Function testTheName()
- * 
+ *
  * The actual performance test will execute on the returned Commond object
  * (refer to Command Pattern). To call a test from command line, the 'test'
  * prefix of the test method name can be ignored/removed.
- * 
+ *
  * In addition, the subclass should define a main() method that calls
  * PerfTest.run() as defined here.
- * 
+ *
  * If the subclasses uses any command line arguments (beyond those handled
  * automatically by this calss) then it should override PerfTest.setup() to
  * handle its arguments. If the subclasse needs more sophisticated management
  * for controlling finding/calling test method, it can replace the default
  * implementation for PerfTest.testProvider before calling PerfTest.run().
- * 
+ *
  * Example invocation: java -cp classes -verbose:gc
  * com.ibm.icu.dev.test.perf.UnicodeSetPerf --gc --passes 4 --iterations 100
  * UnicodeSetAdd [[:l:][:c:]]
- * 
+ *
  * Example output: [GC 511K->192K(1984K), 0.0086170 secs] [GC 704K->353K(1984K),
  * 0.0059619 secs] [Full GC 618K->371K(1984K), 0.0242779 secs] [Full GC
  * 371K->371K(1984K), 0.0228649 secs] = testUnicodeSetAdd begin 100 =
@@ -54,9 +57,9 @@ import com.ibm.icu.impl.LocaleUtility;
  * testUnicodeSetAdd end 12047 1109044 = testUnicodeSetAdd begin 100 =
  * testUnicodeSetAdd end 11987 1109044 = testUnicodeSetAdd begin 100 =
  * testUnicodeSetAdd end 11978 1109044
- * 
+ *
  * The [] lines are emitted by the JVM as a result of the -verbose:gc switch.
- * 
+ *
  * Lines beginning with '=' are emitted by PerfTest: = testUnicodeSetAdd begin
  * 100 A 'begin' statement contains the name of the setup method, which
  * determines what test function is measures, and the number of iterations that
@@ -65,38 +68,30 @@ import com.ibm.icu.impl.LocaleUtility;
  * total elapsed time in milliseconds, and the second is the number of events
  * per iteration. In this example, the time per event is 12047 / (100 * 1109044)
  * or 108.6 ns/event.
- * 
+ *
  * Raw times are given as integer ms, because this is what the system measures.
- * 
+ *
  * @author Alan Liu
  * @since ICU 2.4
  */
 public abstract class PerfTest {
     // Command-line options set these:
     protected boolean verbose;
-
     protected String sourceDir;
-
     protected String fileName;
 
     // protected String resolvedFileName;
     protected String encoding;
-
+    protected String testName;
     protected boolean uselen;
-
     protected int iterations;
-
     protected int passes;
-
     protected int time;
-
     protected boolean line_mode;
-
     protected boolean bulk_mode;
-
     protected Locale locale;
-
     protected boolean doPriorGC;
+    protected int threads;
 
     protected TestCmdProvider testProvider = new TestPrefixProvider(this);
 
@@ -126,14 +121,8 @@ public abstract class PerfTest {
      * object as the test methods.
      */
     static class TestPrefixProvider implements TestCmdProvider {
-        private Map theTests = null; // Map<string(no case), string(with
-
-        // case)>
-
-        private Set orgNames = null; // shadow reference, ==theTests, for
-
-        // better output
-
+        private Map theTests = null; // Map<string(no case), string(with case)>
+        private Set orgNames = null; // shadow reference, ==theTests, for better output
         private Object refer;
 
         TestPrefixProvider(Object theProvider) {
@@ -254,6 +243,24 @@ public abstract class PerfTest {
             return stop - start; // ms
         }
     }
+    
+    private class FunctionRunner implements Runnable {
+        public FunctionRunner(Function f, long loops) {
+            this.f = f;
+            this.loops = loops;
+        }
+
+        public void run() {
+            long n = loops;
+            while (n-- > 0)
+                f.call();
+        }
+        
+        private Function f;
+
+        private long loops;
+    }
+    
 
     /**
      * Exception indicating a usage error.
@@ -294,49 +301,43 @@ public abstract class PerfTest {
      * These must be kept in sync with getOptions().
      */
     static final int HELP1 = 0;
-
     static final int HELP2 = 1;
-
     static final int VERBOSE = 2;
-
     static final int SOURCEDIR = 3;
-
     static final int ENCODING = 4;
-
     static final int USELEN = 5;
-
     static final int FILE_NAME = 6;
-
     static final int PASSES = 7;
-
     static final int ITERATIONS = 8;
-
     static final int TIME = 9;
-
     static final int LINE_MODE = 10;
-
     static final int BULK_MODE = 11;
-
     static final int LOCALE = 12;
+    static final int TEST_NAME = 13;
+    static final int THREADS = 14;
 
     // Options above here are identical to those in C; keep in sync with C
     // Options below here are unique to Java; shift down as necessary
-    static final int GARBAGE_COLLECT = 13;
-
-    static final int LIST = 14;
+    static final int GARBAGE_COLLECT = 14;
+    static final int LIST = 15;
 
     UOption[] getOptions() {
-        return new UOption[] { UOption.HELP_H(), UOption.HELP_QUESTION_MARK(),
-                UOption.VERBOSE(), UOption.SOURCEDIR(),
+        return new UOption[] {
+                UOption.HELP_H(),
+                UOption.HELP_QUESTION_MARK(),
+                UOption.VERBOSE(),
+                UOption.SOURCEDIR(),
                 UOption.ENCODING(),
-                UOption.DEF("uselen", 'u', UOption.NO_ARG),
-                UOption.DEF("file-name", 'f', UOption.REQUIRES_ARG),
-                UOption.DEF("passes", 'p', UOption.REQUIRES_ARG),
+                UOption.DEF("uselen",     'u', UOption.NO_ARG),
+                UOption.DEF("filename",   'f', UOption.REQUIRES_ARG),
+                UOption.DEF("passes",     'p', UOption.REQUIRES_ARG),
                 UOption.DEF("iterations", 'i', UOption.REQUIRES_ARG),
-                UOption.DEF("time", 't', UOption.REQUIRES_ARG),
-                UOption.DEF("line-mode", 'l', UOption.NO_ARG),
-                UOption.DEF("bulk-mode", 'b', UOption.NO_ARG),
-                UOption.DEF("locale", 'L', UOption.REQUIRES_ARG),
+                UOption.DEF("time",       't', UOption.REQUIRES_ARG),
+                UOption.DEF("line-mode",  'l', UOption.NO_ARG),
+                UOption.DEF("bulk-mode",  'b', UOption.NO_ARG),
+                UOption.DEF("locale",     'L', UOption.REQUIRES_ARG),
+                UOption.DEF("testname",   'T', UOption.REQUIRES_ARG),
+                UOption.DEF("threads",    'r', UOption.REQUIRES_ARG),
 
                 // Options above here are identical to those in C; keep in sync
                 // Options below here are unique to Java
@@ -373,47 +374,53 @@ public abstract class PerfTest {
             long t;
             // long b = System.currentTimeMillis();
             long loops = getIteration(meth, testFunction);
-            // System.out.println("The guess cost: " +
-            // (System.currentTimeMillis() - b)/1000. + " s.");
+            // System.out.println("The guess cost: " + (System.currentTimeMillis() - b)/1000. + " s.");
 
             for (int j = 0; j < passes; ++j) {
                 long events = -1;
                 if (verbose) {
                     if (iterations > 0) {
-                        System.out
-                                .println("= " + meth + " begin " + iterations);
+                        System.out.println("= " + meth + " begin " + iterations);
                     } else {
-                        System.out.println("= " + meth + " begin " + time
-                                + " seconds");
+                        System.out.println("= " + meth + " begin " + time + " seconds");
                     }
                 } else {
                     System.out.println("= " + meth + " begin ");
                 }
 
-                t = testFunction.time(loops); // ms
+                if (threads > 1) {
+                    FunctionRunner runner = new FunctionRunner(testFunction, loops);
+                    Thread[] threadList = new Thread[threads];
+                    for (int i=0; i<threads; i++)
+                        threadList[i] = new Thread(runner);
+                    
+                    t = System.currentTimeMillis();
+                    for (int i=0; i<threads; i++)
+                        threadList[i].start();
+                    for (int i=0; i<threads; i++)
+                        threadList[i].join();
+                    t = System.currentTimeMillis() - t;
+                } else {
+                    t = testFunction.time(loops); // ms
+                }
+                
                 events = testFunction.getEventsPerIteration();
 
                 if (verbose) {
                     if (events == -1) {
-                        System.out.println("= " + meth + " end " + (t / 1000.0)
-                                + " loops: " + loops + " operations: "
+                        System.out.println("= " + meth + " end " + (t / 1000.0) + " loops: " + loops + " operations: "
                                 + testFunction.getOperationsPerIteration());
                     } else {
-                        System.out.println("= " + meth + " end " + (t / 1000.0)
-                                + " loops: " + loops + " operations: "
-                                + testFunction.getOperationsPerIteration()
-                                + " events: " + events);
+                        System.out.println("= " + meth + " end " + (t / 1000.0) + " loops: " + loops + " operations: "
+                                + testFunction.getOperationsPerIteration() + " events: " + events);
                     }
                 } else {
                     if (events == -1) {
-                        System.out.println("= " + meth + " end " + (t / 1000.0)
-                                + " " + loops + " "
+                        System.out.println("= " + meth + " end " + (t / 1000.0) + " " + loops + " "
                                 + testFunction.getOperationsPerIteration());
                     } else {
-                        System.out.println("= " + meth + " end " + (t / 1000.0)
-                                + " " + loops + " "
-                                + testFunction.getOperationsPerIteration()
-                                + " " + events);
+                        System.out.println("= " + meth + " end " + (t / 1000.0) + " " + loops + " "
+                                + testFunction.getOperationsPerIteration() + " " + events);
                     }
                 }
 
@@ -433,89 +440,19 @@ public abstract class PerfTest {
         uselen = false;
         fileName = null;
         sourceDir = null;
-        // lines = null;
         line_mode = false;
-        // buffer = null;
-        // bufferLen = 0;
         verbose = false;
         bulk_mode = false;
         passes = iterations = time = -1;
         locale = null;
+        testName = null;
+        threads = 1;
 
         UOption[] options = getOptions();
         int remainingArgc = UOption.parseArgs(args, options);
 
-        if (args.length == 0 || options[HELP1].doesOccur
-                || options[HELP2].doesOccur) {
+        if (args.length == 0 || options[HELP1].doesOccur || options[HELP2].doesOccur)
             throw new UsageException();
-        }
-
-        if (options[VERBOSE].doesOccur) {
-            verbose = true;
-        }
-
-        if (options[SOURCEDIR].doesOccur) {
-            sourceDir = options[SOURCEDIR].value;
-        }
-
-        if (options[ENCODING].doesOccur) {
-            encoding = options[ENCODING].value;
-        }
-
-        if (options[USELEN].doesOccur) {
-            uselen = true;
-        }
-
-        if (options[FILE_NAME].doesOccur) {
-            fileName = options[FILE_NAME].value;
-        }
-
-        if (options[TIME].doesOccur && options[ITERATIONS].doesOccur) {
-            throw new UsageException(
-                    "Cannot specify both '-t time' and '-i iterations'");
-        }
-
-        if (!options[TIME].doesOccur && !options[ITERATIONS].doesOccur) {
-            throw new UsageException(
-                    "Either '-t time' or '-i iteration' must be specified");
-        }
-
-        if (options[PASSES].doesOccur) {
-            passes = Integer.parseInt(options[PASSES].value);
-        } else {
-            throw new UsageException("'-p pass' must be specified");
-        }
-
-        if (options[ITERATIONS].doesOccur) {
-            iterations = Integer.parseInt(options[ITERATIONS].value);
-        }
-
-        if (options[TIME].doesOccur) {
-            time = Integer.parseInt(options[TIME].value);
-        }
-
-        if (options[LINE_MODE].doesOccur && options[BULK_MODE].doesOccur) {
-            throw new UsageException(
-                    "Cannot specify both line mode and bulk mode");
-        }
-
-        if (options[LINE_MODE].doesOccur) {
-            line_mode = true;
-            bulk_mode = false;
-        }
-
-        if (options[BULK_MODE].doesOccur) {
-            bulk_mode = true;
-            line_mode = false;
-        }
-
-        if (options[LOCALE].doesOccur) {
-            locale = LocaleUtility.getLocaleFromName(options[LOCALE].value);
-        }
-
-        if (options[GARBAGE_COLLECT].doesOccur) {
-            doPriorGC = true;
-        }
 
         if (options[LIST].doesOccur) {
             System.err.println("Available tests:");
@@ -527,10 +464,59 @@ public abstract class PerfTest {
             System.exit(0);
         }
 
+        if (options[TIME].doesOccur && options[ITERATIONS].doesOccur)
+            throw new UsageException("Cannot specify both '-t <seconds>' and '-i <iterations>'");
+        else if (!options[TIME].doesOccur && !options[ITERATIONS].doesOccur)
+            throw new UsageException("Either '-t <seconds>' or '-i <iterations>' must be specified");
+        else if (options[ITERATIONS].doesOccur) {
+            try {
+                iterations = Integer.parseInt(options[ITERATIONS].value);
+            } catch (NumberFormatException ex) {
+                throw new UsageException("'-i <iterations>' requires an integer number of iterations");
+            }
+        } else { //if (options[TIME].doesOccur)
+            try {
+                time = Integer.parseInt(options[TIME].value);
+            } catch (NumberFormatException ex) {
+                throw new UsageException("'-r <seconds>' requires an integer number of seconds");
+            }
+        }
+
+        if (!options[PASSES].doesOccur)
+            throw new UsageException("'-p <passes>' must be specified");
+        else
+            passes = Integer.parseInt(options[PASSES].value);
+
+        if (options[LINE_MODE].doesOccur && options[BULK_MODE].doesOccur)
+            throw new UsageException("Cannot specify both '-l' (line mode) and '-b' (bulk mode)");
+
+        if (options[THREADS].doesOccur) {
+            try {
+                threads = Integer.parseInt(options[THREADS].value);
+            } catch (NumberFormatException ex) {
+                throw new UsageException("'-r <threads>' requires an integer number of threads");
+            }
+            if (threads <= 0)
+                throw new UsageException("'-r <threads>' requires an number of threads greater than 0");
+        }
+        
+        line_mode = options[LINE_MODE].doesOccur;
+        bulk_mode = options[BULK_MODE].doesOccur;
+        verbose   = options[VERBOSE].doesOccur;
+        uselen    = options[USELEN].doesOccur;
+        doPriorGC = options[GARBAGE_COLLECT].doesOccur;
+
+        if (options[SOURCEDIR].doesOccur) sourceDir = options[SOURCEDIR].value;
+        if (options[ENCODING].doesOccur)  encoding  = options[ENCODING].value;
+        if (options[FILE_NAME].doesOccur) fileName  = options[FILE_NAME].value;
+        if (options[TEST_NAME].doesOccur) testName  = options[TEST_NAME].value;
+        if (options[LOCALE].doesOccur)    locale    = LocaleUtility.getLocaleFromName(options[LOCALE].value);
+
+
+        // build the test list
         Set testList = new HashSet();
         int i, j;
         for (i = 0; i < remainingArgc; ++i) {
-
             // is args[i] a method name?
             if (testProvider.isTestCmd(args[i])) {
                 testList.add(args[i]);
@@ -542,37 +528,35 @@ public abstract class PerfTest {
             }
         }
 
-        if (testList.size() < 1) { // run all tests
+        // if no tests were specified, put all the tests in the test list
+        if (testList.size() == 0) {
             Set testNames = testProvider.getAllTestCmdNames();
-            for (Iterator iter = testNames.iterator(); iter.hasNext();) {
-                String name = (String) iter.next();
-                testList.add(name);
-            }
+            Iterator iter = testNames.iterator();
+            while (iter.hasNext())
+                testList.add((String)iter.next());
         }
 
-        // Pass remaining arguments, if any, through to the subclass
-        // via setup() method.
+        // pass remaining arguments, if any, through to the subclass via setup() method.
         String[] subclassArgs = new String[remainingArgc - i];
-        for (j = 0; i < remainingArgc; ++j) {
+        for (j = 0; i < remainingArgc; j++)
             subclassArgs[j] = args[i++];
-        }
         setup(subclassArgs);
 
-        if (doPriorGC) {
-            // Put the heap in a consistent state
+        // Put the heap in a consistent state
+        if (doPriorGC)
             gc();
-        }
+
         return testList;
     }
 
     /**
      * Translate '-t time' to iterations (or just return '-i iteration')
-     * 
+     *
      * @param meth
      * @param fn
-     * @return
+     * @return rt
      */
-    private long getIteration(String methName, Function fn) {
+    private long getIteration(String methName, Function fn) throws InterruptedException {
         long iter = 0;
         if (time < 0) { // && iterations > 0
             iter = iterations;
@@ -613,7 +597,23 @@ public abstract class PerfTest {
                                 "Unable to converge on desired duration");
                     }
                 }
-                t = fn.time(iter);
+                
+                if (threads > 1) {
+                    FunctionRunner runner = new FunctionRunner(fn, iter);
+                    Thread[] threadList = new Thread[threads];
+                    for (int i=0; i<threads; i++)
+                        threadList[i] = new Thread(runner);
+                    
+                    t = System.currentTimeMillis();
+                    for (int i=0; i<threads; i++)
+                        threadList[i].start();
+                    for (int i=0; i<threads; i++)
+                        threadList[i].join();
+                    t = System.currentTimeMillis() - t;
+                    
+                } else {
+                    t = fn.time(iter); // ms
+                }
             }
             // System.out.println("final t : " + t);
             // System.out.println("final i : " + iter);
@@ -655,46 +655,27 @@ public abstract class PerfTest {
         }
     }
 
-    /*
-     * Private utility to convert a List of Integer objects to int[].
-     */
-    /*
-     * private static int[] toIntArray(List list) { int[] result = new
-     * int[list.size()]; for (int i=0; i<list.size(); ++i) { result[i] =
-     * ((Integer) list.get(i)).intValue(); } return result; }
-     */
 
-    public static char[] readToEOS(InputStreamReader stream) {
+    public static char[] readToEOS(Reader reader) {
         ArrayList vec = new ArrayList();
         int count = 0;
-        int pos;
+        int pos = 0;
         final int MAXLENGTH = 0x8000; // max buffer size - 32K
         int length = 0x80; // start with small buffers and work up
-
-        try {
-            char[] firstChars = new char[1];
-            stream.read(firstChars, 0, 1);
-            if (!(firstChars[0] == BOM1 || firstChars[0] == BOM2)) {
-                // if it's not the UTF-8 BOM, add the three char to vec
-                vec.add(firstChars);
-                count = 1;
-            }
-        } catch (IOException ex) {
-        }
-
         do {
             pos = 0;
             length = length >= MAXLENGTH ? MAXLENGTH : length * 2;
             char[] buffer = new char[length];
             try {
                 do {
-                    int n = stream.read(buffer, pos, length - pos);
+                    int n = reader.read(buffer, pos, length - pos);
                     if (n == -1) {
                         break;
                     }
                     pos += n;
                 } while (pos < length);
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
             }
             vec.add(buffer);
             count += pos;
@@ -710,26 +691,13 @@ public abstract class PerfTest {
         }
         return data;
     }
-
     public static byte[] readToEOS(InputStream stream) {
 
         ArrayList vec = new ArrayList();
         int count = 0;
-        int pos;
+        int pos = 0;
         final int MAXLENGTH = 0x8000; // max buffer size - 32K
         int length = 0x80; // start with small buffers and work up
-
-        try {
-            byte[] firstChars = new byte[1];
-            stream.read(firstChars, 0, 1);
-            if (!(firstChars[0] == BOM1 || firstChars[0] == BOM2)) {
-                // if it's not the UTF-8 BOM, add the first char to vec
-                vec.add(firstChars);
-                count = 1;
-            }
-        } catch (IOException ex) {
-        }
-
         do {
             pos = 0;
             length = length >= MAXLENGTH ? MAXLENGTH : length * 2;
@@ -742,11 +710,13 @@ public abstract class PerfTest {
                     }
                     pos += n;
                 } while (pos < length);
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
             }
             vec.add(buffer);
             count += pos;
         } while (pos == length);
+
 
         byte[] data = new byte[count];
         pos = 0;
@@ -759,17 +729,16 @@ public abstract class PerfTest {
         return data;
     }
 
-    public String[] readLines(String filename, String encoding, boolean bulkMode) {
+    protected String[] readLines(String filename, String srcEncoding, boolean bulkMode) {
         FileInputStream fis = null;
         InputStreamReader isr = null;
         BufferedReader br = null;
         try {
             fis = new FileInputStream(filename);
-            isr = new InputStreamReader(fis, encoding);
+            isr = new InputStreamReader(fis, srcEncoding);
             br = new BufferedReader(isr);
         } catch (Exception e) {
-            System.err.println("Error: File access exception: "
-                    + e.getMessage() + "!");
+            System.err.println("Error: File access exception: " + e.getMessage() + "!");
             System.exit(1);
         }
         ArrayList list = new ArrayList();
@@ -781,10 +750,8 @@ public abstract class PerfTest {
                 System.err.println("Read File Error" + e.getMessage() + "!");
                 System.exit(1);
             }
-            if (line == null)
-                break;
-            if (line.length() == 0)
-                continue;
+            if (line == null) break;
+            if (line.length() == 0) continue;
             list.add(line);
         }
 
@@ -796,9 +763,9 @@ public abstract class PerfTest {
             StringBuffer buffer = new StringBuffer("");
             for (int i = 0; i < size; ++i) {
                 buffer.append((String) list.get(i));
-                /*
-                 * if (i < (size - 1)) { buffer.append("\r\n"); }
-                 */
+                /*if (i < (size - 1)) {
+                    buffer.append("\r\n");
+                }*/
             }
             lines[0] = buffer.toString();
         } else {
@@ -816,13 +783,10 @@ public abstract class PerfTest {
         String line = "";
         try {
             line = originalLine = br.readLine();
-            if (line == null)
-                return null;
-            if (line.length() > 0 && line.charAt(0) == 0xFEFF)
-                line = line.substring(1);
+            if (line == null) return null;
+            if (line.length() > 0 && line.charAt(0) == 0xFEFF) line = line.substring(1);
             int commentPos = line.indexOf('#');
-            if (commentPos >= 0)
-                line = line.substring(0, commentPos);
+            if (commentPos >= 0) line = line.substring(0, commentPos);
             line = line.trim();
         } catch (Exception e) {
             throw new Exception("Line \"{0}\",  \"{1}\"" + originalLine + " "
@@ -831,9 +795,123 @@ public abstract class PerfTest {
         return line;
     }
 
-    final public static int BOM1 = 0xfeff; // big endian byte order mark
+    
+    public class BOMFreeReader extends Reader {
+        InputStreamReader reader;
+        String encoding;
+        int MAX_BOM_LENGTH = 5;
 
-    final public static int BOM2 = 0xfffe; // little endian byte order mark
+        /**
+         * Creates a new reader, skipping a BOM associated with the given
+         * encoding. Equivalent to BOMFreeReader(in, null).
+         * 
+         * @param in
+         *            The input stream.
+         * @throws IOException
+         *             Thrown if reading for a BOM causes an IOException.
+         */
+        public BOMFreeReader(InputStream in) throws IOException {
+            this(in, null);
+        }
+        
+        /**
+         * Creates a new reader, skipping a BOM associated with the given
+         * encoding. If encoding is null, attempts to detect the encoding by the
+         * BOM.
+         * 
+         * @param in
+         *            The input stream.
+         * @param encoding
+         *            The encoding to use. Can be null.
+         * @throws IOException
+         *             Thrown if reading for a BOM causes an IOException.
+         */
+        public BOMFreeReader(InputStream in, String encoding) throws IOException {
+            PushbackInputStream pushback = new PushbackInputStream(in, MAX_BOM_LENGTH);
+            this.encoding = encoding;
+            
+            byte[] start = new byte[MAX_BOM_LENGTH];
+            Arrays.fill(start, (byte)0xa5);
+            
+            int amountRead = pushback.read(start, 0, MAX_BOM_LENGTH);
+            int bomLength = detectBOMLength(start);
+            if (amountRead > bomLength)
+                pushback.unread(start, bomLength, amountRead - bomLength);
+            
+            reader = (encoding == null) ? new InputStreamReader(pushback) : new InputStreamReader(pushback, encoding);
+        }
+
+        /**
+         * Determines the length of a BOM in the beginning of start. Assumes
+         * start is at least a length 5 array. If encoding is null, the check
+         * will not be encoding specific and it will set the encoding of this
+         * BOMFreeReader.
+         * 
+         * @param start
+         *            The starting bytes.
+         * @param encoding
+         *            The encoding. Can be null.
+         * @return The length of a detected BOM.
+         */
+        private int detectBOMLength(byte[] start) {
+            if ((encoding == null || "UTF-16BE".equals(encoding)) && start[0] == (byte) 0xFE && start[1] == (byte) 0xFF) {
+                if (encoding == null) this.encoding = "UTF-16BE";
+                return 2; // "UTF-16BE";
+            } else if (start[0] == (byte) 0xFF && start[1] == (byte) 0xFE) {
+                if ((encoding == null || "UTF-32LE".equals(encoding)) && start[2] == (byte) 0x00
+                        && start[3] == (byte) 0x00) {
+                    if (encoding == null) this.encoding = "UTF-32LE";
+                    return 4; // "UTF-32LE";
+                } else if ((encoding == null || "UTF-16LE".equals(encoding))) {
+                    if (encoding == null) this.encoding = "UTF-16LE";
+                    return 2; // "UTF-16LE";
+                }
+            } else if ((encoding == null || "UTF-8".equals(encoding)) && start[0] == (byte) 0xEF
+                    && start[1] == (byte) 0xBB && start[2] == (byte) 0xBF) {
+                if (encoding == null) this.encoding = "UTF-8";
+                return 3; // "UTF-8";
+            } else if ((encoding == null || "UTF-32BE".equals(encoding)) && start[0] == (byte) 0x00
+                    && start[1] == (byte) 0x00 && start[2] == (byte) 0xFE && start[3] == (byte) 0xFF) {
+                if (encoding == null) this.encoding = "UTF-32BE";
+                return 4; // "UTF-32BE";
+            } else if ((encoding == null || "SCSU".equals(encoding)) && start[0] == (byte) 0x0E
+                    && start[1] == (byte) 0xFE && start[2] == (byte) 0xFF) {
+                if (encoding == null) this.encoding = "SCSU";
+                return 3; // "SCSU";
+            } else if ((encoding == null || "BOCU-1".equals(encoding)) && start[0] == (byte) 0xFB
+                    && start[1] == (byte) 0xEE && start[2] == (byte) 0x28) {
+                if (encoding == null) this.encoding = "BOCU-1";
+                return 3; // "BOCU-1";
+            } else if ((encoding == null || "UTF-7".equals(encoding)) && start[0] == (byte) 0x2B
+                    && start[1] == (byte) 0x2F && start[2] == (byte) 0x76) {
+                if (start[3] == (byte) 0x38 && start[4] == (byte) 0x2D) {
+                    if (encoding == null) this.encoding = "UTF-7";
+                    return 5; // "UTF-7";
+                } else if (start[3] == (byte) 0x38 || start[3] == (byte) 0x39 || start[3] == (byte) 0x2B
+                        || start[3] == (byte) 0x2F) {
+                    if (encoding == null) this.encoding = "UTF-7";
+                    return 4; // "UTF-7";
+                }
+            } else if ((encoding == null || "UTF-EBCDIC".equals(encoding)) && start[0] == (byte) 0xDD
+                    && start[2] == (byte) 0x73 && start[2] == (byte) 0x66 && start[3] == (byte) 0x73) {
+                if (encoding == null) this.encoding = "UTF-EBCDIC";
+                return 4; // "UTF-EBCDIC";
+            }
+
+            /* no known Unicode signature byte sequence recognized */
+            return 0;
+        }
+
+        public int read(char[] cbuf, int off, int len) throws IOException {
+            return reader.read(cbuf, off, len);
+        }
+
+        public void close() throws IOException {
+            reader.close();
+        }
+    }
 }
+
+
 
 // eof

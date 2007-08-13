@@ -104,7 +104,7 @@ print "run perl src\\com\\ibm\\icu\\dev\\test\\perf\\collationperf.pl\n";
 #       Do a key-generation test and return the time and key length/char values.
 #
 sub doKeyTimes($$$) {
-   # print "$_[0]";
+   # print "$_[0]\n";
    local($x) = `$_[0]`;                  # execute the collperf command.
    ($_[1], $_[2]) = split(/\,/, $x);     # collperf returns "time, keylength" string.
 }
