@@ -227,7 +227,8 @@ public class FieldsSet {
     }
     
     public String toString() {
-        String str = getClass().getName()+" ["+fFieldsCount+","+(fEnum!=NO_ENUM?DebugUtilities.typeString(fEnum):fEnum)+"]: ";
+        String str = getClass().getName()+" ["+fFieldsCount+","
+        +(fEnum!=NO_ENUM?DebugUtilities.typeString(fEnum):Integer.toString(fEnum))+"]: ";
         for(int i=0;i<fFieldsCount;i++) {
             if(isSet(i)) {
                 str = str + fieldName(i)+"="+get(i)+",";
