@@ -246,6 +246,7 @@ icu4j/src/com/ibm/icu/dev/test/duration/testdata/testdata_zh_Hans_SG.txt -text
 icu4j/src/com/ibm/icu/dev/test/duration/testdata/testdata_zh_Hant.txt -text
 icu4j/src/com/ibm/icu/dev/test/duration/testdata/testdata_zh_Hant_HK.txt -text
 icu4j/src/com/ibm/icu/dev/test/format/DataDrivenFormatTest.java -text
+icu4j/src/com/ibm/icu/dev/test/perf/DateFormatPerformanceTest.java -text
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Asian.txt -text
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Chinese.txt -text
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Japanese.txt -text
@@ -258,6 +259,7 @@ icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_SerbianSH.txt -text
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_SerbianSR.txt -text
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Simplified_Chinese.txt -text
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Thai.txt -text
+icu4j/src/com/ibm/icu/dev/test/perf/dateformatperf.pl -text
 icu4j/src/com/ibm/icu/dev/test/perf/normalizationperf_r_b.pl -text
 icu4j/src/com/ibm/icu/dev/test/perf/normalizationperf_r_l.pl -text
 icu4j/src/com/ibm/icu/dev/test/perf/rbbiperf_r.pl -text
