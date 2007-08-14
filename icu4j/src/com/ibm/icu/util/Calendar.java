@@ -3881,7 +3881,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
         buffer.append(",minimalDaysInFirstWeek=");
         buffer.append(minimalDaysInFirstWeek);
         for (int i=0; i<fields.length; ++i) {
-            buffer.append(',').append(FIELD_NAME[i]).append('=');
+            buffer.append(',').append(fieldName(i)).append('=');
             buffer.append(isSet(i) ? String.valueOf(fields[i]) : "?");
         }
         buffer.append(']');
