@@ -7,8 +7,6 @@
 
 package com.ibm.icu.impl.duration;
 
-import java.util.Date;
-
 /**
  * Formats a Period, such as '2 hours 23 minutes'.  
  * The Period defines the fields to format and their

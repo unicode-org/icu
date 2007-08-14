@@ -9,15 +9,8 @@ package com.ibm.icu.impl.duration;
 
 import com.ibm.icu.impl.duration.BasicPeriodFormatterFactory.Customizations;
 
-import com.ibm.icu.impl.duration.impl.DataRecord.ETimeLimit;
-import com.ibm.icu.impl.duration.impl.DataRecord.ETimeDirection;
-import com.ibm.icu.impl.duration.impl.DataRecord.EUnitVariant;
-import com.ibm.icu.impl.duration.impl.DataRecord.ECountVariant;
-import com.ibm.icu.impl.duration.impl.DataRecord.ESeparatorVariant;
-import com.ibm.icu.impl.duration.impl.DataRecord.EMilliSupport;
+import com.ibm.icu.impl.duration.impl.DataRecord.*;
 import com.ibm.icu.impl.duration.impl.PeriodFormatterData;
-
-import java.util.Date;
 
 /**
  * Core implementation class for PeriodFormatter.

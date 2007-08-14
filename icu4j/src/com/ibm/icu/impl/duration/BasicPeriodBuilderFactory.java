@@ -11,7 +11,6 @@ import com.ibm.icu.impl.duration.impl.DataRecord;
 import com.ibm.icu.impl.duration.impl.PeriodFormatterData;
 import com.ibm.icu.impl.duration.impl.PeriodFormatterDataService;
 
-import java.util.Date;
 import java.util.TimeZone;
 
 /**

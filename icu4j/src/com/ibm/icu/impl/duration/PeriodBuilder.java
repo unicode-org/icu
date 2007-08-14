@@ -7,7 +7,6 @@
 
 package com.ibm.icu.impl.duration;
 
-import java.util.Date;
 import java.util.TimeZone;
 
 /**

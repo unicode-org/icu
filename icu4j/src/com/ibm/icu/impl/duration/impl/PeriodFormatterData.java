@@ -9,25 +9,7 @@ package com.ibm.icu.impl.duration.impl;
 
 import com.ibm.icu.impl.duration.TimeUnit;
 
-import com.ibm.icu.impl.duration.impl.DataRecord.ScopeData;
-import com.ibm.icu.impl.duration.impl.DataRecord.ECountVariant;
-import com.ibm.icu.impl.duration.impl.DataRecord.EDecimalHandling;
-import com.ibm.icu.impl.duration.impl.DataRecord.EFractionHandling;
-import com.ibm.icu.impl.duration.impl.DataRecord.EGender;
-import com.ibm.icu.impl.duration.impl.DataRecord.EHalfPlacement;
-import com.ibm.icu.impl.duration.impl.DataRecord.EHalfSupport;
-import com.ibm.icu.impl.duration.impl.DataRecord.ENumberSystem;
-import com.ibm.icu.impl.duration.impl.DataRecord.EPluralization;
-import com.ibm.icu.impl.duration.impl.DataRecord.EUnitVariant;
-import com.ibm.icu.impl.duration.impl.DataRecord.EZeroHandling;
-import com.ibm.icu.util.ULocale;
-
-import java.io.InputStreamReader;
-import java.io.FileInputStream;
-import java.io.File;
-import java.io.StringReader;
-import java.lang.reflect.*;
-import java.util.*;
+import com.ibm.icu.impl.duration.impl.DataRecord.*;
 
 
 /**
