@@ -349,9 +349,9 @@ static void millisToOffset(int32_t millis, UnicodeString& str) {
 static void getDefaultTZName(const UnicodeString tzid, UBool isDST, UnicodeString& tzname) {
     tzname = tzid;
     if (isDST) {
-        tzname += "(DST)";
+        tzname += UNICODE_STRING_SIMPLE("(DST)");
     } else {
-        tzname += "(STD)";
+        tzname += UNICODE_STRING_SIMPLE("(STD)");
     }
 }
 
