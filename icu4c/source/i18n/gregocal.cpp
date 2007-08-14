@@ -84,7 +84,7 @@ static const int32_t kGregorianCalendarLimits[UCAL_FIELD_COUNT][4] = {
     {        1,        1,      28,      31 }, // DAY_OF_MONTH
     {        1,        1,     365,     366 }, // DAY_OF_YEAR
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1},// DAY_OF_WEEK
-    {       -1,       -1,       4,       6 }, // DAY_OF_WEEK_IN_MONTH
+    {       -1,       -1,       4,       5 }, // DAY_OF_WEEK_IN_MONTH
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1},// AM_PM
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1},// HOUR
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1},// HOUR_OF_DAY
@@ -113,7 +113,7 @@ static const int32_t kGregorianCalendarLimits[UCAL_FIELD_COUNT][4] = {
 * DAY_OF_MONTH            1         1          28          31
 * DAY_OF_YEAR             1         1         365         366
 * DAY_OF_WEEK             1         1           7           7
-* DAY_OF_WEEK_IN_MONTH   -1        -1           4           6
+* DAY_OF_WEEK_IN_MONTH   -1        -1           4           5
 * AM_PM                   0         0           1           1
 * HOUR                    0         0          11          11
 * HOUR_OF_DAY             0         0          23          23
