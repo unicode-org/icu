@@ -8,7 +8,6 @@
 package com.ibm.icu.impl.duration.impl;
 
 import java.util.Locale;
-import java.lang.reflect.Array;
 
 public class Utils {
   public static final Locale localeFromString(String s) {
