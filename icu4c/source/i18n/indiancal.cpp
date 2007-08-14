@@ -61,11 +61,11 @@ static const int32_t LIMITS[UCAL_FIELD_COUNT][4] = {
   {        1,        1, 5000000, 5000000 }, // YEAR
   {        0,        0,      11,      11 }, // MONTH
   {        1,        1,      52,      53 }, // WEEK_OF_YEAR
-  {        0,        0,       5,       6 }, // WEEK_OF_MONTH
+  {        0,        0,       4,       6 }, // WEEK_OF_MONTH
   {        1,        1,      30,      31 }, // DAY_OF_MONTH
   {        1,        1,     365,     366 }, // DAY_OF_YEAR
   {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DAY_OF_WEEK
-  {       -1,       -1,       4,       6 }, // DAY_OF_WEEK_IN_MONTH
+  {       -1,       -1,       5,       5 }, // DAY_OF_WEEK_IN_MONTH
   {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // AM_PM
   {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // HOUR
   {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // HOUR_OF_DAY
