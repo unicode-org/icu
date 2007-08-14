@@ -2060,19 +2060,19 @@ static void _testManyAddedPoints(void) {
     UChar text[90], dest[MAXLEN], expected[120];
     int destLen, i;
     for (i = 0; i < LENGTHOF(text); i+=3) {
-        text[i] = 'a';
+        text[i] = 0x0061; /* 'a' */
         text[i+1] = 0x05d0;
-        text[i+2] = '3';
+        text[i+2] = 0x0033; /* '3' */
     }
     ubidi_setReorderingMode(bidi, UBIDI_REORDER_INVERSE_LIKE_DIRECT);
     ubidi_setReorderingOptions(bidi, UBIDI_OPTION_INSERT_MARKS);
     ubidi_setPara(bidi, text, LENGTHOF(text), UBIDI_LTR, NULL, &errorCode);
     destLen = ubidi_writeReordered(bidi, dest, MAXLEN, 0, &errorCode);
     for (i = 0; i < LENGTHOF(expected); i+=4) {
-        expected[i] = 'a';
+        expected[i] = 0x0061; /* 'a' */
         expected[i+1] = 0x05d0;
         expected[i+2] = 0x200e;
-        expected[i+3] = '3';
+        expected[i+3] = 0x0033; /* '3' */
     }
     if (memcmp(dest, expected, destLen * sizeof(UChar))) {
         log_err("\nInvalid output with many added points, "

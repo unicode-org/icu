@@ -111,8 +111,8 @@ class FieldsSet {
     void clear();
     void clear(int32_t field);
     void set(int32_t field, int32_t amount);
-    UBool isSet(int field) const;
-    int32_t get(int field) const;
+    UBool isSet(int32_t field) const;
+    int32_t get(int32_t field) const;
     
     UBool isSameType(const FieldsSet& other) const;
     int32_t fieldCount() const;
