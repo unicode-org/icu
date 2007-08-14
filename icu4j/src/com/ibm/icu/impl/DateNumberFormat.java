@@ -42,10 +42,11 @@ public final class DateNumberFormat extends NumberFormat {
         initialize(loc);
     }
 
-    public DateNumberFormat(char zeroDigit, char minusSign) {
+/*    public DateNumberFormat(char zeroDigit, char minusSign) {
         this.zeroDigit = zeroDigit;
         this.minusSign = minusSign;
     }
+*/
 
     private void initialize(ULocale loc) {
         char[] elems = (char[])CACHE.get(loc);
@@ -186,21 +187,15 @@ public final class DateNumberFormat extends NumberFormat {
     }
 
     public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (!super.equals(obj)) {
+        if (obj == null || !super.equals(obj) || !(obj instanceof DateNumberFormat)) {
             return false;
         }
         DateNumberFormat other = (DateNumberFormat)obj;
-        if (this.maxIntDigits == other.maxIntDigits
+        return (this.maxIntDigits == other.maxIntDigits
                 && this.minIntDigits == other.minIntDigits
                 && this.zeroDigit == other.zeroDigit
                 && this.minusSign == other.minusSign
-                && this.positiveOnly == other.positiveOnly) {
-            return true;
-        }
-        return false;
+                && this.positiveOnly == other.positiveOnly);
     }
 
     private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
