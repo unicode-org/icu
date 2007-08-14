@@ -100,11 +100,11 @@ int32_t FieldsSet::parseFrom(const UnicodeString& str, const
     }
 
     int32_t destCount = 0;
-    UnicodeString *dest = split(str, ',', destCount);
+    UnicodeString *dest = split(str, 0x002C /* ',' */, destCount);
 
     for(int i = 0; i < destCount; i += 1) {
         int32_t dc = 0;
-        UnicodeString *kv = split(dest[i], '=', dc);
+        UnicodeString *kv = split(dest[i], 0x003D /* '=' */, dc);
 
         if(dc != 2) {
             it_errln(UnicodeString("dc == ") + dc + UnicodeString("?"));
