@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2003-2006, International Business Machines Corporation and    *
+* Copyright (C) 2003-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -27,8 +27,6 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(BuddhistCalendar)
 static const int32_t kMaxEra = 0; // only 1 era
 
 static const int32_t kBuddhistEraStart = -543;  // 544 BC (Gregorian)
-
-static const int32_t kGregorianEpoch = 1970; 
 
 BuddhistCalendar::BuddhistCalendar(const Locale& aLocale, UErrorCode& success)
 :   GregorianCalendar(aLocale, success)
@@ -81,49 +79,15 @@ BuddhistCalendar::getLeastMaximum(UCalendarDateFields field) const
     }
 }
 
-int32_t
-BuddhistCalendar::monthLength(int32_t month, int32_t year) const
-{
-    return GregorianCalendar::monthLength(month,year);
-}
-
-
-int32_t
-BuddhistCalendar::monthLength(int32_t month) const
-{
-    UErrorCode status = U_ZERO_ERROR;
-    // ignore era
-    return GregorianCalendar::monthLength(month, getGregorianYear(status));
-}
-
-int32_t BuddhistCalendar::internalGetEra() const
-{
-    return internalGet(UCAL_ERA, BE);
-}
-
-int32_t
-BuddhistCalendar::getGregorianYear(UErrorCode &status)  const
-{
-    int32_t year = (fStamp[UCAL_YEAR] != kUnset) ? internalGet(UCAL_YEAR) : kGregorianEpoch+kBuddhistEraStart;
-    int32_t era = BE;
-    if (fStamp[UCAL_ERA] != kUnset) {
-        era = internalGet(UCAL_ERA);
-        if (era != BE) {
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-            return kGregorianEpoch + kBuddhistEraStart;
-        }
-    }
-    return year + kBuddhistEraStart;
-}
-
 int32_t BuddhistCalendar::handleGetExtendedYear()
 {
     int32_t year;
     if (newerField(UCAL_EXTENDED_YEAR, UCAL_YEAR) == UCAL_EXTENDED_YEAR) {
         year = internalGet(UCAL_EXTENDED_YEAR, 1);
     } else {
-        // Ignore the era, as there is only one
-        year = internalGet(UCAL_YEAR, 1);
+        // extended year is a gregorian year, where 1 = 1AD,  0 = 1BC, -1 = 2BC, etc 
+        year = internalGet(UCAL_YEAR, 1)                       // pin to minimum of year 1 (first year)
+                + kBuddhistEraStart;                      // add gregorian starting year
     }
     return year;
 }
@@ -132,14 +96,13 @@ int32_t BuddhistCalendar::handleComputeMonthStart(int32_t eyear, int32_t month,
 
                                                   UBool useMonth) const
 {
-    return GregorianCalendar::handleComputeMonthStart(eyear+kBuddhistEraStart, month, useMonth);
+    return GregorianCalendar::handleComputeMonthStart(eyear, month, useMonth);
 }
 
 void BuddhistCalendar::handleComputeFields(int32_t julianDay, UErrorCode& status)
 {
     GregorianCalendar::handleComputeFields(julianDay, status);
     int32_t y = internalGet(UCAL_EXTENDED_YEAR) - kBuddhistEraStart;
-    internalSet(UCAL_EXTENDED_YEAR, y);
     internalSet(UCAL_ERA, 0);
     internalSet(UCAL_YEAR, y);
 }

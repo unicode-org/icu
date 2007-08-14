@@ -219,29 +219,6 @@ private:
                                             UBool useMonth) const;
 
     /**
-     * month length of current month
-     * @internal
-     */
-    virtual int32_t monthLength(int32_t month) const; 
-    /**
-     * month length of month
-     * @internal
-     */
-    virtual int32_t monthLength(int32_t month, int32_t year) const; 
-
-    /**
-     * month length of current month
-     * @internal
-     */
-    int32_t getGregorianYear(UErrorCode& status) const;
-
-    /** 
-     * Calculate the era for internal computation
-     * @internal
-     */
-    virtual int32_t internalGetEra() const;
-
-    /**
      * Returns TRUE because the Buddhist Calendar does have a default century
      * @internal
      */
