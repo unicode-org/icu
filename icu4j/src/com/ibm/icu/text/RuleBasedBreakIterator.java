@@ -94,7 +94,10 @@ public class RuleBasedBreakIterator extends BreakIterator {
      */
     public Object clone()
     {
-        RuleBasedBreakIterator result = new RuleBasedBreakIterator(this);
+        RuleBasedBreakIterator result = (RuleBasedBreakIterator)super.clone();
+        if (fText != null) {
+            result.fText = (CharacterIterator)(fText.clone());   
+        }
         return result;
     }
 

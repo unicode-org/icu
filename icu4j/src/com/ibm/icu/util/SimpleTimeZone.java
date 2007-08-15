@@ -1090,24 +1090,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @stable ICU 3.8
      */
     public Object clone() {
-        //TODO: We should not call SimpleTimeZone constructor below.
-        SimpleTimeZone clone = new SimpleTimeZone( raw, getID());
-        clone.startMonth     = startMonth;
-        clone.startDay       = startDay;
-        clone.startDayOfWeek = startDayOfWeek;
-        clone.startTime      = startTime;
-        clone.startTimeMode  = startTimeMode;
-        clone.endMonth       = endMonth;
-        clone.endDay         = endDay;
-        clone.endDayOfWeek   = endDayOfWeek;
-        clone.endTime        = endTime;
-        clone.endTimeMode    = endTimeMode;
-        clone.dst            = dst;
-        clone.startYear      = startYear;
-        clone.startMode      = startMode;
-        clone.endMode        = endMode;
-        clone.useDaylight    = useDaylight;
-        return clone;
+        return (SimpleTimeZone)super.clone();
     }
 
     /**
