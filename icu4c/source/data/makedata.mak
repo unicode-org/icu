@@ -358,6 +358,8 @@ ALL : GODATA "$(ICU_LIB_TARGET)" "$(TESTDATAOUT)\testdata.dat"
 # They are not built by default but need to be built for ICU4J data and for getting the .c source files
 # when updating the Unicode data.
 # Changed in makedata.mak revision 1.117. See Jitterbug 4497.
+# Command line:
+#   C:\svn\icuproj\icu\trunk\source\data>nmake -f makedata.mak ICUMAKE=C:\svn\icuproj\icu\trunk\source\data\ CFG=Debug uni-core-data
 uni-core-data: GODATA "$(ICUBLD_PKG)\uprops.icu" "$(ICUBLD_PKG)\ucase.icu" "$(ICUBLD_PKG)\ubidi.icu" "$(ICUBLD_PKG)\unorm.icu"
 	@echo Unicode .icu files built to "$(ICUBLD_PKG)"
 	@echo Unicode .c source files built to "$(ICUTMP)"

@@ -1825,7 +1825,9 @@ TestMirroring() {
     log_verbose("Testing u_charMirror()\n");
     if(!(u_charMirror(0x3c)==0x3e && u_charMirror(0x5d)==0x5b && u_charMirror(0x208d)==0x208e && u_charMirror(0x3017)==0x3016 &&
          u_charMirror(0xbb)==0xab && u_charMirror(0x2215)==0x29F5 && u_charMirror(0x29F5)==0x2215 && /* large delta between the code points */
-         u_charMirror(0x2e)==0x2e && u_charMirror(0x6f3)==0x6f3 && u_charMirror(0x301c)==0x301c && u_charMirror(0xa4ab)==0xa4ab 
+         u_charMirror(0x2e)==0x2e && u_charMirror(0x6f3)==0x6f3 && u_charMirror(0x301c)==0x301c && u_charMirror(0xa4ab)==0xa4ab &&
+         /* see Unicode Corrigendum #6 at http://www.unicode.org/versions/corrigendum6.html */
+         u_charMirror(0x2018)==0x2018 && u_charMirror(0x201b)==0x201b && u_charMirror(0x301d)==0x301d
          )
     ) {
         log_err("u_charMirror() does not work correctly\n");
@@ -2098,6 +2100,12 @@ TestAdditionalProperties() {
 
         { 0x003c, UCHAR_BIDI_MIRRORED, TRUE },
         { 0x003d, UCHAR_BIDI_MIRRORED, FALSE },
+
+        /* see Unicode Corrigendum #6 at http://www.unicode.org/versions/corrigendum6.html */
+        { 0x2018, UCHAR_BIDI_MIRRORED, FALSE },
+        { 0x201d, UCHAR_BIDI_MIRRORED, FALSE },
+        { 0x201f, UCHAR_BIDI_MIRRORED, FALSE },
+        { 0x301e, UCHAR_BIDI_MIRRORED, FALSE },
 
         { 0x058a, UCHAR_DASH, TRUE },
         { 0x007e, UCHAR_DASH, FALSE },
