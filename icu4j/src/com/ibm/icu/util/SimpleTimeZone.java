@@ -1090,7 +1090,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @stable ICU 3.8
      */
     public Object clone() {
-        return (SimpleTimeZone)super.clone();
+        return super.clone();
     }
 
     /**
