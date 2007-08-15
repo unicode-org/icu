@@ -6,6 +6,7 @@
  */
 package com.ibm.icu.dev.test.perf;
 
+import java.text.ParseException;
 import java.util.Locale;
 
 /**
@@ -17,14 +18,10 @@ public class DecimalFormatPerformanceTest extends PerfTest {
     String decimalAsString;
 
     Number decimalAsNumber;
-    
-    com.ibm.icu.text.DecimalFormatSymbols icuDecimalFormatSymbols;
-    
-    com.ibm.icu.text.DecimalFormat icuDecimalFormat;
-    
-    java.text.DecimalFormatSymbols javaDecimalFormatSymbols;
-    
-    java.text.DecimalFormat javaDecimalFormat;
+
+    com.ibm.icu.text.DecimalFormat[] icuDecimalFormat;
+
+    java.text.DecimalFormat[] javaDecimalFormat;
 
     public static void main(String[] args) throws Exception {
         new DecimalFormatPerformanceTest().run(args);
@@ -41,15 +38,18 @@ public class DecimalFormatPerformanceTest extends PerfTest {
             if (locale == null)
                 locale = Locale.getDefault();
 
-            icuDecimalFormatSymbols = new com.ibm.icu.text.DecimalFormatSymbols(locale);
-            icuDecimalFormat = new com.ibm.icu.text.DecimalFormat(pattern, icuDecimalFormatSymbols);
-            
-            javaDecimalFormatSymbols = new java.text.DecimalFormatSymbols(locale);
-            javaDecimalFormat = new java.text.DecimalFormat(pattern, javaDecimalFormatSymbols);
-            
+            icuDecimalFormat = new com.ibm.icu.text.DecimalFormat[threads];
+            javaDecimalFormat = new java.text.DecimalFormat[threads];
+            for (int i = 0; i < threads; i++) {
+                icuDecimalFormat[i] = new com.ibm.icu.text.DecimalFormat(pattern,
+                        new com.ibm.icu.text.DecimalFormatSymbols(locale));
+                javaDecimalFormat[i] = new java.text.DecimalFormat(pattern,
+                        new java.text.DecimalFormatSymbols(locale));
+            }
+
             if (args.length == 2) {
                 decimalAsString = args[1];
-                decimalAsNumber = icuDecimalFormat.parse(decimalAsString);
+                decimalAsNumber = icuDecimalFormat[0].parse(decimalAsString);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -61,12 +61,8 @@ public class DecimalFormatPerformanceTest extends PerfTest {
     PerfTest.Function TestICUConstruction() {
         return new PerfTest.Function() {
             public void call() {
-                try {
-                    new com.ibm.icu.text.DecimalFormat(pattern, icuDecimalFormatSymbols);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e.getMessage());
-                }
+                new com.ibm.icu.text.DecimalFormat(pattern,
+                        new com.ibm.icu.text.DecimalFormatSymbols(locale));
             }
         };
     }
@@ -74,22 +70,17 @@ public class DecimalFormatPerformanceTest extends PerfTest {
     PerfTest.Function TestJDKConstruction() {
         return new PerfTest.Function() {
             public void call() {
-                try {
-                    new java.text.DecimalFormat(pattern, javaDecimalFormatSymbols);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e.getMessage());
-                }
+                new java.text.DecimalFormat(pattern, new java.text.DecimalFormatSymbols(locale));
             }
         };
     }
 
     PerfTest.Function TestICUParse() {
         return new PerfTest.Function() {
-            public void call() {
+            public void call(int id) {
                 try {
-                    icuDecimalFormat.parse(decimalAsString);
-                } catch (Exception e) {
+                    icuDecimalFormat[id].parse(decimalAsString);
+                } catch (ParseException e) {
                     e.printStackTrace();
                     throw new RuntimeException(e.getMessage());
                 }
@@ -99,10 +90,10 @@ public class DecimalFormatPerformanceTest extends PerfTest {
 
     PerfTest.Function TestJDKParse() {
         return new PerfTest.Function() {
-            public void call() {
+            public void call(int id) {
                 try {
-                    javaDecimalFormat.parse(decimalAsString);
-                } catch (Exception e) {
+                    javaDecimalFormat[id].parse(decimalAsString);
+                } catch (ParseException e) {
                     e.printStackTrace();
                     throw new RuntimeException(e.getMessage());
                 }
@@ -112,26 +103,16 @@ public class DecimalFormatPerformanceTest extends PerfTest {
 
     PerfTest.Function TestICUFormat() {
         return new PerfTest.Function() {
-            public void call() {
-                try {
-                    icuDecimalFormat.format(decimalAsNumber);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e.getMessage());
-                }
+            public void call(int id) {
+                icuDecimalFormat[id].format(decimalAsNumber);
             }
         };
     }
 
     PerfTest.Function TestJDKFormat() {
         return new PerfTest.Function() {
-            public void call() {
-                try {
-                    javaDecimalFormat.format(decimalAsNumber);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e.getMessage());
-                }
+            public void call(int id) {
+                javaDecimalFormat[id].format(decimalAsNumber);
             }
         };
     }
