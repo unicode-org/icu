@@ -200,10 +200,15 @@ public abstract class PerfTest {
     public abstract static class Function {
 
         /**
-         * Subclasses must implement this method to do the action to be
-         * measured.
+         * Subclasses should implement this method to do the action to be
+         * measured if the action is thread-safe
          */
-        public abstract void call();
+        public void call() { call(0); }
+
+        /**
+         * Subclasses should implement this method if the action is not thread-safe
+         */
+        public void call(int id) { call(); }
 
         /**
          * Subclasses may implement this method to return positive integer
@@ -242,23 +247,42 @@ public abstract class PerfTest {
             stop = System.currentTimeMillis();
             return stop - start; // ms
         }
+        
+        
+        /**
+         * init is called each time before looping through call
+         */
+        public void init() {}
+        
+        
+        public final int getID() {
+            return id;
+        }
+        
+        public final void setID(int id) {
+            this.id = id;
+        }
+        
+        private int id;
     }
     
     private class FunctionRunner implements Runnable {
-        public FunctionRunner(Function f, long loops) {
+        public FunctionRunner(Function f, long loops, int id) {
             this.f = f;
             this.loops = loops;
+            this.id = id;
         }
 
         public void run() {
             long n = loops;
             while (n-- > 0)
-                f.call();
+                f.call(id);
         }
         
         private Function f;
 
         private long loops;
+        private int id;
     }
     
 
@@ -388,21 +412,7 @@ public abstract class PerfTest {
                     System.out.println("= " + meth + " begin ");
                 }
 
-                if (threads > 1) {
-                    FunctionRunner runner = new FunctionRunner(testFunction, loops);
-                    Thread[] threadList = new Thread[threads];
-                    for (int i=0; i<threads; i++)
-                        threadList[i] = new Thread(runner);
-                    
-                    t = System.currentTimeMillis();
-                    for (int i=0; i<threads; i++)
-                        threadList[i].start();
-                    for (int i=0; i<threads; i++)
-                        threadList[i].join();
-                    t = System.currentTimeMillis() - t;
-                } else {
-                    t = testFunction.time(loops); // ms
-                }
+                t = performLoops(testFunction, loops);
                 
                 events = testFunction.getEventsPerIteration();
 
@@ -597,29 +607,34 @@ public abstract class PerfTest {
                                 "Unable to converge on desired duration");
                     }
                 }
-                
-                if (threads > 1) {
-                    FunctionRunner runner = new FunctionRunner(fn, iter);
-                    Thread[] threadList = new Thread[threads];
-                    for (int i=0; i<threads; i++)
-                        threadList[i] = new Thread(runner);
-                    
-                    t = System.currentTimeMillis();
-                    for (int i=0; i<threads; i++)
-                        threadList[i].start();
-                    for (int i=0; i<threads; i++)
-                        threadList[i].join();
-                    t = System.currentTimeMillis() - t;
-                    
-                } else {
-                    t = fn.time(iter); // ms
-                }
+                t = performLoops(fn, iter);
             }
             // System.out.println("final t : " + t);
             // System.out.println("final i : " + iter);
         }
         return iter;
     }
+    
+    
+    private long performLoops(Function function, long loops) throws InterruptedException {
+        function.init();
+        if (threads > 1) {
+            Thread[] threadList = new Thread[threads];
+            for (int i=0; i<threads; i++)
+                threadList[i] = new Thread(new FunctionRunner(function, loops, i));
+            
+            long start = System.currentTimeMillis();
+            for (int i=0; i<threads; i++)
+                threadList[i].start();
+            for (int i=0; i<threads; i++)
+                threadList[i].join();
+            return System.currentTimeMillis() - start;
+            
+        } else {
+            return function.time(loops); // ms
+        }
+    }
+    
 
     /**
      * Invoke the runtime's garbage collection procedure repeatedly until the
