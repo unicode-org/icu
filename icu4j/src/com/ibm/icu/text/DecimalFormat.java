@@ -970,7 +970,7 @@ public class DecimalFormat extends NumberFormat {
         // number.
         synchronized(digitList) {
             digitList.set(number, precision(true));
-            return subformat(result, fieldPosition, number.signum() < 0, false, parseAttr);
+            return subformat(result, fieldPosition, number.signum() < 0, true, parseAttr);
         }
     }
 
