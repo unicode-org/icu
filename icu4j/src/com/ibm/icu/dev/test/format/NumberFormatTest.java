@@ -43,7 +43,6 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         int pat_length = pat.length;
         final String newpat[] = { "#0.#", "#0.", "#.0", "#" };
         final String num[]    = { "0",   "0.", ".0", "0" };
-        final BigInteger biZero = new BigInteger("0");
         for (int i=0; i<pat_length; ++i)
         {
             DecimalFormat fmt = new DecimalFormat(pat[i], sym);
@@ -60,7 +59,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 logln("Min integer digits = " + fmt.getMinimumIntegerDigits());
             }
             // BigInteger 0 - ticket#4731
-            s = ((NumberFormat)fmt).format(biZero);
+            s = ((NumberFormat)fmt).format(BigInteger.ZERO);
             if (!s.equals(num[i]))
             {
                 errln("FAIL: Pattern " + pat[i] + " should format BigInteger zero as " + num[i] +
