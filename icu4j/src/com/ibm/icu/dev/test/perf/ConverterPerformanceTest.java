@@ -16,6 +16,7 @@ import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
+import java.nio.charset.CodingErrorAction;
 
 import sun.io.CharToByteConverter;
 
@@ -28,21 +29,32 @@ public class ConverterPerformanceTest extends PerfTest {
    public static void main(String[] args) throws Exception {
        new ConverterPerformanceTest().run(args);
    }
-   char unicodeBuffer[] = null;
-   byte encBuffer[] = null;
+   char[] unicodeBuffer = null;
+   byte[] encBuffer = null;
 
    protected void setup(String[] args) {
         try{
+            // read in the input file, being careful with a possible BOM
             FileInputStream in = new FileInputStream(fileName);
             BOMFreeReader reader = new BOMFreeReader(in, encoding);
             unicodeBuffer = readToEOS(reader);
-            //encBuffer = new String(unicodeBuffer).getBytes(testEncoderName);
-
-            // TODO: should use built in nio converters (this is just for setup, not for the actual performance test)
-            CharToByteConverter cbConv = CharToByteConverter.getConverter(testName);
-            cbConv.setSubstitutionMode(false);
-            encBuffer = cbConv.convertAll(unicodeBuffer);
-        }catch(Exception e){
+            
+            // use java.nio to convert unicodeBuffer from char[] to byte[] 
+            CharBuffer source = CharBuffer.wrap(unicodeBuffer, 0, unicodeBuffer.length);
+            CharsetEncoder encoder = Charset.forName(encoding).newEncoder();
+            encoder.onMalformedInput(CodingErrorAction.REPORT);
+            encoder.onUnmappableCharacter(CodingErrorAction.REPORT);
+            ByteBuffer target = encoder.encode(source);
+            
+            // target.array() will probably return what we want, but lets take no chances
+            encBuffer = new byte[target.limit()];
+            for (int i=0; i<encBuffer.length; i++)
+                encBuffer[i] = target.get(i);
+            
+            // we created some heavy objects, so lets try to clean up a little
+            gc();
+            
+        } catch(Exception e){
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());
         }
