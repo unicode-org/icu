@@ -1,18 +1,24 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2004, International Business Machines
-* Corporation and others.  All Rights Reserved.
+* Copyright (c) 2002-2007, International Business Machines           *
+* Corporation and others.  All Rights Reserved.                      *
 **********************************************************************
 */
 package com.ibm.icu.dev.test.perf;
 
-import com.ibm.icu.text.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import com.ibm.icu.text.Normalizer;
 
 public class NormalizerPerformanceTest extends PerfTest {
     
     String[] NFDFileLines;
     String[] NFCFileLines;
     String[] fileLines;
+    Method normalizerMethod;
+    Object[] normalizerArgs;
+    
     
     public static void main(String[] args) throws Exception {
         new NormalizerPerformanceTest().run(args);
@@ -137,17 +143,19 @@ public class NormalizerPerformanceTest extends PerfTest {
     // Test NFC Performance
     PerfTest.Function TestJDK_NFC_NFD_Text() {
         return new PerfTest.Function() {
+            public void init() {
+                normalizerInit(true);
+            }
+            
             public void call() {
-                for (int i = 0; i < NFDFileLines.length; i++) {
-                    sun.text.Normalizer.normalize(NFDFileLines[i], sun.text.Normalizer.COMPOSE,0);
-                }
+                for (int i = 0; i < NFDFileLines.length; i++)
+                    normalizerTest(NFDFileLines[i]);
             }
             
             public long getOperationsPerIteration() {
                 int totalChars = 0;
-                for (int i = 0; i < NFDFileLines.length; i++) {
+                for (int i = 0; i < NFDFileLines.length; i++)
                     totalChars = totalChars + NFDFileLines[i].length();
-                }
                 return totalChars;
             }
         };
@@ -155,17 +163,19 @@ public class NormalizerPerformanceTest extends PerfTest {
   
     PerfTest.Function TestJDK_NFC_NFC_Text() {
         return new PerfTest.Function() {
+            public void init() {
+                normalizerInit(true);
+            }
+            
             public void call() {
-                for (int i = 0; i < NFCFileLines.length; i++) {
-                    sun.text.Normalizer.normalize(NFCFileLines[i], sun.text.Normalizer.COMPOSE,0);
-                }
+                for (int i = 0; i < NFCFileLines.length; i++)
+                    normalizerTest(NFCFileLines[i]);
             }
             
             public long getOperationsPerIteration() {
                 int totalChars = 0;
-                for (int i = 0; i < NFCFileLines.length; i++) {
+                for (int i = 0; i < NFCFileLines.length; i++)
                     totalChars = totalChars + NFCFileLines[i].length();
-                }
                 return totalChars;
             }
         };
@@ -173,17 +183,19 @@ public class NormalizerPerformanceTest extends PerfTest {
     
     PerfTest.Function TestJDK_NFC_Orig_Text() {
         return new PerfTest.Function() {
+            public void init() {
+                normalizerInit(true);
+            }
+            
             public void call() {
-                for (int i = 0; i < fileLines.length; i++) {
-                    sun.text.Normalizer.normalize(fileLines[i], sun.text.Normalizer.COMPOSE,0);
-                }
+                for (int i = 0; i < fileLines.length; i++)
+                    normalizerTest(fileLines[i]);
             }
             
             public long getOperationsPerIteration() {
                 int totalChars = 0;
-                for (int i = 0; i < fileLines.length; i++) {
+                for (int i = 0; i < fileLines.length; i++)
                     totalChars = totalChars + fileLines[i].length();
-                }
                 return totalChars;
             }
         };
@@ -192,17 +204,19 @@ public class NormalizerPerformanceTest extends PerfTest {
     // Test NFD Performance
     PerfTest.Function TestJDK_NFD_NFD_Text() {
         return new PerfTest.Function() {
+            public void init() {
+                normalizerInit(false);
+            }
+            
             public void call() {
-                for (int i = 0; i < NFDFileLines.length; i++) {
-                    sun.text.Normalizer.normalize(NFDFileLines[i], sun.text.Normalizer.DECOMP,0);
-                }
+                for (int i = 0; i < NFDFileLines.length; i++)
+                    normalizerTest(NFDFileLines[i]);
             }
             
             public long getOperationsPerIteration() {
                 int totalChars = 0;
-                for (int i = 0; i < NFDFileLines.length; i++) {
+                for (int i = 0; i < NFDFileLines.length; i++)
                     totalChars = totalChars + NFDFileLines[i].length();
-                }
                 return totalChars;
             }
         };
@@ -210,17 +224,19 @@ public class NormalizerPerformanceTest extends PerfTest {
     
     PerfTest.Function TestJDK_NFD_NFC_Text() {
         return new PerfTest.Function() {
+            public void init() {
+                normalizerInit(false);
+            }
+            
             public void call() {
-                for (int i = 0; i < NFCFileLines.length; i++) {
-                    sun.text.Normalizer.normalize(NFCFileLines[i], sun.text.Normalizer.DECOMP,0);
-                }
+                for (int i = 0; i < NFCFileLines.length; i++)
+                    normalizerTest(NFCFileLines[i]);
             }
             
             public long getOperationsPerIteration() {
                 int totalChars = 0;
-                for (int i = 0; i < NFCFileLines.length; i++) {
+                for (int i = 0; i < NFCFileLines.length; i++)
                     totalChars = totalChars + NFCFileLines[i].length();
-                }
                 return totalChars;
             }
         };
@@ -228,17 +244,19 @@ public class NormalizerPerformanceTest extends PerfTest {
     
     PerfTest.Function TestJDK_NFD_Orig_Text() {
         return new PerfTest.Function() {
+            public void init() {
+                normalizerInit(false);
+            }
+            
             public void call() {
-                for (int i = 0; i < fileLines.length; i++) {
-                    sun.text.Normalizer.normalize(fileLines[i], sun.text.Normalizer.DECOMP,0);
-                }
+                for (int i = 0; i < fileLines.length; i++)
+                    normalizerTest(fileLines[i]);
             }
             
             public long getOperationsPerIteration() {
                 int totalChars = 0;
-                for (int i = 0; i < fileLines.length; i++) {
+                for (int i = 0; i < fileLines.length; i++)
                     totalChars = totalChars + fileLines[i].length();
-                }
                 return totalChars;
             }
         };
@@ -644,5 +662,59 @@ public class NormalizerPerformanceTest extends PerfTest {
         }
         
         return dest;
+    }
+    
+    
+    void normalizerInit(boolean compose) {
+        Class normalizer;
+        boolean sun;
+        
+        try {
+            normalizer = Class.forName("java.text.Normalizer");
+            sun = false;
+        } catch (ClassNotFoundException ex) {
+            try {
+                normalizer = Class.forName("sun.text.Normalizer");
+                sun = true;
+            } catch (ClassNotFoundException ex2) {
+                throw new RuntimeException(
+                        "Could not find sun.text.Normalizer nor java.text.Normalizer and their required subclasses");
+            }
+        }
+        
+        try {
+            if (sun) {
+                normalizerArgs = new Object[] { null, null, Integer.valueOf(0) };
+                normalizerArgs[1] = normalizer.getField(compose ? "COMPOSE" : "DECOMP").get(null);
+                normalizerMethod = normalizer.getMethod("normalize", new Class[] { String.class, normalizerArgs[1].getClass(), int.class });
+                // sun.text.Normalizer.normalize(line, compose
+                //   ? sun.text.Normalizer.COMPOSE
+                //   : sun.text.Normalizer.DECOMP, 0);
+            } else {
+                normalizerArgs = new Object[] { null, null };
+                normalizerArgs[1] = Class.forName("java.text.Normalizer$Form").getField(compose ? "NFC" : "NFD").get(null);
+                normalizerMethod = normalizer.getMethod("normalize", new Class[] { String.class, normalizerArgs[1].getClass()});
+                // java.text.Normalizer.normalize(line, compose
+                //   ? java.text.Normalizer.Form.NFC
+                //   : java.text.Normalizer.Form.NFD);
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Reflection error -- could not load the JDK normalizer");
+        }
+    }
+    
+    void normalizerTest(String line) {
+        try {
+            normalizerArgs[0] = line;
+            normalizerMethod.invoke(line, normalizerArgs);
+        } catch (Exception ex) {
+            if (ex instanceof InvocationTargetException) {
+                Throwable cause = ex.getCause();
+                cause.printStackTrace();
+                throw new RuntimeException(cause.getMessage());
+            } else {
+                throw new RuntimeException("Reflection error -- could not run the JDK normalizer");
+            }
+        }
     }
 }
