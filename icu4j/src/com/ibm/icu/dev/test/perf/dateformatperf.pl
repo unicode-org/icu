@@ -33,9 +33,9 @@ my @OPTIONS = (
               );
 
 my $THREADS;        # number of threads (input from command-line args)
-my $CALIBRATE = 1;#2;  # duration in seconds for initial calibration
-my $DURATION  = 1;#10; # duration in seconds for each pass
-my $NUMPASSES = 3;#4;  # number of passes.  If > 1 then the first pass
+my $CALIBRATE = 2;  # duration in seconds for initial calibration
+my $DURATION  = 10; # duration in seconds for each pass
+my $NUMPASSES = 4;  # number of passes.  If > 1 then the first pass
                     # is discarded as a JIT warm-up pass.
 
 my $TABLEATTR = 'BORDER="1" CELLPADDING="4" CELLSPACING="0"';
