@@ -921,6 +921,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
     /**
      * Tests whether the text matches at the offset. If so, returns the end of the longest substring that it matches. If not, returns -1. 
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public int matchesAt(CharSequence text, int offset) {
         int lastLen = -1;
@@ -1858,6 +1859,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
      * Get the Regex equivalent for this UnicodeSet
      * @return regex pattern equivalent to this UnicodeSet
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public String getRegexEquivalent() {
         if (strings.size() == 0) return toString();
