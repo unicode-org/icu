@@ -6,6 +6,7 @@
  */
 package com.ibm.icu.dev.test.perf;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
 
@@ -13,15 +14,15 @@ import java.util.Locale;
  * @author ajmacher
  */
 public class DateFormatPerformanceTest extends PerfTest {
-    String pattern;
+    private String pattern;
 
-    String dateString;
+    private String dateString;
 
-    Date date;
-    
-    com.ibm.icu.text.SimpleDateFormat icuSDF;
-    
-    java.text.SimpleDateFormat javaSDF;
+    private Date date;
+
+    private com.ibm.icu.text.SimpleDateFormat[] icuDateFormat;
+
+    private java.text.SimpleDateFormat[] javaDateFormat;
 
     public static void main(String[] args) throws Exception {
         new DateFormatPerformanceTest().run(args);
@@ -38,12 +39,16 @@ public class DateFormatPerformanceTest extends PerfTest {
             if (locale == null)
                 locale = Locale.getDefault();
 
-            icuSDF = new com.ibm.icu.text.SimpleDateFormat(pattern, locale);
-            javaSDF = new java.text.SimpleDateFormat(pattern, locale);
-            
+            icuDateFormat = new com.ibm.icu.text.SimpleDateFormat[threads];
+            javaDateFormat = new java.text.SimpleDateFormat[threads];
+            for (int i = 0; i < threads; i++) {
+                icuDateFormat[i] = new com.ibm.icu.text.SimpleDateFormat(pattern, locale);
+                javaDateFormat[i] = new java.text.SimpleDateFormat(pattern, locale);
+            }
+
             if (args.length == 2) {
                 dateString = args[1];
-                date = icuSDF.parse(dateString);
+                date = icuDateFormat[0].parse(dateString);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -55,12 +60,7 @@ public class DateFormatPerformanceTest extends PerfTest {
     PerfTest.Function TestICUConstruction() {
         return new PerfTest.Function() {
             public void call() {
-                try {
-                    new com.ibm.icu.text.SimpleDateFormat(pattern, locale);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e.getMessage());
-                }
+                new com.ibm.icu.text.SimpleDateFormat(pattern, locale);
             }
         };
     }
@@ -68,24 +68,18 @@ public class DateFormatPerformanceTest extends PerfTest {
     PerfTest.Function TestJDKConstruction() {
         return new PerfTest.Function() {
             public void call() {
-                try {
-                    new java.text.SimpleDateFormat(pattern, locale);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e.getMessage());
-                }
+                new java.text.SimpleDateFormat(pattern, locale);
             }
         };
     }
 
     PerfTest.Function TestICUParse() {
         return new PerfTest.Function() {
-            public void call() {
+            public void call(int id) {
                 try {
-                    icuSDF.parse(dateString).getTime();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e.getMessage());
+                    icuDateFormat[id].parse(dateString);
+                } catch (ParseException ex) {
+                    ex.printStackTrace();
                 }
             }
         };
@@ -93,12 +87,11 @@ public class DateFormatPerformanceTest extends PerfTest {
 
     PerfTest.Function TestJDKParse() {
         return new PerfTest.Function() {
-            public void call() {
+            public void call(int id) {
                 try {
-                    javaSDF.parse(dateString).getTime();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e.getMessage());
+                    javaDateFormat[id].parse(dateString);
+                } catch (ParseException ex) {
+                    ex.printStackTrace();
                 }
             }
         };
@@ -106,26 +99,16 @@ public class DateFormatPerformanceTest extends PerfTest {
 
     PerfTest.Function TestICUFormat() {
         return new PerfTest.Function() {
-            public void call() {
-                try {
-                    icuSDF.format(date);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e.getMessage());
-                }
+            public void call(int id) {
+                icuDateFormat[id].format(date);
             }
         };
     }
 
     PerfTest.Function TestJDKFormat() {
         return new PerfTest.Function() {
-            public void call() {
-                try {
-                    javaSDF.format(date);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e.getMessage());
-                }
+            public void call(int id) {
+                javaDateFormat[id].format(date);
             }
         };
     }
