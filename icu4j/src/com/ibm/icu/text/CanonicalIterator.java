@@ -151,6 +151,7 @@ public final class CanonicalIterator {
      * @param skipZeros set to true to skip characters with canonical combining class zero
      * @param output the set to add the results to
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static void permute(String source, boolean skipZeros, Set output) {
         // TODO: optimize
