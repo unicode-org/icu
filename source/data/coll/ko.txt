@@ -683,5 +683,6 @@ ko{
             }
             Version{"1.5"}
         }
+        unihan:alias{"root/collations/unihan"}
     }
 }
