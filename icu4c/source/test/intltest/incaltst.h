@@ -28,7 +28,6 @@ public:
     void TestBuddhistFormat(void);
 
     void TestTaiwan(void);
-    void TestTaiwanFormat(void);
 
     void TestJapanese(void);
     void TestJapaneseFormat(void);

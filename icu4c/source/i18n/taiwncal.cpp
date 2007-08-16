@@ -25,7 +25,7 @@ U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(TaiwanCalendar)
 
-static const int32_t kMaxEra = 0; // only 1 era
+static const int32_t kMaxEra = 1; // 1 eras
 
 static const int32_t kTaiwanEraStart = 1911;  // 1911 (Gregorian)
 
@@ -105,23 +105,34 @@ int32_t TaiwanCalendar::internalGetEra() const
 int32_t
 TaiwanCalendar::getGregorianYear(UErrorCode &status)  const
 {
-    int32_t year = (fStamp[UCAL_YEAR] != kUnset) ? internalGet(UCAL_YEAR) : kGregorianEpoch+kTaiwanEraStart;
     int32_t era = internalGetEra();
-    if (era != MINGUO) {
+    
+    int32_t year = 1;
+    if(fStamp[UCAL_YEAR] != kUnset) {
+        year = internalGet(UCAL_YEAR, 1);
+    }
+    if(era == MINGUO) {
+        return kTaiwanEraStart + year;
+    } else if(era == BEFORE_MINGUO) {
+        return kTaiwanEraStart - year;
+    } else {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return kGregorianEpoch + kTaiwanEraStart;
     }
-    return year + kTaiwanEraStart;
 }
 
 int32_t TaiwanCalendar::handleGetExtendedYear()
 {
-    int32_t year;
+    int32_t year = 1;
     if (newerField(UCAL_EXTENDED_YEAR, UCAL_YEAR) == UCAL_EXTENDED_YEAR) {
         year = internalGet(UCAL_EXTENDED_YEAR, 1);
     } else {
-        // Ignore the era, as there is only one
-        year = internalGet(UCAL_YEAR, 1);
+        int32_t era = internalGetEra();
+        if(era == MINGUO) {
+            year =     internalGet(UCAL_YEAR, 1);
+        } else if(era == BEFORE_MINGUO) {
+            year = 1 - internalGet(UCAL_YEAR, 1);
+        }
     }
     return year;
 }
@@ -138,14 +149,23 @@ void TaiwanCalendar::handleComputeFields(int32_t julianDay, UErrorCode& status)
     GregorianCalendar::handleComputeFields(julianDay, status);
     int32_t y = internalGet(UCAL_EXTENDED_YEAR) - kTaiwanEraStart;
     internalSet(UCAL_EXTENDED_YEAR, y);
-    internalSet(UCAL_ERA, 0);
-    internalSet(UCAL_YEAR, y);
+    if(y>0) {
+        internalSet(UCAL_ERA, MINGUO);
+        internalSet(UCAL_YEAR, y);
+    } else {
+        internalSet(UCAL_ERA, BEFORE_MINGUO);
+        internalSet(UCAL_YEAR, 1-y);
+    }
 }
 
 int32_t TaiwanCalendar::handleGetLimit(UCalendarDateFields field, ELimitType limitType) const
 {
     if(field == UCAL_ERA) {
-        return MINGUO;
+        if(limitType == UCAL_LIMIT_MINIMUM || limitType == UCAL_LIMIT_GREATEST_MINIMUM) {
+            return BEFORE_MINGUO;
+        } else {
+            return MINGUO;
+        }
     } else {
         return GregorianCalendar::handleGetLimit(field,limitType);
     }

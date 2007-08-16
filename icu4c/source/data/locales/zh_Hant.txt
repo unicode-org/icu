@@ -1765,6 +1765,7 @@ zh_Hant{
             }
             eras{
                 abbreviated{
+                    "民國前",
                     "民國",
                 }
             }

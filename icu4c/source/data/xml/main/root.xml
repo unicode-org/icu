@@ -52,8 +52,8 @@
                     <alias source="locale" path="../eraAbbr"/>
                 </eraNames>
                 <eraAbbr>
-                    <!-- type="-1" 'before míngúo' -->
-                    <era type="0">míngúo</era>
+                    <era type="0">Before Minguo</era>
+                    <era type="1">Minguo</era>
                     <!-- = 1912 AD     gregorian. See: http://en.wikipedia.org/wiki/Minguo_calendar -->
                 </eraAbbr>
                 <eraNarrow>

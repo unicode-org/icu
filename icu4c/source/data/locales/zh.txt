@@ -2198,6 +2198,7 @@ zh{
             }
             eras{
                 abbreviated{
+                    "民国前",
                     "民国",
                 }
             }
