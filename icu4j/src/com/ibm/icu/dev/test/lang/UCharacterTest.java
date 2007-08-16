@@ -425,7 +425,12 @@ public final class UCharacterTest extends TestFmwk
               UCharacter.getMirror(0x2e) == 0x2e &&
               UCharacter.getMirror(0x6f3) == 0x6f3 &&
               UCharacter.getMirror(0x301c) == 0x301c &&
-              UCharacter.getMirror(0xa4ab) == 0xa4ab)) {
+              UCharacter.getMirror(0xa4ab) == 0xa4ab &&
+
+              /* see Unicode Corrigendum #6 at http://www.unicode.org/versions/corrigendum6.html */
+              UCharacter.getMirror(0x2018) == 0x2018 &&
+              UCharacter.getMirror(0x201b) == 0x201b &&
+              UCharacter.getMirror(0x301d) == 0x301d)) {
             errln("getMirror() does not work correctly");
         }
 
@@ -1499,6 +1504,12 @@ public final class UCharacterTest extends TestFmwk
 
             { 0x003c, UProperty.BIDI_MIRRORED, 1 },
             { 0x003d, UProperty.BIDI_MIRRORED, 0 },
+
+            /* see Unicode Corrigendum #6 at http://www.unicode.org/versions/corrigendum6.html */
+            { 0x2018, UProperty.BIDI_MIRRORED, 0 },
+            { 0x201d, UProperty.BIDI_MIRRORED, 0 },
+            { 0x201f, UProperty.BIDI_MIRRORED, 0 },
+            { 0x301e, UProperty.BIDI_MIRRORED, 0 },
 
             { 0x058a, UProperty.DASH, 1 },
             { 0x007e, UProperty.DASH, 0 },
