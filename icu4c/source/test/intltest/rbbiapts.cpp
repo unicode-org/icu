@@ -68,7 +68,7 @@ void RBBIAPITest::TestCloneEquals()
         errln((UnicodeString)"ERROR:2 RBBI's == and != operator  failed.");
 
 
-    // Quick test of RulesBasedBreakIterator assignment - 
+    // Quick test of RulesBasedBreakIterator assignment -
     // Check that
     //    two different iterators are !=
     //    they are == after assignment
@@ -122,16 +122,16 @@ void RBBIAPITest::TestCloneEquals()
     RuleBasedBreakIterator* bi1clone=(RuleBasedBreakIterator*)bi1->clone();
     RuleBasedBreakIterator* bi2clone=(RuleBasedBreakIterator*)bi2->clone();
 
-    if(*bi1clone != *bi1 || *bi1clone  != *biequal  ||  
+    if(*bi1clone != *bi1 || *bi1clone  != *biequal  ||
       *bi1clone == *bi3 || *bi1clone == *bi2)
         errln((UnicodeString)"ERROR:1 RBBI's clone() method failed");
 
-    if(*bi2clone == *bi1 || *bi2clone == *biequal ||  
+    if(*bi2clone == *bi1 || *bi2clone == *biequal ||
        *bi2clone == *bi3 || *bi2clone != *bi2)
         errln((UnicodeString)"ERROR:2 RBBI's clone() method failed");
 
     if(bi1->getText() != bi1clone->getText()   ||
-       bi2clone->getText() != bi2->getText()   || 
+       bi2clone->getText() != bi2->getText()   ||
        *bi2clone == *bi1clone )
         errln((UnicodeString)"ERROR: RBBI's clone() method failed");
 
@@ -232,7 +232,7 @@ void RBBIAPITest::TestHashCode()
         errln((UnicodeString)"ERROR: different objects have same hashcodes");
 
     delete bi1clone;
-    delete bi2clone; 
+    delete bi2clone;
     delete bi1;
     delete bi2;
     delete bi3;
@@ -256,7 +256,7 @@ void RBBIAPITest::TestGetSetAdoptText()
     CharacterIterator* text1Clone = text1->clone();
     CharacterIterator* text2= new StringCharacterIterator(str2);
     CharacterIterator* text3= new StringCharacterIterator(str2, 3, 10, 3); //  "ond str"
-    
+
     wordIter1->setText(str1);
     CharacterIterator *tci = &wordIter1->getText();
     UnicodeString      tstr;
@@ -366,9 +366,9 @@ void RBBIAPITest::TestGetSetAdoptText()
     delete charIter1;
     delete rb;
 
- } 
+ }
 
-  
+
 void RBBIAPITest::TestIteration()
 {
     // This test just verifies that the API is present.
@@ -407,13 +407,6 @@ void RBBIAPITest::TestIteration()
     if (U_FAILURE(status) || bi == NULL)  {
         errln("Failure creating Title break iterator.  Status = %s", u_errorName(status));
     }
-    delete bi;
-
-    status=U_ZERO_ERROR;
-    bi  = (RuleBasedBreakIterator*)RuleBasedBreakIterator::
-            createXGraphemeClusterInstance(Locale::getDefault(), status);
-    TEST_ASSERT_SUCCESS(status);
-    TEST_ASSERT(bi != NULL);
     delete bi;
 
     status=U_ZERO_ERROR;
@@ -605,7 +598,7 @@ void RBBIAPITest::TestBuilder() {
      int32_t bounds1[] = {0, 3, 6, 7, 8, 11};
      UErrorCode status=U_ZERO_ERROR;
      UParseError    parseError;
-     
+
      RuleBasedBreakIterator *bi = new RuleBasedBreakIterator(rulesString1, parseError, status);
      if(U_FAILURE(status)) {
          errln("FAIL : in construction");
@@ -632,7 +625,7 @@ void RBBIAPITest::TestQuoteGrouping() {
      int32_t bounds1[] = {0, 6, 7, 10, 11, 12};
      UErrorCode status=U_ZERO_ERROR;
      UParseError    parseError;
-     
+
      RuleBasedBreakIterator *bi = new RuleBasedBreakIterator(rulesString1, parseError, status);
      if(U_FAILURE(status)) {
          errln("FAIL : in construction");
@@ -648,7 +641,7 @@ void RBBIAPITest::TestQuoteGrouping() {
 //      Test word break rule status constants.
 //
 void RBBIAPITest::TestRuleStatus() {
-     UChar str[30]; 
+     UChar str[30];
      u_unescape("plain word 123.45 \\u9160\\u9161 \\u30a1\\u30a2 \\u3041\\u3094",
               // 012345678901234567  8      9    0  1      2    3  4      5    6
               //                    Ideographic    Katakana       Hiragana
@@ -666,7 +659,7 @@ void RBBIAPITest::TestRuleStatus() {
                           UBRK_WORD_KANA_LIMIT, UBRK_WORD_NONE_LIMIT,   UBRK_WORD_KANA_LIMIT, UBRK_WORD_KANA_LIMIT};
 
      UErrorCode status=U_ZERO_ERROR;
-     
+
      RuleBasedBreakIterator *bi = (RuleBasedBreakIterator *)BreakIterator::createWordInstance(Locale::getEnglish(), status);
      if(U_FAILURE(status)) {
          errln("FAIL : in construction");
@@ -688,7 +681,7 @@ void RBBIAPITest::TestRuleStatus() {
                  errln("FAIL: incorrect tag value %d at position %d", tag, pos);
                  break;
              }
-             
+
              // Check that we get the same tag values from getRuleStatusVec()
              int32_t vec[10];
              int t = bi->getRuleStatusVec(vec, 10, status);
@@ -764,7 +757,7 @@ void RBBIAPITest::TestRuleStatusVec() {
 
      UErrorCode status=U_ZERO_ERROR;
      UParseError    parseError;
-     
+
      RuleBasedBreakIterator *bi = new RuleBasedBreakIterator(rulesString, parseError, status);
      TEST_ASSERT_SUCCESS(status);
      if (U_SUCCESS(status)) {
@@ -823,7 +816,7 @@ void RBBIAPITest::TestRuleStatusVec() {
          TEST_ASSERT(statusVals[0] == 0);
 
          //
-         //  Check buffer overflow error handling.   Char == A 
+         //  Check buffer overflow error handling.   Char == A
          //
          bi->first();
          pos = bi->next();
@@ -867,7 +860,7 @@ void RBBIAPITest::TestBug2190() {
      int32_t bounds1[] = {0, 4, 8};
      UErrorCode status=U_ZERO_ERROR;
      UParseError    parseError;
-     
+
      RuleBasedBreakIterator *bi = new RuleBasedBreakIterator(rulesString1, parseError, status);
      if(U_FAILURE(status)) {
          errln("FAIL : in construction");
@@ -883,19 +876,19 @@ void RBBIAPITest::TestRegistration() {
 #if !UCONFIG_NO_SERVICE
     UErrorCode status = U_ZERO_ERROR;
     BreakIterator* ja_word = BreakIterator::createWordInstance("ja_JP", status);
-    
+
     // ok to not delete these if we exit because of error?
     BreakIterator* ja_char = BreakIterator::createCharacterInstance("ja_JP", status);
     BreakIterator* root_word = BreakIterator::createWordInstance("", status);
     BreakIterator* root_char = BreakIterator::createCharacterInstance("", status);
-    
+
     URegistryKey key = BreakIterator::registerInstance(ja_word, "xx", UBRK_WORD, status);
     {
         if (ja_word && *ja_word == *root_word) {
             errln("japan not different from root");
         }
     }
-    
+
     {
         BreakIterator* result = BreakIterator::createWordInstance("xx_XX", status);
         UBool fail = TRUE;
@@ -907,7 +900,7 @@ void RBBIAPITest::TestRegistration() {
             errln("bad result for xx_XX/word");
         }
     }
-    
+
     {
         BreakIterator* result = BreakIterator::createCharacterInstance("ja_JP", status);
         UBool fail = TRUE;
@@ -919,7 +912,7 @@ void RBBIAPITest::TestRegistration() {
             errln("bad result for ja_JP/char");
         }
     }
-    
+
     {
         BreakIterator* result = BreakIterator::createCharacterInstance("xx_XX", status);
         UBool fail = TRUE;
@@ -931,7 +924,7 @@ void RBBIAPITest::TestRegistration() {
             errln("bad result for xx_XX/char");
         }
     }
-    
+
     {
         StringEnumeration* avail = BreakIterator::getAvailableLocales();
         UBool found = FALSE;
@@ -947,14 +940,14 @@ void RBBIAPITest::TestRegistration() {
             errln("did not find test locale");
         }
     }
-    
+
     {
         UBool unreg = BreakIterator::unregister(key, status);
         if (!unreg) {
             errln("unable to unregister");
         }
     }
-    
+
     {
         BreakIterator* result = BreakIterator::createWordInstance("en_US", status);
         BreakIterator* root = BreakIterator::createWordInstance("", status);
@@ -968,7 +961,7 @@ void RBBIAPITest::TestRegistration() {
             errln("did not get root break");
         }
     }
-    
+
     {
         StringEnumeration* avail = BreakIterator::getAvailableLocales();
         UBool found = FALSE;
@@ -984,7 +977,7 @@ void RBBIAPITest::TestRegistration() {
             errln("found test locale");
         }
     }
-    
+
     {
         int32_t count;
         UBool   foundLocale = FALSE;
@@ -999,8 +992,8 @@ void RBBIAPITest::TestRegistration() {
             errln("BreakIterator::getAvailableLocales(&count), failed to find EN.");
         }
     }
-    
-    
+
+
     // ja_word was adopted by factory
     delete ja_char;
     delete root_word;
@@ -1111,7 +1104,7 @@ void RBBIAPITest::doTest(UnicodeString& testString, int32_t start, int32_t gotof
     if(gotoffset != expectedOffset)
          errln((UnicodeString)"ERROR:****returned #" + gotoffset + (UnicodeString)" instead of #" + expectedOffset);
     if(start <= gotoffset){
-        testString.extractBetween(start, gotoffset, selected);  
+        testString.extractBetween(start, gotoffset, selected);
     }
     else{
         testString.extractBetween(gotoffset, start, selected);

@@ -60,7 +60,7 @@ BreakIterator::buildInstance(const Locale& loc, const char *type, int32_t kind, 
     UResourceBundle *brkRules = &brkRulesStack;
     UResourceBundle *brkName  = &brkNameStack;
     RuleBasedBreakIterator *result = NULL;
-    
+
     if (U_FAILURE(status))
         return NULL;
 
@@ -96,7 +96,7 @@ BreakIterator::buildInstance(const Locale& loc, const char *type, int32_t kind, 
             uprv_strncpy(actualLocale,
                 ures_getLocale(brkName, &status),
                 sizeof(actualLocale)/sizeof(actualLocale[0]));
-            
+
             UChar* extStart=u_strchr(brkfname, 0x002e);
             int len = 0;
             if(extStart!=NULL){
@@ -110,7 +110,7 @@ BreakIterator::buildInstance(const Locale& loc, const char *type, int32_t kind, 
 
     ures_close(brkRules);
     ures_close(brkName);
-    
+
     UDataMemory* file = udata_open(U_ICUDATA_BRKITR, ext, fnbuff, &status);
     if (U_FAILURE(status)) {
         ures_close(b);
@@ -128,7 +128,7 @@ BreakIterator::buildInstance(const Locale& loc, const char *type, int32_t kind, 
     }
 
     ures_close(b);
-    
+
     if (U_FAILURE(status) && result != NULL) {  // Sometimes redundant check, but simple
         delete result;
         return NULL;
@@ -185,15 +185,6 @@ BreakIterator* U_EXPORT2
 BreakIterator::createTitleInstance(const Locale& key, UErrorCode& status)
 {
     return createInstance(key, UBRK_TITLE, status);
-}
-
-// -------------------------------------
-
-// Creates a break iterator for Extended Grapheme Cluster breaks.
-BreakIterator* U_EXPORT2
-BreakIterator::createXGraphemeClusterInstance(const Locale& key, UErrorCode& status)
-{
-    return createInstance(key, UBRK_X_GRAPHEME_CLUSTER, status);
 }
 
 // -------------------------------------
@@ -266,11 +257,11 @@ public:
         UErrorCode status = U_ZERO_ERROR;
         registerFactory(new ICUBreakIteratorFactory(), status);
     }
-    
+
     virtual UObject* cloneInstance(UObject* instance) const {
         return ((BreakIterator*)instance)->clone();
     }
-    
+
     virtual UObject* handleDefault(const ICUServiceKey& key, UnicodeString* /*actualID*/, UErrorCode& status) const {
         LocaleKey& lkey = (LocaleKey&)key;
         int32_t kind = lkey.kind();
@@ -278,7 +269,7 @@ public:
         lkey.currentLocale(loc);
         return BreakIterator::makeInstance(loc, kind, status);
     }
-    
+
     virtual UBool isDefault() const {
         return countFactories() == 1;
     }
@@ -293,7 +284,7 @@ U_NAMESPACE_END
 static U_NAMESPACE_QUALIFIER ICULocaleService* gService = NULL;
 
 /**
- * Release all static memory held by breakiterator.  
+ * Release all static memory held by breakiterator.
  */
 U_CDECL_BEGIN
 static UBool U_CALLCONV breakiterator_cleanup(void) {
@@ -308,12 +299,12 @@ static UBool U_CALLCONV breakiterator_cleanup(void) {
 U_CDECL_END
 U_NAMESPACE_BEGIN
 
-static ICULocaleService* 
+static ICULocaleService*
 getService(void)
 {
     UBool needsInit;
     UMTX_CHECK(NULL, (UBool)(gService == NULL), needsInit);
-    
+
     if (needsInit) {
         ICULocaleService  *tService = new ICUBreakIteratorService();
         umtx_lock(NULL);
@@ -331,7 +322,7 @@ getService(void)
 // -------------------------------------
 
 static inline UBool
-hasService(void) 
+hasService(void)
 {
     UBool retVal;
     UMTX_CHECK(NULL, gService != NULL, retVal);
@@ -341,7 +332,7 @@ hasService(void)
 // -------------------------------------
 
 URegistryKey U_EXPORT2
-BreakIterator::registerInstance(BreakIterator* toAdopt, const Locale& locale, UBreakIteratorType kind, UErrorCode& status) 
+BreakIterator::registerInstance(BreakIterator* toAdopt, const Locale& locale, UBreakIteratorType kind, UErrorCode& status)
 {
     return getService()->registerInstance(toAdopt, locale, kind, status);
 }
@@ -349,7 +340,7 @@ BreakIterator::registerInstance(BreakIterator* toAdopt, const Locale& locale, UB
 // -------------------------------------
 
 UBool U_EXPORT2
-BreakIterator::unregister(URegistryKey key, UErrorCode& status) 
+BreakIterator::unregister(URegistryKey key, UErrorCode& status)
 {
     if (U_SUCCESS(status)) {
         if (hasService()) {
@@ -377,7 +368,7 @@ BreakIterator::createInstance(const Locale& loc, int32_t kind, UErrorCode& statu
     if (U_FAILURE(status)) {
         return NULL;
     }
-    
+
     u_init(&status);
 #if !UCONFIG_NO_SERVICE
     if (hasService()) {
@@ -408,7 +399,7 @@ BreakIterator::createInstance(const Locale& loc, int32_t kind, UErrorCode& statu
 
 // -------------------------------------
 
-BreakIterator* 
+BreakIterator*
 BreakIterator::makeInstance(const Locale& loc, int32_t kind, UErrorCode& status)
 {
 
@@ -418,7 +409,7 @@ BreakIterator::makeInstance(const Locale& loc, int32_t kind, UErrorCode& status)
 
     BreakIterator *result = NULL;
     switch (kind) {
-    case UBRK_CHARACTER: 
+    case UBRK_CHARACTER:
         result = BreakIterator::buildInstance(loc, "grapheme", kind, status);
         break;
     case UBRK_WORD:
@@ -433,9 +424,6 @@ BreakIterator::makeInstance(const Locale& loc, int32_t kind, UErrorCode& status)
     case UBRK_TITLE:
         result = BreakIterator::buildInstance(loc, "title", kind, status);
         break;
-    case UBRK_X_GRAPHEME_CLUSTER:
-        result = BreakIterator::buildInstance(loc, "xgc", kind, status);
-        break;
     default:
         status = U_ILLEGAL_ARGUMENT_ERROR;
     }
@@ -447,7 +435,7 @@ BreakIterator::makeInstance(const Locale& loc, int32_t kind, UErrorCode& status)
     return result;
 }
 
-Locale 
+Locale
 BreakIterator::getLocale(ULocDataLocaleType type, UErrorCode& status) const {
     U_LOCALE_BASED(locBased, *this);
     return locBased.getLocale(type, status);

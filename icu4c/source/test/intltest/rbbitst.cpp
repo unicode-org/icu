@@ -1194,8 +1194,8 @@ void RBBITest::TestBug5775() {
     TEST_ASSERT(pos == 6);
     delete bi;
 }
-    
-    
+
+
 
 /**
  * Test Japanese Line Break
@@ -1534,13 +1534,7 @@ void RBBITest::TestExtended() {
                 charIdx += 6;
                 break;
             }
-            if (testString.compare(charIdx-1, 5, "<xgc>") == 0) {
-                delete tp.bi;
-                tp.bi = BreakIterator::createXGraphemeClusterInstance(locale,  status);
-                charIdx += 4;
-                break;
-            }
-                
+
             // <locale  loc_name>
             localeMatcher.reset(testString);
             if (localeMatcher.lookingAt(charIdx-1, status)) {
@@ -2090,7 +2084,7 @@ void RBBITest::checkUnicodeTestCase(const char *testFileName, int lineNumber,
         pos = bi->next();
         expectedI++;
     }
-    
+
     if (pos==BreakIterator::DONE && expectedI<breakPositions->size()) {
         errln("Test file \"%s\", line %d, failed to find break at position %d",
             testFileName, lineNumber, breakPositions->elementAti(expectedI));
