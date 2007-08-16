@@ -78,7 +78,6 @@ void IntlCalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &n
     CASE(7,TestPersian);
     CASE(8,TestPersianFormat);
     CASE(9,TestTaiwan);
-    CASE(10,TestTaiwanFormat);
     default: name = ""; break;
     }
 }
@@ -303,21 +302,22 @@ void IntlCalendarTest::TestBuddhist() {
 void IntlCalendarTest::TestTaiwan() {
     // MG 1 == 1912 AD
     UDate timeA = Calendar::getNow();
-
+    
+    // TODO port these to the data items
     int32_t data[] = {
-        0,           // B. era   [928479600000]
+        1,           // B. era   [928479600000]
         1,        // B. year
         1912,        // G. year
         UCAL_JUNE,   // month
         4,           // day
 
-        0,           // B. era   [-79204842000000]
+        1,           // B. era   [-79204842000000]
         3,           // B. year
         1914,        // G. year
         UCAL_FEBRUARY, // month
         12,          // day
 
-        0,           // B. era   [-79204842000000]
+        1,           // B. era   [-79204842000000]
         96,           // B. year
         2007,        // G. year
         UCAL_FEBRUARY, // month
@@ -475,86 +475,7 @@ void IntlCalendarTest::TestBuddhistFormat() {
     }
 }
 
-
-void IntlCalendarTest::TestTaiwanFormat() {
-// TODO: need some more data
-#if 0
-    UErrorCode status = U_ZERO_ERROR;
-    
-    // Test simple parse/format with adopt
-    
-    // First, a contrived english test..
-    UDate aDate = 999932400000.0; 
-    SimpleDateFormat *fmt = new SimpleDateFormat(UnicodeString("MMMM d, yyyy G"), Locale("en_US@calendar=buddhist"), status);
-    CHECK(status, "creating date format instance");
-    SimpleDateFormat *fmt2 = new SimpleDateFormat(UnicodeString("MMMM d, yyyy G"), Locale("en_US@calendar=gregorian"), status);
-    CHECK(status, "creating gregorian date format instance");
-    if(!fmt) { 
-        errln("Coudln't create en_US instance");
-    } else {
-        UnicodeString str;
-        fmt2->format(aDate, str);
-        logln(UnicodeString() + "Test Date: " + str);
-        str.remove();
-        fmt->format(aDate, str);
-        logln(UnicodeString() + "as Buddhist Calendar: " + escape(str));
-        UnicodeString expected("September 8, 2544 BE");
-        if(str != expected) {
-            errln("Expected " + escape(expected) + " but got " + escape(str));
-        }
-        UDate otherDate = fmt->parse(expected, status);
-        if(otherDate != aDate) { 
-            UnicodeString str3;
-            fmt->format(otherDate, str3);
-            errln("Parse incorrect of " + escape(expected) + " - wanted " + aDate + " but got " +  otherDate + ", " + escape(str3));
-        } else {
-            logln("Parsed OK: " + expected);
-        }
-        delete fmt;
-    }
-    delete fmt2;
-    
-    CHECK(status, "Error occured testing Buddhist Calendar in English ");
-    
-    status = U_ZERO_ERROR;
-    // Now, try in Thai
-    {
-        UnicodeString expect = CharsToUnicodeString("\\u0E27\\u0E31\\u0E19\\u0E40\\u0E2A\\u0E32\\u0E23\\u0E4C\\u0E17\\u0E35\\u0E48"
-            " 8 \\u0E01\\u0E31\\u0e19\\u0e22\\u0e32\\u0e22\\u0e19 \\u0e1e.\\u0e28. 2544");
-        UDate         expectDate = 999932400000.0;
-        Locale        loc("th_TH_TRADITIONAL"); // legacy
-        
-        simpleTest(loc, expect, expectDate, status);
-    }
-    status = U_ZERO_ERROR;
-    {
-        UnicodeString expect = CharsToUnicodeString("\\u0E27\\u0E31\\u0E19\\u0E40\\u0E2A\\u0E32\\u0E23\\u0E4C\\u0E17\\u0E35\\u0E48"
-            " 8 \\u0E01\\u0E31\\u0e19\\u0e22\\u0e32\\u0e22\\u0e19 \\u0e1e.\\u0e28. 2544");
-        UDate         expectDate = 999932400000.0;
-        Locale        loc("th_TH@calendar=buddhist");
-        
-        simpleTest(loc, expect, expectDate, status);
-    }
-    status = U_ZERO_ERROR;
-    {
-        UnicodeString expect = CharsToUnicodeString("\\u0E27\\u0E31\\u0E19\\u0E40\\u0E2A\\u0E32\\u0E23\\u0E4C\\u0E17\\u0E35\\u0E48"
-            " 8 \\u0E01\\u0E31\\u0e19\\u0e22\\u0e32\\u0e22\\u0e19 \\u0e04.\\u0e28. 2001");
-        UDate         expectDate = 999932400000.0;
-        Locale        loc("th_TH@calendar=gregorian");
-        
-        simpleTest(loc, expect, expectDate, status);
-    }
-    status = U_ZERO_ERROR;
-    {
-        UnicodeString expect = CharsToUnicodeString("\\u0E27\\u0E31\\u0E19\\u0E40\\u0E2A\\u0E32\\u0E23\\u0E4C\\u0E17\\u0E35\\u0E48"
-            " 8 \\u0E01\\u0E31\\u0e19\\u0e22\\u0e32\\u0e22\\u0e19 \\u0e04.\\u0e28. 2001");
-        UDate         expectDate = 999932400000.0;
-        Locale        loc("th_TH_TRADITIONAL@calendar=gregorian");
-        
-        simpleTest(loc, expect, expectDate, status);
-    }
-#endif
-}
+// TaiwanFormat has been moved to testdata/format.txt
 
 
 void IntlCalendarTest::TestJapaneseFormat() {
