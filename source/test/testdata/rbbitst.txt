@@ -94,23 +94,23 @@
 ########################################################################################
 #
 #
-#       Extended G r a p h e m e    C l u s t e r     T e s t s
+#       E x t e n d e d    G r a p h e m e    C l u s t e r     T e s t s
 #
 #
 ##########################################################################################
-<xgc>
+#<xgc>
 
 # Plain Vanilla grapheme clusters
-<data>•a•b•c•</data>
-<data>•a\u0301\u0302• •b\u0303\u0304•</data>
+#<data>•a•b•c•</data>
+#<data>•a\u0301\u0302• •b\u0303\u0304•</data>
 
 # Assorted Hindi combining marks
-<data>•\u0904\u0903• •\u0937\u093E• •\u0904\u093F• •\u0937\u0940• •\u0937\u0949• •\u0937\u094A• •\u0937\u094B• •\u0937\u094C•</data>
+#<data>•\u0904\u0903• •\u0937\u093E• •\u0904\u093F• •\u0937\u0940• •\u0937\u0949• •\u0937\u094A• •\u0937\u094B• •\u0937\u094C•</data>
 
 # Thai Clusters
 # $Prepend $Extend* $PrependBase $Extend*;
 #
-<data>•\u0e40\u0e01•\u0e44\u0301\u0e23\u0302\u0303•\u0e40•\u0e40\u0e02•\u0e02• •</data>
+#<data>•\u0e40\u0e01•\u0e44\u0301\u0e23\u0302\u0303•\u0e40•\u0e40\u0e02•\u0e02• •</data>
 
 
 ########################################################################################

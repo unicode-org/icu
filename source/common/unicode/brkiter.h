@@ -26,7 +26,7 @@
  * \file
  * \brief C++ API: Break Iterator.
  */
- 
+
 #if UCONFIG_NO_BREAK_ITERATION
 
 U_NAMESPACE_BEGIN
@@ -92,7 +92,7 @@ U_NAMESPACE_BEGIN
  * file ubrk.h
  * <p>
  * Code snippits illustrating the use of the Break Iterator APIs
- * are available in the ICU User Guide, 
+ * are available in the ICU User Guide,
  * http://icu-project.org/userguide/boundaryAnalysis.html
  * and in the sample program icu/source/samples/break/break.cpp"
  *
@@ -174,7 +174,7 @@ public:
     virtual void  setText(const UnicodeString &text) = 0;
 
     /**
-     * Reset the break iterator to operate over the text represented by 
+     * Reset the break iterator to operate over the text represented by
      * the UText.  The iterator position is reset to the start.
      *
      * This function makes a shallow clone of the supplied UText.  This means
@@ -397,22 +397,6 @@ public:
     static BreakIterator* U_EXPORT2
     createTitleInstance(const Locale& where, UErrorCode& status);
 
-   /**
-    * Create BreakIterator for Extended Grapheme Clusters using specified locale
-    * Returns an instance of a BreakIterator for locating XGC booundaries
-    * Extended Grapheme Clusters are combining character sequences and other
-    *   sequences that should remain unbroken when iterating over
-    *   "characters" from a user perspective.
-    * @param loc the locale.
-    * @param status Receive information regarding any errors or warnings that
-    *   occurred in creating the break iterator.
-    * @return A BreakIterator for Extended Grapheme Clusters.
-    * The caller owns the returned object and is responsible for deleting it.
-    * @draft ICU 3.8
-    */
-   static BreakIterator* U_EXPORT2
-   createXGraphemeClusterInstance(const Locale& loc, UErrorCode& status);
-   
     /**
      * Get the set of Locales for which TextBoundaries are installed.
      * <p><b>Note:</b> this will not return locales added through the register
