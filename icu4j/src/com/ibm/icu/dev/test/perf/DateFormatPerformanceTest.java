@@ -22,7 +22,7 @@ public class DateFormatPerformanceTest extends PerfTest {
 
     private com.ibm.icu.text.SimpleDateFormat[] icuDateFormat;
 
-    private java.text.SimpleDateFormat[] javaDateFormat;
+    private java.text.SimpleDateFormat[] jdkDateFormat;
 
     public static void main(String[] args) throws Exception {
         new DateFormatPerformanceTest().run(args);
@@ -40,10 +40,10 @@ public class DateFormatPerformanceTest extends PerfTest {
                 locale = Locale.getDefault();
 
             icuDateFormat = new com.ibm.icu.text.SimpleDateFormat[threads];
-            javaDateFormat = new java.text.SimpleDateFormat[threads];
+            jdkDateFormat = new java.text.SimpleDateFormat[threads];
             for (int i = 0; i < threads; i++) {
                 icuDateFormat[i] = new com.ibm.icu.text.SimpleDateFormat(pattern, locale);
-                javaDateFormat[i] = new java.text.SimpleDateFormat(pattern, locale);
+                jdkDateFormat[i] = new java.text.SimpleDateFormat(pattern, locale);
             }
 
             if (args.length == 2) {
@@ -89,7 +89,7 @@ public class DateFormatPerformanceTest extends PerfTest {
         return new PerfTest.Function() {
             public void call(int id) {
                 try {
-                    javaDateFormat[id].parse(dateString);
+                    jdkDateFormat[id].parse(dateString);
                 } catch (ParseException ex) {
                     ex.printStackTrace();
                 }
@@ -108,7 +108,7 @@ public class DateFormatPerformanceTest extends PerfTest {
     PerfTest.Function TestJDKFormat() {
         return new PerfTest.Function() {
             public void call(int id) {
-                javaDateFormat[id].format(date);
+                jdkDateFormat[id].format(date);
             }
         };
     }
