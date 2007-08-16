@@ -811,7 +811,7 @@ public abstract class PerfTest {
     }
 
     
-    public class BOMFreeReader extends Reader {
+    public static class BOMFreeReader extends Reader {
         InputStreamReader reader;
         String encoding;
         int MAX_BOM_LENGTH = 5;
