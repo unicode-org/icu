@@ -18,14 +18,14 @@ my $TESTCLASS = 'com.ibm.icu.dev.test.perf.DecimalFormatPerformanceTest';
 # a baseline method which is used for comparison.
 my @METHODS  = (
                  ['TestJDKConstruction',     'TestICUConstruction'],
-#                ['TestJDKParse',            'TestICUParse'],
-#                ['TestJDKFormat',           'TestICUFormat']
+                 ['TestJDKParse',            'TestICUParse'],
+                 ['TestJDKFormat',           'TestICUFormat']
                );
 # Patterns which define the set of characters used for testing.
 my @OPTIONS = (
 #                 locale    pattern      date string
                 [ "en_US",  "#,###.##",  "1,234.56"],
-#               [ "de_DE",  "#,###.##",  "1.234,56"],
+                [ "de_DE",  "#,###.##",  "1.234,56"],
               );
 
 my $THREADS;        # number of threads (input from command-line args)
