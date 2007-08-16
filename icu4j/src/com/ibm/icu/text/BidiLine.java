@@ -279,7 +279,8 @@ final class BidiLine {
            a special interpretation when REORDER_RUNS_ONLY
          */
         BidiRun newRun = new BidiRun(), iRun;
-        int runCount = bidi.countRuns();
+        getRuns(bidi);
+        int runCount = bidi.runCount;
         int visualStart = 0, logicalLimit = 0;
         iRun = bidi.runs[0];
 
