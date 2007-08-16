@@ -106,8 +106,7 @@ typedef enum UBreakIteratorType {
   UBRK_TITLE = 4,
 #endif /* U_HIDE_DEPRECATED_API */
   /** Extended Grapheme Cluster breaks  @draft ICU 3.8 */
-  UBRK_X_GRAPHEME_CLUSTER=5,
-  UBRK_COUNT = 6
+  UBRK_COUNT = 5
 } UBreakIteratorType;
 
 /** Value indicating all text boundaries have been returned.
