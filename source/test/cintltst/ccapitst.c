@@ -2632,8 +2632,10 @@ static void testFromBadUTF8(UConverter *utf8Cnv, UConverter *cnv, const char *co
 /* Test illegal UTF-8 input. */
 static void TestConvertExFromUTF8() {
     static const char *const converterNames[]={
+#if !UCONFIG_NO_LEGACY_CONVERSION
         "windows-1252",
         "shift-jis",
+#endif
         "us-ascii",
         "iso-8859-1",
         "utf-8"
