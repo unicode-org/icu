@@ -18,8 +18,6 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CodingErrorAction;
 
-import sun.io.CharToByteConverter;
-
 import com.ibm.icu.charset.CharsetProviderICU;
 
 /**
