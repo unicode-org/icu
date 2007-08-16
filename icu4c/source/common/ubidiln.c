@@ -300,14 +300,14 @@ ubidi_getLevels(UBiDi *pBiDi, UErrorCode *pErrorCode) {
 }
 
 U_CAPI void U_EXPORT2
-ubidi_getLogicalRun(const UBiDi *pBiDi, int32_t logicalStart,
+ubidi_getLogicalRun(const UBiDi *pBiDi, int32_t logicalPosition,
                     int32_t *pLogicalLimit, UBiDiLevel *pLevel) {
     UErrorCode errorCode;
     int32_t runCount, visualStart, logicalLimit, logicalFirst, i;
     Run iRun;
 
     errorCode=U_ZERO_ERROR;
-    RETURN_VOID_IF_BAD_RANGE(logicalStart, 0, pBiDi->length, errorCode);
+    RETURN_VOID_IF_BAD_RANGE(logicalPosition, 0, pBiDi->length, errorCode);
     /* ubidi_countRuns will check VALID_PARA_OR_LINE */
     runCount=ubidi_countRuns((UBiDi *)pBiDi, &errorCode);
     if(U_FAILURE(errorCode)) {
@@ -323,8 +323,8 @@ ubidi_getLogicalRun(const UBiDi *pBiDi, int32_t logicalStart,
         iRun = pBiDi->runs[i];
         logicalFirst=GET_INDEX(iRun.logicalStart);
         logicalLimit=logicalFirst+iRun.visualLimit-visualStart;
-        if((logicalStart>=logicalFirst) &&
-           (logicalStart<logicalLimit)) {
+        if((logicalPosition>=logicalFirst) &&
+           (logicalPosition<logicalLimit)) {
             break;
         }
         visualStart = iRun.visualLimit;
@@ -336,10 +336,10 @@ ubidi_getLogicalRun(const UBiDi *pBiDi, int32_t logicalStart,
         if(pBiDi->reorderingMode==UBIDI_REORDER_RUNS_ONLY) {
             *pLevel=(UBiDiLevel)GET_ODD_BIT(iRun.logicalStart);
         }
-        else if(pBiDi->direction!=UBIDI_MIXED || logicalStart>=pBiDi->trailingWSStart) {
-            *pLevel=GET_PARALEVEL(pBiDi, logicalStart);
+        else if(pBiDi->direction!=UBIDI_MIXED || logicalPosition>=pBiDi->trailingWSStart) {
+            *pLevel=GET_PARALEVEL(pBiDi, logicalPosition);
         } else {
-        *pLevel=pBiDi->levels[logicalStart];
+        *pLevel=pBiDi->levels[logicalPosition];
         }
     }
 }
