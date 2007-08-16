@@ -27,9 +27,8 @@
             <calendar type="taiwan">
                 <eras>
                     <eraAbbr>
-                        <!-- pre-minguo: 중화민국전 -->
-                        <era type="0">중화민국</era>
-                        <!-- = 1912 AD	 gregorian. See: http://en.wikipedia.org/wiki/Minguo_calendar -->
+                        <era type="0">중화민국전</era>
+                        <era type="1">중화민국</era>
                     </eraAbbr>
                 </eras>
                 <dateFormats>

@@ -34,8 +34,15 @@ format:table(nofallback) {
                {
                     "zh_TW@calendar=taiwan",
                     "DATE=LONG",
-                    "ERA=0,YEAR=98,MONTH=0,DATE=24",
+                    "ERA=1,YEAR=98,MONTH=0,DATE=24",
                     "民國98年1月24日",
+               },
+               {
+                    //民國前2年1月24日 -> 1910-1-24 
+                    "zh_TW@calendar=taiwan",
+                    "DATE=LONG",
+                    "ERA=0,YEAR=2,MONTH=0,DATE=24",
+                    "民國前2年1月24日",
                },
             }
         }

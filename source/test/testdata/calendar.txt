@@ -25,19 +25,26 @@ calendar:table(nofallback) {
             Cases { 
                {
                     "en_US@calendar=taiwan",         
-                    "ERA=0,YEAR=1,MONTH=JUNE,DATE=4",  // tw  
+                    "ERA=1,YEAR=1,MONTH=JUNE,DATE=4",  // tw  
                     "ERA=1,YEAR=1912,MONTH=,DATE="     // greg
                },
                {
                     "en_US@calendar=taiwan",         
-                    "ERA=0,YEAR=3,MONTH=FEBRUARY,DATE=12",  // tw  
+                    "ERA=1,YEAR=3,MONTH=FEBRUARY,DATE=12",  // tw  
                     "ERA=1,YEAR=1914,MONTH=,DATE="     // greg
                },
                {
                     "en_US@calendar=taiwan",         
-                    "ERA=0,YEAR=96,MONTH=FEBRUARY,DATE=12",  // tw  
+                    "ERA=1,YEAR=96,MONTH=FEBRUARY,DATE=12",  // tw  
                     "ERA=1,YEAR=2007,MONTH=,DATE="     // greg
                },
+               // before 1912:
+               // [before minguo]2   1[month] 24[day] -> 1910-1-24 
+               {
+                    "en_US@calendar=taiwan", 
+                    "ERA=0,YEAR=2,MONTH=JANUARY,DATE=24", // tw
+                    "ERA=1,YEAR=1910,MONTH=JANUARY,DATE=24", // greg
+               }
             }
         }
         TestCalendarOperations {
@@ -53,33 +60,33 @@ calendar:table(nofallback) {
             Cases { 
                {
                     "en_US@calendar=taiwan",         
-                    "ERA=0,YEAR=1,MONTH=JUNE,DATE=4",  // tw  
+                    "ERA=1,YEAR=1,MONTH=JUNE,DATE=4",  // tw  
                     "roll",
                     "DATE=1", // date + 1
-                    "ERA=0,YEAR=1,MONTH=JUNE,DATE=5",  // tw  
+                    "ERA=1,YEAR=1,MONTH=JUNE,DATE=5",  // tw  
                },
                {
                     "en_US@calendar=taiwan",         
-                    "ERA=0,YEAR=1,MONTH=JUNE,DATE=4",  // tw  
+                    "ERA=1,YEAR=1,MONTH=JUNE,DATE=4",  // tw  
                     "add",
                     "DATE=1", // date + 1
-                    "ERA=0,YEAR=1,MONTH=JUNE,DATE=5",  // tw  
+                    "ERA=1,YEAR=1,MONTH=JUNE,DATE=5",  // tw  
                },
                {
                     "en_US@calendar=taiwan",         
-                    "ERA=0,YEAR=1,MONTH=JUNE,DATE=4",  // tw  
+                    "ERA=1,YEAR=1,MONTH=JUNE,DATE=4",  // tw  
                     "roll",
                     "YEAR=1", // date + 1
-                    "ERA=0,YEAR=2,MONTH=JUNE,DATE=4",  // tw  
+                    "ERA=1,YEAR=2,MONTH=JUNE,DATE=4",  // tw  
                },
                {
                     "en_US@calendar=taiwan",         
-                    "ERA=0,YEAR=1,MONTH=JUNE,DATE=4",  // tw  
+                    "ERA=1,YEAR=1,MONTH=JUNE,DATE=4",  // tw  
                     "add",
                     "YEAR=1", // date + 1
-                    "ERA=0,YEAR=2,MONTH=JUNE,DATE=4",  // tw  
+                    "ERA=1,YEAR=2,MONTH=JUNE,DATE=4",  // tw  
                },
-	       }
+	    }
         }	          
     }	    
 }

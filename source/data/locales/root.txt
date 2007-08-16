@@ -1206,7 +1206,8 @@ root{
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             eras{
                 abbreviated{
-                    "míngúo",
+                    "Before Minguo",
+                    "Minguo",
                 }
                 narrow:alias{"/LOCALE/calendar/taiwan/eras/abbreviated"}
                 wide:alias{"/LOCALE/calendar/taiwan/eras/abbreviated"}

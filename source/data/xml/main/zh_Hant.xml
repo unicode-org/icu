@@ -28,9 +28,8 @@
             <calendar type="taiwan">
                 <eras>
                     <eraAbbr>
-                        <!-- pre-minguo: 民國前 -->
-                        <era type="0">民國</era>
-                        <!-- = 1912 AD	 gregorian. See: http://en.wikipedia.org/wiki/Minguo_calendar -->
+                        <era type="0">民國前</era>
+                        <era type="1">民國</era>
                     </eraAbbr>
                 </eras>
                 <dateFormats>
