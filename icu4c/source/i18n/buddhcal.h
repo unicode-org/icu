@@ -129,20 +129,6 @@ public:
     virtual const char * getType() const;
 
     /**
-     * (Overrides Calendar) UDate Arithmetic function. Adds the specified (signed) amount
-     * of time to the given time field, based on the calendar's rules.  For more
-     * information, see the documentation for Calendar::add().
-     *
-     * @param field   The time field.
-     * @param amount  The amount of date or time to be added to the field.
-     * @param status  Output param set to success/failure code on exit. If any value
-     *                previously set in the time field is invalid, this will be set to
-     *                an error status.
-     * @draft ICU 2.6
-     */
-    virtual void add(UCalendarDateFields field, int32_t amount, UErrorCode& status);
-
-    /**
      * Gets the maximum value for the given time field. e.g. for DAY_OF_MONTH,
      * 31.
      *
@@ -161,19 +147,6 @@ public:
      * @draft ICU 2.6
      */
     int32_t getLeastMaximum(UCalendarDateFields field) const;
-
-    /**
-     * @deprecated ICU 2.6 use UCalendarDateFields instead of EDateFields
-     */
-    inline virtual int32_t getMaximum(EDateFields field) const { return getMaximum((UCalendarDateFields)field); }
-    /**
-     * @deprecated ICU 2.6 use UCalendarDateFields instead of EDateFields
-     */
-    inline virtual int32_t getLeastMaximum(EDateFields field) const { return getLeastMaximum((UCalendarDateFields)field); }
-    /**
-     * @deprecated ICU 2.6 use UCalendarDateFields instead of EDateFields
-     */
-    inline virtual void add(EDateFields field, int32_t amount, UErrorCode& status) { add((UCalendarDateFields)field, amount, status); }
 
 private:
     BuddhistCalendar(); // default constructor not implemented
