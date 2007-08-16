@@ -684,7 +684,7 @@ public class NormalizerPerformanceTest extends PerfTest {
         
         try {
             if (sun) {
-                normalizerArgs = new Object[] { null, null, Integer.valueOf(0) };
+                normalizerArgs = new Object[] { null, null, new Integer(0) };
                 normalizerArgs[1] = normalizer.getField(compose ? "COMPOSE" : "DECOMP").get(null);
                 normalizerMethod = normalizer.getMethod("normalize", new Class[] { String.class, normalizerArgs[1].getClass(), int.class });
                 // sun.text.Normalizer.normalize(line, compose
@@ -693,13 +693,14 @@ public class NormalizerPerformanceTest extends PerfTest {
             } else {
                 normalizerArgs = new Object[] { null, null };
                 normalizerArgs[1] = Class.forName("java.text.Normalizer$Form").getField(compose ? "NFC" : "NFD").get(null);
-                normalizerMethod = normalizer.getMethod("normalize", new Class[] { String.class, normalizerArgs[1].getClass()});
+                normalizerMethod = normalizer.getMethod("normalize", new Class[] { CharSequence.class, normalizerArgs[1].getClass()});
                 // java.text.Normalizer.normalize(line, compose
                 //   ? java.text.Normalizer.Form.NFC
                 //   : java.text.Normalizer.Form.NFD);
             }
         } catch (Exception ex) {
-            throw new RuntimeException("Reflection error -- could not load the JDK normalizer");
+            ex.printStackTrace();
+            throw new RuntimeException("Reflection error -- could not load the JDK normalizer (" + normalizer.getName() + ")");
         }
     }
     
