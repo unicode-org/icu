@@ -28,6 +28,8 @@ static const int32_t kMaxEra = 0; // only 1 era
 
 static const int32_t kBuddhistEraStart = -543;  // 544 BC (Gregorian)
 
+static const int32_t kGregorianEpoch = 1970;    // used as the default value of EXTENDED_YEAR
+
 BuddhistCalendar::BuddhistCalendar(const Locale& aLocale, UErrorCode& success)
 :   GregorianCalendar(aLocale, success)
 {
@@ -81,13 +83,15 @@ BuddhistCalendar::getLeastMaximum(UCalendarDateFields field) const
 
 int32_t BuddhistCalendar::handleGetExtendedYear()
 {
+    // EXTENDED_YEAR in BuddhistCalendar is a Gregorian year.
+    // The default value of EXTENDED_YEAR is 1970 (Buddhist 2513)
     int32_t year;
     if (newerField(UCAL_EXTENDED_YEAR, UCAL_YEAR) == UCAL_EXTENDED_YEAR) {
-        year = internalGet(UCAL_EXTENDED_YEAR, 1);
+        year = internalGet(UCAL_EXTENDED_YEAR, kGregorianEpoch);
     } else {
         // extended year is a gregorian year, where 1 = 1AD,  0 = 1BC, -1 = 2BC, etc 
-        year = internalGet(UCAL_YEAR, 1)                       // pin to minimum of year 1 (first year)
-                + kBuddhistEraStart;                      // add gregorian starting year
+        year = internalGet(UCAL_YEAR, kGregorianEpoch - kBuddhistEraStart)
+                + kBuddhistEraStart;
     }
     return year;
 }
@@ -139,28 +143,6 @@ void BuddhistCalendar::timeToFields(UDate theTime, UBool quick, UErrorCode& stat
     internalSet(UCAL_YEAR, year);
 }
 #endif
-
-void BuddhistCalendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& status)
-{
-    if (U_FAILURE(status)) 
-        return;
-
-    if (amount == 0) 
-        return;   // Do nothing!
-
-    if(field == UCAL_YEAR /* || field == UCAL_YEAR_WOY */) {
-        int32_t year = get(field, status); // not internalGet -- force completion
-
-        year += amount;
-
-        set(field,year);
-        pinDayOfMonth();
-    } else {
-        GregorianCalendar::add(field,amount,status);
-    }
-}
-
-
 
 // default century
 const UDate     BuddhistCalendar::fgSystemDefaultCentury        = DBL_MIN;

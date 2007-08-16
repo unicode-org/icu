@@ -280,6 +280,8 @@ static const struct {
 
 static const uint32_t kCurrentEra = (kEraCount-1);
 
+static const int32_t kGregorianEpoch = 1970;    // used as the default value of EXTENDED_YEAR
+
 /* Some platforms don't like to export constants, like old Palm OS and some z/OS configurations. */
 uint32_t JapaneseCalendar::getCurrentEra() {
     return kCurrentEra;
@@ -361,17 +363,18 @@ int32_t JapaneseCalendar::internalGetEra() const
 
 int32_t JapaneseCalendar::handleGetExtendedYear()
 {
+    // EXTENDED_YEAR in JapaneseCalendar is a Gregorian year
+    // The default value of EXTENDED_YEAR is 1970 (Showa 45)
     int32_t year;
 
     if (newerField(UCAL_EXTENDED_YEAR, UCAL_YEAR) == UCAL_EXTENDED_YEAR &&
         newerField(UCAL_EXTENDED_YEAR, UCAL_ERA) == UCAL_EXTENDED_YEAR) {
-            year = internalGet(UCAL_EXTENDED_YEAR, 1);
+            year = internalGet(UCAL_EXTENDED_YEAR, kGregorianEpoch);
         } else {
             // Subtract one because year starts at 1
             year = internalGet(UCAL_YEAR) + kEraInfo[internalGetEra()].year - 1;
         }
         return year;
-
 }
 
 

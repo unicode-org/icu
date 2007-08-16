@@ -126,20 +126,6 @@ public:
     virtual const char * getType() const;
 
     /**
-     * (Overrides Calendar) UDate Arithmetic function. Adds the specified (signed) amount
-     * of time to the given time field, based on the calendar's rules.  For more
-     * information, see the documentation for Calendar::add().
-     *
-     * @param field   The time field.
-     * @param amount  The amount of date or time to be added to the field.
-     * @param status  Output param set to success/failure code on exit. If any value
-     *                previously set in the time field is invalid, this will be set to
-     *                an error status.
-     * @draft ICU 2.6
-     */
-    virtual void add(UCalendarDateFields field, int32_t amount, UErrorCode& status);
-
-    /**
      * Gets the maximum value for the given time field. e.g. for DAY_OF_MONTH,
      * 31.
      *
@@ -158,19 +144,6 @@ public:
      * @draft ICU 2.6
      */
     int32_t getLeastMaximum(UCalendarDateFields field) const;
-
-    /**
-     * @deprecated ICU 2.6 use UCalendarDateFields instead of EDateFields
-     */
-    inline virtual int32_t getMaximum(EDateFields field) const { return getMaximum((UCalendarDateFields)field); }
-    /**
-     * @deprecated ICU 2.6 use UCalendarDateFields instead of EDateFields
-     */
-    inline virtual int32_t getLeastMaximum(EDateFields field) const { return getLeastMaximum((UCalendarDateFields)field); }
-    /**
-     * @deprecated ICU 2.6 use UCalendarDateFields instead of EDateFields
-     */
-    inline virtual void add(EDateFields field, int32_t amount, UErrorCode& status) { add((UCalendarDateFields)field, amount, status); }
 
 private:
     TaiwanCalendar(); // default constructor not implemented
@@ -199,44 +172,6 @@ private:
      * @internal
      */
     virtual int32_t handleGetLimit(UCalendarDateFields field, ELimitType limitType) const;
-        /**
-     * Return the Julian day number of day before the first day of the
-     * given month in the given extended year.  Subclasses should override
-     * this method to implement their calendar system.
-     * @param eyear the extended year
-     * @param month the zero-based month, or 0 if useMonth is false
-     * @param useMonth if false, compute the day before the first day of
-     * the given year, otherwise, compute the day before the first day of
-     * the given month
-     * @param return the Julian day number of the day before the first
-     * day of the given month and year
-     * @internal
-     */
-    virtual int32_t handleComputeMonthStart(int32_t eyear, int32_t month,
-                                            UBool useMonth) const;
-
-    /**
-     * month length of current month
-     * @internal
-     */
-    virtual int32_t monthLength(int32_t month) const; 
-    /**
-     * month length of month
-     * @internal
-     */
-    virtual int32_t monthLength(int32_t month, int32_t year) const; 
-
-    /**
-     * month length of current month
-     * @internal
-     */
-    int32_t getGregorianYear(UErrorCode& status) const;
-
-    /** 
-     * Calculate the era for internal computation
-     * @internal
-     */
-    virtual int32_t internalGetEra() const;
 
     /**
      * Returns TRUE because the Taiwan Calendar does have a default century

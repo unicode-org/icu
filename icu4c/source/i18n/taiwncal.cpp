@@ -82,73 +82,30 @@ TaiwanCalendar::getLeastMaximum(UCalendarDateFields field) const
     }
 }
 
-int32_t
-TaiwanCalendar::monthLength(int32_t month, int32_t year) const
-{
-    return GregorianCalendar::monthLength(month,year);
-}
-
-
-int32_t
-TaiwanCalendar::monthLength(int32_t month) const
-{
-    UErrorCode status = U_ZERO_ERROR;
-    // ignore era
-    return GregorianCalendar::monthLength(month, getGregorianYear(status));
-}
-
-int32_t TaiwanCalendar::internalGetEra() const
-{
-    return internalGet(UCAL_ERA, MINGUO);
-}
-
-int32_t
-TaiwanCalendar::getGregorianYear(UErrorCode &status)  const
-{
-    int32_t era = internalGetEra();
-    
-    int32_t year = 1;
-    if(fStamp[UCAL_YEAR] != kUnset) {
-        year = internalGet(UCAL_YEAR, 1);
-    }
-    if(era == MINGUO) {
-        return kTaiwanEraStart + year;
-    } else if(era == BEFORE_MINGUO) {
-        return kTaiwanEraStart - year;
-    } else {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return kGregorianEpoch + kTaiwanEraStart;
-    }
-}
-
 int32_t TaiwanCalendar::handleGetExtendedYear()
 {
-    int32_t year = 1;
-    if (newerField(UCAL_EXTENDED_YEAR, UCAL_YEAR) == UCAL_EXTENDED_YEAR) {
-        year = internalGet(UCAL_EXTENDED_YEAR, 1);
+    // EXTENDED_YEAR in TaiwanCalendar is a Gregorian year
+    // The default value of EXTENDED_YEAR is 1970 (Minguo 59)
+    int32_t year = kGregorianEpoch;
+
+    if (newerField(UCAL_EXTENDED_YEAR, UCAL_YEAR) == UCAL_EXTENDED_YEAR
+        && newerField(UCAL_EXTENDED_YEAR, UCAL_ERA) == UCAL_EXTENDED_YEAR) {
+        year = internalGet(UCAL_EXTENDED_YEAR, kGregorianEpoch);
     } else {
         int32_t era = internalGetEra();
         if(era == MINGUO) {
-            year =     internalGet(UCAL_YEAR, 1);
+            year =     internalGet(UCAL_YEAR, 1) + kTaiwanEraStart;
         } else if(era == BEFORE_MINGUO) {
-            year = 1 - internalGet(UCAL_YEAR, 1);
+            year = 1 - internalGet(UCAL_YEAR, 1) + kTaiwanEraStart;
         }
     }
     return year;
-}
-
-int32_t TaiwanCalendar::handleComputeMonthStart(int32_t eyear, int32_t month,
-
-                                                  UBool useMonth) const
-{
-    return GregorianCalendar::handleComputeMonthStart(eyear+kTaiwanEraStart, month, useMonth);
 }
 
 void TaiwanCalendar::handleComputeFields(int32_t julianDay, UErrorCode& status)
 {
     GregorianCalendar::handleComputeFields(julianDay, status);
     int32_t y = internalGet(UCAL_EXTENDED_YEAR) - kTaiwanEraStart;
-    internalSet(UCAL_EXTENDED_YEAR, y);
     if(y>0) {
         internalSet(UCAL_ERA, MINGUO);
         internalSet(UCAL_YEAR, y);
@@ -194,28 +151,6 @@ void TaiwanCalendar::timeToFields(UDate theTime, UBool quick, UErrorCode& status
     internalSet(UCAL_YEAR, year);
 }
 #endif
-
-void TaiwanCalendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& status)
-{
-    if (U_FAILURE(status)) 
-        return;
-
-    if (amount == 0) 
-        return;   // Do nothing!
-
-    if(field == UCAL_YEAR /* || field == UCAL_YEAR_WOY */) {
-        int32_t year = get(field, status); // not internalGet -- force completion
-
-        year += amount;
-
-        set(field,year);
-        pinDayOfMonth();
-    } else {
-        GregorianCalendar::add(field,amount,status);
-    }
-}
-
-
 
 // default century
 const UDate     TaiwanCalendar::fgSystemDefaultCentury        = DBL_MIN;
