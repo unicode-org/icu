@@ -7,7 +7,7 @@
 */
 
 /* FOOD FOR THOUGHT: currently the reordering modes are a mixture of
- * algorithm for direct BiDi, algorithm for inverse BiDi and the bizarre
+ * algorithm for direct BiDi, algorithm for inverse Bidi and the bizarre
  * concept of RUNS_ONLY which is a double operation.
  * It could be advantageous to divide this into 3 concepts:
  * a) Operation: direct / inverse / RUNS_ONLY
@@ -42,7 +42,7 @@ import com.ibm.icu.lang.UCharacterDirection;
 
 /**
  *
- * <h2>BIDI algorithm for ICU</h2>
+ * <h2>Bidi algorithm for ICU</h2>
  *
  * This is an implementation of the Unicode Bidirectional algorithm. The
  * algorithm is defined in the <a
@@ -647,7 +647,7 @@ public class Bidi {
     /** Reordering mode: Reorder runs only to transform a Logical LTR string
      * to the logical RTL string with the same display, or vice-versa.<br>
      * If this mode is set together with option
-     * <code>OPTION_INSERT_MARKS</code>, some BiDi controls in the source
+     * <code>OPTION_INSERT_MARKS</code>, some Bidi controls in the source
      * text may be removed and other controls may be added to produce the
      * minimum combination which has the required display.
      * @see #OPTION_INSERT_MARKS
@@ -658,7 +658,7 @@ public class Bidi {
     public static final short REORDER_RUNS_ONLY = 3;
 
     /** Reordering mode: Visual to Logical algorithm which handles numbers
-     * like L (same algorithm as selected by * <code>setInverse(true)</code>.
+     * like L (same algorithm as selected by <code>setInverse(true)</code>.
      * @see #setInverse
      * @see #setReorderingMode
      * @draft ICU 3.8
@@ -675,7 +675,7 @@ public class Bidi {
     public static final short REORDER_INVERSE_LIKE_DIRECT = 5;
 
     /** Reordering mode: Inverse Bidi (Visual to Logical) algorithm for the
-     * <code>REORDER_NUMBERS_SPECIAL</code> BiDi algorithm.
+     * <code>REORDER_NUMBERS_SPECIAL</code> Bidi algorithm.
      * @see #setReorderingMode
      * @draft ICU 3.8
      * @provisional This API might change or be removed in a future release.
@@ -726,7 +726,7 @@ public class Bidi {
      * <p>For other reordering modes, a minimum number of LRM or RLM characters
      * will be added to the source text after reordering it so as to ensure
      * round trip, i.e. when applying the inverse reordering mode on the
-     * resulting logical text with removal of BiDi marks
+     * resulting logical text with removal of Bidi marks
      * (option <code>OPTION_REMOVE_CONTROLS</code> set before calling
      * <code>setPara()</code> or option
      * <code>REMOVE_BIDI_CONTROLS</code> in
@@ -761,9 +761,6 @@ public class Bidi {
      *
      * <p>This option must be set or reset before calling
      * <code>setPara</code>.</p>
-     *
-     * <p>This option implies the option <code>REMOVE_BIDI_CONTROLS</code>
-     * in <code>writeReordered</code>.</p>
      *
      * <p>This option nullifies option
      * <code>OPTION_INSERT_MARKS</code>. It inhibits option
@@ -898,7 +895,7 @@ public class Bidi {
      */
     int                 length;
 
-    /* if option OPTION_REMOVE_CONTROLS is set, and/or BiDi
+    /* if option OPTION_REMOVE_CONTROLS is set, and/or Bidi
      * marks are allowed to be inserted in one of the reordering modes, the
      * length of the result string may be different from the processed length.
      */
@@ -1141,8 +1138,6 @@ public class Bidi {
      * This method provides a <code>Bidi</code> object like the default constructor
      * but it also preallocates memory for internal structures
      * according to the sizings supplied by the caller.<p>
-     * Subsequent methods will not allocate any more memory, and are thus
-     * guaranteed not to fail because of lack of memory.<p>
      * The preallocation can be limited to some of the internal memory
      * by setting some values to 0 here. That means that if, e.g.,
      * <code>maxRunCount</code> cannot be reasonably predetermined and should not
@@ -1461,7 +1456,7 @@ public class Bidi {
      * This mode may be needed when logical text which is basically Arabic or
      * Hebrew, with possible included numbers or phrases in English, has to be
      * displayed as if it had an even embedding level (this can happen if the
-     * displaying application treats all text as if it was basically LTR.
+     * displaying application treats all text as if it was basically LTR).
      * <br>
      * This mode may also be needed in the reverse case, when logical text which
      * is basically English, with possible included phrases in Arabic or Hebrew,
@@ -1498,14 +1493,14 @@ public class Bidi {
      * with mode <code>REORDER_INVERSE_NUMBERS_AS_L</code>.<br>
      * When used in conjunction with option
      * <code>OPTION_INSERT_MARKS</code>, this mode generally
-     * adds BiDi marks to the output significantly more sparingly than mode
+     * adds Bidi marks to the output significantly more sparingly than mode
      * <code>REORDER_INVERSE_NUMBERS_AS_L</code>.<br> with option
      * <code>INSERT_LRM_FOR_NUMERIC</code> in calls to
      * <code>writeReordered</code>.</li>
      *
      * <li>When the reordering mode is set to
      * <code>REORDER_INVERSE_FOR_NUMBERS_SPECIAL</code>, the Logical to Visual
-     * BiDi algorithm used in Windows XP is used as an approximation of an "inverse
+     * Bidi algorithm used in Windows XP is used as an approximation of an "inverse
      * Bidi" algorithm.
      * <br>
      * For example, an LTR paragraph with the content "abc FED123" (where
@@ -1617,7 +1612,7 @@ public class Bidi {
         byte dirProp;
         byte paraDirDefault = 0;   /* initialize to avoid compiler warnings */
         boolean isDefaultLevel = IsDefaultLevel(paraLevel);
-        /* for inverse BiDi, the default para level is set to RTL if there is a
+        /* for inverse Bidi, the default para level is set to RTL if there is a
            strong R or AL character at either end of the text                */
         boolean isDefaultLevelInverse=isDefaultLevel &&
                 (reorderingMode==REORDER_INVERSE_LIKE_DIRECT ||
@@ -1634,7 +1629,7 @@ public class Bidi {
         int paraStart = 0;                    /* index of first char in paragraph */
         byte paraDir;                         /* == CONTEXT_RTL within paragraphs
                                                  starting with strong R char      */
-        byte lastStrongDir=0;                 /* for default level & inverse BiDi */
+        byte lastStrongDir=0;                 /* for default level & inverse Bidi */
         int lastStrongLTR=0;                  /* for STREAMING option             */
 
         if ((reorderingOptions & OPTION_STREAMING) > 0) {
@@ -2605,8 +2600,8 @@ public class Bidi {
         int nextStrongPos = -1;
 
 
-        /* check for RTL inverse BiDi mode */
-        /* FOOD FOR THOUGHT: in case of RTL inverse BiDi, it would make sense to
+        /* check for RTL inverse Bidi mode */
+        /* FOOD FOR THOUGHT: in case of RTL inverse Bidi, it would make sense to
          * loop on the text characters from end to start.
          * This would need a different properties state table (at least different
          * actions) and different levels state tables (maybe very similar to the
@@ -2788,7 +2783,7 @@ public class Bidi {
         /* FOOD FOR THOUGHT: instead of writing the visual text, we could use
          * the visual map and the dirProps array to drive the second call
          * to setPara (but must make provision for possible removal of
-         * BiDi controls.  Alternatively, only use the dirProps array via
+         * Bidi controls.  Alternatively, only use the dirProps array via
          * customized classifier callback.
          */
         visualText = writeReordered(DO_MIRRORING);
@@ -2964,8 +2959,8 @@ public class Bidi {
      *        with one exception: a level of zero may be specified for a
      *        paragraph separator even if <code>paraLevel&gt;0</code> when multiple
      *        paragraphs are submitted in the same call to <code>setPara()</code>.<br><br>
-     *        <strong>Caution: </strong>A copy of this pointer, not of the levels,
-     *        will be stored in the <code>Bidi</code> object;
+     *        <strong>Caution: </strong>A reference to this array, not a copy
+     *        of the levels, will be stored in the <code>Bidi</code> object;
      *        the <code>embeddingLevels</code>
      *        should not be modified to avoid unexpected results on subsequent
      *        Bidi operations. However, the <code>setPara()</code> and
@@ -3049,8 +3044,8 @@ public class Bidi {
      *        with one exception: a level of zero may be specified for a
      *        paragraph separator even if <code>paraLevel&gt;0</code> when multiple
      *        paragraphs are submitted in the same call to <code>setPara()</code>.<br><br>
-     *        <strong>Caution: </strong>A copy of this pointer, not of the levels,
-     *        will be stored in the <code>Bidi</code> object;
+     *        <strong>Caution: </strong>A reference to this array, not a copy
+     *        of the levels, will be stored in the <code>Bidi</code> object;
      *        the <code>embeddingLevels</code>
      *        should not be modified to avoid unexpected results on subsequent
      *        Bidi operations. However, the <code>setPara()</code> and
@@ -3173,7 +3168,7 @@ public class Bidi {
         }
 
         /*
-         * The steps after (X9) in the UBiDi algorithm are performed only if
+         * The steps after (X9) in the Bidi algorithm are performed only if
          * the paragraph text has mixed directionality!
          */
         switch (direction) {
@@ -3609,7 +3604,7 @@ public class Bidi {
      * <li>number of elements returned by <code>getVisualMap</code></li>
      * </ul>
      * Note that this length stays identical to the source text length if
-     * BiDi marks are inserted or removed using option bits of
+     * Bidi marks are inserted or removed using option bits of
      * <code>writeReordered</code>, or if option
      * <code>REORDER_INVERSE_NUMBERS_AS_L</code> has been set.
      *
@@ -3678,7 +3673,8 @@ public class Bidi {
      *
      * This method returns information about a paragraph.<p>
      *
-     * @param paraIndex is the number of the paragraph, starting from 0.
+     * @param paraIndex is the number of the paragraph, in the
+     *        range <code>[0..countParagraphs()-1]</code>.
      *
      * @return a BidiRun object with the details of the paragraph:<br>
      *        <code>start</code> will receive the index of the first character
@@ -3810,8 +3806,8 @@ public class Bidi {
     /**
      * Retrieves the Bidi class for a given code point.
      * <p>If a <code>BidiClassifier</code> is defined and returns a value
-     * other than the default, that value is used; otherwise the default class
-     * determination mechanism is invoked.</p>
+     * other than <code>CLASS_DEFAULT</code>, that value is used; otherwise
+     * the default class determination mechanism is invoked.</p>
      *
      * @param c The code point to get a Bidi class for.
      *
@@ -3850,11 +3846,10 @@ public class Bidi {
      * trailing WS and for reordering are performed on
      * a <code>Bidi</code> object that represents a line.<p>
      *
-     * <strong>Important: </strong><code>pLineBiDi</code> references data
-     * within <code>pParaBiDi</code>.
-     * You must destroy or reuse <code>pLineBiDi</code> before <code>pParaBiDi</code>.
-     * In other words, you must destroy or reuse the <code>Bidi</code>
-     * object for a line before the object for its parent paragraph.
+     * <strong>Important: </strong>the line <code>Bidi</code> object may
+     * reference data within the global text <code>Bidi</code> object.
+     * You should not alter the content of the global text object until
+     * you are finished using the line object.
      *
      * @param start is the line's first index into the text.
      *
@@ -3878,7 +3873,7 @@ public class Bidi {
     {
         verifyValidPara();
         verifyRange(start, 0, limit);
-        verifyRange(limit, 0, length);
+        verifyRange(limit, 0, length+1);
         if (getParagraphIndex(start) != getParagraphIndex(limit - 1)) {
             /* the line crosses a paragraph boundary */
             throw new IllegalArgumentException();
@@ -3891,9 +3886,7 @@ public class Bidi {
      *
      * @param charIndex the index of a character.
      *
-     * @return The level for the character at <code>charIndex</code>. If
-     *         <code>charIndex</code> is &lt;0 or &gt;= the length of the line,
-     *         return the base direction level.
+     * @return The level for the character at <code>charIndex</code>.
      *
      * @throws IllegalStateException if this call is not preceded by a successful
      *         call to <code>setPara</code> or <code>setLine</code>
@@ -3991,7 +3984,8 @@ public class Bidi {
 
     /**
      *
-     * Get one run's logical start, length, and level,
+     * Get a <code>BidiRun</code> object according to its index. BidiRun methods
+     * may be used to retrieve the run's logical start, length and level,
      * which can be even for an LTR run or odd for an RTL run.
      * In an RTL run, the character at the logical start is
      * visually on the right of the displayed run.
@@ -4240,7 +4234,7 @@ public class Bidi {
     {
         /* countRuns() checks successful call to setPara/setLine */
         countRuns();
-        if (length <= 0) {
+        if (resultLength <= 0) {
             return new int[0];
         }
         return BidiLine.getVisualMap(this);
@@ -4299,30 +4293,30 @@ public class Bidi {
      * The index mapping of the argument map is inverted and returned as
      * an array of indexes that we will call the inverse map.
      *
-     * @param srcMap is an array whose indexes define the original mapping
+     * @param srcMap is an array whose elements define the original mapping
      * from a source array to a destination array.
      * Some elements of the source array may have no mapping in the
-     * destination array. In that case, the index for those elements will be
+     * destination array. In that case, their value will be
      * the special value <code>MAP_NOWHERE</code>.
-     * All indexes must be >=0 or equal to <code>MAP_NOWHERE</code>.
-     * Some indexes in the source map may have a value greater than the
+     * All elements must be >=0 or equal to <code>MAP_NOWHERE</code>.
+     * Some elements in the source map may have a value greater than the
      * srcMap.length if the destination array has more elements than the
      * source array.
-     * There must be no duplicate indexes (two or more indexes with the
+     * There must be no duplicate indexes (two or more elements with the
      * same value except <code>MAP_NOWHERE</code>).
      *
      * @return an array representing the inverse map.
-     *         This array has a number of indexes equal to 1 + the highest
+     *         This array has a number of elements equal to 1 + the highest
      *         value in <code>srcMap</code>.
      *         For elements of the result array which have no matching elements
-     *         in the source array, the corresponding indexes in the inverse
+     *         in the source array, the corresponding elements in the inverse
      *         map will receive a value equal to <code>MAP_NOWHERE</code>.
-     *         If index i in <code>srcMap</code> has a value k different
+     *         If element with index i in <code>srcMap</code> has a value k different
      *         from <code>MAP_NOWHERE</code>, this means that element i of
      *         the source array maps to element k in the destination array.
-     *         The inverse map will have value i in its k-th index.
+     *         The inverse map will have value i in its k-th element.
      *         For all elements of the destination array which do not map to
-     *         an element in the source array, the corresponding index in the
+     *         an element in the source array, the corresponding element in the
      *         inverse map will have a value equal to <code>MAP_NOWHERE</code>.
      *
      * @see #MAP_NOWHERE
@@ -4853,7 +4847,7 @@ public class Bidi {
      *         length of the returned string may be less than
      *         <code>getLength()</code>.<br>
      *         If none of these options is set, then the length of the returned
-     *         string will be exactly <code>getLength()</code>.
+     *         string will be exactly <code>getProcessedLength()</code>.
      *
      * @throws IllegalStateException if this call is not preceded by a successful
      *         call to <code>setPara</code> or <code>setLine</code>
