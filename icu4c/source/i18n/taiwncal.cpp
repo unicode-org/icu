@@ -25,8 +25,6 @@ U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(TaiwanCalendar)
 
-static const int32_t kMaxEra = 1; // 1 eras
-
 static const int32_t kTaiwanEraStart = 1911;  // 1911 (Gregorian)
 
 static const int32_t kGregorianEpoch = 1970; 
@@ -62,26 +60,6 @@ const char *TaiwanCalendar::getType() const
     return "taiwan";
 }
 
-int32_t
-TaiwanCalendar::getMaximum(UCalendarDateFields field) const
-{
-    if(field == UCAL_ERA) {
-        return kMaxEra;
-    } else {
-        return GregorianCalendar::getMaximum(field);
-    }
-}
-
-int32_t
-TaiwanCalendar::getLeastMaximum(UCalendarDateFields field) const
-{
-    if(field == UCAL_ERA) {
-        return kMaxEra;
-    } else {
-        return GregorianCalendar::getLeastMaximum(field);
-    }
-}
-
 int32_t TaiwanCalendar::handleGetExtendedYear()
 {
     // EXTENDED_YEAR in TaiwanCalendar is a Gregorian year
@@ -92,7 +70,7 @@ int32_t TaiwanCalendar::handleGetExtendedYear()
         && newerField(UCAL_EXTENDED_YEAR, UCAL_ERA) == UCAL_EXTENDED_YEAR) {
         year = internalGet(UCAL_EXTENDED_YEAR, kGregorianEpoch);
     } else {
-        int32_t era = internalGetEra();
+        int32_t era = internalGet(UCAL_ERA, MINGUO);
         if(era == MINGUO) {
             year =     internalGet(UCAL_YEAR, 1) + kTaiwanEraStart;
         } else if(era == BEFORE_MINGUO) {
