@@ -1021,6 +1021,8 @@ SimpleTimeZone::initTransitionRules(UErrorCode& status) {
         DateTimeRule* dtRule;
         DateTimeRule::TimeRuleType timeRuleType;
         UDate firstStdStart, firstDstStart;
+        UnicodeString dst("(DST)", -1, US_INV);  // These work even if
+        UnicodeString std("(STD)", -1, US_INV);  // UCONFIG_NO_CONVERSION is set.
 
         // Create a TimeZoneRule for daylight saving time
         timeRuleType = (startTimeMode == STANDARD_TIME) ? DateTimeRule::STANDARD_TIME :
@@ -1043,7 +1045,7 @@ SimpleTimeZone::initTransitionRules(UErrorCode& status) {
             return;
         }
         // For now, use ID + "(DST)" as the name
-        dstRule = new AnnualTimeZoneRule(tzid+"(DST)", getRawOffset(), getDSTSavings(),
+        dstRule = new AnnualTimeZoneRule(tzid+dst, getRawOffset(), getDSTSavings(),
             dtRule, startYear, AnnualTimeZoneRule::MAX_YEAR);
  
         // Calculate the first DST start time
@@ -1067,7 +1069,7 @@ SimpleTimeZone::initTransitionRules(UErrorCode& status) {
             break;
         }
         // For now, use ID + "(STD)" as the name
-        stdRule = new AnnualTimeZoneRule(tzid+"(STD)", getRawOffset(), 0,
+        stdRule = new AnnualTimeZoneRule(tzid+std, getRawOffset(), 0,
             dtRule, startYear, AnnualTimeZoneRule::MAX_YEAR);
 
         // Calculate the first STD start time
@@ -1075,10 +1077,10 @@ SimpleTimeZone::initTransitionRules(UErrorCode& status) {
 
         // Create a TimeZoneRule for initial time
         if (firstStdStart < firstDstStart) {
-            initialRule = new InitialTimeZoneRule(tzid+"(DST)", getRawOffset(), dstRule->getDSTSavings());
+            initialRule = new InitialTimeZoneRule(tzid+dst, getRawOffset(), dstRule->getDSTSavings());
             firstTransition = new TimeZoneTransition(firstStdStart, *initialRule, *stdRule);
         } else {
-            initialRule = new InitialTimeZoneRule(tzid+"(STD)", getRawOffset(), 0);
+            initialRule = new InitialTimeZoneRule(tzid+std, getRawOffset(), 0);
             firstTransition = new TimeZoneTransition(firstDstStart, *initialRule, *dstRule);
         }
         
