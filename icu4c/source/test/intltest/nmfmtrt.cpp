@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation
+ * Copyright (c) 1997-2007, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -199,7 +199,7 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt)
         test(fmt, randomDouble(1e-78));  /*OS390 and OS400*/
 #   endif
 #else
-        test(fmt, randomDouble(1e-323));
+        test(fmt, randomDouble(DBL_MIN)); /* Usually 2.2250738585072014e-308 */
 #endif /* OS390 and OS400*/
 #if !defined(OS390) && !defined(OS400)
         test(fmt, randomDouble(1e-100));
@@ -283,8 +283,8 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt, const Formattable& value)
 
     if (show) {
         errln(/*value.getString(temp) +*/ typeOf(value, temp) + " F> " +
-            escape(s) + " P> " +
-            /*n.getString(temp) +*/ typeOf(n, temp) + " F> " +
+            escape(s) + " P> " + (n.getType() == Formattable::kDouble ? n.getDouble() : (double)n.getLong())
+            /*n.getString(temp) */ + typeOf(n, temp) + " F> " +
             escape(s2));
     }
 }
