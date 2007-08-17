@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -50,7 +50,7 @@ public class JapaneseTest extends CalendarTest {
             errln("could not create JapaneseCalendar with TimeZone ULocale");
         }
     }
-    
+
     {
         // new JapaneseCalendar(Locale)
         JapaneseCalendar cal = new JapaneseCalendar(Locale.getDefault());
@@ -113,7 +113,7 @@ public class JapaneseTest extends CalendarTest {
         cal.add(Calendar.YEAR, 1);
         logln("date: " + fmt.format(cal.getTime()));
     }
-    
+
     {
         // data
         JapaneseCalendar cal = new JapaneseCalendar(1868, Calendar.JANUARY, 1);
@@ -127,16 +127,16 @@ public class JapaneseTest extends CalendarTest {
         "en", "ja"
         };
         for (int i = 0; i < calendarLocales.length; ++i) {
-        String calLocName = calendarLocales[i];
-        Locale calLocale = LocaleUtility.getLocaleFromName(calLocName);
-        cal = new JapaneseCalendar(calLocale);
+            String calLocName = calendarLocales[i];
+            Locale calLocale = LocaleUtility.getLocaleFromName(calLocName);
+            cal = new JapaneseCalendar(calLocale);
 
-        for (int j = 0; j < formatLocales.length; ++j) {
-            String locName = formatLocales[j];
-            Locale formatLocale = LocaleUtility.getLocaleFromName(locName);
-            DateFormat format = DateFormat.getDateTimeInstance(cal, DateFormat.FULL, DateFormat.FULL, formatLocale);
-            logln(calLocName + "/" + locName + " --> " + format.format(time));
-        }
+            for (int j = 0; j < formatLocales.length; ++j) {
+                String locName = formatLocales[j];
+                Locale formatLocale = LocaleUtility.getLocaleFromName(locName);
+                DateFormat format = DateFormat.getDateTimeInstance(cal, DateFormat.FULL, DateFormat.FULL, formatLocale);
+                logln(calLocName + "/" + locName + " --> " + format.format(time));
+            }
         }
     }
     }
@@ -151,7 +151,7 @@ public class JapaneseTest extends CalendarTest {
         ParsePosition pos = new ParsePosition(0);
         Date aDate = format.parse("1.1.9", pos); // after the start of heisei accession.  Jan 1, 1H wouldn't work  because it is actually showa 64
         String inEn = enjformat.format(aDate);
-        
+
         cal.clear();
         cal.setTime(aDate);
         int gotYear = cal.get(Calendar.YEAR);
@@ -162,11 +162,11 @@ public class JapaneseTest extends CalendarTest {
         
         if((gotYear != expectYear) || (gotEra != expectEra)) {
             errln("Expected year " + expectYear + ", era " + expectEra +", but got year " + gotYear + " and era " + gotEra + ", == " + inEn);
-        } else {            
+        } else {
             logln("Got year " + gotYear + " and era " + gotEra + ", == " + inEn);
         }
     }
-    
+
     public void Test5345parse() {
         // Test parse with incomplete information
         DateFormat fmt2= DateFormat.getDateInstance(); //DateFormat.LONG, Locale.US);
@@ -201,8 +201,8 @@ public class JapaneseTest extends CalendarTest {
                 
                 errln("FAIL: Parse incorrect of " + expected + ":  wanted " + aDate + " ("+aLong+"), but got " +  " " +
                     otherDate + " ("+oLong+") = " + str3 + " not " + dd.toString() );
-                
-                
+
+
             } else {
                 logln("Parsed OK: " + expected);
             }
@@ -242,12 +242,12 @@ public class JapaneseTest extends CalendarTest {
         JapaneseCalendar c = new JapaneseCalendar(TimeZone.getDefault());
         logln("test clear");
         c.clear();
-        
-        int expected0[] = {   Calendar.ERA, 0 ,
-                              Calendar.YEAR, -643 };
+ 
+        // Showa 45 = Gregorian 1970
+        int expected0[] = {   Calendar.ERA, 234,
+                              Calendar.YEAR, 45 };
         checkExpected(c, expected0);
-        
-        
+
         logln("test setting era");
         c.clear();
         c.set(Calendar.ERA, JapaneseCalendar.MEIJI);
@@ -255,7 +255,7 @@ public class JapaneseTest extends CalendarTest {
         
         int expectedA[] = {   Calendar.ERA, JapaneseCalendar.MEIJI };
         checkExpected(c, expectedA);
-        
+
 
         logln("test setting era and year and month and date");
         c.clear();
@@ -263,11 +263,11 @@ public class JapaneseTest extends CalendarTest {
         c.set(Calendar.YEAR, 1);
         c.set(Calendar.MONTH, Calendar.JANUARY);
         c.set(Calendar.DATE, 1);
-        
-        
+
+
         int expectedC[] = {   Calendar.ERA, JapaneseCalendar.MEIJI -1};
         checkExpected(c, expectedC);
-        
+
 
         logln("test setting  year and month and date THEN era");
         c.clear();
@@ -284,12 +284,12 @@ public class JapaneseTest extends CalendarTest {
         c.clear();
         c.set(Calendar.YEAR, 1);
         c.set(Calendar.ERA, JapaneseCalendar.MEIJI);
-        
-        
+
+
         int expectedB[] = { Calendar.ERA, JapaneseCalendar.MEIJI,
                             Calendar.YEAR, 1 };
         checkExpected(c, expectedB);
-        
+
     }
 
 }

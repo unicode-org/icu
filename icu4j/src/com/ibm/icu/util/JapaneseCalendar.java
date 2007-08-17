@@ -206,14 +206,19 @@ public class JapaneseCalendar extends GregorianCalendar {
 
     //-------------------------------------------------------------------------
 
+    // Use 1970 as the default value of EXTENDED_YEAR
+    private static final int GREGORIAN_EPOCH = 1970;
+
     /**
      * @stable ICU 2.8
      */
     protected int handleGetExtendedYear() {
+        // EXTENDED_YEAR in JapaneseCalendar is a Gregorian year
+        // The default value of EXTENDED_YEAR is 1970 (Showa 45)
         int year;
         if (newerField(EXTENDED_YEAR, YEAR) == EXTENDED_YEAR &&
             newerField(EXTENDED_YEAR, ERA) == EXTENDED_YEAR) {
-            year = internalGet(EXTENDED_YEAR, 1);
+            year = internalGet(EXTENDED_YEAR, GREGORIAN_EPOCH);
         } else {
             // extended year is a gregorian year, where 1 = 1AD,  0 = 1BC, -1 = 2BC, etc 
             year = internalGet(YEAR, 1)                       // pin to minimum of year 1 (first year)
@@ -647,22 +652,4 @@ public class JapaneseCalendar extends GregorianCalendar {
     public String getType() {
         return "japanese";
     }
-
-    /*
-    private static CalendarFactory factory;
-    public static CalendarFactory factory() {
-        if (factory == null) {
-            factory = new CalendarFactory() {
-                public Calendar create(TimeZone tz, ULocale loc) {
-                    return new JapaneseCalendar(tz, loc);
-                }
-
-                public String factoryName() {
-                    return "Japanese";
-                }
-            };
-        }
-        return factory;
-    }
-    */
 }
