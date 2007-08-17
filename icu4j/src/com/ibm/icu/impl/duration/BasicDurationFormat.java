@@ -32,6 +32,10 @@ public class BasicDurationFormat extends DurationFormat {
         return new BasicDurationFormat(locale);
     }
     
+    // BEGIN JDK>1.5
+    private static boolean checkXMLDuration = true; 
+    // END JDK>1.5
+    
     public StringBuffer format(Object object, StringBuffer toAppend, FieldPosition pos) {
         if(object instanceof Long) {
             String res = formatDurationFromNow(((Long)object).longValue());
@@ -39,14 +43,21 @@ public class BasicDurationFormat extends DurationFormat {
         } else if(object instanceof Date) {
             String res = formatDurationFromNowTo(((Date)object));
             return toAppend.append(res);
-         // BEGIN JDK>1.5
-        } else if(object instanceof javax.xml.datatype.Duration) {
-            String res = formatDuration(object);
-            return toAppend.append(res);
-         // END JDK>1.5
-        } else {
-            throw new IllegalArgumentException("Cannot format given Object as a Duration");
         }
+        // BEGIN JDK>1.5
+        if(checkXMLDuration) try {
+            if(object instanceof javax.xml.datatype.Duration) {
+                String res = formatDuration(object);
+                return toAppend.append(res);
+            }
+        } catch ( NoClassDefFoundError ncdfe ) {
+            System.err.println("Skipping XML capability");
+            checkXMLDuration = false; // don't try again
+        }
+        // END JDK>1.5
+
+        throw new IllegalArgumentException("Cannot format given Object as a Duration");
+
     }
     
     public BasicDurationFormat() {
@@ -86,22 +97,6 @@ public class BasicDurationFormat extends DurationFormat {
     }
 
  // BEGIN JDK>1.5
-    private static final javax.xml.datatype.DatatypeConstants.Field inFields[] = { 
-        javax.xml.datatype.DatatypeConstants.YEARS,
-        javax.xml.datatype.DatatypeConstants.MONTHS,
-        javax.xml.datatype.DatatypeConstants.DAYS,
-        javax.xml.datatype.DatatypeConstants.HOURS,
-        javax.xml.datatype.DatatypeConstants.MINUTES,
-        javax.xml.datatype.DatatypeConstants.SECONDS,
-    };
-    private static final TimeUnit outFields[] = { 
-        TimeUnit.YEAR,
-        TimeUnit.MONTH,
-        TimeUnit.DAY,
-        TimeUnit.HOUR,
-        TimeUnit.MINUTE,
-        TimeUnit.SECOND,
-    };
     /** 
      *  JDK 1.5+ only
      * @param o
@@ -109,7 +104,24 @@ public class BasicDurationFormat extends DurationFormat {
      * @see http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/datatype/Duration.html
      */
     public String formatDuration(Object obj) {
-        javax.xml.datatype.Duration inDuration = (javax.xml.datatype.Duration)obj;
+        javax.xml.datatype.DatatypeConstants.Field inFields[] = { 
+                javax.xml.datatype.DatatypeConstants.YEARS,
+                javax.xml.datatype.DatatypeConstants.MONTHS,
+                javax.xml.datatype.DatatypeConstants.DAYS,
+                javax.xml.datatype.DatatypeConstants.HOURS,
+                javax.xml.datatype.DatatypeConstants.MINUTES,
+                javax.xml.datatype.DatatypeConstants.SECONDS,
+            };
+             TimeUnit outFields[] = { 
+                TimeUnit.YEAR,
+                TimeUnit.MONTH,
+                TimeUnit.DAY,
+                TimeUnit.HOUR,
+                TimeUnit.MINUTE,
+                TimeUnit.SECOND,
+            };
+
+         javax.xml.datatype.Duration inDuration = (javax.xml.datatype.Duration)obj;
         Period p = null;
         javax.xml.datatype.Duration duration = inDuration;
         boolean inPast = false;

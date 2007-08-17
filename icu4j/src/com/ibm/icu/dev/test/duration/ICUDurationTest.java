@@ -165,4 +165,25 @@ public class ICUDurationTest extends TestFmwk {
         }
     }
  // END JDK>1.5
+
+  
+    
+    public void TestBadObjectError() {
+        Runtime r = Runtime.getRuntime();
+        DurationFormat df = DurationFormat.getInstance(new ULocale("en"));
+        String output = null;
+        try {
+            output = df.format(r);
+            errln("FAIL: did NOT get IllegalArgumentException! Should have. Formatted Runtime as " + output + " ???");
+        } catch (IllegalArgumentException iae) {
+            logln("PASS: expected: Caught iae: " + iae.toString() );
+        }
+        // try a second time, because it is a different code path for java < 1.5
+        try {
+            output = df.format(r);
+            errln("FAIL: [#2] did NOT get IllegalArgumentException! Should have. Formatted Runtime as " + output + " ???");
+        } catch (IllegalArgumentException iae) {
+            logln("PASS: [#2] expected: Caught iae: " + iae.toString() );
+        }
+    }
 }
