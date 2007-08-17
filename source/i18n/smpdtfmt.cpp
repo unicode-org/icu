@@ -950,7 +950,7 @@ SimpleDateFormat::zoneIDCanonicalize(UnicodeString &zid) const
             int32_t len;
             const UChar* alias = ures_getNextString(zoneAliases,&len,NULL,&status);
             if ( zid.compare(alias)==0 ) {
-                zid.setTo(UnicodeString(currentZoneString,(const char *)0));
+                zid.setTo(UnicodeString(currentZoneString, -1, US_INV));
                 zid.findAndReplace(colon,solidus);
                 ures_close(zoneAliases);
                 ures_close(currentZone);
