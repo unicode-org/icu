@@ -51,25 +51,15 @@ public abstract class DurationFormat extends UFormat {
     /**
      * Format an arbitrary object.
      * Defaults to a call to formatDurationFromNow() for either Long or Date objects.
-     * @param object the object to format. Should be either a Long or Date object.
+     * @param object the object to format. Should be either a Long, Date, or javax.xml.datatype.Duration object.
      * @param toAppend the buffer to append to
      * @param pos the field position, may contain additional error messages.
      * @return the toAppend buffer
      * @draft ICU 3.8
      * @provisional This API might change or be removed in a future release.
      */
-    public StringBuffer format(Object object, StringBuffer toAppend,
-            FieldPosition pos) {
-        if(object instanceof Long) {
-            String res = formatDurationFromNow(((Long)object).longValue());
-            return toAppend.append(res);
-        } else if(object instanceof Date) {
-            String res = formatDurationFromNowTo(((Date)object));
-            return toAppend.append(res);
-        } else {
-            throw new IllegalArgumentException("Cannot format given Object as a Duration");
-        }
-    }
+    public abstract StringBuffer format(Object object, StringBuffer toAppend,
+            FieldPosition pos);
 
     /**
      * DurationFormat cannot parse, by default. This method will throw an UnsupportedOperationException.
