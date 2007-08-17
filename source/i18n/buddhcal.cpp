@@ -61,26 +61,6 @@ const char *BuddhistCalendar::getType() const
     return "buddhist";
 }
 
-int32_t
-BuddhistCalendar::getMaximum(UCalendarDateFields field) const
-{
-    if(field == UCAL_ERA) {
-        return kMaxEra;
-    } else {
-        return GregorianCalendar::getMaximum(field);
-    }
-}
-
-int32_t
-BuddhistCalendar::getLeastMaximum(UCalendarDateFields field) const
-{
-    if(field == UCAL_ERA) {
-        return kMaxEra;
-    } else {
-        return GregorianCalendar::getLeastMaximum(field);
-    }
-}
-
 int32_t BuddhistCalendar::handleGetExtendedYear()
 {
     // EXTENDED_YEAR in BuddhistCalendar is a Gregorian year.
