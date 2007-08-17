@@ -44,15 +44,26 @@ public class TaiwanCalendar extends GregorianCalendar {
     //-------------------------------------------------------------------------
 
     /**
-     * Constant for the Taiwan Era.  This is the only allowable <code>ERA</code>
-     * value for the Taiwan calendar.
+     * Constant for the Taiwan Era for years before Minguo 1.
+     * Brefore Minuo 1 is Gregorian 1911, Before Minguo 2 is Gregorian 1910
+     * and so on.
      *
      * @see com.ibm.icu.util.Calendar#ERA
      * @draft ICU 3.8
      * @provisional This API might change or be removed in a future release.
      */
-    public static final int MINGUO = 0;
-    
+    public static final int BEFORE_MINGUO = 0;
+
+    /**
+     * Constant for the Taiwan Era for Minguo.  Minguo 1 is 1912 in
+     * Gregorian calendar.
+     *
+     * @see com.ibm.icu.util.Calendar#ERA
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int MINGUO = 1;
+
     /**
      * Constructs a <code>TaiwanCalendar</code> using the current time
      * in the default time zone with the default locale.
@@ -185,30 +196,31 @@ public class TaiwanCalendar extends GregorianCalendar {
     
     private static final int Taiwan_ERA_START = 1911; // 0=1911, 1=1912
 
+    // Use 1970 as the default value of EXTENDED_YEAR
+    private static final int GREGORIAN_EPOCH = 1970;
+
+
     /**
      * {@inheritDoc}
      * @draft ICU 3.8
      * @provisional This API might change or be removed in a future release.
      */    
     protected int handleGetExtendedYear() {
-        int year;
-        if (newerField(EXTENDED_YEAR, YEAR) == EXTENDED_YEAR) {
-            year = internalGet(EXTENDED_YEAR, 1);
+        // EXTENDED_YEAR in TaiwanCalendar is a Gregorian year
+        // The default value of EXTENDED_YEAR is 1970 (Minguo 59)
+        int year = GREGORIAN_EPOCH;
+        if (newerField(EXTENDED_YEAR, YEAR) == EXTENDED_YEAR
+                && newerField(EXTENDED_YEAR, ERA) == EXTENDED_YEAR) {
+            year = internalGet(EXTENDED_YEAR, GREGORIAN_EPOCH);
         } else {
-            // Ignore the era, as there is only one
-            year = internalGet(YEAR, 1);
+            int era = internalGet(ERA, MINGUO);
+            if (era == MINGUO) {
+                year = internalGet(YEAR, 1) + Taiwan_ERA_START;
+            } else {
+                year = 1 - internalGet(YEAR, 1) + Taiwan_ERA_START;
+            }
         }
         return year;
-    }
-
-    // Return JD of start of given month/year
-    /**
-     * {@inheritDoc}
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
-     */    
-    protected int handleComputeMonthStart(int eyear, int month, boolean useMonth) {
-        return super.handleComputeMonthStart(eyear + Taiwan_ERA_START, month, useMonth);
     }
 
     /**
@@ -219,9 +231,13 @@ public class TaiwanCalendar extends GregorianCalendar {
     protected void handleComputeFields(int julianDay) {
         super.handleComputeFields(julianDay);
         int y = internalGet(EXTENDED_YEAR) - Taiwan_ERA_START;
-        internalSet(EXTENDED_YEAR, y);
-        internalSet(ERA, 0);
-        internalSet(YEAR, y);
+        if (y > 0) {
+            internalSet(ERA, MINGUO);
+            internalSet(YEAR, y);
+        } else {
+            internalSet(ERA, BEFORE_MINGUO);
+            internalSet(YEAR, 1- y);
+        }
     }
 
     /**
@@ -233,7 +249,11 @@ public class TaiwanCalendar extends GregorianCalendar {
      */
     protected int handleGetLimit(int field, int limitType) {
         if (field == ERA) {
-            return MINGUO;
+            if (limitType == MINIMUM || limitType == GREATEST_MINIMUM) {
+                return BEFORE_MINGUO;
+            } else {
+                return MINGUO;
+            }
         }
         return super.handleGetLimit(field, limitType);
     }
@@ -246,22 +266,4 @@ public class TaiwanCalendar extends GregorianCalendar {
     public String getType() {
         return "taiwan";
     }
-
-    /*
-    private static CalendarFactory factory;
-    public static CalendarFactory factory() {
-        if (factory == null) {
-            factory = new CalendarFactory() {
-                public Calendar create(TimeZone tz, ULocale loc) {
-                    return new TaiwanCalendar(tz, loc);
-                }
-
-                public String factoryName() {
-                    return "Taiwan";
-                }
-            };
-        }
-        return factory;
-    }
-    */
 }

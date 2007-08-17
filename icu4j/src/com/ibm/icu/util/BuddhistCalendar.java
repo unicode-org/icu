@@ -186,17 +186,21 @@ public class BuddhistCalendar extends GregorianCalendar {
     // Starts in -543 AD, ie 544 BC
     private static final int BUDDHIST_ERA_START = -543;
 
+    // Use 1970 as the default value of EXTENDED_YEAR
+    private static final int GREGORIAN_EPOCH = 1970;
+
     /**
      * @stable ICU 2.8
      */    
     protected int handleGetExtendedYear() {
+        // EXTENDED_YEAR in BuddhistCalendar is a Gregorian year
+        // The default value of EXTENDED_YEAR is 1970 (Buddhist 2513)
         int year;
         if (newerField(EXTENDED_YEAR, YEAR) == EXTENDED_YEAR) {
-            year = internalGet(EXTENDED_YEAR, 1);
+            year = internalGet(EXTENDED_YEAR, GREGORIAN_EPOCH);
         } else {
-            // extended year is a gregorian year, where 1 = 1AD,  0 = 1BC, -1 = 2BC, etc 
-            year = internalGet(YEAR, 1)                       // pin to minimum of year 1 (first year)
-                    + BUDDHIST_ERA_START;                     // add gregorian starting year
+            year = internalGet(YEAR, GREGORIAN_EPOCH - BUDDHIST_ERA_START)
+                    + BUDDHIST_ERA_START;
         }
         return year;
     }
@@ -241,22 +245,4 @@ public class BuddhistCalendar extends GregorianCalendar {
     public String getType() {
         return "buddhist";
     }
-
-    /*
-    private static CalendarFactory factory;
-    public static CalendarFactory factory() {
-        if (factory == null) {
-            factory = new CalendarFactory() {
-                public Calendar create(TimeZone tz, ULocale loc) {
-                    return new BuddhistCalendar(tz, loc);
-                }
-
-                public String factoryName() {
-                    return "Buddhist";
-                }
-            };
-        }
-        return factory;
-    }
-    */
 }

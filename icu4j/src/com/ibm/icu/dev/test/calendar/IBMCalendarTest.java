@@ -307,9 +307,10 @@ public class IBMCalendarTest extends CalendarTest {
     public void TestTaiwan() {
         quasiGregorianTest(new TaiwanCalendar(),
                            new int[] {
-                               0, 1, 1912, Calendar.JUNE, 4,
-                               0, 3, 1914, Calendar.FEBRUARY, 12,
-                               0, 96,2007, Calendar.FEBRUARY, 12,
+                               TaiwanCalendar.BEFORE_MINGUO, 8, 1904, Calendar.FEBRUARY, 29,
+                               TaiwanCalendar.MINGUO, 1, 1912, Calendar.JUNE, 4,
+                               TaiwanCalendar.MINGUO, 3, 1914, Calendar.FEBRUARY, 12,
+                               TaiwanCalendar.MINGUO, 96,2007, Calendar.FEBRUARY, 12,
                            });
     }
 
