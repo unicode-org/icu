@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2006, International Business Machines Corporation and    *
+* Copyright (C) 1997-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -75,7 +75,8 @@ static const UChar gLastResortScientificPat[] = {
 
 // If the maximum base 10 exponent were 4, then the largest number would
 // be 99,999 which has 5 digits.
-static const int32_t gMaxIntegerDigits = DBL_MAX_10_EXP + 1; // Should be ~40 ? --srl
+// On IEEE754 systems gMaxIntegerDigits is 308 + possible denormalized 15 digits + rounding digit
+static const int32_t gMaxIntegerDigits = DBL_MAX_10_EXP + DBL_DIG + 1;
 static const int32_t gMinIntegerDigits = 127;
 
 static const UChar * const gLastResortNumberPatterns[] =

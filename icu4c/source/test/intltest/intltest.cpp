@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -114,7 +114,7 @@ operator+(const UnicodeString& left,
     //  53*log(2)/log(10) = 15.95
     // so there is no need to show more than 16 digits. [alan]
 
-    sprintf(buffer, "%.16g", num);
+    sprintf(buffer, "%.17g", num);
     assert(danger == 'p');
 
     return left + buffer;
