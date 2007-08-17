@@ -125,31 +125,11 @@ public:
      */
     virtual const char * getType() const;
 
-    /**
-     * Gets the maximum value for the given time field. e.g. for DAY_OF_MONTH,
-     * 31.
-     *
-     * @param field  The given time field.
-     * @return       The maximum value for the given time field.
-     * @draft ICU 2.6
-     */
-    int32_t getMaximum(UCalendarDateFields field) const;
-
-    /**
-     * Gets the lowest maximum value for the given field if varies. Otherwise same as
-     * getMaximum(). e.g., for Gregorian DAY_OF_MONTH, 28.
-     *
-     * @param field  The given time field.
-     * @return       The lowest maximum value for the given time field.
-     * @draft ICU 2.6
-     */
-    int32_t getLeastMaximum(UCalendarDateFields field) const;
-
 private:
     TaiwanCalendar(); // default constructor not implemented
 
  protected:
-    /**
+     /**
      * Return the extended year defined by the current fields.  This will
      * use the UCAL_EXTENDED_YEAR field or the UCAL_YEAR and supra-year fields (such
      * as UCAL_ERA) specific to the calendar system, depending on which set of
