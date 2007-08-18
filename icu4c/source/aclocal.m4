@@ -30,7 +30,7 @@ powerpc*-*-linux*)
 	else
 		icu_cv_host_frag=mh-linux-va
 	fi ;;
-*-*-linux*) icu_cv_host_frag=mh-linux ;;
+*-*-linux*|*-pc-gnu) icu_cv_host_frag=mh-linux ;;
 *-*-cygwin|*-*-mingw32)
 	if test "$GCC" = yes; then
 		AC_TRY_COMPILE([
