@@ -398,7 +398,7 @@ AC_SUBST(HAVE_MMAP)
 dnl Check to see if genccode can generate simple assembly.
 GENCCODE_ASSEMBLY=
 case "${host}" in
-i*86-*-linux*|x86_64-*-linux*|powerpc*-*-linux*|i*86-*-*bsd*)
+i*86-*-linux*|x86_64-*-linux*|powerpc*-*-linux*|i*86-*-*bsd*|i*86-pc-gnu)
     if test "$GCC" = yes; then
         dnl We're using gcc, and the simple -a gcc command line works for genccode
         GENCCODE_ASSEMBLY="-a gcc"
@@ -996,6 +996,7 @@ dnl set ICUDATA_CHAR to 'e' for any EBCDIC (which should be big endian) platform
 case "${host}" in
 	*-*-solaris*) 	platform=U_SOLARIS ;;
 	*-*-linux*) 	platform=U_LINUX ;;
+	*-pc-gnu) 	platform=U_HURD ;;
 	*-*-*bsd*|*-*-dragonfly*) 	platform=U_BSD ;;
 	*-*-aix*) 	platform=U_AIX ;;
 	*-*-hpux*) 	platform=U_HPUX ;;
