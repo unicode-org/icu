@@ -233,7 +233,9 @@ public final class RuleBasedCollator extends Collator
         RuleBasedCollator result = (RuleBasedCollator)super.clone();
         if (latinOneCEs_ != null) {
             result.m_reallocLatinOneCEs_ = true;
+            result.m_ContInfo_ = new ContractionInfo();
         }
+
         // since all collation data in the RuleBasedCollator do not change
         // we can safely assign the result.fields to this collator
         result.initUtility(false);  // let the new clone have their own util
