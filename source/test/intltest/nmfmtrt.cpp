@@ -190,22 +190,22 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt)
 #endif
         }
 
-#if defined XP_MAC || defined __alpha__ || defined U_OSF
-// These machines don't support denormalized doubles,
-// so the low-end range doesn't match Windows
+#if _MSC_VER >= 1400 || defined __alpha__ || defined U_OSF
+        // These machines and compilers don't fully support denormalized doubles,
         test(fmt, randomDouble(1e-292));
+        test(fmt, randomDouble(1e-100));
 #elif defined(OS390) || defined(OS400)
+        // i5/OS (OS400) throws exceptions on denormalized numbers
 #   if IEEE_754
-        test(fmt, randomDouble(1e-78));  /*OS390 and OS400*/
+        test(fmt, randomDouble(1e-78));
+        test(fmt, randomDouble(1e-78));
+        // #else we're using something like the old z/OS floating point.
 #   endif
 #else
+        // This is a normal machine that can support IEEE754 denormalized doubles without throwing an error.
         test(fmt, randomDouble(DBL_MIN)); /* Usually 2.2250738585072014e-308 */
-#endif /* OS390 and OS400*/
-#if !defined(OS390) && !defined(OS400)
         test(fmt, randomDouble(1e-100));
-#elif IEEE_754
-        test(fmt, randomDouble(1e-78));  /*OS390 and OS400*/
-#endif /* OS390 and OS400*/
+#endif
     }
 }
 
