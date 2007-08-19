@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-2004, International Business Machines
+*   Copyright (C) 1996-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 * Modification History:
@@ -250,7 +250,7 @@ unum_formatDouble(    const    UNumberFormat*  fmt,
   return res.extract(result, resultLength, *status);
 }
 
-U_DRAFT int32_t U_EXPORT2 
+U_CAPI int32_t U_EXPORT2 
 unum_formatDoubleCurrency(const UNumberFormat* fmt,
                           double number,
                           UChar* currency,
@@ -354,7 +354,7 @@ unum_parseDouble(    const   UNumberFormat*  fmt,
     return res.getDouble(*status);
 }
 
-U_DRAFT double U_EXPORT2
+U_CAPI double U_EXPORT2
 unum_parseDoubleCurrency(const UNumberFormat* fmt,
                          const UChar* text,
                          int32_t textLength,

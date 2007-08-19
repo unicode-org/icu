@@ -96,7 +96,7 @@ public:
      *
      * Note: Subclass arrays will also be reset and not deleted.
      *
-     * @draft ICU 3.6
+     * @stable ICU 3.6
      */
     inline void reset();
 

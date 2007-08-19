@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2000-2006, International Business Machines
+*   Copyright (C) 2000-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -236,28 +236,28 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  * Replaces any combination of U+0651 with one of
  * U+064C, U+064D, U+064E, U+064F, U+0650 with
  * U+FC5E, U+FC5F, U+FC60, U+FC61, U+FC62 consecutively.
- * @draft ICU 3.6
+ * @stable ICU 3.6
  */
 #define U_SHAPE_AGGREGATE_TASHKEEL              0x4000
-/** Tashkeel aggregation option: do not aggregate tashkeels. @draft ICU 3.6 */
+/** Tashkeel aggregation option: do not aggregate tashkeels. @stable ICU 3.6 */
 #define U_SHAPE_AGGREGATE_TASHKEEL_NOOP         0
-/** Bit mask for tashkeel aggregation. @draft ICU 3.6 */
+/** Bit mask for tashkeel aggregation. @stable ICU 3.6 */
 #define U_SHAPE_AGGREGATE_TASHKEEL_MASK         0x4000
 
 /** 
  * Presentation form option:
  * Don't replace Arabic Presentation Forms-A and Arabic Presentation Forms-B
  * characters with 0+06xx characters, before shaping.
- * @draft ICU 3.6
+ * @stable ICU 3.6
  */
 #define U_SHAPE_PRESERVE_PRESENTATION           0x8000
 /** Presentation form option: 
  * Replace Arabic Presentation Forms-A and Arabic Presentationo Forms-B with 
  * their unshaped correspondants in range 0+06xx, before shaping.
- * @draft ICU 3.6 
+ * @stable ICU 3.6 
  */
 #define U_SHAPE_PRESERVE_PRESENTATION_NOOP      0
-/** Bit mask for preserve presentation form. @draft ICU 3.6 */
+/** Bit mask for preserve presentation form. @stable ICU 3.6 */
 #define U_SHAPE_PRESERVE_PRESENTATION_MASK      0x8000
 
 #endif

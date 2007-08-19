@@ -303,9 +303,9 @@ ubrk_setText(UBreakIterator* bi,
  *             UText that was passed as a parameter, but that the underlying text itself
  *             must not be altered while being referenced by the break iterator.
  * @param status The error code
- * @draft ICU 3.4
+ * @stable ICU 3.4
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 ubrk_setUText(UBreakIterator* bi,
              UText*          text,
              UErrorCode*     status);

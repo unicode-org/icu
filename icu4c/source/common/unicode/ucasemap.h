@@ -38,10 +38,10 @@
 /**
  * UCaseMap is an opaque service object for newer ICU case mapping functions.
  * Older functions did not use a service object.
- * @draft ICU 3.4
+ * @stable ICU 3.4
  */
 struct UCaseMap;
-typedef struct UCaseMap UCaseMap; /**< C typedef for struct UCaseMap. @draft ICU 3.4 */
+typedef struct UCaseMap UCaseMap; /**< C typedef for struct UCaseMap. @stable ICU 3.4 */
 
 /**
  * Open a UCaseMap service object for a locale and a set of options.
@@ -63,35 +63,35 @@ typedef struct UCaseMap UCaseMap; /**< C typedef for struct UCaseMap. @draft ICU
  * @see U_FOLD_CASE_EXCLUDE_SPECIAL_I
  * @see U_TITLECASE_NO_LOWERCASE
  * @see U_TITLECASE_NO_BREAK_ADJUSTMENT
- * @draft ICU 3.4
+ * @stable ICU 3.4
  */
-U_DRAFT UCaseMap * U_EXPORT2
+U_STABLE UCaseMap * U_EXPORT2
 ucasemap_open(const char *locale, uint32_t options, UErrorCode *pErrorCode);
 
 /**
  * Close a UCaseMap service object.
  * @param csm Object to be closed.
- * @draft ICU 3.4
+ * @stable ICU 3.4
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 ucasemap_close(UCaseMap *csm);
 
 /**
  * Get the locale ID that is used for language-dependent case mappings.
  * @param csm UCaseMap service object.
  * @return locale ID
- * @draft ICU 3.4
+ * @stable ICU 3.4
  */
-U_DRAFT const char * U_EXPORT2
+U_STABLE const char * U_EXPORT2
 ucasemap_getLocale(const UCaseMap *csm);
 
 /**
  * Get the options bit set that is used for case folding and string comparisons.
  * @param csm UCaseMap service object.
  * @return options bit set
- * @draft ICU 3.4
+ * @stable ICU 3.4
  */
-U_DRAFT uint32_t U_EXPORT2
+U_STABLE uint32_t U_EXPORT2
 ucasemap_getOptions(const UCaseMap *csm);
 
 /**
@@ -103,9 +103,9 @@ ucasemap_getOptions(const UCaseMap *csm);
  *                   which must not indicate a failure before the function call.
  *
  * @see ucasemap_open
- * @draft ICU 3.4
+ * @stable ICU 3.4
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 ucasemap_setLocale(UCaseMap *csm, const char *locale, UErrorCode *pErrorCode);
 
 /**
@@ -117,9 +117,9 @@ ucasemap_setLocale(UCaseMap *csm, const char *locale, UErrorCode *pErrorCode);
  *                   which must not indicate a failure before the function call.
  *
  * @see ucasemap_open
- * @draft ICU 3.4
+ * @stable ICU 3.4
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 ucasemap_setOptions(UCaseMap *csm, uint32_t options, UErrorCode *pErrorCode);
 
 #ifndef U_HIDE_DRAFT_API
@@ -272,9 +272,9 @@ ucasemap_toTitle(UCaseMap *csm,
  *         in which case it will be greater than destCapacity.
  *
  * @see u_strToLower
- * @draft ICU 3.4
+ * @stable ICU 3.4
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 ucasemap_utf8ToLower(const UCaseMap *csm,
                      char *dest, int32_t destCapacity,
                      const char *src, int32_t srcLength,
@@ -301,9 +301,9 @@ ucasemap_utf8ToLower(const UCaseMap *csm,
  *         in which case it will be greater than destCapacity.
  *
  * @see u_strToUpper
- * @draft ICU 3.4
+ * @stable ICU 3.4
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 ucasemap_utf8ToUpper(const UCaseMap *csm,
                      char *dest, int32_t destCapacity,
                      const char *src, int32_t srcLength,

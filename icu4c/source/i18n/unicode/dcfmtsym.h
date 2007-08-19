@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2006, International Business Machines
+*   Copyright (C) 1997-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -122,7 +122,7 @@ public:
          * @stable ICU 3.0 */
         kSignificantDigitSymbol,
         /** The monetary grouping separator 
-         * @draft ICU 3.6
+         * @stable ICU 3.6
          */
         kMonetaryGroupingSeparatorSymbol,
         /** count symbol constants */

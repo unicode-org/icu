@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved 
+ * (C) Copyright IBM Corp. 1998-2007 - All Rights Reserved 
  *
  * Developed at DIT - Government of Bhutan
  *
@@ -73,7 +73,7 @@ public:
      * @internal
      */
     TibetanOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
-			      le_int32 typoFlags);
+                                le_int32 typoFlags);
 
     /**
      * The destructor, virtual for correct polymorphic invocation.
@@ -85,14 +85,14 @@ public:
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
-     * @draft ICU 3.6
+     * @internal ICU 3.6
      */
     virtual UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
-     * @draft ICU 3.6
+     * @internal ICU 3.6
      */
     static UClassID getStaticClassID();
 

@@ -192,7 +192,7 @@ public:
     *  @param status for catching errors
     *  @return newly created collator
     *  @see cloneBinary
-    *  @draft ICU 3.4
+    *  @stable ICU 3.4
     */
     RuleBasedCollator(const uint8_t *bin, int32_t length, 
                     const RuleBasedCollator *base, 
@@ -511,7 +511,7 @@ public:
     *  @param status for catching errors
     *  @return size of the image
     *  @see ucol_openBinary
-    *  @draft ICU 3.4
+    *  @stable ICU 3.4
     */
     int32_t cloneBinary(uint8_t *buffer, int32_t capacity, UErrorCode &status);
 
@@ -859,7 +859,7 @@ inline void RuleBasedCollator::setUCollator(UCollator     *collator)
     ucollator   = collator;
     dataIsOwned = FALSE;
     isWriteThroughAlias = TRUE;
-	setRuleStringFromCollator();
+    setRuleStringFromCollator();
 }
 
 inline const UCollator * RuleBasedCollator::getUCollator()

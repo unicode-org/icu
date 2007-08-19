@@ -374,7 +374,7 @@ typedef void* UClassID;
  * \def U_TOOLUTIL_API
  * Set to export library symbols from inside the toolutil library,
  * and to import them from outside.
- * @draft ICU 3.4
+ * @stable ICU 3.4
  */
 
 #if defined(U_COMBINED_IMPLEMENTATION)

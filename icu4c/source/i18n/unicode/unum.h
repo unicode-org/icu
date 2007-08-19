@@ -798,14 +798,10 @@ typedef enum UNumberFormatSymbol {
   /** Significant digit symbol
    * @stable ICU 3.0 */
   UNUM_SIGNIFICANT_DIGIT_SYMBOL = 16,
-
-#ifndef U_HIDE_DRAFT_API  
   /** The monetary grouping separator 
-   * @draft ICU 3.6
+   * @stable ICU 3.6
    */
   UNUM_MONETARY_GROUPING_SEPARATOR_SYMBOL = 17,  
-#endif /*U_HIDE_DRAFT_API*/
-
   /** count symbol constants */
   UNUM_FORMAT_SYMBOL_COUNT = 18
 } UNumberFormatSymbol;

@@ -355,19 +355,17 @@ typedef enum UDateFormatField {
      */
     UDAT_TIMEZONE_RFC_FIELD = 23,
 
-#ifndef U_HIDE_DRAFT_API
-
     /**
      * FieldPosition and UFieldPosition selector for 'v' field alignment,
      * corresponding to the UCAL_ZONE_OFFSET field.
-     * @draft ICU 3.4
+     * @stable ICU 3.4
      */
     UDAT_TIMEZONE_GENERIC_FIELD = 24,
     /**
      * FieldPosition selector for 'c' field alignment,
      * corresponding to the {@link #UCAL_DAY} field. 
      * This displays the stand alone day name, if available.
-     * @draft ICU 3.4
+     * @stable ICU 3.4
      */
     UDAT_STANDALONE_DAY_FIELD = 25,
     
@@ -375,7 +373,7 @@ typedef enum UDateFormatField {
      * FieldPosition selector for 'L' field alignment,
      * corresponding to the {@link #UCAL_MONTH} field.  
      * This displays the stand alone month name, if available.
-     * @draft ICU 3.4
+     * @stable ICU 3.4
      */
     UDAT_STANDALONE_MONTH_FIELD = 26,
 
@@ -384,7 +382,7 @@ typedef enum UDateFormatField {
      * corresponding to quarters. This is implemented
      * using the {@link #UCAL_MONTH} field. This
      * displays the quarter.
-     * @draft ICU 3.6
+     * @stable ICU 3.6
      */
     UDAT_QUARTER_FIELD = 27,
 
@@ -393,12 +391,10 @@ typedef enum UDateFormatField {
      * corresponding to stand-alone quarters. This is
      * implemented using the {@link #UCAL_MONTH} field.
      * This displays the stand-alone quarter.
-     * @draft ICU 3.6
+     * @stable ICU 3.6
      */
     UDAT_STANDALONE_QUARTER_FIELD = 28,
 
-#endif /*U_HIDE_DRAFT_API*/
-   
    /**
      * Number of FieldPosition and UFieldPosition selectors for 
      * DateFormat and UDateFormat.

@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1998-2006, International Business Machines
+ *   Copyright (C) 1998-2007, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -29,7 +29,7 @@ U_NAMESPACE_BEGIN
  *
  * @see LEInsertionList.h
  *
- * @draft ICU 3.6
+ * @stable ICU 3.6
  */
 class U_LAYOUT_API LEGlyphStorage : public UObject, protected LEInsertionCallback
 {
@@ -249,7 +249,7 @@ public:
      *
      * @return the size of the auxillary data array.
      *
-     * @draft ICU 3.6
+     * @stable ICU 3.6
      */
     le_int32 allocateAuxData(LEErrorCode &success);
 
@@ -259,7 +259,7 @@ public:
      * @param auxData the auxillary data array will be copied to this address
      * @param success set to an error code if the data cannot be copied
      *
-     * @draft ICU 3.6
+     * @stable ICU 3.6
      */
     void getAuxData(le_uint32 auxData[], LEErrorCode &success) const;
 
@@ -296,7 +296,7 @@ public:
      *
      * @return the auxillary data
      *
-     * @draft ICU 3.6
+     * @stable ICU 3.6
      */
     le_uint32 getAuxData(le_int32 glyphIndex, LEErrorCode &success) const;
 
@@ -397,7 +397,7 @@ public:
      * @param auxData the new auxillary data
      * @param success will be set to an error code if the auxillary data cannot be set.
      *
-     * @draft ICU 3.6
+     * @stable ICU 3.6
      */
     void setAuxData(le_int32 glyphIndex, le_uint32 auxData, LEErrorCode &success);
 

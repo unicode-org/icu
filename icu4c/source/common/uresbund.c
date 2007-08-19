@@ -1068,7 +1068,7 @@ ures_toUTF8String(const UChar *s16, int32_t length16,
     }
 }
 
-U_DRAFT const char * U_EXPORT2
+U_CAPI const char * U_EXPORT2
 ures_getUTF8String(const UResourceBundle *resB,
                    char *dest, int32_t *pLength,
                    UBool forceCopy,
@@ -1395,7 +1395,7 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByIndex(const UResourceBundle *resB,
     return NULL;
 }
 
-U_DRAFT const char * U_EXPORT2
+U_CAPI const char * U_EXPORT2
 ures_getUTF8StringByIndex(const UResourceBundle *resB,
                           int32_t index,
                           char *dest, int32_t *pLength,
@@ -1724,7 +1724,7 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, c
     return NULL;
 }
 
-U_DRAFT const char * U_EXPORT2
+U_CAPI const char * U_EXPORT2
 ures_getUTF8StringByKey(const UResourceBundle *resB,
                         const char *key,
                         char *dest, int32_t *pLength,

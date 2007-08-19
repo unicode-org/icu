@@ -466,7 +466,7 @@ public:
 
     /**
      * Override of existing call that provides flags to control typography.
-     * @draft ICU 3.4
+     * @stable ICU 3.4
      */
     static LayoutEngine *layoutEngineFactory(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, le_int32 typo_flags, LEErrorCode &success);
 

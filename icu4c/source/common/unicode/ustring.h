@@ -1311,9 +1311,9 @@ u_strFromUTF8(UChar *dest,
  * @return The pointer to destination buffer.
  * @see u_strToUTF8
  * @see u_strFromUTF8WithSub
- * @draft ICU 3.6
+ * @stable ICU 3.6
  */
-U_DRAFT char* U_EXPORT2
+U_STABLE char* U_EXPORT2
 u_strToUTF8WithSub(char *dest,
             int32_t destCapacity,
             int32_t *pDestLength,
@@ -1355,9 +1355,9 @@ u_strToUTF8WithSub(char *dest,
  * @see u_strFromUTF8
  * @see u_strFromUTF8Lenient
  * @see u_strToUTF8WithSub
- * @draft ICU 3.6
+ * @stable ICU 3.6
  */
-U_DRAFT UChar* U_EXPORT2
+U_STABLE UChar* U_EXPORT2
 u_strFromUTF8WithSub(UChar *dest,
               int32_t destCapacity,
               int32_t *pDestLength,
@@ -1411,9 +1411,9 @@ u_strFromUTF8WithSub(UChar *dest,
  * @see u_strFromUTF8
  * @see u_strFromUTF8WithSub
  * @see u_strToUTF8WithSub
- * @draft ICU 3.6
+ * @stable ICU 3.6
  */
-U_CAPI UChar * U_EXPORT2
+U_STABLE UChar * U_EXPORT2
 u_strFromUTF8Lenient(UChar *dest,
                      int32_t destCapacity,
                      int32_t *pDestLength,
