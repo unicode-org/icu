@@ -1,6 +1,6 @@
 /*
 *****************************************************************************************
-*   Copyright (C) 1996-2006, International Business Machines
+*   Copyright (C) 1996-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *****************************************************************************************
 */
@@ -176,7 +176,7 @@ ubrk_setText(UBreakIterator* bi,
 
 
 
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 ubrk_setUText(UBreakIterator *bi,
              UText          *text,
              UErrorCode     *status)

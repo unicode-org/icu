@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2002-2006, International Business Machines
+*   Copyright (C) 2002-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -50,16 +50,14 @@ U_NAMESPACE_BEGIN
 #endif
 
 
-#ifndef U_HIDE_DRAFT_API
 /**  U_HAVE_DEBUG_LOCATION_NEW - Define this to define the MFC debug
  * version of the operator new.
  *
- * @draft ICU 3.4
+ * @stable ICU 3.4
  */                              
 #ifndef U_HAVE_DEBUG_LOCATION_NEW
 #define U_HAVE_DEBUG_LOCATION_NEW 0
 #endif
-#endif /*U_HIDE_DRAFT_API*/
 
 /**
  * UMemory is the common ICU base class.

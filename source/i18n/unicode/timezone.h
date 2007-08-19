@@ -625,7 +625,7 @@ public:
      * the known latest daylight saving value.
      *
      * @return the amount of saving time in milliseconds
-     * @draft ICU 3.6
+     * @stable ICU 3.6
      */
     virtual int32_t getDSTSavings() const;
 

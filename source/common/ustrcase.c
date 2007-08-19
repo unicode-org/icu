@@ -594,7 +594,7 @@ u_strToTitle(UChar *dest, int32_t destCapacity,
     return length;
 }
 
-U_DRAFT int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ucasemap_toTitle(UCaseMap *csm,
                  UChar *dest, int32_t destCapacity,
                  const UChar *src, int32_t srcLength,

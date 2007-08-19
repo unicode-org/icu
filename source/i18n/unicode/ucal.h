@@ -700,9 +700,9 @@ ucal_inDaylightTime(const UCalendar*  cal,
  *
  * @see GregorianCalendar::setGregorianChange
  * @see ucal_getGregorianChange
- * @draft ICU 3.6
+ * @stable ICU 3.6
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 ucal_setGregorianChange(UCalendar *cal, UDate date, UErrorCode *pErrorCode);
 
 /**
@@ -723,9 +723,9 @@ ucal_setGregorianChange(UCalendar *cal, UDate date, UErrorCode *pErrorCode);
  *
  * @see GregorianCalendar::getGregorianChange
  * @see ucal_setGregorianChange
- * @draft ICU 3.6
+ * @stable ICU 3.6
  */
-U_DRAFT UDate U_EXPORT2
+U_STABLE UDate U_EXPORT2
 ucal_getGregorianChange(const UCalendar *cal, UErrorCode *pErrorCode);
 
 /**
@@ -1064,35 +1064,6 @@ ucal_getLimit(const UCalendar*     cal,
               UCalendarDateFields  field,
               UCalendarLimitType   type,
               UErrorCode*          status);
-
-#ifdef U_USE_UCAL_OBSOLETE_2_8
-/**
- * Get an available TimeZone ID.
- * A Timezone ID is a string of the form "America/Los Angeles".
- * @param rawOffset The desired GMT offset
- * @param index The index of the desired TimeZone.
- * @param status A pointer to an UErrorCode to receive any errors
- * @return The requested TimeZone ID, or 0 if not found
- * @see ucal_countAvailableTZIDs
- * @obsolete ICU 2.8. Use ucal_openTimeZoneEnumeration instead since this API will be removed in that release.
- */
-U_OBSOLETE const UChar* U_EXPORT2 
-ucal_getAvailableTZIDs(int32_t      rawOffset,
-                       int32_t      index,
-                       UErrorCode*  status);
-
-/**
- * Determine how many TimeZones exist with a certain offset.
- * This function is most useful as determining the loop ending condition for
- * calls to \ref ucal_getAvailableTZIDs.
- * @param rawOffset The desired GMT offset.
- * @return The number of TimeZones with rawOffset.
- * @see ucal_getAvailableTZIDs
- * @obsolete ICU 2.8.  Use ucal_openTimeZoneEnumeration instead since this API will be removed in that release.
- */
-U_OBSOLETE int32_t U_EXPORT2 
-ucal_countAvailableTZIDs(int32_t rawOffset);
-#endif
 
 /** Get the locale for this calendar object. You can choose between valid and actual locale.
  *  @param cal The calendar object

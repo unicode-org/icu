@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2002-2006, International Business Machines
+*   Copyright (C) 2002-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  uconfig.h
@@ -81,7 +81,7 @@
  * File access cannot be turned off for the icuio library or for the ICU
  * test suites and ICU tools.
  *
- * @draft ICU 3.6
+ * @stable ICU 3.6
  */
 #ifndef UCONFIG_NO_FILE_IO
 #   define UCONFIG_NO_FILE_IO 0

@@ -544,9 +544,9 @@ uset_addString(USet* set, const UChar* str, int32_t strLen);
  * @param set the object to which to add the character
  * @param str the source string
  * @param strLen the length of the string or -1 if null terminated.
- * @draft ICU 3.4
+ * @stable ICU 3.4
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 uset_addAllCodePoints(USet* set, const UChar *str, int32_t strLen);
 
 /**
@@ -811,9 +811,9 @@ uset_containsAll(const USet* set1, const USet* set2);
  * @param str string containing codepoints to be checked for containment
  * @param strLen the length of the string or -1 if null terminated.
  * @return true if the test condition is met
- * @draft ICU 3.4
+ * @stable ICU 3.4
  */
-U_DRAFT UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 uset_containsAllCodePoints(const USet* set, const UChar *str, int32_t strLen);
 
 /**

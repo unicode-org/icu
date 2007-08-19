@@ -41,22 +41,22 @@ uset_close(USet* set) {
     delete (UnicodeSet*) set;
 }
 
-U_DRAFT USet * U_EXPORT2
+U_CAPI USet * U_EXPORT2
 uset_clone(const USet *set) {
     return (USet*) (((UnicodeSet*) set)->UnicodeSet::clone());
 }
 
-U_DRAFT UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 uset_isFrozen(const USet *set) {
     return ((UnicodeSet*) set)->UnicodeSet::isFrozen();
 }
 
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 uset_freeze(USet *set) {
     ((UnicodeSet*) set)->UnicodeSet::freeze();
 }
 
-U_DRAFT USet * U_EXPORT2
+U_CAPI USet * U_EXPORT2
 uset_cloneAsThawed(const USet *set) {
     return (USet*) (((UnicodeSet*) set)->UnicodeSet::cloneAsThawed());
 }
@@ -190,22 +190,22 @@ uset_containsSome(const USet* set1, const USet* set2) {
     return ((const UnicodeSet*) set1)->UnicodeSet::containsSome(* (const UnicodeSet*) set2);
 }
 
-U_DRAFT int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 uset_span(const USet *set, const UChar *s, int32_t length, USetSpanCondition spanCondition) {
     return ((UnicodeSet*) set)->UnicodeSet::span(s, length, spanCondition);
 }
 
-U_DRAFT int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 uset_spanBack(const USet *set, const UChar *s, int32_t length, USetSpanCondition spanCondition) {
     return ((UnicodeSet*) set)->UnicodeSet::spanBack(s, length, spanCondition);
 }
 
-U_DRAFT int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 uset_spanUTF8(const USet *set, const char *s, int32_t length, USetSpanCondition spanCondition) {
     return ((UnicodeSet*) set)->UnicodeSet::spanUTF8(s, length, spanCondition);
 }
 
-U_DRAFT int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 uset_spanBackUTF8(const USet *set, const char *s, int32_t length, USetSpanCondition spanCondition) {
     return ((UnicodeSet*) set)->UnicodeSet::spanBackUTF8(s, length, spanCondition);
 }

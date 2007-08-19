@@ -461,7 +461,7 @@ ucnv_setSubstChars (UConverter * converter,
     return;
 }
 
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 ucnv_setSubstString(UConverter *cnv,
                     const UChar *s,
                     int32_t length,
@@ -2827,9 +2827,9 @@ ucnv_detectUnicodeSignature( const char* source,
     return NULL;
 }
 
- U_DRAFT int32_t U_EXPORT2
- ucnv_fromUCountPending(const UConverter* cnv, UErrorCode* status){
-    
+U_CAPI int32_t U_EXPORT2
+ucnv_fromUCountPending(const UConverter* cnv, UErrorCode* status)
+{
     if(status == NULL || U_FAILURE(*status)){
         return -1;
     }
@@ -2849,9 +2849,9 @@ ucnv_detectUnicodeSignature( const char* source,
     }
     return 0; 
 
- }
+}
 
-U_DRAFT int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ucnv_toUCountPending(const UConverter* cnv, UErrorCode* status){
 
     if(status == NULL || U_FAILURE(*status)){

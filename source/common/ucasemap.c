@@ -31,7 +31,7 @@
 
 /* UCaseMap service object -------------------------------------------------- */
 
-U_DRAFT UCaseMap * U_EXPORT2
+U_CAPI UCaseMap * U_EXPORT2
 ucasemap_open(const char *locale, uint32_t options, UErrorCode *pErrorCode) {
     UCaseMap *csm;
 
@@ -56,7 +56,7 @@ ucasemap_open(const char *locale, uint32_t options, UErrorCode *pErrorCode) {
     return csm;
 }
 
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 ucasemap_close(UCaseMap *csm) {
     if(csm!=NULL) {
 #if !UCONFIG_NO_BREAK_ITERATION
@@ -66,17 +66,17 @@ ucasemap_close(UCaseMap *csm) {
     }
 }
 
-U_DRAFT const char * U_EXPORT2
+U_CAPI const char * U_EXPORT2
 ucasemap_getLocale(const UCaseMap *csm) {
     return csm->locale;
 }
 
-U_DRAFT uint32_t U_EXPORT2
+U_CAPI uint32_t U_EXPORT2
 ucasemap_getOptions(const UCaseMap *csm) {
     return csm->options;
 }
 
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 ucasemap_setLocale(UCaseMap *csm, const char *locale, UErrorCode *pErrorCode) {
     int32_t length;
 
@@ -101,19 +101,19 @@ ucasemap_setLocale(UCaseMap *csm, const char *locale, UErrorCode *pErrorCode) {
     }
 }
 
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 ucasemap_setOptions(UCaseMap *csm, uint32_t options, UErrorCode *pErrorCode) {
     csm->options=options;
 }
 
 #if !UCONFIG_NO_BREAK_ITERATION
 
-U_DRAFT const UBreakIterator * U_EXPORT2
+U_CAPI const UBreakIterator * U_EXPORT2
 ucasemap_getBreakIterator(const UCaseMap *csm) {
     return csm->iter;
 }
 
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 ucasemap_setBreakIterator(UCaseMap *csm, UBreakIterator *iterToAdopt, UErrorCode *pErrorCode) {
     ubrk_close(csm->iter);
     csm->iter=iterToAdopt;
@@ -514,7 +514,7 @@ caseMap(const UCaseMap *csm,
 
 /* public API functions */
 
-U_DRAFT int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ucasemap_utf8ToLower(const UCaseMap *csm,
                      char *dest, int32_t destCapacity,
                      const char *src, int32_t srcLength,
@@ -525,7 +525,7 @@ ucasemap_utf8ToLower(const UCaseMap *csm,
                    TO_LOWER, pErrorCode);
 }
 
-U_DRAFT int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ucasemap_utf8ToUpper(const UCaseMap *csm,
                      char *dest, int32_t destCapacity,
                      const char *src, int32_t srcLength,
@@ -538,7 +538,7 @@ ucasemap_utf8ToUpper(const UCaseMap *csm,
 
 #if !UCONFIG_NO_BREAK_ITERATION
 
-U_DRAFT int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ucasemap_utf8ToTitle(UCaseMap *csm,
                      char *dest, int32_t destCapacity,
                      const char *src, int32_t srcLength,
@@ -551,7 +551,7 @@ ucasemap_utf8ToTitle(UCaseMap *csm,
 
 #endif
 
-U_DRAFT int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ucasemap_utf8FoldCase(const UCaseMap *csm,
                       char *dest, int32_t destCapacity,
                       const char *src, int32_t srcLength,

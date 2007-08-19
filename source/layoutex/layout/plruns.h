@@ -42,7 +42,7 @@ typedef void pl_localeRuns;
  *
  * @internal
  */
-U_DRAFT pl_fontRuns * U_EXPORT2
+U_INTERNAL pl_fontRuns * U_EXPORT2
 pl_openFontRuns(const le_font **fonts,
                 const le_int32 *limits,
                 le_int32 count);
@@ -58,7 +58,7 @@ pl_openFontRuns(const le_font **fonts,
  *
  * @internal
  */
-U_DRAFT pl_fontRuns * U_EXPORT2
+U_INTERNAL pl_fontRuns * U_EXPORT2
 pl_openEmptyFontRuns(le_int32 initialCapacity);
 
 /**
@@ -69,7 +69,7 @@ pl_openEmptyFontRuns(le_int32 initialCapacity);
  *
  * @internal
  */
-U_DRAFT void U_EXPORT2
+U_INTERNAL void U_EXPORT2
 pl_closeFontRuns(pl_fontRuns *fontRuns);
 
 /**
@@ -81,7 +81,7 @@ pl_closeFontRuns(pl_fontRuns *fontRuns);
  *
  * @internal
  */
-U_DRAFT le_int32 U_EXPORT2
+U_INTERNAL le_int32 U_EXPORT2
 pl_getFontRunCount(const pl_fontRuns *fontRuns);
 
 /**
@@ -91,7 +91,7 @@ pl_getFontRunCount(const pl_fontRuns *fontRuns);
  *
  * @internal
  */
-U_DRAFT void U_EXPORT2
+U_INTERNAL void U_EXPORT2
 pl_resetFontRuns(pl_fontRuns *fontRuns);
 
 /**
@@ -104,7 +104,7 @@ pl_resetFontRuns(pl_fontRuns *fontRuns);
  *
  * @internal
  */
-U_DRAFT le_int32 U_EXPORT2
+U_INTERNAL le_int32 U_EXPORT2
 pl_getFontRunLastLimit(const pl_fontRuns *fontRuns);
 
 /**
@@ -117,7 +117,7 @@ pl_getFontRunLastLimit(const pl_fontRuns *fontRuns);
  *
  * @internal
  */
-U_DRAFT le_int32 U_EXPORT2
+U_INTERNAL le_int32 U_EXPORT2
 pl_getFontRunLimit(const pl_fontRuns *fontRuns,
                    le_int32 run);
 
@@ -133,7 +133,7 @@ pl_getFontRunLimit(const pl_fontRuns *fontRuns,
  *
  * @internal
  */
-U_DRAFT const le_font * U_EXPORT2
+U_INTERNAL const le_font * U_EXPORT2
 pl_getFontRunFont(const pl_fontRuns *fontRuns,
                   le_int32 run);
 
@@ -156,7 +156,7 @@ pl_getFontRunFont(const pl_fontRuns *fontRuns,
  *
  * @internal
  */
-U_DRAFT le_int32 U_EXPORT2
+U_INTERNAL le_int32 U_EXPORT2
 pl_addFontRun(pl_fontRuns *fontRuns,
               const le_font *font,
               le_int32 limit);
@@ -175,7 +175,7 @@ pl_addFontRun(pl_fontRuns *fontRuns,
  *
  * @internal
  */
-U_DRAFT pl_valueRuns * U_EXPORT2
+U_INTERNAL pl_valueRuns * U_EXPORT2
 pl_openValueRuns(const le_int32 *values,
                  const le_int32 *limits,
                  le_int32 count);
@@ -191,7 +191,7 @@ pl_openValueRuns(const le_int32 *values,
  *
  * @internal
  */
-U_DRAFT pl_valueRuns * U_EXPORT2
+U_INTERNAL pl_valueRuns * U_EXPORT2
 pl_openEmptyValueRuns(le_int32 initialCapacity);
 
 /**
@@ -202,7 +202,7 @@ pl_openEmptyValueRuns(le_int32 initialCapacity);
  *
  * @internal
  */
-U_DRAFT void U_EXPORT2
+U_INTERNAL void U_EXPORT2
 pl_closeValueRuns(pl_valueRuns *valueRuns);
 
 /**
@@ -214,7 +214,7 @@ pl_closeValueRuns(pl_valueRuns *valueRuns);
  *
  * @internal
  */
-U_DRAFT le_int32 U_EXPORT2
+U_INTERNAL le_int32 U_EXPORT2
 pl_getValueRunCount(const pl_valueRuns *valueRuns);
 
 /**
@@ -224,7 +224,7 @@ pl_getValueRunCount(const pl_valueRuns *valueRuns);
  *
  * @internal
  */
-U_DRAFT void U_EXPORT2
+U_INTERNAL void U_EXPORT2
 pl_resetValueRuns(pl_valueRuns *valueRuns);
 
 /**
@@ -237,7 +237,7 @@ pl_resetValueRuns(pl_valueRuns *valueRuns);
  *
  * @internal
  */
-U_DRAFT le_int32 U_EXPORT2
+U_INTERNAL le_int32 U_EXPORT2
 pl_getValueRunLastLimit(const pl_valueRuns *valueRuns);
 
 /**
@@ -250,7 +250,7 @@ pl_getValueRunLastLimit(const pl_valueRuns *valueRuns);
  *
  * @internal
  */
-U_DRAFT le_int32 U_EXPORT2
+U_INTERNAL le_int32 U_EXPORT2
 pl_getValueRunLimit(const pl_valueRuns *valueRuns,
                      le_int32 run);
 
@@ -266,7 +266,7 @@ pl_getValueRunLimit(const pl_valueRuns *valueRuns,
  *
  * @internal
  */
-U_DRAFT le_int32 U_EXPORT2
+U_INTERNAL le_int32 U_EXPORT2
 pl_getValueRunValue(const pl_valueRuns *valueRuns,
                     le_int32 run);
 
@@ -288,7 +288,7 @@ pl_getValueRunValue(const pl_valueRuns *valueRuns,
  *
  * @internal
  */
-U_DRAFT le_int32 U_EXPORT2
+U_INTERNAL le_int32 U_EXPORT2
 pl_addValueRun(pl_valueRuns *valueRuns,
                le_int32 value,
                le_int32 limit);
@@ -307,7 +307,7 @@ pl_addValueRun(pl_valueRuns *valueRuns,
  *
  * @internal
  */
-U_DRAFT pl_localeRuns * U_EXPORT2
+U_INTERNAL pl_localeRuns * U_EXPORT2
 pl_openLocaleRuns(const char **locales,
                   const le_int32 *limits,
                   le_int32 count);
@@ -323,7 +323,7 @@ pl_openLocaleRuns(const char **locales,
  *
  * @internal
  */
-U_DRAFT pl_localeRuns * U_EXPORT2
+U_INTERNAL pl_localeRuns * U_EXPORT2
 pl_openEmptyLocaleRuns(le_int32 initialCapacity);
 
 /**
@@ -334,7 +334,7 @@ pl_openEmptyLocaleRuns(le_int32 initialCapacity);
  *
  * @internal
  */
-U_DRAFT void U_EXPORT2
+U_INTERNAL void U_EXPORT2
 pl_closeLocaleRuns(pl_localeRuns *localeRuns);
 
 /**
@@ -346,7 +346,7 @@ pl_closeLocaleRuns(pl_localeRuns *localeRuns);
  *
  * @internal
  */
-U_DRAFT le_int32 U_EXPORT2
+U_INTERNAL le_int32 U_EXPORT2
 pl_getLocaleRunCount(const pl_localeRuns *localeRuns);
 
 /**
@@ -356,7 +356,7 @@ pl_getLocaleRunCount(const pl_localeRuns *localeRuns);
  *
  * @internal
  */
-U_DRAFT void U_EXPORT2
+U_INTERNAL void U_EXPORT2
 pl_resetLocaleRuns(pl_localeRuns *localeRuns);
 
 /**
@@ -369,7 +369,7 @@ pl_resetLocaleRuns(pl_localeRuns *localeRuns);
  *
  * @internal
  */
-U_DRAFT le_int32 U_EXPORT2
+U_INTERNAL le_int32 U_EXPORT2
 pl_getLocaleRunLastLimit(const pl_localeRuns *localeRuns);
 
 /**
@@ -382,7 +382,7 @@ pl_getLocaleRunLastLimit(const pl_localeRuns *localeRuns);
  *
  * @internal
  */
-U_DRAFT le_int32 U_EXPORT2
+U_INTERNAL le_int32 U_EXPORT2
 pl_getLocaleRunLimit(const pl_localeRuns *localeRuns,
                      le_int32 run);
 
@@ -398,7 +398,7 @@ pl_getLocaleRunLimit(const pl_localeRuns *localeRuns,
  *
  * @internal
  */
-U_DRAFT const char * U_EXPORT2
+U_INTERNAL const char * U_EXPORT2
 pl_getLocaleRunLocale(const pl_localeRuns *localeRuns,
                       le_int32 run);
 
@@ -421,7 +421,7 @@ pl_getLocaleRunLocale(const pl_localeRuns *localeRuns,
  *
  * @internal
  */
-U_DRAFT le_int32 U_EXPORT2
+U_INTERNAL le_int32 U_EXPORT2
 pl_addLocaleRun(pl_localeRuns *localeRuns,
                 const char *locale,
                 le_int32 limit);
