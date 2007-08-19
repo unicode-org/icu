@@ -406,7 +406,7 @@ typedef uint8_t UBiDiLevel;
  * @see ubidi_getVisualMap
  * @see ubidi_getLogicalIndex
  * @see ubidi_getLogicalMap
- * @draft ICU 3.6
+ * @stable ICU 3.6
  */
 #define UBIDI_MAP_NOWHERE   (-1)
 
@@ -631,20 +631,20 @@ ubidi_isOrderParagraphsLTR(UBiDi *pBiDi);
  * algorithm to use.
  *
  * @see ubidi_setReorderingMode
- * @draft ICU 3.6
+ * @stable ICU 3.6
  */
 typedef enum UBiDiReorderingMode {
     /** Regular Logical to Visual Bidi algorithm according to Unicode.
       * This is a 0 value.
-      * @draft ICU 3.6 */
+      * @stable ICU 3.6 */
     UBIDI_REORDER_DEFAULT = 0,
     /** Logical to Visual algorithm which handles numbers in a way which
       * mimicks the behavior of Windows XP.
-      * @draft ICU 3.6 */
+      * @stable ICU 3.6 */
     UBIDI_REORDER_NUMBERS_SPECIAL,
     /** Logical to Visual algorithm grouping numbers with adjacent R characters
       * (reversible algorithm).
-      * @draft ICU 3.6 */
+      * @stable ICU 3.6 */
     UBIDI_REORDER_GROUP_NUMBERS_WITH_R,
     /** Reorder runs only to transform a Logical LTR string to the Logical RTL
       * string with the same display, or vice-versa.<br>
@@ -652,22 +652,23 @@ typedef enum UBiDiReorderingMode {
       * <code>#UBIDI_OPTION_INSERT_MARKS</code>, some Bidi controls in the source
       * text may be removed and other controls may be added to produce the
       * minimum combination which has the required display.
-      * @draft ICU 3.6 */
+      * @stable ICU 3.6 */
     UBIDI_REORDER_RUNS_ONLY,
     /** Visual to Logical algorithm which handles numbers like L
       * (same algorithm as selected by <code>ubidi_setInverse(TRUE)</code>.
       * @see ubidi_setInverse
-      * @draft ICU 3.6 */
+      * @stable ICU 3.6 */
     UBIDI_REORDER_INVERSE_NUMBERS_AS_L,
     /** Visual to Logical algorithm equivalent to the regular Logical to Visual
-      * algorithm. @draft ICU 3.6 */
+      * algorithm.
+      * @stable ICU 3.6 */
     UBIDI_REORDER_INVERSE_LIKE_DIRECT,
     /** Inverse Bidi (Visual to Logical) algorithm for the
       * <code>UBIDI_REORDER_NUMBERS_SPECIAL</code> Bidi algorithm.
-      * @draft ICU 3.6 */
+      * @stable ICU 3.6 */
     UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL,
     /** Number of values for reordering mode.
-      * @draft ICU 3.6 */
+      * @stable ICU 3.6 */
     UBIDI_REORDER_COUNT
 } UBiDiReorderingMode;
 
@@ -822,9 +823,9 @@ typedef enum UBiDiReorderingMode {
  * @see ubidi_setInverse
  * @see ubidi_setPara
  * @see ubidi_writeReordered
- * @draft ICU 3.6
+ * @stable ICU 3.6
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 ubidi_setReorderingMode(UBiDi *pBiDi, UBiDiReorderingMode reorderingMode);
 
 /**
@@ -833,9 +834,9 @@ ubidi_setReorderingMode(UBiDi *pBiDi, UBiDiReorderingMode reorderingMode);
  * @param pBiDi is a <code>UBiDi</code> object.
  * @return the current reordering mode of the Bidi object
  * @see ubidi_setReorderingMode
- * @draft ICU 3.6
+ * @stable ICU 3.6
  */
-U_DRAFT UBiDiReorderingMode U_EXPORT2
+U_STABLE UBiDiReorderingMode U_EXPORT2
 ubidi_getReorderingMode(UBiDi *pBiDi);
 
 /**
@@ -843,14 +844,14 @@ ubidi_getReorderingMode(UBiDi *pBiDi);
  * specified to affect the Bidi algorithm.
  *
  * @see ubidi_setReorderingOptions
- * @draft ICU 3.6
+ * @stable ICU 3.6
  */
 typedef enum UBiDiReorderingOption {
     /**
      * option value for <code>ubidi_setReorderingOptions</code>:
      * disable all the options which can be set with this function
      * @see ubidi_setReorderingOptions
-     * @draft ICU 3.6
+     * @stable ICU 3.6
      */
     UBIDI_OPTION_DEFAULT = 0,
 
@@ -896,7 +897,7 @@ typedef enum UBiDiReorderingOption {
      *
      * @see ubidi_setReorderingMode
      * @see ubidi_setReorderingOptions
-     * @draft ICU 3.6
+     * @stable ICU 3.6
      */
     UBIDI_OPTION_INSERT_MARKS = 1,
 
@@ -914,7 +915,7 @@ typedef enum UBiDiReorderingOption {
      *
      * @see ubidi_setReorderingMode
      * @see ubidi_setReorderingOptions
-     * @draft ICU 3.6
+     * @stable ICU 3.6
      */
     UBIDI_OPTION_REMOVE_CONTROLS = 2,
 
@@ -962,7 +963,7 @@ typedef enum UBiDiReorderingOption {
      * @see ubidi_setReorderingOptions
      * @see ubidi_getProcessedLength
      * @see ubidi_orderParagraphsLTR
-     * @draft ICU 3.6
+     * @stable ICU 3.6
      */
     UBIDI_OPTION_STREAMING = 4
 } UBiDiReorderingOption;
@@ -978,9 +979,9 @@ typedef enum UBiDiReorderingOption {
  * <code>#UBIDI_OPTION_REMOVE_CONTROLS</code>, <code>#UBIDI_OPTION_STREAMING</code>.
  *
  * @see ubidi_getReorderingOptions
- * @draft ICU 3.6
+ * @stable ICU 3.6
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 ubidi_setReorderingOptions(UBiDi *pBiDi, uint32_t reorderingOptions);
 
 /**
@@ -989,9 +990,9 @@ ubidi_setReorderingOptions(UBiDi *pBiDi, uint32_t reorderingOptions);
  * @param pBiDi is a <code>UBiDi</code> object.
  * @return the current reordering options of the Bidi object
  * @see ubidi_setReorderingOptions
- * @draft ICU 3.6
+ * @stable ICU 3.6
  */
-U_DRAFT uint32_t U_EXPORT2
+U_STABLE uint32_t U_EXPORT2
 ubidi_getReorderingOptions(UBiDi *pBiDi);
 
 /**
@@ -1735,9 +1736,9 @@ ubidi_invertMap(const int32_t *srcMap, int32_t *destMap, int32_t length);
  *         the last call to <code>ubidi_setPara</code>.
  * @see ubidi_setPara
  * @see UBIDI_OPTION_STREAMING
- * @draft ICU 3.6
+ * @stable ICU 3.6
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 ubidi_getProcessedLength(const UBiDi *pBiDi);
 
 /**
@@ -1765,9 +1766,9 @@ ubidi_getProcessedLength(const UBiDi *pBiDi);
  * @see ubidi_setPara
  * @see UBIDI_OPTION_INSERT_MARKS
  * @see UBIDI_OPTION_REMOVE_CONTROLS
- * @draft ICU 3.6
+ * @stable ICU 3.6
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 ubidi_getResultLength(const UBiDi *pBiDi);
 
 U_CDECL_BEGIN
@@ -1775,7 +1776,7 @@ U_CDECL_BEGIN
  * value returned by <code>UBiDiClassCallback</code> callbacks when
  * there is no need to override the standard Bidi class for a given code point.
  * @see UBiDiClassCallback
- * @draft ICU 3.6
+ * @stable ICU 3.6
  */
 #define U_BIDI_CLASS_DEFAULT  U_CHAR_DIRECTION_COUNT
 
@@ -1797,7 +1798,7 @@ U_CDECL_BEGIN
  *         for <code>c</code> is to be used.
  * @see ubidi_setClassCallback
  * @see ubidi_getClassCallback
- * @draft ICU 3.6
+ * @stable ICU 3.6
  */
 typedef UCharDirection U_CALLCONV
 UBiDiClassCallback(const void *context, UChar32 c);
@@ -1817,9 +1818,9 @@ U_CDECL_END
  * @return The Bidi class for character <code>c</code> based
  *         on the given <code>pBiDi</code> instance.
  * @see UBiDiClassCallback
- * @draft ICU 3.6
+ * @stable ICU 3.6
  */
-U_DRAFT UCharDirection U_EXPORT2
+U_STABLE UCharDirection U_EXPORT2
 ubidi_getCustomizedClass(UBiDi *pBiDi, UChar32 c);
 
 /**
@@ -1847,9 +1848,9 @@ ubidi_getCustomizedClass(UBiDi *pBiDi, UChar32 c);
  * @param pErrorCode must be a valid pointer to an error code value.
  *
  * @see ubidi_getClassCallback
- * @draft ICU 3.6
+ * @stable ICU 3.6
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 ubidi_setClassCallback(UBiDi *pBiDi, UBiDiClassCallback *newFn,
                        const void *newContext, UBiDiClassCallback **oldFn,
                        const void **oldContext, UErrorCode *pErrorCode);
@@ -1864,9 +1865,9 @@ ubidi_setClassCallback(UBiDi *pBiDi, UBiDiClassCallback *newFn,
  * @param context fillin: Returns the callback's private context.
  *
  * @see ubidi_setClassCallback
- * @draft ICU 3.6
+ * @stable ICU 3.6
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 ubidi_getClassCallback(UBiDi *pBiDi, UBiDiClassCallback **fn, const void **context);
 
 /**

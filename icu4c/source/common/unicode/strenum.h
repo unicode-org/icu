@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2006, International Business Machines
+*   Copyright (C) 2002-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -189,7 +189,7 @@ public:
      *
      * @param that The other string enumeration to compare this object to
      * @return TRUE if the enumerations are equal. FALSE if not.
-     * @draft ICU 3.6 
+     * @stable ICU 3.6 
      */
     virtual UBool operator==(const StringEnumeration& that)const;
     /**
@@ -197,7 +197,7 @@ public:
      *
      * @param that The other string enumeration to compare this object to
      * @return TRUE if the enumerations are equal. FALSE if not.
-     * @draft ICU 3.6 
+     * @stable ICU 3.6 
      */
     virtual UBool operator!=(const StringEnumeration& that)const;
 

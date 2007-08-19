@@ -108,8 +108,7 @@ typedef enum UScriptCode {
       /** New script code in Unicode 4.0.1 @stable ICU 3.0 */
       USCRIPT_KATAKANA_OR_HIRAGANA = 54,/*Hrkt */
       
-#ifndef U_HIDE_DRAFT_API
-      /* New scripts in Unicode 4.1 @draft ICU 3.4 */
+      /* New scripts in Unicode 4.1 @stable ICU 3.4 */
       USCRIPT_BUGINESE      = 55, /* Bugi */
       USCRIPT_GLAGOLITIC    = 56, /* Glag */
       USCRIPT_KHAROSHTHI    = 57, /* Khar */
@@ -118,7 +117,7 @@ typedef enum UScriptCode {
       USCRIPT_TIFINAGH      = 60, /* Tfng */
       USCRIPT_OLD_PERSIAN   = 61, /* Xpeo */
 
-      /* New script codes from ISO 15924 @draft ICU 3.6 */
+      /* New script codes from ISO 15924 @stable ICU 3.6 */
       USCRIPT_BALINESE                      = 62, /* Bali */
       USCRIPT_BATAK                         = 63, /* Batk */
       USCRIPT_BLISSYMBOLS                   = 64, /* Blis */
@@ -177,7 +176,6 @@ typedef enum UScriptCode {
       USCRIPT_MEITEI_MAYEK                  = 115,/* Mtei */
 
       /* Private use codes from Qaaa - Qabx are not supported*/
-#endif /* U_HIDE_DRAFT_API */
       USCRIPT_CODE_LIMIT    = 116
 } UScriptCode;
 

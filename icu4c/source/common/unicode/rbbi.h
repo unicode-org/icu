@@ -336,7 +336,7 @@ public:
       * @param status receives any error codes.
       * @return   The current UText for this break iterator.  If an input
       *           UText was provided, it will always be returned.
-      * @draft ICU 3.4
+      * @stable ICU 3.4
       */
      virtual UText *getUText(UText *fillIn, UErrorCode &status) const;
 
@@ -368,7 +368,7 @@ public:
      *
      * @param text    The UText used to change the text.
      * @param status  Receives any error codes.
-     * @draft ICU 3.4
+     * @stable ICU 3.4
      */
     virtual void  setText(UText *text, UErrorCode &status);
 

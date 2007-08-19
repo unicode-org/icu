@@ -354,7 +354,7 @@ udata_setAppData(const char *packageName, const void *data, UErrorCode *err);
 /**
  * Possible settings for udata_setFileAccess()
  * @see udata_setFileAccess
- * @draft ICU 3.4
+ * @stable ICU 3.4
  */
 typedef enum UDataFileAccess {
     /** ICU does not access the file system for data loading. */
@@ -379,9 +379,9 @@ typedef enum UDataFileAccess {
  * @param access The type of file access to be used
  * @param status Error code.
  * @see UDataFileAccess
- * @draft ICU 3.4 
+ * @stable ICU 3.4 
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 udata_setFileAccess(UDataFileAccess access, UErrorCode *status);
 
 U_CDECL_END

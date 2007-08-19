@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2003-2006, International Business Machines                   *
+* Copyright (C) 2003-2007, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -26,27 +26,25 @@
  * \brief C API: Provides access to locale data. 
  */
 
-/** Forward declaration of the ULocaleData structure. @draft ICU 3.6 */
+/** Forward declaration of the ULocaleData structure. @stable ICU 3.6 */
 struct ULocaleData;
 
-/** A locale data object. @draft ICU 3.6 */
+/** A locale data object. @stable ICU 3.6 */
 typedef struct ULocaleData ULocaleData;
 
 
 
 /** The possible types of exemplar character sets.
-  * @draft ICU 3.4
+  * @stable ICU 3.4
   */
 typedef enum ULocaleDataExemplarSetType  {
-#ifndef U_HIDE_DRAFT_API 
      ULOCDATA_ES_STANDARD=0,      /* Basic set */
      ULOCDATA_ES_AUXILIARY=1,     /* Auxiliary set */
-#endif
      ULOCDATA_ES_COUNT=3
 } ULocaleDataExemplarSetType;
 
 /** The possible types of delimiters.
-  * @draft ICU 3.4
+  * @stable ICU 3.4
   */
 typedef enum ULocaleDataDelimiterType {
 #ifndef U_HIDE_DRAFT_API 
@@ -64,18 +62,18 @@ typedef enum ULocaleDataDelimiterType {
  * @param localeID  Specifies the locale associated with this locale
  *                  data object.
  * @param status    Pointer to error status code.
- * @draft ICU 3.4
+ * @stable ICU 3.4
  */
-U_DRAFT ULocaleData* U_EXPORT2 
+U_STABLE ULocaleData* U_EXPORT2 
 ulocdata_open(const char *localeID, UErrorCode *status);
 
 /**
  * Closes a locale data object.
  *
  * @param uld       The locale data object to close
- * @draft ICU 3.4
+ * @stable ICU 3.4
  */
-U_DRAFT void U_EXPORT2 
+U_STABLE void U_EXPORT2 
 ulocdata_close(ULocaleData *uld);
 
 /**
@@ -87,9 +85,9 @@ ulocdata_close(ULocaleData *uld);
  *
  * @param uld       The locale data object to set.
  * @param setting   Value of the "no substitute" attribute.
- * @draft ICU 3.4
+ * @stable ICU 3.4
  */
-U_DRAFT void U_EXPORT2 
+U_STABLE void U_EXPORT2 
 ulocdata_setNoSubstitute(ULocaleData *uld, UBool setting);
 
 /**
@@ -101,9 +99,9 @@ ulocdata_setNoSubstitute(ULocaleData *uld, UBool setting);
  *
  * @param uld       Pointer to the The locale data object to set.
  * @return UBool    Value of the "no substitute" attribute.
- * @draft ICU 3.4
+ * @stable ICU 3.4
  */
-U_DRAFT UBool U_EXPORT2 
+U_STABLE UBool U_EXPORT2 
 ulocdata_getNoSubstitute(ULocaleData *uld);
 
 /**
@@ -129,9 +127,9 @@ ulocdata_getNoSubstitute(ULocaleData *uld);
  *                  must not be NULL.
  * @return USet*    Either fillIn, or if fillIn is NULL, a pointer to
  *                  a newly-allocated USet that the user must close.
- * @draft ICU 3.4
+ * @stable ICU 3.4
  */
-U_DRAFT USet* U_EXPORT2 
+U_STABLE USet* U_EXPORT2 
 ulocdata_getExemplarSet(ULocaleData *uld, USet *fillIn, 
                         uint32_t options, ULocaleDataExemplarSetType extype, UErrorCode *status);
 
@@ -146,9 +144,9 @@ ulocdata_getExemplarSet(ULocaleData *uld, USet *fillIn,
  * @param status        Pointer to an error code value
  * @return int32_t      The total buffer size needed; if greater than resultLength,
  *                      the output was truncated.
- * @draft ICU 3.4
+ * @stable ICU 3.4
  */
-U_DRAFT int32_t U_EXPORT2 
+U_STABLE int32_t U_EXPORT2 
 ulocdata_getDelimiter(ULocaleData *uld, ULocaleDataDelimiterType type, UChar *result, int32_t resultLength, UErrorCode *status);
 
 /**

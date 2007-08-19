@@ -400,9 +400,9 @@ ures_getString(const UResourceBundle* resourceBundle,
  *
  * @see ures_getString
  * @see u_strToUTF8
- * @draft ICU 3.6
+ * @stable ICU 3.6
  */
-U_DRAFT const char * U_EXPORT2
+U_STABLE const char * U_EXPORT2
 ures_getUTF8String(const UResourceBundle *resB,
                    char *dest, int32_t *length,
                    UBool forceCopy,
@@ -666,9 +666,9 @@ ures_getStringByIndex(const UResourceBundle *resourceBundle,
  *
  * @see ures_getStringByIndex
  * @see u_strToUTF8
- * @draft ICU 3.6
+ * @stable ICU 3.6
  */
-U_DRAFT const char * U_EXPORT2
+U_STABLE const char * U_EXPORT2
 ures_getUTF8StringByIndex(const UResourceBundle *resB,
                           int32_t index,
                           char *dest, int32_t *pLength,
@@ -759,9 +759,9 @@ ures_getStringByKey(const UResourceBundle *resB,
  *
  * @see ures_getStringByKey
  * @see u_strToUTF8
- * @draft ICU 3.6
+ * @stable ICU 3.6
  */
-U_DRAFT const char * U_EXPORT2
+U_STABLE const char * U_EXPORT2
 ures_getUTF8StringByKey(const UResourceBundle *resB,
                         const char *key,
                         char *dest, int32_t *pLength,

@@ -199,7 +199,7 @@ public:
      *
      * @param count    Filled in with length of the array.
      * @return         the era name strings.
-     * @draft ICU 3.4
+     * @stable ICU 3.4
      */
     const UnicodeString* getEraNames(int32_t& count) const;
 
@@ -207,7 +207,7 @@ public:
      * Sets era name strings. For example: "Anno Domini" and "Before Christ".
      * @param eraNames  Array of era name strings (DateFormatSymbols retains ownership.)
      * @param count Filled in with length of the array.
-     * @draft ICU 3.6
+     * @stable ICU 3.6
      */
     void setEraNames(const UnicodeString* eraNames, int32_t count);
 
@@ -247,7 +247,7 @@ public:
 
     /**
      * Selector for date formatting context
-     * @draft ICU 3.6
+     * @stable ICU 3.6
      */
     enum DtContextType {
          FORMAT,
@@ -257,7 +257,7 @@ public:
 
     /**
      * Selector for date formatting width
-     * @draft ICU 3.6
+     * @stable ICU 3.6
      */
     enum DtWidthType {
          ABBREVIATED,
@@ -272,7 +272,7 @@ public:
      * @param context The formatting context, either FORMAT or STANDALONE
      * @param width   The width of returned strings, either WIDE, ABBREVIATED, or NARROW.
      * @return the month strings. (DateFormatSymbols retains ownership.)
-     * @draft ICU 3.4
+     * @stable ICU 3.4
      */
     const UnicodeString* getMonths(int32_t& count, DtContextType context, DtWidthType width) const;
 
@@ -283,7 +283,7 @@ public:
      * @param count   Filled in with length of the array.
      * @param context The formatting context, either FORMAT or STANDALONE
      * @param width   The width of returned strings, either WIDE, ABBREVIATED, or NARROW.
-     * @draft ICU 3.6
+     * @stable ICU 3.6
      */
     void setMonths(const UnicodeString* months, int32_t count, DtContextType context, DtWidthType width);
 
@@ -326,7 +326,7 @@ public:
      * @param context The formatting context, either FORMAT or STANDALONE
      * @param width   The width of returned strings, either WIDE, ABBREVIATED, or NARROW
      * @return the month strings. (DateFormatSymbols retains ownership.)
-     * @draft ICU 3.4
+     * @stable ICU 3.4
      */
     const UnicodeString* getWeekdays(int32_t& count, DtContextType context, DtWidthType width) const;
 
@@ -336,7 +336,7 @@ public:
      * @param count     Filled in with length of the array.
      * @param context   The formatting context, either FORMAT or STANDALONE
      * @param width     The width of returned strings, either WIDE, ABBREVIATED, or NARROW
-     * @draft ICU 3.6
+     * @stable ICU 3.6
      */
     void setWeekdays(const UnicodeString* weekdays, int32_t count, DtContextType context, DtWidthType width);
 
@@ -347,7 +347,7 @@ public:
      * @param width   The width of returned strings, either WIDE or ABBREVIATED. There
      *                are no NARROW quarters.
      * @return the quarter strings. (DateFormatSymbols retains ownership.)
-     * @draft ICU 3.6
+     * @stable ICU 3.6
      */
     const UnicodeString* getQuarters(int32_t& count, DtContextType context, DtWidthType width) const;
 
@@ -359,7 +359,7 @@ public:
      * @param context The formatting context, either FORMAT or STANDALONE
      * @param width   The width of returned strings, either WIDE or ABBREVIATED. There
      *                are no NARROW quarters.
-     * @draft ICU 3.6
+     * @stable ICU 3.6
      */
     void setQuarters(const UnicodeString* quarters, int32_t count, DtContextType context, DtWidthType width);
 

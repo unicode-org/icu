@@ -379,43 +379,41 @@ typedef enum UProperty {
         processing collation tailoring rules.
         @stable ICU 3.0 */
     UCHAR_SEGMENT_STARTER=41,
-#ifndef U_HIDE_DRAFT_API
     /** Binary property Pattern_Syntax (new in Unicode 4.1).
         See UAX #31 Identifier and Pattern Syntax
         (http://www.unicode.org/reports/tr31/)
-        @draft ICU 3.4 */
+        @stable ICU 3.4 */
     UCHAR_PATTERN_SYNTAX=42,
     /** Binary property Pattern_White_Space (new in Unicode 4.1).
         See UAX #31 Identifier and Pattern Syntax
         (http://www.unicode.org/reports/tr31/)
-        @draft ICU 3.4 */
+        @stable ICU 3.4 */
     UCHAR_PATTERN_WHITE_SPACE=43,
     /** Binary property alnum (a C/POSIX character class).
         Implemented according to the UTS #18 Annex C Standard Recommendation.
         See the uchar.h file documentation.
-        @draft ICU 3.4 */
+        @stable ICU 3.4 */
     UCHAR_POSIX_ALNUM=44,
     /** Binary property blank (a C/POSIX character class).
         Implemented according to the UTS #18 Annex C Standard Recommendation.
         See the uchar.h file documentation.
-        @draft ICU 3.4 */
+        @stable ICU 3.4 */
     UCHAR_POSIX_BLANK=45,
     /** Binary property graph (a C/POSIX character class).
         Implemented according to the UTS #18 Annex C Standard Recommendation.
         See the uchar.h file documentation.
-        @draft ICU 3.4 */
+        @stable ICU 3.4 */
     UCHAR_POSIX_GRAPH=46,
     /** Binary property print (a C/POSIX character class).
         Implemented according to the UTS #18 Annex C Standard Recommendation.
         See the uchar.h file documentation.
-        @draft ICU 3.4 */
+        @stable ICU 3.4 */
     UCHAR_POSIX_PRINT=47,
     /** Binary property xdigit (a C/POSIX character class).
         Implemented according to the UTS #18 Annex C Standard Recommendation.
         See the uchar.h file documentation.
-        @draft ICU 3.4 */
+        @stable ICU 3.4 */
     UCHAR_POSIX_XDIGIT=48,
-#endif /* U_HIDE_DRAFT_API */
     /** One more than the last constant for binary Unicode properties. @stable ICU 2.1 */
     UCHAR_BINARY_LIMIT=49,
 
@@ -484,23 +482,21 @@ typedef enum UProperty {
         see UNORM_FCD and http://www.unicode.org/notes/tn5/#FCD .
         Returns 8-bit numeric values like UCHAR_CANONICAL_COMBINING_CLASS. @stable ICU 3.0 */
     UCHAR_TRAIL_CANONICAL_COMBINING_CLASS=0x1011,
-#ifndef U_HIDE_DRAFT_API
     /** Enumerated property Grapheme_Cluster_Break (new in Unicode 4.1).
         Used in UAX #29: Text Boundaries
         (http://www.unicode.org/reports/tr29/)
-        Returns UGraphemeClusterBreak values. @draft ICU 3.4 */
+        Returns UGraphemeClusterBreak values. @stable ICU 3.4 */
     UCHAR_GRAPHEME_CLUSTER_BREAK=0x1012,
     /** Enumerated property Sentence_Break (new in Unicode 4.1).
         Used in UAX #29: Text Boundaries
         (http://www.unicode.org/reports/tr29/)
-        Returns USentenceBreak values. @draft ICU 3.4 */
+        Returns USentenceBreak values. @stable ICU 3.4 */
     UCHAR_SENTENCE_BREAK=0x1013,
     /** Enumerated property Word_Break (new in Unicode 4.1).
         Used in UAX #29: Text Boundaries
         (http://www.unicode.org/reports/tr29/)
-        Returns UWordBreakValues values. @draft ICU 3.4 */
+        Returns UWordBreakValues values. @stable ICU 3.4 */
     UCHAR_WORD_BREAK=0x1014,
-#endif /*U_HIDE_DRAFT_API*/
     /** One more than the last constant for enumerated/integer Unicode properties. @stable ICU 2.2 */
     UCHAR_INT_LIMIT=0x1015,
 
@@ -1194,73 +1190,70 @@ enum UBlockCode {
     /** @stable ICU 2.6 */
     UBLOCK_VARIATION_SELECTORS_SUPPLEMENT = 125, /*[E0100]*/
 
-#ifndef U_HIDE_DRAFT_API
     /* New blocks in Unicode 4.1 */
 
-    /** @draft ICU 3.4 */
+    /** @stable ICU 3.4 */
     UBLOCK_ANCIENT_GREEK_MUSICAL_NOTATION = 126, /*[1D200]*/
-    /** @draft ICU 3.4 */
+    /** @stable ICU 3.4 */
     UBLOCK_ANCIENT_GREEK_NUMBERS = 127, /*[10140]*/
-    /** @draft ICU 3.4 */
+    /** @stable ICU 3.4 */
     UBLOCK_ARABIC_SUPPLEMENT = 128, /*[0750]*/
-    /** @draft ICU 3.4 */
+    /** @stable ICU 3.4 */
     UBLOCK_BUGINESE = 129, /*[1A00]*/
-    /** @draft ICU 3.4 */
+    /** @stable ICU 3.4 */
     UBLOCK_CJK_STROKES = 130, /*[31C0]*/
-    /** @draft ICU 3.4 */
+    /** @stable ICU 3.4 */
     UBLOCK_COMBINING_DIACRITICAL_MARKS_SUPPLEMENT = 131, /*[1DC0]*/
-    /** @draft ICU 3.4 */
+    /** @stable ICU 3.4 */
     UBLOCK_COPTIC = 132, /*[2C80]*/
-    /** @draft ICU 3.4 */
+    /** @stable ICU 3.4 */
     UBLOCK_ETHIOPIC_EXTENDED = 133, /*[2D80]*/
-    /** @draft ICU 3.4 */
+    /** @stable ICU 3.4 */
     UBLOCK_ETHIOPIC_SUPPLEMENT = 134, /*[1380]*/
-    /** @draft ICU 3.4 */
+    /** @stable ICU 3.4 */
     UBLOCK_GEORGIAN_SUPPLEMENT = 135, /*[2D00]*/
-    /** @draft ICU 3.4 */
+    /** @stable ICU 3.4 */
     UBLOCK_GLAGOLITIC = 136, /*[2C00]*/
-    /** @draft ICU 3.4 */
+    /** @stable ICU 3.4 */
     UBLOCK_KHAROSHTHI = 137, /*[10A00]*/
-    /** @draft ICU 3.4 */
+    /** @stable ICU 3.4 */
     UBLOCK_MODIFIER_TONE_LETTERS = 138, /*[A700]*/
-    /** @draft ICU 3.4 */
+    /** @stable ICU 3.4 */
     UBLOCK_NEW_TAI_LUE = 139, /*[1980]*/
-    /** @draft ICU 3.4 */
+    /** @stable ICU 3.4 */
     UBLOCK_OLD_PERSIAN = 140, /*[103A0]*/
-    /** @draft ICU 3.4 */
+    /** @stable ICU 3.4 */
     UBLOCK_PHONETIC_EXTENSIONS_SUPPLEMENT = 141, /*[1D80]*/
-    /** @draft ICU 3.4 */
+    /** @stable ICU 3.4 */
     UBLOCK_SUPPLEMENTAL_PUNCTUATION = 142, /*[2E00]*/
-    /** @draft ICU 3.4 */
+    /** @stable ICU 3.4 */
     UBLOCK_SYLOTI_NAGRI = 143, /*[A800]*/
-    /** @draft ICU 3.4 */
+    /** @stable ICU 3.4 */
     UBLOCK_TIFINAGH = 144, /*[2D30]*/
-    /** @draft ICU 3.4 */
+    /** @stable ICU 3.4 */
     UBLOCK_VERTICAL_FORMS = 145, /*[FE10]*/
 
     /* New blocks in Unicode 5.0 */
 
-    /** @draft ICU 3.6 */
+    /** @stable ICU 3.6 */
     UBLOCK_NKO = 146, /*[07C0]*/
-    /** @draft ICU 3.6 */
+    /** @stable ICU 3.6 */
     UBLOCK_BALINESE = 147, /*[1B00]*/
-    /** @draft ICU 3.6 */
+    /** @stable ICU 3.6 */
     UBLOCK_LATIN_EXTENDED_C = 148, /*[2C60]*/
-    /** @draft ICU 3.6 */
+    /** @stable ICU 3.6 */
     UBLOCK_LATIN_EXTENDED_D = 149, /*[A720]*/
-    /** @draft ICU 3.6 */
+    /** @stable ICU 3.6 */
     UBLOCK_PHAGS_PA = 150, /*[A840]*/
-    /** @draft ICU 3.6 */
+    /** @stable ICU 3.6 */
     UBLOCK_PHOENICIAN = 151, /*[10900]*/
-    /** @draft ICU 3.6 */
+    /** @stable ICU 3.6 */
     UBLOCK_CUNEIFORM = 152, /*[12000]*/
-    /** @draft ICU 3.6 */
+    /** @stable ICU 3.6 */
     UBLOCK_CUNEIFORM_NUMBERS_AND_PUNCTUATION = 153, /*[12400]*/
-    /** @draft ICU 3.6 */
+    /** @stable ICU 3.6 */
     UBLOCK_COUNTING_ROD_NUMERALS = 154, /*[1D360]*/
 
-#endif /*U_HIDE_DRAFT_API*/
-    
     /** @stable ICU 2.0 */
     UBLOCK_COUNT = 155,
 
@@ -1441,10 +1434,9 @@ typedef enum UJoiningGroup {
  * Grapheme Cluster Break constants.
  *
  * @see UCHAR_GRAPHEME_CLUSTER_BREAK
- * @draft ICU 3.4
+ * @stable ICU 3.4
  */
 typedef enum UGraphemeClusterBreak {
-#ifndef U_HIDE_DRAFT_API
     U_GCB_OTHER = 0,            /*[XX]*/ /*See note !!*/
     U_GCB_CONTROL = 1,          /*[CN]*/
     U_GCB_CR = 2,               /*[CR]*/
@@ -1455,7 +1447,6 @@ typedef enum UGraphemeClusterBreak {
     U_GCB_LVT = 7,              /*[LVT]*/
     U_GCB_T = 8,                /*[T]*/
     U_GCB_V = 9,                /*[V]*/
-#endif /*U_HIDE_DRAFT_API*/
     U_GCB_COUNT = 10
 } UGraphemeClusterBreak;
 
@@ -1464,10 +1455,9 @@ typedef enum UGraphemeClusterBreak {
  * (UWordBreak is a pre-existing enum type in ubrk.h for word break status tags.)
  *
  * @see UCHAR_WORD_BREAK
- * @draft ICU 3.4
+ * @stable ICU 3.4
  */
 typedef enum UWordBreakValues {
-#ifndef U_HIDE_DRAFT_API
     U_WB_OTHER = 0,             /*[XX]*/ /*See note !!*/
     U_WB_ALETTER = 1,           /*[LE]*/
     U_WB_FORMAT = 2,            /*[FO]*/
@@ -1476,7 +1466,6 @@ typedef enum UWordBreakValues {
     U_WB_MIDNUM = 5,            /*[MN]*/
     U_WB_NUMERIC = 6,           /*[NU]*/
     U_WB_EXTENDNUMLET = 7,      /*[EX]*/
-#endif /*U_HIDE_DRAFT_API*/
     U_WB_COUNT = 8
 } UWordBreakValues;
 
@@ -1484,10 +1473,9 @@ typedef enum UWordBreakValues {
  * Sentence Break constants.
  *
  * @see UCHAR_SENTENCE_BREAK
- * @draft ICU 3.4
+ * @stable ICU 3.4
  */
 typedef enum USentenceBreak {
-#ifndef U_HIDE_DRAFT_API
     U_SB_OTHER = 0,             /*[XX]*/ /*See note !!*/
     U_SB_ATERM = 1,             /*[AT]*/
     U_SB_CLOSE = 2,             /*[CL]*/
@@ -1499,7 +1487,6 @@ typedef enum USentenceBreak {
     U_SB_SP = 8,                /*[SP]*/
     U_SB_STERM = 9,             /*[ST]*/
     U_SB_UPPER = 10,             /*[UP]*/
-#endif /*U_HIDE_DRAFT_API*/
     U_SB_COUNT = 11
 } USentenceBreak;
 

@@ -593,9 +593,9 @@ ucnv_setSubstChars(UConverter *converter,
  *
  * @see ucnv_setSubstChars
  * @see ucnv_getSubstChars
- * @draft ICU 3.6
+ * @stable ICU 3.6
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 ucnv_setSubstString(UConverter *cnv,
                     const UChar *s,
                     int32_t length,
@@ -1915,9 +1915,9 @@ ucnv_detectUnicodeSignature(const char* source,
  * @param status    ICU error code in/out parameter.
  *                  Must fulfill U_SUCCESS before the function call.
  * @return The number of UChars in the state. -1 if an error is encountered.
- * @draft ICU 3.4
+ * @stable ICU 3.4
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 ucnv_fromUCountPending(const UConverter* cnv, UErrorCode* status);
 
 /**
@@ -1929,9 +1929,9 @@ ucnv_fromUCountPending(const UConverter* cnv, UErrorCode* status);
  * @param status    ICU error code in/out parameter.
  *                  Must fulfill U_SUCCESS before the function call.
  * @return The number of chars in the state. -1 if an error is encountered.
- * @draft ICU 3.4
+ * @stable ICU 3.4
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 ucnv_toUCountPending(const UConverter* cnv, UErrorCode* status);
 
 #endif
