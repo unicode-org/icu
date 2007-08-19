@@ -11,6 +11,7 @@
 
 #include "unicode/unistr.h"
 #include "unicode/ustring.h"
+#include "util.h"
 #include "ucln.h"
 
 #include <stdio.h>
@@ -117,22 +118,19 @@ udbg_stoi(const UnicodeString &s)
     return atoi(ch);
 }
 
-// from incaltst.cpp
-T_CTEST_API UnicodeString
-udbg_escape(const UnicodeString &src)
+T_CTEST_API UnicodeString *
+udbg_escape(const UnicodeString &src, UnicodeString *dst)
 {
-  UnicodeString dst;
-    dst.remove();
+    dst->remove();
     for (int32_t i = 0; i < src.length(); ++i) {
         UChar c = src[i];
-        if(c < 0x0080)
-            dst += c;
+        if(ICU_Utility::isUnprintable(c)) {
+            *dst += UnicodeString("[");
+            ICU_Utility::escapeUnprintable(*dst, c);
+            *dst += UnicodeString("]");
+        }
         else {
-            dst += UnicodeString("[");
-            char buf [8];
-            sprintf(buf, "%#x", c);
-            dst += UnicodeString(buf);
-            dst += UnicodeString("]");
+            *dst += c;
         }
     }
 
