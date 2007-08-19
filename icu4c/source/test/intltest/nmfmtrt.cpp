@@ -190,7 +190,7 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt)
 #endif
         }
 
-#if _MSC_VER >= 1400 || defined __alpha__ || defined U_OSF
+#if (defined(_MSC_VER) && _MSC_VER < 1400) || defined(__alpha__) || defined(U_OSF)
         // These machines and compilers don't fully support denormalized doubles,
         test(fmt, randomDouble(1e-292));
         test(fmt, randomDouble(1e-100));
