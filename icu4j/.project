@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>ICU4J</name>
+	<name>icu4j</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -16,7 +16,7 @@
 			<arguments>
 				<dictionary>
 					<key>LaunchConfigHandle</key>
-					<value>&lt;project&gt;/.externalToolBuilders/ICU4J_Resources.launch</value>
+					<value>&lt;project&gt;/.externalToolBuilders/icu4j_Resources.launch</value>
 				</dictionary>
 			</arguments>
 		</buildCommand>
