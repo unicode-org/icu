@@ -70,7 +70,8 @@ static void initRandom(int64_t min, int64_t max)
     ranMax = max;
     ranInt = 0;
 
-    if (interval < U_INT64_MIN) {
+    /* Verify that we don't have a huge interval. */
+    if (interval < (uint64_t)U_INT64_MAX) {
         ranInt = interval;
     }
 }
