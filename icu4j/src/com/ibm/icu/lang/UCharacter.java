@@ -3978,7 +3978,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                                               int value,
                                               int nameChoice) 
     {
-        if (property == UProperty.CANONICAL_COMBINING_CLASS 
+        if ((property == UProperty.CANONICAL_COMBINING_CLASS
+             || property == UProperty.LEAD_CANONICAL_COMBINING_CLASS
+             || property == UProperty.TRAIL_CANONICAL_COMBINING_CLASS)
             && value >= UCharacter.getIntPropertyMinValue(
                               UProperty.CANONICAL_COMBINING_CLASS)
             && value <= UCharacter.getIntPropertyMaxValue(
