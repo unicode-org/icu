@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /**
  *******************************************************************************
  * Copyright (C) 2001-2007, International Business Machines Corporation and    *
@@ -13,10 +13,10 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.JarURLConnection;
-//#ifndef FOUNDATION
-import java.nio.ByteBuffer;
-//#else
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //##import com.ibm.icu.impl.ByteBuffer;
+//#else
+import java.nio.ByteBuffer;
 //#endif
 import java.util.MissingResourceException;
 import java.util.Enumeration;

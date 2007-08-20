@@ -220,7 +220,7 @@ public abstract class CharsetICU extends Charset{
 //##        return icuCanonicalName.compareTo(((CharsetICU)otherObj).icuCanonicalName);
 //##    }
 //#endif
-    
+
     /**
      * This follows ucnv.c method ucnv_detectUnicodeSignature() to detect the
      * start of the stream for example U+FEFF (the Unicode BOM/signature

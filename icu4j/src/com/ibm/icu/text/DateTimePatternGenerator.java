@@ -1,5 +1,6 @@
-//##header
-//#ifndef FOUNDATION
+//##header J2SE15
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
 /*
  *******************************************************************************
  * Copyright (C) 2006-2007, Google, International Business Machines Corporation *

@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /*
  *******************************************************************************
  * Copyright (C) 2001-2007, International Business Machines Corporation and    *
@@ -272,7 +272,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
      */
     static final String PATTERN_CHARS = "GyMdkHmsSEDFwWahKzYeugAZvcLQq";
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     /**
      * A list of the DateFormat.Field.
      * This MUST be kept in sync with PATTERN_CHARS above.
@@ -2907,7 +2908,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     }
     */
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     /*
      * Test case for formatToCharacterIterator
      */

@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /*
  *******************************************************************************
  * Copyright (C) 1996-2007, International Business Machines Corporation and    *
@@ -14,7 +14,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.SortedSet;
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
 import java.util.regex.Matcher;
 //#endif
 
@@ -328,7 +329,8 @@ public final class CollectionUtilities {
         return result.toString();
     }
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
      /**
       * Does one string contain another, starting at a specific offset?
       * @param text
@@ -479,7 +481,8 @@ public final class CollectionUtilities {
         }
     }
     
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     public static class RegexIterator extends FilteredIterator {
         private Matcher matcher;
         public RegexIterator set(Iterator baseIterator, Matcher matcher) {

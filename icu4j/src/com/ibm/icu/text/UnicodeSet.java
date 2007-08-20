@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /*
  *******************************************************************************
  * Copyright (C) 1996-2007, International Business Machines Corporation and    *
@@ -917,7 +917,8 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
         return maxLen;
     }
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     /**
      * Tests whether the text matches at the offset. If so, returns the end of the longest substring that it matches. If not, returns -1. 
      * @internal

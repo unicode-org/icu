@@ -6,6 +6,8 @@
  */
 package com.ibm.icu.dev.test.util;
 
+import com.ibm.icu.impl.Utility;
+
 /**
  * @author srl
  * 
@@ -116,10 +118,10 @@ public class FieldsSet {
     public int parseFrom(String str, FieldsSet inheritFrom) {
         int goodFields = 0;
         
-        String[] fields = str.split(",");
+        String[] fields = Utility.split(str, ',');
         for(int i=0;i<fields.length;i++) {
             String fieldStr = fields[i];
-            String kv[] = fieldStr.split("=");
+            String kv[] = Utility.split(fieldStr, '=');
             if(kv.length < 1 || kv.length > 2) {
                 throw new InternalError("split around '=' failed: " + fieldStr);
             }

@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /*
 *   Copyright (C) 1996-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
@@ -1208,7 +1208,8 @@ public abstract class DateFormat extends UFormat {
         return getDateTimeInstance(cal, dateStyle, timeStyle, ULocale.getDefault());
     }
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     /**
      * The instances of this inner class are used as attribute keys and values
      * in AttributedCharacterIterator that

@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /*
  *******************************************************************************
  * Copyright (C) 1996-2007, International Business Machines Corporation and    *
@@ -41,7 +41,8 @@ public class TestAll extends TestGroup {
                   "CollationMiscTest",
                   "CollationChineseTest",
                   "CollationServiceTest",
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
                   //"RandomCollator", //Disabled until the problem in the test case is resolved #5747
 //#endif
                   "UCAConformanceTest",

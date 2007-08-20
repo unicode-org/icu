@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /*
  *******************************************************************************
  * Copyright (C) 2004-2007, International Business Machines Corporation and    *
@@ -18,7 +18,8 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.TreeMap;
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 //#endif
@@ -249,7 +250,8 @@ public class GlobalizationPreferences implements Freezable {
         return setLocales(new ULocale[]{uLocale});
     }
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     /**
      * Convenience routine for setting the locale priority list from
      * an Accept-Language string.
@@ -654,7 +656,8 @@ public class GlobalizationPreferences implements Freezable {
                 // fix other hacks
                 // hack for couldn't match
                 // note, compiling with FOUNDATION omits this check for now
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
                 if (badTimeZone.reset(result).matches()) continue;
 //#endif
                 break;
@@ -670,7 +673,8 @@ public class GlobalizationPreferences implements Freezable {
         }
         return result;
     }
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     // TODO remove need for this
     private static final Matcher badTimeZone = Pattern.compile("[A-Z]{2}|.*\\s\\([A-Z]{2}\\)").matcher("");
 //#endif

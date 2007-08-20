@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /*
  **********************************************************************
  * Copyright (c) 2006-2007, International Business Machines
@@ -151,7 +151,7 @@ class ResourceModule implements TestDataModule {
                 isStrResPrepared = true; // toggle the tag
                 return true;
             } catch (DataModuleFormatError e) {
-//#ifdef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //##                throw new RuntimeException(e.getMessage());
 //#else
                 throw new RuntimeException(e.getMessage(),e);
@@ -176,7 +176,7 @@ class ResourceModule implements TestDataModule {
                 return true;
             } catch (DataModuleFormatError e) {
                 // Sadly, we throw RuntimeException also
-//#ifdef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //##                throw new RuntimeException(e.getMessage());
 //#else
                 throw new RuntimeException(e.getMessage(),e);
@@ -247,7 +247,7 @@ class ResourceModule implements TestDataModule {
         if (Arrays.binarySearch(expResTypes, type) >= 0) {
             return t;
         } else {
-//#ifdef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //##            throw new DataModuleFormatError("Actual type " + t.getType() + " != expected types " + expResTypes + ".");
 //#else
             throw new DataModuleFormatError(new UResourceTypeMismatchException("Actual type " + t.getType() + " != expected types " + expResTypes + "."));
@@ -276,7 +276,7 @@ class ResourceModule implements TestDataModule {
                 throw new UResourceTypeMismatchException("Only accept ARRAY and STRING types.");
             }
         } catch (UResourceTypeMismatchException e){
-//#ifdef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //##            throw new DataModuleFormatError(e.getMessage());
 //#else
             throw new DataModuleFormatError(e);

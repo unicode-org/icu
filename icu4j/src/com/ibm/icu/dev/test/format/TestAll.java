@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /*
  *******************************************************************************
  * Copyright (C) 1996-2007, International Business Machines Corporation and    *
@@ -72,7 +72,8 @@ public class TestAll extends TestGroup {
                 "IntlTestDateFormatAPI",
                 "IntlTestDateFormatAPIC",
                 "IntlTestDateFormatSymbols",
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
                 "DateTimeGeneratorTest",
 //#endif
                 "IntlTestSimpleDateFormatAPI",

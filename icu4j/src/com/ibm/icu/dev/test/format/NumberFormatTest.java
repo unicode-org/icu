@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /*
  *******************************************************************************
  * Copyright (C) 2001-2007, International Business Machines Corporation and    *
@@ -874,10 +874,10 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         expect2(df, 2.0, "2.00 *&' Rs. '&*");
         expect2(df, -1.0, "-1.00 *&' Re. '&*");
 
-//#ifndef FOUNDATION
-        java.math.BigDecimal r = df.getRoundingIncrement();
-//#else
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //##        com.ibm.icu.math.BigDecimal r = df.getRoundingIncrement();
+//#else
+        java.math.BigDecimal r = df.getRoundingIncrement();
 //#endif
         if (r != null) {
             errln("FAIL: rounding = " + r + ", expect null");
@@ -1274,10 +1274,10 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 }
             }
         } catch (java.io.IOException e) {
-//#ifndef FOUNDATION
-            throw new RuntimeException(e);
-//#else
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //##        throw new RuntimeException(e.getMessage());
+//#else
+            throw new RuntimeException(e);
 //#endif
         }
     }
@@ -1306,7 +1306,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     }
 
     void checkRounding(DecimalFormat nf, BigDecimal base, int iterations, BigDecimal increment) {
-//#ifdef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //##        nf.setRoundingIncrement(increment);
 //#else
         nf.setRoundingIncrement(increment.toBigDecimal());
@@ -1357,7 +1357,8 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     static BigDecimal toBigDecimal(Number number) {
         return number instanceof BigDecimal ? (BigDecimal) number
             : number instanceof BigInteger ? new BigDecimal((BigInteger)number)
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
             : number instanceof java.math.BigDecimal ? new BigDecimal((java.math.BigDecimal)number)
 //#endif
             : number instanceof Double ? new BigDecimal(number.doubleValue())

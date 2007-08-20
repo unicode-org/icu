@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /*
  *******************************************************************************
  * Copyright (C) 1996-2007, International Business Machines Corporation and    *
@@ -192,7 +192,8 @@ public abstract class NumberFormat extends UFormat {
             return format(((Long)number).longValue(), toAppendTo, pos);
         } else if (number instanceof BigInteger) {
             return format((BigInteger) number, toAppendTo, pos);
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
         } else if (number instanceof java.math.BigDecimal) {
             return format((java.math.BigDecimal) number, toAppendTo, pos);
 //#endif
@@ -248,7 +249,8 @@ public abstract class NumberFormat extends UFormat {
                       new FieldPosition(0)).toString();
     }
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Convenience method to format a BigDecimal.
@@ -307,7 +309,8 @@ public abstract class NumberFormat extends UFormat {
     public abstract StringBuffer format(BigInteger number,
                                         StringBuffer toAppendTo,
                                         FieldPosition pos); 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Format a BigDecimal.
@@ -1537,7 +1540,8 @@ public abstract class NumberFormat extends UFormat {
     // new in ICU4J 3.6
     private boolean parseStrict;
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     /**
      * The instances of this inner class are used as attribute keys and values
      * in AttributedCharacterIterator that

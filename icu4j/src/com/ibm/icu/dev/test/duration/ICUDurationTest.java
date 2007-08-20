@@ -1,3 +1,4 @@
+//##header J2SE15
 /*
  *******************************************************************************
  * Copyright (C) 2007, International Business Machines Corporation and         *
@@ -8,11 +9,12 @@ package com.ibm.icu.dev.test.duration;
 
 import java.util.Date;
 
-// BEGIN JDK>1.5
+//#if defined(FOUNDATION10) || defined(J2SE13) || defined(J2SE14)
+//#else
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.Duration;
-// END JDK>1.5
+//#endif
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.DurationFormat;
@@ -80,8 +82,8 @@ public class ICUDurationTest extends TestFmwk {
         }
     }
 
- // BEGIN JDK>1.5
-
+//#if defined(FOUNDATION10) || defined(J2SE13) || defined(J2SE14)
+//#else
     public void TestSimpleXMLDuration() {
         DatatypeFactory factory = null;
         try {
@@ -119,8 +121,8 @@ public class ICUDurationTest extends TestFmwk {
             errln("FAIL: got " + out + " wanted " + expected + " from " + d);
         }
     }
-    
-    
+
+
     public void TestXMLDuration() {
         DatatypeFactory factory = null;
         try {
@@ -164,10 +166,9 @@ public class ICUDurationTest extends TestFmwk {
             }
         }
     }
- // END JDK>1.5
+//#endif
 
-  
-    
+
     public void TestBadObjectError() {
         Runtime r = Runtime.getRuntime();
         DurationFormat df = DurationFormat.getInstance(new ULocale("en"));

@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /**
 *******************************************************************************
 * Copyright (C) 1996-2007, International Business Machines Corporation and    *
@@ -13,10 +13,10 @@ import java.text.ParseException;
 import java.util.Arrays;
 import java.util.MissingResourceException;
 
-//#ifndef FOUNDATION
-import java.nio.ByteBuffer;
-//#else
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //##import com.ibm.icu.impl.ByteBuffer;
+//#else
+import java.nio.ByteBuffer;
 //#endif
 
 import com.ibm.icu.impl.BOCU;

@@ -1,13 +1,13 @@
-//##header
-/*
- * *****************************************************************************
- * Copyright (C) 2006-2007, International Business Machines
- * Corporation and others. All Rights Reserved.
- * *****************************************************************************
- */
-// dlf13 internal 1.3 compatibility only
-
-//#ifdef FOUNDATION
+//##header J2SE15
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//##/*
+//## * *****************************************************************************
+//## * Copyright (C) 2006-2007, International Business Machines
+//## * Corporation and others. All Rights Reserved.
+//## * *****************************************************************************
+//## */
+//##// dlf13 internal 1.3 compatibility only
+//##
 //##package com.ibm.icu.impl;
 //##
 //##/**

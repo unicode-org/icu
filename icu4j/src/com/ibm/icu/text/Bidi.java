@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /*
 *******************************************************************************
 *   Copyright (C) 2001-2007, International Business Machines
@@ -26,9 +26,13 @@
 
 package com.ibm.icu.text;
 
-//#ifndef FOUNDATION
-import java.awt.font.NumericShaper;
+//#if defined(FOUNDATION10)
+//#else
 import java.awt.font.TextAttribute;
+//#endif
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
+import java.awt.font.NumericShaper;
 //#endif
 import java.io.IOException;
 import java.lang.reflect.Array;
@@ -3341,7 +3345,8 @@ public class Bidi {
         paraBidi = this;             /* mark successful setPara */
     }
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10)
+//#else
     /**
      * Perform the Unicode Bidi algorithm on a given paragraph, as defined in the
      * <a href="http://www.unicode.org/unicode/reports/tr9/">Unicode Standard Annex #9</a>,
@@ -3419,10 +3424,13 @@ public class Bidi {
             ++i;
         }
 
+//#if defined(J2SE13)
+//#else
         NumericShaper shaper = (NumericShaper) paragraph.getAttribute(TextAttribute.NUMERIC_SHAPING);
         if (shaper != null) {
             shaper.shape(text, 0, length);
         }
+//#endif
         setPara(text, paraLevel, levels);
     }
 //#endif
@@ -4390,7 +4398,8 @@ public class Bidi {
         this(paragraph.toCharArray(), 0, null, 0, paragraph.length(), flags);
     }
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10)
+//#else
     /**
      * Create Bidi from the given paragraph of text.<p>
      *

@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /*
 **********************************************************************
 * Copyright (c) 2004-2007, International Business Machines
@@ -1293,7 +1293,8 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     // Test case for formatToCharacterIterator
     public void TestFormatToCharacterIterator() {
         MessageFormat[] msgfmts = {

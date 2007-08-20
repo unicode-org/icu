@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /*
  *******************************************************************************
  * Copyright (C) 1996-2007, International Business Machines Corporation and    *
@@ -553,7 +553,8 @@ public class SimpleDateFormat extends DateFormat {
                 toAppendTo.append((String)items[i]);
             } else {
                 PatternItem item = (PatternItem)items[i];
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
                 int start = 0;
                 if (attributes != null) {
                     // Save the current length
@@ -565,7 +566,8 @@ public class SimpleDateFormat extends DateFormat {
                 } else {
                     toAppendTo.append(subFormat(item.type, item.length, toAppendTo.length(), pos, formatData, cal));
                 }
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
                 if (attributes != null) {
                     // Check the sub format length
                     int end = toAppendTo.length();
@@ -632,7 +634,8 @@ public class SimpleDateFormat extends DateFormat {
         /*Qq*/  DateFormat.QUARTER_FIELD, DateFormat.STANDALONE_QUARTER_FIELD,
     };
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     // Map pattern character index to DateFormat.Field
     private static final DateFormat.Field[] PATTERN_INDEX_TO_DATE_FORMAT_ATTRIBUTE = {
         /*GyM*/ DateFormat.Field.ERA, DateFormat.Field.YEAR, DateFormat.Field.MONTH,
@@ -2159,7 +2162,8 @@ public class SimpleDateFormat extends DateFormat {
         initLocalZeroPaddingNumberFormat();
     }
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     /**
      * Format the object to an attributed string, and return the corresponding iterator
      * Overrides superclass method.

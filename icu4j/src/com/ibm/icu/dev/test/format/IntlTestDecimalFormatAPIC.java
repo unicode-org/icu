@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /*
  *******************************************************************************
  * Copyright (C) 2001-2007, International Business Machines Corporation and    *
@@ -276,7 +276,8 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     public void testFormatToCharacterIterator() {
 
         Number number = new Double(350.76);

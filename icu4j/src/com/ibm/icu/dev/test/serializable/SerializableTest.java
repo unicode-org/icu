@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /*
  *******************************************************************************
  * Copyright (C) 1996-2007, International Business Machines Corporation and    *
@@ -628,7 +628,8 @@ public class SerializableTest extends TestFmwk.TestGroup
         map.put("com.ibm.icu.util.UResourceTypeMismatchException", new ExceptionTests.UResourceTypeMismatchExceptionHandler());
         map.put("com.ibm.icu.impl.InvalidFormatException", new ExceptionTests.InvalidFormatExceptionHandler());
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
         map.put("com.ibm.icu.text.NumberFormat$Field", new FormatTests.NumberFormatFieldHandler());
         map.put("com.ibm.icu.text.DateFormat$Field", new FormatTests.DateFormatFieldHandler());
         map.put("com.ibm.icu.text.ChineseDateFormat$Field", new FormatTests.ChineseDateFormatFieldHandler());

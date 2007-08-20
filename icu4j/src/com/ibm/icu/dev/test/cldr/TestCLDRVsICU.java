@@ -1,4 +1,6 @@
-//##header
+//##header J2SE15
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
 /*
 **********************************************************************
 * Copyright (c) 2002-2007, International Business Machines
@@ -7,7 +9,6 @@
 * Author: Mark Davis
 **********************************************************************
 */
-//#ifndef FOUNDATION
 package com.ibm.icu.dev.test.cldr;
 
 import java.io.File;

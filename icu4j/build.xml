@@ -49,33 +49,11 @@
 
   <!-- ### End Clover 1.2 setup ### -->
 
-  <target name="anthack1">
-    <!-- It's a real pain to set properties conditionally.
-          Ant 1.5 isn't really any better than 1.4, in fact 1.5 enforces that
-          properties are write-once so you can't even set a default and then
-          override it, which we used to do for Ant 1.4. -->
-    <condition property="version.1.4">
-      <or>
-        <equals arg1="${ant.java.version}" arg2="1.4" />
-        <equals arg1="${ant.java.version}" arg2="1.5" />
-        <equals arg1="${ant.java.version}" arg2="1.6" />
-      </or>
-    </condition>
+  <target name="init"
+          depends="initBase,initSrc"
+          description="Initialized ICU4J build environment" />
 
-    <condition property="doc.params" value="-breakiterator -use -tagletpath ./classes -taglet com.ibm.icu.dev.tool.docs.ICUTaglet -group 'ICU Core' 'com.ibm.icu.lang*:com.ibm.icu.math*:com.ibm.icu.text*:com.ibm.icu.util*:com.ibm.icu.charset' -group 'ICU Tests' 'com.ibm.icu.dev.test*' -group 'Demos' 'com.ibm.icu.dev.demo*' -group 'ICU Tools' 'com.ibm.icu.dev*'">
-      <equals arg1="${version.1.4}" arg2="true" />
-    </condition>
-
-    <condition property="richeditdoc.params" value="-breakiterator -use -tagletpath ./classes -taglet com.ibm.icu.dev.tool.docs.ICUTaglet -group 'Rich Text Editing' 'com.ibm.richtext*'">
-      <equals arg1="${version.1.4}" arg2="true" />
-    </condition>
-  </target>
-
-  <target name="anthack2" unless="doc.params">
-    <property name="doc.params" value="" />
-  </target>
-
-  <target name="init">
+  <target name="initBase" unless="initBase.done">
     <tstamp />
     <property name="src.dir" value="src" />
     <property name="build.dir" value="classes" />
@@ -129,6 +107,10 @@
     <!-- Capture the computer name in a cross-platform manner -->
     <property name="env.COMPUTERNAME" value="${env.HOSTNAME}" />
 
+    <!-- JavaDoc params -->
+    <property name="doc.params" value="-breakiterator -use -tagletpath ./classes -taglet com.ibm.icu.dev.tool.docs.ICUTaglet -group 'ICU Core' 'com.ibm.icu.lang*:com.ibm.icu.math*:com.ibm.icu.text*:com.ibm.icu.util*:com.ibm.icu.charset' -group 'ICU Tests' 'com.ibm.icu.dev.test*' -group 'Demos' 'com.ibm.icu.dev.demo*' -group 'ICU Tools' 'com.ibm.icu.dev*'" />
+    <property name="richeditdoc.params" value="-breakiterator -use -tagletpath ./classes -taglet com.ibm.icu.dev.tool.docs.ICUTaglet -group 'Rich Text Editing' 'com.ibm.richtext*'" />
+
     <mkdir dir="${build.dir}" />
     <mkdir dir="${wrapper.build.dir}" />
 
@@ -138,6 +120,53 @@
     <echo message="${ant.version}" />
     <echo message="${env.COMPUTERNAME} with ${os.name} ${os.version} on ${os.arch}" />
     <echo message="clover initstring = '${clover.initstring}'" />
+
+    <!-- ## Java version dependent build configuration ##-->
+ 
+    <!-- JRE lib version used for building ICU4J -->
+    <condition property="target.rt.version" value="J2SE13">
+      <equals arg1="${ant.java.version}" arg2="1.3" />
+    </condition>
+    <condition property="target.rt.version" value="J2SE14">
+      <equals arg1="${ant.java.version}" arg2="1.4" />
+    </condition>
+    <condition property="target.rt.version" value="J2SE15">
+      <equals arg1="${ant.java.version}" arg2="1.5" />
+    </condition>
+    <condition property="target.rt.version" value="JAVASE6">
+      <equals arg1="${ant.java.version}" arg2="1.6" />
+    </condition>
+
+    <echo message="target runtime environment: ${target.rt.version}" />
+
+    <condition property="default.java.env">
+      <equals arg1="${target.rt.version}" arg2="${default.target.rt.version}" />
+    </condition>
+    <antcall target="displayBuildEnvWarning" />
+
+    <condition property="before.java14">
+      <or>
+        <equals arg1="${target.rt.version}" arg2="FOUNDATION10"/>
+        <equals arg1="${target.rt.version}" arg2="J2SE13"/>
+      </or>
+    </condition>
+
+    <condition property="before.java15">
+      <or>
+        <equals arg1="${target.rt.version}" arg2="FOUNDATION10"/>
+        <equals arg1="${target.rt.version}" arg2="J2SE13"/>
+        <equals arg1="${target.rt.version}" arg2="J2SE14"/>
+      </or>
+    </condition>
+
+    <condition property="jvm.assertion.arg" value="">
+        <isset property="before.java14" />
+    </condition>
+    <condition property="jvm.assertion.arg" value="-ea">
+      <not>
+        <isset property="jvm.assertion.arg" />
+      </not>
+    </condition>
 
     <uptodate property="icu4j.resources" targetfile="${src.dir}/com/ibm/icu/impl/data">
       <!-- note must not have '/' before 'com' in srcfiles includes arg! -->
@@ -156,7 +185,55 @@
     <tstamp>
       <format property="date.time" pattern="yyyy-MM-dd 'at' hh:mm:ss z" locale="en,US" />
     </tstamp>
+
+    <property name="initBase.done" value="true" />
     <echo message="Initialized at ${date.time}" />
+  </target>
+
+  <target name="displayBuildEnvWarning" unless="default.java.env">
+    <echo message="####################### WARINNG #######################" />
+    <echo message="The JDK version used by the current build environment" />
+    <echo message="does not match the reference JDK version for this" />
+    <echo message="ICU4J release.  The build outputs may not be identical" />
+    <echo message="to the official ICU4J binary distribution." />
+    <echo message="#######################################################" />
+  </target>
+
+  <target name="initSrc"
+          depends="buildMangle"
+          description="Run the preprocessor tool to modify Java sources for the Java runtime lib currently used.">
+    <echo message="Running source code preprocessor for environment: ${target.rt.version}"/>
+    <!-- Build CodeMangler -->
+    <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}">
+      <include name="com/ibm/icu/dev/tool/docs/CodeMangler.java" />
+    </javac>
+    <!-- Run CodeMangler -->
+    <antcall target="doMangle">
+      <param name="target.defs" value="${target.rt.version}" />
+      <param name="input.file" value="@preprocessor.txt" />
+    </antcall>
+  </target>
+
+  <target name="normSrc"
+          depends="buildMangle"
+          description="Run the preprocessor to normalize Java sources to the ICU source repository target JDK version">
+    <antcall target="doMangle">
+      <param name="target.defs" value="${default.target.rt.version}" />
+      <param name="input.file" value="@preprocessor.txt" />
+    </antcall>
+  </target>
+
+  <target name="buildMangle" depends="initBase">
+    <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}">
+      <include name="com/ibm/icu/dev/tool/docs/CodeMangler.java" />
+    </javac>
+  </target>
+
+  <target name="doMangle">
+    <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true">
+      <arg value="-d${target.defs}" />
+      <arg value="${input.file}" />
+    </java>
   </target>
 
   <!-- build everything but dist-related stuff -->
@@ -164,7 +241,7 @@
 
   <target name="resources" depends="init, icudata, coreData, testdata" description="builds all the resources" />
 
-  <target name="icudata" depends="init" if="icu4j.resources">
+  <target name="icudata" depends="initBase" if="icu4j.resources">
     <!-- use this target to force resources to be rebuilt -->
     <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}" />
     <touch file="${build.dir}/${icu4j.data.path}/res_index.res" />
@@ -173,7 +250,7 @@
     </copy>
   </target>
 
-  <target name="durationdata" depends="init">
+  <target name="durationdata" depends="initBase">
     <copy todir="${build.dir}/com/ibm/icu/impl/duration/impl/data">
       <fileset dir="${src.dir}/com/ibm/icu/impl/duration/impl/data" includes="index.txt, pfd*.xml"/>
     </copy>
@@ -189,12 +266,18 @@
 
   <!-- core does not build richedit or tests -->
   <target name="core" depends="init,coreData,icudata,durationdata" description="build core classes and data">
-    <javac sourcepath="" srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}" debug="on" deprecation="off" encoding="ascii">
-
-      <exclude name="**/CVS/**/*" />
-      <include name="com/ibm/icu/charset/**/*.java" />
+    <javac  sourcepath=""
+            srcdir="${src.dir}"
+            destdir="${build.dir}"
+            classpathref="build.classpath"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
+            debug="on"
+            deprecation="off"
+            encoding="ascii">
+      <include name="com/ibm/icu/charset/**/*.java" unless="before.java14" />
       <include name="com/ibm/icu/impl/**/*.java" />
-      <include name="com/ibm/icu/lang/*.java" />
+      <include name="com/ibm/icu/lang/**/*.java" />
       <include name="com/ibm/icu/math/**/*.java" />
       <include name="com/ibm/icu/text/**/*.java" />
       <include name="com/ibm/icu/util/**/*.java" />
@@ -202,74 +285,30 @@
   </target>
 
   <target name="tests" depends="core,testdata" description="build tests">
-    <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}" debug="on" deprecation="off">
-
-      <exclude name="**/CVS/**/*" />
-      <include name="com/ibm/icu/dev/test/calendar/**/*.java" />
-    </javac>
-
-    <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}" debug="on" deprecation="off">
-
-      <exclude name="**/CVS/**/*" />
-      <include name="com/ibm/icu/dev/test/collator/**/*.java" />
-
-    </javac>
-
-    <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}" debug="on" deprecation="off">
-
-      <exclude name="**/CVS/**/*" />
-      <include name="com/ibm/icu/dev/test/format/**/*.java" />
-    </javac>
-
-    <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}" debug="on" deprecation="off">
-
-      <exclude name="**/CVS/**/*" />
-      <include name="com/ibm/icu/dev/test/translit/**/*.java" />
-    </javac>
-
-    <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}" debug="on" deprecation="off">
-
-      <exclude name="**/CVS/**/*" />
-      <include name="com/ibm/icu/dev/test/lang/**/*.java" />
-      <include name="com/ibm/icu/dev/test/normalizer/**/*.java" />
-    </javac>
-
-    <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}" debug="on" deprecation="off">
-
-      <exclude name="**/CVS/**/*" />
-      <include name="com/ibm/icu/dev/test/serializable/**/*.java" />
-    </javac>
-
-    <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}" debug="on" deprecation="off">
-
-      <exclude name="**/CVS/**/*" />
+    <javac  srcdir="${src.dir}"
+            destdir="${build.dir}"
+            classpathref="build.classpath"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
+            debug="on"
+            deprecation="off">
+      <exclude name="com/ibm/icu/dev/test/charset/**/*.java" if="before.java14" />
+      <exclude name="com/ibm/icu/dev/test/perf/**/*.java" if="before.java14" />
       <include name="com/ibm/icu/dev/test/**/*.java" />
     </javac>
 
   </target>
 
-  <target name="demos" depends="core,testdata" description="build demos">
-    <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}" debug="on" deprecation="off">
-
-      <exclude name="**/CVS/**/*" />
+  <target name="demos" depends="core,testdata" unless="before.java14" description="build demos">
+    <javac  srcdir="${src.dir}"
+            destdir="${build.dir}"
+            classpathref="build.classpath"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
+            debug="on"
+            deprecation="off">
       <include name="com/ibm/icu/dev/demo/**/*.java" />
     </javac>
-  </target>
-
-  <target name="buildmangle" depends="init,anthack1">
-    <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}">
-
-      <include name="com/ibm/icu/dev/tool/docs/CodeMangler.java" />
-    </javac>
-  </target>
-
-  <target name="mangle" depends="buildmangle">
-    <!-- this is a hack for now, need a way to express dependency on the .jpp files
-    and to provide directories or trees of files to the code mangler tool. -->
-    <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true">
-      <arg value="-dVERSION_${ant.java.version}" />
-      <arg value="${src.dir}/com/ibm/icu/dev/tool/docs/ICUTaglet.java" />
-    </java>
   </target>
 
   <target name="indices" depends="icudata,build_indexgenerator">
@@ -287,51 +326,89 @@
     </java>
   </target>
 
-  <target name="one4tools" depends="anthack1,anthack2,mangle" if="version.1.4">
-    <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}" debug="on" deprecation="off">
-
-      <exclude name="**/CVS/**/*" />
-
-      <include name="com/ibm/icu/dev/localeconverter/docs/*.java" />
-      <include name="com/ibm/icu/dev/tool/docs/*.java" />
-    </javac>
-  </target>
-
-  <target name="tools" depends="core,one4tools" description="build tools">
-    <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}" debug="on" deprecation="off">
-
+  <target name="tools"
+          depends="core"
+          unless="before.java14"
+          description="build tools">
+    <javac  srcdir="${src.dir}"
+            destdir="${build.dir}"
+            classpathref="build.classpath"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
+            debug="on"
+            deprecation="off">
       <exclude name="com/ibm/icu/dev/tool/cldr/*" />
-      <exclude name="com/ibm/icu/dev/tool/localeconverter/*" />
-      <exclude name="com/ibm/icu/dev/tool/docs/*" />
-      <exclude name="**/CVS/**/*" />
-
+      <exclude name="com/ibm/icu/dev/tool/localeconverter/*" if="before.java15" />
       <include name="com/ibm/icu/dev/tool/**/*.java" />
     </javac>
   </target>
 
-  <target name="build_indexgenerator">
-    <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}" debug="on" deprecation="off">
-
+  <target name="build_indexgenerator" depends="init">
+    <javac  srcdir="${src.dir}"
+            destdir="${build.dir}"
+            classpathref="build.classpath"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
+            debug="on"
+            deprecation="off">
       <include name="com/ibm/icu/dev/tool/index/IndexGenerator.java" />
     </javac>
   </target>
 
-  <!-- use excludefiles below when we move to ant 1.5 -->
-  <target name="docs" depends="anthack1,anthack2,tools" description="build user javadoc">
-    <echo message="doc params: ${doc.params}" />
+  <target name="docs" depends="init,docs13,docs14plus" description="build user javadoc" />
+
+  <target name="docs13" if="before.java14">
     <mkdir dir="${doc.dir}" />
-    <javadoc packagenames="com.ibm.icu.lang,com.ibm.icu.text,com.ibm.icu.util,com.ibm.icu.math,com.ibm.icu.charset,com.ibm.icu.dev" sourcepath="${src.dir}" destdir="${doc.dir}" nodeprecatedlist="true" windowtitle="icu4j" doctitle="icu4j" encoding="iso-8859-1" docencoding="iso-8859-1" bottom="&lt;font size=-1>Copyright (c) ${current.year} IBM Corporation and others.&lt;/font>" additionalparam="${doc.params}" link="http://java.sun.com/j2se/1.5/docs/api" source="1.4" />
+    <javadoc  packagenames="com.ibm.icu.lang,com.ibm.icu.text,com.ibm.icu.util,com.ibm.icu.math"
+              sourcepath="${src.dir}"
+              destdir="${doc.dir}"
+              nodeprecatedlist="true"
+              windowtitle="icu4j"
+              doctitle="icu4j"
+              encoding="iso-8859-1"
+              docencoding="iso-8859-1"
+              bottom="&lt;font size=-1>Copyright (c) ${current.year} IBM Corporation and others.&lt;/font>"
+              link="http://java.sun.com/j2se/1.3/docs/api"
+              source="1.4" />
   </target>
 
-  <target name="fulldocs" depends="anthack1,anthack2,tools" description="build all javadoc">
+  <target name="docs14plus" depends="tools" unless="before.java14">
     <echo message="doc params: ${doc.params}" />
     <mkdir dir="${doc.dir}" />
-    <javadoc packagenames="com.ibm.icu.*" sourcepath="${src.dir}" destdir="${doc.dir}" nodeprecatedlist="true" windowtitle="icu4j" doctitle="icu4j" encoding="iso-8859-1" docencoding="iso-8859-1" bottom="&lt;font size=-1>Copyright (c) 2004 IBM Corporation and others.&lt;/font>" additionalparam="${doc.params}" link="http://java.sun.com/j2se/1.4/docs/api" source="1.4" />
+    <javadoc  packagenames="com.ibm.icu.lang,com.ibm.icu.text,com.ibm.icu.util,com.ibm.icu.charset,com.ibm.icu.math,com.ibm.icu.dev"
+              sourcepath="${src.dir}"
+              destdir="${doc.dir}"
+              nodeprecatedlist="true"
+              windowtitle="icu4j"
+              doctitle="icu4j"
+              encoding="iso-8859-1"
+              docencoding="iso-8859-1"
+              bottom="&lt;font size=-1>Copyright (c) ${current.year} IBM Corporation and others.&lt;/font>"
+              additionalparam="${doc.params}"
+              link="http://java.sun.com/j2se/1.5/docs/api"
+              source="1.4" />
+  </target>
+
+  <target name="fulldocs" depends="tools" unless="before.java14" description="build all javadoc">
+    <echo message="doc params: ${doc.params}" />
+    <mkdir dir="${doc.dir}" />
+    <javadoc  packagenames="com.ibm.icu.*"
+              sourcepath="${src.dir}"
+              destdir="${doc.dir}"
+              nodeprecatedlist="true"
+              windowtitle="icu4j"
+              doctitle="icu4j"
+              encoding="iso-8859-1"
+              docencoding="iso-8859-1"
+              bottom="&lt;font size=-1>Copyright (c) ${current.year} IBM Corporation and others.&lt;/font>"
+              additionalparam="${doc.params}"
+              link="http://java.sun.com/j2se/1.5/docs/api"
+              source="1.4" />
   </target>
 
   <target name="coreData" depends="init">
     <copy todir="${build.dir}/com/ibm/icu/impl/data">
-      <fileset dir="${src.dir}/com/ibm/icu/impl/data" includes="*.icu,*.spp,*.brk" excludes="**/CVS/**/*,Transliterator_Han_Latin_*.txt" />
+      <fileset dir="${src.dir}/com/ibm/icu/impl/data" includes="*.icu,*.spp,*.brk" excludes="Transliterator_Han_Latin_*.txt" />
     </copy>
   </target>
 
@@ -346,10 +423,13 @@
     </copy>
     <copy file="${src.dir}/com/ibm/icu/dev/data/riwords.txt" todir="${build.dir}/com/ibm/icu/dev/data" />
     <copy file="${src.dir}/com/ibm/icu/dev/data/IDNATestInput.txt" todir="${build.dir}/com/ibm/icu/dev/data" />
-    <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}" debug="on" deprecation="off">
-
-      <exclude name="**/CVS/**/*" />
-
+    <javac  srcdir="${src.dir}"
+            destdir="${build.dir}"
+            classpathref="build.classpath"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
+            debug="on"
+            deprecation="off">
       <include name="com/ibm/icu/dev/data/*.java" />
       <include name="com/ibm/icu/dev/data/resources/*.java" />
     </javac>
@@ -373,9 +453,13 @@
 
   <!-- builds richedit and richedit tests -->
   <target name="richedit" depends="init" description="build richedit classes and tests">
-    <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}" debug="on" deprecation="off">
-
-      <exclude name="**/CVS/**/*" />
+    <javac  srcdir="${src.dir}"
+            destdir="${build.dir}"
+            classpathref="build.classpath"
+            source="${icu4j.javac.source}"
+            target="${icu4j.javac.target}"
+            debug="on"
+            deprecation="off">
       <include name="com/ibm/richtext/**/*.java" />
     </javac>
     <copy todir="${build.dir}/com/ibm/richtext/textapps/resources" overwrite="yes" includeEmptyDirs="no">
@@ -452,14 +536,30 @@
     </jar>
   </target>
 
-  <target name="jarSrc" depends="init" description="build source 'icu4jsrc.jar' jar file">
+  <target name="jarSrc" depends="initBase,normSrc" description="build source 'icu4jsrc.jar' jar file">
     <!--Create a jar archive of just the source for distribution.  The
         jar file will be created in the directory above the root ICU4J
         directory. The exclude pattern ${src.dir}/com/ibm/icu/dev/data/unicode/UnicodeData-*.txt
         and ${src.dir}/com/ibm/icu/dev/data/unicode/SpecialCasing-*.txt
         eliminates old archive copies like SpecialCasing-2.txt and
         UnicodeData-2.1.8.txt -->
-    <jar jarfile="${jarSrc.file}" compress="true" basedir="." excludes="${richedit.dir}/**/*,test_*,${src.dir}/com/ibm/icu/dev/data/unicode//UnicodeData-*.txt,${src.dir}/com/ibm/icu/dev/data/unicode/SpecialCasing-*.txt,${src.dir}/com/ibm/icu/dev/data/unicode/CompositionExclusions-*.txt,${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*,${doc.dir}/**,*.jar,*.zip, *.gz">
+    <jar  jarfile="${jarSrc.file}"
+          compress="true">
+      <fileset dir=".">
+        <exclude name="${richedit.dir}/**/*" />
+        <exclude name="test_*" />
+        <exclude name="${src.dir}/com/ibm/icu/dev/data/unicode/UnicodeData-*.txt" />
+        <exclude name="${src.dir}/com/ibm/icu/dev/data/unicode/SpecialCasing-*.txt" />
+        <exclude name="${src.dir}/com/ibm/icu/dev/data/unicode/CompositionExclusions-*.txt" />
+        <exclude name="${obsolete.dir}/**" />
+        <exclude name="**/*~" />
+        <exclude name="${src.dir}/**/*.class" />
+        <exclude name="${build.dir}/**" />
+        <exclude name="${doc.dir}/**" />
+        <exclude name="*.jar" />
+        <exclude name="*.zip" />
+        <exclude name="*.gz" />
+      </fileset>
       <manifest>
         <attribute name="Built-By" value="${corp}" />
         <section name="common">
@@ -550,7 +650,15 @@
   <!-- the 'public' docs for richedit -->
   <target name="richeditDocs" depends="init" description="build richedit javadoc">
     <mkdir dir="${richedit.doc.dir}" />
-    <javadoc packagenames="com.ibm.richtext.demo,com.ibm.richtext.awtui,com.ibm.richtext.swingui,com.ibm.richtext.textpanel,com.ibm.richtext.styledtext,com.ibm.richtext.textlayout.attributes,com.ibm.richtext.print" sourcepath="${src.dir}" destdir="${richedit.doc.dir}" nodeprecatedlist="true" windowtitle="RichEdit Control" doctitle="RichEdit Control" encoding="iso-8859-1" docencoding="iso-8859-1" bottom="&lt;font size=-1>Copyright (c) 1998-2004 IBM Corporation and others.&lt;/font>" />
+    <javadoc  packagenames="com.ibm.richtext.demo,com.ibm.richtext.awtui,com.ibm.richtext.swingui,com.ibm.richtext.textpanel,com.ibm.richtext.styledtext,com.ibm.richtext.textlayout.attributes,com.ibm.richtext.print"
+              sourcepath="${src.dir}"
+              destdir="${richedit.doc.dir}"
+              nodeprecatedlist="true"
+              windowtitle="RichEdit Control"
+              doctitle="RichEdit Control"
+              encoding="iso-8859-1"
+              docencoding="iso-8859-1"
+              bottom="&lt;font size=-1>Copyright (c) 1998-2004 IBM Corporation and others.&lt;/font>" />
   </target>
 
   <!-- richedit alphaworks distribution - jar and docs, but no source -->
@@ -572,7 +680,7 @@
   <target name="check" depends="tests, jar, deleteCore" description="run standard icu4j test suite">
     <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
       <!-- enable assertion checks -->
-      <jvmarg value="-ea" />
+      <jvmarg value="${jvm.assertion.arg}" />
       <jvmarg value="-Xms96m" />
       <jvmarg value="-Xmx128m" />
       <arg value="-n" />
@@ -589,7 +697,7 @@
   <target name="exhaustiveCheck" depends="tests, jar, deleteCore" description="run standard icu4j test suite in exhaustive mode">
     <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
       <!-- enable assertion checks -->
-      <jvmarg value="-ea" />
+      <jvmarg value="${jvm.assertion.arg}" />
       <jvmarg value="-Xms96m" />
       <jvmarg value="-Xmx128m" />
       <!-- set the max heap size to 128m -->
@@ -645,11 +753,12 @@
       </classpath>
     </java>
   </target>
-  <target name="_requires14" unless="version.1.4">
-    <echo message="One of your targets requires JAVA_HOME to be set to JDK version 1.4" />
+
+  <target name="_requires14" if="before.java14">
+    <echo message="One of your targets requires JAVA_HOME to be set to JDK version 1.4 or newer" />
   </target>
 
-  <target name="_checktags" depends="anthack1,anthack2,tools" if="version.1.4">
+  <target name="_checktags" depends="tools" unless="before.java14">
     <echo message="doc params: ${doc.params}" />
     <javadoc sourcepath="${src.dir}" packagenames="com.ibm.icu.*" excludepackagenames="com.ibm.icu.dev.*,com.ibm.icu.impl.*" classpath="${build.dir}" source="1.4">
       <doclet name="com.ibm.icu.dev.tool.docs.CheckTags" path="${build.dir}">
@@ -658,9 +767,9 @@
     </javadoc>
   </target>
 
-  <target name="checktags" depends="anthack1,anthack2,_requires14,_checktags" description="check API tags before release" />
+  <target name="checktags" depends="_requires14,_checktags" description="check API tags before release" />
 
-  <target name="gatherapi" depends="tools" if="version.1.4" description="run API database generator tool">
+  <target name="gatherapi" depends="tools" unless="before.java14" description="run API database generator tool">
     <javadoc classpath="${build.dir}" sourcepath="${src.dir}" packagenames="com.ibm.icu.lang,com.ibm.icu.math,com.ibm.icu.text,com.ibm.icu.util" source="1.4">
       <doclet name="com.ibm.icu.dev.tool.docs.GatherAPIData" path="${build.dir}">
         <param name="-name" value="ICU4J ${icu4j.version.string}" />
@@ -671,7 +780,7 @@
     </javadoc>
   </target>
 
-  <target name="gatherapi.with.version" depends="tools" if="version.1.4" description="run API database generator tool">
+  <target name="gatherapi.with.version" depends="tools" unless="before.java14" description="run API database generator tool">
     <javadoc classpath="${build.dir}" sourcepath="${src.dir}" packagenames="com.ibm.icu.lang,com.ibm.icu.math,com.ibm.icu.text,com.ibm.icu.util" source="1.4">
       <doclet name="com.ibm.icu.dev.tool.docs.GatherAPIData" path="${build.dir}">
         <param name="-name" value="ICU4J ${icu4j.version.string}" />
@@ -682,7 +791,7 @@
     </javadoc>
   </target>
 
-  <target name="apireport" depends="tools, gatherapi" if="version.1.4" description="run API report generator tool">
+  <target name="apireport" depends="tools, gatherapi" unless="beofre.java14" description="run API report generator tool">
     <java classname="com.ibm.icu.dev.tool.docs.ReportAPI" classpath="${build.dir}" failonerror="true">
       <arg value="-old:" />
       <arg value="${api.dir}/icu4j${icu4j.previous.version.number}.api.gz" />
@@ -1301,7 +1410,7 @@
     <!--run the tests -->
     <java classname="TestDefaultPackageLoading" fork="yes" failonerror="true">
       <!-- enable assertion checks -->
-      <jvmarg value="-ea" />
+      <jvmarg value="${jvm.assertion.arg}" />
       <jvmarg value="-Xms96m" />
       <jvmarg value="-Xmx128m" />
       <arg value="-n" />
@@ -1314,7 +1423,7 @@
   </target>
 
   <!-- convert @deprecated @draft tags to @provisional -->
-  <target name="swatDeprecated" depends="init, tools" if="version.1.4">
+  <target name="swatDeprecated" depends="init, tools" unless="before.java14">
     <java classname="com.ibm.icu.dev.tool.docs.SwatDeprecated" classpath="${build.dir}" failonerror="true">
       <arg value="-src" />
       <arg value="${src.dir}" />
@@ -1326,7 +1435,7 @@
   </target>
 
   <!-- convert @provisional tags to @deprecated -->
-  <target name="restoreDeprecated" depends="init, tools" if="version.1.4">
+  <target name="restoreDeprecated" depends="init, tools" unless="before.java14">
     <java classname="com.ibm.icu.dev.tool.docs.SwatDeprecated" classpath="${build.dir}" failonerror="true">
       <arg value="-prov" />
       <arg value="-src" />
@@ -1341,14 +1450,14 @@
   <!-- for building eclipse distribution -->
   <target name="eclipseProjects" depends="eclipseCoreProject,eclipseTestProject,eclipseWrapperProject" description="create all eclipse icu projects" />
 
-  <target name="undoEclipseMangle" depends="buildmangle" description="preprocess files back to default)">
+  <target name="undoEclipseMangle" depends="buildMangle" description="preprocess files back to default)">
     <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true">
       <arg value="@eclipseCoreArgs.txt" />
       <arg value="@eclipseTestArgs.txt" />
     </java>
   </target>
 
-  <target name="eclipseCoreMangle" depends="buildmangle">
+  <target name="eclipseCoreMangle" depends="buildMangle">
     <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true">
       <arg value="-dFOUNDATION" />
       <arg value="-t" />
@@ -1435,7 +1544,7 @@
     <copy file="${eclipse.dir}/misc/about.html" todir="${eclipse.projects.dir}/com.ibm.icu.base-feature/sourceTemplatePlugin" />
   </target>
 
-  <target name="eclipseTestMangle" depends="buildmangle">
+  <target name="eclipseTestMangle" depends="buildMangle">
     <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true">
       <arg value="-dFOUNDATION" />
       <arg value="-t" />
@@ -1493,7 +1602,7 @@
     <zip destfile="${zipTestSrc.file}" compress="true" basedir="${src.dir}" includes="com/ibm/icu/dev/test/**/*" excludes="com/ibm/icu/dev/test/cldr/**/*, com/ibm/icu/dev/test/perf/**/*" />
   </target>
 
-  <target name="gatherICU4JWrapperAPI" depends="tools" if="version.1.4">
+  <target name="gatherICU4JWrapperAPI" depends="tools" unless="before.java14">
     <javadoc classpath="${build.dir}" sourcepath="${src.dir}" packagenames="com.ibm.icu.text,com.ibm.icu.util" source="1.4">
       <doclet name="com.ibm.icu.dev.tool.docs.GatherAPIData" path="${build.dir}">
         <param name="-name" value="ICU4J 3.6" />
@@ -1505,7 +1614,7 @@
     </javadoc>
   </target>
 
-  <target name="gatherEclipseWrapperAPI" depends="tools" if="version.1.4">
+  <target name="gatherEclipseWrapperAPI" depends="tools" unless="before.java14">
     <javadoc classpath="${build.dir}" sourcepath="${src.dir}/com/ibm/icu/dev/eclipse/com.ibm.icu.base/src" packagenames="com.ibm.icu.text,com.ibm.icu.util" source="1.4">
       <doclet name="com.ibm.icu.dev.tool.docs.GatherAPIData" path="${build.dir}">
         <param name="-name" value="ICU4J 3.6 Wrapper" />
@@ -1516,7 +1625,7 @@
     </javadoc>
   </target>
 
-  <target name="reportWrapperAPI" depends="tools" if="version.1.4">
+  <target name="reportWrapperAPI" depends="tools" unless="before.java14">
     <java classname="com.ibm.icu.dev.tool.docs.ReportAPI" classpath="${build.dir}" failonerror="true">
       <arg value="-old:" />
       <arg value="${api.dir}/icu4j${icu4j.previous.version.number}w_i.api" />
@@ -1530,7 +1639,7 @@
 
   <target name="runCheck" depends="init,tests">
     <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
-      <jvmarg value="-ea" />
+      <jvmarg value="${jvm.assertion.arg}" />
       <jvmarg value="-Xms96m" />
       <jvmarg value="-Xmx128m" />
       <arg value="-n" />

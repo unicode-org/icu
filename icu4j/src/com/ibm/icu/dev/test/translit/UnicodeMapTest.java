@@ -1,3 +1,6 @@
+//##header J2SE15
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
 /*
  *******************************************************************************
  * Copyright (C) 1996-2007, International Business Machines Corporation and    *
@@ -68,3 +71,4 @@ public class UnicodeMapTest extends TestFmwk {
     return true;
   }
 }
+//#endif

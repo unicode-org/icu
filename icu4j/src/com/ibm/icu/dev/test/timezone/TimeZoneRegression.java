@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /**
  *******************************************************************************
  * Copyright (C) 2000-2007, International Business Machines Corporation and    *
@@ -1020,9 +1020,10 @@ public class TimeZoneRegression extends TestFmwk {
             errln("FAIL: DST is observed in time zone America/New_York on Jan 1, 1900");
         }
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
         if (System.getProperty("java.vendor", "").startsWith("IBM") &&
-        	System.getProperty("java.version", "").equals("1.4.1")) {
+            System.getProperty("java.version", "").equals("1.4.1")) {
             // IBM JDK 1.4.1 has a bug and fails to run this test case.
             return;
         }
