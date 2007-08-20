@@ -22,6 +22,7 @@
 #include <cstring>
 #include <fstream>
 #include <sstream>
+#include <iostream>
 
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
