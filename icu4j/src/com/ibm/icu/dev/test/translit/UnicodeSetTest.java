@@ -44,13 +44,41 @@ public class UnicodeSetTest extends TestFmwk {
   public static void main(String[] args) throws Exception {
     new UnicodeSetTest().run(args);
   }
-  
-  
+
+  private static final boolean isCccValue(int ccc) {
+    switch (ccc) {
+    case 0:
+    case 1:
+    case 7:
+    case 8:
+    case 9:
+    case 200:
+    case 202:
+    case 216:
+    case 218:
+    case 220:
+    case 222:
+    case 224:
+    case 226:
+    case 228:
+    case 230:
+    case 232:
+    case 233:
+    case 234:
+    case 240:
+      return true;
+    default:
+      return false;
+    }
+  }
+
   public void TestPropertyAccess() {
     // test to see that all of the names work
     for (int propNum = UProperty.BINARY_START; propNum < UProperty.INT_LIMIT; ++propNum) {
+      if (propNum >= UProperty.BINARY_LIMIT && propNum < UProperty.INT_START) { // skip the gap
+        propNum = UProperty.INT_START;
+      }
       for (int nameChoice = UProperty.NameChoice.SHORT; nameChoice <= UProperty.NameChoice.LONG; ++nameChoice) {
-        if (propNum >= UProperty.BINARY_LIMIT && propNum < UProperty.INT_START) continue; // skip the gap
         String propName;
         try {
           propName = UCharacter.getPropertyName(propNum, nameChoice);
@@ -72,18 +100,18 @@ public class UnicodeSetTest extends TestFmwk {
             valueName = UCharacter.getPropertyValueName(propNum, valueNum, nameChoice);
             if (valueName == null) {
               if (nameChoice == UProperty.NameChoice.SHORT) continue; // allow non-existent short names
-              throw new NullPointerException();
+              if ((propNum == UProperty.CANONICAL_COMBINING_CLASS ||
+                   propNum == UProperty.LEAD_CANONICAL_COMBINING_CLASS ||
+                   propNum == UProperty.TRAIL_CANONICAL_COMBINING_CLASS) &&
+                  !isCccValue(valueNum)) {
+                // Only a few of the canonical combining classes have names.
+                // Otherwise they are just integer values.
+                continue;
+              } else {
+                throw new NullPointerException();
+              }
             }
           } catch (RuntimeException e1) {
-            // HACK for now
-            
-            if (propNum == 4098 && e1 instanceof NullPointerException) {
-              if (skipIfBeforeICU(3,8,0)) continue;
-            }
-            if (propNum == 4112 || propNum == 4113) {
-              if (skipIfBeforeICU(3,8,0)) continue;
-            }
-            
             errln("Can't get property value name for: "
                 + "Property (" + propNum + "): " + propName + ", " 
                 + "Value (" + valueNum + ") "
@@ -110,9 +138,6 @@ public class UnicodeSetTest extends TestFmwk {
             }
           }
           if (collectedErrors.size() != 0) {
-            if (propNum == 4107 && valueNum == 0 && skipIfBeforeICU(3,8,0)) {
-              continue; 
-            }
             errln("Property Value Differs: " 
                 + "Property (" + propNum + "): " + propName + ", " 
                 + "Value (" + valueNum + "): " + valueName + ", "

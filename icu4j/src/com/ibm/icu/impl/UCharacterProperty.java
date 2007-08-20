@@ -21,6 +21,8 @@ import com.ibm.icu.text.UTF16;
 import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.icu.util.VersionInfo;
 
+import com.ibm.icu.impl.NormalizerImpl;
+
 /**
 * <p>Internal class used for Unicode character property database.</p>
 * <p>This classes store binary data read from uprops.icu.
@@ -955,6 +957,13 @@ public final class UCharacterProperty
                 set.add(c);
             }
         }
+
+        /* Add Hangul type boundaries for UCHAR_HANGUL_SYLLABLE_TYPE. */
+        for(c=NormalizerImpl.HANGUL_BASE; c<(NormalizerImpl.HANGUL_BASE+NormalizerImpl.HANGUL_COUNT); c+=NormalizerImpl.JAMO_T_COUNT) {
+            set.add(c);
+            set.add(c+1);
+        }
+        set.add(c);
     }
 
     public UnicodeSet addPropertyStarts(UnicodeSet set) {
