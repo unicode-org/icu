@@ -120,6 +120,27 @@ public class ICUDurationTest extends TestFmwk {
         } else {
             errln("FAIL: got " + out + " wanted " + expected + " from " + d);
         }
+        // test 3
+        d = factory.newDuration("P0DT0H0M10.0S");
+        df = DurationFormat.getInstance(new ULocale("en"));
+        expected = "10 seconds";
+        out = df.format(d);
+        if(out.equals(expected)) {
+            logln("out=expected: " + expected + " from " + d);
+        } else {
+            errln("FAIL: got " + out + " wanted " + expected + " from " + d);
+        }
+        // test 4
+        d = factory.newDuration(86400000);
+        df = DurationFormat.getInstance(new ULocale("en"));
+        expected = "1 day, 0 hours, 0 minutes, and 0 seconds";
+        out = df.format(d);
+        if(out.equals(expected)) {
+            logln("out=expected: " + expected + " from " + d);
+        } else {
+            errln("FAIL: got " + out + " wanted " + expected + " from " + d);
+        }
+
     }
 
 

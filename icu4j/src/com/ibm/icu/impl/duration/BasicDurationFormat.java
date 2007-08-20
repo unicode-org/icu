@@ -133,9 +133,15 @@ public class BasicDurationFormat extends DurationFormat {
             inPast = true;
         }
         // convert a Duration to a Period
+        boolean sawNonZero = false; // did we have a set, non-zero field?
         for(int i=0;i<inFields.length;i++) {
             if(duration.isSet(inFields[i])) {
                 Number n = duration.getField(inFields[i]);
+                if(n.intValue() == 0 && !sawNonZero) {
+                    continue; // ignore zero fields larger than the largest nonzero field
+                } else {
+                    sawNonZero = true;
+                }
                 if(p == null) {
                     p = Period.at(n.floatValue(), outFields[i]);
                 } else {
