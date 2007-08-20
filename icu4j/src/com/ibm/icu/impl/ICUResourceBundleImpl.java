@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /**
  *******************************************************************************
  * Copyright (C) 2004-2007, International Business Machines Corporation and    *
@@ -15,7 +15,8 @@ import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceBundleIterator;
 import com.ibm.icu.util.UResourceTypeMismatchException;
 
-//#ifndef FOUNDATION 
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
 import java.nio.ByteBuffer; 
 //#endif 
 

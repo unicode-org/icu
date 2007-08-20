@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /**
  *******************************************************************************
  * Copyright (C) 2005-2006, International Business Machines Corporation and    *
@@ -16,7 +16,7 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.CharsetDetector;
 import com.ibm.icu.text.CharsetMatch;
 
-//#ifdef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //##import com.ibm.icu.impl.Utility;
 //#endif
 
@@ -56,12 +56,12 @@ public class TestCharsetDetector extends TestFmwk
                 throw new Exception();
             }
             catch (Exception e) {
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//##           msg = "Test failure  " + e.getMessage() ;
+//#else
                 StackTraceElement failPoint = e.getStackTrace()[1];
                 msg = "Test failure in file " + failPoint.getFileName() +
                              " at line " + failPoint.getLineNumber();
-//#else
-//##           msg = "Test failure  " + e.getMessage() ;
 //#endif
             }
             errln(msg);
@@ -125,10 +125,10 @@ public class TestCharsetDetector extends TestFmwk
     private void checkEncoding(String testString, String encoding, String id)
     {
         String enc = null, lang = null;
-//#ifndef FOUNDATION
-        String[] split = encoding.split("/");
-//#else
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //##        String[] split = Utility.split(encoding,'/');
+//#else
+        String[] split = encoding.split("/");
 //#endif
         
         enc = split[0];
@@ -358,10 +358,10 @@ public class TestCharsetDetector extends TestFmwk
                 
                 // Process test text with each encoding / language pair.
                 String testString = testText.toString();
-//#ifndef FOUNDATION
-                String[] encodingList = encodings.split(" ");
-//#else
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //##                String[] encodingList = Utility.split(encodings, ' ');
+//#else
+                String[] encodingList = encodings.split(" ");
 //#endif
                 
                 for (int e = 0; e < encodingList.length; e += 1) {

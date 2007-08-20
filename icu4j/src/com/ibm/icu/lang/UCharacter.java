@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /**
 *******************************************************************************
 * Copyright (C) 1996-2007, International Business Machines Corporation and    *
@@ -5383,10 +5383,10 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @return the code point at the index
      * @stable ICU 3.0
      */
-//#ifndef FOUNDATION
-    public static final int codePointAt(CharSequence seq, int index) {
-//#else
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //##    public static final int codePointAt(String seq, int index) {
+//#else
+    public static final int codePointAt(CharSequence seq, int index) {
 //#endif
         char c1 = seq.charAt(index++);
         if (isHighSurrogate(c1)) {
@@ -5399,7 +5399,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
         return c1;
     }
-//#ifdef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //##    public static final int codePointAt(StringBuffer seq, int index) {
 //##        return codePointAt(seq.toString(), index);
 //##    }
@@ -5462,10 +5462,10 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @return the code point before the index
      * @stable ICU 3.0
      */
-//#ifndef FOUNDATION
-    public static final int codePointBefore(CharSequence seq, int index) {
-//#else
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //##    public static final int codePointBefore(String seq, int index) {
+//#else
+    public static final int codePointBefore(CharSequence seq, int index) {
 //#endif
         char c2 = seq.charAt(--index);
         if (isLowSurrogate(c2)) {
@@ -5478,7 +5478,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
         return c2;
     }
-//#ifdef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //##    public static final int codePointBefore(StringBuffer seq, int index) {
 //##        return codePointBefore(seq.toString(), index);
 //##    }
@@ -5605,10 +5605,10 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @return the number of code points in the range
      * @stable ICU 3.0
      */
-//#ifndef FOUNDATION
-    public static int codePointCount(CharSequence text, int start, int limit) {
-//#else
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //##    public static int codePointCount(String text, int start, int limit) {
+//#else
+    public static int codePointCount(CharSequence text, int start, int limit) {
 //#endif
         if (start < 0 || limit < start || limit > text.length()) {
             throw new IndexOutOfBoundsException("start (" + start +
@@ -5667,10 +5667,10 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @return the adjusted index
      * @stable ICU 3.0
      */
-//#ifndef FOUNDATION
-    public static int offsetByCodePoints(CharSequence text, int index, int codePointOffset) {
-//#else
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //##    public static int offsetByCodePoints(String text, int index, int codePointOffset) {
+//#else
+    public static int offsetByCodePoints(CharSequence text, int index, int codePointOffset) {
 //#endif
         if (index < 0 || index > text.length()) {
             throw new IndexOutOfBoundsException("index ( " + index +

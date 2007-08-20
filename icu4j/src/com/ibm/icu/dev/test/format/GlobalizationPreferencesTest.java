@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /*
  *******************************************************************************
  * Copyright (C) 2004-2007, International Business Machines Corporation and    *
@@ -176,7 +176,8 @@ public class GlobalizationPreferencesTest extends TestFmwk {
             errln("FAIL: setLocales(List) must be blocked after frozen");
         }
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
         // setLocales(String)
         logln("Call setLocales(String) after frozen");
         bSet = true;
@@ -330,7 +331,8 @@ public class GlobalizationPreferencesTest extends TestFmwk {
             }
         }
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
         // setLocales(String)
         for (int i = 0; i < ACCEPT_LANGUAGES.length; i++) {
             String acceptLanguage = ACCEPT_LANGUAGES[i];

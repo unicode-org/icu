@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /* Generated from 'DiagBigDecimal.nrx' 27 Mar 2000 22:38:44 [v1.162] */
 /* Options: Binary Comments Crossref Format Java Logo Trace1 Verbose3 */
 package com.ibm.icu.dev.test.bigdec;
@@ -407,7 +407,8 @@ public class DiagBigDecimal extends TestFmwk {
         (new Test("con006")).ok = (com.ibm.icu.math.BigDecimal.TEN.intValueExact()) == 10;
 
         // [java.math.] BigDecimal
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
         (new Test("cbd001")).ok = ((new com.ibm.icu.math.BigDecimal(new java.math.BigDecimal("0"))).toString()).equals("0");
         (new Test("cbd002")).ok = ((new com.ibm.icu.math.BigDecimal(new java.math.BigDecimal("1"))).toString()).equals("1");
         (new Test("cbd003")).ok = ((new com.ibm.icu.math.BigDecimal(new java.math.BigDecimal("10"))).toString()).equals("10");
@@ -587,7 +588,8 @@ public class DiagBigDecimal extends TestFmwk {
         }/* checkbound3 */
         (new Test("cca204")).ok = flag;
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
         // double [deprecated]
         // Note that many of these differ from the valueOf(double) results.
         dzer = (double) 0;
@@ -4254,7 +4256,8 @@ public class DiagBigDecimal extends TestFmwk {
     /** Test the {@link com.ibm.icu.math.BigDecimal#toBigDecimal} method. */
 
     public void diagtobigdecimal() {
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
         (new Test("tbd001")).ok=((new com.ibm.icu.math.BigDecimal("0")).toBigDecimal().toString()).equals("0");
         (new Test("tbd002")).ok=((new com.ibm.icu.math.BigDecimal("-1")).toBigDecimal().toString()).equals("-1");
         (new Test("tbd003")).ok=((new com.ibm.icu.math.BigDecimal("+1")).toBigDecimal().toString()).equals("1");

@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /*
 *******************************************************************************
 *   Copyright (C) 2007, International Business Machines
@@ -136,7 +136,8 @@ public final class DateNumberFormat extends NumberFormat {
         throw new UnsupportedOperationException("StringBuffer format(BigInteger, StringBuffer, FieldPostion) is not implemented");
     }
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     public StringBuffer format(java.math.BigDecimal number, StringBuffer toAppendTo,
             FieldPosition pos) {
         throw new UnsupportedOperationException("StringBuffer format(BigDecimal, StringBuffer, FieldPostion) is not implemented");

@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /*****************************************************************************************
  *
  * Copyright (C) 1996-2007, International Business Machines
@@ -1107,7 +1107,8 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     /**
      * BigDecimal numbers get their fractions truncated by NumberFormat.
      */
@@ -1844,7 +1845,8 @@ class MyNumberFormatTest extends NumberFormat {
     public Number parse(String text, ParsePosition parsePosition) {
         return new Integer(0);
     }
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     public StringBuffer format(java.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
         return new StringBuffer("");
     }

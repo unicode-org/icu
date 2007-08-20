@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /*
  *******************************************************************************
  * Copyright (C) 1996-2007, International Business Machines Corporation and    *
@@ -1083,7 +1083,8 @@ public class RuleBasedNumberFormat extends NumberFormat {
         return format(new com.ibm.icu.math.BigDecimal(number), toAppendTo, pos);
     }
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Implement com.ibm.icu.text.NumberFormat:

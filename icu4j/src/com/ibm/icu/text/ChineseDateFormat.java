@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /*********************************************************************
  * Copyright (C) 2000-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
@@ -175,7 +175,8 @@ public class ChineseDateFormat extends SimpleDateFormat {
         }
     }
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     /**
      * {@inheritDoc}
      * 

@@ -176,6 +176,7 @@ icu4j/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/ee.foundation.jar -text
 icu4j/license.html -text
+icu4j/preprocessor.txt -text
 icu4j/src/com/ibm/icu/charset/CharsetISCII.java -text
 icu4j/src/com/ibm/icu/charset/CharsetUTF16BE.java -text
 icu4j/src/com/ibm/icu/charset/CharsetUTF32BE.java -text

@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /*
  *******************************************************************************
  * Copyright (C) 1996-2007, International Business Machines Corporation and    *
@@ -718,7 +718,8 @@ public class RbnfTest extends TestFmwk {
         fmt.format(bigI, buf, null);
         logln("big int: " + buf.toString());
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
         buf.setLength(0);
         java.math.BigDecimal bigD = new java.math.BigDecimal(bigI);
         fmt.format(bigD, buf, null);

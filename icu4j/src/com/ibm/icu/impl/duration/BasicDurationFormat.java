@@ -1,3 +1,4 @@
+//##header J2SE15
 /*
  *******************************************************************************
  * Copyright (C) 2007, International Business Machines Corporation and         *
@@ -31,11 +32,12 @@ public class BasicDurationFormat extends DurationFormat {
     public static DurationFormat getInstance(ULocale locale) {
         return new BasicDurationFormat(locale);
     }
-    
-    // BEGIN JDK>1.5
+
+//#if defined(FOUNDATION10) || defined(J2SE13) || defined(J2SE14)
+//#else
     private static boolean checkXMLDuration = true; 
-    // END JDK>1.5
-    
+//#endif
+
     public StringBuffer format(Object object, StringBuffer toAppend, FieldPosition pos) {
         if(object instanceof Long) {
             String res = formatDurationFromNow(((Long)object).longValue());
@@ -44,7 +46,8 @@ public class BasicDurationFormat extends DurationFormat {
             String res = formatDurationFromNowTo(((Date)object));
             return toAppend.append(res);
         }
-        // BEGIN JDK>1.5
+//#if defined(FOUNDATION10) || defined(J2SE13) || defined(J2SE14)
+//#else
         if(checkXMLDuration) try {
             if(object instanceof javax.xml.datatype.Duration) {
                 String res = formatDuration(object);
@@ -54,8 +57,7 @@ public class BasicDurationFormat extends DurationFormat {
             System.err.println("Skipping XML capability");
             checkXMLDuration = false; // don't try again
         }
-        // END JDK>1.5
-
+//#endif
         throw new IllegalArgumentException("Cannot format given Object as a Duration");
 
     }
@@ -96,7 +98,8 @@ public class BasicDurationFormat extends DurationFormat {
         return formatter.formatDurationFromNowTo(targetDate);
     }
 
- // BEGIN JDK>1.5
+//#if defined(FOUNDATION10) || defined(J2SE13) || defined(J2SE14)
+//#else
     /** 
      *  JDK 1.5+ only
      * @param o
@@ -121,7 +124,7 @@ public class BasicDurationFormat extends DurationFormat {
                 TimeUnit.SECOND,
             };
 
-         javax.xml.datatype.Duration inDuration = (javax.xml.datatype.Duration)obj;
+        javax.xml.datatype.Duration inDuration = (javax.xml.datatype.Duration)obj;
         Period p = null;
         javax.xml.datatype.Duration duration = inDuration;
         boolean inPast = false;
@@ -155,6 +158,5 @@ public class BasicDurationFormat extends DurationFormat {
         // now, format it.
         return pformatter.format(p);
     }
- // END JDK>1.5
-
+//#endif
 }

@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /*
  *******************************************************************************
  * Copyright (C) 1996-2007, International Business Machines Corporation and    *
@@ -716,7 +716,8 @@ public class DecimalFormat extends NumberFormat {
             result.append(symbols.getNaN());
             // [Spark/CDL] Add attribute for NaN here.
             // result.append(symbols.getNaN());
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
             if (parseAttr) {
                 addAttribute(Field.INTEGER, result.length()
                         - symbols.getNaN().length(), result.length());
@@ -765,7 +766,8 @@ public class DecimalFormat extends NumberFormat {
 
             // [Spark/CDL] Add attribute for infinity here.
             result.append(symbols.getInfinity());
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
             if (parseAttr) {
                 addAttribute(Field.INTEGER, result.length()
                         - symbols.getInfinity().length(), result.length());
@@ -974,7 +976,8 @@ public class DecimalFormat extends NumberFormat {
         }
     }
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Format a BigDecimal number.
@@ -1204,7 +1207,8 @@ public class DecimalFormat extends NumberFormat {
                     if (fieldPosition.getField() == NumberFormat.INTEGER_FIELD) {
                         fieldPosition.setEndIndex(result.length());
                     }
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
                     // [Spark/CDL] Add attribute for integer part
                     if (parseAttr) {
                         intEnd = result.length();
@@ -1212,7 +1216,8 @@ public class DecimalFormat extends NumberFormat {
                     }
 //#endif
                     result.append(decimal);
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
                     // [Spark/CDL] Add attribute for decimal separator
                     if (parseAttr) {
                         // Length of decimal separator is 1.
@@ -1248,7 +1253,8 @@ public class DecimalFormat extends NumberFormat {
                 }
                 fieldPosition.setEndIndex(result.length());
             }
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
             // [Spark/CDL] Calcuate the end index of integer part and fractional
             // part if they are not properly processed yet.
             if (parseAttr) {
@@ -1266,7 +1272,8 @@ public class DecimalFormat extends NumberFormat {
             // digits, since truncating the exponent would result in an
             // unacceptable inaccuracy.
             result.append(symbols.getExponentSeparator());
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
             // [Spark/CDL] For exponent symbol, add an attribute.
             if (parseAttr) {
                 addAttribute(Field.EXPONENT_SYMBOL, result.length()
@@ -1283,7 +1290,8 @@ public class DecimalFormat extends NumberFormat {
             if (negativeExponent) {
                 exponent = -exponent;
                 result.append(symbols.getMinusSign());
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
                 // [Spark/CDL] If exponent has sign, then add an exponent sign
                 // attribute.
                 if (parseAttr) {
@@ -1294,7 +1302,8 @@ public class DecimalFormat extends NumberFormat {
 //#endif
             } else if (exponentSignAlwaysShown) {
                 result.append(symbols.getPlusSign());
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
                 // [Spark/CDL] Add an plus sign attribute.
                 if (parseAttr) {
                     // Length of exponent sign is 1.
@@ -1318,7 +1327,8 @@ public class DecimalFormat extends NumberFormat {
                 result.append((i < digitList.count) ?
                           (char)(digitList.digits[i] + zeroDelta) : zero);
             }
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
             // [Spark/CDL] Add attribute for exponent part.
             if (parseAttr) {
                 addAttribute(Field.EXPONENT, expBegin, result.length());
@@ -1385,7 +1395,8 @@ public class DecimalFormat extends NumberFormat {
                 // Output grouping separator if necessary.
                 if (isGroupingPosition(i)) {
                     result.append(grouping);
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
                     // [Spark/CDL] Add grouping separator attribute here.
                     if (parseAttr) {
                         // Length of grouping separator is 1.
@@ -1411,7 +1422,8 @@ public class DecimalFormat extends NumberFormat {
             // _any_ digits, and we won't be able to parse this string.
             if (!fractionPresent && result.length() == sizeBeforeIntegerPart)
                 result.append(zero);
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
             // [Spark/CDL] Add attribute for integer part.
             if (parseAttr) {
                 addAttribute(Field.INTEGER, intBegin, result.length());
@@ -1421,7 +1433,8 @@ public class DecimalFormat extends NumberFormat {
             if (decimalSeparatorAlwaysShown || fractionPresent)
             {
                 result.append(decimal);
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
                 // [Spark/CDL] Add attribute for decimal separator
                 if (parseAttr) {
                     addAttribute(Field.DECIMAL_SEPARATOR, result.length() - 1,
@@ -1488,7 +1501,8 @@ public class DecimalFormat extends NumberFormat {
             if (fieldPosition.getField() == NumberFormat.FRACTION_FIELD) {
                 fieldPosition.setEndIndex(result.length());
             }
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
             // [Spark/CDL] Add attribute information if necessary.
             if (parseAttr && (decimalSeparatorAlwaysShown || fractionPresent)) {
                 addAttribute(Field.FRACTION, fracBegin, result.length());
@@ -2506,19 +2520,20 @@ public class DecimalFormat extends NumberFormat {
      * @see #setRoundingMode
      * @stable ICU 2.0
      */
-//#ifndef FOUNDATION
-    public java.math.BigDecimal getRoundingIncrement() {
-        if (roundingIncrementICU == null) return null;
-        return roundingIncrementICU.toBigDecimal();
-    }
-//#else
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //##    public BigDecimal getRoundingIncrement() {
 //##        if (roundingIncrementICU == null) return null;
 //##        return new BigDecimal(roundingIncrementICU.toString());
 //##    }
+//#else
+    public java.math.BigDecimal getRoundingIncrement() {
+        if (roundingIncrementICU == null) return null;
+        return roundingIncrementICU.toBigDecimal();
+    }
 //#endif
     
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Set the rounding increment.  This method also controls whether
@@ -3282,7 +3297,8 @@ public class DecimalFormat extends NumberFormat {
         } else {
             affix = isNegative ? negativeSuffix : positiveSuffix;
         }
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
         // [Spark/CDL] Invoke formatAffix2Attribute to add attributes for affix
         if (parseAttr) {
             int offset = affix.indexOf(symbols.getCurrencySymbol());
@@ -3300,7 +3316,8 @@ public class DecimalFormat extends NumberFormat {
         return affix.length();
     }
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     /*
      * [Spark/CDL] This is a newly added method, used to add attributes for
      * prefix and suffix.
@@ -3322,7 +3339,8 @@ public class DecimalFormat extends NumberFormat {
     }
 //#endif
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     /*
      * [Spark/CDL] Use this method to add attribute.
      */
@@ -3334,7 +3352,8 @@ public class DecimalFormat extends NumberFormat {
     }
 //#endif
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     /**
      * Format the object to an attributed string, and return the corresponding iterator
      * Overrides superclass method.
@@ -4376,7 +4395,8 @@ public class DecimalFormat extends NumberFormat {
         return parseBigDecimal;
     }
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     private void writeObject(ObjectOutputStream stream) throws IOException {
 // Doug, do we need this anymore?
 //            if (roundingIncrementICU != null) {
@@ -4440,7 +4460,8 @@ public class DecimalFormat extends NumberFormat {
         serialVersionOnStream = currentSerialVersion;
         digitList = new DigitList();
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
         if (roundingIncrement != null) {
             setInternalRoundingIncrement(new BigDecimal(roundingIncrement));
             setRoundingDouble();
@@ -4451,7 +4472,8 @@ public class DecimalFormat extends NumberFormat {
 
     private void setInternalRoundingIncrement(BigDecimal value) {
         roundingIncrementICU = value;
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
         roundingIncrement = value == null ? null : value.toBigDecimal();
 //#endif
     }
@@ -4669,7 +4691,8 @@ public class DecimalFormat extends NumberFormat {
      */
     private boolean exponentSignAlwaysShown = false;
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * The value to which numbers are rounded during formatting.  For example,
@@ -4898,7 +4921,7 @@ public class DecimalFormat extends NumberFormat {
      */
     static final int MAX_SCIENTIFIC_INTEGER_DIGITS = 8;
 
-//#ifdef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //##    // we're not compatible with other versions, since we have no java.math.BigDecimal field
 //##    private static final long serialVersionUID = 2;
 //#else

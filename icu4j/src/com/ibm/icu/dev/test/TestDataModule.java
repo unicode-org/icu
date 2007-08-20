@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /**
  *******************************************************************************
  * Copyright (C) 2001-2007, International Business Machines Corporation and    *
@@ -52,7 +52,8 @@ public interface TestDataModule {
         public DataModuleFormatError(String msg){
             super(msg);
         }
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
         public DataModuleFormatError(String msg, Throwable cause){
             super(msg, cause);
         }

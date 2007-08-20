@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /*
 **********************************************************************
 * Copyright (c) 2004-2007, International Business Machines
@@ -1125,7 +1125,8 @@ public class MessageFormat extends UFormat {
         }
     }
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     /**
      * Formats an array of objects and inserts them into the
      * <code>MessageFormat</code>'s pattern, producing an
@@ -1477,7 +1478,8 @@ public class MessageFormat extends UFormat {
         return pattern.hashCode(); // enough for reasonable distribution
     }
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     /**
      * Defines constants that are used as attribute keys in the
      * <code>AttributedCharacterIterator</code> returned
@@ -1686,7 +1688,12 @@ public class MessageFormat extends UFormat {
                 // is non-null indicating we should format obj using it,
                 // or arg is non-null and we should use it as the value.
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//##                if (subFormatter != null) {
+//##                    arg = subFormatter.format(obj);
+//##                }
+//##                result.append(arg);
+//#else
                 if (characterIterators != null) {
                     // If characterIterators is non-null, it indicates we need
                     // to get the CharacterIterator from the child formatter.
@@ -1731,16 +1738,12 @@ public class MessageFormat extends UFormat {
                     }
                     last = result.length();
                 }
-//#else
-//##                if (subFormatter != null) {
-//##                    arg = subFormatter.format(obj);
-//##                }
-//##                result.append(arg);
 //#endif
             }
         }
         result.append(pattern.substring(lastOffset, pattern.length()));
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
         if (characterIterators != null && last != result.length()) {
             characterIterators.add(_createAttributedCharacterIterator(
                                    result.substring(last)));
@@ -2208,7 +2211,8 @@ public class MessageFormat extends UFormat {
         return new String(buf);
     }
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     //
     // private methods for AttributedCharacterIterator support
     //

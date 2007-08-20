@@ -1,11 +1,12 @@
-//##header
+//##header J2SE15
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
 /*
  *******************************************************************************
  * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
-//#ifndef FOUNDATION
 package com.ibm.icu.dev.test.util;
 
 import java.io.DataOutput;

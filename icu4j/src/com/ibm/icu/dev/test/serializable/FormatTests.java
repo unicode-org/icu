@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /*
  *******************************************************************************
  * Copyright (C) 1996-2007, International Business Machines Corporation and    *
@@ -924,7 +924,8 @@ public class FormatTests
         }
     }
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     public static class MessageFormatFieldHandler implements SerializableTest.Handler
     {
         public Object[] getTestObjects()
@@ -966,7 +967,8 @@ public class FormatTests
         
     }
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     public static class DateFormatFieldHandler implements SerializableTest.Handler
     {
         public Object[] getTestObjects() {
@@ -1415,7 +1417,8 @@ public class FormatTests
         }
     }
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     public static class ChineseDateFormatFieldHandler implements SerializableTest.Handler
     {
         public Object[] getTestObjects() {
@@ -1461,7 +1464,8 @@ public class FormatTests
         }
     }
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     public static class NumberFormatFieldHandler implements SerializableTest.Handler
     {
         public Object[] getTestObjects()

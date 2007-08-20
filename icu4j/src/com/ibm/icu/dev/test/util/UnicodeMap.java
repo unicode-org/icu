@@ -1,11 +1,12 @@
-//##header
+//##header J2SE15
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
 /*
  *******************************************************************************
  * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
-//#ifndef FOUNDATION
 package com.ibm.icu.dev.test.util;
 
 import java.io.*;
@@ -57,7 +58,7 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
 
         errorOnReset = false;
         lastIndex = 0;
-    	return this;
+        return this;
     }
     
     /* Boilerplate */
@@ -77,14 +78,14 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
     }
     
     public int getHashCode(Object o) {
-    	return o.hashCode();
-    	//equator.getHashCode
+        return o.hashCode();
+        //equator.getHashCode
     }
     
     public static boolean areEqual(Object a , Object b) {
-    	if (a == b) return true;
-    	if (a == null || b == null) return false;
-    	return a.equals(b);
+        if (a == b) return true;
+        if (a == null || b == null) return false;
+        return a.equals(b);
     }
     
     public int hashCode() {
@@ -262,8 +263,8 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
         if (areEqual(values[baseIndex], value)) return this;
         if (locked) throw new UnsupportedOperationException("Attempt to modify locked object");
         if (errorOnReset && values[baseIndex] != null) {
-        	throw new IllegalArgumentException("Attempt to reset value for " + Utility.hex(codepoint)
-        			+ " when that is disallowed. Old: " + values[baseIndex] + "; New: " + value);
+            throw new IllegalArgumentException("Attempt to reset value for " + Utility.hex(codepoint)
+                    + " when that is disallowed. Old: " + values[baseIndex] + "; New: " + value);
         }
 
         // adjust the available values
@@ -423,17 +424,17 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
      * @return this (for chaining)
      */
     public UnicodeMap setMissing(Object value) {
-    	// fast path, if value not yet present
-    	if (!getAvailableValues().contains(value)) {
-        	staleAvailableValues = true;
-	    	availableValues.add(value);
-	        for (int i = 0; i < length; ++i) {
-	            if (values[i] == null) values[i] = value;
-	        }
-	        return this;
-	    } else {
-	    	return putAll(getSet(null), value);
-	    }
+        // fast path, if value not yet present
+        if (!getAvailableValues().contains(value)) {
+            staleAvailableValues = true;
+            availableValues.add(value);
+            for (int i = 0; i < length; ++i) {
+                if (values[i] == null) values[i] = value;
+            }
+            return this;
+        } else {
+            return putAll(getSet(null), value);
+        }
     }
     /**
      * Returns the set associated with a given value. Deposits into
@@ -468,17 +469,17 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
      * @return result
      */
     public Collection getAvailableValues(Collection result) {
-    	if (staleAvailableValues) {
-    		// collect all the current values
-    		// retain them in the availableValues
-    		Set temp = new HashSet();
+        if (staleAvailableValues) {
+            // collect all the current values
+            // retain them in the availableValues
+            Set temp = new HashSet();
             for (int i = 0; i < length - 1; ++i) {
                 if (values[i] != null) temp.add(values[i]);
             }
             availableValues.retainAll(temp);
             staleAvailableValues = false;
-    	}
-    	if (result == null) result = new ArrayList(availableValues.size());
+        }
+        if (result == null) result = new ArrayList(availableValues.size());
         result.addAll(availableValues);
         return result;
     }
@@ -523,27 +524,27 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
       }
     
     public interface Composer {
-    	Object compose(int codePoint, Object a, Object b);
+        Object compose(int codePoint, Object a, Object b);
     }
     
     public UnicodeMap composeWith(UnicodeMap other, Composer composer) {
-    	for (int i = 0; i <= 0x10FFFF; ++i) {
-    		Object v1 = getValue(i);
-    		Object v2 = other.getValue(i);
-    		Object v3 = composer.compose(i, v1, v2);
-    		if (v1 != v3 && (v1 == null || !v1.equals(v3))) put(i, v3);
-    	}
-    	return this;
+        for (int i = 0; i <= 0x10FFFF; ++i) {
+            Object v1 = getValue(i);
+            Object v2 = other.getValue(i);
+            Object v3 = composer.compose(i, v1, v2);
+            if (v1 != v3 && (v1 == null || !v1.equals(v3))) put(i, v3);
+        }
+        return this;
     }
     
     public UnicodeMap composeWith(UnicodeSet set, Object value, Composer composer) {
-    	for (UnicodeSetIterator it = new UnicodeSetIterator(set); it.next();) {
-    		int i = it.codepoint;
-    		Object v1 = getValue(i);
-    		Object v3 = composer.compose(i, v1, value);
-    		if (v1 != v3 && (v1 == null || !v1.equals(v3))) put(i, v3);
-    	}
-    	return this;
+        for (UnicodeSetIterator it = new UnicodeSetIterator(set); it.next();) {
+            int i = it.codepoint;
+            Object v1 = getValue(i);
+            Object v3 = composer.compose(i, v1, value);
+            if (v1 != v3 && (v1 == null || !v1.equals(v3))) put(i, v3);
+        }
+        return this;
     }
     
     /**
@@ -627,34 +628,34 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
         }
         return result.toString();
     }
-	/**
-	 * @return Returns the errorOnReset.
-	 */
-	public boolean getErrorOnReset() {
-		return errorOnReset;
-	}
-	/**
-	 * @param errorOnReset The errorOnReset to set.
-	 */
-	public void setErrorOnReset(boolean errorOnReset) {
-		this.errorOnReset = errorOnReset;
-	}
+    /**
+     * @return Returns the errorOnReset.
+     */
+    public boolean getErrorOnReset() {
+        return errorOnReset;
+    }
+    /**
+     * @param errorOnReset The errorOnReset to set.
+     */
+    public void setErrorOnReset(boolean errorOnReset) {
+        this.errorOnReset = errorOnReset;
+    }
 
-	/* (non-Javadoc)
-	 * @see com.ibm.icu.dev.test.util.Lockable#isLocked()
-	 */
-	public boolean isFrozen() {
-		// TODO Auto-generated method stub
-		return locked;
-	}
+    /* (non-Javadoc)
+     * @see com.ibm.icu.dev.test.util.Lockable#isLocked()
+     */
+    public boolean isFrozen() {
+        // TODO Auto-generated method stub
+        return locked;
+    }
 
-	/* (non-Javadoc)
-	 * @see com.ibm.icu.dev.test.util.Lockable#lock()
-	 */
-	public Object freeze() {
-		locked = true;
-		return this;
-	}
+    /* (non-Javadoc)
+     * @see com.ibm.icu.dev.test.util.Lockable#lock()
+     */
+    public Object freeze() {
+        locked = true;
+        return this;
+    }
     
     static final boolean DEBUG_WRITE = false;
     
@@ -692,8 +693,8 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
             sc.writeInt(deltaValueNumber);
             if (DEBUG_WRITE) System.out.println("deltaValueNumber: " + deltaValueNumber);
             if (!canCombine) {
-            	sc.writeUInt(deltaTransition);           	
-            	if (DEBUG_WRITE) System.out.println("deltaTransition: " + deltaTransition);
+                sc.writeUInt(deltaTransition);
+                if (DEBUG_WRITE) System.out.println("deltaTransition: " + deltaTransition);
             }
         }
         sc.flush();
@@ -766,7 +767,7 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
 //    }
 //    //public void readObject(ObjectInputStream in) throws IOException {
 //    public static class StreamCompressor {
-//    	transient byte[] buffer = new byte[1];
+//        transient byte[] buffer = new byte[1];
 //        transient StringBuffer stringBuffer = new StringBuffer();
 //        
 //        transient byte[] readWriteBuffer = new byte[8];
@@ -781,10 +782,10 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
 //        public void writeInt(int i) throws IOException {
 //            while (true) {
 //                if (position == readWriteBuffer.length) {
-//                	out.write(readWriteBuffer);
+//                    out.write(readWriteBuffer);
 //                    position = 0;
 //                }
-//            	if ((i & ~0x7F) == 0) {
+//                if ((i & ~0x7F) == 0) {
 //                    readWriteBuffer[position++] = (byte)i;
 //                    break;
 //                }
@@ -792,47 +793,47 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
 //                i >>>= 7;
 //            }
 //        }
-//		/**
-//		 * @throws IOException
-//		 * 
-//		 */
-//		public int readNInt(ObjectInput in) throws IOException {
-//			int result = readInt(in);
+//        /**
+//         * @throws IOException
+//         * 
+//         */
+//        public int readNInt(ObjectInput in) throws IOException {
+//            int result = readInt(in);
 //            boolean negative = (result & 1) != 0;
 //            result >>>= 1;
 //            if (negative) result = ~result;
 //            return result;
-//		}
-//		/**
-//		 * @throws IOException
-//		 * 
-//		 */
-//		public void writeNInt(int input) throws IOException {
+//        }
+//        /**
+//         * @throws IOException
+//         * 
+//         */
+//        public void writeNInt(int input) throws IOException {
 //            int flag = 0;
 //            if (input < 0) {
 //                input = ~input;
 //                flag = 1;
 //            }
-//			input = (input << 1) | flag;
-//			writeInt(out, input);
-//		}
-//		/**
-//		 * @throws IOException
-//		 * 
-//		 */
-//		public void flush() throws IOException {
+//            input = (input << 1) | flag;
+//            writeInt(out, input);
+//        }
+//        /**
+//         * @throws IOException
+//         * 
+//         */
+//        public void flush() throws IOException {
 //            out.write(readWriteBuffer);
 //            position = 0;
-//		}
+//        }
 //        
 //        int readPosition = readWriteBuffer.length;
 //        
-//		public int readInt(ObjectInput in) throws IOException {
+//        public int readInt(ObjectInput in) throws IOException {
 //            int result = 0;
 //            int offset = 0;
 //            while (true) {
 //                if (readPosition == readWriteBuffer.length) {
-//                	in.read(readWriteBuffer);
+//                    in.read(readWriteBuffer);
 //                    readPosition = 0;
 //                }
 //                //in.read(buffer);
@@ -854,16 +855,16 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
 //            writeCodePoints(s);
 //        }
 //        /**
-//		 * 
-//		 */
-//		private void writeCodePoints(String s) throws IOException {
-//			int cp = 0;
+//         * 
+//         */
+//        private void writeCodePoints(String s) throws IOException {
+//            int cp = 0;
 //            for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
 //                cp = UTF16.charAt(s, i);
 //                writeInt(cp);
 //            }
-//		}
-//		/**
+//        }
+//        /**
 //         * @throws IOException
 //         * 
 //         */
@@ -871,26 +872,26 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
 //            int len = readInt(in);
 //            return readCodePoints(in, len);
 //        }
-//		/**
-//		 * 
-//		 */
-//		private String readCodePoints(int len) throws IOException {
-//			stringBuffer.setLength(0);
+//        /**
+//         * 
+//         */
+//        private String readCodePoints(int len) throws IOException {
+//            stringBuffer.setLength(0);
 //            for (int i = 0; i < len; ++i) {
-//            	int cp = readInt(in);
+//                int cp = readInt(in);
 //                UTF16.append(stringBuffer, cp);
 //            }
 //            return stringBuffer.toString();
-//		}
-//		/**
-//		 * @param this
-//		 * @throws IOException
-//		 * 
-//		 */
-//		private void showSize(UnicodeMap map, String title, ObjectOutput out) throws IOException {
-//		    out.flush();
-//			System.out.println(title + ": " + (map.debugOut.size() + position));
-//		}
+//        }
+//        /**
+//         * @param this
+//         * @throws IOException
+//         * 
+//         */
+//        private void showSize(UnicodeMap map, String title, ObjectOutput out) throws IOException {
+//            out.flush();
+//            System.out.println(title + ": " + (map.debugOut.size() + position));
+//        }
 //    }
 }
 //#endif

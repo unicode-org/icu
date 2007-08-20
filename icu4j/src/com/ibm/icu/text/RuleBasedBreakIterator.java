@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /*
  *******************************************************************************
  * Copyright (C) 2005-2007 International Business Machines Corporation and          *
@@ -72,7 +72,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
         } catch (IOException e) {
             // An IO exception can only arrive here if there is a bug in the RBBI Rule compiler,
             //  causing bogus compiled rules to be produced, but with no compile error raised.
-//#ifdef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //##            RuntimeException rte = new RuntimeException("RuleBasedBreakIterator rule compilation internal error:");
 //#else
             RuntimeException rte = new RuntimeException("RuleBasedBreakIterator rule compilation internal error:", e);

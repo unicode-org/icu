@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /*
 **********************************************************************
 * Copyright (c) 2003-2006, International Business Machines
@@ -116,10 +116,10 @@ public class UtilityTest extends TestFmwk {
     {
         byte[] ba = {0x00, 0x01, 0x02};
         byte[] bb = {0x00, 0x01, 0x02, -1};
-//#ifndef FOUNDATION
-        java.nio.ByteBuffer buffer = java.nio.ByteBuffer.wrap(ba);
-//#else
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //##        com.ibm.icu.impl.ByteBuffer buffer = com.ibm.icu.impl.ByteBuffer.wrap(ba);
+//#else
+        java.nio.ByteBuffer buffer = java.nio.ByteBuffer.wrap(ba);
 //#endif
         ByteArrayWrapper x = new ByteArrayWrapper(buffer);
         

@@ -1,11 +1,12 @@
-//##header
+//##header J2SE15
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
 /*
  *******************************************************************************
  * Copyright (C) 2002-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
-//#ifndef FOUNDATION
 package com.ibm.icu.dev.test.util;
 
 import java.io.BufferedReader;
@@ -35,13 +36,13 @@ public class BagFormatter {
     static final boolean DEBUG = false;
     public static final boolean SHOW_FILES;
     static {
-	boolean showFiles = false;
-	try {
-	    showFiles = System.getProperty("SHOW_FILES") != null;
-	}
-	catch (SecurityException e) {
-	}
-	SHOW_FILES = showFiles;
+    boolean showFiles = false;
+    try {
+        showFiles = System.getProperty("SHOW_FILES") != null;
+    }
+    catch (SecurityException e) {
+    }
+    SHOW_FILES = showFiles;
     }
 
     public static final PrintWriter CONSOLE = new PrintWriter(System.out,true);
@@ -105,7 +106,7 @@ public class BagFormatter {
             UnicodeSet set1,
             String name2,
             UnicodeSet set2) {
-    	showSetDifferences(pw, name1, set1, name2, set2, -1);
+        showSetDifferences(pw, name1, set1, name2, set2, -1);
     }
     /**
      * Compare two UnicodeSets, and show the differences
@@ -120,7 +121,7 @@ public class BagFormatter {
         UnicodeSet set1,
         String name2,
         UnicodeSet set2,
-		int flags) 
+        int flags) 
     {
         if (pw == null) pw = CONSOLE;
         String[] names = { name1, name2 };
@@ -128,27 +129,27 @@ public class BagFormatter {
         UnicodeSet temp;
         
         if ((flags&1) != 0) {
-        	temp = new UnicodeSet(set1).removeAll(set2);
-	        pw.print(lineSeparator);
-	        pw.print(inOut.format(names));
-	        pw.print(lineSeparator);
-	        showSetNames(pw, temp);
+            temp = new UnicodeSet(set1).removeAll(set2);
+            pw.print(lineSeparator);
+            pw.print(inOut.format(names));
+            pw.print(lineSeparator);
+            showSetNames(pw, temp);
         }
 
         if ((flags&2) != 0) {
-        	temp = new UnicodeSet(set2).removeAll(set1);
-	        pw.print(lineSeparator);
-	        pw.print(outIn.format(names));
-	        pw.print(lineSeparator);
-	        showSetNames(pw, temp);
-	    }
+            temp = new UnicodeSet(set2).removeAll(set1);
+            pw.print(lineSeparator);
+            pw.print(outIn.format(names));
+            pw.print(lineSeparator);
+            showSetNames(pw, temp);
+        }
 
         if ((flags&4) != 0) {
-	        temp = new UnicodeSet(set2).retainAll(set1);
-	        pw.print(lineSeparator);
-	        pw.print(inIn.format(names));
-	        pw.print(lineSeparator);
-	        showSetNames(pw, temp);
+            temp = new UnicodeSet(set2).retainAll(set1);
+            pw.print(lineSeparator);
+            pw.print(inIn.format(names));
+            pw.print(lineSeparator);
+            showSetNames(pw, temp);
         }
         pw.flush();
     }
@@ -365,12 +366,12 @@ public class BagFormatter {
 
     // refactored
     public String getName(int codePoint, boolean withCodePoint) {
-    	String result = getNameSource().getValue(codePoint, !withCodePoint);
+        String result = getNameSource().getValue(codePoint, !withCodePoint);
         return fixName == null ? result : fixName.transliterate(result);
     }
 
     public String getName(String s, boolean withCodePoint) {
-       	String result = getNameSource().getValue(s, separator, !withCodePoint);
+           String result = getNameSource().getValue(s, separator, !withCodePoint);
         return fixName == null ? result : fixName.transliterate(result);
      }
 
@@ -1096,18 +1097,18 @@ public class BagFormatter {
         return this;
     }
 
-	/**
-	 * @return Returns the fixName.
-	 */
-	public Transliterator getFixName() {
-		return fixName;
-	}
-	/**
-	 * @param fixName The fixName to set.
-	 */
-	public void setFixName(Transliterator fixName) {
-		this.fixName = fixName;
-	}
+    /**
+     * @return Returns the fixName.
+     */
+    public Transliterator getFixName() {
+        return fixName;
+    }
+    /**
+     * @param fixName The fixName to set.
+     */
+    public void setFixName(Transliterator fixName) {
+        this.fixName = fixName;
+    }
 
     public Tabber getTabber() {
         return tabber;

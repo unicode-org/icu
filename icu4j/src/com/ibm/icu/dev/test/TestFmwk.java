@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /*
  *******************************************************************************
  * Copyright (C) 1996-2007, International Business Machines Corporation and    *
@@ -27,7 +27,7 @@ import java.util.Comparator;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Random;
-//#ifdef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //## import com.ibm.icu.impl.Utility;
 //#endif
 /**
@@ -63,10 +63,10 @@ public class TestFmwk extends AbstractTestLog {
         }
     }
     protected void handleException(Throwable e){
-//#ifndef FOUNDATION
-        Throwable ex = e.getCause();
-//#else
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //##    Throwable ex = null;
+//#else
+        Throwable ex = e.getCause();
 //#endif
         if(ex==null){
             ex = e;
@@ -1073,10 +1073,10 @@ public class TestFmwk extends AbstractTestLog {
         public static TestParams create(String arglist, PrintWriter log) {
             String[] args = null;
             if (arglist != null && arglist.length() > 0) {
-//#ifndef FOUNDATION
-                args = arglist.split("\\s");
-//#else
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //##            args = Utility.split(arglist, '\u0020');
+//#else
+                args = arglist.split("\\s");
 //#endif
             }
             return create(args, log);

@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /**
  *******************************************************************************
  * Copyright (C) 1996-2007, International Business Machines Corporation and    *
@@ -258,7 +258,8 @@ public final class UTF16 {
         return single; // return unmatched surrogate
     }
 
-//#ifndef FOUNDATION
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     /**
      * Extract a single UTF-32 value from a string. Used when iterating forwards or backwards (with
      * <code>UTF16.getCharCount()</code>, as well as random access. If a validity check is

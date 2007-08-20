@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /*
  *******************************************************************************
  * Copyright (C) 1996-2007, International Business Machines Corporation and    *
@@ -1805,45 +1805,43 @@ public final class Utility {
     
     // !!! 1.3 compatibility
     public static int indexOf(StringBuffer buf, String s) {
-//#ifndef FOUNDATION
-        return buf.indexOf(s);
-//#else
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //##        return buf.toString().indexOf(s);
+//#else
+        return buf.indexOf(s);
 //#endif
     }
     
     // !!! 1.3 compatibility
     public static int lastIndexOf(StringBuffer buf, String s) {
-//#ifndef FOUNDATION
-        return buf.lastIndexOf(s);
-//#else
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //##        return buf.toString().lastIndexOf(s);
+//#else
+        return buf.lastIndexOf(s);
 //#endif
     }
     
     // !!! 1.3 compatibility
     public static int indexOf(StringBuffer buf, String s, int i) {
-//#ifndef FOUNDATION
-        return buf.indexOf(s, i);
-//#else
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //##        return buf.toString().indexOf(s, i);
+//#else
+        return buf.indexOf(s, i);
 //#endif
     }
     
     // !!! 1.3 compatibility
    public static int lastIndexOf(StringBuffer buf, String s, int i) {
-//#ifndef FOUNDATION
-        return buf.lastIndexOf(s, i);
-//#else
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //##        return buf.toString().lastIndexOf(s, i);
+//#else
+        return buf.lastIndexOf(s, i);
 //#endif
     }
    
    // !!! 1.3 compatibility
    public static String replaceAll(String src, String target, String replacement) {
-//#ifndef FOUNDATION
-       return src.replaceAll(target, replacement);
-//#else
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //##       int i = src.indexOf(target);
 //##       if (i == -1) {
 //##           return src;
@@ -1860,6 +1858,8 @@ public final class Utility {
 //##           buf.append(src.substring(n));
 //##       }
 //##       return buf.toString();
+//#else
+       return src.replaceAll(target, replacement);
 //#endif
    }
 
@@ -1868,9 +1868,7 @@ public final class Utility {
    // !!! 1.3 compatibility
    // Note: target is not a string literal, not a regular expression.
    public static String[] splitString(String src, String target) {
-//#ifndef FOUNDATION
-       return src.split("\\Q" + target + "\\E");
-//#else
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //##       int i = src.indexOf(target);
 //##       if (i == -1) {
 //##           return new String[] { src };
@@ -1886,6 +1884,8 @@ public final class Utility {
 //##           output.add(src.substring(n));
 //##       }
 //##       return (String[]) output.toArray(new String[output.size()]);
+//#else
+       return src.split("\\Q" + target + "\\E");
 //#endif
    }
 
@@ -1894,9 +1894,7 @@ public final class Utility {
    * Split the string at runs of ascii whitespace characters.
    */
    public static String[] splitWhitespace(String src) {
-//#ifndef FOUNDATION
-       return src.split("\\s+");
-//#else
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //##        char ws[] = "\u0020\u0009\n\u000b\u000c\r".toCharArray();
 //##        ArrayList output = new ArrayList();
 //##        boolean inWhitespace = true;
@@ -1922,6 +1920,8 @@ public final class Utility {
 //##          output.add(src.substring(n));
 //##        }
 //##        return (String[]) output.toArray(new String[output.size()]);
+//#else
+       return src.split("\\s+");
 //#endif
    }
 }

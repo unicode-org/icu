@@ -1,4 +1,4 @@
-//##header  VERSION_1.5
+//##header J2SE15
 /**
 *******************************************************************************
 * Copyright (C) 2002-2007, International Business Machines Corporation and    *
@@ -15,19 +15,16 @@
 package com.ibm.icu.dev.tool.docs;
 
 import com.sun.javadoc.*;
-//#ifndef VERSION_1.5
+//#if defined(J2SE13) || defined(J2SE14)
 //##import com.sun.tools.doclets.*;
-//#endif
-//#ifdef VERSION_1.5
-
-import com.sun.tools.doclets.internal.toolkit.taglets.*;
-import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
-
+//#else
 // jdk 1.5 contains both com.sun.tools.doclets.Taglet and
 // com.sun.tools.doclets.internal.toolkit.taglets.Taglet.
 // Their registration code casts to the second, not the first, and the
 // second doesn't implement the first, so if you just implement the
 // first, you die.
+import com.sun.tools.doclets.internal.toolkit.taglets.*;
+import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
 //#endif
 
 import java.text.BreakIterator;
@@ -53,7 +50,7 @@ public abstract class ICUTaglet implements Taglet {
         ICUInternalTaglet.register(taglets);
         ICUDraftTaglet.register(taglets);
         ICUStableTaglet.register(taglets);
-//#ifndef VERSION_1.5
+//#if defined(J2SE13) || defined(J2SE14)
 //##        ICUDeprecatedTaglet.register(taglets);
 //#endif
         ICUProvisionalTaglet.register(taglets);
@@ -116,22 +113,23 @@ public abstract class ICUTaglet implements Taglet {
         }
         return null;
     }
-//#ifdef VERSION_1.5
 
+//#if defined(J2SE13) || defined(J2SE14)
+//#else
     public TagletOutput getTagletOutput(Tag tag, TagletWriter writer) throws IllegalArgumentException {
-	TagletOutput out = writer.getTagletOutputInstance();
-	out.setOutput(toString(tag));
-	return out;
+        TagletOutput out = writer.getTagletOutputInstance();
+        out.setOutput(toString(tag));
+        return out;
     }
 
     public TagletOutput getTagletOutput(Doc holder, TagletWriter writer) throws IllegalArgumentException {
- 	TagletOutput out = writer.getTagletOutputInstance();
-	Tag[] tags = holder.tags(getName());
-	if (tags.length == 0) {
-	    return null;
-	}
- 	out.setOutput(toString(tags[0]));
- 	return out;
+        TagletOutput out = writer.getTagletOutputInstance();
+        Tag[] tags = holder.tags(getName());
+        if (tags.length == 0) {
+            return null;
+        }
+        out.setOutput(toString(tags[0]));
+        return out;
     }
 //#endif
 
@@ -193,8 +191,7 @@ public abstract class ICUTaglet implements Taglet {
             }
         }
     }
-//#ifndef VERSION_1.5
-//##
+//#if defined(J2SE13) || defined(J2SE14)
 //##    /*
 //##     * sigh, in JDK 1.5 we can't override the standard deprecated taglet
 //##     * so easily.  I'm not impressed with the javadoc code.
