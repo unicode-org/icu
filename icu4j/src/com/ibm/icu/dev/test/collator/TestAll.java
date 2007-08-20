@@ -41,6 +41,7 @@ public class TestAll extends TestGroup {
                   "CollationMiscTest",
                   "CollationChineseTest",
                   "CollationServiceTest",
+                  "CollationThreadTest",
 //#if defined(FOUNDATION10) || defined(J2SE13)
 //#else
                   //"RandomCollator", //Disabled until the problem in the test case is resolved #5747
