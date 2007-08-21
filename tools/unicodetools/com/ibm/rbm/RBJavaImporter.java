@@ -1,6 +1,6 @@
 /*
  *****************************************************************************
- * Copyright (C) 2000-2004, International Business Machines Corporation and  *
+ * Copyright (C) 2000-2007, International Business Machines Corporation and  *
  * others. All Rights Reserved.                                              *
  *****************************************************************************
  */
@@ -62,9 +62,9 @@ public class RBJavaImporter extends RBImporter {
             e.printStackTrace(System.err);
         }
         if (base_lrb != null) {
-            Enumeration enum = base_lrb.getKeys();
-            while (enum.hasMoreElements()) {
-                String key = enum.nextElement().toString();
+            Enumeration keys = base_lrb.getKeys();
+            while (keys.hasMoreElements()) {
+                String key = keys.nextElement().toString();
                 RBManagerGUI.debugMsg("Resource -> " + key + " = " + base_lrb.getString(key));
             }
         }

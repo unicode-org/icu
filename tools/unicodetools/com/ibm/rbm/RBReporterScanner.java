@@ -1,6 +1,6 @@
 /*
  *****************************************************************************
- * Copyright (C) 2000-2004, International Business Machines Corporation and  *
+ * Copyright (C) 2000-2007, International Business Machines Corporation and  *
  * others. All Rights Reserved.                                              *
  *****************************************************************************
  */
@@ -48,9 +48,9 @@ public class RBReporterScanner {
 		parseRules = getParseRules(root);
 		
 		results = new Hashtable();
-		Enumeration enum = bundle.allItems.keys();
-		while (enum.hasMoreElements()) {
-			String key = (String)enum.nextElement();
+		Enumeration keys = bundle.allItems.keys();
+		while (keys.hasMoreElements()) {
+			String key = (String)keys.nextElement();
 			BundleItem item = (BundleItem)bundle.allItems.get(key);
 			results.put(key, new ScanResult(item));
 		}
@@ -68,26 +68,27 @@ public class RBReporterScanner {
 	
 	protected int getNumberUnusedResources() {
 		int count = 0;
-		Enumeration enum = results.elements();
-		while (enum.hasMoreElements()) {
-			ScanResult result = (ScanResult)enum.nextElement();
+		Enumeration elems = results.elements();
+		while (elems.hasMoreElements()) {
+			ScanResult result = (ScanResult)elems.nextElement();
 			if (result.getOccurances().size() < 1) count++;
 		}
 		return count;
 	}
 	
 	protected Vector getMissingResources() {
-		Enumeration enum = missing.elements();
+		Enumeration elems = missing.elements();
 		Vector v = new Vector();
-		while (enum.hasMoreElements()) v.addElement(enum.nextElement());
+		while (elems.hasMoreElements())
+			v.addElement(elems.nextElement());
 		return v;
 	}
 	
 	protected Vector getUnusedResources() {
-		Enumeration enum = results.elements();
+		Enumeration elems = results.elements();
 		Vector v = new Vector();
-		while (enum.hasMoreElements()) {
-			ScanResult result = (ScanResult)enum.nextElement();
+		while (elems.hasMoreElements()) {
+			ScanResult result = (ScanResult)elems.nextElement();
 			if (result.getOccurances().size() < 1) {
 				v.addElement(result);
 			}

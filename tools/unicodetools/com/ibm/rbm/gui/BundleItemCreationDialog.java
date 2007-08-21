@@ -1,6 +1,6 @@
 /*
  *****************************************************************************
- * Copyright (C) 2000-2004, International Business Machines Corporation and  *
+ * Copyright (C) 2000-2007, International Business Machines Corporation and  *
  * others. All Rights Reserved.                                              *
  *****************************************************************************
  */
@@ -207,9 +207,9 @@ class BundleItemCreationDialog extends JDialog {
 			}
 		}
 		// Remove old lookups if necessary
-		Enumeration enum = lookups.keys();
-		while (enum.hasMoreElements()) {
-			String name = (String)enum.nextElement();
+		Enumeration keys = lookups.keys();
+		while (keys.hasMoreElements()) {
+			String name = (String)keys.nextElement();
 			if (currentTrans.indexOf("{" + name + "}") < 0) {
 				lookups.remove(name);
 			}
@@ -235,9 +235,9 @@ class BundleItemCreationDialog extends JDialog {
 			lookupFields = new JTextField[lookups.size()];
 			lookupLabels = new JLabel[lookups.size()];
 			int count = 0;
-			enum = lookups.keys();
-			while (enum.hasMoreElements()) {
-				String name = (String)enum.nextElement();
+			keys = lookups.keys();
+			while (keys.hasMoreElements()) {
+				String name = (String)keys.nextElement();
 				String value = (String)lookups.get(name);
 				RBManagerGUI.debugMsg("Lookup: " + name + " -> " + value);
 				RBManagerGUI.debugMsg(lookups.toString());

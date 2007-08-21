@@ -1,6 +1,6 @@
 /*
  *****************************************************************************
- * Copyright (C) 2000-2004, International Business Machines Corporation and  *
+ * Copyright (C) 2000-2007, International Business Machines Corporation and  *
  * others. All Rights Reserved.                                              *
  *****************************************************************************
  */
@@ -90,9 +90,9 @@ class RBSearchPanel extends JPanel {
 	
 	private void performSearch(String term, Bundle bundle, boolean case_sensitive) {
 		Vector ret_v = new Vector();
-		Enumeration enum = bundle.allItems.keys();
-		while (enum.hasMoreElements()) {
-			String key = (String)enum.nextElement();
+		Enumeration keys = bundle.allItems.keys();
+		while (keys.hasMoreElements()) {
+			String key = (String)keys.nextElement();
 			BundleItem item = (BundleItem)bundle.allItems.get(key);
 			if (case_sensitive) {
 				if (keysCheck.isSelected() && key.indexOf(term) >= 0) {
