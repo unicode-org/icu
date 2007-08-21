@@ -153,6 +153,7 @@ $(TESTBUILDDIR)/testtable32.txt:  $(TOOLDIR)/gentest/gentest$(EXEEXT)
 java-output: $(JAVA_OUT_DIR)/DebugUtilitiesData.java
 
 $(JAVA_OUT_DIR)/DebugUtilitiesData.java:  $(TOOLDIR)/gentest/gentest$(EXEEXT)
+	$(MKINSTALLDIRS) $(JAVA_OUT_DIR)
 	$(INVOKE) $(TOOLDIR)/gentest/gentest -j -d $(JAVA_OUT_DIR)
 
 
