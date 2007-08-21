@@ -1,6 +1,8 @@
 # Copyright (c) 2005-2007 International Business Machines 
 # Corporation and others. All Rights Reserved.
-# suffix matches
+## see NOTE below.
+#
+# suffix matches - start with '*'.  They are turned into as RE, '.brk$'
 *.brk
 *.bz2
 *.csproj
@@ -26,6 +28,24 @@
 *.vcproj
 *.zip
 *.cvsignore
+## NOTE: the hook uses SHORTENED* paths.  the tag,trunk,branch stuff is taken out.
+##
+## So,
+##
+#      icu/asdf
+##
+##  is treated as "^icu/asdf" to the shortened path
+##
+##  and so matches all of the following
+##
+##     icu/tags/release-3-4-3-d02/asdf
+##     icu/branches/srl-hacky-btf5-support/asdf
+##     icu/trunk/asdf
+##
+##
+## *contains partially hydrogenated vegetable oil.
+#
+#
 # ICU4C files that don't need an IBM copyright
 icu/debian/changelog
 icu/debian/control
@@ -98,6 +118,11 @@ icu4jni/src/classes/com/ibm/icu4jni/test/text/NormalizationTest.txt
 icu4jni/src/native/converter/ConverterInterface.h
 icu4jni/configure
 #ICU4J files that don't need an IBM copyright
+icu4j/.classpath
+icu4j/.project
+icu4j/.settings/org.eclipse.core.resources.prefs
+icu4j/.settings/org.eclipse.jdt.core.prefs
+icu4j/.settings/org.eclipse.jdt.ui.prefs
 icu4j/src/com/ibm/icu/dev/data/CollationTest_NON_IGNORABLE_STUB.txt
 icu4j/src/com/ibm/icu/dev/data/CollationTest_SHIFTED_STUB.txt
 icu4j/src/com/ibm/icu/dev/data/holidays_jp.ucs
@@ -135,7 +160,6 @@ icu4j/src/com/ibm/icu/dev/eclipse/com.ibm.icu-feature/.project
 icu4j/src/com/ibm/icu/dev/eclipse/com.ibm.icu-feature/build.properties
 icu4j/src/com/ibm/icu/dev/eclipse/com.ibm.icu-feature/feature.xml
 icu4j/src/com/ibm/icu/dev/eclipse/misc/about.html
-icu4j/src/com/ibm/icu/dev/test/serializable/*/*.dat
 icu4j/src/com/ibm/icu/dev/tool/ime/indic/services/java.awt.im.spi.InputMethodDescriptor
 icu4j/src/com/ibm/icu/dev/tool/ime/translit/services/java.awt.im.spi.InputMethodDescriptor
 icu4j/src/com/ibm/richtext/textapps/resources/unicode.arabic.red
@@ -155,3 +179,5 @@ icuhtml/userguide/html-template/ugtemplate.html
 icuapps/redemo/readme
 icuapps/datacustom/gendatadep/resources/pkgdatain.txt
 icuapps/configure
+icuapps/*
+data/test/perf/*
