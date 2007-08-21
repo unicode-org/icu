@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -58,7 +58,7 @@ void reportError(UErrorCode *status);
 static UChar *quotedString(const UChar *string);
 void printOutBundle(UFILE *out, UResourceBundle *resource, int32_t indent, UErrorCode *status);
 void printIndent(UFILE *out, int32_t indent);
-void printHex(UFILE *out, const uint8_t *what);
+void printHex(UFILE *out, const int8_t *what);
 
 static UOption options[]={
     UOPTION_HELP_H,
@@ -178,8 +178,8 @@ void printIndent(UFILE *out, int32_t indent) {
     u_fprintf(out, "%s", inchar);
 }
 
-void printHex(UFILE *out, const uint8_t *what) {
-  u_fprintf(out, "%02X", *what);
+void printHex(UFILE *out, const int8_t *what) {
+  u_fprintf(out, "%02X", (u_int8_t)*what);
 }
 
 static UChar *quotedString(const UChar *string) {
@@ -378,4 +378,3 @@ const UChar *getErrorName(UErrorCode errorNumber) {
     }
 
 }
-
