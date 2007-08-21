@@ -3614,8 +3614,6 @@ void UnicodeSetTest::TestSpan() {
             whichSpans[0]=SPAN_ALL;
             whichSpansCount=1;
 
-            // parse options
-            uint32_t options=0;
             while(*++s!=0) {
                 switch(*s) {
                 case 'c':

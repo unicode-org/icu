@@ -111,7 +111,7 @@ void DataDrivenFormatTest::testConvertDate(TestData *testData,
         UnicodeString pattern;
         UBool usePattern = FALSE;
         CalendarFieldsSet fromSet;
-        UDate fromDate;
+        UDate fromDate = 0;
         UBool useDate = FALSE;
       
 
