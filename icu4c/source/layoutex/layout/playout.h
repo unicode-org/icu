@@ -20,7 +20,6 @@
 /**
  * \file 
  * \brief C API for paragraph layout.
- * \internal
  *
  * This is a technology preview. The API may
  * change significantly.
