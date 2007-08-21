@@ -1,4 +1,4 @@
-//##header JAVASE6
+//##header J2SE15
 /*
  *******************************************************************************
  * Copyright (C) 1996-2007, International Business Machines Corporation and    *

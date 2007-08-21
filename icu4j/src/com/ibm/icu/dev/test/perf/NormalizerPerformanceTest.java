@@ -1,3 +1,4 @@
+//##header J2SE15
 /*
 **********************************************************************
 * Copyright (c) 2002-2007, International Business Machines           *
@@ -6,9 +7,6 @@
 */
 package com.ibm.icu.dev.test.perf;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import com.ibm.icu.text.Normalizer;
 
 public class NormalizerPerformanceTest extends PerfTest {
@@ -16,8 +14,6 @@ public class NormalizerPerformanceTest extends PerfTest {
     String[] NFDFileLines;
     String[] NFCFileLines;
     String[] fileLines;
-    Method normalizerMethod;
-    Object[] normalizerArgs;
     
     
     public static void main(String[] args) throws Exception {
@@ -697,14 +693,14 @@ public class NormalizerPerformanceTest extends PerfTest {
     */
 
     void normalizerTest(String line, boolean compose) {
-        //#if defined(FOUNDATION10) || defined(J2SE13) || defined(J2SE14) || defined(J2SE15)
-        //## sun.text.Normalizer.normalize(line, compose
-        //##      ? sun.text.Normalizer.COMPOSE
-        //##      : sun.text.Normalizer.DECOMP, 0);
-        //#else
-        //## java.text.Normalizer.normalize(line, compose
-        //##      ? java.text.Normalizer.Form.NFC
-        //##      : java.text.Normalizer.Form.NFD);
-        //#endif
+//#if defined(FOUNDATION10) || defined(J2SE13) || defined(J2SE14) || defined(J2SE15)
+ sun.text.Normalizer.normalize(line, compose
+      ? sun.text.Normalizer.COMPOSE
+      : sun.text.Normalizer.DECOMP, 0);
+//#else
+//## java.text.Normalizer.normalize(line, compose
+//##      ? java.text.Normalizer.Form.NFC
+//##      : java.text.Normalizer.Form.NFD);
+//#endif
     }
 }
