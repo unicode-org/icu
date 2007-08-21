@@ -860,7 +860,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             logln("PASS: numberformat of string failed as expected");
         }
 
-        /*int hash = */fmt.hashCode();
+        int hash = fmt.hashCode();
 
         logln("compare to string returns: " + fmt.equals(""));
 

@@ -413,7 +413,7 @@ public class TestCLDRVsICU extends TestFmwk {
         addHandler("zoneFields", new Handler() {
             String date = "";
             String zone = "";
-            //String parse = "";
+            String parse = "";
             String pattern = "";
             
             public void handleResult(ULocale locale, String result) throws ParseException {
@@ -427,7 +427,7 @@ public class TestCLDRVsICU extends TestFmwk {
                     } else if (attributeName.equals("zone")) {
                     	zone = attributeValue;
                     } else if (attributeName.equals("parse")) {
-                    	//parse = attributeValue;
+                    	parse = attributeValue;
                     }
                 }
                 if (!ZONE_MATCH.reset(zone).matches()) return;
