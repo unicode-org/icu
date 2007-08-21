@@ -498,9 +498,9 @@ StringCaseTest::TestCasing() {
                     }
                 }
 #endif
+                options = 0;
                 if(whichCase==TEST_TITLE || whichCase==TEST_FOLD) {
                     optionsString = myCase->getString("Options", status);
-                    options = 0;
                     if(optionsString.indexOf((UChar)0x54)>=0) {  // T
                         options|=U_FOLD_CASE_EXCLUDE_SPECIAL_I;
                     }

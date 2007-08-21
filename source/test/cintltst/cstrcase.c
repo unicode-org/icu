@@ -926,6 +926,8 @@ TestUCaseMapToTitle(void) {
 
 #endif
 
+void addCaseTest(TestNode** root);
+
 void addCaseTest(TestNode** root) {
     /* cstrcase.c functions, declared in cucdtst.h */
     addTest(root, &TestCaseLower, "tsutil/cstrcase/TestCaseLower");
