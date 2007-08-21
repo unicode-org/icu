@@ -2265,6 +2265,7 @@ da{
             ls{"Kinesisk normaltid"}
         }
         "meta:Europe_Central"{
+            cu:int{1}
             ld{"mellemeuropæisk sommertid"}
             lg{"mellemeuropæisk tid"}
             ls{"mellemeuropæisk normaltid"}
@@ -2273,6 +2274,7 @@ da{
             ss{"CET"}
         }
         "meta:Europe_Eastern"{
+            cu:int{1}
             ld{"østeuropæisk sommertid"}
             lg{"østeuropæisk tid"}
             ls{"østeuropæisk normaltid"}
@@ -2281,12 +2283,14 @@ da{
             ss{"EET"}
         }
         "meta:Europe_Western"{
+            cu:int{1}
             ld{"vesteuropæisk sommertid"}
             lg{"vesteuropæisk tid"}
             ls{"vesteuropæisk normaltid"}
             sg{"WET"}
         }
         "meta:GMT"{
+            cu:int{1}
             ld{"GMT-sommertid"}
             lg{"verdenstid"}
             ls{"Verdenstid"}

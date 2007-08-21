@@ -3057,6 +3057,7 @@ ja{
             ss{"IST"}
         }
         "meta:Japan"{
+            cu:int{1}
             ld{"日本夏時間"}
             ls{"日本標準時"}
             sd{"JDT"}

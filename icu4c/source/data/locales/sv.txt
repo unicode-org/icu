@@ -2655,6 +2655,7 @@ sv{
             lg{"equadoriansk tid"}
         }
         "meta:Europe_Central"{
+            cu:int{1}
             ld{"Centraleuropa, sommartid"}
             lg{"centraleuropeisk tid"}
             ls{"Centraleuropa, normaltid"}
@@ -2663,6 +2664,7 @@ sv{
             ss{"CET"}
         }
         "meta:Europe_Eastern"{
+            cu:int{1}
             ld{"Östeuropa, sommartid"}
             lg{"östeuropeisk tid"}
             ls{"Östeuropa, normaltid"}
@@ -2671,6 +2673,7 @@ sv{
             ss{"EET"}
         }
         "meta:Europe_Western"{
+            cu:int{1}
             ld{"västeuropeisk sommartid"}
             lg{"västeuropeisk tid"}
             ls{"västeuropeisk normaltid"}
@@ -2679,6 +2682,7 @@ sv{
             ss{"WET"}
         }
         "meta:GMT"{
+            cu:int{1}
             ld{"greenwichtid"}
             lg{"greenwichtid"}
             ls{"Greenwichtid"}

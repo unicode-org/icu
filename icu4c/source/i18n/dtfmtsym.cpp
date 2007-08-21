@@ -44,17 +44,17 @@
  * resource data.
  */
 
-#define PATTERN_CHARS_LEN 29
+#define PATTERN_CHARS_LEN 30
 
 /**
  * Unlocalized date-time pattern characters. For example: 'y', 'd', etc. All
  * locales use the same these unlocalized pattern characters.
  */
 static const UChar gPatternChars[] = {
-    // GyMdkHmsSEDFwWahKzYeugAZvcLQq
+    // GyMdkHmsSEDFwWahKzYeugAZvcLQqV
     0x47, 0x79, 0x4D, 0x64, 0x6B, 0x48, 0x6D, 0x73, 0x53, 0x45,
     0x44, 0x46, 0x77, 0x57, 0x61, 0x68, 0x4B, 0x7A, 0x59, 0x65,
-    0x75, 0x67, 0x41, 0x5A, 0x76, 0x63, 0x4c, 0x51, 0x71, 0
+    0x75, 0x67, 0x41, 0x5A, 0x76, 0x63, 0x4c, 0x51, 0x71, 0x56, 0
 };
 
 /* length of an array */
@@ -202,6 +202,7 @@ static UMTX LOCK;
 #define UTZ_LONG_DAYLIGHT   "ld"
 #define UTZ_EXEMPLAR_CITY   "ec"
 #define UTZ_USES_METAZONE   "um"
+#define UTZ_COMMONLY_USED   "cu"
 
 /**
  * Jitterbug 2974: MSVC has a bug whereby new X[0] behaves badly.
@@ -1912,12 +1913,13 @@ DateFormatSymbols::getZoneString(const UnicodeString &zid, const TimeZoneTransla
     return result;
 }
 
-UnicodeString&
+UnicodeString
 DateFormatSymbols::getMetazoneString(const UnicodeString &zid, const TimeZoneTranslationType type, Calendar &cal,
                                  UnicodeString &result, UErrorCode &status)
 {
     UErrorCode tempStatus = U_ZERO_ERROR;
     int32_t len;
+    UnicodeString mzid(UNICODE_STRING_SIMPLE("meta/"));
 
     // Get the appropriate metazone mapping from the resource bundles
 
@@ -1973,7 +1975,6 @@ DateFormatSymbols::getMetazoneString(const UnicodeString &zid, const TimeZoneTra
                 UnicodeString(TRUE, mz_from, -1) <= theTime &&
                 UnicodeString(TRUE, mz_to, -1) > theTime )
             {
-                UnicodeString mzid(UNICODE_STRING_SIMPLE("meta/"));
                 mzid += mz_name;
                 getZoneString(mzid,type,result,status);
                 break;
@@ -1981,6 +1982,9 @@ DateFormatSymbols::getMetazoneString(const UnicodeString &zid, const TimeZoneTra
         }
     } 
     ures_close(um);
+    if ( mzid.length() > 5 ) {
+        return mzid;
+    }
     return result;
 }
 
@@ -2082,6 +2086,58 @@ DateFormatSymbols::getFallbackString(const UnicodeString &zid, UnicodeString &re
     ures_close(multiZone);
 
     return result;
+}
+
+UBool
+DateFormatSymbols::isCommonlyUsed(const UnicodeString &zid){
+    UErrorCode status=U_ZERO_ERROR;
+    UResourceBundle *zoneArray, *zoneItem, *cuRes;
+    UnicodeString solidus = UNICODE_STRING_SIMPLE("/");
+    UnicodeString colon = UNICODE_STRING_SIMPLE(":");
+    UnicodeString key(zid);
+    char keychars[ZID_KEY_MAX+1];
+
+    key.findAndReplace(solidus,colon);
+
+    for(const UResourceBundle* rb = fResourceBundle; rb!=NULL; rb=ures_getParentBundle(rb)){
+        zoneArray = ures_getByKey(rb, gZoneStringsTag, NULL, &status);
+        if(U_FAILURE(status)){
+            status = U_ZERO_ERROR;
+            continue;
+        }
+        int32_t len = key.length();
+        u_UCharsToChars(key.getBuffer(), keychars, len);
+        keychars[len] = 0; // NULL terminate
+        zoneItem = ures_getByKey(zoneArray,keychars,NULL, &status);
+        if(U_FAILURE(status)){
+            ures_close(zoneArray);
+            status = U_ZERO_ERROR;
+            continue;
+        }
+
+        cuRes = ures_getByKey(zoneItem,UTZ_COMMONLY_USED,NULL,&status);
+        if(U_FAILURE(status)){
+            ures_close(zoneItem);
+            ures_close(zoneArray);
+            status = U_ZERO_ERROR;
+            continue;
+        }
+        int32_t cuValue = ures_getInt(cuRes,&status);
+
+        ures_close(cuRes);
+        ures_close(zoneItem);
+        ures_close(zoneArray);
+
+        if(U_FAILURE(status)){
+            status = U_ZERO_ERROR;
+            continue;
+        }
+
+        if ( cuValue == 1 ) {
+            return TRUE;
+        }
+    }
+    return FALSE;
 }
 
 StringEnumeration* 

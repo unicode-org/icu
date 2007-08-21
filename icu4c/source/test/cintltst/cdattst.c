@@ -58,7 +58,7 @@ static void TestDateFormat()
     UChar* result = NULL;
     const UCalendar *cal;
     const UNumberFormat *numformat1, *numformat2;
-    UChar temp[30];
+    UChar temp[50];
     int32_t numlocales;
     UDate d1;
     int i;
@@ -172,7 +172,7 @@ static void TestDateFormat()
         log_err("FAIL: Date Format for US locale failed using udat_format()\n");
     /*format using fr */
     
-    u_unescape("10 juil. 1996 16:05:28 HP", temp, 30);
+    u_unescape("10 juil. 1996 16:05:28 \\u00C9tats-Unis (Los Angeles)", temp, 50);
     if(result != NULL) {
         free(result);
         result = NULL;
@@ -460,7 +460,7 @@ static void TestSymbols()
     VerifygetSymbols(def, UDAT_QUARTERS, 3, "4th quarter");
     VerifygetSymbols(fr, UDAT_SHORT_QUARTERS, 1, "T2");
     VerifygetSymbols(def, UDAT_SHORT_QUARTERS, 2, "Q3");
-    VerifygetSymbols(def,UDAT_LOCALIZED_CHARS, 0, "GyMdkHmsSEDFwWahKzYeugAZvcLQq");
+    VerifygetSymbols(def,UDAT_LOCALIZED_CHARS, 0, "GyMdkHmsSEDFwWahKzYeugAZvcLQqV");
 
 
     if(result != NULL) {

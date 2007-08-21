@@ -285,7 +285,7 @@ DateFormatTest::escape(UnicodeString& s)
 /**
  * This MUST be kept in sync with DateFormatSymbols.gPatternChars.
  */
-static const char* PATTERN_CHARS = "GyMdkHmsSEDFwWahKzYeugAZvcLQq";
+static const char* PATTERN_CHARS = "GyMdkHmsSEDFwWahKzYeugAZvcLQqV";
 
 /**
  * A list of the names of all the fields in DateFormat.
@@ -320,7 +320,8 @@ static const char* DATEFORMAT_FIELD_NAMES[] = {
     "STAND_ALONE_DAY_FIELD",
     "STAND_ALONE_MONTH_FIELD",
     "QUARTER_FIELD",
-    "STAND_ALONE_QUARTER_FIELD"
+    "STAND_ALONE_QUARTER_FIELD",
+    "TIMEZONE_SPECIAL_FIELD"
 };
 
 static const int32_t DATEFORMAT_FIELD_NAMES_LENGTH =
@@ -371,17 +372,17 @@ void DateFormatTest::TestFieldPosition() {
     // Fields are given in order of DateFormat field number
     const char* EXPECTED[] = {
         "", "1997", "August", "13", "", "", "34", "12", "",
-        "Wednesday", "", "", "", "", "PM", "2", "", "", "", "", "", "", "", "", "PT", "", "", "", "",
+        "Wednesday", "", "", "", "", "PM", "2", "", "", "", "", "", "", "", "", "PT", "", "", "", "","",
 
         "", "1997", "ao\\u00FBt", "13", "", "14", "34", "12", "",
-        "mercredi", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "HP",  "", "", "", "",
+        "mercredi", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "\\u00C9tats-Unis (Los Angeles)",  "", "", "", "", "",
 
         "AD", "1997", "8", "13", "14", "14", "34", "12", "5",
-        "Wed", "225", "2", "33", "3", "PM", "2", "2", "PDT", "1997", "4", "1997", "2450674", "52452513", "-0700", "PT",  "4", "8", "3", "3",
+        "Wed", "225", "2", "33", "3", "PM", "2", "2", "PDT", "1997", "4", "1997", "2450674", "52452513", "-0700", "PT",  "4", "8", "3", "3","PDT",
 
         "Anno Domini", "1997", "August", "0013", "0014", "0014", "0034", "0012", "5130",
         "Wednesday", "0225", "0002", "0033", "0003", "PM", "0002", "0002", "Pacific Daylight Time", "1997", "0004", "1997", "2450674", "52452513", "-0700",
-        "Pacific Time",  "Wednesday", "August", "3rd quarter", "3rd quarter"
+        "Pacific Time",  "Wednesday", "August", "3rd quarter", "3rd quarter", "United States (Los Angeles)"
     };
 
     const int32_t EXPECTED_LENGTH = sizeof(EXPECTED)/sizeof(EXPECTED[0]);
@@ -1048,7 +1049,7 @@ DateFormatTest::TestLocaleDateFormat() // Bug 495
         DateFormat::FULL, Locale::getFrench());
     DateFormat *dfUS = DateFormat::createDateTimeInstance(DateFormat::FULL, 
         DateFormat::FULL, Locale::getUS());
-    UnicodeString expectedFRENCH ( "lundi 15 septembre 1997 00:00:00 HP" );
+    UnicodeString expectedFRENCH ( "lundi 15 septembre 1997 00:00:00 \\u00C9tats-Unis (Los Angeles)" );
     expectedFRENCH = expectedFRENCH.unescape();
     //UnicodeString expectedUS ( "Monday, September 15, 1997 12:00:00 o'clock AM PDT" );
     UnicodeString expectedUS ( "Monday, September 15, 1997 12:00:00 AM PT" );
