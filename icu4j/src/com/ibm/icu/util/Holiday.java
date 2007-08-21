@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -46,7 +46,7 @@ public abstract class Holiday implements DateRule
         Holiday[] result = noHolidays;
 
         try {
-            ResourceBundle bundle = UResourceBundle.getBundleInstance("HolidayBundle", locale);
+            ResourceBundle bundle = UResourceBundle.getBundleInstance("com.ibm.icu.impl.data.HolidayBundle", locale);
 
             result = (Holiday[]) bundle.getObject("holidays");
         }
