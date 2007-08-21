@@ -2308,6 +2308,7 @@ pt{
             ec{"Taiti"}
         }
         "meta:Acre"{
+            cu:int{1}
             ld{"Horário de Verão do Acre"}
             ls{"Horário do Acre"}
             sd{"ACST"}
@@ -2352,6 +2353,7 @@ pt{
             ss{"AHST"}
         }
         "meta:Amazon"{
+            cu:int{1}
             ld{"Horário de Verão do Amazonas"}
             ls{"Horário do Amazonas"}
             sd{"AMST"}
@@ -2491,6 +2493,7 @@ pt{
             ss{"BORT"}
         }
         "meta:Brasilia"{
+            cu:int{1}
             ld{"Horário de Verão de Brasília"}
             ls{"Horário de Brasília"}
             sd{"BRST"}
@@ -2568,6 +2571,7 @@ pt{
             ss{"FRUT"}
         }
         "meta:GMT"{
+            cu:int{1}
             ls{"Horário do Meridiano de Greenwich"}
             ss{"GMT"}
         }

@@ -2287,6 +2287,7 @@ en{
             ss{"AKTT"}
         }
         "meta:Alaska"{
+            cu:int{1}
             ld{"Alaska Daylight Time"}
             lg{"Alaska Time"}
             ls{"Alaska Standard Time"}
@@ -2315,6 +2316,7 @@ en{
             ss{"AMT"}
         }
         "meta:America_Central"{
+            cu:int{1}
             ld{"Central Daylight Time"}
             lg{"Central Time"}
             ls{"Central Standard Time"}
@@ -2323,6 +2325,7 @@ en{
             ss{"CST"}
         }
         "meta:America_Eastern"{
+            cu:int{1}
             ld{"Eastern Daylight Time"}
             lg{"Eastern Time"}
             ls{"Eastern Standard Time"}
@@ -2331,6 +2334,7 @@ en{
             ss{"EST"}
         }
         "meta:America_Mountain"{
+            cu:int{1}
             ld{"Mountain Daylight Time"}
             lg{"Mountain Time"}
             ls{"Mountain Standard Time"}
@@ -2339,6 +2343,7 @@ en{
             ss{"MST"}
         }
         "meta:America_Pacific"{
+            cu:int{1}
             ld{"Pacific Daylight Time"}
             lg{"Pacific Time"}
             ls{"Pacific Standard Time"}
@@ -2395,6 +2400,7 @@ en{
             ss{"ASHT"}
         }
         "meta:Atlantic"{
+            cu:int{1}
             ld{"Atlantic Daylight Time"}
             lg{"Atlantic Time"}
             ls{"Atlantic Standard Time"}
@@ -2638,6 +2644,7 @@ en{
             ss{"FRUT"}
         }
         "meta:GMT"{
+            cu:int{1}
             ls{"Greenwich Mean Time"}
             ss{"GMT"}
         }
@@ -2692,6 +2699,7 @@ en{
             ss{"GYT"}
         }
         "meta:Hawaii"{
+            cu:int{1}
             ld{"Hawaii Daylight Time"}
             lg{"Hawaii Time"}
             ls{"Hawaii Standard Time"}
@@ -2700,6 +2708,7 @@ en{
             ss{"HST"}
         }
         "meta:Hawaii_Aleutian"{
+            cu:int{1}
             ld{"Hawaii-Aleutian Daylight Time"}
             lg{"Hawaii-Aleutian Time"}
             ls{"Hawaii-Aleutian Standard Time"}

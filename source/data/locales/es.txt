@@ -2448,12 +2448,17 @@ es{
             ec{"Tahití"}
         }
         "meta:Alaska"{
+            cu:int{1}
             ld{"Hora de verano de Alaska"}
             ls{"Hora estándar de Alaska"}
             sd{"AKDT"}
             ss{"AKST"}
         }
+        "meta:Alaska_Hawaii"{
+            cu:int{1}
+        }
         "meta:America_Central"{
+            cu:int{1}
             ld{"Hora de verano central"}
             lg{"Hora central"}
             ls{"Hora estándar central"}
@@ -2461,6 +2466,7 @@ es{
             ss{"CST"}
         }
         "meta:America_Eastern"{
+            cu:int{1}
             ld{"Hora de verano oriental"}
             lg{"Hora oriental"}
             ls{"Hora estándar oriental"}
@@ -2468,12 +2474,14 @@ es{
             ss{"EST"}
         }
         "meta:America_Mountain"{
+            cu:int{1}
             ld{"Hora de verano de Montaña"}
             ls{"Hora estándar de Montaña"}
             sd{"MDT"}
             ss{"MST"}
         }
         "meta:America_Pacific"{
+            cu:int{1}
             ld{"Hora de verano del Pacífico"}
             ls{"Hora estándar del Pacífico"}
             sd{"PDT"}
@@ -2507,6 +2515,7 @@ es{
             ss{"GMT"}
         }
         "meta:Hawaii"{
+            cu:int{1}
             ld{"Hora de verano de Hawai"}
             ls{"Hora estándar de Hawai"}
             sd{"HDT"}

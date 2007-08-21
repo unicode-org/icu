@@ -2970,6 +2970,7 @@ ko{
             ss{"JST"}
         }
         "meta:Korea"{
+            cu:int{1}
             ld{"한국 하계 표준시"}
             ls{"한국 표준시"}
             sd{"KDT"}

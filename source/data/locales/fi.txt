@@ -2488,86 +2488,600 @@ fi{
         "Pacific:Easter"{
             ec{"Pääsiäissaari"}
         }
+        "meta:Acre"{
+            cu:int{0}
+        }
+        "meta:Afghanistan"{
+            cu:int{0}
+        }
+        "meta:Africa_Central"{
+            cu:int{0}
+        }
+        "meta:Africa_Eastern"{
+            cu:int{0}
+        }
+        "meta:Africa_FarWestern"{
+            cu:int{0}
+        }
+        "meta:Africa_Southern"{
+            cu:int{0}
+        }
+        "meta:Africa_Western"{
+            cu:int{0}
+        }
+        "meta:Aktyubinsk"{
+            cu:int{0}
+        }
         "meta:Alaska"{
+            cu:int{0}
             ld{"Alaskan kesäaika"}
             ls{"Alaskan normaaliaika"}
             sd{"AKDT"}
             ss{"AKST"}
         }
+        "meta:Alaska_Hawaii"{
+            cu:int{0}
+        }
+        "meta:Almaty"{
+            cu:int{0}
+        }
+        "meta:Amazon"{
+            cu:int{0}
+        }
         "meta:America_Central"{
+            cu:int{0}
             ld{"Yhdysvaltain keskinen kesäaika"}
             ls{"Yhdysvaltain keskinen normaaliaika"}
             sd{"CDT"}
             ss{"CST"}
         }
         "meta:America_Eastern"{
+            cu:int{0}
             ld{"Yhdysvaltain itäinen kesäaika"}
             ls{"Yhdysvaltain itäinen normaaliaika"}
             sd{"EDT"}
             ss{"EST"}
         }
         "meta:America_Mountain"{
+            cu:int{0}
             ld{"Kalliovuorten kesäaika"}
             ls{"Kalliovuorten normaaliaika"}
             sd{"MDT"}
             ss{"MST"}
         }
         "meta:America_Pacific"{
+            cu:int{0}
             ld{"Yhdysvaltain Tyynenmeren kesäaika"}
             ls{"Yhdysvaltain Tyynenmeren normaaliaika"}
             sd{"PDT"}
             ss{"PST"}
         }
+        "meta:Anadyr"{
+            cu:int{0}
+        }
+        "meta:Aqtau"{
+            cu:int{0}
+        }
+        "meta:Aqtobe"{
+            cu:int{0}
+        }
+        "meta:Arabian"{
+            cu:int{0}
+        }
+        "meta:Argentina"{
+            cu:int{0}
+        }
+        "meta:Argentina_Western"{
+            cu:int{0}
+        }
+        "meta:Armenia"{
+            cu:int{0}
+        }
+        "meta:Ashkhabad"{
+            cu:int{0}
+        }
         "meta:Atlantic"{
+            cu:int{0}
             ld{"Kanadan Atlantin kesäaika"}
             ls{"Kanadan Atlantin normaaliaika"}
             sd{"ADT"}
             ss{"AST"}
         }
+        "meta:Australia_Central"{
+            cu:int{0}
+        }
+        "meta:Australia_CentralWestern"{
+            cu:int{0}
+        }
+        "meta:Australia_Eastern"{
+            cu:int{0}
+        }
+        "meta:Australia_Western"{
+            cu:int{0}
+        }
+        "meta:Azerbaijan"{
+            cu:int{0}
+        }
+        "meta:Azores"{
+            cu:int{0}
+        }
+        "meta:Baku"{
+            cu:int{0}
+        }
+        "meta:Bangladesh"{
+            cu:int{0}
+        }
+        "meta:Bering"{
+            cu:int{0}
+        }
+        "meta:Bhutan"{
+            cu:int{0}
+        }
+        "meta:Bolivia"{
+            cu:int{0}
+        }
+        "meta:Borneo"{
+            cu:int{0}
+        }
+        "meta:Brasilia"{
+            cu:int{0}
+        }
+        "meta:Brunei"{
+            cu:int{0}
+        }
+        "meta:Cape_Verde"{
+            cu:int{0}
+        }
+        "meta:Chamorro"{
+            cu:int{0}
+        }
+        "meta:Changbai"{
+            cu:int{0}
+        }
+        "meta:Chatham"{
+            cu:int{0}
+        }
+        "meta:Chile"{
+            cu:int{0}
+        }
         "meta:China"{
+            cu:int{0}
             ld{"Kiinan kesäaika"}
             ls{"Kiinan normaaliaika"}
             sd{"CDT (Kiina)"}
             ss{"CST (Kiina)"}
         }
+        "meta:Choibalsan"{
+            cu:int{0}
+        }
+        "meta:Christmas"{
+            cu:int{0}
+        }
+        "meta:Cocos"{
+            cu:int{0}
+        }
+        "meta:Colombia"{
+            cu:int{0}
+        }
+        "meta:Cook"{
+            cu:int{0}
+        }
+        "meta:Cuba"{
+            cu:int{0}
+        }
+        "meta:Dacca"{
+            cu:int{0}
+        }
+        "meta:Davis"{
+            cu:int{0}
+        }
+        "meta:DumontDUrville"{
+            cu:int{0}
+        }
+        "meta:Dushanbe"{
+            cu:int{0}
+        }
+        "meta:Dutch_Guiana"{
+            cu:int{0}
+        }
+        "meta:East_Timor"{
+            cu:int{0}
+        }
+        "meta:Easter"{
+            cu:int{0}
+        }
+        "meta:Ecuador"{
+            cu:int{0}
+        }
         "meta:Europe_Central"{
+            cu:int{0}
             ld{"Keski-Euroopan kesäaika"}
             ls{"Keski-Euroopan normaaliaika"}
             sd{"CEST"}
             ss{"CET"}
         }
         "meta:Europe_Eastern"{
+            cu:int{0}
             ld{"Itä-Euroopan kesäaika"}
             ls{"Itä-Euroopan normaaliaika"}
             sd{"EEST"}
             ss{"EET"}
         }
+        "meta:Europe_Western"{
+            cu:int{0}
+        }
+        "meta:Falkland"{
+            cu:int{0}
+        }
+        "meta:Fiji"{
+            cu:int{0}
+        }
+        "meta:French_Guiana"{
+            cu:int{0}
+        }
+        "meta:French_Southern"{
+            cu:int{0}
+        }
+        "meta:Frunze"{
+            cu:int{0}
+        }
         "meta:GMT"{
             ls{"Greenwichin normaaliaika"}
             ss{"GMT"}
         }
+        "meta:Galapagos"{
+            cu:int{0}
+        }
+        "meta:Gambier"{
+            cu:int{0}
+        }
+        "meta:Georgia"{
+            cu:int{0}
+        }
+        "meta:Gilbert_Islands"{
+            cu:int{0}
+        }
+        "meta:Greenland_Central"{
+            cu:int{0}
+        }
+        "meta:Greenland_Eastern"{
+            cu:int{0}
+        }
+        "meta:Greenland_Western"{
+            cu:int{0}
+        }
+        "meta:Guam"{
+            cu:int{0}
+        }
+        "meta:Gulf"{
+            cu:int{0}
+        }
+        "meta:Guyana"{
+            cu:int{0}
+        }
         "meta:Hawaii"{
+            cu:int{0}
             ld{"Havaijin kesäaika"}
             ls{"Havaijin normaaliaika"}
             sd{"HDT"}
             ss{"HST"}
         }
+        "meta:Hawaii_Aleutian"{
+            cu:int{0}
+        }
+        "meta:Hong_Kong"{
+            cu:int{0}
+        }
+        "meta:Hovd"{
+            cu:int{0}
+        }
+        "meta:India"{
+            cu:int{0}
+        }
+        "meta:Indian_Ocean"{
+            cu:int{0}
+        }
+        "meta:Indochina"{
+            cu:int{0}
+        }
+        "meta:Indonesia_Central"{
+            cu:int{0}
+        }
+        "meta:Indonesia_Eastern"{
+            cu:int{0}
+        }
+        "meta:Indonesia_Western"{
+            cu:int{0}
+        }
+        "meta:Iran"{
+            cu:int{0}
+        }
+        "meta:Irkutsk"{
+            cu:int{0}
+        }
         "meta:Israel"{
+            cu:int{0}
             ld{"Israelin kesäaika"}
             ls{"Israelin normaaliaika"}
             sd{"IDT"}
             ss{"IST"}
         }
         "meta:Japan"{
+            cu:int{0}
             ld{"Japanin kesäaika"}
             ls{"Japanin normaaliaika"}
             sd{"JDT"}
             ss{"JST"}
         }
+        "meta:Kamchatka"{
+            cu:int{0}
+        }
+        "meta:Karachi"{
+            cu:int{0}
+        }
+        "meta:Kashgar"{
+            cu:int{0}
+        }
+        "meta:Kazakhstan_Eastern"{
+            cu:int{0}
+        }
+        "meta:Kazakhstan_Western"{
+            cu:int{0}
+        }
+        "meta:Kizilorda"{
+            cu:int{0}
+        }
+        "meta:Korea"{
+            cu:int{0}
+        }
+        "meta:Kosrae"{
+            cu:int{0}
+        }
+        "meta:Krasnoyarsk"{
+            cu:int{0}
+        }
+        "meta:Kuybyshev"{
+            cu:int{0}
+        }
+        "meta:Kwajalein"{
+            cu:int{0}
+        }
+        "meta:Kyrgystan"{
+            cu:int{0}
+        }
+        "meta:Lanka"{
+            cu:int{0}
+        }
+        "meta:Line_Islands"{
+            cu:int{0}
+        }
+        "meta:Long_Shu"{
+            cu:int{0}
+        }
+        "meta:Lord_Howe"{
+            cu:int{0}
+        }
+        "meta:Macau"{
+            cu:int{0}
+        }
+        "meta:Magadan"{
+            cu:int{0}
+        }
+        "meta:Malaya"{
+            cu:int{0}
+        }
+        "meta:Malaysia"{
+            cu:int{0}
+        }
+        "meta:Maldives"{
+            cu:int{0}
+        }
+        "meta:Marquesas"{
+            cu:int{0}
+        }
+        "meta:Marshall_Islands"{
+            cu:int{0}
+        }
+        "meta:Mauritius"{
+            cu:int{0}
+        }
+        "meta:Mawson"{
+            cu:int{0}
+        }
+        "meta:Mongolia"{
+            cu:int{0}
+        }
+        "meta:Moscow"{
+            cu:int{0}
+        }
+        "meta:Myanmar"{
+            cu:int{0}
+        }
+        "meta:Nauru"{
+            cu:int{0}
+        }
+        "meta:Nepal"{
+            cu:int{0}
+        }
+        "meta:New_Caledonia"{
+            cu:int{0}
+        }
+        "meta:New_Zealand"{
+            cu:int{0}
+        }
         "meta:Newfoundland"{
+            cu:int{0}
             ld{"Newfoundlandin kesäaika"}
             ls{"Newfoundlandin normaaliaika"}
             ss{"NST"}
+        }
+        "meta:Niue"{
+            cu:int{0}
+        }
+        "meta:Norfolk"{
+            cu:int{0}
+        }
+        "meta:Noronha"{
+            cu:int{0}
+        }
+        "meta:North_Mariana"{
+            cu:int{0}
+        }
+        "meta:Novosibirsk"{
+            cu:int{0}
+        }
+        "meta:Omsk"{
+            cu:int{0}
+        }
+        "meta:Pakistan"{
+            cu:int{0}
+        }
+        "meta:Palau"{
+            cu:int{0}
+        }
+        "meta:Papua_New_Guinea"{
+            cu:int{0}
+        }
+        "meta:Paraguay"{
+            cu:int{0}
+        }
+        "meta:Peru"{
+            cu:int{0}
+        }
+        "meta:Philippines"{
+            cu:int{0}
+        }
+        "meta:Phoenix_Islands"{
+            cu:int{0}
+        }
+        "meta:Pierre_Miquelon"{
+            cu:int{0}
+        }
+        "meta:Pitcairn"{
+            cu:int{0}
+        }
+        "meta:Ponape"{
+            cu:int{0}
+        }
+        "meta:Qyzylorda"{
+            cu:int{0}
+        }
+        "meta:Reunion"{
+            cu:int{0}
+        }
+        "meta:Rothera"{
+            cu:int{0}
+        }
+        "meta:Sakhalin"{
+            cu:int{0}
+        }
+        "meta:Samara"{
+            cu:int{0}
+        }
+        "meta:Samarkand"{
+            cu:int{0}
+        }
+        "meta:Samoa"{
+            cu:int{0}
+        }
+        "meta:Seychelles"{
+            cu:int{0}
+        }
+        "meta:Shevchenko"{
+            cu:int{0}
+        }
+        "meta:Singapore"{
+            cu:int{0}
+        }
+        "meta:Solomon"{
+            cu:int{0}
+        }
+        "meta:South_Georgia"{
+            cu:int{0}
+        }
+        "meta:Suriname"{
+            cu:int{0}
+        }
+        "meta:Sverdlovsk"{
+            cu:int{0}
+        }
+        "meta:Syowa"{
+            cu:int{0}
+        }
+        "meta:Tahiti"{
+            cu:int{0}
+        }
+        "meta:Tajikistan"{
+            cu:int{0}
+        }
+        "meta:Tashkent"{
+            cu:int{0}
+        }
+        "meta:Tbilisi"{
+            cu:int{0}
+        }
+        "meta:Tokelau"{
+            cu:int{0}
+        }
+        "meta:Tonga"{
+            cu:int{0}
+        }
+        "meta:Truk"{
+            cu:int{0}
+        }
+        "meta:Turkey"{
+            cu:int{0}
+        }
+        "meta:Turkmenistan"{
+            cu:int{0}
+        }
+        "meta:Tuvalu"{
+            cu:int{0}
+        }
+        "meta:Uralsk"{
+            cu:int{0}
+        }
+        "meta:Uruguay"{
+            cu:int{0}
+        }
+        "meta:Urumqi"{
+            cu:int{0}
+        }
+        "meta:Uzbekistan"{
+            cu:int{0}
+        }
+        "meta:Vanuatu"{
+            cu:int{0}
+        }
+        "meta:Venezuela"{
+            cu:int{0}
+        }
+        "meta:Vladivostok"{
+            cu:int{0}
+        }
+        "meta:Volgograd"{
+            cu:int{0}
+        }
+        "meta:Vostok"{
+            cu:int{0}
+        }
+        "meta:Wake"{
+            cu:int{0}
+        }
+        "meta:Wallis"{
+            cu:int{0}
+        }
+        "meta:Yakutsk"{
+            cu:int{0}
+        }
+        "meta:Yekaterinburg"{
+            cu:int{0}
+        }
+        "meta:Yerevan"{
+            cu:int{0}
+        }
+        "meta:Yukon"{
+            cu:int{0}
         }
         gmtFormat{"UTC{0}"}
         hourFormat{"+HH.mm;-HH.mm"}
