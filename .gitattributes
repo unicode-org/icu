@@ -297,10 +297,8 @@ icu4c/source/tools/tzcode/icuzdump.cpp -text
 icu4c/source/tools/tzcode/icuzdump.vcproj -text
 icu4c/source/tools/tzcode/zdump.c -text
 icu4j/.classpath -text
+icu4j/.externalToolBuilders/icu4j_Resources.launch svneol=native#text/xml
 icu4j/.project -text
-icu4j/.settings/org.eclipse.core.resources.prefs -text
-icu4j/.settings/org.eclipse.jdt.core.prefs -text
-icu4j/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/APIChangeReport.html svneol=native#text/html
 icu4j/build.xml svneol=native#text/xml
 icu4j/ee.foundation.jar -text svneol=unset#application/java-archive
