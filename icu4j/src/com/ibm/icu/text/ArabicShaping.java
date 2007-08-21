@@ -403,16 +403,16 @@ public final class ArabicShaping {
         0x0, 0x2, 0x4, 0x6, 0x8, 0xA, 0xC, 0xE 
     };
 
-//    private static final char convertLamAlef[] =  {
-//        '\u0622', // FEF5 
-//        '\u0622', // FEF6
-//        '\u0623', // FEF7
-//        '\u0623', // FEF8
-//        '\u0625', // FEF9
-//        '\u0625', // FEFA
-//        '\u0627', // FEFB
-//        '\u0627'  // FEFC 
-//    };
+    private static final char convertLamAlef[] =  {
+        '\u0622', // FEF5 
+        '\u0622', // FEF6
+        '\u0623', // FEF7
+        '\u0623', // FEF8
+        '\u0625', // FEF9
+        '\u0625', // FEFA
+        '\u0627', // FEFB
+        '\u0627'  // FEFC 
+    };
 
     private static final char convertNormalizedLamAlef[] = {
         '\u0622', // 065C

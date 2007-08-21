@@ -202,7 +202,7 @@ public class IndianTest extends CalendarTest
                 for (int j = 0; j < formatLocales.length; j++  ) {
                     String locName = formatLocales[j];
                     Locale formatLocale = LocaleUtility.getLocaleFromName(locName);
-                    /*DateFormat format = */DateFormat.getDateTimeInstance(cal, DateFormat.FULL, DateFormat.FULL, formatLocale);
+                    DateFormat format = DateFormat.getDateTimeInstance(cal, DateFormat.FULL, DateFormat.FULL, formatLocale);
                     //logln(calLocName + "/" + locName + " --> " + format.format(time));
                 }
             }
