@@ -1,6 +1,6 @@
 /*
  *****************************************************************************
- * Copyright (C) 2000-2004, International Business Machines Corporation and  *
+ * Copyright (C) 2000-2007, International Business Machines Corporation and  *
  * others. All Rights Reserved.                                              *
  *****************************************************************************
  */
@@ -76,9 +76,9 @@ public class RBPropertiesImporter extends RBImporter {
             resolveEncodings(encodings);
             for (int i=0; i < bundles.size(); i++) {
                 Bundle b = (Bundle)bundles.elementAt(i);
-                Enumeration enum = b.allItems.keys();
-                while (enum.hasMoreElements()) {
-                    String key = (String)enum.nextElement();
+                Enumeration keys = b.allItems.keys();
+                while (keys.hasMoreElements()) {
+                    String key = (String)keys.nextElement();
                     BundleItem item = (BundleItem)b.allItems.get(key);
                     importResource(item, b.encoding, (item.getParentGroup() == null ? getDefaultGroup(): item.getParentGroup().getName())); 
                 }
@@ -105,9 +105,9 @@ public class RBPropertiesImporter extends RBImporter {
                                         (children_v.elementAt(i).toString().equals("") ? "" : "_" + children_v.elementAt(i).toString()) +
                                         ".properties"));
                 p.load(fis);
-                Enumeration enum = p.keys();
-                while (enum.hasMoreElements()) {
-                    String key = (String)enum.nextElement();
+                Enumeration keys = p.keys();
+                while (keys.hasMoreElements()) {
+                    String key = (String)keys.nextElement();
                     BundleItem item = new BundleItem(null, key, p.getProperty(key));
                     item.setTranslated(this.getDefaultTranslated());
                     importResource(item, children_v.elementAt(i).toString(), getDefaultGroup());

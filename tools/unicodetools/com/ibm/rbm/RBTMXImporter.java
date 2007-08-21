@@ -1,6 +1,6 @@
 /*
  *****************************************************************************
- * Copyright (C) 2000-2004, International Business Machines Corporation and  *
+ * Copyright (C) 2000-2007, International Business Machines Corporation and  *
  * others. All Rights Reserved.                                              *
  *****************************************************************************
  */
@@ -232,9 +232,9 @@ public class RBTMXImporter extends RBImporter {
             }
         }
         Vector v = new Vector();
-        Enumeration enum = hash.keys();
-        while (enum.hasMoreElements()) {
-        	v.addElement(enum.nextElement());
+        Enumeration keys = hash.keys();
+        while (keys.hasMoreElements()) {
+        	v.addElement(keys.nextElement());
         }
         return v;
     }

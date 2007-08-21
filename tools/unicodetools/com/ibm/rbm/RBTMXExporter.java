@@ -1,6 +1,6 @@
 /*
  *****************************************************************************
- * Copyright (C) 2000-2004, International Business Machines Corporation and  *
+ * Copyright (C) 2000-2007, International Business Machines Corporation and  *
  * others. All Rights Reserved.                                              *
  *****************************************************************************
  */
@@ -115,9 +115,9 @@ public class RBTMXExporter extends RBExporter {
         tuv.appendChild(translated_prop);
 		
         Hashtable lookups = item.getLookups();
-        Enumeration enum = lookups.keys();
-        while (enum.hasMoreElements()) {
-            String key = (String)enum.nextElement();
+        Enumeration keys = lookups.keys();
+        while (keys.hasMoreElements()) {
+            String key = (String)keys.nextElement();
             String value = (String)lookups.get(key);
             Element lookup_prop = xml.createElement("prop");
             lookup_prop.appendChild(xml.createTextNode(key + "=" + value));

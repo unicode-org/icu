@@ -1,6 +1,6 @@
 /*
  *****************************************************************************
- * Copyright (C) 2000-2004, International Business Machines Corporation and  *
+ * Copyright (C) 2000-2007, International Business Machines Corporation and  *
  * others. All Rights Reserved.                                              *
  *****************************************************************************
  */
@@ -422,9 +422,9 @@ public class RBReporter extends JFrame {
 		
         int untranslated = 0;
         String untransStr = new String();
-        Enumeration enum = dict.allItems.elements();
-        while (enum.hasMoreElements()) {
-            BundleItem tempItem = (BundleItem)enum.nextElement();
+        Enumeration items = dict.allItems.elements();
+        while (items.hasMoreElements()) {
+            BundleItem tempItem = (BundleItem)items.nextElement();
             if (tempItem.isTranslated()) continue;
             untranslated++;
             untransStr += " " + tempItem.getKey();
@@ -512,9 +512,9 @@ public class RBReporter extends JFrame {
         body_elem.appendChild(block_elem);
 		
         int untranslated = 0;
-        Enumeration enum = dict.allItems.elements();
-        while (enum.hasMoreElements()) {
-            BundleItem tempItem = (BundleItem)enum.nextElement();
+        Enumeration items = dict.allItems.elements();
+        while (items.hasMoreElements()) {
+            BundleItem tempItem = (BundleItem)items.nextElement();
             if (tempItem.isTranslated()) continue;
             untranslated++;
             if (detailed) {
@@ -542,10 +542,10 @@ public class RBReporter extends JFrame {
         
         buffer.append("<P>Number of NLS items in the file: " + String.valueOf(dict.allItems.size()) + "</P>\n");
         int untranslated = 0;
-        Enumeration enum = dict.allItems.elements();
+        Enumeration items = dict.allItems.elements();
         StringBuffer innerBuffer = new StringBuffer();
-        while (enum.hasMoreElements()) {
-            BundleItem tempItem = (BundleItem)enum.nextElement();
+        while (items.hasMoreElements()) {
+            BundleItem tempItem = (BundleItem)items.nextElement();
             if (tempItem.isTranslated()) continue;
             untranslated++;
             innerBuffer.append("<LI>" + tempItem.getKey() + "</LI>\n");
@@ -614,9 +614,9 @@ public class RBReporter extends JFrame {
         if (detailed) lang_report_elem.appendChild(untranslated_elem);
 		
         int untranslated = 0;
-        Enumeration enum = dict.allItems.elements();
-        while (enum.hasMoreElements()) {
-            BundleItem tempItem = (BundleItem)enum.nextElement();
+        Enumeration items = dict.allItems.elements();
+        while (items.hasMoreElements()) {
+            BundleItem tempItem = (BundleItem)items.nextElement();
             if (tempItem.isTranslated()) continue;
             untranslated++;
             Element resource_elem = xml.createElement("RESOURCEKEY");
@@ -640,10 +640,10 @@ public class RBReporter extends JFrame {
 		
         buffer.append("\t<NLS_TOTAL>" + String.valueOf(dict.allItems.size()) + "</NLS_TOTAL>\n");
         int untranslated = 0;
-        Enumeration enum = dict.allItems.elements();
+        Enumeration items = dict.allItems.elements();
         StringBuffer innerBuffer = new StringBuffer();
-        while (enum.hasMoreElements()) {
-            BundleItem tempItem = (BundleItem)enum.nextElement();
+        while (items.hasMoreElements()) {
+            BundleItem tempItem = (BundleItem)items.nextElement();
             if (tempItem.isTranslated()) continue;
             untranslated++;
             innerBuffer.append("\t\t<RESOURCEKEY>" + tempItem.getKey() + "</RESOURCEKEY>\n");

@@ -1,13 +1,7 @@
 /*
  *****************************************************************************
- * Copyright (C) 2000-2002, International Business Machines Corporation and  *
+ * Copyright (C) 2000-2007, International Business Machines Corporation and  *
  * others. All Rights Reserved.                                              *
- *****************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/rbm/BundleItem.java,v $ 
- * $Date: 2004/07/14 18:29:00 $ 
- * $Revision: 1.4 $
- *
  *****************************************************************************
  */
 package com.ibm.rbm;
@@ -290,9 +284,9 @@ public class BundleItem {
         }
         if (creator != null) retStr += " @creator " + creator;
         if (modifier != null) retStr += " @modifier " + modifier;
-        Enumeration enum = lookups.keys();
-        while (enum.hasMoreElements()) {
-            String str = (String)enum.nextElement();
+        Enumeration elems = lookups.keys();
+        while (elems.hasMoreElements()) {
+            String str = (String)elems.nextElement();
             retStr += "\n# @{" + str + "} " + (String)lookups.get(str);
         }
         if (comment != null) retStr += "\n# @comment " + comment;

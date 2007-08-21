@@ -1,6 +1,6 @@
 /*
  *****************************************************************************
- * Copyright (C) 2000-2004, International Business Machines Corporation and  *
+ * Copyright (C) 2000-2007, International Business Machines Corporation and  *
  * others. All Rights Reserved.                                              *
  *****************************************************************************
  */
@@ -243,9 +243,9 @@ public class Bundle {
         removeUntranslatedItemsByGroup(groupName);
 			
         // Loop through all Items
-        Enumeration enum = allItems.elements();
-        while(enum.hasMoreElements()) {
-            BundleItem item = (BundleItem)enum.nextElement();
+        Enumeration elems = allItems.elements();
+        while(elems.hasMoreElements()) {
+            BundleItem item = (BundleItem)elems.nextElement();
             if (item.getParentGroup().getName().equals(groupName)) {
                 allItems.remove(item);
             }

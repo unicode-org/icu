@@ -1,6 +1,6 @@
 /*
  *****************************************************************************
- * Copyright (C) 2000-2004, International Business Machines Corporation and  *
+ * Copyright (C) 2000-2007, International Business Machines Corporation and  *
  * others. All Rights Reserved.                                              *
  *****************************************************************************
  */
@@ -259,9 +259,9 @@ public class RBManager {
 		
         // Now that we have parsed the entire main language file, populate the allNLSKey set with the dictionary keys
         allBundleKeys = new Vector();
-        Enumeration enum = ((Bundle)bundles.elementAt(0)).allItems.keys();
-        while (enum.hasMoreElements()) {
-            allBundleKeys.addElement(enum.nextElement());
+        Enumeration keys = ((Bundle)bundles.elementAt(0)).allItems.keys();
+        while (keys.hasMoreElements()) {
+            allBundleKeys.addElement(keys.nextElement());
         }
 		
         // Now go through all of the other languages
@@ -323,9 +323,9 @@ public class RBManager {
                         o = descriptors.get("modified");   if (o != null) item.setModifiedDate((String) o);
                         
                         // Lookup tags (e.g. {_#_} _description_)
-                        Enumeration keys = descriptors.keys();
-                        while (keys.hasMoreElements()) {
-                            String tag = (String)keys.nextElement();
+                        Enumeration descKeys = descriptors.keys();
+                        while (descKeys.hasMoreElements()) {
+                            String tag = (String)descKeys.nextElement();
                             if (tag.startsWith("{")) {
                                 if (tag.indexOf("}") < 0) continue;
                                 String lookup = tag.substring(1,tag.indexOf("}"));
@@ -609,9 +609,9 @@ public class RBManager {
             bundle.removeUntranslatedItem(itemName);
                     
             // Loop through all Items
-            Enumeration enum = bundle.allItems.elements();
-            while(enum.hasMoreElements()) {
-                BundleItem item = (BundleItem)enum.nextElement();
+            Enumeration items = bundle.allItems.elements();
+            while(items.hasMoreElements()) {
+                BundleItem item = (BundleItem)items.nextElement();
                 if (item.getKey().equals(itemName)) {
                     bundle.allItems.remove(item);
                     item.getParentGroup().removeBundleItem(item.getKey());
@@ -681,9 +681,9 @@ public class RBManager {
                     item.setModifier(mainItem.getModifier());
                     item.setLookups(new Hashtable());
                     // TODO: This should be done in the Bundle class
-                    Enumeration enum = mainItem.getLookups().keys();
-                    while (enum.hasMoreElements()) {
-                        String name = (String)enum.nextElement();
+                    Enumeration keys = mainItem.getLookups().keys();
+                    while (keys.hasMoreElements()) {
+                        String name = (String)keys.nextElement();
                         String value = (String)mainItem.getLookups().get(name);
                         item.getLookups().put(new String(name), new String(value));
                     }

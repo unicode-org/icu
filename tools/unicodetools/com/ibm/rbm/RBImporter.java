@@ -1,6 +1,6 @@
 /*
  *****************************************************************************
- * Copyright (C) 2000-2004, International Business Machines Corporation and  *
+ * Copyright (C) 2000-2007, International Business Machines Corporation and  *
  * others. All Rights Reserved.                                              *
  *****************************************************************************
  */
@@ -290,7 +290,7 @@ public class RBImporter extends JDialog {
         progressBar.setValue(0);
         progressBarDialog.getContentPane().add(progressBar);
         progressBarDialog.pack();
-        progressBarDialog.show();
+        progressBarDialog.setVisible(true);
     }
 	
     protected void incrementProgressBar() {

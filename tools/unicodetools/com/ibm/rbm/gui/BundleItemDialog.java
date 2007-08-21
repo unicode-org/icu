@@ -1,6 +1,6 @@
 /*
  *****************************************************************************
- * Copyright (C) 2000-2004, International Business Machines Corporation and  *
+ * Copyright (C) 2000-2007, International Business Machines Corporation and  *
  * others. All Rights Reserved.                                              *
  *****************************************************************************
  */
@@ -152,9 +152,9 @@ class BundleItemDialog extends JDialog implements ActionListener {
 			lookups = new Box[item.getLookups().size()];
 			lookupLabels = new JLabel[item.getLookups().size()];
 			lookupFields = new JTextField[item.getLookups().size()];
-			Enumeration enum = item.getLookups().keys();
+			Enumeration keys = item.getLookups().keys();
 			for (int i = 0; i < item.getLookups().size(); i++) {
-				String name = (String)enum.nextElement();
+				String name = (String)keys.nextElement();
 				String value = (String)item.getLookups().get(name);
 				RBManagerGUI.debugMsg("X - Lookup: " + name + " -> " + value);
 				lookups[i] = new Box(BoxLayout.X_AXIS);
