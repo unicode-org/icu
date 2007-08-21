@@ -20,7 +20,6 @@ typedef void pl_localeRuns;
 /**
  * \file 
  * \brief C API for run arrays.
- * \internal
  *
  * This is a technology preview. The API may
  * change significantly.
