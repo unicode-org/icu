@@ -191,7 +191,7 @@
   </target>
 
   <target name="displayBuildEnvWarning" unless="default.java.env">
-    <echo message="####################### WARINNG #######################" />
+    <echo message="####################### WARNING #######################" />
     <echo message="The JDK version used by the current build environment" />
     <echo message="does not match the reference JDK version for this" />
     <echo message="ICU4J release.  The build outputs may not be identical" />
