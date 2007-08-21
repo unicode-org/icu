@@ -37,4 +37,9 @@ en_CA{
             }
         }
     }
+    zoneStrings{
+        "meta:Newfoundland"{
+            cu:int{1}
+        }
+    }
 }

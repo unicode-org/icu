@@ -388,6 +388,15 @@ pt_PT{
         "Europe:Moscow"{
             ec{"Moscovo"}
         }
+        "meta:Acre"{
+            cu:int{0}
+        }
+        "meta:Amazon"{
+            cu:int{0}
+        }
+        "meta:Brasilia"{
+            cu:int{0}
+        }
         "meta:Europe_Central"{
             ls{"Horário Padrão da Europa Central"}
         }

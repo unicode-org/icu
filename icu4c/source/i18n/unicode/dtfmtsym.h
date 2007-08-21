@@ -495,7 +495,7 @@ public:
      * @return the input UnicodeString parameter for chaining
      * @internal ICU 3.8
      */
-    UnicodeString& getMetazoneString(const UnicodeString &ID, const TimeZoneTranslationType type, Calendar &cal, UnicodeString &result, UErrorCode &status);
+    UnicodeString getMetazoneString(const UnicodeString &ID, const TimeZoneTranslationType type, Calendar &cal, UnicodeString &result, UErrorCode &status);
 
     /**
      * Gets fallback string given the key
@@ -518,6 +518,16 @@ public:
      * @param status   Input/output parameter, set to success or     
      * @internal ICU 3.6
      */
+
+    /**
+     * Determines if the Commonly Used flag is set for this zone 
+     * @param zid      The ID of zone strings,  e.g: "America/Los_Angeles".
+     *                 The time zone ID is  for programmatic lookup.
+     * @return         A boolean value indicating if the zone is commonlyUsed or not.
+     * @internal ICU 3.8
+     */
+    UBool isCommonlyUsed(const UnicodeString &zid);
+
     void setZoneString(const UnicodeString &ID, const TimeZoneTranslationType type, const UnicodeString &value, UErrorCode &status);
 
 private:

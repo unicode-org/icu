@@ -545,6 +545,7 @@ SimpleDateFormat::fgPatternIndexToCalendarField[] =
     /*L*/   UCAL_MONTH,
     /*Q*/   UCAL_MONTH,
     /*q*/   UCAL_MONTH,
+    /*V*/   UCAL_ZONE_OFFSET,
 };
 
 // Map index into pattern character string to DateFormat field number
@@ -563,6 +564,7 @@ SimpleDateFormat::fgPatternIndexToDateFormatField[] = {
     /*L*/   UDAT_STANDALONE_MONTH_FIELD,
     /*Q*/   UDAT_QUARTER_FIELD,
     /*q*/   UDAT_STANDALONE_QUARTER_FIELD,
+    /*V*/   UDAT_TIMEZONE_SPECIAL_FIELD,
 };
 
 //----------------------------------------------------------------------
@@ -773,9 +775,11 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     // then the time zone shows up as "GMT+hh:mm" or "GMT-hh:mm" (where "hh:mm" is the
     // offset from GMT) regardless of how many z's were in the pattern symbol
     case UDAT_TIMEZONE_FIELD: 
+    case UDAT_TIMEZONE_SPECIAL_FIELD: 
     case UDAT_TIMEZONE_GENERIC_FIELD: {
         UnicodeString str;
         UnicodeString zid;
+        UnicodeString mzid;
         UnicodeString displayString;
         zid = fSymbols->getZoneID(cal.getTimeZone().getID(str), zid, status);
         if(U_FAILURE(status)){
@@ -789,23 +793,59 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
             if (patternCharIndex == UDAT_TIMEZONE_GENERIC_FIELD) {
                 if(count < 4){
                     fSymbols->getZoneString(zid, DateFormatSymbols::TIMEZONE_SHORT_GENERIC, displayString, status);
-                    if(displayString.length()==0)
-                       fSymbols->getMetazoneString(zid, DateFormatSymbols::TIMEZONE_SHORT_GENERIC, cal, displayString, status);
-                    if(displayString.length()==0)
+                    if ( !fSymbols->isCommonlyUsed(zid)) {
+                        displayString.remove();
+                    }
+                    if(displayString.length()==0) {
+                        mzid = fSymbols->getMetazoneString(zid, DateFormatSymbols::TIMEZONE_SHORT_GENERIC, cal, displayString, status);
+                        if ( !fSymbols->isCommonlyUsed(mzid)) {
+                            displayString.remove();
+                        }
+                    }
+                    if(displayString.length()==0) {
                        fSymbols->getFallbackString(zid, displayString, status);
+                    }
                 }else{
                     fSymbols->getZoneString(zid, DateFormatSymbols::TIMEZONE_LONG_GENERIC, displayString, status);
-                    if(displayString.length()==0)
-                       fSymbols->getMetazoneString(zid, DateFormatSymbols::TIMEZONE_LONG_GENERIC, cal, displayString, status);
-                    if(displayString.length()==0)
+                    if(displayString.length()==0) {
+                       mzid = fSymbols->getMetazoneString(zid, DateFormatSymbols::TIMEZONE_LONG_GENERIC, cal, displayString, status);
+                    }
+                    if(displayString.length()==0) {
                        fSymbols->getFallbackString(zid, displayString, status);
+                    }
+                }
+            }
+            else if (patternCharIndex == UDAT_TIMEZONE_SPECIAL_FIELD) {
+                if(count == 4){ // VVVV format - always get fallback string.
+                       fSymbols->getFallbackString(zid, displayString, status);
+                }
+                else if (count == 1){ // V format - ignore commonlyUsed
+                    if (cal.get(UCAL_DST_OFFSET, status) != 0) {
+                        fSymbols->getZoneString(zid, DateFormatSymbols::TIMEZONE_SHORT_DAYLIGHT, displayString, status);
+                        if(displayString.length()==0) {
+                            mzid = fSymbols->getMetazoneString(zid, DateFormatSymbols::TIMEZONE_SHORT_DAYLIGHT, cal, displayString, status);
+                        }
+                    }
+                    else {
+                        fSymbols->getZoneString(zid, DateFormatSymbols::TIMEZONE_SHORT_STANDARD, displayString, status);
+                        if(displayString.length()==0) {
+                            mzid = fSymbols->getMetazoneString(zid, DateFormatSymbols::TIMEZONE_SHORT_STANDARD, cal, displayString, status);
+                        }
+                    }
                 }
             } else {
                 if (cal.get(UCAL_DST_OFFSET, status) != 0) {
                     if(count < 4){
                         fSymbols->getZoneString(zid, DateFormatSymbols::TIMEZONE_SHORT_DAYLIGHT, displayString, status);
-                        if(displayString.length()==0)
-                           fSymbols->getMetazoneString(zid, DateFormatSymbols::TIMEZONE_SHORT_DAYLIGHT, cal, displayString, status);
+                        if ( fSymbols->isCommonlyUsed(zid) == FALSE ) {
+                            displayString.remove();
+                        }
+                        if(displayString.length()==0) {
+                            mzid = fSymbols->getMetazoneString(zid, DateFormatSymbols::TIMEZONE_SHORT_DAYLIGHT, cal, displayString, status);
+                            if ( fSymbols->isCommonlyUsed(mzid) == FALSE ) {
+                                displayString.remove();
+                            }
+                        }
                     }else{
                         fSymbols->getZoneString(zid, DateFormatSymbols::TIMEZONE_LONG_DAYLIGHT, displayString, status);
                         if(displayString.length()==0)
@@ -814,8 +854,15 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
                 }else{
                     if(count < 4){
                         fSymbols->getZoneString(zid, DateFormatSymbols::TIMEZONE_SHORT_STANDARD, displayString, status);
-                        if(displayString.length()==0)
-                           fSymbols->getMetazoneString(zid, DateFormatSymbols::TIMEZONE_SHORT_STANDARD, cal, displayString, status);
+                        if ( !fSymbols->isCommonlyUsed(zid)) {
+                            displayString.remove();
+                        }
+                        if(displayString.length()==0) {
+                            mzid = fSymbols->getMetazoneString(zid, DateFormatSymbols::TIMEZONE_SHORT_STANDARD, cal, displayString, status);
+                            if ( fSymbols->isCommonlyUsed(mzid) == FALSE ) {
+                                displayString.remove();
+                            }
+                        }
                     }else{
                         fSymbols->getZoneString(zid, DateFormatSymbols::TIMEZONE_LONG_STANDARD, displayString, status);
                         if(displayString.length()==0)

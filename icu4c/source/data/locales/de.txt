@@ -2408,6 +2408,7 @@ de{
             ec{"Fidschi"}
         }
         "meta:Europe_Central"{
+            cu:int{1}
             ld{"Mitteleuropäische Sommerzeit"}
             ls{"Mitteleuropäische Zeit"}
             sd{"MESZ"}

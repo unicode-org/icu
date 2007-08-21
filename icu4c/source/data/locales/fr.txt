@@ -2624,6 +2624,7 @@ fr{
             ss{"HNC (Chine)"}
         }
         "meta:Europe_Central"{
+            cu:int{1}
             ld{"Heure avancée de l’Europe centrale"}
             lg{"Heure de l’Europe centrale"}
             ls{"Heure normale de l’Europe centrale"}
@@ -2632,6 +2633,7 @@ fr{
             ss{"HNEC"}
         }
         "meta:Europe_Eastern"{
+            cu:int{1}
             ld{"Heure avancée de l’Europe de l’Est"}
             ls{"Heure normale de l’Europe de l’Est"}
             sd{"HAEE"}

@@ -518,6 +518,7 @@ hi{
             ec{"अज्ञात"}
         }
         "meta:India"{
+            cu:int{1}
             ls{"भारतीय समय"}
             ss{"IST"}
         }

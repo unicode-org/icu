@@ -406,6 +406,7 @@ ta{
     }
     zoneStrings{
         "meta:India"{
+            cu:int{1}
             ls{"இந்திய நேரப்படி"}
             ss{"IST"}
         }

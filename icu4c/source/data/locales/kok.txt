@@ -246,6 +246,7 @@ kok{
     }
     zoneStrings{
         "meta:India"{
+            cu:int{1}
             ls{"भारतीय समय"}
             ss{"IST"}
         }
