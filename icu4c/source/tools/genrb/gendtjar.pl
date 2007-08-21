@@ -235,8 +235,10 @@ sub checkPlatformEndianess {
 sub copyData{
     local($icu4jDir, $icu4jImpl, $icu4jDevDataDir, $tempDir) =@_;
     print("INFO: Copying $tempDir/icudata.jar to $icu4jDir/src/$icu4jImpl\n");
+    mkpath("$icu4jDir/src/$icu4jImpl");
     copy("$tempDir/icudata.jar", "$icu4jDir/src/$icu4jImpl"); 
     print("INFO: Copying $tempDir/testdata.jar $icu4jDir/src/$icu4jDevDataDir\n");
+    mkpath("$icu4jDir/src/$icu4jDevDataDir");
     copy("$tempDir/testdata.jar","$icu4jDir/src/$icu4jDevDataDir");
 }
 #-----------------------------------------------------------------------

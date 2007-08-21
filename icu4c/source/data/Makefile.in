@@ -563,6 +563,9 @@ $(INDEX_RES_FILE): $(INDEX_FILE) $(BINDIR)/genrb$(EXEEXT)
 uni-core-data: build-dir $(UNI_CORE_TARGET_DATA)
 	@echo Unicode .icu files built to $(BUILDDIR)
 	@echo Unicode .c source files built to $(OUTTMPDIR)
+	
+build-icu4j: all
+	$(MAKE) -C ../tools/genrb $@
 
 ###################################################################
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
