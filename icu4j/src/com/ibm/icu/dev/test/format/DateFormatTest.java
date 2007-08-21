@@ -1,4 +1,4 @@
-//##header J2SE15
+//##header JAVASE6
 /*
  *******************************************************************************
  * Copyright (C) 2001-2007, International Business Machines Corporation and    *
@@ -22,7 +22,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -2047,7 +2046,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             errln("A time instance shouldn't equal a default date format");
         }
         
-        Date d;
+        /*Date d;*/
         {
             ChineseDateFormat fmt = new ChineseDateFormat("yymm", Locale.US);
             try {
@@ -2088,7 +2087,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 xbuf.setLength(0);
                 xcal.set(Calendar.HOUR_OF_DAY, 25);
                 fmt.format(xcal, xbuf, fpos);
-                Date d2 = fmt.parse(xbuf.toString());
+                /*Date d2 = */fmt.parse(xbuf.toString());
                 logln("ok again");
             }
             catch (ParseException e) {
@@ -2100,7 +2099,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             // cover gmt+hh:mm
             DateFormat fmt = new SimpleDateFormat("MM/dd/yy z");
             try {
-                d = fmt.parse("07/10/53 GMT+10:00");
+                /*d = */fmt.parse("07/10/53 GMT+10:00");
                 logln("ok");
             }
             catch (ParseException e) {
@@ -2111,7 +2110,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             {
                 ParsePosition pp = new ParsePosition(0);
                 String text = "07/10/53 GMT=10:00";
-                d = fmt.parse(text, pp);
+                /*d = */fmt.parse(text, pp);
                 if(pp.getIndex()!=12){
                     errln("Parse of 07/10/53 GMT=10:00 for pattern MM/dd/yy z");
                 }
@@ -2138,7 +2137,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             // cover no ':' GMT+#, # < 24 (hh)
             try {
-                d = fmt.parse("07/10/53 GMT+07");
+                /*d = */fmt.parse("07/10/53 GMT+07");
                 logln("ok");
             }
             catch (ParseException e) {
@@ -2147,7 +2146,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             // cover no ':' GMT+#, # > 24 (hhmm)
             try {
-                d = fmt.parse("07/10/53 GMT+0730");
+                /*d = */fmt.parse("07/10/53 GMT+0730");
                 logln("ok");
             }
             catch (ParseException e) {
@@ -2156,7 +2155,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             // cover no ':' GMT+#, # > 2400 (this should fail, i suspect, but doesn't)
             try {
-                d = fmt.parse("07/10/53 GMT+07300");
+                /*d = */fmt.parse("07/10/53 GMT+07300");
                 logln("should GMT+9999 fail?");
             }
             catch (ParseException e) {
@@ -2174,7 +2173,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             // cover raw digits (RFC822) 
             try {
-                d = fmt.parse("07/10/53 +07");
+                /*d = */fmt.parse("07/10/53 +07");
                 logln("ok");
             }
             catch (ParseException e) {
@@ -2183,7 +2182,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             // cover raw digits (RFC822) 
             try {
-                d = fmt.parse("07/10/53 -0730");
+                /*d = */fmt.parse("07/10/53 -0730");
                 logln("ok");
             }
             catch (ParseException e) {
@@ -2193,7 +2192,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             // cover raw digits (RFC822) in DST
             try {
                 fmt.setTimeZone(TimeZone.getTimeZone("PDT"));
-                d = fmt.parse("07/10/53 -0730");
+                /*d = */fmt.parse("07/10/53 -0730");
                 logln("ok");
             }
             catch (ParseException e) {
@@ -2329,10 +2328,10 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 errln("FAIL: constructs DateFormatSymbols with calendar and locale failed");
             
             uloc = ULocale.getDefault();
-            ResourceBundle resb = DateFormatSymbols.getDateFormatBundle(cal, loc);
-            ResourceBundle resb2 = DateFormatSymbols.getDateFormatBundle(cal, uloc);
-            ResourceBundle resb3 = DateFormatSymbols.getDateFormatBundle(cal.getClass(), loc);
-            ResourceBundle resb4 = DateFormatSymbols.getDateFormatBundle(cal.getClass(), uloc);
+            /*ResourceBundle resb = */DateFormatSymbols.getDateFormatBundle(cal, loc);
+            /*ResourceBundle resb2 = */DateFormatSymbols.getDateFormatBundle(cal, uloc);
+            /*ResourceBundle resb3 = */DateFormatSymbols.getDateFormatBundle(cal.getClass(), loc);
+            /*ResourceBundle resb4 = */DateFormatSymbols.getDateFormatBundle(cal.getClass(), uloc);
             
             /* (ToDo) Not sure how to construct resourceBundle for this test
                 So comment out the verifying code. 
@@ -3015,25 +3014,25 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     public void TestFormatToCharacterIteratorCoverage() {
         // Calling formatToCharacterIterator, using various argument types
         DateFormat df = DateFormat.getDateTimeInstance();
-        AttributedCharacterIterator acit = null;
+        //AttributedCharacterIterator acit = null;
 
         Calendar cal = Calendar.getInstance();
         try {
-            acit = df.formatToCharacterIterator(cal);
+            /*acit = */df.formatToCharacterIterator(cal);
         } catch (IllegalArgumentException iae) {
             errln("FAIL: Calendar must be accepted by formatToCharacterIterator");
         }
 
         Date d = cal.getTime();
         try {
-            acit = df.formatToCharacterIterator(d);
+            /*acit = */df.formatToCharacterIterator(d);
         } catch (IllegalArgumentException iae) {
             errln("FAIL: Date must be accepted by formatToCharacterIterator");
         }
 
         Number num = new Long(d.getTime());
         try {
-            acit = df.formatToCharacterIterator(num);
+            /*acit = */df.formatToCharacterIterator(num);
         } catch (IllegalArgumentException iae) {
             errln("FAIL: Number must be accepted by formatToCharacterIterator");
         }
@@ -3041,7 +3040,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         boolean isException = false;
         String str = df.format(d);
         try {
-            acit = df.formatToCharacterIterator(str);
+            /*acit = */df.formatToCharacterIterator(str);
         } catch (IllegalArgumentException iae) {
             logln("IllegalArgumentException is thrown by formatToCharacterIterator");
             isException = true;

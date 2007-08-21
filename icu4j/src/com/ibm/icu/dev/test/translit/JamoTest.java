@@ -15,7 +15,7 @@ import java.util.*;
  */
 public class JamoTest extends TransliteratorTest {
 
-    private static final char SEP = '-';
+//    private static final char SEP = '-';
 
     public static void main(String[] args) throws Exception {
         new JamoTest().run(args);
