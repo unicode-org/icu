@@ -18,8 +18,6 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CodingErrorAction;
 
-import sun.io.CharToByteConverter;
-
 import com.ibm.icu.charset.CharsetProviderICU;
 
 /**
@@ -46,25 +44,10 @@ public class ConverterPerformanceTest extends PerfTest {
             encoder.onUnmappableCharacter(CodingErrorAction.REPORT);
             ByteBuffer target = encoder.encode(source);
             
-            CharToByteConverter conv = CharToByteConverter.getConverter("UTF-8");
-            conv.setSubstitutionMode(false);
-            byte[] encBuffer2 = conv.convertAll(unicodeBuffer);
-            
-            boolean b = true;
             // target.array() will probably return what we want, but lets take no chances
             encBuffer = new byte[target.limit()];
-            for (int i=0; i<encBuffer.length; i++) {
+            for (int i=0; i<encBuffer.length; i++)
                 encBuffer[i] = target.get(i);
-                if (encBuffer[i] != encBuffer2[i]) {
-                    System.out.println("difference: " + Integer.toHexString(0xff & encBuffer[i]) + " " + Integer.toHexString(0xff & encBuffer2[i]));
-                    b = false;
-                }
-            }
-            System.out.println(b);
-            System.out.println(encBuffer.length);
-            System.out.println(encBuffer2.length);
-            
-            
             
             // we created some heavy objects, so lets try to clean up a little
             gc();
