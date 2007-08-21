@@ -1,4 +1,4 @@
-//##header J2SE15
+//##header JAVASE6
 /*
  *******************************************************************************
  * Copyright (C) 1996-2007, International Business Machines Corporation and    *
@@ -52,10 +52,10 @@ public class FormatTests
         }
         
         public boolean hasSameBehavior(Object a, Object b) {
-            DurationFormat da = (DurationFormat)a;
-            DurationFormat db = (DurationFormat)b;
+            //DurationFormat da = (DurationFormat)a;
+            //DurationFormat db = (DurationFormat)b;
             
-            Date d = new Date(12345);
+            /*Date d = */new Date(12345);
         System.err.println("Warning: BasicDurationFormat test is being skipped for now.");
             return true;
             //return da.format(d).equals(db.format(d));
@@ -960,7 +960,7 @@ public class FormatTests
             DateFormat dfb = (DateFormat) b;
             Date date = new Date(System.currentTimeMillis());
             String sfa = dfa.format(date);
-            String sfb = dfa.format(date);
+            String sfb = dfb.format(date);
             
            return sfa.equals(sfb);
         }

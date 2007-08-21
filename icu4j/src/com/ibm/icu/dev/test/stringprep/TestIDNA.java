@@ -746,7 +746,7 @@ public class TestIDNA extends TestFmwk {
             try{
                 String ascii = IDNA.convertToASCII(in[i],IDNA.DEFAULT).toString();
                 try{
-                    String unicode = IDNA.convertToUnicode(ascii,IDNA.DEFAULT).toString();
+                    /*String unicode = */IDNA.convertToUnicode(ascii,IDNA.DEFAULT).toString();
                 }catch(StringPrepParseException ex){
                     errln("Unexpected exception for convertToUnicode: " + ex.getMessage());
                 }

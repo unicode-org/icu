@@ -690,7 +690,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
         }
         MessageFormat fmt = new MessageFormat("There are {numberOfApples} apples growing on the {whatKindOfTree} tree.");
         String str = new String("There is one apple growing on the peach tree.");
-        Map objs = fmt.parseToMap(str, pos);
+        /*Map objs = */fmt.parseToMap(str, pos);
         logln("unparsable string , should fail at " + pos.getErrorIndex());
         if (pos.getErrorIndex() == -1)
             errln("Bug 4052223 failed : parsing string " + str);

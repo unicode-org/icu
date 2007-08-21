@@ -109,6 +109,6 @@ public class NumberFormatRegistrationTest extends com.ibm.icu.dev.test.TestFmwk 
         }
 
         // coverage
-        NumberFormat f6 = NumberFormat.getNumberInstance(fu_FU);
+        /*NumberFormat f6 = */NumberFormat.getNumberInstance(fu_FU);
     }
 }

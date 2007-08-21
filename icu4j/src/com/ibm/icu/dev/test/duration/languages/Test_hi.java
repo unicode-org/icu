@@ -10,9 +10,6 @@
 package com.ibm.icu.dev.test.duration.languages;
 
 import com.ibm.icu.dev.test.duration.LanguageTestRoot;
-
-import com.ibm.icu.impl.duration.Period;
-import com.ibm.icu.impl.duration.PeriodFormatter;
 import com.ibm.icu.impl.duration.BasicPeriodFormatterFactory;
 import com.ibm.icu.impl.duration.PeriodFormatterFactory;
 import com.ibm.icu.impl.duration.TimeUnitConstants;
@@ -44,12 +41,12 @@ public class Test_hi extends LanguageTestRoot implements TimeUnitConstants {
     // "more than 1 months",
     // "more than 1 months ago"
 
-    Period[] times = {
-      Period.at(1, MONTH).inFuture(),
-      Period.at(1, MONTH).and(2, WEEK).inFuture(),
-      Period.moreThan(1, MONTH),
-      Period.moreThan(1, MONTH).inFuture(),
-    };
+//    Period[] times = {
+//      Period.at(1, MONTH).inFuture(),
+//      Period.at(1, MONTH).and(2, WEEK).inFuture(),
+//      Period.moreThan(1, MONTH),
+//      Period.moreThan(1, MONTH).inFuture(),
+//    };
 
     String[] targets = {
       "\u0905\u092d\u0940 \u0938\u0947 \u0967 \u092e\u0939\u0940\u0928\u0947 \u092c\u093e\u0926",
@@ -60,7 +57,7 @@ public class Test_hi extends LanguageTestRoot implements TimeUnitConstants {
 
     PeriodFormatterFactory pff = BasicPeriodFormatterFactory.getDefault()
         .setLocale("hi");
-    PeriodFormatter pf = pff.getFormatter();
+    /*PeriodFormatter pf = */pff.getFormatter();
     for (int i = 0; i < targets.length; ++i) {
       //xAssertEquals(timestring(times[i]), targets, i, pf.format(times[i]));
     }
