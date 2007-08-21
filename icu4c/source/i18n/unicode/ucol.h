@@ -355,9 +355,9 @@ ucol_getContractions( const UCollator *coll,
  * @param addPrefixes add the prefix contextual elements to contractions
  * @param status to hold the error code
  *
- * @draft ICU 3.4
+ * @stable ICU 3.4
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 ucol_getContractionsAndExpansions( const UCollator *coll,
                   USet *contractions, USet *expansions,
                   UBool addPrefixes, UErrorCode *status);
