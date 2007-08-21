@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1999-2002, International Business Machines Corporation and
+ * Copyright (c) 1999-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -45,7 +45,7 @@ U_CAPI void U_EXPORT2 flagCB_fromU(
       /* The following is the recommended way to implement UCNV_CLONE
          in a callback. */
       UConverterFromUCallback   saveCallback;
-      void *saveContext;
+      const void *saveContext;
       FromUFLAGContext *old, *cloned;
       UErrorCode subErr = U_ZERO_ERROR;
 
@@ -193,7 +193,7 @@ void debugCB_fromU(const void *context,
         /* see comments in above flagCB clone code */
 
         UConverterFromUCallback   saveCallback;
-        void *saveContext;
+        const void *saveContext;
         debugCBContext *cloned;
         UErrorCode subErr = U_ZERO_ERROR;
 
@@ -286,4 +286,3 @@ debugCBContext *debugCB_openContext()
 
     return ctx;
 }
-
