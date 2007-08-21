@@ -24,7 +24,7 @@ import com.ibm.icu.text.UTF16;
  */
 class CharsetUTF8 extends CharsetICU {
 
-    protected byte[] fromUSubstitution = new byte[] { (byte) 0xef, (byte) 0xbf, (byte) 0xbd };
+    private static final byte[] fromUSubstitution = new byte[] { (byte) 0xef, (byte) 0xbf, (byte) 0xbd };
 
     public CharsetUTF8(String icuCanonicalName, String javaCanonicalName, String[] aliases) {
         super(icuCanonicalName, javaCanonicalName, aliases);
@@ -36,23 +36,23 @@ class CharsetUTF8 extends CharsetICU {
 
     private static final int BITMASK_FROM_UTF8[] = { -1, 0x7f, 0x1f, 0xf, 0x7, 0x3, 0x1 };
 
-    private static final byte BYTES_FROM_UTF8[] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-            2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4,
-            5, 5, 5, 5, 6, 6, 0, 0 };
+    private static final byte BYTES_FROM_UTF8[] = {
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 0, 0
+    };
 
     /*
      * Starting with Unicode 3.0.1: UTF-8 byte sequences of length N _must_ encode code points of or
      * above utf8_minChar32[N]; byte sequences with more than 4 bytes are illegal in UTF-8, which is
      * tested with impossible values for them
      */
-    private static final int UTF8_MIN_CHAR32[] = { Integer.MAX_VALUE, -1, 0x7f, 0x7ff, 0xffff,
+    private static final int UTF8_MIN_CHAR32[] = { 0, 0, 0x80, 0x800, 0x10000,
             Integer.MAX_VALUE, Integer.MAX_VALUE };
 
     private final boolean isCESU8 = this instanceof CharsetCESU8;
@@ -125,7 +125,7 @@ class CharsetUTF8 extends CharsetICU {
                         }
                         char32 = (char32 << 6) | (ch & 0x3f);
                         i++;
-                    } else if (i == bytes && UTF8_MIN_CHAR32[bytes] < char32 && char32 <= 0x10ffff
+                    } else if (i == bytes && UTF8_MIN_CHAR32[bytes] <= char32 && char32 <= 0x10ffff
                             && (isCESU8 ? bytes <= 3 : !UTF16.isSurrogate((char) char32))) {
                         /*
                          * char32 is a valid code point and is composed of the correct number of
@@ -245,7 +245,20 @@ class CharsetUTF8 extends CharsetICU {
                         }
                         char32 = (char32 << 6) | (ch & 0x3f);
                         i++;
-                    } else if (i == bytes && UTF8_MIN_CHAR32[bytes] < char32 && char32 <= 0x10ffff
+                    }
+                    /*
+                     * Legal UTF-8 byte sequences in Unicode 3.0.1 and up:
+                     * - use only trail bytes after a lead byte (checked above)
+                     * - use the right number of trail bytes for a given lead byte
+                     * - encode a code point <= U+10ffff
+                     * - use the fewest possible number of bytes for their code points
+                     * - use at most 4 bytes (for i>=5 it is 0x10ffff<utf8_minChar32[])
+                     *
+                     * Starting with Unicode 3.2, surrogate code points must not be encoded in UTF-8.
+                     * There are no irregular sequences any more.
+                     * In CESU-8, only surrogates, not supplementary code points, are encoded directly.
+                     */
+                    else if (i == bytes && UTF8_MIN_CHAR32[bytes] <= char32 && char32 <= 0x10ffff
                             && (isCESU8 ? bytes <= 3 : !UTF16.isSurrogate((char) char32))) {
                         /*
                          * char32 is a valid code point and is composed of the correct number of
@@ -397,39 +410,39 @@ class CharsetUTF8 extends CharsetICU {
                     if (char32 <= 0x7f) {
                         /* 1 byte to encode from char32 */
 
-                        targetArray[targetIndex++] = encode1of1(char32);
+                        targetArray[targetIndex++] = encodeHeadOf1(char32);
 
                     } else if (char32 <= 0x7ff) {
                         /* 2 bytes to encode from char32 */
 
-                        targetArray[targetIndex++] = encode1of2(char32);
+                        targetArray[targetIndex++] = encodeHeadOf2(char32);
 
                         if (targetIndex >= targetLimit) {
-                            errorBuffer[errorBufferLength++] = encode2of2(char32);
+                            errorBuffer[errorBufferLength++] = encodeLastTail(char32);
                             cr = CoderResult.OVERFLOW;
                             break;
                         }
-                        targetArray[targetIndex++] = encode2of2(char32);
+                        targetArray[targetIndex++] = encodeLastTail(char32);
 
                     } else if (!UTF16.isSurrogate((char) char32) || isCESU8) {
                         /* 3 bytes to encode from char32 */
 
-                        targetArray[targetIndex++] = encode1of3(char32);
+                        targetArray[targetIndex++] = encodeHeadOf3(char32);
 
                         if (targetIndex >= targetLimit) {
-                            errorBuffer[errorBufferLength++] = encode2of3(char32);
-                            errorBuffer[errorBufferLength++] = encode3of3(char32);
+                            errorBuffer[errorBufferLength++] = encodeSecondToLastTail(char32);
+                            errorBuffer[errorBufferLength++] = encodeLastTail(char32);
                             cr = CoderResult.OVERFLOW;
                             break;
                         }
-                        targetArray[targetIndex++] = encode2of3(char32);
+                        targetArray[targetIndex++] = encodeSecondToLastTail(char32);
 
                         if (targetIndex >= targetLimit) {
-                            errorBuffer[errorBufferLength++] = encode3of3(char32);
+                            errorBuffer[errorBufferLength++] = encodeLastTail(char32);
                             cr = CoderResult.OVERFLOW;
                             break;
                         }
-                        targetArray[targetIndex++] = encode3of3(char32);
+                        targetArray[targetIndex++] = encodeLastTail(char32);
 
                     } else {
                         /* 4 bytes to encode from char32 and a following char in source */
@@ -496,39 +509,39 @@ class CharsetUTF8 extends CharsetICU {
                     if (char32 <= 0x7f) {
                         /* 1 byte to encode from char32 */
 
-                        target.put(targetIndex++, encode1of1(char32));
+                        target.put(targetIndex++, encodeHeadOf1(char32));
 
                     } else if (char32 <= 0x7ff) {
                         /* 2 bytes to encode from char32 */
 
-                        target.put(targetIndex++, encode1of2(char32));
+                        target.put(targetIndex++, encodeHeadOf2(char32));
 
                         if (targetIndex >= targetLimit) {
-                            errorBuffer[errorBufferLength++] = encode2of2(char32);
+                            errorBuffer[errorBufferLength++] = encodeLastTail(char32);
                             cr = CoderResult.OVERFLOW;
                             break;
                         }
-                        target.put(targetIndex++, encode2of2(char32));
+                        target.put(targetIndex++, encodeLastTail(char32));
 
                     } else if (!UTF16.isSurrogate((char) char32) || isCESU8) {
                         /* 3 bytes to encode from char32 */
 
-                        target.put(targetIndex++, encode1of3(char32));
+                        target.put(targetIndex++, encodeHeadOf3(char32));
 
                         if (targetIndex >= targetLimit) {
-                            errorBuffer[errorBufferLength++] = encode2of3(char32);
-                            errorBuffer[errorBufferLength++] = encode3of3(char32);
+                            errorBuffer[errorBufferLength++] = encodeSecondToLastTail(char32);
+                            errorBuffer[errorBufferLength++] = encodeLastTail(char32);
                             cr = CoderResult.OVERFLOW;
                             break;
                         }
-                        target.put(targetIndex++, encode2of3(char32));
+                        target.put(targetIndex++, encodeSecondToLastTail(char32));
 
                         if (targetIndex >= targetLimit) {
-                            errorBuffer[errorBufferLength++] = encode3of3(char32);
+                            errorBuffer[errorBufferLength++] = encodeLastTail(char32);
                             cr = CoderResult.OVERFLOW;
                             break;
                         }
-                        target.put(targetIndex++, encode3of3(char32));
+                        target.put(targetIndex++, encodeLastTail(char32));
 
                     } else {
                         /* 4 bytes to encode from char32 and a following char in source */
@@ -572,28 +585,28 @@ class CharsetUTF8 extends CharsetICU {
 
             /* the rest is routine -- encode four bytes, stopping on overflow */
 
-            targetArray[targetIndex++] = encode1of4(char32);
+            targetArray[targetIndex++] = encodeHeadOf4(char32);
 
             if (targetIndex >= targetLimit) {
-                errorBuffer[errorBufferLength++] = encode2of4(char32);
-                errorBuffer[errorBufferLength++] = encode3of4(char32);
-                errorBuffer[errorBufferLength++] = encode4of4(char32);
+                errorBuffer[errorBufferLength++] = encodeThirdToLastTail(char32);
+                errorBuffer[errorBufferLength++] = encodeSecondToLastTail(char32);
+                errorBuffer[errorBufferLength++] = encodeLastTail(char32);
                 return CoderResult.OVERFLOW;
             }
-            targetArray[targetIndex++] = encode2of4(char32);
+            targetArray[targetIndex++] = encodeThirdToLastTail(char32);
 
             if (targetIndex >= targetLimit) {
-                errorBuffer[errorBufferLength++] = encode3of4(char32);
-                errorBuffer[errorBufferLength++] = encode4of4(char32);
+                errorBuffer[errorBufferLength++] = encodeSecondToLastTail(char32);
+                errorBuffer[errorBufferLength++] = encodeLastTail(char32);
                 return CoderResult.OVERFLOW;
             }
-            targetArray[targetIndex++] = encode3of4(char32);
+            targetArray[targetIndex++] = encodeSecondToLastTail(char32);
 
             if (targetIndex >= targetLimit) {
-                errorBuffer[errorBufferLength++] = encode4of4(char32);
+                errorBuffer[errorBufferLength++] = encodeLastTail(char32);
                 return CoderResult.OVERFLOW;
             }
-            targetArray[targetIndex++] = encode4of4(char32);
+            targetArray[targetIndex++] = encodeLastTail(char32);
 
             /* return null for success */
             return null;
@@ -620,77 +633,65 @@ class CharsetUTF8 extends CharsetICU {
 
             /* the rest is routine -- encode four bytes, stopping on overflow */
 
-            target.put(targetIndex++, encode1of4(char32));
+            target.put(targetIndex++, encodeHeadOf4(char32));
 
             if (targetIndex >= targetLimit) {
-                errorBuffer[errorBufferLength++] = encode2of4(char32);
-                errorBuffer[errorBufferLength++] = encode3of4(char32);
-                errorBuffer[errorBufferLength++] = encode4of4(char32);
+                errorBuffer[errorBufferLength++] = encodeThirdToLastTail(char32);
+                errorBuffer[errorBufferLength++] = encodeSecondToLastTail(char32);
+                errorBuffer[errorBufferLength++] = encodeLastTail(char32);
                 return CoderResult.OVERFLOW;
             }
-            target.put(targetIndex++, encode2of4(char32));
+            target.put(targetIndex++, encodeThirdToLastTail(char32));
 
             if (targetIndex >= targetLimit) {
-                errorBuffer[errorBufferLength++] = encode3of4(char32);
-                errorBuffer[errorBufferLength++] = encode4of4(char32);
+                errorBuffer[errorBufferLength++] = encodeSecondToLastTail(char32);
+                errorBuffer[errorBufferLength++] = encodeLastTail(char32);
                 return CoderResult.OVERFLOW;
             }
-            target.put(targetIndex++, encode3of4(char32));
+            target.put(targetIndex++, encodeSecondToLastTail(char32));
 
             if (targetIndex >= targetLimit) {
-                errorBuffer[errorBufferLength++] = encode4of4(char32);
+                errorBuffer[errorBufferLength++] = encodeLastTail(char32);
                 return CoderResult.OVERFLOW;
             }
-            target.put(targetIndex++, encode4of4(char32));
+            target.put(targetIndex++, encodeLastTail(char32));
 
             /* return null for success */
             return null;
-        }
-
-        private final byte encode1of1(int char32) {
-            return (byte) char32;
-        }
-
-        private final byte encode1of2(int char32) {
-            return (byte) (0xc0 | (char32 >>> 6));
-        }
-
-        private final byte encode2of2(int char32) {
-            return (byte) (0x80 | (char32 & 0x3f));
-        }
-
-        private final byte encode1of3(int char32) {
-            return (byte) (0xe0 | ((char32 >>> 12)));
-        }
-
-        private final byte encode2of3(int char32) {
-            return (byte) (0x80 | ((char32 >>> 6) & 0x3f));
-        }
-
-        private final byte encode3of3(int char32) {
-            return (byte) (0x80 | ((char32 >>> 0) & 0x3f));
-        }
-
-        private final byte encode1of4(int char32) {
-            return (byte) (0xf0 | ((char32 >>> 18)));
-        }
-
-        private final byte encode2of4(int char32) {
-            return (byte) (0x80 | ((char32 >>> 12) & 0x3f));
-        }
-
-        private final byte encode3of4(int char32) {
-            return (byte) (0x80 | ((char32 >>> 6) & 0x3f));
-        }
-
-        private final byte encode4of4(int char32) {
-            return (byte) (0x80 | ((char32 >>> 0) & 0x3f));
         }
 
         private int sourceIndex;
 
         private int targetIndex;
 
+    }
+
+    private static final byte encodeHeadOf1(int char32) {
+        return (byte) char32;
+    }
+
+    private static final byte encodeHeadOf2(int char32) {
+        return (byte) (0xc0 | (char32 >>> 6));
+    }
+
+    private static final byte encodeHeadOf3(int char32) {
+        return (byte) (0xe0 | ((char32 >>> 12)));
+    }
+
+    private static final byte encodeHeadOf4(int char32) {
+        return (byte) (0xf0 | ((char32 >>> 18)));
+    }
+
+    private static final byte encodeThirdToLastTail(int char32) {
+        return (byte) (0x80 | ((char32 >>> 12) & 0x3f));
+    }
+
+    private static final byte encodeSecondToLastTail(int char32) {
+        return (byte) (0x80 | ((char32 >>> 6) & 0x3f));
+    }
+
+    private static final byte encodeLastTail(int char32) {
+        return (byte) (0x80 | (char32 & 0x3f));
     }
 
     /* single-code point definitions -------------------------------------------- */
