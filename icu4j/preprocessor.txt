@@ -77,6 +77,7 @@ src/com/ibm/icu/dev/test/util/TransliteratorUtilities.java
 src/com/ibm/icu/dev/test/util/UnicodeMap.java
 src/com/ibm/icu/dev/test/util/UnicodeProperty.java
 src/com/ibm/icu/dev/test/util/UtilityTest.java
+src/com/ibm/icu/dev/test/perf/NormalizerPerformanceTest.java
 
 ## tool sources
 src/com/ibm/icu/dev/tool/docs/ICUTaglet.java
