@@ -1,7 +1,7 @@
 //##header
 /**
  *******************************************************************************
- * Copyright (C) 2000-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1047,6 +1047,33 @@ public class TimeZoneRegression extends TestFmwk {
             time += 24*60*60*1000L; // increment 1 day
         }
 //#endif
+    }
+
+    /**
+     * Test setRawOffset works OK with system timezone
+     */
+    public void TestT5280() {
+        String[] tzids = TimeZone.getAvailableIDs();
+        for (int i = 0; i < tzids.length; i++) {
+            TimeZone tz = TimeZone.getTimeZone(tzids[i]);
+            // Increse offset for 30 minutes
+            int newRawOffset = tz.getRawOffset() + 30*60*1000;
+            try {
+                tz.setRawOffset(newRawOffset);
+            } catch (Exception e) {
+                errln("FAIL: setRawOffset throws an exception");
+            }
+            int offset = tz.getRawOffset();
+            if (offset != newRawOffset) {
+                errln("FAIL: Modified zone(" + tz.getID() + ") - getRawOffset returns " + offset + "/ Expected: " + newRawOffset);
+            }
+            // Make sure the offset is preserved in a clone
+            TimeZone tzClone = (TimeZone)tz.clone();
+            offset = tzClone.getRawOffset();
+            if (offset != newRawOffset) {
+                errln("FAIL: Cloned modified zone(" + tz.getID() + ") - getRawOffset returns " + offset + "/ Expected: " + newRawOffset);
+            }
+        }
     }
 }
 
