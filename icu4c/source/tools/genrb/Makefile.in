@@ -65,7 +65,7 @@ DEPS = $(OBJECTS:.o=.d)
 DERB_DEPS = $(DERB_OBJ:.o=.d)
 
 # build-icu4j  variables
-GENDTJAR_ICUHOME=$(CURR_FULL_DIR)/../../..
+GENDTJAR_ICUHOME=$(shell pwd)/../../..
 GENDTJAR_OPTS=--icu-root="$(GENDTJAR_ICUHOME)" --jar="$(GENDTJAR_JARHOME)" --icu4j-root="$(ICU4J_HOME)" --verbose
 GENDTJAR_TEMP=./temp/
 GENDTJAR=$(srcdir)/gendtjar.pl
@@ -73,7 +73,7 @@ GENDTJAR=$(srcdir)/gendtjar.pl
 -include Makefile.local
 
 ifeq (,$(ICU4J_HOME))
-ICU4J_HOME=$(CURR_FULL_DIR)/icu4j
+ICU4J_HOME=$(shell pwd)/icu4j
 endif
 
 
