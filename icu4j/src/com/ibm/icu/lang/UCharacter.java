@@ -5385,9 +5385,30 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
 //#if defined(FOUNDATION10) || defined(J2SE13)
 //##    public static final int codePointAt(String seq, int index) {
+//##        char c1 = seq.charAt(index++);
+//##        if (isHighSurrogate(c1)) {
+//##            if (index < seq.length()) {
+//##                char c2 = seq.charAt(index);
+//##                if (isLowSurrogate(c2)) {
+//##                    return toCodePoint(c1, c2);
+//##                }
+//##            }
+//##        }
+//##        return c1;
+//##    }
+//##    public static final int codePointAt(StringBuffer seq, int index) {
+//##        return codePointAt(seq.toString(), index);
+//##    }
 //#else
-    public static final int codePointAt(CharSequence seq, int index) {
+//#if defined(ECLIPSE_FRAGMENT)
+//##    public static final int codePointAt(String seq, int index) {
+//##        return codePointAt((CharSequence)seq, index);
+//##    }
+//##    public static final int codePointAt(StringBuffer seq, int index) {
+//##        return codePointAt((CharSequence)seq, index);
+//##    }
 //#endif
+    public static final int codePointAt(CharSequence seq, int index) {
         char c1 = seq.charAt(index++);
         if (isHighSurrogate(c1)) {
             if (index < seq.length()) {
@@ -5399,10 +5420,6 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
         return c1;
     }
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//##    public static final int codePointAt(StringBuffer seq, int index) {
-//##        return codePointAt(seq.toString(), index);
-//##    }
 //#endif
 
     /**
@@ -5464,9 +5481,30 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
 //#if defined(FOUNDATION10) || defined(J2SE13)
 //##    public static final int codePointBefore(String seq, int index) {
+//##        char c2 = seq.charAt(--index);
+//##        if (isLowSurrogate(c2)) {
+//##            if (index > 0) {
+//##                char c1 = seq.charAt(--index);
+//##                if (isHighSurrogate(c1)) {
+//##                    return toCodePoint(c1, c2);
+//##                }
+//##            }
+//##        }
+//##        return c2;
+//##    }
+//##    public static final int codePointBefore(StringBuffer seq, int index) {
+//##        return codePointBefore(seq.toString(), index);
+//##    }
 //#else
-    public static final int codePointBefore(CharSequence seq, int index) {
+//#if defined(ECLIPSE_FRAGMENT)
+//##    public static final int codePointBefore(String seq, int index) {
+//##        return codePointBefore((CharSequence)seq, index);
+//##    }
+//##    public static final int codePointBefore(StringBuffer seq, int index) {
+//##        return codePointBefore((CharSequence)seq, index);
+//##    }
 //#endif
+    public static final int codePointBefore(CharSequence seq, int index) {
         char c2 = seq.charAt(--index);
         if (isLowSurrogate(c2)) {
             if (index > 0) {
@@ -5478,10 +5516,6 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
         return c2;
     }
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//##    public static final int codePointBefore(StringBuffer seq, int index) {
-//##        return codePointBefore(seq.toString(), index);
-//##    }
 //#endif
 
     /**
@@ -5607,9 +5641,38 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
 //#if defined(FOUNDATION10) || defined(J2SE13)
 //##    public static int codePointCount(String text, int start, int limit) {
+//##        if (start < 0 || limit < start || limit > text.length()) {
+//##            throw new IndexOutOfBoundsException("start (" + start +
+//##                ") or limit (" + limit +
+//##                ") invalid or out of range 0, " + text.length());
+//##        }
+//##
+//##        int len = limit - start;
+//##        while (limit > start) {
+//##            char ch = text.charAt(--limit);
+//##            while (ch >= MIN_LOW_SURROGATE && ch <= MAX_LOW_SURROGATE && limit > start) {
+//##                ch = text.charAt(--limit);
+//##                if (ch >= MIN_HIGH_SURROGATE && ch <= MAX_HIGH_SURROGATE) {
+//##                    --len;
+//##                    break;
+//##                }
+//##            }
+//##        }
+//##        return len;
+//##    }
+//##    public static int codePointCount(StringBuffer text, int start, int limit) {
+//##        return codePointCount(text.toString(), start, limit);
+//##    }
 //#else
-    public static int codePointCount(CharSequence text, int start, int limit) {
+//#if defined(ECLIPSE_FRAGEMENT)
+//##    public static int codePointCount(String text, int start, int limit) {
+//##        return codePointCount((CharSequence)text, start, limit);
+//##    }
+//##    public static int codePointCount(StringBuffer text, int start, int limit) {
+//##        return codePointCount((CharSequence)text, start, limit);
+//##    }
 //#endif
+    public static int codePointCount(CharSequence text, int start, int limit) {
         if (start < 0 || limit < start || limit > text.length()) {
             throw new IndexOutOfBoundsException("start (" + start +
                 ") or limit (" + limit +
@@ -5629,6 +5692,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
         return len;
     }
+//#endif
 
     /**
      * Cover the JDK API, for convenience.  Count the number of code points in the range of text.
@@ -5669,9 +5733,53 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
 //#if defined(FOUNDATION10) || defined(J2SE13)
 //##    public static int offsetByCodePoints(String text, int index, int codePointOffset) {
+//##        if (index < 0 || index > text.length()) {
+//##            throw new IndexOutOfBoundsException("index ( " + index +
+//##                                                ") out of range 0, " + text.length());
+//##        }
+//##
+//##        if (codePointOffset < 0) {
+//##            while (++codePointOffset <= 0) {
+//##                char ch = text.charAt(--index);
+//##                while (ch >= MIN_LOW_SURROGATE && ch <= MAX_LOW_SURROGATE && index > 0) {
+//##                    ch = text.charAt(--index);
+//##                    if (ch < MIN_HIGH_SURROGATE || ch > MAX_HIGH_SURROGATE) {
+//##                        if (++codePointOffset > 0) {
+//##                            return index+1;
+//##                        }
+//##                    }
+//##                }
+//##            }
+//##        } else {
+//##            int limit = text.length();
+//##            while (--codePointOffset >= 0) {
+//##                char ch = text.charAt(index++);
+//##                while (ch >= MIN_HIGH_SURROGATE && ch <= MAX_HIGH_SURROGATE && index < limit) {
+//##                    ch = text.charAt(index++);
+//##                    if (ch < MIN_LOW_SURROGATE || ch > MAX_LOW_SURROGATE) {
+//##                        if (--codePointOffset < 0) {
+//##                            return index-1;
+//##                        }
+//##                    }
+//##                }
+//##            }
+//##        }
+//##
+//##        return index;
+//##    }
+//##    public static int offsetByCodePoints(StringBuffer text, int index, int codePointOffset) {
+//##        return offsetByCodePoints(text.toString(), index, codePointOffset);
+//##    }
 //#else
-    public static int offsetByCodePoints(CharSequence text, int index, int codePointOffset) {
+//#if defined(ECLIPSE_FRAGMENT)
+//##    public static int offsetByCodePoints(String text, int index, int codePointOffset) {
+//##        return offsetByCodePoints((CharSequence)text, index, codePointOffset);
+//##    }
+//##    public static int offsetByCodePoints(StringBuffer text, int index, int codePointOffset) {
+//##        return offsetByCodePoints((CharSequence)text, index, codePointOffset);
+//##    }
 //#endif
+    public static int offsetByCodePoints(CharSequence text, int index, int codePointOffset) {
         if (index < 0 || index > text.length()) {
             throw new IndexOutOfBoundsException("index ( " + index +
                                                 ") out of range 0, " + text.length());
@@ -5706,6 +5814,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
 
         return index;
     }
+//#endif
 
     /**
      * Cover the JDK API, for convenience.  Adjust the char index by a code point offset.
