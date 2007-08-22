@@ -1562,7 +1562,7 @@ _canonicalize(const char* localeID,
               UErrorCode* err) {
     int32_t j, len, fieldCount=0, scriptSize=0, variantSize=0, nameCapacity;
     char localeBuffer[ULOC_FULLNAME_CAPACITY];
-    const char* origLocaleID = localeID;
+    const char* origLocaleID;
     const char* keywordAssign = NULL;
     const char* separatorIndicator = NULL;
     const char* addKeyword = NULL;
@@ -1578,6 +1578,7 @@ _canonicalize(const char* localeID,
     if (localeID==NULL) {
         localeID=uloc_getDefault();
     }
+    origLocaleID=localeID;
 
     /* if we are doing a full canonicalization, then put results in
        localeBuffer, if necessary; otherwise send them to result. */
