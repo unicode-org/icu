@@ -179,7 +179,7 @@ void printIndent(UFILE *out, int32_t indent) {
 }
 
 void printHex(UFILE *out, const int8_t *what) {
-  u_fprintf(out, "%02X", (u_int8_t)*what);
+  u_fprintf(out, "%02X", (uint8_t)*what);
 }
 
 static UChar *quotedString(const UChar *string) {
