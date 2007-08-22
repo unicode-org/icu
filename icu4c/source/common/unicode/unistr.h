@@ -1468,7 +1468,10 @@ public:
    * If <TT>target</TT> is NULL, then the number of bytes required for
    * <TT>target</TT> is returned. It is assumed that the target is big enough
    * to fit all of the characters.
-   * @return the output string length, not including the terminating NUL
+   * @return the output string length, not including the terminating NUL.
+   *        The terminating NUL may be larger than one byte for the encodings of
+   *        some codepages, like UTF-32, where the terminating NUL is 4 bytes.
+   *        The terminating NUL is written when there is room in the target buffer.
    * @stable ICU 2.0
    */
   inline int32_t extract(int32_t start,
@@ -1503,6 +1506,9 @@ public:
    * If <TT>target</TT> is NULL, then the number of bytes required for
    * <TT>target</TT> is returned.
    * @return the output string length, not including the terminating NUL
+   *        The terminating NUL may be larger than one byte for the encodings of
+   *        some codepages, like UTF-32, where the terminating NUL is 4 bytes.
+   *        The terminating NUL is written when there is room in the target buffer.
    * @stable ICU 2.0
    */
   int32_t extract(int32_t start,
@@ -1523,9 +1529,12 @@ public:
    * @param cnv the converter object to be used (ucnv_resetFromUnicode() will be called),
    *        or NULL for the default converter
    * @param errorCode normal ICU error code
-   * @return the length of the output string, not counting the terminating NUL;
-   *         if the length is greater than destCapacity, then the string will not fit
-   *         and a buffer of the indicated length would need to be passed in
+   * @return the length of the output string, not counting the terminating NUL.
+   *        The terminating NUL may be larger than one byte for the encodings of
+   *        some codepages, like UTF-32, where the terminating NUL is 4 bytes.
+   *        The terminating NUL is written when there is room in the dest buffer.
+   *        If the length is greater than destCapacity, then the string will not fit
+   *        and a buffer of the indicated length would need to be passed in.
    * @stable ICU 2.0
    */
   int32_t extract(char *dest, int32_t destCapacity,

@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2006, International Business Machines
+ *   Copyright (C) 2003-2007, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -129,7 +129,7 @@ CLEANUP:
         free(b3);
     }
 
-    return u_terminateChars(dest, destCapacity, reqLength, status);
+    return u_terminateChars(dest, destCapacity, reqLength, 1, status);
 }
 
 /* sorted array for binary search*/
@@ -273,7 +273,7 @@ CLEANUP:
         free(s);
     }
     
-    return u_terminateChars(dest, destCapacity, reqLen, status);
+    return u_terminateChars(dest, destCapacity, reqLen, 1, status);
 }
 
 int32_t

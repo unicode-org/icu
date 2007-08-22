@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2004, International Business Machines
+*   Copyright (C) 1998-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -1443,15 +1443,16 @@ u_growBufferFromStatic(void *context,
  * NUL-terminate a string no matter what its type.
  * Set warning and error codes accordingly.
  */
-#define __TERMINATE_STRING(dest, destCapacity, length, pErrorCode)      \
+#define __TERMINATE_STRING(dest, destCapacity, length, sizeOfNull, pErrorCode) \
     if(pErrorCode!=NULL && U_SUCCESS(*pErrorCode)) {                    \
         /* not a public function, so no complete argument checking */   \
-                                                                        \
         if(length<0) {                                                  \
             /* assume that the caller handles this */                   \
-        } else if(length<destCapacity) {                                \
+        } else if(sizeOfNull > 0 && (length+sizeOfNull)<=destCapacity) {\
             /* NUL-terminate the string, the NUL fits */                \
-            dest[length]=0;                                             \
+            do {                                                        \
+                dest[length+(--sizeOfNull)]=0;                          \
+            } while (sizeOfNull > 0);                                   \
             /* unset the not-terminated warning but leave all others */ \
             if(*pErrorCode==U_STRING_NOT_TERMINATED_WARNING) {          \
                 *pErrorCode=U_ZERO_ERROR;                               \
@@ -1467,24 +1468,27 @@ u_growBufferFromStatic(void *context,
 
 U_CAPI int32_t U_EXPORT2
 u_terminateUChars(UChar *dest, int32_t destCapacity, int32_t length, UErrorCode *pErrorCode) {
-    __TERMINATE_STRING(dest, destCapacity, length, pErrorCode);
+    int32_t sizeOfNull = 1;
+    __TERMINATE_STRING(dest, destCapacity, length, sizeOfNull, pErrorCode);
     return length;
 }
 
 U_CAPI int32_t U_EXPORT2
-u_terminateChars(char *dest, int32_t destCapacity, int32_t length, UErrorCode *pErrorCode) {
-    __TERMINATE_STRING(dest, destCapacity, length, pErrorCode);
+u_terminateChars(char *dest, int32_t destCapacity, int32_t length, int32_t sizeOfNull, UErrorCode *pErrorCode) {
+    __TERMINATE_STRING(dest, destCapacity, length, sizeOfNull, pErrorCode);
     return length;
 }
 
 U_CAPI int32_t U_EXPORT2
 u_terminateUChar32s(UChar32 *dest, int32_t destCapacity, int32_t length, UErrorCode *pErrorCode) {
-    __TERMINATE_STRING(dest, destCapacity, length, pErrorCode);
+    int32_t sizeOfNull = 1;
+    __TERMINATE_STRING(dest, destCapacity, length, sizeOfNull, pErrorCode);
     return length;
 }
 
 U_CAPI int32_t U_EXPORT2
 u_terminateWChars(wchar_t *dest, int32_t destCapacity, int32_t length, UErrorCode *pErrorCode) {
-    __TERMINATE_STRING(dest, destCapacity, length, pErrorCode);
+    int32_t sizeOfNull = 1;
+    __TERMINATE_STRING(dest, destCapacity, length, sizeOfNull, pErrorCode);
     return length;
 }

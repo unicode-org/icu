@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2006, International Business Machines
+*   Copyright (C) 1999-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -123,6 +123,8 @@ UnicodeString::extract(int32_t start,
     UConverter *converter;
     UErrorCode status = U_ZERO_ERROR;
 
+    // We don't NULL terminate here because we might need 1 to 4 bytes for the termination.
+    /*
     // just write the NUL if the string length is 0
     if(length == 0) {
         if(dstSize >= 0x80000000) {  
@@ -131,7 +133,7 @@ UnicodeString::extract(int32_t start,
             dstSize=0x7fffffff;
         }
         return u_terminateChars(target, dstSize, 0, &status);
-    }
+    }*/
 
     // if the codepage is the default, use our cache
     // if it is an empty string, then use the "invariant character" conversion
@@ -151,7 +153,7 @@ UnicodeString::extract(int32_t start,
             destLength = (int32_t)dstSize;
         }
         u_UCharsToChars(getArrayStart() + start, target, destLength);
-        return u_terminateChars(target, (int32_t)dstSize, length, &status);
+        return u_terminateChars(target, (int32_t)dstSize, length, 1, &status);
     } else {
         converter = ucnv_open(codepage, &status);
     }
@@ -184,7 +186,7 @@ UnicodeString::extract(char *dest, int32_t destCapacity,
 
     // nothing to do?
     if(fLength<=0) {
-        return u_terminateChars(dest, destCapacity, 0, &errorCode);
+        return u_terminateChars(dest, destCapacity, 0, ucnv_getMinCharSize(cnv), &errorCode);
     }
 
     // get the converter
@@ -256,7 +258,7 @@ UnicodeString::doExtract(int32_t start, int32_t length,
         } while(errorCode==U_BUFFER_OVERFLOW_ERROR);
     }
 
-    return u_terminateChars(originalDest, destCapacity, length, &errorCode);
+    return u_terminateChars(originalDest, destCapacity, length, ucnv_getMinCharSize(cnv), &errorCode);
 }
 
 void

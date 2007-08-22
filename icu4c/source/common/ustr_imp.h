@@ -190,9 +190,16 @@ u_terminateUChars(UChar *dest, int32_t destCapacity, int32_t length, UErrorCode 
 /**
  * NUL-terminate a char * string if possible.
  * Same as u_terminateUChars() but for a different string type.
+ * @param dest The buffer to NULL terminate.
+ * @param destCapacity The size in bytes for the dest buffer.
+ * @param length The number of bytes used in dest.
+ * @param sizeOfNULL When a non-ASCII compatible encoding is used, like UTF-32,
+ *      UTF-16 or some DBCS encoding, this specifies the number of bytes used
+ *      by the NULL termination. This should be 1 for the invariant codepage.
+ * @return length
  */
 U_CAPI int32_t U_EXPORT2
-u_terminateChars(char *dest, int32_t destCapacity, int32_t length, UErrorCode *pErrorCode);
+u_terminateChars(char *dest, int32_t destCapacity, int32_t length, int32_t sizeOfNULL, UErrorCode *pErrorCode);
 
 /**
  * NUL-terminate a UChar32 * string if possible.
