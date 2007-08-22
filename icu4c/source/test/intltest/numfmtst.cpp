@@ -84,6 +84,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
         CASE(32,TestHost);
         CASE(33,TestHostClone);
         CASE(34,TestCurrencyFormat);
+        CASE(35,TestRounding);
         default: name = ""; break;
     }
 }
@@ -2336,6 +2337,75 @@ void NumberFormatTest::TestCurrencyFormat()
     if (MeasureFormat::createCurrencyFormat(status) != NULL) {
         errln("createCurrencyFormat should have returned NULL.");
     }
+}
+
+/* Port of ICU4J rounding test. */
+void NumberFormatTest::TestRounding() {
+	UErrorCode status = U_ZERO_ERROR;
+	DecimalFormat *df = (DecimalFormat*)NumberFormat::createCurrencyInstance(Locale::getEnglish(), status);
+	
+	if (U_FAILURE(status)) {
+		errln("Unable to create decimal formatter.");
+	}
+	
+	int roundingIncrements[]={1, 2, 5, 20, 50, 100};
+	int testValues[]={0, 300};
+	
+	for (int j=0; j<2; j++) {
+		for (int mode=DecimalFormat::kRoundUp;mode<DecimalFormat::kRoundHalfEven;mode++) {
+			df->setRoundingMode((DecimalFormat::ERoundingMode)mode);
+			for (int increment=0; increment<6; increment++) {
+				double base=testValues[j];
+				double rInc=roundingIncrements[increment];
+				checkRounding(df, base, 20, rInc);
+				rInc=1.000000000/rInc;
+				checkRounding(df, base, 20, rInc);
+			}
+		}
+	}
+	
+}
+
+void NumberFormatTest::checkRounding(DecimalFormat* df, double base, int iterations, double increment) {
+	df->setRoundingIncrement(increment);
+	double lastParsed=(int)0x80000000; //Interget.MIN_VALUE
+	for (int i=-iterations; i<=iterations;i++) {
+		double iValue=base+(increment*(i*0.1));
+		double smallIncrement=0.00000001;
+		if (iValue!=0) {
+			smallIncrement*=iValue;
+		}
+		//we not only test the value, but some values in a small range around it
+		lastParsed=checkRound(df, iValue-smallIncrement, lastParsed);
+		lastParsed=checkRound(df, iValue, lastParsed);
+		lastParsed=checkRound(df, iValue+smallIncrement, lastParsed);
+	}
+}
+    
+double NumberFormatTest::checkRound(DecimalFormat* df, double iValue, double lastParsed) {
+	UErrorCode status=U_ZERO_ERROR;
+	UnicodeString formattedDecimal;
+	double parsed;
+	Formattable result;
+	df->format(iValue, formattedDecimal, status);
+	
+	if (U_FAILURE(status)) {
+		errln("Error formatting number.");
+	}
+	
+	df->parse(formattedDecimal, result, status);
+	
+	if (U_FAILURE(status)) {
+		errln("Error parsing number.");
+	}
+	
+	parsed=result.getDouble();
+	
+	if (lastParsed>parsed) {
+		errln("Rounding wrong direction! %d > %d", lastParsed, parsed);
+	}
+	
+	return lastParsed;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
