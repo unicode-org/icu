@@ -1523,7 +1523,7 @@ FormatParser::getQuoteLiteral(UnicodeString& quote, int32_t *itemIndex) {
     }
     while ( i < itemNumber ) {
         if ( items[i].charAt(0)==SINGLE_QUOTE ) {
-            if ( items[i+1].charAt(0)==SINGLE_QUOTE ) {
+            if ( (i+1<itemNumber) && (items[i+1].charAt(0)==SINGLE_QUOTE)) {
                 // two single quotes e.g. 'o''clock'
                 quote += items[++i];
                 continue;
