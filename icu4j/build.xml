@@ -187,13 +187,13 @@
       </or>
     </condition>
 
-    <!-- JVM assertion argument for running test cases -->
-    <condition property="jvm.assertion.arg" value="">
+    <!-- JVM arguments for running test cases -->
+    <condition property="test.jvm.args" value="-Xms96m -Xmx128m">
         <isset property="before.java14" />
     </condition>
-    <condition property="jvm.assertion.arg" value="-ea">
+    <condition property="test.jvm.args" value="-ea -Xms96m -Xmx128m">
       <not>
-        <isset property="jvm.assertion.arg" />
+        <isset property="test.jvm.args" />
       </not>
     </condition>
 
@@ -713,10 +713,7 @@
   </target>
   <target name="check" depends="tests, jar, deleteCore" description="run standard icu4j test suite">
     <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
-      <!-- enable assertion checks -->
-      <jvmarg value="${jvm.assertion.arg}" />
-      <jvmarg value="-Xms96m" />
-      <jvmarg value="-Xmx128m" />
+      <jvmarg line="${test.jvm.args}"/>
       <arg value="-n" />
       <classpath>
         <pathelement path="${java.class.path}/" />
@@ -730,11 +727,7 @@
 
   <target name="exhaustiveCheck" depends="tests, jar, deleteCore" description="run standard icu4j test suite in exhaustive mode">
     <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
-      <!-- enable assertion checks -->
-      <jvmarg value="${jvm.assertion.arg}" />
-      <jvmarg value="-Xms96m" />
-      <jvmarg value="-Xmx128m" />
-      <!-- set the max heap size to 128m -->
+      <jvmarg line="${test.jvm.args}"/>
       <arg value="-n" />
       <arg value="-e10" />
       <classpath>
@@ -1443,10 +1436,7 @@
   <target name="defaultPackageCheck" depends="tests, defaultPackage" description="Run Tests for loading resources in the default package">
     <!--run the tests -->
     <java classname="TestDefaultPackageLoading" fork="yes" failonerror="true">
-      <!-- enable assertion checks -->
-      <jvmarg value="${jvm.assertion.arg}" />
-      <jvmarg value="-Xms96m" />
-      <jvmarg value="-Xmx128m" />
+      <jvmarg line="${test.jvm.args}"/>
       <arg value="-n" />
       <classpath>
         <pathelement path="${java.class.path}/" />
@@ -1974,9 +1964,7 @@
 <!-- Test suite launcher targets -->
   <target name="runCheck" depends="tests">
     <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
-      <jvmarg value="${jvm.assertion.arg}" />
-      <jvmarg value="-Xms96m" />
-      <jvmarg value="-Xmx128m" />
+      <jvmarg line="${test.jvm.args}"/>
       <arg value="-n" />
       <classpath>
         <pathelement path="${java.class.path}/" />
@@ -1990,8 +1978,7 @@
 
   <target name="eclipseRunCheck" depends="eclipseTests">
     <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
-      <jvmarg value="-Xms96m" />
-      <jvmarg value="-Xmx128m" />
+      <jvmarg line="${test.jvm.args}"/>
       <arg value="-n" />
       <classpath>
         <pathelement path="${java.class.path}/" />
