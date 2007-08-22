@@ -1,6 +1,7 @@
-# Copyright (c) 2001-2004 International Business Machines 
+# Copyright (c) 2001-2007 International Business Machines 
 # Corporation and others. All Rights Reserved.
 bidi.h
+basictz.h
 brkiter.h
 calendar.h
 caniter.h
@@ -15,6 +16,8 @@ dbbi.h
 dcfmtsym.h
 decimfmt.h
 dtfmtsym.h
+dtptngen.h
+dtrule.h
 fieldpos.h
 fmtable.h
 format.h
@@ -29,6 +32,7 @@ parsepos.h
 rbbi.h
 rbnf.h
 rbt.h
+rbtz.h
 regex.h
 rep.h
 resbund.h
@@ -42,6 +46,8 @@ stsearch.h
 tblcoll.h
 timezone.h
 translit.h
+tzrule.h
+tztrans.h
 uchriter.h
 unicode.h
 unifilt.h
@@ -54,6 +60,7 @@ unistr.h
 unitohex.h
 uobject.h
 usetiter.h
+vtzone.h
 #added
 loengine.h
 #the following are C++ also
