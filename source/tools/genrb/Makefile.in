@@ -13,14 +13,11 @@
 #        Path to your icu4j directory. Should contain build.xml
 #        If not set, will create a 'icu4j' directory in source/tools/genrb/icu4j
 #
-# 2.  The next two variables can be set by uncommenting and copying the following two lines
-#     to your Makefile.local. ICU4J_VERSION GENDTJAR_JARHOME 
+# 2.  The next variable can be set by uncommenting and copying the following line to your Makefile.local.GENDTJAR_JARHOME 
 #
-## ICU4J_VERSION=$(shell echo $(VERSION) | cut -d. -f-2 | tr -d .)
 ## GENDTJAR_JARHOME:=$(shell dirname `which jar`)
-## (uncomment the above 2 lines and copy to Makefile.local)
+## (uncomment the above line and copy to Makefile.local)
 #
-# ICU4J_VERSION is the 2 digit version number, such as 36, 38, 40.  
 # GENDTJAR_JARHOME is the directory containing the 'jar' binary, such as /usr/bin
 #
 #
@@ -68,11 +65,8 @@ DEPS = $(OBJECTS:.o=.d)
 DERB_DEPS = $(DERB_OBJ:.o=.d)
 
 # build-icu4j  variables
-ifneq (,$(JAVA_HOME))
-GENDTJAR_JARHOME=$(JAVA_HOME)/bin
-endif
 GENDTJAR_ICUHOME=$(CURR_FULL_DIR)/../../..
-GENDTJAR_OPTS=--icu-root="$(GENDTJAR_ICUHOME)" --jar="$(GENDTJAR_JARHOME)" --icu4j-root="$(ICU4J_HOME)" --version="$(ICU4J_VERSION)" --verbose
+GENDTJAR_OPTS=--icu-root="$(GENDTJAR_ICUHOME)" --jar="$(GENDTJAR_JARHOME)" --icu4j-root="$(ICU4J_HOME)" --verbose
 GENDTJAR_TEMP=./temp/
 GENDTJAR=$(srcdir)/gendtjar.pl
 
@@ -142,10 +136,6 @@ $(ICU4J_HOME)/build.xml:
 
 build-icu4j:	$(GENDTJAR) $(ICU4J_HOME)/build.xml $(GENDTJAR_JARHOME)/jar
 	# clean up old temp files
-ifeq (,$(ICU4J_VERSION))
-	@echo ERROR: ICU4J_VERSION is not set. See Makefile.in.
-	@exit 1
-endif
 	-$(RMV) $(GENDTJAR_TEMP)
 	perl $(GENDTJAR) $(GENDTJAR_OPTS)
 	@echo Finished building to $(ICU4J_HOME)
