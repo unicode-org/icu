@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ICU Test Fragment
+Bundle-SymbolicName: com.ibm.icu.tests
+Bundle-Version: 1.0.0
+Bundle-Vendor: IBM
+Fragment-Host: com.ibm.icu;bundle-version="[3.8.0,3.9.0)"
+Bundle-Localization: plugin
+Bundle-Copyright: @COPYRIGHT@
+Require-Bundle: org.junit
+Bundle-ClassPath: .,icu4jtests.jar

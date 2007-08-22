@@ -11,8 +11,8 @@
 <project name="ICU4J" default="core" basedir=".">
 
   <!-- ### Begin Clover 1.2 setup ### -->
-  <typedef resource="clovertypes" />
-  <taskdef resource="clovertasks" />
+  <typedef resource="clovertypes" onerror="ignore" />
+  <taskdef resource="clovertasks" onerror="ignore" />
 
   <target name="with.clover">
     <mkdir dir="tmp/" />
@@ -44,16 +44,36 @@
       <package name="com.ibm.icu.lang" />
       <package name="com.ibm.icu.math" />
       <package name="com.ibm.icu.util" />
+      <package name="com.ibm.icu.charset" />
     </clover-log>
   </target>
 
   <!-- ### End Clover 1.2 setup ### -->
 
-  <target name="init"
-          depends="initBase,initSrc"
-          description="Initialized ICU4J build environment" />
+  <target name="checkAntVersion">
+    <condition property="supported.ant.version">
+      <or>
+        <contains string="${ant.version}" substring="1.6." />
+        <contains string="${ant.version}" substring="1.7." />
+        <contains string="${ant.version}" substring="1.8." /> <!-- just in case -->
+      </or>
+    </condition>
+    <antcall target="warnAntVersion" />
+  </target>
 
-  <target name="initBase" unless="initBase.done">
+  <target name="warnAntVersion" unless="supported.ant.version">
+    <echo message="####################### WARNING #######################" />
+    <echo message="The version of ant used by the current configuration" />
+    <echo message="may not work well with this build script file.  Please" />
+    <echo message="use ant 1.6 or later version." />
+    <echo message="#######################################################" />
+  </target>
+
+  <target name="init" depends="initBase,initSrc"/>
+
+  <target name="initBase"
+          depends="checkAntVersion"
+          description="Initialized ICU4J build environment">
     <tstamp />
     <property name="src.dir" value="src" />
     <property name="build.dir" value="classes" />
@@ -63,9 +83,9 @@
     <property name="jar.file" value="icu4j.jar" />
     <property name="charsets.jar.file" value="icu4j-charsets.jar" />
     <property name="jarSrc.file" value="icu4jsrc.jar" />
-    <property name="zipCoreSrc.file" value="icu4jcsrc.zip" />
     <property name="zipTestSrc.file" value="icu4jtsrc.zip" />
     <property name="jdk.wrapper.jar.file" value="icu4jwrapper.jar" />
+    <property name="fragment.jar.file" value="icu4jfragment.jar" />
     <property name="eclipse.dir" value="${src.dir}/com/ibm/icu/dev/eclipse" />
     <property name="eclipse.projects.dir" value="eclipseProjects" />
     <property name="wrapper.build.dir" value="classes.wrapper" />
@@ -112,7 +132,6 @@
     <property name="richeditdoc.params" value="-breakiterator -use -tagletpath ./classes -taglet com.ibm.icu.dev.tool.docs.ICUTaglet -group 'Rich Text Editing' 'com.ibm.richtext*'" />
 
     <mkdir dir="${build.dir}" />
-    <mkdir dir="${wrapper.build.dir}" />
 
     <echo message="java home: ${java.home}" />
     <echo message="java version: ${java.version}" />
@@ -125,24 +144,33 @@
  
     <!-- JRE lib version used for building ICU4J -->
     <condition property="target.rt.version" value="J2SE13">
-      <equals arg1="${ant.java.version}" arg2="1.3" />
+      <contains string="${java.version}" substring="1.3." />
     </condition>
     <condition property="target.rt.version" value="J2SE14">
-      <equals arg1="${ant.java.version}" arg2="1.4" />
+      <contains string="${java.version}" substring="1.4." />
     </condition>
     <condition property="target.rt.version" value="J2SE15">
-      <equals arg1="${ant.java.version}" arg2="1.5" />
+      <contains string="${java.version}" substring="1.5." />
     </condition>
     <condition property="target.rt.version" value="JAVASE6">
-      <equals arg1="${ant.java.version}" arg2="1.6" />
+      <contains string="${java.version}" substring="1.6." />
     </condition>
 
+    <fail message="Failed to detect Java runtime library version used for building ICU4J"
+          unless="target.rt.version" />
     <echo message="target runtime environment: ${target.rt.version}" />
 
-    <condition property="default.java.env">
+    <condition property="default.java.build.target">
       <equals arg1="${target.rt.version}" arg2="${default.target.rt.version}" />
     </condition>
-    <antcall target="displayBuildEnvWarning" />
+
+    <!-- Specification title in manifest file -->
+    <condition property="manifest.specification.title" value="ICU4J Compatible Build for ${target.rt.version}">
+      <not>
+        <isset property="default.java.build.target" />
+      </not>
+    </condition>
+    <property name="manifest.specification.title" value="ICU4J" />
 
     <condition property="before.java14">
       <or>
@@ -159,6 +187,7 @@
       </or>
     </condition>
 
+    <!-- JVM assertion argument for running test cases -->
     <condition property="jvm.assertion.arg" value="">
         <isset property="before.java14" />
     </condition>
@@ -186,11 +215,10 @@
       <format property="date.time" pattern="yyyy-MM-dd 'at' hh:mm:ss z" locale="en,US" />
     </tstamp>
 
-    <property name="initBase.done" value="true" />
     <echo message="Initialized at ${date.time}" />
   </target>
 
-  <target name="displayBuildEnvWarning" unless="default.java.env">
+  <target name="displayBuildEnvWarning" unless="default.java.build.target">
     <echo message="####################### WARNING #######################" />
     <echo message="The JDK version used by the current build environment" />
     <echo message="does not match the reference JDK version for this" />
@@ -202,7 +230,7 @@
   <target name="initSrc"
           depends="buildMangle"
           description="Run the preprocessor tool to modify Java sources for the Java runtime lib currently used.">
-    <echo message="Running source code preprocessor for environment: ${target.rt.version}"/>
+    <antcall target="displayBuildEnvWarning" />
     <!-- Build CodeMangler -->
     <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}">
       <include name="com/ibm/icu/dev/tool/docs/CodeMangler.java" />
@@ -230,6 +258,7 @@
   </target>
 
   <target name="doMangle">
+    <echo message="Running source code preprocessor for [${target.defs}]"/>
     <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true">
       <arg value="-d${target.defs}" />
       <arg value="${input.file}" />
@@ -239,7 +268,7 @@
   <!-- build everything but dist-related stuff -->
   <target name="all" depends="core,tests,tools,richedit,demos,jar,docs" description="build all primary targets" />
 
-  <target name="resources" depends="init, icudata, coreData, testdata" description="builds all the resources" />
+  <target name="resources" depends="icudata,coreData,durationdata,testdata" description="builds all the resources" />
 
   <target name="icudata" depends="initBase" if="icu4j.resources">
     <!-- use this target to force resources to be rebuilt -->
@@ -343,7 +372,7 @@
     </javac>
   </target>
 
-  <target name="build_indexgenerator" depends="init">
+  <target name="build_indexgenerator" depends="initBase">
     <javac  srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
@@ -406,13 +435,13 @@
               source="1.4" />
   </target>
 
-  <target name="coreData" depends="init">
+  <target name="coreData" depends="initBase">
     <copy todir="${build.dir}/com/ibm/icu/impl/data">
       <fileset dir="${src.dir}/com/ibm/icu/impl/data" includes="*.icu,*.spp,*.brk" excludes="Transliterator_Han_Latin_*.txt" />
     </copy>
   </target>
 
-  <target name="testdata" depends="init">
+  <target name="testdata" depends="initBase">
     <copy file="${src.dir}/com/ibm/icu/dev/data/rbbi/english.dict" todir="${build.dir}/com/ibm/icu/dev/data/rbbi" />
     <copy file="${src.dir}/com/ibm/icu/dev/test/rbbi/rbbitst.txt" todir="${build.dir}/com/ibm/icu/dev/test/rbbi" />
     <copy file="${src.dir}/com/ibm/icu/dev/test/charsetdet/CharsetDetectionTests.xml" todir="${build.dir}/com/ibm/icu/dev/test/charsetdet" />
@@ -470,7 +499,9 @@
   <!-- Creates the 3 release jar archives for distribution -->
   <target name="jarRelease" depends="jar,jarSrc,jarDocs" />
 
-  <target name="jar" depends="core,indices,charsetsJar" description="build 'icu4j.jar' jar file">
+  <target name="jar"
+          depends="core,indices,charsetsJar"
+          description="build 'icu4j.jar' jar file">
     <jar jarfile="${jar.file}" compress="true">
       <fileset dir="${basedir}" includes="license.html, unicode-license.txt" />
       <fileset dir="${build.dir}" includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*" excludes="META-INF/services/**/*,com/ibm/icu/charset/**/*,${icu4j.data.path}/*.cnv,${icu4j.data.path}/cnvalias.icu" />
@@ -478,11 +509,11 @@
       <manifest>
         <attribute name="Built-By" value="${corp}" />
         <section name="common">
-          <attribute name="Specification-Title" value="ICU4J" />
-          <attribute name="Specification-Version" value="${icu4j.version.string}" />
+          <attribute name="Specification-Title" value="${manifest.specification.title}" />
+          <attribute name="Specification-Version" value="${icu4j.spec.version.string}" />
           <attribute name="Specification-Vendor" value="ICU" />
           <attribute name="Implementation-Title" value=" ICU for Java" />
-          <attribute name="Implementation-Version" value="${icu4j.version.string}" />
+          <attribute name="Implementation-Version" value="${icu4j.impl.version.string}" />
           <attribute name="Implementation-Vendor" value="${corp}" />
           <attribute name="Implementation-Vendor-Id" value="com.ibm" />
           <attribute name="Copyright-Info" value="${copyright}" />
@@ -492,7 +523,10 @@
     </jar>
   </target>
 
-  <target name="charsetsJar" depends="core,indices" description="build  'icu4j-charstes.jar' jar file">
+  <target name="charsetsJar"
+          depends="core,indices"
+          unless="before.java14"
+          description="build  'icu4j-charstes.jar' jar file">
     <echo message="${icu4j.data.path}/cnvalias.icu"/>
     <jar jarfile="${charsets.jar.file}" compress="true">
       <fileset dir="${basedir}" includes="license.html, unicode-license.txt" />
@@ -502,10 +536,10 @@
         <attribute name="Built-By" value="${corp}" />
         <section name="common">
           <attribute name="Specification-Title" value="ICU4J Charsets" />
-          <attribute name="Specification-Version" value="${icu4j.version.string}" />
+          <attribute name="Specification-Version" value="${icu4j.spec.version.string}" />
           <attribute name="Specification-Vendor" value="ICU" />
           <attribute name="Implementation-Title" value=" ICU for Java Charsets" />
-          <attribute name="Implementation-Version" value="${icu4j.version.string}" />
+          <attribute name="Implementation-Version" value="${icu4j.impl.version.string}" />
           <attribute name="Implementation-Vendor" value="${corp}" />
           <attribute name="Implementation-Vendor-Id" value="com.ibm" />
           <attribute name="Copyright-Info" value="${copyright}" />
@@ -523,10 +557,10 @@
         <attribute name="Built-By" value="${corp}" />
         <section name="common">
           <attribute name="Specification-Title" value="ICU4J Tests" />
-          <attribute name="Specification-Version" value="${icu4j.version.string}" />
+          <attribute name="Specification-Version" value="${icu4j.spec.version.string}" />
           <attribute name="Specification-Vendor" value="ICU" />
           <attribute name="Implementation-Title" value=" ICU for Java Tests" />
-          <attribute name="Implementation-Version" value="${icu4j.version.string}" />
+          <attribute name="Implementation-Version" value="${icu4j.impl.version.string}" />
           <attribute name="Implementation-Vendor" value="${corp}" />
           <attribute name="Implementation-Vendor-Id" value="com.ibm" />
           <attribute name="Copyright-Info" value="${copyright}" />
@@ -536,7 +570,7 @@
     </jar>
   </target>
 
-  <target name="jarSrc" depends="initBase,normSrc" description="build source 'icu4jsrc.jar' jar file">
+  <target name="jarSrc" depends="init,normSrc" description="build source 'icu4jsrc.jar' jar file">
     <!--Create a jar archive of just the source for distribution.  The
         jar file will be created in the directory above the root ICU4J
         directory. The exclude pattern ${src.dir}/com/ibm/icu/dev/data/unicode/UnicodeData-*.txt
@@ -563,11 +597,11 @@
       <manifest>
         <attribute name="Built-By" value="${corp}" />
         <section name="common">
-          <attribute name="Specification-Title" value="ICU4J Source Files" />
-          <attribute name="Specification-Version" value="${icu4j.version.string}" />
+          <attribute name="Specification-Title" value="ICU4J Sources" />
+          <attribute name="Specification-Version" value="${icu4j.spec.version.string}" />
           <attribute name="Specification-Vendor" value="ICU" />
-          <attribute name="Implementation-Title" value=" ICU for Java" />
-          <attribute name="Implementation-Version" value="${icu4j.version.string}" />
+          <attribute name="Implementation-Title" value=" ICU for Java source files" />
+          <attribute name="Implementation-Version" value="${icu4j.impl.version.string}" />
           <attribute name="Implementation-Vendor" value="${corp}" />
           <attribute name="Implementation-Vendor-Id" value="com.ibm" />
           <attribute name="Copyright-Info" value="${copyright}" />
@@ -582,11 +616,11 @@
       <manifest>
         <attribute name="Built-By" value="${corp}" />
         <section name="common">
-          <attribute name="Specification-Title" value="ICU4J Source Files" />
-          <attribute name="Specification-Version" value="${icu4j.version.string}" />
+          <attribute name="Specification-Title" value="ICU4J Documents" />
+          <attribute name="Specification-Version" value="${icu4j.spec.version.string}" />
           <attribute name="Specification-Vendor" value="ICU" />
-          <attribute name="Implementation-Title" value=" ICU for Java" />
-          <attribute name="Implementation-Version" value="${icu4j.version.string}" />
+          <attribute name="Implementation-Title" value=" ICU for Java documents" />
+          <attribute name="Implementation-Version" value="${icu4j.impl.version.string}" />
           <attribute name="Implementation-Vendor" value="${corp}" />
           <attribute name="Implementation-Vendor-Id" value="com.ibm" />
           <attribute name="Copyright-Info" value="${copyright}" />
@@ -667,7 +701,7 @@
     <copy file="license.html" todir="${richedit.dir}" />
     <zip zipfile="${richedit.zip.file}" basedir="${richedit.dir}" includes="doc/**/*,richedit.jar,license.html" />
   </target>
-  <target name="deleteCore" depends="init">
+  <target name="deleteCore" depends="initBase">
     <delete failonerror="no">
       <fileset dir="${build.dir}/com/ibm/icu/text" />
       <fileset dir="${build.dir}/com/ibm/icu/impl" />
@@ -772,7 +806,7 @@
   <target name="gatherapi" depends="tools" unless="before.java14" description="run API database generator tool">
     <javadoc classpath="${build.dir}" sourcepath="${src.dir}" packagenames="com.ibm.icu.lang,com.ibm.icu.math,com.ibm.icu.text,com.ibm.icu.util" source="1.4">
       <doclet name="com.ibm.icu.dev.tool.docs.GatherAPIData" path="${build.dir}">
-        <param name="-name" value="ICU4J ${icu4j.version.string}" />
+        <param name="-name" value="ICU4J ${icu4j.spec.version.string}" />
         <param name="-output" value="${api.dir}/icu4j${icu4j.version.number}.api" />
         <param name="-internal" />
         <param name="-gzip" />
@@ -783,7 +817,7 @@
   <target name="gatherapi.with.version" depends="tools" unless="before.java14" description="run API database generator tool">
     <javadoc classpath="${build.dir}" sourcepath="${src.dir}" packagenames="com.ibm.icu.lang,com.ibm.icu.math,com.ibm.icu.text,com.ibm.icu.util" source="1.4">
       <doclet name="com.ibm.icu.dev.tool.docs.GatherAPIData" path="${build.dir}">
-        <param name="-name" value="ICU4J ${icu4j.version.string}" />
+        <param name="-name" value="ICU4J ${icu4j.spec.version.string}" />
         <param name="-output" value="${api.dir}/icu4j${icu4j.version.number}.stver.api" />
         <param name="-internal" />
         <param name="-version" />
@@ -804,7 +838,7 @@
     </java>
   </target>
 
-  <target name="clean" depends="init" description="remove all build targets">
+  <target name="clean" depends="initBase" description="remove all build targets">
     <delete dir="${build.dir}" />
     <delete dir="${doc.dir}" />
     <delete file="${jar.file}" />
@@ -815,25 +849,25 @@
 
     <delete dir="${eclipse.projects.dir}" />
     <delete dir="${wrapper.build.dir}" />
-    <delete file="${zipCoreSrc.file}" />
     <delete file="${zipTestSrc.file}" />
     <delete file="${jdk.wrapper.jar.file}" />
+    <delete file="${fragment.jar.file}"/>
 
     <delete dir="${tzu.bin.dir}" />
     <delete file="${tzu.bin.zip.file}" />
     <delete file="${tzu.src.zip.file}" />
   </target>
 
-  <target name="moduleJar" depends="init" description="modular build of 'icu4j.jar' jar file">
+  <target name="moduleJar" depends="initBase" description="modular build of 'icu4j.jar' jar file">
     <jar jarfile="${jar.file}" compress="true" includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*" basedir="${build.dir}">
       <manifest>
         <attribute name="Built-By" value="${corp}" />
         <section name="common">
           <attribute name="Specification-Title" value="ICU4J Modularized Build" />
-          <attribute name="Specification-Version" value="${icu4j.version.string}" />
+          <attribute name="Specification-Version" value="${icu4j.spec.version.string}" />
           <attribute name="Specification-Vendor" value="ICU" />
           <attribute name="Implementation-Title" value=" ICU for Java Module" />
-          <attribute name="Implementation-Version" value="${icu4j.version.string}" />
+          <attribute name="Implementation-Version" value="${icu4j.impl.version.string}" />
           <attribute name="Implementation-Vendor" value="${corp}" />
           <attribute name="Implementation-Vendor-Id" value="com.ibm" />
           <attribute name="Copyright-Info" value="${copyright}" />
@@ -885,7 +919,7 @@
   </target>
 
   <!-- Module: Calendar -->
-  <target name="copyCalendarData" depends="init">
+  <target name="copyCalendarData" depends="initBase">
     <!-- Calendar does not require Collation data, BreakIterator data -->
     <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
       <patternset>
@@ -932,7 +966,7 @@
     </javac>
   </target>
 
-  <target name="copyCollatorData" depends="init">
+  <target name="copyCollatorData" depends="initBase">
     <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
       <patternset>
         <include name="**/*.icu" />
@@ -1009,7 +1043,7 @@
   </target>
 
   <!-- Module: Format -->
-  <target name="copyFormatData" depends="init" if="icu4j.module.resources">
+  <target name="copyFormatData" depends="initBase" if="icu4j.module.resources">
     <!-- Format does not require BreakIterator data -->
     <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
       <patternset>
@@ -1053,7 +1087,7 @@
   </target>
 
   <!-- Module: Normalizer -->
-  <target name="normalizerData" depends="init">
+  <target name="normalizerData" depends="initBase">
     <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
       <patternset>
         <include name="**/ucase.icu" />
@@ -1104,7 +1138,7 @@
   </target>
 
   <!-- Module: Basic Properties / Full Properties -->
-  <target name="copyBasicPropsData" depends="init">
+  <target name="copyBasicPropsData" depends="initBase">
     <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
       <patternset>
         <include name="**/unorm.icu" />
@@ -1118,7 +1152,7 @@
     <touch file="${build.dir}/${icu4j.data.path}/uprops.icu" />
   </target>
 
-  <target name="copyFullPropsData" depends="init">
+  <target name="copyFullPropsData" depends="initBase">
     <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
       <patternset>
         <include name="**/unorm.icu" />
@@ -1182,7 +1216,7 @@
   </target>
 
   <!-- Module: Transliterator -->
-  <target name="copyTranslitData" depends="init">
+  <target name="copyTranslitData" depends="initBase">
     <!-- Calendar does not require Collation data, BreakIterator data -->
     <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
       <patternset>
@@ -1231,7 +1265,7 @@
   </target>
 
   <!-- Module: StringPrep, IDNA -->
-  <target name="copyStringPrepData" depends="init">
+  <target name="copyStringPrepData" depends="initBase">
     <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
       <patternset>
         <include name="**/*.spp" />
@@ -1296,7 +1330,7 @@
     </delete>
   </target>
 
-  <target name="moduleCheck" depends="init" description="run tests for module jar">
+  <target name="moduleCheck" depends="initBase" description="run tests for module jar">
     <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
       <arg value="-nothrow" />
       <arg value="-nodata" />
@@ -1307,7 +1341,7 @@
   </target>
 
   <!-- build the extra Transliterator data pertaining to Han-Latin transliteration -->
-  <target name="extraTransliteratorData" depends="init" description="build han-to-latin transliterator data (normally omitted)">
+  <target name="extraTransliteratorData" depends="initBase" description="build han-to-latin transliterator data (normally omitted)">
     <copy todir="${build.dir}/com/ibm/icu/impl/data">
       <fileset dir="${src.dir}/com/ibm/icu/impl/data" includes="Transliterator_Han_Latin_*.txt" />
     </copy>
@@ -1328,10 +1362,10 @@
         <attribute name="Built-By" value="${corp}" />
         <section name="common">
           <attribute name="Specification-Title" value="XLIFF To ICU Converter" />
-          <attribute name="Specification-Version" value="${icu4j.version.string}" />
+          <attribute name="Specification-Version" value="${icu4j.spec.version.string}" />
           <attribute name="Specification-Vendor" value="ICU" />
           <attribute name="Implementation-Title" value="XLIFF2ICUConverter" />
-          <attribute name="Implementation-Version" value="${icu4j.version.string}" />
+          <attribute name="Implementation-Version" value="${icu4j.impl.version.string}" />
           <attribute name="Implementation-Vendor" value="${corp}" />
           <attribute name="Implementation-Vendor-Id" value="com.ibm" />
           <attribute name="Copyright-Info" value="${copyright}" />
@@ -1345,10 +1379,10 @@
         <attribute name="Built-By" value="${corp}" />
         <section name="common">
           <attribute name="Specification-Title" value="XLIFF To ICU Converter Sources" />
-          <attribute name="Specification-Version" value="${icu4j.version.string}" />
+          <attribute name="Specification-Version" value="${icu4j.spec.version.string}" />
           <attribute name="Specification-Vendor" value="ICU" />
           <attribute name="Implementation-Title" value="XLIFF2ICUConverter Sources" />
-          <attribute name="Implementation-Version" value="${icu4j.version.string}" />
+          <attribute name="Implementation-Version" value="${icu4j.impl.version.string}" />
           <attribute name="Implementation-Vendor" value="${corp}" />
           <attribute name="Implementation-Vendor-Id" value="com.ibm" />
           <attribute name="Copyright-Info" value="${copyright}" />
@@ -1372,10 +1406,10 @@
         <attribute name="Built-By" value="${corp}" />
         <section name="common">
           <attribute name="Specification-Title" value="Utilities for CLDR Tools" />
-          <attribute name="Specification-Version" value="${icu4j.version.string}" />
+          <attribute name="Specification-Version" value="${icu4j.spec.version.string}" />
           <attribute name="Specification-Vendor" value="ICU" />
           <attribute name="Implementation-Title" value="CLDR Utilities" />
-          <attribute name="Implementation-Version" value="${icu4j.version.string}" />
+          <attribute name="Implementation-Version" value="${icu4j.impl.version.string}" />
           <attribute name="Implementation-Vendor" value="${corp}" />
           <attribute name="Implementation-Vendor-Id" value="com.ibm" />
           <attribute name="Copyright-Info" value="${copyright}" />
@@ -1423,7 +1457,7 @@
   </target>
 
   <!-- convert @deprecated @draft tags to @provisional -->
-  <target name="swatDeprecated" depends="init, tools" unless="before.java14">
+  <target name="swatDeprecated" depends="initBase, tools" unless="before.java14">
     <java classname="com.ibm.icu.dev.tool.docs.SwatDeprecated" classpath="${build.dir}" failonerror="true">
       <arg value="-src" />
       <arg value="${src.dir}" />
@@ -1435,7 +1469,7 @@
   </target>
 
   <!-- convert @provisional tags to @deprecated -->
-  <target name="restoreDeprecated" depends="init, tools" unless="before.java14">
+  <target name="restoreDeprecated" depends="initBase, tools" unless="before.java14">
     <java classname="com.ibm.icu.dev.tool.docs.SwatDeprecated" classpath="${build.dir}" failonerror="true">
       <arg value="-prov" />
       <arg value="-src" />
@@ -1447,38 +1481,171 @@
     </java>
   </target>
 
+<!-- Eclipse plug-in build targets --> 
   <!-- for building eclipse distribution -->
-  <target name="eclipseProjects" depends="eclipseCoreProject,eclipseTestProject,eclipseWrapperProject" description="create all eclipse icu projects" />
-
-  <target name="undoEclipseMangle" depends="buildMangle" description="preprocess files back to default)">
-    <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true">
-      <arg value="@eclipseCoreArgs.txt" />
-      <arg value="@eclipseTestArgs.txt" />
-    </java>
+  <target name="initIcuEclipseVersion" depends="initBase">
+    <tstamp>
+      <format property="build.date" pattern="yyyyMMdd"/>
+    </tstamp>
+    <property name="icu4j.eclipse.build.version.string" value="${icu4j.plugin.impl.version.string}.v${build.date}"/>
   </target>
 
-  <target name="eclipseCoreMangle" depends="buildMangle">
-    <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true">
-      <arg value="-dFOUNDATION" />
-      <arg value="-t" />
-      <arg value="@eclipseCoreArgs.txt" />
-    </java>
+  <target name="eclipseProjects" 
+          depends="eclipseCoreProject,eclipseTestProject,eclipseWrapperProject,eclipseFragmentProject"
+          description="create all eclipse icu projects"/>
+
+  <target name="eclipsePDEBuild"
+          depends="initEclipsePDEBuildEnv, eclipseProjects"
+          description="build icu4j plugin files">
+
+    <!-- copy OSGi jar file to baseLocation -->
+    <mkdir dir="${eclipse.projects.dir}/baseLocation/features"/>
+    <mkdir dir="${eclipse.projects.dir}/baseLocation/plugins"/>
+    <copy toDir="${eclipse.projects.dir}/baseLocation/plugins" file="${eclipse.osgi.jar}"/>
+
+    <!-- copy PDE build script files and run the build -->
+    <pathconvert property="eclipse.projects.dir.full" dirsep="/">
+      <path location="${basedir}/${eclipse.projects.dir}"/>
+    </pathconvert>
+    <antcall target="runEclipsePDEBuild">
+      <param name="icu.plugin.id" value="com.ibm.icu"/>
+    </antcall>
+    <antcall target="runEclipsePDEBuild">
+      <param name="icu.plugin.id" value="com.ibm.icu.base"/>
+    </antcall>
+    <antcall target="runEclipsePDEBuild">
+      <param name="icu.plugin.id" value="com.ibm.icu.jse4"/>
+    </antcall>
   </target>
 
-  <target name="eclipseCore" depends="init,coreData,icudata,eclipseCoreMangle">
-    <javac includes="com/ibm/icu/util/**/*.java,com/ibm/icu/text/**/*.java,com/ibm/icu/math/**/*.java,com/ibm/icu/impl/**/*.java,com/ibm/icu/lang/*.java" excludes="**/CVS/**/*,com/ibm/icu/charset/**/*.*" compiler="javac1.3" srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" bootclasspath="ee.foundation.jar" source="1.3" target="1.1" debug="on" deprecation="off" encoding="ascii" />
+  <target name="initEclipsePDEBuildEnv"
+          depends="initBase,initEclipseHome,initEclipseLauncher,initEclipseOSGiJar,initEclipsePDE"
+          description="Initialize eclipse PDE build environment">
+    <echo message="[PDE build configuration properties]"/>
+    <echo message="    Eclipse home:    ${eclipse.home}"/>
+    <echo message="    Launcher jar:    ${eclipse.launcher}"/>
+    <echo message="    OSGi bundle jar: ${eclipse.osgi.jar}"/>
+    <echo message="    Base OS:         ${eclipse.baseos}"/>
+    <echo message="    Base WS:         ${eclipse.basews}"/>
+    <echo message="    Base ARCH:       ${eclipse.basearch}"/>
+  </target>
+
+  <target name="initEclipseHome"
+          if="env.ECLIPSE_HOME"
+          unless="eclipse.home"
+          description="Initialize the property eclipse.home from the environment variable ECLIPSE_HOME">
+    <property name="eclipse.home" value="${env.ECLIPSE_HOME}"/>
+  </target>
+
+  <target name="initEclipseLauncher"
+          if="eclipse.home"
+          description="Locate org.eclipse.equinox.launcher jar file for eclipse 3.3 and beyond">
+    <first id="equinox.launcher">
+      <fileset dir="${eclipse.home}/plugins">
+        <include name="org.eclipse.equinox.launcher_*.jar"/>
+      </fileset>
+    </first>
+    <pathconvert property="eclipse.launcher" dirsep="/" refid="equinox.launcher"/>
+  </target>
+
+  <target name="initEclipseOSGiJar"
+          if="eclipse.home"
+          description="Locate org.eclipse.osgi plugin jar file">
+    <first id="osgi.bundle">
+      <fileset dir="${eclipse.home}/plugins">
+        <include name="org.eclipse.osgi_*.jar"/>
+      </fileset>
+    </first>
+    <pathconvert property="eclipse.osgi.jar" dirsep="/" refid="osgi.bundle"/>
+  </target>
+
+  <target name="initEclipsePDE"
+          depends="locateEclipsePDE"
+          if="eclipse.pde.dir"
+          description="Set up PDE runtime arguments">
+    <property file="${eclipse.pde.dir}/templates/headless-build/build.properties" prefix="pde.template"/>
+    <property name="eclipse.baseos" value="${pde.template.baseos}"/>
+    <property name="eclipse.basews" value="${pde.template.basews}"/>
+    <property name="eclipse.basearch" value="${pde.template.basearch}"/>
+  </target>
+
+  <target name="locateEclipsePDE"
+          if="eclipse.home"
+          description="Locate org.eclipse.pde.build plug-in and set the property 'eclipse.pde.dir'">
+    <first id="eclipse.pde.plugin.dir">
+      <dirset dir="${eclipse.home}/plugins">
+        <include name="org.eclipse.pde.build_*"/>
+      </dirset>
+    </first>
+    <pathconvert property="eclipse.pde.dir" dirsep="/" refid="eclipse.pde.plugin.dir"/>
+  </target>
+
+  <target name="runEclipsePDEBuild">
+    <mkdir dir="${eclipse.projects.dir}/buildScripts/${icu.plugin.id}"/>
+      <copy toDir="${eclipse.projects.dir}/buildScripts/${icu.plugin.id}">
+        <fileset dir="${eclipse.dir}/pdebuild" includes="**/*"/>
+          <filterset>
+            <filter token="PLUGIN_ID" value="${icu.plugin.id}"/>
+            <filter token="BUILD_DIR" value="${eclipse.projects.dir.full}"/>
+            <filter token="BUILD_TYPE" value="ICU4J"/>
+            <filter token="BUILD_ID" value="${icu.plugin.id}"/>
+            <filter token="BASE_LOCATION" value="${eclipse.projects.dir.full}/baseLocation"/>
+            <filter token="BASE_OS" value="${eclipse.baseos}"/>
+            <filter token="BASE_WS" value="${eclipse.basews}"/>
+            <filter token="BASE_ARCH" value="${eclipse.basearch}"/>
+          </filterset>
+      </copy>
+
+      <java jar="${eclipse.launcher}" fork="true" failonerror="true">
+        <arg value="-application"/>
+        <arg value="org.eclipse.ant.core.antRunner"/>
+        <arg value="-buildfile"/>
+        <arg value="${eclipse.pde.dir}/scripts/build.xml"/>
+        <arg value="-Dbuilder=${eclipse.projects.dir.full}/buildScripts/${icu.plugin.id}"/>
+      </java>
+  </target>
+
+  <target name="eclipseMangle" depends="buildMangle">
+    <antcall target="doMangle">
+      <param name="target.defs" value="FOUNDATION10" />
+      <param name="input.file" value="@preprocessor.txt" />
+    </antcall>
+  </target>
+
+  <target name="eclipseCore" depends="coreData,icudata,durationdata,eclipseMangle">
+    <javac  includes="com/ibm/icu/util/**/*.java,com/ibm/icu/text/**/*.java,com/ibm/icu/math/**/*.java,com/ibm/icu/impl/**/*.java,com/ibm/icu/lang/*.java"
+            compiler="javac1.3"
+            srcdir="${src.dir}"
+            destdir="${build.dir}"
+            classpathref="build.classpath"
+            bootclasspath="ee.foundation.jar"
+            source="1.3"
+            target="1.1"
+            debug="on"
+            deprecation="off"
+            encoding="ascii" />
     <antcall target="indices" />
     <jar jarfile="${jar.file}" compress="true">
       <fileset dir="${basedir}" includes="license.html, unicode-license.txt" />
-      <fileset dir="${build.dir}" includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*" excludes="META-INF/services/**/*,com/ibm/icu/charset/**/*,${icu4j.data.path}/*.cnv, ${icu4j.data.path}/cnvalias.icu" />
+      <fileset dir="${build.dir}">
+        <exclude name="META-INF/services/**/*" />
+        <exclude name="com/ibm/icu/charset/**/*" />
+        <exclude name="${icu4j.data.path}/*.cnv" />
+        <exclude name="${icu4j.data.path}/cnvalias.icu" />
+        <include name="com/ibm/icu/util/**/*" />
+        <include name="com/ibm/icu/text/**/*" />
+        <include name="com/ibm/icu/math/**/*" />
+        <include name="com/ibm/icu/impl/**/*" />
+        <include name="com/ibm/icu/lang/**/*" />
+      </fileset>
       <manifest>
         <attribute name="Built-By" value="${corp}" />
         <section name="common">
           <attribute name="Specification-Title" value="ICU4J Eclipse Build" />
-          <attribute name="Specification-Version" value="${icu4j.version.string}" />
+          <attribute name="Specification-Version" value="${icu4j.spec.version.string}" />
           <attribute name="Specification-Vendor" value="ICU" />
-          <attribute name="Implementation-Title" value=" ICU for Java" />
-          <attribute name="Implementation-Version" value="${icu4j.version.string}" />
+          <attribute name="Implementation-Title" value="ICU for Java Eclipse plug-in" />
+          <attribute name="Implementation-Version" value="${icu4j.impl.version.string}" />
           <attribute name="Implementation-Vendor" value="${corp}" />
           <attribute name="Implementation-Vendor-Id" value="com.ibm" />
           <attribute name="Copyright-Info" value="${copyright}" />
@@ -1488,116 +1655,283 @@
     </jar>
   </target>
 
-  <target name="eclipseCoreProject" depends="eclipseCore" description="gather eclipse icu core project files">
+  <target name="eclipseCoreProject"
+          depends="eclipseCore,initIcuEclipseVersion"
+          description="gather eclipse icu core project files">
     <delete failonerror="no">
-      <fileset dir="${eclipse.projects.dir}/com.ibm.icu" />
-      <fileset dir="${eclipse.projects.dir}/com.ibm.icu-feature" />
+      <fileset dir="${eclipse.projects.dir}/plugins/com.ibm.icu" />
+      <fileset dir="${eclipse.projects.dir}/features/com.ibm.icu" />
     </delete>
-    <!-- collect source files -->
-    <copy toDir="${eclipse.projects.dir}/com.ibm.icu/src/com/ibm/icu">
-      <fileset dir="src/com/ibm/icu" includes="impl/**/*,lang/**/*,math/**/*,text/**/*,util/**/*" excludes="**/CVS/**/*,**/*.jar,**/Transliterator_Han_Latin*.txt" />
-    </copy>
-    <!-- collect icu data files -->
-    <copy todir="${eclipse.projects.dir}/com.ibm.icu/src/com/ibm/icu/impl/data">
-      <fileset dir="${build.dir}/com/ibm/icu/impl/data" includes="**/*.brk,**/*.icu,**/*.res,**/*.spp,**/*.txt" excludes="**/Transliterator_Han_Latin*.txt" />
-    </copy>
-    <!-- collect eclipse project files -->
-    <copy todir="${eclipse.projects.dir}">
-      <fileset dir="${eclipse.dir}" includes="com.ibm.icu/**/*,com.ibm.icu-feature/**/*" excludes="**/CVS/**/*" />
-    </copy>
-    <!-- copy ICU license file -->
-    <copy file="license.html" todir="${eclipse.projects.dir}/com.ibm.icu/about_files" />
-    <!-- ucd terms -->
-    <copy file="src/com/ibm/icu/dev/data/unicode/ucdterms.txt" todir="${eclipse.projects.dir}/com.ibm.icu/about_files" />
-    <!-- copy ICU about file -->
-    <copy file="${eclipse.dir}/misc/about_icu.html" tofile="${eclipse.projects.dir}/com.ibm.icu/about.html" />
-    <!-- common eclipse about file -->
-    <copy file="${eclipse.dir}/misc/about.html" todir="${eclipse.projects.dir}/com.ibm.icu-feature/sourceTemplatePlugin" />
-  </target>
 
+    <!-- PLUGIN FILES -->
+    <!-- icu source -->
+    <copy toDir="${eclipse.projects.dir}/plugins/com.ibm.icu/src/com/ibm/icu">
+      <fileset dir="src/com/ibm/icu"
+               includes="impl/**/*,lang/**/*,math/**/*,text/**/*,util/**/*"
+               excludes="**/.svn/**/*,**/*.jar,**/Transliterator_Han_Latin*.txt" />
+    </copy>
+    <!-- icu data -->
+    <copy todir="${eclipse.projects.dir}/plugins/com.ibm.icu/src/com/ibm/icu/impl/data">
+      <fileset dir="${build.dir}/com/ibm/icu/impl/data"
+               includes="**/*.brk,**/*.icu,**/*.res,**/*.spp,**/*.txt"
+               excludes="**/Transliterator_Han_Latin*.txt" />
+    </copy>
+    <!-- plugin project -->
+    <copy todir="${eclipse.projects.dir}/plugins/com.ibm.icu">
+      <fileset dir="${eclipse.dir}/plugins/com.ibm.icu" excludes="**/.svn/**/*" />
+      <filterset>
+        <filter token="BUILD_VERSION" value="${icu4j.eclipse.build.version.string}" />
+        <filter token="COPYRIGHT" value="${copyright.eclipse}" />
+        <filter token="IMPL_VERSION" value="${icu4j.impl.version.string}" />
+        <filter token="VERSION_NUMBER" value="${icu4j.version.number}" />
+      </filterset>
+    </copy>
+    <!-- license -->
+    <copy file="license.html"
+          todir="${eclipse.projects.dir}/plugins/com.ibm.icu/about_files" />
+    <!-- ucd terms -->
+    <copy file="src/com/ibm/icu/dev/data/unicode/ucdterms.txt"
+          todir="${eclipse.projects.dir}/plugins/com.ibm.icu/about_files" />
+    <!-- about -->
+    <copy file="${eclipse.dir}/misc/about_icu.html"
+          tofile="${eclipse.projects.dir}/plugins/com.ibm.icu/about.html" />
+
+    <!-- FEATURE FILES -->
+    <copy todir="${eclipse.projects.dir}/features/com.ibm.icu">
+      <fileset dir="${eclipse.dir}/features/com.ibm.icu" excludes="**/.svn/**/*" />
+      <filterset>
+        <filter token="BUILD_VERSION" value="${icu4j.eclipse.build.version.string}" />
+        <filter token="COPYRIGHT" value="${copyright.eclipse}" />
+        <filter token="VERSION_NUMBER" value="${icu4j.version.number}" />
+      </filterset>
+    </copy>
+    <!-- common eclipse about file -->
+    <copy file="${eclipse.dir}/misc/about.html"
+          todir="${eclipse.projects.dir}/features/com.ibm.icu/sourceTemplatePlugin" />
+  </target>
 
   <!-- ensure eclipse wrapper code builds with foundation1.0/java1.3 -->
-  <target name="eclipseWrapper" depends="init">
-    <javac includes="com/ibm/icu/util/**/*.java,com/ibm/icu/text/**/*.java" compiler="javac1.3" srcdir="${src.dir}/com/ibm/icu/dev/eclipse/com.ibm.icu.base/src" destdir="${wrapper.build.dir}" classpathref="build.classpath" bootclasspath="ee.foundation.jar" source="1.3" target="1.1" debug="on" deprecation="off" encoding="ascii" />
-    <jar jarfile="${jdk.wrapper.jar.file}" compress="true" basedir="${wrapper.build.dir}" />
+  <target name="eclipseWrapper" depends="initBase">
+    <mkdir dir="${wrapper.build.dir}" />
+    <javac includes="com/ibm/icu/util/**/*.java,com/ibm/icu/text/**/*.java"
+           compiler="javac1.3"
+           srcdir="${eclipse.dir}/plugins/com.ibm.icu.base/src"
+           destdir="${wrapper.build.dir}"
+           classpathref="build.classpath"
+           bootclasspath="ee.foundation.jar"
+           source="1.3"
+           target="1.1"
+           debug="on" 
+           deprecation="off"
+           encoding="ascii" />
+    <jar jarfile="${jdk.wrapper.jar.file}"
+         compress="true"
+         basedir="${wrapper.build.dir}" />
   </target>
 
-  <target name="eclipseWrapperTest" depends="init">
+  <target name="eclipseWrapperTest" depends="eclipseWrapper">
     <!-- TODO: build the wrapper test code this ant target -->
   </target>
 
-  <target name="eclipseWrapperProject" depends="eclipseWrapper,eclipseWrapperTest" description="gather eclipse icu core project files">
+  <target name="eclipseWrapperProject"
+          depends="eclipseWrapper,eclipseWrapperTest,initIcuEclipseVersion"
+          description="gather eclipse icu core project files">
     <delete failonerror="no">
-      <fileset dir="${eclipse.projects.dir}/com.ibm.icu.base" />
-      <fileset dir="${eclipse.projects.dir}/com.ibm.icu.base-feature" />
-      <fileset dir="${eclipse.projects.dir}/com.ibm.icu.base.tests" />
+      <fileset dir="${eclipse.projects.dir}/plugins/com.ibm.icu.base" />
+      <fileset dir="${eclipse.projects.dir}/plugins/com.ibm.icu.base.tests" />
+      <fileset dir="${eclipse.projects.dir}/features/com.ibm.icu.base" />
     </delete>
-    <!-- collect eclipse project files -->
-    <copy todir="${eclipse.projects.dir}">
-      <fileset dir="${eclipse.dir}" includes="com.ibm.icu.base/**/*,com.ibm.icu.base-feature/**/*,com.ibm.icu.base.tests/**/*" excludes="**/CVS/**/*" />
+    <!-- PLUGIN FILES -->
+    <!-- source and project files -->
+    <copy todir="${eclipse.projects.dir}/plugins">
+      <fileset dir="${eclipse.dir}/plugins"
+               includes="com.ibm.icu.base/**/*,com.ibm.icu.base.tests/**/*"
+               excludes="**/.svn/**/*" />
+      <filterset>
+        <filter token="BUILD_VERSION" value="${icu4j.eclipse.build.version.string}" />
+        <filter token="COPYRIGHT" value="${copyright.eclipse}" />
+        <filter token="IMPL_VERSION" value="${icu4j.impl.version.string}" />
+        <filter token="VERSION_NUMBER" value="${icu4j.version.number}" />
+      </filterset>
     </copy>
-    <!-- copy ICU license file -->
-    <copy file="license.html" todir="${eclipse.projects.dir}/com.ibm.icu.base/about_files" />
-    <!-- copy ICU about file -->
-    <copy file="${eclipse.dir}/misc/about_icu.html" tofile="${eclipse.projects.dir}/com.ibm.icu.base/about.html" />
+    <!-- license -->
+    <copy file="license.html"
+          todir="${eclipse.projects.dir}/plugins/com.ibm.icu.base/about_files" />
+    <!-- about -->
+    <copy file="${eclipse.dir}/misc/about_icu.html"
+          tofile="${eclipse.projects.dir}/plugins/com.ibm.icu.base/about.html" />
+
+    <!-- FEATURE FILES -->
+    <!-- project files -->
+    <copy todir="${eclipse.projects.dir}/features/com.ibm.icu.base">
+      <fileset dir="${eclipse.dir}/features/com.ibm.icu.base"
+               excludes="**/.svn/**/*"/>
+      <filterset>
+      <filter token="BUILD_VERSION" value="${icu4j.eclipse.build.version.string}" />
+        <filter token="COPYRIGHT" value="${copyright.eclipse}" />
+        <filter token="VERSION_NUMBER" value="${icu4j.version.number}" />
+      </filterset>
+    </copy>
     <!-- common eclipse about file -->
-    <copy file="${eclipse.dir}/misc/about.html" todir="${eclipse.projects.dir}/com.ibm.icu.base-feature/sourceTemplatePlugin" />
+    <copy file="${eclipse.dir}/misc/about.html"
+          todir="${eclipse.projects.dir}/features/com.ibm.icu.base/sourceTemplatePlugin" />
   </target>
 
-  <target name="eclipseTestMangle" depends="buildMangle">
-    <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true">
-      <arg value="-dFOUNDATION" />
-      <arg value="-t" />
-      <arg value="@eclipseTestArgs.txt" />
-    </java>
-  </target>
-
-  <target name="eclipseTests" depends="eclipseCore,testdata,eclipseTestMangle" description="build tests trimmed for eclipse API">
+  <target name="eclipseTests"
+          depends="eclipseCore,testdata,eclipseMangle"
+          description="build tests trimmed for eclipse API">
     <!-- TODO: we should actually use ee.foundation.jar for eclipse env -->
     <javac includes="com/ibm/icu/dev/test/**/*.java"
-      excludes="**/CVS/**/*,com/ibm/icu/dev/test/charset/**/*.*,com/ibm/icu/dev/test/perf/**/*.*,com/ibm/icu/dev/test/translit/UnicodeMapTest.java"
-      srcdir="${src.dir}" destdir="${build.dir}" source="1.3" target="1.3" classpathref="build.classpath" debug="on" deprecation="off" />
-    <antcall target="indices" />
+           excludes="com/ibm/icu/dev/test/charset/**/*.*,com/ibm/icu/dev/test/perf/**/*.*"
+           srcdir="${src.dir}"
+           destdir="${build.dir}"
+           source="1.3"
+           target="1.3"
+           classpathref="build.classpath"
+           debug="on"
+           deprecation="off" />
+    <antcall target="indices"/>
     <jar jarfile="${testjar.file}" compress="true">
       <fileset dir="${build.dir}" includes="com/ibm/icu/dev/test/**/*" />
       <fileset dir="${build.dir}" includes="com/ibm/icu/dev/data/**/*" />
       <manifest>
         <attribute name="Built-By" value="${corp}" />
         <section name="common">
-          <attribute name="Specification-Title" value="Tests for ICU4J " />
-          <attribute name="Specification-Version" value="${icu4j.version.string}" />
-          <attribute name="Specification-Vendor" value="ICU" />
-          <attribute name="Implementation-Title" value="Tests for ICU4J" />
-          <attribute name="Implementation-Version" value="${icu4j.version.string}" />
-          <attribute name="Implementation-Vendor" value="${corp}" />
-          <attribute name="Implementation-Vendor-Id" value="com.ibm" />
-          <attribute name="Copyright-Info" value="${copyright}" />
-          <attribute name="Sealed" value="false" />
+          <attribute name="Specification-Title" value="ICU4J Eclipse Tests"/>
+          <attribute name="Specification-Version" value="${icu4j.spec.version.string}"/>
+          <attribute name="Specification-Vendor" value="ICU"/>
+          <attribute name="Implementation-Title" value="ICU for Java Eclipse plug-in Tests"/>
+          <attribute name="Implementation-Version" value="${icu4j.impl.version.string}"/> 
+          <attribute name="Implementation-Vendor" value="${corp}"/>
+          <attribute name="Implementation-Vendor-Id" value="com.ibm"/>
+          <attribute name="Copyright-Info" value="${copyright}"/>
+          <attribute name="Sealed" value="false"/>
         </section>
       </manifest>
     </jar>
   </target>
 
-  <target name="eclipseTestProject" depends="eclipseTests,zipTestSrc" description="gather eclipse icu test project files">
+  <target name="eclipseTestProject" depends="eclipseTests,eclipseZipTestSrc" description="gather eclipse icu test project files">
     <delete failonerror="no">
-      <fileset dir="${eclipse.projects.dir}/com.ibm.icu.tests" />
+      <fileset dir="${eclipse.projects.dir}/plugins/com.ibm.icu.tests"/>
     </delete>
     <!-- copy eclipse test source and project files -->
-    <copy toDir="${eclipse.projects.dir}/com.ibm.icu.tests">
-      <fileset dir="${eclipse.dir}/com.ibm.icu.tests" includes="**/*" excludes="**/CVS/**/" />
+    <copy toDir="${eclipse.projects.dir}/plugins/com.ibm.icu.tests">
+      <fileset  dir="${eclipse.dir}/plugins/com.ibm.icu.tests"
+                excludes="**/.svn/**/"/>
+      <filterset>
+        <filter token="COPYRIGHT" value="${copyright.eclipse}"/>
+      </filterset>
     </copy>
     <!-- copy icu test jar -->
-    <copy toDir="${eclipse.projects.dir}/com.ibm.icu.tests" file="${testjar.file}" />
+    <copy toDir="${eclipse.projects.dir}/plugins/com.ibm.icu.tests" file="${testjar.file}"/>
     <!-- copy icu test source zip -->
-    <copy toDir="${eclipse.projects.dir}/com.ibm.icu.tests" file="${zipTestSrc.file}" />
+    <copy toDir="${eclipse.projects.dir}/plugins/com.ibm.icu.tests" file="${zipTestSrc.file}"/>
   </target>
 
-  <target name="zipCoreSrc" depends="init" description="build zip of core sources for debugging">
-    <!-- for eclipse -->
-    <zip destfile="${zipCoreSrc.file}" compress="true" basedir="${src.dir}" includes="../license.html,../Copyright_Assignment.rtf,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*,com/ibm/icu/math/**/*,com/ibm/icu/text/**/*,com/ibm/icu/util/**/*" />
+  <target name="eclipseFragmentMangle" depends="buildMangle">
+    <antcall target="initSrc"/>
+    <antcall target="doMangle">
+      <param name="target.defs" value="ECLIPSE_FRAGMENT" />
+      <param name="input.file" value="@eclipseFragment.txt" />
+    </antcall>
   </target>
 
-  <target name="zipTestSrc" depends="init" description="build zip of test sources for debugging">
+  <target name="eclipseFragment" depends="eclipseCore,eclipseFragmentMangle">
+    <property name="timepattern" value="yyyyMMdd'T'HHmmss','SSS"/>
+    <tstamp>
+      <format property="time.before.compile" pattern="${timepattern}"/>
+    </tstamp>
+    <!--
+        Note: *.class files compiled by the target "eclipseCore" are in ${build.dir} directory.
+        The target "eclipseFragmentMangle" updates timestamp of .java files, so only modified files
+        should be compiled.
+    -->
+    <javac includes="com/ibm/icu/util/**/*.java,com/ibm/icu/text/**/*.java,com/ibm/icu/math/**/*.java,com/ibm/icu/impl/**/*.java,com/ibm/icu/lang/*.java"
+           compiler="javac1.4"
+           srcdir="${src.dir}"
+           destdir="${build.dir}"
+           classpathref="build.classpath"
+           source="1.3"
+           target="1.2"
+           debug="on"
+           deprecation="off"
+           encoding="ascii"
+           listfiles="true" />
+    <tstamp>
+      <format property="time.after.compile" pattern="${timepattern}" />
+    </tstamp>
+    <!-- collect only class files updated, which are fragment specific files -->
+    <jar jarfile="${fragment.jar.file}" compress="true">
+      <fileset dir="${build.dir}" includes="**/*.class">
+        <date datetime="${time.before.compile}" pattern="${timepattern}" when="after" />
+      </fileset>
+    </jar>
+  </target>
+
+  <target name="eclipseFragmentProject"
+          depends="eclipseFragment,initIcuEclipseVersion"
+          description="gather eclipse icu fragment project files">
+    <delete failonerror="no">
+      <fileset dir="${eclipse.projects.dir}/plugins/com.ibm.icu.jse4" />
+      <fileset dir="${eclipse.projects.dir}/features/com.ibm.icu.jse4" />
+    </delete>
+
+    <!-- PLUGIN FILES -->
+    <!-- source -->
+    <copy toDir="${eclipse.projects.dir}/plugins/com.ibm.icu.jse4/src">
+      <!-- TODO: Use a single file list as input.  The list is identical with eclipseFragmentArgs.txt -->
+      <fileset dir="${src.dir}">
+        <include name="com/ibm/icu/impl/CollectionUtilities.java" />
+        <include name="com/ibm/icu/impl/PatternTokenizer.java" />
+        <include name="com/ibm/icu/impl/Utility.java" />
+        <include name="com/ibm/icu/lang/UCharacter.java" />
+        <include name="com/ibm/icu/math/BigDecimal.java" />
+        <include name="com/ibm/icu/text/DateTimePatternGenerator.java" />
+        <include name="com/ibm/icu/text/DecimalFormat.java" />
+        <include name="com/ibm/icu/text/DigitList.java" />
+        <include name="com/ibm/icu/text/NumberFormat.java" />
+        <include name="com/ibm/icu/text/RuleBasedNumberFormat.java" />
+        <include name="com/ibm/icu/text/UnicodeSet.java" />
+        <include name="com/ibm/icu/text/UTF16.java" />
+        <include name="com/ibm/icu/util/GlobalizationPreferences.java" />
+      </fileset>
+    </copy>
+    <!-- project files -->
+    <copy todir="${eclipse.projects.dir}/plugins/com.ibm.icu.jse4">
+      <fileset  dir="${eclipse.dir}/plugins/com.ibm.icu.jse4"
+                excludes="**/.svn/**/*" />
+      <filterset>
+        <filter token="BUILD_VERSION" value="${icu4j.eclipse.build.version.string}" />
+        <filter token="COPYRIGHT" value="${copyright.eclipse}" />
+        <filter token="IMPL_VERSION" value="${icu4j.impl.version.string}" />
+        <filter token="VERSION_NUMBER" value="${icu4j.version.number}" />
+      </filterset>
+    </copy>
+    <!-- license -->
+    <copy file="license.html"
+          todir="${eclipse.projects.dir}/plugins/com.ibm.icu.jse4/about_files" />
+    <!-- ucd terms -->
+    <copy file="src/com/ibm/icu/dev/data/unicode/ucdterms.txt"
+          todir="${eclipse.projects.dir}/plugins/com.ibm.icu.jse4/about_files" />
+
+    <!-- FEATURE FILES -->
+    <!-- project files -->
+    <copy todir="${eclipse.projects.dir}/features/com.ibm.icu.jse4">
+      <fileset  dir="${eclipse.dir}/features/com.ibm.icu.jse4"
+                excludes="**/.svn/**/*" />
+      <filterset>
+        <filter token="BUILD_VERSION" value="${icu4j.eclipse.build.version.string}" />
+        <filter token="COPYRIGHT" value="${copyright.eclipse}" />
+        <filter token="VERSION_NUMBER" value="${icu4j.version.number}" />
+      </filterset>
+    </copy>
+    <!-- common eclipse about -->
+    <copy file="${eclipse.dir}/misc/about.html"
+        todir="${eclipse.projects.dir}/features/com.ibm.icu.jse4/sourceTemplatePlugin" />
+  </target>
+
+  <target name="eclipseZipTestSrc" depends="eclipseMangle" description="build zip of test sources for debugging">
     <!-- for eclipse -->
     <zip destfile="${zipTestSrc.file}" compress="true" basedir="${src.dir}" includes="com/ibm/icu/dev/test/**/*" excludes="com/ibm/icu/dev/test/cldr/**/*, com/ibm/icu/dev/test/perf/**/*" />
   </target>
@@ -1637,7 +1971,8 @@
     </java>
   </target>
 
-  <target name="runCheck" depends="init,tests">
+<!-- Test suite launcher targets -->
+  <target name="runCheck" depends="tests">
     <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
       <jvmarg value="${jvm.assertion.arg}" />
       <jvmarg value="-Xms96m" />
@@ -1653,7 +1988,7 @@
     </java>
   </target>
 
-  <target name="eclipseRunCheck" depends="init,eclipseTests">
+  <target name="eclipseRunCheck" depends="eclipseTests">
     <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
       <jvmarg value="-Xms96m" />
       <jvmarg value="-Xmx128m" />
@@ -1667,47 +2002,16 @@
     </java>
   </target>
 
-  <target name="eclipseCompat" depends="init, eclipseCore" />
-  <target name="eclipseCompatTests" depends="init, eclipseTestMangle, eclipseTests" />
-  <target name="eclipseCompatCheck" depends="init, eclipseCompat, eclipseCompatTests, deleteCore, eclipseRunCheck" />
+  <target name="eclipseCompat" depends="initBase, eclipseCore" />
+  <target name="eclipseCompatTests" depends="initBase, eclipseTests" />
+  <target name="eclipseCompatCheck" depends="initBase, eclipseCompat, eclipseCompatTests, deleteCore, eclipseRunCheck" />
 
-
-  <target name="core13" depends="init,coreData,icudata" description="build core classes and data">
-    <javac includes="com/ibm/icu/util/**/*.java,com/ibm/icu/text/**/*.java,com/ibm/icu/math/**/*.java,com/ibm/icu/impl/**/*.java,com/ibm/icu/lang/*.java,com/ibm/icu/charset/**/*.java" excludes="**/CVS/**/*,com/ibm/icu/charset/**/*.*" srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" compiler="javac1.3" source="1.3" target="1.3" debug="on" deprecation="off" encoding="ascii" />
-  </target>
-
-  <target name="jar13" depends="core13,indices" description="build full 'icu4j.jar' jar file for jdk1.3">
-    <jar jarfile="${jar.file}" compress="true">
-      <fileset dir="${basedir}" includes="license.html, unicode-license.txt" />
-      <fileset dir="${build.dir}" includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*" excludes="META-INF/services/**/*,com/ibm/icu/charset/**/*,${icu4j.data.path}/*.cnv, ${icu4j.data.path}/cnvalias.icu" />
-
-      <manifest>
-        <attribute name="Built-By" value="${corp}" />
-        <section name="common">
-          <attribute name="Specification-Title" value="ICU4J JDK 1.3 Compatible Build" />
-          <attribute name="Specification-Version" value="${icu4j.version.string}" />
-          <attribute name="Specification-Vendor" value="ICU" />
-          <attribute name="Implementation-Title" value=" ICU for Java Charsets" />
-          <attribute name="Implementation-Version" value="${icu4j.version.string}" />
-          <attribute name="Implementation-Vendor" value="${corp}" />
-          <attribute name="Implementation-Vendor-Id" value="com.ibm" />
-          <attribute name="Copyright-Info" value="${copyright}" />
-          <attribute name="Sealed" value="false" />
-        </section>
-      </manifest>
-    </jar>
-  </target>
-
-  <target name="jdk13Compat" depends="init, eclipseCoreMangle, core13" description="builds ICU4J core with JDK 1.3" />
-  <target name="jdk13CompatTests" depends="init, jdk13Compat, eclipseTestMangle, eclipseTests" description="builds ICU4J tests with JDK 1.3" />
-  <target name="jdk13CompatCheck" depends="init, jdk13CompatTests, jar13, deleteCore, eclipseRunCheck" description="runs the tests with JDK 1.3" />
-
-
+<!-- ICU TimeZone Update Utility targets -->
   <target name="icutzu" depends="init" description="build ICU4J TimeZone Update Utility Classes">
     <javac includes="${tzu.src.path}/**/*.java" excludes="**/.svn/**/*" srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" source="${icu4j.javac.source}" target="${icu4j.javac.target}" debug="on" deprecation="off" encoding="ascii" />
   </target>
 
-  <target name="icutzudata" depends="init, jar13">
+  <target name="icutzudata" depends="initBase, jar">
     <mkdir dir="${tzu.bin.dir}" />
     <copy todir="${tzu.bin.dir}">
       <fileset dir="${src.dir}/${tzu.src.path}">
@@ -1724,7 +2028,7 @@
     </copy>
   </target>
 
-  <target name="icutzujar" depends="init, icutzu, icutzudata" description="build ICU4J TimeZone Update Utility classes">
+  <target name="icutzujar" depends="initBase, icutzu, icutzudata" description="build ICU4J TimeZone Update Utility classes">
     <jar jarfile="${tzu.bin.dir}/${tzu.jar.file}" compress="true">
       <fileset dir="${basedir}" includes="license.html" />
       <fileset dir="${build.dir}" includes="${tzu.src.path}/**/*.class" />
@@ -1733,10 +2037,10 @@
         <attribute name="Built-By" value="${corp}" />
         <section name="common">
           <attribute name="Specification-Title" value="ICU4J TimeZone Update Utility" />
-          <attribute name="Specification-Version" value="${icu4j.version.string}" />
+          <attribute name="Specification-Version" value="${icu4j.spec.version.string}" />
           <attribute name="Specification-Vendor" value="ICU" />
           <attribute name="Implementation-Title" value="ICUTZU" />
-          <attribute name="Implementation-Version" value="${icu4j.version.string}" />
+          <attribute name="Implementation-Version" value="${icu4j.impl.version.string}" />
           <attribute name="Implementation-Vendor" value="${corp}" />
           <attribute name="Implementation-Vendor-Id" value="com.ibm" />
           <attribute name="Copyright-Info" value="${copyright}" />
