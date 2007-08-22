@@ -1149,9 +1149,14 @@ ucnv_toUnicode(UConverter *converter,
  *                  common error codes that may be set by this function include
  *                  U_BUFFER_OVERFLOW_ERROR, U_STRING_NOT_TERMINATED_WARNING,
  *                  U_ILLEGAL_ARGUMENT_ERROR, and conversion errors
- * @return the length of the output string, not counting the terminating NUL;
- *         if the length is greater than destCapacity, then the string will not fit
- *         and a buffer of the indicated length would need to be passed in
+ * @return The length of the output string, not counting the terminating NUL.
+ *        The terminating NUL may be larger than one byte for the encodings of
+ *        some codepages, like UTF-32, where the terminating NUL is 4 bytes.
+ *        The terminating NUL is written when there is room in the dest buffer.
+ *        If the length is greater than destCapacity, then the string will not fit
+ *        and a buffer of the indicated length would need to be passed in.
+ *        This return value plus the value of ucnv_getMinCharSize will give you a
+ *        buffer large enough for the conversion.
  * @see ucnv_fromUnicode
  * @see ucnv_convert
  * @see UCNV_GET_MAX_BYTES_FOR_STRING

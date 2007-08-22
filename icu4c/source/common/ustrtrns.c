@@ -1161,7 +1161,7 @@ u_strToUTF8WithSub(char *dest,
     }
 
     /* Terminate the buffer */
-    u_terminateChars((char*)dest,destCapacity,reqLength,pErrorCode);
+    u_terminateChars((char*)dest,destCapacity,reqLength,1,pErrorCode);
 
     return (char*)dest;
 }

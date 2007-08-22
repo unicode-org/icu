@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1999-2006, International Business Machines Corporation and   *
+* Copyright (C) 1999-2007, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 *
@@ -723,7 +723,7 @@ UnicodeString::extract(int32_t start,
     u_UCharsToChars(getArrayStart() + start, target, length);
   }
   UErrorCode status = U_ZERO_ERROR;
-  return u_terminateChars(target, targetCapacity, length, &status);
+  return u_terminateChars(target, targetCapacity, length, 1, &status);
 }
 
 void 

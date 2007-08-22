@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2006, International Business Machines
+*   Copyright (C) 2000-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -366,5 +366,5 @@ u_parseUTF8(const char *source, int32_t sLen, char *dest, int32_t destCapacity, 
         i++;
         read += 2;
     }
-    return u_terminateChars(dest, destCapacity, i, status);
+    return u_terminateChars(dest, destCapacity, i, 1, status);
 }

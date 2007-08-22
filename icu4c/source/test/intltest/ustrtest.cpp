@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -609,6 +609,78 @@ UnicodeStringTest::TestExtract()
 
             // try the constructor
             UnicodeString t(expect, sizeof(expect), cnv, errorCode);
+            if(U_FAILURE(errorCode) || s!=t) {
+                errln("UnicodeString(UConverter) conversion failed (%s)",
+                      u_errorName(errorCode));
+            }
+
+            ucnv_close(cnv);
+        }
+    }
+
+    {
+        // test UConverter extract() and constructor to properly NULL terminate
+        UnicodeString s=UNICODE_STRING_SIMPLE("hello");
+        char buffer[24];
+        static const char expect[]={
+            0,0,0,0x68,
+            0,0,0,0x65,
+            0,0,0,0x6C,
+            0,0,0,0x6C,
+            0,0,0,0x6F
+        };
+        UErrorCode errorCode=U_ZERO_ERROR;
+        UConverter *cnv=ucnv_open("UTF-32BE", &errorCode);
+        int32_t length;
+
+        if(U_SUCCESS(errorCode)) {
+            // test preflighting
+            if( (length=s.extract(NULL, 0, cnv, errorCode))!=20 ||
+                errorCode!=U_BUFFER_OVERFLOW_ERROR
+            ) {
+                errln("UnicodeString::extract(NULL, UConverter) preflighting failed (length=%ld, %s)",
+                      length, u_errorName(errorCode));
+            }
+            errorCode=U_ZERO_ERROR;
+            if( (length=s.extract(buffer, 2, cnv, errorCode))!=20 ||
+                errorCode!=U_BUFFER_OVERFLOW_ERROR
+            ) {
+                errln("UnicodeString::extract(too small, UConverter) preflighting failed (length=%ld, %s)",
+                      length, u_errorName(errorCode));
+            }
+
+            // try error cases
+            errorCode=U_ZERO_ERROR;
+            if( s.extract(NULL, 2, cnv, errorCode)==20 || U_SUCCESS(errorCode)) {
+                errln("UnicodeString::extract(UConverter) succeeded with an illegal destination");
+            }
+            errorCode=U_ILLEGAL_ARGUMENT_ERROR;
+            if( s.extract(NULL, 0, cnv, errorCode)==20 || U_SUCCESS(errorCode)) {
+                errln("UnicodeString::extract(UConverter) succeeded with a previous error code");
+            }
+            errorCode=U_ZERO_ERROR;
+
+            // extract for real
+            if( (length=s.extract(buffer, sizeof(buffer), cnv, errorCode))!=20 ||
+                uprv_memcmp(buffer, expect, 20)!=0 ||
+                buffer[20]!=0 || buffer[21]!=0 || buffer[22]!=0 || buffer[23]!=0 ||
+                U_FAILURE(errorCode)
+            ) {
+                errln("UnicodeString::extract(UConverter) conversion failed (length=%ld, %s)",
+                      length, u_errorName(errorCode));
+            }
+            // Test again with just the converter name.
+            if( (length=s.extract(0, s.length(), buffer, sizeof(buffer), "UTF-32BE"))!=20 ||
+                uprv_memcmp(buffer, expect, 20)!=0 ||
+                buffer[20]!=0 || buffer[21]!=0 || buffer[22]!=0 || buffer[23]!=0 ||
+                U_FAILURE(errorCode)
+            ) {
+                errln("UnicodeString::extract(\"UTF-32BE\") conversion failed (length=%ld, %s)",
+                      length, u_errorName(errorCode));
+            }
+
+            // try the constructor
+            UnicodeString t((const char *)expect, sizeof(expect), cnv, errorCode);
             if(U_FAILURE(errorCode) || s!=t) {
                 errln("UnicodeString(UConverter) conversion failed (%s)",
                       u_errorName(errorCode));
