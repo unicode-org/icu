@@ -114,6 +114,8 @@ void BMPSet::initBits() {
         start=list[listIndex++];
         if(listIndex<listLength) {
             limit=list[listIndex++];
+        } else {
+            limit=0x110000;
         }
         if(start>=0x80) {
             break;
@@ -134,6 +136,8 @@ void BMPSet::initBits() {
         start=list[listIndex++];
         if(listIndex<listLength) {
             limit=list[listIndex++];
+        } else {
+            limit=0x110000;
         }
     }
 
@@ -178,6 +182,8 @@ void BMPSet::initBits() {
         start=list[listIndex++];
         if(listIndex<listLength) {
             limit=list[listIndex++];
+        } else {
+            limit=0x110000;
         }
     }
 }
