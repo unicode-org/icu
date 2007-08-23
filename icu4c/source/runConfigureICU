@@ -31,12 +31,13 @@ The following names can be supplied as the argument for platform:
 
     AIX                 Use the IBM Visual Age xlc_r/xlC_r compilers on AIX
     AIX/GCC             Use the GNU gcc/g++ compilers on AIX
+    BeOS                Use the GNU gcc/g++ compilers on BeOS
     Cygwin              Use the GNU gcc/g++ compilers on Cygwin
     Cygwin/MSVC         Use the Microsoft Visual C++ compiler on Cygwin
-    Cygwin/MSVC2005     Use the Microsoft Visual C++ 2005 compiler on Cygwin
     Cygwin/ICL          Use the Intel C++ compiler on Cygwin
     FreeBSD             Use the GNU gcc/g++ compilers on Free BSD
     HP-UX/ACC           Use the HP ANSI C/Advanced C++ compilers on HP-UX 11
+    i5OS                Use the i5/OS C++ compilers on i5/OS
     Linux               Use the GNU gcc/g++ compilers on Linux
     Linux/ECC           Use the Intel ECC compiler on Linux
     Linux/ICC           Use the Intel ICC compiler on Linux
@@ -167,6 +168,14 @@ case $platform in
         RELEASE_CFLAGS='+O2 +Ofltacc'
         RELEASE_CXXFLAGS='+O2 +Ofltacc'
         ;;
+    i5OS)
+        THE_OS="i5/OS"
+        THE_COMP="the i5/OS C++"
+        CC=/usr/bin/icc; export CC
+        CXX=/usr/bin/icc; export CXX
+        RELEASE_CFLAGS='-O4'
+        RELEASE_CXXFLAGS='-O4'
+        ;;
     Linux/ECC)
         THE_OS="Linux"
         THE_COMP="Intel ECC 7.1"
@@ -214,18 +223,6 @@ case $platform in
         DEBUG_CXXFLAGS='/Zi'
         DEBUG_LDFLAGS='/DEBUG'
         ;;
-    Cygwin/MSVC2005)
-        THE_OS="Windows with Cygwin"
-        THE_COMP="Microsoft Visual C++ 2005"
-        CC=cl; export CC
-        CXX=cl; export CXX
-        RELEASE_CFLAGS='/O2 /Ob2'
-        RELEASE_CXXFLAGS='/O2 /Ob2'
-        RELEASE_LDFLAGS='/OPT:NOWIN98'
-        DEBUG_CFLAGS='/Zi'
-        DEBUG_CXXFLAGS='/Zi'
-        DEBUG_LDFLAGS='/DEBUG'
-        ;;
     Cygwin/ICL)
         THE_OS="Windows with Cygwin"
         THE_COMP="Intel C++"
@@ -262,13 +259,28 @@ case $platform in
         CC=qcc; export CC
         CXX=QCC; export CXX
         ;;
+    BeOS)
+        THE_OS="BeOS"
+        THE_COMP="the GNU C++"
+        OPTIMIZATIONS="-fdefault-inline -fdefer-pop -fforce-mem -fforce-addr \
+            -finline -finline-functions \
+            -fkeep-inline-functions -fkeep-static-consts -fbranch-count-reg \
+            -ffunction-cse -fstrength-reduce -fthread-jumps -fcse-follow-jumps \
+            -fcse-skip-blocks -frerun-cse-after-loop -frerun-loop-opt \
+            -fexpensive-optimizations -foptimize-register-move -fregmove \
+            -fschedule-insns -fschedule-insns2 -ffloat-store -funroll-loops \
+            -fmove-all-movables -freduce-all-givs -fpeephole \
+            -funroll-all-loops -ffunction-sections -fdata-sections"
+        RELEASE_CFLAGS="$OPTIMIZATIONS"
+        RELEASE_CXXFLAGS="$OPTIMIZATIONS"
+        ;;
     zOS)
         THE_OS="z/OS (OS/390)"
         THE_COMP="z/OS C/C++"
         CC=cc; export CC
         CXX=cxx; export CXX
-        RELEASE_CFLAGS="-2 -Wc,'inline(auto,noreport,500,4000)'"
-        RELEASE_CXXFLAGS="-2 -Wc,'inline(auto,noreport,500,4000)'"
+        export RELEASE_CFLAGS="-2 -Wc,'inline(auto,noreport,500,2500)'"
+        export RELEASE_CXXFLAGS="-2 -Wc,'inline(auto,noreport,300,2500)'"
         ;;
     zOSV1R2)
         THE_OS="z/OS 1.2"
@@ -280,8 +292,8 @@ case $platform in
         export LDFLAGS="-Wl,'compat=pm3'"
         export CFLAGS="-Wc,'target(zOSV1R2)'"
         export CXXFLAGS="-Wc,'target(zOSV1R2)'"
-        export RELEASE_CFLAGS="-2 -Wc,'inline(auto,noreport,500,4000)'"
-        export RELEASE_CXXFLAGS="-2 -Wc,'inline(auto,noreport,500,4000)'"
+        export RELEASE_CFLAGS="-2 -Wc,'inline(auto,noreport,500,2500)'"
+        export RELEASE_CXXFLAGS="-2 -Wc,'inline(auto,noreport,300,2500)'"
         ;;
     *)
         >&2 echo "$me: unrecognized platform \"$platform\" (use --help for help)"
@@ -305,6 +317,7 @@ then
     then
         CFLAGS="$CFLAGS $RELEASE_CFLAGS"
     fi
+    export CFLAGS
     if test "$RELEASE_CXXFLAGS" = ""
     then
         case $CXX in
@@ -317,10 +330,7 @@ then
     then
         CXXFLAGS="$CXXFLAGS $RELEASE_CXXFLAGS"
     fi
-    if test "$RELEASE_LDFLAGS" != ""
-    then
-        LDFLAGS="$LDFLAGS $RELEASE_LDFLAGS"
-    fi
+    export CXXFLAGS
 fi
 
 if test $debug -eq 1
@@ -329,19 +339,18 @@ then
     then
         CFLAGS="$CFLAGS $DEBUG_CFLAGS"
     fi
+    export CFLAGS
     if test "$DEBUG_CXXFLAGS" != ""
     then
         CXXFLAGS="$CXXFLAGS $DEBUG_CXXFLAGS"
     fi
+    export CXXFLAGS
     if test "$DEBUG_LDFLAGS" != ""
     then
         LDFLAGS="$LDFLAGS $DEBUG_LDFLAGS"
     fi
+    export LDFLAGS
 fi
-
-export CFLAGS
-export CXXFLAGS
-export LDFLAGS
 
 # Run configure
 

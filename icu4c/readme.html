@@ -1254,20 +1254,9 @@ Data set name type  : PDS</samp>
       <li>
         Create i5/OS target library. This library will be the target for the
         resulting modules, programs and service programs. You will specify this
-        library on the OUTPUTDIR environment variable in step 2. 
+        library on the OUTPUTDIR environment variable. 
 <pre>
-<samp>CRTLIB LIB(<i>libraryname</i>)</samp>
-</pre>
-      </li>
-
-      <li>
-        Set up the following environment variables in your build process (use the
-        <i>libraryname</i> from the previous step). The <i>libraryname</i>
-        identifies target i5/OS library for *module, *pgm and *srvpgm objects. 
-<pre>
-<samp>ADDENVVAR ENVVAR(CC) VALUE('/usr/bin/icc')
-ADDENVVAR ENVVAR(CXX) VALUE('/usr/bin/icc')
-ADDENVVAR ENVVAR(MAKE) VALUE('/usr/bin/gmake')
+<samp>CRTLIB LIB(<i>libraryname</i>)
 ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
 </pre>
       </li>
@@ -1283,23 +1272,59 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
 
       <li>Change your current directory to icu/source.</li>
 
-      <li>Run <tt>'export CFLAGS=-O4 CXXFLAGS=-O4'</tt> to optimize your build of
-      ICU. If the build fails, rerun these build steps without this step before
-      asking the icu-support mailing list for help.</li>
+      <li>Run <tt>'./runConfigureICU i5OS'</tt>  (See <a href="#HowToConfigureICUi5OS">configuration
+      note</a> below).</li></li>
 
-      <li>Run <tt>'./configure'</tt></li>
+      <li>Type <tt>"gmake"</tt> (or "make" if GNU make is the default make on
+      your platform) to compile the libraries and all the data files. The proper
+      name of the GNU make command is printed at the end of the configuration
+      run, as in "You must use gmake to compile ICU". 
+      (See <a href="#HowToCompilei5OS">compilation note</a> below).</li>
 
-      <li>Run <tt>'gmake'</tt> to build ICU.</li>
+      <li>Optionally, type <tt>"gmake check"</tt> to run the test suite, which
+      checks for ICU's functionality integrity (See <a href=
+      "#HowToTesti5OS">testing note</a> below).</li>
 
-      <li>Run <tt>'gmake check'</tt> to build the tests.</li>
-
-      <li>The "utility/MultithreadTest" test in intltest may have failed during
-      <tt>'gmake check'</tt>. In order to make this test pass, please use
-      <tt>'gmake check QIBM_MULTI_THREADED=Y'</tt> after you built the tests with
-      <tt>'gmake check'</tt> from the previous step. You can look at the <a href=
-      "http://publib.boulder.ibm.com/infocenter/iseries/v5r3/index.jsp?topic=/apis/concept4.htm">
-      iSeries Information Center</a> for more details.</li>
+      <li>Type <tt>"gmake install"</tt> to install ICU. If you used the --prefix=
+      option on configure or runConfigureICU, ICU will be installed to the
+      directory you specified. (See <a href="#HowToInstallICUi5OS">installation
+      note</a> below).</li>
     </ol>
+
+    <p><a name="HowToConfigureICUi5OS" id="HowToConfigureICUi5OS"><strong>Configuring ICU
+    NOTE:</strong></a> Type <tt>"./runConfigureICU --help"</tt> for help on how
+    to run it and a list of supported platforms. You may also want to type
+    <tt>"./configure --help"</tt> to print the available configure options that
+    you may want to give runConfigureICU. If you are not using the
+    runConfigureICU script, or your platform is not supported by the script, you
+    may need to set your CC, CXX, CFLAGS and CXXFLAGS environment variables, and
+    type <tt>"./configure"</tt>. Some of the more frequently used options to
+    configure are --disable-64bit-libs to create 32-bit libraries, and --srcdir
+    to do out of source builds (build the libraries in the current location).</p>
+
+    <p><a name="HowToCompilei5OS" id="HowToCompilei5OS"><strong>Setting the Make Command
+    NOTE:</strong></a>  Depending on how the system is set up, the command listed
+    at the end of the configuration run may not work on all files.  In those cases you may
+    need to export the path to the gmake utility.  Please type <tt>"EXPORT MAKE=/usr/bin/gmake"</tt> or
+    you can <tt>ADDENVVAR ENVVAR(MAKE) VALUE('/usr/bin/gmake')</tt> from the i5/OS command line
+ .  Then run the gmake command.
+     </p>
+
+    <p><a name="HowToTesti5OS" id="HowToTesti5OS"><strong>Running Multithreaded Tests
+    NOTE:</strong></a>  The "utility/MultithreadTest" test in intltest may have failed during
+    <tt>'gmake check'</tt>. In order to make this test pass, please use
+    <tt>'gmake check QIBM_MULTI_THREADED=Y'</tt>.  You can look at the <a href=
+    "http://publib.boulder.ibm.com/infocenter/iseries/v5r3/index.jsp?topic=/apis/concept4.htm">
+    iSeries Information Center</a> for more details.</p>
+
+    <p><a name="HowToInstallICUi5OS" id="HowToInstallICUi5OS"><strong>Installing ICU
+    NOTE:</strong></a> Some platforms use package management tools to control the
+    installation and uninstallation of files on the system, as well as the
+    integrity of the system configuration. You may want to check if ICU can be
+    packaged for your package management tools by looking into the "packaging"
+    directory. (Please note that if you are using a snapshot of ICU from CVS, it
+    is probable that the packaging scripts or related files are not up to date
+    with the contents of ICU at this time, so use them with caution).</p>
     <!-- end build environment -->
 
     <h2><a name="HowToPackage" href="#HowToPackage" id="HowToPackage">How To
