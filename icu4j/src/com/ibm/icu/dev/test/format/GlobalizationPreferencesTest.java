@@ -1,4 +1,3 @@
-//##header J2SE15
 /*
  *******************************************************************************
  * Copyright (C) 2004-2007, International Business Machines Corporation and    *
@@ -176,8 +175,6 @@ public class GlobalizationPreferencesTest extends TestFmwk {
             errln("FAIL: setLocales(List) must be blocked after frozen");
         }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
         // setLocales(String)
         logln("Call setLocales(String) after frozen");
         bSet = true;
@@ -189,7 +186,6 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         if (bSet) {
             errln("FAIL: setLocales(String) must be blocked after frozen");
         }
-//#endif
 
         // setLocale(ULocale)
         logln("Call setLocale(ULocale) after frozen");
@@ -241,7 +237,10 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         {"fr_CA", "fr"},
         {"fr", "fr_CA"},
         {"es", "fr", "en_US"},
-        {"zh_CN", "zh_Hans", "zh_Hans_CN"}
+        {"zh_CN", "zh_Hans", "zh_Hans_CN"},
+        {"en_US_123"},
+        {"es_US", "es"},
+        {"de_DE", "es", "fr_FR"},
     };
 
     static String[] ACCEPT_LANGUAGES = {
@@ -249,7 +248,10 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         "fr-CA,fr;q=0.5",
         "fr_CA;q=0.5,fr",
         "es,fr;q=0.76,en_US;q=0.75",
-        "zh-CN,zh-Hans;q=0.5,zh-Hans-CN;q=0.1"
+        "zh-CN,zh-Hans;q=0.5,zh-Hans-CN;q=0.1",
+        "en-US-123",
+        "  es\t; q   =0.5 \t, es-US ;q   =1",
+        "fr-FR; q=0.5, de-DE, es",
     };
 
     static String[][] RESULTS_LOCALEIDS = {
@@ -257,7 +259,10 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         {"fr_CA", "fr"},
         {"fr_CA", "fr"},
         {"es", "fr", "en_US", "en"},
-        {"zh_Hans_CN", "zh_CN", "zh_Hans", "zh"}
+        {"zh_Hans_CN", "zh_CN", "zh_Hans", "zh"},
+        {"en_US_123", "en_US", "en"},
+        {"es_US", "es"},
+        {"de_DE", "de", "es", "fr_FR", "fr"},
     };
 
     public void TestSetLocales() {
@@ -331,8 +336,6 @@ public class GlobalizationPreferencesTest extends TestFmwk {
             }
         }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
         // setLocales(String)
         for (int i = 0; i < ACCEPT_LANGUAGES.length; i++) {
             String acceptLanguage = ACCEPT_LANGUAGES[i];
@@ -383,7 +386,6 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         if (!gp.getLocale(0).toString().equals("ko_KR")) {
             errln("FAIL: Previous valid locale list had gone");
         }
-//#endif
     }
 
     public void TestResourceBundle() {
