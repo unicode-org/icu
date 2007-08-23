@@ -1417,9 +1417,10 @@ getTrail:
 
                 /* JIS7/8: try single-byte half-width Katakana before JISX208 */
                 if(converterData->version == 3 || converterData->version == 4) {
-                    choices[choiceCount++] = cs = (int8_t)HWKANA_7BIT;
-                    csm &= ~CSM(cs);
+                    choices[choiceCount++] = (int8_t)HWKANA_7BIT;
                 }
+                /* Do not try single-byte half-width Katakana for other versions. */
+                csm &= ~CSM(HWKANA_7BIT);
 
                 /* try the current G0 charset */
                 choices[choiceCount++] = cs = pFromU2022State->cs[0];
@@ -1448,6 +1449,12 @@ getTrail:
              * len>0: found a roundtrip result, done
              */
             len = 0;
+            /*
+             * We will turn off useFallback after finding a fallback,
+             * but we still get fallbacks from PUA code points as usual.
+             * Therefore, we will also need to check that we don't overwrite
+             * an early fallback with a later one.
+             */
             useFallback = cnv->useFallback;
 
             for(i = 0; i < choiceCount && len <= 0; ++i) {
@@ -1475,12 +1482,14 @@ getTrail:
                     if((uint32_t)(0xff9f-sourceChar)<=(0xff9f-0xff61)) {
                         if(converterData->version==3) {
                             /* JIS7: use G1 (SO) */
+                            /* Shift U+FF61..U+FF9F to bytes 21..5F. */
                             targetValue = (uint32_t)(sourceChar - (0xff61 - 0x21));
                             len = 1;
                             pFromU2022State->cs[1] = cs = cs0; /* do not output an escape sequence */
                             g = 1;
                         } else if(converterData->version==4) {
                             /* JIS8: use 8-bit bytes with any single-byte charset, see escape sequence output below */
+                            /* Shift U+FF61..U+FF9F to bytes A1..DF. */
                             targetValue = (uint32_t)(sourceChar - (0xff61 - 0xa1));
                             len = 1;
 
@@ -1501,7 +1510,7 @@ getTrail:
                                 converterData->myConverterArray[cs0],
                                 sourceChar, &value,
                                 useFallback);
-                    if(len2 != 0 && value <= 0x7f) {
+                    if(len2 != 0 && !(len2 < 0 && len != 0) && value <= 0x7f) {
                         targetValue = value;
                         len = len2;
                         cs = cs0;
@@ -1515,7 +1524,7 @@ getTrail:
                                 converterData->myConverterArray[cs0],
                                 sourceChar, &value,
                                 useFallback);
-                    if(len2 != 0 && 0xa0 <= value && value <= 0xff) {
+                    if(len2 != 0 && !(len2 < 0 && len != 0) && 0xa0 <= value && value <= 0xff) {
                         targetValue = value - 0x80;
                         len = len2;
                         cs = cs0;
@@ -1529,7 +1538,7 @@ getTrail:
                                 converterData->myConverterArray[cs0],
                                 sourceChar, &value,
                                 useFallback, MBCS_OUTPUT_2);
-                    if(len2 == 2 || len2 == -2) {  /* only accept DBCS: abs(len)==2 */
+                    if(len2 == 2 || (len2 == -2 && len == 0)) {  /* only accept DBCS: abs(len)==2 */
                         if(cs0 == KSC5601) {
                             if( (uint16_t)(value - 0xa1a1) <= (0xfefe - 0xa1a1) &&
                                 (uint8_t)(value - 0xa1) <= (0xfe - 0xa1)
@@ -2606,6 +2615,12 @@ getTrail:
                  * len>0: found a roundtrip result, done
                  */
                 len = 0;
+                /*
+                 * We will turn off useFallback after finding a fallback,
+                 * but we still get fallbacks from PUA code points as usual.
+                 * Therefore, we will also need to check that we don't overwrite
+                 * an early fallback with a later one.
+                 */
                 useFallback = cnv->useFallback;
 
                 for(i = 0; i < choiceCount && len <= 0; ++i) {
@@ -2620,7 +2635,7 @@ getTrail:
                                         &value,
                                         useFallback,
                                         MBCS_OUTPUT_3);
-                            if(len2==3 || len2==-3) {
+                            if(len2 == 3 || (len2 == -3 && len == 0)) {
                                 targetValue = value;
                                 cs = (int8_t)(CNS_11643_0 + (value >> 16) - 0x80);
                                 if(len2 >= 0) {
@@ -2648,7 +2663,7 @@ getTrail:
                                         &value,
                                         useFallback,
                                         MBCS_OUTPUT_2);
-                            if(len2 == 2 || len2 == -2) {
+                            if(len2 == 2 || (len2 == -2 && len == 0)) {
                                 targetValue = value;
                                 len = len2;
                                 cs = cs0;
