@@ -381,7 +381,7 @@ public class TestFmwk extends AbstractTestLog {
                 }catch (ExceptionInInitializerError e){
                     handleException(e);
                 } catch (InvocationTargetException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                     handleException(e);
                 }catch (MissingResourceException e) {
                     handleException(e);
