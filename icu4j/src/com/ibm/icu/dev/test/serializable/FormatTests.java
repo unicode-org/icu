@@ -39,6 +39,27 @@ import com.ibm.icu.util.ULocale;
 public class FormatTests
 {
 
+    public static class RelativeDateFormatHandler implements SerializableTest.Handler
+    {
+        public Object[] getTestObjects()
+        {
+            DateFormat formats[] = { 
+                    DateFormat.getDateInstance(DateFormat.RELATIVE_LONG,new ULocale("en")),
+                    DateFormat.getDateInstance(DateFormat.RELATIVE_SHORT,new ULocale("ru")),
+            };
+            
+            return formats;
+        }
+        
+        public boolean hasSameBehavior(Object a, Object b) {
+            DateFormat da = (DateFormat)a;
+            DateFormat db = (DateFormat)b;
+            
+            Date d = new Date(System.currentTimeMillis());
+            return da.format(d).equals(db.format(d));
+        }
+    }
+
     public static class BasicDurationFormatHandler implements SerializableTest.Handler
     {
         public Object[] getTestObjects()
@@ -61,7 +82,7 @@ public class FormatTests
             //return da.format(d).equals(db.format(d));
         }
     }
-    
+
     public static class NumberFormatHandler implements SerializableTest.Handler
     {
         public Object[] getTestObjects()

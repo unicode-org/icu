@@ -66,6 +66,7 @@ public class DataDrivenFormatTest extends ModuleTest {
    
     private static final String kPATTERN = "PATTERN=";
     private static final String kMILLIS = "MILLIS=";
+    private static final String kRELATIVE_MILLIS = "RELATIVE_MILLIS=";
     
     private void testConvertDate(TestDataModule.TestData testData, DataMap  settings, boolean fmt) {
         DateFormat basicFmt = new SimpleDateFormat("EEE MMM dd yyyy / YYYY'-W'ww-ee");
@@ -73,6 +74,7 @@ public class DataDrivenFormatTest extends ModuleTest {
         int n = 0;
         for (Iterator iter = testData.getDataIterator(); iter.hasNext();) {
             ++n;
+            long now = System.currentTimeMillis();
             DataMap currentCase = (DataMap) iter.next();
             String caseString = "["+testData.getName()+"#"+n+(fmt?"format":"parse")+"]";
             
@@ -106,6 +108,9 @@ public class DataDrivenFormatTest extends ModuleTest {
             if(date.startsWith(kMILLIS)) {
                 useDate = true;
                 fromDate = new Date(Long.parseLong(date.substring(kMILLIS.length())));
+            } else if(date.startsWith(kRELATIVE_MILLIS)) {
+                useDate = true;
+                fromDate = new Date(now+Long.parseLong(date.substring(kRELATIVE_MILLIS.length())));
             } else {
                 fromSet = new CalendarFieldsSet();
                 fromSet.parseFrom(date);
@@ -118,7 +123,7 @@ public class DataDrivenFormatTest extends ModuleTest {
                 cal.clear();
                 FieldPosition pos = new FieldPosition(0);
                 if(useDate) {
-                    output = format.format(date, output, pos);
+                    output = format.format(fromDate, output, pos);
                 } else {
                     fromSet.setOnCalendar(cal);
                     format.format(cal, output, pos);
