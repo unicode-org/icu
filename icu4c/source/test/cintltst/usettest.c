@@ -541,22 +541,51 @@ static USet *openIDSet() {
 }
 
 static void TestFreezable() {
-    USet *idSet=openIDSet();
-    USet *frozen=uset_clone(idSet);
+    USet *idSet;
+    USet *frozen;
     USet *thawed;
+
+    idSet=openIDSet();
+
+    if (idSet == NULL) {
+        log_err("openIDSet() returned NULL");
+        uset_close(idSet);
+        return;
+    }
+
+    frozen=uset_clone(idSet);
+
+    if (frozen == NULL) {
+        log_err("uset_Clone() returned NULL");
+        return;
+    }
+
     if(!uset_equals(frozen, idSet)) {
         log_err("uset_clone() did not make an equal copy\n");
     }
+
     uset_freeze(frozen);
     uset_addRange(frozen, 0xd802, 0xd805);
+
     if(uset_isFrozen(idSet) || !uset_isFrozen(frozen) || !uset_equals(frozen, idSet)) {
         log_err("uset_freeze() or uset_isFrozen() does not work\n");
     }
+
     thawed=uset_cloneAsThawed(frozen);
+
+    if (thawed == NULL) {
+        log_err("uset_cloneAsThawed(frozen) returned NULL");
+        uset_close(frozen);
+        uset_close(idSet);
+        return;
+    }
+
     uset_addRange(thawed, 0xd802, 0xd805);
+
     if(uset_isFrozen(thawed) || uset_equals(thawed, idSet) || !uset_containsRange(thawed, 0xd802, 0xd805)) {
         log_err("uset_cloneAsThawed() does not work\n");
     }
+
     uset_close(idSet);
     uset_close(frozen);
     uset_close(thawed);
@@ -567,6 +596,11 @@ static void TestSpan() {
     static const char* s8="\xE0\xB8\x81\xE3\x80\x80";
 
     USet *idSet=openIDSet();
+
+    if (idSet == NULL) {
+        log_err("openIDSet() returned NULL");
+        return;
+    }
 
     if(
         1!=uset_span(idSet, s16, 2, USET_SPAN_CONTAINED) ||
