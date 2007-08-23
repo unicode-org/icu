@@ -172,6 +172,8 @@ icu4c/source/tools/tzcode/zdump.c -text
 icu4j/.classpath -text
 icu4j/.project -text
 icu4j/eclipseFragment.txt -text
+icu4j/eclipseProjectMisc/initSrc.launch -text
+icu4j/eclipseProjectMisc/normSrc.launch -text
 icu4j/ee.foundation.jar -text
 icu4j/license.html -text
 icu4j/preprocessor.txt -text

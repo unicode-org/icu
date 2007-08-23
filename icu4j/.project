@@ -12,7 +12,7 @@
 		</buildCommand>
 		<buildCommand>
 			<name>org.eclipse.ui.externaltools.ExternalToolBuilder</name>
-			<triggers>full,incremental,</triggers>
+			<triggers>full,</triggers>
 			<arguments>
 				<dictionary>
 					<key>LaunchConfigHandle</key>
