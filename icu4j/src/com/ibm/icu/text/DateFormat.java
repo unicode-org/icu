@@ -419,7 +419,7 @@ public abstract class DateFormat extends UFormat {
             return format( new Date(((Number)obj).longValue()),
                           toAppendTo, fieldPosition );
         else 
-            throw new IllegalArgumentException("Cannot format given Object (" + obj.getClass().getSimpleName() + ") as a Date");
+            throw new IllegalArgumentException("Cannot format given Object (" + obj.getClass().getName() + ") as a Date");
     }
 
     /**
