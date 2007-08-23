@@ -454,7 +454,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * Unlocalized date-time pattern characters. For example: 'y', 'd', etc.
      * All locales use the same unlocalized pattern characters.
      */
-    static final String  patternChars = "GyMdkHmsSEDFwWahKzYeugAZvcLQq";
+    static final String  patternChars = "GyMdkHmsSEDFwWahKzYeugAZvcLQqV";
 
     /**
      * Localized date-time pattern characters. For example, a locale may
@@ -1311,31 +1311,44 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /*
-     * Package private: used by SimpleDateFormat.
+     * @internal Package private: used by SimpleDateFormat.
      * Gets the string for the specified time zone.
      * @param zid The time zone ID
      * @param type The type of zone string
-     * @return The zone string, or null if not available.
+     * @param cal The calendar to use
+     * @return A metazone info structure, returning the desired metazone string and the
+     *         metazone ID.
      */
-    String getMetazoneString(String zid, int type, Calendar cal) {
+
+    MetazoneInfo getMetazoneInfo(String zid, int type, Calendar cal) {
         // Try local zone item info first
-        String zoneString = getMetazoneString(getLocalZoneItemInfo(), zid, type, cal);
-        if (zoneString == null) {
+        MetazoneInfo mzInfo = getMetazoneInfo(getLocalZoneItemInfo(), zid, type, cal);
+        if (mzInfo == null) {
             // Fallback to the default info
-            zoneString = getMetazoneString(getDefaultZoneItemInfo(), zid, type, cal);
+            mzInfo = getMetazoneInfo(getDefaultZoneItemInfo(), zid, type, cal);
         }
-        return zoneString;
+        return mzInfo;
     }
 
     /*
-     * Gets the zone string from the specified zone item info
+     * @internal Package private: used by SimpleDateFormat.
+     * Gets the string for the specified time zone.
+     * @param zinfo The zone item info
+     * @param zid The time zone ID
+     * @param type The type of zone string
+     * @param cal The calendar to use
+     * @return A metazone info structure, returning the desired metazone string and the
+     *         metazone ID.
+     *
+     * Gets the metazone string from the specified zone item info
      */
-    private String getMetazoneString(ZoneItemInfo zinfo, String zid, int type, Calendar cal) {
+    private MetazoneInfo getMetazoneInfo(ZoneItemInfo zinfo, String zid, int type, Calendar cal) {
+
+        MetazoneInfo mz = new MetazoneInfo();
 
         if (zinfo == null) {
             return null;
         }
-        String mzid;
         String[] names = (String[])zinfo.tzidMap.get(zid);
         if ( names == null ) {
            return null;
@@ -1346,16 +1359,57 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         String theTime = df.format(cal.getTime());
         int mz_index = 8;
         while ( mz_index < names.length ) {
-       if ( names[mz_index] != null && 
-                names[mz_index+1].compareTo(theTime) <= 0 &&  
-                names[mz_index+2].compareTo(theTime) >  0 ) {
-                 mzid = "meta/"+names[mz_index];
-                 String mz_string = getZoneString(zinfo,mzid,type);
-                 return mz_string;
-           } 
-           mz_index += 3;
+            if ( names[mz_index] != null && 
+                 names[mz_index+1].compareTo(theTime) <= 0 &&  
+                 names[mz_index+2].compareTo(theTime) >  0 ) {
+                     mz.mzid = "meta/"+names[mz_index];
+                     mz.value = getZoneString(zinfo,mz.mzid,type);
+                     return mz;
+            } 
+            mz_index += 3;
         }
         return null;
+    }
+
+    boolean isCommonlyUsed(String zid) {
+
+        if ( zid == null || zid.length() == 0 ) {
+            return false;
+        }
+
+        String key = zid.replace('/',':');
+        for (ULocale tempLocale = requestedLocale; tempLocale != null; tempLocale = tempLocale.getFallback()) {
+            UResourceBundle rb = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, tempLocale);
+            UResourceBundle zoneArray;
+            try {
+                zoneArray = rb.get("zoneStrings");
+            } catch (MissingResourceException ex) {
+                continue;
+            }
+
+            UResourceBundle zoneItem;
+            try {
+                zoneItem = zoneArray.get(key);
+            } catch (MissingResourceException ex) {
+                continue;
+            }
+
+            UResourceBundle cuRes;
+            try {
+                cuRes = zoneItem.get(COMMONLY_USED);
+            } catch (MissingResourceException ex) {
+                continue;
+            }
+            int cuValue = cuRes.getInt();
+            if ( cuValue == 1 ) {
+                return true;
+            }
+            else {
+                return false;
+            }
+            
+        }
+        return false;    
     }
 
     class ZoneItem{
@@ -1442,6 +1496,11 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         }
         
         return result;
+    }
+
+    protected class MetazoneInfo {
+        String mzid;
+        String value;
     }
 
     /*
@@ -1686,8 +1745,8 @@ public class DateFormatSymbols implements Serializable, Cloneable {
                                    LONG_DAYLIGHT  = "ld",
                                    EXEMPLAR_CITY  = "ec",
                                    USES_METAZONE  = "um",
-                                   METAZONE       = "mz";
-                                   //COMMONLY_USED  = "cu";
+                                   METAZONE       = "mz",
+                                   COMMONLY_USED  = "cu";
     /*
      * The translation type of the translated zone strings
      */

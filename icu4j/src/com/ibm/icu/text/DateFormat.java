@@ -363,11 +363,21 @@ public abstract class DateFormat extends UFormat {
     public final static int STANDALONE_QUARTER_FIELD = 28;
     
     /**
+     * FieldPosition selector for 'V' field alignment,
+     * corresponding to the {@link Calendar#ZONE_OFFSET} and
+     * {@link Calendar#DST_OFFSET} fields.  This displays the fallback timezone
+     * name when VVVV is specified, and the short standard or daylight
+     * timezone name ignoring commonlyUsed when a single V is specified.
+     * @stable ICU 3.8
+     */
+    public final static int TIMEZONE_SPECIAL_FIELD = 29;
+
+    /**
      * Number of FieldPosition selectors for DateFormat.
      * Valid selectors range from 0 to FIELD_COUNT-1.
      * @stable ICU 3.0
      */
-    public final static int FIELD_COUNT = 29; // must == DateFormatSymbols.patternChars.length()
+    public final static int FIELD_COUNT = 30; // must == DateFormatSymbols.patternChars.length()
 
     // Proclaim serial compatibility with 1.1 FCS
     private static final long serialVersionUID = 7218322306649953788L;
