@@ -61,7 +61,7 @@ fDatesLen(other.fDatesLen), fDates(NULL)
 }
 
 RelativeDateFormat::RelativeDateFormat( UDateFormatStyle timeStyle, UDateFormatStyle dateStyle, const Locale& locale, UErrorCode& status)
- : DateFormat(), fDateFormat(NULL), fTimeFormat(NULL), fCombinedFormat(NULL),
+ : DateFormat(), fDateFormat(NULL), fTimeFormat(NULL), fCombinedFormat(NULL), fLocale(locale),
 fDateStyle(dateStyle), fTimeStyle(timeStyle), fDatesLen(0), fDates(NULL)
  {
     if(U_FAILURE(status) ) {
@@ -230,7 +230,6 @@ const UChar *RelativeDateFormat::getStringForDay(int32_t day, int32_t &len, UErr
 void RelativeDateFormat::loadDates(UErrorCode &status) {
     CalendarData calData(fLocale, "gregorian", status);
     UResourceBundle *strings = calData.getByKey3("fields", "day", "relative", status);
-
     // set up min/max 
     fDayMin=-1;
     fDayMax=1;

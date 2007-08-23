@@ -46,5 +46,60 @@ format:table(nofallback) {
                },
             }
         }
+        TestFormatRelative {
+            Info {
+                Description { "relative format :" }
+            }
+            Settings {
+                {
+                    Type { "date_format" }
+                },
+            }
+            Headers { "locale","spec", "date", "str"}
+            Cases { 
+               {
+                    "en_US@calendar=gregorian",         
+                    "DATE=RELATIVE_SHORT",
+                    "RELATIVE_MILLIS=86410000", // one day from now
+                    "Tomorrow"
+               },
+               {
+                    "en_US@calendar=gregorian",         
+                    "DATE=RELATIVE_SHORT",
+                    "RELATIVE_MILLIS=0", // one day before now
+                    "Today"
+               },
+               {
+                    "en_US@calendar=gregorian",         
+                    "DATE=RELATIVE_SHORT",
+                    "RELATIVE_MILLIS=-86410000", // one day before now
+                    "Yesterday"
+               },
+               {
+                    "mt_MT@calendar=gregorian",         
+                    "DATE=RELATIVE_SHORT",
+                    "RELATIVE_MILLIS=86410000", // one day from now
+                    "Għada"
+               },
+               {
+                    "mt_MT@calendar=gregorian",         
+                    "DATE=RELATIVE_SHORT",
+                    "RELATIVE_MILLIS=0", // one day before now
+                    "Illum"
+               },
+               {
+                    "mt_MT@calendar=gregorian",         
+                    "DATE=RELATIVE_SHORT",
+                    "RELATIVE_MILLIS=-86410000", // one day before now
+                    "Lbieraħ"
+               },
+               {
+                    "ru",
+                    "DATE=RELATIVE_SHORT",
+                    "RELATIVE_MILLIS=-172810000", // 2 days ago
+                    "Позавчера"
+               },
+            }
+        }
     }
 }
