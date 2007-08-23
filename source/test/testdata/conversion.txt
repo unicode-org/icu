@@ -495,6 +495,46 @@ conversion:table(nofallback) {
     fromUnicode {
       Headers { "charset", "unicode", "bytes", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidUChars" }
       Cases {
+        // Verify that mappings that would result in byte values outside 20..7F (for SBCS)
+        // or 21..7E (for DBCS) are not used.
+        // ibm-9005_X110-2007.ucm (ISO 8859-7, <ESC>.F=1b2e46):
+        //   <U009F> \x9F |0 (also in ISO 8859-1)
+        //   <U0387> \xB7 |1
+        // windows-949-2000 (KSC_5601, <ESC>$(C=1b242843):
+        //   <UC829> \xA0\xA1 |0
+        //   <UD4FE> \xC0\x41 |0
+        //   <UD79D> \xC8\xFE |0
+        {
+          "JIS8",  // =ISO_2022,locale=ja,version=4
+          "\u009f\u0387\uc829\ud4fe\ud79d",
+          :bin{       1a1b2e461b4e371a1a1b242843487e1b2842 },
+          :intvector{ 0,1,1,1,1,1,1,2,3,4,4,4,4,4,4,4,4,4 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+        // Ticket 5483: ISO 2022 converter incorrectly using fallback mapping
+        // Verify that a roundtrip mapping is used even when a fallback mapping is
+        // available in the current state.
+        //   U+FF61 is handled in code
+        // jisx-208.ucm (<ESC>$B=1b2442):
+        //   <U30FE> \x21\x34 |0
+        //   <UFF5D> \x21\x51 |0  and
+        // ibm-897_P100-1995.ucm (JIS X 0201, <ESC>(J=1b284a):
+        //   <UFF5D> \x7D |1
+        // ibm-9005_X110-2007.ucm (ISO 8859-7, <ESC>.F=1b2e46):
+        //   <U03D5> \xF6 |1
+        //   <U2015> \xAF |0
+        //   <UFF5D> \x7D |1 (not legal for ISO 2022)
+        // windows-949-2000 (KSC_5601, <ESC>$(C=1b242843):
+        //   <UAC00> \xB0\xA1 |0
+        //   <UFF5D> \xA3\xFD |0
+        //   <U223C> \xA1\xAD |0 (in extension table)
+        {
+          "JIS8",  // =ISO_2022,locale=ja,version=4
+          "a\uff61\u03d5\uff5d\uac00\u223c\uff5d\u30fe\uff5d",  // Make it switch to ISO-8859-7, KSC 5601 and JIS X 0208.
+          :bin{       61a11b2e461b4e761b244221511b2428433021212d237d1b2442213421511b2842 },
+          :intvector{ 0,1,2,2,2,2,2,2,3,3,3,3,3,4,4,4,4,4,4,5,5,6,6,7,7,7,7,7,8,8,8,8,8 },
+          :int{1}, :int{1}, "", "?", ""
+        }
         // Code coverage for UTF-8->SBCS conversion (ucnv_convertEx()).
         // Test code path for non-roundtripping ASCII characters
         // (try EBCDIC SBCS, and IBM PC SBCS with control code rotation).

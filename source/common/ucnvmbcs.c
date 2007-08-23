@@ -4098,7 +4098,8 @@ ucnv_MBCSFromUChar32(UConverterSharedData *sharedData,
 
     cx=sharedData->mbcs.extIndexes;
     if(cx!=NULL) {
-        return ucnv_extSimpleMatchFromU(cx, c, pValue, useFallback);
+        length=ucnv_extSimpleMatchFromU(cx, c, pValue, useFallback);
+        return length>=0 ? length : -length;  /* return abs(length); */
     }
 
     /* unassigned */
