@@ -2122,7 +2122,7 @@ class CharsetMBCS extends CharsetICU {
                 }
             
                 if(doloop) {
-                    while(sourceArrayIndex<source.limit()) {
+                    while(!doread || sourceArrayIndex<source.limit()) {
                         /*
                          * This following test is to see if available input would overflow the output.
                          * It does not catch output of more than one byte that
@@ -3201,7 +3201,7 @@ class CharsetMBCS extends CharsetICU {
             }
         
             if(doloop) {
-                while(sourceArrayIndex<source.limit()) {
+                while(!doread || sourceArrayIndex<source.limit()) {
                     /*
                      * This following test is to see if available input would overflow the output.
                      * It does not catch output of more than one byte that
@@ -3347,7 +3347,7 @@ class CharsetMBCS extends CharsetICU {
             }
         
             if(doloop) {
-                while(sourceArrayIndex<source.limit()) {
+                while(!doread || sourceArrayIndex<source.limit()) {
                     /*
                      * This following test is to see if available input would overflow the output.
                      * It does not catch output of more than one byte that

@@ -55,6 +55,10 @@ public class TestConversion extends ModuleTest {
         String map;
         String mapnot;
         int which;
+        
+        String caseNrAsString() {
+            return "[" + caseNr + "]";
+        }
     }
 
     // public methods --------------------------------------------------------
@@ -310,83 +314,75 @@ public class TestConversion extends ModuleTest {
             break;
         }
     }
-    private int stepFromUnicode(ConversionCase cc, CharsetEncoder encoder,
-            int step) {
+    
+    private int stepFromUnicode(ConversionCase cc, CharsetEncoder encoder, int step) {
+        if (step < 0) {
+            errln("Negative step size, test internal error.");
+            return 0;
+        }
 
-        CharBuffer source;
-        ByteBuffer target;
-        int sourceLen;
-        boolean flush;
-        source = CharBuffer.wrap(cc.unicode.toCharArray());
-        sourceLen = cc.unicode.length();
-
-        target = ByteBuffer.allocate(cc.bytes.capacity() + 4/* for BOM */);
-        target.position(0);
-        source.position(0);
+        int sourceLen = cc.unicode.length();
+        int targetLen = cc.bytes.capacity() + 20;  // for BOM, and to let failures produce excess output
+        CharBuffer source = CharBuffer.wrap(cc.unicode.toCharArray());
+        ByteBuffer target = ByteBuffer.allocate(targetLen);
         cc.fromUnicodeResult = null;
         encoder.reset();
 
-        if (step >= 0) {
-
-            int iStep = step;
-            int oStep = step;
-
-            for (;;) {
-
-                if (step != 0) {
-                    source.limit((iStep < sourceLen) ? iStep : sourceLen);
-                    target.limit((oStep < target.capacity()) ? oStep : target
-                            .capacity());
-                    flush = (cc.finalFlush && source.limit() == sourceLen);
-                } else {
-                    source.limit(sourceLen);
-                    target.limit(target.capacity());
-                    flush = cc.finalFlush;
-                }
-                CoderResult cr = null;
-                // convert
-                if (source.hasRemaining()) {
-
-                    cr = encoder.encode(source, target, flush);
-
-                    // check pointers and errors
-                    if (cr.isOverflow()) {
-                        // the partial target is filled, set a new limit, reset
-                        // the error and continue
-                        target.limit(((target.position() + step) < target
-                                .capacity()) ? target.position() + step
-                                : target.capacity());
-
-                    } else if (cr.isError()) {
-                        // check the error code to see if it matches
-                        // cc.errorCode
-                        logln("Encoder returned an error code");
-                        logln("ErrorCode expected is: " + cc.outErrorCode);
-                        logln("Error Result is: " + cr.toString());
-                        break;
-                    }
-                } else {
-
-                    if (source.limit() == sourceLen) {
-                        cr = encoder.encode(source, target, true);
-                        if (target.limit() != target.capacity()) {
-                            target.limit(target.capacity());
-                        }
-                        cr = encoder.flush(target);
-
-                        if (cr.isError()) {
-                            errln("Flush operation failed");
-                        }
-                        break;
-                    }
-                }
-                iStep += step;
-                oStep += step;
-            }
+        int currentSourceLimit;
+        int currentTargetLimit;
+        if (step > 0) {
+            currentSourceLimit = Math.min(step, sourceLen);
+            currentTargetLimit = Math.min(step, targetLen);
+        } else {
+            currentSourceLimit = sourceLen;
+            currentTargetLimit = targetLen;
         }
+        
+        CoderResult cr = null;
+
+        for (;;) {
+            source.limit(currentSourceLimit);
+            target.limit(currentTargetLimit);
+
+            cr = encoder.encode(source, target, currentSourceLimit == sourceLen);
+            
+            if (cr.isUnderflow()) {
+                if (currentSourceLimit == sourceLen) {
+                    // Do a final flush for cleanup, then break out
+                    // Encode loop, exits with cr==underflow in normal operation.
+                    target.limit(targetLen);
+                    cr = encoder.flush(target);
+                    if (cr.isUnderflow()) {
+                        // good
+                    } else if (cr.isOverflow()) {
+                        errln(cc.caseNrAsString() + " Flush is producing excessive output");
+                    } else {
+                        errln(cc.caseNrAsString() + " Flush operation failed.  CoderResult = \""
+                                + cr.toString() + "\"");
+                    }
+                    break;
+                }
+                currentSourceLimit = Math.min(currentSourceLimit + step, sourceLen);
+            } else if (cr.isOverflow()) {
+                if (currentTargetLimit == targetLen) {
+                    errln(cc.caseNrAsString() + " encode() is producing excessive output");
+                    break;
+                }
+                currentTargetLimit = Math.min(currentTargetLimit + step, targetLen);
+            } else {
+                // check the error code to see if it matches cc.errorCode
+                logln("Encoder returned an error code");
+                logln("ErrorCode expected is: " + cc.outErrorCode);
+                logln("Error Result is: " + cr.toString());
+                break;
+            }
+
+        }
+        
         cc.fromUnicodeResult = target;
         return target.position();
     }
+    
     private boolean checkFromUnicode(ConversionCase cc, int resultLength) {
         return checkResultsFromUnicode(cc, cc.bytes, cc.fromUnicodeResult);
     }
