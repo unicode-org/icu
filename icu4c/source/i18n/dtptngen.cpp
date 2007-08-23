@@ -123,12 +123,15 @@ static const char* Resource_Fields[] = {
 static const UChar UDATPG_ItemFormat[]= {0x7B, 0x30, 0x7D, 0x20, 0x251C, 0x7B, 0x32, 0x7D, 0x3A,
     0x20, 0x7B, 0x31, 0x7D, 0x2524, 0};  // {0} \u251C{2}: {1}\u2524
 
+static const UChar repeatedPatterns[6]={CAP_G, CAP_E, LOW_Z, LOW_V, CAP_Q, 0}; // "GEzvQ"
+
 static const char DT_DateTimePatternsTag[]="DateTimePatterns";
 static const char DT_DateTimeCalendarTag[]="calendar";
 static const char DT_DateTimeGregorianTag[]="gregorian";
 static const char DT_DateTimeAppendItemsTag[]="appendItems";
 static const char DT_DateTimeFieldsTag[]="fields";
 static const char DT_DateTimeAvailableFormatsTag[]="availableFormats";
+static const UnicodeString repeatedPattern=UnicodeString(repeatedPatterns);
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DateTimePatternGenerator)
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DTSkeletonEnumeration)
@@ -303,7 +306,7 @@ DateTimePatternGenerator::addICUPatterns(const Locale& locale, UErrorCode& statu
 }
 
 void
-DateTimePatternGenerator::hackTimes(UnicodeString& hackPattern, UErrorCode& status)  {
+DateTimePatternGenerator::hackTimes(const UnicodeString& hackPattern, UErrorCode& status)  {
     UDateTimePatternConflict conflictingStatus;
     UnicodeString conflictingString;
     
@@ -702,7 +705,7 @@ DateTimePatternGenerator::addPattern(
 
 
 UDateTimePatternField
-DateTimePatternGenerator::getAppendFormatNumber(const char* field) {
+DateTimePatternGenerator::getAppendFormatNumber(const char* field) const {
     for (int32_t i=0; i<UDATPG_FIELD_COUNT; ++i ) {
         if (uprv_strcmp(CLDR_FIELD_APPEND[i], field)==0) {
             return (UDateTimePatternField)i;
@@ -712,7 +715,7 @@ DateTimePatternGenerator::getAppendFormatNumber(const char* field) {
 }
 
 UDateTimePatternField
-DateTimePatternGenerator::getAppendNameNumber(const char* field) {
+DateTimePatternGenerator::getAppendNameNumber(const char* field) const {
     for (int32_t i=0; i<UDATPG_FIELD_COUNT; ++i ) {
         if (uprv_strcmp(CLDR_FIELD_NAME[i],field)==0) {
             return (UDateTimePatternField)i;
@@ -881,7 +884,7 @@ DateTimePatternGenerator::setAvailableFormat(const UnicodeString &key, UErrorCod
 }
 
 UBool
-DateTimePatternGenerator::isAvailableFormatSet(const UnicodeString &key) {
+DateTimePatternGenerator::isAvailableFormatSet(const UnicodeString &key) const {
     return (UBool)(fAvailableFormatKeyHash->geti(key) == 1);
 }
 
@@ -966,7 +969,7 @@ DateTimePatternGenerator::getRedundants(UErrorCode& status) {
 }
 
 UBool
-DateTimePatternGenerator::isCanonicalItem(const UnicodeString& item) {
+DateTimePatternGenerator::isCanonicalItem(const UnicodeString& item) const {
     if ( item.length() != 1 ) {
         return FALSE;
     }
@@ -1080,31 +1083,12 @@ PatternMap::add(const UnicodeString& basePattern,
             return;
         }
         if (baseChar >= LOW_A) {
-            Mutex mutex;
-            if ( boot[26 + (baseChar-LOW_A)]==NULL ) {
-                boot[26 + (baseChar-LOW_A)] = curElem;
-            }
-            else {
-                uprv_free(curElem);
-                curElem=NULL;
-                baseElem = boot[26 + (baseChar-LOW_A)];
-            }
+            boot[26 + (baseChar-LOW_A)] = curElem;
         }
         else {
-            Mutex mutex;
-            if (boot[baseChar-CAP_A] == NULL ) {
-                boot[baseChar-CAP_A] = curElem;
-            }
-            else {
-                uprv_free(curElem);
-                curElem=NULL;
-                baseElem = boot[baseChar-CAP_A];
-            }
+            boot[baseChar-CAP_A] = curElem;
         }
-        if ( curElem != NULL ) {
-            curElem->skeleton = new PtnSkeleton(skeleton);
-            curElem->next = NULL;
-        }
+        curElem->skeleton = new PtnSkeleton(skeleton);
     }
     if ( baseElem != NULL ) {
         curElem = getDuplicateElem(basePattern, skeleton, baseElem);
@@ -1112,21 +1096,17 @@ PatternMap::add(const UnicodeString& basePattern,
         if (curElem == NULL) {
             // add new element to the list.
             curElem = baseElem;
+            while( curElem -> next != NULL )
             {
-                Mutex mutex;
-                while( curElem -> next != NULL )
-                {
-                    curElem = curElem->next;
-                }
-                if ((curElem->next = new PtnElem(basePattern, value)) == NULL ) {
-                    // out of memory
-                    status = U_MEMORY_ALLOCATION_ERROR;
-                    return;
-                }
-                curElem=curElem->next;
+                curElem = curElem->next;
             }
+            if ((curElem->next = new PtnElem(basePattern, value)) == NULL ) {
+                // out of memory
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return;
+            }
+            curElem=curElem->next;
             curElem->skeleton = new PtnSkeleton(skeleton);
-            curElem->next = NULL;
         }
         else {
             // Pattern exists in the list already.
@@ -1278,10 +1258,6 @@ DateTimeMatcher::set(const UnicodeString& pattern, FormatParser* fp) {
 
 void
 DateTimeMatcher::set(const UnicodeString& pattern, FormatParser* fp, PtnSkeleton& skeleton) {
-
-    static const UChar repeatedPatterns[6]={CAP_G, CAP_E, LOW_Z, LOW_V, CAP_Q, 0}; // "GEzvQ"
-    UnicodeString repeatedPattern=UnicodeString(repeatedPatterns);
-
     for (int32_t i=0; i<UDATPG_FIELD_COUNT; ++i) {
         skeleton.type[i]=NONE;
     }
@@ -1315,11 +1291,7 @@ DateTimeMatcher::set(const UnicodeString& pattern, FormatParser* fp, PtnSkeleton
         }
         skeleton.type[typeValue] = (int8_t)subTypeValue;
     }
-    {
-        Mutex mutex;
-        copyFrom(skeleton);
-    }
-
+    copyFrom(skeleton);
     return;
 }
 
@@ -1347,7 +1319,7 @@ DateTimeMatcher::getPattern() {
 }
 
 int32_t
-DateTimeMatcher::getDistance(DateTimeMatcher& other, int32_t includeMask, DistanceInfo& distanceInfo) {
+DateTimeMatcher::getDistance(const DateTimeMatcher& other, int32_t includeMask, DistanceInfo& distanceInfo) {
     int32_t result=0;
     distanceInfo.clear();
     for (int32_t i=0; i<UDATPG_FIELD_COUNT; ++i ) {
@@ -1396,7 +1368,7 @@ DateTimeMatcher::copyFrom() {
 }
 
 UBool
-DateTimeMatcher::equals(DateTimeMatcher* other) {
+DateTimeMatcher::equals(const DateTimeMatcher* other) const {
     if (other==NULL) {
         return FALSE;
     }
@@ -1507,7 +1479,7 @@ FormatParser::getCanonicalIndex(const UnicodeString& s) {
 }
 
 UBool
-FormatParser::isQuoteLiteral(UnicodeString s) {
+FormatParser::isQuoteLiteral(const UnicodeString& s) const {
     return (UBool)(s.charAt(0)==SINGLE_QUOTE);
 }
 
@@ -1517,6 +1489,7 @@ void
 FormatParser::getQuoteLiteral(UnicodeString& quote, int32_t *itemIndex) {
     int32_t i=*itemIndex;
     
+    quote.remove();
     if (items[i].charAt(0)==SINGLE_QUOTE) {
         quote += items[i];
         ++i;
@@ -1525,7 +1498,8 @@ FormatParser::getQuoteLiteral(UnicodeString& quote, int32_t *itemIndex) {
         if ( items[i].charAt(0)==SINGLE_QUOTE ) {
             if ( (i+1<itemNumber) && (items[i+1].charAt(0)==SINGLE_QUOTE)) {
                 // two single quotes e.g. 'o''clock'
-                quote += items[++i];
+                quote += items[i++];
+                quote += items[i++];
                 continue;
             }
             else {
@@ -1710,10 +1684,10 @@ PtnSkeleton::~PtnSkeleton() {
 
 PtnElem::PtnElem(const UnicodeString &basePat, const UnicodeString &pat) : 
 basePattern(basePat),
-pattern(pat)
+pattern(pat),
+skeleton(NULL),
+next(NULL)
 {
-    skeleton=NULL;
-    next=NULL;
 }
 
 PtnElem::~PtnElem() {
