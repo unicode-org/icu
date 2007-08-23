@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.RelativeDateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.TimeZone;
@@ -408,7 +409,7 @@ public abstract class DateFormat extends UFormat {
             return format( new Date(((Number)obj).longValue()),
                           toAppendTo, fieldPosition );
         else 
-            throw new IllegalArgumentException("Cannot format given Object as a Date");
+            throw new IllegalArgumentException("Cannot format given Object (" + obj.getClass().getSimpleName() + ") as a Date");
     }
 
     /**
@@ -985,7 +986,8 @@ public abstract class DateFormat extends UFormat {
      */
     private static DateFormat get(int dateStyle, int timeStyle, ULocale loc) {
         if((timeStyle != -1 && (timeStyle & RELATIVE)>0) || (dateStyle != -1 && (dateStyle & RELATIVE)>0)) {
-            throw new UnsupportedOperationException("Relative Date is not implemented yet");
+            RelativeDateFormat r = new RelativeDateFormat(timeStyle, dateStyle /* offset? */, loc);
+            return r;
         }
     
         if (timeStyle < -1 || timeStyle > 3) {

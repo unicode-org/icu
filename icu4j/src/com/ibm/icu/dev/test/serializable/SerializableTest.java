@@ -636,6 +636,7 @@ public class SerializableTest extends TestFmwk.TestGroup
         map.put("com.ibm.icu.text.MessageFormat$Field", new FormatTests.MessageFormatFieldHandler());
 //#endif
         map.put("com.ibm.icu.impl.duration.BasicDurationFormat", new FormatTests.BasicDurationFormatHandler());
+        map.put("com.ibm.icu.impl.RelativeDateFormat", new FormatTests.RelativeDateFormatHandler());
     }
     
     public SerializableTest()

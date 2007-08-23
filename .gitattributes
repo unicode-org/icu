@@ -397,6 +397,7 @@ icu4j/src/com/ibm/icu/dev/tool/tzu/runicutzuenv.bat -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/runicutzuenv.cmd -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/runicutzuenv.sh -text
 icu4j/src/com/ibm/icu/impl/ICUCache.java -text
+icu4j/src/com/ibm/icu/impl/RelativeDateFormat.java -text
 icu4j/src/com/ibm/icu/impl/SimpleCache.java -text
 icu4j/src/com/ibm/icu/impl/data/icudata.jar -text
 icu4j/src/com/ibm/icu/impl/data/th.brk -text
