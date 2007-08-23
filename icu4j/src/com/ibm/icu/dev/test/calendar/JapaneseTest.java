@@ -292,5 +292,38 @@ public class JapaneseTest extends CalendarTest {
 
     }
 
+    
+    public void TestJapaneseYear3282() {
+        Calendar c = Calendar.getInstance(ULocale.ENGLISH);
+        c.set(2003,Calendar.SEPTEMBER,25);
+        JapaneseCalendar jcal = new JapaneseCalendar();
+        //jcal.setTime(new Date(1187906308151L));  alternate value
+        jcal.setTime(c.getTime());
+        logln("Now is: " + jcal.getTime());
+        c.setTime(jcal.getTime());
+        int nowYear = c.get(Calendar.YEAR);
+        logln("Now year: "+nowYear);
+        SimpleDateFormat jdf = (SimpleDateFormat) SimpleDateFormat.getDateInstance(jcal,
+                SimpleDateFormat.DEFAULT, Locale.getDefault());
+        jdf.applyPattern("G yy/MM/dd");
+        String text = jdf.format(jcal.getTime());
+        logln("Now is: " + text + " (in Japan)");
+        try {
+            Date date = jdf.parse(text);
+            logln("But is this not the date?: " + date);
+            c.setTime(date);
+            int thenYear = c.get(Calendar.YEAR);
+            logln("Then year: "+thenYear);
+            if(thenYear != nowYear) {
+                errln("Nowyear "+nowYear +" is not thenyear "+thenYear);
+            } else {
+                logln("Nowyear "+nowYear +" == thenyear "+thenYear);
+            }
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    
 }
 
