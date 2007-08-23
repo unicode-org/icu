@@ -137,31 +137,8 @@ public:
 
     FormatParser();
     virtual ~FormatParser();
-    /**
-     * Set the string to parse
-     * @param string
-     * @return this, for chaining
-     * @deprecated
-     * @internal
-     */
     void set(const UnicodeString& patternString);
-    /**
-     * Check string 's' is a quoted literal
-     * @param string with quoted literals
-     * @param starting index of items and return the next index of items of end quoted literal
-     * @return TRUE if s is a quote literal, FALSE if s is not a quote literal.
-     * @deprecated
-     * @internal
-     */
-    UBool isQuoteLiteral(UnicodeString s);
-    /**
-     *  produce a quoted literal
-     * @param string with quoted literals
-     * @param starting index of items and return the next index of items of end quoted literal
-     * @return none
-     * @deprecated
-     * @internal
-     */
+    UBool isQuoteLiteral(const UnicodeString& s) const;
     void getQuoteLiteral(UnicodeString& quote, int32_t *itemIndex);
     int32_t getCanonicalIndex(const UnicodeString& s);
     UBool isPatternSeparator(UnicodeString& field);
@@ -176,11 +153,8 @@ private:
    } ToeknStatus;
 
    TokenStatus status;
-   UnicodeSet *quoteFilter;
-
    virtual TokenStatus setTokens(const UnicodeString& pattern, int32_t startPos, int32_t *len);
 };
-
 
 class DistanceInfo : public UMemory {
 public:
@@ -206,8 +180,8 @@ public:
     void copyFrom(PtnSkeleton& skeleton);
     void copyFrom();
     PtnSkeleton* getSkeletonPtr();
-    UBool equals(DateTimeMatcher* other);
-    int32_t getDistance(DateTimeMatcher& other, int32_t includeMask, DistanceInfo& distanceInfo);
+    UBool equals(const DateTimeMatcher* other) const;
+    int32_t getDistance(const DateTimeMatcher& other, int32_t includeMask, DistanceInfo& distanceInfo);
     DateTimeMatcher();
     virtual ~DateTimeMatcher() {};
     int32_t getFieldMask();
