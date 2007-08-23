@@ -27,7 +27,6 @@ src/com/ibm/icu/text/SimpleDateFormat.java
 src/com/ibm/icu/text/UnicodeSet.java
 src/com/ibm/icu/text/UTF16.java
 src/com/ibm/icu/util/ByteArrayWrapper.java
-src/com/ibm/icu/util/GlobalizationPreferences.java
 src/com/ibm/icu/util/UResourceBundle.java
 
 ## test sources
@@ -42,7 +41,6 @@ src/com/ibm/icu/dev/test/duration/ICUDurationTest.java
 src/com/ibm/icu/dev/test/format/BigNumberFormatTest.java
 src/com/ibm/icu/dev/test/format/DateFormatTest.java
 src/com/ibm/icu/dev/test/format/DateTimeGeneratorTest.java
-src/com/ibm/icu/dev/test/format/GlobalizationPreferencesTest.java
 src/com/ibm/icu/dev/test/format/IntlTestDecimalFormatAPIC.java
 src/com/ibm/icu/dev/test/format/IntlTestNumberFormatAPI.java
 src/com/ibm/icu/dev/test/format/NumberFormatRegressionTest.java

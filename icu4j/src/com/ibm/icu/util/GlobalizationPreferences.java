@@ -1,4 +1,3 @@
-//##header J2SE15
 /*
  *******************************************************************************
  * Copyright (C) 2004-2007, International Business Machines Corporation and    *
@@ -6,23 +5,18 @@
  *******************************************************************************
 */
 package com.ibm.icu.util;
+
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-import java.util.TreeMap;
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-//#endif
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.ZoneMeta;
 import com.ibm.icu.text.BreakIterator;
@@ -250,8 +244,6 @@ public class GlobalizationPreferences implements Freezable {
         return setLocales(new ULocale[]{uLocale});
     }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
     /**
      * Convenience routine for setting the locale priority list from
      * an Accept-Language string.
@@ -266,48 +258,15 @@ public class GlobalizationPreferences implements Freezable {
         if (isFrozen()) {
             throw new UnsupportedOperationException("Attempt to modify immutable object");
         }
-        /*
-          Accept-Language = "Accept-Language" ":" 1#( language-range [ ";" "q" "=" qvalue ] )
-          x matches x-...
-        */
-        // reorders in quality order
-        // don't care that it is not very efficient right now
-        Matcher acceptMatcher = Pattern.compile("\\s*([-_a-zA-Z]+)(;q=([.0-9]+))?\\s*").matcher("");
-        Map reorder = new TreeMap();
-        String[] pieces = acceptLanguageString.split(",");
-        
-        for (int i = 0; i < pieces.length; ++i) {
-            Double qValue = new Double(1);
-            try {
-                if (!acceptMatcher.reset(pieces[i]).matches()) {
-                    throw new IllegalArgumentException();
-                }
-                String qValueString = acceptMatcher.group(3);
-                if (qValueString != null) {
-                    qValue = new Double(Double.parseDouble(qValueString));
-                }
-            } catch (Exception e) {
-                throw new IllegalArgumentException("element '" + pieces[i] + 
-                    "' is not of the form '<locale>{;q=<number>}");
-            }
-            List items = (List)reorder.get(qValue);
-            if (items == null) {
-                reorder.put(qValue, items = new LinkedList());
-            }
-            items.add(0, acceptMatcher.group(1)); // reverse order, will reverse again
+        ULocale[] acceptLocales = null;
+        try {
+            acceptLocales = ULocale.parseAcceptLanguage(acceptLanguageString, true);
+        } catch (ParseException pe) {
+            //TODO: revisit after 3.8
+            throw new IllegalArgumentException("Invalid Accept-Language string");
         }
-        // now read out in reverse order
-        List result = new ArrayList();
-        for (Iterator it = reorder.keySet().iterator(); it.hasNext();) {
-            Object key = it.next();
-            List items = (List)reorder.get(key);
-            for (Iterator it2 = items.iterator(); it2.hasNext();) {
-                result.add(0, new ULocale((String)it2.next()));
-            }
-        }
-        return setLocales(result);
+        return setLocales(acceptLocales);
     }
-//#endif
 
     /**
      * Convenience function to get a ResourceBundle instance using
@@ -655,11 +614,29 @@ public class GlobalizationPreferences implements Freezable {
                 // TODO, have method that doesn't require us to create a timezone
                 // fix other hacks
                 // hack for couldn't match
-                // note, compiling with FOUNDATION omits this check for now
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
-                if (badTimeZone.reset(result).matches()) continue;
-//#endif
+                
+                boolean isBadStr = false;
+                // Matcher badTimeZone = Pattern.compile("[A-Z]{2}|.*\\s\\([A-Z]{2}\\)").matcher("");
+                // badtzstr = badTimeZone.reset(result).matches();
+                String teststr = result;
+                int sidx = result.indexOf('(');
+                int eidx = result.indexOf(')');
+                if (sidx != -1 && eidx != -1 && (eidx - sidx) == 3) {
+                    teststr = result.substring(sidx+1, eidx);
+                }
+                if (teststr.length() == 2) {
+                    isBadStr = true;
+                    for (int i = 0; i < 2; i++) {
+                        char c = teststr.charAt(i);
+                        if (c < 'A' || 'Z' < c) {
+                            isBadStr = false;
+                            break;
+                        }
+                    }
+                }
+                if (isBadStr) {
+                    continue;
+                }
                 break;
             default:
                 throw new IllegalArgumentException("Unknown type: " + type);
@@ -673,12 +650,6 @@ public class GlobalizationPreferences implements Freezable {
         }
         return result;
     }
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
-    // TODO remove need for this
-    private static final Matcher badTimeZone = Pattern.compile("[A-Z]{2}|.*\\s\\([A-Z]{2}\\)").matcher("");
-//#endif
-
 
     /**
      * Set an explicit date format. Overrides the locale priority list for
@@ -810,12 +781,12 @@ public class GlobalizationPreferences implements Freezable {
     /**
      * Process a language/locale priority list specified via <code>setLocales</code>.
      * The input locale list may be expanded or re-ordered to represent the prioritized
-     * language/locale order actually used by this object by the algorithm exaplained
+     * language/locale order actually used by this object by the algorithm explained
      * below.
      * <br>
      * <br>
-     * <b>Step 1</b>: Move later occurence of more specific locale before ealier occurence of less
-     * specific locale.
+     * <b>Step 1</b>: Move later occurrence of more specific locale before earlier
+     * occurrence of less specific locale.
      * <br>
      * Before: en, fr_FR, en_US, en_GB
      * <br>
@@ -829,7 +800,7 @@ public class GlobalizationPreferences implements Freezable {
      * After: en_US, en, en_GB, en, en, fr_FR, fr
      * <br>
      * <br>
-     * <b>Step 3</b>: Remove ealier occurence of duplicated locale entries.
+     * <b>Step 3</b>: Remove earlier occurrence of duplicated locale entries.
      * <br>
      * Before: en_US, en, en_GB, en, en, fr_FR, fr
      * <br>
@@ -848,8 +819,8 @@ public class GlobalizationPreferences implements Freezable {
     protected List processLocales(List inputLocales) {
         List result = new ArrayList();
         /*
-         * Step 1: Relocate later occurence of more specific locale
-         * before earlier occurence of less specific locale.
+         * Step 1: Relocate later occurrence of more specific locale
+         * before earlier occurrence of less specific locale.
          *
          * Example:
          *   Before - en_US, fr_FR, zh, en_US_Boston, zh_TW, zh_Hant, fr_CA
@@ -938,7 +909,7 @@ public class GlobalizationPreferences implements Freezable {
         }
 
         /*
-         * Step 3: Remove earlier occurence of duplicated locales
+         * Step 3: Remove earlier occurrence of duplicated locales
          * 
          * Example:
          *   Before - en_US_Boston, en_US, en, en_US, en, fr_FR, fr,
@@ -952,7 +923,7 @@ public class GlobalizationPreferences implements Freezable {
             boolean bRemoved = false;
             for (int i = index + 1; i < result.size(); i++) {
                 if (uloc.equals((ULocale)result.get(i))) {
-                    // Remove ealier one
+                    // Remove earlier one
                     result.remove(index);
                     bRemoved = true;
                     break;
@@ -1508,7 +1479,7 @@ public class GlobalizationPreferences implements Freezable {
         }
     }
 
-    // Freezable implmentation
+    // Freezable implementation
     
     private boolean frozen;
 
