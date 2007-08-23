@@ -25,8 +25,14 @@ TimeZoneTransition::TimeZoneTransition()
 }
 
 TimeZoneTransition::TimeZoneTransition(const TimeZoneTransition& source)
-: UObject(), fTime(source.fTime), fFrom(source.fFrom->clone()),
-  fTo(source.fTo->clone()) {
+: UObject(), fTime(source.fTime), fFrom(NULL), fTo(NULL) {
+      if (source.fFrom != NULL) {
+          fFrom = source.fFrom->clone();
+      }
+
+      if (source.fTo != NULL) {
+          fTo = source.fTo->clone();
+      }
 }
 
 TimeZoneTransition::~TimeZoneTransition() {
