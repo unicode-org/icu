@@ -1,6 +1,6 @@
 #!/bin/sh
 # Exhaust(ive, ing)  (Mean, Multi)  (Test, Trouble)
-# Copyright (c) 2002-2006 IBM All Rights Reserved
+# Copyright (c) 2002-2007 IBM All Rights Reserved
 #
 
 # Builds ICU a whole lotta times and with different options
@@ -32,7 +32,8 @@ BUILD_DIR=${BUILD_DIR:-${S}/uconfigtest}
 ICUPLATFORM=${ICUPLATFORM:-LinuxRedHat}
 
 # Global Config options to use
-export COPTS=" --with-data-packaging=archive"
+#export COPTS=" --with-data-packaging=archive"
+export COPTS=
 
 # Global testing options to use
 export INTLTESTOPTS=-w 
