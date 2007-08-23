@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2003-2004, International Business Machines
+*   Copyright (C) 2003-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -551,6 +551,12 @@ ucnv_extMatchFromU(const int32_t *cx,
         return 0;
     }
 
+    /*
+     * Tests for (value&UCNV_EXT_FROM_U_RESERVED_MASK)==0:
+     * Do not interpret values with reserved bits used, for forward compatibility,
+     * and do not even remember intermediate results with reserved bits used.
+     */
+
     if(UCNV_EXT_TO_U_IS_PARTIAL(value)) {
         /* partial match, enter the loop below */
         index=(int32_t)UCNV_EXT_FROM_U_GET_PARTIAL_INDEX(value);
@@ -575,7 +581,8 @@ ucnv_extMatchFromU(const int32_t *cx,
             value=*fromUSectionValues++;
             if( value!=0 &&
                 (UCNV_EXT_FROM_U_IS_ROUNDTRIP(value) ||
-                 FROM_U_USE_FALLBACK(useFallback, firstCP))
+                 FROM_U_USE_FALLBACK(useFallback, firstCP)) &&
+                (value&UCNV_EXT_FROM_U_RESERVED_MASK)==0
             ) {
                 /* remember longest match so far */
                 matchValue=value;
@@ -613,8 +620,9 @@ ucnv_extMatchFromU(const int32_t *cx,
                     /* partial match, continue */
                     index=(int32_t)UCNV_EXT_FROM_U_GET_PARTIAL_INDEX(value);
                 } else {
-                    if( UCNV_EXT_FROM_U_IS_ROUNDTRIP(value) ||
-                         FROM_U_USE_FALLBACK(useFallback, firstCP)
+                    if( (UCNV_EXT_FROM_U_IS_ROUNDTRIP(value) ||
+                         FROM_U_USE_FALLBACK(useFallback, firstCP)) &&
+                        (value&UCNV_EXT_FROM_U_RESERVED_MASK)==0
                     ) {
                         /* full match, stop with result */
                         matchValue=value;
@@ -632,8 +640,9 @@ ucnv_extMatchFromU(const int32_t *cx,
             return 0;
         }
     } else /* result from firstCP trie lookup */ {
-        if( UCNV_EXT_FROM_U_IS_ROUNDTRIP(value) ||
-             FROM_U_USE_FALLBACK(useFallback, firstCP)
+        if( (UCNV_EXT_FROM_U_IS_ROUNDTRIP(value) ||
+             FROM_U_USE_FALLBACK(useFallback, firstCP)) &&
+            (value&UCNV_EXT_FROM_U_RESERVED_MASK)==0
         ) {
             /* full match, stop with result */
             matchValue=value;
@@ -644,20 +653,18 @@ ucnv_extMatchFromU(const int32_t *cx,
         }
     }
 
-    if(matchValue&UCNV_EXT_FROM_U_RESERVED_MASK) {
-        /* do not interpret values with reserved bits used, for forward compatibility */
-        return 0;
-    }
-
     /* return result */
     if(matchValue==UCNV_EXT_FROM_U_SUBCHAR1) {
         return 1; /* assert matchLength==2 */
     }
 
-    *pMatchValue=UCNV_EXT_FROM_U_MASK_ROUNDTRIP(matchValue);
+    *pMatchValue=matchValue;
     return matchLength;
 }
 
+/*
+ * @param value fromUnicode mapping table value; ignores roundtrip and reserved bits
+ */
 static U_INLINE void
 ucnv_extWriteFromU(UConverter *cnv, const int32_t *cx,
                    uint32_t value,
@@ -792,6 +799,10 @@ ucnv_extInitialMatchFromU(UConverter *cnv, const int32_t *cx,
     }
 }
 
+/*
+ * Used by ISO 2022 implementation.
+ * @return number of bytes in *pValue; negative number if fallback; 0 for no mapping
+ */
 U_CFUNC int32_t
 ucnv_extSimpleMatchFromU(const int32_t *cx,
                          UChar32 cp, uint32_t *pValue,
@@ -809,13 +820,15 @@ ucnv_extSimpleMatchFromU(const int32_t *cx,
     if(match>=2) {
         /* write result for simple, single-character conversion */
         int32_t length;
-        
+        int isRoundtrip;
+
+        isRoundtrip=UCNV_EXT_FROM_U_IS_ROUNDTRIP(value);
         length=UCNV_EXT_FROM_U_GET_LENGTH(value);
         value=(uint32_t)UCNV_EXT_FROM_U_GET_DATA(value);
 
         if(length<=UCNV_EXT_FROM_U_MAX_DIRECT_LENGTH) {
             *pValue=value;
-            return length;
+            return isRoundtrip ? length : -length;
 #if 0 /* not currently used */
         } else if(length==4) {
             /* de-serialize a 4-byte result */
@@ -825,7 +838,7 @@ ucnv_extSimpleMatchFromU(const int32_t *cx,
                 ((uint32_t)result[1]<<16)|
                 ((uint32_t)result[2]<<8)|
                 result[3];
-            return 4;
+            return isRoundtrip ? 4 : -4;
 #endif
         }
     }

@@ -976,22 +976,27 @@ getEndOfBuffer_2022(const char** source,
 
 
 /* This inline function replicates code in _MBCSFromUChar32() function in ucnvmbcs.c
- * any future change in _MBCSFromUChar32() function should be reflected in
- * this macro
+ * any future change in _MBCSFromUChar32() function should be reflected here.
+ * @return number of bytes in *value; negative number if fallback; 0 if no mapping
  */
-static U_INLINE void
+static U_INLINE int32_t
 MBCS_FROM_UCHAR32_ISO2022(UConverterSharedData* sharedData,
                                          UChar32 c,
                                          uint32_t* value,
                                          UBool useFallback,
-                                         int32_t *length,
                                          int outputType)
 {
     const int32_t *cx;
     const uint16_t *table;
     uint32_t stage2Entry;
     uint32_t myValue;
+    int32_t length;
     const uint8_t *p;
+    /*
+     * TODO(markus): Use and require new, faster MBCS conversion table structures.
+     * Use internal version of ucnv_open() that verifies that the new structures are available,
+     * else U_INTERNAL_PROGRAM_ERROR.
+     */
     /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
     if(c<0x10000 || (sharedData->mbcs.unicodeMask&UCNV_HAS_SUPPLEMENTARY)) {
         table=sharedData->mbcs.fromUnicodeTable;
@@ -1000,51 +1005,60 @@ MBCS_FROM_UCHAR32_ISO2022(UConverterSharedData* sharedData,
         if(outputType==MBCS_OUTPUT_2){
             myValue=MBCS_VALUE_2_FROM_STAGE_2(sharedData->mbcs.fromUnicodeBytes, stage2Entry, c);
             if(myValue<=0xff) {
-                *length=1;
+                length=1;
             } else {
-                *length=2;
+                length=2;
             }
         } else /* outputType==MBCS_OUTPUT_3 */ {
             p=MBCS_POINTER_3_FROM_STAGE_2(sharedData->mbcs.fromUnicodeBytes, stage2Entry, c);
             myValue=((uint32_t)*p<<16)|((uint32_t)p[1]<<8)|p[2];
             if(myValue<=0xff) {
-                *length=1;
+                length=1;
             } else if(myValue<=0xffff) {
-                *length=2;
+                length=2;
             } else {
-                *length=3;
+                length=3;
             }
         }
+        /*
+         * TODO(markus): Use Shift-JIS table for JIS X 0208, to save mapping table space.
+         * Pass in parameter for type of output bytes, for validation and shifting:
+         * - Direct: Pass bytes through, but forbid control codes 00-1F (except SI/SO/ESC) and space 20?
+         *   (Need to allow some (TAB/LF/CR) or most of them for ASCII and maybe JIS X 0201.)
+         * - A1-FE: Subtract 80 after range check.
+         * - SJIS: Shift DBCS result to 21-7E x 21-7E.
+         */
         /* is this code point assigned, or do we use fallbacks? */
-        if( (stage2Entry&(1<<(16+(c&0xf))))!=0 ||
-            (FROM_U_USE_FALLBACK(useFallback, c) && myValue!=0)
-        ) {
+        if((stage2Entry&(1<<(16+(c&0xf))))!=0) {
+            /* assigned */
+            *value=myValue;
+            return length;
+        } else if(FROM_U_USE_FALLBACK(useFallback, c) && myValue!=0) {
             /*
              * We allow a 0 byte output if the "assigned" bit is set for this entry.
              * There is no way with this data structure for fallback output
              * to be a zero byte.
              */
-            /* assigned */
             *value=myValue;
-            return;
+            return -length;
         }
     }
 
     cx=sharedData->mbcs.extIndexes;
     if(cx!=NULL) {
-        *length=ucnv_extSimpleMatchFromU(cx, c, value, useFallback);
-        return;
+        return ucnv_extSimpleMatchFromU(cx, c, value, useFallback);
     }
 
     /* unassigned */
-    *length=0;
+    return 0;
 }
 
 /* This inline function replicates code in _MBCSSingleFromUChar32() function in ucnvmbcs.c
- * any future change in _MBCSSingleFromUChar32() function should be reflected in
- * this macro
+ * any future change in _MBCSSingleFromUChar32() function should be reflected here.
+ * @param retval pointer to output byte
+ * @return 1 roundtrip byte  0 no mapping  -1 fallback byte
  */
-static U_INLINE void
+static U_INLINE int32_t
 MBCS_SINGLE_FROM_UCHAR32(UConverterSharedData* sharedData,
                                        UChar32 c,
                                        uint32_t* retval,
@@ -1054,20 +1068,21 @@ MBCS_SINGLE_FROM_UCHAR32(UConverterSharedData* sharedData,
     int32_t value;
     /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
     if(c>=0x10000 && !(sharedData->mbcs.unicodeMask&UCNV_HAS_SUPPLEMENTARY)) {
-        *retval=(uint16_t)-1;
-        return;
+        return 0;
     }
     /* convert the Unicode code point in c into codepage bytes (same as in _MBCSFromUnicodeWithOffsets) */
     table=sharedData->mbcs.fromUnicodeTable;
     /* get the byte for the output */
     value=MBCS_SINGLE_RESULT_FROM_U(table, (uint16_t *)sharedData->mbcs.fromUnicodeBytes, c);
     /* is this code point assigned, or do we use fallbacks? */
-    if(useFallback ? value>=0x800 : value>=0xc00) {
-        value &=0xff;
+    *retval=(uint32_t)(value&0xff);
+    if(value>=0xf00) {
+        return 1;  /* roundtrip */
+    } else if(useFallback ? value>=0x800 : value>=0xc00) {
+        return -1;  /* fallback taken */
     } else {
-        value= -1;
+        return 0;  /* no mapping */
     }
-    *retval=(uint16_t) value;
 }
 
 #ifdef U_ENABLE_GENERIC_ISO_2022
@@ -1311,6 +1326,7 @@ static  const int32_t escSeqCharsLen[] ={
 
 static void
 UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args, UErrorCode* err) {
+    UConverter *cnv = args->converter;
     UConverterDataISO2022 *converterData;
     ISO2022State *pFromU2022State;
     uint8_t *target = (uint8_t *) args->target;
@@ -1330,14 +1346,13 @@ UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
     int8_t cs, g;
 
     /* set up the state */
-    converterData     = (UConverterDataISO2022*)args->converter->extraInfo;
+    converterData     = (UConverterDataISO2022*)cnv->extraInfo;
     pFromU2022State   = &converterData->fromU2022State;
-    useFallback       = args->converter->useFallback;
 
     choiceCount = 0;
 
     /* check if the last codepoint of previous buffer was a lead surrogate*/
-    if((sourceChar = args->converter->fromUChar32)!=0 && target< targetLimit) {
+    if((sourceChar = cnv->fromUChar32)!=0 && target< targetLimit) {
         goto getTrail;
     }
 
@@ -1356,26 +1371,26 @@ getTrail:
                         if(UTF_IS_SECOND_SURROGATE(trail)) {
                             source++;
                             sourceChar=UTF16_GET_PAIR_VALUE(sourceChar, trail);
-                            args->converter->fromUChar32=0x00;
+                            cnv->fromUChar32=0x00;
                             /* convert this supplementary code point */
                             /* exit this condition tree */
                         } else {
                             /* this is an unmatched lead code unit (1st surrogate) */
                             /* callback(illegal) */
                             *err=U_ILLEGAL_CHAR_FOUND;
-                            args->converter->fromUChar32=sourceChar;
+                            cnv->fromUChar32=sourceChar;
                             break;
                         }
                     } else {
                         /* no more input */
-                        args->converter->fromUChar32=sourceChar;
+                        cnv->fromUChar32=sourceChar;
                         break;
                     }
                 } else {
                     /* this is an unmatched trail code unit (2nd surrogate) */
                     /* callback(illegal) */
                     *err=U_ILLEGAL_CHAR_FOUND;
-                    args->converter->fromUChar32=sourceChar;
+                    cnv->fromUChar32=sourceChar;
                     break;
                 }
             }
@@ -1384,7 +1399,7 @@ getTrail:
             if(IS_2022_CONTROL(sourceChar)) {
                 /* callback(illegal) */
                 *err=U_ILLEGAL_CHAR_FOUND;
-                args->converter->fromUChar32=sourceChar;
+                cnv->fromUChar32=sourceChar;
                 break;
             }
 
@@ -1427,86 +1442,117 @@ getTrail:
             }
 
             cs = g = 0;
+            /*
+             * len==0: no mapping found yet
+             * len<0: found a fallback result: continue looking for a roundtrip but no further fallbacks
+             * len>0: found a roundtrip result, done
+             */
             len = 0;
+            useFallback = cnv->useFallback;
 
-            for(i = 0; i < choiceCount && len == 0; ++i) {
-                cs = choices[i];
-                switch(cs) {
+            for(i = 0; i < choiceCount && len <= 0; ++i) {
+                uint32_t value;
+                int32_t len2;
+                int8_t cs0 = choices[i];
+                switch(cs0) {
                 case ASCII:
                     if(sourceChar <= 0x7f) {
                         targetValue = (uint32_t)sourceChar;
                         len = 1;
+                        cs = cs0;
+                        g = 0;
                     }
                     break;
                 case ISO8859_1:
-                    if(0x80 <= sourceChar && sourceChar <= 0xff) {
+                    if(0xa0 <= sourceChar && sourceChar <= 0xff) {
                         targetValue = (uint32_t)sourceChar - 0x80;
                         len = 1;
+                        cs = cs0;
                         g = 2;
                     }
                     break;
                 case HWKANA_7BIT:
                     if((uint32_t)(0xff9f-sourceChar)<=(0xff9f-0xff61)) {
-                        targetValue = (uint32_t)(sourceChar - (0xff61 - 0x21));
-                        len = 1;
-
                         if(converterData->version==3) {
                             /* JIS7: use G1 (SO) */
-                            pFromU2022State->cs[1] = cs; /* do not output an escape sequence */
+                            targetValue = (uint32_t)(sourceChar - (0xff61 - 0x21));
+                            len = 1;
+                            pFromU2022State->cs[1] = cs = cs0; /* do not output an escape sequence */
                             g = 1;
                         } else if(converterData->version==4) {
                             /* JIS8: use 8-bit bytes with any single-byte charset, see escape sequence output below */
-                            int8_t cs0;
+                            targetValue = (uint32_t)(sourceChar - (0xff61 - 0xa1));
+                            len = 1;
 
-                            targetValue += 0x80;
-
-                            cs0 = pFromU2022State->cs[0];
-                            if(IS_JP_DBCS(cs0)) {
+                            cs = pFromU2022State->cs[0];
+                            if(IS_JP_DBCS(cs)) {
                                 /* switch from a DBCS charset to JISX201 */
                                 cs = (int8_t)JISX201;
-                            } else {
-                                /* stay in the current G0 charset */
-                                cs = cs0;
                             }
+                            /* else stay in the current G0 charset */
+                            g = 0;
                         }
+                        /* else do not use HWKANA_7BIT with other versions */
                     }
                     break;
                 case JISX201:
                     /* G0 SBCS */
-                    MBCS_SINGLE_FROM_UCHAR32(
-                        converterData->myConverterArray[cs],
-                        sourceChar, &targetValue,
-                        useFallback);
-                    if(targetValue <= 0x7f) {
-                        len = 1;
+                    len2 = MBCS_SINGLE_FROM_UCHAR32(
+                                converterData->myConverterArray[cs0],
+                                sourceChar, &value,
+                                useFallback);
+                    if(len2 != 0 && value <= 0x7f) {
+                        targetValue = value;
+                        len = len2;
+                        cs = cs0;
+                        g = 0;
+                        useFallback = FALSE;
                     }
                     break;
                 case ISO8859_7:
                     /* G0 SBCS forced to 7-bit output */
-                    MBCS_SINGLE_FROM_UCHAR32(
-                        converterData->myConverterArray[cs],
-                        sourceChar, &targetValue,
-                        useFallback);
-                    if(0x80 <= targetValue && targetValue <= 0xff) {
-                        targetValue -= 0x80;
-                        len = 1;
+                    len2 = MBCS_SINGLE_FROM_UCHAR32(
+                                converterData->myConverterArray[cs0],
+                                sourceChar, &value,
+                                useFallback);
+                    if(len2 != 0 && 0xa0 <= value && value <= 0xff) {
+                        targetValue = value - 0x80;
+                        len = len2;
+                        cs = cs0;
                         g = 2;
+                        useFallback = FALSE;
                     }
                     break;
                 default:
                     /* G0 DBCS */
-                    MBCS_FROM_UCHAR32_ISO2022(
-                        converterData->myConverterArray[cs],
-                        sourceChar, &targetValue,
-                        useFallback, &len, MBCS_OUTPUT_2);
-                    if(len != 2) {
-                        len = 0;
+                    len2 = MBCS_FROM_UCHAR32_ISO2022(
+                                converterData->myConverterArray[cs0],
+                                sourceChar, &value,
+                                useFallback, MBCS_OUTPUT_2);
+                    if(len2 == 2 || len2 == -2) {  /* only accept DBCS: abs(len)==2 */
+                        if(cs0 == KSC5601) {
+                            if( (uint16_t)(value - 0xa1a1) <= (0xfefe - 0xa1a1) &&
+                                (uint8_t)(value - 0xa1) <= (0xfe - 0xa1)
+                            ) {
+                                value -= 0x8080;  /* shift down to 21..7e byte range */
+                            } else {
+                                break;  /* not valid for ISO 2022 */
+                            }
+                        }
+                        targetValue = value;
+                        len = len2;
+                        cs = cs0;
+                        g = 0;
+                        useFallback = FALSE;
                     }
                     break;
                 }
             }
 
-            if(len > 0) {
+            if(len != 0) {
+                if(len < 0) {
+                    len = -len;  /* fallback */
+                }
                 outLen = 0; /* count output bytes */
 
                 /* write SI if necessary (only for JIS7) */
@@ -1555,7 +1601,7 @@ getTrail:
                  * then this is an error
                  */
                 *err = U_INVALID_CHAR_FOUND;
-                args->converter->fromUChar32=sourceChar;
+                cnv->fromUChar32=sourceChar;
                 break;
             }
 
@@ -1581,7 +1627,7 @@ getTrail:
                 }
             } else {
                 fromUWriteUInt8(
-                    args->converter,
+                    cnv,
                     buffer, outLen,
                     &target, (const char *)targetLimit,
                     &offsets, (int32_t)(source - args->source - U16_LENGTH(sourceChar)),
@@ -1610,7 +1656,7 @@ getTrail:
      */
     if( U_SUCCESS(*err) &&
         (pFromU2022State->g!=0 || pFromU2022State->cs[0]!=ASCII) &&
-        args->flush && source>=sourceLimit && args->converter->fromUChar32==0
+        args->flush && source>=sourceLimit && cnv->fromUChar32==0
     ) {
         int32_t sourceIndex;
 
@@ -1649,7 +1695,7 @@ getTrail:
         }
 
         fromUWriteUInt8(
-            args->converter,
+            cnv,
             buffer, outLen,
             &target, (const char *)targetLimit,
             &offsets, sourceIndex,
@@ -1940,9 +1986,10 @@ UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
                 break;
             }
 
-           /* length= ucnv_MBCSFromUChar32(converterData->currentConverter->sharedData,
-                sourceChar,&targetByteUnit,args->converter->useFallback);*/
-            MBCS_FROM_UCHAR32_ISO2022(sharedData,sourceChar,&targetByteUnit,useFallback,&length,MBCS_OUTPUT_2);
+            length = MBCS_FROM_UCHAR32_ISO2022(sharedData,sourceChar,&targetByteUnit,useFallback,MBCS_OUTPUT_2);
+            if(length < 0) {
+                length = -length;  /* fallback */
+            }
             /* only DBCS or SBCS characters are expected*/
             /* DB characters with high bit set to 1 are expected */
             if(length > 2 || length==0 ||(((targetByteUnit & 0x8080) != 0x8080)&& length==2)){
@@ -2411,7 +2458,7 @@ static const char* const escSeqCharsCN[10] ={
 
 static void
 UConverter_fromUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args, UErrorCode* err){
-
+    UConverter *cnv = args->converter;
     UConverterDataISO2022 *converterData;
     ISO2022State *pFromU2022State;
     uint8_t *target = (uint8_t *) args->target;
@@ -2428,14 +2475,13 @@ UConverter_fromUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
     UBool useFallback;
 
     /* set up the state */
-    converterData     = (UConverterDataISO2022*)args->converter->extraInfo;
+    converterData     = (UConverterDataISO2022*)cnv->extraInfo;
     pFromU2022State   = &converterData->fromU2022State;
-    useFallback       = args->converter->useFallback;
 
     choiceCount = 0;
 
     /* check if the last codepoint of previous buffer was a lead surrogate*/
-    if((sourceChar = args->converter->fromUChar32)!=0 && target< targetLimit) {
+    if((sourceChar = cnv->fromUChar32)!=0 && target< targetLimit) {
         goto getTrail;
     }
 
@@ -2454,26 +2500,26 @@ getTrail:
                         if(UTF_IS_SECOND_SURROGATE(trail)) {
                             source++;
                             sourceChar=UTF16_GET_PAIR_VALUE(sourceChar, trail);
-                            args->converter->fromUChar32=0x00;
+                            cnv->fromUChar32=0x00;
                             /* convert this supplementary code point */
                             /* exit this condition tree */
                         } else {
                             /* this is an unmatched lead code unit (1st surrogate) */
                             /* callback(illegal) */
                             *err=U_ILLEGAL_CHAR_FOUND;
-                            args->converter->fromUChar32=sourceChar;
+                            cnv->fromUChar32=sourceChar;
                             break;
                         }
                     } else {
                         /* no more input */
-                        args->converter->fromUChar32=sourceChar;
+                        cnv->fromUChar32=sourceChar;
                         break;
                     }
                 } else {
                     /* this is an unmatched trail code unit (2nd surrogate) */
                     /* callback(illegal) */
                     *err=U_ILLEGAL_CHAR_FOUND;
-                    args->converter->fromUChar32=sourceChar;
+                    cnv->fromUChar32=sourceChar;
                     break;
                 }
             }
@@ -2484,7 +2530,7 @@ getTrail:
                 if(IS_2022_CONTROL(sourceChar)) {
                     /* callback(illegal) */
                     *err=U_ILLEGAL_CHAR_FOUND;
-                    args->converter->fromUChar32=sourceChar;
+                    cnv->fromUChar32=sourceChar;
                     break;
                 }
 
@@ -2507,7 +2553,6 @@ getTrail:
             }
             else{
                 /* convert U+0080..U+10ffff */
-                UConverterSharedData *cnv;
                 int32_t i;
                 int8_t cs, g;
 
@@ -2555,17 +2600,35 @@ getTrail:
                 }
 
                 cs = g = 0;
+                /*
+                 * len==0: no mapping found yet
+                 * len<0: found a fallback result: continue looking for a roundtrip but no further fallbacks
+                 * len>0: found a roundtrip result, done
+                 */
                 len = 0;
+                useFallback = cnv->useFallback;
 
-                for(i = 0; i < choiceCount && len == 0; ++i) {
-                    cs = choices[i];
-                    if(cs > 0) {
-                        if(cs > CNS_11643_0) {
-                            cnv = converterData->myConverterArray[CNS_11643];
-                            MBCS_FROM_UCHAR32_ISO2022(cnv,sourceChar,&targetValue,useFallback,&len,MBCS_OUTPUT_3);
-                            if(len==3) {
-                                cs = (int8_t)(CNS_11643_0 + (targetValue >> 16) - 0x80);
-                                len = 2;
+                for(i = 0; i < choiceCount && len <= 0; ++i) {
+                    int8_t cs0 = choices[i];
+                    if(cs0 > 0) {
+                        uint32_t value;
+                        int32_t len2;
+                        if(cs0 > CNS_11643_0) {
+                            len2 = MBCS_FROM_UCHAR32_ISO2022(
+                                        converterData->myConverterArray[CNS_11643],
+                                        sourceChar,
+                                        &value,
+                                        useFallback,
+                                        MBCS_OUTPUT_3);
+                            if(len2==3 || len2==-3) {
+                                targetValue = value;
+                                cs = (int8_t)(CNS_11643_0 + (value >> 16) - 0x80);
+                                if(len2 >= 0) {
+                                    len = 2;
+                                } else {
+                                    len = -2;
+                                    useFallback = FALSE;
+                                }
                                 if(cs == CNS_11643_1) {
                                     g = 1;
                                 } else if(cs == CNS_11643_2) {
@@ -2579,15 +2642,25 @@ getTrail:
                             }
                         } else {
                             /* GB2312_1 or ISO-IR-165 */
-                            cnv = converterData->myConverterArray[cs];
-                            MBCS_FROM_UCHAR32_ISO2022(cnv,sourceChar,&targetValue,useFallback,&len,MBCS_OUTPUT_2);
-                            g = 1; /* used if len == 2 */
+                            len2 = MBCS_FROM_UCHAR32_ISO2022(
+                                        converterData->myConverterArray[cs0],
+                                        sourceChar,
+                                        &value,
+                                        useFallback,
+                                        MBCS_OUTPUT_2);
+                            if(len2 == 2 || len2 == -2) {
+                                targetValue = value;
+                                len = len2;
+                                cs = cs0;
+                                g = 1;
+                                useFallback = FALSE;
+                            }
                         }
                     }
                 }
 
-                if(len > 0) {
-                    len = 0; /* count output bytes; it must have been len == 2 */
+                if(len != 0) {
+                    len = 0; /* count output bytes; it must have been abs(len) == 2 */
 
                     /* write the designation sequence if necessary */
                     if(cs != pFromU2022State->cs[g]) {
@@ -2632,7 +2705,7 @@ getTrail:
                      * then this is an error
                      */
                     *err = U_INVALID_CHAR_FOUND;
-                    args->converter->fromUChar32=sourceChar;
+                    cnv->fromUChar32=sourceChar;
                     break;
                 }
             }
@@ -2653,7 +2726,7 @@ getTrail:
                 }
             } else {
                 fromUWriteUInt8(
-                    args->converter,
+                    cnv,
                     buffer, len,
                     &target, (const char *)targetLimit,
                     &offsets, (int32_t)(source - args->source - U16_LENGTH(sourceChar)),
@@ -2682,7 +2755,7 @@ getTrail:
      */
     if( U_SUCCESS(*err) &&
         pFromU2022State->g!=0 &&
-        args->flush && source>=sourceLimit && args->converter->fromUChar32==0
+        args->flush && source>=sourceLimit && cnv->fromUChar32==0
     ) {
         int32_t sourceIndex;
 
@@ -2710,7 +2783,7 @@ getTrail:
         }
 
         fromUWriteUInt8(
-            args->converter,
+            cnv,
             SHIFT_IN_STR, 1,
             &target, (const char *)targetLimit,
             &offsets, sourceIndex,
