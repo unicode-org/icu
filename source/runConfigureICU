@@ -173,6 +173,7 @@ case $platform in
         THE_COMP="the i5/OS C++"
         CC=/usr/bin/icc; export CC
         CXX=/usr/bin/icc; export CXX
+        MAKE=/usr/bin/gmake; export MAKE
         RELEASE_CFLAGS='-O4'
         RELEASE_CXXFLAGS='-O4'
         ;;
