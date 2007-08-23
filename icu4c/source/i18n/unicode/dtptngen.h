@@ -59,7 +59,7 @@ public:
     static DateTimePatternGenerator* U_EXPORT2 createInstance(const Locale& uLocale, UErrorCode& status);
 
     /**
-     * Create an empty generator, to be constructed with add(...) etc.
+     * Create an empty generator, to be constructed with addPattern(...) etc.
      * @param status  Output param set to success/failure code on exit,
      *               which must not indicate a failure before the function call.
      * @draft ICU 3.8
@@ -390,24 +390,24 @@ private:
     void initData(const Locale &locale);
     void addCanonicalItems();
     void addICUPatterns(const Locale& locale, UErrorCode& status);
-    void hackTimes(UnicodeString& hackPattern, UErrorCode& status);
+    void hackTimes(const UnicodeString& hackPattern, UErrorCode& status);
     void addCLDRData(const Locale& locale);
     void initHashtable(UErrorCode& status);
     void setDateTimeFromCalendar(const Locale& locale, UErrorCode& status);
     void setDecimalSymbols(const Locale& locale, UErrorCode& status);
-    UDateTimePatternField getAppendFormatNumber(const char* field);
-    UDateTimePatternField getAppendNameNumber(const char* field);
+    UDateTimePatternField getAppendFormatNumber(const char* field) const;
+    UDateTimePatternField getAppendNameNumber(const char* field) const;
     void getAppendName(UDateTimePatternField field, UnicodeString& value);
     int32_t getCanonicalIndex(const UnicodeString& field);
     const UnicodeString* getBestRaw(DateTimeMatcher& source, int32_t includeMask, DistanceInfo* missingFields);
     UnicodeString adjustFieldTypes(const UnicodeString& pattern, UBool fixFractionalSeconds);
-    UnicodeString getBestAppending(const int32_t missingFields);
+    UnicodeString getBestAppending(int32_t missingFields);
     int32_t getTopBitNumber(int32_t foundMask);
     void setAvailableFormat(const UnicodeString &key, UErrorCode& status);
-    UBool isAvailableFormatSet(const UnicodeString &key);
+    UBool isAvailableFormatSet(const UnicodeString &key) const;
     void copyHashtable(Hashtable *other);
-    UBool isCanonicalItem(const UnicodeString& item);
-    UErrorCode getStatus() {  return fStatus; } ;
+    UBool isCanonicalItem(const UnicodeString& item) const;
+    UErrorCode getStatus() const {  return fStatus; } ;
 } ;// end class DateTimePatternGenerator
 
 U_NAMESPACE_END
