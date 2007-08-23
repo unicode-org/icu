@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 //===============================================================================
@@ -1036,11 +1036,21 @@ CollationAPITest::TestGetAll(/* char* par */)
             + UnicodeString(list[i].getDisplayName(dispName)));
     }
 
+    if (count1 == 0 || list == NULL) {
+        errln("getAvailableLocales(int&) returned an empty list");
+    }
+
     logln("Trying Collator::getAvailableLocales()");
     StringEnumeration* localeEnum = Collator::getAvailableLocales();
     const UnicodeString* locStr;
     const char *locCStr;
     count2 = 0;
+
+    if (localeEnum == NULL) {
+        errln("getAvailableLocales() returned NULL");
+        return;
+    }
+
     while ((locStr = localeEnum->snext(status)) != NULL)
     {
         logln(UnicodeString("Locale name is: ") + *locStr);
@@ -2228,6 +2238,12 @@ void CollationAPITest::TestClone() {
     logln("\ninit c0");
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedCollator* c0 = (RuleBasedCollator*)Collator::createInstance(status);
+
+    if (U_FAILURE(status)) {
+        errln("Collator::CreateInstance(status) failed with %s", u_errorName(status));
+        return;
+    }
+
     c0->setStrength(Collator::TERTIARY);
     dump("c0", c0, status);
 

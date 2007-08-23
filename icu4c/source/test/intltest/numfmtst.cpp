@@ -2346,6 +2346,7 @@ void NumberFormatTest::TestRounding() {
 	
 	if (U_FAILURE(status)) {
 		errln("Unable to create decimal formatter.");
+        return;
 	}
 	
 	int roundingIncrements[]={1, 2, 5, 20, 50, 100};
