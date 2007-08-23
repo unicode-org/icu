@@ -322,7 +322,17 @@ UDateFormatStyle DateTimeStyleSet::getTimeStyle() const {
 void DateTimeStyleSet::handleParseValue(const FieldsSet* inheritFrom, int32_t field, const UnicodeString& substr, UErrorCode& status) {
 //    int32_t value = udbg_enumByString(UDBG_UDateFormatStyle, substr);
 //    fprintf(stderr, " HPV: %d -> %d\n", field, value);
-    parseValueEnum(UDBG_UDateFormatStyle, inheritFrom, field, substr, status);
+    UnicodeString kRELATIVE_("RELATIVE_");
+    if(substr.startsWith(kRELATIVE_)) {
+        UnicodeString relativeas(substr,kRELATIVE_.length());
+        parseValueEnum(UDBG_UDateFormatStyle, inheritFrom, field, relativeas, status);
+        // fix relative value
+        if(isSet(field) && U_SUCCESS(status)) {
+            set(field, get(field) | UDAT_RELATIVE);
+        }
+    } else {
+        parseValueEnum(UDBG_UDateFormatStyle, inheritFrom, field, substr, status);
+    }
 }
 
 int32_t DateTimeStyleSet::handleParseName(const FieldsSet* /* inheritFrom */, const UnicodeString& name, const UnicodeString& /* substr */, UErrorCode& status) {

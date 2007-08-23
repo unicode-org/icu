@@ -92,6 +92,7 @@ void DataDrivenFormatTest::testConvertDate(TestData *testData,
         const DataMap * /* settings */, UBool fmt) {
     UnicodeString kPATTERN("PATTERN="); // TODO: static
     UnicodeString kMILLIS("MILLIS="); // TODO: static
+    UnicodeString kRELATIVE_MILLIS("RELATIVE_MILLIS="); // TODO: static
     
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat basicFmt(UnicodeString("EEE MMM dd yyyy / YYYY'-W'ww-ee"),
@@ -113,8 +114,8 @@ void DataDrivenFormatTest::testConvertDate(TestData *testData,
         CalendarFieldsSet fromSet;
         UDate fromDate = 0;
         UBool useDate = FALSE;
-      
-
+        
+        UDate now = Calendar::getNow();
         
         ++n;
 
@@ -174,11 +175,13 @@ void DataDrivenFormatTest::testConvertDate(TestData *testData,
             UnicodeString millis = UnicodeString(date, kMILLIS.length());
             useDate = TRUE;
             fromDate = udbg_stoi(millis);
-        } else {
-            if(fromSet.parseFrom(date, status)<0 || U_FAILURE(status)) {
-                errln("case %d: could not parse date as calendar fields: %s", n, u_errorName(status));
-                continue;
-            }
+        } else if(date.startsWith(kRELATIVE_MILLIS)) {
+            UnicodeString millis = UnicodeString(date, kRELATIVE_MILLIS.length());
+            useDate = TRUE;
+            fromDate = udbg_stoi(millis) + now;
+        } else if(fromSet.parseFrom(date, status)<0 || U_FAILURE(status)) {
+            errln("case %d: could not parse date as calendar fields: %s", n, u_errorName(status));
+            continue;
         }
         
         Calendar *cal = Calendar::createInstance(loc, status);
@@ -222,7 +225,8 @@ void DataDrivenFormatTest::testConvertDate(TestData *testData,
                 logln(caseString+": format: SUCCESS! "+UnicodeString("expect=output=")+output);
             } else {
                 UnicodeString result;
-                errln(caseString+": format:  output!=expectStr, got " + *udbg_escape(output, &result) + " expected " + *udbg_escape(expectStr, &result));
+                UnicodeString result2;
+                errln(caseString+": format:  output!=expectStr, got " + *udbg_escape(output, &result) + " expected " + *udbg_escape(expectStr, &result2));
             }
         } else {
             cal->clear();
