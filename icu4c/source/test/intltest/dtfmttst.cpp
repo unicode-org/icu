@@ -1990,10 +1990,33 @@ void DateFormatTest::TestRelative(int daysdelta,
     UnicodeString test;
     Locale en("en");
     DateFormat *fullrelative = DateFormat::createDateInstance(DateFormat::kFullRelative, loc);
+
+    if (fullrelative == NULL) {
+        errln("DateFormat::createDateInstance(DateFormat::kFullRelative, %s) returned NULL", loc.getName());
+        return;
+    }
+
     DateFormat *full         = DateFormat::createDateInstance(DateFormat::kFull        , loc);
-    
+ 
+    if (full == NULL) {
+        errln("DateFormat::createDateInstance(DateFormat::kFull, %s) returned NULL", loc.getName());
+        return;
+    }
+   
     DateFormat *en_full =         DateFormat::createDateInstance(DateFormat::kFull,         en);
+ 
+    if (en_full == NULL) {
+        errln("DateFormat::createDateInstance(DateFormat::kFull, en) returned NULL");
+        return;
+    }
+   
     DateFormat *en_fulltime =         DateFormat::createDateTimeInstance(DateFormat::kFull,DateFormat::kFull,en);
+ 
+    if (en_fulltime == NULL) {
+        errln("DateFormat::createDateTimeInstance(DateFormat::kFull, DateFormat::kFull, en) returned NULL");
+        return;
+    }
+   
     UnicodeString result;
     UnicodeString normalResult;
     UnicodeString expect;

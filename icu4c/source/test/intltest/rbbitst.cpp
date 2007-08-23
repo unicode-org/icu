@@ -1182,6 +1182,11 @@ void RBBITest::TestBug5775() {
     TEST_ASSERT_SUCCESS(status);
     TEST_ASSERT(bi != NULL);
 
+    if (U_FAILURE(status) || bi == NULL) {
+        // TEST_ASSERT already printed error message.
+        return;
+    }
+
     UnicodeString s("One.\\u00ad Two.");
     //               01234      56789
     s = s.unescape();

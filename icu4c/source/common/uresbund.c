@@ -2250,8 +2250,11 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
         }
         
         subStatus = U_ZERO_ERROR;
-        
-        uprv_strcpy(found, ures_getLocaleByType(res, ULOC_VALID_LOCALE, &subStatus));
+
+        if (res != NULL) {
+            uprv_strcpy(found, ures_getLocaleByType(res, ULOC_VALID_LOCALE, &subStatus));
+        }
+
         uloc_getParent(found,parent,sizeof(parent),&subStatus);
         ures_close(res);
     } while(!defVal[0] && *found && uprv_strcmp(found, "root") != 0 && U_SUCCESS(*status));
