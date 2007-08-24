@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2006, International Business Machines
+ *   Copyright (C) 2003-2007, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -107,7 +107,8 @@
  *                          U_INDEX_OUTOFBOUNDS_ERROR if src contains
  *                          too many code points.
  *                          U_BUFFER_OVERFLOW_ERROR if destCapacity is not enough
- * @return                  Number of ASCII characters converted.
+ * @return The length of the result string, if successful - or in case of a buffer overflow,
+ *         in which case it will be greater than destCapacity.
  * @stable ICU 2.6
  */
 U_STABLE int32_t U_EXPORT2
@@ -157,7 +158,8 @@ uidna_toASCII(const UChar* src, int32_t srcLength,
  *                          U_INDEX_OUTOFBOUNDS_ERROR if src contains
  *                          too many code points.
  *                          U_BUFFER_OVERFLOW_ERROR if destCapacity is not enough
- * @return                  Number of Unicode characters converted.
+ * @return The length of the result string, if successful - or in case of a buffer overflow,
+ *         in which case it will be greater than destCapacity.
  * @stable ICU 2.6
  */
 U_STABLE int32_t U_EXPORT2
@@ -207,7 +209,8 @@ uidna_toUnicode(const UChar* src, int32_t srcLength,
  *                          U_INDEX_OUTOFBOUNDS_ERROR if src contains
  *                          too many code points.
  *                          U_BUFFER_OVERFLOW_ERROR if destCapacity is not enough
- * @return                  Number of ASCII characters converted.
+ * @return The length of the result string, if successful - or in case of a buffer overflow,
+ *         in which case it will be greater than destCapacity.
  * @stable ICU 2.6
  */
 U_STABLE int32_t U_EXPORT2
@@ -253,7 +256,8 @@ uidna_IDNToASCII(  const UChar* src, int32_t srcLength,
  *                          U_INDEX_OUTOFBOUNDS_ERROR if src contains
  *                          too many code points.
  *                          U_BUFFER_OVERFLOW_ERROR if destCapacity is not enough
- * @return                  Number of ASCII characters converted.
+ * @return The length of the result string, if successful - or in case of a buffer overflow,
+ *         in which case it will be greater than destCapacity.
  * @stable ICU 2.6
  */
 U_STABLE int32_t U_EXPORT2
