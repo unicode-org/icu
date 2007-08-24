@@ -2055,7 +2055,29 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
 //        logln("getMillis: "+sunCalendar.getTimeInMillis());
         
     }
-    
+
+    public void TestYearJump3279() {
+        final long time = 1041148800000L;
+        Calendar c = new GregorianCalendar();
+        DateFormat fmt = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, Locale.US);
+
+        c.setTimeInMillis(time);
+        int year1 = c.get(Calendar.YEAR);
+        
+        logln("time: " + fmt.format(new Date(c.getTimeInMillis())));
+
+        logln("setting DOW to " + c.getFirstDayOfWeek());
+        c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek());
+        logln("week: " + c.getTime());
+        logln("week adjust: " + fmt.format(new Date(c.getTimeInMillis())));
+        int year2 = c.get(Calendar.YEAR);
+        
+        if(year1 != year2) {
+            errln("Error: adjusted day of week, and year jumped from " + year1 + " to " + year2);
+        } else {
+            logln("Year remained " + year2 + " - PASS.");
+        }
+    }
 }
 
 //eof
