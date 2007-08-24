@@ -698,9 +698,6 @@ public class GregorianCalendar extends Calendar {
     /**
      * Return true if the current time for this Calendar is in Daylignt
      * Savings Time.
-     *
-     * Note -- MAKE THIS PUBLIC AT THE NEXT API CHANGE.  POSSIBLY DEPRECATE
-     * AND REMOVE TimeZone.inDaylightTime().
      */
     boolean inDaylightTime() {
         if (!getTimeZone().useDaylightTime()) return false;
