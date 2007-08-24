@@ -1003,21 +1003,21 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
 
         // Currently supported NLV locales
         Locale ENGLISH = new Locale("en", "US"); // We don't support 'en' alone
-        Locale ARABIC = new Locale("ar");
-        Locale CZECH = new Locale("cs");
-        Locale GERMAN = new Locale("de");
-        Locale GREEK = new Locale("el");
-        Locale SPANISH = new Locale("es");
-        Locale FRENCH = new Locale("fr");
-        Locale HUNGARIAN = new Locale("hu");
-        Locale ITALIAN = new Locale("it");
-        Locale HEBREW = new Locale("iw");
-        Locale JAPANESE = new Locale("ja");
-        Locale KOREAN = new Locale("ko");
-        Locale POLISH = new Locale("pl");
+        Locale ARABIC = new Locale("ar", "");
+        Locale CZECH = new Locale("cs", "");
+        Locale GERMAN = new Locale("de", "");
+        Locale GREEK = new Locale("el", "");
+        Locale SPANISH = new Locale("es", "");
+        Locale FRENCH = new Locale("fr", "");
+        Locale HUNGARIAN = new Locale("hu", "");
+        Locale ITALIAN = new Locale("it", "");
+        Locale HEBREW = new Locale("iw", "");
+        Locale JAPANESE = new Locale("ja", "");
+        Locale KOREAN = new Locale("ko", "");
+        Locale POLISH = new Locale("pl", "");
         Locale PORTUGUESE = new Locale("pt", "BR");
-        Locale RUSSIAN = new Locale("ru");
-        Locale TURKISH = new Locale("tr");
+        Locale RUSSIAN = new Locale("ru", "");
+        Locale TURKISH = new Locale("tr", "");
         Locale CHINESE_SIMPLIFIED = new Locale("zh", "CN");
         Locale CHINESE_TRADITIONAL = new Locale("zh", "TW");
 
