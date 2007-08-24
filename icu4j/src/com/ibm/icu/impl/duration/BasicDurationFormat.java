@@ -142,10 +142,31 @@ public class BasicDurationFormat extends DurationFormat {
                 } else {
                     sawNonZero = true;
                 }
+                float floatVal = n.floatValue();
+                // is there a 'secondary' unit to set?
+                TimeUnit alternateUnit = null;
+                float alternateVal = 0;
+                
+                // see if there is a fractional part
+                if(outFields[i]==TimeUnit.SECOND) {
+                    double fullSeconds = floatVal;
+                    double intSeconds = Math.floor(floatVal);
+                    double millis = (fullSeconds-intSeconds)*1000.0;
+                    if(millis > 0.0) {
+                        alternateUnit = TimeUnit.MILLISECOND;
+                        alternateVal=(float)millis;
+                        floatVal=(float)intSeconds;
+                    }
+                }
+                
                 if(p == null) {
-                    p = Period.at(n.floatValue(), outFields[i]);
+                    p = Period.at(floatVal, outFields[i]);
                 } else {
-                    p = p.and(n.floatValue(), outFields[i]);
+                    p = p.and(floatVal, outFields[i]);
+                }
+                
+                if(alternateUnit != null) {
+                    p = p.and(alternateVal, alternateUnit); // add in MILLISECONDs
                 }
             }
         }

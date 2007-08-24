@@ -140,7 +140,6 @@ public class ICUDurationTest extends TestFmwk {
         } else {
             errln("FAIL: got " + out + " wanted " + expected + " from " + d);
         }
-
     }
 
 
@@ -162,6 +161,13 @@ public class ICUDurationTest extends TestFmwk {
                 // from BD req's
                 "en",   "PT2H46M40S",   "2 hours, 46 minutes, and 40 seconds",
                 "it",   "PT2H46M40S",   "due ore, 46 minuti e 40 secondi",
+                
+                // more cases
+                "en",   "PT10S",        "10 seconds",
+                "en",   "PT88M70S",        "88 minutes and 70 seconds",
+                "en",   "PT10.100S",    "10 seconds and 100 milliseconds",
+                "en",   "-PT10S",       "10 seconds",
+                "en",   "PT0H5M0S",     "5 minutes and 0 seconds"
         };
         
         for(int n=0;n<cases.length;n+=3) {
