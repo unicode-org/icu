@@ -687,6 +687,7 @@ public:
      * or <code>UNIVERSAL_TIME</code>.
      * 
      * @return The time type used of the start times used by this rule.
+     * @draft ICU 3.8
      */
     DateTimeRule::TimeRuleType getTimeType(void) const;
 
@@ -697,12 +698,14 @@ public:
      * @return  true if the index is within the valid range and
      *          and the result is set.  When false, the output
      *          parameger "result" is unchanged.
+     * @draft ICU 3.8
      */
     UBool getStartTimeAt(int32_t index, UDate& result) const;
 
     /**
      * Returns the number of start times stored in this rule
      * @return The number of start times.
+     * @draft ICU 3.8
      */
     int32_t countStartTimes(void) const;
 
