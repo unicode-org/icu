@@ -196,11 +196,14 @@ final class NormalizationTransliterator extends Transliterator {
         //System.out.println("t: " + com.ibm.icu.impl.Utility.hex(text.toString()) + ", s: " + lastSafe + ", l: " + limit);
 
         int len = limit - lastSafe;
-        if (buffer.length < len) {
-            buffer = new char[len]; // rare, and we don't care if we grow too large
+        String input = null;
+        synchronized (buffer) {
+            if (buffer.length < len) {
+                buffer = new char[len]; // rare, and we don't care if we grow too large
+            }
+            text.getChars(lastSafe, limit, buffer, 0);
+            input = new String(buffer, 0, len); // TODO: fix normalizer to take char[]
         }
-        text.getChars(lastSafe, limit, buffer, 0);
-        String input = new String(buffer, 0, len); // TODO: fix normalizer to take char[]
         String output = Normalizer.normalize(input, mode, options);
         
         // verify OK, if specified
