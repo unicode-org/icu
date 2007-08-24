@@ -1834,20 +1834,31 @@ U_STABLE UBool U_EXPORT2
 ucnv_isAmbiguous(const UConverter *cnv);
 
 /**
- * Sets the converter to use fallback mapping or not.
+ * Sets the converter to use fallback mappings or not.
+ * Regardless of this flag, the converter will always use
+ * fallbacks from Unicode Private Use code points, as well as
+ * reverse fallbacks (to Unicode).
+ * For details see ".ucm File Format"
+ * in the Conversion Data chapter of the ICU User Guide:
+ * http://www.icu-project.org/userguide/conversion-data.html#ucmformat
+ *
  * @param cnv The converter to set the fallback mapping usage on.
  * @param usesFallback TRUE if the user wants the converter to take advantage of the fallback 
  * mapping, FALSE otherwise.
  * @stable ICU 2.0
+ * @see ucnv_usesFallback
  */
 U_STABLE void U_EXPORT2 
 ucnv_setFallback(UConverter *cnv, UBool usesFallback);
 
 /**
  * Determines if the converter uses fallback mappings or not.
+ * This flag has restrictions, see ucnv_setFallback().
+ *
  * @param cnv The converter to be tested
  * @return TRUE if the converter uses fallback, FALSE otherwise.
  * @stable ICU 2.0
+ * @see ucnv_setFallback
  */
 U_STABLE UBool U_EXPORT2 
 ucnv_usesFallback(const UConverter *cnv);
