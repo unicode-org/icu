@@ -997,4 +997,79 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
+    
+    
+    public void Test5006GetShortMonths() throws Exception {
+
+        // Currently supported NLV locales
+        Locale ENGLISH = new Locale("en", "US"); // We don't support 'en' alone
+        Locale ARABIC = new Locale("ar");
+        Locale CZECH = new Locale("cs");
+        Locale GERMAN = new Locale("de");
+        Locale GREEK = new Locale("el");
+        Locale SPANISH = new Locale("es");
+        Locale FRENCH = new Locale("fr");
+        Locale HUNGARIAN = new Locale("hu");
+        Locale ITALIAN = new Locale("it");
+        Locale HEBREW = new Locale("iw");
+        Locale JAPANESE = new Locale("ja");
+        Locale KOREAN = new Locale("ko");
+        Locale POLISH = new Locale("pl");
+        Locale PORTUGUESE = new Locale("pt", "BR");
+        Locale RUSSIAN = new Locale("ru");
+        Locale TURKISH = new Locale("tr");
+        Locale CHINESE_SIMPLIFIED = new Locale("zh", "CN");
+        Locale CHINESE_TRADITIONAL = new Locale("zh", "TW");
+
+        Locale[] locales = new Locale[] { ENGLISH, ARABIC, CZECH, GERMAN, GREEK, SPANISH, FRENCH,
+                HUNGARIAN, ITALIAN, HEBREW, JAPANESE, KOREAN, POLISH, PORTUGUESE, RUSSIAN, TURKISH,
+                CHINESE_SIMPLIFIED, CHINESE_TRADITIONAL };
+
+        String[] islamicTwelfthMonthLocalized = new String[locales.length];
+        String[] gregorianTwelfthMonthLocalized = new String[locales.length];
+
+        for (int i = 0; i < locales.length; i++) {
+
+            Locale locale = locales[i];
+
+            // Islamic
+            com.ibm.icu.util.Calendar islamicCalendar = new com.ibm.icu.util.IslamicCalendar(locale);
+            com.ibm.icu.text.SimpleDateFormat islamicDateFormat = (com.ibm.icu.text.SimpleDateFormat) islamicCalendar
+                    .getDateTimeFormat(com.ibm.icu.text.DateFormat.FULL, -1, locale);
+            com.ibm.icu.text.DateFormatSymbols islamicDateFormatSymbols = islamicDateFormat
+                    .getDateFormatSymbols();
+
+            String[] shortMonths = islamicDateFormatSymbols.getShortMonths();
+            String twelfthMonthLocalized = shortMonths[11];
+
+            islamicTwelfthMonthLocalized[i] = twelfthMonthLocalized;
+
+            // Gregorian
+            com.ibm.icu.util.Calendar gregorianCalendar = new com.ibm.icu.util.GregorianCalendar(
+                    locale);
+            com.ibm.icu.text.SimpleDateFormat gregorianDateFormat = (com.ibm.icu.text.SimpleDateFormat) gregorianCalendar
+                    .getDateTimeFormat(com.ibm.icu.text.DateFormat.FULL, -1, locale);
+
+            com.ibm.icu.text.DateFormatSymbols gregorianDateFormatSymbols = gregorianDateFormat
+                    .getDateFormatSymbols();
+            shortMonths = gregorianDateFormatSymbols.getShortMonths();
+            twelfthMonthLocalized = shortMonths[11];
+
+            gregorianTwelfthMonthLocalized[i] = twelfthMonthLocalized;
+
+        }
+
+        // Compare
+        for (int i = 0; i < locales.length; i++) {
+
+            String gregorianTwelfthMonth = gregorianTwelfthMonthLocalized[i];
+            String islamicTwelfthMonth = islamicTwelfthMonthLocalized[i];
+
+            logln(locales[i] + ": " + gregorianTwelfthMonth + ", " + islamicTwelfthMonth);
+            if (gregorianTwelfthMonth.equalsIgnoreCase(islamicTwelfthMonth)) {
+                errln(locales[i] + ": gregorian and islamic are same: " + gregorianTwelfthMonth
+                        + ", " + islamicTwelfthMonth);
+            }
+        }
+    }
 }
