@@ -1400,16 +1400,22 @@ remapPlatformDependentCodepage(const char *locale, const char *name) {
         name = "IBM-5348";
     }
 #elif defined(U_SOLARIS)
-    if (locale != NULL && uprv_strcmp(name, "EUC") == 0) {
-        /* Solaris underspecifies the "EUC" name. */
-        if (uprv_strcmp(locale, "zh_CN") == 0) {
-            name = "EUC-CN";
+    if (locale != NULL) {
+        if (uprv_strcmp(name, "EUC") == 0) {
+            /* Solaris underspecifies the "EUC" name. */
+            if (uprv_strcmp(locale, "zh_CN") == 0) {
+                name = "EUC-CN";
+            }
+            else if (uprv_strcmp(locale, "zh_TW") == 0) {
+                name = "EUC-TW";
+            }
+            else if (uprv_strcmp(locale, "ko_KR") == 0) {
+                name = "EUC-KR";
+            }
         }
-        else if (uprv_strcmp(locale, "zh_TW") == 0) {
-            name = "EUC-TW";
-        }
-        else if (uprv_strcmp(locale, "ko_KR") == 0) {
-            name = "EUC-KR";
+        else if (uprv_strcmp(locale, "en_US_POSIX") && *name == 0) {
+            /* Solaris 10 seems to default to ISO-8859-1 for the C locale */
+            name = "ISO-8859-1";
         }
     }
     else if (uprv_strcmp(name, "eucJP") == 0) {
