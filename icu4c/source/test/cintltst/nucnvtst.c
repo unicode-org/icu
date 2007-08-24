@@ -1418,7 +1418,7 @@ static void TestConverterTypesAndStarters()
 
 static void
 TestAmbiguousConverter(UConverter *cnv) {
-    static const char inBytes[2]={ 0x61, 0x5c };
+    static const char inBytes[3]={ 0x61, 0x5B, 0x5c };
     UChar outUnicode[20]={ 0, 0, 0, 0 };
 
     const char *s;
@@ -1426,34 +1426,36 @@ TestAmbiguousConverter(UConverter *cnv) {
     UErrorCode errorCode;
     UBool isAmbiguous;
 
-    /* try to convert an 'a' and a US-ASCII backslash */
+    /* try to convert an 'a', a square bracket and a US-ASCII backslash */
     errorCode=U_ZERO_ERROR;
     s=inBytes;
     u=outUnicode;
-    ucnv_toUnicode(cnv, &u, u+20, &s, s+2, NULL, TRUE, &errorCode);
+    ucnv_toUnicode(cnv, &u, u+20, &s, s+3, NULL, TRUE, &errorCode);
     if(U_FAILURE(errorCode)) {
         /* we do not care about general failures in this test; the input may just not be mappable */
         return;
     }
 
-    if(outUnicode[0]!=0x61 || outUnicode[1]==0xfffd) {
-        /* not an ASCII-family encoding, or 0x5c is unassigned/illegal: this test is not applicable */
+    if(outUnicode[0]!=0x61 || outUnicode[1]!=0x5B || outUnicode[2]==0xfffd) {
+        /* not a close ASCII-family encoding, or 0x5c is unassigned/illegal: this test is not applicable */
+        /* There are some encodings that are partially ASCII based,
+        like the ISO-7 and GSM series of codepages, which we ignore. */
         return;
     }
 
     isAmbiguous=ucnv_isAmbiguous(cnv);
 
     /* check that outUnicode[1]!=0x5c is exactly the same as ucnv_isAmbiguous() */
-    if((outUnicode[1]!=0x5c)!=isAmbiguous) {
+    if((outUnicode[2]!=0x5c)!=isAmbiguous) {
         log_err("error: converter \"%s\" needs a backslash fix: %d but ucnv_isAmbiguous()==%d\n",
-            ucnv_getName(cnv, &errorCode), outUnicode[1]!=0x5c, isAmbiguous);
+            ucnv_getName(cnv, &errorCode), outUnicode[2]!=0x5c, isAmbiguous);
         return;
     }
 
-    if(outUnicode[1]!=0x5c) {
+    if(outUnicode[2]!=0x5c) {
         /* needs fixup, fix it */
         ucnv_fixFileSeparator(cnv, outUnicode, (int32_t)(u-outUnicode));
-        if(outUnicode[1]!=0x5c) {
+        if(outUnicode[2]!=0x5c) {
             /* the fix failed */
             log_err("error: ucnv_fixFileSeparator(%s) failed\n", ucnv_getName(cnv, &errorCode));
             return;
