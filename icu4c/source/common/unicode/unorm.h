@@ -182,6 +182,7 @@ enum {
  * Normalize a string.
  * The string will be normalized according the specified normalization mode
  * and options.
+ * The source and result buffers must not be the same, nor overlap.
  *
  * @param source The string to normalize.
  * @param sourceLength The length of source, or -1 if NUL-terminated.
@@ -451,7 +452,7 @@ unorm_previous(UCharIterator *src,
  *
  * @param left Left source string, may be same as dest.
  * @param leftLength Length of left source string, or -1 if NUL-terminated.
- * @param right Right source string.
+ * @param right Right source string. Must not be the same as dest, nor overlap.
  * @param rightLength Length of right source string, or -1 if NUL-terminated.
  * @param dest The output buffer; can be NULL if destCapacity==0 for pure preflighting.
  * @param destCapacity The number of UChars that fit into dest.
