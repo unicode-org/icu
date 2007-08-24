@@ -527,7 +527,16 @@ public:
      * @internal ICU 3.8
      */
     UBool isCommonlyUsed(const UnicodeString &zid);
-
+    
+    /**
+     * Sets timezone string for the given the ID and translation type
+     * @param ID       The ID of zone strings,  e.g: "America/Los_Angeles".
+     *                 The time zone ID is for programmatic lookup.
+     * @param type     The translation type to set the value for
+     * @param value    The string with which current translation needs to be replaced
+     * @param status   Input/output parameter, set to success or     
+     * @internal ICU 3.6
+     */
     void setZoneString(const UnicodeString &ID, const TimeZoneTranslationType type, const UnicodeString &value, UErrorCode &status);
 
 private:
