@@ -300,10 +300,22 @@ public final class ZoneMeta {
         if (country_code != null) {
             ICUResourceBundle rb = 
                 (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
-            if (rb.getLoadingStatus() != ICUResourceBundle.FROM_ROOT && rb.getLoadingStatus() != ICUResourceBundle.FROM_DEFAULT) {
+//
+// TODO: There is a design bug in UResourceBundle and getLoadingStatus() does not work well.
+//
+//            if (rb.getLoadingStatus() != ICUResourceBundle.FROM_ROOT && rb.getLoadingStatus() != ICUResourceBundle.FROM_DEFAULT) {
+//                country = ULocale.getDisplayCountry("xx_" + country_code, locale);
+//            }
+//            if (country == null || country.length() == 0) country = country_code;
+// START WORKAROUND
+            ULocale rbloc = rb.getULocale();
+            if (!rbloc.equals(ULocale.ROOT) && rbloc.getLanguage().equals(locale.getLanguage())) {
                 country = ULocale.getDisplayCountry("xx_" + country_code, locale);
             }
-            if (country == null || country.length() == 0) country = country_code;
+            if (country == null || country.length() == 0) {
+                country = country_code;
+            }
+// END WORKAROUND
         }
         
         // This is not behavior specified in tr35, but behavior added by Mark.  
