@@ -105,7 +105,6 @@ typedef enum UBreakIteratorType {
    */
   UBRK_TITLE = 4,
 #endif /* U_HIDE_DEPRECATED_API */
-  /** Extended Grapheme Cluster breaks  @draft ICU 3.8 */
   UBRK_COUNT = 5
 } UBreakIteratorType;
 
