@@ -126,6 +126,8 @@ static char *extractBytes(const UnicodeString &source, const char *codepage, int
         source.extract(bytes, capacity, cnv, status);
     }
     
+    ucnv_close(cnv);
+
     return bytes;
 }
 
