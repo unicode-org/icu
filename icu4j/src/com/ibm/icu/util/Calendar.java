@@ -1310,9 +1310,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
 
     /**
      * True if all fields have been virtually set, but have not yet been
-     * computed.  This occurs only in setTimeInMillis().  A calendar set
-     * to this state will compute all fields from the time if it becomes
-     * necessary, but otherwise will delay such computation.
+     * computed.  This occurs only in setTimeInMillis(), or after readObject().
+     * A calendar set to this state will compute all fields from the time if it
+     * becomes necessary, but otherwise will delay such computation.
      */
     private transient boolean areFieldsVirtuallySet;
 
@@ -1416,9 +1416,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
 
     /**
      * The next available value for <code>stamp[]</code>, an internal array.
-     * This actually should not be written out to the stream, and will probably
-     * be removed from the stream in the near future.  In the meantime,
-     * a value of <code>MINIMUM_USER_STAMP</code> should be used.
      * @serial
      */
     private transient int             nextStamp = MINIMUM_USER_STAMP;
@@ -3968,16 +3965,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
 
     /**
      * Save the state of this object to a stream (i.e., serialize it).
-     *
-     * Ideally, <code>Calendar</code> would only write out its state data and
-     * the current time, and not write any field data out, such as
-     * <code>fields[]</code>, <code>isTimeSet</code>, <code>areFieldsSet</code>,
-     * and <code>isSet[]</code>.  <code>nextStamp</code> also should not be part
-     * of the persistent state. Unfortunately, this didn't happen before JDK 1.1
-     * shipped. To be compatible with JDK 1.1, we will always have to write out
-     * the field values and state flags.  However, <code>nextStamp</code> can be
-     * removed from the serialization stream; this will probably happen in the
-     * near future.
      */
     private void writeObject(ObjectOutputStream stream)
          throws IOException
@@ -4007,6 +3994,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
 
         isTimeSet = true;
         areFieldsSet = areAllFieldsSet = false;
+        areFieldsVirtuallySet = true; // cause fields to be recalculated if requested.
         nextStamp = MINIMUM_USER_STAMP;
     }
 

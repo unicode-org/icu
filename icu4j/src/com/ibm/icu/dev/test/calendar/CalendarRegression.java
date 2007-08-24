@@ -7,6 +7,11 @@
 package com.ibm.icu.dev.test.calendar;
 import com.ibm.icu.util.*;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Date;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -1949,6 +1954,108 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
          */
     }
 
+    /**
+     * test serialize-and-modify.
+     * @throws ClassNotFoundException 
+     */
+    public void TestSerialization3474() {
+        try {
+            ByteArrayOutputStream icuStream = new ByteArrayOutputStream();
+    
+            logln("icu Calendar");
+            
+            com.ibm.icu.util.GregorianCalendar icuCalendar =
+                new com.ibm.icu.util.GregorianCalendar();
+            
+            icuCalendar.setTimeInMillis(1187912555931L);
+            long expectMillis = 1187912520931L; // with seconds (not ms) cleared.
+            
+            logln("instantiated: "+icuCalendar);
+            logln("getMillis: "+icuCalendar.getTimeInMillis());
+            icuCalendar.set(com.ibm.icu.util.GregorianCalendar.SECOND, 0);
+            logln("setSecond=0: "+icuCalendar);
+            {
+                long gotMillis = icuCalendar.getTimeInMillis();
+                if(gotMillis != expectMillis) {
+                    errln("expect millis "+expectMillis+" but got "+gotMillis);
+                } else {
+                    logln("getMillis: "+gotMillis);
+                }
+            }
+            ObjectOutputStream icuOut =
+                new ObjectOutputStream(icuStream);
+            icuOut.writeObject(icuCalendar);
+            icuOut.flush();
+            icuOut.close();
+            
+            ObjectInputStream icuIn =
+                new ObjectInputStream(new ByteArrayInputStream(icuStream.toByteArray()));
+            icuCalendar = null;
+            icuCalendar = (com.ibm.icu.util.GregorianCalendar)icuIn.readObject();
+            
+            logln("serialized back in: "+icuCalendar);
+            {
+                long gotMillis = icuCalendar.getTimeInMillis();
+                if(gotMillis != expectMillis) {
+                    errln("expect millis "+expectMillis+" but got "+gotMillis);
+                } else {
+                    logln("getMillis: "+gotMillis);
+                }
+            }
+            
+            icuCalendar.set(com.ibm.icu.util.GregorianCalendar.SECOND, 0);
+                    
+            logln("setSecond=0: "+icuCalendar);
+            {
+                long gotMillis = icuCalendar.getTimeInMillis();
+                if(gotMillis != expectMillis) {
+                    errln("expect millis "+expectMillis+" after stream and setSecond but got "+gotMillis);
+                } else {
+                    logln("getMillis after stream and setSecond: "+gotMillis);
+                }
+            }
+        } catch(IOException e) {
+            errln(e.toString());
+            e.printStackTrace();
+        } catch(ClassNotFoundException cnf) {
+            errln(cnf.toString());
+            cnf.printStackTrace();
+        }
+
+        // JDK works correctly, etc etc.  
+//        ByteArrayOutputStream jdkStream = new ByteArrayOutputStream();
+
+//        logln("\nSUN Calendar");
+//        
+//        java.util.GregorianCalendar sunCalendar =
+//            new java.util.GregorianCalendar();
+//        
+//        logln("instanzieren: "+sunCalendar);
+//        logln("getMillis: "+sunCalendar.getTimeInMillis());
+//        sunCalendar.set(java.util.GregorianCalendar.SECOND, 0);
+//        logln("setSecond=0: "+sunCalendar);
+//        logln("getMillis: "+sunCalendar.getTimeInMillis());
+//        
+//        ObjectOutputStream sunOut =
+//            new ObjectOutputStream(jdkStream);
+//        sunOut.writeObject(sunCalendar);
+//        sunOut.flush();
+//        sunOut.close();
+//        
+//        ObjectInputStream sunIn =
+//            new ObjectInputStream(new ByteArrayInputStream(jdkStream.toByteArray()));
+//        sunCalendar = null;
+//        sunCalendar = (java.util.GregorianCalendar)sunIn.readObject();
+//        
+//        logln("serialized: "+sunCalendar);
+//        logln("getMillis: "+sunCalendar.getTimeInMillis());
+//        
+//        sunCalendar.set(java.util.GregorianCalendar.SECOND, 0);
+//        logln("setSecond=0: "+sunCalendar);
+//        logln("getMillis: "+sunCalendar.getTimeInMillis());
+        
+    }
+    
 }
 
 //eof
