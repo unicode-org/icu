@@ -240,12 +240,17 @@ public class IntlTestDateFormat extends com.ibm.icu.dev.test.TestFmwk {
         else errln("********** FAIL: Zero available locales or null array pointer");
     }
 
-    public void TestMonster() {
+    public void TestRoundtrip() {
+        ULocale[] locales;;
         if (isQuick()) {
-            logln("Skipping test (use -e for exhaustive)");
-            return;
+            locales = new ULocale[] {
+                    new ULocale("bg_BG"),
+                    new ULocale("fr_CA"),
+                    new ULocale("zh_TW"),
+            };
+        } else {
+            locales = DateFormat.getAvailableULocales();
         }
-        final ULocale[] locales = DateFormat.getAvailableULocales();
         long count = locales.length;
         if (locales != null  &&  count != 0) {
             for (int i=0; i<count; ++i) {

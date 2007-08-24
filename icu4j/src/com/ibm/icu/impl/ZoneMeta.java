@@ -341,7 +341,10 @@ public final class ZoneMeta {
     }
 
     public static String displayGMT(long value, ULocale locale) {
-        String msgpat = getTZLocalizationInfo(locale, GMT);
+        //TODO: revisit after 3.8
+
+        String msgpat = "GMT{0}"; // Parser code is not quite ready to accept localized GMT string as of 3.8
+        //String msgpat = getTZLocalizationInfo(locale, GMT);
         String dtepat = getTZLocalizationInfo(locale, HOUR);
         
         int n = dtepat.indexOf(';');
