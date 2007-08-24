@@ -375,10 +375,11 @@ getAlgorithmicTypeFromName(const char *realName)
 * Based on the number of known converters, this determines how many times larger
 * the shared data hash table should be. When on small platforms, or just a couple
 * of converters are used, this number should be 2. When memory is plentiful, or
-* when ucnv_countAvailable is ever used, this should be 4.
+* when ucnv_countAvailable is ever used with a lot of available converters,
+* this should be 4.
 * Larger numbers reduce the number of hash collisions, but use more memory.
 */
-#define UCNV_CACHE_LOAD_FACTOR 4
+#define UCNV_CACHE_LOAD_FACTOR 2
 
 /* Puts the shared data in the static hashtable SHARED_DATA_HASHTABLE */
 /*   Will always be called with the cnvCacheMutex alrady being held   */
