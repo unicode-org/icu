@@ -395,7 +395,7 @@ public:
 
   /**
    * Compare two Unicode strings in code point order.
-   * This is different in UTF-16 from how compare(), operator==, startsWith() etc. work
+   * The result may be different from the results of compare(), operator<, etc.
    * if supplementary characters are present:
    *
    * In UTF-16, supplementary characters (with code points U+10000 and above) are
@@ -414,7 +414,7 @@ public:
 
   /**
    * Compare two Unicode strings in code point order.
-   * This is different in UTF-16 from how compare(), operator==, startsWith() etc. work
+   * The result may be different from the results of compare(), operator<, etc.
    * if supplementary characters are present:
    *
    * In UTF-16, supplementary characters (with code points U+10000 and above) are
@@ -437,7 +437,7 @@ public:
 
   /**
    * Compare two Unicode strings in code point order.
-   * This is different in UTF-16 from how compare(), operator==, startsWith() etc. work
+   * The result may be different from the results of compare(), operator<, etc.
    * if supplementary characters are present:
    *
    * In UTF-16, supplementary characters (with code points U+10000 and above) are
@@ -464,7 +464,7 @@ public:
 
   /**
    * Compare two Unicode strings in code point order.
-   * This is different in UTF-16 from how compare(), operator==, startsWith() etc. work
+   * The result may be different from the results of compare(), operator<, etc.
    * if supplementary characters are present:
    *
    * In UTF-16, supplementary characters (with code points U+10000 and above) are
@@ -485,7 +485,7 @@ public:
 
   /**
    * Compare two Unicode strings in code point order.
-   * This is different in UTF-16 from how compare(), operator==, startsWith() etc. work
+   * The result may be different from the results of compare(), operator<, etc.
    * if supplementary characters are present:
    *
    * In UTF-16, supplementary characters (with code points U+10000 and above) are
@@ -508,7 +508,7 @@ public:
 
   /**
    * Compare two Unicode strings in code point order.
-   * This is different in UTF-16 from how compare(), operator==, startsWith() etc. work
+   * The result may be different from the results of compare(), operator<, etc.
    * if supplementary characters are present:
    *
    * In UTF-16, supplementary characters (with code points U+10000 and above) are
@@ -535,7 +535,7 @@ public:
 
   /**
    * Compare two Unicode strings in code point order.
-   * This is different in UTF-16 from how compare(), operator==, startsWith() etc. work
+   * The result may be different from the results of compare(), operator<, etc.
    * if supplementary characters are present:
    *
    * In UTF-16, supplementary characters (with code points U+10000 and above) are
