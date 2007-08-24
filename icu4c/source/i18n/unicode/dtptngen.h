@@ -68,6 +68,7 @@ public:
      
     /**
      * Destructor.
+     * @draft ICU 3.8
      */
     virtual ~DateTimePatternGenerator();
 
