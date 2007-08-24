@@ -17,7 +17,7 @@ TZORIG=./tzorig
 TZORIG_TZDIR=./tzorig/tzdir
 TZORIG_ABS := $(shell pwd)/tzorig
 TZORIG_TZDIR_ABS := $(TZORIG_ABS)/tzdir
-TZORIG_OPTS := CFLAGS=-D_POSIX_C_SOURCE TZDIR=$(TZORIG_TZDIR_ABS)
+TZORIG_OPTS := CFLAGS="-D_POSIX_C_SOURCE $(TZORIG_EXTRA_CFLAGS)" TZDIR=$(TZORIG_TZDIR_ABS)
 
 
 ## Options for building zdumps
@@ -104,7 +104,7 @@ XDATA=zone.tab yearistype.sh leapseconds iso3166.tab
 ICUDATA=ZoneMetaData.java icu_zone.txt tz2icu zoneinfo.txt
 
 zic:		$(OBJECTS) yearistype $(srcdir)/tz2icu.h
-		$(CC) $(CFLAGS) $(LFLAGS) -I$(srcdir) $(OBJECTS) $(LDLIBS) -o $@
+		$(CC) $(CFLAGS) $(TZORIG_EXTRA_CFLAGS) $(LFLAGS) -I$(srcdir) $(OBJECTS) $(LDLIBS) -o $@
 
 tz2icu:		$(srcdir)/tz2icu.cpp $(srcdir)/tz2icu.h
 		$(CXX) -W -Wall  -I$(srcdir) -I$(top_srcdir)/common -pedantic $(srcdir)/tz2icu.cpp -o $@
