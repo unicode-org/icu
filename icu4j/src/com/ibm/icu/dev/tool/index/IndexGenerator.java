@@ -20,8 +20,13 @@ public class IndexGenerator {
 	}
 
 	File inDir = new File(args[0]);
-	if (!inDir.isDirectory() || !inDir.exists()) {
-	    usage("first argument '" + inDir + "' must be existing directory");
+	if (!inDir.exists()) {
+	    System.out.println("skipping nonexistent directory " + inDir);
+	    return;
+	}
+
+	if (!inDir.isDirectory()) {
+	    usage("first argument '" + inDir + "' must be a directory");
 	}
 
 	File outDir = inDir;

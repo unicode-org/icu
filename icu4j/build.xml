@@ -79,6 +79,7 @@
     <property name="build.dir" value="classes" />
     <property name="api.dir" value="${src.dir}/com/ibm/icu/dev/tool/docs" />
     <property name="doc.dir" value="doc" />
+    <property name="icudatajar.file" value="${src.dir}/com/ibm/icu/impl/data/icudata.jar" />
     <property name="testjar.file" value="icu4jtests.jar" />
     <property name="jar.file" value="icu4j.jar" />
     <property name="charsets.jar.file" value="icu4j-charsets.jar" />
@@ -207,7 +208,7 @@
       <srcfiles dir="${build.dir}" includes="${icu4j.testdatadata.path}/root.res" />
     </uptodate>
 
-    <uptodate property="icu4j.module.resources" targetfile="${src.dir}/com/ibm/icu/impl/data/icudata.jar">
+    <uptodate property="icu4j.module.resources" targetfile="${icudatajar.file}">
       <srcfiles dir="${build.dir}" includes="${icu4j.data.path}/*.icu" />
     </uptodate>
     <!-- <echo message="icu4j.module.resources result: ${icu4j.module.resources}" /> -->
@@ -272,7 +273,7 @@
 
   <target name="icudata" depends="initBase" if="icu4j.resources">
     <!-- use this target to force resources to be rebuilt -->
-    <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}" />
+    <unjar src="${icudatajar.file}" dest="${build.dir}" />
     <touch file="${build.dir}/${icu4j.data.path}/res_index.res" />
     <copy todir="${build.dir}/META-INF">
       <fileset dir="${src.dir}/META-INF" includes="**/*" />
@@ -914,7 +915,7 @@
   <!-- Module: Calendar -->
   <target name="copyCalendarData" depends="initBase">
     <!-- Calendar does not require Collation data, BreakIterator data -->
-    <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
+    <unjar src="${icudatajar.file}" dest="${build.dir}">
       <patternset>
         <include name="**/pnames.icu" />
         <include name="**/ucase.icu" />
@@ -960,7 +961,7 @@
   </target>
 
   <target name="copyCollatorData" depends="initBase">
-    <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
+    <unjar src="${icudatajar.file}" dest="${build.dir}">
       <patternset>
         <include name="**/*.icu" />
         <include name="**/coll/*.res" />
@@ -1038,7 +1039,7 @@
   <!-- Module: Format -->
   <target name="copyFormatData" depends="initBase" if="icu4j.module.resources">
     <!-- Format does not require BreakIterator data -->
-    <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
+    <unjar src="${icudatajar.file}" dest="${build.dir}">
       <patternset>
         <include name="**/*.icu" />
         <include name="**/*.res" />
@@ -1081,7 +1082,7 @@
 
   <!-- Module: Normalizer -->
   <target name="normalizerData" depends="initBase">
-    <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
+    <unjar src="${icudatajar.file}" dest="${build.dir}">
       <patternset>
         <include name="**/ucase.icu" />
         <include name="**/unorm.icu" />
@@ -1132,7 +1133,7 @@
 
   <!-- Module: Basic Properties / Full Properties -->
   <target name="copyBasicPropsData" depends="initBase">
-    <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
+    <unjar src="${icudatajar.file}" dest="${build.dir}">
       <patternset>
         <include name="**/unorm.icu" />
         <include name="**/uprops.icu" />
@@ -1146,7 +1147,7 @@
   </target>
 
   <target name="copyFullPropsData" depends="initBase">
-    <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
+    <unjar src="${icudatajar.file}" dest="${build.dir}">
       <patternset>
         <include name="**/unorm.icu" />
         <include name="**/uprops.icu" />
@@ -1211,7 +1212,7 @@
   <!-- Module: Transliterator -->
   <target name="copyTranslitData" depends="initBase">
     <!-- Calendar does not require Collation data, BreakIterator data -->
-    <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
+    <unjar src="${icudatajar.file}" dest="${build.dir}">
       <patternset>
         <include name="**/unorm.icu" />
         <include name="**/uprops.icu" />
@@ -1259,7 +1260,7 @@
 
   <!-- Module: StringPrep, IDNA -->
   <target name="copyStringPrepData" depends="initBase">
-    <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
+    <unjar src="${icudatajar.file}" dest="${build.dir}">
       <patternset>
         <include name="**/*.spp" />
         <include name="**/ubidi.icu" />
