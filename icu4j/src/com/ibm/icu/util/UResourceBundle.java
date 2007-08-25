@@ -133,7 +133,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @stable ICU 3.0
      * 
      */    
-    protected static UResourceBundle getBundleInstance(String baseName, String localeName, ClassLoader root, boolean disableFallback){
+    protected static UResourceBundle getBundleInstance(String baseName, String localeName, ClassLoader root, boolean disableFallback) {
         return instantiateBundle(baseName, localeName, root, disableFallback);   
     }
 
@@ -154,12 +154,13 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @return a resource bundle for the given locale               
      * @stable ICU 3.0
      */
-    public static UResourceBundle getBundleInstance(ULocale locale){
-        if(locale==null){
+    public static UResourceBundle getBundleInstance(ULocale locale) {
+        if (locale==null) {
             locale = ULocale.getDefault();   
         }
-        return getBundleInstance( ICUResourceBundle.ICU_BASE_NAME, locale.toString(), ICUResourceBundle.ICU_DATA_CLASS_LOADER );   
+        return getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale.toString(), ICUResourceBundle.ICU_DATA_CLASS_LOADER, false);   
     }
+
     /**
      * Creates a UResourceBundle for the default locale and specified base name,
      * from which users can extract resources by using their corresponding keys.
@@ -168,9 +169,14 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @return a resource bundle for the given base name and default locale              
      * @stable ICU 3.0 
      */    
-    public static UResourceBundle getBundleInstance(String baseName){
-        return getBundleInstance( baseName, ULocale.getDefault().toString(), ICUResourceBundle.ICU_DATA_CLASS_LOADER );
+    public static UResourceBundle getBundleInstance(String baseName) {
+	if (baseName == null) {
+	    baseName = ICUResourceBundle.ICU_BASE_NAME;
+	}
+	ULocale uloc = ULocale.getDefault();
+        return getBundleInstance(baseName, uloc.toString(), ICUResourceBundle.ICU_DATA_CLASS_LOADER, false);
     }
+
     /**
      * Creates a UResourceBundle for the specified locale and specified base name,
      * from which users can extract resources by using their corresponding keys.
@@ -182,8 +188,13 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @stable ICU 3.0
      */
 
-    public static UResourceBundle getBundleInstance(String baseName, Locale locale){
-        return getBundleInstance(baseName, ULocale.forLocale(locale));
+    public static UResourceBundle getBundleInstance(String baseName, Locale locale) {
+	if (baseName == null) {
+	    baseName = ICUResourceBundle.ICU_BASE_NAME;
+	}
+	ULocale uloc = locale == null ? ULocale.getDefault() : ULocale.forLocale(locale);
+
+        return getBundleInstance(baseName, uloc.toString(), ICUResourceBundle.ICU_DATA_CLASS_LOADER, false);
     }
    
     /**
@@ -196,8 +207,14 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @return a resource bundle for the given base name and locale               
      * @stable ICU 3.0
      */
-    public static UResourceBundle getBundleInstance(String baseName, ULocale locale){
-         return getBundleInstance(baseName, locale.toString(),ICUResourceBundle.ICU_DATA_CLASS_LOADER);  
+    public static UResourceBundle getBundleInstance(String baseName, ULocale locale) {
+ 	if (baseName == null) {
+	    baseName = ICUResourceBundle.ICU_BASE_NAME;
+	}
+	if (locale == null) {
+	    locale = ULocale.getDefault();
+	}
+        return getBundleInstance(baseName, locale.toString(), ICUResourceBundle.ICU_DATA_CLASS_LOADER, false);  
     }
     
     /**
@@ -212,8 +229,12 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @draft ICU 3.8
      * @provisional This API might change or be removed in a future release.
      */
-    public static UResourceBundle getBundleInstance(String baseName, Locale locale, ClassLoader loader){
-        return getBundleInstance(baseName, ULocale.forLocale(locale), loader);
+    public static UResourceBundle getBundleInstance(String baseName, Locale locale, ClassLoader loader) {
+ 	if (baseName == null) {
+	    baseName = ICUResourceBundle.ICU_BASE_NAME;
+	}
+	ULocale uloc = locale == null ? ULocale.getDefault() : ULocale.forLocale(locale);
+        return getBundleInstance(baseName, uloc.toString(), loader, false);
     }
    
     /**
@@ -231,8 +252,14 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @draft ICU 3.8
      * @provisional This API might change or be removed in a future release.
      */
-    public static UResourceBundle getBundleInstance(String baseName, ULocale locale, ClassLoader loader){
-         return getBundleInstance(baseName, locale.toString(),loader);  
+    public static UResourceBundle getBundleInstance(String baseName, ULocale locale, ClassLoader loader) {
+ 	if (baseName == null) {
+	    baseName = ICUResourceBundle.ICU_BASE_NAME;
+	}
+	if (locale == null) {
+	    locale = ULocale.getDefault();
+	}
+        return getBundleInstance(baseName, locale.toString(), loader, false);  
     }
     
     /**
