@@ -34,7 +34,7 @@
 #include "uresimp.h"
 #include "dtptngen_impl.h"
 
-//TODO
+
 #if defined U_DEBUG_DTPTN
 #include <stdio.h>
 #endif
@@ -115,10 +115,10 @@ static const char* CLDR_FIELD_NAME[] = {
     "hour", "minute", "second", "*", "zone"
 };
 
-// TODO: add 'quarter' and MAX_RESOURCE_FIELD field after CLDR fix the bug
 static const char* Resource_Fields[] = {
     "day", "dayperiod", "era", "hour", "minute", "month", "second", "week",
-    "weekday", "year", "zone" };
+    "weekday", "year", "zone", "quarter" };
+
 // For appendItems
 static const UChar UDATPG_ItemFormat[]= {0x7B, 0x30, 0x7D, 0x20, 0x251C, 0x7B, 0x32, 0x7D, 0x3A,
     0x20, 0x7B, 0x31, 0x7D, 0x2524, 0};  // {0} \u251C{2}: {1}\u2524
@@ -438,7 +438,6 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale) {
     patBundle = ures_getByKeyWithFallback(gregorianBundle, DT_DateTimeAvailableFormatsTag, NULL, &err);
     if (U_SUCCESS(err)) {
         int32_t numberKeys = ures_getSize(patBundle);
-        //printf ("\n available formats from current locale:%s", locale.getName());
         int32_t len;
         const UChar *retPattern;
         key=NULL;
@@ -448,12 +447,6 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale) {
             UnicodeString retKey=UnicodeString(key, -1, US_INV);
             setAvailableFormat(retKey, err);
             conflictingStatus = addPattern(format, FALSE, conflictingPattern, err);
-            // TODO remove the printf after picking up CLDR 1.5 data
-            /*
-            printf("\n Available  format=>");
-            for (int32_t j=0; j<format.length(); ++j)
-                printf("%c", format.charAt(j));
-            */
         }
     }
     ures_close(patBundle);
@@ -477,7 +470,6 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale) {
             const UChar *retPattern;
             key=NULL;
 
-            //printf ("\n available formats from parent locale:%s", parentLocale);
             for(int32_t i=0; i<numberKeys; ++i) {
                 retPattern=ures_getNextString(patBundle, &len, &key, &err);
                 UnicodeString format=UnicodeString(retPattern);
@@ -485,12 +477,6 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale) {
                 if ( !isAvailableFormatSet(retKey) ) {
                     setAvailableFormat(retKey, err);
                     conflictingStatus = addPattern(format, FALSE, conflictingPattern, err);
-                    // TODO remove the printf after picking up CLDR 1.5 data
-                    /*
-                    printf("\n Available  format=>");
-                    for (int32_t j=0; j<format.length(); ++j)
-                        printf("%c", format.charAt(j));
-                    */
                 }
             }
         }
@@ -583,6 +569,7 @@ DateTimePatternGenerator::getBestPattern(const UnicodeString& patternForm, UErro
         return datePattern;
     }
     resultPattern.remove();
+    status = U_ZERO_ERROR;
     dtFormat=getDateTimeFormat();
     Formattable dateTimeObject[] = { datePattern, timePattern };
     resultPattern = MessageFormat::format(dtFormat, dateTimeObject, 2, resultPattern, status );
@@ -742,13 +729,6 @@ DateTimePatternGenerator::getBestRaw(DateTimeMatcher& source,
         if (distance<bestDistance) {
             bestDistance=distance;
             bestPattern=patternMap->getPatternFromSkeleton(*trial.getSkeletonPtr());
-            // TODO : remove printf if all test cases passed on AIX.
-            /*
-            printf("\n Distance:%x Best pattern:", bestDistance);
-            for(int32_t i=0; i<bestPattern->length(); ++i) {
-                printf("%c", bestPattern->charAt(i));
-            }
-            */
             missingFields->setTo(tempInfo);
             if (distance==0) {
                 break;
@@ -764,13 +744,6 @@ DateTimePatternGenerator::adjustFieldTypes(const UnicodeString& pattern,
                                            UBool fixFractionalSeconds) {
     UnicodeString newPattern;
     fp->set(pattern);
-    // TODO : remove printf if all test cases passed on AIX.
-    /*
-    printf("\n Picked pattern:");
-    for(int32_t i=0; i<pattern.length(); ++i) {
-        printf("%c", pattern.charAt(i));
-    }
-    */
     for (int32_t i=0; i < fp->itemNumber; i++) {
         UnicodeString field = fp->items[i];
         if ( fp->isQuoteLiteral(field) ) {
@@ -837,7 +810,7 @@ DateTimePatternGenerator::getBestAppending(int32_t missingFields) {
             if (((distanceInfo->missingFieldMask & UDATPG_SECOND_AND_FRACTIONAL_MASK)==UDATPG_FRACTIONAL_MASK) &&
                 ((missingFields & UDATPG_SECOND_AND_FRACTIONAL_MASK) == UDATPG_SECOND_AND_FRACTIONAL_MASK)) {
                 resultPattern = adjustFieldTypes(resultPattern, FALSE);
-                resultPattern = tempPattern;
+                //resultPattern = tempPattern;
                 distanceInfo->missingFieldMask &= ~UDATPG_FRACTIONAL_MASK;
                 continue;
             }
