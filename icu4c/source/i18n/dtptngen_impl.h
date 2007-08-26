@@ -20,7 +20,7 @@
 #define MAX_PATTERN_ENTRIES 52
 #define MAX_CLDR_FIELD_LEN  60
 #define MAX_DT_TOKEN        50
-#define MAX_RESOURCE_FIELD  11
+#define MAX_RESOURCE_FIELD  12
 #define MAX_AVAILABLE_FORMATS  12
 #define NONE          0
 #define EXTRA_FIELD   0x10000

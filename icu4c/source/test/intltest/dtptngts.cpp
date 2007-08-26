@@ -185,10 +185,15 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     SimpleDateFormat *format = new SimpleDateFormat(findPattern, deLocale, status);
     if (U_FAILURE(status)) {
         dataerrln("ERROR: Could not create SimpleDateFormat (Locale::getGermany())");
+        delete gen;
+        return;
     }
     TimeZone *zone = TimeZone::createTimeZone(UnicodeString("ECT"));
-    if (U_FAILURE(status)) {
+    if (zone==NULL) {
         dataerrln("ERROR: Could not create TimeZone ECT");
+        delete gen;
+        delete format;
+        return;
     }
     format->setTimeZone(*zone);
     UnicodeString dateReturned, expectedResult;
