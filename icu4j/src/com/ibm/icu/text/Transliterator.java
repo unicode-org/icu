@@ -1902,6 +1902,8 @@ public abstract class Transliterator implements StringTransform  {
      * Implements StringTransform via this method.
      * @param source text to be transformed (eg lowercased)
      * @return result
+     * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public String transform(String source) {
         return transliterate(source);
