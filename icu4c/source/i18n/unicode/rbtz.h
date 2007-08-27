@@ -236,7 +236,7 @@ public:
      * @param other the <code>TimeZone</code> object to be compared with
      * @return true if the given zone is the same as this one,
      * with the possible exception of the ID
-     * @stable ICU 3.8
+     * @draft ICU 3.8
      */
     virtual UBool hasSameRules(const TimeZone& other) const;
 
