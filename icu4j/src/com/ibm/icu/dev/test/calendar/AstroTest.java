@@ -43,20 +43,38 @@ public class AstroTest extends TestFmwk {
 
             double longitude = astro.getSunLongitude();
             if (longitude != tests[i][5]) {
-                errln("FAIL: longitude(" + longitude +
-                        ") !=  tests[i][5](" + tests[i][5] +
-                        ") for test " + i);
+                if ((float)longitude == (float)tests[i][5]) {
+                    logln("longitude(" + longitude +
+                            ") !=  tests[i][5](" + tests[i][5] +
+                            ") in double for test " + i);
+                } else {
+                    errln("FAIL: longitude(" + longitude +
+                            ") !=  tests[i][5](" + tests[i][5] +
+                            ") for test " + i);
+                }
             }
             Equatorial result = astro.getSunPosition();
-            if ((float)result.ascension != (float)tests[i][6]) {
-                errln("FAIL: result.ascension(" + result.ascension +
-                        ") !=  tests[i][6](" + tests[i][6] +
-                        ") for test " + i);
+            if (result.ascension != tests[i][6]) {
+                if ((float)result.ascension == (float)tests[i][6]) {
+                    logln("result.ascension(" + result.ascension +
+                            ") !=  tests[i][6](" + tests[i][6] +
+                            ") in double for test " + i);
+                } else {
+                    errln("FAIL: result.ascension(" + result.ascension +
+                            ") !=  tests[i][6](" + tests[i][6] +
+                            ") for test " + i);
+                }
             }
             if (result.declination != tests[i][7]) {
-                errln("FAIL: result.declination(" + result.declination +
-                        ") !=  tests[i][7](" + tests[i][7] +
-                        ") for test " + i);
+                if ((float)result.declination == (float)tests[i][7]) {
+                    logln("result.declination(" + result.declination +
+                            ") !=  tests[i][7](" + tests[i][7] +
+                            ") in double for test " + i);
+                } else {
+                    errln("FAIL: result.declination(" + result.declination +
+                            ") !=  tests[i][7](" + tests[i][7] +
+                            ") for test " + i);
+                }
             }
         }
     }
@@ -77,16 +95,28 @@ public class AstroTest extends TestFmwk {
 
             Equatorial result = astro.getMoonPosition();
             if (result.ascension != tests[i][5]) {
-                errln("FAIL: result.ascension(" + result.ascension +
-                        ") !=  tests[i][5](" + tests[i][5] +
-                        ") for test " + i);
+                if ((float)result.ascension == (float)tests[i][5]) {
+                    logln("result.ascension(" + result.ascension +
+                            ") !=  tests[i][5](" + tests[i][5] +
+                            ") in double for test " + i);
+                } else {
+                    errln("FAIL: result.ascension(" + result.ascension +
+                            ") !=  tests[i][5](" + tests[i][5] +
+                            ") for test " + i);
+                }
             }
-            if ((float)result.declination != (float)tests[i][6]) {
-                errln("FAIL: result.declination(" + result.declination +
-                        ") !=  tests[i][6](" + tests[i][6] +
-                        ") for test " + i);
-            }        }
-
+            if (result.declination != tests[i][6]) {
+                if ((float)result.declination == (float)tests[i][6]) {
+                    logln("result.declination(" + result.declination +
+                            ") !=  tests[i][6](" + tests[i][6] +
+                            ") in double for test " + i);
+                } else {
+                    errln("FAIL: result.declination(" + result.declination +
+                            ") !=  tests[i][6](" + tests[i][6] +
+                            ") for test " + i);
+                }
+            }
+        }
     }
 
     public void TestCoordinates() {
