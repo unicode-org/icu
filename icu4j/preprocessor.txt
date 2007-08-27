@@ -5,7 +5,6 @@
 src/com/ibm/icu/impl/ByteBuffer.java
 src/com/ibm/icu/impl/DateNumberFormat.java
 src/com/ibm/icu/impl/duration/BasicDurationFormat.java
-src/com/ibm/icu/impl/ICUResourceBundle.java
 src/com/ibm/icu/impl/ICUResourceBundleImpl.java
 src/com/ibm/icu/impl/ICUResourceBundleReader.java
 src/com/ibm/icu/impl/PatternTokenizer.java

@@ -1829,17 +1829,7 @@
   </target>
 
   <target name="eclipseFragment" depends="eclipseCore,eclipseFragmentMangle">
-    <property name="timepattern" value="yyyyMMdd'T'HHmmss','SSS"/>
-    <tstamp>
-      <format property="time.before.compile" pattern="${timepattern}"/>
-    </tstamp>
-    <!--
-        Note: *.class files compiled by the target "eclipseCore" are in ${build.dir} directory.
-        The target "eclipseFragmentMangle" updates timestamp of .java files, so only modified files
-        should be compiled.
-    -->
-    <javac includes="com/ibm/icu/util/**/*.java,com/ibm/icu/text/**/*.java,com/ibm/icu/math/**/*.java,com/ibm/icu/impl/**/*.java,com/ibm/icu/lang/*.java"
-           compiler="javac1.4"
+    <javac compiler="javac1.4"
            srcdir="${src.dir}"
            destdir="${build.dir}"
            classpathref="build.classpath"
@@ -1848,14 +1838,63 @@
            debug="on"
            deprecation="off"
            encoding="ascii"
-           listfiles="true" />
-    <tstamp>
-      <format property="time.after.compile" pattern="${timepattern}" />
-    </tstamp>
-    <!-- collect only class files updated, which are fragment specific files -->
+           listfiles="true">
+      <include name="com/ibm/icu/impl/DateNumberFormat.java" />
+      <include name="com/ibm/icu/impl/duration/BasicDurationFormat.java" />
+      <include name="com/ibm/icu/impl/ICUResourceBundleReader.java" />
+      <include name="com/ibm/icu/impl/PatternTokenizer.java" />
+      <include name="com/ibm/icu/impl/Utility.java" />
+      <include name="com/ibm/icu/lang/UCharacter.java" />
+      <include name="com/ibm/icu/math/BigDecimal.java" />
+      <include name="com/ibm/icu/text/Bidi.java" />
+      <include name="com/ibm/icu/text/ChineseDateFormat.java" />
+      <include name="com/ibm/icu/text/DateFormat.java" />
+      <include name="com/ibm/icu/text/DateTimePatternGenerator.java" />
+      <include name="com/ibm/icu/text/DecimalFormat.java" />
+      <include name="com/ibm/icu/text/DigitList.java" />
+      <include name="com/ibm/icu/text/MessageFormat.java" />
+      <include name="com/ibm/icu/text/NumberFormat.java" />
+      <include name="com/ibm/icu/text/RuleBasedBreakIterator.java" />
+      <include name="com/ibm/icu/text/RuleBasedNumberFormat.java" />
+      <include name="com/ibm/icu/text/SimpleDateFormat.java" />
+      <include name="com/ibm/icu/text/UnicodeSet.java" />
+      <include name="com/ibm/icu/text/UTF16.java" />
+    </javac>
+
+    <!-- collect fragment specific files -->
     <jar jarfile="${fragment.jar.file}" compress="true">
-      <fileset dir="${build.dir}" includes="**/*.class">
-        <date datetime="${time.before.compile}" pattern="${timepattern}" when="after" />
+      <fileset dir="${build.dir}">
+        <include name="com/ibm/icu/impl/DateNumberFormat.class" />
+        <include name="com/ibm/icu/impl/duration/BasicDurationFormat.class" />
+        <include name="com/ibm/icu/impl/ICUResourceBundleReader.class" />
+        <include name="com/ibm/icu/impl/PatternTokenizer.class" />
+        <include name="com/ibm/icu/impl/Utility.class" />
+        <include name="com/ibm/icu/lang/UCharacter.class" />
+        <include name="com/ibm/icu/math/BigDecimal.class" />
+        <include name="com/ibm/icu/text/Bidi.class" />
+        <include name="com/ibm/icu/text/ChineseDateFormat.class" />
+        <include name="com/ibm/icu/text/DateFormat.class" />
+        <include name="com/ibm/icu/text/DateTimePatternGenerator.class" />
+        <include name="com/ibm/icu/text/DecimalFormat.class" />
+        <include name="com/ibm/icu/text/DigitList.class" />
+        <include name="com/ibm/icu/text/MessageFormat.class" />
+        <include name="com/ibm/icu/text/NumberFormat.class" />
+        <include name="com/ibm/icu/text/RuleBasedBreakIterator.class" />
+        <include name="com/ibm/icu/text/RuleBasedNumberFormat.class" />
+        <include name="com/ibm/icu/text/SimpleDateFormat.class" />
+        <include name="com/ibm/icu/text/UnicodeSet.class" />
+        <include name="com/ibm/icu/text/UTF16.class" />
+
+        <include name="com/ibm/icu/lang/UCharacter$*.class" />
+        <include name="com/ibm/icu/text/Bidi$*.class" />
+        <include name="com/ibm/icu/text/ChineseDateFormat$*.class" />
+        <include name="com/ibm/icu/text/DateFormat$*.class" />
+        <include name="com/ibm/icu/text/DateTimePatternGenerator$*.class" />
+        <include name="com/ibm/icu/text/MessageFormat$*.class" />
+        <include name="com/ibm/icu/text/NumberFormat$*.class" />
+        <include name="com/ibm/icu/text/SimpleDateFormat$*.class" />
+        <include name="com/ibm/icu/text/UnicodeSet$*.class" />
+        <include name="com/ibm/icu/text/UTF16$*.class" />
       </fileset>
     </jar>
   </target>
@@ -1871,21 +1910,28 @@
     <!-- PLUGIN FILES -->
     <!-- source -->
     <copy toDir="${eclipse.projects.dir}/plugins/com.ibm.icu.jse4/src">
-      <!-- TODO: Use a single file list as input.  The list is identical with eclipseFragmentArgs.txt -->
+      <!-- TODO: Better way to collect files? -->
       <fileset dir="${src.dir}">
-        <include name="com/ibm/icu/impl/CollectionUtilities.java" />
+        <include name="com/ibm/icu/impl/DateNumberFormat.java" />
+        <include name="com/ibm/icu/impl/duration/BasicDurationFormat.java" />
+        <include name="com/ibm/icu/impl/ICUResourceBundleReader.java" />
         <include name="com/ibm/icu/impl/PatternTokenizer.java" />
         <include name="com/ibm/icu/impl/Utility.java" />
         <include name="com/ibm/icu/lang/UCharacter.java" />
         <include name="com/ibm/icu/math/BigDecimal.java" />
+        <include name="com/ibm/icu/text/Bidi.java" />
+        <include name="com/ibm/icu/text/ChineseDateFormat.java" />
+        <include name="com/ibm/icu/text/DateFormat.java" />
         <include name="com/ibm/icu/text/DateTimePatternGenerator.java" />
         <include name="com/ibm/icu/text/DecimalFormat.java" />
         <include name="com/ibm/icu/text/DigitList.java" />
+        <include name="com/ibm/icu/text/MessageFormat.java" />
         <include name="com/ibm/icu/text/NumberFormat.java" />
+        <include name="com/ibm/icu/text/RuleBasedBreakIterator.java" />
         <include name="com/ibm/icu/text/RuleBasedNumberFormat.java" />
+        <include name="com/ibm/icu/text/SimpleDateFormat.java" />
         <include name="com/ibm/icu/text/UnicodeSet.java" />
         <include name="com/ibm/icu/text/UTF16.java" />
-        <include name="com/ibm/icu/util/GlobalizationPreferences.java" />
       </fileset>
     </copy>
     <!-- project files -->
