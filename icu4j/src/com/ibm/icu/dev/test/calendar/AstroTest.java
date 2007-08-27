@@ -81,7 +81,7 @@ public class AstroTest extends TestFmwk {
                         ") !=  tests[i][5](" + tests[i][5] +
                         ") for test " + i);
             }
-            if (result.declination != tests[i][6]) {
+            if ((float)result.declination != (float)tests[i][6]) {
                 errln("FAIL: result.declination(" + result.declination +
                         ") !=  tests[i][6](" + tests[i][6] +
                         ") for test " + i);
