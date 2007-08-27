@@ -1311,13 +1311,15 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /*
-     * @internal Package private: used by SimpleDateFormat.
+     * Package private: used by SimpleDateFormat.
      * Gets the string for the specified time zone.
      * @param zid The time zone ID
      * @param type The type of zone string
      * @param cal The calendar to use
      * @return A metazone info structure, returning the desired metazone string and the
      *         metazone ID.
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
 
     MetazoneInfo getMetazoneInfo(String zid, int type, Calendar cal) {
@@ -1331,16 +1333,16 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /*
-     * @internal Package private: used by SimpleDateFormat.
-     * Gets the string for the specified time zone.
+     * Package private: used by SimpleDateFormat.
+     * Gets the metazone string from the specified zone item info
      * @param zinfo The zone item info
      * @param zid The time zone ID
      * @param type The type of zone string
      * @param cal The calendar to use
      * @return A metazone info structure, returning the desired metazone string and the
      *         metazone ID.
-     *
-     * Gets the metazone string from the specified zone item info
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     private MetazoneInfo getMetazoneInfo(ZoneItemInfo zinfo, String zid, int type, Calendar cal) {
 
@@ -1498,7 +1500,8 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         return result;
     }
 
-    protected class MetazoneInfo {
+    /* Package private: used by SimpleDateFormat */
+    class MetazoneInfo {
         String mzid;
         String value;
     }
