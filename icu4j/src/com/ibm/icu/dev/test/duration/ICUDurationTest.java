@@ -8,6 +8,7 @@
 package com.ibm.icu.dev.test.duration;
 
 import java.util.Date;
+import java.util.MissingResourceException;
 
 //#if defined(FOUNDATION10) || defined(J2SE13) || defined(J2SE14)
 //#else
@@ -214,4 +215,17 @@ public class ICUDurationTest extends TestFmwk {
             logln("PASS: [#2] expected: Caught iae: " + iae.toString() );
         }
     }
+
+    public void TestBadLocaleError() {
+        try {
+            DurationFormat df = DurationFormat.getInstance(new ULocale("und"));
+            df.format(new Date());
+            logln("Should have thrown err.");
+            errln("failed, should have thrown err.");
+        } catch(MissingResourceException mre) {
+            logln("PASS: caught missing resource exception on locale 'und'");
+            logln(mre.toString());
+        }
+    }
+
 }

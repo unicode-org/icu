@@ -12,6 +12,7 @@ import java.util.*;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 
 import java.io.OutputStreamWriter;
 
@@ -91,35 +92,37 @@ public class ResourceBasedPeriodFormatterDataService
           }
         }
         if (ln != null) {
+          String name = PATH + "pfd_" + ln + ".xml";
           try {
-            String name = PATH + "pfd_" + ln + ".xml";
             InputStream is = getClass().getResourceAsStream(name);
             if (is == null) {
-              System.err.println("no resource named " + name);
+               throw new MissingResourceException("no resource named " + name,name,"");
             } else {
               DataRecord dr = DataRecord.read(ln,
                   new XMLRecordReader(
                       new InputStreamReader(is, "UTF-8")));
               if (dr != null) {
 		  // debug
-                if (false && ln.equals("ar_EG")) {
-                  OutputStreamWriter osw = new OutputStreamWriter(System.out, "UTF-8");
-                  XMLRecordWriter xrw = new XMLRecordWriter(osw);
-                  dr.write(xrw);
-                  osw.flush();
-                }
+//                if (false && ln.equals("ar_EG")) {
+//                  OutputStreamWriter osw = new OutputStreamWriter(System.out, "UTF-8");
+//                  XMLRecordWriter xrw = new XMLRecordWriter(osw);
+//                  dr.write(xrw);
+//                  osw.flush();
+//                }
                 ld = new PeriodFormatterData(localeName,dr);
               }
             }
           } 
-          catch (Exception e) {
-            System.err.println(e);
+          catch (UnsupportedEncodingException e) {
+              throw new MissingResourceException("Unhandled Encoding for resource " + name,name,"");
           }
+        } else {
+            throw new MissingResourceException("Duration data not found for  " + localeName,PATH,localeName);
         }
 
-        if (ld == null) {
-          ld = getFallbackFormatterData();
-        }
+//        if (ld == null) {
+//          ld = getFallbackFormatterData();
+//        }
         cache.put(localeName, ld);
       }
       lastData = ld;
@@ -133,13 +136,13 @@ public class ResourceBasedPeriodFormatterDataService
     return availableLocales;
   }
 
-  PeriodFormatterData getFallbackFormatterData() {
-    synchronized (this) {
-      if (fallbackFormatterData == null) {
-        DataRecord dr = new DataRecord(); // hack, no default, will die if used
-        fallbackFormatterData = new PeriodFormatterData(null, dr);
-      }
-      return fallbackFormatterData;
-    }
-  }
+//  PeriodFormatterData getFallbackFormatterData() {
+//    synchronized (this) {
+//      if (fallbackFormatterData == null) {
+//        DataRecord dr = new DataRecord(); // hack, no default, will die if used
+//        fallbackFormatterData = new PeriodFormatterData(null, dr);
+//      }
+//      return fallbackFormatterData;
+//    }
+//  }
 }
