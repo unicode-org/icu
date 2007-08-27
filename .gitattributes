@@ -374,6 +374,7 @@ icu4j/src/com/ibm/icu/dev/tool/docs/icu4j341.api.gz -text
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j342.api.gz -text
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j343.api.gz -text
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j36.api.gz -text
+icu4j/src/com/ibm/icu/dev/tool/docs/icu4j38.api.gz -text
 icu4j/src/com/ibm/icu/dev/tool/timezone/ICUZDump.java -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/CLILoader.java -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/DirectorySearch.txt -text
