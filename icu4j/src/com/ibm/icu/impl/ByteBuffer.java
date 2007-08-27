@@ -1,5 +1,5 @@
 //##header J2SE15
-//#if defined(FOUNDATION10) || defined(J2SE13)
+//#if defined(FOUNDATION10) || defined(J2SE13) || defined(ECLIPSE_FRAGMENT)
 //##/*
 //## * *****************************************************************************
 //## * Copyright (C) 2006-2007, International Business Machines

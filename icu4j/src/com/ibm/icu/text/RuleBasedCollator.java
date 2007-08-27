@@ -13,7 +13,7 @@ import java.text.ParseException;
 import java.util.Arrays;
 import java.util.MissingResourceException;
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
+//#if defined(FOUNDATION10) || defined(J2SE13) || defined(ECLIPSE_FRAGMENT)
 //##import com.ibm.icu.impl.ByteBuffer;
 //#else
 import java.nio.ByteBuffer;
