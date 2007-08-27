@@ -1413,7 +1413,7 @@ remapPlatformDependentCodepage(const char *locale, const char *name) {
                 name = "EUC-KR";
             }
         }
-        else if (uprv_strcmp(locale, "en_US_POSIX") && *name == 0) {
+        else if (uprv_strcmp(locale, "en_US_POSIX") == 0 && *name == 0) {
             /* Solaris 10 seems to default to ISO-8859-1 for the C locale */
             name = "ISO-8859-1";
         }
