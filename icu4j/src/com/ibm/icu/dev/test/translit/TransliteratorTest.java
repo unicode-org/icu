@@ -547,8 +547,8 @@ public class TransliteratorTest extends TestFmwk {
     public void TestJ329() {
 
         Object[] DATA = {
-            new Boolean(false), "a > b; c > d",
-            new Boolean(true),  "a > b; no operator; c > d",
+            Boolean.FALSE, "a > b; c > d",
+            Boolean.TRUE,  "a > b; no operator; c > d",
         };
 
         for (int i=0; i<DATA.length; i+=2) {

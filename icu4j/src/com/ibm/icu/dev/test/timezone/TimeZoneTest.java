@@ -339,10 +339,10 @@ public class TimeZoneTest extends TestFmwk
 
         // todo: check to see whether we can test for all of pst, pdt, pt
         Object[] DATA = {
-            new Boolean(false), new Integer(TimeZone.SHORT), "PST",
-            new Boolean(true),  new Integer(TimeZone.SHORT), "PDT",
-            new Boolean(false), new Integer(TimeZone.LONG),  "Pacific Standard Time",
-            new Boolean(true),  new Integer(TimeZone.LONG),  "Pacific Daylight Time",
+            Boolean.FALSE, new Integer(TimeZone.SHORT), "PST",
+            Boolean.TRUE,  new Integer(TimeZone.SHORT), "PDT",
+            Boolean.FALSE, new Integer(TimeZone.LONG),  "Pacific Standard Time",
+            Boolean.TRUE,  new Integer(TimeZone.LONG),  "Pacific Daylight Time",
         };
 
         for (int i=0; i<DATA.length; i+=3) {

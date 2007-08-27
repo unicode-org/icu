@@ -782,7 +782,7 @@ final class CollationParsedRuleBuilder
         m_endExpansionCE_ = new Vector();
         m_isV_ = new Vector();
         m_endExpansionCE_.add(new Integer(0));
-        m_isV_.add(new Boolean(false));
+        m_isV_.add(Boolean.FALSE);
             m_maxLSize_ = 1;
             m_maxVSize_ = 1;
             m_maxTSize_ = 1;
@@ -2226,7 +2226,7 @@ final class CollationParsedRuleBuilder
         }
     }
     maxexpansion.m_endExpansionCE_.add(new Integer(endexpansion));
-    maxexpansion.m_isV_.add(new Boolean(isV));
+    maxexpansion.m_isV_.add(isV ? Boolean.TRUE : Boolean.FALSE);
           
     return maxexpansion.m_endExpansionCE_.size();
     }
