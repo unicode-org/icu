@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2006, International Business Machines Corporation and         *
+ * Copyright (C) 2007, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -221,7 +221,7 @@ public class NumberFormatTest extends ICUTestCase {
      */
     public void testGetCurrencyInstanceLocale() {
         NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.GERMANY);
-        assertEquals("123.456,99 €", nf.format(123456.99));
+        assertEquals("123.456,99 \u20AC", nf.format(123456.99));
     }
 
     /*
@@ -229,7 +229,7 @@ public class NumberFormatTest extends ICUTestCase {
      */
     public void testGetCurrencyInstanceULocale() {
         NumberFormat nf = NumberFormat.getCurrencyInstance(ULocale.GERMANY);
-        assertEquals("123.456,99 €", nf.format(123456.99));
+        assertEquals("123.456,99 \u20AC", nf.format(123456.99));
     }
 
     /*
