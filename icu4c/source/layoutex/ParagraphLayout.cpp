@@ -1033,6 +1033,11 @@ le_int32 ParagraphLayout::Line::getLeading() const
 le_int32 ParagraphLayout::Line::getWidth() const
 {
     const VisualRun *lastRun = getVisualRun(fRunCount - 1);
+
+    if (lastRun == NULL) {
+        return 0;
+    }
+
     le_int32 glyphCount = lastRun->getGlyphCount();
     const float *positions = lastRun->getPositions();
     
