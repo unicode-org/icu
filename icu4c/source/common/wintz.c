@@ -103,11 +103,102 @@ enum {
     WIN_2K_XP_TYPE = 2
 };
 
+# if 0
 /*
- * TODO: Sort on ICU ID?
- * TODO: This data should come from ICU/CLDR...
+ * ZONE_MAP from supplementalData.txt
+ */
+static const WindowsICUMap NEW_ZONE_MAP[] = {
+    {"Africa/Cairo",         "Egypt"},
+    {"Africa/Casablanca",    "Greenwich"},
+    {"Africa/Johannesburg",  "South Africa"},
+    {"Africa/Lagos",         "W. Central Africa"},
+    {"Africa/Nairobi",       "E. Africa"},
+    {"Africa/Windhoek",      "Namibia"},
+    {"America/Anchorage",    "Alaskan"},
+    {"America/Bogota",       "SA Pacific"},
+    {"America/Buenos_Aires", "SA Eastern"},
+    {"America/Caracas",      "SA Western"},
+    {"America/Chicago",      "Central"},
+    {"America/Chihuahua",    "Mountain Standard Time (Mexico)"},
+    {"America/Denver",       "Mountain"},
+    {"America/Godthab",      "Greenland"},
+    {"America/Guatemala",    "Central America"},
+    {"America/Halifax",      "Atlantic"},
+    {"America/Indianapolis", "US Eastern"},
+    {"America/Los_Angeles",  "Pacific"},
+    {"America/Manaus",       "Central Brazilian"},
+    {"America/Mexico_City",  "Central Standard Time (Mexico)"},
+    {"America/Montevideo",   "Montevideo"},
+    {"America/New_York",     "Eastern"},
+    {"America/Noronha",      "Mid-Atlantic"},
+    {"America/Phoenix",      "US Mountain"},
+    {"America/Regina",       "Canada Central"},
+    {"America/Santiago",     "Pacific SA"},
+    {"America/Sao_Paulo",    "E. South America"},
+    {"America/St_Johns",     "Newfoundland"},
+    {"America/Tijuana",      "Pacific Standard Time (Mexico)"},
+    {"Asia/Amman",           "Jordan"},
+    {"Asia/Baghdad",         "Arabic"},
+    {"Asia/Baku",            "Azerbaijan"},
+    {"Asia/Bangkok",         "SE Asia"},
+    {"Asia/Beirut",          "Middle East"},
+    {"Asia/Calcutta",        "India"},
+    {"Asia/Colombo",         "Sri Lanka"},
+    {"Asia/Dhaka",           "Central Asia"},
+    {"Asia/Jerusalem",       "Israel"},
+    {"Asia/Kabul",           "Afghanistan"},
+    {"Asia/Karachi",         "West Asia"},
+    {"Asia/Katmandu",        "Nepal"},
+    {"Asia/Krasnoyarsk",     "North Asia"},
+    {"Asia/Muscat",          "Arabian"},
+    {"Asia/Novosibirsk",     "N. Central Asia"},
+    {"Asia/Rangoon",         "Myanmar"},
+    {"Asia/Riyadh",          "Arab"},
+    {"Asia/Seoul",           "Korea"},
+    {"Asia/Shanghai",        "China"},
+    {"Asia/Singapore",       "Singapore"},
+    {"Asia/Taipei",          "Taipei"},
+    {"Asia/Tbilisi",         "Georgian"},
+    {"Asia/Tehran",          "Iran"},
+    {"Asia/Tokyo",           "Tokyo"},
+    {"Asia/Ulaanbaatar",     "North Asia East"},
+    {"Asia/Vladivostok",     "Vladivostok"},
+    {"Asia/Yakutsk",         "Yakutsk"},
+    {"Asia/Yekaterinburg",   "Ekaterinburg"},
+    {"Asia/Yerevan",         "Caucasus"},
+    {"Atlantic/Azores",      "Azores"},
+    {"Atlantic/Cape_Verde",  "Cape Verde"},
+    {"Australia/Adelaide",   "Cen. Australia"},
+    {"Australia/Brisbane",   "E. Australia"},
+    {"Australia/Darwin",     "AUS Central"},
+    {"Australia/Hobart",     "Tasmania"},
+    {"Australia/Perth",      "W. Australia"},
+    {"Australia/Sydney",     "AUS Eastern"},
+    {"Europe/Berlin",        "W. Europe"},
+    {"Europe/Helsinki",      "FLE"},
+    {"Europe/Istanbul",      "GTB"},
+    {"Europe/London",        "GMT"},
+    {"Europe/Minsk",         "E. Europe"},
+    {"Europe/Moscow",        "Russian"},
+    {"Europe/Paris",         "Romance"},
+    {"Europe/Prague",        "Central Europe"},
+    {"Europe/Warsaw",        "Central European"},
+    {"Pacific/Apia",         "Samoa"},
+    {"Pacific/Auckland",     "New Zealand"},
+    {"Pacific/Fiji",         "Fiji"},
+    {"Pacific/Guadalcanal",  "Central Pacific"},
+    {"Pacific/Guam",         "West Pacific"},
+    {"Pacific/Honolulu",     "Hawaiian"},
+    {"Pacific/Kwajalein",    "Dateline"},
+    {"Pacific/Tongatapu",    "Tonga"}
+};
+#endif
+
+/* NOTE: Some Windows zone ids appear more than once. In such cases the
+ * ICU zone id from the first one is the preferred match.
  */
 static const WindowsICUMap ZONE_MAP[] = {
+    {"Pacific/Kwajalein",    "Dateline"}, /* S (GMT-12:00) International Date Line West */
     {"Etc/GMT+12",           "Dateline"}, /* S (GMT-12:00) International Date Line West */
 
     {"Pacific/Apia",         "Samoa"}, /* S (GMT-11:00) Midway Island, Samoa */
@@ -116,15 +207,16 @@ static const WindowsICUMap ZONE_MAP[] = {
 
     {"America/Anchorage",    "Alaskan"}, /* D (GMT-09:00) Alaska */
 
-    {"America/Los_Angeles",  "Pacific"}, /* D (GMT-08:00) Pacific Time (US & Canada); Tijuana */
+    {"America/Los_Angeles",  "Pacific"}, /* D (GMT-08:00) Pacific Time (US & Canada) */
+    {"America/Tijuana",      "Pacific Standard Time (Mexico)"}, /* S (GMT-08:00) Tijuana, Baja California */
 
     {"America/Phoenix",      "US Mountain"}, /* S (GMT-07:00) Arizona */
     {"America/Denver",       "Mountain"}, /* D (GMT-07:00) Mountain Time (US & Canada) */
-    {"America/Chihuahua",    "Mexico Standard Time 2"}, /* D (GMT-07:00) Chihuahua, La Paz, Mazatlan */
+    {"America/Chihuahua",    "Mountain Standard Time (Mexico)"}, /* D (GMT-07:00) Chihuahua, La Paz, Mazatlan */
 
-    {"America/Managua",      "Central America"}, /* S (GMT-06:00) Central America */
+    {"America/Managua",      "Central America"}, /* S (GMT-06:00) Central America */ /* America/Guatemala? */
     {"America/Regina",       "Canada Central"}, /* S (GMT-06:00) Saskatchewan */
-    {"America/Mexico_City",  "Mexico"}, /* D (GMT-06:00) Guadalajara, Mexico City, Monterrey */
+    {"America/Mexico_City",  "Central Standard Time (Mexico)"}, /* D (GMT-06:00) Guadalajara, Mexico City, Monterrey */
     {"America/Chicago",      "Central"}, /* D (GMT-06:00) Central Time (US & Canada) */
 
     {"America/Indianapolis", "US Eastern"}, /* S (GMT-05:00) Indiana (East) */
@@ -134,12 +226,14 @@ static const WindowsICUMap ZONE_MAP[] = {
     {"America/Caracas",      "SA Western"}, /* S (GMT-04:00) Caracas, La Paz */
     {"America/Santiago",     "Pacific SA"}, /* D (GMT-04:00) Santiago */
     {"America/Halifax",      "Atlantic"}, /* D (GMT-04:00) Atlantic Time (Canada) */
+    {"America/Manaus",       "Central Brazilian"}, /* D (GMT-04:00 Manaus */
 
     {"America/St_Johns",     "Newfoundland"}, /* D (GMT-03:30) Newfoundland */
 
     {"America/Buenos_Aires", "SA Eastern"}, /* S (GMT-03:00) Buenos Aires, Georgetown */
     {"America/Godthab",      "Greenland"}, /* D (GMT-03:00) Greenland */
     {"America/Sao_Paulo",    "E. South America"}, /* D (GMT-03:00) Brasilia */
+    {"America/Montevideo",   "Montevideo"}, /* S (GMT-03:00) Montevideo */
 
     {"America/Noronha",      "Mid-Atlantic"}, /* D (GMT-02:00) Mid-Atlantic */
 
@@ -152,7 +246,9 @@ static const WindowsICUMap ZONE_MAP[] = {
     {"Africa/Lagos",         "W. Central Africa"}, /* S (GMT+01:00) West Central Africa */
     {"Europe/Berlin",        "W. Europe"}, /* D (GMT+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna */
     {"Europe/Paris",         "Romance"}, /* D (GMT+01:00) Brussels, Copenhagen, Madrid, Paris */
+    {"Eurpoe/Warsaw",        "Central European"}, /* D (GMT+01:00) Sarajevo, Skopje, Warsaw, Zagreb */
     {"Europe/Sarajevo",      "Central European"}, /* D (GMT+01:00) Sarajevo, Skopje, Warsaw, Zagreb */
+    {"Europe/Prague",        "Central Europe"}, /* D (GMT+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague */
     {"Europe/Belgrade",      "Central Europe"}, /* D (GMT+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague */
 
     {"Africa/Johannesburg",  "South Africa"}, /* S (GMT+02:00) Harare, Pretoria */
@@ -160,7 +256,11 @@ static const WindowsICUMap ZONE_MAP[] = {
     {"Europe/Istanbul",      "GTB"}, /* D (GMT+02:00) Athens, Istanbul, Minsk */
     {"Europe/Helsinki",      "FLE"}, /* D (GMT+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius */
     {"Africa/Cairo",         "Egypt"}, /* D (GMT+02:00) Cairo */
+    {"Europe/Minsk",         "E. Europe"}, /* D (GMT+02:00) Bucharest */
     {"Europe/Bucharest",     "E. Europe"}, /* D (GMT+02:00) Bucharest */
+    {"Africa/Windhoek",      "Namibia"}, /* S (GMT+02:00) Windhoek */
+    {"Asia/Amman",           "Jordan"}, /* S (GMT+02:00) Aman */
+    {"Asia/Beirut",          "Middle East"}, /* S (GMT+02:00) Beirut */
 
     {"Africa/Nairobi",       "E. Africa"}, /* S (GMT+03:00) Nairobi */
     {"Asia/Riyadh",          "Arab"}, /* S (GMT+03:00) Kuwait, Riyadh */
@@ -170,8 +270,9 @@ static const WindowsICUMap ZONE_MAP[] = {
     {"Asia/Tehran",          "Iran"}, /* D (GMT+03:30) Tehran */
 
     {"Asia/Muscat",          "Arabian"}, /* S (GMT+04:00) Abu Dhabi, Muscat */
-    {"Asia/Tbilisi",         "Caucasus"}, /* D (GMT+04:00) Baku, Tbilisi, Yerevan */
-
+    {"Asia/Tbilisi",         "Georgian"}, /* D (GMT+04:00) Tbilisi */
+    {"Asia/Baku",            "Azerbaijan"}, /* S (GMT+04:00) Baku */
+    {"Asia/Yerevan",         "Caucasus"}, /* S (GMT+04:00) Yerevan */
     {"Asia/Kabul",           "Afghanistan"}, /* S (GMT+04:30) Kabul */
 
     {"Asia/Karachi",         "West Asia"}, /* S (GMT+05:00) Islamabad, Karachi, Tashkent */
@@ -193,7 +294,9 @@ static const WindowsICUMap ZONE_MAP[] = {
     {"Australia/Perth",      "W. Australia"}, /* S (GMT+08:00) Perth */
     {"Asia/Taipei",          "Taipei"}, /* S (GMT+08:00) Taipei */
     {"Asia/Singapore",       "Singapore"}, /* S (GMT+08:00) Kuala Lumpur, Singapore */
+    {"Asia/Shanghai",        "China"}, /* S (GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi */
     {"Asia/Hong_Kong",       "China"}, /* S (GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi */
+    {"Asia/Ulaanbaatar",     "North Asia East"}, /* D (GMT+08:00) Irkutsk, Ulaan Bataar */
     {"Asia/Irkutsk",         "North Asia East"}, /* D (GMT+08:00) Irkutsk, Ulaan Bataar */
 
     {"Asia/Tokyo",           "Tokyo"}, /* S (GMT+09:00) Osaka, Sapporo, Tokyo */
@@ -209,6 +312,7 @@ static const WindowsICUMap ZONE_MAP[] = {
     {"Australia/Hobart",     "Tasmania"}, /* D (GMT+10:00) Hobart */
     {"Australia/Sydney",     "AUS Eastern"}, /* D (GMT+10:00) Canberra, Melbourne, Sydney */
 
+    {"Asia/Guadalcanal",     "Central Pacific"}, /* S (GMT+11:00) Magadan, Solomon Is., New Caledonia */
     {"Asia/Magadan",         "Central Pacific"}, /* S (GMT+11:00) Magadan, Solomon Is., New Caledonia */
 
     {"Pacific/Fiji",         "Fiji"}, /* S (GMT+12:00) Fiji, Kamchatka, Marshall Is. */
@@ -225,15 +329,17 @@ static const WindowsICUMap ZONE_MAP[] = {
  * append a " Standard Time" if appropriate.
  */
 static const WindowsZoneRemap ZONE_REMAP[] = {
-    "Central European",     "-Warsaw",
-    "Central Europe",       "-Prague Bratislava",
-    "China",                "-Beijing",
+    "Central European",                "-Warsaw",
+    "Central Europe",                  "-Prague Bratislava",
+    "China",                           "-Beijing",
                                                
-    "Greenwich",            "+GMT",
-    "GTB",                  "+GFT",
-    "Arab",                 "+Saudi Arabia",
-    "SE Asia",              "+Bangkok",
-    "AUS Eastern",          "+Sydney",
+    "Greenwich",                       "+GMT",
+    "GTB",                             "+GFT",
+    "Arab",                            "+Saudi Arabia",
+    "SE Asia",                         "+Bangkok",
+    "AUS Eastern",                     "+Sydney",
+    "Mountain Standard Time (Mexico)", "-Mexico Standard Time 2",
+    "Central Standard Time (Mexico)",  "+Mexico",
     NULL,                   NULL,
 };
 
@@ -319,6 +425,7 @@ static LONG openTZRegKey(HKEY *hkey, const char *winid)
 
     if (fWinType != WIN_9X_ME_TYPE &&
         (winid[strlen(winid) - 1] != '2') &&
+        (winid[strlen(winid) - 1] != ')') &&
         !(fWinType == WIN_NT_TYPE && strcmp(winid, "GMT") == 0)) {
         uprv_strcat(subKeyName, STANDARD_TIME_REGKEY);
     }
