@@ -152,7 +152,8 @@ DateTimePatternGenerator::createEmptyInstance(UErrorCode& status) {
     return new DateTimePatternGenerator(status);
 }
 
-DateTimePatternGenerator::DateTimePatternGenerator(UErrorCode &status) : UObject() {
+DateTimePatternGenerator::DateTimePatternGenerator(UErrorCode &status) : UObject()
+{
     fStatus = U_ZERO_ERROR;
     skipMatcher = NULL;
     fAvailableFormatKeyHash=NULL;
@@ -160,15 +161,24 @@ DateTimePatternGenerator::DateTimePatternGenerator(UErrorCode &status) : UObject
     dtMatcher = new DateTimeMatcher();
     distanceInfo = new DistanceInfo();
     patternMap = new PatternMap();
+    if (fp == NULL || dtMatcher == NULL || distanceInfo == NULL || patternMap == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+    }
 }
 
-DateTimePatternGenerator::DateTimePatternGenerator(const Locale& locale, UErrorCode &status) : UObject() {
+DateTimePatternGenerator::DateTimePatternGenerator(const Locale& locale, UErrorCode &status) : UObject()
+{
     fp = new FormatParser();
     dtMatcher = new DateTimeMatcher();
     distanceInfo = new DistanceInfo();
     patternMap = new PatternMap();
-    initData(locale);
-    status = getStatus();
+    if (fp == NULL || dtMatcher == NULL || distanceInfo == NULL || patternMap == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+    }
+    else {
+        initData(locale);
+        status = getStatus();
+    }
 }
 
 DateTimePatternGenerator::DateTimePatternGenerator(const DateTimePatternGenerator& other) : UObject() {
@@ -1738,14 +1748,15 @@ DTSkeletonEnumeration::snext(UErrorCode& status) {
 }
 
 void
-DTSkeletonEnumeration::reset(UErrorCode& status) {
+DTSkeletonEnumeration::reset(UErrorCode& /*status*/) {
     pos=0;
 }
 
 int32_t
-DTSkeletonEnumeration::count(UErrorCode& status) const {
-       return (fSkeletons==NULL) ? 0 : fSkeletons->size();
-   }
+DTSkeletonEnumeration::count(UErrorCode& /*status*/) const {
+   return (fSkeletons==NULL) ? 0 : fSkeletons->size();
+}
+
 UBool
 DTSkeletonEnumeration::isCanonicalItem(const UnicodeString& item) {
     if ( item.length() != 1 ) {
@@ -1802,12 +1813,12 @@ DTRedundantEnumeration::snext(UErrorCode& status) {
 }
 
 void
-DTRedundantEnumeration::reset(UErrorCode& status) {
+DTRedundantEnumeration::reset(UErrorCode& /*status*/) {
     pos=0;
 }
 
 int32_t
-DTRedundantEnumeration::count(UErrorCode& status) const {
+DTRedundantEnumeration::count(UErrorCode& /*status*/) const {
        return (fPatterns==NULL) ? 0 : fPatterns->size();
 }
 
