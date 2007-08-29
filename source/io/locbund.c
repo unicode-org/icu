@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2006, International Business Machines
+*   Copyright (C) 1998-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -162,7 +162,7 @@ UNumberFormat*
 u_locbund_getNumberFormat(ULocaleBundle *bundle, UNumberFormatStyle style)
 {
     UNumberFormat *formatAlias = NULL;
-    if (style >= UNUM_IGNORE) {
+    if (style > UNUM_IGNORE) {
         formatAlias = bundle->fNumberFormat[style-1];
         if (formatAlias == NULL) {
             if (bundle->isInvariantLocale) {

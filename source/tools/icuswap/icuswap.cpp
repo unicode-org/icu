@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2006, International Business Machines
+*   Copyright (C) 2003-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -42,6 +42,7 @@
 /* definitions */
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
+#define DEFAULT_PADDING_LENGTH 15
 
 static UOption options[]={
     UOPTION_HELP_H,
@@ -170,7 +171,7 @@ main(int argc, char *argv[]) {
     }
 
     length=fileSize(in);
-    if(length<=0) {
+    if(length<DEFAULT_PADDING_LENGTH) {
         fprintf(stderr, "%s: empty input file \"%s\"\n", pname, argv[1]);
         rc=2;
         goto done;
@@ -182,7 +183,7 @@ main(int argc, char *argv[]) {
      * because the last item may be resorted into the middle and then needs
      * additional padding bytes
      */
-    data=(char *)malloc(length+15);
+    data=(char *)malloc(length+DEFAULT_PADDING_LENGTH);
     if(data==NULL) {
         fprintf(stderr, "%s: error allocating memory for \"%s\"\n", pname, argv[1]);
         rc=2;
@@ -190,7 +191,7 @@ main(int argc, char *argv[]) {
     }
 
     /* set the last 15 bytes to the usual padding byte, see udata_swapPackage() */
-    uprv_memset(data+length-15, 0xaa, 15);
+    uprv_memset(data+length-DEFAULT_PADDING_LENGTH, 0xaa, DEFAULT_PADDING_LENGTH);
 
     if(length!=(int32_t)fread(data, 1, length, in)) {
         fprintf(stderr, "%s: error reading \"%s\"\n", pname, argv[1]);
@@ -519,7 +520,7 @@ udata_swapPackage(const char *inFilename, const char *outFilename,
          */
         if(inData==outData) {
             /* +15: prepare for extra padding of a newly-last item */
-            table=(ToCEntry *)uprv_malloc(itemCount*sizeof(ToCEntry)+length+15);
+            table=(ToCEntry *)uprv_malloc(itemCount*sizeof(ToCEntry)+length+DEFAULT_PADDING_LENGTH);
             if(table!=NULL) {
                 outBytes=(uint8_t *)(table+itemCount);
 
@@ -533,7 +534,7 @@ udata_swapPackage(const char *inFilename, const char *outFilename,
         if(table==NULL) {
             udata_printError(ds, "udata_swapPackage(): out of memory allocating %d bytes\n",
                              inData==outData ?
-                                 itemCount*sizeof(ToCEntry)+length+15 :
+                                 itemCount*sizeof(ToCEntry)+length+DEFAULT_PADDING_LENGTH :
                                  itemCount*sizeof(ToCEntry));
             *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
             return 0;

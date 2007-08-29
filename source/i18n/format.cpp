@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2004, International Business Machines Corporation and    *
+* Copyright (C) 1997-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -152,7 +152,7 @@ void Format::syntaxError(const UnicodeString& pattern,
     parseError.line=0;  // we are not using line number
     
     // for pre-context
-    int32_t start = (pos <=U_PARSE_CONTEXT_LEN)? 0 : (pos - (U_PARSE_CONTEXT_LEN-1
+    int32_t start = (pos < U_PARSE_CONTEXT_LEN)? 0 : (pos - (U_PARSE_CONTEXT_LEN-1
                                                              /* subtract 1 so that we have room for null*/));
     int32_t stop  = pos;
     pattern.extract(start,stop-start,parseError.preContext,0);

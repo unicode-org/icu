@@ -172,7 +172,7 @@ void syntaxError(const UChar* rules,
     parseError->line = 0 ; /* we are not using line numbers */
 
     // for pre-context
-    int32_t start = (pos <=U_PARSE_CONTEXT_LEN)? 0 : (pos - (U_PARSE_CONTEXT_LEN-1));
+    int32_t start = (pos < U_PARSE_CONTEXT_LEN)? 0 : (pos - (U_PARSE_CONTEXT_LEN-1));
     int32_t stop  = pos;
 
     u_memcpy(parseError->preContext,rules+start,stop-start);
