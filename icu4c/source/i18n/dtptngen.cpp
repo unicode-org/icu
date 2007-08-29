@@ -194,7 +194,13 @@ DateTimePatternGenerator::operator=(const DateTimePatternGenerator& other) {
     // NUL-terminate for the C API.
     dateTimeFormat.getTerminatedBuffer();
     decimal.getTerminatedBuffer();
-    skipMatcher = other.skipMatcher;
+    delete skipMatcher;
+    if ( other.skipMatcher == NULL ) {
+        skipMatcher = NULL;
+    }
+    else {
+        skipMatcher = new DateTimeMatcher(*other.skipMatcher);
+    }
     for (int32_t i=0; i< UDATPG_FIELD_COUNT; ++i ) {
         appendItemFormats[i] = other.appendItemFormats[i];
         appendItemNames[i] = other.appendItemNames[i];
@@ -243,7 +249,7 @@ DateTimePatternGenerator::~DateTimePatternGenerator() {
     if (dtMatcher != NULL) delete dtMatcher;
     if (distanceInfo != NULL) delete distanceInfo;
     if (patternMap != NULL) delete patternMap;
-    
+    if (skipMatcher != NULL) delete skipMatcher;
 }
 
 void
@@ -921,7 +927,6 @@ StringEnumeration*
 DateTimePatternGenerator::getRedundants(UErrorCode& status) {
     StringEnumeration* output = new DTRedundantEnumeration();
     const UnicodeString *pattern;
-
     PatternMapIterator it;
     for (it.set(*patternMap); it.hasNext(); ) {
         DateTimeMatcher current = it.next();
@@ -929,7 +934,13 @@ DateTimePatternGenerator::getRedundants(UErrorCode& status) {
         if ( isCanonicalItem(*pattern) ) {
             continue;
         }
-        skipMatcher = &current;
+        if ( skipMatcher == NULL ) {
+            delete skipMatcher;
+            skipMatcher = new DateTimeMatcher(current);
+        }
+        else {
+            *skipMatcher = current;
+        }
         UnicodeString trial = getBestPattern(current.getPattern(), status);
         if (trial == *pattern) {   
             ((DTRedundantEnumeration *)output)->add(*pattern, status);
@@ -1222,6 +1233,10 @@ PatternMap::getDuplicateElem(
 DateTimeMatcher::DateTimeMatcher(void) {
 }
 
+DateTimeMatcher::DateTimeMatcher(const DateTimeMatcher& other) {
+    copyFrom(other.skeleton);
+}
+
 
 void
 DateTimeMatcher::set(const UnicodeString& pattern, FormatParser* fp) {
@@ -1320,7 +1335,7 @@ DateTimeMatcher::getDistance(const DateTimeMatcher& other, int32_t includeMask, 
 }
 
 void
-DateTimeMatcher::copyFrom(PtnSkeleton& skeleton) {
+DateTimeMatcher::copyFrom(const PtnSkeleton& skeleton) {
     for (int32_t i=0; i<UDATPG_FIELD_COUNT; ++i) {
         this->skeleton.type[i]=skeleton.type[i];
         this->skeleton.original[i]=skeleton.original[i];
@@ -1761,7 +1776,8 @@ DTRedundantEnumeration::DTRedundantEnumeration() {
 
 void
 DTRedundantEnumeration::add(const UnicodeString& pattern, UErrorCode& status) {
-    if ( (fPatterns == NULL) && U_SUCCESS(status) ) {
+    if (U_FAILURE(status)) return;
+    if (fPatterns == NULL)  {
         fPatterns = new UVector(status);
         if (U_FAILURE(status)) {
             delete fPatterns;
