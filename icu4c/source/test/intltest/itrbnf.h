@@ -83,6 +83,11 @@ class IntlTestRBNF : public IntlTest {
   virtual void TestItalianSpellout();
 
   /**
+   * Perform a simple spot check on the Portuguese spellout rules
+   */
+  virtual void TestPortugueseSpellout();
+
+  /**
    * Perform a simple spot check on the German spellout rules
    */
   virtual void TestGermanSpellout();

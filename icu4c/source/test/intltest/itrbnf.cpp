@@ -64,6 +64,7 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
         TESTCASE(14, TestLocalizations);
         TESTCASE(15, TestAllLocales);
         TESTCASE(16, TestHebrewFraction);
+        TESTCASE(17, TestPortugueseSpellout);
 #else
         TESTCASE(0, TestRBNFDisabled);
 #endif
@@ -1360,6 +1361,44 @@ IntlTestRBNF::TestItalianSpellout()
     delete formatter;
 }
 
+void 
+IntlTestRBNF::TestPortugueseSpellout() 
+{
+    UErrorCode status = U_ZERO_ERROR;
+    RuleBasedNumberFormat* formatter
+        = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale("pt","BR",""), status);
+
+    if (U_FAILURE(status)) {
+        errln("FAIL: could not construct formatter");
+    } else {
+        static const char* const testData[][2] = {
+            { "1", "um" },
+            { "15", "quinze" },
+            { "20", "vinte" },
+            { "23", "vinte e tr\\u00EAs" },
+            { "73", "setenta e tr\\u00EAs" },
+            { "88", "oitenta e oito" },
+            { "100", "cem" },
+            { "106", "cento e seis" },
+            { "108", "cento e oito" },
+            { "127", "cento e vinte e sete" },
+            { "181", "cento e oitenta e um" },
+            { "200", "duzcentos" },
+            { "579", "quinhentos e setenta e nove" },
+            { "1,000", "mil" },
+            { "2,000", "dois mil" },
+            { "3,004", "tr\\u00EAs mil e quatro" },
+            { "4,567", "quatro mil quinhentos e sessenta e sete" },
+            { "15,943", "quinze mil novecentos e quarenta e tr\\u00EAs" },
+            { "-36", "menos trinta e seis" },
+            { "234.567", "duzcentos e trinta e quatro ponto cinco seis sete" },
+            { NULL, NULL}
+        };
+        
+        doTest(formatter, testData, TRUE);
+    }
+    delete formatter;
+}
 void 
 IntlTestRBNF::TestGermanSpellout() 
 {
