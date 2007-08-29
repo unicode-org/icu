@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2006, International Business Machines
+*   Copyright (C) 2000-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -473,8 +473,8 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, UE
     // Directives.
     if(buffer[0] == '[') {
       uint32_t cnt = 0;
-      struct {
-        char name[256];
+      static const struct {
+        char name[128];
         uint32_t *what;
         ActionType what_to_do;
       } vt[]  = { {"[first tertiary ignorable",  consts->UCA_FIRST_TERTIARY_IGNORABLE,  READCE},
@@ -682,13 +682,19 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, UE
     element->isThai = UCOL_ISTHAIPREVOWEL(element->cPoints[0]);
 #endif
     // we don't want any strange stuff after useful data!
-    while(pointer < commentStart)  {
-        if(*pointer != ' ' && *pointer != '\t')
-        {
-            *status=U_INVALID_FORMAT_ERROR;
-            break;
+    if (pointer == NULL) {
+        /* huh? Did we get ']' without the '['? Pair your brackets! */
+        *status=U_INVALID_FORMAT_ERROR;
+    }
+    else {
+        while(pointer < commentStart)  {
+            if(*pointer != ' ' && *pointer != '\t')
+            {
+                *status=U_INVALID_FORMAT_ERROR;
+                break;
+            }
+            pointer++;
         }
-        pointer++;
     }
 
     if(U_FAILURE(*status)) {

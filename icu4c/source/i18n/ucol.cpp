@@ -5529,6 +5529,8 @@ ucol_nextSortKeyPart(const UCollator *coll,
         count<0 || (count>0 && dest==NULL)
     ) {
         *status=U_ILLEGAL_ARGUMENT_ERROR;
+        UTRACE_EXIT_STATUS(status);
+        return 0;
     }
 
     UTRACE_DATA6(UTRACE_VERBOSE, "coll=%p, iter=%p, state=%d %d, dest=%p, count=%d",

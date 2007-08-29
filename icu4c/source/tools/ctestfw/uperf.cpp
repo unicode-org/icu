@@ -439,12 +439,16 @@ UBool UPerfTest::runTestLoop( char* testname, char* par )
             }
             if(verbose && U_SUCCESS(status)) {
                 double avg_t = sum_t/passes;
-                if(events == -1) {
+                if (loops == 0 || ops == 0) {
+                    fprintf(stderr, "%s did not run\n", name);
+                }
+                else if(events == -1) {
                     fprintf(stdout, "%%= %s avg: %.4g loops: %i avg/op: %.4g ns\n",
                             name, avg_t, (int)loops, (avg_t*1E9)/(loops*ops));
                     fprintf(stdout, "_= %s min: %.4g loops: %i min/op: %.4g ns\n",
                             name, min_t, (int)loops, (min_t*1E9)/(loops*ops));
-                } else {
+                }
+                else {
                     fprintf(stdout, "%%= %s avg: %.4g loops: %i avg/op: %.4g ns avg/event: %.4g ns\n",
                             name, avg_t, (int)loops, (avg_t*1E9)/(loops*ops), (avg_t*1E9)/(loops*events));
                     fprintf(stdout, "_= %s min: %.4g loops: %i min/op: %.4g ns min/event: %.4g ns\n",

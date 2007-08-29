@@ -192,13 +192,13 @@ RBBIRuleScanner::~RBBIRuleScanner() {
 //                              definitions problems.  I'm sure that there's a better way.
 //
 //----------------------------------------------------------------------------------------
-UBool RBBIRuleScanner::doParseActions(EParseAction action)
+UBool RBBIRuleScanner::doParseActions(int32_t action)
 {
     RBBINode *n       = NULL;
 
     UBool   returnVal = TRUE;
 
-    switch ((RBBI_RuleParseAction)action) {
+    switch (action) {
 
     case doExprStart:
         pushNewNode(RBBINode::opStart);
@@ -994,7 +994,7 @@ void RBBIRuleScanner::parse() {
         // We've found the row of the state table that matches the current input
         //   character from the rules string.
         // Perform any action specified  by this row in the state table.
-        if (doParseActions((EParseAction)tableEl->fAction) == FALSE) {
+        if (doParseActions((int32_t)tableEl->fAction) == FALSE) {
             // Break out of the state machine loop if the
             //   the action signalled some kind of error, or
             //   the action was to exit, occurs on normal end-of-rules-input.

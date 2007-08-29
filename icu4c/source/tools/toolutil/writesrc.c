@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2005, International Business Machines
+*   Copyright (C) 2005-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -72,7 +72,7 @@ usrc_create(const char *path, const char *filename) {
         fprintf(
             stderr,
             "usrc_create(%s, %s): unable to create file\n",
-            path!=NULL ? path : NULL, filename);
+            path!=NULL ? path : "", filename);
     }
     return f;
 }
