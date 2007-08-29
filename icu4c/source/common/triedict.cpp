@@ -1,7 +1,7 @@
 /**
  *******************************************************************************
- * Copyright (C) 2006, International Business Machines Corporation and others. *
- * All Rights Reserved.                                                        *
+ * Copyright (C) 2006-2007, International Business Machines Corporation        *
+ * and others. All Rights Reserved.                                            *
  *******************************************************************************
  */
 
@@ -820,7 +820,7 @@ compactOneNode(const TernaryNode *node, UBool parentEndsWord, UStack &nodes, UEr
         if (vResult == NULL) {
             status = U_MEMORY_ALLOCATION_ERROR;
         }
-        if (U_SUCCESS(status)) {
+        else if (U_SUCCESS(status)) {
             UBool   endsWord = FALSE;
             // Take up nodes until we end a word, or hit a node with < or > links
             do {

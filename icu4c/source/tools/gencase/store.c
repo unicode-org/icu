@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2005, International Business Machines
+*   Copyright (C) 2004-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -266,7 +266,7 @@ addUnfolding(UChar32 c, const UChar *s, int32_t length) {
                 (long)length, UGENCASE_UNFOLD_STRING_WIDTH);
         exit(U_INTERNAL_PROGRAM_ERROR);
     }
-    if(unfoldTop>=LENGTHOF(unfold)) {
+    if(unfoldTop >= (LENGTHOF(unfold) - UGENCASE_UNFOLD_STRING_WIDTH)) {
         fprintf(stderr, "gencase error: too many multi-character case foldings\n");
         exit(U_BUFFER_OVERFLOW_ERROR);
     }
