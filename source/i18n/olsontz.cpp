@@ -616,10 +616,8 @@ OlsonTimeZone::initTransitionRules(UErrorCode& status) {
     UnicodeString tzid;
     getID(tzid);
 
-    UnicodeString _std("(STD)", -1, US_INV);
-    UnicodeString _dst("(DST)", -1, US_INV);
-    UnicodeString stdName = tzid + _std;
-    UnicodeString dstName = tzid + _dst;
+    UnicodeString stdName = tzid + UNICODE_STRING_SIMPLE("(STD)");
+    UnicodeString dstName = tzid + UNICODE_STRING_SIMPLE("(DST)");
 
     int32_t raw, dst;
     if (transitionCount > 0) {
