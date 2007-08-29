@@ -29,7 +29,7 @@
 #endif
 
 // Define this to test just a single locale
-#define TEST_ONE_LOC  "bg_BG"
+//#define TEST_ONE_LOC  "cs_CZ"
 
 // If SPARSENESS is > 0, we don't run each exhaustive possibility.
 // There are 24 total possible tests per each locale.  A SPARSENESS
