@@ -68,7 +68,8 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
             // prepare the zoneFormats for the locale
             List zoneFormatList = new ArrayList();
-            for (String zoneFormat : zoneFormats) {
+            for (int zoneFormatsIndex = 0; zoneFormatsIndex < zoneFormats.length; ++zoneFormatsIndex) {
+                String zoneFormat = zoneFormats[zoneFormatsIndex];
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat(zoneFormat, locale);
                 try {
                     // check once just to make sure the syntax is supported
