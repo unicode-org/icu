@@ -537,7 +537,7 @@ static const char *close_bin_unit = "</bin-unit>\n";
 static const char *bin_source = "<bin-source>\n";
 static const char *close_bin_source = "</bin-source>\n";
 static const char *external_file = "<external-file";
-static const char *close_external_file = "</external-file>\n";
+/*static const char *close_external_file = "</external-file>\n";*/
 static const char *internal_file = "<internal-file";
 static const char *close_internal_file = "</internal-file>\n";
 
