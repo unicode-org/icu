@@ -1672,8 +1672,8 @@ PtnSkeleton::~PtnSkeleton() {
 
 PtnElem::PtnElem(const UnicodeString &basePat, const UnicodeString &pat) : 
 basePattern(basePat),
-pattern(pat),
 skeleton(NULL),
+pattern(pat),
 next(NULL)
 {
 }

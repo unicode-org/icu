@@ -61,8 +61,8 @@ fDatesLen(other.fDatesLen), fDates(NULL)
 }
 
 RelativeDateFormat::RelativeDateFormat( UDateFormatStyle timeStyle, UDateFormatStyle dateStyle, const Locale& locale, UErrorCode& status)
- : DateFormat(), fDateFormat(NULL), fTimeFormat(NULL), fCombinedFormat(NULL), fLocale(locale),
-fDateStyle(dateStyle), fTimeStyle(timeStyle), fDatesLen(0), fDates(NULL)
+ : DateFormat(), fDateFormat(NULL), fTimeFormat(NULL), fCombinedFormat(NULL),
+fDateStyle(dateStyle), fTimeStyle(timeStyle), fLocale(locale), fDatesLen(0), fDates(NULL)
  {
     if(U_FAILURE(status) ) {
         return;
