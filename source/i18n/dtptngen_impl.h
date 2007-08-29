@@ -177,12 +177,13 @@ public:
     UnicodeString getPattern();
     void set(const UnicodeString& pattern, FormatParser* fp);
     void set(const UnicodeString& pattern, FormatParser* fp, PtnSkeleton& skeleton);
-    void copyFrom(PtnSkeleton& skeleton);
+    void copyFrom(const PtnSkeleton& skeleton);
     void copyFrom();
     PtnSkeleton* getSkeletonPtr();
     UBool equals(const DateTimeMatcher* other) const;
     int32_t getDistance(const DateTimeMatcher& other, int32_t includeMask, DistanceInfo& distanceInfo);
     DateTimeMatcher();
+    DateTimeMatcher(const DateTimeMatcher& other);
     virtual ~DateTimeMatcher() {};
     int32_t getFieldMask();
 };
