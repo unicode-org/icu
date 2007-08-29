@@ -14,7 +14,6 @@ root{
         sentence:process(dependency){"sent.brk"}
         title:process(dependency){"title.brk"}
         word:process(dependency){"word.brk"}
-        xgc:process(dependency){"xgc.brk"}
     }
     dictionaries{
         Thai:process(dependency){"thaidict.ctd"}

@@ -22,7 +22,6 @@
                 <icu:line     icu:dependency="line.brk"/>
                 <icu:sentence icu:dependency="sent.brk"/>
                 <icu:title    icu:dependency="title.brk"/>
-                <icu:xgc      icu:dependency="xgc.brk"/>
             </icu:boundaries>
             <icu:dictionaries>
                 <icu:dictionary type="Thai" icu:dependency="thaidict.ctd"/>
