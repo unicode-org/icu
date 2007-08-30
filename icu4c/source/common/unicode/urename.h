@@ -1053,6 +1053,7 @@
 #define uprv_malloc uprv_malloc_3_8
 #define uprv_mapFile uprv_mapFile_3_8
 #define uprv_max uprv_max_3_8
+#define uprv_maximumPtr uprv_maximumPtr_3_8
 #define uprv_maxMantissa uprv_maxMantissa_3_8
 #define uprv_min uprv_min_3_8
 #define uprv_modf uprv_modf_3_8
