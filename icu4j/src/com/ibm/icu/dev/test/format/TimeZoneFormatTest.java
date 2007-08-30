@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -41,7 +42,8 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         // pick one winter time, one summer time
         Date[] testDates = { new Date(107, 1, 15), new Date(107, 6, 15) };
         String[] zoneFormats = { "z", "zzzz", "Z", "ZZZZ", "v", "vvvv", "V", "VVVV" };
-        Set mustRoundTrip = new HashSet(Arrays.asList(new String[] { "v", "vvvv", "VVVV" }));
+        Set mustRoundTrip = new HashSet(Arrays.asList(new String[] { "VVVV" }));
+        Set mustSetZone = new HashSet(Arrays.asList(new String[] { "z", "zzzz", "v", "vvvv",  "VVVV" }));
         String[] zones = TimeZone.getAvailableIDs();
 
         // common objects
@@ -98,45 +100,47 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                         String formattedString = format.format(date);
                         inoutPosition.setIndex(0);
                         outputCalendar.setTimeZone(unknownZone);
-                        int badDstOffset = -123;
+                        int badDstOffset = -1234;
                         int badZoneOffset = -2345;
                         outputCalendar.set(Calendar.DST_OFFSET, badDstOffset);
                         outputCalendar.set(Calendar.ZONE_OFFSET, badZoneOffset);
                         format.parse(formattedString, outputCalendar, inoutPosition);
 
-//                        // now check for errors
-//                        if (pos.getIndex() != formatted.length()) {
-//                            // we failed to parse everything
-//                            errln(status.getPrefix(locale, timezone, format, formatted)
-//                                    + ", but can't parse it at all!");
-//                            continue; // don't bother with other tests
-//                        }
-                        // we must not get "Etc/Unknown" -- that would mean
                         // that we didn't really get the timezone, and the old value was left
                         TimeZone parsedZone = outputCalendar.getTimeZone();
-                        // parsedZone.getID().equals(unknownZone.getID())
+                        
+                        // See that we set the zone when we must
+                        //  we must not get "Etc/Unknown" -- that would mean
+                        if (mustSetZone.contains(format.toPattern())) {
+                            if (parsedZone.getID().equals(unknownZone.getID())) { 
+                                errln(status.getPrefix(locale, timezone, format, formattedString)
+                                        + ", but when parsed, got no zone.");
+                            }
+                        }
+
+                        // See that in all cases, the zone offsets are set
                         if (outputCalendar.get(Calendar.DST_OFFSET) == badDstOffset
                                 || outputCalendar.get(Calendar.ZONE_OFFSET) == badZoneOffset) {
                             errln(status.getPrefix(locale, timezone, format, formattedString)
                                     + ", but when parsed, the zone isn't retrieved.");
-                            continue; // don't bother with other tests
                         }
+                        
+                        // Make sure that we roundtrip when we must
+                        // We don't have to roundtrip to exactly the same value, but we must roundtrip to an equivalent
                         if (mustRoundTrip.contains(format.toPattern())) {
-                            // also make sure that we roundtrip when we must
-                            if (parsedZone.getID().equals(unknownZone.getID())) { 
-                                errln(status.getPrefix(locale, timezone, format, formattedString)
-                                        + ", but when parsed, got no zone.");
-                                continue; // don't bother with other tests
-                            }
                             if (!equivalents.contains(parsedZone.getID())) { 
-                                // also make sure that we roundtrip when we must
                                 errln(status.getPrefix(locale, timezone, format, formattedString)
                                         + ", but when parsed, a non-equivalent zone is retrieved: "
                                         + parsedZone.getID()
                                         + "; equivalents are: " + equivalents);
-                                continue; // don't bother with other tests
                             }
-                        }   
+                        }
+                        
+                        // TODO: if we could get access to what metazones are considered equivalent,
+                        // we could add a test to verify that even in the case of v, vvvv, we got a timezone that was equivalent *according to metazone*
+                        // ADD TEST HERE
+                        
+                        
                         status.succeed(locale, timezone, format);
                     }
                 }
@@ -193,4 +197,48 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         Integer count = (Integer) map.get(key);
         map.put(key, new Integer(count == null ? delta : count.intValue() + delta));
     }
+    
+    // The following code generates alias differences with CLDR. It can be turned into a test if we can get access to CLDR data in ICU.
+    // http://bugs.icu-project.org/trac/ticket/5896
+    
+    
+//    final static SupplementalDataInfo supplementalData = SupplementalDataInfo.getInstance("C:/cvsdata/unicode/cldr/common/supplemental/");
+//    static {
+//      Set<String> canonicalZones = supplementalData.getCanonicalZones();
+//      // get all the CLDR IDs
+//      Set <String> allCLDRZones = new TreeSet<String>(canonicalZones);
+//      for (String canonicalZone : canonicalZones) {
+//        allCLDRZones.addAll(supplementalData.getZone_aliases(canonicalZone));
+//      }
+//      // get all the ICU IDs
+//      Set<String> allIcuZones = new TreeSet<String>();
+//      for (String canonicalZone:TimeZone.getAvailableIDs()) {
+//        allIcuZones.add(canonicalZone);
+//        for (int i = 0; i < TimeZone.countEquivalentIDs(canonicalZone); ++i) {
+//          allIcuZones.add(TimeZone.getEquivalentID(canonicalZone, i));
+//        }
+//      }
+//      
+//      System.out.println("Zones in CLDR but not ICU:" + getFirstMinusSecond(allCLDRZones, allIcuZones));
+//      final Set<String> icuMinusCldr_all = getFirstMinusSecond(allIcuZones, allCLDRZones);
+//      System.out.println("Zones in ICU but not CLDR:" + icuMinusCldr_all);
+//      
+//      for (String canonicalZone : canonicalZones) {
+//        Set<String> aliases = supplementalData.getZone_aliases(canonicalZone);
+//        LinkedHashSet<String> icuAliases = getIcuEquivalentZones(canonicalZone);
+//        icuAliases.remove(canonicalZone); // difference in APIs
+//        icuAliases.removeAll(icuMinusCldr_all);
+//        if (!aliases.equals(icuAliases)) {
+//          System.out.println("Difference in Aliases for: " + canonicalZone);
+//          Set<String> cldrMinusIcu = getFirstMinusSecond(aliases, icuAliases);
+//          if (cldrMinusIcu.size() != 0) {
+//            System.out.println("\tCLDR - ICU: " + cldrMinusIcu);
+//          }
+//          Set<String> icuMinusCldr = getFirstMinusSecond(icuAliases, aliases);
+//          if (icuMinusCldr.size() != 0) {
+//            System.out.println("\tICU - CLDR: " + icuMinusCldr);
+//          }
+//        }
+//      }
+//    }
 }
