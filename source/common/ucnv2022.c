@@ -84,6 +84,26 @@ static const char SHIFT_OUT_STR[] = "\x0E";
 #define V_TAB   0x0B
 #define SPACE   0x20
 
+enum {
+    HWKANA_START=0xff61,
+    HWKANA_END=0xff9f
+};
+
+/*
+ * 94-character sets with native byte values A1..FE are encoded in ISO 2022
+ * as bytes 21..7E. (Subtract 0x80.)
+ * 96-character sets with native byte values A0..FF are encoded in ISO 2022
+ * as bytes 20..7F. (Subtract 0x80.)
+ * Do not encode C1 control codes with native bytes 80..9F
+ * as bytes 00..1F (C0 control codes).
+ */
+enum {
+    GR94_START=0xa1,
+    GR94_END=0xfe,
+    GR96_START=0xa0,
+    GR96_END=0xff
+};
+
 /*
  * ISO 2022 control codes must not be converted from Unicode
  * because they would mess up the byte stream.
@@ -1471,7 +1491,7 @@ getTrail:
                     }
                     break;
                 case ISO8859_1:
-                    if(0xa0 <= sourceChar && sourceChar <= 0xff) {
+                    if(GR96_START <= sourceChar && sourceChar <= GR96_END) {
                         targetValue = (uint32_t)sourceChar - 0x80;
                         len = 1;
                         cs = cs0;
@@ -1479,18 +1499,18 @@ getTrail:
                     }
                     break;
                 case HWKANA_7BIT:
-                    if((uint32_t)(0xff9f-sourceChar)<=(0xff9f-0xff61)) {
+                    if((uint32_t)(HWKANA_END-sourceChar)<=(HWKANA_END-HWKANA_START)) {
                         if(converterData->version==3) {
                             /* JIS7: use G1 (SO) */
                             /* Shift U+FF61..U+FF9F to bytes 21..5F. */
-                            targetValue = (uint32_t)(sourceChar - (0xff61 - 0x21));
+                            targetValue = (uint32_t)(sourceChar - (HWKANA_START - 0x21));
                             len = 1;
                             pFromU2022State->cs[1] = cs = cs0; /* do not output an escape sequence */
                             g = 1;
                         } else if(converterData->version==4) {
                             /* JIS8: use 8-bit bytes with any single-byte charset, see escape sequence output below */
                             /* Shift U+FF61..U+FF9F to bytes A1..DF. */
-                            targetValue = (uint32_t)(sourceChar - (0xff61 - 0xa1));
+                            targetValue = (uint32_t)(sourceChar - (HWKANA_START - 0xa1));
                             len = 1;
 
                             cs = pFromU2022State->cs[0];
@@ -1524,7 +1544,7 @@ getTrail:
                                 converterData->myConverterArray[cs0],
                                 sourceChar, &value,
                                 useFallback);
-                    if(len2 != 0 && !(len2 < 0 && len != 0) && 0xa0 <= value && value <= 0xff) {
+                    if(len2 != 0 && !(len2 < 0 && len != 0) && GR96_START <= value && value <= GR96_END) {
                         targetValue = value - 0x80;
                         len = len2;
                         cs = cs0;
@@ -1540,6 +1560,15 @@ getTrail:
                                 useFallback, MBCS_OUTPUT_2);
                     if(len2 == 2 || (len2 == -2 && len == 0)) {  /* only accept DBCS: abs(len)==2 */
                         if(cs0 == KSC5601) {
+                            /*
+                             * Check for valid bytes for the encoding scheme.
+                             * This is necessary because the sub-converter (windows-949)
+                             * has a broader encoding scheme than is valid for 2022.
+                             *
+                             * Check that the result is a 2-byte value with each byte in the range A1..FE
+                             * (strict EUC-KR DBCS) before accepting it and subtracting 0x80 from each byte
+                             * to move it to the ISO 2022 range 21..7E.
+                             */
                             if( (uint16_t)(value - 0xa1a1) <= (0xfefe - 0xa1a1) &&
                                 (uint8_t)(value - 0xa1) <= (0xfe - 0xa1)
                             ) {
@@ -1807,7 +1836,7 @@ escape:
                     !IS_JP_DBCS(cs)
                 ) {
                     /* 8-bit halfwidth katakana in any single-byte mode for JIS8 */
-                    targetUniChar = mySourceChar + (0xff61 - 0xa1);
+                    targetUniChar = mySourceChar + (HWKANA_START - 0xa1);
 
                     /* return from a single-shift state to the previous one */
                     if(pToU2022State->g >= 2) {
@@ -1848,7 +1877,7 @@ escape:
                 case HWKANA_7BIT:
                     if((uint8_t)(mySourceChar - 0x21) <= (0x5f - 0x21)) {
                         /* 7-bit halfwidth Katakana */
-                        targetUniChar = mySourceChar + (0xff61 - 0x21);
+                        targetUniChar = mySourceChar + (HWKANA_START - 0x21);
                     }
                     break;
                 default:
@@ -3170,7 +3199,7 @@ _ISO_2022_GetUnicodeSet(const UConverter *cnv,
         }
         if(jpCharsetMasks[cnvData->version]&CSM(HWKANA_7BIT)) {
             /* include half-width Katakana for JP */
-            sa->addRange(sa->set, 0xff61, 0xff9f);
+            sa->addRange(sa->set, HWKANA_START, HWKANA_END);
         }
         break;
     case 'c':
