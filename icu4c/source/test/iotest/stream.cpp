@@ -28,9 +28,11 @@
 // <strstream> is deprecated on some platforms, and the compiler complains very loudly if you use it.
 #include <strstream>
 #endif
+#include <fstream>
 using namespace std;
 #elif U_IOSTREAM_SOURCE >= 198506
 #include <strstream.h>
+#include <fstream.h>
 #endif
 
 #include <string.h>
@@ -127,9 +129,40 @@ static void U_CALLCONV TestStream(void)
     log_info("U_IOSTREAM_SOURCE is disabled\n");
 #endif
 }
+
+static void U_CALLCONV TestStreamEOF(void)
+{
+    UnicodeString dest;
+    fstream fs(STANDARD_TEST_FILE, fstream::in | fstream::out | fstream::trunc);
+#ifdef USE_SSTREAM
+    stringstream ss;
+#else
+    strstream ss;
+#endif
+
+    fs << "EXAMPLE";
+    fs.seekg(0);
+    ss << "EXAMPLE";
+
+    if (!(fs >> dest)) {
+        log_err("Reading of file did not return expected status result\n");
+    }
+    if (dest != "EXAMPLE") {
+        log_err("Reading of file did not return expected string\n");
+    }
+
+    if (!(ss >> dest)) {
+        log_err("Reading of string did not return expected status result\n");
+    }
+    if (dest != "EXAMPLE") {
+        log_err("Reading of string did not return expected string\n");
+    }
+    fs.close();
+}
 U_CDECL_END
 
 U_CFUNC void addStreamTests(TestNode** root) {
     addTest(root, &TestStream, "stream/TestStream");
+    addTest(root, &TestStreamEOF, "stream/TestStreamEOF");
 }
 

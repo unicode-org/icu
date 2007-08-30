@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2006, International Business Machines
+*   Copyright (C) 2001-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *  FILE NAME : ustream.cpp
@@ -88,18 +88,25 @@ operator>>(STD_ISTREAM& stream, UnicodeString& str)
         char ch;
         UChar ch32;
         UBool intialWhitespace = TRUE;
+        UBool continueReading = TRUE;
 
         /* We need to consume one byte at a time to see what is considered whitespace. */
-        while (!stream.eof()) {
+        while (continueReading) {
             ch = stream.get();
-            sLimit = &ch + 1;
-            errorCode = U_ZERO_ERROR;
+            if (stream.eof()) {
+                // The EOF is only set after the get() of an unavailable byte.
+                stream.clear(STD_NAMESPACE ios_base::eofbit);
+                continueReading = FALSE;
+            }
+            sLimit = &ch + (int)continueReading;
             us = uBuffer;
             s = &ch;
-            ucnv_toUnicode(converter, &us, uLimit, &s, sLimit, 0, FALSE, &errorCode);
+            errorCode = U_ZERO_ERROR;
+            ucnv_toUnicode(converter, &us, uLimit, &s, sLimit, 0, !continueReading, &errorCode);
             if(U_FAILURE(errorCode)) {
                 /* Something really bad happened */
-                return stream;
+                stream.setstate(STD_NAMESPACE ios_base::failbit);
+                goto STOP_READING;
             }
             /* Was the character consumed? */
             if (us != uBuffer) {
