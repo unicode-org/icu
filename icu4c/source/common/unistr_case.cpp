@@ -85,17 +85,6 @@ UnicodeString::doCaseCompare(int32_t start,
 // Write implementation
 //========================================
 
-/*
- * Implement argument checking and buffer handling
- * for string case mapping as a common function.
- */
-enum {
-    TO_LOWER,
-    TO_UPPER,
-    TO_TITLE,
-    FOLD_CASE
-};
-
 UnicodeString &
 UnicodeString::caseMap(BreakIterator *titleIter,
                        const char *locale,
