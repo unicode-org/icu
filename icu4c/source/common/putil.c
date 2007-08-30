@@ -94,6 +94,7 @@ Cleanly installed Solaris can use this #define.
 #   include <qusec.h>       /* error code structure */
 #   include <qusrjobi.h>
 #   include <qliept.h>      /* EPT_CALL macro  - this include must be after all other "QSYSINCs" */
+#   include <mih/testptr.h> /* For uprv_maximumPtr */
 #elif defined(XP_MAC)
 #   include <Files.h>
 #   include <IntlResources.h>
@@ -486,51 +487,38 @@ uprv_log(double d)
     return log(d);
 }
 
-#if 0
-/* This isn't used. If it's readded, readd putiltst.c tests */
-U_CAPI int32_t U_EXPORT2
-uprv_digitsAfterDecimal(double x)
+U_CAPI void * U_EXPORT2
+uprv_maximumPtr(void * base)
 {
-    char buffer[20];
-    int32_t numDigits, bytesWritten;
-    char *p = buffer;
-    int32_t ptPos, exponent;
-
-    /* cheat and use the string-format routine to get a string representation*/
-    /* (it handles mathematical inaccuracy better than we can), then find out */
-    /* many characters are to the right of the decimal point */
-    bytesWritten = sprintf(buffer, "%+.9g", x);
-    while (isdigit(*(++p))) {
+#if defined(OS400)
+    /*
+     * With the provided function we should never be out of range of a given segment 
+     * (a traditional/typical segment that is).  Our segments have 5 bytes for the
+     * id and 3 bytes for the offset.  The key is that the casting takes care of
+     * only retrieving the offset portion minus x1000.  Hence, the smallest offset
+     * seen in a program is x001000 and when casted to an int would be 0.
+     * That's why we can only add 0xffefff.  Otherwise, we would exceed the segment.
+     *
+     * Currently, 16MB is the current addressing limitation on i5/OS if the activation is 
+     * non-TERASPACE.  If it is TERASPACE it is 2GB - 4k(header information).
+     * This function determines the activation based on the pointer that is passed in and 
+     * calculates the appropriate maximum available size for 
+     * each pointer type (TERASPACE and non-TERASPACE)
+     *
+     * Unlike other operating systems, the pointer model isn't determined at
+     * compile time on i5/OS.
+     */
+    if ((base != NULL) && (_TESTPTR(base, _C_TERASPACE_CHECK))) {
+        /* if it is a TERASPACE pointer the max is 2GB - 4k */
+        return ((void *)(((char *)base)-((uint32_t)(base))+((uint32_t)0x7fffefff)));
     }
+    /* otherwise 16MB since NULL ptr is not checkable or the ptr is not TERASPACE */
+    return ((void *)(((char *)base)-((uint32_t)(base))+((uint32_t)0xffefff)));
 
-    ptPos = (int32_t)(p - buffer);
-    numDigits = (int32_t)(bytesWritten - ptPos - 1);
-
-    /* if the number's string representation is in scientific notation, find */
-    /* the exponent and take it into account*/
-    exponent = 0;
-    p = uprv_strchr(buffer, 'e');
-    if (p != 0) {
-        int16_t expPos = (int16_t)(p - buffer);
-        numDigits -= bytesWritten - expPos;
-        exponent = (int32_t)(atol(p + 1));
-    }
-
-    /* the string representation may still have spurious decimal digits in it, */
-    /* so we cut off at the ninth digit to the right of the decimal, and have */
-    /* to search backward from there to the first non-zero digit*/
-    if (numDigits > 9) {
-        numDigits = 9;
-        while (numDigits > 0 && buffer[ptPos + numDigits] == '0')
-            --numDigits;
-    }
-    numDigits -= exponent;
-    if (numDigits < 0) {
-        return 0;
-    }
-    return numDigits;
-}
+#else
+    return U_MAX_PTR(base); 
 #endif
+}
 
 /*---------------------------------------------------------------------------
   Platform-specific Implementations

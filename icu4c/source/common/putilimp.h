@@ -227,6 +227,14 @@ U_INTERNAL UDate U_EXPORT2 uprv_getUTCtime(void);
 U_INTERNAL UBool U_EXPORT2 uprv_pathIsAbsolute(const char *path);
 
 /**
+ * Use U_MAX_PTR instead of this function.
+ * @param void pointer to test
+ * @return the largest possible pointer greater than the base
+ * @internal (ICU 3.8)
+ */
+U_INTERNAL void * U_EXPORT2 uprv_maximumPtr(void *base);
+
+/**
  * Maximum value of a (void*) - use to indicate the limit of an 'infinite' buffer.
  * In fact, buffer sizes must not exceed 2GB so that the difference between
  * the buffer limit and the buffer start can be expressed in an int32_t.
@@ -245,26 +253,14 @@ U_INTERNAL UBool U_EXPORT2 uprv_pathIsAbsolute(const char *path);
     /* We have 31-bit pointers. */
 #    define U_MAX_PTR(base) ((void *)0x7fffffff)
 #  elif defined(OS400)
-/*
- * With the provided macro we should never be out of range of a given segment
- * (a traditional/typical segment that is).  Our segments have 5 bytes for the
- * id and 3 bytes for the offset.  The key is that the casting takes care of
- * only retrieving the offset portion minus x1000.  Hence, the smallest offset
- * seen in a program is x001000 and when casted to an int would be 0.
- * That's why we can only add 0xffefff.  Otherwise, we would exceed the segment.
- *
- * Currently, 16MB is the current addressing limitation on as/400.  This macro
- * may eventually be changed to use 2GB addressability for the newer version of
- * as/400 machines.
- */
-#    define U_MAX_PTR(base) ((void *)(((char *)base)-((int32_t)(base))+((int32_t)0xffefff)))
+#    define U_MAX_PTR(base) uprv_maximumPtr((void *)base)
 #  elif defined(__GNUC__) && __GNUC__ >= 4
 /*
  * Due to a compiler optimization bug, gcc 4 causes test failures when doing
  * this math arithmetic on pointers on some platforms. It seems like the
  * pointers are considered signed instead of unsigned. The uintptr_t type
  * isn't available on all platforms (i.e MSVC 6) and pointers aren't always
- * a scalar value (i.e. i5/OS in the lines above).
+ * a scalar value (i.e. i5/OS see uprv_maximumPtr function).
  */
 #    define U_MAX_PTR(base) \
     ((void *)(((uintptr_t)(base)+0x7fffffffu) > (uintptr_t)(base) \
