@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1996-2006, International Business Machines Corporation and    *
+* Copyright (C) 1996-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -451,9 +451,13 @@ const CollationElementIterator& CollationElementIterator::operator=(
             coliter->pos = coliter->string + 
                 (othercoliter->pos - othercoliter->string);
         }
-        else {
+        else if (coliter->writableBuffer != NULL) {
             coliter->pos = coliter->writableBuffer + 
                 (othercoliter->pos - othercoliter->writableBuffer);
+        }
+        else {
+            // Error: couldn't allocate memory for writableBuffer
+            coliter->pos = NULL;
         }
 
         /* CE buffer */

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2002-2006, International Business Machines
+*   Copyright (C) 2002-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  iotest.cpp
@@ -286,7 +286,11 @@ static void U_CALLCONV DataDrivenPrintf(void)
                     log_err("FAILURE string test case %d \"%s\" - Got: \"%s\" Expected: \"%s\"\n",
                             i, cFormat, cBuffer, cExpected);
                 }
-                if (uBuffer[uBufferLenReturned-1] == 0
+                if (uBufferLenReturned <= 0) {
+                    log_err("FAILURE test case %d - \"%s\" is an empty string.\n",
+                            i, cBuffer);
+                }
+                else if (uBuffer[uBufferLenReturned-1] == 0
                     || uBuffer[uBufferLenReturned] != 0
                     || uBuffer[uBufferLenReturned+1] != 0x2A
                     || uBuffer[uBufferLenReturned+2] != 0x2A)
@@ -636,7 +640,11 @@ static void U_CALLCONV DataDrivenPrintfPrecision(void)
                     log_err("FAILURE test case %d \"%s\" - Got: \"%s\" Expected: \"%s\"\n",
                             i, cFormat, cBuffer, cExpected);
                 }
-                if (uBuffer[uBufferLenReturned-1] == 0
+                if (uBufferLenReturned <= 0) {
+                    log_err("FAILURE test case %d - \"%s\" is an empty string.\n",
+                            i, cBuffer);
+                }
+                else if (uBuffer[uBufferLenReturned-1] == 0
                     || uBuffer[uBufferLenReturned] != 0
                     || uBuffer[uBufferLenReturned+1] != 0x2A
                     || uBuffer[uBufferLenReturned+2] != 0x2A)
