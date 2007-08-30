@@ -32,6 +32,7 @@ import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.impl.ZoneMeta;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 
@@ -1867,8 +1868,6 @@ public class SimpleDateFormat extends DateFormat {
                     if ((text.length() - start) >= GMT.length() &&
                         text.regionMatches(true, start, GMT, 0, GMT.length()))
                         {
-                            cal.set(Calendar.DST_OFFSET, 0);
-
                             pos.setIndex(start + GMT.length());
 
                             try { // try-catch for "GMT" only time zone string
@@ -1883,40 +1882,38 @@ public class SimpleDateFormat extends DateFormat {
                             } catch(StringIndexOutOfBoundsException e) {
                             }
                             if (sign == 0) {
-                                cal.set(Calendar.ZONE_OFFSET, 0 );
-                                return pos.getIndex();
-                            }
-
-                            // Look for hours:minutes or hhmm.
-                            pos.setIndex(pos.getIndex() + 1);
-                            int st = pos.getIndex();
-                            Number tzNumber = numberFormat.parse(text, pos);
-                            if( tzNumber == null) {
-                                return -start;
-                            }
-                            if( pos.getIndex() < text.length() &&
-                                text.charAt(pos.getIndex()) == ':' ) {
-
-                                // This is the hours:minutes case
-                                offset = tzNumber.intValue() * 60;
+                                offset = 0;
+                            } else {
+                                // Look for hours:minutes or hhmm.
                                 pos.setIndex(pos.getIndex() + 1);
-                                tzNumber = numberFormat.parse(text, pos);
+                                int st = pos.getIndex();
+                                Number tzNumber = numberFormat.parse(text, pos);
                                 if( tzNumber == null) {
                                     return -start;
                                 }
-                                offset += tzNumber.intValue();
-                            }
-                            else {
-                                // This is the hhmm case.
-                                offset = tzNumber.intValue();
-                                // Assume "-23".."+23" refers to hours.
-                                if( offset < 24 && (pos.getIndex() - st) <= 2)
-                                    offset *= 60;
-                                else
-                                    // todo: this looks questionable, should have more error checking
-                                    offset = offset % 100 + offset / 100 * 60;
-                            }
+                                if( pos.getIndex() < text.length() &&
+                                    text.charAt(pos.getIndex()) == ':' ) {
 
+                                    // This is the hours:minutes case
+                                    offset = tzNumber.intValue() * 60;
+                                    pos.setIndex(pos.getIndex() + 1);
+                                    tzNumber = numberFormat.parse(text, pos);
+                                    if( tzNumber == null) {
+                                        return -start;
+                                    }
+                                    offset += tzNumber.intValue();
+                                }
+                                else {
+                                    // This is the hhmm case.
+                                    offset = tzNumber.intValue();
+                                    // Assume "-23".."+23" refers to hours.
+                                    if( offset < 24 && (pos.getIndex() - st) <= 2)
+                                        offset *= 60;
+                                    else
+                                        // todo: this looks questionable, should have more error checking
+                                        offset = offset % 100 + offset / 100 * 60;
+                                }
+                            }
                             // Fall through for final processing below of 'offset' and 'sign'.
                         }
                     else {
@@ -1958,12 +1955,20 @@ public class SimpleDateFormat extends DateFormat {
                     // assert (sign != 0) : sign; // enable when guaranteed JDK >= 1.4
                     offset *= millisPerMinute * sign;
 
-                    if (cal.getTimeZone().useDaylightTime())
-                        {
-                            cal.set(Calendar.DST_OFFSET, millisPerHour);
-                            offset -= millisPerHour;
-                        }
+                    //TODO: revisit this after 3.8
+                    // We do not know if the date is in DST or not, thus,
+                    // better to use standard time
+                    //if (cal.getTimeZone().useDaylightTime())
+                    //    {
+                    //        cal.set(Calendar.DST_OFFSET, millisPerHour);
+                    //        offset -= millisPerHour;
+                    //    }
+                    cal.set(Calendar.DST_OFFSET, 0);
                     cal.set(Calendar.ZONE_OFFSET, offset);
+                    // Create TimeZone instance to match the parsed offset pattern and set it
+                    // to the result calendar
+                    SimpleTimeZone tz = new SimpleTimeZone(offset, text.substring(start, pos.getIndex() - start));
+                    parsedTimeZone = tz;
 
                     return pos.getIndex();
                 }
