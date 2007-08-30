@@ -310,18 +310,9 @@ private:
     inline ULocRuns();
     inline ULocRuns(const ULocRuns &other);
     inline ULocRuns &operator=(const ULocRuns & /*other*/) { return *this; };
-
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
-
     const char **fLocaleNames;
     Locale **fLocalesCopy;
 };
-
-const char ULocRuns::fgClassID = 0;
 
 inline ULocRuns::ULocRuns()
     : LocaleRuns(0), fLocaleNames(NULL)
