@@ -1,0 +1,180 @@
+* text=auto !eol
+
+*.c text !eol
+*.cc text !eol
+*.classpath text !eol
+*.cpp text !eol
+*.css text !eol
+*.dsp text !eol
+*.dsw text !eol
+*.filters text !eol
+*.h text !eol
+*.htm text !eol
+*.html text !eol
+*.in text !eol
+*.java text !eol
+*.launch text !eol
+*.mak text !eol
+*.md text !eol
+*.MF text !eol
+*.mk text !eol
+*.pl text !eol
+*.pm text !eol
+*.project text !eol
+*.properties text !eol
+*.py text !eol
+*.rc text !eol
+*.sh text eol=lf
+*.sln text !eol
+*.stub text !eol
+*.txt text !eol
+*.ucm text !eol
+*.vcproj text !eol
+*.vcxproj text !eol
+*.xml text !eol
+*.xsl text !eol
+*.xslt text !eol
+Makefile text !eol
+configure text !eol
+LICENSE text !eol
+README text !eol
+
+*.bin -text
+*.brk -text
+*.cnv -text
+*.icu -text
+*.res -text
+*.nrm -text
+*.spp -text
+*.tri2 -text
+
+source/data/coll/cy.txt -text
+source/data/coll/km.txt -text
+source/data/coll/no.txt -text
+source/data/coll/no_NO.txt -text
+source/data/coll/sr_Latn.txt -text
+source/data/coll/sr_Latn_BA.txt -text
+source/data/coll/sr_Latn_ME.txt -text
+source/data/coll/sr_Latn_RS.txt -text
+source/data/coll/sr_ME.txt -text
+source/data/coll/zh_Hans.txt -text
+source/data/coll/zh_Hans_CN.txt -text
+source/data/coll/zh_Hans_SG.txt -text
+source/data/coll/zh_Hant_HK.txt -text
+source/data/coll/zh_Hant_MO.txt -text
+source/data/coll/zh_Hant_TW.txt -text
+source/data/locales/af_NA.txt -text
+source/data/locales/bn_BD.txt -text
+source/data/locales/de_LI.txt -text
+source/data/locales/el_CY.txt -text
+source/data/locales/en_BZ.txt -text
+source/data/locales/en_JM.txt -text
+source/data/locales/en_MH.txt -text
+source/data/locales/en_NA.txt -text
+source/data/locales/en_TT.txt -text
+source/data/locales/eo.txt -text
+source/data/locales/fr_MC.txt -text
+source/data/locales/ka.txt -text
+source/data/locales/ka_GE.txt -text
+source/data/locales/km.txt -text
+source/data/locales/km_KH.txt -text
+source/data/locales/pa_Guru.txt -text
+source/data/locales/pa_Guru_IN.txt -text
+source/data/locales/sh_BA.txt -text
+source/data/locales/sr_BA.txt -text
+source/data/locales/sr_Cyrl_BA.txt -text
+source/data/locales/sr_Latn_BA.txt -text
+source/data/locales/uz_AF.txt -text
+source/data/locales/uz_Arab.txt -text
+source/data/locales/uz_Arab_AF.txt -text
+source/data/mappings/ibm-1137_P100-1999.ucm -text
+source/data/mappings/ibm-1168_P100-2002.ucm -text
+source/data/mappings/ibm-1364_P110-2007.ucm -text
+source/data/mappings/ibm-1375_P100-2007.ucm -text
+source/data/mappings/ibm-1383_P110-1999.ucm -text
+source/data/mappings/ibm-1386_P100-2001.ucm -text
+source/data/mappings/ibm-33722_P120-1999.ucm -text
+source/data/mappings/ibm-33722_P12A_P12A-2004_U2.ucm -text
+source/data/mappings/ibm-420_X120-1999.ucm -text
+source/data/mappings/ibm-5012_P100-1999.ucm -text
+source/data/mappings/ibm-5471_P100-2006.ucm -text
+source/data/mappings/ibm-720_P100-1997.ucm -text
+source/data/mappings/ibm-864_X110-1999.ucm -text
+source/data/mappings/ibm-9005_X110-2007.ucm -text
+source/data/mappings/ibm-913_P100-2000.ucm -text
+source/data/mappings/ibm-930_P120-1999.ucm -text
+source/data/mappings/ibm-933_P110-1995.ucm -text
+source/data/mappings/ibm-935_P110-1999.ucm -text
+source/data/mappings/ibm-937_P110-1999.ucm -text
+source/data/mappings/ibm-939_P120-1999.ucm -text
+source/data/mappings/ibm-942_P12A-1999.ucm -text
+source/data/mappings/ibm-943_P130-1999.ucm -text
+source/data/mappings/ibm-943_P15A-2003.ucm -text
+source/data/mappings/ibm-949_P110-1999.ucm -text
+source/data/mappings/ibm-949_P11A-1999.ucm -text
+source/data/mappings/ibm-950_P110-1999.ucm -text
+source/data/mappings/ibm-954_P101-2007.ucm -text
+source/data/mappings/ibm-964_P110-1999.ucm -text
+source/data/mappings/ibm-970_P110_P110-2006_U2.ucm -text
+source/data/translit/Simplified_Traditional.txt -text
+source/data/xml/collation/as.xml -text
+source/data/xml/collation/bn.xml -text
+source/data/xml/collation/cy.xml -text
+source/data/xml/collation/haw.xml -text
+source/data/xml/collation/km.xml -text
+source/data/xml/collation/kok.xml -text
+source/data/xml/collation/sr_Latn.xml -text
+source/data/xml/main/eo.xml -text
+source/data/xml/main/ii.xml -text
+source/data/xml/main/my.xml -text
+source/data/xml/main/nr.xml -text
+source/data/xml/main/pa_Guru.xml -text
+source/data/xml/main/tl.xml -text
+source/data/xml/main/to.xml -text
+source/i18n/persncal.h -text
+source/i18n/reldtfmt.h -text
+source/samples/layout/cgnomelayout.c -text
+source/samples/layout/gnomeglue.cpp -text
+source/samples/layout/gnomeglue.h -text
+source/samples/ucnv/data02.bin -text
+source/test/compat/Makefile.in -text
+source/test/compat/readme.txt -text
+source/test/compat/tzdate.c -text
+source/test/compat/tzone.pl -text
+source/test/intltest/dadrcal.cpp -text
+source/test/intltest/dadrcal.h -text
+source/test/intltest/dadrfmt.cpp -text
+source/test/intltest/dadrfmt.h -text
+source/test/intltest/fldset.cpp -text
+source/test/intltest/fldset.h -text
+source/test/intltest/tzrulets.h -text
+source/test/perf/charperf/CharPerf_r.pl -text
+source/test/perf/convperf/ConvPerf_r.pl -text
+source/test/perf/convperf/Makefile.in -text
+source/test/perf/normperf/NormPerf_r.pl -text
+source/test/perf/ubrkperf/UBrkPerf_r.pl -text
+source/test/perf/ustrperf/StringPerf_r.pl -text
+source/test/testdata/TestFont1.otf -text
+source/test/testdata/calendar.txt -text
+source/test/testdata/format.txt -text
+source/test/testdata/icu26_testtypes.res -text
+source/test/testdata/icu26e_testtypes.res -text
+source/test/testdata/importtest.bin -text
+source/test/testdata/tstfiles.mk -text
+source/test/testdata/uni-text.bin -text
+source/tools/ctestfw/dbgutil.cpp -text
+source/tools/ctestfw/udbgutil.cpp -text
+source/tools/ctestfw/unicode/dbgutil.h -text
+source/tools/ctestfw/unicode/udbgutil.h -text
+source/tools/tzcode/icuzdump.cpp -text
+source/tools/tzcode/icuzdump.vcproj -text
+source/tools/tzcode/zdump.c -text
+
+# The following file types are stored in Git-LFS.
+*.jar filter=lfs diff=lfs merge=lfs -text
+*.dat filter=lfs diff=lfs merge=lfs -text
+*.zip filter=lfs diff=lfs merge=lfs -text
+*.gz filter=lfs diff=lfs merge=lfs -text
+*.bz2 filter=lfs diff=lfs merge=lfs -text
+*.gif filter=lfs diff=lfs merge=lfs -text
+
