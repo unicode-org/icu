@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -1521,7 +1521,6 @@ static void TestAmbiguous()
     if (U_FAILURE(status))
     {
         log_err("Failed to convert the Latin-1 string.\n");
-        free(sjisResult);
         ucnv_close(sjis_cnv);
         ucnv_close(ascii_cnv);
         return;
@@ -1529,8 +1528,6 @@ static void TestAmbiguous()
     if (!ucnv_isAmbiguous(sjis_cnv))
     {
         log_err("SJIS converter should contain ambiguous character mappings.\n");
-        free(sjisResult);
-        free(asciiResult);
         ucnv_close(sjis_cnv);
         ucnv_close(ascii_cnv);
         return;
@@ -5236,13 +5233,14 @@ static void TestJitterbug981(){
         status = U_ZERO_ERROR;
         if(target_cap >= buff_size) {
             log_err("wanted %d bytes, only %d available\n", target_cap, buff_size);
-            return;
+            break;
         }
         bytes_needed = ucnv_fromUChars(utf8cnv, buff, target_cap,
             rules, rules_length, &status);
         target_cap = (bytes_needed > target_cap) ? bytes_needed : target_cap +1;
         if(numNeeded!=0 && numNeeded!= bytes_needed){
             log_err("ucnv_fromUChars returns different values for required capacity in pre-flight and conversion modes");
+            break;
         }
         numNeeded = bytes_needed;
     } while (status == U_BUFFER_OVERFLOW_ERROR);

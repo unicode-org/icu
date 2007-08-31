@@ -1762,7 +1762,7 @@ _canonicalize(const char* localeID,
         }
     }
 
-    if (U_SUCCESS(*err) && name == localeBuffer) {
+    if (U_SUCCESS(*err) && result != NULL && name == localeBuffer) {
         uprv_strncpy(result, localeBuffer, (len > resultCapacity) ? resultCapacity : len);
     }
 

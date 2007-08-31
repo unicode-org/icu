@@ -77,9 +77,6 @@ static const uint16_t *mappingData       = NULL;
 
 extern int
 testData(TestIDNA& test) {
-    char* filename = (char*) malloc(strlen(IntlTest::pathToDataDirectory())*5555);
-    //TODO get the srcDir dynamically 
-    const char *srcDir=IntlTest::pathToDataDirectory();
     char *basename=NULL;
     UErrorCode errorCode=U_ZERO_ERROR;
     char *saveBasename =NULL;
@@ -90,6 +87,10 @@ testData(TestIDNA& test) {
         return errorCode;
     }
     
+    char* filename = (char*) malloc(strlen(IntlTest::pathToDataDirectory())*1024);
+    //TODO get the srcDir dynamically 
+    const char *srcDir=IntlTest::pathToDataDirectory();
+
     idnTrie     = &profile->sprepTrie;
     indexes     = profile->indexes;
     mappingData = profile->mappingData;
