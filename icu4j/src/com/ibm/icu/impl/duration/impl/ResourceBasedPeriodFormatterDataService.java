@@ -7,14 +7,21 @@
 
 package com.ibm.icu.impl.duration.impl;
 
-import java.util.*;
-
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.zip.DataFormatException;
 
-import java.io.OutputStreamWriter;
+import com.ibm.icu.impl.ICUData;
 
 /**
  * A PeriodFormatterDataService that serves PeriodFormatterData
@@ -49,11 +56,8 @@ public class ResourceBasedPeriodFormatterDataService
    */
   private ResourceBasedPeriodFormatterDataService() {
     List localeNames = new ArrayList(); // of String
+    InputStream is = ICUData.getRequiredStream(getClass(), PATH + "index.txt");
     try {
-      InputStream is = getClass().getResourceAsStream(PATH + "index.txt");
-      if (is == null) {
-        System.err.println("could not load index.txt");
-      } else {
         BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
         String string = null;
         while (null != (string = br.readLine())) {
@@ -63,10 +67,9 @@ public class ResourceBasedPeriodFormatterDataService
           }
           localeNames.add(string);
         }
-      }
     }
-    catch (Exception e) {
-      System.err.println(e.getMessage());
+    catch (IOException e) {
+        System.err.println("IO Error reading index.txt ");
     }
     availableLocales = Collections.unmodifiableList(localeNames);
   }
@@ -94,7 +97,7 @@ public class ResourceBasedPeriodFormatterDataService
         if (ln != null) {
           String name = PATH + "pfd_" + ln + ".xml";
           try {
-            InputStream is = getClass().getResourceAsStream(name);
+            InputStream is = ICUData.getStream(getClass(), name);
             if (is == null) {
                throw new MissingResourceException("no resource named " + name,name,"");
             } else {
