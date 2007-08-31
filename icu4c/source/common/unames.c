@@ -1441,7 +1441,7 @@ u_charName(UChar32 code, UCharNameChoice nameChoice,
     }
 
     if((uint32_t)code>UCHAR_MAX_VALUE || !isDataLoaded(pErrorCode)) {
-        return u_terminateChars(buffer, bufferLength, 0, 1, pErrorCode);
+        return u_terminateChars(buffer, bufferLength, 0, pErrorCode);
     }
 
     length=0;
@@ -1472,7 +1472,7 @@ u_charName(UChar32 code, UCharNameChoice nameChoice,
         }
     }
 
-    return u_terminateChars(buffer, bufferLength, length, 1, pErrorCode);
+    return u_terminateChars(buffer, bufferLength, length, pErrorCode);
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -1490,12 +1490,12 @@ u_getISOComment(UChar32 c,
     }
 
     if((uint32_t)c>UCHAR_MAX_VALUE || !isDataLoaded(pErrorCode)) {
-        return u_terminateChars(dest, destCapacity, 0, 1, pErrorCode);
+        return u_terminateChars(dest, destCapacity, 0, pErrorCode);
     }
 
     /* the ISO comment is stored like a normal character name */
     length=getName(uCharNames, (uint32_t)c, U_ISO_COMMENT, dest, (uint16_t)destCapacity);
-    return u_terminateChars(dest, destCapacity, length, 1, pErrorCode);
+    return u_terminateChars(dest, destCapacity, length, pErrorCode);
 }
 
 U_CAPI UChar32 U_EXPORT2

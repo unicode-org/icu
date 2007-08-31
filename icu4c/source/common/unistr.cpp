@@ -723,7 +723,7 @@ UnicodeString::extract(int32_t start,
     u_UCharsToChars(getArrayStart() + start, target, length);
   }
   UErrorCode status = U_ZERO_ERROR;
-  return u_terminateChars(target, targetCapacity, length, 1, &status);
+  return u_terminateChars(target, targetCapacity, length, &status);
 }
 
 void 
