@@ -1256,7 +1256,7 @@ DateTimeMatcher::set(const UnicodeString& pattern, FormatParser* fp) {
 void
 DateTimeMatcher::set(const UnicodeString& pattern, FormatParser* fp, PtnSkeleton& skeletonResult) {
     for (int32_t i=0; i<UDATPG_FIELD_COUNT; ++i) {
-        skeleton.type[i]=NONE;
+        skeletonResult.type[i]=NONE;
     }
     fp->set(pattern);
     for (int32_t i=0; i < fp->itemNumber; i++) {
@@ -1299,7 +1299,6 @@ DateTimeMatcher::getBasePattern(UnicodeString &result ) {
             result += skeleton.baseOriginal[i];
         }
     }
-    return;
 }
 
 UnicodeString
@@ -1349,7 +1348,6 @@ DateTimeMatcher::copyFrom(const PtnSkeleton& newSkeleton) {
         this->skeleton.original[i]=newSkeleton.original[i];
         this->skeleton.baseOriginal[i]=newSkeleton.baseOriginal[i];
     }
-    return;
 }
 
 void
@@ -1360,7 +1358,6 @@ DateTimeMatcher::copyFrom() {
         this->skeleton.original[i].remove();
         this->skeleton.baseOriginal[i].remove();
     }
-    return;
 }
 
 UBool
@@ -1530,7 +1527,6 @@ void
 DistanceInfo::setTo(DistanceInfo &other) {
     missingFieldMask = other.missingFieldMask;
     extraFieldMask= other.extraFieldMask;
-    return;
 }
 
 PatternMapIterator::PatternMapIterator() {
