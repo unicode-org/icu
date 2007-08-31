@@ -602,8 +602,8 @@ DateTimePatternGenerator::replaceFieldTypes(const UnicodeString& pattern,
 }
 
 void
-DateTimePatternGenerator::setDecimal(const UnicodeString& decimal) {
-    this->decimal = decimal;
+DateTimePatternGenerator::setDecimal(const UnicodeString& newDecimal) {
+    this->decimal = newDecimal;
     // NUL-terminate for the C API.
     this->decimal.getTerminatedBuffer();
 }
@@ -1249,12 +1249,12 @@ DateTimeMatcher::DateTimeMatcher(const DateTimeMatcher& other) {
 
 void
 DateTimeMatcher::set(const UnicodeString& pattern, FormatParser* fp) {
-    PtnSkeleton skeleton;
-    return set(pattern, fp, skeleton);
+    PtnSkeleton localSkeleton;
+    return set(pattern, fp, localSkeleton);
 }
 
 void
-DateTimeMatcher::set(const UnicodeString& pattern, FormatParser* fp, PtnSkeleton& skeleton) {
+DateTimeMatcher::set(const UnicodeString& pattern, FormatParser* fp, PtnSkeleton& skeletonResult) {
     for (int32_t i=0; i<UDATPG_FIELD_COUNT; ++i) {
         skeleton.type[i]=NONE;
     }
@@ -1276,20 +1276,19 @@ DateTimeMatcher::set(const UnicodeString& pattern, FormatParser* fp, PtnSkeleton
         }
         const dtTypeElem *row = &dtTypes[canonicalIndex];
         int32_t typeValue = row->field;
-        skeleton.original[typeValue]=field;
+        skeletonResult.original[typeValue]=field;
         UChar repeatChar = row->patternChar;
         int32_t repeatCount = row->minLen > 3 ? 3: row->minLen;
         while (repeatCount-- > 0) {
-            skeleton.baseOriginal[typeValue] += repeatChar;
+            skeletonResult.baseOriginal[typeValue] += repeatChar;
         }
         int16_t subTypeValue = row->type;
         if ( row->type > 0) {
             subTypeValue += field.length();
         }
-        skeleton.type[typeValue] = (int8_t)subTypeValue;
+        skeletonResult.type[typeValue] = (int8_t)subTypeValue;
     }
-    copyFrom(skeleton);
-    return;
+    copyFrom(skeletonResult);
 }
 
 void
@@ -1344,11 +1343,11 @@ DateTimeMatcher::getDistance(const DateTimeMatcher& other, int32_t includeMask, 
 }
 
 void
-DateTimeMatcher::copyFrom(const PtnSkeleton& skeleton) {
+DateTimeMatcher::copyFrom(const PtnSkeleton& newSkeleton) {
     for (int32_t i=0; i<UDATPG_FIELD_COUNT; ++i) {
-        this->skeleton.type[i]=skeleton.type[i];
-        this->skeleton.original[i]=skeleton.original[i];
-        this->skeleton.baseOriginal[i]=skeleton.baseOriginal[i];
+        this->skeleton.type[i]=newSkeleton.type[i];
+        this->skeleton.original[i]=newSkeleton.original[i];
+        this->skeleton.baseOriginal[i]=newSkeleton.baseOriginal[i];
     }
     return;
 }
@@ -1547,8 +1546,8 @@ PatternMapIterator::~PatternMapIterator() {
 }
 
 void
-PatternMapIterator::set(PatternMap& patternMap) {
-    this->patternMap=&patternMap;
+PatternMapIterator::set(PatternMap& newPatternMap) {
+    this->patternMap=&newPatternMap;
 }
 
 PtnSkeleton* 
