@@ -144,7 +144,7 @@ import com.ibm.icu.util.VersionInfo;
  * // Create a new Collator object with additional rules
  * String addRules = "&amp; C &lt; ch, cH, Ch, CH";
  * RuleBasedCollator myCollator =
- *     new RuleBasedCollator(en_USCollator + addRules);
+ *     new RuleBasedCollator(en_USCollator.getRules() + addRules);
  * // myCollator contains the new rules
  * </pre>
  * </blockquote>
