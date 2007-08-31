@@ -319,7 +319,6 @@ icu4j/src/com/ibm/icu/dev/data/thai6.ucs -text
 icu4j/src/com/ibm/icu/dev/demo/calendar/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/demo/holiday/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/demo/impl/package.html svneol=native#text/html
-icu4j/src/com/ibm/icu/dev/demo/rbbi/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/demo/rbnf/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/demo/translit/Test_Instructions.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/demo/translit/demo.html svneol=native#text/html
