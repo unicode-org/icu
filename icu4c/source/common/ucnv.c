@@ -1762,7 +1762,7 @@ ucnv_fromUChars(UConverter *cnv,
         destLength=0;
     }
 
-    return u_terminateChars(originalDest, destCapacity, destLength, ucnv_getMinCharSize(cnv), pErrorCode);
+    return u_terminateChars(originalDest, destCapacity, destLength, pErrorCode);
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -2415,7 +2415,7 @@ ucnv_internalConvert(UConverter *outConverter, UConverter *inConverter,
 
     /* if there is no input data, we're done */
     if(source==sourceLimit) {
-        return u_terminateChars(target, targetCapacity, 0, ucnv_getMinCharSize(outConverter), pErrorCode);
+        return u_terminateChars(target, targetCapacity, 0, pErrorCode);
     }
 
     pivot=pivot2=pivotBuffer;
@@ -2459,7 +2459,7 @@ ucnv_internalConvert(UConverter *outConverter, UConverter *inConverter,
         } while(*pErrorCode==U_BUFFER_OVERFLOW_ERROR);
 
         /* done with preflighting, set warnings and errors as appropriate */
-        return u_terminateChars(target, targetCapacity, targetLength, ucnv_getMinCharSize(outConverter), pErrorCode);
+        return u_terminateChars(target, targetCapacity, targetLength, pErrorCode);
     }
 
     /* no need to call u_terminateChars() because ucnv_convertEx() took care of that */
@@ -2470,11 +2470,10 @@ U_CAPI int32_t U_EXPORT2
 ucnv_convert(const char *toConverterName, const char *fromConverterName,
              char *target, int32_t targetCapacity,
              const char *source, int32_t sourceLength,
-             UErrorCode *pErrorCode)
-{
+             UErrorCode *pErrorCode) {
     UConverter in, out; /* stack-allocated */
-    UConverter *inConverter = NULL, *outConverter = NULL;
-    int32_t targetLength = 0;
+    UConverter *inConverter, *outConverter;
+    int32_t targetLength;
 
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return 0;
@@ -2487,21 +2486,21 @@ ucnv_convert(const char *toConverterName, const char *fromConverterName,
         return 0;
     }
 
-    outConverter=ucnv_createConverter(&out, toConverterName, pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        goto cleanup;
-    }
-
     /* if there is no input data, we're done */
     if(sourceLength==0 || (sourceLength<0 && *source==0)) {
-        targetLength = u_terminateChars(target, targetCapacity, 0, ucnv_getMinCharSize(outConverter), pErrorCode);
-        goto cleanup;
+        return u_terminateChars(target, targetCapacity, 0, pErrorCode);
     }
 
     /* create the converters */
     inConverter=ucnv_createConverter(&in, fromConverterName, pErrorCode);
     if(U_FAILURE(*pErrorCode)) {
-        goto cleanup;
+        return 0;
+    }
+
+    outConverter=ucnv_createConverter(&out, toConverterName, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        ucnv_close(inConverter);
+        return 0;
     }
 
     targetLength=ucnv_internalConvert(outConverter, inConverter,
@@ -2509,7 +2508,6 @@ ucnv_convert(const char *toConverterName, const char *fromConverterName,
                                       source, sourceLength,
                                       pErrorCode);
 
-cleanup:
     ucnv_close(inConverter);
     ucnv_close(outConverter);
 
@@ -2541,7 +2539,7 @@ ucnv_convertAlgorithmic(UBool convertToAlgorithmic,
 
     /* if there is no input data, we're done */
     if(sourceLength==0 || (sourceLength<0 && *source==0)) {
-        return u_terminateChars(target, targetCapacity, 0, ucnv_getMinCharSize(cnv), pErrorCode);
+        return u_terminateChars(target, targetCapacity, 0, pErrorCode);
     }
 
     /* create the algorithmic converter */

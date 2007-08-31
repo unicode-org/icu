@@ -366,5 +366,5 @@ u_parseUTF8(const char *source, int32_t sLen, char *dest, int32_t destCapacity, 
         i++;
         read += 2;
     }
-    return u_terminateChars(dest, destCapacity, i, 1, status);
+    return u_terminateChars(dest, destCapacity, i, status);
 }

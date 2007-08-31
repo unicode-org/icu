@@ -1032,7 +1032,7 @@ ures_toUTF8String(const UChar *s16, int32_t length16,
             *pLength = 0;
         }
         if (forceCopy) {
-            u_terminateChars(dest, capacity, 0, 1, status);
+            u_terminateChars(dest, capacity, 0, status);
             return dest;
         } else {
             return "";
@@ -2460,7 +2460,7 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
         length = 0;
         result[0]=0;
     }
-    return u_terminateChars(result, resultCapacity, length, 1, status);
+    return u_terminateChars(result, resultCapacity, length, status);
 }
 
 U_CAPI UEnumeration* U_EXPORT2

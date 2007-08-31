@@ -774,7 +774,7 @@ _getKeywords(const char *localeID,
                 *valLen = valuesLen;
             }
         }
-        return u_terminateChars(keywords, keywordCapacity, keywordsLen, 1, status);
+        return u_terminateChars(keywords, keywordCapacity, keywordsLen, status);   
     } else {
         return 0;
     }
@@ -856,14 +856,14 @@ uloc_getKeywordValue(const char* localeID,
                       startSearchHere--;
                   }
                   uprv_strncpy(buffer, nextSeparator, startSearchHere - nextSeparator);
-                  result = u_terminateChars(buffer, bufferCapacity, (int32_t)(startSearchHere - nextSeparator), 1, status);
+                  result = u_terminateChars(buffer, bufferCapacity, (int32_t)(startSearchHere - nextSeparator), status);
               } else if(!startSearchHere && (int32_t)uprv_strlen(nextSeparator) < bufferCapacity) { /* last item in string */
                   i = (int32_t)uprv_strlen(nextSeparator);
                   while(nextSeparator[i - 1] == ' ') {
                       i--;
                   }
                   uprv_strncpy(buffer, nextSeparator, i);
-                  result = u_terminateChars(buffer, bufferCapacity, i, 1, status);
+                  result = u_terminateChars(buffer, bufferCapacity, i, status);
               } else {
                   /* give a bigger buffer, please */
                   *status = U_BUFFER_OVERFLOW_ERROR;
@@ -1766,7 +1766,7 @@ _canonicalize(const char* localeID,
         uprv_strncpy(result, localeBuffer, (len > resultCapacity) ? resultCapacity : len);
     }
 
-    return u_terminateChars(result, resultCapacity, len, 1, err);
+    return u_terminateChars(result, resultCapacity, len, err);
 }
 
 /* ### ID parsing API **************************************************/
@@ -1796,7 +1796,7 @@ uloc_getParent(const char*    localeID,
     if(i>0 && parent != localeID) {
         uprv_memcpy(parent, localeID, uprv_min(i, parentCapacity));
     }
-    return u_terminateChars(parent, parentCapacity, i, 1, err);
+    return u_terminateChars(parent, parentCapacity, i, err);
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -1817,7 +1817,7 @@ uloc_getLanguage(const char*    localeID,
     }
 
     i=_getLanguage(localeID, language, languageCapacity, NULL);
-    return u_terminateChars(language, languageCapacity, i, 1, err);
+    return u_terminateChars(language, languageCapacity, i, err);
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -1841,7 +1841,7 @@ uloc_getScript(const char*    localeID,
     if(_isIDSeparator(*localeID)) {
         i=_getScript(localeID+1, script, scriptCapacity, NULL);
     }
-    return u_terminateChars(script, scriptCapacity, i, 1, err);
+    return u_terminateChars(script, scriptCapacity, i, err);
 }
 
 U_CAPI int32_t  U_EXPORT2
@@ -1874,7 +1874,7 @@ uloc_getCountry(const char* localeID,
             i=_getCountry(localeID+1, country, countryCapacity, NULL);
         }
     }
-    return u_terminateChars(country, countryCapacity, i, 1, err);
+    return u_terminateChars(country, countryCapacity, i, err);
 }
 
 U_CAPI int32_t  U_EXPORT2
@@ -1919,7 +1919,7 @@ uloc_getVariant(const char* localeID,
         i=_getVariant(localeID+1, '@', variant, variantCapacity);
     }
 */
-    return u_terminateChars(variant, variantCapacity, i, 1, err);
+    return u_terminateChars(variant, variantCapacity, i, err);
 }
 
 U_CAPI int32_t  U_EXPORT2
@@ -2978,7 +2978,7 @@ uloc_acceptLanguage(char *result, int32_t resultAvailable,
                     uprv_free(fallbackList[j]);
                 }
                 uprv_free(fallbackList);
-                return u_terminateChars(result, resultAvailable, len, 1, status);
+                return u_terminateChars(result, resultAvailable, len, status);   
             }
             if(len>maxLen) {
                 maxLen = len;
@@ -3018,7 +3018,7 @@ uloc_acceptLanguage(char *result, int32_t resultAvailable,
                             uprv_free(fallbackList[j]);
                         }
                         uprv_free(fallbackList);
-                        return u_terminateChars(result, resultAvailable, len, 1, status);
+                        return u_terminateChars(result, resultAvailable, len, status);
                     }
                 }
                 uenum_reset(availableLocales, status);    
