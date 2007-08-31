@@ -108,26 +108,16 @@ static UnicodeString *split(const UnicodeString &src, UChar ch, int32_t &splits)
 
 static char *extractBytes(const UnicodeString &source, const char *codepage, int32_t &length)
 {
-    UErrorCode status = U_ZERO_ERROR;
-    UConverter *cnv = ucnv_open(codepage, &status);
+    int32_t sLength = source.length();
     char *bytes = NULL;
 
-    length = source.extract(NULL, 0, cnv, status);
+    length = source.extract(0, sLength, NULL, codepage);
 
-    if (status == U_BUFFER_OVERFLOW_ERROR) {
-        status = U_ZERO_ERROR;
-    }
-
-
-    if (U_SUCCESS(status) && length > 0) {
-        int32_t capacity = length + ucnv_getMinCharSize(cnv);
-
-        bytes = NEW_ARRAY(char, capacity);
-        source.extract(bytes, capacity, cnv, status);
+    if (length > 0) {
+        bytes = NEW_ARRAY(char, length + 1);
+        source.extract(0, sLength, bytes, codepage);
     }
     
-    ucnv_close(cnv);
-
     return bytes;
 }
 
