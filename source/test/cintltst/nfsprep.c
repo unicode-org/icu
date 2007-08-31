@@ -129,7 +129,7 @@ CLEANUP:
         free(b3);
     }
 
-    return u_terminateChars(dest, destCapacity, reqLength, 1, status);
+    return u_terminateChars(dest, destCapacity, reqLength, status);
 }
 
 /* sorted array for binary search*/
@@ -273,7 +273,7 @@ CLEANUP:
         free(s);
     }
     
-    return u_terminateChars(dest, destCapacity, reqLen, 1, status);
+    return u_terminateChars(dest, destCapacity, reqLen, status);
 }
 
 int32_t

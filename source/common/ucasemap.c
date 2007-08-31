@@ -509,7 +509,7 @@ caseMap(const UCaseMap *csm,
         }
     }
 
-    return u_terminateChars((char *)dest, destCapacity, destLength, 1, pErrorCode);
+    return u_terminateChars((char *)dest, destCapacity, destLength, pErrorCode);
 }
 
 /* public API functions */
