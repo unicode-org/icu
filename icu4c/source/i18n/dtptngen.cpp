@@ -945,7 +945,6 @@ DateTimePatternGenerator::getRedundants(UErrorCode& status) {
             continue;
         }
         if ( skipMatcher == NULL ) {
-            delete skipMatcher;
             skipMatcher = new DateTimeMatcher(current);
         }
         else {

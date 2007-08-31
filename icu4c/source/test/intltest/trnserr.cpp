@@ -137,8 +137,6 @@ void TransliteratorErrorTest::TestTransliteratorErrors() {
     if(t1!=0 || U_SUCCESS(status)){
         delete t1;
         errln("FAIL: construction of bogus ID \"LATINGREEK-GREEKLATIN\"");
-    } else {
-        delete t1;
     }
     status = U_ZERO_ERROR;
     Transliterator* t2 = Transliterator::createFromRules(newID, newIDRules, UTRANS_FORWARD, parseError, status);
