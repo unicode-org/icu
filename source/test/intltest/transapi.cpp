@@ -119,7 +119,7 @@ void TransliteratorAPITest::TestgetID() {
     Transliterator* t5=Transliterator::createInstance("Latin-Devanagari", UTRANS_FORWARD, parseError, status);
     if(t5 == 0)
         errln("FAIL: construction");
-    if(t1->getID() != t5->getID() || t5->getID() != t3->getID() || t1->getID() != t3->getID())
+    else if(t1->getID() != t5->getID() || t5->getID() != t3->getID() || t1->getID() != t3->getID())
         errln("FAIL: getID or clone failed");
 
 
@@ -589,13 +589,11 @@ void TransliteratorAPITest::TestKeyboardTransliterator3(){
     UTransPosition index={0, 0, 0, 0};
     logln("Testing transliterate(Replaceable, int32_t, UErrorCode)");
     Transliterator *t=Transliterator::createInstance("Any-Hex", UTRANS_FORWARD, parseError, status);
-    if(U_FAILURE(status)) {
+    if(t == 0 || U_FAILURE(status)) {
       errln("Error creating transliterator %s", u_errorName(status));
       delete t;
       return;
     }
-    if(t == 0)
-        errln("FAIL : construction");
     for(uint32_t i=0; i<sizeof(Data)/sizeof(Data[0]); i=i+4){
         UnicodeString log;
         index.contextStart=getInt(Data[i+0]);
@@ -777,18 +775,18 @@ void TransliteratorAPITest::TestGetAdoptFilter(){
     UErrorCode status = U_ZERO_ERROR;
     UParseError parseError;
     Transliterator *t=Transliterator::createInstance("Any-Hex", UTRANS_FORWARD, parseError, status);
-    if(U_FAILURE(status)) {
-      errln("Error creating transliterator %s", u_errorName(status));
-      delete t;
-      return;
+    if(t == 0 || U_FAILURE(status)) {
+        errln("Error creating transliterator %s", u_errorName(status));
+        delete t;
+        return;
     }
-    if(t == 0)
-        errln("FAIL : construction");
     const UnicodeFilter *u=t->getFilter();
     if(u != NULL){
-      errln("FAIL: getFilter failed. Didn't return null when the transliterator used no filtering");
+        errln("FAIL: getFilter failed. Didn't return null when the transliterator used no filtering");
+        delete t;
+        return;
     }
-          
+
     UnicodeString got, temp, message;
     UnicodeString data="ABCabcbbCBa";
     temp = data;

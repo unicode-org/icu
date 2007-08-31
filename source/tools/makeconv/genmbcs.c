@@ -130,9 +130,12 @@ MBCSInit(MBCSData *mbcsData, UCMFile *ucm) {
 NewConverter *
 MBCSOpen(UCMFile *ucm) {
     MBCSData *mbcsData=(MBCSData *)uprv_malloc(sizeof(MBCSData));
-    if(mbcsData!=NULL) {
-        MBCSInit(mbcsData, ucm);
+    if(mbcsData==NULL) {
+        printf("out of memory\n");
+        exit(U_MEMORY_ALLOCATION_ERROR);
     }
+
+    MBCSInit(mbcsData, ucm);
     return &mbcsData->newConverter;
 }
 

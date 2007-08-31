@@ -1017,21 +1017,21 @@ TimeZoneRuleTest::TestVTimeZoneHeaderProps(void) {
     VTimeZone *newvtz1 = NULL;
     if (U_FAILURE(status)) {
         errln("FAIL: error returned while writing VTIMEZONE data 1");
+        return;
+    }
+    // Create a new one
+    newvtz1 = VTimeZone::createVTimeZone(vtzdata, status);
+    if (U_FAILURE(status)) {
+        errln("FAIL: error returned while loading VTIMEZONE data 1");
     } else {
-        // Create a new one
-        newvtz1 = VTimeZone::createVTimeZone(vtzdata, status);
-        if (U_FAILURE(status)) {
-            errln("FAIL: error returned while loading VTIMEZONE data 1");
-        } else {
-            // Check if TZURL and LAST-MODIFIED properties are preserved
-            newvtz1->getTZURL(tzurl);
-            if (tzurl != TESTURL1) {
-                errln("FAIL: TZURL 1 was not preserved");
-            }
-            vtz->getLastModified(lmod);
-            if (lastmod != lmod) {
-                errln("FAIL: LAST-MODIFIED was not preserved");
-            }
+        // Check if TZURL and LAST-MODIFIED properties are preserved
+        newvtz1->getTZURL(tzurl);
+        if (tzurl != TESTURL1) {
+            errln("FAIL: TZURL 1 was not preserved");
+        }
+        vtz->getLastModified(lmod);
+        if (lastmod != lmod) {
+            errln("FAIL: LAST-MODIFIED was not preserved");
         }
     }
 
