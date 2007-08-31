@@ -947,7 +947,7 @@
     </javac>
   </target>
 
-  <target name="calendarTests" depends="calendar" description="test calendar modular build target">
+  <target name="calendarTests" depends="calendar,testdata" description="test calendar modular build target">
     <javac srcdir="${src.dir}"
            destdir="${build.dir}"
            classpathref="build.classpath"
@@ -960,6 +960,7 @@
     </javac>
   </target>
 
+  <!-- Module: Collator -->
   <target name="copyCollatorData" depends="initBase">
     <unjar src="${icudatajar.file}" dest="${build.dir}">
       <patternset>
@@ -971,7 +972,6 @@
     <touch file="${build.dir}/${icu4j.data.path}/uprops.icu" />
   </target>
 
-  <!-- Module: Collator -->
   <target name="collator" depends="init,copyCollatorData" description="modular build of collator services">
     <javac srcdir="${src.dir}"
            destdir="${build.dir}"
@@ -1064,7 +1064,7 @@
       <include name="com/ibm/icu/util/CalendarServiceShim.java"/>    </javac>
   </target>
 
-  <target name="formatTests" depends="format" description="test format modular build target">
+  <target name="formatTests" depends="format,testdata" description="test format modular build target">
     <javac srcdir="${src.dir}"
            destdir="${build.dir}"
            classpathref="build.classpath"
