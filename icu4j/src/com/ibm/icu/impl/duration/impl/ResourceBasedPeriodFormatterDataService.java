@@ -69,7 +69,7 @@ public class ResourceBasedPeriodFormatterDataService
         }
     }
     catch (IOException e) {
-        throw new MissingResourceException("IO Error reading "+PATH + "index.txt: " + e.toString(),PATH + "index.txt","");
+        throw new IllegalStateException("IO Error reading "+PATH + "index.txt: " + e.toString());
     }
     availableLocales = Collections.unmodifiableList(localeNames);
   }
