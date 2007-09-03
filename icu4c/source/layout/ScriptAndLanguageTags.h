@@ -1,11 +1,11 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2006. All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2007. All Rights Reserved.
  *
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
  *
- * Generated on: 08/21/2006 02:35:14 PM HST
+ * Generated on: 09/03/2007 08:58:56 AM HST
  */
 
 #ifndef __SCRIPTANDLANGUAGES_H
@@ -124,6 +124,18 @@ const LETag vispScriptTag = 0x76697370; /* 'visp' (VISP) */
 const LETag xsuxScriptTag = 0x78737578; /* 'xsux' (CUNEIFORM) */
 const LETag zxxxScriptTag = 0x7A787878; /* 'zxxx' (ZXXX) */
 const LETag zzzzScriptTag = 0x7A7A7A7A; /* 'zzzz' (UNKNOWN) */
+const LETag cariScriptTag = 0x63617269; /* 'cari' (CARI) */
+const LETag jpanScriptTag = 0x6A70616E; /* 'jpan' (JPAN) */
+const LETag lanaScriptTag = 0x6C616E61; /* 'lana' (LANA) */
+const LETag lyciScriptTag = 0x6C796369; /* 'lyci' (LYCI) */
+const LETag lydiScriptTag = 0x6C796469; /* 'lydi' (LYDI) */
+const LETag olckScriptTag = 0x6F6C636B; /* 'olck' (OLCK) */
+const LETag rjngScriptTag = 0x726A6E67; /* 'rjng' (RJNG) */
+const LETag saurScriptTag = 0x73617572; /* 'saur' (SAUR) */
+const LETag sgnwScriptTag = 0x73676E77; /* 'sgnw' (SGNW) */
+const LETag sundScriptTag = 0x73756E64; /* 'sund' (SUND) */
+const LETag moonScriptTag = 0x6D6F6F6E; /* 'moon' (MOON) */
+const LETag mteiScriptTag = 0x6D746569; /* 'mtei' (MTEI) */
 
 const LETag nullScriptTag = 0x00000000; /* ''     (NULL) */
 

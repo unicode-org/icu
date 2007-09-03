@@ -380,7 +380,19 @@ static const IndicClassTable * const indicClassTables[scriptCodeCount] = {
     NULL,            /* 'visp' (VISP) */
     NULL,            /* 'xsux' (CUNEIFORM) */
     NULL,            /* 'zxxx' (ZXXX) */
-    NULL             /* 'zzzz' (UNKNOWN) */
+    NULL,            /* 'zzzz' (UNKNOWN) */
+    NULL,            /* 'cari' (CARI) */
+    NULL,            /* 'jpan' (JPAN) */
+    NULL,            /* 'lana' (LANA) */
+    NULL,            /* 'lyci' (LYCI) */
+    NULL,            /* 'lydi' (LYDI) */
+    NULL,            /* 'olck' (OLCK) */
+    NULL,            /* 'rjng' (RJNG) */
+    NULL,            /* 'saur' (SAUR) */
+    NULL,            /* 'sgnw' (SGNW) */
+    NULL,            /* 'sund' (SUND) */
+    NULL,            /* 'moon' (MOON) */
+    NULL             /* 'mtei' (MTEI) */
 };
 
 IndicClassTable::CharClass IndicClassTable::getCharClass(LEUnicode ch) const
