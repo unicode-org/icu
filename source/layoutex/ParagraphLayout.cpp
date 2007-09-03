@@ -239,7 +239,19 @@ static const le_bool complexTable[scriptCodeCount] = {
     FALSE,  /* Visp */
     FALSE,  /* Xsux */
     FALSE,  /* Zxxx */
-    FALSE   /* Zzzz */
+    FALSE,  /* Zzzz */
+    FALSE,  /* Cari */
+    FALSE,  /* Jpan */
+    FALSE,  /* Lana */
+    FALSE,  /* Lyci */
+    FALSE,  /* Lydi */
+    FALSE,  /* Olck */
+    FALSE,  /* Rjng */
+    FALSE,  /* Saur */
+    FALSE,  /* Sgnw */
+    FALSE,  /* Sund */
+    FALSE,  /* Moon */
+    FALSE   /* Mtei */
 };
 
 
@@ -812,7 +824,7 @@ le_int32 ParagraphLayout::getLanguageCode(const Locale *locale)
 
 le_bool ParagraphLayout::isComplex(UScriptCode script)
 {
-    if (script < 0 || script >= USCRIPT_CODE_LIMIT) {
+    if (script < 0 || script >= (UScriptCode) scriptCodeCount) {
         return FALSE;
     }
 
