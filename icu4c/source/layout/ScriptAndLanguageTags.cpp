@@ -1,11 +1,11 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2006. All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2007. All Rights Reserved.
  *
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
  *
- * Generated on: 08/21/2006 02:35:14 PM HST
+ * Generated on: 09/03/2007 08:58:56 AM HST
  */
 
 #include "LETypes.h"
@@ -118,7 +118,19 @@ const LETag OpenTypeLayoutEngine::scriptTags[] = {
     vispScriptTag, /* 'visp' (VISP) */
     xsuxScriptTag, /* 'xsux' (CUNEIFORM) */
     zxxxScriptTag, /* 'zxxx' (ZXXX) */
-    zzzzScriptTag  /* 'zzzz' (UNKNOWN) */
+    zzzzScriptTag, /* 'zzzz' (UNKNOWN) */
+    cariScriptTag, /* 'cari' (CARI) */
+    jpanScriptTag, /* 'jpan' (JPAN) */
+    lanaScriptTag, /* 'lana' (LANA) */
+    lyciScriptTag, /* 'lyci' (LYCI) */
+    lydiScriptTag, /* 'lydi' (LYDI) */
+    olckScriptTag, /* 'olck' (OLCK) */
+    rjngScriptTag, /* 'rjng' (RJNG) */
+    saurScriptTag, /* 'saur' (SAUR) */
+    sgnwScriptTag, /* 'sgnw' (SGNW) */
+    sundScriptTag, /* 'sund' (SUND) */
+    moonScriptTag, /* 'moon' (MOON) */
+    mteiScriptTag  /* 'mtei' (MTEI) */
 };
 
 const LETag OpenTypeLayoutEngine::languageTags[] = {
