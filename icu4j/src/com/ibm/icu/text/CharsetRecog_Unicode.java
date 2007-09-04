@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -37,11 +37,11 @@ abstract class CharsetRecog_Unicode extends CharsetRecognizer {
         {
             byte[] input = det.fRawInput;
             
-            if ((input[0] & 0xFF) == 0xFE && (input[1] & 0xFF) == 0xFF) {
+            if (input.length>=2 && ((input[0] & 0xFF) == 0xFE && (input[1] & 0xFF) == 0xFF)) {
                 return 100;
             }
             
-            // TODO: Do some statastics to check for unsigned UTF-16BE
+            // TODO: Do some statistics to check for unsigned UTF-16BE
             return 0;
         }
     }
@@ -57,11 +57,17 @@ abstract class CharsetRecog_Unicode extends CharsetRecognizer {
         {
             byte[] input = det.fRawInput;
             
-            if ((input[0] & 0xFF) == 0xFF && (input[1] & 0xFF) == 0xFE && (input[2] != 0x00 || input[3] != 0x00)) {
-                return 100;
-            }
+            if (input.length >= 2 && ((input[0] & 0xFF) == 0xFF && (input[1] & 0xFF) == 0xFE))
+            {
+               // An LE BOM is present.
+               if (input.length>=4 && input[2] == 0x00 && input[3] == 0x00) {
+                   // It is probably UTF-32 LE, not UTF-16
+                   return 0;
+               }
+               return 100;
+            }        
             
-            // TODO: Do some statastics to check for unsigned UTF-16LE
+            // TODO: Do some statistics to check for unsigned UTF-16LE
             return 0;
         }
     }
@@ -81,6 +87,9 @@ abstract class CharsetRecog_Unicode extends CharsetRecognizer {
             boolean hasBOM = false;
             int confidence = 0;
             
+            if (limit==0) {
+                return 0;
+            }
             if (getChar(input, 0) == 0x0000FEFF) {
                 hasBOM = true;
             }
@@ -96,7 +105,7 @@ abstract class CharsetRecog_Unicode extends CharsetRecognizer {
             }
             
             
-            // Cook up some sort of confidence score, based on presense of a BOM
+            // Cook up some sort of confidence score, based on presence of a BOM
             //    and the existence of valid and/or invalid multi-byte sequences.
             if (hasBOM && numInvalid==0) {
                 confidence = 100;
@@ -107,7 +116,7 @@ abstract class CharsetRecog_Unicode extends CharsetRecognizer {
             } else if (numValid > 0 && numInvalid == 0) {
                 confidence = 80;
             } else if (numValid > numInvalid*10) {
-                // Probably corruput UTF-32BE data.  Valid sequences aren't likely by chance.
+                // Probably corrupt UTF-32BE data.  Valid sequences aren't likely by chance.
                 confidence = 25;
             }
             
