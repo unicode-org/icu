@@ -1,7 +1,7 @@
 //##header J2SE15
 /**
  *******************************************************************************
- * Copyright (C) 2005-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -308,6 +308,29 @@ public class TestCharsetDetector extends TestFmwk
         
         if (m.getName() != "ISO-8859-1") {
             errln("Text without C1 bytes not correctly detected as ISO-8859-1.");
+        }
+    }
+    
+    public void TestShortInput() {
+        // Test that detection with very short byte strings does not crash and burn.
+        // The shortest input that should produce positive detection result is two bytes, 
+        //   a UTF-16 BOM.
+        // TODO:  Detector confidence levels needs to be refined for very short input.
+        //        Too high now, for some charsets that happen to be compatible with a few bytes of input.
+        byte [][]  shortBytes = new byte [][] 
+            {
+                {},
+                {(byte)0x0a},
+                {(byte)'A', (byte)'B'},
+                {(byte)'A', (byte)'B', (byte)'C'},
+                {(byte)'A', (byte)'B', (byte)'C', (byte)'D'}
+            };
+        
+        CharsetDetector det = new CharsetDetector();
+        CharsetMatch m;
+        for (int i=0; i<shortBytes.length; i++) {
+            det.setText(shortBytes[i]);
+            m = det.detect();
         }
     }
     
