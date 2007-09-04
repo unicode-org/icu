@@ -40,6 +40,14 @@ U_NAMESPACE_USE
 #define CH_COMMA 0x002C
 
 U_CDECL_BEGIN
+
+static void U_CALLCONV ScriptTest(void)
+{
+    if (scriptCodeCount != USCRIPT_CODE_LIMIT) {
+        log_err("ScriptCodes::scriptCodeCount = %n, but UScriptCode::USCRIPT_CODE_LIMIT = %n\n", scriptCodeCount, USCRIPT_CODE_LIMIT);
+    }
+}
+
 static void U_CALLCONV ParamTest(void)
 {
     LEErrorCode status = LE_NO_ERROR;
@@ -709,6 +717,7 @@ U_CDECL_END
 
 static void addAllTests(TestNode **root)
 {
+    addTest(root, &ScriptTest,     "api/ScriptTest");
     addTest(root, &ParamTest,      "api/ParameterTest");
     addTest(root, &FactoryTest,    "api/FactoryTest");
     addTest(root, &AccessTest,     "layout/AccessTest");
