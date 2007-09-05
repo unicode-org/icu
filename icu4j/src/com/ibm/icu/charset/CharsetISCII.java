@@ -1069,6 +1069,7 @@ class CharsetISCII extends CharsetICU {
         
         protected void implReset() {
             super.implReset();
+            extraInfo.isFirstBuffer = true;
         }
         
         protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush) {
