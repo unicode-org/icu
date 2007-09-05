@@ -1057,7 +1057,9 @@ public class TimeZoneRegression extends TestFmwk {
         String[] tzids = TimeZone.getAvailableIDs();
         for (int i = 0; i < tzids.length; i++) {
             TimeZone tz = TimeZone.getTimeZone(tzids[i]);
-            // Increse offset for 30 minutes
+            boolean useDst = tz.useDaylightTime();
+
+            // Increase offset for 30 minutes
             int newRawOffset = tz.getRawOffset() + 30*60*1000;
             try {
                 tz.setRawOffset(newRawOffset);
@@ -1067,6 +1069,16 @@ public class TimeZoneRegression extends TestFmwk {
             int offset = tz.getRawOffset();
             if (offset != newRawOffset) {
                 errln("FAIL: Modified zone(" + tz.getID() + ") - getRawOffset returns " + offset + "/ Expected: " + newRawOffset);
+            }
+            // Ticket#5917
+            // Check if DST observation status is not unexpectedly changed to true.
+            // When original Olson time zone observes DST, setRawOffset may change DST observation
+            // status for some zones.  For example, Asia/Jerusalem, which currently use no DST after
+            // 2037 in tzdata 2007g.  But, the opposite change (false -> true) should never happen.
+            if (!useDst) {
+                if (tz.useDaylightTime()) {
+                    errln("FAIL: Modified zone(" + tz.getID() + ") - useDaylightTime has changed from false to true.");
+                }
             }
             // Make sure the offset is preserved in a clone
             TimeZone tzClone = (TimeZone)tz.clone();
