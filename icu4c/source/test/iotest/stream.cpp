@@ -130,6 +130,70 @@ static void U_CALLCONV TestStream(void)
 #endif
 }
 
+#define IOSTREAM_GOOD_SHIFT 3
+#define IOSTREAM_GOOD (1<<IOSTREAM_GOOD_SHIFT)
+#define IOSTREAM_BAD_SHIFT 2
+#define IOSTREAM_BAD (1<<IOSTREAM_BAD_SHIFT)
+#define IOSTREAM_EOF_SHIFT 1
+#define IOSTREAM_EOF (1<<IOSTREAM_EOF_SHIFT)
+#define IOSTREAM_FAIL_SHIFT 0
+#define IOSTREAM_FAIL (1<<IOSTREAM_FAIL_SHIFT)
+
+static int32_t getBitStatus(const iostream&  stream) {
+    return (stream.good()<<IOSTREAM_GOOD_SHIFT)
+        | (stream.bad()<<IOSTREAM_BAD_SHIFT)
+        | (stream.eof()<<IOSTREAM_EOF_SHIFT)
+        | (stream.fail()<<IOSTREAM_FAIL_SHIFT);
+}
+
+void
+printBits(const iostream&  stream)
+{
+    int32_t status = getBitStatus(stream);
+    log_verbose("status 0x%02X (", status);
+    if (status & IOSTREAM_GOOD) {
+        log_verbose("good");
+    }
+    if (status & IOSTREAM_BAD) {
+        log_verbose("bad");
+    }
+    if (status & IOSTREAM_EOF) {
+        log_verbose("eof");
+    }
+    if (status & IOSTREAM_FAIL) {
+        log_verbose("fail");
+    }
+    log_verbose(")\n");
+}
+
+void
+testString(
+            UnicodeString&        str,
+            const char*     testString,
+            int32_t expectedStatus)
+{
+#ifdef USE_SSTREAM
+    stringstream sstrm;
+#else
+    strstream sstrm;
+#endif
+
+    sstrm << testString;
+
+    /*log_verbose("iostream before operator::>>() call \"%s\" ", testString);
+    printBits(sstrm);*/
+
+    sstrm >> str;
+
+    log_verbose("iostream after operator::>>() call \"%s\" ", testString);
+    printBits(sstrm);
+
+    if (getBitStatus(sstrm) != expectedStatus) {
+        printBits(sstrm);
+        log_err("Expected status %d, Got %d. See verbose output for details\n", getBitStatus(sstrm), expectedStatus);
+    }
+}
+
 static void U_CALLCONV TestStreamEOF(void)
 {
     UnicodeString dest;
@@ -158,6 +222,16 @@ static void U_CALLCONV TestStreamEOF(void)
         log_err("Reading of string did not return expected string\n");
     }
     fs.close();
+
+    log_verbose("Testing operator >> for UnicodeString...\n");
+
+    UnicodeString UStr;
+    testString(UStr, "", IOSTREAM_EOF|IOSTREAM_FAIL);
+    testString(UStr, "foo", IOSTREAM_EOF);
+    testString(UStr, "   ", IOSTREAM_EOF|IOSTREAM_FAIL);
+    testString(UStr, "   bar", IOSTREAM_EOF);
+    testString(UStr, "bar   ", IOSTREAM_GOOD);
+    testString(UStr, "   bar   ", IOSTREAM_GOOD);
 }
 U_CDECL_END
 
