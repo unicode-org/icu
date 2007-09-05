@@ -87,7 +87,7 @@ operator>>(STD_ISTREAM& stream, UnicodeString& str)
         const char *s, *sLimit;
         char ch;
         UChar ch32;
-        UBool intialWhitespace = TRUE;
+        UBool initialWhitespace = TRUE;
         UBool continueReading = TRUE;
 
         /* We need to consume one byte at a time to see what is considered whitespace. */
@@ -95,7 +95,9 @@ operator>>(STD_ISTREAM& stream, UnicodeString& str)
             ch = stream.get();
             if (stream.eof()) {
                 // The EOF is only set after the get() of an unavailable byte.
-                stream.clear(STD_NAMESPACE ios_base::eofbit);
+                if (!initialWhitespace) {
+                    stream.clear(STD_NAMESPACE ios_base::eofbit);
+                }
                 continueReading = FALSE;
             }
             sLimit = &ch + (int)continueReading;
@@ -116,7 +118,7 @@ operator>>(STD_ISTREAM& stream, UnicodeString& str)
                 while (uBuffIdx < uBuffSize) {
                     U16_NEXT(uBuffer, uBuffIdx, uBuffSize, ch32);
                     if (u_isWhitespace(ch32)) {
-                        if (!intialWhitespace) {
+                        if (!initialWhitespace) {
                             buffer[idx++] = ch;
                             while (idx > 0) {
                                 stream.putback(buffer[--idx]);
@@ -127,7 +129,7 @@ operator>>(STD_ISTREAM& stream, UnicodeString& str)
                     }
                     else {
                         str.append(ch32);
-                        intialWhitespace = FALSE;
+                        initialWhitespace = FALSE;
                     }
                 }
                 idx = 0;
