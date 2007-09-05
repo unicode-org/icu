@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-*   Copyright (C) 1999-2006 International Business Machines Corporation   *
+*   Copyright (C) 1999-2007 International Business Machines Corporation   *
 *   and others. All rights reserved.                                      *
 ***************************************************************************
 */
@@ -368,8 +368,7 @@ ubrk_swap(const UDataSwapper *ds, const void *inData, int32_t length, void *outD
     // Each state table begins with several 32 bit fields.  Calculate the size
     //   in bytes of these.
     //
-    RBBIStateTable *stp = NULL;
-    int32_t         topSize = (char *)stp->fTableData - (char *)stp;
+    int32_t         topSize = offsetof(RBBIStateTable, fTableData);
 
     // Forward state table.  
     tableStartOffset = ds->readUInt32(rbbiDH->fFTable);
