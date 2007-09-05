@@ -829,26 +829,54 @@ public class SimpleDateFormat extends DateFormat {
                 if (zid != null) {
                     if (patternCharIndex == TIMEZONE_GENERIC_FIELD) {
                         if(count < 4){
-                            res = formatData.getZoneString(zid, DateFormatSymbols.TIMEZONE_SHORT_GENERIC);
-                            if ( !formatData.isCommonlyUsed(zid)) {
-                               res = null;
-                            }
-                            if ( res == null ) {
-                               mz = formatData.getMetazoneInfo(zid, DateFormatSymbols.TIMEZONE_SHORT_GENERIC,cal);
-                               if ( mz == null || !formatData.isCommonlyUsed(mz.mzid)) {
+                            if (cal.getTimeZone().useDaylightTime()) {
+                                res = formatData.getZoneString(zid, DateFormatSymbols.TIMEZONE_SHORT_GENERIC);
+                                if ( !formatData.isCommonlyUsed(zid)) {
                                    res = null;
-                               }
-                               else {
-                                   res = mz.value;
-                               }
+                                }
+                                if ( res == null ) {
+                                   mz = formatData.getMetazoneInfo(zid, DateFormatSymbols.TIMEZONE_SHORT_GENERIC,cal);
+                                   if ( mz == null || !formatData.isCommonlyUsed(mz.mzid)) {
+                                       res = null;
+                                   }
+                                   else {
+                                       res = mz.value;
+                                   }
+                                }
+                            }
+                            else {
+                                res = formatData.getZoneString(zid, DateFormatSymbols.TIMEZONE_SHORT_STANDARD);
+                                if ( !formatData.isCommonlyUsed(zid)) {
+                                   res = null;
+                                }
+                                if ( res == null ) {
+                                   mz = formatData.getMetazoneInfo(zid, DateFormatSymbols.TIMEZONE_SHORT_STANDARD,cal);
+                                   if ( mz == null || !formatData.isCommonlyUsed(mz.mzid)) {
+                                       res = null;
+                                   }
+                                   else {
+                                       res = mz.value;
+                                   }
+                                }
                             }
                         }else{
-                            res = formatData.getZoneString(zid, DateFormatSymbols.TIMEZONE_LONG_GENERIC);
-                            if ( res == null ) {
-                               mz = formatData.getMetazoneInfo(zid, DateFormatSymbols.TIMEZONE_LONG_GENERIC,cal);
-                               if ( mz != null ) {
-                                   res = mz.value;
-                               }
+                            if (cal.getTimeZone().useDaylightTime()) {
+                                res = formatData.getZoneString(zid, DateFormatSymbols.TIMEZONE_LONG_GENERIC);
+                                if ( res == null ) {
+                                   mz = formatData.getMetazoneInfo(zid, DateFormatSymbols.TIMEZONE_LONG_GENERIC,cal);
+                                   if ( mz != null ) {
+                                       res = mz.value;
+                                   }
+                                }
+                            }
+                            else {
+                                res = formatData.getZoneString(zid, DateFormatSymbols.TIMEZONE_LONG_STANDARD);
+                                if ( res == null ) {
+                                   mz = formatData.getMetazoneInfo(zid, DateFormatSymbols.TIMEZONE_LONG_STANDARD,cal);
+                                   if ( mz != null ) {
+                                       res = mz.value;
+                                   }
+                                }
                             }
                         }
                     } else if (patternCharIndex == TIMEZONE_SPECIAL_FIELD) {

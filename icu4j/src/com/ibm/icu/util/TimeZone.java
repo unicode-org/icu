@@ -507,10 +507,15 @@ abstract public class TimeZone implements Serializable, Cloneable {
         }
         String[] patterns = { "z", "zzzz", "v", "vvvv" };
         format.applyPattern(patterns[style]);      
-        format.setTimeZone(tz);
-        // Format a date in January.  We use the value 10*ONE_DAY == Jan 11 1970
-        // 0:00 GMT.
-        return format.format(new Date(864000000L));
+        if ( style >= 2 ) {
+            format.setTimeZone(this);
+            return format.format(new Date());
+        } else {
+            format.setTimeZone(tz);
+            // Format a date in January.  We use the value 10*ONE_DAY == Jan 11 1970
+            // 0:00 GMT.
+            return format.format(new Date(864000000L));
+        }
     }
 
     /**
