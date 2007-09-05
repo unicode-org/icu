@@ -792,24 +792,47 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
             zoneIDCanonicalize(zid);
             if (patternCharIndex == UDAT_TIMEZONE_GENERIC_FIELD) {
                 if(count < 4){
-                    fSymbols->getZoneString(zid, DateFormatSymbols::TIMEZONE_SHORT_GENERIC, displayString, status);
-                    if ( !fSymbols->isCommonlyUsed(zid)) {
-                        displayString.remove();
-                    }
-                    if(displayString.length()==0) {
-                        mzid = fSymbols->getMetazoneString(zid, DateFormatSymbols::TIMEZONE_SHORT_GENERIC, cal, displayString, status);
-                        if ( !fSymbols->isCommonlyUsed(mzid)) {
+                    if (cal.getTimeZone().useDaylightTime()) {
+                        fSymbols->getZoneString(zid, DateFormatSymbols::TIMEZONE_SHORT_GENERIC, displayString, status);
+                        if ( !fSymbols->isCommonlyUsed(zid)) {
                             displayString.remove();
+                        }
+                        if(displayString.length()==0) {
+                            mzid = fSymbols->getMetazoneString(zid, DateFormatSymbols::TIMEZONE_SHORT_GENERIC, cal, displayString, status);
+                            if ( !fSymbols->isCommonlyUsed(mzid)) {
+                                displayString.remove();
+                            }
+                        }
+                    }
+                    else {
+                        fSymbols->getZoneString(zid, DateFormatSymbols::TIMEZONE_SHORT_STANDARD, displayString, status);
+                        if ( !fSymbols->isCommonlyUsed(zid)) {
+                            displayString.remove();
+                        }
+                        if(displayString.length()==0) {
+                            mzid = fSymbols->getMetazoneString(zid, DateFormatSymbols::TIMEZONE_SHORT_STANDARD, cal, displayString, status);
+                            if ( !fSymbols->isCommonlyUsed(mzid)) {
+                                displayString.remove();
+                            }
                         }
                     }
                     if(displayString.length()==0) {
                        fSymbols->getFallbackString(zid, displayString, status);
                     }
                 }else{
-                    fSymbols->getZoneString(zid, DateFormatSymbols::TIMEZONE_LONG_GENERIC, displayString, status);
-                    if(displayString.length()==0) {
-                       mzid = fSymbols->getMetazoneString(zid, DateFormatSymbols::TIMEZONE_LONG_GENERIC, cal, displayString, status);
+                    if (cal.getTimeZone().useDaylightTime()) {
+                        fSymbols->getZoneString(zid, DateFormatSymbols::TIMEZONE_LONG_GENERIC, displayString, status);
+                        if(displayString.length()==0) {
+                           mzid = fSymbols->getMetazoneString(zid, DateFormatSymbols::TIMEZONE_LONG_GENERIC, cal, displayString, status);
+                        }
                     }
+                    else {
+                        fSymbols->getZoneString(zid, DateFormatSymbols::TIMEZONE_LONG_STANDARD, displayString, status);
+                        if(displayString.length()==0) {
+                           mzid = fSymbols->getMetazoneString(zid, DateFormatSymbols::TIMEZONE_LONG_STANDARD, cal, displayString, status);
+                        }
+                    }
+
                     if(displayString.length()==0) {
                        fSymbols->getFallbackString(zid, displayString, status);
                     }
