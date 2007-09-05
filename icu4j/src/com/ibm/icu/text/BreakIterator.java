@@ -174,7 +174,7 @@ import com.ibm.icu.util.ULocale;
  *     int current = wb.next();
  *     while (current != BreakIterator.DONE) {
  *         for (int p = last; p < current; p++) {
- *             if (Character.isLetter(text.charAt(p))
+ *             if (Character.isLetter(text.charAt(p)))
  *                 return last;
  *         }
  *         last = current;
