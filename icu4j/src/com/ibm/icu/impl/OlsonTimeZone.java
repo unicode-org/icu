@@ -308,8 +308,7 @@ public class OlsonTimeZone extends BasicTimeZone {
 
         int year=it[0]; /*, month=it[1], dom=it[2], dow=it[3]*/
         if (year > finalYear) { // [sic] >, not >=; see above
-            if (ASSERT) Assert.assrt("finalZone != null && finalZone.useDaylightTime()", finalZone != null && finalZone.useDaylightTime());
-            return true;
+            return (finalZone != null && finalZone.useDaylightTime());
         }
 
         // Find start of this year, and start of next year
