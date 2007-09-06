@@ -351,7 +351,8 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         return;
     }
     UChar newChar;
-    for (int32_t i=0; i<10; ++i) {
+    int32_t i;
+    for (i=0; i<10; ++i) {
         UnicodeString randomSkeleton;
         int32_t len = rand() % 20;
         for (int32_t j=0; j<len; ++j ) {
@@ -404,38 +405,38 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     }
     
     // ======== Test getSkeletons and getBaseSkeletons
-     StringEnumeration* ptrSkeletonEnum = test->getSkeletons(status);
-     if(U_FAILURE(status)) {
-          errln("ERROR: Fail to get skeletons !\n");
-     }
-     UnicodeString returnPattern, *ptrSkeleton;
-     ptrSkeletonEnum->reset(status);
-     int32_t count=ptrSkeletonEnum->count(status);
-     for (int32_t i=0; i<count; ++i) {
-         ptrSkeleton = (UnicodeString *)ptrSkeletonEnum->snext(status);
-         returnPattern = test->getPatternForSkeleton(*ptrSkeleton);
-         if ( returnPattern != testSkeletonsResults[i] ) {
-             errln(UnicodeString("ERROR: Unexpected result from getSkeletons and getPatternForSkeleton\nGot: ") + returnPattern
-                + UnicodeString("\nExpected: ") + testSkeletonsResults[i]
-                + UnicodeString("\n"));
-         }
-     }
-     StringEnumeration* ptrBaseSkeletonEnum = test->getBaseSkeletons(status);
-     if(U_FAILURE(status)) {
-          errln("ERROR: Fail to get base skeletons !\n");
-      }   
-     count=ptrBaseSkeletonEnum->count(status);
-     for (int32_t i=0; i<count; ++i) {
-         ptrSkeleton = (UnicodeString *)ptrBaseSkeletonEnum->snext(status);
-         if ( *ptrSkeleton != testBaseSkeletonsResults[i] ) {
-             errln("ERROR: Unexpected result from getBaseSkeletons() !\n");
-         }
-     }
-     
-     delete output;
-     delete ptrSkeletonEnum;
-     delete ptrBaseSkeletonEnum;
-     delete test;
+    StringEnumeration* ptrSkeletonEnum = test->getSkeletons(status);
+    if(U_FAILURE(status)) {
+        errln("ERROR: Fail to get skeletons !\n");
+    }
+    UnicodeString returnPattern, *ptrSkeleton;
+    ptrSkeletonEnum->reset(status);
+    int32_t count=ptrSkeletonEnum->count(status);
+    for (i=0; i<count; ++i) {
+        ptrSkeleton = (UnicodeString *)ptrSkeletonEnum->snext(status);
+        returnPattern = test->getPatternForSkeleton(*ptrSkeleton);
+        if ( returnPattern != testSkeletonsResults[i] ) {
+            errln(UnicodeString("ERROR: Unexpected result from getSkeletons and getPatternForSkeleton\nGot: ") + returnPattern
+               + UnicodeString("\nExpected: ") + testSkeletonsResults[i]
+               + UnicodeString("\n"));
+        }
+    }
+    StringEnumeration* ptrBaseSkeletonEnum = test->getBaseSkeletons(status);
+    if(U_FAILURE(status)) {
+        errln("ERROR: Fail to get base skeletons !\n");
+    }   
+    count=ptrBaseSkeletonEnum->count(status);
+    for (i=0; i<count; ++i) {
+        ptrSkeleton = (UnicodeString *)ptrBaseSkeletonEnum->snext(status);
+        if ( *ptrSkeleton != testBaseSkeletonsResults[i] ) {
+            errln("ERROR: Unexpected result from getBaseSkeletons() !\n");
+        }
+    }
+
+    delete output;
+    delete ptrSkeletonEnum;
+    delete ptrBaseSkeletonEnum;
+    delete test;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
