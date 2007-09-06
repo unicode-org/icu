@@ -170,6 +170,7 @@ void
 testString(
             UnicodeString&        str,
             const char*     testString,
+            const char* expectedString,
             int32_t expectedStatus)
 {
 #ifdef USE_SSTREAM
@@ -191,6 +192,9 @@ testString(
     if (getBitStatus(sstrm) != expectedStatus) {
         printBits(sstrm);
         log_err("Expected status %d, Got %d. See verbose output for details\n", getBitStatus(sstrm), expectedStatus);
+    }
+    if (str != UnicodeString(expectedString)) {
+        log_err("Did not get expected results from \"%s\", expected \"%s\"\n", testString, expectedString);
     }
 }
 
@@ -226,12 +230,13 @@ static void U_CALLCONV TestStreamEOF(void)
     log_verbose("Testing operator >> for UnicodeString...\n");
 
     UnicodeString UStr;
-    testString(UStr, "", IOSTREAM_EOF|IOSTREAM_FAIL);
-    testString(UStr, "foo", IOSTREAM_EOF);
-    testString(UStr, "   ", IOSTREAM_EOF|IOSTREAM_FAIL);
-    testString(UStr, "   bar", IOSTREAM_EOF);
-    testString(UStr, "bar   ", IOSTREAM_GOOD);
-    testString(UStr, "   bar   ", IOSTREAM_GOOD);
+    testString(UStr, "", "", IOSTREAM_EOF|IOSTREAM_FAIL);
+    testString(UStr, "foo", "foo", IOSTREAM_EOF);
+    UStr = "unchanged";
+    testString(UStr, "   ", "unchanged", IOSTREAM_EOF|IOSTREAM_FAIL);
+    testString(UStr, "   bar", "bar", IOSTREAM_EOF);
+    testString(UStr, "bar   ", "bar", IOSTREAM_GOOD);
+    testString(UStr, "   bar   ", "bar", IOSTREAM_GOOD);
 }
 U_CDECL_END
 

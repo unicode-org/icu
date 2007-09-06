@@ -71,6 +71,11 @@ operator<<(STD_OSTREAM& stream, const UnicodeString& str)
 U_IO_API STD_ISTREAM & U_EXPORT2
 operator>>(STD_ISTREAM& stream, UnicodeString& str)
 {
+    // This is like ICU status checking.
+    if (stream.fail()) {
+        return stream;
+    }
+
     /* ipfx should eat whitespace when ios::skipws is set */
     UChar uBuffer[16];
     char buffer[16];
@@ -78,7 +83,6 @@ operator>>(STD_ISTREAM& stream, UnicodeString& str)
     UConverter *converter;
     UErrorCode errorCode = U_ZERO_ERROR;
 
-    str.truncate(0);
     // use the default converter to convert chunks of text
     converter = u_getDefaultConverter(&errorCode);
     if(U_SUCCESS(errorCode)) {
@@ -104,6 +108,11 @@ operator>>(STD_ISTREAM& stream, UnicodeString& str)
             us = uBuffer;
             s = &ch;
             errorCode = U_ZERO_ERROR;
+            /*
+            Since we aren't guaranteed to see the state before this call,
+            this code won't work on stateful encodings like ISO-2022 or an EBCDIC stateful encoding.
+            We flush on the last byte to ensure that we output truncated multibyte characters.
+            */
             ucnv_toUnicode(converter, &us, uLimit, &s, sLimit, 0, !continueReading, &errorCode);
             if(U_FAILURE(errorCode)) {
                 /* Something really bad happened */
@@ -128,8 +137,17 @@ operator>>(STD_ISTREAM& stream, UnicodeString& str)
                         /* else skip intialWhitespace */
                     }
                     else {
+                        if (initialWhitespace) {
+                            /*
+                            When initialWhitespace is TRUE, we haven't appended any
+                            character yet.  This is where we truncate the string,
+                            to avoid modifying the string before we know if we can
+                            actually read from the stream.
+                            */
+                            str.truncate(0);
+                            initialWhitespace = FALSE;
+                        }
                         str.append(ch32);
-                        initialWhitespace = FALSE;
                     }
                 }
                 idx = 0;
