@@ -736,6 +736,7 @@ class CharsetISCII extends CharsetICU {
                             option,
                             new String(ISCII_CNV_PREFIX + (option & UCNV_OPTIONS_VERSION_MASK))  /* name */
                         );
+        extraInfo.initialize();
     }
     
     /*
