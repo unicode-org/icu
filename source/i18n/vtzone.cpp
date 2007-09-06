@@ -1312,6 +1312,7 @@ VTimeZone::parse(UErrorCode& status) {
     UnicodeString tzid;
 
     int32_t state = INI;
+    int32_t n = 0;
     UBool dst = FALSE;      // current zone type
     UnicodeString from;     // current zone from offset
     UnicodeString to;       // current zone offset
@@ -1336,7 +1337,7 @@ VTimeZone::parse(UErrorCode& status) {
         goto cleanupParse;
     }
 
-    for (int32_t n = 0; n < vtzlines->size(); n++) {
+    for (n = 0; n < vtzlines->size(); n++) {
         UnicodeString *line = (UnicodeString*)vtzlines->elementAt(n);
         int32_t valueSep = line->indexOf(COLON);
         if (valueSep < 0) {
