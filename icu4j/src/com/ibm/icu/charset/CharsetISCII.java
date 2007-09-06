@@ -114,6 +114,8 @@ class CharsetISCII extends CharsetICU {
         UConverterDataISCII(int option, String name) {
             this.option = option;
             this.name = name;
+            
+            initialize();
         }
         
         void initialize() {          
@@ -736,7 +738,6 @@ class CharsetISCII extends CharsetICU {
                             option,
                             new String(ISCII_CNV_PREFIX + (option & UCNV_OPTIONS_VERSION_MASK))  /* name */
                         );
-        extraInfo.initialize();
     }
     
     /*
