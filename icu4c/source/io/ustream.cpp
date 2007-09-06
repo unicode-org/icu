@@ -115,8 +115,8 @@ operator>>(STD_ISTREAM& stream, UnicodeString& str)
             */
             ucnv_toUnicode(converter, &us, uLimit, &s, sLimit, 0, !continueReading, &errorCode);
             if(U_FAILURE(errorCode)) {
-                /* Something really bad happened */
-                stream.setstate(stream.failbit);
+                /* Something really bad happened. setstate() isn't always an available API */
+                stream.clear(stream.failbit);
                 goto STOP_READING;
             }
             /* Was the character consumed? */
