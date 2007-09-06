@@ -769,14 +769,25 @@ public class SimpleTimeZone extends BasicTimeZone {
                 ++month;
             }
         }
+        /*
+         * For some reasons, Sun Java 6 on Solaris/Linux has a problem with
+         * the while loop below (at least Java 6 up to build 1.6.0_02-b08).
+         * It looks the JRE messes up the variable 'millis' while executing
+         * the code in the while block.  The problem is not reproduced with
+         * JVM option -Xint, that is, it is likely a bug of the HotSpot
+         * adaptive compiler.  Moving 'millis += Grego.MILLIS_PER_DAY'
+         * to the end of this while block seems to resolve the problem.
+         * See ticket#5887 about the problem in detail.
+         */
         while (millis < 0) {
-            millis += Grego.MILLIS_PER_DAY;
+            //millis += Grego.MILLIS_PER_DAY;
             --dayOfMonth;
             dayOfWeek = 1 + ((dayOfWeek+5) % 7); // dayOfWeek is one-based
             if (dayOfMonth < 1) {
                 dayOfMonth = prevMonthLen;
                 --month;
             }
+            millis += Grego.MILLIS_PER_DAY;
         }
         
         if (month < ruleMonth) return -1;
