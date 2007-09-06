@@ -190,6 +190,7 @@ public:
      * Test Relative Dates
      */
      void TestRelative(void);
+     void TestTimeZoneDisplayName(void);
 /*   void TestRelativeError(void);
      void TestRelativeOther(void);
 */
