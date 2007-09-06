@@ -98,6 +98,7 @@ class CharsetISCII extends CharsetICU {
     private final String ISCII_CNV_PREFIX = "ISCII,version=";
     
     private final class UConverterDataISCII {
+        int option;
         int contextCharToUnicode;      /* previous Unicode codepoint for contextual analysis */
         int contextCharFromUnicode;    /* previous Unicode codepoint for contextual analysis */
         short defDeltaToUnicode;             /* delta for switching to default state when DEF is encountered */
@@ -110,20 +111,22 @@ class CharsetISCII extends CharsetICU {
         boolean resetToDefaultToUnicode;    /* boolean for reseting to default delta and mask when a newline is encountered */
         String name;
         
-        UConverterDataISCII(int contextCharToUnicode, int contextCharFromUnicode, short defDeltaToUnicode, short currentDeltaFromUnicode,
-                            short currentDeltaToUnicode, short currentMaskFromUnicode, short currentMaskToUnicode, short defMaskToUnicode,
-                            boolean isFirstBuffer, boolean resetToDefaultToUnicode, String name) {
-            this.contextCharToUnicode = contextCharToUnicode;
-            this.contextCharFromUnicode = contextCharFromUnicode;
-            this.defDeltaToUnicode = defDeltaToUnicode;
-            this.currentDeltaFromUnicode = currentDeltaFromUnicode;
-            this.currentDeltaToUnicode = currentDeltaToUnicode;
-            this.currentMaskFromUnicode = currentMaskFromUnicode;
-            this.currentMaskToUnicode = currentMaskToUnicode;
-            this.defMaskToUnicode = defMaskToUnicode;
-            this.isFirstBuffer = isFirstBuffer;
-            this.resetToDefaultToUnicode = resetToDefaultToUnicode;
+        UConverterDataISCII(int option, String name) {
+            this.option = option;
             this.name = name;
+        }
+        
+        void initialize() {          
+            this.contextCharToUnicode = NO_CHAR_MARKER; /* contextCharToUnicode */
+            this.currentDeltaFromUnicode = 0x0000; /* contextCharFromUnicode */
+            this.defDeltaToUnicode = (short)(lookupInitialData[option & UCNV_OPTIONS_VERSION_MASK].uniLang * UniLang.DELTA); /* defDeltaToUnicode */ 
+            this.currentDeltaFromUnicode = (short)(lookupInitialData[option & UCNV_OPTIONS_VERSION_MASK].uniLang * UniLang.DELTA); /* currentDeltaFromUnicode */ 
+            this.currentDeltaToUnicode = (short)(lookupInitialData[option & UCNV_OPTIONS_VERSION_MASK].uniLang * UniLang.DELTA); /* currentDeltaToUnicode */ 
+            this.currentMaskToUnicode = (short)lookupInitialData[option & UCNV_OPTIONS_VERSION_MASK].maskEnum; /* currentMaskToUnicode */
+            this.currentMaskFromUnicode = (short)lookupInitialData[option & UCNV_OPTIONS_VERSION_MASK].maskEnum; /* currentMaskFromUnicode */
+            this.defMaskToUnicode = (short)lookupInitialData[option & UCNV_OPTIONS_VERSION_MASK].maskEnum; /* defMaskToUnicode */
+            this.isFirstBuffer = true; /* isFirstBuffer */
+            this.resetToDefaultToUnicode = false; /* resetToDefaultToUnicode */   
         }
     }
     
@@ -729,17 +732,8 @@ class CharsetISCII extends CharsetICU {
         //get the version number of the ISCII converter
         int option = Integer.parseInt(icuCanonicalName.substring(14));
         
-        extraInfo = new UConverterDataISCII(
-                            NO_CHAR_MARKER, /* contextCharToUnicode */
-                            0x0000, /* contextCharFromUnicode */
-                            (short)(lookupInitialData[option & UCNV_OPTIONS_VERSION_MASK].uniLang * UniLang.DELTA), /* defDeltaToUnicode */ 
-                            (short)(lookupInitialData[option & UCNV_OPTIONS_VERSION_MASK].uniLang * UniLang.DELTA), /* currentDeltaFromUnicode */ 
-                            (short)(lookupInitialData[option & UCNV_OPTIONS_VERSION_MASK].uniLang * UniLang.DELTA), /* currentDeltaToUnicode */ 
-                            (short)lookupInitialData[option & UCNV_OPTIONS_VERSION_MASK].maskEnum, /* currentMaskToUnicode */
-                            (short)lookupInitialData[option & UCNV_OPTIONS_VERSION_MASK].maskEnum, /* currentMaskFromUnicode */
-                            (short)lookupInitialData[option & UCNV_OPTIONS_VERSION_MASK].maskEnum, /* defMaskToUnicode */
-                            true, /* isFirstBuffer */
-                            false, /* resetToDefaultToUnicode */
+        extraInfo = new UConverterDataISCII( 
+                            option,
                             new String(ISCII_CNV_PREFIX + (option & UCNV_OPTIONS_VERSION_MASK))  /* name */
                         );
     }
@@ -772,6 +766,7 @@ class CharsetISCII extends CharsetICU {
         protected void implReset() {
             super.implReset();
             this.toUnicodeStatus = 0xFFFF;
+            extraInfo.initialize();
         }
         
         protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) { 
@@ -1069,7 +1064,7 @@ class CharsetISCII extends CharsetICU {
         
         protected void implReset() {
             super.implReset();
-            extraInfo.isFirstBuffer = true;
+            extraInfo.initialize();
         }
         
         protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush) {
