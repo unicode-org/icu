@@ -100,7 +100,7 @@ operator>>(STD_ISTREAM& stream, UnicodeString& str)
             if (stream.eof()) {
                 // The EOF is only set after the get() of an unavailable byte.
                 if (!initialWhitespace) {
-                    stream.clear(STD_NAMESPACE ios_base::eofbit);
+                    stream.clear(stream.eofbit);
                 }
                 continueReading = FALSE;
             }
@@ -116,7 +116,7 @@ operator>>(STD_ISTREAM& stream, UnicodeString& str)
             ucnv_toUnicode(converter, &us, uLimit, &s, sLimit, 0, !continueReading, &errorCode);
             if(U_FAILURE(errorCode)) {
                 /* Something really bad happened */
-                stream.setstate(STD_NAMESPACE ios_base::failbit);
+                stream.setstate(stream.failbit);
                 goto STOP_READING;
             }
             /* Was the character consumed? */
