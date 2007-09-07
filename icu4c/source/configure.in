@@ -1088,7 +1088,7 @@ AC_OUTPUT([icudefs.mk \
 		test/iotest/Makefile \
 		test/letest/Makefile \
 		samples/Makefile samples/date/Makefile \
-		samples/cal/Makefile samples/csdet/Makefile samples/layout/Makefile \
+		samples/cal/Makefile samples/layout/Makefile \
 		common/unicode/platform.h])
 
 if test $ICU_USE_THREADS = 0; then
