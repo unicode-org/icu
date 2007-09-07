@@ -71,6 +71,11 @@ class CECalendar extends Calendar {
     // the Julian and Coptic or Ethiopic epoch.
     // This value is set in the class initialization phase of the two
     // subclasses, CopticCalendar and EthiopicCalendar
+    /**
+     * The difference between the Julian and Coptic epoch.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     protected int jdEpochOffset  = -1;
     
 

@@ -26,93 +26,93 @@ public final class CopticCalendar extends CECalendar
     private static final long serialVersionUID = 5903818751846742911L;
 
     /** 
-     * Constant for \u03c9\u03bf\u03b3\u03c4/\u062a\ufeee\ufe97,
+     * Constant for &#x03c9;&#x03bf;&#x03b3;&#x03c4;/&#x062a;&#xfeee;&#xfe97;,
      * the 1st month of the Coptic year. 
      * @stable ICU 3.8
      */
     public static final int TOUT = 0;
 
     /** 
-     * Constant for \u03a0\u03b1\u03bf\u03c0\u03b9/\ufeea\ufe91\ufe8e\ufe91,
+     * Constant for &#x03a0;&#x03b1;&#x03bf;&#x03c0;&#x03b9;/&#xfeea;&#xfe91;&#xfe8e;&#xfe91;,
      * the 2nd month of the Coptic year. 
      * @stable ICU 3.8
      */
     public static final int BABA = 1;
 
     /** 
-     * Constant for \u0391\u03b8\u03bf\u03c1/\u0631\ufeee\ufe97\ufe8e\ufeeb,
+     * Constant for &#x0391;&#x03b8;&#x03bf;&#x03c1;/&#x0631;&#xfeee;&#xfe97;&#xfe8e;&#xfeeb;,
      * the 3rd month of the Coptic year. 
      * @stable ICU 3.8
      */
     public static final int HATOR = 2;
 
     /** 
-     * Constant for \u03a7\u03bf\u03b9\u03b1\u03ba/\ufeda\ufeec\ufef4\ufedb,
+     * Constant for &#x03a7;&#x03bf;&#x03b9;&#x03b1;&#x03ba;/&#xfeda;&#xfeec;&#xfef4;&#xfedb;,
      * the 4th month of the Coptic year. 
      * @stable ICU 3.8
      */
     public static final int KIAHK = 3;
 
     /** 
-     * Constant for \u03a4\u03c9\u03b2\u03b9/\u0637\ufeee\ufe92\ufeeb,
+     * Constant for &#x03a4;&#x03c9;&#x03b2;&#x03b9;/&#x0637;&#xfeee;&#xfe92;&#xfeeb;,
      * the 5th month of the Coptic year. 
      * @stable ICU 3.8
      */
     public static final int TOBA = 4;
 
     /** 
-     * Constant for \u039c\u03b5\u03e3\u03b9\u03c1/\ufeae\ufef4\ufeb8\ufee3\u0623,
+     * Constant for &#x039c;&#x03b5;&#x03e3;&#x03b9;&#x03c1;/&#xfeae;&#xfef4;&#xfeb8;&#xfee3;&#x0623;,
      * the 6th month of the Coptic year. 
      * @stable ICU 3.8
      */
     public static final int AMSHIR = 5;
 
     /** 
-     * Constant for \u03a0\u03b1\u03c1\u03b5\u03bc\u03e9\u03b1\u03c4/\u062a\ufe8e\ufeec\ufee3\ufeae\ufe91,
+     * Constant for &#x03a0;&#x03b1;&#x03c1;&#x03b5;&#x03bc;&#x03e9;&#x03b1;&#x03c4;/&#x062a;&#xfe8e;&#xfeec;&#xfee3;&#xfeae;&#xfe91;,
      * the 7th month of the Coptic year. 
      * @stable ICU 3.8
      */
     public static final int BARAMHAT = 6;
 
     /** 
-     * Constant for \u03a6\u03b1\u03c1\u03bc\u03bf\u03b8\u03b9/\u0647\u062f\ufeee\ufee3\ufeae\ufe91, 
+     * Constant for &#x03a6;&#x03b1;&#x03c1;&#x03bc;&#x03bf;&#x03b8;&#x03b9;/&#x0647;&#x062f;&#xfeee;&#xfee3;&#xfeae;&#xfe91;, 
      * the 8th month of the Coptic year. 
      * @stable ICU 3.8
      */
     public static final int BARAMOUDA = 7;
 
     /** 
-     * Constant for \u03a0\u03b1\u03e3\u03b1\u03bd/\ufeb2\ufee8\ufeb8\ufe91, 
+     * Constant for &#x03a0;&#x03b1;&#x03e3;&#x03b1;&#x03bd;/&#xfeb2;&#xfee8;&#xfeb8;&#xfe91;,
      * the 9th month of the Coptic year. 
      * @stable ICU 3.8
      */
     public static final int BASHANS = 8;
 
     /** 
-     * Constant for \u03a0\u03b1\u03c9\u03bd\u03b9/\ufeea\ufee7\u0624\ufeee\ufe91, 
+     * Constant for &#x03a0;&#x03b1;&#x03c9;&#x03bd;&#x03b9;/&#xfeea;&#xfee7;&#x0624;&#xfeee;&#xfe91;,
      * the 10th month of the Coptic year. 
      * @stable ICU 3.8
      */
     public static final int PAONA = 9;
 
     /** 
-     * Constant for \u0395\u03c0\u03b7\u03c0/\ufe90\ufef4\ufe91\u0623, 
+     * Constant for &#x0395;&#x03c0;&#x03b7;&#x03c0;/&#xfe90;&#xfef4;&#xfe91;&#x0623;,
      * the 11th month of the Coptic year. 
      * @stable ICU 3.8
      */
     public static final int EPEP = 10;
 
     /** 
-     * Constant for \u039c\u03b5\u03f2\u03c9\u03c1\u03b7/\u0649\ufeae\ufeb4\ufee3, 
+     * Constant for &#x039c;&#x03b5;&#x03f2;&#x03c9;&#x03c1;&#x03b7;/&#x0649;&#xfeae;&#xfeb4;&#xfee3;,
      * the 12th month of the Coptic year. 
      * @stable ICU 3.8
      */
     public static final int MESRA = 11;
 
     /** 
-     * Constant for \u03a0\u03b9\u03ba\u03bf\u03b3\u03eb\u03b9 
-     * \u03bc\u03b1\u03b2\u03bf\u03c4/\ufeae\ufef4\ufed0\ufebc\ufedf\u0627 
-     * \ufeae\ufeec\ufeb8\ufedf\u0627, 
+     * Constant for &#x03a0;&#x03b9;&#x03ba;&#x03bf;&#x03b3;&#x03eb;&#x03b9;
+     * &#x03bc;&#x03b1;&#x03b2;&#x03bf;&#x03c4;/&#xfeae;&#xfef4;&#xfed0;&#xfebc;&#xfedf;&#x0627;
+     * &#xfeae;&#xfeec;&#xfeb8;&#xfedf;&#x0627;,
      * the 13th month of the Coptic year. 
      * @stable ICU 3.8
      */
