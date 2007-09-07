@@ -410,8 +410,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
              "y/M/d H:mm v", "pf", "2004/10/31 1:30 PST", "2004 10 31 01:30 PST", "2004/10/31 1:30 PT",
              "y/M/d H:mm v", "pf", "2004/10/31 1:30 PDT", "2004 10 31 01:30 PDT", "2004/10/31 1:30 PT",
              "y/M/d H:mm", "pf", "2004/10/31 1:30", "2004 10 31 01:30 PST", "2004/10/31 1:30",
-             
-             "y/M/d H:mm vvvv", "pf", "2004/10/31 1:30 Argentina Time", "2004 10 30 21:30 PDT", "2004/10/31 1:30 Argentina Time",
+            // Below is actually an invalid test case.  See the note in #5910.  Disable the case for now.
+            // TODO: Revisit after 3.8
+            //"y/M/d H:mm vvvv", "pf", "2004/10/31 1:30 Argentina Time", "2004 10 30 21:30 PDT", "2004/10/31 1:30 Argentina Time",
         };
         expect(ZDATA, en);
 
