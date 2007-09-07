@@ -26,79 +26,79 @@ public final class EthiopicCalendar extends CECalendar
     private static final long serialVersionUID = -2438495771339315608L;
 
     /** 
-     * Constant for \u1218\u1235\u12a8\u1228\u121d, the 1st month of the Ethiopic year.
+     * Constant for &#x1218;&#x1235;&#x12a8;&#x1228;&#x121d;, the 1st month of the Ethiopic year.
      * @stable ICU 3.8
      */
     public static final int MESKEREM = 0;
 
     /** 
-     * Constant for \u1325\u1245\u121d\u1275, the 2nd month of the Ethiopic year. 
+     * Constant for &#x1325;&#x1245;&#x121d;&#x1275;, the 2nd month of the Ethiopic year. 
      * @stable ICU 3.8
      */
     public static final int TEKEMT = 1;
 
     /** 
-     * Constant for \u1285\u12f3\u122d, the 3rd month of the Ethiopic year. 
+     * Constant for &#x1285;&#x12f3;&#x122d;, the 3rd month of the Ethiopic year. 
      * @stable ICU 3.8
      */
     public static final int HEDAR = 2;
 
     /** 
-     * Constant for \u1273\u1285\u1223\u1225, the 4th month of the Ethiopic year. 
+     * Constant for &#x1273;&#x1285;&#x1223;&#x1225;, the 4th month of the Ethiopic year. 
      * @stable ICU 3.8
      */
     public static final int TAHSAS = 3;
 
     /** 
-     * Constant for \u1325\u122d, the 5th month of the Ethiopic year. 
+     * Constant for &#x1325;&#x122d;, the 5th month of the Ethiopic year. 
      * @stable ICU 3.8
      */
     public static final int TER = 4;
 
     /** 
-     * Constant for \u12e8\u12ab\u1272\u1275, the 6th month of the Ethiopic year. 
+     * Constant for &#x12e8;&#x12ab;&#x1272;&#x1275;, the 6th month of the Ethiopic year. 
      * @stable ICU 3.8
      */
     public static final int YEKATIT = 5;
 
     /** 
-     * Constant for \u1218\u130b\u1262\u1275, the 7th month of the Ethiopic year. 
+     * Constant for &#x1218;&#x130b;&#x1262;&#x1275;, the 7th month of the Ethiopic year. 
      * @stable ICU 3.8
      */
     public static final int MEGABIT = 6;
 
     /** 
-     * Constant for \u121a\u12eb\u12dd\u12eb, the 8th month of the Ethiopic year. 
+     * Constant for &#x121a;&#x12eb;&#x12dd;&#x12eb;, the 8th month of the Ethiopic year. 
      * @stable ICU 3.8
      */
     public static final int MIAZIA = 7;
 
     /** 
-     * Constant for \u130d\u1295\u1266\u1275, the 9th month of the Ethiopic year. 
+     * Constant for &#x130d;&#x1295;&#x1266;&#x1275;, the 9th month of the Ethiopic year. 
      * @stable ICU 3.8
      */
     public static final int GENBOT = 8;
 
     /** 
-     * Constant for \u1230\u1294, the 10th month of the Ethiopic year. 
+     * Constant for &#x1230;&#x1294;, the 10th month of the Ethiopic year. 
      * @stable ICU 3.8
      */
     public static final int SENE = 9;
 
     /** 
-     * Constant for \u1210\u121d\u120c, the 11th month of the Ethiopic year. 
+     * Constant for &#x1210;&#x121d;&#x120c;, the 11th month of the Ethiopic year. 
      * @stable ICU 3.8
      */
     public static final int HAMLE = 10;
 
     /** 
-     * Constant for \u1290\u1210\u1234, the 12th month of the Ethiopic year. 
+     * Constant for &#x1290;&#x1210;&#x1234;, the 12th month of the Ethiopic year. 
      * @stable ICU 3.8
      */
     public static final int NEHASSE = 11;
 
     /** 
-     * Constant for \u1333\u1309\u121c\u1295, the 13th month of the Ethiopic year. 
+     * Constant for &#x1333;&#x1309;&#x121c;&#x1295;, the 13th month of the Ethiopic year. 
      * @stable ICU 3.8
      */
     public static final int PAGUMEN = 12;

@@ -430,8 +430,7 @@ public class TimeZoneTest extends TestFmwk
 
 
     public void TestDisplayName2() {
-        // Date now = new Date();
-        Date then = new Date(2005, 0, 1);
+        Date now = new Date();
 
         String[] timezones = {"America/Chicago", "Europe/Moscow", "Europe/Rome", "Asia/Shanghai", "WET" };
         String[] locales = {"en", "fr", "de", "ja", "zh_TW", "zh_Hans" };
@@ -442,7 +441,7 @@ public class TimeZoneTest extends TestFmwk
                 String displayName0 = tz.getDisplayName(locale); // doesn't work???
                 SimpleDateFormat dt = new SimpleDateFormat("vvvv", locale);
                 dt.setTimeZone(tz);
-                String displayName1 = dt.format(then);  // date value _does_ matter if we fallback to GMT
+                String displayName1 = dt.format(now);  // date value _does_ matter if we fallback to GMT
                 logln(locale.getDisplayName() + ", " + tz.getID() + ": " + displayName0);
                 if (!displayName1.equals(displayName0)) {
                     errln(locale.getDisplayName() + ", " + tz.getID() + 

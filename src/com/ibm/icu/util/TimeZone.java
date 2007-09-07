@@ -491,26 +491,34 @@ abstract public class TimeZone implements Serializable, Cloneable {
             format = new SimpleDateFormat(null, locale);
             cachedLocaleData.put(locale, new SoftReference(format));
         }
-        // Create a new SimpleTimeZone as a stand-in for this zone; the stand-in
-        // will have no DST, or DST during January, but the same ID and offset,
-        // and hence the same display name.  We don't cache these because
-        // they're small and cheap to create.
-        SimpleTimeZone tz;
-        if (daylight && useDaylightTime()) {
-            int savings = getDSTSavings();
-            tz = new SimpleTimeZone(getRawOffset(), getID(),
-                                    Calendar.JANUARY, 1, 0, 0,
-                                    Calendar.FEBRUARY, 1, 0, 0,
-                                    savings);
-        } else {
-            tz = new SimpleTimeZone(getRawOffset(), getID());
-        }
+
         String[] patterns = { "z", "zzzz", "v", "vvvv" };
         format.applyPattern(patterns[style]);      
-        format.setTimeZone(tz);
-        // Format a date in January.  We use the value 10*ONE_DAY == Jan 11 1970
-        // 0:00 GMT.
-        return format.format(new Date(864000000L));
+        if ( style >= 2 ) {
+            // Generic names may change time to time even for a single time zone.
+            // This method returns the one used for the zone now.
+            format.setTimeZone(this);
+            return format.format(new Date());
+        } else {
+            // Create a new SimpleTimeZone as a stand-in for this zone; the stand-in
+            // will have no DST, or DST during January, but the same ID and offset,
+            // and hence the same display name.  We don't cache these because
+            // they're small and cheap to create.
+            SimpleTimeZone tz;
+            if (daylight && useDaylightTime()) {
+                int savings = getDSTSavings();
+                tz = new SimpleTimeZone(getRawOffset(), getID(),
+                                        Calendar.JANUARY, 1, 0, 0,
+                                        Calendar.FEBRUARY, 1, 0, 0,
+                                        savings);
+            } else {
+                tz = new SimpleTimeZone(getRawOffset(), getID());
+            }
+            format.setTimeZone(tz);
+            // Format a date in January.  We use the value 10*ONE_DAY == Jan 11 1970
+            // 0:00 GMT.
+            return format.format(new Date(864000000L));
+        }
     }
 
     /**

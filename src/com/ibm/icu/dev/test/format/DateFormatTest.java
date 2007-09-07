@@ -410,8 +410,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
              "y/M/d H:mm v", "pf", "2004/10/31 1:30 PST", "2004 10 31 01:30 PST", "2004/10/31 1:30 PT",
              "y/M/d H:mm v", "pf", "2004/10/31 1:30 PDT", "2004 10 31 01:30 PDT", "2004/10/31 1:30 PT",
              "y/M/d H:mm", "pf", "2004/10/31 1:30", "2004 10 31 01:30 PST", "2004/10/31 1:30",
-             
-             "y/M/d H:mm vvvv", "pf", "2004/10/31 1:30 Argentina (Buenos Aires)", "2004 10 30 21:30 PDT", "2004/10/31 1:30 Argentina (Buenos Aires)",
+            // Below is actually an invalid test case.  See the note in #5910.  Disable the case for now.
+            // TODO: Revisit after 3.8
+            //"y/M/d H:mm vvvv", "pf", "2004/10/31 1:30 Argentina Time", "2004 10 30 21:30 PDT", "2004/10/31 1:30 Argentina Time",
         };
         expect(ZDATA, en);
 
@@ -533,6 +534,19 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "en", "America/Los_Angeles", "2004-07-15T00:00:00Z", "vvvv", "Pacific Time", "America/Los_Angeles" },
         { "en", "America/Los_Angeles", "2004-07-15T00:00:00Z", "VVVV", "United States (Los Angeles)", "America/Los_Angeles" },
         { "en_GB", "America/Los_Angeles", "2004-01-15T12:00:00Z", "z", "PST", "America/Los_Angeles" },
+        { "en", "America/Phoenix", "2004-01-15T00:00:00Z", "Z", "-0700", "-7:00" },
+        { "en", "America/Phoenix", "2004-01-15T00:00:00Z", "ZZZZ", "GMT-07:00", "-7:00" },
+        { "en", "America/Phoenix", "2004-01-15T00:00:00Z", "z", "MST", "America/Phoenix" },
+        { "en", "America/Phoenix", "2004-01-15T00:00:00Z", "V", "MST", "America/Phoenix" },
+        { "en", "America/Phoenix", "2004-01-15T00:00:00Z", "zzzz", "Mountain Standard Time", "America/Phoenix" },
+        { "en", "America/Phoenix", "2004-07-15T00:00:00Z", "Z", "-0700", "-7:00" },
+        { "en", "America/Phoenix", "2004-07-15T00:00:00Z", "ZZZZ", "GMT-07:00", "-7:00" },
+        { "en", "America/Phoenix", "2004-07-15T00:00:00Z", "z", "MST", "America/Phoenix" },
+        { "en", "America/Phoenix", "2004-07-15T00:00:00Z", "V", "MST", "America/Phoenix" },
+        { "en", "America/Phoenix", "2004-07-15T00:00:00Z", "zzzz", "Mountain Standard Time", "America/Phoenix" },
+        { "en", "America/Phoenix", "2004-07-15T00:00:00Z", "v", "MST", "America/Phoenix" },
+        { "en", "America/Phoenix", "2004-07-15T00:00:00Z", "vvvv", "Mountain Standard Time", "America/Phoenix" },
+        { "en", "America/Phoenix", "2004-07-15T00:00:00Z", "VVVV", "United States (Phoenix)", "America/Phoenix" },
 
         { "en", "America/Argentina/Buenos_Aires", "2004-01-15T00:00:00Z", "Z", "-0300", "-3:00" },
         { "en", "America/Argentina/Buenos_Aires", "2004-01-15T00:00:00Z", "ZZZZ", "GMT-03:00", "-3:00" },
@@ -545,7 +559,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "en", "America/Argentina/Buenos_Aires", "2004-07-15T00:00:00Z", "V", "ART", "-3:00" },
         { "en", "America/Argentina/Buenos_Aires", "2004-07-15T00:00:00Z", "zzzz", "Argentina Time", "-3:00" },
         { "en", "America/Argentina/Buenos_Aires", "2004-07-15T00:00:00Z", "v", "Argentina (Buenos Aires)", "America/Buenos_Aires" },
-        { "en", "America/Argentina/Buenos_Aires", "2004-07-15T00:00:00Z", "vvvv", "Argentina (Buenos Aires)", "America/Buenos_Aires" },
+        { "en", "America/Argentina/Buenos_Aires", "2004-07-15T00:00:00Z", "vvvv", "Argentina Time", "America/Buenos_Aires" },
         { "en", "America/Argentina/Buenos_Aires", "2004-07-15T00:00:00Z", "VVVV", "Argentina (Buenos Aires)", "America/Buenos_Aires" },
 
         { "en", "America/Buenos_Aires", "2004-01-15T00:00:00Z", "Z", "-0300", "-3:00" },
@@ -559,7 +573,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "en", "America/Buenos_Aires", "2004-07-15T00:00:00Z", "V", "ART", "-3:00" },
         { "en", "America/Buenos_Aires", "2004-07-15T00:00:00Z", "zzzz", "Argentina Time", "-3:00" },
         { "en", "America/Buenos_Aires", "2004-07-15T00:00:00Z", "v", "Argentina (Buenos Aires)", "America/Buenos_Aires" },
-        { "en", "America/Buenos_Aires", "2004-07-15T00:00:00Z", "vvvv", "Argentina (Buenos Aires)", "America/Buenos_Aires" },
+        { "en", "America/Buenos_Aires", "2004-07-15T00:00:00Z", "vvvv", "Argentina Time", "America/Buenos_Aires" },
         { "en", "America/Buenos_Aires", "2004-07-15T00:00:00Z", "VVVV", "Argentina (Buenos Aires)", "America/Buenos_Aires" },
 
         { "en", "America/Havana", "2004-01-15T00:00:00Z", "Z", "-0500", "-5:00" },
@@ -642,7 +656,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "en", "Asia/Calcutta", "2004-07-15T00:00:00Z", "V", "IST", "+05:30" },
         { "en", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "India Standard Time", "+5:30" },
         { "en", "Asia/Calcutta", "2004-07-15T00:00:00Z", "v", "India Time", "Asia/Calcutta" },
-        { "en", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "India Time", "Asia/Calcutta" },
+        { "en", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "India Standard Time", "Asia/Calcutta" },
         
         // ==========
 
@@ -955,8 +969,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "hi", "Asia/Calcutta", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+\u0966\u096B:\u0969\u0966", "+5:30" },
         { "hi", "Asia/Calcutta", "2004-07-15T00:00:00Z", "z", "IST", "+05:30" },
         { "hi", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "\u092D\u093E\u0930\u0924\u0940\u092F \u0938\u092E\u092F", "+5:30" },
-        { "hi", "Asia/Calcutta", "2004-07-15T00:00:00Z", "v", "\u092D\u093E\u0930\u0924", "Asia/Calcutta" },
-        { "hi", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "\u092D\u093E\u0930\u0924", "Asia/Calcutta" },
+        { "hi", "Asia/Calcutta", "2004-07-15T00:00:00Z", "v", "IST", "Asia/Calcutta" },
+        { "hi", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "\u092D\u093E\u0930\u0924\u0940\u092F \u0938\u092E\u092F", "Asia/Calcutta" },
 
         // ==========
 
@@ -1276,8 +1290,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "as", "Asia/Calcutta", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+05:30", "+5:30" },
         { "as", "Asia/Calcutta", "2004-07-15T00:00:00Z", "z", "\u09AD\u09BE. \u09B8.", "+05:30" },
         { "as", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "\u09AD\u09BE\u09F0\u09A4\u09C0\u09AF\u09BC \u09B8\u09AE\u09AF\u09BC", "+5:30" },
-        { "as", "Asia/Calcutta", "2004-07-15T00:00:00Z", "v", "\u09AD\u09BE\u09F0\u09A4", "Asia/Calcutta" },
-        { "as", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "\u09AD\u09BE\u09F0\u09A4", "Asia/Calcutta" },
+        { "as", "Asia/Calcutta", "2004-07-15T00:00:00Z", "v", "\u09AD\u09BE. \u09B8.", "Asia/Calcutta" },
+        { "as", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "\u09AD\u09BE\u09F0\u09A4\u09C0\u09AF\u09BC \u09B8\u09AE\u09AF\u09BC", "Asia/Calcutta" },
         
     };
 
