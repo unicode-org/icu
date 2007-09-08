@@ -1,5 +1,5 @@
 /********************************************************************
- * COPYRIGHT: 
+ * COPYRIGHT:
  * Copyright (c) 1997-2007, International Business Machines Corporation
  * and others. All Rights Reserved.
  ********************************************************************/
@@ -66,7 +66,7 @@ static void TestPatterns(void)
     const char* pat[]    = { "#.#", "#.", ".#", "#" };
     const char* newpat[] = { "#0.#", "#0.", "#.0", "#" };
     const char* num[]    = { "0",   "0.", ".0", "0" };
-    
+
     log_verbose("\nTesting different format patterns\n");
     pat_length = sizeof(pat) / sizeof(pat[0]);
     for (i=0; i < pat_length; ++i)
@@ -76,7 +76,7 @@ static void TestPatterns(void)
         fmt= unum_open(UNUM_IGNORE,upat, u_strlen(upat), "en_US",NULL, &status);
         if (U_FAILURE(status)) {
             log_err("FAIL: Number format constructor failed for pattern %s\n", pat[i]);
-            continue; 
+            continue;
         }
         lneed=0;
         lneed=unum_toPattern(fmt, FALSE, NULL, lneed, &status);
@@ -91,7 +91,7 @@ static void TestPatterns(void)
         u_uastrcpy(unewpat, newpat[i]);
         if(u_strcmp(unewp, unewpat) != 0)
             log_err("FAIL: Pattern  %s should be transmute to %s; %s seen instead\n", pat[i], newpat[i],  austrdup(unewp) );
-        
+
         lneed=0;
         lneed=unum_format(fmt, 0, NULL, lneed, NULL, &status);
         if(status==U_BUFFER_OVERFLOW_ERROR){
@@ -106,7 +106,7 @@ static void TestPatterns(void)
         if (u_strcmp(str, unum) != 0)
         {
             log_err("FAIL: Pattern %s should format zero as %s; %s Seen instead\n", pat[i], num[i], austrdup(str) );
-            
+
         }
         free(unewp);
         free(str);
@@ -146,15 +146,15 @@ static void TestQuotes(void)
     u_uastrcpy(res, "afo'ob123");
     if(u_strcmp(str, res) != 0)
         log_err("FAIL: Expected afo'ob123");
-    
+
     free(str);
     unum_close(fmt);
-    
-    
+
+
     u_uastrcpy(pat, "");
     u_uastrcpy(pat, "a''b#");
-    
-    
+
+
     fmt =unum_open(UNUM_IGNORE,pat, u_strlen(pat), "en_US",NULL, &status);
     if(U_FAILURE(status)){
         log_err("Error in number format costruction using pattern \"a''b#\"\n");
@@ -175,7 +175,7 @@ static void TestQuotes(void)
     u_uastrcpy(res, "a'b123");
     if(u_strcmp(str, res) != 0)
         log_err("FAIL: Expected a'b123\n");
-    
+
     free(str);
     unum_close(fmt);
 }
@@ -201,7 +201,7 @@ static void TestExponential(void)
 #endif
     static const char* pat[] = { "0.####E0", "00.000E00", "##0.######E000", "0.###E0;[0.###E0]" };
     static const int32_t lval[] = { 0, -1, 1, 123456789 };
-    
+
     static const char* valFormat[] =
     {
         "1.234E-2", "1.2346E8", "1.23E300", "-3.1416E-271",
@@ -239,8 +239,8 @@ static void TestExponential(void)
             0, -1, 1, 123456800,
             0, -1, 1, 123500000
     };
-    
-    
+
+
     pat_length = sizeof(pat) / sizeof(pat[0]);
     val_length = sizeof(val) / sizeof(val[0]);
     lval_length = sizeof(lval) / sizeof(lval[0]);
@@ -251,9 +251,9 @@ static void TestExponential(void)
         upat=(UChar*)malloc(sizeof(UChar) * (strlen(pat[p])+1) );
         u_uastrcpy(upat, pat[p]);
         fmt=unum_open(UNUM_IGNORE,upat, u_strlen(upat), "en_US",NULL, &status);
-        if (U_FAILURE(status)) { 
-            log_err("FAIL: Bad status returned by Number format construction with pattern %s\n, pat[i]"); 
-            continue; 
+        if (U_FAILURE(status)) {
+            log_err("FAIL: Bad status returned by Number format construction with pattern %s\n, pat[i]");
+            continue;
         }
         lneed= u_strlen(upat) + 1;
         unum_toPattern(fmt, FALSE, pattern, lneed, &status);
@@ -261,7 +261,7 @@ static void TestExponential(void)
         for (v=0; v<val_length; ++v)
         {
             /*format*/
-            lneed=0; 
+            lneed=0;
             lneed=unum_formatDouble(fmt, val[v], NULL, lneed, NULL, &status);
             if(status==U_BUFFER_OVERFLOW_ERROR){
                 status=U_ZERO_ERROR;
@@ -271,13 +271,13 @@ static void TestExponential(void)
             if(U_FAILURE(status)) {
                 log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
             }
-            
-            
-            
+
+
+
             u_uastrcpy(uvalfor, valFormat[v+ival]);
             if(u_strcmp(str, uvalfor) != 0)
                 log_verbose("FAIL: Expected %s ( %s )\n", valFormat[v+ival], u_austrcpy(tempMsgBug, uvalfor) );
-            
+
             /*parsing*/
             ppos=0;
             a=unum_parseDouble(fmt, str, u_strlen(str), &ppos, &status);
@@ -287,13 +287,13 @@ static void TestExponential(void)
             }
             else
                 log_err(" FAIL: Partial parse (  %d  chars ) ->  %e\n",  ppos, a);
-            
+
             free(str);
         }
         for (v=0; v<lval_length; ++v)
         {
             /*format*/
-            lneed=0; 
+            lneed=0;
             lneed=unum_formatDouble(fmt, lval[v], NULL, lneed, NULL, &status);
             if(status==U_BUFFER_OVERFLOW_ERROR){
                 status=U_ZERO_ERROR;
@@ -307,7 +307,7 @@ static void TestExponential(void)
             u_uastrcpy(ulvalfor, lvalFormat[v+ilval]);
             if(u_strcmp(str, ulvalfor) != 0)
                 log_err("FAIL: Expected %s ( %s )\n", valFormat[v+ilval], austrdup(ulvalfor) );
-            
+
             /*parsing*/
             ppos=0;
             a=unum_parseDouble(fmt, str, u_strlen(str), &ppos, &status);
@@ -318,9 +318,9 @@ static void TestExponential(void)
             }
             else
                 log_err(" FAIL: Partial parse (  %d  chars ) ->  %e\n",  ppos, a);
-            
+
             free(str);
-            
+
         }
         ival += val_length;
         ilval += lval_length;
@@ -342,7 +342,7 @@ static void TestCurrencySign(void)
     UChar *res=NULL;
     UErrorCode status = U_ZERO_ERROR;
     char tempBuf[256];
-    
+
     pattern=(UChar*)malloc(sizeof(UChar) * (strlen("*#,##0.00;-*#,##0.00") + 1) );
     u_uastrcpy(pattern, "*#,##0.00;-*#,##0.00");
     pattern[0]=pattern[11]=0xa4; /* insert latin-1 currency symbol */
@@ -350,7 +350,7 @@ static void TestCurrencySign(void)
     if(U_FAILURE(status)){
         log_err("Error in number format construction with pattern  \"\\xA4#,##0.00;-\\xA4#,##0.00\\\" \n");
     }
-    lneed=0; 
+    lneed=0;
     lneed=unum_formatDouble(fmt, 1234.56, NULL, lneed, NULL, &status);
     if(status==U_BUFFER_OVERFLOW_ERROR){
         status=U_ZERO_ERROR;
@@ -379,8 +379,8 @@ static void TestCurrencySign(void)
     free(str);
     free(res);
     free(pat);
-    
-    lneed=0; 
+
+    lneed=0;
     lneed=unum_formatDouble(fmt, -1234.56, NULL, lneed, NULL, &status);
     if(status==U_BUFFER_OVERFLOW_ERROR){
         status=U_ZERO_ERROR;
@@ -397,8 +397,8 @@ static void TestCurrencySign(void)
         free(str);
         free(res);
     }
-    
-    unum_close(fmt);  
+
+    unum_close(fmt);
     free(pattern);
 }
 
@@ -459,21 +459,21 @@ static void TestCurrencyPreEuro(void)
     int32_t lneed, i;
     UFieldPosition pos;
     UErrorCode status = U_ZERO_ERROR;
-    
+
     const char* locale[]={
-        "ca_ES_PREEURO",  "de_LU_PREEURO",  "en_IE_PREEURO",              "fi_FI_PREEURO",  "fr_LU_PREEURO",  "it_IT_PREEURO",  
-        "pt_PT_PREEURO",  "de_AT_PREEURO",  "el_GR_PREEURO",              "es_ES_PREEURO",  "fr_BE_PREEURO",  "ga_IE_PREEURO",  
-        "nl_BE_PREEURO",  "de_DE_PREEURO",  "en_BE_PREEURO",              "eu_ES_PREEURO",  "fr_FR_PREEURO",  "gl_ES_PREEURO",  
+        "ca_ES_PREEURO",  "de_LU_PREEURO",  "en_IE_PREEURO",              "fi_FI_PREEURO",  "fr_LU_PREEURO",  "it_IT_PREEURO",
+        "pt_PT_PREEURO",  "de_AT_PREEURO",  "el_GR_PREEURO",              "es_ES_PREEURO",  "fr_BE_PREEURO",  "ga_IE_PREEURO",
+        "nl_BE_PREEURO",  "de_DE_PREEURO",  "en_BE_PREEURO",              "eu_ES_PREEURO",  "fr_FR_PREEURO",  "gl_ES_PREEURO",
         "nl_NL_PREEURO",
     };
-    
+
     const char* result[]={
-        "2 \\u20A7",      "2 F",            "\\u00A31.50",                "1,50\\u00A0mk",        "2 F",         "\\u20A4 2", 
-        "1$50 Esc.",      "\\u00F6S 1,50",  "1,50\\u0394\\u03C1\\u03C7", "2 \\u20A7",      "1,50 FB",        "\\u00a31.50", 
-        "1,50 BF",        "1,50 DM",        "1,50 BF",                    "2 \\u20A7",      "1,50 F",         "2 \\u20A7", 
+        "2 \\u20A7",      "2 F",            "\\u00A31.50",                "1,50\\u00A0mk",        "2 F",         "\\u20A4 2",
+        "1$50 Esc.",      "\\u00F6S 1,50",  "1,50\\u0394\\u03C1\\u03C7", "2 \\u20A7",      "1,50 FB",        "\\u00a31.50",
+        "1,50 BF",        "1,50 DM",        "1,50 BF",                    "2 \\u20A7",      "1,50 F",         "2 \\u20A7",
         "fl 1,50"
     };
-    
+
     log_verbose("\nTesting the number format with different currency patterns\n");
     for(i=0; i < 19; i++)
     {
@@ -510,7 +510,7 @@ static void TestCurrencyPreEuro(void)
                 }
             }
         }
-            
+
         unum_close(currencyFmt);
         free(str);
         free(res);
@@ -529,22 +529,22 @@ static void TestCurrencyObject(void)
     int32_t lneed, i;
     UFieldPosition pos;
     UErrorCode status = U_ZERO_ERROR;
-    
+
     const char* locale[]={
         "fr_FR",
         "fr_FR",
     };
-    
+
     const char* currency[]={
         "",
         "JPY",
     };
-    
+
     const char* result[]={
         "1\\u00A0234,56 \\u20AC",
         "1\\u00A0235 \\u00A5JP",
     };
-    
+
     log_verbose("\nTesting the number format with different currency codes\n");
     for(i=0; i < 2; i++)
     {
@@ -577,7 +577,7 @@ static void TestCurrencyObject(void)
             if (*currency[i] && uprv_strcmp(cStr, currency[i])) {
                 log_err("FAIL: currency should be %s, but is %s\n", currency[i], cStr);
             }
-            
+
             lneed=0;
             lneed= unum_formatDouble(currencyFmt, 1234.56, NULL, lneed, NULL, &status);
             if(status==U_BUFFER_OVERFLOW_ERROR){
@@ -596,7 +596,7 @@ static void TestCurrencyObject(void)
                 }
             }
         }
-        
+
         unum_close(currencyFmt);
         free(str);
         free(res);
@@ -610,7 +610,7 @@ static void TestRounding487(void)
 {
     UNumberFormat *nnf;
     UErrorCode status = U_ZERO_ERROR;
-    /* this is supposed to open default date format, but later on it treats it like it is "en_US" 
+    /* this is supposed to open default date format, but later on it treats it like it is "en_US"
      - very bad if you try to run the tests on machine where default locale is NOT "en_US" */
     /* nnf = unum_open(UNUM_DEFAULT, NULL, &status); */
     nnf = unum_open(UNUM_DEFAULT, NULL,0,"en_US",NULL, &status);
@@ -620,18 +620,18 @@ static void TestRounding487(void)
     } else {
         roundingTest(nnf, 0.00159999, 4, "0.0016");
         roundingTest(nnf, 0.00995, 4, "0.01");
-        
+
         roundingTest(nnf, 12.3995, 3, "12.4");
-        
+
         roundingTest(nnf, 12.4999, 0, "12");
         roundingTest(nnf, - 19.5, 0, "-20");
     }
 
     unum_close(nnf);
 }
- 
+
 /*-------------------------------------*/
- 
+
 static void roundingTest(UNumberFormat* nf, double x, int32_t maxFractionDigits, const char* expected)
 {
     UChar *out = NULL;
@@ -665,7 +665,7 @@ static void roundingTest(UNumberFormat* nf, double x, int32_t maxFractionDigits,
 }
 
 /*
- * Testing unum_getDoubleAttribute and  unum_setDoubleAttribute() 
+ * Testing unum_getDoubleAttribute and  unum_setDoubleAttribute()
  */
 static void TestDoubleAttribute(void)
 {
@@ -687,7 +687,7 @@ static void TestDoubleAttribute(void)
         dvalue=unum_getDoubleAttribute(def, attr);
         for (i = 0; i<9 ; i++)
         {
-            dvalue = mydata[i]; 
+            dvalue = mydata[i];
             unum_setDoubleAttribute(def, attr, dvalue);
             if(unum_getDoubleAttribute(def,attr)!=mydata[i])
                 log_err("Fail: error in setting and getting double attributes for UNUM_ROUNDING_INCREMENT\n");
@@ -791,14 +791,14 @@ static void TestSecondaryGrouping(void) {
     }
     if (!ok) {
         log_err("FAIL  Expected %s x hi_IN -> \"1,87,65,43,210\" (with Hindi digits), got %s\n", "1876543210L", resultBuffer);
-    } 
+    }
     unum_close(f);
     unum_close(us);
 }
 
 static void TestCurrencyKeywords(void)
 {
-    static const char * const currencies[] = { 
+    static const char * const currencies[] = {
         "ADD", "ADP", "AED", "AFA", "AFN", "AIF", "ALK", "ALL", "ALV", "ALX", "AMD",
         "ANG", "AOA", "AOK", "AON", "AOR", "AOS", "ARA", "ARM", "ARP", "ARS", "ATS",
         "AUD", "AUP", "AWG", "AZM", "BAD", "BAM", "BAN", "BBD", "BDT", "BEC", "BEF",
@@ -807,35 +807,35 @@ static void TestCurrencyKeywords(void)
         "BSD", "BSP", "BTN", "BTR", "BUK", "BUR", "BWP", "BYB", "BYL", "BYR", "BZD",
         "BZH", "CAD", "CDF", "CDG", "CDL", "CFF", "CHF", "CKD", "CLC", "CLE", "CLF",
         "CLP", "CMF", "CNP", "CNX", "CNY", "COB", "COF", "COP", "CRC", "CSC", "CSK",
-        "CUP", "CUX", "CVE", "CWG", "CYP", "CZK", "DDM", "DEM", "DES", "DJF", "DKK", 
-        "DOP", "DZD", "DZF", "DZG", "ECS", "ECV", "EEK", "EGP", "ERN", "ESP", "ETB", 
-        "ETD", "EUR", "FIM", "FIN", "FJD", "FJP", "FKP", "FOK", "FRF", "FRG", "GAF", 
-        "GBP", "GEK", "GEL", "GHC", "GHO", "GHP", "GHR", "GIP", "GLK", "GMD", "GMP", 
-        "GNF", "GNI", "GNS", "GPF", "GQE", "GQF", "GQP", "GRD", "GRN", "GTQ", "GUF", 
-        "GWE", "GWM", "GWP", "GYD", "HKD", "HNL", "HRD", "HRK", "HTG", "HUF", "IBP", 
-        "IDG", "IDJ", "IDN", "IDR", "IEP", "ILL", "ILP", "ILS", "IMP", "INR", "IQD", 
-        "IRR", "ISK", "ITL", "JEP", "JMD", "JMP", "JOD", "JPY", "KES", "KGS", "KHO", 
-        "KHR", "KID", "KMF", "KPP", "KPW", "KRH", "KRO", "KRW", "KWD", "KYD", "KZR", 
-        "KZT", "LAK", "LBP", "LIF", "LKR", "LNR", "LRD", "LSL", "LTL", "LTT", "LUF", 
-        "LVL", "LVR", "LYB", "LYD", "LYP", "MAD", "MAF", "MCF", "MCG", "MDC", "MDL", 
-        "MDR", "MGA", "MGF", "MHD", "MKD", "MKN", "MLF", "MMK", "MMX", "MNT", "MOP", 
-        "MQF", "MRO", "MTL", "MTP", "MUR", "MVP", "MVR", "MWK", "MWP", "MXN", "MXP", 
-        "MXV", "MYR", "MZE", "MZM", "NAD", "NCF", "NGN", "NGP", "NHF", "NIC", "NIG", 
-        "NIO", "NLG", "NOK", "NPR", "NZD", "NZP", "OMR", "OMS", "PAB", "PDK", "PDN", 
-        "PDR", "PEI", "PEN", "PES", "PGK", "PHP", "PKR", "PLN", "PLX", "PLZ", "PSP", 
-        "PTC", "PTE", "PYG", "QAR", "REF", "ROL", "RON", "RUB", "RUR", "RWF", "SAR", 
-        "SAS", "SBD", "SCR", "SDD", "SDP", "SEK", "SGD", "SHP", "SIB", "SIT", "SKK", 
-        "SLL", "SML", "SOS", "SQS", "SRG", "SSP", "STD", "STE", "SUN", "SUR", "SVC", 
-        "SYP", "SZL", "TCC", "TDF", "THB", "TJR", "TJS", "TMM", "TND", "TOP", "TOS", 
-        "TPE", "TPP", "TRL", "TTD", "TTO", "TVD", "TWD", "TZS", "UAH", "UAK", "UGS", 
-        "UGX", "USD", "USN", "USS", "UYF", "UYP", "UYU", "UZC", "UZS", "VAL", "VDD", 
-        "VDN", "VDP", "VEB", "VGD", "VND", "VNN", "VNR", "VNS", "VUV", "WSP", "WST", 
-        "XAD", "XAF", "XAM", "XAU", "XBA", "XBB", "XBC", "XBD", "XCD", "XCF", "XDR", 
-        "XEF", "XEU", "XFO", "XFU", "XID", "XMF", "XNF", "XOF", "XPF", "XPS", "XSS", 
-        "XTR", "YDD", "YEI", "YER", "YUD", "YUF", "YUG", "YUM", "YUN", "YUO", "YUR", 
+        "CUP", "CUX", "CVE", "CWG", "CYP", "CZK", "DDM", "DEM", "DES", "DJF", "DKK",
+        "DOP", "DZD", "DZF", "DZG", "ECS", "ECV", "EEK", "EGP", "ERN", "ESP", "ETB",
+        "ETD", "EUR", "FIM", "FIN", "FJD", "FJP", "FKP", "FOK", "FRF", "FRG", "GAF",
+        "GBP", "GEK", "GEL", "GHC", "GHO", "GHP", "GHR", "GIP", "GLK", "GMD", "GMP",
+        "GNF", "GNI", "GNS", "GPF", "GQE", "GQF", "GQP", "GRD", "GRN", "GTQ", "GUF",
+        "GWE", "GWM", "GWP", "GYD", "HKD", "HNL", "HRD", "HRK", "HTG", "HUF", "IBP",
+        "IDG", "IDJ", "IDN", "IDR", "IEP", "ILL", "ILP", "ILS", "IMP", "INR", "IQD",
+        "IRR", "ISK", "ITL", "JEP", "JMD", "JMP", "JOD", "JPY", "KES", "KGS", "KHO",
+        "KHR", "KID", "KMF", "KPP", "KPW", "KRH", "KRO", "KRW", "KWD", "KYD", "KZR",
+        "KZT", "LAK", "LBP", "LIF", "LKR", "LNR", "LRD", "LSL", "LTL", "LTT", "LUF",
+        "LVL", "LVR", "LYB", "LYD", "LYP", "MAD", "MAF", "MCF", "MCG", "MDC", "MDL",
+        "MDR", "MGA", "MGF", "MHD", "MKD", "MKN", "MLF", "MMK", "MMX", "MNT", "MOP",
+        "MQF", "MRO", "MTL", "MTP", "MUR", "MVP", "MVR", "MWK", "MWP", "MXN", "MXP",
+        "MXV", "MYR", "MZE", "MZM", "NAD", "NCF", "NGN", "NGP", "NHF", "NIC", "NIG",
+        "NIO", "NLG", "NOK", "NPR", "NZD", "NZP", "OMR", "OMS", "PAB", "PDK", "PDN",
+        "PDR", "PEI", "PEN", "PES", "PGK", "PHP", "PKR", "PLN", "PLX", "PLZ", "PSP",
+        "PTC", "PTE", "PYG", "QAR", "REF", "ROL", "RON", "RUB", "RUR", "RWF", "SAR",
+        "SAS", "SBD", "SCR", "SDD", "SDP", "SEK", "SGD", "SHP", "SIB", "SIT", "SKK",
+        "SLL", "SML", "SOS", "SQS", "SRG", "SSP", "STD", "STE", "SUN", "SUR", "SVC",
+        "SYP", "SZL", "TCC", "TDF", "THB", "TJR", "TJS", "TMM", "TND", "TOP", "TOS",
+        "TPE", "TPP", "TRL", "TTD", "TTO", "TVD", "TWD", "TZS", "UAH", "UAK", "UGS",
+        "UGX", "USD", "USN", "USS", "UYF", "UYP", "UYU", "UZC", "UZS", "VAL", "VDD",
+        "VDN", "VDP", "VEB", "VGD", "VND", "VNN", "VNR", "VNS", "VUV", "WSP", "WST",
+        "XAD", "XAF", "XAM", "XAU", "XBA", "XBB", "XBC", "XBD", "XCD", "XCF", "XDR",
+        "XEF", "XEU", "XFO", "XFU", "XID", "XMF", "XNF", "XOF", "XPF", "XPS", "XSS",
+        "XTR", "YDD", "YEI", "YER", "YUD", "YUF", "YUG", "YUM", "YUN", "YUO", "YUR",
         "ZAL", "ZAP", "ZAR", "ZMK", "ZMP", "ZRN", "ZRZ", "ZWD"
     };
-    
+
     UErrorCode status = U_ZERO_ERROR;
     int32_t i = 0, j = 0;
     int32_t noLocales = uloc_countAvailable();
@@ -843,8 +843,8 @@ static void TestCurrencyKeywords(void)
     char currLoc[256];
     UChar result[4];
     UChar currBuffer[256];
-    
-    
+
+
     for(i = 0; i < noLocales; i++) {
         strcpy(currLoc, uloc_getAvailable(i));
         for(j = 0; j < sizeof(currencies)/sizeof(currencies[0]); j++) {
@@ -858,7 +858,7 @@ static void TestCurrencyKeywords(void)
                 log_err("Didn't get the right currency for %s\n", locale);
             }
         }
-        
+
     }
 }
 
@@ -869,7 +869,7 @@ static void TestRounding5350(void)
 {
     UNumberFormat *nnf;
     UErrorCode status = U_ZERO_ERROR;
-    /* this is supposed to open default date format, but later on it treats it like it is "en_US" 
+    /* this is supposed to open default date format, but later on it treats it like it is "en_US"
      - very bad if you try to run the tests on machine where default locale is NOT "en_US" */
     /* nnf = unum_open(UNUM_DEFAULT, NULL, &status); */
     nnf = unum_open(UNUM_DEFAULT, NULL,0,"en_US",NULL, &status);
@@ -886,13 +886,35 @@ static void TestRounding5350(void)
         roundingTest2(nnf, 0.135, UNUM_ROUND_HALFDOWN, "0.13");
         roundingTest2(nnf, 0.125, UNUM_ROUND_HALFUP, "0.13");
         roundingTest2(nnf, 0.135, UNUM_FOUND_HALFEVEN, "0.14");
+        // The following are exactly represented, and shouldn't round
+        roundingTest2(nnf, 1.00, UNUM_ROUND_UP, "1");
+        roundingTest2(nnf, 24.25, UNUM_ROUND_UP, "24.25");
+        roundingTest2(nnf, 24.25, UNUM_ROUND_CEILING, "24.25");
+        roundingTest2(nnf, -24.25, UNUM_ROUND_UP, "-24.25");
+
+        // Differences pretty far out there
+        roundingTest2(nnf, 1.0000001, UNUM_ROUND_CEILING, "1.01");
+        roundingTest2(nnf, 1.0000001, UNUM_ROUND_FLOOR, "1");
+        roundingTest2(nnf, 1.0000001, UNUM_ROUND_DOWN, "1");
+        roundingTest2(nnf, 1.0000001, UNUM_ROUND_UP, "1.01");
+        roundingTest2(nnf, 1.0000001, UNUM_FOUND_HALFEVEN, "1");
+        roundingTest2(nnf, 1.0000001, UNUM_ROUND_HALFDOWN, "1");
+        roundingTest2(nnf, 1.0000001, UNUM_ROUND_HALFUP, "1");
+
+        roundingTest2(nnf, -1.0000001, UNUM_ROUND_CEILING, "-1");
+        roundingTest2(nnf, -1.0000001, UNUM_ROUND_FLOOR, "-1.01");
+        roundingTest2(nnf, -1.0000001, UNUM_ROUND_DOWN, "-1");
+        roundingTest2(nnf, -1.0000001, UNUM_ROUND_UP, "-1.01");
+        roundingTest2(nnf, -1.0000001, UNUM_FOUND_HALFEVEN, "-1");
+        roundingTest2(nnf, -1.0000001, UNUM_ROUND_HALFDOWN, "-1");
+        roundingTest2(nnf, -1.0000001, UNUM_ROUND_HALFUP, "-1");
     }
 
     unum_close(nnf);
 }
- 
+
 /*-------------------------------------*/
- 
+
 static void roundingTest2(UNumberFormat* nf, double x, int32_t roundingMode, const char* expected)
 {
     UChar *out = NULL;
@@ -918,7 +940,7 @@ static void roundingTest2(UNumberFormat* nf, double x, int32_t roundingMode, con
     res=(UChar*)malloc(sizeof(UChar) * (strlen(expected)+1) );
     u_uastrcpy(res, expected);
     if (u_strcmp(out, res) != 0)
-        log_err("FAIL: Expected: %s or %s\n", expected, austrdup(res) );
+        log_err("FAIL: Expected: \"%s\"  Got: \"%s\"\n", expected, austrdup(out) );
     free(res);
     if(out != NULL) {
         free(out);

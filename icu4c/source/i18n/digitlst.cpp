@@ -30,6 +30,7 @@
 #include "unicode/putil.h"
 #include "cstring.h"
 #include "putilimp.h"
+#include "uassert.h"
 #include <stdlib.h>
 #include <limits.h>
 #include <string.h>
@@ -38,7 +39,7 @@
 // ***************************************************************************
 // class DigitList
 // This class handles the transcoding between numeric values and strings of
-//  characters.  Only handles as non-negative numbers.  
+//  characters.  Only handles as non-negative numbers.
 // ***************************************************************************
 
 /**
@@ -142,7 +143,7 @@ DigitList::clear()
  * @return the number of digits written, not including the sign.
  */
 static int32_t
-formatBase10(int64_t number, char *outputStr, int32_t outputLen) 
+formatBase10(int64_t number, char *outputStr, int32_t outputLen)
 {
     char buffer[MAX_DIGITS + 1];
     int32_t bufferLen;
@@ -412,12 +413,12 @@ DigitList::set(int64_t source, int32_t maximumDigits)
     fCount = fDecimalAt = formatBase10(source, fDecimalDigits, MAX_DIGITS);
 
     fIsPositive = (*fDecimalDigits == '+');
-    
+
     // Don't copy trailing zeros
-    while (fCount > 1 && fDigits[fCount - 1] == kZero) 
+    while (fCount > 1 && fDigits[fCount - 1] == kZero)
         --fCount;
-    
-    if(maximumDigits > 0) 
+
+    if(maximumDigits > 0)
         round(maximumDigits);
 }
 
@@ -510,7 +511,7 @@ DigitList::set(double source, int32_t maximumDigits, UBool fixedPoint)
  * @param maximumDigits The maximum number of digits to be shown.
  * Upon return, count will be less than or equal to maximumDigits.
  */
-void 
+void
 DigitList::round(int32_t maximumDigits)
 {
     // Eliminate digits beyond maximum digits to be displayed.
@@ -559,21 +560,18 @@ DigitList::round(int32_t maximumDigits)
  * incremented
  */
 UBool DigitList::shouldRoundUp(int32_t maximumDigits) const {
-    switch (fRoundingMode) {
-    case DecimalFormat::kRoundCeiling:
-        return fIsPositive;
-    case DecimalFormat::kRoundFloor:
-        return !fIsPositive;
-    case DecimalFormat::kRoundDown:
+    int i = 0;
+    if (fRoundingMode == DecimalFormat::kRoundDown ||
+        fRoundingMode == DecimalFormat::kRoundFloor   &&  fIsPositive ||
+        fRoundingMode == DecimalFormat::kRoundCeiling && !fIsPositive) {
         return FALSE;
-    case DecimalFormat::kRoundUp:
-        return TRUE;
-    case DecimalFormat::kRoundHalfEven:
-    case DecimalFormat::kRoundHalfDown:
-    case DecimalFormat::kRoundHalfUp:
-    default:
+    }
+
+    if (fRoundingMode == DecimalFormat::kRoundHalfEven ||
+        fRoundingMode == DecimalFormat::kRoundHalfDown ||
+        fRoundingMode == DecimalFormat::kRoundHalfUp) {
         if (fDigits[maximumDigits] == '5' ) {
-            for (int i=maximumDigits+1; i<fCount; ++i) {
+            for (i=maximumDigits+1; i<fCount; ++i) {
                 if (fDigits[i] != kZero) {
                     return TRUE;
                 }
@@ -591,6 +589,17 @@ UBool DigitList::shouldRoundUp(int32_t maximumDigits) const {
         }
         return (fDigits[maximumDigits] > '5');
     }
+
+    U_ASSERT(fRoundingMode == DecimalFormat::kRoundUp ||
+             fRoundingMode == DecimalFormat::kRoundFloor   && !fIsPositive ||
+             fRoundingMode == DecimalFormat::kRoundCeiling &&  fIsPositive);
+
+     for (i=maximumDigits; i<fCount; ++i) {
+         if (fDigits[i] != kZero) {
+             return TRUE;
+         }
+     }
+     return false;
 }
 
 // -------------------------------------
