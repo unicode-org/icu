@@ -192,6 +192,14 @@
     <condition property="test.jvm.args" value="-Xms96m -Xmx128m">
         <isset property="before.java14" />
     </condition>
+    <condition property="test.jvm.args" value="-ea -Xms96m -Xmx128m -Xdisableexcessivegc">
+      <and>
+        <not>
+          <isset property="before.java15" />
+        </not>
+        <equals arg1="${java.vm.vendor}" arg2="IBM Corporation"/>
+      </and>
+    </condition>
     <condition property="test.jvm.args" value="-ea -Xms96m -Xmx128m">
       <not>
         <isset property="test.jvm.args" />
