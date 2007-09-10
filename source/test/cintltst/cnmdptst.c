@@ -876,39 +876,40 @@ static void TestRounding5350(void)
 
     if(U_FAILURE(status)){
         log_err("FAIL: failure in the construction of number format: %s\n", myErrorName(status));
-    } else {
-        unum_setAttribute(nnf, UNUM_MAX_FRACTION_DIGITS, 2);
-        roundingTest2(nnf, -0.125, UNUM_ROUND_CEILING, "-0.12");
-        roundingTest2(nnf, -0.125, UNUM_ROUND_FLOOR, "-0.13");
-        roundingTest2(nnf, -0.125, UNUM_ROUND_DOWN, "-0.12");
-        roundingTest2(nnf, -0.125, UNUM_ROUND_UP, "-0.13");
-        roundingTest2(nnf, 0.125, UNUM_FOUND_HALFEVEN, "0.12");
-        roundingTest2(nnf, 0.135, UNUM_ROUND_HALFDOWN, "0.13");
-        roundingTest2(nnf, 0.125, UNUM_ROUND_HALFUP, "0.13");
-        roundingTest2(nnf, 0.135, UNUM_FOUND_HALFEVEN, "0.14");
-        // The following are exactly represented, and shouldn't round
-        roundingTest2(nnf, 1.00, UNUM_ROUND_UP, "1");
-        roundingTest2(nnf, 24.25, UNUM_ROUND_UP, "24.25");
-        roundingTest2(nnf, 24.25, UNUM_ROUND_CEILING, "24.25");
-        roundingTest2(nnf, -24.25, UNUM_ROUND_UP, "-24.25");
-
-        // Differences pretty far out there
-        roundingTest2(nnf, 1.0000001, UNUM_ROUND_CEILING, "1.01");
-        roundingTest2(nnf, 1.0000001, UNUM_ROUND_FLOOR, "1");
-        roundingTest2(nnf, 1.0000001, UNUM_ROUND_DOWN, "1");
-        roundingTest2(nnf, 1.0000001, UNUM_ROUND_UP, "1.01");
-        roundingTest2(nnf, 1.0000001, UNUM_FOUND_HALFEVEN, "1");
-        roundingTest2(nnf, 1.0000001, UNUM_ROUND_HALFDOWN, "1");
-        roundingTest2(nnf, 1.0000001, UNUM_ROUND_HALFUP, "1");
-
-        roundingTest2(nnf, -1.0000001, UNUM_ROUND_CEILING, "-1");
-        roundingTest2(nnf, -1.0000001, UNUM_ROUND_FLOOR, "-1.01");
-        roundingTest2(nnf, -1.0000001, UNUM_ROUND_DOWN, "-1");
-        roundingTest2(nnf, -1.0000001, UNUM_ROUND_UP, "-1.01");
-        roundingTest2(nnf, -1.0000001, UNUM_FOUND_HALFEVEN, "-1");
-        roundingTest2(nnf, -1.0000001, UNUM_ROUND_HALFDOWN, "-1");
-        roundingTest2(nnf, -1.0000001, UNUM_ROUND_HALFUP, "-1");
+        return;
     }
+
+    unum_setAttribute(nnf, UNUM_MAX_FRACTION_DIGITS, 2);
+    roundingTest2(nnf, -0.125, UNUM_ROUND_CEILING, "-0.12");
+    roundingTest2(nnf, -0.125, UNUM_ROUND_FLOOR, "-0.13");
+    roundingTest2(nnf, -0.125, UNUM_ROUND_DOWN, "-0.12");
+    roundingTest2(nnf, -0.125, UNUM_ROUND_UP, "-0.13");
+    roundingTest2(nnf, 0.125, UNUM_FOUND_HALFEVEN, "0.12");
+    roundingTest2(nnf, 0.135, UNUM_ROUND_HALFDOWN, "0.13");
+    roundingTest2(nnf, 0.125, UNUM_ROUND_HALFUP, "0.13");
+    roundingTest2(nnf, 0.135, UNUM_FOUND_HALFEVEN, "0.14");
+    /* The following are exactly represented, and shouldn't round */
+    roundingTest2(nnf, 1.00, UNUM_ROUND_UP, "1");
+    roundingTest2(nnf, 24.25, UNUM_ROUND_UP, "24.25");
+    roundingTest2(nnf, 24.25, UNUM_ROUND_CEILING, "24.25");
+    roundingTest2(nnf, -24.25, UNUM_ROUND_UP, "-24.25");
+
+    /* Differences pretty far out there */
+    roundingTest2(nnf, 1.0000001, UNUM_ROUND_CEILING, "1.01");
+    roundingTest2(nnf, 1.0000001, UNUM_ROUND_FLOOR, "1");
+    roundingTest2(nnf, 1.0000001, UNUM_ROUND_DOWN, "1");
+    roundingTest2(nnf, 1.0000001, UNUM_ROUND_UP, "1.01");
+    roundingTest2(nnf, 1.0000001, UNUM_FOUND_HALFEVEN, "1");
+    roundingTest2(nnf, 1.0000001, UNUM_ROUND_HALFDOWN, "1");
+    roundingTest2(nnf, 1.0000001, UNUM_ROUND_HALFUP, "1");
+
+    roundingTest2(nnf, -1.0000001, UNUM_ROUND_CEILING, "-1");
+    roundingTest2(nnf, -1.0000001, UNUM_ROUND_FLOOR, "-1.01");
+    roundingTest2(nnf, -1.0000001, UNUM_ROUND_DOWN, "-1");
+    roundingTest2(nnf, -1.0000001, UNUM_ROUND_UP, "-1.01");
+    roundingTest2(nnf, -1.0000001, UNUM_FOUND_HALFEVEN, "-1");
+    roundingTest2(nnf, -1.0000001, UNUM_ROUND_HALFDOWN, "-1");
+    roundingTest2(nnf, -1.0000001, UNUM_ROUND_HALFUP, "-1");
 
     unum_close(nnf);
 }
