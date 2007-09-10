@@ -18,10 +18,10 @@ h3.doc { background: #CCCCFF }
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h2>International Components for Unicode for Java (ICU4J)</h2>
-<h3>Read Me for ICU4J 3.8d02</h3>
+<h3>Read Me for ICU4J 3.8</h3>
 <hr size="2" width="100%">
 <p><b>Release Date</b><br>
-August 31, 2007<br>
+September 14, 2007<br>
 </p>
 <p><b>Note:</b> This is major release of ICU4J.  It contains bug fixes
 and adds implementations of inherited API and introduces new API
@@ -823,8 +823,6 @@ These sizes are approximate for release 3.6.
               UCharacterCategory,
               UCharacterDirection,
               UCharacterEnums,
-              UCharacterNameIterator,
-              UCharacterTypeIterator,
               UProperty,
               UScript
             </td>
@@ -885,8 +883,6 @@ These sizes are approximate for release 3.6.
               UCharacterCategory,
               UCharacterDirection,
               UCharacterEnums,
-              UCharacterNameIterator,
-              UCharacterTypeIterator,
               UProperty,
               UScript
             </td>
@@ -896,26 +892,13 @@ These sizes are approximate for release 3.6.
             <td valign="baseline">
               BreakDictionary,
               BreakIterator,
-              BreajIteratorFactory,
               CanonicalIterator,
               <b>CollationElementIterator</b>,
               <b>CollationKey</b>,
-              CollationParsedRuleBuilder,
-              CollationRuleParser,
               <b>Collator</b>,
-              CollatorReader,
-              CollatorServiceShim,
               DictionaryBasedBreakIterator,
               Normalizer,
               RawCollationKey,
-              RBBIDataWrapper,
-              RBBINode,
-              RBBIRuleBuilder,
-              RBBIRuleParseTable,
-              RBBIRuleScanner,
-              RBBISetBuilder,
-              RBBISymbolTable,
-              RBBITableBuilder,
               Replaceable,
               ReplaceableString,
               RuleBasedBreakIterator,
@@ -970,8 +953,6 @@ These sizes are approximate for release 3.6.
               UCharacterCategory,
               UCharacterDirection,
               UCharacterEnums,
-              UCharacterNameIterator,
-              UCharacterTypeIterator,
               UProperty,
               UScript
             </td>
@@ -987,44 +968,28 @@ These sizes are approximate for release 3.6.
           <tr>
             <td valign="baseline">icu.text:</td>
             <td valign="baseline">
-              AbsoluteValueSubstitution
               BreakIterator,
               CanonicalIterator,
               <b>ChineseDateFormat</b>,
               <b>ChineseDateFormatSymbols</b>,
               CollationElementIterator,
               CollationKey,
-              CollationParsedRuleBuilder,
-              CollationRuleParser,
               Collator,
-              CollatorReader,
               <b>DateFormat</b>,
               <b>DateFormatSymbols</b>,
               DecimalFormat,
               DecimalFormatSymbols,
-              DigitList,
-              FractionalPartSubstitution,
-              IntegralPartSubstitution,
               MessageFormat,
-              ModulusSubstitution,
-              MultiplierSubstitution,
-              NFRule,
-              NFRuleSet,
-              NFSubstitution,
               Normalizer,
-              NullSubstitution,
               NumberFormat,
-              NumeratorSubstitution,
               PluralFormat,
               PluralRules,
               RawCollationKey,
-              RBNFPostProcessor,
               Replaceable,
               ReplaceableString,
               RuleBasedCollator,
               RuleBasedNumberFormat,
               RuleBasedTransliterator,
-              SameValueSubstitution,
               <b>SimpleDateFormat</b>,
               SymbolTable,
               UCharacterIterator,
@@ -1046,8 +1011,6 @@ These sizes are approximate for release 3.6.
               <b>BuddhistCalendar</b>,
               ByteArrayWrapper,
               <b>Calendar</b>,
-              CalendarServiceShim,
-              CECalendar,
               <b>ChineseCalendar</b>,
               <b>CopticCalendar</b>,
               Currency,
@@ -1055,7 +1018,6 @@ These sizes are approximate for release 3.6.
               <b>DateRule</b>,
               DateTimeRule,
               <b>EasterHoliday</b>,
-              EasterRule,
               <b>EthiopicCalendar</b>,
               Freezable,
               <b>GregorianCalendar</b>,
@@ -1074,7 +1036,6 @@ These sizes are approximate for release 3.6.
               <b>SimpleHoliday</b>,
               <b>SimpleTimeZone</b>,
               StringTokenizer,
-              STZInfo,
               <b>TaiwanCalendar</b>,
               <b>TimeZone</b>,
               TimeZoneRule,
@@ -1112,8 +1073,6 @@ breakIteratorTests</td>
               UCharacterCategory,
               UCharacterDirection,
               UCharacterEnums,
-              UCharacterNameIterator,
-              UCharacterTypeIterator,
               UProperty,
               UScript
             </td>
@@ -1123,18 +1082,9 @@ breakIteratorTests</td>
             <td valign="baseline">
               <b>BreakDictionary</b>,
               <b>BreakIterator</b>,
-              BreakIteratorFactory,
               CanonicalIterator,
               <b>DictionaryBasedBreakIterator</b>,
               Normalizer,
-              RBBIDataWrapper,
-              RBBINode,
-              RBBIRuleBuilder,
-              RBBIRuleParseTable,
-              RBBIRuleScanner,
-              RBBISetBuilder,
-              RBBISymbolTable,
-              RBBITableBuilder,
               Replaceable,
               ReplaceableString,
               <b>RuleBasedBreakIterator</b>,
@@ -1188,8 +1138,6 @@ propertiesBasicTests</td>
               <b>UCharacterCategory</b>,
               <b>UCharacterDirection</b>,
               <b>UCharacterEnums</b>,
-              UCharacterNameIterator,
-              UCharacterTypeIterator,
               <b>UProperty</b>,
               <b>UScript</b>,
               <b>UScriptRun</b>
@@ -1200,17 +1148,8 @@ propertiesBasicTests</td>
             <td valign="baseline">
               BreakDictionary,
               BreakIterator,
-              BreakIteratorFactory,
               DictionaryBasedBreakIterator,
               Normalizer,
-              RBBIDataWrapper,
-              RBBINode,
-              RBBIRuleBuilder,
-              RBBIRuleParseTable,
-              RBBIRuleScanner,
-              RBBISetBuilder,
-              RBBISymbolTable,
-              RBBITableBuilder,
               Replaceable,
               ReplaceableString,
               RuleBasedBreakIterator,
@@ -1263,8 +1202,6 @@ propertiesFullTests</td>
               <b>UCharacterCategory</b>,
               <b>UCharacterDirection</b>,
               <b>UCharacterEnums</b>,
-              UCharacterNameIterator,
-              UCharacterTypeIterator,
               <b>UProperty</b>,
               <b>UScript</b>,
               <b>UScriptRun</b>
@@ -1275,17 +1212,8 @@ propertiesFullTests</td>
             <td valign="baseline">
               BreakDictionary,
               BreakIterator,
-              BreakIteratorFactory,
               DictionaryBasedBreakIterator,
               <b>Normalizer</b>,
-              RBBIDataWrapper,
-              RBBINode,
-              RBBIRuleBuilder,
-              RBBIRuleParseTable,
-              RBBIRuleScanner,
-              RBBISetBuilder,
-              RBBISymbolTable,
-              RBBITableBuilder,
               <b>Replaceable</b>,
               <b>ReplaceableString</b>,
               RuleBasedBreakIterator,
@@ -1337,8 +1265,6 @@ propertiesFullTests</td>
               UCharacterCategory,
               UCharacterDirection,
               UCharacterEnums,
-              UCharacterNameIterator,
-              UCharacterTypeIterator,
               UProperty,
               UScript
             </td>
@@ -1353,47 +1279,29 @@ propertiesFullTests</td>
           <tr>
             <td valign="baseline">icu.text:</td>
             <td valign="baseline">
-              AbsoluteValueSubstitution,
               BreakIterator,
               CanonicalIterator,
-              ChineseDateFormat,
-              ChineseDateFormatSymbols,
+              <b>ChineseDateFormat</b>,
+              <b>ChineseDateFormatSymbols</b>,
               CollationElementIterator,
               CollationKey,
-              CollationParsedRuleBuilder,
-              CollationRuleParser,
               Collator,
-              CollatorReader,
-              CollatorServiceShim,
-              CurrencyFormat,
               <b>DateFormat</b>,
               <b>DateFormatSymbols</b>,
               <b>DecimalFormat</b>,
               <b>DecimalFormatSymbols</b>,
-              DigitList,
               <b>DurationFormat</b>,
-              FractionalPartSubstitution,
-              IntegralPartSubstitution,
               MeasureFormat,
               <b>MessageFormat</b>,
-              ModulusSubstitution,
-              MultiplierSubstitution,
-              NFRule,
-              NFRuleSet,
-              NFSubstitution,
               Normalizer,
-              NullSubstitution,
               <b>NumberFormat</b>,
-              NumberFormatServiceShim,
               <b>PluralFormat</b>,
               <b>PluralRules</b>,
               RawCollationKey,
-              RBNFPostProcessor,
               Replaceable,
               ReplaceableString,
               RuleBasedCollator,
               <b>RuleBasedNumberFormat</b>,
-              SameValueSubstitution,
               <b>SimpleDateFormat</b>,
               SymbolTable,
               <b>UCharacterIterator</b>,
@@ -1414,8 +1322,6 @@ propertiesFullTests</td>
               <b>BuddhistCalendar</b>,
               ByteArrayWrapper,
               <b>Calendar</b>,
-              CalendarServiceShim,
-              CECalendar,
               <b>ChineseCalendar</b>,
               <b>CopticCalendar</b>,
               <b>Currency</b>,
@@ -1434,7 +1340,6 @@ propertiesFullTests</td>
               RangeValueIterator,
               <b>SimpleTimeZone</b>,
               StringTokenizer,
-              STZInfo,
               <b>TaiwanCalendar</b>,
               TimeArrayTimeZoneRule,
               <b>TimeZone</b>,
@@ -1471,8 +1376,6 @@ propertiesFullTests</td>
               UCharacterCategory,
               UCharacterDirection,
               UCharacterEnums,
-              UCharacterNameIterator,
-              UCharacterTypeIterator,
               UProperty,
               UScript
             </td>
@@ -1529,8 +1432,6 @@ propertiesFullTests</td>
               UCharacterCategory,
               UCharacterDirection,
               UCharacterEnums,
-              UCharacterNameIterator,
-              UCharacterTypeIterator,
               UProperty,
               UScript
             </td>
@@ -1538,56 +1439,25 @@ propertiesFullTests</td>
           <tr>
             <td valign="baseline">icu.text:</td>
             <td valign="baseline">
-              AnyTransliterator,
               BreakDictionary,
               BreakIterator,
-              BreakTransliterator,
-              CompoundTransliterator,
               DictionaryBasedBreakIterator,
-              EscapeTransliterator,
-              FunctionReplacer,
-              LowercaseTransliterator,
-              NameUnicodeTransliterator,
-              NormalizationTransliterator,
               Normalizer,
-              NullTransliterator,
-              Quantifier,
-              RBBIDataWrapper,
-              RBBINode,
-              RBBIRuleBuilder,
-              RBBIRuleParseTable,
-              RBBIRuleScanner,
-              RBBISetBuilder,
-              RBBISymbolTable,
-              RBBITableBuilder,
-              RemoveTransliterator,
               <b>Replaceable</b>,
-              ReplaceableContextIterator,
               <b>ReplaceableString</b>,
               RuleBasedBreakIterator,
               RuleBasedCollator,
               <b>RuleBasedTransliterator</b>,
-              StringMatcher,
-              StringReplacer,
               StringTransform,
               SymbolTable,
-              TitlecaseTransliterator,
-              TransliterationRule,
               <b>Transliterator</b>,
-              TransliteratorIDParser,
-              TransliteratorParser,
-              TransliteratorRegistry,
               UCharacterIterator,
               UForwardCharacterIterator,
               UnicodeFilter,
               UnicodeMatcher,
-              UnicodeNameTransliterator,
-              UnicodeReplacer,
               <b>UnicodeSet</b>,
               <b>UnicodeSetIterator</b>,
               <b>UTF16</b>
-            </td>
-            <td> <br>
             </td>
           </tr>
           <tr>
@@ -1760,7 +1630,7 @@ data</b> and default <b>unicode collation algorithm (UCA) data</b>
 is found under the <tt>data</tt> directory as a set of <tt>".icu"</tt>
 files. </li>
   <li>The <b>character set converter data</b> is under the directory
-  <tt>icudt38b</tt>, as as set of <tt>".cnv"</tt> files.  These files are
+  <tt>icudt38b</tt>, as a set of <tt>".cnv"</tt> files.  These files are
   currently included only in icu-charset.jar.</li>
   <li>The <b>time zone data</b> is named <tt>zoneinfo.res</tt> under
   the directory <tt>icudt38b</tt>.</li>
