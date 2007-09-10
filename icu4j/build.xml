@@ -745,6 +745,7 @@
 
   <target name="secureCheck" depends="secure" description="run secure (applet-like) icu4j test suite">
     <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
+      <jvmarg line="${test.jvm.args}"/>
       <!-- jvmarg value="-verbose"/ -->
       <!-- (use for debugging, LOTS of output) <jvmarg value="-Djava.security.debug=access:trace"/ -->
       <!-- <jvmarg value="-Djava.security.debug=access:failure,domain"/> -->
