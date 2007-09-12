@@ -133,8 +133,8 @@ class RBBIRuleBuilder {
     //----------------------------------------------------------------------------------------
     RBBIRuleBuilder(String rules)
     {
-        fDebugEnv       = ICUDebug.enabled("U_RBBIDEBUG") ?
-                            ICUDebug.value("U_RBBIDEBUG") : null;
+        fDebugEnv       = ICUDebug.enabled("rbbi") ?
+                            ICUDebug.value("rbbi") : null;
         fRules          = rules;
         fUSetNodes      = new ArrayList();
         fRuleStatusVals = new ArrayList();

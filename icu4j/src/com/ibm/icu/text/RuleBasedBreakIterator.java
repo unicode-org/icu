@@ -283,7 +283,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
     /*
      * ICU debug argument name for RBBI
      */
-    private static final String RBBI_DEBUG_ARG = "U_RBBIDEBUG";
+    private static final String RBBI_DEBUG_ARG = "rbbi";
 
     /**
      * Dump the contents of the state table and character classes for this break iterator.
