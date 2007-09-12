@@ -142,6 +142,9 @@ ICULanguageBreakFactory::getEngineFor(UChar32 c, int32_t breakType) {
     const LanguageBreakEngine *lbe = NULL;
     UErrorCode  status = U_ZERO_ERROR;
 
+    // TODO: The global mutex should not be used.
+    // The global mutex should only be used for short periods.
+    // A ICULanguageBreakFactory specific mutex should be used.
     umtx_lock(NULL);
     needsInit = (UBool)(fEngines == NULL);
     if (!needsInit) {
