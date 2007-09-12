@@ -138,6 +138,14 @@ public class TestCompatibility extends BidiTest {
 
     public void testCompatibility()
     {
+        // This test case does not work well on Java 1.4/1.4.1 environment,
+        // because of insufficient Bidi implementation in these versions.
+        String javaVersion = System.getProperty("java.version");
+        if (javaVersion.startsWith("1.4.0") || javaVersion.startsWith("1.4.1")) {
+            logln("\nSkipping TestCompatibility.  The test case is known to fail on Java "
+                    + javaVersion + "\n");
+            return;
+        }
         logln("\nEntering TestCompatibility\n");
         /* check constant field values */
         int val;
