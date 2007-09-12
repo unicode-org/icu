@@ -1,6 +1,6 @@
 //#
- //#*******************************************************************************
-//#* Copyright (C) 1997-2006, International Business Machines Corporation and    *
+//#*******************************************************************************
+//#* Copyright (C) 1997-2007, International Business Machines Corporation and    *
 //#* others. All Rights Reserved.                                                *
 //#*******************************************************************************
 //#* This is the ant build file for ICU4J.  See readme.html for more information.
@@ -8,24 +8,23 @@
 // policies needed to run tests
 grant // codebase "file:${user.dir}/icu4jtests.jar"
 {
-	// temporary for debugging
-        // permission java.lang.RuntimePermission "getProtectionDomain";
+    // temporary for debugging
+    // permission java.lang.RuntimePermission "getProtectionDomain";
 
-	// ibm 141 on ibm xp can't use reflection
-	permission java.lang.RuntimePermission "accessDeclaredMembers";
+    // ibm 141 on ibm xp can't use reflection
+    permission java.lang.RuntimePermission "accessDeclaredMembers";
 
-	// needed for Locale.setDefault, only used in tests and demos
-	permission java.util.PropertyPermission "user.language", "write";
+    // needed for Locale.setDefault, only used in tests and demos
+    permission java.util.PropertyPermission "user.language", "write";
 
-	// needed for TestUtils
-	permission java.util.PropertyPermission "ICUDataPath", "read";
-	permission java.util.PropertyPermission "user.dir", "read";
-    permission java.util.PropertyPermission "U_RBBIDEBUG", "read";
+    // needed for TestUtils
+    permission java.util.PropertyPermission "ICUDataPath", "read";
+    permission java.util.PropertyPermission "user.dir", "read";
     permission java.util.PropertyPermission "GENERATE_TEST_DATA", "read";
-	
+
     // time zone tests
-	permission java.util.PropertyPermission "user.timezone", "read";
-    
+    permission java.util.PropertyPermission "user.timezone", "read";
+
     //for charsets
     permission java.lang.RuntimePermission "charsetProvider", "read";
 
@@ -43,6 +42,6 @@ grant // codebase "file:${user.dir}/icu4jtests.jar"
 //
 grant codebase "file:${user.dir}/icu4j.jar"
 {
-	permission java.io.FilePermission "${/}${user.dir}${/}icu4jtests.jar", "read";
-	permission java.io.FilePermission "${/}${user.dir}${/}icu4j-charsets.jar", "read";
+    permission java.io.FilePermission "${/}${user.dir}${/}icu4jtests.jar", "read";
+    permission java.io.FilePermission "${/}${user.dir}${/}icu4j-charsets.jar", "read";
 };

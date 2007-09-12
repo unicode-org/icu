@@ -13,6 +13,7 @@ import java.io.OutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import com.ibm.icu.impl.Assert;
+import com.ibm.icu.impl.ICUDebug;
 
 class RBBIRuleBuilder {
     //   This is the main class for building (compiling) break rules into the tables
@@ -132,7 +133,8 @@ class RBBIRuleBuilder {
     //----------------------------------------------------------------------------------------
     RBBIRuleBuilder(String rules)
     {
-        fDebugEnv       = System.getProperty("U_RBBIDEBUG");
+        fDebugEnv       = ICUDebug.enabled("U_RBBIDEBUG") ?
+                            ICUDebug.value("U_RBBIDEBUG") : null;
         fRules          = rules;
         fUSetNodes      = new ArrayList();
         fRuleStatusVals = new ArrayList();
