@@ -1262,14 +1262,19 @@ Data set name type  : PDS</samp>
       <li>
         Create i5/OS target library. This library will be the target for the
         resulting modules, programs and service programs. You will specify this
-        library on the OUTPUTDIR environment variable. 
+        library on the OUTPUTDIR environment variable.
 <pre>
 <samp>CRTLIB LIB(<i>libraryname</i>)
 ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
 </pre>
       </li>
 
-      <li>Run <tt>'CHGJOB CCSID(37)'</tt></li>
+      <li>
+      Set up the following environment variables and job characteristics in your build process
+<pre>
+<samp>ADDENVVAR ENVVAR(MAKE) VALUE('/usr/bin/gmake')
+CHGJOB CCSID(37)</samp>
+</pre>
 
       <li>Run <tt>'QSH'</tt></li>
 
@@ -1285,14 +1290,11 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
 
       <li>Run <tt>'gmake'</tt> to build ICU.</li>
 
-      <li>Run <tt>'gmake check'</tt> to build and run the tests.</li>
-
-      <li>The "utility/MultithreadTest" test in intltest may have failed during
-      <tt>'gmake check'</tt>. In order to make this test pass, please use
-      <tt>'gmake check QIBM_MULTI_THREADED=Y'</tt> after you built the tests with
-      <tt>'gmake check'</tt> from the previous step. You can look at the <a href=
+      <li>Run <tt>'gmake check QIBM_MULTI_THREADED=Y'</tt> to build and run the tests.
+      You can look at the <a href=
       "http://publib.boulder.ibm.com/infocenter/iseries/v5r3/index.jsp?topic=/apis/concept4.htm">
-      iSeries Information Center</a> for more details.</li>
+      iSeries Information Center</a> for more details regarding the running of multiple threads
+      on i5/OS.</li>
     </ol>
     <!-- end build environment -->
 
