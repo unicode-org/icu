@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -86,7 +86,7 @@ public final class ICUDebug {
         return false;
     }
 
-/*    public static String value(String arg) {
+    public static String value(String arg) {
         String result = "false";
         if (debug) {
             int index = params.indexOf(arg);
@@ -104,7 +104,7 @@ public final class ICUDebug {
             if (help) System.out.println("\nICUDebug.value(" + arg + ") = " + result);
         }
         return result;
-    }*/
+    }
 
 /*    static public void main(String[] args) {
         // test
