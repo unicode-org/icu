@@ -3,7 +3,6 @@
 
 <html lang="en-US" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
   <head>
-    <meta name="generator" content="HTML Tidy, see www.w3.org" />
 
     <title>ReadMe for ICU</title>
     <meta name="COPYRIGHT" content=
@@ -34,7 +33,7 @@
      <abbr title="International Components for Unicode">ICU</abbr> 3.8
     ReadMe</h1>
 
-    <p>Version: 2007 September 4<br />
+    <p>Version: 2007 September 12<br />
      Copyright &copy; 1997-2007 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -218,80 +217,25 @@
     this release, see the <a href="http://www.icu-project.org/download/">ICU 3.8
     download page</a>.</p>
 
-    <h3><a name="News_app_packaging" id="News_app_packaging">Changes to packaging
-    resource bundles</a></h3>
+    <h3><a name="News_timezone" id="News_timezone">Changes to timezone formatting
+    and parsing</a></h3>
 
-    <p>Since ICU 3.0, the old style of packaging was deprecated, and an alternate
-    packaging mode was made available. In this release, this compatibility mode
-    of packaging has been removed from ICU. If you're using the genrb -P or -t
-    options, you are probably using the older compatible mode of data packaging.
-    This compatibility file naming mode was removed for portability and
-    performance reasons.</p>
+    <p>In ICU 3.8, the behavior of date formatting and parsing has changed
+    significantly, perhaps requiring recoding on your part depending on your
+    usage. The goal of making the change was to return more understandable
+    results from formatting timezones, but a byproduct is that the result from
+    formatting with strings z, zzzz, v or vvvv are no longer unique, and thus no
+    longer roundtrips. That is, if you use a date format with one of these
+    strings, producing a certain output, you can no longer parse that output
+    and expect to recover the original timezone.</p>
 
-    <p>Code changes should not be required to use the newer data file naming
-    scheme, but you will need to update your makefile scripts, if you're using
-    the older data file naming scheme. The example of using the new data file
-    naming scheme can be found in <a href="source/samples/ufortune/">the ufortune
-    sample program</a>.</p>
-
-    <table border="1" cellpadding="0" summary=
-    "The following are examples of the file naming schemes.">
-      <caption>
-        The following are examples of the file naming schemes.
-      </caption>
-
-      <tr>
-        <th scope="col">Old File Naming Scheme</th>
-
-        <th scope="col">Current File Naming Scheme</th>
-      </tr>
-
-      <tr>
-        <td>MyApp_root.res</td>
-
-        <td>MyApp/root.res</td>
-      </tr>
-
-      <tr>
-        <td>MyApp_en.res</td>
-
-        <td>MyApp/en.res</td>
-      </tr>
-    </table>
-
-    <h3><a name="News_wchar_t" id="News_wchar_t">Changes to wchar_t type for the
-    Microsoft Visual Studio builds</a></h3>
-
-    <p>Previous versions of ICU built with Microsoft Visual Studio were not built
-    with the /Zc:wchar_t compiler option. ICU now builds with this option turned
-    on by default. This allows the built libraries to be compatible with Visual
-    Studio 2005, and this makes it easier for ICU users to use MFC in their
-    projects, which requires this option to be turned by default. If you do not
-    use the C++ API of ICU, you are not affected by this change.</p>
-
-    <p>If you receive any errors while linking ICU into your project, please make
-    sure that you have set "Treat wchar_t as Built-in Type" to "Yes
-    (/Zc:wchar_t)" in your project files.</p>
-
-    <h3><a name="News_scanf" id="News_scanf">Changes to scanf and storing
-    floating point types</a></h3>
-
-    <p>In order to improve interoperability with standard scanf implementations,
-    the icuio library's implementations of scanf has changed the default scanf
-    type from <tt>double</tt> to <tt>float</tt>. This is a breaking change
-    requires you to change your code if you are using the icuio library's scanf
-    to read <tt>double</tt> or <tt>float</tt> values with %e, %f or %g. As a
-    reminder, these scanf functions in the icuio library are still marked
-    draft.</p>
-
-    <h3><a name="News_data_package" id="News_data_package">Source download
-    contains .dat package for ICU data</a></h3>
-
-    <p>The ICU4C 3.8 source downloads contain a pre-built .dat package with ICU's
-    data rather than the data source files. This is to simplify the build process
-    for the majority of users and to reduce platform porting issues. If you need
-    the data source files for customization, then please download the ICU source
-    code from <a href="http://www.icu-project.org/repository/">subversion</a>.</p>
+    <p>What you will be able to get is a related, "best fit" mapping for the
+    name, based on the region associated with the current locale and the
+    mappings found in CLDR's supplemental data. For example, for example, if
+    you format the time zone "America/Denver", getting "Heure des Rocheuses"
+    in French, and then parse, the resulting time zone would be "America/Denver"
+    unless the locale in use has the region "CA" (such as en-CA or fr-CA), in
+    which case "America/Edmonton" would be retrieved.</p>
 
     <h2><a name="Download" href="#Download" id="Download">How To Download the
     Source Code</a></h2>
