@@ -15,6 +15,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
 import com.ibm.icu.impl.Assert;
+import com.ibm.icu.impl.ICUDebug;
 
 
 /**
@@ -261,7 +262,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * This flag lets us lazily compute the value if we are ever asked for it.
      */
     private boolean             fLastStatusIndexValid;
-    
+
     /**
      * Counter for the number of characters encountered with the "dictionary"
      *   flag set.  Normal RBBI iterators don't use it, although the code
@@ -271,15 +272,19 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * @deprecated This API is ICU internal only.
      */
      protected int fDictionaryCharCount;
-    
+
     /**
      * Debugging flag.  Trace operation of state machine when true.
      * @internal
      * @deprecated This API is ICU internal only.
      */
     public static boolean       fTrace;
-    
-    
+
+    /*
+     * ICU debug argument name for RBBI
+     */
+    private static final String RBBI_DEBUG_ARG = "U_RBBIDEBUG";
+
     /**
      * Dump the contents of the state table and character classes for this break iterator.
      * For debugging only.
@@ -298,10 +303,8 @@ public class RuleBasedBreakIterator extends BreakIterator {
 
  
         if (debugInitDone == false) {
-            String debugEnv = System.getProperty("U_RBBIDEBUG");
-            if (debugEnv!=null && debugEnv.indexOf("trace")>=0) {
-                fTrace = true;
-            }
+            fTrace = ICUDebug.enabled(RBBI_DEBUG_ARG)
+                && ICUDebug.value(RBBI_DEBUG_ARG).indexOf("trace") >= 0;
             debugInitDone = true;
         }
     }
@@ -797,7 +800,8 @@ public int getRuleStatusVec(int[] fillInArray) {
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    protected static String fDebugEnv = System.getProperty("U_RBBIDEBUG");
+    protected static String fDebugEnv = ICUDebug.enabled(RBBI_DEBUG_ARG) ?
+                                        ICUDebug.value(RBBI_DEBUG_ARG) : null;
 
     
     // 32 bit Char value returned from when an iterator has run out of range.
