@@ -231,7 +231,6 @@ private:
     UStack      fNodeStack;     // Stack of nodes to process
     UVector32   fBranchStack;   // Stack of which branch we are working on
     TernaryNode *fRoot;         // Root node
-    static const char fgClassID;
     enum StackBranch {
         kLessThan,
         kEqual,
@@ -240,8 +239,8 @@ private:
     };
 
 public:
-    static UClassID U_EXPORT2 getStaticClassID(void) { return (UClassID)&fgClassID; }
-    virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); }
+    static UClassID U_EXPORT2 getStaticClassID(void);
+    virtual UClassID getDynamicClassID(void) const;
 public:
     MutableTrieEnumeration(TernaryNode *root, UErrorCode &status) 
         : fNodeStack(status), fBranchStack(status) {
@@ -341,7 +340,7 @@ public:
     }
 };
 
-const char MutableTrieEnumeration::fgClassID = '\0';
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(MutableTrieEnumeration)
 
 StringEnumeration *
 MutableTrieDictionary::openWords( UErrorCode &status ) const {
@@ -547,11 +546,10 @@ private:
     UVector32               fNodeStack;     // Stack of nodes to process
     UVector32               fIndexStack;    // Stack of where in node we are
     const CompactTrieHeader *fHeader;       // Trie data
-    static const char fgClassID;
 
 public:
-    static UClassID U_EXPORT2 getStaticClassID(void) { return (UClassID)&fgClassID; }
-    virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); }
+    static UClassID U_EXPORT2 getStaticClassID(void);
+    virtual UClassID getDynamicClassID(void) const;
 public:
     CompactTrieEnumeration(const CompactTrieHeader *header, UErrorCode &status) 
         : fNodeStack(status), fIndexStack(status) {
@@ -590,7 +588,7 @@ public:
     }
 };
 
-const char CompactTrieEnumeration::fgClassID = '\0';
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(CompactTrieEnumeration)
 
 const UnicodeString *
 CompactTrieEnumeration::snext(UErrorCode &status) {
