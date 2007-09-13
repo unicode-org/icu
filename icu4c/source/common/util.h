@@ -244,7 +244,7 @@ U_NAMESPACE_END
  * See UAX #31 Identifier and Pattern Syntax: http://www.unicode.org/reports/tr31/
  * @internal
  */
-U_CAPI UnicodeSet* U_EXPORT2
+U_CAPI U_NAMESPACE_QUALIFIER UnicodeSet* U_EXPORT2
 uprv_openRuleWhiteSpaceSet(UErrorCode* ec);
 
 /**
