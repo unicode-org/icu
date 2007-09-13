@@ -1,0 +1,94 @@
+* text=auto !eol
+
+*.c text !eol
+*.cc text !eol
+*.classpath text !eol
+*.cpp text !eol
+*.css text !eol
+*.dsp text !eol
+*.dsw text !eol
+*.filters text !eol
+*.h text !eol
+*.htm text !eol
+*.html text !eol
+*.in text !eol
+*.java text !eol
+*.launch text !eol
+*.mak text !eol
+*.md text !eol
+*.MF text !eol
+*.mk text !eol
+*.pl text !eol
+*.pm text !eol
+*.project text !eol
+*.properties text !eol
+*.py text !eol
+*.rc text !eol
+*.sh text eol=lf
+*.sln text !eol
+*.stub text !eol
+*.txt text !eol
+*.ucm text !eol
+*.vcproj text !eol
+*.vcxproj text !eol
+*.xml text !eol
+*.xsl text !eol
+*.xslt text !eol
+Makefile text !eol
+configure text !eol
+LICENSE text !eol
+README text !eol
+
+*.bin -text
+*.brk -text
+*.cnv -text
+*.icu -text
+*.res -text
+*.nrm -text
+*.spp -text
+*.tri2 -text
+
+source/data/xml/collation/as.xml -text
+source/data/xml/collation/bn.xml -text
+source/data/xml/collation/cy.xml -text
+source/data/xml/collation/haw.xml -text
+source/data/xml/collation/km.xml -text
+source/data/xml/collation/kok.xml -text
+source/data/xml/collation/sr_Latn.xml -text
+source/i18n/persncal.h -text
+source/i18n/reldtfmt.h -text
+source/samples/layout/cgnomelayout.c -text
+source/samples/layout/gnomeglue.cpp -text
+source/samples/layout/gnomeglue.h -text
+source/samples/ucnv/data02.bin -text
+source/test/compat/Makefile.in -text
+source/test/compat/readme.txt -text
+source/test/compat/tzdate.c -text
+source/test/compat/tzone.pl -text
+source/test/intltest/dadrcal.cpp -text
+source/test/intltest/dadrcal.h -text
+source/test/intltest/dadrfmt.cpp -text
+source/test/intltest/dadrfmt.h -text
+source/test/intltest/fldset.cpp -text
+source/test/intltest/fldset.h -text
+source/test/perf/convperf/Makefile.in -text
+source/test/testdata/TestFont1.otf -text
+source/test/testdata/calendar.txt -text
+source/test/testdata/format.txt -text
+source/test/testdata/icu26_testtypes.res -text
+source/test/testdata/icu26e_testtypes.res -text
+source/test/testdata/importtest.bin -text
+source/test/testdata/tstfiles.mk -text
+source/test/testdata/uni-text.bin -text
+source/tools/ctestfw/udbgutil.cpp -text
+source/tools/ctestfw/unicode/dbgutil.h -text
+source/tools/ctestfw/unicode/udbgutil.h -text
+
+# The following file types are stored in Git-LFS.
+*.jar filter=lfs diff=lfs merge=lfs -text
+*.dat filter=lfs diff=lfs merge=lfs -text
+*.zip filter=lfs diff=lfs merge=lfs -text
+*.gz filter=lfs diff=lfs merge=lfs -text
+*.bz2 filter=lfs diff=lfs merge=lfs -text
+*.gif filter=lfs diff=lfs merge=lfs -text
+
