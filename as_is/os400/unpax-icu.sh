@@ -105,20 +105,15 @@ for file in `find ./icu \( -name \*.txt -print \)`; do
     then
         file="`echo $file | cut -d / -f2-`"
 
-        if [ `echo $binary_files1 | wc -w` -lt 200 ]
+        if [ `echo $binary_files | wc -w` -lt 200 ]
         then
-            binary_files1="$binary_files1 $file";
-        elif [ `echo $binary_files2 | wc -w` -lt 200 ]
-        then
-            binary_files2="$binary_files2 $file";
-        elif [ `echo $binary_files3 | wc -w` -lt 200 ]
-        then
-            binary_files3="$binary_files3 $file";
-        elif [ `echo $binary_files4 | wc -w` -lt 200 ]
-        then
-            binary_files4="$binary_files4 $file";
+            binary_files="$binary_files $file";
         else
-            binary_files5="$binary_files5 $file";
+            echo "Restoring binary files ..."
+            rm $binary_files;
+            pax -C 819 -rvf $tar_file $binary_files;
+            echo "Determining binary files ..."
+            binary_files="$file";
         fi
     fi
 done
@@ -137,7 +132,17 @@ do
        suf=${i#*.*}
        if [ "$suf" = "$j" ]
        then
-         binary_files6="$binary_files6 $i"
+
+         if [ `echo $binary_files | wc -w` -lt 200 ]
+         then
+            binary_files="$binary_files $i";
+         else
+            echo "Restoring binary files ..."
+            rm $binary_files;
+            pax -C 819 -rvf $tar_file $binary_files;
+            echo "Determining binary files ..."
+            binary_files="$i";
+         fi
          break
        fi
      done
@@ -149,80 +154,11 @@ do
 done
 
 # now see if a re-extract of binary files is necessary
-if [ ${#binary_files1} -eq 0 ] &&
-   [ ${#binary_files2} -eq 0 ] &&
-   [ ${#binary_files3} -eq 0 ] &&
-   [ ${#binary_files4} -eq 0 ] &&
-   [ ${#binary_files5} -eq 0 ] &&
-   [ ${#binary_files6} -eq 0 ]
-
+if [ `echo $binary_files | wc -w` -gt 0 ]
 then
-  echo ""
-  echo "There are no binary files to restore."
-else
   echo "Restoring binary files ..."
-  echo ""
-
-  if [ `echo $binary_files1 | wc -w` -gt 0 ]
-  then
-    rm $binary_files1
-  fi
-
-  if [ `echo $binary_files2 | wc -w` -gt 0 ]
-  then
-    rm $binary_files2
-  fi
-
-  if [ `echo $binary_files3 | wc -w` -gt 0 ]
-  then
-    rm $binary_files3
-  fi
-
-  if [ `echo $binary_files4 | wc -w` -gt 0 ]
-  then
-    rm $binary_files4
-  fi
-
-  if [ `echo $binary_files5 | wc -w` -gt 0 ]
-  then
-    rm $binary_files5
-  fi
-
-  if [ `echo $binary_files6 | wc -w` -gt 0 ]
-  then
-    rm $binary_files6
-  fi
-
-  if [ `echo $binary_files1 | wc -w` -gt 0 ]
-  then
-    pax -C 819 -rvf $tar_file $binary_files1
-  fi
-
-  if [ `echo $binary_files2 | wc -w` -gt 0 ]
-  then
-    pax -C 819 -rvf $tar_file $binary_files2
-  fi
-
-  if [ `echo $binary_files3 | wc -w` -gt 0 ]
-  then
-    pax -C 819 -rvf $tar_file $binary_files3
-  fi
-
-  if [ `echo $binary_files4 | wc -w` -gt 0 ]
-  then
-    pax -C 819 -rvf $tar_file $binary_files4
-  fi
-
-  if [ `echo $binary_files5 | wc -w` -gt 0 ]
-  then
-    pax -C 819 -rvf $tar_file $binary_files5
-  fi
-
-  if [ `echo $binary_files6 | wc -w` -gt 0 ]
-  then
-    pax -C 819 -rvf $tar_file $binary_files6
-  fi
-
+  rm $binary_files
+  pax -C 819 -rvf $tar_file $binary_files
 fi
 
 #****************************************************************************
