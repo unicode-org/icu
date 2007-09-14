@@ -18,6 +18,7 @@ import java.nio.charset.Charset;
 import javax.swing.*;
 
 import com.ibm.icu.charset.CharsetICU;
+import com.ibm.icu.dev.demo.impl.DemoApplet;
 import com.ibm.icu.text.CharsetDetector;
 import com.ibm.icu.text.CharsetMatch;
 
@@ -42,10 +43,11 @@ public class DetectingViewer extends JFrame implements ActionListener
     public DetectingViewer()
     {
         super();
+        DemoApplet.demoFrameOpened();
         
         fileChooser = new JFileChooser();
         
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 800);
 
         setJMenuBar(makeMenus());
@@ -61,6 +63,18 @@ public class DetectingViewer extends JFrame implements ActionListener
         
         getContentPane().add(scrollPane);
         setVisible(true);
+
+        addWindowListener(
+                new WindowAdapter() {
+                    public void windowClosing(WindowEvent e) {
+//                        setVisible(false);
+//                        dispose();
+
+                          doQuit();
+                    }
+                } );
+
+    
     }
 
     public void actionPerformed(ActionEvent event)
@@ -345,7 +359,9 @@ public class DetectingViewer extends JFrame implements ActionListener
     
     private void doQuit()
     {
-        System.exit(0);
+        DemoApplet.demoFrameClosed();
+        this.setVisible(false);
+        this.dispose();
     }
     
     private JMenuBar makeMenus()

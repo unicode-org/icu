@@ -64,10 +64,12 @@ public class Demo extends Frame {
         Frame f = new Demo(600, 200);
         f.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                System.exit(0);
+                com.ibm.icu.dev.demo.impl.DemoApplet.demoFrameClosed();
+//                System.exit(0);
             }
         });
         f.setVisible(true);
+        com.ibm.icu.dev.demo.impl.DemoApplet.demoFrameOpened();
     }
 
     public Demo(int width, int height) {
