@@ -145,24 +145,11 @@ you can still run all of the Ant standard build targets in build.xml and make IC
 binaries.  The build script detects the current Java version and comments out code
 blocks including references to J2SE 5.0 only types.</p>
 <p>
-<p><b>Changes to timezone text formatting and parsing</b>
-<p>In ICU 3.8, the behavior of date formatting and parsing has changed significantly,
-perhaps requiring recoding on your part depending on your usage. The goal of making
-the change was to return more understandable results from formatting timezones, but
-a byproduct is that the result from formatting with strings z, zzzz, v or vvvv are
-no longer unique, and thus no longer roundtrips. That is, if you use a date format
-with one of these strings, producing a certain output, you can no longer parse that
-output and expect to recover the original timezone.
-<p>What you will be able to get is a related, "best fit" mapping for the name, based
-on the region associated with the current locale and the mappings found in CLDR's
-supplemental data: for example, if you format the time zone "America/Denver",
-getting "Heure des Rocheuses" in French, and then parse, the resulting time zone
-would be "America/Denver" unless the locale in use has the region "CA" (such as
-en-CA or fr-CA), in which case "America/Edmonton" would be retrieved.
-<p>If you require roundtripping, you will need to change your code to use "VVVV"
-instead. If you are working with date patterns based on a locale, then the workaround
-is to use the DateTimePatternGenerator to convert the format you get for a locale to
-using "VVVV".
+<p><b>Changes to timezone formatting and parsing</b>
+<p>In ICU 3.8, the behavior of date formatting and parsing has changed
+significantly, perhaps requiring recoding on your part depending on your
+usage. For more information, see <a href="http://icu-project.org/userguide/formatDateTime.html">
+Formatting Dates and Times</a> in the User Guide.
 <p>
 <p><b>New features</b>
 <p>
