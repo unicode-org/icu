@@ -95,9 +95,15 @@ public class Launcher extends DemoApplet {
             add(BorderLayout.CENTER,topPanel);
             statusLabel = new Label("");
             statusLabel.setAlignment(Label.LEFT);
+            String javaVersion = "";
+            try { 
+                javaVersion = "* Java: "+System.getProperty("java.version");
+            } catch (Throwable t) {
+                javaVersion = "";
+            }
             add(BorderLayout.NORTH, new Label(
-                   "ICU Demos \u2022 ICU version "+VersionInfo.ICU_VERSION +
-                   " \u2022 http://icu-project.org"));
+                   "ICU Demos * ICU version "+VersionInfo.ICU_VERSION +
+                   " * http://icu-project.org "+javaVersion));
             add(BorderLayout.SOUTH,statusLabel);
             // set up an initial status.
             showStatus(buttonList.length+" demos ready. ");
