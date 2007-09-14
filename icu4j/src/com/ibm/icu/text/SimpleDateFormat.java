@@ -1879,6 +1879,7 @@ public class SimpleDateFormat extends DateFormat {
             case 17: // 'z' - ZONE_OFFSET
             case 23: // 'Z' - TIMEZONE_RFC
             case 24: // 'v' - TIMEZONE_GENERIC
+            case 29: // 'V' - TIMEZONE_SPECIAL
                 // First try to parse generic forms such as GMT-07:00. Do this first
                 // in case localized DateFormatZoneData contains the string "GMT"
                 // for a zone; in that case, we don't want to match the first three
