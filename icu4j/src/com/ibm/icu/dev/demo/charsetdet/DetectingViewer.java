@@ -14,6 +14,7 @@ import java.io.*;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.security.AccessControlException;
 
 import javax.swing.*;
 
@@ -45,7 +46,12 @@ public class DetectingViewer extends JFrame implements ActionListener
         super();
         DemoApplet.demoFrameOpened();
         
-        fileChooser = new JFileChooser();
+        try {
+            fileChooser = new JFileChooser();
+        } catch (AccessControlException ace) {
+            System.err.println("no file chooser - access control exception. Continuing without file browsing. "+ace.toString());
+            fileChooser = null; //
+        }
         
 //        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 800);
@@ -373,6 +379,9 @@ public class DetectingViewer extends JFrame implements ActionListener
         mi.setAccelerator((KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK)));
         mi.addActionListener(this);
         menu.add(mi);
+        if(fileChooser == null) {
+            mi.setEnabled(false); // no file chooser.
+        }
         
         mi = new JMenuItem("Open URL...");
         mi.setAccelerator((KeyStroke.getKeyStroke(KeyEvent.VK_U, ActionEvent.CTRL_MASK)));

@@ -646,6 +646,8 @@
       <fileset dir="${build.dir}" includes="com/ibm/icu/dev/demo/**" />
       <manifest>
         <attribute name="Built-By" value="${corp}" />
+        <attribute name="Main-Class" value="com.ibm.icu.dev.demo.Launcher" />
+        <attribute name="Class-Path" value="icu4j.jar" />
         <section name="common">
           <attribute name="Specification-Title" value="${manifest.specification.title}" />
           <attribute name="Specification-Version" value="${icu4j.spec.version.string}" />
