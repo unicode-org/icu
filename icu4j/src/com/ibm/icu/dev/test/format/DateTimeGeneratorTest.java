@@ -18,10 +18,17 @@ import com.ibm.icu.text.DateTimePatternGenerator;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.text.DateTimePatternGenerator.VariableField;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 
+import java.text.ParsePosition;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 
 public class DateTimeGeneratorTest extends TestFmwk {
@@ -247,6 +254,214 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"HHmm", "23.58"},
         new String[] {"mmss", "58.59"},
     };
+    
+    public void TestOrdering() {
+        ULocale[] locales = ULocale.getAvailableLocales();
+        for (int i = 0; i < locales.length; ++i) {
+            for (int style1 = DateFormat.FULL; style1 <= DateFormat.SHORT; ++style1) {
+                for (int style2 = DateFormat.FULL; style2 < style1; ++style2) {
+                    checkCompatible(style1, style2, locales[i]);                    
+                }               
+            }
+        }
+    }
+    
+    public void TestReplacingZoneString() {
+        Date testDate = new Date();
+        TimeZone testTimeZone = TimeZone.getTimeZone("America/New_York");
+        TimeZone bogusTimeZone = new SimpleTimeZone(1234, "Etc/Unknown");
+        Calendar calendar = Calendar.getInstance();
+        ParsePosition parsePosition = new ParsePosition(0);
+
+        ULocale[] locales = ULocale.getAvailableLocales();
+        for (int i = 0; i < locales.length; ++i) {
+            for (int style1 = DateFormat.FULL; style1 <= DateFormat.SHORT; ++style1) {
+                final SimpleDateFormat oldFormat = (SimpleDateFormat) DateFormat.getTimeInstance(style1, locales[i]);
+                String pattern = oldFormat.toPattern();
+                String newPattern = replaceZoneString(pattern, "VVVV");
+                if (newPattern.equals(pattern)) {
+                    continue;
+                }
+                // verify that it roundtrips parsing
+                SimpleDateFormat newFormat = new SimpleDateFormat(newPattern, locales[i]);
+                newFormat.setTimeZone(testTimeZone);
+                String formatted = newFormat.format(testDate);
+                calendar.setTimeZone(bogusTimeZone);
+                parsePosition.setIndex(0);
+                newFormat.parse(formatted, calendar, parsePosition);
+                if (parsePosition.getErrorIndex() >= 0) {
+                    errln("Failed parse with VVVV:\t" + locales[i] + ",\t\"" + pattern + "\",\t\"" + newPattern + "\",\t\"" + formatted.substring(0,parsePosition.getErrorIndex()) + "{}" + formatted.substring(parsePosition.getErrorIndex()) + "\"");
+                } else if (!calendar.getTimeZone().getID().equals(testTimeZone.getID())) {
+                    errln("Failed timezone roundtrip with VVVV:\t" + locales[i] + ",\t\"" + pattern + "\",\t\"" + newPattern + "\",\t\"" + formatted + "\",\t" + calendar.getTimeZone().getID() + " != " + testTimeZone.getID());
+                } else {
+                    logln(locales[i] + ":\t\"" + pattern + "\" => \t\"" + newPattern + "\"\t" + formatted);
+                }
+            }
+        }
+    }
+    
+    static String[] DATE_STYLE_NAMES = {
+        "FULL", "LONG", "MEDIUM", "SHORT"
+    };
+    
+    /**
+     * @param fullOrder
+     * @param longOrder
+     */
+    private void checkCompatible(int style1, int style2, ULocale uLocale) {
+        DateOrder order1 = getOrdering(style1, uLocale);
+        DateOrder order2 = getOrdering(style2, uLocale);
+        if (!order1.hasSameOrderAs(order2)) {
+            if (order1.monthLength == order2.monthLength) { // error if have same month length, different ordering
+                if (skipIfBeforeICU(3,8,1)) {
+                    logln(showOrderComparison(uLocale, style1, style2, order1, order2));
+                } else {
+                    errln(showOrderComparison(uLocale, style1, style2, order1, order2));
+                }
+            } else if (isVerbose() && order1.monthLength > 2 && order2.monthLength > 2) { // warn if both are not numeric
+                logln(showOrderComparison(uLocale, style1, style2, order1, order2));
+            }
+        }
+    }
+
+    private String showOrderComparison(ULocale uLocale, int style1, int style2, DateOrder order1, DateOrder order2) {
+        String pattern1 = ((SimpleDateFormat) DateFormat.getDateInstance(style1, uLocale)).toPattern();
+        String pattern2 = ((SimpleDateFormat) DateFormat.getDateInstance(style2, uLocale)).toPattern();
+        return "Mismatch in in ordering for " + uLocale + ": " + DATE_STYLE_NAMES[style1] + ": " + order1 + ", <" + pattern1 
+                + ">; " 
+                + DATE_STYLE_NAMES[style2] + ": " + order2 + ", <" + pattern2 + ">; " ;
+    }
+
+    /**
+     * Main date fields -- Poor-man's enum -- change to real enum when we get JDK 1.5
+     */
+    public static class DateFieldType {
+        private String name;
+        private DateFieldType(String string) {
+            name = string;
+        }
+        
+        public static DateFieldType 
+        YEAR = new DateFieldType("YEAR"), 
+        MONTH = new DateFieldType("MONTH"), 
+        DAY = new DateFieldType("DAY");
+        
+        public String toString() {
+            return name;
+        }
+    };
+    
+    /**
+     * Simple struct for output from getOrdering
+     */
+    static class DateOrder {
+        int monthLength;
+        DateFieldType[] fields = new DateFieldType[3];
+        
+        public boolean isCompatible(DateOrder other) {
+            return monthLength == other.monthLength;
+        }
+        /**
+         * @param order2
+         * @return
+         */
+        public boolean hasSameOrderAs(DateOrder other) {
+            // TODO Auto-generated method stub
+            return fields[0] == other.fields[0] && fields[1] == other.fields[1] && fields[2] == other.fields[2];
+        }
+        public String toString() {
+            return "{" + monthLength + ", " + fields[0]  + ", " + fields[1]  + ", " + fields[2] + "}";
+        }
+        public boolean equals(Object that) {
+            DateOrder other = (DateOrder) that;
+            return monthLength == other.monthLength && fields[0] == other.fields[0] && fields[1] == other.fields[1] && fields[2] == other.fields[2];            
+        }
+    }
+    
+    /** 
+     * Some statics. If we were multithreaded, we'd need to protect these
+     */
+    static DateTimePatternGenerator.FormatParser formatParser = new DateTimePatternGenerator.FormatParser ();
+    static DateTimePatternGenerator generator = DateTimePatternGenerator.getEmptyInstance();
+    
+    /**
+     * Replace the zone string with a different type, eg v's for z's, etc. <p>Called with a pattern, such as one gotten from 
+     * <pre>
+     * String pattern = ((SimpleDateFormat) DateFormat.getTimeInstance(style, locale)).toPattern();
+     * </pre>
+     * @param pattern original pattern to change, such as "HH:mm zzzz"
+     * @param newZone Must be: z, zzzz, Z, ZZZZ, v, vvvv, V, or VVVV
+     * @return
+     */
+    public String replaceZoneString(String pattern, String newZone) {
+        final List itemList = formatParser.set(pattern).getItems();
+        boolean found = false;
+        for (int i = 0; i < itemList.size(); ++i) {
+            Object item = itemList.get(i);
+            if (item instanceof VariableField) {
+                // the first character of the variable field determines the type,
+                // according to CLDR.
+                String variableField = item.toString();
+                switch (variableField.charAt(0)) {
+                case 'z': case 'Z': case 'v': case 'V':
+                    if (!variableField.equals(newZone)) {
+                        found = true;
+                        itemList.set(i, new VariableField(newZone));
+                    }
+                    break;
+                }
+            }
+        }
+        return found ? formatParser.toString() : pattern;
+    }
+
+    /**
+     * Get the ordering from a particular date format. Best is to use
+     * DateFormat.FULL to get the format with String form month (like "January")
+     * and DateFormat.SHORT for the numeric format order. They may be different.
+     * (Theoretically all 4 formats could be different but that never happens in
+     * practice.)
+     *
+     * @param style
+     *          DateFormat.FULL..DateFormat.SHORT
+     * @param locale
+     *          desired locale.
+     * @return
+     * @return list of ordered items DateFieldType (I
+     *         didn't know what form you really wanted so this is just a
+     *         stand-in.)
+     */
+  private static DateOrder getOrdering(int style, ULocale locale) {
+      // and the date pattern
+      String pattern = ((SimpleDateFormat) DateFormat.getDateInstance(style, locale)).toPattern();
+      int count = 0;
+      DateOrder result = new DateOrder();
+     
+      for (Iterator it = formatParser.set(pattern).getItems().iterator(); it.hasNext();) {
+          Object item = it.next();
+        if (!(item instanceof String)) {
+          // the first character of the variable field determines the type,
+          // according to CLDR.
+          String variableField = item.toString();
+          switch (variableField.charAt(0)) {
+            case 'y': case 'Y': case 'u':
+              result.fields[count++] = DateFieldType.YEAR;
+              break;
+            case 'M': case 'L':
+                result.monthLength = variableField.length();
+                if (result.monthLength < 2) {
+                    result.monthLength = 2;
+                }
+                result.fields[count++] = DateFieldType.MONTH;
+              break;
+            case 'd': case 'D': case 'F': case 'g':
+                result.fields[count++] = DateFieldType.DAY;
+              break;
+          }
+        }
+      }
+      return result;
+    }
 }
 //#endif
 //eof
