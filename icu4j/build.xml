@@ -516,7 +516,6 @@
     <jar jarfile="${jar.file}" compress="true">
       <fileset dir="${basedir}" includes="license.html, unicode-license.txt" />
       <fileset dir="${build.dir}" includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*" excludes="META-INF/services/**/*,com/ibm/icu/charset/**/*,${icu4j.data.path}/*.cnv,${icu4j.data.path}/cnvalias.icu" />
-      <fileset dir="${src.dir}" includes="com/ibm/icu/impl/duration/impl/data/*.xml" />
       <manifest>
         <attribute name="Built-By" value="${corp}" />
         <section name="common">
