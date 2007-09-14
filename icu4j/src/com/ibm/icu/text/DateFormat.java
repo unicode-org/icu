@@ -563,11 +563,12 @@ public abstract class DateFormat extends UFormat {
      */
     public Date parse(String text, ParsePosition pos) {
         int start = pos.getIndex();
-        calendar.clear();
-        parse(text, calendar, pos);
+        Calendar workcal = (Calendar)calendar.clone();
+        workcal.clear();
+        parse(text, workcal, pos);
         if (pos.getIndex() != start) {
             try {
-                return calendar.getTime();
+                return workcal.getTime();
             } catch (IllegalArgumentException e) {
                 // This occurs if the calendar is non-lenient and there is
                 // an out-of-range field.  We don't know which field was
