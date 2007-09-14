@@ -562,13 +562,14 @@ public abstract class DateFormat extends UFormat {
      * @stable ICU 2.0
      */
     public Date parse(String text, ParsePosition pos) {
+        Date result = null;
         int start = pos.getIndex();
-        Calendar workcal = (Calendar)calendar.clone();
-        workcal.clear();
-        parse(text, workcal, pos);
+        TimeZone tzsav = calendar.getTimeZone();
+        calendar.clear();
+        parse(text, calendar, pos);
         if (pos.getIndex() != start) {
             try {
-                return workcal.getTime();
+                result = calendar.getTime();
             } catch (IllegalArgumentException e) {
                 // This occurs if the calendar is non-lenient and there is
                 // an out-of-range field.  We don't know which field was
@@ -577,7 +578,9 @@ public abstract class DateFormat extends UFormat {
                 pos.setErrorIndex(start);
             }
         }
-        return null;
+        // Restore TimeZone
+        calendar.setTimeZone(tzsav);
+        return result;
     }
 
     /**
