@@ -32,7 +32,7 @@ import java.util.Arrays;
  * in the language are needed.  The detection process will attempt to
  * ignore html or xml style markup that could otherwise obscure the content.
  * <p/>
- * @stable ICU 3.8
+ * @stable ICU 3.4
  */
 public class CharsetDetector {
 
@@ -49,7 +49,7 @@ public class CharsetDetector {
     /**
      *   Constructor
      * 
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public CharsetDetector() {
     }
@@ -68,7 +68,7 @@ public class CharsetDetector {
      * 
      *  @param encoding The declared encoding 
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public CharsetDetector setDeclaredEncoding(String encoding) {
         fDeclaredEncoding = encoding;
@@ -82,7 +82,7 @@ public class CharsetDetector {
      * 
      * @return This CharsetDetector
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public CharsetDetector setText(byte [] in) {
         fRawInput  = in;
@@ -108,7 +108,7 @@ public class CharsetDetector {
      * 
      * @return This CharsetDetector
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     
     public CharsetDetector setText(InputStream in) throws IOException {
@@ -152,7 +152,7 @@ public class CharsetDetector {
      * @return a CharsetMatch object representing the best matching charset, or
      *         <code>null</code> if there are no matches.
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public CharsetMatch detect() {
 //   TODO:  A better implementation would be to copy the detect loop from
@@ -181,7 +181,7 @@ public class CharsetDetector {
      * 
      * @return An array of CharsetMatch objects representing possibly matching charsets.
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public CharsetMatch[] detectAll() {
         CharsetRecognizer csr;
@@ -229,7 +229,7 @@ public class CharsetDetector {
      * @param declaredEncoding  A declared encoding for the data, if available,
      *           or null or an empty string if none is available.
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public Reader getReader(InputStream in, String declaredEncoding) {
         fDeclaredEncoding = declaredEncoding;
@@ -263,7 +263,7 @@ public class CharsetDetector {
      * @param declaredEncoding  A declared encoding for the data, if available,
      *           or null or an empty string if none is available.
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public String getString(byte[] in, String declaredEncoding)
     {
@@ -291,7 +291,7 @@ public class CharsetDetector {
      * @return an array of the names of all charsets that can be recognized
      * by the charset detector.
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public static String[] getAllDetectableCharsets() {
         return fCharsetNames;
@@ -304,7 +304,7 @@ public class CharsetDetector {
      * 
      * @see #enableInputFilter
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public boolean inputFilterEnabled()
     {
@@ -320,7 +320,7 @@ public class CharsetDetector {
      * 
      * @return The previous setting.
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public boolean enableInputFilter(boolean filter)
     {

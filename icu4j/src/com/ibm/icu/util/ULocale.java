@@ -2674,7 +2674,7 @@ public final class ULocale implements Serializable {
     * @param availableLocales list of available locales. One of these will be returned.
     * @param fallback if non-null, a 1-element array containing a boolean to be set with the fallback status
     * @return one of the locales from the availableLocales list, or null if none match
-    * @stable ICU 3.8
+    * @stable ICU 3.4
     */
 
     public static ULocale acceptLanguage(String acceptLanguageList, ULocale[] availableLocales, 
@@ -2707,7 +2707,7 @@ public final class ULocale implements Serializable {
     * @param availableLocales list of available locales. One of these will be returned.
     * @param fallback if non-null, a 1-element array containing a boolean to be set with the fallback status
     * @return one of the locales from the availableLocales list, or null if none match
-    * @stable ICU 3.8
+    * @stable ICU 3.4
     */
 
     public static ULocale acceptLanguage(ULocale[] acceptLanguageList, ULocale[]
@@ -2755,7 +2755,7 @@ public final class ULocale implements Serializable {
     * @param acceptLanguageList list in HTTP "Accept-Language:" format of acceptable locales
     * @param fallback if non-null, a 1-element array containing a boolean to be set with the fallback status
     * @return one of the locales from the ULocale.getAvailableLocales() list, or null if none match
-    * @stable ICU 3.8
+    * @stable ICU 3.4
     */
 
     public static ULocale acceptLanguage(String acceptLanguageList, boolean[] fallback) {
@@ -2776,7 +2776,7 @@ public final class ULocale implements Serializable {
     * @param acceptLanguageList ordered array of acceptable locales (preferred are listed first)
     * @param fallback if non-null, a 1-element array containing a boolean to be set with the fallback status
     * @return one of the locales from the ULocale.getAvailableLocales() list, or null if none match
-    * @stable ICU 3.8
+    * @stable ICU 3.4
     */
 
     public static ULocale acceptLanguage(ULocale[] acceptLanguageList, boolean[]

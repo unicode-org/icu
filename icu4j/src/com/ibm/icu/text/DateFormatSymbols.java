@@ -167,7 +167,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @throws  java.util.MissingResourceException
      *          if the resources for the specified locale cannot be
      *          found or cannot be loaded.
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public DateFormatSymbols(ULocale locale)
     {
@@ -497,7 +497,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Gets era name strings. For example: "Anno Domini" and "Before Christ".
      * @return the era strings.
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public String[] getEraNames() {
         return duplicate(eraNames);
@@ -527,7 +527,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @param width      The width or the returned month string,
      *                   either WIDE, ABBREVIATED, or NARROW.
      * @return the month strings.
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public String[] getMonths(int context, int width) {
         String [] returnValue = null;
@@ -645,7 +645,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @param context    Formatting context, either FORMAT or STANDALONE.
      * @param width      Width of strings to be returned, either
      *                   WIDE, ABBREVIATED, or NARROW
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public String[] getWeekdays(int context, int width) {
         String [] returnValue = null;
@@ -1962,7 +1962,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @param locale    The ulocale whose symbols are desired.
      *
      * @see DateFormatSymbols#DateFormatSymbols(java.util.Locale)
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public DateFormatSymbols(Calendar cal, ULocale locale) {
         initializeData(locale, cal.getType());
@@ -1982,7 +1982,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * Variant of DateFormatSymbols(Calendar, ULocale) that takes the Calendar class
      * instead of a Calandar instance.
      * @see #DateFormatSymbols(Calendar, Locale)
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public DateFormatSymbols(Class calendarClass, ULocale locale) {
         String fullName = calendarClass.getName();
@@ -2009,7 +2009,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * bundle.  Symbols that are not overridden are inherited from the
      * default DateFormatSymbols for the locale.
      * @see DateFormatSymbols#DateFormatSymbols(java.util.Locale)
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public DateFormatSymbols(ResourceBundle bundle, ULocale locale) {
         initializeData(locale, 
@@ -2041,7 +2041,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * (just before the class name) and "Symbols" appended to the end.
      * For example, the bundle corresponding to "com.ibm.icu.util.HebrewCalendar"
      * is "com.ibm.icu.impl.data.HebrewCalendarSymbols".
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     static public ResourceBundle getDateFormatBundle(Class calendarClass, ULocale locale)
         throws MissingResourceException {
@@ -2087,7 +2087,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * Variant of getDateFormatBundle(java.lang.Class, java.util.Locale) that takes
      * a Calendar instance instead of a Calendar class.
      * @see #getDateFormatBundle(java.lang.Class, java.util.Locale)
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static ResourceBundle getDateFormatBundle(Calendar cal, ULocale locale)
         throws MissingResourceException {

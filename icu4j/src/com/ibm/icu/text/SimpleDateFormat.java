@@ -339,7 +339,7 @@ public class SimpleDateFormat extends DateFormat {
      * Construct a SimpleDateFormat using the given pattern and locale.
      * <b>Note:</b> Not all locales support SimpleDateFormat; for full
      * generality, use the factory methods in the DateFormat class.
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public SimpleDateFormat(String pattern, ULocale loc)
     {

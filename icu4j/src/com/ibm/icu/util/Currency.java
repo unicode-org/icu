@@ -104,7 +104,7 @@ public class Currency extends MeasureUnit implements Serializable {
     /**
      * Returns a currency object for the default currency in the given
      * locale.
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static Currency getInstance(ULocale locale) {
         String currency = locale.getKeywordValue("currency");
@@ -211,7 +211,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * @param locale the ulocale under which to register the currency
      * @return a registry key that can be used to unregister this currency
      * @see #unregister
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static Object registerInstance(Currency currency, ULocale locale) {
         return getShim().registerInstance(currency, locale);
@@ -301,7 +301,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * Convenience and compatibility override of getName that
      * requests the symbol name.
      * @see #getName
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public String getSymbol() {
         return getSymbol(ULocale.getDefault());
@@ -312,7 +312,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * requests the symbol name.
      * @param loc the Locale for the symbol
      * @see #getName
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public String getSymbol(Locale loc) {
         return getSymbol(ULocale.forLocale(loc));
@@ -323,7 +323,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * requests the symbol name.
      * @param uloc the ULocale for the symbol
      * @see #getName
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public String getSymbol(ULocale uloc) {
         return getName(uloc, SYMBOL_NAME, new boolean[1]);
@@ -342,7 +342,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * contains no entry for this currency, then the ISO 4217 code is
      * returned.  If isChoiceFormat[0] is true, then the result is a
      * ChoiceFormat pattern.  Otherwise it is a static string.
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public String getName(Locale locale,
                           int nameStyle,
@@ -363,7 +363,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * contains no entry for this currency, then the ISO 4217 code is
      * returned.  If isChoiceFormat[0] is true, then the result is a
      * ChoiceFormat pattern.  Otherwise it is a static string.
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public String getName(ULocale locale,
                           int nameStyle,

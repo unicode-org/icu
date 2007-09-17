@@ -50,7 +50,7 @@ public class ChineseDateFormatSymbols extends DateFormatSymbols {
     /**
      * Construct a ChineseDateFormatSymbols for the provided locale.
      * @param locale the locale
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public ChineseDateFormatSymbols(ULocale locale) {
         super(ChineseCalendar.class, locale);
@@ -70,7 +70,7 @@ public class ChineseDateFormatSymbols extends DateFormatSymbols {
      * Construct a ChineseDateFormatSymbols for the provided calendar and locale.
      * @param cal the Calendar
      * @param locale the locale
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public ChineseDateFormatSymbols(Calendar cal, ULocale locale) {
         super(cal == null ? null : cal.getClass(), locale);

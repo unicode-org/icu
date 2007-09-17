@@ -158,7 +158,7 @@ public class ChineseCalendar extends Calendar {
      * Construct a Chinese calendar with the given time zone and locale.
      * @param zone time zone for this calendar
      * @param locale ulocale for this calendar
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public ChineseCalendar(TimeZone zone, ULocale locale) {
         super(zone, locale);

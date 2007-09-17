@@ -410,7 +410,7 @@ public interface UProperty
      * Binary property Pattern_Syntax (new in Unicode 4.1).
      * See UAX #31 Identifier and Pattern Syntax
      * (http://www.unicode.org/reports/tr31/)
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public static final int PATTERN_SYNTAX = 42;
 
@@ -418,7 +418,7 @@ public interface UProperty
      * Binary property Pattern_White_Space (new in Unicode 4.1).
      * See UAX #31 Identifier and Pattern Syntax
      * (http://www.unicode.org/reports/tr31/)
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public static final int PATTERN_WHITE_SPACE = 43;
 
@@ -426,7 +426,7 @@ public interface UProperty
      * Binary property alnum (a C/POSIX character class).
      * Implemented according to the UTS #18 Annex C Standard Recommendation.
      * See the UCharacter class documentation.
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public static final int POSIX_ALNUM = 44;
 
@@ -434,7 +434,7 @@ public interface UProperty
      * Binary property blank (a C/POSIX character class).
      * Implemented according to the UTS #18 Annex C Standard Recommendation.
      * See the UCharacter class documentation.
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public static final int POSIX_BLANK = 45;
 
@@ -442,7 +442,7 @@ public interface UProperty
      * Binary property graph (a C/POSIX character class).
      * Implemented according to the UTS #18 Annex C Standard Recommendation.
      * See the UCharacter class documentation.
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public static final int POSIX_GRAPH = 46;
 
@@ -450,7 +450,7 @@ public interface UProperty
      * Binary property print (a C/POSIX character class).
      * Implemented according to the UTS #18 Annex C Standard Recommendation.
      * See the UCharacter class documentation.
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public static final int POSIX_PRINT = 47;
 
@@ -458,7 +458,7 @@ public interface UProperty
      * Binary property xdigit (a C/POSIX character class).
      * Implemented according to the UTS #18 Annex C Standard Recommendation.
      * See the UCharacter class documentation.
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public static final int POSIX_XDIGIT = 48;
 
@@ -615,7 +615,7 @@ public interface UProperty
      * Used in UAX #29: Text Boundaries
      * (http://www.unicode.org/reports/tr29/)
      * Returns UGraphemeClusterBreak values.
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public static final int GRAPHEME_CLUSTER_BREAK = 0x1012;
 
@@ -624,7 +624,7 @@ public interface UProperty
      * Used in UAX #29: Text Boundaries
      * (http://www.unicode.org/reports/tr29/)
      * Returns USentenceBreak values.
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public static final int SENTENCE_BREAK = 0x1013;
 
@@ -633,7 +633,7 @@ public interface UProperty
      * Used in UAX #29: Text Boundaries
      * (http://www.unicode.org/reports/tr29/)
      * Returns UWordBreakValues values.
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public static final int WORD_BREAK = 0x1014;
 
