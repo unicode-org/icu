@@ -308,7 +308,7 @@ public class HebrewCalendar extends Calendar {
      * in the default time zone with the given locale.
      *
      * @param locale The locale for the new calendar.
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public HebrewCalendar(ULocale locale) {
         this(TimeZone.getDefault(), locale);
@@ -335,7 +335,7 @@ public class HebrewCalendar extends Calendar {
      * @param zone The time zone for the new calendar.
      *
      * @param locale The locale for the new calendar.
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public HebrewCalendar(TimeZone zone, ULocale locale) {
         super(zone, locale);

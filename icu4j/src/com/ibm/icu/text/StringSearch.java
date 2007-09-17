@@ -243,7 +243,7 @@ public final class StringSearch extends SearchIterator
      * @see BreakIterator
      * @see RuleBasedCollator
      * @see SearchIterator
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public StringSearch(String pattern, CharacterIterator target, ULocale locale)
     {

@@ -864,7 +864,7 @@ public final class RuleBasedCollator extends Collator
      * @param expansions if not null, set to contain expansions
      * @param addPrefixes add the prefix contextual elements to contractions
      * @throws Exception 
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public void
     getContractionsAndExpansions(UnicodeSet contractions, UnicodeSet expansions,

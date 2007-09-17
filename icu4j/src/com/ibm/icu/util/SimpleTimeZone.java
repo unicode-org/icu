@@ -560,7 +560,7 @@ public class SimpleTimeZone extends BasicTimeZone {
     /**
      * Returns a string representation of this object.
      * @return  a string representation of this object
-     * @stable ICU 3.8
+     * @stable ICU 3.6
      */
     public String toString() {
         return "SimpleTimeZone: " + getID();
@@ -1030,7 +1030,7 @@ public class SimpleTimeZone extends BasicTimeZone {
     /**
      * Return true if obj is a SimpleTimeZone equivalent to this.
      * @return true if obj is a SimpleTimeZone equivalent to this
-     * @stable ICU 3.8
+     * @stable ICU 3.6
      */
     public boolean equals(Object obj){
         if (this == obj) return true;
@@ -1070,7 +1070,7 @@ public class SimpleTimeZone extends BasicTimeZone {
     /**
      * Return the hash code.
      * @return the hash code
-     * @stable ICU 3.8
+     * @stable ICU 3.6
      */
     public int hashCode(){
         int ret = (int)( super.hashCode() +
@@ -1098,7 +1098,7 @@ public class SimpleTimeZone extends BasicTimeZone {
     /**
      * Return a clone of this time zone.
      * @return a clone of this time zone
-     * @stable ICU 3.8
+     * @stable ICU 3.6
      */
     public Object clone() {
         return super.clone();

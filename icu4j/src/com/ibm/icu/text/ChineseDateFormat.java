@@ -61,7 +61,7 @@ public class ChineseDateFormat extends SimpleDateFormat {
      * Construct a ChineseDateFormat from a date format pattern and locale
      * @param pattern the pattern
      * @param locale the locale
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
    public ChineseDateFormat(String pattern, ULocale locale) {
        super(pattern, new ChineseDateFormatSymbols(locale), 
