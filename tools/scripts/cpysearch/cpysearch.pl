@@ -11,11 +11,15 @@
 use strict;
 
 my $icuSource = $ARGV[0];
+die "Can't open ICU dir: $icuSource" unless  -d $icuSource ;
+
 my $ignore = "CVS|\\.svn|\\~|\\#|Debug|Release|\\.dll|\\.ilk|\\.idb|\\.pdb|\\.dsp|\\.dsw|\\.opt|\\.ncb|\\.vcproj|\\.sln|\\.suo|\\.cvsignore|\\.cnv|\\.res|\\.icu|\\.exe|\\.obj|\\.bin|\\.exp|\\.lib|\\.out|\\.plg|positions|unidata|\\.jar|\\.spp|\\.stub|\\.policy|\\.ttf|\\.TTF|\\.otf";
 
 my ($sec, $min, $hour, , $day, $mon, $year, $wday, $yday, $isdst) = localtime;
 $year += 1900;
-
+if ( ! -f "cpyskip.txt" ) {
+	die "Can't open cpyskip.txt, please download from http://source.icu-project.org/cpyskip.txt (see http://icu-project.org/copyright-scan.html for more details)"
+}
 my $command = "find $icuSource -type f -mtime -$yday | fgrep -v -f cpyskip.txt";
 my @files = `$command`;
 @files = grep(!/$ignore/, @files);
