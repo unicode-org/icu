@@ -314,7 +314,7 @@ static void TestBuilder() {
     
     /* sample code in Userguide */
     patternCapacity = (int32_t)(sizeof(pattern)/sizeof((pattern)[0]));
-    status=U_ZERO_ERROR;      
+    status=U_ZERO_ERROR;
     generator=udatpg_open(locale, &status);
     if(U_FAILURE(status)) {
         return;
@@ -323,7 +323,7 @@ static void TestBuilder() {
     /* get a pattern for an abbreviated month and day */
     length = udatpg_getBestPattern(generator, skeleton, 4,
                                    pattern, patternCapacity, &status);
-    formatter = udat_open(UDAT_IGNORE, UDAT_DEFAULT, locale, NULL, -1, 
+    formatter = udat_open(UDAT_IGNORE, UDAT_DEFAULT, locale, NULL, -1,
                           pattern, length, &status);
 
     /* use it to format (or parse) */
@@ -332,13 +332,14 @@ static void TestBuilder() {
                           NULL, &status);
     /* for French, the result is "13 sept." */
 
-    /* cannot use the result from ucal_getNow() because the value change evreyday. */ 
+    /* cannot use the result from ucal_getNow() because the value change evreyday. */
     resultLen=udat_format(formatter, sampleDate, formatted, formattedCapacity,
                           NULL, &status);
     if ( u_memcmp(sampleFormatted, formatted, resultLen) != 0 ) {
         log_err("Failed udat_format() of sample code in Userguide.\n");
     }
     udatpg_close(generator);
+    udat_close(formatter);
 }
 
 #endif
