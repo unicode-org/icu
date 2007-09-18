@@ -26,7 +26,7 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
-
+#include "unicode/udat.h"
 #include "unicode/udatpg.h"
 #include "unicode/ustring.h"
 #include "cintltst.h"
@@ -63,6 +63,7 @@ static const UChar testPattern2[]={ 0x48, 0x48, 0x3a, 0x6d, 0x6d, 0x20, 0x76, 0 
 static const UChar replacedStr[]={ 0x76, 0x76, 0x76, 0x76, 0 }; /* vvvv */
 /* results for getBaseSkeletons() - {Hmv}, {yMMM} */
 static const UChar resultBaseSkeletons[2][10] = {{0x48,0x6d, 0x76, 0}, {0x79, 0x4d, 0x4d, 0x4d, 0 } };
+static const UChar sampleFormatted[] = {0x31, 0x30, 0x20, 0x6A, 0x75, 0x69, 0x6C, 0x2E, 0};
 
 
 static void TestOpenClose() {
@@ -219,6 +220,14 @@ static void TestBuilder() {
     const UChar *s, *p;
     const UChar* ptrResult[2]; 
     int32_t count=0;
+    UDateTimePatternGenerator *generator;
+    const UChar skeleton[]= {'M', 'M', 'M', 'd', 0};
+    const char locale[]= {'f', 'r', 0};
+    int32_t formattedCapacity, resultLen,patternCapacity ;
+    UChar   pattern[40], formatted[40];
+    UDateFormat *formatter;
+    UDate sampleDate = 837039928046.0;
+    UErrorCode status=U_ZERO_ERROR;
     
     /* test create an empty DateTimePatternGenerator */
     dtpg=udatpg_openEmpty(&errorCode);
@@ -302,6 +311,34 @@ static void TestBuilder() {
     uenum_close(en);
     
     udatpg_close(dtpg);
+    
+    /* sample code in Userguide */
+    patternCapacity = (int32_t)(sizeof(pattern)/sizeof((pattern)[0]));
+    status=U_ZERO_ERROR;      
+    generator=udatpg_open(locale, &status);
+    if(U_FAILURE(status)) {
+        return;
+    }
+
+    /* get a pattern for an abbreviated month and day */
+    length = udatpg_getBestPattern(generator, skeleton, 4,
+                                   pattern, patternCapacity, &status);
+    formatter = udat_open(UDAT_IGNORE, UDAT_DEFAULT, locale, NULL, -1, 
+                          pattern, length, &status);
+
+    /* use it to format (or parse) */
+    formattedCapacity = (int32_t)(sizeof(formatted)/sizeof((formatted)[0]));
+    resultLen=udat_format(formatter, ucal_getNow(), formatted, formattedCapacity,
+                          NULL, &status);
+    /* for French, the result is "13 sept." */
+
+    /* cannot use the result from ucal_getNow() because the value change evreyday. */ 
+    resultLen=udat_format(formatter, sampleDate, formatted, formattedCapacity,
+                          NULL, &status);
+    if ( u_memcmp(sampleFormatted, formatted, resultLen) != 0 ) {
+        log_err("Failed udat_format() of sample code in Userguide.\n");
+    }
+    udatpg_close(generator);
 }
 
 #endif
