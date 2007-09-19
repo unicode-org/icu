@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -2179,6 +2179,39 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
 
         }
         {
+            static const UChar iso_2022_cn_inputText8[]={
+                                0x3000,
+                                0xD84D, 0xDC56,
+                                0x3001,
+                                0xD84D, 0xDC56,
+                                0xDBFF, 0xDFFF,
+                                0x0042,
+                                0x0902};
+            static const uint8_t to_iso_2022_cn8_v2[]={  
+                                0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x21,   
+                                0x0f,   0x5c,   0x32,   0x33,   0x34,   0x35,   0x36,   0x20,   
+                                0x0e,   0x21,   0x22,   
+                                0x0f,   0x5c,   0x32,   0x33,   0x34,   0x35,   0x36,   0x20,   
+                                0x5c,   0x31,   0x30,   0x46,   0x46,   0x46,   0x46,   0x20,   
+                                0x42,   
+                                0x5c,   0x39,   0x30,   0x32,   0x20
+                             };
+            static const int32_t from_iso_2022_cnOffs8_v2 [] ={
+                    0,  0,  0,  0,  0,  0,  0,
+                    1,  1,  1,  1,  1,  1,  1,  1,
+                    3,  3,  3,
+                    4,  4,  4,  4,  4,  4,  4,  4,
+                    6,  6,  6,  6,  6,  6,  6,  6,
+                    8,
+                    9,  9,  9,  9,  9
+            };
+            if(!testConvertFromUnicodeWithContext(iso_2022_cn_inputText8, sizeof(iso_2022_cn_inputText8)/sizeof(iso_2022_cn_inputText8[0]),
+                to_iso_2022_cn8_v2, sizeof(to_iso_2022_cn8_v2), "iso-2022-cn",
+                UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_cnOffs8_v2, NULL, 0,UCNV_ESCAPE_CSS2,U_ZERO_ERROR ))
+                log_err("u-> iso-2022-cn with sub & UCNV_ESCAPE_CSS2 did not match.\n"); 
+
+        }
+        {
             static const uint8_t to_iso_2022_cn4_v3[]={  
                             0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x21,   
                             0x0f,   0x5c,   0x55,   0x30,   0x30,   0x30,   0x32,   0x33,   0x34,   0x35,   0x36,   
@@ -3351,4 +3384,3 @@ static void TestCallBackFailure(void) {
         log_err("Error: ucnv_cbToUWriteUChars did not react correctly to a bad UErrorCode\n");
     }
 }
-
