@@ -40,12 +40,14 @@
 #define UNICODE_PLUS_CODEPOINT          0x002B
 #define UNICODE_LEFT_CURLY_CODEPOINT    0x007B
 #define UNICODE_RIGHT_CURLY_CODEPOINT   0x007D
+#define UNICODE_SPACE_CODEPOINT         0x0020
 #define UCNV_PRV_ESCAPE_ICU         0
 #define UCNV_PRV_ESCAPE_C           'C'
 #define UCNV_PRV_ESCAPE_XML_DEC     'D'
 #define UCNV_PRV_ESCAPE_XML_HEX     'X'
 #define UCNV_PRV_ESCAPE_JAVA        'J'
 #define UCNV_PRV_ESCAPE_UNICODE     'U'
+#define UCNV_PRV_ESCAPE_CSS2        'S'
 #define UCNV_PRV_STOP_ON_ILLEGAL    'i'
 
 /*Function Pointer STOPS at the ILLEGAL_SEQUENCE */
@@ -239,6 +241,18 @@ UCNV_FROM_U_CALLBACK_ESCAPE (
               valueStringLength += uprv_itou (valueString + valueStringLength, VALUE_STRING_LENGTH - valueStringLength, (uint16_t)codeUnits[0], 16, 4);
           }
           valueString[valueStringLength++] = (UChar) UNICODE_RIGHT_CURLY_CODEPOINT;    /* adding } */
+          break;
+
+      case UCNV_PRV_ESCAPE_CSS2:
+          valueString[valueStringLength++] = (UChar) UNICODE_RS_CODEPOINT;    /* adding \ */
+          if (length == 2) {
+              valueStringLength += uprv_itou (valueString + valueStringLength, VALUE_STRING_LENGTH - valueStringLength, codePoint, 16, 0);
+          } else {
+              valueStringLength += uprv_itou (valueString + valueStringLength, VALUE_STRING_LENGTH - valueStringLength, (uint16_t)codeUnits[0], 16, 0);
+          }
+          /* Always add space character, becase the next character might be whitespace,
+             which would erroneously be considered the termination of the escape sequence. */
+          valueString[valueStringLength++] = (UChar) UNICODE_SPACE_CODEPOINT;
           break;
 
       default:

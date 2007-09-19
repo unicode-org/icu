@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
  *
@@ -134,10 +134,17 @@ typedef struct UConverter UConverter;
  */
 #define UCNV_ESCAPE_XML_HEX   "X"
 /**
- * FROM_U_CALLBACK_ESCAPE context option to escape teh code unit according to Unicode (U+XXXXX)
+ * FROM_U_CALLBACK_ESCAPE context option to escape the code unit according to Unicode (U+XXXXX)
  * @stable ICU 2.0
  */
 #define UCNV_ESCAPE_UNICODE   "U"
+
+/**
+ * FROM_U_CALLBACK_ESCAPE context option to escape the code unit according to CSS2 conventions (\\X{XXXXX} followed by
+ * a space.
+ * @stable ICU 4.0
+ */
+#define UCNV_ESCAPE_CSS2   "S"
 
 /** 
  * The process condition code to be used with the callbacks.  
