@@ -59,6 +59,8 @@ allflags()
     echo "  --unicode-version      Print version of Unicode data used in ICU ($UNICODE_VERSION)"
     echo "  --version              Print ICU version ($VERSION)"
     echo "  --incfile              Print path to Makefile.inc (for -O option of pkgdata)"
+    echo "  --install              Print path to install-sh"
+    echo "  --mkinstalldirs              Print path to mkinstalldirs"
 }
 
 ## Print the normal usage message
@@ -143,6 +145,14 @@ do
 
 	--sbindir)
 	    echo $sbindir
+	    ;;
+
+	--mkinstalldirs)
+	    echo ${MKINSTALLDIRS}
+	    ;;
+
+	--install)
+	    echo ${INSTALL}
 	    ;;
 
 	--invoke=*)
