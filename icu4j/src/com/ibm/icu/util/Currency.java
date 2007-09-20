@@ -163,7 +163,16 @@ public class Currency extends MeasureUnit implements Serializable {
                 // here pointer comparison is valid since getCurrentCountryID
                 // will return the input string if there is no replacement
                 if(rep != country){
-                    curriso = cm.getString(rep);
+                    UResourceBundle countryArray = cm.get(rep);
+                    UResourceBundle currencyReq = countryArray.get(0);
+                    curriso = currencyReq.getString("id");
+                    if (isPreEuro && curriso.equals(EUR_STR)) {
+                        currencyReq = countryArray.get(1);
+                        curriso = currencyReq.getString("id");
+                    }
+                    else if (isEuro) {
+                        curriso = EUR_STR;
+                    }
                     if (curriso != null) {
                         return new Currency(curriso);
                     }
