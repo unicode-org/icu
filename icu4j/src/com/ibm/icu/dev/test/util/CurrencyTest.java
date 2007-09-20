@@ -11,7 +11,9 @@
 
 package com.ibm.icu.dev.test.util;
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.*;
+
 import java.util.Locale;
 
 /**
@@ -171,5 +173,21 @@ public class CurrencyTest extends TestFmwk {
     if (!"QQQ".equals(result)) {
         errln("got unexpected currency: " + result);
     }
+    }
+    
+    public void TestDeprecatedCurrencyFormat() {
+        // bug 5952
+        Locale locale = new Locale("sr", "YU");
+        DecimalFormatSymbols icuSymbols = new 
+        com.ibm.icu.text.DecimalFormatSymbols(locale);
+        String symbol = icuSymbols.getCurrencySymbol();
+        Currency currency = icuSymbols.getCurrency();
+        String expectCur = "EUR";
+        String expectSym = "\u20AC";
+        if(!symbol.equals(expectSym) || !currency.toString().equals(expectCur)) {
+            errln("for " + locale + " expected " + expectSym+"/"+expectCur + " but got " + symbol+"/"+currency.toString());
+        } else {
+            logln("for " + locale + " expected " + expectSym+"/"+expectCur + " and got " + symbol+"/"+currency.toString());
+        }
     }
 }
