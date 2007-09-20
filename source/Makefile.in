@@ -125,6 +125,7 @@ install-icu: $(INSTALLED_BUILT_FILES)
 	@$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
 	$(INSTALL_DATA) @platform_make_fragment@ $(DESTDIR)$(pkgdatadir)/config/@platform_make_fragment_name@
 	$(INSTALL_SCRIPT) $(top_srcdir)/mkinstalldirs $(DESTDIR)$(pkgdatadir)/mkinstalldirs
+	$(INSTALL_SCRIPT) $(top_srcdir)/install-sh $(DESTDIR)$(pkgdatadir)/install-sh
 	$(INSTALL_DATA) $(top_srcdir)/../license.html $(DESTDIR)$(pkgdatadir)/license.html
 	$(INSTALL_SCRIPT) $(top_builddir)/config/icu-config $(DESTDIR)$(bindir)/icu-config
 	$(INSTALL_DATA) $(top_builddir)/config/Makefile.inc $(DESTDIR)$(pkglibdir)/Makefile.inc
