@@ -112,8 +112,7 @@ class CharsetUTF32 extends CharsetICU {
                 cr =decodeLoopUTF32LE(source, target, offsets, flush);
             }else{
                 /* should not occur */
-                //cr = decodeLoopUTF32BE(source, target, offsets, flush);
-                cr = CoderResult.malformedForLength(source.position());
+                cr = decodeLoopUTF32BE(source, target, offsets, flush);
             }
             return cr;
         }
