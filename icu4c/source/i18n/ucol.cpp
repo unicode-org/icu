@@ -5054,7 +5054,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
     uint8_t *primaries = *result, *secondaries = second, *tertiaries = tert;
 
     if(U_FAILURE(*status)) {
-      return 0;
+        return 0;
     }
 
     if(primaries == NULL && allocateSKBuffer == TRUE) {
@@ -5090,6 +5090,11 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
                                           source, len,
                                           UNORM_FCD, FALSE,
                                           status);
+            if(U_FAILURE(*status)) {
+                /* Should never happen. */
+                uprv_free(normSource);
+                normSource = normBuffer;
+            }
         }
 
         if(U_FAILURE(*status)) {
