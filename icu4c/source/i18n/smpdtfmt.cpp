@@ -1785,6 +1785,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
     case UDAT_TIMEZONE_FIELD:
     case UDAT_TIMEZONE_RFC_FIELD:
     case UDAT_TIMEZONE_GENERIC_FIELD:
+    case UDAT_TIMEZONE_SPECIAL_FIELD:
         {
         // First try to parse generic forms such as GMT-07:00. Do this first
         // in case localized DateFormatZoneData contains the string "GMT"
