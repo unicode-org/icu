@@ -35,13 +35,19 @@ ifeq ($(ENABLE_RELEASE),1)
 CPPFLAGS+=-DU_RELEASE=1
 endif
 
+ifeq ($(ENABLE_DEBUG),1)
+# Pass debugging flag through
+CPPFLAGS+=-D_DEBUG=1
+ICULIBSUFFIX:=$(ICULIBSUFFIX)d
+endif
+
 # /GF pools strings and places them into read-only memory
 # /EHsc enables exception handling
 # /Zc:wchar_t makes wchar_t a native type. Required for C++ ABI compatibility.
 # -D_CRT_SECURE_NO_DEPRECATE is needed to quiet warnings about using standard C functions.
-CFLAGS+=/GF
-CXXFLAGS+=/GF /EHsc /Zc:wchar_t
-CPPFLAGS+=/nologo -D_CRT_SECURE_NO_DEPRECATE
+CFLAGS+=/GF /nologo
+CXXFLAGS+=/GF /nologo /EHsc /Zc:wchar_t
+CPPFLAGS+=-D_CRT_SECURE_NO_DEPRECATE
 DEFS+=-DWIN32
 LDFLAGS+=/nologo
 
@@ -169,7 +175,7 @@ endif
 
 ## Compile a Windows resource file
 %.res : $(srcdir)/%.rc
-	rc.exe /fo$@ $(SOURCE_FILE)
+	rc.exe /fo$@ $(CPPFLAGS) $(SOURCE_FILE)
 
 ## Versioned target for a shared library.
 FINAL_SO_TARGET= $(basename $(SO_TARGET))$(SO_TARGET_VERSION_MAJOR).$(SO)

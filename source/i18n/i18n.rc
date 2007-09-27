@@ -1,7 +1,7 @@
 // Do not edit with Microsoft Developer Studio Resource Editor.
 //   It will permanently substitute version numbers that are intended to be
 //   picked up by the pre-processor during each build.
-// Copyright (c) 2001-2005 International Business Machines
+// Copyright (c) 2001-2005, 2007 International Business Machines
 // Corporation and others. All Rights Reserved.
 //
 #include "../common/msvcres.h"
@@ -54,8 +54,8 @@ END
 #define CommaVersionString(a, b, c, d) STR(a) ", " STR(b) ", " STR(c) ", " STR(d) "\0"
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION U_ICU_VERSION_MAJOR_NUM, U_ICU_VERSION_MINOR_NUM, U_ICU_VERSION_PATCHLEVEL_NUM, 0
- PRODUCTVERSION U_ICU_VERSION_MAJOR_NUM, U_ICU_VERSION_MINOR_NUM, U_ICU_VERSION_PATCHLEVEL_NUM, 0
+ FILEVERSION U_ICU_VERSION_MAJOR_NUM, U_ICU_VERSION_MINOR_NUM, U_ICU_VERSION_PATCHLEVEL_NUM, U_ICU_VERSION_BUILDLEVEL_NUM
+ PRODUCTVERSION U_ICU_VERSION_MAJOR_NUM, U_ICU_VERSION_MINOR_NUM, U_ICU_VERSION_PATCHLEVEL_NUM, U_ICU_VERSION_BUILDLEVEL_NUM
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -73,7 +73,7 @@ BEGIN
             VALUE "Comments", ICU_WEBSITE "\0"
             VALUE "CompanyName", "IBM Corporation and others\0"
             VALUE "FileDescription", "IBM ICU I18N DLL\0"
-            VALUE "FileVersion",  CommaVersionString(U_ICU_VERSION_MAJOR_NUM, U_ICU_VERSION_MINOR_NUM, U_ICU_VERSION_PATCHLEVEL_NUM, 0)
+            VALUE "FileVersion",  CommaVersionString(U_ICU_VERSION_MAJOR_NUM, U_ICU_VERSION_MINOR_NUM, U_ICU_VERSION_PATCHLEVEL_NUM, U_ICU_VERSION_BUILDLEVEL_NUM)
             VALUE "LegalCopyright", U_COPYRIGHT_STRING "\0"
 #ifdef _DEBUG
             VALUE "OriginalFilename", "icuin" U_ICU_VERSION_SHORT "d.dll\0")
@@ -82,7 +82,7 @@ BEGIN
 #endif
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "International Components for Unicode\0"
-            VALUE "ProductVersion", CommaVersionString(U_ICU_VERSION_MAJOR_NUM, U_ICU_VERSION_MINOR_NUM, U_ICU_VERSION_PATCHLEVEL_NUM, 0)
+            VALUE "ProductVersion", CommaVersionString(U_ICU_VERSION_MAJOR_NUM, U_ICU_VERSION_MINOR_NUM, U_ICU_VERSION_PATCHLEVEL_NUM, U_ICU_VERSION_BUILDLEVEL_NUM)
             VALUE "SpecialBuild", "\0"
         END
     END
