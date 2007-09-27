@@ -75,6 +75,14 @@
  */
 #define U_ICU_VERSION_PATCHLEVEL_NUM 0
 
+/** The current ICU build level version as an integer.  
+ *  This value is for use by ICU clients. It defaults to 0.
+ *  @draft ICU 4.0
+ */
+#ifndef U_ICU_VERSION_BUILDLEVEL_NUM
+#define U_ICU_VERSION_BUILDLEVEL_NUM 0
+#endif
+
 /** Glued version suffix for renamers 
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.6
