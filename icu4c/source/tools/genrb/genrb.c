@@ -53,7 +53,8 @@ enum
     STRICT,
     NO_BINARY_COLLATION,
     /*added by Jing*/
-    LANGUAGE
+    LANGUAGE,
+    NO_COLLATION_RULES
 };
 
 UOption options[]={
@@ -73,7 +74,8 @@ UOption options[]={
                       UOPTION_DEF( "write-xliff", 'x', UOPT_OPTIONAL_ARG),
                       UOPTION_DEF( "strict",    'k', UOPT_NO_ARG), /* 14 */
                       UOPTION_DEF( "noBinaryCollation", 'C', UOPT_NO_ARG),/* 15 */
-                      UOPTION_DEF( "language",  'l', UOPT_REQUIRES_ARG)
+                      UOPTION_DEF( "language",  'l', UOPT_REQUIRES_ARG), /* 16 */
+                      UOPTION_DEF( "omitCollationRules", 'R', UOPT_NO_ARG),/* 17 */
                   };
 
 static     UBool       write_java = FALSE;
@@ -146,10 +148,18 @@ main(int argc,
         fprintf(stderr,
                 "\t-b or --bundle-name      bundle name for writing the ListResourceBundle for ICU4J,\n"
                 "\t                         defaults to LocaleElements\n"
-                "\t-x or --write-xliff      write a XLIFF file for the resource bundle. Followed by an optional output file name.\n"
+                "\t-x or --write-xliff      write an XLIFF file for the resource bundle. Followed by\n"
+                "\t                         an optional output file name.\n"
                 "\t-k or --strict           use pedantic parsing of syntax\n"
                 /*added by Jing*/
-                "\t-l or --language         For XLIFF: language code compliant with ISO 639.\n");
+                "\t-l or --language         for XLIFF: language code compliant with BCP 47.\n");
+        fprintf(stderr,
+                "\t-C or --noBinaryCollation  do not generate binary collation image;\n"
+                "\t                           makes .res file smaller but collator instantiation much slower;\n"
+                "\t                           maintains ability to get tailoring rules\n"
+                "\t-R or --omitCollationRules do not include collation (tailoring) rules;\n"
+                "\t                           makes .res file smaller and maintains collator instantiation speed\n"
+                "\t                           but tailoring rules will not be available (they are rarely used)\n");
 
         return argc < 0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
@@ -222,11 +232,7 @@ main(int argc,
         }
     }
 
-    if(options[NO_BINARY_COLLATION].doesOccur) {
-      initParser(FALSE);
-    } else {
-      initParser(TRUE);
-    }
+    initParser(options[NO_BINARY_COLLATION].doesOccur, options[NO_COLLATION_RULES].doesOccur);
 
     /*added by Jing*/
     if(options[LANGUAGE].doesOccur) {
