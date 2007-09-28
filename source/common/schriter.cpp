@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1998-2004, International Business Machines Corporation and   *
+* Copyright (C) 1998-2007, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 *
@@ -28,31 +28,31 @@ StringCharacterIterator::StringCharacterIterator()
 }
 
 StringCharacterIterator::StringCharacterIterator(const UnicodeString& textStr)
-  : UCharCharacterIterator(textStr.fArray, textStr.length()),
+  : UCharCharacterIterator(textStr.getBuffer(), textStr.length()),
     text(textStr)
 {
     // we had set the input parameter's array, now we need to set our copy's array
-    UCharCharacterIterator::text = this->text.fArray;
+    UCharCharacterIterator::text = this->text.getBuffer();
 }
 
 StringCharacterIterator::StringCharacterIterator(const UnicodeString& textStr,
                                                  int32_t textPos)
-  : UCharCharacterIterator(textStr.fArray, textStr.length(), textPos),
+  : UCharCharacterIterator(textStr.getBuffer(), textStr.length(), textPos),
     text(textStr)
 {
     // we had set the input parameter's array, now we need to set our copy's array
-    UCharCharacterIterator::text = this->text.fArray;
+    UCharCharacterIterator::text = this->text.getBuffer();
 }
 
 StringCharacterIterator::StringCharacterIterator(const UnicodeString& textStr,
                                                  int32_t textBegin,
                                                  int32_t textEnd,
                                                  int32_t textPos)
-  : UCharCharacterIterator(textStr.fArray, textStr.length(), textBegin, textEnd, textPos),
+  : UCharCharacterIterator(textStr.getBuffer(), textStr.length(), textBegin, textEnd, textPos),
     text(textStr)
 {
     // we had set the input parameter's array, now we need to set our copy's array
-    UCharCharacterIterator::text = this->text.fArray;
+    UCharCharacterIterator::text = this->text.getBuffer();
 }
 
 StringCharacterIterator::StringCharacterIterator(const StringCharacterIterator& that)
@@ -60,7 +60,7 @@ StringCharacterIterator::StringCharacterIterator(const StringCharacterIterator& 
     text(that.text)
 {
     // we had set the input parameter's array, now we need to set our copy's array
-    UCharCharacterIterator::text = this->text.fArray;
+    UCharCharacterIterator::text = this->text.getBuffer();
 }
 
 StringCharacterIterator::~StringCharacterIterator() {
@@ -71,7 +71,7 @@ StringCharacterIterator::operator=(const StringCharacterIterator& that) {
     UCharCharacterIterator::operator=(that);
     text = that.text;
     // we had set the input parameter's array, now we need to set our copy's array
-    UCharCharacterIterator::text = this->text.fArray;
+    UCharCharacterIterator::text = this->text.getBuffer();
     return *this;
 }
 
@@ -105,7 +105,7 @@ StringCharacterIterator::clone() const {
 void
 StringCharacterIterator::setText(const UnicodeString& newText) {
     text = newText;
-    UCharCharacterIterator::setText(text.fArray, text.length());
+    UCharCharacterIterator::setText(text.getBuffer(), text.length());
 }
 
 void
