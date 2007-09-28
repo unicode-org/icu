@@ -22,7 +22,7 @@ import java.util.TreeMap;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.LocaleUtility;
-import com.ibm.icu.lang.UCharacter;
+
 /**
  * A class analogous to {@link java.util.Locale} that provides additional
  * support for ICU protocol.  In ICU 3.0 this class is enhanced to support

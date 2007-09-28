@@ -49,13 +49,13 @@ public class RuleBasedBreakIterator extends BreakIterator {
         return This;   
     }
     
-    private RuleBasedBreakIterator(RuleBasedBreakIterator other) {
+    /*private RuleBasedBreakIterator(RuleBasedBreakIterator other) {
         // TODO: check types.
         fRData = other.fRData;
         if (fText != null) {
             fText = (CharacterIterator)(other.fText.clone());   
         }
-    }
+    }*/
 
     /**
      * Construct a RuleBasedBreakIterator from a set of rules supplied as a string.

@@ -1,6 +1,6 @@
 /***************************************************************************************
  *
- *   Copyright (C) 1996-2006, International Business Machines
+ *   Copyright (C) 1996-2007, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  */
 
@@ -241,7 +241,7 @@ public class IntlTestDateFormat extends com.ibm.icu.dev.test.TestFmwk {
     }
 
     public void TestRoundtrip() {
-        ULocale[] locales;;
+        ULocale[] locales;
         if (isQuick()) {
             locales = new ULocale[] {
                     new ULocale("bg_BG"),

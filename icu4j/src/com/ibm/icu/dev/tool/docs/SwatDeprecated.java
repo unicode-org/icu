@@ -21,7 +21,7 @@ public class SwatDeprecated {
     private boolean overwrite;
     private int verbosity;
     private int cc; // changed file count
-    private boolean inPlace;
+    //private boolean inPlace;
     private String copyYear;
 
     private PrintWriter pw = new PrintWriter(System.out);
@@ -106,7 +106,7 @@ public class SwatDeprecated {
             throw re;
         }
 
-        this.inPlace = srcPrefix.equals(dstPrefix);
+        //this.inPlace = srcPrefix.equals(dstPrefix);
         this.cc = 0;
 
         if (verbosity >= 1) {
