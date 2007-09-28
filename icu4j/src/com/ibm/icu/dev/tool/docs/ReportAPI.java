@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2004-2006, International Business Machines Corporation and    *
+* Copyright (C) 2004-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -131,7 +131,7 @@ public class ReportAPI {
 
         ArrayList ams = new ArrayList();
         ArrayList rms = new ArrayList();
-        PrintWriter outpw = new PrintWriter(System.out);
+        //PrintWriter outpw = new PrintWriter(System.out);
 
         APIInfo a = null, r = null;
         while ((a != null || ai.hasNext()) && (r != null || ri.hasNext())) {

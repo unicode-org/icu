@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2004-2005, International Business Machines Corporation and         *
+* Copyright (C) 2004-2007, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -563,7 +563,7 @@ public class CheckAPI {
                 BufferedReader br = new BufferedReader(isr);
 
                 // read header line
-                int version = Integer.parseInt(readToken(br));
+                /*int version = */Integer.parseInt(readToken(br));
                 // check version if we change it later, probably can just rebuild though
                 this.compareName = readToken(br);
                 br.readLine();

@@ -25,7 +25,6 @@ import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 
 import java.text.ParsePosition;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -349,7 +348,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         public String toString() {
             return name;
         }
-    };
+    }
     
     /**
      * Simple struct for output from getOrdering
