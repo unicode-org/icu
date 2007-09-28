@@ -38,9 +38,7 @@ U_NAMESPACE_BEGIN
 
 UnicodeString::UnicodeString(const char *codepageData,
                              const char *codepage)
-  : fLength(0),
-    fCapacity(US_STACKBUF_SIZE),
-    fArray(fStackBuffer),
+  : fShortLength(0),
     fFlags(kShortString)
 {
     if(codepageData != 0) {
@@ -52,9 +50,7 @@ UnicodeString::UnicodeString(const char *codepageData,
 UnicodeString::UnicodeString(const char *codepageData,
                              int32_t dataLength,
                              const char *codepage)
-  : fLength(0),
-    fCapacity(US_STACKBUF_SIZE),
-    fArray(fStackBuffer),
+  : fShortLength(0),
     fFlags(kShortString)
 {
     if(codepageData != 0) {
@@ -65,9 +61,7 @@ UnicodeString::UnicodeString(const char *codepageData,
 UnicodeString::UnicodeString(const char *src, int32_t srcLength,
                              UConverter *cnv,
                              UErrorCode &errorCode)
-  : fLength(0),
-    fCapacity(US_STACKBUF_SIZE),
-    fArray(fStackBuffer),
+  : fShortLength(0),
     fFlags(kShortString)
 {
     if(U_SUCCESS(errorCode)) {
@@ -183,7 +177,7 @@ UnicodeString::extract(char *dest, int32_t destCapacity,
     }
 
     // nothing to do?
-    if(fLength<=0) {
+    if(isEmpty()) {
         return u_terminateChars(dest, destCapacity, 0, &errorCode);
     }
 
@@ -201,14 +195,14 @@ UnicodeString::extract(char *dest, int32_t destCapacity,
     }
 
     // convert
-    int32_t length=doExtract(0, fLength, dest, destCapacity, cnv, errorCode);
+    int32_t len=doExtract(0, length(), dest, destCapacity, cnv, errorCode);
 
     // release the converter
     if(isDefaultConverter) {
         u_releaseDefaultConverter(cnv);
     }
 
-    return length;
+    return len;
 }
 
 int32_t
@@ -224,7 +218,7 @@ UnicodeString::doExtract(int32_t start, int32_t length,
         return 0;
     }
 
-    const UChar *src=fArray+start, *srcLimit=src+length;
+    const UChar *src=getArrayStart()+start, *srcLimit=src+length;
     char *originalDest=dest;
     const char *destLimit;
 
@@ -294,7 +288,7 @@ UnicodeString::doCodepageCreate(const char *codepageData,
         // use the "invariant characters" conversion
         if(cloneArrayIfNeeded(dataLength, dataLength, FALSE)) {
             u_charsToUChars(codepageData, getArrayStart(), dataLength);
-            fLength = dataLength;
+            setLength(dataLength);
         } else {
             setToBogus();
         }
@@ -328,11 +322,17 @@ UnicodeString::doCodepageCreate(const char *codepageData,
     // set up the conversion parameters
     const char *mySource     = codepageData;
     const char *mySourceEnd  = mySource + dataLength;
-    UChar *myTarget;
+    UChar *array, *myTarget;
 
     // estimate the size needed:
-    // 1.25 UChar's per source byte should cover most cases
-    int32_t arraySize = dataLength + (dataLength >> 2);
+    int32_t arraySize;
+    if(dataLength <= US_STACKBUF_SIZE) {
+        // try to use the stack buffer
+        arraySize = US_STACKBUF_SIZE;
+    } else {
+        // 1.25 UChar's per source byte should cover most cases
+        arraySize = dataLength + (dataLength >> 2);
+    }
 
     // we do not care about the current contents
     UBool doCopyArray = FALSE;
@@ -343,12 +343,13 @@ UnicodeString::doCodepageCreate(const char *codepageData,
         }
 
         // perform the conversion
-        myTarget = fArray + fLength;
-        ucnv_toUnicode(converter, &myTarget,  fArray + fCapacity,
+        array = getArrayStart();
+        myTarget = array + length();
+        ucnv_toUnicode(converter, &myTarget,  array + getCapacity(),
             &mySource, mySourceEnd, 0, TRUE, &status);
 
         // update the conversion parameters
-        fLength = (int32_t)(myTarget - fArray);
+        setLength((int32_t)(myTarget - array));
 
         // allocate more space and copy data, if needed
         if(status == U_BUFFER_OVERFLOW_ERROR) {
@@ -360,7 +361,7 @@ UnicodeString::doCodepageCreate(const char *codepageData,
 
             // estimate the new size needed, larger than before
             // try 2 UChar's per remaining source byte
-            arraySize = (int32_t)(fLength + 2 * (mySourceEnd - mySource));
+            arraySize = (int32_t)(length() + 2 * (mySourceEnd - mySource));
         } else {
             break;
         }
