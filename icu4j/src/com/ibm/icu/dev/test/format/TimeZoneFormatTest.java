@@ -1,19 +1,14 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007, Google and  *
+ * Copyright (C) 2007, Google, IBM and  *
  * others. All Rights Reserved. *
  *******************************************************************************
  */
 
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.text.SimpleDateFormat;
-import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.SimpleTimeZone;
-import com.ibm.icu.util.TimeZone;
-import com.ibm.icu.util.ULocale;
-
 import java.io.PrintWriter;
+import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,12 +16,19 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+
+import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.util.BasicTimeZone;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.SimpleTimeZone;
+import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.TimeZoneTransition;
+import com.ibm.icu.util.ULocale;
 
 public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
@@ -240,4 +242,110 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 //        }
 //      }
 //    }
+
+    public void TestTimeRoundTrip() {
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+
+        cal.set(1900, Calendar.JANUARY, 1);
+        final long START_TIME = cal.getTimeInMillis();
+
+        cal.set(2020, Calendar.JANUARY, 1);
+        final long END_TIME = cal.getTimeInMillis();
+        
+        final String[] PATTERNS = {"z", "zzzz", "Z", "ZZZZ", "v", "vvvv", "V", "VVVV"};
+        // Whether each pattern is ambiguous at DST->STD local time overlap
+        final boolean[] AMBIGUOUS_DST_DECESSION = {false, false, false, false, true, true, false, true};
+        // Whether each pattern is ambiguous at STD->STD/DST->DST local time overlap
+        final boolean[] AMBIGUOUS_NEGATIVE_SHIFT = {true, true, false, false, true, true, true, true};
+
+        final String BASEPATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS";
+
+        ULocale[] LOCALES = null;
+        if (getInclusion() > 5) {
+            LOCALES = ULocale.getAvailableLocales();
+        } else {
+            LOCALES = new ULocale[] {new ULocale("en_US")};
+        }
+
+        long[] testTimes = new long[4];
+        boolean[] expectedRoundTrip = new boolean[4];
+        int testLen = 0;
+
+        for (int locidx = 0; locidx < LOCALES.length; locidx++) {
+            for (int patidx = 0; patidx < PATTERNS.length; patidx++) {
+                String pattern = BASEPATTERN + " " + PATTERNS[patidx];
+                SimpleDateFormat sdf = new SimpleDateFormat(pattern, LOCALES[locidx]);
+
+                String[] ids = TimeZone.getAvailableIDs();
+                for (int zidx = 0; zidx < ids.length; zidx++) {
+                    BasicTimeZone tz = (BasicTimeZone)TimeZone.getTimeZone(ids[zidx]);
+                    sdf.setTimeZone(tz);
+
+                    long t = START_TIME;
+                    TimeZoneTransition tzt = null;
+                    while (t < END_TIME) {
+                        if (tzt == null) {
+                            testTimes[0] = t;
+                            expectedRoundTrip[0] = true;
+                            testLen = 1;
+                        } else {
+                            int fromOffset = tzt.getFrom().getRawOffset() + tzt.getFrom().getDSTSavings();
+                            int toOffset = tzt.getFrom().getRawOffset() + tzt.getFrom().getDSTSavings();
+                            int delta = toOffset - fromOffset;
+                            if (delta < 0) {
+                                boolean isDstDecession = tzt.getFrom().getDSTSavings() > 0 && tzt.getTo().getDSTSavings() == 0;
+                                testTimes[0] = t + delta - 1;
+                                expectedRoundTrip[0] = true;
+                                testTimes[1] = t + delta;
+                                expectedRoundTrip[1] = isDstDecession ?
+                                        !AMBIGUOUS_DST_DECESSION[patidx] : !AMBIGUOUS_NEGATIVE_SHIFT[patidx];
+                                testTimes[2] = t - 1;
+                                expectedRoundTrip[2] = isDstDecession ?
+                                        !AMBIGUOUS_DST_DECESSION[patidx] : !AMBIGUOUS_NEGATIVE_SHIFT[patidx];
+                                testTimes[3] = t;
+                                expectedRoundTrip[3] = true;
+                                testLen = 4;
+                            } else {
+                                testTimes[0] = t - 1;
+                                expectedRoundTrip[0] = true;
+                                testTimes[1] = t;
+                                expectedRoundTrip[1] = true;
+                                testLen = 2;
+                            }
+                        }
+                        for (int testidx = 0; testidx < testLen; testidx++) {
+                            String text = sdf.format(new Date(testTimes[testidx]));
+                            try {
+                                Date parsedDate = sdf.parse(text);
+                                long restime = parsedDate.getTime();
+                                if (restime != testTimes[testidx]) {
+                                    StringBuffer msg = new StringBuffer();
+                                    msg.append("Time round trip failed for ")
+                                        .append("tzid=").append(ids[zidx])
+                                        .append(", locale=").append(LOCALES[locidx])
+                                        .append(", pattern=").append(PATTERNS[patidx])
+                                        .append(", text=").append(text)
+                                        .append(", time=").append(testTimes[testidx])
+                                        .append(", restime=").append(restime)
+                                        .append(", diff=").append(restime - testTimes[testidx]);
+                                    if (expectedRoundTrip[testidx]) {
+                                        errln("FAIL: " + msg.toString());
+                                    } else {
+                                        logln(msg.toString());
+                                    }
+                                }
+                            } catch (ParseException pe) {
+                                errln("FAIL: " + pe.getMessage());
+                            }
+                        }
+                        tzt = tz.getNextTransition(t, false);
+                        if (tzt == null) {
+                            break;
+                        }
+                        t = tzt.getTime();
+                    }
+                }
+            }
+        }
+    }
 }
