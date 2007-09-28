@@ -95,7 +95,7 @@ UnicodeString::caseMap(BreakIterator *titleIter,
                        const char *locale,
                        uint32_t options,
                        int32_t toWhichCase) {
-  if(fLength <= 0) {
+  if(isEmpty() || !isWritable()) {
     // nothing to do
     return *this;
   }
@@ -110,54 +110,62 @@ UnicodeString::caseMap(BreakIterator *titleIter,
   }
 
   // We need to allocate a new buffer for the internal string case mapping function.
-  // This is very similar to how doReplace() below keeps the old array pointer
+  // This is very similar to how doReplace() keeps the old array pointer
   // and deletes the old array itself after it is done.
   // In addition, we are forcing cloneArrayIfNeeded() to always allocate a new array.
-  UChar *oldArray = fArray;
-  int32_t oldLength = fLength;
-  int32_t *bufferToDelete = 0;
+  UChar oldStackBuffer[US_STACKBUF_SIZE];
+  UChar *oldArray;
+  int32_t oldLength;
 
-  // Make sure that if the string is in fStackBuffer we do not overwrite it!
-  int32_t capacity;
-  if(fLength <= US_STACKBUF_SIZE) {
-    if(fArray == fStackBuffer) {
-      capacity = 2 * US_STACKBUF_SIZE; // make sure that cloneArrayIfNeeded() allocates a new buffer
-    } else {
-      capacity = US_STACKBUF_SIZE;
-    }
+  if(fFlags&kUsingStackBuffer) {
+    // copy the stack buffer contents because it will be overwritten
+    u_memcpy(oldStackBuffer, fUnion.fStackBuffer, fShortLength);
+    oldArray = oldStackBuffer;
+    oldLength = fShortLength;
   } else {
-    capacity = fLength + 20;
+    oldArray = getArrayStart();
+    oldLength = length();
   }
+
+  int32_t capacity;
+  if(oldLength <= US_STACKBUF_SIZE) {
+    capacity = US_STACKBUF_SIZE;
+  } else {
+    capacity = oldLength + 20;
+  }
+  int32_t *bufferToDelete = 0;
   if(!cloneArrayIfNeeded(capacity, capacity, FALSE, &bufferToDelete, TRUE)) {
     return *this;
   }
 
   // Case-map, and if the result is too long, then reallocate and repeat.
+  int32_t newLength;
   do {
     errorCode = U_ZERO_ERROR;
     if(toWhichCase==TO_LOWER) {
-      fLength = ustr_toLower(csp, fArray, fCapacity,
-                             oldArray, oldLength,
-                             locale, &errorCode);
+      newLength = ustr_toLower(csp, getArrayStart(), getCapacity(),
+                               oldArray, oldLength,
+                               locale, &errorCode);
     } else if(toWhichCase==TO_UPPER) {
-      fLength = ustr_toUpper(csp, fArray, fCapacity,
-                             oldArray, oldLength,
-                             locale, &errorCode);
+      newLength = ustr_toUpper(csp, getArrayStart(), getCapacity(),
+                               oldArray, oldLength,
+                               locale, &errorCode);
     } else if(toWhichCase==TO_TITLE) {
 #if UCONFIG_NO_BREAK_ITERATION
         errorCode=U_UNSUPPORTED_ERROR;
 #else
-      fLength = ustr_toTitle(csp, fArray, fCapacity,
-                             oldArray, oldLength,
-                             (UBreakIterator *)titleIter, locale, options, &errorCode);
+      newLength = ustr_toTitle(csp, getArrayStart(), getCapacity(),
+                               oldArray, oldLength,
+                               (UBreakIterator *)titleIter, locale, options, &errorCode);
 #endif
     } else {
-      fLength = ustr_foldCase(csp, fArray, fCapacity,
-                              oldArray, oldLength,
-                              options,
-                              &errorCode);
+      newLength = ustr_foldCase(csp, getArrayStart(), getCapacity(),
+                                oldArray, oldLength,
+                                options,
+                                &errorCode);
     }
-  } while(errorCode==U_BUFFER_OVERFLOW_ERROR && cloneArrayIfNeeded(fLength, fLength, FALSE));
+    setLength(newLength);
+  } while(errorCode==U_BUFFER_OVERFLOW_ERROR && cloneArrayIfNeeded(newLength, newLength, FALSE));
 
   if (bufferToDelete) {
     uprv_free(bufferToDelete);
