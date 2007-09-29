@@ -14,7 +14,10 @@
 
 #include "layout/LETypes.h"
 #include "layout/LEScripts.h"
-#include "loengine.h"
+#include "layout/loengine.h"
+
+#include "layout/playout.h"
+#include "layout/plruns.h"
 
 #include "cfonts.h"
 
@@ -478,12 +481,94 @@ static void U_CALLCONV DataDrivenTest(void)
 	readTestFile(testFilePath, doTestCase);
 }
 
+/*
+ * From ticket:5923:
+ *
+ * Build a pl_paragraph with all Arabic text. Break it into multiple lines
+ * and make sure that the charToGlyph map for each run in each line is correct.
+ *
+ * Since the whole paragraph is right to left, we can expect the character indices,
+ * when read from right to left, to in order.
+ *
+ * Note: it might be a good idea to also check the glyphs and positions for each run,
+ * that we get the expected number of runs per line and that the line breaks are where
+ * we expect them to be. Really, it would be a good idea to make a whole test suite
+ * for pl_paragraph.
+ */
+static void U_CALLCONV GlyphToCharTest(void)
+{
+    LEErrorCode status = LE_NO_ERROR;
+    le_font *font;
+    pl_fontRuns *fontRuns;
+    pl_paragraph *paragraph;
+    const pl_line *line;
+    LEUnicode chars[] = {
+        0x0627, 0x0644, 0x0629, 0x0020, 0x0627, 0x0644, 0x0635, 0x063A, 0x064A, 0x0631, 0x0629
+    };
+    le_int32 charCount = LE_ARRAY_SIZE(chars);
+    le_int32 charIndex = 0, lineNumber = 1;
+    le_int32 run, i;
+    const float lineWidth = 72;
+
+    font = le_simpleFontOpen(12, &status);
+
+    if (LE_FAILURE(status)) {
+        log_err("le_simpleFontOpen(12, &status) failed");
+        goto finish;
+    }
+
+    fontRuns = pl_openEmptyFontRuns(0);
+    pl_addFontRun(fontRuns, font, charCount);
+
+    paragraph = pl_create(chars, charCount, fontRuns, NULL, NULL, NULL, 0, FALSE, &status);
+
+    pl_closeFontRuns(fontRuns);
+
+    if (LE_FAILURE(status)) {
+        log_err("pl_create failed.");
+        goto close_font;
+    }
+
+    pl_reflow(paragraph);
+    while ((line = pl_nextLine(paragraph, lineWidth)) != NULL) {
+        le_int32 runCount = pl_countLineRuns(line);
+
+        for(run = 0; run < runCount; run += 1) {
+            const pl_visualRun *visualRun = pl_getLineVisualRun(line, run);
+            const le_int32 glyphCount = pl_getVisualRunGlyphCount(visualRun);
+            const le_int32 *glyphToCharMap = pl_getVisualRunGlyphToCharMap(visualRun);
+
+            for(i = glyphCount - 1; i >= 0; i -= 1) {
+                if (glyphToCharMap[i] != charIndex) {
+                    log_err("Bad glyph to char index for glyph %d on line %d: expected %d, got %d\n",
+                        i, lineNumber, charIndex, glyphToCharMap[i]);
+                    goto close_paragraph; // once there's one error, we can't count on anything else...
+                }
+
+                charIndex += 1;
+            }
+        }
+
+        lineNumber += 1;
+    }
+
+close_paragraph:
+    pl_close(paragraph);
+
+close_font:
+    le_fontClose(font);
+
+finish:
+    return;
+}
+
 U_CFUNC void addCTests(TestNode **root)
 {
-    addTest(root, &ParamTest,      "c_api/ParameterTest");
-    addTest(root, &FactoryTest,    "c_api/FactoryTest");
-    addTest(root, &AccessTest,     "c_layout/AccessTest");
-    addTest(root, &DataDrivenTest, "c_layout/DataDrivenTest");
+    addTest(root, &ParamTest,       "c_api/ParameterTest");
+    addTest(root, &FactoryTest,     "c_api/FactoryTest");
+    addTest(root, &AccessTest,      "c_layout/AccessTest");
+    addTest(root, &DataDrivenTest,  "c_layout/DataDrivenTest");
+    addTest(root, &GlyphToCharTest, "c_paragraph/GlyphToCharTest");
 }
 
 

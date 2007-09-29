@@ -23,6 +23,9 @@
 #include "layout/LEScripts.h"
 #include "layout/LayoutEngine.h"
 
+#include "layout/ParagraphLayout.h"
+#include "layout/RunArrays.h"
+
 #include "PortableFontInstance.h"
 #include "SimpleFontInstance.h"
 
@@ -715,13 +718,90 @@ free_c_strings:
 }
 U_CDECL_END
 
+U_CDECL_BEGIN
+/*
+ * From ticket:5923:
+ *
+ * Build a ParagraphLayout with all Arabic text. Break it into multiple lines
+ * and make sure that the charToGlyph map for each run in each line is correct.
+ *
+ * Since the whole paragraph is right to left, we can expect the character indices,
+ * when read from right to left, to in order.
+ *
+ * Note: it might be a good idea to also check the glyphs and positions for each run,
+ * that we get the expected number of runs per line and that the line breaks are where
+ * we expect them to be. Really, it would be a good idea to make a whole test suite
+ * for ParagraphLayout.
+ */
+static void U_CALLCONV GlyphToCharTest(void)
+{
+    LEErrorCode status = LE_NO_ERROR;
+    LEFontInstance *font;
+    FontRuns fontRuns(0);
+    ParagraphLayout *paragraphLayout;
+    const ParagraphLayout::Line *line;
+    LEUnicode chars[] = {
+        0x0627, 0x0644, 0x0629, 0x0020, 0x0627, 0x0644, 0x0635, 0x063A, 0x064A, 0x0631, 0x0629
+    };
+    le_int32 charCount = LE_ARRAY_SIZE(chars);
+    le_int32 charIndex = 0, lineNumber = 1;
+    const float lineWidth = 72;
+
+    font = new SimpleFontInstance(12, status);
+
+    if (LE_FAILURE(status)) {
+        goto finish;
+    }
+
+    fontRuns.add(font, charCount);
+
+    paragraphLayout = new ParagraphLayout(chars, charCount, &fontRuns, NULL, NULL, NULL, 0, FALSE, status);
+
+    if (LE_FAILURE(status)) {
+        goto close_font;
+    }
+
+    paragraphLayout->reflow();
+    while ((line = paragraphLayout->nextLine(lineWidth)) != NULL) {
+        le_int32 runCount = line->countRuns();
+
+        for(le_int32 run = 0; run < runCount; run += 1) {
+            const ParagraphLayout::VisualRun *visualRun = line->getVisualRun(run);
+            le_int32 glyphCount = visualRun->getGlyphCount();
+            const le_int32 *glyphToCharMap = visualRun->getGlyphToCharMap();
+
+            for(le_int32 i = glyphCount - 1; i >= 0; i -= 1) {
+                if (glyphToCharMap[i] != charIndex) {
+                    log_err("Bad glyph to char index for glyph %d on line %d: expected %d, got %d\n",
+                        i, lineNumber, charIndex, glyphToCharMap[i]);
+                    goto close_paragraph; // once there's one error, we can't count on anything else...
+                }
+
+                charIndex += 1;
+            }
+        }
+
+        lineNumber += 1;
+    }
+close_paragraph:
+    delete paragraphLayout;
+
+close_font:
+    delete font;
+
+finish:
+    return;
+}
+U_CDECL_END
+
 static void addAllTests(TestNode **root)
 {
-    addTest(root, &ScriptTest,     "api/ScriptTest");
-    addTest(root, &ParamTest,      "api/ParameterTest");
-    addTest(root, &FactoryTest,    "api/FactoryTest");
-    addTest(root, &AccessTest,     "layout/AccessTest");
-    addTest(root, &DataDrivenTest, "layout/DataDrivenTest");
+    addTest(root, &ScriptTest,      "api/ScriptTest");
+    addTest(root, &ParamTest,       "api/ParameterTest");
+    addTest(root, &FactoryTest,     "api/FactoryTest");
+    addTest(root, &AccessTest,      "layout/AccessTest");
+    addTest(root, &DataDrivenTest,  "layout/DataDrivenTest");
+    addTest(root, &GlyphToCharTest, "paragraph/GlyphToCharTest");
 
     addCTests(root);
 }
