@@ -1888,14 +1888,14 @@ void DateFormatTest::TestTimeZoneStringsAPI() {
         errln("Could not iterate over the StringEnumeration. Error: %s", u_errorName(status)); 
         return;
     }
-    UnicodeString expectedKey("meta/Hawaii");
+    UnicodeString expectedKey("meta/Alaska");
     UnicodeString expectedStrs[DateFormatSymbols::TIMEZONE_COUNT];
-    expectedStrs[DateFormatSymbols::TIMEZONE_SHORT_GENERIC].setTo("HT");
-    expectedStrs[DateFormatSymbols::TIMEZONE_SHORT_STANDARD].setTo("HST");
-    expectedStrs[DateFormatSymbols::TIMEZONE_SHORT_DAYLIGHT].setTo("HDT");
-    expectedStrs[DateFormatSymbols::TIMEZONE_LONG_GENERIC].setTo("Hawaii Time");
-    expectedStrs[DateFormatSymbols::TIMEZONE_LONG_STANDARD].setTo("Hawaii Standard Time");
-    expectedStrs[DateFormatSymbols::TIMEZONE_LONG_DAYLIGHT].setTo("Hawaii Daylight Time");
+    expectedStrs[DateFormatSymbols::TIMEZONE_SHORT_GENERIC].setTo("AKT");
+    expectedStrs[DateFormatSymbols::TIMEZONE_SHORT_STANDARD].setTo("AKST");
+    expectedStrs[DateFormatSymbols::TIMEZONE_SHORT_DAYLIGHT].setTo("AKDT");
+    expectedStrs[DateFormatSymbols::TIMEZONE_LONG_GENERIC].setTo("Alaska Time");
+    expectedStrs[DateFormatSymbols::TIMEZONE_LONG_STANDARD].setTo("Alaska Standard Time");
+    expectedStrs[DateFormatSymbols::TIMEZONE_LONG_DAYLIGHT].setTo("Alaska Daylight Time");
     expectedStrs[DateFormatSymbols::TIMEZONE_EXEMPLAR_CITY].setTo("");
     for(int32_t i=0; i<DateFormatSymbols::TIMEZONE_COUNT; i++){
         UnicodeString result;

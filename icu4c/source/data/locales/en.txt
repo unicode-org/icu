@@ -2082,7 +2082,7 @@ en{
         TARASK{"Taraskievica orthography"}
         XIANG{"Xiang or Hunanese"}
     }
-    Version{"1.156"}
+    Version{"1.158"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2698,23 +2698,10 @@ en{
             ls{"Guyana Time"}
             ss{"GYT"}
         }
-        "meta:Hawaii"{
-            cu:int{1}
-            ld{"Hawaii Daylight Time"}
-            lg{"Hawaii Time"}
-            ls{"Hawaii Standard Time"}
-            sd{"HDT"}
-            sg{"HT"}
-            ss{"HST"}
-        }
         "meta:Hawaii_Aleutian"{
             cu:int{1}
-            ld{"Hawaii-Aleutian Daylight Time"}
-            lg{"Hawaii-Aleutian Time"}
             ls{"Hawaii-Aleutian Standard Time"}
-            sd{"HADT"}
-            sg{"HAT"}
-            ss{"HAST"}
+            ss{"HST"}
         }
         "meta:Hong_Kong"{
             ld{"Hong Kong Summer Time"}

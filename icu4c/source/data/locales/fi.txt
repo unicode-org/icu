@@ -2069,7 +2069,7 @@ fi{
         SCOUSE{"englannin scouse-murre"}
         VALENCIA{"katalaanin valencia-murre"}
     }
-    Version{"1.94"}
+    Version{"1.95"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2498,9 +2498,6 @@ fi{
             cu:int{0}
         }
         "meta:Africa_Eastern"{
-            cu:int{0}
-        }
-        "meta:Africa_FarWestern"{
             cu:int{0}
         }
         "meta:Africa_Southern"{
