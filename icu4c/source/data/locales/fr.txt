@@ -2023,7 +2023,7 @@ fr{
         SCOUSE{"dialecte scouse"}
         VALENCIA{"valencien"}
     }
-    Version{"1.104"}
+    Version{"1.106"}
     calendar{
         chinese{
             monthNames{

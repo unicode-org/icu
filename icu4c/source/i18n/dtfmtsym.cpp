@@ -1955,7 +1955,7 @@ DateFormatSymbols::getMetazoneString(const UnicodeString &zid, const TimeZoneTra
 
     if(stringsArray != NULL){
         SimpleDateFormat df(UNICODE_STRING_SIMPLE("yyyy-MM-dd HH:mm"), Locale(""),tempStatus);
-        TimeZone *tz = TimeZone::createTimeZone(zid);
+        TimeZone *tz = TimeZone::createTimeZone(UNICODE_STRING_SIMPLE("Etc/GMT"));
         df.setTimeZone(*tz);
         delete tz;
         UnicodeString theTime;
