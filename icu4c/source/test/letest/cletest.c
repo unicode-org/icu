@@ -542,7 +542,7 @@ static void U_CALLCONV GlyphToCharTest(void)
                 if (glyphToCharMap[i] != charIndex) {
                     log_err("Bad glyph to char index for glyph %d on line %d: expected %d, got %d\n",
                         i, lineNumber, charIndex, glyphToCharMap[i]);
-                    goto close_paragraph; // once there's one error, we can't count on anything else...
+                    goto close_paragraph; /* once there's one error, we can't count on anything else... */
                 }
 
                 charIndex += 1;
