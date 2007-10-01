@@ -1548,6 +1548,9 @@ void TimeZoneTest::TestFebruary() {
     // Time zone with daylight savings time from the first Sunday in November
     // to the last Sunday in February.
     // Similar to the new rule for Brazil (Sao Paulo) in tzdata2006n.
+    //
+    // Note: In tzdata2007h, the rule had changed, so no actual zones uses
+    // lastSun in Feb anymore.
     SimpleTimeZone tz1(-3 * U_MILLIS_PER_HOUR,          // raw offset: 3h before (west of) GMT
                        UNICODE_STRING("nov-feb", 7),
                        UCAL_NOVEMBER, 1, UCAL_SUNDAY,   // start: November, first, Sunday
@@ -1560,18 +1563,10 @@ void TimeZoneTest::TestFebruary() {
         return;
     }
 
-    // Time zone for Brazil, with effectively the same rules as above,
-    // but expressed with DOW_GE_DOM_MODE and DOW_LE_DOM_MODE rules.
-    TimeZone *tz2 = TimeZone::createTimeZone(UNICODE_STRING_SIMPLE("America/Sao_Paulo"));
-    if (U_FAILURE(status) || (*tz2 == *TimeZone::getGMT())) {
-        delete tz2;
-        errln("Unable to create the America/Sao_Paulo TimeZone: %s", u_errorName(status));
-        return;
-    }
-
-    // Now hardcode the same rules as for Brazil, so that we cover the intended code
-    // even when in the future zoneinfo hardcodes these transition dates.
-    SimpleTimeZone tz3(-3 * U_MILLIS_PER_HOUR,          // raw offset: 3h before (west of) GMT
+    // Now hardcode the same rules as for Brazil in tzdata 2006n, so that
+    // we cover the intended code even when in the future zoneinfo hardcodes
+    // these transition dates.
+    SimpleTimeZone tz2(-3 * U_MILLIS_PER_HOUR,          // raw offset: 3h before (west of) GMT
                        UNICODE_STRING("nov-feb2", 8),
                        UCAL_NOVEMBER, 1, -UCAL_SUNDAY,  // start: November, 1 or after, Sunday
                        0,                               //        midnight wall time
@@ -1617,7 +1612,7 @@ void TimeZoneTest::TestFebruary() {
         { 2010, UCAL_FEBRUARY, 28, 02, 00, 00, -3 }
     };
 
-    TimeZone *timezones[] = { &tz1, tz2, &tz3 };
+    TimeZone *timezones[] = { &tz1, &tz2 };
 
     TimeZone *tz;
     UDate dt;
@@ -1653,7 +1648,6 @@ void TimeZoneTest::TestFebruary() {
             }
         }
     }
-    delete tz2;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
