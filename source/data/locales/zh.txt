@@ -2026,7 +2026,7 @@ zh{
         REVISED{"已修订的拼字学"}
         SAAHO{"萨霍"}
     }
-    Version{"1.103"}
+    Version{"1.104"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -3286,11 +3286,6 @@ zh{
             ld{"非洲东部夏令时间"}
             lg{"非洲东部时间"}
             ls{"东部非洲标准时间"}
-        }
-        "meta:Africa_FarWestern"{
-            ld{"非洲西部夏令时间"}
-            lg{"非洲西部时间"}
-            ls{"非洲西部标准时间"}
         }
         "meta:Africa_Southern"{
             ld{"非洲南部夏令时间"}
