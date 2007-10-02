@@ -188,6 +188,13 @@ public class TestCompatibility extends BidiTest {
         /* check bogus flags */
         bidi = new Bidi("abc", 999);
         assertEquals("\nDirection should be LTR", Bidi.LTR, bidi.getDirection());
+        /* check constructor with overriding embeddings */
+        bidi = new Bidi(new char[] { 's', 's', 's' }, 0,
+                        new byte[] {(byte) -7, (byte) -2, (byte) -3 },
+                        0, 3, Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT);
+        jbidi = new java.text.Bidi(new char[] { 's', 's', 's' }, 0,
+                        new byte[] {(byte) -7, (byte) -2, (byte) -3 },
+                        0, 3, Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT);
 
         AttributedString as = new AttributedString("HEBREW 123 english MOREHEB");
         as.addAttribute(TextAttribute.RUN_DIRECTION, TextAttribute.RUN_DIRECTION_RTL);
