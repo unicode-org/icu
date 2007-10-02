@@ -1242,6 +1242,9 @@ public class TimeZoneTest extends TestFmwk
         // Time zone with daylight savings time from the first Sunday in November
         // to the last Sunday in February.
         // Similar to the new rule for Brazil (Sao Paulo) in tzdata2006n.
+        //
+        // Note: In tzdata2007h, the rule had changed, so no actual zones uses
+        // lastSun in Feb anymore.
         SimpleTimeZone tz1 = new SimpleTimeZone(
                            -3 * MILLIS_PER_HOUR,                    // raw offset: 3h before (west of) GMT
                            "nov-feb",
@@ -1250,13 +1253,10 @@ public class TimeZoneTest extends TestFmwk
                            Calendar.FEBRUARY, -1, Calendar.SUNDAY,  // end:   February, last, Sunday
                            0);                                      //        midnight wall time
 
-        // Time zone for Brazil, with effectively the same rules as above,
-        // but expressed with DOW_GE_DOM_MODE and DOW_LE_DOM_MODE rules.
-        TimeZone tz2 = TimeZone.getTimeZone("America/Sao_Paulo");
-
-        // Now hardcode the same rules as for Brazil, so that we cover the intended code
-        // even when in the future zoneinfo hardcodes these transition dates.
-        SimpleTimeZone tz3= new SimpleTimeZone(
+        // Now hardcode the same rules as for Brazil in tzdata 2006n, so that
+        // we cover the intended code even when in the future zoneinfo hardcodes
+        // these transition dates.
+        SimpleTimeZone tz2= new SimpleTimeZone(
                            -3 * MILLIS_PER_HOUR,                    // raw offset: 3h before (west of) GMT
                            "nov-feb2",
                            Calendar.NOVEMBER, 1, -Calendar.SUNDAY,  // start: November, 1 or after, Sunday
@@ -1293,7 +1293,7 @@ public class TimeZoneTest extends TestFmwk
             2010, Calendar.FEBRUARY, 28, 02, 00, 00, -3
         };
 
-        TimeZone timezones[] = { tz1, tz2, tz3 };
+        TimeZone timezones[] = { tz1, tz2 };
 
         TimeZone tz;
         Date dt;
