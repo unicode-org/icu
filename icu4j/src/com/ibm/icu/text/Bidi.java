@@ -4493,29 +4493,29 @@ public class Bidi {
             paraLevel = LEVEL_DEFAULT_RTL;
             break;
         }
+        byte[] paraEmbeddings;
+        if (embeddings == null) {
+            paraEmbeddings = null;
+        } else {
+            paraEmbeddings = new byte[paragraphLength];
+            byte lev;
+            for (int i = 0; i < paragraphLength; i++) {
+                lev = embeddings[i + embStart];
+                if (lev < 0) {
+                    lev = (byte)((- lev) | LEVEL_OVERRIDE);
+                } else if (lev == 0) {
+                    lev = paraLevel;
+                    if (paraLevel > MAX_EXPLICIT_LEVEL) {
+                        lev &= 1;
+                    }
+                }
+                paraEmbeddings[i] = lev;
+            }
+        }
         if (textStart == 0 && embStart == 0 && paragraphLength == text.length) {
-            setPara(text, paraLevel, embeddings);
+            setPara(text, paraLevel, paraEmbeddings);
         } else {
             char[] paraText = new char[paragraphLength];
-            byte[] paraEmbeddings;
-            if (embeddings == null) {
-                paraEmbeddings = null;
-            } else {
-                paraEmbeddings = new byte[paragraphLength];
-                byte lev;
-                for (int i = 0; i < paragraphLength; i++) {
-                    lev = embeddings[i + embStart];
-                    if (lev < 0) {
-                        lev = (byte)((- lev) | LEVEL_OVERRIDE);
-                    } else if (lev == 0) {
-                        lev = paraLevel;
-                        if (paraLevel > MAX_EXPLICIT_LEVEL) {
-                            lev &= 1;
-                        }
-                    }
-                    paraEmbeddings[i] = lev;
-                }
-            }
             System.arraycopy(text, textStart, paraText, 0, paragraphLength);
             setPara(paraText, paraLevel, paraEmbeddings);
         }
