@@ -325,6 +325,11 @@ static void TestBuilder() {
                                    pattern, patternCapacity, &status);
     formatter = udat_open(UDAT_IGNORE, UDAT_DEFAULT, locale, NULL, -1,
                           pattern, length, &status);
+    if (formatter==NULL) {
+        log_err("Failed to initialize the UDateFormat of the sample code in Userguide.\n");
+        udatpg_close(generator);
+        return;
+    }
 
     /* use it to format (or parse) */
     formattedCapacity = (int32_t)(sizeof(formatted)/sizeof((formatted)[0]));
@@ -336,7 +341,8 @@ static void TestBuilder() {
     resultLen=udat_format(formatter, sampleDate, formatted, formattedCapacity,
                           NULL, &status);
     if ( u_memcmp(sampleFormatted, formatted, resultLen) != 0 ) {
-        log_err("Failed udat_format() of sample code in Userguide.\n");
+        log_err("Failed udat_format() of sample code in Userguide.  Expected:%s   Got:%d\n",
+                 sampleFormatted, formatted);
     }
     udatpg_close(generator);
     udat_close(formatter);
