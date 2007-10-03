@@ -3216,6 +3216,8 @@ private:
   };
 
   friend class StringThreadTest;
+
+  union StackBufferOrFields;        // forward declaration necessary before friend declaration
   friend union StackBufferOrFields; // make US_STACKBUF_SIZE visible inside fUnion
 
   /*
