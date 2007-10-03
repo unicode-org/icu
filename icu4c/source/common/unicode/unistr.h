@@ -3216,6 +3216,7 @@ private:
   };
 
   friend class StringThreadTest;
+  friend union StackBufferOrFields; // make US_STACKBUF_SIZE visible inside fUnion
 
   /*
    * The following are all the class fields that are stored
@@ -3231,7 +3232,7 @@ private:
   // (implicit) *vtable;
   int8_t    fShortLength;   // 0..127: length  <0: real length is in fUnion.fFields.fLength
   uint8_t   fFlags;         // bit flags: see constants above
-  union {
+  union StackBufferOrFields {
     // fStackBuffer is used iff (fFlags&kUsingStackBuffer)
     // else fFields is used
     UChar     fStackBuffer [US_STACKBUF_SIZE]; // buffer for small strings
