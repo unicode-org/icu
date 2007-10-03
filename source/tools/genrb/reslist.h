@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2006, International Business Machines
+*   Copyright (C) 2000-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -66,6 +66,13 @@ int32_t bundle_addtag(struct SRBRoot *bundle, const char *tag, UErrorCode *statu
 
 /* Various resource types */
 struct SResource* res_open(const struct UString* comment, UErrorCode* status);
+
+/*
+ * Return a unique pointer to a dummy object,
+ * for use in non-error cases when no resource is to be added to the bundle.
+ * (NULL is used in error cases.)
+ */
+struct SResource* res_none(void);
 
 struct SResTable {
     uint32_t fCount;
