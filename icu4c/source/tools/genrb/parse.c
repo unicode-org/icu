@@ -309,6 +309,9 @@ parseUCARules(char *tag, uint32_t startline, const struct UString* comment, UErr
     }
     uprv_strcat(filename, cs);
 
+    if(gOmitCollationRules) {
+        return res_none();
+    }
 
     ucbuf = ucbuf_open(filename, &cp, getShowWarning(),FALSE, status);
 

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2006, International Business Machines
+*   Copyright (C) 2000-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -26,6 +26,13 @@
 #define BIN_ALIGNMENT 16
 
 static UBool gIncludeCopyright = FALSE;
+
+/*
+ * res_none() returns the address of kNoResource,
+ * for use in non-error cases when no resource is to be added to the bundle.
+ * (NULL is used in error cases.)
+ */
+static struct SResource kNoResource = { RES_NONE };
 
 uint32_t res_write(UNewDataMemory *mem, struct SResource *res,
                    uint32_t usedOffset, UErrorCode *status);
@@ -460,6 +467,11 @@ struct SResource* res_open(const struct UString* comment, UErrorCode* status){
     return res;
 
 }
+
+struct SResource* res_none() {
+    return &kNoResource;
+}
+
 struct SResource* table_open(struct SRBRoot *bundle, char *tag,  const struct UString* comment, UErrorCode *status) {
 
     struct SResource *res = res_open(comment, status);
@@ -870,6 +882,9 @@ void table_add(struct SResource *table, struct SResource *res, int linenumber, U
     struct SResTable *list;
 
     if (U_FAILURE(*status)) {
+        return;
+    }
+    if (res == &kNoResource) {
         return;
     }
 
