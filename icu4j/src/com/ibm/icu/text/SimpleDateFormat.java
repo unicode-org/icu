@@ -26,6 +26,7 @@ import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.CalendarData;
 import com.ibm.icu.impl.DateNumberFormat;
+import com.ibm.icu.impl.GMTFormat;
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.UCharacterProperty;
@@ -283,17 +284,15 @@ public class SimpleDateFormat extends DateFormat {
 
     private static final int millisPerHour = 60 * 60 * 1000;
     private static final int millisPerMinute = 60 * 1000;
-
-    // For time zones that have no names, use strings GMT+minutes and
-    // GMT-minutes. For instance, in France the time zone is GMT+60.
-    private static final String GMT_PLUS = "GMT+";
-    private static final String GMT_MINUS = "GMT-";
-    private static final String GMT = "GMT";
+    private static final int millisPerSecond = 1000;
 
     // This prefix is designed to NEVER MATCH real text, in order to
     // suppress the parsing of negative numbers.  Adjust as needed (if
     // this becomes valid Unicode).
     private static final String SUPPRESS_NEGATIVE_PREFIX = "\uAB00";
+
+    // Localized time zone GMT formatter/parser
+    private transient GMTFormat gmtfmt;
 
     /**
      * If true, this object supports fast formatting using the
@@ -962,11 +961,7 @@ public class SimpleDateFormat extends DateFormat {
                 if (res == null || res.length() == 0) {
                     // note, tr35 does not describe the special case for 'no country' 
                     // implemented below, this is from discussion with Mark
-                    if (zid == null || !isGeneric || ZoneMeta.getCanonicalCountry(zid) == null) {
-                         long offset = cal.get(Calendar.ZONE_OFFSET) +
-                            cal.get(Calendar.DST_OFFSET);
-                        res = ZoneMeta.displayGMT(offset, locale);
-                    } else { 
+                    if (zid != null && isGeneric && ZoneMeta.getCanonicalCountry(zid) != null) {
                         /*
                         String city = formatData.getZoneString(zid, DateFormatSymbols.TIMEZONE_EXEMPLAR_CITY);
                         res = ZoneMeta.displayFallback(zid, city, locale);
@@ -979,29 +974,40 @@ public class SimpleDateFormat extends DateFormat {
                     }
                 }
                 
-                if(res.length()==0){
+                if(res == null || res.length() == 0){
                     appendGMT(buf, cal);
-                }else{
+                } else {
                     buf.append(res);
                 }
             } break;
         case 23: // 'Z' - TIMEZONE_RFC
             {
                 if (count < 4) {
-                    // 'short' (standard Java) form, must use ASCII digits
-                    long val= (cal.get(Calendar.ZONE_OFFSET) +
-                           cal.get(Calendar.DST_OFFSET)) / millisPerMinute;
+                    // RFC822 format, must use ASCII digits
+                    int val = (cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET));
                     char sign = '+';
                     if (val < 0) {
                         val = -val;
                         sign = '-';
                     }
-                    val = (val / 60) * 100 + (val % 60); // minutes => KKmm
                     buf.append(sign);
 
-                    // Always use ASCII numbers
-                    int num = (int)(val % 10000);
-                    int denom = 1000;
+                    int offsetH = val / millisPerHour;
+                    val = val % millisPerHour;
+                    int offsetM = val / millisPerMinute;
+                    val = val % millisPerMinute;
+                    int offsetS = val / millisPerSecond;
+
+                    int num = 0, denom = 0;
+                    if (offsetS == 0) {
+                        val = offsetH*100 + offsetM; // HHmm
+                        num = val % 10000;
+                        denom = 1000;
+                    } else {
+                        val = offsetH*10000 + offsetM*100 + offsetS; // HHmmss
+                        num = val % 1000000;
+                        denom = 100000;
+                    }
                     while (denom >= 1) {
                         char digit = (char)((num / denom) + '0');
                         buf.append(digit);
@@ -1010,10 +1016,7 @@ public class SimpleDateFormat extends DateFormat {
                     }
                 } else {
                     // long form, localized GMT pattern
-                    // not in 3.4 locale data, need to add, so use same default as for general time zone names
-                    long val = cal.get(Calendar.ZONE_OFFSET) +
-                        cal.get(Calendar.DST_OFFSET);
-                    buf.append(ZoneMeta.displayGMT(val, locale));
+                    appendGMT(buf, cal);
                 }
             }
             break;
@@ -1185,21 +1188,23 @@ public class SimpleDateFormat extends DateFormat {
         return patternItems;
     }
 
-    private void appendGMT(StringBuffer buf, Calendar cal){
-        int value = cal.get(Calendar.ZONE_OFFSET) +
-        cal.get(Calendar.DST_OFFSET);
+    private void appendGMT(StringBuffer buf, Calendar cal) {
+        if (gmtfmt == null) {
+            // SimpleDateFormat#getLocale(ULocale.Type) is broken,
+            // so the GMTFormat cannot be properly initialized by
+            // the constructor below.
+            //gmtfmt = new GMTFormat(this);
 
-        if (value < 0) {
-            buf.append(GMT_MINUS);
-            value = -value; // suppress the '-' sign for text display.
-        }else{
-            buf.append(GMT_PLUS);
+            gmtfmt = new GMTFormat(locale);
+            
+            // Note: With the alternative constructor above,
+            // GMTFormat does not use NumbFormat used by this
+            // SimpleDateFormat instance.
         }
-
-        zeroPaddingNumber(buf, (int)(value/millisPerHour), 2, 2);
-        buf.append((char)0x003A) /*':'*/;
-        zeroPaddingNumber(buf, (int)((value%millisPerHour)/millisPerMinute), 2, 2);
+        int offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
+        gmtfmt.format(offset, buf, null);
     }
+
     /*
      * Internal method. Returns null if the value of an array is empty, or if the
      * index is out of bounds
@@ -1880,123 +1885,104 @@ public class SimpleDateFormat extends DateFormat {
             case 23: // 'Z' - TIMEZONE_RFC
             case 24: // 'v' - TIMEZONE_GENERIC
             case 29: // 'V' - TIMEZONE_SPECIAL
-                // First try to parse generic forms such as GMT-07:00. Do this first
-                // in case localized DateFormatZoneData contains the string "GMT"
-                // for a zone; in that case, we don't want to match the first three
-                // characters of GMT+/-HH:MM etc.
                 {
-                    int sign = 0;
-                    int offset;
+                    int offset = 0;
+                    boolean parsed = false;
 
-                    // For time zones that have no known names, look for strings
-                    // of the form:
-                    //    GMT[+-]hours:minutes or
-                    //    GMT[+-]hhmm or
-                    //    GMT.
-                    if ((text.length() - start) >= GMT.length() &&
-                        text.regionMatches(true, start, GMT, 0, GMT.length()))
-                        {
-                            cal.set(Calendar.DST_OFFSET, 0);
-
-                            pos.setIndex(start + GMT.length());
-
-                            try { // try-catch for "GMT" only time zone string
-                                switch (text.charAt(pos.getIndex())) {
-                                case '+':
-                                    sign = 1;
-                                    break;
-                                case '-':
-                                    sign = -1;
-                                    break;
-                                }
-                            } catch(StringIndexOutOfBoundsException e) {
-                            }
-                            if (sign == 0) {
-                                cal.set(Calendar.ZONE_OFFSET, 0 );
-                                return pos.getIndex();
-                            }
-
-                            // Look for hours:minutes or hhmm.
-                            pos.setIndex(pos.getIndex() + 1);
-                            int st = pos.getIndex();
-                            Number tzNumber = numberFormat.parse(text, pos);
-                            if( tzNumber == null) {
-                                return -start;
-                            }
-                            if( pos.getIndex() < text.length() &&
-                                text.charAt(pos.getIndex()) == ':' ) {
-
-                                // This is the hours:minutes case
-                                offset = tzNumber.intValue() * 60;
-                                pos.setIndex(pos.getIndex() + 1);
-                                tzNumber = numberFormat.parse(text, pos);
-                                if( tzNumber == null) {
-                                    return -start;
-                                }
-                                offset += tzNumber.intValue();
-                            }
-                            else {
-                                // This is the hhmm case.
-                                offset = tzNumber.intValue();
-                                // Assume "-23".."+23" refers to hours.
-                                if( offset < 24 && (pos.getIndex() - st) <= 2)
-                                    offset *= 60;
-                                else
-                                    // todo: this looks questionable, should have more error checking
-                                    offset = offset % 100 + offset / 100 * 60;
-                            }
-
-                            // Fall through for final processing below of 'offset' and 'sign'.
-                        }
-                    else {
-                        // At this point, check for named time zones by looking through
-                        // the locale data from the DateFormatZoneData strings.
-                        // Want to be able to parse both short and long forms.
-                        i = subParseZoneString(text, start, cal);
-                        if (i != 0)
-                            return i;
-
-                        // As a last resort, look for numeric timezones of the form
-                        // [+-]hhmm as specified by RFC 822.  This code is actually
-                        // a little more permissive than RFC 822.  It will try to do
-                        // its best with numbers that aren't strictly 4 digits long.
-                        DecimalFormat fmt = new DecimalFormat("+####;-####");
-                        fmt.setParseIntegerOnly(true);
-                        Number tzNumber = fmt.parse( text, pos );
-                        if( tzNumber == null) {
-                            return -start;   // Wasn't actually a number.
-                        }
-                        offset = tzNumber.intValue();
-                        sign = 1;
-                        if( offset < 0 ) {
-                            sign = -1;
-                            offset = -offset;
-                        }
-                        // Assume "-23".."+23" refers to hours. Length includes sign.
-                        if( offset < 24 && (pos.getIndex() - start) <= 3)
-                            offset = offset * 60;
-                        else
-                            offset = offset % 100 + offset / 100 * 60;
-
-                        // Fall through for final processing below of 'offset' and 'sign'.
+                    // Step 1
+                    // Check if this is a long GMT offset string (either localized or default)
+                    if (gmtfmt == null) {
+                        gmtfmt = new GMTFormat(this);
+                    }
+                    Integer gmtoff = gmtfmt.parse(text, pos);
+                    if (gmtoff != null) {
+                        offset = gmtoff.intValue();
+                        parsed = true;
                     }
 
-                    // Do the final processing for both of the above cases.  We only
-                    // arrive here if the form GMT+/-... or an RFC 822 form was seen.
+                    if (!parsed) {
+                        // Step 2
+                        // Check if this is an RFC822 time zone offset.
+                        // ICU supports the standard RFC822 format [+|-]HHmm
+                        // and its extended form [+|-]HHmmSS.
+                        
+                        do {
+                            int sign = 0;
+                            char signChar = text.charAt(start);
+                            if (signChar == '+') {
+                                sign = 1;
+                            } else if (signChar == '-') {
+                                sign = -1;
+                            } else {
+                                // Not an RFC822 offset string
+                                break;
+                            }
 
-                    // assert (sign != 0) : sign; // enable when guaranteed JDK >= 1.4
-                    offset *= millisPerMinute * sign;
+                            // Parse digits
+                            int orgPos = start + 1;
+                            int textLen = text.length();
+                            int maxPos = textLen < orgPos + 6 ? textLen : orgPos + 6; // Max digits = 6
+                            pos.setIndex(orgPos);
+                            number = parseInt(text.substring(0, maxPos), pos, false);
+                            int numLen = pos.getIndex() - orgPos;
+                            if (numLen <= 0) {
+                                break;
+                            }
 
-                    if (cal.getTimeZone().useDaylightTime())
-                        {
-                            cal.set(Calendar.DST_OFFSET, millisPerHour);
-                            offset -= millisPerHour;
+                            // Followings are possible format (excluding sign char)
+                            // HHmmSS
+                            // HmmSS
+                            // HHmm
+                            // Hmm
+                            // HH
+                            // H
+                            int val = number.intValue();
+                            int hour = 0, min = 0, sec = 0;
+                            switch(numLen) {
+                            case 1: // H
+                            case 2: // HH
+                                hour = val;
+                                break;
+                            case 3: // Hmm
+                            case 4: // HHmm
+                                hour = val / 100;
+                                min = val % 100;
+                                break;
+                            case 5: // Hmmss
+                            case 6: // HHmmss
+                                hour = val / 10000;
+                                min = (val % 10000) / 100;
+                                sec = val % 100;
+                                break;
+                            }
+                            if (hour > 23 || min > 59 || sec > 59) {
+                                // Invalid value range
+                                break;
+                            }
+                            offset = (((hour * 60) + min) * 60 + sec) * 1000 * sign;
+                            parsed = true;
+                        } while (false);
+
+                        if (!parsed) {
+                            // Failed to parse.  Reset the position.
+                            pos.setIndex(start);
                         }
-                    cal.set(Calendar.ZONE_OFFSET, offset);
+                    }
 
-                    return pos.getIndex();
+                    if (parsed) {
+                        // offset was successfully parsed as either a long GMT string or RFC822 zone offset
+                        // string.  Create normalized zone ID for the offset.
+                        parsedTimeZone = ZoneMeta.getCustomTimeZone(offset);
+                        return pos.getIndex();
+                    }
+
+                    // Step 3
+                    // At this point, check for named time zones by looking through
+                    // the locale data from the DateFormatZoneData strings.
+                    // Want to be able to parse both short and long forms.
+                    return subParseZoneString(text, start, cal);
                 }
-                
+
             case 27: // 'Q' - QUARTER
                 if (count <= 2) // i.e., Q or QQ.
                 {

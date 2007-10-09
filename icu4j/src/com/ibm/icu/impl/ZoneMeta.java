@@ -481,7 +481,7 @@ public final class ZoneMeta {
     private static final String kZONES    = "Zones";
     private static final String kNAMES    = "Names";
     private static final String kGMT_ID   = "GMT";
-    private static final String kRFC_TZ_PREFIX = "GMT";
+    private static final String kCUSTOM_TZ_PREFIX = "GMT";
     private static ICUCache zoneCache = new SimpleCache();
     /**
      * The Olson data is stored the "zoneinfo" resource bundle.
@@ -546,6 +546,8 @@ public final class ZoneMeta {
     // Maximum value of valid custom time zone hour/min
     private static final int kMAX_CUSTOM_HOUR = 23;
     private static final int kMAX_CUSTOM_MIN = 59;
+    private static final int kMAX_CUSTOM_SEC = 59;
+
     /**
      * Parse a custom time zone identifier and return a corresponding zone.
      * @param id a string of the form GMT[+-]hh:mm, GMT[+-]hhmm, or
@@ -564,6 +566,7 @@ public final class ZoneMeta {
             boolean negative = false;
             int hour = 0;
             int min = 0;
+            int sec = 0;
 
             if (id.charAt(pos.getIndex()) == 0x002D /*'-'*/) {
                 negative = true;
@@ -584,59 +587,141 @@ public final class ZoneMeta {
             }
             hour = n.intValue();
 
-            if (pos.getIndex() < id.length() &&
-                id.charAt(pos.getIndex()) == 0x003A /*':'*/) {
+            if (pos.getIndex() < id.length()){
+                if (pos.getIndex() - start > 2
+                        || id.charAt(pos.getIndex()) != 0x003A /*':'*/) {
+                    return null;
+                }
                 // hh:mm
                 pos.setIndex(pos.getIndex() + 1);
                 int oldPos = pos.getIndex();
                 n = numberFormat.parse(id, pos);
-                if (pos.getIndex() == oldPos) {
+                if ((pos.getIndex() - oldPos) != 2) {
+                    // must be 2 digits
                     return null;
                 }
                 min = n.intValue();
+                if (pos.getIndex() < id.length()) {
+                    if (id.charAt(pos.getIndex()) != 0x003A /*':'*/) {
+                        return null;
+                    }
+                    // [:ss]
+                    pos.setIndex(pos.getIndex() + 1);
+                    oldPos = pos.getIndex();
+                    n = numberFormat.parse(id, pos);
+                    if (pos.getIndex() != id.length()
+                            || (pos.getIndex() - oldPos) != 2) {
+                        return null;
+                    }
+                    sec = n.intValue();
+                }
             } else {
-                // hhmm or hh
+                // Supported formats are below -
+                //
+                // HHmmss
+                // Hmmss
+                // HHmm
+                // Hmm
+                // HH
+                // H
 
-                // Be strict about interpreting something as hh; it must be
-                // an offset < 23, and it must be one or two digits. Thus
-                // 0010 is interpreted as 00:10, but 10 is interpreted as
-                // 10:00.
-                if (hour > kMAX_CUSTOM_HOUR || (pos.getIndex() - start) > 2) {
-                    min = hour % 100;
-                    hour /= 100;
+                int length = pos.getIndex() - start;
+                if (length <= 0 || 6 < length) {
+                    // invalid length
+                    return null;
+                }
+                switch (length) {
+                    case 1:
+                    case 2:
+                        // already set to hour
+                        break;
+                    case 3:
+                    case 4:
+                        min = hour % 100;
+                        hour /= 100;
+                        break;
+                    case 5:
+                    case 6:
+                        sec = hour % 100;
+                        min = (hour/100) % 100;
+                        hour /= 10000;
+                        break;
                 }
             }
 
-            if (hour > kMAX_CUSTOM_HOUR || min > kMAX_CUSTOM_MIN) {
+            if (hour > kMAX_CUSTOM_HOUR || min > kMAX_CUSTOM_MIN || sec > kMAX_CUSTOM_SEC) {
                 return null;
             }
 
-            // Create time zone ID in RFC822 format - GMT[+|-]hhmm
-            StringBuffer zid = new StringBuffer(kRFC_TZ_PREFIX);
-            if (hour != 0 || min != 0) {
-                if(negative) {
-                    zid.append('-');
-                } else {
-                    zid.append('+');
-                }
-                // Always use US-ASCII digits
-                if (hour < 10) {
-                    zid.append('0');
-                }
-                zid.append(hour);
-                if (min < 10) {
-                    zid.append('0');
-                }
-                zid.append(min);
-            }
-
-            int offset = (hour * 60 + min) * 60 * 1000;
+            String zid = getCustomID(hour, min, sec, negative);
+            int offset = ((hour * 60 + min) * 60 + sec) * 1000;
             if(negative) {
                 offset = -offset;
             }
-            TimeZone z = new SimpleTimeZone(offset, zid.toString());
+            TimeZone z = new SimpleTimeZone(offset, zid);
             return z;
         }
         return null;
+    }
+
+    /**
+     * Creates a custom zone for the offset
+     * @param offset GMT offset in milliseconds
+     * @return A custom TimeZone for the offset with normalized time zone id
+     */
+    public static TimeZone getCustomTimeZone(int offset) {
+        boolean negative = false;
+        int tmp = offset;
+        if (offset < 0) {
+            negative = true;
+            tmp = -offset;
+        }
+
+        int hour, min, sec, millis;
+
+        millis = tmp % 1000;
+        tmp /= 1000;
+        sec = tmp % 60;
+        tmp /= 60;
+        min = tmp % 60;
+        hour = tmp / 60;
+
+        // Note: No millisecond part included in TZID for now
+        String zid = getCustomID(hour, min, sec, negative);
+
+        return new SimpleTimeZone(offset, zid);
+    }
+
+    /*
+     * Returns the normalized custom TimeZone ID
+     */
+    private static String getCustomID(int hour, int min, int sec, boolean negative) {
+        // Create normalized time zone ID - GMT[+|-]hhmm[ss]
+        StringBuffer zid = new StringBuffer(kCUSTOM_TZ_PREFIX);
+        if (hour != 0 || min != 0) {
+            if(negative) {
+                zid.append('-');
+            } else {
+                zid.append('+');
+            }
+            // Always use US-ASCII digits
+            if (hour < 10) {
+                zid.append('0');
+            }
+            zid.append(hour);
+            if (min < 10) {
+                zid.append('0');
+            }
+            zid.append(min);
+
+            if (sec != 0) {
+                // Optional second field
+                if (sec < 10) {
+                    zid.append('0');
+                }
+                zid.append(sec);
+            }
+        }
+        return zid.toString();
     }
 }
