@@ -1357,7 +1357,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         }
 
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        df.setTimeZone(TimeZone.getTimeZone(zid));
+        df.setTimeZone(TimeZone.getTimeZone("Etc/GMT"));
         String theTime = df.format(cal.getTime());
         int mz_index = 8;
         while ( mz_index < names.length ) {
