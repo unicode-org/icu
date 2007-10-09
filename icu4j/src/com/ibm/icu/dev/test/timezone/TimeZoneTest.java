@@ -224,21 +224,66 @@ public class TimeZoneTest extends TestFmwk
         }
     }
 
-    static final String EXPECTED_CUSTOM_ID = "Custom";
-    static final String formatMinutes(int min) {
+    static final String formatOffset(int offset) {
         char sign = '+';
-        if (min < 0) { sign = '-'; min = -min; }
-        int h = min/60;
-        min = min%60;
-        return "" + sign + (h<10?"0":"") + h + ":" + (min<10?"0":"") + min;
+        if (offset < 0) {
+            sign = '-';
+            offset = -offset;
+        }
+        int s = offset % 60;
+        offset /= 60;
+        int m = offset % 60;
+        int h = offset / 60;
+
+        StringBuffer buf = new StringBuffer();
+        buf.append(sign);
+        if (h < 10) {
+            buf.append('0');
+        }
+        buf.append(h);
+        buf.append(':');
+        if (m < 10) {
+            buf.append('0');
+        }
+        buf.append(m);
+        buf.append(':');
+        if (s < 10) {
+            buf.append('0');
+        }
+        buf.append(s);
+
+        return buf.toString();
     }
-    /* Returns RFC822 time zone string for the given offset in minutes */
-    static final String formatRFC822TZ(int min) {
+
+    static final String formatTZID(int offset) {
         char sign = '+';
-        if (min < 0) { sign = '-'; min = -min; }
-        int h = min/60;
-        min = min%60;
-        return "GMT" + sign + (h<10?"0":"") + h + (min<10?"0":"") + min;
+        if (offset < 0) {
+            sign = '-';
+            offset = -offset;
+        }
+        int s = offset % 60;
+        offset /= 60;
+        int m = offset % 60;
+        int h = offset / 60;
+
+        StringBuffer buf = new StringBuffer("GMT");
+        buf.append(sign);
+        if (h < 10) {
+            buf.append('0');
+        }
+        buf.append(h);
+        if (m < 10) {
+            buf.append('0');
+        }
+        buf.append(m);
+        if (s != 0) {
+            if (s < 10) {
+                buf.append('0');
+            }
+            buf.append(s);
+        }
+
+        return buf.toString();
     }
 
     /**
@@ -256,20 +301,27 @@ public class TimeZoneTest extends TestFmwk
             "GMT-YOUR.AD.HERE", null,
             // "GMT0",      null, // ICU 3.6: An Olson zone IDThis is parsed by some JDKs (Sun 1.4.1), but not by others
             // "GMT+0",     new Integer(0),// ICU 3.6: An Olson zone ID
-            "GMT+1",     new Integer(60),
-            "GMT-0030",  new Integer(-30),
+            "GMT+1",     new Integer(1*60*60),
+            "GMT-0030",  new Integer(-30*60),
             // Parsed in 1.3, parse failure in 1.4:
             "GMT+15:99", null,
             "GMT+",      null,
             "GMT-",      null,
             "GMT+0:",    null,
             "GMT-:",     null,
-            "GMT+0010",  new Integer(10), // Interpret this as 00:10
-            "GMT-10",    new Integer(-10*60),
+            "GMT+0010",  new Integer(10*60), // Interpret this as 00:10
+            "GMT-10",    new Integer(-10*60*60),
             // Parsed in 1.3, parse failure in 1.4:
             //"GMT+30",    new Integer(30),
-            "GMT-3:30",  new Integer(-(3*60+30)),
-            "GMT-230",   new Integer(-(2*60+30)),
+            "GMT-3:30",  new Integer(-(3*60+30)*60),
+            "GMT-230",   new Integer(-(2*60+30)*60),
+            "GMT+05:13:05", new Integer((5*60+13)*60+5),
+            "GMT-71023",    new Integer(-((7*60+10)*60+23)),
+            "GMT+01:23:45:67",  null,
+            "GMT+01:234",   null,
+            "GMT-2:31:123", null,
+            "GMT+3:75", null,
+            "GMT-01010101", null
         };
         for (int i=0; i<DATA.length; i+=2) {
             String id = (String)DATA[i];
@@ -281,14 +333,14 @@ public class TimeZoneTest extends TestFmwk
                 // returns GMT -- a dubious practice, but required for
                 // backward compatibility.
                 if (exp != null) {
-                    errln("Expected offset of " + formatMinutes(exp.intValue()) +
+                    errln("Expected offset of " + formatOffset(exp.intValue()) +
                           " for " + id + ", got parse failure");
                 }
             }
             else {
-                int ioffset = zone.getRawOffset()/60000;
-                String offset = formatMinutes(ioffset);
-                String expectedID = formatRFC822TZ(ioffset);
+                int ioffset = zone.getRawOffset()/1000;
+                String offset = formatOffset(ioffset);
+                String expectedID = formatTZID(ioffset);
                 logln(id + " -> " + zone.getID() + " " + offset);
                 String gotID = zone.getID();
                 if (exp == null) {
@@ -298,9 +350,9 @@ public class TimeZoneTest extends TestFmwk
                 }
                 // JDK 1.3 creates custom zones with the ID "Custom"
                 // JDK 1.4 creates custom zones with IDs of the form "GMT+02:00"
-                // ICU creates custom zones with IDs of the form "GMT+0200" (RFC822 style)
+                // ICU creates custom zones with IDs of the form "GMT+0200"
                 else if (ioffset != exp.intValue() || !(gotID.equals(expectedID))) {
-                    errln("Expected offset of " + formatMinutes(exp.intValue()) +
+                    errln("Expected offset of " + formatOffset(exp.intValue()) +
                           ", id " + expectedID +
                           ", for " + id +
                           ", got offset of " + offset +
