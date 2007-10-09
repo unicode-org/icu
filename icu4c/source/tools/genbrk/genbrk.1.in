@@ -2,7 +2,7 @@
 .\"
 .\" genbrk.1: manual page for the genbrk utility
 .\"
-.\" Copyright (C) 2005-2006 IBM, Inc. and others.
+.\" Copyright (C) 2005-2006 International Business Machines Corporation and others
 .\"
 .TH GENBRK 1 "2 December 2005" "ICU MANPAGE" "ICU @VERSION@ Manual"
 .SH NAME
@@ -106,7 +106,7 @@ Andy Heninger
 .SH VERSION
 1.0
 .SH COPYRIGHT
-Copyright (C) 2005 IBM, Inc. and others.
+Copyright (C) 2005 International Business Machines Corporation and others
 .SH SEE ALSO
-.BR http://icu.sourceforge.net/userguide/boundaryAnalysis.html
+.BR http://www.icu-project.org/userguide/boundaryAnalysis.html
 
