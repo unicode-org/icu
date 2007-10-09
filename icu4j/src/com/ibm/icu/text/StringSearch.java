@@ -26,20 +26,20 @@ import com.ibm.icu.util.ULocale;
  * <code>StringSearch</code> uses a version of the fast Boyer-Moore search
  * algorithm that has been adapted to work with the large character set of
  * Unicode. Refer to 
- * <a href="http://icu.sourceforge.net/docs/papers/efficient_text_searching_in_java.html">
+ * <a href="http://www.icu-project.org/docs/papers/efficient_text_searching_in_java.html">
  * "Efficient Text Searching in Java"</a>, published in the 
  * <i>Java Report</i> on February, 1999, for further information on the 
  * algorithm.
  * </p>
  * <p>
  * Users are also strongly encouraged to read the section on 
- * <a href="http://icu.sourceforge.net/userguide/searchString.html">
+ * <a href="http://www.icu-project.org/userguide/searchString.html">
  * String Search</a> and 
- * <a href="http://icu.sourceforge.net/userguide/Collate_Intro.html">
+ * <a href="http://www.icu-project.org/userguide/Collate_Intro.html">
  * Collation</a> in the user guide before attempting to use this class.
  * </p>
  * <p>
- * String searching gets alittle complicated when accents are encountered at
+ * String searching becomes a little complicated when accents are encountered at
  * match boundaries. If a match is found and it has preceding or trailing 
  * accents not part of the match, the result returned will include the 
  * preceding accents up to the first base character, if the pattern searched 
@@ -132,7 +132,7 @@ import com.ibm.icu.util.ULocale;
  * </p>
  * <p>
  * Consult the 
- * <a href="http://icu.sourceforge.net/userguide/searchString.html">
+ * <a href="http://www.icu-project.org/userguide/searchString.html">
  * String Search</a> user guide and the <code>SearchIterator</code> 
  * documentation for more information and examples of use.
  * </p>

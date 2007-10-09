@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -40,7 +40,7 @@ import com.ibm.icu.util.ULocale;
 *     difference between large and small Kana. A tertiary difference is ignored
 *     when there is a primary or secondary difference anywhere in the strings.
 * <li>QUATERNARY strength: When punctuation is ignored
-*     <a href="http://icu.sourceforge.net/userguide/Collate_Concepts.html#Ignoring_Punctuation">
+*     <a href="http://www.icu-project.org/userguide/Collate_Concepts.html#Ignoring_Punctuation">
 *     (see Ignoring Punctuations in the user guide)</a> at PRIMARY to TERTIARY
 *     strength, an additional strength level can
 *     be used to distinguish words with and without punctuation (for example,
@@ -71,7 +71,7 @@ import com.ibm.icu.util.ULocale;
 * a comparison or before getting a CollationKey.</p>
 *
 * <p>For more information about the collation service see the
-* <a href="http://icu.sourceforge.net/userguide/Collate_Intro.html">users
+* <a href="http://www.icu-project.org/userguide/Collate_Intro.html">users
 * guide</a>.</p>
 *
 * <p>Examples of use
@@ -170,7 +170,7 @@ public class Collator implements Comparator, Cloneable
     /**
      * Fourth level collator strength value.
      * When punctuation is ignored
-     * <a href="http://icu.sourceforge.net/userguide/Collate_Concepts.html#Ignoring_Punctuation">
+     * <a href="http://www.icu-project.org/userguide/Collate_Concepts.html#Ignoring_Punctuation">
      * (see Ignoring Punctuations in the user guide)</a> at PRIMARY to TERTIARY
      * strength, an additional strength level can
      * be used to distinguish words with and without punctuation.

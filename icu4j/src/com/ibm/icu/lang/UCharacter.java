@@ -80,7 +80,7 @@ import com.ibm.icu.util.VersionInfo;
  * </ul>
  * <p>
  * Further detail differences can be determined from the program 
- *        <a href="http://dev.icu-project.org/cgi-bin/viewcvs.cgi/~checkout~/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterCompare.java">
+ *        <a href="http://source.icu-project.org/repos/icu/icu4j/trunk/src/com/ibm/icu/dev/test/lang/UCharacterCompare.java">
  *        com.ibm.icu.dev.test.lang.UCharacterCompare</a>
  * </p>
  * <p>
@@ -96,7 +96,7 @@ import com.ibm.icu.util.VersionInfo;
  * <p>
  * For more information see
  * "About the Unicode Character Database" (http://www.unicode.org/ucd/)
- * and the ICU User Guide chapter on Properties (http://icu.sourceforge.net/userguide/properties.html).
+ * and the ICU User Guide chapter on Properties (http://www.icu-project.org/userguide/properties.html).
  * </p>
  * <p>
  * There are also functions that provide easy migration from C/POSIX functions
@@ -3396,7 +3396,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Full case mappings are applied by the case mapping functions
      * that take String parameters rather than code points (int).
      * See also the User Guide chapter on C/POSIX migration:
-     * http://icu.sourceforge.net/userguide/posix.html#case_mappings
+     * http://www.icu-project.org/userguide/posix.html#case_mappings
      *
      * @param ch code point whose lowercase equivalent is to be retrieved
      * @return the lowercase equivalent code point
@@ -3449,7 +3449,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Full case mappings are applied by the case mapping functions
      * that take String parameters rather than code points (int).
      * See also the User Guide chapter on C/POSIX migration:
-     * http://icu.sourceforge.net/userguide/posix.html#case_mappings
+     * http://www.icu-project.org/userguide/posix.html#case_mappings
      *
      * @param ch code point  whose title case is to be retrieved
      * @return titlecase code point
@@ -3472,7 +3472,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Full case mappings are applied by the case mapping functions
      * that take String parameters rather than code points (int).
      * See also the User Guide chapter on C/POSIX migration:
-     * http://icu.sourceforge.net/userguide/posix.html#case_mappings
+     * http://www.icu-project.org/userguide/posix.html#case_mappings
      *
      * @param ch code point whose uppercase is to be retrieved
      * @return uppercase code point
@@ -4549,7 +4549,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Full case mappings are applied by the case mapping functions
      * that take String parameters rather than code points (int).
      * See also the User Guide chapter on C/POSIX migration:
-     * http://icu.sourceforge.net/userguide/posix.html#case_mappings
+     * http://www.icu-project.org/userguide/posix.html#case_mappings
      *
      * @param ch             the character to be converted
      * @param defaultmapping Indicates if all mappings defined in 
@@ -4610,7 +4610,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Full case mappings are applied by the case mapping functions
      * that take String parameters rather than code points (int).
      * See also the User Guide chapter on C/POSIX migration:
-     * http://icu.sourceforge.net/userguide/posix.html#case_mappings
+     * http://www.icu-project.org/userguide/posix.html#case_mappings
      *
      * @param ch             the character to be converted
      * @param options        A bit set for special processing. Currently the recognised options are

@@ -118,8 +118,8 @@ import java.util.Collection;
  * "[:Lu:]" and the Perl-like syntax "\p{Lu}" are recognized.  For a
  * complete list of supported property patterns, see the User's Guide
  * for UnicodeSet at
- * <a href="http://icu.sourceforge.net/userguide/unicodeSet.html">
- * http://icu.sourceforge.net/userguide/unicodeSet.html</a>.
+ * <a href="http://www.icu-project.org/userguide/unicodeSet.html">
+ * http://www.icu-project.org/userguide/unicodeSet.html</a>.
  * Actual determination of property data is defined by the underlying
  * Unicode database as implemented by UCharacter.
  *
