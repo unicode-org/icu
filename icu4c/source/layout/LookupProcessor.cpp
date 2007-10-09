@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2007 - All Rights Reserved
  *
  */
 
@@ -67,11 +67,7 @@ le_int32 LookupProcessor::process(LEGlyphStorage &glyphStorage, GlyphPositionAdj
             glyphIterator.reset(lookupFlags, selectMask);
 
             while (glyphIterator.findFeatureTag()) {
-                le_uint32 delta = 1;
-
-                while (glyphIterator.next(delta)) {
-                    delta = applyLookupTable(lookupTable, &glyphIterator, fontInstance);
-                }
+                applyLookupTable(lookupTable, &glyphIterator, fontInstance);
             }
 
             newGlyphCount = glyphIterator.applyInsertions();

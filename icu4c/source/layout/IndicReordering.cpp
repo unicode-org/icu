@@ -52,6 +52,7 @@ U_NAMESPACE_BEGIN
 
 class IndicReorderingOutput : public UMemory {
 private:
+    le_int32   fSyllableCount;
     le_int32   fOutIndex;
     LEUnicode *fOutChars;
 
@@ -130,7 +131,7 @@ private:
 
 public:
     IndicReorderingOutput(LEUnicode *outChars, LEGlyphStorage &glyphStorage, MPreFixups *mpreFixups)
-        : fOutIndex(0), fOutChars(outChars), fGlyphStorage(glyphStorage),
+        : fSyllableCount(0), fOutIndex(0), fOutChars(outChars), fGlyphStorage(glyphStorage),
           fMpre(0), fMpreIndex(0), fMbelow(0), fMbelowIndex(0), fMabove(0), fMaboveIndex(0),
           fMpost(0), fMpostIndex(0), fLengthMark(0), fLengthMarkIndex(0), fVirama(0), fViramaIndex(0),
           fMatraFeatures(0), fMPreOutIndex(-1), fMPreFixups(mpreFixups),
@@ -147,6 +148,8 @@ public:
 
     void reset()
     {
+        fSyllableCount += 1;
+
         fMpre = fMbelow = fMabove = fMpost = fLengthMark = fVirama = 0;
         fMPreOutIndex = -1;
         
@@ -161,7 +164,7 @@ public:
         fOutChars[fOutIndex] = ch;
 
         fGlyphStorage.setCharIndex(fOutIndex, charIndex, success);
-        fGlyphStorage.setAuxData(fOutIndex, charFeatures, success);
+        fGlyphStorage.setAuxData(fOutIndex, charFeatures | (fSyllableCount & LE_GLYPH_GROUP_MASK), success);
 
         fOutIndex += 1;
     }
