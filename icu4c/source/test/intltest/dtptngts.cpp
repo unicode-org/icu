@@ -443,6 +443,8 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     pattern = generator->getBestPattern(UnicodeString("MMMd"), status); 
     SimpleDateFormat *formatter = new SimpleDateFormat(pattern, locale, status); 
 
+    zone = TimeZone::createTimeZone(UnicodeString("GMT"));
+    formatter->setTimeZone(*zone);
     // use it to format (or parse)
     UnicodeString formatted;
     formatted = formatter->format(Calendar::getNow(), formatted, status); 
@@ -450,12 +452,13 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     formatted.remove();
     // cannot use the result from getNow() because the value change evreyday. 
     formatted = formatter->format(testDate, formatted, status);
-    expectedResult=UnicodeString("13 janv.");
+    expectedResult=UnicodeString("14 janv.");
     if ( formatted != expectedResult ) {
         errln("ERROR: Userguide sample code result!");
         errln(UnicodeString(" Got: ")+ formatted + UnicodeString(" Expected: ") + expectedResult);
     }
 
+    delete zone;
     delete output;
     delete ptrSkeletonEnum;
     delete ptrBaseSkeletonEnum;
