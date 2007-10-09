@@ -63,8 +63,10 @@ static const UChar testPattern2[]={ 0x48, 0x48, 0x3a, 0x6d, 0x6d, 0x20, 0x76, 0 
 static const UChar replacedStr[]={ 0x76, 0x76, 0x76, 0x76, 0 }; /* vvvv */
 /* results for getBaseSkeletons() - {Hmv}, {yMMM} */
 static const UChar resultBaseSkeletons[2][10] = {{0x48,0x6d, 0x76, 0}, {0x79, 0x4d, 0x4d, 0x4d, 0 } };
-static const UChar sampleFormatted[] = {0x31, 0x30, 0x20, 0x6A, 0x75, 0x69, 0x6C, 0x2E, 0};
-
+static const UChar sampleFormatted[] = {0x31, 0x30, 0x20, 0x6A, 0x75, 0x69, 0x6C, 0x2E, 0}; /* 10 juil. */
+static const UChar skeleton[]= {0x4d, 0x4d, 0x4d, 0x64, 0};  /* MMMd */
+static const char locale[]= {0x66, 0x72, 0};  /* fr */
+static const UChar timeZoneGMT[] = { 0x0047, 0x004d, 0x0054, 0x0000 };  /* "GMT" */
 
 static void TestOpenClose() {
     UErrorCode errorCode=U_ZERO_ERROR;
@@ -221,8 +223,6 @@ static void TestBuilder() {
     const UChar* ptrResult[2]; 
     int32_t count=0;
     UDateTimePatternGenerator *generator;
-    const UChar skeleton[]= {'M', 'M', 'M', 'd', 0};
-    const char locale[]= {'f', 'r', 0};
     int32_t formattedCapacity, resultLen,patternCapacity ;
     UChar   pattern[40], formatted[40];
     UDateFormat *formatter;
@@ -323,7 +323,7 @@ static void TestBuilder() {
     /* get a pattern for an abbreviated month and day */
     length = udatpg_getBestPattern(generator, skeleton, 4,
                                    pattern, patternCapacity, &status);
-    formatter = udat_open(UDAT_IGNORE, UDAT_DEFAULT, locale, NULL, -1,
+    formatter = udat_open(UDAT_IGNORE, UDAT_DEFAULT, locale, timeZoneGMT, -1,
                           pattern, length, &status);
     if (formatter==NULL) {
         log_err("Failed to initialize the UDateFormat of the sample code in Userguide.\n");
@@ -341,8 +341,7 @@ static void TestBuilder() {
     resultLen=udat_format(formatter, sampleDate, formatted, formattedCapacity,
                           NULL, &status);
     if ( u_memcmp(sampleFormatted, formatted, resultLen) != 0 ) {
-        log_err("Failed udat_format() of sample code in Userguide.  Expected:%s   Got:%d\n",
-                 sampleFormatted, formatted);
+        log_err("Failed udat_format() of sample code in Userguide.\n");
     }
     udatpg_close(generator);
     udat_close(formatter);
