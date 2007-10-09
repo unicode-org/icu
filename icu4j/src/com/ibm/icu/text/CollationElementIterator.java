@@ -59,7 +59,7 @@ import java.util.MissingResourceException;
  * can not be compared simply by using basic arithmetric operators,
  * e.g. &lt;, == or &gt;, further processing has to be done. Details
  * can be found in the ICU
- * <a href="http://icu.sourceforge.net/userguide/Collate_ServiceArchitecture.html">
+ * <a href="http://www.icu-project.org/userguide/Collate_ServiceArchitecture.html">
  * user guide</a>. An example of using the CollationElementIterator
  * for collation ordering comparison is the class
  * <a href=StringSearch.html> com.ibm.icu.text.StringSearch</a>.</p>

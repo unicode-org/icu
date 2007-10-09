@@ -1,6 +1,6 @@
 /*
  *********************************************************************************
- * Copyright (C) 2004 -2007, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                  *
  *********************************************************************************
  *
@@ -45,7 +45,7 @@ import java.lang.IllegalArgumentException;
  * datetime time scale.</p>
  *
  * <p>For more details and background, see the
- * <a href="http://icu.sourceforge.net/userguide/universalTimeScale.html">Universal Time Scale</a>
+ * <a href="http://www.icu-project.org/userguide/universalTimeScale.html">Universal Time Scale</a>
  * chapter in the ICU User Guide.</p>
  *
  * @stable ICU 3.2

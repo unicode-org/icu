@@ -1,16 +1,10 @@
 <!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
 <html>
 <head>
-  <meta http-equiv="Content-Type"
- content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="Content-Style-Type" content="text/css2">
   <title>ReadMe for ICU4J</title>
-<!--
-*******************************************************************************
-* Copyright (C) 2000-2007, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
-*******************************************************************************
--->
+  <meta name="COPYRIGHT" content="Copyright 2000-2007, International Business Machines Corporation and others. All Rights Reserved.">
   <style type="text/css">
 h3.doc { background: #CCCCFF }
   </style>
@@ -69,58 +63,58 @@ internationalization API design.</p>
 </p>
 <ul>
   <li><a
- href="http://icu.sourceforge.net/userguide/Collate_Intro.html"><b>Collation</b></a>
+ href="http://www.icu-project.org/userguide/Collate_Intro.html"><b>Collation</b></a>
 &#8211; rule-based, up-to-date Unicode Collation Algorithm (UCA) sorting order<br>
 &nbsp;&nbsp;&nbsp;&nbsp;For fast multilingual string comparison; faster
 and more complete than
 the J2SE implementation</li>
-  <li><a href="http://icu.sourceforge.net/userguide/strings.html"><b>Supplementary
+  <li><a href="http://www.icu-project.org/userguide/strings.html"><b>Supplementary
 Characters</b></a> &#8211; String manipulation and character properties<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Required for proper GB 18030 and JIS X 0213
 repertoire support</li>
-  <li><a href="http://icu.sourceforge.net/userguide/charsetDetection.html"><b>Charset
+  <li><a href="http://www.icu-project.org/userguide/charsetDetection.html"><b>Charset
 Detection</b></a> &#8211; Recognition of various single and multibyte charsets<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Useful for recognizing untagged text data</li>
   <li><a
- href="http://icu.sourceforge.net/userguide/unicodeSet.html"><b>UnicodeSet</b></a>
+ href="http://www.icu-project.org/userguide/unicodeSet.html"><b>UnicodeSet</b></a>
 &#8211; standard set operations optimized for sets of Unicode characters<br>
 &nbsp;&nbsp;&nbsp;&nbsp;UnicodeSets can be built from string patterns
 using any Unicode properties.</li>
-  <li><a href="http://icu.sourceforge.net/userguide/Transform.html"><b>Transforms</b></a>
+  <li><a href="http://www.icu-project.org/userguide/Transform.html"><b>Transforms</b></a>
 &#8211; a flexible mechanism for Unicode text conversions<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Including Full/Halfwidth conversions,
 Normalization, Case conversions, Hex
 conversions, and transliterations between scripts (50+ pairs)</li>
   <li><a
- href="http://icu.sourceforge.net/userguide/normalization.html"><b>Unicode
+ href="http://www.icu-project.org/userguide/normalization.html"><b>Unicode
 Normalization</b></a> &#8211; NFC, NFD, NFKD, NFKC<br>
 &nbsp;&nbsp;&nbsp;&nbsp;For canonical text representations, needed for
 XML and the net</li>
   <li><a
- href="http://icu.sourceforge.net/userguide/dateCalendar.html"><b>International
+ href="http://www.icu-project.org/userguide/dateCalendar.html"><b>International
 Calendars</b></a> &#8211; Arabic, Buddhist, Chinese, Hebrew, Japanese, Ethiopic, Islamic, Coptic and other calendars<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Required for correct presentation of dates in
 certain countries</li>
   <li><a
- href="http://icu.sourceforge.net/userguide/formatNumbers.html"><b>Number
+ href="http://www.icu-project.org/userguide/formatNumbers.html"><b>Number
 Format
 Enhancements</b></a> &#8211; Scientific Notation, Spelled-out, etc.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Enhancements to the normal Java number
 formatting. The spell-out format is
 used for checks and similar documents</li>
   <li><a
- href="http://icu.sourceforge.net/userguide/boundaryAnalysis.html"><b>Enhanced
+ href="http://www.icu-project.org/userguide/boundaryAnalysis.html"><b>Enhanced
 Word-Break Detection</b></a> &#8211; Rule-based, supports Thai<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Required for correct support of Thai</li>
   <li><a
- href="http://icu.sourceforge.net/userguide/compression.html"><b>Unicode
+ href="http://www.icu-project.org/userguide/compression.html"><b>Unicode
 Text
 Compression</b></a> &#8211; Standard compression of Unicode text<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Suitable for large numbers of small fields,
 where LZW and similar schemes
 do not apply</li>
   <li><a
- href="http://icu.sourceforge.net/userguide/conversion.html"><b>Charset Conversion</b></a> &#8211; Conversion to and from different charsets.<br>
+ href="http://www.icu-project.org/userguide/conversion.html"><b>Charset Conversion</b></a> &#8211; Conversion to and from different charsets.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Plugs into Java CharsetProvider Service Provider Interface (SPI)</li>
 
 </ul>
@@ -144,22 +138,21 @@ versions.  If you want to build your own copy of ICU4J binaries with J2SE SDK 1.
 you can still run all of the Ant standard build targets in build.xml and make ICU4J
 binaries.  The build script detects the current Java version and comments out code
 blocks including references to J2SE 5.0 only types.</p>
-<p>
 <p><b>Changes to timezone formatting and parsing</b>
 <p>In ICU 3.8, the behavior of date formatting and parsing has changed
 significantly, perhaps requiring recoding on your part depending on your
 usage. For more information, see <a href="http://icu-project.org/userguide/formatDateTime.html">
 Formatting Dates and Times</a> in the User Guide.
-<p>
+</p>
 <p><b>Status of ICU4J charset converter</b>
 <p>The ICU4J implementation of java.nio.charset.Charset is included as a Technology
 Preview. Not all functionality from the java.nio.Charset interfaces is operational,
 and some converters are known to mis-handle Unicode supplementary characters. Use with caution.
-<p>
-<p><b>New features</b>
+</p>
+<p><b>New features</b></p>
 <p>
 See the <a href="http://www.icu-project.org/download/">ICU 3.8 download page</a> about new features in this release.
-<p>
+</p>
 <h3 class="doc"><a name="license"></a>License Information</h3>
 <p>
 The ICU projects (ICU4C and ICU4J) use the X license. The X
@@ -195,7 +188,7 @@ on JRE 1.3, but not all build targets work on that platform. Currently
 components on these JREs at your own risk.
 <p>The table below shows operating systems and JRE/JDK versions currently
 used by the ICU development team.
-<p>
+</p>
 <table bgcolor="#CCCCFF">
 <tr>
   <th rowspan="2" bgcolor="#FFFFFF">Operating System</th>
@@ -531,7 +524,7 @@ the ICU4J web site, and can be built from the sources:
   <li><a href="http://www.icu-project.org/apiref/icu4j/">Index
 to all ICU4J API</a></li>
   <li><a href="http://www.icu-project.org/apiref/icu4j/com/ibm/icu/text/CharsetDetector.html">Charset Detector</a> &#8211; Detection of charset from a byte stream</li>
-  <li>International Calendars &#8211; <a
+  <li>International Calendars &#8211; 
     <a
  href="http://www.icu-project.org/apiref/icu4j/com/ibm/icu/util/BuddhistCalendar.html">Buddhist</a>,
     <a
@@ -784,7 +777,7 @@ Currently ICU4J can be divided into the following modules:
       <th align="left" valign="baseline"><b>Module Name</b></th>
       <th align="left" valign="baseline"><b>Ant Targets</b></th>
       <th align="left" valign="baseline"><b>Test Package Supported</b></th>
-      <th align="right" valign="baseline"><b>Size‡</b></th>
+      <th align="right" valign="baseline"><b>Size&#x2021;</b></th>
     </tr>
     <tr bgcolor="#ffffff">
 
@@ -793,7 +786,7 @@ Currently ICU4J can be divided into the following modules:
         <tbody>
           <tr>
             <td valign="baseline">Package*</td>
-            <td valign="baseline">Main Classes† </td>
+            <td valign="baseline">Main Classes&#x2020;</td>
           </tr>
         </tbody>
 
@@ -805,10 +798,10 @@ Currently ICU4J can be divided into the following modules:
 <b><font size="2">* com.ibm. should be prepended to the package names
 listed.
 <br>
-† Class name in bold indicates core service API. Only APIs in these classes are
+&#x2020; Class name in bold indicates core service API. Only APIs in these classes are
 fully supported.
 <br>
-‡ Sizes are of the compressed jar file containing only this module.
+&#x2021; Sizes are of the compressed jar file containing only this module.
 These sizes are approximate for release 3.6.
 </font></b>
 <p><b>Modules:</b></p>
@@ -1752,7 +1745,7 @@ overwrite any corresponding resource files already in that directory.
 <ol>
   <li> Download and build ICU4C on a Windows machine. For instructions on
 downloading and building ICU4C, please click <a
- href="http://dev.icu-project.org/cgi-bin/viewcvs.cgi/icu/readme.html?view=co#HowToBuild">here</a>.</li>
+ href="http://source.icu-project.org/repos/icu/icu/tags/release-3-8/readme.html#HowToBuild">here</a>.</li>
   <li> Change directory to <I>$icu4c_root</I>/source/tools/genrb.  <I>$icu4c_root</I>
   is the root directory of ICU4C source package.</li>
   <li> Launch gendtjar.pl from that directory itself with the command <br>

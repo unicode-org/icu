@@ -12,7 +12,7 @@ import com.ibm.icu.text.UCharacterIterator;
  * <p>Binary Ordered Compression for Unicode</p>
  * 
  * <p>Users are strongly encouraged to read the ICU paper on 
- * <a href="http://icu.sourceforge.net/docs/papers/binary_ordered_compression_for_unicode.html">
+ * <a href="http://www.icu-project.org/docs/papers/binary_ordered_compression_for_unicode.html">
  * BOCU</a> before attempting to use this class.</p>
  * 
  * <p>BOCU is used to compress unicode text into a stream of unsigned

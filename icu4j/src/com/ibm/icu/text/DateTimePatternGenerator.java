@@ -89,8 +89,7 @@ import java.util.TreeMap;
 public class DateTimePatternGenerator implements Freezable, Cloneable {
     // debugging flags
     //static boolean SHOW_DISTANCE = false;
-    // TODO add hack to fix months for CJK, as per bug 1099
-    // http://dev.icu-project.org/cgi-bin/locale-bugs/incoming?findid=1099
+    // TODO add hack to fix months for CJK, as per bug ticket 1099
     
     /**
      * Create empty generator, to be constructed with add(...) etc.

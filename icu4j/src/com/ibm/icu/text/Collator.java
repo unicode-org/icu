@@ -23,7 +23,7 @@ import com.ibm.icu.util.VersionInfo;
 *
 * <p>Following the <a href=http://www.unicode.org>Unicode
 * Consortium</a>'s specifications for the
-* <a href="http://www.unicode.org/unicode/reports/tr10/"> Unicode Collation
+* <a href="http://www.unicode.org/unicode/reports/tr10/">Unicode Collation
 * Algorithm (UCA)</a>, there are 5 different levels of strength used
 * in comparisons:
 *
@@ -46,7 +46,7 @@ import com.ibm.icu.util.VersionInfo;
 *     difference between large and small Kana. A tertiary difference is ignored
 *     when there is a primary or secondary difference anywhere in the strings.
 * <li>QUATERNARY strength: When punctuation is ignored
-*     <a href="http://icu.sourceforge.net/userguide/Collate_Concepts.html#Ignoring_Punctuation">
+*     <a href="http://www.icu-project.org/userguide/Collate_Concepts.html#Ignoring_Punctuation">
 *     (see Ignoring Punctuations in the user guide)</a> at PRIMARY to TERTIARY
 *     strength, an additional strength level can
 *     be used to distinguish words with and without punctuation (for example,
@@ -77,7 +77,7 @@ import com.ibm.icu.util.VersionInfo;
 * a comparison or before getting a CollationKey.</p>
 *
 * <p>For more information about the collation service see the
-* <a href="http://icu.sourceforge.net/userguide/Collate_Intro.html">users
+* <a href="http://www.icu-project.org/userguide/Collate_Intro.html">users
 * guide</a>.</p>
 *
 * <p>Examples of use
@@ -155,7 +155,7 @@ public abstract class Collator implements Comparator, Cloneable
     /**
      * Fourth level collator strength value.
      * When punctuation is ignored
-     * <a href="http://icu.sourceforge.net/userguide/Collate_Concepts.html#Ignoring_Punctuation">
+     * <a href="http://www.icu-project.org/userguide/Collate_Concepts.html#Ignoring_Punctuation">
      * (see Ignoring Punctuations in the user guide)</a> at PRIMARY to TERTIARY
      * strength, an additional strength level can
      * be used to distinguish words with and without punctuation.
@@ -624,7 +624,7 @@ public abstract class Collator implements Comparator, Cloneable
      * applications who wish to cache collators, or otherwise reuse
      * collators when possible.  The functional equivalent may change
      * over time.  For more information, please see the <a
-     * href="http://icu.sourceforge.net/userguide/locale.html#services">
+     * href="http://www.icu-project.org/userguide/locale.html#services">
      * Locales and Services</a> section of the ICU User Guide.
      * @param keyword a particular keyword as enumerated by
      * getKeywords.

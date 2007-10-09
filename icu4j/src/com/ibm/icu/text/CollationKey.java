@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2006, International Business Machines Corporation and    *
+* Copyright (C) 1996-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -42,7 +42,7 @@ package com.ibm.icu.text;
  * 
  * <p>More information about the composition of the bit sequence can
  * be found in the 
- * <a href="http://icu.sourceforge.net/userguide/Collate_ServiceArchitecture.html">
+ * <a href="http://www.icu-project.org/userguide/Collate_ServiceArchitecture.html">
  * user guide</a>.</p>
  *
  * <p>The following example shows how <code>CollationKey</code>s can be used
@@ -401,7 +401,7 @@ public final class CollationKey implements Comparable
      * </p>
      * <p>
      * For more on usage, see example in test procedure 
-     * <a href="http://dev.icu-project.org/cgi-bin/viewcvs.cgi/~checkout~/icu4j/src/com/ibm/icu/dev/test/collator/CollationAPITest.java">
+     * <a href="http://source.icu-project.org/repos/icu/icu4j/trunk/src/com/ibm/icu/dev/test/collator/CollationAPITest.java">
      * src/com/ibm/icu/dev/test/collator/CollationAPITest/TestBounds.
      * </a>
      * </p>
