@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2006 - All Rights Reserved 
+ * (C) Copyright IBM Corp. 1998-2007 - All Rights Reserved 
  *
  * This file is a modification of the ICU file IndicReordering.cpp
  * by Jens Herden and Javier Sola for Khmer language 
@@ -126,6 +126,7 @@ const KhmerClassTable *KhmerClassTable::getKhmerClassTable()
 
 class KhmerReorderingOutput : public UMemory {
 private:
+    le_int32 fSyllableCount;
     le_int32 fOutIndex;
     LEUnicode *fOutChars;
 
@@ -134,7 +135,7 @@ private:
 
 public:
     KhmerReorderingOutput(LEUnicode *outChars, LEGlyphStorage &glyphStorage)
-        : fOutIndex(0), fOutChars(outChars), fGlyphStorage(glyphStorage)
+        : fSyllableCount(0), fOutIndex(0), fOutChars(outChars), fGlyphStorage(glyphStorage)
     {
         // nothing else to do...
     }
@@ -144,6 +145,11 @@ public:
         // nothing to do here...
     }
 
+    void reset()
+    {
+        fSyllableCount += 1;
+    }
+
     void writeChar(LEUnicode ch, le_uint32 charIndex, FeatureMask charFeatures)
     {
         LEErrorCode success = LE_NO_ERROR;
@@ -151,7 +157,7 @@ public:
         fOutChars[fOutIndex] = ch;
 
         fGlyphStorage.setCharIndex(fOutIndex, charIndex, success);
-        fGlyphStorage.setAuxData(fOutIndex, charFeatures, success);
+        fGlyphStorage.setAuxData(fOutIndex, charFeatures | (fSyllableCount & LE_GLYPH_GROUP_MASK), success);
 
         fOutIndex += 1;
     }
@@ -364,6 +370,8 @@ le_int32 KhmerReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
     // several syllables.
     while (prev < charCount) {
         le_int32 syllable = findSyllable(classTable, chars, prev, charCount);
+
+        output.reset();
    
         // write a pre vowel or the pre part of a split vowel first
         // and look out for coeng + ro. RO is the only vowel of type 2, and
