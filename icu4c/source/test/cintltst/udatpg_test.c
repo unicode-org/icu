@@ -65,7 +65,6 @@ static const UChar replacedStr[]={ 0x76, 0x76, 0x76, 0x76, 0 }; /* vvvv */
 static const UChar resultBaseSkeletons[2][10] = {{0x48,0x6d, 0x76, 0}, {0x79, 0x4d, 0x4d, 0x4d, 0 } };
 static const UChar sampleFormatted[] = {0x31, 0x30, 0x20, 0x6A, 0x75, 0x69, 0x6C, 0x2E, 0}; /* 10 juil. */
 static const UChar skeleton[]= {0x4d, 0x4d, 0x4d, 0x64, 0};  /* MMMd */
-static const char locale[]= {0x66, 0x72, 0};  /* fr */
 static const UChar timeZoneGMT[] = { 0x0047, 0x004d, 0x0054, 0x0000 };  /* "GMT" */
 
 static void TestOpenClose() {
@@ -227,6 +226,7 @@ static void TestBuilder() {
     UChar   pattern[40], formatted[40];
     UDateFormat *formatter;
     UDate sampleDate = 837039928046.0;
+	static const char locale[]= "fr";
     UErrorCode status=U_ZERO_ERROR;
     
     /* test create an empty DateTimePatternGenerator */
