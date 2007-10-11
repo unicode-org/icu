@@ -1436,7 +1436,7 @@ _2022ToSJIS(uint8_t c1, uint8_t c2, char bytes[2]) {
             c2 = 0;  /* invalid */
         }
     } else {
-        if((uint8_t)(c2-0x21) <= (0x7e-0x21)) {
+        if((uint8_t)(c2-0x21) <= ((0x7e)-0x21)) {
             c2 += 0x7e;
         } else {
             c2 = 0;  /* invalid */
