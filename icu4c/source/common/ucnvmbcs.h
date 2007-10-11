@@ -456,6 +456,7 @@ U_CFUNC void
 ucnv_MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                           UErrorCode *pErrorCode);
 
+#if 0  /* Replaced by ucnv_MBCSGetFilteredUnicodeSetForUnicode() until we implement ucnv_getUnicodeSet() with reverse fallbacks. */
 /*
  * Internal function returning a UnicodeSet for toUnicode() conversion.
  * Currently only used for ISO-2022-CN, and only handles roundtrip mappings.
@@ -470,6 +471,7 @@ ucnv_MBCSGetUnicodeSetForBytes(const UConverterSharedData *sharedData,
                            UConverterUnicodeSet which,
                            uint8_t state, int32_t lowByte, int32_t highByte,
                            UErrorCode *pErrorCode);
+#endif
 
 /*
  * Internal function returning a UnicodeSet for toUnicode() conversion.
@@ -481,9 +483,30 @@ ucnv_MBCSGetUnicodeSetForBytes(const UConverterSharedData *sharedData,
  */
 U_CFUNC void
 ucnv_MBCSGetUnicodeSetForUnicode(const UConverterSharedData *sharedData,
-                             const USetAdder *sa,
-                             UConverterUnicodeSet which,
-                             UErrorCode *pErrorCode);
+                                 const USetAdder *sa,
+                                 UConverterUnicodeSet which,
+                                 UErrorCode *pErrorCode);
+
+typedef enum UConverterSetFilter {
+    UCNV_SET_FILTER_NONE,
+    UCNV_SET_FILTER_DBCS_ONLY,
+    UCNV_SET_FILTER_2022_CN,
+    UCNV_SET_FILTER_SJIS,
+    UCNV_SET_FILTER_COUNT
+} UConverterSetFilter;
+
+/*
+ * Same as ucnv_MBCSGetUnicodeSetForUnicode() but
+ * the set can be filtered by encoding scheme.
+ * Used by stateful converters which share regular conversion tables
+ * but only use a subset of their mappings.
+ */
+U_CFUNC void
+ucnv_MBCSGetFilteredUnicodeSetForUnicode(const UConverterSharedData *sharedData,
+                                         const USetAdder *sa,
+                                         UConverterUnicodeSet which,
+                                         UConverterSetFilter filter,
+                                         UErrorCode *pErrorCode);
 
 #endif
 
