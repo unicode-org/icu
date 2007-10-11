@@ -810,6 +810,8 @@ ISO_2022,locale=zh,version=1    ISO-2022-CN-EXT { IANA* }
 HZ                              HZ-GB-2312 { IANA* }
 
 # Part of iso-2022
+# Obsolete with tickets #5797 & #5880 which hardcode the necessary mappings
+# in the ISO-2022-JP conversion code.
 ibm-897_P100-1995 { UTR22* }    ibm-897 { IBM* } JIS_X0201 { IANA* } X0201 { IANA } csHalfWidthKatakana { IANA }
 
 
