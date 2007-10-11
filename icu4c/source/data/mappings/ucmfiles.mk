@@ -101,7 +101,7 @@ windows-874-2000.ucm\
 windows-936-2000.ucm\
 windows-949-2000.ucm\
 windows-950-2000.ucm\
-ibm-897_P100-1995.ucm jisx-208.ucm jisx-212.ucm\
+jisx-212.ucm\
 iso-ir-165.ucm cns-11643-1992.ucm\
 ibm-5478_P100-1995.ucm\
 icu-internal-25546.ucm lmb-excp.ucm
