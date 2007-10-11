@@ -362,6 +362,8 @@ gb18030Ranges[13][4]={
 
 /* Miscellaneous ------------------------------------------------------------ */
 
+#if 0  /* Replaced by ucnv_MBCSGetFilteredUnicodeSetForUnicode() until we implement ucnv_getUnicodeSet() with reverse fallbacks. */
+
 /* similar to ucnv_MBCSGetNextUChar() but recursive */
 static void
 _getUnicodeSetForBytes(const UConverterSharedData *sharedData,
@@ -454,11 +456,14 @@ ucnv_MBCSGetUnicodeSetForBytes(const UConverterSharedData *sharedData,
         pErrorCode);
 }
 
+#endif
+
 U_CFUNC void
-ucnv_MBCSGetUnicodeSetForUnicode(const UConverterSharedData *sharedData,
-                             const USetAdder *sa,
-                             UConverterUnicodeSet which,
-                             UErrorCode *pErrorCode) {
+ucnv_MBCSGetFilteredUnicodeSetForUnicode(const UConverterSharedData *sharedData,
+                                         const USetAdder *sa,
+                                         UConverterUnicodeSet which,
+                                         UConverterSetFilter filter,
+                                         UErrorCode *pErrorCode) {
     const UConverterMBCSTable *mbcsTable;
     const uint16_t *table;
 
@@ -512,12 +517,26 @@ ucnv_MBCSGetUnicodeSetForUnicode(const UConverterSharedData *sharedData,
                 c+=1024; /* empty stage 2 block */
             }
         }
-    } else if(mbcsTable->outputType==MBCS_OUTPUT_DBCS_ONLY) {
-        /* ignore single-byte results */
+    } else {
         const uint32_t *stage2;
-        const uint16_t *stage3, *results;
+        const uint8_t *stage3, *bytes;
+        uint32_t st3Multiplier;
+        uint32_t value;
 
-        results=(const uint16_t *)mbcsTable->fromUnicodeBytes;
+        bytes=mbcsTable->fromUnicodeBytes;
+
+        switch(mbcsTable->outputType) {
+        case MBCS_OUTPUT_3:
+        case MBCS_OUTPUT_4_EUC:
+            st3Multiplier=3;
+            break;
+        case MBCS_OUTPUT_4:
+            st3Multiplier=4;
+            break;
+        default:
+            st3Multiplier=2;
+            break;
+        }
 
         for(st1=0; st1<maxStage1; ++st1) {
             st2=table[st1];
@@ -526,7 +545,7 @@ ucnv_MBCSGetUnicodeSetForUnicode(const UConverterSharedData *sharedData,
                 for(st2=0; st2<64; ++st2) {
                     if((st3=stage2[st2])!=0) {
                         /* read the stage 3 block */
-                        stage3=results+16*(uint32_t)(uint16_t)st3;
+                        stage3=bytes+st3Multiplier*16*(uint32_t)(uint16_t)st3;
 
                         /* get the roundtrip flags for the stage 3 block */
                         st3>>=16;
@@ -536,48 +555,50 @@ ucnv_MBCSGetUnicodeSetForUnicode(const UConverterSharedData *sharedData,
                          * Once we get a set for fallback mappings, we have to check
                          * non-roundtrip stage 3 results for whether they are 0.
                          * See ucnv_MBCSFromUnicodeWithOffsets() for details.
-                         *
-                         * Ignore single-byte results (<0x100).
                          */
-                        do {
-                            if((st3&1)!=0 && *stage3>=0x100) {
-                                sa->add(sa->set, c);
-                            }
-                            st3>>=1;
-                            ++stage3;
-                        } while((++c&0xf)!=0);
-                    } else {
-                        c+=16; /* empty stage 3 block */
-                    }
-                }
-            } else {
-                c+=1024; /* empty stage 2 block */
-            }
-        }
-    } else {
-        const uint32_t *stage2;
-
-        for(st1=0; st1<maxStage1; ++st1) {
-            st2=table[st1];
-            if(st2>(maxStage1>>1)) {
-                stage2=(const uint32_t *)table+st2;
-                for(st2=0; st2<64; ++st2) {
-                    if((st3=stage2[st2])!=0) {
-                        /* get the roundtrip flags for the stage 3 block */
-                        st3>>=16;
-
-                        /*
-                         * Add code points for which the roundtrip flag is set.
-                         * Once we get a set for fallback mappings, we have to check
-                         * non-roundtrip stage 3 results for whether they are 0.
-                         * See ucnv_MBCSFromUnicodeWithOffsets() for details.
-                         */
-                        do {
-                            if(st3&1) {
-                                sa->add(sa->set, c);
-                            }
-                            st3>>=1;
-                        } while((++c&0xf)!=0);
+                        switch(filter) {
+                        case UCNV_SET_FILTER_NONE:
+                            do {
+                                if(st3&1) {
+                                    sa->add(sa->set, c);
+                                }
+                                st3>>=1;
+                            } while((++c&0xf)!=0);
+                            break;
+                        case UCNV_SET_FILTER_DBCS_ONLY:
+                             /* Ignore single-byte results (<0x100). */
+                            do {
+                                if((st3&1)!=0 && *((const uint16_t *)stage3)>=0x100) {
+                                    sa->add(sa->set, c);
+                                }
+                                st3>>=1;
+                                stage3+=2;  /* +=st3Multiplier */
+                            } while((++c&0xf)!=0);
+                            break;
+                        case UCNV_SET_FILTER_2022_CN:
+                             /* Only add code points that map to CNS 11643 planes 1 & 2 for non-EXT ISO-2022-CN. */
+                            do {
+                                if((st3&1)!=0 && ((value=*stage3)==0x81 || value==0x82)) {
+                                    sa->add(sa->set, c);
+                                }
+                                st3>>=1;
+                                stage3+=3;  /* +=st3Multiplier */
+                            } while((++c&0xf)!=0);
+                            break;
+                        case UCNV_SET_FILTER_SJIS:
+                             /* Only add code points that map to Shift-JIS codes corresponding to JIS X 0208. */
+                            do {
+                                if((st3&1)!=0 && (value=*((const uint16_t *)stage3))>=0x8140 && value<=0xeffc) {
+                                    sa->add(sa->set, c);
+                                }
+                                st3>>=1;
+                                stage3+=2;  /* +=st3Multiplier */
+                            } while((++c&0xf)!=0);
+                            break;
+                        default:
+                            *pErrorCode=U_INTERNAL_PROGRAM_ERROR;
+                            return;
+                        }
                     } else {
                         c+=16; /* empty stage 3 block */
                     }
@@ -589,6 +610,19 @@ ucnv_MBCSGetUnicodeSetForUnicode(const UConverterSharedData *sharedData,
     }
 
     ucnv_extGetUnicodeSet(sharedData, sa, which, pErrorCode);
+}
+
+U_CFUNC void
+ucnv_MBCSGetUnicodeSetForUnicode(const UConverterSharedData *sharedData,
+                                 const USetAdder *sa,
+                                 UConverterUnicodeSet which,
+                                 UErrorCode *pErrorCode) {
+    ucnv_MBCSGetFilteredUnicodeSetForUnicode(
+        sharedData, sa, which,
+        sharedData->mbcs.outputType==MBCS_OUTPUT_DBCS_ONLY ?
+            UCNV_SET_FILTER_DBCS_ONLY :
+            UCNV_SET_FILTER_NONE,
+        pErrorCode);
 }
 
 static void

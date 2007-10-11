@@ -48,6 +48,15 @@ conversion:table(nofallback) {
     toUnicode {
       Headers { "charset", "bytes", "unicode", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidChars" }
       Cases {
+        // improve coverage of ISO-2022-JP converter with hardcoded JIS X 0201 and
+        // using the Shift-JIS table for JIS X 0208 (ticket #5797)
+        {
+          "ISO-2022-JP",
+          :bin{ 1b284a7d7e801b2442306c20217f7e21202160217f22202225227f5f211b2842 },
+          "}\u203e\ufffd\u4e00\ufffd\ufffd\ufffd\xf7\ufffd\ufffd\u25b2\ufffd\u6f3e",
+          :intvector{ 3,4,5,9,11,13,15,17,19,21,23,25,27 },
+          :int{1}, :int{1}, "", "?", :bin{""}
+        }
         // improve coverage of unrolled loops in ucnvmbcs.c/ucnv_MBCSSingleToBMPWithOffsets()
         {
           "ISO-8859-3",
@@ -495,6 +504,15 @@ conversion:table(nofallback) {
     fromUnicode {
       Headers { "charset", "unicode", "bytes", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidUChars" }
       Cases {
+        // improve coverage of ISO-2022-JP converter with hardcoded JIS X 0201 and
+        // using the Shift-JIS table for JIS X 0208 (ticket #5797)
+        {
+          "ISO-2022-JP",
+          "\u203e\xa5\u4e00\ufa10\u6f3e\u0391",
+          :bin{       1b284a7e5c1b2442306c222e5f2126211b2842 },
+          :intvector{ 0,0,0,0,1,2,2,2,2,2,3,3,4,4,5,5,5,5,5 },
+          :int{1}, :int{0}, "", "?=\u3013", ""  // U+3013 Geta Mark converts to 222e
+        }
         // Verify that mappings that would result in byte values outside 20..7F (for SBCS)
         // or 21..7E (for DBCS) are not used.
         // ibm-9005_X110-2007.ucm (ISO 8859-7, <ESC>.F=1b2e46):
@@ -1293,13 +1311,13 @@ conversion:table(nofallback) {
         // versions of ISO-2022-JP
         {
           "ISO-2022-JP",
-          "[\x00-\x0d\x10-\x1a\x1c-\x7f\u0391-\u03a1\uff61-\uff9f\u4e00\u4e01\uffe5]",
-          "[\x0e\x0f\x1b\u0100-\u0113\u0385-\u038a\u4e02\u4e27-\u4e29\uffe6-\U0010ffff]",
+          "[\x00-\x0d\x10-\x1a\x1c-\x7f\xa5\u0391-\u03a1\u203e\uff61-\uff9f\u4e00\u4e01\uffe5]",
+          "[\x0e\x0f\x1b\u0100-\u0113\u0385-\u038a\u4e02\u4e27-\u4e29\ufa0e-\ufa2d\uffe6-\U0010ffff]",
           :int{0}
         }   
         {
           "ISO-2022-JP-2",
-          "[\x00-\x0d\x10-\x1a\x1c-\u0113\u0384-\u0386\u0388-\u038a\u0390-\u03a1\uff61-\uff9f\u4e00-\u4e05\uffe6]",
+          "[\x00-\x0d\x10-\x1a\x1c-\u0113\u0384-\u0386\u0388-\u038a\u0390-\u03a1\u203e\uff61-\uff9f\u4e00-\u4e05\uffe6]",
           "[\x0e\x0f\x1b\uffe7-\U0010ffff]",
           :int{0}
         }
