@@ -809,12 +809,6 @@ ISO_2022,locale=zh,version=0    ISO-2022-CN { IANA* JAVA* } csISO2022CN { JAVA }
 ISO_2022,locale=zh,version=1    ISO-2022-CN-EXT { IANA* }
 HZ                              HZ-GB-2312 { IANA* }
 
-# Part of iso-2022
-# Obsolete with tickets #5797 & #5880 which hardcode the necessary mappings
-# in the ISO-2022-JP conversion code.
-ibm-897_P100-1995 { UTR22* }    ibm-897 { IBM* } JIS_X0201 { IANA* } X0201 { IANA } csHalfWidthKatakana { IANA }
-
-
 ISCII,version=0         x-iscii-de { WINDOWS } windows-57002 { WINDOWS* } iscii-dev ibm-4902 { IBM* } # ibm-806 contains non-standard box drawing symbols.
 ISCII,version=1         x-iscii-be { WINDOWS } windows-57003 { WINDOWS* } iscii-bng windows-57006 { WINDOWS } x-iscii-as { WINDOWS } # be is different from as on Windows.
 ISCII,version=2         x-iscii-pa { WINDOWS } windows-57011 { WINDOWS* } iscii-gur
@@ -1074,6 +1068,7 @@ ibm-8612_P100-1995 { UTR22* }   ibm-8612 { IBM* } # Arabic (EBCDIC update of ibm
 ibm-872_P100-1999 { UTR22* }    ibm-872 { IBM* } # Cyrillic (Euro update of ibm-855)
 ibm-880_P100-1995 { UTR22* }    ibm-880 { IBM* } IBM880 { IANA* } cp880 { IANA } EBCDIC-Cyrillic { IANA } csIBM880 { IANA } windows-20880 { WINDOWS* }
 ibm-896_P100-1995 { UTR22* }    ibm-896 { IBM* } # SBCS Katakana
+ibm-897_P100-1995 { UTR22* }    ibm-897 { IBM* } JIS_X0201 { IANA* } X0201 { IANA } csHalfWidthKatakana { IANA }
 ibm-9027_P100-1999 { UTR22* }   ibm-9027 { IBM* } # DBCS T-Ch Host. Euro update of ibm-835. DBCS portion of ibm-1371.
 ibm-9048_P100-1998 { UTR22* }   ibm-9048 { IBM* } # Hebrew (Euro and Sequel update of ibm-856)
 ibm-905_P100-1995 { UTR22* }    ibm-905 { IBM* } IBM905 { IANA* } CP905 { IANA } ebcdic-cp-tr { IANA } csIBM905 { IANA } windows-20905 { WINDOWS* }
