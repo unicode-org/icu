@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 2001-2006 International Business Machines 
+ * Copyright (c) 2001-2007 International Business Machines 
  * Corporation and others. All Rights Reserved.
  ********************************************************************
  * File USRCHDAT.H
@@ -256,8 +256,8 @@ static const SearchData CONTRACTION[] = {
 static const char *IGNORABLERULE = "&a = \\u0300";
 
 static const SearchData IGNORABLE[] = {
-    {"\\u0315\\u0300 \\u0315\\u0300\\u0315 ", "\\u0300", NULL, UCOL_PRIMARY, NULL, 
-    {0, 3, -1}, {2, 3}},
+    {"\\u0300\\u0315 \\u0300\\u0315 ", "\\u0300", NULL, UCOL_PRIMARY, NULL, 
+    {0, 3, -1}, {2, 2}},
     {NULL, NULL, NULL, UCOL_TERTIARY, NULL, {-1}, {0}}
 };
 
