@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2006 IBM and others. All rights reserved.
+*   Copyright (C) 2001-2007 IBM and others. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *  07/02/2001   synwee      Creation.
@@ -320,13 +320,19 @@ inline int16_t initializePattern(UStringSearch *strsrch, UErrorCode *status)
     const UChar      *patterntext = pattern->text;
           int32_t     length      = pattern->textLength;
           int32_t index       = 0;
-
-    pattern->hasPrefixAccents = getFCD(patterntext, &index, length) >> 
-                                                     SECOND_LAST_BYTE_SHIFT_;
-    index = length;
-    UTF_BACK_1(patterntext, 0, index);
-    pattern->hasSuffixAccents = getFCD(patterntext, &index, length) & 
-                                                             LAST_BYTE_MASK_;
+    
+    // Since the strength is primary, accents are ignored in the pattern.
+    if (strsrch->strength == UCOL_PRIMARY) {
+    	pattern->hasPrefixAccents = 0;
+    	pattern->hasSuffixAccents = 0;
+    } else {
+	    pattern->hasPrefixAccents = getFCD(patterntext, &index, length) >> 
+	                                                     SECOND_LAST_BYTE_SHIFT_;
+	    index = length;
+	    UTF_BACK_1(patterntext, 0, index);
+	    pattern->hasSuffixAccents = getFCD(patterntext, &index, length) & 
+	                                                             LAST_BYTE_MASK_;
+    }
     // since intializePattern is an internal method status is a success.
     return initializePatternCETable(strsrch, status);   
 }
@@ -426,6 +432,35 @@ inline void initialize(UStringSearch *strsrch, UErrorCode *status)
 }
 
 /**
+* Check to make sure that the match length is at the end of the character by 
+* using the breakiterator.
+* @param strsrch string search data 
+* @param start target text start offset
+* @param end target text end offset
+*/
+static
+void checkBreakBoundary(const UStringSearch *strsrch, int32_t *start, 
+                               int32_t *end)
+{
+#if !UCONFIG_NO_BREAK_ITERATION
+    UBreakIterator *breakiterator = strsrch->search->breakIter;
+    if (breakiterator) {
+	    int32_t matchend = *end;
+	    int32_t matchstart = *start;
+	    
+	    if (!ubrk_isBoundary(breakiterator, matchend))
+	    	*end = ubrk_following(breakiterator, matchend);
+	    
+	    /* Check the start of the matched text to make sure it doesn't have any accents 
+	     * before it.  This code may not be necessary and so it is commented out */
+	    /*if (!ubrk_isBoundary(breakiterator, matchstart) && !ubrk_isBoundary(breakiterator, matchstart-1)) {
+	    	*start = ubrk_preceding(breakiterator, matchstart);
+	    }*/
+    }
+#endif
+}
+
+/**
 * Determine whether the target text in UStringSearch bounded by the offset 
 * start and end is one or more whole units of text as 
 * determined by the breakiterator in UStringSearch.
@@ -439,7 +474,8 @@ UBool isBreakUnit(const UStringSearch *strsrch, int32_t start,
 {
 #if !UCONFIG_NO_BREAK_ITERATION
     UBreakIterator *breakiterator = strsrch->search->breakIter;
-    if (breakiterator) {
+    //TODO: Add here.
+    if (breakiterator && strsrch->search->breakIterGiven) {
         int32_t startindex = ubrk_first(breakiterator);
         int32_t endindex   = ubrk_last(breakiterator);
         
@@ -1119,6 +1155,11 @@ inline UBool checkNextExactMatch(UStringSearch *strsrch,
         (*textoffset) ++;
         *textoffset = getNextUStringSearchBaseOffset(strsrch, *textoffset);  
         return FALSE;
+    }
+
+    //Add breakiterator boundary check for primary strength search.
+    if (!strsrch->search->breakIterGiven && strsrch->strength == UCOL_PRIMARY) {
+    	checkBreakBoundary(strsrch, &start, textoffset);
     }
         
     // totally match, we will get rid of the ending ignorables.
@@ -1963,6 +2004,12 @@ inline UBool checkPreviousExactMatch(UStringSearch *strsrch,
                                             *textoffset);
         return FALSE;
     }
+    
+    //Add breakiterator boundary check for primary strength search.
+    if (!strsrch->search->breakIterGiven && strsrch->strength == UCOL_PRIMARY) {
+    	checkBreakBoundary(strsrch, textoffset, &end);
+    }
+    
     strsrch->search->matchedIndex = *textoffset;
     strsrch->search->matchedLength = end - *textoffset;
     return TRUE;
@@ -2550,12 +2597,17 @@ U_CAPI UStringSearch * U_EXPORT2 usearch_openFromCollator(
         result->pattern.textLength = patternlength;
         result->pattern.CE         = NULL;
         
-        result->search->breakIter  = breakiter;
+        // If a breakiterator is given, use that one, otherwise create a character break iterator.
+        result->search->breakIterGiven = breakiter ? TRUE : FALSE;
 #if !UCONFIG_NO_BREAK_ITERATION
+        if (!breakiter && result->strength == UCOL_PRIMARY) {
+        	breakiter = ubrk_open(UBRK_CHARACTER, ucol_getLocale(result->collator, ULOC_VALID_LOCALE, status), NULL, 0, status);
+        }
         if (breakiter) {
             ubrk_setText(breakiter, text, textlength, status);
         }
 #endif
+        result->search->breakIter  = breakiter;
 
         result->ownCollator           = FALSE;
         result->search->matchedLength = 0;
