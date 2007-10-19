@@ -3284,6 +3284,7 @@ UBool usearch_handleNextExact(UStringSearch *strsrch, UErrorCode *status)
         //targetce = lastce;
         
         while (found && patternceindex > 0) {
+        	lastce = targetce;
             targetce    = ucol_previous(coleiter, status);
             if (U_FAILURE(*status) || targetce == UCOL_NULLORDER) {
                 found = FALSE;
@@ -3296,7 +3297,6 @@ UBool usearch_handleNextExact(UStringSearch *strsrch, UErrorCode *status)
 
             patternceindex --;
             found = found && targetce == patternce[patternceindex]; 
-            if (found) lastce = targetce;
         }
         
         targetce = lastce;
@@ -3483,6 +3483,7 @@ UBool usearch_handlePreviousExact(UStringSearch *strsrch, UErrorCode *status)
         //targetce = firstce;
         
         while (found && (patternceindex < patterncelength)) {
+        	firstce = targetce;
             targetce    = ucol_next(coleiter, status);
             if (U_FAILURE(*status) || targetce == UCOL_NULLORDER) {
                 found = FALSE;
@@ -3495,7 +3496,6 @@ UBool usearch_handlePreviousExact(UStringSearch *strsrch, UErrorCode *status)
 
             found = found && targetce == patternce[patternceindex]; 
             patternceindex ++;
-            if (found) firstce = targetce;
         }
         
         targetce = firstce;
