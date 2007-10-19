@@ -894,7 +894,7 @@ UBool hasAccentsAfterMatch(const UStringSearch *strsrch, int32_t start,
                 }
                 count ++;
             }
-            int32_t ce = getCE(strsrch, ucol_next(coleiter, &status));
+            int32_t ce = ucol_next(coleiter, &status);
             if (U_FAILURE(status)) {
                 return TRUE;
             }
