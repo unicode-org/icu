@@ -3281,7 +3281,7 @@ UBool usearch_handleNextExact(UStringSearch *strsrch, UErrorCode *status)
             }
         }
 
-        targetce = lastce;
+        //targetce = lastce;
         
         while (found && patternceindex > 0) {
             targetce    = ucol_previous(coleiter, status);
@@ -3296,7 +3296,10 @@ UBool usearch_handleNextExact(UStringSearch *strsrch, UErrorCode *status)
 
             patternceindex --;
             found = found && targetce == patternce[patternceindex]; 
+            if (found) lastce = targetce;
         }
+        
+        targetce = lastce;
 
         if (!found) {
             if (U_FAILURE(*status)) {
@@ -3477,7 +3480,7 @@ UBool usearch_handlePreviousExact(UStringSearch *strsrch, UErrorCode *status)
             }
         }
 
-        targetce = firstce;
+        //targetce = firstce;
         
         while (found && (patternceindex < patterncelength)) {
             targetce    = ucol_next(coleiter, status);
@@ -3492,12 +3495,16 @@ UBool usearch_handlePreviousExact(UStringSearch *strsrch, UErrorCode *status)
 
             found = found && targetce == patternce[patternceindex]; 
             patternceindex ++;
+            if (found) firstce = targetce;
         }
+        
+        targetce = firstce;
 
         if (!found) {
             if (U_FAILURE(*status)) {
                 break;
             }
+            
             textoffset = reverseShift(strsrch, textoffset, targetce, 
                                       patternceindex);
             patternceindex = 0;
