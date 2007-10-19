@@ -2767,6 +2767,7 @@ public final class StringSearch extends SearchIterator
             }
     
             while (found && patternceindex > 0) {
+                lastce = targetce;
                 targetce = m_colEIter_.previous();
                 if (targetce == CollationElementIterator.NULLORDER) {
                     found = false;
@@ -2780,6 +2781,8 @@ public final class StringSearch extends SearchIterator
                 patternceindex --;
                 found = found && targetce == m_pattern_.m_CE_[patternceindex]; 
             }
+            
+            targetce = lastce;
     
             if (!found) {
                 textoffset = shiftForward(textoffset, lastce, patternceindex);
@@ -2931,9 +2934,10 @@ public final class StringSearch extends SearchIterator
                 }
             }
     
-            targetce = firstce;
+            //targetce = firstce;
             
             while (found && patternceindex < m_pattern_.m_CELength_) {
+                firstce = targetce;
                 targetce = m_colEIter_.next();
                 if (targetce == CollationElementIterator.NULLORDER) {
                     found = false;
@@ -2947,6 +2951,8 @@ public final class StringSearch extends SearchIterator
                 found = found && targetce == m_pattern_.m_CE_[patternceindex]; 
                 patternceindex ++;
             }
+            
+            targetce = firstce;
     
             if (!found) {
                 textoffset = reverseShift(textoffset, targetce, patternceindex);
