@@ -772,6 +772,11 @@ public final class StringSearch extends SearchIterator
      * Utility buffer for return values and temporary storage
      */
     private int m_utilBuffer_[] = new int[2];
+    /**
+     *  Unsigned 32-Bit Integer Mask
+     */
+    private static final long UNSIGNED_32BIT_MASK = 0xffffffffL;
+    
 
     // private methods -------------------------------------------------------
 
@@ -860,7 +865,7 @@ public final class StringSearch extends SearchIterator
             // if the ce is a variable, we mask and get only the primary values
             // no shifting to quartenary is required since all primary values
             // less than variabletop will need to be masked off anyway.
-            if ((m_collator_.m_variableTopValue_  << 16) > ce) {
+            if (((m_collator_.m_variableTopValue_  << 16) & UNSIGNED_32BIT_MASK) > (ce & UNSIGNED_32BIT_MASK)) {
                 if (m_collator_.getStrength() == Collator.QUATERNARY) {
                     ce = CollationElementIterator.primaryOrder(ce);
                 }
