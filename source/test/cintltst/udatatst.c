@@ -199,10 +199,10 @@ static void TestUDataOpen(){
     strcat(icuDataFilePath, dirSepString);
     strcat(icuDataFilePath, U_ICUDATA_NAME);
     strcat(icuDataFilePath, "_");
-    strcat(icuDataFilePath, "unorm.icu");
+    strcat(icuDataFilePath, "cnvalias.icu");
 
     /* lots_of_mallocs(); */
-/*    if (stat(icuDataFilePath, &stat_buf) == 0)*/
+    if (stat(icuDataFilePath, &stat_buf) == 0)
     {
         int i;
         log_verbose("%s exists, so..\n", icuDataFilePath);
@@ -222,11 +222,11 @@ static void TestUDataOpen(){
             }
         }
     }
-/*    else
+    else
     {
          log_verbose("Skipping tests of udata_open() on %s.  File not present in this configuration.\n",
              icuDataFilePath);
-    }*/
+    }
 
     free(icuDataFilePath);
     icuDataFilePath = NULL;
