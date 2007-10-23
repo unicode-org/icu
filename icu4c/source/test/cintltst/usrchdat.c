@@ -485,6 +485,10 @@ static const SearchData CONTRACTIONCANONICAL[] = {
     {NULL, NULL, NULL, UCOL_TERTIARY, NULL, {-1}, {0}}
 };
 
+static const SearchData DIACTRICMATCH[] = {
+		{"\\u0061\\u0061\\u00E1", "\\u0061\\u00E1", NULL, UCOL_SECONDARY, NULL, {1, -1}, {2}}
+};
+
 #endif /* #if !UCONFIG_NO_COLLATION */
 
 #endif
