@@ -427,6 +427,7 @@ public class SimpleDateFormat extends DateFormat {
         // Instead, we just record time of construction for backward compatibility.
         defaultCenturyBase = System.currentTimeMillis();
 
+        setLocale(calendar.getLocale(ULocale.VALID_LOCALE ), calendar.getLocale(ULocale.ACTUAL_LOCALE));
         initLocalZeroPaddingNumberFormat();
     }
 
