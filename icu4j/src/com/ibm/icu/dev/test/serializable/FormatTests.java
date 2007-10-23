@@ -30,6 +30,8 @@ import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.ULocale;
 
+import com.ibm.icu.impl.Utility;
+
 /**
  * @author emader
  *
@@ -38,7 +40,677 @@ import com.ibm.icu.util.ULocale;
  */
 public class FormatTests
 {
+    /*
+     * The serialized form of a normally created DateFormatSymbols object
+     * will have locale-specific data in it that might change from one version
+     * of ICU4J to another. To guard against this, we store the following canned
+     * data into the test objects we create.
+     */
+    static HashMap cannedMonthNames      = new HashMap();
+    static HashMap cannedShortMonthNames = new HashMap();
 
+    static String en_CA_MonthNames[] = {
+        "January", 
+        "February", 
+        "March", 
+        "April", 
+        "May", 
+        "June", 
+        "July", 
+        "August", 
+        "September", 
+        "October", 
+        "November", 
+        "December", 
+    };
+
+    static String fr_CA_MonthNames[] = {
+        "janvier", 
+        "f\u00E9vrier", 
+        "mars", 
+        "avril", 
+        "mai", 
+        "juin", 
+        "juillet", 
+        "ao\u00FBt", 
+        "septembre", 
+        "octobre", 
+        "novembre", 
+        "d\u00E9cembre", 
+    };
+
+    static String zh_Hans_CN_MonthNames[] = {
+        "\u4E00\u6708", 
+        "\u4E8C\u6708", 
+        "\u4E09\u6708", 
+        "\u56DB\u6708", 
+        "\u4E94\u6708", 
+        "\u516D\u6708", 
+        "\u4E03\u6708", 
+        "\u516B\u6708", 
+        "\u4E5D\u6708", 
+        "\u5341\u6708", 
+        "\u5341\u4E00\u6708", 
+        "\u5341\u4E8C\u6708", 
+    };
+
+    static String zh_CN_MonthNames[] = {
+        "\u4E00\u6708", 
+        "\u4E8C\u6708", 
+        "\u4E09\u6708", 
+        "\u56DB\u6708", 
+        "\u4E94\u6708", 
+        "\u516D\u6708", 
+        "\u4E03\u6708", 
+        "\u516B\u6708", 
+        "\u4E5D\u6708", 
+        "\u5341\u6708", 
+        "\u5341\u4E00\u6708", 
+        "\u5341\u4E8C\u6708", 
+    };
+
+    static String zh_MonthNames[] = {
+        "\u4E00\u6708", 
+        "\u4E8C\u6708", 
+        "\u4E09\u6708", 
+        "\u56DB\u6708", 
+        "\u4E94\u6708", 
+        "\u516D\u6708", 
+        "\u4E03\u6708", 
+        "\u516B\u6708", 
+        "\u4E5D\u6708", 
+        "\u5341\u6708", 
+        "\u5341\u4E00\u6708", 
+        "\u5341\u4E8C\u6708", 
+    };
+
+    static String en_MonthNames[] = {
+        "January", 
+        "February", 
+        "March", 
+        "April", 
+        "May", 
+        "June", 
+        "July", 
+        "August", 
+        "September", 
+        "October", 
+        "November", 
+        "December", 
+    };
+
+    static String fr_FR_MonthNames[] = {
+        "janvier", 
+        "f\u00E9vrier", 
+        "mars", 
+        "avril", 
+        "mai", 
+        "juin", 
+        "juillet", 
+        "ao\u00FBt", 
+        "septembre", 
+        "octobre", 
+        "novembre", 
+        "d\u00E9cembre", 
+    };
+
+    static String fr_MonthNames[] = {
+        "janvier", 
+        "f\u00E9vrier", 
+        "mars", 
+        "avril", 
+        "mai", 
+        "juin", 
+        "juillet", 
+        "ao\u00FBt", 
+        "septembre", 
+        "octobre", 
+        "novembre", 
+        "d\u00E9cembre", 
+    };
+
+    static String de_MonthNames[] = {
+        "Januar", 
+        "Februar", 
+        "M\u00E4rz", 
+        "April", 
+        "Mai", 
+        "Juni", 
+        "Juli", 
+        "August", 
+        "September", 
+        "Oktober", 
+        "November", 
+        "Dezember", 
+    };
+
+    static String de_DE_MonthNames[] = {
+        "Januar", 
+        "Februar", 
+        "M\u00E4rz", 
+        "April", 
+        "Mai", 
+        "Juni", 
+        "Juli", 
+        "August", 
+        "September", 
+        "Oktober", 
+        "November", 
+        "Dezember", 
+    };
+
+    static String it_MonthNames[] = {
+        "gennaio", 
+        "febbraio", 
+        "marzo", 
+        "aprile", 
+        "maggio", 
+        "giugno", 
+        "luglio", 
+        "agosto", 
+        "settembre", 
+        "ottobre", 
+        "novembre", 
+        "dicembre", 
+    };
+
+    static String it_IT_MonthNames[] = {
+        "gennaio", 
+        "febbraio", 
+        "marzo", 
+        "aprile", 
+        "maggio", 
+        "giugno", 
+        "luglio", 
+        "agosto", 
+        "settembre", 
+        "ottobre", 
+        "novembre", 
+        "dicembre", 
+    };
+
+    static String ja_JP_MonthNames[] = {
+        "1\u6708", 
+        "2\u6708", 
+        "3\u6708", 
+        "4\u6708", 
+        "5\u6708", 
+        "6\u6708", 
+        "7\u6708", 
+        "8\u6708", 
+        "9\u6708", 
+        "10\u6708", 
+        "11\u6708", 
+        "12\u6708", 
+    };
+
+    static String ja_MonthNames[] = {
+        "1\u6708", 
+        "2\u6708", 
+        "3\u6708", 
+        "4\u6708", 
+        "5\u6708", 
+        "6\u6708", 
+        "7\u6708", 
+        "8\u6708", 
+        "9\u6708", 
+        "10\u6708", 
+        "11\u6708", 
+        "12\u6708", 
+    };
+
+    static String ko_KR_MonthNames[] = {
+        "1\uC6D4", 
+        "2\uC6D4", 
+        "3\uC6D4", 
+        "4\uC6D4", 
+        "5\uC6D4", 
+        "6\uC6D4", 
+        "7\uC6D4", 
+        "8\uC6D4", 
+        "9\uC6D4", 
+        "10\uC6D4", 
+        "11\uC6D4", 
+        "12\uC6D4", 
+    };
+
+    static String ko_MonthNames[] = {
+        "1\uC6D4", 
+        "2\uC6D4", 
+        "3\uC6D4", 
+        "4\uC6D4", 
+        "5\uC6D4", 
+        "6\uC6D4", 
+        "7\uC6D4", 
+        "8\uC6D4", 
+        "9\uC6D4", 
+        "10\uC6D4", 
+        "11\uC6D4", 
+        "12\uC6D4", 
+    };
+
+    static String zh_Hant_TW_MonthNames[] = {
+        "\u4E00\u6708", 
+        "\u4E8C\u6708", 
+        "\u4E09\u6708", 
+        "\u56DB\u6708", 
+        "\u4E94\u6708", 
+        "\u516D\u6708", 
+        "\u4E03\u6708", 
+        "\u516B\u6708", 
+        "\u4E5D\u6708", 
+        "\u5341\u6708", 
+        "\u5341\u4E00\u6708", 
+        "\u5341\u4E8C\u6708", 
+    };
+
+    static String zh_TW_MonthNames[] = {
+        "\u4E00\u6708", 
+        "\u4E8C\u6708", 
+        "\u4E09\u6708", 
+        "\u56DB\u6708", 
+        "\u4E94\u6708", 
+        "\u516D\u6708", 
+        "\u4E03\u6708", 
+        "\u516B\u6708", 
+        "\u4E5D\u6708", 
+        "\u5341\u6708", 
+        "\u5341\u4E00\u6708", 
+        "\u5341\u4E8C\u6708", 
+        };
+
+    static String en_GB_MonthNames[] = {
+        "January", 
+        "February", 
+        "March", 
+        "April", 
+        "May", 
+        "June", 
+        "July", 
+        "August", 
+        "September", 
+        "October", 
+        "November", 
+        "December", 
+    };
+
+    static String en_US_MonthNames[] = {
+        "January", 
+        "February", 
+        "March", 
+        "April", 
+        "May", 
+        "June", 
+        "July", 
+        "August", 
+        "September", 
+        "October", 
+        "November", 
+        "December", 
+    };
+
+    static String en_CA_ShortMonthNames[] = {
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+    };
+
+    static String fr_CA_ShortMonthNames[] = {
+        "janv.",
+        "f\u00E9vr.",
+        "mars",
+        "avr.",
+        "mai",
+        "juin",
+        "juil.",
+        "ao\u00FBt",
+        "sept.",
+        "oct.",
+        "nov.",
+        "d\u00E9c.",
+    };
+
+    static String zh_Hans_CN_ShortMonthNames[] = {
+        "\u4E00\u6708",
+        "\u4E8C\u6708",
+        "\u4E09\u6708",
+        "\u56DB\u6708",
+        "\u4E94\u6708",
+        "\u516D\u6708",
+        "\u4E03\u6708",
+        "\u516B\u6708",
+        "\u4E5D\u6708",
+        "\u5341\u6708",
+        "\u5341\u4E00\u6708",
+        "\u5341\u4E8C\u6708",
+    };
+
+    static String zh_CN_ShortMonthNames[] = {
+        "\u4E00\u6708",
+        "\u4E8C\u6708",
+        "\u4E09\u6708",
+        "\u56DB\u6708",
+        "\u4E94\u6708",
+        "\u516D\u6708",
+        "\u4E03\u6708",
+        "\u516B\u6708",
+        "\u4E5D\u6708",
+        "\u5341\u6708",
+        "\u5341\u4E00\u6708",
+        "\u5341\u4E8C\u6708",
+    };
+
+    static String zh_ShortMonthNames[] = {
+        "\u4E00\u6708",
+        "\u4E8C\u6708",
+        "\u4E09\u6708",
+        "\u56DB\u6708",
+        "\u4E94\u6708",
+        "\u516D\u6708",
+        "\u4E03\u6708",
+        "\u516B\u6708",
+        "\u4E5D\u6708",
+        "\u5341\u6708",
+        "\u5341\u4E00\u6708",
+        "\u5341\u4E8C\u6708",
+    };
+
+    static String en_ShortMonthNames[] = {
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+    };
+
+    static String fr_FR_ShortMonthNames[] = {
+        "janv.",
+        "f\u00E9vr.",
+        "mars",
+        "avr.",
+        "mai",
+        "juin",
+        "juil.",
+        "ao\u00FBt",
+        "sept.",
+        "oct.",
+        "nov.",
+        "d\u00E9c.",
+    };
+
+   static String fr_ShortMonthNames[] = {
+        "janv.",
+        "f\u00E9vr.",
+        "mars",
+        "avr.",
+        "mai",
+        "juin",
+        "juil.",
+        "ao\u00FBt",
+        "sept.",
+        "oct.",
+        "nov.",
+        "d\u00E9c.",
+    };
+
+    static String de_ShortMonthNames[] = {
+        "Jan",
+        "Feb",
+        "Mrz",
+        "Apr",
+        "Mai",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Okt",
+        "Nov",
+        "Dez",
+    };
+
+    static String de_DE_ShortMonthNames[] = {
+        "Jan",
+        "Feb",
+        "Mrz",
+        "Apr",
+        "Mai",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Okt",
+        "Nov",
+        "Dez",
+    };
+
+    static String it_ShortMonthNames[] = {
+        "gen",
+        "feb",
+        "mar",
+        "apr",
+        "mag",
+        "giu",
+        "lug",
+        "ago",
+        "set",
+        "ott",
+        "nov",
+        "dic",
+    };
+
+    static String it_IT_ShortMonthNames[] = {
+        "gen",
+        "feb",
+        "mar",
+        "apr",
+        "mag",
+        "giu",
+        "lug",
+        "ago",
+        "set",
+        "ott",
+        "nov",
+        "dic",
+    };
+
+    static String ja_JP_ShortMonthNames[] = {
+        "1 \u6708",
+        "2 \u6708",
+        "3 \u6708",
+        "4 \u6708",
+        "5 \u6708",
+        "6 \u6708",
+        "7 \u6708",
+        "8 \u6708",
+        "9 \u6708",
+        "10 \u6708",
+        "11 \u6708",
+        "12 \u6708",
+    };
+
+    static String ja_ShortMonthNames[] = {
+        "1 \u6708",
+        "2 \u6708",
+        "3 \u6708",
+        "4 \u6708",
+        "5 \u6708",
+        "6 \u6708",
+        "7 \u6708",
+        "8 \u6708",
+        "9 \u6708",
+        "10 \u6708",
+        "11 \u6708",
+        "12 \u6708",
+    };
+
+    static String ko_KR_ShortMonthNames[] = {
+        "1\uC6D4",
+        "2\uC6D4",
+        "3\uC6D4",
+        "4\uC6D4",
+        "5\uC6D4",
+        "6\uC6D4",
+        "7\uC6D4",
+        "8\uC6D4",
+        "9\uC6D4",
+        "10\uC6D4",
+        "11\uC6D4",
+        "12\uC6D4",
+    };
+
+    static String ko_ShortMonthNames[] = {
+        "1\uC6D4",
+        "2\uC6D4",
+        "3\uC6D4",
+        "4\uC6D4",
+        "5\uC6D4",
+        "6\uC6D4",
+        "7\uC6D4",
+        "8\uC6D4",
+        "9\uC6D4",
+        "10\uC6D4",
+        "11\uC6D4",
+        "12\uC6D4",
+    };
+
+    static String zh_Hant_TW_ShortMonthNames[] = {
+        "\u4E00\u6708",
+        "\u4E8C\u6708",
+        "\u4E09\u6708",
+        "\u56DB\u6708",
+        "\u4E94\u6708",
+        "\u516D\u6708",
+        "\u4E03\u6708",
+        "\u516B\u6708",
+        "\u4E5D\u6708",
+        "\u5341\u6708",
+        "\u5341\u4E00\u6708",
+        "\u5341\u4E8C\u6708",
+    };
+
+    static String zh_TW_ShortMonthNames[] = {
+        "\u4E00\u6708",
+        "\u4E8C\u6708",
+        "\u4E09\u6708",
+        "\u56DB\u6708",
+        "\u4E94\u6708",
+        "\u516D\u6708",
+        "\u4E03\u6708",
+        "\u516B\u6708",
+        "\u4E5D\u6708",
+        "\u5341\u6708",
+        "\u5341\u4E00\u6708",
+        "\u5341\u4E8C\u6708",
+    };
+
+    static String en_GB_ShortMonthNames[] = {
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+    };
+
+    static String en_US_ShortMonthNames[] = {
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+    };
+        
+    static {
+        cannedMonthNames.put("en_CA",      en_CA_MonthNames);
+        cannedMonthNames.put("fr_CA",      fr_CA_MonthNames);
+        cannedMonthNames.put("zh_Hans_CN", zh_Hans_CN_MonthNames);
+        cannedMonthNames.put("zh_CN",      zh_CN_MonthNames);
+        cannedMonthNames.put("zh",         zh_MonthNames);
+        cannedMonthNames.put("en",         en_MonthNames);
+        cannedMonthNames.put("fr_FR",      fr_FR_MonthNames);
+        cannedMonthNames.put("fr",         fr_MonthNames);
+        cannedMonthNames.put("de",         de_MonthNames);
+        cannedMonthNames.put("de_DE",      de_DE_MonthNames);
+        cannedMonthNames.put("it",         it_MonthNames);
+        cannedMonthNames.put("it_IT",      it_IT_MonthNames);
+        cannedMonthNames.put("ja_JP",      ja_JP_MonthNames);
+        cannedMonthNames.put("ja",         ja_MonthNames);
+        cannedMonthNames.put("ko_KR",      ko_KR_MonthNames);
+        cannedMonthNames.put("ko",         ko_MonthNames);
+        cannedMonthNames.put("zh_Hant_TW", zh_Hant_TW_MonthNames);
+        cannedMonthNames.put("zh_TW",      zh_TW_MonthNames);
+        cannedMonthNames.put("en_GB",      en_GB_MonthNames);
+        cannedMonthNames.put("en_US",      en_US_MonthNames);
+
+        cannedShortMonthNames.put("en_CA",      en_CA_ShortMonthNames);
+        cannedShortMonthNames.put("fr_CA",      fr_CA_ShortMonthNames);
+        cannedShortMonthNames.put("zh_Hans_CN", zh_Hans_CN_ShortMonthNames);
+        cannedShortMonthNames.put("zh_CN",      zh_CN_ShortMonthNames);
+        cannedShortMonthNames.put("zh",         zh_ShortMonthNames);
+        cannedShortMonthNames.put("en",         en_ShortMonthNames);
+        cannedShortMonthNames.put("fr_FR",      fr_FR_ShortMonthNames);
+        cannedShortMonthNames.put("fr",         fr_ShortMonthNames);
+        cannedShortMonthNames.put("de",         de_ShortMonthNames);
+        cannedShortMonthNames.put("de_DE",      de_DE_ShortMonthNames);
+        cannedShortMonthNames.put("it",         it_ShortMonthNames);
+        cannedShortMonthNames.put("it_IT",      it_IT_ShortMonthNames);
+        cannedShortMonthNames.put("ja_JP",      ja_JP_ShortMonthNames);
+        cannedShortMonthNames.put("ja",         ja_ShortMonthNames);
+        cannedShortMonthNames.put("ko_KR",      ko_KR_ShortMonthNames);
+        cannedShortMonthNames.put("ko",         ko_ShortMonthNames);
+        cannedShortMonthNames.put("zh_Hant_TW", zh_Hant_TW_ShortMonthNames);
+        cannedShortMonthNames.put("zh_TW",      zh_TW_ShortMonthNames);
+        cannedShortMonthNames.put("en_GB",      en_GB_ShortMonthNames);
+        cannedShortMonthNames.put("en_US",      en_US_ShortMonthNames);
+    }
+
+    private static DateFormatSymbols getCannedDateFormatSymbols(ULocale uloc)
+    {
+        DateFormatSymbols dfs =new DateFormatSymbols(GregorianCalendar.class, uloc);
+        String key = uloc.toString();
+        
+        dfs.setMonths((String[]) cannedMonthNames.get(key));
+        dfs.setShortMonths((String[]) cannedShortMonthNames.get(key));
+        
+        return dfs;
+    }
+    
+    private static SimpleDateFormat getCannedSimpleDateFormat(String pattern, ULocale uloc)
+    {
+        DateFormatSymbols dfs = getCannedDateFormatSymbols(uloc);
+        
+        return new SimpleDateFormat(pattern, dfs, uloc);
+    }
+    
     public static class RelativeDateFormatHandler implements SerializableTest.Handler
     {
         public Object[] getTestObjects()
@@ -964,13 +1636,41 @@ public class FormatTests
 
     public static class DateFormatHandler implements SerializableTest.Handler
     {
+        static HashMap cannedPatterns = new HashMap();
+        
+        {
+            cannedPatterns.put("en_CA",      "EEEE, MMMM d, yyyy h:mm:ss a z");
+            cannedPatterns.put("fr_CA",      "EEEE d MMMM yyyy HH' h 'mm' min 'ss' s 'z");
+            cannedPatterns.put("zh_Hans_CN", "yyyy'\u5E74'M'\u6708'd'\u65E5'EEEE ahh'\u65F6'mm'\u5206'ss'\u79D2' z");
+            cannedPatterns.put("zh_CN",      "yyyy'\u5E74'M'\u6708'd'\u65E5'EEEE ahh'\u65F6'mm'\u5206'ss'\u79D2' z");
+            cannedPatterns.put("zh",         "EEEE, yyyy MMMM dd HH:mm:ss z");
+            cannedPatterns.put("en",         "EEEE, MMMM d, yyyy h:mm:ss a z");
+            cannedPatterns.put("fr_FR",      "EEEE d MMMM yyyy HH' h 'mm z");
+            cannedPatterns.put("fr",         "EEEE d MMMM yyyy HH' h 'mm z");
+            cannedPatterns.put("de",         "EEEE, d. MMMM yyyy H:mm' Uhr 'z");
+            cannedPatterns.put("de_DE",      "EEEE, d. MMMM yyyy H:mm' Uhr 'z");
+            cannedPatterns.put("it",         "EEEE d MMMM yyyy HH:mm:ss z");
+            cannedPatterns.put("it_IT",      "EEEE d MMMM yyyy HH:mm:ss z");
+            cannedPatterns.put("ja_JP",      "yyyy'\u5E74'M'\u6708'd'\u65E5'EEEE H'\u6642'mm'\u5206'ss'\u79D2'z");
+            cannedPatterns.put("ja",         "yyyy'\u5E74'M'\u6708'd'\u65E5'EEEE H'\u6642'mm'\u5206'ss'\u79D2'z");
+            cannedPatterns.put("ko_KR",      "yyyy'\uB144' M'\uC6D4' d'\uC77C' EEEE a hh'\uC2DC' mm'\uBD84' ss'\uCD08' z");
+            cannedPatterns.put("ko",         "yyyy'\uB144' M'\uC6D4' d'\uC77C' EEEE a hh'\uC2DC' mm'\uBD84' ss'\uCD08' z");
+            cannedPatterns.put("zh_Hant_TW", "yyyy'\u5E74'M'\u6708'd'\u65E5'EEEE ahh'\u6642'mm'\u5206'ss'\u79D2' z");
+            cannedPatterns.put("zh_TW",      "yyyy'\u5E74'M'\u6708'd'\u65E5'EEEE ahh'\u6642'mm'\u5206'ss'\u79D2' z");
+            cannedPatterns.put("en_GB",      "EEEE, d MMMM yyyy HH:mm:ss z");
+            cannedPatterns.put("en_US",      "EEEE, MMMM d, yyyy h:mm:ss a z");
+        }
+        
         public Object[] getTestObjects()
         {
             Locale locales[] = SerializableTest.getLocales();
             DateFormat formats[] = new DateFormat[locales.length];
             
             for (int i = 0; i < locales.length; i += 1) {
-                formats[i] = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, locales[i]);
+                ULocale uloc = ULocale.forLocale(locales[i]);
+                
+              //formats[i] = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, locales[i]);
+                formats[i] = getCannedSimpleDateFormat((String)cannedPatterns.get(uloc.toString()), uloc);
             }
             
             return formats;
@@ -984,13 +1684,7 @@ public class FormatTests
             String sfa = dfa.format(date);
             String sfb = dfb.format(date);
 
-            //TODO: This test case will fail if locale data is updated.
-            //if (!sfa.equals(sfb)) {
-            //    System.err.println("\nWarning: Different DateFormat outputs\n    [a] "
-            //                        + sfa + "\n    [b] " + sfb);
-            //}
-            //return sfa.equals(sfb);
-            return true;
+            return sfa.equals(sfb);
         }
         
     }
@@ -1036,336 +1730,6 @@ public class FormatTests
 
     public static class DateFormatSymbolsHandler implements SerializableTest.Handler
     {
-        /*
-         * The serialized form of a normally created DateFormatSymbols object
-         * will have locale-specific data in it that might change from one version
-         * of ICU4J to another. To guard against this, we store the following canned
-         * data into the test objects we create.
-         */
-        static HashMap cannedData = new HashMap();
-
-        static String en_CA_MonthNames[] = {
-            "January", 
-            "February", 
-            "March", 
-            "April", 
-            "May", 
-            "June", 
-            "July", 
-            "August", 
-            "September", 
-            "October", 
-            "November", 
-            "December", 
-        };
-
-        static String fr_CA_MonthNames[] = {
-            "janvier", 
-            "f\u00E9vrier", 
-            "mars", 
-            "avril", 
-            "mai", 
-            "juin", 
-            "juillet", 
-            "ao\u00FBt", 
-            "septembre", 
-            "octobre", 
-            "novembre", 
-            "d\u00E9cembre", 
-        };
-
-        static String zh_Hans_CN_MonthNames[] = {
-            "\u4E00\u6708", 
-            "\u4E8C\u6708", 
-            "\u4E09\u6708", 
-            "\u56DB\u6708", 
-            "\u4E94\u6708", 
-            "\u516D\u6708", 
-            "\u4E03\u6708", 
-            "\u516B\u6708", 
-            "\u4E5D\u6708", 
-            "\u5341\u6708", 
-            "\u5341\u4E00\u6708", 
-            "\u5341\u4E8C\u6708", 
-        };
-
-        static String zh_CN_MonthNames[] = {
-            "\u4E00\u6708", 
-            "\u4E8C\u6708", 
-            "\u4E09\u6708", 
-            "\u56DB\u6708", 
-            "\u4E94\u6708", 
-            "\u516D\u6708", 
-            "\u4E03\u6708", 
-            "\u516B\u6708", 
-            "\u4E5D\u6708", 
-            "\u5341\u6708", 
-            "\u5341\u4E00\u6708", 
-            "\u5341\u4E8C\u6708", 
-        };
-
-        static String zh_MonthNames[] = {
-            "\u4E00\u6708", 
-            "\u4E8C\u6708", 
-            "\u4E09\u6708", 
-            "\u56DB\u6708", 
-            "\u4E94\u6708", 
-            "\u516D\u6708", 
-            "\u4E03\u6708", 
-            "\u516B\u6708", 
-            "\u4E5D\u6708", 
-            "\u5341\u6708", 
-            "\u5341\u4E00\u6708", 
-            "\u5341\u4E8C\u6708", 
-        };
-
-        static String en_MonthNames[] = {
-            "January", 
-            "February", 
-            "March", 
-            "April", 
-            "May", 
-            "June", 
-            "July", 
-            "August", 
-            "September", 
-            "October", 
-            "November", 
-            "December", 
-        };
-
-        static String fr_FR_MonthNames[] = {
-            "janvier", 
-            "f\u00E9vrier", 
-            "mars", 
-            "avril", 
-            "mai", 
-            "juin", 
-            "juillet", 
-            "ao\u00FBt", 
-            "septembre", 
-            "octobre", 
-            "novembre", 
-            "d\u00E9cembre", 
-        };
-
-        static String fr_MonthNames[] = {
-            "janvier", 
-            "f\u00E9vrier", 
-            "mars", 
-            "avril", 
-            "mai", 
-            "juin", 
-            "juillet", 
-            "ao\u00FBt", 
-            "septembre", 
-            "octobre", 
-            "novembre", 
-            "d\u00E9cembre", 
-        };
-
-        static String de_MonthNames[] = {
-            "Januar", 
-            "Februar", 
-            "M\u00E4rz", 
-            "April", 
-            "Mai", 
-            "Juni", 
-            "Juli", 
-            "August", 
-            "September", 
-            "Oktober", 
-            "November", 
-            "Dezember", 
-        };
-
-        static String de_DE_MonthNames[] = {
-            "Januar", 
-            "Februar", 
-            "M\u00E4rz", 
-            "April", 
-            "Mai", 
-            "Juni", 
-            "Juli", 
-            "August", 
-            "September", 
-            "Oktober", 
-            "November", 
-            "Dezember", 
-        };
-
-        static String it_MonthNames[] = {
-            "gennaio", 
-            "febbraio", 
-            "marzo", 
-            "aprile", 
-            "maggio", 
-            "giugno", 
-            "luglio", 
-            "agosto", 
-            "settembre", 
-            "ottobre", 
-            "novembre", 
-            "dicembre", 
-        };
-
-        static String it_IT_MonthNames[] = {
-            "gennaio", 
-            "febbraio", 
-            "marzo", 
-            "aprile", 
-            "maggio", 
-            "giugno", 
-            "luglio", 
-            "agosto", 
-            "settembre", 
-            "ottobre", 
-            "novembre", 
-            "dicembre", 
-        };
-
-        static String ja_JP_MonthNames[] = {
-            "1\u6708", 
-            "2\u6708", 
-            "3\u6708", 
-            "4\u6708", 
-            "5\u6708", 
-            "6\u6708", 
-            "7\u6708", 
-            "8\u6708", 
-            "9\u6708", 
-            "10\u6708", 
-            "11\u6708", 
-            "12\u6708", 
-        };
-
-        static String ja_MonthNames[] = {
-            "1\u6708", 
-            "2\u6708", 
-            "3\u6708", 
-            "4\u6708", 
-            "5\u6708", 
-            "6\u6708", 
-            "7\u6708", 
-            "8\u6708", 
-            "9\u6708", 
-            "10\u6708", 
-            "11\u6708", 
-            "12\u6708", 
-        };
-
-        static String ko_KR_MonthNames[] = {
-            "1\uC6D4", 
-            "2\uC6D4", 
-            "3\uC6D4", 
-            "4\uC6D4", 
-            "5\uC6D4", 
-            "6\uC6D4", 
-            "7\uC6D4", 
-            "8\uC6D4", 
-            "9\uC6D4", 
-            "10\uC6D4", 
-            "11\uC6D4", 
-            "12\uC6D4", 
-        };
-
-        static String ko_MonthNames[] = {
-            "1\uC6D4", 
-            "2\uC6D4", 
-            "3\uC6D4", 
-            "4\uC6D4", 
-            "5\uC6D4", 
-            "6\uC6D4", 
-            "7\uC6D4", 
-            "8\uC6D4", 
-            "9\uC6D4", 
-            "10\uC6D4", 
-            "11\uC6D4", 
-            "12\uC6D4", 
-        };
-
-        static String zh_Hant_TW_MonthNames[] = {
-            "\u4E00\u6708", 
-            "\u4E8C\u6708", 
-            "\u4E09\u6708", 
-            "\u56DB\u6708", 
-            "\u4E94\u6708", 
-            "\u516D\u6708", 
-            "\u4E03\u6708", 
-            "\u516B\u6708", 
-            "\u4E5D\u6708", 
-            "\u5341\u6708", 
-            "\u5341\u4E00\u6708", 
-            "\u5341\u4E8C\u6708", 
-        };
-
-        static String zh_TW_MonthNames[] = {
-            "\u4E00\u6708", 
-            "\u4E8C\u6708", 
-            "\u4E09\u6708", 
-            "\u56DB\u6708", 
-            "\u4E94\u6708", 
-            "\u516D\u6708", 
-            "\u4E03\u6708", 
-            "\u516B\u6708", 
-            "\u4E5D\u6708", 
-            "\u5341\u6708", 
-            "\u5341\u4E00\u6708", 
-            "\u5341\u4E8C\u6708", 
-            };
-
-        static String en_GB_MonthNames[] = {
-            "January", 
-            "February", 
-            "March", 
-            "April", 
-            "May", 
-            "June", 
-            "July", 
-            "August", 
-            "September", 
-            "October", 
-            "November", 
-            "December", 
-        };
-
-        static String en_US_MonthNames[] = {
-            "January", 
-            "February", 
-            "March", 
-            "April", 
-            "May", 
-            "June", 
-            "July", 
-            "August", 
-            "September", 
-            "October", 
-            "November", 
-            "December", 
-        };
-
-        {
-            cannedData.put("en_CA",      en_CA_MonthNames);
-            cannedData.put("fr_CA",      fr_CA_MonthNames);
-            cannedData.put("zh_Hans_CN", zh_Hans_CN_MonthNames);
-            cannedData.put("zh_CN",      zh_CN_MonthNames);
-            cannedData.put("zh",         zh_MonthNames);
-            cannedData.put("en",         en_MonthNames);
-            cannedData.put("fr_FR",      fr_FR_MonthNames);
-            cannedData.put("fr",         fr_MonthNames);
-            cannedData.put("de",         de_MonthNames);
-            cannedData.put("de_DE",      de_DE_MonthNames);
-            cannedData.put("it",         it_MonthNames);
-            cannedData.put("it_IT",      it_IT_MonthNames);
-            cannedData.put("ja_JP",      ja_JP_MonthNames);
-            cannedData.put("ja",         ja_MonthNames);
-            cannedData.put("ko_KR",      ko_KR_MonthNames);
-            cannedData.put("ko",         ko_MonthNames);
-            cannedData.put("zh_Hant_TW", zh_Hant_TW_MonthNames);
-            cannedData.put("zh_TW",      zh_TW_MonthNames);
-            cannedData.put("en_GB",      en_GB_MonthNames);
-            cannedData.put("en_US",      en_US_MonthNames);
-        }
         
         public Object[] getTestObjects()
         {
@@ -1375,8 +1739,7 @@ public class FormatTests
             for (int i = 0; i < locales.length; i += 1) {
                 ULocale uloc = ULocale.forLocale(locales[i]);
                 
-                dfs[i] = new DateFormatSymbols(GregorianCalendar.class, uloc);
-                dfs[i].setMonths((String[]) cannedData.get(uloc.toString()));
+                dfs[i] = getCannedDateFormatSymbols(uloc);
             }
             
             return dfs;
@@ -1410,7 +1773,7 @@ public class FormatTests
             
             for (int p = 0; p < patterns.length; p += 1) {
                 for (int l = 0; l < locales.length; l += 1) {
-                    dateFormats[i++] = new SimpleDateFormat(patterns[p], ULocale.forLocale(locales[l]));
+                    dateFormats[i++] = getCannedSimpleDateFormat(patterns[p], ULocale.forLocale(locales[l]));
                 }
             }
             
@@ -1472,7 +1835,7 @@ public class FormatTests
                 ULocale uloc = ULocale.forLocale(locales[i]);
                 
                 cdfs[i] = new ChineseDateFormatSymbols(uloc);
-                cdfs[i].setMonths((String[]) cannedData.get(uloc.toString()));
+                cdfs[i].setMonths((String[]) cannedMonthNames.get(uloc.toString()));
             }
             
             return cdfs;
