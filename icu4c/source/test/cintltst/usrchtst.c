@@ -1537,6 +1537,38 @@ static void TestIgnorable(void)
     ucol_close(collator);
 }
 
+static void TestDiactricMatch(void) 
+{
+    UChar          pattern[128];
+    UChar          text[128];
+    UErrorCode     status = U_ZERO_ERROR;
+    UStringSearch *strsrch;
+    uint32_t       count = 0;
+
+    memset(pattern, 0, 128*sizeof(UChar));
+    memset(text, 0, 128*sizeof(UChar));
+
+    strsrch = usearch_open(pattern, 1, text, 1, uloc_getDefault(), NULL, 
+                                       &status);
+    if (U_FAILURE(status)) {
+        log_err("Error opening string search %s\n", u_errorName(status));
+    }   
+    
+    ucol_setStrength(usearch_getCollator(strsrch), DIACTRICMATCH[count].strength);
+    
+    while (DIACTRICMATCH[count].text != NULL) {
+        u_unescape(DIACTRICMATCH[count].text, text, 128);
+        u_unescape(DIACTRICMATCH[count].pattern, pattern, 128);
+        usearch_setText(strsrch, text, -1, &status);
+        usearch_setPattern(strsrch, pattern, -1, &status);
+        if (!assertEqualWithUStringSearch(strsrch, DIACTRICMATCH[count])) {
+            log_err("Error at test number %d\n", count);
+        }
+        count ++;
+    }
+    usearch_close(strsrch);
+}
+
 static void TestCanonical(void)
 {
     int count = 0;
@@ -2191,6 +2223,7 @@ void addSearchTest(TestNode** root)
                                  "tscoll/usrchtst/TestContractionCanonical");
     addTest(root, &TestEnd, "tscoll/usrchtst/TestEnd");
     addTest(root, &TestNumeric, "tscoll/usrchtst/TestNumeric");
+    addTest(root, &TestDiactricMatch, "tscoll/usrchtst/TestDiactricMatch");
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
