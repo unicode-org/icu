@@ -899,6 +899,9 @@ UBool hasAccentsAfterMatch(const UStringSearch *strsrch, int32_t start,
                 return TRUE;
             }
             if (ce != UCOL_NULLORDER && ce != UCOL_IGNORABLE) {
+            	ce = getCE(strsrch, ce);
+            }
+            if (ce != UCOL_NULLORDER && ce != UCOL_IGNORABLE) {
                 if (ucol_getOffset(coleiter) <= end) {
                     return TRUE;
                 }
