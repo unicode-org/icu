@@ -287,6 +287,11 @@ public class SearchTest extends TestFmwk {
             new int[] {0, 3, -1}, new int[] {2, 3}),
         new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0})
     };
+    
+    SearchData DIACTRICMATCH[] = {
+        new SearchData("\u0061\u0061\u00E1", "\u0061\u00E1", null, Collator.SECONDARY, null,
+            new int[] {1, -1}, new int[] {2})    
+    };
 
     SearchData NORMCANONICAL[] = {
         new SearchData("\u0300\u0325", "\u0300", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {2}),
@@ -1977,23 +1982,28 @@ public class SearchTest extends TestFmwk {
     
     //Test for ticket 5024
     public void TestDiactricMatch() {
-        char pttrn[] = { 0x0061, 0x00E1 };
-        char txt[] = { 0x0061, 0x0061, 0x00E1 };
-        String pattern = new String(pttrn);
-        String text = new String(txt);
-        int matchIndex = 1, matchLength = 2; 
-        int match = 0, length = 0;
+        String pattern = "pattern";
+        String text = "text";
+        StringSearch strsrch = null;
+        int count = 0;
+        try {
+            strsrch = new StringSearch(pattern, text);
+        } catch (Exception e) {
+            errln("Error opening string search ");
+            return;
+        }
         
-        StringSearch strsrch = new StringSearch(pattern, text);
-        
-        strsrch.getCollator().setStrength(Collator.SECONDARY);
-        strsrch.reset();
-        
-        match = strsrch.first();
-        length = strsrch.getMatchLength();
-        
-        if (match != matchIndex || length != matchLength) {
-            errln("Error should have found match at " + matchIndex + " with length " + matchLength);
+        strsrch.getCollator().setStrength(DIACTRICMATCH[count].strength);
+
+        while (count < DIACTRICMATCH.length) {
+            text = DIACTRICMATCH[count].text;
+            pattern = DIACTRICMATCH[count].pattern;
+            strsrch.setTarget(new StringCharacterIterator(text));
+            strsrch.setPattern(pattern);
+            if (!assertEqualWithStringSearch(strsrch, DIACTRICMATCH[count])) {
+                errln("Error at test number " + count);
+            }
+            count++;
         }
     }
 }
