@@ -30,8 +30,6 @@ import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.ULocale;
 
-import com.ibm.icu.impl.Utility;
-
 /**
  * @author emader
  *
