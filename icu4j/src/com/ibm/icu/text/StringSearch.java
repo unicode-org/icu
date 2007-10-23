@@ -1370,7 +1370,12 @@ public final class StringSearch extends SearchIterator
                     }
                     count ++;
                 }
-                int ce = getCE(m_colEIter_.next());
+                //int ce = getCE(m_colEIter_.next());
+                int ce = m_colEIter_.next();
+                if (ce != CollationElementIterator.NULLORDER 
+                        && ce != CollationElementIterator.IGNORABLE) {
+                    ce = getCE(ce);
+                }
                 if (ce != CollationElementIterator.NULLORDER 
                             && ce != CollationElementIterator.IGNORABLE) {
                     if (m_colEIter_.getOffset() <= end) {

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2000-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1972,6 +1972,28 @@ public class SearchTest extends TestFmwk {
         }
         if (search.previous() != SearchIterator.DONE) {
             errln("Error should have reached the start of the iteration");
+        }
+    }
+    
+    //Test for ticket 5024
+    public void TestDiactricMatch() {
+        char pttrn[] = { 0x0061, 0x00E1 };
+        char txt[] = { 0x0061, 0x0061, 0x00E1 };
+        String pattern = new String(pttrn);
+        String text = new String(txt);
+        int matchIndex = 1, matchLength = 2; 
+        int match = 0, length = 0;
+        
+        StringSearch strsrch = new StringSearch(pattern, text);
+        
+        strsrch.getCollator().setStrength(Collator.SECONDARY);
+        strsrch.reset();
+        
+        match = strsrch.first();
+        length = strsrch.getMatchLength();
+        
+        if (match != matchIndex || length != matchLength) {
+            errln("Error should have found match at " + matchIndex + " with length " + matchLength);
         }
     }
 }
