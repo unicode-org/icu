@@ -65,6 +65,7 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
         TESTCASE(15, TestAllLocales);
         TESTCASE(16, TestHebrewFraction);
         TESTCASE(17, TestPortugueseSpellout);
+        TESTCASE(18, TestMultiplierSubstitution);
 #else
         TESTCASE(0, TestRBNFDisabled);
 #endif
@@ -1762,6 +1763,31 @@ IntlTestRBNF::TestAllLocales()
         errln(UnicodeString(loc->getName()) + UnicodeString(names[j])
             + UnicodeString("ERROR could not instantiate -> ") + UnicodeString(u_errorName(status)));
       }
+    }
+  }
+}
+
+void 
+IntlTestRBNF::TestMultiplierSubstitution(void) {
+  UnicodeString rules("=#,##0=;1,000,000: <##0.###< million;");
+  UErrorCode status = U_ZERO_ERROR;
+  UParseError parse_error;
+  RuleBasedNumberFormat *rbnf = 
+    new RuleBasedNumberFormat(rules, Locale::getUS(), parse_error, status);
+  if (U_SUCCESS(status)) {
+    UnicodeString res;
+    FieldPosition pos;
+    double n = 1234000.0;
+    rbnf->format(n, res, pos);
+    delete rbnf;
+
+    UnicodeString expected = UNICODE_STRING_SIMPLE("1.234 million");
+    if (expected != res) {
+      UnicodeString msg = "Expected: ";
+      msg.append(expected);
+      msg.append(" but got ");
+      msg.append(res);
+      errln(msg);
     }
   }
 }
