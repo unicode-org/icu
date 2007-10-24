@@ -485,8 +485,22 @@ ucnv_MBCSGetFilteredUnicodeSetForUnicode(const UConverterSharedData *sharedData,
 
     if(mbcsTable->outputType==MBCS_OUTPUT_1) {
         const uint16_t *stage2, *stage3, *results;
+        uint16_t minValue;
 
         results=(const uint16_t *)mbcsTable->fromUnicodeBytes;
+
+        /*
+         * Set a threshold variable for selecting which mappings to use.
+         * See ucnv_MBCSSingleFromBMPWithOffsets() and
+         * MBCS_SINGLE_RESULT_FROM_U() for details.
+         */
+        if(which==UCNV_ROUNDTRIP_SET) {
+            /* use only roundtrips */
+            minValue=0xf00;
+        } else /* UCNV_ROUNDTRIP_AND_FALLBACK_SET */ {
+            /* use all roundtrip and fallback results */
+            minValue=0x800;
+        }
 
         for(st1=0; st1<maxStage1; ++st1) {
             st2=table[st1];
@@ -497,15 +511,8 @@ ucnv_MBCSGetFilteredUnicodeSetForUnicode(const UConverterSharedData *sharedData,
                         /* read the stage 3 block */
                         stage3=results+st3;
 
-                        /*
-                         * Add code points for which the roundtrip flag is set.
-                         * Once we get a set for fallback mappings, we have to use
-                         * a threshold variable with a value of 0x800.
-                         * See ucnv_MBCSSingleFromBMPWithOffsets() and
-                         * MBCS_SINGLE_RESULT_FROM_U() for details.
-                         */
                         do {
-                            if(*stage3++>=0xf00) {
+                            if(*stage3++>=minValue) {
                                 sa->add(sa->set, c);
                             }
                         } while((++c&0xf)!=0);
@@ -522,8 +529,11 @@ ucnv_MBCSGetFilteredUnicodeSetForUnicode(const UConverterSharedData *sharedData,
         const uint8_t *stage3, *bytes;
         uint32_t st3Multiplier;
         uint32_t value;
+        UBool useFallback;
 
         bytes=mbcsTable->fromUnicodeBytes;
+
+        useFallback=(UBool)(which==UCNV_ROUNDTRIP_AND_FALLBACK_SET);
 
         switch(mbcsTable->outputType) {
         case MBCS_OUTPUT_3:
@@ -551,9 +561,8 @@ ucnv_MBCSGetFilteredUnicodeSetForUnicode(const UConverterSharedData *sharedData,
                         st3>>=16;
 
                         /*
-                         * Add code points for which the roundtrip flag is set.
-                         * Once we get a set for fallback mappings, we have to check
-                         * non-roundtrip stage 3 results for whether they are 0.
+                         * Add code points for which the roundtrip flag is set,
+                         * or which map to non-zero bytes if we use fallbacks.
                          * See ucnv_MBCSFromUnicodeWithOffsets() for details.
                          */
                         switch(filter) {
@@ -561,6 +570,23 @@ ucnv_MBCSGetFilteredUnicodeSetForUnicode(const UConverterSharedData *sharedData,
                             do {
                                 if(st3&1) {
                                     sa->add(sa->set, c);
+                                    stage3+=st3Multiplier;
+                                } else if(useFallback) {
+                                    uint8_t b=0;
+                                    switch(st3Multiplier) {
+                                    case 4:
+                                        b|=*stage3++;
+                                    case 3:
+                                        b|=*stage3++;
+                                    case 2:
+                                        b|=stage3[0]|stage3[1];
+                                        stage3+=2;
+                                    default:
+                                        break;
+                                    }
+                                    if(b!=0) {
+                                        sa->add(sa->set, c);
+                                    }
                                 }
                                 st3>>=1;
                             } while((++c&0xf)!=0);
@@ -568,7 +594,7 @@ ucnv_MBCSGetFilteredUnicodeSetForUnicode(const UConverterSharedData *sharedData,
                         case UCNV_SET_FILTER_DBCS_ONLY:
                              /* Ignore single-byte results (<0x100). */
                             do {
-                                if((st3&1)!=0 && *((const uint16_t *)stage3)>=0x100) {
+                                if(((st3&1)!=0 || useFallback) && *((const uint16_t *)stage3)>=0x100) {
                                     sa->add(sa->set, c);
                                 }
                                 st3>>=1;
@@ -578,7 +604,7 @@ ucnv_MBCSGetFilteredUnicodeSetForUnicode(const UConverterSharedData *sharedData,
                         case UCNV_SET_FILTER_2022_CN:
                              /* Only add code points that map to CNS 11643 planes 1 & 2 for non-EXT ISO-2022-CN. */
                             do {
-                                if((st3&1)!=0 && ((value=*stage3)==0x81 || value==0x82)) {
+                                if(((st3&1)!=0 || useFallback) && ((value=*stage3)==0x81 || value==0x82)) {
                                     sa->add(sa->set, c);
                                 }
                                 st3>>=1;
@@ -588,7 +614,20 @@ ucnv_MBCSGetFilteredUnicodeSetForUnicode(const UConverterSharedData *sharedData,
                         case UCNV_SET_FILTER_SJIS:
                              /* Only add code points that map to Shift-JIS codes corresponding to JIS X 0208. */
                             do {
-                                if((st3&1)!=0 && (value=*((const uint16_t *)stage3))>=0x8140 && value<=0xeffc) {
+                                if(((st3&1)!=0 || useFallback) && (value=*((const uint16_t *)stage3))>=0x8140 && value<=0xeffc) {
+                                    sa->add(sa->set, c);
+                                }
+                                st3>>=1;
+                                stage3+=2;  /* +=st3Multiplier */
+                            } while((++c&0xf)!=0);
+                            break;
+                        case UCNV_SET_FILTER_GR94DBCS:
+                            /* Only add code points that map to ISO 2022 GR 94 DBCS codes (each byte A1..FE). */
+                            do {
+                                if( ((st3&1)!=0 || useFallback) &&
+                                    (uint16_t)((value=*((const uint16_t *)stage3))-0xa1a1)<=(0xfefe-0xa1a1) &&
+                                    (uint8_t)(value-0xa1)<=(0xfe-0xa1)
+                                ) {
                                     sa->add(sa->set, c);
                                 }
                                 st3>>=1;
@@ -609,7 +648,7 @@ ucnv_MBCSGetFilteredUnicodeSetForUnicode(const UConverterSharedData *sharedData,
         }
     }
 
-    ucnv_extGetUnicodeSet(sharedData, sa, which, pErrorCode);
+    ucnv_extGetUnicodeSet(sharedData, sa, which, filter, pErrorCode);
 }
 
 U_CFUNC void
