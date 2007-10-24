@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2000-2006, International Business Machines
+*   Copyright (C) 2000-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnvhz.c
@@ -528,6 +528,7 @@ _HZ_GetUnicodeSet(const UConverter *cnv,
     sa->add(sa->set, 0x7e);
 
     /* add all of the code points that the sub-converter handles */
+    /* ucnv_MBCSGetFilteredUnicodeSetForUnicode(((UConverterDataHZ*)cnv->extraInfo)->gbConverter->sharedData, sa, which, UCNV_SET_FILTER_GR94DBCS, pErrorCode); */
     ((UConverterDataHZ*)cnv->extraInfo)->
         gbConverter->sharedData->impl->
             getUnicodeSet(((UConverterDataHZ*)cnv->extraInfo)->gbConverter,
