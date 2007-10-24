@@ -70,6 +70,7 @@ ConversionTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
         case 0: name="TestToUnicode"; if (exec) TestToUnicode(); break;
         case 1: name="TestFromUnicode"; if (exec) TestFromUnicode(); break;
         case 2: name="TestGetUnicodeSet"; if (exec) TestGetUnicodeSet(); break;
+        case 3: name="TestGetUnicodeSet2"; if (exec) TestGetUnicodeSet2(); break;
         default: name=""; break; //needed to end loop
     }
 }
@@ -463,6 +464,181 @@ ConversionTest::TestGetUnicodeSet() {
     else {
         errln("Failed: could not load test conversion data");
     }
+}
+
+static void U_EXPORT2
+getUnicodeSetCallback(const void *context,
+                      UConverterFromUnicodeArgs *fromUArgs,
+                      const UChar* codeUnits,
+                      int32_t length,
+                      UChar32 codePoint,
+                      UConverterCallbackReason reason,
+                      UErrorCode *pErrorCode) {
+    if(reason<=UCNV_IRREGULAR) {
+        ((UnicodeSet *)context)->remove(codePoint);  // the converter cannot convert this code point
+        *pErrorCode=U_ZERO_ERROR;                    // skip
+    }  // else ignore the reset, close and clone calls.
+}
+
+// Compare ucnv_getUnicodeSet() with the set of characters that can be converted.
+void
+ConversionTest::TestGetUnicodeSet2() {
+    // Build a string with all code points.
+    UChar32 cpLimit;
+    int32_t s0Length;
+    if(quick) {
+        cpLimit=s0Length=0x10000;  // BMP only
+    } else {
+        cpLimit=0x110000;
+        s0Length=0x10000+0x200000;  // BMP + surrogate pairs
+    }
+    UChar *s0=new UChar[s0Length];
+    if(s0==NULL) {
+        return;
+    }
+    UChar *s=s0;
+    UChar32 c;
+    UChar c2;
+    // low BMP
+    for(c=0; c<=0xd7ff; ++c) {
+        *s++=(UChar)c;
+    }
+    // trail surrogates
+    for(c=0xdc00; c<=0xdfff; ++c) {
+        *s++=(UChar)c;
+    }
+    // lead surrogates
+    // (after trails so that there is not even one surrogate pair in between)
+    for(c=0xd800; c<=0xdbff; ++c) {
+        *s++=(UChar)c;
+    }
+    // high BMP
+    for(c=0xe000; c<=0xffff; ++c) {
+        *s++=(UChar)c;
+    }
+    // supplementary code points = surrogate pairs
+    if(cpLimit==0x110000) {
+        for(c=0xd800; c<=0xdbff; ++c) {
+            for(c2=0xdc00; c2<=0xdfff; ++c2) {
+                *s++=(UChar)c;
+                *s++=c2;
+            }
+        }
+    }
+
+    static const char *const cnvNames[]={
+        "UTF-8",
+        "UTF-7",
+        "UTF-16",
+        "US-ASCII",
+        "ISO-8859-1",
+        "windows-1252",
+        "Shift-JIS",
+        "ibm-1390",  // EBCDIC_STATEFUL table
+        "ibm-16684",  // DBCS-only extension table based on EBCDIC_STATEFUL table
+        // "HZ", TODO(markus): known bug, the set incorrectly contains [\u02CA\u02CB\u02D9\u2010\u2013\u2015...]
+        "ISO-2022-JP",
+        "JIS7",
+        "ISO-2022-CN",
+        "ISO-2022-CN-EXT",
+        // "LMBCS" TODO(markus): known bug, the fallback set is said to be missing [\uF600-\uF6FF]
+    };
+    char buffer[1024];
+    int32_t i;
+    for(i=0; i<LENGTHOF(cnvNames); ++i) {
+        UErrorCode errorCode=U_ZERO_ERROR;
+        UConverter *cnv=cnv_open(cnvNames[i], errorCode);
+        if(U_FAILURE(errorCode)) {
+            errln("failed to open converter %s - %s", cnvNames[i], u_errorName(errorCode));
+            continue;
+        }
+        UnicodeSet expected;
+        ucnv_setFromUCallBack(cnv, getUnicodeSetCallback, &expected, NULL, NULL, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            errln("failed to set the callback on converter %s - %s", cnvNames[i], u_errorName(errorCode));
+            ucnv_close(cnv);
+            continue;
+        }
+        UConverterUnicodeSet which;
+        for(which=UCNV_ROUNDTRIP_SET; which<UCNV_SET_COUNT; which=(UConverterUnicodeSet)((int)which+1)) {
+            if(which==UCNV_ROUNDTRIP_AND_FALLBACK_SET) {
+                ucnv_setFallback(cnv, TRUE);
+            }
+            expected.add(0, cpLimit-1);
+            s=s0;
+            UBool flush;
+            do {
+                char *t=buffer;
+                flush=(UBool)(s==s0+s0Length);
+                ucnv_fromUnicode(cnv, &t, buffer+sizeof(buffer), (const UChar **)&s, s0+s0Length, NULL, flush, &errorCode);
+                if(U_FAILURE(errorCode)) {
+                    if(errorCode==U_BUFFER_OVERFLOW_ERROR) {
+                        errorCode=U_ZERO_ERROR;
+                        continue;
+                    } else {
+                        break;  // unexpected error, should not occur
+                    }
+                }
+            } while(!flush);
+            UnicodeSet set;
+            ucnv_getUnicodeSet(cnv, (USet *)&set, which, &errorCode);
+            if(cpLimit<0x110000) {
+                set.remove(cpLimit, 0x10ffff);
+            }
+            if(which==UCNV_ROUNDTRIP_SET) {
+                // ignore PUA code points because they will be converted even if they
+                // are fallbacks and when other fallbacks are turned off,
+                // but ucnv_getUnicodeSet(UCNV_ROUNDTRIP_SET) delivers true roundtrips
+                expected.remove(0xe000, 0xf8ff);
+                expected.remove(0xf0000, 0xffffd);
+                expected.remove(0x100000, 0x10fffd);
+                set.remove(0xe000, 0xf8ff);
+                set.remove(0xf0000, 0xffffd);
+                set.remove(0x100000, 0x10fffd);
+            }
+            if(set!=expected) {
+                // First try to see if we have different sets because ucnv_getUnicodeSet()
+                // added strings: The above conversion method does not tell us what strings might be convertible.
+                // Remove strings from the set and compare again.
+                // Unfortunately, there are no good, direct set methods for finding out whether there are strings
+                // in the set, nor for enumerating or removing just them.
+                // Intersect all code points with the set. The intersection will not contain strings.
+                UnicodeSet temp(0, 0x10ffff);
+                temp.retainAll(set);
+                set=temp;
+            }
+            if(set!=expected) {
+                UnicodeSet diffSet;
+                UnicodeString out;
+
+                // are there items that must be in the set but are not?
+                (diffSet=expected).removeAll(set);
+                if(!diffSet.isEmpty()) {
+                    diffSet.toPattern(out, TRUE);
+                    if(out.length()>100) {
+                        out.replace(100, 0x7fffffff, ellipsis, LENGTHOF(ellipsis));
+                    }
+                    errln("error: ucnv_getUnicodeSet(\"%s\") is missing items - which set: %d",
+                            cnvNames[i], which);
+                    errln(out);
+                }
+
+                // are there items that must not be in the set but are?
+                (diffSet=set).removeAll(expected);
+                if(!diffSet.isEmpty()) {
+                    diffSet.toPattern(out, TRUE);
+                    if(out.length()>100) {
+                        out.replace(100, 0x7fffffff, ellipsis, LENGTHOF(ellipsis));
+                    }
+                    errln("error: ucnv_getUnicodeSet(\"%s\") contains unexpected items - which set: %d",
+                            cnvNames[i], which);
+                    errln(out);
+                }
+            }
+        }
+    }
+
+    delete [] s0;
 }
 
 // open testdata or ICU data converter ------------------------------------- ***

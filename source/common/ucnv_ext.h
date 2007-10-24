@@ -382,10 +382,20 @@ ucnv_extContinueMatchFromU(UConverter *cnv,
                            UConverterFromUnicodeArgs *pArgs, int32_t srcIndex,
                            UErrorCode *pErrorCode);
 
+/*
+ * Add code points and strings to the set according to the extension mappings.
+ * Limitation on the UConverterSetFilter:
+ * The filters currently assume that they are used with 1:1 mappings.
+ * They only apply to single input code points, and then they pass through
+ * only mappings with single-charset-code results.
+ * For example, the Shift-JIS filter only works for 2-byte results and tests
+ * that those 2 bytes are in the JIS X 0208 range of Shift-JIS.
+ */
 U_CFUNC void
 ucnv_extGetUnicodeSet(const UConverterSharedData *sharedData,
                       const USetAdder *sa,
                       UConverterUnicodeSet which,
+                      UConverterSetFilter filter,
                       UErrorCode *pErrorCode);
 
 /* toUnicode helpers -------------------------------------------------------- */

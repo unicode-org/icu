@@ -946,7 +946,7 @@ static void
 ucnv_extGetUnicodeSetString(const UConverterSharedData *sharedData,
                             const int32_t *cx,
                             const USetAdder *sa,
-                            UConverterUnicodeSet which,
+                            UBool useFallback,
                             int32_t minLength,
                             UChar32 c,
                             UChar s[UCNV_EXT_MAX_UCHARS], int32_t length,
@@ -966,7 +966,7 @@ ucnv_extGetUnicodeSetString(const UConverterSharedData *sharedData,
     value=*fromUSectionValues++;
 
     if( value!=0 &&
-        UCNV_EXT_FROM_U_IS_ROUNDTRIP(value) &&
+        (UCNV_EXT_FROM_U_IS_ROUNDTRIP(value) || useFallback) &&
         UCNV_EXT_FROM_U_GET_LENGTH(value)>=minLength
     ) {
         if(c>=0) {
@@ -987,12 +987,14 @@ ucnv_extGetUnicodeSetString(const UConverterSharedData *sharedData,
             /* no mapping, do nothing */
         } else if(UCNV_EXT_FROM_U_IS_PARTIAL(value)) {
             ucnv_extGetUnicodeSetString(
-                sharedData, cx, sa, which, minLength,
+                sharedData, cx, sa, useFallback, minLength,
                 U_SENTINEL, s, length+1,
                 (int32_t)UCNV_EXT_FROM_U_GET_PARTIAL_INDEX(value),
                 pErrorCode);
-        } else if(((value&(UCNV_EXT_FROM_U_ROUNDTRIP_FLAG|UCNV_EXT_FROM_U_RESERVED_MASK))==
-                           UCNV_EXT_FROM_U_ROUNDTRIP_FLAG) &&
+        } else if((useFallback ?
+                      (value&UCNV_EXT_FROM_U_RESERVED_MASK)==0 :
+                      ((value&(UCNV_EXT_FROM_U_ROUNDTRIP_FLAG|UCNV_EXT_FROM_U_RESERVED_MASK))==
+                          UCNV_EXT_FROM_U_ROUNDTRIP_FLAG)) &&
                   UCNV_EXT_FROM_U_GET_LENGTH(value)>=minLength
         ) {
             sa->addString(sa->set, s, length+1);
@@ -1004,6 +1006,7 @@ U_CFUNC void
 ucnv_extGetUnicodeSet(const UConverterSharedData *sharedData,
                       const USetAdder *sa,
                       UConverterUnicodeSet which,
+                      UConverterSetFilter filter,
                       UErrorCode *pErrorCode) {
     const int32_t *cx;
     const uint16_t *stage12, *stage3, *ps2, *ps3;
@@ -1011,6 +1014,7 @@ ucnv_extGetUnicodeSet(const UConverterSharedData *sharedData,
 
     uint32_t value;
     int32_t st1, stage1Length, st2, st3, minLength;
+    UBool useFallback;
 
     UChar s[UCNV_EXT_MAX_UCHARS];
     UChar32 c;
@@ -1027,12 +1031,20 @@ ucnv_extGetUnicodeSet(const UConverterSharedData *sharedData,
 
     stage1Length=cx[UCNV_EXT_FROM_U_STAGE_1_LENGTH];
 
+    useFallback=(UBool)(which==UCNV_ROUNDTRIP_AND_FALLBACK_SET);
+
     /* enumerate the from-Unicode trie table */
     c=0; /* keep track of the current code point while enumerating */
 
-    if(sharedData->mbcs.outputType==MBCS_OUTPUT_DBCS_ONLY) {
+    if( sharedData->mbcs.outputType==MBCS_OUTPUT_DBCS_ONLY ||
+        filter==UCNV_SET_FILTER_DBCS_ONLY ||
+        filter==UCNV_SET_FILTER_SJIS ||
+        filter==UCNV_SET_FILTER_GR94DBCS
+    ) {
         /* DBCS-only, ignore single-byte results */
         minLength=2;
+    } else if(filter==UCNV_SET_FILTER_2022_CN) {
+        minLength=3;
     } else {
         minLength=1;
     }
@@ -1064,14 +1076,41 @@ ucnv_extGetUnicodeSet(const UConverterSharedData *sharedData,
                             length=0;
                             U16_APPEND_UNSAFE(s, length, c);
                             ucnv_extGetUnicodeSetString(
-                                sharedData, cx, sa, which, minLength,
+                                sharedData, cx, sa, useFallback, minLength,
                                 c, s, length,
                                 (int32_t)UCNV_EXT_FROM_U_GET_PARTIAL_INDEX(value),
                                 pErrorCode);
-                        } else if(((value&(UCNV_EXT_FROM_U_ROUNDTRIP_FLAG|UCNV_EXT_FROM_U_RESERVED_MASK))==
-                                           UCNV_EXT_FROM_U_ROUNDTRIP_FLAG) &&
+                        } else if((useFallback ?
+                                      (value&UCNV_EXT_FROM_U_RESERVED_MASK)==0 :
+                                      ((value&(UCNV_EXT_FROM_U_ROUNDTRIP_FLAG|UCNV_EXT_FROM_U_RESERVED_MASK))==
+                                          UCNV_EXT_FROM_U_ROUNDTRIP_FLAG)) &&
                                   UCNV_EXT_FROM_U_GET_LENGTH(value)>=minLength
                         ) {
+                            switch(filter) {
+                            case UCNV_SET_FILTER_2022_CN:
+                                if(!(UCNV_EXT_FROM_U_GET_LENGTH(value)==3 && UCNV_EXT_FROM_U_GET_DATA(value)<=0x82ffff)) {
+                                    continue;
+                                }
+                                break;
+                            case UCNV_SET_FILTER_SJIS:
+                                if(!(UCNV_EXT_FROM_U_GET_LENGTH(value)==2 && (value=UCNV_EXT_FROM_U_GET_DATA(value))>=0x8140 && value<=0xeffc)) {
+                                    continue;
+                                }
+                                break;
+                            case UCNV_SET_FILTER_GR94DBCS:
+                                if(!(UCNV_EXT_FROM_U_GET_LENGTH(value)==2 &&
+                                     (uint16_t)((value=UCNV_EXT_FROM_U_GET_DATA(value))-0xa1a1)<=(0xfefe-0xa1a1) &&
+                                     (uint8_t)(value-0xa1)<=(0xfe-0xa1))) {
+                                    continue;
+                                }
+                                break;
+                            default:
+                                /*
+                                 * UCNV_SET_FILTER_NONE,
+                                 * or UCNV_SET_FILTER_DBCS_ONLY which is handled via minLength
+                                 */
+                                break;
+                            }
                             sa->add(sa->set, c);
                         }
                     } while((++c&0xf)!=0);

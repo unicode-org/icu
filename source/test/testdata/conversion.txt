@@ -1311,15 +1311,28 @@ conversion:table(nofallback) {
         // versions of ISO-2022-JP
         {
           "ISO-2022-JP",
-          "[\x00-\x0d\x10-\x1a\x1c-\x7f\xa5\u0391-\u03a1\u203e\uff61-\uff9f\u4e00\u4e01\uffe5]",
-          "[\x0e\x0f\x1b\u0100-\u0113\u0385-\u038a\u4e02\u4e27-\u4e29\ufa0e-\ufa2d\uffe6-\U0010ffff]",
+          "[\x00-\x0d\x10-\x1a\x1c-\x7f\xa5\u0391-\u03a1\u2015\u203e\u4e00\u4e01\uffe5]",
+          "[\x0e\x0f\x1b\u0100-\u0113\u0385-\u038a\u2014\u301c\u4e02\u4e27-\u4e29\u4fe0\u663b\u9eb5\ufa0e-\ufa2d\uff61-\uff9f\uffe4\uffe6-\U0010ffff]",
           :int{0}
-        }   
+        }
         {
           "ISO-2022-JP-2",
-          "[\x00-\x0d\x10-\x1a\x1c-\u0113\u0384-\u0386\u0388-\u038a\u0390-\u03a1\u203e\uff61-\uff9f\u4e00-\u4e05\uffe6]",
-          "[\x0e\x0f\x1b\uffe7-\U0010ffff]",
+          "[\x00-\x0d\x10-\x1a\x1c-\x7f\xa0-\u0113\u0384-\u0386\u0388-\u038a\u0390-\u03a1\u203e\u4e00-\u4e05\u4fe0\u663b\uffe6]",
+          "[\x0e\x0f\x1b\uff61-\uff9f\uffe4\uffe7-\U0010ffff]",
           :int{0}
+        }
+        {
+          "JIS7",
+          "[\x00-\x0d\x10-\x1a\x1c-\x7f\xa0-\u0113\u0384-\u0386\u0388-\u038a\u0390-\u03a1\u203e\u4e00-\u4e05\u4fe0\u663b\uff61-\uff9f\uffe6]",
+          "[\x0e\x0f\x1b\uffe4\uffe7-\U0010ffff]",
+          :int{0}
+        }
+        // with fallbacks
+        {
+          "ISO-2022-JP",
+          "[\x00-\x0d\x10-\x1a\x1c-\x7f\xa5\u0391-\u03a1\u2014\u2015\u203e\u301c\u4e00\u4e01\u4fe0\u9eb5\uff61-\uff9f\uffe5]",
+          "[\x0e\x0f\x1b\xa6\u0100-\u0113\u0385-\u038a\u4e02\u4e27-\u4e29\u663b\ufa0e-\ufa2d\uffe4\uffe6-\U0010ffff]",
+          :int{1}
         }
 
         // versions of ISO-2022-CN

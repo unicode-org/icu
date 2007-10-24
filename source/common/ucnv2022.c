@@ -3399,11 +3399,19 @@ _ISO_2022_GetUnicodeSet(const UConverter *cnv,
             /* include ASCII for JP */
             sa->addRange(sa->set, 0, 0x7f);
         }
-        if(jpCharsetMasks[cnvData->version]&CSM(HWKANA_7BIT)) {
+        if(cnvData->version==3 || cnvData->version==4 || which==UCNV_ROUNDTRIP_AND_FALLBACK_SET) {
             /*
-             * TODO(markus): If and when ucnv_getUnicodeSet() supports fallbacks,
-             * we need to include half-width Katakana for all JP variants because
-             * JIS X 0208 has hardcoded fallbacks for them.
+             * Do not test (jpCharsetMasks[cnvData->version]&CSM(HWKANA_7BIT))!=0
+             * because the bit is on for all JP versions although only versions 3 & 4 (JIS7 & JIS8)
+             * use half-width Katakana.
+             * This is because all ISO-2022-JP variants are lenient in that they accept (in toUnicode)
+             * half-width Katakana via the ESC ( I sequence.
+             * However, we only emit (fromUnicode) half-width Katakana according to the
+             * definition of each variant.
+             *
+             * When including fallbacks,
+             * we need to include half-width Katakana Unicode code points for all JP variants because
+             * JIS X 0208 has hardcoded fallbacks for them (which map to full-width Katakana).
              */
             /* include half-width Katakana for JP */
             sa->addRange(sa->set, HWKANA_START, HWKANA_END);
@@ -3457,6 +3465,12 @@ _ISO_2022_GetUnicodeSet(const UConverter *cnv,
                  * corresponding to JIS X 0208.
                  */
                 filter=UCNV_SET_FILTER_SJIS;
+            } else if(i==KSC5601) {
+                /*
+                 * Some of the KSC 5601 tables (convrtrs.txt has this aliases on multiple tables)
+                 * are broader than GR94.
+                 */
+                filter=UCNV_SET_FILTER_GR94DBCS;
             } else {
                 filter=UCNV_SET_FILTER_NONE;
             }
@@ -3472,6 +3486,9 @@ _ISO_2022_GetUnicodeSet(const UConverter *cnv,
     sa->remove(sa->set, 0x0e);
     sa->remove(sa->set, 0x0f);
     sa->remove(sa->set, 0x1b);
+
+    /* ISO 2022 converters do not convert C1 controls either */
+    sa->removeRange(sa->set, 0x80, 0x9f);
 }
 
 static const UConverterImpl _ISO2022Impl={
