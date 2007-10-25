@@ -34,6 +34,8 @@
 #include "makeconv.h"
 #include "genmbcs.h"
 
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
+
 #define DEBUG 0
 
 typedef struct ConvData {
@@ -76,6 +78,7 @@ extern const UConverterStaticData * ucnv_converterStaticData[UCNV_NUMBER_OF_SUPP
  * Global - verbosity
  */
 UBool VERBOSE = FALSE;
+UBool SMALL = FALSE;
 
 static void
 createConverter(ConvData *data, const char* converterName, UErrorCode *pErrorCode);
@@ -163,13 +166,25 @@ writeConverterData(ConvData *data, const char *cnvName, const char *cnvDir, UErr
     }
 }
 
+enum {
+    OPT_HELP_H,
+    OPT_HELP_QUESTION_MARK,
+    OPT_COPYRIGHT,
+    OPT_VERSION,
+    OPT_DESTDIR,
+    OPT_VERBOSE,
+    OPT_SMALL,
+    OPT_COUNT
+};
+
 static UOption options[]={
-    UOPTION_HELP_H,              /* 0  Numbers for those who*/
-    UOPTION_HELP_QUESTION_MARK,  /* 1   can't count. */
-    UOPTION_COPYRIGHT,           /* 2 */
-    UOPTION_VERSION,             /* 3 */
-    UOPTION_DESTDIR,             /* 4 */
-    UOPTION_VERBOSE,             /* 5 */
+    UOPTION_HELP_H,
+    UOPTION_HELP_QUESTION_MARK,
+    UOPTION_COPYRIGHT,
+    UOPTION_VERSION,
+    UOPTION_DESTDIR,
+    UOPTION_VERBOSE,
+    { "small", NULL, NULL, NULL, '\1', UOPT_NO_ARG, 0 }
 };
 
 int main(int argc, char* argv[])
@@ -194,8 +209,8 @@ int main(int argc, char* argv[])
     uprv_memcpy(&dataInfo.dataVersion, &icuVersion, sizeof(UVersionInfo));
 
     /* preset then read command line options */
-    options[4].value=u_getDataDirectory();
-    argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
+    options[OPT_DESTDIR].value=u_getDataDirectory();
+    argc=u_parseArgs(argc, argv, LENGTHOF(options), options);
 
     /* error handling, printing usage message */
     if(argc<0) {
@@ -205,8 +220,9 @@ int main(int argc, char* argv[])
     } else if(argc<2) {
         argc=-1;
     }
-    if(argc<0 || options[0].doesOccur || options[1].doesOccur) {
-        fprintf(stderr,
+    if(argc<0 || options[OPT_HELP_H].doesOccur || options[OPT_HELP_QUESTION_MARK].doesOccur) {
+        FILE *stdfile=argc<0 ? stderr : stdout;
+        fprintf(stdfile,
             "usage: %s [-options] files...\n"
             "\tread .ucm codepage mapping files and write .cnv files\n"
             "options:\n"
@@ -216,20 +232,26 @@ int main(int argc, char* argv[])
             "\t-d or --destdir     destination directory, followed by the path\n"
             "\t-v or --verbose     Turn on verbose output\n",
             argv[0]);
+        fprintf(stdfile,
+            "\t      --small       Generate smaller .cnv files. They will be\n"
+            "\t                    significantly smaller but may not be compatible with\n"
+            "\t                    older versions of ICU and will require heap memory\n"
+            "\t                    allocation when loaded.\n");
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
-    if(options[3].doesOccur) {
-        fprintf(stderr,"makeconv version %hu.%hu, ICU tool to read .ucm codepage mapping files and write .cnv files\n",
-            dataInfo.formatVersion[0], dataInfo.formatVersion[1]);
-        fprintf(stderr, U_COPYRIGHT_STRING "\n");
+    if(options[OPT_VERSION].doesOccur) {
+        printf("makeconv version %hu.%hu, ICU tool to read .ucm codepage mapping files and write .cnv files\n",
+               dataInfo.formatVersion[0], dataInfo.formatVersion[1]);
+        printf("%s\n", U_COPYRIGHT_STRING);
         exit(0);
     }
 
     /* get the options values */
-    haveCopyright = options[2].doesOccur;
-    destdir = options[4].value;
-    VERBOSE = options[5].doesOccur;
+    haveCopyright = options[OPT_COPYRIGHT].doesOccur;
+    destdir = options[OPT_DESTDIR].value;
+    VERBOSE = options[OPT_VERBOSE].doesOccur;
+    SMALL = options[OPT_SMALL].doesOccur;
 
     if (destdir != NULL && *destdir != 0) {
         uprv_strcpy(outFileName, destdir);
@@ -766,12 +788,13 @@ createConverter(ConvData *data, const char *converterName, UErrorCode *pErrorCod
                          *
                          * Do this after ucm_checkBaseExt().
                          */
+                        const MBCSData *mbcsData=MBCSGetDummy();
                         int32_t needsMove=0;
                         for(m=baseData.ucm->base->mappings, mLimit=m+baseData.ucm->base->mappingsLength;
                             m<mLimit;
                             ++m
                         ) {
-                            if(!MBCSOkForBaseFromUnicode(TRUE, m->b.bytes, m->bLen, m->u, m->f)) {
+                            if(!MBCSOkForBaseFromUnicode(mbcsData, m->b.bytes, m->bLen, m->u, m->f)) {
                                 m->f|=MBCS_FROM_U_EXT_FLAG;
                                 m->moveFlag=UCM_MOVE_TO_EXT;
                                 ++needsMove;

@@ -23,6 +23,7 @@
 
 #include "unicode/ucnv.h"
 #include "ucnv_cnv.h"
+#include "ucnv_ext.h"
 
 /**
  * ICU conversion (.cnv) data file structure, following the usual UDataInfo
@@ -40,6 +41,24 @@
  * At the moment, there are only variations of MBCS converters. They all have
  * the same toUnicode structures, while the fromUnicode structures for SBCS
  * differ from those for other MBCS-style converters.
+ *
+ * _MBCSHeader.version 5 is optional and not backward-compatible
+ * (as usual for changes in the major version field).
+ *
+ * Versions 5.m work like versions 4.m except:
+ * - The _MBCSHeader has variable length (and is always longer than in version 4).
+ *   See the struct _MBCSHeader further description below.
+ * - There is a set of flags which indicate further incompatible changes.
+ *   (Reader code must reject the file if it does not recognize them all.)
+ * - In particular, one of these flags indicates that most of the fromUnicode
+ *   data is missing and must be reconstituted from the toUnicode data
+ *   and from the utf8Friendly mbcsIndex at load time.
+ *   (This only works with a utf8Friendly table.)
+ *   In this case, makeconv may increase maxFastUChar automatically to U+FFFF.
+ *
+ * The first of these versions is 5.3, which is like 4.3 except for the differences above.
+ *
+ * When possible, makeconv continues to generate version 4.m files.
  *
  * _MBCSHeader.version 4.3 optionally modifies the fromUnicode data structures
  * slightly and optionally adds a table for conversion to MBCS (non-SBCS)
@@ -127,6 +146,26 @@
  *  7   uint32_t    fromUBytesLength -- _MBCSHeader.version 4.1 (ICU 2.4) and higher
  *                  counts bytes in fromUBytes[]
  *
+ * New and required in version 5:
+ *  8   uint32_t    options, bits:
+ *                      31..16 reserved for flags that can be added without breaking
+ *                                 backward compatibility
+ *                      15.. 6 reserved for flags whose addition will break
+ *                                 backward compatibility
+ *                           6 MBCS_OPT_FROM_U -- if set,
+ *                                 then most of the fromUnicode data is omitted;
+ *                                 fullStage2Length is present and the missing
+ *                                 bottom part of stage 2 must be reconstituted from
+ *                                 the toUnicode data;
+ *                                 stage 3 is missing completely as well;
+ *                                 not used for SBCS tables
+ *                       5.. 0 length of the _MBCSHeader (number of uint32_t)
+ *
+ * New and optional in version 5:
+ *  9   uint32_t    fullStage2Length: used if MBCS_OPT_FROM_U is set
+ *                                 specifies the full length of stage 2
+ *                                 including the omitted part
+ *
  * if(outputType==MBCS_OUTPUT_EXT_ONLY) {
  *     -- base table name for extension-only table
  *     char baseTableName[variable]; -- with NUL plus padding for 4-alignment
@@ -153,7 +192,7 @@
  *         -- BMP-only tables have a smaller stage 1 table
  *         uint16_t fromUTable[0x40]; (32-bit-aligned)
  *     }
- *    
+ *
  *     -- stage 2 tables
  *        length determined by top of stage 1 and bottom of stage 3 tables
  *     if(outputType==MBCS_OUTPUT_1) {
@@ -162,17 +201,24 @@
  *     } else {
  *         -- DBCS, MBCS, EBCDIC_STATEFUL, ...: roundtrip flags and indexes
  *         uint32_t stage 2 flags and indexes[?];
+ *         if(options&MBCS_OPT_NO_FROM_U) {
+ *             stage 2 really has length fullStage2Length
+ *             and the omitted lower part must be reconstituted from
+ *             the toUnicode data
+ *         }
  *     }
- *    
+ *
  *     -- stage 3 tables with byte results
  *     if(outputType==MBCS_OUTPUT_1) {
  *         -- SBCS: each 16-bit result contains flags and the result byte, see ucnvmbcs.c
  *         uint16_t fromUBytes[fromUBytesLength/2];
- *     } else {
+ *     } else if(!(options&MBCS_OPT_NO_FROM_U)) {
  *         -- DBCS, MBCS, EBCDIC_STATEFUL, ... 2/3/4 bytes result, see ucnvmbcs.c
  *         uint8_t fromUBytes[fromUBytesLength]; or
  *         uint16_t fromUBytes[fromUBytesLength/2]; or
  *         uint32_t fromUBytes[fromUBytesLength/4];
+ *     } else {
+ *         fromUBytes[] must be reconstituted from the toUnicode data
  *     }
  *
  *     -- optional utf8Friendly mbcsIndex -- _MBCSHeader.version 4.3 (ICU 3.8) and higher
@@ -340,6 +386,9 @@ typedef struct UConverterMBCSTable {
     /* roundtrips */
     uint32_t asciiRoundtrips;
 
+    /* reconstituted data that was omitted from the .cnv file */
+    uint8_t *reconstitutedData;
+
     /* converter name for swaplfnl */
     char *swapLFNLName;
 
@@ -347,6 +396,26 @@ typedef struct UConverterMBCSTable {
     struct UConverterSharedData *baseSharedData;
     const int32_t *extIndexes;
 } UConverterMBCSTable;
+
+enum {
+    MBCS_OPT_LENGTH_MASK=0x3f,
+    MBCS_OPT_NO_FROM_U=0x40,
+    /*
+     * If any of the following options bits are set,
+     * then the file must be rejected.
+     */
+    MBCS_OPT_INCOMPATIBLE_MASK=0xffc0,
+    /*
+     * Remove bits from this mask as more options are recognized
+     * by all implementations that use this constant.
+     */
+    MBCS_OPT_UNKNOWN_INCOMPATIBLE_MASK=0xff80
+};
+
+enum {
+    MBCS_HEADER_V4_LENGTH=8,
+    MBCS_HEADER_V5_MIN_LENGTH=9
+};
 
 /**
  * MBCS data header. See data format description above.
@@ -360,6 +429,12 @@ typedef struct {
              offsetFromUBytes,
              flags,
              fromUBytesLength;
+
+    /* new and required in version 5 */
+    uint32_t options;
+
+    /* new and optional in version 5; used if options&MBCS_OPT_NO_FROM_U */
+    uint32_t fullStage2Length;  /* number of 32-bit units */
 } _MBCSHeader;
 
 /*
@@ -456,23 +531,6 @@ U_CFUNC void
 ucnv_MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                           UErrorCode *pErrorCode);
 
-#if 0  /* Replaced by ucnv_MBCSGetFilteredUnicodeSetForUnicode() until we implement ucnv_getUnicodeSet() with reverse fallbacks. */
-/*
- * Internal function returning a UnicodeSet for toUnicode() conversion.
- * Currently only used for ISO-2022-CN, and only handles roundtrip mappings.
- * In the future, if we add support for reverse-fallback sets, this function
- * needs to be updated, and called for each initial state.
- * Does not currently handle extensions.
- * Does not empty the set first.
- */
-U_CFUNC void
-ucnv_MBCSGetUnicodeSetForBytes(const UConverterSharedData *sharedData,
-                           const USetAdder *sa,
-                           UConverterUnicodeSet which,
-                           uint8_t state, int32_t lowByte, int32_t highByte,
-                           UErrorCode *pErrorCode);
-#endif
-
 /*
  * Internal function returning a UnicodeSet for toUnicode() conversion.
  * Currently only used for ISO-2022-CN, and only handles roundtrip mappings.
@@ -486,16 +544,6 @@ ucnv_MBCSGetUnicodeSetForUnicode(const UConverterSharedData *sharedData,
                                  const USetAdder *sa,
                                  UConverterUnicodeSet which,
                                  UErrorCode *pErrorCode);
-
-typedef enum UConverterSetFilter {
-    UCNV_SET_FILTER_NONE,
-    UCNV_SET_FILTER_DBCS_ONLY,
-    UCNV_SET_FILTER_2022_CN,
-    UCNV_SET_FILTER_SJIS,
-    UCNV_SET_FILTER_GR94DBCS,
-    UCNV_SET_FILTER_HZ,
-    UCNV_SET_FILTER_COUNT
-} UConverterSetFilter;
 
 /*
  * Same as ucnv_MBCSGetUnicodeSetForUnicode() but

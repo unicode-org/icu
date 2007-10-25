@@ -130,7 +130,7 @@ CnvExtWrite(NewConverter *cnvData, const UConverterStaticData *staticData,
             extData->ucm->baseName[length++]=0;
         }
 
-        headerSize=sizeof(header)+length;
+        headerSize=MBCS_HEADER_V4_LENGTH*4+length;
 
         /* fill the header */
         header.version[0]=4;
@@ -138,7 +138,7 @@ CnvExtWrite(NewConverter *cnvData, const UConverterStaticData *staticData,
         header.flags=(uint32_t)((headerSize<<8)|MBCS_OUTPUT_EXT_ONLY);
 
         /* write the header and the base table name */
-        udata_writeBlock(pData, &header, sizeof(header));
+        udata_writeBlock(pData, &header, MBCS_HEADER_V4_LENGTH*4);
         udata_writeBlock(pData, extData->ucm->baseName, length);
     }
 
