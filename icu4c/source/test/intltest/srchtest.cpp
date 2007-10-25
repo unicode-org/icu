@@ -1551,31 +1551,36 @@ void StringSearchTest::TestDiactricMatch()
 	UChar temp[128];
     UErrorCode status = U_ZERO_ERROR;
     int        count  = 0;
+    RuleBasedCollator* coll = NULL;
+    StringSearch *strsrch = NULL;
 
     UnicodeString pattern("pattern");
     UnicodeString text("text");
-    StringSearch *strsrch = new StringSearch(pattern, text, Locale::getDefault(), NULL, 
-                                             status);
-    if (U_FAILURE(status)) {
-        errln("Error opening string search %s", u_errorName(status));
-        return;
-    }   
     
-    strsrch->getCollator()->setStrength(getECollationStrength(DIACTRICMATCH[count].strength));
+    const SearchData *search; 
     
-    while (DIACTRICMATCH[count].text != NULL) {
-        u_unescape(DIACTRICMATCH[count].text, temp, 128);
+    search = &(DIACTRICMATCH[count]);
+    while (search->text != NULL) {
+   		coll = getCollator(search->collator);
+    	coll->setStrength(getECollationStrength(search->strength));
+    	strsrch = new StringSearch(pattern, text, coll, getBreakIterator(search->breaker), status);
+    	if (U_FAILURE(status)) {
+	        errln("Error opening string search %s", u_errorName(status));
+	        return;
+	    }  
+        u_unescape(search->text, temp, 128);
         text.setTo(temp, u_strlen(temp));
-        u_unescape(DIACTRICMATCH[count].pattern, temp, 128);
+        u_unescape(search->pattern, temp, 128);
         pattern.setTo(temp, u_strlen(temp));
         strsrch->setText(text, status);
         strsrch->setPattern(pattern, status);
-        if (!assertEqualWithStringSearch(strsrch, &DIACTRICMATCH[count])) {
+        if (!assertEqualWithStringSearch(strsrch, search)) {
             errln("Error at test number %d", count);
         }
-        count ++;
+        search = &(DIACTRICMATCH[++count]);
+        delete strsrch;
     }
-    delete strsrch;
+    
 }
  
 void StringSearchTest::TestCanonical()

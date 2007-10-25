@@ -487,6 +487,8 @@ static const SearchData CONTRACTIONCANONICAL[] = {
 
 static const SearchData DIACTRICMATCH[] = {
 		{"\\u0061\\u0061\\u00E1", "\\u0061\\u00E1", NULL, UCOL_SECONDARY, NULL, {1, -1}, {2}},
+		{"\\u0020\\u00C2\\u0303\\u0020\\u0041\\u0061\\u1EAA\\u0041\\u0302\\u0303\\u00C2\\u0303\\u1EAB\\u0061\\u0302\\u0303\\u00E2\\u0303\\uD806\\uDC01\\u0300\\u0020",
+		 "\\u00C2\\u0303", "LDE_AN_CX_EX_FX_HX_NX_S1", UCOL_PRIMARY, NULL, {1, 4, 5, 6, 7, 10, 12, 13, 16,-1}, {2, 1, 1, 1, 3, 2, 1, 3, 2}},
 		{NULL, NULL, NULL, UCOL_TERTIARY, NULL, {-1}, {0}}
 };
 
