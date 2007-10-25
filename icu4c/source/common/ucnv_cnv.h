@@ -176,6 +176,19 @@ typedef UConverter * (*UConverterSafeClone) (const UConverter   *cnv,
                                              UErrorCode         *status);
 
 /**
+ * Filters for some ucnv_getUnicodeSet() implementation code.
+ */
+typedef enum UConverterSetFilter {
+    UCNV_SET_FILTER_NONE,
+    UCNV_SET_FILTER_DBCS_ONLY,
+    UCNV_SET_FILTER_2022_CN,
+    UCNV_SET_FILTER_SJIS,
+    UCNV_SET_FILTER_GR94DBCS,
+    UCNV_SET_FILTER_HZ,
+    UCNV_SET_FILTER_COUNT
+} UConverterSetFilter;
+
+/**
  * Fills the set of Unicode code points that can be converted by an ICU converter.
  * The API function ucnv_getUnicodeSet() clears the USet before calling
  * the converter's getUnicodeSet() implementation; the converter should only

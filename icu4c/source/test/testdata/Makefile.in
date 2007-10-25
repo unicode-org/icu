@@ -186,7 +186,7 @@ $(TESTBUILDDIR)/nfsmxp.spp: $(BINDIR)/gensprep$(EXEEXT) $(TESTSRCDATADIR)/nfs4_m
 	$(INVOKE) $(BINDIR)/gensprep -s $(TESTSRCDATADIR) $(ICU_DATA_OPT) -d $(TESTBUILDDIR) -b nfsmxp -k -n $(UNICODEDATADIR) -u 3.2.0 nfs4_mixed_prep_p.txt
 
 $(TESTBUILDDIR)/%.cnv: $(TESTSRCDATADIR)/%.ucm $(BINDIR)/makeconv$(EXEEXT)
-	$(INVOKE) $(BINDIR)/makeconv -c -d $(TESTBUILDDIR) $(TESTSRCDATADIR)/$(<F)
+	$(INVOKE) $(BINDIR)/makeconv --small -c -d $(TESTBUILDDIR) $(TESTSRCDATADIR)/$(<F)
 
 $(TESTBUILDDIR)/%.res: $(TESTSRCDATADIR)/%.txt $(BINDIR)/genrb$(EXEEXT) $(DAT_FILES)
 	$(INVOKE) $(BINDIR)/genrb $(GENRBOPTS) -q -s $(TESTSRCDATADIR) $(ICU_DATA_OPT) -d $(TESTBUILDDIR) $(<F)

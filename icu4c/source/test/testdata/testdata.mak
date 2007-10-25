@@ -124,21 +124,21 @@ $(TEST_RES_FILES:.res =.res
 # Targets for test converter data
 "$(TESTDATABLD)\test1.cnv": "$(TESTDATA)\test1.ucm"
 	@echo Building $@
-	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" -d"$(TESTDATABLD)" $**
+	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" --small -d"$(TESTDATABLD)" $**
 
 "$(TESTDATABLD)\test3.cnv": "$(TESTDATA)\test3.ucm"
 	@echo Building $@
-	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" -d"$(TESTDATABLD)" $**
+	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" --small -d"$(TESTDATABLD)" $**
 
 "$(TESTDATABLD)\test4.cnv": "$(TESTDATA)\test4.ucm"
 	@echo Building $@
-	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" -d"$(TESTDATABLD)" $**
+	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" --small -d"$(TESTDATABLD)" $**
 
 "$(TESTDATABLD)\test4x.cnv": "$(TESTDATA)\test4x.ucm"
 	@echo Building $@
-	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" -d"$(TESTDATABLD)" $**
+	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" --small -d"$(TESTDATABLD)" $**
 
 "$(TESTDATABLD)\ibm9027.cnv": "$(TESTDATA)\ibm9027.ucm"
 	@echo Building $@
-	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" -d"$(TESTDATABLD)" $**
+	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" --small -d"$(TESTDATABLD)" $**
 
