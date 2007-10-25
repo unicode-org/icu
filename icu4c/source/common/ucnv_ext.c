@@ -1036,15 +1036,13 @@ ucnv_extGetUnicodeSet(const UConverterSharedData *sharedData,
     /* enumerate the from-Unicode trie table */
     c=0; /* keep track of the current code point while enumerating */
 
-    if( sharedData->mbcs.outputType==MBCS_OUTPUT_DBCS_ONLY ||
-        filter==UCNV_SET_FILTER_DBCS_ONLY ||
-        filter==UCNV_SET_FILTER_SJIS ||
-        filter==UCNV_SET_FILTER_GR94DBCS
+    if(filter==UCNV_SET_FILTER_2022_CN) {
+        minLength=3;
+    } else if( sharedData->mbcs.outputType==MBCS_OUTPUT_DBCS_ONLY ||
+               filter!=UCNV_SET_FILTER_NONE
     ) {
         /* DBCS-only, ignore single-byte results */
         minLength=2;
-    } else if(filter==UCNV_SET_FILTER_2022_CN) {
-        minLength=3;
     } else {
         minLength=1;
     }
@@ -1100,6 +1098,13 @@ ucnv_extGetUnicodeSet(const UConverterSharedData *sharedData,
                             case UCNV_SET_FILTER_GR94DBCS:
                                 if(!(UCNV_EXT_FROM_U_GET_LENGTH(value)==2 &&
                                      (uint16_t)((value=UCNV_EXT_FROM_U_GET_DATA(value))-0xa1a1)<=(0xfefe-0xa1a1) &&
+                                     (uint8_t)(value-0xa1)<=(0xfe-0xa1))) {
+                                    continue;
+                                }
+                                break;
+                            case UCNV_SET_FILTER_HZ:
+                                if(!(UCNV_EXT_FROM_U_GET_LENGTH(value)==2 &&
+                                     (uint16_t)((value=UCNV_EXT_FROM_U_GET_DATA(value))-0xa1a1)<=(0xfdfe-0xa1a1) &&
                                      (uint8_t)(value-0xa1)<=(0xfe-0xa1))) {
                                     continue;
                                 }

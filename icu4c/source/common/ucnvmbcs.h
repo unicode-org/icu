@@ -493,6 +493,7 @@ typedef enum UConverterSetFilter {
     UCNV_SET_FILTER_2022_CN,
     UCNV_SET_FILTER_SJIS,
     UCNV_SET_FILTER_GR94DBCS,
+    UCNV_SET_FILTER_HZ,
     UCNV_SET_FILTER_COUNT
 } UConverterSetFilter;
 
