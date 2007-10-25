@@ -536,7 +536,7 @@ ConversionTest::TestGetUnicodeSet2() {
         "Shift-JIS",
         "ibm-1390",  // EBCDIC_STATEFUL table
         "ibm-16684",  // DBCS-only extension table based on EBCDIC_STATEFUL table
-        // "HZ", TODO(markus): known bug, the set incorrectly contains [\u02CA\u02CB\u02D9\u2010\u2013\u2015...]
+        "HZ",
         "ISO-2022-JP",
         "JIS7",
         "ISO-2022-CN",

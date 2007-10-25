@@ -48,6 +48,14 @@ conversion:table(nofallback) {
     toUnicode {
       Headers { "charset", "bytes", "unicode", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidChars" }
       Cases {
+        // test that HZ limits its byte values to lead bytes 21..7d and trail bytes 21..7e
+        {
+          "HZ",
+          :bin{ 7e7b21212120217e217f772100007e217e7d207e7e807e0a2b },
+          "\u3000\ufffd\u3013\ufffd\u9ccc\ufffd\ufffd ~\ufffd+",
+          :intvector{ 2,4,6,8,10,12,14,18,19,21,24 },
+          :int{1}, :int{1}, "", "?", :bin{""}
+        }
         // improve coverage of ISO-2022-JP converter with hardcoded JIS X 0201 and
         // using the Shift-JIS table for JIS X 0208 (ticket #5797)
         {
@@ -1349,6 +1357,14 @@ conversion:table(nofallback) {
           :int{0}
         }
 
+        // HZ
+        {
+          "HZ",
+          "[\u0410-\u044f\u4e00\u4e01\u4e03]",
+          "[\u4e02\u4e04-\u4e06\uac00-\ud7ff]",
+          :int{0}
+        }
+        
         // DBCS-only
         {
           "ibm-971",
