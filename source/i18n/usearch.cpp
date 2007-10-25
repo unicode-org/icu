@@ -443,7 +443,7 @@ void checkBreakBoundary(const UStringSearch *strsrch, int32_t *start,
                                int32_t *end)
 {
 #if !UCONFIG_NO_BREAK_ITERATION
-    UBreakIterator *breakiterator = strsrch->search->breakIter;
+    UBreakIterator *breakiterator = strsrch->search->_breakIter_;
     if (breakiterator) {
 	    int32_t matchend = *end;
 	    int32_t matchstart = *start;
@@ -475,7 +475,7 @@ UBool isBreakUnit(const UStringSearch *strsrch, int32_t start,
 #if !UCONFIG_NO_BREAK_ITERATION
     UBreakIterator *breakiterator = strsrch->search->breakIter;
     //TODO: Add here.
-    if (breakiterator && strsrch->search->breakIterGiven) {
+    if (breakiterator) {
         int32_t startindex = ubrk_first(breakiterator);
         int32_t endindex   = ubrk_last(breakiterator);
         
@@ -1161,7 +1161,7 @@ inline UBool checkNextExactMatch(UStringSearch *strsrch,
     }
 
     //Add breakiterator boundary check for primary strength search.
-    if (!strsrch->search->breakIterGiven && strsrch->strength == UCOL_PRIMARY) {
+    if (!strsrch->search->breakIter && strsrch->strength == UCOL_PRIMARY) {
     	checkBreakBoundary(strsrch, &start, textoffset);
     }
         
@@ -2009,7 +2009,7 @@ inline UBool checkPreviousExactMatch(UStringSearch *strsrch,
     }
     
     //Add breakiterator boundary check for primary strength search.
-    if (!strsrch->search->breakIterGiven && strsrch->strength == UCOL_PRIMARY) {
+    if (!strsrch->search->breakIter && strsrch->strength == UCOL_PRIMARY) {
     	checkBreakBoundary(strsrch, textoffset, &end);
     }
     
@@ -2600,17 +2600,13 @@ U_CAPI UStringSearch * U_EXPORT2 usearch_openFromCollator(
         result->pattern.textLength = patternlength;
         result->pattern.CE         = NULL;
         
-        // If a breakiterator is given, use that one, otherwise create a character break iterator.
-        result->search->breakIterGiven = breakiter ? TRUE : FALSE;
+        result->search->breakIter  = breakiter;
 #if !UCONFIG_NO_BREAK_ITERATION
-        if (!breakiter && result->strength == UCOL_PRIMARY) {
-        	breakiter = ubrk_open(UBRK_CHARACTER, ucol_getLocale(result->collator, ULOC_VALID_LOCALE, status), NULL, 0, status);
-        }
+        result->search->_breakIter_ = ubrk_open(UBRK_CHARACTER, ucol_getLocale(result->collator, ULOC_VALID_LOCALE, status), text, textlength, status);
         if (breakiter) {
-            ubrk_setText(breakiter, text, textlength, status);
+        	ubrk_setText(breakiter, text, textlength, status);
         }
 #endif
-        result->search->breakIter  = breakiter;
 
         result->ownCollator           = FALSE;
         result->search->matchedLength = 0;
@@ -2791,7 +2787,7 @@ U_CAPI void U_EXPORT2 usearch_setBreakIterator(UStringSearch  *strsrch,
                                                UErrorCode     *status)
 {
     if (U_SUCCESS(*status) && strsrch) {
-        strsrch->search->breakIter = breakiter;
+    	strsrch->search->breakIter = breakiter;
         if (breakiter) {
             ubrk_setText(breakiter, strsrch->search->text, 
                          strsrch->search->textLength, status);
@@ -2835,6 +2831,7 @@ U_CAPI void U_EXPORT2 usearch_setText(      UStringSearch *strsrch,
                 ubrk_setText(strsrch->search->breakIter, text, 
                              textlength, status);
             }
+            ubrk_setText(strsrch->search->_breakIter_, text, textlength, status);
 #endif
         }
     }
@@ -2867,6 +2864,11 @@ U_CAPI void U_EXPORT2 usearch_setCollator(      UStringSearch *strsrch,
             strsrch->collator    = collator;
             strsrch->strength    = ucol_getStrength(collator);
             strsrch->ceMask      = getMask(strsrch->strength);
+#if !UCONFIG_NO_BREAK_ITERATION
+        	ubrk_close(strsrch->search->_breakIter_);
+        	strsrch->search->_breakIter_ = ubrk_open(UBRK_CHARACTER, ucol_getLocale(collator, ULOC_VALID_LOCALE, status), 
+        											 strsrch->search->text, strsrch->search->textLength, status);
+#endif
             // if status is a failure, ucol_getAttribute returns UCOL_DEFAULT
             strsrch->toShift     =  
                ucol_getAttribute(collator, UCOL_ALTERNATE_HANDLING, status) == 
@@ -3469,7 +3471,7 @@ UBool usearch_handlePreviousExact(UStringSearch *strsrch, UErrorCode *status)
             if (firstce == UCOL_NULLORDER || firstce == UCOL_IGNORABLE) {
                 firstce = targetce;
             }
-            if (targetce == UCOL_IGNORABLE) {
+            if (targetce == UCOL_IGNORABLE && strsrch->strength != UCOL_PRIMARY) {
                 continue;
             }         
             if (targetce == patternce[0]) {
