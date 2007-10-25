@@ -634,6 +634,19 @@ ucnv_MBCSGetFilteredUnicodeSetForUnicode(const UConverterSharedData *sharedData,
                                 stage3+=2;  /* +=st3Multiplier */
                             } while((++c&0xf)!=0);
                             break;
+                        case UCNV_SET_FILTER_HZ:
+                            /* Only add code points that are suitable for HZ DBCS (lead byte A1..FD). */
+                            do {
+                                if( ((st3&1)!=0 || useFallback) &&
+                                    (uint16_t)((value=*((const uint16_t *)stage3))-0xa1a1)<=(0xfdfe-0xa1a1) &&
+                                    (uint8_t)(value-0xa1)<=(0xfe-0xa1)
+                                ) {
+                                    sa->add(sa->set, c);
+                                }
+                                st3>>=1;
+                                stage3+=2;  /* +=st3Multiplier */
+                            } while((++c&0xf)!=0);
+                            break;
                         default:
                             *pErrorCode=U_INTERNAL_PROGRAM_ERROR;
                             return;
