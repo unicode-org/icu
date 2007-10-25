@@ -1097,15 +1097,15 @@ ucnv_extGetUnicodeSet(const UConverterSharedData *sharedData,
                                 break;
                             case UCNV_SET_FILTER_GR94DBCS:
                                 if(!(UCNV_EXT_FROM_U_GET_LENGTH(value)==2 &&
-                                     (uint16_t)((value=UCNV_EXT_FROM_U_GET_DATA(value))-0xa1a1)<=(0xfefe-0xa1a1) &&
-                                     (uint8_t)(value-0xa1)<=(0xfe-0xa1))) {
+                                     (uint16_t)((value=UCNV_EXT_FROM_U_GET_DATA(value))-0xa1a1)<=(0xfefe - 0xa1a1) &&
+                                     (uint8_t)(value-0xa1)<=(0xfe - 0xa1))) {
                                     continue;
                                 }
                                 break;
                             case UCNV_SET_FILTER_HZ:
                                 if(!(UCNV_EXT_FROM_U_GET_LENGTH(value)==2 &&
-                                     (uint16_t)((value=UCNV_EXT_FROM_U_GET_DATA(value))-0xa1a1)<=(0xfdfe-0xa1a1) &&
-                                     (uint8_t)(value-0xa1)<=(0xfe-0xa1))) {
+                                     (uint16_t)((value=UCNV_EXT_FROM_U_GET_DATA(value))-0xa1a1)<=(0xfdfe - 0xa1a1) &&
+                                     (uint8_t)(value-0xa1)<=(0xfe - 0xa1))) {
                                     continue;
                                 }
                                 break;
