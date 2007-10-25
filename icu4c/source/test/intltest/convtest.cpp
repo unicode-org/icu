@@ -541,7 +541,7 @@ ConversionTest::TestGetUnicodeSet2() {
         "JIS7",
         "ISO-2022-CN",
         "ISO-2022-CN-EXT",
-        // "LMBCS" TODO(markus): known bug, the fallback set is said to be missing [\uF600-\uF6FF]
+        "LMBCS"
     };
     char buffer[1024];
     int32_t i;

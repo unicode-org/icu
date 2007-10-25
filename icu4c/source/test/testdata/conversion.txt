@@ -1365,6 +1365,14 @@ conversion:table(nofallback) {
           :int{0}
         }
         
+        // LMBCS
+        {
+          "LMBCS",
+          "[\x00-\U0010ffff]",
+          "[]",
+          :int{0}
+        }
+
         // DBCS-only
         {
           "ibm-971",
