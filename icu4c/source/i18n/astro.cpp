@@ -650,9 +650,9 @@ double CalendarAstronomer::SUMMER_SOLSTICE() {
  * @internal
  * @deprecated ICU 2.4. This class may be removed or modified.
  */
-/*double CalendarAstronomer::WINTER_SOLSTICE() {
+double CalendarAstronomer::WINTER_SOLSTICE() {
   return  ((CalendarAstronomer::PI*3)/2);
-}*/
+}
 
 CalendarAstronomer::AngleFunc::~AngleFunc() {}
 
@@ -1128,9 +1128,9 @@ double CalendarAstronomer::getMoonPhase() {
  * @internal
  * @deprecated ICU 2.4. This class may be removed or modified.
  */
-/*const CalendarAstronomer::MoonAge CalendarAstronomer::NEW_MOON() {
+const CalendarAstronomer::MoonAge CalendarAstronomer::NEW_MOON() {
   return  CalendarAstronomer::MoonAge(0);
-}*/
+}
 
 /**
  * Constant representing the moon's first quarter.

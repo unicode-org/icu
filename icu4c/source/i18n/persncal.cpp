@@ -222,8 +222,9 @@ static const int32_t LIMITS[UCAL_FIELD_COUNT][4] = {
     { -140742, -140742,  144683,  140742 }, // YEAR_WOY
     {       0,       0,       6,       6 }, // DOW_LOCAL
     {   -2500,   -2500,    2500,    2500 }, // EXTENDED_YEAR
-    {/*      -1,      -1,      -1,      -1 */}, // JULIAN_DAY
-    {/*      -1,      -1,      -1,      -1 */}, // MILLISECONDS_IN_DAY
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // JULIAN_DAY
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MILLISECONDS_IN_DAY
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // IS_LEAP_MONTH
 };
 static const int32_t MONTH_COUNT[12][4]  = {
     //len len2   st  st2

@@ -397,6 +397,12 @@ enum UCalendarDateFields {
    * @stable ICU 2.8
    */
   UCAL_MILLISECONDS_IN_DAY,
+
+  /**
+   * Whether or not the current month is a leap month (0 or 1). See the Chinese calendar for
+   * an example of this.
+   */
+  UCAL_IS_LEAP_MONTH,
   
   /**
    * Field count

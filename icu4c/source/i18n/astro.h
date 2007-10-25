@@ -521,7 +521,7 @@ public:
    * Note: In this case, "winter" refers to the northern hemisphere's seasons.
    * @internal
    */
-//  static double WINTER_SOLSTICE();
+  static double WINTER_SOLSTICE();
 
   /**
    * Find the next time at which the sun's ecliptic longitude will have
@@ -596,7 +596,7 @@ public:
    * For use with {@link #getMoonTime getMoonTime}
    * @internal
    */
-//  static const MoonAge NEW_MOON();
+  static const MoonAge NEW_MOON();
 
   /**
    * Constant representing the moon's first quarter.
