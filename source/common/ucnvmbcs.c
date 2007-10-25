@@ -625,8 +625,8 @@ ucnv_MBCSGetFilteredUnicodeSetForUnicode(const UConverterSharedData *sharedData,
                             /* Only add code points that map to ISO 2022 GR 94 DBCS codes (each byte A1..FE). */
                             do {
                                 if( ((st3&1)!=0 || useFallback) &&
-                                    (uint16_t)((value=*((const uint16_t *)stage3))-0xa1a1)<=(0xfefe-0xa1a1) &&
-                                    (uint8_t)(value-0xa1)<=(0xfe-0xa1)
+                                    (uint16_t)((value=*((const uint16_t *)stage3)) - 0xa1a1)<=(0xfefe - 0xa1a1) &&
+                                    (uint8_t)(value-0xa1)<=(0xfe - 0xa1)
                                 ) {
                                     sa->add(sa->set, c);
                                 }
@@ -638,8 +638,8 @@ ucnv_MBCSGetFilteredUnicodeSetForUnicode(const UConverterSharedData *sharedData,
                             /* Only add code points that are suitable for HZ DBCS (lead byte A1..FD). */
                             do {
                                 if( ((st3&1)!=0 || useFallback) &&
-                                    (uint16_t)((value=*((const uint16_t *)stage3))-0xa1a1)<=(0xfdfe-0xa1a1) &&
-                                    (uint8_t)(value-0xa1)<=(0xfe-0xa1)
+                                    (uint16_t)((value=*((const uint16_t *)stage3))-0xa1a1)<=(0xfdfe - 0xa1a1) &&
+                                    (uint8_t)(value-0xa1)<=(0xfe - 0xa1)
                                 ) {
                                     sa->add(sa->set, c);
                                 }
