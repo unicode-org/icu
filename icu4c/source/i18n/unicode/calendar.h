@@ -192,6 +192,11 @@ public:
         DST_OFFSET,           // Example: 0 or U_MILLIS_PER_HOUR
         YEAR_WOY,             // 'Y' Example: 1..big number - Year of Week of Year
         DOW_LOCAL,            // 'e' Example: 1..7 - Day of Week / Localized
+		
+		EXTENDED_YEAR,
+		JULIAN_DAY,
+		MILLISECONDS_IN_DAY,
+		IS_LEAP_MONTH,
 
         FIELD_COUNT = UCAL_FIELD_COUNT // See ucal.h for other fields.
 #endif /* U_HIDE_DEPRECATED_API */
@@ -1938,6 +1943,8 @@ private:
      */
     void computeGregorianAndDOWFields(int32_t julianDay, UErrorCode &ec);
 
+	protected:
+
     /**
      * Compute the Gregorian calendar year, month, and day of month from the
      * Julian day.  These values are not stored in fields, but in member
@@ -1949,6 +1956,8 @@ private:
      * @see #computeGregorianMonthStart
      */
     void computeGregorianFields(int32_t julianDay, UErrorCode &ec);
+
+	private:
 
     /**
      * Compute the fields WEEK_OF_YEAR, YEAR_WOY, WEEK_OF_MONTH,

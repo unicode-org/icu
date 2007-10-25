@@ -37,7 +37,7 @@
 #include "hebrwcal.h"
 #include "persncal.h"
 #include "indiancal.h"
-//#include "chnsecal.h"
+#include "chnsecal.h"
 #include "unicode/calendar.h"
 #include "cpputils.h"
 #include "servloc.h"
@@ -196,8 +196,8 @@ static Calendar *createStandardCalendar(char *calType, const Locale &canLoc, UEr
         return new HebrewCalendar(canLoc, status);
     } else if(!uprv_strcmp(calType, "persian")) {
         return new PersianCalendar(canLoc, status);
-        //} else if(!uprv_strcmp(calType, "chinese")) {
-        //return new ChineseCalendar(canLoc, status);
+    } else if(!uprv_strcmp(calType, "chinese")) {
+        return new ChineseCalendar(canLoc, status);
     } else if(!uprv_strcmp(calType, "indian")) {
         return new IndianCalendar(canLoc, status);
     } else { 
@@ -472,7 +472,8 @@ static const int32_t kCalendarLimits[UCAL_FIELD_COUNT][4] = {
     {           1,            1,             7,             7  }, // DOW_LOCAL
     {/*N/A*/-1,       /*N/A*/-1,     /*N/A*/-1,       /*N/A*/-1}, // EXTENDED_YEAR
     { -0x7F000000,  -0x7F000000,    0x7F000000,    0x7F000000  }, // JULIAN_DAY
-    {           0,            0, 24*kOneHour-1, 24*kOneHour-1  } // MILLISECONDS_IN_DAY
+    {           0,            0, 24*kOneHour-1, 24*kOneHour-1  },  // MILLISECONDS_IN_DAY
+    {           0,            0,             1,             1  },  // IS_LEAP_MONTH
 };
 
 // Resource bundle tags read by this class
@@ -2086,6 +2087,7 @@ int32_t Calendar::getLimit(UCalendarDateFields field, ELimitType limitType) cons
     case UCAL_DOW_LOCAL:
     case UCAL_JULIAN_DAY:
     case UCAL_MILLISECONDS_IN_DAY:
+    case UCAL_IS_LEAP_MONTH:
         return kCalendarLimits[field][limitType];
     default:
         return handleGetLimit(field, limitType);
