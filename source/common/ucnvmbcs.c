@@ -61,8 +61,46 @@
 #define MBCS_UNROLL_SINGLE_FROM_BMP 0
 
 /*
- * _MBCSHeader version 4.3
+ * _MBCSHeader versions 5.3 & 4.3
  * (Note that the _MBCSHeader version is in addition to the converter formatVersion.)
+ *
+ * This version is optional. Version 5 is used for incompatible data format changes.
+ * makeconv will continue to generate version 4 files if possible.
+ *
+ * Changes from version 4:
+ *
+ * The main difference is an additional _MBCSHeader field with
+ * - the length (number of uint32_t) of the _MBCSHeader
+ * - flags for further incompatible data format changes
+ * - flags for further, backward compatible data format changes
+ *
+ * The MBCS_OPT_FROM_U flag indicates that most of the fromUnicode data is omitted from
+ * the file and needs to be reconstituted at load time.
+ * This requires a utf8Friendly format with an additional mbcsIndex table for fast
+ * (and UTF-8-friendly) fromUnicode conversion for Unicode code points up to maxFastUChar.
+ * (For details about these structures see below, and see ucnvmbcs.h.)
+ *
+ *   utf8Friendly also implies that the fromUnicode mappings are stored in ascending order
+ *   of the Unicode code points. (This requires that the .ucm file has the |0 etc.
+ *   precision markers for all mappings.)
+ *
+ *   All fallbacks have been moved to the extension table, leaving only roundtrips in the
+ *   omitted data that can be reconstituted from the toUnicode data.
+ *
+ *   Of the stage 2 table, the part corresponding to maxFastUChar and below is omitted.
+ *   With only roundtrip mappings in the base fromUnicode data, this part is fully
+ *   redundant with the mbcsIndex and will be reconstituted from that (also using the
+ *   stage 1 table which contains the information about how stage 2 was compacted).
+ *
+ *   The rest of the stage 2 table, the part for code points above maxFastUChar,
+ *   is stored in the file and will be appended to the reconstituted part.
+ *
+ *   The entire fromUBytes array is omitted from the file and will be reconstitued.
+ *   This is done by enumerating all toUnicode roundtrip mappings, performing
+ *   each mapping (using the stage 1 and reconstituted stage 2 tables) and
+ *   writing instead of reading the byte values.
+ *
+ * _MBCSHeader version 4.3
  *
  * Change from version 4.2:
  * - Optional utf8Friendly data structures, with 64-entry stage 3 block
@@ -362,101 +400,240 @@ gb18030Ranges[13][4]={
 
 /* Miscellaneous ------------------------------------------------------------ */
 
-#if 0  /* Replaced by ucnv_MBCSGetFilteredUnicodeSetForUnicode() until we implement ucnv_getUnicodeSet() with reverse fallbacks. */
+/**
+ * Callback from ucnv_MBCSEnumToUnicode(), takes 32 mappings from
+ * consecutive sequences of bytes, starting from the one encoded in value,
+ * to Unicode code points. (Multiple mappings to reduce per-function call overhead.)
+ * Does not currently support m:n mappings or reverse fallbacks.
+ * This function will not be called for sequences of bytes with leading zeros.
+ *
+ * @param context an opaque pointer, as passed into ucnv_MBCSEnumToUnicode()
+ * @param value contains 1..4 bytes of the first byte sequence, right-aligned
+ * @param codePoints resulting Unicode code points, or negative if a byte sequence does
+ *        not map to anything
+ * @return TRUE to continue enumeration, FALSE to stop
+ */
+typedef UBool U_CALLCONV
+UConverterEnumToUCallback(const void *context, uint32_t value, UChar32 codePoints[32]);
 
 /* similar to ucnv_MBCSGetNextUChar() but recursive */
-static void
-_getUnicodeSetForBytes(const UConverterSharedData *sharedData,
-                       const int32_t (*stateTable)[256], const uint16_t *unicodeCodeUnits,
-                       const USetAdder *sa,
-                       UConverterUnicodeSet which,
-                       uint8_t state, uint32_t offset, int32_t lowByte, int32_t highByte,
-                      
-                       UErrorCode *pErrorCode) {
-    int32_t b, entry;
+static UBool
+enumToU(UConverterMBCSTable *mbcsTable, int8_t stateProps[],
+        int32_t state, uint32_t offset,
+        uint32_t value,
+        UConverterEnumToUCallback *callback, const void *context,
+        UErrorCode *pErrorCode) {
+    UChar32 codePoints[32];
+    const int32_t *row;
+    const uint16_t *unicodeCodeUnits;
+    UChar32 anyCodePoints;
+    int32_t b, limit;
 
-    for(b=lowByte; b<=highByte; ++b) {
-        entry=stateTable[state][b];
+    row=mbcsTable->stateTable[state];
+    unicodeCodeUnits=mbcsTable->unicodeCodeUnits;
+
+    value<<=8;
+    anyCodePoints=-1;  /* becomes non-negative if there is a mapping */
+
+    b=(stateProps[state]&0x38)<<2;
+    if(b==0 && stateProps[state]>=0x40) {
+        /* skip byte sequences with leading zeros because they are not stored in the fromUnicode table */
+        codePoints[0]=U_SENTINEL;
+        b=1;
+    }
+    limit=((stateProps[state]&7)+1)<<5;
+    while(b<limit) {
+        int32_t entry=row[b];
         if(MBCS_ENTRY_IS_TRANSITION(entry)) {
-            _getUnicodeSetForBytes(
-                sharedData, stateTable, unicodeCodeUnits,
-                sa, which,
-                (uint8_t)MBCS_ENTRY_TRANSITION_STATE(entry),
-                offset+MBCS_ENTRY_TRANSITION_OFFSET(entry),
-                0, 0xff,
-                pErrorCode);
+            int32_t nextState=MBCS_ENTRY_TRANSITION_STATE(entry);
+            if(stateProps[nextState]>=0) {
+                /* recurse to a state with non-ignorable actions */
+                if(!enumToU(
+                        mbcsTable, stateProps, nextState,
+                        offset+MBCS_ENTRY_TRANSITION_OFFSET(entry),
+                        value|(uint32_t)b,
+                        callback, context,
+                        pErrorCode)) {
+                    return FALSE;
+                }
+            }
+            codePoints[b&0x1f]=U_SENTINEL;
         } else {
             UChar32 c;
-            int32_t rowOffset=offset;
-            uint8_t action;
-
-            c=U_SENTINEL;
+            int32_t action;
 
             /*
              * An if-else-if chain provides more reliable performance for
              * the most common cases compared to a switch.
              */
-            action=(uint8_t)(MBCS_ENTRY_FINAL_ACTION(entry));
+            action=MBCS_ENTRY_FINAL_ACTION(entry);
             if(action==MBCS_STATE_VALID_DIRECT_16) {
                 /* output BMP code point */
                 c=(UChar)MBCS_ENTRY_FINAL_VALUE_16(entry);
             } else if(action==MBCS_STATE_VALID_16) {
-                offset+=MBCS_ENTRY_FINAL_VALUE_16(entry);
-                c=unicodeCodeUnits[offset];
+                int32_t finalOffset=offset+MBCS_ENTRY_FINAL_VALUE_16(entry);
+                c=unicodeCodeUnits[finalOffset];
                 if(c<0xfffe) {
                     /* output BMP code point */
                 } else {
                     c=U_SENTINEL;
                 }
             } else if(action==MBCS_STATE_VALID_16_PAIR) {
-                offset+=MBCS_ENTRY_FINAL_VALUE_16(entry);
-                c=unicodeCodeUnits[offset++];
+                int32_t finalOffset=offset+MBCS_ENTRY_FINAL_VALUE_16(entry);
+                c=unicodeCodeUnits[finalOffset++];
                 if(c<0xd800) {
                     /* output BMP code point below 0xd800 */
                 } else if(c<=0xdbff) {
                     /* output roundtrip or fallback supplementary code point */
-                    c=((c&0x3ff)<<10)+unicodeCodeUnits[offset]+(0x10000-0xdc00);
+                    c=((c&0x3ff)<<10)+unicodeCodeUnits[finalOffset]+(0x10000-0xdc00);
                 } else if(c==0xe000) {
                     /* output roundtrip BMP code point above 0xd800 or fallback BMP code point */
-                    c=unicodeCodeUnits[offset];
+                    c=unicodeCodeUnits[finalOffset];
                 } else {
                     c=U_SENTINEL;
                 }
             } else if(action==MBCS_STATE_VALID_DIRECT_20) {
                 /* output supplementary code point */
                 c=(UChar32)(MBCS_ENTRY_FINAL_VALUE(entry)+0x10000);
+            } else {
+                c=U_SENTINEL;
             }
 
-            if(c>=0) {
-                sa->add(sa->set, c);
+            codePoints[b&0x1f]=c;
+            anyCodePoints&=c;
+        }
+        if(((++b)&0x1f)==0) {
+            if(anyCodePoints>=0) {
+                if(!callback(context, value|(uint32_t)(b-0x20), codePoints)) {
+                    return FALSE;
+                }
+                anyCodePoints=-1;
             }
-            offset=rowOffset;
         }
     }
+    return TRUE;
 }
 
 /*
- * Internal function returning a UnicodeSet for toUnicode() conversion.
- * Currently only used for ISO-2022-CN, and only handles roundtrip mappings.
- * In the future, if we add support for reverse-fallback sets, this function
- * needs to be updated, and called for each initial state.
- * Does not currently handle extensions.
- * Does not empty the set first.
+ * Only called if stateProps[state]==-1.
+ * A recursive call may do stateProps[state]|=0x40 if this state is the target of an
+ * MBCS_STATE_CHANGE_ONLY.
  */
-U_CFUNC void
-ucnv_MBCSGetUnicodeSetForBytes(const UConverterSharedData *sharedData,
-                           const USetAdder *sa,
-                           UConverterUnicodeSet which,
-                           uint8_t state, int32_t lowByte, int32_t highByte,
-                           UErrorCode *pErrorCode) {
-    _getUnicodeSetForBytes(
-        sharedData, sharedData->mbcs.stateTable, sharedData->mbcs.unicodeCodeUnits,
-        sa, which,
-        state, 0, lowByte, highByte,
-        pErrorCode);
+static int8_t
+getStateProp(const int32_t (*stateTable)[256], int8_t stateProps[], int state) {
+    const int32_t *row;
+    int32_t min, max, entry, nextState;
+
+    row=stateTable[state];
+    stateProps[state]=0;
+
+    /* find first non-ignorable state */
+    for(min=0;; ++min) {
+        entry=row[min];
+        nextState=MBCS_ENTRY_STATE(entry);
+        if(stateProps[nextState]==-1) {
+            getStateProp(stateTable, stateProps, nextState);
+        }
+        if(MBCS_ENTRY_IS_TRANSITION(entry)) {
+            if(stateProps[nextState]>=0) {
+                break;
+            }
+        } else if(MBCS_ENTRY_FINAL_ACTION(entry)<MBCS_STATE_UNASSIGNED) {
+            break;
+        }
+        if(min==0xff) {
+            stateProps[state]=-0x40;  /* (int8_t)0xc0 */
+            return stateProps[state];
+        }
+    }
+    stateProps[state]|=(int8_t)((min>>5)<<3);
+
+    /* find last non-ignorable state */
+    for(max=0xff; min<max; --max) {
+        entry=row[max];
+        nextState=MBCS_ENTRY_STATE(entry);
+        if(stateProps[nextState]==-1) {
+            getStateProp(stateTable, stateProps, nextState);
+        }
+        if(MBCS_ENTRY_IS_TRANSITION(entry)) {
+            if(stateProps[nextState]>=0) {
+                break;
+            }
+        } else if(MBCS_ENTRY_FINAL_ACTION(entry)<MBCS_STATE_UNASSIGNED) {
+            break;
+        }
+    }
+    stateProps[state]|=(int8_t)(max>>5);
+
+    /* recurse further and collect direct-state information */
+    while(min<=max) {
+        entry=row[min];
+        nextState=MBCS_ENTRY_STATE(entry);
+        if(stateProps[nextState]==-1) {
+            getStateProp(stateTable, stateProps, nextState);
+        }
+        if(MBCS_ENTRY_IS_FINAL(entry)) {
+            stateProps[nextState]|=0x40;
+            if(MBCS_ENTRY_FINAL_ACTION(entry)<=MBCS_STATE_FALLBACK_DIRECT_20) {
+                stateProps[state]|=0x40;
+            }
+        }
+        ++min;
+    }
+    return stateProps[state];
 }
 
-#endif
+/*
+ * Internal function enumerating the toUnicode data of an MBCS converter.
+ * Currently only used for reconstituting data for a MBCS_OPT_NO_FROM_U
+ * table, but could also be used for a future ucnv_getUnicodeSet() option
+ * that includes reverse fallbacks (after updating this function's implementation).
+ * Currently only handles roundtrip mappings.
+ * Does not currently handle extensions.
+ */
+static void
+ucnv_MBCSEnumToUnicode(UConverterMBCSTable *mbcsTable,
+                       UConverterEnumToUCallback *callback, const void *context,
+                       UErrorCode *pErrorCode) {
+    /*
+     * Properties for each state, to speed up the enumeration.
+     * Ignorable actions are unassigned/illegal/state-change-only:
+     * They do not lead to mappings.
+     *
+     * Bits 7..6:
+     * 1 direct/initial state (stateful converters have multiple)
+     * 0 non-initial state with transitions or with non-ignorable result actions
+     * -1 final state with only ignorable actions
+     *
+     * Bits 5..3:
+     * The lowest byte value with non-ignorable actions is
+     * value<<5 (rounded down).
+     *
+     * Bits 2..0:
+     * The highest byte value with non-ignorable actions is
+     * (value<<5)&0x1f (rounded up).
+     */
+    int8_t stateProps[MBCS_MAX_STATE_COUNT];
+    int32_t state;
+
+    uprv_memset(stateProps, -1, sizeof(stateProps));
+
+    /* recurse from state 0 and set all stateProps */
+    getStateProp(mbcsTable->stateTable, stateProps, 0);
+
+    for(state=0; state<mbcsTable->countStates; ++state) {
+        /*if(stateProps[state]==-1) {
+            printf("unused/unreachable <icu:state> %d\n", state);
+        }*/
+        if(stateProps[state]>=0x40) {
+            /* start from each direct state */
+            enumToU(
+                mbcsTable, stateProps, state, 0, 0,
+                callback, context,
+                pErrorCode);
+        }
+    }
+}
 
 U_CFUNC void
 ucnv_MBCSGetFilteredUnicodeSetForUnicode(const UConverterSharedData *sharedData,
@@ -1006,6 +1183,156 @@ _EBCDICSwapLFNL(UConverterSharedData *sharedData, UErrorCode *pErrorCode) {
     return TRUE;
 }
 
+/* reconstitute omitted fromUnicode data ------------------------------------ */
+
+/* for details, compare with genmbcs.c MBCSAddFromUnicode() and transformEUC() */
+static UBool U_CALLCONV
+writeStage3Roundtrip(const void *context, uint32_t value, UChar32 codePoints[32]) {
+    UConverterMBCSTable *mbcsTable=(UConverterMBCSTable *)context;
+    const uint16_t *table;
+    uint32_t *stage2;
+    uint8_t *bytes, *p;
+    UChar32 c;
+    int32_t i, st3;
+
+    table=mbcsTable->fromUnicodeTable;
+    bytes=(uint8_t *)mbcsTable->fromUnicodeBytes;
+
+    /* for EUC outputTypes, modify the value like genmbcs.c's transformEUC() */
+    switch(mbcsTable->outputType) {
+    case MBCS_OUTPUT_3_EUC:
+        if(value<=0xffff) {
+            /* short sequences are stored directly */
+            /* code set 0 or 1 */
+        } else if(value<=0x8effff) {
+            /* code set 2 */
+            value&=0x7fff;
+        } else /* first byte is 0x8f */ {
+            /* code set 3 */
+            value&=0xff7f;
+        }
+        break;
+    case MBCS_OUTPUT_4_EUC:
+        if(value<=0xffffff) {
+            /* short sequences are stored directly */
+            /* code set 0 or 1 */
+        } else if(value<=0x8effffff) {
+            /* code set 2 */
+            value&=0x7fffff;
+        } else /* first byte is 0x8f */ {
+            /* code set 3 */
+            value&=0xff7fff;
+        }
+        break;
+    default:
+        break;
+    }
+
+    for(i=0; i<=0x1f; ++value, ++i) {
+        c=codePoints[i];
+        if(c<0) {
+            continue;
+        }
+
+        /* locate the stage 2 & 3 data */
+        stage2=((uint32_t *)table)+table[c>>10]+((c>>4)&0x3f);
+        p=bytes;
+        st3=(int32_t)(uint16_t)*stage2*16+(c&0xf);
+
+        /* write the codepage bytes into stage 3 */
+        switch(mbcsTable->outputType) {
+        case MBCS_OUTPUT_3:
+        case MBCS_OUTPUT_4_EUC:
+            p+=st3*3;
+            p[0]=(uint8_t)(value>>16);
+            p[1]=(uint8_t)(value>>8);
+            p[2]=(uint8_t)value;
+            break;
+        case MBCS_OUTPUT_4:
+            ((uint32_t *)p)[st3]=value;
+            break;
+        default:
+            /* 2 bytes per character */
+            ((uint16_t *)p)[st3]=(uint16_t)value;
+            break;
+        }
+
+        /* set the roundtrip flag */
+        *stage2|=(1UL<<(16+(c&0xf)));
+    }
+    return TRUE;
+ }
+
+static void
+reconstituteData(UConverterMBCSTable *mbcsTable,
+                 uint32_t stage1Length, uint32_t stage2Length,
+                 uint32_t fullStage2Length,  /* lengths are numbers of units, not bytes */
+                 UErrorCode *pErrorCode) {
+    uint16_t *stage1;
+    uint32_t *stage2;
+    uint8_t *bytes;
+    uint32_t dataLength=stage1Length*2+fullStage2Length*4+mbcsTable->fromUBytesLength;
+    mbcsTable->reconstitutedData=(uint8_t *)uprv_malloc(dataLength);
+    if(mbcsTable->reconstitutedData==NULL) {
+        *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    uprv_memset(mbcsTable->reconstitutedData, 0, dataLength);
+
+    /* copy existing data and reroute the pointers */
+    stage1=(uint16_t *)mbcsTable->reconstitutedData;
+    uprv_memcpy(stage1, mbcsTable->fromUnicodeTable, stage1Length*2);
+
+    stage2=(uint32_t *)(stage1+stage1Length);
+    uprv_memcpy(stage2+(fullStage2Length-stage2Length),
+                mbcsTable->fromUnicodeTable+stage1Length,
+                stage2Length*4);
+
+    mbcsTable->fromUnicodeTable=stage1;
+    mbcsTable->fromUnicodeBytes=bytes=(uint8_t *)(stage2+fullStage2Length);
+
+    /* indexes into stage 2 count from the bottom of the fromUnicodeTable */
+    stage2=(uint32_t *)stage1;
+
+    /* reconstitute the initial part of stage 2 from the mbcsIndex */
+    {
+        int32_t stageUTF8Length=((int32_t)mbcsTable->maxFastUChar+1)>>6;
+        int32_t stageUTF8Index=0;
+        int32_t st1, st2, st3, i;
+
+        for(st1=0; stageUTF8Index<stageUTF8Length; ++st1) {
+            st2=stage1[st1];
+            if(st2!=stage1Length/2) {
+                /* each stage 2 block has 64 entries corresponding to 16 entries in the mbcsIndex */
+                for(i=0; i<16; ++i) {
+                    st3=mbcsTable->mbcsIndex[stageUTF8Index++];
+                    if(st3!=0) {
+                        /* an stage 2 entry's index is per stage 3 16-block, not per stage 3 entry */
+                        st3>>=4;
+                        /*
+                         * 4 stage 2 entries point to 4 consecutive stage 3 16-blocks which are
+                         * allocated together as a single 64-block for access from the mbcsIndex
+                         */
+                        stage2[st2++]=st3++;
+                        stage2[st2++]=st3++;
+                        stage2[st2++]=st3++;
+                        stage2[st2++]=st3;
+                    } else {
+                        /* no stage 3 block, skip */
+                        st2+=4;
+                    }
+                }
+            } else {
+                /* no stage 2 block, skip */
+                stageUTF8Index+=16;
+            }
+        }
+    }
+
+    /* reconstitute fromUnicodeBytes with roundtrips from toUnicode data */
+    ucnv_MBCSEnumToUnicode(mbcsTable, writeStage3Roundtrip, mbcsTable, pErrorCode);
+}
+
 /* MBCS setup functions ----------------------------------------------------- */
 
 static void
@@ -1017,13 +1344,25 @@ ucnv_MBCSLoad(UConverterSharedData *sharedData,
     UConverterMBCSTable *mbcsTable=&sharedData->mbcs;
     _MBCSHeader *header=(_MBCSHeader *)raw;
     uint32_t offset;
+    uint32_t headerLength;
+    UBool noFromU=FALSE;
 
-    if(header->version[0]!=4) {
+    if(header->version[0]==4) {
+        headerLength=MBCS_HEADER_V4_LENGTH;
+    } else if(header->version[0]==5 && header->version[1]>=3 &&
+              (header->options&MBCS_OPT_UNKNOWN_INCOMPATIBLE_MASK)==0) {
+        headerLength=header->options&MBCS_OPT_LENGTH_MASK;
+        noFromU=(UBool)((header->options&MBCS_OPT_NO_FROM_U)!=0);
+    } else {
         *pErrorCode=U_INVALID_TABLE_FORMAT;
         return;
     }
 
     mbcsTable->outputType=(uint8_t)header->flags;
+    if(noFromU && mbcsTable->outputType==MBCS_OUTPUT_1) {
+        *pErrorCode=U_INVALID_TABLE_FORMAT;
+        return;
+    }
 
     /* extension data, header version 4.2 and higher */
     offset=header->flags>>8;
@@ -1051,7 +1390,7 @@ ucnv_MBCSLoad(UConverterSharedData *sharedData,
         }
 
         /* load the base table */
-        baseName=(const char *)(header+1);
+        baseName=(const char *)header+headerLength*4;
         if(0==uprv_strcmp(baseName, sharedData->staticData->name)) {
             /* forbid loading this same extension-only file */
             *pErrorCode=U_INVALID_TABLE_FORMAT;
@@ -1094,6 +1433,12 @@ ucnv_MBCSLoad(UConverterSharedData *sharedData,
         mbcsTable->swapLFNLStateTable=NULL;
         mbcsTable->swapLFNLFromUnicodeBytes=NULL;
         mbcsTable->swapLFNLName=NULL;
+
+        /*
+         * The reconstitutedData must be deleted only when the base converter
+         * is unloaded.
+         */
+        mbcsTable->reconstitutedData=NULL;
 
         /*
          * Set a special, runtime-only outputType if the extension converter
@@ -1187,7 +1532,7 @@ ucnv_MBCSLoad(UConverterSharedData *sharedData,
 
         mbcsTable->countStates=(uint8_t)header->countStates;
         mbcsTable->countToUFallbacks=header->countToUFallbacks;
-        mbcsTable->stateTable=(const int32_t (*)[256])(raw+sizeof(_MBCSHeader));
+        mbcsTable->stateTable=(const int32_t (*)[256])(raw+headerLength*4);
         mbcsTable->toUFallbacks=(const _MBCSToUFallback *)(mbcsTable->stateTable+header->countStates);
         mbcsTable->unicodeCodeUnits=(const uint16_t *)(raw+header->offsetToUCodeUnits);
 
@@ -1244,7 +1589,9 @@ ucnv_MBCSLoad(UConverterSharedData *sharedData,
                  * The .cnv file is prebuilt with an additional stage table with indexes
                  * to each block.
                  */
-                mbcsTable->mbcsIndex=(const uint16_t *)(mbcsTable->fromUnicodeBytes+mbcsTable->fromUBytesLength);
+                mbcsTable->mbcsIndex=(const uint16_t *)
+                    (mbcsTable->fromUnicodeBytes+
+                     (noFromU ? 0 : mbcsTable->fromUBytesLength));
                 mbcsTable->maxFastUChar=(((UChar)header->version[2])<<8)|0xff;
             }
         }
@@ -1260,6 +1607,16 @@ ucnv_MBCSLoad(UConverterSharedData *sharedData,
                 }
             }
             mbcsTable->asciiRoundtrips=asciiRoundtrips;
+        }
+
+        if(noFromU) {
+            uint32_t stage1Length=
+                mbcsTable->unicodeMask&UCNV_HAS_SUPPLEMENTARY ?
+                    0x440 : 0x40;
+            uint32_t stage2Length=
+                (header->offsetFromUBytes-header->offsetFromUTable)/4-
+                stage1Length/2;
+            reconstituteData(mbcsTable, stage1Length, stage2Length, header->fullStage2Length, pErrorCode);
         }
     }
 
@@ -1295,6 +1652,9 @@ ucnv_MBCSUnload(UConverterSharedData *sharedData) {
     }
     if(mbcsTable->baseSharedData!=NULL) {
         ucnv_unload(mbcsTable->baseSharedData);
+    }
+    if(mbcsTable->reconstitutedData!=NULL) {
+        uprv_free(mbcsTable->reconstitutedData);
     }
 }
 
