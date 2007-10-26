@@ -709,6 +709,291 @@ public class FormatTests
         return new SimpleDateFormat(pattern, dfs, uloc);
     }
     
+    /*
+     * The serialized form of a normally created DecimalFormatSymbols object
+     * will have locale-specific data in it that might change from one version
+     * of ICU4J to another. To guard against this, we store the following canned
+     * data into the test objects we create.
+     */
+    static HashMap cannedDecimalFormatSymbols = new HashMap();
+    
+    static String en_CA_StringSymbols[] = {
+        "$", 
+        "E", 
+        "\u221E", 
+        "CAD", 
+        "\uFFFD", 
+        ".#,-.*;%\u2030+@0"
+    };
+
+    static String fr_CA_StringSymbols[] = {
+        "$", 
+        "E", 
+        "\u221E", 
+        "CAD", 
+        "\uFFFD", 
+        ",#\u00A0-,*;%\u2030+@0"
+    };
+
+    static String zh_CN_StringSymbols[] = {
+        "\uFFE5", 
+        "E", 
+        "\u221E", 
+        "CNY", 
+        "\uFFFD",
+        ".#,-.*;%\u2030+@0"
+    };
+
+    static String zh_StringSymbols[] = {
+        "\u00A4", 
+        "E", 
+        "\u221E", 
+        "XXX", 
+        "\uFFFD", 
+        ".#,-.*;%\u2030+@0"
+    };
+
+    static String en_StringSymbols[] = {
+        "\u00A4", 
+        "E", 
+        "\u221E", 
+        "XXX", 
+        "\uFFFD", 
+        ".#,-.*;%\u2030+@0"
+    };
+
+    static String fr_FR_StringSymbols[] = {
+        "\u20AC", 
+        "E", 
+        "\u221E", 
+        "EUR", 
+        "\uFFFD", 
+        ",#\u00A0-,*;%\u2030+@0"
+    };
+
+    static String fr_StringSymbols[] = {
+        "\u00A4", 
+        "E", 
+        "\u221E", 
+        "XXX", 
+        "\uFFFD", 
+        ",#\u00A0-,*;%\u2030+@0"
+    };
+
+    static String de_StringSymbols[] = {
+        "\u00A4", 
+        "E", 
+        "\u221E", 
+        "XXX", 
+        "\uFFFD",
+        ",#.-,*;%\u2030+@0"
+    };
+
+    static String de_DE_StringSymbols[] = {
+        "\u20AC", 
+        "E", 
+        "\u221E", 
+        "EUR", 
+        "\uFFFD", 
+        ",#.-,*;%\u2030+@0"
+    };
+
+    static String it_StringSymbols[] = {
+        "\u00A4", 
+        "E", 
+        "\u221E", 
+        "XXX", 
+        "\uFFFD", 
+        ",#.-,*;%\u2030+@0"
+    };
+
+    static String it_IT_StringSymbols[] = {
+        "\u20AC", 
+        "E", 
+        "\u221E", 
+        "EUR", 
+        "\uFFFD", 
+        ",#.-,*;%\u2030+@0"
+    };
+
+    static String ja_JP_StringSymbols[] = {
+        "\uFFE5", 
+        "E", 
+        "\u221E", 
+        "JPY", 
+        "\uFFFD", 
+        ".#,-.*;%\u2030+@0"
+    };
+
+    static String ja_StringSymbols[] = {
+        "\u00A4", 
+        "E", 
+        "\u221E", 
+        "XXX", 
+        "\uFFFD", 
+        ".#,-.*;%\u2030+@0"
+    };
+
+    static String ko_KR_StringSymbols[] = {
+        "\uFFE6", 
+        "E", 
+        "\u221E", 
+        "KRW", 
+        "\uFFFD",
+        ".#,-.*;%\u2030+@0"
+    };
+
+    static String ko_StringSymbols[] = {
+        "\u00A4", 
+        "E", 
+        "\u221E", 
+        "XXX", 
+        "\uFFFD",
+        ".#,-.*;%\u2030+@0"
+    };
+
+    static String zh_Hans_CN_StringSymbols[] = {
+        "\uFFE5", 
+        "E", 
+        "\u221E", 
+        "CNY", 
+        "\uFFFD", 
+        ".#,-.*;%\u2030+@0"
+    };
+
+    static String zh_Hant_TW_StringSymbols[] = {
+        "NT$", 
+        "E", 
+        "\u221E", 
+        "TWD", 
+        "\uFFFD", 
+        ".#,-.*;%\u2030+@0"
+    };
+
+    static String zh_TW_StringSymbols[] = {
+        "NT$", 
+        "E", 
+        "\u221E", 
+        "TWD", 
+        "\uFFFD", 
+        ".#,-.*;%\u2030+@0"
+    };
+
+    static String en_GB_StringSymbols[] = {
+        "\u00A3", 
+        "E", 
+        "\u221E", 
+        "GBP", 
+        "\uFFFD", 
+        ".#,-.*;%\u2030+@0"
+    };
+
+    static String en_US_StringSymbols[] = {
+        "$", 
+        "E", 
+        "\u221E", 
+        "USD", 
+        "\uFFFD",
+        ".#,-.*;%\u2030+@0"
+    };
+    
+    static {
+        cannedDecimalFormatSymbols.put("en_CA",      en_CA_StringSymbols);
+        cannedDecimalFormatSymbols.put("fr_CA",      fr_CA_StringSymbols);
+        cannedDecimalFormatSymbols.put("zh_CN",      zh_CN_StringSymbols);
+        cannedDecimalFormatSymbols.put("zh",         zh_StringSymbols);
+        cannedDecimalFormatSymbols.put("en",         en_StringSymbols);
+        cannedDecimalFormatSymbols.put("fr_FR",      fr_FR_StringSymbols);
+        cannedDecimalFormatSymbols.put("fr",         fr_StringSymbols);
+        cannedDecimalFormatSymbols.put("de",         de_StringSymbols);
+        cannedDecimalFormatSymbols.put("de_DE",      de_DE_StringSymbols);
+        cannedDecimalFormatSymbols.put("it",         it_StringSymbols);
+        cannedDecimalFormatSymbols.put("it_IT",      it_IT_StringSymbols);
+        cannedDecimalFormatSymbols.put("ja_JP",      ja_JP_StringSymbols);
+        cannedDecimalFormatSymbols.put("ja",         ja_StringSymbols);
+        cannedDecimalFormatSymbols.put("ko_KR",      ko_KR_StringSymbols);
+        cannedDecimalFormatSymbols.put("ko",         ko_StringSymbols);
+        cannedDecimalFormatSymbols.put("zh_Hans_CN", zh_Hans_CN_StringSymbols);
+        cannedDecimalFormatSymbols.put("zh_Hant_TW", zh_Hant_TW_StringSymbols);
+        cannedDecimalFormatSymbols.put("zh_TW",      zh_TW_StringSymbols);
+        cannedDecimalFormatSymbols.put("en_GB",      en_GB_StringSymbols);
+        cannedDecimalFormatSymbols.put("en_US",      en_US_StringSymbols);
+    }
+    
+    private static char[] getCharSymbols(DecimalFormatSymbols dfs)
+    {
+        char symbols[] = {
+            dfs.getDecimalSeparator(),
+            dfs.getDigit(),
+            dfs.getGroupingSeparator(),
+            dfs.getMinusSign(),
+            dfs.getMonetaryDecimalSeparator(),
+            dfs.getPadEscape(),
+            dfs.getPatternSeparator(),
+            dfs.getPercent(),
+            dfs.getPerMill(),
+            dfs.getPlusSign(),
+            dfs.getSignificantDigit(),
+            dfs.getZeroDigit()
+        };
+        
+        return symbols;
+    }
+    
+    private static void setCharSymbols(DecimalFormatSymbols dfs, char symbols[])
+    {
+        dfs.setDecimalSeparator(symbols[0]);
+        dfs.setDigit(symbols[1]);
+        dfs.setGroupingSeparator(symbols[2]);
+        dfs.setMinusSign(symbols[3]);
+        dfs.setMonetaryDecimalSeparator(symbols[4]);
+        dfs.setPadEscape(symbols[5]);
+        dfs.setPatternSeparator(symbols[6]);
+        dfs.setPercent(symbols[7]);
+        dfs.setPerMill(symbols[8]);
+        dfs.setPlusSign(symbols[9]);
+        dfs.setSignificantDigit(symbols[10]);
+        dfs.setZeroDigit(symbols[11]);
+    }
+    
+    private static String[] getStringSymbols(DecimalFormatSymbols dfs)
+    {
+        String symbols[] = {
+            dfs.getCurrencySymbol(),
+            dfs.getExponentSeparator(),
+            dfs.getInfinity(),
+            dfs.getInternationalCurrencySymbol(),
+            dfs.getNaN()
+        };
+        
+        return symbols;
+    }
+    
+    private static DecimalFormatSymbols getCannedDecimalFormatSymbols(ULocale uloc)
+    {
+        DecimalFormatSymbols dfs = new DecimalFormatSymbols(uloc);
+        
+        setSymbols(dfs, (String[]) cannedDecimalFormatSymbols.get(uloc.toString()));
+        
+        return dfs;
+    }
+
+    private static DecimalFormat getCannedDecimalFormat(String pattern, ULocale uloc)
+    {
+        return new DecimalFormat(pattern, getCannedDecimalFormatSymbols(uloc));
+    }
+    
+    private static void setSymbols(DecimalFormatSymbols dfs, String symbols[])
+    {
+        dfs.setCurrencySymbol(symbols[0]);
+        dfs.setExponentSeparator(symbols[1]);
+        dfs.setInfinity(symbols[2]);
+        dfs.setInternationalCurrencySymbol(symbols[3]);
+        dfs.setNaN(symbols[4]);
+        
+        setCharSymbols(dfs, symbols[5].toCharArray());
+    }
+    
     public static class RelativeDateFormatHandler implements SerializableTest.Handler
     {
         public Object[] getTestObjects()
@@ -758,11 +1043,27 @@ public class FormatTests
     {
         public Object[] getTestObjects()
         {
+            ULocale uloc = ULocale.forLocale(Locale.US);
             NumberFormat formats[] = {
-                NumberFormat.getInstance(Locale.US),
-                NumberFormat.getCurrencyInstance(Locale.US),
-                NumberFormat.getPercentInstance(Locale.US),
-                NumberFormat.getScientificInstance(Locale.US)
+                /*
+                 * The code below was used to genereate the
+                 * serialized NumberFormat objects in ICU 3.6:
+                 * 
+                 *    NumberFormat.getInstance(Locale.US)
+                 *    NumberFormat.getCurrencyInstance(Locale.US)
+                 *    NumberFormat.getPercentInstance(Locale.US)
+                 *    NumberFormat.getScientificInstance(Locale.US)
+                 * 
+                 * Because the locale data might now be different that it was in
+                 * ICU 3.6, the only way to guarantee that the object we generate
+                 * will match the ICU 3.6 objects is to generate DecimalFormat objects
+                 * that use the same patterns and DecimalFormatSymbols that
+                 * were used in ICU 3.6.
+                 */
+                getCannedDecimalFormat("#,##0.###", uloc),
+                getCannedDecimalFormat("\u00A4#,##0.00;(\u00A4#,##0.00)", uloc),
+                getCannedDecimalFormat("#,##0%", uloc),
+                getCannedDecimalFormat("#E0", uloc)
                
             };
             
@@ -787,7 +1088,9 @@ public class FormatTests
             DecimalFormat formats[] = new DecimalFormat[locales.length];
             
             for (int i = 0; i < locales.length; i += 1) {
-                formats[i] = new DecimalFormat("#,##0.###", new DecimalFormatSymbols(locales[i]));
+                ULocale uloc = ULocale.forLocale(locales[i]);
+                
+                formats[i] = getCannedDecimalFormat("#,##0.###", uloc);
             }
             
             return formats;
@@ -1336,239 +1639,6 @@ public class FormatTests
     
     public static class DecimalFormatSymbolsHandler implements SerializableTest.Handler
     {
-        /*
-         * The serialized form of a normally created DecimalFormatSymbols object
-         * will have locale-specific data in it that might change from one version
-         * of ICU4J to another. To guard against this, we store the following canned
-         * data into the test objects we create.
-         */
-        static HashMap cannedData = new HashMap();
-        
-        static String en_CA_StringSymbols[] = {
-            "$", 
-            "E", 
-            "\u221E", 
-            "CAD", 
-            "\uFFFD", 
-        };
-
-        static String fr_CA_StringSymbols[] = {
-            "$", 
-            "E", 
-            "\u221E", 
-            "CAD", 
-            "\uFFFD", 
-        };
-
-        static String zh_CN_StringSymbols[] = {
-            "\uFFE5", 
-            "E", 
-            "\u221E", 
-            "CNY", 
-            "\uFFFD", 
-        };
-
-        static String zh_StringSymbols[] = {
-            "\u00A4", 
-            "E", 
-            "\u221E", 
-            "XXX", 
-            "\uFFFD", 
-        };
-
-        static String en_StringSymbols[] = {
-            "\u00A4", 
-            "E", 
-            "\u221E", 
-            "XXX", 
-            "\uFFFD", 
-        };
-
-        static String fr_FR_StringSymbols[] = {
-            "\u20AC", 
-            "E", 
-            "\u221E", 
-            "EUR", 
-            "\uFFFD", 
-        };
-
-        static String fr_StringSymbols[] = {
-            "\u00A4", 
-            "E", 
-            "\u221E", 
-            "XXX", 
-            "\uFFFD", 
-        };
-
-        static String de_StringSymbols[] = {
-            "\u00A4", 
-            "E", 
-            "\u221E", 
-            "XXX", 
-            "\uFFFD", 
-        };
-
-        static String de_DE_StringSymbols[] = {
-            "\u20AC", 
-            "E", 
-            "\u221E", 
-            "EUR", 
-            "\uFFFD", 
-        };
-
-        static String it_StringSymbols[] = {
-            "\u00A4", 
-            "E", 
-            "\u221E", 
-            "XXX", 
-            "\uFFFD", 
-        };
-
-        static String it_IT_StringSymbols[] = {
-            "\u20AC", 
-            "E", 
-            "\u221E", 
-            "EUR", 
-            "\uFFFD", 
-        };
-
-        static String ja_JP_StringSymbols[] = {
-            "\uFFE5", 
-            "E", 
-            "\u221E", 
-            "JPY", 
-            "\uFFFD", 
-        };
-
-        static String ja_StringSymbols[] = {
-            "\u00A4", 
-            "E", 
-            "\u221E", 
-            "XXX", 
-            "\uFFFD", 
-        };
-
-        static String ko_KR_StringSymbols[] = {
-            "\uFFE6", 
-            "E", 
-            "\u221E", 
-            "KRW", 
-            "\uFFFD", 
-        };
-
-        static String ko_StringSymbols[] = {
-            "\u00A4", 
-            "E", 
-            "\u221E", 
-            "XXX", 
-            "\uFFFD", 
-        };
-
-        static String zh_Hans_CN_StringSymbols[] = {
-            "\uFFE5", 
-            "E", 
-            "\u221E", 
-            "CNY", 
-            "\uFFFD", 
-        };
-
-        static String zh_Hant_TW_StringSymbols[] = {
-            "NT$", 
-            "E", 
-            "\u221E", 
-            "TWD", 
-            "\uFFFD", 
-        };
-
-        static String zh_TW_StringSymbols[] = {
-            "NT$", 
-            "E", 
-            "\u221E", 
-            "TWD", 
-            "\uFFFD", 
-        };
-
-        static String en_GB_StringSymbols[] = {
-            "\u00A3", 
-            "E", 
-            "\u221E", 
-            "GBP", 
-            "\uFFFD", 
-        };
-
-        static String en_US_StringSymbols[] = {
-            "$", 
-            "E", 
-            "\u221E", 
-            "USD", 
-            "\uFFFD", 
-        };
-        
-        {
-            cannedData.put("en_CA",      en_CA_StringSymbols);
-            cannedData.put("fr_CA",      fr_CA_StringSymbols);
-            cannedData.put("zh_CN",      zh_CN_StringSymbols);
-            cannedData.put("zh",         zh_StringSymbols);
-            cannedData.put("en",         en_StringSymbols);
-            cannedData.put("fr_FR",      fr_FR_StringSymbols);
-            cannedData.put("fr",         fr_StringSymbols);
-            cannedData.put("de",         de_StringSymbols);
-            cannedData.put("de_DE",      de_DE_StringSymbols);
-            cannedData.put("it",         it_StringSymbols);
-            cannedData.put("it_IT",      it_IT_StringSymbols);
-            cannedData.put("ja_JP",      ja_JP_StringSymbols);
-            cannedData.put("ja",         ja_StringSymbols);
-            cannedData.put("ko_KR",      ko_KR_StringSymbols);
-            cannedData.put("ko",         ko_StringSymbols);
-            cannedData.put("zh_Hans_CN", zh_Hans_CN_StringSymbols);
-            cannedData.put("zh_Hant_TW", zh_Hant_TW_StringSymbols);
-            cannedData.put("zh_TW",      zh_TW_StringSymbols);
-            cannedData.put("en_GB",      en_GB_StringSymbols);
-            cannedData.put("en_US",      en_US_StringSymbols);
-        }
-        
-        private char[] getCharSymbols(DecimalFormatSymbols dfs)
-        {
-            char symbols[] = {
-                dfs.getDecimalSeparator(),
-                dfs.getDigit(),
-                dfs.getGroupingSeparator(),
-                dfs.getMinusSign(),
-                dfs.getMonetaryDecimalSeparator(),
-                dfs.getPadEscape(),
-                dfs.getPatternSeparator(),
-                dfs.getPercent(),
-                dfs.getPerMill(),
-                dfs.getPlusSign(),
-                dfs.getSignificantDigit(),
-                dfs.getZeroDigit()
-            };
-            
-            return symbols;
-        }
-        
-        private String[] getStringSymbols(DecimalFormatSymbols dfs)
-        {
-            String symbols[] = {
-                dfs.getCurrencySymbol(),
-                dfs.getExponentSeparator(),
-                dfs.getInfinity(),
-                dfs.getInternationalCurrencySymbol(),
-                dfs.getNaN()
-            };
-            
-            return symbols;
-        }
-        
-        private void setStringSymbols(DecimalFormatSymbols dfs, String symbols[])
-        {
-            dfs.setCurrencySymbol(symbols[0]);
-            dfs.setExponentSeparator(symbols[1]);
-            dfs.setInfinity(symbols[2]);
-            dfs.setInternationalCurrencySymbol(symbols[3]);
-            dfs.setNaN(symbols[4]);
-        }
-        
         public Object[] getTestObjects()
         {
             Locale locales[] = SerializableTest.getLocales();
@@ -1577,8 +1647,10 @@ public class FormatTests
             for (int i = 0; i < locales.length; i += 1) {
                 ULocale uloc = ULocale.forLocale(locales[i]);
 
-                dfs[i] = new DecimalFormatSymbols(uloc);
-                setStringSymbols(dfs[i], (String[]) cannedData.get(uloc.toString()));
+                dfs[i] = getCannedDecimalFormatSymbols(uloc);
+
+//                System.out.println("\n    " + uloc.toString() + " = \"" + 
+//                        com.ibm.icu.impl.Utility.escape(String.valueOf(getCharSymbols(dfs[i]), 0, 12)) + "\"");
             }
             
             return dfs;
