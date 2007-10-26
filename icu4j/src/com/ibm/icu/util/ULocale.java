@@ -538,7 +538,7 @@ public final class ULocale implements Serializable {
             };
             String[] tempReplacementCountries = {
            /*  "BU", "DY", "FX", "HV", "NH", "RH", "TP", "YU", "ZR" */
-               "MM", "BJ", "FR", "BF", "VU", "ZW", "TL", "CS", "CD",   /* replacement country codes */      
+               "MM", "BJ", "FR", "BF", "VU", "ZW", "TL", "RS", "CD",   /* replacement country codes */      
             };
     
             /* This list MUST contain a three-letter code for every two-letter code in
