@@ -917,6 +917,14 @@ conversion:table(nofallback) {
           :intvector{ -1,-1,-1,-1,0,1,2,2,2,3,3,5,5,5 },
           :int{1}, :int{1}, "", "?\x00\x2f\x7e", ""
         }
+        // ISO-2022-KR
+        {
+          "ibm-25546",
+          "AB\uc88b\U00050005\uacccC",
+          :bin{           1b24294341420e41410f5c3530303035200e306a0f43 },
+          :intvector{ -1,-1,-1,-1,0,1,2,2,2,3,3,3,3,3,3,3,3,5,5,5,6,6 },
+          :int{1}, :int{1}, "", "&S", ""
+        }
 
         // ISO-2022-JP-2 with G2 designator & SS2 shift
         {
