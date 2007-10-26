@@ -140,9 +140,9 @@ typedef struct UConverter UConverter;
 #define UCNV_ESCAPE_UNICODE   "U"
 
 /**
- * FROM_U_CALLBACK_ESCAPE context option to escape the code unit according to CSS2 conventions (\\X{XXXXX} followed by
- * a space.
- * @stable ICU 4.0
+ * FROM_U_CALLBACK_ESCAPE context option to escape the code unit according to CSS2 conventions (\\HH..H<space>, that is,
+ * a backslash, 1..6 hex digits, and a space)
+ * @draft ICU 4.0
  */
 #define UCNV_ESCAPE_CSS2   "S"
 
