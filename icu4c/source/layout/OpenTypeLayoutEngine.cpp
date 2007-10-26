@@ -340,15 +340,17 @@ void OpenTypeLayoutEngine::adjustGlyphPositions(const LEUnicode chars[], le_int3
     LEGlyphID space = fFontInstance->mapCharToGlyph(0x0020);
 #endif
 
-    for (le_int32 g = 0; g < glyphCount; g += 1) {
-        LEGlyphID glyph = glyphStorage[g];
+    if (zwnj != 0x0000) {
+        for (le_int32 g = 0; g < glyphCount; g += 1) {
+            LEGlyphID glyph = glyphStorage[g];
 
-        if (glyph == zwnj) {
-            glyphStorage[g] = LE_SET_GLYPH(glyph, 0xFFFF);
-#if 0
-        } else if (glyph == nbsp) {
-            glyphStorage[g] = LE_SET_GLYPH(glyph, space);
-#endif
+            if (glyph == zwnj) {
+                glyphStorage[g] = LE_SET_GLYPH(glyph, 0xFFFF);
+    #if 0
+            } else if (glyph == nbsp) {
+                glyphStorage[g] = LE_SET_GLYPH(glyph, space);
+    #endif
+            }
         }
     }
 
