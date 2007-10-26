@@ -245,11 +245,7 @@ UCNV_FROM_U_CALLBACK_ESCAPE (
 
       case UCNV_PRV_ESCAPE_CSS2:
           valueString[valueStringLength++] = (UChar) UNICODE_RS_CODEPOINT;    /* adding \ */
-          if (length == 2) {
-              valueStringLength += uprv_itou (valueString + valueStringLength, VALUE_STRING_LENGTH - valueStringLength, codePoint, 16, 0);
-          } else {
-              valueStringLength += uprv_itou (valueString + valueStringLength, VALUE_STRING_LENGTH - valueStringLength, (uint16_t)codeUnits[0], 16, 0);
-          }
+          valueStringLength += uprv_itou (valueString + valueStringLength, VALUE_STRING_LENGTH - valueStringLength, codePoint, 16, 0);
           /* Always add space character, becase the next character might be whitespace,
              which would erroneously be considered the termination of the escape sequence. */
           valueString[valueStringLength++] = (UChar) UNICODE_SPACE_CODEPOINT;
