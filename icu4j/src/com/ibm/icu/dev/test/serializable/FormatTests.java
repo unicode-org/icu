@@ -27,6 +27,7 @@ import com.ibm.icu.text.PluralFormat;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.ULocale;
 
@@ -1707,6 +1708,7 @@ public class FormatTests
     public static class DateFormatHandler implements SerializableTest.Handler
     {
         static HashMap cannedPatterns = new HashMap();
+        static Date fixedDate;
         
         {
             cannedPatterns.put("en_CA",      "EEEE, MMMM d, yyyy h:mm:ss a z");
@@ -1729,6 +1731,13 @@ public class FormatTests
             cannedPatterns.put("zh_TW",      "yyyy'\u5E74'M'\u6708'd'\u65E5'EEEE ahh'\u6642'mm'\u5206'ss'\u79D2' z");
             cannedPatterns.put("en_GB",      "EEEE, d MMMM yyyy HH:mm:ss z");
             cannedPatterns.put("en_US",      "EEEE, MMMM d, yyyy h:mm:ss a z");
+            
+            // Get a date that will likely not move in or out of Daylight savings time...
+            Calendar cal = Calendar.getInstance(Locale.US);
+            
+            cal.clear();
+            cal.set(2007, Calendar.JANUARY, 1, 12, 0, 0); // January 1, 2007 12:00:00 PM.
+            fixedDate = cal.getTime();
         }
         
         public Object[] getTestObjects()
@@ -1750,9 +1759,9 @@ public class FormatTests
         {
             DateFormat dfa = (DateFormat) a;
             DateFormat dfb = (DateFormat) b;
-            Date date = new Date(System.currentTimeMillis());
-            String sfa = dfa.format(date);
-            String sfb = dfb.format(date);
+          //Date date = new Date(System.currentTimeMillis());
+            String sfa = dfa.format(fixedDate);
+            String sfb = dfb.format(fixedDate);
 
             return sfa.equals(sfb);
         }
