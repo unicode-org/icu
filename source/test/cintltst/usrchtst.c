@@ -1544,43 +1544,49 @@ static void TestDiactricMatch(void)
     UErrorCode     status = U_ZERO_ERROR;
     UStringSearch *strsrch = NULL;
     UCollator *coll = NULL;
-    uint32_t       count = 1;
-    UBool collatorCreated = FALSE;
+    uint32_t       count = 0;
+    SearchData search;
 
     memset(pattern, 0, 128*sizeof(UChar));
     memset(text, 0, 128*sizeof(UChar));
-       
     
-    while (DIACTRICMATCH[count].text != NULL) {
-    	if (DIACTRICMATCH[count].collator != NULL) {
-    		coll = ucol_openFromShortString(DIACTRICMATCH[count].collator, FALSE, NULL, &status);
-    		collatorCreated = TRUE;
+    strsrch = usearch_open(pattern, 1, text, 1, uloc_getDefault(), NULL, &status);
+	if (U_FAILURE(status)) {
+        log_err("Error opening string search %s\n", u_errorName(status));
+        return;
+    }
+       
+    search = DIACTRICMATCH[count];
+    while (search.text != NULL) {
+    	if (search.collator != NULL) {
+    		coll = ucol_openFromShortString(search.collator, FALSE, NULL, &status);
     	} else {
-    		coll = getCollator(DIACTRICMATCH[count].collator);
-    		collatorCreated = FALSE;
+    		coll = ucol_open(uloc_getDefault(), &status);
+    		ucol_setStrength(coll, search.strength);
     	}
     	if (U_FAILURE(status)) {
 	        log_err("Error opening string search collator %s\n", u_errorName(status));
 	        return;
 	    }
-    	strsrch = usearch_openFromCollator(pattern, 1, text, 1, coll, DIACTRICMATCH[count].breaker, &status);
+    	
+    	usearch_setCollator(strsrch, coll, &status);
     	if (U_FAILURE(status)) {
-	        log_err("Error opening string search %s\n", u_errorName(status));
+	        log_err("Error setting string search collator %s\n", u_errorName(status));
 	        return;
 	    }
-        u_unescape(DIACTRICMATCH[count].text, text, 128);
-        u_unescape(DIACTRICMATCH[count].pattern, pattern, 128);
+    
+        u_unescape(search.text, text, 128);
+        u_unescape(search.pattern, pattern, 128);
         usearch_setText(strsrch, text, -1, &status);
         usearch_setPattern(strsrch, pattern, -1, &status);
-        if (!assertEqualWithUStringSearch(strsrch, DIACTRICMATCH[count])) {
+        if (!assertEqualWithUStringSearch(strsrch, search)) {
             log_err("Error at test number %d\n", count);
         }
-        count ++;
-        if (collatorCreated) {
-        	ucol_close(coll);
-        }
-        usearch_close(strsrch);
+        ucol_close(coll);
+        
+        search = DIACTRICMATCH[++count];
     }
+    usearch_close(strsrch);
 }
 
 static void TestCanonical(void)
