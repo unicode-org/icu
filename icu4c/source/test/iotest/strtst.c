@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2004-2006, International Business Machines
+*   Copyright (C) 2004-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  strtst.c
@@ -330,26 +330,26 @@ static void TestSnprintf(void) {
     char cTestResult[256];
     int32_t size;
 
-    Test_u_snprintf(0, "%d", 123, 0, "xxxxxxxxxxxxxx");
-    Test_u_snprintf(2, "%d", 123, 2, "12xxxxxxxxxxxx");
+    Test_u_snprintf(0, "%d", 123, 3, "xxxxxxxxxxxxxx");
+    Test_u_snprintf(2, "%d", 123, 3, "12xxxxxxxxxxxx");
     Test_u_snprintf(3, "%d", 123, 3, "123xxxxxxxxxxx");
     Test_u_snprintf(4, "%d", 123, 3, "123");
 
-    Test_u_snprintf(0, "%s", "abcd", 0, "xxxxxxxxxxxxxx");
-    Test_u_snprintf(3, "%s", "abcd", 3, "abcxxxxxxxxxxx");
+    Test_u_snprintf(0, "%s", "abcd", 4, "xxxxxxxxxxxxxx");
+    Test_u_snprintf(3, "%s", "abcd", 4, "abcxxxxxxxxxxx");
     Test_u_snprintf(4, "%s", "abcd", 4, "abcdxxxxxxxxxx");
     Test_u_snprintf(5, "%s", "abcd", 4, "abcd");
 
-    Test_u_snprintf(0, "%e", 12.34, 0, "xxxxxxxxxxxxxx");
-    Test_u_snprintf(1, "%e", 12.34, 1, "1xxxxxxxxxxxxx");
-    Test_u_snprintf(2, "%e", 12.34, 2, "1.xxxxxxxxxxxx");
-    Test_u_snprintf(3, "%e", 12.34, 3, "1.2xxxxxxxxxxx");
-    Test_u_snprintf(5, "%e", 12.34, 5, "1.234xxxxxxxxx");
-    Test_u_snprintf(6, "%e", 12.34, 6, "1.2340xxxxxxxx");
-    Test_u_snprintf(8, "%e", 12.34, 8, "1.234000xxxxxx");
-    Test_u_snprintf(9, "%e", 12.34, 9, "1.234000exxxxx");
-    Test_u_snprintf(10, "%e", 12.34, 10, "1.234000e+xxxx");
-    Test_u_snprintf(11, "%e", 12.34, 11, "1.234000e+0xxx");
+    Test_u_snprintf(0, "%e", 12.34, 13, "xxxxxxxxxxxxxx");
+    Test_u_snprintf(1, "%e", 12.34, 13, "1xxxxxxxxxxxxx");
+    Test_u_snprintf(2, "%e", 12.34, 13, "1.xxxxxxxxxxxx");
+    Test_u_snprintf(3, "%e", 12.34, 13, "1.2xxxxxxxxxxx");
+    Test_u_snprintf(5, "%e", 12.34, 13, "1.234xxxxxxxxx");
+    Test_u_snprintf(6, "%e", 12.34, 13, "1.2340xxxxxxxx");
+    Test_u_snprintf(8, "%e", 12.34, 13, "1.234000xxxxxx");
+    Test_u_snprintf(9, "%e", 12.34, 13, "1.234000exxxxx");
+    Test_u_snprintf(10, "%e", 12.34, 13, "1.234000e+xxxx");
+    Test_u_snprintf(11, "%e", 12.34, 13, "1.234000e+0xxx");
     Test_u_snprintf(13, "%e", 12.34, 13, "1.234000e+001x");
     Test_u_snprintf(14, "%e", 12.34, 13, "1.234000e+001");
 #endif
