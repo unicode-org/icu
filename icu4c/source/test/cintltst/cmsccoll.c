@@ -4766,6 +4766,102 @@ TestJ5367(void)
     genericRulesStarter(rules, test, sizeof(test)/sizeof(test[0]));
 }
 
+static void
+TestVI5913(void)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t i, j;
+    UCollator *coll =NULL;
+    uint8_t  resColl[100], expColl[100];
+    int32_t  rLen, tLen, ruleLen, sLen, kLen;
+    UChar rule[256]={0x26, 0x62, 0x3c, 0x1FF3, 0};  /* &a<0x1FF3-omega with Ypogegrammeni*/
+    UChar tData[][20]={
+        {0x1EAC, 0},
+        {0x1EA0, 0x0302, 0},
+        {0x00C2, 0x0323, 0},
+        {0x1ED8, 0},  /* O with dot and circumflex */
+        {0x1ECC, 0x0302, 0},
+        {0x1EB7, 0},
+        {0x1EA1, 0x0306, 0},
+    };
+    UChar tailorData[][20]={
+        {0x1FA2, 0},  /* Omega with 3 combining marks */
+        {0x03C9, 0x0313, 0x0300, 0x0345, 0},
+        {0x1FF3, 0x0313, 0x0300, 0},
+        {0x1F60, 0x0300, 0x0345, 0},
+        {0x1F62, 0x0345, 0},
+        {0x1FA0, 0x0300, 0},  
+    };
+
+    /* Test Vietnamese sort. */
+    coll = ucol_open("vi", &status);
+    log_verbose("\n\nVI collation:");
+    if ( !ucol_equal(coll, tData[0], u_strlen(tData[0]), tData[1], u_strlen(tData[1])) ) {
+        log_err("\\u1EAC not equals to \\u1EA0+\\u0302\n");
+    }
+    if ( !ucol_equal(coll, tData[0], u_strlen(tData[0]), tData[2], u_strlen(tData[2])) ) {
+        log_err("\\u1EAC not equals to \\u00c2+\\u0323\n");
+    }
+    if ( !ucol_equal(coll, tData[3], u_strlen(tData[3]), tData[4], u_strlen(tData[4])) ) {
+        log_err("\\u1ED8 not equals to \\u1ECC+\\u0302\n");
+    }
+    if ( !ucol_equal(coll, tData[5], u_strlen(tData[5]), tData[6], u_strlen(tData[6])) ) {
+        log_err("\\u1EB7 not equals to \\u1EA1+\\u0306\n");
+    }
+
+    ucol_close(coll);
+
+    /* Test Russian sort. */
+    coll = ucol_open("ro", &status);
+    log_verbose("\n\nRO collation:");
+    if ( !ucol_equal(coll, tData[0], u_strlen(tData[0]), tData[1], u_strlen(tData[1])) ) {
+        log_err("\\u1EAC not equals to \\u1EA0+\\u0302\n");
+    }
+    if ( !ucol_equal(coll, tData[0], u_strlen(tData[0]), tData[2], u_strlen(tData[2])) ) {
+        log_err("\\u1EAC not equals to \\u00c2+\\u0323\n");
+    }
+    if ( !ucol_equal(coll, tData[5], u_strlen(tData[5]), tData[6], u_strlen(tData[6])) ) {
+        log_err("\\u1EB7 not equals to \\u1EA1+\\u0306\n");
+    }
+
+    
+    for (j=0; j<3; j++) {
+        tLen = u_strlen(tData[j]);
+        log_verbose("\n Data :%s  \tlen: %d key: ", tData[j], tLen);
+        rLen = ucol_getSortKey(coll, tData[j], tLen, resColl, 100);
+        for(i = 0; i<rLen; i++) {
+            log_verbose(" %02X", resColl[i]);
+        }
+    }
+    ucol_close(coll);
+ 
+    /* Test the precomposed Greek character with 3 combining marks. */
+    log_verbose("\n\nTailoring test:");
+    ruleLen = u_strlen(rule);
+    coll = ucol_openRules(rule, ruleLen, UCOL_OFF, UCOL_TERTIARY, NULL,&status);
+    sLen = u_strlen(tailorData[0]);
+    for (j=1; j<6; j++) {
+        tLen = u_strlen(tailorData[j]);
+        if ( !ucol_equal(coll, tailorData[0], sLen, tailorData[j], tLen))  {
+            log_err("\n \\u1FA2 not equals to data[%d]:%s\n", j, tailorData[j]);
+        }
+    }
+    /* Test getSortKey. */
+    tLen = u_strlen(tailorData[0]);
+    kLen=ucol_getSortKey(coll, tailorData[0], tLen, expColl, 100);
+    for (j=0; j<6; j++) {
+        tLen = u_strlen(tailorData[j]);
+        rLen = ucol_getSortKey(coll, tailorData[j], tLen, resColl, 100);
+        if ( kLen!=rLen || uprv_memcmp(expColl, resColl, rLen*sizeof(uint8_t))!=0 ) {
+            log_err("\n Data[%d] :%s  \tlen: %d key: ", j, tailorData[j], tLen);
+            for(i = 0; i<rLen; i++) {
+                log_err(" %02X", resColl[i]);
+            }
+        }
+    }
+    ucol_close(coll);
+}
+
 
 #define TEST(x) addTest(root, &x, "tscoll/cmsccoll/" # x)
 
@@ -4836,7 +4932,7 @@ void addMiscCollTest(TestNode** root)
     TEST(TestJ5223);
     TEST(TestJ5232);
     TEST(TestJ5367);
+    TEST(TestVI5913);  /* VI, RO tailored rules */
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
-
