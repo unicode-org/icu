@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2006, International Business Machines
+*   Copyright (C) 1998-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -1059,7 +1059,7 @@ u_printf_parse(const u_printf_stream_handler *streamHandler,
     const UChar *lastAlias;
 
     /* iterate through the pattern */
-    while(!locStringContext || locStringContext->available > 0) {
+    while(!locStringContext || locStringContext->available >= 0) {
 
         /* find the next '%' */
         lastAlias = alias;

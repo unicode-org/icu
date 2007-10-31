@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2001-2004, International Business Machines
+*   Copyright (C) 2001-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -54,6 +54,7 @@ u_sprintf_pad_and_justify(void                        *context,
 {
     u_localized_print_string *output = (u_localized_print_string *)context;
     int32_t written = 0;
+    int32_t lengthOfResult = resultLen;
 
     resultLen = ufmt_min(resultLen, output->available);
 
@@ -87,6 +88,10 @@ u_sprintf_pad_and_justify(void                        *context,
     /* just write the formatted output */
     else {
         written = u_sprintf_write(output, result, resultLen);
+    }
+    
+    if (written >= 0 && lengthOfResult > written) {
+    	return lengthOfResult;
     }
 
     return written;
