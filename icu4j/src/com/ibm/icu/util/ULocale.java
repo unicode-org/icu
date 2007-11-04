@@ -497,118 +497,118 @@ public final class ULocale implements Serializable {
             /* This list MUST be in sorted order, and MUST contain only two-letter codes! */
             String[] tempCountries = {
                 "AD",  "AE",  "AF",  "AG",  "AI",  "AL",  "AM",  "AN",
-                "AO",  "AQ",  "AR",  "AS",  "AT",  "AU",  "AW",  "AZ",
+                "AO",  "AQ",  "AR",  "AS",  "AT",  "AU",  "AW",  "AX",  "AZ",
                 "BA",  "BB",  "BD",  "BE",  "BF",  "BG",  "BH",  "BI",
-                "BJ",  "BM",  "BN",  "BO",  "BR",  "BS",  "BT",  "BV",
+                "BJ",  "BL",  "BM",  "BN",  "BO",  "BR",  "BS",  "BT",  "BV",
                 "BW",  "BY",  "BZ",  "CA",  "CC",  "CD",  "CF",  "CG",
                 "CH",  "CI",  "CK",  "CL",  "CM",  "CN",  "CO",  "CR",
                 "CU",  "CV",  "CX",  "CY",  "CZ",  "DE",  "DJ",  "DK",
                 "DM",  "DO",  "DZ",  "EC",  "EE",  "EG",  "EH",  "ER",
                 "ES",  "ET",  "FI",  "FJ",  "FK",  "FM",  "FO",  "FR",
-                "GA",  "GB",  "GD",  "GE",  "GF",  "GH",  "GI",  "GL",
+                "GA",  "GB",  "GD",  "GE",  "GF",  "GG",  "GH",  "GI",  "GL",
                 "GM",  "GN",  "GP",  "GQ",  "GR",  "GS",  "GT",  "GU",
                 "GW",  "GY",  "HK",  "HM",  "HN",  "HR",  "HT",  "HU",
-                "ID",  "IE",  "IL",  "IN",  "IO",  "IQ",  "IR",  "IS",
-                "IT",  "JM",  "JO",  "JP",  "KE",  "KG",  "KH",  "KI",
+                "ID",  "IE",  "IL",  "IM",  "IN",  "IO",  "IQ",  "IR",  "IS",
+                "IT",  "JE",  "JM",  "JO",  "JP",  "KE",  "KG",  "KH",  "KI",
                 "KM",  "KN",  "KP",  "KR",  "KW",  "KY",  "KZ",  "LA",
                 "LB",  "LC",  "LI",  "LK",  "LR",  "LS",  "LT",  "LU",
-                "LV",  "LY",  "MA",  "MC",  "MD",  "MG",  "MH",  "MK",
+                "LV",  "LY",  "MA",  "MC",  "MD",  "ME",  "MF",  "MG",  "MH",  "MK",
                 "ML",  "MM",  "MN",  "MO",  "MP",  "MQ",  "MR",  "MS",
                 "MT",  "MU",  "MV",  "MW",  "MX",  "MY",  "MZ",  "NA",
                 "NC",  "NE",  "NF",  "NG",  "NI",  "NL",  "NO",  "NP",
                 "NR",  "NU",  "NZ",  "OM",  "PA",  "PE",  "PF",  "PG",
                 "PH",  "PK",  "PL",  "PM",  "PN",  "PR",  "PS",  "PT",
-                "PW",  "PY",  "QA",  "RE",  "RO",  "RU",  "RW",  "SA",
+                "PW",  "PY",  "QA",  "RE",  "RO",  "RS",  "RU",  "RW",  "SA",
                 "SB",  "SC",  "SD",  "SE",  "SG",  "SH",  "SI",  "SJ",
                 "SK",  "SL",  "SM",  "SN",  "SO",  "SR",  "ST",  "SV",
                 "SY",  "SZ",  "TC",  "TD",  "TF",  "TG",  "TH",  "TJ",
                 "TK",  "TL",  "TM",  "TN",  "TO",  "TR",  "TT",  "TV",
                 "TW",  "TZ",  "UA",  "UG",  "UM",  "US",  "UY",  "UZ",
                 "VA",  "VC",  "VE",  "VG",  "VI",  "VN",  "VU",  "WF",
-                "WS",  "YE",  "YT",  "YU",  "ZA",  "ZM",  "ZW",  
+                "WS",  "YE",  "YT",  "ZA",  "ZM",  "ZW",
             };
 
             /* this table is used for 3 letter codes */
             String[] tempObsoleteCountries = {
-                "FX",  "RO",  "TP",  "ZR",  /* obsolete country codes */      
+                "FX",  "CS",  "RO",  "TP",  "YU",  "ZR",  /* obsolete country codes */      
             };
             
             String[] tempDeprecatedCountries = {
-               "BU", "DY", "FX", "HV", "NH", "RH", "TP", "YU", "ZR" /* deprecated country list */
+               "BU", "CS", "DY", "FX", "HV", "NH", "RH", "TP", "YU", "ZR" /* deprecated country list */
             };
             String[] tempReplacementCountries = {
-           /*  "BU", "DY", "FX", "HV", "NH", "RH", "TP", "YU", "ZR" */
-               "MM", "BJ", "FR", "BF", "VU", "ZW", "TL", "RS", "CD",   /* replacement country codes */      
+           /*  "BU", "CS", "DY", "FX", "HV", "NH", "RH", "TP", "YU", "ZR" */
+               "MM", "RS", "BJ", "FR", "BF", "VU", "ZW", "TL", "RS", "CD",   /* replacement country codes */      
             };
     
             /* This list MUST contain a three-letter code for every two-letter code in
                the above list, and they MUST be listed in the same order! */
             String[] tempCountries3 = {
-                /*"AD",  "AE",  "AF",  "AG",  "AI",  "AL",  "AM",  "AN",     */
-                "AND", "ARE", "AFG", "ATG", "AIA", "ALB", "ARM", "ANT",
-                /*"AO",  "AQ",  "AR",  "AS",  "AT",  "AU",  "AW",  "AZ",     */
-                "AGO", "ATA", "ARG", "ASM", "AUT", "AUS", "ABW", "AZE",
-                /*"BA",  "BB",  "BD",  "BE",  "BF",  "BG",  "BH",  "BI",     */
-                "BIH", "BRB", "BGD", "BEL", "BFA", "BGR", "BHR", "BDI",
-                /*"BJ",  "BM",  "BN",  "BO",  "BR",  "BS",  "BT",  "BV",     */
-                "BEN", "BMU", "BRN", "BOL", "BRA", "BHS", "BTN", "BVT",
-                /*"BW",  "BY",  "BZ",  "CA",  "CC",  "CD",  "CF",  "CG",     */
-                "BWA", "BLR", "BLZ", "CAN", "CCK", "COD", "CAF", "COG",
-                /*"CH",  "CI",  "CK",  "CL",  "CM",  "CN",  "CO",  "CR",     */
-                "CHE", "CIV", "COK", "CHL", "CMR", "CHN", "COL", "CRI",
-                /*"CU",  "CV",  "CX",  "CY",  "CZ",  "DE",  "DJ",  "DK",     */
-                "CUB", "CPV", "CXR", "CYP", "CZE", "DEU", "DJI", "DNK",
-                /*"DM",  "DO",  "DZ",  "EC",  "EE",  "EG",  "EH",  "ER",     */
-                "DMA", "DOM", "DZA", "ECU", "EST", "EGY", "ESH", "ERI",
-                /*"ES",  "ET",  "FI",  "FJ",  "FK",  "FM",  "FO",  "FR",     */
-                "ESP", "ETH", "FIN", "FJI", "FLK", "FSM", "FRO", "FRA",
-                /*"GA",  "GB",  "GD",  "GE",  "GF",  "GH",  "GI",  "GL",     */
-                "GAB", "GBR", "GRD", "GEO", "GUF", "GHA", "GIB", "GRL",
-                /*"GM",  "GN",  "GP",  "GQ",  "GR",  "GS",  "GT",  "GU",     */
-                "GMB", "GIN", "GLP", "GNQ", "GRC", "SGS", "GTM", "GUM",
-                /*"GW",  "GY",  "HK",  "HM",  "HN",  "HR",  "HT",  "HU",     */
-                "GNB", "GUY", "HKG", "HMD", "HND", "HRV", "HTI", "HUN",
-                /*"ID",  "IE",  "IL",  "IN",  "IO",  "IQ",  "IR",  "IS",     */
-                "IDN", "IRL", "ISR", "IND", "IOT", "IRQ", "IRN", "ISL",
-                /*"IT",  "JM",  "JO",  "JP",  "KE",  "KG",  "KH",  "KI",     */
-                "ITA", "JAM", "JOR", "JPN", "KEN", "KGZ", "KHM", "KIR",
-                /*"KM",  "KN",  "KP",  "KR",  "KW",  "KY",  "KZ",  "LA",     */
-                "COM", "KNA", "PRK", "KOR", "KWT", "CYM", "KAZ", "LAO",
-                /*"LB",  "LC",  "LI",  "LK",  "LR",  "LS",  "LT",  "LU",     */
-                "LBN", "LCA", "LIE", "LKA", "LBR", "LSO", "LTU", "LUX",
-                /*"LV",  "LY",  "MA",  "MC",  "MD",  "MG",  "MH",  "MK",     */
-                "LVA", "LBY", "MAR", "MCO", "MDA", "MDG", "MHL", "MKD",
-                /*"ML",  "MM",  "MN",  "MO",  "MP",  "MQ",  "MR",  "MS",     */
-                "MLI", "MMR", "MNG", "MAC", "MNP", "MTQ", "MRT", "MSR",
-                /*"MT",  "MU",  "MV",  "MW",  "MX",  "MY",  "MZ",  "NA",     */
-                "MLT", "MUS", "MDV", "MWI", "MEX", "MYS", "MOZ", "NAM",
-                /*"NC",  "NE",  "NF",  "NG",  "NI",  "NL",  "NO",  "NP",     */
-                "NCL", "NER", "NFK", "NGA", "NIC", "NLD", "NOR", "NPL",
-                /*"NR",  "NU",  "NZ",  "OM",  "PA",  "PE",  "PF",  "PG",     */
-                "NRU", "NIU", "NZL", "OMN", "PAN", "PER", "PYF", "PNG",
-                /*"PH",  "PK",  "PL",  "PM",  "PN",  "PR",  "PS",  "PT",     */
-                "PHL", "PAK", "POL", "SPM", "PCN", "PRI", "PSE", "PRT",
-                /*"PW",  "PY",  "QA",  "RE",  "RO",  "RU",  "RW",  "SA",     */
-                "PLW", "PRY", "QAT", "REU", "ROU", "RUS", "RWA", "SAU",
-                /*"SB",  "SC",  "SD",  "SE",  "SG",  "SH",  "SI",  "SJ",     */
-                "SLB", "SYC", "SDN", "SWE", "SGP", "SHN", "SVN", "SJM",
-                /*"SK",  "SL",  "SM",  "SN",  "SO",  "SR",  "ST",  "SV",     */
-                "SVK", "SLE", "SMR", "SEN", "SOM", "SUR", "STP", "SLV",
-                /*"SY",  "SZ",  "TC",  "TD",  "TF",  "TG",  "TH",  "TJ",     */
-                "SYR", "SWZ", "TCA", "TCD", "ATF", "TGO", "THA", "TJK",
-                /*"TK",  "TL",  "TM",  "TN",  "TO",  "TR",  "TT",  "TV",     */
-                "TKL", "TLS", "TKM", "TUN", "TON", "TUR", "TTO", "TUV",
-                /*"TW",  "TZ",  "UA",  "UG",  "UM",  "US",  "UY",  "UZ",     */
-                "TWN", "TZA", "UKR", "UGA", "UMI", "USA", "URY", "UZB",
-                /*"VA",  "VC",  "VE",  "VG",  "VI",  "VN",  "VU",  "WF",     */
-                "VAT", "VCT", "VEN", "VGB", "VIR", "VNM", "VUT", "WLF",
-                /*"WS",  "YE",  "YT",  "YU",  "ZA",  "ZM",  "ZW",            */
-                "WSM", "YEM", "MYT", "YUG", "ZAF", "ZMB", "ZWE",
+                /*  "AD",  "AE",  "AF",  "AG",  "AI",  "AL",  "AM",  "AN",     */
+                    "AND", "ARE", "AFG", "ATG", "AIA", "ALB", "ARM", "ANT",
+                /*  "AO",  "AQ",  "AR",  "AS",  "AT",  "AU",  "AW",  "AX",  "AZ",     */
+                    "AGO", "ATA", "ARG", "ASM", "AUT", "AUS", "ABW", "ALA", "AZE",
+                /*  "BA",  "BB",  "BD",  "BE",  "BF",  "BG",  "BH",  "BI",     */
+                    "BIH", "BRB", "BGD", "BEL", "BFA", "BGR", "BHR", "BDI",
+                /*  "BJ",  "BL",  "BM",  "BN",  "BO",  "BR",  "BS",  "BT",  "BV",     */
+                    "BEN", "BLM", "BMU", "BRN", "BOL", "BRA", "BHS", "BTN", "BVT",
+                /*  "BW",  "BY",  "BZ",  "CA",  "CC",  "CD",  "CF",  "CG",     */
+                    "BWA", "BLR", "BLZ", "CAN", "CCK", "COD", "CAF", "COG",
+                /*  "CH",  "CI",  "CK",  "CL",  "CM",  "CN",  "CO",  "CR",     */
+                    "CHE", "CIV", "COK", "CHL", "CMR", "CHN", "COL", "CRI",
+                /*  "CU",  "CV",  "CX",  "CY",  "CZ",  "DE",  "DJ",  "DK",     */
+                    "CUB", "CPV", "CXR", "CYP", "CZE", "DEU", "DJI", "DNK",
+                /*  "DM",  "DO",  "DZ",  "EC",  "EE",  "EG",  "EH",  "ER",     */
+                    "DMA", "DOM", "DZA", "ECU", "EST", "EGY", "ESH", "ERI",
+                /*  "ES",  "ET",  "FI",  "FJ",  "FK",  "FM",  "FO",  "FR",     */
+                    "ESP", "ETH", "FIN", "FJI", "FLK", "FSM", "FRO", "FRA",
+                /*  "GA",  "GB",  "GD",  "GE",  "GF",  "GG",  "GH",  "GI",  "GL",     */
+                    "GAB", "GBR", "GRD", "GEO", "GUF", "GGY", "GHA", "GIB", "GRL",
+                /*  "GM",  "GN",  "GP",  "GQ",  "GR",  "GS",  "GT",  "GU",     */
+                    "GMB", "GIN", "GLP", "GNQ", "GRC", "SGS", "GTM", "GUM",
+                /*  "GW",  "GY",  "HK",  "HM",  "HN",  "HR",  "HT",  "HU",     */
+                    "GNB", "GUY", "HKG", "HMD", "HND", "HRV", "HTI", "HUN",
+                /*  "ID",  "IE",  "IL",  "IM",  "IN",  "IO",  "IQ",  "IR",  "IS" */
+                    "IDN", "IRL", "ISR", "IMN", "IND", "IOT", "IRQ", "IRN", "ISL",
+                /*  "IT",  "JE",  "JM",  "JO",  "JP",  "KE",  "KG",  "KH",  "KI",     */
+                    "ITA", "JEY", "JAM", "JOR", "JPN", "KEN", "KGZ", "KHM", "KIR",
+                /*  "KM",  "KN",  "KP",  "KR",  "KW",  "KY",  "KZ",  "LA",     */
+                    "COM", "KNA", "PRK", "KOR", "KWT", "CYM", "KAZ", "LAO",
+                /*  "LB",  "LC",  "LI",  "LK",  "LR",  "LS",  "LT",  "LU",     */
+                    "LBN", "LCA", "LIE", "LKA", "LBR", "LSO", "LTU", "LUX",
+                /*  "LV",  "LY",  "MA",  "MC",  "MD",  "ME",  "MF",  "MG",  "MH",  "MK",     */
+                    "LVA", "LBY", "MAR", "MCO", "MDA", "MNE", "MAF", "MDG", "MHL", "MKD",
+                /*  "ML",  "MM",  "MN",  "MO",  "MP",  "MQ",  "MR",  "MS",     */
+                    "MLI", "MMR", "MNG", "MAC", "MNP", "MTQ", "MRT", "MSR",
+                /*  "MT",  "MU",  "MV",  "MW",  "MX",  "MY",  "MZ",  "NA",     */
+                    "MLT", "MUS", "MDV", "MWI", "MEX", "MYS", "MOZ", "NAM",
+                /*  "NC",  "NE",  "NF",  "NG",  "NI",  "NL",  "NO",  "NP",     */
+                    "NCL", "NER", "NFK", "NGA", "NIC", "NLD", "NOR", "NPL",
+                /*  "NR",  "NU",  "NZ",  "OM",  "PA",  "PE",  "PF",  "PG",     */
+                    "NRU", "NIU", "NZL", "OMN", "PAN", "PER", "PYF", "PNG",
+                /*  "PH",  "PK",  "PL",  "PM",  "PN",  "PR",  "PS",  "PT",     */
+                    "PHL", "PAK", "POL", "SPM", "PCN", "PRI", "PSE", "PRT",
+                /*  "PW",  "PY",  "QA",  "RE",  "RO",  "RS",  "RU",  "RW",  "SA",     */
+                    "PLW", "PRY", "QAT", "REU", "ROU", "SRB", "RUS", "RWA", "SAU",
+                /*  "SB",  "SC",  "SD",  "SE",  "SG",  "SH",  "SI",  "SJ",     */
+                    "SLB", "SYC", "SDN", "SWE", "SGP", "SHN", "SVN", "SJM",
+                /*  "SK",  "SL",  "SM",  "SN",  "SO",  "SR",  "ST",  "SV",     */
+                    "SVK", "SLE", "SMR", "SEN", "SOM", "SUR", "STP", "SLV",
+                /*  "SY",  "SZ",  "TC",  "TD",  "TF",  "TG",  "TH",  "TJ",     */
+                    "SYR", "SWZ", "TCA", "TCD", "ATF", "TGO", "THA", "TJK",
+                /*  "TK",  "TL",  "TM",  "TN",  "TO",  "TR",  "TT",  "TV",     */
+                    "TKL", "TLS", "TKM", "TUN", "TON", "TUR", "TTO", "TUV",
+                /*  "TW",  "TZ",  "UA",  "UG",  "UM",  "US",  "UY",  "UZ",     */
+                    "TWN", "TZA", "UKR", "UGA", "UMI", "USA", "URY", "UZB",
+                /*  "VA",  "VC",  "VE",  "VG",  "VI",  "VN",  "VU",  "WF",     */
+                    "VAT", "VCT", "VEN", "VGB", "VIR", "VNM", "VUT", "WLF",
+                /*  "WS",  "YE",  "YT",  "ZA",  "ZM",  "ZW",  "ZZZ"          */
+                    "WSM", "YEM", "MYT", "ZAF", "ZMB", "ZWE", "ZZZ",
             };
     
             String[] tempObsoleteCountries3 = {
-                /*"FX",  "RO",  "TP",  "ZR",   */
-                "FXX", "ROM", "TMP", "ZAR",    
+                /*"FX",  "CS",  "RO",  "TP",  "YU",  "ZR",   */
+                "FXX", "SCG", "ROM", "TMP", "YUG", "ZAR",    
             };
 
             synchronized (ULocale.class) {
