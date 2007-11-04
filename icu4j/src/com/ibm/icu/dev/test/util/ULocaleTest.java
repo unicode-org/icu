@@ -733,6 +733,7 @@ public class ULocaleTest extends TestFmwk {
             { "in",  "ind", "in", "", "" },
             { "id",  "ind", "id", "", "" }, /* NO aliasing */
             { "sh",  "srp", "sh", "", "" },
+            { "zz_CS",  "", "zz", "SCG", "CS" },
             { "zz_FX",  "", "zz", "FXX", "FX" },
             { "zz_RO",  "", "zz", "ROU", "RO" },
             { "zz_TP",  "", "zz", "TMP", "TP" },
@@ -744,6 +745,7 @@ public class ULocaleTest extends TestFmwk {
             { "zz_ZAR",  "", "zz", "ZAR", "ZR" },
             { "zz_TMP",  "", "zz", "TMP", "TP" },
             { "zz_TLS",  "", "zz", "TLS", "TL" },
+            { "zz_YUG",  "", "zz", "YUG", "YU" },
             { "mlt_PSE", "mlt", "mt", "PSE", "PS" },
             { "iw", "heb", "iw", "", "" },
             { "ji", "yid", "ji", "", "" },
