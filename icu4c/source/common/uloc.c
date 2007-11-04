@@ -348,7 +348,7 @@ static const char * const COUNTRIES[] = {
     "AD",  "AE",  "AF",  "AG",  "AI",  "AL",  "AM",  "AN",
     "AO",  "AQ",  "AR",  "AS",  "AT",  "AU",  "AW",  "AX",  "AZ",
     "BA",  "BB",  "BD",  "BE",  "BF",  "BG",  "BH",  "BI",
-    "BJ",  "BM",  "BN",  "BO",  "BR",  "BS",  "BT",  "BV",
+    "BJ",  "BL",  "BM",  "BN",  "BO",  "BR",  "BS",  "BT",  "BV",
     "BW",  "BY",  "BZ",  "CA",  "CC",  "CD",  "CF",  "CG",
     "CH",  "CI",  "CK",  "CL",  "CM",  "CN",  "CO",  "CR",
     "CU",  "CV",  "CX",  "CY",  "CZ",  "DE",  "DJ",  "DK",
@@ -361,31 +361,31 @@ static const char * const COUNTRIES[] = {
     "IT",  "JE",  "JM",  "JO",  "JP",  "KE",  "KG",  "KH",  "KI",
     "KM",  "KN",  "KP",  "KR",  "KW",  "KY",  "KZ",  "LA",
     "LB",  "LC",  "LI",  "LK",  "LR",  "LS",  "LT",  "LU",
-    "LV",  "LY",  "MA",  "MC",  "MD",  "MG",  "MH",  "MK",
+    "LV",  "LY",  "MA",  "MC",  "MD",  "ME",  "MF",  "MG",  "MH",  "MK",
     "ML",  "MM",  "MN",  "MO",  "MP",  "MQ",  "MR",  "MS",
     "MT",  "MU",  "MV",  "MW",  "MX",  "MY",  "MZ",  "NA",
     "NC",  "NE",  "NF",  "NG",  "NI",  "NL",  "NO",  "NP",
     "NR",  "NU",  "NZ",  "OM",  "PA",  "PE",  "PF",  "PG",
     "PH",  "PK",  "PL",  "PM",  "PN",  "PR",  "PS",  "PT",
-    "PW",  "PY",  "QA",  "RE",  "RO",  "RU",  "RW",  "SA",
+    "PW",  "PY",  "QA",  "RE",  "RO",  "RS",  "RU",  "RW",  "SA",
     "SB",  "SC",  "SD",  "SE",  "SG",  "SH",  "SI",  "SJ",
     "SK",  "SL",  "SM",  "SN",  "SO",  "SR",  "ST",  "SV",
     "SY",  "SZ",  "TC",  "TD",  "TF",  "TG",  "TH",  "TJ",
     "TK",  "TL",  "TM",  "TN",  "TO",  "TR",  "TT",  "TV",
     "TW",  "TZ",  "UA",  "UG",  "UM",  "US",  "UY",  "UZ",
     "VA",  "VC",  "VE",  "VG",  "VI",  "VN",  "VU",  "WF",
-    "WS",  "YE",  "YT",  "YU",  "ZA",  "ZM",  "ZW",  "ZZ",
+    "WS",  "YE",  "YT",  "ZA",  "ZM",  "ZW",
 NULL,
-    "FX",  "RO",  "TP",  "ZR",   /* obsolete country codes */
+    "FX",  "CS",  "RO",  "TP",  "YU",  "ZR",   /* obsolete country codes */
 NULL
 };
 
 static const char* const DEPRECATED_COUNTRIES[] ={
-    "BU", "DY", "FX", "HV", "NH", "RH", "TP", "YU", "ZR", NULL, NULL /* deprecated country list */
+    "BU", "CS", "DY", "FX", "HV", "NH", "RH", "TP", "YU", "ZR", NULL, NULL /* deprecated country list */
 };
 static const char* const REPLACEMENT_COUNTRIES[] = {
-/*  "BU", "DY", "FX", "HV", "NH", "RH", "TP", "YU", "ZR" */
-    "MM", "BJ", "FR", "BF", "VU", "ZW", "TL", "CS", "CD", NULL, NULL  /* replacement country codes */      
+/*  "BU", "CS", "DY", "FX", "HV", "NH", "RH", "TP", "YU", "ZR" */
+    "MM", "RS", "BJ", "FR", "BF", "VU", "ZW", "TL", "RS", "CD", NULL, NULL  /* replacement country codes */      
 };
     
 /**
@@ -408,8 +408,8 @@ static const char * const COUNTRIES_3[] = {
     "AGO", "ATA", "ARG", "ASM", "AUT", "AUS", "ABW", "ALA", "AZE",
 /*  "BA",  "BB",  "BD",  "BE",  "BF",  "BG",  "BH",  "BI",     */
     "BIH", "BRB", "BGD", "BEL", "BFA", "BGR", "BHR", "BDI",
-/*  "BJ",  "BM",  "BN",  "BO",  "BR",  "BS",  "BT",  "BV",     */
-    "BEN", "BMU", "BRN", "BOL", "BRA", "BHS", "BTN", "BVT",
+/*  "BJ",  "BL",  "BM",  "BN",  "BO",  "BR",  "BS",  "BT",  "BV",     */
+    "BEN", "BLM", "BMU", "BRN", "BOL", "BRA", "BHS", "BTN", "BVT",
 /*  "BW",  "BY",  "BZ",  "CA",  "CC",  "CD",  "CF",  "CG",     */
     "BWA", "BLR", "BLZ", "CAN", "CCK", "COD", "CAF", "COG",
 /*  "CH",  "CI",  "CK",  "CL",  "CM",  "CN",  "CO",  "CR",     */
@@ -420,22 +420,22 @@ static const char * const COUNTRIES_3[] = {
     "DMA", "DOM", "DZA", "ECU", "EST", "EGY", "ESH", "ERI",
 /*  "ES",  "ET",  "FI",  "FJ",  "FK",  "FM",  "FO",  "FR",     */
     "ESP", "ETH", "FIN", "FJI", "FLK", "FSM", "FRO", "FRA",
-/*  "GA",   "GB",   "GD",   "GE",    "GF",   "GG",   "GH",  "GI",  "GL",     */
+/*  "GA",  "GB",  "GD",  "GE",  "GF",  "GG",  "GH",  "GI",  "GL",     */
     "GAB", "GBR", "GRD", "GEO", "GUF", "GGY", "GHA", "GIB", "GRL",
 /*  "GM",  "GN",  "GP",  "GQ",  "GR",  "GS",  "GT",  "GU",     */
     "GMB", "GIN", "GLP", "GNQ", "GRC", "SGS", "GTM", "GUM",
 /*  "GW",  "GY",  "HK",  "HM",  "HN",  "HR",  "HT",  "HU",     */
     "GNB", "GUY", "HKG", "HMD", "HND", "HRV", "HTI", "HUN",
-/*  ID",    "IE",   "IL",    "IM",   "IN",   "IO",   "IQ",   "IR",   "IS" */
-    "IDN", "IRL", "ISR", "IMN", "IND", "IOT", "IRQ", "IRN", "ISL",	   
-/*  "IT",   "JE",   "JM",   "JO",    "JP",   "KE",   "KG",  "KH",  "KI",     */
+/*  "ID",  "IE",  "IL",  "IM",  "IN",  "IO",  "IQ",  "IR",  "IS" */
+    "IDN", "IRL", "ISR", "IMN", "IND", "IOT", "IRQ", "IRN", "ISL",
+/*  "IT",  "JE",  "JM",  "JO",  "JP",  "KE",  "KG",  "KH",  "KI",     */
     "ITA", "JEY", "JAM", "JOR", "JPN", "KEN", "KGZ", "KHM", "KIR",
 /*  "KM",  "KN",  "KP",  "KR",  "KW",  "KY",  "KZ",  "LA",     */
     "COM", "KNA", "PRK", "KOR", "KWT", "CYM", "KAZ", "LAO",
 /*  "LB",  "LC",  "LI",  "LK",  "LR",  "LS",  "LT",  "LU",     */
     "LBN", "LCA", "LIE", "LKA", "LBR", "LSO", "LTU", "LUX",
-/*  "LV",  "LY",  "MA",  "MC",  "MD",  "MG",  "MH",  "MK",     */
-    "LVA", "LBY", "MAR", "MCO", "MDA", "MDG", "MHL", "MKD",
+/*  "LV",  "LY",  "MA",  "MC",  "MD",  "ME",  "MF",  "MG",  "MH",  "MK",     */
+    "LVA", "LBY", "MAR", "MCO", "MDA", "MNE", "MAF", "MDG", "MHL", "MKD",
 /*  "ML",  "MM",  "MN",  "MO",  "MP",  "MQ",  "MR",  "MS",     */
     "MLI", "MMR", "MNG", "MAC", "MNP", "MTQ", "MRT", "MSR",
 /*  "MT",  "MU",  "MV",  "MW",  "MX",  "MY",  "MZ",  "NA",     */
@@ -446,8 +446,8 @@ static const char * const COUNTRIES_3[] = {
     "NRU", "NIU", "NZL", "OMN", "PAN", "PER", "PYF", "PNG",
 /*  "PH",  "PK",  "PL",  "PM",  "PN",  "PR",  "PS",  "PT",     */
     "PHL", "PAK", "POL", "SPM", "PCN", "PRI", "PSE", "PRT",
-/*  "PW",  "PY",  "QA",  "RE",  "RO",  "RU",  "RW",  "SA",     */
-    "PLW", "PRY", "QAT", "REU", "ROU", "RUS", "RWA", "SAU",
+/*  "PW",  "PY",  "QA",  "RE",  "RO",  "RS",  "RU",  "RW",  "SA",     */
+    "PLW", "PRY", "QAT", "REU", "ROU", "SRB", "RUS", "RWA", "SAU",
 /*  "SB",  "SC",  "SD",  "SE",  "SG",  "SH",  "SI",  "SJ",     */
     "SLB", "SYC", "SDN", "SWE", "SGP", "SHN", "SVN", "SJM",
 /*  "SK",  "SL",  "SM",  "SN",  "SO",  "SR",  "ST",  "SV",     */
@@ -460,11 +460,11 @@ static const char * const COUNTRIES_3[] = {
     "TWN", "TZA", "UKR", "UGA", "UMI", "USA", "URY", "UZB",
 /*  "VA",  "VC",  "VE",  "VG",  "VI",  "VN",  "VU",  "WF",     */
     "VAT", "VCT", "VEN", "VGB", "VIR", "VNM", "VUT", "WLF",
-/*  "WS",  "YE",  "YT",  "YU",  "ZA",  "ZM",  "ZW", "ZZZ"          */
-    "WSM", "YEM", "MYT", "YUG", "ZAF", "ZMB", "ZWE",  "ZZZ",
+/*  "WS",  "YE",  "YT",  "ZA",  "ZM",  "ZW",          */
+    "WSM", "YEM", "MYT", "ZAF", "ZMB", "ZWE",
 NULL,
-/*  "FX",  "RO",  "TP",  "ZR",   */
-    "FXX", "ROM", "TMP", "ZAR",
+/*  "FX",  "CS",  "RO",  "TP",  "YU",  "ZR",   */
+    "FXX", "SCG", "ROM", "TMP", "YUG", "ZAR",
 NULL
 };
 

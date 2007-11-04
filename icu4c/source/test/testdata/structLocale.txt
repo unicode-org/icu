@@ -72,6 +72,7 @@ structLocale:table(nofallback){
         BH{""}
         BI{""}
         BJ{""}
+        BL{""}
         BM{""}
         BN{""}
         BO{""}
@@ -185,6 +186,7 @@ structLocale:table(nofallback){
         MC{""}
         MD{""}
         ME{""}
+        MF{""}
         MG{""}
         MH{""}
         MK{""}
@@ -231,7 +233,6 @@ structLocale:table(nofallback){
         PW{""}
         PY{""}
         QA{""}
-        QE{""}
         QO{""}
         QU{""}
         RE{""}
@@ -253,7 +254,6 @@ structLocale:table(nofallback){
         SM{""}
         SN{""}
         SO{""}
-        SP{""}
         SR{""}
         ST{""}
         SV{""}
