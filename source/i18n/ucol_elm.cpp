@@ -1499,15 +1499,13 @@ _enumCategoryRangeClosureCategory(const void *context, UChar32 start, UChar32 li
         UCAElements el;
         UChar decomp[256] = { 0 };
         int32_t noOfDec = 0;
-        int32_t newNoOfDec=0;
-        UChar tmpDecomp[256] = { 0 };
-        int32_t newLen, noOfCompose, j;
+
         UChar32 u32 = 0;
-        UChar comp[256] = { 0 };
+        UChar comp[2];
         uint32_t len = 0;
 
         for(u32 = start; u32 < limit; u32++) {
-            newNoOfDec = noOfDec = unorm_getDecomposition(u32, FALSE, decomp, 256);
+            noOfDec = unorm_getDecomposition(u32, FALSE, decomp, 256);
             //if((noOfDec = unorm_normalize(comp, len, UNORM_NFD, 0, decomp, 256, status)) > 1
             //|| (noOfDec == 1 && *decomp != (UChar)u32))
             if(noOfDec > 0) // if we're positive, that means there is no decomposition
@@ -1523,56 +1521,35 @@ _enumCategoryRangeClosureCategory(const void *context, UChar32 start, UChar32 li
                     }
                     fprintf(stderr, "\n");
 #endif
-                    do {
-                         if ( noOfDec != newNoOfDec ) {
-                            // Compose the prefix combining marks with base character.
-                            noOfCompose = noOfDec-newNoOfDec+1;
-                            for (j=0; j<noOfCompose; j++) {
-                                tmpDecomp[j]=decomp[j];
-                            }
-                            tmpDecomp[noOfCompose]=0;
-                            if ((u_getCombiningClass(decomp[noOfCompose-1])==
-                                 u_getCombiningClass(decomp[noOfCompose])) ||
-                                (newLen = unorm_normalize(tmpDecomp, noOfCompose, UNORM_NFC, 0,
-                                                      comp, 256, status))>1) {
-                                continue;
-                            }
-                            uprv_memcpy(comp+newLen, decomp+(noOfDec-newNoOfDec+1), 
-                                        (newNoOfDec-1)*sizeof(UChar));
-                            len = newLen+(newNoOfDec-1);
-                            comp[len]=0;
-                        }
-                        ((enumStruct *)context)->noOfClosures++;
-                        el.cPoints = decomp;
-                        el.cSize = noOfDec;
-                        el.noOfCEs = 0;
-                        el.prefix = el.prefixChars;
-                        el.prefixSize = 0;
+                    ((enumStruct *)context)->noOfClosures++;
+                    el.cPoints = decomp;
+                    el.cSize = noOfDec;
+                    el.noOfCEs = 0;
+                    el.prefix = el.prefixChars;
+                    el.prefixSize = 0;
 
-                        UCAElements *prefix=(UCAElements *)uhash_get(t->prefixLookup, &el);
-                        el.cPoints = comp;
-                        el.cSize = len;
-                        el.prefix = el.prefixChars;
-                        el.prefixSize = 0;
-                        if(prefix == NULL) {
-                            el.noOfCEs = 0;
-                            ucol_setText(colEl, decomp, noOfDec, status);
-                            while((el.CEs[el.noOfCEs] = ucol_next(colEl, status)) != (uint32_t)UCOL_NULLORDER) {
-                                el.noOfCEs++;
-                            }
-                        } else {
-                            el.noOfCEs = 1;
-                            el.CEs[0] = prefix->mapCE;
-                            // This character uses a prefix. We have to add it
-                            // to the unsafe table, as it decomposed form is already
-                            // in. In Japanese, this happens for \u309e & \u30fe
-                            // Since unsafeCPSet is static in ucol_elm, we are going
-                            // to wrap it up in the uprv_uca_unsafeCPAddCCNZ function
+                    UCAElements *prefix=(UCAElements *)uhash_get(t->prefixLookup, &el);
+                    el.cPoints = comp;
+                    el.cSize = len;
+                    el.prefix = el.prefixChars;
+                    el.prefixSize = 0;
+                    if(prefix == NULL) {
+                        el.noOfCEs = 0;
+                        ucol_setText(colEl, decomp, noOfDec, status);
+                        while((el.CEs[el.noOfCEs] = ucol_next(colEl, status)) != (uint32_t)UCOL_NULLORDER) {
+                            el.noOfCEs++;
                         }
-                        uprv_uca_addAnElement(t, &el, status);
-                    }while (--newNoOfDec>=2 &&
-                            u_getCombiningClass(decomp[noOfDec-1])!=u_getCombiningClass(decomp[noOfDec-2]));
-               }
+                    } else {
+                        el.noOfCEs = 1;
+                        el.CEs[0] = prefix->mapCE;
+                        // This character uses a prefix. We have to add it 
+                        // to the unsafe table, as it decomposed form is already
+                        // in. In Japanese, this happens for \u309e & \u30fe
+                        // Since unsafeCPSet is static in ucol_elm, we are going
+                        // to wrap it up in the uprv_uca_unsafeCPAddCCNZ function
+                    }
+                    uprv_uca_addAnElement(t, &el, status);
+                }
             }
         }
     }
@@ -1620,3 +1597,5 @@ uprv_uca_canonicalClosure(tempUCATable *t, UErrorCode *status)
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
+
+
