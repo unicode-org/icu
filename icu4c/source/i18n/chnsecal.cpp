@@ -742,8 +742,7 @@ void ChineseCalendar::offsetMonth(int32_t newMoon, int32_t dom, int32_t delta) {
     // Pin the dom.  In this calendar all months are 29 or 30 days
     // so pinning just means handling dom 30.
     if (dom > 29) {
-        set(UCAL_JULIAN_DAY, jd-1, status);
-		if (U_FAILURE(status)) return;
+        set(UCAL_JULIAN_DAY, jd-1);
         // TODO Fix this.  We really shouldn't ever have to
         // explicitly call complete().  This is either a bug in
         // this method, in ChineseCalendar, or in
@@ -752,12 +751,10 @@ void ChineseCalendar::offsetMonth(int32_t newMoon, int32_t dom, int32_t delta) {
         if (U_FAILURE(status)) return;
         if (getActualMaximum(UCAL_DAY_OF_MONTH, status) >= dom) {
 		    if (U_FAILURE(status)) return;
-            set(UCAL_JULIAN_DAY, jd, status);
-		    if (U_FAILURE(status)) return;
+            set(UCAL_JULIAN_DAY, jd);
         }
     } else {
-        set(UCAL_JULIAN_DAY, jd, status);
-		if (U_FAILURE(status)) return;
+        set(UCAL_JULIAN_DAY, jd);
     }
 }
 
