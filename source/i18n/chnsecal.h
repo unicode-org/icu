@@ -139,7 +139,7 @@ class ChineseCalendar : public Calendar {
 
  protected:
   virtual int32_t handleGetLimit(UCalendarDateFields field, ELimitType limitType) const;
-  virtual int32_t handleGetMonthLength(int32_t extendedYear, int32_t month);
+  virtual int32_t handleGetMonthLength(int32_t extendedYear, int32_t month) const;
   //virtual int32_t handleGetYearLength(int32_t extendedYear) const;
   virtual int32_t handleComputeMonthStart(int32_t eyear, int32_t month, UBool useMonth) const;
   virtual int32_t handleGetExtendedYear();
@@ -150,7 +150,9 @@ class ChineseCalendar : public Calendar {
 
 public:
   virtual void add(UCalendarDateFields field, int32_t amount, UErrorCode &status);
+  virtual void add(EDateFields field, int32_t amount, UErrorCode &status);
   virtual void roll(UCalendarDateFields field, int32_t amount, UErrorCode &status);
+  virtual void roll(EDateFields field, int32_t amount, UErrorCode &status);
 
   
   //----------------------------------------------------------------------
