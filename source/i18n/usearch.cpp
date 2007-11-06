@@ -741,7 +741,7 @@ UBool checkExtraMatchAccents(const UStringSearch *strsrch, int32_t start,
             uint32_t            firstce   = strsrch->pattern.CE[0];
             UBool               ignorable = TRUE;
             uint32_t            ce        = UCOL_IGNORABLE;
-            while (U_SUCCESS(*status) && ce != firstce) {
+            while (U_SUCCESS(*status) && ce != firstce && ce != UCOL_NULLORDER) {
                 offset = ucol_getOffset(coleiter);
                 if (ce != firstce && ce != UCOL_IGNORABLE) {
                     ignorable = FALSE;
