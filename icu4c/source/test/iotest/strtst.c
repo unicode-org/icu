@@ -488,6 +488,27 @@ static void TestSprintfFormat(void) {
     TestSPrintFormat("%.2f", -1.234,     "%.2f", -1.234);
     TestSPrintFormat("%3f", 1.234,       "%3f", 1.234);
     TestSPrintFormat("%3f", -1.234,      "%3f", -1.234);
+    
+    /* Test reordering format */
+    /* Reinitialize the buffer to verify null termination works. */
+    char *uFormat = "%2$d==>%1$-10.10s %4$-10.10s %3$#x\n%5$d";
+    u_memset(uBuffer, 0x2a, sizeof(uBuffer)/sizeof(*uBuffer));
+    memset(buffer, '*', sizeof(buffer)/sizeof(*buffer));
+    
+    cNumPrinted = sprintf(buffer, uFormat,"truncateiftoolong", 99, 990099, "12345678901234567890", 10);
+    uNumPrinted = u_sprintf(uBuffer, uFormat,"truncateiftoolong", 99, 990099, "12345678901234567890", 10);
+    u_austrncpy(compBuffer, uBuffer, sizeof(uBuffer)/sizeof(uBuffer[0]));
+   
+    if (strcmp(buffer, compBuffer) != 0) {
+        log_err("%s Got: \"%s\", Expected: \"%s\"\n", uFormat, compBuffer, buffer);
+    }
+    if (cNumPrinted != uNumPrinted) {
+        log_err("%s number printed Got: %d, Expected: %d\n", uFormat, uNumPrinted, cNumPrinted);\
+    }
+    if (buffer[uNumPrinted+1] != '*') {
+        log_err("%s too much stored\n", uFormat);
+    }
+    
 #endif
 }
 
