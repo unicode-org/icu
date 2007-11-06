@@ -177,7 +177,7 @@ int32_t ChineseCalendar::handleGetExtendedYear() {
  * whether or not the given month is a leap month.
  * @stable ICU 2.8
  */
-int32_t ChineseCalendar::handleGetMonthLength(int32_t extendedYear, int32_t month) {
+int32_t ChineseCalendar::handleGetMonthLength(int32_t extendedYear, int32_t month) const {
     int32_t thisStart = handleComputeMonthStart(extendedYear, month, TRUE) -
         kEpochStartAsJulianDay + 1; // Julian day -> local days
     int32_t nextStart = newMoonNear(thisStart + SYNODIC_GAP, TRUE);
@@ -332,6 +332,14 @@ void ChineseCalendar::add(UCalendarDateFields field, int32_t amount, UErrorCode&
  * Override Calendar to handle leap months properly.
  * @stable ICU 2.8
  */
+void ChineseCalendar::add(EDateFields field, int32_t amount, UErrorCode& status) {
+    add((UCalendarDateFields)field, amount, status);
+}
+
+/**
+ * Override Calendar to handle leap months properly.
+ * @stable ICU 2.8
+ */
 void ChineseCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& status) {
     switch (field) {
     case UCAL_MONTH:
@@ -388,6 +396,10 @@ void ChineseCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode
 		Calendar::roll(field, amount, status);
         break;
     }
+}
+
+void ChineseCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status) {
+	roll((UCalendarDateFields)field, amount, status);
 }
 
 
@@ -499,7 +511,7 @@ int32_t ChineseCalendar::newMoonNear(double days, UBool after) const {
 	UDate newMoon = gChineseCalendarAstro->getMoonTime(CalendarAstronomer::NEW_MOON(), after);
     umtx_unlock(&astroLock);
     
-	return millisToDays(newMoon);
+	return (int32_t) millisToDays(newMoon);
 }
 
 /**
@@ -510,7 +522,8 @@ int32_t ChineseCalendar::newMoonNear(double days, UBool after) const {
  * @return the nearest integer number of months between day1 and day2
  */
 int32_t ChineseCalendar::synodicMonthsBetween(int32_t day1, int32_t day2) const {
-	return (int32_t) (((day2 - day1) / CalendarAstronomer::SYNODIC_MONTH) + .5);
+	double roundme = ((day2 - day1) / CalendarAstronomer::SYNODIC_MONTH);
+	return (int32_t) (roundme + (roundme >= 0 ? .5 : -.5));
 }
 
 /**
