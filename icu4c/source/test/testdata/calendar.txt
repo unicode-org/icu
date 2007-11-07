@@ -158,7 +158,7 @@ calendar:table(nofallback) {
                     "ERA=1,YEAR=2,MONTH=JUNE,DATE=4",  // tw  
                },
                
-               //chinese
+               //chinese add tests
                { // normal
                     "en_US@calendar=chinese",         
                     "EXTENDED_YEAR=4642,MONTH=2,DATE=15,IS_LEAP_MONTH=0",  // ch  
@@ -229,6 +229,121 @@ calendar:table(nofallback) {
                     "MONTH=3", // month + 3
                     "EXTENDED_YEAR=4638,MONTH=5,DATE=29,IS_LEAP_MONTH=0",  // ch  
                },
+               
+               // chinese roll tests
+               { // normal
+                    "en_US@calendar=chinese",         
+                    "EXTENDED_YEAR=4642,MONTH=2,DATE=15,IS_LEAP_MONTH=0",  // ch  
+                    "roll",
+                    "MONTH=3", // month + 3
+                    "EXTENDED_YEAR=4642,MONTH=5,DATE=15,IS_LEAP_MONTH=0",  // ch  
+               },
+               { // normal
+                    "en_US@calendar=chinese",         
+                    "EXTENDED_YEAR=4642,MONTH=2,DATE=15,IS_LEAP_MONTH=0",  // ch  
+                    "roll",
+                    "MONTH=11", // month + 11
+                    "EXTENDED_YEAR=4642,MONTH=1,DATE=15,IS_LEAP_MONTH=0",  // ch  
+               },
+               { // across year
+                    "en_US@calendar=chinese",         
+                    "EXTENDED_YEAR=4639,MONTH=11,DATE=15,IS_LEAP_MONTH=0",  // ch  
+                    "roll",
+                    "MONTH=1", // month + 1
+                    "EXTENDED_YEAR=4639,MONTH=0,DATE=15,IS_LEAP_MONTH=0",  // ch  
+               },
+               { // across year
+                    "en_US@calendar=chinese",         
+                    "EXTENDED_YEAR=4640,MONTH=0,DATE=15,IS_LEAP_MONTH=0",  // ch  
+                    "roll",
+                    "MONTH=-1", // month - 1
+                    "EXTENDED_YEAR=4640,MONTH=11,DATE=15,IS_LEAP_MONTH=0",  // ch  
+               },
+               { // month=3 is a leap month
+                    "en_US@calendar=chinese",         
+                    "EXTENDED_YEAR=4638,MONTH=2,DATE=15,IS_LEAP_MONTH=0",  // ch  
+                    "roll",
+                    "MONTH=3", // month + 3
+                    "EXTENDED_YEAR=4638,MONTH=4,DATE=15,IS_LEAP_MONTH=0",  // ch  
+               },
+               { // month=3 is a leap month
+                    "en_US@calendar=chinese",         
+                    "EXTENDED_YEAR=4638,MONTH=2,DATE=15,IS_LEAP_MONTH=0",  // ch  
+                    "roll",
+                    "MONTH=3", // month + 16
+                    "EXTENDED_YEAR=4638,MONTH=4,DATE=15,IS_LEAP_MONTH=0",  // ch  
+               },
+               { // month=3 is a leap month
+                    "en_US@calendar=chinese",         
+                    "EXTENDED_YEAR=4638,MONTH=2,DATE=15,IS_LEAP_MONTH=0",  // ch  
+                    "roll",
+                    "MONTH=2", // month + 2
+                    "EXTENDED_YEAR=4638,MONTH=3,DATE=15,IS_LEAP_MONTH=1",  // ch  
+               },
+               { // month=3 is a leap month
+                    "en_US@calendar=chinese",         
+                    "EXTENDED_YEAR=4638,MONTH=2,DATE=15,IS_LEAP_MONTH=0",  // ch  
+                    "roll",
+                    "MONTH=28", // month + 28
+                    "EXTENDED_YEAR=4638,MONTH=3,DATE=15,IS_LEAP_MONTH=1",  // ch  
+               },
+               { // month=3 is a leap month
+                    "en_US@calendar=chinese",         
+                    "EXTENDED_YEAR=4638,MONTH=3,DATE=15,IS_LEAP_MONTH=0",  // ch  
+                    "roll",
+                    "MONTH=1", // month + 1
+                    "EXTENDED_YEAR=4638,MONTH=3,DATE=15,IS_LEAP_MONTH=1",  // ch  
+               },
+               { // month=3 is a leap month
+                    "en_US@calendar=chinese",         
+                    "EXTENDED_YEAR=4638,MONTH=3,DATE=15,IS_LEAP_MONTH=0",  // ch  
+                    "roll",
+                    "MONTH=-12", // month - 12
+                    "EXTENDED_YEAR=4638,MONTH=3,DATE=15,IS_LEAP_MONTH=1",  // ch  
+               },
+               { // month=3 is a leap month
+                    "en_US@calendar=chinese",         
+                    "EXTENDED_YEAR=4638,MONTH=3,DATE=15,IS_LEAP_MONTH=1",  // ch  
+                    "roll",
+                    "MONTH=1", // month + 1
+                    "EXTENDED_YEAR=4638,MONTH=4,DATE=15,IS_LEAP_MONTH=0",  // ch  
+               },
+               { // month=3 is a leap month
+                    "en_US@calendar=chinese",         
+                    "EXTENDED_YEAR=4638,MONTH=3,DATE=15,IS_LEAP_MONTH=1",  // ch  
+                    "roll",
+                    "MONTH=-25", // month - 25
+                    "EXTENDED_YEAR=4638,MONTH=4,DATE=15,IS_LEAP_MONTH=0",  // ch  
+               },
+               { // dom should pin
+                    "en_US@calendar=chinese",         
+                    "EXTENDED_YEAR=4638,MONTH=3,DATE=30,IS_LEAP_MONTH=0",  // ch  
+                    "roll",
+                    "MONTH=1", // month + 1
+                    "EXTENDED_YEAR=4638,MONTH=3,DATE=29,IS_LEAP_MONTH=1",  // ch  
+               },
+               { // dom should pin
+                    "en_US@calendar=chinese",         
+                    "EXTENDED_YEAR=4638,MONTH=3,DATE=30,IS_LEAP_MONTH=0",  // ch  
+                    "roll",
+                    "MONTH=14", // month + 14
+                    "EXTENDED_YEAR=4638,MONTH=3,DATE=29,IS_LEAP_MONTH=1",  // ch  
+               },
+               { // no dom pin
+                    "en_US@calendar=chinese",         
+                    "EXTENDED_YEAR=4638,MONTH=3,DATE=30,IS_LEAP_MONTH=0",  // ch  
+                    "roll",
+                    "MONTH=15", // month + 15
+                    "EXTENDED_YEAR=4638,MONTH=4,DATE=30,IS_LEAP_MONTH=0",  // ch  
+               },
+               { // dom should pin
+                    "en_US@calendar=chinese",         
+                    "EXTENDED_YEAR=4638,MONTH=3,DATE=30,IS_LEAP_MONTH=0",  // ch  
+                    "roll",
+                    "MONTH=-10", // month - 10
+                    "EXTENDED_YEAR=4638,MONTH=5,DATE=29,IS_LEAP_MONTH=0",  // ch  
+               },
+               
 	    }
         }	          
     }	    
