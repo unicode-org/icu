@@ -91,10 +91,12 @@ Calendar* ChineseCalendar::clone() const {
 ChineseCalendar::ChineseCalendar(const Locale& aLocale, UErrorCode& success)
 :   Calendar(TimeZone::createDefault(), aLocale, success)
 {
+	isLeapYear = FALSE;
     setTimeInMillis(getNow(), success); // Call this again now that the vtable is set up properly.
 }
 
 ChineseCalendar::ChineseCalendar(const ChineseCalendar& other) : Calendar(other) {
+	isLeapYear = other.isLeapYear;
 }
 
 ChineseCalendar::~ChineseCalendar()
