@@ -377,8 +377,8 @@ static void TestSprintfFormat(void) {
 #if !UCONFIG_NO_FORMATTING
     static const UChar abcUChars[] = {0x61,0x62,0x63,0};
     static const char abcChars[] = "abc";
-    const char *reorderFormat = "%2$d==>%1$-10.10s %4$-10.10s %3$#x((%5$d"; /* reordering test*/
-    const char *reorderResult = "99==>truncateif 1234567890 0xf1b93((10";
+    const char *reorderFormat = "%2$d==>%1$-10.10s %6$lld %4$-10.10s %3$#x((%5$d"; /* reordering test*/
+    const char *reorderResult = "99==>truncateif 1311768467463790322 1234567890 0xf1b93((10";
     UChar uBuffer[256];
     char buffer[256];
     char compBuffer[256];
@@ -492,7 +492,7 @@ static void TestSprintfFormat(void) {
     TestSPrintFormat("%3f", -1.234,      "%3f", -1.234);
     
     /* Test reordering format */   
-    u_sprintf(uBuffer, reorderFormat,"truncateiftoolong", 99, 990099, "12345678901234567890", 10);
+    u_sprintf(uBuffer, reorderFormat,"truncateiftoolong", 99, 990099, "12345678901234567890", 10, 0x123456789abcdef2LL);
     u_austrncpy(compBuffer, uBuffer, sizeof(uBuffer)/sizeof(uBuffer[0]));
    
     if (strcmp(compBuffer, reorderResult) != 0) {
