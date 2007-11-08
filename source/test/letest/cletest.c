@@ -694,7 +694,7 @@ static void U_CALLCONV GlyphToCharTest(void)
                 if (minIndex != charIndex) {
                     log_err("Bad minIndex for run %d on line %d: expected %d, got %d\n",
                         run, lineNumber, charIndex, minIndex);
-                    goto close_paragraph; // once there's one error, we can't count on anything else...
+                    goto close_paragraph; /* once there's one error, we can't count on anything else... */
                 }
 
                 charIndex = maxIndex + 1;
