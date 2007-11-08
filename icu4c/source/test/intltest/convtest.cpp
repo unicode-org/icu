@@ -466,7 +466,8 @@ ConversionTest::TestGetUnicodeSet() {
     }
 }
 
-static void U_EXPORT2
+U_CDECL_BEGIN
+static void U_CALLCONV
 getUnicodeSetCallback(const void *context,
                       UConverterFromUnicodeArgs *fromUArgs,
                       const UChar* codeUnits,
@@ -479,6 +480,7 @@ getUnicodeSetCallback(const void *context,
         *pErrorCode=U_ZERO_ERROR;                    // skip
     }  // else ignore the reset, close and clone calls.
 }
+U_CDECL_END
 
 // Compare ucnv_getUnicodeSet() with the set of characters that can be converted.
 void
