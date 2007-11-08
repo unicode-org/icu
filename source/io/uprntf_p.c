@@ -1045,7 +1045,7 @@ ufmt_args* parseArguments(const UChar *alias, va_list ap) {
 	int32_t pos = 0;
 	UChar type;
 	uint16_t handlerNum;
-	UChar *aliasStart = alias;
+	const UChar *aliasStart = alias;
 	
 	/* get maximum number of arguments */
 	for(;;) {
@@ -1140,33 +1140,32 @@ ufmt_args* parseArguments(const UChar *alias, va_list ap) {
 	}
 	
 	/* store argument in arglist */
-	int i;
-	for (i = 1; i <= size; i++) {
-		switch (typelist[i]) {
+	for (pos = 1; pos <= size; pos++) {
+		switch (typelist[pos]) {
         case ufmt_string:
         case ufmt_ustring:
         case ufmt_pointer:
-            arglist[i].ptrValue = va_arg(ap, void*);
+            arglist[pos].ptrValue = va_arg(ap, void*);
             break;
         case ufmt_char:
         case ufmt_uchar:
         case ufmt_int:
-            if (islonglong[i]) {
-                arglist[i].int64Value = va_arg(ap, int64_t);
+            if (islonglong[pos]) {
+                arglist[pos].int64Value = va_arg(ap, int64_t);
             }
             else {
-                arglist[i].int64Value = va_arg(ap, int32_t);
+                arglist[pos].int64Value = va_arg(ap, int32_t);
             }
             break;
         case ufmt_float:
-            arglist[i].floatValue = (float) va_arg(ap, double);
+            arglist[pos].floatValue = (float) va_arg(ap, double);
             break;
         case ufmt_double:
-            arglist[i].doubleValue = va_arg(ap, double);
+            arglist[pos].doubleValue = va_arg(ap, double);
             break;
         default:
             /* else args is ignored */
-            arglist[i].ptrValue = NULL;
+            arglist[pos].ptrValue = NULL;
             break;
         }
 	}
