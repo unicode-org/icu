@@ -602,8 +602,8 @@ public final class ULocale implements Serializable {
                     "TWN", "TZA", "UKR", "UGA", "UMI", "USA", "URY", "UZB",
                 /*  "VA",  "VC",  "VE",  "VG",  "VI",  "VN",  "VU",  "WF",     */
                     "VAT", "VCT", "VEN", "VGB", "VIR", "VNM", "VUT", "WLF",
-                /*  "WS",  "YE",  "YT",  "ZA",  "ZM",  "ZW",  "ZZZ"          */
-                    "WSM", "YEM", "MYT", "ZAF", "ZMB", "ZWE", "ZZZ",
+                /*  "WS",  "YE",  "YT",  "ZA",  "ZM",  "ZW"          */
+                    "WSM", "YEM", "MYT", "ZAF", "ZMB", "ZWE",
             };
     
             String[] tempObsoleteCountries3 = {
