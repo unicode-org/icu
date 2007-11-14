@@ -543,18 +543,18 @@ uint32_t u_toLargeKana(const UChar *source, const uint32_t sourceLen, UChar *res
 
     for(i = 0; i < sourceLen; i++) {
         c = source[i];
-        if(0x3042 < c && c < 0x30ef) { /* Kana range */
+        if(0x3041 <= c && c <= 0x30FA) { /* Kana range */
             switch(c - 0x3000) {
-      case 0x41: case 0x43: case 0x45: case 0x47: case 0x49: case 0x63: case 0x83: case 0x85: case 0x8E:
-      case 0xA1: case 0xA3: case 0xA5: case 0xA7: case 0xA9: case 0xC3: case 0xE3: case 0xE5: case 0xEE:
-          c++;
-          break;
-      case 0xF5:
-          c = 0x30AB;
-          break;
-      case 0xF6:
-          c = 0x30B1;
-          break;
+            case 0x41: case 0x43: case 0x45: case 0x47: case 0x49: case 0x63: case 0x83: case 0x85: case 0x8E:
+            case 0xA1: case 0xA3: case 0xA5: case 0xA7: case 0xA9: case 0xC3: case 0xE3: case 0xE5: case 0xEE:
+                c++;
+                break;
+            case 0xF5:
+                c = 0x30AB;
+                break;
+            case 0xF6:
+                c = 0x30B1;
+                break;
             }
         }
         resBuf[i] = c;
@@ -578,18 +578,18 @@ uint32_t u_toSmallKana(const UChar *source, const uint32_t sourceLen, UChar *res
 
     for(i = 0; i < sourceLen; i++) {
         c = source[i];
-        if(0x3042 < c && c < 0x30ef) { /* Kana range */
+        if(0x3041 <= c && c <= 0x30FA) { /* Kana range */
             switch(c - 0x3000) {
-      case 0x42: case 0x44: case 0x46: case 0x48: case 0x4A: case 0x64: case 0x84: case 0x86: case 0x8F:
-      case 0xA2: case 0xA4: case 0xA6: case 0xA8: case 0xAA: case 0xC4: case 0xE4: case 0xE6: case 0xEF:
-          c--;
-          break;
-      case 0xAB:
-          c = 0x30F5;
-          break;
-      case 0xB1:
-          c = 0x30F6;
-          break;
+            case 0x42: case 0x44: case 0x46: case 0x48: case 0x4A: case 0x64: case 0x84: case 0x86: case 0x8F:
+            case 0xA2: case 0xA4: case 0xA6: case 0xA8: case 0xAA: case 0xC4: case 0xE4: case 0xE6: case 0xEF:
+                c--;
+                break;
+            case 0xAB:
+                c = 0x30F5;
+                break;
+            case 0xB1:
+                c = 0x30F6;
+                break;
             }
         }
         resBuf[i] = c;
