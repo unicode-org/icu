@@ -4783,7 +4783,7 @@ TestSortKeyConsistency(void)
     ucol = ucol_openFromShortString("LEN_S4", FALSE, NULL, &icuRC);
     if (U_FAILURE(icuRC))
 	{
-	    log_err("ucol_openFromShortString failed");
+	    log_err("ucol_openFromShortString failed\n");
         return;
 	}
 
@@ -4803,7 +4803,7 @@ TestSortKeyConsistency(void)
         ucol_nextSortKeyPart(ucol, &uiter, state, bufPart[i], TSKC_BUF_SIZE, &icuRC);
         if (U_FAILURE(icuRC))
 		{
-		    log_err("ucol_nextSortKeyPart failed");
+		    log_err("ucol_nextSortKeyPart failed\n");
 			ucol_close(ucol);
 			return;
 		}
@@ -4818,8 +4818,8 @@ TestSortKeyConsistency(void)
 			    partMatch = partMatch && (bufPart[i][j] != bufPart[i2][j]);
 		    }
 			if (fullMatch != partMatch) {
-		        log_err(fullMatch ? "full key was consistent, but partial key changed"
-					              : "partial key was consistent, but full key changed");
+		        log_err(fullMatch ? "full key was consistent, but partial key changed\n"
+					              : "partial key was consistent, but full key changed\n");
 				ucol_close(ucol);
 				return;
 			}
