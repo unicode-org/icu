@@ -4767,6 +4767,71 @@ TestJ5367(void)
 }
 
 
+#define TSKC_DATA_SIZE 5
+#define TSKC_BUF_SIZE  50
+static void
+TestSortKeyConsistency(void)
+{
+    UErrorCode icuRC = U_ZERO_ERROR;
+    UCollator* ucol;
+    UChar data[] = { 0xFFFD, 0x0006, 0x0006, 0x0006, 0xFFFD};
+
+    uint8_t bufFull[TSKC_DATA_SIZE][TSKC_BUF_SIZE];
+    uint8_t bufPart[TSKC_DATA_SIZE][TSKC_BUF_SIZE];
+	int32_t i, j, i2;
+
+    ucol = ucol_openFromShortString("LEN_S4", FALSE, NULL, &icuRC);
+    if (U_FAILURE(icuRC))
+	{
+	    log_err("ucol_openFromShortString failed");
+        return;
+	}
+
+    for (i = 0; i < TSKC_DATA_SIZE; i++)
+    {
+        UCharIterator uiter;
+        uint32_t state[2] = { 0, 0 };
+        int32_t dataLen = i+1;
+	    for (j=0; j<TSKC_BUF_SIZE; j++)
+	        bufFull[i][j] = bufPart[i][j] = 0;
+
+        // Full sort key
+        ucol_getSortKey(ucol, data, dataLen, bufFull[i], TSKC_BUF_SIZE);
+
+        // Partial sort key
+        uiter_setString(&uiter, data, dataLen);
+        ucol_nextSortKeyPart(ucol, &uiter, state, bufPart[i], TSKC_BUF_SIZE, &icuRC);
+        if (U_FAILURE(icuRC))
+		{
+		    log_err("ucol_nextSortKeyPart failed");
+			ucol_close(ucol);
+			return;
+		}
+
+	    for (i2=0; i2<i; i2++)
+	    {
+	        UBool fullMatch = TRUE;
+		    UBool partMatch = TRUE;
+		    for (j=0; j<TSKC_BUF_SIZE; j++)
+		    {
+			    fullMatch = fullMatch && (bufFull[i][j] != bufFull[i2][j]);
+			    partMatch = partMatch && (bufPart[i][j] != bufPart[i2][j]);
+		    }
+			if (fullMatch != partMatch) {
+		        log_err(fullMatch ? "full key was consistent, but partial key changed"
+					              : "partial key was consistent, but full key changed");
+				ucol_close(ucol);
+				return;
+			}
+	    }
+
+    }
+
+   //=============================================
+   ucol_close(ucol);
+}
+
+
 #define TEST(x) addTest(root, &x, "tscoll/cmsccoll/" # x)
 
 void addMiscCollTest(TestNode** root)
@@ -4836,6 +4901,7 @@ void addMiscCollTest(TestNode** root)
     TEST(TestJ5223);
     TEST(TestJ5232);
     TEST(TestJ5367);
+	TEST(TestSortKeyConsistency);
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
