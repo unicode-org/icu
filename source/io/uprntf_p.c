@@ -1038,8 +1038,8 @@ static const u_printf_info g_u_printf_infos[UPRINTF_NUM_FMT_HANDLERS] = {
             (s) == MOD_L
 /* Returns an array of the parsed argument type given in the format string. */
 ufmt_args* parseArguments(const UChar *alias, va_list ap) {
-	ufmt_type_info *typelist = NULL;
 	ufmt_args *arglist = NULL;
+	ufmt_type_info *typelist = NULL;
 	UBool *islonglong = NULL;
 	int32_t size = 0;
 	int32_t pos = 0;
@@ -1087,9 +1087,9 @@ ufmt_args* parseArguments(const UChar *alias, va_list ap) {
 	}
 	
 	/* create the parsed argument list */
-	typelist = uprv_malloc(sizeof(ufmt_type_info) * size + 1);
-	arglist = uprv_malloc(sizeof(ufmt_args) * size + 1);
-	islonglong = uprv_malloc(sizeof(UBool) * size + 1);
+	typelist = (ufmt_type_info*)uprv_malloc(sizeof(ufmt_type_info*) * size + 1);
+	islonglong = (UBool*)uprv_malloc(sizeof(UBool*) * size + 1);
+	arglist = (ufmt_args*)uprv_malloc(sizeof(ufmt_args*) * size + 1);
 	
 	/* reset alias back to the beginning */
 	alias = aliasStart;
