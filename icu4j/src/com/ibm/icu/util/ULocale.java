@@ -712,7 +712,7 @@ public final class ULocale implements Serializable {
         { "ja_JP_JP",   "ja_JP",    "calendar", "japanese", "ja"},
         { "no_NO_NY",   "nn_NO",    null,       null,       "nn"},
     //  { "th_TH_TH",   "th_TH",    ??,         ??,         "th"} //TODO
-    };    
+    };
 
     /**
      * Private constructor used by static initializers.
@@ -3042,5 +3042,560 @@ public final class ULocale implements Serializable {
         // pull out the map 
         ULocale acceptList[] = (ULocale[])map.values().toArray(new ULocale[map.size()]);
         return acceptList;
+    }
+
+    private static HashMap _likelySubtagMaximizeMap;
+
+    private static void initLikelySubtagMaximizeMap() {
+        if (_likelySubtagMaximizeMap != null) {
+            return;
+        }
+        // We should use CLDR data which will be introduced in CLDR1.5.1.
+        // For now, use the hardcoded table below.
+        String[][] likelySubtagTable = {
+                {"aa", "aa_Latn_ET"},
+                {"af", "af_Latn_ZA"},
+                {"ak", "ak_Latn_GH"},
+                {"am", "am_Ethi_ET"},
+                {"ar", "ar_Arab_EG"},
+                {"as", "as_Beng_IN"},
+                {"az", "az_Latn_AZ"},
+                {"be", "be_Cyrl_BY"},
+                {"bg", "bg_Cyrl_BG"},
+                {"bn", "bn_Beng_BD"},
+                {"bo", "bo_Tibt_CN"},
+                {"bs", "bs_Latn_BA"},
+                {"byn", "byn_Ethi_ER"},
+                {"ca", "ca_Latn_ES"},
+                {"cch", "cch_Latn_NG"},
+                {"ch", "ch_Latn_GU"},
+                {"chk", "chk_Latn_FM"},
+                {"cop", "cop_Arab_EG"},
+                {"cs", "cs_Latn_CZ"},
+                {"cy", "cy_Latn_GB"},
+                {"da", "da_Latn_DK"},
+                {"de", "de_Latn_DE"},
+                {"dv", "dv_Thaa_MV"},
+                {"dz", "dz_Tibt_BT"},
+                {"ee", "ee_Latn_GH"},
+                {"el", "el_Grek_GR"},
+                {"en", "en_Latn_US"},
+                {"es", "es_Latn_ES"},
+                {"et", "et_Latn_EE"},
+                {"eu", "eu_Latn_ES"},
+                {"fa", "fa_Arab_IR"},
+                {"fi", "fi_Latn_FI"},
+                {"fil", "fil_Latn_PH"},
+                {"fj", "fj_Latn_FJ"},
+                {"fo", "fo_Latn_FO"},
+                {"fr", "fr_Latn_FR"},
+                {"fur", "fur_Latn_IT"},
+                {"ga", "ga_Latn_IE"},
+                {"gaa", "gaa_Latn_GH"},
+                {"gez", "gez_Ethi_ER"},
+                {"gl", "gl_Latn_ES"},
+                {"gn", "gn_Latn_PY"},
+                {"gu", "gu_Gujr_IN"},
+                {"gv", "gv_Latn_GB"},
+                {"ha", "ha_Latn_NG"},
+                {"haw", "haw_Latn_US"},
+                {"he", "he_Hebr_IL"},
+                {"hi", "hi_Deva_IN"},
+                {"hr", "hr_Latn_HR"},
+                {"ht", "ht_Latn_HT"},
+                {"hu", "hu_Latn_HU"},
+                {"hy", "hy_Armn_AM"},
+                {"id", "id_Latn_ID"},
+                {"ig", "ig_Latn_NG"},
+                {"ii", "ii_Yiii_CN"},
+                {"is", "is_Latn_IS"},
+                {"it", "it_Latn_IT"},
+                {"iu", "iu_Cans_CA"},
+                {"ja", "ja_Jpan_JP"},
+                {"ka", "ka_Geor_GE"},
+                {"kaj", "kaj_Latn_NG"},
+                {"kam", "kam_Latn_KE"},
+                {"kcg", "kcg_Latn_NG"},
+                {"kfo", "kfo_Latn_NG"},
+                {"kk", "kk_Cyrl_KZ"},
+                {"kl", "kl_Latn_GL"},
+                {"km", "km_Khmr_KH"},
+                {"kn", "kn_Knda_IN"},
+                {"ko", "ko_Kore_KR"},
+                {"kok", "kok_Deva_IN"},
+                {"kpe", "kpe_Latn_LR"},
+                {"ku", "ku_Latn_TR"},
+                {"kw", "kw_Latn_GB"},
+                {"ky", "ky_Cyrl_KG"},
+                {"la", "la_Latn_VA"},
+                {"ln", "ln_Latn_CD"},
+                {"lo", "lo_Laoo_LA"},
+                {"lt", "lt_Latn_LT"},
+                {"lv", "lv_Latn_LV"},
+                {"mg", "mg_Latn_MG"},
+                {"mh", "mh_Latn_MH"},
+                {"mk", "mk_Cyrl_MK"},
+                {"ml", "ml_Mlym_IN"},
+                {"mn", "mn_Cyrl_MN"},
+                {"mr", "mr_Deva_IN"},
+                {"ms", "ms_Latn_MY"},
+                {"mt", "mt_Latn_MT"},
+                {"my", "my_Mymr_MM"},
+                {"na", "na_Latn_NR"},
+                {"nb", "nb_Latn_NO"},
+                {"ne", "ne_Deva_NP"},
+                {"niu", "niu_Latn_NU"},
+                {"nl", "nl_Latn_NL"},
+                {"nn", "nn_Latn_NO"},
+                {"nr", "nr_Latn_ZA"},
+                {"nso", "nso_Latn_ZA"},
+                {"ny", "ny_Latn_MW"},
+                {"om", "om_Latn_ET"},
+                {"or", "or_Orya_IN"},
+                {"pa", "pa_Guru_IN"},
+                {"pa_Arab", "pa_Arab_PK"},
+                {"pa_PK", "pa_Arab_PK"},
+                {"pap", "pap_Latn_AN"},
+                {"pau", "pau_Latn_PW"},
+                {"pl", "pl_Latn_PL"},
+                {"ps", "ps_Arab_AF"},
+                {"pt", "pt_Latn_BR"},
+                {"rn", "rn_Latn_BI"},
+                {"ro", "ro_Latn_RO"},
+                {"ru", "ru_Cyrl_RU"},
+                {"rw", "rw_Latn_RW"},
+                {"sa", "sa_Deva_IN"},
+                {"se", "se_Latn_NO"},
+                {"sg", "sg_Latn_CF"},
+                {"sh", "sr_Latn_RS"},
+                {"si", "si_Sinh_LK"},
+                {"sid", "sid_Latn_ET"},
+                {"sk", "sk_Latn_SK"},
+                {"sl", "sl_Latn_SI"},
+                {"sm", "sm_Latn_AS"},
+                {"so", "so_Latn_SO"},
+                {"sq", "sq_Latn_AL"},
+                {"sr", "sr_Cyrl_RS"},
+                {"ss", "ss_Latn_ZA"},
+                {"st", "st_Latn_ZA"},
+                {"sv", "sv_Latn_SE"},
+                {"sw", "sw_Latn_TZ"},
+                {"syr", "syr_Syrc_SY"},
+                {"ta", "ta_Taml_IN"},
+                {"te", "te_Telu_IN"},
+                {"tet", "tet_Latn_TL"},
+                {"tg", "tg_Cyrl_TJ"},
+                {"th", "th_Thai_TH"},
+                {"ti", "ti_Ethi_ET"},
+                {"tig", "tig_Ethi_ER"},
+                {"tk", "tk_Latn_TM"},
+                {"tkl", "tkl_Latn_TK"},
+                {"tn", "tn_Latn_ZA"},
+                {"to", "to_Latn_TO"},
+                {"tpi", "tpi_Latn_PG"},
+                {"tr", "tr_Latn_TR"},
+                {"ts", "ts_Latn_ZA"},
+                {"tt", "tt_Cyrl_RU"},
+                {"tvl", "tvl_Latn_TV"},
+                {"ty", "ty_Latn_PF"},
+                {"uk", "uk_Cyrl_UA"},
+                {"ur", "ur_Arab_IN"},
+                {"uz", "uz_Cyrl_UZ"},
+                {"uz_AF", "uz_Arab_AF"},
+                {"uz_Arab", "uz_Arab_AF"},
+                {"ve", "ve_Latn_ZA"},
+                {"vi", "vi_Latn_VN"},
+                {"wal", "wal_Ethi_ET"},
+                {"wo", "wo_Arab_SN"},
+                {"wo_SN", "wo_Latn_SN"},
+                {"xh", "xh_Latn_ZA"},
+                {"yo", "yo_Latn_NG"},
+                {"zh", "zh_Hans_CN"},
+                {"zh_Hani", "zh_Hans_CN"},
+                {"zh_Hant", "zh_Hant_TW"},
+                {"zh_HK", "zh_Hant_HK"},
+                {"zh_MO", "zh_Hant_MO"},
+                {"zh_TW", "zh_Hant_TW"},
+                {"zu", "zu_Latn_ZA"},
+
+                {"und", "en_Latn_US"},
+                {"und_AD", "ca_Latn_AD"},
+                {"und_AE", "ar_Arab_AE"},
+                {"und_AF", "fa_Arab_AF"},
+                {"und_AL", "sq_Latn_AL"},
+                {"und_AM", "hy_Armn_AM"},
+                {"und_AN", "pap_Latn_AN"},
+                {"und_AO", "pt_Latn_AO"},
+                {"und_AR", "es_Latn_AR"},
+                {"und_Arab", "ar_Arab_EG"},
+                {"und_Arab_IN", "ur_Arab_IN"},
+                {"und_Arab_PK", "pa_Arab_PK"},
+                {"und_Arab_SN", "wo_Arab_SN"},
+                {"und_Armn", "hy_Armn_AM"},
+                {"und_AS", "sm_Latn_AS"},
+                {"und_AT", "de_Latn_AT"},
+                {"und_AW", "nl_Latn_AW"},
+                {"und_AX", "sv_Latn_AX"},
+                {"und_AZ", "az_Latn_AZ"},
+                {"und_BA", "bs_Latn_BA"},
+                {"und_BD", "bn_Beng_BD"},
+                {"und_BE", "nl_Latn_BE"},
+                {"und_Beng", "bn_Beng_BD"},
+                {"und_Beng_IN", "as_Beng_IN"},
+                {"und_BF", "fr_Latn_BF"},
+                {"und_BG", "bg_Cyrl_BG"},
+                {"und_BH", "ar_Arab_BH"},
+                {"und_BI", "rn_Latn_BI"},
+                {"und_BJ", "fr_Latn_BJ"},
+                {"und_BN", "ms_Latn_BN"},
+                {"und_BO", "es_Latn_BO"},
+                {"und_BR", "pt_Latn_BR"},
+                {"und_BT", "dz_Tibt_BT"},
+                {"und_BY", "be_Cyrl_BY"},
+                {"und_Cans", "iu_Cans_CA"},
+                {"und_CD", "fr_Latn_CD"},
+                {"und_CF", "sg_Latn_CF"},
+                {"und_CG", "ln_Latn_CG"},
+                {"und_CH", "de_Latn_CH"},
+                {"und_CI", "fr_Latn_CI"},
+                {"und_CL", "es_Latn_CL"},
+                {"und_CM", "fr_Latn_CM"},
+                {"und_CN", "zh_Hans_CN"},
+                {"und_CO", "es_Latn_CO"},
+                {"und_CR", "es_Latn_CR"},
+                {"und_CU", "es_Latn_CU"},
+                {"und_CV", "pt_Latn_CV"},
+                {"und_CY", "el_Grek_CY"},
+                {"und_Cyrl", "ru_Cyrl_RU"},
+                {"und_Cyrl_KZ", "kk_Cyrl_KZ"},
+                {"und_CZ", "cs_Latn_CZ"},
+                {"und_DE", "de_Latn_DE"},
+                {"und_Deva", "hi_Deva_IN"},
+                {"und_DJ", "ar_Arab_DJ"},
+                {"und_DK", "da_Latn_DK"},
+                {"und_DO", "es_Latn_DO"},
+                {"und_DZ", "ar_Arab_DZ"},
+                {"und_EC", "es_Latn_EC"},
+                {"und_EE", "et_Latn_EE"},
+                {"und_EG", "ar_Arab_EG"},
+                {"und_EH", "ar_Arab_EH"},
+                {"und_ER", "ti_Ethi_ER"},
+                {"und_ES", "es_Latn_ES"},
+                {"und_ET", "am_Ethi_ET"},
+                {"und_Ethi", "am_Ethi_ET"},
+                {"und_Ethi_ER", "byn_Ethi_ER"},
+                {"und_FI", "fi_Latn_FI"},
+                {"und_FJ", "fj_Latn_FJ"},
+                {"und_FM", "chk_Latn_FM"},
+                {"und_FO", "fo_Latn_FO"},
+                {"und_FR", "fr_Latn_FR"},
+                {"und_GA", "fr_Latn_GA"},
+                {"und_GE", "ka_Geor_GE"},
+                {"und_Geor", "ka_Geor_GE"},
+                {"und_GF", "fr_Latn_GF"},
+                {"und_GL", "kl_Latn_GL"},
+                {"und_GN", "fr_Latn_GN"},
+                {"und_GP", "fr_Latn_GP"},
+                {"und_GQ", "fr_Latn_GQ"},
+                {"und_GR", "el_Grek_GR"},
+                {"und_Grek", "el_Grek_GR"},
+                {"und_GT", "es_Latn_GT"},
+                {"und_GU", "ch_Latn_GU"},
+                {"und_Gujr", "gu_Gujr_IN"},
+                {"und_Guru", "pa_Guru_IN"},
+                {"und_GW", "pt_Latn_GW"},
+                {"und_Hani", "zh_Hans_CN"},
+                {"und_Hans", "zh_Hans_CN"},
+                {"und_Hant", "zh_Hant_HK"},
+                {"und_Hebr", "he_Hebr_IL"},
+                {"und_HK", "zh_Hant_HK"},
+                {"und_HN", "es_Latn_HN"},
+                {"und_HR", "hr_Latn_HR"},
+                {"und_HT", "ht_Latn_HT"},
+                {"und_HU", "hu_Latn_HU"},
+                {"und_ID", "id_Latn_ID"},
+                {"und_IL", "he_Hebr_IL"},
+                {"und_IN", "hi_Deva_IN"},
+                {"und_IQ", "ar_Arab_IQ"},
+                {"und_IR", "fa_Arab_IR"},
+                {"und_IS", "is_Latn_IS"},
+                {"und_IT", "it_Latn_IT"},
+                {"und_JO", "ar_Arab_JO"},
+                {"und_JP", "ja_Jpan_JP"},
+                {"und_Jpan", "ja_Jpan_JP"},
+                {"und_KG", "ky_Cyrl_KG"},
+                {"und_KH", "km_Khmr_KH"},
+                {"und_Khmr", "km_Khmr_KH"},
+                {"und_KM", "ar_Arab_KM"},
+                {"und_Knda", "kn_Knda_IN"},
+                {"und_Kore", "ko_Kore_KR"},
+                {"und_KP", "ko_Kore_KP"},
+                {"und_KR", "ko_Kore_KR"},
+                {"und_KW", "ar_Arab_KW"},
+                {"und_KZ", "ru_Cyrl_KZ"},
+                {"und_LA", "lo_Laoo_LA"},
+                {"und_Laoo", "lo_Laoo_LA"},
+                {"und_Latn_ES", "ca_Latn_ES"},
+                {"und_Latn_ET", "aa_Latn_ET"},
+                {"und_Latn_GB", "cy_Latn_GB"},
+                {"und_Latn_GH", "ak_Latn_GH"},
+                {"und_Latn_IT", "fur_Latn_IT"},
+                {"und_Latn_NG", "cch_Latn_NG"},
+                {"und_Latn_TR", "ku_Latn_TR"},
+                {"und_Latn_ZA", "af_Latn_ZA"},
+                {"und_LB", "ar_Arab_LB"},
+                {"und_LI", "de_Latn_LI"},
+                {"und_LK", "si_Sinh_LK"},
+                {"und_LS", "st_Latn_LS"},
+                {"und_LT", "lt_Latn_LT"},
+                {"und_LU", "fr_Latn_LU"},
+                {"und_LV", "lv_Latn_LV"},
+                {"und_LY", "ar_Arab_LY"},
+                {"und_MA", "ar_Arab_MA"},
+                {"und_MC", "fr_Latn_MC"},
+                {"und_MD", "ro_Latn_MD"},
+                {"und_ME", "sr_Cyrl_ME"},
+                {"und_MG", "mg_Latn_MG"},
+                {"und_MH", "mh_Latn_MH"},
+                {"und_MK", "mk_Cyrl_MK"},
+                {"und_ML", "fr_Latn_ML"},
+                {"und_Mlym", "ml_Mlym_IN"},
+                {"und_MM", "my_Mymr_MM"},
+                {"und_MN", "mn_Cyrl_MN"},
+                {"und_MO", "zh_Hant_MO"},
+                {"und_MQ", "fr_Latn_MQ"},
+                {"und_MR", "ar_Arab_MR"},
+                {"und_MT", "mt_Latn_MT"},
+                {"und_MV", "dv_Thaa_MV"},
+                {"und_MW", "ny_Latn_MW"},
+                {"und_MX", "es_Latn_MX"},
+                {"und_MY", "ms_Latn_MY"},
+                {"und_Mymr", "my_Mymr_MM"},
+                {"und_MZ", "pt_Latn_MZ"},
+                {"und_NC", "fr_Latn_NC"},
+                {"und_NE", "fr_Latn_NE"},
+                {"und_NG", "ha_Latn_NG"},
+                {"und_NI", "es_Latn_NI"},
+                {"und_NL", "nl_Latn_NL"},
+                {"und_NO", "nb_Latn_NO"},
+                {"und_NP", "ne_Deva_NP"},
+                {"und_NR", "na_Latn_NR"},
+                {"und_NU", "niu_Latn_NU"},
+                {"und_OM", "ar_Arab_OM"},
+                {"und_Orya", "or_Orya_IN"},
+                {"und_PA", "es_Latn_PA"},
+                {"und_PE", "es_Latn_PE"},
+                {"und_PF", "ty_Latn_PF"},
+                {"und_PG", "tpi_Latn_PG"},
+                {"und_PH", "fil_Latn_PH"},
+                {"und_PL", "pl_Latn_PL"},
+                {"und_PM", "fr_Latn_PM"},
+                {"und_PR", "es_Latn_PR"},
+                {"und_PS", "ar_Arab_PS"},
+                {"und_PT", "pt_Latn_PT"},
+                {"und_PW", "pau_Latn_PW"},
+                {"und_PY", "gn_Latn_PY"},
+                {"und_QA", "ar_Arab_QA"},
+                {"und_RE", "fr_Latn_RE"},
+                {"und_RO", "ro_Latn_RO"},
+                {"und_RS", "sr_Cyrl_RS"},
+                {"und_RU", "ru_Cyrl_RU"},
+                {"und_RW", "rw_Latn_RW"},
+                {"und_SA", "ar_Arab_SA"},
+                {"und_SD", "ar_Arab_SD"},
+                {"und_SE", "sv_Latn_SE"},
+                {"und_SG", "zh_Hans_SG"},
+                {"und_SI", "sl_Latn_SI"},
+                {"und_Sinh", "si_Sinh_LK"},
+                {"und_SJ", "nb_Latn_SJ"},
+                {"und_SK", "sk_Latn_SK"},
+                {"und_SM", "it_Latn_SM"},
+                {"und_SN", "fr_Latn_SN"},
+                {"und_SO", "so_Latn_SO"},
+                {"und_SR", "nl_Latn_SR"},
+                {"und_ST", "pt_Latn_ST"},
+                {"und_SV", "es_Latn_SV"},
+                {"und_SY", "ar_Arab_SY"},
+                {"und_Syrc", "syr_Syrc_SY"},
+                {"und_Taml", "ta_Taml_IN"},
+                {"und_TD", "ar_Arab_TD"},
+                {"und_Telu", "te_Telu_IN"},
+                {"und_TG", "fr_Latn_TG"},
+                {"und_TH", "th_Thai_TH"},
+                {"und_Thaa", "dv_Thaa_MV"},
+                {"und_Thai", "th_Thai_TH"},
+                {"und_Tibt", "bo_Tibt_CN"},
+                {"und_TJ", "tg_Cyrl_TJ"},
+                {"und_TK", "tkl_Latn_TK"},
+                {"und_TL", "tet_Latn_TL"},
+                {"und_TM", "tk_Latn_TM"},
+                {"und_TN", "ar_Arab_TN"},
+                {"und_TO", "to_Latn_TO"},
+                {"und_TR", "tr_Latn_TR"},
+                {"und_TV", "tvl_Latn_TV"},
+                {"und_TW", "zh_Hant_TW"},
+                {"und_UA", "uk_Cyrl_UA"},
+                {"und_UY", "es_Latn_UY"},
+                {"und_UZ", "uz_Cyrl_UZ"},
+                {"und_VA", "la_Latn_VA"},
+                {"und_VE", "es_Latn_VE"},
+                {"und_VN", "vi_Latn_VN"},
+                {"und_VU", "fr_Latn_VU"},
+                {"und_WF", "fr_Latn_WF"},
+                {"und_WS", "sm_Latn_WS"},
+                {"und_YE", "ar_Arab_YE"},
+                {"und_Yiii", "ii_Yiii_CN"},
+                {"und_YT", "fr_Latn_YT"},
+        };
+
+        HashMap tmpMap = new HashMap();
+        for (int i = 0; i < likelySubtagTable.length; i++) {
+            ULocale loc = new ULocale(likelySubtagTable[i][1]);
+            tmpMap.put(likelySubtagTable[i][0], loc);
+        }
+        
+        synchronized (ULocale.class) {
+            if (_likelySubtagMaximizeMap == null) {
+                _likelySubtagMaximizeMap = tmpMap;
+            }
+        }
+    }
+
+    private static final String UNDEFINED_LANGUAGE = "und";
+    private static final String UNDEFINED_SCRIPT = "Zzzz";
+    private static final String UNDEFINED_REGION = "ZZ";
+    
+    /**
+     * Supply most likely subtags to the given locale
+     * @param loc The input locale
+     * @return A ULocale with most likely subtags filled in.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    public static ULocale addLikelySubtag(ULocale loc) {
+        initLikelySubtagMaximizeMap();
+
+        // Replace any deprecated subtags with their canonical values.
+        // TODO: not yet implemented.
+
+        // If the tag is grandfathered, then return it.
+        // TODO: not yet implemented.
+
+        // Remove the script Zzzz and the region ZZ if they occur;
+        // change an empty language subtag to 'und'.
+
+        String language = loc.getLanguage();
+        String script = loc.getScript();
+        String region = loc.getCountry();
+
+        if (language.length() == 0) {
+            language = UNDEFINED_LANGUAGE;
+        }
+        if (script.equals(UNDEFINED_SCRIPT)) {
+            script = EMPTY_STRING;
+        }
+        if (region.equals(UNDEFINED_REGION)) {
+            region = EMPTY_STRING;
+        }
+
+        // Lookup
+        boolean hasScript = script.length() != 0;
+        boolean hasRegion = region.length() != 0;
+        ULocale match;
+        boolean bDone = false;
+
+        if (hasScript && hasRegion) {
+            // Lookup language_script_region
+            match = (ULocale)_likelySubtagMaximizeMap.get(language + "_" + script + "_" + region);
+            if (match != null) {
+                language = match.getLanguage();
+                script = match.getScript();
+                region = match.getCountry();
+                bDone = true;
+            }
+        }
+        if (!bDone && hasScript) {
+            // Lookup language_script
+            match = (ULocale)_likelySubtagMaximizeMap.get(language + "_" + script);
+            if (match != null) {
+                language = match.getLanguage();
+                script = match.getScript();
+                if (!hasRegion) {
+                    region = match.getCountry();
+                }
+                bDone = true;
+            }
+        }
+        if (!bDone && hasRegion) {
+            // Lookup language_region
+            match = (ULocale)_likelySubtagMaximizeMap.get(language + "_" + region);
+            if (match != null) {
+                language = match.getLanguage();
+                region = match.getCountry();
+                if (!hasScript) {
+                    script = match.getScript();
+                }
+                bDone = true;
+            }
+        }
+        if (!bDone) {
+            // Lookup language
+            match = (ULocale)_likelySubtagMaximizeMap.get(language);
+            if (match != null) {
+                language = match.getLanguage();
+                if (!hasScript) {
+                    script = match.getScript();
+                }
+                if (!hasRegion) {
+                    region = match.getCountry();
+                }
+                bDone = true;
+            }
+        }
+
+        ULocale result = null;
+
+        if (bDone) {
+            // Check if we need to create a new locale instance
+            if (language.equals(loc.getLanguage())
+                    && script.equals(loc.getScript())
+                    && region.equals(loc.getCountry())) {
+                // Nothing had changed - return the input locale
+                result = loc;
+            } else {
+                StringBuffer buf = new StringBuffer();
+                buf.append(language);
+                if (script.length() != 0) {
+                    buf.append(UNDERSCORE);
+                    buf.append(script);
+                }
+                if (region.length() != 0) {
+                    buf.append(UNDERSCORE);
+                    buf.append(region);
+                }
+                String variant = loc.getVariant();
+                if (variant.length() != 0) {
+                    buf.append(UNDERSCORE);
+                    buf.append(variant);
+                }
+                int keywordsIdx = loc.localeID.indexOf('@');
+                if (keywordsIdx >= 0) {
+                    buf.append(loc.localeID.substring(keywordsIdx));
+                }
+                result = new ULocale(buf.toString());
+            }
+        } else {
+            if (hasScript && hasRegion && language != UNDEFINED_LANGUAGE) {
+                // If non of these succeed, if the original had language, region
+                // and script, return it.
+                result = loc;
+            } else {
+                // Otherwise, signal an error.
+                // TODO: For now, we just return the input locale.
+                result = loc;
+            }
+        }
+
+        return result;
     }
 }

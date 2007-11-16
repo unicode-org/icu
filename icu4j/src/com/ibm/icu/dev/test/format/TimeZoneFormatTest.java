@@ -7,21 +7,12 @@
 
 package com.ibm.icu.dev.test.format;
 
-import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.ParsePosition;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
+import com.ibm.icu.impl.ZoneMeta;
+import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.BasicTimeZone;
 import com.ibm.icu.util.Calendar;
@@ -36,213 +27,140 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         new TimeZoneFormatTest().run(args);
     }
 
-    public void TestTimeZones() {
-        int testCount = 0;
-        // test all combinations of the following
-        String[] testLocales = { "en", "fr", "zh" };
-        // pick one winter time, one summer time
-        Date[] testDates = { new Date(107, 1, 15), new Date(107, 6, 15) };
-        String[] zoneFormats = { "z", "zzzz", "Z", "ZZZZ", "v", "vvvv", "V", "VVVV" };
-        Set mustRoundTrip = new HashSet(Arrays.asList(new String[] { "VVVV" }));
-        Set mustSetZone = new HashSet(Arrays.asList(new String[] { "z", "zzzz", "v", "vvvv",  "VVVV" }));
-        String[] zones = TimeZone.getAvailableIDs();
+    private static final String[] PATTERNS = {"z", "zzzz", "Z", "ZZZZ", "v", "vvvv", "V", "VVVV"};
 
-        // common objects
-        ParsePosition inoutPosition = new ParsePosition(0);
+    /*
+     * Test case for checking if a TimeZone is properly set in the result calendar
+     * and if the result TimeZone has the expected behavior.
+     */
+    public void TestTimeZoneRoundTrip() {
         TimeZone unknownZone = new SimpleTimeZone(-31415, "Etc/Unknown");
-        Calendar outputCalendar = Calendar.getInstance();
-        ZoneStatus status = new ZoneStatus();
-        
-        // set up equivalents
-        // could be optimized, but not worth the effort
-        Map equivalentZones = new HashMap();
-        for (int zoneIndex = 0; zoneIndex < zones.length; ++zoneIndex) {
-            String zone = zones[zoneIndex];
-            Set equivalents = new HashSet();
-            equivalents.add(zone);
-            for (int i = 0; i < TimeZone.countEquivalentIDs(zone); ++i) {
-                equivalents.add(TimeZone.getEquivalentID(zone, i));
-            }
-            equivalentZones.put(zone, equivalents);
+        int badDstOffset = -1234;
+        int badZoneOffset = -2345;
+
+        int[][] testDateData = {
+            {2007, 1, 15},
+            {2007, 6, 15},
+            {1990, 1, 15},
+            {1990, 6, 15},
+            {1960, 1, 15},
+            {1960, 6, 15},
+        };
+
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        cal.clear();
+
+        // Set up rule equivalency test range
+        long low, high;
+        cal.set(1900, 0, 1);
+        low = cal.getTimeInMillis();
+        cal.set(2040, 0, 1);
+        high = cal.getTimeInMillis();
+
+        // Set up test dates
+        Date[] DATES = new Date[testDateData.length];
+        cal.clear();
+        for (int i = 0; i < DATES.length; i++) {
+            cal.set(testDateData[i][0], testDateData[i][1], testDateData[i][2]);
+            DATES[i] = cal.getTime();
         }
-        
-       for (int testLocaleIndex = 0; testLocaleIndex < testLocales.length; ++testLocaleIndex) {
-            ULocale locale = new ULocale(testLocales[testLocaleIndex]);
 
-            // prepare the zoneFormats for the locale
-            List zoneFormatList = new ArrayList();
-            for (int zoneFormatsIndex = 0; zoneFormatsIndex < zoneFormats.length; ++zoneFormatsIndex) {
-                String zoneFormat = zoneFormats[zoneFormatsIndex];
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(zoneFormat, locale);
-                try {
-                    // check once just to make sure the syntax is supported
-                    simpleDateFormat.format(testDates[0]);
-                } catch (RuntimeException e) {
-                    errln("Unable to parse format: " + zoneFormat + "; " + e.getClass().getName() + ", " + e.getMessage());
-                    bumpCount(status.formatFailures, zoneFormat, zones.length * testDates.length);
-                    continue;
-                }
-                zoneFormatList.add(simpleDateFormat);
-            }
+        // Set up test locales
+        ULocale[] LOCALES = null;
+        if (getInclusion() > 5) {
+            LOCALES = ULocale.getAvailableLocales();
+        } else {
+            LOCALES = new ULocale[] {new ULocale("en"), new ULocale("en_CA"), new ULocale("fr"), new ULocale("zh_Hant")};
+        }
 
-            // loop over zones, formats, and test dates
-            for (int zoneIndex = 0; zoneIndex < zones.length; ++zoneIndex) {
-                TimeZone timezone = TimeZone.getTimeZone(zones[zoneIndex]);
-                Set equivalents = (Set) equivalentZones.get(zones[zoneIndex]);
-                
-                for (Iterator formatIterator = zoneFormatList.iterator(); formatIterator.hasNext();) {
-                    SimpleDateFormat format = (SimpleDateFormat) formatIterator.next();
-                    format.setTimeZone(timezone);
-                    
-                    for (int dateIndex = 0; dateIndex < testDates.length; ++dateIndex) {
-                        ++testCount;
-                        Date date = testDates[dateIndex];
+        String[] tzids = TimeZone.getAvailableIDs();
+        int[] inOffsets = new int[2];
+        int[] outOffsets = new int[2];
 
-                        String formattedString = format.format(date);
-                        inoutPosition.setIndex(0);
-                        outputCalendar.setTimeZone(unknownZone);
-                        int badDstOffset = -1234;
-                        int badZoneOffset = -2345;
-                        outputCalendar.set(Calendar.DST_OFFSET, badDstOffset);
-                        outputCalendar.set(Calendar.ZONE_OFFSET, badZoneOffset);
-                        format.parse(formattedString, outputCalendar, inoutPosition);
+        // Run the roundtrip test
+        for (int locidx = 0; locidx < LOCALES.length; locidx++) {
+            for (int patidx = 0; patidx < PATTERNS.length; patidx++) {
+                SimpleDateFormat sdf = new SimpleDateFormat(PATTERNS[patidx], LOCALES[locidx]);
 
-                        // that we didn't really get the timezone, and the old value was left
-                        TimeZone parsedZone = outputCalendar.getTimeZone();
-                        
-                        // See that we set the zone when we must
-                        //  we must not get "Etc/Unknown" -- that would mean
-                        if (mustSetZone.contains(format.toPattern())) {
-                            if (parsedZone.getID().equals(unknownZone.getID())) { 
-                                errln(status.getPrefix(locale, timezone, format, formattedString)
-                                        + ", but when parsed, got no zone.");
+                for (int tzidx = 0; tzidx < tzids.length; tzidx++) {
+                    TimeZone tz = TimeZone.getTimeZone(tzids[tzidx]);
+
+                    for (int datidx = 0; datidx < DATES.length; datidx++) {
+                        // Format
+                        sdf.setTimeZone(tz);
+                        String tzstr = sdf.format(DATES[datidx]);
+
+                        // Before parse, set unknown zone to SimpleDateFormat instance
+                        // just for making sure that it does not depends on the time zone
+                        // originally set.
+                        sdf.setTimeZone(unknownZone);
+
+                        // Parse
+                        ParsePosition pos = new ParsePosition(0);
+                        Calendar outcal = Calendar.getInstance(unknownZone);
+                        outcal.set(Calendar.DST_OFFSET, badDstOffset);
+                        outcal.set(Calendar.ZONE_OFFSET, badZoneOffset);
+
+                        sdf.parse(tzstr, outcal, pos);
+
+                        // Check the result
+                        TimeZone outtz = outcal.getTimeZone();
+
+                        tz.getOffset(DATES[datidx].getTime(), false, inOffsets);
+                        outtz.getOffset(DATES[datidx].getTime(), false, outOffsets);
+
+                        // Check if localized GMT format or RFC format is used.
+                        int numDigits = 0;
+                        for (int n = 0; n < tzstr.length(); n++) {
+                            if (UCharacter.isDigit(tzstr.charAt(n))) {
+                                numDigits++;
                             }
                         }
-
-                        // See that in all cases, the zone offsets are set
-                        if (outputCalendar.get(Calendar.DST_OFFSET) == badDstOffset
-                                || outputCalendar.get(Calendar.ZONE_OFFSET) == badZoneOffset) {
-                            errln(status.getPrefix(locale, timezone, format, formattedString)
-                                    + ", but when parsed, the zone isn't retrieved.");
-                        }
-                        
-                        // Make sure that we roundtrip when we must
-                        // We don't have to roundtrip to exactly the same value, but we must roundtrip to an equivalent
-                        if (mustRoundTrip.contains(format.toPattern())) {
-                            if (!equivalents.contains(parsedZone.getID())) { 
-                                errln(status.getPrefix(locale, timezone, format, formattedString)
-                                        + ", but when parsed, a non-equivalent zone is retrieved: "
-                                        + parsedZone.getID()
-                                        + "; equivalents are: " + equivalents);
+                        if (numDigits >= 4) {
+                            // Localized GMT or RFC: total offset (raw + dst) must be preserved.
+                            int inOffset = inOffsets[0] + inOffsets[1];
+                            int outOffset = outOffsets[0] + outOffsets[1];
+                            if (inOffset != outOffset) {
+                                errln("Offset round trip failed; tz=" + tzids[tzidx]
+                                    + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
+                                    + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
+                                    + ", inOffset=" + inOffset + ", outOffset=" + outOffset);
+                            }
+                        } else if (PATTERNS[patidx].equals("z") || PATTERNS[patidx].equals("zzzz")
+                                || PATTERNS[patidx].equals("v") || PATTERNS[patidx].equals("vvvv")
+                                || PATTERNS[patidx].equals("V")) {
+                            // Specific or generic: raw offset must be preserved.
+                            if (inOffsets[0] != outOffsets[0]) {
+                                errln("Raw offset round trip failed; tz=" + tzids[tzidx]
+                                    + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
+                                    + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
+                                    + ", inRawOffset=" + inOffsets[0] + ", outRawOffset=" + outOffsets[0]);
+                            }
+                        } else { // "VVVV"
+                            // Location: time zone rule must be preserved.
+                            if (!outtz.getID().equals(ZoneMeta.getCanonicalID(tzids[tzidx]))) {
+                                // Canonical ID did not match - check the rules
+                                if (!((BasicTimeZone)outtz).hasEquivalentTransitions(tz, low, high)) {
+                                    errln("Canonical round trip failed; tz=" + tzids[tzidx]
+                                        + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
+                                        + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
+                                        + ", outtz=" + outtz.getID());
+                                }
                             }
                         }
                         
-                        // TODO: if we could get access to what metazones are considered equivalent,
-                        // we could add a test to verify that even in the case of v, vvvv, we got a timezone that was equivalent *according to metazone*
-                        // ADD TEST HERE
-                        
-                        
-                        status.succeed(locale, timezone, format);
                     }
                 }
             }
         }
-       logln("total tests: " + testCount);
-       status.log(getLogPrintWriter());
+
     }
 
-    static class ZoneStatus {
-        Map localeFailures = new TreeMap();
-        Map formatFailures = new TreeMap();
-        Map zoneFailures = new TreeMap();
-        Map localeOk = new TreeMap();
-        Map formatOk = new TreeMap();
-        Map zoneOk = new TreeMap();
-
-        private String getPrefix(ULocale locale, TimeZone timezone,
-                SimpleDateFormat format, String formatted) {
-            bumpCount(localeFailures, locale.toString(), 1);
-            bumpCount(formatFailures, format.toPattern(), 1);
-            bumpCount(zoneFailures, timezone.getID(), 1);
-            return locale + ": Created \"" + formatted + "\" with \"" + format.toPattern()
-                    + "\" and " + timezone.getID();
-        }
-        
-        void succeed(ULocale locale, TimeZone timezone, SimpleDateFormat format) {
-            bumpCount(localeOk, locale.toString(), 1);
-            bumpCount(formatOk, format.toPattern(), 1);
-            bumpCount(zoneOk, timezone.getID(), 1);
-        }
-        
-        void log(PrintWriter out) {
-            writeCounts(out, "Locales", localeFailures, localeOk);
-            writeCounts(out, "Formats", formatFailures, formatOk);
-            writeCounts(out, "Zones", zoneFailures, zoneOk);
-        }
-
-        private void writeCounts(PrintWriter out, String title, Map fail, Map ok) {
-            out.println("Succeed/Fail for types: " + title);
-            Set all = new TreeSet();
-            all.addAll(fail.keySet());
-            all.addAll(ok.keySet());
-            for (Iterator it = all.iterator(); it.hasNext();) {
-                Object key = it.next();
-                Object failCount = fail.get(key);
-                Object okCount = ok.get(key);
-                out.println("\t" + key + ":\tok:\t" + (okCount == null ? "0" : okCount) + "\tfail: " + (failCount == null ? "0" : failCount) );
-            }
-        }
-    }
-    
-    static void bumpCount(Map map, Object key, int delta) {
-        Integer count = (Integer) map.get(key);
-        map.put(key, new Integer(count == null ? delta : count.intValue() + delta));
-    }
-    
-    // The following code generates alias differences with CLDR. It can be turned into a test if we can get access to CLDR data in ICU.
-    // http://bugs.icu-project.org/trac/ticket/5896
-    
-    
-//    final static SupplementalDataInfo supplementalData = SupplementalDataInfo.getInstance("C:/cvsdata/unicode/cldr/common/supplemental/");
-//    static {
-//      Set<String> canonicalZones = supplementalData.getCanonicalZones();
-//      // get all the CLDR IDs
-//      Set <String> allCLDRZones = new TreeSet<String>(canonicalZones);
-//      for (String canonicalZone : canonicalZones) {
-//        allCLDRZones.addAll(supplementalData.getZone_aliases(canonicalZone));
-//      }
-//      // get all the ICU IDs
-//      Set<String> allIcuZones = new TreeSet<String>();
-//      for (String canonicalZone:TimeZone.getAvailableIDs()) {
-//        allIcuZones.add(canonicalZone);
-//        for (int i = 0; i < TimeZone.countEquivalentIDs(canonicalZone); ++i) {
-//          allIcuZones.add(TimeZone.getEquivalentID(canonicalZone, i));
-//        }
-//      }
-//      
-//      System.out.println("Zones in CLDR but not ICU:" + getFirstMinusSecond(allCLDRZones, allIcuZones));
-//      final Set<String> icuMinusCldr_all = getFirstMinusSecond(allIcuZones, allCLDRZones);
-//      System.out.println("Zones in ICU but not CLDR:" + icuMinusCldr_all);
-//      
-//      for (String canonicalZone : canonicalZones) {
-//        Set<String> aliases = supplementalData.getZone_aliases(canonicalZone);
-//        LinkedHashSet<String> icuAliases = getIcuEquivalentZones(canonicalZone);
-//        icuAliases.remove(canonicalZone); // difference in APIs
-//        icuAliases.removeAll(icuMinusCldr_all);
-//        if (!aliases.equals(icuAliases)) {
-//          System.out.println("Difference in Aliases for: " + canonicalZone);
-//          Set<String> cldrMinusIcu = getFirstMinusSecond(aliases, icuAliases);
-//          if (cldrMinusIcu.size() != 0) {
-//            System.out.println("\tCLDR - ICU: " + cldrMinusIcu);
-//          }
-//          Set<String> icuMinusCldr = getFirstMinusSecond(icuAliases, aliases);
-//          if (icuMinusCldr.size() != 0) {
-//            System.out.println("\tICU - CLDR: " + icuMinusCldr);
-//          }
-//        }
-//      }
-//    }
-
+    /*
+     * Test case of round trip time and text.  This test case detects every canonical TimeZone's
+     * rule transition since 1900 until 2020, then check if time around each transition can
+     * round trip as expected.
+     */
     public void TestTimeRoundTrip() {
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 
@@ -251,8 +169,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
         cal.set(2020, Calendar.JANUARY, 1);
         final long END_TIME = cal.getTimeInMillis();
-        
-        final String[] PATTERNS = {"z", "zzzz", "Z", "ZZZZ", "v", "vvvv", "V", "VVVV"};
+
         // Whether each pattern is ambiguous at DST->STD local time overlap
         final boolean[] AMBIGUOUS_DST_DECESSION = {false, false, false, false, true, true, false, true};
         // Whether each pattern is ambiguous at STD->STD/DST->DST local time overlap
@@ -261,28 +178,59 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         final String BASEPATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS";
 
         ULocale[] LOCALES = null;
-        if (getInclusion() > 5) {
+        boolean DEBUG_ALL = false;
+        boolean REALLY_VERBOSE = false;
+
+        // timer for performance analysis
+        long[] times = new long[PATTERNS.length];
+        long timer;
+
+        if (DEBUG_ALL) {
+            // It may take about an hour for testing all locales
             LOCALES = ULocale.getAvailableLocales();
+        } else if (getInclusion() > 5) {
+            LOCALES = new ULocale[] {
+                new ULocale("ar_EG"), new ULocale("bg_BG"), new ULocale("ca_ES"), new ULocale("da_DK"), new ULocale("de"),
+                new ULocale("de_DE"), new ULocale("el_GR"), new ULocale("en"), new ULocale("en_AU"), new ULocale("en_CA"),
+                new ULocale("en_US"), new ULocale("es"), new ULocale("es_ES"), new ULocale("es_MX"), new ULocale("fi_FI"),
+                new ULocale("fr"), new ULocale("fr_CA"), new ULocale("fr_FR"), new ULocale("he_IL"), new ULocale("hu_HU"),
+                new ULocale("it"), new ULocale("it_IT"), new ULocale("ja"), new ULocale("ja_JP"), new ULocale("ko"),
+                new ULocale("ko_KR"), new ULocale("nb_NO"), new ULocale("nl_NL"), new ULocale("nn_NO"), new ULocale("pl_PL"),
+                new ULocale("pt"), new ULocale("pt_BR"), new ULocale("pt_PT"), new ULocale("ru_RU"), new ULocale("sv_SE"),
+                new ULocale("th_TH"), new ULocale("tr_TR"), new ULocale("zh"), new ULocale("zh_Hans"), new ULocale("zh_Hans_CN"),
+                new ULocale("zh_Hant"), new ULocale("zh_Hant_HK"), new ULocale("zh_Hant_TW")
+            };
         } else {
-            LOCALES = new ULocale[] {new ULocale("en_US")};
+            LOCALES = new ULocale[] {
+                new ULocale("en"),
+                new ULocale("en_CA"),
+                new ULocale("fr")
+            };
         }
 
         long[] testTimes = new long[4];
         boolean[] expectedRoundTrip = new boolean[4];
         int testLen = 0;
-
         for (int locidx = 0; locidx < LOCALES.length; locidx++) {
+            logln("Locale: " + LOCALES[locidx].toString());
             for (int patidx = 0; patidx < PATTERNS.length; patidx++) {
+                logln("    pattern: " + PATTERNS[patidx]);
                 String pattern = BASEPATTERN + " " + PATTERNS[patidx];
                 SimpleDateFormat sdf = new SimpleDateFormat(pattern, LOCALES[locidx]);
 
                 String[] ids = TimeZone.getAvailableIDs();
+                timer = System.currentTimeMillis();
                 for (int zidx = 0; zidx < ids.length; zidx++) {
+                    if(ids[zidx].equals(ZoneMeta.getCanonicalID(ids[zidx]))) {
+                        // Skip aliases
+                        continue;
+                    }
                     BasicTimeZone tz = (BasicTimeZone)TimeZone.getTimeZone(ids[zidx]);
                     sdf.setTimeZone(tz);
 
                     long t = START_TIME;
                     TimeZoneTransition tzt = null;
+                    boolean middle = true;
                     while (t < END_TIME) {
                         if (tzt == null) {
                             testTimes[0] = t;
@@ -290,7 +238,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                             testLen = 1;
                         } else {
                             int fromOffset = tzt.getFrom().getRawOffset() + tzt.getFrom().getDSTSavings();
-                            int toOffset = tzt.getFrom().getRawOffset() + tzt.getFrom().getDSTSavings();
+                            int toOffset = tzt.getTo().getRawOffset() + tzt.getTo().getDSTSavings();
                             int delta = toOffset - fromOffset;
                             if (delta < 0) {
                                 boolean isDstDecession = tzt.getFrom().getDSTSavings() > 0 && tzt.getTo().getDSTSavings() == 0;
@@ -330,7 +278,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                                         .append(", diff=").append(restime - testTimes[testidx]);
                                     if (expectedRoundTrip[testidx]) {
                                         errln("FAIL: " + msg.toString());
-                                    } else {
+                                    } else if (REALLY_VERBOSE) {
                                         logln(msg.toString());
                                     }
                                 }
@@ -342,10 +290,26 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                         if (tzt == null) {
                             break;
                         }
-                        t = tzt.getTime();
+                        if (middle) {
+                            // Test the date in the middle of two transitions.
+                            t += (tzt.getTime() - t)/2;
+                            middle = false;
+                            tzt = null;
+                        } else {
+                            t = tzt.getTime();
+                        }
                     }
                 }
+                times[patidx] += System.currentTimeMillis() - timer;
             }
         }
+
+        long total = 0;
+        logln("### Elapsed time by patterns ###");
+        for (int i = 0; i < PATTERNS.length; i++) {
+            logln(times[i] + "ms (" + PATTERNS[i] + ")");
+            total += times[i];
+        }
+        logln("Total: " + total + "ms");
     }
 }

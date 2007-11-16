@@ -175,38 +175,40 @@ abstract public class TimeZone implements Serializable, Cloneable {
      */
     public void getOffset(long date, boolean local, int[] offsets) {
         offsets[0] = getRawOffset();
-        
-        // Convert to local wall millis if necessary
         if (!local) {
             date += offsets[0]; // now in local standard millis
         }
 
-        // When local==FALSE, we might have to recompute. This loop is
-        // executed once, unless a recomputation is required; then it is
-        // executed twice.
-        for (int pass=0; ; ++pass) {
-            int fields[] = new int[4];
+        // When local == true, date might not be in local standard
+        // millis.  getOffset taking 6 parameters used here assume
+        // the given time in day is local standard time.
+        // At STD->DST transition, there is a range of time which
+        // does not exist.  When 'date' is in this time range
+        // (and local == true), this method interprets the specified
+        // local time as DST.  At DST->STD transition, there is a
+        // range of time which occurs twice.  In this case, this
+        // method interprets the specified local time as STD.
+        // To support the behavior above, we need to call getOffset
+        // (with 6 args) twice when local == true and DST is
+        // detected in the initial call.
+        int fields[] = new int[4];
+        for (int pass = 0; ; pass++) {
             long day = floorDivide(date, Grego.MILLIS_PER_DAY, fields);
             int millis = fields[0];
-            
+
             computeGregorianFields(day, fields);
-            
             offsets[1] = getOffset(GregorianCalendar.AD,
-                                   fields[0], fields[1], fields[2],
-                                   fields[3], millis) - offsets[0];
-            
-            // Recompute if local==FALSE, dstOffset!=0, and addition of
-            // the dstOffset puts us in a different day.
-            if (pass!=0 || local || offsets[1]==0) {
+                                    fields[0], fields[1], fields[2],
+                                    fields[3], millis) - offsets[0];
+
+            if (pass != 0 || !local || offsets[1] == 0) {
                 break;
             }
-            date += offsets[1];
-            if (floorDivide(date, Grego.MILLIS_PER_DAY) == day) {
-                break;
-            }
+            // adjust to local standard millis
+            date -= offsets[1];
         }
     }
-    
+
     /**
      * Divide two long integers, returning the floor of the quotient.
      * <p>

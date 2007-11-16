@@ -78,6 +78,7 @@ public class TestAll extends TestGroup {
 //#endif
                 "IntlTestSimpleDateFormatAPI",
                 "DateFormatRegressionTestJ",
+                "TimeZoneFormatTest"
             });
         }
     }
