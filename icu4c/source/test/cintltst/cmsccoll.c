@@ -4795,10 +4795,10 @@ TestSortKeyConsistency(void)
 	    for (j=0; j<TSKC_BUF_SIZE; j++)
 	        bufFull[i][j] = bufPart[i][j] = 0;
 
-        // Full sort key
+        /* Full sort key */
         ucol_getSortKey(ucol, data, dataLen, bufFull[i], TSKC_BUF_SIZE);
 
-        // Partial sort key
+        /* Partial sort key */
         uiter_setString(&uiter, data, dataLen);
         ucol_nextSortKeyPart(ucol, &uiter, state, bufPart[i], TSKC_BUF_SIZE, &icuRC);
         if (U_FAILURE(icuRC))
@@ -4827,7 +4827,7 @@ TestSortKeyConsistency(void)
 
     }
 
-   //=============================================
+    /*=============================================*/
    ucol_close(ucol);
 }
 
