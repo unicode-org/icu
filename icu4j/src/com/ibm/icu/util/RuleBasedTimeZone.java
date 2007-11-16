@@ -101,7 +101,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
         }
         long time = Grego.fieldsToDay(year, month, day) * Grego.MILLIS_PER_DAY + milliseconds;
         int[] offsets = new int[2];
-        getOffset(time, true, offsets);
+        getOffset(time, true, LOCAL_DST, LOCAL_STD, offsets);
         return (offsets[0] + offsets[1]);
     }
 
@@ -112,40 +112,19 @@ public class RuleBasedTimeZone extends BasicTimeZone {
      * @provisional This API might change or be removed in a future release.
      */
     public void getOffset(long time, boolean local, int[] offsets) {
-        complete();
-        TimeZoneRule rule;
-        if (historicTransitions == null) {
-            rule = initialRule;
-        } else {
-            long tstart = getTransitionTime((TimeZoneTransition)historicTransitions.get(0), local);
-            if (time < tstart) {
-                rule = initialRule;
-            } else {
-                int idx = historicTransitions.size() - 1;
-                long tend = getTransitionTime((TimeZoneTransition)historicTransitions.get(idx), local);
-                if (time > tend) {
-                    if (finalRules != null) {
-                        rule = findRuleInFinal(time, local);
-                    } else {
-                        // no final rule, use the last rule
-                        rule = ((TimeZoneTransition)historicTransitions.get(idx)).getTo();
-                    }
-                } else {
-                    // Find a historical transition
-                    while (idx >= 0) {
-                        if (time >= getTransitionTime((TimeZoneTransition)historicTransitions.get(idx), local)) {
-                            break;
-                        }
-                        idx--;
-                    }
-                    rule = ((TimeZoneTransition)historicTransitions.get(idx)).getTo();
-                }
-            }
-        }
-        offsets[0] = rule.getRawOffset();
-        offsets[1] = rule.getDSTSavings();
+        getOffset(time, local, LOCAL_FORMER, LOCAL_LATTER, offsets);
     }
 
+    /**
+     * {@inheritDoc}
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    public void getOffsetFromLocal(long date,
+            int nonExistingTimeOpt, int duplicatedTimeOpt, int[] offsets) {
+        getOffset(date, true, nonExistingTimeOpt, duplicatedTimeOpt, offsets);
+    }
+    
     /**
      * {@inheritDoc}
      * 
@@ -325,13 +304,13 @@ public class RuleBasedTimeZone extends BasicTimeZone {
         boolean isFinal = false;
         TimeZoneTransition result = null;
         TimeZoneTransition tzt = (TimeZoneTransition)historicTransitions.get(0);
-        long tt = getTransitionTime(tzt, false);
+        long tt = tzt.getTime();
         if (tt > base || (inclusive && tt == base)) {
             result = tzt;
         } else {
             int idx = historicTransitions.size() - 1;        
             tzt = (TimeZoneTransition)historicTransitions.get(idx);
-            tt = getTransitionTime(tzt, false);
+            tt = tzt.getTime();
             if (inclusive && tt == base) {
                 result = tzt;
             } else if (tt <= base) {
@@ -358,7 +337,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
                 TimeZoneTransition prev = tzt;
                 while (idx > 0) {
                     tzt = (TimeZoneTransition)historicTransitions.get(idx);
-                    tt = getTransitionTime(tzt, false);
+                    tt = tzt.getTime();
                     if (tt < base || (!inclusive && tt == base)) {
                         break;
                     }
@@ -398,7 +377,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
         }
         TimeZoneTransition result = null;
         TimeZoneTransition tzt = (TimeZoneTransition)historicTransitions.get(0);
-        long tt = getTransitionTime(tzt, false);
+        long tt = tzt.getTime();
         if (inclusive && tt == base) {
             result = tzt;
         } else if (tt >= base) {
@@ -406,7 +385,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
         } else {
             int idx = historicTransitions.size() - 1;        
             tzt = (TimeZoneTransition)historicTransitions.get(idx);
-            tt = getTransitionTime(tzt, false);
+            tt = tzt.getTime();
             if (inclusive && tt == base) {
                 result = tzt;
             } else if (tt < base) {
@@ -429,7 +408,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
                 idx--;
                 while (idx >= 0) {
                     tzt = (TimeZoneTransition)historicTransitions.get(idx);
-                    tt = getTransitionTime(tzt, false);
+                    tt = tzt.getTime();
                     if (tt < base || (inclusive && tt == base)) {
                         break;
                     }
@@ -593,20 +572,74 @@ public class RuleBasedTimeZone extends BasicTimeZone {
     }
 
     /*
+     * getOffset internal implementation
+     */
+    private void getOffset(long time, boolean local, int NonExistingTimeOpt, int DuplicatedTimeOpt, int[] offsets) {
+        complete();
+        TimeZoneRule rule;
+        if (historicTransitions == null) {
+            rule = initialRule;
+        } else {
+            long tstart = getTransitionTime((TimeZoneTransition)historicTransitions.get(0),
+                    local, NonExistingTimeOpt, DuplicatedTimeOpt);
+            if (time < tstart) {
+                rule = initialRule;
+            } else {
+                int idx = historicTransitions.size() - 1;
+                long tend = getTransitionTime((TimeZoneTransition)historicTransitions.get(idx),
+                        local, NonExistingTimeOpt, DuplicatedTimeOpt);
+                if (time > tend) {
+                    if (finalRules != null) {
+                        rule = findRuleInFinal(time, local, NonExistingTimeOpt, DuplicatedTimeOpt);
+                    } else {
+                        // no final rule, use the last rule
+                        rule = ((TimeZoneTransition)historicTransitions.get(idx)).getTo();
+                    }
+                } else {
+                    // Find a historical transition
+                    while (idx >= 0) {
+                        if (time >= getTransitionTime((TimeZoneTransition)historicTransitions.get(idx),
+                                local, NonExistingTimeOpt, DuplicatedTimeOpt)) {
+                            break;
+                        }
+                        idx--;
+                    }
+                    rule = ((TimeZoneTransition)historicTransitions.get(idx)).getTo();
+                }
+            }
+        }
+        offsets[0] = rule.getRawOffset();
+        offsets[1] = rule.getDSTSavings();
+    }
+    
+    /*
      * Find a time zone rule applicable to the specified time
      */
-    private TimeZoneRule findRuleInFinal(long time, boolean local) {
+    private TimeZoneRule findRuleInFinal(long time, boolean local, int NonExistingTimeOpt, int DuplicatedTimeOpt) {
         if (finalRules == null || finalRules.length != 2 || finalRules[0] == null || finalRules[1] == null) {
             return null;
         }
 
         Date start0, start1;
         long base;
+        int localDelta;
 
-        base = local ? time - finalRules[1].getRawOffset() - finalRules[1].getDSTSavings() : time;
+        base = time;
+        if (local) {
+            localDelta = getLocalDelta(finalRules[1].getRawOffset(), finalRules[1].getDSTSavings(),
+                    finalRules[0].getRawOffset(), finalRules[0].getDSTSavings(),
+                    NonExistingTimeOpt, DuplicatedTimeOpt);
+            base -= localDelta;
+        }
         start0 = finalRules[0].getPreviousStart(base, finalRules[1].getRawOffset(), finalRules[1].getDSTSavings(), true);
- 
-        base = local ? time - finalRules[0].getRawOffset() - finalRules[0].getDSTSavings() : time;
+
+        base = time;
+        if (local) {
+            localDelta = getLocalDelta(finalRules[0].getRawOffset(), finalRules[0].getDSTSavings(),
+                    finalRules[1].getRawOffset(), finalRules[1].getDSTSavings(),
+                    NonExistingTimeOpt, DuplicatedTimeOpt);
+            base -= localDelta;
+        }
         start1 = finalRules[1].getPreviousStart(base, finalRules[0].getRawOffset(), finalRules[0].getDSTSavings(), true);
 
         return start0.after(start1) ? finalRules[0] : finalRules[1];
@@ -615,12 +648,62 @@ public class RuleBasedTimeZone extends BasicTimeZone {
     /*
      * Get the transition time in local wall clock
      */
-    private static long getTransitionTime(TimeZoneTransition tzt, boolean local) {
+    private static long getTransitionTime(TimeZoneTransition tzt, boolean local,
+            int NonExistingTimeOpt, int DuplicatedTimeOpt) {
         long time = tzt.getTime();
         if (local) {
-            time += tzt.getFrom().getRawOffset() + tzt.getFrom().getDSTSavings();
+            time += getLocalDelta(tzt.getFrom().getRawOffset(), tzt.getFrom().getDSTSavings(),
+                                tzt.getTo().getRawOffset(), tzt.getTo().getDSTSavings(),
+                                NonExistingTimeOpt, DuplicatedTimeOpt);
         }
         return time;
+    }
+
+    /*
+     * Returns amount of local time adjustment used for checking rule transitions
+     */
+    private static int getLocalDelta(int rawBefore, int dstBefore, int rawAfter, int dstAfter,
+            int NonExistingTimeOpt, int DuplicatedTimeOpt) {
+        int delta = 0;
+
+        int offsetBefore = rawBefore + dstBefore;
+        int offsetAfter = rawAfter + dstAfter;
+
+        boolean dstToStd = (dstBefore != 0) && (dstAfter == 0);
+        boolean stdToDst = (dstBefore == 0) && (dstAfter != 0);
+
+        if (offsetAfter - offsetBefore >= 0) {
+            // Positive transition, which makes a non-existing local time range
+            if (((NonExistingTimeOpt & STD_DST_MASK) == LOCAL_STD && dstToStd)
+                    || ((NonExistingTimeOpt & STD_DST_MASK) == LOCAL_DST && stdToDst)) {
+                delta = offsetBefore;
+            } else if (((NonExistingTimeOpt & STD_DST_MASK) == LOCAL_STD && stdToDst)
+                    || ((NonExistingTimeOpt & STD_DST_MASK) == LOCAL_DST && dstToStd)) {
+                delta = offsetAfter;
+            } else if ((NonExistingTimeOpt & FORMER_LATTER_MASK) == LOCAL_LATTER) {
+                delta = offsetBefore;
+            } else {
+                // Interprets the time with rule before the transition,
+                // default for non-existing time range
+                delta = offsetAfter;
+            }
+        } else {
+            // Negative transition, which makes a duplicated local time range
+            if (((DuplicatedTimeOpt & STD_DST_MASK) == LOCAL_STD && dstToStd)
+                    || ((DuplicatedTimeOpt & STD_DST_MASK) == LOCAL_DST && stdToDst)) {
+                delta = offsetAfter;
+            } else if (((DuplicatedTimeOpt & STD_DST_MASK) == LOCAL_STD && stdToDst)
+                    || ((DuplicatedTimeOpt & STD_DST_MASK) == LOCAL_DST && dstToStd)) {
+                delta = offsetBefore;
+            } else if ((DuplicatedTimeOpt & FORMER_LATTER_MASK) == LOCAL_FORMER) {
+                delta = offsetBefore;
+            } else {
+                // Interprets the time with rule after the transition,
+                // default for duplicated local time range
+                delta = offsetAfter;
+            }
+        }
+        return delta;
     }
 }
 

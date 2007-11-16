@@ -10,9 +10,14 @@
 */
 package com.ibm.icu.impl;
 
+import java.lang.ref.SoftReference;
+import java.text.ParseException;
 import java.text.ParsePosition;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
@@ -187,6 +192,11 @@ public final class ZoneMeta {
     }
 
     private static String[] getCanonicalInfo(String id) {
+        // We need to resolve Olson links which are not available in CLDR first
+        String olsonCanonicalID = getOlsonCanonicalID(id);
+        if (olsonCanonicalID == null) {
+            return null;
+        }
         if (canonicalMap == null) {
             Map m = new HashMap();
             Set s = new HashSet();
@@ -238,7 +248,7 @@ public final class ZoneMeta {
             }
         }
 
-        return (String[])canonicalMap.get(id);
+        return (String[])canonicalMap.get(olsonCanonicalID);
     }
 
     private static Map canonicalMap = null;
@@ -283,9 +293,10 @@ public final class ZoneMeta {
     }
 
     /**
-     * Handle fallbacks for generic time (rules E.. G)
+     * Returns a time zone location(region) format string defined by UTR#35.
+     * e.g. "Italy Time", "United States (Los Angeles) Time"
      */
-    public static String displayFallback(String tzid, String city, ULocale locale) {
+    public static String getLocationFormat(String tzid, String city, ULocale locale) {
         String[] info = getCanonicalInfo(tzid);
         if (info == null) {
             return null; // error
@@ -306,22 +317,23 @@ public final class ZoneMeta {
 //            if (rb.getLoadingStatus() != ICUResourceBundle.FROM_ROOT && rb.getLoadingStatus() != ICUResourceBundle.FROM_DEFAULT) {
 //                country = ULocale.getDisplayCountry("xx_" + country_code, locale);
 //            }
-//            if (country == null || country.length() == 0) country = country_code;
 // START WORKAROUND
             ULocale rbloc = rb.getULocale();
             if (!rbloc.equals(ULocale.ROOT) && rbloc.getLanguage().equals(locale.getLanguage())) {
                 country = ULocale.getDisplayCountry("xx_" + country_code, locale);
             }
+// END WORKAROUND
             if (country == null || country.length() == 0) {
                 country = country_code;
             }
-// END WORKAROUND
         }
         
         // This is not behavior specified in tr35, but behavior added by Mark.  
         // TR35 says to display the country _only_ if there is a localization.
         if (getSingleCountry(tzid) != null) { // single country
-            return displayRegion(country, locale);
+            String regPat = getTZLocalizationInfo(locale, REGION_FORMAT);
+            MessageFormat mf = new MessageFormat(regPat);
+            return mf.format(new Object[] { country });
         }
 
         if (city == null) {
@@ -332,40 +344,6 @@ public final class ZoneMeta {
         MessageFormat mf = new MessageFormat(flbPat);
 
         return mf.format(new Object[] { city, country });
-    }
-
-    public static String displayRegion(String cityOrCountry, ULocale locale) {
-        String regPat = getTZLocalizationInfo(locale, REGION_FORMAT);
-        MessageFormat mf = new MessageFormat(regPat);
-        return mf.format(new Object[] { cityOrCountry });
-    }
-
-    public static String displayGMT(long value, ULocale locale) {
-        //TODO: revisit after 3.8
-
-        String msgpat = "GMT{0}"; // Parser code is not quite ready to accept localized GMT string as of 3.8
-        //String msgpat = getTZLocalizationInfo(locale, GMT);
-        String dtepat = getTZLocalizationInfo(locale, HOUR);
-        
-        int n = dtepat.indexOf(';');
-        if (n != -1) {
-            if (value < 0) {
-                value = - value;
-                dtepat = dtepat.substring(n+1);
-            } else {
-                dtepat = dtepat.substring(0, n);
-            }
-        }
-
-        //final long mph = 3600000;
-        //final long mpm = 60000;
-
-        SimpleDateFormat sdf = new SimpleDateFormat(dtepat, locale);
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-        String res = sdf.format(new Long(value));
-        MessageFormat mf = new MessageFormat(msgpat);
-        res = mf.format(new Object[] { res });
-        return res;
     }
 
     public static final String
@@ -423,6 +401,35 @@ public final class ZoneMeta {
         } 
         return res;
     }
+
+    /**
+     * Get a canonical Olson zone ID for the given ID.  If the given ID is not valid,
+     * this method returns null as the result.  If the given ID is a link, then the
+     * referenced ID (canonical ID) is returned.
+     * @param id zone id
+     * @return a canonical Olson id (not a link)
+     */
+    public static synchronized String getOlsonCanonicalID(String id) {
+        if (!getOlsonMeta()) {
+            return null;
+        }
+        String canonicalID = null;
+        ICUResourceBundle top = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        try {
+            UResourceBundle res = getZoneByName(top, id);
+            if (res.getSize() == 1) {
+                int deref = res.getInt();
+                UResourceBundle names = top.get(kNAMES);
+                canonicalID = names.getString(deref);
+            } else {
+                canonicalID = id;
+            }
+        } catch (MissingResourceException mre) {
+            // throw away the exception
+        }
+        return canonicalID;
+    }
+    
     /**
      * Fetch a specific zone by name.  Replaces the getByKey call. 
      * @param top Top timezone resource
@@ -724,4 +731,193 @@ public final class ZoneMeta {
         }
         return zid.toString();
     }
+
+    private static SoftReference OLSON_TO_META_REF;
+    private static SoftReference META_TO_OLSON_REF;
+
+    static class OlsonToMetaMappingEntry {
+        String mzid;
+        long from;
+        long to;
+    }
+
+    private static class MetaToOlsonMappingEntry {
+        String id;
+        String territory;
+    }
+
+    static Map getOlsonToMetaMap() {
+        HashMap olsonToMeta = null;
+        synchronized(ZoneMeta.class) {
+            if (OLSON_TO_META_REF != null) {
+                olsonToMeta = (HashMap)OLSON_TO_META_REF.get();
+            }
+            if (olsonToMeta == null) {
+                // Create olson id to metazone mapping table
+                olsonToMeta = new HashMap();
+                UResourceBundle zoneStringsBundle = null;
+                try {
+                    UResourceBundle bundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "root");
+                    zoneStringsBundle = bundle.get("zoneStrings");
+                } catch (MissingResourceException mre) {
+                    // do nothing
+                }
+                if (zoneStringsBundle != null) {
+                    // DateFormat to be used for parsing metazone mapping range
+                    SimpleDateFormat mzdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                    mzdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+                    
+                    String[] tzids = getAvailableIDs();
+                    for (int i = 0; i < tzids.length; i++) {
+                        // Skip aliases
+                        if (!tzids[i].equals(getCanonicalID(tzids[i]))) {
+                            continue;
+                        }
+                        String tzkey = tzids[i].replace('/', ':');
+                        try {
+                            UResourceBundle zoneBundle = zoneStringsBundle.get(tzkey);
+                            UResourceBundle useMZ = zoneBundle.get("um");
+                            LinkedList mzMappings = new LinkedList();
+                            for (int idx = 0; ; idx++) {
+                                try {
+                                    UResourceBundle mz = useMZ.get("mz" + idx);
+                                    String[] mzstr = mz.getStringArray();
+                                    if (mzstr == null || mzstr.length != 3) {
+                                        continue;
+                                    }
+                                    OlsonToMetaMappingEntry mzmap = new OlsonToMetaMappingEntry();
+                                    mzmap.mzid = mzstr[0].intern();
+                                    mzmap.from = mzdf.parse(mzstr[1]).getTime();
+                                    mzmap.to = mzdf.parse(mzstr[2]).getTime();
+
+                                    // Add this mapping to the list
+                                    mzMappings.add(mzmap);
+                                } catch (MissingResourceException nomz) {
+                                    // we're done
+                                    break;
+                                } catch (ParseException baddate) {
+                                    // skip this
+                                }
+                            }
+                            if (mzMappings.size() != 0) {
+                                // Add to the olson-to-meta map
+                                olsonToMeta.put(tzids[i], mzMappings);
+                            }
+                        } catch (MissingResourceException noum) {
+                            // Does not use metazone, just skip this.
+                        }
+                    }
+                }
+                OLSON_TO_META_REF = new SoftReference(olsonToMeta);
+            }
+        }
+        return olsonToMeta;
+    }
+
+    /**
+     * Returns a CLDR metazone ID for the given Olson tzid and time.
+     */
+    public static String getMetazoneID(String olsonID, long date) {
+        String mzid = null;
+        Map olsonToMeta = getOlsonToMetaMap();
+        List mappings = (List)olsonToMeta.get(olsonID);
+        if (mappings != null) {
+            for (int i = 0; i < mappings.size(); i++) {
+                OlsonToMetaMappingEntry mzm = (OlsonToMetaMappingEntry)mappings.get(i);
+                if (date >= mzm.from && date < mzm.to) {
+                    mzid = mzm.mzid;
+                    break;
+                }
+            }
+        }
+        return mzid;
+    }
+
+    private static Map getMetaToOlsonMap() {
+        HashMap metaToOlson = null;
+        synchronized(ZoneMeta.class) {
+            if (META_TO_OLSON_REF != null) {
+                metaToOlson = (HashMap)META_TO_OLSON_REF.get();
+            }
+            if (metaToOlson == null) {
+                metaToOlson = new HashMap();
+                UResourceBundle metazonesBundle = null;
+                try {
+                    UResourceBundle supplementalBundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,
+                        "supplementalData");
+                    UResourceBundle  mapTimezonesBundle = supplementalBundle.get("mapTimezones");
+                    metazonesBundle = mapTimezonesBundle.get("metazones");
+                } catch (MissingResourceException mre) {
+                    // do nothing
+                }
+                if (metazonesBundle != null) {
+                    Enumeration mzenum = metazonesBundle.getKeys();
+                    while (mzenum.hasMoreElements()) {
+                        String mzkey = (String)mzenum.nextElement();
+                        if (!mzkey.startsWith("meta:")) {
+                            continue;
+                        }
+                        String tzid = null;
+                        try {
+                            tzid = metazonesBundle.getString(mzkey);
+                        } catch (MissingResourceException mre) {
+                            // It should not happen..
+                        }
+                        if (tzid != null) {
+                            int territoryIdx = mzkey.lastIndexOf('_');
+                            if (territoryIdx > 0) {
+                                String mzid = mzkey.substring(5 /* "meta:".length() */, territoryIdx);
+                                String territory = mzkey.substring(territoryIdx + 1);
+                                List mappings = (List)metaToOlson.get(mzid);
+                                if (mappings == null) {
+                                    mappings = new LinkedList();
+                                    metaToOlson.put(mzid, mappings);
+                                }
+                                MetaToOlsonMappingEntry olsonmap = new MetaToOlsonMappingEntry();
+                                olsonmap.id = tzid;
+                                olsonmap.territory = territory;
+                                mappings.add(olsonmap);
+                            }
+                        }
+                    }
+                }
+                META_TO_OLSON_REF = new SoftReference(metaToOlson);
+            }
+        }
+        return metaToOlson;
+    }
+
+    /**
+     * Returns an Olson ID for the ginve metazone and region
+     */
+    public static String getZoneIdByMetazone(String metazoneID, String region) {
+        String tzid = null;
+        Map metaToOlson = getMetaToOlsonMap();
+        List mappings = (List)metaToOlson.get(metazoneID);
+        if (mappings != null) {
+            for (int i = 0; i < mappings.size(); i++) {
+                MetaToOlsonMappingEntry olsonmap = (MetaToOlsonMappingEntry)mappings.get(i);
+                if (olsonmap.territory.equals(region)) {
+                    tzid = olsonmap.id;
+                    break;
+                } else if (olsonmap.territory.equals("001")) {
+                    tzid = olsonmap.id;
+                }
+            }
+        }
+        return tzid;
+    }
+
+//    /**
+//     * Returns an Olson ID for the given metazone and locale
+//     */
+//    public static String getZoneIdByMetazone(String metazoneID, ULocale loc) {
+//        String region = loc.getCountry();
+//        if (region.length() == 0) {
+//            // Get likely region
+//            ULocale tmp = ULocale.addLikelySubtag(loc);
+//            region = tmp.getCountry();
+//        }
+//        return getZoneIdByMetazone(metazoneID, region);
+//    }
 }

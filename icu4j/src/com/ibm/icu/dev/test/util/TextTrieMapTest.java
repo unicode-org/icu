@@ -1,10 +1,12 @@
 /*
  *******************************************************************************
- * Copyright (C) 2006, International Business Machines Corporation and         *
+ * Copyright (C) 2007, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
 package com.ibm.icu.dev.test.util;
+
+import java.util.Iterator;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.TextTrieMap;
@@ -52,10 +54,10 @@ public class TextTrieMapTest extends TestFmwk {
         {"Mo", MON, MON},
         {"mo", null, MON},
         {"Thursday Friday", THU, THU},
-        {"T", THU, THU},
-        {"TEST", THU, THU},
-        {"SUN", SAT, SUN},
-        {"super", null, SAT},
+        {"T", new Object[]{TUE, THU}, new Object[]{TUE, THU}},
+        {"TEST", new Object[]{TUE, THU}, new Object[]{TUE, THU}},
+        {"SUN", new Object[]{SUN, SAT}, SUN},
+        {"super", null, SUN},
         {"NO", null, null}
     };
     
@@ -65,6 +67,7 @@ public class TextTrieMapTest extends TestFmwk {
     }
 
     public void TestCaseSensitive() {
+        Iterator itr = null;
         TextTrieMap map = new TextTrieMap(false);
         for (int i = 0; i < TESTDATA.length; i++) {
             map.put((String)TESTDATA[i][0], TESTDATA[i][1]);
@@ -72,10 +75,8 @@ public class TextTrieMapTest extends TestFmwk {
 
         logln("Test for get(String)");
         for (int i = 0; i < TESTCASES.length; i++) {
-            Object value = map.get((String)TESTCASES[i][0]);
-            if (!eql(value, TESTCASES[i][1])) {
-                errln("Invalid search results - Expected:" + TESTCASES[i][1] + " Actual:" + value);
-            }
+            itr = map.get((String)TESTCASES[i][0]);
+            checkResult(itr, TESTCASES[i][1]);
         }
 
         logln("Test for get(String, int)");
@@ -86,37 +87,22 @@ public class TextTrieMapTest extends TestFmwk {
                 textBuf.append('X');
             }
             textBuf.append(TESTCASES[i][0]);
-            Object value = map.get(textBuf.toString(), i);
-            if (!eql(value, TESTCASES[i][1])) {
-                errln("Invalid search results - Expected:" + TESTCASES[i][1] + " Actual:" + value);
-            }
+            itr = map.get(textBuf.toString(), i);
+            checkResult(itr, TESTCASES[i][1]);
         }
 
         // Add duplicated entry
-        Object prev = map.put("Sunday", FOO);
-        if (!eql(prev, SUN)) {
-            errln("The previous value of duplicated entry is not valid - Expected:" + SUN + " Actual:" + prev);
-        }
-        // Make sure the value is updated
-        Object value = map.get("Sunday");
-        if (!eql(value, FOO)) {
-            errln("The map value is not valid - Expected:" + FOO + " Actual:" + value);
-        }
-
+        map.put("Sunday", FOO);
         // Add duplicated entry with different casing
-        prev = map.put("sunday", BAR);
-        if (!eql(prev, null)) {
-            errln("The value should be new in the trie map - Expected:null" + " Actual:" + prev);
-        }
-        // Make sure the value is valid
-        value = map.get("sunday");
-        if (!eql(value, BAR)) {
-            errln("The map value is not valid - Expected:" + BAR + " Actual:" + value);
-        }
+        map.put("sunday", BAR);
 
+        // Make sure the all entries are returned
+        itr = map.get("Sunday");
+        checkResult(itr, new Object[]{FOO, SUN});
     }
 
     public void TestCaseInsensitive() {
+        Iterator itr = null;
         TextTrieMap map = new TextTrieMap(true);
         for (int i = 0; i < TESTDATA.length; i++) {
             map.put((String)TESTDATA[i][0], TESTDATA[i][1]);
@@ -124,10 +110,8 @@ public class TextTrieMapTest extends TestFmwk {
 
         logln("Test for get(String)");
         for (int i = 0; i < TESTCASES.length; i++) {
-            Object value = map.get((String)TESTCASES[i][0]);
-            if (!eql(value, TESTCASES[i][2])) {
-                errln("Invalid search results - Expected:" + TESTCASES[i][2] + " Actual:" + value);
-            }
+            itr = map.get((String)TESTCASES[i][0]);
+            checkResult(itr, TESTCASES[i][2]);
         }
         
         logln("Test for get(String, int)");
@@ -138,34 +122,18 @@ public class TextTrieMapTest extends TestFmwk {
                 textBuf.append('X');
             }
             textBuf.append(TESTCASES[i][0]);
-            Object value = map.get(textBuf.toString(), i);
-            if (!eql(value, TESTCASES[i][2])) {
-                errln("Invalid search results - Expected:" + TESTCASES[i][2] + " Actual:" + value);
-            }
+            itr = map.get(textBuf.toString(), i);
+            checkResult(itr, TESTCASES[i][2]);
         }
 
         // Add duplicated entry
-        Object prev = map.put("Sunday", FOO);
-        if (!eql(prev, SUN)) {
-            errln("The previous value of duplicated entry is not valid - Expected:" + SUN + " Actual:" + prev);
-        }
-        // Make sure the value is updated
-        Object value = map.get("Sunday");
-        if (!eql(value, FOO)) {
-            errln("The map value is not valid - Expected:" + FOO + " Actual:" + value);
-        }
-
+        map.put("Sunday", FOO);
         // Add duplicated entry with different casing
-        prev = map.put("sunday", BAR);
-        if (!eql(prev, FOO)) {
-            errln("The value should be new in the trie map - Expected:" + FOO + " Actual:" + prev);
-        }
-        // Make sure the value is updated
-        value = map.get("sunday");
-        if (!eql(value, BAR)) {
-            errln("The map value is not valid - Expected:" + BAR + " Actual:" + value);
-        }
+        map.put("sunday", BAR);
 
+        // Make sure the all entries are returned
+        itr = map.get("Sunday");
+        checkResult(itr, new Object[]{SUN, FOO, BAR});
     }
 
     private boolean eql(Object o1, Object o2) {
@@ -176,5 +144,40 @@ public class TextTrieMapTest extends TestFmwk {
             return false;
         }
         return o1.equals(o2);
+    }
+
+    private void checkResult(Iterator itr, Object expected) {
+        if (itr == null) {
+            if (expected != null) {
+                errln("FAIL: Empty results - Expected: " + expected);
+            }
+            return;
+        }
+        if (expected == null && itr != null) {
+            errln("FAIL: Empty result is expected");
+            return;
+        }
+
+        Object[] exp;
+        if (expected instanceof Object[]) {
+            exp = (Object[])expected;
+        } else {
+            exp = new Object[]{expected};
+        }
+
+        boolean[] found = new boolean[exp.length];
+        while (itr.hasNext()) {
+            Object val = itr.next();
+            for (int i = 0; i < exp.length; i++) {
+                if (eql(exp[i], val)) {
+                    found[i] = true;
+                }
+            }
+        }
+        for (int i = 0; i < exp.length; i++) {
+            if (found[i] == false) {
+                errln("FAIL: The search result does not contain " + exp[i]);
+            }
+        }
     }
 }

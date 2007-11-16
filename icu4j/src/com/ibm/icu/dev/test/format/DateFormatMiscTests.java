@@ -124,7 +124,7 @@ public class DateFormatMiscTests extends com.ibm.icu.dev.test.TestFmwk {
         final String jdtLong = "\u65e5\u672c\u590f\u6642\u9593";
         final String jstShort = "JST";
         final String jdtShort = "JDT";
-        final String tzID = "meta/Japan";
+        final String tzID = "Asia/Tokyo";
 
         DateFormatSymbols symbols = new DateFormatSymbols(Locale.JAPAN);
         final String[] eras = symbols.getEras();
