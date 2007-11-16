@@ -1087,9 +1087,9 @@ ufmt_args* parseArguments(const UChar *alias, va_list ap) {
 	}
 	
 	/* create the parsed argument list */
-	typelist = (ufmt_type_info*)uprv_malloc(sizeof(ufmt_type_info*) * size + 1);
-	islonglong = (UBool*)uprv_malloc(sizeof(UBool*) * size + 1);
-	arglist = (ufmt_args*)uprv_malloc(sizeof(ufmt_args*) * size + 1);
+	typelist = (ufmt_type_info*)uprv_malloc(sizeof(ufmt_type_info) * size);
+	islonglong = (UBool*)uprv_malloc(sizeof(UBool) * size);
+	arglist = (ufmt_args*)uprv_malloc(sizeof(ufmt_args) * size);
 	
 	/* reset alias back to the beginning */
 	alias = aliasStart;
@@ -1115,6 +1115,8 @@ ufmt_args* parseArguments(const UChar *alias, va_list ap) {
                 pos += (int) (*alias++ - DIGIT_ZERO);
             }
         }
+        /* offset position by 1 */
+        pos--;
 
 		/* skip over everything except for the type */
 		while (ISMOD(*alias) || ISFLAG(*alias) || ISDIGIT(*alias) || 
@@ -1140,7 +1142,7 @@ ufmt_args* parseArguments(const UChar *alias, va_list ap) {
 	}
 	
 	/* store argument in arglist */
-	for (pos = 1; pos <= size; pos++) {
+	for (pos = 0; pos < size; pos++) {
 		switch (typelist[pos]) {
         case ufmt_string:
         case ufmt_ustring:
@@ -1470,6 +1472,8 @@ u_printf_parse(const u_printf_stream_handler *streamHandler,
             
             /* goto the correct argument on arg_list if position is specified */
             if (spec.fArgPos > 0) {
+            	/* offset position by 1 */
+            	spec.fArgPos--;
             	switch(argType) {
 	            case ufmt_count:
 	                /* set the spec's width to the # of chars written */
