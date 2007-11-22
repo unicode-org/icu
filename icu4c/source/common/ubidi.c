@@ -1923,7 +1923,8 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
          * Examples for "insignificant" ones are empty embeddings
          * LRE-PDF, LRE-RLE-PDF-PDF, etc.
          */
-        if(embeddingLevels==NULL && !(pBiDi->flags&DIRPROP_FLAG_MULTI_RUNS)) {
+        if(embeddingLevels==NULL && pBiDi->paraCount<=1 &&
+                                   !(pBiDi->flags&DIRPROP_FLAG_MULTI_RUNS)) {
             resolveImplicitLevels(pBiDi, 0, length,
                                     GET_LR_FROM_LEVEL(GET_PARALEVEL(pBiDi, 0)),
                                     GET_LR_FROM_LEVEL(GET_PARALEVEL(pBiDi, length-1)));
