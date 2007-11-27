@@ -747,66 +747,20 @@ public final class ZoneMeta {
     }
 
     static Map getOlsonToMetaMap() {
-        HashMap olsonToMeta = null;
+        Map olsonToMeta = null;
         synchronized(ZoneMeta.class) {
             if (OLSON_TO_META_REF != null) {
                 olsonToMeta = (HashMap)OLSON_TO_META_REF.get();
             }
             if (olsonToMeta == null) {
-                // Create olson id to metazone mapping table
-                olsonToMeta = new HashMap();
-                UResourceBundle zoneStringsBundle = null;
-                try {
-                    UResourceBundle bundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "root");
-                    zoneStringsBundle = bundle.get("zoneStrings");
-                } catch (MissingResourceException mre) {
-                    // do nothing
+                olsonToMeta = createOlsonToMetaMap();
+                if (olsonToMeta == null) {
+                    // We may not need this code for ICU4J...
+                    olsonToMeta = createOlsonToMetaMapOld();
                 }
-                if (zoneStringsBundle != null) {
-                    // DateFormat to be used for parsing metazone mapping range
-                    SimpleDateFormat mzdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                    mzdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-                    
-                    String[] tzids = getAvailableIDs();
-                    for (int i = 0; i < tzids.length; i++) {
-                        // Skip aliases
-                        if (!tzids[i].equals(getCanonicalID(tzids[i]))) {
-                            continue;
-                        }
-                        String tzkey = tzids[i].replace('/', ':');
-                        try {
-                            UResourceBundle zoneBundle = zoneStringsBundle.get(tzkey);
-                            UResourceBundle useMZ = zoneBundle.get("um");
-                            LinkedList mzMappings = new LinkedList();
-                            for (int idx = 0; ; idx++) {
-                                try {
-                                    UResourceBundle mz = useMZ.get("mz" + idx);
-                                    String[] mzstr = mz.getStringArray();
-                                    if (mzstr == null || mzstr.length != 3) {
-                                        continue;
-                                    }
-                                    OlsonToMetaMappingEntry mzmap = new OlsonToMetaMappingEntry();
-                                    mzmap.mzid = mzstr[0].intern();
-                                    mzmap.from = mzdf.parse(mzstr[1]).getTime();
-                                    mzmap.to = mzdf.parse(mzstr[2]).getTime();
-
-                                    // Add this mapping to the list
-                                    mzMappings.add(mzmap);
-                                } catch (MissingResourceException nomz) {
-                                    // we're done
-                                    break;
-                                } catch (ParseException baddate) {
-                                    // skip this
-                                }
-                            }
-                            if (mzMappings.size() != 0) {
-                                // Add to the olson-to-meta map
-                                olsonToMeta.put(tzids[i], mzMappings);
-                            }
-                        } catch (MissingResourceException noum) {
-                            // Does not use metazone, just skip this.
-                        }
-                    }
+                if (olsonToMeta == null) {
+                    // We need to return non-null Map to avoid disaster
+                    olsonToMeta = new HashMap();
                 }
                 OLSON_TO_META_REF = new SoftReference(olsonToMeta);
             }
@@ -814,6 +768,127 @@ public final class ZoneMeta {
         return olsonToMeta;
     }
 
+    /*
+     * Create olson tzid to metazone mappings from metazoneInfo.res (3.8.1 or later)
+     */
+    private static Map createOlsonToMetaMap() {
+        // Create olson id to metazone mapping table
+        HashMap olsonToMeta = null;
+        UResourceBundle metazoneMappingsBundle = null;
+        try {
+            UResourceBundle bundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "metazoneInfo");
+            metazoneMappingsBundle = bundle.get("metazoneMappings");
+        } catch (MissingResourceException mre) {
+            // do nothing
+        }
+        if (metazoneMappingsBundle != null) {
+            String[] tzids = getAvailableIDs();
+            for (int i = 0; i < tzids.length; i++) {
+                // Skip aliases
+                if (!tzids[i].equals(getCanonicalID(tzids[i]))) {
+                    continue;
+                }
+                String tzkey = tzids[i].replace('/', ':');
+                try {
+                    UResourceBundle zoneBundle = metazoneMappingsBundle.get(tzkey);
+                    LinkedList mzMappings = new LinkedList();
+                    for (int idx = 0; ; idx++) {
+                        try {
+                            UResourceBundle mz = zoneBundle.get("mz" + idx);
+                            String[] mzstr = mz.getStringArray();
+                            if (mzstr == null || mzstr.length != 3) {
+                                continue;
+                            }
+                            OlsonToMetaMappingEntry mzmap = new OlsonToMetaMappingEntry();
+                            mzmap.mzid = mzstr[0].intern();
+                            mzmap.from = parseDate(mzstr[1]);
+                            mzmap.to = parseDate(mzstr[2]);
+
+                            // Add this mapping to the list
+                            mzMappings.add(mzmap);
+                        } catch (MissingResourceException nomz) {
+                            // we're done
+                            break;
+                        } catch (IllegalArgumentException baddate) {
+                            // skip this
+                        }
+                    }
+                    if (mzMappings.size() != 0) {
+                        // Add to the olson-to-meta map
+                        if (olsonToMeta == null) {
+                            olsonToMeta = new HashMap();
+                        }
+                        olsonToMeta.put(tzids[i], mzMappings);
+                    }
+                } catch (MissingResourceException noum) {
+                    // Does not use metazone, just skip this.
+                }
+            }
+        }
+        return olsonToMeta;
+    }
+
+    /*
+     * Create olson tzid to metazone mappings from root.res (3.8)
+     */
+    private static Map createOlsonToMetaMapOld() {
+        // Create olson id to metazone mapping table
+        HashMap olsonToMeta = null;
+        UResourceBundle zoneStringsBundle = null;
+        try {
+            UResourceBundle bundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "root");
+            zoneStringsBundle = bundle.get("zoneStrings");
+        } catch (MissingResourceException mre) {
+            // do nothing
+        }
+        if (zoneStringsBundle != null) {
+            String[] tzids = getAvailableIDs();
+            for (int i = 0; i < tzids.length; i++) {
+                // Skip aliases
+                if (!tzids[i].equals(getCanonicalID(tzids[i]))) {
+                    continue;
+                }
+                String tzkey = tzids[i].replace('/', ':');
+                try {
+                    UResourceBundle zoneBundle = zoneStringsBundle.get(tzkey);
+                    UResourceBundle useMZ = zoneBundle.get("um");
+                    LinkedList mzMappings = new LinkedList();
+                    for (int idx = 0; ; idx++) {
+                        try {
+                            UResourceBundle mz = useMZ.get("mz" + idx);
+                            String[] mzstr = mz.getStringArray();
+                            if (mzstr == null || mzstr.length != 3) {
+                                continue;
+                            }
+                            OlsonToMetaMappingEntry mzmap = new OlsonToMetaMappingEntry();
+                            mzmap.mzid = mzstr[0].intern();
+                            mzmap.from = parseDate(mzstr[1]);
+                            mzmap.to = parseDate(mzstr[2]);
+
+                            // Add this mapping to the list
+                            mzMappings.add(mzmap);
+                        } catch (MissingResourceException nomz) {
+                            // we're done
+                            break;
+                        } catch (IllegalArgumentException baddate) {
+                            // skip this
+                        }
+                    }
+                    if (mzMappings.size() != 0) {
+                        // Add to the olson-to-meta map
+                        if (olsonToMeta == null) {
+                            olsonToMeta = new HashMap();
+                        }
+                        olsonToMeta.put(tzids[i], mzMappings);
+                    }
+                } catch (MissingResourceException noum) {
+                    // Does not use metazone, just skip this.
+                }
+            }
+        }
+        return olsonToMeta;
+    }
+    
     /**
      * Returns a CLDR metazone ID for the given Olson tzid and time.
      */
@@ -920,4 +995,67 @@ public final class ZoneMeta {
 //        }
 //        return getZoneIdByMetazone(metazoneID, region);
 //    }
+
+    /*
+     * Convert a date string used by metazone mappings to long.
+     * The format used by CLDR metazone mapping is "yyyy-MM-dd HH:mm".
+     * We do not want to use SimpleDateFormat to parse the metazone
+     * mapping range strings in createOlsonToMeta, because it might be
+     * called from SimpleDateFormat initialization code.
+     */
+     static long parseDate (String text) throws IllegalArgumentException {
+        int year = 0, month = 0, day = 0, hour = 0, min = 0;
+        int idx;
+        int n;
+
+        // "yyyy" (0 - 3)
+        for (idx = 0; idx <= 3; idx++) {
+            n = text.charAt(idx) - '0';
+            if (n >= 0 && n < 10) {
+                year = 10*year + n;
+            } else {
+                throw new IllegalArgumentException("Bad year");
+            }
+        }
+        // "MM" (5 - 6)
+        for (idx = 5; idx <= 6; idx++) {
+            n = text.charAt(idx) - '0';
+            if (n >= 0 && n < 10) {
+                month = 10*month + n;
+            } else {
+                throw new IllegalArgumentException("Bad month");
+            }
+        }
+        // "dd" (8 - 9)
+        for (idx = 8; idx <= 9; idx++) {
+            n = text.charAt(idx) - '0';
+            if (n >= 0 && n < 10) {
+                day = 10*day + n;
+            } else {
+                throw new IllegalArgumentException("Bad day");
+            }
+        }
+        // "HH" (11 - 12)
+        for (idx = 11; idx <= 12; idx++) {
+            n = text.charAt(idx) - '0';
+            if (n >= 0 && n < 10) {
+                hour = 10*hour + n;
+            } else {
+                throw new IllegalArgumentException("Bad hour");
+            }
+        }
+        // "mm" (14 - 15)
+        for (idx = 14; idx <= 15; idx++) {
+            n = text.charAt(idx) - '0';
+            if (n >= 0 && n < 10) {
+                min = 10*min + n;
+            } else {
+                throw new IllegalArgumentException("Bad minute");
+            }
+        }
+
+        long date = Grego.fieldsToDay(year, month - 1, day) * Grego.MILLIS_PER_DAY
+                    + hour * Grego.MILLIS_PER_HOUR + min * Grego.MILLIS_PER_MINUTE;
+        return date;
+     }
 }
