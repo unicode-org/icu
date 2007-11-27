@@ -221,7 +221,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 String[] ids = TimeZone.getAvailableIDs();
                 timer = System.currentTimeMillis();
                 for (int zidx = 0; zidx < ids.length; zidx++) {
-                    if(ids[zidx].equals(ZoneMeta.getCanonicalID(ids[zidx]))) {
+                    if(!ids[zidx].equals(ZoneMeta.getCanonicalID(ids[zidx]))) {
                         // Skip aliases
                         continue;
                     }
