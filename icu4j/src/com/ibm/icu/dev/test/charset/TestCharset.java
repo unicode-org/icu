@@ -514,7 +514,7 @@ public class TestCharset extends TestFmwk {
         char[] chars = new char[size[0] + size[1] + size[2]];
         int i = 0;
         int x, y;
-
+        
         // 0 to 1 << 7 (1 byters)
         for (; i < size[0]; i++) {
             bytes[i] = (byte) i;
@@ -625,6 +625,81 @@ public class TestCharset extends TestFmwk {
         }
         if (true)
             return;
+    }
+    
+    
+    public void TestUTF8Surrogates() {
+        byte[][] in = new byte[][] {
+            { (byte)0x61, },
+            { (byte)0xc2, (byte)0x80, },
+            { (byte)0xe0, (byte)0xa0, (byte)0x80, },
+            { (byte)0xf0, (byte)0x90, (byte)0x80, (byte)0x80, },
+            { (byte)0xf4, (byte)0x84, (byte)0x8c, (byte)0xa1, },
+            { (byte)0xf0, (byte)0x90, (byte)0x90, (byte)0x81, },
+        };
+
+        /* expected test results */
+        char[][] results = new char[][] {
+            /* number of bytes read, code point */
+            { '\u0061', },
+            { '\u0080', },
+            { '\u0800', },
+            { '\ud800', '\udc00', },      //  10000
+            { '\udbd0', '\udf21', },      // 104321
+            { '\ud801', '\udc01', },      //  10401
+        };
+
+        /* error test input */
+        byte[][] in2 = new byte[][] {
+            { (byte)0x61, },
+            { (byte)0xc0, (byte)0x80,                                     /* illegal non-shortest form */
+            (byte)0xe0, (byte)0x80, (byte)0x80,                           /* illegal non-shortest form */
+            (byte)0xf0, (byte)0x80, (byte)0x80, (byte)0x80,               /* illegal non-shortest form */
+            (byte)0xc0, (byte)0xc0,                                       /* illegal trail byte */
+            (byte)0xf4, (byte)0x90, (byte)0x80, (byte)0x80,               /* 0x110000 out of range */
+            (byte)0xf8, (byte)0x80, (byte)0x80, (byte)0x80, (byte)0x80,   /* too long */
+            (byte)0xfe,                                                   /* illegal byte altogether */
+            (byte)0x62, },
+        };
+
+        /* expected error test results */
+        char[][] results2 = new char[][] {
+            /* number of bytes read, code point */
+            { '\u0062', },
+            { '\u0062', },
+        };
+        
+        String converter = "UTF-8";
+        CharsetProvider icu = new CharsetProviderICU();
+        Charset icuChar = icu.charsetForName(converter);
+        CharsetDecoder decoder = icuChar.newDecoder();
+        
+        int i;
+        try {
+            for (i = 0; i < in.length; i++) {
+                ByteBuffer source = ByteBuffer.wrap(in[i]);
+                CharBuffer expected = CharBuffer.wrap(results[i]);
+                smBufDecode(decoder, converter, source, expected, true, false,
+                        true);
+                smBufDecode(decoder, converter, source, expected, true, false,
+                        false);
+            }
+        } catch (Exception ex) {
+            errln("Incorrect result in " + converter);
+        }
+        try {
+            for (i = 0; i < in2.length; i++) {
+                ByteBuffer source = ByteBuffer.wrap(in2[i]);
+                CharBuffer expected = CharBuffer.wrap(results2[i]);
+                decoder.onMalformedInput(CodingErrorAction.IGNORE);
+                smBufDecode(decoder, converter, source, expected, true, false,
+                        true);
+                smBufDecode(decoder, converter, source, expected, true, false,
+                        false);
+            }
+        } catch (Exception ex) {
+            errln("Incorrect result in " + converter);
+        }
     }
     
     
