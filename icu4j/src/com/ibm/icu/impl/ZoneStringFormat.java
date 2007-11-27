@@ -168,41 +168,41 @@ public class ZoneStringFormat {
         return find(text, start, LOCATION);
     }
 
-    // Following APIs are not used by SimpleDateFormat, but available for testing purpose
-    public String getLongStandardString(String tzid, long date) {
+    // Following APIs are not used by SimpleDateFormat, but public for testing purpose
+    public String getLongStandard(String tzid, long date) {
         return getString(tzid, ZSIDX_LONG_STANDARD, date, false /* not used */);
     }
 
-    public String getLongDaylightString(String tzid, long date) {
+    public String getLongDaylight(String tzid, long date) {
         return getString(tzid, ZSIDX_LONG_DAYLIGHT, date, false /* not used */);
     }
 
-    public String getLongGenericNonLocationString(String tzid, long date) {
+    public String getLongGenericNonLocation(String tzid, long date) {
         return getString(tzid, ZSIDX_LONG_GENERIC, date, false /* not used */);
     }
 
-    public String getLongGenericPartialLocationString(String tzid, long date) {
+    public String getLongGenericPartialLocation(String tzid, long date) {
         return getGenericPartialLocationString(tzid, false, date, false /* not used */);
     }
 
-    public String getShortStandardString(String tzid, long date, boolean commonlyUsedOnly) {
+    public String getShortStandard(String tzid, long date, boolean commonlyUsedOnly) {
         return getString(tzid, ZSIDX_SHORT_STANDARD, date, commonlyUsedOnly);
     }
 
-    public String getShortDaylightString(String tzid, long date, boolean commonlyUsedOnly) {
+    public String getShortDaylight(String tzid, long date, boolean commonlyUsedOnly) {
         return getString(tzid, ZSIDX_SHORT_DAYLIGHT, date, commonlyUsedOnly);
     }
 
-    public String getShortGenericNonLocationString(String tzid, long date, boolean commonlyUsedOnly) {
+    public String getShortGenericNonLocation(String tzid, long date, boolean commonlyUsedOnly) {
         return getString(tzid, ZSIDX_SHORT_GENERIC, date, commonlyUsedOnly);
     }
 
-    public String getShortGenericPartialLocationString(String tzid, long date, boolean commonlyUsedOnly) {
+    public String getShortGenericPartialLocation(String tzid, long date, boolean commonlyUsedOnly) {
         return getGenericPartialLocationString(tzid, true, date, commonlyUsedOnly);
     }
 
-    public String getGenericLocationString(String tzid) {
-        return getString(tzid, ZSIDX_LOCATION, 0L /* not used */, false /* not used */);        
+    public String getGenericLocation(String tzid) {
+        return getString(tzid, ZSIDX_LOCATION, 0L /* not used */, false /* not used */);
     }
     
     /**
@@ -218,14 +218,15 @@ public class ZoneStringFormat {
         mzidToStrings = new HashMap();
         zoneStringsTrie = new TextTrieMap(true);
 
-        LinkedList bundleList = new LinkedList();
-        for (ULocale tempLocale = locale; tempLocale != null; tempLocale = tempLocale.getFallback()) {
-            ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(
-                    ICUResourceBundle.ICU_BASE_NAME, tempLocale);
-            ICUResourceBundle zoneStringsBundle = bundle.getWithFallback("zoneStrings");
-            if (zoneStringsBundle != null) {
-                bundleList.add(zoneStringsBundle);
-            }
+        ICUResourceBundle zoneStringsBundle = null;
+        try {
+            ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
+            zoneStringsBundle = bundle.getWithFallback("zoneStrings");
+        } catch (MissingResourceException e) {
+            // If no locale bundles are available, zoneStringsBundle will be null.
+            // We still want to go through the rest of zone strings initialization,
+            // because generic location format is generated from tzid for the case.
+            // The rest of code should work even zoneStrings is null.
         }
 
         String[] zoneIDs = TimeZone.getAvailableIDs();
@@ -244,19 +245,19 @@ public class ZoneStringFormat {
             String tzid = zoneIDs[i];
 
             String zoneKey = tzid.replace('/', ':');
-            zstrarray[ZSIDX_LONG_STANDARD] = getZoneStringFromBundles(bundleList, zoneKey, RESKEY_LONG_STANDARD);
-            zstrarray[ZSIDX_SHORT_STANDARD] = getZoneStringFromBundles(bundleList, zoneKey, RESKEY_SHORT_STANDARD);
-            zstrarray[ZSIDX_LONG_DAYLIGHT] = getZoneStringFromBundles(bundleList, zoneKey, RESKEY_LONG_DAYLIGHT);
-            zstrarray[ZSIDX_SHORT_DAYLIGHT] = getZoneStringFromBundles(bundleList, zoneKey, RESKEY_SHORT_DAYLIGHT);
-            zstrarray[ZSIDX_LONG_GENERIC] = getZoneStringFromBundles(bundleList, zoneKey, RESKEY_LONG_GENERIC);
-            zstrarray[ZSIDX_SHORT_GENERIC] = getZoneStringFromBundles(bundleList, zoneKey, RESKEY_SHORT_GENERIC);
+            zstrarray[ZSIDX_LONG_STANDARD] = getZoneStringFromBundle(zoneStringsBundle, zoneKey, RESKEY_LONG_STANDARD);
+            zstrarray[ZSIDX_SHORT_STANDARD] = getZoneStringFromBundle(zoneStringsBundle, zoneKey, RESKEY_SHORT_STANDARD);
+            zstrarray[ZSIDX_LONG_DAYLIGHT] = getZoneStringFromBundle(zoneStringsBundle, zoneKey, RESKEY_LONG_DAYLIGHT);
+            zstrarray[ZSIDX_SHORT_DAYLIGHT] = getZoneStringFromBundle(zoneStringsBundle, zoneKey, RESKEY_SHORT_DAYLIGHT);
+            zstrarray[ZSIDX_LONG_GENERIC] = getZoneStringFromBundle(zoneStringsBundle, zoneKey, RESKEY_LONG_GENERIC);
+            zstrarray[ZSIDX_SHORT_GENERIC] = getZoneStringFromBundle(zoneStringsBundle, zoneKey, RESKEY_SHORT_GENERIC);
 
             // Compose location format string
             String countryCode = ZoneMeta.getCanonicalCountry(tzid);
             String country = null;
             String city = null;
             if (countryCode != null) {
-                city = getZoneStringFromBundles(bundleList, zoneKey, RESKEY_EXEMPLAR_CITY);
+                city = getZoneStringFromBundle(zoneStringsBundle, zoneKey, RESKEY_EXEMPLAR_CITY);
                 if (city == null) {
                     city = tzid.substring(tzid.lastIndexOf('/') + 1).replace('_', ' ');
                 }
@@ -265,13 +266,13 @@ public class ZoneStringFormat {
                     // If the zone is only one zone in the country, do not add city
                     zstrarray[ZSIDX_LOCATION] = regionFmt.format(new Object[] {country});
                 } else {
-                    zstrarray[ZSIDX_LOCATION] = fallbackFmt.format(new Object[] {city, country});                    
+                    zstrarray[ZSIDX_LOCATION] = fallbackFmt.format(new Object[] {city, country});
                 }
             } else {
                 zstrarray[ZSIDX_LOCATION] = null;
             }
 
-            boolean commonlyUsed = isCommonlyUsed(bundleList, zoneKey);
+            boolean commonlyUsed = isCommonlyUsed(zoneStringsBundle, zoneKey);
             
             // Resolve metazones used by this zone
             int mzPartialLocIdx = 0;
@@ -285,13 +286,13 @@ public class ZoneStringFormat {
                     if (mzStrings == null) {
                         // If the metazone strings are not yet processed, do it now.
                         String mzkey = "meta:" + mzmap.mzid;
-                        boolean mzCommonlyUsed = isCommonlyUsed(bundleList, mzkey);
-                        mzstrarray[ZSIDX_LONG_STANDARD] = getZoneStringFromBundles(bundleList, mzkey, RESKEY_LONG_STANDARD);
-                        mzstrarray[ZSIDX_SHORT_STANDARD] = getZoneStringFromBundles(bundleList, mzkey, RESKEY_SHORT_STANDARD);
-                        mzstrarray[ZSIDX_LONG_DAYLIGHT] = getZoneStringFromBundles(bundleList, mzkey, RESKEY_LONG_DAYLIGHT);
-                        mzstrarray[ZSIDX_SHORT_DAYLIGHT] = getZoneStringFromBundles(bundleList, mzkey, RESKEY_SHORT_DAYLIGHT);
-                        mzstrarray[ZSIDX_LONG_GENERIC] = getZoneStringFromBundles(bundleList, mzkey, RESKEY_LONG_GENERIC);
-                        mzstrarray[ZSIDX_SHORT_GENERIC] = getZoneStringFromBundles(bundleList, mzkey, RESKEY_SHORT_GENERIC);
+                        boolean mzCommonlyUsed = isCommonlyUsed(zoneStringsBundle, mzkey);
+                        mzstrarray[ZSIDX_LONG_STANDARD] = getZoneStringFromBundle(zoneStringsBundle, mzkey, RESKEY_LONG_STANDARD);
+                        mzstrarray[ZSIDX_SHORT_STANDARD] = getZoneStringFromBundle(zoneStringsBundle, mzkey, RESKEY_SHORT_STANDARD);
+                        mzstrarray[ZSIDX_LONG_DAYLIGHT] = getZoneStringFromBundle(zoneStringsBundle, mzkey, RESKEY_LONG_DAYLIGHT);
+                        mzstrarray[ZSIDX_SHORT_DAYLIGHT] = getZoneStringFromBundle(zoneStringsBundle, mzkey, RESKEY_SHORT_DAYLIGHT);
+                        mzstrarray[ZSIDX_LONG_GENERIC] = getZoneStringFromBundle(zoneStringsBundle, mzkey, RESKEY_LONG_GENERIC);
+                        mzstrarray[ZSIDX_SHORT_GENERIC] = getZoneStringFromBundle(zoneStringsBundle, mzkey, RESKEY_SHORT_GENERIC);
                         mzstrarray[ZSIDX_LOCATION] = null;
                         mzStrings = new ZoneStrings(mzstrarray, mzCommonlyUsed, null);
                         mzidToStrings.put(mzmap.mzid, mzStrings);
@@ -346,7 +347,7 @@ public class ZoneStringFormat {
                                 }
                             }
                             mzPartialLocIdx++;
-                        }                        
+                        }
                     }
                 }
             }
@@ -624,7 +625,8 @@ public class ZoneStringFormat {
             }
         }
         if (result == null) {
-            result = getGenericLocationString(tzid);
+            // Use location format as the final fallback
+            result = getString(tzid, ZSIDX_LOCATION, cal.getTimeInMillis(), false /* not used */);
         }
         return result;
     }
@@ -663,13 +665,13 @@ public class ZoneStringFormat {
         while (it.hasNext()) {
             String tzid = (String)it.next();
             zoneStrings[idx][0] = tzid;
-            zoneStrings[idx][1] = getLongStandardString(tzid, date);
-            zoneStrings[idx][2] = getShortStandardString(tzid, date, false);
-            zoneStrings[idx][3] = getLongDaylightString(tzid, date);
-            zoneStrings[idx][4] = getShortDaylightString(tzid, date, false);
-            zoneStrings[idx][5] = getGenericLocationString(tzid);
-            zoneStrings[idx][6] = getLongGenericNonLocationString(tzid, date);
-            zoneStrings[idx][7] = getShortGenericNonLocationString(tzid, date, false);
+            zoneStrings[idx][1] = getLongStandard(tzid, date);
+            zoneStrings[idx][2] = getShortStandard(tzid, date, false);
+            zoneStrings[idx][3] = getLongDaylight(tzid, date);
+            zoneStrings[idx][4] = getShortDaylight(tzid, date, false);
+            zoneStrings[idx][5] = getGenericLocation(tzid);
+            zoneStrings[idx][6] = getLongGenericNonLocation(tzid, date);
+            zoneStrings[idx][7] = getShortGenericNonLocation(tzid, date, false);
             idx++;
         }
         return zoneStrings;
@@ -733,20 +735,15 @@ public class ZoneStringFormat {
     }
 
     /*
-     * Returns a localized zone string from bundles.
+     * Returns a localized zone string from bundle.
      */
-    private static String getZoneStringFromBundles(List bundleList, String key, String type) {
-        Iterator it = bundleList.iterator();
+    private static String getZoneStringFromBundle(ICUResourceBundle bundle, String key, String type) {
         String zstring = null;
-        while (it.hasNext()) {
-            ICUResourceBundle zoneTable = (ICUResourceBundle)it.next();
+        if (bundle != null) {
             try {
-                zstring = zoneTable.getStringWithFallback(key + "/" + type);
+                zstring = bundle.getStringWithFallback(key + "/" + type);
             } catch (MissingResourceException ex) {
                 // throw away the exception
-            }
-            if (zstring != null) {
-                break;
             }
         }
         return zstring;
@@ -755,17 +752,13 @@ public class ZoneStringFormat {
     /*
      * Returns if the short strings of the zone/metazone is commonly used.
      */
-    private static boolean isCommonlyUsed(List bundleList, String key) {
+    private static boolean isCommonlyUsed(ICUResourceBundle bundle, String key) {
         boolean commonlyUsed = false;
-        Iterator it = bundleList.iterator();
-        while (it.hasNext()) {
-            ICUResourceBundle zoneTable = (ICUResourceBundle)it.next();
+        if (bundle != null) {
             try {
-                UResourceBundle zoneItem = zoneTable.get(key);
-                UResourceBundle cuRes = zoneItem.get(RESKEY_COMMONLY_USED);
+                UResourceBundle cuRes = bundle.getWithFallback(key + "/" + RESKEY_COMMONLY_USED);
                 int cuValue = cuRes.getInt();
                 commonlyUsed = (cuValue != 0);
-                break;                
             } catch (MissingResourceException ex) {
                 // throw away the exception
             }
@@ -854,13 +847,13 @@ public class ZoneStringFormat {
      * Mapping from name type index to name type
      */
     private static final int[] NAMETYPEMAP = {
-        LOCATION,       // ZIDX_LOCATION
-        STANDARD_LONG,  // ZIDX_LONG_STANDARD
-        STANDARD_SHORT, // ZIDX_SHORT_STANDARD
-        DAYLIGHT_LONG,  // ZIDX_LONG_DAYLIGHT
-        DAYLIGHT_SHORT, // ZIDX_SHORT_DAYLIGHT
-        GENERIC_LONG,   // ZIDX_LONG_GENERIC
-        GENERIC_SHORT,  // ZIDX_SHORT_GENERIC
+        LOCATION,       // ZSIDX_LOCATION
+        STANDARD_LONG,  // ZSIDX_LONG_STANDARD
+        STANDARD_SHORT, // ZSIDX_SHORT_STANDARD
+        DAYLIGHT_LONG,  // ZSIDX_LONG_DAYLIGHT
+        DAYLIGHT_SHORT, // ZSIDX_SHORT_DAYLIGHT
+        GENERIC_LONG,   // ZSIDX_LONG_GENERIC
+        GENERIC_SHORT,  // ZSIDX_SHORT_GENERIC
     };
 
     private static int getNameType(int typeIdx) {

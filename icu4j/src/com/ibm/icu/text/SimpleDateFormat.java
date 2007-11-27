@@ -1217,10 +1217,10 @@ public class SimpleDateFormat extends DateFormat {
         int numLen;
         pos.setIndex(cur);
 
-        Number n = parseInt(text, pos, false);
+        Number n = parseInt(text, 6, pos, false);
         numLen = pos.getIndex() - cur;
 
-        if (n == null || numLen <= 0) {
+        if (n == null || numLen <= 0 || numLen > 6) {
             pos.setIndex(start);
             pos.setErrorIndex(cur);
             return null;
@@ -1239,7 +1239,7 @@ public class SimpleDateFormat extends DateFormat {
             if (cur + 2 < text.length() && text.charAt(cur) == COLON) {
                 cur++;
                 pos.setIndex(cur);
-                n = parseInt(text.substring(0, cur + 2), pos, false);
+                n = parseInt(text, 2, pos, false);
                 numLen = pos.getIndex() - cur;
                 if (n != null && numLen == 2) {
                     // got minute field
@@ -1248,7 +1248,7 @@ public class SimpleDateFormat extends DateFormat {
                     if (cur + 2 < text.length() && text.charAt(cur) == COLON) {
                         cur++;
                         pos.setIndex(cur);
-                        n = parseInt(text.substring(0, cur + 2), pos, false);
+                        n = parseInt(text, 2, pos, false);
                         numLen = pos.getIndex() - cur;
                         if (n != null && numLen == 2) {
                             // got second field
@@ -1269,20 +1269,8 @@ public class SimpleDateFormat extends DateFormat {
             // Hmm or HHmm
             hour = numVal / 100;
             min = numVal % 100;
-        } else if (numLen == 5 || numLen == 6) {
+        } else { // numLen == 5 || numLen == 6
             // Hmmss or HHmmss
-            hour = numVal / 10000;
-            min = (numVal % 10000) / 100;
-            sec = numVal % 100;
-        } else {
-            // HHmmss followed by bogus numbers
-            pos.setIndex(cur + 6);
-
-            int shift = numLen - 6;
-            while (shift > 0) {
-                numVal /= 10;
-                shift--;
-            }
             hour = numVal / 10000;
             min = (numVal % 10000) / 100;
             sec = numVal % 100;
@@ -1309,7 +1297,7 @@ public class SimpleDateFormat extends DateFormat {
         if (fmt == null) {
             fmt = new MessageFormat(formatData.gmtFormat);
             SimpleDateFormat sdf = (SimpleDateFormat)this.clone();
-            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+            sdf.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
             sdf.applyPattern(formatData.getGmtHourFormat(sign, width));
             fmt.setFormat(0, sdf);
             gmtfmtCache[cacheIdx] = new WeakReference(fmt);
@@ -1885,7 +1873,7 @@ public class SimpleDateFormat extends DateFormat {
                 if (obeyCount)
                     {
                         if ((start+count) > text.length()) return -start;
-                        number = parseInt(text.substring(0, start+count), pos, allowNegative);
+                        number = parseInt(text, count, pos, allowNegative);
                     }
                 else number = parseInt(text, pos, allowNegative);
                 if (number == null)
@@ -2065,10 +2053,8 @@ public class SimpleDateFormat extends DateFormat {
 
                             // Parse digits
                             int orgPos = start + 1;
-                            int textLen = text.length();
-                            int maxPos = textLen < orgPos + 6 ? textLen : orgPos + 6; // Max digits = 6
                             pos.setIndex(orgPos);
-                            number = parseInt(text.substring(0, maxPos), pos, false);
+                            number = parseInt(text, 6, pos, false);
                             int numLen = pos.getIndex() - orgPos;
                             if (numLen <= 0) {
                                 break;
@@ -2233,7 +2219,7 @@ public class SimpleDateFormat extends DateFormat {
                 if (obeyCount)
                     {
                         if ((start+count) > text.length()) return -start;
-                        number = parseInt(text.substring(0, start+count), pos, allowNegative);
+                        number = parseInt(text, count, pos, allowNegative);
                     }
                 else number = parseInt(text, pos, allowNegative);
                 if (number != null) {
@@ -2245,13 +2231,24 @@ public class SimpleDateFormat extends DateFormat {
     }
 
     /**
-     * Parse an integer using fNumberFormat.  This method is semantically
+     * Parse an integer using numberFormat.  This method is semantically
      * const, but actually may modify fNumberFormat.
      */
     private Number parseInt(String text,
                             ParsePosition pos,
                             boolean allowNegative) {
-        Number number;        
+        return parseInt(text, -1, pos, allowNegative);
+    }
+    
+    /**
+     * Parse an integer using numberFormat up to maxDigits.
+     */
+    private Number parseInt(String text,
+                            int maxDigits,
+                            ParsePosition pos,
+                            boolean allowNegative) {
+        Number number;
+        int oldPos = pos.getIndex();
         if (allowNegative) {
             number = numberFormat.parse(text, pos);
         } else {
@@ -2272,9 +2269,25 @@ public class SimpleDateFormat extends DateFormat {
                 }
             }
         }
+        if (maxDigits > 0) {
+            // adjust the result to fit into
+            // the maxDigits and move the position back
+            int nDigits = pos.getIndex() - oldPos;
+            if (nDigits > maxDigits) {
+                double val = number.doubleValue();
+                nDigits -= maxDigits;
+                while (nDigits > 0) {
+                    val /= 10;
+                    nDigits--;
+                }
+                pos.setIndex(oldPos + maxDigits);
+                number = new Integer((int)val);
+            }
+        }
         return number;
     }
 
+    
     /**
      * Translate a pattern, mapping each character in the from string to the
      * corresponding character in the to string.
