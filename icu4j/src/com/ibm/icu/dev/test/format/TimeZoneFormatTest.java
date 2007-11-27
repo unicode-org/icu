@@ -208,6 +208,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             };
         }
 
+        long testCounts = 0;
         long[] testTimes = new long[4];
         boolean[] expectedRoundTrip = new boolean[4];
         int testLen = 0;
@@ -219,7 +220,6 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 SimpleDateFormat sdf = new SimpleDateFormat(pattern, LOCALES[locidx]);
 
                 String[] ids = TimeZone.getAvailableIDs();
-                timer = System.currentTimeMillis();
                 for (int zidx = 0; zidx < ids.length; zidx++) {
                     if(!ids[zidx].equals(ZoneMeta.getCanonicalID(ids[zidx]))) {
                         // Skip aliases
@@ -262,6 +262,8 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                             }
                         }
                         for (int testidx = 0; testidx < testLen; testidx++) {
+                            testCounts++;
+                            timer = System.currentTimeMillis();
                             String text = sdf.format(new Date(testTimes[testidx]));
                             try {
                                 Date parsedDate = sdf.parse(text);
@@ -285,6 +287,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                             } catch (ParseException pe) {
                                 errln("FAIL: " + pe.getMessage());
                             }
+                            times[patidx] += System.currentTimeMillis() - timer;
                         }
                         tzt = tz.getNextTransition(t, false);
                         if (tzt == null) {
@@ -300,7 +303,6 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                         }
                     }
                 }
-                times[patidx] += System.currentTimeMillis() - timer;
             }
         }
 
@@ -311,5 +313,6 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             total += times[i];
         }
         logln("Total: " + total + "ms");
+        logln("Iteration: " + testCounts);
     }
 }

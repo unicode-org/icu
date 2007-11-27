@@ -4041,8 +4041,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
 
         fields[JULIAN_DAY] = (int) days + EPOCH_JULIAN_DAY;
 
-        // In some cases we will have to call this method again below to
-        // adjust for DST pushing us into the next Julian day.
         computeGregorianAndDOWFields(fields[JULIAN_DAY]);
 
         // Call framework method to have subclass compute its fields.

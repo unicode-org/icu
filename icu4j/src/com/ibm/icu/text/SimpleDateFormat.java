@@ -1648,7 +1648,6 @@ public class SimpleDateFormat extends DateFormat {
                         }
                     } else { // tztype == TZTYPE_DST
                         if (offsets[1] == 0) {
-                            int savings = 60*60*1000; // default DST savings
                             if (btz != null) {
                                 long time = localMillis + offsets[0];
                                 // We use the nearest daylight saving time rule.
@@ -1684,16 +1683,23 @@ public class SimpleDateFormat extends DateFormat {
 
                                 if (beforeTrs != null && afterTrs != null) {
                                     if (time - beforeT > afterT - time) {
-                                        savings = afterSav;
+                                        resolvedSavings = afterSav;
                                     } else {
-                                        savings = beforeSav;
+                                        resolvedSavings = beforeSav;
                                     }
-                                } else if (beforeTrs != null) {
-                                    savings = beforeSav;
-                                } else if (afterTrs != null) {
-                                    savings = afterSav;
+                                } else if (beforeTrs != null && beforeSav != 0) {
+                                    resolvedSavings = beforeSav;
+                                } else if (afterTrs != null && afterSav != 0) {
+                                    resolvedSavings = afterSav;
+                                } else {
+                                    resolvedSavings = btz.getDSTSavings();
                                 }
-                                resolvedSavings = savings;
+                            } else {
+                                resolvedSavings = tz.getDSTSavings();
+                            }
+                            if (resolvedSavings == 0) {
+                                // Final fallback
+                                resolvedSavings = millisPerHour;
                             }
                         }
                     }
