@@ -1956,7 +1956,7 @@ it{
         ROZAJ{"resiano"}
         SAAHO{"saho"}
     }
-    Version{"1.92"}
+    Version{"1.93"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2325,7 +2325,7 @@ it{
             ls{"Ora Standard Alaska"}
         }
         "meta:China"{
-            ld{"Ora Standard Cina"}
+            ld{"Ora Legale Cina"}
             ls{"Ora Standard Cina"}
             sd{"CDT (Cina)"}
             ss{"CST (Cina)"}

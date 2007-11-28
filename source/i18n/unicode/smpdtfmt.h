@@ -38,6 +38,7 @@ U_NAMESPACE_BEGIN
 
 class DateFormatSymbols;
 class DateFormat;
+class MessageFormat;
 
 /**
  *
@@ -650,13 +651,6 @@ private:
                                 UErrorCode& status) const; // in case of illegal argument
 
     /**
-     * Used to resolve Time Zone aliases
-     *
-     * @param zid       Time Zone ID to Canonicalize ( resolve aliases )
-     */
-    void zoneIDCanonicalize( UnicodeString & ) const;
-
-    /**
      * Used by subFormat() to format a numeric value.
      * Appends to toAppendTo a string representation of "value"
      * having a number of digits between "minDigits" and
@@ -767,6 +761,12 @@ private:
                   ParsePosition& pos,
                   UBool allowNegative) const;
 
+    void parseInt(const UnicodeString& text,
+                  Formattable& number,
+                  int32_t maxDigits,
+                  ParsePosition& pos,
+                  UBool allowNegative) const;
+
     /**
      * Translate a pattern, mapping each character in the from string to the
      * corresponding character in the to string. Return an error if the original
@@ -793,25 +793,22 @@ private:
      *                  if the operation succeeds.
      */
     void         parseAmbiguousDatesAsAfter(UDate startDate, UErrorCode& status);
-
-    /**
-     * Given text, a start in the text, and a row index, return the column index that
-     * of the zone name that matches (case insensitive) at start, or 0 if none matches.
-     *
-    int32_t      matchZoneString(const UnicodeString& text, int32_t start, int32_t zi) const;
-    */
-
-    /**
-     * Given text, a start in the text, and a calendar, return the next offset in the text
-     * after matching the zone string.  If we fail to match, return 0.  Update the calendar
-     * as appropriate.
-     */
-    int32_t      subParseZoneString(const UnicodeString& text, int32_t start, Calendar& cal, UErrorCode& status) const;
     
     /**
-     * append the gmt string
+     * Private methods for formatting/parsing GMT string
      */
-    inline void appendGMT(UnicodeString &appendTo, Calendar& cal, UErrorCode& status) const;
+    void appendGMT(UnicodeString &appendTo, Calendar& cal, UErrorCode& status) const;
+    void formatGMTDefault(UnicodeString &appendTo, int32_t offset) const;
+    int32_t parseGMT(const UnicodeString &text, ParsePosition &pos) const;
+    int32_t parseGMTDefault(const UnicodeString &text, ParsePosition &pos) const;
+    UBool isDefaultGMTFormat() const;
+
+    void formatRFC822TZ(UnicodeString &appendTo, int32_t offset) const;
+
+    /**
+     * Initialize MessageFormat instances used for GMT formatting/parsing
+     */
+    void initGMTFormatters(UErrorCode &status);
 
     /**
      * Used to map pattern characters to Calendar field identifiers.
@@ -854,7 +851,18 @@ private:
      */
     /*transient*/ int32_t   fDefaultCenturyStartYear;
 
-    /*transient*/ TimeZone* parsedTimeZone; // here to avoid api change
+    enum ParsedTZType {
+        TZTYPE_UNK,
+        TZTYPE_STD,
+        TZTYPE_DST
+    };
+
+    ParsedTZType tztype; // here to avoid api change
+
+    /*
+     * MessageFormat instances used for localized GMT format
+     */
+    MessageFormat   **fGMTFormatters;
 
     UBool fHaveDefaultCentury;
 };

@@ -46,14 +46,6 @@ static UBool compareRules(UVector* rules1, UVector* rules2) {
     return TRUE;
 }
 
-static UDate getTransitionTime(Transition* transition, UBool local) {
-    UDate time = transition->time;
-    if (local) {
-        time += transition->from->getRawOffset() + transition->from->getDSTSavings();
-    }
-    return time;
-}
-
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RuleBasedTimeZone)
 
 RuleBasedTimeZone::RuleBasedTimeZone(const UnicodeString& id, InitialTimeZoneRule* initialRule)
@@ -183,7 +175,7 @@ RuleBasedTimeZone::complete(UErrorCode& status) {
             for (i = 0; i < historicCount; i++) {
                 done[i] = FALSE;
             }
-            while (true) {
+            while (TRUE) {
                 int32_t curStdOffset = curRule->getRawOffset();
                 int32_t curDstSavings = curRule->getDSTSavings();
                 UDate nextTransitionTime = MAX_MILLIS;
@@ -377,7 +369,7 @@ RuleBasedTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t d
     }
     int32_t rawOffset, dstOffset;
     UDate time = (UDate)Grego::fieldsToDay(year, month, day) * U_MILLIS_PER_DAY + millis;
-    getOffset(time, true, rawOffset, dstOffset, status);
+    getOffsetInternal(time, TRUE, kDaylight, kStandard, rawOffset, dstOffset, status);
     if (U_FAILURE(status)) {
         return 0;
     }
@@ -387,6 +379,24 @@ RuleBasedTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t d
 void
 RuleBasedTimeZone::getOffset(UDate date, UBool local, int32_t& rawOffset,
                              int32_t& dstOffset, UErrorCode& status) const {
+    getOffsetInternal(date, local, kFormer, kLatter, rawOffset, dstOffset, status);
+}
+
+void
+RuleBasedTimeZone::getOffsetFromLocal(UDate date, int32_t nonExistingTimeOpt, int32_t duplicatedTimeOpt,
+                                      int32_t& rawOffset, int32_t& dstOffset, UErrorCode& status) /*const*/ {
+    getOffsetInternal(date, TRUE, nonExistingTimeOpt, duplicatedTimeOpt, rawOffset, dstOffset, status);
+}
+
+
+/*
+ * The internal getOffset implementation
+ */
+void
+RuleBasedTimeZone::getOffsetInternal(UDate date, UBool local,
+                                     int32_t NonExistingTimeOpt, int32_t DuplicatedTimeOpt,
+                                     int32_t& rawOffset, int32_t& dstOffset,
+                                     UErrorCode& status) const {
     rawOffset = 0;
     dstOffset = 0;
 
@@ -404,15 +414,17 @@ RuleBasedTimeZone::getOffset(UDate date, UBool local, int32_t& rawOffset,
     if (fHistoricTransitions == NULL) {
         rule = fInitialRule;
     } else {
-        UDate tstart = getTransitionTime((Transition*)fHistoricTransitions->elementAt(0), local);
+        UDate tstart = getTransitionTime((Transition*)fHistoricTransitions->elementAt(0),
+            local, NonExistingTimeOpt, DuplicatedTimeOpt);
         if (date < tstart) {
             rule = fInitialRule;
         } else {
             int32_t idx = fHistoricTransitions->size() - 1;
-            UDate tend = getTransitionTime((Transition*)fHistoricTransitions->elementAt(idx), local);
+            UDate tend = getTransitionTime((Transition*)fHistoricTransitions->elementAt(idx),
+                local, NonExistingTimeOpt, DuplicatedTimeOpt);
             if (date > tend) {
                 if (fFinalRules != NULL) {
-                    rule = findRuleInFinal(date, local);
+                    rule = findRuleInFinal(date, local, NonExistingTimeOpt, DuplicatedTimeOpt);
                 } else {
                     // no final rule, use the last rule
                     rule = ((Transition*)fHistoricTransitions->elementAt(idx))->to;
@@ -420,7 +432,8 @@ RuleBasedTimeZone::getOffset(UDate date, UBool local, int32_t& rawOffset,
             } else {
                 // Find a historical transition
                 while (idx >= 0) {
-                    if (date >= getTransitionTime((Transition*)fHistoricTransitions->elementAt(idx), local)) {
+                    if (date >= getTransitionTime((Transition*)fHistoricTransitions->elementAt(idx),
+                        local, NonExistingTimeOpt, DuplicatedTimeOpt)) {
                         break;
                     }
                     idx--;
@@ -651,7 +664,8 @@ RuleBasedTimeZone::copyRules(UVector* source) {
 }
 
 TimeZoneRule*
-RuleBasedTimeZone::findRuleInFinal(UDate date, UBool local) const {
+RuleBasedTimeZone::findRuleInFinal(UDate date, UBool local,
+                                   int32_t NonExistingTimeOpt, int32_t DuplicatedTimeOpt) const {
     if (fFinalRules == NULL) {
         return NULL;
     }
@@ -664,12 +678,25 @@ RuleBasedTimeZone::findRuleInFinal(UDate date, UBool local) const {
 
     UDate start0, start1;
     UDate base;
+    int32_t localDelta;
 
-    base = local ? date - fr1->getRawOffset() - fr1->getDSTSavings() : date;
-    UBool avail0 = fr0->getPreviousStart(base, fr1->getRawOffset(), fr1->getDSTSavings(), true, start0);
+    base = date;
+    if (local) {
+        localDelta = getLocalDelta(fr1->getRawOffset(), fr1->getDSTSavings(),
+                                   fr0->getRawOffset(), fr0->getDSTSavings(),
+                                   NonExistingTimeOpt, DuplicatedTimeOpt);
+        base -= localDelta;
+    }
+    UBool avail0 = fr0->getPreviousStart(base, fr1->getRawOffset(), fr1->getDSTSavings(), TRUE, start0);
 
-    base = local ? date - fr0->getRawOffset() - fr0->getDSTSavings() : date;
-    UBool avail1 = fr1->getPreviousStart(base, fr0->getRawOffset(), fr0->getDSTSavings(), true, start1);
+    base = date;
+    if (local) {
+        localDelta = getLocalDelta(fr0->getRawOffset(), fr0->getDSTSavings(),
+                                   fr1->getRawOffset(), fr1->getDSTSavings(),
+                                   NonExistingTimeOpt, DuplicatedTimeOpt);
+        base -= localDelta;
+    }
+    UBool avail1 = fr1->getPreviousStart(base, fr0->getRawOffset(), fr0->getDSTSavings(), TRUE, start1);
 
     if (avail0 && (!avail1 || start0 > start1)) {
         return fr0;
@@ -689,14 +716,14 @@ RuleBasedTimeZone::findNext(UDate base, UBool inclusive, UDate& transitionTime,
     UBool found = FALSE;
     Transition result;
     Transition *tzt = (Transition*)fHistoricTransitions->elementAt(0);
-    UDate tt = getTransitionTime(tzt, FALSE);
+    UDate tt = tzt->time;
     if (tt > base || (inclusive && tt == base)) {
         result = *tzt;
         found = TRUE;
     } else {
         int32_t idx = fHistoricTransitions->size() - 1;        
         tzt = (Transition*)fHistoricTransitions->elementAt(idx);
-        tt = getTransitionTime(tzt, FALSE);
+        tt = tzt->time;
         if (inclusive && tt == base) {
             result = *tzt;
             found = TRUE;
@@ -730,7 +757,7 @@ RuleBasedTimeZone::findNext(UDate base, UBool inclusive, UDate& transitionTime,
             Transition *prev = tzt;
             while (idx > 0) {
                 tzt = (Transition*)fHistoricTransitions->elementAt(idx);
-                tt = getTransitionTime(tzt, FALSE);
+                tt = tzt->time;
                 if (tt < base || (!inclusive && tt == base)) {
                     break;
                 }
@@ -772,14 +799,14 @@ RuleBasedTimeZone::findPrev(UDate base, UBool inclusive, UDate& transitionTime,
     UBool found = FALSE;
     Transition result;
     Transition *tzt = (Transition*)fHistoricTransitions->elementAt(0);
-    UDate tt = getTransitionTime(tzt, FALSE);
+    UDate tt = tzt->time;
     if (inclusive && tt == base) {
         result = *tzt;
         found = TRUE;
     } else if (tt < base) {
         int32_t idx = fHistoricTransitions->size() - 1;        
         tzt = (Transition*)fHistoricTransitions->elementAt(idx);
-        tt = getTransitionTime(tzt, FALSE);
+        tt = tzt->time;
         if (inclusive && tt == base) {
             result = *tzt;
             found = TRUE;
@@ -813,7 +840,7 @@ RuleBasedTimeZone::findPrev(UDate base, UBool inclusive, UDate& transitionTime,
             idx--;
             while (idx >= 0) {
                 tzt = (Transition*)fHistoricTransitions->elementAt(idx);
-                tt = getTransitionTime(tzt, FALSE);
+                tt = tzt->time;
                 if (tt < base || (inclusive && tt == base)) {
                     break;
                 }
@@ -837,6 +864,63 @@ RuleBasedTimeZone::findPrev(UDate base, UBool inclusive, UDate& transitionTime,
         return TRUE;
     }
     return FALSE;
+}
+
+UDate
+RuleBasedTimeZone::getTransitionTime(Transition* transition, UBool local,
+                                     int32_t NonExistingTimeOpt, int32_t DuplicatedTimeOpt) const {
+    UDate time = transition->time;
+    if (local) {
+        time += getLocalDelta(transition->from->getRawOffset(), transition->from->getDSTSavings(),
+                              transition->to->getRawOffset(), transition->to->getDSTSavings(),
+                              NonExistingTimeOpt, DuplicatedTimeOpt);
+    }
+    return time;
+}
+
+int32_t
+RuleBasedTimeZone::getLocalDelta(int32_t rawBefore, int32_t dstBefore, int32_t rawAfter, int32_t dstAfter,
+                             int32_t NonExistingTimeOpt, int32_t DuplicatedTimeOpt) const {
+    int32_t delta = 0;
+
+    int32_t offsetBefore = rawBefore + dstBefore;
+    int32_t offsetAfter = rawAfter + dstAfter;
+
+    UBool dstToStd = (dstBefore != 0) && (dstAfter == 0);
+    UBool stdToDst = (dstBefore == 0) && (dstAfter != 0);
+
+    if (offsetAfter - offsetBefore >= 0) {
+        // Positive transition, which makes a non-existing local time range
+        if (((NonExistingTimeOpt & kStdDstMask) == kStandard && dstToStd)
+                || ((NonExistingTimeOpt & kStdDstMask) == kDaylight && stdToDst)) {
+            delta = offsetBefore;
+        } else if (((NonExistingTimeOpt & kStdDstMask) == kStandard && stdToDst)
+                || ((NonExistingTimeOpt & kStdDstMask) == kDaylight && dstToStd)) {
+            delta = offsetAfter;
+        } else if ((NonExistingTimeOpt & kFormerLatterMask) == kLatter) {
+            delta = offsetBefore;
+        } else {
+            // Interprets the time with rule before the transition,
+            // default for non-existing time range
+            delta = offsetAfter;
+        }
+    } else {
+        // Negative transition, which makes a duplicated local time range
+        if (((DuplicatedTimeOpt & kStdDstMask) == kStandard && dstToStd)
+                || ((DuplicatedTimeOpt & kStdDstMask) == kDaylight && stdToDst)) {
+            delta = offsetAfter;
+        } else if (((DuplicatedTimeOpt & kStdDstMask) == kStandard && stdToDst)
+                || ((DuplicatedTimeOpt & kStdDstMask) == kDaylight && dstToStd)) {
+            delta = offsetBefore;
+        } else if ((DuplicatedTimeOpt & kFormerLatterMask) == kFormer) {
+            delta = offsetBefore;
+        } else {
+            // Interprets the time with rule after the transition,
+            // default for duplicated local time range
+            delta = offsetAfter;
+        }
+    }
+    return delta;
 }
 
 U_NAMESPACE_END

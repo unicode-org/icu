@@ -1918,7 +1918,7 @@ da{
             traditional{"traditionel sorteringsrækkefølge"}
         }
     }
-    Version{"1.89"}
+    Version{"1.90"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2270,7 +2270,6 @@ da{
             lg{"mellemeuropæisk tid"}
             ls{"mellemeuropæisk normaltid"}
             sd{"CEST"}
-            sg{"CET"}
             ss{"CET"}
         }
         "meta:Europe_Eastern"{
@@ -2279,7 +2278,6 @@ da{
             lg{"østeuropæisk tid"}
             ls{"østeuropæisk normaltid"}
             sd{"EEST"}
-            sg{"EET"}
             ss{"EET"}
         }
         "meta:Europe_Western"{
@@ -2287,22 +2285,13 @@ da{
             ld{"vesteuropæisk sommertid"}
             lg{"vesteuropæisk tid"}
             ls{"vesteuropæisk normaltid"}
-            sg{"WET"}
+            sd{"WEST"}
+            ss{"WET"}
         }
         "meta:GMT"{
             cu:int{1}
-            ld{"GMT-sommertid"}
-            lg{"verdenstid"}
             ls{"Verdenstid"}
-            sd{"GMT"}
-            sg{"GMT"}
             ss{"GMT"}
-        }
-        "meta:Hawaii"{
-            ld{"Hawaii-sommertid"}
-            ls{"Hawaii-normaltid"}
-            sd{"HDT"}
-            ss{"HST"}
         }
         "meta:Israel"{
             ld{"Israelsk sommertid"}

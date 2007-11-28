@@ -1413,7 +1413,7 @@ bg{
             traditional{"Традиционно"}
         }
     }
-    Version{"1.89"}
+    Version{"1.90"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2196,12 +2196,6 @@ bg{
         }
         "meta:GMT"{
             ls{"Часова зона Гринуич"}
-        }
-        "meta:Hawaii"{
-            ld{"Лятна часова зона Хавай"}
-            ls{"Часова зона Хавай"}
-            sd{"HDT"}
-            ss{"HST"}
         }
         "meta:Israel"{
             ld{"Лятна часова зона Израел"}

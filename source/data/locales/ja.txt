@@ -1975,7 +1975,7 @@ ja{
         POSIX{"コンピュータ"}
         REVISED{"改訂版"}
     }
-    Version{"1.114"}
+    Version{"1.115"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -3043,12 +3043,6 @@ ja{
         "meta:GMT"{
             ls{"グリニッジ標準時"}
             ss{"GMT"}
-        }
-        "meta:Hawaii"{
-            ld{"ハワイ夏時間"}
-            ls{"ハワイ標準時"}
-            sd{"HDT"}
-            ss{"HST"}
         }
         "meta:Israel"{
             ld{"イスラエル夏時間"}

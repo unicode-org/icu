@@ -1441,7 +1441,7 @@ cs{
             japanese{"Japonský kalendář"}
         }
     }
-    Version{"1.103"}
+    Version{"1.104"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1722,12 +1722,6 @@ cs{
         "meta:GMT"{
             ls{"Greenwichský střední čas"}
             ss{"GMT"}
-        }
-        "meta:Hawaii"{
-            ld{"Havajský letní čas"}
-            ls{"Havajský standardní čas"}
-            sd{"HDT"}
-            ss{"HST"}
         }
         "meta:Israel"{
             ld{"Izraelský letní čas"}
