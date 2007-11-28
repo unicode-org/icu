@@ -317,11 +317,11 @@ int32_t OlsonTimeZone::getOffset(uint8_t era, int32_t year, int32_t month,
                                     millis, monthLength, ec);
     }
 
-    // Compute local epoch seconds from input fields
-    double time = Grego::fieldsToDay(year, month, dom) * SECONDS_PER_DAY +
-        uprv_floor(millis / (double) U_MILLIS_PER_SECOND);
-
-    return zoneOffset(findTransition(time, TRUE)) * U_MILLIS_PER_SECOND;
+    // Compute local epoch millis from input fields
+    UDate date = (UDate)(Grego::fieldsToDay(year, month, dom) * U_MILLIS_PER_DAY + millis);
+    int32_t rawoff, dstoff;
+    getHistoricalOffset(date, TRUE, kDaylight, kStandard, rawoff, dstoff);
+    return rawoff + dstoff;
 }
 
 /**
@@ -332,39 +332,29 @@ void OlsonTimeZone::getOffset(UDate date, UBool local, int32_t& rawoff,
     if (U_FAILURE(ec)) {
         return;
     }
-
     // The check against finalMillis will suffice most of the time, except
     // for the case in which finalMillis == DBL_MAX, date == DBL_MAX,
     // and finalZone == 0.  For this case we add "&& finalZone != 0".
     if (date >= finalMillis && finalZone != 0) {
-        int32_t year, month, dom, dow;
-        double millis;
-        double days = Math::floorDivide(date, (double)U_MILLIS_PER_DAY, millis);
-        
-        Grego::dayToFields(days, year, month, dom, dow);
+        finalZone->getOffset(date, local, rawoff, dstoff, ec);
+    } else {
+        getHistoricalOffset(date, local, kFormer, kLatter, rawoff, dstoff);
+    }
+}
 
-        rawoff = finalZone->getRawOffset();
-
-        if (!local) {
-            // Adjust from GMT to local
-            date += rawoff;
-            double days2 = Math::floorDivide(date, (double)U_MILLIS_PER_DAY, millis);
-            if (days2 != days) {
-                Grego::dayToFields(days2, year, month, dom, dow);
-            }
-        }
-
-        dstoff = finalZone->getOffset(
-            GregorianCalendar::AD, year, month,
-            dom, (uint8_t) dow, (int32_t) millis, ec) - rawoff;
+void
+OlsonTimeZone::getOffsetFromLocal(UDate date, int32_t nonExistingTimeOpt, int32_t duplicatedTimeOpt,
+                                  int32_t& rawoff, int32_t& dstoff, UErrorCode& ec) /*const*/ {
+    if (U_FAILURE(ec)) {
         return;
     }
-
-    double secs = uprv_floor(date / U_MILLIS_PER_SECOND);
-    int16_t i = findTransition(secs, local);
-    rawoff = rawOffset(i) * U_MILLIS_PER_SECOND;
-    dstoff = dstOffset(i) * U_MILLIS_PER_SECOND;
+    if (date >= finalMillis && finalZone != 0) {
+        finalZone->getOffsetFromLocal(date, nonExistingTimeOpt, duplicatedTimeOpt, rawoff, dstoff, ec);
+    } else {
+        getHistoricalOffset(date, TRUE, nonExistingTimeOpt, duplicatedTimeOpt, rawoff, dstoff);
+    }
 }
+
 
 /**
  * TimeZone API.
@@ -394,69 +384,84 @@ void printTime(double ms) {
             double days = Math::floorDivide(((double)ms), (double)U_MILLIS_PER_DAY, millis);
             
             Grego::dayToFields(days, year, month, dom, dow);
-            U_DEBUG_TZ_MSG(("   findTransition:  time %.1f (%04d.%02d.%02d+%.1fh)\n", ms,
+            U_DEBUG_TZ_MSG(("   getHistoricalOffset:  time %.1f (%04d.%02d.%02d+%.1fh)\n", ms,
                             year, month+1, dom, (millis/kOneHour)));
     }
 #endif
 
-/**
- * Find the smallest i (in 0..transitionCount-1) such that time >=
- * transition(i), where transition(i) is either the GMT or the local
- * transition time, as specified by `local'.
- * @param time epoch seconds, either GMT or local wall
- * @param local if TRUE, `time' is in local wall units, otherwise it
- * is GMT
- * @return an index i, where 0 <= i < transitionCount, and
- * transition(i) <= time < transition(i+1), or i == 0 if
- * transitionCount == 0 or time < transition(0).
- */
-int16_t OlsonTimeZone::findTransition(double time, UBool local) const {
-    int16_t i = 0;
-    U_DEBUG_TZ_MSG(("findTransition(%.1f, %s)\n", time, local?"T":"F"));
+void
+OlsonTimeZone::getHistoricalOffset(UDate date, UBool local,
+                                   int32_t NonExistingTimeOpt, int32_t DuplicatedTimeOpt,
+                                   int32_t& rawoff, int32_t& dstoff) const {
+    U_DEBUG_TZ_MSG(("getHistoricalOffset(%.1f, %s, %d, %d, raw, dst)\n",
+        date, local?"T":"F", NonExistingTimeOpt, DuplicatedTimeOpt));
 #if defined U_DEBUG_TZ
-        printTime(time*1000.0);
+        printTime(date*1000.0);
 #endif
-    
     if (transitionCount != 0) {
+        double sec = uprv_floor(date / U_MILLIS_PER_SECOND);
         // Linear search from the end is the fastest approach, since
         // most lookups will happen at/near the end.
+        int16_t i;
         for (i = transitionCount - 1; i > 0; --i) {
             int32_t transition = transitionTimes[i];
-            if (local) {
-                int32_t zoneOffsetPrev = zoneOffset(typeData[i-1]);
-                int32_t zoneOffsetCurr = zoneOffset(typeData[i]);
-                
-                // use the lowest offset ( == standard time ). as per tzregts.cpp which says:
 
-                    /**
-                     * @bug 4084933
-                     * The expected behavior of TimeZone around the boundaries is:
-                     * (Assume transition time of 2:00 AM)
-                     *    day of onset 1:59 AM STD  = display name 1:59 AM ST
-                     *                 2:00 AM STD  = display name 3:00 AM DT
-                     *    day of end   0:59 AM STD  = display name 1:59 AM DT
-                     *                 1:00 AM STD  = display name 1:00 AM ST
-                     */
-                if(zoneOffsetPrev<zoneOffsetCurr) {
-                    transition += zoneOffsetPrev;
+            if (local) {
+                int32_t offsetBefore = zoneOffset(typeData[i-1]);
+                UBool dstBefore = dstOffset(typeData[i-1]) != 0;
+
+                int32_t offsetAfter = zoneOffset(typeData[i]);
+                UBool dstAfter = dstOffset(typeData[i]) != 0;
+
+                UBool dstToStd = dstBefore && !dstAfter;
+                UBool stdToDst = !dstBefore && dstAfter;
+                
+                if (offsetAfter - offsetBefore >= 0) {
+                    // Positive transition, which makes a non-existing local time range
+                    if (((NonExistingTimeOpt & kStdDstMask) == kStandard && dstToStd)
+                            || ((NonExistingTimeOpt & kStdDstMask) == kDaylight && stdToDst)) {
+                        transition += offsetBefore;
+                    } else if (((NonExistingTimeOpt & kStdDstMask) == kStandard && stdToDst)
+                            || ((NonExistingTimeOpt & kStdDstMask) == kDaylight && dstToStd)) {
+                        transition += offsetAfter;
+                    } else if ((NonExistingTimeOpt & kFormerLatterMask) == kLatter) {
+                        transition += offsetBefore;
+                    } else {
+                        // Interprets the time with rule before the transition,
+                        // default for non-existing time range
+                        transition += offsetAfter;
+                    }
                 } else {
-                    transition += zoneOffsetCurr;
+                    // Negative transition, which makes a duplicated local time range
+                    if (((DuplicatedTimeOpt & kStdDstMask) == kStandard && dstToStd)
+                            || ((DuplicatedTimeOpt & kStdDstMask) == kDaylight && stdToDst)) {
+                        transition += offsetAfter;
+                    } else if (((DuplicatedTimeOpt & kStdDstMask) == kStandard && stdToDst)
+                            || ((DuplicatedTimeOpt & kStdDstMask) == kDaylight && dstToStd)) {
+                        transition += offsetBefore;
+                    } else if ((DuplicatedTimeOpt & kFormerLatterMask) == kFormer) {
+                        transition += offsetBefore;
+                    } else {
+                        // Interprets the time with rule after the transition,
+                        // default for duplicated local time range
+                        transition += offsetAfter;
+                    }
                 }
             }
-            if (time >= transition) {
-                U_DEBUG_TZ_MSG(("Found@%d: time=%.1f, localtransition=%d (orig %d) dz %d\n", i, time, transition, transitionTimes[i],
+            if (sec >= transition) {
+                U_DEBUG_TZ_MSG(("Found@%d: time=%.1f, localtransition=%d (orig %d) dz %d\n", i, sec, transition, transitionTimes[i],
                     zoneOffset(typeData[i-1])));
 #if defined U_DEBUG_TZ
-        printTime(transition*1000.0);
-        printTime(transitionTimes[i]*1000.0);
+                printTime(transition*1000.0);
+                printTime(transitionTimes[i]*1000.0);
 #endif
                 break;
             } else {
-                U_DEBUG_TZ_MSG(("miss@%d: time=%.1f, localtransition=%d (orig %d) dz %d\n", i, time, transition, transitionTimes[i],
+                U_DEBUG_TZ_MSG(("miss@%d: time=%.1f, localtransition=%d (orig %d) dz %d\n", i, sec, transition, transitionTimes[i],
                     zoneOffset(typeData[i-1])));
 #if defined U_DEBUG_TZ
-        printTime(transition*1000.0);
-        printTime(transitionTimes[i]*1000.0);
+                printTime(transition*1000.0);
+                printTime(transitionTimes[i]*1000.0);
 #endif
             }
         }
@@ -465,17 +470,25 @@ int16_t OlsonTimeZone::findTransition(double time, UBool local) const {
 
         // Check invariants for GMT times; if these pass for GMT times
         // the local logic should be working too.
-        U_ASSERT(local || time < transitionTimes[0] || time >= transitionTimes[i]);
-        U_ASSERT(local || i == transitionCount-1 || time < transitionTimes[i+1]);
+        U_ASSERT(local || sec < transitionTimes[0] || sec >= transitionTimes[i]);
+        U_ASSERT(local || i == transitionCount-1 || sec < transitionTimes[i+1]);
 
-        U_DEBUG_TZ_MSG(("findTransition(%.1f, %s)= trans %d\n", time, local?"T":"F", i));
-        i = typeData[i];
+        U_DEBUG_TZ_MSG(("getHistoricalOffset(%.1f, %s, %d, %d, raw, dst) - trans %d\n",
+            date, local?"T":"F", NonExistingTimeOpt, DuplicatedTimeOpt, i));
+
+        // Since ICU tzdata 2007c, the first transition data is actually not a
+        // transition, but used for representing the initial offset.  So the code
+        // below works even if i == 0.
+        int16_t index = typeData[i];
+        rawoff = rawOffset(index) * U_MILLIS_PER_SECOND;
+        dstoff = dstOffset(index) * U_MILLIS_PER_SECOND;
+    } else {
+        // No transitions, single pair of offsets only
+        rawoff = rawOffset(0) * U_MILLIS_PER_SECOND;
+        dstoff = dstOffset(0) * U_MILLIS_PER_SECOND;
     }
-
-    U_ASSERT(i>=0 && i<typeCount);
-    
-    U_DEBUG_TZ_MSG(("findTransition(%.1f, %s)=%d, offset %d\n", time, local?"T":"F", i, zoneOffset(i)));
-    return i;
+    U_DEBUG_TZ_MSG(("getHistoricalOffset(%.1f, %s, %d, %d, raw, dst) - raw=%d, dst=%d\n",
+        date, local?"T":"F", NonExistingTimeOpt, DuplicatedTimeOpt, rawoff, dstoff));
 }
 
 /**

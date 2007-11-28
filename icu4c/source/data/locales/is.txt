@@ -1404,7 +1404,7 @@ is{
             traditional{"Hefðbundin"}
         }
     }
-    Version{"1.76"}
+    Version{"1.77"}
     calendar{
         gregorian{
             DateTimePatterns{

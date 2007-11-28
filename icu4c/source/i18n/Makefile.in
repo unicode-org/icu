@@ -78,7 +78,7 @@ name2uni.o uni2name.o nortrans.o quant.o transreg.o \
 regexcmp.o rematch.o repattrn.o regexst.o udatpg.o uregex.o uregexc.o \
 ulocdata.o measfmt.o currfmt.o curramt.o currunit.o measure.o utmscale.o \
 csdetect.o csmatch.o csr2022.o csrecog.o csrmbcs.o csrsbcs.o csrucode.o csrutf8.o inputext.o \
-windtfmt.o winnmfmt.o basictz.o dtrule.o rbtz.o tzrule.o tztrans.o vtzone.o
+windtfmt.o winnmfmt.o basictz.o dtrule.o rbtz.o tzrule.o tztrans.o vtzone.o zonemeta.o zstrfmt.o
 
 ## Header files to install
 HEADERS = $(srcdir)/unicode/*.h

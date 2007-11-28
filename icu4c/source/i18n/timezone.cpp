@@ -88,6 +88,7 @@ static char gStrBuf[256];
 #define kDEFAULT  "Default"
 #define kMAX_CUSTOM_HOUR    23
 #define kMAX_CUSTOM_MIN     59
+#define kMAX_CUSTOM_SEC     59
 #define MINUS 0x002D
 #define PLUS 0x002B
 #define ZERO_DIGIT 0x0030
@@ -687,36 +688,40 @@ void TimeZone::getOffset(UDate date, UBool local, int32_t& rawOffset,
     }
 
     rawOffset = getRawOffset();
-
-    // Convert to local wall millis if necessary
     if (!local) {
         date += rawOffset; // now in local standard millis
     }
 
-    // When local==FALSE, we might have to recompute. This loop is
-    // executed once, unless a recomputation is required; then it is
-    // executed twice.
+    // When local == TRUE, date might not be in local standard
+    // millis.  getOffset taking 7 parameters used here assume
+    // the given time in day is local standard time.
+    // At STD->DST transition, there is a range of time which
+    // does not exist.  When 'date' is in this time range
+    // (and local == TRUE), this method interprets the specified
+    // local time as DST.  At DST->STD transition, there is a
+    // range of time which occurs twice.  In this case, this
+    // method interprets the specified local time as STD.
+    // To support the behavior above, we need to call getOffset
+    // (with 7 args) twice when local == true and DST is
+    // detected in the initial call.
     for (int32_t pass=0; ; ++pass) {
         int32_t year, month, dom, dow;
         double day = uprv_floor(date / U_MILLIS_PER_DAY);
         int32_t millis = (int32_t) (date - day * U_MILLIS_PER_DAY);
-        
+
         Grego::dayToFields(day, year, month, dom, dow);
-        
+
         dstOffset = getOffset(GregorianCalendar::AD, year, month, dom,
                               (uint8_t) dow, millis,
                               Grego::monthLength(year, month),
                               ec) - rawOffset;
 
-        // Recompute if local==FALSE, dstOffset!=0, and addition of
-        // the dstOffset puts us in a different day.
-        if (pass!=0 || local || dstOffset==0) {
+        // Recompute if local==TRUE, dstOffset!=0.
+        if (pass!=0 || !local || dstOffset == 0) {
             break;
         }
-        date += dstOffset;
-        if (uprv_floor(date / U_MILLIS_PER_DAY) == day) {
-            break;
-        }
+        // adjust to local standard millis
+        date -= dstOffset;
     }
 }
 
@@ -1093,6 +1098,33 @@ TimeZone::getEquivalentID(const UnicodeString& id, int32_t index) {
 
 // ---------------------------------------
 
+UnicodeString&
+TimeZone::getOlsonCanonicalID(const UnicodeString &id, UnicodeString &canonical) {
+    UErrorCode ec = U_ZERO_ERROR;
+    canonical.remove();
+    UResourceBundle *top = ures_openDirect(0, kZONEINFO, &ec);
+    UResourceBundle *res = getZoneByName(top, id, NULL, ec);
+    if (U_SUCCESS(ec)) {
+        if (ures_getSize(res) == 1) {
+            int32_t deref = ures_getInt(res, &ec);
+            UResourceBundle *nres = ures_getByKey(top, kNAMES, NULL, &ec); // dereference Names section
+            int32_t len;
+            const UChar* tmp = ures_getStringByIndex(nres, deref, &len, &ec);
+            if (U_SUCCESS(ec)) {
+                canonical.setTo(tmp, len);
+            }
+            ures_close(nres);
+        } else {
+            canonical.setTo(id);
+        }
+    }
+    ures_close(res);
+    ures_close(top);
+    return canonical;
+}
+
+// ---------------------------------------
+
 
 UnicodeString&
 TimeZone::getDisplayName(UnicodeString& result) const
@@ -1192,11 +1224,12 @@ TimeZone::createCustomTimeZone(const UnicodeString& id)
         UBool negative = FALSE;
         int32_t hour = 0;
         int32_t min = 0;
+        int32_t sec = 0;
 
         if (id[pos.getIndex()] == MINUS /*'-'*/)
             negative = TRUE;
         else if (id[pos.getIndex()] != PLUS /*'+'*/)
-            return 0;
+            return NULL;
         pos.setIndex(pos.getIndex() + 1);
 
         UErrorCode success = U_ZERO_ERROR;
@@ -1215,75 +1248,125 @@ TimeZone::createCustomTimeZone(const UnicodeString& id)
         numberFormat->parse(id, n, pos);
         if (pos.getIndex() == start) {
             delete numberFormat;
-            return 0;
+            return NULL;
         }
         hour = n.getLong();
 
-        if (pos.getIndex() < id.length() &&
-            id[pos.getIndex()] == 0x003A /*':'*/)
-        {
+        if (pos.getIndex() < id.length()) {
+            if (pos.getIndex() - start > 2
+                || id[pos.getIndex()] != 0x003A /*':'*/) {
+                delete numberFormat;
+                return NULL;
+            }
             // hh:mm
             pos.setIndex(pos.getIndex() + 1);
             int32_t oldPos = pos.getIndex();
             n.setLong(kParseFailed);
             numberFormat->parse(id, n, pos);
-            if (pos.getIndex() == oldPos) {
+            if ((pos.getIndex() - oldPos) != 2) {
+                // must be 2 digits
                 delete numberFormat;
-                return 0;
+                return NULL;
             }
             min = n.getLong();
-        }
-        else 
-        {
-            // hhmm or hh
+            if (pos.getIndex() < id.length()) {
+                if (id[pos.getIndex()] != 0x003A /*':'*/) {
+                    delete numberFormat;
+                    return NULL;
+                }
+                // [:ss]
+                pos.setIndex(pos.getIndex() + 1);
+                oldPos = pos.getIndex();
+                n.setLong(kParseFailed);
+                numberFormat->parse(id, n, pos);
+                if (pos.getIndex() != id.length()
+                        || (pos.getIndex() - oldPos) != 2) {
+                    delete numberFormat;
+                    return NULL;
+                }
+                sec = n.getLong();
+            }
+        } else {
+            // Supported formats are below -
+            //
+            // HHmmss
+            // Hmmss
+            // HHmm
+            // Hmm
+            // HH
+            // H
 
-            // Be strict about interpreting something as hh; it must be
-            // an offset < 23, and it must be one or two digits. Thus
-            // 0010 is interpreted as 00:10, but 10 is interpreted as
-            // 10:00.
-            if (hour > kMAX_CUSTOM_HOUR || (pos.getIndex() - start) > 2) {
-                min = hour % 100;
-                hour /= 100;
+            int32_t length = pos.getIndex() - start;
+            if (length <= 0 || 6 < length) {
+                // invalid length
+                delete numberFormat;
+                return NULL;
+            }
+            switch (length) {
+                case 1:
+                case 2:
+                    // already set to hour
+                    break;
+                case 3:
+                case 4:
+                    min = hour % 100;
+                    hour /= 100;
+                    break;
+                case 5:
+                case 6:
+                    sec = hour % 100;
+                    min = (hour/100) % 100;
+                    hour /= 10000;
+                    break;
             }
         }
 
         delete numberFormat;
 
-        if (hour > kMAX_CUSTOM_HOUR || min > kMAX_CUSTOM_MIN) {
+        if (hour > kMAX_CUSTOM_HOUR || min > kMAX_CUSTOM_MIN || sec > kMAX_CUSTOM_SEC) {
             return 0;
         }
 
-        // Create time zone ID in RFC822 format - GMT[+|-]hhmm
-        UnicodeString tzRFC(GMT_ID);
-        if (hour|min) {
+        // Create time zone ID - GMT[+|-]hhmm[ss]
+        UnicodeString tzID(GMT_ID);
+        if (hour | min | sec) {
             if (negative) {
-                tzRFC += (UChar)MINUS;
+                tzID += (UChar)MINUS;
             } else {
-                tzRFC += (UChar)PLUS;
+                tzID += (UChar)PLUS;
             }
 
             if (hour < 10) {
-                tzRFC += (UChar)ZERO_DIGIT;
+                tzID += (UChar)ZERO_DIGIT;
             } else {
-                tzRFC += (UChar)(ZERO_DIGIT + hour/10);
+                tzID += (UChar)(ZERO_DIGIT + hour/10);
             }
-            tzRFC += (UChar)(ZERO_DIGIT + hour%10);
+            tzID += (UChar)(ZERO_DIGIT + hour%10);
 
             if (min < 10) {
-                tzRFC += (UChar)ZERO_DIGIT;
+                tzID += (UChar)ZERO_DIGIT;
             } else {
-                tzRFC += (UChar)(ZERO_DIGIT + min/10);
+                tzID += (UChar)(ZERO_DIGIT + min/10);
             }
-            tzRFC += (UChar)(ZERO_DIGIT + min%10);
+            tzID += (UChar)(ZERO_DIGIT + min%10);
+
+            if (sec) {
+                if (sec < 10) {
+                    tzID += (UChar)ZERO_DIGIT;
+                } else {
+                    tzID += (UChar)(ZERO_DIGIT + sec/10);
+                }
+                tzID += (UChar)(ZERO_DIGIT + sec%10);
+            }
         }
 
-        int32_t offset = (hour * 60 + min) * 60 * 1000;
-        if(negative) {
+        int32_t offset = ((hour * 60 + min) * 60 + sec) * 1000;
+        if (negative) {
             offset = -offset;
         }
-        return new SimpleTimeZone(offset, tzRFC);
+        return new SimpleTimeZone(offset, tzID);
     }
-    return 0;
+    return NULL;
 }
 
 

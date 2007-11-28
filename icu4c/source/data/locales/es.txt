@@ -1953,7 +1953,7 @@ es{
     Variants{
         REVISED{"Ortografía revisada"}
     }
-    Version{"1.98"}
+    Version{"1.99"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2496,7 +2496,7 @@ es{
         "meta:China"{
             ld{"Hora de verano de China"}
             ls{"Hora estándar de China"}
-            ss{"CTT"}
+            ss{"CST (China)"}
         }
         "meta:Europe_Central"{
             ld{"Hora de verano de Europa Central"}
@@ -2514,11 +2514,8 @@ es{
             ls{"Hora media de Greenwich"}
             ss{"GMT"}
         }
-        "meta:Hawaii"{
+        "meta:Hawaii_Aleutian"{
             cu:int{1}
-            ld{"Hora de verano de Hawai"}
-            ls{"Hora estándar de Hawai"}
-            sd{"HDT"}
             ss{"HST"}
         }
         "meta:Israel"{
@@ -2536,7 +2533,7 @@ es{
         "meta:Newfoundland"{
             ld{"Hora de verano de Newfoundland"}
             ls{"Hora estándar de Newfoundland"}
-            ss{"CNT"}
+            ss{"NST"}
         }
     }
 }

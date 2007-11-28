@@ -2069,7 +2069,7 @@ fi{
         SCOUSE{"englannin scouse-murre"}
         VALENCIA{"katalaanin valencia-murre"}
     }
-    Version{"1.95"}
+    Version{"1.96"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2755,13 +2755,6 @@ fi{
         }
         "meta:Guyana"{
             cu:int{0}
-        }
-        "meta:Hawaii"{
-            cu:int{0}
-            ld{"Havaijin kesäaika"}
-            ls{"Havaijin normaaliaika"}
-            sd{"HDT"}
-            ss{"HST"}
         }
         "meta:Hawaii_Aleutian"{
             cu:int{0}

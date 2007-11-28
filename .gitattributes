@@ -3,6 +3,7 @@ icu4c/license.html svneol=native#text/html
 icu4c/readme.html svneol=native#text/html
 icu4c/source/data/build.xml svneol=native#text/xml
 icu4c/source/data/icu-config.xml svneol=native#text/xml
+icu4c/source/data/misc/metazoneInfo.txt -text
 icu4c/source/data/xml/brkitr/en.xml svneol=native#text/xml
 icu4c/source/data/xml/brkitr/en_US.xml svneol=native#text/xml
 icu4c/source/data/xml/brkitr/en_US_POSIX.xml svneol=native#text/xml

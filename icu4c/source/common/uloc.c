@@ -170,7 +170,7 @@ static const char * const LANGUAGES[] = {
     "ty",  "tyv", "udm", "ug",  "uga", "uk",  "umb", "und", "ur",
     "uz",  "vai", "ve",  "vi",  "vo",  "vot", "wa",  "wak",
     "wal", "war", "was", "wen", "wo",  "xal", "xh",  "yao", "yap",
-    "yi",  "yo",  "ypk", "za",  "zap", "zen", "zh",  "znd",
+    "yi",  "yo",  "ypk", "za",  "zap", "zbl", "zen", "zh",  "znd",
     "zu",  "zun", "zxx", "zza",
 NULL,
     "in",  "iw",  "ji",  "jw",  "sh",    /* obsolete language codes */
@@ -310,8 +310,8 @@ static const char * const LANGUAGES_3[] = {
     "uzb", "vai", "ven", "vie", "vol", "vot", "wln", "wak",
 /*  "wal", "war", "was", "wen", "wo",  "xal", "xh",  "yao", "yap",    */
     "wal", "war", "was", "wen", "wol", "xal", "xho", "yao", "yap",
-/*  "yi",  "yo",  "ypk", "za",  "zap", "zen", "zh",  "znd",    */
-    "yid", "yor", "ypk", "zha", "zap", "zen", "zho", "znd",
+/*  "yi",  "yo",  "ypk", "za",  "zap", "zbl", "zen", "zh",  "znd",    */
+    "yid", "yor", "ypk", "zha", "zap", "zbl", "zen", "zho", "znd",
 /*  "zu",  "zun", "zxx", "zza",                                         */
     "zul", "zun", "zxx", "zza",
 NULL,

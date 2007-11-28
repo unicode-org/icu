@@ -617,6 +617,13 @@ public:
                            int32_t& dstOffset, UErrorCode& ec) const;
 
     /**
+     * Get time zone offsets from local wall time.
+     * @internal
+     */
+    virtual void getOffsetFromLocal(UDate date, int32_t nonExistingTimeOpt, int32_t duplicatedTimeOpt,
+        int32_t& rawOffset, int32_t& dstOffset, UErrorCode& status) /*const*/;
+
+    /**
      * Returns the TimeZone's raw GMT offset (i.e., the number of milliseconds to add
      * to GMT to get local time, before taking daylight savings time into account).
      *

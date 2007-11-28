@@ -1996,7 +1996,7 @@ nl{
         SAAHO{"Saho"}
         SCOUSE{"Liverpools (Scouse)"}
     }
-    Version{"1.93"}
+    Version{"1.94"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -2515,12 +2515,6 @@ nl{
         "meta:GMT"{
             ls{"Greenwich Mean Time"}
             ss{"GMT"}
-        }
-        "meta:Hawaii"{
-            ld{"Hawaï-zomertijd"}
-            ls{"Hawaï-standaardtijd"}
-            sd{"HDT"}
-            ss{"HST"}
         }
         "meta:Israel"{
             ld{"Israëlische zomertijd"}

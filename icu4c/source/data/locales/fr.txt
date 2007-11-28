@@ -2023,7 +2023,7 @@ fr{
         SCOUSE{"dialecte scouse"}
         VALENCIA{"valencien"}
     }
-    Version{"1.106"}
+    Version{"1.107"}
     calendar{
         chinese{
             monthNames{
@@ -2638,13 +2638,6 @@ fr{
             ls{"Heure normale de l’Europe de l’Est"}
             sd{"HAEE"}
             ss{"HEE"}
-        }
-        "meta:Hawaii"{
-            ld{"Heure avancée d’Hawaï"}
-            lg{"Heure d’Hawaï"}
-            ls{"Heure normale d’Hawaï"}
-            sd{"HDT"}
-            ss{"HST"}
         }
         "meta:Israel"{
             ld{"Heure avancée d’Israël"}

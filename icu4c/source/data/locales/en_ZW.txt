@@ -19,7 +19,7 @@ en_ZW{
         "#,##0%",
         "#E0",
     }
-    Version{"1.42"}
+    Version{"1.43"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
