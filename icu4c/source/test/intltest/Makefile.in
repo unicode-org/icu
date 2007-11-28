@@ -56,7 +56,7 @@ jamotest.o srchtest.o reptest.o regextst.o \
 itrbnf.o itrbnfrt.o itrbnfp.o ucaconf.o icusvtst.o \
 uobjtest.o idnaref.o idnaconf.o nptrans.o punyref.o testidn.o testidna.o incaltst.o \
 calcasts.o v32test.o uvectest.o textfile.o tokiter.o utxttest.o \
-windttst.o winnmtst.o winutil.o csdetest.o tzrulets.o
+windttst.o winnmtst.o winutil.o csdetest.o tzrulets.o tzoffloc.o tzfmttst.o
 
 
 DEPS = $(OBJECTS:.o=.d)

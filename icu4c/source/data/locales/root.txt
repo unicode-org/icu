@@ -70,7 +70,7 @@ root{
         297,
         210,
     }
-    Version{"1.121"}
+    Version{"1.123"}
     calendar{
         buddhist{
             AmPmMarkers{
@@ -5075,7 +5075,7 @@ root{
                     "1994-04-30 21:00",
                 }
                 mz3{
-                    "Moscow",
+                    "Europe_Eastern",
                     "1997-03-30 01:00",
                     "9999-12-31 23:59",
                 }

@@ -170,24 +170,32 @@ UDate
 DateFormat::parse(const UnicodeString& text,
                   ParsePosition& pos) const
 {
+    UDate d = 0; // Error return UDate is 0 (the epoch)
     if (fCalendar != NULL) {
         int32_t start = pos.getIndex();
+
+        // Parse may update TimeZone used by the calendar.
+        TimeZone *tzsav = (TimeZone*)fCalendar->getTimeZone().clone();
+
         fCalendar->clear();
         parse(text, *fCalendar, pos);
         if (pos.getIndex() != start) {
             UErrorCode ec = U_ZERO_ERROR;
-            UDate d = fCalendar->getTime(ec);
-            if (U_SUCCESS(ec)) {
-                return d; // Successful function exit
+            d = fCalendar->getTime(ec);
+            if (U_FAILURE(ec)) {
+                // We arrive here if fCalendar is non-lenient and there
+                // is an out-of-range field.  We don't know which field
+                // was illegal so we set the error index to the start.
+                pos.setIndex(start);
+                pos.setErrorIndex(start);
+                d = 0;
             }
-            // We arrive here if fCalendar is non-lenient and there
-            // is an out-of-range field.  We don't know which field
-            // was illegal so we set the error index to the start.
-            pos.setIndex(start);
-            pos.setErrorIndex(start);
         }
+
+        // Restore TimeZone
+        fCalendar->adoptTimeZone(tzsav);
     }
-    return 0; // Error return UDate is 0 (the epoch)
+    return d;
 }
 
 //----------------------------------------------------------------------

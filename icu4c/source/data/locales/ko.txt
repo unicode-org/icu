@@ -1906,7 +1906,7 @@ ko{
     Variants{
         REVISED{"개정"}
     }
-    Version{"1.95"}
+    Version{"1.96"}
     calendar{
         buddhist{
             eras{
@@ -2950,12 +2950,6 @@ ko{
         "meta:GMT"{
             ls{"그리니치 표준시"}
             ss{"GMT"}
-        }
-        "meta:Hawaii"{
-            ld{"하와이 하계 표준시"}
-            ls{"하와이 표준시"}
-            sd{"HDT"}
-            ss{"HST"}
         }
         "meta:Israel"{
             ld{"이스라엘 하계 표준시"}

@@ -69,21 +69,20 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCASE(23,TestGreekMay);
         TESTCASE(24,TestGenericTime);
         TESTCASE(25,TestGenericTimeZoneOrder);
-        TESTCASE(26,TestTimeZoneStringsAPI);
-        TESTCASE(27,TestHost);
-        TESTCASE(28,TestEras);
-        TESTCASE(29,TestNarrowNames);
-        TESTCASE(30,TestStandAloneDays);
-        TESTCASE(31,TestStandAloneMonths);
-        TESTCASE(32,TestQuarters);
-        TESTCASE(33,TestZTimeZoneParsing);
-        TESTCASE(34,TestRelative);
-        TESTCASE(35,TestRelativeClone);
-        TESTCASE(36,TestHostClone);
-        TESTCASE(37,TestTimeZoneDisplayName);
+        TESTCASE(26,TestHost);
+        TESTCASE(27,TestEras);
+        TESTCASE(28,TestNarrowNames);
+        TESTCASE(29,TestStandAloneDays);
+        TESTCASE(30,TestStandAloneMonths);
+        TESTCASE(31,TestQuarters);
+        TESTCASE(32,TestZTimeZoneParsing);
+        TESTCASE(33,TestRelative);
+        TESTCASE(34,TestRelativeClone);
+        TESTCASE(35,TestHostClone);
+        TESTCASE(36,TestTimeZoneDisplayName);
         /*
-        TESTCASE(38,TestRelativeError);
-        TESTCASE(39,TestRelativeOther);
+        TESTCASE(37,TestRelativeError);
+        TESTCASE(38,TestRelativeOther);
         */
         default: name = ""; break;
     }
@@ -100,7 +99,7 @@ void DateFormatTest::TestWallyWedel()
     /*
      * Computational variables.
      */
-    int32_t offset, hours, minutes;
+    int32_t offset, hours, minutes, seconds;
     /*
      * Instantiate a SimpleDateFormat set up to produce a full time
      zone name.
@@ -141,8 +140,12 @@ void DateFormatTest::TestWallyWedel()
         }
         hours = offset/3600000;
         minutes = (offset%3600000)/60000;
+        seconds = (offset%60000)/1000;
         UnicodeString dstOffset = (UnicodeString)"" + sign + (hours < 10 ? "0" : "") +
             (int32_t)hours + ":" + (minutes < 10 ? "0" : "") + (int32_t)minutes;
+        if (seconds != 0) {
+            dstOffset = dstOffset + ":" + (seconds < 10 ? "0" : "") + seconds;
+        }
         /*
          * Instantiate a date so we can display the time zone name.
          */
@@ -382,7 +385,7 @@ void DateFormatTest::TestFieldPosition() {
         "Wed", "225", "2", "33", "3", "PM", "2", "2", "PDT", "1997", "4", "1997", "2450674", "52452513", "-0700", "PT",  "4", "8", "3", "3","PDT",
 
         "Anno Domini", "1997", "August", "0013", "0014", "0014", "0034", "0012", "5130",
-        "Wednesday", "0225", "0002", "0033", "0003", "PM", "0002", "0002", "Pacific Daylight Time", "1997", "0004", "1997", "2450674", "52452513", "-0700",
+        "Wednesday", "0225", "0002", "0033", "0003", "PM", "0002", "0002", "Pacific Daylight Time", "1997", "0004", "1997", "2450674", "52452513", "GMT-07:00",
         "Pacific Time",  "Wednesday", "August", "3rd quarter", "3rd quarter", "United States (Los Angeles)"
     };
 
@@ -1752,7 +1755,7 @@ void DateFormatTest::TestGenericTime() {
         "y/M/d H:mm zzzz", "F", "2004 01 01 01:00 PST", "2004/1/1 1:00 Pacific Standard Time",
         "y/M/d H:mm zzz", "F", "2004 01 01 01:00 PST", "2004/1/1 1:00 PST",
         "y/M/d H:mm vvvv", "F", "2004 01 01 01:00 PST", "2004/1/1 1:00 Pacific Time",
-        "y/M/d H:mm vvv", "F", "2004 01 01 01:00 PST", "2004/1/1 1:00 PT",
+        "y/M/d H:mm v", "F", "2004 01 01 01:00 PST", "2004/1/1 1:00 PT",
         // non-generic timezone string influences dst offset even if wrong for date/time
         "y/M/d H:mm zzz", "pf", "2004/1/1 1:00 PDT", "2004 01 01 01:00 PDT", "2004/1/1 0:00 PST",
         "y/M/d H:mm vvvv", "pf", "2004/1/1 1:00 PDT", "2004 01 01 01:00 PDT", "2004/1/1 0:00 Pacific Time",
@@ -1765,21 +1768,25 @@ void DateFormatTest::TestGenericTime() {
         "y/M/d H:mm vvvv", "pf", "2004/7/1 1:00 PT", "2004 07 01 01:00 PDT", "2004/7/1 1:00 Pacific Time",
         // daylight savings time transition edge cases.
         // time to parse does not really exist, PT interpreted as earlier time
-        "y/M/d H:mm zzz", "pf", "2005/4/3 2:30 PT", "2005 04 03 01:30 PST", "2005/4/3 1:30 PST", // adjust earlier
+        "y/M/d H:mm zzz", "pf", "2005/4/3 2:30 PT", "2005 04 03 03:30 PDT", "2005/4/3 3:30 PDT",
         "y/M/d H:mm zzz", "pf", "2005/4/3 2:30 PST", "2005 04 03 03:30 PDT", "2005/4/3 3:30 PDT",
         "y/M/d H:mm zzz", "pf", "2005/4/3 2:30 PDT", "2005 04 03 01:30 PST", "2005/4/3 1:30 PST",
-        "y/M/d H:mm vvv", "pf", "2005/4/3 2:30 PT", "2005 04 03 01:30 PST", "2005/4/3 1:30 PT", // adjust earlier
-        "y/M/d H:mm vvv", "pf", "2005/4/3 2:30 PST", "2005 04 03 03:30 PDT", "2005/4/3 3:30 PT",
-        "y/M/d H:mm vvv", "pf", "2005/4/3 2:30 PDT", "2005 04 03 01:30 PST", "2005/4/3 1:30 PT",
-        "y/M/d H:mm", "pf", "2005/4/3 2:30", "2005 04 03 01:30 PST", "2005/4/3 1:30",
-        // time to parse is ambiguous, PT interpreted as LATER time (?)
-        "y/M/d H:mm zzz", "pf", "2004/10/31 1:30 PT", "2004 10 31 01:30 PST", "2004/10/31 1:30 PST", // 1:30a PT -> 1:30a PST (later)
+        "y/M/d H:mm v", "pf", "2005/4/3 2:30 PT", "2005 04 03 03:30 PDT", "2005/4/3 3:30 PT",
+        "y/M/d H:mm v", "pf", "2005/4/3 2:30 PST", "2005 04 03 03:30 PDT", "2005/4/3 3:30 PT",
+        "y/M/d H:mm v", "pf", "2005/4/3 2:30 PDT", "2005 04 03 01:30 PST", "2005/4/3 1:30 PT",
+        "y/M/d H:mm", "pf", "2005/4/3 2:30", "2005 04 03 03:30 PDT", "2005/4/3 3:30",
+        // time to parse is ambiguous, PT interpreted as later time
+        "y/M/d H:mm zzz", "pf", "2005/10/30 1:30 PT", "2005 10 30 01:30 PST", "2005/10/30 1:30 PST",
+        "y/M/d H:mm v", "pf", "2005/10/30 1:30 PT", "2005 10 30  01:30 PST", "2005/10/30 1:30 PT",
+        "y/M/d H:mm", "pf", "2005/10/30 1:30 PT", "2005 10 30 01:30 PST", "2005/10/30 1:30",
+
+        "y/M/d H:mm zzz", "pf", "2004/10/31 1:30 PT", "2004 10 31 01:30 PST", "2004/10/31 1:30 PST",
         "y/M/d H:mm zzz", "pf", "2004/10/31 1:30 PST", "2004 10 31 01:30 PST", "2004/10/31 1:30 PST",
         "y/M/d H:mm zzz", "pf", "2004/10/31 1:30 PDT", "2004 10 31 01:30 PDT", "2004/10/31 1:30 PDT",
-        "y/M/d H:mm vvv", "pf", "2004/10/31 1:30 PT", "2004 10 31 01:30 PST", "2004/10/31 1:30 PT", // 1:30a PT -> 1:30a PST (later)
-        "y/M/d H:mm vvv", "pf", "2004/10/31 1:30 PST", "2004 10 31 01:30 PST", "2004/10/31 1:30 PT",
-        "y/M/d H:mm vvv", "pf", "2004/10/31 1:30 PDT", "2004 10 31 01:30 PDT", "2004/10/31 1:30 PT",
-        "y/M/d H:mm", "pf", "2004/10/31 1:30", "2004 10 31 01:30 PST", "2004/10/31 1:30", // 1:30a PT -> 1:30a PST (later)
+        "y/M/d H:mm v", "pf", "2004/10/31 1:30 PT", "2004 10 31 01:30 PST", "2004/10/31 1:30 PT",
+        "y/M/d H:mm v", "pf", "2004/10/31 1:30 PST", "2004 10 31 01:30 PST", "2004/10/31 1:30 PT",
+        "y/M/d H:mm v", "pf", "2004/10/31 1:30 PDT", "2004 10 31 01:30 PDT", "2004/10/31 1:30 PT",
+        "y/M/d H:mm", "pf", "2004/10/31 1:30", "2004 10 31 01:30 PST", "2004/10/31 1:30",
   };
   const int32_t ZDATA_length = sizeof(ZDATA)/ sizeof(ZDATA[0]);
   expect(ZDATA, ZDATA_length, en);
@@ -1862,66 +1869,6 @@ void DateFormatTest::TestGenericTimeZoneOrder() {
   const int32_t XDATA_length = sizeof(XDATA)/sizeof(XDATA[0]);
   Locale en("en");
   expect(XDATA, XDATA_length, en);
-}
-
-void DateFormatTest::TestTimeZoneStringsAPI() {
-    // Verify data
-    UErrorCode status  = U_ZERO_ERROR;
-    DateFormatSymbols symbols(Locale::getUS(), status);
-    StringEnumeration* keys = symbols.createZoneStringIDs(status);
-    if(U_FAILURE(status)){
-        errln("Could not create the StringEnumeration for Locale::getUS(). Error: %s", u_errorName(status)); 
-        return;
-    }
-    
-    StringEnumeration* keys2 = symbols.createZoneStringIDs(status);
-    ASSERT_OK(status);
-     if(*keys2!=*keys){
-        errln("operator!= failed for TimeZoneStringsEnum");
-    }
-    const UnicodeString* key = NULL;
-
-    while( (key = keys->snext(status))!=NULL){ 
-        logln(prettify(*key)); 
-    }
-    if(U_FAILURE(status)){
-        errln("Could not iterate over the StringEnumeration. Error: %s", u_errorName(status)); 
-        return;
-    }
-    UnicodeString expectedKey("meta/Alaska");
-    UnicodeString expectedStrs[DateFormatSymbols::TIMEZONE_COUNT];
-    expectedStrs[DateFormatSymbols::TIMEZONE_SHORT_GENERIC].setTo("AKT");
-    expectedStrs[DateFormatSymbols::TIMEZONE_SHORT_STANDARD].setTo("AKST");
-    expectedStrs[DateFormatSymbols::TIMEZONE_SHORT_DAYLIGHT].setTo("AKDT");
-    expectedStrs[DateFormatSymbols::TIMEZONE_LONG_GENERIC].setTo("Alaska Time");
-    expectedStrs[DateFormatSymbols::TIMEZONE_LONG_STANDARD].setTo("Alaska Standard Time");
-    expectedStrs[DateFormatSymbols::TIMEZONE_LONG_DAYLIGHT].setTo("Alaska Daylight Time");
-    expectedStrs[DateFormatSymbols::TIMEZONE_EXEMPLAR_CITY].setTo("");
-    for(int32_t i=0; i<DateFormatSymbols::TIMEZONE_COUNT; i++){
-        UnicodeString result;
-        result = symbols.getZoneString(expectedKey, (DateFormatSymbols::TimeZoneTranslationType)i, result,status);
-        if(U_FAILURE(status)){
-            errln("Could not retrieve display name. Error: %s", u_errorName(status)); 
-            return;
-        }
-        if(expectedStrs[i] != result){
-            errln("Did not get the expected string. Expected: "+expectedStrs[i]+ UnicodeString(" Got: ") + result ); 
-        }
-    }
-    expectedKey.setTo("America/Los_Angeles",0);
-    UnicodeString exemplarCity("Phoenix");
-    UnicodeString result;
-    symbols.setZoneString(expectedKey,DateFormatSymbols::TIMEZONE_EXEMPLAR_CITY, exemplarCity, status);
-    if(U_FAILURE(status)){
-        errln("setZoneString() did not succeed. Error: %s", u_errorName(status)); 
-        return;
-    }    
-    result = symbols.getZoneString(expectedKey, DateFormatSymbols::TIMEZONE_EXEMPLAR_CITY, result,status);
-    if(result != exemplarCity){ 
-        errln("setZoneString() did not succeed. Expected: " + exemplarCity + " Got: " + result); 
-    }
-    delete keys;
-    delete keys2;
 }
 
 void DateFormatTest::TestZTimeZoneParsing(void) {

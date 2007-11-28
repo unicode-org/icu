@@ -48,6 +48,7 @@ README text !eol
 *.spp -text
 *.tri2 -text
 
+icu4c/source/data/misc/metazoneInfo.txt -text
 icu4c/source/data/xml/collation/as.xml -text
 icu4c/source/data/xml/collation/bn.xml -text
 icu4c/source/data/xml/collation/cy.xml -text

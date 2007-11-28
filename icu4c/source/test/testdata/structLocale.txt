@@ -1897,6 +1897,7 @@ structLocale:table(nofallback){
         ypk{""}
         za{""}
         zap{""}
+        zbl{""}
         zen{""}
         zh{""}
         zh_Hans{""}
@@ -1938,6 +1939,7 @@ structLocale:table(nofallback){
     Scripts{
         Arab{""}
         Armn{""}
+        Avst{""}
         Bali{""}
         Batk{""}
         Beng{""}
@@ -2001,6 +2003,7 @@ structLocale:table(nofallback){
         Lyci{""}
         Lydi{""}
         Mand{""}
+        Mani{""}
         Maya{""}
         Mero{""}
         Mlym{""}
@@ -2016,12 +2019,14 @@ structLocale:table(nofallback){
         Osma{""}
         Perm{""}
         Phag{""}
+        Phlv{""}
         Phnx{""}
         Plrd{""}
         Qaai{""}
         Rjng{""}
         Roro{""}
         Runr{""}
+        Samr{""}
         Sara{""}
         Saur{""}
         Sgnw{""}
@@ -2080,6 +2085,7 @@ structLocale:table(nofallback){
         1606NICT{""}
         1694ACAD{""}
         1901{""}
+        1994{""}
         1996{""}
         AREVELA{""}
         AREVMDA{""}
@@ -2091,6 +2097,7 @@ structLocale:table(nofallback){
         GAULISH{""}
         GUOYU{""}
         HAKKA{""}
+        LIPAW{""}
         LOJBAN{""}
         MONOTON{""}
         NEDIS{""}
@@ -2102,6 +2109,7 @@ structLocale:table(nofallback){
         REVISED{""}
         ROZAJ{""}
         SAAHO{""}
+        SCOTLAND{""}
         SCOUSE{""}
         SOLBA{""}
         TARASK{""}

@@ -92,8 +92,8 @@ public:
 
 private:
     // internal functions
-    static UnicodeString& formatMinutes(int32_t min, UnicodeString& rv, UBool insertSep = TRUE);
-    static UnicodeString& formatRFC822TZ(int32_t min, UnicodeString& rv);
+    static UnicodeString& formatOffset(int32_t offset, UnicodeString& rv);
+    static UnicodeString& formatTZID(int32_t offset, UnicodeString& rv);
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

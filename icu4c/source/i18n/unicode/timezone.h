@@ -670,6 +670,15 @@ protected:
     static UResourceBundle* loadRule(const UResourceBundle* top, const UnicodeString& ruleid, UResourceBundle* oldbundle, UErrorCode&status);
 
 private:
+    friend class ZoneMeta;
+
+    /**
+     * Get a canonical Olson zone ID for the given ID.  If the given ID is not valid,
+     * this method returns empty string as the result.  If the given ID is a link, then the
+     * referenced ID (canonical ID) is returned.
+     */
+    static UnicodeString& getOlsonCanonicalID(const UnicodeString &id, UnicodeString &canonical);
+
     static TimeZone*        createCustomTimeZone(const UnicodeString&); // Creates a time zone based on the string.
 
     /**

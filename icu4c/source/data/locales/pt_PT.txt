@@ -199,7 +199,7 @@ pt_PT{
             phonebook{"Ordem da Lista Telefónica"}
         }
     }
-    Version{"1.63"}
+    Version{"1.64"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -399,10 +399,6 @@ pt_PT{
         }
         "meta:Europe_Central"{
             ls{"Horário Padrão da Europa Central"}
-        }
-        "meta:Hawaii"{
-            ld{"Horário de Verão do Havai"}
-            ls{"Horário Padrão do Havai"}
         }
         "meta:Newfoundland"{
             ld{"Horário de Verão da Terra Nova"}

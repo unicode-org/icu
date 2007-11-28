@@ -23,7 +23,7 @@ fr_CA{
         "#,##0 %",
         "#E0",
     }
-    Version{"1.49"}
+    Version{"1.50"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

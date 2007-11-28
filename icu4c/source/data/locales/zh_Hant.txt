@@ -1662,7 +1662,7 @@ zh_Hant{
         REVISED{"已修訂"}
         SAAHO{"SAAHO"}
     }
-    Version{"1.89"}
+    Version{"1.90"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -2510,9 +2510,6 @@ zh_Hant{
         }
         "meta:GMT"{
             ls{"格林威治標準時間"}
-        }
-        "meta:Hawaii"{
-            ls{"夏威夷標準時間"}
         }
         "meta:Israel"{
             ls{"以色列標準時間"}

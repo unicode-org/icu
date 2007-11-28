@@ -70,7 +70,7 @@
         </taskdef>
     </target>
     <!-- target for generating ICU data -->
-    <target name="all" depends="locales, resfiles, collation, colfiles, supplementalData, brkitr, brkfiles" />
+    <target name="all" depends="locales, resfiles, collation, colfiles, supplementalData, metazoneInfo, brkitr, brkfiles" />
 
     <!-- parallel target -->
     <target name="pall" depends="init">
@@ -237,6 +237,20 @@
             </run>
         </cldr-build>
     </target>
+    <target name="metazoneInfo" depends="init,setup" description="builds metazoneInfo.txt from metazoneInfo.xml">
+        <cldr-build toolName="org.unicode.cldr.icu.LDML2ICUConverter" destFile="metazoneInfo.txt" noArgs="true">
+            <!-- launch the tool and generate the data after reading the config file -->
+            <run>
+                <args>
+                    <arg name="-s" value="${env.CLDR_DIR}/common/supplemental" />
+                    <arg name="-d" value="${env.ICU4C_DIR}/source/data/misc"/>
+                    <arg name="-z"/>
+                    <arg name="-f"/>
+                    <arg name="-m" value="${env.CLDR_DIR}/common/supplemental" />
+                </args>
+            </run>
+        </cldr-build>
+    </target>
     <target name="brkitr" depends="init,setup" description="builds break iterator files in ICU text format">
         <cldr-build toolName="org.unicode.cldr.icu.LDML2ICUConverter" srcFile=".*xml" destFile=".*txt">
             <run>
@@ -315,6 +329,9 @@
             </fileset>
             <fileset id="locales" dir="${env.ICU4C_DIR}/source/data/misc">
                 <include name="supplementalData.txt" />
+            </fileset>
+            <fileset id="locales" dir="${env.ICU4C_DIR}/source/data/misc">
+                <include name="metazoneInfo.txt" />
             </fileset>
         </delete>
     </target>

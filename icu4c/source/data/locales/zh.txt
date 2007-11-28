@@ -2026,7 +2026,7 @@ zh{
         REVISED{"已修订的拼字学"}
         SAAHO{"萨霍"}
     }
-    Version{"1.104"}
+    Version{"1.105"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -3278,17 +3278,14 @@ zh{
             ls{"Acre 标准时间"}
         }
         "meta:Africa_Central"{
-            ld{"非洲中部夏令时间"}
             lg{"非洲中部时间"}
             ls{"中部非洲标准时间"}
         }
         "meta:Africa_Eastern"{
-            ld{"非洲东部夏令时间"}
             lg{"非洲东部时间"}
             ls{"东部非洲标准时间"}
         }
         "meta:Africa_Southern"{
-            ld{"非洲南部夏令时间"}
             lg{"非洲南部时间"}
             ls{"南部非洲标准时间"}
         }
@@ -3375,17 +3372,11 @@ zh{
             ls{"格林尼治标准时间"}
             ss{"GMT"}
         }
-        "meta:Hawaii"{
-            ld{"夏威夷夏令时间"}
-            ls{"夏威夷标准时间"}
-            sd{"HDT"}
-            ss{"HST"}
-        }
         "meta:Israel"{
             ld{"以色列夏令时间"}
             ls{"以色列标准时间"}
             sd{"IDT"}
-            ss{"IST"}
+            ss{"IST (Israel)"}
         }
         "meta:Japan"{
             ld{"日本夏令时间"}

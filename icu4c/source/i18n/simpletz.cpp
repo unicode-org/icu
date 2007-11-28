@@ -502,6 +502,55 @@ SimpleTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
     return result;
 }
 
+void
+SimpleTimeZone::getOffsetFromLocal(UDate date, int32_t nonExistingTimeOpt, int32_t duplicatedTimeOpt,
+                                   int32_t& rawOffsetGMT, int32_t& savingsDST, UErrorCode& status) /*const*/ {
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    rawOffsetGMT = getRawOffset();
+    int32_t year, month, dom, dow;
+    double day = uprv_floor(date / U_MILLIS_PER_DAY);
+    int32_t millis = (int32_t) (date - day * U_MILLIS_PER_DAY);
+
+    Grego::dayToFields(day, year, month, dom, dow);
+
+    savingsDST = getOffset(GregorianCalendar::AD, year, month, dom,
+                          (uint8_t) dow, millis,
+                          Grego::monthLength(year, month),
+                          status) - rawOffsetGMT;
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    UBool recalc = FALSE;
+
+    // Now we need some adjustment
+    if (savingsDST > 0) {
+        if ((nonExistingTimeOpt & kStdDstMask) == kStandard
+            || (nonExistingTimeOpt & kStdDstMask) != kDaylight && (nonExistingTimeOpt & kFormerLatterMask) != kLatter) {
+            date -= getDSTSavings();
+            recalc = TRUE;
+        }
+    } else {
+        if ((duplicatedTimeOpt & kStdDstMask) == kDaylight
+                || (duplicatedTimeOpt & kStdDstMask) != kStandard && (duplicatedTimeOpt & kFormerLatterMask) == kFormer) {
+            date -= getDSTSavings();
+            recalc = TRUE;
+        }
+    }
+    if (recalc) {
+        day = uprv_floor(date / U_MILLIS_PER_DAY);
+        millis = (int32_t) (date - day * U_MILLIS_PER_DAY);
+        Grego::dayToFields(day, year, month, dom, dow);
+        savingsDST = getOffset(GregorianCalendar::AD, year, month, dom,
+                          (uint8_t) dow, millis,
+                          Grego::monthLength(year, month),
+                          status) - rawOffsetGMT;
+    }
+}
+
 // -------------------------------------
 
 /**
@@ -966,8 +1015,8 @@ SimpleTimeZone::getPreviousTransition(UDate base, UBool inclusive, TimeZoneTrans
         return FALSE;
     }
     UDate stdDate, dstDate;
-    UBool stdAvail = stdRule->getPreviousStart(base, dstRule->getRawOffset(), dstRule->getDSTSavings(), false, stdDate);
-    UBool dstAvail = dstRule->getPreviousStart(base, stdRule->getRawOffset(), stdRule->getDSTSavings(), false, dstDate);
+    UBool stdAvail = stdRule->getPreviousStart(base, dstRule->getRawOffset(), dstRule->getDSTSavings(), inclusive, stdDate);
+    UBool dstAvail = dstRule->getPreviousStart(base, stdRule->getRawOffset(), stdRule->getDSTSavings(), inclusive, dstDate);
     if (stdAvail && (!dstAvail || stdDate > dstDate)) {
         result.setTime(stdDate);
         result.setFrom((const TimeZoneRule&)*dstRule);
