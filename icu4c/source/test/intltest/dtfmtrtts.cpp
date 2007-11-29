@@ -293,7 +293,8 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
     // patterns we have, but it may be a problem later.
 
     UBool hasEra = (pat.indexOf(UnicodeString("G")) != -1);
-    UBool hasZone = (pat.indexOf(UnicodeString("Z")) != -1) || (pat.indexOf(UnicodeString("z")) != -1) || (pat.indexOf(UnicodeString("v")) != -1);
+    UBool hasZoneDisplayName = (pat.indexOf(UnicodeString("z")) != -1) || (pat.indexOf(UnicodeString("v")) != -1) 
+        || (pat.indexOf(UnicodeString("V")) != -1);
 
     // Because patterns contain incomplete data representing the Date,
     // we must be careful of how we do the roundtrip.  We start with
@@ -375,7 +376,8 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
             int maxSmatch = 1;
             if (dmatch > maxDmatch) {
                 // Time-only pattern with zone information and a starting date in PST.
-                if(timeOnly && hasZone && fmt->getTimeZone().inDaylightTime(d[0], status) && ! failure(status, "TimeZone::inDST()")) {
+                if(timeOnly && hasZoneDisplayName
+                        && fmt->getTimeZone().inDaylightTime(d[0], status) && ! failure(status, "TimeZone::inDST()")) {
                     maxDmatch = 3;
                     maxSmatch = 2;
                 }
@@ -402,16 +404,20 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
                         && getField(d[0], UCAL_YEAR)
                             != getField(d[dmatch], UCAL_YEAR)
                         && !failure(status, "error status [smatch>maxSmatch]")
-                        && ((hasZone
+                        && ((hasZoneDisplayName
                          && (fmt->getTimeZone().inDaylightTime(d[0], status)
                                 == fmt->getTimeZone().inDaylightTime(d[dmatch], status)
                             || getField(d[0], UCAL_MONTH) == UCAL_APRIL
                             || getField(d[0], UCAL_MONTH) == UCAL_OCTOBER))
-                         || !hasZone)
+                         || !hasZoneDisplayName)
                          )
                 {
                     maxSmatch = 2;
-                }                
+                }
+                // If zone display name is used, fallback format might be used before 1970
+                else if (hasZoneDisplayName && d[0] < 0) {
+                    maxSmatch = 2;
+                }
             }
 
             if(dmatch > maxDmatch || smatch > maxSmatch) { // Special case for Japanese and Islamic (could have large negative years)
