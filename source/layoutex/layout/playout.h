@@ -17,8 +17,6 @@
 #include "layout/LETypes.h"
 #include "plruns.h"
 
-U_NAMESPACE_BEGIN
-
 /**
  * \file 
  * \brief C API for paragraph layout.
@@ -461,8 +459,6 @@ pl_getVisualRunDescent(const pl_visualRun *run);
  */
 U_INTERNAL le_int32 U_EXPORT2
 pl_getVisualRunLeading(const pl_visualRun *run);
-
-U_NAMESPACE_END
 
 #endif
 #endif
