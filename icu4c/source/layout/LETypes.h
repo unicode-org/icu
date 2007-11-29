@@ -21,11 +21,9 @@
 #include "cmemory.h"
 #endif
 
-U_NAMESPACE_BEGIN
-
 /*!
  * \file
- * \brief Basic definitions for the ICU LayoutEngine
+ * \brief C API: Basic definitions for the ICU LayoutEngine
  */
 
 /**
@@ -565,7 +563,4 @@ typedef enum LEErrorCode LEErrorCode;
  */
 #define LE_FAILURE(code) (U_FAILURE((UErrorCode)code))
 
-U_NAMESPACE_END
 #endif
-
-
