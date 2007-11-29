@@ -13,6 +13,8 @@
 
 #include "layout/loengine.h"
 
+U_NAMESPACE_BEGIN
+
 typedef void pl_fontRuns;
 typedef void pl_valueRuns;
 typedef void pl_localeRuns;
@@ -424,5 +426,7 @@ U_INTERNAL le_int32 U_EXPORT2
 pl_addLocaleRun(pl_localeRuns *localeRuns,
                 const char *locale,
                 le_int32 limit);
+
+U_NAMESPACE_END
 
 #endif
