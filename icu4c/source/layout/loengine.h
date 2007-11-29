@@ -9,8 +9,6 @@
 
 #include "LETypes.h"
 
-U_NAMESPACE_BEGIN
-
 /**
  * \file 
  * \brief C API for complex text layout.
@@ -221,7 +219,5 @@ le_getGlyphPosition(le_engine *engine,
 U_INTERNAL void U_EXPORT2
 le_reset(le_engine *engine,
          LEErrorCode *success);
-
-U_NAMESPACE_END
 
 #endif
