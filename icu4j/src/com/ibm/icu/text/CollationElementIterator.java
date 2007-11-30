@@ -1585,15 +1585,24 @@ public final class CollationElementIterator
             }
 
             offset ++; // skip the combining class offset
-            while (nextch > collator.m_contractionIndex_[offset]) {
+            while ((offset < collator.m_contractionIndex_.length) &&
+                   (nextch > collator.m_contractionIndex_[offset])) {
                 offset ++;
             }
 
             int ce = CE_NOT_FOUND_;
-            if (nextch != collator.m_contractionIndex_[offset]
-                    || getCombiningClass(nextch) == getCombiningClass(ch)) {
+            if ( offset >= collator.m_contractionIndex_.length)  {
+                break;
+            }
+            if ( nextch != collator.m_contractionIndex_[offset]
+                 || getCombiningClass(nextch) == getCombiningClass(ch)) {
                     // unmatched or blocked character
-                m_utilSkippedBuffer_.append(nextch);
+                if ( (m_utilSkippedBuffer_.length()!= 1) ||
+                     ((m_utilSkippedBuffer_.charAt(0)!= nextch) &&
+                      (m_bufferOffset_<0) )) { // avoid push to skipped buffer twice
+                    m_utilSkippedBuffer_.append(nextch);
+                }
+                offset = entryoffset;  // Restore the offset before checking next character.
                 continue;
             }
             else {
