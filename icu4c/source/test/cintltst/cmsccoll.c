@@ -1328,12 +1328,6 @@ static void TestCollations(void) {
   ucol_close(UCA);
 }
 
-/*--------------------------------------------------------------------
- Time bomb - allows temporary behavior that expires at a given
-             release
---------------------------------------------------------------------*/
-static const UVersionInfo ICU_39 = {3,9,0,0};
-
 static void RamsRulesTest(void) {
   UErrorCode status = U_ZERO_ERROR;
   int32_t i = 0;
@@ -1357,10 +1351,10 @@ static void RamsRulesTest(void) {
         log_verbose("Don't know how to test Phonebook because the reset is on an expanding character\n");
         continue;
       }
-      if (!isICUVersionAtLeast(ICU_39) && (uprv_strcmp("km", locName)==0 ||
+      if (uprv_strcmp("km", locName)==0 ||
           uprv_strcmp("km_KH", locName)==0 ||
           uprv_strcmp("zh", locName)==0 ||
-          uprv_strcmp("zh_Hant", locName)==0 )) {
+          uprv_strcmp("zh_Hant", locName)==0 ) {
           continue;  /* TODO: enable these locale tests after trac#6040 is fixed. */
       }
       log_verbose("Testing locale %s\n", locName);
