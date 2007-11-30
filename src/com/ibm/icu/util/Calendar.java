@@ -1517,7 +1517,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * Constructs a calendar with the specified time zone and locale.
      * @param zone the time zone to use
      * @param locale the ulocale for the week data
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     protected Calendar(TimeZone zone, ULocale locale)
     {
@@ -1587,7 +1587,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * Gets a calendar using the default time zone and specified locale.  
      * @param locale the ulocale for the week data
      * @return a Calendar.
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static synchronized Calendar getInstance(ULocale locale)
     {
@@ -1611,7 +1611,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * @param zone the time zone to use
      * @param locale the ulocale for the week data
      * @return a Calendar.
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static synchronized Calendar getInstance(TimeZone zone,
                                                     ULocale locale) {
@@ -2919,7 +2919,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
 
     /**
      * Return the name of this calendar in the language of the given locale.
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public String getDisplayName(ULocale loc) {
         return this.getClass().getName();
@@ -2942,7 +2942,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * @throws IllegalArgumentException if the time of that 
      * <code>Calendar</code> can't be obtained because of invalid
      * calendar values.
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public int compareTo(Calendar that) {
         long v = getTimeInMillis() - that.getTimeInMillis();
@@ -2952,7 +2952,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
     /**
      * Implement comparable API as a convenience override of
      * {@link #compareTo(Calendar)}.
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public int compareTo(Object that) {
         return compareTo((Calendar)that);
@@ -2978,7 +2978,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * Subclasses wishing to specialize this behavior should override
      * <code>handleGetDateFormat()</code>
      * @see #handleGetDateFormat
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public DateFormat getDateTimeFormat(int dateStyle, int timeStyle, ULocale loc) {
         return formatHelper(this, loc, dateStyle, timeStyle);
@@ -4041,8 +4041,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
 
         fields[JULIAN_DAY] = (int) days + EPOCH_JULIAN_DAY;
 
-        // In some cases we will have to call this method again below to
-        // adjust for DST pushing us into the next Julian day.
         computeGregorianAndDOWFields(fields[JULIAN_DAY]);
 
         // Call framework method to have subclass compute its fields.
@@ -4455,11 +4453,11 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
         // 1. The transition into DST.  Here, a designated time of 2:00 am - 2:59 am
         //    can be in standard or in DST depending.  However, 2:00 am is an invalid
         //    representation (the representation jumps from 1:59:59 am Std to 3:00:00 am DST).
-        //    We assume standard time.
+        //    We assume standard time, that is, 2:30 am is interpreted as 3:30 am DST.
         // 2. The transition out of DST.  Here, a designated time of 1:00 am - 1:59 am
         //    can be in standard or DST.  Both are valid representations (the rep
         //    jumps from 1:59:59 DST to 1:00:00 Std).
-        //    Again, we assume standard time.
+        //    Again, we assume standard time, that is, 1:30 am is interpreted as 1:30 am Std.
         // We use the TimeZone object, unless the user has explicitly set the ZONE_OFFSET
         // or DST_OFFSET fields; then we use those fields.
         if (stamp[ZONE_OFFSET] >= MINIMUM_USER_STAMP ||

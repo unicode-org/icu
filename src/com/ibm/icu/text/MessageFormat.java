@@ -2145,7 +2145,7 @@ public class MessageFormat extends UFormat {
      *
      * @param pattern the 'apostrophe-friendly' patttern to convert
      * @return the standard equivalent of the original pattern
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public static String autoQuoteApostrophe(String pattern) {
         StringBuffer buf = new StringBuffer(pattern.length() * 2);

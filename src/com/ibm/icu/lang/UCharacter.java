@@ -80,7 +80,7 @@ import com.ibm.icu.util.VersionInfo;
  * </ul>
  * <p>
  * Further detail differences can be determined from the program 
- *        <a href="http://dev.icu-project.org/cgi-bin/viewcvs.cgi/~checkout~/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterCompare.java">
+ *        <a href="http://source.icu-project.org/repos/icu/icu4j/trunk/src/com/ibm/icu/dev/test/lang/UCharacterCompare.java">
  *        com.ibm.icu.dev.test.lang.UCharacterCompare</a>
  * </p>
  * <p>
@@ -96,7 +96,7 @@ import com.ibm.icu.util.VersionInfo;
  * <p>
  * For more information see
  * "About the Unicode Character Database" (http://www.unicode.org/ucd/)
- * and the ICU User Guide chapter on Properties (http://icu.sourceforge.net/userguide/properties.html).
+ * and the ICU User Guide chapter on Properties (http://www.icu-project.org/userguide/properties.html).
  * </p>
  * <p>
  * There are also functions that provide easy migration from C/POSIX functions
@@ -708,102 +708,102 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /* New blocks in Unicode 4.1 */
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int ANCIENT_GREEK_MUSICAL_NOTATION_ID = 126; /*[1D200]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int ANCIENT_GREEK_NUMBERS_ID = 127; /*[10140]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int ARABIC_SUPPLEMENT_ID = 128; /*[0750]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int BUGINESE_ID = 129; /*[1A00]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int CJK_STROKES_ID = 130; /*[31C0]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int COMBINING_DIACRITICAL_MARKS_SUPPLEMENT_ID = 131; /*[1DC0]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int COPTIC_ID = 132; /*[2C80]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int ETHIOPIC_EXTENDED_ID = 133; /*[2D80]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int ETHIOPIC_SUPPLEMENT_ID = 134; /*[1380]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int GEORGIAN_SUPPLEMENT_ID = 135; /*[2D00]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int GLAGOLITIC_ID = 136; /*[2C00]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int KHAROSHTHI_ID = 137; /*[10A00]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int MODIFIER_TONE_LETTERS_ID = 138; /*[A700]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int NEW_TAI_LUE_ID = 139; /*[1980]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int OLD_PERSIAN_ID = 140; /*[103A0]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int PHONETIC_EXTENSIONS_SUPPLEMENT_ID = 141; /*[1D80]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int SUPPLEMENTAL_PUNCTUATION_ID = 142; /*[2E00]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int SYLOTI_NAGRI_ID = 143; /*[A800]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int TIFINAGH_ID = 144; /*[2D30]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int VERTICAL_FORMS_ID = 145; /*[FE10]*/
 
@@ -1530,102 +1530,102 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /* New blocks in Unicode 4.1 */
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final UnicodeBlock ANCIENT_GREEK_MUSICAL_NOTATION = new UnicodeBlock("ANCIENT_GREEK_MUSICAL_NOTATION", ANCIENT_GREEK_MUSICAL_NOTATION_ID); /*[1D200]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final UnicodeBlock ANCIENT_GREEK_NUMBERS = new UnicodeBlock("ANCIENT_GREEK_NUMBERS", ANCIENT_GREEK_NUMBERS_ID); /*[10140]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final UnicodeBlock ARABIC_SUPPLEMENT = new UnicodeBlock("ARABIC_SUPPLEMENT", ARABIC_SUPPLEMENT_ID); /*[0750]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final UnicodeBlock BUGINESE = new UnicodeBlock("BUGINESE", BUGINESE_ID); /*[1A00]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final UnicodeBlock CJK_STROKES = new UnicodeBlock("CJK_STROKES", CJK_STROKES_ID); /*[31C0]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final UnicodeBlock COMBINING_DIACRITICAL_MARKS_SUPPLEMENT = new UnicodeBlock("COMBINING_DIACRITICAL_MARKS_SUPPLEMENT", COMBINING_DIACRITICAL_MARKS_SUPPLEMENT_ID); /*[1DC0]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final UnicodeBlock COPTIC = new UnicodeBlock("COPTIC", COPTIC_ID); /*[2C80]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final UnicodeBlock ETHIOPIC_EXTENDED = new UnicodeBlock("ETHIOPIC_EXTENDED", ETHIOPIC_EXTENDED_ID); /*[2D80]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final UnicodeBlock ETHIOPIC_SUPPLEMENT = new UnicodeBlock("ETHIOPIC_SUPPLEMENT", ETHIOPIC_SUPPLEMENT_ID); /*[1380]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final UnicodeBlock GEORGIAN_SUPPLEMENT = new UnicodeBlock("GEORGIAN_SUPPLEMENT", GEORGIAN_SUPPLEMENT_ID); /*[2D00]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final UnicodeBlock GLAGOLITIC = new UnicodeBlock("GLAGOLITIC", GLAGOLITIC_ID); /*[2C00]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final UnicodeBlock KHAROSHTHI = new UnicodeBlock("KHAROSHTHI", KHAROSHTHI_ID); /*[10A00]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final UnicodeBlock MODIFIER_TONE_LETTERS = new UnicodeBlock("MODIFIER_TONE_LETTERS", MODIFIER_TONE_LETTERS_ID); /*[A700]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final UnicodeBlock NEW_TAI_LUE = new UnicodeBlock("NEW_TAI_LUE", NEW_TAI_LUE_ID); /*[1980]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final UnicodeBlock OLD_PERSIAN = new UnicodeBlock("OLD_PERSIAN", OLD_PERSIAN_ID); /*[103A0]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final UnicodeBlock PHONETIC_EXTENSIONS_SUPPLEMENT = new UnicodeBlock("PHONETIC_EXTENSIONS_SUPPLEMENT", PHONETIC_EXTENSIONS_SUPPLEMENT_ID); /*[1D80]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final UnicodeBlock SUPPLEMENTAL_PUNCTUATION = new UnicodeBlock("SUPPLEMENTAL_PUNCTUATION", SUPPLEMENTAL_PUNCTUATION_ID); /*[2E00]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final UnicodeBlock SYLOTI_NAGRI = new UnicodeBlock("SYLOTI_NAGRI", SYLOTI_NAGRI_ID); /*[A800]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final UnicodeBlock TIFINAGH = new UnicodeBlock("TIFINAGH", TIFINAGH_ID); /*[2D30]*/
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final UnicodeBlock VERTICAL_FORMS = new UnicodeBlock("VERTICAL_FORMS", VERTICAL_FORMS_ID); /*[FE10]*/
 
@@ -2295,51 +2295,51 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     /**
      * Grapheme Cluster Break constants.
      * @see UProperty#GRAPHEME_CLUSTER_BREAK
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public static interface GraphemeClusterBreak {
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int OTHER = 0;
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int CONTROL = 1;
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int CR = 2;
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int EXTEND = 3;
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int L = 4;
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int LF = 5;
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int LV = 6;
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int LVT = 7;
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int T = 8;
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int V = 9;
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int COUNT = 10;
     }
@@ -2347,7 +2347,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     /**
      * Word Break constants.
      * @see UProperty#WORD_BREAK
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public static interface WordBreak {
         /**
@@ -2391,7 +2391,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     /**
      * Sentence Break constants.
      * @see UProperty#SENTENCE_BREAK
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public static interface SentenceBreak {
         /**
@@ -2587,23 +2587,23 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /* from here on: new in Unicode 4.1/ICU 3.4 */
 
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int  H2 = 31;
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int  H3 = 32;
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int  JL = 33;
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int  JT = 34;
         /**
-         * @stable ICU 3.8
+         * @stable ICU 3.4
          */
         public static final int  JV = 35;
 
@@ -2721,13 +2721,13 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
 
     /**
      * Compatibility constant for Java Character's MIN_RADIX.
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public static final int MIN_RADIX = java.lang.Character.MIN_RADIX;
 
     /**
      * Compatibility constant for Java Character's MAX_RADIX.
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public static final int MAX_RADIX = java.lang.Character.MAX_RADIX;
 
@@ -3142,7 +3142,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * java.lang.Character.isJavaIdentifierStart.
      * @param cp the code point
      * @return true if the code point can start a java identifier.
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public static boolean isJavaIdentifierStart(int cp) {
         // note, downcast to char for jdk 1.4 compatibility
@@ -3154,7 +3154,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * java.lang.Character.isJavaIdentifierPart.
      * @param cp the code point
      * @return true if the code point can continue a java identifier.
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public static boolean isJavaIdentifierPart(int cp) {
         // note, downcast to char for jdk 1.4 compatibility
@@ -3396,7 +3396,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Full case mappings are applied by the case mapping functions
      * that take String parameters rather than code points (int).
      * See also the User Guide chapter on C/POSIX migration:
-     * http://icu.sourceforge.net/userguide/posix.html#case_mappings
+     * http://www.icu-project.org/userguide/posix.html#case_mappings
      *
      * @param ch code point whose lowercase equivalent is to be retrieved
      * @return the lowercase equivalent code point
@@ -3449,7 +3449,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Full case mappings are applied by the case mapping functions
      * that take String parameters rather than code points (int).
      * See also the User Guide chapter on C/POSIX migration:
-     * http://icu.sourceforge.net/userguide/posix.html#case_mappings
+     * http://www.icu-project.org/userguide/posix.html#case_mappings
      *
      * @param ch code point  whose title case is to be retrieved
      * @return titlecase code point
@@ -3472,7 +3472,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Full case mappings are applied by the case mapping functions
      * that take String parameters rather than code points (int).
      * See also the User Guide chapter on C/POSIX migration:
-     * http://icu.sourceforge.net/userguide/posix.html#case_mappings
+     * http://www.icu-project.org/userguide/posix.html#case_mappings
      *
      * @param ch code point whose uppercase is to be retrieved
      * @return uppercase code point
@@ -4263,7 +4263,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param locale which string is to be converted in
      * @param str source string to be performed on
      * @return uppercase version of the argument string
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static String toUpperCase(ULocale locale, String str) {
         StringContextIterator iter = new StringContextIterator(str);
@@ -4316,7 +4316,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param locale which string is to be converted in
      * @param str source string to be performed on
      * @return lowercase version of the argument string
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static String toLowerCase(ULocale locale, String str) {
         StringContextIterator iter = new StringContextIterator(str);
@@ -4392,7 +4392,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param titleIter break iterator to determine the positions in which
      *        the character should be title cased.
      * @return lowercase version of the argument string
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static String toTitleCase(ULocale locale, String str, 
                                      BreakIterator titleIter) {
@@ -4549,7 +4549,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Full case mappings are applied by the case mapping functions
      * that take String parameters rather than code points (int).
      * See also the User Guide chapter on C/POSIX migration:
-     * http://icu.sourceforge.net/userguide/posix.html#case_mappings
+     * http://www.icu-project.org/userguide/posix.html#case_mappings
      *
      * @param ch             the character to be converted
      * @param defaultmapping Indicates if all mappings defined in 
@@ -4610,7 +4610,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Full case mappings are applied by the case mapping functions
      * that take String parameters rather than code points (int).
      * See also the User Guide chapter on C/POSIX migration:
-     * http://icu.sourceforge.net/userguide/posix.html#case_mappings
+     * http://www.icu-project.org/userguide/posix.html#case_mappings
      *
      * @param ch             the character to be converted
      * @param options        A bit set for special processing. Currently the recognised options are

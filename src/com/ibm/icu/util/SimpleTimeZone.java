@@ -560,7 +560,7 @@ public class SimpleTimeZone extends BasicTimeZone {
     /**
      * Returns a string representation of this object.
      * @return  a string representation of this object
-     * @stable ICU 3.8
+     * @stable ICU 3.6
      */
     public String toString() {
         return "SimpleTimeZone: " + getID();
@@ -586,8 +586,8 @@ public class SimpleTimeZone extends BasicTimeZone {
     private final static byte staticMonthLength[] = {31,29,31,30,31,30,31,31,30,31,30,31};
 
     /**
-     * @internal revisit for ICU 3.6
-     * @deprecated This API is ICU internal only.
+     * {@inheritDoc}
+     * @stable ICU 2.0
      */
     public int getOffset(int era, int year, int month, int day,
                          int dayOfWeek, int millis) 
@@ -607,7 +607,7 @@ public class SimpleTimeZone extends BasicTimeZone {
     }
 
     /**
-     * @internal revisit for ICU 3.6
+     * @internal
      * @deprecated This API is ICU internal only.
      */
     public int getOffset(int era, int year, int month, int day,
@@ -729,6 +729,50 @@ public class SimpleTimeZone extends BasicTimeZone {
             result += dst;
 
         return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    public void getOffsetFromLocal(long date,
+            int nonExistingTimeOpt, int duplicatedTimeOpt, int[] offsets) {
+        offsets[0] = getRawOffset();
+        int fields[] = new int[4];
+        long day = floorDivide(date, Grego.MILLIS_PER_DAY, fields);
+        int millis = fields[0];
+
+        computeGregorianFields(day, fields);
+        offsets[1] = getOffset(GregorianCalendar.AD,
+              fields[0], fields[1], fields[2],
+              fields[3], millis) - offsets[0];        
+
+        boolean recalc = false;
+
+        // Now, we need some adjustment
+        if (offsets[1] > 0) {
+            if ((nonExistingTimeOpt & STD_DST_MASK) == LOCAL_STD
+                || (nonExistingTimeOpt & STD_DST_MASK) != LOCAL_DST && (nonExistingTimeOpt & FORMER_LATTER_MASK) != LOCAL_LATTER) {
+                date -= getDSTSavings();
+                recalc = true;
+            }
+        } else {
+            if ((duplicatedTimeOpt & STD_DST_MASK) == LOCAL_DST
+                    || (duplicatedTimeOpt & STD_DST_MASK) != LOCAL_STD && (duplicatedTimeOpt & FORMER_LATTER_MASK) == LOCAL_FORMER) {
+                date -= getDSTSavings();
+                recalc = true;
+            }
+        }
+
+        if (recalc) {
+            day = floorDivide(date, Grego.MILLIS_PER_DAY, fields);
+            millis = fields[0];
+            computeGregorianFields(day, fields);
+            offsets[1] = getOffset(GregorianCalendar.AD,
+                    fields[0], fields[1], fields[2],
+                    fields[3], millis) - offsets[0];        
+        }
     }
 
     private static final int
@@ -1030,7 +1074,7 @@ public class SimpleTimeZone extends BasicTimeZone {
     /**
      * Return true if obj is a SimpleTimeZone equivalent to this.
      * @return true if obj is a SimpleTimeZone equivalent to this
-     * @stable ICU 3.8
+     * @stable ICU 3.6
      */
     public boolean equals(Object obj){
         if (this == obj) return true;
@@ -1070,7 +1114,7 @@ public class SimpleTimeZone extends BasicTimeZone {
     /**
      * Return the hash code.
      * @return the hash code
-     * @stable ICU 3.8
+     * @stable ICU 3.6
      */
     public int hashCode(){
         int ret = (int)( super.hashCode() +
@@ -1098,7 +1142,7 @@ public class SimpleTimeZone extends BasicTimeZone {
     /**
      * Return a clone of this time zone.
      * @return a clone of this time zone
-     * @stable ICU 3.8
+     * @stable ICU 3.6
      */
     public Object clone() {
         return super.clone();
@@ -1179,8 +1223,8 @@ public class SimpleTimeZone extends BasicTimeZone {
         if (base < firstTransitionTime || (!inclusive && base == firstTransitionTime)) {
             return null;
         }
-        Date stdDate = stdRule.getPreviousStart(base, dstRule.getRawOffset(), dstRule.getDSTSavings(), false);
-        Date dstDate = dstRule.getPreviousStart(base, stdRule.getRawOffset(), stdRule.getDSTSavings(), false);
+        Date stdDate = stdRule.getPreviousStart(base, dstRule.getRawOffset(), dstRule.getDSTSavings(), inclusive);
+        Date dstDate = dstRule.getPreviousStart(base, stdRule.getRawOffset(), stdRule.getDSTSavings(), inclusive);
         if (stdDate != null && (dstDate == null || stdDate.after(dstDate))) {
             return new TimeZoneTransition(stdDate.getTime(), dstRule, stdRule);
         }

@@ -14,10 +14,12 @@ import java.io.*;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.security.AccessControlException;
 
 import javax.swing.*;
 
 import com.ibm.icu.charset.CharsetICU;
+import com.ibm.icu.dev.demo.impl.DemoApplet;
 import com.ibm.icu.text.CharsetDetector;
 import com.ibm.icu.text.CharsetMatch;
 
@@ -42,10 +44,16 @@ public class DetectingViewer extends JFrame implements ActionListener
     public DetectingViewer()
     {
         super();
+        DemoApplet.demoFrameOpened();
         
-        fileChooser = new JFileChooser();
+        try {
+            fileChooser = new JFileChooser();
+        } catch (AccessControlException ace) {
+            System.err.println("no file chooser - access control exception. Continuing without file browsing. "+ace.toString());
+            fileChooser = null; //
+        }
         
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 800);
 
         setJMenuBar(makeMenus());
@@ -61,6 +69,18 @@ public class DetectingViewer extends JFrame implements ActionListener
         
         getContentPane().add(scrollPane);
         setVisible(true);
+
+        addWindowListener(
+                new WindowAdapter() {
+                    public void windowClosing(WindowEvent e) {
+//                        setVisible(false);
+//                        dispose();
+
+                          doQuit();
+                    }
+                } );
+
+    
     }
 
     public void actionPerformed(ActionEvent event)
@@ -345,7 +365,9 @@ public class DetectingViewer extends JFrame implements ActionListener
     
     private void doQuit()
     {
-        System.exit(0);
+        DemoApplet.demoFrameClosed();
+        this.setVisible(false);
+        this.dispose();
     }
     
     private JMenuBar makeMenus()
@@ -357,6 +379,9 @@ public class DetectingViewer extends JFrame implements ActionListener
         mi.setAccelerator((KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK)));
         mi.addActionListener(this);
         menu.add(mi);
+        if(fileChooser == null) {
+            mi.setEnabled(false); // no file chooser.
+        }
         
         mi = new JMenuItem("Open URL...");
         mi.setAccelerator((KeyStroke.getKeyStroke(KeyEvent.VK_U, ActionEvent.CTRL_MASK)));

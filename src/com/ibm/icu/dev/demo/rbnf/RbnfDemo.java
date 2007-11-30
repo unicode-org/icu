@@ -335,6 +335,18 @@ public class RbnfDemo extends DemoApplet {
 
         window.doLayout();
         window.show();
+        final DemoApplet theApplet = applet;
+        window.addWindowListener(
+                new WindowAdapter() {
+                    public void windowClosing(WindowEvent e) {
+                        setVisible(false);
+                        window.dispose();
+
+                        if (theApplet != null) {
+                            theApplet.demoClosed();
+                        } else System.exit(0);
+                    }
+                } );
         return window;
     }
 

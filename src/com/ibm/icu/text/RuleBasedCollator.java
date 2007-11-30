@@ -38,11 +38,11 @@ import com.ibm.icu.util.VersionInfo;
  * <p>RuleBasedCollator is a concrete subclass of Collator. It allows
  * customization of the Collator via user-specified rule sets.
  * RuleBasedCollator is designed to be fully compliant to the <a
- * href="http://www.unicode.org/unicode/reports/tr10/"> Unicode
+ * href="http://www.unicode.org/unicode/reports/tr10/">Unicode
  * Collation Algorithm (UCA)</a> and conforms to ISO 14651.</p>
  *
  * <p>Users are strongly encouraged to read <a
- * href="http://icu.sourceforge.net/userguide/Collate_Intro.html">
+ * href="http://www.icu-project.org/userguide/Collate_Intro.html">
  * the users guide</a> for more information about the collation
  * service before using this class.</p>
  *
@@ -64,7 +64,7 @@ import com.ibm.icu.util.VersionInfo;
  *
  * <p>For information about the collation rule syntax and details
  * about customization, please refer to the
- * <a href="http://icu.sourceforge.net/userguide/Collate_Customization.html">
+ * <a href="http://www.icu-project.org/userguide/Collate_Customization.html">
  * Collation customization</a> section of the user's guide.</p>
  *
  * <p><strong>Note</strong> that there are some differences between
@@ -202,7 +202,7 @@ public final class RuleBasedCollator extends Collator
      * argument rules.
      * </p>
      * <p>See the user guide's section on
-     * <a href="http://icu.sourceforge.net/userguide/Collate_Customization.html">
+     * <a href="http://www.icu-project.org/userguide/Collate_Customization.html">
      * Collation Customization</a> for details on the rule syntax.
      * </p>
      * @param rules the collation rules to build the collation table from.
@@ -495,7 +495,7 @@ public final class RuleBasedCollator extends Collator
      * they appear.
      * If set to true, the SECONDARY weights will be sorted backwards.
      * See the section on
-     * <a href="http://icu.sourceforge.net/userguide/Collate_ServiceArchitecture.html">
+     * <a href="http://www.icu-project.org/userguide/Collate_ServiceArchitecture.html">
      * French collation</a> for more information.
      * @param flag true to set the French collation on, false to set it off
      * @stable ICU 2.8
@@ -552,7 +552,7 @@ public final class RuleBasedCollator extends Collator
      * </p>
      * <p>
      * See the section on
-     * <a href="http://icu.sourceforge.net/userguide/Collate_ServiceArchitecture.html">
+     * <a href="http://www.icu-project.org/userguide/Collate_ServiceArchitecture.html">
      * case level</a> for more information.
      * </p>
      * @param flag true if case level sorting is required, false otherwise
@@ -864,7 +864,7 @@ public final class RuleBasedCollator extends Collator
      * @param expansions if not null, set to contain expansions
      * @param addPrefixes add the prefix contextual elements to contractions
      * @throws Exception 
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public void
     getContractionsAndExpansions(UnicodeSet contractions, UnicodeSet expansions,

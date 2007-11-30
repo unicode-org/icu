@@ -30,7 +30,7 @@ import java.nio.ByteBuffer;
 
 /**
  * A class representing a collection of resource information pertaining to a given
- * locale. A resource bundle provides a way of accessing locale- specfic information in
+ * locale. A resource bundle provides a way of accessing locale- specific information in
  * a data file. You create a resource bundle that manages the resources for a given
  * locale and then ask it for individual resources.
  * <P>
@@ -40,9 +40,9 @@ import java.nio.ByteBuffer;
  * 
  * <P>
  * Resource bundles in ICU are currently defined using text files which conform to the following
- * <a href="http://dev.icu-project.org/cgi-bin/viewcvs.cgi/icuhtml/design/bnf_rb.txt">BNF definition</a>.
+ * <a href="http://source.icu-project.org/repos/icu/icuhtml/trunk/design/bnf_rb.txt">BNF definition</a>.
  * More on resource bundle concepts and syntax can be found in the 
- * <a href="http://icu.sourceforge.net/userguide/ResourceManagement.html">Users Guide</a>.
+ * <a href="http://www.icu-project.org/userguide/ResourceManagement.html">Users Guide</a>.
  * <P>
  * 
  * The packaging of ICU *.res files can be of two types

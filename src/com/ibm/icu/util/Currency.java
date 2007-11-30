@@ -104,7 +104,7 @@ public class Currency extends MeasureUnit implements Serializable {
     /**
      * Returns a currency object for the default currency in the given
      * locale.
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static Currency getInstance(ULocale locale) {
         String currency = locale.getKeywordValue("currency");
@@ -124,21 +124,22 @@ public class Currency extends MeasureUnit implements Serializable {
      * Instantiate a currency from a resource bundle found in Locale loc.
      */
     /* package */ static Currency createCurrency(ULocale loc) {
-        // TODO: check, this munging might not be required for ULocale
         String country = loc.getCountry();
         String variant = loc.getVariant();
         boolean isPreEuro = variant.equals("PREEURO");
         boolean isEuro = variant.equals("EURO");
+        // TODO: ICU4C has service registration, and the currency is requested from the service here.
         ICUResourceBundle bundle = (ICUResourceBundle) ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,"supplementalData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         if(bundle==null){
             //throw new MissingResourceException()
+            return null;
         }
-        UResourceBundle cm = bundle.get("CurrencyMap");
-
-        // Do a linear search
-        String curriso = null;
         try {
+            UResourceBundle cm = bundle.get("CurrencyMap");
+            String curriso = null;
             UResourceBundle countryArray = cm.get(country);
+            // Some regions can have more than one current currency in use.
+            // The latest default currency is always the first one.
             UResourceBundle currencyReq = countryArray.get(0);
             curriso = currencyReq.getString("id");
             if (isPreEuro && curriso.equals(EUR_STR)) {
@@ -152,46 +153,13 @@ public class Currency extends MeasureUnit implements Serializable {
                 return new Currency(curriso);
             }
         } catch (MissingResourceException ex) {
-            try{
-                if (isPreEuro || isEuro) {
-                    country = country + '_' + variant;
-                }
-                // a deprecated ISO code may have been passed
-                // try to get the current country code
-                String rep = ULocale.getCurrentCountryID(country);
-                if(DEBUG) System.out.println("DEBUG: oldID: "+country +" newID:" +rep);
-                // here pointer comparison is valid since getCurrentCountryID
-                // will return the input string if there is no replacement
-                if(rep != country){
-                    curriso = cm.getString(rep);
-                    if (curriso != null) {
-                        return new Currency(curriso);
-                    }
-                }
-            }catch(MissingResourceException e){
-                //do nothing
-            }
+            // We don't know about this region.
+            // As of CLDR 1.5.1, the data includes deprecated region history too.
+            // So if we get here, either the region doesn't exist, or the data is really bad.
+            // Deprecated regions should return the last valid currency for that region in the data.
+            // We don't try to resolve it to a new region.
         }
         return null;
-        /*
-        for (int i=0; i<cm.length; ++i) {
-            if (country.equals((String) cm[i][0])) {
-                curriso = (String) cm[i][1];
-                break;
-            }
-        }
-
-        Currency curr = null;
-        if (curriso != null) {
-
-            curr = new Currency(curriso);
-
-            // TODO: Determine valid and actual locale correctly.
-            ULocale uloc = bundle.getULocale();
-            curr.setLocale(uloc, uloc);
-        }
-        return curr;
-        */
     }
 
     /**
@@ -211,7 +179,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * @param locale the ulocale under which to register the currency
      * @return a registry key that can be used to unregister this currency
      * @see #unregister
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static Object registerInstance(Currency currency, ULocale locale) {
         return getShim().registerInstance(currency, locale);
@@ -301,7 +269,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * Convenience and compatibility override of getName that
      * requests the symbol name.
      * @see #getName
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public String getSymbol() {
         return getSymbol(ULocale.getDefault());
@@ -312,7 +280,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * requests the symbol name.
      * @param loc the Locale for the symbol
      * @see #getName
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public String getSymbol(Locale loc) {
         return getSymbol(ULocale.forLocale(loc));
@@ -323,7 +291,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * requests the symbol name.
      * @param uloc the ULocale for the symbol
      * @see #getName
-     * @stable ICU 3.8
+     * @stable ICU 3.4
      */
     public String getSymbol(ULocale uloc) {
         return getName(uloc, SYMBOL_NAME, new boolean[1]);
@@ -342,7 +310,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * contains no entry for this currency, then the ISO 4217 code is
      * returned.  If isChoiceFormat[0] is true, then the result is a
      * ChoiceFormat pattern.  Otherwise it is a static string.
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public String getName(Locale locale,
                           int nameStyle,
@@ -363,7 +331,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * contains no entry for this currency, then the ISO 4217 code is
      * returned.  If isChoiceFormat[0] is true, then the result is a
      * ChoiceFormat pattern.  Otherwise it is a static string.
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public String getName(ULocale locale,
                           int nameStyle,

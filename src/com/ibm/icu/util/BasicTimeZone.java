@@ -503,6 +503,64 @@ public abstract class BasicTimeZone extends TimeZone {
     }
 
     /**
+     * The time type option for standard time used by
+     * {@link #getOffsetFromLocal(long, int, int, int[])}
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    public static final int LOCAL_STD = 0x01;
+
+    /**
+     * The time type option for daylight saving time used by
+     * {@link #getOffsetFromLocal(long, int, int, int[])}
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    public static final int LOCAL_DST = 0x03;
+
+    /**
+     * The option designate former time to be used by
+     * {@link #getOffsetFromLocal(long, int, int, int[])
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    public static final int LOCAL_FORMER = 0x04;
+
+    /**
+     * The option designate latter time to be used by
+     * {@link #getOffsetFromLocal(long, int, int, int[])
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    public static final int LOCAL_LATTER = 0x0C;
+
+    /**
+     * The bit mask for the time type option used by
+     * {@link #getOffsetFromLocal(long, int, int, int[])
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    protected static final int STD_DST_MASK = 0x03;
+
+    /**
+     * The bit mask for the former/latter option used by
+     * {@link #getOffsetFromLocal(long, int, int, int[])
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    protected static final int FORMER_LATTER_MASK = 0x0C;
+
+    /**
+     * Get time zone offsets from local wall time.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    public void getOffsetFromLocal(long date,
+            int nonExistingTimeOpt, int duplicatedTimeOpt, int[] offsets) {
+        throw new IllegalStateException("Not implemented");
+    }
+
+    /**
      * Protected no arg constructor.
      * @draft ICU 3.8
      * @provisional This API might change or be removed in a future release.

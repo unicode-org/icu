@@ -60,13 +60,16 @@ public abstract class DemoApplet extends java.applet.Applet {
         demoFrameClosed();
     }
 
-    protected static void demoFrameOpened() {
+    public static void demoFrameOpened() {
         demoFrameCount++;
+        System.err.println("DemoFrameOpened, now at:"+demoFrameCount);
     }
-    protected static void demoFrameClosed() {
+    public static void demoFrameClosed() {
         if (--demoFrameCount == 0) {
+            System.err.println("DemoFrameClosed, now at:"+demoFrameCount + " - quitting");
             System.exit(0);
         }
+        System.err.println("DemoFrameClosed, now at:"+demoFrameCount);
     }
 }
 

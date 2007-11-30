@@ -10,9 +10,14 @@
 */
 package com.ibm.icu.impl;
 
+import java.lang.ref.SoftReference;
+import java.text.ParseException;
 import java.text.ParsePosition;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
@@ -187,6 +192,11 @@ public final class ZoneMeta {
     }
 
     private static String[] getCanonicalInfo(String id) {
+        // We need to resolve Olson links which are not available in CLDR first
+        String olsonCanonicalID = getOlsonCanonicalID(id);
+        if (olsonCanonicalID == null) {
+            return null;
+        }
         if (canonicalMap == null) {
             Map m = new HashMap();
             Set s = new HashSet();
@@ -238,7 +248,7 @@ public final class ZoneMeta {
             }
         }
 
-        return (String[])canonicalMap.get(id);
+        return (String[])canonicalMap.get(olsonCanonicalID);
     }
 
     private static Map canonicalMap = null;
@@ -283,9 +293,10 @@ public final class ZoneMeta {
     }
 
     /**
-     * Handle fallbacks for generic time (rules E.. G)
+     * Returns a time zone location(region) format string defined by UTR#35.
+     * e.g. "Italy Time", "United States (Los Angeles) Time"
      */
-    public static String displayFallback(String tzid, String city, ULocale locale) {
+    public static String getLocationFormat(String tzid, String city, ULocale locale) {
         String[] info = getCanonicalInfo(tzid);
         if (info == null) {
             return null; // error
@@ -306,22 +317,23 @@ public final class ZoneMeta {
 //            if (rb.getLoadingStatus() != ICUResourceBundle.FROM_ROOT && rb.getLoadingStatus() != ICUResourceBundle.FROM_DEFAULT) {
 //                country = ULocale.getDisplayCountry("xx_" + country_code, locale);
 //            }
-//            if (country == null || country.length() == 0) country = country_code;
 // START WORKAROUND
             ULocale rbloc = rb.getULocale();
             if (!rbloc.equals(ULocale.ROOT) && rbloc.getLanguage().equals(locale.getLanguage())) {
                 country = ULocale.getDisplayCountry("xx_" + country_code, locale);
             }
+// END WORKAROUND
             if (country == null || country.length() == 0) {
                 country = country_code;
             }
-// END WORKAROUND
         }
         
         // This is not behavior specified in tr35, but behavior added by Mark.  
         // TR35 says to display the country _only_ if there is a localization.
         if (getSingleCountry(tzid) != null) { // single country
-            return displayRegion(country, locale);
+            String regPat = getTZLocalizationInfo(locale, REGION_FORMAT);
+            MessageFormat mf = new MessageFormat(regPat);
+            return mf.format(new Object[] { country });
         }
 
         if (city == null) {
@@ -332,40 +344,6 @@ public final class ZoneMeta {
         MessageFormat mf = new MessageFormat(flbPat);
 
         return mf.format(new Object[] { city, country });
-    }
-
-    public static String displayRegion(String cityOrCountry, ULocale locale) {
-        String regPat = getTZLocalizationInfo(locale, REGION_FORMAT);
-        MessageFormat mf = new MessageFormat(regPat);
-        return mf.format(new Object[] { cityOrCountry });
-    }
-
-    public static String displayGMT(long value, ULocale locale) {
-        //TODO: revisit after 3.8
-
-        String msgpat = "GMT{0}"; // Parser code is not quite ready to accept localized GMT string as of 3.8
-        //String msgpat = getTZLocalizationInfo(locale, GMT);
-        String dtepat = getTZLocalizationInfo(locale, HOUR);
-        
-        int n = dtepat.indexOf(';');
-        if (n != -1) {
-            if (value < 0) {
-                value = - value;
-                dtepat = dtepat.substring(n+1);
-            } else {
-                dtepat = dtepat.substring(0, n);
-            }
-        }
-
-        //final long mph = 3600000;
-        //final long mpm = 60000;
-
-        SimpleDateFormat sdf = new SimpleDateFormat(dtepat, locale);
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-        String res = sdf.format(new Long(value));
-        MessageFormat mf = new MessageFormat(msgpat);
-        res = mf.format(new Object[] { res });
-        return res;
     }
 
     public static final String
@@ -423,6 +401,35 @@ public final class ZoneMeta {
         } 
         return res;
     }
+
+    /**
+     * Get a canonical Olson zone ID for the given ID.  If the given ID is not valid,
+     * this method returns null as the result.  If the given ID is a link, then the
+     * referenced ID (canonical ID) is returned.
+     * @param id zone id
+     * @return a canonical Olson id (not a link)
+     */
+    public static synchronized String getOlsonCanonicalID(String id) {
+        if (!getOlsonMeta()) {
+            return null;
+        }
+        String canonicalID = null;
+        ICUResourceBundle top = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        try {
+            UResourceBundle res = getZoneByName(top, id);
+            if (res.getSize() == 1) {
+                int deref = res.getInt();
+                UResourceBundle names = top.get(kNAMES);
+                canonicalID = names.getString(deref);
+            } else {
+                canonicalID = id;
+            }
+        } catch (MissingResourceException mre) {
+            // throw away the exception
+        }
+        return canonicalID;
+    }
+    
     /**
      * Fetch a specific zone by name.  Replaces the getByKey call. 
      * @param top Top timezone resource
@@ -481,7 +488,7 @@ public final class ZoneMeta {
     private static final String kZONES    = "Zones";
     private static final String kNAMES    = "Names";
     private static final String kGMT_ID   = "GMT";
-    private static final String kRFC_TZ_PREFIX = "GMT";
+    private static final String kCUSTOM_TZ_PREFIX = "GMT";
     private static ICUCache zoneCache = new SimpleCache();
     /**
      * The Olson data is stored the "zoneinfo" resource bundle.
@@ -546,6 +553,8 @@ public final class ZoneMeta {
     // Maximum value of valid custom time zone hour/min
     private static final int kMAX_CUSTOM_HOUR = 23;
     private static final int kMAX_CUSTOM_MIN = 59;
+    private static final int kMAX_CUSTOM_SEC = 59;
+
     /**
      * Parse a custom time zone identifier and return a corresponding zone.
      * @param id a string of the form GMT[+-]hh:mm, GMT[+-]hhmm, or
@@ -564,6 +573,7 @@ public final class ZoneMeta {
             boolean negative = false;
             int hour = 0;
             int min = 0;
+            int sec = 0;
 
             if (id.charAt(pos.getIndex()) == 0x002D /*'-'*/) {
                 negative = true;
@@ -584,59 +594,468 @@ public final class ZoneMeta {
             }
             hour = n.intValue();
 
-            if (pos.getIndex() < id.length() &&
-                id.charAt(pos.getIndex()) == 0x003A /*':'*/) {
+            if (pos.getIndex() < id.length()){
+                if (pos.getIndex() - start > 2
+                        || id.charAt(pos.getIndex()) != 0x003A /*':'*/) {
+                    return null;
+                }
                 // hh:mm
                 pos.setIndex(pos.getIndex() + 1);
                 int oldPos = pos.getIndex();
                 n = numberFormat.parse(id, pos);
-                if (pos.getIndex() == oldPos) {
+                if ((pos.getIndex() - oldPos) != 2) {
+                    // must be 2 digits
                     return null;
                 }
                 min = n.intValue();
+                if (pos.getIndex() < id.length()) {
+                    if (id.charAt(pos.getIndex()) != 0x003A /*':'*/) {
+                        return null;
+                    }
+                    // [:ss]
+                    pos.setIndex(pos.getIndex() + 1);
+                    oldPos = pos.getIndex();
+                    n = numberFormat.parse(id, pos);
+                    if (pos.getIndex() != id.length()
+                            || (pos.getIndex() - oldPos) != 2) {
+                        return null;
+                    }
+                    sec = n.intValue();
+                }
             } else {
-                // hhmm or hh
+                // Supported formats are below -
+                //
+                // HHmmss
+                // Hmmss
+                // HHmm
+                // Hmm
+                // HH
+                // H
 
-                // Be strict about interpreting something as hh; it must be
-                // an offset < 23, and it must be one or two digits. Thus
-                // 0010 is interpreted as 00:10, but 10 is interpreted as
-                // 10:00.
-                if (hour > kMAX_CUSTOM_HOUR || (pos.getIndex() - start) > 2) {
-                    min = hour % 100;
-                    hour /= 100;
+                int length = pos.getIndex() - start;
+                if (length <= 0 || 6 < length) {
+                    // invalid length
+                    return null;
+                }
+                switch (length) {
+                    case 1:
+                    case 2:
+                        // already set to hour
+                        break;
+                    case 3:
+                    case 4:
+                        min = hour % 100;
+                        hour /= 100;
+                        break;
+                    case 5:
+                    case 6:
+                        sec = hour % 100;
+                        min = (hour/100) % 100;
+                        hour /= 10000;
+                        break;
                 }
             }
 
-            if (hour > kMAX_CUSTOM_HOUR || min > kMAX_CUSTOM_MIN) {
+            if (hour > kMAX_CUSTOM_HOUR || min > kMAX_CUSTOM_MIN || sec > kMAX_CUSTOM_SEC) {
                 return null;
             }
 
-            // Create time zone ID in RFC822 format - GMT[+|-]hhmm
-            StringBuffer zid = new StringBuffer(kRFC_TZ_PREFIX);
-            if (hour != 0 || min != 0) {
-                if(negative) {
-                    zid.append('-');
-                } else {
-                    zid.append('+');
-                }
-                // Always use US-ASCII digits
-                if (hour < 10) {
-                    zid.append('0');
-                }
-                zid.append(hour);
-                if (min < 10) {
-                    zid.append('0');
-                }
-                zid.append(min);
-            }
-
-            int offset = (hour * 60 + min) * 60 * 1000;
+            String zid = getCustomID(hour, min, sec, negative);
+            int offset = ((hour * 60 + min) * 60 + sec) * 1000;
             if(negative) {
                 offset = -offset;
             }
-            TimeZone z = new SimpleTimeZone(offset, zid.toString());
+            TimeZone z = new SimpleTimeZone(offset, zid);
             return z;
         }
         return null;
     }
+
+    /**
+     * Creates a custom zone for the offset
+     * @param offset GMT offset in milliseconds
+     * @return A custom TimeZone for the offset with normalized time zone id
+     */
+    public static TimeZone getCustomTimeZone(int offset) {
+        boolean negative = false;
+        int tmp = offset;
+        if (offset < 0) {
+            negative = true;
+            tmp = -offset;
+        }
+
+        int hour, min, sec, millis;
+
+        millis = tmp % 1000;
+        tmp /= 1000;
+        sec = tmp % 60;
+        tmp /= 60;
+        min = tmp % 60;
+        hour = tmp / 60;
+
+        // Note: No millisecond part included in TZID for now
+        String zid = getCustomID(hour, min, sec, negative);
+
+        return new SimpleTimeZone(offset, zid);
+    }
+
+    /*
+     * Returns the normalized custom TimeZone ID
+     */
+    private static String getCustomID(int hour, int min, int sec, boolean negative) {
+        // Create normalized time zone ID - GMT[+|-]hhmm[ss]
+        StringBuffer zid = new StringBuffer(kCUSTOM_TZ_PREFIX);
+        if (hour != 0 || min != 0) {
+            if(negative) {
+                zid.append('-');
+            } else {
+                zid.append('+');
+            }
+            // Always use US-ASCII digits
+            if (hour < 10) {
+                zid.append('0');
+            }
+            zid.append(hour);
+            if (min < 10) {
+                zid.append('0');
+            }
+            zid.append(min);
+
+            if (sec != 0) {
+                // Optional second field
+                if (sec < 10) {
+                    zid.append('0');
+                }
+                zid.append(sec);
+            }
+        }
+        return zid.toString();
+    }
+
+    private static SoftReference OLSON_TO_META_REF;
+    private static SoftReference META_TO_OLSON_REF;
+
+    static class OlsonToMetaMappingEntry {
+        String mzid;
+        long from;
+        long to;
+    }
+
+    private static class MetaToOlsonMappingEntry {
+        String id;
+        String territory;
+    }
+
+    static Map getOlsonToMetaMap() {
+        Map olsonToMeta = null;
+        synchronized(ZoneMeta.class) {
+            if (OLSON_TO_META_REF != null) {
+                olsonToMeta = (HashMap)OLSON_TO_META_REF.get();
+            }
+            if (olsonToMeta == null) {
+                olsonToMeta = createOlsonToMetaMap();
+                if (olsonToMeta == null) {
+                    // We may not need this code for ICU4J...
+                    olsonToMeta = createOlsonToMetaMapOld();
+                }
+                if (olsonToMeta == null) {
+                    // We need to return non-null Map to avoid disaster
+                    olsonToMeta = new HashMap();
+                }
+                OLSON_TO_META_REF = new SoftReference(olsonToMeta);
+            }
+        }
+        return olsonToMeta;
+    }
+
+    /*
+     * Create olson tzid to metazone mappings from metazoneInfo.res (3.8.1 or later)
+     */
+    private static Map createOlsonToMetaMap() {
+        // Create olson id to metazone mapping table
+        HashMap olsonToMeta = null;
+        UResourceBundle metazoneMappingsBundle = null;
+        try {
+            UResourceBundle bundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "metazoneInfo");
+            metazoneMappingsBundle = bundle.get("metazoneMappings");
+        } catch (MissingResourceException mre) {
+            // do nothing
+        }
+        if (metazoneMappingsBundle != null) {
+            String[] tzids = getAvailableIDs();
+            for (int i = 0; i < tzids.length; i++) {
+                // Skip aliases
+                if (!tzids[i].equals(getCanonicalID(tzids[i]))) {
+                    continue;
+                }
+                String tzkey = tzids[i].replace('/', ':');
+                try {
+                    UResourceBundle zoneBundle = metazoneMappingsBundle.get(tzkey);
+                    LinkedList mzMappings = new LinkedList();
+                    for (int idx = 0; ; idx++) {
+                        try {
+                            UResourceBundle mz = zoneBundle.get("mz" + idx);
+                            String[] mzstr = mz.getStringArray();
+                            if (mzstr == null || mzstr.length != 3) {
+                                continue;
+                            }
+                            OlsonToMetaMappingEntry mzmap = new OlsonToMetaMappingEntry();
+                            mzmap.mzid = mzstr[0].intern();
+                            mzmap.from = parseDate(mzstr[1]);
+                            mzmap.to = parseDate(mzstr[2]);
+
+                            // Add this mapping to the list
+                            mzMappings.add(mzmap);
+                        } catch (MissingResourceException nomz) {
+                            // we're done
+                            break;
+                        } catch (IllegalArgumentException baddate) {
+                            // skip this
+                        }
+                    }
+                    if (mzMappings.size() != 0) {
+                        // Add to the olson-to-meta map
+                        if (olsonToMeta == null) {
+                            olsonToMeta = new HashMap();
+                        }
+                        olsonToMeta.put(tzids[i], mzMappings);
+                    }
+                } catch (MissingResourceException noum) {
+                    // Does not use metazone, just skip this.
+                }
+            }
+        }
+        return olsonToMeta;
+    }
+
+    /*
+     * Create olson tzid to metazone mappings from root.res (3.8)
+     */
+    private static Map createOlsonToMetaMapOld() {
+        // Create olson id to metazone mapping table
+        HashMap olsonToMeta = null;
+        UResourceBundle zoneStringsBundle = null;
+        try {
+            UResourceBundle bundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "root");
+            zoneStringsBundle = bundle.get("zoneStrings");
+        } catch (MissingResourceException mre) {
+            // do nothing
+        }
+        if (zoneStringsBundle != null) {
+            String[] tzids = getAvailableIDs();
+            for (int i = 0; i < tzids.length; i++) {
+                // Skip aliases
+                if (!tzids[i].equals(getCanonicalID(tzids[i]))) {
+                    continue;
+                }
+                String tzkey = tzids[i].replace('/', ':');
+                try {
+                    UResourceBundle zoneBundle = zoneStringsBundle.get(tzkey);
+                    UResourceBundle useMZ = zoneBundle.get("um");
+                    LinkedList mzMappings = new LinkedList();
+                    for (int idx = 0; ; idx++) {
+                        try {
+                            UResourceBundle mz = useMZ.get("mz" + idx);
+                            String[] mzstr = mz.getStringArray();
+                            if (mzstr == null || mzstr.length != 3) {
+                                continue;
+                            }
+                            OlsonToMetaMappingEntry mzmap = new OlsonToMetaMappingEntry();
+                            mzmap.mzid = mzstr[0].intern();
+                            mzmap.from = parseDate(mzstr[1]);
+                            mzmap.to = parseDate(mzstr[2]);
+
+                            // Add this mapping to the list
+                            mzMappings.add(mzmap);
+                        } catch (MissingResourceException nomz) {
+                            // we're done
+                            break;
+                        } catch (IllegalArgumentException baddate) {
+                            // skip this
+                        }
+                    }
+                    if (mzMappings.size() != 0) {
+                        // Add to the olson-to-meta map
+                        if (olsonToMeta == null) {
+                            olsonToMeta = new HashMap();
+                        }
+                        olsonToMeta.put(tzids[i], mzMappings);
+                    }
+                } catch (MissingResourceException noum) {
+                    // Does not use metazone, just skip this.
+                }
+            }
+        }
+        return olsonToMeta;
+    }
+    
+    /**
+     * Returns a CLDR metazone ID for the given Olson tzid and time.
+     */
+    public static String getMetazoneID(String olsonID, long date) {
+        String mzid = null;
+        Map olsonToMeta = getOlsonToMetaMap();
+        List mappings = (List)olsonToMeta.get(olsonID);
+        if (mappings != null) {
+            for (int i = 0; i < mappings.size(); i++) {
+                OlsonToMetaMappingEntry mzm = (OlsonToMetaMappingEntry)mappings.get(i);
+                if (date >= mzm.from && date < mzm.to) {
+                    mzid = mzm.mzid;
+                    break;
+                }
+            }
+        }
+        return mzid;
+    }
+
+    private static Map getMetaToOlsonMap() {
+        HashMap metaToOlson = null;
+        synchronized(ZoneMeta.class) {
+            if (META_TO_OLSON_REF != null) {
+                metaToOlson = (HashMap)META_TO_OLSON_REF.get();
+            }
+            if (metaToOlson == null) {
+                metaToOlson = new HashMap();
+                UResourceBundle metazonesBundle = null;
+                try {
+                    UResourceBundle supplementalBundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,
+                        "supplementalData");
+                    UResourceBundle  mapTimezonesBundle = supplementalBundle.get("mapTimezones");
+                    metazonesBundle = mapTimezonesBundle.get("metazones");
+                } catch (MissingResourceException mre) {
+                    // do nothing
+                }
+                if (metazonesBundle != null) {
+                    Enumeration mzenum = metazonesBundle.getKeys();
+                    while (mzenum.hasMoreElements()) {
+                        String mzkey = (String)mzenum.nextElement();
+                        if (!mzkey.startsWith("meta:")) {
+                            continue;
+                        }
+                        String tzid = null;
+                        try {
+                            tzid = metazonesBundle.getString(mzkey);
+                        } catch (MissingResourceException mre) {
+                            // It should not happen..
+                        }
+                        if (tzid != null) {
+                            int territoryIdx = mzkey.lastIndexOf('_');
+                            if (territoryIdx > 0) {
+                                String mzid = mzkey.substring(5 /* "meta:".length() */, territoryIdx);
+                                String territory = mzkey.substring(territoryIdx + 1);
+                                List mappings = (List)metaToOlson.get(mzid);
+                                if (mappings == null) {
+                                    mappings = new LinkedList();
+                                    metaToOlson.put(mzid, mappings);
+                                }
+                                MetaToOlsonMappingEntry olsonmap = new MetaToOlsonMappingEntry();
+                                olsonmap.id = tzid;
+                                olsonmap.territory = territory;
+                                mappings.add(olsonmap);
+                            }
+                        }
+                    }
+                }
+                META_TO_OLSON_REF = new SoftReference(metaToOlson);
+            }
+        }
+        return metaToOlson;
+    }
+
+    /**
+     * Returns an Olson ID for the ginve metazone and region
+     */
+    public static String getZoneIdByMetazone(String metazoneID, String region) {
+        String tzid = null;
+        Map metaToOlson = getMetaToOlsonMap();
+        List mappings = (List)metaToOlson.get(metazoneID);
+        if (mappings != null) {
+            for (int i = 0; i < mappings.size(); i++) {
+                MetaToOlsonMappingEntry olsonmap = (MetaToOlsonMappingEntry)mappings.get(i);
+                if (olsonmap.territory.equals(region)) {
+                    tzid = olsonmap.id;
+                    break;
+                } else if (olsonmap.territory.equals("001")) {
+                    tzid = olsonmap.id;
+                }
+            }
+        }
+        return tzid;
+    }
+
+//    /**
+//     * Returns an Olson ID for the given metazone and locale
+//     */
+//    public static String getZoneIdByMetazone(String metazoneID, ULocale loc) {
+//        String region = loc.getCountry();
+//        if (region.length() == 0) {
+//            // Get likely region
+//            ULocale tmp = ULocale.addLikelySubtag(loc);
+//            region = tmp.getCountry();
+//        }
+//        return getZoneIdByMetazone(metazoneID, region);
+//    }
+
+    /*
+     * Convert a date string used by metazone mappings to long.
+     * The format used by CLDR metazone mapping is "yyyy-MM-dd HH:mm".
+     * We do not want to use SimpleDateFormat to parse the metazone
+     * mapping range strings in createOlsonToMeta, because it might be
+     * called from SimpleDateFormat initialization code.
+     */
+     static long parseDate (String text) throws IllegalArgumentException {
+        int year = 0, month = 0, day = 0, hour = 0, min = 0;
+        int idx;
+        int n;
+
+        // "yyyy" (0 - 3)
+        for (idx = 0; idx <= 3; idx++) {
+            n = text.charAt(idx) - '0';
+            if (n >= 0 && n < 10) {
+                year = 10*year + n;
+            } else {
+                throw new IllegalArgumentException("Bad year");
+            }
+        }
+        // "MM" (5 - 6)
+        for (idx = 5; idx <= 6; idx++) {
+            n = text.charAt(idx) - '0';
+            if (n >= 0 && n < 10) {
+                month = 10*month + n;
+            } else {
+                throw new IllegalArgumentException("Bad month");
+            }
+        }
+        // "dd" (8 - 9)
+        for (idx = 8; idx <= 9; idx++) {
+            n = text.charAt(idx) - '0';
+            if (n >= 0 && n < 10) {
+                day = 10*day + n;
+            } else {
+                throw new IllegalArgumentException("Bad day");
+            }
+        }
+        // "HH" (11 - 12)
+        for (idx = 11; idx <= 12; idx++) {
+            n = text.charAt(idx) - '0';
+            if (n >= 0 && n < 10) {
+                hour = 10*hour + n;
+            } else {
+                throw new IllegalArgumentException("Bad hour");
+            }
+        }
+        // "mm" (14 - 15)
+        for (idx = 14; idx <= 15; idx++) {
+            n = text.charAt(idx) - '0';
+            if (n >= 0 && n < 10) {
+                min = 10*min + n;
+            } else {
+                throw new IllegalArgumentException("Bad minute");
+            }
+        }
+
+        long date = Grego.fieldsToDay(year, month - 1, day) * Grego.MILLIS_PER_DAY
+                    + hour * Grego.MILLIS_PER_HOUR + min * Grego.MILLIS_PER_MINUTE;
+        return date;
+     }
 }

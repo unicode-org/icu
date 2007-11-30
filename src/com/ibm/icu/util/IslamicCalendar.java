@@ -199,7 +199,7 @@ public class IslamicCalendar extends Calendar {
      * in the default time zone with the given locale.
      *
      * @param locale the given ulocale.
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public IslamicCalendar(ULocale locale)
     {
@@ -226,7 +226,7 @@ public class IslamicCalendar extends Calendar {
      *
      * @param zone the given time zone.
      * @param locale the given ulocale.
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public IslamicCalendar(TimeZone zone, ULocale locale)
     {

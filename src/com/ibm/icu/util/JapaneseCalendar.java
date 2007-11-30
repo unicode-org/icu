@@ -87,7 +87,7 @@ public class JapaneseCalendar extends GregorianCalendar {
      * Constructs a <code>JapaneseCalendar</code> based on the current time
      * in the default time zone with the given locale.
      * @param locale the given ulocale.
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public JapaneseCalendar(ULocale locale) {
         super(locale);
@@ -113,7 +113,7 @@ public class JapaneseCalendar extends GregorianCalendar {
      * @param zone the given time zone.
      *
      * @param locale the given ulocale.
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public JapaneseCalendar(TimeZone zone, ULocale locale) {
         super(zone, locale);

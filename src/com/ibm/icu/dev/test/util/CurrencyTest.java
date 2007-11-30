@@ -11,7 +11,9 @@
 
 package com.ibm.icu.dev.test.util;
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.*;
+
 import java.util.Locale;
 
 /**
@@ -165,11 +167,27 @@ public class CurrencyTest extends TestFmwk {
     }
 
     public void TestCurrencyKeyword() {
-    ULocale locale = new ULocale("th_TH@collation=traditional;currency=QQQ");
-    Currency currency = Currency.getInstance(locale);
-    String result = currency.getCurrencyCode();
-    if (!"QQQ".equals(result)) {
-        errln("got unexpected currency: " + result);
+        ULocale locale = new ULocale("th_TH@collation=traditional;currency=QQQ");
+        Currency currency = Currency.getInstance(locale);
+        String result = currency.getCurrencyCode();
+        if (!"QQQ".equals(result)) {
+            errln("got unexpected currency: " + result);
+        }
     }
+    
+    public void TestDeprecatedCurrencyFormat() {
+        // bug 5952
+        Locale locale = new Locale("sr", "QQ");
+        DecimalFormatSymbols icuSymbols = new 
+        com.ibm.icu.text.DecimalFormatSymbols(locale);
+        String symbol = icuSymbols.getCurrencySymbol();
+        Currency currency = icuSymbols.getCurrency();
+        String expectCur = null;
+        String expectSym = "\u00A4";
+        if(!symbol.toString().equals(expectSym) || currency != null) {
+            errln("for " + locale + " expected " + expectSym+"/"+expectCur + " but got " + symbol+"/"+currency);
+        } else {
+            logln("for " + locale + " expected " + expectSym+"/"+expectCur + " and got " + symbol+"/"+currency);
+        }
     }
 }

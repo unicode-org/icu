@@ -55,7 +55,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         /*
          * Computational variables.
          */
-        int offset, hours, minutes;
+        int offset, hours, minutes, seconds;
         /*
          * Instantiate a SimpleDateFormat set up to produce a full time
          zone name.
@@ -96,8 +96,12 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
             hours = offset / 3600000;
             minutes = (offset % 3600000) / 60000;
+            seconds = (offset % 60000) / 1000;
             String dstOffset = sign + (hours < 10 ? "0" : "") + hours
                     + ":" + (minutes < 10 ? "0" : "") + minutes; 
+            if (seconds != 0) {
+                dstOffset += ":" + (seconds < 10 ? "0" : "") + seconds;
+            }
             /*
              * Instantiate a date so we can display the time zone name.
              */
@@ -378,7 +382,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             "y/M/d H:mm zzzz", "F", "2004 01 01 01:00 PST", "2004/1/1 1:00 Pacific Standard Time",
             "y/M/d H:mm zzz", "F", "2004 01 01 01:00 PST", "2004/1/1 1:00 PST",
             "y/M/d H:mm vvvv", "F", "2004 01 01 01:00 PST", "2004/1/1 1:00 Pacific Time",
-            "y/M/d H:mm vvv", "F", "2004 01 01 01:00 PST", "2004/1/1 1:00 PT",
+            "y/M/d H:mm v", "F", "2004 01 01 01:00 PST", "2004/1/1 1:00 PT",
             // non-generic timezone string influences dst offset even if wrong for date/time
             "y/M/d H:mm zzz", "pf", "2004/1/1 1:00 PDT", "2004 01 01 01:00 PDT", "2004/1/1 0:00 PST",
             "y/M/d H:mm vvvv", "pf", "2004/1/1 1:00 PDT", "2004 01 01 01:00 PDT", "2004/1/1 0:00 Pacific Time",
@@ -391,19 +395,19 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             "y/M/d H:mm vvvv", "pf", "2004/7/1 1:00 PT", "2004 07 01 01:00 PDT", "2004/7/1 1:00 Pacific Time",
             // daylight savings time transition edge cases.
             // time to parse does not really exist, PT interpreted as earlier time
-            "y/M/d H:mm zzz", "pf", "2005/4/3 2:30 PT", "2005 04 03 01:30 PST", "2005/4/3 1:30 PST",
+            "y/M/d H:mm zzz", "pf", "2005/4/3 2:30 PT", "2005 04 03 03:30 PDT", "2005/4/3 3:30 PDT",
             "y/M/d H:mm zzz", "pf", "2005/4/3 2:30 PST", "2005 04 03 03:30 PDT", "2005/4/3 3:30 PDT",
             "y/M/d H:mm zzz", "pf", "2005/4/3 2:30 PDT", "2005 04 03 01:30 PST", "2005/4/3 1:30 PST",
-            "y/M/d H:mm v", "pf", "2005/4/3 2:30 PT", "2005 04 03 01:30 PST", "2005/4/3 1:30 PT",
+            "y/M/d H:mm v", "pf", "2005/4/3 2:30 PT", "2005 04 03 03:30 PDT", "2005/4/3 3:30 PT",
             "y/M/d H:mm v", "pf", "2005/4/3 2:30 PST", "2005 04 03 03:30 PDT", "2005/4/3 3:30 PT",
             "y/M/d H:mm v", "pf", "2005/4/3 2:30 PDT", "2005 04 03 01:30 PST", "2005/4/3 1:30 PT",
-            "y/M/d H:mm", "pf", "2005/4/3 2:30", "2005 04 03 01:30 PST", "2005/4/3 1:30",
-            // time to parse is ambiguous, PT interpreted as earlier time (?)
-            "y/M/d H:mm zzz", "pf", "2005/4/3 1:30 PT", "2005 04 03 01:30 PST", "2005/4/3 1:30 PST",
-            "y/M/d H:mm v", "pf", "2005/4/3 1:30 PT", "2005 04 03  01:30 PST", "2005/4/3 1:30 PT",
-            "y/M/d H:mm", "pf", "2005/4/3 1:30 PT", "2005 04 03 01:30 PST", "2005/4/3 1:30",
-            
-             "y/M/d H:mm zzz", "pf", "2004/10/31 1:30 PT", "2004 10 31 01:30 PST", "2004/10/31 1:30 PST",
+            "y/M/d H:mm", "pf", "2005/4/3 2:30", "2005 04 03 03:30 PDT", "2005/4/3 3:30",
+            // time to parse is ambiguous, PT interpreted as later time
+            "y/M/d H:mm zzz", "pf", "2005/10/30 1:30 PT", "2005 10 30 01:30 PST", "2005/10/30 1:30 PST",
+            "y/M/d H:mm v", "pf", "2005/10/30 1:30 PT", "2005 10 30  01:30 PST", "2005/10/30 1:30 PT",
+            "y/M/d H:mm", "pf", "2005/10/30 1:30 PT", "2005 10 30 01:30 PST", "2005/10/30 1:30",
+
+            "y/M/d H:mm zzz", "pf", "2004/10/31 1:30 PT", "2004 10 31 01:30 PST", "2004/10/31 1:30 PST",
              "y/M/d H:mm zzz", "pf", "2004/10/31 1:30 PST", "2004 10 31 01:30 PST", "2004/10/31 1:30 PST",
              "y/M/d H:mm zzz", "pf", "2004/10/31 1:30 PDT", "2004 10 31 01:30 PDT", "2004/10/31 1:30 PDT",
              "y/M/d H:mm v", "pf", "2004/10/31 1:30 PT", "2004 10 31 01:30 PST", "2004/10/31 1:30 PT",
@@ -419,7 +423,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         logln("cross format/parse tests");
         final String basepat = "yy/MM/dd H:mm ";
         final SimpleDateFormat[] formats = { 
-            new SimpleDateFormat(basepat + "vvv", en),
+            new SimpleDateFormat(basepat + "v", en),
             new SimpleDateFormat(basepat + "vvvv", en),
             new SimpleDateFormat(basepat + "zzz", en),
             new SimpleDateFormat(basepat + "zzzz", en)
@@ -516,8 +520,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
-    //private static final String GMT_BG = "\u0413\u0440\u0438\u0438\u043D\u0443\u0438\u0447";
-    private static final String GMT_BG = "GMT";
+    private static final String GMT_BG = "\u0413\u0440\u0438\u0438\u043D\u0443\u0438\u0447";
+    //private static final String GMT_BG = "GMT";
 
     private static final String[][] fallbackTests  = {
         { "en", "America/Los_Angeles", "2004-01-15T00:00:00Z", "Z", "-0800", "-8:00" },
@@ -2175,25 +2179,25 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             // cover bad text after GMT+.
             try {
                 fmt.parse("07/10/53 GMT+blecch");
-                errln("whoops GMT+blecch");
+                logln("ok GMT+blecch");
             }
             catch (ParseException e) {
-                logln("ok GMT+blecch");
+                errln("whoops GMT+blecch");
             }
             
             // cover bad text after GMT+hh:.
             try {
                 fmt.parse("07/10/53 GMT+07:blecch");
-                errln("whoops GMT+xx:blecch");
+                logln("ok GMT+xx:blecch");
             }
             catch (ParseException e) {
-                logln("ok GMT+xx:blecch");
+                errln("whoops GMT+xx:blecch");
             }
             
             // cover no ':' GMT+#, # < 24 (hh)
             try {
                 d = fmt.parse("07/10/53 GMT+07");
-                logln("ok");
+                logln("ok GMT+07");
             }
             catch (ParseException e) {
                 errln("Parse of 07/10/53 GMT+07 for pattern MM/dd/yy z");
@@ -2208,18 +2212,36 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 errln("Parse of 07/10/53 GMT+0730 for pattern MM/dd/yy z");
             }
             
-            // cover no ':' GMT+#, # > 2400 (this should fail, i suspect, but doesn't)
+            // cover GMT+#, # with second field
             try {
-                d = fmt.parse("07/10/53 GMT+07300");
-                logln("should GMT+9999 fail?");
+                d = fmt.parse("07/10/53 GMT+07:30:15");
+                logln("ok GMT+07:30:15");
             }
             catch (ParseException e) {
-                logln("ok, I guess");
+                errln("Parse of 07/10/53 GMT+07:30:15 for pattern MM/dd/yy z");
+            }
+
+            // cover no ':' GMT+#, # with second field, no leading zero
+            try {
+                d = fmt.parse("07/10/53 GMT+73015");
+                logln("ok GMT+73015");
+            }
+            catch (ParseException e) {
+                errln("Parse of 07/10/53 GMT+73015 for pattern MM/dd/yy z");
+            }
+
+            // cover no ':' GMT+#, # with 1 digit second field
+            try {
+                d = fmt.parse("07/10/53 GMT+07300");
+                logln("ok GMT+07300");
+            }
+            catch (ParseException e) {
+                errln("Parse of 07/10/53 GMT+07300 for pattern MM/dd/yy z");
             }
             
             // cover raw digits with no leading sign (bad RFC822) 
             try {
-                fmt.parse("07/10/53 07");
+                d = fmt.parse("07/10/53 07");
                 errln("Parse of 07/10/53 07 for pattern MM/dd/yy z passed!");
             }
             catch (ParseException e) {

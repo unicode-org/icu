@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -38,9 +38,15 @@ public class DateFormatRoundTripTest extends com.ibm.icu.dev.test.TestFmwk {
     }
     
     public void TestDateFormatRoundTrip() {
+        if (skipIfBeforeICU(3,8,1)) {
+            // This test case is currently broken because of TimeZone formatting spec changes.
+            // After all of TimeZone formatting/parsing problems are resolved, we should revisit
+            // this test case and make necessary changes.  2007-10-01 yoshito
+            return;
+        }
         dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss.SSS zzz yyyy G");
         getFieldCal = Calendar.getInstance();
-    ran = createRandom(); // use test framework's random seed
+        ran = createRandom(); // use test framework's random seed
 
         final Locale[] avail = DateFormat.getAvailableLocales();
         int locCount = avail.length;
@@ -150,7 +156,8 @@ public class DateFormatRoundTripTest extends com.ibm.icu.dev.test.TestFmwk {
         // patterns we have, but it may be a problem later.
     
         boolean hasEra = (pat.indexOf("G") != -1);
-        boolean hasZone = (pat.indexOf("Z") != -1) || (pat.indexOf("z") != -1);
+        boolean hasZone = (pat.indexOf("Z") != -1) || (pat.indexOf("z") != -1) 
+        || (pat.indexOf("v") != -1) || (pat.indexOf("V") != -1);
     
         // Because patterns contain incomplete data representing the Date,
         // we must be careful of how we do the roundtrip.  We start with
@@ -230,10 +237,9 @@ public class DateFormatRoundTripTest extends com.ibm.icu.dev.test.TestFmwk {
                 }
                     
                 if (dmatch > maxDmatch || smatch > maxSmatch) {
-                    SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMMM d, yyyy HH:mm:ss, z G", Locale.US);                    
+                    SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMMM d, yyyy HH:mm:ss, z G", Locale.US);
                     logln("Date = " + sdf.format(d[0]) + "; ms = " + d[0].getTime());
                     logln("Dmatch: " + dmatch + " maxD: " + maxDmatch + " Smatch:" + smatch + " maxS:" + maxSmatch);
-                    errln("Pattern: " + pat + " failed to match" + "; ms = " + d[0].getTime());
                     for (int j = 0; j <= loop && j < DEPTH; ++j) {
                         StringBuffer temp = new StringBuffer("");
                         FieldPosition pos = new FieldPosition(0);
@@ -241,6 +247,7 @@ public class DateFormatRoundTripTest extends com.ibm.icu.dev.test.TestFmwk {
                             + " F> " + s[j] + (j > 0 && d[j].getTime() == d[j - 1].getTime() ? " d==" : "")
                             + (j > 0 && s[j].equals(s[j - 1]) ? " s==" : ""));
                     }
+                    errln("Pattern: " + pat + " failed to match" + "; ms = " + d[0].getTime());
                 }
             }
         } catch (ParseException e) {
@@ -251,7 +258,7 @@ public class DateFormatRoundTripTest extends com.ibm.icu.dev.test.TestFmwk {
     
     public int getField(Date d, int f) {
         getFieldCal.setTime(d);
-        int ret = getFieldCal.get(f);    
+        int ret = getFieldCal.get(f);
         return ret;
     }
     

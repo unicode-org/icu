@@ -1225,7 +1225,7 @@ public abstract class Transliterator implements StringTransform  {
      * @param inLocale the ULocale in which the display name should be
      * localized.
      * @see java.text.MessageFormat
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static String getDisplayName(String id, ULocale inLocale) {
 
@@ -1674,7 +1674,7 @@ public abstract class Transliterator implements StringTransform  {
      * This is generally used to create short aliases of compound IDs.
      * @param aliasID The new ID being registered.
      * @param realID The existing ID that the new ID should be an alias of.
-     * @stable ICU 3.8
+     * @stable ICU 3.6
      */
     public static void registerAlias(String aliasID, String realID) {
         registry.put(aliasID, realID, true);

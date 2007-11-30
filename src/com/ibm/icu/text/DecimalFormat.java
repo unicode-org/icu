@@ -2565,7 +2565,7 @@ public class DecimalFormat extends NumberFormat {
      * @see #getRoundingIncrement
      * @see #getRoundingMode
      * @see #setRoundingMode
-     * @stable ICU 3.8
+     * @stable ICU 3.6
      */
     public void setRoundingIncrement(BigDecimal newValue) {
         int i = newValue == null

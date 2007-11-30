@@ -733,6 +733,7 @@ public class ULocaleTest extends TestFmwk {
             { "in",  "ind", "in", "", "" },
             { "id",  "ind", "id", "", "" }, /* NO aliasing */
             { "sh",  "srp", "sh", "", "" },
+            { "zz_CS",  "", "zz", "SCG", "CS" },
             { "zz_FX",  "", "zz", "FXX", "FX" },
             { "zz_RO",  "", "zz", "ROU", "RO" },
             { "zz_TP",  "", "zz", "TMP", "TP" },
@@ -744,6 +745,7 @@ public class ULocaleTest extends TestFmwk {
             { "zz_ZAR",  "", "zz", "ZAR", "ZR" },
             { "zz_TMP",  "", "zz", "TMP", "TP" },
             { "zz_TLS",  "", "zz", "TLS", "TL" },
+            { "zz_YUG",  "", "zz", "YUG", "YU" },
             { "mlt_PSE", "mlt", "mt", "PSE", "PS" },
             { "iw", "heb", "iw", "", "" },
             { "ji", "yid", "ji", "", "" },
@@ -1385,6 +1387,34 @@ public class ULocaleTest extends TestFmwk {
         String disp = loc.getDisplayName(ULocale.GERMAN);
         if(!disp.equals("Deutsch (Schweiz)")){
             errln("Did not get the expected display name for de_CH locale. Got: "+ prettify(disp));
+        }
+    }
+
+    public void TestAddLikelySubtags() {
+        String[][] data = {
+            {"en", "en_Latn_US"},
+            {"en_US_BOSTON", "en_Latn_US_BOSTON"},
+            {"th@calendar=buddhist", "th_Thai_TH@calendar=buddhist"},
+            {"ar_ZZ", "ar_Arab_EG"},
+            {"cch", "cch_Latn_NG"},
+            {"zh", "zh_Hans_CN"},
+            {"zh_TW", "zh_Hant_TW"},
+            {"zh_HK", "zh_Hant_HK"},
+            {"zh_Hant", "zh_Hant_TW"},
+            {"zh_Zzzz_CN", "zh_Hans_CN"},
+            {"und_US", "en_Latn_US"},
+            {"und_HK", "zh_Hant_HK"},
+            /* Not yet implemented
+            {"art_lojban", "arg_lojban"},
+            {"zh_cmn_Hans", "zh_cmn_Hans"},
+            */
+        };
+        for (int i = 0; i < data.length; i++) {
+            ULocale org = new ULocale(data[i][0]);
+            ULocale res = ULocale.addLikelySubtag(org);
+            if (!res.toString().equals(data[i][1])) {
+                errln("Original: " + data[i][0] + " Expected: " + data[i][1] + " - but got " + res.toString());
+            }
         }
     }
 }

@@ -1,6 +1,6 @@
 /*
  *********************************************************************************
- * Copyright (C) 2004 -2007, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2007, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                  *
  *********************************************************************************
  *
@@ -45,10 +45,10 @@ import java.lang.IllegalArgumentException;
  * datetime time scale.</p>
  *
  * <p>For more details and background, see the
- * <a href="http://icu.sourceforge.net/userguide/universalTimeScale.html">Universal Time Scale</a>
+ * <a href="http://www.icu-project.org/userguide/universalTimeScale.html">Universal Time Scale</a>
  * chapter in the ICU User Guide.</p>
  *
- * @stable ICU 3.8
+ * @stable ICU 3.2
  */
 
 public final class UniversalTimeScale
@@ -57,7 +57,7 @@ public final class UniversalTimeScale
      * Used in the JDK. Data is a <code>long</code>. Value
      * is milliseconds since January 1, 1970.
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static final int JAVA_TIME = 0;
 
@@ -65,7 +65,7 @@ public final class UniversalTimeScale
      * Used in Unix systems. Data is an <code>int</code> or a <code>long</code>. Value
      * is seconds since January 1, 1970.
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static final int UNIX_TIME = 1;
 
@@ -73,7 +73,7 @@ public final class UniversalTimeScale
      * Used in the ICU4C. Data is a <code>double</code>. Value
      * is milliseconds since January 1, 1970.
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static final int ICU4C_TIME = 2;
 
@@ -81,7 +81,7 @@ public final class UniversalTimeScale
      * Used in Windows for file times. Data is a <code>long</code>. Value
      * is ticks (1 tick == 100 nanoseconds) since January 1, 1601.
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static final int WINDOWS_FILE_TIME = 3;
 
@@ -89,7 +89,7 @@ public final class UniversalTimeScale
      * Used in the .NET framework's <code>System.DateTime</code> structure.
      * Data is a <code>long</code>. Value is ticks (1 tick == 100 nanoseconds) since January 1, 0001.
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static final int DOTNET_DATE_TIME = 4;
 
@@ -97,7 +97,7 @@ public final class UniversalTimeScale
      * Used in older Macintosh systems. Data is an <code>int</code>. Value
      * is seconds since January 1, 1904.
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static final int MAC_OLD_TIME = 5;
 
@@ -105,7 +105,7 @@ public final class UniversalTimeScale
      * Used in the JDK. Data is a <code>double</code>. Value
      * is milliseconds since January 1, 2001.
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static final int MAC_TIME = 6;
 
@@ -113,7 +113,7 @@ public final class UniversalTimeScale
      * Used in Excel. Data is a <code>?unknown?</code>. Value
      * is days since December 31, 1899.
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static final int EXCEL_TIME = 7;
 
@@ -121,7 +121,7 @@ public final class UniversalTimeScale
      * Used in DB2. Data is a <code>?unknown?</code>. Value
      * is days since December 31, 1899.
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static final int DB2_TIME = 8;
 
@@ -138,7 +138,7 @@ public final class UniversalTimeScale
     /**
      * This is the first unused time scale value.
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static final int MAX_SCALE = 10;
     
@@ -147,7 +147,7 @@ public final class UniversalTimeScale
      * for a time scale.
      * 
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static final int UNITS_VALUE = 0;
     
@@ -157,7 +157,7 @@ public final class UniversalTimeScale
      * 
      * @see #getTimeScaleValue
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static final int EPOCH_OFFSET_VALUE = 1;
     
@@ -167,7 +167,7 @@ public final class UniversalTimeScale
      * 
      * @see #getTimeScaleValue
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static final int FROM_MIN_VALUE = 2;
     
@@ -177,7 +177,7 @@ public final class UniversalTimeScale
      * 
      * @see #getTimeScaleValue
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static final int FROM_MAX_VALUE = 3;
     
@@ -187,7 +187,7 @@ public final class UniversalTimeScale
      * 
      * @see #getTimeScaleValue
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static final int TO_MIN_VALUE = 4;
     
@@ -197,7 +197,7 @@ public final class UniversalTimeScale
      * 
      * @see #getTimeScaleValue
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static final int TO_MAX_VALUE = 5;
     
@@ -210,7 +210,7 @@ public final class UniversalTimeScale
      * 
      * @see #getTimeScaleValue
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static final int EPOCH_OFFSET_PLUS_1_VALUE = 6;
     
@@ -368,7 +368,7 @@ public final class UniversalTimeScale
      * 
      * @return The datetime converted to the universal time scale
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static long from(long otherTime, int timeScale)
     {
@@ -387,7 +387,7 @@ public final class UniversalTimeScale
      * 
      * @return The datetime converted to the universal time scale
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static BigDecimal bigDecimalFrom(double otherTime, int timeScale)
     {
@@ -409,7 +409,7 @@ public final class UniversalTimeScale
      * 
      * @return The datetime converted to the universal time scale
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static BigDecimal bigDecimalFrom(long otherTime, int timeScale)
     {
@@ -431,7 +431,7 @@ public final class UniversalTimeScale
      * 
      * @return The datetime converted to the universal time scale
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static BigDecimal bigDecimalFrom(BigDecimal otherTime, int timeScale)
     {
@@ -481,7 +481,7 @@ public final class UniversalTimeScale
      * 
      * @return The datetime converted to the given time scale
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static long toLong(long universalTime, int timeScale)
     {
@@ -510,7 +510,7 @@ public final class UniversalTimeScale
      * 
      * @return The datetime converted to the given time scale
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static BigDecimal toBigDecimal(long universalTime, int timeScale)
     {
@@ -530,7 +530,7 @@ public final class UniversalTimeScale
      * 
      * @return The datetime converted to the given time scale
      *
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static BigDecimal toBigDecimal(BigDecimal universalTime, int timeScale)
     {
@@ -569,7 +569,7 @@ public final class UniversalTimeScale
      * 
      * @return - the value.
      * 
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public static long getTimeScaleValue(int scale, int value)
     {

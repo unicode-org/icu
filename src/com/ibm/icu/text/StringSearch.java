@@ -26,20 +26,20 @@ import com.ibm.icu.util.ULocale;
  * <code>StringSearch</code> uses a version of the fast Boyer-Moore search
  * algorithm that has been adapted to work with the large character set of
  * Unicode. Refer to 
- * <a href="http://icu.sourceforge.net/docs/papers/efficient_text_searching_in_java.html">
+ * <a href="http://www.icu-project.org/docs/papers/efficient_text_searching_in_java.html">
  * "Efficient Text Searching in Java"</a>, published in the 
  * <i>Java Report</i> on February, 1999, for further information on the 
  * algorithm.
  * </p>
  * <p>
  * Users are also strongly encouraged to read the section on 
- * <a href="http://icu.sourceforge.net/userguide/searchString.html">
+ * <a href="http://www.icu-project.org/userguide/searchString.html">
  * String Search</a> and 
- * <a href="http://icu.sourceforge.net/userguide/Collate_Intro.html">
+ * <a href="http://www.icu-project.org/userguide/Collate_Intro.html">
  * Collation</a> in the user guide before attempting to use this class.
  * </p>
  * <p>
- * String searching gets alittle complicated when accents are encountered at
+ * String searching becomes a little complicated when accents are encountered at
  * match boundaries. If a match is found and it has preceding or trailing 
  * accents not part of the match, the result returned will include the 
  * preceding accents up to the first base character, if the pattern searched 
@@ -132,7 +132,7 @@ import com.ibm.icu.util.ULocale;
  * </p>
  * <p>
  * Consult the 
- * <a href="http://icu.sourceforge.net/userguide/searchString.html">
+ * <a href="http://www.icu-project.org/userguide/searchString.html">
  * String Search</a> user guide and the <code>SearchIterator</code> 
  * documentation for more information and examples of use.
  * </p>
@@ -183,7 +183,8 @@ public final class StringSearch extends SearchIterator
         m_isCanonicalMatch_ = false;
         m_pattern_ = new Pattern(pattern);
         m_matchedIndex_ = DONE;
-        
+        m_charBreakIter_ = BreakIterator.getCharacterInstance(/*m_collator_.getLocale(ULocale.ACTUAL_LOCALE)*/);
+        m_charBreakIter_.setText(target);
         initialize();
     }
 
@@ -203,7 +204,7 @@ public final class StringSearch extends SearchIterator
     public StringSearch(String pattern, CharacterIterator target,
                         RuleBasedCollator collator) 
     {
-        this(pattern, target, collator, BreakIterator.getCharacterInstance());
+        this(pattern, target, collator, null/*BreakIterator.getCharacterInstance()*/);
     }
 
     /**
@@ -243,12 +244,12 @@ public final class StringSearch extends SearchIterator
      * @see BreakIterator
      * @see RuleBasedCollator
      * @see SearchIterator
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public StringSearch(String pattern, CharacterIterator target, ULocale locale)
     {
         this(pattern, target, (RuleBasedCollator)Collator.getInstance(locale),
-             BreakIterator.getCharacterInstance(locale));
+             null/*BreakIterator.getCharacterInstance(locale)*/);
     }
 
     /**
@@ -271,7 +272,7 @@ public final class StringSearch extends SearchIterator
     {
         this(pattern, new StringCharacterIterator(target),
              (RuleBasedCollator)Collator.getInstance(),
-             BreakIterator.getCharacterInstance());
+             null/*BreakIterator.getCharacterInstance()*/);
     }
 
     // public getters -----------------------------------------------------
@@ -364,6 +365,8 @@ public final class StringSearch extends SearchIterator
         initialize();
         m_colEIter_.setCollator(m_collator_);
         m_utilColEIter_.setCollator(m_collator_);
+        m_charBreakIter_ = BreakIterator.getCharacterInstance(/*collator.getLocale(ULocale.VALID_LOCALE)*/);
+        m_charBreakIter_.setText(targetText);
     }
     
     /**
@@ -406,6 +409,7 @@ public final class StringSearch extends SearchIterator
         m_textBeginOffset_ = targetText.getBeginIndex();
         m_textLimitOffset_ = targetText.getEndIndex();
         m_colEIter_.setText(targetText);
+        m_charBreakIter_.setText(targetText);
     }
     
     /**
@@ -753,6 +757,10 @@ public final class StringSearch extends SearchIterator
      */
     private boolean m_isCanonicalMatch_;
     /**
+     * Character break iterator for boundary checking.
+     */
+    private BreakIterator m_charBreakIter_; 
+    /**
      * Size of the shift tables
      */
     private static final int MAX_TABLE_SIZE_ = 257; 
@@ -772,6 +780,10 @@ public final class StringSearch extends SearchIterator
      * Utility buffer for return values and temporary storage
      */
     private int m_utilBuffer_[] = new int[2];
+    /**
+     *  Unsigned 32-Bit Integer Mask
+     */
+    private static final long UNSIGNED_32BIT_MASK = 0xffffffffL;
 
     // private methods -------------------------------------------------------
 
@@ -860,7 +872,7 @@ public final class StringSearch extends SearchIterator
             // if the ce is a variable, we mask and get only the primary values
             // no shifting to quartenary is required since all primary values
             // less than variabletop will need to be masked off anyway.
-            if ((m_collator_.m_variableTopValue_  << 16) > ce) {
+            if (((m_collator_.m_variableTopValue_  << 16) & UNSIGNED_32BIT_MASK) > (ce & UNSIGNED_32BIT_MASK)) {
                 if (m_collator_.getStrength() == Collator.QUATERNARY) {
                     ce = CollationElementIterator.primaryOrder(ce);
                 }
@@ -931,12 +943,17 @@ public final class StringSearch extends SearchIterator
      */ 
     private final int initializePattern()
     {
-        m_pattern_.m_hasPrefixAccents_ = (getFCD(m_pattern_.targetText, 0) 
-                                             >> SECOND_LAST_BYTE_SHIFT_) != 0;
-        m_pattern_.m_hasSuffixAccents_ = (getFCD(m_pattern_.targetText, 
-                                                 m_pattern_.targetText.length() 
-                                                 - 1) 
-                                            & LAST_BYTE_MASK_) != 0;
+        if (m_collator_.getStrength() == Collator.PRIMARY) {
+            m_pattern_.m_hasPrefixAccents_ = false;
+            m_pattern_.m_hasSuffixAccents_ = false;
+        } else {
+            m_pattern_.m_hasPrefixAccents_ = (getFCD(m_pattern_.targetText, 0) 
+                                                 >> SECOND_LAST_BYTE_SHIFT_) != 0;
+            m_pattern_.m_hasSuffixAccents_ = (getFCD(m_pattern_.targetText, 
+                                                     m_pattern_.targetText.length() 
+                                                     - 1) 
+                                                & LAST_BYTE_MASK_) != 0;
+        }
         // since intializePattern is an internal method status is a success.
         return initializePatternCETable();   
     }
@@ -1365,7 +1382,12 @@ public final class StringSearch extends SearchIterator
                     }
                     count ++;
                 }
-                int ce = getCE(m_colEIter_.next());
+                //int ce = getCE(m_colEIter_.next());
+                int ce = m_colEIter_.next();
+                if (ce != CollationElementIterator.NULLORDER 
+                        && ce != CollationElementIterator.IGNORABLE) {
+                    ce = getCE(ce);
+                }
                 if (ce != CollationElementIterator.NULLORDER 
                             && ce != CollationElementIterator.IGNORABLE) {
                     if (m_colEIter_.getOffset() <= end) {
@@ -1555,6 +1577,10 @@ public final class StringSearch extends SearchIterator
             textoffset = getNextBaseOffset(textoffset);  
             m_utilBuffer_[0] = textoffset;
             return false;
+        }
+        
+        if (m_collator_.getStrength() == Collator.PRIMARY) {
+            textoffset = checkBreakBoundary(textoffset);
         }
             
         // totally match, we will get rid of the ending ignorables.
@@ -2300,6 +2326,11 @@ public final class StringSearch extends SearchIterator
             m_utilBuffer_[0] = textoffset;
             return false;
         }
+        
+        if (m_collator_.getStrength() == Collator.PRIMARY) {
+            end = checkBreakBoundary(end);
+        }
+        
         m_matchedIndex_ = textoffset;
         matchLength = end - textoffset;
         return true;
@@ -2767,6 +2798,7 @@ public final class StringSearch extends SearchIterator
             }
     
             while (found && patternceindex > 0) {
+                lastce = targetce;
                 targetce = m_colEIter_.previous();
                 if (targetce == CollationElementIterator.NULLORDER) {
                     found = false;
@@ -2780,6 +2812,8 @@ public final class StringSearch extends SearchIterator
                 patternceindex --;
                 found = found && targetce == m_pattern_.m_CE_[patternceindex]; 
             }
+            
+            targetce = lastce;
     
             if (!found) {
                 textoffset = shiftForward(textoffset, lastce, patternceindex);
@@ -2915,7 +2949,7 @@ public final class StringSearch extends SearchIterator
                     || firstce == CollationElementIterator.IGNORABLE) {
                     firstce = targetce;
                 }
-                if (targetce == CollationElementIterator.IGNORABLE) {
+                if (targetce == CollationElementIterator.IGNORABLE && m_collator_.getStrength() != Collator.PRIMARY) {
                     continue;
                 }         
                 if (targetce == m_pattern_.m_CE_[0]) {
@@ -2931,9 +2965,10 @@ public final class StringSearch extends SearchIterator
                 }
             }
     
-            targetce = firstce;
+            //targetce = firstce;
             
             while (found && patternceindex < m_pattern_.m_CELength_) {
+                firstce = targetce;
                 targetce = m_colEIter_.next();
                 if (targetce == CollationElementIterator.NULLORDER) {
                     found = false;
@@ -2947,6 +2982,8 @@ public final class StringSearch extends SearchIterator
                 found = found && targetce == m_pattern_.m_CE_[patternceindex]; 
                 patternceindex ++;
             }
+            
+            targetce = firstce;
     
             if (!found) {
                 textoffset = reverseShift(textoffset, targetce, patternceindex);
@@ -3104,5 +3141,15 @@ public final class StringSearch extends SearchIterator
         // this method resets the match result regardless of the error status.
         m_matchedIndex_ = DONE;
         setMatchLength(0);
+    }
+    
+    /**
+     * Check the boundaries of the match.
+     */
+    private int checkBreakBoundary(int end) {
+        if (!m_charBreakIter_.isBoundary(end)) {
+            end = m_charBreakIter_.following(end);
+        }
+        return end;
     }
 }

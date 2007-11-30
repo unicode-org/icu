@@ -82,6 +82,7 @@
     <property name="icudatajar.file" value="${src.dir}/com/ibm/icu/impl/data/icudata.jar" />
     <property name="testjar.file" value="icu4jtests.jar" />
     <property name="jar.file" value="icu4j.jar" />
+    <property name="demos-jar.file" value="icu4jdemos.jar" />
     <property name="charsets.jar.file" value="icu4j-charsets.jar" />
     <property name="jarSrc.file" value="icu4jsrc.jar" />
     <property name="zipTestSrc.file" value="icu4jtsrc.zip" />
@@ -346,6 +347,7 @@
             debug="on"
             deprecation="off">
       <include name="com/ibm/icu/dev/demo/**/*.java" />
+      <include name="com/ibm/icu/dev/demo/*.java" />
     </javac>
   </target>
 
@@ -514,7 +516,6 @@
     <jar jarfile="${jar.file}" compress="true">
       <fileset dir="${basedir}" includes="license.html, unicode-license.txt" />
       <fileset dir="${build.dir}" includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*" excludes="META-INF/services/**/*,com/ibm/icu/charset/**/*,${icu4j.data.path}/*.cnv,${icu4j.data.path}/cnvalias.icu" />
-      <fileset dir="${src.dir}" includes="com/ibm/icu/impl/duration/impl/data/*.xml" />
       <manifest>
         <attribute name="Built-By" value="${corp}" />
         <section name="common">
@@ -629,6 +630,28 @@
           <attribute name="Specification-Version" value="${icu4j.spec.version.string}" />
           <attribute name="Specification-Vendor" value="ICU" />
           <attribute name="Implementation-Title" value=" ICU for Java documents" />
+          <attribute name="Implementation-Version" value="${icu4j.impl.version.string}" />
+          <attribute name="Implementation-Vendor" value="${corp}" />
+          <attribute name="Implementation-Vendor-Id" value="com.ibm" />
+          <attribute name="Copyright-Info" value="${copyright}" />
+          <attribute name="Sealed" value="false" />
+        </section>
+      </manifest>
+    </jar>
+  </target>
+
+  <target name="jarDemos" depends="demos" description="build demos to 'icu4jdemos.jar' jar file">
+    <jar jarfile="${demos-jar.file}" compress="true">
+      <fileset dir="${build.dir}" includes="com/ibm/icu/dev/demo/**" />
+      <manifest>
+        <attribute name="Built-By" value="${corp}" />
+        <attribute name="Main-Class" value="com.ibm.icu.dev.demo.Launcher" />
+        <attribute name="Class-Path" value="icu4j.jar" />
+        <section name="common">
+          <attribute name="Specification-Title" value="${manifest.specification.title}" />
+          <attribute name="Specification-Version" value="${icu4j.spec.version.string}" />
+          <attribute name="Specification-Vendor" value="ICU" />
+          <attribute name="Implementation-Title" value=" ICU for Java Demos" />
           <attribute name="Implementation-Version" value="${icu4j.impl.version.string}" />
           <attribute name="Implementation-Vendor" value="${corp}" />
           <attribute name="Implementation-Vendor-Id" value="com.ibm" />

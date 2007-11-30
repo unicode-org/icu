@@ -93,7 +93,7 @@ public final class RawCollationKey extends ByteArrayWrapper
      * @return -1, 0, or 1 as this compares less than, equal to, or
      * greater than rhs.
      * @throws ClassCastException if the other object is not a RawCollationKey.
-     * @stable ICU 3.8
+     * @stable ICU 3.2
      */
     public int compareTo(Object rhs) {
         int result = super.compareTo((RawCollationKey)rhs);
