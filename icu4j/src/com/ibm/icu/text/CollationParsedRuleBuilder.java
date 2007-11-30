@@ -883,6 +883,85 @@ final class CollationParsedRuleBuilder
     Vector m_offsets_;
     int m_currentTag_;
     }
+    
+    /**
+     * Private class for combining mark table.
+     * The table is indexed by the class value(0-255).
+     */
+    private static class CombinClassTable {
+        /**
+         * accumulated numbers of combining marks.
+         */
+        int[] index =  new int[256]; 
+        
+        /**
+         * code point array for combining marks.
+         */
+        char[] cPoints; 
+        
+        /**
+         * size of cPoints.
+         */
+        int    size;
+        
+        // constructor
+        CombinClassTable() {
+            cPoints = null;
+            size = 0;
+            pos = 0;
+            curClass=1;
+        }
+        
+        /**
+         * Copy the combining mark table from ccc and index in compact
+         * way.
+         * 
+         * @param cps : code point array
+         * @param size : size of ccc
+         * @param index : index of combining classes(0-255)
+         */
+        void generate(char[] cps, int numOfCM, int[] ccIndex) {
+            int count =0;
+            
+            cPoints = new char[numOfCM];
+            for (int i=0; i<256; i++) {
+                for (int j=0; j<ccIndex[i]; j++) {
+                    cPoints[count++] = cps[(i<<8)+j];
+                }
+                index[i] = count;
+            }
+            size = count;
+        }
+        
+        /**
+         * Get first CM(combining mark) with the combining class value cClass.
+         * @param cClass : combining class value.
+         * @return combining mark codepoint or 0 if no combining make with class value cClass
+         */
+        char GetFirstCM(int cClass) {
+            curClass=cClass;
+            if (cPoints==null || cClass==0 || index[cClass]==index[cClass-1]) {
+                return 0;
+            }
+            pos =1;
+            return cPoints[index[cClass-1]];
+        }
+        
+        /**
+         * Get next CM(combining mark) with the combining class value cClass.
+         * Return combining mark codepoint or 0 if no next CM.
+         */
+        char GetNextCM() {
+            if (cPoints==null || index[curClass]==(index[curClass-1]+pos))  {
+                return 0;
+            }
+            return cPoints[index[curClass-1] + (pos++)];
+        }
+        
+        // private data members
+        int pos;
+        int curClass;
+    }
 
     private static final class BuildTable implements TrieBuilder.DataManipulate
     {
@@ -1000,6 +1079,7 @@ final class CollationParsedRuleBuilder
     byte m_unsafeCP_[];
     byte m_contrEndCP_[];
     Hashtable m_prefixLookup_;
+    CombinClassTable cmLookup = null;
     } 
     
     private static class Elements
@@ -1251,6 +1331,9 @@ final class CollationParsedRuleBuilder
     private char m_utilCharBuffer_[] = new char[256];
     private CanonicalIterator m_utilCanIter_ = new CanonicalIterator("");
     private StringBuffer m_utilStringBuffer_ = new StringBuffer("");
+    // Flag indicating a combining marks table is required or not.
+    private static boolean buildCMTabFlag = false;
+    
     
     // private methods -------------------------------------------------------
     
@@ -1749,12 +1832,29 @@ final class CollationParsedRuleBuilder
                                      offset + size);
         }
         m_utilElement_.m_cPoints_ = m_utilElement_.m_uchars_;
+        
+        boolean containCombinMarks = false;
         for (int i = 0; i < m_utilElement_.m_cPoints_.length() 
              - m_utilElement_.m_cPointsOffset_; i ++) {
         if (isJamo(m_utilElement_.m_cPoints_.charAt(i))) {
             t.m_collator_.m_isJamoSpecial_ = true;
             break;
         }
+        if ( !buildCMTabFlag ) {
+            // check combining class
+            char fcd = NormalizerImpl.getFCD16(m_utilElement_.m_cPoints_.charAt(i));
+            if ( (fcd & 0xff) == 0 ) {
+                // reset flag when current char is not combining mark.
+                containCombinMarks = false;  
+            }
+            else {
+                containCombinMarks = true;
+            }
+        }
+        }
+        
+        if ( !buildCMTabFlag && containCombinMarks ) {
+            buildCMTabFlag = true;
         }
             
             /***
@@ -3707,13 +3807,27 @@ final class CollationParsedRuleBuilder
      */
     private static final void unsafeCPAddCCNZ(BuildTable t) 
     {
-    
+        boolean buildCMTable = ( buildCMTabFlag & (t.cmLookup==null) );
+        char[]  cm = null;  // combining mark array
+        int[]   index= new int[256];
+        int     count=0;
+
+        if (buildCMTable) {
+            cm = new char[0x10000];
+        }
         for (char c = 0; c < 0xffff; c ++) {
             char fcd = NormalizerImpl.getFCD16(c);
             if (fcd >= 0x100 || // if the leading combining class(c) > 0 ||
                 (UTF16.isLeadSurrogate(c) && fcd != 0)) {
                 // c is a leading surrogate with some FCD data
                 unsafeCPSet(t.m_unsafeCP_, c);
+                if ( buildCMTable && (fcd!=0)) {
+                    int cc = (fcd& 0xff);
+                    int pos = (cc<<8)+index[cc];
+                    cm[pos] = c;
+                    index[cc]++;
+                    count++;
+                }
             }
         }
     
@@ -3731,6 +3845,11 @@ final class CollationParsedRuleBuilder
                 String comp = Normalizer.compose(e.m_cPoints_, false);
                 unsafeCPSet(t.m_unsafeCP_, comp.charAt(0));
             } 
+        }
+        
+        if (buildCMTable) {
+            t.cmLookup = new CombinClassTable();
+            t.cmLookup.generate(cm, count, index);
         }
     }
     
@@ -3831,6 +3950,291 @@ final class CollationParsedRuleBuilder
                          element.start, element.limit, 
                          element.value);
         }
+        
+        t.cmLookup = temp.cmLookup;
+        temp.cmLookup = null;
+        
+        for (int i = 0; i < m_parser_.m_resultLength_; i ++) {
+            char baseChar, firstCM;
+            // now we need to generate the CEs 
+            // We stuff the initial value in the buffers, and increase the 
+            // appropriate buffer according to strength                                                          */
+            // createElements(t, m_parser_.m_listHeader_[i]);
+            CollationRuleParser.Token tok = m_parser_.m_listHeader_[i].m_first_;
+            m_utilElement_.clear();
+            while ( tok!=null ) {
+                m_utilElement_.m_prefix_ = 0;// el.m_prefixChars_;
+                m_utilElement_.m_cPointsOffset_ = 0; //el.m_uchars_;
+                if (tok.m_prefix_ != 0) { 
+                // we will just copy the prefix here, and adjust accordingly in 
+                // the addPrefix function in ucol_elm. The reason is that we 
+                // need to add both composed AND decomposed elements to the 
+                // unsafe table.
+                int size = tok.m_prefix_ >> 24;
+                int offset = tok.m_prefix_ & 0x00FFFFFF;
+                m_utilElement_.m_prefixChars_ 
+                    = m_parser_.m_source_.substring(offset, offset + size);
+                size = (tok.m_source_ >> 24) - (tok.m_prefix_ >> 24); 
+                offset = (tok.m_source_ & 0x00FFFFFF) + (tok.m_prefix_ >> 24);
+                m_utilElement_.m_uchars_ 
+                    = m_parser_.m_source_.substring(offset, offset + size);
+                } 
+                else {
+                m_utilElement_.m_prefixChars_ = null;
+                int offset = tok.m_source_ & 0x00FFFFFF;
+                int size = tok.m_source_ >>> 24;
+                m_utilElement_.m_uchars_ = m_parser_.m_source_.substring(offset, 
+                                             offset + size);
+                }
+                m_utilElement_.m_cPoints_ = m_utilElement_.m_uchars_;
+                
+                baseChar = firstCM = 0;  //reset
+                for (int j = 0; j < m_utilElement_.m_cPoints_.length() 
+                     - m_utilElement_.m_cPointsOffset_; j ++) {
+
+                    char fcd = NormalizerImpl.getFCD16(m_utilElement_.m_cPoints_.charAt(j));
+                    if ( (fcd & 0xff) == 0 ) {
+                        baseChar = m_utilElement_.m_cPoints_.charAt(j);
+                    }
+                    else {
+                        if ( (baseChar!=0) && (firstCM==0) ) {
+                            firstCM = m_utilElement_.m_cPoints_.charAt(j); // first combining mark
+                        }
+                    }
+                }
+                
+                if ( (baseChar!=0) && (firstCM!=0)) {
+                      addTailCanonicalClosures(t, temp.m_collator_, coleiter, baseChar, firstCM);
+                }
+                tok = tok.m_next_;
+            }
+        }
+    }
+    
+    private void addTailCanonicalClosures(BuildTable t,
+            RuleBasedCollator m_collator, 
+            CollationElementIterator colEl,
+            char baseChar, 
+            char cMark) {
+        if ( t.cmLookup == null ) {
+            return;
+        }
+        CombinClassTable cmLookup = t.cmLookup;  
+        int[] index = cmLookup.index;
+        int cClass =  NormalizerImpl.getFCD16(cMark) & 0xff;
+        int maxIndex=0;
+        char[] precompCh = new char[256];  
+        int[] precompClass = new int[256];
+        int precompLen=0;
+        Elements element = new Elements();
+        
+        if ( cClass>0 ) {
+            maxIndex = index[cClass-1];
+        }
+        for (int i=0; i<maxIndex; i++) {
+            StringBuffer decompBuf = new StringBuffer();
+            decompBuf.append(baseChar).append(cmLookup.cPoints[i]);
+            String comp = Normalizer.compose(decompBuf.toString(), false);
+            if ( comp.length() == 1 ) {
+                precompCh[precompLen] = comp.charAt(0);
+                precompClass[precompLen] = 
+                    (NormalizerImpl.getFCD16(cmLookup.cPoints[i]) & 0xff);
+                precompLen++;
+                StringBuffer decomp = new StringBuffer();
+                for (int j=0; j < m_utilElement_.m_cPoints_.length(); j++) {
+                    if ( m_utilElement_.m_cPoints_.charAt(j) == cMark ) {
+                        decomp.append(cmLookup.cPoints[i]);
+                    }
+                    else {
+                        decomp.append(m_utilElement_.m_cPoints_.charAt(j));
+                    }
+                }
+                comp = Normalizer.compose(decomp.toString(), false);
+                StringBuffer buf= new StringBuffer(comp);
+                buf.append(cMark);
+                decomp.append(cMark);
+                comp = buf.toString();
+                
+                element.m_cPoints_ = decomp.toString();
+                element.m_CELength_ = 0;
+                element.m_prefix_ = 0;
+                Elements prefix = (Elements)t.m_prefixLookup_.get(element);
+                element.m_cPoints_ = comp;
+                element.m_uchars_ = comp;
+                
+                if (prefix == null) {
+                    element.m_prefix_ = 0;
+                    element.m_prefixChars_ = null;
+                    colEl.setText(decomp.toString());
+                    int ce = colEl.next();
+                    element.m_CELength_ = 0;
+                    while (ce != CollationElementIterator.NULLORDER) {
+                        element.m_CEs_[element.m_CELength_ ++] = ce;
+                        ce = colEl.next();
+                    }
+                } 
+                else {
+                    element.m_cPoints_ = comp;
+                    element.m_prefix_ = 0;
+                    element.m_prefixChars_ = null;
+                    element.m_CELength_ = 1;
+                    element.m_CEs_[0] = prefix.m_mapCE_;
+                }
+                setMapCE(t, element);
+                finalizeAddition(t, element);
+                
+                if (comp.length()>2) {
+                    // This is a fix for tailoring contractions with accented
+                    // character at the end of contraction string.
+                    addFCD4AccentedContractions(t, colEl, comp, element);
+                }
+                if ( precompLen > 1 ) {
+                    precompLen = addMultiCMontractions(t, colEl, element, precompCh, 
+                                 precompClass, precompLen, cMark, i, decomp.toString());
+                }
+            }
+        }
+        
+    }
+    
+    private void setMapCE(BuildTable t, Elements element) {
+        Vector expansions = t.m_expansions_;
+        element.m_mapCE_ = 0;
+        
+        if (element.m_CELength_ == 2 // a two CE expansion 
+        && RuleBasedCollator.isContinuation(element.m_CEs_[1]) 
+        && (element.m_CEs_[1] 
+            & (~(0xFF << 24 | RuleBasedCollator.CE_CONTINUATION_MARKER_))) == 0 // that has only primaries in continuation
+        && (((element.m_CEs_[0] >> 8) & 0xFF) == RuleBasedCollator.BYTE_COMMON_) 
+        // a common secondary
+        && ((element.m_CEs_[0] & 0xFF) == RuleBasedCollator.BYTE_COMMON_)) { // and a common tertiary
+        
+            element.m_mapCE_ = RuleBasedCollator.CE_SPECIAL_FLAG_ 
+                // a long primary special
+                | (CE_LONG_PRIMARY_TAG_ << 24) 
+                // first and second byte of primary
+                | ((element.m_CEs_[0] >> 8) & 0xFFFF00) 
+                // third byte of primary
+                | ((element.m_CEs_[1] >> 24) & 0xFF);   
+        } 
+        else {
+                // omitting expansion offset in builder
+                // (HEADER_SIZE_ >> 2)
+            int expansion = RuleBasedCollator.CE_SPECIAL_FLAG_ 
+                | (CE_EXPANSION_TAG_ << RuleBasedCollator.CE_TAG_SHIFT_) 
+                | (addExpansion(expansions, element.m_CEs_[0]) << 4) & 0xFFFFF0;
+    
+            for (int i = 1; i < element.m_CELength_; i ++) {
+                addExpansion(expansions, element.m_CEs_[i]);
+            }
+            if (element.m_CELength_ <= 0xF) {
+                expansion |= element.m_CELength_;
+            } 
+            else {
+                addExpansion(expansions, 0);
+            }
+            element.m_mapCE_ = expansion;
+            setMaxExpansion(element.m_CEs_[element.m_CELength_ - 1],
+                    (byte)element.m_CELength_, t.m_maxExpansions_);
+        }
+    }
+    
+    private int addMultiCMontractions(BuildTable t,
+            CollationElementIterator colEl,
+            Elements element,
+            char[] precompCh,
+            int[] precompClass,
+            int maxComp,
+            char cMark,
+            int cmPos,
+            String decomp) {
+        
+        CombinClassTable cmLookup = t.cmLookup;
+        char[] combiningMarks = {cMark};
+        int cMarkClass = (int)(UCharacter.getCombiningClass(cMark) & 0xFF);
+        String comMark = new String(combiningMarks);
+        int  noOfPrecomposedChs = maxComp; 
+        
+        for (int j=0; j<maxComp; j++) {
+            int count = 0;
+            StringBuffer temp;
+           
+            do {
+                String newDecomp, comp;
+                
+                if ( count==0 ) { // Decompose the saved precomposed char.
+                    newDecomp = Normalizer.decompose( new String(precompCh, j ,1), false);
+                    temp = new StringBuffer(newDecomp);
+                    temp.append(cmLookup.cPoints[cmPos]);
+                    newDecomp = temp.toString();
+                }
+                else {
+                    temp = new StringBuffer(decomp);
+                    temp.append(precompCh[j]);
+                    newDecomp = temp.toString();
+                }
+                comp = Normalizer.compose(newDecomp, false);
+                if (comp.length()==1) {
+                    temp.append(cMark);
+                    element.m_cPoints_ = temp.toString();
+                    element.m_CELength_ = 0;
+                    element.m_prefix_ = 0;
+                    Elements prefix = (Elements)t.m_prefixLookup_.get(element);
+                    element.m_cPoints_ = comp+comMark;
+                    if (prefix == null) {
+                        element.m_prefix_ = 0;
+                        element.m_prefixChars_ = null;
+                        colEl.setText(temp.toString());
+                        int ce = colEl.next();
+                        element.m_CELength_ = 0;
+                        while (ce != CollationElementIterator.NULLORDER) {
+                            element.m_CEs_[element.m_CELength_ ++] = ce;
+                            ce = colEl.next();
+                        }
+                    } 
+                    else {
+                        element.m_cPoints_ = comp;
+                        element.m_prefix_ = 0;
+                        element.m_prefixChars_ = null;
+                        element.m_CELength_ = 1;
+                        element.m_CEs_[0] = prefix.m_mapCE_;
+                    }
+                    setMapCE(t, element);
+                    finalizeAddition(t, element);
+                    precompCh[noOfPrecomposedChs] = comp.charAt(0);
+                    precompClass[noOfPrecomposedChs] = cMarkClass;  
+                    noOfPrecomposedChs++;
+                }
+            }while(++count<2 && (precompClass[j]==cMarkClass)); 
+        }
+        return noOfPrecomposedChs;
+    }
+
+    private void addFCD4AccentedContractions(BuildTable t, 
+            CollationElementIterator colEl,
+            String data,
+            Elements element) {
+        String decomp = Normalizer.decompose(data, false);
+        String comp = Normalizer.compose(data, false);
+        
+        element.m_cPoints_ = decomp;
+        element.m_CELength_ = 0;
+        element.m_prefix_ = 0;
+        Elements prefix = (Elements)t.m_prefixLookup_.get(element);
+        if (prefix == null) {
+            element.m_cPoints_ = comp;
+            element.m_prefix_ = 0;
+            element.m_prefixChars_ = null;
+            element.m_CELength_ = 0;
+            colEl.setText(decomp);
+            int ce = colEl.next();
+            element.m_CELength_ = 0;
+            while (ce != CollationElementIterator.NULLORDER) {
+                element.m_CEs_[element.m_CELength_ ++] = ce;
+                ce = colEl.next();
+            }
+            addAnElement(t, element);
+        } 
     }
     
     private void processUCACompleteIgnorables(BuildTable t) 
