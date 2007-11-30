@@ -5162,6 +5162,13 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        dsb{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+        }
         dv{
             primary{
                 scripts{
@@ -5572,6 +5579,20 @@ supplementalData:table(nofallback){
                 territories{
                     "GB",
                     "US",
+                }
+            }
+        }
+        frr{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+        }
+        frs{
+            primary{
+                scripts{
+                    "Latn",
                 }
             }
         }
@@ -5996,6 +6017,13 @@ supplementalData:table(nofallback){
             secondary{
                 territories{
                     "AT",
+                }
+            }
+        }
+        hsb{
+            primary{
+                scripts{
+                    "Latn",
                 }
             }
         }
@@ -6448,7 +6476,7 @@ supplementalData:table(nofallback){
         ko{
             primary{
                 scripts{
-                    "Hang",
+                    "Kore",
                 }
                 territories{
                     "KP",
@@ -7291,6 +7319,13 @@ supplementalData:table(nofallback){
             secondary{
                 territories{
                     "MZ",
+                }
+            }
+        }
+        nds{
+            primary{
+                scripts{
+                    "Latn",
                 }
             }
         }
@@ -9032,6 +9067,13 @@ supplementalData:table(nofallback){
             secondary{
                 territories{
                     "CN",
+                }
+            }
+        }
+        zbl{
+            primary{
+                scripts{
+                    "Blis",
                 }
             }
         }

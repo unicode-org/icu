@@ -250,7 +250,7 @@ ka{
     LocaleScript{
         "Geor",
     }
-    Version{"1.46"}
+    Version{"1.47"}
     calendar{
         gregorian{
             quarters{

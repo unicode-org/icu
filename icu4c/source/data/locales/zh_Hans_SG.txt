@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 zh_Hans_SG{
-    Version{"1.46"}
+    Version{"1.47"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
