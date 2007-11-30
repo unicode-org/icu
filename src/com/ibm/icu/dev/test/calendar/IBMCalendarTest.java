@@ -296,7 +296,7 @@ public class IBMCalendarTest extends CalendarTest {
         Calendar cal = Calendar.getInstance();
         cal.set(2007, Calendar.JANUARY, 1);
         BuddhistCalendar buddhist = new BuddhistCalendar();
-        if (!skipIfBeforeICU(3,8,0)) {
+        if (!skipIfBeforeICU(3,9,0)) {
             doLimitsTest(buddhist, null, cal.getTime());
         }
         doTheoreticalLimitsTest(buddhist, false);
@@ -325,7 +325,7 @@ public class IBMCalendarTest extends CalendarTest {
         Calendar cal = Calendar.getInstance();
         cal.set(2007, Calendar.JANUARY, 1);
         TaiwanCalendar taiwan = new TaiwanCalendar();
-        if (!skipIfBeforeICU(3,8,0)) {
+        if (!skipIfBeforeICU(3,9,0)) {
             doLimitsTest(taiwan, null, cal.getTime());
         }
         doTheoreticalLimitsTest(taiwan, false);

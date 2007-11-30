@@ -194,7 +194,7 @@ public class CopticTest extends CalendarTest
         Calendar cal = Calendar.getInstance();
         cal.set(2007, Calendar.JANUARY, 1);
         CopticCalendar coptic = new CopticCalendar();
-        if (!skipIfBeforeICU(3,8,0)) {
+        if (!skipIfBeforeICU(3,9,0)) {
             doLimitsTest(coptic, null, cal.getTime());
         }
         doTheoreticalLimitsTest(coptic, true);

@@ -237,7 +237,7 @@ public class IndianTest extends CalendarTest
         Calendar cal = Calendar.getInstance();
         cal.set(2007, Calendar.JANUARY, 1);
         IndianCalendar indian = new IndianCalendar();
-        if (!skipIfBeforeICU(3,8,0)) {
+        if (!skipIfBeforeICU(3,9,0)) {
             doLimitsTest(indian, null, cal.getTime());
         }
         doTheoreticalLimitsTest(indian, true);
