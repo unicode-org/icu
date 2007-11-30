@@ -986,7 +986,7 @@ struct {
     /* first set up constants for implicit calculation */
     uprv_uca_initImplicitConstants(consts.UCA_PRIMARY_IMPLICIT_MIN, consts.UCA_PRIMARY_IMPLICIT_MAX, status);
     /* do the closure */
-    int32_t noOfClosures = uprv_uca_canonicalClosure(t, status);
+    int32_t noOfClosures = uprv_uca_canonicalClosure(t, NULL, status);
     if(noOfClosures != 0) {
       fprintf(stderr, "Warning: %i canonical closures occured!\n", (int)noOfClosures);
     }

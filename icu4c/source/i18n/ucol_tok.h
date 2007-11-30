@@ -122,6 +122,7 @@ typedef struct {
   UColToken *varTop;
   USet *copySet;
   USet *removeSet;
+  UBool buildCCTabFlag;  // Tailoring rule requirs building combining class table.
 } UColTokenParser;
 
 typedef struct {
