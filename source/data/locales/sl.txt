@@ -397,7 +397,7 @@ sl{
             traditional{"Tradicionano zlaganje"}
         }
     }
-    Version{"1.84"}
+    Version{"1.85"}
     calendar{
         gregorian{
             DateTimePatterns{

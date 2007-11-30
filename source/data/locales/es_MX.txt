@@ -13,5 +13,19 @@ es_MX{
             "peso mexicano",
         }
     }
-    Version{"1.48"}
+    NumberElements{
+        ".",
+        ",",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    Version{"1.49"}
 }
