@@ -8,11 +8,25 @@
 // ***************************************************************************
 es_US{
     MeasurementSystem:int{1}
+    NumberElements{
+        ".",
+        ",",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
     PaperSize:intvector{
         279,
         216,
     }
-    Version{"1.58"}
+    Version{"1.59"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
