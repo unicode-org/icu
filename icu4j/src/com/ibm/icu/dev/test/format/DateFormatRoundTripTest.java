@@ -38,12 +38,6 @@ public class DateFormatRoundTripTest extends com.ibm.icu.dev.test.TestFmwk {
     }
     
     public void TestDateFormatRoundTrip() {
-        if (skipIfBeforeICU(3,8,1)) {
-            // This test case is currently broken because of TimeZone formatting spec changes.
-            // After all of TimeZone formatting/parsing problems are resolved, we should revisit
-            // this test case and make necessary changes.  2007-10-01 yoshito
-            return;
-        }
         dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss.SSS zzz yyyy G");
         getFieldCal = Calendar.getInstance();
         ran = createRandom(); // use test framework's random seed
@@ -156,8 +150,7 @@ public class DateFormatRoundTripTest extends com.ibm.icu.dev.test.TestFmwk {
         // patterns we have, but it may be a problem later.
     
         boolean hasEra = (pat.indexOf("G") != -1);
-        boolean hasZone = (pat.indexOf("Z") != -1) || (pat.indexOf("z") != -1) 
-        || (pat.indexOf("v") != -1) || (pat.indexOf("V") != -1);
+        boolean hasZoneDisplayName = (pat.indexOf("z") != -1) || (pat.indexOf("v") != -1) || (pat.indexOf("V") != -1);
     
         // Because patterns contain incomplete data representing the Date,
         // we must be careful of how we do the roundtrip.  We start with
@@ -228,7 +221,10 @@ public class DateFormatRoundTripTest extends com.ibm.icu.dev.test.TestFmwk {
                         maxDmatch = 3;
                         maxSmatch = 2;
                     }
-                    if (hasZone && (fmt.getTimeZone().inDaylightTime(d[0]) || fmt.getTimeZone().inDaylightTime(d[1]) )) {
+                    if (hasZoneDisplayName &&
+                            (fmt.getTimeZone().inDaylightTime(d[0])
+                                    || fmt.getTimeZone().inDaylightTime(d[1])
+                                    || d[0].getTime() < 0L /* before 1970 */)) {
                         maxSmatch = 2;
                         if (timeOnly) {
                             maxDmatch = 3;
