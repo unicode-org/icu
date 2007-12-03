@@ -657,6 +657,7 @@ icu4c/source/tools/tzcode/europe
 icu4c/source/tools/tzcode/factory
 icu4c/source/tools/tzcode/icu_zone.txt
 icu4c/source/tools/tzcode/icuzdump
+icu4c/source/tools/tzcode/icuzdump.dSYM
 icu4c/source/tools/tzcode/icuzdumpout
 icu4c/source/tools/tzcode/iso3166.tab
 icu4c/source/tools/tzcode/leapseconds
