@@ -1367,7 +1367,9 @@ The leftmost codepage (.xxx) wins.
 /*
 Due to various platform differences, one platform may specify a charset,
 when they really mean a different charset. Remap the names so that they are
-compatible with ICU.
+compatible with ICU. Only conflicting/ambiguous aliases should be resolved
+here. Before adding anything to this function, please consider adding unique
+names to the ICU alias table in the data directory.
 */
 static const char*
 remapPlatformDependentCodepage(const char *locale, const char *name) {
