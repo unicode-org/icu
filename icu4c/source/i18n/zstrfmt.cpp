@@ -1582,10 +1582,11 @@ ZSFCache::get(const Locale &locale, UErrorCode &status) {
             entry->fRefCount++;
 
             // move the entry to the top
-            if (prev != NULL) {
+            if (entry != fFirst) {
                 prev->fNext = next;
+                entry->fNext = fFirst;
+                fFirst = entry;
             }
-            fFirst = entry;
             break;
         }
         prev = entry;
@@ -1601,7 +1602,7 @@ ZSFCache::get(const Locale &locale, UErrorCode &status) {
         }
         // Now add the new entry
         umtx_lock(&gZSFCacheLock);
-        // Make sure no other threads already creaded the one for the same locale
+        // Make sure no other threads already created the one for the same locale
         entry = fFirst;
         prev = NULL;
         while (entry) {
@@ -1611,10 +1612,11 @@ ZSFCache::get(const Locale &locale, UErrorCode &status) {
                 entry->fRefCount++;
 
                 // move the entry to the top
-                if (prev != NULL) {
+                if (entry != fFirst) {
                     prev->fNext = next;
+                    entry->fNext = fFirst;
+                    fFirst = entry;
                 }
-                fFirst = entry;
                 break;
             }
             prev = entry;
@@ -1641,7 +1643,9 @@ ZSFCache::get(const Locale &locale, UErrorCode &status) {
     while (entry) {
         next = entry->fNext;
         if (idx >= fCapacity && entry->fRefCount == 0) {
-            if (prev->fNext) {
+            if (entry == fFirst) {
+                fFirst = next;
+            } else {
                 prev->fNext = next;
             }
             delete entry;
