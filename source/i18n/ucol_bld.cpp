@@ -27,6 +27,7 @@
 #include "ucln_in.h" 
 #include "umutex.h"
 #include "unicode/uniset.h"
+#include "unormimp.h"
 
 static const InverseUCATableHeader* _staticInvUCA = NULL;
 static UDataMemory* invUCA_DATA_MEM = NULL;
@@ -825,6 +826,7 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
     UColToken *tok = lh->first;
     UColToken *expt = NULL;
     uint32_t i = 0, j = 0;
+    const uint16_t  *fcdTrieData = unorm_getFCDTrie(status);
 
     while(tok != NULL && U_SUCCESS(*status)) {
         /* first, check if there are any expansions */
@@ -912,10 +914,25 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
             uprv_memcpy(el.uchars, (tok->source & 0x00FFFFFF) + src->source, el.cSize*sizeof(UChar));
         }
         if(src->UCA != NULL) {
+            UBool containCombinMarks = FALSE;
             for(i = 0; i<el.cSize; i++) {
                 if(UCOL_ISJAMO(el.cPoints[i])) {
                     t->image->jamoSpecial = TRUE;
                 }
+                if ( !src->buildCCTabFlag ) {
+                    // check combining class
+                    int16_t fcd = unorm_getFCD16(fcdTrieData, el.cPoints[i]);
+                    if ( (fcd && 0xff) == 0 ) {
+                        // reset flag when current char is not combining mark.
+                        containCombinMarks = FALSE;  
+                    }
+                    else {
+                        containCombinMarks = TRUE;
+                    }
+                }
+            }
+            if ( !src->buildCCTabFlag && containCombinMarks ) {
+                src->buildCCTabFlag = TRUE;
             }
         }
 
@@ -1214,10 +1231,8 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     // Add completely ignorable elements
     utrie_enum(&t->UCA->mapping, NULL, _processUCACompleteIgnorables, t);
 
-
-    // canonical closure
-    uprv_uca_canonicalClosure(t, status);
-
+    // add tailoring characters related canonical closures
+    uprv_uca_canonicalClosure(t, src, status);
 
     /* still need to produce compatibility closure */
 

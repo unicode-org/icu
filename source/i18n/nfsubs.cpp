@@ -97,7 +97,11 @@ public:
     }
 
     virtual double transformNumber(double number) const {
-        return uprv_floor(number / divisor);
+        if (getRuleSet()) {
+            return uprv_floor(number / divisor);
+        } else {
+            return number/divisor;
+        }
     }
 
     virtual double composeRuleValue(double newRuleValue, double /*oldRuleValue*/) const {

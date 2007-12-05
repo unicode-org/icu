@@ -1991,7 +1991,7 @@ pt{
         SAAHO{"saho"}
         SCOUSE{"scouse"}
     }
-    Version{"1.89"}
+    Version{"1.91"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -2668,7 +2668,7 @@ pt{
             ss{"EKST"}
         }
         "meta:Kazakhstan_Western"{
-            ls{"Horário da Argentina Ocidental"}
+            ls{"Horário do Cazaquistão Ocidental"}
             ss{"WKST"}
         }
         "meta:Kizilorda"{

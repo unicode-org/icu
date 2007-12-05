@@ -1662,7 +1662,7 @@ zh_Hant{
         REVISED{"已修訂"}
         SAAHO{"SAAHO"}
     }
-    Version{"1.89"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -2470,7 +2470,7 @@ zh_Hant{
         }
         "meta:Aqtau"{
             ld{"阿克陶夏令時間"}
-            ls{"阿克陶夏令時間"}
+            ls{"阿克陶標準時間"}
             sd{"AQTST (阿克陶)"}
             ss{"AQTT (阿克陶)"}
         }

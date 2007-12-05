@@ -73,12 +73,9 @@ source/test/intltest/fldset.cpp -text
 source/test/intltest/fldset.h -text
 source/test/perf/convperf/Makefile.in -text
 source/test/testdata/TestFont1.otf -text
-source/test/testdata/calendar.txt -text
-source/test/testdata/format.txt -text
 source/test/testdata/icu26_testtypes.res -text
 source/test/testdata/icu26e_testtypes.res -text
 source/test/testdata/importtest.bin -text
-source/test/testdata/tstfiles.mk -text
 source/test/testdata/uni-text.bin -text
 source/tools/ctestfw/udbgutil.cpp -text
 source/tools/ctestfw/unicode/dbgutil.h -text

@@ -1,13 +1,13 @@
-Copyright (c) 2002-2005, International Business Machines Corporation and others. All Rights Reserved.
+Copyright (c) 2002-2007, International Business Machines Corporation and others. All Rights Reserved.
 This is an exercise for the ICU Workshop (September 2000).
-  http://icu.sourceforge.net/docs/workshop_2000/agenda.html
+  http://www.icu-project.org/docs/workshop_2000/agenda.html
 
   Day 2: September 12th 2000
   Pre-requisite:
   1. All the hardware and software requirements from Day 1.
   2. Attended or fully understand Day 1 material.
   3. Read through the ICU user's guide at
-  http://icu.sourceforge.net/userguide/.
+  http://www.icu-project.org/userguide/.
 
   #Transformation Support
   10:45am - 12:00pm

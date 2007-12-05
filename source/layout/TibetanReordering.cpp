@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2006 - All Rights Reserved 
+ * (C) Copyright IBM Corp. 1998-2007 - All Rights Reserved 
  *
  * Developed at DIT - Government of Bhutan
  *
@@ -128,6 +128,7 @@ const TibetanClassTable *TibetanClassTable::getTibetanClassTable()
 
 class TibetanReorderingOutput : public UMemory {
 private:
+    le_int32 fSyllableCount;
     le_int32 fOutIndex;
     LEUnicode *fOutChars;
 
@@ -136,7 +137,7 @@ private:
 
 public:
     TibetanReorderingOutput(LEUnicode *outChars, LEGlyphStorage &glyphStorage)
-        : fOutIndex(0), fOutChars(outChars), fGlyphStorage(glyphStorage)
+        : fSyllableCount(0), fOutIndex(0), fOutChars(outChars), fGlyphStorage(glyphStorage)
     {
         // nothing else to do...
     }
@@ -144,6 +145,11 @@ public:
     ~TibetanReorderingOutput()
     {
         // nothing to do here...
+    }
+
+    void reset()
+    {
+        fSyllableCount += 1;
     }
 
     void writeChar(LEUnicode ch, le_uint32 charIndex, FeatureMask featureMask)
@@ -325,7 +331,9 @@ le_int32 TibetanReordering::reorder(const LEUnicode *chars, le_int32 charCount, 
     // This loop only exits when we reach the end of a run, which may contain 
     // several syllables.
     while (prev < charCount) {
-        le_int32 syllable = findSyllable(classTable, chars, prev, charCount);   
+        le_int32 syllable = findSyllable(classTable, chars, prev, charCount);  
+
+        output.reset();
        
         // shall we add a dotted circle?
         // If in the position in which the base should be (first char in the string) there is

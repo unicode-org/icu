@@ -100,6 +100,7 @@ static const UChar         ZZZZ_STR[] = {0x7A, 0x7A, 0x7A, 0x7A, 0x00}; /* "zzzz
 static const int32_t       GMT_ID_LENGTH = 3;
 
 static UMTX                             LOCK;
+static UMTX                             TZSET_LOCK;
 static U_NAMESPACE_QUALIFIER TimeZone*  DEFAULT_ZONE = NULL;
 static U_NAMESPACE_QUALIFIER TimeZone*  _GMT = NULL; // cf. TimeZone::GMT
 
@@ -128,6 +129,10 @@ static UBool U_CALLCONV timeZone_cleanup(void)
     if (LOCK) {
         umtx_destroy(&LOCK);
         LOCK = NULL;
+    }
+    if (TZSET_LOCK) {
+        umtx_destroy(&TZSET_LOCK);
+        TZSET_LOCK = NULL;
     }
 
     return TRUE;
@@ -511,12 +516,19 @@ TimeZone::initDefault()
     // First, try to create a system timezone, based
     // on the string ID in tzname[0].
     {
-        // NOTE: Global mutex here; TimeZone mutex above
-        // mutexed to avoid threading issues in the platform fcns.
-        // Some of the locale/timezone OS functions may not be thread safe, 
-        //  so the intent is that any setting from anywhere within ICU 
-        //  happens with the ICU global mutex held.
-        Mutex lock;
+        // NOTE: Local mutex here. TimeZone mutex below
+        // mutexed to avoid threading issues in the platform functions.
+        // Some of the locale/timezone OS functions may not be thread safe,
+        // so the intent is that any setting from anywhere within ICU
+        // happens while the ICU mutex is held.
+        // The operating system might actually use ICU to implement timezones.
+        // So we may have ICU calling ICU here, like on AIX.
+        // In order to prevent a double lock of a non-reentrant mutex in a
+        // different part of ICU, we use TZSET_LOCK to allow only one instance
+        // of ICU to query these thread unsafe OS functions at any given time.
+        Mutex lock(&TZSET_LOCK);
+
+        ucln_i18n_registerCleanup(UCLN_I18N_TIMEZONE, timeZone_cleanup);
         uprv_tzset(); // Initialize tz... system data
         
         // Get the timezone ID from the host.  This function should do
@@ -527,6 +539,13 @@ TimeZone::initDefault()
         
         // Invert sign because UNIX semantics are backwards
         rawOffset = uprv_timezone() * -U_MILLIS_PER_SECOND;
+    }
+
+    UBool initialized;
+    UMTX_CHECK(&LOCK, (DEFAULT_ZONE != NULL), initialized);
+    if (initialized) {
+        /* Hrmph? Either a race condition happened, or tzset initialized ICU. */
+        return;
     }
 
     TimeZone* default_zone = NULL;
@@ -617,13 +636,13 @@ TimeZone::createDefault()
 {
     /* This is here to prevent race conditions. */
     UBool needsInit;
-    UMTX_CHECK(&LOCK, (DEFAULT_ZONE == 0), needsInit);
+    UMTX_CHECK(&LOCK, (DEFAULT_ZONE == NULL), needsInit);
     if (needsInit) {
         initDefault();
     }
 
     Mutex lock(&LOCK); // In case adoptDefault is called
-    return DEFAULT_ZONE->clone();
+    return (DEFAULT_ZONE != NULL) ? DEFAULT_ZONE->clone() : NULL;
 }
 
 // -------------------------------------

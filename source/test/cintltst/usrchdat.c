@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 2001-2006 International Business Machines 
+ * Copyright (c) 2001-2007 International Business Machines 
  * Corporation and others. All Rights Reserved.
  ********************************************************************
  * File USRCHDAT.H
@@ -256,8 +256,8 @@ static const SearchData CONTRACTION[] = {
 static const char *IGNORABLERULE = "&a = \\u0300";
 
 static const SearchData IGNORABLE[] = {
-    {"\\u0315\\u0300 \\u0315\\u0300\\u0315 ", "\\u0300", NULL, UCOL_PRIMARY, NULL, 
-    {0, 3, -1}, {2, 3}},
+    {"\\u0300\\u0315 \\u0300\\u0315 ", "\\u0300", NULL, UCOL_PRIMARY, NULL, 
+    {0, 3, -1}, {2, 2}},
     {NULL, NULL, NULL, UCOL_TERTIARY, NULL, {-1}, {0}}
 };
 
@@ -483,6 +483,14 @@ static const SearchData CONTRACTIONCANONICAL[] = {
     {1, -1}, {4}},
     {"ab", "z", NULL, UCOL_TERTIARY, NULL, {0, -1}, {2}},
     {NULL, NULL, NULL, UCOL_TERTIARY, NULL, {-1}, {0}}
+};
+
+static const SearchData DIACTRICMATCH[] = {
+		{"\\u03BA\\u03B1\\u03B9\\u0300\\u0020\\u03BA\\u03B1\\u1F76", "\\u03BA\\u03B1\\u03B9", NULL, UCOL_PRIMARY, NULL, {0, 5,-1}, {4, 3}},
+		{"\\u0061\\u0061\\u00E1", "\\u0061\\u00E1", NULL, UCOL_SECONDARY, NULL, {1, -1}, {2}},
+		{"\\u0020\\u00C2\\u0303\\u0020\\u0041\\u0061\\u1EAA\\u0041\\u0302\\u0303\\u00C2\\u0303\\u1EAB\\u0061\\u0302\\u0303\\u00E2\\u0303\\uD806\\uDC01\\u0300\\u0020",
+		 "\\u00C2\\u0303", "LDE_AN_CX_EX_FX_HX_NX_S1", UCOL_PRIMARY, NULL, {1, 4, 5, 6, 7, 10, 12, 13, 16,-1}, {2, 1, 1, 1, 3, 2, 1, 3, 2}},
+		{NULL, NULL, NULL, UCOL_TERTIARY, NULL, {-1}, {0}}
 };
 
 #endif /* #if !UCONFIG_NO_COLLATION */

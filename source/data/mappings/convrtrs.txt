@@ -372,6 +372,7 @@ ibm-9005_X110-2007 { UTR22* }
                         iso-ir-126 { IANA WINDOWS }
                         ISO_8859-7:1987 { IANA* WINDOWS }
                         windows-28597 { WINDOWS* }
+                        sun_eu_greek # For Solaris
 
 # ISO Greek (w/o euro update)
 # JDK 1.5 has these aliases.

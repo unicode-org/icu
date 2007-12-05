@@ -971,9 +971,9 @@ supplementalData:table(nofallback){
                     -412,
                     -1215901344,
                 }
-                to:intvector{ /** 2008-02-01  */
+                to:intvector{ /** 2008-01-31  */
                     279,
-                    849844416,
+                    -853182880,
                 }
             }
         }
@@ -2389,9 +2389,9 @@ supplementalData:table(nofallback){
                     -15,
                     1784869440,
                 }
-                to:intvector{ /** 2008-02-01  */
+                to:intvector{ /** 2008-01-31  */
                     279,
-                    849844416,
+                    -853182880,
                 }
             }
             {
@@ -3061,9 +3061,9 @@ supplementalData:table(nofallback){
         SD{
             {
                 id{"SDG"}
-                from:intvector{ /** 2007-01-09  */
+                from:intvector{ /** 2007-01-10  */
                     272,
-                    69755488,
+                    156155488,
                 }
             }
             {
@@ -4998,6 +4998,13 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        dsb{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+        }
         dv{
             primary{
                 scripts{
@@ -5406,6 +5413,20 @@ supplementalData:table(nofallback){
                 territories{
                     "GB",
                     "US",
+                }
+            }
+        }
+        frr{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+        }
+        frs{
+            primary{
+                scripts{
+                    "Latn",
                 }
             }
         }
@@ -5830,6 +5851,13 @@ supplementalData:table(nofallback){
             secondary{
                 territories{
                     "AT",
+                }
+            }
+        }
+        hsb{
+            primary{
+                scripts{
+                    "Latn",
                 }
             }
         }
@@ -6275,7 +6303,7 @@ supplementalData:table(nofallback){
         ko{
             primary{
                 scripts{
-                    "Hang",
+                    "Kore",
                 }
                 territories{
                     "KP",
@@ -7125,6 +7153,13 @@ supplementalData:table(nofallback){
             secondary{
                 territories{
                     "MZ",
+                }
+            }
+        }
+        nds{
+            primary{
+                scripts{
+                    "Latn",
                 }
             }
         }
@@ -8864,6 +8899,13 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        zbl{
+            primary{
+                scripts{
+                    "Blis",
+                }
+            }
+        }
         zh{
             primary{
                 scripts{
@@ -8925,8 +8967,8 @@ supplementalData:table(nofallback){
             "meta:Africa_Eastern_TZ"{"Africa/Dar_es_Salaam"}
             "meta:Africa_Eastern_UG"{"Africa/Kampala"}
             "meta:Africa_Eastern_YT"{"Indian/Mayotte"}
-            "meta:Africa_FarWestern_001"{"Africa/Bissau"}
-            "meta:Africa_FarWestern_EH"{"Africa/El_Aaiun"}
+            "meta:Africa_FarWestern_001"{"Africa/El_Aaiun"}
+            "meta:Africa_FarWestern_GW"{"Africa/Bissau"}
             "meta:Africa_Southern_001"{"Africa/Johannesburg"}
             "meta:Africa_Southern_LS"{"Africa/Maseru"}
             "meta:Africa_Southern_SZ"{"Africa/Mbabane"}
@@ -8943,7 +8985,7 @@ supplementalData:table(nofallback){
             "meta:Africa_Western_NE"{"Africa/Niamey"}
             "meta:Africa_Western_TD"{"Africa/Ndjamena"}
             "meta:Aktyubinsk_001"{"Asia/Aqtobe"}
-            "meta:Alaska_001"{"America/Anchorage"}
+            "meta:Alaska_001"{"America/Juneau"}
             "meta:Alaska_Hawaii_001"{"America/Anchorage"}
             "meta:Almaty_001"{"Asia/Almaty"}
             "meta:Amazon_001"{"America/Manaus"}
@@ -8980,7 +9022,7 @@ supplementalData:table(nofallback){
             "meta:Arabian_QA"{"Asia/Qatar"}
             "meta:Arabian_YE"{"Asia/Aden"}
             "meta:Argentina_001"{"America/Buenos_Aires"}
-            "meta:Argentina_Western_001"{"America/Catamarca"}
+            "meta:Argentina_Western_001"{"America/Mendoza"}
             "meta:Armenia_001"{"Asia/Yerevan"}
             "meta:Ashkhabad_001"{"Asia/Ashgabat"}
             "meta:Atlantic_001"{"America/Halifax"}
@@ -9017,6 +9059,7 @@ supplementalData:table(nofallback){
             "meta:Bolivia_001"{"America/La_Paz"}
             "meta:Borneo_001"{"Asia/Kuching"}
             "meta:Brasilia_001"{"America/Sao_Paulo"}
+            "meta:British_001"{"Europe/London"}
             "meta:Brunei_001"{"Asia/Brunei"}
             "meta:Cape_Verde_001"{"Atlantic/Cape_Verde"}
             "meta:Chamorro_001"{"Pacific/Saipan"}
@@ -9036,6 +9079,7 @@ supplementalData:table(nofallback){
             "meta:Cuba_001"{"America/Havana"}
             "meta:Dacca_001"{"Asia/Dhaka"}
             "meta:Davis_001"{"Antarctica/Davis"}
+            "meta:Dominican_001"{"America/Santo_Domingo"}
             "meta:DumontDUrville_001"{"Antarctica/DumontDUrville"}
             "meta:Dushanbe_001"{"Asia/Dushanbe"}
             "meta:Dutch_Guiana_001"{"America/Paramaribo"}
@@ -9091,16 +9135,17 @@ supplementalData:table(nofallback){
             "meta:Europe_Eastern_SY"{"Asia/Damascus"}
             "meta:Europe_Eastern_TR"{"Europe/Istanbul"}
             "meta:Europe_Eastern_UA"{"Europe/Kiev"}
-            "meta:Europe_Western_001"{"Europe/Lisbon"}
+            "meta:Europe_Western_001"{"Atlantic/Canary"}
             "meta:Europe_Western_EH"{"Africa/El_Aaiun"}
             "meta:Europe_Western_FO"{"Atlantic/Faeroe"}
             "meta:Europe_Western_MA"{"Africa/Casablanca"}
+            "meta:Europe_Western_PT"{"Europe/Lisbon"}
             "meta:Falkland_001"{"Atlantic/Stanley"}
             "meta:Fiji_001"{"Pacific/Fiji"}
             "meta:French_Guiana_001"{"America/Cayenne"}
             "meta:French_Southern_001"{"Indian/Kerguelen"}
             "meta:Frunze_001"{"Asia/Bishkek"}
-            "meta:GMT_001"{"Etc/GMT"}
+            "meta:GMT_001"{"Atlantic/Reykjavik"}
             "meta:GMT_BF"{"Africa/Ouagadougou"}
             "meta:GMT_CI"{"Africa/Abidjan"}
             "meta:GMT_GB"{"Europe/London"}
@@ -9110,7 +9155,6 @@ supplementalData:table(nofallback){
             "meta:GMT_GN"{"Africa/Conakry"}
             "meta:GMT_GW"{"Africa/Bissau"}
             "meta:GMT_IE"{"Europe/Dublin"}
-            "meta:GMT_IS"{"Atlantic/Reykjavik"}
             "meta:GMT_LR"{"Africa/Monrovia"}
             "meta:GMT_ML"{"Africa/Bamako"}
             "meta:GMT_MR"{"Africa/Nouakchott"}
@@ -9123,6 +9167,7 @@ supplementalData:table(nofallback){
             "meta:Gambier_001"{"Pacific/Gambier"}
             "meta:Georgia_001"{"Asia/Tbilisi"}
             "meta:Gilbert_Islands_001"{"Pacific/Tarawa"}
+            "meta:Goose_Bay_001"{"America/Goose_Bay"}
             "meta:Greenland_Central_001"{"America/Scoresbysund"}
             "meta:Greenland_Eastern_001"{"America/Scoresbysund"}
             "meta:Greenland_Western_001"{"America/Godthab"}
@@ -9130,8 +9175,7 @@ supplementalData:table(nofallback){
             "meta:Gulf_001"{"Asia/Dubai"}
             "meta:Gulf_OM"{"Asia/Muscat"}
             "meta:Guyana_001"{"America/Guyana"}
-            "meta:Hawaii_001"{"Pacific/Honolulu"}
-            "meta:Hawaii_Aleutian_001"{"America/Adak"}
+            "meta:Hawaii_Aleutian_001"{"Pacific/Honolulu"}
             "meta:Hong_Kong_001"{"Asia/Hong_Kong"}
             "meta:Hovd_001"{"Asia/Hovd"}
             "meta:India_001"{"Asia/Calcutta"}
@@ -9145,6 +9189,7 @@ supplementalData:table(nofallback){
             "meta:Indonesia_Eastern_001"{"Asia/Jayapura"}
             "meta:Indonesia_Western_001"{"Asia/Jakarta"}
             "meta:Iran_001"{"Asia/Tehran"}
+            "meta:Irish_001"{"Europe/Dublin"}
             "meta:Irkutsk_001"{"Asia/Irkutsk"}
             "meta:Israel_001"{"Asia/Jerusalem"}
             "meta:Japan_001"{"Asia/Tokyo"}
@@ -9152,7 +9197,7 @@ supplementalData:table(nofallback){
             "meta:Karachi_001"{"Asia/Karachi"}
             "meta:Kashgar_001"{"Asia/Kashgar"}
             "meta:Kazakhstan_Eastern_001"{"Asia/Almaty"}
-            "meta:Kazakhstan_Western_001"{"Asia/Aqtau"}
+            "meta:Kazakhstan_Western_001"{"Asia/Aqtobe"}
             "meta:Kizilorda_001"{"Asia/Qyzylorda"}
             "meta:Korea_001"{"Asia/Seoul"}
             "meta:Korea_KP"{"Asia/Pyongyang"}
@@ -9162,13 +9207,14 @@ supplementalData:table(nofallback){
             "meta:Kwajalein_001"{"Pacific/Kwajalein"}
             "meta:Kyrgystan_001"{"Asia/Bishkek"}
             "meta:Lanka_001"{"Asia/Colombo"}
+            "meta:Liberia_001"{"Africa/Monrovia"}
             "meta:Line_Islands_001"{"Pacific/Kiritimati"}
             "meta:Long_Shu_001"{"Asia/Chongqing"}
             "meta:Lord_Howe_001"{"Australia/Lord_Howe"}
             "meta:Macau_001"{"Asia/Macau"}
             "meta:Magadan_001"{"Asia/Magadan"}
             "meta:Malaya_001"{"Asia/Kuala_Lumpur"}
-            "meta:Malaysia_001"{"Asia/Kuala_Lumpur"}
+            "meta:Malaysia_001"{"Asia/Kuching"}
             "meta:Maldives_001"{"Indian/Maldives"}
             "meta:Marquesas_001"{"Pacific/Marquesas"}
             "meta:Marshall_Islands_001"{"Pacific/Majuro"}
@@ -9189,6 +9235,7 @@ supplementalData:table(nofallback){
             "meta:North_Mariana_001"{"Pacific/Saipan"}
             "meta:Novosibirsk_001"{"Asia/Novosibirsk"}
             "meta:Omsk_001"{"Asia/Omsk"}
+            "meta:Oral_001"{"Asia/Oral"}
             "meta:Pakistan_001"{"Asia/Karachi"}
             "meta:Palau_001"{"Pacific/Palau"}
             "meta:Papua_New_Guinea_001"{"Pacific/Port_Moresby"}
@@ -9238,7 +9285,7 @@ supplementalData:table(nofallback){
             "meta:Yakutsk_001"{"Asia/Yakutsk"}
             "meta:Yekaterinburg_001"{"Asia/Yekaterinburg"}
             "meta:Yerevan_001"{"Asia/Yerevan"}
-            "meta:Yukon_001"{"America/Dawson"}
+            "meta:Yukon_001"{"America/Yakutat"}
         }
         windows{
             "Africa:Cairo"{"Egypt"}
@@ -10138,6 +10185,9 @@ supplementalData:table(nofallback){
         "America:Indiana:Petersburg"{
             territory{"US"}
         }
+        "America:Indiana:Tell_City"{
+            territory{"US"}
+        }
         "America:Indiana:Vevay"{
             territory{"US"}
         }
@@ -10335,6 +10385,9 @@ supplementalData:table(nofallback){
                 "Canada/Saskatchewan",
             }
         }
+        "America:Resolute"{
+            territory{"CA"}
+        }
         "America:Rio_Branco"{
             territory{"BR"}
             aliases{
@@ -10455,14 +10508,14 @@ supplementalData:table(nofallback){
         }
         "Antarctica:McMurdo"{
             territory{"AQ"}
+            aliases{
+                "Antarctica/South_Pole",
+            }
         }
         "Antarctica:Palmer"{
             territory{"AQ"}
         }
         "Antarctica:Rothera"{
-            territory{"AQ"}
-        }
-        "Antarctica:South_Pole"{
             territory{"AQ"}
         }
         "Antarctica:Syowa"{

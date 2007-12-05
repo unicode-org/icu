@@ -1367,7 +1367,9 @@ The leftmost codepage (.xxx) wins.
 /*
 Due to various platform differences, one platform may specify a charset,
 when they really mean a different charset. Remap the names so that they are
-compatible with ICU.
+compatible with ICU. Only conflicting/ambiguous aliases should be resolved
+here. Before adding anything to this function, please consider adding unique
+names to the ICU alias table in the data directory.
 */
 static const char*
 remapPlatformDependentCodepage(const char *locale, const char *name) {
@@ -1426,7 +1428,17 @@ remapPlatformDependentCodepage(const char *locale, const char *name) {
         name = "eucjis";
     }
 #elif defined(U_LINUX)
-    if (uprv_strcmp(name, "eucjp") == 0) {
+    if (locale != NULL && uprv_strcmp(name, "euc") == 0) {
+        /* Linux underspecifies the "EUC" name. */
+        if (uprv_strcmp(locale, "korean") == 0) {
+            name = "EUC-KR";
+        }
+        else if (uprv_strcmp(locale, "japanese") == 0) {
+            /* See comment below about eucJP */
+            name = "eucjis";
+        }
+    }
+    else if (uprv_strcmp(name, "eucjp") == 0) {
         /*
         ibm-1350 is the best match, but unavailable.
         ibm-954 is mostly a superset of ibm-1350.

@@ -35,9 +35,9 @@ ifneq ($(top_builddir),$(top_srcdir))
 CPPFLAGS += -I$(top_builddir)/common
 endif
 
-CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/ctestfw -I$(top_srcdir)/tools/toolutil -I$(top_srcdir)/layout -I$(top_srcdir)
+CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/ctestfw -I$(top_srcdir)/tools/toolutil -I$(top_srcdir)/layout -I$(top_srcdir)/layoutex -I$(top_srcdir)
 DEFS += -D'U_TOPSRCDIR="$(top_srcdir)/"' -D'U_TOPBUILDDIR="$(BUILDDIR)"'
-LIBS = $(LIBICULE) $(LIBICUUC) $(LIBICUI18N) $(LIBCTESTFW) $(LIBICUTOOLUTIL) @LIBS@ @LIB_M@
+LIBS = $(LIBICULX) $(LIBICULE) $(LIBICUUC) $(LIBICUI18N) $(LIBCTESTFW) $(LIBICUTOOLUTIL) @LIBS@ @LIB_M@
 
 COMMONOBJECTS = letsutil.o cmaps.o FontTableCache.o SimpleFontInstance.o PortableFontInstance.o
 TESTOBJECTS   = letest.o

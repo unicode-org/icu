@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2004 IBM and others. All rights reserved.
+*   Copyright (C) 2001-2007 IBM and others. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *  08/13/2001   synwee      Creation.
@@ -26,6 +26,7 @@ struct USearch {
           int32_t             textLength; // exact length
           UBool               isOverlap;
           UBool               isCanonicalMatch;
+          UBreakIterator	 *_breakIter_;  //internal character breakiterator
           UBreakIterator     *breakIter;
     // value USEARCH_DONE is the default value
     // if we are not at the start of the text or the end of the text, 

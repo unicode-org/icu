@@ -1351,6 +1351,12 @@ static void RamsRulesTest(void) {
         log_verbose("Don't know how to test Phonebook because the reset is on an expanding character\n");
         continue;
       }
+      if (uprv_strcmp("km", locName)==0 ||
+          uprv_strcmp("km_KH", locName)==0 ||
+          uprv_strcmp("zh", locName)==0 ||
+          uprv_strcmp("zh_Hant", locName)==0 ) {
+          continue;  /* TODO: enable these locale tests after trac#6040 is fixed. */
+      }
       log_verbose("Testing locale %s\n", locName);
       coll = ucol_open(locName, &status);
       if(U_SUCCESS(status)) {
@@ -4766,6 +4772,232 @@ TestJ5367(void)
     genericRulesStarter(rules, test, sizeof(test)/sizeof(test[0]));
 }
 
+static void
+TestVI5913(void)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t i, j;
+    UCollator *coll =NULL;
+    uint8_t  resColl[100], expColl[100];
+    int32_t  rLen, tLen, ruleLen, sLen, kLen;
+    UChar rule[256]={0x26, 0x62, 0x3c, 0x1FF3, 0};  /* &a<0x1FF3-omega with Ypogegrammeni*/
+    UChar rule2[256]={0x26, 0x7a, 0x3c, 0x0161, 0};  /* &z<s with caron*/
+    UChar rule3[256]={0x26, 0x7a, 0x3c, 0x0061, 0x00ea, 0};  /* &z<a+e with circumflex.*/
+    UChar tData[][20]={
+        {0x1EAC, 0},
+        {0x0041, 0x0323, 0x0302, 0},
+        {0x1EA0, 0x0302, 0},
+        {0x00C2, 0x0323, 0},
+        {0x1ED8, 0},  /* O with dot and circumflex */
+        {0x1ECC, 0x0302, 0},
+        {0x1EB7, 0},
+        {0x1EA1, 0x0306, 0},
+    };
+    UChar tailorData[][20]={
+        {0x1FA2, 0},  /* Omega with 3 combining marks */
+        {0x03C9, 0x0313, 0x0300, 0x0345, 0},
+        {0x1FF3, 0x0313, 0x0300, 0},
+        {0x1F60, 0x0300, 0x0345, 0},
+        {0x1F62, 0x0345, 0},
+        {0x1FA0, 0x0300, 0},
+    };
+    UChar tailorData2[][20]={
+        {0x1E63, 0x030C, 0},  /* s with dot below + caron */
+        {0x0073, 0x0323, 0x030C, 0},
+        {0x0073, 0x030C, 0x0323, 0},
+    };
+    UChar tailorData3[][20]={
+        {0x007a, 0},  /*  z */
+        {0x0061, 0x0065, 0},  /*  a + e */
+        {0x0061, 0x00ea, 0}, /* a + e with circumflex */
+        {0x0061, 0x1EC7, 0},  /* a+ e with dot below and circumflex */
+        {0x0061, 0x1EB9, 0x0302, 0}, /* a + e with dot below + combining circumflex */
+        {0x0061, 0x00EA, 0x0323, 0},  /* a + e with circumflex + combining dot below */
+        {0x00EA, 0x0323, 0},  /* e with circumflex + combining dot below */
+        {0x00EA, 0},  /* e with circumflex  */
+    };
+
+    /* Test Vietnamese sort. */
+    coll = ucol_open("vi", &status);
+    log_verbose("\n\nVI collation:");
+    if ( !ucol_equal(coll, tData[0], u_strlen(tData[0]), tData[2], u_strlen(tData[2])) ) {
+        log_err("\\u1EAC not equals to \\u1EA0+\\u0302\n");
+    }
+    if ( !ucol_equal(coll, tData[0], u_strlen(tData[0]), tData[3], u_strlen(tData[3])) ) {
+        log_err("\\u1EAC not equals to \\u00c2+\\u0323\n");
+    }
+    if ( !ucol_equal(coll, tData[5], u_strlen(tData[5]), tData[4], u_strlen(tData[4])) ) {
+        log_err("\\u1ED8 not equals to \\u1ECC+\\u0302\n");
+    }
+    if ( !ucol_equal(coll, tData[7], u_strlen(tData[7]), tData[6], u_strlen(tData[6])) ) {
+        log_err("\\u1EB7 not equals to \\u1EA1+\\u0306\n");
+    }
+
+    for (j=0; j<8; j++) {
+        tLen = u_strlen(tData[j]);
+        log_verbose("\n Data :%s  \tlen: %d key: ", tData[j], tLen);
+        rLen = ucol_getSortKey(coll, tData[j], tLen, resColl, 100);
+        for(i = 0; i<rLen; i++) {
+            log_verbose(" %02X", resColl[i]);
+        }
+    }
+
+    ucol_close(coll);
+
+    /* Test Russian sort. */
+    coll = ucol_open("ro", &status);
+    log_verbose("\n\nRO collation:");
+    if ( !ucol_equal(coll, tData[0], u_strlen(tData[0]), tData[1], u_strlen(tData[1])) ) {
+        log_err("\\u1EAC not equals to \\u1EA0+\\u0302\n");
+    }
+    if ( !ucol_equal(coll, tData[4], u_strlen(tData[4]), tData[5], u_strlen(tData[5])) ) {
+        log_err("\\u1EAC not equals to \\u00c2+\\u0323\n");
+    }
+    if ( !ucol_equal(coll, tData[6], u_strlen(tData[6]), tData[7], u_strlen(tData[7])) ) {
+        log_err("\\u1EB7 not equals to \\u1EA1+\\u0306\n");
+    }
+
+    for (j=4; j<8; j++) {
+        tLen = u_strlen(tData[j]);
+        log_verbose("\n Data :%s  \tlen: %d key: ", tData[j], tLen);
+        rLen = ucol_getSortKey(coll, tData[j], tLen, resColl, 100);
+        for(i = 0; i<rLen; i++) {
+            log_verbose(" %02X", resColl[i]);
+        }
+    }
+    ucol_close(coll);
+
+    /* Test the precomposed Greek character with 3 combining marks. */
+    log_verbose("\n\nTailoring test: Greek character with 3 combining marks");
+    ruleLen = u_strlen(rule);
+    coll = ucol_openRules(rule, ruleLen, UCOL_OFF, UCOL_TERTIARY, NULL,&status);
+    sLen = u_strlen(tailorData[0]);
+    for (j=1; j<6; j++) {
+        tLen = u_strlen(tailorData[j]);
+        if ( !ucol_equal(coll, tailorData[0], sLen, tailorData[j], tLen))  {
+            log_err("\n \\u1FA2 not equals to data[%d]:%s\n", j, tailorData[j]);
+        }
+    }
+    /* Test getSortKey. */
+    tLen = u_strlen(tailorData[0]);
+    kLen=ucol_getSortKey(coll, tailorData[0], tLen, expColl, 100);
+    for (j=0; j<6; j++) {
+        tLen = u_strlen(tailorData[j]);
+        rLen = ucol_getSortKey(coll, tailorData[j], tLen, resColl, 100);
+        if ( kLen!=rLen || uprv_memcmp(expColl, resColl, rLen*sizeof(uint8_t))!=0 ) {
+            log_err("\n Data[%d] :%s  \tlen: %d key: ", j, tailorData[j], tLen);
+            for(i = 0; i<rLen; i++) {
+                log_err(" %02X", resColl[i]);
+            }
+        }
+    }
+    ucol_close(coll);
+
+    log_verbose("\n\nTailoring test for s with caron:");
+    ruleLen = u_strlen(rule2);
+    coll = ucol_openRules(rule2, ruleLen, UCOL_OFF, UCOL_TERTIARY, NULL,&status);
+    tLen = u_strlen(tailorData2[0]);
+    kLen=ucol_getSortKey(coll, tailorData2[0], tLen, expColl, 100);
+    for (j=1; j<3; j++) {
+        tLen = u_strlen(tailorData2[j]);
+        rLen = ucol_getSortKey(coll, tailorData2[j], tLen, resColl, 100);
+        if ( kLen!=rLen || uprv_memcmp(expColl, resColl, rLen*sizeof(uint8_t))!=0 ) {
+            log_err("\n After tailoring Data[%d] :%s  \tlen: %d key: ", j, tailorData[j], tLen);
+            for(i = 0; i<rLen; i++) {
+                log_err(" %02X", resColl[i]);
+            }
+        }
+    }
+    ucol_close(coll);
+
+    log_verbose("\n\nTailoring test for &z< ae with circumflex:");
+     ruleLen = u_strlen(rule3);
+     coll = ucol_openRules(rule3, ruleLen, UCOL_OFF, UCOL_TERTIARY, NULL,&status);
+     tLen = u_strlen(tailorData3[3]);
+     kLen=ucol_getSortKey(coll, tailorData3[3], tLen, expColl, 100);
+     for (j=4; j<6; j++) {
+         tLen = u_strlen(tailorData3[j]);
+         rLen = ucol_getSortKey(coll, tailorData3[j], tLen, resColl, 100);
+
+         if ( kLen!=rLen || uprv_memcmp(expColl, resColl, rLen*sizeof(uint8_t))!=0 ) {
+             log_err("\n After tailoring Data[%d] :%s  \tlen: %d key: ", j, tailorData[j], tLen);
+             for(i = 0; i<rLen; i++) {
+                 log_err(" %02X", resColl[i]);
+             }
+         }
+
+         log_verbose("\n Test Data[%d] :%s  \tlen: %d key: ", j, tailorData[j], tLen);
+          for(i = 0; i<rLen; i++) {
+              log_verbose(" %02X", resColl[i]);
+          }
+     }
+     ucol_close(coll);
+}
+
+#define TSKC_DATA_SIZE 5
+#define TSKC_BUF_SIZE  50
+static void
+TestSortKeyConsistency(void)
+{
+    UErrorCode icuRC = U_ZERO_ERROR;
+    UCollator* ucol;
+    UChar data[] = { 0xFFFD, 0x0006, 0x0006, 0x0006, 0xFFFD};
+
+    uint8_t bufFull[TSKC_DATA_SIZE][TSKC_BUF_SIZE];
+    uint8_t bufPart[TSKC_DATA_SIZE][TSKC_BUF_SIZE];
+	int32_t i, j, i2;
+
+    ucol = ucol_openFromShortString("LEN_S4", FALSE, NULL, &icuRC);
+    if (U_FAILURE(icuRC))
+	{
+	    log_err("ucol_openFromShortString failed\n");
+        return;
+	}
+
+    for (i = 0; i < TSKC_DATA_SIZE; i++)
+    {
+        UCharIterator uiter;
+        uint32_t state[2] = { 0, 0 };
+        int32_t dataLen = i+1;
+	    for (j=0; j<TSKC_BUF_SIZE; j++)
+	        bufFull[i][j] = bufPart[i][j] = 0;
+
+        /* Full sort key */
+        ucol_getSortKey(ucol, data, dataLen, bufFull[i], TSKC_BUF_SIZE);
+
+        /* Partial sort key */
+        uiter_setString(&uiter, data, dataLen);
+        ucol_nextSortKeyPart(ucol, &uiter, state, bufPart[i], TSKC_BUF_SIZE, &icuRC);
+        if (U_FAILURE(icuRC))
+		{
+		    log_err("ucol_nextSortKeyPart failed\n");
+			ucol_close(ucol);
+			return;
+		}
+
+	    for (i2=0; i2<i; i2++)
+	    {
+	        UBool fullMatch = TRUE;
+		    UBool partMatch = TRUE;
+		    for (j=0; j<TSKC_BUF_SIZE; j++)
+		    {
+			    fullMatch = fullMatch && (bufFull[i][j] != bufFull[i2][j]);
+			    partMatch = partMatch && (bufPart[i][j] != bufPart[i2][j]);
+		    }
+			if (fullMatch != partMatch) {
+		        log_err(fullMatch ? "full key was consistent, but partial key changed\n"
+					              : "partial key was consistent, but full key changed\n");
+				ucol_close(ucol);
+				return;
+			}
+	    }
+
+    }
+
+    /*=============================================*/
+   ucol_close(ucol);
+}
+
 
 #define TEST(x) addTest(root, &x, "tscoll/cmsccoll/" # x)
 
@@ -4836,7 +5068,8 @@ void addMiscCollTest(TestNode** root)
     TEST(TestJ5223);
     TEST(TestJ5232);
     TEST(TestJ5367);
+    TEST(TestSortKeyConsistency);
+    TEST(TestVI5913);  /* VI, RO tailored rules */
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
-

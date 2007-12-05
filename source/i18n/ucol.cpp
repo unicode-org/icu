@@ -6054,6 +6054,8 @@ ucol_nextSortKeyPart(const UCollator *coll,
               level = UCOL_PSK_QUIN;
               break;
           }
+		  if(CE==0)
+			  continue;
           if(isShiftedCE(CE, LVT, &wasShifted)) {
             CE >>= 16; /* get primary */
             if(CE != 0) {

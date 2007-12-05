@@ -971,8 +971,13 @@ void ParagraphLayout::appendRun(ParagraphLayout::Line *line, le_int32 run, le_in
             glyphToCharMap[outGlyph] = fGlyphToCharMap[glyphBase + inGlyph];
         }
     } else {
-        for (outGlyph = 0, inGlyph = rightGlyph - 1; inGlyph >= leftGlyph; inGlyph -= 1, outGlyph += 1) {
-            glyphToCharMap[outGlyph] = fGlyphToCharMap[glyphBase + inGlyph];
+        // Because fGlyphToCharMap is stored in logical order to facilitate line breaking,
+        // we need to map the physical glyph indices to logical indices while we copy the
+        // character indices.
+        le_int32 base = glyphBase + fStyleRunInfo[run].glyphCount - 1;
+
+        for (outGlyph = 0, inGlyph = leftGlyph; inGlyph < rightGlyph; inGlyph += 1, outGlyph += 1) {
+            glyphToCharMap[outGlyph] = fGlyphToCharMap[base - inGlyph];
         }
     }
 

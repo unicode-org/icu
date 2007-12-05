@@ -88,6 +88,7 @@ private:
     void TestUClassID();
     void TestSubclass();
     void TestCoverage();
+    void TestDiactricMatch();
 };
 
 #endif /* #if !UCONFIG_NO_COLLATION */

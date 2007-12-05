@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2006, International Business Machines
+*   Copyright (C) 2001-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -122,6 +122,7 @@ typedef struct {
   UColToken *varTop;
   USet *copySet;
   USet *removeSet;
+  UBool buildCCTabFlag;  /* Tailoring rule requirs building combining class table. */
 } UColTokenParser;
 
 typedef struct {

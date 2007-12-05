@@ -1537,6 +1537,58 @@ static void TestIgnorable(void)
     ucol_close(collator);
 }
 
+static void TestDiactricMatch(void) 
+{
+    UChar          pattern[128];
+    UChar          text[128];
+    UErrorCode     status = U_ZERO_ERROR;
+    UStringSearch *strsrch = NULL;
+    UCollator *coll = NULL;
+    uint32_t       count = 0;
+    SearchData search;
+
+    memset(pattern, 0, 128*sizeof(UChar));
+    memset(text, 0, 128*sizeof(UChar));
+    
+    strsrch = usearch_open(pattern, 1, text, 1, uloc_getDefault(), NULL, &status);
+	if (U_FAILURE(status)) {
+        log_err("Error opening string search %s\n", u_errorName(status));
+        return;
+    }
+       
+    search = DIACTRICMATCH[count];
+    while (search.text != NULL) {
+    	if (search.collator != NULL) {
+    		coll = ucol_openFromShortString(search.collator, FALSE, NULL, &status);
+    	} else {
+    		coll = ucol_open(uloc_getDefault(), &status);
+    		ucol_setStrength(coll, search.strength);
+    	}
+    	if (U_FAILURE(status)) {
+	        log_err("Error opening string search collator %s\n", u_errorName(status));
+	        return;
+	    }
+    	
+    	usearch_setCollator(strsrch, coll, &status);
+    	if (U_FAILURE(status)) {
+	        log_err("Error setting string search collator %s\n", u_errorName(status));
+	        return;
+	    }
+    
+        u_unescape(search.text, text, 128);
+        u_unescape(search.pattern, pattern, 128);
+        usearch_setText(strsrch, text, -1, &status);
+        usearch_setPattern(strsrch, pattern, -1, &status);
+        if (!assertEqualWithUStringSearch(strsrch, search)) {
+            log_err("Error at test number %d\n", count);
+        }
+        ucol_close(coll);
+        
+        search = DIACTRICMATCH[++count];
+    }
+    usearch_close(strsrch);
+}
+
 static void TestCanonical(void)
 {
     int count = 0;
@@ -2191,6 +2243,7 @@ void addSearchTest(TestNode** root)
                                  "tscoll/usrchtst/TestContractionCanonical");
     addTest(root, &TestEnd, "tscoll/usrchtst/TestEnd");
     addTest(root, &TestNumeric, "tscoll/usrchtst/TestNumeric");
+    addTest(root, &TestDiactricMatch, "tscoll/usrchtst/TestDiactricMatch");
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */

@@ -23,7 +23,10 @@ ThaiLayoutEngine::ThaiLayoutEngine(const LEFontInstance *fontInstance, le_int32 
     fErrorChar = 0x25CC;
 
     // Figure out which presentation forms the font uses
-    if (fontInstance->canDisplay(0x0E64)) {
+    if (! fontInstance->canDisplay(0x0E01)) {
+        // No Thai in font; don't use presentation forms.
+        fGlyphSet = 3;
+    } else if (fontInstance->canDisplay(0x0E64)) {
         // WorldType uses reserved space in Thai block
         fGlyphSet = 0;
     } else if (fontInstance->canDisplay(0xF701)) {

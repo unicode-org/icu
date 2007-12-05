@@ -529,6 +529,24 @@
 			<File
 				RelativePath=".\unicode\basictz.h"
 				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\buddhcal.cpp"
@@ -799,6 +817,24 @@
 			<File
 				RelativePath=".\unicode\dtrule.h"
 				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\unicode\fieldpos.h"
@@ -1147,6 +1183,24 @@
 			<File
 				RelativePath=".\unicode\rbtz.h"
 				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\reldtfmt.cpp"
@@ -1249,6 +1303,24 @@
 			<File
 				RelativePath=".\unicode\tzrule.h"
 				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\tztrans.cpp"
@@ -1257,6 +1329,24 @@
 			<File
 				RelativePath=".\unicode\tztrans.h"
 				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\ucal.cpp"
@@ -1456,6 +1546,15 @@
 				RelativePath=".\unicode\utmscale.h"
 				>
 				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Debug|Win32"
 					>
 					<Tool
@@ -1472,6 +1571,24 @@
 			<File
 				RelativePath=".\unicode\vtzone.h"
 				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\windtfmt.cpp"

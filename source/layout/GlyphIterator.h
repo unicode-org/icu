@@ -74,7 +74,7 @@ public:
 
 private:
     le_bool filterGlyph(le_uint32 index) const;
-    le_bool hasFeatureTag() const;
+    le_bool hasFeatureTag(le_bool matchGroup) const;
     le_bool nextInternal(le_uint32 delta = 1);
     le_bool prevInternal(le_uint32 delta = 1);
 
@@ -90,6 +90,7 @@ private:
     le_int32    destIndex;
     le_uint16   lookupFlags;
     FeatureMask featureMask;
+    le_int32    glyphGroup;
 
     const GlyphClassDefinitionTable *glyphClassDefinitionTable;
     const MarkAttachClassDefinitionTable *markAttachClassDefinitionTable;

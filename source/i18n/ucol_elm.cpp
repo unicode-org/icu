@@ -1,7 +1,8 @@
+
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2006, International Business Machines
+*   Copyright (C) 2001-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -32,6 +33,7 @@
 #include "unicode/ucoleitr.h"
 #include "unicode/normlzr.h"
 #include "ucol_elm.h"
+#include "ucol_tok.h"
 #include "unormimp.h"
 #include "unicode/caniter.h"
 #include "cmemory.h"
@@ -203,6 +205,7 @@ uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollat
     }
     uprv_memset(t->unsafeCP, 0, UCOL_UNSAFECP_TABLE_SIZE);
     uprv_memset(t->contrEndCP, 0, UCOL_UNSAFECP_TABLE_SIZE);
+    t->cmLookup = NULL;
     return t;
 
 allocation_failure:
@@ -391,6 +394,11 @@ uprv_uca_closeTempTable(tempUCATable *t) {
 
         uprv_free(t->unsafeCP);
         uprv_free(t->contrEndCP);
+        
+        if (t->cmLookup != NULL) {
+            uprv_free(t->cmLookup->cPoints);
+            uprv_free(t->cmLookup);
+        }
 
         uprv_free(t);
     }
@@ -675,25 +683,94 @@ static void unsafeCPSet(uint8_t *table, UChar c) {
     *htByte |= (1 << (hash & 7));
 }
 
+static void
+uprv_uca_createCMTable(tempUCATable *t, int32_t noOfCM, UErrorCode *status) {
+    t->cmLookup = (CombinClassTable *)uprv_malloc(sizeof(CombinClassTable));
+    if (t->cmLookup==NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    t->cmLookup->cPoints=(UChar *)uprv_malloc(noOfCM*sizeof(UChar));
+    if (t->cmLookup->cPoints ==NULL) {
+        uprv_free(t->cmLookup);
+        t->cmLookup = NULL;
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
 
-/*  to the UnsafeCP hash table, add all chars with combining class != 0     */
+    t->cmLookup->size=noOfCM;
+    uprv_memset(t->cmLookup->index, 0, sizeof(t->cmLookup->index));
+
+    return;
+}
+
+static void
+uprv_uca_copyCMTable(tempUCATable *t, UChar *cm, uint16_t *index) {
+    int32_t count=0;
+
+    for (int32_t i=0; i<256; ++i) {
+        if (index[i]>0) {
+            // cPoints is ordered by combining class value.
+            uprv_memcpy(t->cmLookup->cPoints+count, cm+(i<<8), index[i]*sizeof(UChar));
+            count += index[i];
+        }
+        t->cmLookup->index[i]=count;
+    }
+    return;
+}
+
+/* 1. to the UnsafeCP hash table, add all chars with combining class != 0     */
+/* 2. build combining marks table for all chars with combining class != 0     */
 static void uprv_uca_unsafeCPAddCCNZ(tempUCATable *t, UErrorCode *status) {
 
     UChar              c;
     uint16_t           fcd;     // Hi byte is lead combining class.
     // lo byte is trailing combing class.
     const uint16_t    *fcdTrieData;
-
+    UBool buildCMTable = (t->cmLookup==NULL); // flag for building combining class table
+    UChar *cm=NULL;
+    uint16_t index[256];
+    int32_t count=0;
     fcdTrieData = unorm_getFCDTrie(status);
     if (U_FAILURE(*status)) {
         return;
     }
 
+    if (buildCMTable) {
+        if (cm==NULL) {
+            cm = (UChar *)uprv_malloc(sizeof(UChar)*UCOL_MAX_CM_TAB);
+            if (cm==NULL) {
+                *status = U_MEMORY_ALLOCATION_ERROR;
+                return;
+            }
+        }
+        uprv_memset(index, 0, sizeof(index));
+    }
     for (c=0; c<0xffff; c++) {
         fcd = unorm_getFCD16(fcdTrieData, c);
         if (fcd >= 0x100 ||               // if the leading combining class(c) > 0 ||
-            (UTF_IS_LEAD(c) && fcd != 0)) //    c is a leading surrogate with some FCD data
+            (UTF_IS_LEAD(c) && fcd != 0)) {//    c is a leading surrogate with some FCD data
+            if (buildCMTable) {
+                uint32_t cClass = fcd & 0xff;
+                uint32_t temp=(cClass<<8)+index[cClass];
+                cm[(cClass<<8)+index[cClass]] = c; //
+                index[cClass]++;
+                count++;
+            }
             unsafeCPSet(t->unsafeCP, c);
+        }
+    }
+
+    // copy to cm table
+    if (buildCMTable) {
+        uprv_uca_createCMTable(t, count, status);
+        if(U_FAILURE(*status)) {
+            if (cm!=NULL) {
+                uprv_free(cm);
+            }
+            return;
+        }
+        uprv_uca_copyCMTable(t, cm, index);
     }
 
     if(t->prefixLookup != NULL) {
@@ -705,21 +782,25 @@ static void uprv_uca_unsafeCPAddCCNZ(tempUCATable *t, UErrorCode *status) {
         while((e = uhash_nextElement(t->prefixLookup, &i)) != NULL) {
             element = (UCAElements *)e->value.pointer;
             // codepoints here are in the NFD form. We need to add the
-            // first code point of the NFC form to unsafe, because 
+            // first code point of the NFC form to unsafe, because
             // strcoll needs to backup over them.
             NFCbufLen = unorm_normalize(element->cPoints, element->cSize, UNORM_NFC, 0,
                 NFCbuf, 256, status);
             unsafeCPSet(t->unsafeCP, NFCbuf[0]);
-        } 
+        }
+    }
+
+    if (cm!=NULL) {
+        uprv_free(cm);
     }
 }
 
-static uint32_t uprv_uca_addPrefix(tempUCATable *t, uint32_t CE, 
+static uint32_t uprv_uca_addPrefix(tempUCATable *t, uint32_t CE,
                                    UCAElements *element, UErrorCode *status)
 {
     // currently the longest prefix we're supporting in Japanese is two characters
     // long. Although this table could quite easily mimic complete contraction stuff
-    // there is no good reason to make a general solution, as it would require some 
+    // there is no good reason to make a general solution, as it would require some
     // error prone messing.
     CntTable *contractions = t->contractions;
     UChar32 cp;
@@ -744,7 +825,7 @@ static uint32_t uprv_uca_addPrefix(tempUCATable *t, uint32_t CE,
 #endif
 
     for (j = 1; j<element->prefixSize; j++) {   /* First add NFD prefix chars to unsafe CP hash table */
-        // Unless it is a trail surrogate, which is handled algoritmically and 
+        // Unless it is a trail surrogate, which is handled algoritmically and
         // shouldn't take up space in the table.
         if(!(UTF_IS_TRAIL(element->prefix[j]))) {
             unsafeCPSet(t->unsafeCP, element->prefix[j]);
@@ -784,7 +865,7 @@ static uint32_t uprv_uca_addPrefix(tempUCATable *t, uint32_t CE,
     element->cSize = element->prefixSize;
 
     // Add the last char of the contraction to the contraction-end hash table.
-    // unless it is a trail surrogate, which is handled algorithmically and 
+    // unless it is a trail surrogate, which is handled algorithmically and
     // shouldn't be in the table
     if(!(UTF_IS_TRAIL(element->cPoints[element->cSize -1]))) {
         ContrEndCPSet(t->contrEndCP, element->cPoints[element->cSize -1]);
@@ -793,7 +874,7 @@ static uint32_t uprv_uca_addPrefix(tempUCATable *t, uint32_t CE,
     // First we need to check if contractions starts with a surrogate
     UTF_NEXT_CHAR(element->cPoints, cpsize, element->cSize, cp);
 
-    // If there are any Jamos in the contraction, we should turn on special 
+    // If there are any Jamos in the contraction, we should turn on special
     // processing for Jamos
     if(UCOL_ISJAMO(element->prefix[0])) {
         t->image->jamoSpecial = TRUE;
@@ -801,7 +882,7 @@ static uint32_t uprv_uca_addPrefix(tempUCATable *t, uint32_t CE,
     /* then we need to deal with it */
     /* we could aready have something in table - or we might not */
 
-    if(!isPrefix(CE)) { 
+    if(!isPrefix(CE)) {
         /* if it wasn't contraction, we wouldn't end up here*/
         int32_t firstContractionOffset = 0;
         firstContractionOffset = uprv_cnttab_addContraction(contractions, UPRV_CNTTAB_NEWELEMENT, 0, CE, status);
@@ -1557,45 +1638,348 @@ _enumCategoryRangeClosureCategory(const void *context, UChar32 start, UChar32 li
 }
 U_CDECL_END
 
+static void
+uprv_uca_setMapCE(tempUCATable *t, UCAElements *element, UErrorCode *status) {
+    uint32_t expansion = 0;
+    int32_t j;
+
+    ExpansionTable *expansions = t->expansions;
+    if(element->noOfCEs == 2 // a two CE expansion
+        && isContinuation(element->CEs[1]) // which  is a continuation
+        && (element->CEs[1] & (~(0xFF << 24 | UCOL_CONTINUATION_MARKER))) == 0 // that has only primaries in continuation,
+        && (((element->CEs[0]>>8) & 0xFF) == UCOL_BYTE_COMMON) // a common secondary
+        && ((element->CEs[0] & 0xFF) == UCOL_BYTE_COMMON) // and a common tertiary
+        ) {
+            element->mapCE = UCOL_SPECIAL_FLAG | (LONG_PRIMARY_TAG<<24) // a long primary special
+                | ((element->CEs[0]>>8) & 0xFFFF00) // first and second byte of primary
+                | ((element->CEs[1]>>24) & 0xFF);   // third byte of primary
+        } else {
+            expansion = (uint32_t)(UCOL_SPECIAL_FLAG | (EXPANSION_TAG<<UCOL_TAG_SHIFT)
+                | ((uprv_uca_addExpansion(expansions, element->CEs[0], status)+(headersize>>2))<<4)
+                & 0xFFFFF0);
+
+            for(j = 1; j<(int32_t)element->noOfCEs; j++) {
+                uprv_uca_addExpansion(expansions, element->CEs[j], status);
+            }
+            if(element->noOfCEs <= 0xF) {
+                expansion |= element->noOfCEs;
+            } else {
+                uprv_uca_addExpansion(expansions, 0, status);
+            }
+            element->mapCE = expansion;
+            uprv_uca_setMaxExpansion(element->CEs[element->noOfCEs - 1],
+                (uint8_t)element->noOfCEs,
+                t->maxExpansions,
+                status);
+        }
+}
+
+static void
+uprv_uca_addFCD4AccentedContractions(tempUCATable *t,
+                                      UCollationElements* colEl,
+                                      UChar *data,
+                                      int32_t len,
+                                      UCAElements *el,
+                                      UErrorCode *status) {
+    UChar decomp[256], comp[256];
+    int32_t decLen, compLen;
+
+    decLen = unorm_normalize(data, len, UNORM_NFD, 0, decomp, 256, status);
+    compLen = unorm_normalize(data, len, UNORM_NFC, 0, comp, 256, status);
+    decomp[decLen] = comp[compLen] = 0;
+
+    el->cPoints = decomp;
+    el->cSize = decLen;
+    el->noOfCEs = 0;
+    el->prefixSize = 0;
+    el->prefix = el->prefixChars;
+
+    UCAElements *prefix=(UCAElements *)uhash_get(t->prefixLookup, el);
+    el->cPoints = comp;
+    el->cSize = compLen;
+    el->prefix = el->prefixChars;
+    el->prefixSize = 0;
+    if(prefix == NULL) {
+        el->noOfCEs = 0;
+        ucol_setText(colEl, decomp, decLen, status);
+        while((el->CEs[el->noOfCEs] = ucol_next(colEl, status)) != (uint32_t)UCOL_NULLORDER) {
+            el->noOfCEs++;
+        }
+        uprv_uca_setMapCE(t, el, status);
+        uprv_uca_addAnElement(t, el, status);
+    }
+}
+
+static void
+uprv_uca_addMultiCMContractions(tempUCATable *t,
+                                UCollationElements* colEl,
+                                tempTailorContext *c,
+                                UCAElements *el,
+                                UErrorCode *status) {
+    CombinClassTable *cmLookup = t->cmLookup;
+    UChar  newDecomp[256];
+    int32_t maxComp, newDecLen;
+    const uint16_t  *fcdTrieData = unorm_getFCDTrie(status);
+    int16_t curClass = (unorm_getFCD16(fcdTrieData, c->tailoringCM) & 0xff);
+    CompData *precomp = c->precomp;
+    int32_t  compLen = c->compLen;
+    UChar *comp = c->comp;
+    maxComp = c->precompLen;
+
+    for (int32_t j=0; j < maxComp; j++) {
+        int32_t count=0;
+        int32_t newClass=0;
+        do {
+            if ( count == 0 ) {  // Decompose the saved precomposed char.
+                UChar temp[2];
+                temp[0]=precomp[j].cp;
+                temp[1]=0;
+                newDecLen = unorm_normalize(temp, 1, UNORM_NFD, 0,
+                            newDecomp, sizeof(newDecomp)/sizeof(UChar), status);
+                newDecomp[newDecLen++] = cmLookup->cPoints[c->cmPos];
+            }
+            else {  // swap 2 combining marks when they are equal.
+                uprv_memcpy(newDecomp, c->decomp, sizeof(UChar)*(c->decompLen));
+                newDecLen = c->decompLen;
+                newDecomp[newDecLen++] = precomp[j].cClass;
+            }
+            newDecomp[newDecLen] = 0;
+            compLen = unorm_normalize(newDecomp, newDecLen, UNORM_NFC, 0,
+                              comp, 256, status);
+            if (compLen==1) {
+                comp[compLen++] = newDecomp[newDecLen++] = c->tailoringCM;
+                comp[compLen] = newDecomp[newDecLen] = 0;
+                el->cPoints = newDecomp;
+                el->cSize = newDecLen;
+
+                UCAElements *prefix=(UCAElements *)uhash_get(t->prefixLookup, el);
+                el->cPoints = c->comp;
+                el->cSize = compLen;
+                el->prefix = el->prefixChars;
+                el->prefixSize = 0;
+                if(prefix == NULL) {
+                    el->noOfCEs = 0;
+                    ucol_setText(colEl, newDecomp, newDecLen, status);
+                    while((el->CEs[el->noOfCEs] = ucol_next(colEl, status)) != (uint32_t)UCOL_NULLORDER) {
+                        el->noOfCEs++;
+                    }
+                    uprv_uca_setMapCE(t, el, status);
+                    uprv_uca_finalizeAddition(t, el, status);
+
+                    // Save the current precomposed char and its class to find any
+                    // other combining mark combinations.
+                    precomp[c->precompLen].cp=comp[0];
+                    precomp[c->precompLen].cClass = curClass;
+                    c->precompLen++;
+                }
+            }
+        } while (++count<2 && (precomp[j].cClass == curClass));
+    }
+
+}
+
+static void
+uprv_uca_addTailCanonicalClosures(tempUCATable *t,
+                                  UCollationElements* colEl,
+                                  UChar baseCh,
+                                  UChar cMark,
+                                  UCAElements *el,
+                                  UErrorCode *status) {
+    CombinClassTable *cmLookup = t->cmLookup;
+    const uint16_t  *fcdTrieData = unorm_getFCDTrie(status);
+    int16_t maxIndex = (unorm_getFCD16(fcdTrieData, cMark) & 0xff );
+    UCAElements element;
+    uint16_t *index;
+    UChar  decomp[256];
+    UChar  comp[256];
+    CompData precomp[256];   // precomposed array
+    int32_t  precompLen = 0; // count for precomp
+    int32_t i, len, decompLen, curClass, replacedPos;
+    tempTailorContext c;
+
+    if ( cmLookup == NULL ) {
+        return;
+    }
+    index = cmLookup->index;
+    int32_t cClass=(unorm_getFCD16(fcdTrieData, cMark) & 0xff);
+    maxIndex = (int32_t)index[(unorm_getFCD16(fcdTrieData, cMark) & 0xff)-1];
+    c.comp = comp;
+    c.decomp = decomp;
+    c.precomp = precomp;
+    c.tailoringCM =  cMark;
+
+    if (cClass>0) {
+        maxIndex = (int32_t)index[cClass-1];
+    }
+    else {
+        maxIndex=0;
+    }
+    decomp[0]=baseCh;
+    for ( i=0; i<maxIndex ; i++ ) {
+        decomp[1] = cmLookup->cPoints[i];
+        decomp[2]=0;
+        decompLen=2;
+        len = unorm_normalize(decomp, decompLen, UNORM_NFC, 0, comp, 256, status);
+        if (len==1) {
+            // Save the current precomposed char and its class to find any
+            // other combining mark combinations.
+            precomp[precompLen].cp=comp[0];
+            curClass = precomp[precompLen].cClass =
+                       index[unorm_getFCD16(fcdTrieData, decomp[1]) & 0xff];
+            precompLen++;
+            replacedPos=0;
+            for (decompLen=0; decompLen< (int32_t)el->cSize; decompLen++) {
+                decomp[decompLen] = el->cPoints[decompLen];
+                if (decomp[decompLen]==cMark) {
+                    replacedPos = decompLen;  // record the position for later use
+                }
+            }
+            if ( replacedPos != 0 ) {
+                decomp[replacedPos]=cmLookup->cPoints[i];
+            }
+            decomp[decompLen] = 0;
+            len = unorm_normalize(decomp, decompLen, UNORM_NFC, 0, comp, 256, status);
+            comp[len++] = decomp[decompLen++] = cMark;
+            comp[len] = decomp[decompLen] = 0;
+            element.cPoints = decomp;
+            element.cSize = decompLen;
+            element.noOfCEs = 0;
+            element.prefix = el->prefixChars;
+            element.prefixSize = 0;
+
+            UCAElements *prefix=(UCAElements *)uhash_get(t->prefixLookup, &element);
+            element.cPoints = comp;
+            element.cSize = len;
+            element.prefix = el->prefixChars;
+            element.prefixSize = 0;
+            if(prefix == NULL) {
+                element.noOfCEs = 0;
+                ucol_setText(colEl, decomp, decompLen, status);
+                while((element.CEs[element.noOfCEs] = ucol_next(colEl, status)) != (uint32_t)UCOL_NULLORDER) {
+                    element.noOfCEs++;
+                }
+                uprv_uca_setMapCE(t, &element, status);
+                uprv_uca_finalizeAddition(t, &element, status);
+            }
+
+            // This is a fix for tailoring contractions with accented
+            // character at the end of contraction string.
+            if ((len>2) && 
+                (unorm_getFCD16(fcdTrieData, comp[len-2]) & 0xff00)==0) {
+                uprv_uca_addFCD4AccentedContractions(t, colEl, comp, len, &element, status);
+            }
+
+            if (precompLen >1) {
+                c.compLen = len;
+                c.decompLen = decompLen;
+                c.precompLen = precompLen;
+                c.cmPos = i;
+                uprv_uca_addMultiCMContractions(t, colEl, &c, &element, status);
+                precompLen = c.precompLen;
+            }
+        }
+    }
+}
+
 U_CAPI int32_t U_EXPORT2
-uprv_uca_canonicalClosure(tempUCATable *t, UErrorCode *status) 
+uprv_uca_canonicalClosure(tempUCATable *t,
+                          UColTokenParser *src,
+                          UErrorCode *status)
 {
     enumStruct context;
     context.noOfClosures = 0;
+    UCAElements el;
+    UColToken *tok;
+    UColToken *expt = NULL;
+    uint32_t i = 0, j = 0;
+    UChar  baseChar, firstCM;
+    const uint16_t  *fcdTrieData = unorm_getFCDTrie(status);
+
+    if(!U_SUCCESS(*status)) {
+        return 0;
+    }
+
+    UCollator *tempColl = NULL;
+    tempUCATable *tempTable = uprv_uca_cloneTempTable(t, status);
+
+    UCATableHeader *tempData = uprv_uca_assembleTable(tempTable, status);
+    tempColl = ucol_initCollator(tempData, 0, t->UCA, status);
+    if ( tempTable->cmLookup != NULL ) {
+        t->cmLookup = tempTable->cmLookup;  // copy over to t
+        tempTable->cmLookup = NULL;
+    }
+    uprv_uca_closeTempTable(tempTable);
+
     if(U_SUCCESS(*status)) {
-        UCollator *tempColl = NULL;
-        tempUCATable *tempTable = uprv_uca_cloneTempTable(t, status);
+        tempColl->rb = NULL;
+        tempColl->elements = NULL;
+        tempColl->validLocale = NULL;
+        tempColl->requestedLocale = NULL;
+        tempColl->hasRealData = TRUE;
+        tempColl->freeImageOnClose = TRUE;
+    } else if(tempData != 0) {
+        uprv_free(tempData);
+    }
 
-        UCATableHeader *tempData = uprv_uca_assembleTable(tempTable, status);
-        tempColl = ucol_initCollator(tempData, 0, t->UCA, status);
-        uprv_uca_closeTempTable(tempTable);    
+    /* produce canonical closure */
+    UCollationElements* colEl = ucol_openElements(tempColl, NULL, 0, status);
 
-        if(U_SUCCESS(*status)) {
-            tempColl->rb = NULL;
-            tempColl->elements = NULL;
-            tempColl->validLocale = NULL;
-            tempColl->requestedLocale = NULL;
-            tempColl->hasRealData = TRUE;
-            tempColl->freeImageOnClose = TRUE;
-        } else if(tempData != 0) {
-            uprv_free(tempData);
-        }
+    context.t = t;
+    context.tempColl = tempColl;
+    context.colEl = colEl;
+    context.status = status;
+    u_enumCharTypes(_enumCategoryRangeClosureCategory, &context);
 
-        /* produce canonical closure */
-        UCollationElements* colEl = ucol_openElements(tempColl, NULL, 0, status);
-
-        context.t = t;
-        context.tempColl = tempColl;
-        context.colEl = colEl;
-        context.status = status;
-        u_enumCharTypes(_enumCategoryRangeClosureCategory, &context);
-
+    if ( (src==NULL) || !src->buildCCTabFlag ) {
         ucol_closeElements(colEl);
         ucol_close(tempColl);
+        return context.noOfClosures;  // no extra contraction needed to add
     }
+
+    for (i=0; i < src->resultLen; i++) {
+        baseChar = firstCM= (UChar)0;
+        tok = src->lh[i].first;
+        while (tok != NULL && U_SUCCESS(*status)) {
+            el.prefix = el.prefixChars;
+            el.cPoints = el.uchars;
+            if(tok->prefix != 0) {
+                el.prefixSize = tok->prefix>>24;
+                uprv_memcpy(el.prefix, src->source + (tok->prefix & 0x00FFFFFF), el.prefixSize*sizeof(UChar));
+
+                el.cSize = (tok->source >> 24)-(tok->prefix>>24);
+                uprv_memcpy(el.uchars, (tok->source & 0x00FFFFFF)+(tok->prefix>>24) + src->source, el.cSize*sizeof(UChar));
+            } else {
+                el.prefixSize = 0;
+                *el.prefix = 0;
+
+                el.cSize = (tok->source >> 24);
+                uprv_memcpy(el.uchars, (tok->source & 0x00FFFFFF) + src->source, el.cSize*sizeof(UChar));
+            }
+            if(src->UCA != NULL) {
+                for(j = 0; j<el.cSize; j++) {
+                    int16_t fcd = unorm_getFCD16(fcdTrieData, el.cPoints[j]);
+                    if ( (fcd & 0xff) == 0 ) {
+                        baseChar = el.cPoints[j];  // last base character
+                        firstCM=0;  // reset combining mark value
+                    }
+                    else {
+                        if ( (baseChar!=0) && (firstCM==0) ) {
+                            firstCM = el.cPoints[j];  // first combining mark
+                        }
+                    }
+                }
+            }
+            if ( (baseChar!= (UChar)0) && (firstCM != (UChar)0) ) {
+                // find all the canonical rules
+                uprv_uca_addTailCanonicalClosures(t, colEl, baseChar, firstCM, &el, status);
+            }
+            tok = tok->next;
+        }
+    }
+    ucol_closeElements(colEl);
+    ucol_close(tempColl);
+    
     return context.noOfClosures;
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
-
-
