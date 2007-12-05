@@ -2650,8 +2650,8 @@ U_CAPI void U_EXPORT2 usearch_close(UStringSearch *strsrch)
         if (strsrch->ownCollator && strsrch->collator) {
             ucol_close((UCollator *)strsrch->collator);
         }
-        if (strsrch->internalBreakIter) {
-        	ubrk_close(strsrch->internalBreakIter);
+        if (strsrch->search->internalBreakIter) {
+        	ubrk_close(strsrch->search->internalBreakIter);
         }
         uprv_free(strsrch->search);
         uprv_free(strsrch);
