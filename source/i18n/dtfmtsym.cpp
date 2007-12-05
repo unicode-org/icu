@@ -1068,7 +1068,6 @@ DateFormatSymbols::setZoneStrings(const UnicodeString* const *strings, int32_t r
     // since deleting a 2-d array is a pain in the butt, we offload that task to
     // a separate function
     disposeZoneStrings();
-    UErrorCode status = U_ZERO_ERROR;
     // we always own the new list, which we create here (we duplicate rather
     // than adopting the list passed in)
     fZoneStringsRowCount = rowCount;

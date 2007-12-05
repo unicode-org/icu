@@ -439,17 +439,18 @@ inline void initialize(UStringSearch *strsrch, UErrorCode *status)
 * @param end target text end offset
 */
 static
-void checkBreakBoundary(const UStringSearch *strsrch, int32_t *start, 
+void checkBreakBoundary(const UStringSearch *strsrch, int32_t * /*start*/, 
                                int32_t *end)
 {
 #if !UCONFIG_NO_BREAK_ITERATION
     UBreakIterator *breakiterator = strsrch->search->_breakIter_;
     if (breakiterator) {
 	    int32_t matchend = *end;
-	    int32_t matchstart = *start;
+	    //int32_t matchstart = *start;
 	    
-	    if (!ubrk_isBoundary(breakiterator, matchend))
+	    if (!ubrk_isBoundary(breakiterator, matchend)) {
 	    	*end = ubrk_following(breakiterator, matchend);
+        }
 	    
 	    /* Check the start of the matched text to make sure it doesn't have any accents 
 	     * before it.  This code may not be necessary and so it is commented out */
@@ -741,7 +742,7 @@ UBool checkExtraMatchAccents(const UStringSearch *strsrch, int32_t start,
             uint32_t            firstce   = strsrch->pattern.CE[0];
             UBool               ignorable = TRUE;
             uint32_t            ce        = UCOL_IGNORABLE;
-            while (U_SUCCESS(*status) && ce != firstce && ce != UCOL_NULLORDER) {
+            while (U_SUCCESS(*status) && ce != firstce && ce != (uint32_t)UCOL_NULLORDER) {
                 offset = ucol_getOffset(coleiter);
                 if (ce != firstce && ce != UCOL_IGNORABLE) {
                     ignorable = FALSE;
