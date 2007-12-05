@@ -425,7 +425,7 @@ public class TestConversion extends ModuleTest {
         // decoder replacement
         // { "ibm-1363", :bin{ a2aea2 }, "\u00a1\u001a", :intvector{ 0, 2 },
         // :int{1}, :int{0}, "", "?", :bin{""} }
-        if (cc.caseNr == 63 && skipIfBeforeICU(3,8,0)) {
+        if (cc.caseNr == 65 && skipIfBeforeICU(3,8,0)) {
             logln("TestToUnicode[" + cc.caseNr + "] " + cc.charset);
             logln("Skipping test due to limitation in Java API - callback replacement value");
             return;
