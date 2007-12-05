@@ -224,6 +224,7 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip(void) {
                             }
                         }
                     }
+                    delete outcal;
                 }
                 delete tz;
             }
