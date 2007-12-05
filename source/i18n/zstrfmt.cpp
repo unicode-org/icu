@@ -1624,6 +1624,8 @@ ZSFCache::get(const Locale &locale, UErrorCode &status) {
             next = fFirst;
             entry = new ZSFCacheEntry(locale, zsf, next);
             fFirst = entry;
+        } else {
+            delete zsf;
         }
         umtx_unlock(&gZSFCacheLock);
     }
