@@ -32,6 +32,7 @@ void addUCharTransformTest(TestNode** root);
 
 static void Test_UChar_UTF32_API(void);
 static void Test_UChar_UTF8_API(void);
+static void Test_FromUTF8(void);
 static void Test_FromUTF8Lenient(void);
 static void Test_UChar_WCHART_API(void);
 static void Test_widestrs(void);
@@ -42,6 +43,7 @@ addUCharTransformTest(TestNode** root)
 {
    addTest(root, &Test_UChar_UTF32_API, "custrtrn/Test_UChar_UTF32_API");
    addTest(root, &Test_UChar_UTF8_API, "custrtrn/Test_UChar_UTF8_API");
+   addTest(root, &Test_FromUTF8, "custrtrn/Test_FromUTF8");
    addTest(root, &Test_FromUTF8Lenient, "custrtrn/Test_FromUTF8Lenient");
    addTest(root, &Test_UChar_WCHART_API,  "custrtrn/Test_UChar_WCHART_API");
    addTest(root, &Test_widestrs,  "custrtrn/Test_widestrs");
@@ -618,6 +620,56 @@ equalAnyFFFD(const UChar *s, const UChar *t, int32_t length) {
         --length;
     }
     return TRUE;
+}
+
+/* test u_strFromUTF8Lenient() */
+static void
+Test_FromUTF8(void) {
+    /*
+     * Test case from icu-support list 20071130 "u_strFromUTF8() returns U_INVALID_CHAR_FOUND(10)"
+     */
+    static const uint8_t bytes[]={ 0xe0, 0xa5, 0x9c, 0 };
+    UChar dest[64];
+    UChar *destPointer;
+    int32_t destLength;
+    UErrorCode errorCode;
+
+    /* 3 bytes input, one UChar output (U+095C) */
+    errorCode=U_ZERO_ERROR;
+    destLength=-99;
+    destPointer=u_strFromUTF8(NULL, 0, &destLength, (const char *)bytes, 3, &errorCode);
+    if(errorCode!=U_BUFFER_OVERFLOW_ERROR || destPointer!=NULL || destLength!=1) {
+        log_err("error: u_strFromUTF8(preflight srcLength=3) fails: destLength=%ld - %s\n",
+                (long)destLength, u_errorName(errorCode));
+    }
+
+    /* 4 bytes input, two UChars output (U+095C U+0000) */
+    errorCode=U_ZERO_ERROR;
+    destLength=-99;
+    destPointer=u_strFromUTF8(NULL, 0, &destLength, (const char *)bytes, 4, &errorCode);
+    if(errorCode!=U_BUFFER_OVERFLOW_ERROR || destPointer!=NULL || destLength!=2) {
+        log_err("error: u_strFromUTF8(preflight srcLength=4) fails: destLength=%ld - %s\n",
+                (long)destLength, u_errorName(errorCode));
+    }
+
+    /* NUL-terminated 3 bytes input, one UChar output (U+095C) */
+    errorCode=U_ZERO_ERROR;
+    destLength=-99;
+    destPointer=u_strFromUTF8(NULL, 0, &destLength, (const char *)bytes, -1, &errorCode);
+    if(errorCode!=U_BUFFER_OVERFLOW_ERROR || destPointer!=NULL || destLength!=1) {
+        log_err("error: u_strFromUTF8(preflight srcLength=-1) fails: destLength=%ld - %s\n",
+                (long)destLength, u_errorName(errorCode));
+    }
+
+    /* 3 bytes input, one UChar output (U+095C), transform not just preflight */
+    errorCode=U_ZERO_ERROR;
+    dest[0]=dest[1]=99;
+    destLength=-99;
+    destPointer=u_strFromUTF8(dest, LENGTHOF(dest), &destLength, (const char *)bytes, 3, &errorCode);
+    if(U_FAILURE(errorCode) || destPointer!=dest || destLength!=1 || dest[0]!=0x95c || dest[1]!=0) {
+        log_err("error: u_strFromUTF8(transform srcLength=3) fails: destLength=%ld - %s\n",
+                (long)destLength, u_errorName(errorCode));
+    }
 }
 
 /* test u_strFromUTF8Lenient() */
