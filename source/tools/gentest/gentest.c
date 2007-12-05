@@ -196,6 +196,10 @@ outputJavaStuff(const char* progname, const char *outputDir) {
             switch(t) {
             case UDBG_UCalendarDateFields:
             case UDBG_UCalendarMonths:
+                /* Temporary workaround for IS_LEAP_MOTH #6051 */
+                if (t == UDBG_UCalendarDateFields && i == 22) {
+                    fprintf(out, "com.ibm.icu.util.ChineseCalendar.%s, /* %d */", udbg_enumName((UDebugEnumType)t,i), i);
+                } else
                 fprintf(out, "com.ibm.icu.util.Calendar.%s, /* %d */", udbg_enumName((UDebugEnumType)t,i), i);
                 break;
             case UDBG_UDebugEnumType:
