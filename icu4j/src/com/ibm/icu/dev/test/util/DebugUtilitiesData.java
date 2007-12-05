@@ -49,6 +49,7 @@ public class DebugUtilitiesData extends Object {
            "EXTENDED_YEAR", /* 19 */ 
            "JULIAN_DAY", /* 20 */ 
            "MILLISECONDS_IN_DAY", /* 21 */ 
+           "IS_LEAP_MONTH", /* 22 */ 
         },
         /* UCalendarMonths, 2 */
         { 
@@ -107,6 +108,7 @@ public class DebugUtilitiesData extends Object {
            com.ibm.icu.util.Calendar.EXTENDED_YEAR, /* 19 */
            com.ibm.icu.util.Calendar.JULIAN_DAY, /* 20 */
            com.ibm.icu.util.Calendar.MILLISECONDS_IN_DAY, /* 21 */
+           com.ibm.icu.util.ChineseCalendar.IS_LEAP_MONTH, /* 22 */
         },
         /* UCalendarMonths, 2 */
         { 
