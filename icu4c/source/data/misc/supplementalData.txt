@@ -9152,7 +9152,6 @@ supplementalData:table(nofallback){
             "meta:Africa_Western_CM"{"Africa/Douala"}
             "meta:Africa_Western_GA"{"Africa/Libreville"}
             "meta:Africa_Western_GQ"{"Africa/Malabo"}
-            "meta:Africa_Western_NA"{"Africa/Windhoek"}
             "meta:Africa_Western_NE"{"Africa/Niamey"}
             "meta:Africa_Western_TD"{"Africa/Ndjamena"}
             "meta:Aktyubinsk_001"{"Asia/Aqtobe"}
@@ -9304,7 +9303,6 @@ supplementalData:table(nofallback){
             "meta:Europe_Eastern_PS"{"Asia/Gaza"}
             "meta:Europe_Eastern_RU"{"Europe/Kaliningrad"}
             "meta:Europe_Eastern_SY"{"Asia/Damascus"}
-            "meta:Europe_Eastern_TR"{"Europe/Istanbul"}
             "meta:Europe_Eastern_UA"{"Europe/Kiev"}
             "meta:Europe_Western_001"{"Atlantic/Canary"}
             "meta:Europe_Western_EH"{"Africa/El_Aaiun"}
