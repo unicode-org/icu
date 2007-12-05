@@ -391,7 +391,7 @@ ZoneStringSearchResultHandler::clear(void) {
     if (fResults != NULL) {
         delete fResults;
     }
-    for (int32_t i = 0; i < sizeof(fMatchLen)/sizeof(int32_t); i++) {
+    for (int32_t i = 0; i < (int32_t)(sizeof(fMatchLen)/sizeof(fMatchLen[0])); i++) {
         fMatchLen[i] = 0;
     }
 }
@@ -1530,8 +1530,9 @@ SafeZoneStringFormatPtr::get() const {
 }
 
 ZSFCacheEntry::ZSFCacheEntry(const Locale &locale, ZoneStringFormat *zsf, ZSFCacheEntry *next)
-: UMemory(), fRefCount(1), fLocale(locale),
-  fZoneStringFormat(zsf), fNext(next) {
+: UMemory(), fLocale(locale), fZoneStringFormat(zsf),
+ fNext(next), fRefCount(1)
+{
 }
 
 ZSFCacheEntry::~ZSFCacheEntry () {
