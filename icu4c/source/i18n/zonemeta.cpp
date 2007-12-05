@@ -200,7 +200,6 @@ ZoneMeta::initialize(void) {
     if (initialized) {
         return;
     }
-    UErrorCode status = U_ZERO_ERROR;
 
     // Initialize hash tables
     Hashtable *tmpCanonicalMap = createCanonicalMap();

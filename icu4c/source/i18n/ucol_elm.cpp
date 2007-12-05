@@ -752,7 +752,7 @@ static void uprv_uca_unsafeCPAddCCNZ(tempUCATable *t, UErrorCode *status) {
             (UTF_IS_LEAD(c) && fcd != 0)) {//    c is a leading surrogate with some FCD data
             if (buildCMTable) {
                 uint32_t cClass = fcd & 0xff;
-                uint32_t temp=(cClass<<8)+index[cClass];
+                //uint32_t temp=(cClass<<8)+index[cClass];
                 cm[(cClass<<8)+index[cClass]] = c; //
                 index[cClass]++;
                 count++;
@@ -1728,7 +1728,6 @@ uprv_uca_addMultiCMContractions(tempUCATable *t,
 
     for (int32_t j=0; j < maxComp; j++) {
         int32_t count=0;
-        int32_t newClass=0;
         do {
             if ( count == 0 ) {  // Decompose the saved precomposed char.
                 UChar temp[2];
@@ -1890,7 +1889,6 @@ uprv_uca_canonicalClosure(tempUCATable *t,
     context.noOfClosures = 0;
     UCAElements el;
     UColToken *tok;
-    UColToken *expt = NULL;
     uint32_t i = 0, j = 0;
     UChar  baseChar, firstCM;
     const uint16_t  *fcdTrieData = unorm_getFCDTrie(status);
