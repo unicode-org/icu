@@ -28,7 +28,7 @@ typedef struct OlsonToMetaMappingEntry {
 } OlsonToMetaMappingEntry;
 
 typedef struct MetaToOlsonMappingEntry {
-    UChar *id;
+    const UChar *id; // const because it's a reference to a resource bundle string.
     UChar *territory;
 } MetaToOlsonMappingEntry;
 

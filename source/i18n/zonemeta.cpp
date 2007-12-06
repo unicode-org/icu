@@ -91,7 +91,6 @@ deleteOlsonToMetaMappingEntry(void *obj) {
 static void U_CALLCONV
 deleteMetaToOlsonMappingEntry(void *obj) {
     U_NAMESPACE_QUALIFIER MetaToOlsonMappingEntry *entry = (U_NAMESPACE_QUALIFIER MetaToOlsonMappingEntry*)obj;
-    uprv_free(entry->id);
     uprv_free(entry->territory);
     uprv_free(entry);
 }
@@ -293,7 +292,7 @@ ZoneMeta::createCanonicalMap(void) {
         }
         u_charsToUChars(tzid, entry->id, tzidLen + 1);
 
-        if (territory  == NULL || u_strcmp(territory, gWorld) == 0) {
+        if (territory == NULL || u_strcmp(territory, gWorld) == 0) {
             entry->country = NULL;
         } else {
             entry->country = territory;
@@ -706,19 +705,10 @@ ZoneMeta::createMetaToOlsonMap(void) {
                         ures_close(mz);
                         goto error_cleanup;
                     }
-                    entry->id = (UChar*)uprv_malloc((tzidLen + 1) * sizeof(UChar));
-                    if (entry->id == NULL) {
-                        status = U_MEMORY_ALLOCATION_ERROR;
-                        uprv_free(entry);
-                        ures_close(mz);
-                        goto error_cleanup;
-                    }
-                    u_strcpy(entry->id, tzid);
-
+                    entry->id = tzid;
                     entry->territory = (UChar*)uprv_malloc((territoryLen + 1) * sizeof(UChar));
                     if (entry->territory == NULL) {
                         status = U_MEMORY_ALLOCATION_ERROR;
-                        uprv_free(entry->id);
                         uprv_free(entry);
                         ures_close(mz);
                         goto error_cleanup;
