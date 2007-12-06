@@ -39,17 +39,17 @@ static UBool U_CALLCONV zoneMeta_cleanup(void)
      umtx_destroy(&gZoneMetaLock);
 
     if (gCanonicalMap != NULL) {
-        delete (U_NAMESPACE_QUALIFIER Hashtable*) gCanonicalMap;
+        delete gCanonicalMap;
         gCanonicalMap = NULL;
     }
 
     if (gOlsonToMeta != NULL) {
-        delete (U_NAMESPACE_QUALIFIER Hashtable*) gOlsonToMeta;
+        delete gOlsonToMeta;
         gOlsonToMeta = NULL;
     }
 
     if (gMetaToOlson != NULL) {
-        delete (U_NAMESPACE_QUALIFIER Hashtable*) gMetaToOlson;
+        delete gMetaToOlson;
         gMetaToOlson = NULL;
     }
 
@@ -73,9 +73,6 @@ static void U_CALLCONV
 deleteCanonicalMapEntry(void *obj) {
     U_NAMESPACE_QUALIFIER CanonicalMapEntry *entry = (U_NAMESPACE_QUALIFIER CanonicalMapEntry*)obj;
     uprv_free(entry->id);
-    if (entry->country != NULL) {
-        uprv_free(entry->country);
-    }
     uprv_free(entry);
 }
 
@@ -85,7 +82,6 @@ deleteCanonicalMapEntry(void *obj) {
 static void U_CALLCONV
 deleteOlsonToMetaMappingEntry(void *obj) {
     U_NAMESPACE_QUALIFIER OlsonToMetaMappingEntry *entry = (U_NAMESPACE_QUALIFIER OlsonToMetaMappingEntry*)obj;
-    uprv_free(entry->mzid);
     uprv_free(entry);
 }
 
@@ -300,17 +296,11 @@ ZoneMeta::createCanonicalMap(void) {
         if (territory  == NULL || u_strcmp(territory, gWorld) == 0) {
             entry->country = NULL;
         } else {
-            entry->country = (UChar*)uprv_malloc((territoryLen + 1) * sizeof(UChar));
-            if (entry->country == NULL) {
-                status = U_MEMORY_ALLOCATION_ERROR;
-                deleteCanonicalMapEntry(entry);
-                goto error_cleanup;
-            }
-            u_strcpy(entry->country, territory);
+            entry->country = territory;
         }
 
         // Put this entry to the table
-        canonicalMap->put(UnicodeString(tzid), entry, status);
+        canonicalMap->put(UnicodeString(entry->id), entry, status);
         if (U_FAILURE(status)) {
             deleteCanonicalMapEntry(entry);
             goto error_cleanup;
@@ -349,13 +339,7 @@ ZoneMeta::createCanonicalMap(void) {
             if (territory  == NULL || u_strcmp(territory, gWorld) == 0) {
                 entry->country = NULL;
             } else {
-                entry->country = (UChar*)uprv_malloc((territoryLen + 1) * sizeof(UChar));
-                if (entry->country == NULL) {
-                    status = U_MEMORY_ALLOCATION_ERROR;
-                    deleteCanonicalMapEntry(entry);
-                    goto error_cleanup;
-                }
-                u_strcpy(entry->country, territory);
+                entry->country = territory;
             }
             canonicalMap->put(UnicodeString(alias), entry, status);
             if (U_FAILURE(status)) {
@@ -446,10 +430,9 @@ ZoneMeta::createOlsonToMetaMap(void) {
         UVector *mzMappings = NULL;
         while (ures_hasNext(zoneItem)) {
             UResourceBundle *mz = ures_getNextResource(zoneItem, NULL, &status);
-            int32_t len;
-            const UChar *mz_name = ures_getStringByIndex(mz, 0, &len, &status);
-            const UChar *mz_from = ures_getStringByIndex(mz, 1, &len, &status);
-            const UChar *mz_to   = ures_getStringByIndex(mz, 2, &len, &status);
+            const UChar *mz_name = ures_getStringByIndex(mz, 0, NULL, &status);
+            const UChar *mz_from = ures_getStringByIndex(mz, 1, NULL, &status);
+            const UChar *mz_to   = ures_getStringByIndex(mz, 2, NULL, &status);
             ures_close(mz);
 
             if(U_FAILURE(status)){
@@ -471,13 +454,7 @@ ZoneMeta::createOlsonToMetaMap(void) {
                 status = U_MEMORY_ALLOCATION_ERROR;
                 break;
             }
-            entry->mzid = (UChar*)uprv_malloc((u_strlen(mz_name) + 1) * sizeof(UChar));
-            if (entry->mzid == NULL) {
-                uprv_free(entry);
-                status = U_MEMORY_ALLOCATION_ERROR;
-                break;
-            }
-            u_strcpy(entry->mzid, mz_name);
+            entry->mzid = mz_name;
             entry->from = from;
             entry->to = to;
 
@@ -506,7 +483,7 @@ ZoneMeta::createOlsonToMetaMap(void) {
             goto error_cleanup;
         }
         if (mzMappings != NULL) {
-            olsonToMeta->put(UnicodeString(tzid), mzMappings, status);
+            olsonToMeta->put(UnicodeString(tzid, -1, US_INV), mzMappings, status);
             if (U_FAILURE(status)) {
                 delete mzMappings;
                 goto error_cleanup;
@@ -597,10 +574,9 @@ ZoneMeta::createOlsonToMetaMapOld(void) {
         UVector *mzMappings = NULL;
         while (ures_hasNext(useMZ)) {
             UResourceBundle *mz = ures_getNextResource(useMZ, NULL, &status);
-            int32_t len;
-            const UChar *mz_name = ures_getStringByIndex(mz, 0, &len, &status);
-            const UChar *mz_from = ures_getStringByIndex(mz, 1, &len, &status);
-            const UChar *mz_to   = ures_getStringByIndex(mz, 2, &len, &status);
+            const UChar *mz_name = ures_getStringByIndex(mz, 0, NULL, &status);
+            const UChar *mz_from = ures_getStringByIndex(mz, 1, NULL, &status);
+            const UChar *mz_to   = ures_getStringByIndex(mz, 2, NULL, &status);
             ures_close(mz);
 
             if(U_FAILURE(status)){
@@ -622,13 +598,7 @@ ZoneMeta::createOlsonToMetaMapOld(void) {
                 status = U_MEMORY_ALLOCATION_ERROR;
                 break;
             }
-            entry->mzid = (UChar*)uprv_malloc((u_strlen(mz_name) + 1) * sizeof(UChar));
-            if (entry->mzid == NULL) {
-                uprv_free(entry);
-                status = U_MEMORY_ALLOCATION_ERROR;
-                break;
-            }
-            u_strcpy(entry->mzid, mz_name);
+            entry->mzid = mz_name;
             entry->from = from;
             entry->to = to;
 
@@ -658,7 +628,7 @@ ZoneMeta::createOlsonToMetaMapOld(void) {
             goto error_cleanup;
         }
         if (mzMappings != NULL) {
-            olsonToMeta->put(UnicodeString(tzid), mzMappings, status);
+            olsonToMeta->put(UnicodeString(tzid, -1, US_INV), mzMappings, status);
             if (U_FAILURE(status)) {
                 delete mzMappings;
                 goto error_cleanup;
@@ -754,7 +724,7 @@ ZoneMeta::createMetaToOlsonMap(void) {
                     u_charsToUChars(territory, entry->territory, territoryLen + 1);
 
                     // Check if mapping entries for metazone is already available
-                    UnicodeString mzidStr(mzid, mzidLen);
+                    UnicodeString mzidStr(mzid, mzidLen, US_INV);
                     UVector *tzMappings = (UVector*)metaToOlson->get(mzidStr);
                     if (tzMappings == NULL) {
                         // Create new UVector and put it into the hashtable
