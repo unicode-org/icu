@@ -17,6 +17,8 @@ package com.ibm.icu.dev.test.rbbi;
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.text.RuleBasedBreakIterator;
 import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.util.ULocale;
+
 import java.util.Vector;
 
 public class RBBITest extends TestFmwk 
@@ -503,5 +505,28 @@ public class RBBITest extends TestFmwk
         }
          logln(out.toString());
     }
+   
+   public void TestThaiDictionaryBreakIterator() {
+       int position;
+       int index;
+       int result[] = { 3, 8 };
+       char ctext[] = { 
+               0x0E01, 0x0E32, 0x0E23, 0x0E17, 0x0E14, 0x0E25, 0x0E2D, 0x0E07 
+               };
+       String text = new String(ctext);
+       
+       ULocale locale = ULocale.createCanonical("th");
+       BreakIterator b = BreakIterator.getWordInstance(locale);
+       
+       b.setText(text);
+       
+       index = 0;
+       while ((position = b.next() )!= BreakIterator.DONE) {
+           if (position != result[index]) {
+               errln("Error with ThaiDictionaryBreakIterator test at " + position + ".\nShould have been " + result[index]);
+           }
+           index++;
+       }
+   }
   
 }
