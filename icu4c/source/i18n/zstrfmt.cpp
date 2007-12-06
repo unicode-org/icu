@@ -462,9 +462,8 @@ ZoneStringFormat::ZoneStringFormat(const Locale &locale, UErrorCode &status)
     fTzidToStrings.setValueDeleter(deleteZoneStrings);
     fMzidToStrings.setValueDeleter(deleteZoneStrings);
 
-    UResourceBundle *localeBundle = ures_open(NULL, locale.getName(), &status);
-    UResourceBundle *zoneStringsArray = ures_getByKeyWithFallback(localeBundle, gZoneStringsTag, localeBundle, &status);
-    localeBundle = NULL;
+    UResourceBundle *zoneStringsArray = ures_open(NULL, locale.getName(), &status);
+    zoneStringsArray = ures_getByKeyWithFallback(zoneStringsArray, gZoneStringsTag, zoneStringsArray, &status);
     if (U_FAILURE(status)) {
         // If no locale bundles are available, zoneStrings will be null.
         // We still want to go through the rest of zone strings initialization,
@@ -527,7 +526,7 @@ ZoneStringFormat::ZoneStringFormat(const Locale &locale, UErrorCode &status)
         }
 
         if (zoneStringsArray != NULL) {
-            zoneItem = ures_getByKeyWithFallback(zoneStringsArray, zidkey, NULL, &status);
+            zoneItem = ures_getByKeyWithFallback(zoneStringsArray, zidkey, zoneItem, &status);
             if (U_FAILURE(status)) {
                 // If failed to open the zone item, create only location string
                 ures_close(zoneItem);
@@ -805,17 +804,7 @@ ZoneStringFormat::ZoneStringFormat(const Locale &locale, UErrorCode &status)
             delete zstrings;
             goto error_cleanup;
         }
-        ures_close(zoneItem);
-        zoneItem = NULL;
     }
-
-    delete tzids;
-    delete fallbackFmt;
-    delete regionFmt;
-    ures_close(metazoneItem);
-    ures_close(zoneStringsArray);
-
-    return;
 
 error_cleanup:
     if (fallbackFmt != NULL) {
@@ -827,11 +816,9 @@ error_cleanup:
     if (tzids != NULL) {
         delete tzids;
     }
-    ures_close(metazoneItem);
     ures_close(zoneItem);
+    ures_close(metazoneItem);
     ures_close(zoneStringsArray);
-
-    return;
 }
 
 ZoneStringFormat::~ZoneStringFormat() {
@@ -1300,9 +1287,9 @@ ZoneStringFormat::getFallbackFormat(const Locale &locale, UErrorCode &status) {
     if (U_FAILURE(status)) {
         return NULL;
     }
-    UnicodeString pattern(gDefFallbackPattern);
-    UResourceBundle *localeBundle = ures_open(NULL, locale.getName(), &status);
-    UResourceBundle *zoneStringsArray = ures_getByKeyWithFallback(localeBundle, gZoneStringsTag, NULL, &status);
+    UnicodeString pattern(TRUE, gDefFallbackPattern, -1);
+    UResourceBundle *zoneStringsArray = ures_open(NULL, locale.getName(), &status);
+    zoneStringsArray = ures_getByKeyWithFallback(zoneStringsArray, gZoneStringsTag, zoneStringsArray, &status);
     int32_t len;
     const UChar *flbkfmt = ures_getStringByKeyWithFallback(zoneStringsArray, gFallbackFormatTag, &len, &status);
     if (U_SUCCESS(status)) {
@@ -1311,7 +1298,6 @@ ZoneStringFormat::getFallbackFormat(const Locale &locale, UErrorCode &status) {
         status = U_ZERO_ERROR;
     }
     ures_close(zoneStringsArray);
-    ures_close(localeBundle);
 
     MessageFormat *fallbackFmt = new MessageFormat(pattern, status);
     return fallbackFmt;
@@ -1322,9 +1308,9 @@ ZoneStringFormat::getRegionFormat(const Locale& locale, UErrorCode &status) {
     if (U_FAILURE(status)) {
         return NULL;
     }
-    UnicodeString pattern(gDefRegionPattern);
-    UResourceBundle *localeBundle = ures_open(NULL, locale.getName(), &status);
-    UResourceBundle *zoneStringsArray = ures_getByKeyWithFallback(localeBundle, gZoneStringsTag, NULL, &status);
+    UnicodeString pattern(TRUE, gDefRegionPattern, -1);
+    UResourceBundle *zoneStringsArray = ures_open(NULL, locale.getName(), &status);
+    zoneStringsArray = ures_getByKeyWithFallback(zoneStringsArray, gZoneStringsTag, zoneStringsArray, &status);
     int32_t len;
     const UChar *regionfmt = ures_getStringByKeyWithFallback(zoneStringsArray, gRegionFormatTag, &len, &status);
     if (U_SUCCESS(status)) {
@@ -1333,7 +1319,6 @@ ZoneStringFormat::getRegionFormat(const Locale& locale, UErrorCode &status) {
         status = U_ZERO_ERROR;
     }
     ures_close(zoneStringsArray);
-    ures_close(localeBundle);
 
     MessageFormat *regionFmt = new MessageFormat(pattern, status);
     return regionFmt;
