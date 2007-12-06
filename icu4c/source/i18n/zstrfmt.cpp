@@ -45,6 +45,7 @@ static UBool U_CALLCONV zoneStringFormat_cleanup(void)
         delete gZoneStringFormatCache;
         gZoneStringFormatCache = NULL;
     }
+    gZoneStringFormatCache = NULL;
     return TRUE;
 }
 
@@ -582,6 +583,12 @@ ZoneStringFormat::ZoneStringFormat(const Locale &locale, UErrorCode &status)
             if (U_FAILURE(status)) {
                 goto error_cleanup;
             }
+
+            // Workaround for reducing UMR warning in Purify.
+            // Append NULL before calling getTerminatedBuffer()
+            int32_t locLen = location.length();
+            location.append((UChar)0).truncate(locLen);
+
             zstrarray[ZSIDX_LOCATION] = location.getTerminatedBuffer();
         }
 
