@@ -395,15 +395,16 @@ ZoneMeta::createOlsonToMetaMap(void) {
     char zidkey[ZID_KEY_MAX];
 
     tzids = TimeZone::createEnumeration();
-    const char *tzid;
-    while ((tzid = tzids->next(NULL, status))) {
+    const UnicodeString *tzid;
+    while ((tzid = tzids->snext(status))) {
         if (U_FAILURE(status)) {
             goto error_cleanup;
         }
         // We may skip aliases, because the bundle
         // contains only canonical IDs.  For now, try
         // all of them.
-        uprv_strcpy(zidkey, tzid);
+        tzid->extract(0, tzid->length(), zidkey, sizeof(zidkey), US_INV);
+        zidkey[sizeof(zidkey)-1] = 0; // NULL terminate just in case.
 
         // Replace '/' with ':'
         UBool foundSep = FALSE;
@@ -483,7 +484,7 @@ ZoneMeta::createOlsonToMetaMap(void) {
             goto error_cleanup;
         }
         if (mzMappings != NULL) {
-            olsonToMeta->put(UnicodeString(tzid, -1, US_INV), mzMappings, status);
+            olsonToMeta->put(*tzid, mzMappings, status);
             if (U_FAILURE(status)) {
                 delete mzMappings;
                 goto error_cleanup;
@@ -537,15 +538,16 @@ ZoneMeta::createOlsonToMetaMapOld(void) {
     char zidkey[ZID_KEY_MAX];
 
     tzids = TimeZone::createEnumeration();
-    const char *tzid;
-    while ((tzid = tzids->next(NULL, status))) {
+    const UnicodeString *tzid;
+    while ((tzid = tzids->snext(status))) {
         if (U_FAILURE(status)) {
             goto error_cleanup;
         }
         // We may skip aliases, because the bundle
         // contains only canonical IDs.  For now, try
         // all of them.
-        uprv_strcpy(zidkey, tzid);
+        tzid->extract(0, tzid->length(), zidkey, sizeof(zidkey), US_INV);
+        zidkey[sizeof(zidkey)-1] = 0; // NULL terminate just in case.
 
         // Replace '/' with ':'
         UBool foundSep = FALSE;
@@ -628,7 +630,7 @@ ZoneMeta::createOlsonToMetaMapOld(void) {
             goto error_cleanup;
         }
         if (mzMappings != NULL) {
-            olsonToMeta->put(UnicodeString(tzid, -1, US_INV), mzMappings, status);
+            olsonToMeta->put(*tzid, mzMappings, status);
             if (U_FAILURE(status)) {
                 delete mzMappings;
                 goto error_cleanup;
