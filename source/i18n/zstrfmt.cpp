@@ -42,7 +42,8 @@ static UBool U_CALLCONV zoneStringFormat_cleanup(void)
 {
     umtx_destroy(&gZSFCacheLock);
     if (gZoneStringFormatCache != NULL) {
-        delete (U_NAMESPACE_QUALIFIER ZSFCache*) gZoneStringFormatCache;
+        delete gZoneStringFormatCache;
+        gZoneStringFormatCache = NULL;
     }
     return TRUE;
 }
@@ -150,22 +151,22 @@ getTimeZoneTranslationType(TimeZoneTranslationTypeIndex typeIdx) {
     return type;
 }
 
+#define DEFAULT_CHARACTERNODE_CAPACITY 1
+
 // ----------------------------------------------------------------------------
-CharacterNode::CharacterNode(UChar32 c, UObjectDeleter *valueDeleterFunc)
-: UMemory(), fCharacter(c), fChildren(NULL), fValues(NULL),
-  fValueDeleter(valueDeleterFunc) {
+CharacterNode::CharacterNode(UChar32 c, UObjectDeleter *valueDeleterFunc, UErrorCode &status)
+: UMemory(),
+  fChildren(valueDeleterFunc, NULL, DEFAULT_CHARACTERNODE_CAPACITY, status),
+  fValues(valueDeleterFunc, NULL, DEFAULT_CHARACTERNODE_CAPACITY, status),
+  fValueDeleter(valueDeleterFunc),
+  fCharacter(c)
+{
 }
 
 CharacterNode::~CharacterNode() {
-    if (fValues != NULL) {
-        delete fValues;
-    }
-    if (fChildren != NULL) {
-        while (!fChildren->isEmpty()) {
-            CharacterNode *node = (CharacterNode*)fChildren->orphanElementAt(0);
-            delete node;
-        }
-        delete fChildren;
+    while (!fChildren.isEmpty()) {
+        CharacterNode *node = (CharacterNode*)fChildren.orphanElementAt(0);
+        delete node;
     }
 }
 
@@ -174,13 +175,7 @@ CharacterNode::addValue(void *value, UErrorCode &status) {
     if (U_FAILURE(status)) {
         return;
     }
-    if (fValues == NULL) {
-        fValues = new UVector(fValueDeleter, NULL, status);
-        if (U_FAILURE(status)) {
-            return;
-        }
-    }
-    fValues->addElement(value, status);
+    fValues.addElement(value, status);
 }
 
 CharacterNode*
@@ -189,23 +184,16 @@ CharacterNode::addChildNode(UChar32 c, UErrorCode &status) {
         return NULL;
     }
     CharacterNode *result = NULL;
-    if (fChildren == NULL) {
-        fChildren = new UVector(status);
-        if (U_FAILURE(status)) {
-            return NULL;
-        }
-    } else {
-        for (int32_t i = 0; i < fChildren->size(); i++) {
-            CharacterNode *node = (CharacterNode*)fChildren->elementAt(i);
-            if (node->getCharacter() == c) {
-                result = node;
-                break;
-            }
+    for (int32_t i = 0; i < fChildren.size(); i++) {
+        CharacterNode *node = (CharacterNode*)fChildren.elementAt(i);
+        if (node->getCharacter() == c) {
+            result = node;
+            break;
         }
     }
     if (result == NULL) {
-        result = new CharacterNode(c, fValueDeleter);
-        fChildren->addElement(result, status);
+        result = new CharacterNode(c, fValueDeleter, status);
+        fChildren.addElement(result, status);
     }
 
     return result;
@@ -213,12 +201,9 @@ CharacterNode::addChildNode(UChar32 c, UErrorCode &status) {
 
 CharacterNode*
 CharacterNode::getChildNode(UChar32 c) const {
-    if (fChildren == NULL) {
-        return NULL;
-    }
     CharacterNode *result = NULL;
-    for (int32_t i = 0; i < fChildren->size(); i++) {
-        CharacterNode *node = (CharacterNode*)fChildren->elementAt(i);
+    for (int32_t i = 0; i < fChildren.size(); i++) {
+        CharacterNode *node = (CharacterNode*)fChildren.elementAt(i);
         if (node->getCharacter() == c) {
             result = node;
             break;
@@ -241,7 +226,7 @@ TextTrieMap::~TextTrieMap() {
 void
 TextTrieMap::put(const UnicodeString &key, void *value, UErrorCode &status) {
     if (fRoot == NULL) {
-        fRoot = new CharacterNode(0, fValueDeleter);
+        fRoot = new CharacterNode(0, fValueDeleter, status);
     }
 
     UnicodeString keyString(key);
@@ -317,8 +302,9 @@ ZoneStringInfo::ZoneStringInfo(const UnicodeString &id, const UnicodeString &str
 ZoneStringInfo::~ZoneStringInfo() {
 }
 // ----------------------------------------------------------------------------
-ZoneStringSearchResultHandler::ZoneStringSearchResultHandler()
-: UMemory(), fResults(NULL) {
+ZoneStringSearchResultHandler::ZoneStringSearchResultHandler(UErrorCode &status)
+: UMemory(), fResults(status)
+{
     clear();
 }
 
@@ -332,12 +318,6 @@ ZoneStringSearchResultHandler::handleMatch(int32_t matchLength, const UVector *v
         return FALSE;
     }
     if (values != NULL) {
-        if (fResults == NULL) {
-            fResults = new UVector(status);
-            if (U_FAILURE(status)) {
-                return FALSE;
-            }
-        }
         for (int32_t i = 0; values->size(); i++) {
             ZoneStringInfo *zsinfo = (ZoneStringInfo*)values->elementAt(i);
             if (zsinfo == NULL) {
@@ -345,13 +325,13 @@ ZoneStringSearchResultHandler::handleMatch(int32_t matchLength, const UVector *v
             }
             // Update the results
             UBool foundType = FALSE;
-            for (int32_t j = 0; j < fResults->size(); j++) {
-                ZoneStringInfo *tmp = (ZoneStringInfo*)fResults->elementAt(j);
+            for (int32_t j = 0; j < fResults.size(); j++) {
+                ZoneStringInfo *tmp = (ZoneStringInfo*)fResults.elementAt(j);
                 if (zsinfo->fType == tmp->fType) {
                     int32_t lenidx = getTimeZoneTranslationTypeIndex(tmp->fType);
                     if (matchLength > fMatchLen[lenidx]) {
                         // Same type, longer match
-                        fResults->setElementAt(zsinfo, j);
+                        fResults.setElementAt(zsinfo, j);
                         fMatchLen[lenidx] = matchLength;
                     }
                     foundType = TRUE;
@@ -360,7 +340,7 @@ ZoneStringSearchResultHandler::handleMatch(int32_t matchLength, const UVector *v
             }
             if (!foundType) {
                 // not found in the current list
-                fResults->addElement(zsinfo, status);
+                fResults.addElement(zsinfo, status);
                 fMatchLen[getTimeZoneTranslationTypeIndex(zsinfo->fType)] = matchLength;
             }
         }
@@ -370,17 +350,14 @@ ZoneStringSearchResultHandler::handleMatch(int32_t matchLength, const UVector *v
 
 int32_t
 ZoneStringSearchResultHandler::countMatches(void) {
-    if (fResults == NULL) {
-        return 0;
-    }
-    return fResults->size();
+    return fResults.size();
 }
 
 const ZoneStringInfo*
 ZoneStringSearchResultHandler::getMatch(int32_t index, int32_t &matchLength) {
     ZoneStringInfo *zsinfo = NULL;
-    if (fResults != NULL && index < fResults->size()) {
-        zsinfo = (ZoneStringInfo*)fResults->elementAt(index);
+    if (index < fResults.size()) {
+        zsinfo = (ZoneStringInfo*)fResults.elementAt(index);
         matchLength = fMatchLen[getTimeZoneTranslationTypeIndex(zsinfo->fType)];
     }
     return zsinfo;
@@ -388,9 +365,7 @@ ZoneStringSearchResultHandler::getMatch(int32_t index, int32_t &matchLength) {
 
 void
 ZoneStringSearchResultHandler::clear(void) {
-    if (fResults != NULL) {
-        delete fResults;
-    }
+    fResults.removeAllElements();
     for (int32_t i = 0; i < (int32_t)(sizeof(fMatchLen)/sizeof(fMatchLen[0])); i++) {
         fMatchLen[i] = 0;
     }
@@ -398,19 +373,22 @@ ZoneStringSearchResultHandler::clear(void) {
 // ----------------------------------------------------------------------------
 ZoneStringFormat::ZoneStringFormat(const UnicodeString* const* strings,
                                    int32_t rowCount, int32_t columnCount, UErrorCode &status)
-: UMemory(), fTzidToStrings(NULL), fMzidToStrings(NULL), fZoneStringsTrie(NULL) {
-    fLocale.setToBogus();
-    if (strings == NULL || columnCount <= 0 || rowCount <= 0) {
-        return;
-    }
-
-    fTzidToStrings = new Hashtable(uhash_compareUnicodeString, NULL, status);
+: UMemory(),
+  fLocale(""),
+  fTzidToStrings(uhash_compareUnicodeString, NULL, status),
+  fMzidToStrings(uhash_compareUnicodeString, NULL, status),
+  fZoneStringsTrie(TRUE, deleteZoneStringInfo)
+{
     if (U_FAILURE(status)) {
         return;
     }
-    fTzidToStrings->setValueDeleter(deleteZoneStrings);
+    fLocale.setToBogus();
+    if (strings == NULL || columnCount <= 0 || rowCount <= 0) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
 
-    fZoneStringsTrie = new TextTrieMap(TRUE, deleteZoneStringInfo);
+    fTzidToStrings.setValueDeleter(deleteZoneStrings);
 
     for (int32_t row = 0; row < rowCount; row++) {
         if (strings[row][0].isEmpty()) {
@@ -449,7 +427,7 @@ ZoneStringFormat::ZoneStringFormat(const UnicodeString* const* strings,
                     // Put the name into the trie
                     int32_t type = getTimeZoneTranslationType((TimeZoneTranslationTypeIndex)typeIdx);
                     ZoneStringInfo *zsinf = new ZoneStringInfo(strings[row][0], strings[row][col], (TimeZoneTranslationType)type);
-                    fZoneStringsTrie->put(strings[row][col], zsinf, status);
+                    fZoneStringsTrie.put(strings[row][col], zsinf, status);
                     if (U_FAILURE(status)) {
                         delete zsinf;
                         goto error_cleanup;
@@ -458,7 +436,7 @@ ZoneStringFormat::ZoneStringFormat(const UnicodeString* const* strings,
             }
         }
         ZoneStrings *zstrings = new ZoneStrings(names, ZSIDX_COUNT, TRUE, NULL, 0, 0);
-        fTzidToStrings->put(strings[row][0], zstrings, status);
+        fTzidToStrings.put(strings[row][0], zstrings, status);
         if (U_FAILURE(status)) {
             delete zstrings;
             goto error_cleanup;
@@ -467,39 +445,32 @@ ZoneStringFormat::ZoneStringFormat(const UnicodeString* const* strings,
     return;
 
 error_cleanup:
-    delete fZoneStringsTrie;
-    fZoneStringsTrie = NULL;
-
-    delete fTzidToStrings;
-    fTzidToStrings = NULL;
+    return;
 }
 
 ZoneStringFormat::ZoneStringFormat(const Locale &locale, UErrorCode &status)
-: UMemory(), fLocale(locale), fTzidToStrings(NULL), fMzidToStrings(NULL),
-  fZoneStringsTrie(NULL) {
-
-    fTzidToStrings = new Hashtable(uhash_compareUnicodeString, NULL, status);
-    fMzidToStrings = new Hashtable(uhash_compareUnicodeString, NULL, status);
+: UMemory(),
+  fLocale(locale),
+  fTzidToStrings(uhash_compareUnicodeString, NULL, status),
+  fMzidToStrings(uhash_compareUnicodeString, NULL, status),
+  fZoneStringsTrie(TRUE, deleteZoneStringInfo)
+{
     if (U_FAILURE(status)) {
         return;
     }
-    fTzidToStrings->setValueDeleter(deleteZoneStrings);
-    fMzidToStrings->setValueDeleter(deleteZoneStrings);
-
-    fZoneStringsTrie = new TextTrieMap(TRUE, deleteZoneStringInfo);
+    fTzidToStrings.setValueDeleter(deleteZoneStrings);
+    fMzidToStrings.setValueDeleter(deleteZoneStrings);
 
     UResourceBundle *localeBundle = ures_open(NULL, locale.getName(), &status);
-    UResourceBundle *zoneStringsArray = ures_getByKeyWithFallback(localeBundle, gZoneStringsTag, NULL, &status);
+    UResourceBundle *zoneStringsArray = ures_getByKeyWithFallback(localeBundle, gZoneStringsTag, localeBundle, &status);
+    localeBundle = NULL;
     if (U_FAILURE(status)) {
         // If no locale bundles are available, zoneStrings will be null.
         // We still want to go through the rest of zone strings initialization,
         // because generic location format is generated from tzid for the case.
         // The rest of code should work even zoneStrings is null.
         status = U_ZERO_ERROR;
-        if (localeBundle != NULL) {
-            ures_close(localeBundle);
-        }
-        localeBundle = NULL;
+        ures_close(zoneStringsArray);
         zoneStringsArray = NULL;
     }
 
@@ -534,7 +505,7 @@ ZoneStringFormat::ZoneStringFormat(const Locale &locale, UErrorCode &status)
             goto error_cleanup;
         }
         // Skip non-canonical IDs
-        UnicodeString utzid(tzid);
+        UnicodeString utzid(tzid, -1, US_INV);
         UnicodeString canonicalID;
         ZoneMeta::getCanonicalID(utzid, canonicalID);
         if (utzid != canonicalID) {
@@ -581,9 +552,9 @@ ZoneStringFormat::ZoneStringFormat(const Locale &locale, UErrorCode &status)
         } else {
             const UChar* tmpCity = getZoneStringFromBundle(zoneItem, gExemplarCityTag);
             if (tmpCity != NULL) {
-                city.setTo(tmpCity, -1);
+                city.setTo(TRUE, tmpCity, -1);
             } else {
-                city.setTo(pCity, -1);
+                city.setTo(UnicodeString(pCity, -1, US_INV));
                 // Replace '_' with ' '
                 for (int32_t i = 0; i < city.length(); i++) {
                     if (city.charAt(i) == (UChar)0x5F /*'_'*/) {
@@ -623,17 +594,16 @@ ZoneStringFormat::ZoneStringFormat(const Locale &locale, UErrorCode &status)
             for (int32_t i = 0; i < metazoneMappings->size(); i++) {
                 const OlsonToMetaMappingEntry *mzmap = (const OlsonToMetaMappingEntry*)metazoneMappings->elementAt(i);
                 UnicodeString mzid(mzmap->mzid);
-                const ZoneStrings *mzStrings = (const ZoneStrings*)fMzidToStrings->get(mzid);
+                const ZoneStrings *mzStrings = (const ZoneStrings*)fMzidToStrings.get(mzid);
                 if (mzStrings == NULL) {
                     // If the metazone strings are not yet processed, do it now.
                     char mzidkey[ZID_KEY_MAX];
                     uprv_strcpy(mzidkey, gMetazoneIdPrefix);
                     u_UCharsToChars(mzmap->mzid, mzidkey + MZID_PREFIX_LEN, u_strlen(mzmap->mzid) + 1);
-                    metazoneItem = ures_getByKeyWithFallback(zoneStringsArray, mzidkey, NULL, &status);
+                    metazoneItem = ures_getByKeyWithFallback(zoneStringsArray, mzidkey, metazoneItem, &status);
                     if (U_FAILURE(status)) {
                         // No resources available for this metazone
-                        ures_close(metazoneItem);
-                        metazoneItem = NULL;
+                        // Resource bundle will be cleaned up after end of the loop.
                         status = U_ZERO_ERROR;
                         continue;
                     }
@@ -664,12 +634,12 @@ ZoneStringFormat::ZoneStringFormat(const Locale &locale, UErrorCode &status)
 
                         for (int32_t typeidx = 0; typeidx <= lastNonNullIdx; typeidx++) {
                             if (mzstrarray[typeidx] != NULL) {
-                                strings_mz[typeidx].setTo(mzstrarray[typeidx], -1);
+                                strings_mz[typeidx].setTo(TRUE, mzstrarray[typeidx], -1);
 
                                 // Add a metazone string to the zone string trie
                                 int32_t type = getTimeZoneTranslationType((TimeZoneTranslationTypeIndex)typeidx);
                                 ZoneStringInfo *zsinfo = new ZoneStringInfo(preferredIdForLocale, strings_mz[typeidx], (TimeZoneTranslationType)type);
-                                fZoneStringsTrie->put(strings_mz[typeidx], zsinfo, status);
+                                fZoneStringsTrie.put(strings_mz[typeidx], zsinfo, status);
                                 if (U_FAILURE(status)) {
                                     delete zsinfo;
                                     delete strings_mz;
@@ -683,14 +653,11 @@ ZoneStringFormat::ZoneStringFormat(const Locale &locale, UErrorCode &status)
                         tmp_mzStrings = new ZoneStrings(NULL, 0, FALSE, NULL, 0, 0);
                     }
 
-                    fMzidToStrings->put(mzid, tmp_mzStrings, status);
+                    fMzidToStrings.put(mzid, tmp_mzStrings, status);
                     if (U_FAILURE(status)) {
                         delete tmp_mzStrings;
                         goto error_cleanup;
                     }
-
-                    ures_close(metazoneItem);
-                    metazoneItem = NULL;
 
                     mzStrings = tmp_mzStrings;
                 }
@@ -745,7 +712,7 @@ ZoneStringFormat::ZoneStringFormat(const Locale &locale, UErrorCode &status)
                                 };
                                 fallbackFmt->format(params, 2, mzPartialLoc[mzPartialLocIdx][2], fpos, status);
                                 if (mzStrings->isShortFormatCommonlyUsed()) {
-                                    mzPartialLoc[mzPartialLocIdx][3].setTo(gCommonlyUsedTrue, -1);
+                                    mzPartialLoc[mzPartialLocIdx][3].setTo(TRUE, gCommonlyUsedTrue, -1);
                                 }
                             }
                             if (U_FAILURE(status)) {
@@ -779,7 +746,7 @@ ZoneStringFormat::ZoneStringFormat(const Locale &locale, UErrorCode &status)
                     // Add names to the trie
                     int32_t type = getTimeZoneTranslationType((TimeZoneTranslationTypeIndex)i);
                     ZoneStringInfo *zsinfo = new ZoneStringInfo(utzid, strings[i], (TimeZoneTranslationType)type);
-                    fZoneStringsTrie->put(strings[i], zsinfo, status);
+                    fZoneStringsTrie.put(strings[i], zsinfo, status);
                     if (U_FAILURE(status)) {
                         delete zsinfo;
                         delete[] strings;
@@ -810,7 +777,7 @@ ZoneStringFormat::ZoneStringFormat(const Locale &locale, UErrorCode &status)
                         ZoneStringInfo *zsinfo;
                         TimeZoneTranslationType type = (j == 1) ? GENERIC_LONG : GENERIC_SHORT;
                         zsinfo = new ZoneStringInfo(utzid, genericPartialLocationNames[i][j], type);
-                        fZoneStringsTrie->put(genericPartialLocationNames[i][j], zsinfo, status);
+                        fZoneStringsTrie.put(genericPartialLocationNames[i][j], zsinfo, status);
                         if (U_FAILURE(status)) {
                             delete[] genericPartialLocationNames[i];
                             uprv_free(genericPartialLocationNames);
@@ -826,7 +793,7 @@ ZoneStringFormat::ZoneStringFormat(const Locale &locale, UErrorCode &status)
         ZoneStrings *zstrings = new ZoneStrings(strings, stringsCount, commonlyUsed,
             genericPartialLocationNames, genericPartialRowCount, genericPartialColCount);
 
-        fTzidToStrings->put(utzid, zstrings, status);
+        fTzidToStrings.put(utzid, zstrings, status);
         if (U_FAILURE(status)) {
             delete zstrings;
             goto error_cleanup;
@@ -838,8 +805,8 @@ ZoneStringFormat::ZoneStringFormat(const Locale &locale, UErrorCode &status)
     delete tzids;
     delete fallbackFmt;
     delete regionFmt;
+    ures_close(metazoneItem);
     ures_close(zoneStringsArray);
-    ures_close(localeBundle);
 
     return;
 
@@ -856,31 +823,11 @@ error_cleanup:
     ures_close(metazoneItem);
     ures_close(zoneItem);
     ures_close(zoneStringsArray);
-    ures_close(localeBundle);
-
-    delete fTzidToStrings;
-    fTzidToStrings = NULL;
-
-    delete fMzidToStrings;
-    fMzidToStrings = NULL;
-
-    delete fZoneStringsTrie;
-    fZoneStringsTrie = NULL;
 
     return;
 }
 
 ZoneStringFormat::~ZoneStringFormat() {
-    if (fTzidToStrings != NULL) {
-        delete fTzidToStrings;
-    }
-    if (fMzidToStrings != NULL) {
-        delete fMzidToStrings;
-    }
-    if (fZoneStringsTrie != NULL) {
-        delete fZoneStringsTrie;
-    }
-    return;
 }
 
 SafeZoneStringFormatPtr*
@@ -911,8 +858,8 @@ ZoneStringFormat::createZoneStringsArray(UDate date, int32_t &rowCount, int32_t 
         return NULL;
     }
     StringEnumeration *tzids = TimeZone::createEnumeration();
-    const char *tzid;
-    while ((tzid = tzids->next(NULL, status))) {
+    const UChar *tzid;
+    while ((tzid = tzids->unext(NULL, status))) {
         if (U_FAILURE(status)) {
             delete tzids;
             return NULL;
@@ -1048,8 +995,8 @@ ZoneStringFormat::getString(const UnicodeString &tzid, TimeZoneTranslationTypeIn
     UnicodeString canonicalID;
     ZoneMeta::getCanonicalID(tzid, canonicalID);
 
-    if (fTzidToStrings != NULL) {
-        ZoneStrings *zstrings = (ZoneStrings*)fTzidToStrings->get(canonicalID);
+    if (fTzidToStrings.count() > 0) {
+        ZoneStrings *zstrings = (ZoneStrings*)fTzidToStrings.get(canonicalID);
         if (zstrings != NULL) {
             switch (typeIdx) {
                 case ZSIDX_LONG_STANDARD:
@@ -1068,12 +1015,12 @@ ZoneStringFormat::getString(const UnicodeString &tzid, TimeZoneTranslationTypeIn
             }
         }
     }
-    if (result.isEmpty() && fMzidToStrings != NULL && typeIdx != ZSIDX_LOCATION) {
+    if (result.isEmpty() && fMzidToStrings.count() > 0 && typeIdx != ZSIDX_LOCATION) {
         // Try metazone
         UnicodeString mzid;
         ZoneMeta::getMetazoneID(canonicalID, date, mzid);
         if (!mzid.isEmpty()) {
-            ZoneStrings *mzstrings = (ZoneStrings*)fMzidToStrings->get(mzid);
+            ZoneStrings *mzstrings = (ZoneStrings*)fMzidToStrings.get(mzid);
             if (mzstrings != NULL) {
                 switch (typeIdx) {
                     case ZSIDX_LONG_STANDARD:
@@ -1113,8 +1060,8 @@ ZoneStringFormat::getGenericString(const Calendar &cal, UBool isShort, UBool com
     ZoneMeta::getCanonicalID(tzid, canonicalID);
 
     ZoneStrings *zstrings;
-    if (fTzidToStrings != NULL) {
-        zstrings = (ZoneStrings*)fTzidToStrings->get(canonicalID);
+    if (fTzidToStrings.count() > 0) {
+        zstrings = (ZoneStrings*)fTzidToStrings.get(canonicalID);
         if (zstrings != NULL) {
             if (isShort) {
                 if (!commonlyUsedOnly || zstrings->isShortFormatCommonlyUsed()) {
@@ -1125,7 +1072,7 @@ ZoneStringFormat::getGenericString(const Calendar &cal, UBool isShort, UBool com
             }
         }
     }
-    if (result.isEmpty() && fMzidToStrings != NULL) {
+    if (result.isEmpty() && fMzidToStrings.count() > 0) {
         // try metazone
         int32_t raw, sav;
         UnicodeString mzid;
@@ -1203,7 +1150,7 @@ ZoneStringFormat::getGenericString(const Calendar &cal, UBool isShort, UBool com
                 }
             }
             if (result.isEmpty()) {
-                ZoneStrings *mzstrings = (ZoneStrings*)fMzidToStrings->get(mzid);
+                ZoneStrings *mzstrings = (ZoneStrings*)fMzidToStrings.get(mzid);
                 if (mzstrings != NULL) {
                     if (isShort) {
                         if (!commonlyUsedOnly || mzstrings->isShortFormatCommonlyUsed()) {
@@ -1259,7 +1206,7 @@ UnicodeString&
 ZoneStringFormat::getGenericPartialLocationString(const UnicodeString &tzid, UBool isShort,
                                                   UDate date, UBool commonlyUsedOnly, UnicodeString &result) const {
     result.remove();
-    if (fTzidToStrings == NULL) {
+    if (fTzidToStrings.count() <= 0) {
         return result;
     }
 
@@ -1270,7 +1217,7 @@ ZoneStringFormat::getGenericPartialLocationString(const UnicodeString &tzid, UBo
     ZoneMeta::getMetazoneID(canonicalID, date, mzid);
 
     if (!mzid.isEmpty()) {
-        ZoneStrings *zstrings = (ZoneStrings*)fTzidToStrings->get(canonicalID);
+        ZoneStrings *zstrings = (ZoneStrings*)fTzidToStrings.get(canonicalID);
         if (zstrings != NULL) {
             zstrings->getGenericPartialLocationString(mzid, isShort, commonlyUsedOnly, result);
         }
@@ -1285,15 +1232,15 @@ ZoneStringFormat::find(const UnicodeString &text, int32_t start, int32_t types,
     if (U_FAILURE(status)) {
         return NULL;
     }
-    if (fZoneStringsTrie == NULL) {
+    if (fZoneStringsTrie.isEmpty()) {
         return NULL;
     }
     const ZoneStringInfo *result = NULL;
     const ZoneStringInfo *fallback = NULL;
     int32_t fallbackMatchLen = 0;
 
-    ZoneStringSearchResultHandler handler;
-    fZoneStringsTrie->search(text, start, (TextTrieMapSearchResultHandler*)&handler, status);
+    ZoneStringSearchResultHandler handler(status);
+    fZoneStringsTrie.search(text, start, (TextTrieMapSearchResultHandler*)&handler, status);
     if (U_SUCCESS(status)) {
         int32_t numMatches = handler.countMatches();
         for (int32_t i = 0; i < numMatches; i++) {
@@ -1337,7 +1284,7 @@ ZoneStringFormat::getRegion(UnicodeString &region) const {
     const char* country = fLocale.getCountry();
     // TODO: Utilize addLikelySubtag in Locale to resolve default region
     // when the implementation is ready.
-    region.setTo(country, -1);
+    region.setTo(UnicodeString(country, -1, US_INV));
     return region;
 }
 

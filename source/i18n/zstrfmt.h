@@ -11,48 +11,46 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "unicode/uobject.h"
 #include "unicode/unistr.h"
 #include "unicode/calendar.h"
 #include "hash.h"
+#include "uvector.h"
 
 U_NAMESPACE_BEGIN
-
-class UVector;
 
 /*
  * Character node used by TextTrieMap
  */
 class CharacterNode : public UMemory {
 public:
-    CharacterNode(UChar32 c, UObjectDeleter *fn);
+    CharacterNode(UChar32 c, UObjectDeleter *fn, UErrorCode &status);
     virtual ~CharacterNode();
 
     inline UChar32 getCharacter(void) const;
-    inline UVector* getValues(void) const;
-    inline UVector* getChildNodes(void) const;
+    inline const UVector* getValues(void) const;
+    inline const UVector* getChildNodes(void) const;
 
     void addValue(void *value, UErrorCode &status);
     CharacterNode* addChildNode(UChar32 c, UErrorCode &status);
     CharacterNode* getChildNode(UChar32 c) const;
 
 private:
-    UChar32 fCharacter;
-    UVector *fChildren;
-    UVector *fValues;
+    UVector fChildren;
+    UVector fValues;
     UObjectDeleter  *fValueDeleter;
+    UChar32 fCharacter;
 };
 
 inline UChar32 CharacterNode::getCharacter(void) const {
     return fCharacter;
 }
 
-inline UVector* CharacterNode::getValues(void) const {
-    return fValues;
+inline const UVector* CharacterNode::getValues(void) const {
+    return &fValues;
 }
 
-inline UVector* CharacterNode::getChildNodes(void) const {
-    return fChildren;
+inline const UVector* CharacterNode::getChildNodes(void) const {
+    return &fChildren;
 }
 
 /*
@@ -76,6 +74,7 @@ public:
     void put(const UnicodeString &key, void *value, UErrorCode &status);
     void search(const UnicodeString &text, int32_t start,
         TextTrieMapSearchResultHandler *handler, UErrorCode& status) const;
+    inline int32_t isEmpty() const;
 
 private:
     UBool           fIgnoreCase;
@@ -85,6 +84,10 @@ private:
     void search(CharacterNode *node, const UnicodeString &text, int32_t start,
         int32_t index, TextTrieMapSearchResultHandler *handler, UErrorCode &status) const;
 };
+
+inline UChar32 TextTrieMap::isEmpty(void) const {
+    return fRoot == NULL;
+}
 
 // Name types, these bit flag are used for zone string lookup
 enum TimeZoneTranslationType {
@@ -221,9 +224,9 @@ public:
 
 private:
     Locale      fLocale;
-    Hashtable   *fTzidToStrings;
-    Hashtable   *fMzidToStrings;
-    TextTrieMap *fZoneStringsTrie;
+    Hashtable   fTzidToStrings;
+    Hashtable   fMzidToStrings;
+    TextTrieMap fZoneStringsTrie;
 
     /*
      * Private method to get a zone string except generic partial location types.
@@ -372,7 +375,7 @@ ZoneStrings::isShortFormatCommonlyUsed(void) const {
  */
 class ZoneStringSearchResultHandler : public UMemory, TextTrieMapSearchResultHandler {
 public:
-    ZoneStringSearchResultHandler();
+    ZoneStringSearchResultHandler(UErrorCode &status);
     virtual ~ZoneStringSearchResultHandler();
 
     virtual UBool handleMatch(int32_t matchLength, const UVector *values, UErrorCode &status);
@@ -381,7 +384,7 @@ public:
     void clear(void);
 
 private:
-    UVector *fResults;
+    UVector fResults;
     int32_t fMatchLen[ZSIDX_COUNT];
 };
 
