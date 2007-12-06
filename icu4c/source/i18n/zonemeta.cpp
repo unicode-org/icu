@@ -128,6 +128,13 @@ static const UChar gWorld[] = {0x30, 0x30, 0x31, 0x00}; // "001"
     if (U_FAILURE(status)) {
         return 0;
     }
+    int32_t len = u_strlen(text);
+    if (len != 16 && len != 10) {
+        // It must be yyyy-MM-dd HH:mm (length 16) or yyyy-MM-dd (length 10)
+        status = U_INVALID_FORMAT_ERROR;
+        return 0;
+    }
+
     int32_t year = 0, month = 0, day = 0, hour = 0, min = 0, n;
     int32_t idx;
 
@@ -158,22 +165,24 @@ static const UChar gWorld[] = {0x30, 0x30, 0x31, 0x00}; // "001"
             status = U_INVALID_FORMAT_ERROR;
         }
     }
-    // "HH" (11 - 12)
-    for (idx = 11; idx <= 12 && U_SUCCESS(status); idx++) {
-        n = ASCII_DIGIT(text[idx]);
-        if (n >= 0) {
-            hour = 10*hour + n;
-        } else {
-            status = U_INVALID_FORMAT_ERROR;
+    if (len == 16) {
+        // "HH" (11 - 12)
+        for (idx = 11; idx <= 12 && U_SUCCESS(status); idx++) {
+            n = ASCII_DIGIT(text[idx]);
+            if (n >= 0) {
+                hour = 10*hour + n;
+            } else {
+                status = U_INVALID_FORMAT_ERROR;
+            }
         }
-    }
-    // "mm" (14 - 15)
-    for (idx = 14; idx <= 15 && U_SUCCESS(status); idx++) {
-        n = ASCII_DIGIT(text[idx]);
-        if (n >= 0) {
-            min = 10*min + n;
-        } else {
-            status = U_INVALID_FORMAT_ERROR;
+        // "mm" (14 - 15)
+        for (idx = 14; idx <= 15 && U_SUCCESS(status); idx++) {
+            n = ASCII_DIGIT(text[idx]);
+            if (n >= 0) {
+                min = 10*min + n;
+            } else {
+                status = U_INVALID_FORMAT_ERROR;
+            }
         }
     }
 
@@ -185,7 +194,7 @@ static const UChar gWorld[] = {0x30, 0x30, 0x31, 0x00}; // "001"
     return 0;
 }
 
-/*
+ /*
  * Initialize global objects
  */
 void
@@ -201,7 +210,7 @@ ZoneMeta::initialize(void) {
     Hashtable *tmpOlsonToMeta = createOlsonToMetaMap();
     if (tmpOlsonToMeta == NULL) {
         // With ICU 3.8 data
-        createOlsonToMetaMapOld();
+        tmpOlsonToMeta = createOlsonToMetaMapOld();
     }
     Hashtable *tmpMetaToOlson = createMetaToOlsonMap();
 
@@ -824,7 +833,7 @@ ZoneMeta::getMetazoneID(const UnicodeString &tzid, UDate date, UnicodeString &re
 const UVector*
 ZoneMeta::getMetazoneMappings(const UnicodeString &tzid) {
     initialize();
-    const UVector *result;
+    const UVector *result = NULL;
     if (gOlsonToMeta != NULL) {
         result = (UVector*)gOlsonToMeta->get(tzid);
     }
