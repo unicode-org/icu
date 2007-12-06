@@ -469,9 +469,9 @@ ConversionTest::TestGetUnicodeSet() {
 U_CDECL_BEGIN
 static void U_CALLCONV
 getUnicodeSetCallback(const void *context,
-                      UConverterFromUnicodeArgs *fromUArgs,
-                      const UChar* codeUnits,
-                      int32_t length,
+                      UConverterFromUnicodeArgs * /*fromUArgs*/,
+                      const UChar* /*codeUnits*/,
+                      int32_t /*length*/,
                       UChar32 codePoint,
                       UConverterCallbackReason reason,
                       UErrorCode *pErrorCode) {
@@ -638,6 +638,7 @@ ConversionTest::TestGetUnicodeSet2() {
                 }
             }
         }
+        ucnv_close(cnv);
     }
 
     delete [] s0;
