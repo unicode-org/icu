@@ -441,17 +441,17 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         
     // get a pattern for an abbreviated month and day
     pattern = generator->getBestPattern(UnicodeString("MMMd"), status); 
-    SimpleDateFormat *formatter = new SimpleDateFormat(pattern, locale, status); 
+    SimpleDateFormat formatter(pattern, locale, status); 
 
     zone = TimeZone::createTimeZone(UnicodeString("GMT"));
-    formatter->setTimeZone(*zone);
+    formatter.setTimeZone(*zone);
     // use it to format (or parse)
     UnicodeString formatted;
-    formatted = formatter->format(Calendar::getNow(), formatted, status); 
+    formatted = formatter.format(Calendar::getNow(), formatted, status); 
     // for French, the result is "13 sept."
     formatted.remove();
     // cannot use the result from getNow() because the value change evreyday. 
-    formatted = formatter->format(testDate, formatted, status);
+    formatted = formatter.format(testDate, formatted, status);
     expectedResult=UnicodeString("14 janv.");
     if ( formatted != expectedResult ) {
         errln("ERROR: Userguide sample code result!");
