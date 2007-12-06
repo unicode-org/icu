@@ -18,11 +18,11 @@ U_NAMESPACE_BEGIN
 
 typedef struct CanonicalMapEntry {
     UChar *id;
-    UChar *country;
+    const UChar *country; // const because it's a reference to a resource bundle string.
 } CanonicalMapEntry;
 
 typedef struct OlsonToMetaMappingEntry {
-    UChar *mzid;
+    const UChar *mzid; // const because it's a reference to a resource bundle string.
     UDate from;
     UDate to;
 } OlsonToMetaMappingEntry;
