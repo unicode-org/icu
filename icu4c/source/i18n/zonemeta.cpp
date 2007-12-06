@@ -226,7 +226,6 @@ ZoneMeta::createCanonicalMap(void) {
     UErrorCode status = U_ZERO_ERROR;
 
     Hashtable *canonicalMap = NULL;
-    UResourceBundle *supplementalDataBundle = NULL;
     UResourceBundle *zoneFormatting = NULL;
     UResourceBundle *tzitem = NULL;
     UResourceBundle *aliases = NULL;
@@ -237,23 +236,19 @@ ZoneMeta::createCanonicalMap(void) {
     }
     canonicalMap->setValueDeleter(deleteCanonicalMapEntry);
 
-    supplementalDataBundle = ures_openDirect(NULL, gSupplementalData, &status);
-    zoneFormatting = ures_getByKey(supplementalDataBundle, gZoneFormattingTag, NULL, &status);
+    zoneFormatting = ures_openDirect(NULL, gSupplementalData, &status);
+    zoneFormatting = ures_getByKey(zoneFormatting, gZoneFormattingTag, zoneFormatting, &status);
     if (U_FAILURE(status)) {
         goto error_cleanup;
     }
 
     while (ures_hasNext(zoneFormatting)) {
-        tzitem = ures_getNextResource(zoneFormatting, NULL, &status);
+        tzitem = ures_getNextResource(zoneFormatting, tzitem, &status);
         if (U_FAILURE(status)) {
-            ures_close(tzitem);
-            tzitem = NULL;
             status = U_ZERO_ERROR;
             continue;
         }
         if (ures_getType(tzitem) != URES_TABLE) {
-            ures_close(tzitem);
-            tzitem = NULL;
             continue;
         }
 
@@ -306,17 +301,15 @@ ZoneMeta::createCanonicalMap(void) {
         }
 
         // Get aliases
-        aliases = ures_getByKey(tzitem, gAliasesTag, NULL, &status);
+        aliases = ures_getByKey(tzitem, gAliasesTag, aliases, &status);
         if (U_FAILURE(status)) {
             // No aliases
             status = U_ZERO_ERROR;
-            ures_close(tzitem);
             continue;
         }
 
         while (ures_hasNext(aliases)) {
-            int32_t aliasLen;
-            const UChar* alias = ures_getNextString(aliases, &aliasLen, NULL, &status);
+            const UChar* alias = ures_getNextString(aliases, NULL, NULL, &status);
             if (U_FAILURE(status)) {
                 status = U_ZERO_ERROR;
                 continue;
@@ -346,23 +339,19 @@ ZoneMeta::createCanonicalMap(void) {
                 goto error_cleanup;
             }
         }
-
-        ures_close(aliases);
-        ures_close(tzitem);
     }
 
-    ures_close(zoneFormatting);
-    ures_close(supplementalDataBundle);
-    return canonicalMap;
-
-error_cleanup:
+normal_cleanup:
     ures_close(aliases);
     ures_close(tzitem);
     ures_close(zoneFormatting);
-    ures_close(supplementalDataBundle);
-    delete canonicalMap;
+    return canonicalMap;
 
-    return NULL;
+error_cleanup:
+    delete canonicalMap;
+    canonicalMap = NULL;
+
+    goto normal_cleanup;
 }
 
 /*
@@ -373,8 +362,9 @@ ZoneMeta::createOlsonToMetaMap(void) {
     UErrorCode status = U_ZERO_ERROR;
 
     Hashtable *olsonToMeta = NULL;
-    UResourceBundle *metazoneInfoBundle = NULL;
     UResourceBundle *metazoneMappings = NULL;
+    UResourceBundle *zoneItem = NULL;
+    UResourceBundle *mz = NULL;
     StringEnumeration *tzids = NULL;
 
     olsonToMeta = new Hashtable(uhash_compareUnicodeString, NULL, status);
@@ -384,8 +374,8 @@ ZoneMeta::createOlsonToMetaMap(void) {
     olsonToMeta->setValueDeleter(deleteUVector);
 
     // Read metazone mappings from metazoneInfo bundle
-    metazoneInfoBundle = ures_openDirect(NULL, gMetazoneInfo, &status);
-    metazoneMappings = ures_getByKey(metazoneInfoBundle, gMetazoneMappings, NULL, &status);
+    metazoneMappings = ures_openDirect(NULL, gMetazoneInfo, &status);
+    metazoneMappings = ures_getByKey(metazoneMappings, gMetazoneMappings, metazoneMappings, &status);
     if (U_FAILURE(status)) {
         goto error_cleanup;
     }
@@ -420,20 +410,18 @@ ZoneMeta::createOlsonToMetaMap(void) {
             continue;
         }
 
-        UResourceBundle *zoneItem = ures_getByKey(metazoneMappings, zidkey, NULL, &status);
+        zoneItem = ures_getByKey(metazoneMappings, zidkey, zoneItem, &status);
         if (U_FAILURE(status)) {
             status = U_ZERO_ERROR;
-            ures_close(zoneItem);
             continue;
         }
 
         UVector *mzMappings = NULL;
         while (ures_hasNext(zoneItem)) {
-            UResourceBundle *mz = ures_getNextResource(zoneItem, NULL, &status);
+            mz = ures_getNextResource(zoneItem, mz, &status);
             const UChar *mz_name = ures_getStringByIndex(mz, 0, NULL, &status);
             const UChar *mz_from = ures_getStringByIndex(mz, 1, NULL, &status);
             const UChar *mz_to   = ures_getStringByIndex(mz, 2, NULL, &status);
-            ures_close(mz);
 
             if(U_FAILURE(status)){
                 status = U_ZERO_ERROR;
@@ -474,8 +462,6 @@ ZoneMeta::createOlsonToMetaMap(void) {
             }
         }
 
-        ures_close(zoneItem);
-
         if (U_FAILURE(status)) {
             if (mzMappings != NULL) {
                 delete mzMappings;
@@ -491,21 +477,21 @@ ZoneMeta::createOlsonToMetaMap(void) {
         }
     }
 
-    delete tzids;
-    ures_close(metazoneMappings);
-    ures_close(metazoneInfoBundle);
-    return olsonToMeta;
-
-error_cleanup:
+normal_cleanup:
     if (tzids != NULL) {
         delete tzids;
     }
+    ures_close(zoneItem);
+    ures_close(mz);
     ures_close(metazoneMappings);
-    ures_close(metazoneInfoBundle);
+    return olsonToMeta;
+
+error_cleanup:
     if (olsonToMeta != NULL) {
         delete olsonToMeta;
+        olsonToMeta = NULL;
     }
-    return NULL;
+    goto normal_cleanup;
 }
 
 /*
@@ -516,8 +502,10 @@ ZoneMeta::createOlsonToMetaMapOld(void) {
     UErrorCode status = U_ZERO_ERROR;
 
     Hashtable *olsonToMeta = NULL;
-    UResourceBundle *rootBundle = NULL;
     UResourceBundle *zoneStringsArray = NULL;
+    UResourceBundle *mz = NULL;
+    UResourceBundle *zoneItem = NULL;
+    UResourceBundle *useMZ = NULL;
     StringEnumeration *tzids = NULL;
 
     olsonToMeta = new Hashtable(uhash_compareUnicodeString, NULL, status);
@@ -527,8 +515,8 @@ ZoneMeta::createOlsonToMetaMapOld(void) {
     olsonToMeta->setValueDeleter(deleteUVector);
 
     // Read metazone mappings from root bundle
-    rootBundle = ures_openDirect(NULL, "", &status);
-    zoneStringsArray = ures_getByKey(rootBundle, gZoneStringsTag, NULL, &status);
+    zoneStringsArray = ures_openDirect(NULL, "", &status);
+    zoneStringsArray = ures_getByKey(zoneStringsArray, gZoneStringsTag, zoneStringsArray, &status);
     if (U_FAILURE(status)) {
         goto error_cleanup;
     }
@@ -563,22 +551,19 @@ ZoneMeta::createOlsonToMetaMapOld(void) {
             continue;
         }
 
-        UResourceBundle *zoneItem = ures_getByKey(zoneStringsArray, zidkey, NULL, &status);
-        UResourceBundle *useMZ = ures_getByKey(zoneItem, gUseMetazoneTag, NULL, &status);
+        zoneItem = ures_getByKey(zoneStringsArray, zidkey, zoneItem, &status);
+        useMZ = ures_getByKey(zoneItem, gUseMetazoneTag, useMZ, &status);
         if (U_FAILURE(status)) {
             status = U_ZERO_ERROR;
-            ures_close(zoneItem);
-            ures_close(useMZ);
             continue;
         }
 
         UVector *mzMappings = NULL;
         while (ures_hasNext(useMZ)) {
-            UResourceBundle *mz = ures_getNextResource(useMZ, NULL, &status);
+            mz = ures_getNextResource(useMZ, mz, &status);
             const UChar *mz_name = ures_getStringByIndex(mz, 0, NULL, &status);
             const UChar *mz_from = ures_getStringByIndex(mz, 1, NULL, &status);
             const UChar *mz_to   = ures_getStringByIndex(mz, 2, NULL, &status);
-            ures_close(mz);
 
             if(U_FAILURE(status)){
                 status = U_ZERO_ERROR;
@@ -619,9 +604,6 @@ ZoneMeta::createOlsonToMetaMapOld(void) {
             }
         }
 
-        ures_close(zoneItem);
-        ures_close(useMZ);
-
         if (U_FAILURE(status)) {
             if (mzMappings != NULL) {
                 delete mzMappings;
@@ -637,21 +619,21 @@ ZoneMeta::createOlsonToMetaMapOld(void) {
         }
     }
 
-    delete tzids;
-    ures_close(zoneStringsArray);
-    ures_close(rootBundle);
-    return olsonToMeta;
-
-error_cleanup:
+normal_cleanup:
     if (tzids != NULL) {
         delete tzids;
     }
+    ures_close(zoneItem);
+    ures_close(useMZ);
+    ures_close(mz);
     ures_close(zoneStringsArray);
-    ures_close(rootBundle);
+    return olsonToMeta;
+
+error_cleanup:
     if (olsonToMeta != NULL) {
         delete olsonToMeta;
     }
-    return NULL;
+    goto normal_cleanup;
 }
 
 Hashtable*
@@ -659,9 +641,8 @@ ZoneMeta::createMetaToOlsonMap(void) {
     UErrorCode status = U_ZERO_ERROR;
 
     Hashtable *metaToOlson = NULL;
-    UResourceBundle *supplementalDataBundle = NULL;
-    UResourceBundle *mapTimezones = NULL;
     UResourceBundle *metazones = NULL;
+    UResourceBundle *mz = NULL;
 
     metaToOlson = new Hashtable(uhash_compareUnicodeString, NULL, status);
     if (U_FAILURE(status)) {
@@ -669,17 +650,16 @@ ZoneMeta::createMetaToOlsonMap(void) {
     }
     metaToOlson->setValueDeleter(deleteUVector);
 
-    supplementalDataBundle = ures_openDirect(NULL, gSupplementalData, &status);
-    mapTimezones = ures_getByKey(supplementalDataBundle, gMapTimezonesTag, NULL, &status);
-    metazones = ures_getByKey(mapTimezones, gMetazonesTag, NULL, &status);
+    metazones = ures_openDirect(NULL, gSupplementalData, &status);
+    metazones = ures_getByKey(metazones, gMapTimezonesTag, metazones, &status);
+    metazones = ures_getByKey(metazones, gMetazonesTag, metazones, &status);
     if (U_FAILURE(status)) {
         goto error_cleanup;
     }
 
     while (ures_hasNext(metazones)) {
-        UResourceBundle *mz = ures_getNextResource(metazones, NULL, &status);
+        mz = ures_getNextResource(metazones, mz, &status);
         if (U_FAILURE(status)) {
-            ures_close(mz);
             status = U_ZERO_ERROR;
             continue;
         }
@@ -702,7 +682,6 @@ ZoneMeta::createMetaToOlsonMap(void) {
                     MetaToOlsonMappingEntry *entry = (MetaToOlsonMappingEntry*)uprv_malloc(sizeof(MetaToOlsonMappingEntry));
                     if (entry == NULL) {
                         status = U_MEMORY_ALLOCATION_ERROR;
-                        ures_close(mz);
                         goto error_cleanup;
                     }
                     entry->id = tzid;
@@ -710,7 +689,6 @@ ZoneMeta::createMetaToOlsonMap(void) {
                     if (entry->territory == NULL) {
                         status = U_MEMORY_ALLOCATION_ERROR;
                         uprv_free(entry);
-                        ures_close(mz);
                         goto error_cleanup;
                     }
                     u_charsToUChars(territory, entry->territory, territoryLen + 1);
@@ -727,7 +705,6 @@ ZoneMeta::createMetaToOlsonMap(void) {
                                 delete tzMappings;
                             }
                             deleteMetaToOlsonMappingEntry(entry);
-                            ures_close(mz);
                             goto error_cleanup;
                         }
                     }
@@ -740,22 +717,18 @@ ZoneMeta::createMetaToOlsonMap(void) {
                 }
             }
         }
-        ures_close(mz);
     }
 
+normal_cleanup:
+    ures_close(mz);
     ures_close(metazones);
-    ures_close(mapTimezones);
-    ures_close(supplementalDataBundle);
     return metaToOlson;
 
 error_cleanup:
-    ures_close(metazones);
-    ures_close(mapTimezones);
-    ures_close(supplementalDataBundle);
     if (metaToOlson != NULL) {
         delete metaToOlson;
     }
-    return NULL;
+    goto normal_cleanup;
 }
 
 UnicodeString&
