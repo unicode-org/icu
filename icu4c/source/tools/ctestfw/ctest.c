@@ -1,7 +1,7 @@
 /*
 ********************************************************************************
 *
-*   Copyright (C) 1996-2006, International Business Machines
+*   Copyright (C) 1996-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ********************************************************************************
@@ -13,6 +13,8 @@
 #include <stdarg.h>
 
 #include "unicode/utrace.h"
+#include "unicode/uclean.h"
+#include "umutex.h"
 
 /* NOTES:
    3/20/1999 srl - strncpy called w/o setting nulls at the end
@@ -87,6 +89,8 @@ int ERR_MSG =1; /* error messages will be displayed by default*/
 int QUICK = 1;  /* Skip some of the slower tests? */
 int WARN_ON_MISSING_DATA = 0; /* Reduce data errs to warnings? */
 UTraceLevel ICU_TRACE = UTRACE_OFF;  /* ICU tracing level */
+size_t MAX_MEMORY_ALLOCATION = (size_t)-1; /* Maximum library memory allocation allowed. */
+int32_t ALLOCATION_COUNT = 0;
 /*-------------------------------------------*/
 
 /* strncmp that also makes sure there's a \0 at s2[0] */
@@ -501,25 +505,193 @@ log_verbose(const char* pattern, ...)
 void T_CTEST_EXPORT2
 log_data_err(const char* pattern, ...)
 {
-  va_list ap;
-  va_start(ap, pattern);
+    va_list ap;
+    va_start(ap, pattern);
 
-  ++DATA_ERROR_COUNT; /* for informational message at the end */
+    ++DATA_ERROR_COUNT; /* for informational message at the end */
 
-  if(WARN_ON_MISSING_DATA == 0) {
-    /* Fatal error. */
-    if(strchr(pattern, '\n') != NULL) {
-        ++ERROR_COUNT;
+    if(WARN_ON_MISSING_DATA == 0) {
+        /* Fatal error. */
+        if(strchr(pattern, '\n') != NULL) {
+            ++ERROR_COUNT;
+        }
+        vlog_err(NULL, pattern, ap); /* no need for prefix in default case */
+    } else {
+        vlog_info("[Data] ", pattern, ap); 
     }
-    vlog_err(NULL, pattern, ap); /* no need for prefix in default case */
-  } else {
-    vlog_info("[Data] ", pattern, ap); 
-  }
 }
 
 
+/*
+ * Tracing functions.
+ */
+static int traceFnNestingDepth = 0;
+U_CDECL_BEGIN
+static void U_CALLCONV TraceEntry(const void *context, int32_t fnNumber) {
+    char buf[500];
+    utrace_format(buf, sizeof(buf), traceFnNestingDepth*3, "%s() enter.\n", utrace_functionName(fnNumber));    buf[sizeof(buf)-1]=0;  
+    fputs(buf, stdout);
+    traceFnNestingDepth++;
+}   
+ 
+static void U_CALLCONV TraceExit(const void *context, int32_t fnNumber, const char *fmt, va_list args) {    char buf[500];
+    
+    if (traceFnNestingDepth>0) {
+        traceFnNestingDepth--; 
+    }
+    utrace_format(buf, sizeof(buf), traceFnNestingDepth*3, "%s() ", utrace_functionName(fnNumber));    buf[sizeof(buf)-1]=0;
+    fputs(buf, stdout);
+    utrace_vformat(buf, sizeof(buf), traceFnNestingDepth*3, fmt, args);
+    buf[sizeof(buf)-1]=0;
+    fputs(buf, stdout);
+    putc('\n', stdout);
+}
+
+static void U_CALLCONV TraceData(const void *context, int32_t fnNumber,
+                          int32_t level, const char *fmt, va_list args) {
+    char buf[500];
+    utrace_vformat(buf, sizeof(buf), traceFnNestingDepth*3, fmt, args);
+    buf[sizeof(buf)-1]=0;
+    fputs(buf, stdout);
+    putc('\n', stdout);
+}
+
+static void *U_CALLCONV ctest_libMalloc(const void *context, size_t size) {
+    /*if (VERBOSITY) {
+        printf("Allocated %ld\n", (long)size);
+    }*/
+    if (size >= MAX_MEMORY_ALLOCATION) {
+        return NULL;
+    }
+    umtx_atomic_inc(&ALLOCATION_COUNT);
+    return malloc(size);
+}
+static void *U_CALLCONV ctest_libRealloc(const void *context, void *mem, size_t size) {
+    /*if (VERBOSITY) {
+        printf("Reallocated %ld\n", (long)size);
+    }*/
+    if (size >= MAX_MEMORY_ALLOCATION) {
+        free(mem);
+        return NULL;
+    }
+    if (mem == NULL) {
+        umtx_atomic_inc(&ALLOCATION_COUNT);
+    }
+    return realloc(mem, size);
+}
+static void U_CALLCONV ctest_libFree(const void *context, void *mem) {
+    umtx_atomic_dec(&ALLOCATION_COUNT);
+    free(mem);
+}
+
 int T_CTEST_EXPORT2
-processArgs(const TestNode* root,
+initArgs( int argc, const char* const argv[])
+{
+    int                i;
+    int                doList = FALSE;
+
+    VERBOSITY = FALSE;
+    ERR_MSG = TRUE;
+
+    for( i=1; i<argc; i++)
+    {
+        if ( argv[i][0] == '/' )
+        {
+            /* We don't run the tests here. */
+            continue;
+        }
+        else if ((strcmp( argv[i], "-a") == 0) || (strcmp(argv[i],"-all") == 0))
+        {
+            /* We don't run the tests here. */
+            continue;
+        }
+        else if (strcmp( argv[i], "-v" )==0 || strcmp( argv[i], "-verbose")==0)
+        {
+            VERBOSITY = TRUE;
+        }
+        else if (strcmp( argv[i], "-l" )==0 )
+        {
+            doList = TRUE;
+        }
+        else if (strcmp( argv[i], "-e1") == 0)
+        {
+            QUICK = -1;
+        }
+        else if (strcmp( argv[i], "-e") ==0)
+        {
+            QUICK = 0;
+        }
+        else if (strcmp( argv[i], "-w") ==0)
+        {
+            WARN_ON_MISSING_DATA = TRUE;
+        }
+        else if (strcmp( argv[i], "-m") ==0)
+        {
+            UErrorCode errorCode = U_ZERO_ERROR;
+            if (i+1 < argc) {
+                char *endPtr = NULL;
+                i++;
+                MAX_MEMORY_ALLOCATION = (size_t)strtol(argv[i], &endPtr, 10);
+                if (endPtr == argv[i]) {
+                    printf("Can't parse %s\n", argv[i]);
+                    help( argv[0] );
+                    return 0;
+                }
+            }
+            /* Use the default value */
+            u_setMemoryFunctions(&MAX_MEMORY_ALLOCATION, ctest_libMalloc, ctest_libRealloc, ctest_libFree, &errorCode);
+            if (U_FAILURE(errorCode)) {
+                printf("u_setMemoryFunctions returned %s\n", u_errorName(errorCode));
+                return 0;
+            }
+        }
+        else if(strcmp( argv[i], "-n") == 0 || strcmp( argv[i], "-no_err_msg") == 0)
+        {
+            ERR_MSG = FALSE;
+        }
+        else if (strcmp( argv[i], "-r") == 0)
+        {
+            if (!REPEAT_TESTS_INIT) {
+                REPEAT_TESTS++;
+            }
+        }
+        else if (strcmp( argv[i], "-t_info") == 0) {
+            ICU_TRACE = UTRACE_INFO;
+        }
+        else if (strcmp( argv[i], "-t_error") == 0) {
+            ICU_TRACE = UTRACE_ERROR;
+        }
+        else if (strcmp( argv[i], "-t_warn") == 0) {
+            ICU_TRACE = UTRACE_WARNING;
+        }
+        else if (strcmp( argv[i], "-t_verbose") == 0) {
+            ICU_TRACE = UTRACE_VERBOSE;
+        }
+        else if (strcmp( argv[i], "-t_oc") == 0) {
+            ICU_TRACE = UTRACE_OPEN_CLOSE;
+        }
+        else if (strcmp( argv[i], "-h" )==0 || strcmp( argv[i], "--help" )==0)
+        {
+            help( argv[0] );
+            return 0;
+        }
+        else
+        {
+            printf("* unknown option: %s\n", argv[i]);
+            help( argv[0] );
+            return 0;
+        }
+    }
+    if (ICU_TRACE != UTRACE_OFF) {
+        utrace_setFunctions(NULL, TraceEntry, TraceExit, TraceData);
+        utrace_setLevel(ICU_TRACE);
+    }
+
+    return 1; /* total error count */
+}
+
+int T_CTEST_EXPORT2
+runTestRequest(const TestNode* root,
              int argc,
              const char* const argv[])
 {
@@ -534,8 +706,6 @@ processArgs(const TestNode* root,
     int                errorCount = 0;
 
     toRun = root;
-    VERBOSITY = FALSE;
-    ERR_MSG = TRUE;
 
     for( i=1; i<argc; i++)
     {
@@ -563,66 +733,11 @@ processArgs(const TestNode* root,
 
             subtreeOptionSeen = TRUE;
         }
-        else if (strcmp( argv[i], "-v" )==0 || strcmp( argv[i], "-verbose")==0)
-        {
-            VERBOSITY = TRUE;
-        }
-        else if (strcmp( argv[i], "-l" )==0 )
-        {
-            doList = TRUE;
-        }
-        else if (strcmp( argv[i], "-e1") == 0)
-        {
-            QUICK = -1;
-        }
-        else if (strcmp( argv[i], "-e") ==0)
-        {
-            QUICK = 0;
-        }
-        else if (strcmp( argv[i], "-w") ==0)
-        {
-            WARN_ON_MISSING_DATA = TRUE;
-        }
-        else if(strcmp( argv[i], "-n") == 0 || strcmp( argv[i], "-no_err_msg") == 0)
-        {
-            ERR_MSG = FALSE;
-        }
-        else if (strcmp( argv[i], "-r") == 0)
-        {
-            if (!REPEAT_TESTS_INIT) {
-                REPEAT_TESTS++;
-            }
-        }
         else if ((strcmp( argv[i], "-a") == 0) || (strcmp(argv[i],"-all") == 0))
         {
             subtreeOptionSeen=FALSE;
         }
-        else if (strcmp( argv[i], "-t_info") == 0) {
-            ICU_TRACE = UTRACE_INFO;
-        }
-        else if (strcmp( argv[i], "-t_error") == 0) {
-            ICU_TRACE = UTRACE_ERROR;
-        }
-        else if (strcmp( argv[i], "-t_warn") == 0) {
-            ICU_TRACE = UTRACE_WARNING;
-        }
-        else if (strcmp( argv[i], "-t_verbose") == 0) {
-            ICU_TRACE = UTRACE_VERBOSE;
-        }
-        else if (strcmp( argv[i], "-t_oc") == 0) {
-            ICU_TRACE = UTRACE_OPEN_CLOSE;
-        }
-        else if (strcmp( argv[i], "-h" )==0 || strcmp( argv[i], "--help" )==0)
-        {
-            help( argv[0] );
-            return 0;
-        }
-        else
-        {
-            printf("* unknown option: %s\n", argv[i]);
-            help( argv[0] );
-            return -1;
-        }
+        /* else option already handled by initArgs */
     }
 
     if( subtreeOptionSeen == FALSE) /* no other subtree given, run the default */
@@ -665,6 +780,8 @@ static void help ( const char *argv0 )
            "        user has reduced/changed the common set of ICU data \n");
     printf("    -t_info | -t_error | -t_warn | -t_oc | -t_verbose  Enable ICU tracing\n");
     printf("    -no_err_msg (same as -n) \n");
+    printf("    -m n Maximum size of library allocation allowed.\n");
+    printf("      The default is the maximum value of size_t\n");
     printf("    -r  repeat tests after calling u_cleanup \n");
     printf("    -[/subtest]  To run a subtest \n");
     printf("    eg: to run just the utility tests type: cintltest /tsutil) \n");

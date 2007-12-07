@@ -677,6 +677,9 @@ void TestSafeClone() {
     someCollators[2] = ucol_open("ja_JP", &err);
     someCollators[3] = ucol_openRules(sampleRule, -1, UCOL_ON, UCOL_TERTIARY, NULL, &err);
     if(U_FAILURE(err)) {
+        for (index = 0; index < CLONETEST_COLLATOR_COUNT; index++) {
+            ucol_close(someCollators[index]);
+        }
         log_data_err("Couldn't open one or more collators\n");
         return;
     }
@@ -2086,7 +2089,7 @@ TestOpenBinary(void)
     int32_t uRulesLen = u_unescape(rule, uRules, 256);
 
     UCollator *coll = ucol_openRules(uRules, uRulesLen, UCOL_DEFAULT, UCOL_DEFAULT, NULL, &status);
-    UCollator *UCA = ucol_open("root", &status);
+    UCollator *UCA = NULL;
     UCollator *cloneNOUCA = NULL, *cloneWUCA = NULL;
 
     uint8_t imageBuffer[32768];
@@ -2095,8 +2098,14 @@ TestOpenBinary(void)
 
     int32_t imageSize;
 
-    if((coll==NULL)||(UCA==NULL)||(U_FAILURE(status))) {
+    if((coll==NULL)||(U_FAILURE(status))) {
         log_data_err("could not load collators or error occured: %s\n",
+            u_errorName(status));
+        return;
+    }		
+    UCA = ucol_open("root", &status);
+    if((UCA==NULL)||(U_FAILURE(status))) {
+        log_data_err("could not load UCA collator or error occured: %s\n",
             u_errorName(status));
         return;
     }		
