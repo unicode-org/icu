@@ -2364,7 +2364,7 @@ void NumberFormatTest::TestRounding() {
             }
         }
     }
-
+    delete df;
 }
 
 void NumberFormatTest::checkRounding(DecimalFormat* df, double base, int iterations, double increment) {
