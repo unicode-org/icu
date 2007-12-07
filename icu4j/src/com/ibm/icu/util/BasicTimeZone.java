@@ -520,7 +520,7 @@ public abstract class BasicTimeZone extends TimeZone {
 
     /**
      * The option designate former time to be used by
-     * {@link #getOffsetFromLocal(long, int, int, int[])
+     * {@link #getOffsetFromLocal(long, int, int, int[])}
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -528,7 +528,7 @@ public abstract class BasicTimeZone extends TimeZone {
 
     /**
      * The option designate latter time to be used by
-     * {@link #getOffsetFromLocal(long, int, int, int[])
+     * {@link #getOffsetFromLocal(long, int, int, int[])}
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -536,7 +536,7 @@ public abstract class BasicTimeZone extends TimeZone {
 
     /**
      * The bit mask for the time type option used by
-     * {@link #getOffsetFromLocal(long, int, int, int[])
+     * {@link #getOffsetFromLocal(long, int, int, int[])}
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -544,7 +544,7 @@ public abstract class BasicTimeZone extends TimeZone {
 
     /**
      * The bit mask for the former/latter option used by
-     * {@link #getOffsetFromLocal(long, int, int, int[])
+     * {@link #getOffsetFromLocal(long, int, int, int[])}
      * @internal
      * @deprecated This API is ICU internal only.
      */
