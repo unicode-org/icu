@@ -160,7 +160,7 @@ static void TestG7Locales()
                    UCOL_DEFAULT_STRENGTH,NULL, &status);
         if (U_FAILURE(status))
         {
-            
+            ucol_close(myCollation);
             log_err("Error in creating collator in %s:  %s\n", locales[i], myErrorName(status));
             continue;
         }

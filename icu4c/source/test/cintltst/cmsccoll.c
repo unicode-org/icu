@@ -4783,7 +4783,7 @@ TestVI5913(void)
     UChar rule[256]={0x26, 0x62, 0x3c, 0x1FF3, 0};  /* &a<0x1FF3-omega with Ypogegrammeni*/
     UChar rule2[256]={0x26, 0x7a, 0x3c, 0x0161, 0};  /* &z<s with caron*/
     UChar rule3[256]={0x26, 0x7a, 0x3c, 0x0061, 0x00ea, 0};  /* &z<a+e with circumflex.*/
-    UChar tData[][20]={
+    static const UChar tData[][20]={
         {0x1EAC, 0},
         {0x0041, 0x0323, 0x0302, 0},
         {0x1EA0, 0x0302, 0},
@@ -4793,7 +4793,7 @@ TestVI5913(void)
         {0x1EB7, 0},
         {0x1EA1, 0x0306, 0},
     };
-    UChar tailorData[][20]={
+    static const UChar tailorData[][20]={
         {0x1FA2, 0},  /* Omega with 3 combining marks */
         {0x03C9, 0x0313, 0x0300, 0x0345, 0},
         {0x1FF3, 0x0313, 0x0300, 0},
@@ -4801,12 +4801,12 @@ TestVI5913(void)
         {0x1F62, 0x0345, 0},
         {0x1FA0, 0x0300, 0},
     };
-    UChar tailorData2[][20]={
+    static const UChar tailorData2[][20]={
         {0x1E63, 0x030C, 0},  /* s with dot below + caron */
         {0x0073, 0x0323, 0x030C, 0},
         {0x0073, 0x030C, 0x0323, 0},
     };
-    UChar tailorData3[][20]={
+    static const UChar tailorData3[][20]={
         {0x007a, 0},  /*  z */
         {0x0061, 0x0065, 0},  /*  a + e */
         {0x0061, 0x00ea, 0}, /* a + e with circumflex */
@@ -4844,7 +4844,7 @@ TestVI5913(void)
 
     ucol_close(coll);
 
-    /* Test Russian sort. */
+    /* Test Romanian sort. */
     coll = ucol_open("ro", &status);
     log_verbose("\n\nRO collation:");
     if ( !ucol_equal(coll, tData[0], u_strlen(tData[0]), tData[1], u_strlen(tData[1])) ) {
@@ -4871,6 +4871,10 @@ TestVI5913(void)
     log_verbose("\n\nTailoring test: Greek character with 3 combining marks");
     ruleLen = u_strlen(rule);
     coll = ucol_openRules(rule, ruleLen, UCOL_OFF, UCOL_TERTIARY, NULL,&status);
+    if (U_FAILURE(status)) {
+        log_err("ucol_openRules failed with %s\n", u_errorName(status));
+        return;
+    }
     sLen = u_strlen(tailorData[0]);
     for (j=1; j<6; j++) {
         tLen = u_strlen(tailorData[j]);
@@ -4911,27 +4915,27 @@ TestVI5913(void)
     ucol_close(coll);
 
     log_verbose("\n\nTailoring test for &z< ae with circumflex:");
-     ruleLen = u_strlen(rule3);
-     coll = ucol_openRules(rule3, ruleLen, UCOL_OFF, UCOL_TERTIARY, NULL,&status);
-     tLen = u_strlen(tailorData3[3]);
-     kLen=ucol_getSortKey(coll, tailorData3[3], tLen, expColl, 100);
-     for (j=4; j<6; j++) {
-         tLen = u_strlen(tailorData3[j]);
-         rLen = ucol_getSortKey(coll, tailorData3[j], tLen, resColl, 100);
+    ruleLen = u_strlen(rule3);
+    coll = ucol_openRules(rule3, ruleLen, UCOL_OFF, UCOL_TERTIARY, NULL,&status);
+    tLen = u_strlen(tailorData3[3]);
+    kLen=ucol_getSortKey(coll, tailorData3[3], tLen, expColl, 100);
+    for (j=4; j<6; j++) {
+        tLen = u_strlen(tailorData3[j]);
+        rLen = ucol_getSortKey(coll, tailorData3[j], tLen, resColl, 100);
 
-         if ( kLen!=rLen || uprv_memcmp(expColl, resColl, rLen*sizeof(uint8_t))!=0 ) {
-             log_err("\n After tailoring Data[%d] :%s  \tlen: %d key: ", j, tailorData[j], tLen);
-             for(i = 0; i<rLen; i++) {
-                 log_err(" %02X", resColl[i]);
-             }
+        if ( kLen!=rLen || uprv_memcmp(expColl, resColl, rLen*sizeof(uint8_t))!=0 ) {
+            log_err("\n After tailoring Data[%d] :%s  \tlen: %d key: ", j, tailorData[j], tLen);
+            for(i = 0; i<rLen; i++) {
+                log_err(" %02X", resColl[i]);
+            }
+        }
+
+        log_verbose("\n Test Data[%d] :%s  \tlen: %d key: ", j, tailorData[j], tLen);
+         for(i = 0; i<rLen; i++) {
+             log_verbose(" %02X", resColl[i]);
          }
-
-         log_verbose("\n Test Data[%d] :%s  \tlen: %d key: ", j, tailorData[j], tLen);
-          for(i = 0; i<rLen; i++) {
-              log_verbose(" %02X", resColl[i]);
-          }
-     }
-     ucol_close(coll);
+    }
+    ucol_close(coll);
 }
 
 #define TSKC_DATA_SIZE 5
