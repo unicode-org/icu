@@ -1470,6 +1470,7 @@ TimeZoneRuleTest::TestTimeZoneRuleCoverage(void) {
     delete t2;
     delete t3;
     delete t4;
+    delete t5;
 }
 
 /*
