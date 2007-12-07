@@ -12,14 +12,14 @@ h3.doc { background: #CCCCFF }
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h2>International Components for Unicode for Java (ICU4J)</h2>
-<h3>Read Me for ICU4J 3.8</h3>
+<h3>Read Me for ICU4J 3.8.1</h3>
 <hr size="2" width="100%">
 <p><b>Release Date</b><br>
-September 14, 2007<br>
+December 10, 2007<br>
 </p>
-<p><b>Note:</b> This is major release of ICU4J.  It contains bug fixes
-and adds implementations of inherited API and introduces new API
-or functionality.
+<p><b>Note:</b> This is an update release of ICU4J 3.8.  It contains bug fixes
+and adds implementations of inherited API, but does not introduce new API
+or functionality.  These changes will be rolled into the next release of ICU4J.
 </p>
 <p>For the most recent release, see the <a
  href="http://www.icu-project.org/download/"> ICU4J
@@ -126,7 +126,7 @@ current and complete version is always found in ICU4J.</p>
 </blockquote>
 
 <h3 class="doc"><a name="news"></a>What Is New In This Release?</h3>
-
+<strong>ICU4J 3.8</strong>
 <p><b>Changes to J2SE version requirement for building ICU4J</b>
 <p>Previous version of ICU4J was successfully built with J2SE SDK 1.4 or later
 versions.  In this release, there is a new feature which uses a new type introduced
@@ -153,6 +153,40 @@ and some converters are known to mis-handle Unicode supplementary characters. Us
 <p>
 See the <a href="http://www.icu-project.org/download/">ICU 3.8 download page</a> about new features in this release.
 </p>
+<hr>
+<strong>ICU4J 3.8.1</strong> (This release)
+<p><b>Locale Data</b></p>
+<p>ICU uses and supports data from <a href="http://www.unicode.org/cldr/">Common Locale Data Repository(CLDR)</a>.
+In ICU4J 3.8.1, ICU locale data was updated to CLDR 1.5.1.</p>
+<p><b>Updates to timezone formatting and parsing</b></p>
+<p>In ICU4J 3.8, the behavior of timezone formatting and parsing had changed based on
+CLDR 1.5 description.  There were some design problems identified in the specification
+and it was updated in CLDR 1.5.1.  In ICU4J 3.8.1, timezone formatting and parsing implementation
+had been updated to support the new specification.  As a result, many timezone parsing problems
+reproduced in ICU4J 3.8 were resolved in this release.</p>
+<p><b>Bug fixes</b></p>
+<p>This release contains following bug fixes (not a complete list)</p>
+<ul>
+<li><a href="http://www.icu-project.org/trac/ticket/3536">#3536</a> Problems with SHIFTED mode in StringSearch</li>
+<li><a href="http://www.icu-project.org/trac/ticket/4038">#4038</a> usearch_last misses matches when pattern length > 1</li>
+<li><a href="http://www.icu-project.org/trac/ticket/4279">#4279</a> StringSearch succeeds on NFC text but not NFD</li>
+<li><a href="http://www.icu-project.org/trac/ticket/5024">#5024</a> StringSearch with Secondary strength collator fails to match diacritic at end of input</li>
+<li><a href="http://www.icu-project.org/trac/ticket/5812">#5812</a> ICU4J Calendar handles ambiguous local time differently from Java</li>
+<li><a href="http://www.icu-project.org/trac/ticket/5883">#5883</a> Localized GMT string for time zone display name</li>
+<li><a href="http://www.icu-project.org/trac/ticket/5895">#5895</a> Parsed time zone is not properly set in the result calendar</li>
+<li><a href="http://www.icu-project.org/trac/ticket/5935">#5935</a> Don't include duration data twice</li>
+<li><a href="http://www.icu-project.org/trac/ticket/5937">#5937</a> ICU version in JavaDoc status tag was updated incorrectly for ICU4J 3.8</li>
+<li><a href="http://www.icu-project.org/trac/ticket/5945">#5945</a> TimeZone GMT format to handle a offset with a fraction of minute</li>
+<li><a href="http://www.icu-project.org/trac/ticket/5950">#5950</a> string search does not return correct position when search pattern is U+00C2 U+0303</li>
+<li><a href="http://www.icu-project.org/trac/ticket/5952">#5952</a> currency for sr_YU fails</li>
+<li><a href="http://www.icu-project.org/trac/ticket/5961">#5961</a> Creating Bidi with overridden embeddings causes IllegalArgumentException to be thrown</li>
+<li><a href="http://www.icu-project.org/trac/ticket/5964">#5964</a> TimeZone.getTimeZone(timezone) fails for GMT+8:30 (although spec'ed)</li>
+<li><a href="http://www.icu-project.org/trac/ticket/5990">#5990</a> SimpleDateFormat parse to round trip time properly</li>
+<li><a href="http://www.icu-project.org/trac/ticket/6010">#6010</a> Country Code "RS" Missing In Action</li>
+</ul>
+<p><b>Timezone Data</b></p>
+<p>ICU4J 3.8.1 updates the time zone data to version 2007j from the Olson timezone database.</p>
+
 <h3 class="doc"><a name="license"></a>License Information</h3>
 <p>
 The ICU projects (ICU4C and ICU4J) use the X license. The X
@@ -802,7 +836,7 @@ listed.
 fully supported.
 <br>
 &#x2021; Sizes are of the compressed jar file containing only this module.
-These sizes are approximate for release 3.6.
+These sizes are approximate for release 3.8.
 </font></b>
 <p><b>Modules:</b></p>
 
@@ -1764,7 +1798,7 @@ following command. <br>
     <I>$ant_home</I>/bin/ant resources</li>
 </ol>
 <h5> Generating Data from CLDR </h5>
-<I> Note: This procedure assumes that all 3 sources are in sibling directories</I>
+<blockquote>Note: This procedure assumes that all 3 sources are in sibling directories.</blockquote>
 <ol>
     <li>Checkout CLDR.  $cldr_root in the following steps is the root directory where
     the CLDR source files checked out.</li>
@@ -1784,6 +1818,8 @@ following command. <br>
     <li>cd to <I>$icu4j_root</I> dir</li>
     <li>Build and test icu4j</li>
 </ol>
+<blockquote>Note: The description above explains the procedure for ICU4J release 3.8.
+For ICU4J 3.8.1, change the CLDR tag to 'release-1-5-1' and the ICU4J/ICU4C tag to 'release-3-8-1'</blockquote>
 
 <h3 class="doc"><a name="WhereToFindMore"></a>Where to Find More
 Information</h3>
