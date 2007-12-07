@@ -2106,7 +2106,7 @@ unrolled:
             cnv->toUBytes[0]=*(source-1);
             cnv->toULength=_extToU(cnv, cnv->sharedData,
                                     1, &source, sourceLimit,
-                                    &target, target+targetCapacity,
+                                    &target, pArgs->targetLimit,
                                     &offsets, sourceIndex,
                                     pArgs->flush,
                                     pErrorCode);
@@ -3649,7 +3649,7 @@ getTrail:
         lastSource=source;
         c=_extFromU(cnv, cnv->sharedData,
                     c, &source, sourceLimit,
-                    &target, target+targetCapacity,
+                    &target, (const uint8_t *)(pArgs->targetLimit),
                     &offsets, sourceIndex,
                     pArgs->flush,
                     pErrorCode);
