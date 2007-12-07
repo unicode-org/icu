@@ -48,6 +48,14 @@ conversion:table(nofallback) {
     toUnicode {
       Headers { "charset", "bytes", "unicode", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidChars" }
       Cases {
+        // Test bug 6071 (2:1 Unicode:charset SBCS mapping).
+        {
+          "*test1bmp",
+          :bin{ 050008 },
+          "e@uv",
+          :intvector{ 0,1,2,2 },
+          :int{1}, :int{1}, "", "?", :bin{""}
+        }
         // test that HZ limits its byte values to lead bytes 21..7d and trail bytes 21..7e
         {
           "HZ",
@@ -512,6 +520,14 @@ conversion:table(nofallback) {
     fromUnicode {
       Headers { "charset", "unicode", "bytes", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidUChars" }
       Cases {
+        // Test bug 6071 (1:2 Unicode:charset SBCS mapping).
+        {
+          "*test1bmp",
+          "e@t",
+          :bin{       05000709 },
+          :intvector{ 0,1,2,2 },
+          :int{1}, :int{0}, "", "?", ""
+        }
         // improve coverage of ISO-2022-JP converter with hardcoded JIS X 0201 and
         // using the Shift-JIS table for JIS X 0208 (ticket #5797)
         {
