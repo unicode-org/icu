@@ -796,6 +796,10 @@ int main(int argc, char* argv[])
     }
     u_cleanup();
     errorCode = U_ZERO_ERROR;
+    if (!initArgs(argc, argv)) {
+        /* Error already displayed. */
+        return -1;
+    }
 
     /* Initialize ICU */
     ctest_setICU_DATA();    /* u_setDataDirectory() must happen Before u_init() */
@@ -811,7 +815,7 @@ int main(int argc, char* argv[])
     fprintf(stdout, "Default charset for this run is %s\n", ucnv_getDefaultName());
 
     addAllTests(&root);
-    nerrors = processArgs(root, argc, argv);
+    nerrors = runTestRequest(root, argc, argv);
 
 #if 1
     {

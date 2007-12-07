@@ -78,6 +78,12 @@ U_CFUNC void ctest_setTimeZone(const char *optionalTimeZone, UErrorCode *status)
 U_CFUNC void ctest_resetTimeZone(void);
 
 /**
+ * Call this once get ICU back to its original state with test arguments.
+ * This function calls u_cleanup.
+ */
+U_CFUNC UBool ctest_resetICU(void);
+
+/**
  * Assert that the given UErrorCode succeeds, and return TRUE if it does.
  */
 U_CFUNC UBool assertSuccess(const char* msg, UErrorCode* ec);

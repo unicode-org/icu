@@ -1,7 +1,7 @@
 /*
 ********************************************************************************
 *
-*   Copyright (C) 1996-2004, International Business Machines
+*   Copyright (C) 1996-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ********************************************************************************
@@ -69,6 +69,21 @@ extern T_CTEST_EXPORT_API int WARN_ON_MISSING_DATA;
  * @internal
  */
 extern T_CTEST_EXPORT_API UTraceLevel ICU_TRACE;
+
+/**
+ * Maximum amount of memory uprv_malloc should allocate before returning NULL.
+ *
+ * @internal
+ */
+extern T_CTEST_EXPORT_API size_t MAX_MEMORY_ALLOCATION;
+
+/**
+ * If memory tracing was enabled, contains the number of unfreed allocations.
+ *
+ * @internal
+ */
+extern T_CTEST_EXPORT_API int32_t ALLOCATION_COUNT;
+
 
 /**
  * Show the names of all nodes.
@@ -173,6 +188,14 @@ T_CTEST_API void T_CTEST_EXPORT2
 log_data_err(const char *pattern, ...);
 
 /**
+ * Initialize the variables above. This allows the test to set up accordingly
+ * before running the tests.
+ * This must be called before runTests.
+ */
+T_CTEST_API int T_CTEST_EXPORT2 
+initArgs( int argc, const char* const argv[]);
+
+/**
  * Processes the command line arguments.
  * This is a sample implementation
  * <PRE>Usage: %s [ -l ] [ -v ] [ -? ] [ /path/to/test ]
@@ -186,7 +209,7 @@ log_data_err(const char *pattern, ...);
  * @internal Internal APIs for testing purpose only
  */
 T_CTEST_API int T_CTEST_EXPORT2 
-processArgs(const TestNode* root,
+runTestRequest(const TestNode* root,
             int argc,
             const char* const argv[]);
 

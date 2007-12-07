@@ -208,20 +208,16 @@ void addAllCollTest(TestNode** root)
 UBool hasCollationElements(const char *locName) {
 
   UErrorCode status = U_ZERO_ERROR;
-  UResourceBundle *ColEl = NULL;
 
   UResourceBundle *loc = ures_open(U_ICUDATA_COLL, locName, &status);;
 
   if(U_SUCCESS(status)) {
     status = U_ZERO_ERROR;
-    ColEl = ures_getByKey(loc, "collations", ColEl, &status);
+    loc = ures_getByKey(loc, "collations", loc, &status);
+    ures_close(loc);
     if(status == U_ZERO_ERROR) { /* do the test - there are real elements */
-      ures_close(ColEl);
-      ures_close(loc);
       return TRUE;
     }
-    ures_close(ColEl);
-    ures_close(loc);
   }
   return FALSE;
 }
@@ -699,6 +695,7 @@ static void TestTertiary()
     myCollation=ucol_openRules(rules, len, UCOL_OFF, UCOL_DEFAULT_STRENGTH, NULL, &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator :%s\n", myErrorName(status));
+        return;
     }
    
     ucol_setStrength(myCollation, UCOL_TERTIARY);
@@ -725,6 +722,7 @@ static void TestPrimary( )
     myCollation=ucol_openRules(rules, len, UCOL_OFF, UCOL_DEFAULT_STRENGTH,NULL, &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator :%s\n", myErrorName(status));
+        return;
     }
     ucol_setStrength(myCollation, UCOL_PRIMARY);
     
@@ -753,6 +751,7 @@ static void TestSecondary()
     myCollation=ucol_openRules(rules, len, UCOL_OFF, UCOL_DEFAULT_STRENGTH,NULL, &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator :%s\n", myErrorName(status));
+        return;
     }
     ucol_setStrength(myCollation, UCOL_SECONDARY);
     for (i = 26; i < 34 ; i++)
@@ -779,6 +778,7 @@ static void TestIdentical()
     myCollation=ucol_openRules(rules, len, UCOL_OFF, UCOL_IDENTICAL, NULL,&status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator :%s\n", myErrorName(status));
+        return;
     }
     for(i= 34; i<37; i++)
     {
@@ -804,6 +804,7 @@ static void TestExtra()
     myCollation=ucol_openRules(rules, len, UCOL_OFF, UCOL_DEFAULT_STRENGTH,NULL, &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator :%s\n", myErrorName(status));
+        return;
     }
     ucol_setStrength(myCollation, UCOL_TERTIARY);
     for (i = 0; i < COUNT_TEST_CASES-1 ; i++)
@@ -990,9 +991,15 @@ static void TestVariableTop(void)
     u_uastrcpy(rules, str);
 
     enCollation = ucol_open("en_US", &status);
+    if (U_FAILURE(status)) {
+        log_err("ERROR: in creation of collator :%s\n", 
+                myErrorName(status));
+        return;
+    }
     myCollation = ucol_openRules(rules, len, UCOL_OFF, 
                                  UCOL_PRIMARY,NULL, &status);
     if (U_FAILURE(status)) {
+        ucol_close(enCollation);
         log_err("ERROR: in creation of rule based collator :%s\n", 
                 myErrorName(status));
         return;
@@ -1067,9 +1074,15 @@ static void TestSurrogates(void)
     rlen = u_unescape(str, rules, len);
     
     enCollation = ucol_open("en_US", &status);
+    if (U_FAILURE(status)) {
+        log_err("ERROR: in creation of collator :%s\n", 
+                myErrorName(status));
+        return;
+    }
     myCollation = ucol_openRules(rules, rlen, UCOL_OFF, 
                                  UCOL_TERTIARY,NULL, &status);
     if (U_FAILURE(status)) {
+        ucol_close(enCollation);
         log_err("ERROR: in creation of rule based collator :%s\n", 
                 myErrorName(status));
         return;
@@ -1193,7 +1206,7 @@ TestJitterbug1098(){
         u_uastrcpy(rule, rules[i]);
         c1 = ucol_openRules(rule, u_strlen(rule), UCOL_OFF, UCOL_DEFAULT_STRENGTH, &parseError, &status);
         if(U_FAILURE(status)){
-            log_err("Could not parse the rules syntax. Error: %s ", u_errorName(status));
+            log_err("Could not parse the rules syntax. Error: %s\n", u_errorName(status));
 
             if (status == U_PARSE_ERROR) {
                 u_UCharsToChars(parseError.preContext,preContext,20);
@@ -1210,21 +1223,6 @@ TestJitterbug1098(){
     }
 }
 
-/*  These tests do cleanup and reinitialize ICU in the course of their operation.
- *    The ICU data directory must be preserved across these operations.
- *    Here is a helper function to assist with that.
- */
-static char *safeGetICUDataDirectory() {
-    const char *dataDir = u_getDataDirectory();  /* Returned string vanashes with u_cleanup */
-    char *retStr = NULL;
-    if (dataDir != NULL) {
-        retStr = (char *)malloc(strlen(dataDir)+1);
-        strcpy(retStr, dataDir);
-    }
-    return retStr;
-}
-
-
 static void
 TestFCDCrash(void) {
     static const char *test[] = {
@@ -1232,7 +1230,6 @@ TestFCDCrash(void) {
     "Grossist"
     };
 
-    char *icuDataDir = safeGetICUDataDirectory();
     UErrorCode status = U_ZERO_ERROR;
     UCollator *coll = ucol_open("es", &status);
     if(U_FAILURE(status)) {
@@ -1241,8 +1238,7 @@ TestFCDCrash(void) {
     }
     ucol_close(coll);
     coll = NULL;
-    u_cleanup();
-    u_setDataDirectory(icuDataDir);
+    ctest_resetICU();
     coll = ucol_open("de_DE", &status);
     if(U_FAILURE(status)) {
         log_err("Couldn't open collator\n");
@@ -1251,8 +1247,6 @@ TestFCDCrash(void) {
     ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
     genericOrderingTest(coll, test, 2);
     ucol_close(coll);
-    free(icuDataDir);
-
 }
 
 /*static UBool

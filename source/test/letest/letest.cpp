@@ -46,7 +46,7 @@ U_CDECL_BEGIN
 
 static void U_CALLCONV ScriptTest(void)
 {
-    if (scriptCodeCount != USCRIPT_CODE_LIMIT) {
+    if ((int)scriptCodeCount != (int)USCRIPT_CODE_LIMIT) {
         log_err("ScriptCodes::scriptCodeCount = %n, but UScriptCode::USCRIPT_CODE_LIMIT = %n\n", scriptCodeCount, USCRIPT_CODE_LIMIT);
     }
 }
@@ -1054,6 +1054,11 @@ int main(int argc, char* argv[])
 
     startTime = uprv_getUTCtime();
 
+    if (!initArgs(argc, argv)) {
+        /* Error already displayed. */
+        return -1;
+    }
+
     /* Check whether ICU will initialize without forcing the build data directory into
     *  the ICU_DATA path.  Success here means either the data dll contains data, or that
     *  this test program was run with ICU_DATA set externally.  Failure of this check
@@ -1072,7 +1077,11 @@ int main(int argc, char* argv[])
     u_cleanup();
     errorCode = U_ZERO_ERROR;
 
-    /* Initialize ICU */
+    if (!initArgs(argc, argv)) {
+        /* Error already displayed. */
+        return -1;
+    }
+/* Initialize ICU */
     ctest_setICU_DATA();    /* u_setDataDirectory() must happen Before u_init() */
     u_init(&errorCode);
 
@@ -1085,7 +1094,7 @@ int main(int argc, char* argv[])
     }
 
     addAllTests(&root);
-    nerrors = processArgs(root, argc, argv);
+    nerrors = runTestRequest(root, argc, argv);
 
     cleanUpTestTree(root);
     u_cleanup();
