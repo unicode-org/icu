@@ -1093,7 +1093,7 @@ void Calendar::computeFields(UErrorCode &ec)
     double localMillis = internalGetTime();
     int32_t rawOffset, dstOffset;
     getTimeZone().getOffset(localMillis, FALSE, rawOffset, dstOffset, ec);
-    localMillis += rawOffset; 
+    localMillis += (rawOffset + dstOffset); 
 
     // Mark fields as set.  Do this before calling handleComputeFields().
     uint32_t mask =   //fInternalSetMask;
@@ -1133,32 +1133,7 @@ void Calendar::computeFields(UErrorCode &ec)
     //__FILE__, __LINE__, fFields[UCAL_JULIAN_DAY], localMillis);
 #endif  
 
-    // In some cases we will have to call this method again below to
-    // adjust for DST pushing us into the next Julian day.
     computeGregorianAndDOWFields(fFields[UCAL_JULIAN_DAY], ec);
-
-    int32_t millisInDay =  (int32_t) (localMillis - (days * kOneDay));
-    if (millisInDay < 0) millisInDay += (int32_t)kOneDay;
-
-    // Adjust our millisInDay for DST.  dstOffset will be zero if DST
-    // is not in effect at this time of year, or if our zone does not
-    // use DST.
-    millisInDay += dstOffset;
-
-    // If DST has pushed us into the next day, we must call
-    // computeGregorianAndDOWFields() again.  This happens in DST between
-    // 12:00 am and 1:00 am every day.  The first call to
-    // computeGregorianAndDOWFields() will give the wrong day, since the
-    // Standard time is in the previous day.
-    if (millisInDay >= (int32_t)kOneDay) {
-        millisInDay -= (int32_t)kOneDay; // ASSUME dstOffset < 24:00
-
-        // We don't worry about overflow of JULIAN_DAY because the
-        // allowable range of JULIAN_DAY has slop at the ends (that is,
-        // the max is less that 0x7FFFFFFF and the min is greater than
-        // -0x80000000).
-        computeGregorianAndDOWFields(++fFields[UCAL_JULIAN_DAY], ec);
-    }
 
     // Call framework method to have subclass compute its fields.
     // These must include, at a minimum, MONTH, DAY_OF_MONTH,
@@ -1173,6 +1148,7 @@ void Calendar::computeFields(UErrorCode &ec)
     // Compute time-related fields.  These are indepent of the date and
     // of the subclass algorithm.  They depend only on the local zone
     // wall milliseconds in day.
+    int32_t millisInDay =  (int32_t) (localMillis - (days * kOneDay));
     fFields[UCAL_MILLISECONDS_IN_DAY] = millisInDay;
     fFields[UCAL_MILLISECOND] = millisInDay % 1000;
     millisInDay /= 1000;
@@ -2346,11 +2322,11 @@ void Calendar::computeTime(UErrorCode& status) {
         // 1. The transition into DST.  Here, a designated time of 2:00 am - 2:59 am
         //    can be in standard or in DST depending.  However, 2:00 am is an invalid
         //    representation (the representation jumps from 1:59:59 am Std to 3:00:00 am DST).
-        //    We assume standard time.
+        //    We assume standard time, that is, 2:30 am is interpreted as 3:30 am DST.
         // 2. The transition out of DST.  Here, a designated time of 1:00 am - 1:59 am
         //    can be in standard or DST.  Both are valid representations (the rep
         //    jumps from 1:59:59 DST to 1:00:00 Std).
-        //    Again, we assume standard time.
+        //    Again, we assume standard time, that is, 1:30 am is interpreted as 1:30 am Std.
         // We use the TimeZone object, unless the user has explicitly set the ZONE_OFFSET
         // or DST_OFFSET fields; then we use those fields.
         if (fStamp[UCAL_ZONE_OFFSET] >= ((int32_t)kMinimumUserStamp) ||

@@ -18,6 +18,7 @@
 #include "cmemory.h"
 #include "putilimp.h"
 #include "cstring.h"
+#include "olsontz.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
@@ -755,53 +756,92 @@ void TimeZoneTest::TestShortZoneIDs()
     }
 }
 
+
 /**
  * Utility function for TestCustomParse
  */
-UnicodeString& TimeZoneTest::formatMinutes(int32_t min, UnicodeString& rv, UBool insertSep/*=TRUE*/)
-{
-        rv.remove();
+UnicodeString& TimeZoneTest::formatOffset(int32_t offset, UnicodeString &rv) {
+    rv.remove();
+    UChar sign = 0x002B;
+    if (offset < 0) {
+        sign = 0x002D;
+        offset = -offset;
+    }
 
-        UChar sign = 0x002B;
-        if (min < 0) {
-            sign = 0x002D;
-            min = -min;
+    int32_t s = offset % 60;
+    offset /= 60;
+    int32_t m = offset % 60;
+    int32_t h = offset / 60;
+
+    rv += (UChar)(sign);
+    if (h >= 10) {
+        rv += (UChar)(0x0030 + (h/10));
+    } else {
+        rv += (UChar)0x0030;
+    }
+    rv += (UChar)(0x0030 + (h%10));
+
+    rv += (UChar)0x003A; /* ':' */
+    if (m >= 10) {
+        rv += (UChar)(0x0030 + (m/10));
+    } else {
+        rv += (UChar)0x0030;
+    }
+    rv += (UChar)(0x0030 + (m%10));
+
+    if (s) {
+        rv += (UChar)0x003A; /* ':' */
+        if (s >= 10) {
+            rv += (UChar)(0x0030 + (s/10));
+        } else {
+            rv += (UChar)0x0030;
         }
-        int h = min/60;
-        min = min%60;
-
-        rv += (UChar)(sign);
-        if(h >= 10)
-            rv += (UChar)(0x0030 + (h/10));
-        else
-            rv += "0";
-
-        rv += (UChar)(0x0030 + (h%10));
-
-        if (insertSep)
-            rv += ":";
-
-        if(min >= 10)
-            rv += (UChar)(0x0030 + (min/10));
-        else
-            rv += "0";
-
-        rv += (UChar)(0x0030 + (min%10));
-
-        return rv;
+        rv += (UChar)(0x0030 + (s%10));
+    }
+    return rv;
 }
 
 /**
- * Utility function for TestCustomParse, generating RFC822 style
- * time zone string for the give offset in minutes
+ * Utility function for TestCustomParse, generating time zone ID
+ * string for the give offset.
  */
-UnicodeString& TimeZoneTest::formatRFC822TZ(int32_t min, UnicodeString& rv)
-{
-    UnicodeString offsetStr;
-    formatMinutes(min, offsetStr, FALSE);
+UnicodeString& TimeZoneTest::formatTZID(int32_t offset, UnicodeString &rv) {
     rv.remove();
+    UChar sign = 0x002B;
+    if (offset < 0) {
+        sign = 0x002D;
+        offset = -offset;
+    }
+
+    int32_t s = offset % 60;
+    offset /= 60;
+    int32_t m = offset % 60;
+    int32_t h = offset / 60;
+
     rv += "GMT";
-    rv += offsetStr;
+    rv += (UChar)(sign);
+    if (h >= 10) {
+        rv += (UChar)(0x0030 + (h/10));
+    } else {
+        rv += (UChar)0x0030;
+    }
+    rv += (UChar)(0x0030 + (h%10));
+
+    if (m >= 10) {
+        rv += (UChar)(0x0030 + (m/10));
+    } else {
+        rv += (UChar)0x0030;
+    }
+    rv += (UChar)(0x0030 + (m%10));
+
+    if (s) {
+        if (s >= 10) {
+            rv += (UChar)(0x0030 + (s/10));
+        } else {
+            rv += (UChar)0x0030;
+        }
+        rv += (UChar)(0x0030 + (s%10));
+    }
     return rv;
 }
 
@@ -825,92 +865,63 @@ void TimeZoneTest::TestCustomParse()
     }
     kData[] =
     {
-        // ID        Expected offset in minutes
-        //{"GMT",       kUnparseable},   //Isn't custom. Can't test it here. [returns normal GMT]
+        // ID        Expected offset in seconds
+        {"GMT",       kUnparseable},   //Isn't custom. [returns normal GMT]
         {"GMT-YOUR.AD.HERE", kUnparseable},
-        // {"GMT0",      kUnparseable}, // ICU 2.8: An Olson zone ID
-        // {"GMT+0",     (0)}, // ICU 2.8: An Olson zone ID
-        {"GMT+1",     (60)},
-        {"GMT-0030",  (-30)},
+        {"GMT0",      kUnparseable},
+        {"GMT+0",     (0)},
+        {"GMT+1",     (1*60*60)},
+        {"GMT-0030",  (-30*60)},
         {"GMT+15:99", kUnparseable},
         {"GMT+",      kUnparseable},
         {"GMT-",      kUnparseable},
         {"GMT+0:",    kUnparseable},
         {"GMT-:",     kUnparseable},
-        {"GMT-YOUR.AD.HERE",     kUnparseable},
-        {"GMT+0010",  (10)}, // Interpret this as 00:10
-        {"GMT-10",    (-10*60)},
-        {"GMT+30",    (30)},
-        {"GMT-3:30",  (-(3*60+30))},
-        {"GMT-230",   (-(2*60+30))},
+        {"GMT-YOUR.AD.HERE",    kUnparseable},
+        {"GMT+0010",  (10*60)}, // Interpret this as 00:10
+        {"GMT-10",    (-10*60*60)},
+        {"GMT+30",    kUnparseable},
+        {"GMT-3:30",  (-(3*60+30)*60)},
+        {"GMT-230",   (-(2*60+30)*60)},
+        {"GMT+05:13:05",    ((5*60+13)*60+5)},
+        {"GMT-71023",       (-((7*60+10)*60+23))},
+        {"GMT+01:23:45:67", kUnparseable},
+        {"GMT+01:234",      kUnparseable},
+        {"GMT-2:31:123",    kUnparseable},
+        {"GMT+3:75",        kUnparseable},
+        {"GMT-01010101",    kUnparseable},
         {0,           0}
     };
 
-    for (i=0; kData[i].customId != 0; i++)
-    {
+    for (i=0; kData[i].customId != 0; i++) {
         UnicodeString id(kData[i].customId);
         int32_t exp = kData[i].expectedOffset;
-/*
-        { // for no data test Jitterbug 4354
-            UErrorCode success = U_ZERO_ERROR;
-            NumberFormat* numberFormat = NumberFormat::createInstance(success);
-            if (U_FAILURE(success)) {
-                dataerrln(" NumberFormat::createInstance() error");
-                return;
-            }
-            delete numberFormat;
-        }
-        */
-
         TimeZone *zone = TimeZone::createTimeZone(id);
         UnicodeString   itsID, temp;
 
-        logln();
-        logln("testing # " + formatMinutes(i, temp) + id);
-
-        /*
-        if(zone == NULL)
-        {
-            errln("FAIL: Could not createTimeZone(" + id + "). Returned NULL.");
-            continue;
-        }
-        */
-
-
-        if (! zone->getID(itsID).compare("GMT"))
-        //if(zone == NULL)
-        {
-            logln(id + " -> generic GMT");
-            // When TimeZone.getTimeZone() can't parse the id, it
-            // returns GMT -- a dubious practice, but required for
-            // backward compatibility.
-            if (exp != kUnparseable) {
-                errln("FAIL: Expected offset of " + formatMinutes(exp,temp) +
-                                    " for " + id + ", got parse failure");
-            }
-        }
-        else
-        {
+        if (zone->getDynamicClassID() == OlsonTimeZone::getStaticClassID()) {
+            logln(id + " -> Olson time zone");
+        } else {
             zone->getID(itsID);
-            int32_t ioffset = zone->getRawOffset()/60000;
+            int32_t ioffset = zone->getRawOffset()/1000;
             UnicodeString offset, expectedID;
-            formatMinutes(ioffset, offset);
-            formatRFC822TZ(ioffset, expectedID);
-            logln(id + " -> " + itsID + " GMT" + offset);
-            if (exp == kUnparseable)
-            {
-                errln("FAIL: Expected parse failure for " + id +
-                                    ", got offset of " + offset +
-                                    ", id " + itsID);
+            formatOffset(ioffset, offset);
+            formatTZID(ioffset, expectedID);
+            logln(id + " -> " + itsID + " " + offset);
+            if (exp == kUnparseable && itsID != "GMT") {
+                errln("Expected parse failure for " + id +
+                      ", got offset of " + offset +
+                      ", id " + itsID);
             }
-            else if (ioffset != exp ||
-                     (itsID.compare(expectedID) != 0))
-            {
-                errln("Expected offset of " + formatMinutes(exp,temp) +
-                                    ", id " + expectedID +
-                                    ", for " + id +
-                                    ", got offset of " + offset +
-                                    ", id " + itsID);
+            // JDK 1.3 creates custom zones with the ID "Custom"
+            // JDK 1.4 creates custom zones with IDs of the form "GMT+02:00"
+            // ICU creates custom zones with IDs of the form "GMT+0200"
+            else if (exp != kUnparseable && (ioffset != exp || itsID != expectedID)) {
+                errln("Expected offset of " + formatOffset(exp, temp) +
+                      ", id " + expectedID +
+                      ", for " + id +
+                      ", got offset of " + offset +
+                      ", id " + itsID);
             }
         }
         delete zone;

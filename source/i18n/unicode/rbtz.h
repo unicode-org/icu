@@ -23,6 +23,7 @@ U_NAMESPACE_BEGIN
 
 // forward declaration
 class UVector;
+struct Transition;
 
 class U_I18N_API RuleBasedTimeZone : public BasicTimeZone {
 public:
@@ -289,13 +290,27 @@ public:
     virtual void getTimeZoneRules(const InitialTimeZoneRule*& initial,
         const TimeZoneRule* trsrules[], int32_t& trscount, UErrorCode& status) /*const*/;
 
+    /**
+     * Get time zone offsets from local wall time.
+     * @internal
+     */
+    virtual void getOffsetFromLocal(UDate date, int32_t nonExistingTimeOpt, int32_t duplicatedTimeOpt,
+        int32_t& rawOffset, int32_t& dstOffset, UErrorCode& status) /*const*/;
+
 private:
     void deleteRules(void);
     void deleteTransitions(void);
     UVector* copyRules(UVector* source);
-    TimeZoneRule* findRuleInFinal(UDate date, UBool local) const;
+    TimeZoneRule* findRuleInFinal(UDate date, UBool local,
+        int32_t NonExistingTimeOpt, int32_t DuplicatedTimeOpt) const;
     UBool findNext(UDate base, UBool inclusive, UDate& time, TimeZoneRule*& from, TimeZoneRule*& to) const;
     UBool findPrev(UDate base, UBool inclusive, UDate& time, TimeZoneRule*& from, TimeZoneRule*& to) const;
+    int32_t getLocalDelta(int32_t rawBefore, int32_t dstBefore, int32_t rawAfter, int32_t dstAfter,
+        int32_t NonExistingTimeOpt, int32_t DuplicatedTimeOpt) const;
+    UDate getTransitionTime(Transition* transition, UBool local,
+        int32_t NonExistingTimeOpt, int32_t DuplicatedTimeOpt) const;
+    void getOffsetInternal(UDate date, UBool local, int32_t NonExistingTimeOpt, int32_t DuplicatedTimeOpt,
+        int32_t& rawOffset, int32_t& dstOffset, UErrorCode& ec) const;
 
     InitialTimeZoneRule *fInitialRule;
     UVector             *fHistoricRules;

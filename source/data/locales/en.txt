@@ -75,6 +75,7 @@ en{
         BH{"Bahrain"}
         BI{"Burundi"}
         BJ{"Benin"}
+        BL{"Saint Barthélemy"}
         BM{"Bermuda"}
         BN{"Brunei"}
         BO{"Bolivia"}
@@ -188,6 +189,7 @@ en{
         MC{"Monaco"}
         MD{"Moldova"}
         ME{"Montenegro"}
+        MF{"Saint Martin"}
         MG{"Madagascar"}
         MH{"Marshall Islands"}
         MK{"Macedonia"}
@@ -1882,6 +1884,7 @@ en{
         ypk{"Yupik Language"}
         za{"Zhuang"}
         zap{"Zapotec"}
+        zbl{"Blissymbols"}
         zen{"Zenaga"}
         zh{"Chinese"}
         zh_Hans{"Simplified Chinese"}
@@ -1918,6 +1921,7 @@ en{
     Scripts{
         Arab{"Arabic"}
         Armn{"Armenian"}
+        Avst{"Avestan"}
         Bali{"Balinese"}
         Batk{"Batak"}
         Beng{"Bengali"}
@@ -1981,6 +1985,7 @@ en{
         Lyci{"Lycian"}
         Lydi{"Lydian"}
         Mand{"Mandaean"}
+        Mani{"Manichaean"}
         Maya{"Mayan hieroglyphs"}
         Mero{"Meroitic"}
         Mlym{"Malayalam"}
@@ -1996,12 +2001,14 @@ en{
         Osma{"Osmanya"}
         Perm{"Old Permic"}
         Phag{"Phags-pa"}
+        Phlv{"Book Pahlavi"}
         Phnx{"Phoenician"}
         Plrd{"Pollard Phonetic"}
         Qaai{"Inherited"}
         Rjng{"Rejang"}
         Roro{"Rongorongo"}
         Runr{"Runic"}
+        Samr{"Samaritan"}
         Sara{"Sarati"}
         Saur{"Saurashtra"}
         Sgnw{"SignWriting"}
@@ -2057,6 +2064,7 @@ en{
     Variants{
         1606NICT{"Late Middle French to 1606"}
         1901{"Traditional German orthography"}
+        1994{"Standardized Resian orthography"}
         1996{"German orthography of 1996"}
         AREVELA{"Eastern Armenian"}
         BAKU1926{"Unified Turkic Latin Alphabet"}
@@ -2067,6 +2075,7 @@ en{
         GAULISH{"Gaulish"}
         GUOYU{"Mandarin or Standard Chinese"}
         HAKKA{"Hakka"}
+        LIPAW{"The Lipovaz dialect of Resian"}
         LOJBAN{"Lojban"}
         MONOTON{"Monotonic"}
         NEDIS{"Natisone dialect"}
@@ -2077,12 +2086,13 @@ en{
         REVISED{"Revised Orthography"}
         ROZAJ{"Resian"}
         SAAHO{"Saho"}
+        SCOTLAND{"Scottish Standard English"}
         SCOUSE{"Scouse"}
         SOLBA{"Stolvizza/Solbica dialect"}
         TARASK{"Taraskievica orthography"}
         XIANG{"Xiang or Hunanese"}
     }
-    Version{"1.158"}
+    Version{"1.161"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2253,8 +2263,8 @@ en{
         "meta:Acre"{
             ld{"Acre Summer Time"}
             ls{"Acre Time"}
-            sd{"ACST"}
-            ss{"ACT"}
+            sd{"ACST (Acre)"}
+            ss{"ACT (Acre)"}
         }
         "meta:Afghanistan"{
             ls{"Afghanistan Time"}

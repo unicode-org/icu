@@ -1748,7 +1748,7 @@ hu{
         NEDIS{"Natisone dialektus"}
         REVISED{"Átdolgozott helyesírás"}
     }
-    Version{"1.88"}
+    Version{"1.89"}
     calendar{
         buddhist{
             eras{

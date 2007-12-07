@@ -1964,7 +1964,7 @@ th{
         ROZAJ{"เรเซียน"}
         SAAHO{"ซาโฮ"}
     }
-    Version{"1.94"}
+    Version{"1.95"}
     calendar{
         buddhist{
             DateTimePatterns{

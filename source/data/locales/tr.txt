@@ -2041,7 +2041,7 @@ tr{
         SAAHO{"Saho"}
         SCOUSE{"Scouse"}
     }
-    Version{"1.91"}
+    Version{"1.92"}
     calendar{
         coptic{
             monthNames{
@@ -2435,8 +2435,8 @@ tr{
         "meta:Acre"{
             ld{"Acre Yaz Saati"}
             ls{"Acre Saati"}
-            sd{"ACST"}
-            ss{"ACT"}
+            sd{"ACST (Acre)"}
+            ss{"ACT (Acre)"}
         }
         "meta:Afghanistan"{
             ls{"Afganistan Saati"}
@@ -2842,21 +2842,9 @@ tr{
             ls{"Guyana Saati"}
             ss{"GYT"}
         }
-        "meta:Hawaii"{
-            ld{"Hawaii Yaz Saati"}
-            lg{"Hawaii Saati"}
-            ls{"Hawaii Standart Saati"}
-            sd{"HDT"}
-            sg{"HT"}
-            ss{"HST"}
-        }
         "meta:Hawaii_Aleutian"{
-            ld{"Hawaii-Aleutian Yaz Saati"}
-            lg{"Hawaii-Aleutian Saati"}
             ls{"Hawaii-Aleutian Standart Saati"}
-            sd{"HADT"}
-            sg{"HAT"}
-            ss{"HAST"}
+            ss{"HST"}
         }
         "meta:Hong_Kong"{
             ld{"Hong Kong Yaz Saati"}
@@ -3207,7 +3195,7 @@ tr{
         }
         "meta:South_Georgia"{
             ls{"Güney Georgia Saati"}
-            ss{"GST (S. Georgia)"}
+            ss{"GST (Güney Georgia)"}
         }
         "meta:Suriname"{
             ls{"Surinam Saati"}

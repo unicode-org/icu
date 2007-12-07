@@ -512,6 +512,15 @@ error:
     transitionRules = NULL;
 }
 
+void
+BasicTimeZone::getOffsetFromLocal(UDate date, int32_t nonExistingTimeOpt, int32_t duplicatedTimeOpt,
+                            int32_t& rawOffset, int32_t& dstOffset, UErrorCode& status) /*const*/ {
+    if (U_FAILURE(status)) {
+        return;
+    }
+    status = U_UNSUPPORTED_ERROR;
+}
+
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

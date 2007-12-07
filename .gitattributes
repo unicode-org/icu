@@ -48,6 +48,7 @@ README text !eol
 *.spp -text
 *.tri2 -text
 
+source/data/misc/metazoneInfo.txt -text
 source/data/xml/collation/as.xml -text
 source/data/xml/collation/bn.xml -text
 source/data/xml/collation/cy.xml -text

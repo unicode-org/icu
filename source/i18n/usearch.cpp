@@ -443,7 +443,7 @@ void checkBreakBoundary(const UStringSearch *strsrch, int32_t *start,
                                int32_t *end)
 {
 #if !UCONFIG_NO_BREAK_ITERATION
-    UBreakIterator *breakiterator = strsrch->search->_breakIter_;
+    UBreakIterator *breakiterator = strsrch->search->internalBreakIter;
     if (breakiterator) {
 	    int32_t matchend = *end;
 	    int32_t matchstart = *start;
@@ -2602,7 +2602,7 @@ U_CAPI UStringSearch * U_EXPORT2 usearch_openFromCollator(
         
         result->search->breakIter  = breakiter;
 #if !UCONFIG_NO_BREAK_ITERATION
-        result->search->_breakIter_ = ubrk_open(UBRK_CHARACTER, ucol_getLocale(result->collator, ULOC_VALID_LOCALE, status), text, textlength, status);
+        result->search->internalBreakIter = ubrk_open(UBRK_CHARACTER, ucol_getLocale(result->collator, ULOC_VALID_LOCALE, status), text, textlength, status);
         if (breakiter) {
         	ubrk_setText(breakiter, text, textlength, status);
         }
@@ -2648,6 +2648,9 @@ U_CAPI void U_EXPORT2 usearch_close(UStringSearch *strsrch)
         ucol_closeElements(strsrch->utilIter);
         if (strsrch->ownCollator && strsrch->collator) {
             ucol_close((UCollator *)strsrch->collator);
+        }
+        if (strsrch->search->internalBreakIter) {
+        	ubrk_close(strsrch->search->internalBreakIter);
         }
         uprv_free(strsrch->search);
         uprv_free(strsrch);
@@ -2831,7 +2834,7 @@ U_CAPI void U_EXPORT2 usearch_setText(      UStringSearch *strsrch,
                 ubrk_setText(strsrch->search->breakIter, text, 
                              textlength, status);
             }
-            ubrk_setText(strsrch->search->_breakIter_, text, textlength, status);
+            ubrk_setText(strsrch->search->internalBreakIter, text, textlength, status);
 #endif
         }
     }
@@ -2865,8 +2868,8 @@ U_CAPI void U_EXPORT2 usearch_setCollator(      UStringSearch *strsrch,
             strsrch->strength    = ucol_getStrength(collator);
             strsrch->ceMask      = getMask(strsrch->strength);
 #if !UCONFIG_NO_BREAK_ITERATION
-        	ubrk_close(strsrch->search->_breakIter_);
-        	strsrch->search->_breakIter_ = ubrk_open(UBRK_CHARACTER, ucol_getLocale(collator, ULOC_VALID_LOCALE, status), 
+        	ubrk_close(strsrch->search->internalBreakIter);
+        	strsrch->search->internalBreakIter = ubrk_open(UBRK_CHARACTER, ucol_getLocale(collator, ULOC_VALID_LOCALE, status), 
         											 strsrch->search->text, strsrch->search->textLength, status);
 #endif
             // if status is a failure, ucol_getAttribute returns UCOL_DEFAULT

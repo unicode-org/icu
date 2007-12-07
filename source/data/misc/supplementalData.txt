@@ -516,6 +516,26 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        BL{
+            {
+                id{"EUR"}
+                from:intvector{ /** 1999-01-01  */
+                    213,
+                    320825952,
+                }
+            }
+            {
+                id{"FRF"}
+                from:intvector{ /** 1960-01-01  */
+                    -74,
+                    -2086527392,
+                }
+                to:intvector{ /** 2002-02-17  */
+                    235,
+                    1908405440,
+                }
+            }
+        }
         BM{
             {
                 id{"BMD"}
@@ -651,6 +671,19 @@ supplementalData:table(nofallback){
                 from:intvector{ /** 1974-04-16  */
                     29,
                     -1322378880,
+                }
+            }
+        }
+        BU{
+            {
+                id{"BUK"}
+                from:intvector{ /** 1952-07-01  */
+                    -133,
+                    -1143896928,
+                }
+                to:intvector{ /** 1989-06-18  */
+                    139,
+                    -210261440,
                 }
             }
         }
@@ -875,10 +908,10 @@ supplementalData:table(nofallback){
         }
         CS{
             {
-                id{"EUR"}
-                from:intvector{ /** 2003-02-04  */
-                    242,
-                    -2038532928,
+                id{"CSD"}
+                from:intvector{ /** 2002-05-15  */
+                    235,
+                    1735785440,
                 }
                 to:intvector{ /** 2006-06-03  */
                     264,
@@ -886,10 +919,10 @@ supplementalData:table(nofallback){
                 }
             }
             {
-                id{"CSD"}
-                from:intvector{ /** 2002-05-15  */
-                    235,
-                    1735785440,
+                id{"EUR"}
+                from:intvector{ /** 2003-02-04  */
+                    242,
+                    -2038532928,
                 }
                 to:intvector{ /** 2006-06-03  */
                     264,
@@ -994,6 +1027,19 @@ supplementalData:table(nofallback){
                 to:intvector{ /** 1993-03  */
                     168,
                     -2893024,
+                }
+            }
+        }
+        DD{
+            {
+                id{"DDM"}
+                from:intvector{ /** 1948-07-20  */
+                    -162,
+                    -1178645344,
+                }
+                to:intvector{ /** 1990-10-02  */
+                    146,
+                    -121192512,
                 }
             }
         }
@@ -1424,9 +1470,9 @@ supplementalData:table(nofallback){
         GP{
             {
                 id{"EUR"}
-                from:intvector{ /** 1999  */
+                from:intvector{ /** 1999-01-01  */
                     213,
-                    320765952,
+                    320825952,
                 }
             }
             {
@@ -2210,6 +2256,26 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        MF{
+            {
+                id{"EUR"}
+                from:intvector{ /** 1999-01-01  */
+                    213,
+                    320825952,
+                }
+            }
+            {
+                id{"FRF"}
+                from:intvector{ /** 1960-01-01  */
+                    -74,
+                    -2086527392,
+                }
+                to:intvector{ /** 2002-02-17  */
+                    235,
+                    1908405440,
+                }
+            }
+        }
         MG{
             {
                 id{"MGA"}
@@ -2920,6 +2986,15 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        QU{
+            {
+                id{"EUR"}
+                from:intvector{ /** 1999-01-01  */
+                    213,
+                    320825952,
+                }
+            }
+        }
         RE{
             {
                 id{"EUR"}
@@ -3296,6 +3371,19 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        SU{
+            {
+                id{"SUR"}
+                from:intvector{ /** 1961-01-01  */
+                    -67,
+                    -528898464,
+                }
+                to:intvector{ /** 1991-12-25  */
+                    154,
+                    -957610880,
+                }
+            }
+        }
         SV{
             {
                 id{"SVC"}
@@ -3492,6 +3580,30 @@ supplementalData:table(nofallback){
                 from:intvector{ /** 1966-02-14  */
                     -30,
                     -553028416,
+                }
+            }
+        }
+        TP{
+            {
+                id{"TPE"}
+                from:intvector{ /** 1959-01-02  */
+                    -81,
+                    823610976,
+                }
+                to:intvector{ /** 2002-05-20  */
+                    235,
+                    -2127181856,
+                }
+            }
+            {
+                id{"IDR"}
+                from:intvector{ /** 1975-12-07  */
+                    36,
+                    -628269952,
+                }
+                to:intvector{ /** 2002-05-20  */
+                    235,
+                    -2127181856,
                 }
             }
         }
@@ -3814,6 +3926,41 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        YU{
+            {
+                id{"YUM"}
+                from:intvector{ /** 1994-01-24  */
+                    176,
+                    -839551392,
+                }
+                to:intvector{ /** 2002-05-15  */
+                    235,
+                    1735785440,
+                }
+            }
+            {
+                id{"YUN"}
+                from:intvector{ /** 1990-01-01  */
+                    146,
+                    -208132512,
+                }
+                to:intvector{ /** 1992-07-24  */
+                    162,
+                    426918048,
+                }
+            }
+            {
+                id{"YUD"}
+                from:intvector{ /** 1966-01-01  */
+                    -30,
+                    -1676288416,
+                }
+                to:intvector{ /** 1990-01-01  */
+                    146,
+                    -208132512,
+                }
+            }
+        }
         ZA{
             {
                 id{"ZAR"}
@@ -3829,6 +3976,30 @@ supplementalData:table(nofallback){
                 from:intvector{ /** 1968-01-16  */
                     -15,
                     -1732797856,
+                }
+            }
+        }
+        ZR{
+            {
+                id{"ZRN"}
+                from:intvector{ /** 1993-11-01  */
+                    168,
+                    -2413024,
+                }
+                to:intvector{ /** 1998-07  */
+                    205,
+                    -1150042976,
+                }
+            }
+            {
+                id{"ZRZ"}
+                from:intvector{ /** 1971-10-27  */
+                    7,
+                    -576738368,
+                }
+                to:intvector{ /** 1993-11-01  */
+                    168,
+                    -2413024,
                 }
             }
         }
@@ -4255,13 +4426,6 @@ supplementalData:table(nofallback){
             secondary{
                 territories{
                     "ES",
-                }
-            }
-        }
-        auv{
-            secondary{
-                territories{
-                    "FR",
                 }
             }
         }
@@ -5368,6 +5532,7 @@ supplementalData:table(nofallback){
                     "BF",
                     "BI",
                     "BJ",
+                    "BL",
                     "CA",
                     "CD",
                     "CF",
@@ -5388,6 +5553,7 @@ supplementalData:table(nofallback){
                     "LU",
                     "MA",
                     "MC",
+                    "MF",
                     "MG",
                     "ML",
                     "MQ",
@@ -6164,6 +6330,13 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        kg{
+            secondary{
+                territories{
+                    "CD",
+                }
+            }
+        }
         kha{
             primary{
                 scripts{
@@ -6337,13 +6510,6 @@ supplementalData:table(nofallback){
             secondary{
                 territories{
                     "IN",
-                }
-            }
-        }
-        kon{
-            secondary{
-                territories{
-                    "CD",
                 }
             }
         }
@@ -7340,6 +7506,11 @@ supplementalData:table(nofallback){
             primary{
                 scripts{
                     "Latn",
+                }
+            }
+            secondary{
+                territories{
+                    "FR",
                 }
             }
         }
@@ -8981,7 +9152,6 @@ supplementalData:table(nofallback){
             "meta:Africa_Western_CM"{"Africa/Douala"}
             "meta:Africa_Western_GA"{"Africa/Libreville"}
             "meta:Africa_Western_GQ"{"Africa/Malabo"}
-            "meta:Africa_Western_NA"{"Africa/Windhoek"}
             "meta:Africa_Western_NE"{"Africa/Niamey"}
             "meta:Africa_Western_TD"{"Africa/Ndjamena"}
             "meta:Aktyubinsk_001"{"Asia/Aqtobe"}
@@ -9133,13 +9303,11 @@ supplementalData:table(nofallback){
             "meta:Europe_Eastern_PS"{"Asia/Gaza"}
             "meta:Europe_Eastern_RU"{"Europe/Kaliningrad"}
             "meta:Europe_Eastern_SY"{"Asia/Damascus"}
-            "meta:Europe_Eastern_TR"{"Europe/Istanbul"}
             "meta:Europe_Eastern_UA"{"Europe/Kiev"}
             "meta:Europe_Western_001"{"Atlantic/Canary"}
             "meta:Europe_Western_EH"{"Africa/El_Aaiun"}
             "meta:Europe_Western_FO"{"Atlantic/Faeroe"}
             "meta:Europe_Western_MA"{"Africa/Casablanca"}
-            "meta:Europe_Western_PT"{"Europe/Lisbon"}
             "meta:Falkland_001"{"Atlantic/Stanley"}
             "meta:Fiji_001"{"Pacific/Fiji"}
             "meta:French_Guiana_001"{"America/Cayenne"}
@@ -9299,7 +9467,7 @@ supplementalData:table(nofallback){
             "America:Buenos_Aires"{"SA Eastern"}
             "America:Caracas"{"SA Western"}
             "America:Chicago"{"Central"}
-            "America:Chihuahua"{"Mountain Standard Time (Mexico)"}
+            "America:Chihuahua"{"Mexico Standard Time 2"}
             "America:Denver"{"Mountain"}
             "America:Godthab"{"Greenland"}
             "America:Guatemala"{"Central America"}
@@ -9307,7 +9475,7 @@ supplementalData:table(nofallback){
             "America:Indianapolis"{"US Eastern"}
             "America:Los_Angeles"{"Pacific"}
             "America:Manaus"{"Central Brazilian"}
-            "America:Mexico_City"{"Central Standard Time (Mexico)"}
+            "America:Mexico_City"{"Mexico"}
             "America:Montevideo"{"Montevideo"}
             "America:New_York"{"Eastern"}
             "America:Noronha"{"Mid-Atlantic"}
@@ -9515,6 +9683,7 @@ supplementalData:table(nofallback){
             "AN",
             "AW",
             "BB",
+            "BL",
             "BS",
             "CU",
             "DM",
@@ -9526,6 +9695,7 @@ supplementalData:table(nofallback){
             "KN",
             "KY",
             "LC",
+            "MF",
             "MQ",
             "MS",
             "PR",
@@ -10508,14 +10678,14 @@ supplementalData:table(nofallback){
         }
         "Antarctica:McMurdo"{
             territory{"AQ"}
-            aliases{
-                "Antarctica/South_Pole",
-            }
         }
         "Antarctica:Palmer"{
             territory{"AQ"}
         }
         "Antarctica:Rothera"{
+            territory{"AQ"}
+        }
+        "Antarctica:South_Pole"{
             territory{"AQ"}
         }
         "Antarctica:Syowa"{

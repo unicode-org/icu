@@ -23,4 +23,4 @@
 #
 
 MISC_SOURCE = \
-zoneinfo.txt supplementalData.txt
+zoneinfo.txt supplementalData.txt metazoneInfo.txt

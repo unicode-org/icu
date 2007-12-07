@@ -2048,7 +2048,7 @@ sv{
         SCOUSE{"scouse"}
         VALENCIA{"valensisk dialekt"}
     }
-    Version{"1.108"}
+    Version{"1.109"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2497,29 +2497,25 @@ sv{
             lg{"västbrasiliansk tid"}
         }
         "meta:Africa_Central"{
-            lg{"centralafrikansk tid"}
             ls{"centralafrikansk tid"}
-            sg{"CAT"}
             ss{"CAT"}
         }
         "meta:Africa_Eastern"{
             lg{"östafrikansk tid"}
             ls{"östafrikansk normaltid"}
-            sg{"EAT"}
             ss{"EAT"}
         }
         "meta:Africa_Southern"{
             lg{"sydafrikansk tid"}
             ls{"sydafrikansk normaltid"}
-            sd{"sydafrikansk sommartid"}
-            ss{"SAT"}
+            sg{"SAT"}
+            ss{"SAST"}
         }
         "meta:Africa_Western"{
             ld{"västafrikansk sommartid"}
             lg{"västafrikansk tid"}
             ls{"västafrikansk normaltid"}
             sd{"VAST"}
-            sg{"WAT"}
             ss{"WAT"}
         }
         "meta:Alaska"{
@@ -2568,8 +2564,8 @@ sv{
             ld{"saudiarabisk sommartid"}
             lg{"saudiarabisk tid"}
             ls{"saudiarabisk normaltid"}
-            sg{"AT"}
-            ss{"AST"}
+            sg{"AT (saudiarabisk)"}
+            ss{"AST (saudiarabisk)"}
         }
         "meta:Argentina"{
             lg{"östargentinsk tid"}
@@ -2660,7 +2656,6 @@ sv{
             lg{"centraleuropeisk tid"}
             ls{"Centraleuropa, normaltid"}
             sd{"CEST"}
-            sg{"CET"}
             ss{"CET"}
         }
         "meta:Europe_Eastern"{
@@ -2669,7 +2664,6 @@ sv{
             lg{"östeuropeisk tid"}
             ls{"Östeuropa, normaltid"}
             sd{"EEST"}
-            sg{"EET"}
             ss{"EET"}
         }
         "meta:Europe_Western"{
@@ -2678,16 +2672,11 @@ sv{
             lg{"västeuropeisk tid"}
             ls{"västeuropeisk normaltid"}
             sd{"WEST"}
-            sg{"WET"}
             ss{"WET"}
         }
         "meta:GMT"{
             cu:int{1}
-            ld{"greenwichtid"}
-            lg{"greenwichtid"}
             ls{"Greenwichtid"}
-            sd{"GMT"}
-            sg{"GMT"}
             ss{"GMT"}
         }
         "meta:Galapagos"{
@@ -2714,13 +2703,6 @@ sv{
         "meta:Guam"{
             lg{"Guamtid"}
         }
-        "meta:Hawaii"{
-            ld{"Hawaii, sommartid"}
-            lg{"hawaiiansk tid"}
-            ls{"Hawaii, normaltid"}
-            sd{"HDT"}
-            ss{"HST"}
-        }
         "meta:India"{
             lg{"indisk tid"}
         }
@@ -2741,7 +2723,7 @@ sv{
             lg{"israelisk tid"}
             ls{"Israel, normaltid"}
             sd{"IDT"}
-            ss{"IST"}
+            ss{"IST (Israel)"}
         }
         "meta:Japan"{
             ld{"Japan, sommartid"}
@@ -2776,8 +2758,8 @@ sv{
             ld{"Newfoundland, sommartid"}
             lg{"New Foundland-tid"}
             ls{"Newfoundland, normaltid"}
-            sd{"CDT"}
-            ss{"CNT"}
+            sd{"NDT"}
+            ss{"NST"}
         }
         "meta:Pakistan"{
             lg{"pakistansk tid"}

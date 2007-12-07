@@ -1638,6 +1638,22 @@
 				RelativePath=".\winnmfmt.h"
 				>
 			</File>
+			<File
+				RelativePath=".\zonemeta.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\zonemeta.h"
+				>
+			</File>
+			<File
+				RelativePath=".\zstrfmt.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\zstrfmt.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="misc"

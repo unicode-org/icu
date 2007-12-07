@@ -2443,7 +2443,7 @@ pt{
             lg{"Horário da Austrália Central"}
             ls{"Horário Padrão da Austrália Central"}
             sd{"ACDT"}
-            ss{"ACST"}
+            ss{"ACST (Austrália)"}
         }
         "meta:Australia_Eastern"{
             ld{"Horário de Verão da Austrália Oriental"}
@@ -2611,21 +2611,9 @@ pt{
             ls{"Horário Padrão de Gulf"}
             ss{"GST"}
         }
-        "meta:Hawaii"{
-            ld{"Horário de Verão do Havaí"}
-            lg{"Horário do Havaí"}
-            ls{"Horário Padrão do Havaí"}
-            sd{"HDT"}
-            sg{"HT"}
-            ss{"HST"}
-        }
         "meta:Hawaii_Aleutian"{
-            ld{"Horário de Verão do Havaí-Aleuta"}
-            lg{"Horário do Havaí-Aleuta"}
             ls{"Horário Padrão do Havaí-Aleuta"}
-            sd{"HADT"}
-            sg{"HAT"}
-            ss{"HAST"}
+            ss{"HST"}
         }
         "meta:India"{
             ls{"Horário Padrão da Índia"}
@@ -2647,7 +2635,7 @@ pt{
             ld{"Horário de Verão de Israel"}
             ls{"Horário Padrão de Israel"}
             sd{"IDT"}
-            ss{"IST"}
+            ss{"IST (Israel)"}
         }
         "meta:Japan"{
             ld{"Horário de Verão do Japão"}

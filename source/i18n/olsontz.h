@@ -182,6 +182,12 @@ class OlsonTimeZone: public BasicTimeZone {
                    int32_t& dstOffset, UErrorCode& ec) const;
 
     /**
+     * BasicTimeZone API.
+     */
+    virtual void getOffsetFromLocal(UDate date, int32_t nonExistingTimeOpt, int32_t duplicatedTimeOpt,
+        int32_t& rawoff, int32_t& dstoff, UErrorCode& ec) /*const*/;
+
+    /**
      * TimeZone API.  This method has no effect since objects of this
      * class are quasi-immutable (the base class allows the ID to be
      * changed).
@@ -279,7 +285,9 @@ private:
 
     void constructEmpty();
 
-    int16_t findTransition(double time, UBool local) const;
+    void getHistoricalOffset(UDate date, UBool local,
+        int32_t NonExistingTimeOpt, int32_t DuplicatedTimeOpt,
+        int32_t& rawoff, int32_t& dstoff) const;
 
     int32_t zoneOffset(int16_t index) const;
     int32_t rawOffset(int16_t index) const;

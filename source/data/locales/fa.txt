@@ -1056,7 +1056,7 @@ fa{
         1996{"رسم‌الخط آلمانی ۱۹۹۶ میلادی"}
         REVISED{"رسم‌الخط تجدیدنظرشده"}
     }
-    Version{"1.78"}
+    Version{"1.79"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1615,8 +1615,8 @@ fa{
             ec{"تاهیتی"}
         }
         "meta:Afghanistan"{
-            lg{"وقت افغانستان"}
-            sg{"AFT"}
+            ls{"وقت افغانستان"}
+            ss{"AFT"}
         }
         "meta:Iran"{
             ld{"وقت تابستانی ایران"}
