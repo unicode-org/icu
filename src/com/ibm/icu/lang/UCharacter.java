@@ -5664,7 +5664,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
 //##        return codePointCount(text.toString(), start, limit);
 //##    }
 //#else
-//#if defined(ECLIPSE_FRAGEMENT)
+//#if defined(ECLIPSE_FRAGMENT)
 //##    public static int codePointCount(String text, int start, int limit) {
 //##        return codePointCount((CharSequence)text, start, limit);
 //##    }
