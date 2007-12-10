@@ -126,35 +126,6 @@ current and complete version is always found in ICU4J.</p>
 </blockquote>
 
 <h3 class="doc"><a name="news"></a>What Is New In This Release?</h3>
-<strong>ICU4J 3.8</strong>
-<p><b>Changes to J2SE version requirement for building ICU4J</b>
-<p>Previous version of ICU4J was successfully built with J2SE SDK 1.4 or later
-versions.  In this release, there is a new feature which uses a new type introduced
-in J2SE 5.0.  Although the new feature does not need the type available at run time,
-it requires J2SE 5.0 or newer version of Java class library at the build time to enable
-the feature.  The binary distribution version of ICU4J available at the ICU download
-page was built with J2SE SDK 5.0 and this version should work well on JRE 1.4 or later
-versions.  If you want to build your own copy of ICU4J binaries with J2SE SDK 1.4,
-you can still run all of the Ant standard build targets in build.xml and make ICU4J
-binaries.  The build script detects the current Java version and comments out code
-blocks including references to J2SE 5.0 only types.</p>
-<p><b>Changes to timezone formatting and parsing</b>
-<p>In ICU 3.8, the behavior of date formatting and parsing has changed
-significantly, perhaps requiring recoding on your part depending on your
-usage. For more information, see <a href="http://icu-project.org/userguide/formatDateTime.html">
-Formatting Dates and Times</a> in the User Guide.
-</p>
-<p><b>Status of ICU4J charset converter</b>
-<p>The ICU4J implementation of java.nio.charset.Charset is included as a Technology
-Preview. Not all functionality from the java.nio.Charset interfaces is operational,
-and some converters are known to mis-handle Unicode supplementary characters. Use with caution.
-</p>
-<p><b>New features</b></p>
-<p>
-See the <a href="http://www.icu-project.org/download/">ICU 3.8 download page</a> about new features in this release.
-</p>
-<hr>
-<strong>ICU4J 3.8.1</strong> (This release)
 <p><b>Locale Data</b></p>
 <p>ICU uses and supports data from <a href="http://www.unicode.org/cldr/">Common Locale Data Repository(CLDR)</a>.
 In ICU4J 3.8.1, ICU locale data was updated to CLDR 1.5.1.</p>
@@ -186,6 +157,8 @@ reproduced in ICU4J 3.8 were resolved in this release.</p>
 </ul>
 <p><b>Timezone Data</b></p>
 <p>ICU4J 3.8.1 updates the time zone data to version 2007j from the Olson timezone database.</p>
+
+<p>For a list of what was new in ICU4J 3.8, see <a href="http://source.icu-project.org/repos/icu/icu4j/tags/release-3-8/readme.html#news">here</a>.<p>
 
 <h3 class="doc"><a name="license"></a>License Information</h3>
 <p>
