@@ -867,6 +867,7 @@ static void TestISOFunctions()
     const char* const* str=uloc_getISOLanguages();
     const char* const* str1=uloc_getISOCountries();
     const char* test;
+    const char *key = NULL;
     int32_t count = 0, skipped = 0;
     int32_t expect;
     UResourceBundle *res;
@@ -888,7 +889,7 @@ static void TestISOFunctions()
     expect = ures_getSize(subRes);
     for(count = 0; *(str+count) != 0; count++)
     {
-        const char *key = NULL;
+        key = NULL;
         test = *(str+count);
         status = U_ZERO_ERROR;
 
@@ -938,7 +939,7 @@ static void TestISOFunctions()
     expect = ures_getSize(subRes) - 1; /* Skip ZZ */
     for(count = 0; *(str1+count) != 0; count++)
     {
-        const char *key = NULL;
+        key = NULL;
         test = *(str1+count);
         do {
             /* Skip over numeric UN tags. This API only returns ISO-3166 codes. */
@@ -968,6 +969,21 @@ static void TestISOFunctions()
         if(!strcmp(test,"ZR"))
             log_err("FAIL getISOCountries() has obsolete country code %s\n", test);
     }
+
+    ures_getNextString(subRes, NULL, &key, &status);
+    if (strcmp(key, "ZZ") != 0) {
+        log_err("ZZ was expected to be the last entry in structLocale, but got %s\n", key);
+    }
+#if U_CHARSET_FAMILY==U_EBCDIC_FAMILY
+    /* On EBCDIC machines, the numbers are sorted last. Account for those in the skipped value too. */
+    key = NULL;
+    do {
+        /* Skip over numeric UN tags. uloc_getISOCountries only returns ISO-3166 codes. */
+        skipped += (key != NULL);
+        ures_getNextString(subRes, NULL, &key, &status);
+    }
+    while (U_SUCCESS(status) && key != NULL && strlen(key) != 2);
+#endif
     expect -= skipped; /* Ignore the skipped resources from structLocale */
     if(count!=expect)
     {
