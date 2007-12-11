@@ -1342,7 +1342,7 @@
 
   <target name="excludeCharset" depends="core" description="excludes charset module from ICU4J">
     <delete failonerror="yes">
-      <fileset dir="${build.dir}/com/ibm/icu/impl/data/icudt${icu4j.version.number}b/">
+      <fileset dir="${build.dir}/com/ibm/icu/impl/data/icudt${icu4j.data.version.number}b/">
         <include name="*.cnv" />
         <include name="cnvalias.icu" />
       </fileset>
@@ -1707,7 +1707,7 @@
         <filter token="BUILD_VERSION" value="${icu4j.eclipse.build.version.string}" />
         <filter token="COPYRIGHT" value="${copyright.eclipse}" />
         <filter token="IMPL_VERSION" value="${icu4j.impl.version.string}" />
-        <filter token="VERSION_NUMBER" value="${icu4j.version.number}" />
+        <filter token="DATA_VERSION_NUMBER" value="${icu4j.data.version.number}" />
       </filterset>
     </copy>
     <!-- license -->
@@ -1726,7 +1726,7 @@
       <filterset>
         <filter token="BUILD_VERSION" value="${icu4j.eclipse.build.version.string}" />
         <filter token="COPYRIGHT" value="${copyright.eclipse}" />
-        <filter token="VERSION_NUMBER" value="${icu4j.version.number}" />
+        <filter token="DATA_VERSION_NUMBER" value="${icu4j.data.version.number}" />
       </filterset>
     </copy>
     <!-- common eclipse about file -->
@@ -1775,7 +1775,7 @@
         <filter token="BUILD_VERSION" value="${icu4j.eclipse.build.version.string}" />
         <filter token="COPYRIGHT" value="${copyright.eclipse}" />
         <filter token="IMPL_VERSION" value="${icu4j.impl.version.string}" />
-        <filter token="VERSION_NUMBER" value="${icu4j.version.number}" />
+        <filter token="DATA_VERSION_NUMBER" value="${icu4j.data.version.number}" />
       </filterset>
     </copy>
     <!-- license -->
@@ -1793,7 +1793,7 @@
       <filterset>
       <filter token="BUILD_VERSION" value="${icu4j.eclipse.build.version.string}" />
         <filter token="COPYRIGHT" value="${copyright.eclipse}" />
-        <filter token="VERSION_NUMBER" value="${icu4j.version.number}" />
+        <filter token="DATA_VERSION_NUMBER" value="${icu4j.data.version.number}" />
       </filterset>
     </copy>
     <!-- common eclipse about file -->
@@ -1975,7 +1975,7 @@
         <filter token="BUILD_VERSION" value="${icu4j.eclipse.build.version.string}" />
         <filter token="COPYRIGHT" value="${copyright.eclipse}" />
         <filter token="IMPL_VERSION" value="${icu4j.impl.version.string}" />
-        <filter token="VERSION_NUMBER" value="${icu4j.version.number}" />
+        <filter token="DATA_VERSION_NUMBER" value="${icu4j.data.version.number}" />
       </filterset>
     </copy>
     <!-- license -->
@@ -1993,7 +1993,7 @@
       <filterset>
         <filter token="BUILD_VERSION" value="${icu4j.eclipse.build.version.string}" />
         <filter token="COPYRIGHT" value="${copyright.eclipse}" />
-        <filter token="VERSION_NUMBER" value="${icu4j.version.number}" />
+        <filter token="DATA_VERSION_NUMBER" value="${icu4j.data.version.number}" />
       </filterset>
     </copy>
     <!-- common eclipse about -->

@@ -12,11 +12,11 @@ Export-Package: com.ibm.icu.lang;version="@IMPL_VERSION@",
  com.ibm.icu.util;version="@IMPL_VERSION@",
  com.ibm.icu.impl;x-internal:=true,
  com.ibm.icu.impl.data;x-internal:=true,
- com.ibm.icu.impl.data.icudt@VERSION_NUMBER@b;x-internal:=true,
- com.ibm.icu.impl.data.icudt@VERSION_NUMBER@b.brkitr;x-internal:=true,
- com.ibm.icu.impl.data.icudt@VERSION_NUMBER@b.coll;x-internal:=true,
- com.ibm.icu.impl.data.icudt@VERSION_NUMBER@b.rbnf;x-internal:=true,
- com.ibm.icu.impl.data.icudt@VERSION_NUMBER@b.translit;x-internal:=true
+ com.ibm.icu.impl.data.icudt@DATA_VERSION_NUMBER@b;x-internal:=true,
+ com.ibm.icu.impl.data.icudt@DATA_VERSION_NUMBER@b.brkitr;x-internal:=true,
+ com.ibm.icu.impl.data.icudt@DATA_VERSION_NUMBER@b.coll;x-internal:=true,
+ com.ibm.icu.impl.data.icudt@DATA_VERSION_NUMBER@b.rbnf;x-internal:=true,
+ com.ibm.icu.impl.data.icudt@DATA_VERSION_NUMBER@b.translit;x-internal:=true
 Eclipse-LazyStart: true
 Bundle-RequiredExecutionEnvironment: CDC-1.0/Foundation-1.0,
  J2SE-1.3
