@@ -20,10 +20,9 @@ import java.util.List;
 import javax.swing.AbstractListModel;
 
 /**
- * Represents a list of IncludePaths that is usable by any class that uses
- * AbstractListModels (such as a JList in swing). Also contains methods to begin
- * a search on those paths using ICUJarFinder and placing the results in a
- * ResultModel, and methods to load a path list from a file.
+ * Represents a list of IncludePaths that is usable by any class that uses AbstractListModels (such
+ * as a JList in swing). Also contains methods to begin a search on those paths using ICUJarFinder
+ * and placing the results in a ResultModel, and methods to load a path list from a file.
  */
 class PathModel extends AbstractListModel {
     /**
@@ -86,15 +85,14 @@ class PathModel extends AbstractListModel {
     }
 
     /**
-     * Adds a filename to the path list if it is valid and unique. The filename
-     * must either be of the form (<b>+</b>|<b>-</b>)<i>pathstring</i> and
-     * exist, or of the form <b>all</b>. In the case of the latter, all drives
-     * are added to the path list.
+     * Adds a filename to the path list if it is valid and unique. The filename must either be of
+     * the form (<b>+</b>|<b>-</b>)<i>pathstring</i> and exist, or of the form <b>all</b>. In
+     * the case of the latter, all drives are added to the path list.
      * 
      * @param includeFilename
      *            A filename in the form above.
-     * @return Whether or not <code>includeFilename</code> is both of the form
-     *         detailed above and exists.
+     * @return Whether or not <code>includeFilename</code> is both of the form detailed above and
+     *         exists.
      */
     public boolean add(String includeFilename) {
         if ("all".equalsIgnoreCase(includeFilename)) {
@@ -104,9 +102,8 @@ class PathModel extends AbstractListModel {
             return true;
         }
 
-        return add(new IncludePath(
-                new File(includeFilename.substring(1).trim()), includeFilename
-                        .charAt(0) == '+'));
+        return add(new IncludePath(new File(includeFilename.substring(1).trim()), includeFilename
+                .charAt(0) == '+'));
     }
 
     /**
@@ -123,8 +120,8 @@ class PathModel extends AbstractListModel {
      * 
      * @param index
      *            The index of the element of the path list to return.
-     * @return The path at the specified index of the path list. Guaranteed to
-     *         always be an IncludePath.
+     * @return The path at the specified index of the path list. Guaranteed to always be an
+     *         IncludePath.
      */
     public Object getElementAt(int index) {
         return list.get(index);
@@ -149,47 +146,45 @@ class PathModel extends AbstractListModel {
     }
 
     /**
-     * Loads a list of paths from the given path list file. Each path must be of
-     * the form
+     * Loads a list of paths from the given path list file. Each path must be of the form
      * 
      * @throws IOException
      * @throws IllegalArgumentException
      */
     public void loadPaths() throws IOException, IllegalArgumentException {
-        logger.printlnToScreen("Scanning " + pathListFilename + " file...");
-        logger.printlnToScreen(pathListFilename + " file contains");
+        logger.printlnToBoth("Scanning " + pathListFilename + " file...");
+        logger.loglnToBoth(pathListFilename + " file contains");
 
         BufferedReader reader = null;
-        int lineNumber = 1;
+        int lineNumber = 0;
         String line;
         char sign;
 
         try {
-            reader = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(pathListFile), "UTF-8"), 4 * 1024);
+            reader = new BufferedReader(new InputStreamReader(new FileInputStream(pathListFile),
+                    "UTF-8"), 4 * 1024);
             while ((line = reader.readLine()) != null) {
                 if (line.length() >= 1 && line.charAt(0) == '\ufeff')
                     line = line.substring(1);
                 line = line.trim();
-
-                if (line.length() >= 1) {
-                    sign = line.charAt(0);
-                    if (sign != '#') {
-                        logger.printlnToScreen(line);
-                        if (sign != '+' && sign != '-'
-                                && !"all".equalsIgnoreCase(line))
-                            pathListError(
-                                    "Each path entry must start with a + or - to denote inclusion/exclusion",
-                                    lineNumber);
-                        if (!add(line))
-                            logger
-                                    .errorln(line.substring(1).trim()
-                                            + " is not a valid file or directory (perhaps it does not exist?)");
-                    }
-                }
-
                 lineNumber++;
+
+                if (line.length() >= 1 && (sign = line.charAt(0)) != '#') {
+                    if (sign != '+' && sign != '-' && !"all".equalsIgnoreCase(line)) {
+                        String error = "Each path entry must start with a + or - to denote inclusion/exclusion";
+                        pathListError(error, lineNumber);
+                        continue;
+                    }
+                    if (!add(line)) {
+                        String error = line.substring(1).trim()
+                                + " is not a valid file or directory (perhaps it does not exist?)";
+                        pathListError(error, lineNumber);
+                        continue;
+                    }
+                    logger.printlnToBoth(line);
+                }
             }
+            logger.printlnToBoth("Scanning " + pathListFilename + " complete.");
         } catch (FileNotFoundException ex) {
             pathListError("The " + pathListFilename + " file doesn't exist.");
         } catch (IOException ex) {
@@ -204,8 +199,8 @@ class PathModel extends AbstractListModel {
     }
 
     /**
-     * Removes a path from the path list. Since there are no duplicates in the
-     * path list, this method either removes a single path or removes none.
+     * Removes a path from the path list. Since there are no duplicates in the path list, this
+     * method either removes a single path or removes none.
      * 
      * @param path
      *            The path to remove from the path list.
@@ -247,9 +242,8 @@ class PathModel extends AbstractListModel {
     }
 
     /**
-     * Searches a selection of paths in the path list for updatable ICU4J jars.
-     * Results are added to the result model. The indices provided are the
-     * indices of the path list to search.
+     * Searches a selection of paths in the path list for updatable ICU4J jars. Results are added to
+     * the result model. The indices provided are the indices of the path list to search.
      * 
      * @param resultModel
      *            The result model to store the results of the search.
@@ -263,8 +257,8 @@ class PathModel extends AbstractListModel {
      *            Where to store backup files.
      * @throws InterruptedException
      */
-    public void search(ResultModel resultModel, int[] indices, boolean subdirs,
-            File curDir, File backupDir) throws InterruptedException {
+    public void search(ResultModel resultModel, int[] indices, boolean subdirs, File curDir,
+            File backupDir) throws InterruptedException {
         if (list.size() > 0 && indices.length > 0) {
             Arrays.sort(indices);
             int n = indices.length;
@@ -278,14 +272,13 @@ class PathModel extends AbstractListModel {
                 else
                     iter.next();
 
-            ICUJarFinder.search(resultModel, logger, paths, subdirs, curDir,
-                    backupDir);
+            ICUJarFinder.search(resultModel, logger, paths, subdirs, curDir, backupDir);
         }
     }
 
     /**
-     * Searches each path in the path list for updatable ICU4J jars. Results are
-     * added to the result model.
+     * Searches each path in the path list for updatable ICU4J jars. Results are added to the result
+     * model.
      * 
      * @param resultModel
      *            The result model to store the results of the search.
@@ -297,16 +290,15 @@ class PathModel extends AbstractListModel {
      *            Where to store backup files.
      * @throws InterruptedException
      */
-    public void searchAll(ResultModel resultModel, boolean subdirs,
-            File curDir, File backupDir) throws InterruptedException {
+    public void searchAll(ResultModel resultModel, boolean subdirs, File curDir, File backupDir)
+            throws InterruptedException {
         if (list.size() > 0) {
             int n = list.size();
             IncludePath[] paths = new IncludePath[n];
             Iterator iter = iterator();
             for (int i = 0; i < n; i++)
                 paths[i] = (IncludePath) iter.next();
-            ICUJarFinder.search(resultModel, logger, paths, subdirs, curDir,
-                    backupDir);
+            ICUJarFinder.search(resultModel, logger, paths, subdirs, curDir, backupDir);
         }
     }
 
@@ -322,8 +314,7 @@ class PathModel extends AbstractListModel {
     }
 
     /**
-     * Throws an IllegalArgumentException with the specified message and line
-     * number.
+     * Logs as an error a specified message and line number.
      * 
      * @param message
      *            The message to put in the exception.
@@ -331,7 +322,7 @@ class PathModel extends AbstractListModel {
      *            The line number to put in the exception.
      */
     private void pathListError(String message, int lineNumber) {
-        logger.errorln("Error in " + pathListFilename + " (line " + lineNumber
-                + "): " + message);
+        logger.printlnToBoth("Error in " + pathListFilename + " (line " + lineNumber + "): "
+                + message);
     }
 }

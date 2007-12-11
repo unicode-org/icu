@@ -42,11 +42,9 @@ public class PathComponent extends JComponent {
     public static final long serialVersionUID = 1340;
 
     /**
-     * A menu item for <code>pathPopup</code> to add all drives to the path
-     * model.
+     * A menu item for <code>pathPopup</code> to add all drives to the path model.
      */
-    private JMenuItem pathAddAllDrivesItem = new JMenuItem(
-            "Add All Drives to List");
+    private JMenuItem pathAddAllDrivesItem = new JMenuItem("Add All Drives to List");
 
     /**
      * The browse button where the user can browse for a particular path.
@@ -71,14 +69,12 @@ public class PathComponent extends JComponent {
     /**
      * The label for path input field.
      */
-    private JLabel pathInputLabel = new JLabel(
-            "Include/exclude a directory or a file:");
+    private JLabel pathInputLabel = new JLabel("Include/exclude a directory or a file:");
 
     /**
      * The label for the path list.
      */
-    private JLabel pathListLabel = new JLabel(
-            "Directories to search and ICU4J jar files to check:");
+    private JLabel pathListLabel = new JLabel("Directories to search and ICU4J jar files to check:");
 
     /**
      * The panel to hold the input components.
@@ -106,27 +102,24 @@ public class PathComponent extends JComponent {
     private JPopupMenu pathPopup = new JPopupMenu();
 
     /**
-     * A menu item for <code>pathPopup</code> to remove all paths from the
-     * path model.
+     * A menu item for <code>pathPopup</code> to remove all paths from the path model.
      */
     private JMenuItem pathRemoveAllItem = new JMenuItem("Remove All");
 
     /**
-     * A menu item for <code>pathPopup</code> to remove the selected paths
-     * from the path model.
+     * A menu item for <code>pathPopup</code> to remove the selected paths from the path model.
      */
-    private JMenuItem pathRemoveSelectedItem = new JMenuItem(
-            "Remove Selected Items");
+    private JMenuItem pathRemoveSelectedItem = new JMenuItem("Remove Selected Items");
 
     /**
-     * A menu item for <code>pathPopup</code> to begin a search on the
-     * selected paths in the path model.
+     * A menu item for <code>pathPopup</code> to begin a search on the selected paths in the path
+     * model.
      */
     private JMenuItem pathSearchAllItem = new JMenuItem("Search All");
 
     /**
-     * The search button that starts the search on the selected paths (or all
-     * the paths if none are selected).
+     * The search button that starts the search on the selected paths (or all the paths if none are
+     * selected).
      */
     private JButton pathSearchAllButton = new JButton("Search All");
 
@@ -136,25 +129,25 @@ public class PathComponent extends JComponent {
     private JPanel pathSearchPanel = new JPanel();
 
     /**
-     * A menu item for <code>pathPopup</code> to begin a search on all paths
-     * in the path model.
+     * A menu item for <code>pathPopup</code> to begin a search on all paths in the path model.
      */
-    private JMenuItem pathSearchSelectedItem = new JMenuItem(
-            "Search Selected Items");
+    private JMenuItem pathSearchSelectedItem = new JMenuItem("Search Selected Items");
 
     /**
-     * The combobox where a user specifies whether to include or to exclude an
-     * entered path.
+     * The combobox where a user specifies whether to include or to exclude an entered path.
      */
-    private JComboBox pathSignBox = new JComboBox(new Object[] { "Include",
-            "Exclude" });
+    private JComboBox pathSignBox = new JComboBox(new Object[] { "Include", "Exclude" });
 
     /**
-     * The checkbox where the user can specify whether or not to search
-     * subdirectories. Set to true by default.
+     * The checkbox where the user can specify whether or not to search subdirectories. Set to true
+     * by default.
      */
-    private JCheckBox pathSubdirOption = new JCheckBox("Search Subdirectories",
-            true);
+    private JCheckBox pathSubdirOption = new JCheckBox("Search Subdirectories", true);
+
+    /**
+     * Preferred starting number of rows in the table.
+     */
+    public static final int PATH_LIST_ROWS_PREFERRED = 5;
 
     /**
      * Constructs the path list GUI component.
@@ -163,6 +156,8 @@ public class PathComponent extends JComponent {
      *            The GUILoader object that ownes this component.
      */
     public PathComponent(final GUILoader owner) {
+        pathList.setVisibleRowCount(PATH_LIST_ROWS_PREFERRED);
+
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         add(pathInputPanel);
         add(pathListLabel);
@@ -171,8 +166,7 @@ public class PathComponent extends JComponent {
         add(pathSearchPanel);
 
         JPanel pathInputSubPanel = new JPanel();
-        pathInputPanel
-                .setLayout(new BoxLayout(pathInputPanel, BoxLayout.Y_AXIS));
+        pathInputPanel.setLayout(new BoxLayout(pathInputPanel, BoxLayout.Y_AXIS));
         pathInputPanel.add(pathInputLabel);
         pathInputPanel.add(pathInputSubPanel);
         pathInputSubPanel.add(pathSignBox);
@@ -223,16 +217,14 @@ public class PathComponent extends JComponent {
 
             private void checkPopup(MouseEvent event) {
                 if (event.isPopupTrigger())
-                    pathPopup.show((Component) event.getSource(), event.getX(),
-                            event.getY());
+                    pathPopup.show((Component) event.getSource(), event.getX(), event.getY());
             }
         });
 
         pathList.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent event) {
                 int code = event.getKeyCode();
-                if (code == KeyEvent.VK_DELETE
-                        || code == KeyEvent.VK_BACK_SPACE)
+                if (code == KeyEvent.VK_DELETE || code == KeyEvent.VK_BACK_SPACE)
                     pathModel.remove(pathList.getSelectedIndices());
             }
         });
@@ -242,18 +234,15 @@ public class PathComponent extends JComponent {
                 String selection = "";
                 int[] rows = pathList.getSelectedIndices();
                 for (int i = 0; i < rows.length; i++) {
-                    String includePathString = pathModel.getElementAt(rows[i])
-                            .toString();
+                    String includePathString = pathModel.getElementAt(rows[i]).toString();
                     // get rid of a + or - at the begining of includePathString
                     // if one exists
                     if (includePathString.length() > 0
-                            && (includePathString.charAt(0) == '+' || includePathString
-                                    .charAt(0) == '-'))
+                            && (includePathString.charAt(0) == '+' || includePathString.charAt(0) == '-'))
                         includePathString = includePathString.substring(1);
                     selection += includePathString + "\n";
                 }
-                getToolkit().getSystemClipboard().setContents(
-                        new StringSelection(selection), null);
+                getToolkit().getSystemClipboard().setContents(new StringSelection(selection), null);
             }
         });
 
@@ -271,8 +260,7 @@ public class PathComponent extends JComponent {
 
         pathSearchSelectedItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                owner.search(pathList.getSelectedIndices(), pathSubdirOption
-                        .isSelected());
+                owner.search(pathList.getSelectedIndices(), pathSubdirOption.isSelected());
             }
         });
 
@@ -345,17 +333,15 @@ public class PathComponent extends JComponent {
      */
     private void addFile(File file) {
         if (!pathModel.add(new IncludePath(file, isIncluded())))
-            JOptionPane.showMessageDialog(PathComponent.this, "\""
-                    + file.getPath() + "\" is not a valid file or path.",
-                    "Cannot add path/file", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(PathComponent.this, "\"" + file.getPath()
+                    + "\" is not a valid file or path.", "Cannot add path/file",
+                    JOptionPane.ERROR_MESSAGE);
     }
 
     /**
-     * Returns whether the user has specified to include or to exclude the
-     * entered path.
+     * Returns whether the user has specified to include or to exclude the entered path.
      * 
-     * @return Whether the user has specified to include or to exclude the
-     *         entered path.
+     * @return Whether the user has specified to include or to exclude the entered path.
      */
     private boolean isIncluded() {
         return ((String) pathSignBox.getSelectedItem()).equals("Include");
