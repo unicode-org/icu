@@ -436,6 +436,7 @@ icu4j/src/com/ibm/icu/dev/tool/docs/icu4j342.api.gz -text svneol=unset#applicati
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j343.api.gz -text svneol=unset#application/gzip
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j36.api.gz -text
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j38.api.gz -text
+icu4j/src/com/ibm/icu/dev/tool/docs/icu4j381.api.gz -text
 icu4j/src/com/ibm/icu/dev/tool/rbbi/readme.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/tool/tzu/icu.css svneol=native#text/css
 icu4j/src/com/ibm/icu/dev/tool/tzu/icu.gif -text
