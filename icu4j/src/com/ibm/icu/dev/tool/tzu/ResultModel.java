@@ -24,10 +24,9 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 /**
- * Represents a list of ICUFiles that is usable by any class that uses
- * AbstractTableModels (such as a JTable in swing). Also contains methods to
- * begin updates on those ICUFiles and methods to load and save a result list
- * from and to a file.
+ * Represents a list of ICUFiles that is usable by any class that uses AbstractTableModels (such as
+ * a JTable in swing). Also contains methods to begin updates on those ICUFiles and methods to load
+ * and save a result list from and to a file.
  */
 class ResultModel extends AbstractTableModel {
     /**
@@ -53,8 +52,8 @@ class ResultModel extends AbstractTableModel {
     /**
      * A list of names of the columns in a result model.
      */
-    public static final String[] COLUMN_NAMES = new String[] { "Filename",
-            "Path", "ICU Version", "TZ Version" };
+    public static final String[] COLUMN_NAMES = new String[] { "Filename", "Path", "ICU Version",
+            "TZ Version" };
 
     /**
      * The serializable UID.
@@ -100,8 +99,8 @@ class ResultModel extends AbstractTableModel {
      * 
      * @param file
      *            The file.
-     * @return Whether the file was added successfully (which is determined by
-     *         if it is an updatable ICU4J jar).
+     * @return Whether the file was added successfully (which is determined by if it is an updatable
+     *         ICU4J jar).
      */
     public boolean add(File file) {
         try {
@@ -131,8 +130,8 @@ class ResultModel extends AbstractTableModel {
      * 
      * @param filename
      *            The name of the file.
-     * @return Whether the file was added successfully (which is determined by
-     *         if it is an updatable ICU4J jar).
+     * @return Whether the file was added successfully (which is determined by if it is an updatable
+     *         ICU4J jar).
      */
     public boolean add(String filename) {
         return add(new File(filename));
@@ -168,9 +167,8 @@ class ResultModel extends AbstractTableModel {
     }
 
     /**
-     * Returns the item at the given row and column. The row determines which
-     * ICUFile is used, and the column determines which piece of data should be
-     * used.
+     * Returns the item at the given row and column. The row determines which ICUFile is used, and
+     * the column determines which piece of data should be used.
      * 
      * @param row
      *            Which ICU file to use.
@@ -209,8 +207,7 @@ class ResultModel extends AbstractTableModel {
     }
 
     /**
-     * Loads a list of ICUFiles from the given result list file. Lines should be
-     * of the form <b><i>pathstring</i><tab><i>tzversion</i></b>.
+     * Loads a list of ICUFiles from the given result list file. Lines should be of the form <b><i>pathstring</i><tab><i>tzversion</i></b>.
      * 
      * @throws IOException
      * @throws IllegalArgumentException
@@ -226,8 +223,8 @@ class ResultModel extends AbstractTableModel {
         String filename;
 
         try {
-            reader = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(resultListFile), "UTF-8"), 4 * 1024);
+            reader = new BufferedReader(new InputStreamReader(new FileInputStream(resultListFile),
+                    "UTF-8"), 4 * 1024);
             while ((line = reader.readLine()) != null) {
                 if (line.length() >= 1 && line.charAt(0) == '\ufeff')
                     line = line.substring(1);
@@ -236,8 +233,7 @@ class ResultModel extends AbstractTableModel {
 
                 if (line.length() >= 1 && (tab = line.lastIndexOf('\t')) >= 0) {
                     if (!add(filename = line.substring(0, tab)))
-                        resultListError(filename
-                                + " is not an updatable ICU4J file", lineNumber);
+                        resultListError(filename + " is not an updatable ICU4J file", lineNumber);
                 }
 
                 lineNumber++;
@@ -271,8 +267,7 @@ class ResultModel extends AbstractTableModel {
             int i = 0;
             while (iter.hasNext()) {
                 ICUFile icuFile = (ICUFile) iter.next();
-                if (icuFile.getFile().getAbsoluteFile().equals(
-                        file.getAbsoluteFile())) {
+                if (icuFile.getFile().getAbsoluteFile().equals(file.getAbsoluteFile())) {
                     icuFileList.remove(icuFile);
                     fireTableRowsDeleted(i, i);
                     return;
@@ -310,8 +305,7 @@ class ResultModel extends AbstractTableModel {
     }
 
     /**
-     * Saves a list of ICUFiles to the given result list file. Lines will be of
-     * the form <b><i>pathstring</i><tab><i>tzversion</i></b>.
+     * Saves a list of ICUFiles to the given result list file. Lines will be of the form <b><i>pathstring</i><tab><i>tzversion</i></b>.
      * 
      * @throws IOException
      * @throws IllegalArgumentException
@@ -327,17 +321,14 @@ class ResultModel extends AbstractTableModel {
             Iterator iter = iterator();
             while (iter.hasNext()) {
                 icuFile = (ICUFile) iter.next();
-                String line = icuFile.getFile().getPath() + '\t'
-                        + icuFile.getTZVersion() + "\n";
-                logger.printToScreen(line);
+                String line = icuFile.getFile().getPath() + '\t' + icuFile.getTZVersion();
+                logger.printlnToScreen(line);
                 writer.write(line);
             }
         } catch (FileNotFoundException ex) {
-            resultListError("Could not create the " + resultListFilename
-                    + " file.");
+            resultListError("Could not create the " + resultListFilename + " file.");
         } catch (IOException ex) {
-            resultListError("Could not write to the " + resultListFilename
-                    + " file.");
+            resultListError("Could not write to the " + resultListFilename + " file.");
         } finally {
             try {
                 if (writer != null)
@@ -348,9 +339,8 @@ class ResultModel extends AbstractTableModel {
     }
 
     /**
-     * Updates a selection of the ICUFiles given a URL as the source of the
-     * update and a backup directory as a place to store a copy of the
-     * un-updated file.
+     * Updates a selection of the ICUFiles given a URL as the source of the update and a backup
+     * directory as a place to store a copy of the un-updated file.
      * 
      * @param indices
      *            The indices of the ICUFiles to update.
@@ -360,8 +350,8 @@ class ResultModel extends AbstractTableModel {
      *            The directory in which to store backups.
      * @throws InterruptedException
      */
-    public void update(int[] indices, URL updateURL, File backupDir)
-            throws InterruptedException {
+    public int update(int[] indices, URL updateURL, File backupDir) throws InterruptedException {
+        int numberFailed = 0;
         if (icuFileList.size() > 0 && indices.length > 0) {
             Arrays.sort(indices);
             int n = indices.length;
@@ -378,15 +368,18 @@ class ResultModel extends AbstractTableModel {
                     } catch (IOException ex) {
                         // could not update the jar
                         logger.errorln(ex.getMessage());
+                        numberFailed++;
                     }
                 else
                     iter.next();
         }
+
+        return numberFailed;
     }
 
     /**
-     * Updates all of the ICUFiles given a URL as the source of the update and a
-     * backup directory as a place to store a copy of the un-updated file.
+     * Updates all of the ICUFiles given a URL as the source of the update and a backup directory as
+     * a place to store a copy of the un-updated file.
      * 
      * @param updateURL
      *            The URL to use a source of the update.
@@ -394,8 +387,8 @@ class ResultModel extends AbstractTableModel {
      *            The directory in which to store backups.
      * @throws InterruptedException
      */
-    public void updateAll(URL updateURL, File backupDir)
-            throws InterruptedException {
+    public int updateAll(URL updateURL, File backupDir) throws InterruptedException {
+        int numberFailed = 0;
         if (icuFileList.size() > 0) {
             int n = icuFileList.size();
             Iterator iter = iterator();
@@ -406,8 +399,10 @@ class ResultModel extends AbstractTableModel {
                 } catch (IOException ex) {
                     // could not update the jar
                     logger.errorln(ex.getMessage());
+                    numberFailed++;
                 }
         }
+        return numberFailed;
     }
 
     /**
@@ -422,8 +417,7 @@ class ResultModel extends AbstractTableModel {
     }
 
     /**
-     * Throws an IllegalArgumentException with the given message and line
-     * number.
+     * Logs as an error a given message and line number.
      * 
      * @param message
      *            The message.
@@ -431,7 +425,6 @@ class ResultModel extends AbstractTableModel {
      *            The line number.
      */
     private void resultListError(String message, int lineNumber) {
-        logger.errorln("Error in " + resultListFilename + " (line "
-                + lineNumber + "): " + message);
+        logger.errorln("Error in " + resultListFilename + " (line " + lineNumber + "): " + message);
     }
 }

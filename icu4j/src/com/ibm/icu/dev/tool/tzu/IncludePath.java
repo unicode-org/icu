@@ -23,8 +23,8 @@ public class IncludePath {
     private File path;
 
     /**
-     * Constructs an IncludePath around a file or directory and whether it
-     * should be included or excluded.
+     * Constructs an IncludePath around a file or directory and whether it should be included or
+     * excluded.
      * 
      * @param path
      *            The file / directory to be used.
@@ -37,18 +37,16 @@ public class IncludePath {
     }
 
     /**
-     * Returns true if the other object is an IncludePath and the path that both
-     * objects represent are the same. It is not required for both IncludePaths
-     * to be included or excluded.
+     * Returns true if the other object is an IncludePath and the path that both objects represent
+     * are the same. It is not required for both IncludePaths to be included or excluded.
      * 
      * @param other
      *            The other IncludePath to compare this one to.
-     * @return Whether the two IncludePaths are considered equal by the criteria
-     *         above.
+     * @return Whether the two IncludePaths are considered equal by the criteria above.
      */
     public boolean equals(Object other) {
-        return !(other instanceof IncludePath) ? false : path.getAbsoluteFile()
-                .equals(((IncludePath) other).path.getAbsoluteFile());
+        return !(other instanceof IncludePath) ? false : path.getAbsoluteFile().equals(
+                ((IncludePath) other).path.getAbsoluteFile());
     }
 
     /**

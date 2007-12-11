@@ -29,6 +29,8 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
 
 /**
  * The path list GUI component.
@@ -75,17 +77,14 @@ public class ResultComponent extends JComponent {
     private JPopupMenu resultPopup = new JPopupMenu();
 
     /**
-     * A menu item for <code>pathPopup</code> to remove all files from the
-     * result model.
+     * A menu item for <code>pathPopup</code> to remove all files from the result model.
      */
     private JMenuItem resultRemoveAllItem = new JMenuItem("Remove All");
 
     /**
-     * A menu item for <code>pathPopup</code> to remove the selected files
-     * from the result model.
+     * A menu item for <code>pathPopup</code> to remove the selected files from the result model.
      */
-    private JMenuItem resultRemoveSelectedItem = new JMenuItem(
-            "Remove Selected Items");
+    private JMenuItem resultRemoveSelectedItem = new JMenuItem("Remove Selected Items");
 
     /**
      * The label for the result source list.
@@ -93,15 +92,9 @@ public class ResultComponent extends JComponent {
     private JLabel resultSourceLabel = new JLabel("New Time Zone Version: ");
 
     /**
-     * The combobox for choosing which timezone resource on the web to use in an
-     * update.
+     * The combobox for choosing which timezone resource on the web to use in an update.
      */
     private JComboBox resultSourceList = new JComboBox();
-
-    /**
-     * The panel where status components are shown.
-     */
-    private JPanel resultStatusPanel = new JPanel();
 
     /**
      * The label for the path list.
@@ -114,14 +107,12 @@ public class ResultComponent extends JComponent {
     private JTable resultTable = new JTable();
 
     /**
-     * A menu item for <code>pathPopup</code> to update all files in the
-     * result model.
+     * A menu item for <code>pathPopup</code> to update all files in the result model.
      */
     private JMenuItem resultUpdateAllItem = new JMenuItem("Update All");
 
     /**
-     * An update button to update the selected files, or all files if none are
-     * selected.
+     * An update button to update the selected files, or all files if none are selected.
      */
     private JButton resultUpdateSelectedButton = new JButton("Update Selected");
 
@@ -131,11 +122,9 @@ public class ResultComponent extends JComponent {
     private JPanel resultUpdatePanel = new JPanel();
 
     /**
-     * A menu item for <code>pathPopup</code> to update the selected files in
-     * the result model.
+     * A menu item for <code>pathPopup</code> to update the selected files in the result model.
      */
-    private JMenuItem resultUpdateSelectedItem = new JMenuItem(
-            "Update Selected Items");
+    private JMenuItem resultUpdateSelectedItem = new JMenuItem("Update Selected Items");
 
     /**
      * The model for all the timezone resources on the web.
@@ -145,21 +134,43 @@ public class ResultComponent extends JComponent {
     /**
      * The status bar for status messages.
      */
-    private JLabel statusBar = new JLabel();
+    private JTextArea statusLog = new JTextArea(STATUS_BAR_ROWS_PREFERRED,
+            STATUS_BAR_COLUMNS_PREFERRED);
+
+    /**
+     * Preferred starting number of rows in the table.
+     */
+    public static final int RESULT_TABLE_ROWS_PREFERRED = 4;
+
+    /**
+     * Preferred starting number of rows in the table.
+     */
+    public static final int STATUS_BAR_ROWS_PREFERRED = 4;
+
+    /**
+     * Preferred starting number of rows in the table.
+     */
+    public static final int STATUS_BAR_COLUMNS_PREFERRED = 48;
 
     /**
      * @param owner
      *            The GUILoader object that ownes this component.
      */
     public ResultComponent(final GUILoader owner) {
+        java.awt.Dimension tableSize = resultTable.getPreferredScrollableViewportSize();
+        tableSize.height = RESULT_TABLE_ROWS_PREFERRED * resultTable.getRowHeight();
+        resultTable.setPreferredScrollableViewportSize(tableSize);
+
+        statusLog.setEditable(false);
+
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         add(resultTableLabel);
         add(new JScrollPane(resultTable));
-        add(resultStatusPanel);
+        add(new JScrollPane(statusLog, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER));
         add(resultOptionPanel);
         add(resultUpdatePanel);
 
-        resultStatusPanel.add(statusBar);
         resultOptionPanel.add(resultSourceLabel);
         resultOptionPanel.add(resultSourceList);
         resultUpdatePanel.add(resultCancelSearchButton);
@@ -199,16 +210,14 @@ public class ResultComponent extends JComponent {
 
             private void checkPopup(MouseEvent event) {
                 if (event.isPopupTrigger())
-                    resultPopup.show((Component) event.getSource(), event
-                            .getX(), event.getY());
+                    resultPopup.show((Component) event.getSource(), event.getX(), event.getY());
             }
         });
 
         resultTable.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent event) {
                 int code = event.getKeyCode();
-                if (code == KeyEvent.VK_DELETE
-                        || code == KeyEvent.VK_BACK_SPACE)
+                if (code == KeyEvent.VK_DELETE || code == KeyEvent.VK_BACK_SPACE)
                     resultModel.remove(resultTable.getSelectedRows());
             }
         });
@@ -219,13 +228,10 @@ public class ResultComponent extends JComponent {
                 int[] rows = resultTable.getSelectedRows();
                 for (int i = 0; i < rows.length; i++)
                     selection += new File(resultModel.getValueAt(rows[i],
-                            ResultModel.COLUMN_FILE_PATH).toString(),
-                            resultModel.getValueAt(rows[i],
-                                    ResultModel.COLUMN_FILE_NAME).toString())
-                            .toString()
+                            ResultModel.COLUMN_FILE_PATH).toString(), resultModel.getValueAt(
+                            rows[i], ResultModel.COLUMN_FILE_NAME).toString()).toString()
                             + "\n";
-                getToolkit().getSystemClipboard().setContents(
-                        new StringSelection(selection), null);
+                getToolkit().getSystemClipboard().setContents(new StringSelection(selection), null);
             }
         });
 
@@ -243,9 +249,7 @@ public class ResultComponent extends JComponent {
 
         resultUpdateSelectedItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                owner
-                        .update(resultTable.getSelectedRows(),
-                                getSelectedSource());
+                owner.update(resultTable.getSelectedRows(), getSelectedSource());
             }
         });
 
@@ -277,12 +281,18 @@ public class ResultComponent extends JComponent {
     }
 
     /**
-     * Returns the status bar.
+     * Adds the status to the statusbar.
      * 
-     * @return The status bar.
+     * @param status
+     *            The current status.
      */
-    public JLabel getStatusBar() {
-        return statusBar;
+    public void addStatusMessage(String status) {
+        String text = statusLog.getText();
+        if (text == null || text.trim().length() == 0)
+            statusLog.setText(status);
+        else
+            statusLog.append("\n" + status);
+        statusLog.setCaretPosition(statusLog.getText().length());
     }
 
     /**

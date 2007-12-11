@@ -24,10 +24,9 @@ import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.parser.ParserDelegator;
 
 /**
- * Represents a map of timezone version names to urls where they can be found
- * that is usable by any class that uses AbstractListModels (such as a JList or
- * JCombobox in swing). Also contains methods to begin a search for sources on
- * the ICU Timezone Repository.
+ * Represents a map of timezone version names to urls where they can be found that is usable by any
+ * class that uses AbstractListModels (such as a JList or JCombobox in swing). Also contains methods
+ * to begin a search for sources on the ICU Timezone Repository.
  */
 class SourceModel extends AbstractListModel implements ComboBoxModel {
     /**
@@ -36,14 +35,14 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
     public static final long serialVersionUID = 1339;
 
     /**
-     * The URL of the ICU Timezone Repository. In order to catch a
-     * MalformedURLException, this field must be initialized by the constructor.
+     * The URL of the ICU Timezone Repository. In order to catch a MalformedURLException, this field
+     * must be initialized by the constructor.
      */
     public static URL TZ_BASE_URL = null;
 
     /**
-     * The end of a URL string to any timezone resource in the ICU Timezone
-     * Repository meant for ICU4J.
+     * The end of a URL string to any timezone resource in the ICU Timezone Repository meant for
+     * ICU4J.
      */
     public static final String TZ_BASE_URLSTRING_END = "/be/zoneinfo.res";
 
@@ -53,23 +52,22 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
     public static final String TZ_BASE_URLSTRING_START = "http://icu-project.org/tzdata/";
 
     /**
-     * The readable name of the local timezone resource file, ie. "Local Copy"
-     * or "Local Copy (2007c)". Since the version is determined by a
-     * <code>ICUFile.findFileTZVersion</code>, this field must be initialized
-     * by the constructor.
+     * The readable name of the local timezone resource file, ie. "Local Copy" or "Local Copy
+     * (2007c)". Since the version is determined by a <code>ICUFile.findFileTZVersion</code>,
+     * this field must be initialized by the constructor.
      */
     public static String TZ_LOCAL_CHOICE = null;
 
     /**
-     * The URL of the local timezone resource file. In order to catch a
-     * MalformedURLException, this field must be initialized by the constructor.
+     * The URL of the local timezone resource file. In order to catch a MalformedURLException, this
+     * field must be initialized by the constructor.
      */
     public static URL TZ_LOCAL_URL = null;
 
     /**
-     * The version of the local timezone resource file, ie. "2007c". Since the
-     * version is determined by a <code>ICUFile.findFileTZVersion</code>,
-     * this field must be initialized by the constructor.
+     * The version of the local timezone resource file, ie. "2007c". Since the version is determined
+     * by a <code>ICUFile.findFileTZVersion</code>, this field must be initialized by the
+     * constructor.
      */
     public static String TZ_LOCAL_VERSION = null;
 
@@ -84,8 +82,7 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
     private Logger logger;
 
     /**
-     * The currently selected timezone resource name. Initially set to
-     * <code>TZ_LOCAL_CHOICE</code>.
+     * The currently selected timezone resource name. Initially set to <code>TZ_LOCAL_CHOICE</code>.
      */
     private Object selected = TZ_LOCAL_CHOICE;
 
@@ -115,18 +112,15 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
                 if (!tzLocalFile.exists()) {
                     // not a critical error, but we won't be able to use the
                     // local tz file
-                    logger.errorln("Local copy (zoneinfo.res) does not exist");
+                    logger.errorln("Local copy (zoneinfo.res) does not exist (perhaps you are not running icutzu from the correct directory?)");
                 } else {
                     TZ_LOCAL_URL = tzLocalFile.toURL();
-                    TZ_LOCAL_VERSION = ICUFile.findFileTZVersion(tzLocalFile,
-                            logger);
+                    TZ_LOCAL_VERSION = ICUFile.findFileTZVersion(tzLocalFile, logger);
                     if (TZ_LOCAL_VERSION == null) {
-                        logger
-                                .errorln("Failed to determine version of local copy");
+                        logger.errorln("Failed to determine version of local copy");
                         TZ_LOCAL_CHOICE = "Local Copy";
                     } else {
-                        TZ_LOCAL_CHOICE = "Local Copy (" + TZ_LOCAL_VERSION
-                                + ")";
+                        TZ_LOCAL_CHOICE = "Local Copy (" + TZ_LOCAL_VERSION + ")";
                     }
                     selected = TZ_LOCAL_CHOICE;
                 }
@@ -139,9 +133,9 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
     }
 
     /**
-     * Gathers all the names and urls of timezone resources available on the ICU
-     * Timezone Repository. Also sets the selected item in this list to be the
-     * best timezone version available.
+     * Gathers all the names and urls of timezone resources available on the ICU Timezone
+     * Repository. Also sets the selected item in this list to be the best timezone version
+     * available.
      */
     public void findSources() {
         BufferedReader reader = null;
@@ -160,8 +154,7 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
                         listItem = false;
                 }
 
-                public void handleStartTag(HTML.Tag tag,
-                        MutableAttributeSet attr, int pos) {
+                public void handleStartTag(HTML.Tag tag, MutableAttributeSet attr, int pos) {
                     if (tag == HTML.Tag.LI)
                         listItem = true;
                 }
@@ -174,15 +167,14 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
                         if (!"..".equals(str))
                             try {
                                 // add the new item to the map
-                                urlMap.put(str, new URL(TZ_BASE_URLSTRING_START
-                                        + str + TZ_BASE_URLSTRING_END));
+                                urlMap.put(str, new URL(TZ_BASE_URLSTRING_START + str
+                                        + TZ_BASE_URLSTRING_END));
 
                                 // update the selected item and fire off an
                                 // event
                                 selected = urlMap.lastKey();
                                 int index = 0;
-                                for (Iterator iter = urlMap.keySet().iterator(); iter
-                                        .hasNext();) {
+                                for (Iterator iter = urlMap.keySet().iterator(); iter.hasNext();) {
                                     if (iter.next().equals(str))
                                         index++;
                                 }
@@ -235,9 +227,9 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
     }
 
     /**
-     * Returns the selected timezone resource name. If
-     * <code>setSelectedItem</code> is never called externally, then this is
-     * also the best available timezone resource (the most recent version).
+     * Returns the selected timezone resource name. If <code>setSelectedItem</code> is never
+     * called externally, then this is also the best available timezone resource (the most recent
+     * version).
      * 
      * @return The selected timezone resource name.
      */
@@ -246,8 +238,8 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
     }
 
     /**
-     * Gets the number of timezone resources currently stored by the source
-     * model. There will always be at least one.
+     * Gets the number of timezone resources currently stored by the source model. There will always
+     * be at least one.
      * 
      * @return The number of timezone resources.
      */
@@ -273,10 +265,9 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
     }
 
     /**
-     * Returns the version of a timezone resource with the given name. Usually
-     * this is exactly the same as the name, but if the name is
-     * <code>TZ_LOCAL_CHOICE</code> (ignoring case), then the version is
-     * <code>TZ_LOCAL_VERSION</code>.
+     * Returns the version of a timezone resource with the given name. Usually this is exactly the
+     * same as the name, but if the name is <code>TZ_LOCAL_CHOICE</code> (ignoring case), then the
+     * version is <code>TZ_LOCAL_VERSION</code>.
      * 
      * @param choice
      *            The version name, which should be a String.
@@ -292,8 +283,8 @@ class SourceModel extends AbstractListModel implements ComboBoxModel {
     }
 
     /**
-     * Returns an iterator on the entry set of the url map. Each item iterated
-     * will be of type Map.Entry, whos key is a String and value is a URL.
+     * Returns an iterator on the entry set of the url map. Each item iterated will be of type
+     * Map.Entry, whos key is a String and value is a URL.
      * 
      * @return An iterator as described above.
      */

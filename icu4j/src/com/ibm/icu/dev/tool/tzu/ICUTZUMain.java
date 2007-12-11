@@ -61,15 +61,14 @@ public class ICUTZUMain {
      *            <li>Timezone resource file</li>
      *            <li>Backup directory</li>
      *            </ul>
-     *            All directories and paths should be relative to the given
-     *            current directory.
+     *            All directories and paths should be relative to the given current directory.
      */
     public static void main(String[] args) {
         try {
             // TODO: fix this to properly set the user agent
             String agent = "ICUTZU/1.0 (" + System.getProperty("os.name") + " "
-                    + System.getProperty("os.version") + "; "
-                    + Locale.getDefault().toString() + ")";
+                    + System.getProperty("os.version") + "; " + Locale.getDefault().toString()
+                    + ")";
             System.setProperty("http.agent", agent);
 
             if (args.length == 0) {
@@ -81,11 +80,10 @@ public class ICUTZUMain {
                     curDir = curDir.getAbsoluteFile();
                 }
 
-                new GUILoader(curDir, new File("Temp").getAbsoluteFile(),
-                        new File("DirectorySearch.txt").getAbsoluteFile(),
-                        new File("ICUList.txt").getAbsoluteFile(), new File(
-                                "zoneinfo.res").getAbsoluteFile(), new File(
-                                "icu.gif").getAbsoluteFile());
+                new GUILoader(curDir, new File("Temp").getAbsoluteFile(), new File(
+                        "DirectorySearch.txt").getAbsoluteFile(), new File("ICUList.txt")
+                        .getAbsoluteFile(), new File("zoneinfo.res").getAbsoluteFile(), new File(
+                        "icu.gif").getAbsoluteFile());
                 return;
             } else if (args.length != NUM_ARGS) {
                 System.err.println("Incorrect number of arguments.");
@@ -101,22 +99,16 @@ public class ICUTZUMain {
                     curDir = curDir.getAbsoluteFile();
                 }
 
-                File backupDir = new File(curDir, args[BACKUP_DIR])
-                        .getAbsoluteFile();
-                File pathFile = new File(curDir, args[PATH_FILE])
-                        .getAbsoluteFile();
-                File resultFile = new File(curDir, args[RESULT_FILE])
-                        .getAbsoluteFile();
+                File backupDir = new File(curDir, args[BACKUP_DIR]).getAbsoluteFile();
+                File pathFile = new File(curDir, args[PATH_FILE]).getAbsoluteFile();
+                File resultFile = new File(curDir, args[RESULT_FILE]).getAbsoluteFile();
                 File tzFile = new File(curDir, args[TZ_FILE]).getAbsoluteFile();
-                File iconFile = new File(curDir, args[ICON_FILE])
-                        .getAbsoluteFile();
+                File iconFile = new File(curDir, args[ICON_FILE]).getAbsoluteFile();
 
                 if ("true".equalsIgnoreCase(System.getProperty("nogui")))
-                    new CLILoader(curDir, backupDir, pathFile, resultFile,
-                            tzFile);
+                    new CLILoader(curDir, backupDir, pathFile, resultFile, tzFile);
                 else
-                    new GUILoader(curDir, backupDir, pathFile, resultFile,
-                            tzFile, iconFile);
+                    new GUILoader(curDir, backupDir, pathFile, resultFile, tzFile, iconFile);
             }
         } catch (Throwable ex) {
             // should any unexplained exception occur, we should exit

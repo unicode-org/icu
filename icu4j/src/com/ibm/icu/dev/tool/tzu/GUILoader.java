@@ -84,8 +84,8 @@ public class GUILoader {
     private ResultModel resultModel;
 
     /**
-     * The source model that stores all the update sources and accesses the
-     * repository for more sources.
+     * The source model that stores all the update sources and accesses the repository for more
+     * sources.
      */
     private SourceModel sourceModel;
 
@@ -110,15 +110,14 @@ public class GUILoader {
      * @param iconFile
      *            The icon file.
      */
-    public GUILoader(File curDir, File backupDir, File pathFile,
-            File resultFile, File tzFile, File iconFile) {
+    public GUILoader(File curDir, File backupDir, File pathFile, File resultFile, File tzFile,
+            File iconFile) {
         // set the backup dir
         this.backupDir = backupDir;
         this.curDir = curDir;
 
         // get the icon
-        Image icon = Toolkit.getDefaultToolkit().getImage(
-                iconFile.getAbsolutePath());
+        Image icon = Toolkit.getDefaultToolkit().getImage(iconFile.getAbsolutePath());
 
         // initialize the path list gui
         pathGUI = new PathComponent(this);
@@ -154,14 +153,11 @@ public class GUILoader {
         // get the logger instance
         try {
             File logFile = new File(curDir.getPath(), "icutzugui.log");
-            logger = Logger.getInstance(logFile, Logger.NORMAL, resultGUI
-                    .getStatusBar(), pathFrame);
+            logger = Logger.getInstance(logFile, Logger.NORMAL, resultGUI, pathFrame);
         } catch (FileNotFoundException ex) {
-            String error = "Could not open " + Logger.DEFAULT_FILENAME
-                    + " for writing.";
+            String error = "Could not open " + Logger.DEFAULT_FILENAME + " for writing.";
             System.out.println(error);
-            JOptionPane.showMessageDialog(null, error, TITLE,
-                    JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, error, TITLE, JOptionPane.ERROR_MESSAGE);
             System.exit(-1);
         }
 
@@ -177,7 +173,11 @@ public class GUILoader {
 
         // load all the paths into the path model
         try {
+            // do it quietly
+            int verb = logger.getVerbosity();
+            logger.setVerbosity(Logger.QUIET);
             pathModel.loadPaths();
+            logger.setVerbosity(verb);
         } catch (IOException ex) {
             // failed to load the directory search file
             pathModel.addAllDrives();
@@ -229,23 +229,16 @@ public class GUILoader {
         workerThread = new Thread(new Runnable() {
             public void run() {
                 try {
-                    logger.printlnToScreen("Search started ...");
-                    logger.setStatus("Search started ...");
+                    logger.printlnToBoth("Search started ...");
                     setCancelSearchEnabled(true);
                     setUpdateEnabled(false);
                     setSearchEnabled(false);
                     resultFrame.setVisible(true);
                     resultClosed = false;
-                    pathModel.search(resultModel, indices, subdirs, curDir,
-                            backupDir);
-                    logger.printlnToScreen("Search ended.");
-                    logger.setStatus("Search ended.");
+                    pathModel.search(resultModel, indices, subdirs, curDir, backupDir);
+                    logger.printlnToBoth("Search ended.");
                 } catch (InterruptedException ex) {
-                    try {
-                        logger.setStatus("Search interrupted.");
-                    } catch (InterruptedException e) {
-                        // once is enough
-                    }
+                    logger.printlnToBoth("Search interrupted.");
                 }
                 setSearchEnabled(true);
                 setUpdateEnabled(true);
@@ -268,23 +261,16 @@ public class GUILoader {
         workerThread = new Thread(new Runnable() {
             public void run() {
                 try {
-                    logger.printlnToScreen("Search started ...");
-                    logger.setStatus("Search started ...");
+                    logger.printlnToBoth("Search started ...");
                     setCancelSearchEnabled(true);
                     setUpdateEnabled(false);
                     setSearchEnabled(false);
                     resultFrame.setVisible(true);
                     resultClosed = false;
-                    pathModel
-                            .searchAll(resultModel, subdirs, curDir, backupDir);
-                    logger.printlnToScreen("Search ended.");
-                    logger.setStatus("Search ended.");
+                    pathModel.searchAll(resultModel, subdirs, curDir, backupDir);
+                    logger.printlnToBoth("Search ended.");
                 } catch (InterruptedException ex) {
-                    try {
-                        logger.setStatus("Search interrupted.");
-                    } catch (InterruptedException e) {
-                        // once is enough
-                    }
+                    logger.printlnToBoth("Search interrupted.");
                 }
                 setSearchEnabled(true);
                 setUpdateEnabled(true);
@@ -309,14 +295,12 @@ public class GUILoader {
         workerThread = new Thread(new Runnable() {
             public void run() {
                 try {
-                    logger.printlnToScreen("Update started ...");
-                    logger.setStatus("Update started ...");
+                    logger.printlnToBoth("Update started ...");
                     setCancelUpdateEnabled(true);
                     setUpdateEnabled(false);
                     setSearchEnabled(false);
                     resultModel.update(indices, updateURL, backupDir);
-                    logger.printlnToScreen("Update ended.");
-                    logger.setStatus("Update ended.");
+                    logger.printlnToBoth("Update ended.");
                 } catch (InterruptedException ex) {
                     // we want to know what was last being updated, so do not
                     // change the status bar message
@@ -347,14 +331,12 @@ public class GUILoader {
         workerThread = new Thread(new Runnable() {
             public void run() {
                 try {
-                    logger.printlnToScreen("Update started ...");
-                    logger.setStatus("Update started ...");
+                    logger.printlnToBoth("Update started ...");
                     setCancelUpdateEnabled(true);
                     setUpdateEnabled(false);
                     setSearchEnabled(false);
                     resultModel.updateAll(updateURL, backupDir);
-                    logger.printlnToScreen("Update ended.");
-                    logger.setStatus("Update ended.");
+                    logger.printlnToBoth("Update ended.");
                 } catch (InterruptedException ex) {
                     // we want to know what was last being updated, so do not
                     // change the status bar message
