@@ -176,7 +176,7 @@ public class ChineseTest extends CalendarTest {
         tempcal.clear();
         tempcal.set(1989, Calendar.NOVEMBER, 1);
         ChineseCalendar chinese = new ChineseCalendar();
-        if (!skipIfBeforeICU(3,8,0)) {
+        if (!skipIfBeforeICU(3,9,1)) {
             doLimitsTest(chinese, null, tempcal.getTime());
         }
         doTheoreticalLimitsTest(chinese, true);
