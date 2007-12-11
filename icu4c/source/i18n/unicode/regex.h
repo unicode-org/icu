@@ -16,7 +16,7 @@
 #ifndef REGEX_H
 #define REGEX_H
 
-//#define REGEX_DEBUG
+#define REGEX_DEBUG
 
 /**
  * \file
@@ -36,7 +36,7 @@
  *  operations, for search and replace operations, and for obtaining detailed
  *  information about bounds of a match. </p>
  *
- * <p>Note that by constructing <code>RegexMatcher</code> objects directly from regular 
+ * <p>Note that by constructing <code>RegexMatcher</code> objects directly from regular
  * expression pattern strings application code can be simplified and the explicit
  * need for <code>RegexPattern</code> objects can usually be eliminated.
  * </p>
@@ -480,7 +480,7 @@ public:
       * critical that the string not be altered or deleted before use by the regular
       * expression operations is complete.
       *
-      *  @param regexp The Regular Expression to be compiled.  
+      *  @param regexp The Regular Expression to be compiled.
       *  @param input  The string to match.  The matcher retains a reference to the
       *                caller's string; mo copy is made.
       *  @param flags  Regular expression options, such as case insensitive matching.
@@ -517,7 +517,7 @@ public:
 
 
    /**
-    *   Attempts to match the entire input string against the pattern.
+    *   Attempts to match the entire input region against the pattern.
     *    @param   status     A reference to a UErrorCode to receive any errors.
     *    @return TRUE if there is a match
     *    @stable ICU 2.4
@@ -525,8 +525,10 @@ public:
     virtual UBool matches(UErrorCode &status);
 
    /**
-    *   Attempts to match the input string, beginning at startIndex, against the pattern.
-    *   The match must extend to the end of the input string.
+    *   Resets the matcher, then attempts to match the input beginning 
+    *   at the specified startIndex, and extending to the end of the input.
+    *   The input region is reset to include the entire input string.
+    *   A successful match must extend to the end of the input.
     *    @param   startIndex The input string index at which to begin matching.
     *    @param   status     A reference to a UErrorCode to receive any errors.
     *    @return TRUE if there is a match
@@ -538,9 +540,10 @@ public:
 
 
    /**
-    *   Attempts to match the input string, starting from the beginning, against the pattern.
-    *   Like the matches() method, this function always starts at the beginning of the input string;
-    *   unlike that function, it does not require that the entire input string be matched.
+    *   Attempts to match the input string, starting from the beginning of the region,
+    *   against the pattern.  Like the matches() method, this function 
+    *   always starts at the beginning of the input region;
+    *   unlike that function, it does not require that the entire region be matched.
     *
     *   <p>If the match succeeds then more information can be obtained via the <code>start()</code>,
     *     <code>end()</code>, and <code>group()</code> functions.</p>
@@ -699,6 +702,12 @@ public:
     *   The effect is to remove any memory of previous matches,
     *       and to cause subsequent find() operations to begin at
     *       the specified position in the input string.
+    * <p>
+    *   The matcher's region is reset to its default, which is the entire
+    *   input string.
+    * <p>
+    *   An alternative to this function is to set a match region
+    *   beginning at the desired index.
     *
     *   @return this RegexMatcher.
     *   @stable ICU 2.8
@@ -709,13 +718,13 @@ public:
    /**
     *   Resets this matcher with a new input string.  This allows instances of RegexMatcher
     *     to be reused, which is more efficient than creating a new RegexMatcher for
-    *     each input string to be processed.  
+    *     each input string to be processed.
     *   @param input The new string on which subsequent pattern matches will operate.
     *                The matcher retains a reference to the callers string, and operates
     *                directly on that.  Ownership of the string remains with the caller.
     *                Because no copy of the string is made, it is essential that the
     *                caller not delete the string until after regexp operations on it
-    *                are done.  
+    *                are done.
     *   @return this RegexMatcher.
     *   @stable ICU 2.4
     */
@@ -743,6 +752,132 @@ public:
     *   @stable ICU 2.4
     */
     virtual const UnicodeString &input() const;
+    
+    
+
+   /** Sets the limits of this matcher's region.
+     * The region is the part of the input string that will be searched to find a match.
+     * Invoking this method resets the matcher, and then sets the region to start
+     * at the index specified by the start parameter and end at the index specified
+     * by the end parameter.
+     *
+     * Depending on the transparency and anchoring being used (see useTransparentBounds
+     * and useAnchoringBounds), certain constructs such as anchors may behave differently
+     * at or around the boundaries of the region
+     *
+     * The function will fail if start is greater than limit, or if either index
+     *  is less than zero or greater than the length of the string being matched.
+     *
+     * @param start  The index to begin searches at.
+     * @param limit  The index to end searches at (exclusive).
+     * @param status A reference to a UErrorCode to receive any errors.
+     * @draft ICU 4.0
+     */
+     virtual RegexMatcher &region(int32_t start, int32_t limit, UErrorCode &status);
+
+
+   /**
+     * Reports the start index of this matcher's region. The searches this matcher
+     * conducts are limited to finding matches within regionStart (inclusive) and
+     * regionEnd (exclusive).
+     *
+     * @return The starting index of this matcher's region.
+     * @draft ICU 4.0
+     */
+     virtual int32_t regionStart() const;
+
+
+    /**
+      * Reports the end (limit) index (exclusive) of this matcher's region. The searches
+      * this matcher conducts are limited to finding matches within regionStart
+      * (inclusive) and regionEnd (exclusive).
+      *
+      * @return The ending point of this matcher's region.
+      * @draft ICU 4.0
+      */
+      virtual int32_t regionEnd() const;
+
+    /**
+      * Queries the transparency of region bounds for this matcher.
+      * See useTransparentBounds for a description of transparent and opaque bounds.
+      * By default, a matcher uses opaque region boundaries.
+      *
+      * @return TRUE if this matcher is using opaque bounds, false if it is not.
+      * @draft ICU 4.0
+      */
+      virtual UBool hasTransparentBounds() const;
+
+    /**
+      * Sets the transparency of region bounds for this matcher.
+      * Invoking this function with an argument of true will set this matcher to use transparent bounds.
+      * If the boolean argument is false, then opaque bounds will be used.
+      *
+      * Using transparent bounds, the boundaries of this matcher's region are transparent
+      * to lookahead, lookbehind, and boundary matching constructs. Those constructs can
+      * see text beyond the boundaries of the region while checking for a match.
+      *
+      * With opaque bounds, no text outside of the matcher's region is visible to lookahead,
+      * lookbehind, and boundary matching constructs.
+      *
+      * By default, a matcher uses opaque bounds.
+      *
+      * @param   b TRUE for transparent bounds; FALSE for opaque bounds
+      * @return  This Matcher;
+      * @draft   ICU 4.0
+      **/
+      virtual RegexMatcher &useTransparentBounds(UBool b);
+
+     
+    /**
+      * Return true if this matcher is using anchoring bounds.
+      * By default, matchers use anchoring region boounds.
+      *
+      * @return TRUE if this matcher is using anchoring bounds.
+      * @draft  ICU 4.0
+      */    
+      virtual UBool hasAnchoringBounds() const;
+
+    /**
+      * Set whether this matcher is using Anchoring Bounds for its region.
+      * With anchoring bounds, pattern anchors such as ^ and $ will match at the start
+      * and end of the region.  Without Anchoring Bounds, anchors will only match at
+      * the positions they would in the complete text.
+      *
+      * Anchoring Bounds are the default for regions.
+      *
+      * @param b TRUE if to enable anchoring bounds; FALSE to disable them.
+      * @return  This Matcher
+      * @draft   ICU 4.0
+      */
+      virtual RegexMatcher &useAnchoringBounds(UBool b);
+
+    /**
+      * Return TRUE if the most recent matching operation touched the
+      *  end of the text being processed.  In this case, additional input text could
+      *  change the results of that match.
+      *
+      *  hitEnd() is defined for both successful and unsuccessful matches.
+      *  In either case hitEnd() will return TRUE if if the end of the text was
+      *  reached at any point during the matching process.
+      *
+      *  @return  TRUE if the most recent match hit the end of input
+      *  @draft   ICU 4.0
+      */
+      virtual UBool hitEnd() const;
+
+    /**
+      * Return TRUE the most recent match succeeded and additional input could cause
+      * it to fail. If this method returns false and a match was found, then more input
+      * might change the match but the match won't be lost. If a match was not found,
+      * then requireEnd has no meaning.
+      *
+      * @return TRUE if more input could cause the most recent match to no longer match.
+      * @draft  ICU 4.0
+      */
+      virtual UBool requireEnd() const;
+
+
+
 
 
    /**
@@ -901,12 +1036,16 @@ private:
     RegexMatcher &operator =(const RegexMatcher &rhs);
     friend class RegexPattern;
     friend class RegexCImpl;
+public:
+    /** @internal  */
+    void resetPreserveRegion();  // Reset matcher state, but preserve any region.
+private:
 
     //
     //  MatchAt   This is the internal interface to the match engine itself.
     //            Match status comes back in matcher member variables.
     //
-    void                 MatchAt(int32_t startIdx, UErrorCode &status);
+    void                 MatchAt(int32_t startIdx, UBool toEnd, UErrorCode &status);
     inline void          backTrack(int32_t &inputIdx, int32_t &patIdx);
     UBool                isWordBoundary(int32_t pos);         // perform Perl-like  \b test
     UBool                isUWordBoundary(int32_t pos);        // perform RBBI based \b test
@@ -918,18 +1057,45 @@ private:
     const RegexPattern  *fPattern;
     RegexPattern        *fPatternOwned;    // Non-NULL if this matcher owns the pattern, and
                                            //   should delete it when through.
-    const UnicodeString *fInput;
 
-    UBool                fMatch;           // True if the last match was successful.
+    const UnicodeString *fInput;           // The text being matched. Is never NULL.
+    
+    int32_t              fRegionStart;     // Start of the input region, default = 0.
+    int32_t              fRegionLimit;     // End of input region, default to input.length.
+    
+    int32_t              fAnchorStart;     // Region bounds for anchoring operations (^ or $).
+    int32_t              fAnchorLimit;     //   See useAnchoringBounds
+    
+    int32_t              fLookStart;       // Region bounds for look-ahead/behind and
+    int32_t              fLookLimit;       //   and other boundary tests.  See
+                                           //   useTransparentBounds
+
+    int32_t              fActiveStart;     // Currently active bounds for matching.
+    int32_t              fActiveLimit;     //   Usually is the same as region, but
+                                           //   is changed to fLookStart/Limit when
+                                           //   entering look around regions.
+
+    UBool                fTransparentBounds;  // True if using transparent bounds.
+    UBool                fAnchoringBounds; // True if using anchoring bounds.
+
+    UBool                fMatch;           // True if the last attempted match was successful.
     int32_t              fMatchStart;      // Position of the start of the most recent match
     int32_t              fMatchEnd;        // First position after the end of the most recent match
+                                           //   Zero if no previous match, even when a region
+                                           //   is active.
     int32_t              fLastMatchEnd;    // First position after the end of the previous match,
                                            //   or -1 if there was no previous match.
-    int32_t              fLastReplaceEnd;  // First position after the end of the previous appendReplacement();
+    int32_t              fAppendPosition;  // First position after the end of the previous
+                                           //   appendReplacement().  As described by the
+                                           //   JavaDoc for Java Matcher, where it is called 
+                                           //   "append position"
+    UBool                fHitEnd;          // True if the last match touched the end of input.
+    UBool                fRequireEnd;      // True if the last match required end-of-input
+                                           //    (matched $ or Z)
 
     UVector32           *fStack;
-    REStackFrame        *fFrame;           // After finding a match, the last active stack
-                                           //   frame, which will contain the capture group results.
+    REStackFrame        *fFrame;           // After finding a match, the last active stack frame,
+                                           //   which will contain the capture group results.
                                            //   NOT valid while match engine is running.
 
     int32_t             *fData;            // Data area for use by the compiled pattern.

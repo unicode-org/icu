@@ -1,7 +1,7 @@
 
 #*****************************************************************************
 #
-#   Copyright (C) 2002-2003, International Business Machines Corporation and others.
+#   Copyright (C) 2002-2007, International Business Machines Corporation and others.
 #   All Rights Reserved.
 #
 #*****************************************************************************
@@ -25,8 +25,8 @@
 #
 #
 #StateName:
-#   input-char           n next-state           ^push-state     action    
-#   input-char           n next-state           ^push-state     action    
+#   input-char           n next-state           ^push-state     action
+#   input-char           n next-state           ^push-state     action
 #       |                |   |                      |             |
 #       |                |   |                      |             |--- action to be performed by state machine
 #       |                |   |                      |                  See function RBBIRuleScanner::doParseActions()
@@ -46,7 +46,7 @@
 #            matches, peform the actions and go to the state specified on this line.
 #            The input character is tested sequentally, in the order written.  The characters and
 #            character classes tested for do not need to be mutually exclusive.  The first match wins.
-#            
+#
 
 
 
@@ -56,27 +56,27 @@
 #
 start:
    default                 term                                     doPatStart
-    
 
-    
-    
+
+
+
 #
 #  term.  At a position where we can accept the start most items in a pattern.
 #
 term:
     quoted               n expr-quant                               doLiteralChar
     rule_char            n expr-quant                               doLiteralChar
-    '['                  n expr-quant                               doScanUnicodeSet
-    '('                  n open-paren                     
+    '['                  n set-open       ^set-finish               doSetBegin
+    '('                  n open-paren
     '.'                  n expr-quant                               doDotAny
-    '^'                  n term                                     doCaret
-    '$'                  n term                                     doDollar
+    '^'                  n expr-quant                               doCaret
+    '$'                  n expr-quant                               doDollar
     '\'                  n backslash
     '|'                  n  term                                    doOrOperator
     ')'                  n  pop                                     doCloseParen
     eof	                   term                                     doPatFinish
     default                errorDeath                               doRuleError
-    
+
 
 
 #
@@ -84,14 +84,14 @@ term:
 #                 trailing quantifier - *, +, ?, *?,  etc.
 #
 expr-quant:
-    '*'                  n  quant-star                       
-    '+'                  n  quant-plus                              
-    '?'                  n  quant-opt     
+    '*'                  n  quant-star
+    '+'                  n  quant-plus
+    '?'                  n  quant-opt
     '{'                  n  interval-open                          doIntervalInit
     '('                  n  open-paren-quant
-    default                 expr-cont 
-    
-    
+    default                 expr-cont
+
+
 #
 #  expr-cont      Expression, continuation.  At a point where additional terms are
 #                                            allowed, but not required.  No Quantifiers
@@ -99,8 +99,8 @@ expr-quant:
 expr-cont:
     '|'                  n  term                                    doOrOperator
     ')'                  n  pop                                     doCloseParen
-    default                 term                                    
-    
+    default                 term
+
 
 #
 #   open-paren-quant   Special case handling for comments appearing before a quantifier,
@@ -111,12 +111,12 @@ expr-cont:
 open-paren-quant:
     '?'                  n  open-paren-quant2                      doSuppressComments
     default                 open-paren
-    
+
 open-paren-quant2:
     '#'                  n  paren-comment   ^expr-quant
     default                 open-paren-extended
-    
- 
+
+
 #
 #   open-paren    We've got an open paren.  We need to scan further to
 #                 determine what kind of quantifier it is - plain (, (?:, (?>, or whatever.
@@ -124,7 +124,7 @@ open-paren-quant2:
 open-paren:
     '?'                  n  open-paren-extended                     doSuppressComments
     default                 term            ^expr-quant             doOpenCaptureParen
-    
+
 open-paren-extended:
     ':'                  n  term            ^expr-quant             doOpenNonCaptureParen  #  (?:
     '>'                  n  term            ^expr-quant             doOpenAtomicParen      #  (?>
@@ -133,24 +133,25 @@ open-paren-extended:
     '<'                  n  open-paren-lookbehind
     '#'                  n  paren-comment   ^term
     'i'                     paren-flag                              doBeginMatchMode
+    'd'                     paren-flag                              doBeginMatchMode
     'm'                     paren-flag                              doBeginMatchMode
     's'                     paren-flag                              doBeginMatchMode
+    'u'                     paren-flag                              doBeginMatchMode
     'w'                     paren-flag                              doBeginMatchMode
     'x'                     paren-flag                              doBeginMatchMode
     '-'                     paren-flag                              doBeginMatchMode
     '('                  n  errorDeath                              doConditionalExpr
     '{'                  n  errorDeath                              doPerlInline
     default                 errorDeath                              doBadOpenParenType
-    
+
 open-paren-lookbehind:
     '='                  n  term            ^expr-cont              doOpenLookBehind       #  (?<=
     '!'                  n  term            ^expr-cont              doOpenLookBehindNeg    #  (?<!
     default                 errorDeath                              doBadOpenParenType
-    
+
 
 #
 #   paren-comment    We've got a (?# ... )  style comment.  Eat pattern text till we get to the ')'
-#                    TODO:  should parens nest here?  Check what perl does.
 #
 paren-comment:
     ')'                  n  pop
@@ -158,20 +159,22 @@ paren-comment:
     default              n  paren-comment
 
 #
-#  paren-flag    Scanned a (?ismx-ismx  flag setting 
-#                 
+#  paren-flag    Scanned a (?ismx-ismx  flag setting
+#
 paren-flag:
     'i'                  n  paren-flag                              doMatchMode
+    'd'                  n  paren-flag                              doMatchMode
     'm'                  n  paren-flag                              doMatchMode
     's'                  n  paren-flag                              doMatchMode
+    'u'                  n  paren-flag                              doMatchMode
     'w'                  n  paren-flag                              doMatchMode
     'x'                  n  paren-flag                              doMatchMode
     '-'                  n  paren-flag                              doMatchMode
     ')'                  n  term                                    doSetMatchMode
     ':'                  n  term              ^expr-quant           doMatchModeParen
     default                 errorDeath                              doBadModeFlag
-    
-    
+
+
 #
 #  quant-star     Scanning a '*' quantifier.  Need to look ahead to decide
 #                 between plain '*', '*?', '*+'
@@ -204,13 +207,12 @@ quant-opt:
 
 #
 #   Interval         scanning a '{', the opening delimiter for an interval specification
-#                                   {number} or {min, max} or {min, }
+#                                   {number} or {min, max} or {min,}
 #
 interval-open:
-    white_space          n  interval-open                                  # TODO:  is white space allowed here in non-free mode?
-    digit_char              interval-lower                          
+    digit_char              interval-lower
     default                 errorDeath                              doIntervalError
-    
+
 interval-lower:
     digit_char           n  interval-lower                          doIntevalLowerDigit
     ','			         n  interval-upper
@@ -221,13 +223,13 @@ interval-upper:
     digit_char           n  interval-upper                          doIntervalUpperDigit
     '}'                  n  interval-type
     default                 errorDeath                              doIntervalError
-    
+
 interval-type:
     '?'                  n  expr-cont                               doNGInterval                # {n,m}?
     '+'                  n  expr-cont                               doPossessiveInterval        # {n,m}+
     default                 expr-cont                               doInterval                  # {m,n}
-    
-    
+
+
 #
 #  backslash        #  Backslash.  Figure out which of the \thingies we have encountered.
 #                                  The low level next-char function will have preprocessed
@@ -239,7 +241,7 @@ backslash:
    'd'                   n  expr-quant                              doBackslashd
    'D'                   n  expr-quant                              doBackslashD
    'G'                   n  term                                    doBackslashG
-   'N'                      expr-quant                              doProperty       #   \N{NAME}  named char
+   'N'                      expr-quant                              doNamedChar      #   \N{NAME}  named char
    'p'                      expr-quant                              doProperty       #   \p{Lu}  style property
    'P'                      expr-quant                              doProperty
    'Q'                   n  term                                    doEnterQuoteMode
@@ -250,11 +252,210 @@ backslash:
    'X'                   n  expr-quant                              doBackslashX
    'Z'                   n  term                                    doBackslashZ
    'z'                   n  term                                    doBackslashz
-   digit_char	         n  expr-quant                              doBackRef         #  Will scan multiple digits
+   digit_char            n  expr-quant                              doBackRef         #  Will scan multiple digits
    eof                      errorDeath                              doEscapeError
-   default               n  expr-quant		                    doLiteralChar     #  Escaped literal char.		       
+   default               n  expr-quant                              doEscapedLiteralChar
 
+
+
+#
+# [set expression] parsing,
+#    All states involved in parsing set expressions have names beginning with "set-"
+#
+
+set-open:
+   '^'                   n  set-open2                               doSetNegate
+   ':'                      set-posix                               doSetPosixProp
+   default                  set-open2
+
+set-open2:
+   ']'                   n  set-after-lit                           doSetLiteral
+   default                  set-start
+
+#  set-posix:
+#                  scanned a '[:'  If it really is a [:property:], doSetPosixProp will have
+#                  moved the scan to the closing ']'.  If it wasn't a property
+#                  expression, the scan will still be at the opening ':', which should
+#                  be interpreted as a normal set expression.
+set-posix:
+    ']'                  n   pop                                    doSetEnd
+    ':'                      set-start
+    default                  errorDeath                             doRuleError  # should not be possible.
+
+#
+#   set-start   after the [ and special case leading characters (^ and/or ]) but before
+#               everything else.   A '-' is literal at this point.
+#
+set-start:
+    ']'                  n  pop                                     doSetEnd
+    '['                  n  set-open      ^set-after-set            doSetBeginUnion
+    '\'                  n  set-escape
+    '-'                  n  set-start-dash
+    '&'                  n  set-start-amp
+    default              n  set-after-lit                           doSetLiteral
+
+#    set-start-dash    Turn "[--" into a syntax error.
+#                           "[-x" is good, - and x are literals.
+#
+set-start-dash:
+    '-'                     errorDeath                              doRuleError
+    default                 set-after-lit                           doSetAddDash
+
+#    set-start-amp     Turn "[&&" into a syntax error.
+#                           "[&x" is good, & and x are literals.
+#
+set-start-amp:
+    '&'                     errorDeath                              doRuleError
+    default                 set-after-lit                           doSetAddAmp
+
+#
+#   set-after-lit    The last thing scanned was a literal character within a set.
+#                    Can be followed by anything.  Single '-' or '&' are
+#                    literals in this context, not operators.
+set-after-lit:
+    ']'                  n  pop                                     doSetEnd
+    '['                  n  set-open      ^set-after-set            doSetBeginUnion
+    '-'                  n  set-lit-dash
+    '&'                  n  set-lit-amp
+    '\'                  n  set-escape
+    eof                     errorDeath                              doSetNoCloseError
+    default              n  set-after-lit                           doSetLiteral
+
+set-after-set:
+    ']'                  n  pop                                     doSetEnd
+    '['                  n  set-open      ^set-after-set            doSetBeginUnion
+    '-'                  n  set-set-dash
+    '&'                  n  set-set-amp
+    '\'                  n  set-escape
+    eof                     errorDeath                              doSetNoCloseError
+    default              n  set-after-lit                           doSetLiteral
+
+set-after-range:
+    ']'                  n  pop                                     doSetEnd
+    '['                  n  set-open      ^set-after-set            doSetBeginUnion
+    '-'                  n  set-range-dash
+    '&'                  n  set-range-amp
+    '\'                  n  set-escape
+    eof                     errorDeath                              doSetNoCloseError
+    default              n  set-after-lit                           doSetLiteral
     
+
+# set-after-op
+#     After a --  or &&
+#     It is an error to close a set at this point.
+#
+set-after-op:
+    '['                  n  set-open         ^set-after-set         doSetBeginUnion
+    ']'                     errorDeath                              doSetOpError
+    '\'                  n  set-escape
+    default              n  set-after-lit                           doSetLiteral
+
+#
+#   set-set-amp
+#      Have scanned [[set]&
+#      Could be a '&' intersection operator, if a set follows.
+#      Could be the start of a '&&' operator.
+#      Otherewise is a literal.
+set-set-amp:
+    '['                  n  set-open      ^set-after-set           doSetBeginIntersection1
+    '&'                  n  set-after-op                           doSetIntersection2
+    default                 set-after-lit                          doSetAddAmp
+
+
+# set-lit-amp   Have scanned "[literals&"
+#               Could be a start of "&&" operator or a literal
+#               In [abc&[def]],   the '&' is a literal
+#
+set-lit-amp:
+    '&'                  n  set-after-op                            doSetIntersection2
+    default                 set-after-lit                           doSetAddAmp
+
+
+#
+#  set-set-dash
+#      Have scanned [set]-
+#      Could be a '-' difference operator, if a [set] follows.
+#      Could be the start of a '--' operator.
+#      Otherewise is a literal.
+set-set-dash:
+    '['                  n  set-open      ^set-after-set           doSetBeginDifference1
+    '-'                  n  set-after-op                           doSetDifference2
+    default                 set-after-lit                          doSetAddDash
+
+
+#
+#  set-range-dash
+#      scanned  a-b-  or \w-
+#         any set or range like item where the trailing single '-' should
+#         be literal, not a set difference operation.
+#         A trailing "--" is still a difference operator.
+set-range-dash:
+    '-'                  n  set-after-op                           doSetDifference2
+    default                 set-after-lit                          doSetAddDash
+
+
+set-range-amp:
+    '&'                  n  set-after-op                           doSetIntersection2
+    default                 set-after-lit                          doSetAddAmp
+
+
+#  set-lit-dash
+#     Have scanned "[literals-" Could be a range or a -- operator or a literal
+#     In [abc-[def]], the '-' is a literal (confirmed with a Java test)
+#        [abc-\p{xx}  the '-' is an error
+#        [abc-]       the '-' is a literal
+#        [ab-xy]      the '-' is a range
+#
+set-lit-dash:
+    '-'                  n  set-after-op                            doSetDifference2
+    '['                     set-after-lit                           doSetAddDash
+    ']'                     set-after-lit                           doSetAddDash
+    '\'                  n  set-lit-dash-escape
+    default              n  set-after-range                         doSetRange
+
+# set-lit-dash-escape
+#
+#    scanned "[literal-\"
+#    Could be a range, if the \ introduces an escaped literal char or a named char.
+#    Otherwise it is an error.
+#
+set-lit-dash-escape:
+   's'                      errorDeath                             doSetOpError
+   'S'                      errorDeath                             doSetOpError
+   'w'                      errorDeath                             doSetOpError
+   'W'                      errorDeath                             doSetOpError
+   'd'                      errorDeath                             doSetOpError
+   'D'                      errorDeath                             doSetOpError
+   'N'                      set-after-range                        doSetNamedRange
+   default               n  set-after-range                        doSetRange
+
+   
+#
+#  set-escape
+#       Common back-slash escape processing within set expressions
+#
+set-escape:
+   'p'                      set-after-set                           doSetProp
+   'P'                      set-after-set                           doSetProp
+   'N'                      set-after-lit                           doSetNamedChar
+   's'                   n  set-after-range                         doSetBackslash_s
+   'S'                   n  set-after-range                         doSetBackslash_S
+   'w'                   n  set-after-range                         doSetBackslash_w
+   'W'                   n  set-after-range                         doSetBackslash_W
+   'd'                   n  set-after-range                         doSetBackslash_d
+   'D'                   n  set-after-range                         doSetBackslash_D
+   default               n  set-after-lit                           doSetLiteralEscaped 
+
+#
+# set-finish
+#     Have just encountered the final ']' that completes a [set], and
+#     arrived here via a pop.  From here, we exit the set parsing world, and go
+#     back to generic regular expression parsing.
+#
+set-finish:
+    default                 expr-quant                              doSetFinish
+
+
 #
 # errorDeath.   This state is specified as the next state whenever a syntax error
 #               in the source rules is detected.  Barring bugs, the state machine will never

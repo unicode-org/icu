@@ -16,10 +16,10 @@
 #include "unicode/uset.h"
 
 /**
- * \file 
+ * \file
  * \brief C++ API: Unicode Set
  */
- 
+
 U_NAMESPACE_BEGIN
 
 class BMPSet;
@@ -1212,6 +1212,14 @@ public:
      * @internal
      */
     UnicodeSet& closeOver(int32_t attribute);
+
+    /**
+     * Remove all strings from this set.
+     *
+     * @return a reference to this set.
+     * @internal
+     */
+    virtual UnicodeSet &removeAllStrings();
 
     /**
      * Iteration method that returns the number of ranges contained in
