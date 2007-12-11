@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2004-2006, International Business Machines
+*   Copyright (C) 2004-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  regex.cpp
@@ -304,10 +304,15 @@ U_CAPI UBool U_EXPORT2
 uregex_matches(URegularExpression *regexp,
                 int32_t            startIndex,
                 UErrorCode        *status)  {
+    UBool result = FALSE;
     if (validateRE(regexp, status) == FALSE) {
-        return FALSE;
+        return result;
     }
-    UBool result = regexp->fMatcher->matches(startIndex, *status);
+    if (startIndex == -1) {
+        result = regexp->fMatcher->matches(*status);
+    } else {
+        result = regexp->fMatcher->matches(startIndex, *status);
+    }
     return result;
 }
 
@@ -322,10 +327,15 @@ U_CAPI UBool U_EXPORT2
 uregex_lookingAt(URegularExpression *regexp,
                  int32_t             startIndex,
                  UErrorCode         *status)  {
+    UBool result = FALSE;
     if (validateRE(regexp, status) == FALSE) {
-        return FALSE;
+        return result;
     }
-    UBool result = regexp->fMatcher->lookingAt(startIndex, *status);
+    if (startIndex == -1) {
+        result = regexp->fMatcher->lookingAt(*status);
+    } else {
+        result = regexp->fMatcher->lookingAt(startIndex, *status);
+    }
     return result;
 }
 
@@ -340,10 +350,16 @@ U_CAPI UBool U_EXPORT2
 uregex_find(URegularExpression *regexp,
             int32_t             startIndex, 
             UErrorCode         *status)  {
+    UBool result = FALSE;
     if (validateRE(regexp, status) == FALSE) {
-        return FALSE;
+        return result;
     }
-    UBool result = regexp->fMatcher->find(startIndex, *status);
+    if (startIndex == -1) {
+        regexp->fMatcher->resetPreserveRegion();
+        result = regexp->fMatcher->find();
+    } else {
+        result = regexp->fMatcher->find(startIndex, *status);
+    }
     return result;
 }
 
@@ -476,6 +492,145 @@ uregex_reset(URegularExpression    *regexp,
         return;
     }
     regexp->fMatcher->reset(index, *status);
+}
+
+
+//------------------------------------------------------------------------------
+//
+//    uregex_setRegion
+//
+//------------------------------------------------------------------------------
+U_CAPI void U_EXPORT2 
+uregex_setRegion(URegularExpression   *regexp,
+                 int32_t               regionStart,
+                 int32_t               regionLimit,
+                 UErrorCode           *status)  {
+    if (validateRE(regexp, status) == FALSE) {
+        return;
+    }
+    regexp->fMatcher->region(regionStart, regionLimit, *status);
+}
+
+
+//------------------------------------------------------------------------------
+//
+//    uregex_regionStart
+//
+//------------------------------------------------------------------------------
+U_CAPI int32_t U_EXPORT2 
+uregex_regionStart(const  URegularExpression   *regexp,
+                          UErrorCode           *status)  {
+    if (validateRE(regexp, status) == FALSE) {
+        return 0;
+    }
+    return regexp->fMatcher->regionStart();
+}
+
+
+//------------------------------------------------------------------------------
+//
+//    uregex_regionEnd
+//
+//------------------------------------------------------------------------------
+U_CAPI int32_t U_EXPORT2 
+uregex_regionEnd(const  URegularExpression   *regexp,
+                        UErrorCode           *status)  {
+    if (validateRE(regexp, status) == FALSE) {
+        return 0;
+    }
+    return regexp->fMatcher->regionEnd();
+}
+
+
+//------------------------------------------------------------------------------
+//
+//    uregex_hasTransparentBounds
+//
+//------------------------------------------------------------------------------
+U_CAPI UBool U_EXPORT2 
+uregex_hasTransparentBounds(const  URegularExpression   *regexp,
+                                   UErrorCode           *status)  {
+    if (validateRE(regexp, status) == FALSE) {
+        return FALSE;
+    }
+    return regexp->fMatcher->hasTransparentBounds();
+}
+
+
+//------------------------------------------------------------------------------
+//
+//    uregex_useTransparentBounds
+//
+//------------------------------------------------------------------------------
+U_CAPI void U_EXPORT2 
+uregex_useTransparentBounds(URegularExpression    *regexp,
+             UBool                 b,
+             UErrorCode            *status)  {
+    if (validateRE(regexp, status) == FALSE) {
+        return;
+    }
+    regexp->fMatcher->useTransparentBounds(b);
+}
+
+
+//------------------------------------------------------------------------------
+//
+//    uregex_hasAnchoringBounds
+//
+//------------------------------------------------------------------------------
+U_CAPI UBool U_EXPORT2 
+uregex_hasAnchoringBounds(const  URegularExpression   *regexp,
+                                   UErrorCode           *status)  {
+    if (validateRE(regexp, status) == FALSE) {
+        return FALSE;
+    }
+    return regexp->fMatcher->hasAnchoringBounds();
+}
+
+
+//------------------------------------------------------------------------------
+//
+//    uregex_useAnchoringBounds
+//
+//------------------------------------------------------------------------------
+U_CAPI void U_EXPORT2 
+uregex_useAnchoringBounds(URegularExpression    *regexp,
+             UBool                 b,
+             UErrorCode            *status)  {
+    if (validateRE(regexp, status) == FALSE) {
+        return;
+    }
+    regexp->fMatcher->useAnchoringBounds(b);
+}
+
+
+//------------------------------------------------------------------------------
+//
+//    uregex_hitEnd
+//
+//------------------------------------------------------------------------------
+U_CAPI UBool U_EXPORT2 
+uregex_hitEnd(const  URegularExpression   *regexp,
+                     UErrorCode           *status)  {
+    if (validateRE(regexp, status) == FALSE) {
+        return FALSE;
+    }
+    return regexp->fMatcher->hitEnd();
+}
+
+
+//------------------------------------------------------------------------------
+//
+//    uregex_requireEnd
+//
+//------------------------------------------------------------------------------
+U_CAPI UBool U_EXPORT2 
+uregex_requireEnd(const  URegularExpression   *regexp,
+                         UErrorCode           *status)  {
+    if (validateRE(regexp, status) == FALSE) {
+        return FALSE;
+    }
+    return regexp->fMatcher->requireEnd();
 }
 
 

@@ -1,5 +1,5 @@
 /********************************************************************
- * COPYRIGHT: 
+ * COPYRIGHT:
  * Copyright (c) 2002-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
@@ -16,7 +16,7 @@
 
 class RegexTest: public IntlTest {
 public:
-  
+
     RegexTest();
     virtual ~RegexTest();
 
@@ -37,7 +37,7 @@ public:
         const UnicodeString &input, int32_t line);
     virtual void regex_err(const char *pat, int32_t errline, int32_t errcol,
                             UErrorCode expectedStatus, int32_t line);
-    virtual UChar *ReadAndConvertFile(const char *fileName, int32_t &len, UErrorCode &status);
+    virtual UChar *ReadAndConvertFile(const char *fileName, int32_t &len, const char *charset, UErrorCode &status);
     virtual const char *getPath(char buffer[2048], const char *filename);
 
 };

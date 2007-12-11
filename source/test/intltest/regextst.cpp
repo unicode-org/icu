@@ -175,209 +175,6 @@ UBool RegexTest::doRegexLMTest(const char *pat, const char *text, UBool looking,
 
 
 
-//---------------------------------------------------------------------------
-//
-//    regex_find(pattern, inputString, lineNumber)
-//
-//         function to simplify writing tests regex tests.
-//
-//          The input text is unescaped.  The pattern is not.
-//          The input text is marked with the expected match positions
-//              <0>text  <1> more text </1>   </0>
-//          The <n> </n> tags are removed before trying the match.
-//          The tags mark the start and end of the match and of any capture groups.
-//
-//
-//---------------------------------------------------------------------------
-
-
-//  Set a value into a UVector at position specified by a decimal number in
-//   a UnicodeString.   This is a utility function needed by the actual test function,
-//   which follows.
-static void set(UVector &vec, int32_t val, UnicodeString index) {
-    UErrorCode  status=U_ZERO_ERROR;
-    int32_t  idx = 0;
-    for (int32_t i=0; i<index.length(); i++) {
-        int32_t d=u_charDigitValue(index.charAt(i));
-        if (d<0) {return;}
-        idx = idx*10 + d;
-    }
-    while (vec.size()<idx+1) {vec.addElement(-1, status);}
-    vec.setElementAt(val, idx);
-}
-
-void RegexTest::regex_find(const UnicodeString &pattern,
-                           const UnicodeString &flags,
-                           const UnicodeString &inputString,
-                           int32_t line) {
-    UnicodeString       unEscapedInput;
-    UnicodeString       deTaggedInput;
-
-    UErrorCode          status         = U_ZERO_ERROR;
-    UParseError         pe;
-    RegexPattern        *parsePat      = NULL;
-    RegexMatcher        *parseMatcher  = NULL;
-    RegexPattern        *callerPattern = NULL;
-    RegexMatcher        *matcher       = NULL;
-    UVector             groupStarts(status);
-    UVector             groupEnds(status);
-    UBool               isMatch        = FALSE;
-    UBool               failed         = FALSE;
-    int32_t                 numFinds;
-    int32_t                 i;
-
-    //
-    //  Compile the caller's pattern
-    //
-    uint32_t bflags = 0;
-    if (flags.indexOf((UChar)0x69) >= 0)  { // 'i' flag
-        bflags |= UREGEX_CASE_INSENSITIVE;
-    }
-    if (flags.indexOf((UChar)0x78) >= 0)  { // 'x' flag
-        bflags |= UREGEX_COMMENTS;
-    }
-    if (flags.indexOf((UChar)0x73) >= 0)  { // 's' flag
-        bflags |= UREGEX_DOTALL;
-    }
-    if (flags.indexOf((UChar)0x6d) >= 0)  { // 'm' flag
-        bflags |= UREGEX_MULTILINE;
-    }
-
-
-    callerPattern = RegexPattern::compile(pattern, bflags, pe, status);
-    if (status != U_ZERO_ERROR) {
-        #if UCONFIG_NO_BREAK_ITERATION==1
-        // 'v' test flag means that the test pattern should not compile if ICU was configured
-        //     to not include break iteration.  RBBI is needed for Unicode word boundaries.
-        if (flags.indexOf((UChar)0x76) >= 0 /*'v'*/ && status == U_UNSUPPORTED_ERROR) {
-            goto cleanupAndReturn;
-        }
-        #endif
-        errln("Line %d: error %s compiling pattern.", line, u_errorName(status));
-        goto cleanupAndReturn;
-    }
-
-    if (flags.indexOf((UChar)'d') >= 0) {
-        RegexPatternDump(callerPattern);
-    }
-
-    //
-    // Number of times find() should be called on the test string, default to 1
-    //
-    numFinds = 1;
-    for (i=2; i<=9; i++) {
-        if (flags.indexOf((UChar)(0x30 + i)) >= 0) {   // digit flag
-            if (numFinds != 1) {
-                errln("Line %d: more than one digit flag.  Scanning %d.", line, i);
-                goto cleanupAndReturn;
-            }
-            numFinds = i;
-        }
-    }
-
-    //
-    //  Find the tags in the input data, remove them, and record the group boundary
-    //    positions.
-    //
-    parsePat = RegexPattern::compile("<(/?)([0-9]+)>", 0, pe, status);
-    REGEX_CHECK_STATUS_L(line);
-
-    unEscapedInput = inputString.unescape();
-    parseMatcher = parsePat->matcher(unEscapedInput, status);
-    REGEX_CHECK_STATUS_L(line);
-    while(parseMatcher->find()) {
-        parseMatcher->appendReplacement(deTaggedInput, "", status);
-        REGEX_CHECK_STATUS;
-        UnicodeString groupNum = parseMatcher->group(2, status);
-        if (parseMatcher->group(1, status) == "/") {
-            // close tag
-            set(groupEnds, deTaggedInput.length(), groupNum);
-        } else {
-            set(groupStarts, deTaggedInput.length(), groupNum);
-        }
-    }
-    parseMatcher->appendTail(deTaggedInput);
-    REGEX_ASSERT_L(groupStarts.size() == groupEnds.size(), line);
-
-
-    //
-    // Do a find on the de-tagged input using the caller's pattern
-    //
-    matcher = callerPattern->matcher(deTaggedInput, status);
-    REGEX_CHECK_STATUS_L(line);
-    if (flags.indexOf((UChar)'t') >= 0) {
-        matcher->setTrace(TRUE);
-    }
-
-    for (i=0; i<numFinds; i++) {
-        isMatch = matcher->find();
-    }
-    matcher->setTrace(FALSE);
-
-    //
-    // Match up the groups from the find() with the groups from the tags
-    //
-
-    // number of tags should match number of groups from find operation.
-    // matcher->groupCount does not include group 0, the entire match, hence the +1.
-    //   G option in test means that capture group data is not available in the
-    //     expected results, so the check needs to be suppressed.
-    if (isMatch == FALSE && groupStarts.size() != 0) {
-        errln("Error at line %d:  Match expected, but none found.\n", line);
-        failed = TRUE;
-        goto cleanupAndReturn;
-    }
-
-    if (flags.indexOf((UChar)0x47 /*G*/) >= 0) {
-        // Only check for match / no match.  Don't check capture groups.
-        if (isMatch && groupStarts.size() == 0) {
-            errln("Error at line %d:  No match expected, but one found.\n", line);
-            failed = TRUE;
-        }
-        goto cleanupAndReturn;
-    }
-
-    for (i=0; i<=matcher->groupCount(); i++) {
-        int32_t  expectedStart = (i >= groupStarts.size()? -1 : groupStarts.elementAti(i));
-        if (matcher->start(i, status) != expectedStart) {
-            errln("Error at line %d: incorrect start position for group %d.  Expected %d, got %d",
-                line, i, expectedStart, matcher->start(i, status));
-            failed = TRUE;
-            goto cleanupAndReturn;  // Good chance of subsequent bogus errors.  Stop now.
-        }
-        int32_t  expectedEnd = (i >= groupEnds.size()? -1 : groupEnds.elementAti(i));
-        if (matcher->end(i, status) != expectedEnd) {
-            errln("Error at line %d: incorrect end position for group %d.  Expected %d, got %d",
-                line, i, expectedEnd, matcher->end(i, status));
-            failed = TRUE;
-            // Error on end position;  keep going; real error is probably yet to come as group
-            //   end positions work from end of the input data towards the front.
-        }
-    }
-    if ( matcher->groupCount()+1 < groupStarts.size()) {
-        errln("Error at line %d: Expected %d capture groups, found %d.",
-            line, groupStarts.size()-1, matcher->groupCount());
-        failed = TRUE;
-        }
-
-cleanupAndReturn:
-    if (failed) {
-        errln((UnicodeString)"\""+pattern+(UnicodeString)"\"  "
-            +flags+(UnicodeString)"  \""+inputString+(UnicodeString)"\"");
-        // callerPattern->dump();
-    }
-    delete parseMatcher;
-    delete parsePat;
-    delete matcher;
-    delete callerPattern;
-}
-
-
-
-
-
-
-
 
 //---------------------------------------------------------------------------
 //
@@ -938,6 +735,87 @@ void RegexTest::API_Match() {
         delete m;
         delete p;
     }
+    
+    //
+    // Regions
+    //
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        UnicodeString testString("This is test data");
+        RegexMatcher m(".*", testString,  0, status);
+        REGEX_CHECK_STATUS;
+        REGEX_ASSERT(m.regionStart() == 0);
+        REGEX_ASSERT(m.regionEnd() == testString.length());
+        REGEX_ASSERT(m.hasTransparentBounds() == FALSE);
+        REGEX_ASSERT(m.hasAnchoringBounds() == TRUE);
+        
+        m.region(2,4, status);
+        REGEX_CHECK_STATUS;
+        REGEX_ASSERT(m.matches(status));
+        REGEX_ASSERT(m.start(status)==2);
+        REGEX_ASSERT(m.end(status)==4);
+        REGEX_CHECK_STATUS;
+        
+        m.reset();
+        REGEX_ASSERT(m.regionStart() == 0);
+        REGEX_ASSERT(m.regionEnd() == testString.length());
+        
+        UnicodeString shorterString("short");
+        m.reset(shorterString);
+        REGEX_ASSERT(m.regionStart() == 0);
+        REGEX_ASSERT(m.regionEnd() == shorterString.length());
+        
+        REGEX_ASSERT(m.hasAnchoringBounds() == TRUE);
+        REGEX_ASSERT(&m == &m.useAnchoringBounds(FALSE));
+        REGEX_ASSERT(m.hasAnchoringBounds() == FALSE);
+        REGEX_ASSERT(&m == &m.reset());
+        REGEX_ASSERT(m.hasAnchoringBounds() == FALSE);
+        
+        REGEX_ASSERT(&m == &m.useAnchoringBounds(TRUE));
+        REGEX_ASSERT(m.hasAnchoringBounds() == TRUE);
+        REGEX_ASSERT(&m == &m.reset());
+        REGEX_ASSERT(m.hasAnchoringBounds() == TRUE);
+    
+        REGEX_ASSERT(m.hasTransparentBounds() == FALSE);
+        REGEX_ASSERT(&m == &m.useTransparentBounds(TRUE));
+        REGEX_ASSERT(m.hasTransparentBounds() == TRUE);
+        REGEX_ASSERT(&m == &m.reset());
+        REGEX_ASSERT(m.hasTransparentBounds() == TRUE);
+
+        REGEX_ASSERT(&m == &m.useTransparentBounds(FALSE));
+        REGEX_ASSERT(m.hasTransparentBounds() == FALSE);
+        REGEX_ASSERT(&m == &m.reset());
+        REGEX_ASSERT(m.hasTransparentBounds() == FALSE);
+        
+    }
+    
+    //
+    // hitEnd() and requireEnd()
+    //
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        UnicodeString testString("aabb");
+        RegexMatcher m1(".*", testString,  0, status);
+        REGEX_ASSERT(m1.lookingAt(status) == TRUE);
+        REGEX_ASSERT(m1.hitEnd() == TRUE);
+        REGEX_ASSERT(m1.requireEnd() == FALSE);
+        REGEX_CHECK_STATUS;
+        
+        status = U_ZERO_ERROR;
+        RegexMatcher m2("a*", testString, 0, status);
+        REGEX_ASSERT(m2.lookingAt(status) == TRUE);
+        REGEX_ASSERT(m2.hitEnd() == FALSE);
+        REGEX_ASSERT(m2.requireEnd() == FALSE);
+        REGEX_CHECK_STATUS;
+
+        status = U_ZERO_ERROR;
+        RegexMatcher m3(".*$", testString, 0, status);
+        REGEX_ASSERT(m3.lookingAt(status) == TRUE);
+        REGEX_ASSERT(m3.hitEnd() == TRUE);
+        REGEX_ASSERT(m3.requireEnd() == TRUE);
+        REGEX_CHECK_STATUS;
+    }
+
 
     //
     // Compilation error on reset with UChar *
@@ -1470,7 +1348,7 @@ void RegexTest::Extended() {
     }
 
     int32_t    len;
-    UChar *testData = ReadAndConvertFile(srcPath, len, status);
+    UChar *testData = ReadAndConvertFile(srcPath, len, "utf-8", status);
     if (U_FAILURE(status)) {
         return; /* something went wrong, error already output */
     }
@@ -1482,7 +1360,7 @@ void RegexTest::Extended() {
 
     RegexMatcher    quotedStuffMat("\\s*([\\'\\\"/])(.*?)\\1", 0, status);
     RegexMatcher    commentMat    ("\\s*(#.*)?$", 0, status);
-    RegexMatcher    flagsMat      ("\\s*([ixsmdtGv2-9]*)([:letter:]*)", 0, status);
+    RegexMatcher    flagsMat      ("\\s*([ixsmdteDEGLMvabtyYzZ2-9]*)([:letter:]*)", 0, status);
 
     RegexMatcher    lineMat("(.*?)\\r?\\n", testString, 0, status);
     UnicodeString   testPattern;   // The pattern for test from the test file.
@@ -1583,6 +1461,295 @@ void RegexTest::Extended() {
 
 //---------------------------------------------------------------------------
 //
+//    regex_find(pattern, flags, inputString, lineNumber)
+//
+//         Function to run a single test from the Extended (data driven) tests.
+//         See file test/testdata/regextst.txt for a description of the
+//         pattern and inputString fields, and the allowed flags.
+//         lineNumber is the source line in regextst.txt of the test.
+//
+//---------------------------------------------------------------------------
+
+
+//  Set a value into a UVector at position specified by a decimal number in
+//   a UnicodeString.   This is a utility function needed by the actual test function,
+//   which follows.
+static void set(UVector &vec, int32_t val, UnicodeString index) {
+    UErrorCode  status=U_ZERO_ERROR;
+    int32_t  idx = 0;
+    for (int32_t i=0; i<index.length(); i++) {
+        int32_t d=u_charDigitValue(index.charAt(i));
+        if (d<0) {return;}
+        idx = idx*10 + d;
+    }
+    while (vec.size()<idx+1) {vec.addElement(-1, status);}
+    vec.setElementAt(val, idx);
+}
+
+void RegexTest::regex_find(const UnicodeString &pattern,
+                           const UnicodeString &flags,
+                           const UnicodeString &inputString,
+                           int32_t line) {
+    UnicodeString       unEscapedInput;
+    UnicodeString       deTaggedInput;
+
+    UErrorCode          status         = U_ZERO_ERROR;
+    UParseError         pe;
+    RegexPattern        *parsePat      = NULL;
+    RegexMatcher        *parseMatcher  = NULL;
+    RegexPattern        *callerPattern = NULL;
+    RegexMatcher        *matcher       = NULL;
+    UVector             groupStarts(status);
+    UVector             groupEnds(status);
+    UBool               isMatch        = FALSE;
+    UBool               failed         = FALSE;
+    int32_t             numFinds;
+    int32_t             i;
+    UBool               useMatchesFunc   = FALSE;
+    UBool               useLookingAtFunc = FALSE;
+    int32_t             regionStart      = -1;
+    int32_t             regionEnd        = -1;
+
+    //
+    //  Compile the caller's pattern
+    //
+    uint32_t bflags = 0;
+    if (flags.indexOf((UChar)0x69) >= 0)  { // 'i' flag
+        bflags |= UREGEX_CASE_INSENSITIVE;
+    }
+    if (flags.indexOf((UChar)0x78) >= 0)  { // 'x' flag
+        bflags |= UREGEX_COMMENTS;
+    }
+    if (flags.indexOf((UChar)0x73) >= 0)  { // 's' flag
+        bflags |= UREGEX_DOTALL;
+    }
+    if (flags.indexOf((UChar)0x6d) >= 0)  { // 'm' flag
+        bflags |= UREGEX_MULTILINE;
+    }
+    
+    if (flags.indexOf((UChar)0x65) >= 0) { // 'e' flag
+        bflags |= UREGEX_ERROR_ON_UNKNOWN_ESCAPES;
+    }
+    if (flags.indexOf((UChar)0x44) >= 0) { // 'D' flag
+        bflags |= UREGEX_UNIX_LINES;
+    }
+
+
+    callerPattern = RegexPattern::compile(pattern, bflags, pe, status);
+    if (status != U_ZERO_ERROR) {
+        #if UCONFIG_NO_BREAK_ITERATION==1
+        // 'v' test flag means that the test pattern should not compile if ICU was configured
+        //     to not include break iteration.  RBBI is needed for Unicode word boundaries.
+        if (flags.indexOf((UChar)0x76) >= 0 /*'v'*/ && status == U_UNSUPPORTED_ERROR) {
+            goto cleanupAndReturn;
+        }
+        #endif
+        if (flags.indexOf((UChar)0x45) >= 0) {  //  flags contain 'E'
+            // Expected pattern compilation error.
+            if (flags.indexOf((UChar)0x64) >= 0) {   // flags contain 'd'
+                logln("Pattern Compile returns \"%s\"", u_errorName(status));
+            }
+            goto cleanupAndReturn;
+        } else {
+            // Unexpected pattern compilation error.
+            errln("Line %d: error %s compiling pattern.", line, u_errorName(status));
+            goto cleanupAndReturn;
+        }
+    }
+
+    if (flags.indexOf((UChar)0x64) >= 0) {  // 'd' flag
+        RegexPatternDump(callerPattern);
+    }
+
+    if (flags.indexOf((UChar)0x45) >= 0) {  // 'E' flag
+        errln("Expected, but did not get, a pattern compilation error.");
+        goto cleanupAndReturn;
+    }
+
+
+    //
+    // Number of times find() should be called on the test string, default to 1
+    //
+    numFinds = 1;
+    for (i=2; i<=9; i++) {
+        if (flags.indexOf((UChar)(0x30 + i)) >= 0) {   // digit flag
+            if (numFinds != 1) {
+                errln("Line %d: more than one digit flag.  Scanning %d.", line, i);
+                goto cleanupAndReturn;
+            }
+            numFinds = i;
+        }
+    }
+    
+    // 'M' flag.  Use matches() instead of find()
+    if (flags.indexOf((UChar)0x4d) >= 0) {
+        useMatchesFunc = TRUE;
+    }
+    if (flags.indexOf((UChar)0x4c) >= 0) {
+        useLookingAtFunc = TRUE;
+    }
+
+    //
+    //  Find the tags in the input data, remove them, and record the group boundary
+    //    positions.
+    //
+    parsePat = RegexPattern::compile("<(/?)(r|[0-9]+)>", 0, pe, status);
+    REGEX_CHECK_STATUS_L(line);
+
+    unEscapedInput = inputString.unescape();
+    parseMatcher = parsePat->matcher(unEscapedInput, status);
+    REGEX_CHECK_STATUS_L(line);
+    while(parseMatcher->find()) {
+        parseMatcher->appendReplacement(deTaggedInput, "", status);
+        REGEX_CHECK_STATUS;
+        UnicodeString groupNum = parseMatcher->group(2, status);
+        if (groupNum == "r") {
+            // <r> or </r>, a region specification within the string
+            if (parseMatcher->group(1, status) == "/") {
+                regionEnd = deTaggedInput.length();
+            } else {
+                regionStart = deTaggedInput.length();
+            }
+        } else {
+            // <digits> or </digits>, a group match boundary tag.
+            if (parseMatcher->group(1, status) == "/") {
+                set(groupEnds, deTaggedInput.length(), groupNum);
+            } else {
+                set(groupStarts, deTaggedInput.length(), groupNum);
+            }
+        }
+    }
+    parseMatcher->appendTail(deTaggedInput);
+    REGEX_ASSERT_L(groupStarts.size() == groupEnds.size(), line);
+    if ((regionStart>=0 || regionEnd>=0) && (regionStart<0 || regionStart>regionEnd)) {
+      errln("mismatched <r> tags");
+      failed = TRUE;
+      goto cleanupAndReturn;
+    }
+
+
+    //
+    //  Configure the matcher according to the flags specified with this test.
+    //
+    matcher = callerPattern->matcher(deTaggedInput, status);
+    REGEX_CHECK_STATUS_L(line);
+    if (flags.indexOf((UChar)0x74) >= 0) {   //  't' trace flag
+        matcher->setTrace(TRUE);
+    }
+    if (regionStart>=0) {
+       matcher->region(regionStart, regionEnd, status);
+       REGEX_CHECK_STATUS_L(line);
+    }
+    if (flags.indexOf((UChar)0x61) >= 0) {   //  'a' anchoring bounds flag
+        matcher->useAnchoringBounds(FALSE);
+    }
+    if (flags.indexOf((UChar)0x62) >= 0) {   //  'b' transparent bounds flag
+        matcher->useTransparentBounds(TRUE);
+    }
+    
+    
+
+    //
+    // Do a find on the de-tagged input using the caller's pattern
+    //     TODO: error on count>1 and not find().
+    //           error on both matches() and lookingAt().
+    //
+    for (i=0; i<numFinds; i++) {
+        if (useMatchesFunc) {
+            isMatch = matcher->matches(status);
+        } else  if (useLookingAtFunc) {
+            isMatch = matcher->lookingAt(status);
+        } else {
+            isMatch = matcher->find();
+        }
+    }
+    matcher->setTrace(FALSE);
+
+    //
+    // Match up the groups from the find() with the groups from the tags
+    //
+
+    // number of tags should match number of groups from find operation.
+    // matcher->groupCount does not include group 0, the entire match, hence the +1.
+    //   G option in test means that capture group data is not available in the
+    //     expected results, so the check needs to be suppressed.
+    if (isMatch == FALSE && groupStarts.size() != 0) {
+        errln("Error at line %d:  Match expected, but none found.\n", line);
+        failed = TRUE;
+        goto cleanupAndReturn;
+    }
+
+    if (flags.indexOf((UChar)0x47 /*G*/) >= 0) {
+        // Only check for match / no match.  Don't check capture groups.
+        if (isMatch && groupStarts.size() == 0) {
+            errln("Error at line %d:  No match expected, but one found.\n", line);
+            failed = TRUE;
+        }
+        goto cleanupAndReturn;
+    }
+
+    for (i=0; i<=matcher->groupCount(); i++) {
+        int32_t  expectedStart = (i >= groupStarts.size()? -1 : groupStarts.elementAti(i));
+        if (matcher->start(i, status) != expectedStart) {
+            errln("Error at line %d: incorrect start position for group %d.  Expected %d, got %d",
+                line, i, expectedStart, matcher->start(i, status));
+            failed = TRUE;
+            goto cleanupAndReturn;  // Good chance of subsequent bogus errors.  Stop now.
+        }
+        int32_t  expectedEnd = (i >= groupEnds.size()? -1 : groupEnds.elementAti(i));
+        if (matcher->end(i, status) != expectedEnd) {
+            errln("Error at line %d: incorrect end position for group %d.  Expected %d, got %d",
+                line, i, expectedEnd, matcher->end(i, status));
+            failed = TRUE;
+            // Error on end position;  keep going; real error is probably yet to come as group
+            //   end positions work from end of the input data towards the front.
+        }
+    }
+    if ( matcher->groupCount()+1 < groupStarts.size()) {
+        errln("Error at line %d: Expected %d capture groups, found %d.",
+            line, groupStarts.size()-1, matcher->groupCount());
+        failed = TRUE;
+        }
+
+    if ((flags.indexOf((UChar)0x59) >= 0) &&   //  'Y' flag:  RequireEnd() == false
+        matcher->requireEnd() == TRUE) {
+        errln("Error at line %d: requireEnd() returned TRUE.  Expected FALSE", line);
+        failed = TRUE;
+    }
+    if ((flags.indexOf((UChar)0x79) >= 0) &&   //  'y' flag:  RequireEnd() == true
+        matcher->requireEnd() == FALSE) {
+        errln("Error at line %d: requireEnd() returned FALSE.  Expected TRUE", line);
+        failed = TRUE;
+    }
+    if ((flags.indexOf((UChar)0x5A) >= 0) &&   //  'Z' flag:  hitEnd() == false
+        matcher->hitEnd() == TRUE) {
+        errln("Error at line %d: hitEnd() returned TRUE.  Expected FALSE", line);
+        failed = TRUE;
+    }
+    if ((flags.indexOf((UChar)0x7A) >= 0) &&   //  'z' flag:  hitEnd() == true
+        matcher->hitEnd() == FALSE) {
+        errln("Error at line %d: hitEnd() returned FALSE.  Expected TRUE", line);
+        failed = TRUE;
+    }
+
+
+cleanupAndReturn:
+    if (failed) {
+        errln((UnicodeString)"\""+pattern+(UnicodeString)"\"  "
+            +flags+(UnicodeString)"  \""+inputString+(UnicodeString)"\"");
+        // callerPattern->dump();
+    }
+    delete parseMatcher;
+    delete parsePat;
+    delete matcher;
+    delete callerPattern;
+}
+
+
+
+
+//---------------------------------------------------------------------------
+//
 //      Errors     Check for error handling in patterns.
 //
 //---------------------------------------------------------------------------
@@ -1633,10 +1800,6 @@ void RegexTest::Errors() {
     REGEX_ERR("abc{5,687865858}", 1, 16, U_REGEX_NUMBER_TOO_BIG);          // Overflows regex binary format
     REGEX_ERR("abc{687865858,687865859}", 1, 24, U_REGEX_NUMBER_TOO_BIG);
 
-
-    // UnicodeSet containing a string
-    REGEX_ERR("abc[{def}]xyz", 1, 10, U_REGEX_SET_CONTAINS_STRING);
-
     // Ticket 5389
     REGEX_ERR("*c", 1, 1, U_REGEX_RULE_SYNTAX);
 
@@ -1649,7 +1812,8 @@ void RegexTest::Errors() {
 //    in one big UChar * buffer, which the caller must delete.
 //
 //--------------------------------------------------------------------------------
-UChar *RegexTest::ReadAndConvertFile(const char *fileName, int32_t &ulen, UErrorCode &status) {
+UChar *RegexTest::ReadAndConvertFile(const char *fileName, int32_t &ulen,
+                                     const char *defEncoding, UErrorCode &status) {
     UChar       *retPtr  = NULL;
     char        *fileBuf = NULL;
     UConverter* conv     = NULL;
@@ -1698,6 +1862,11 @@ UChar *RegexTest::ReadAndConvertFile(const char *fileName, int32_t &ulen, UError
     if(encoding!=NULL ){
         fileBufC  += signatureLength;
         fileSize  -= signatureLength;
+    } else {
+        encoding = defEncoding;
+        if (strcmp(encoding, "utf-8") == 0) {
+            errln("file %s is missing its BOM", fileName);
+        }
     }
 
     //
@@ -1804,7 +1973,7 @@ void RegexTest::PerlTests() {
     }
 
     int32_t    len;
-    UChar *testData = ReadAndConvertFile(srcPath, len, status);
+    UChar *testData = ReadAndConvertFile(srcPath, len, "iso-8859-1", status);
     if (U_FAILURE(status)) {
         return; /* something went wrong, error already output */
     }
@@ -1979,6 +2148,14 @@ void RegexTest::PerlTests() {
         if (expected != found) {
             errln("line %d: Expected %smatch, got %smatch",
                 lineNum, expected?"":"no ", found?"":"no " );
+            continue;
+        }
+        
+        // Don't try to check expected results if there is no match.
+        //   (Some have stuff in the expected fields)
+        if (!found) {
+            delete testMat;
+            delete testPat;
             continue;
         }
 

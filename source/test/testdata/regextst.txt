@@ -1,7 +1,7 @@
 ﻿# Copyright (c) 2001-2007 International Business Machines
 # Corporation and others. All Rights Reserved.
 #
-#  file:  
+#  file:
 #
 #   ICU regular expression test cases.
 #
@@ -10,23 +10,160 @@
 #               <pattern>      =  "<regular expression pattern>"
 #               <match string> =  "<tagged string>"
 #                                 the quotes on the pattern and match string can be " or ' or /
-#               <tagged string> = text, with the start and end of each 
+#               <tagged string> = text, with the start and end of each
 #                                 capture group tagged with <n>...</n>.  The overall match,
 #                                 if any, is group 0, as in <0>matched text</0>
-#               <flags>         = any combination of 
+#
+#                                  A region can be specified with <r>...</r> tags.
+#
+#               <flags>         = any combination of
 #                                   i      case insensitive match
 #                                   x      free spacing and comments
 #                                   s      dot-matches-all mode
-#                                   m      multi-line mode.  $ and ^ match at embedded new-lines
+#                                   m      multi-line mode.  
+#                                            ($ and ^ match at embedded new-lines)
+#                                   D      Unix Lines mode (only recognize 0x0a as new-line)
 #                                   v      If icu configured without break iteration, this
 #                                          regex test pattern should not compile.
+#                                   e      set the UREGEX_ERROR_ON_UNKNOWN_ESCAPES flag
 #                                   d      dump the compiled pattern
 #                                   t      trace operation of match engine.
-#                                   2-9    a digit between 2 and 9, specifies the number of 
+#                                   2-9    a digit between 2 and 9, specifies the number of
 #                                          times to execute find().  The expected results are
 #                                          for the last find() in the sequence.
+#                                   G      Only check match / no match.  Do not check capture groups.
+#                                   E      Pattern compilation error expected
+#                                   L      Use LookingAt() rather than find()
+#                                   M      Use matches() rather than find().
+#
+#                                   a      Use non-Anchoring Bounds.
+#                                   b      Use Transparent Bounds.
+#                                          The a and t options only make a difference if
+#                                          a <r>region</r> has been specified in the string.
+#                                   z|Z    hitEnd was expected(z) or not expected (Z).
+#                                          With neither, hitEnd is not checked.
+#                                   y|Y    Require End expected(y) or not expected (Y).
+#
 #                                 White space must be present between the flags and the match string.
 #
+
+# Look-ahead expressions
+#
+"abc(?=def)"                   "<0>abc</0>def"
+"(.*)(?=c)"                    "<0><1>ab</1></0>cdef"
+
+"(?:.*)(?=c)"                  "<r>ab</r>cdef"
+"(?:.*)(?=c)"             b    "<r><0>ab</0></r>cdef"      # transparent bounds
+"(?:.*)(?=c)"             bM   "<r><0>ab</0></r>cdef"      # transparent bounds
+
+"(?:.*)(?=(c))"           b    "<0>ab</0><1>c</1>def"      # Capture in look-ahead
+"(?=(.)\1\1)\1"                "abcc<0><1>d</1></0>ddefg"  # Backrefs to look-ahead capture
+
+".(?!\p{L})"                   "abc<0>d</0> "              # Negated look-ahead
+".(?!(\p{L}))"                 "abc<0>d</0> "              # Negated look-ahead, no capture
+                                                           #   visible outside of look-ahead
+"and(?=roid)"            L     "<0>and</0>roid"
+"and(?=roid)"            M     "<r>and</r>roid"
+"and(?=roid)"            bM    "<r><0>and</0></r>roid"
+
+"and(?!roid)"            L     "<0>and</0>roix"
+"and(?!roid)"            L     "android"
+
+"and(?!roid)"            M     "<r><0>and</0></r>roid"     # Opaque bounds
+"and(?!roid)"            bM    "<r>and</r>roid"
+"and(?!roid)"            bM    "<r><0>and</0></r>roix"
+
+#
+# Negated Lookahead, various regions and region transparency
+#
+"abc(?!def)"                   "<0>abc</0>xyz"
+"abc(?!def)"                   "abcdef"
+"abc(?!def)"                   "<r><0>abc</0></r>def"
+"abc(?!def)"              b    "<r>abc</r>def"
+"abc(?!def)"              b    "<r><0>abc</0></r>xyz"
+
+#
+#  Anchoring Bounds
+#
+"^def$"                        "abc<r><0>def</0></r>ghi"           # anchoring (default) bounds
+"^def$"                  a     "abc<r>def</r>ghi"                  # non-anchoring bounds
+"^def"                   a     "<r><0>def</0></r>ghi"              # non-anchoring bounds
+"def$"                   a     "abc<r><0>def</0></r>"              # non-anchoring bounds
+
+"^.*$"                   m     "<0>line 1</0>\n line 2"
+"^.*$"                   m2    "line 1\n<0> line 2</0>"
+"^.*$"                   m3    "line 1\n line 2"
+"^.*$"                   m     "li<r><0>ne </0></r>1\n line 2"     # anchoring bounds
+"^.*$"                   m2    "li<r>ne </r>1\n line 2"            # anchoring bounds
+"^.*$"                  am     "li<r>ne </r>1\n line 2"            # non-anchoring bounds
+"^.*$"                  am     "li\n<r><0>ne </0></r>\n1\n line 2" # non-anchoring bounds
+
+#
+#  HitEnd and RequireEnd for new-lines just before end-of-input
+#
+"xyz$"                  yz     "<0>xyz</0>\n"
+"xyz$"                  yz     "<0>xyz</0>\x{d}\x{a}"
+
+"xyz$"                 myz     "<0>xyz</0>"                        # multi-line mode
+"xyz$"                 mYZ     "<0>xyz</0>\n" 
+"xyz$"                 mYZ     "<0>xyz</0>\r\n"
+"xyz$"                 mYZ     "<0>xyz</0>\x{85}abcd"
+
+"xyz$"                  Yz     "xyz\nx"
+"xyz$"                  Yz     "xyza"
+"xyz$"                  yz     "<0>xyz</0>"
+
+#
+#  All Unicode line endings recognized.
+#     0a, 0b, 0c, 0d, 0x85, 0x2028, 0x2029
+#     Multi-line and non-multiline mode take different paths, so repeated tests.
+#
+"^def$"                 mYZ    "abc\x{a}<0>def</0>\x{a}ghi"
+"^def$"                 mYZ    "abc\x{b}<0>def</0>\x{b}ghi"
+"^def$"                 mYZ    "abc\x{c}<0>def</0>\x{c}ghi"
+"^def$"                 mYZ    "abc\x{d}<0>def</0>\x{d}ghi"
+"^def$"                 mYZ    "abc\x{85}<0>def</0>\x{85}ghi"
+"^def$"                 mYZ    "abc\x{2028}<0>def</0>\x{2028}ghi"
+"^def$"                 mYZ    "abc\x{2029}<0>def</0>\x{2029}ghi"
+"^def$"                 mYZ    "abc\r\n<0>def</0>\r\nghi"
+
+"^def$"                 yz     "<0>def</0>\x{a}"
+"^def$"                 yz     "<0>def</0>\x{b}"
+"^def$"                 yz     "<0>def</0>\x{c}"
+"^def$"                 yz     "<0>def</0>\x{d}"
+"^def$"                 yz     "<0>def</0>\x{85}"
+"^def$"                 yz     "<0>def</0>\x{2028}"
+"^def$"                 yz     "<0>def</0>\x{2029}"
+"^def$"                 yz     "<0>def</0>\r\n"
+"^def$"                 yz     "<0>def</0>"
+
+
+"^def$"                       "<0>def</0>\x{2028"    #TODO: should be an error of some sort.
+
+#
+#  UNIX_LINES mode
+#
+"abc$"                 D      "<0>abc</0>\n"
+"abc$"                 D      "abc\r"
+"abc$"                 D      "abc\u0085"
+"a.b"                  D      "<0>a\rb</0>"
+"a.b"                  D      "a\nb"
+"(?d)abc$"                    "<0>abc</0>\n"
+"(?d)abc$"                    "abc\r"
+"abc$"                 mD     "<0>abc</0>\ndef"
+"abc$"                 mD     "abc\rdef"
+
+".*def"                L      "abc\r def xyz"          # Normal mode, LookingAt() stops at \r
+".*def"                DL     "<0>abc\r def</0> xyz"   # Unix Lines mode, \r not line end.
+".*def"                DL     "abc\n def xyz"   
+
+"(?d)a.b"                     "a\nb"
+"(?d)a.b"                     "<0>a\rb</0>"
+
+"^abc"                 m      "xyz\r<0>abc</0>"
+"^abc"                 Dm     "xyz\rabc"
+"^abc"                 Dm     "xyz\n<0>abc</0>"
+
 
 
 # Capturing parens
@@ -97,6 +234,16 @@
 "(?w:.+?(\b\S.+?\b).*)"          v   "<0>  <1>don't</1>   </0>"
 "(?w:(\b.+?)(\b.+?)(\b.+?)(\b.+?)(\b.+?)(\b.+?)(\b.+?).*)"     v "<0><1>.</1><2> </2><3>,</3><4>:</4><5>$</5><6>37,000.50</6><7> </7>   </0>"
 
+#
+#  Unicode word boundaries with Regions
+#
+"(?w).*?\b"                      v   "abc<r><0>def</0></r>ghi"
+"(?w).*?\b"                      v2  "abc<r>def<0></0></r>ghi"
+"(?w).*?\b"                      v3  "abc<r>def</r>ghi"
+#"(?w).*?\b"                      vb  "abc<r><0>def</0></r>ghi"    # TODO:  bug.  Ticket 6073
+#"(?w).*?\b"                      vb2 "abc<r>def</r>ghi"
+
+
 
 # . does not match new-lines
 "."                            "\u000a\u000d\u0085\u000c\u000b\u2028\u2029<0>X</0>\u000aY"
@@ -128,20 +275,20 @@
 ".*^(Hello)"                   " Hello Hello Hello Hello Goodbye"# No Match
 
 # $ matches only at end of line, or before a newline preceding the end of line
-".*?(Goodbye)$"                "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>"
-".*?(Goodbye)"                 "<0>Hello <1>Goodbye</1></0> Goodbye Goodbye"
-".*?(Goodbye)$"                "Hello Goodbye> Goodbye Goodbye "# No Match
+".*?(Goodbye)$"           zy   "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>"
+".*?(Goodbye)"            ZY   "<0>Hello <1>Goodbye</1></0> Goodbye Goodbye"
+".*?(Goodbye)$"           z    "Hello Goodbye> Goodbye Goodbye "# No Match
 
-".*?(Goodbye)$"                "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>\n"
-".*?(Goodbye)$"                "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>\n"
-".*?(Goodbye)$"                "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>\r\n"
-".*?(Goodbye)$"                "Hello Goodbye Goodbye Goodbye\n\n"# No Match
+".*?(Goodbye)$"           zy   "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>\n"
+".*?(Goodbye)$"           zy   "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>\n"
+".*?(Goodbye)$"           zy   "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>\r\n"
+".*?(Goodbye)$"           z    "Hello Goodbye Goodbye Goodbye\n\n"# No Match
 
 # \Z matches at end of input, like $ with default flags.
-".*?(Goodbye)\Z"               "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>"
-".*?(Goodbye)"                 "<0>Hello <1>Goodbye</1></0> Goodbye Goodbye"
-".*?(Goodbye)\Z"               "Hello Goodbye> Goodbye Goodbye "# No Match
-"here$"                        "here\nthe end"# No Match
+".*?(Goodbye)\Z"          zy   "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>"
+".*?(Goodbye)"            ZY   "<0>Hello <1>Goodbye</1></0> Goodbye Goodbye"
+".*?(Goodbye)\Z"          z    "Hello Goodbye> Goodbye Goodbye "# No Match
+"here$"                   z    "here\nthe end"# No Match
 
 ".*?(Goodbye)\Z"               "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>\n"
 ".*?(Goodbye)\Z"               "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>\n"
@@ -151,12 +298,13 @@
 # \z matches only at the end of string.
 #    no special treatment of new lines.
 #    no dependencies on flag settings.
-".*?(Goodbye)\z"               "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>"
-".*?(Goodbye)\z"               "Hello Goodbye Goodbye Goodbye "# No Match
-"here$"                        "here\nthe end"# No Match
+".*?(Goodbye)\z"          zy   "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>"
+".*?(Goodbye)\z"          z    "Hello Goodbye Goodbye Goodbye "# No Match
+"here$"                   z    "here\nthe end"# No Match
 
-".*?(Goodbye)\z"               "Hello Goodbye Goodbye Goodbye\n"# No Match
-".*?(Goodbye)\n\z"             "<0>Hello Goodbye Goodbye <1>Goodbye</1>\n</0>"
+".*?(Goodbye)\z"          z    "Hello Goodbye Goodbye Goodbye\n"# No Match
+".*?(Goodbye)\n\z"        zy   "<0>Hello Goodbye Goodbye <1>Goodbye</1>\n</0>"
+"abc\z|def"               ZY   "abc<0>def</0>"
 
 # (?# comment) doesn't muck up pattern
 "Hello (?# this is a comment) world"  "  <0>Hello  world</0>..."
@@ -179,6 +327,61 @@
 "^(?:a?b?)*$"	               "a--"
 "(x?)*xyz"                     "<0>xx<1></1>xyz</0>"    # Sligthly wierd, but correct.  The "last" time through (x?),
                                                         #   it matches the empty string.
+
+# Set expressions, basic operators and escapes work
+#
+"[\d]+"                        "<0>0123</0>abc/.,"
+"[^\d]+"                       "0123<0>abc/.,</0>"
+"[\D]+"                        "0123<0>abc/.,</0>"
+"[^\D]+"                       "<0>0123</0>abc/.,"
+
+"[\s]+"                        "<0> \t</0>abc/.,"
+"[^\s]+"                       " \t<0>abc/.,</0>"
+"[\S]+"                        " \t<0>abc/.,</0>"
+"[^\S]+"                       "<0> \t</0>abc/.,"
+
+"[\w]+"                        "<0>abc123</0> .,;"
+"[^\w]+"                       "abc123<0> .,;</0>"
+"[\W]+"                        "abc123<0> .,;</0>"
+"[^\W]+"                       "<0>abc123</0> .,;"
+
+"[\z]+"                        "abc<0>zzz</0>def"     # \z has no special meaning
+"[^\z]+"                       "<0>abc</0>zzzdef"
+"[\^]+"                        "abc<0>^^</0>"
+"[^\^]+"                       "<0>abc</0>^^"
+
+"[\u0041c]+"                   "<0>AcAc</0>def"
+"[\U00010002]+"                "<0>\ud800\udc02</0>\U00010003"
+"[^\U00010002]+"               "<0>Hello</0>\x{10002}"
+"[\x61b]+"                     "<0>abab</0>cde"
+#"[\x6z]+"                      "\x06"                  #TODO:  single hex digits should fail
+"[\x{9}\x{75}\x{6d6}\x{6ba6}\x{6146B}\x{10ffe3}]+"  "<0>\u0009\u0075\u06d6\u6ba6\U0006146B\U0010ffe3</0>abc"
+
+"[\N{LATIN CAPITAL LETTER TONE SIX}ab\N{VARIATION SELECTOR-70} ]+"       "x<0> \u0184\U000E0135 ab</0>c"
+"[\N{LATIN SMALL LETTER C}-\N{LATIN SMALL LETTER F}]+"    "ab<0>cdef</0>ghi"
+
+
+
+#
+#  [set expressions], check the precedence of '-', '&', '--', '&&'
+#      '-' and '&', for compatibility with ICU UnicodeSet, have the same
+#                   precedence as the implicit Union between adjacent items.
+#      '--' and '&&', for compatibility with Java, have lower precedence than
+#                   the implicit Union operations.  '--' and '&&' themselves
+#                   have the same precedence, and group left to right.
+#
+"[[a-m]-[f-w]p]+"              "<0>dep</0>fgwxyz"
+"[^[a-m]-[f-w]p]+"             "dep<0>fgwxyz</0>"
+
+"[[a-m]--[f-w]p]+"             "<0>de</0>pfgwxyz"
+"[^[a-m]--[f-w]p]+"            "de<0>pfgwxyz</0>"
+
+"[[a-m]&[e-s]w]+"              "<0>efmw</0>adnst"
+"[^[a-m]&[e-s]w]+"             "efmw<0>adnst</0>"
+
+"[[a-m]&[e-s]]+"              "<0>efm</0>adnst"
+
+
 
 # {min,max} iteration qualifier
 "A{3}BC"                       "<0>AAABC</0>"
@@ -247,8 +450,8 @@
 "ab(?:c|(d?))(\1)"             "<0>ab<1></1><2></2></0>"
 
 # Case Insensitive
-"aBc"                    i      "<0>ABC</0>"      
-"a[^bc]d"                i      "ABD"   
+"aBc"                    i      "<0>ABC</0>"
+"a[^bc]d"                i      "ABD"
 '((((((((((a))))))))))\10' i    "<0><1><2><3><4><5><6><7><8><9><10>A</10></9></8></7></6></5></4></3></2></1>A</0>"
 
 "(?:(?i)a)b"                    "<0>Ab</0>"
@@ -259,15 +462,36 @@
 "a b"                           "ab"
 "abc "                          "abc"
 "abc "                          "<0>abc </0>"
-"ab[cd e]z"                     "<0>ab z</0>" 
+"ab[cd e]z"                     "<0>ab z</0>"
 "ab\ c"                         "<0>ab c</0> "
 "ab c"                          "<0>ab c</0> "
 "ab c"                        x "ab c "
 "ab\ c"                       x "<0>ab c</0> "
 
+#
+# Pattern Flags
+#
+"(?u)abc"                       "<0>abc</0>"
+"(?-u)abc"                      "<0>abc</0>"
+
+#
+#  \c escapes  (Control-whatever)
+#
+"\cA"                           "<0>\u0001</0>"
+"\ca"                           "<0>\u0001</0>"
+"\c\x"                          "<0>\u001cx</0>"
+
 
 #Multi-line mode
-'b\s^'                        m  "a\nb\n"
+'b\s^'                        m "a\nb\n"
+"(?m)^abc$"                     "abc \n abc\n<0>abc</0>\nabc"
+"(?m)^abc$"                   2 "abc \n abc\nabc\n<0>abc</0>"
+"^abc$"                       2 "abc \n abc\nabc\nabc"
+
+# Empty and full range
+"[\u0000-\U0010ffff]+"          "<0>abc\u0000\uffff\U00010000\U0010ffffzz</0>"
+"[^\u0000-\U0010ffff]"          "abc\u0000\uffff\U00010000\U0010ffffzz"
+"[^a--a]+"                      "<0>abc\u0000\uffff\U00010000\U0010ffffzz</0>"
 
 # Free-spacing mode
 "a b c  # this is a comment"  x "<0>abc</0> "
@@ -316,8 +540,8 @@
 "abc.*$"                         "<0>abcdef</0>"
 "abc(.*)"                        "<0>abc<1>def</1></0>"
 "abc(.*)"                        "<0>abc<1></1></0>"
-"abc.*"                          "<0>abc</0>\ndef"     
-"abc.*"                     s    "<0>abc\ndef</0>"     
+"abc.*"                          "<0>abc</0>\ndef"
+"abc.*"                     s    "<0>abc\ndef</0>"
 "abc.*$"                    s    "<0>abc\ndef</0>"
 "abc.*$"                         "abc\ndef"
 "abc.*$"                    m    "<0>abc</0>\ndef"
@@ -357,9 +581,16 @@
 "ab\x09w"                        "<0>ab\u0009w</0>"
 "ab\xabcdc"                      "<0>ab\u00abcdc</0>"
 "ab\x{abcd}c"                    "<0>ab\uabcdc</0>"
-"ab\x{101234}c"                    "<0>ab\U00101234c</0>"
+"ab\x{101234}c"                  "<0>ab\U00101234c</0>"
 "abα"                            "<0>abα</0>"
 
+#
+#  Octal Escaping.   This conforms to Java conventions, not Perl.
+"\0101\00\03\073\0154\01442"      "<0>A\u0000\u0003\u003b\u006c\u0064\u0032</0>"
+"\0776"                          "<0>\u003f\u0036</0>"  # overflow, the 6 is literal.
+"\0376xyz"                       "<0>\u00fexyz</0>"
+"\08"                        E   "<0>\u00008</0>"
+"\0"                         E   "x"
 
 #
 #  \u Surrogate Pairs
@@ -368,6 +599,24 @@
 "\ud800\udc00*"                   "<0>\U00010000\U00010000\U00010000</0>\U00010001"
 "\ud800\ud800\udc00"              "<0>\ud800\U00010000</0>\U00010000\U00010000\U00010001"
 "(\ud800)(\udc00)"                "\U00010000"
+
+#
+# hitEnd with find()
+#
+"abc"                        Z    "aa<0>abc</0>  abcab"
+"abc"                       2Z    "aaabc  <0>abc</0>ab"
+"abc"                       3z    "aa>abc  abcab"
+
+#
+# Bug xxxx
+#
+"(?:\-|(\-?\d+\d\d\d))?(?:\-|\-(\d\d))?(?:\-|\-(\d\d))?(T)?(?:(\d\d):(\d\d):(\d\d)(\.\d+)?)?(?:(?:((?:\+|\-)\d\d):(\d\d))|(Z))?"   MG  "<0>-1234-21-31T41:51:61.789+71:81</0>"
+
+
+#
+# A random, complex, meaningless pattern that should at least compile
+#
+"(?![^\<C\f\0146\0270\}&&[|\02-\x3E\}|X-\|]]{7,}+)[|\\\x98\<\?\u4FCFr\,\0025\}\004|\0025-\0521]|(?<![|\01-\u829E])|(?<!\p{Alpha})|^|(?-s:[^\x15\\\x24F\a\,\a\u97D8[\x38\a[\0224-\0306[^\0020-\u6A57]]]]??)(?xix:[^|\{\[\0367\t\e\x8C\{\[\074c\]V[|b\fu\r\0175\<\07f\066s[^D-\x5D]]])(?xx:^{5,}+)(?d)(?=^\D)|(?!\G)(?>\G)(?![^|\]\070\ne\{\t\[\053\?\\\x51\a\075\0023-\[&&[|\022-\xEA\00-\u41C2&&[^|a-\xCC&&[^\037\uECB3\u3D9A\x31\|\<b\0206\uF2EC\01m\,\ak\a\03&&\p{Punct}]]]])(?-dxs:[|\06-\07|\e-\x63&&[|Tp\u18A3\00\|\xE4\05\061\015\0116C|\r\{\}\006\xEA\0367\xC4\01\0042\0267\xBB\01T\}\0100\?[|\[-\u459B|\x23\x91\rF\0376[|\?-\x94\0113-\\\s]]]]{6}?)(?<=[^\t-\x42H\04\f\03\0172\?i\u97B6\e\f\uDAC2])(?=\B)(?>[^\016\r\{\,\uA29D\034\02[\02-\[|\t\056\uF599\x62\e\<\032\uF0AC\0026\0205Q\|\\\06\0164[|\057-\u7A98&&[\061-g|\|\0276\n\042\011\e\xE8\x64B\04\u6D0EDW^\p{Lower}]]]]?)(?<=[^\n\\\t\u8E13\,\0114\u656E\xA5\]&&[\03-\026|\uF39D\01\{i\u3BC2\u14FE]])(?<=[^|\uAE62\054H\|\}&&^\p{Space}])(?sxx)(?<=[\f\006\a\r\xB4]{1,5})|(?x-xd:^{5}+)()"  "<0></0>abc"
 
 
 #
@@ -435,7 +684,7 @@
 "^"                               "<0></0>"
 "^"                           2   ""
 
-"\Z"				  "<0></0>"
+"\Z"                              "<0></0>"
 "\Z"                          2   ""
 "\Z"                          2   "\u000a<0></0>"
 "\Z"                              "<0></0>\u000d\u000a"
@@ -471,6 +720,173 @@
 ".{6}"                            "123\u000a\u000dXYZ"
 ".{6}"                         s  "<0>123\u000a\u000dX</0>Y"
 
+
+#
+# Ranges
+#
+".*"                              "abc<r><0>def</0></r>ghi"
+"a"                               "aaa<r><0>a</0>aa</r>aaa"
+"a"                           2   "aaa<r>a<0>a</0>a</r>aaa"
+"a"                           3   "aaa<r>aa<0>a</0></r>aaa"
+"a"                           4   "aaa<r>aaa</r>aaa"
+"a"                               "aaa<r><0>a</0>aa</r>aaa"
+
+#
+# [set] parsing, systematically run through all of the parser states.
+#
+#
+"[def]+"                          "abc<0>ddeeff</0>ghi"       # set-open
+"[^def]+"                         "<0>abc</0>defghi"
+"[:digit:]+"                      "abc<0>123</0>def"
+"[:^digit:]+"                     "<0>abc</0>123def"
+"[\u005edef]+"                    "abc<0>de^f</0>ghi"
+
+"[]]+"                            "abc<0>]]]</0>[def"         # set-open2
+"[^]]+"                           "<0>abc</0>]]][def"
+
+"[:Lu:]+"                         "abc<0>ABC</0>def"          # set-posix
+"[:Lu]+"                          "abc<0>uL::Lu</0>"
+"[:^Lu]+"                         "abc<0>uL:^:Lu</0>"
+"[:]+"                            "abc<0>:::</0>def"
+"[:whats this:]"               E  " "
+"[--]+"                       dE  "-------"
+
+"[[nested]]+"                      "xyz[<0>nnetsteed</0>]abc"   #set-start
+"[\x{41}]+"                        "CB<0>AA</0>ZYX"
+"[\[\]\\]+"                        "&*<0>[]\\</0>..."
+"[*({<]+"                          "^&<0>{{(<<*</0>)))"
+
+
+"[-def]+"                          "abc<0>def-ef-d</0>xyz"     # set-start-dash
+"[abc[--def]]"                 E   " "
+
+"[x[&def]]+"                        "abc<0>def&</0>ghi"        # set-start-amp
+"[&& is bad at start]"         E   " "
+
+"[abc"                         E   " "                         # set-after-lit
+"[def]]"                           "abcdef"
+"[def]]"                           "abcde<0>f]</0>]"
+
+"[[def][ghi]]+"                    "abc]<0>defghi</0>[xyz"     # set-after-set
+"[[def]ghi]+"                      "abc]<0>defghi</0>[xyz" 
+"[[[[[[[[[[[abc]"              E   " "
+"[[abc]\p{Lu}]+"                   "def<0>abcABC</0>xyz"
+
+"[d-f]+"                           "abc<0>def</0>ghi"          # set-after-range
+"[d-f[x-z]]+"                      "abc<0>defxyzzz</0>gw"
+"[\s\d]+"                          "abc<0>  123</0>def"
+"[d-f\d]+"                         "abc<0>def123</0>ghi"
+"[d-fr-t]+"                        "abc<0>defrst</0>uvw"
+
+"[abc--]"                      E   " "                         # set-after-op
+"[[def]&&]"                    E   " "
+"[-abcd---]+"                     "<0>abc</0>--"                 #[-abcd]--[-]
+"[&abcd&&&ac]+"                   "b<0>ac&&ca</0>d"              #[&abcd]&&[&ac]
+
+"[[abcd]&[ac]]+"                  "b<0>acac</0>d"              # set-set-amp
+"[[abcd]&&[ac]]+"                 "b<0>acac</0>d"
+"[[abcd]&&ac]+"                   "b<0>acac</0>d"
+"[[abcd]&ac]+"                    "<0>bacacd&&&</0>"
+
+"[abcd&[ac]]+"                    "<0>bacacd&&&</0>"           #set-lit-amp
+"[abcd&&[ac]]+"                   "b<0>acac</0>d"
+"[abcd&&ac]+"                     "b<0>acac</0>d"
+
+"[[abcd]-[ac]]+"                  "a<0>bdbd</0>c"              # set-set-dash
+"[[abcd]--[ac]]+"                 "a<0>bdbd</0>c"
+"[[abcd]--ac]+"                   "a<0>bdbd</0>c"
+"[[abcd]-ac]+"                    "<0>bacacd---</0>"
+
+"[a-d--[b-c]]+"                   "b<0>adad</0>c"              # set-range-dash
+"[a-d--b-c]+"                     "b<0>adad</0>c"   
+"[a-d-[b-c]]+"                    "<0>bad-adc</0>"
+"[a-d-b-c]+"                      "<0>bad-adc</0>"
+"[\w--[b-c]]+"                    "b<0>adad</0>c"  
+"[\w--b-c]+"                      "b<0>adad</0>c"   
+"[\w-[b-c]]+"                     "<0>bad-adc</0>"
+"[\w-b-c]+"                       "<0>bad-adc</0>"
+
+"[a-d&&[b-c]]+"                   "a<0>bcbc</0>d"              # set-range-amp
+"[a-d&&b-c]+"                     "a<0>bcbc</0>d"
+"[a-d&[b-c]]+"                    "<0>abc&bcd</0>"
+"[a-d&b-c]+"                      "<0>abc&bcd</0>"
+
+"[abcd--bc]+"                     "b<0>adda</0>c"              # set-lit-dash
+"[abcd--[bc]]+"                   "b<0>adda</0>c"
+"[abcd-[bc]]+"                    "<0>bad--dac</0>xyz"
+"[abcd-]+"                        "<0>bad--dac</0>xyz"
+
+"[abcd-\s]+"                 E    "xyz<0>abcd  --</0>xyz"      # set-lit-dash-esc
+"[abcd-\N{LATIN SMALL LETTER G}]+"  "xyz-<0>abcdefg</0>hij-"
+"[bcd-\{]+"                       "a<0>bcdefyz{</0>|}"
+
+"[\p{Ll}]+"                       "ABC<0>abc</0>^&*&"          # set-escape
+"[\P{Ll}]+"                       "abc<0>ABC^&*&</0>xyz"
+"[\N{LATIN SMALL LETTER Q}]+"     "mnop<0>qqq</0>rst"
+"[\sa]+"                          "cb<0>a  a  </0>(*&"
+"[\S]+"                           "   <0>hello</0>  "
+"[\w]+"                           "   <0>hello_world</0>!  "
+"[\W]+"                           "a<0>   *$%#,</0>hello "
+"[\d]+"                           "abc<0>123</0>def"
+"[\D]+"                           "123<0>abc</0>567"
+"[\$\#]+"                         "123<0>$#$#</0>\\"
+
+#
+#  Try each of the Java compatibility properties.
+#    These are checked here, while normal Unicode properties aren't, because
+#    these Java compatibility properties are implemented directly by regexp, while other
+#    properties are handled by ICU's Property and UnicodeSet APIs.
+#
+#    These tests are only to verify that the names are recognized and the
+#    implementation isn't dead.  They are not intended to verify that the
+#    function defintions are 100% correct.
+#
+"[:InBasic Latin:]+"               "ΓΔΕΖΗΘ<0>hello, world.</0>ニヌネノハバパ"
+"[:^InBasic Latin:]+"              "<0>ΓΔΕΖΗΘ</0>hello, world.ニヌネノハバパ"
+"\p{InBasicLatin}+"                "ΓΔΕΖΗΘ<0>hello, world.</0>ニヌネノハバパ"
+"\P{InBasicLatin}+"                "<0>ΓΔΕΖΗΘ</0>hello, world.ニヌネノハバパ"
+"\p{InGreek}+"                     "<0>ΓΔΕΖΗΘ</0>hello, world.ニヌネノハバパ"
+"\p{InCombining Marks for Symbols}" "<0>\u20d0</0>"
+"\p{Incombiningmarksforsymbols}"    "<0>\u20d0</0>"
+
+
+"\p{javaDefined}+"                 "\uffff<0>abcd</0>\U00045678"
+"\p{javaDigit}+"                   "abc<0>1234</0>xyz"
+"\p{javaIdentifierIgnorable}+"     "abc<0>\u0000\u000e\u009f</0>xyz"
+"\p{javaISOControl}+"              "abc<0>\u0000\u000d\u0083</0>xyz"
+"\p{javaJavaIdentifierPart}+"      "#@!<0>abc123_$</0>;"
+"\p{javaJavaIdentifierStart}+"     "123\u0301<0>abc$_</0>%^&"
+"\p{javaLetter}+"                  "123<0>abcDEF</0>&*()("
+"\p{javaLetterOrDigit}+"           "$%^&*<0>123abcகஙசஜஞ</0>☺♘♚☔☎♬⚄⚡"
+"\p{javaLowerCase}+"               "ABC<0>def</0>&^%#:="
+"\p{javaMirrored}+"                "ab$%<0>(){}[]</0>xyz"
+"\p{javaSpaceChar}+"               "abc<0> \u00ao\u2028</0>!@#"
+"\p{javaSupplementaryCodePoint}+"  "abc\uffff<0>\U00010000\U0010ffff</0>\u0000"
+"\p{javaTitleCase}+"               "abCE<0>ǅῌᾨ</0>123"
+"\p{javaUnicodeIdentifierStart}+"  "123<0>abcⅣ</0>%^&&*"
+"\p{javaUnicodeIdentifierPart}+"   "%&&^<0>abc123\u0301\u0002</0>..."
+"\p{javaUpperCase}+"               "abc<0>ABC</0>123"
+"\p{javaValidCodePoint}+"          "<0>\u0000abc\ud800 unpaired \udfff |\U0010ffff</0>"
+"\p{javaWhitespace}+"              "abc\u00a0\u2007\u202f<0> \u0009\u001c\u001f\u2028</0>42"
+"\p{all}+"                         "<0>123\u0000\U0010ffff</0>"
+"\P{all}+"                         "123\u0000\U0010ffff"
+
+#
+#  Errors on unrecognized ASCII letter escape sequences.
+#
+"[abc\Y]+"                         "<0>abcY</0>"
+"[abc\Y]+"                     eE  "<0>abcY</0>"
+
+"(?:a|b|c|\Y)+"                    "<0>abcY</0>"
+"(?:a|b|c|\Y)+"                eE  "<0>abcY</0>"
+
+"\Q\Y\E"                       e   "<0>\\Y</0>"
+
+#
+# Reported problem
+#
+"[a-\w]"                       E  "x"
+
 #
 # Bug 4045
 #
@@ -485,7 +901,7 @@
 "A*"                           3  ""
 "A*"                           4  ""
 "A*"                           5  ""
-				  
+
 #
 # Bug 4046
 #
@@ -512,11 +928,10 @@
 # Bug 4058    ICU Unicode Set patterns have an odd feature -
 #             A $ as the last character before the close bracket means match
 #             a \uffff, which means off the end of the string in transliterators.
-#             Doesn't make much sense for regex, but works that way anyhow.
+#             Didn't make sense for regular expressions, and is now fixed.
 #
 "[\$](P|C|D);"                    "<0>$<1>P</1>;</0>"
-"[$](P|C|D);"                     "<0>\uffff<1>P</1>;</0>"
-"[$](P|C|D);"                     "$P;"
+"[$](P|C|D);"                     "<0>$<1>P</1>;</0>"
 "[$$](P|C|D);"                    "<0>$<1>P</1>;</0>"
 
 #
@@ -538,9 +953,67 @@
 ".+?\b"                       3   " \u0935\u0915\u094D\u200D\u0924\u0947 "
 
 #
+# bug 5386  "^.*$" should match empty input
+#
+"^.*$"                            "<0></0>"
+"^.*$"                     m      "<0></0>"
+"^.*$"                            "<0></0>\n"
+"(?s)^.*$"                        "<0>\n</0>"
+
+#
+# bug 5386  Empty pattern and empty input should match.
+#
+""                                "<0></0>abc"
+""                                "<0></0>"
+
+#
+# bug 5386   Range upper and lower bounds can be equal
+#
+"[a-a]"                           "<0>a</0>"
+
+#
+# bug 5386  $* should not fail, should match empty string.
+#
+"$*"                              "<0></0>abc"
+
+#
+# bug 5386  \Q ... \E escaping problem
+#
+"[a-z\Q-$\E]+"                    "QE<0>abc-def$</0>."
+
+# More reported 5386 Java comaptibility failures
+#
+"[^]*abb]*"                       "<0>kkkk</0>"
+"\xa"                             "huh"              # Java would like to be warned.
+"^.*$"                            "<0></0>"
+
+#
+# bug 5386  Empty left alternation should produce a zero length match.
+#
+"|a"                              "<0></0>a"
+"$|ab"                            "<0>ab</0>"
+"$|ba"                            "ab<0></0>"
+
+#
+# bug 5386  Java compatibility for set expressions
+#
+"[a-z&&[cde]]+"                   "ab<0>cde</0>fg"
+
+#
+# bug 6019  matches() needs to backtrack and check for a longer match if the
+#                     first match(es) found don't match the entire input.
+#
+"a?|b"                            "<0></0>b"
+"a?|b"                         M  "<0>b</0>"
+"a?|.*?u|stuff|d"              M  "<0>stuff</0>"
+"a?|.*?(u)|stuff|d"            M  "<0>stuff<1>u</1></0>"
+"a+?"                             "<0>a</0>aaaaaaaaaaaa"
+"a+?"                          M  "<0>aaaaaaaaaaaaa</0>"
+
+#
 #  Random debugging, Temporary
 #
-#"^(?:a?b?)*$"	                  "a--"	
+#"^(?:a?b?)*$"	                  "a--"
 "^(?:a?b?)*$"	                  "a--"
 
 "This is a string with (?:one |two |three )endings"   "<0>This is a string with two endings</0>"
@@ -681,7 +1154,7 @@
 "^(http|https|ftp)\://[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(:[a-zA-Z0-9]*)?/?([a-zA-Z0-9\-\._\?\,\'/\\\+\&%\$#\=~])*$"   G "<0>ftp://ftp.blah.co.uk:2828/blah%20blah.gif</0>"
 "^(http|https|ftp)\://[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(:[a-zA-Z0-9]*)?/?([a-zA-Z0-9\-\._\?\,\'/\\\+\&%\$#\=~])*$"   G "<0>https://blah.gov/blah-blah.as</0>"
 "^(http|https|ftp)\://[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(:[a-zA-Z0-9]*)?/?([a-zA-Z0-9\-\._\?\,\'/\\\+\&%\$#\=~])*$"     "www.blah.com"
-"^(http|https|ftp)\://[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(:[a-zA-Z0-9]*)?/?([a-zA-Z0-9\-\._\?\,\'/\\\+\&%\$#\=~])*$"     "http://www.blah.com/I have spaces!" 
+"^(http|https|ftp)\://[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(:[a-zA-Z0-9]*)?/?([a-zA-Z0-9\-\._\?\,\'/\\\+\&%\$#\=~])*$"     "http://www.blah.com/I have spaces!"
 "^(http|https|ftp)\://[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(:[a-zA-Z0-9]*)?/?([a-zA-Z0-9\-\._\?\,\'/\\\+\&%\$#\=~])*$"     "ftp://blah_underscore/[nope]"
 "^(([0-2]\d|[3][0-1])\/([0]\d|[1][0-2])\/[2][0]\d{2})$|^(([0-2]\d|[3][0-1])\/([0]\d|[1][0-2])\/[2][0]\d{2}\s([0-1]\d|[2][0-3])\:[0-5]\d\:[0-5]\d)$"   G "<0>12/01/2002</0>"
 "^(([0-2]\d|[3][0-1])\/([0]\d|[1][0-2])\/[2][0]\d{2})$|^(([0-2]\d|[3][0-1])\/([0]\d|[1][0-2])\/[2][0]\d{2}\s([0-1]\d|[2][0-3])\:[0-5]\d\:[0-5]\d)$"   G "<0>12/01/2002 12:32:10</0>"
@@ -959,18 +1432,18 @@
 "^(((25[0-5]|2[0-4][0-9]|19[0-1]|19[3-9]|18[0-9]|17[0-1]|17[3-9]|1[0-6][0-9]|1[1-9]|[2-9][0-9]|[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9]))|(192\.(25[0-5]|2[0-4][0-9]|16[0-7]|169|1[0-5][0-9]|1[7-9][0-9]|[1-9][0-9]|[0-9]))|(172\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|1[0-5]|3[2-9]|[4-9][0-9]|[0-9])))\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$"     "10.0.5.4"
 "^(((25[0-5]|2[0-4][0-9]|19[0-1]|19[3-9]|18[0-9]|17[0-1]|17[3-9]|1[0-6][0-9]|1[1-9]|[2-9][0-9]|[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9]))|(192\.(25[0-5]|2[0-4][0-9]|16[0-7]|169|1[0-5][0-9]|1[7-9][0-9]|[1-9][0-9]|[0-9]))|(172\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|1[0-5]|3[2-9]|[4-9][0-9]|[0-9])))\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$"     "192.168.0.1"
 "^(((25[0-5]|2[0-4][0-9]|19[0-1]|19[3-9]|18[0-9]|17[0-1]|17[3-9]|1[0-6][0-9]|1[1-9]|[2-9][0-9]|[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9]))|(192\.(25[0-5]|2[0-4][0-9]|16[0-7]|169|1[0-5][0-9]|1[7-9][0-9]|[1-9][0-9]|[0-9]))|(172\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|1[0-5]|3[2-9]|[4-9][0-9]|[0-9])))\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$"     "my ip address"
-#"^([\w\d\-\.]+)@{1}(([\w\d\-]{1,67})|([\w\d\-]+\.[\w\d\-]{1,67}))\.(([a-zA-Z\d]{2,4})(\.[a-zA-Z\d]{2})?)$"   G "<0>foo@foo.com</0>"   # TODO:  \w in pattern
-#"^([\w\d\-\.]+)@{1}(([\w\d\-]{1,67})|([\w\d\-]+\.[\w\d\-]{1,67}))\.(([a-zA-Z\d]{2,4})(\.[a-zA-Z\d]{2})?)$"   G "<0>foo@foo-foo.com.au</0>"   # TODO:  \w in pattern
-#"^([\w\d\-\.]+)@{1}(([\w\d\-]{1,67})|([\w\d\-]+\.[\w\d\-]{1,67}))\.(([a-zA-Z\d]{2,4})(\.[a-zA-Z\d]{2})?)$"   G "<0>foo@foo.foo.info</0>"   # TODO:  \w in pattern
-#"^([\w\d\-\.]+)@{1}(([\w\d\-]{1,67})|([\w\d\-]+\.[\w\d\-]{1,67}))\.(([a-zA-Z\d]{2,4})(\.[a-zA-Z\d]{2})?)$"     "foo@.com"   # TODO:  \w in pattern
-#"^([\w\d\-\.]+)@{1}(([\w\d\-]{1,67})|([\w\d\-]+\.[\w\d\-]{1,67}))\.(([a-zA-Z\d]{2,4})(\.[a-zA-Z\d]{2})?)$"     "foo@foo..com"   # TODO:  \w in pattern
-#"^([\w\d\-\.]+)@{1}(([\w\d\-]{1,67})|([\w\d\-]+\.[\w\d\-]{1,67}))\.(([a-zA-Z\d]{2,4})(\.[a-zA-Z\d]{2})?)$"     "foo@me@.com"   # TODO:  \w in pattern
-#"/\*[\d\D]*?\*/"   G "<0>/* my comment */</0>"
-#"/\*[\d\D]*?\*/"   G "<0>/* my multiline comment */</0>"
-#"/\*[\d\D]*?\*/"   G "<0>/* my nested comment */</0>"
-#"/\*[\d\D]*?\*/"     "*/ anything here /*"
-#"/\*[\d\D]*?\*/"     "anything between 2 seperate comments"
-#"/\*[\d\D]*?\*/"     "\* *\"
+"^([\w\d\-\.]+)@{1}(([\w\d\-]{1,67})|([\w\d\-]+\.[\w\d\-]{1,67}))\.(([a-zA-Z\d]{2,4})(\.[a-zA-Z\d]{2})?)$"   G "<0>foo@foo.com</0>"
+"^([\w\d\-\.]+)@{1}(([\w\d\-]{1,67})|([\w\d\-]+\.[\w\d\-]{1,67}))\.(([a-zA-Z\d]{2,4})(\.[a-zA-Z\d]{2})?)$"   G "<0>foo@foo-foo.com.au</0>"
+"^([\w\d\-\.]+)@{1}(([\w\d\-]{1,67})|([\w\d\-]+\.[\w\d\-]{1,67}))\.(([a-zA-Z\d]{2,4})(\.[a-zA-Z\d]{2})?)$"   G "<0>foo@foo.foo.info</0>"
+"^([\w\d\-\.]+)@{1}(([\w\d\-]{1,67})|([\w\d\-]+\.[\w\d\-]{1,67}))\.(([a-zA-Z\d]{2,4})(\.[a-zA-Z\d]{2})?)$"     "foo@.com"
+"^([\w\d\-\.]+)@{1}(([\w\d\-]{1,67})|([\w\d\-]+\.[\w\d\-]{1,67}))\.(([a-zA-Z\d]{2,4})(\.[a-zA-Z\d]{2})?)$"     "foo@foo..com"
+"^([\w\d\-\.]+)@{1}(([\w\d\-]{1,67})|([\w\d\-]+\.[\w\d\-]{1,67}))\.(([a-zA-Z\d]{2,4})(\.[a-zA-Z\d]{2})?)$"     "foo@me@.com"
+"/\*[\d\D]*?\*/"   G "<0>/* my comment */</0>"
+"/\*[\d\D]*?\*/"   G "<0>/* my multiline comment */</0>"
+"/\*[\d\D]*?\*/"   G "<0>/* my nested comment */</0>"
+"/\*[\d\D]*?\*/"     "*/ anything here /*"
+"/\*[\d\D]*?\*/"     "anything between 2 seperate comments"
+"/\*[\d\D]*?\*/"     "\* *\"
 "/\*[\p{N}\P{N}]*?\*/"   G "<0>/* my comment */</0>"
 "/\*[\p{N}\P{N}]*?\*/"   G "<0>/* my multiline comment */</0>"
 "/\*[\p{N}\P{N}]*?\*/"   G "<0>/* my nested comment */</0>"
@@ -986,9 +1459,9 @@
 '^(([^<>;()\[\]\\.,;:@"]+(\.[^<>()\[\]\\.,;:@"]+)*)|(".+"))@((([a-z]([-a-z0-9]*[a-z0-9])?)|(#[0-9]+)|(\[((([01]?[0-9]{0,2})|(2(([0-4][0-9])|(5[0-5]))))\.){3}(([01]?[0-9]{0,2})|(2(([0-4][0-9])|(5[0-5]))))\]))\.)*(([a-z]([-a-z0-9]*[a-z0-9])?)|(#[0-9]+)|(\[((([01]?[0-9]{0,2})|(2(([0-4][0-9])|(5[0-5]))))\.){3}(([01]?[0-9]{0,2})|(2(([0-4][0-9])|(5[0-5]))))\]))$'   G "<0>blah@[10.0.0.1]</0>"
 '^(([^<>;()\[\]\\.,;:@"]+(\.[^<>()\[\]\\.,;:@"]+)*)|(".+"))@((([a-z]([-a-z0-9]*[a-z0-9])?)|(#[0-9]+)|(\[((([01]?[0-9]{0,2})|(2(([0-4][0-9])|(5[0-5]))))\.){3}(([01]?[0-9]{0,2})|(2(([0-4][0-9])|(5[0-5]))))\]))\.)*(([a-z]([-a-z0-9]*[a-z0-9])?)|(#[0-9]+)|(\[((([01]?[0-9]{0,2})|(2(([0-4][0-9])|(5[0-5]))))\.){3}(([01]?[0-9]{0,2})|(2(([0-4][0-9])|(5[0-5]))))\]))$'   G "<0>a@b.c</0>"
 '^(([^<>;()\[\]\\.,;:@"]+(\.[^<>()\[\]\\.,;:@"]+)*)|(".+"))@((([a-z]([-a-z0-9]*[a-z0-9])?)|(#[0-9]+)|(\[((([01]?[0-9]{0,2})|(2(([0-4][0-9])|(5[0-5]))))\.){3}(([01]?[0-9]{0,2})|(2(([0-4][0-9])|(5[0-5]))))\]))\.)*(([a-z]([-a-z0-9]*[a-z0-9])?)|(#[0-9]+)|(\[((([01]?[0-9]{0,2})|(2(([0-4][0-9])|(5[0-5]))))\.){3}(([01]?[0-9]{0,2})|(2(([0-4][0-9])|(5[0-5]))))\]))$'     "non@match@."
-#"^\d{9}[\d|X]$"   G "<0>1234123412</0>"
-#"^\d{9}[\d|X]$"   G "<0>123412341X</0>"
-#"^\d{9}[\d|X]$"     "not an isbn"
+"^\d{9}[\d|X]$"   G "<0>1234123412</0>"
+"^\d{9}[\d|X]$"   G "<0>123412341X</0>"
+"^\d{9}[\d|X]$"     "not an isbn"
 "^\d{9}(\d|X)$"   G "<0>1234123412</0>"
 "^\d{9}(\d|X)$"   G "<0>123412341X</0>"
 "^\d{9}(\d|X)$"     "not an isbn"
@@ -1056,12 +1529,12 @@
 "\(([0-9]{2}|0{1}((x|[0-9]){2}[0-9]{2}))\)\s*[0-9]{3,4}[- ]*[0-9]{4}"     "12 123 1234"
 "\(([0-9]{2}|0{1}((x|[0-9]){2}[0-9]{2}))\)\s*[0-9]{3,4}[- ]*[0-9]{4}"     "(012) 123/1234"
 "\(([0-9]{2}|0{1}((x|[0-9]){2}[0-9]{2}))\)\s*[0-9]{3,4}[- ]*[0-9]{4}"     "(012) 123 12345"
-#"^\w+[\w-\.]*\@\w+((-\w+)|(\w*))\.[a-z]{2,3}$"   G "<0>bob-smith@foo.com</0>"   # TODO:  \w in pattern
-#"^\w+[\w-\.]*\@\w+((-\w+)|(\w*))\.[a-z]{2,3}$"   G "<0>bob.smith@foo.com</0>"   # TODO:  \w in pattern
-#"^\w+[\w-\.]*\@\w+((-\w+)|(\w*))\.[a-z]{2,3}$"   G "<0>bob_smith@foo.com</0>"   # TODO:  \w in pattern
-#"^\w+[\w-\.]*\@\w+((-\w+)|(\w*))\.[a-z]{2,3}$"     "-smith@foo.com"   # TODO:  \w in pattern 
-#"^\w+[\w-\.]*\@\w+((-\w+)|(\w*))\.[a-z]{2,3}$"     ".smith@foo.com"   # TODO:  \w in pattern
-#"^\w+[\w-\.]*\@\w+((-\w+)|(\w*))\.[a-z]{2,3}$"     "smith@foo_com"   # TODO:  \w in pattern
+"^\w+[\w-\.]*\@\w+((-\w+)|(\w*))\.[a-z]{2,3}$"   G "<0>bob-smith@foo.com</0>"
+"^\w+[\w-\.]*\@\w+((-\w+)|(\w*))\.[a-z]{2,3}$"   G "<0>bob.smith@foo.com</0>"
+"^\w+[\w-\.]*\@\w+((-\w+)|(\w*))\.[a-z]{2,3}$"   G "<0>bob_smith@foo.com</0>"
+"^\w+[\w-\.]*\@\w+((-\w+)|(\w*))\.[a-z]{2,3}$"     "-smith@foo.com"
+"^\w+[\w-\.]*\@\w+((-\w+)|(\w*))\.[a-z]{2,3}$"     ".smith@foo.com"
+"^\w+[\w-\.]*\@\w+((-\w+)|(\w*))\.[a-z]{2,3}$"     "smith@foo_com"
 "^(?=.*\d).{4,8}$"   G "<0>1234</0>"
 "^(?=.*\d).{4,8}$"   G "<0>asdf1234</0>"
 "^(?=.*\d).{4,8}$"   G "<0>asp123</0>"
@@ -1175,7 +1648,7 @@
 "^\$(\d{1,3}(\,\d{3})*|(\d+))(\.\d{2})?$"     "$12,3456.01"
 "^\$(\d{1,3}(\,\d{3})*|(\d+))(\.\d{2})?$"     "12345"
 "^\$(\d{1,3}(\,\d{3})*|(\d+))(\.\d{2})?$"     "$1.234"
-"([A-Z]:\\[^/:\*\?<>\|]+\.\w{2,6})|(\\{2}[^/:\*\?<>\|]+\.\w{2,6})"   G "<0>C:\\temp\\this allows spaces\\web.config</0>" 
+"([A-Z]:\\[^/:\*\?<>\|]+\.\w{2,6})|(\\{2}[^/:\*\?<>\|]+\.\w{2,6})"   G "<0>C:\\temp\\this allows spaces\\web.config</0>"
 "([A-Z]:\\[^/:\*\?<>\|]+\.\w{2,6})|(\\{2}[^/:\*\?<>\|]+\.\w{2,6})"   G "<0>\\\\Andromeda\\share\\file name.123</0>"
 "([A-Z]:\\[^/:\*\?<>\|]+\.\w{2,6})|(\\{2}[^/:\*\?<>\|]+\.\w{2,6})"     "tz:\temp\ fi*le?na:m<e>.doc"
 "([A-Z]:\\[^/:\*\?<>\|]+\.\w{2,6})|(\\{2}[^/:\*\?<>\|]+\.\w{2,6})"     "\\Andromeda\share\filename.a"
@@ -1206,24 +1679,24 @@
 "^[A-Za-z0-9]{8}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{12}$"     "qqqBFDB4D31-3E35-4DAB-AFCA-5E6E5C8F61EA"
 "^[A-Za-z0-9]{8}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{12}$"     "BFDB4D31-3E-4DAB-AFCA-5E6E5C8F61EA"
 "^[A-Za-z0-9]{8}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{12}$"     "BFDB4D31-3E35-4DAB-AF"
-#"^\d{2}(\x2e)(\d{3})(-\d{3})?$"   G "<0>12.345-678</0>"  # TODO: \x not implemented.
-#"^\d{2}(\x2e)(\d{3})(-\d{3})?$"   G "<0>23.345-123</0>"
-#"^\d{2}(\x2e)(\d{3})(-\d{3})?$"   G "<0>99.999</0>"
-#"^\d{2}(\x2e)(\d{3})(-\d{3})?$"     "41222-222"
-#"^\d{2}(\x2e)(\d{3})(-\d{3})?$"     "3.444-233"
-#"^\d{2}(\x2e)(\d{3})(-\d{3})?$"     "43.324444"
+"^\d{2}(\x2e)(\d{3})(-\d{3})?$"   G "<0>12.345-678</0>"
+"^\d{2}(\x2e)(\d{3})(-\d{3})?$"   G "<0>23.345-123</0>"
+"^\d{2}(\x2e)(\d{3})(-\d{3})?$"   G "<0>99.999</0>"
+"^\d{2}(\x2e)(\d{3})(-\d{3})?$"     "41222-222"
+"^\d{2}(\x2e)(\d{3})(-\d{3})?$"     "3.444-233"
+"^\d{2}(\x2e)(\d{3})(-\d{3})?$"     "43.324444"
 "^\d{2}(\u002e)(\d{3})(-\d{3})?$"   G "<0>12.345-678</0>"
 "^\d{2}(\u002e)(\d{3})(-\d{3})?$"   G "<0>23.345-123</0>"
 "^\d{2}(\u002e)(\d{3})(-\d{3})?$"   G "<0>99.999</0>"
 "^\d{2}(\u002e)(\d{3})(-\d{3})?$"     "41222-222"
 "^\d{2}(\u002e)(\d{3})(-\d{3})?$"     "3.444-233"
 "^\d{2}(\u002e)(\d{3})(-\d{3})?$"     "43.324444"
-#"^(([a-zA-Z]:)|(\\{2}\w+)\$?)(\\(\w[\w ]*))+\.(txt|TXT)$"   G "<0>c:\file.txt</0>"
-#"^(([a-zA-Z]:)|(\\{2}\w+)\$?)(\\(\w[\w ]*))+\.(txt|TXT)$"   G "<0>c:\folder\sub folder\file.txt</0>"
-#"^(([a-zA-Z]:)|(\\{2}\w+)\$?)(\\(\w[\w ]*))+\.(txt|TXT)$"   G "<0>\\network\folder\file.txt</0>"    # TODO:  \w in pattern
-#"^(([a-zA-Z]:)|(\\{2}\w+)\$?)(\\(\w[\w ]*))+\.(txt|TXT)$"     "C:"   # TODO:  \w in pattern
-#"^(([a-zA-Z]:)|(\\{2}\w+)\$?)(\\(\w[\w ]*))+\.(txt|TXT)$"     "C:\file.xls"   # TODO:  \w in pattern
-#"^(([a-zA-Z]:)|(\\{2}\w+)\$?)(\\(\w[\w ]*))+\.(txt|TXT)$"     "folder.txt"   # TODO:  \w in pattern
+#"^(([a-zA-Z]:)|(\\{2}\w+)\$?)(\\(\w[\w ]*))+\.(txt|TXT)$"   G "<0>c:\file.txt</0>"   # TODO:  debug
+#"^(([a-zA-Z]:)|(\\{2}\w+)\$?)(\\(\w[\w ]*))+\.(txt|TXT)$"   G "<0>c:\folder\sub folder\file.txt</0>"   # TODO:  debug
+#"^(([a-zA-Z]:)|(\\{2}\w+)\$?)(\\(\w[\w ]*))+\.(txt|TXT)$"   G "<0>\\network\folder\file.txt</0>"    # TODO:  debug
+"^(([a-zA-Z]:)|(\\{2}\w+)\$?)(\\(\w[\w ]*))+\.(txt|TXT)$"     "C:"
+"^(([a-zA-Z]:)|(\\{2}\w+)\$?)(\\(\w[\w ]*))+\.(txt|TXT)$"     "C:\file.xls"
+"^(([a-zA-Z]:)|(\\{2}\w+)\$?)(\\(\w[\w ]*))+\.(txt|TXT)$"     "folder.txt"
 "^[a-zA-Z0-9]+([a-zA-Z0-9\-\.]+)?\.(com|org|net|mil|edu|COM|ORG|NET|MIL|EDU)$"   G "<0>my.domain.com</0>"
 "^[a-zA-Z0-9]+([a-zA-Z0-9\-\.]+)?\.(com|org|net|mil|edu|COM|ORG|NET|MIL|EDU)$"   G "<0>regexlib.com</0>"
 "^[a-zA-Z0-9]+([a-zA-Z0-9\-\.]+)?\.(com|org|net|mil|edu|COM|ORG|NET|MIL|EDU)$"   G "<0>big-reg.com</0>"
@@ -1265,12 +1738,12 @@
 "^(1?(-?\d{3})-?)?(\d{3})(-?\d{4})$"     "1-555-5555"
 "^(1?(-?\d{3})-?)?(\d{3})(-?\d{4})$"     "15553333"
 "^(1?(-?\d{3})-?)?(\d{3})(-?\d{4})$"     "0-561-555-1212"
-#"<[^>]*name[\s]*=[\s]*"?[^\w_]*"?[^>]*>"   G "<0><input type = text name = "bob"></0>"    # TODO:  \w in pattern
-#"<[^>]*name[\s]*=[\s]*"?[^\w_]*"?[^>]*>"   G "<0><select name = "fred"></0>"   # TODO:  \w in pattern
-#"<[^>]*name[\s]*=[\s]*"?[^\w_]*"?[^>]*>"   G "<0><form</0>"   # TODO:  \w in pattern
-#"<[^>]*name[\s]*=[\s]*"?[^\w_]*"?[^>]*>"     "<input type = submit>"   # TODO:  \w in pattern
-#"<[^>]*name[\s]*=[\s]*"?[^\w_]*"?[^>]*>"     "<font face = "arial">"   # TODO:  \w in pattern
-#"<[^>]*name[\s]*=[\s]*"?[^\w_]*"?[^>]*>"     "The drity brown fox stank like"   # TODO:  \w in pattern
+'<[^>]*name[\s]*=[\s]*"?[^\w_]*"?[^>]*>'   G '<0><input type = text name = "bob"></0>'
+'<[^>]*name[\s]*=[\s]*"?[^\w_]*"?[^>]*>'   G '<0><select name = "fred"></0>'
+#'<[^>]*name[\s]*=[\s]*"?[^\w_]*"?[^>]*>'   G '<0><form></0>'    #TODO:  Debug
+'<[^>]*name[\s]*=[\s]*"?[^\w_]*"?[^>]*>'     "<input type = submit>"   # TODO:  \w in pattern
+'<[^>]*name[\s]*=[\s]*"?[^\w_]*"?[^>]*>'     '<font face = "arial">'   # TODO:  \w in pattern
+'<[^>]*name[\s]*=[\s]*"?[^\w_]*"?[^>]*>'      "The drity brown fox stank like"
 "^(1|01|2|02|3|03|4|04|5|05|6|06|7|07|8|08|9|09|10|11|12{1,2}):(([0-5]{1}[0-9]{1}\s{0,1})([AM|PM|am|pm]{2,2}))\W{0}$"   G "<0>1:00 AM</0>"
 "^(1|01|2|02|3|03|4|04|5|05|6|06|7|07|8|08|9|09|10|11|12{1,2}):(([0-5]{1}[0-9]{1}\s{0,1})([AM|PM|am|pm]{2,2}))\W{0}$"   G "<0>12:00 PM</0>"
 "^(1|01|2|02|3|03|4|04|5|05|6|06|7|07|8|08|9|09|10|11|12{1,2}):(([0-5]{1}[0-9]{1}\s{0,1})([AM|PM|am|pm]{2,2}))\W{0}$"   G "<0>1:00am</0>"
@@ -1495,9 +1968,9 @@
 "^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$"     "10.57.98.23."
 "<img([^>]*[^/])>"   G '<0><img src="bob"></0>'
 "<img([^>]*[^/])>"     '<img src="bob" />'
-#"<!--[\s\S]*?-->"   G "<0><!-- comments --></0>"
-#"<!--[\s\S]*?-->"   G "<0><!-- x = a > b - 3 --></0>"
-#"<!--[\s\S]*?-->"     "<COMMENTS>this is a comment</COMMENTS>"
+"<!--[\s\S]*?-->"   G "<0><!-- comments --></0>"
+"<!--[\s\S]*?-->"   G "<0><!-- x = a > b - 3 --></0>"
+"<!--[\s\S]*?-->"     "<COMMENTS>this is a comment</COMMENTS>"
 "<!--[\p{Zs}\P{Zs}]*?-->"   G "<0><!-- comments --></0>"
 "<!--[\p{Zs}\P{Zs}]*?-->"   G "<0><!-- x = a > b - 3 --></0>"
 "<!--[\p{Zs}\P{Zs}]*?-->"     "<COMMENTS>this is a comment</COMMENTS>"
@@ -1509,8 +1982,8 @@
 "(\{\\f\d*)\\([^;]+;)"   G "<0>{\\f1\\fswiss\\fcharset0\\fprq2{\\*\\panose 020b0604020202020204}Arial;</0>"
 "(\{\\f\d*)\\([^;]+;)"   G "{\\f"
 "(\{\\f\d*)\\([^;]+;)"     "{f0fs20 some text}"
-#"</?([a-zA-Z][-A-Za-z\d\.]{0,71})(\s+(\S+)(\s*=\s*([-\w\.]{1,1024}|"[^"]{0,1024}"|'[^']{0,1024}'))?)*\s*>"   G "<0><IMG src='stars.gif' alt="space" height=1></0>"    # TODO:  \w in pattern
-#"</?([a-zA-Z][-A-Za-z\d\.]{0,71})(\s+(\S+)(\s*=\s*([-\w\.]{1,1024}|"[^"]{0,1024}"|'[^']{0,1024}'))?)*\s*>"     "this is not a tag"   # TODO:  \w in pattern
+#"</?([a-zA-Z][-A-Za-z\d\.]{0,71})(\s+(\S+)(\s*=\s*([-\w\.]{1,1024}|"[^"]{0,1024}"|'[^']{0,1024}'))?)*\s*>"   G '<0><IMG src='stars.gif' alt="space" height=1></0>'    # TODO:  Can't quote this pattern with the test syntax!
+#"</?([a-zA-Z][-A-Za-z\d\.]{0,71})(\s+(\S+)(\s*=\s*([-\w\.]{1,1024}|"[^"]{0,1024}"|'[^']{0,1024}'))?)*\s*>"     "this is not a tag"
 "^([0]\d|[1][0-2])\/([0-2]\d|[3][0-1])\/([2][01]|[1][6-9])\d{2}(\s([0-1]\d|[2][0-3])(\:[0-5]\d){1,2})?$"   G "<0>12/30/2002</0>"
 "^([0]\d|[1][0-2])\/([0-2]\d|[3][0-1])\/([2][01]|[1][6-9])\d{2}(\s([0-1]\d|[2][0-3])(\:[0-5]\d){1,2})?$"   G "<0>01/12/1998 13:30</0>"
 "^([0]\d|[1][0-2])\/([0-2]\d|[3][0-1])\/([2][01]|[1][6-9])\d{2}(\s([0-1]\d|[2][0-3])(\:[0-5]\d){1,2})?$"   G "<0>01/28/2002 22:35:00</0>"
@@ -1586,10 +2059,10 @@
 "^[0-9A-Za-z_ ]+(.[jJ][pP][gG]|.[gG][iI][fF])$"     "bad.bad.gif"
 "^[0-9A-Za-z_ ]+(.[jJ][pP][gG]|.[gG][iI][fF])$"     "slash\gif."
 "<[^>\s]*\bauthor\b[^>]*>"   G '<0><author name="Daniel"></0>'
-#"<[^>\s]*\bauthor\b[^>]*>"   G "<0></sch:author></0>"
-#"<[^>\s]*\bauthor\b[^>]*>"   G '<0><pp:author name="Daniel"</0>'
+"<[^>\s]*\bauthor\b[^>]*>"   G "<0></sch:author></0>"
+# "<[^>\s]*\bauthor\b[^>]*>"   G '<0><pp:author name="Daniel"</0>'  #Debug  should work
 "<[^> ]*\bauthor\b[^>]*>"   G "<0></sch:author></0>"
-"<[^> ]*\bauthor\b[^>]*>"   G '<0><pp:author name="Daniel"></0>' 
+"<[^> ]*\bauthor\b[^>]*>"   G '<0><pp:author name="Daniel"></0>'
 "<[^>\s]*\bauthor\b[^>]*>"     "<other>"
 "<[^>\s]*\bauthor\b[^>]*>"     "</authors>"
 "<[^>\s]*\bauthor\b[^>]*>"     "<work>author</work>"
@@ -1625,15 +2098,15 @@
 "(^\d*\.?\d*[1-9]+\d*$)|(^[1-9]+\d*\.\d*$)"     "0"
 "(^\d*\.?\d*[1-9]+\d*$)|(^[1-9]+\d*\.\d*$)"     "0.0"
 "(^\d*\.?\d*[1-9]+\d*$)|(^[1-9]+\d*\.\d*$)"     ".0"
-#"^([A-Z]{1}[a-z]{1,})$|^([A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,})$|^([A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,})$|^$"   G "<0>Sacramento</0>"          #TODO: Octal
-#"^([A-Z]{1}[a-z]{1,})$|^([A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,})$|^([A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,})$|^$"   G "<0>San Francisco</0>"
-#"^([A-Z]{1}[a-z]{1,})$|^([A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,})$|^([A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,})$|^$"   G "<0>San Luis Obispo</0>"
-#"^([A-Z]{1}[a-z]{1,})$|^([A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,})$|^([A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,})$|^$"     "SanFrancisco"
-#"^([A-Z]{1}[a-z]{1,})$|^([A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,})$|^([A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,})$|^$"     "SanLuisObispo"
-#"^([A-Z]{1}[a-z]{1,})$|^([A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,})$|^([A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,})$|^$"     "San francisco"
-#"^\{?[a-fA-F\d]{8}-([a-fA-F\d]{4}-){3}[a-fA-F\d]{12}\}?$"   G "<0>{e02ff0e4-00ad-090A-c030-0d00a0008ba0}</0>"
-#"^\{?[a-fA-F\d]{8}-([a-fA-F\d]{4}-){3}[a-fA-F\d]{12}\}?$"   G "<0>e02ff0e4-00ad-090A-c030-0d00a0008ba0</0>"
-#"^\{?[a-fA-F\d]{8}-([a-fA-F\d]{4}-){3}[a-fA-F\d]{12}\}?$"     "0xe02ff0e400ad090Ac0300d00a0008ba0"
+"^([A-Z]{1}[a-z]{1,})$|^([A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,})$|^([A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,})$|^$"   G "<0>Sacramento</0>"
+"^([A-Z]{1}[a-z]{1,})$|^([A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,})$|^([A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,})$|^$"     "<0><2>San Francisco</2></0>"
+"^([A-Z]{1}[a-z]{1,})$|^([A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,})$|^([A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,})$|^$"     "<0><3>San Luis Obispo</3></0>"
+"^([A-Z]{1}[a-z]{1,})$|^([A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,})$|^([A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,})$|^$"     "SanFrancisco"
+"^([A-Z]{1}[a-z]{1,})$|^([A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,})$|^([A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,})$|^$"     "SanLuisObispo"
+"^([A-Z]{1}[a-z]{1,})$|^([A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,})$|^([A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,}\040[A-Z]{1}[a-z]{1,})$|^$"     "San francisco"
+"^\{?[a-fA-F\d]{8}-([a-fA-F\d]{4}-){3}[a-fA-F\d]{12}\}?$"   G "<0>{e02ff0e4-00ad-090A-c030-0d00a0008ba0}</0>"
+"^\{?[a-fA-F\d]{8}-([a-fA-F\d]{4}-){3}[a-fA-F\d]{12}\}?$"   G "<0>e02ff0e4-00ad-090A-c030-0d00a0008ba0</0>"
+"^\{?[a-fA-F\d]{8}-([a-fA-F\d]{4}-){3}[a-fA-F\d]{12}\}?$"     "0xe02ff0e400ad090Ac0300d00a0008ba0"
 "^\{?[a-fA-F0-9]{8}-([a-fA-F0-9]{4}-){3}[a-fA-F0-9]{12}\}?$"   G "<0>{e02ff0e4-00ad-090A-c030-0d00a0008ba0}</0>"
 "^\{?[a-fA-F0-9]{8}-([a-fA-F0-9]{4}-){3}[a-fA-F0-9]{12}\}?$"   G "<0>e02ff0e4-00ad-090A-c030-0d00a0008ba0</0>"
 "^\{?[a-fA-F0-9]{8}-([a-fA-F0-9]{4}-){3}[a-fA-F0-9]{12}\}?$"     "0xe02ff0e400ad090Ac0300d00a0008ba0"
@@ -1682,15 +2155,15 @@
 "^((0[1-9])|(1[0-2]))\/(\d{2})$"   G "<0>01/04</0>"
 "^((0[1-9])|(1[0-2]))\/(\d{2})$"     "13/03"
 "^((0[1-9])|(1[0-2]))\/(\d{2})$"     "10/2003"
-#"<script[^>]*>[\w|\t|\r|\W]*</script>"   G "<0><script language=javascript>document.write("one");</script></0>"    # TODO:  \w in pattern
-#"<script[^>]*>[\w|\t|\r|\W]*</script>"     "--"   # TODO:  \w in pattern
-#"<script[^>]*>[\w|\t|\r|\W]*</script>"     "A-Z][a-z]+"   # TODO:  \w in pattern
-#"<script[^>]*>[\w|\t|\r|\W]*</script>"   G "<0>strFirstName</0>"   # TODO:  \w in pattern
-#"<script[^>]*>[\w|\t|\r|\W]*</script>"   G "<0>intAgeInYears</0>"   # TODO:  \w in pattern
-#"<script[^>]*>[\w|\t|\r|\W]*</script>"   G "<0>Where the Wild Things Are</0>"   # TODO:  \w in pattern
-#"<script[^>]*>[\w|\t|\r|\W]*</script>"     "123"   # TODO:  \w in pattern
-#"<script[^>]*>[\w|\t|\r|\W]*</script>"     "abc"   # TODO:  \w in pattern
-#"<script[^>]*>[\w|\t|\r|\W]*</script>"     "this has no caps in it"   # TODO:  \w in pattern
+"<script[^>]*>[\w|\t|\r|\W]*</script>"   G '<0><script language=javascript>document.write("one");</script></0>'
+"<script[^>]*>[\w|\t|\r|\W]*</script>"     "--"
+"<script[^>]*>[\w|\t|\r|\W]*</script>"     "A-Z][a-z]+"
+#"<script[^>]*>[\w|\t|\r|\W]*</script>"   G "<0>strFirstName</0>"   # Test Case damaged?
+#"<script[^>]*>[\w|\t|\r|\W]*</script>"   G "<0>intAgeInYears</0>"   # Test Case damaged?
+#"<script[^>]*>[\w|\t|\r|\W]*</script>"   G "<0>Where the Wild Things Are</0>"   #  Test Case damaged?
+"<script[^>]*>[\w|\t|\r|\W]*</script>"     "123"
+"<script[^>]*>[\w|\t|\r|\W]*</script>"     "abc"
+"<script[^>]*>[\w|\t|\r|\W]*</script>"     "this has no caps in it"
 "(^-\d*\.?\d*[1-9]+\d*$)|(^-[1-9]+\d*\.\d*$)"   G "<0>-0.050</0>"
 "(^-\d*\.?\d*[1-9]+\d*$)|(^-[1-9]+\d*\.\d*$)"   G "<0>-5.000</0>"
 "(^-\d*\.?\d*[1-9]+\d*$)|(^-[1-9]+\d*\.\d*$)"   G "<0>-5</0>"
@@ -1725,12 +2198,12 @@
 "^.{4,8}$"     "asd"
 "^.{4,8}$"     "123"
 "^.{4,8}$"     "asdfe12345"
-#"^[\w\.=-]+@[\w\.-]+\.[\w]{2,3}$"   G "<0>a@a.com</0>"    # TODO:  \w in pattern
-#"^[\w\.=-]+@[\w\.-]+\.[\w]{2,3}$"   G "<0>a@a.com.au</   # TODO:  \w in pattern0>"
-#"^[\w\.=-]+@[\w\.-]+\.[\w]{2,3}$"   G "<0>a@a.au</0>"   # TODO:  \w in pattern
-#"^[\w\.=-]+@[\w\.-]+\.[\w]{2,3}$"     "word"   # TODO:  \w in pattern
-#"^[\w\.=-]+@[\w\.-]+\.[\w]{2,3}$"     "word@"   # TODO:  \w in pattern
-#"^[\w\.=-]+@[\w\.-]+\.[\w]{2,3}$"     "@word"   # TODO:  \w in pattern
+"^[\w\.=-]+@[\w\.-]+\.[\w]{2,3}$"   G "<0>a@a.com</0>"
+"^[\w\.=-]+@[\w\.-]+\.[\w]{2,3}$"   G "<0>a@a.com.au</0>"
+"^[\w\.=-]+@[\w\.-]+\.[\w]{2,3}$"   G "<0>a@a.au</0>"
+"^[\w\.=-]+@[\w\.-]+\.[\w]{2,3}$"     "word"
+"^[\w\.=-]+@[\w\.-]+\.[\w]{2,3}$"     "word@"
+"^[\w\.=-]+@[\w\.-]+\.[\w]{2,3}$"     "@word"
 "^\d{5}-\d{4}$"   G "<0>22222-3333</0>"
 "^\d{5}-\d{4}$"   G "<0>34545-2367</0>"
 "^\d{5}-\d{4}$"   G "<0>56334-2343</0>"
@@ -1795,22 +2268,22 @@
 "^[12345]$"     "6"
 "^[12345]$"     "-1"
 "^[12345]$"     "abc"
-#"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"   G "<0>joe@aol.com</0>"    # TODO:  \w in pattern
-#"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"   G "<0>joe@wrox.co.uk</0>"   # TODO:  \w in pattern
-#"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"   G "<0>joe@domain.info</0>"   # TODO:  \w in pattern
-#"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"     "a@b"   # TODO:  \w in pattern
-#"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"     "notanemail"   # TODO:  \w in pattern
-#"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"     "joe@@."   # TODO:  \w in pattern
+"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"   G "<0>joe@aol.com</0>"
+"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"   G "<0>joe@wrox.co.uk</0>"
+"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"   G "<0>joe@domain.info</0>"
+"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"     "a@b"
+"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"     "notanemail"
+"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"     "joe@@."
 "^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$"   G "<0>joe@aol.com</0>"
 "^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$"   G "<0>ssmith@aspalliance.com</0>"
 "^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$"   G "<0>a@b.cc</0>"
 "^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$"     "joe@123aspx.com"
 "^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$"     "joe@web.info"
 "^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$"     "joe@company.co.uk"
-#"[\w-]+@([\w-]+\.)+[\w-]+"   G "<0>joe@aol.com</0>"   # TODO:  \w in pattern
-#"[\w-]+@([\w-]+\.)+[\w-]+"   G "<0>a@b.c</0>"   # TODO:  \w in pattern
-#"[\w-]+@([\w-]+\.)+[\w-]+"     "asdf"   # TODO:  \w in pattern
-#"[\w-]+@([\w-]+\.)+[\w-]+"     "1234"   # TODO:  \w in pattern
+"[\w-]+@([\w-]+\.)+[\w-]+"   G "<0>joe@aol.com</0>"
+"[\w-]+@([\w-]+\.)+[\w-]+"   G "<0>a@b.c</0>"
+"[\w-]+@([\w-]+\.)+[\w-]+"     "asdf"
+"[\w-]+@([\w-]+\.)+[\w-]+"     "1234"
 "\d{4}-?\d{4}-?\d{4}-?\d{4}"   G "<0>1234-1234-1234-1234</0>"
 "\d{4}-?\d{4}-?\d{4}-?\d{4}"   G "<0>1234123412341234</0>"
 "\d{4}-?\d{4}-?\d{4}-?\d{4}"     "1234123412345"

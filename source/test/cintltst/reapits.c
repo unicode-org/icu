@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2004-2006, International Business Machines Corporation and
+ * Copyright (c) 2004-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -33,6 +33,36 @@ log_err("Failure at file %s, line %d, error = %s\n", __FILE__, __LINE__, u_error
 
 #define TEST_ASSERT(expr) {if ((expr)==FALSE) { \
 log_err("Test Failure at file %s, line %d\n", __FILE__, __LINE__);}}
+
+/*
+ *   TEST_SETUP and TEST_TEARDOWN
+ *         macros to handle the boilerplate around setting up regex test cases.
+ *         parameteres to setup:
+ *              pattern:     The regex pattern, a (char *) null terminated C string.
+ *              testString:  The string data, also a (char *) C string.
+ *              flags:       Regex flags to set when compiling the pattern
+ *
+ *         Put arbitrary test code between SETUP and TEARDOWN.
+ *         're" is the compiled, ready-to-go  regular expression.
+ */
+#define TEST_SETUP(pattern, testString, flags) {  \
+    UChar   *srcString = NULL;  \
+    status = U_ZERO_ERROR; \
+    re = uregex_openC(pattern, flags, NULL, &status);  \
+    TEST_ASSERT_SUCCESS(status);   \
+    srcString = (UChar *)malloc((strlen(testString)+2)*sizeof(UChar)); \
+    u_uastrncpy(srcString, testString,  strlen(testString)+1); \
+    uregex_setText(re, srcString, -1, &status); \
+    TEST_ASSERT_SUCCESS(status);  \
+    if (U_SUCCESS(status)) {
+    
+#define TEST_TEARDOWN  \
+    }  \
+    TEST_ASSERT_SUCCESS(status);  \
+    uregex_close(re);  \
+    free(srcString);   \
+    }
+
 
 static void test_assert_string(const char *expected, const UChar *actual, UBool nulTerm, const char *file, int line) {
      char     buf_inside_macro[120];
@@ -544,6 +574,135 @@ static void TestRegexCAPI(void) {
         uregex_close(re);
 
     }
+    
+    /*
+     *  Regions
+     */
+        
+        
+        /* SetRegion(), getRegion() do something  */
+        TEST_SETUP(".*", "0123456789ABCDEF", 0)
+        UChar resultString[40];
+        TEST_ASSERT(uregex_regionStart(re, &status) == 0);
+        TEST_ASSERT(uregex_regionEnd(re, &status) == 16);
+        uregex_setRegion(re, 3, 6, &status);
+        TEST_ASSERT(uregex_regionStart(re, &status) == 3);
+        TEST_ASSERT(uregex_regionEnd(re, &status) == 6);
+        TEST_ASSERT(uregex_findNext(re, &status));
+        TEST_ASSERT(uregex_group(re, 0, resultString, sizeof(resultString)/2, &status) == 3)
+        TEST_ASSERT_STRING("345", resultString, TRUE);
+        TEST_TEARDOWN;
+        
+        /* find(start=-1) uses regions   */
+        TEST_SETUP(".*", "0123456789ABCDEF", 0);
+        uregex_setRegion(re, 4, 6, &status);
+        TEST_ASSERT(uregex_find(re, -1, &status) == TRUE);
+        TEST_ASSERT(uregex_start(re, 0, &status) == 4);
+        TEST_ASSERT(uregex_end(re, 0, &status) == 6);
+        TEST_TEARDOWN;
+        
+        /* find (start >=0) does not use regions   */
+        TEST_SETUP(".*", "0123456789ABCDEF", 0);
+        uregex_setRegion(re, 4, 6, &status);
+        TEST_ASSERT(uregex_find(re, 0, &status) == TRUE);
+        TEST_ASSERT(uregex_start(re, 0, &status) == 0);
+        TEST_ASSERT(uregex_end(re, 0, &status) == 16);
+        TEST_TEARDOWN;
+         
+        /* findNext() obeys regions    */
+        TEST_SETUP(".", "0123456789ABCDEF", 0);
+        uregex_setRegion(re, 4, 6, &status);
+        TEST_ASSERT(uregex_findNext(re,&status) == TRUE);
+        TEST_ASSERT(uregex_start(re, 0, &status) == 4);
+        TEST_ASSERT(uregex_findNext(re, &status) == TRUE);
+        TEST_ASSERT(uregex_start(re, 0, &status) == 5);
+        TEST_ASSERT(uregex_findNext(re, &status) == FALSE);
+        TEST_TEARDOWN;
+
+        /* matches(start=-1) uses regions                                           */
+        /*    Also, verify that non-greedy *? succeeds in finding the full match.   */
+        TEST_SETUP(".*?", "0123456789ABCDEF", 0);
+        uregex_setRegion(re, 4, 6, &status);
+        TEST_ASSERT(uregex_matches(re, -1, &status) == TRUE);
+        TEST_ASSERT(uregex_start(re, 0, &status) == 4);
+        TEST_ASSERT(uregex_end(re, 0, &status) == 6);
+        TEST_TEARDOWN;
+        
+        /* matches (start >=0) does not use regions       */
+        TEST_SETUP(".*?", "0123456789ABCDEF", 0);
+        uregex_setRegion(re, 4, 6, &status);
+        TEST_ASSERT(uregex_matches(re, 0, &status) == TRUE);
+        TEST_ASSERT(uregex_start(re, 0, &status) == 0);
+        TEST_ASSERT(uregex_end(re, 0, &status) == 16);
+        TEST_TEARDOWN;
+        
+        /* lookingAt(start=-1) uses regions                                         */
+        /*    Also, verify that non-greedy *? finds the first (shortest) match.     */
+        TEST_SETUP(".*?", "0123456789ABCDEF", 0);
+        uregex_setRegion(re, 4, 6, &status);
+        TEST_ASSERT(uregex_lookingAt(re, -1, &status) == TRUE);
+        TEST_ASSERT(uregex_start(re, 0, &status) == 4);
+        TEST_ASSERT(uregex_end(re, 0, &status) == 4);
+        TEST_TEARDOWN;
+        
+        /* lookingAt (start >=0) does not use regions  */
+        TEST_SETUP(".*?", "0123456789ABCDEF", 0);
+        uregex_setRegion(re, 4, 6, &status);
+        TEST_ASSERT(uregex_lookingAt(re, 0, &status) == TRUE);
+        TEST_ASSERT(uregex_start(re, 0, &status) == 0);
+        TEST_ASSERT(uregex_end(re, 0, &status) == 0);
+        TEST_TEARDOWN;
+
+        /* hitEnd()       */
+        TEST_SETUP("[a-f]*", "abcdefghij", 0);
+        TEST_ASSERT(uregex_find(re, 0, &status) == TRUE);
+        TEST_ASSERT(uregex_hitEnd(re, &status) == FALSE);
+        TEST_TEARDOWN;
+
+        TEST_SETUP("[a-f]*", "abcdef", 0);
+        TEST_ASSERT(uregex_find(re, 0, &status) == TRUE);
+        TEST_ASSERT(uregex_hitEnd(re, &status) == TRUE);
+        TEST_TEARDOWN;
+
+        /* requireEnd   */
+        TEST_SETUP("abcd", "abcd", 0);
+        TEST_ASSERT(uregex_find(re, 0, &status) == TRUE);
+        TEST_ASSERT(uregex_requireEnd(re, &status) == FALSE);
+        TEST_TEARDOWN;
+
+        TEST_SETUP("abcd$", "abcd", 0);
+        TEST_ASSERT(uregex_find(re, 0, &status) == TRUE);
+        TEST_ASSERT(uregex_requireEnd(re, &status) == TRUE);
+        TEST_TEARDOWN;
+        
+        /* anchoringBounds        */
+        TEST_SETUP("abc$", "abcdef", 0);
+        TEST_ASSERT(uregex_hasAnchoringBounds(re, &status) == TRUE);
+        uregex_useAnchoringBounds(re, FALSE, &status);
+        TEST_ASSERT(uregex_hasAnchoringBounds(re, &status) == FALSE);
+        
+        TEST_ASSERT(uregex_find(re, -1, &status) == FALSE);
+        uregex_useAnchoringBounds(re, TRUE, &status);
+        uregex_setRegion(re, 0, 3, &status);
+        TEST_ASSERT(uregex_find(re, -1, &status) == TRUE);
+        TEST_ASSERT(uregex_end(re, 0, &status) == 3);
+        TEST_TEARDOWN;
+        
+        /* Transparent Bounds      */
+        TEST_SETUP("abc(?=def)", "abcdef", 0);
+        TEST_ASSERT(uregex_hasTransparentBounds(re, &status) == FALSE);
+        uregex_useTransparentBounds(re, TRUE, &status);
+        TEST_ASSERT(uregex_hasTransparentBounds(re, &status) == TRUE);
+        
+        uregex_useTransparentBounds(re, FALSE, &status);
+        TEST_ASSERT(uregex_find(re, -1, &status) == TRUE);    /* No Region */
+        uregex_setRegion(re, 0, 3, &status);
+        TEST_ASSERT(uregex_find(re, -1, &status) == FALSE);   /* with region, opaque bounds */
+        uregex_useTransparentBounds(re, TRUE, &status);
+        TEST_ASSERT(uregex_find(re, -1, &status) == TRUE);    /* with region, transparent bounds */
+        TEST_ASSERT(uregex_end(re, 0, &status) == 3);
+        TEST_TEARDOWN;
+        
 
     /*
      *  replaceFirst()

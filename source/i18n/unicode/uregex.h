@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2004-2006, International Business Machines
+*   Copyright (C) 2004-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  regex.h
@@ -59,12 +59,32 @@ typedef enum URegexpFlag{
     /**  If set, '.' matches line terminators,  otherwise '.' matching stops at line end.
       *  @stable ICU 2.4 */
     UREGEX_DOTALL           = 32,
+    
+    /**  If set, treat the entire pattern as a literal string.  
+      *  Metacharacters or escape sequences in the input sequence will be given 
+      *  no special meaning.
+      *
+      *  The flags CASE_INSENSITIVE and UNICODE_CASE retain their impact
+      *  on matching when used in conjunction with this flag.
+      *  The other flags become superfluous.
+      *  TODO:  say which escapes are still handled; anything Java does
+      *         early (\u) we should still do.
+      * @draft ICU 4.0
+      */
+    UREGEX_LITERAL = 16,
 
     /**   Control behavior of "$" and "^"
       *    If set, recognize line terminators within string,
       *    otherwise, match only at start and end of input string.
       *   @stable ICU 2.4 */
     UREGEX_MULTILINE        = 8,
+    
+    /**   Unix-only line endings.
+      *   When this mode is enabled, only \u000a is recognized as a line ending
+      *    in the behavior of ., ^, and $.
+      *   @draft ICU 4.0
+      */
+    UREGEX_UNIX_LINES = 1,
 
     /**  Unicode word boundaries.
       *     If set, \b uses the Unicode TR 29 definition of word boundaries.
@@ -73,7 +93,17 @@ typedef enum URegexpFlag{
       *     http://unicode.org/reports/tr29/#Word_Boundaries
       *     @stable ICU 2.8
       */
-    UREGEX_UWORD            = 256
+    UREGEX_UWORD            = 256,
+
+     /**  Error on Unrecognized backslash escapes.
+       *     If set, fail with an error on patterns that contain
+       *     backslash-escaped ASCII letters without a known specail
+       *     meaning.  If this flag is not set, these
+       *     escaped letters represent themselves.
+       *     @draft ICU 4.0
+       */
+     UREGEX_ERROR_ON_UNKNOWN_ESCAPES = 512
+
 }  URegexpFlag;
 
 /**
@@ -251,11 +281,21 @@ uregex_getText(URegularExpression *regexp,
                UErrorCode         *status);
 
 /**
-  *   Attempts to match the input string, beginning at startIndex, against the pattern.
-  *   To succeed, the match must extend to the end of the input string.
+  *   Attempts to match the input string against the pattern.
+  *   To succeed, the match must extend to the end of the string,
+  *   or cover the complete match region.
+  *
+  *   If startIndex >= zero the match operation starts at the specified
+  *   index and must extend to the end of the input string.  Any region
+  *   that has been specified is reset.
+  *
+  *   If startIndex == -1 the match must cover the input region, or the entire
+  *   input string if no region has been set.  This directly corresponds to
+  *   Matcher.matches() in Java
   *
   *    @param  regexp      The compiled regular expression.
-  *    @param  startIndex  The input string index at which to begin matching.
+  *    @param  startIndex  The input string index at which to begin matching, or -1
+  *                        to match the input Region.
   *    @param  status      Receives errors detected by this function.
   *    @return             TRUE if there is a match
   *    @stable ICU 3.0
@@ -270,12 +310,20 @@ uregex_matches(URegularExpression *regexp,
   *   The match may be of any length, and is not required to extend to the end
   *   of the input string.  Contrast with uregex_matches().
   *
+  *   <p>If startIndex is >= 0 any input region that was set for this
+  *   URegularExpression is reset before the operation begins.
+  *
+  *   <p>If the specified starting index == -1 the match begins at the start of the input 
+  *   region, or at the start of the full string if no region has been specified.
+  *   This corresponds directly with Matcher.lookingAt() in Java.
+  *
   *   <p>If the match succeeds then more information can be obtained via the
   *    <code>uregexp_start()</code>, <code>uregexp_end()</code>,
   *    and <code>uregexp_group()</code> functions.</p>
   *
   *    @param   regexp      The compiled regular expression.
-  *    @param   startIndex  The input string index at which to begin matching.
+  *    @param   startIndex  The input string index at which to begin matching, or
+  *                         -1 to match the Input Region
   *    @param   status      A reference to a UErrorCode to receive any errors.
   *    @return  TRUE if there is a match.
   *    @stable ICU 3.0
@@ -287,12 +335,19 @@ uregex_lookingAt(URegularExpression *regexp,
 
 /**
   *   Find the first matching substring of the input string that matches the pattern.
-  *   The search for a match begins at the specified index.
+  *   If startIndex is >= zero the search for a match begins at the specified index,
+  *          and any match region is reset.  This corresponds directly with
+  *          Matcher.find(startIndex) in Java.
+  *
+  *   If startIndex == -1 the search begins at the start of the input region,
+  *           or at the start of the full string if no region has been specified.
+  *
   *   If a match is found, <code>uregex_start(), uregex_end()</code>, and
   *   <code>uregex_group()</code> will provide more information regarding the match.
   *
   *   @param   regexp      The compiled regular expression.
-  *   @param   startIndex  The position in the input string to begin the search
+  *   @param   startIndex  The position in the input string to begin the search, or
+  *                        -1 to search within the Input Region.
   *   @param   status      A reference to a UErrorCode to receive any errors.
   *   @return              TRUE if a match is found.
   *   @stable ICU 3.0
@@ -303,10 +358,10 @@ uregex_find(URegularExpression *regexp,
             UErrorCode         *status);
 
 /**
-  *  Find the next pattern match in the input string.
-  *  Begin searching the input at the location following the end of
-  *  the previous match, or at the start of the string if there is no previous match.
-  *  If a match is found, <code>uregex_start(), uregex_end()</code>, and
+  *  Find the next pattern match in the input string.  Begin searching 
+  *  the input at the location following the end of he previous match, 
+  *  or at the start of the string (or region) if there is no 
+  *  previous match.  If a match is found, <code>uregex_start(), uregex_end()</code>, and
   *  <code>uregex_group()</code> will provide more information regarding the match.
   *
   *  @param   regexp      The compiled regular expression.
@@ -395,7 +450,8 @@ uregex_end(URegularExpression   *regexp,
   *  Reset any saved state from the previous match.  Has the effect of
   *  causing uregex_findNext to begin at the specified index, and causing
   *  uregex_start(), uregex_end() and uregex_group() to return an error 
-  *  indicating that there is no match information available.
+  *  indicating that there is no match information available.  Clears any
+  *  match region that may have been set.
   *
   *    @param   regexp      The compiled regular expression.
   *    @param   index       The position in the text at which a
@@ -407,6 +463,166 @@ U_STABLE void U_EXPORT2
 uregex_reset(URegularExpression    *regexp,
              int32_t               index,
              UErrorCode            *status);
+             
+             
+/** Sets the limits of the matching region for this URegularExpression.
+  * The region is the part of the input string that will be considered when matching.
+  * Invoking this method resets any saved state from the previous match, 
+  * then sets the region to start at the index specified by the start parameter
+  * and end at the index specified by the end parameter.
+  *
+  * Depending on the transparency and anchoring being used (see useTransparentBounds
+  * and useAnchoringBounds), certain constructs such as anchors may behave differently
+  * at or around the boundaries of the region
+  *
+  * The function will fail if start is greater than limit, or if either index
+  *  is less than zero or greater than the length of the string being matched.
+  *
+  * @param regexp The compiled regular expression.
+  * @param start  The index to begin searches at.
+  * @param limit  The index to end searches at (exclusive).
+  * @param status A pointer to a UErrorCode to receive any errors.
+  * @draft ICU 4.0
+  */
+U_DRAFT void U_EXPORT2
+uregex_setRegion(URegularExpression   *regexp,
+                 int32_t               regionStart,
+                 int32_t               regionLimit,
+                 UErrorCode           *status);
+
+/**
+  * Reports the start index of the matching region. Any matches found are limited to
+  * to the region bounded by regionStart (inclusive) and regionEnd (exclusive).
+  *
+  * @param regexp The compiled regular expression.
+  * @param status A pointer to a UErrorCode to receive any errors.
+  * @return The starting index of this matcher's region.
+  * @draft ICU 4.0
+  */
+U_DRAFT int32_t U_EXPORT2
+uregex_regionStart(const  URegularExpression   *regexp,
+                          UErrorCode           *status);
+
+
+
+/**
+  * Reports the end index (exclusive) of the matching region for this URegularExpression.
+  * Any matches found are limited to to the region bounded by regionStart (inclusive)
+  * and regionEnd (exclusive).
+  *
+  * @param regexp The compiled regular expression.
+  * @param status A pointer to a UErrorCode to receive any errors.
+  * @return The ending point of this matcher's region.
+  * @draft ICU 4.0
+  */
+U_DRAFT int32_t U_EXPORT2
+uregex_regionEnd(const  URegularExpression   *regexp,
+                        UErrorCode           *status);
+
+/**
+  * Queries the transparency of region bounds for this URegularExpression.
+  * See useTransparentBounds for a description of transparent and opaque bounds.
+  * By default, matching boundaries are opaque.
+  *
+  * @param regexp The compiled regular expression.
+  * @param status A pointer to a UErrorCode to receive any errors.
+  * @return TRUE if this matcher is using opaque bounds, false if it is not.
+  * @draft ICU 4.0
+  */
+U_DRAFT UBool U_EXPORT2
+uregex_hasTransparentBounds(const  URegularExpression   *regexp,
+                                   UErrorCode           *status);
+
+
+/**
+  * Sets the transparency of region bounds for this URegularExpression.
+  * Invoking this function with an argument of TRUE will set matches to use transparent bounds.
+  * If the boolean argument is FALSE, then opaque bounds will be used.
+  *
+  * Using transparent bounds, the boundaries of the matching region are transparent
+  * to lookahead, lookbehind, and boundary matching constructs. Those constructs can
+  * see text beyond the boundaries of the region while checking for a match.
+  *
+  * With opaque bounds, no text outside of the matching region is visible to lookahead,
+  * lookbehind, and boundary matching constructs.
+  *
+  * By default, opaque bounds are used.
+  *
+  * @param   regexp The compiled regular expression.
+  * @param   b      TRUE for transparent bounds; FALSE for opaque bounds
+  * @param   status A pointer to a UErrorCode to receive any errors.
+  * @draft   ICU 4.0
+  **/
+U_DRAFT void U_EXPORT2  
+uregex_useTransparentBounds(URegularExpression   *regexp, 
+                            UBool                b,
+                            UErrorCode           *status);
+
+
+/**
+  * Return true if this URegularExpression is using anchoring bounds.
+  * By default, anchoring region bounds are used.
+  *
+  * @param  regexp The compiled regular expression.
+  * @param  status A pointer to a UErrorCode to receive any errors.
+  * @return TRUE if this matcher is using anchoring bounds.
+  * @draft  ICU 4.0
+  */
+U_DRAFT UBool U_EXPORT2
+uregex_hasAnchoringBounds(const  URegularExpression   *regexp,
+                                 UErrorCode           *status);
+
+
+/**
+  * Set whether this URegularExpression is using Anchoring Bounds for its region.
+  * With anchoring bounds, pattern anchors such as ^ and $ will match at the start
+  * and end of the region.  Without Anchoring Bounds, anchors will only match at
+  * the positions they would in the complete text.
+  *
+  * Anchoring Bounds are the default for regions.
+  *
+  * @param regexp The compiled regular expression.
+  * @param b      TRUE if to enable anchoring bounds; FALSE to disable them.
+  * @param status A pointer to a UErrorCode to receive any errors.
+  * @draft   ICU 4.0
+  */
+U_DRAFT void U_EXPORT2
+uregex_useAnchoringBounds(URegularExpression   *regexp,
+                          UBool                 b,
+                          UErrorCode           *status);
+
+/**
+  * Return TRUE if the most recent matching operation touched the
+  *  end of the text being processed.  In this case, additional input text could
+  *  change the results of that match.
+  *
+  *  @param regexp The compiled regular expression.
+  *  @param status A pointer to a UErrorCode to receive any errors.
+  *  @return  TRUE if the most recent match hit the end of input
+  *  @draft   ICU 4.0
+  */
+U_DRAFT UBool U_EXPORT2
+uregex_hitEnd(const  URegularExpression   *regexp,
+                     UErrorCode           *status);
+
+/**
+  * Return TRUE the most recent match succeeded and additional input could cause
+  * it to fail. If this function returns false and a match was found, then more input
+  * might change the match but the match won't be lost. If a match was not found,
+  * then requireEnd has no meaning.
+  *
+  * @param regexp The compiled regular expression.
+  * @param status A pointer to a UErrorCode to receive any errors.
+  * @return TRUE  if more input could cause the most recent match to no longer match.
+  * @draft  ICU 4.0
+  */
+U_DRAFT UBool U_EXPORT2   
+uregex_requireEnd(const  URegularExpression   *regexp,
+                         UErrorCode           *status);
+
+
+
+
 
 /**
   *    Replaces every substring of the input that matches the pattern
