@@ -62,8 +62,8 @@ ab{0,1}c	abc	y	$&	abc
 ^abc$	aabc	n	-	-
 abc$	aabc	y	$&	abc
 abc$	aabcd	n	-	-
-^	abc	y	$&	
-$	abc	y	$&	
+^	abc	y	$&
+$	abc	y	$&
 a.c	abc	y	$&	abc
 a.c	axc	y	$&	axc
 a.*c	axyzc	y	$&	axyzc
@@ -79,13 +79,13 @@ a[b-a]	-	c	-	Invalid [] range "b-a"
 a[]b	-	ci	-	Unmatched [
 a[	-	c	-	Unmatched [
 a]	a]	y	$&	a]
-a[]]b	a]b	yi	$&	a]b	ICU makes [] into an empty set.
+a[]]b	a]b	y	$&	a]b
 a[^bc]d	aed	y	$&	aed
 a[^bc]d	abd	n	-	-
-a[^-b]c	adc	yi	$&	adc	ICU [] set rules
-a[^-b]c	a-c	ni	-	-	ICU [] set rules
+a[^-b]c	adc	y	$&	adc
+a[^-b]c	a-c	n	-	-
 a[^]b]c	a]c	n	-	-
-a[^]b]c	adc	yi	$&	adc     ICU [] set rules.
+a[^]b]c	adc	y	$&	adc
 \ba\b	a-	y	-	-
 \ba\b	-a	y	-	-
 \ba\b	-a-	y	-	-
@@ -113,18 +113,18 @@ a\Sb	a-b	y	-	-
 \d	-	n	-	-
 \D	1	n	-	-
 \D	-	y	-	-
-[\w]	a	iy	-	-
-[\w]	-	in	-	-
-[\W]	a	in	-	-
-[\W]	-	iy	-	-
-a[\s]b	a b	iy	-	-
-a[\s]b	a-b	in	-	-
-a[\S]b	a b	in	-	-
-a[\S]b	a-b	iy	-	-
-[\d]	1	iy	-	-
-[\d]	-	in	-	-
-[\D]	1	in	-	-
-[\D]	-	iy	-	-
+[\w]	a	y	-	-
+[\w]	-	n	-	-
+[\W]	a	n	-	-
+[\W]	-	y	-	-
+a[\s]b	a b	y	-	-
+a[\s]b	a-b	n	-	-
+a[\S]b	a b	n	-	-
+a[\S]b	a-b	y	-	-
+[\d]	1	y	-	-
+[\d]	-	n	-	-
+[\D]	1	n	-	-
+[\D]	-	y	-	-
 ab|cd	abc	y	$&	ab
 ab|cd	abcd	y	$&	ab
 ()ef	def	y	$&-$1	ef-
@@ -167,7 +167,7 @@ a.+?c	abcabc	y	$&	abc
 )(	-	c	-	Unmatched )
 [^ab]*	cde	y	$&	cde
 abc		n	-	-
-a*		y	$&	
+a*		y	$&
 ([abc])*d	abbbcd	y	$&-$1	abbbcd-c
 ([abc])*bcd	abcd	y	$&-$1	abcd-a
 a|b|c|d|e	e	y	$&	e
@@ -292,8 +292,8 @@ a[-]?c	ac	y	$&	ac
 '^abc'i	ABCC	y	$&	ABC
 '^abc$'i	AABC	n	-	-
 'abc$'i	AABC	y	$&	ABC
-'^'i	ABC	y	$&	
-'$'i	ABC	y	$&	
+'^'i	ABC	y	$&
+'$'i	ABC	y	$&
 'a.c'i	ABC	y	$&	ABC
 'a.c'i	AXC	y	$&	AXC
 'a.*?c'i	AXYZC	y	$&	AXYZC
@@ -309,13 +309,13 @@ a[-]?c	ac	y	$&	ac
 'a[]b'i	-	ci	-	Unmatched [
 'a['i	-	c	-	Unmatched [
 'a]'i	A]	y	$&	A]
-'a[]]b'i	A]B	yi	$&	A]B
+'a[]]b'i	A]B	y	$&	A]B
 'a[^bc]d'i	AED	y	$&	AED
 'a[^bc]d'i	ABD	n	-	-
-'a[^-b]c'i	ADC	yi	$&	ADC	ICU [] set rules
-'a[^-b]c'i	A-C	ni	-	-	ICU [] set rules
+'a[^-b]c'i	ADC	y	$&	ADC
+'a[^-b]c'i	A-C	n	-	-
 'a[^]b]c'i	A]C	n	-	-
-'a[^]b]c'i	ADC	yi	$&	ADC
+'a[^]b]c'i	ADC	y	$&	ADC
 'ab|cd'i	ABC	y	$&	AB
 'ab|cd'i	ABCD	y	$&	AB
 '()ef'i	DEF	y	$&-$1	EF-
@@ -347,7 +347,7 @@ a[-]?c	ac	y	$&	ac
 ')('i	-	c	-	Unmatched )
 '[^ab]*'i	CDE	y	$&	CDE
 'abc'i		n	-	-
-'a*'i		y	$&	
+'a*'i		y	$&
 '([abc])*d'i	ABBBCD	y	$&-$1	ABBBCD-C
 '([abc])*bcd'i	ABCD	y	$&-$1	ABCD-A
 'a|b|c|d|e'i	E	y	$&	E
@@ -357,7 +357,7 @@ a[-]?c	ac	y	$&	ac
 'ab*'i	XAYABBBZ	y	$&	A
 '(ab|cd)e'i	ABCDE	y	$&-$1	CDE-CD
 '[abhgefdc]ij'i	HIJ	y	$&	HIJ
-'^(ab|cd)e'i	ABCDE	ni	x$1y	XY
+'^(ab|cd)e'i	ABCDE	n	x$1y	XY
 '(abc|)ef'i	ABCDEF	y	$&-$1	EF-
 '(a|b)c*d'i	ABCD	y	$&-$1	BCD-B
 '(ab|ab*)bc'i	ABC	y	$&-$1	ABC-A
@@ -486,7 +486,7 @@ foo\w*\d{4}baz	foobar1234baz	y	$&	foobar1234baz
 a(?{})b	cabd	y	$&	ab
 a(?{)b	-	c	-	Sequence (?{...}) not terminated or not {}-balanced
 a(?{{})b	-	c	-	Sequence (?{...}) not terminated or not {}-balanced
-a(?{}})b	-	c	-	
+a(?{}})b	-	c	-
 a(?{"{"})b	-	c	-	Sequence (?{...}) not terminated or not {}-balanced
 a(?{"\{"})b	cabd	y	$&	ab
 a(?{"{"}})b	-	c	-	Unmatched right curly bracket
@@ -546,50 +546,50 @@ $(?<=^(a))	a	y	$1	a
 ^(?=(a+?))\1ab	aaab	n	-	-
 ([\w:]+::)?(\w+)$	abcd:	n	-	-
 ([\w:]+::)?(\w+)$	abcd	y	$1-$2	-abcd
-([\w:]+::)?(\w+)$	xy:z:::abcd	iy	$1-$2	xy:z:::-abcd
+([\w:]+::)?(\w+)$	xy:z:::abcd	y	$1-$2	xy:z:::-abcd
 ^[^bcd]*(c+)	aexycd	y	$1	c
 (a*)b+	caab	y	$1	aa
 ([\w:]+::)?(\w+)$	abcd:	n	-	-
 ([\w:]+::)?(\w+)$	abcd	y	$1-$2	-abcd
-([\w:]+::)?(\w+)$	xy:z:::abcd	iy	$1-$2	xy:z:::-abcd
+([\w:]+::)?(\w+)$	xy:z:::abcd	y	$1-$2	xy:z:::-abcd
 ^[^bcd]*(c+)	aexycd	y	$1	c
 (?{$a=2})a*aa(?{local$a=$a+1})k*c(?{$b=$a})	yaaxxaaaacd	y	$b	3
 (?{$a=2})(a(?{local$a=$a+1}))*aak*c(?{$b=$a})	yaaxxaaaacd	y	$b	4
 (>a+)ab	aaab	n	-	-
 (?>a+)b	aaab	y	-	-
-([[:]+)	a:[b]:	iy	$1	:[
-([[=]+)	a=[b]=	iy	$1	=[
-([[.]+)	a.[b].	iy	$1	.[
+([[:]+)	a:[b]:	yi	$1	:[	 Java and ICU dont escape [[xyz
+([[=]+)	a=[b]=	yi	$1	=[	 Java and ICU dont escape [[xyz
+([[.]+)	a.[b].	yi	$1	.[	 Java and ICU dont escape [[xyz
 [a[:xyz:	-	c	-	Unmatched [
 [a[:xyz:]	-	c	-	POSIX class [:xyz:] unknown
-[a[:]b[:c]	abc	iy	$&	abc
+[a[:]b[:c]	abc	yi	$&	abc	  Java and ICU embedded [ is nested set
 ([a[:xyz:]b]+)	pbaq	c	-	POSIX class [:xyz:] unknown
-[a[:]b[:c]	abc	iy	$&	abc
+[a[:]b[:c]	abc	iy	$&	abc	  Java and ICU embedded [ is nested set
 ([[:alpha:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	y	$1	ABcd
-([[:alnum:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	yi	$1	ABcd01Xy
+([[:alnum:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	y	$1	ABcd01Xy
 ([[:ascii:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	y	$1	ABcd01Xy__--  ${nulnul}
-([[:cntrl:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	yi	$1	${nulnul}
-([[:digit:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	yi	$1	01
-([[:graph:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	yi	$1	ABcd01Xy__--
+([[:cntrl:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	y	$1	${nulnul}
+([[:digit:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	y	$1	01
+([[:graph:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	y	$1	ABcd01Xy__--
 ([[:lower:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	y	$1	cd
-([[:print:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	yi	$1	ABcd01Xy__--  
-([[:punct:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	yi	$1	__--
-([[:space:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	yi	$1	  
+([[:print:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	y	$1	ABcd01Xy__--  
+([[:punct:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	y	$1	__--
+([[:space:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	y	$1	  
 ([[:word:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	yi	$1	ABcd01Xy__
 ([[:upper:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	y	$1	AB
-([[:xdigit:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	yi	$1	ABcd01
+([[:xdigit:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	y	$1	ABcd01
 ([[:^alpha:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	y	$1	01
-([[:^alnum:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	yi	$1	__--  ${nulnul}${ffff}
+([[:^alnum:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	y	$1	__--  ${nulnul}${ffff}
 ([[:^ascii:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	y	$1	${ffff}
-([[:^cntrl:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	yi	$1	ABcd01Xy__--  
-([[:^digit:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	yi	$1	ABcd
+([[:^cntrl:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	y	$1	ABcd01Xy__--  
+([[:^digit:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	y	$1	ABcd
 ([[:^lower:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	y	$1	AB
-([[:^print:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	yi	$1	${nulnul}${ffff}
-([[:^punct:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	yi	$1	ABcd01Xy
-([[:^space:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	yi	$1	ABcd01Xy__--
+([[:^print:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	y	$1	${nulnul}${ffff}
+([[:^punct:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	y	$1	ABcd01Xy
+([[:^space:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	y	$1	ABcd01Xy__--
 ([[:^word:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	yi	$1	--  ${nulnul}${ffff}
 ([[:^upper:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	y	$1	cd01
-([[:^xdigit:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	yi	$1	Xy__--  ${nulnul}${ffff}
+([[:^xdigit:]]+)	ABcd01Xy__--  ${nulnul}${ffff}	y	$1	Xy__--  ${nulnul}${ffff}
 [[:foo:]]	-	c	-	POSIX class [:foo:] unknown
 [[:^foo:]]	-	c	-	POSIX class [:^foo:] unknown
 ((?>a+)b)	aaab	y	$1	aaab
@@ -823,11 +823,11 @@ foo.bart	foo.bart	y	-	-
 .[X][X](.+)+[X]	bbbbXXXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	ni	-	-
 tt+$	xxxtt	y	-	-
 ([a-\d]+)	za-9z	yi	$1	a-9
-([\d-z]+)	a0-za	yi	$1	0-z
-([\d-\s]+)	a0- z	yi	$1	0- 
-([a-[:digit:]]+)	za-9z	iy	$1	a-9
-([[:digit:]-z]+)	=0-z=	iy	$1	0-z
-([[:digit:]-[:alpha:]]+)	=0-z=	iy	$1	0-z
+([\d-z]+)	a0-za	y	$1	0-z
+([\d-\s]+)	a0- z	y	$1	0- 
+([a-[:digit:]]+)	za-9z	y	$1	a-9
+([[:digit:]-z]+)	=0-z=	y	$1	0-z
+([[:digit:]-[:alpha:]]+)	=0-z=	iy	$1	0-z	 Set difference in ICU
 \GX.*X	aaaXbX	n	-	-
 (\d+\.\d+)	3.1415926	y	$1	3.1415926
 (\ba.{0,10}br)	have a web browser	y	$1	a web br
@@ -857,7 +857,7 @@ tt+$	xxxtt	y	-	-
 ^([^,]{0,3},){0,3}d	aaa,b,c,d	y	$1	c,
 (?i)		y	-	-
 '(?!\A)x'm	a\nxb\n	y	-	-
-^(a(b)?)+$	aba	iy	-$1-$2-	-a--
+^(a(b)?)+$	aba	yi	-$1-$2-	-a--	Java disagrees.  Not clear who is right.
 '^.{9}abc.*\n'm	123\nabcabcabcabc\n	y	-	-
 ^(a)?a$	a	y	-$1-	--
 ^(a)?(?(1)a|b)+$	a	n	-	-

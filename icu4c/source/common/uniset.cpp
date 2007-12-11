@@ -1037,6 +1037,12 @@ UnicodeSet& UnicodeSet::removeAll(const UnicodeString& s) {
     return *this;
 }
 
+UnicodeSet& UnicodeSet::removeAllStrings() {
+    strings->removeAllElements();
+    return *this;
+}
+
+
 /**
  * Makes a set from a multicharacter string. Thus "ch" => {"ch"}
  * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
