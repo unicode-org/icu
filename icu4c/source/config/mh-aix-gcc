@@ -43,6 +43,7 @@ LDLIBRARYPATH_ENVVAR = LIBPATH
 ## Override Versioned target for a shared library.
 FINAL_SO_TARGET=  $(basename $(SO_TARGET))$(SO_TARGET_VERSION).$(SO)
 MIDDLE_SO_TARGET= $(basename $(SO_TARGET))$(SO_TARGET_VERSION_MAJOR).$(SO)
+SHARED_OBJECT = $(notdir $(FINAL_SO_TARGET:.$(SO)=.$(SOBJ)))
 
 # The following is for Makefile.inc's use.
 ICULIBSUFFIX_VERSION = $(LIB_VERSION_MAJOR)
@@ -59,6 +60,8 @@ LD_SONAME =
 GENCCODE_ASSEMBLY=-a xlc
 
 ## Shared object suffix
+SOBJ=   so
+# without the -brtl option, the library names use .a. AIX is funny that way.
 SO=	a
 A=	a
 
@@ -69,6 +72,8 @@ STATIC_O = o
 
 ## Build archive from shared object
 %.a : %.so
+	$(AR) $(ARFLAGS) $@ $<
+$(LIBDIR)/%.a : %.so
 	$(AR) $(ARFLAGS) $@ $<
 
 ## Build import list from export list
