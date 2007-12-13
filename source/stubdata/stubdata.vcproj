@@ -41,7 +41,7 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName=".\Release/icudt.tlb"
+				TypeLibraryName=".\Release\icudt.tlb"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
@@ -52,7 +52,7 @@
 				EnableFunctionLevelLinking="true"
 				DisableLanguageExtensions="true"
 				TreatWChar_tAsBuiltInType="true"
-				PrecompiledHeaderFile=".\Release/stubdata.pch"
+				PrecompiledHeaderFile=".\Release\stubdata.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
@@ -74,12 +74,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\icudt38.dll"
+				OutputFile="..\..\bin\icudt39.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				GenerateManifest="false"
 				IgnoreAllDefaultLibraries="true"
-				ProgramDatabaseFile=".\Release/icudt38.pdb"
+				ProgramDatabaseFile=".\Release\icudt.pdb"
 				ResourceOnlyDLL="true"
 				SetChecksum="true"
 				BaseAddress="0x4ad00000"
@@ -173,10 +173,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\icudt38.dll"
+				OutputFile="..\..\bin\icudt39.dll"
 				SuppressStartupBanner="true"
 				GenerateManifest="false"
-				ProgramDatabaseFile=".\Debug/icudt38.pdb"
+				ProgramDatabaseFile=".\Debug/icudt.pdb"
 				ResourceOnlyDLL="true"
 				SetChecksum="true"
 				BaseAddress="0x4ad00000"

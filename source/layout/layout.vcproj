@@ -77,11 +77,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\icule38d.dll"
+				OutputFile="..\..\bin\icule39d.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\..\..\lib\icule38d.pdb"
+				ProgramDatabaseFile=".\..\..\lib\iculed.pdb"
 				BaseAddress="0x4ac00000"
 				ImportLibrary="..\..\lib\iculed.lib"
 			/>
@@ -172,10 +172,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\icule38.dll"
+				OutputFile="..\..\bin\icule39.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				ProgramDatabaseFile=".\..\..\lib\icule38.pdb"
+				ProgramDatabaseFile=".\..\..\lib\icule.pdb"
 				EnableCOMDATFolding="2"
 				BaseAddress="0x4ac00000"
 				ImportLibrary="..\..\lib\icule.lib"

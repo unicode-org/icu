@@ -74,10 +74,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\icuin38.dll"
+				OutputFile="..\..\bin\icuin39.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				ProgramDatabaseFile=".\..\..\lib\icuin38.pdb"
+				ProgramDatabaseFile=".\..\..\lib\icuin.pdb"
 				EnableCOMDATFolding="2"
 				BaseAddress="0x4a900000"
 				ImportLibrary="..\..\lib\icuin.lib"
@@ -171,11 +171,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\icuin38d.dll"
+				OutputFile="..\..\bin\icuin39d.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\..\..\lib\icuin38d.pdb"
+				ProgramDatabaseFile=".\..\..\lib\icuind.pdb"
 				BaseAddress="0x4a900000"
 				ImportLibrary="..\..\lib\icuind.lib"
 			/>
