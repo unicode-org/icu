@@ -2553,13 +2553,13 @@ void DateFormatTest::TestTimeZoneDisplayName()
         // ==========
 
         { "bg", "America/Los_Angeles", "2004-01-15T00:00:00Z", "Z", "-0800", "-8:00" },
-        { "bg", "America/Los_Angeles", "2004-01-15T00:00:00Z", "ZZZZ", "GMT-0800", "-8:00" },
-        { "bg", "America/Los_Angeles", "2004-01-15T00:00:00Z", "z", "GMT-0800", "America/Los_Angeles" },
+        { "bg", "America/Los_Angeles", "2004-01-15T00:00:00Z", "ZZZZ", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447-0800", "-8:00" },
+        { "bg", "America/Los_Angeles", "2004-01-15T00:00:00Z", "z", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447-0800", "America/Los_Angeles" },
         { "bg", "America/Los_Angeles", "2004-01-15T00:00:00Z", "V", "PST", "America/Los_Angeles" },
         { "bg", "America/Los_Angeles", "2004-01-15T00:00:00Z", "zzzz", "\\u0422\\u0438\\u0445\\u043E\\u043E\\u043A\\u0435\\u0430\\u043D\\u0441\\u043A\\u0430 \\u0447\\u0430\\u0441\\u043E\\u0432\\u0430 \\u0437\\u043E\\u043D\\u0430", "America/Los_Angeles" },
         { "bg", "America/Los_Angeles", "2004-07-15T00:00:00Z", "Z", "-0700", "-7:00" },
-        { "bg", "America/Los_Angeles", "2004-07-15T00:00:00Z", "ZZZZ", "GMT-0700", "-7:00" },
-        { "bg", "America/Los_Angeles", "2004-07-15T00:00:00Z", "z", "GMT-0700", "America/Los_Angeles" },
+        { "bg", "America/Los_Angeles", "2004-07-15T00:00:00Z", "ZZZZ", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447-0700", "-7:00" },
+        { "bg", "America/Los_Angeles", "2004-07-15T00:00:00Z", "z", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447-0700", "America/Los_Angeles" },
         { "bg", "America/Los_Angeles", "2004-07-15T00:00:00Z", "V", "PDT", "America/Los_Angeles" },
         { "bg", "America/Los_Angeles", "2004-07-15T00:00:00Z", "zzzz", "\\u0422\\u0438\\u0445\\u043E\\u043E\\u043A\\u0435\\u0430\\u043D\\u0441\\u043A\\u0430 \\u043B\\u044F\\u0442\\u043D\\u0430 \\u0447\\u0430\\u0441\\u043E\\u0432\\u0430 \\u0437\\u043E\\u043D\\u0430", "America/Los_Angeles" },
     // icu bg.txt has exemplar city for this time zone
@@ -2568,95 +2568,94 @@ void DateFormatTest::TestTimeZoneDisplayName()
         { "bg", "America/Los_Angeles", "2004-07-15T00:00:00Z", "VVVV", "\\u0421\\u0410\\u0429 (\\u041b\\u043e\\u0441 \\u0410\\u043d\\u0436\\u0435\\u043b\\u0438\\u0441)", "America/Los_Angeles" },
 
         { "bg", "America/Argentina/Buenos_Aires", "2004-01-15T00:00:00Z", "Z", "-0300", "-3:00" },
-        { "bg", "America/Argentina/Buenos_Aires", "2004-01-15T00:00:00Z", "ZZZZ", "GMT-0300", "-3:00" },
-        { "bg", "America/Argentina/Buenos_Aires", "2004-01-15T00:00:00Z", "z", "GMT-0300", "-3:00" },
-        { "bg", "America/Argentina/Buenos_Aires", "2004-01-15T00:00:00Z", "zzzz", "GMT-0300", "-3:00" },
+        { "bg", "America/Argentina/Buenos_Aires", "2004-01-15T00:00:00Z", "ZZZZ", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447-0300", "-3:00" },
+        { "bg", "America/Argentina/Buenos_Aires", "2004-01-15T00:00:00Z", "z", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447-0300", "-3:00" },
+        { "bg", "America/Argentina/Buenos_Aires", "2004-01-15T00:00:00Z", "zzzz", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447-0300", "-3:00" },
         { "bg", "America/Argentina/Buenos_Aires", "2004-07-15T00:00:00Z", "Z", "-0300", "-3:00" },
-        { "bg", "America/Argentina/Buenos_Aires", "2004-07-15T00:00:00Z", "ZZZZ", "GMT-0300", "-3:00" },
-        { "bg", "America/Argentina/Buenos_Aires", "2004-07-15T00:00:00Z", "z", "GMT-0300", "-3:00" },
-        { "bg", "America/Argentina/Buenos_Aires", "2004-07-15T00:00:00Z", "zzzz", "GMT-0300", "-3:00" },
+        { "bg", "America/Argentina/Buenos_Aires", "2004-07-15T00:00:00Z", "ZZZZ", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447-0300", "-3:00" },
+        { "bg", "America/Argentina/Buenos_Aires", "2004-07-15T00:00:00Z", "z", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447-0300", "-3:00" },
+        { "bg", "America/Argentina/Buenos_Aires", "2004-07-15T00:00:00Z", "zzzz", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447-0300", "-3:00" },
         { "bg", "America/Argentina/Buenos_Aires", "2004-07-15T00:00:00Z", "v", "\\u0410\\u0440\\u0436\\u0435\\u043d\\u0442\\u0438\\u043d\\u0430 (\\u0411\\u0443\\u0435\\u043D\\u043E\\u0441 \\u0410\\u0439\\u0440\\u0435\\u0441)", "America/Buenos_Aires" },
         { "bg", "America/Argentina/Buenos_Aires", "2004-07-15T00:00:00Z", "vvvv", "\\u0410\\u0440\\u0436\\u0435\\u043d\\u0442\\u0438\\u043d\\u0430 (\\u0411\\u0443\\u0435\\u043D\\u043E\\u0441 \\u0410\\u0439\\u0440\\u0435\\u0441)", "America/Buenos_Aires" },
 
         { "bg", "America/Buenos_Aires", "2004-01-15T00:00:00Z", "Z", "-0300", "-3:00" },
-        { "bg", "America/Buenos_Aires", "2004-01-15T00:00:00Z", "ZZZZ", "GMT-0300", "-3:00" },
-        { "bg", "America/Buenos_Aires", "2004-01-15T00:00:00Z", "z", "GMT-0300", "-3:00" },
-        { "bg", "America/Buenos_Aires", "2004-01-15T00:00:00Z", "zzzz", "GMT-0300", "-3:00" },
+        { "bg", "America/Buenos_Aires", "2004-01-15T00:00:00Z", "ZZZZ", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447-0300", "-3:00" },
+        { "bg", "America/Buenos_Aires", "2004-01-15T00:00:00Z", "z", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447-0300", "-3:00" },
+        { "bg", "America/Buenos_Aires", "2004-01-15T00:00:00Z", "zzzz", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447-0300", "-3:00" },
         { "bg", "America/Buenos_Aires", "2004-07-15T00:00:00Z", "Z", "-0300", "-3:00" },
-        { "bg", "America/Buenos_Aires", "2004-07-15T00:00:00Z", "ZZZZ", "GMT-0300", "-3:00" },
-        { "bg", "America/Buenos_Aires", "2004-07-15T00:00:00Z", "z", "GMT-0300", "-3:00" },
-        { "bg", "America/Buenos_Aires", "2004-07-15T00:00:00Z", "zzzz", "GMT-0300", "-3:00" },
+        { "bg", "America/Buenos_Aires", "2004-07-15T00:00:00Z", "ZZZZ", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447-0300", "-3:00" },
+        { "bg", "America/Buenos_Aires", "2004-07-15T00:00:00Z", "z", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447-0300", "-3:00" },
+        { "bg", "America/Buenos_Aires", "2004-07-15T00:00:00Z", "zzzz", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447-0300", "-3:00" },
     // icu bg.txt does not have info for this time zone
         { "bg", "America/Buenos_Aires", "2004-07-15T00:00:00Z", "v", "\\u0410\\u0440\\u0436\\u0435\\u043d\\u0442\\u0438\\u043d\\u0430 (\\u0411\\u0443\\u0435\\u043D\\u043E\\u0441 \\u0410\\u0439\\u0440\\u0435\\u0441)", "America/Buenos_Aires" },
         { "bg", "America/Buenos_Aires", "2004-07-15T00:00:00Z", "vvvv", "\\u0410\\u0440\\u0436\\u0435\\u043d\\u0442\\u0438\\u043d\\u0430 (\\u0411\\u0443\\u0435\\u043D\\u043E\\u0441 \\u0410\\u0439\\u0440\\u0435\\u0441)", "America/Buenos_Aires" },
 
         { "bg", "America/Havana", "2004-01-15T00:00:00Z", "Z", "-0500", "-5:00" },
-        { "bg", "America/Havana", "2004-01-15T00:00:00Z", "ZZZZ", "GMT-0500", "-5:00" },
-        { "bg", "America/Havana", "2004-01-15T00:00:00Z", "z", "GMT-0500", "-5:00" },
-        { "bg", "America/Havana", "2004-01-15T00:00:00Z", "zzzz", "GMT-0500", "-5:00" },
+        { "bg", "America/Havana", "2004-01-15T00:00:00Z", "ZZZZ", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447-0500", "-5:00" },
+        { "bg", "America/Havana", "2004-01-15T00:00:00Z", "z", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447-0500", "-5:00" },
+        { "bg", "America/Havana", "2004-01-15T00:00:00Z", "zzzz", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447-0500", "-5:00" },
         { "bg", "America/Havana", "2004-07-15T00:00:00Z", "Z", "-0400", "-4:00" },
-        { "bg", "America/Havana", "2004-07-15T00:00:00Z", "ZZZZ", "GMT-0400", "-4:00" },
-        { "bg", "America/Havana", "2004-07-15T00:00:00Z", "z", "GMT-0400", "-4:00" },
-        { "bg", "America/Havana", "2004-07-15T00:00:00Z", "zzzz", "GMT-0400", "-4:00" },
+        { "bg", "America/Havana", "2004-07-15T00:00:00Z", "ZZZZ", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447-0400", "-4:00" },
+        { "bg", "America/Havana", "2004-07-15T00:00:00Z", "z", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447-0400", "-4:00" },
+        { "bg", "America/Havana", "2004-07-15T00:00:00Z", "zzzz", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447-0400", "-4:00" },
         { "bg", "America/Havana", "2004-07-15T00:00:00Z", "v", "\\u041a\\u0443\\u0431\\u0430", "America/Havana" },
         { "bg", "America/Havana", "2004-07-15T00:00:00Z", "vvvv", "\\u041a\\u0443\\u0431\\u0430", "America/Havana" },
 
         { "bg", "Australia/ACT", "2004-01-15T00:00:00Z", "Z", "+1100", "+11:00" },
-        { "bg", "Australia/ACT", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+1100", "+11:00" },
-        { "bg", "Australia/ACT", "2004-01-15T00:00:00Z", "z", "GMT+1100", "+11:00" },
-        { "bg", "Australia/ACT", "2004-01-15T00:00:00Z", "zzzz", "GMT+1100", "+11:00" },
+        { "bg", "Australia/ACT", "2004-01-15T00:00:00Z", "ZZZZ", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447+1100", "+11:00" },
+        { "bg", "Australia/ACT", "2004-01-15T00:00:00Z", "z", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447+1100", "+11:00" },
+        { "bg", "Australia/ACT", "2004-01-15T00:00:00Z", "zzzz", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447+1100", "+11:00" },
         { "bg", "Australia/ACT", "2004-07-15T00:00:00Z", "Z", "+1000", "+10:00" },
-        { "bg", "Australia/ACT", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+1000", "+10:00" },
-        { "bg", "Australia/ACT", "2004-07-15T00:00:00Z", "z", "GMT+1000", "+10:00" },
-        { "bg", "Australia/ACT", "2004-07-15T00:00:00Z", "zzzz", "GMT+1000", "+10:00" },
+        { "bg", "Australia/ACT", "2004-07-15T00:00:00Z", "ZZZZ", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447+1000", "+10:00" },
+        { "bg", "Australia/ACT", "2004-07-15T00:00:00Z", "z", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447+1000", "+10:00" },
+        { "bg", "Australia/ACT", "2004-07-15T00:00:00Z", "zzzz", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447+1000", "+10:00" },
         { "bg", "Australia/ACT", "2004-07-15T00:00:00Z", "v", "\\u0410\\u0432\\u0441\\u0442\\u0440\\u0430\\u043b\\u0438\\u044f (\\u0421\\u0438\\u0434\\u043D\\u0438)", "Australia/Sydney" },
         { "bg", "Australia/ACT", "2004-07-15T00:00:00Z", "vvvv", "\\u0410\\u0432\\u0441\\u0442\\u0440\\u0430\\u043b\\u0438\\u044f (\\u0421\\u0438\\u0434\\u043D\\u0438)", "Australia/Sydney" },
 
         { "bg", "Australia/Sydney", "2004-01-15T00:00:00Z", "Z", "+1100", "+11:00" },
-        { "bg", "Australia/Sydney", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+1100", "+11:00" },
-        { "bg", "Australia/Sydney", "2004-01-15T00:00:00Z", "z", "GMT+1100", "+11:00" },
-        { "bg", "Australia/Sydney", "2004-01-15T00:00:00Z", "zzzz", "GMT+1100", "+11:00" },
+        { "bg", "Australia/Sydney", "2004-01-15T00:00:00Z", "ZZZZ", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447+1100", "+11:00" },
+        { "bg", "Australia/Sydney", "2004-01-15T00:00:00Z", "z", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447+1100", "+11:00" },
+        { "bg", "Australia/Sydney", "2004-01-15T00:00:00Z", "zzzz", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447+1100", "+11:00" },
         { "bg", "Australia/Sydney", "2004-07-15T00:00:00Z", "Z", "+1000", "+10:00" },
-        { "bg", "Australia/Sydney", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+1000", "+10:00" },
-        { "bg", "Australia/Sydney", "2004-07-15T00:00:00Z", "z", "GMT+1000", "+10:00" },
-        { "bg", "Australia/Sydney", "2004-07-15T00:00:00Z", "zzzz", "GMT+1000", "+10:00" },
+        { "bg", "Australia/Sydney", "2004-07-15T00:00:00Z", "ZZZZ", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447+1000", "+10:00" },
+        { "bg", "Australia/Sydney", "2004-07-15T00:00:00Z", "z", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447+1000", "+10:00" },
+        { "bg", "Australia/Sydney", "2004-07-15T00:00:00Z", "zzzz", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447+1000", "+10:00" },
         { "bg", "Australia/Sydney", "2004-07-15T00:00:00Z", "v", "\\u0410\\u0432\\u0441\\u0442\\u0440\\u0430\\u043b\\u0438\\u044f (\\u0421\\u0438\\u0434\\u043D\\u0438)", "Australia/Sydney" },
         { "bg", "Australia/Sydney", "2004-07-15T00:00:00Z", "vvvv", "\\u0410\\u0432\\u0441\\u0442\\u0440\\u0430\\u043b\\u0438\\u044f (\\u0421\\u0438\\u0434\\u043D\\u0438)", "Australia/Sydney" },
 
         { "bg", "Europe/London", "2004-01-15T00:00:00Z", "Z", "+0000", "+0:00" },
-        { "bg", "Europe/London", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+0000", "+0:00" },
-        { "bg", "Europe/London", "2004-01-15T00:00:00Z", "z", "GMT+0000", "+0:00" },
+        { "bg", "Europe/London", "2004-01-15T00:00:00Z", "ZZZZ", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447+0000", "+0:00" },
+        { "bg", "Europe/London", "2004-01-15T00:00:00Z", "z", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447+0000", "+0:00" },
         { "bg", "Europe/London", "2004-01-15T00:00:00Z", "zzzz", "\\u0427\\u0430\\u0441\\u043E\\u0432\\u0430 \\u0437\\u043E\\u043D\\u0430 \\u0413\\u0440\\u0438\\u043D\\u0443\\u0438\\u0447", "+0:00" },
         { "bg", "Europe/London", "2004-07-15T00:00:00Z", "Z", "+0100", "+1:00" },
-        { "bg", "Europe/London", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+0100", "+1:00" },
-        { "bg", "Europe/London", "2004-07-15T00:00:00Z", "z", "GMT+0100", "+1:00" },
-        { "bg", "Europe/London", "2004-07-15T00:00:00Z", "zzzz", "GMT+0100", "+1:00" },
+        { "bg", "Europe/London", "2004-07-15T00:00:00Z", "ZZZZ", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447+0100", "+1:00" },
+        { "bg", "Europe/London", "2004-07-15T00:00:00Z", "z", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447+0100", "+1:00" },
+        { "bg", "Europe/London", "2004-07-15T00:00:00Z", "zzzz", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447+0100", "+1:00" },
         { "bg", "Europe/London", "2004-07-15T00:00:00Z", "v", "\\u041e\\u0431\\u0435\\u0434\\u0438\\u043d\\u0435\\u043d\\u043e \\u043a\\u0440\\u0430\\u043b\\u0441\\u0442\\u0432\\u043e", "Europe/London" },
         { "bg", "Europe/London", "2004-07-15T00:00:00Z", "vvvv", "\\u041e\\u0431\\u0435\\u0434\\u0438\\u043d\\u0435\\u043d\\u043e \\u043a\\u0440\\u0430\\u043b\\u0441\\u0442\\u0432\\u043e", "Europe/London" },
 
         { "bg", "Etc/GMT+3", "2004-01-15T00:00:00Z", "Z", "-0300", "-3:00" },
-        { "bg", "Etc/GMT+3", "2004-01-15T00:00:00Z", "ZZZZ", "GMT-0300", "-3:00" },
-        { "bg", "Etc/GMT+3", "2004-01-15T00:00:00Z", "z", "GMT-0300", "-3:00" },
-        { "bg", "Etc/GMT+3", "2004-01-15T00:00:00Z", "zzzz", "GMT-0300", "-3:00" },
+        { "bg", "Etc/GMT+3", "2004-01-15T00:00:00Z", "ZZZZ", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447-0300", "-3:00" },
+        { "bg", "Etc/GMT+3", "2004-01-15T00:00:00Z", "z", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447-0300", "-3:00" },
+        { "bg", "Etc/GMT+3", "2004-01-15T00:00:00Z", "zzzz", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447-0300", "-3:00" },
         { "bg", "Etc/GMT+3", "2004-07-15T00:00:00Z", "Z", "-0300", "-3:00" },
-        { "bg", "Etc/GMT+3", "2004-07-15T00:00:00Z", "ZZZZ", "GMT-0300", "-3:00" },
-        { "bg", "Etc/GMT+3", "2004-07-15T00:00:00Z", "z", "GMT-0300", "-3:00" },
-        { "bg", "Etc/GMT+3", "2004-07-15T00:00:00Z", "zzzz", "GMT-0300", "-3:00" },
-        { "bg", "Etc/GMT+3", "2004-07-15T00:00:00Z", "v", "GMT-0300", "-3:00" },
-        { "bg", "Etc/GMT+3", "2004-07-15T00:00:00Z", "vvvv", "GMT-0300", "-3:00" },
+        { "bg", "Etc/GMT+3", "2004-07-15T00:00:00Z", "ZZZZ", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447-0300", "-3:00" },
+        { "bg", "Etc/GMT+3", "2004-07-15T00:00:00Z", "z", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447-0300", "-3:00" },
+        { "bg", "Etc/GMT+3", "2004-07-15T00:00:00Z", "zzzz", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447-0300", "-3:00" },
+        { "bg", "Etc/GMT+3", "2004-07-15T00:00:00Z", "v", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447-0300", "-3:00" },
+        { "bg", "Etc/GMT+3", "2004-07-15T00:00:00Z", "vvvv", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447-0300", "-3:00" },
 
         // JB#5150
         { "bg", "Asia/Calcutta", "2004-01-15T00:00:00Z", "Z", "+0530", "+5:30" },
-        { "bg", "Asia/Calcutta", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+0530", "+5:30" },
-        { "bg", "Asia/Calcutta", "2004-01-15T00:00:00Z", "z", "GMT+0530", "+5:30" },
-        { "bg", "Asia/Calcutta", "2004-01-15T00:00:00Z", "zzzz", "GMT+0530", "+5:30" },
+        { "bg", "Asia/Calcutta", "2004-01-15T00:00:00Z", "ZZZZ", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447+0530", "+5:30" },
+        { "bg", "Asia/Calcutta", "2004-01-15T00:00:00Z", "z", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447+0530", "+5:30" },
+        { "bg", "Asia/Calcutta", "2004-01-15T00:00:00Z", "zzzz", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447+0530", "+5:30" },
         { "bg", "Asia/Calcutta", "2004-07-15T00:00:00Z", "Z", "+0530", "+5:30" },
-        { "bg", "Asia/Calcutta", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+0530", "+5:30" },
-        { "bg", "Asia/Calcutta", "2004-07-15T00:00:00Z", "z", "GMT+0530", "+05:30" },
-        { "bg", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "GMT+0530", "+5:30" },
+        { "bg", "Asia/Calcutta", "2004-07-15T00:00:00Z", "ZZZZ", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447+0530", "+5:30" },
+        { "bg", "Asia/Calcutta", "2004-07-15T00:00:00Z", "z", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447+0530", "+05:30" },
+        { "bg", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "\\u0413\\u0440\\u0438\\u0438\\u043D\\u0443\\u0438\\u0447+0530", "+5:30" },
         { "bg", "Asia/Calcutta", "2004-07-15T00:00:00Z", "v", "\\u0418\\u043D\\u0434\\u0438\\u044F", "Asia/Calcutta" },
         { "bg", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "\\u0418\\u043D\\u0434\\u0438\\u044F", "Asia/Calcutta" },
-
     // ==========
 
         { "ja", "America/Los_Angeles", "2004-01-15T00:00:00Z", "Z", "-0800", "-8:00" },
@@ -2873,39 +2872,34 @@ void DateFormatTest::TestTimeZoneDisplayName()
         { "", "", "", "", "", "" },
     };
 
-    if (isICUVersionAtLeast(ICU_39))
-    {
-        UErrorCode status;
-        Calendar *cal = GregorianCalendar::createInstance(status);
-        for (int i = 0; fallbackTests[i][0][0]; i++) {
-            UnicodeString info[5];
-            for ( int j = 0 ; j < 5 ; j++ ) {
-                UnicodeString value(fallbackTests[i][j],"");
-                value = value.unescape();
-                info[j].setTo(value);
-            }
-            logln(info[0] + ";" + info[1] + ";" + info[2] + ";" + info[3]);
-
-            TimeZone *tz = TimeZone::createTimeZone(info[1]);
-
-            if ( info[2] == UNICODE_STRING_SIMPLE("2004-07-15T00:00:00Z")) {
-                cal->set(2004,6,15,0,0,0);
-            } else {
-                cal->set(2004,0,15,0,0,0);
-            }
-
-            SimpleDateFormat *fmt = new SimpleDateFormat(info[3], Locale(fallbackTests[i][0]),status);
-            cal->setTimeZone(*tz);
-            UnicodeString result;
-            FieldPosition pos(0);
-            fmt->format(*cal,result,pos);
-            if (result != info[4]) {
-                errln(info[0] + ";" + info[1] + ";" + info[2] + ";" + info[3] + " expected: '" + 
-                      info[4] + "' but got: '" + result + "'");
-            }
+    UErrorCode status;
+    Calendar *cal = GregorianCalendar::createInstance(status);
+    for (int i = 0; fallbackTests[i][0][0]; i++) {
+        UnicodeString info[5];
+        for ( int j = 0 ; j < 5 ; j++ ) {
+            UnicodeString value(fallbackTests[i][j],"");
+            value = value.unescape();
+            info[j].setTo(value);
         }
-    } else {
-       logln("Warning: Skipping TestTimeZoneDisplayName. TODO: Fix in ICU 4.0");
+        logln(info[0] + ";" + info[1] + ";" + info[2] + ";" + info[3]);
+
+        TimeZone *tz = TimeZone::createTimeZone(info[1]);
+
+        if ( info[2] == UNICODE_STRING_SIMPLE("2004-07-15T00:00:00Z")) {
+            cal->set(2004,6,15,0,0,0);
+        } else {
+            cal->set(2004,0,15,0,0,0);
+        }
+
+        SimpleDateFormat *fmt = new SimpleDateFormat(info[3], Locale(fallbackTests[i][0]),status);
+        cal->setTimeZone(*tz);
+        UnicodeString result;
+        FieldPosition pos(0);
+        fmt->format(*cal,result,pos);
+        if (result != info[4]) {
+            errln(info[0] + ";" + info[1] + ";" + info[2] + ";" + info[3] + " expected: '" + 
+                  info[4] + "' but got: '" + result + "'");
+        }
     }
 }
 
