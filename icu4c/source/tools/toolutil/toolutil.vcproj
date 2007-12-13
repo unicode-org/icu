@@ -74,11 +74,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\..\bin\icutu38.dll"
+				OutputFile="..\..\..\bin\icutu39.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\..\lib"
-				ProgramDatabaseFile=".\..\..\..\lib\icutu38.pdb"
+				ProgramDatabaseFile=".\..\..\..\lib\icutu.pdb"
 				EnableCOMDATFolding="2"
 				OptimizeForWindows98="1"
 				LinkTimeCodeGeneration="1"
@@ -172,12 +172,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\..\bin\icutu38d.dll"
+				OutputFile="..\..\..\bin\icutu39d.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\..\lib"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\..\..\..\lib\icutu38d.pdb"
+				ProgramDatabaseFile=".\..\..\..\lib\icutud.pdb"
 				BaseAddress="0x4ac00000"
 				ImportLibrary="..\..\..\lib\icutud.lib"
 			/>
