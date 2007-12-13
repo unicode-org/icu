@@ -139,8 +139,9 @@ checkParent(const char *itemName, CheckDependency check, void *context,
 
 // get dependencies from resource bundles ---------------------------------- ***
 
-static const char *const gAliasKey="%%ALIAS";
-enum { gAliasKeyLength=7 };
+static const char gAliasKey[]="%%ALIAS";
+static const char gDependencyKey[]="%%DEPENDENCY";
+enum { gAliasKeyLength=7, gDependencyKeyLength=12 };
 
 /*
  * Enumerate one resource item and its children and extract dependencies from
@@ -151,11 +152,12 @@ static void
 ures_enumDependencies(const UDataSwapper *ds,
                       const char *itemName,
                       const Resource *inBundle, int32_t length,
-                      Resource res, const char *inKey, int32_t depth,
+                      Resource res, const char *inKey, const char *parentKey, int32_t depth,
                       CheckDependency check, void *context,
                       UErrorCode *pErrorCode) {
     const Resource *p;
     int32_t offset;
+    UBool useResSuffix = TRUE;
 
     if(res==0 || RES_GET_TYPE(res)==URES_INT) {
         /* empty string or integer, nothing to do */
@@ -175,11 +177,9 @@ ures_enumDependencies(const UDataSwapper *ds,
     switch(RES_GET_TYPE(res)) {
         /* strings and aliases have physically the same value layout */
     case URES_STRING:
-        // we ignore all strings except top-level strings with a %%ALIAS key
-        if(depth!=1) {
-            break;
-        } else {
-            char key[8];
+        // Check for %%ALIAS
+        if(depth==1 && inKey!=NULL) {
+            char key[gAliasKeyLength+1];
             int32_t keyLength;
 
             keyLength=(int32_t)strlen(inKey);
@@ -196,7 +196,30 @@ ures_enumDependencies(const UDataSwapper *ds,
                 break;
             }
         }
-        // for the top-level %%ALIAS string fall through to URES_ALIAS
+        // Check for %%DEPENDENCY
+        else if(depth==2 && parentKey!=NULL) {
+            char key[gDependencyKeyLength+1];
+            int32_t keyLength;
+
+            keyLength=(int32_t)strlen(parentKey);
+            if(keyLength!=gDependencyKeyLength) {
+                break;
+            }
+            ds->swapInvChars(ds, parentKey, gDependencyKeyLength+1, key, pErrorCode);
+            if(U_FAILURE(*pErrorCode)) {
+                udata_printError(ds, "icupkg/ures_enumDependencies(%s res=%08x) string key contains variant characters\n",
+                                itemName, res);
+                return;
+            }
+            if(0!=strcmp(key, gDependencyKey)) {
+                break;
+            }
+            useResSuffix = FALSE;
+        } else {
+            // we ignore all other strings
+            break;
+        }
+        // for the top-level %%ALIAS or %%DEPENDENCY string fall through to URES_ALIAS
     case URES_ALIAS:
         {
             char localeID[32];
@@ -291,7 +314,7 @@ ures_enumDependencies(const UDataSwapper *ds,
 #           error Unknown U_CHARSET_FAMILY value!
 #endif
 
-            checkIDSuffix(itemName, localeID, -1, ".res", check, context, pErrorCode);
+            checkIDSuffix(itemName, localeID, -1, (useResSuffix ? ".res" : ""), check, context, pErrorCode);
         }
         break;
     case URES_TABLE:
@@ -339,7 +362,7 @@ ures_enumDependencies(const UDataSwapper *ds,
                             (pKey16!=NULL ?
                                 ds->readUInt16(pKey16[i]) :
                                 udata_readInt32(ds, pKey32[i])),
-                        depth+1,
+                        inKey, depth+1,
                         check, context,
                         pErrorCode);
                 if(U_FAILURE(*pErrorCode)) {
@@ -368,7 +391,7 @@ ures_enumDependencies(const UDataSwapper *ds,
                 item=ds->readUInt32(*p++);
                 ures_enumDependencies(
                         ds, itemName, inBundle, length,
-                        item, NULL, depth+1,
+                        item, NULL, inKey, depth+1,
                         check, context,
                         pErrorCode);
                 if(U_FAILURE(*pErrorCode)) {
@@ -429,7 +452,7 @@ ures_enumDependencies(const UDataSwapper *ds,
 
     ures_enumDependencies(
         ds, itemName, inBundle, bundleLength,
-        rootRes, NULL, 0,
+        rootRes, NULL, NULL, 0,
         check, context,
         pErrorCode);
 
