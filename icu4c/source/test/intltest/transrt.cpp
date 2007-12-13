@@ -83,7 +83,7 @@ TransliteratorRoundTripTest::runIndexedTest(int32_t index, UBool exec,
 // Time bomb - allows temporary behavior that expires at a given
 //             release
 //--------------------------------------------------------------------
-static const UVersionInfo ICU_39 = {3,9,0,0};
+static const UVersionInfo ICU_39 = {3,9,2,0};
 
 
 //--------------------------------------------------------------------

@@ -50,7 +50,7 @@
  *  @stable ICU 2.4
  */
 #define U_COPYRIGHT_STRING \
-  " Copyright (C) 2007, International Business Machines Corporation and others. All Rights Reserved. "
+  " Copyright (C) 2008, International Business Machines Corporation and others. All Rights Reserved. "
 
 /** Maximum length of the copyright string.
  *  @stable ICU 2.4
@@ -67,13 +67,13 @@
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.6
  */
-#define U_ICU_VERSION_MINOR_NUM 8
+#define U_ICU_VERSION_MINOR_NUM 9
 
 /** The current ICU patchlevel version as an integer.  
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.4
  */
-#define U_ICU_VERSION_PATCHLEVEL_NUM 0
+#define U_ICU_VERSION_PATCHLEVEL_NUM 1
 
 /** The current ICU build level version as an integer.  
  *  This value is for use by ICU clients. It defaults to 0.
@@ -87,20 +87,20 @@
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.6
  */
-#define U_ICU_VERSION_SUFFIX _3_8
+#define U_ICU_VERSION_SUFFIX _3_9
 
 /** The current ICU library version as a dotted-decimal string. The patchlevel
  *  only appears in this string if it non-zero. 
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.4
  */
-#define U_ICU_VERSION "3.8"
+#define U_ICU_VERSION "3.9.1"
 
 /** The current ICU library major/minor version as a string without dots, for library name suffixes. 
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.6
  */
-#define U_ICU_VERSION_SHORT "38"
+#define U_ICU_VERSION_SHORT "39"
 
 /** An ICU version consists of up to 4 numbers from 0..255.
  *  @stable ICU 2.4
