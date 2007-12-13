@@ -2866,8 +2866,9 @@ void DateFormatTest::TestTimeZoneDisplayName()
         { "", "", "", "", "", "" },
     };
 
-    UErrorCode status;
+    UErrorCode status = U_ZERO_ERROR;
     Calendar *cal = GregorianCalendar::createInstance(status);
+    ASSERT_OK(status);
     for (int i = 0; fallbackTests[i][0][0]; i++) {
         UnicodeString info[5];
         for ( int j = 0 ; j < 5 ; j++ ) {
@@ -2886,6 +2887,7 @@ void DateFormatTest::TestTimeZoneDisplayName()
         }
 
         SimpleDateFormat *fmt = new SimpleDateFormat(info[3], Locale(fallbackTests[i][0]),status);
+        ASSERT_OK(status);
         cal->setTimeZone(*tz);
         UnicodeString result;
         FieldPosition pos(0);
