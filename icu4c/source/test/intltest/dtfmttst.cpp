@@ -29,12 +29,6 @@
 
 #define ASSERT_OK(status)  if(U_FAILURE(status)) {errln(#status " = %s @ %s:%d", u_errorName(status), __FILE__, __LINE__); return; }
 
-//--------------------------------------------------------------------
-// Time bomb - allows temporary behavior that expires at a given
-//             release
-//--------------------------------------------------------------------
-static const UVersionInfo ICU_39 = {3,9,0,0};
-
 // *****************************************************************************
 // class DateFormatTest
 // *****************************************************************************
