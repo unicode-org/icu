@@ -1567,7 +1567,7 @@ TestSwapData() {
     UErrorCode errorCode = U_ZERO_ERROR;
     int32_t i;
 
-    buffer=(uint8_t *)uprv_malloc(2*SWAP_BUFFER_SIZE);
+    buffer=(uint8_t *)malloc(2*SWAP_BUFFER_SIZE);
     if(buffer==NULL) {
         log_err("unable to allocate %d bytes\n", 2*SWAP_BUFFER_SIZE);
         return;
@@ -1663,7 +1663,7 @@ TestSwapData() {
         }
     }
 
-    uprv_free(buffer);
+    free(buffer);
 }
 
 
