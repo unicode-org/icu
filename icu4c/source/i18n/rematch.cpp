@@ -749,7 +749,7 @@ RegexMatcher &RegexMatcher::region(int32_t start, int32_t limit, UErrorCode &sta
 //    regionEnd
 //
 //--------------------------------------------------------------------------------
-int RegexMatcher::regionEnd() const {
+int32_t RegexMatcher::regionEnd() const {
     return fRegionLimit;
 }
 
@@ -759,7 +759,7 @@ int RegexMatcher::regionEnd() const {
 //    regionStart
 //
 //--------------------------------------------------------------------------------
-int RegexMatcher::regionStart() const {
+int32_t RegexMatcher::regionStart() const {
     return fRegionStart;
 }
 
