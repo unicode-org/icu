@@ -323,24 +323,21 @@ int32_t UVector::indexOf(UHashTok key, int32_t startIndex, int8_t hint) const {
 }
 
 UBool UVector::ensureCapacity(int32_t minimumCapacity, UErrorCode &status) {
-    if (capacity >= minimumCapacity) {
-        return TRUE;
-    } else {
+    if (capacity < minimumCapacity) {
         int32_t newCap = capacity * 2;
         if (newCap < minimumCapacity) {
             newCap = minimumCapacity;
         }
-        UHashTok* newElems = (UHashTok *)uprv_malloc(sizeof(UHashTok)*newCap);
-        if (newElems == 0) {
+        UHashTok* newElems = (UHashTok *)uprv_realloc(elements, sizeof(UHashTok)*newCap);
+        if (newElems == NULL) {
+            // We keep the original contents on the memory failure on realloc.
             status = U_MEMORY_ALLOCATION_ERROR;
             return FALSE;
         }
-        uprv_memcpy(newElems, elements, sizeof(elements[0]) * count);
-        uprv_free(elements);
         elements = newElems;
         capacity = newCap;
-        return TRUE;
     }
+    return TRUE;
 }
 
 /**

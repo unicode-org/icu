@@ -2996,7 +2996,14 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
                     numTempBuf = (uint8_t *)uprv_malloc(sizeof(uint8_t) * numTempBufSize);
                     uprv_memcpy(numTempBuf, stackNumTempBuf, UCOL_MAX_BUFFER);
                 } else {
-                    uprv_realloc(numTempBuf, numTempBufSize);
+                    uint8_t *temp = (uint8_t *)uprv_realloc(numTempBuf, numTempBufSize);
+                    if (temp == NULL) {
+                        *status = U_MEMORY_ALLOCATION_ERROR;
+                        /* The original contents weren't freed. */
+                        uprv_free(temp);
+                        return 0;
+                    }
+                    numTempBuf = temp;
                 }
             }
 
@@ -3575,16 +3582,24 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
         digVal = u_charDigitValue(char32);
 
         for(;;){
-        // Make sure we have enough space.
-        if (digIndx >= ((numTempBufSize - 2) * 2) + 1)
-        {
-            numTempBufSize *= 2;
-            if (numTempBuf == stackNumTempBuf){
-                numTempBuf = (uint8_t *)uprv_malloc(sizeof(uint8_t) * numTempBufSize);
-                uprv_memcpy(numTempBuf, stackNumTempBuf, UCOL_MAX_BUFFER);
-            }else
-                uprv_realloc(numTempBuf, numTempBufSize);
-        }
+            // Make sure we have enough space.
+            if (digIndx >= ((numTempBufSize - 2) * 2) + 1)
+            {
+                numTempBufSize *= 2;
+                if (numTempBuf == stackNumTempBuf){
+                    numTempBuf = (uint8_t *)uprv_malloc(sizeof(uint8_t) * numTempBufSize);
+                    uprv_memcpy(numTempBuf, stackNumTempBuf, UCOL_MAX_BUFFER);
+                }else {
+                    uint8_t *temp = (uint8_t *)uprv_realloc(numTempBuf, numTempBufSize);
+                    if (temp == NULL) {
+                        *status = U_MEMORY_ALLOCATION_ERROR;
+                        /* The original contents weren't freed. */
+                        uprv_free(temp);
+                        return 0;
+                    }
+                    numTempBuf = temp;
+                }
+            }
 
             // Skip over trailing zeroes, and keep a count of them.
             if (digVal != 0)
