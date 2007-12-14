@@ -1508,7 +1508,7 @@ void TransliteratorParser::setSegmentObject(int32_t seg, StringMatcher* adopted,
     // and stored before segment i; be careful with the
     // vector handling here.
     if (segmentObjects.size() < seg) {
-        segmentObjects.setSize(seg);
+        segmentObjects.setSize(seg, status);
     }
     int32_t index = getSegmentStandin(seg, status) - curData->variablesBase;
     if (segmentObjects.elementAt(seg-1) != NULL ||
