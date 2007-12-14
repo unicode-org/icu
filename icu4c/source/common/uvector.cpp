@@ -93,12 +93,14 @@ UVector::~UVector() {
  */
 void UVector::assign(const UVector& other, UTokenAssigner *assign, UErrorCode &ec) {
     if (ensureCapacity(other.count, ec)) {
-        setSize(other.count);
-        for (int32_t i=0; i<other.count; ++i) {
-            if (elements[i].pointer != 0 && deleter != 0) {
-                (*deleter)(elements[i].pointer);
+        setSize(other.count, ec);
+        if (U_SUCCESS(ec)) {
+            for (int32_t i=0; i<other.count; ++i) {
+                if (elements[i].pointer != 0 && deleter != 0) {
+                    (*deleter)(elements[i].pointer);
+                }
+                (*assign)(&elements[i], &other.elements[i]);
             }
-            (*assign)(&elements[i], &other.elements[i]);
         }
     }
 }
@@ -346,14 +348,13 @@ UBool UVector::ensureCapacity(int32_t minimumCapacity, UErrorCode &status) {
  * newSize.  If newSize is larger, grow the array, filling in new
  * slots with NULL.
  */
-void UVector::setSize(int32_t newSize) {
+void UVector::setSize(int32_t newSize, UErrorCode &status) {
     int32_t i;
     if (newSize < 0) {
         return;
     }
     if (newSize > count) {
-        UErrorCode ec = U_ZERO_ERROR;
-        if (!ensureCapacity(newSize, ec)) {
+        if (!ensureCapacity(newSize, status)) {
             return;
         }
         UHashTok empty;

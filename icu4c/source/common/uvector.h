@@ -195,7 +195,7 @@ public:
      * elements for i >= newSize.  If newSize is larger, grow the
      * array, filling in new slots with NULL.
      */
-    void setSize(int32_t newSize);
+    void setSize(int32_t newSize, UErrorCode &status);
 
     /**
      * Fill in the given array with all elements of this vector.
