@@ -162,7 +162,7 @@ typedef uint8_t UVersionInfo[U_MAX_VERSION_LENGTH];
 #       define U_ICU_NAMESPACE icu
         namespace U_ICU_NAMESPACE { }
 #   else
-#       define U_ICU_NAMESPACE icu_3_8
+#       define U_ICU_NAMESPACE icu_3_9
         namespace U_ICU_NAMESPACE { }
         namespace icu = U_ICU_NAMESPACE;
 #   endif
