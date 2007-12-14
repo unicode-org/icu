@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -438,6 +438,7 @@ UBool ctest_resetICU() {
         return FALSE;
     }
     u_setDataDirectory(dataDir);
+    free(dataDir);
     u_init(&status);
     if (U_FAILURE(status)) {
         log_err("u_init failed with %s\n", u_errorName(status));
