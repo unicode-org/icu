@@ -124,7 +124,7 @@ public final class VersionInfo
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    public static final String ICU_DATA_VERSION = "38b";
+    public static final String ICU_DATA_VERSION = "39b";
 
     /**
      * ICU4J collator runtime version
