@@ -945,7 +945,7 @@ void RBBITableBuilder::setAdd(UVector *dest, UVector *source) {
     (void) dest->toArray(destBuff);
     (void) source->toArray(sourceBuff);
 
-    dest->setSize(sourceSize+destOriginalSize);
+    dest->setSize(sourceSize+destOriginalSize, *fStatus);
 
     while (sourceBuff < sourceLim && destBuff < destLim) {
         if (*destBuff == *sourceBuff) {
@@ -970,7 +970,7 @@ void RBBITableBuilder::setAdd(UVector *dest, UVector *source) {
         dest->setElementAt(*sourceBuff++, di++);
     }
 
-    dest->setSize(di);
+    dest->setSize(di, *fStatus);
     if (destH) {
         uprv_free(destH);
     }
@@ -1211,7 +1211,7 @@ RBBIStateDescriptor::RBBIStateDescriptor(int lastInputSymbol, UErrorCode *fStatu
         *fStatus = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    fDtran->setSize(lastInputSymbol+1);    // fDtran needs to be pre-sized.
+    fDtran->setSize(lastInputSymbol+1, *fStatus);    // fDtran needs to be pre-sized.
                                            //   It is indexed by input symbols, and will
                                            //   hold  the next state number for each
                                            //   symbol.

@@ -1374,9 +1374,9 @@ private:
     // Implementation: Utility methods
     //----------------------------------------------------------------
 
-    void ensureCapacity(int32_t newLen);
+    void ensureCapacity(int32_t newLen, UErrorCode& ec);
 
-    void ensureBufferCapacity(int32_t newLen);
+    void ensureBufferCapacity(int32_t newLen, UErrorCode& ec);
 
     void swapBuffers(void);
 

@@ -144,12 +144,13 @@ UnicodeSet::UnicodeSet() :
     len(1), capacity(1 + START_EXTRA), list(0), bmpSet(0), buffer(0),
     bufferCapacity(0), patLen(0), pat(NULL), strings(NULL), stringSpan(NULL)
 {
+    UErrorCode status = U_ZERO_ERROR;
+    allocateStrings(status);
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
     if(list!=NULL){
         list[0] = UNICODESET_HIGH;
     }
-    UErrorCode status = U_ZERO_ERROR;
-    allocateStrings(status);
+    // else TODO: we should set this to bogus on malloc failure.
     _dbgct(this);
 }
 
@@ -164,14 +165,14 @@ UnicodeSet::UnicodeSet(UChar32 start, UChar32 end) :
     len(1), capacity(1 + START_EXTRA), list(0), bmpSet(0), buffer(0),
     bufferCapacity(0), patLen(0), pat(NULL), strings(NULL), stringSpan(NULL)
 {
+    UErrorCode status = U_ZERO_ERROR;
+    allocateStrings(status);
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
     if(list!=NULL){
-        UErrorCode status = U_ZERO_ERROR;
-
         list[0] = UNICODESET_HIGH;
-        allocateStrings(status);
         complement(start, end);
     }
+    // else TODO: we should set this to bogus on malloc failure.
     _dbgct(this);
 }
 
@@ -185,12 +186,13 @@ UnicodeSet::UnicodeSet(const UnicodeSet& o) :
     buffer(0), bufferCapacity(0),
     patLen(0), pat(NULL), strings(NULL), stringSpan(NULL)
 {
+    UErrorCode status = U_ZERO_ERROR;
+    allocateStrings(status);
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
     if(list!=NULL){
-        UErrorCode status = U_ZERO_ERROR;
-        allocateStrings(status);
         *this = o;
     }
+    // else TODO: we should set this to bogus on malloc failure.
     _dbgct(this);
 }
 
@@ -202,10 +204,11 @@ UnicodeSet::UnicodeSet(const UnicodeSet& o, UBool /* asThawed */) :
     buffer(0), bufferCapacity(0),
     patLen(0), pat(NULL), strings(NULL), stringSpan(NULL)
 {
+    UErrorCode status = U_ZERO_ERROR;
+    allocateStrings(status);
+
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
     if(list!=NULL){
-        UErrorCode status = U_ZERO_ERROR;
-        allocateStrings(status);
         // *this = o except for bmpSet and stringSpan
         len = o.len;
         uprv_memcpy(list, o.list, len*sizeof(UChar32));
@@ -214,6 +217,7 @@ UnicodeSet::UnicodeSet(const UnicodeSet& o, UBool /* asThawed */) :
             setPattern(UnicodeString(o.pat, o.patLen));
         }
     }
+    // else TODO: we should set this to bogus on malloc failure.
     _dbgct(this);
 }
 
