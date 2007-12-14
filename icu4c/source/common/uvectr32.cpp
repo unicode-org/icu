@@ -187,24 +187,21 @@ int32_t UVector32::indexOf(int32_t key, int32_t startIndex) const {
 
 
 UBool UVector32::expandCapacity(int32_t minimumCapacity, UErrorCode &status) {
-    if (capacity >= minimumCapacity) {
-        return TRUE;
-    } else {
+    if (capacity < minimumCapacity) {
         int32_t newCap = capacity * 2;
         if (newCap < minimumCapacity) {
             newCap = minimumCapacity;
         }
-        int32_t* newElems = (int32_t *)uprv_malloc(sizeof(int32_t)*newCap);
-        if (newElems == 0) {
+        int32_t* newElems = (int32_t *)uprv_realloc(elements, sizeof(int32_t)*newCap);
+        if (newElems == NULL) {
+            // We keep the original contents on the memory failure on realloc.
             status = U_MEMORY_ALLOCATION_ERROR;
             return FALSE;
         }
-        uprv_memcpy(newElems, elements, sizeof(elements[0]) * count);
-        uprv_free(elements);
         elements = newElems;
         capacity = newCap;
-        return TRUE;
     }
+    return TRUE;
 }
 
 /**

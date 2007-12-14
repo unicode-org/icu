@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2002-2003, International Business Machines Corporation and
+ * Copyright (c) 2002-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -63,7 +63,7 @@ void UVector32Test::runIndexedTest( int32_t index, UBool exec, const char* &name
 
 #define TEST_ASSERT(expr) \
     if ((expr)==FALSE) {\
-        errln("RegexTest failure at line %d.\n", __LINE__);\
+        errln("UVector32Test failure at line %d.\n", __LINE__);\
     }
 
 //---------------------------------------------------------------------------
@@ -405,7 +405,7 @@ void UVector32Test::UVector32_API() {
     a->setSize(20000);
     int32_t *resizedBuf;
     resizedBuf = a->getBuffer();
-    TEST_ASSERT(buf != resizedBuf);
+    //TEST_ASSERT(buf != resizedBuf); // The buffer might have been realloc'd
     TEST_ASSERT(resizedBuf[0] == 10);
     TEST_ASSERT(resizedBuf[1] == 20);
 

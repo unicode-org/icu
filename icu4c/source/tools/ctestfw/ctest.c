@@ -571,7 +571,7 @@ static void *U_CALLCONV ctest_libRealloc(const void *context, void *mem, size_t 
         printf("Reallocated %ld\n", (long)size);
     }*/
     if (size >= MAX_MEMORY_ALLOCATION) {
-        free(mem);
+        /*free(mem);*/ /* Realloc doesn't free on failure. */
         return NULL;
     }
     if (mem == NULL) {
