@@ -155,11 +155,10 @@ getTimeZoneTranslationType(TimeZoneTranslationTypeIndex typeIdx) {
 #define DEFAULT_CHARACTERNODE_CAPACITY 1
 
 // ----------------------------------------------------------------------------
-CharacterNode::CharacterNode(UChar32 c, UObjectDeleter *valueDeleterFunc, UErrorCode &status)
+CharacterNode::CharacterNode(UChar32 c, UErrorCode &status)
 : UMemory(),
-  fChildren(valueDeleterFunc, NULL, DEFAULT_CHARACTERNODE_CAPACITY, status),
-  fValues(valueDeleterFunc, NULL, DEFAULT_CHARACTERNODE_CAPACITY, status),
-  fValueDeleter(valueDeleterFunc),
+  fChildren(deleteZoneStringInfo, NULL, DEFAULT_CHARACTERNODE_CAPACITY, status),
+  fValues(deleteZoneStringInfo, NULL, DEFAULT_CHARACTERNODE_CAPACITY, status),
   fCharacter(c)
 {
 }
@@ -185,7 +184,8 @@ CharacterNode::addChildNode(UChar32 c, UErrorCode &status) {
         return NULL;
     }
     CharacterNode *result = NULL;
-    for (int32_t i = 0; i < fChildren.size(); i++) {
+    int32_t childrenNum = fChildren.size();
+    for (int32_t i = 0; i < childrenNum; i++) {
         CharacterNode *node = (CharacterNode*)fChildren.elementAt(i);
         if (node->getCharacter() == c) {
             result = node;
@@ -193,7 +193,7 @@ CharacterNode::addChildNode(UChar32 c, UErrorCode &status) {
         }
     }
     if (result == NULL) {
-        result = new CharacterNode(c, fValueDeleter, status);
+        result = new CharacterNode(c, status);
         fChildren.addElement(result, status);
     }
 
@@ -203,7 +203,8 @@ CharacterNode::addChildNode(UChar32 c, UErrorCode &status) {
 CharacterNode*
 CharacterNode::getChildNode(UChar32 c) const {
     CharacterNode *result = NULL;
-    for (int32_t i = 0; i < fChildren.size(); i++) {
+    int32_t childrenNum = fChildren.size();
+    for (int32_t i = 0; i < childrenNum; i++) {
         CharacterNode *node = (CharacterNode*)fChildren.elementAt(i);
         if (node->getCharacter() == c) {
             result = node;
@@ -214,8 +215,8 @@ CharacterNode::getChildNode(UChar32 c) const {
 }
 
 // ----------------------------------------------------------------------------
-TextTrieMap::TextTrieMap(UBool ignoreCase, UObjectDeleter *valueDeleterFunc)
-: UMemory(), fIgnoreCase(ignoreCase), fValueDeleter(valueDeleterFunc), fRoot(NULL) {
+TextTrieMap::TextTrieMap(UBool ignoreCase)
+: UMemory(), fIgnoreCase(ignoreCase), fRoot(NULL) {
 }
 
 TextTrieMap::~TextTrieMap() {
@@ -227,7 +228,7 @@ TextTrieMap::~TextTrieMap() {
 void
 TextTrieMap::put(const UnicodeString &key, void *value, UErrorCode &status) {
     if (fRoot == NULL) {
-        fRoot = new CharacterNode(0, fValueDeleter, status);
+        fRoot = new CharacterNode(0, status);
     }
 
     UnicodeString keyString(key);
@@ -378,7 +379,7 @@ ZoneStringFormat::ZoneStringFormat(const UnicodeString* const* strings,
   fLocale(""),
   fTzidToStrings(uhash_compareUnicodeString, NULL, status),
   fMzidToStrings(uhash_compareUnicodeString, NULL, status),
-  fZoneStringsTrie(TRUE, deleteZoneStringInfo)
+  fZoneStringsTrie(TRUE)
 {
     if (U_FAILURE(status)) {
         return;
@@ -454,7 +455,7 @@ ZoneStringFormat::ZoneStringFormat(const Locale &locale, UErrorCode &status)
   fLocale(locale),
   fTzidToStrings(uhash_compareUnicodeString, NULL, status),
   fMzidToStrings(uhash_compareUnicodeString, NULL, status),
-  fZoneStringsTrie(TRUE, deleteZoneStringInfo)
+  fZoneStringsTrie(TRUE)
 {
     if (U_FAILURE(status)) {
         return;
@@ -1053,7 +1054,7 @@ ZoneStringFormat::getGenericString(const Calendar &cal, UBool isShort, UBool com
     UnicodeString canonicalID;
     ZoneMeta::getCanonicalID(tzid, canonicalID);
 
-    ZoneStrings *zstrings;
+    ZoneStrings *zstrings = NULL;
     if (fTzidToStrings.count() > 0) {
         zstrings = (ZoneStrings*)fTzidToStrings.get(canonicalID);
         if (zstrings != NULL) {

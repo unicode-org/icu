@@ -23,7 +23,7 @@ U_NAMESPACE_BEGIN
  */
 class CharacterNode : public UMemory {
 public:
-    CharacterNode(UChar32 c, UObjectDeleter *fn, UErrorCode &status);
+    CharacterNode(UChar32 c, UErrorCode &status);
     virtual ~CharacterNode();
 
     inline UChar32 getCharacter(void) const;
@@ -37,7 +37,6 @@ public:
 private:
     UVector fChildren;
     UVector fValues;
-    UObjectDeleter  *fValueDeleter;
     UChar32 fCharacter;
 };
 
@@ -68,7 +67,7 @@ public:
  */
 class TextTrieMap : public UMemory {
 public:
-    TextTrieMap(UBool ignoreCase, UObjectDeleter *valueDeleterFunc);
+    TextTrieMap(UBool ignoreCase);
     virtual ~TextTrieMap();
 
     void put(const UnicodeString &key, void *value, UErrorCode &status);
@@ -78,7 +77,6 @@ public:
 
 private:
     UBool           fIgnoreCase;
-    UObjectDeleter  *fValueDeleter;
     CharacterNode   *fRoot;
 
     void search(CharacterNode *node, const UnicodeString &text, int32_t start,
