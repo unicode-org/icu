@@ -2863,40 +2863,41 @@ void DateFormatTest::TestTimeZoneDisplayName()
         { "as", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "\\u09AD\\u09BE\\u09F0\\u09A4\\u09C0\\u09AF\\u09BC \\u09B8\\u09AE\\u09AF\\u09BC", "+5:30" },
         { "as", "Asia/Calcutta", "2004-07-15T00:00:00Z", "v", "\\u09AD\\u09BE. \\u09B8.", "Asia/Calcutta" },
         { "as", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "\\u09AD\\u09BE\\u09F0\\u09A4\\u09C0\\u09AF\\u09BC \\u09B8\\u09AE\\u09AF\\u09BC", "Asia/Calcutta" },
-        { "", "", "", "", "", "" },
+        { NULL, NULL, NULL, NULL, NULL, NULL },
     };
 
     UErrorCode status = U_ZERO_ERROR;
     Calendar *cal = GregorianCalendar::createInstance(status);
     ASSERT_OK(status);
-    for (int i = 0; fallbackTests[i][0][0]; i++) {
+    for (int i = 0; fallbackTests[i][0]; i++) {
+        const char **testLine = fallbackTests[i];
         UnicodeString info[5];
         for ( int j = 0 ; j < 5 ; j++ ) {
-            UnicodeString value(fallbackTests[i][j],"");
-            value = value.unescape();
-            info[j].setTo(value);
+            info[j] = UnicodeString(testLine[j], -1, US_INV);
         }
-        logln(info[0] + ";" + info[1] + ";" + info[2] + ";" + info[3]);
+        info[4] = info[4].unescape();
+        logln("%s;%s;%s;%s", testLine[0], testLine[1], testLine[2], testLine[3]);
 
         TimeZone *tz = TimeZone::createTimeZone(info[1]);
 
-        if ( info[2] == UNICODE_STRING_SIMPLE("2004-07-15T00:00:00Z")) {
+        if (strcmp(testLine[2], "2004-07-15T00:00:00Z") == 0) {
             cal->set(2004,6,15,0,0,0);
         } else {
             cal->set(2004,0,15,0,0,0);
         }
 
-        SimpleDateFormat *fmt = new SimpleDateFormat(info[3], Locale(fallbackTests[i][0]),status);
+        SimpleDateFormat fmt(info[3], Locale(testLine[0]),status);
         ASSERT_OK(status);
-        cal->setTimeZone(*tz);
+        cal->adoptTimeZone(tz);
         UnicodeString result;
         FieldPosition pos(0);
-        fmt->format(*cal,result,pos);
+        fmt.format(*cal,result,pos);
         if (result != info[4]) {
             errln(info[0] + ";" + info[1] + ";" + info[2] + ";" + info[3] + " expected: '" + 
                   info[4] + "' but got: '" + result + "'");
         }
     }
+    delete cal;
 }
 
 /*
