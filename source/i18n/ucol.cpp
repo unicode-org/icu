@@ -128,6 +128,8 @@ inline void  IInit_collIterate(const UCollator *collator, const UChar *sourceStr
         /* change to enable easier checking for end of string for fcdpositon */
         (s)->endp = NULL;
     }
+    (s)->extendCEs = NULL;
+    (s)->extendCEsSize = 0;
     (s)->CEpos = (s)->toReturn = (s)->CEs;
     (s)->writableBuffer = (s)->stackWritableBuffer;
     (s)->writableBufSize = UCOL_WRITABLE_BUFFER_SIZE;
@@ -1411,7 +1413,7 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
     if (collationSource->CEpos > collationSource->toReturn) {       /* Are there any CEs from previous expansions? */
       order = *(collationSource->toReturn++);                         /* if so, return them */
       if(collationSource->CEpos == collationSource->toReturn) {
-        collationSource->CEpos = collationSource->toReturn = collationSource->CEs;
+        collationSource->CEpos = collationSource->toReturn = collationSource->extendCEs ? collationSource->extendCEs : collationSource->CEs;
       }
       return order;
     }
@@ -1791,10 +1793,11 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
                                UErrorCode *status)
 {
     uint32_t result = (uint32_t)UCOL_NULLORDER;
-    if (data->toReturn > data->CEs) {
+    if ((data->extendCEs && data->toReturn > data->extendCEs) || 
+    		(!data->extendCEs && data->toReturn > data->CEs)) {
         data->toReturn --;
         result = *(data->toReturn);
-        if (data->CEs == data->toReturn) {
+        if (data->CEs == data->toReturn || data->extendCEs == data->toReturn) {
             data->CEpos = data->toReturn;
         }
     }
@@ -3285,6 +3288,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
         uint32_t *endCEBuffer;
         UChar   *strbuffer;
         int32_t noChars = 0;
+        int32_t CECount = 0;
 
   for(;;)
   {
@@ -3462,22 +3466,54 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
         //IInit_collIterate(coll, UCharOffset, -1, &temp);
         IInit_collIterate(coll, UCharOffset, noChars, &temp);
         temp.flags &= ~UCOL_ITER_NORM;
-
+        
         CE = ucol_IGetNextCE(coll, &temp, status);
-        endCEBuffer = source->CEs + UCOL_EXPAND_CE_BUFFER_SIZE;
+        if (source->extendCEs) {
+        	endCEBuffer = source->extendCEs + source->extendCEsSize;
+        	CECount = (source->CEpos - source->extendCEs)/sizeof(uint32_t);
+        } else {
+        	endCEBuffer = source->CEs + UCOL_EXPAND_CE_BUFFER_SIZE;
+        	CECount = (source->CEpos - source->CEs)/sizeof(uint32_t);
+        }
         while (CE != UCOL_NO_MORE_CES) {
             *(source->CEpos ++) = CE;
+            CECount++;
             if (source->CEpos == endCEBuffer) {
-                /* ran out of CE space, bail.
+                /* ran out of CE space, reallocate to new buffer.
+                If reallocation fails, reset pointers and bail out,
                 there's no guarantee of the right character position after
                 this bail*/
-                *status = U_BUFFER_OVERFLOW_ERROR;
-                source->CEpos = source->CEs;
-                freeHeapWritableBuffer(&temp);
-                if (strbuffer != buffer) {
-                    uprv_free(strbuffer);
-                }
-                return (uint32_t)UCOL_NULLORDER;
+            	if (source->extendCEs == NULL) {
+            		source->extendCEs = (uint32_t *)uprv_malloc(sizeof(uint32_t) * 
+            				(source->extendCEsSize =UCOL_EXPAND_CE_BUFFER_SIZE + UCOL_EXPAND_CE_BUFFER_EXTEND_SIZE));
+            		if (source->extendCEs == NULL) {
+            			CECount = -1;
+            		} else {
+            			source->extendCEs = (uint32_t *)uprv_memcpy(source->extendCEs, source->CEs, UCOL_EXPAND_CE_BUFFER_SIZE * sizeof(uint32_t));
+            		}
+            	} else {
+            		uint32_t *temp = source->extendCEs;
+            		source->extendCEs = (uint32_t *)uprv_realloc(source->extendCEs, 
+            				sizeof(uint32_t) * (source->extendCEsSize += UCOL_EXPAND_CE_BUFFER_EXTEND_SIZE));
+            		if (source->extendCEs == NULL) {
+            			CECount = -1;
+            			source->extendCEs = temp;
+            			uprv_free(source->extendCEs);
+            			source->extendCEs = NULL;
+            			source->extendCEsSize = 0;
+            		}
+            	}
+            	if (CECount == -1) {
+            		*status = U_BUFFER_OVERFLOW_ERROR;
+	                source->CEpos = source->CEs;
+	                freeHeapWritableBuffer(&temp);
+	                if (strbuffer != buffer) {
+	                    uprv_free(strbuffer);
+	                }
+	                return (uint32_t)UCOL_NULLORDER;
+            	}
+            	source->CEpos = source->extendCEs + CECount;
+            	endCEBuffer = source->extendCEs + source->extendCEsSize;
             }
             CE = ucol_IGetNextCE(coll, &temp, status);
         }

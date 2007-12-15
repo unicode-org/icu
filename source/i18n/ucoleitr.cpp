@@ -72,6 +72,9 @@ ucol_closeElements(UCollationElements *elems)
   {
     uprv_free(elems->iteratordata_.string);
   }
+  if (ci->extendCEs) {
+	  uprv_free(ci->extendCEs);
+  }
   uprv_free(elems);
 }
 

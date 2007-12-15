@@ -461,13 +461,26 @@ const CollationElementIterator& CollationElementIterator::operator=(
         }
 
         /* CE buffer */
-        int32_t CEsize = (int32_t)(othercoliter->CEpos - othercoliter->CEs);
-        if (CEsize > 0) {
-            uprv_memcpy(coliter->CEs, othercoliter->CEs, CEsize);
+        int32_t CEsize;
+        if (coliter->extendCEs) {
+        	uprv_memcpy(coliter->CEs, othercoliter->CEs, sizeof(uint32_t) * UCOL_EXPAND_CE_BUFFER_SIZE);
+        	CEsize = sizeof(othercoliter->extendCEs);
+	        if (CEsize > 0) {
+	        	othercoliter->extendCEs = (uint32_t *)uprv_malloc(CEsize);
+	            uprv_memcpy(coliter->extendCEs, othercoliter->extendCEs, CEsize);
+	        }
+	        coliter->toReturn = coliter->extendCEs + 
+	            (othercoliter->toReturn - othercoliter->extendCEs);
+	        coliter->CEpos    = coliter->extendCEs + CEsize;
+        } else {
+	        CEsize = (int32_t)(othercoliter->CEpos - othercoliter->CEs);
+	        if (CEsize > 0) {
+	            uprv_memcpy(coliter->CEs, othercoliter->CEs, CEsize);
+	        }
+	        coliter->toReturn = coliter->CEs + 
+	            (othercoliter->toReturn - othercoliter->CEs);
+	        coliter->CEpos    = coliter->CEs + CEsize;
         }
-        coliter->toReturn = coliter->CEs + 
-            (othercoliter->toReturn - othercoliter->CEs);
-        coliter->CEpos    = coliter->CEs + CEsize;
 
         if (othercoliter->fcdPosition != NULL) {
             coliter->fcdPosition = coliter->string + 
