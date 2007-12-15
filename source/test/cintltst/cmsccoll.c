@@ -1561,7 +1561,11 @@ static void TestFCDProblem(void) {
   ucol_close(coll);
 }
 
-#define NORM_BUFFER_TEST_LEN 32
+/*
+The largest normalization form is 18 for NFKC/NFKD, 4 for NFD and 3 for NFC
+We're only using NFC/NFD in this test.
+*/
+#define NORM_BUFFER_TEST_LEN 18
 typedef struct {
   UChar32 u;
   UChar NFC[NORM_BUFFER_TEST_LEN];
@@ -1569,13 +1573,17 @@ typedef struct {
 } tester;
 
 static void TestComposeDecompose(void) {
+    /* [[:NFD_Inert=false:][:NFC_Inert=false:]] */
+    static const UChar UNICODESET_STR[] = {
+        0x5B,0x5B,0x3A,0x4E,0x46,0x44,0x5F,0x49,0x6E,0x65,0x72,0x74,0x3D,0x66,0x61,
+        0x6C,0x73,0x65,0x3A,0x5D,0x5B,0x3A,0x4E,0x46,0x43,0x5F,0x49,0x6E,0x65,0x72,
+        0x74,0x3D,0x66,0x61,0x6C,0x73,0x65,0x3A,0x5D,0x5D,0
+    };
     int32_t noOfLoc;
     int32_t i = 0, j = 0;
 
     UErrorCode status = U_ZERO_ERROR;
-
     const char *locName = NULL;
-
     uint32_t nfcSize;
     uint32_t nfdSize;
     tester **t;
@@ -1585,49 +1593,55 @@ static void TestComposeDecompose(void) {
     UChar comp[NORM_BUFFER_TEST_LEN];
     uint32_t len = 0;
     UCollationElements *iter;
+    USet *charsToTest = uset_openPattern(UNICODESET_STR, -1, &status);
+    int32_t charsToTestSize = uset_size(charsToTest);
 
     noOfLoc = uloc_countAvailable();
 
-    t = malloc(0x30000 * sizeof(tester *));
+    t = malloc(charsToTestSize * sizeof(tester *));
     t[0] = (tester *)malloc(sizeof(tester));
-    log_verbose("Testing UCA extensively\n");
+    log_verbose("Testing UCA extensively for %d characters\n", charsToTestSize);
     coll = ucol_open("", &status);
     if(status == U_FILE_ACCESS_ERROR) {
-      log_data_err("Is your data around?\n");
-      return;
+        log_data_err("Is your data around?\n");
+        return;
     } else if(U_FAILURE(status)) {
-      log_err("Error opening collator\n");
-      return;
+        log_err("Error opening collator\n");
+        return;
     }
 
 
-    for(u = 0; u < 0x30000; u++) {
-      len = 0;
-      UTF_APPEND_CHAR_UNSAFE(comp, len, u);
+    for(u = 0; u < charsToTestSize; u++) {
+        UChar32 ch = uset_charAt(charsToTest, u);
+        len = 0;
+        UTF_APPEND_CHAR_UNSAFE(comp, len, ch);
         nfcSize = unorm_normalize(comp, len, UNORM_NFC, 0, t[noCases]->NFC, NORM_BUFFER_TEST_LEN, &status);
         nfdSize = unorm_normalize(comp, len, UNORM_NFD, 0, t[noCases]->NFD, NORM_BUFFER_TEST_LEN, &status);
 
         if(nfcSize != nfdSize || (uprv_memcmp(t[noCases]->NFC, t[noCases]->NFD, nfcSize * sizeof(UChar)) != 0)
           || (len != nfdSize || (uprv_memcmp(comp, t[noCases]->NFD, nfdSize * sizeof(UChar)) != 0))) {
-            t[noCases]->u = u;
+            t[noCases]->u = ch;
             if(len != nfdSize || (uprv_memcmp(comp, t[noCases]->NFD, nfdSize * sizeof(UChar)) != 0)) {
-              u_strncpy(t[noCases]->NFC, comp, len);
-              t[noCases]->NFC[len] = 0;
+                u_strncpy(t[noCases]->NFC, comp, len);
+                t[noCases]->NFC[len] = 0;
             }
             noCases++;
             t[noCases] = (tester *)malloc(sizeof(tester));
             uprv_memset(t[noCases], 0, sizeof(tester));
         }
     }
+    log_verbose("Testing %d/%d of possible test cases\n", noCases, charsToTestSize);
+    uset_close(charsToTest);
+    charsToTest = NULL;
 
     for(u=0; u<(UChar32)noCases; u++) {
-      if(!ucol_equal(coll, t[u]->NFC, -1, t[u]->NFD, -1)) {
-        log_err("Failure: codePoint %05X fails TestComposeDecompose in the UCA\n", t[u]->u);
-        doTest(coll, t[u]->NFC, t[u]->NFD, UCOL_EQUAL);
-      }
+        if(!ucol_equal(coll, t[u]->NFC, -1, t[u]->NFD, -1)) {
+            log_err("Failure: codePoint %05X fails TestComposeDecompose in the UCA\n", t[u]->u);
+            doTest(coll, t[u]->NFC, t[u]->NFD, UCOL_EQUAL);
+        }
     }
     /*
-    for(u = 0; u < 0x30000; u++) {
+    for(u = 0; u < charsToTestSize; u++) {
       if(!(u&0xFFFF)) {
         log_verbose("%08X ", u);
       }
@@ -1665,16 +1679,16 @@ static void TestComposeDecompose(void) {
             iter = ucol_openElements(coll, t[u]->NFD, u_strlen(t[u]->NFD), &status);
 
             for(u=0; u<(UChar32)noCases; u++) {
-              if(!ucol_equal(coll, t[u]->NFC, -1, t[u]->NFD, -1)) {
-                log_err("Failure: codePoint %05X fails TestComposeDecompose for locale %s\n", t[u]->u, cName);
-                doTest(coll, t[u]->NFC, t[u]->NFD, UCOL_EQUAL);
-                log_verbose("Testing NFC\n");
-                ucol_setText(iter, t[u]->NFC, u_strlen(t[u]->NFC), &status);
-                  backAndForth(iter);
-                log_verbose("Testing NFD\n");
-                  ucol_setText(iter, t[u]->NFD, u_strlen(t[u]->NFD), &status);
-                  backAndForth(iter);
-              }
+                if(!ucol_equal(coll, t[u]->NFC, -1, t[u]->NFD, -1)) {
+                    log_err("Failure: codePoint %05X fails TestComposeDecompose for locale %s\n", t[u]->u, cName);
+                    doTest(coll, t[u]->NFC, t[u]->NFD, UCOL_EQUAL);
+                    log_verbose("Testing NFC\n");
+                    ucol_setText(iter, t[u]->NFC, u_strlen(t[u]->NFC), &status);
+                    backAndForth(iter);
+                    log_verbose("Testing NFD\n");
+                    ucol_setText(iter, t[u]->NFD, u_strlen(t[u]->NFD), &status);
+                    backAndForth(iter);
+                }
             }
             ucol_closeElements(iter);
             ucol_close(coll);
