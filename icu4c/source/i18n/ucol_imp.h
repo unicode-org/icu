@@ -222,7 +222,10 @@ minimum number for special Jamo
 /* WARNING THIS BUFFER DOES NOT HAVE MALLOC FALLBACK. If you make it too small, you'll get in trouble */
 /* Reasonable small value is around 10, if you don't do Arabic or other funky collations that have long expansion sequence */
 /* This is the longest expansion sequence we can handle without bombing out */
-#define UCOL_EXPAND_CE_BUFFER_SIZE 512 /* synwee :TODO revert back 64*/
+#define UCOL_EXPAND_CE_BUFFER_SIZE 64 /* synwee :TODO revert back 64*/
+
+/* This is the size to increase the buffer for expansion CE's */
+#define UCOL_EXPAND_CE_BUFFER_EXTEND_SIZE 64
 
 
 /* Unsafe UChar hash table table size.                                           */
@@ -276,6 +279,8 @@ typedef struct collIterate {
   const UCollator *coll;
   uint8_t   flags;
   uint8_t   origFlags;
+  uint32_t *extendCEs; /* This is use if CEs is not big enough */
+  int32_t extendCEsSize; /* Holds the size of the dynamic CEs buffer */
   uint32_t CEs[UCOL_EXPAND_CE_BUFFER_SIZE]; /* This is where we store CEs */
   UChar stackWritableBuffer[UCOL_WRITABLE_BUFFER_SIZE]; /* A writable buffer. */
   UCharIterator *iterator;

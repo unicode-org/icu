@@ -44,7 +44,7 @@ inline void setColEIterOffset(UCollationElements *elems,
 {
     collIterate *ci = &(elems->iteratordata_);
     ci->pos         = ci->string + offset;
-    ci->CEpos       = ci->toReturn = ci->CEs;
+    ci->CEpos       = ci->toReturn = ci->extendCEs ? ci->extendCEs : ci->CEs;
     if (ci->flags & UCOL_ITER_INNORMBUF) {
         ci->flags = ci->origFlags;
     }
