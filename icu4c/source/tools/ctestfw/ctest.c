@@ -26,10 +26,10 @@
 
 struct TestNode
 {
-  char name[MAXTESTNAME];
   void (*test)(void);
   struct TestNode* sibling;
   struct TestNode* child;
+  char name[1]; /* This is dynamically allocated off the end with malloc. */
 };
 
 
@@ -49,7 +49,7 @@ static char ERROR_LOG[MAX_TEST_LOG][MAXTESTNAME];
 /* Local prototypes */
 static TestNode* addTestNode( TestNode *root, const char *name );
 
-static TestNode* createTestNode();
+static TestNode *createTestNode(const char* name, int32_t nameLen);
 
 static int strncmp_nullcheck( const char* s1,
                   const char* s2,
@@ -127,16 +127,18 @@ static void getNextLevel( const char* name,
     }
 }
 
-static TestNode *createTestNode( )
+static TestNode *createTestNode(const char* name, int32_t nameLen)
 {
     TestNode *newNode;
 
-    newNode = (TestNode*)malloc ( sizeof ( TestNode ) );
+    newNode = (TestNode*)malloc(sizeof(TestNode) + (nameLen + 1));
 
-    newNode->name[0]  = '\0';
     newNode->test = NULL;
     newNode->sibling = NULL;
     newNode->child = NULL;
+
+    strncpy( newNode->name, name, nameLen );
+    newNode->name[nameLen] = 0;
 
     return  newNode;
 }
@@ -164,7 +166,7 @@ addTest(TestNode** root,
 
     /*if this is the first Test created*/
     if (*root == NULL)
-        *root = createTestNode();
+        *root = createTestNode("", 0);
 
     newNode = addTestNode( *root, name );
     assert(newNode != 0 );
@@ -202,14 +204,11 @@ static TestNode *addTestNode ( TestNode *root, const char *name )
             /* Add all children of the node */
             do
             {
-                curNode->child = createTestNode ( );
-
                 /* Get the next component of the name */
-                getNextLevel ( name, &nameLen, &nextName );
+                getNextLevel(name, &nameLen, &nextName);
 
                 /* update curName to have the next name segment */
-                strncpy ( curNode->child->name , name, nameLen );
-                curNode->child->name[nameLen] = 0;
+                curNode->child = createTestNode(name, nameLen);
                 /* printf("*** added %s\n", curNode->child->name );*/
                 curNode = curNode->child;
                 name = nextName;
@@ -228,9 +227,7 @@ static TestNode *addTestNode ( TestNode *root, const char *name )
             if ( nextNode == NULL )
             {
                 /* Did not find 'name' on this level. */
-                nextNode = createTestNode ( );
-                strncpy( nextNode->name, name, nameLen );
-                nextNode->name[nameLen] = 0;
+                nextNode = createTestNode(name, nameLen);
                 curNode->sibling = nextNode;
                 break;
             }
