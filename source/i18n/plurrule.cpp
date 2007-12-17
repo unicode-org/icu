@@ -23,8 +23,6 @@
 #include "plurrule_impl.h"
 #include "putilimp.h"
 #include "ustrfmt.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 #if !UCONFIG_NO_FORMATTING
 
