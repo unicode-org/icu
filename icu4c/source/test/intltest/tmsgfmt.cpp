@@ -534,15 +534,15 @@ void TestMessageFormat::testMsgFormatPlural(/* char* par */)
         logln(UnicodeString("TestMessageFormat::testMsgFormatPlural #1 with error code ")+(int32_t)err);
         return;
     }
-    Formattable testArgs1[] = {(int32_t)0};
+    Formattable testArgs1((int32_t)0);
     FieldPosition ignore(FieldPosition::DONT_CARE);
     UnicodeString numResult1;
-    mfNum->format(testArgs1, 1, numResult1, ignore, err);
+    mfNum->format(&testArgs1, 1, numResult1, ignore, err);
    
     MessageFormat* mfAlpha = new MessageFormat(t2, Locale("fr"), err);
     UnicodeString argName[] = {UnicodeString("argument")};
     UnicodeString argNameResult;
-    mfAlpha->format(argName, testArgs1, 1, argNameResult, err);
+    mfAlpha->format(argName, &testArgs1, 1, argNameResult, err);
     if (U_FAILURE(err)) {
         errln("TestMessageFormat::testMsgFormatPlural #1 - argumentName");
         logln(UnicodeString("TestMessageFormat::testMsgFormatPlural #1 with error code ")+(int32_t)err);
@@ -565,11 +565,11 @@ void TestMessageFormat::testMsgFormatPlural(/* char* par */)
 
     MessageFormat* mfNum2 = new MessageFormat(t3, Locale("ru"), err);
     numResult1.remove();
-    Formattable testArgs2[] = {(int32_t)4};
-    mfNum2->format(testArgs2, 1, numResult1, ignore, err);
+    Formattable testArgs2((int32_t)4);
+    mfNum2->format(&testArgs2, 1, numResult1, ignore, err);
     MessageFormat* mfAlpha2 = new MessageFormat(t4, Locale("ru"), err);
     argNameResult.remove();
-    mfAlpha2->format(argName, testArgs2, 1, argNameResult, err);
+    mfAlpha2->format(argName, &testArgs2, 1, argNameResult, err);
 
     if (U_FAILURE(err)) {
         errln("TestMessageFormat::testMsgFormatPlural #2 - argumentName");
@@ -598,9 +598,9 @@ void TestMessageFormat::testMsgFormatPlural(/* char* par */)
         delete msgFmt;
         return;
     }
-    Formattable testArgs3[] = {(int32_t)0};
+    Formattable testArgs3((int32_t)0);
     argNameResult.remove();
-    msgFmt->format(testArgs3, 1, argNameResult, ignore, err);
+    msgFmt->format(&testArgs3, 1, argNameResult, ignore, err);
     if (U_FAILURE(err)) {
         errln("TestMessageFormat::test nested PluralFormat with argumentName");
     }
