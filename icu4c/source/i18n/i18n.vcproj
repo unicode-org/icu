@@ -1063,6 +1063,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\msgfmt_impl.h"
+				>
+			</File>
+			<File
 				RelativePath=".\msgfmt.cpp"
 				>
 			</File>
@@ -1156,6 +1160,22 @@
 			</File>
 			<File
 				RelativePath=".\persncal.h"
+				>
+			</File>
+			<File
+				RelativePath=".\unicode\plurfmt.h"
+				>
+			</File>
+			<File
+				RelativePath=".\plurfmt.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\unicode\plurrule.h"
+				>
+			</File>
+			<File
+				RelativePath=".\plurrule.cpp"
 				>
 			</File>
 			<File

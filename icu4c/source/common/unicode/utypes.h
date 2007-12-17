@@ -678,6 +678,10 @@ typedef enum UErrorCode {
     U_UNMATCHED_BRACES,               /**< Braces do not match in message pattern */
     U_UNSUPPORTED_PROPERTY,           /**< UNUSED as of ICU 2.4 */
     U_UNSUPPORTED_ATTRIBUTE,          /**< UNUSED as of ICU 2.4 */
+    U_ARGUMENT_TYPE_MISMATCH,         /**< Argument name and argument index mismatch in MessageFormat functions */
+    U_DUPLICATE_KEYWORD,              /**< Duplicate keyword in PluralFormat */
+    U_UNDEFINED_KEYWORD,              /**< Undefined Pluarl keyword */
+    U_DEFAULT_KEYWORD_MISSING,        /**< Missing DEFAULT rule in plural rules */
     U_FMT_PARSE_ERROR_LIMIT,          /**< The limit for format library errors */
 
     /*

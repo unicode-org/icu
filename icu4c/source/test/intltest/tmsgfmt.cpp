@@ -52,6 +52,7 @@ TestMessageFormat::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(18,TestRBNF);
         TESTCASE(19,TestTurkishCasing);
         TESTCASE(20,testAutoQuoteApostrophe);
+        TESTCASE(21,testMsgFormatPlural);
         default: name = ""; break;
     }
 }
@@ -514,6 +515,100 @@ void TestMessageFormat::testMsgFormatChoice(/* char* par */)
 
     delete form;
     delete fileform;
+}
+
+
+void TestMessageFormat::testMsgFormatPlural(/* char* par */)
+{
+    logln("running TestMessageFormat::testMsgFormatPlural");
+
+    UErrorCode err = U_ZERO_ERROR;
+    UnicodeString t1("{0, plural, one{C''est # fichier} other{Ce sont # fichiers}} dans la liste."); 
+    UnicodeString t2("{argument, plural, one{C''est # fichier} other {Ce sont # fichiers}} dans la liste.");
+    UnicodeString t3("There {0, plural, one{is # zavod}few{are {0, number,###.0} zavoda} other{are # zavodov}} in the directory.");
+    UnicodeString t4("There {argument, plural, one{is # zavod}few{are {argument, number,###.0} zavoda} other{are #zavodov}} in the directory.");
+    UnicodeString t5("{0, plural, one {{0, number,C''''est #,##0.0# fichier}} other {Ce sont # fichiers}} dans la liste.");
+    MessageFormat* mfNum = new MessageFormat(t1, Locale("fr"), err);
+    if (U_FAILURE(err)) {
+        errln("TestMessageFormat::testMsgFormatPlural #1 - argumentIndex");
+        logln(UnicodeString("TestMessageFormat::testMsgFormatPlural #1 with error code ")+(int32_t)err);
+        return;
+    }
+    Formattable testArgs1[] = {(int32_t)0};
+    FieldPosition ignore(FieldPosition::DONT_CARE);
+    UnicodeString numResult1;
+    mfNum->format(testArgs1, 1, numResult1, ignore, err);
+   
+    MessageFormat* mfAlpha = new MessageFormat(t2, Locale("fr"), err);
+    UnicodeString argName[] = {UnicodeString("argument")};
+    UnicodeString argNameResult;
+    mfAlpha->format(argName, testArgs1, 1, argNameResult, err);
+    if (U_FAILURE(err)) {
+        errln("TestMessageFormat::testMsgFormatPlural #1 - argumentName");
+        logln(UnicodeString("TestMessageFormat::testMsgFormatPlural #1 with error code ")+(int32_t)err);
+        delete mfNum;
+        return;
+    }
+    if ( numResult1 != argNameResult){
+        errln("TestMessageFormat::testMsgFormatPlural #1");
+        logln(UnicodeString("The results of argumentName and argumentIndex are not the same."));
+    }
+    if ( numResult1 != UnicodeString("C\'est 0 fichier dans la liste.")) {
+        errln("TestMessageFormat::testMsgFormatPlural #1");
+        logln(UnicodeString("The results of argumentName and argumentIndex are not the same."));
+    }
+    err = U_ZERO_ERROR;
+    int32_t fmtsCnt=0;
+  
+    delete mfNum;
+    delete mfAlpha;
+
+    MessageFormat* mfNum2 = new MessageFormat(t3, Locale("ru"), err);
+    numResult1.remove();
+    Formattable testArgs2[] = {(int32_t)4};
+    mfNum2->format(testArgs2, 1, numResult1, ignore, err);
+    MessageFormat* mfAlpha2 = new MessageFormat(t4, Locale("ru"), err);
+    argNameResult.remove();
+    mfAlpha2->format(argName, testArgs2, 1, argNameResult, err);
+
+    if (U_FAILURE(err)) {
+        errln("TestMessageFormat::testMsgFormatPlural #2 - argumentName");
+        logln(UnicodeString("TestMessageFormat::testMsgFormatPlural #2 with error code ")+(int32_t)err);
+        delete mfNum2;
+        return;
+    }
+    if ( numResult1 != argNameResult){
+        errln("TestMessageFormat::testMsgFormatPlural #2");
+        logln(UnicodeString("The results of argumentName and argumentIndex are not the same."));
+    }
+    if ( numResult1 != UnicodeString("There are 4,0 zavoda in the directory.")) {
+        errln("TestMessageFormat::testMsgFormatPlural #2");
+        logln(UnicodeString("The results of argumentName and argumentIndex are not the same."));
+    }
+
+    delete mfNum2;
+    delete mfAlpha2;
+    
+    // nested formats
+    err = U_ZERO_ERROR;
+    MessageFormat* msgFmt = new MessageFormat(t5, Locale("fr"), err);
+    if (U_FAILURE(err)) {
+        errln("TestMessageFormat::test nested PluralFormat with argumentName");
+        logln(UnicodeString("TestMessageFormat::test nested PluralFormat with error code ")+(int32_t)err);
+        delete msgFmt;
+        return;
+    }
+    Formattable testArgs3[] = {(int32_t)0};
+    argNameResult.remove();
+    msgFmt->format(testArgs3, 1, argNameResult, ignore, err);
+    if (U_FAILURE(err)) {
+        errln("TestMessageFormat::test nested PluralFormat with argumentName");
+    }
+    if ( argNameResult!= UnicodeString("C'est 0,0 fichier dans la liste.")) {
+        errln(UnicodeString("TestMessageFormat::test nested named PluralFormat."));
+        logln(UnicodeString("The unexpected nested named PluralFormat."));
+    }
+    delete msgFmt;
 }
 
 
