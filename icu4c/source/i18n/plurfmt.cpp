@@ -13,14 +13,11 @@
 */
 
 
-#include "mutex.h"
-#include "plurrule_impl.h"
 #include "unicode/utypes.h"
 #include "unicode/plurfmt.h"
 #include "unicode/plurrule.h"
-
-#include <stdio.h>
-#include <stdlib.h>
+#include "mutex.h"
+#include "plurrule_impl.h"
 
 #if !UCONFIG_NO_FORMATTING
 
@@ -289,11 +286,11 @@ PluralFormat::toPattern(UnicodeString& appendTo) {
 
 UBool
 PluralFormat::inRange(UChar ch, fmtToken& type) {
-    if ((ch>=CAP_A) and (ch<=CAP_Z)) {
+    if ((ch>=CAP_A) && (ch<=CAP_Z)) {
         // we assume all characters are in lower case already.
         return FALSE;
     }
-    if ((ch>=LOW_A) and (ch<=LOW_Z)) {
+    if ((ch>=LOW_A) && (ch<=LOW_Z)) {
         type = tLetter;
         return TRUE;
     }
