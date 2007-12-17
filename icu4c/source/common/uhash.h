@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2006, International Business Machines
+*   Copyright (C) 1997-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   Date        Name        Description
@@ -173,8 +173,6 @@ struct UHashtable {
                              * never let count == length (see code). */
     int32_t     length;     /* The physical size of the arrays hashes, keys
                              * and values.  Must be prime. */
-    int32_t     primeIndex;     /* Index into our prime table for length.
-                                 * length == PRIMES[primeIndex] */
 
     /* Rehashing thresholds */
     
@@ -183,6 +181,8 @@ struct UHashtable {
     float       highWaterRatio; /* 0..1; high water as a fraction of length */
     float       lowWaterRatio;  /* 0..1; low water as a fraction of length */
     
+    int8_t      primeIndex;     /* Index into our prime table for length.
+                                 * length == PRIMES[primeIndex] */
     UBool       allocated; /* Was this UHashtable allocated? */
 };
 typedef struct UHashtable UHashtable;
