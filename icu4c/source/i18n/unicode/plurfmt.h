@@ -16,28 +16,28 @@
 #ifndef PLURFMT
 #define PLURFMT
 
+#include "unicode/utypes.h"
+
 /**
  * \file
  * \brief C++ API: PluralFormat object
  */
- 
+
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/numfmt.h"
-#include "unicode/plurfmt.h"
 #include "unicode/plurrule.h"
-#include "unicode/utypes.h"
 
 U_NAMESPACE_BEGIN
 
 class Hashtable;
 class PluralRules;
-class NumberFormat;
+
 /**
  * <p>
  * <code>PluralFormat</code> supports the creation of internationalized
  * messages with plural inflection. It is based on <i>plural
- * selection</i>, i.e. the caller specifies messages for each 
+ * selection</i>, i.e. the caller specifies messages for each
  * plural case that can appear in the users language and the
  * <code>PluralFormat</code> selects the appropriate message based on
  * the number.
@@ -84,7 +84,7 @@ class NumberFormat;
  * <h5>Patterns and Their Interpretation</h5>
  * <p>
  * The pattern text defines the message output for each plural case of the
- * used locale. The pattern is a sequence of 
+ * used locale. The pattern is a sequence of
  * <code><i>caseKeyword</i>{<i>message</i>}</code> clauses, separated by white
  * space characters. Each clause assigns the message <code><i>message</i></code>
  * to the plural case identified by <code><i>caseKeyword</i></code>.
@@ -100,9 +100,9 @@ class NumberFormat;
  * U_DUPLICATE_KEYWORD will be set to status.
  * <br/>
  * Spaces between <code><i>caseKeyword</i></code> and
- * <code><i>message</i></code>  will be ignored; spaces within 
+ * <code><i>message</i></code>  will be ignored; spaces within
  * <code><i>message</i></code> will be preserved.
- * </p><p> 
+ * </p><p>
  * The message text for a particular plural case may contain other message
  * format patterns. <code>PluralFormat</code> preserves these so that you
  * can use the strings produced by <code>PluralFormat</code> with other
@@ -123,7 +123,7 @@ class NumberFormat;
  * Example
  * <pre>
  * UErrorCode status = U_ZERO_ERROR;
- * MessageFormat* msgFmt = new MessageFormat(UnicodeString("{0, plural, 
+ * MessageFormat* msgFmt = new MessageFormat(UnicodeString("{0, plural,
  *   one{0, number, C''est #,##0.0#  fichier} other {Ce sont # fichiers}} dans la liste."),
  *   Locale("fr"), status);
  * if (U_FAILURE(status)) {
@@ -167,14 +167,14 @@ class NumberFormat;
  * For more information about <code>PluralRules</code>, see
  * {@link PluralRules}.
  * </p>
- * 
+ *
  * ported from Java
  * @draft ICU 4.0
  */
 
 class U_I18N_API PluralFormat : public Format {
 public:
-    
+
     /**
      * Creates a new <code>PluralFormat</code> for the default locale.
      * This locale will be used to get the set of plural rules and for standard
@@ -184,29 +184,29 @@ public:
      * @draft ICU 4.0
      */
     PluralFormat(UErrorCode& status);
-    
+
     /**
      * Creates a new <code>PluralFormat</code> for a given locale.
      * @param locale the <code>PluralFormat</code> will be configured with
-     *               rules for this locale. This locale will also be used for 
+     *               rules for this locale. This locale will also be used for
      *               standard number formatting.
      * @param status output param set to success/failure code on exit, which
      *               must not indicate a failure before the function call.
      * @draft ICU 4.0
-     */    
+     */
     PluralFormat(const Locale& locale, UErrorCode& status);
-    
+
     /**
      * Creates a new <code>PluralFormat</code> for a given set of rules.
-     * The standard number formatting will be done using the default locale. 
+     * The standard number formatting will be done using the default locale.
      * @param rules   defines the behavior of the <code>PluralFormat</code>
      *                object.
      * @param status  output param set to success/failure code on exit, which
      *                must not indicate a failure before the function call.
      * @draft ICU 4.0
-     */  
+     */
     PluralFormat(const PluralRules& rules, UErrorCode& status);
-    
+
     /**
      * Creates a new <code>PluralFormat</code> for a given set of rules.
      * The standard number formatting will be done using the given locale.
@@ -217,9 +217,9 @@ public:
      * @param status  output param set to success/failure code on exit, which
      *                must not indicate a failure before the function call.
      * @draft ICU 4.0
-     */   
+     */
     PluralFormat(const Locale& locale, const PluralRules& rules, UErrorCode& status);
-    
+
     /**
      * Creates a new <code>PluralFormat</code> for a given pattern string.
      * The default locale will be used to get the set of plural rules and for
@@ -229,11 +229,11 @@ public:
      * @param status   output param set to success/failure code on exit, which
      *                 must not indicate a failure before the function call.
      * @draft ICU 4.0
-     */    
+     */
     PluralFormat(const UnicodeString& pattern, UErrorCode& status);
-    
+
     /**
-     * Creates a new <code>PluralFormat</code> for a given pattern string and 
+     * Creates a new <code>PluralFormat</code> for a given pattern string and
      * locale.
      * The locale will be used to get the set of plural rules and for
      * standard number formatting.
@@ -247,9 +247,9 @@ public:
      * @draft ICU 4.0
      */
     PluralFormat(const Locale& locale, const UnicodeString& pattern, UErrorCode& status);
-    
+
     /**
-     * Creates a new <code>PluralFormat</code> for a given set of rules, a 
+     * Creates a new <code>PluralFormat</code> for a given set of rules, a
      * pattern and a locale.
      * @param rules    defines the behavior of the <code>PluralFormat</code>
      *                 object.
@@ -258,13 +258,13 @@ public:
      * @param status   output param set to success/failure code on exit, which
      *                 must not indicate a failure before the function call.
      * @draft ICU 4.0
-     */    
+     */
     PluralFormat(const PluralRules& rules,
                  const UnicodeString& pattern,
                  UErrorCode& status);
-    
+
     /**
-     * Creates a new <code>PluralFormat</code> for a given set of rules, a 
+     * Creates a new <code>PluralFormat</code> for a given set of rules, a
      * pattern and a locale.
      * @param locale  the <code>PluralFormat</code> will be configured with
      *                rules for this locale. This locale will also be used for
@@ -276,8 +276,8 @@ public:
      * @param status  output param set to success/failure code on exit, which
      *                must not indicate a failure before the function call.
      * @draft ICU 4.0
-     */   
-    PluralFormat(const Locale& locale, 
+     */
+    PluralFormat(const Locale& locale,
                  const PluralRules& rules,
                  const UnicodeString& pattern,
                  UErrorCode& status);
@@ -287,19 +287,19 @@ public:
       * @draft ICU 4.0
       */
     PluralFormat(const PluralFormat& other);
-    
+
     /**
      * Destructor.
      * @draft ICU 4.0
      */
     virtual ~PluralFormat();
-    
+
     /**
      * Sets the pattern used by this plural format.
      * The method parses the pattern and creates a map of format strings
      * for the plural rules.
      * Patterns and their interpretation are specified in the class description.
-     * 
+     *
      * @param pattern the pattern for this plural format
      *                errors are returned to status if the pattern is invalid.
      * @param status  output param set to success/failure code on exit, which
@@ -310,7 +310,7 @@ public:
 
     /**
      * Formats a plural message for a given number.
-     * 
+     *
      * @param number  a number for which the plural message should be formatted
      *                for. If no pattern has been applied to this
      *                <code>PluralFormat</code> object yet, the formatted number
@@ -321,10 +321,10 @@ public:
      * @draft ICU 4.0
      */
     UnicodeString format(int32_t number, UErrorCode& status) const;
-    
+
     /**
      * Formats a plural message for a given number.
-     * 
+     *
      * @param number   a number for which the plural message should be formatted
      *                 for. If no pattern has been applied to this
      *                 <code>PluralFormat</code> object yet, the formatted number
@@ -342,7 +342,7 @@ public:
                           UnicodeString& appendTo,
                           FieldPosition& pos,
                           UErrorCode& status) const;
-    
+
     /**
      * Sets the locale used by this <code>PluraFormat</code> object.
      * Note: Calling this method resets this <code>PluraFormat</code> object,
@@ -356,7 +356,7 @@ public:
      * @draft ICU 4.0
      */
     void setLocale(const Locale& locale, UErrorCode& status);
-    
+
     /**
       * Sets the number format used by this formatter.  You only need to
       * call this if you want a different number format than the default
@@ -367,15 +367,15 @@ public:
       * @draft ICU 4.0
       */
     void setNumberFormat(const NumberFormat* format, UErrorCode& status);
-    
+
     /**
        * Assignment operator
        *
        * @param other    the PluralFormat object to copy from.
        * @draft ICU 4.0
        */
-    PluralFormat& operator=(const PluralFormat& other);   
-    
+    PluralFormat& operator=(const PluralFormat& other);
+
     /**
       * Return true if another object is semantically equal to this one.
       *
@@ -384,7 +384,7 @@ public:
       * @draft ICU 4.0
       */
     virtual UBool operator==(const Format& other) const;
-    
+
     /**
      * Return true if another object is semantically unequal to this one.
      *
@@ -393,7 +393,7 @@ public:
      * @draft ICU 4.0
      */
     virtual UBool operator!=(const Format& other) const;
-    
+
     /**
      * Clones this Format object polymorphically.  The caller owns the
      * result and should delete it when done.
@@ -417,7 +417,7 @@ public:
                          UnicodeString& appendTo,
                          FieldPosition& pos,
                          UErrorCode& status) const;
-   
+
    /**
     * Returns the pattern from applyPattern() or constructor().
     *
@@ -427,7 +427,7 @@ public:
     * @draft ICU 4.0
     */
    UnicodeString& toPattern(UnicodeString& appendTo);
-   
+
    /**
     * This method is not yet supported by <code>PluralFormat</code>.
     * <P>
@@ -453,7 +453,7 @@ public:
    virtual void parseObject(const UnicodeString& source,
                             Formattable& result,
                             ParsePosition& parse_pos) const;
-   
+
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
@@ -468,7 +468,7 @@ public:
      * @draft ICU 4.0
      */
      virtual UClassID getDynamicClassID() const;
-      
+
 private:
 typedef enum fmtToken {
     none,
@@ -479,14 +479,14 @@ typedef enum fmtToken {
     tLeftBrace,
     tRightBrace,
     }fmtToken;
-  
+
     Locale  locale;
     PluralRules* pluralRules;
     UnicodeString pattern;
     Hashtable  *fParsedValuesHash;
     NumberFormat*  numberFormat;
     NumberFormat*  replacedNumberFormat;
-    
+
     PluralFormat();   // default constructor not implemented
     void init(const PluralRules* rules, const Locale& curlocale, UErrorCode& status);
     UBool inRange(UChar ch, fmtToken& type);
