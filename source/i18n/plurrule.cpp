@@ -967,15 +967,15 @@ RuleParser::getNextToken(const UnicodeString& ruleData,
 
 UBool
 RuleParser::inRange(UChar ch, tokenType& type) {
-    if ((ch>=CAP_A) and (ch<=CAP_Z)) {
+    if ((ch>=CAP_A) && (ch<=CAP_Z)) {
         // we assume all characters are in lower case already.
         return FALSE;
     }
-    if ((ch>=LOW_A) and (ch<=LOW_Z)) {
+    if ((ch>=LOW_A) && (ch<=LOW_Z)) {
         type = tLetter;
         return TRUE;
     }
-    if ((ch>=U_ZERO) and (ch<=U_NINE)) {
+    if ((ch>=U_ZERO) && (ch<=U_NINE)) {
         type = tNumber;
         return TRUE;
     }

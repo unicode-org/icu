@@ -1165,6 +1165,24 @@
 			<File
 				RelativePath=".\unicode\plurfmt.h"
 				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\plurfmt.cpp"
@@ -1173,6 +1191,24 @@
 			<File
 				RelativePath=".\unicode\plurrule.h"
 				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\plurrule.cpp"
