@@ -190,18 +190,10 @@
     </condition>
 
     <!-- JVM arguments for running test cases -->
-    <condition property="test.jvm.args" value="-Xms128m -Xmx160m">
+    <condition property="test.jvm.args" value="-Xms160m -Xmx192m">
         <isset property="before.java14" />
     </condition>
-    <condition property="test.jvm.args" value="-ea -Xms128m -Xmx160m -Xdisableexcessivegc">
-      <and>
-        <not>
-          <isset property="before.java15" />
-        </not>
-        <equals arg1="${java.vm.vendor}" arg2="IBM Corporation"/>
-      </and>
-    </condition>
-    <condition property="test.jvm.args" value="-ea -Xms128m -Xmx160m">
+    <condition property="test.jvm.args" value="-ea -Xms160m -Xmx192m">
       <not>
         <isset property="test.jvm.args" />
       </not>
