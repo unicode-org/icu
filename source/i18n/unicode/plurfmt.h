@@ -470,14 +470,14 @@ public:
      virtual UClassID getDynamicClassID() const;
 
 private:
-typedef enum fmtToken {
-    none,
-    tLetter,
-    tNumber,
-    tSpace,
-    tNumberSign,
-    tLeftBrace,
-    tRightBrace,
+    typedef enum fmtToken {
+        none,
+        tLetter,
+        tNumber,
+        tSpace,
+        tNumberSign,
+        tLeftBrace,
+        tRightBrace
     }fmtToken;
 
     Locale  locale;
