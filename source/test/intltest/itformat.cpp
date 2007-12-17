@@ -48,7 +48,8 @@
 #include "dtptngts.h"       // IntlTestDateTimePatternGeneratorAPI
 #include "tzoffloc.h"       // TimeZoneOffsetLocalTest
 #include "tzfmttst.h"       // TimeZoneFormatTest
-
+#include "plurults.h"       // PluralRulesTest
+#include "plurfmts.h"       // PluralFormatTest
 
 #define TESTCLASS(id, TestClass)          \
     case id:                              \
@@ -114,7 +115,8 @@ void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCLASS(32,IntlTestDateTimePatternGeneratorAPI);
         TESTCLASS(33,TimeZoneOffsetLocalTest);
         TESTCLASS(34,TimeZoneFormatTest);
-
+        TESTCLASS(35,PluralRulesTest);
+        TESTCLASS(36,PluralFormatTest);
 
         default: name = ""; break; //needed to end loop
     }
