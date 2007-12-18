@@ -598,18 +598,18 @@ const Locale RuleBasedCollator::getLocale(ULocDataLocaleType type, UErrorCode &s
 }
 
 void
-RuleBasedCollator::setLocales(const Locale& requestedLocale, const Locale& validLocale) {
+RuleBasedCollator::setLocales(const Locale& requestedLocale, const Locale& validLocale, const Locale& actualLocale) {
     checkOwned();
-    size_t rlen = uprv_strlen(requestedLocale.getName());
-    char* rloc  = (char *)uprv_malloc((rlen+1)*sizeof(char));
+    char* rloc  = uprv_strdup(requestedLocale.getName());
     if (rloc) {
-        uprv_strcpy(rloc, requestedLocale.getName());
-        size_t vlen = uprv_strlen(validLocale.getName());
-        char* vloc = (char*)uprv_malloc((vlen+1)*sizeof(char));
+        char* vloc = uprv_strdup(validLocale.getName());
         if (vloc) {
-            uprv_strcpy(vloc, validLocale.getName());
-            ucol_setReqValidLocales(ucollator, rloc, vloc);
-            return;
+            char* aloc = uprv_strdup(actualLocale.getName());
+            if (aloc) {
+                ucol_setReqValidLocales(ucollator, rloc, vloc, aloc);
+                return;
+            }
+            uprv_free(vloc);
         }
         uprv_free(rloc);
     }

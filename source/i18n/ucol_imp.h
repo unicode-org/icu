@@ -487,7 +487,7 @@ ucol_cloneRuleData(const UCollator *coll, int32_t *length, UErrorCode *status);
  * service.
  */
 U_CFUNC void U_EXPORT2
-ucol_setReqValidLocales(UCollator *coll, char *requestedLocaleToAdopt, char *validLocaleToAdopt);
+ucol_setReqValidLocales(UCollator *coll, char *requestedLocaleToAdopt, char *validLocaleToAdopt, char *actualLocaleToAdopt);
 
 #define UCOL_SPECIAL_FLAG 0xF0000000
 #define UCOL_TAG_SHIFT 24
@@ -861,13 +861,12 @@ struct UCollator {
     UColOptionSet  *options;
     SortKeyGenerator *sortKeyGen;
     uint32_t *latinOneCEs;
+    char* actualLocale;
     char* validLocale;
     char* requestedLocale;
     const UChar *rules;
+    const UChar *ucaRules;
     const UCollator *UCA;
-    ResourceCleaner *resCleaner;
-    UResourceBundle *rb;
-    UResourceBundle *elements;
     const UCATableHeader *image;
     UTrie mapping;
     const uint32_t *latinOneMapping;
@@ -922,7 +921,7 @@ struct UCollator {
     UBool latinOneRegenTable;
     UBool latinOneFailed;
 
-    int32_t tertiaryAddition; /* when switching case, we need to add or subtract different values */
+    int8_t tertiaryAddition; /* when switching case, we need to add or subtract different values */
     uint8_t caseSwitch;
     uint8_t tertiaryCommon;
     uint8_t tertiaryMask;

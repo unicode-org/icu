@@ -176,8 +176,8 @@ public:
             Locale canonicalLocale("");
             Locale currentLocale("");
             
-            result->setLocales(lkey.canonicalLocale(canonicalLocale), 
-                LocaleUtility::initLocaleFromName(*actualReturn, currentLocale));
+            LocaleUtility::initLocaleFromName(*actualReturn, currentLocale);
+            result->setLocales(lkey.canonicalLocale(canonicalLocale), currentLocale, currentLocale);
         }
         return result;
     }
@@ -325,7 +325,7 @@ Collator* U_EXPORT2 Collator::createInstance(const Locale& desiredLocale,
         // correctly already, and we don't want to overwrite it. (TODO
         // remove in 3.0) [aliu]
         if (*actualLoc.getName() != 0) {
-            result->setLocales(desiredLocale, actualLoc);
+            result->setLocales(desiredLocale, actualLoc, actualLoc);
         }
         return result;
     }
@@ -552,7 +552,7 @@ int32_t U_EXPORT2 Collator::getBound(const uint8_t       *source,
 }
 
 void
-Collator::setLocales(const Locale& /* requestedLocale */, const Locale& /* validLocale */) {
+Collator::setLocales(const Locale& /* requestedLocale */, const Locale& /* validLocale */, const Locale& /*actualLocale*/) {
 }
 
 UnicodeSet *Collator::getTailoredSet(UErrorCode &status) const
