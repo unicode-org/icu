@@ -1956,7 +1956,7 @@ public:
                              uint8_t*result, int32_t resultLength) const;
     virtual UnicodeSet *getTailoredSet(UErrorCode &status) const;
     virtual UBool operator!=(const Collator& other) const;
-    virtual void setLocales(const Locale& requestedLocale, const Locale& validLocale);
+    virtual void setLocales(const Locale& requestedLocale, const Locale& validLocale, const Locale& actualLocale);
     TestCollator() : Collator() {};
     TestCollator(UCollationStrength collationStrength, 
            UNormalizationMode decompositionMode) : Collator(collationStrength, decompositionMode) {};
@@ -2155,9 +2155,9 @@ UnicodeSet * TestCollator::getTailoredSet(UErrorCode &status) const
     return Collator::getTailoredSet(status);
 }
 
-void TestCollator::setLocales(const Locale& requestedLocale, const Locale& validLocale) 
+void TestCollator::setLocales(const Locale& requestedLocale, const Locale& validLocale, const Locale& actualLocale) 
 {
-    Collator::setLocales(requestedLocale, validLocale);
+    Collator::setLocales(requestedLocale, validLocale, actualLocale);
 }
 
 
@@ -2196,7 +2196,7 @@ void CollationAPITest::TestSubclass()
     // use base class implementation
     Locale loc1 = Locale::getGermany();
     Locale loc2 = Locale::getFrance();
-    col1.setLocales(loc1, loc2); // default implementation has no effect
+    col1.setLocales(loc1, loc2, loc2); // default implementation has no effect
 
     UnicodeString displayName;
     col1.getDisplayName(loc1, loc2, displayName); // de_DE collator in fr_FR locale
