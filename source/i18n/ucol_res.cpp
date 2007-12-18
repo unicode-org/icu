@@ -198,6 +198,7 @@ clean:
     ures_close(b);
     ures_close(collElem);
     ures_close(binary);
+    ucol_close(result);
     return NULL;
 }
 
