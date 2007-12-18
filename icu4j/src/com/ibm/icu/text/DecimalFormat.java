@@ -1709,6 +1709,24 @@ public class DecimalFormat extends NumberFormat {
     private static final int STATUS_INFINITE = 0;
     private static final int STATUS_POSITIVE = 1;
     private static final int STATUS_LENGTH   = 2;
+    private static final UnicodeSet dotEquivalents =(UnicodeSet) new UnicodeSet(
+        "[.\u2024\u3002\uFE12\uFE52\uFF0E\uFF61]").freeze();
+    private static final UnicodeSet commaEquivalents = (UnicodeSet) new UnicodeSet(
+        "[,\u060C\u066B\u3001\uFE10\uFE11\uFE50\uFE51\uFF0C\uFF64]").freeze();
+    private static final UnicodeSet otherGroupingSeparators = (UnicodeSet) new UnicodeSet(
+        "[\\ '\u00A0\u066C\u2000-\u200A\u2018\u2019\u202F\u205F\u3000\uFF07]").freeze();
+    
+    private static final UnicodeSet strictDotEquivalents =(UnicodeSet) new UnicodeSet(
+        "[.\u2024\uFE52\uFF0E\uFF61]").freeze();
+    private static final UnicodeSet strictCommaEquivalents = (UnicodeSet) new UnicodeSet(
+        "[,\u066B\uFE10\uFE50\uFF0C]").freeze();
+    private static final UnicodeSet strictOtherGroupingSeparators = (UnicodeSet) new UnicodeSet(
+        "[\\ '\u00A0\u066C\u2000-\u200A\u2018\u2019\u202F\u205F\u3000\uFF07]").freeze();
+
+    private static final UnicodeSet defaultGroupingSeparators = (UnicodeSet) new UnicodeSet(
+        dotEquivalents).addAll(commaEquivalents).addAll(otherGroupingSeparators).freeze();
+    private static final UnicodeSet strictDefaultGroupingSeparators = (UnicodeSet) new UnicodeSet(
+            strictDotEquivalents).addAll(strictCommaEquivalents).addAll(strictOtherGroupingSeparators).freeze();
 
     /**
      * <strong><font face=helvetica color=red>CHANGED</font></strong>
@@ -1783,6 +1801,7 @@ public class DecimalFormat extends NumberFormat {
             char decimal = isCurrencyFormat ?
             symbols.getMonetaryDecimalSeparator() : symbols.getDecimalSeparator();
             char grouping = symbols.getGroupingSeparator();
+                        
             String exponentSep = symbols.getExponentSeparator();
             boolean sawDecimal = false;
             boolean sawExponent = false;
@@ -1797,6 +1816,19 @@ public class DecimalFormat extends NumberFormat {
             int lastGroup = -1; // where did we last see a grouping separator?
             int prevGroup = -1; // where did we see the grouping separator before that?
             int gs2 = groupingSize2 == 0 ? groupingSize : groupingSize2;
+            
+            // equivalent grouping and decimal support
+            
+            // TODO markdavis Cache these if it makes a difference in performance.
+            UnicodeSet decimalSet = new UnicodeSet(getSimilarDecimals(decimal, strictParse));
+            UnicodeSet groupingSet = new UnicodeSet(strictParse ? strictDefaultGroupingSeparators : defaultGroupingSeparators)
+                .add(grouping).removeAll(decimalSet);
+            
+            // we are guaranteed that 
+            // decimalSet contains the decimal, and 
+            // groupingSet contains the groupingSeparator
+            // (unless decimal and grouping are the same, which should never happen. But in that case, groupingSet will just be empty.)
+
 
             // We have to track digitCount ourselves, because digits.count will
             // pin when the maximum allowable digits is reached.
@@ -1894,7 +1926,7 @@ public class DecimalFormat extends NumberFormat {
                     // Cancel out backup setting (see grouping handler below)
                     backup = -1;
                 }
-                else if (!isExponent && ch == decimal)
+                else if (!isExponent && decimalSet.contains(ch))
                 {
                     if (strictParse) {
                         if (backup != -1 ||
@@ -1910,7 +1942,7 @@ public class DecimalFormat extends NumberFormat {
                     sawDecimal = true;
                     leadingZero = false; // a single leading zero before a decimal is ok
                 }
-                else if (!isExponent && ch == grouping && isGroupingUsed())
+                else if (!isExponent && isGroupingUsed() && groupingSet.contains(ch))
                 {
                     if (sawDecimal) {
                         break;
@@ -2065,6 +2097,23 @@ public class DecimalFormat extends NumberFormat {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Return characters that are used where this decimal is used.
+     * @param decimal
+     * @param strictParse 
+     * @return
+     */
+    private UnicodeSet getSimilarDecimals(char decimal, boolean strictParse) {
+        if (dotEquivalents.contains(decimal)) {
+            return strictParse ? strictDotEquivalents : dotEquivalents;
+        }
+        if (commaEquivalents.contains(decimal)) {
+            return strictParse ? strictCommaEquivalents : commaEquivalents;
+        }
+        // if there is no match, return the character itself
+        return new UnicodeSet().add(decimal);
     }
 
     /**

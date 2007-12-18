@@ -1110,19 +1110,21 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         /*6*/ "perr:", // <pattern or '-'> <invalid string>
         /*7*/ "pat:", // <pattern or '-'> <exp. toPattern or '-' or 'err'>
         /*8*/ "fpc:", // <loc or '-'> <curr.amt> <exp. string> <exp. curr.amt>
+        /*9*/ "strict=", // true or false
     };
 
     public void TestCases() {
         String caseFileName = "NumberFormatTestCases.txt";
         java.io.InputStream is = NumberFormatTest.class.getResourceAsStream(caseFileName);
 
-        ResourceReader reader = new ResourceReader(is, caseFileName);
+        ResourceReader reader = new ResourceReader(is, caseFileName, "utf-8");
         TokenIterator tokens = new TokenIterator(reader);
 
         Locale loc = new Locale("en", "US", "");
         DecimalFormat ref = null, fmt = null;
         MeasureFormat mfmt = null;
         String pat = null, str = null, mloc = null;
+        boolean strict = false;
 
         try {
             for (;;) {
@@ -1137,10 +1139,14 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                     // ref= <reference pattern>
                     ref = new DecimalFormat(tokens.next(),
                                             new DecimalFormatSymbols(Locale.US));
+                    ref.setParseStrict(strict);
+                    logln("Setting reference pattern to:\t" + ref);
                     break;
                 case 1:
                     // loc= <locale>
                     loc = LocaleUtility.getLocaleFromName(tokens.next());
+                    pat = ((DecimalFormat) NumberFormat.getInstance(loc)).toPattern();
+                    logln("Setting locale to:\t" + loc + ", \tand pattern to:\t" + pat);
                     break;
                 case 2: // f:
                 case 3: // fp:
@@ -1149,18 +1155,19 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                     tok = tokens.next();
                     if (!tok.equals("-")) {
                         pat = tok;
-                        try {
-                            fmt = new DecimalFormat(pat, new DecimalFormatSymbols(loc));
-                        } catch (IllegalArgumentException iae) {
-                            errln(where + "Pattern \"" + pat + '"');
-                            iae.printStackTrace();
-                            tokens.next(); // consume remaining tokens
-                            tokens.next();
-                            if (cmd == 3) tokens.next();
-                            continue;
-                        }
                     }
-                    str = null;
+                    try {
+                        fmt = new DecimalFormat(pat, new DecimalFormatSymbols(loc));
+                        fmt.setParseStrict(strict);
+                    } catch (IllegalArgumentException iae) {
+                        errln(where + "Pattern \"" + pat + '"');
+                        iae.printStackTrace();
+                        tokens.next(); // consume remaining tokens
+                        //tokens.next();
+                        if (cmd == 3) tokens.next();
+                        continue;
+                    }
+                   str = null;
                     try {
                         if (cmd == 2 || cmd == 3 || cmd == 4) {
                             // f: <pattern or '-'> <number> <exp. string>
@@ -1183,9 +1190,10 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                         else {
                             str = tokens.next();
                             String expstr = tokens.next();
+                            Number parsed = fmt.parse(str);
                             Number exp = (Number) ref.parse(expstr);
                             assertEquals(where + '"' + pat + "\".parse(\"" + str + "\")",
-                                         exp, fmt.parse(str));
+                                         exp, parsed);
                         }
                     } catch (ParseException e) {
                         errln(where + '"' + pat + "\".parse(\"" + str +
@@ -1216,6 +1224,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                             f = fmt;
                         } else {
                             f = new DecimalFormat(testpat);
+                            f.setParseStrict(strict);
                         }
                         if (err) {
                             errln(where + "Invalid pattern \"" + testpat +
@@ -1267,6 +1276,10 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                               "\") threw an exception");
                         e.printStackTrace();
                     }
+                    break;
+                case 9: // strict= true or false
+                    strict = "true".equalsIgnoreCase(tokens.next());
+                    logln("Setting strict to:\t" + strict);
                     break;
                 case -1:
                     errln("Unknown command \"" + tok + "\" at " + tokens.describePosition());
