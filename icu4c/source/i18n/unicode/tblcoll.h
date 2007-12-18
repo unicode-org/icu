@@ -805,7 +805,7 @@ protected:
     * @param validLocale the valid locale
     * @internal
     */
-    virtual void setLocales(const Locale& requestedLocale, const Locale& validLocale);
+    virtual void setLocales(const Locale& requestedLocale, const Locale& validLocale, const Locale& actualLocale);
 
 private:
 

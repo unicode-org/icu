@@ -45,18 +45,6 @@
 
 U_NAMESPACE_USE
 
-U_CDECL_BEGIN
-static void U_CALLCONV
-ucol_prv_closeResources(UCollator *coll) {
-    if(coll->rb != NULL) { /* pointing to read-only memory */
-        ures_close(coll->rb);
-    }
-    if(coll->elements != NULL) {
-        ures_close(coll->elements);
-    }
-}
-U_CDECL_END
-
 /****************************************************************************/
 /* Following are the open/close functions                                   */
 /*                                                                          */
@@ -76,6 +64,7 @@ U_CFUNC UCollator*
 ucol_open_internal(const char *loc,
                    UErrorCode *status)
 {
+    UErrorCode intStatus = U_ZERO_ERROR;
     const UCollator* UCA = ucol_initUCA(status);
 
     /* New version */
@@ -93,7 +82,7 @@ ucol_open_internal(const char *loc,
     // if there is a keyword, we pick it up and try to get elements
     if(!uloc_getKeywordValue(loc, "collation", keyBuffer, 256, status)) {
         // no keyword. we try to find the default setting, which will give us the keyword value
-        UErrorCode intStatus = U_ZERO_ERROR;
+        intStatus = U_ZERO_ERROR;
         // finding default value does not affect collation fallback status
         UResourceBundle *defaultColl = ures_getByKeyWithFallback(collations, "default", NULL, &intStatus);
         if(U_SUCCESS(intStatus)) {
@@ -107,7 +96,8 @@ ucol_open_internal(const char *loc,
         }
         ures_close(defaultColl);
     }
-    collElem = ures_getByKeyWithFallback(collations, keyBuffer, collElem, status);
+    collElem = ures_getByKeyWithFallback(collations, keyBuffer, collations, status);
+    collations = NULL; // We just reused the collations object as collElem.
 
     UResourceBundle *binary = NULL;
 
@@ -115,26 +105,27 @@ ucol_open_internal(const char *loc,
         *status = U_USING_DEFAULT_WARNING;
         result = ucol_initCollator(UCA->image, result, UCA, status);
         // if we use UCA, real locale is root
-        result->rb = ures_open(U_ICUDATA_COLL, "", status);
-        result->elements = ures_open(U_ICUDATA_COLL, "", status);
+        ures_close(b);
+        b = ures_open(U_ICUDATA_COLL, "", status);
+        ures_close(collElem);
+        collElem = ures_open(U_ICUDATA_COLL, "", status);
         if(U_FAILURE(*status)) {
             goto clean;
         }
-        ures_close(b);
         result->hasRealData = FALSE;
     } else if(U_SUCCESS(*status)) {
-        int32_t len = 0;
-        UErrorCode binaryStatus = U_ZERO_ERROR;
+        intStatus = U_ZERO_ERROR;
 
-        binary = ures_getByKey(collElem, "%%CollationBin", NULL, &binaryStatus);
+        binary = ures_getByKey(collElem, "%%CollationBin", NULL, &intStatus);
 
-        if(binaryStatus == U_MISSING_RESOURCE_ERROR) { /* we didn't find the binary image, we should use the rules */
+        if(intStatus == U_MISSING_RESOURCE_ERROR) { /* we didn't find the binary image, we should use the rules */
             binary = NULL;
             result = tryOpeningFromRules(collElem, status);
             if(U_FAILURE(*status)) {
                 goto clean;
             }
         } else if(U_SUCCESS(*status)) { /* otherwise, we'll pick a collation data that exists */
+            int32_t len = 0;
             const uint8_t *inData = ures_getBinary(binary, &len, status);
             UCATableHeader *colData = (UCATableHeader *)inData;
             if(uprv_memcmp(colData->UCAVersion, UCA->image->UCAVersion, sizeof(UVersionInfo)) != 0 ||
@@ -164,39 +155,48 @@ ucol_open_internal(const char *loc,
                 result->freeImageOnClose = FALSE;
             }
         }
-        result->rb = b;
-        result->elements = collElem;
-        len = 0;
-        binaryStatus = U_ZERO_ERROR;
-        result->rules = ures_getStringByKey(result->elements, "Sequence", &len, &binaryStatus);
-        result->rulesLength = len;
+        intStatus = U_ZERO_ERROR;
+        result->rules = ures_getStringByKey(collElem, "Sequence", &result->rulesLength, &intStatus);
         result->freeRulesOnClose = FALSE;
     } else { /* There is another error, and we're just gonna clean up */
         goto clean;
     }
 
-    result->validLocale = NULL; // default is to use rb info
+    intStatus = U_ZERO_ERROR;
+    result->ucaRules = ures_getStringByKey(b,"UCARules",NULL,&intStatus);
 
     if(loc == NULL) {
-        loc = ures_getLocale(result->rb, status);
+        loc = ures_getLocale(b, status);
     }
-    result->requestedLocale = (char *)uprv_malloc((uprv_strlen(loc)+1)*sizeof(char));
+    result->requestedLocale = uprv_strdup(loc);
     /* test for NULL */
     if (result->requestedLocale == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         goto clean;
     }
-    uprv_strcpy(result->requestedLocale, loc);
+    loc = ures_getLocale(collElem, status);
+    result->actualLocale = uprv_strdup(loc);
+    /* test for NULL */
+    if (result->actualLocale == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        goto clean;
+    }
+    loc = ures_getLocale(b, status);
+    result->validLocale = uprv_strdup(loc);
+    /* test for NULL */
+    if (result->validLocale == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        goto clean;
+    }
 
+    ures_close(b);
+    ures_close(collElem);
     ures_close(binary);
-    ures_close(collations); //??? we have to decide on that. Probably affects something :)
-    result->resCleaner = ucol_prv_closeResources;
     return result;
 
 clean:
     ures_close(b);
     ures_close(collElem);
-    ures_close(collations);
     ures_close(binary);
     return NULL;
 }
@@ -344,8 +344,8 @@ ucol_openRules( const UChar        *rules,
             result->rulesLength = rulesLength;
             result->freeRulesOnClose = TRUE;
         }
-        result->rb = NULL;
-        result->elements = NULL;
+        result->ucaRules = NULL;
+        result->actualLocale = NULL;
         result->validLocale = NULL;
         result->requestedLocale = NULL;
         ucol_setAttribute(result, UCOL_STRENGTH, strength, status);
@@ -377,8 +377,12 @@ ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int3
     if(delta == UCOL_FULL_RULES) {
         /* take the UCA rules and append real rules at the end */
         /* UCA rules will be probably coming from the root RB */
-        ucaRules = ures_getStringByKey(coll->rb,"UCARules",&UCAlen,&status);
+        ucaRules = coll->ucaRules;
+        if (ucaRules) {
+            UCAlen = u_strlen(ucaRules);
+        }
         /*
+        ucaRules = ures_getStringByKey(coll->rb,"UCARules",&UCAlen,&status);
         UResourceBundle* cresb = ures_getByKeyWithFallback(coll->rb, "collations", NULL, &status);
         UResourceBundle*  uca = ures_getByKeyWithFallback(cresb, "UCA", NULL, &status);
         ucaRules = ures_getStringByKey(uca,"Sequence",&UCAlen,&status);
@@ -643,28 +647,17 @@ ucol_getLocaleByType(const UCollator *coll, ULocDataLocaleType type, UErrorCode 
     UTRACE_DATA1(UTRACE_INFO, "coll=%p", coll);
 
     switch(type) {
-  case ULOC_ACTUAL_LOCALE:
-      // validLocale is set only if service registration has explicitly set the
-      // requested and valid locales.  if this is the case, the actual locale
-      // is considered to be the valid locale.
-      if (coll->validLocale != NULL) {
-          result = coll->validLocale;
-      } else if(coll->elements != NULL) {
-          result = ures_getLocale(coll->elements, status);
-      }
-      break;
-  case ULOC_VALID_LOCALE:
-      if (coll->validLocale != NULL) {
-          result = coll->validLocale;
-      } else if(coll->rb != NULL) {
-          result = ures_getLocale(coll->rb, status);
-      }
-      break;
-  case ULOC_REQUESTED_LOCALE:
-      result = coll->requestedLocale;
-      break;
-  default:
-      *status = U_ILLEGAL_ARGUMENT_ERROR;
+    case ULOC_ACTUAL_LOCALE:
+        result = coll->actualLocale;
+        break;
+    case ULOC_VALID_LOCALE:
+        result = coll->validLocale;
+        break;
+    case ULOC_REQUESTED_LOCALE:
+        result = coll->requestedLocale;
+        break;
+    default:
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
     }
     UTRACE_DATA1(UTRACE_INFO, "result = %s", result);
     UTRACE_EXIT_STATUS(*status);
@@ -672,7 +665,7 @@ ucol_getLocaleByType(const UCollator *coll, ULocDataLocaleType type, UErrorCode 
 }
 
 U_CFUNC void U_EXPORT2
-ucol_setReqValidLocales(UCollator *coll, char *requestedLocaleToAdopt, char *validLocaleToAdopt)
+ucol_setReqValidLocales(UCollator *coll, char *requestedLocaleToAdopt, char *validLocaleToAdopt, char *actualLocaleToAdopt)
 {
     if (coll) {
         if (coll->validLocale) {
@@ -683,6 +676,10 @@ ucol_setReqValidLocales(UCollator *coll, char *requestedLocaleToAdopt, char *val
             uprv_free(coll->requestedLocale);
         }
         coll->requestedLocale = requestedLocaleToAdopt;
+        if (coll->actualLocale) {
+            uprv_free(coll->actualLocale);
+        }
+        coll->actualLocale = actualLocaleToAdopt;
     }
 }
 
