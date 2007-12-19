@@ -1,0 +1,304 @@
+* text=auto !eol
+
+*.c text !eol
+*.cc text !eol
+*.classpath text !eol
+*.cpp text !eol
+*.css text !eol
+*.dsp text !eol
+*.dsw text !eol
+*.filters text !eol
+*.h text !eol
+*.htm text !eol
+*.html text !eol
+*.in text !eol
+*.java text !eol
+*.launch text !eol
+*.mak text !eol
+*.md text !eol
+*.MF text !eol
+*.mk text !eol
+*.pl text !eol
+*.pm text !eol
+*.project text !eol
+*.properties text !eol
+*.py text !eol
+*.rc text !eol
+*.sh text eol=lf
+*.sln text !eol
+*.stub text !eol
+*.txt text !eol
+*.ucm text !eol
+*.vcproj text !eol
+*.vcxproj text !eol
+*.xml text !eol
+*.xsl text !eol
+*.xslt text !eol
+Makefile text !eol
+configure text !eol
+LICENSE text !eol
+README text !eol
+
+*.bin -text
+*.brk -text
+*.cnv -text
+*.icu -text
+*.res -text
+*.nrm -text
+*.spp -text
+*.tri2 -text
+
+/.classpath -text
+/.project -text
+/eclipseFragment.txt -text
+eclipseProjectMisc/initSrc.launch -text
+eclipseProjectMisc/normSrc.launch -text
+/ee.foundation.jar -text
+/preprocessor.txt -text
+src/com/ibm/icu/dev/data/rbbi/english.dict -text
+src/com/ibm/icu/dev/data/testdata.jar -text
+src/com/ibm/icu/dev/data/thai6.ucs -text
+src/com/ibm/icu/dev/eclipse/features/com.ibm.icu.base/.project -text
+src/com/ibm/icu/dev/eclipse/features/com.ibm.icu.base/build.properties -text
+src/com/ibm/icu/dev/eclipse/features/com.ibm.icu.base/feature.xml -text
+src/com/ibm/icu/dev/eclipse/features/com.ibm.icu.base/sourceTemplatePlugin/build.properties -text
+src/com/ibm/icu/dev/eclipse/features/com.ibm.icu.base/sourceTemplatePlugin/plugin.properties -text
+src/com/ibm/icu/dev/eclipse/features/com.ibm.icu.jse4/.project -text
+src/com/ibm/icu/dev/eclipse/features/com.ibm.icu.jse4/build.properties -text
+src/com/ibm/icu/dev/eclipse/features/com.ibm.icu.jse4/feature.xml -text
+src/com/ibm/icu/dev/eclipse/features/com.ibm.icu.jse4/sourceTemplatePlugin/build.properties -text
+src/com/ibm/icu/dev/eclipse/features/com.ibm.icu.jse4/sourceTemplatePlugin/plugin.properties -text
+src/com/ibm/icu/dev/eclipse/features/com.ibm.icu/.project -text
+src/com/ibm/icu/dev/eclipse/features/com.ibm.icu/build.properties -text
+src/com/ibm/icu/dev/eclipse/features/com.ibm.icu/feature.xml -text
+src/com/ibm/icu/dev/eclipse/features/com.ibm.icu/sourceTemplatePlugin/build.properties -text
+src/com/ibm/icu/dev/eclipse/features/com.ibm.icu/sourceTemplatePlugin/plugin.properties -text
+src/com/ibm/icu/dev/eclipse/pdebuild/allElements.xml -text
+src/com/ibm/icu/dev/eclipse/pdebuild/build.properties -text
+src/com/ibm/icu/dev/eclipse/pdebuild/customTargets.xml -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/.classpath -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/.project -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/.settings/org.eclipse.jdt.core.prefs -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/.settings/org.eclipse.jdt.ui.prefs -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/META-INF/MANIFEST.MF -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/build.properties -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/src/com/ibm/icu/tests/BreakIteratorTest.java -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/src/com/ibm/icu/tests/CalendarTest.java -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/src/com/ibm/icu/tests/CollationKeyTest.java -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/src/com/ibm/icu/tests/CollatorTest.java -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/src/com/ibm/icu/tests/DateFormatSymbolsTest.java -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/src/com/ibm/icu/tests/DateFormatTest.java -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/src/com/ibm/icu/tests/DecimalFormatSymbolsTest.java -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/src/com/ibm/icu/tests/DecimalFormatTest.java -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/src/com/ibm/icu/tests/ICUTestCase.java -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/src/com/ibm/icu/tests/MessageFormatTest.java -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/src/com/ibm/icu/tests/NumberFormatTest.java -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/src/com/ibm/icu/tests/SimpleDateFormatTest.java -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/src/com/ibm/icu/tests/TimeZoneTest.java -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/src/com/ibm/icu/tests/ULocaleTest.java -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/.classpath -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/.project -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/.settings/org.eclipse.jdt.core.prefs -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/.settings/org.eclipse.jdt.ui.prefs -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/META-INF/MANIFEST.MF -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/build.properties -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/plugin.properties -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/text/BreakIterator.java -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/text/CollationKey.java -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/text/Collator.java -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/text/DateFormat.java -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/text/DateFormatSymbols.java -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/text/DecimalFormat.java -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/text/DecimalFormatSymbols.java -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/text/MessageFormat.java -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/text/NumberFormat.java -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/text/SimpleDateFormat.java -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/util/Calendar.java -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/util/TimeZone.java -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/util/ULocale.java -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.jse4/.classpath -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.jse4/.project -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.jse4/.settings/org.eclipse.jdt.core.prefs -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.jse4/.settings/org.eclipse.jdt.ui.prefs -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.jse4/META-INF/MANIFEST.MF -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.jse4/build.properties -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.jse4/fragment-icu-jse4.properties -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.jse4/plugin.properties -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.tests/.classpath -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.tests/.project -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.tests/.settings/org.eclipse.jdt.core.prefs -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.tests/.settings/org.eclipse.jdt.ui.prefs -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.tests/META-INF/MANIFEST.MF -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.tests/build.properties -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.tests/src/com/ibm/icu/tests/UnitTest.java -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu/.classpath -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu/.project -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu/.settings/org.eclipse.jdt.core.prefs -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu/.settings/org.eclipse.jdt.ui.prefs -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu/META-INF/MANIFEST.MF -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu/build.properties -text
+src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu/plugin.properties -text
+src/com/ibm/icu/dev/test/calendar/DataDrivenCalendarTest.java -text
+src/com/ibm/icu/dev/test/calendar/IndianTest.java -text
+src/com/ibm/icu/dev/test/duration/DataReadWriteTest.java -text
+src/com/ibm/icu/dev/test/duration/LanguageTestRoot.java -text
+src/com/ibm/icu/dev/test/duration/PeriodBuilderFactoryTest.java -text
+src/com/ibm/icu/dev/test/duration/PeriodBuilderTest.java -text
+src/com/ibm/icu/dev/test/duration/PeriodTest.java -text
+src/com/ibm/icu/dev/test/duration/ResourceBasedPeriodFormatterDataServiceTest.java -text
+src/com/ibm/icu/dev/test/duration/TestAll.java -text
+src/com/ibm/icu/dev/test/duration/languages/TestAll.java -text
+src/com/ibm/icu/dev/test/duration/languages/Test_ar_EG.java -text
+src/com/ibm/icu/dev/test/duration/languages/Test_en.java -text
+src/com/ibm/icu/dev/test/duration/languages/Test_es.java -text
+src/com/ibm/icu/dev/test/duration/languages/Test_fr.java -text
+src/com/ibm/icu/dev/test/duration/languages/Test_he_IL.java -text
+src/com/ibm/icu/dev/test/duration/languages/Test_hi.java -text
+src/com/ibm/icu/dev/test/duration/languages/Test_it.java -text
+src/com/ibm/icu/dev/test/duration/languages/Test_ja.java -text
+src/com/ibm/icu/dev/test/duration/languages/Test_ko.java -text
+src/com/ibm/icu/dev/test/duration/languages/Test_ru.java -text
+src/com/ibm/icu/dev/test/duration/languages/Test_zh_Hans.java -text
+src/com/ibm/icu/dev/test/duration/languages/Test_zh_Hans_SG.java -text
+src/com/ibm/icu/dev/test/duration/languages/Test_zh_Hant.java -text
+src/com/ibm/icu/dev/test/duration/languages/Test_zh_Hant_HK.java -text
+src/com/ibm/icu/dev/test/duration/testdata/testdata_ar_EG.txt -text
+src/com/ibm/icu/dev/test/duration/testdata/testdata_en.txt -text
+src/com/ibm/icu/dev/test/duration/testdata/testdata_es.txt -text
+src/com/ibm/icu/dev/test/duration/testdata/testdata_fr.txt -text
+src/com/ibm/icu/dev/test/duration/testdata/testdata_he_IL.txt -text
+src/com/ibm/icu/dev/test/duration/testdata/testdata_hi.txt -text
+src/com/ibm/icu/dev/test/duration/testdata/testdata_it.txt -text
+src/com/ibm/icu/dev/test/duration/testdata/testdata_ja.txt -text
+src/com/ibm/icu/dev/test/duration/testdata/testdata_ko.txt -text
+src/com/ibm/icu/dev/test/duration/testdata/testdata_ru.txt -text
+src/com/ibm/icu/dev/test/duration/testdata/testdata_th.txt -text
+src/com/ibm/icu/dev/test/duration/testdata/testdata_zh_Hans.txt -text
+src/com/ibm/icu/dev/test/duration/testdata/testdata_zh_Hans_SG.txt -text
+src/com/ibm/icu/dev/test/duration/testdata/testdata_zh_Hant.txt -text
+src/com/ibm/icu/dev/test/duration/testdata/testdata_zh_Hant_HK.txt -text
+src/com/ibm/icu/dev/test/format/DataDrivenFormatTest.java -text
+src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Asian.txt -text
+src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Chinese.txt -text
+src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Japanese.txt -text
+src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Japanese_h.txt -text
+src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Japanese_k.txt -text
+src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Korean.txt -text
+src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Latin.txt -text
+src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Russian.txt -text
+src/com/ibm/icu/dev/test/perf/data/collation/TestNames_SerbianSH.txt -text
+src/com/ibm/icu/dev/test/perf/data/collation/TestNames_SerbianSR.txt -text
+src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Simplified_Chinese.txt -text
+src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Thai.txt -text
+src/com/ibm/icu/dev/test/rbbi/rbbitst.txt -text
+src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.impl.OlsonTimeZone.dat -text
+src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.impl.TimeZoneAdapter.dat -text
+src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.math.BigDecimal.dat -text
+src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.math.MathContext.dat -text
+src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.ArabicShapingException.dat -text
+src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.ChineseDateFormat.dat -text
+src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.ChineseDateFormatSymbols.dat -text
+src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.DateFormat.dat -text
+src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.DateFormatSymbols.dat -text
+src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.DecimalFormat.dat -text
+src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.DecimalFormatSymbols.dat -text
+src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.MessageFormat.dat -text
+src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.NumberFormat.dat -text
+src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.RuleBasedNumberFormat.dat -text
+src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.SimpleDateFormat.dat -text
+src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.text.StringPrepParseException.dat -text
+src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.BuddhistCalendar.dat -text
+src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.Calendar.dat -text
+src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.ChineseCalendar.dat -text
+src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.CopticCalendar.dat -text
+src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.Currency.dat -text
+src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.EthiopicCalendar.dat -text
+src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.GregorianCalendar.dat -text
+src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.HebrewCalendar.dat -text
+src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.IslamicCalendar.dat -text
+src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.JapaneseCalendar.dat -text
+src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.SimpleTimeZone.dat -text
+src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.TimeZone.dat -text
+src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.ULocale.dat -text
+src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.util.UResourceTypeMismatchException.dat -text
+src/com/ibm/icu/dev/test/util/CalendarFieldsSet.java -text
+src/com/ibm/icu/dev/test/util/DateTimeStyleSet.java -text
+src/com/ibm/icu/dev/test/util/DebugUtilities.java -text
+src/com/ibm/icu/dev/test/util/DebugUtilitiesData.java -text
+src/com/ibm/icu/dev/test/util/DebugUtilitiesTest.java -text
+src/com/ibm/icu/dev/test/util/FieldsSet.java -text
+src/com/ibm/icu/dev/tool/docs/icu4j28.api.gz -text
+src/com/ibm/icu/dev/tool/docs/icu4j30.api.gz -text
+src/com/ibm/icu/dev/tool/docs/icu4j32.api.gz -text
+src/com/ibm/icu/dev/tool/docs/icu4j34.api.gz -text
+src/com/ibm/icu/dev/tool/docs/icu4j341.api.gz -text
+src/com/ibm/icu/dev/tool/docs/icu4j342.api.gz -text
+src/com/ibm/icu/dev/tool/docs/icu4j343.api.gz -text
+src/com/ibm/icu/dev/tool/docs/icu4j36.api.gz -text
+src/com/ibm/icu/dev/tool/docs/icu4j38.api.gz -text
+src/com/ibm/icu/dev/tool/docs/icu4j381.api.gz -text
+src/com/ibm/icu/dev/tool/tzu/icu.gif -text
+src/com/ibm/icu/dev/tool/tzu/runicutzu.bat -text
+src/com/ibm/icu/dev/tool/tzu/runicutzu.cmd -text
+src/com/ibm/icu/dev/tool/tzu/runicutzu.sh -text
+src/com/ibm/icu/dev/tool/tzu/runicutzuenv.bat -text
+src/com/ibm/icu/dev/tool/tzu/runicutzuenv.cmd -text
+src/com/ibm/icu/dev/tool/tzu/runicutzuenv.sh -text
+src/com/ibm/icu/impl/data/icudata.jar -text
+src/com/ibm/icu/impl/data/th.brk -text
+src/com/ibm/icu/impl/duration/BasicDurationFormatter.java -text
+src/com/ibm/icu/impl/duration/BasicDurationFormatterFactory.java -text
+src/com/ibm/icu/impl/duration/BasicPeriodBuilderFactory.java -text
+src/com/ibm/icu/impl/duration/BasicPeriodFormatter.java -text
+src/com/ibm/icu/impl/duration/BasicPeriodFormatterFactory.java -text
+src/com/ibm/icu/impl/duration/BasicPeriodFormatterService.java -text
+src/com/ibm/icu/impl/duration/DateFormatter.java -text
+src/com/ibm/icu/impl/duration/DurationFormatter.java -text
+src/com/ibm/icu/impl/duration/DurationFormatterFactory.java -text
+src/com/ibm/icu/impl/duration/Period.java -text
+src/com/ibm/icu/impl/duration/PeriodBuilder.java -text
+src/com/ibm/icu/impl/duration/PeriodBuilderFactory.java -text
+src/com/ibm/icu/impl/duration/PeriodFormatter.java -text
+src/com/ibm/icu/impl/duration/PeriodFormatterFactory.java -text
+src/com/ibm/icu/impl/duration/PeriodFormatterService.java -text
+src/com/ibm/icu/impl/duration/TimeUnit.java -text
+src/com/ibm/icu/impl/duration/TimeUnitConstants.java -text
+src/com/ibm/icu/impl/duration/impl/DataRecord.java -text
+src/com/ibm/icu/impl/duration/impl/PeriodFormatterData.java -text
+src/com/ibm/icu/impl/duration/impl/PeriodFormatterDataService.java -text
+src/com/ibm/icu/impl/duration/impl/RecordReader.java -text
+src/com/ibm/icu/impl/duration/impl/RecordWriter.java -text
+src/com/ibm/icu/impl/duration/impl/ResourceBasedPeriodFormatterDataService.java -text
+src/com/ibm/icu/impl/duration/impl/Utils.java -text
+src/com/ibm/icu/impl/duration/impl/XMLRecordReader.java -text
+src/com/ibm/icu/impl/duration/impl/XMLRecordWriter.java -text
+src/com/ibm/icu/impl/duration/impl/YMDDateFormatter.java -text
+src/com/ibm/icu/impl/duration/impl/data/index.txt -text
+src/com/ibm/icu/impl/duration/impl/data/pfd_ar_EG.xml -text
+src/com/ibm/icu/impl/duration/impl/data/pfd_ar_EG.xml.escaped -text
+src/com/ibm/icu/impl/duration/impl/data/pfd_en.xml -text
+src/com/ibm/icu/impl/duration/impl/data/pfd_es.xml -text
+src/com/ibm/icu/impl/duration/impl/data/pfd_fr.xml -text
+src/com/ibm/icu/impl/duration/impl/data/pfd_he_IL.xml -text
+src/com/ibm/icu/impl/duration/impl/data/pfd_hi.xml -text
+src/com/ibm/icu/impl/duration/impl/data/pfd_it.xml -text
+src/com/ibm/icu/impl/duration/impl/data/pfd_ja.xml -text
+src/com/ibm/icu/impl/duration/impl/data/pfd_ko.xml -text
+src/com/ibm/icu/impl/duration/impl/data/pfd_ru.xml -text
+src/com/ibm/icu/impl/duration/impl/data/pfd_th.xml -text
+src/com/ibm/icu/impl/duration/impl/data/pfd_zh_Hans.xml -text
+src/com/ibm/icu/impl/duration/impl/data/pfd_zh_Hans_SG.xml -text
+src/com/ibm/icu/impl/duration/impl/data/pfd_zh_Hant.xml -text
+src/com/ibm/icu/impl/duration/impl/data/pfd_zh_Hant_HK.xml -text
+src/com/ibm/icu/text/DurationFormat.java -text
+src/com/ibm/richtext/textapps/resources/unicode.arabic.red -text
+src/com/ibm/richtext/textapps/resources/unicode.hebrew.red -text
+
+# The following file types are stored in Git-LFS.
+*.jar filter=lfs diff=lfs merge=lfs -text
+*.dat filter=lfs diff=lfs merge=lfs -text
+*.zip filter=lfs diff=lfs merge=lfs -text
+*.gz filter=lfs diff=lfs merge=lfs -text
+*.bz2 filter=lfs diff=lfs merge=lfs -text
+*.gif filter=lfs diff=lfs merge=lfs -text
+

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+******************************************************************************
+* Copyright (C) 2007, International Business Machines Corporation and        *
+* others. All Rights Reserved.                                               *
+******************************************************************************
+-->
+<DataRecord>
+    <pl>PLURAL</pl>
+    <pluralNameTable>
+        <pluralNameList>
+            <pluralName>years</pluralName>
+            <pluralName>year</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>months</pluralName>
+            <pluralName>month</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>weeks</pluralName>
+            <pluralName>week</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>days</pluralName>
+            <pluralName>day</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>hours</pluralName>
+            <pluralName>hour</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>minutes</pluralName>
+            <pluralName>minute</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>seconds</pluralName>
+            <pluralName>second</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>milliseconds</pluralName>
+            <pluralName>millisecond</pluralName>
+        </pluralNameList>
+    </pluralNameTable>
+    <mediumNameList>
+        <mediumName>yr</mediumName>
+        <mediumName>mnth</mediumName>
+        <mediumName>wk</mediumName>
+        <mediumName>dy</mediumName>
+        <mediumName>hr</mediumName>
+        <mediumName>min</mediumName>
+        <mediumName>sec</mediumName>
+        <mediumName>ms</mediumName>
+    </mediumNameList>
+    <shortNameList>
+        <shortName>y</shortName>
+        <shortName>m</shortName>
+        <shortName>w</shortName>
+        <shortName>d</shortName>
+        <shortName>h</shortName>
+        <shortName>m</shortName>
+        <shortName>s</shortName>
+        <shortName>x</shortName>
+    </shortNameList>
+    <halvesList>
+        <halves>½</halves>
+        <halves>½</halves>
+    </halvesList>
+    <requiresDigitSeparator>false</requiresDigitSeparator>
+    <countSep> </countSep>
+    <shortUnitSep> </shortUnitSep>
+    <unitSepList>
+        <unitSep>, </unitSep>
+        <unitSep>, and </unitSep>
+        <unitSep>, </unitSep>
+        <unitSep> and </unitSep>
+    </unitSepList>
+    <numberSystem>DEFAULT</numberSystem>
+    <zero>0</zero>
+    <decimalSep>.</decimalSep>
+    <omitSingularCount>false</omitSingularCount>
+    <omitDualCount>false</omitDualCount>
+    <decimalHandling>DPLURAL</decimalHandling>
+    <fractionHandling>FSINGULAR_PLURAL</fractionHandling>
+    <allowZero>true</allowZero>
+    <weeksAloneOnly>false</weeksAloneOnly>
+    <useMilliseconds>YES</useMilliseconds>
+    <ScopeDataList>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix> ago</suffix>
+        </ScopeData>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix> from now</suffix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>less than </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>less than </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix> ago</suffix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>less than </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix> from now</suffix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>more than </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>more than </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix> ago</suffix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>more than </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix> from now</suffix>
+        </ScopeData>
+    </ScopeDataList>
+</DataRecord>
