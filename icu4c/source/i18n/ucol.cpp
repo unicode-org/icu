@@ -2805,9 +2805,24 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
             // Source string char was not in contraction table.
             //   Unless we have a discontiguous contraction, we have finished
             //   with this contraction.
+        	// in order to do the proper detection, we
+        	// need to see if we're dealing with a supplementary
+        	/* We test whether the next two char are surrogate pairs. 
+        	 * This test is done if the iterator is not NULL.
+        	 * If there is no surrogate pair, the iterator 
+        	 * goes back one if needed. */
             UChar32 miss = schar;
-            if(U16_IS_LEAD(schar)) { // in order to do the proper detection, we
-              // need to see if we're dealing with a supplementary
+            if (source->iterator) {
+	          UChar32 surrNextChar; /* the next char in the iteration to test */
+	          int32_t prevIndex = source->iterator->index; /* store the previous index to test if we need to move back the iterator. */
+	          if(U16_IS_LEAD(schar) && prevIndex < source->iterator->limit) {
+	            if (U16_IS_TRAIL(surrNextChar = getNextNormalizedChar(source))) { 
+	              miss = U16_GET_SUPPLEMENTARY(schar, surrNextChar);
+	            } else if (prevIndex < source->iterator->index){
+	        	  goBackOne(source);
+	            }
+	          }
+            } else if (U16_IS_LEAD(schar)) {
               miss = U16_GET_SUPPLEMENTARY(schar, getNextNormalizedChar(source));
             }
 
