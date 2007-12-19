@@ -131,7 +131,7 @@ static const char DT_DateTimeGregorianTag[]="gregorian";
 static const char DT_DateTimeAppendItemsTag[]="appendItems";
 static const char DT_DateTimeFieldsTag[]="fields";
 static const char DT_DateTimeAvailableFormatsTag[]="availableFormats";
-static const UnicodeString repeatedPattern=UnicodeString(repeatedPatterns);
+//static const UnicodeString repeatedPattern=UnicodeString(repeatedPatterns);
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DateTimePatternGenerator)
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DTSkeletonEnumeration)
