@@ -28,8 +28,9 @@
 
 U_NAMESPACE_BEGIN
 
+// TODO: Plural rule data - will move to ResourceBundle.
 #define NUMBER_PLURAL_RULES 13
-static const UChar uCharPluralRules[NUMBER_PLURAL_RULES][150] = {
+static const UChar uCharPluralRules[NUMBER_PLURAL_RULES][128] = {
  // other: n/ja,ko,tr,v
  {LOW_O,LOW_T,LOW_H,LOW_E,LOW_R,COLON,SPACE,LOW_N,SLASH,LOW_J,LOW_A,COMMA,LOW_K,LOW_O,COMMA,LOW_T,
   LOW_R,COMMA,LOW_V,LOW_I, 0},
@@ -96,22 +97,22 @@ static const UChar uCharPluralRules[NUMBER_PLURAL_RULES][150] = {
 };
 
 static Hashtable *fPluralRuleLocaleHash=NULL;
-static const UChar PLURAL_UCHAR_ZERO[] = {LOW_Z,LOW_E,LOW_R,LOW_O, 0};
-static const UChar PLURAL_UCHAR_ONE[]={LOW_O,LOW_N,LOW_E,0};
-static const UChar PLURAL_UCHAR_TWO[]={LOW_T,LOW_W,LOW_O,0};
-static const UChar PLURAL_UCHAR_FEW[]={LOW_F,LOW_E,LOW_W,0};
-static const UChar PLURAL_UCHAR_MANY[]={LOW_M,LOW_A,LOW_N,LOW_Y,0};
-static const UChar PLURAL_UCHAR_OTHER[]={LOW_O,LOW_T,LOW_H,LOW_E,LOW_R,0};
-static const UChar PLURAL_UCHAR_DEFAULT[]={LOW_O,LOW_T,LOW_H,LOW_E,LOW_R,COLON,SPACE,LOW_N,0};
-static const UChar PLURAL_UCHAR_IN[]={LOW_I,LOW_N,0};
-static const UChar PLURAL_UCHAR_NOT[]={LOW_N,LOW_O,LOW_T,0};
-static const UChar PLURAL_UCHAR_IS[]={LOW_I,LOW_S,0};
-static const UChar PLURAL_UCHAR_MOD[]={LOW_M,LOW_O,LOW_D,0};
-static const UChar PLURAL_UCHAR_AND[]={LOW_A,LOW_N,LOW_D,0};
-static const UChar PLURAL_UCHAR_OR[]={LOW_O,LOW_R,0};
-static const UChar PLURAL_UCHAR_VAR_N[]={LOW_N,0};
+static const UChar PLURAL_ZERO[] = {LOW_Z,LOW_E,LOW_R,LOW_O, 0};
+static const UChar PLURAL_ONE[]={LOW_O,LOW_N,LOW_E,0};
+static const UChar PLURAL_TWO[]={LOW_T,LOW_W,LOW_O,0};
+static const UChar PLURAL_FEW[]={LOW_F,LOW_E,LOW_W,0};
+static const UChar PLURAL_MANY[]={LOW_M,LOW_A,LOW_N,LOW_Y,0};
+static const UChar PLURAL_KEYWORD_OTHER[]={LOW_O,LOW_T,LOW_H,LOW_E,LOW_R,0};
+static const UChar PLURAL_DEFAULT_RULE[]={LOW_O,LOW_T,LOW_H,LOW_E,LOW_R,COLON,SPACE,LOW_N,0};
+static const UChar PK_IN[]={LOW_I,LOW_N,0};
+static const UChar PK_NOT[]={LOW_N,LOW_O,LOW_T,0};
+static const UChar PK_IS[]={LOW_I,LOW_S,0};
+static const UChar PK_MOD[]={LOW_M,LOW_O,LOW_D,0};
+static const UChar PK_AND[]={LOW_A,LOW_N,LOW_D,0};
+static const UChar PK_OR[]={LOW_O,LOW_R,0};
+static const UChar PK_VAR_N[]={LOW_N,0};
 
-static const UnicodeString PLURAL_KEYWORD_ZERO = UnicodeString(PLURAL_UCHAR_ZERO);
+/*static const UnicodeString PLURAL_KEYWORD_ZERO = UnicodeString(PLURAL_UCHAR_ZERO);
 static const UnicodeString PLURAL_KEYWORD_ONE = UnicodeString(PLURAL_UCHAR_ONE);
 static const UnicodeString PLURAL_KEYWORD_TWO = UnicodeString(PLURAL_UCHAR_TWO);
 static const UnicodeString PLURAL_KEYWORD_FEW = UnicodeString(PLURAL_UCHAR_FEW);
@@ -125,7 +126,7 @@ static const UnicodeString   PK_IS=UnicodeString(PLURAL_UCHAR_IS);
 static const UnicodeString   PK_MOD=UnicodeString(PLURAL_UCHAR_MOD);
 static const UnicodeString   PK_AND=UnicodeString(PLURAL_UCHAR_AND);
 static const UnicodeString   PK_OR=UnicodeString(PLURAL_UCHAR_OR);
-static const UnicodeString   PK_VAR_N=UnicodeString(PLURAL_UCHAR_VAR_N);
+static const UnicodeString   PK_VAR_N=UnicodeString(PLURAL_UCHAR_VAR_N);*/
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(PluralRules);
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(PluralKeywordEnumeration)
