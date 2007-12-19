@@ -28,44 +28,104 @@
 
 U_NAMESPACE_BEGIN
 
-
-// Plural rule data - will move to ResourceBundle.
-static const UnicodeString PLURAL_RULE_DATA[] = {
-    UNICODE_STRING_SIMPLE("other: n/ja,ko,tr,vi"),
-    UNICODE_STRING_SIMPLE("one: n is 1/da,de,el,en,eo,es,et,fi,fo,he,hu,it,nb,nl,nn,no,pt,sv"),
-    UNICODE_STRING_SIMPLE("one: n in 0..1/fr,pt_BR"),
-    UNICODE_STRING_SIMPLE("zero: n is 0; one: n mod 10 is 1 and n mod 100 is not 11/lv"),
-    UNICODE_STRING_SIMPLE("one: n is 1; two: n is 2/ga"),
-    UNICODE_STRING_SIMPLE("zero: n is 0; one: n is 1; zero: n mod 100 in 1..19/ro"),
-    UNICODE_STRING_SIMPLE("other: n mod 100 in 11..19; one: n mod 10 is 1; few: n mod 10 in 2..9/lt"),
-    UNICODE_STRING_SIMPLE("one: n mod 10 is 1 and n mod 100 is not 11; few: n mod 10 in 2..4 ") +
-    UNICODE_STRING_SIMPLE("and n mod 100 not in 12..14/hr,ru,sr,uk"),
-    UNICODE_STRING_SIMPLE("one: n is 1; few: n in 2..4/cs,sk"),
-    UNICODE_STRING_SIMPLE("one: n is 1; few: n mod 10 in 2..4 and n mod 100 not in 12..14/pl"),
-    UNICODE_STRING_SIMPLE("one: n mod 100 is 1; two: n mod 100 is 2; few: n mod 100 in 3..4/sl"),
-    UNICODE_STRING_SIMPLE("zero: n is 0; one: n is 1; two: n is 2; few: n is 3..10; many: n in 11..99/ar"),
-    ""
+#define NUMBER_PLURAL_RULES 13
+static const UChar uCharPluralRules[NUMBER_PLURAL_RULES][150] = {
+ // other: n/ja,ko,tr,v
+ {LOW_O,LOW_T,LOW_H,LOW_E,LOW_R,COLON,SPACE,LOW_N,SLASH,LOW_J,LOW_A,COMMA,LOW_K,LOW_O,COMMA,LOW_T,
+  LOW_R,COMMA,LOW_V,LOW_I, 0},
+  // one: n is 1/da,de,el,en,eo,es,et,fi,fo,he,hu,it,nb,nl,nn,no,pt,sv
+ {LOW_O,LOW_N,LOW_E,COLON,SPACE,LOW_N,SPACE,LOW_I,LOW_S,SPACE,U_ONE,SLASH,LOW_D,LOW_A,COMMA,LOW_D,
+  LOW_E,COMMA,LOW_E,LOW_L,COMMA,LOW_E,LOW_N,COMMA,LOW_E,LOW_O,COMMA,LOW_E,LOW_S,COMMA,LOW_E,LOW_T,
+  COMMA,LOW_F,LOW_I,COMMA,LOW_F,LOW_O,COMMA,LOW_H,LOW_E,COMMA,LOW_H,LOW_U,COMMA,LOW_I,LOW_T,COMMA,
+  LOW_N,LOW_B,COMMA,LOW_N,LOW_L,COMMA,LOW_N,LOW_N,COMMA,LOW_N,LOW_O,COMMA,LOW_P,LOW_T,COMMA,LOW_S,
+  LOW_V, 0},
+  // one: n in 0..1/fr,pt_BR
+ {LOW_O,LOW_N,LOW_E,COLON,SPACE,LOW_N,SPACE,LOW_I,LOW_N,SPACE,U_ZERO,DOT,DOT,U_ONE,SLASH,LOW_F,
+  LOW_R,COMMA,LOW_P,LOW_T,LOWLINE,CAP_B,CAP_R, 0},
+  // zero: n is 0; one: n mod 10 is 1 and n mod 100 is not 11/lv
+ {LOW_Z,LOW_E,LOW_R,LOW_O,COLON,SPACE,LOW_N,SPACE,LOW_I,LOW_S,SPACE,U_ZERO,SEMI_COLON,SPACE,LOW_O,
+  LOW_N,LOW_E,COLON,SPACE,LOW_N,SPACE,LOW_M,LOW_O,LOW_D,SPACE,U_ONE,U_ZERO,SPACE,LOW_I,LOW_S,SPACE,
+  U_ONE,SPACE,LOW_A,LOW_N,LOW_D,SPACE,LOW_N,SPACE,LOW_M,LOW_O,LOW_D,SPACE,U_ONE,U_ZERO,U_ZERO,SPACE,
+  LOW_I,LOW_S,SPACE,LOW_N,LOW_O,LOW_T,SPACE,U_ONE,U_ONE,SLASH,LOW_L,LOW_V, 0},
+  // one: n is 1; two: n is 2/ga
+ {LOW_O,LOW_N,LOW_E,COLON,SPACE,LOW_N,SPACE,LOW_I,LOW_S,SPACE,U_ONE,SEMI_COLON,SPACE,LOW_T,LOW_W,
+  LOW_O,COLON,SPACE,LOW_N,SPACE,LOW_I,LOW_S,SPACE,U_TWO,SLASH,LOW_G,LOW_A, 0},
+  // zero: n is 0; one: n is 1; zero: n mod 100 in 1..19/ro
+ {LOW_Z,LOW_E,LOW_R,LOW_O,COLON,SPACE,LOW_N,SPACE,LOW_I,LOW_S,SPACE,U_ZERO,SEMI_COLON,SPACE,LOW_O,
+  LOW_N,LOW_E,COLON,SPACE,LOW_N,SPACE,LOW_I,LOW_S,SPACE,U_ONE,SEMI_COLON,SPACE,LOW_Z,LOW_E,LOW_R,
+  LOW_O,COLON,SPACE,LOW_N,SPACE,LOW_M,LOW_O,LOW_D,SPACE,U_ONE,U_ZERO,U_ZERO,SPACE,LOW_I,LOW_N,SPACE,
+  U_ONE,DOT,DOT,U_ONE,U_NINE,SLASH,LOW_R,LOW_O, 0},
+  // other: n mod 100 in 11..19; one: n mod 10 is 1; few: n mod 10 in 2..9/lt
+ {LOW_O,LOW_T,LOW_H,LOW_E,LOW_R,COLON,SPACE,LOW_N,SPACE,LOW_M,LOW_O,LOW_D,SPACE,U_ONE,U_ZERO,U_ZERO,
+  SPACE,LOW_I,LOW_N,SPACE,U_ONE,U_ONE,DOT,DOT,U_ONE,U_NINE,SEMI_COLON,SPACE,LOW_O,LOW_N,LOW_E,COLON,
+  SPACE,LOW_N,SPACE,LOW_M,LOW_O,LOW_D,SPACE,U_ONE,U_ZERO,SPACE,LOW_I,LOW_S,SPACE,U_ONE,SEMI_COLON,
+  SPACE,LOW_F,LOW_E,LOW_W,COLON,SPACE,LOW_N,SPACE,LOW_M,LOW_O,LOW_D,SPACE,U_ONE,U_ZERO,SPACE,LOW_I,
+  LOW_N,SPACE,U_TWO,DOT,DOT,U_NINE,SLASH,LOW_L,LOW_T, 0},
+ // one: n mod 10 is 1 and n mod 100 is not 11; few: n mod 10 in 2..4
+ // and n mod 100 not in 12..14/hr,ru,sr,uk
+ {LOW_O,LOW_N,LOW_E,COLON,SPACE,LOW_N,SPACE,LOW_M,LOW_O,LOW_D,SPACE,U_ONE,U_ZERO,SPACE,LOW_I,LOW_S,
+  SPACE,U_ONE,SPACE,LOW_A,LOW_N,LOW_D,SPACE,LOW_N,SPACE,LOW_M,LOW_O,LOW_D,SPACE,U_ONE,U_ZERO,U_ZERO,
+  SPACE,LOW_I,LOW_S,SPACE,LOW_N,LOW_O,LOW_T,SPACE,U_ONE,U_ONE,SEMI_COLON,SPACE,LOW_F,LOW_E,LOW_W,
+  COLON,SPACE,LOW_N,SPACE,LOW_M,LOW_O,LOW_D,SPACE,U_ONE,U_ZERO,SPACE,LOW_I,LOW_N,SPACE,U_TWO,DOT,
+  DOT,U_FOUR,SPACE,LOW_A,LOW_N,LOW_D,SPACE,LOW_N,SPACE,LOW_M,LOW_O,LOW_D,SPACE,U_ONE,
+  U_ZERO,U_ZERO,SPACE,LOW_N,LOW_O,LOW_T,SPACE,LOW_I,LOW_N,SPACE,U_ONE,U_TWO,DOT,DOT,U_ONE,U_FOUR,
+  SLASH,LOW_H,LOW_R,COMMA,LOW_R,LOW_U,COMMA,LOW_S,LOW_R,COMMA,LOW_U,LOW_K, 0},
+  // one: n is 1; few: n in 2..4/cs,sk
+ {LOW_O,LOW_N,LOW_E,COLON,SPACE,LOW_N,SPACE,LOW_I,LOW_S,SPACE,U_ONE,SEMI_COLON,SPACE,LOW_F,LOW_E,
+  LOW_W,COLON,SPACE,LOW_N,SPACE,LOW_I,LOW_N,SPACE,U_TWO,DOT,DOT,U_FOUR,SLASH,LOW_C,LOW_S,COMMA,
+  LOW_S,LOW_K, 0},
+  // one: n is 1; few: n mod 10 in 2..4 and n mod 100 not in 12..14/pl
+ {LOW_O,LOW_N,LOW_E,COLON,SPACE,LOW_N,SPACE,LOW_I,LOW_S,SPACE,U_ONE,SEMI_COLON,SPACE,LOW_F,LOW_E,
+  LOW_W,COLON,SPACE,LOW_N,SPACE,LOW_M,LOW_O,LOW_D,SPACE,U_ONE,U_ZERO,SPACE,LOW_I,LOW_N,SPACE,U_TWO,
+  DOT,DOT,U_FOUR,SPACE,LOW_A,LOW_N,LOW_D,SPACE,LOW_N,SPACE,LOW_M,LOW_O,LOW_D,SPACE,U_ONE,U_ZERO,
+  U_ZERO,SPACE,LOW_N,LOW_O,LOW_T,SPACE,LOW_I,LOW_N,SPACE,U_ONE,U_TWO,DOT,DOT,U_ONE,U_FOUR,SLASH,
+  LOW_P,LOW_L, 0},
+  // one: n mod 100 is 1; two: n mod 100 is 2; few: n mod 100 in 3..4/sl
+ {LOW_O,LOW_N,LOW_E,COLON,SPACE,LOW_N,SPACE,LOW_M,LOW_O,LOW_D,SPACE,U_ONE,U_ZERO,U_ZERO,SPACE,LOW_I,
+  LOW_S,SPACE,U_ONE,SEMI_COLON,SPACE,LOW_T,LOW_W,LOW_O,COLON,SPACE,LOW_N,SPACE,LOW_M,LOW_O,LOW_D,
+  SPACE,U_ONE,U_ZERO,U_ZERO,SPACE,LOW_I,LOW_S,SPACE,U_TWO,SEMI_COLON,SPACE,LOW_F,LOW_E,LOW_W,COLON,
+  SPACE,LOW_N,SPACE,LOW_M,LOW_O,LOW_D,SPACE,U_ONE,U_ZERO,U_ZERO,SPACE,LOW_I,LOW_N,SPACE,U_THREE,DOT,
+  DOT,U_FOUR,SLASH,LOW_S,LOW_L, 0},
+  // zero: n is 0; one: n is 1; two: n is 2; few: n is 3..10; many: n in 11..99/ar
+ {LOW_Z,LOW_E,LOW_R,LOW_O,COLON,SPACE,LOW_N,SPACE,LOW_I,LOW_S,SPACE,U_ZERO,SEMI_COLON,SPACE,LOW_O,
+  LOW_N,LOW_E,COLON,SPACE,LOW_N,SPACE,LOW_I,LOW_S,SPACE,U_ONE,SEMI_COLON,SPACE,LOW_T,LOW_W,LOW_O,
+  COLON,SPACE,LOW_N,SPACE,LOW_I,LOW_S,SPACE,U_TWO,SEMI_COLON,SPACE,LOW_F,LOW_E,LOW_W,COLON,SPACE,
+  LOW_N,SPACE,LOW_I,LOW_S,SPACE,U_THREE,DOT,DOT,U_ONE,U_ZERO,SEMI_COLON,SPACE,LOW_M,LOW_A,LOW_N,
+  LOW_Y,COLON,SPACE,LOW_N,SPACE,LOW_I,LOW_N,SPACE,U_ONE,U_ONE,DOT,DOT,U_NINE,U_NINE,SLASH,LOW_A,
+  LOW_R, 0},
 };
 
 static Hashtable *fPluralRuleLocaleHash=NULL;
+static const UChar PLURAL_UCHAR_ZERO[] = {LOW_Z,LOW_E,LOW_R,LOW_O, 0};
+static const UChar PLURAL_UCHAR_ONE[]={LOW_O,LOW_N,LOW_E,0};
+static const UChar PLURAL_UCHAR_TWO[]={LOW_T,LOW_W,LOW_O,0};
+static const UChar PLURAL_UCHAR_FEW[]={LOW_F,LOW_E,LOW_W,0};
+static const UChar PLURAL_UCHAR_MANY[]={LOW_M,LOW_A,LOW_N,LOW_Y,0};
+static const UChar PLURAL_UCHAR_OTHER[]={LOW_O,LOW_T,LOW_H,LOW_E,LOW_R,0};
+static const UChar PLURAL_UCHAR_DEFAULT[]={LOW_O,LOW_T,LOW_H,LOW_E,LOW_R,COLON,SPACE,LOW_N,0};
+static const UChar PLURAL_UCHAR_IN[]={LOW_I,LOW_N,0};
+static const UChar PLURAL_UCHAR_NOT[]={LOW_N,LOW_O,LOW_T,0};
+static const UChar PLURAL_UCHAR_IS[]={LOW_I,LOW_S,0};
+static const UChar PLURAL_UCHAR_MOD[]={LOW_M,LOW_O,LOW_D,0};
+static const UChar PLURAL_UCHAR_AND[]={LOW_A,LOW_N,LOW_D,0};
+static const UChar PLURAL_UCHAR_OR[]={LOW_O,LOW_R,0};
+static const UChar PLURAL_UCHAR_VAR_N[]={LOW_N,0};
 
-static const UnicodeString PLURAL_KEYWORD_ZERO = UNICODE_STRING_SIMPLE("zero");
-static const UnicodeString PLURAL_KEYWORD_ONE = UNICODE_STRING_SIMPLE("one");
-static const UnicodeString PLURAL_KEYWORD_TWO = UNICODE_STRING_SIMPLE("two");
-static const UnicodeString PLURAL_KEYWORD_FEW = UNICODE_STRING_SIMPLE("few");
-static const UnicodeString PLURAL_KEYWORD_MANY = UNICODE_STRING_SIMPLE("many");
-static const UnicodeString PLURAL_KEYWORD_OTHER = UNICODE_STRING_SIMPLE("other");
-static const UnicodeString PLURAL_DEFAULT_RULE = UNICODE_STRING_SIMPLE("other: n");
+static const UnicodeString PLURAL_KEYWORD_ZERO = UnicodeString(PLURAL_UCHAR_ZERO);
+static const UnicodeString PLURAL_KEYWORD_ONE = UnicodeString(PLURAL_UCHAR_ONE);
+static const UnicodeString PLURAL_KEYWORD_TWO = UnicodeString(PLURAL_UCHAR_TWO);
+static const UnicodeString PLURAL_KEYWORD_FEW = UnicodeString(PLURAL_UCHAR_FEW);
+static const UnicodeString PLURAL_KEYWORD_MANY = UnicodeString(PLURAL_UCHAR_MANY);
+static const UnicodeString PLURAL_KEYWORD_OTHER = UnicodeString(PLURAL_UCHAR_OTHER);
+static const UnicodeString PLURAL_DEFAULT_RULE = UnicodeString(PLURAL_UCHAR_DEFAULT);
 
-static const UnicodeString   PK_IN=UNICODE_STRING_SIMPLE("in");
-static const UnicodeString   PK_NOT=UNICODE_STRING_SIMPLE("not");
-static const UnicodeString   PK_IS=UNICODE_STRING_SIMPLE("is");
-static const UnicodeString   PK_MOD=UNICODE_STRING_SIMPLE("mod");
-static const UnicodeString   PK_AND=UNICODE_STRING_SIMPLE("and");
-static const UnicodeString   PK_OR=UNICODE_STRING_SIMPLE("or");
-static const UnicodeString   PK_VAR_N=UNICODE_STRING_SIMPLE("n");
-
-
+static const UnicodeString   PK_IN=UnicodeString(PLURAL_UCHAR_IN);
+static const UnicodeString   PK_NOT=UnicodeString(PLURAL_UCHAR_NOT);
+static const UnicodeString   PK_IS=UnicodeString(PLURAL_UCHAR_IS);
+static const UnicodeString   PK_MOD=UnicodeString(PLURAL_UCHAR_MOD);
+static const UnicodeString   PK_AND=UnicodeString(PLURAL_UCHAR_AND);
+static const UnicodeString   PK_OR=UnicodeString(PLURAL_UCHAR_OR);
+static const UnicodeString   PK_VAR_N=UnicodeString(PLURAL_UCHAR_VAR_N);
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(PluralRules);
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(PluralKeywordEnumeration)
@@ -251,26 +311,26 @@ PluralRules::getRuleData(UErrorCode& status) {
     UnicodeString ruleData;
     UnicodeString localeData;
     UnicodeString localeName;
-    int32_t i=0;
+    int32_t i;
     UChar cSlash = (UChar)0x002F;
     status=U_ZERO_ERROR;
-    
-    
-    while ( (PLURAL_RULE_DATA[i].length() > 0) && U_SUCCESS(status) ) {
+
+    i=0;
+    while ( i<NUMBER_PLURAL_RULES && U_SUCCESS(status) ) {
         RuleChain   rules;
-        int32_t slashIndex = PLURAL_RULE_DATA[i].indexOf(cSlash);
+        UnicodeString pluralRuleData = UnicodeString(uCharPluralRules[i]);
+        int32_t slashIndex = pluralRuleData.indexOf(cSlash);
         if ( slashIndex < 0 ) {
             break;
         }
-        ruleData=UnicodeString(PLURAL_RULE_DATA[i], 0, slashIndex);
-        localeData=UnicodeString(PLURAL_RULE_DATA[i], slashIndex+1);
+        ruleData=UnicodeString(pluralRuleData, 0, slashIndex);
+        localeData=UnicodeString(pluralRuleData, slashIndex+1);
         status = parseDescription(ruleData, rules);
         int32_t curIndex=0;
         while (curIndex < localeData.length() && U_SUCCESS(status)) {
             getNextLocale(localeData, &curIndex, localeName);
             addRules(localeName, rules, TRUE, status);
         }
-        
         i++;
     }
 }
