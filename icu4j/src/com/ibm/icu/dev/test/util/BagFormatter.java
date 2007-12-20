@@ -344,7 +344,7 @@ public class BagFormatter {
             control = source.getSet("gc=Cc");
             private_use = source.getSet("gc=Co");
             surrogate = source.getSet("gc=Cs");
-            noncharacter = source.getSet("noncharactercodepoint=true");
+            noncharacter = source.getSet("noncharactercodepoint=yes");
         }
 
         public String getValue(int codePoint, boolean isShort) {
@@ -354,10 +354,18 @@ public class BagFormatter {
             String result = nameProp.getValue(codePoint);
             if (result != null)
                 return hcp + result;
-            if (control.contains(codePoint)) return "<control-" + Utility.hex(codePoint, 4) + ">";
-            if (private_use.contains(codePoint)) return "<private-use-" + Utility.hex(codePoint, 4) + ">";
-            if (noncharacter.contains(codePoint)) return "<noncharacter-" + Utility.hex(codePoint, 4) + ">";
-            if (surrogate.contains(codePoint)) return "<surrogate-" + Utility.hex(codePoint, 4) + ">";
+            if (control.contains(codePoint)) {
+                return "<control-" + Utility.hex(codePoint, 4) + ">";
+            }
+            if (private_use.contains(codePoint)) {
+                return "<private-use-" + Utility.hex(codePoint, 4) + ">";
+            }
+            if (surrogate.contains(codePoint)) {
+                return "<surrogate-" + Utility.hex(codePoint, 4) + ">";
+            }
+            if (noncharacter.contains(codePoint)) {
+                return "<noncharacter-" + Utility.hex(codePoint, 4) + ">";
+            }
             //if (suppressReserved) return "";
             return hcp + "<reserved-" + Utility.hex(codePoint, 4) + ">";
         }
@@ -504,22 +512,36 @@ public class BagFormatter {
             counter = 0;
             
             tabber.clear();
+            // old:
+            // 0009..000D    ; White_Space # Cc   [5] <control-0009>..<control-000D>
+            // new
+            // 0009..000D    ; White_Space #Cc  [5] <control>..<control>
             tabber.add(mergeRanges ? 14 : 6,Tabber.LEFT);
 
-            if (propName.length() > 0) tabber.add(propName.length() + 2,Tabber.LEFT);
+            if (propName.length() > 0) {
+                tabber.add(propName.length() + 2,Tabber.LEFT);
+            }
 
             valueSize = getValueSource().getMaxWidth(shortValue);
             if (DEBUG) System.out.println("ValueSize: " + valueSize);
-            if (getValueSource() != UnicodeLabel.NULL) tabber.add(valueSize + 2,Tabber.LEFT); // value
+            if (valueSize > 0) {
+                tabber.add(valueSize + 2,Tabber.LEFT); // value
+            }
 
             tabber.add(3,Tabber.LEFT); // comment character
 
             labelSize = getLabelSource(true).getMaxWidth(shortLabel);
-            if (labelSize > 0) tabber.add(labelSize + 1,Tabber.LEFT); // value
+            if (labelSize > 0) {
+                tabber.add(labelSize + 1,Tabber.LEFT); // value
+            }
 
-            if (mergeRanges && showCount) tabber.add(5,Tabber.RIGHT);
+            if (mergeRanges && showCount) {
+                tabber.add(5,Tabber.RIGHT);
+            }
 
-            if (showLiteral != null) tabber.add(4,Tabber.LEFT);
+            if (showLiteral != null) {
+                tabber.add(4,Tabber.LEFT);
+            }
             //myTabber.add(7,Tabber.LEFT);
 
             commentSeparator = (showCount || showLiteral != null
@@ -528,7 +550,8 @@ public class BagFormatter {
             ? "\t #" : "";
 
             if (DEBUG) System.out.println("Tabber: " + tabber.toString());
-            if (DEBUG) System.out.println("Tabber: " + tabber.process("a\tb\td\td\tf\tg\th"));
+            if (DEBUG) System.out.println("Tabber: " + tabber.process(
+                    "200C..200D\t; White_Space\t #\tCf\t [2]\t ZERO WIDTH NON-JOINER..ZERO WIDTH JOINER"));
             doAt(c);
         }
 

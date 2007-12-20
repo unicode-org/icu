@@ -254,6 +254,22 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"mmss", "58.59"},
     };
     
+    public void DayMonthTest() {
+        final ULocale locale = ULocale.FRANCE;
+        
+        // set up the generator
+        DateTimePatternGenerator generator
+          = DateTimePatternGenerator.getInstance(locale);
+        
+        // get a pattern for an abbreviated month and day
+        final String pattern = generator.getBestPattern("MMMd");
+        SimpleDateFormat formatter = new SimpleDateFormat(pattern, locale);
+        
+        // use it to format (or parse)
+        String formatted = formatter.format(new Date());
+        // for French, the result is "13 sept."
+    }
+    
     public void TestOrdering() {
         ULocale[] locales = ULocale.getAvailableLocales();
         for (int i = 0; i < locales.length; ++i) {
@@ -274,10 +290,20 @@ public class DateTimeGeneratorTest extends TestFmwk {
 
         ULocale[] locales = ULocale.getAvailableLocales();
         for (int i = 0; i < locales.length; ++i) {
+            // skip the country locales unless we are doing exhaustive tests
+            if (getInclusion() < 6) {
+                if (locales[i].getCountry().length() > 0) {
+                    continue;
+                }
+            }
+            logln(locales[i].toString());
+            DateTimePatternGenerator generator
+            = DateTimePatternGenerator.getInstance(locales[i]);
+
             for (int style1 = DateFormat.FULL; style1 <= DateFormat.SHORT; ++style1) {
                 final SimpleDateFormat oldFormat = (SimpleDateFormat) DateFormat.getTimeInstance(style1, locales[i]);
                 String pattern = oldFormat.toPattern();
-                String newPattern = replaceZoneString(pattern, "VVVV");
+                String newPattern = generator.replaceFieldTypes(pattern, "VVVV"); // replaceZoneString(pattern, "VVVV");
                 if (newPattern.equals(pattern)) {
                     continue;
                 }
@@ -294,6 +320,24 @@ public class DateTimeGeneratorTest extends TestFmwk {
                     errln("Failed timezone roundtrip with VVVV:\t" + locales[i] + ",\t\"" + pattern + "\",\t\"" + newPattern + "\",\t\"" + formatted + "\",\t" + calendar.getTimeZone().getID() + " != " + testTimeZone.getID());
                 } else {
                     logln(locales[i] + ":\t\"" + pattern + "\" => \t\"" + newPattern + "\"\t" + formatted);
+                }
+            }
+        }
+    }
+    
+    public void TestVariableCharacters() {
+        UnicodeSet valid = new UnicodeSet("[G   y   Y   u   Q   q   M   L   w   W   d   D   F   g   E   e   c   a   h   H   K   k   j   m   s   S   A   z   Z   v   V]");
+        for (char c = 0; c < 0xFF; ++c) {
+            boolean works = false;
+            try {
+                VariableField vf = new VariableField(String.valueOf(c), true);
+                works = true;
+            } catch (Exception e) {}
+            if (works != valid.contains(c)) {
+                if (works) {
+                    errln("VariableField can be created with illegal character: " + c);
+                } else {
+                    errln("VariableField can't be created with legal character: " + c);
                 }
             }
         }
@@ -394,24 +438,33 @@ public class DateTimeGeneratorTest extends TestFmwk {
      */
     public String replaceZoneString(String pattern, String newZone) {
         final List itemList = formatParser.set(pattern).getItems();
-        boolean found = false;
+        boolean changed = false;
         for (int i = 0; i < itemList.size(); ++i) {
             Object item = itemList.get(i);
             if (item instanceof VariableField) {
-                // the first character of the variable field determines the type,
-                // according to CLDR.
-                String variableField = item.toString();
-                switch (variableField.charAt(0)) {
-                case 'z': case 'Z': case 'v': case 'V':
-                    if (!variableField.equals(newZone)) {
-                        found = true;
-                        itemList.set(i, new VariableField(newZone));
+                VariableField variableField = (VariableField) item;
+                if (variableField.getType() == DateTimePatternGenerator.ZONE) {
+                    if (!variableField.toString().equals(newZone)) {
+                        changed = true;
+                        itemList.set(i, new VariableField(newZone, true));
                     }
-                    break;
                 }
             }
         }
-        return found ? formatParser.toString() : pattern;
+        return changed ? formatParser.toString() : pattern;
+    }
+    
+    public boolean containsZone(String pattern) {
+        for (Iterator it = formatParser.set(pattern).getItems().iterator(); it.hasNext();) {
+            Object item = it.next();
+            if (item instanceof VariableField) {
+                VariableField variableField = (VariableField) item;
+                if (variableField.getType() == DateTimePatternGenerator.ZONE) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
