@@ -196,7 +196,11 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
      * @stable ICU 3.6
      */
     protected CoderResult decodeLoop(ByteBuffer in,CharBuffer out){
-        if(in.remaining() < toUCountPending()){
+//        if(in.remaining() < toUCountPending()){
+//            return CoderResult.UNDERFLOW;
+//        }
+        if (!in.hasRemaining()) {
+            toULength = 0;
             return CoderResult.UNDERFLOW;
         }
         
