@@ -2814,11 +2814,10 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
             UChar32 miss = schar;
             if (source->iterator) {
 	          UChar32 surrNextChar; /* the next char in the iteration to test */
-	          int32_t prevIndex = source->iterator->index; /* store the previous index to test if we need to move back the iterator. */
-	          if(U16_IS_LEAD(schar) && prevIndex < source->iterator->limit) {
+	          if(U16_IS_LEAD(schar) && source->iterator->index < source->iterator->limit) {
 	            if (U16_IS_TRAIL(surrNextChar = getNextNormalizedChar(source))) { 
 	              miss = U16_GET_SUPPLEMENTARY(schar, surrNextChar);
-	            } else if (prevIndex < source->iterator->index){
+	            } else {
 	        	  goBackOne(source);
 	            }
 	          }
