@@ -1941,6 +1941,9 @@ public class DecimalFormat extends NumberFormat {
                     digits.decimalAt = digitCount; // Not digits.count!
                     sawDecimal = true;
                     leadingZero = false; // a single leading zero before a decimal is ok
+                    
+                    // Once we see a decimal character, we only accept that decimal character from then on.
+                    decimalSet.set(ch,ch);
                 }
                 else if (!isExponent && isGroupingUsed() && groupingSet.contains(ch))
                 {
@@ -1954,6 +1957,9 @@ public class DecimalFormat extends NumberFormat {
                             break;
                         }
                     }
+                    // Once we see a grouping character, we only accept that grouping character from then on.
+                    groupingSet.set(ch,ch);
+                    
                     // Ignore grouping characters, if we are using them, but require
                     // that they be followed by a digit.  Otherwise we backup and
                     // reprocess them.
