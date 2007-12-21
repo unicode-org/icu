@@ -2122,14 +2122,14 @@
     <echo>Testing ICUTZU ...</echo>
 
     <mkdir dir="${tzu.temp.dir}" />
-    <copy todir="${tzu.temp.dir}">
+    <move todir="${tzu.temp.dir}">
       <fileset file="${tzu.bin.dir}/DirectorySearch.txt" />
       <fileset file="${tzu.bin.dir}/zoneinfo.res" />
-    </copy>
+    </move>
 
+    <echo file="${tzu.bin.dir}/DirectorySearch.txt">+${tzu.test.dir}</echo>
     <get dest="${tzu.bin.dir}/zoneinfo.res" src="http://icu-project.org/tzdata/2006a/be/zoneinfo.res" />
     <copy todir="${tzu.test.dir}" file="${tzu.bin.dir}/icu4j.jar" />
-    <echo file="${tzu.bin.dir}/DirectorySearch.txt">+${tzu.test.dir}</echo>
 
     <echo>Running ICUTZU in Discovery Mode ...</echo>
     <exec dir="${tzu.bin.dir}" executable="${java.home}/bin/java">
@@ -2179,19 +2179,15 @@
     <fail unless="tzu.zoneinfo.match">ICUTZU test failed. ${tzu.bin.dir}/zoneinfo.res does not match ${tzu.test.dir}/zoneinfo.res</fail>
 
     <echo>Cleaning up ...</echo>
-    <delete>
-      <fileset file="${tzu.bin.dir}/DirectorySearch.txt" />
-      <fileset file="${tzu.bin.dir}/zoneinfo.res" />
-    </delete>
-    <copy todir="${tzu.bin.dir}">
+    <move todir="${tzu.bin.dir}">
       <fileset file="${tzu.temp.dir}/DirectorySearch.txt" />
       <fileset file="${tzu.temp.dir}/zoneinfo.res" />
-    </copy>
-    <delete includeEmptyDirs="true">
-      <fileset dir="${tzu.temp.dir}" />
-      <fileset dir="${tzu.test.dir}" />
-    </delete>
-
+    </move>
+  	<delete includeEmptyDirs="true">
+        <fileset file="${tzu.temp.dir}" />
+        <fileset dir="${tzu.test.dir}" />
+	</delete>
+  	
     <echo>ICUTZU test successful.</echo>
   </target>
 
