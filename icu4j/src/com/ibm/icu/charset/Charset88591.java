@@ -55,7 +55,7 @@ class Charset88591 extends CharsetASCII {
             super(cs);
         }
 
-        protected CoderResult encodeLoopCoreOptimized(CharBuffer source, ByteBuffer target,
+        protected final CoderResult encodeLoopCoreOptimized(CharBuffer source, ByteBuffer target,
                 char[] sourceArray, byte[] targetArray, int oldSource, int offset, int limit,
                 boolean flush) {
             int i, ch = 0;
@@ -80,7 +80,7 @@ class Charset88591 extends CharsetASCII {
                 return null;
         }
 
-        protected CoderResult encodeLoopCoreUnoptimized(CharBuffer source, ByteBuffer target,
+        protected final CoderResult encodeLoopCoreUnoptimized(CharBuffer source, ByteBuffer target,
                 boolean flush) throws BufferUnderflowException, BufferOverflowException {
             int ch;
 
