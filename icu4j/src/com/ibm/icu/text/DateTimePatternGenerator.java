@@ -345,7 +345,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         
         if (datePattern == null) return timePattern == null ? "" : timePattern;
         if (timePattern == null) return datePattern;
-        return MessageFormat.format(getDateTimeFormat(), new Object[]{datePattern, timePattern});
+        return MessageFormat.format(getDateTimeFormat(), new Object[]{timePattern, datePattern});
     }
     
     /**
