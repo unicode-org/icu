@@ -49,7 +49,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
       DateTimePatternGenerator gen = DateTimePatternGenerator.getInstance(locale);
       SimpleDateFormat format = new SimpleDateFormat(gen.getBestPattern("MMMddHmm"), locale);
       format.setTimeZone(zone);
-      assertEquals("simple format: MMMddHmm", "8:58 14. Okt", format.format(sampleDate));
+      assertEquals("simple format: MMMddHmm", "14. Okt 8:58", format.format(sampleDate));
       // (a generator can be built from scratch, but that is not a typical use case)
       
       // modify the generator by adding patterns
@@ -57,7 +57,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
       gen.addPattern("d'. von' MMMM", true, returnInfo); 
       // the returnInfo is mostly useful for debugging problem cases
       format.applyPattern(gen.getBestPattern("MMMMddHmm"));
-      assertEquals("modified format: MMMddHmm", "8:58 14. von Oktober", format.format(sampleDate));
+      assertEquals("modified format: MMMddHmm", "14. von Oktober 8:58", format.format(sampleDate));
       
       // get a pattern and modify it
       format = (SimpleDateFormat)DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, locale);
@@ -69,8 +69,42 @@ public class DateTimeGeneratorTest extends TestFmwk {
       String newPattern = gen.replaceFieldTypes(pattern, "vvvv");
       format.applyPattern(newPattern);
       assertEquals("full-date: modified zone", "Donnerstag, 14. Oktober 1999 08:58:59 Frankreich", format.format(sampleDate));
+      
+      // add test of basic cases
+      
+      //lang  YYYYMMM MMMd    MMMdhmm hmm hhmm    Full Date-Time
+     // en  Mar 2007    Mar 4   6:05 PM Mar 4   6:05 PM 06:05 PM    Sunday, March 4, 2007 6:05:05 PM PT
+      DateTimePatternGenerator enGen = DateTimePatternGenerator.getInstance(ULocale.ENGLISH);
+      TimeZone enZone = TimeZone.getTimeZone("Etc/GMT");
+      SimpleDateFormat enFormat = (SimpleDateFormat)DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, ULocale.ENGLISH);
+      enFormat.setTimeZone(enZone);
+      String[][] tests = {
+              {"yyyyMMMdd", "Oct 14, 1999"},
+              {"EyyyyMMMdd", "Thu, Oct 14, 1999"},
+              {"yyyyMMdd", "10/14/1999"},
+              {"yyyyMMM", "Oct 1999"},
+              {"yyyyMM", "10/1999"},
+              {"yyMM", "10/99"},
+              {"MMMd", "Oct 14"},
+              {"MMMdhmm", "Oct 14 6:58 AM"},
+              {"EMMMdhmms", "Thu Oct 14 6:58:59 AM"},
+              {"MMdhmm", "10/14 6:58 AM"},
+              {"EEEEMMMdhmms", "Thursday Oct 14 6:58:59 AM"},
+              {"yyyyMMMddhhmmss", "Oct 14, 1999 06:58:59 AM"},
+              {"EyyyyMMMddhhmmss", "Thu, Oct 14, 1999 06:58:59 AM"},
+              {"hmm", "6:58 AM"},
+              {"hhmm", "06:58 AM"},
+      };
+      for (int i = 0; i < tests.length; ++i) {
+          final String testSkeleton = tests[i][0];
+          String pat = enGen.getBestPattern(testSkeleton);
+          enFormat.applyPattern(pat);
+          String formattedDate = enFormat.format(sampleDate);
+          assertEquals("Testing skeleton '" + testSkeleton + "' with  " + sampleDate, tests[i][1], formattedDate);
+      }
+      
     }
-    
+
     public void TestPatternParser() {
         StringBuffer buffer = new StringBuffer();
         PatternTokenizer pp = new PatternTokenizer()
