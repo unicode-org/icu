@@ -29,9 +29,6 @@ import com.ibm.icu.text.UTF16;
  * @provisional This API might change or be removed in a future release.
  */
 public abstract class CharsetEncoderICU extends CharsetEncoder {
-
-    static final int NEED_TO_WRITE_BOM = 1;
-    boolean writeBOM = false; /* only used by UTF-16, UTF-32 */
     
     byte[] errorBuffer = new byte[30];
     int errorBufferLength = 0;
@@ -728,5 +725,94 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
             return CharsetEncoderICU.fromUWriteBytes(encoder, sub, 0,
                     sub.length, target, offsets, source.position());
         }
+    }
+    
+    
+    /**
+     * <p>
+     * Handles a common situation where a character has been read and it may be
+     * a lead surrogate followed by a trail surrogate. This method can change
+     * the source position and will modify fromUChar32.
+     * </p>
+     * 
+     * <p>
+     * If <code>null</code> is returned, then there was success in reading a
+     * surrogate pair, the codepoint is stored in <code>fromUChar32</code> and
+     * <code>fromUChar32</code> should be reset (to 0) after being read.
+     * </p>
+     * 
+     * @param source
+     *            The encoding source.
+     * @param lead
+     *            A character that may be the first in a surrogate pair.
+     * @return <code>CoderResult.malformedForLength(1)</code> or
+     *         <code>CoderResult.UNDERFLOW</code> if there is a problem, or
+     *         <code>null</code> if there isn't.
+     * @see handleSurrogates(CharBuffer, char)
+     * @see handleSurrogates(CharBuffer, int, char)
+     * @see handleSurrogates(char[], int, int, char)
+     */
+    final CoderResult handleSurrogates(CharBuffer source, char lead) {
+        if (!UTF16.isLeadSurrogate(lead)) {
+            fromUChar32 = lead;
+            return CoderResult.malformedForLength(1);
+        }
+        
+        if (!source.hasRemaining()) {
+            fromUChar32 = lead;
+            return CoderResult.UNDERFLOW;
+        }
+        
+        char trail = source.get();
+        
+        if (!UTF16.isTrailSurrogate(trail)) {
+            fromUChar32 = lead;
+            source.position(source.position() - 1);
+            return CoderResult.malformedForLength(1);
+        }
+        
+        fromUChar32 = UCharacter.getCodePoint(lead, trail);
+        return null;
+    }
+    
+    /**
+     * <p>
+     * Same as <code>handleSurrogates(CharBuffer, char)</code>, but with arrays. As an added
+     * requirement, the calling method must also increment the index if this method returns
+     * <code>null</code>.
+     * </p>
+     * 
+     * 
+     * @param source
+     *            The encoding source.
+     * @param lead
+     *            A character that may be the first in a surrogate pair.
+     * @return <code>CoderResult.malformedForLength(1)</code> or
+     *         <code>CoderResult.UNDERFLOW</code> if there is a problem, or <code>null</code> if
+     *         there isn't.
+     * @see handleSurrogates(CharBuffer, char)
+     * @see handleSurrogates(CharBuffer, int, char)
+     * @see handleSurrogates(char[], int, int, char)
+     */
+    final CoderResult handleSurrogates(char[] sourceArray, int sourceIndex, int sourceLimit, char lead) {
+        if (!UTF16.isLeadSurrogate(lead)) {
+            fromUChar32 = lead;
+            return CoderResult.malformedForLength(1);
+        }
+        
+        if (sourceIndex >= sourceLimit) {
+            fromUChar32 = lead;
+            return CoderResult.UNDERFLOW;
+        }
+        
+        char trail = sourceArray[sourceIndex];
+        
+        if (!UTF16.isTrailSurrogate(trail)) {
+            fromUChar32 = lead;
+            return CoderResult.malformedForLength(1);
+        }
+        
+        fromUChar32 = UCharacter.getCodePoint(lead, trail);
+        return null;
     }
 }

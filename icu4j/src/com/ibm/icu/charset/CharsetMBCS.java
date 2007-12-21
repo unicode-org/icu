@@ -2868,7 +2868,7 @@ class CharsetMBCS extends CharsetICU {
          * @return if(U_FAILURE) return the code point for cnv->fromUChar32
          *         else return 0 after output has been written to the target
          */
-        private int fromU(int cp_, CharBuffer source, ByteBuffer target, IntBuffer offsets, int sourceIndex, boolean flush, CoderResult[] cr)
+        private int fromU(int cp_, CharBuffer source, ByteBuffer target, IntBuffer offsets, int sourceIndex, int length, boolean flush, CoderResult[] cr)
         {
             //ByteBuffer cx;
             long cp = cp_ & UConverterConstants.UNSIGNED_INT_MASK;
@@ -2910,7 +2910,7 @@ class CharsetMBCS extends CharsetICU {
             }
         
             /* no mapping */
-            cr[0] = CoderResult.unmappableForLength(1);
+            cr[0] = CoderResult.unmappableForLength(length);
             return (int)cp;
         }
 
@@ -3094,7 +3094,7 @@ class CharsetMBCS extends CharsetICU {
                     /* try an extension mapping */
                     lastSource = sourceArrayIndex;
                     source.position(sourceArrayIndex);
-                    c = fromU(c, source, target, offsets, sourceIndex, flush, cr);
+                    c = fromU(c, source, target, offsets, sourceIndex, length, flush, cr);
                     sourceArrayIndex = source.position();
                     sourceIndex += length+(sourceArrayIndex-lastSource);
                     lastSource = sourceArrayIndex;
@@ -3513,7 +3513,7 @@ class CharsetMBCS extends CharsetICU {
                 } else {
                     /* this is an unmatched lead code unit (1st surrogate) */
                     /* callback(illegal) */
-                    cr[0] = CoderResult.malformedForLength(2);
+                    cr[0] = CoderResult.malformedForLength(1);
                     return false;
                 }
             } else {
@@ -3562,7 +3562,7 @@ class CharsetMBCS extends CharsetICU {
                 } else {
                     /* this is an unmatched lead code unit (1st surrogate) */
                     /* callback(illegal) */
-                    cr[0] = CoderResult.malformedForLength(2);
+                    cr[0] = CoderResult.malformedForLength(1);
                     return false;
                 }
             } else {
@@ -3577,7 +3577,7 @@ class CharsetMBCS extends CharsetICU {
             /* try an extension mapping */
             int sourceBegin = x.sourceArrayIndex;
             source.position(x.sourceArrayIndex);
-            x.c = fromU(x.c, source, target, null, x.sourceIndex, flush, cr);
+            x.c = fromU(x.c, source, target, null, x.sourceIndex, x.nextSourceIndex, flush, cr);
             x.sourceArrayIndex = source.position();
             x.nextSourceIndex += x.sourceArrayIndex-sourceBegin;
             x.prevLength=(int)fromUnicodeStatus;
@@ -3636,7 +3636,7 @@ class CharsetMBCS extends CharsetICU {
                 } else {
                     /* this is an unmatched lead code unit (1st surrogate) */
                     /* callback(illegal) */
-                    cr[0] = CoderResult.malformedForLength(2);
+                    cr[0] = CoderResult.malformedForLength(1);
                     return false;
                 }
             } else {
@@ -3651,7 +3651,7 @@ class CharsetMBCS extends CharsetICU {
             /* try an extension mapping */
             int sourceBegin = x.sourceArrayIndex;
             source.position(x.sourceArrayIndex);
-            x.c = fromU(x.c, source, target, null, x.sourceIndex, flush, cr);
+            x.c = fromU(x.c, source, target, null, x.sourceIndex, x.nextSourceIndex, flush, cr);
             x.sourceArrayIndex = source.position();
             x.nextSourceIndex += x.sourceArrayIndex - sourceBegin;
         
