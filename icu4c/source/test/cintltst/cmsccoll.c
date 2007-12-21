@@ -5016,6 +5016,42 @@ TestSortKeyConsistency(void)
    ucol_close(ucol);
 }
 
+/* ticket: 6101 */
+static void TestCroatianSortKey(void) {
+	const char* collString = "LHR_AN_CX_EX_FX_HX_NX_S3";
+	UErrorCode status = U_ZERO_ERROR;
+	UCollator *ucol;
+	UCharIterator iter;
+	
+	UChar text[] = { 0x0044, 0xD81A };
+	
+	size_t length = sizeof(text)/sizeof(*text);
+	
+	unsigned char textSortKey[32];
+	size_t lenSortKey = 32;
+	size_t actualSortKeyLen;
+	uint32_t uStateInfo[2] = { 0, 0 };
+	
+	ucol = ucol_openFromShortString(collString, FALSE, NULL, &status);
+	if (U_FAILURE(status)) {
+		log_err("ucol_openFromShortString error in Craotian test.\n");
+		return;
+	}
+	
+	uiter_setString(&iter, text, length);
+	
+	actualSortKeyLen = ucol_nextSortKeyPart(
+		ucol, &iter, (uint32_t*)uStateInfo,
+		textSortKey, lenSortKey, &status
+		);
+	
+	if (actualSortKeyLen == lenSortKey) {
+		log_err("ucol_nextSortKeyPart did not give correct result in Croatian test.\n");
+	}
+	
+	ucol_close(ucol);
+}
+
 
 #define TEST(x) addTest(root, &x, "tscoll/cmsccoll/" # x)
 
@@ -5088,6 +5124,7 @@ void addMiscCollTest(TestNode** root)
     TEST(TestJ5367);
     TEST(TestSortKeyConsistency);
     TEST(TestVI5913);  /* VI, RO tailored rules */
+    TEST(TestCroatianSortKey);
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
