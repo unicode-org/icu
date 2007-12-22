@@ -588,7 +588,7 @@ DateTimePatternGenerator::getBestPattern(const UnicodeString& patternForm, UErro
     resultPattern.remove();
     status = U_ZERO_ERROR;
     dtFormat=getDateTimeFormat();
-    Formattable dateTimeObject[] = { datePattern, timePattern };
+    Formattable dateTimeObject[] = { timePattern, datePattern };
     resultPattern = MessageFormat::format(dtFormat, dateTimeObject, 2, resultPattern, status );
     return resultPattern;
 }
