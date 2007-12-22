@@ -104,6 +104,43 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString(),
     };
 
+    UnicodeString patternTests2[] = {
+        UnicodeString("yyyyMMMdd"),
+        UnicodeString("EyyyyMMMdd"),
+        UnicodeString("yyyyMMdd"),
+        UnicodeString("yyyyMMM"),
+        UnicodeString("yyyyMM"),
+        UnicodeString("yyMM"),
+        UnicodeString("MMMd"),
+        UnicodeString("MMMdhmm"),
+        UnicodeString("EMMMdhmms"),
+        UnicodeString("MMdhmm"),
+        UnicodeString("EEEEMMMdhmms"),
+        UnicodeString("yyyyMMMddhhmmss"),
+        UnicodeString("EyyyyMMMddhhmmss"),
+        UnicodeString("hmm"),
+        UnicodeString("hhmm"),
+        UnicodeString(""),
+    };
+    UnicodeString patternResults2[] = {
+        UnicodeString("Oct 14, 1999"),
+        UnicodeString("Thu, Oct 14, 1999"),
+        UnicodeString("10/14/1999"),
+        UnicodeString("Oct 1999"),
+        UnicodeString("10/1999"),
+        UnicodeString("10/99"),
+        UnicodeString("Oct 14"),
+        UnicodeString("Oct 14 6:58 AM"),
+        UnicodeString("Thu Oct 14 6:58:59 AM"),
+        UnicodeString("10/14 6:58 AM"),
+        UnicodeString("Thursday Oct 14 6:58:59 AM"),
+        UnicodeString("Oct 14, 1999 06:58:59 AM"),
+        UnicodeString("Thu, Oct 14, 1999 06:58:59 AM"),
+        UnicodeString("6:58 AM"),
+        UnicodeString("06:58 AM"),
+        UnicodeString(""),
+    };
+    
     // results for getSkeletons() and getPatternForSkeleton()
     const UnicodeString testSkeletonsResults[] = { 
         UnicodeString("HH:mm"), 
@@ -199,7 +236,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     UnicodeString dateReturned, expectedResult;
     dateReturned.remove();
     dateReturned = format->format(sampleDate, dateReturned, status);
-    expectedResult=UnicodeString("8:58 14. Okt");
+    expectedResult=UnicodeString("14. Okt 8:58");
     if ( dateReturned != expectedResult ) {
         errln("ERROR: Simple test in getBestPattern with Locale::getGermany()).");
     }
@@ -215,7 +252,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     format->applyPattern(gen->getBestPattern(UnicodeString("MMMMddHmm"), status));
     dateReturned.remove();
     dateReturned = format->format(sampleDate, dateReturned, status);
-    expectedResult=UnicodeString("8:58 14. von Oktober");
+    expectedResult=UnicodeString("14. von Oktober 8:58");
     if ( dateReturned != expectedResult ) {
         errln("ERROR: Simple test addPattern failed!: d\'. von\' MMMM  ");
     }
@@ -341,6 +378,51 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         delete patGen;
         localeIndex++;
     }
+    
+    // ======= More tests ticket#6110
+    logln("Testing DateTimePatternGenerator with various skeleton");
+   
+    status = U_ZERO_ERROR;
+    localeIndex=0;
+    resultIndex=0;
+    testDate= LocaleTest::date(99, 9, 13, 23, 58, 59);
+    {       
+        int32_t dataIndex=0;
+        UnicodeString bestPattern;
+        logln("\n\n Test various skeletons for English locale...");
+        DateTimePatternGenerator *patGen=DateTimePatternGenerator::createInstance(Locale::getEnglish(), status);
+        if(U_FAILURE(status)) {
+            dataerrln("ERROR: Could not create DateTimePatternGenerator with locale English . - exitting\n");
+            return;
+        }
+        TimeZone *enZone = TimeZone::createTimeZone(UnicodeString("ECT/GMT"));
+        if (enZone==NULL) {
+            dataerrln("ERROR: Could not create TimeZone ECT");
+            delete patGen;
+            return;
+        }
+        SimpleDateFormat *enFormat = (SimpleDateFormat *)DateFormat::createDateTimeInstance(DateFormat::kFull, 
+                         DateFormat::kFull, Locale::getEnglish());
+        enFormat->setTimeZone(*enZone);
+        while (patternTests2[dataIndex].length() > 0) {
+            logln(patternTests2[dataIndex]);
+            bestPattern = patGen->getBestPattern(patternTests2[dataIndex], status);
+            logln(UnicodeString(" -> ") + bestPattern);
+            enFormat->applyPattern(bestPattern);
+            resultDate.remove();
+            resultDate = enFormat->format(testDate, resultDate);
+            if ( resultDate != patternResults2[resultIndex] ) {
+                errln(UnicodeString("\nERROR: Test various skeletons[") + dataIndex
+                    + UnicodeString("]. Got: ") + resultDate + UnicodeString(" Expected: ") + 
+                    patternResults2[resultIndex] );
+            }
+            dataIndex++;
+            resultIndex++;
+        }
+        delete patGen;
+        delete enZone;
+        delete enFormat;
+    }
 
 
 
@@ -450,7 +532,8 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     formatted = formatter.format(Calendar::getNow(), formatted, status); 
     // for French, the result is "13 sept."
     formatted.remove();
-    // cannot use the result from getNow() because the value change evreyday. 
+    // cannot use the result from getNow() because the value change evreyday.
+    testDate= LocaleTest::date(99, 0, 13, 23, 58, 59);
     formatted = formatter.format(testDate, formatted, status);
     expectedResult=UnicodeString("14 janv.");
     if ( formatted != expectedResult ) {
