@@ -7364,10 +7364,9 @@ ucol_strcollRegular( collIterate *sColl, collIterate *tColl,
                 if(sOrder == UCOL_NO_MORE_CES) {
                     UCOL_CEBUF_PUT(&sCEs, sOrder, sColl);
                     break;
-                } else if(sOrder == 0
-                    || (sInShifted && (sOrder & UCOL_PRIMARYMASK) == 0)) {
-                        /* UCA amendment - ignore ignorables that follow shifted code points */
-                        continue;
+                } else if(sOrder == 0 || (sInShifted && (sOrder & UCOL_PRIMARYMASK) == 0)) {
+                    /* UCA amendment - ignore ignorables that follow shifted code points */
+                    continue;
                 } else if(isContinuation(sOrder)) {
                     if((sOrder & UCOL_PRIMARYMASK) > 0) { /* There is primary value */
                         if(sInShifted) {
@@ -7412,10 +7411,9 @@ ucol_strcollRegular( collIterate *sColl, collIterate *tColl,
                 if(tOrder == UCOL_NO_MORE_CES) {
                     UCOL_CEBUF_PUT(&tCEs, tOrder, tColl);
                     break;
-                } else if(tOrder == 0
-                    || (tInShifted && (tOrder & UCOL_PRIMARYMASK) == 0)) {
-                        /* UCA amendment - ignore ignorables that follow shifted code points */
-                        continue;
+                } else if(tOrder == 0 || (tInShifted && (tOrder & UCOL_PRIMARYMASK) == 0)) {
+                    /* UCA amendment - ignore ignorables that follow shifted code points */
+                    continue;
                 } else if(isContinuation(tOrder)) {
                     if((tOrder & UCOL_PRIMARYMASK) > 0) { /* There is primary value */
                         if(tInShifted) {
@@ -7517,7 +7515,8 @@ ucol_strcollRegular( collIterate *sColl, collIterate *tColl,
                     if(sCESave == 0) {
                         secS = *(sCE--);
                         if(isContinuation(secS)) {
-                            while(isContinuation(secS = *(sCE--)));
+                            while(isContinuation(secS = *(sCE--)))
+                                ;
                             /* after this, secS has the start of continuation, and sCEs points before that */
                             sCESave = sCE; /* we save it, so that we know where to come back AND that we need to go forward */
                             sCE+=2;  /* need to point to the first continuation CP */
