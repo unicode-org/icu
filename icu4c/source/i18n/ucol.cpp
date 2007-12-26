@@ -139,7 +139,7 @@ inline void  IInit_collIterate(const UCollator *collator, const UChar *sourceStr
         (s)->flags |= UCOL_ITER_NORM;
     }
     if(collator->hiraganaQ == UCOL_ON && collator->strength >= UCOL_QUATERNARY) {
-      (s)->flags |= UCOL_HIRAGANA_Q;
+        (s)->flags |= UCOL_HIRAGANA_Q;
     }
     (s)->iterator = NULL;
     //(s)->iteratorIndex = 0;
@@ -3513,24 +3513,25 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                         source->extendCEs = (uint32_t *)uprv_malloc(sizeof(uint32_t) *
                             (source->extendCEsSize =UCOL_EXPAND_CE_BUFFER_SIZE + UCOL_EXPAND_CE_BUFFER_EXTEND_SIZE));
                         if (source->extendCEs == NULL) {
+                            // Handle error later.
                             CECount = -1;
                         } else {
                             source->extendCEs = (uint32_t *)uprv_memcpy(source->extendCEs, source->CEs, UCOL_EXPAND_CE_BUFFER_SIZE * sizeof(uint32_t));
                         }
                     } else {
-                        uint32_t *temp = source->extendCEs;
-                        source->extendCEs = (uint32_t *)uprv_realloc(source->extendCEs,
+                        uint32_t *tempBufCE = (uint32_t *)uprv_realloc(source->extendCEs,
                             sizeof(uint32_t) * (source->extendCEsSize += UCOL_EXPAND_CE_BUFFER_EXTEND_SIZE));
-                        if (source->extendCEs == NULL) {
+                        if (tempBufCE == NULL) {
+                            // Handle error later.
                             CECount = -1;
-                            source->extendCEs = temp;
-                            uprv_free(source->extendCEs);
-                            source->extendCEs = NULL;
-                            source->extendCEsSize = 0;
+                        }
+                        else {
+                            source->extendCEs = tempBufCE;
                         }
                     }
                     if (CECount == -1) {
-                        *status = U_BUFFER_OVERFLOW_ERROR;
+                        *status = U_MEMORY_ALLOCATION_ERROR;
+                        source->extendCEsSize = 0;
                         source->CEpos = source->CEs;
                         freeHeapWritableBuffer(&temp);
                         if (strbuffer != buffer) {
