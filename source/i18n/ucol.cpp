@@ -7177,7 +7177,7 @@ static
 inline void UCOL_CEBUF_PUT(ucol_CEBuf *b, uint32_t ce, collIterate *ci) {
     if (b->pos == b->endp) {
         ucol_CEBuf_Expand(b, ci);
-}
+    }
     *(b)->pos++ = ce;
 }
 
@@ -7465,7 +7465,8 @@ ucol_strcollRegular( collIterate *sColl, collIterate *tColl,
                 if(sOrder == UCOL_NO_MORE_CES_PRIMARY) {
                     break;
                 } else {
-                    sOrder = 0; tOrder = 0;
+                    sOrder = 0;
+                    tOrder = 0;
                     continue;
                 }
             } else {
@@ -7537,7 +7538,8 @@ ucol_strcollRegular( collIterate *sColl, collIterate *tColl,
                     if(tCESave == 0) {
                         secT = *(tCE--);
                         if(isContinuation(secT)) {
-                            while(isContinuation(secT = *(tCE--)));
+                            while(isContinuation(secT = *(tCE--)))
+                                ;
                             /* after this, secS has the start of continuation, and sCEs points before that */
                             tCESave = tCE; /* we save it, so that we know where to come back AND that we need to go forward */
                             tCE+=2;  /* need to point to the first continuation CP */
