@@ -4963,22 +4963,22 @@ TestSortKeyConsistency(void)
 
     uint8_t bufFull[TSKC_DATA_SIZE][TSKC_BUF_SIZE];
     uint8_t bufPart[TSKC_DATA_SIZE][TSKC_BUF_SIZE];
-	int32_t i, j, i2;
+    int32_t i, j, i2;
 
     ucol = ucol_openFromShortString("LEN_S4", FALSE, NULL, &icuRC);
     if (U_FAILURE(icuRC))
-	{
-	    log_err("ucol_openFromShortString failed\n");
+    {
+        log_err("ucol_openFromShortString failed\n");
         return;
-	}
+    }
 
     for (i = 0; i < TSKC_DATA_SIZE; i++)
     {
         UCharIterator uiter;
         uint32_t state[2] = { 0, 0 };
         int32_t dataLen = i+1;
-	    for (j=0; j<TSKC_BUF_SIZE; j++)
-	        bufFull[i][j] = bufPart[i][j] = 0;
+        for (j=0; j<TSKC_BUF_SIZE; j++)
+            bufFull[i][j] = bufPart[i][j] = 0;
 
         /* Full sort key */
         ucol_getSortKey(ucol, data, dataLen, bufFull[i], TSKC_BUF_SIZE);
@@ -4987,29 +4987,28 @@ TestSortKeyConsistency(void)
         uiter_setString(&uiter, data, dataLen);
         ucol_nextSortKeyPart(ucol, &uiter, state, bufPart[i], TSKC_BUF_SIZE, &icuRC);
         if (U_FAILURE(icuRC))
-		{
-		    log_err("ucol_nextSortKeyPart failed\n");
-			ucol_close(ucol);
-			return;
-		}
+        {
+            log_err("ucol_nextSortKeyPart failed\n");
+            ucol_close(ucol);
+            return;
+        }
 
-	    for (i2=0; i2<i; i2++)
-	    {
-	        UBool fullMatch = TRUE;
-		    UBool partMatch = TRUE;
-		    for (j=0; j<TSKC_BUF_SIZE; j++)
-		    {
-			    fullMatch = fullMatch && (bufFull[i][j] != bufFull[i2][j]);
-			    partMatch = partMatch && (bufPart[i][j] != bufPart[i2][j]);
-		    }
-			if (fullMatch != partMatch) {
-		        log_err(fullMatch ? "full key was consistent, but partial key changed\n"
-					              : "partial key was consistent, but full key changed\n");
-				ucol_close(ucol);
-				return;
-			}
-	    }
-
+        for (i2=0; i2<i; i2++)
+        {
+            UBool fullMatch = TRUE;
+            UBool partMatch = TRUE;
+            for (j=0; j<TSKC_BUF_SIZE; j++)
+            {
+                fullMatch = fullMatch && (bufFull[i][j] != bufFull[i2][j]);
+                partMatch = partMatch && (bufPart[i][j] != bufPart[i2][j]);
+            }
+            if (fullMatch != partMatch) {
+                log_err(fullMatch ? "full key was consistent, but partial key changed\n"
+                                  : "partial key was consistent, but full key changed\n");
+                ucol_close(ucol);
+                return;
+            }
+        }
     }
 
     /*=============================================*/
@@ -5018,38 +5017,38 @@ TestSortKeyConsistency(void)
 
 /* ticket: 6101 */
 static void TestCroatianSortKey(void) {
-	const char* collString = "LHR_AN_CX_EX_FX_HX_NX_S3";
-	UErrorCode status = U_ZERO_ERROR;
-	UCollator *ucol;
-	UCharIterator iter;
-	
-	UChar text[] = { 0x0044, 0xD81A };
-	
-	size_t length = sizeof(text)/sizeof(*text);
-	
-	unsigned char textSortKey[32];
-	size_t lenSortKey = 32;
-	size_t actualSortKeyLen;
-	uint32_t uStateInfo[2] = { 0, 0 };
-	
-	ucol = ucol_openFromShortString(collString, FALSE, NULL, &status);
-	if (U_FAILURE(status)) {
-		log_err("ucol_openFromShortString error in Craotian test.\n");
-		return;
-	}
-	
-	uiter_setString(&iter, text, length);
-	
-	actualSortKeyLen = ucol_nextSortKeyPart(
-		ucol, &iter, (uint32_t*)uStateInfo,
-		textSortKey, lenSortKey, &status
-		);
-	
-	if (actualSortKeyLen == lenSortKey) {
-		log_err("ucol_nextSortKeyPart did not give correct result in Croatian test.\n");
-	}
-	
-	ucol_close(ucol);
+    const char* collString = "LHR_AN_CX_EX_FX_HX_NX_S3";
+    UErrorCode status = U_ZERO_ERROR;
+    UCollator *ucol;
+    UCharIterator iter;
+
+    static const UChar text[] = { 0x0044, 0xD81A };
+
+    size_t length = sizeof(text)/sizeof(*text);
+
+    uint8_t textSortKey[32];
+    size_t lenSortKey = 32;
+    size_t actualSortKeyLen;
+    uint32_t uStateInfo[2] = { 0, 0 };
+
+    ucol = ucol_openFromShortString(collString, FALSE, NULL, &status);
+    if (U_FAILURE(status)) {
+        log_err("ucol_openFromShortString error in Craotian test.\n");
+        return;
+    }
+
+    uiter_setString(&iter, text, length);
+
+    actualSortKeyLen = ucol_nextSortKeyPart(
+        ucol, &iter, (uint32_t*)uStateInfo,
+        textSortKey, lenSortKey, &status
+        );
+
+    if (actualSortKeyLen == lenSortKey) {
+        log_err("ucol_nextSortKeyPart did not give correct result in Croatian test.\n");
+    }
+
+    ucol_close(ucol);
 }
 
 
