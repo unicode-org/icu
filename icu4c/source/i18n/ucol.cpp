@@ -4673,31 +4673,32 @@ ucol_calcSortKey(const    UCollator    *coll,
 
             if(shifted && ((notIsContinuation && order <= variableTopValue && primary1 > 0)
                 || (!notIsContinuation && wasShifted))
-                || (wasShifted && primary1 == 0)) { /* amendment to the UCA says that primary ignorables */
-                    /* and other ignorables should be removed if following a shifted code point */
-                    if(primary1 == 0) { /* if we were shifted and we got an ignorable code point */
-                        /* we should just completely ignore it */
-                        continue;
+                || (wasShifted && primary1 == 0)) /* amendment to the UCA says that primary ignorables */
+            {
+                /* and other ignorables should be removed if following a shifted code point */
+                if(primary1 == 0) { /* if we were shifted and we got an ignorable code point */
+                    /* we should just completely ignore it */
+                    continue;
+                }
+                if(compareQuad == 0) {
+                    if(count4 > 0) {
+                        while (count4 > UCOL_BOT_COUNT4) {
+                            *quads++ = (uint8_t)(UCOL_COMMON_BOT4 + UCOL_BOT_COUNT4);
+                            count4 -= UCOL_BOT_COUNT4;
+                        }
+                        *quads++ = (uint8_t)(UCOL_COMMON_BOT4 + (count4-1));
+                        count4 = 0;
                     }
-                    if(compareQuad == 0) {
-                        if(count4 > 0) {
-                            while (count4 > UCOL_BOT_COUNT4) {
-                                *quads++ = (uint8_t)(UCOL_COMMON_BOT4 + UCOL_BOT_COUNT4);
-                                count4 -= UCOL_BOT_COUNT4;
-                            }
-                            *quads++ = (uint8_t)(UCOL_COMMON_BOT4 + (count4-1));
-                            count4 = 0;
-                        }
-                        /* We are dealing with a variable and we're treating them as shifted */
-                        /* This is a shifted ignorable */
-                        if(primary1 != 0) { /* we need to check this since we could be in continuation */
-                            *quads++ = primary1;
-                        }
-                        if(primary2 != 0) {
-                            *quads++ = primary2;
-                        }
+                    /* We are dealing with a variable and we're treating them as shifted */
+                    /* This is a shifted ignorable */
+                    if(primary1 != 0) { /* we need to check this since we could be in continuation */
+                        *quads++ = primary1;
                     }
-                    wasShifted = TRUE;
+                    if(primary2 != 0) {
+                        *quads++ = primary2;
+                    }
+                }
+                wasShifted = TRUE;
             } else {
                 wasShifted = FALSE;
                 /* Note: This code assumes that the table is well built i.e. not having 0 bytes where they are not supposed to be. */
