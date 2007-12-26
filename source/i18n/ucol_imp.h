@@ -219,7 +219,7 @@ minimum number for special Jamo
 /* This is the size of the buffer for expansion CE's */
 /* In reality we should not have to deal with expm sequences longer then 16 */
 /* you can change this value if you need memory */
-/* WARNING THIS BUFFER DOES HAVE MALLOC FALLBACK. If you make it too small, you'll get in performance trouble */
+/* WARNING THIS BUFFER DOES HAVE MALLOC FALLBACK. If you make it too small, you'll get into performance trouble */
 /* Reasonable small value is around 10, if you don't do Arabic or other funky collations that have long expansion sequence */
 /* This is the longest expansion sequence we can handle without bombing out */
 #define UCOL_EXPAND_CE_BUFFER_SIZE 64
