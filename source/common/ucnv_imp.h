@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2006, International Business Machines
+*   Copyright (C) 1999-2007, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -87,6 +87,10 @@ ucnv_unloadSharedDataIfReady(UConverterSharedData *sharedData);
 void
 ucnv_incrementRefCount(UConverterSharedData *sharedData);
 
+/**
+ * These are the default error handling callbacks for the charset conversion framework.
+ * For performance reasons, they are only called to handle an error (not normally called for a reset or close).
+ */
 #define UCNV_TO_U_DEFAULT_CALLBACK ((UConverterToUCallback) UCNV_TO_U_CALLBACK_SUBSTITUTE)
 #define UCNV_FROM_U_DEFAULT_CALLBACK ((UConverterFromUCallback) UCNV_FROM_U_CALLBACK_SUBSTITUTE)
 
