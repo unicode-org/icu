@@ -1002,15 +1002,15 @@ static inline UBool ucol_unsafeCP(UChar c, const UCollator *coll) {
 
     hash = c;
     if (hash >= UCOL_UNSAFECP_TABLE_SIZE*8) {
-      if(UTF_IS_LEAD(c) || UTF_IS_TRAIL(c)) {
-            /*  Trail surrogate                     */
+        if(UTF_IS_SURROGATE(c)) {
+            /*  Lead or trail surrogate             */
             /*  These are always considered unsafe. */
             return TRUE;
         }
         hash = (hash & UCOL_UNSAFECP_TABLE_MASK) + 256;
     }
     htbyte = coll->unsafeCP[hash>>3];
-    return (((htbyte >> (hash & 7)) & 1) == 1);
+    return ((htbyte >> (hash & 7)) & 1);
 }
 #endif /* XP_CPLUSPLUS */
 
