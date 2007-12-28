@@ -409,6 +409,67 @@ ucol_openBinary(const uint8_t *bin, int32_t length,
     return ucol_initFromBinary(bin, length, base, NULL, status);
 }
 
+U_CAPI int32_t U_EXPORT2
+ucol_cloneBinary(const UCollator *coll,
+                 uint8_t *buffer, int32_t capacity,
+                 UErrorCode *status)
+{
+    int32_t length = 0;
+    if(U_FAILURE(*status)) {
+        return length;
+    }
+    if(capacity < 0) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return length;
+    }
+    if(coll->hasRealData == TRUE) {
+        length = coll->image->size;
+        if(length <= capacity) {
+            uprv_memcpy(buffer, coll->image, length);
+        } else {
+            *status = U_BUFFER_OVERFLOW_ERROR;
+        }
+    } else {
+        length = (int32_t)(paddedsize(sizeof(UCATableHeader))+paddedsize(sizeof(UColOptionSet)));
+        if(length <= capacity) {
+            /* build the UCATableHeader with minimal entries */
+            /* do not copy the header from the UCA file because its values are wrong! */
+            /* uprv_memcpy(result, UCA->image, sizeof(UCATableHeader)); */
+
+            /* reset everything */
+            uprv_memset(buffer, 0, length);
+
+            /* set the tailoring-specific values */
+            UCATableHeader *myData = (UCATableHeader *)buffer;
+            myData->size = length;
+
+            /* offset for the options, the only part of the data that is present after the header */
+            myData->options = sizeof(UCATableHeader);
+
+            /* need to always set the expansion value for an upper bound of the options */
+            myData->expansion = myData->options + sizeof(UColOptionSet);
+
+            myData->magic = UCOL_HEADER_MAGIC;
+            myData->isBigEndian = U_IS_BIG_ENDIAN;
+            myData->charSetFamily = U_CHARSET_FAMILY;
+
+            /* copy UCA's version; genrb will override all but the builder version with tailoring data */
+            uprv_memcpy(myData->version, coll->image->version, sizeof(UVersionInfo));
+
+            uprv_memcpy(myData->UCAVersion, coll->image->UCAVersion, sizeof(UVersionInfo));
+            uprv_memcpy(myData->UCDVersion, coll->image->UCDVersion, sizeof(UVersionInfo));
+            uprv_memcpy(myData->formatVersion, coll->image->formatVersion, sizeof(UVersionInfo));
+            myData->jamoSpecial = coll->image->jamoSpecial;
+
+            /* copy the collator options */
+            uprv_memcpy(buffer+paddedsize(sizeof(UCATableHeader)), coll->options, sizeof(UColOptionSet));
+        } else {
+            *status = U_BUFFER_OVERFLOW_ERROR;
+        }
+    }
+    return length;
+}
+
 U_CAPI UCollator* U_EXPORT2
 ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, UErrorCode *status)
 {
@@ -558,67 +619,67 @@ ucol_close(UCollator *coll)
 U_CFUNC uint8_t* U_EXPORT2
 ucol_cloneRuleData(const UCollator *coll, int32_t *length, UErrorCode *status)
 {
-  uint8_t *result = NULL;
-  if(U_FAILURE(*status)) {
-    return NULL;
-  }
-  if(coll->hasRealData == TRUE) {
-    *length = coll->image->size;
-    result = (uint8_t *)uprv_malloc(*length);
-    /* test for NULL */
-    if (result == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
+    uint8_t *result = NULL;
+    if(U_FAILURE(*status)) {
         return NULL;
     }
-    uprv_memcpy(result, coll->image, *length);
-  } else {
-    *length = (int32_t)(paddedsize(sizeof(UCATableHeader))+paddedsize(sizeof(UColOptionSet)));
-    result = (uint8_t *)uprv_malloc(*length);
-    /* test for NULL */
-    if (result == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
+    if(coll->hasRealData == TRUE) {
+        *length = coll->image->size;
+        result = (uint8_t *)uprv_malloc(*length);
+        /* test for NULL */
+        if (result == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            return NULL;
+        }
+        uprv_memcpy(result, coll->image, *length);
+    } else {
+        *length = (int32_t)(paddedsize(sizeof(UCATableHeader))+paddedsize(sizeof(UColOptionSet)));
+        result = (uint8_t *)uprv_malloc(*length);
+        /* test for NULL */
+        if (result == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            return NULL;
+        }
+
+        /* build the UCATableHeader with minimal entries */
+        /* do not copy the header from the UCA file because its values are wrong! */
+        /* uprv_memcpy(result, UCA->image, sizeof(UCATableHeader)); */
+
+        /* reset everything */
+        uprv_memset(result, 0, *length);
+
+        /* set the tailoring-specific values */
+        UCATableHeader *myData = (UCATableHeader *)result;
+        myData->size = *length;
+
+        /* offset for the options, the only part of the data that is present after the header */
+        myData->options = sizeof(UCATableHeader);
+
+        /* need to always set the expansion value for an upper bound of the options */
+        myData->expansion = myData->options + sizeof(UColOptionSet);
+
+        myData->magic = UCOL_HEADER_MAGIC;
+        myData->isBigEndian = U_IS_BIG_ENDIAN;
+        myData->charSetFamily = U_CHARSET_FAMILY;
+
+        /* copy UCA's version; genrb will override all but the builder version with tailoring data */
+        uprv_memcpy(myData->version, coll->image->version, sizeof(UVersionInfo));
+
+        uprv_memcpy(myData->UCAVersion, coll->image->UCAVersion, sizeof(UVersionInfo));
+        uprv_memcpy(myData->UCDVersion, coll->image->UCDVersion, sizeof(UVersionInfo));
+        uprv_memcpy(myData->formatVersion, coll->image->formatVersion, sizeof(UVersionInfo));
+        myData->jamoSpecial = coll->image->jamoSpecial;
+
+        /* copy the collator options */
+        uprv_memcpy(result+paddedsize(sizeof(UCATableHeader)), coll->options, sizeof(UColOptionSet));
     }
-
-    /* build the UCATableHeader with minimal entries */
-    /* do not copy the header from the UCA file because its values are wrong! */
-    /* uprv_memcpy(result, UCA->image, sizeof(UCATableHeader)); */
-
-    /* reset everything */
-    uprv_memset(result, 0, *length);
-
-    /* set the tailoring-specific values */
-    UCATableHeader *myData = (UCATableHeader *)result;
-    myData->size = *length;
-
-    /* offset for the options, the only part of the data that is present after the header */
-    myData->options = sizeof(UCATableHeader);
-
-    /* need to always set the expansion value for an upper bound of the options */
-    myData->expansion = myData->options + sizeof(UColOptionSet);
-
-    myData->magic = UCOL_HEADER_MAGIC;
-    myData->isBigEndian = U_IS_BIG_ENDIAN;
-    myData->charSetFamily = U_CHARSET_FAMILY;
-
-    /* copy UCA's version; genrb will override all but the builder version with tailoring data */
-    uprv_memcpy(myData->version, coll->image->version, sizeof(UVersionInfo));
-
-    uprv_memcpy(myData->UCAVersion, coll->image->UCAVersion, sizeof(UVersionInfo));
-    uprv_memcpy(myData->UCDVersion, coll->image->UCDVersion, sizeof(UVersionInfo));
-    uprv_memcpy(myData->formatVersion, coll->image->formatVersion, sizeof(UVersionInfo));
-    myData->jamoSpecial = coll->image->jamoSpecial;
-
-    /* copy the collator options */
-    uprv_memcpy(result+paddedsize(sizeof(UCATableHeader)), coll->options, sizeof(UColOptionSet));
-  }
-  return result;
+    return result;
 }
 
 void ucol_setOptionsFromHeader(UCollator* result, UColOptionSet * opts, UErrorCode *status) {
-  if(U_FAILURE(*status)) {
-    return;
-  }
+    if(U_FAILURE(*status)) {
+        return;
+    }
     result->caseFirst = (UColAttributeValue)opts->caseFirst;
     result->caseLevel = (UColAttributeValue)opts->caseLevel;
     result->frenchCollation = (UColAttributeValue)opts->frenchCollation;
@@ -654,7 +715,7 @@ void ucol_setOptionsFromHeader(UCollator* result, UColOptionSet * opts, UErrorCo
 static
 inline UBool ucol_contractionEndCP(UChar c, const UCollator *coll) {
     if (U16_IS_TRAIL(c)) {
-      return TRUE;
+        return TRUE;
     }
 
     if (c < coll->minContrEndCP) {
@@ -824,30 +885,30 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, con
  */
 
 /**
-    * Function used to:
-    * a) collapse the 2 different Han ranges from UCA into one (in the right order), and
-    * b) bump any non-CJK characters by 10FFFF.
-    * The relevant blocks are:
-    * A:    4E00..9FFF; CJK Unified Ideographs
-    *       F900..FAFF; CJK Compatibility Ideographs
-    * B:    3400..4DBF; CJK Unified Ideographs Extension A
-    *       20000..XX;  CJK Unified Ideographs Extension B (and others later on)
-    * As long as
-    *   no new B characters are allocated between 4E00 and FAFF, and
-    *   no new A characters are outside of this range,
-    * (very high probability) this simple code will work.
-    * The reordered blocks are:
-    * Block1 is CJK
-    * Block2 is CJK_COMPAT_USED
-    * Block3 is CJK_A
-    * (all contiguous)
-    * Any other CJK gets its normal code point
-    * Any non-CJK gets +10FFFF
-    * When we reorder Block1, we make sure that it is at the very start,
-    * so that it will use a 3-byte form.
-    * Warning: the we only pick up the compatibility characters that are
-    * NOT decomposed, so that block is smaller!
-    */
+ * Function used to:
+ * a) collapse the 2 different Han ranges from UCA into one (in the right order), and
+ * b) bump any non-CJK characters by 10FFFF.
+ * The relevant blocks are:
+ * A:    4E00..9FFF; CJK Unified Ideographs
+ *       F900..FAFF; CJK Compatibility Ideographs
+ * B:    3400..4DBF; CJK Unified Ideographs Extension A
+ *       20000..XX;  CJK Unified Ideographs Extension B (and others later on)
+ * As long as
+ *   no new B characters are allocated between 4E00 and FAFF, and
+ *   no new A characters are outside of this range,
+ * (very high probability) this simple code will work.
+ * The reordered blocks are:
+ * Block1 is CJK
+ * Block2 is CJK_COMPAT_USED
+ * Block3 is CJK_A
+ * (all contiguous)
+ * Any other CJK gets its normal code point
+ * Any non-CJK gets +10FFFF
+ * When we reorder Block1, we make sure that it is at the very start,
+ * so that it will use a 3-byte form.
+ * Warning: the we only pick up the compatibility characters that are
+ * NOT decomposed, so that block is smaller!
+ */
 
 // CONSTANTS
 static const UChar32
@@ -1003,17 +1064,14 @@ U_CAPI UChar32 U_EXPORT2
 uprv_uca_getRawFromImplicit(uint32_t implicit) {
     UChar32 result;
     UChar32 b3 = implicit & 0xFF;
-    implicit >>= 8;
-    UChar32 b2 = implicit & 0xFF;
-    implicit >>= 8;
-    UChar32 b1 = implicit & 0xFF;
-    implicit >>= 8;
-    UChar32 b0 = implicit & 0xFF;
+    UChar32 b2 = (implicit >> 8) & 0xFF;
+    UChar32 b1 = (implicit >> 16) & 0xFF;
+    UChar32 b0 = (implicit >> 24) & 0xFF;
 
     // simple parameter checks
     if (b0 < min3Primary || b0 > max4Primary
-      || b1 < minTrail || b1 > maxTrail)
-      return -1;
+        || b1 < minTrail || b1 > maxTrail)
+        return -1;
     // normal offsets
     b1 -= minTrail;
 
@@ -1070,15 +1128,10 @@ static void initImplicitConstants(int minPrimary, int maxPrimary,
                                     int gap3, int primaries3count,
                                     UErrorCode *status) {
     // some simple parameter checks
-    if (minPrimary < 0 || minPrimary >= maxPrimary || maxPrimary > 0xFF) {
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
-    };
-    if (minTrailIn < 0 || minTrailIn >= maxTrailIn || maxTrailIn > 0xFF) {
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
-    };
-    if (primaries3count < 1) {
+    if ((minPrimary < 0 || minPrimary >= maxPrimary || maxPrimary > 0xFF)
+        || (minTrailIn < 0 || minTrailIn >= maxTrailIn || maxTrailIn > 0xFF)
+        || (primaries3count < 1))
+    {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     };
@@ -1115,11 +1168,8 @@ static void initImplicitConstants(int minPrimary, int maxPrimary,
 
     int32_t totalNeeded = UCOL_MAX_INPUT - min4Boundary;
     int32_t neededPerPrimaryByte = divideAndRoundUp(totalNeeded, primaries4count);
-    //if (DEBUG) System.out.println("neededPerPrimaryByte: " + neededPerPrimaryByte);
     int32_t neededPerFinalByte = divideAndRoundUp(neededPerPrimaryByte, medialCount * medialCount);
-    //if (DEBUG) System.out.println("neededPerFinalByte: " + neededPerFinalByte);
     int32_t gap4 = (maxTrail - minTrail - 1) / neededPerFinalByte;
-    //if (DEBUG) System.out.println("expandedGap: " + gap4);
     if (gap4 < 1) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
@@ -1127,15 +1177,6 @@ static void initImplicitConstants(int minPrimary, int maxPrimary,
     final4Multiplier = gap4 + 1;
     final4Count = neededPerFinalByte;
     max4Trail = minTrail + (final4Count - 1) * final4Multiplier;
-    /*
-    if (DEBUG) {
-        System.out.println("final4Count: " + final4Count);
-        for (int counter = 0; counter <= final4Count; ++counter) {
-            int value = minTrail + (1 + counter)*final4Multiplier;
-            System.out.println(counter + "\t" + value + "\t" + Utility.hex(value));
-        }
-    }
-    */
 }
 
     /**
@@ -1965,12 +2006,12 @@ ucol_getPrevCE(const UCollator *coll, collIterate *data,
 /* this should be connected to special Jamo handling */
 U_CFUNC uint32_t  U_EXPORT2
 ucol_getFirstCE(const UCollator *coll, UChar u, UErrorCode *status) {
-  collIterate colIt;
-  uint32_t order;
-  IInit_collIterate(coll, &u, 1, &colIt);
-  order = ucol_IGetNextCE(coll, &colIt, status);
-  /*UCOL_GETNEXTCE(order, coll, colIt, status);*/
-  return order;
+    collIterate colIt;
+    uint32_t order;
+    IInit_collIterate(coll, &u, 1, &colIt);
+    order = ucol_IGetNextCE(coll, &colIt, status);
+    /*UCOL_GETNEXTCE(order, coll, colIt, status);*/
+    return order;
 }
 
 /**
@@ -1984,9 +2025,9 @@ ucol_getFirstCE(const UCollator *coll, UChar u, UErrorCode *status) {
 static
 inline UChar * insertBufferEnd(collIterate *data, UChar *pNull, UChar ch)
 {
-          uint32_t  size    = data->writableBufSize;
-          UChar    *newbuffer;
-    const uint32_t  incsize = 5;
+    uint32_t  size    = data->writableBufSize;
+    UChar    *newbuffer;
+    static const uint32_t  INCSIZE = 5;
 
     if ((data->writableBuffer + size) > (pNull + 1)) {
         *pNull = ch;
@@ -1998,19 +2039,19 @@ inline UChar * insertBufferEnd(collIterate *data, UChar *pNull, UChar ch)
     buffer will always be null terminated at the end.
     giving extra space since it is likely that more characters will be added.
     */
-    size += incsize;
+    size += INCSIZE;
     newbuffer = (UChar *)uprv_malloc(sizeof(UChar) * size);
     if(newbuffer != NULL) { // something wrong, but no status
-      uprv_memcpy(newbuffer, data->writableBuffer,
-                  data->writableBufSize * sizeof(UChar));
+        uprv_memcpy(newbuffer, data->writableBuffer,
+            data->writableBufSize * sizeof(UChar));
 
-      freeHeapWritableBuffer(data);
-      data->writableBufSize = size;
-      data->writableBuffer  = newbuffer;
+        freeHeapWritableBuffer(data);
+        data->writableBufSize = size;
+        data->writableBuffer  = newbuffer;
 
-      newbuffer        = newbuffer + data->writableBufSize;
-      *newbuffer       = ch;
-      *(newbuffer + 1) = 0;
+        newbuffer        = newbuffer + data->writableBufSize;
+        *newbuffer       = ch;
+        *(newbuffer + 1) = 0;
     }
     return newbuffer;
 }
@@ -2416,10 +2457,7 @@ uint32_t getDiscontiguous(const UCollator *coll, collIterate *source,
 
 static
 inline UBool isNonChar(UChar32 cp) {
-    if ((cp & 0xFFFE) == 0xFFFE || (0xFDD0 <= cp && cp <= 0xFDEF) || (0xD800 <= cp && cp <= 0xDFFF)) {
-        return TRUE;
-    }
-    return FALSE;
+    return (UBool)((cp & 0xFFFE) == 0xFFFE || (0xFDD0 <= cp && cp <= 0xFDEF) || (0xD800 <= cp && cp <= 0xDFFF));
 }
 
 /* now uses Mark's getImplicitPrimary code */
@@ -2444,10 +2482,10 @@ inline uint32_t getImplicit(UChar32 cp, collIterate *collationSource) {
 static
 inline UChar * insertBufferFront(collIterate *data, UChar *pNull, UChar ch)
 {
-          uint32_t  size    = data->writableBufSize;
-          UChar    *end;
-          UChar    *newbuffer;
-    const uint32_t  incsize = 5;
+    uint32_t  size    = data->writableBufSize;
+    UChar    *end;
+    UChar    *newbuffer;
+    static const uint32_t  INCSIZE = 5;
 
     if (pNull > data->writableBuffer + 1) {
         *pNull       = ch;
@@ -2459,12 +2497,12 @@ inline UChar * insertBufferFront(collIterate *data, UChar *pNull, UChar ch)
     buffer will always be null terminated infront.
     giving extra space since it is likely that more characters will be added.
     */
-    size += incsize;
+    size += INCSIZE;
     newbuffer = (UChar *)uprv_malloc(sizeof(UChar) * size);
     if(newbuffer == NULL) {
-      return NULL;
+        return NULL;
     }
-    end = newbuffer + incsize;
+    end = newbuffer + INCSIZE;
     uprv_memcpy(end, data->writableBuffer,
                 data->writableBufSize * sizeof(UChar));
     *end       = ch;
@@ -2669,33 +2707,6 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
         case NOT_FOUND_TAG:
             /* This one is not found, and we'll let somebody else bother about it... no more games */
             return CE;
-        case SURROGATE_TAG:
-            /* we encountered a leading surrogate. We shall get the CE by using the following code unit */
-            /* two things can happen here: next code point can be a trailing surrogate - we will use it */
-            /* to retrieve the CE, or it is not a trailing surrogate (or the string is done). In that case */
-            /* we return 0 (completely ignorable - per UCA specification */
-            {
-                UChar trail;
-                collIterateState state;
-                backupState(source, &state);
-                if (collIter_eos(source) || !(U16_IS_TRAIL((trail = getNextNormalizedChar(source))))) {
-                    // we chould have stepped one char forward and it might have turned that it
-                    // was not a trail surrogate. In that case, we have to backup.
-                    loadState(source, &state, TRUE);
-                    return 0;
-                } else {
-                    /* TODO: CE contain the data from the previous CE + the mask. It should at least be unmasked */
-                    CE = UTRIE_GET32_FROM_OFFSET_TRAIL(&coll->mapping, CE&0xFFFFFF, trail);
-                    if(CE == UCOL_NOT_FOUND) { // there are tailored surrogates in this block, but not this one.
-                        // We need to backup
-                        loadState(source, &state, TRUE);
-                        return CE;
-                    }
-                    // calculate the supplementary code point value, if surrogate was not tailored
-                    cp = ((((uint32_t)ch)<<10UL)+(trail)-(((uint32_t)0xd800<<10UL)+0xdc00-0x10000));
-                }
-            }
-            break;
         case SPEC_PROC_TAG:
             {
                 // Special processing is getting a CE that is preceded by a certain prefix
@@ -3173,41 +3184,19 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
                 return CE;
             }
             /* various implicits optimization */
-            // TODO: remove CJK_IMPLICIT_TAG completely - handled by the getImplicit
-        case CJK_IMPLICIT_TAG:    /* 0x3400-0x4DB5, 0x4E00-0x9FA5, 0xF900-0xFA2D*/
-            //return getImplicit(cp, source, 0x04000000);
-            return getImplicit(cp, source);
         case IMPLICIT_TAG:        /* everything that is not defined otherwise */
             /* UCA is filled with these. Tailorings are NOT_FOUND */
-            //return getImplicit(cp, source, 0);
             return getImplicit(cp, source);
-        case TRAIL_SURROGATE_TAG: /* DC00-DFFF*/
-            return 0; /* broken surrogate sequence */
-        case LEAD_SURROGATE_TAG:  /* D800-DBFF*/
-            UChar nextChar;
-            if( source->flags & UCOL_USE_ITERATOR) {
-                if(U_IS_TRAIL(nextChar = (UChar)source->iterator->current(source->iterator))) {
-                    cp = U16_GET_SUPPLEMENTARY(ch, nextChar);
-                    source->iterator->next(source->iterator);
-                    return getImplicit(cp, source);
-                } else {
-                    return 0;
-                }
-            } else if((((source->flags & UCOL_ITER_HASLEN) == 0 ) || (source->pos<source->endp)) &&
-                U_IS_TRAIL((nextChar=*source->pos))) {
-                    cp = U16_GET_SUPPLEMENTARY(ch, nextChar);
-                    source->pos++;
-                    return getImplicit(cp, source);
-            } else {
-                return 0; /* completely ignorable */
-            }
+        case CJK_IMPLICIT_TAG:    /* 0x3400-0x4DB5, 0x4E00-0x9FA5, 0xF900-0xFA2D*/
+            // TODO: remove CJK_IMPLICIT_TAG completely - handled by the getImplicit
+            return getImplicit(cp, source);
         case HANGUL_SYLLABLE_TAG: /* AC00-D7AF*/
             {
-                const uint32_t
+                static const uint32_t
                     SBase = 0xAC00, LBase = 0x1100, VBase = 0x1161, TBase = 0x11A7;
                 //const uint32_t LCount = 19;
-                const uint32_t VCount = 21;
-                const uint32_t TCount = 28;
+                static const uint32_t VCount = 21;
+                static const uint32_t TCount = 28;
                 //const uint32_t NCount = VCount * TCount;   // 588
                 //const uint32_t SCount = LCount * NCount;   // 11172
                 uint32_t L = ch - SBase;
@@ -3267,6 +3256,53 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
                     return(UCOL_IGNORABLE);
                 }
             }
+        case SURROGATE_TAG:
+            /* we encountered a leading surrogate. We shall get the CE by using the following code unit */
+            /* two things can happen here: next code point can be a trailing surrogate - we will use it */
+            /* to retrieve the CE, or it is not a trailing surrogate (or the string is done). In that case */
+            /* we return 0 (completely ignorable - per UCA specification */
+            {
+                UChar trail;
+                collIterateState state;
+                backupState(source, &state);
+                if (collIter_eos(source) || !(U16_IS_TRAIL((trail = getNextNormalizedChar(source))))) {
+                    // we chould have stepped one char forward and it might have turned that it
+                    // was not a trail surrogate. In that case, we have to backup.
+                    loadState(source, &state, TRUE);
+                    return 0;
+                } else {
+                    /* TODO: CE contain the data from the previous CE + the mask. It should at least be unmasked */
+                    CE = UTRIE_GET32_FROM_OFFSET_TRAIL(&coll->mapping, CE&0xFFFFFF, trail);
+                    if(CE == UCOL_NOT_FOUND) { // there are tailored surrogates in this block, but not this one.
+                        // We need to backup
+                        loadState(source, &state, TRUE);
+                        return CE;
+                    }
+                    // calculate the supplementary code point value, if surrogate was not tailored
+                    cp = ((((uint32_t)ch)<<10UL)+(trail)-(((uint32_t)0xd800<<10UL)+0xdc00-0x10000));
+                }
+            }
+            break;
+        case LEAD_SURROGATE_TAG:  /* D800-DBFF*/
+            UChar nextChar;
+            if( source->flags & UCOL_USE_ITERATOR) {
+                if(U_IS_TRAIL(nextChar = (UChar)source->iterator->current(source->iterator))) {
+                    cp = U16_GET_SUPPLEMENTARY(ch, nextChar);
+                    source->iterator->next(source->iterator);
+                    return getImplicit(cp, source);
+                } else {
+                    return 0;
+                }
+            } else if((((source->flags & UCOL_ITER_HASLEN) == 0 ) || (source->pos<source->endp)) &&
+                U_IS_TRAIL((nextChar=*source->pos))) {
+                    cp = U16_GET_SUPPLEMENTARY(ch, nextChar);
+                    source->pos++;
+                    return getImplicit(cp, source);
+            } else {
+                return 0; /* completely ignorable */
+            }
+        case TRAIL_SURROGATE_TAG: /* DC00-DFFF*/
+            return 0; /* broken surrogate sequence */
         case CHARSET_TAG:
             /* not yet implemented */
             /* probably after 1.8 */
@@ -3323,11 +3359,6 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
         {
         case NOT_FOUND_TAG:  /* this tag always returns */
             return CE;
-        case SURROGATE_TAG:  /* This is a surrogate pair */
-            /* essentialy an engaged lead surrogate. */
-            /* if you have encountered it here, it means that a */
-            /* broken sequence was encountered and this is an error */
-            return 0;
         case SPEC_PROC_TAG:
             {
                 // Special processing is getting a CE that is preceded by a certain prefix
@@ -3815,11 +3846,11 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
             }
         case HANGUL_SYLLABLE_TAG: /* AC00-D7AF*/
             {
-                const uint32_t
+                static const uint32_t
                     SBase = 0xAC00, LBase = 0x1100, VBase = 0x1161, TBase = 0x11A7;
                 //const uint32_t LCount = 19;
-                const uint32_t VCount = 21;
-                const uint32_t TCount = 28;
+                static const uint32_t VCount = 21;
+                static const uint32_t TCount = 28;
                 //const uint32_t NCount = VCount * TCount;   /* 588 */
                 //const uint32_t SCount = LCount * NCount;   /* 11172 */
 
@@ -3892,6 +3923,16 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                     return(UCOL_IGNORABLE);
                 }
             }
+        case IMPLICIT_TAG:        /* everything that is not defined otherwise */
+            return getPrevImplicit(ch, source);
+            // TODO: Remove CJK implicits as they are handled by the getImplicitPrimary function
+        case CJK_IMPLICIT_TAG:    /* 0x3400-0x4DB5, 0x4E00-0x9FA5, 0xF900-0xFA2D*/
+            return getPrevImplicit(ch, source);
+        case SURROGATE_TAG:  /* This is a surrogate pair */
+            /* essentialy an engaged lead surrogate. */
+            /* if you have encountered it here, it means that a */
+            /* broken sequence was encountered and this is an error */
+            return 0;
         case LEAD_SURROGATE_TAG:  /* D800-DBFF*/
             return 0; /* broken surrogate sequence */
         case TRAIL_SURROGATE_TAG: /* DC00-DFFF*/
@@ -3919,11 +3960,6 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                 }
                 return getPrevImplicit(cp, source);
             }
-            // TODO: Remove CJK implicits as they are handled by the getImplicitPrimary function
-        case CJK_IMPLICIT_TAG:    /* 0x3400-0x4DB5, 0x4E00-0x9FA5, 0xF900-0xFA2D*/
-            return getPrevImplicit(ch, source);
-        case IMPLICIT_TAG:        /* everything that is not defined otherwise */
-            return getPrevImplicit(ch, source);
             /* UCA is filled with these. Tailorings are NOT_FOUND */
             /* not yet implemented */
         case CHARSET_TAG:  /* this tag always returns */
@@ -4170,8 +4206,8 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
     uint32_t variableTopValue = coll->variableTopValue;
     uint8_t UCOL_COMMON_BOT4 = (uint8_t)((coll->variableTopValue>>8)+1);
     if(doHiragana) {
-      UCOL_COMMON_BOT4++;
-      /* allocate one more space for hiragana */
+        UCOL_COMMON_BOT4++;
+        /* allocate one more space for hiragana */
     }
     uint8_t UCOL_BOT_COUNT4 = (uint8_t)(0xFF - UCOL_COMMON_BOT4);
 
@@ -6390,20 +6426,20 @@ ucol_getBound(const uint8_t       *source,
         uprv_memcpy(result, source, sourceIndex);
         switch(boundType) {
             // Lower bound just gets terminated. No extra bytes
-    case UCOL_BOUND_LOWER: // = 0
-        break;
-        // Upper bound needs one extra byte
-    case UCOL_BOUND_UPPER: // = 1
-        result[sourceIndex++] = 2;
-        break;
-        // Upper long bound needs two extra bytes
-    case UCOL_BOUND_UPPER_LONG: // = 2
-        result[sourceIndex++] = 0xFF;
-        result[sourceIndex++] = 0xFF;
-        break;
-    default:
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
+        case UCOL_BOUND_LOWER: // = 0
+            break;
+            // Upper bound needs one extra byte
+        case UCOL_BOUND_UPPER: // = 1
+            result[sourceIndex++] = 2;
+            break;
+            // Upper long bound needs two extra bytes
+        case UCOL_BOUND_UPPER_LONG: // = 2
+            result[sourceIndex++] = 0xFF;
+            result[sourceIndex++] = 0xFF;
+            break;
+        default:
+            *status = U_ILLEGAL_ARGUMENT_ERROR;
+            return 0;
         }
         result[sourceIndex++] = 0;
 
@@ -8222,7 +8258,6 @@ end_compare:
 }
 
 
-
 /*                                                                      */
 /* ucol_strcoll     Main public API string comparison function          */
 /*                                                                      */
@@ -8231,24 +8266,30 @@ ucol_strcoll( const UCollator    *coll,
               const UChar        *source,
               int32_t            sourceLength,
               const UChar        *target,
-              int32_t            targetLength) {
+              int32_t            targetLength)
+{
     U_ALIGN_CODE(16);
 
     UTRACE_ENTRY(UTRACE_UCOL_STRCOLL);
     if (UTRACE_LEVEL(UTRACE_VERBOSE)) {
-      UTRACE_DATA3(UTRACE_VERBOSE, "coll=%p, source=%p, target=%p", coll, source, target);
-      UTRACE_DATA2(UTRACE_VERBOSE, "source string = %vh ", source, sourceLength);
-      UTRACE_DATA2(UTRACE_VERBOSE, "target string = %vh ", target, targetLength);
+        UTRACE_DATA3(UTRACE_VERBOSE, "coll=%p, source=%p, target=%p", coll, source, target);
+        UTRACE_DATA2(UTRACE_VERBOSE, "source string = %vh ", source, sourceLength);
+        UTRACE_DATA2(UTRACE_VERBOSE, "target string = %vh ", target, targetLength);
     }
 
-    UErrorCode status = U_ZERO_ERROR;
     if(source == NULL || target == NULL) {
-      // do not crash, but return. Should have
-      // status argument to return error.
-      UTRACE_EXIT_VALUE(UTRACE_UCOL_STRCOLL);
-      return UCOL_EQUAL;
+        // do not crash, but return. Should have
+        // status argument to return error.
+        UTRACE_EXIT_VALUE(UCOL_EQUAL);
+        return UCOL_EQUAL;
     }
-      collIterate sColl, tColl;
+
+    /* Quick check if source and target are same strings. */
+    /* They should either both be NULL terminated or the explicit length should be set on both. */
+    if (source==target && sourceLength==targetLength) {
+        UTRACE_EXIT_VALUE(UCOL_EQUAL);
+        return UCOL_EQUAL;
+    }
 
     /* Scan the strings.  Find:                                                             */
     /*    The length of any leading portion that is equal                                   */
@@ -8259,17 +8300,8 @@ ucol_strcoll( const UCollator    *coll,
 
     if (sourceLength == -1 && targetLength == -1) {
         // Both strings are null terminated.
-        //    Check for them being the same string, and scan through
-        //    any leading equal portion.
-        if (source==target) {
-            UTRACE_EXIT_VALUE(UCOL_EQUAL);
-            return UCOL_EQUAL;
-        }
-
-        for (;;) {
-            if ( *pSrc != *pTarg || *pSrc == 0) {
-                break;
-            }
+        //    Scan through any leading equal portion.
+        while (*pSrc == *pTarg && *pSrc != 0) {
             pSrc++;
             pTarg++;
         }
@@ -8282,15 +8314,8 @@ ucol_strcoll( const UCollator    *coll,
     else
     {
         // One or both strings has an explicit length.
-        /* check if source and target are same strings */
-
-        if (source==target  && sourceLength==targetLength) {
-            UTRACE_EXIT_VALUE(UCOL_EQUAL);
-            return UCOL_EQUAL;
-        }
         const UChar    *pSrcEnd = source + sourceLength;
         const UChar    *pTargEnd = target + targetLength;
-
 
         // Scan while the strings are bitwise ==, or until one is exhausted.
         for (;;) {
@@ -8310,7 +8335,8 @@ ucol_strcoll( const UCollator    *coll,
 
         // If we made it all the way through both strings, we are done.  They are ==
         if ((pSrc ==pSrcEnd  || (pSrcEnd <pSrc  && *pSrc==0))  &&   /* At end of src string, however it was specified. */
-            (pTarg==pTargEnd || (pTargEnd<pTarg && *pTarg==0)))  {  /* and also at end of dest string                  */
+            (pTarg==pTargEnd || (pTargEnd<pTarg && *pTarg==0)))     /* and also at end of dest string                  */
+        {
             UTRACE_EXIT_VALUE(UCOL_EQUAL);
             return UCOL_EQUAL;
         }
@@ -8319,8 +8345,10 @@ ucol_strcoll( const UCollator    *coll,
         /* There is an identical portion at the beginning of the two strings.        */
         /*   If the identical portion ends within a contraction or a comibining      */
         /*   character sequence, back up to the start of that sequence.              */
-        pSrc  = source + equalLength;        /* point to the first differing chars   */
-        pTarg = target + equalLength;
+        
+        // These values should already be set by the code above.
+        //pSrc  = source + equalLength;        /* point to the first differing chars   */
+        //pTarg = target + equalLength;
         if (pSrc  != source+sourceLength && ucol_unsafeCP(*pSrc, coll) ||
             pTarg != target+targetLength && ucol_unsafeCP(*pTarg, coll))
         {
@@ -8345,8 +8373,10 @@ ucol_strcoll( const UCollator    *coll,
         }
     }
 
-    UCollationResult  returnVal;
+    UErrorCode status = U_ZERO_ERROR;
+    UCollationResult returnVal;
     if(!coll->latinOneUse || (sourceLength > 0 && *source&0xff00) || (targetLength > 0 && *target&0xff00)) {
+        collIterate sColl, tColl;
         // Preparing the context objects for iterating over strings
         IInit_collIterate(coll, source, sourceLength, &sColl);
         IInit_collIterate(coll, target, targetLength, &tColl);
@@ -8399,67 +8429,6 @@ ucol_getUCAVersion(const UCollator* coll, UVersionInfo info) {
     if(coll && coll->UCA) {
         uprv_memcpy(info, coll->UCA->image->UCAVersion, sizeof(UVersionInfo));
     }
-}
-
-U_CAPI int32_t U_EXPORT2
-ucol_cloneBinary(const UCollator *coll,
-                 uint8_t *buffer, int32_t capacity,
-                 UErrorCode *status)
-{
-    int32_t length = 0;
-    if(U_FAILURE(*status)) {
-        return length;
-    }
-    if(capacity < 0) {
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return length;
-    }
-    if(coll->hasRealData == TRUE) {
-        length = coll->image->size;
-        if(length <= capacity) {
-            uprv_memcpy(buffer, coll->image, length);
-        } else {
-            *status = U_BUFFER_OVERFLOW_ERROR;
-        }
-    } else {
-        length = (int32_t)(paddedsize(sizeof(UCATableHeader))+paddedsize(sizeof(UColOptionSet)));
-        if(length <= capacity) {
-            /* build the UCATableHeader with minimal entries */
-            /* do not copy the header from the UCA file because its values are wrong! */
-            /* uprv_memcpy(result, UCA->image, sizeof(UCATableHeader)); */
-
-            /* reset everything */
-            uprv_memset(buffer, 0, length);
-
-            /* set the tailoring-specific values */
-            UCATableHeader *myData = (UCATableHeader *)buffer;
-            myData->size = length;
-
-            /* offset for the options, the only part of the data that is present after the header */
-            myData->options = sizeof(UCATableHeader);
-
-            /* need to always set the expansion value for an upper bound of the options */
-            myData->expansion = myData->options + sizeof(UColOptionSet);
-
-            myData->magic = UCOL_HEADER_MAGIC;
-            myData->isBigEndian = U_IS_BIG_ENDIAN;
-            myData->charSetFamily = U_CHARSET_FAMILY;
-
-            /* copy UCA's version; genrb will override all but the builder version with tailoring data */
-            uprv_memcpy(myData->version, coll->image->version, sizeof(UVersionInfo));
-
-            uprv_memcpy(myData->UCAVersion, coll->image->UCAVersion, sizeof(UVersionInfo));
-            uprv_memcpy(myData->UCDVersion, coll->image->UCDVersion, sizeof(UVersionInfo));
-            uprv_memcpy(myData->formatVersion, coll->image->formatVersion, sizeof(UVersionInfo));
-            myData->jamoSpecial = coll->image->jamoSpecial;
-
-            /* copy the collator options */
-            uprv_memcpy(buffer+paddedsize(sizeof(UCATableHeader)), coll->options, sizeof(UColOptionSet));
-        } else {
-            *status = U_BUFFER_OVERFLOW_ERROR;
-        }
-    }
-    return length;
 }
 
 U_CAPI void U_EXPORT2
