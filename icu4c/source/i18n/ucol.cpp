@@ -714,10 +714,6 @@ void ucol_setOptionsFromHeader(UCollator* result, UColOptionSet * opts, UErrorCo
 */
 static
 inline UBool ucol_contractionEndCP(UChar c, const UCollator *coll) {
-    if (U16_IS_TRAIL(c)) {
-        return TRUE;
-    }
-
     if (c < coll->minContrEndCP) {
         return FALSE;
     }
@@ -725,6 +721,9 @@ inline UBool ucol_contractionEndCP(UChar c, const UCollator *coll) {
     int32_t  hash = c;
     uint8_t  htbyte;
     if (hash >= UCOL_UNSAFECP_TABLE_SIZE*8) {
+        if (U16_IS_TRAIL(c)) {
+            return TRUE;
+        }
         hash = (hash & UCOL_UNSAFECP_TABLE_MASK) + 256;
     }
     htbyte = coll->contrEndCP[hash>>3];
@@ -1959,36 +1958,37 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
         contraction
         */
         if (ucol_contractionEndCP(ch, coll) && !isAtStartPrevIterate(data)) {
-          result = ucol_prv_getSpecialPrevCE(coll, ch, UCOL_CONTRACTION, data, status);
+            result = ucol_prv_getSpecialPrevCE(coll, ch, UCOL_CONTRACTION, data, status);
         } else {
-          if (ch <= 0xFF) {
-            result = coll->latinOneMapping[ch];
-          }
-          else {
-            result = UTRIE_GET32_FROM_LEAD(&coll->mapping, ch);
-          }
-          if (result > UCOL_NOT_FOUND) {
-            result = ucol_prv_getSpecialPrevCE(coll, ch, result, data, status);
-          }
-          if (result == UCOL_NOT_FOUND) { // Not found in master list
-            if (!isAtStartPrevIterate(data) &&
-              ucol_contractionEndCP(ch, data->coll)) {
-                result = UCOL_CONTRACTION;
-            } else {
-              if(coll->UCA) {
-                result = UTRIE_GET32_FROM_LEAD(&coll->UCA->mapping, ch);
-              }
+            if (ch <= 0xFF) {
+                result = coll->latinOneMapping[ch];
             }
-
+            else {
+                result = UTRIE_GET32_FROM_LEAD(&coll->mapping, ch);
+            }
             if (result > UCOL_NOT_FOUND) {
-              if(coll->UCA) {
-                result = ucol_prv_getSpecialPrevCE(coll->UCA, ch, result, data, status);
-              }
+                result = ucol_prv_getSpecialPrevCE(coll, ch, result, data, status);
             }
-          }
+            if (result == UCOL_NOT_FOUND) { // Not found in master list
+                if (!isAtStartPrevIterate(data) &&
+                    ucol_contractionEndCP(ch, data->coll))
+                {
+                    result = UCOL_CONTRACTION;
+                } else {
+                    if(coll->UCA) {
+                        result = UTRIE_GET32_FROM_LEAD(&coll->UCA->mapping, ch);
+                    }
+                }
+
+                if (result > UCOL_NOT_FOUND) {
+                    if(coll->UCA) {
+                        result = ucol_prv_getSpecialPrevCE(coll->UCA, ch, result, data, status);
+                    }
+                }
+            }
         }
         if(result == UCOL_NOT_FOUND) {
-          result = getPrevImplicit(ch, data);
+            result = getPrevImplicit(ch, data);
         }
     }
     return result;
