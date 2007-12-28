@@ -565,34 +565,35 @@ static void _reset(UConverter *converter, UConverterResetChoice choice,
 
     if(callCallback) {
         /* first, notify the callback functions that the converter is reset */
-        UConverterToUnicodeArgs toUArgs = {
-            sizeof(UConverterToUnicodeArgs),
-                TRUE,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                NULL
-        };
-        UConverterFromUnicodeArgs fromUArgs = {
-            sizeof(UConverterFromUnicodeArgs),
-                TRUE,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                NULL
-        };
         UErrorCode errorCode;
 
-        toUArgs.converter = fromUArgs.converter = converter;
-        if(choice<=UCNV_RESET_TO_UNICODE) {
+        if(choice<=UCNV_RESET_TO_UNICODE && converter->fromCharErrorBehaviour != UCNV_TO_U_DEFAULT_CALLBACK) {
+            UConverterToUnicodeArgs toUArgs = {
+                sizeof(UConverterToUnicodeArgs),
+                TRUE,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL
+            };
+            toUArgs.converter = converter;
             errorCode = U_ZERO_ERROR;
             converter->fromCharErrorBehaviour(converter->toUContext, &toUArgs, NULL, 0, UCNV_RESET, &errorCode);
         }
-        if(choice!=UCNV_RESET_TO_UNICODE) {
+        if(choice!=UCNV_RESET_TO_UNICODE && converter->fromUCharErrorBehaviour != UCNV_FROM_U_DEFAULT_CALLBACK) {
+            UConverterFromUnicodeArgs fromUArgs = {
+                sizeof(UConverterFromUnicodeArgs),
+                TRUE,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL
+            };
+            fromUArgs.converter = converter;
             errorCode = U_ZERO_ERROR;
             converter->fromUCharErrorBehaviour(converter->fromUContext, &fromUArgs, NULL, 0, 0, UCNV_RESET, &errorCode);
         }
