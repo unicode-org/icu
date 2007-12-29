@@ -1,7 +1,6 @@
-
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 2007-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -16,55 +15,11 @@
 #include "unicode/plurfmt.h"
 
 
-#if defined( U_DEBUG_PLURFMT ) 
-#include <stdio.h>
-#endif
-
 const UnicodeString oddAndEvenRule = UNICODE_STRING_SIMPLE("odd: n mod 2 is 1");
 #define PLURAL_PATTERN_DATA 4
 #define PLURAL_TEST_ARRAY_SIZE 256
 
-const UnicodeString patternTestData[PLURAL_PATTERN_DATA] = {
-    UNICODE_STRING_SIMPLE("odd {# is odd.} other{# is even.}"),
-    UNICODE_STRING_SIMPLE("other{# is odd or even.}"),
-    UNICODE_STRING_SIMPLE("odd{The number {0, number, #.#0} is odd.}other{The number {0, number, #.#0} is even.}"),
-    UNICODE_STRING_SIMPLE("odd{The number {#} is odd.}other{The number {#} is even.}"),
-};
-
-const UnicodeString patternOddTestResult[PLURAL_PATTERN_DATA] = {
-    UNICODE_STRING_SIMPLE(" is odd."),
-    UNICODE_STRING_SIMPLE(" is odd or even."),
-    UNICODE_STRING_SIMPLE("The number {0, number, #.#0} is odd."),
-    UNICODE_STRING_SIMPLE("The number {#} is odd."),
-};
-
-const UnicodeString patternEvenTestResult[PLURAL_PATTERN_DATA] = {
-    UNICODE_STRING_SIMPLE(" is even."),
-    UNICODE_STRING_SIMPLE(" is odd or even."),
-    UNICODE_STRING_SIMPLE("The number {0, number, #.#0} is even."),
-    UNICODE_STRING_SIMPLE("The number {#} is even."),
-};
-
 #define PLURAL_SYNTAX_DATA 8
-const UnicodeString checkSyntaxtData[PLURAL_SYNTAX_DATA] = {
-    UNICODE_STRING_SIMPLE("odd{foo} odd{bar} other{foobar}"),
-    UNICODE_STRING_SIMPLE("odd{foo} other{bar} other{foobar}"),
-    UNICODE_STRING_SIMPLE("odd{foo}"),
-    UNICODE_STRING_SIMPLE("otto{foo} other{bar}"),
-    UNICODE_STRING_SIMPLE("1odd{foo} other{bar}"),
-    UNICODE_STRING_SIMPLE("odd{foo},other{bar}"),
-    UNICODE_STRING_SIMPLE("od d{foo} other{bar}"),
-    UNICODE_STRING_SIMPLE("odd{foo}{foobar}other{foo}"),
-};
-
-const UnicodeString PLKeywordLookups[6] = {
-    UNICODE_STRING_SIMPLE("zero"),
-    UNICODE_STRING_SIMPLE("one"),
-    UNICODE_STRING_SIMPLE("two"),
-    UNICODE_STRING_SIMPLE("few"),
-    UNICODE_STRING_SIMPLE("many"),
-    UNICODE_STRING_SIMPLE("other"),
-};
 
 // The value must be same as PLKeywordLookups[] order.
 #define PFT_ZERO   0
@@ -78,17 +33,11 @@ void PluralFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
 {
     if (exec) logln("TestSuite PluralFormat");
     switch (index) {
-        case 0: name = "PluralFormat basic test"; 
-                if (exec) pluralFormatBasicTest();
-                break;
-        case 1: name = "PluralFormat unit tests"; 
-                if (exec) pluralFormatUnitTest();
-                break;
-        case 2: name = "PluralFormat locale test"; 
-                if (exec) pluralFormatLocaleTest();
-                break;
+        TESTCASE(0, pluralFormatBasicTest);
+        TESTCASE(1, pluralFormatUnitTest);
+        TESTCASE(2, pluralFormatLocaleTest);
         default: name = "";
-        break;
+            break;
     }
 }
 
@@ -145,6 +94,35 @@ void PluralFormatTest::pluralFormatBasicTest(/*char *par*/)
  */
 void PluralFormatTest::pluralFormatUnitTest(/*char *par*/)
 {
+    UnicodeString patternTestData[PLURAL_PATTERN_DATA] = {
+        UNICODE_STRING_SIMPLE("odd {# is odd.} other{# is even.}"),
+        UNICODE_STRING_SIMPLE("other{# is odd or even.}"),
+        UNICODE_STRING_SIMPLE("odd{The number {0, number, #.#0} is odd.}other{The number {0, number, #.#0} is even.}"),
+        UNICODE_STRING_SIMPLE("odd{The number {#} is odd.}other{The number {#} is even.}"),
+    };
+    UnicodeString patternOddTestResult[PLURAL_PATTERN_DATA] = {
+        UNICODE_STRING_SIMPLE(" is odd."),
+        UNICODE_STRING_SIMPLE(" is odd or even."),
+        UNICODE_STRING_SIMPLE("The number {0, number, #.#0} is odd."),
+        UNICODE_STRING_SIMPLE("The number {#} is odd."),
+    };
+    UnicodeString patternEvenTestResult[PLURAL_PATTERN_DATA] = {
+        UNICODE_STRING_SIMPLE(" is even."),
+        UNICODE_STRING_SIMPLE(" is odd or even."),
+        UNICODE_STRING_SIMPLE("The number {0, number, #.#0} is even."),
+        UNICODE_STRING_SIMPLE("The number {#} is even."),
+    };
+    UnicodeString checkSyntaxtData[PLURAL_SYNTAX_DATA] = {
+        UNICODE_STRING_SIMPLE("odd{foo} odd{bar} other{foobar}"),
+        UNICODE_STRING_SIMPLE("odd{foo} other{bar} other{foobar}"),
+        UNICODE_STRING_SIMPLE("odd{foo}"),
+        UNICODE_STRING_SIMPLE("otto{foo} other{bar}"),
+        UNICODE_STRING_SIMPLE("1odd{foo} other{bar}"),
+        UNICODE_STRING_SIMPLE("odd{foo},other{bar}"),
+        UNICODE_STRING_SIMPLE("od d{foo} other{bar}"),
+        UNICODE_STRING_SIMPLE("odd{foo}{foobar}other{foo}"),
+    };
+
     UErrorCode status = U_ZERO_ERROR;
     PluralRules*  plRules = PluralRules::createRules(oddAndEvenRule, status);
     if (U_FAILURE(status)) {
@@ -200,14 +178,14 @@ void PluralFormatTest::pluralFormatUnitTest(/*char *par*/)
     
     // ======= Test set locale
     status = U_ZERO_ERROR;
-    plRules = PluralRules::createRules(UNICODE_STRING_SIMPLE("odd__: n mod 2 is 1"), status);  
+    plRules = PluralRules::createRules(UNICODE_STRING_SIMPLE("odd: n mod 2 is 1"), status);  
     PluralFormat pluralFmt = PluralFormat(*plRules, status);
     if (U_FAILURE(status)) {
         dataerrln("ERROR: Could not create PluralFormat instance in setLocale() test - exitting. ");
         delete plRules;
         return;
     }
-    pluralFmt.applyPattern(UNICODE_STRING_SIMPLE("odd__{odd} other{even}"), status);
+    pluralFmt.applyPattern(UNICODE_STRING_SIMPLE("odd{odd} other{even}"), status);
     pluralFmt.setLocale(Locale::getEnglish(), status);
     if (U_FAILURE(status)) {
         dataerrln("ERROR: Could not setLocale() with English locale ");
@@ -268,7 +246,6 @@ void
 PluralFormatTest::pluralFormatLocaleTest(/*char *par*/)
 {
     int8_t pluralResults[PLURAL_TEST_ARRAY_SIZE];  // 0: is for default
-    UErrorCode status = U_ZERO_ERROR;
 
     // ======= Test DefaultRule
     logln("Testing PluralRules with no rule.");
@@ -475,6 +452,14 @@ PluralFormatTest::helperTestRusults(const char** localeArray,
                                     int8_t *expResults) {
     UErrorCode status;
     UnicodeString plResult;
+    const UnicodeString PLKeywordLookups[6] = {
+        UNICODE_STRING_SIMPLE("zero"),
+        UNICODE_STRING_SIMPLE("one"),
+        UNICODE_STRING_SIMPLE("two"),
+        UNICODE_STRING_SIMPLE("few"),
+        UNICODE_STRING_SIMPLE("many"),
+        UNICODE_STRING_SIMPLE("other"),
+    };
     
     for (int32_t i=0; i<capacityOfArray; ++i) {
         const char *locale = localeArray[i];

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2006, International Business Machines Corporation and    *
+* Copyright (C) 1997-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -187,12 +187,12 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
         UChar ucc[4]={0}; //Currency Codes are always 3 chars long 
         int32_t uccLen = 4;
         const char* locName = loc.getName();
-        uccLen = ucurr_forLocale(locName, ucc, uccLen, &status);
-        if(U_SUCCESS(status) && uccLen > 0) {
+        UErrorCode localStatus = U_ZERO_ERROR;
+        uccLen = ucurr_forLocale(locName, ucc, uccLen, &localStatus);
+        if(U_SUCCESS(localStatus) && uccLen > 0) {
             char cc[4]={0};
             u_UCharsToChars(ucc, cc, uccLen);
             /* An explicit currency was requested */
-            UErrorCode localStatus = U_ZERO_ERROR;
             UResourceBundle *currency = ures_getByKeyWithFallback(resource, "Currencies", NULL, &localStatus);
             currency = ures_getByKeyWithFallback(currency, cc, currency, &localStatus);
             if(U_SUCCESS(localStatus) && ures_getSize(currency)>2) { // the length is 3 if more data is present
@@ -211,10 +211,8 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
             ures_close(currency);
             /* else An explicit currency was requested and is unknown or locale data is malformed. */
             /* ucurr_* API will get the correct value later on. */
-        }else{
-            // ignore the error if no currency
-            status = U_ZERO_ERROR;
         }
+        // else ignore the error if no currency
     }
     ures_close(resource);
     ures_close(numberElementsRes);

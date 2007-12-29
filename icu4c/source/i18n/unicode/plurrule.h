@@ -246,7 +246,7 @@ private:
     PluralRules();   // default constructor not implemented
     void getRuleData(UErrorCode& status);
     int32_t getRepeatLimit() const;
-    UErrorCode parseDescription(UnicodeString& ruleData, RuleChain& rules);
+    void parseDescription(UnicodeString& ruleData, RuleChain& rules, UErrorCode &status);
     void getNextLocale(const UnicodeString& localeData, int32_t* curIndex, UnicodeString& localeName);
     void addRules(RuleChain& rules, UErrorCode& err);
     void addRules(const UnicodeString& localeName, RuleChain& rules, UBool addToHash, UErrorCode& err);
