@@ -198,17 +198,17 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
 : fLocale(Locale::getDefault()),  // Uses the default locale
   formatAliases(NULL),
   formatAliasesCapacity(0),
+  idStart(UCHAR_ID_START),
+  idContinue(UCHAR_ID_CONTINUE),
   subformats(NULL),
   subformatCount(0),
   subformatCapacity(0),
   argTypes(NULL),
   argTypeCount(0),
   argTypeCapacity(0),
-  defaultNumberFormat(NULL),
-  defaultDateFormat(NULL),
   isArgNumeric(TRUE),
-  idStart(UCHAR_ID_START),
-  idContinue(UCHAR_ID_CONTINUE)
+  defaultNumberFormat(NULL),
+  defaultDateFormat(NULL)
 {
     if (!allocateSubformats(DEFAULT_INITIAL_CAPACITY) ||
         !allocateArgTypes(DEFAULT_INITIAL_CAPACITY)) {
@@ -225,17 +225,17 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
 : fLocale(newLocale),
   formatAliases(NULL),
   formatAliasesCapacity(0),
+  idStart(UCHAR_ID_START),
+  idContinue(UCHAR_ID_CONTINUE),
   subformats(NULL),
   subformatCount(0),
   subformatCapacity(0),
   argTypes(NULL),
   argTypeCount(0),
   argTypeCapacity(0),
-  defaultNumberFormat(NULL),
-  defaultDateFormat(NULL),
   isArgNumeric(TRUE),
-  idStart(UCHAR_ID_START),
-  idContinue(UCHAR_ID_CONTINUE)
+  defaultNumberFormat(NULL),
+  defaultDateFormat(NULL)
 {
     if (!allocateSubformats(DEFAULT_INITIAL_CAPACITY) ||
         !allocateArgTypes(DEFAULT_INITIAL_CAPACITY)) {
@@ -253,17 +253,17 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
 : fLocale(newLocale),
   formatAliases(NULL),
   formatAliasesCapacity(0),
+  idStart(UCHAR_ID_START),
+  idContinue(UCHAR_ID_CONTINUE),
   subformats(NULL),
   subformatCount(0),
   subformatCapacity(0),
   argTypes(NULL),
   argTypeCount(0),
   argTypeCapacity(0),
-  defaultNumberFormat(NULL),
-  defaultDateFormat(NULL),
   isArgNumeric(TRUE),
-  idStart(UCHAR_ID_START),
-  idContinue(UCHAR_ID_CONTINUE)
+  defaultNumberFormat(NULL),
+  defaultDateFormat(NULL)
 {
     if (!allocateSubformats(DEFAULT_INITIAL_CAPACITY) ||
         !allocateArgTypes(DEFAULT_INITIAL_CAPACITY)) {
@@ -278,16 +278,17 @@ MessageFormat::MessageFormat(const MessageFormat& that)
 : Format(that),
   formatAliases(NULL),
   formatAliasesCapacity(0),
+  idStart(UCHAR_ID_START),
+  idContinue(UCHAR_ID_CONTINUE),
   subformats(NULL),
   subformatCount(0),
   subformatCapacity(0),
   argTypes(NULL),
   argTypeCount(0),
   argTypeCapacity(0),
-  defaultNumberFormat(NULL),
-  defaultDateFormat(NULL),
   isArgNumeric(TRUE),
-  idStart(UCHAR_ID_START)
+  defaultNumberFormat(NULL),
+  defaultDateFormat(NULL)
 {
     *this = that;
 }
@@ -1523,6 +1524,7 @@ MessageFormat::makeFormat(int32_t formatNumber,
         fmt = makeRBNF(URBNF_DURATION, fLocale, segments[3], ec);
         break;
     case 8: // plural
+        argType = Formattable::kDouble;
         quotedPattern = segments[3];
         for (int32_t i = 0; i < quotedPattern.length(); ++i) {
             UChar ch = quotedPattern.charAt(i);
@@ -1717,7 +1719,7 @@ MessageFormat::isLegalArgName(const UnicodeString& argName) const {
     return TRUE;
 }
 
-FormatNameEnumeration::FormatNameEnumeration(UVector *fNameList,  UErrorCode& status) {
+FormatNameEnumeration::FormatNameEnumeration(UVector *fNameList, UErrorCode& /*status*/) {
     pos=0;
     fFormatNames = fNameList;
 }

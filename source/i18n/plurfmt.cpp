@@ -29,7 +29,7 @@ deleteHashStrings(void *obj) {
 U_CDECL_END
 
 U_NAMESPACE_BEGIN
-UOBJECT_DEFINE_RTTI_IMPLEMENTATION(PluralFormat);
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(PluralFormat)
 
 #define MAX_KEYWORD_SIZE 30
 
@@ -46,7 +46,7 @@ PluralFormat::PluralFormat(const PluralRules& rules, UErrorCode& status) {
 }
 
 PluralFormat::PluralFormat(const Locale& locale, const PluralRules& rules, UErrorCode& status) {
-    init(&rules, Locale::getDefault(), status);
+    init(&rules, locale, status);
 }
 
 PluralFormat::PluralFormat(const UnicodeString& pattern, UErrorCode& status) {
@@ -69,7 +69,7 @@ PluralFormat::PluralFormat(const Locale& locale, const PluralRules& rules, const
     applyPattern(pattern, status);
 }
 
-PluralFormat::PluralFormat(const PluralFormat& other) {
+PluralFormat::PluralFormat(const PluralFormat& other) : Format(other) {
     UErrorCode status = U_ZERO_ERROR;
     locale = other.locale;
     pluralRules = other.pluralRules->clone();
@@ -87,7 +87,6 @@ PluralFormat::~PluralFormat() {
 
 void
 PluralFormat::init(const PluralRules* rules, const Locale& curLocale, UErrorCode& status) {
-    status = U_ZERO_ERROR;
     locale = curLocale;
     if ( rules==NULL) {
         pluralRules = PluralRules::forLocale(locale, status);
@@ -258,7 +257,7 @@ UnicodeString&
 PluralFormat::format(int32_t number,
                      UnicodeString& appendTo, 
                      FieldPosition& pos,
-                     UErrorCode& status) const{
+                     UErrorCode& status) const {
 
     if (fParsedValuesHash==NULL) {
         if ( replacedNumberFormat== NULL ) {
@@ -348,7 +347,6 @@ PluralFormat::setNumberFormat(const NumberFormat* format, UErrorCode& status) {
     // TODO: The copy constructor and assignment op of NumberFormat class are protected.
     // create a pointer as the workaround.
     replacedNumberFormat = (NumberFormat *)format;
-    return;
 }
 
 Format*

@@ -98,7 +98,7 @@ typedef enum PluralKey {
   pFew,
   pMany,
   pOther,
-  pLast,
+  pLast
 }PluralKey;
 
 typedef enum tokenType {
@@ -126,21 +126,21 @@ typedef enum tokenType {
   tVariableN,
   tIs,
   tLeftBrace,
-  tRightBrace,
+  tRightBrace
 }tokenType;
 
 class RuleParser : public UMemory {
 public:
     RuleParser();
     virtual ~RuleParser();
-    UErrorCode getNextToken(const UnicodeString& ruleData, int32_t *ruleIndex, UnicodeString& token, 
-                            tokenType& type);
-    UErrorCode checkSyntax(tokenType prevType, tokenType curType);
+    void getNextToken(const UnicodeString& ruleData, int32_t *ruleIndex, UnicodeString& token, 
+                            tokenType& type, UErrorCode &status);
+    void checkSyntax(tokenType prevType, tokenType curType, UErrorCode &status);
 private:
     UnicodeSet      *idStartFilter;
     UnicodeSet      *idContinueFilter;
     
-    UErrorCode getKeyType(const UnicodeString& token, tokenType& type);
+    void getKeyType(const UnicodeString& token, tokenType& type, UErrorCode &status);
     UBool inRange(UChar ch, tokenType& type);
     UBool isValidKeyword(const UnicodeString& token);
 };
@@ -149,7 +149,7 @@ class AndConstraint : public UMemory  {
 public:
     typedef enum RuleOp {
         NONE,
-        MOD,
+        MOD
     } RuleOp;
     RuleOp  op;
     int32_t opNum;
