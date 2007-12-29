@@ -16,58 +16,8 @@
 #include "plurults.h"
 #include "unicode/plurrule.h"
 
-#if defined( U_DEBUG_CALSVC ) || defined (U_DEBUG_CAL)
-#include <stdio.h>
-#endif
-
-#define PLURAL_TEST_NUM    13
-const UnicodeString pluralTestData[PLURAL_TEST_NUM] = {
-        UNICODE_STRING_SIMPLE("a: n is 1"),
-        UNICODE_STRING_SIMPLE("a: n mod 10 is 2"),
-        UNICODE_STRING_SIMPLE("a: n is not 1"),
-        UNICODE_STRING_SIMPLE("a: n mod 3 is not 1"),
-        UNICODE_STRING_SIMPLE("a: n in 2..5"),
-        UNICODE_STRING_SIMPLE("a: n not in 2..5"),
-        UNICODE_STRING_SIMPLE("a: n mod 10 in 2..5"),
-        UNICODE_STRING_SIMPLE("a: n mod 10 is 2 and n is not 12"),
-        UNICODE_STRING_SIMPLE("a: n mod 10 in 2..3 or n mod 10 is 5"),
-        UNICODE_STRING_SIMPLE("a: n is 1 or n is 4 or n is 23"),
-        UNICODE_STRING_SIMPLE("a: n mod 2 is 1 and n is not 3 and n in 1..11"),
-        UNICODE_STRING_SIMPLE("a: n mod 2 is 1 or n mod 5 is 1 and n is not 6"),
-        "",
-};
- 
-
-const int32_t pluralTestResult[PLURAL_TEST_NUM][30] = {
-    {1, 0},
-    {2,12,22, 0},
-    {0,2,3,4,5,0},
-    {0,2,3,5,6,8,9,0},
-    {2,3,4,5,0},
-    {0,1,6,7,8, 0},
-    {2,3,4,5,12,13,14,15,22,23,24,25,0},
-    {2,22,32,42,0},
-    {2,3,5,12,13,15,22,23,25,0},
-    {1,4,23,0},
-    {1,5,7,9,11,0},
-    {1,3,5,7,9,11,13,15,16,0},
-};
 
 
-#define MAX_EQ_ROW  2
-#define MAX_EQ_COL  5
-UnicodeString testEquRules[MAX_EQ_ROW][MAX_EQ_COL] = {
-    {   UNICODE_STRING_SIMPLE("a: n in 2..3"),
-        UNICODE_STRING_SIMPLE("a: n is 2 or n is 3"), 
-        UNICODE_STRING_SIMPLE( "a:n is 3 and n in 2..5 or n is 2"),
-        "",
-    },
-    {   UNICODE_STRING_SIMPLE("a: n is 12; b:n mod 10 in 2..3"),
-        UNICODE_STRING_SIMPLE("b: n mod 10 in 2..3 and n is not 12; a: n in 12..12"),
-        UNICODE_STRING_SIMPLE("b: n is 13; a: n in 12..13; b: n mod 10 is 2 or n mod 10 is 3"),
-        "",
-    }
-};
 void setupResult(const int32_t testSource[], char result[], int32_t* max);
 UBool checkEqual(PluralRules *test, char *result, int32_t max);
 UBool testEquality(PluralRules *test);
@@ -80,29 +30,46 @@ void PluralRulesTest::runIndexedTest( int32_t index, UBool exec, const char* &na
 {
     if (exec) logln("TestSuite PluralRulesAPI");
     switch (index) {
-        case 0: name = "PluralRules API test"; 
-                if (exec) {
-                    logln("PluralRules API test---"); logln("");
-                    UErrorCode status = U_ZERO_ERROR;
-                    Locale saveLocale;
-                    Locale::setDefault(Locale::getEnglish(), status);
-                    if(U_FAILURE(status)) {
-                        errln("ERROR: Could not set default locale, test may not give correct results");
-                    }
-                    testAPI(/*par*/);
-                    Locale::setDefault(saveLocale, status);
-                }
-                break;
-
+        TESTCASE(0, testAPI);
         default: name = ""; break;
     }
 }
 
+#define PLURAL_TEST_NUM    13
 /**
  * Test various generic API methods of PluralRules for API coverage.
  */
 void PluralRulesTest::testAPI(/*char *par*/)
 {
+    UnicodeString pluralTestData[PLURAL_TEST_NUM] = {
+            UNICODE_STRING_SIMPLE("a: n is 1"),
+            UNICODE_STRING_SIMPLE("a: n mod 10 is 2"),
+            UNICODE_STRING_SIMPLE("a: n is not 1"),
+            UNICODE_STRING_SIMPLE("a: n mod 3 is not 1"),
+            UNICODE_STRING_SIMPLE("a: n in 2..5"),
+            UNICODE_STRING_SIMPLE("a: n not in 2..5"),
+            UNICODE_STRING_SIMPLE("a: n mod 10 in 2..5"),
+            UNICODE_STRING_SIMPLE("a: n mod 10 is 2 and n is not 12"),
+            UNICODE_STRING_SIMPLE("a: n mod 10 in 2..3 or n mod 10 is 5"),
+            UNICODE_STRING_SIMPLE("a: n is 1 or n is 4 or n is 23"),
+            UNICODE_STRING_SIMPLE("a: n mod 2 is 1 and n is not 3 and n in 1..11"),
+            UNICODE_STRING_SIMPLE("a: n mod 2 is 1 or n mod 5 is 1 and n is not 6"),
+            "",
+    };
+    static const int32_t pluralTestResult[PLURAL_TEST_NUM][30] = {
+        {1, 0},
+        {2,12,22, 0},
+        {0,2,3,4,5,0},
+        {0,2,3,5,6,8,9,0},
+        {2,3,4,5,0},
+        {0,1,6,7,8, 0},
+        {2,3,4,5,12,13,14,15,22,23,24,25,0},
+        {2,22,32,42,0},
+        {2,3,5,12,13,15,22,23,25,0},
+        {1,4,23,0},
+        {1,5,7,9,11,0},
+        {1,3,5,7,9,11,13,15,16,0},
+    };
     UErrorCode status = U_ZERO_ERROR;
 
     // ======= Test constructors
@@ -221,7 +188,21 @@ UBool checkEqual(PluralRules *test, char *result, int32_t max) {
     return TRUE;
 }
 
+#define MAX_EQ_ROW  2
+#define MAX_EQ_COL  5
 UBool testEquality(PluralRules *test) {
+    UnicodeString testEquRules[MAX_EQ_ROW][MAX_EQ_COL] = {
+        {   UNICODE_STRING_SIMPLE("a: n in 2..3"),
+            UNICODE_STRING_SIMPLE("a: n is 2 or n is 3"), 
+            UNICODE_STRING_SIMPLE( "a:n is 3 and n in 2..5 or n is 2"),
+            "",
+        },
+        {   UNICODE_STRING_SIMPLE("a: n is 12; b:n mod 10 in 2..3"),
+            UNICODE_STRING_SIMPLE("b: n mod 10 in 2..3 and n is not 12; a: n in 12..12"),
+            UNICODE_STRING_SIMPLE("b: n is 13; a: n in 12..13; b: n mod 10 is 2 or n mod 10 is 3"),
+            "",
+        }
+    };
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString key[MAX_EQ_COL];
     UBool ret=TRUE;
@@ -259,3 +240,4 @@ UBool testEquality(PluralRules *test) {
     return ret;
 }
 #endif /* #if !UCONFIG_NO_FORMATTING */
+

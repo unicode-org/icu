@@ -112,7 +112,7 @@ static const UChar PK_AND[]={LOW_A,LOW_N,LOW_D,0};
 static const UChar PK_OR[]={LOW_O,LOW_R,0};
 static const UChar PK_VAR_N[]={LOW_N,0};
 
-UOBJECT_DEFINE_RTTI_IMPLEMENTATION(PluralRules);
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(PluralRules)
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(PluralKeywordEnumeration)
 
 PluralRules::PluralRules(UErrorCode& status) {
@@ -125,7 +125,9 @@ PluralRules::PluralRules(UErrorCode& status) {
     }
 }
 
-PluralRules::PluralRules(const PluralRules& other) {
+PluralRules::PluralRules(const PluralRules& other) 
+: UObject(other)
+{
     *this=other;
 }
 
@@ -141,7 +143,7 @@ PluralRules::clone() const {
 }
 
 PluralRules&
-PluralRules:: operator=(const PluralRules& other) {
+PluralRules::operator=(const PluralRules& other) {
     fLocaleStringsHash=other.fLocaleStringsHash;
     rules = new RuleChain(*other.rules);
     parser = new RuleParser();
@@ -155,9 +157,9 @@ PluralRules::createRules(const UnicodeString& description, UErrorCode& status) {
     
     PluralRules *newRules = new PluralRules(status);
     if ( (newRules != NULL)&& U_SUCCESS(status) ) {
-        status = newRules->parseDescription((UnicodeString &)description, rules);
+        newRules->parseDescription((UnicodeString &)description, rules, status);
         if (U_SUCCESS(status)) {
-          newRules->addRules(rules, status);
+            newRules->addRules(rules, status);
         }
     }
     if (U_FAILURE(status)) {
@@ -179,6 +181,10 @@ PluralRules::forLocale(const Locale& locale, UErrorCode& status) {
     RuleChain *locRules;
 
     PluralRules *newRules = new PluralRules(status);
+    if (U_FAILURE(status)) {
+        delete newRules;
+        return NULL;
+    }
     UnicodeString localeName=UnicodeString(locale.getName());
     locRules = (RuleChain *) (fPluralRuleLocaleHash->get(localeName));
     if ( locRules==NULL ) {
@@ -298,7 +304,6 @@ PluralRules::getRuleData(UErrorCode& status) {
     UnicodeString localeName;
     int32_t i;
     UChar cSlash = (UChar)0x002F;
-    status=U_ZERO_ERROR;
 
     i=0;
     while ( i<NUMBER_PLURAL_RULES && U_SUCCESS(status) ) {
@@ -310,7 +315,7 @@ PluralRules::getRuleData(UErrorCode& status) {
         }
         ruleData=UnicodeString(pluralRuleData, 0, slashIndex);
         localeData=UnicodeString(pluralRuleData, slashIndex+1);
-        status = parseDescription(ruleData, rules);
+        parseDescription(ruleData, rules, status);
         int32_t curIndex=0;
         while (curIndex < localeData.length() && U_SUCCESS(status)) {
             getNextLocale(localeData, &curIndex, localeName);
@@ -320,9 +325,9 @@ PluralRules::getRuleData(UErrorCode& status) {
     }
 }
 
-UErrorCode
-PluralRules::parseDescription(UnicodeString& data, RuleChain& rules) {
-    UErrorCode status=U_ZERO_ERROR;
+void
+PluralRules::parseDescription(UnicodeString& data, RuleChain& rules, UErrorCode &status)
+{
     int32_t ruleIndex=0;
     UnicodeString token;
     tokenType type;
@@ -333,71 +338,71 @@ PluralRules::parseDescription(UnicodeString& data, RuleChain& rules) {
     
     UnicodeString ruleData = data.toLower();
     while (ruleIndex< ruleData.length()) {
-        if ((status=parser->getNextToken(ruleData, &ruleIndex, token, type))!=U_ZERO_ERROR) {
-            return status;
+        parser->getNextToken(ruleData, &ruleIndex, token, type, status);
+        if (U_FAILURE(status)) {
+            return;
         }
-        if ((status=parser->checkSyntax(prevType, type))!=U_ZERO_ERROR) {
-            return status;
+        parser->checkSyntax(prevType, type, status);
+        if (U_FAILURE(status)) {
+            return;
         }
         switch (type) {
-            case tAnd:
-                curAndConstraint = curAndConstraint->add();
-                break;
-            case tOr:
-                orNode=rules.ruleHeader;
-                while (orNode->next != NULL) {
-                    orNode = orNode->next;
-                }
-                orNode->next= new OrConstraint();
-                orNode=orNode->next;
-                orNode->next=NULL;
-                curAndConstraint = orNode->add();
-                break;
-            case tIs:
-                curAndConstraint->rangeHigh=-1;
-                break;
-            case tNot:
-                curAndConstraint->notIn=TRUE;
-                break;
-            case tIn:
-                curAndConstraint->rangeHigh=PLURAL_RANGE_HIGH;
-                break;
-            case tNumber:
-                if ( (curAndConstraint->op==AndConstraint::MOD)&& 
-                     (curAndConstraint->opNum == -1 ) ) {
-                    curAndConstraint->opNum=getNumberValue(token);
-                }
-                else {
-                    if (curAndConstraint->rangeLow == -1) {
-                        curAndConstraint->rangeLow=getNumberValue(token);
-                    }
-                    else {
-                        curAndConstraint->rangeHigh=getNumberValue(token);
-                    }
-                }
-                break;
-            case tMod:
-                curAndConstraint->op=AndConstraint::MOD;
-                break;
-            case tKeyword:
-                if (ruleChain==NULL) {
-                    ruleChain = &rules;
+        case tAnd:
+            curAndConstraint = curAndConstraint->add();
+            break;
+        case tOr:
+            orNode=rules.ruleHeader;
+            while (orNode->next != NULL) {
+                orNode = orNode->next;
+            }
+            orNode->next= new OrConstraint();
+            orNode=orNode->next;
+            orNode->next=NULL;
+            curAndConstraint = orNode->add();
+            break;
+        case tIs:
+            curAndConstraint->rangeHigh=-1;
+            break;
+        case tNot:
+            curAndConstraint->notIn=TRUE;
+            break;
+        case tIn:
+            curAndConstraint->rangeHigh=PLURAL_RANGE_HIGH;
+            break;
+        case tNumber:
+            if ( (curAndConstraint->op==AndConstraint::MOD)&& 
+                 (curAndConstraint->opNum == -1 ) ) {
+                curAndConstraint->opNum=getNumberValue(token);
+            }
+            else {
+                if (curAndConstraint->rangeLow == -1) {
+                    curAndConstraint->rangeLow=getNumberValue(token);
                 }
                 else {
-                    while (ruleChain->next!=NULL){
-                        ruleChain=ruleChain->next;
-                    }
-                    ruleChain=ruleChain->next=new RuleChain();
+                    curAndConstraint->rangeHigh=getNumberValue(token);
                 }
-                orNode = ruleChain->ruleHeader = new OrConstraint();
-                curAndConstraint = orNode->add();
-                ruleChain->keyword = token;
-                break;
+            }
+            break;
+        case tMod:
+            curAndConstraint->op=AndConstraint::MOD;
+            break;
+        case tKeyword:
+            if (ruleChain==NULL) {
+                ruleChain = &rules;
+            }
+            else {
+                while (ruleChain->next!=NULL){
+                    ruleChain=ruleChain->next;
+                }
+                ruleChain=ruleChain->next=new RuleChain();
+            }
+            orNode = ruleChain->ruleHeader = new OrConstraint();
+            curAndConstraint = orNode->add();
+            ruleChain->keyword = token;
+            break;
         }
         prevType=type;
     }
-    
-    return status;
 }
 
 int32_t 
@@ -516,7 +521,7 @@ AndConstraint::~AndConstraint() {
     if (next!=NULL) {
         delete next;
     }
-};
+}
 
 
 UBool
@@ -844,90 +849,79 @@ RuleParser::~RuleParser() {
     delete idContinueFilter;
 }
 
-UErrorCode
-RuleParser::checkSyntax(tokenType prevType, tokenType curType ) {
-    UErrorCode status=U_ZERO_ERROR;
-    
+void
+RuleParser::checkSyntax(tokenType prevType, tokenType curType, UErrorCode &status)
+{
+    if (U_FAILURE(status)) {
+        return;
+    }
     switch(prevType) {
-        case none:
-        case tSemiColon:
-            if (curType!=tKeyword) {
-                return U_UNEXPECTED_TOKEN;
-            }
-            else {
-                return U_ZERO_ERROR;
-            }
-        case tVariableN : 
-            if ( (curType == tIs) || (curType == tMod) || (curType == tIn) || (curType == tNot) ) {
-                return U_ZERO_ERROR;
-            }
-            else {
-                return U_UNEXPECTED_TOKEN;
-            }
-        case tZero:
-        case tOne:
-        case tTwo:
-        case tFew:
-        case tMany:
-        case tOther:
-        case tKeyword:
-            if ( curType == tColon ) {
-                return U_ZERO_ERROR;
-            }
-            else {
-                return U_UNEXPECTED_TOKEN;
-            }
-        case tColon :
-            if ( curType == tVariableN ) {
-                return U_ZERO_ERROR;
-            }
-            else {
-                return U_UNEXPECTED_TOKEN;
-            }
-        case tIs:
-            if ( (curType == tNumber) || (curType == tNot)) {
-                return U_ZERO_ERROR;
-            }
-            else {
-                return U_UNEXPECTED_TOKEN;
-            }
-        case tNot:
-            if ((curType == tNumber) || (curType == tIn)){
-                return U_ZERO_ERROR;
-            }
-            else {
-                return U_UNEXPECTED_TOKEN;
-            }
-        case tMod:
-        case tDot:
-        case tIn:
-        case tAnd:
-        case tOr:
-            if ( (curType == tNumber) || (curType == tVariableN) ){
-                return U_ZERO_ERROR;
-            }
-            else {
-                return U_UNEXPECTED_TOKEN;
-            }
-        case tNumber:
-            if ((curType == tDot) || (curType == tSemiColon) || (curType == tIs) || (curType == tNot) || 
-                (curType == tIn) || (curType == tAnd) || (curType == tOr) ){
-                return U_ZERO_ERROR;
-            }
-            else {
-                return U_UNEXPECTED_TOKEN;
-            }
-        default:
-            return U_UNEXPECTED_TOKEN;
+    case none:
+    case tSemiColon:
+        if (curType!=tKeyword) {
+            status = U_UNEXPECTED_TOKEN;
+        }
+        break;
+    case tVariableN : 
+        if (curType != tIs && curType != tMod && curType != tIn && curType != tNot) {
+            status = U_UNEXPECTED_TOKEN;
+        }
+        break;
+    case tZero:
+    case tOne:
+    case tTwo:
+    case tFew:
+    case tMany:
+    case tOther:
+    case tKeyword:
+        if (curType != tColon) {
+            status = U_UNEXPECTED_TOKEN;
+        }
+        break;
+    case tColon :
+        if (curType != tVariableN) {
+            status = U_UNEXPECTED_TOKEN;
+        }
+        break;
+    case tIs:
+        if ( curType != tNumber && curType != tNot) {
+            status = U_UNEXPECTED_TOKEN;
+        }
+        break;
+    case tNot:
+        if (curType != tNumber && curType != tIn) {
+            status = U_UNEXPECTED_TOKEN;
+        }
+        break;
+    case tMod:
+    case tDot:
+    case tIn:
+    case tAnd:
+    case tOr:
+        if (curType != tNumber && curType != tVariableN) {
+            status = U_UNEXPECTED_TOKEN;
+        }
+        break;
+    case tNumber:
+        if (curType != tDot && curType != tSemiColon && curType != tIs && curType != tNot && 
+            curType != tIn && curType != tAnd && curType != tOr)
+        {
+            status = U_UNEXPECTED_TOKEN;
+        }
+        break;
+    default:
+        status = U_UNEXPECTED_TOKEN;
+        break;
     }
 }
 
-UErrorCode
+void
 RuleParser::getNextToken(const UnicodeString& ruleData, 
                          int32_t *ruleIndex,
                          UnicodeString& token,
-                         tokenType& type) {
-    UErrorCode status=U_ZERO_ERROR;
+                         tokenType& type,
+                         UErrorCode &status)
+{
     int32_t curIndex= *ruleIndex;
     UChar ch;
     tokenType prevType=none;
@@ -935,77 +929,77 @@ RuleParser::getNextToken(const UnicodeString& ruleData,
     while (curIndex<ruleData.length()) {
         ch = ruleData.charAt(curIndex);
         if ( !inRange(ch, type) ) {
-            return U_ILLEGAL_CHARACTER;
+            status = U_ILLEGAL_CHARACTER;
+            return;
         }
         switch (type) {
-            case tSpace:
-                if ( *ruleIndex != curIndex ) { // letter
+        case tSpace:
+            if ( *ruleIndex != curIndex ) { // letter
+                token=UnicodeString(ruleData, *ruleIndex, curIndex-*ruleIndex);
+                *ruleIndex=curIndex;
+                type=prevType;
+                getKeyType(token, type, status);
+                return;
+            }
+            else {
+                *ruleIndex=*ruleIndex+1;
+            }
+            break; // consective space
+        case tColon:
+        case tSemiColon:
+            if ( *ruleIndex != curIndex ) {
+                token=UnicodeString(ruleData, *ruleIndex, curIndex-*ruleIndex);
+                *ruleIndex=curIndex;
+                type=prevType;
+                getKeyType(token, type, status);
+                return;
+            }
+            else {
+                *ruleIndex=curIndex+1;
+                return;
+            }
+        case tLetter:
+             if ((type==prevType)||(prevType==none)) {
+                prevType=type;
+                break;
+             }
+        case tNumber:
+             if ((type==prevType)||(prevType==none)) {
+                prevType=type;
+                break;
+             }
+             else {
+                *ruleIndex=curIndex+1;
+                return;
+             }
+         case tDot:
+             if (prevType==none) {  // first dot
+                prevType=type;
+                continue;
+             }
+             else {
+                 if ( *ruleIndex != curIndex ) {
                     token=UnicodeString(ruleData, *ruleIndex, curIndex-*ruleIndex);
-                    *ruleIndex=curIndex;
+                    *ruleIndex=curIndex;  // letter
                     type=prevType;
-                    status=getKeyType(token, type);
-                    return status;
-                }
-                else {
-                    *ruleIndex=*ruleIndex+1;
-                }
-                break; // consective space
-            case tColon:
-            case tSemiColon:
-                if ( *ruleIndex != curIndex ) {
-                    token=UnicodeString(ruleData, *ruleIndex, curIndex-*ruleIndex);
-                    *ruleIndex=curIndex;
-                    type=prevType;
-                    status=getKeyType(token, type);
-                    return status;
-                }
-                else {
-                    *ruleIndex=curIndex+1;
-                    return status;
-                }
-            case tLetter:
-                 if ((type==prevType)||(prevType==none)) {
-                    prevType=type;
-                    break;
+                    getKeyType(token, type, status);
+                    return;
                  }
-            case tNumber:
-                 if ((type==prevType)||(prevType==none)) {
-                    prevType=type;
-                    break;
+                 else {  // two consective dots
+                    *ruleIndex=curIndex+2;
+                    return;
                  }
-                 else {
-                    *ruleIndex=curIndex+1;
-                    return status;
-                 }
-             case tDot:
-                 if (prevType==none) {  // first dot
-                    prevType=type;
-                    continue;
-                 }
-                 else {
-                     if ( *ruleIndex != curIndex ) {
-                        token=UnicodeString(ruleData, *ruleIndex, curIndex-*ruleIndex);
-                        *ruleIndex=curIndex;  // letter
-                        type=prevType;
-                        status=getKeyType(token, type);
-                        return status;
-                     }
-                     else {  // two consective dots
-                        *ruleIndex=curIndex+2;
-                        return status;
-                     }
-                 }
+             }
         }
         curIndex++;
     }
     if ( curIndex>=ruleData.length() ) {
         if ( (type == tLetter)||(type == tNumber) ) {
             token=UnicodeString(ruleData, *ruleIndex, curIndex-*ruleIndex);
-            status=getKeyType(token, type);
+            getKeyType(token, type, status);
         }
         *ruleIndex = ruleData.length();
     }
-    return status;
 }
 
 UBool
@@ -1023,65 +1017,57 @@ RuleParser::inRange(UChar ch, tokenType& type) {
         return TRUE;
     }
     switch (ch) {
-        case COLON: 
-            type = tColon;
-            return TRUE;
-        case SPACE:
-            type = tSpace;
-            return TRUE;
-        case SEMI_COLON:
-            type = tSemiColon;
-            return TRUE;
-        case DOT:
-            type = tDot;
-            return TRUE;
-        default :
-            type = none;
-            return FALSE;
+    case COLON: 
+        type = tColon;
+        return TRUE;
+    case SPACE:
+        type = tSpace;
+        return TRUE;
+    case SEMI_COLON:
+        type = tSemiColon;
+        return TRUE;
+    case DOT:
+        type = tDot;
+        return TRUE;
+    default :
+        type = none;
+        return FALSE;
     }
 }
 
 
-UErrorCode
-RuleParser::getKeyType(const UnicodeString& token, tokenType& keyType) {
+void
+RuleParser::getKeyType(const UnicodeString& token, tokenType& keyType, UErrorCode &status)
+{
     if ( keyType==tNumber) {
-        return U_ZERO_ERROR;
     }
-    if (token==PK_VAR_N) {
+    else if (token==PK_VAR_N) {
         keyType = tVariableN;
-        return U_ZERO_ERROR;
     }
-    if (token==PK_IS) {
+    else if (token==PK_IS) {
         keyType = tIs;
-        return U_ZERO_ERROR;
     }
-    if (token==PK_AND) {
+    else if (token==PK_AND) {
         keyType = tAnd;
-        return U_ZERO_ERROR;
     }
-    if (token==PK_IN) {
+    else if (token==PK_IN) {
         keyType = tIn;
-        return U_ZERO_ERROR;
     }
-    if (token==PK_NOT) {
+    else if (token==PK_NOT) {
         keyType = tNot;
-        return U_ZERO_ERROR;
     }
-    if (token==PK_MOD) {
+    else if (token==PK_MOD) {
         keyType = tMod;
-        return U_ZERO_ERROR;
     }
-    if (token==PK_OR) {
+    else if (token==PK_OR) {
         keyType = tOr;
-        return U_ZERO_ERROR;
     }
-    
-    if ( isValidKeyword(token) ) {
+    else if ( isValidKeyword(token) ) {
         keyType = tKeyword;
-        return U_ZERO_ERROR;
     }
-  
-    return U_UNEXPECTED_TOKEN;
+    else {
+        status = U_UNEXPECTED_TOKEN;
+    }
 }
 
 UBool
