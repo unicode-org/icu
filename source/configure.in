@@ -184,9 +184,9 @@ dnl Check if we can hide variables from
 AC_MSG_CHECKING([for library API export])
 SHAREDLIBEXPORT=no
 U_USE_GCC_VISIBILITY_ATTRIBUTE=0
+OLD_CFLAGS="${CFLAGS}"
+OLD_CXXFLAGS="${CXXFLAGS}"
 if test "$ac_cv_c_compiler_gnu" = yes; then
-    OLD_CFLAGS="${CFLAGS}"
-    OLD_CXXFLAGS="${CXXFLAGS}"
     LIBCFLAGS="-fvisibility=hidden"
     LIBCXXFLAGS="-fvisibility=hidden"
     CFLAGS="${CFLAGS} ${LIBCFLAGS}"
@@ -194,18 +194,38 @@ if test "$ac_cv_c_compiler_gnu" = yes; then
     AC_TRY_LINK([__attribute__ ((visibility ("default"))) void f(void);
 #include <stdlib.h>],[exit(0);],
         [SHAREDLIBEXPORT=yes],[SHAREDLIBEXPORT=no])
-    # Restore to their original state because the Intel compiler chokes
-    # on this option when checking for the wchar_t size, but the
-    # option otherwise works.
-    CFLAGS="${OLD_CFLAGS}"
-    CXXFLAGS="${OLD_CXXFLAGS}"
     if test "$SHAREDLIBEXPORT" = no; then
         LIBCFLAGS=
         LIBCXXFLAGS=
     else
         U_USE_GCC_VISIBILITY_ATTRIBUTE=1
     fi
+else
+    case "${host}" in
+    *-*-solaris*)
+        LIBCFLAGS="-xldscope=hidden"
+        LIBCXXFLAGS="-xldscope=hidden"
+        CFLAGS="${CFLAGS} ${LIBCFLAGS}"
+        CXXFLAGS="${CXXFLAGS} ${LIBCXXFLAGS}"
+        AC_TRY_LINK([__global void f(void);
+#include <stdlib.h>],[exit(0);],
+            [SHAREDLIBEXPORT=yes],[SHAREDLIBEXPORT=no])
+        if test "$SHAREDLIBEXPORT" = no; then
+            LIBCFLAGS=
+            LIBCXXFLAGS=
+        fi
+        ;;
+    *-*-hpux*)
+        dnl ICU isn't set up to follow the HP syntax yet.
+        ;;
+    *)
+    esac
 fi
+# Restore to their original state because the Intel compiler chokes
+# on this option when checking for the wchar_t size, but the
+# option otherwise works.
+CFLAGS="${OLD_CFLAGS}"
+CXXFLAGS="${OLD_CXXFLAGS}"
 AC_MSG_RESULT($SHAREDLIBEXPORT)
 AC_SUBST(U_USE_GCC_VISIBILITY_ATTRIBUTE)
 AC_SUBST(LIBCFLAGS)
