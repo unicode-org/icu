@@ -2833,7 +2833,7 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
                         if (source->iterator) {
                             UChar32 surrNextChar; /* the next char in the iteration to test */
                             int32_t prevPos; /* holds the previous position before move forward of the source iterator */
-                            if(U16_IS_LEAD(schar) && source->iterator->index < source->iterator->limit) {
+                            if(U16_IS_LEAD(schar) && source->iterator->hasNext(source->iterator)) {
                                 prevPos = source->iterator->index;
                                 surrNextChar = getNextNormalizedChar(source);
                                 if (U16_IS_TRAIL(surrNextChar)) {
