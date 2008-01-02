@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and
+* Copyright (C) 2007-2008, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -197,7 +197,7 @@ private:
     int32_t repeatLimit;
 };
 
-class U_I18N_API PluralKeywordEnumeration : public StringEnumeration {
+class PluralKeywordEnumeration : public StringEnumeration {
 public:
     PluralKeywordEnumeration(UErrorCode& status);
     virtual ~PluralKeywordEnumeration();

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and
+* Copyright (C) 2007-2008, International Business Machines Corporation and
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -220,7 +220,7 @@ private:
     PatternMap *patternMap;
 };
 
-class U_I18N_API DTSkeletonEnumeration : public StringEnumeration {
+class DTSkeletonEnumeration : public StringEnumeration {
 public:
     DTSkeletonEnumeration(PatternMap &patternMap, dtStrEnum type, UErrorCode& status);
     virtual ~DTSkeletonEnumeration();
@@ -235,7 +235,7 @@ private:
     UVector *fSkeletons;
 };
 
-class U_I18N_API DTRedundantEnumeration : public StringEnumeration {
+class DTRedundantEnumeration : public StringEnumeration {
 public:
     DTRedundantEnumeration();
     virtual ~DTRedundantEnumeration();
