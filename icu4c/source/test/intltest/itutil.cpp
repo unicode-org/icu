@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2007, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -26,11 +26,7 @@
 #include "uvectest.h" 
 #include "aliastst.h"
 #include "usettest.h"
-//#include "custrtest.h"
-//#include "ccitrtst.h"
-//#include "cloctest.h"
-//#include "ctres.h"
-//#include "ctucd.h"
+
 
 #define CASE(id, test) case id:                               \
                           name = #test;                       \
@@ -58,7 +54,7 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
         CASE(10, UVector32Test); 
         CASE(11, UVectorTest); 
         CASE(12, UTextTest); 
-        CASE(13, MultithreadTest); 
+        CASE(13, LocaleAliasTest); 
         CASE(14, UnicodeSetTest); 
         default: name = ""; break; //needed to end loop
     }
