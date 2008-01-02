@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002-2007, International Business Machines Corporation and
+ * Copyright (c) 2002-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -158,6 +158,9 @@ UObject *UObjectTest::testClass(UObject *obj,
 #include "japancal.h"
 #include "hebrwcal.h"
 #include "persncal.h"
+#include "taiwncal.h"
+#include "indiancal.h"
+#include "chnsecal.h"
 #include "windtfmt.h"
 #include "winnmfmt.h"
 #include "ustrenum.h"
@@ -177,6 +180,7 @@ UObject *UObjectTest::testClass(UObject *obj,
 #include "unicode/dcfmtsym.h"
 #include "unicode/decimfmt.h"
 #include "unicode/dtfmtsym.h"
+#include "unicode/dtptngen.h"
 #include "unicode/fieldpos.h"
 #include "unicode/fmtable.h"
 #include "unicode/format.h"
@@ -186,6 +190,8 @@ UObject *UObjectTest::testClass(UObject *obj,
 #include "unicode/normlzr.h"
 #include "unicode/numfmt.h"
 #include "unicode/parsepos.h"
+#include "unicode/plurrule.h"
+#include "unicode/plurfmt.h"
 #include "unicode/rbbi.h"
 #include "unicode/rbnf.h"
 #include "unicode/regex.h"
@@ -250,19 +256,25 @@ void UObjectTest::testIDs()
     TESTCLASSID_CTOR(ChoiceFormat, (UNICODE_STRING_SIMPLE("0#are no files|1#is one file|1<are many files"), status));
     TESTCLASSID_CTOR(MessageFormat, (UnicodeString(), status));
     TESTCLASSID_CTOR(DateFormatSymbols, (status));
+    TESTCLASSID_CTOR(PluralFormat, (status));
+    TESTCLASSID_CTOR(PluralRules, (status));
+    TESTCLASSID_FACTORY(DateTimePatternGenerator, DateTimePatternGenerator::createInstance(status));
     TESTCLASSID_FACTORY(RelativeDateFormat, DateFormat::createDateInstance(DateFormat::kFullRelative, Locale::getUS()));
     TESTCLASSID_CTOR(DecimalFormatSymbols, (status));
     TESTCLASSID_DEFAULT(FieldPosition);
     TESTCLASSID_DEFAULT(Formattable);
     TESTCLASSID_CTOR(CurrencyAmount, (1.0, SMALL_STR, status));
     TESTCLASSID_CTOR(CurrencyUnit, (SMALL_STR, status));
-    TESTCLASSID_CTOR(CurrencyFormat, (Locale::getUS(), status));
+    TESTCLASSID_FACTORY_HIDDEN(CurrencyFormat, MeasureFormat::createCurrencyFormat(Locale::getUS(), status));
     TESTCLASSID_FACTORY(GregorianCalendar, Calendar::createInstance(Locale("@calendar=gregorian"), status));
     TESTCLASSID_FACTORY(BuddhistCalendar, Calendar::createInstance(Locale("@calendar=buddhist"), status));
     TESTCLASSID_FACTORY(IslamicCalendar, Calendar::createInstance(Locale("@calendar=islamic"), status));
     TESTCLASSID_FACTORY(JapaneseCalendar, Calendar::createInstance(Locale("@calendar=japanese"), status));
     TESTCLASSID_FACTORY(HebrewCalendar, Calendar::createInstance(Locale("@calendar=hebrew"), status));
     TESTCLASSID_FACTORY(PersianCalendar, Calendar::createInstance(Locale("@calendar=persian"), status));
+    TESTCLASSID_FACTORY(IndianCalendar, Calendar::createInstance(Locale("@calendar=indian"), status));
+    TESTCLASSID_FACTORY(ChineseCalendar, Calendar::createInstance(Locale("@calendar=chinese"), status));
+    TESTCLASSID_FACTORY(TaiwanCalendar, Calendar::createInstance(Locale("@calendar=taiwan"), status));
 #ifdef U_WINDOWS
     TESTCLASSID_FACTORY(Win32DateFormat, DateFormat::createDateInstance(DateFormat::kFull, Locale("@compat=host")));
     TESTCLASSID_FACTORY(Win32NumberFormat, NumberFormat::createInstance(Locale("@compat=host"), status));

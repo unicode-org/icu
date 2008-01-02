@@ -1,7 +1,8 @@
 /*
- * Copyright (C) 2003-2007, International Business Machines Corporation
+ *****************************************************************************
+ * Copyright (C) 2003-2008, International Business Machines Corporation
  * and others. All Rights Reserved.
- ******************************************************************************
+ *****************************************************************************
  *
  * File INDIANCAL.H
  *****************************************************************************
@@ -65,8 +66,8 @@ U_NAMESPACE_BEGIN
  */
 
 
-class U_I18N_API IndianCalendar : public Calendar {
- public:
+class IndianCalendar : public Calendar {
+public:
   /**
    * Useful constants for IndianCalendar.
    * @internal
@@ -271,7 +272,7 @@ class U_I18N_API IndianCalendar : public Calendar {
    * @return   The class ID for all objects of this class.
    * @internal
    */
-  static UClassID U_EXPORT2 getStaticClassID(void);
+  U_I18N_API static UClassID U_EXPORT2 getStaticClassID(void);
 
   /**
    * return the calendar type, "buddhist".
@@ -281,11 +282,11 @@ class U_I18N_API IndianCalendar : public Calendar {
    */
   virtual const char * getType() const;
 
- private:
+private:
   IndianCalendar(); // default constructor not implemented
 
   // Default century.
- protected:
+protected:
 
   /**
    * (Overrides Calendar) Return true if the current date for this Calendar is in
