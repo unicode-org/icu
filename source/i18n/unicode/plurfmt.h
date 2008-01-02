@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and
+* Copyright (C) 2007-2008, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -31,7 +31,6 @@
 U_NAMESPACE_BEGIN
 
 class Hashtable;
-class PluralRules;
 
 /**
  * <p>

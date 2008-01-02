@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2006, International Business Machines
+* Copyright (c) 2004-2008, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -33,7 +33,7 @@ class NumberFormat;
  * @author Alan Liu
  * @internal
  */
-class U_I18N_API CurrencyFormat : public MeasureFormat {
+class CurrencyFormat : public MeasureFormat {
 
  public:
 

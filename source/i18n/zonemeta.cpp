@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and         *
+* Copyright (C) 2007-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -194,44 +194,8 @@ static const UChar gWorld[] = {0x30, 0x30, 0x31, 0x00}; // "001"
     return 0;
 }
 
- /*
- * Initialize global objects
- */
-void
-ZoneMeta::initialize(void) {
-    UBool initialized;
-    UMTX_CHECK(&gZoneMetaLock, gZoneMetaInitialized, initialized);
-    if (initialized) {
-        return;
-    }
-
-    // Initialize hash tables
-    Hashtable *tmpCanonicalMap = createCanonicalMap();
-    Hashtable *tmpOlsonToMeta = createOlsonToMetaMap();
-    if (tmpOlsonToMeta == NULL) {
-        // With ICU 3.8 data
-        tmpOlsonToMeta = createOlsonToMetaMapOld();
-    }
-    Hashtable *tmpMetaToOlson = createMetaToOlsonMap();
-
-    umtx_lock(&gZoneMetaLock);
-    if (gZoneMetaInitialized) {
-        // Another thread already created mappings
-        delete tmpCanonicalMap;
-        delete tmpOlsonToMeta;
-        delete tmpMetaToOlson;
-    } else {
-        gZoneMetaInitialized = TRUE;
-        gCanonicalMap = tmpCanonicalMap;
-        gOlsonToMeta = tmpOlsonToMeta;
-        gMetaToOlson = tmpMetaToOlson;
-        ucln_i18n_registerCleanup(UCLN_I18N_ZONEMETA, zoneMeta_cleanup);
-    }
-    umtx_unlock(&gZoneMetaLock);
-}
-
-Hashtable*
-ZoneMeta::createCanonicalMap(void) {
+static Hashtable*
+createCanonicalMap(void) {
     UErrorCode status = U_ZERO_ERROR;
 
     Hashtable *canonicalMap = NULL;
@@ -366,8 +330,8 @@ error_cleanup:
 /*
  * Creating Olson tzid to metazone mappings from resource (3.8.1 and beyond)
  */
-Hashtable*
-ZoneMeta::createOlsonToMetaMap(void) {
+static Hashtable*
+createOlsonToMetaMap(void) {
     UErrorCode status = U_ZERO_ERROR;
 
     Hashtable *olsonToMeta = NULL;
@@ -506,8 +470,8 @@ error_cleanup:
 /*
  * Creating Olson tzid to metazone mappings from ICU resource (3.8)
  */
-Hashtable*
-ZoneMeta::createOlsonToMetaMapOld(void) {
+static Hashtable*
+createOlsonToMetaMapOld(void) {
     UErrorCode status = U_ZERO_ERROR;
 
     Hashtable *olsonToMeta = NULL;
@@ -645,8 +609,8 @@ error_cleanup:
     goto normal_cleanup;
 }
 
-Hashtable*
-ZoneMeta::createMetaToOlsonMap(void) {
+static Hashtable*
+createMetaToOlsonMap(void) {
     UErrorCode status = U_ZERO_ERROR;
 
     Hashtable *metaToOlson = NULL;
@@ -740,7 +704,43 @@ error_cleanup:
     goto normal_cleanup;
 }
 
-UnicodeString&
+ /*
+ * Initialize global objects
+ */
+static void
+initialize(void) {
+    UBool initialized;
+    UMTX_CHECK(&gZoneMetaLock, gZoneMetaInitialized, initialized);
+    if (initialized) {
+        return;
+    }
+
+    // Initialize hash tables
+    Hashtable *tmpCanonicalMap = createCanonicalMap();
+    Hashtable *tmpOlsonToMeta = createOlsonToMetaMap();
+    if (tmpOlsonToMeta == NULL) {
+        // With ICU 3.8 data
+        tmpOlsonToMeta = createOlsonToMetaMapOld();
+    }
+    Hashtable *tmpMetaToOlson = createMetaToOlsonMap();
+
+    umtx_lock(&gZoneMetaLock);
+    if (gZoneMetaInitialized) {
+        // Another thread already created mappings
+        delete tmpCanonicalMap;
+        delete tmpOlsonToMeta;
+        delete tmpMetaToOlson;
+    } else {
+        gZoneMetaInitialized = TRUE;
+        gCanonicalMap = tmpCanonicalMap;
+        gOlsonToMeta = tmpOlsonToMeta;
+        gMetaToOlson = tmpMetaToOlson;
+        ucln_i18n_registerCleanup(UCLN_I18N_ZONEMETA, zoneMeta_cleanup);
+    }
+    umtx_unlock(&gZoneMetaLock);
+}
+
+UnicodeString& U_EXPORT2
 ZoneMeta::getCanonicalID(const UnicodeString &tzid, UnicodeString &canonicalID) {
     const CanonicalMapEntry *entry = getCanonicalInfo(tzid);
     if (entry != NULL) {
@@ -752,7 +752,7 @@ ZoneMeta::getCanonicalID(const UnicodeString &tzid, UnicodeString &canonicalID) 
     return canonicalID;
 }
 
-UnicodeString&
+UnicodeString& U_EXPORT2
 ZoneMeta::getCanonicalCountry(const UnicodeString &tzid, UnicodeString &canonicalCountry) {
     const CanonicalMapEntry *entry = getCanonicalInfo(tzid);
     if (entry != NULL && entry->country != NULL) {
@@ -764,7 +764,7 @@ ZoneMeta::getCanonicalCountry(const UnicodeString &tzid, UnicodeString &canonica
     return canonicalCountry;
 }
 
-const CanonicalMapEntry*
+const CanonicalMapEntry* U_EXPORT2
 ZoneMeta::getCanonicalInfo(const UnicodeString &tzid) {
     initialize();
     CanonicalMapEntry *entry = NULL;
@@ -778,7 +778,7 @@ ZoneMeta::getCanonicalInfo(const UnicodeString &tzid) {
     return entry;
 }
 
-UnicodeString&
+UnicodeString& U_EXPORT2
 ZoneMeta::getSingleCountry(const UnicodeString &tzid, UnicodeString &country) {
     UErrorCode status = U_ZERO_ERROR;
 
@@ -810,7 +810,7 @@ ZoneMeta::getSingleCountry(const UnicodeString &tzid, UnicodeString &country) {
     return country;
 }
 
-UnicodeString&
+UnicodeString& U_EXPORT2
 ZoneMeta::getMetazoneID(const UnicodeString &tzid, UDate date, UnicodeString &result) {
     UBool isSet = FALSE;
     const UVector *mappings = getMetazoneMappings(tzid);
@@ -830,7 +830,7 @@ ZoneMeta::getMetazoneID(const UnicodeString &tzid, UDate date, UnicodeString &re
     return result;
 }
 
-const UVector*
+const UVector* U_EXPORT2
 ZoneMeta::getMetazoneMappings(const UnicodeString &tzid) {
     initialize();
     const UVector *result = NULL;
@@ -840,7 +840,7 @@ ZoneMeta::getMetazoneMappings(const UnicodeString &tzid) {
     return result;
 }
 
-UnicodeString&
+UnicodeString& U_EXPORT2
 ZoneMeta::getZoneIdByMetazone(const UnicodeString &mzid, const UnicodeString &region, UnicodeString &result) {
     initialize();
     UBool isSet = FALSE;
