@@ -1126,7 +1126,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
     public static abstract class SimpleProperty extends BaseProperty {
         List values;
 
-        public BaseProperty addName(String alias) {
+        public UnicodeProperty addName(String alias) {
             propertyAliases.add(alias);
             return this;
         }
