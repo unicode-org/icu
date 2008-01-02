@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2007, International Business Machines Corporation
+ * Copyright (c) 1997-2008, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -598,7 +598,7 @@ void TimeZoneTest::TestShortZoneIDs()
         {"EST", -300, FALSE}, // updated Aug 2003 aliu
         {"PRT", -240, FALSE},
         {"CNT", -210, TRUE},
-        {"AGT", -180, FALSE}, // updated 26 Sep 2000 aliu
+        {"AGT", -180, TRUE}, // updated by tzdata2007k
         {"BET", -180, TRUE},
         // "CAT", -60, FALSE, // Wrong:
         // As of bug 4130885, fix CAT (Central Africa)
