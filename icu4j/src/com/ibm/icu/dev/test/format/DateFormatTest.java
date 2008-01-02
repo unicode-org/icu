@@ -1,7 +1,7 @@
 //##header J2SE15
 /*
  *******************************************************************************
- * Copyright (C) 2001-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -497,18 +497,22 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
     public void TestTimeZoneDisplayName() {
         Calendar cal = new GregorianCalendar();
-        long julyDate = new Date(2004, 6, 15).getTime();
-        long januaryDate = new Date(2004, 0, 15).getTime();
+        SimpleDateFormat testfmt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
         for (int i = 0; i < fallbackTests.length; ++i) {
             String[] info = fallbackTests[i];
             logln(info[0] + ";" + info[1] + ";" + info[2] + ";" + info[3]);
 
+            long time = 0;
+            try {
+                Date testd = testfmt.parse(info[2]);
+                time = testd.getTime();
+            } catch (ParseException pe) {
+                errln("Failed to parse test date data");
+                continue;
+            }
             ULocale l = new ULocale(info[0]);
             TimeZone tz = TimeZone.getTimeZone(info[1]);
-            long time = info[2].equals("2004-07-15T00:00:00Z") 
-                ? julyDate 
-                : januaryDate;
             SimpleDateFormat fmt = new SimpleDateFormat(info[3], l);
             cal.setTimeInMillis(time);
             cal.setTimeZone(tz);
