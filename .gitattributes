@@ -323,7 +323,9 @@ icu4j/src/com/ibm/icu/impl/duration/impl/data/pfd_zh_Hans.xml -text
 icu4j/src/com/ibm/icu/impl/duration/impl/data/pfd_zh_Hans_SG.xml -text
 icu4j/src/com/ibm/icu/impl/duration/impl/data/pfd_zh_Hant.xml -text
 icu4j/src/com/ibm/icu/impl/duration/impl/data/pfd_zh_Hant_HK.xml -text
+icu4j/src/com/ibm/icu/text/BreakCTDictionary.java -text
 icu4j/src/com/ibm/icu/text/DurationFormat.java -text
+icu4j/src/com/ibm/icu/text/ThaiBreakIterator.java -text
 icu4j/src/com/ibm/richtext/textapps/resources/unicode.arabic.red -text
 icu4j/src/com/ibm/richtext/textapps/resources/unicode.hebrew.red -text
 tools/unicodetools/com/ibm/rbm/docs/images/TitleLogo_transparent.gif -text
