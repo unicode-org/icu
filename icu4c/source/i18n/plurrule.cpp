@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and
+* Copyright (C) 2007-2008, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -96,7 +96,7 @@ static const UChar uCharPluralRules[NUMBER_PLURAL_RULES][128] = {
   LOW_R, 0},
 };
 
-static Hashtable *fPluralRuleLocaleHash=NULL;
+static Hashtable *gPluralRuleLocaleHash=NULL;
 static const UChar PLURAL_KEYWORD_ZERO[] = {LOW_Z,LOW_E,LOW_R,LOW_O, 0};
 static const UChar PLURAL_KEYWORD_ONE[]={LOW_O,LOW_N,LOW_E,0};
 static const UChar PLURAL_KEYWORD_TWO[]={LOW_T,LOW_W,LOW_O,0};
@@ -185,17 +185,17 @@ PluralRules::forLocale(const Locale& locale, UErrorCode& status) {
         delete newRules;
         return NULL;
     }
-    UnicodeString localeName=UnicodeString(locale.getName());
-    locRules = (RuleChain *) (fPluralRuleLocaleHash->get(localeName));
-    if ( locRules==NULL ) {
+    UnicodeString localeName(locale.getName());
+    locRules = (RuleChain *) (newRules->fLocaleStringsHash->get(localeName));
+    if (locRules == NULL) {
         // Check parent locales.
-        char parentLocale[50];
+        char parentLocale[ULOC_FULLNAME_CAPACITY];
         const char *curLocaleName=locale.getName();
         int32_t localeNameLen=0;
         uprv_strcpy(parentLocale, curLocaleName);
-        while((localeNameLen=uloc_getParent(parentLocale, parentLocale, 50, &status))>=0 ) {
-            locRules = (RuleChain *) (fPluralRuleLocaleHash->get(localeName));
-            if ( locRules != NULL ) {
+        while ((localeNameLen=uloc_getParent(parentLocale, parentLocale, ULOC_FULLNAME_CAPACITY, &status)) > 0) {
+            locRules = (RuleChain *) (newRules->fLocaleStringsHash->get(localeName));
+            if (locRules != NULL) {
                 break;
             }
         }
@@ -452,16 +452,16 @@ PluralRules::initHashtable(UErrorCode& status) {
     if (fLocaleStringsHash!=NULL) {
         return;
     }
-    if ( fPluralRuleLocaleHash == NULL ) {
+    if ( gPluralRuleLocaleHash == NULL ) {
         Mutex mutex;
         // This static PluralRule hashtable residents in memory until end of application.
-        if ((fPluralRuleLocaleHash = new Hashtable(TRUE, status))!=NULL) {
-            fLocaleStringsHash = fPluralRuleLocaleHash;
+        if ((gPluralRuleLocaleHash = new Hashtable(TRUE, status))!=NULL) {
+            fLocaleStringsHash = gPluralRuleLocaleHash;
             return;
         }
     }
     else {
-        fLocaleStringsHash = fPluralRuleLocaleHash;
+        fLocaleStringsHash = gPluralRuleLocaleHash;
     }
 }
 
