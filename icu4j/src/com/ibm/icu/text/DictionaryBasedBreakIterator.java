@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -41,7 +41,11 @@ import java.io.IOException;
  * @stable ICU 2.0
  */
 public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
-
+    
+    /**
+     * Keeps track of if we are using the compact trie dictionary.
+     */
+    private boolean usingCTDictionary = false;
     /**
      * a list of known words that is used to divide up contiguous ranges of letters,
      * stored in a compressed, indexed, format that offers fast access
@@ -62,18 +66,30 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
      * to use either the dictionary or the state table again until the iterator
      * leaves this range of text
      */
-    private int[] cachedBreakPositions;
+    protected int[] cachedBreakPositions;
 
     /**
      * if cachedBreakPositions is not null, this indicates which item in the
      * cache the current iteration position refers to
      */
-    private int positionInCache;
+    protected int positionInCache;
 
     /**
      * Special variable name for characters in words in dictionary
      */
- 
+    
+    /**
+     * Construct a DictionarBasedBreakIterator from precompiled rules. Use by ThaiBreakEngine
+     * uses the BreakCTDictionary.
+     * @param compiledRules an input stream containing the binary (flattened) compiled rules.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    protected DictionaryBasedBreakIterator(InputStream compiledRules) throws IOException {
+        fRData = RBBIDataWrapper.get(compiledRules);   // Init the RBBI part of this iterator.
+        dictionary = null;
+        usingCTDictionary = true;
+    }
     /**
      * Constructs a DictionaryBasedBreakIterator.
      * @param rules Same as the rules parameter on RuleBasedBreakIterator,
@@ -325,8 +341,8 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
 
             // if we passed over more than one dictionary character, then we use
             // divideUpDictionaryRange() to regenerate the cached break positions
-            // for the new range
-            if (fDictionaryCharCount > 1 && result - startPos > 1) {
+            // for the new range.
+            if (!usingCTDictionary && fDictionaryCharCount > 1 && result - startPos > 1) {
                 divideUpDictionaryRange(startPos, result);
             }
 
