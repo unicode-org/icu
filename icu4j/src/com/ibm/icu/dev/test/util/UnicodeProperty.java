@@ -3,7 +3,7 @@
 //#else
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1126,7 +1126,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
     public static abstract class SimpleProperty extends BaseProperty {
         List values;
 
-        public SimpleProperty addName(String alias) {
+        public BaseProperty addName(String alias) {
             propertyAliases.add(alias);
             return this;
         }
