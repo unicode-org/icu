@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2007, International Business Machines
+*   Copyright (c) 2001-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -62,9 +62,6 @@ UnicodeString& ICU_Utility::appendNumber(UnicodeString& result, int32_t n,
     return result;
 }
 
-static const UChar HEX[16] = {48,49,50,51,52,53,54,55,  // 0-7
-                              56,57,65,66,67,68,69,70}; // 8-9 A-F
-
 /**
  * Return true if the character is NOT printable ASCII.
  */
@@ -83,17 +80,17 @@ UBool ICU_Utility::escapeUnprintable(UnicodeString& result, UChar32 c) {
         result.append(BACKSLASH);
         if (c & ~0xFFFF) {
             result.append(UPPER_U);
-            result.append(HEX[0xF&(c>>28)]);
-            result.append(HEX[0xF&(c>>24)]);
-            result.append(HEX[0xF&(c>>20)]);
-            result.append(HEX[0xF&(c>>16)]);
+            result.append(DIGITS[0xF&(c>>28)]);
+            result.append(DIGITS[0xF&(c>>24)]);
+            result.append(DIGITS[0xF&(c>>20)]);
+            result.append(DIGITS[0xF&(c>>16)]);
         } else {
             result.append(LOWER_U);
         }
-        result.append(HEX[0xF&(c>>12)]);
-        result.append(HEX[0xF&(c>>8)]);
-        result.append(HEX[0xF&(c>>4)]);
-        result.append(HEX[0xF&c]);
+        result.append(DIGITS[0xF&(c>>12)]);
+        result.append(DIGITS[0xF&(c>>8)]);
+        result.append(DIGITS[0xF&(c>>4)]);
+        result.append(DIGITS[0xF&c]);
         return TRUE;
     }
     return FALSE;

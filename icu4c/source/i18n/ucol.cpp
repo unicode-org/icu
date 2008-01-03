@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-2007, International Business Machines
+*   Copyright (C) 1996-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  ucol.cpp
@@ -72,9 +72,9 @@ static const uint16_t *fcdTrieIndex=NULL;
 // implicit generation and supressing sort key compression
 // they should regularly be in the UCA, but if one
 // is running without UCA, it could be a problem
-static int32_t maxRegularPrimary  = 0xA0;
-static int32_t minImplicitPrimary = 0xE0;
-static int32_t maxImplicitPrimary = 0xE4;
+static const int32_t maxRegularPrimary  = 0xA0;
+static const int32_t minImplicitPrimary = 0xE0;
+static const int32_t maxImplicitPrimary = 0xE4;
 
 U_CDECL_BEGIN
 static UBool U_CALLCONV
