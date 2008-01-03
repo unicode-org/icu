@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -509,9 +509,11 @@ public class RBBITest extends TestFmwk
    public void TestThaiDictionaryBreakIterator() {
        int position;
        int index;
-       int result[] = { 3, 8 };
+       int result[] = { 1, 2, 5, 10, 11, 12, 11, 10, 5, 2, 1, 0 };
        char ctext[] = { 
-               0x0E01, 0x0E32, 0x0E23, 0x0E17, 0x0E14, 0x0E25, 0x0E2D, 0x0E07 
+               0x0041, 0x0020,
+               0x0E01, 0x0E32, 0x0E23, 0x0E17, 0x0E14, 0x0E25, 0x0E2D, 0x0E07,
+               0x0020, 0x0041
                };
        String text = new String(ctext);
        
@@ -521,11 +523,18 @@ public class RBBITest extends TestFmwk
        b.setText(text);
        
        index = 0;
-       while ((position = b.next() )!= BreakIterator.DONE) {
-           if (position != result[index]) {
-               errln("Error with ThaiDictionaryBreakIterator test at " + position + ".\nShould have been " + result[index]);
+       // Test forward iteration
+       while ((position = b.next())!= BreakIterator.DONE) {
+           if (position != result[index++]) {
+               errln("Error with ThaiDictionaryBreakIterator forward iteration test at " + position + ".\nShould have been " + result[index-1]);
            }
-           index++;
+       }
+       
+       // Test backward iteration
+       while ((position = b.previous())!= BreakIterator.DONE) {
+           if (position != result[index++]) {
+               errln("Error with ThaiDictionaryBreakIterator backward iteration test at " + position + ".\nShould have been " + result[index-1]);
+           }
        }
    }
   
