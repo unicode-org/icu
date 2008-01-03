@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2008, International Business Machines Corporation and
+* Copyright (C) 2007-2008, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -34,10 +34,6 @@
 #include "uresimp.h"
 #include "dtptngen_impl.h"
 
-
-#if defined U_DEBUG_DTPTN
-#include <stdio.h>
-#endif
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
@@ -105,17 +101,17 @@ static const dtTypeElem dtTypes[] = {
     {0, UDATPG_FIELD_COUNT, 0, 0, 0} , // last row of dtTypes[] 
  };
 
-static const char* CLDR_FIELD_APPEND[] = {
+static const char* const CLDR_FIELD_APPEND[] = {
     "Era", "Year", "Quarter", "Month", "Week", "*", "Day-Of-Week", "Day", "*", "*", "*",
     "Hour", "Minute", "Second", "*", "Timezone"
 };
 
-static const char* CLDR_FIELD_NAME[] = {
+static const char* const CLDR_FIELD_NAME[] = {
     "era", "year", "quarter", "month", "week", "*", "weekday", "day", "*", "*", "dayperiod",
     "hour", "minute", "second", "*", "zone"
 };
 
-static const char* Resource_Fields[] = {
+static const char* const Resource_Fields[] = {
     "day", "dayperiod", "era", "hour", "minute", "month", "second", "week",
     "weekday", "year", "zone", "quarter" };
 

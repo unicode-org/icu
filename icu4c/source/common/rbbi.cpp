@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-*   Copyright (C) 1999-2007 International Business Machines Corporation   *
+*   Copyright (C) 1999-2008 International Business Machines Corporation   *
 *   and others. All rights reserved.                                      *
 ***************************************************************************
 */
@@ -321,7 +321,7 @@ void RuleBasedBreakIterator::setText(UText *ut, UErrorCode &status) {
     //   we can come to signaling a failure.
     //   (GetText() is obsolete, this failure is sort of OK)
     if (fDCharIter == NULL) {
-        static UChar c = 0;
+        static const UChar c = 0;
         fDCharIter = new UCharCharacterIterator(&c, 0);
     }
 
