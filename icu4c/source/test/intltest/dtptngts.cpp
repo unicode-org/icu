@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2007, International Business Machines Corporation and
+ * Copyright (c) 2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -72,11 +72,11 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("23:58"),
         UnicodeString("58:59"),
         UnicodeString("1999-1"),  // zh_Hans_CN
-        UnicodeString("1999 1"),
+        UnicodeString("1999-01"),
         CharsToUnicodeString("1999\\u5E741\\u670813\\u65E5"),
-        CharsToUnicodeString("1999\\u5E741\\u670813\\u65E5"),
+        CharsToUnicodeString("1999\\u5E7401\\u670813\\u65E5"),
         UnicodeString("1-13"),
-        UnicodeString("1 13"),
+        UnicodeString("01-13"),
         CharsToUnicodeString("1999 Q1"),
         CharsToUnicodeString("\\u4E0B\\u534811:58"),
         CharsToUnicodeString("23:58"),
@@ -339,6 +339,57 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     delete format;
     delete zone;
     delete gen;
+    
+    {
+        // Trac# 6104
+        status = U_ZERO_ERROR;
+        pattern = UnicodeString("YYYYMMM");
+        UnicodeString expR = UnicodeString("1999-01");
+        Locale loc("ja");
+        UDate testDate1= LocaleTest::date(99, 0, 13, 23, 58, 59);
+        DateTimePatternGenerator *patGen=DateTimePatternGenerator::createInstance(loc, status);
+        if(U_FAILURE(status)) {
+            dataerrln("ERROR: Could not create DateTimePatternGenerator");
+            return;
+        }
+        UnicodeString bPattern = patGen->getBestPattern(pattern, status);
+        UnicodeString rDate;
+        SimpleDateFormat sdf(bPattern, loc, status);
+        rDate.remove();
+        rDate = sdf.format(testDate1, rDate);
+
+        logln(UnicodeString(" ja locale with skeleton: YYYYMMM  Best Pattern:") + bPattern);
+        logln(UnicodeString("  Formatted date:") + rDate);
+
+        if ( expR!= rDate ) {
+            errln(UnicodeString("\nERROR: Test Japanese month hack Got: ") + rDate + 
+                  UnicodeString(" Expected: ") + expR );
+        }
+        delete patGen;
+    }
+    {   // Trac# 6104
+        Locale loc("zh");
+        UnicodeString expR = UnicodeString("1999-01");
+        UDate testDate1= LocaleTest::date(99, 0, 13, 23, 58, 59);
+        DateTimePatternGenerator *patGen=DateTimePatternGenerator::createInstance(loc, status);
+        if(U_FAILURE(status)) {
+            dataerrln("ERROR: Could not create DateTimePatternGenerator");
+            return;
+        }
+        UnicodeString bPattern = patGen->getBestPattern(pattern, status);
+        UnicodeString rDate;
+        SimpleDateFormat sdf(bPattern, loc, status);
+        rDate.remove();
+        rDate = sdf.format(testDate1, rDate);
+
+        logln(UnicodeString(" zh locale with skeleton: YYYYMMM  Best Pattern:") + bPattern);
+        logln(UnicodeString("  Formatted date:") + rDate);
+        if ( expR!= rDate ) {
+            errln(UnicodeString("\nERROR: Test Chinese month hack Got: ") + rDate + 
+                  UnicodeString(" Expected: ") + expR );
+        }
+        delete patGen;   
+    }
     
     // ======= Test various skeletons.
     logln("Testing DateTimePatternGenerator with various skeleton");

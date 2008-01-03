@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and
+* Copyright (C) 2008, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -119,6 +119,8 @@ static const char* Resource_Fields[] = {
     "day", "dayperiod", "era", "hour", "minute", "month", "second", "week",
     "weekday", "year", "zone", "quarter" };
 
+static const char* CJKLangName[] = { "zh", "ja", "ko" };  // for ChineseMonthHack
+
 // For appendItems
 static const UChar UDATPG_ItemFormat[]= {0x7B, 0x30, 0x7D, 0x20, 0x251C, 0x7B, 0x32, 0x7D, 0x3A,
     0x20, 0x7B, 0x31, 0x7D, 0x2524, 0};  // {0} \u251C{2}: {1}\u2524
@@ -157,6 +159,7 @@ DateTimePatternGenerator::DateTimePatternGenerator(UErrorCode &status) : UObject
     fStatus = U_ZERO_ERROR;
     skipMatcher = NULL;
     fAvailableFormatKeyHash=NULL;
+    chineseMonthHack = FALSE;
     fp = new FormatParser();
     dtMatcher = new DateTimeMatcher();
     distanceInfo = new DistanceInfo();
@@ -201,6 +204,7 @@ DateTimePatternGenerator::operator=(const DateTimePatternGenerator& other) {
     *distanceInfo = *(other.distanceInfo);
     dateTimeFormat = other.dateTimeFormat;
     decimal = other.decimal;
+    chineseMonthHack = other.chineseMonthHack;
     // NUL-terminate for the C API.
     dateTimeFormat.getTerminatedBuffer();
     decimal.getTerminatedBuffer();
@@ -230,7 +234,8 @@ DateTimePatternGenerator::operator==(const DateTimePatternGenerator& other) cons
         return TRUE;
     }
     if ((pLocale==other.pLocale) && (patternMap->equals(*other.patternMap)) &&
-        (dateTimeFormat==other.dateTimeFormat) && (decimal==other.decimal)) {
+        (dateTimeFormat==other.dateTimeFormat) && (decimal==other.decimal) &&
+        (chineseMonthHack == other.chineseMonthHack)) {
         for ( int32_t i=0 ; i<UDATPG_FIELD_COUNT; ++i ) {
            if ((appendItemFormats[i] != other.appendItemFormats[i]) ||
                (appendItemNames[i] != other.appendItemNames[i]) ) {
@@ -264,10 +269,17 @@ DateTimePatternGenerator::~DateTimePatternGenerator() {
 
 void
 DateTimePatternGenerator::initData(const Locale& locale) {
+    const char *baseLangName = locale.getBaseName();
+    chineseMonthHack = FALSE;
+    for (int32_t i=0; i<3; i++) {
+        if ( uprv_memcmp(baseLangName, CJKLangName[i], 2 ) == 0 ) {
+            chineseMonthHack = TRUE;
+        }
+    }
+    
     fStatus = U_ZERO_ERROR;
     skipMatcher = NULL;
     fAvailableFormatKeyHash=NULL;
-
     addCanonicalItems();
     addICUPatterns(locale, fStatus);
     if (U_FAILURE(fStatus)) {
@@ -564,7 +576,12 @@ DateTimePatternGenerator::getBestPattern(const UnicodeString& patternForm, UErro
     int32_t timeMask=(1<<UDATPG_FIELD_COUNT) - 1 - dateMask;
 
     resultPattern.remove();
-    dtMatcher->set(patternForm, fp);
+    if ( chineseMonthHack ) {
+        dtMatcher->set(getCJKPattern(patternForm), fp);
+    }
+    else {
+        dtMatcher->set(patternForm, fp);
+    }
     bestPattern=getBestRaw(*dtMatcher, -1, distanceInfo);
     if ( distanceInfo->missingFieldMask==0 && distanceInfo->extraFieldMask==0 ) {
         resultPattern = adjustFieldTypes(*bestPattern, FALSE);
@@ -979,6 +996,31 @@ DateTimePatternGenerator::isCanonicalItem(const UnicodeString& item) const {
 DateTimePatternGenerator*
 DateTimePatternGenerator::clone() const {
     return new DateTimePatternGenerator(*this);
+}
+
+// If the pattern contains more than 3 'M', replace with "MM"
+UnicodeString
+DateTimePatternGenerator::getCJKPattern(const UnicodeString& origPattern) {
+    UnicodeString result = UnicodeString(origPattern);
+    int32_t start, count;
+    
+    start=0;
+    if ((start < result.length()) &&
+           ((start = result.indexOf(CAP_M, start)) >=0 )) {
+        count=1;
+        while ( result.charAt(start+count) == CAP_M ) {
+            if ( start+count++ >= result.length() ) {
+                break;
+            }
+        }
+        if ( count >=3 ) {
+            UChar sMM[3] = { CAP_M, CAP_M, 0 };
+            UnicodeString shortMM = UnicodeString(sMM);
+            result = result.replace(start, count, shortMM);
+        }
+        start+=count;
+    }
+    return result;
 }
 
 PatternMap::PatternMap() {

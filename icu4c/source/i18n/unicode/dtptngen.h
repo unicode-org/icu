@@ -387,6 +387,7 @@ private:
     UnicodeString hackPattern;
     UErrorCode fStatus;
     UnicodeString emptyString;
+    UBool chineseMonthHack;
 
     void initData(const Locale &locale);
     void addCanonicalItems();
@@ -396,6 +397,7 @@ private:
     void initHashtable(UErrorCode& status);
     void setDateTimeFromCalendar(const Locale& locale, UErrorCode& status);
     void setDecimalSymbols(const Locale& locale, UErrorCode& status);
+    UnicodeString getCJKPattern(const UnicodeString& patternForm);
     UDateTimePatternField getAppendFormatNumber(const char* field) const;
     UDateTimePatternField getAppendNameNumber(const char* field) const;
     void getAppendName(UDateTimePatternField field, UnicodeString& value);
