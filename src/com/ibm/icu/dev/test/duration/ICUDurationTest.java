@@ -1,7 +1,7 @@
 //##header J2SE15
 /*
  *******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and         *
+ * Copyright (C) 2007-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -19,6 +19,7 @@ import javax.xml.datatype.Duration;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.DurationFormat;
+import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -59,7 +60,9 @@ public class ICUDurationTest extends TestFmwk {
         }
         
         formatted = df.formatDurationFromNowTo(new Date(0));
-        expect = "fra 37 anni"; // will break next year.
+        Calendar cal = Calendar.getInstance();
+        int years = cal.get(Calendar.YEAR) - 1970; // year of Date(0)
+        expect = "fra " + years + " anni";
         if(!expect.equals(formatted)) {
             errln("Expected " + expect + " but got " + formatted);
         } else {
