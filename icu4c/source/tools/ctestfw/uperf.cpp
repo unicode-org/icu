@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2002-2007, International Business Machines Corporation and
+ * Copyright (c) 2002-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -110,6 +110,8 @@ void UPerfTest::init(UOption addOptions[], int32_t addOptionsCount,
     //initialize the argument list
     U_MAIN_INIT_ARGS(_argc, _argv);
 
+    resolvedFileName = NULL;
+
     // add specific options
     int32_t optionsCount = OPTIONS_COUNT;
     if (addOptionsCount > 0) {
@@ -177,11 +179,10 @@ void UPerfTest::init(UOption addOptions[], int32_t addOptionsCount,
     }
     
     if(options[LOCALE].doesOccur) {
-      locale = options[LOCALE].value;
+        locale = options[LOCALE].value;
     }
 
     int32_t len = 0;
-    resolvedFileName = NULL;
     if(fileName!=NULL){
         //pre-flight
         ucbuf_resolveFileName(sourceDir, fileName, NULL, &len, &status);
