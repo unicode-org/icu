@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 2005-2007, International Business Machines
+*   Copyright (C) 2005-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -98,9 +98,9 @@ static const char* const TZ_REGKEY[] = {
  * the registry.
  */
 enum {
-    WIN_9X_ME_TYPE = 0,
-    WIN_NT_TYPE = 1,
-    WIN_2K_XP_TYPE = 2
+    WIN_9X_ME_TYPE = 1,
+    WIN_NT_TYPE = 2,
+    WIN_2K_XP_TYPE = 3
 };
 
 # if 0
@@ -332,7 +332,7 @@ static const WindowsZoneRemap ZONE_REMAP[] = {
     "Central European",                "-Warsaw",
     "Central Europe",                  "-Prague Bratislava",
     "China",                           "-Beijing",
-                                               
+
     "Greenwich",                       "+GMT",
     "GTB",                             "+GFT",
     "Arab",                            "+Saudi Arabia",
@@ -343,7 +343,7 @@ static const WindowsZoneRemap ZONE_REMAP[] = {
     NULL,                   NULL,
 };
 
-static int32_t fWinType = -1;
+static int32_t gWinType = 0;
 
 static int32_t detectWindowsType()
 {
@@ -356,7 +356,7 @@ static int32_t detectWindowsType()
         really want to know is how the registry is laid out.
         Specifically, is it 9x/Me or not, and is it "GMT" or "GMT
         Standard Time". */
-    for (winType = 0; winType < 2; winType += 1) {
+    for (winType = 0; winType < 2; winType++) {
         result = RegOpenKeyExA(HKEY_LOCAL_MACHINE,
                               WIN_TYPE_PROBE_REGKEY[winType],
                               0,
@@ -369,7 +369,7 @@ static int32_t detectWindowsType()
         }
     }
 
-    return winType;
+    return winType+1; // +1 to bring it inline with the enum
 }
 
 /*
@@ -414,19 +414,20 @@ static LONG openTZRegKey(HKEY *hkey, const char *winid)
     char *name;
     LONG result;
 
-    /* TODO: This isn't thread safe, but it's probably good enough. */
-    if (fWinType < 0) {
-        fWinType = detectWindowsType();
+    /* This isn't thread safe, but it's good enough because the result should be constant per system. */
+    if (gWinType <= 0) {
+        gWinType = detectWindowsType();
     }
 
-    uprv_strcpy(subKeyName, TZ_REGKEY[(fWinType == WIN_9X_ME_TYPE) ? 0 : 1]);
+    uprv_strcpy(subKeyName, TZ_REGKEY[(gWinType != WIN_9X_ME_TYPE)]);
     name = &subKeyName[strlen(subKeyName)];
     uprv_strcat(subKeyName, winid);
 
-    if (fWinType != WIN_9X_ME_TYPE &&
+    if (gWinType != WIN_9X_ME_TYPE &&
         (winid[strlen(winid) - 1] != '2') &&
         (winid[strlen(winid) - 1] != ')') &&
-        !(fWinType == WIN_NT_TYPE && strcmp(winid, "GMT") == 0)) {
+        !(gWinType == WIN_NT_TYPE && strcmp(winid, "GMT") == 0))
+    {
         uprv_strcat(subKeyName, STANDARD_TIME_REGKEY);
     }
 
@@ -444,8 +445,8 @@ static LONG openTZRegKey(HKEY *hkey, const char *winid)
         for (i=0; ZONE_REMAP[i].winid; i++) {
             if (uprv_strcmp(winid, ZONE_REMAP[i].winid) == 0) {
                 uprv_strcpy(name, ZONE_REMAP[i].altwinid + 1);
-                if (*(ZONE_REMAP[i].altwinid) == '+' && fWinType != WIN_9X_ME_TYPE) {
-                    uprv_strcat(subKeyName, STANDARD_TIME_REGKEY);                
+                if (*(ZONE_REMAP[i].altwinid) == '+' && gWinType != WIN_9X_ME_TYPE) {
+                    uprv_strcat(subKeyName, STANDARD_TIME_REGKEY);
                 }
                 return RegOpenKeyExA(HKEY_LOCAL_MACHINE,
                                       subKeyName,
@@ -488,7 +489,7 @@ uprv_getWindowsTimeZoneInfo(TIME_ZONE_INFORMATION *zoneInfo, const UChar *icuid,
     const char *winid;
     TZI tzi;
     LONG result;
-    
+
     winid = findWindowsZoneID(icuid, length);
 
     if (winid != NULL) {
@@ -622,7 +623,7 @@ uprv_detectWindowsTimeZone() {
     if (firstMatch < 0) {
         return NULL;
     }
-    
+
     if (firstMatch != lastMatch) {
         char stdName[32];
         DWORD stdNameSize;
