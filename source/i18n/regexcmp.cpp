@@ -2,7 +2,7 @@
 //
 //  file:  regexcmp.cpp
 //
-//  Copyright (C) 2002-2007 International Business Machines Corporation and others.
+//  Copyright (C) 2002-2008 International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains the ICU regular expression compiler, which is responsible
@@ -4022,7 +4022,7 @@ UnicodeSet *RegexCompile::createSetForProperty(const UnicodeString &propName, UB
     //   TODO:  Redo to remove dependency on code page conversion of (char *) strings.
     //
     #define IDENTIFIER_IGNORABLE "[\\u0000-\\u0008\\u000e-\\u001b\\u007f-\\u009f\\p{Cf}]"
-    static const char *javaProps[][2] = {
+    static const char * const javaProps[][2] = {
         {"javaDefined",                "\\P{Cn}"},
         {"javaDigit",                  "\\p{Nd}"},
         {"javaIdentifierIgnorable",    IDENTIFIER_IGNORABLE},
