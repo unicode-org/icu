@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2003-2005, International Business Machines
+*   Copyright (C) 2003-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  utrace.c
@@ -23,7 +23,7 @@ static UTraceData      *pTraceDataFunc  = NULL;
 static const void      *gTraceContext   = NULL;
 
 U_EXPORT int32_t
-utrace_level;
+utrace_level = UTRACE_ERROR;
 
 U_CAPI void U_EXPORT2
 utrace_entry(int32_t fnNumber) {
