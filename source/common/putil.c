@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2007, International Business Machines
+*   Copyright (C) 1997-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -33,6 +33,7 @@
 *   11/15/99    helena      Integrated S/390 IEEE support.
 *   04/26/01    Barry N.    OS/400 support for uprv_getDefaultLocaleID
 *   08/15/01    Steven H.   OS/400 support for uprv_getDefaultCodepage
+*   01/03/08    Steven L.   Fake Time Support
 ******************************************************************************
 */
 
@@ -185,6 +186,41 @@ u_bottomNBytesOfDouble(double* d, int n)
 #endif
 }
 
+#if defined (U_DEBUG_FAKETIME)
+/* Override the clock to test things without having to move the system clock. 
+ * Assumes POSIX gettimeofday() will function
+ */
+UDate fakeClock_t0 = 0; /** Time to start the clock from **/
+UDate fakeClock_dt = 0; /** Offset (fake time - real time) **/
+UBool fakeClock_set = FALSE; /** True if fake clock has spun up **/
+static UMTX fakeClockMutex = NULL;
+
+static UDate getUTCtime_real() {
+    struct timeval posixTime;
+    gettimeofday(&posixTime, NULL);
+    return (UDate)(((int64_t)posixTime.tv_sec * U_MILLIS_PER_SECOND) + (posixTime.tv_usec/1000));
+}
+
+static UDate getUTCtime_fake() {
+    umtx_lock(&fakeClockMutex);
+    if(!fakeClock_set) {
+        UDate real = getUTCtime_real();
+        const char *fake_start = getenv("U_FAKETIME_START");
+        if(fake_start!=NULL) {
+            sscanf(fake_start,"%lf",&fakeClock_t0);
+        }
+        fakeClock_dt = fakeClock_t0 - real;
+        fprintf(stderr,"U_DEBUG_FAKETIME was set at compile time, so the ICU clock will start at a preset value\n"
+                       "U_FAKETIME_START=%.0f (%s) for an offset of %.0f ms from the current time %.0f\n",
+                            fakeClock_t0, fake_start, fakeClock_dt, real);
+        fakeClock_set = TRUE;
+    }
+    umtx_unlock(&fakeClockMutex);
+    
+    return getUTCtime_real() + fakeClock_dt;
+}
+#endif
+
 #if defined(U_WINDOWS)
 typedef union {
     int64_t int64;
@@ -208,7 +244,9 @@ typedef union {
 U_CAPI UDate U_EXPORT2
 uprv_getUTCtime()
 {
-#ifdef XP_MAC
+#if defined(U_DEBUG_FAKETIME)
+    return getUTCtime_fake(); /* Hook for overriding the clock */
+#elif defined(XP_MAC)
     time_t t, t1, t2;
     struct tm tmrec;
 
