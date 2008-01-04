@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006-2007, International Business Machines Corporation and    *
+* Copyright (C) 2006-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -713,7 +713,7 @@ public class TestCharset extends TestFmwk {
         CharsetProviderICU icu = new CharsetProviderICU();
         
         // get all the converters into an array
-        Object[] converters = icu.getAvailableNames();
+        Object[] converters = CharsetProviderICU.getAvailableNames();
         
         String norm = "a";
         String ext = "\u0275"; // theta
@@ -831,7 +831,6 @@ public class TestCharset extends TestFmwk {
         log("The few that passed: "); for (int i=0; i<pass.size(); i++) log(pass.get(i) + ", "); logln(""); 
         log("The few that are exempt: "); for (int i=0; i<exempt.size(); i++) log(exempt.get(i) + ", "); logln(""); 
     }
-    
     
 //    public void TestCharsetCallback() {
 //        String currentTest = "initialization";
@@ -3894,7 +3893,7 @@ public class TestCharset extends TestFmwk {
         try {
             smBufDecode(decoder, "UTF32-DE-2", bs, us, true, false);
         } catch (Exception ex) {
-            // should default to little endian
+            // should recognize little endian BOM
             errln("Exception while decoding UTF32 charset (2) should not have been thrown.");
         }
         
@@ -3931,7 +3930,7 @@ public class TestCharset extends TestFmwk {
         try {
             smBufDecode(decoder, "UTF32-DE-4", bs, us, true, false);
         } catch (Exception ex) {
-            // should default to big endian
+            // should recognize big endian BOM
             errln("Exception while decoding UTF32 charset (4) should not have been thrown.");
         }
         //end of decoding code coverage
@@ -3950,8 +3949,9 @@ public class TestCharset extends TestFmwk {
         bs.position(0);
         
         result = encoder.encode(us, bs, true);
-        if (!result.isMalformed()) {
-            errln("Malformed error while encoding UTF32 charset (1) should have occurred.");
+        // must try to output BOM first for UTF-32 (not UTF-32BE or UTF-32LE)
+        if (!result.isOverflow()) {
+            errln("Buffer overflow error while encoding UTF32 charset (1) should have occurred."); 
         }
         
         us.clear();
@@ -3976,7 +3976,6 @@ public class TestCharset extends TestFmwk {
         
         //test malform surrogate
         us.put((char)0x0000); us.put((char)0xD902);
-        bs.put((byte)0x00); 
         
         us.limit(us.position());
         us.position(0);
@@ -4097,6 +4096,7 @@ public class TestCharset extends TestFmwk {
         bs.position(0);
         
         try {
+            // must flush in order to exhibit malformed behavior
             smBufDecode(decoder, "UTF-32LE", bs, us, true, true);
             errln("Malform exception while decoding UTF32LE (3) should have been thrown.");
         } catch (Exception ex) {
@@ -4189,6 +4189,7 @@ public class TestCharset extends TestFmwk {
         bs.position(0);
         
         try {
+            // must flush to exhibit malformed behavior
             smBufDecode(decoder, "UTF-32BE", bs, us, true, true);
             errln("Malform exception while decoding UTF32BE (3) should have been thrown.");
         } catch (Exception ex) {
@@ -4224,6 +4225,7 @@ public class TestCharset extends TestFmwk {
         bs.position(0);
         
         try {
+            // must flush to exhibit malformed behavior
             smBufDecode(decoder, "UTF-32BE", bs, us, true, true);
             errln("Malform exception while decoding UTF32BE (5) should have been thrown.");
         } catch (Exception ex) {
