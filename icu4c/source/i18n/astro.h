@@ -1,5 +1,5 @@
 /************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation *
+ * Copyright (C) 1996-2008, International Business Machines Corporation *
  * and others. All Rights Reserved.                                     *
  ************************************************************************
  *  2003-nov-07   srl       Port from Java
@@ -668,44 +668,6 @@ public:
   // Other utility methods
   //-------------------------------------------------------------------------
 private:
-  /***
-   * Given 'value', add or subtract 'range' until 0 <= 'value' < range.
-   * The modulus operator.
-   */
-  inline static double normalize(double value, double range)  {
-    return value - range * Math::floorDivide(value, range);
-  }
-
-  /**
-   * Normalize an angle so that it's in the range 0 - 2pi.
-   * For positive angles this is just (angle % 2pi), but the Java
-   * mod operator doesn't work that way for negative numbers....
-   */
-  inline static double norm2PI(double angle)  {
-    return normalize(angle, CalendarAstronomer::PI * 2.0);
-  }
-
-  /**
-   * Normalize an angle into the range -PI - PI
-   */
-  inline static  double normPI(double angle)  {
-    return normalize(angle + PI, CalendarAstronomer::PI * 2.0) - PI;
-  }
-
-  /**
-   * Find the "true anomaly" (longitude) of an object from
-   * its mean anomaly and the eccentricity of its orbit.  This uses
-   * an iterative solution to Kepler's equation.
-   *
-   * @param meanAnomaly   The object's longitude calculated as if it were in
-   *                      a regular, circular orbit, measured in radians
-   *                      from the point of perigee.
-   *
-   * @param eccentricity  The eccentricity of the orbit
-   *
-   * @return The true anomaly (longitude) measured in radians
-   */
-  double trueAnomaly(double meanAnomaly, double eccentricity);
 
   /**
    * Return the obliquity of the ecliptic (the angle between the ecliptic

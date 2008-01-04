@@ -307,7 +307,7 @@ void UObjectTest::testIDs()
     TESTCLASSID_TRANSLIT(UnescapeTransliterator, "Hex-Any");
     TESTCLASSID_TRANSLIT(UnicodeNameTransliterator, "Any-Name");
     TESTCLASSID_TRANSLIT(UppercaseTransliterator, "Upper");
-    TESTCLASSID_CTOR(CaseMapTransliterator, (UnicodeString(), NULL));
+    TESTCLASSID_ABSTRACT(CaseMapTransliterator);
     TESTCLASSID_ABSTRACT(Transliterator);
     TESTCLASSID_FACTORY_HIDDEN(TransliteratorRegistry::Enumeration, Transliterator::getAvailableIDs(status));
 

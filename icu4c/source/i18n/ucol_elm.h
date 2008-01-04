@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2006, International Business Machines
+*   Copyright (C) 2000-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -132,12 +132,10 @@ typedef struct {
 }tempTailorContext;
 
 U_CAPI tempUCATable * U_EXPORT2 uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollator *UCA, UColCETags initTag, UColCETags supplementaryInitTag, UErrorCode *status);
-U_CAPI tempUCATable * U_EXPORT2 uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status);
 U_CAPI void U_EXPORT2 uprv_uca_closeTempTable(tempUCATable *t);
 U_CAPI uint32_t U_EXPORT2 uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status);
 U_CAPI UCATableHeader * U_EXPORT2 uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status);
-U_CAPI int32_t U_EXPORT2
-uprv_uca_canonicalClosure(tempUCATable *t, UColTokenParser *src, UErrorCode *status);
+U_CAPI int32_t U_EXPORT2 uprv_uca_canonicalClosure(tempUCATable *t, UColTokenParser *src, UErrorCode *status);
 #define paddedsize(something) ((something)+((((something)%4)!=0)?(4-(something)%4):0))
 #define headersize (paddedsize(sizeof(UCATableHeader))+paddedsize(sizeof(UColOptionSet)))
 
