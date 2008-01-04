@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2002-2007, International Business Machines
+*   Copyright (C) 2002-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  regex.h
@@ -16,7 +16,7 @@
 #ifndef REGEX_H
 #define REGEX_H
 
-#define REGEX_DEBUG
+//#define REGEX_DEBUG
 
 /**
  * \file
