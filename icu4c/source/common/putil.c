@@ -1457,7 +1457,12 @@ remapPlatformDependentCodepage(const char *locale, const char *name) {
         name = "UTF-8";
     }
 #elif defined(U_HPUX)
-    if (uprv_strcmp(name, "eucJP") == 0) {
+    if (locale != NULL && uprv_strcmp(locale, "zh_HK") == 0 && uprv_strcmp(name, "big5") == 0) {
+        /* HP decided to extend big5 as hkbig5 even though it's not compatible :-( */
+        /* zh_TW.big5 is not the same charset as zh_HK.big5! */
+        name = "hkbig5";
+    }
+    else if (uprv_strcmp(name, "eucJP") == 0) {
         /*
         ibm-1350 is the best match, but unavailable.
         ibm-954 is mostly a superset of ibm-1350.
