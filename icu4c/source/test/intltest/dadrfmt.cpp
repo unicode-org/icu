@@ -191,7 +191,6 @@ void DataDrivenFormatTest::testConvertDate(TestData *testData,
                 errln("case %d: could not parse date as RELATIVE_ADD calendar fields: %s", n, u_errorName(status));
                 continue;
             }
-            logln("Parsing ..\n");
             useDate=TRUE;
             cal->clear();
             cal->setTime(now, status);
@@ -201,7 +200,6 @@ void DataDrivenFormatTest::testConvertDate(TestData *testData,
                     cal->add((UCalendarDateFields)q,
                                 fromSet.get((UCalendarDateFields)q), status);
                     int32_t newv = cal->get((UCalendarDateFields)q, status);
-                    logln("adding %d to %s ..went from %d to %d\n", fromSet.get((UCalendarDateFields)q), udbg_enumName(UDBG_UCalendarDateFields, q), oldv, newv);
                 }
             }
             fromDate = cal->getTime(status);
