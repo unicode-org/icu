@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2007, International Business Machines
+*   Copyright (C) 2001-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -32,7 +32,7 @@ U_NAMESPACE_BEGIN
  * A transliterator that performs locale-sensitive
  * case mapping.
  */
-class U_I18N_API CaseMapTransliterator : public Transliterator {
+class CaseMapTransliterator : public Transliterator {
 public:
     /**
      * Constructs a transliterator.
@@ -56,17 +56,17 @@ public:
      * Transliterator API.
      * @return a copy of the object.
      */
-    virtual Transliterator* clone(void) const;
+    virtual Transliterator* clone(void) const = 0;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      */
-    virtual UClassID getDynamicClassID() const;
+    //virtual UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      */
-    static UClassID U_EXPORT2 getStaticClassID();
+    U_I18N_API static UClassID U_EXPORT2 getStaticClassID();
 
 protected:
     /**
