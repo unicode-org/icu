@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and    *
+* Copyright (C) 2007-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -303,10 +303,15 @@ int32_t RelativeDateFormat::dayDifference(Calendar &cal, UErrorCode &status) {
     if(U_FAILURE(status)) {
         return 0;
     }
-    // TODO: Cache the nowCal to avoid heap allocs?
+    // TODO: Cache the nowCal to avoid heap allocs? Would be difficult, don't know the calendar type
     Calendar *nowCal = cal.clone();
     nowCal->setTime(Calendar::getNow(), status);
-    int32_t dayDiff = nowCal->fieldDifference(cal.getTime(status), Calendar::DATE, status);
+
+    // For the day difference, we are interested in the difference in the (modified) julian day number
+    // which is midnight to midnight.  Using fieldDifference() is NOT correct here, because 
+    // 6pm Jan 4th  to 10am Jan 5th should be considered "tomorrow".
+    int32_t dayDiff = cal.get(UCAL_JULIAN_DAY, status) - nowCal->get(UCAL_JULIAN_DAY, status);
+
     delete nowCal;
     return dayDiff;
 }

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2007, International Business Machines Corporation and    *
+* Copyright (C) 1997-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -73,8 +73,14 @@ U_CDECL_END
 //
 
 #if defined( U_DEBUG_CALSVC ) || defined (U_DEBUG_CAL)
-#include <stdio.h>
 
+/** 
+ * fldName was removed as a duplicate implementation. 
+ * use  udbg_ services instead, 
+ * which depend on include files and library from ../tools/ctestfw
+ */
+#include "unicode/udbgutil.h"
+#include <stdio.h>
 
 /**
 * convert a UCalendarDateFields into a string - for debugging
@@ -82,14 +88,10 @@ U_CDECL_END
 * @return static string to the field name
 * @internal
 */
-#error fldName() has been removed. Please use udbg_ucal_fieldName()  from libctestfw instead. The following code might work.
 
-static const char* fldName(UCalendarDateFields f) {
-	const char *udbg_ucal_fieldName(int32_t fld);
-	return udbg_ucal_fieldName((int32_t)f);
+const char* fldName(UCalendarDateFields f) {
+	return udbg_enumName(UDBG_UCalendarDateFields, (int32_t)f);
 }
-
-
 
 #if UCAL_DEBUG_DUMP
 // from CalendarTest::calToStr - but doesn't modify contents.
