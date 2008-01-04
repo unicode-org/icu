@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2007, International Business Machines
+*   Copyright (C) 1998-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -679,7 +679,7 @@ u_strcmp(const UChar *s1,
     return (int32_t)c1 - (int32_t)c2;
 }
 
-U_CAPI int32_t U_EXPORT2
+U_CFUNC int32_t U_EXPORT2
 uprv_strCompare(const UChar *s1, int32_t length1,
                 const UChar *s2, int32_t length2,
                 UBool strncmpStyle, UBool codePointOrder) {

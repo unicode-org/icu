@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2007, International Business Machines
+*   Copyright (C) 1998-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -479,7 +479,7 @@ ucol_getSortKeySize(const UCollator *coll, collIterate *s,
  * @return memory, owned by the caller, of size 'length' bytes.
  * @internal INTERNAL USE ONLY
  */
-U_CAPI uint8_t* U_EXPORT2 
+U_CFUNC uint8_t* U_EXPORT2 
 ucol_cloneRuleData(const UCollator *coll, int32_t *length, UErrorCode *status);
 
 /**

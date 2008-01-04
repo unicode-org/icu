@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2007, International Business Machines
+*   Copyright (C) 2001-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -81,7 +81,7 @@ utrans_rep_caseContextIterator(void *context, int8_t dir)
 
 U_NAMESPACE_BEGIN
 
-UOBJECT_DEFINE_RTTI_IMPLEMENTATION(CaseMapTransliterator)
+UOBJECT_DEFINE_ABSTRACT_RTTI_IMPLEMENTATION(CaseMapTransliterator)
 
 /**
  * Constructs a transliterator.
@@ -126,9 +126,9 @@ CaseMapTransliterator::CaseMapTransliterator(const CaseMapTransliterator& o) :
 /**
  * Transliterator API.
  */
-Transliterator* CaseMapTransliterator::clone(void) const {
+/*Transliterator* CaseMapTransliterator::clone(void) const {
     return new CaseMapTransliterator(*this);
-}
+}*/
 
 /**
  * Implements {@link Transliterator#handleTransliterate}.

@@ -1,8 +1,7 @@
-
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2007, International Business Machines
+*   Copyright (C) 2001-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -214,7 +213,7 @@ allocation_failure:
     return NULL;
 }
 
-U_CAPI tempUCATable* U_EXPORT2
+static tempUCATable* U_EXPORT2
 uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
     if(U_FAILURE(*status)) {
         return NULL;
@@ -1880,7 +1879,7 @@ uprv_uca_addTailCanonicalClosures(tempUCATable *t,
     }
 }
 
-U_CAPI int32_t U_EXPORT2
+U_CFUNC int32_t U_EXPORT2
 uprv_uca_canonicalClosure(tempUCATable *t,
                           UColTokenParser *src,
                           UErrorCode *status)
