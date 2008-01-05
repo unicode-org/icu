@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and         *
+ * Copyright (C) 2007-2008, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -180,7 +180,7 @@ public class RelativeDateFormat extends DateFormat {
         Date nowDate = new Date(System.currentTimeMillis());
         nowCal.clear();
         nowCal.setTime(nowDate);
-        int dayDiff = nowCal.fieldDifference(until.getTime(), Calendar.DATE);
+        int dayDiff = until.get(Calendar.JULIAN_DAY) - nowCal.get(Calendar.JULIAN_DAY);
         return dayDiff;
     }
     
