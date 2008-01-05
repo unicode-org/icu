@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2005, International Business Machines
+*   Copyright (C) 2001-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -28,19 +28,11 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_COLLATION
-#if !UCONFIG_NO_COLLATION_BUILDER
+/*#if !UCONFIG_NO_COLLATION_BUILDER*/
 
 #include "ucol_imp.h"
 #include "ucol_tok.h"
-#include "ucol_elm.h"
 #include "ucol_wgt.h"
-
-#include "uhash.h"
-#include "cpputils.h"
-
-#include "unicode/ustring.h"
-#include "unicode/unistr.h"
-#include "unicode/normlzr.h"
 
 U_CFUNC
 UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *status);
@@ -56,7 +48,10 @@ typedef struct {
   uint32_t fHigh; /*forbidden High */
 } ucolCEGenerator;
 
-#endif /* #if !UCONFIG_NO_COLLATION_BUILDER */
+U_CFUNC uint32_t U_EXPORT2 ucol_getCEStrengthDifference(uint32_t CE, uint32_t contCE, 
+                                            uint32_t prevCE, uint32_t prevContCE);
+
+/*#endif*/ /* #if !UCONFIG_NO_COLLATION_BUILDER */
 #endif /* #if !UCONFIG_NO_COLLATION */
 
 #endif

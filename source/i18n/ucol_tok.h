@@ -175,9 +175,6 @@ U_CFUNC int32_t U_EXPORT2 ucol_inv_getPrevCE(const UColTokenParser *src,
                                             uint32_t *prevCE, uint32_t *prevContCE,
                                             uint32_t strength);
 
-U_CFUNC uint32_t U_EXPORT2 ucol_getCEStrengthDifference(uint32_t CE, uint32_t contCE, 
-                                            uint32_t prevCE, uint32_t prevContCE);
-
 
 #endif /* #if !UCONFIG_NO_COLLATION */
 

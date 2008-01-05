@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and   *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and   *
  * others. All Rights Reserved.                                               *
  ******************************************************************************
  */
@@ -49,6 +49,7 @@
 #include "umutex.h"
 #include "servloc.h"
 #include "ustrenum.h"
+#include "uresimp.h"
 #include "ucln_in.h"
 
 static U_NAMESPACE_QUALIFIER Locale* availableLocaleList = NULL;

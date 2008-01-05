@@ -33,6 +33,7 @@
 #include "unicode/normlzr.h"
 #include "ucol_elm.h"
 #include "ucol_tok.h"
+#include "ucol_cnt.h"
 #include "unormimp.h"
 #include "unicode/caniter.h"
 #include "cmemory.h"

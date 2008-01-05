@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2007, International Business Machines
+*   Copyright (C) 2001-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -14,7 +14,7 @@
 *   created by: Vladimir Weinstein
 *
 * This module builds a collator based on the rule set.
-* 
+*
 */
 
 #include "unicode/utypes.h"
@@ -22,19 +22,23 @@
 #if !UCONFIG_NO_COLLATION
 
 #include "unicode/ucoleitr.h"
+#include "unicode/udata.h"
 #include "unicode/uchar.h"
-#include "ucol_bld.h" 
-#include "ucln_in.h" 
-#include "umutex.h"
 #include "unicode/uniset.h"
+#include "ucol_bld.h"
+#include "ucol_elm.h"
+#include "ucol_cnt.h"
+#include "ucln_in.h"
+#include "umutex.h"
 #include "unormimp.h"
+#include "cmemory.h"
 
 static const InverseUCATableHeader* _staticInvUCA = NULL;
 static UDataMemory* invUCA_DATA_MEM = NULL;
 
 U_CDECL_BEGIN
 static UBool U_CALLCONV
-isAcceptableInvUCA(void * /*context*/, 
+isAcceptableInvUCA(void * /*context*/,
                    const char * /*type*/, const char * /*name*/,
                    const UDataInfo *pInfo)
 {
@@ -51,26 +55,23 @@ isAcceptableInvUCA(void * /*context*/,
         //pInfo->formatVersion[1]==INVUCA_FORMAT_VERSION_1 &&
         //pInfo->formatVersion[2]==INVUCA_FORMAT_VERSION_2 &&
         //pInfo->formatVersion[3]==INVUCA_FORMAT_VERSION_3 &&
-        ) {
-            UVersionInfo UCDVersion;
-            u_getUnicodeVersion(UCDVersion);
-            if(pInfo->dataVersion[0]==UCDVersion[0] &&
-                pInfo->dataVersion[1]==UCDVersion[1]) {
-                    //pInfo->dataVersion[1]==invUcaDataInfo.dataVersion[1] &&
-                    //pInfo->dataVersion[2]==invUcaDataInfo.dataVersion[2] &&
-                    //pInfo->dataVersion[3]==invUcaDataInfo.dataVersion[3]) {
-                    return TRUE;
-                } else {
-                    return FALSE;
-                }
-        } else {
-            return FALSE;
-        }
+        )
+    {
+        UVersionInfo UCDVersion;
+        u_getUnicodeVersion(UCDVersion);
+        return (pInfo->dataVersion[0]==UCDVersion[0] &&
+            pInfo->dataVersion[1]==UCDVersion[1]);
+            //pInfo->dataVersion[1]==invUcaDataInfo.dataVersion[1] &&
+            //pInfo->dataVersion[2]==invUcaDataInfo.dataVersion[2] &&
+            //pInfo->dataVersion[3]==invUcaDataInfo.dataVersion[3]) {
+    } else {
+        return FALSE;
+    }
 }
 U_CDECL_END
 
-/* 
-* Takes two CEs (lead and continuation) and 
+/*
+* Takes two CEs (lead and continuation) and
 * compares them as CEs should be compared:
 * primary vs. primary, secondary vs. secondary
 * tertiary vs. tertiary
@@ -92,8 +93,8 @@ static int32_t compareCEs(uint32_t source0, uint32_t source1, uint32_t target0, 
     if(s1 == t1 && s2 == t2) {
         return 0;
     }
-    s = (s1 & 0xFFFF0000)|((s2 & 0xFFFF0000)>>16); 
-    t = (t1 & 0xFFFF0000)|((t2 & 0xFFFF0000)>>16); 
+    s = (s1 & 0xFFFF0000)|((s2 & 0xFFFF0000)>>16);
+    t = (t1 & 0xFFFF0000)|((t2 & 0xFFFF0000)>>16);
     if(s < t) {
         return -1;
     } else if(s > t) {
@@ -158,13 +159,13 @@ int32_t ucol_inv_findCE(const UColTokenParser *src, uint32_t CE, uint32_t Second
 
 static const uint32_t strengthMask[UCOL_CE_STRENGTH_LIMIT] = {
     0xFFFF0000,
-        0xFFFFFF00,
-        0xFFFFFFFF
+    0xFFFFFF00,
+    0xFFFFFFFF
 };
 
 U_CAPI int32_t U_EXPORT2 ucol_inv_getNextCE(const UColTokenParser *src,
-                                            uint32_t CE, uint32_t contCE, 
-                                            uint32_t *nextCE, uint32_t *nextContCE, 
+                                            uint32_t CE, uint32_t contCE,
+                                            uint32_t *nextCE, uint32_t *nextContCE,
                                             uint32_t strength)
 {
     uint32_t *CETable = (uint32_t *)((uint8_t *)src->invUCA+src->invUCA->table);
@@ -183,18 +184,19 @@ U_CAPI int32_t U_EXPORT2 ucol_inv_getNextCE(const UColTokenParser *src,
     *nextCE = CE;
     *nextContCE = contCE;
 
-    while((*nextCE  & strengthMask[strength]) == CE 
-        && (*nextContCE  & strengthMask[strength]) == contCE) {
-            *nextCE = (*(CETable+3*(++iCE)));
-            *nextContCE = (*(CETable+3*(iCE)+1));
-        }
+    while((*nextCE  & strengthMask[strength]) == CE
+        && (*nextContCE  & strengthMask[strength]) == contCE)
+    {
+        *nextCE = (*(CETable+3*(++iCE)));
+        *nextContCE = (*(CETable+3*(iCE)+1));
+    }
 
-        return iCE;
+    return iCE;
 }
 
-U_CFUNC int32_t U_EXPORT2 ucol_inv_getPrevCE(const UColTokenParser *src, 
-                                            uint32_t CE, uint32_t contCE, 
-                                            uint32_t *prevCE, uint32_t *prevContCE, 
+U_CFUNC int32_t U_EXPORT2 ucol_inv_getPrevCE(const UColTokenParser *src,
+                                            uint32_t CE, uint32_t contCE,
+                                            uint32_t *prevCE, uint32_t *prevContCE,
                                             uint32_t strength)
 {
     uint32_t *CETable = (uint32_t *)((uint8_t *)src->invUCA+src->invUCA->table);
@@ -213,32 +215,35 @@ U_CFUNC int32_t U_EXPORT2 ucol_inv_getPrevCE(const UColTokenParser *src,
     *prevCE = CE;
     *prevContCE = contCE;
 
-    while((*prevCE  & strengthMask[strength]) == CE 
+    while((*prevCE  & strengthMask[strength]) == CE
         && (*prevContCE  & strengthMask[strength])== contCE
-        && iCE > 0) { /* this condition should prevent falling off the edge of the world */
-            /* here, we end up in a singularity - zero */
-            *prevCE = (*(CETable+3*(--iCE)));
-            *prevContCE = (*(CETable+3*(iCE)+1));
-        }
+        && iCE > 0) /* this condition should prevent falling off the edge of the world */
+    {
+        /* here, we end up in a singularity - zero */
+        *prevCE = (*(CETable+3*(--iCE)));
+        *prevContCE = (*(CETable+3*(iCE)+1));
+    }
 
-        return iCE;
+    return iCE;
 }
 
-U_CFUNC uint32_t U_EXPORT2 ucol_getCEStrengthDifference(uint32_t CE, uint32_t contCE, 
-                                                       uint32_t prevCE, uint32_t prevContCE) 
+U_CFUNC uint32_t U_EXPORT2 ucol_getCEStrengthDifference(uint32_t CE, uint32_t contCE,
+                                                       uint32_t prevCE, uint32_t prevContCE)
 {
     if(prevCE == CE && prevContCE == contCE) {
         return UCOL_IDENTICAL;
     }
     if((prevCE & strengthMask[UCOL_PRIMARY]) != (CE & strengthMask[UCOL_PRIMARY])
-        || (prevContCE & strengthMask[UCOL_PRIMARY]) != (contCE & strengthMask[UCOL_PRIMARY])) {
-            return UCOL_PRIMARY;
-        }
-        if((prevCE & strengthMask[UCOL_SECONDARY]) != (CE & strengthMask[UCOL_SECONDARY])
-            || (prevContCE & strengthMask[UCOL_SECONDARY]) != (contCE & strengthMask[UCOL_SECONDARY])) {
-                return UCOL_SECONDARY;
-            }
-            return UCOL_TERTIARY;                                            
+        || (prevContCE & strengthMask[UCOL_PRIMARY]) != (contCE & strengthMask[UCOL_PRIMARY]))
+    {
+        return UCOL_PRIMARY;
+    }
+    if((prevCE & strengthMask[UCOL_SECONDARY]) != (CE & strengthMask[UCOL_SECONDARY])
+        || (prevContCE & strengthMask[UCOL_SECONDARY]) != (contCE & strengthMask[UCOL_SECONDARY]))
+    {
+        return UCOL_SECONDARY;
+    }
+    return UCOL_TERTIARY;
 }
 
 
@@ -246,7 +251,7 @@ U_CFUNC uint32_t U_EXPORT2 ucol_getCEStrengthDifference(uint32_t CE, uint32_t co
 inline int32_t ucol_inv_getPrevious(UColTokenParser *src, UColTokListHeader *lh, uint32_t strength) {
 
     uint32_t CE = lh->baseCE;
-    uint32_t SecondCE = lh->baseContCE; 
+    uint32_t SecondCE = lh->baseContCE;
 
     uint32_t *CETable = (uint32_t *)((uint8_t *)src->invUCA+src->invUCA->table);
     uint32_t previousCE, previousContCE;
@@ -277,7 +282,7 @@ inline int32_t ucol_inv_getPrevious(UColTokenParser *src, UColTokListHeader *lh,
 static
 inline int32_t ucol_inv_getNext(UColTokenParser *src, UColTokListHeader *lh, uint32_t strength) {
     uint32_t CE = lh->baseCE;
-    uint32_t SecondCE = lh->baseContCE; 
+    uint32_t SecondCE = lh->baseContCE;
 
     uint32_t *CETable = (uint32_t *)((uint8_t *)src->invUCA+src->invUCA->table);
     uint32_t nextCE, nextContCE;
@@ -295,19 +300,20 @@ inline int32_t ucol_inv_getNext(UColTokenParser *src, UColTokListHeader *lh, uin
     nextCE = CE;
     nextContCE = SecondCE;
 
-    while((nextCE  & strengthMask[strength]) == CE 
-        && (nextContCE  & strengthMask[strength]) == SecondCE) {
-            nextCE = (*(CETable+3*(++iCE)));
-            nextContCE = (*(CETable+3*(iCE)+1));
-        }
+    while((nextCE  & strengthMask[strength]) == CE
+        && (nextContCE  & strengthMask[strength]) == SecondCE)
+    {
+        nextCE = (*(CETable+3*(++iCE)));
+        nextContCE = (*(CETable+3*(iCE)+1));
+    }
 
-        lh->nextCE = nextCE;
-        lh->nextContCE = nextContCE;
+    lh->nextCE = nextCE;
+    lh->nextContCE = nextContCE;
 
-        return iCE;
+    return iCE;
 }
 
-U_CFUNC void ucol_inv_getGapPositions(UColTokenParser *src, UColTokListHeader *lh, UErrorCode *status) {
+static void ucol_inv_getGapPositions(UColTokenParser *src, UColTokListHeader *lh, UErrorCode *status) {
     /* reset all the gaps */
     int32_t i = 0;
     uint32_t *CETable = (uint32_t *)((uint8_t *)src->invUCA+src->invUCA->table);
@@ -333,8 +339,8 @@ U_CFUNC void ucol_inv_getGapPositions(UColTokenParser *src, UColTokListHeader *l
 
     UCAConstants *consts = (UCAConstants *)((uint8_t *)src->UCA->image + src->UCA->image->UCAConsts);
 
-    if((lh->baseCE & 0xFF000000)>= (consts->UCA_PRIMARY_IMPLICIT_MIN<<24) && (lh->baseCE & 0xFF000000) <= (consts->UCA_PRIMARY_IMPLICIT_MAX<<24) ) { /* implicits - */ 
-        //if(lh->baseCE >= PRIMARY_IMPLICIT_MIN && lh->baseCE < PRIMARY_IMPLICIT_MAX ) { /* implicits - */ 
+    if((lh->baseCE & 0xFF000000)>= (consts->UCA_PRIMARY_IMPLICIT_MIN<<24) && (lh->baseCE & 0xFF000000) <= (consts->UCA_PRIMARY_IMPLICIT_MAX<<24) ) { /* implicits - */
+        //if(lh->baseCE >= PRIMARY_IMPLICIT_MIN && lh->baseCE < PRIMARY_IMPLICIT_MAX ) { /* implicits - */
         lh->pos[0] = 0;
         t1 = lh->baseCE;
         t2 = lh->baseContCE & UCOL_REMOVE_CONTINUATION;
@@ -429,14 +435,14 @@ U_CFUNC void ucol_inv_getGapPositions(UColTokenParser *src, UColTokListHeader *l
     }                             \
 }
 
-U_CFUNC uint32_t ucol_getNextGenerated(ucolCEGenerator *g, UErrorCode *status) {
+static uint32_t ucol_getNextGenerated(ucolCEGenerator *g, UErrorCode *status) {
     if(U_SUCCESS(*status)) {
         g->current = ucol_nextWeight(g->ranges, &g->noOfRanges);
     }
     return g->current;
 }
 
-U_CFUNC uint32_t ucol_getSimpleCEGenerator(ucolCEGenerator *g, UColToken *tok, uint32_t strength, UErrorCode *status) {
+static uint32_t ucol_getSimpleCEGenerator(ucolCEGenerator *g, UColToken *tok, uint32_t strength, UErrorCode *status) {
     /* TODO: rename to enum names */
     uint32_t high, low, count=1;
     uint32_t maxByte = (strength == UCOL_TERTIARY)?0x3F:0xFF;
@@ -453,7 +459,7 @@ U_CFUNC uint32_t ucol_getSimpleCEGenerator(ucolCEGenerator *g, UColToken *tok, u
 
     if(tok->next != NULL && tok->next->strength == strength) {
         count = tok->next->toInsert;
-    } 
+    }
 
     g->noOfRanges = ucol_allocWeights(low, high, count, maxByte, g->ranges);
     g->current = UCOL_BYTE_COMMON<<24;
@@ -464,7 +470,7 @@ U_CFUNC uint32_t ucol_getSimpleCEGenerator(ucolCEGenerator *g, UColToken *tok, u
     return g->current;
 }
 
-U_CFUNC uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t* lows, uint32_t* highs, UColToken *tok, uint32_t fStrength, UErrorCode *status) {
+static uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t* lows, uint32_t* highs, UColToken *tok, uint32_t fStrength, UErrorCode *status) {
     uint32_t strength = tok->strength;
     uint32_t low = lows[fStrength*3+strength];
     uint32_t high = highs[fStrength*3+strength];
@@ -499,7 +505,7 @@ U_CFUNC uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t* lows, uint32_
                 return 0;
             }
         }
-    } 
+    }
 
     if(low == 0) {
         low = 0x01000000;
@@ -511,14 +517,14 @@ U_CFUNC uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t* lows, uint32_
         }
         if(high > (UCOL_COMMON_BOT2<<24) && high < (uint32_t)(UCOL_COMMON_TOP2<<24)) {
             high = UCOL_COMMON_TOP2<<24;
-        } 
+        }
         if(low < (UCOL_COMMON_BOT2<<24)) {
             g->noOfRanges = ucol_allocWeights(UCOL_BYTE_UNSHIFTED_MIN<<24, high, count, maxByte, g->ranges);
             g->current = ucol_nextWeight(g->ranges, &g->noOfRanges);
             //g->current = UCOL_COMMON_BOT2<<24;
             return g->current;
         }
-    } 
+    }
 
     g->noOfRanges = ucol_allocWeights(low, high, count, maxByte, g->ranges);
     if(g->noOfRanges == 0) {
@@ -530,7 +536,7 @@ U_CFUNC uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t* lows, uint32_
 
 static
 uint32_t u_toLargeKana(const UChar *source, const uint32_t sourceLen, UChar *resBuf, const uint32_t resLen, UErrorCode *status) {
-    uint32_t i = 0; 
+    uint32_t i = 0;
     UChar c;
 
     if(U_FAILURE(*status)) {
@@ -565,7 +571,7 @@ uint32_t u_toLargeKana(const UChar *source, const uint32_t sourceLen, UChar *res
 
 static
 uint32_t u_toSmallKana(const UChar *source, const uint32_t sourceLen, UChar *resBuf, const uint32_t resLen, UErrorCode *status) {
-    uint32_t i = 0; 
+    uint32_t i = 0;
     UChar c;
 
     if(U_FAILURE(*status)) {
@@ -690,7 +696,7 @@ U_CFUNC void ucol_doCE(UColTokenParser *src, uint32_t *CEparts, UColToken *tok, 
 
 
     // we want to set case bits here and now, not later.
-    // Case bits handling 
+    // Case bits handling
     if(tok->CEs[0] != 0) { // case bits should be set only for non-ignorables
         tok->CEs[0] &= 0xFFFFFF3F; // Clean the case bits field
         int32_t cSize = (tok->source & 0xFF000000) >> 24;
@@ -738,7 +744,7 @@ U_CFUNC void ucol_initBuffers(UColTokenParser *src, UColTokListHeader *lh, UErro
         }
         tok=tok->previous;
         tok->toInsert = t[tok->strength];
-    } 
+    }
 
     tok->toInsert = t[tok->strength];
     ucol_inv_getGapPositions(src, lh, status);
@@ -760,7 +766,7 @@ U_CFUNC void ucol_initBuffers(UColTokenParser *src, UColTokListHeader *lh, UErro
 
     tok=lh->first[UCOL_TOK_POLARITY_POSITIVE];
 
-    do {  
+    do {
         fprintf(stderr,"%i", tok->toInsert);
         tok = tok->next;
     } while(tok != NULL);
@@ -792,7 +798,7 @@ U_CFUNC void ucol_initBuffers(UColTokenParser *src, UColTokListHeader *lh, UErro
                 CEparts[UCOL_PRIMARY] = lh->gapsLo[fStrength*3];
                 CEparts[UCOL_SECONDARY] = lh->gapsLo[fStrength*3+1];
                 /*CEparts[UCOL_TERTIARY] = ucol_getCEGenerator(&Gens[2], lh->gapsLo[fStrength*3+2], lh->gapsHi[fStrength*3+2], tok, UCOL_TERTIARY); */
-                CEparts[UCOL_TERTIARY] = ucol_getCEGenerator(&Gens[UCOL_TERTIARY], lh->gapsLo, lh->gapsHi, tok, fStrength, status); 
+                CEparts[UCOL_TERTIARY] = ucol_getCEGenerator(&Gens[UCOL_TERTIARY], lh->gapsLo, lh->gapsHi, tok, fStrength, status);
             } else if(initStrength == UCOL_SECONDARY) { /* secondaries */
                 CEparts[UCOL_PRIMARY] = lh->gapsLo[fStrength*3];
                 /*CEparts[1] = ucol_getCEGenerator(&Gens[1], lh->gapsLo[fStrength*3+1], lh->gapsHi[fStrength*3+1], tok, 1);*/
@@ -894,8 +900,8 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
         }
 
         /* copy UChars */
-        // We kept prefix and source kind of together, as it is a kind of a contraction. 
-        // However, now we have to slice the prefix off the main thing - 
+        // We kept prefix and source kind of together, as it is a kind of a contraction.
+        // However, now we have to slice the prefix off the main thing -
         el.prefix = el.prefixChars;
         el.cPoints = el.uchars;
         if(tok->prefix != 0) { // we will just copy the prefix here, and adjust accordingly in the
@@ -904,13 +910,13 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
             el.prefixSize = tok->prefix>>24;
             uprv_memcpy(el.prefix, src->source + (tok->prefix & 0x00FFFFFF), el.prefixSize*sizeof(UChar));
 
-            el.cSize = (tok->source >> 24)-(tok->prefix>>24); 
+            el.cSize = (tok->source >> 24)-(tok->prefix>>24);
             uprv_memcpy(el.uchars, (tok->source & 0x00FFFFFF)+(tok->prefix>>24) + src->source, el.cSize*sizeof(UChar));
         } else {
             el.prefixSize = 0;
             *el.prefix = 0;
 
-            el.cSize = (tok->source >> 24); 
+            el.cSize = (tok->source >> 24);
             uprv_memcpy(el.uchars, (tok->source & 0x00FFFFFF) + src->source, el.cSize*sizeof(UChar));
         }
         if(src->UCA != NULL) {
@@ -924,7 +930,7 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
                     int16_t fcd = unorm_getFCD16(fcdTrieData, el.cPoints[i]);
                     if ( (fcd && 0xff) == 0 ) {
                         // reset flag when current char is not combining mark.
-                        containCombinMarks = FALSE;  
+                        containCombinMarks = FALSE;
                     }
                     else {
                         containCombinMarks = TRUE;
@@ -988,9 +994,9 @@ _processUCACompleteIgnorables(const void *context, UChar32 start, UChar32 limit,
 }
 U_CDECL_END
 
-static void 
+static void
 ucol_uprv_bld_copyRangeFromUCA(UColTokenParser *src, tempUCATable *t,
-                               UChar32 start, UChar32 end, 
+                               UChar32 start, UChar32 end,
                                UErrorCode *status)
 {
     //UChar decomp[256];
@@ -1004,51 +1010,52 @@ ucol_uprv_bld_copyRangeFromUCA(UColTokenParser *src, tempUCATable *t,
 
     if(U_SUCCESS(*status)) {
         for(u = start; u<=end; u++) {
-            if((CE = utrie_get32(t->mapping, u, NULL)) == UCOL_NOT_FOUND 
+            if((CE = utrie_get32(t->mapping, u, NULL)) == UCOL_NOT_FOUND
                 /* this test is for contractions that are missing the starting element. */
                 || ((isCntTableElement(CE)) &&
                 (uprv_cnttab_getCE(t->contractions, CE, 0, status) == UCOL_NOT_FOUND))
-                ) {
-                    el.cSize = 0;
-                    U16_APPEND_UNSAFE(el.uchars, el.cSize, u); 
-                    //decomp[0] = (UChar)u;
-                    //el.uchars[0] = (UChar)u;
-                    el.cPoints = el.uchars;
-                    //el.cSize = 1;
-                    el.noOfCEs = 0;
-                    el.prefix = el.prefixChars;
-                    el.prefixSize = 0;
-                    //uprv_init_collIterate(src->UCA, decomp, 1, &colIt);
-                    // We actually want to check whether this element is a special
-                    // If it is an implicit element (hangul, CJK - we want to copy the
-                    // special, not the resolved CEs) - for hangul, copying resolved
-                    // would just make things the same (there is an expansion and it
-                    // takes approximately the same amount of time to resolve as 
-                    // falling back to the UCA).
-                    /*
-                    UTRIE_GET32(src->UCA->mapping, u, CE);
-                    tag = getCETag(CE);
-                    if(tag == HANGUL_SYLLABLE_TAG || tag == CJK_IMPLICIT_TAG 
-                    || tag == IMPLICIT_TAG || tag == TRAIL_SURROGATE_TAG
-                    || tag == LEAD_SURROGATE_TAG) {
-                    el.CEs[el.noOfCEs++] = CE;
-                    } else {
-                    */
-                    // It turns out that it does not make sense to keep implicits
-                    // unresolved. The cost of resolving them is big enough so that
-                    // it doesn't make any difference whether we have to go to the UCA
-                    // or not.
-                    {
-                        uprv_init_collIterate(src->UCA, el.uchars, el.cSize, &colIt);
-                        while(CE != UCOL_NO_MORE_CES) {
-                            CE = ucol_getNextCE(src->UCA, &colIt, status);
-                            if(CE != UCOL_NO_MORE_CES) {
-                                el.CEs[el.noOfCEs++] = CE;
-                            }
+                )
+            {
+                el.cSize = 0;
+                U16_APPEND_UNSAFE(el.uchars, el.cSize, u);
+                //decomp[0] = (UChar)u;
+                //el.uchars[0] = (UChar)u;
+                el.cPoints = el.uchars;
+                //el.cSize = 1;
+                el.noOfCEs = 0;
+                el.prefix = el.prefixChars;
+                el.prefixSize = 0;
+                //uprv_init_collIterate(src->UCA, decomp, 1, &colIt);
+                // We actually want to check whether this element is a special
+                // If it is an implicit element (hangul, CJK - we want to copy the
+                // special, not the resolved CEs) - for hangul, copying resolved
+                // would just make things the same (there is an expansion and it
+                // takes approximately the same amount of time to resolve as
+                // falling back to the UCA).
+                /*
+                UTRIE_GET32(src->UCA->mapping, u, CE);
+                tag = getCETag(CE);
+                if(tag == HANGUL_SYLLABLE_TAG || tag == CJK_IMPLICIT_TAG
+                || tag == IMPLICIT_TAG || tag == TRAIL_SURROGATE_TAG
+                || tag == LEAD_SURROGATE_TAG) {
+                el.CEs[el.noOfCEs++] = CE;
+                } else {
+                */
+                // It turns out that it does not make sense to keep implicits
+                // unresolved. The cost of resolving them is big enough so that
+                // it doesn't make any difference whether we have to go to the UCA
+                // or not.
+                {
+                    uprv_init_collIterate(src->UCA, el.uchars, el.cSize, &colIt);
+                    while(CE != UCOL_NO_MORE_CES) {
+                        CE = ucol_getNextCE(src->UCA, &colIt, status);
+                        if(CE != UCOL_NO_MORE_CES) {
+                            el.CEs[el.noOfCEs++] = CE;
                         }
                     }
-                    uprv_uca_addAnElement(t, &el, status);
                 }
+                uprv_uca_addAnElement(t, &el, status);
+            }
         }
     }
 }
@@ -1061,43 +1068,43 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
         return NULL;
     }
     /*
-    2.  Eliminate the negative lists by doing the following for each non-null negative list: 
-    o   if previousCE(baseCE, strongestN) != some ListHeader X's baseCE, 
-    create new ListHeader X 
-    o   reverse the list, add to the end of X's positive list. Reset the strength of the 
-    first item you add, based on the stronger strength levels of the two lists. 
+    2.  Eliminate the negative lists by doing the following for each non-null negative list:
+    o   if previousCE(baseCE, strongestN) != some ListHeader X's baseCE,
+    create new ListHeader X
+    o   reverse the list, add to the end of X's positive list. Reset the strength of the
+    first item you add, based on the stronger strength levels of the two lists.
     */
     /*
-    3.  For each ListHeader with a non-null positive list: 
+    3.  For each ListHeader with a non-null positive list:
     */
     /*
-    o   Find all character strings with CEs between the baseCE and the 
-    next/previous CE, at the strength of the first token. Add these to the 
-    tailoring. 
-    ? That is, if UCA has ...  x <<< X << x' <<< X' < y ..., and the 
-    tailoring has & x < z... 
-    ? Then we change the tailoring to & x  <<< X << x' <<< X' < z ... 
+    o   Find all character strings with CEs between the baseCE and the
+    next/previous CE, at the strength of the first token. Add these to the
+    tailoring.
+    ? That is, if UCA has ...  x <<< X << x' <<< X' < y ..., and the
+    tailoring has & x < z...
+    ? Then we change the tailoring to & x  <<< X << x' <<< X' < z ...
     */
     /* It is possible that this part should be done even while constructing list */
     /* The problem is that it is unknown what is going to be the strongest weight */
     /* So we might as well do it here */
 
     /*
-    o   Allocate CEs for each token in the list, based on the total number N of the 
-    largest level difference, and the gap G between baseCE and nextCE at that 
-    level. The relation * between the last item and nextCE is the same as the 
-    strongest strength. 
-    o   Example: baseCE < a << b <<< q << c < d < e * nextCE(X,1) 
-    ? There are 3 primary items: a, d, e. Fit them into the primary gap. 
-    Then fit b and c into the secondary gap between a and d, then fit q 
-    into the tertiary gap between b and c. 
+    o   Allocate CEs for each token in the list, based on the total number N of the
+    largest level difference, and the gap G between baseCE and nextCE at that
+    level. The relation * between the last item and nextCE is the same as the
+    strongest strength.
+    o   Example: baseCE < a << b <<< q << c < d < e * nextCE(X,1)
+    ? There are 3 primary items: a, d, e. Fit them into the primary gap.
+    Then fit b and c into the secondary gap between a and d, then fit q
+    into the tertiary gap between b and c.
 
-    o   Example: baseCE << b <<< q << c * nextCE(X,2) 
-    ? There are 2 secondary items: b, c. Fit them into the secondary gap. 
-    Then fit q into the tertiary gap between b and c. 
-    o   When incrementing primary values, we will not cross high byte 
-    boundaries except where there is only a single-byte primary. That is to 
-    ensure that the script reordering will continue to work. 
+    o   Example: baseCE << b <<< q << c * nextCE(X,2)
+    ? There are 2 secondary items: b, c. Fit them into the secondary gap.
+    Then fit q into the tertiary gap between b and c.
+    o   When incrementing primary values, we will not cross high byte
+    boundaries except where there is only a single-byte primary. That is to
+    ensure that the script reordering will continue to work.
     */
     UCATableHeader *image = (UCATableHeader *)uprv_malloc(sizeof(UCATableHeader));
     /* test for NULL */
@@ -1108,7 +1115,7 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     uprv_memcpy(image, src->UCA->image, sizeof(UCATableHeader));
 
     for(i = 0; i<src->resultLen; i++) {
-        /* now we need to generate the CEs */ 
+        /* now we need to generate the CEs */
         /* We stuff the initial value in the buffers, and increase the appropriate buffer */
         /* According to strength                                                          */
         if(U_SUCCESS(*status)) {
@@ -1132,7 +1139,7 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
             src->varTop->listHeader->first = src->varTop->next;
         }
         if(src->varTop->listHeader->last == src->varTop) { /* first in list */
-            src->varTop->listHeader->last = src->varTop->previous;    
+            src->varTop->listHeader->last = src->varTop->previous;
         }
         if(src->varTop->next != NULL) {
             src->varTop->next->previous = src->varTop->previous;
@@ -1154,7 +1161,7 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     /* now we will go through list once more and resolve expansions,  */
     /* make UCAElements structs and add them to table                 */
     for(i = 0; i<src->resultLen; i++) {
-        /* now we need to generate the CEs */ 
+        /* now we need to generate the CEs */
         /* We stuff the initial value in the buffers, and increase the appropriate buffer */
         /* According to strength                                                          */
         if(U_SUCCESS(*status)) {
@@ -1189,7 +1196,7 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
         while(*conts != 0) {
             /*tailoredCE = ucmpe32_get(t->mapping, *conts);*/
             tailoredCE = utrie_get32(t->mapping, *conts, NULL);
-            if(tailoredCE != UCOL_NOT_FOUND) {         
+            if(tailoredCE != UCOL_NOT_FOUND) {
                 UBool needToAdd = TRUE;
                 if(isCntTableElement(tailoredCE)) {
                     if(uprv_cnttab_isTailored(t->contractions, tailoredCE, conts+1, status) == TRUE) {
@@ -1236,9 +1243,9 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
 
     /* still need to produce compatibility closure */
 
-    UCATableHeader *myData = uprv_uca_assembleTable(t, status);  
+    UCATableHeader *myData = uprv_uca_assembleTable(t, status);
 
-    uprv_uca_closeTempTable(t);    
+    uprv_uca_closeTempTable(t);
     uprv_free(image);
 
     return myData;

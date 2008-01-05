@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2001-2007, International Business Machines Corporation and
+ * Copyright (c) 2001-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -34,6 +34,7 @@
 #include "uassert.h"
 #include "unicode/parseerr.h"
 #include "unicode/ucnv.h"
+#include "unicode/ures.h"
 #include "uparse.h"
 
 #define LEN(a) (sizeof(a)/sizeof(a[0]))
