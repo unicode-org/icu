@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and         *
+ * Copyright (C) 2007-2008, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -67,6 +67,7 @@ public class DataDrivenFormatTest extends ModuleTest {
     private static final String kPATTERN = "PATTERN=";
     private static final String kMILLIS = "MILLIS=";
     private static final String kRELATIVE_MILLIS = "RELATIVE_MILLIS=";
+    private static final String kRELATIVE_ADD = "RELATIVE_ADD:";
     
     private void testConvertDate(TestDataModule.TestData testData, DataMap  settings, boolean fmt) {
         DateFormat basicFmt = new SimpleDateFormat("EEE MMM dd yyyy / YYYY'-W'ww-ee");
@@ -103,6 +104,8 @@ public class DataDrivenFormatTest extends ModuleTest {
                 styleSet.parseFrom(spec);
                 format = DateFormat.getDateTimeInstance(styleSet.getDateStyle(), styleSet.getTimeStyle(), loc);
             }
+
+            Calendar cal = Calendar.getInstance(loc);
             
             // parse 'date' - either 'MILLIS=12345' or  a CalendarFieldsSet
             if(date.startsWith(kMILLIS)) {
@@ -111,13 +114,28 @@ public class DataDrivenFormatTest extends ModuleTest {
             } else if(date.startsWith(kRELATIVE_MILLIS)) {
                 useDate = true;
                 fromDate = new Date(now+Long.parseLong(date.substring(kRELATIVE_MILLIS.length())));
+            } else if(date.startsWith(kRELATIVE_ADD)) {
+                String add = date.substring(kRELATIVE_ADD.length()); // "add" is a string indicating which fields to add
+                CalendarFieldsSet addSet = new CalendarFieldsSet();
+                addSet.parseFrom(add);
+                useDate = true;
+                cal.clear();
+                cal.setTimeInMillis(now);
+
+                /// perform op on 'to calendar'
+                for (int q=0; q<addSet.fieldCount(); q++) {
+                    if (addSet.isSet(q)) {
+                         cal.add(q,addSet.get(q));
+                    }
+                }
+
+                fromDate = cal.getTime();
             } else {
                 fromSet = new CalendarFieldsSet();
                 fromSet.parseFrom(date);
             }
             
             // run the test
-            Calendar cal = Calendar.getInstance(loc);
             if(fmt) {
                 StringBuffer output = new StringBuffer();
                 cal.clear();
