@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2005, International Business Machines
+*   Copyright (C) 2001-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -25,10 +25,7 @@
 
 #if !UCONFIG_NO_COLLATION
 
-/*#include "ucmpe32.h"*/
 #include "utrie.h"
-#include "uhash.h"
-#include "ucol_elm.h"
 #include "ucol_imp.h"
 
 U_CDECL_BEGIN

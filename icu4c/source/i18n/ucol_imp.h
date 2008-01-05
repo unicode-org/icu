@@ -43,9 +43,6 @@
 
 #include "unicode/ucol.h"
 #include "utrie.h"
-#include "uresimp.h"
-#include "unicode/udata.h"
-#include "unicode/uiter.h"
 
 /* This is the internal header file which contains important declarations for 
  * the collation framework. 
@@ -286,6 +283,9 @@ typedef struct collIterate {
   UCharIterator *iterator;
   /*int32_t iteratorIndex;*/
 } collIterate;
+
+#define paddedsize(something) ((something)+((((something)%4)!=0)?(4-(something)%4):0))
+#define headersize (paddedsize(sizeof(UCATableHeader))+paddedsize(sizeof(UColOptionSet)))
 
 /* 
 struct used internally in getSpecial*CE.
@@ -964,7 +964,7 @@ U_CAPI UBool U_EXPORT2 ucol_isTailored(const UCollator *coll, const UChar u, UEr
 U_CAPI const InverseUCATableHeader* U_EXPORT2 ucol_initInverseUCA(UErrorCode *status);
 
 U_CAPI void U_EXPORT2 
-uprv_uca_initImplicitConstants(int32_t minPrimary, int32_t maxPrimary, UErrorCode *status);
+uprv_uca_initImplicitConstants(UErrorCode *status);
 
 U_CAPI uint32_t U_EXPORT2
 uprv_uca_getImplicitFromRaw(UChar32 cp);
