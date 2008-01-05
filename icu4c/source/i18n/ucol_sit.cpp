@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2004-2006, International Business Machines
+*   Copyright (C) 2004-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  ucol_sit.cpp
@@ -14,6 +14,7 @@
 */
 
 #include "unicode/ustring.h"
+#include "unicode/udata.h"
 
 #include "utracimp.h"
 #include "ucol_imp.h"
@@ -21,6 +22,7 @@
 #include "unormimp.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "uresimp.h"
 
 #if !UCONFIG_NO_COLLATION
 
@@ -30,7 +32,7 @@ enum OptionsList {
     UCOL_SIT_REGION,
     UCOL_SIT_VARIANT,
     UCOL_SIT_KEYWORD,
-    UCOL_SIT_RFC3166BIS,
+    UCOL_SIT_BCP47,
     UCOL_SIT_STRENGTH,
     UCOL_SIT_CASE_LEVEL,
     UCOL_SIT_CASE_FIRST,
@@ -43,34 +45,6 @@ enum OptionsList {
     UCOL_SIT_VARIABLE_TOP_VALUE,
     UCOL_SIT_ITEMS_COUNT
 };
-
-/* list of locales for packing of a collator to an integer.
- * This list corresponds to ICU 3.0. If more collation bearing
- * locales are added in the future, this won't be a simple array
- * but a mapping allowing forward and reverse lookup would have to 
- * be established. Currently, the mapping is from locale name to 
- * index.
- */
-static const char* const locales[] = {
-/* 00 - 09 */ "ar", "be", "bg", "ca", "cs", "da", "de", "de__PHONEBOOK", "el", "en",
-/* 10 - 19 */ "en_BE", "eo", "es", "es__TRADITIONAL", "et", "fa", "fa_AF", "fi", "fo", "fr",
-/* 20 - 29 */ "gu", "he", "hi", "hi__DIRECT", "hr", "hu", "is", "it", "ja", "kk",
-/* 30 - 39 */ "kl", "kn", "ko", "lt", "lv", "mk", "mr", "mt", "nb", "nn",
-/* 40 - 49 */ "om", "pa", "pl", "ps", "ro", "root", "ru", "sh", "sk", "sl",
-/* 50 - 59 */ "sq", "sr", "sv", "ta", "te", "th", "tr", "uk", "vi", "zh",
-/* 60 - 64 */ "zh_HK", "zh_MO", "zh_TW", "zh_TW_STROKE", "zh__PINYIN"
-};
-
-static const char* const keywords[] = {
-/* 00 */ "",
-/* 01 */ "direct",
-/* 02 */ "phonebook",
-/* 03 */ "pinyin",
-/* 04 */ "standard",
-/* 05 */ "stroke",
-/* 06 */ "traditional"
-};
-
 
 /* option starters chars. */
 static const char alternateHArg     = 'A';
@@ -663,251 +637,6 @@ ucol_normalizeShortDefinitionString(const char *definition,
     ucol_sit_initCollatorSpecs(&s);
     ucol_sit_readSpecs(&s, definition, parseError, status);
     return ucol_sit_dumpSpecs(&s, destination, capacity, status);
-}
-
-// structure for packing the bits of the attributes in the
-// identifier number.
-// locale is packed separately
-struct bitPacking {
-    char letter;
-    uint32_t offset;
-    uint32_t width;
-    UColAttribute attribute;
-    UColAttributeValue values[6];
-};
-
-static const bitPacking attributesToBits[UCOL_ATTRIBUTE_COUNT] = {
-    /* french */        { frenchCollArg,    29, 2, UCOL_FRENCH_COLLATION,         { UCOL_DEFAULT, UCOL_OFF, UCOL_ON }},
-    /* alternate */     { alternateHArg,    27, 2, UCOL_ALTERNATE_HANDLING,       { UCOL_DEFAULT, UCOL_NON_IGNORABLE, UCOL_SHIFTED }}, 
-    /* case first */    { caseFirstArg,     25, 2, UCOL_CASE_FIRST,               { UCOL_DEFAULT, UCOL_OFF, UCOL_LOWER_FIRST, UCOL_UPPER_FIRST }},
-    /* case level */    { caseLevelArg,     23, 2, UCOL_CASE_LEVEL,               { UCOL_DEFAULT, UCOL_OFF, UCOL_ON }},
-    /* normalization */ { normArg,          21, 2, UCOL_NORMALIZATION_MODE,       { UCOL_DEFAULT, UCOL_OFF, UCOL_ON }},
-    /* strength */      { strengthArg,      18, 3, UCOL_STRENGTH,                 { UCOL_DEFAULT, UCOL_PRIMARY, UCOL_SECONDARY, UCOL_TERTIARY, UCOL_QUATERNARY, UCOL_IDENTICAL }},
-    /* hiragana */      { hiraganaQArg,     16, 2, UCOL_HIRAGANA_QUATERNARY_MODE, { UCOL_DEFAULT, UCOL_OFF, UCOL_ON }},
-    /* numeric coll */  { numericCollArg,   14, 2, UCOL_NUMERIC_COLLATION,        { UCOL_DEFAULT, UCOL_OFF, UCOL_ON }}
-};
-
-static const uint32_t keywordShift =   9;
-static const uint32_t keywordWidth =   5;
-static const uint32_t localeShift =    0;
-static const uint32_t localeWidth =    7;
-
-
-static uint32_t ucol_sit_putLocaleInIdentifier(uint32_t result, const char* locale, UErrorCode* status) {
-    char buffer[internalBufferSize], keywordBuffer[internalBufferSize], 
-        baseName[internalBufferSize], localeBuffer[internalBufferSize];
-    int32_t len = 0, keywordLen = 0,
-        baseNameLen = 0, localeLen = 0;
-    uint32_t i = 0;
-    UBool isAvailable = FALSE;
-    if(locale) {
-        len = uloc_canonicalize(locale, buffer, internalBufferSize, status);
-        localeLen = ucol_getFunctionalEquivalent(localeBuffer, internalBufferSize, "collation", buffer, &isAvailable, status);
-        keywordLen = uloc_getKeywordValue(buffer, "collation", keywordBuffer, internalBufferSize, status);
-        baseNameLen = uloc_getBaseName(buffer, baseName, internalBufferSize, status);
-
-        /*Binary search for the map entry for normal cases */
-
-        uint32_t   low     = 0;
-        uint32_t   high    = sizeof(locales)/sizeof(locales[0]);
-        uint32_t   mid     = high;
-        uint32_t   oldmid  = 0;
-        int32_t    compVal = 0;
-
-
-        while (high > low)  /*binary search*/{
-
-            mid = (high+low) >> 1; /*Finds median*/
-
-            if (mid == oldmid) 
-                return UCOL_SIT_COLLATOR_NOT_ENCODABLE; // we didn't find it
-
-            compVal = uprv_strcmp(baseName, locales[mid]);
-            if (compVal < 0){
-                high = mid;
-            }
-            else if (compVal > 0){
-                low = mid;
-            }
-            else /*we found it*/{
-                break;
-            }
-            oldmid = mid;
-        }
-
-        result |= (mid & ((1 << localeWidth) - 1)) << localeShift;
-    }
-
-    if(keywordLen) {
-        for(i = 1; i < sizeof(keywords)/sizeof(keywords[0]); i++) {
-            if(uprv_strcmp(keywords[i], keywordBuffer) == 0) {
-                result |= (i & ((1 << keywordWidth) - 1)) << keywordShift;
-                break;
-            }
-        }
-    }
-    return result;
-}
-
-U_CAPI uint32_t U_EXPORT2
-ucol_collatorToIdentifier(const UCollator *coll,
-                          const char *locale,
-                          UErrorCode *status) 
-{
-    uint32_t result = 0;
-    uint32_t i = 0, j = 0;
-    UColAttributeValue attrValue = UCOL_DEFAULT;
-
-    // if variable top is not default, we need to use strings
-    if(coll->variableTopValueisDefault != TRUE) {
-        return UCOL_SIT_COLLATOR_NOT_ENCODABLE;
-    }
-
-    if(locale == NULL) {
-        locale = ucol_getLocale(coll, ULOC_VALID_LOCALE, status);
-    }
-
-    result = ucol_sit_putLocaleInIdentifier(result, locale, status);
-
-    for(i = 0; i < sizeof(attributesToBits)/sizeof(attributesToBits[0]); i++) {
-        attrValue = ucol_getAttributeOrDefault(coll, attributesToBits[i].attribute, status);
-        j = 0;
-        while(attributesToBits[i].values[j] != attrValue) {
-            j++;
-        }
-        result |= (j & ((1 << attributesToBits[i].width) - 1)) << attributesToBits[i].offset;
-    }
-    
-    return result;
-}
-
-U_CAPI UCollator* U_EXPORT2
-ucol_openFromIdentifier(uint32_t identifier,
-                        UBool forceDefaults,
-                        UErrorCode *status) 
-{
-    uint32_t i = 0;
-    int32_t value = 0, keyword = 0;
-    char locale[internalBufferSize];
-
-    value = (identifier >> localeShift) & ((1 << localeWidth) - 1);
-    keyword = (identifier >> keywordShift) & ((1 << keywordWidth) - 1);
-    
-    uprv_strcpy(locale, locales[value]);
-
-    if(keyword) {
-        uprv_strcat(locale, collationKeyword);
-        uprv_strcat(locale, keywords[keyword]);
-    }
-
-    UColAttributeValue attrValue = UCOL_DEFAULT;
-
-    UCollator *result = ucol_open(locale, status);
-
-    // variable top is not set in the identifier, so we can easily skip that on
-
-    for(i = 0; i < sizeof(attributesToBits)/sizeof(attributesToBits[0]); i++) {
-        value = (identifier >> attributesToBits[i].offset) & ((1 << attributesToBits[i].width) - 1);
-        attrValue = attributesToBits[i].values[value];
-        // the collator is all default, so we will set only the values that will differ from 
-        // the default values.
-        if(attrValue != UCOL_DEFAULT) {
-            if(forceDefaults ||
-                ucol_getAttribute(result, attributesToBits[i].attribute, status) != attrValue) {
-                ucol_setAttribute(result, attributesToBits[i].attribute, attrValue, status);
-            }
-        }
-    }
-
-    return result;
-}
-
-U_CAPI int32_t U_EXPORT2
-ucol_identifierToShortString(uint32_t identifier,
-                             char *buffer,
-                             int32_t capacity,
-                             UBool forceDefaults,
-                             UErrorCode *status) 
-{
-    int32_t locIndex = (identifier >> localeShift) & ((1 << localeWidth) - 1);
-    int32_t keywordIndex = (identifier >> keywordShift) & ((1 << keywordWidth) - 1);
-    CollatorSpec s;
-    ucol_sit_initCollatorSpecs(&s);
-    uprv_strcpy(s.locale, locales[locIndex]);
-    if(keywordIndex) {
-        uprv_strcat(s.locale, collationKeyword);
-        uprv_strcat(s.locale, keywords[keywordIndex]);
-    }
-    UCollator *coll = ucol_openFromIdentifier(identifier, forceDefaults, status);
-    int32_t resultLen = ucol_getShortDefinitionString(coll, s.locale, buffer, capacity, status);
-    ucol_close(coll);
-    return resultLen;
-
-#if 0
-    // TODO: Crumy, crumy, crumy... Very hard to currently go algorithmically from 
-    // identifier to short string. Do rethink
-    if(forceDefaults == FALSE) {
-        UCollator *coll = ucol_openFromIdentifier(identifier, FALSE, status);
-        int32_t resultLen = ucol_getShortDefinitionString(coll, s.locale, buffer, capacity, status);
-        ucol_close(coll);
-        return resultLen;
-    } else { // forceDefaults == TRUE
-        char letter;
-        UColAttributeValue value;
-        int32_t i = 0;
-        for(i = 0; i < sizeof(attributesToBits)/sizeof(attributesToBits[0]); i++) {
-            value = attributesToBits[i].values[(identifier >> attributesToBits[i].offset) & ((1 << attributesToBits[i].width) - 1)];
-            if(value != UCOL_DEFAULT) {
-                uprv_strcat(buffer, "_");
-                uprv_strncat(buffer, &attributesToBits[i].letter, 1);
-                letter = ucol_sit_attributeValueToLetter(value, status);
-                uprv_strncat(buffer, &letter, 1);
-            }
-        }
-        return ucol_sit_dumpSpecs(&s, buffer, capacity, status);
-    }
-#endif
-}
-
-U_CAPI uint32_t U_EXPORT2
-ucol_shortStringToIdentifier(const char *definition,
-                             UBool forceDefaults,
-                             UErrorCode *status) 
-{
-    UParseError parseError;
-    CollatorSpec s;
-    uint32_t result = 0;
-    uint32_t i = 0, j = 0;
-    ucol_sit_initCollatorSpecs(&s);
-
-    ucol_sit_readSpecs(&s, definition, &parseError, status);
-    ucol_sit_calculateWholeLocale(&s);
-
-    char locBuffer[internalBufferSize];
-    UBool isAvailable = FALSE;
-    UColAttributeValue attrValue = UCOL_DEFAULT;
-
-    ucol_getFunctionalEquivalent(locBuffer, internalBufferSize, "collation", s.locale, &isAvailable, status);
-
-    if(forceDefaults == FALSE) {
-        UCollator *coll = ucol_openFromShortString(definition, FALSE, &parseError, status);
-        result = ucol_collatorToIdentifier(coll, locBuffer, status);
-        ucol_close(coll);
-    } else { // forceDefaults == TRUE
-        result = ucol_sit_putLocaleInIdentifier(result, locBuffer, status);
-
-        for(i = 0; i < sizeof(attributesToBits)/sizeof(attributesToBits[0]); i++) {
-            attrValue = s.options[i];
-            j = 0;
-            while(attributesToBits[i].values[j] != attrValue) {
-                j++;
-            }
-            result |= (j & ((1 << attributesToBits[i].width) - 1)) << attributesToBits[i].offset;
-        }
-
-    }
-    return result;
-        
 }
 
 U_CAPI UColAttributeValue  U_EXPORT2

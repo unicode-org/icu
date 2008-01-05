@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2007, International Business Machines
+*   Copyright (C) 2000-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -984,7 +984,7 @@ struct {
 
     /* produce canonical closure for table */
     /* first set up constants for implicit calculation */
-    uprv_uca_initImplicitConstants(consts.UCA_PRIMARY_IMPLICIT_MIN, consts.UCA_PRIMARY_IMPLICIT_MAX, status);
+    uprv_uca_initImplicitConstants(status);
     /* do the closure */
     int32_t noOfClosures = uprv_uca_canonicalClosure(t, NULL, status);
     if(noOfClosures != 0) {

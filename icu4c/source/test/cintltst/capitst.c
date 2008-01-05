@@ -1,16 +1,16 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2007, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
-/********************************************************************************
+/*****************************************************************************
 *
 * File CAPITEST.C
 *
 * Modification History:
 *        Name                     Description            
 *     Madhu Katragadda             Ported for C API
-*********************************************************************************
+******************************************************************************
 *//* C API TEST For COLLATOR */
 
 #include "unicode/utypes.h"
@@ -1852,11 +1852,10 @@ static void TestShortString(void)
     };
 
     int32_t i = 0, j = 0;
-    UCollator *coll = NULL, *fromID = NULL, *fromNormalized = NULL;
+    UCollator *coll = NULL, *fromNormalized = NULL;
     UParseError parseError;
     UErrorCode status = U_ZERO_ERROR;
-    char fromShortBuffer[256], fromIDBuffer[256], fromIDRoundtrip[256], normalizedBuffer[256], fromNormalizedBuffer[256];
-    uint32_t identifier = 0, idFromSS = 0;
+    char fromShortBuffer[256], normalizedBuffer[256], fromNormalizedBuffer[256];
     const char* locale = NULL;
 
 
@@ -1895,35 +1894,6 @@ static void TestShortString(void)
             if(!ucol_equals(coll, fromNormalized)) {
                 log_err("Collator from short string ('%s') differs from one obtained through a normalized version ('%s')\n", 
                     testCases[i].input, normalizedBuffer);
-            }
-
-            /* test identifiers */
-            identifier = ucol_collatorToIdentifier(coll, locale, &status);
-            if(identifier < UCOL_SIT_COLLATOR_NOT_ENCODABLE) {
-                ucol_identifierToShortString(identifier, fromIDBuffer, 256, FALSE, &status);
-                fromID = ucol_openFromIdentifier(identifier, FALSE, &status);
-                if(!ucol_equals(coll, fromID)) {
-                    log_err("Collator from short string ('%s') differs from one obtained through an identifier ('%s')\n", 
-                        testCases[i].input, fromIDBuffer);
-                }
-                ucol_close(fromID);
-            }
-
-            /* round-trip short string - identifier */
-            for(j = 1; j < 2; j++) {
-                idFromSS = ucol_shortStringToIdentifier(testCases[i].input, (UBool)j, &status);
-                ucol_identifierToShortString(idFromSS, fromIDBuffer, 256, (UBool)j, &status);
-                identifier = ucol_shortStringToIdentifier(fromIDBuffer, (UBool)j, &status);
-                ucol_identifierToShortString(identifier, fromIDRoundtrip, 256, (UBool)j, &status);
-
-                if(idFromSS != identifier) {
-                    log_err("FD = %i, id didn't round trip. %08X vs %08X (%s)\n", 
-                        j, idFromSS, identifier, testCases[i].input);
-                }
-                if(strcmp(fromIDBuffer, fromIDRoundtrip)) {
-                    log_err("FD = %i, SS didn't round trip. %s vs %s (%s)\n", 
-                        j, fromIDBuffer, fromIDRoundtrip, testCases[i].input);
-                }
             }
 
             ucol_close(fromNormalized);

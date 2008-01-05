@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2007, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -38,6 +38,8 @@
 
 #include "unicode/ucol.h"
 #include "unicode/uloc.h"
+#include "unicode/ures.h"
+#include "unicode/udata.h"
 #include "unicode/ucoleitr.h"
 #include "unicode/ustring.h"
 #include "unicode/uclean.h"
@@ -188,19 +190,17 @@ static char* U_EXPORT2 sortKeyToString(const UCollator *coll, const uint8_t *sor
 
 void addAllCollTest(TestNode** root)
 {
-    
-    
     addTest(root, &TestPrimary, "tscoll/callcoll/TestPrimary");
     addTest(root, &TestSecondary, "tscoll/callcoll/TestSecondary");
     addTest(root, &TestTertiary, "tscoll/callcoll/TestTertiary");
     addTest(root, &TestIdentical, "tscoll/callcoll/TestIdentical");
     addTest(root, &TestExtra, "tscoll/callcoll/TestExtra");
-    addTest(root, &TestJB581, "tscoll/callcoll/TestJB581");      
-    addTest(root, &TestVariableTop, "tscoll/callcoll/TestVariableTop");      
+    addTest(root, &TestJB581, "tscoll/callcoll/TestJB581");
+    addTest(root, &TestVariableTop, "tscoll/callcoll/TestVariableTop");
     addTest(root, &TestSurrogates, "tscoll/callcoll/TestSurrogates");
     addTest(root, &TestInvalidRules, "tscoll/callcoll/TestInvalidRules");
-    addTest(root, &TestJB1401, "tscoll/callcoll/TestJB1401");      
-    addTest(root, &TestJitterbug1098, "tscoll/callcoll/TestJitterbug1098");     
+    addTest(root, &TestJB1401, "tscoll/callcoll/TestJB1401");
+    addTest(root, &TestJitterbug1098, "tscoll/callcoll/TestJitterbug1098");
     addTest(root, &TestFCDCrash, "tscoll/callcoll/TestFCDCrash");
     addTest(root, &TestJ5298, "tscoll/callcoll/TestJ5298");
 }

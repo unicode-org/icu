@@ -1,7 +1,7 @@
 /*  
 *******************************************************************************
 *
-*   Copyright (C) 1999-2001, International Business Machines
+*   Copyright (C) 1999-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -20,8 +20,6 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_COLLATION
-
-#include "ucol_imp.h"
 
 /* definitions for CE weights */
 

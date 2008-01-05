@@ -17,7 +17,6 @@
 */
 
 #include "unicode/utypes.h"
-#include "uassert.h"
 
 #if !UCONFIG_NO_COLLATION
 
@@ -27,7 +26,6 @@
 #include "unicode/ustring.h"
 
 #include "ucol_imp.h"
-#include "ucol_elm.h"
 #include "bocsu.h"
 
 #include "unormimp.h"
@@ -38,6 +36,7 @@
 #include "cstring.h"
 #include "utracimp.h"
 #include "putilimp.h"
+#include "uassert.h"
 
 #ifdef UCOL_DEBUG
 #include <stdio.h>
@@ -357,7 +356,7 @@ ucol_initFromBinary(const uint8_t *bin, int32_t length,
     }
     */
     // We need these and we could be running without UCA
-    uprv_uca_initImplicitConstants(0, 0, status);
+    uprv_uca_initImplicitConstants(status);
     UCATableHeader *colData = (UCATableHeader *)bin;
     // do we want version check here? We're trying to figure out whether collators are compatible
     if((base && (uprv_memcmp(colData->UCAVersion, base->image->UCAVersion, sizeof(UVersionInfo)) != 0 ||
@@ -1182,7 +1181,7 @@ static void initImplicitConstants(int minPrimary, int maxPrimary,
      * Supply parameters for generating implicit CEs
      */
 U_CAPI void U_EXPORT2
-uprv_uca_initImplicitConstants(int32_t, int32_t, UErrorCode *status) {
+uprv_uca_initImplicitConstants(UErrorCode *status) {
     // 13 is the largest 4-byte gap we can use without getting 2 four-byte forms.
     //initImplicitConstants(minPrimary, maxPrimary, 0x04, 0xFE, 1, 1, status);
     initImplicitConstants(minImplicitPrimary, maxImplicitPrimary, 0x04, 0xFE, 1, 1, status);
@@ -1251,8 +1250,8 @@ ucol_initUCA(UErrorCode *status) {
                     ucln_i18n_registerCleanup(UCLN_I18N_UCOL, ucol_cleanup);
                 }
                 // Initalize variables for implicit generation
-                const UCAConstants *UCAconsts = (UCAConstants *)((uint8_t *)_staticUCA->image + _staticUCA->image->UCAConsts);
-                uprv_uca_initImplicitConstants(UCAconsts->UCA_PRIMARY_IMPLICIT_MIN, UCAconsts->UCA_PRIMARY_IMPLICIT_MAX, status);
+                //const UCAConstants *UCAconsts = (UCAConstants *)((uint8_t *)_staticUCA->image + _staticUCA->image->UCAConsts);
+                uprv_uca_initImplicitConstants(status);
                 //_staticUCA->mapping.getFoldingOffset = _getFoldingOffset;
             }else{
                 udata_close(result);
