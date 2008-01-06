@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2005-2007, International Business Machines
+*   Copyright (C) 2005-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -1583,7 +1583,7 @@ utf8TextClose(UText *ut) {
 U_CDECL_END
 
 
-static struct UTextFuncs utf8Funcs = 
+static const struct UTextFuncs utf8Funcs = 
 {
     sizeof(UTextFuncs),
     0, 0, 0,             // Reserved alignment padding
@@ -1984,7 +1984,7 @@ repTextCopy(UText *ut,
     repTextAccess(ut, nativeIterIndex, TRUE);
 }
 
-static struct UTextFuncs repFuncs = 
+static const struct UTextFuncs repFuncs = 
 {
     sizeof(UTextFuncs),
     0, 0, 0,           // Reserved alignment padding
@@ -2232,7 +2232,7 @@ unistrTextCopy(UText *ut,
 
 }
 
-static struct UTextFuncs unistrFuncs = 
+static const struct UTextFuncs unistrFuncs = 
 {
     sizeof(UTextFuncs),
     0, 0, 0,             // Reserved alignment padding
@@ -2543,7 +2543,7 @@ ucstrTextExtract(UText *ut,
     return di;
 }
 
-static struct UTextFuncs ucstrFuncs = 
+static const struct UTextFuncs ucstrFuncs = 
 {
     sizeof(UTextFuncs),
     0, 0, 0,           // Reserved alignment padding
@@ -2757,7 +2757,7 @@ charIterTextExtract(UText *ut,
     return desti;
 }
 
-static struct UTextFuncs charIterFuncs = 
+static const struct UTextFuncs charIterFuncs = 
 {
     sizeof(UTextFuncs),
     0, 0, 0,             // Reserved alignment padding

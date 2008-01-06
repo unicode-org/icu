@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2007, International Business Machines
+*   Copyright (C) 1999-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -357,15 +357,15 @@ udata_setAppData(const char *packageName, const void *data, UErrorCode *err);
  * @stable ICU 3.4
  */
 typedef enum UDataFileAccess {
-    /** ICU does not access the file system for data loading. */
-    UDATA_NO_FILES,
+    /** ICU looks for data in single files first, then in packages. (default) */
+    UDATA_FILES_FIRST,
     /** ICU only loads data from packages, not from single files. */
     UDATA_ONLY_PACKAGES,
     /** ICU loads data from packages first, and only from single files
         if the data cannot be found in a package. */
     UDATA_PACKAGES_FIRST,
-    /** ICU looks for data in single files first, then in packages. (default) */
-    UDATA_FILES_FIRST,
+    /** ICU does not access the file system for data loading. */
+    UDATA_NO_FILES,
     /** An alias for the default access mode. */
     UDATA_DEFAULT_ACCESS = UDATA_FILES_FIRST,
     UDATA_FILE_ACCESS_COUNT

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2007, International Business Machines
+*   Copyright (C) 2004-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -1400,8 +1400,8 @@ struct UText {
       * (public)     Pointer to Dispatch table for accessing functions for this UText.
       * @stable ICU 3.6
       */
-    UTextFuncs     *pFuncs;
-    
+    const UTextFuncs     *pFuncs;
+
     /**
      *  (protected)  Pointer to additional space requested by the
      *               text provider during the utext_open operation.
