@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2007, International Business Machines
+*   Copyright (C) 1997-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -490,7 +490,7 @@ static const CanonicalizationMap CANONICALIZE_MAP[] = {
     { "cel_GAULISH",    "cel__GAULISH", NULL, NULL }, /* registered name */
     { "de_1901",        "de__1901", NULL, NULL }, /* registered name */
     { "de_1906",        "de__1906", NULL, NULL }, /* registered name */
-    { "de__PHONEBOOK",  "de", "collation", "phonebook" },
+    { "de__PHONEBOOK",  "de", "collation", "phonebook" }, /* Old ICU name */
     { "de_AT_PREEURO",  "de_AT", "currency", "ATS" },
     { "de_DE_PREEURO",  "de_DE", "currency", "DEM" },
     { "de_LU_PREEURO",  "de_LU", "currency", "LUF" },
@@ -499,7 +499,7 @@ static const CanonicalizationMap CANONICALIZE_MAP[] = {
     { "en_SCOUSE",      "en__SCOUSE", NULL, NULL }, /* registered name */
     { "en_BE_PREEURO",  "en_BE", "currency", "BEF" },
     { "en_IE_PREEURO",  "en_IE", "currency", "IEP" },
-    { "es__TRADITIONAL", "es", "collation", "traditional" },
+    { "es__TRADITIONAL", "es", "collation", "traditional" }, /* Old ICU name */
     { "es_ES_PREEURO",  "es_ES", "currency", "ESP" },
     { "eu_ES_PREEURO",  "eu_ES", "currency", "ESP" },
     { "fi_FI_PREEURO",  "fi_FI", "currency", "FIM" },
@@ -508,22 +508,23 @@ static const CanonicalizationMap CANONICALIZE_MAP[] = {
     { "fr_LU_PREEURO",  "fr_LU", "currency", "LUF" },
     { "ga_IE_PREEURO",  "ga_IE", "currency", "IEP" },
     { "gl_ES_PREEURO",  "gl_ES", "currency", "ESP" },
-    { "hi__DIRECT",     "hi", "collation", "direct" },
+    { "hi__DIRECT",     "hi", "collation", "direct" }, /* Old ICU name */
     { "it_IT_PREEURO",  "it_IT", "currency", "ITL" },
-    { "ja_JP_TRADITIONAL", "ja_JP", "calendar", "japanese" },
+    { "ja_JP_TRADITIONAL", "ja_JP", "calendar", "japanese" }, /* Old ICU name */
     { "nb_NO_NY",       "nn_NO", NULL, NULL },  /* "markus said this was ok" :-) */
     { "nl_BE_PREEURO",  "nl_BE", "currency", "BEF" },
     { "nl_NL_PREEURO",  "nl_NL", "currency", "NLG" },
     { "pt_PT_PREEURO",  "pt_PT", "currency", "PTE" },
     { "sl_ROZAJ",       "sl__ROZAJ", NULL, NULL }, /* registered name */
-    { "sr_SP_CYRL",     "sr_Cyrl_CS", NULL, NULL }, /* .NET name */
-    { "sr_SP_LATN",     "sr_Latn_CS", NULL, NULL }, /* .NET name */
-    { "sr_YU_CYRILLIC", "sr_Cyrl_CS", NULL, NULL }, /* Linux name */
+    { "sr_SP_CYRL",     "sr_Cyrl_RS", NULL, NULL }, /* .NET name */
+    { "sr_SP_LATN",     "sr_Latn_RS", NULL, NULL }, /* .NET name */
+    { "sr_YU_CYRILLIC", "sr_Cyrl_RS", NULL, NULL }, /* Linux name */
+    { "th_TH_TRADITIONAL", "th_TH", "calendar", "buddhist" }, /* Old ICU name */
     { "uz_UZ_CYRILLIC", "uz_Cyrl_UZ", NULL, NULL }, /* Linux name */
     { "uz_UZ_CYRL",     "uz_Cyrl_UZ", NULL, NULL }, /* .NET name */
     { "uz_UZ_LATN",     "uz_Latn_UZ", NULL, NULL }, /* .NET name */
     { "zh_CHS",         "zh_Hans", NULL, NULL }, /* .NET name */
-    { "zh_CHT",         "zh_Hant", NULL, NULL }, /* .NET name TODO: This should be zh_Hant once the locale structure is fixed. */
+    { "zh_CHT",         "zh_Hant", NULL, NULL }, /* .NET name */
     { "zh_GAN",         "zh__GAN", NULL, NULL }, /* registered name */
     { "zh_GUOYU",       "zh", NULL, NULL }, /* registered name */
     { "zh_HAKKA",       "zh__HAKKA", NULL, NULL }, /* registered name */
@@ -532,10 +533,18 @@ static const CanonicalizationMap CANONICALIZE_MAP[] = {
     { "zh_WUU",         "zh__WUU", NULL, NULL }, /* registered name */
     { "zh_XIANG",       "zh__XIANG", NULL, NULL }, /* registered name */
     { "zh_YUE",         "zh__YUE", NULL, NULL }, /* registered name */
-    { "th_TH_TRADITIONAL", "th_TH", "calendar", "buddhist" },
-    { "hi_IN_TRADITIONAL", "hi_IN", "calendar", "indian" },
-    { "zh_TW_STROKE",   "zh_Hant_TW", "collation", "stroke" },
-    { "zh__PINYIN",     "zh", "collation", "pinyin" }
+};
+
+typedef struct VariantMap {
+    const char *variant;          /* input ID */
+    const char *keyword;     /* keyword, or NULL if none */
+    const char *value;       /* keyword value, or NULL if kw==NULL */
+} VariantMap;
+
+static const VariantMap VARIANT_MAP[] = {
+    { "EURO",   "currency", "EUR" },
+    { "PINYIN", "collation", "pinyin" }, /* Solaris variant */
+    { "STROKE", "collation", "stroke" }  /* Solaris variant */
 };
 
 /* ### Keywords **************************************************/
@@ -1379,7 +1388,8 @@ _getVariant(const char *localeID,
  */
 static int32_t
 _deleteVariant(char* variants, int32_t variantsLen,
-               const char* toDelete, int32_t toDeleteLen) {
+               const char* toDelete, int32_t toDeleteLen)
+{
     int32_t delta = 0; /* number of chars deleted */
     for (;;) {
         UBool flag = FALSE;
@@ -1388,7 +1398,8 @@ _deleteVariant(char* variants, int32_t variantsLen,
         }
         if (uprv_strncmp(variants, toDelete, toDeleteLen) == 0 &&
             (variantsLen == toDeleteLen ||
-             (flag=(variants[toDeleteLen] == '_')))) {
+             (flag=(variants[toDeleteLen] == '_'))))
+        {
             int32_t d = toDeleteLen + (flag?1:0);
             variantsLen -= d;
             delta += d;
@@ -1569,7 +1580,6 @@ _canonicalize(const char* localeID,
     const char* addValue = NULL;
     char* name;
     char* variant = NULL; /* pointer into name, or NULL */
-    int32_t sawEuro = 0;
 
     if (U_FAILURE(*err)) {
         return 0;
@@ -1713,11 +1723,25 @@ _canonicalize(const char* localeID,
             }
         }
 
-        /* Check for EURO variants. */
-        sawEuro = _deleteVariant(variant, uprv_min(variantSize, (nameCapacity-len)), "EURO", 4);
-        len -= sawEuro;
-        if (sawEuro > 0 && name[len-1] == '_') { /* delete trailing '_' */
-            --len;
+        /* Handle generic variants first */
+        if (variant) {
+            for (j=0; j<(int32_t)(sizeof(VARIANT_MAP)/sizeof(VARIANT_MAP[0])); j++) {
+                const char* variantToCompare = VARIANT_MAP[j].variant;
+                int32_t n = (int32_t)uprv_strlen(variantToCompare);
+                int32_t variantLen = _deleteVariant(variant, uprv_min(variantSize, (nameCapacity-len)), variantToCompare, n);
+                len -= variantLen;
+                if (variantLen > 0) {
+                    if (name[len-1] == '_') { /* delete trailing '_' */
+                        --len;
+                    }
+                    addKeyword = VARIANT_MAP[j].keyword;
+                    addValue = VARIANT_MAP[j].value;
+                    break;
+                }
+            }
+            if (name[len-1] == '_') { /* delete trailing '_' */
+                --len;
+            }
         }
 
         /* Look up the ID in the canonicalization map */
@@ -1729,16 +1753,12 @@ _canonicalize(const char* localeID,
                     break; /* Don't remap "" if keywords present */
                 }
                 len = _copyCount(name, nameCapacity, CANONICALIZE_MAP[j].canonicalID);
-                addKeyword = CANONICALIZE_MAP[j].keyword;
-                addValue = CANONICALIZE_MAP[j].value;
+                if (CANONICALIZE_MAP[j].keyword) {
+                    addKeyword = CANONICALIZE_MAP[j].keyword;
+                    addValue = CANONICALIZE_MAP[j].value;
+                }
                 break;
             }
-        }
-
-        /* Explicit EURO variant overrides keyword in CANONICALIZE_MAP */
-        if (sawEuro > 0) {
-            addKeyword = "currency";
-            addValue = "EUR";
         }
     }
 
