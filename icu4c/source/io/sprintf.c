@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2001-2007, International Business Machines
+*   Copyright (C) 2001-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -221,6 +221,7 @@ u_vsnprintf_u(UChar    *buffer,
               va_list        ap)
 {
     int32_t          written = 0;   /* haven't written anything yet */
+    int32_t			 result = 0; /* test the return value of u_printf_parse */
 
     u_localized_print_string outStr;
 
@@ -237,8 +238,8 @@ u_vsnprintf_u(UChar    *buffer,
     }
 
     /* parse and print the whole format string */
-    u_printf_parse(&g_sprintf_stream_handler, patternSpecification, &outStr, &outStr, &outStr.fBundle, &written, ap);
-
+    result = u_printf_parse(&g_sprintf_stream_handler, patternSpecification, &outStr, &outStr, &outStr.fBundle, &written, ap);
+    
     /* Terminate the buffer, if there's room. */
     if (outStr.available > 0) {
         buffer[outStr.len - outStr.available] = 0x0000;
@@ -247,6 +248,10 @@ u_vsnprintf_u(UChar    *buffer,
     /* Release the cloned bundle, if we cloned it. */
     u_locbund_close(&outStr.fBundle);
 
+    // parsing error 
+    if (result < 0) {
+    	return result;
+    }
     /* return # of UChars written */
     return written;
 }
