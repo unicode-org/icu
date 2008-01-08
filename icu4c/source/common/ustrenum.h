@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2006, International Business Machines
+* Copyright (c) 2002-2008, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -28,7 +28,7 @@ uenum_openStringEnumeration(U_NAMESPACE_QUALIFIER StringEnumeration* adopted, UE
  * 0..count-1.
  */
 U_CAPI UEnumeration* U_EXPORT2
-uenum_openCharStringsEnumeration(const char** strings, int32_t count,
+uenum_openCharStringsEnumeration(const char* const* strings, int32_t count,
                                  UErrorCode* ec);
 
 //----------------------------------------------------------------------
