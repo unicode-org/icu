@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2003-2007, International Business Machines Corporation
+* Copyright (C) 2003-2008, International Business Machines Corporation
 * and others. All Rights Reserved.
 ******************************************************************************
 *
@@ -69,7 +69,7 @@ static const int32_t LIMITS[UCAL_FIELD_COUNT][4] = {
 * certain holidays fall on the sabbath, the year can end up being three
 * different lengths, called "deficient", "normal", and "complete".
 */
-static const int32_t MONTH_LENGTH[][3] = {
+static const int8_t MONTH_LENGTH[][3] = {
     // Deficient  Normal     Complete
     {   30,         30,         30     },           //Tishri
     {   29,         29,         30     },           //Heshvan
@@ -92,7 +92,7 @@ static const int32_t MONTH_LENGTH[][3] = {
 * keeping it around separately makes some calculations a lot faster
 */
 
-static const int32_t MONTH_START[][3] = {
+static const int16_t MONTH_START[][3] = {
     // Deficient  Normal     Complete
     {    0,          0,          0  },          // (placeholder)
     {   30,         30,         30  },          // Tishri
@@ -113,7 +113,7 @@ static const int32_t MONTH_START[][3] = {
 /**
 * The cumulative # of days to the end of each month in a leap year
 */
-static const int32_t  LEAP_MONTH_START[][3] = {
+static const int16_t  LEAP_MONTH_START[][3] = {
     // Deficient  Normal     Complete
     {    0,          0,          0  },          // (placeholder)
     {   30,         30,         30  },          // Tishri
