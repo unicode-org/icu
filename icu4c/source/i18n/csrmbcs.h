@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2005-2007, International Business Machines
+ *   Copyright (C) 2005-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -58,7 +58,7 @@ protected:
      *             <br/>
      *             bits 8-15: The match reason, an enum-like value.
      */
-    int32_t match_mbcs(InputText* det, const int32_t commonChars[], int32_t commonCharsLen);
+    int32_t match_mbcs(InputText* det, const uint16_t commonChars[], int32_t commonCharsLen);
 
 public:
 

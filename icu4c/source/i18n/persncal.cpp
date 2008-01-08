@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2003-2007, International Business Machines Corporation
+ ******************************************************************************
+ * Copyright (C) 2003-2008, International Business Machines Corporation
  * and others. All Rights Reserved.
  ******************************************************************************
  *
@@ -15,7 +16,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-static const int monthDays[] = { 31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29 };
+static const int8_t monthDays[] = { 31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29 };
 
 static int32_t
 jalali_to_julian(int year, int month, int day) 

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2007, International Business Machines Corporation and    *
+* Copyright (C) 1997-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -57,13 +57,13 @@
 * day number of January 1, 1970 (Gregorian calendar) at noon UTC. [LIU]
 */
 
-static const int32_t kNumDays[]
+static const int16_t kNumDays[]
 = {0,31,59,90,120,151,181,212,243,273,304,334}; // 0-based, for day-in-year
-static const int32_t kLeapNumDays[]
+static const int16_t kLeapNumDays[]
 = {0,31,60,91,121,152,182,213,244,274,305,335}; // 0-based, for day-in-year
-static const int32_t kMonthLength[]
+static const int8_t kMonthLength[]
 = {31,28,31,30,31,30,31,31,30,31,30,31}; // 0-based
-static const int32_t kLeapMonthLength[]
+static const int8_t kLeapMonthLength[]
 = {31,29,31,30,31,30,31,31,30,31,30,31}; // 0-based
 
 // setTimeInMillis() limits the Julian day range to +/-7F000000.
