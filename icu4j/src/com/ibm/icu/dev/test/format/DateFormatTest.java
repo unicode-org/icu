@@ -247,9 +247,69 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
         assertTrue("data size", EXPECTED.length == COUNT * DateFormat.FIELD_COUNT);
 
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
+        final DateFormat.Field[] DTFMT_FIELDS = {
+            DateFormat.Field.AM_PM,
+            DateFormat.Field.DAY_OF_MONTH,
+            DateFormat.Field.DAY_OF_WEEK,
+            DateFormat.Field.DAY_OF_WEEK_IN_MONTH,
+            DateFormat.Field.DAY_OF_YEAR,
+
+            DateFormat.Field.DOW_LOCAL,
+            DateFormat.Field.ERA,
+            DateFormat.Field.EXTENDED_YEAR,
+            DateFormat.Field.HOUR_OF_DAY0,
+            DateFormat.Field.HOUR_OF_DAY1,
+
+            DateFormat.Field.HOUR0,
+            DateFormat.Field.HOUR1,
+            DateFormat.Field.JULIAN_DAY,
+            DateFormat.Field.MILLISECOND,
+            DateFormat.Field.MILLISECONDS_IN_DAY,
+
+            DateFormat.Field.MINUTE,
+            DateFormat.Field.MONTH,
+            DateFormat.Field.QUARTER,
+            DateFormat.Field.SECOND,
+            DateFormat.Field.TIME_ZONE,
+
+            DateFormat.Field.WEEK_OF_MONTH,
+            DateFormat.Field.WEEK_OF_YEAR,
+            DateFormat.Field.YEAR,
+            DateFormat.Field.YEAR_WOY,
+        };
+
+        final String[][] EXPECTED_BY_FIELD = {
+            {"PM", "13", "Wednesday", "", "",
+             "", "", "", "", "",
+             "", "2", "", "", "",
+             "34", "August", "", "12", "PT",
+             "", "", "1997", ""},
+
+            {"", "13", "mercredi", "", "",
+             "", "", "", "14", "",
+             "", "", "", "", "",
+             "34", "ao\u00FBt", "", "12", "\u00C9tats-Unis (Los Angeles)",
+             "", "", "1997", ""},
+
+            {"PM", "13", "Wed", "2", "225",
+             "4", "AD", "1997", "14", "14",
+             "2", "2", "2450674", "5", "52452513",
+             "34", "8", "3", "12", "PDT",
+             "3", "33", "1997", "1997"},
+
+            {"PM", "0013", "Wednesday", "0002", "0225",
+             "0004", "Anno Domini", "1997", "0014", "0014",
+             "0002", "0002", "2450674", "5130", "52452513",
+             "0034", "August", "3rd quarter", "0012", "Pacific Daylight Time",
+             "0003", "0033", "1997", "1997"},
+        };
+//#endif
+
         TimeZone PT = TimeZone.getTimeZone("America/Los_Angeles");
         for (j = 0, exp = 0; j < COUNT; ++j) {
-          //  String str;
+            //  String str;
             DateFormat df = dateFormats[j];
             df.setTimeZone(PT);
             logln(" Pattern = " + ((SimpleDateFormat) df).toPattern());
@@ -261,14 +321,31 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 continue;
             }
 
+            FieldPosition pos;
+            String field;
+
             for (i = 0; i < DateFormat.FIELD_COUNT; ++i, ++exp) {
-                FieldPosition pos = new FieldPosition(i);
+                pos = new FieldPosition(i);
                 buf.setLength(0);
                 df.format(aug13, buf, pos);    
-                String field = buf.substring(pos.getBeginIndex(), pos.getEndIndex());
-                assertEquals("field #" + i + " " + DATEFORMAT_FIELD_NAMES[i],
+                field = buf.substring(pos.getBeginIndex(), pos.getEndIndex());
+                assertEquals("pattern#" + j + " field #" + i + " " + DATEFORMAT_FIELD_NAMES[i],
                              EXPECTED[exp], field);
             }
+
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
+            // FieldPostion initialized by DateFormat.Field trac#6089
+            for(i = 0; i < DTFMT_FIELDS.length; i++) {
+                // The format method only set position for the first occurrence of
+                // the specified field.
+                pos = new FieldPosition(DTFMT_FIELDS[i]);
+                buf.setLength(0);
+                df.format(aug13, buf, pos);
+                field = buf.substring(pos.getBeginIndex(), pos.getEndIndex());
+                assertEquals("pattern#" + j + " " + DTFMT_FIELDS[i].toString(), EXPECTED_BY_FIELD[j][i], field);
+            }
+//#endif
         }
     }
     /**

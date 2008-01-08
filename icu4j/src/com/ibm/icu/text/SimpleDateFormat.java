@@ -955,11 +955,19 @@ public class SimpleDateFormat extends DateFormat {
             break;
         } // switch (patternCharIndex)
 
-        // Set the FieldPosition (for the first occurence only)
-        if (pos.getBeginIndex() == pos.getEndIndex() &&
-            pos.getField() == PATTERN_INDEX_TO_DATE_FORMAT_FIELD[patternCharIndex]) {
-            pos.setBeginIndex(beginOffset);
-            pos.setEndIndex(beginOffset + buf.length() - bufstart);
+        // Set the FieldPosition (for the first occurrence only)
+        if (pos.getBeginIndex() == pos.getEndIndex()) {
+            if (pos.getField() == PATTERN_INDEX_TO_DATE_FORMAT_FIELD[patternCharIndex]) {
+                pos.setBeginIndex(beginOffset);
+                pos.setEndIndex(beginOffset + buf.length() - bufstart);
+            }
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
+            else if (pos.getFieldAttribute() == PATTERN_INDEX_TO_DATE_FORMAT_ATTRIBUTE[patternCharIndex]) {
+                pos.setBeginIndex(beginOffset);
+                pos.setEndIndex(beginOffset + buf.length() - bufstart);
+            }
+//#endif
         }
     }
 
