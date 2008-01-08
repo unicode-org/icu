@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2007, International Business Machines
+*   Copyright (C) 1998-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -1091,6 +1091,24 @@ ufmt_args* parseArguments(const UChar *alias, va_list ap) {
 	islonglong = (UBool*)uprv_malloc(sizeof(UBool) * size);
 	arglist = (ufmt_args*)uprv_malloc(sizeof(ufmt_args) * size);
 	
+	// If malloc failed, return NULL
+	if (!typelist || !islonglong || !arglist) {
+		if (typelist) {
+			uprv_free(typelist);
+		}
+		
+		if (islonglong) {
+			uprv_free(islonglong);
+		}
+		
+		if (arglist) {
+			uprv_free(arglist);
+		}
+		
+		arglist = -1;
+		goto endParse;
+	}
+	
 	/* reset alias back to the beginning */
 	alias = aliasStart;
 	
@@ -1174,7 +1192,7 @@ ufmt_args* parseArguments(const UChar *alias, va_list ap) {
 	
 	uprv_free(typelist);
 	uprv_free(islonglong);
-	
+endParse:	
 	return arglist;
 }
 
@@ -1205,8 +1223,13 @@ u_printf_parse(const u_printf_stream_handler *streamHandler,
     if (!locStringContext || locStringContext->available >= 0) {
     	/* get the parsed list of argument types */
     	arglist = parseArguments(orgAlias, ap);
+    	
+    	// Return error if parsing failed.
+	    if (arglist == -1) {
+	    	return arglist;
+	    }
     }
-
+    
     /* iterate through the pattern */
     while(!locStringContext || locStringContext->available >= 0) {
 
