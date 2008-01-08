@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2007, International Business Machines
+* Copyright (c) 2004-2008, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -632,7 +632,9 @@ public class ULocaleTest extends TestFmwk {
             {"no", "", "",   "NY", "no@ny", "no@ny", "no__NY"},
             {"el", "Latn", "", "", "el-latn", "el_Latn", null},
             {"en", "Cyrl", "RU", "", "en-cyrl-ru", "en_Cyrl_RU", null},
-            {"zh", "Hant", "TW", "STROKE", "zh-hant_TW_STROKE", "zh_Hant_TW_STROKE", null},
+            {"zh", "Hant", "TW", "STROKE", "zh-hant_TW_STROKE", "zh_Hant_TW_STROKE", "zh_Hant_TW@collation=stroke"},
+            {"zh", "Hant", "CN", "STROKE", "zh-hant_CN_STROKE", "zh_Hant_CN_STROKE", "zh_Hant_CN@collation=stroke"},
+            {"zh", "Hant", "TW", "PINYIN", "zh-hant_TW_PINYIN", "zh_Hant_TW_PINYIN", "zh_Hant_TW@collation=pinyin"},
             {"qq", "Qqqq", "QQ", "QQ", "qq_Qqqq_QQ_QQ", "qq_Qqqq_QQ_QQ", null},
             {"qq", "Qqqq", "", "QQ", "qq_Qqqq__QQ", "qq_Qqqq__QQ", null},
             {"12", "3456", "78", "90", "12_3456_78_90", "12_3456_78_90", null}, /* total garbage */
@@ -860,9 +862,9 @@ public class ULocaleTest extends TestFmwk {
             { "en-BOONT", "en_BOONT", "en__BOONT" }, /* registered name */
             { "de-1901", "de_1901", "de__1901" }, /* registered name */
             { "de-1906", "de_1906", "de__1906" }, /* registered name */
-            { "sr-SP-Cyrl", "sr_SP_CYRL", "sr_Cyrl_CS" }, /* .NET name */
-            { "sr-SP-Latn", "sr_SP_LATN", "sr_Latn_CS" }, /* .NET name */
-            { "sr_YU_CYRILLIC", "sr_YU_CYRILLIC", "sr_Cyrl_CS" }, /* Linux name */
+            { "sr-SP-Cyrl", "sr_SP_CYRL", "sr_Cyrl_RS" }, /* .NET name */
+            { "sr-SP-Latn", "sr_SP_LATN", "sr_Latn_RS" }, /* .NET name */
+            { "sr_YU_CYRILLIC", "sr_YU_CYRILLIC", "sr_Cyrl_RS" }, /* Linux name */
             { "uz-UZ-Cyrl", "uz_UZ_CYRL", "uz_Cyrl_UZ" }, /* .NET name */
             { "uz-UZ-Latn", "uz_UZ_LATN", "uz_Latn_UZ" }, /* .NET name */
             { "zh-CHS", "zh_CHS", "zh_Hans" }, /* .NET name */

@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2003-2007, International Business Machines Corporation and   *
+* Copyright (C) 2003-2008, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -624,16 +624,17 @@ public final class ULocale implements Serializable {
         }
     }
 
-    private static String[][] _variantsToKeywords;
+    private static String[][] CANONICALIZE_MAP;
+    private static String[][] variantsToKeywords;
 
-    private static void initVariantsTable() {
-        if (_variantsToKeywords == null) {
+    private static void initCANONICALIZE_MAP() {
+        if (CANONICALIZE_MAP == null) {
             /**
              * This table lists pairs of locale ids for canonicalization.  The
-             * The first item is the normalized id, the second item is the
-             * canonicalized id.
+             * The 1st item is the normalized id. The 2nd item is the
+             * canonicalized id. The 3rd is the keyword. The 4th is the keyword value.
              */
-            String[][] tempVariantsToKeywords = {
+            String[][] tempCANONICALIZE_MAP = {
 //              { EMPTY_STRING,     "en_US_POSIX", null, null }, /* .NET name */
                 { "C",              "en_US_POSIX", null, null }, /* POSIX name */
                 { "art_LOJBAN",     "jbo", null, null }, /* registered name */
@@ -643,7 +644,7 @@ public final class ULocale implements Serializable {
                 { "cel_GAULISH",    "cel__GAULISH", null, null }, /* registered name */
                 { "de_1901",        "de__1901", null, null }, /* registered name */
                 { "de_1906",        "de__1906", null, null }, /* registered name */
-                { "de__PHONEBOOK",  "de", "collation", "phonebook" },
+                { "de__PHONEBOOK",  "de", "collation", "phonebook" }, /* Old ICU name */
                 { "de_AT_PREEURO",  "de_AT", "currency", "ATS" },
                 { "de_DE_PREEURO",  "de_DE", "currency", "DEM" },
                 { "de_LU_PREEURO",  "de_LU", "currency", "EUR" },
@@ -652,7 +653,7 @@ public final class ULocale implements Serializable {
                 { "en_SCOUSE",      "en__SCOUSE", null, null }, /* registered name */
                 { "en_BE_PREEURO",  "en_BE", "currency", "BEF" },
                 { "en_IE_PREEURO",  "en_IE", "currency", "IEP" },
-                { "es__TRADITIONAL", "es", "collation", "traditional" },
+                { "es__TRADITIONAL", "es", "collation", "traditional" }, /* Old ICU name */
                 { "es_ES_PREEURO",  "es_ES", "currency", "ESP" },
                 { "eu_ES_PREEURO",  "eu_ES", "currency", "ESP" },
                 { "fi_FI_PREEURO",  "fi_FI", "currency", "FIM" },
@@ -661,7 +662,7 @@ public final class ULocale implements Serializable {
                 { "fr_LU_PREEURO",  "fr_LU", "currency", "LUF" },
                 { "ga_IE_PREEURO",  "ga_IE", "currency", "IEP" },
                 { "gl_ES_PREEURO",  "gl_ES", "currency", "ESP" },
-                { "hi__DIRECT",     "hi", "collation", "direct" },
+                { "hi__DIRECT",     "hi", "collation", "direct" }, /* Old ICU name */
                 { "it_IT_PREEURO",  "it_IT", "currency", "ITL" },
                 { "ja_JP_TRADITIONAL", "ja_JP", "calendar", "japanese" },
 //              { "nb_NO_NY",       "nn_NO", null, null },
@@ -669,9 +670,10 @@ public final class ULocale implements Serializable {
                 { "nl_NL_PREEURO",  "nl_NL", "currency", "NLG" },
                 { "pt_PT_PREEURO",  "pt_PT", "currency", "PTE" },
                 { "sl_ROZAJ",       "sl__ROZAJ", null, null }, /* registered name */
-                { "sr_SP_CYRL",     "sr_Cyrl_CS", null, null }, /* .NET name */
-                { "sr_SP_LATN",     "sr_Latn_CS", null, null }, /* .NET name */
-                { "sr_YU_CYRILLIC", "sr_Cyrl_CS", null, null }, /* Linux name */
+                { "sr_SP_CYRL",     "sr_Cyrl_RS", null, null }, /* .NET name */
+                { "sr_SP_LATN",     "sr_Latn_RS", null, null }, /* .NET name */
+                { "sr_YU_CYRILLIC", "sr_Cyrl_RS", null, null }, /* Linux name */
+                { "th_TH_TRADITIONAL", "th_TH", "calendar", "buddhist" }, /* Old ICU name */
                 { "uz_UZ_CYRILLIC", "uz_Cyrl_UZ", null, null }, /* Linux name */
                 { "uz_UZ_CYRL",     "uz_Cyrl_UZ", null, null }, /* .NET name */
                 { "uz_UZ_LATN",     "uz_Latn_UZ", null, null }, /* .NET name */
@@ -684,16 +686,29 @@ public final class ULocale implements Serializable {
                 { "zh_MIN_NAN",     "zh__MINNAN", null, null }, /* registered name */
                 { "zh_WUU",         "zh__WUU", null, null }, /* registered name */
                 { "zh_XIANG",       "zh__XIANG", null, null }, /* registered name */
-                { "zh_YUE",         "zh__YUE", null, null }, /* registered name */
-                { "th_TH_TRADITIONAL", "th_TH", "calendar", "buddhist" },
-                { "hi_IN_TRADITIONAL", "hi_IN", "calendar", "indian" },
-                { "zh_TW_STROKE",   "zh_TW", "collation", "stroke" },
-                { "zh__PINYIN",     "zh", "collation", "pinyin" }
+                { "zh_YUE",         "zh__YUE", null, null } /* registered name */
             };
     
             synchronized (ULocale.class) {
-                if (_variantsToKeywords == null) {
-                    _variantsToKeywords = tempVariantsToKeywords;
+                if (CANONICALIZE_MAP == null) {
+                    CANONICALIZE_MAP = tempCANONICALIZE_MAP;
+                }
+            }
+        }
+        if (variantsToKeywords == null) {
+            /**
+             * This table lists pairs of locale ids for canonicalization.  The
+             * The first item is the normalized variant id.
+             */
+            String[][] tempVariantsToKeywords = {
+                    { "EURO",   "currency", "EUR" },
+                    { "PINYIN", "collation", "pinyin" }, /* Solaris variant */
+                    { "STROKE", "collation", "stroke" }  /* Solaris variant */
+            };
+    
+            synchronized (ULocale.class) {
+                if (variantsToKeywords == null) {
+                    variantsToKeywords = tempVariantsToKeywords;
                 }
             }
         }
@@ -1974,28 +1989,36 @@ public final class ULocale implements Serializable {
 
         // we have an ID in the form xx_Yyyy_ZZ_KKKKK
 
-        initVariantsTable();
+        initCANONICALIZE_MAP();
 
-        /* See if this is an already known locale */
-        for (int i = 0; i < _variantsToKeywords.length; i++) {
-            if (_variantsToKeywords[i][0].equals(baseName)) {
+        /* convert the variants to appropriate ID */
+        for (int i = 0; i < variantsToKeywords.length; i++) {
+            String[] vals = variantsToKeywords[i];
+            int idx = baseName.lastIndexOf("_" + vals[0]);
+            if (idx > -1) {
                 foundVariant = true;
 
-                String[] vals = _variantsToKeywords[i];
+                baseName = baseName.substring(0, idx);
+                if (baseName.endsWith("_")) {
+                    baseName = baseName.substring(0, --idx);
+                }
+                parser.setBaseName(baseName);
+                parser.defaultKeywordValue(vals[1], vals[2]);
+                break;
+            }
+        }
+
+        /* See if this is an already known locale */
+        for (int i = 0; i < CANONICALIZE_MAP.length; i++) {
+            if (CANONICALIZE_MAP[i][0].equals(baseName)) {
+                foundVariant = true;
+
+                String[] vals = CANONICALIZE_MAP[i];
                 parser.setBaseName(vals[1]);
                 if (vals[2] != null) {
                     parser.defaultKeywordValue(vals[2], vals[3]);
                 }
                 break;
-            }
-        }
-
-        /* convert the Euro variant to appropriate ID */
-        if (!foundVariant) {
-            int idx = baseName.indexOf("_EURO");
-            if (idx > -1) {
-                parser.setBaseName(baseName.substring(0, idx));
-                parser.defaultKeywordValue("currency", "EUR");
             }
         }
 
