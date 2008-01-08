@@ -1,7 +1,7 @@
 /*
  ******************************************************************************
  *
- *   Copyright (C) 2000-2007, International Business Machines
+ *   Copyright (C) 2000-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  ******************************************************************************
@@ -60,7 +60,7 @@
 #define COMBINE    (SHADDA+CSHADDA)
 
 
-static const UChar IrrelevantPos[] = {
+static const uint8_t IrrelevantPos[] = {
     0x0, 0x2, 0x4, 0x6,
     0x8, 0xA, 0xC, 0xE,
 };
@@ -165,7 +165,7 @@ static const UChar araLink[178]=
   1, 1                          /*0x06D2-0x06D3*/
 };
 
-static const UChar presALink[] = {
+static const uint8_t presALink[] = {
 /***********0*****1*****2*****3*****4*****5*****6*****7*****8*****9*****A*****B*****C*****D*****E*****F*/
 /*FB5*/    0,    1,    0,    0,    0,    0,    0,    1,    2,1 + 2,    0,    0,    0,    0,    0,    0,
 /*FB6*/    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
@@ -187,7 +187,7 @@ static const UChar presALink[] = {
 /*FC6*/    4,    4,    4
 };
 
-static const UChar presBLink[]=
+static const uint8_t presBLink[]=
 {
 /***********0*****1*****2*****3*****4*****5*****6*****7*****8*****9*****A*****B*****C*****D*****E*****F*/
 /*FE7*/1 + 2,1 + 2,1 + 2,    0,1 + 2,    0,1 + 2,1 + 2,1 + 2,1 + 2,1 + 2,1 + 2,1 + 2,1 + 2,1 + 2,1 + 2, 
@@ -231,7 +231,7 @@ static const UChar convertFEto06[] =
 /*FEF*/   0x649, 0x64A, 0x64A, 0x64A, 0x64A, 0x65C, 0x65C, 0x65D, 0x65D, 0x65E, 0x65E, 0x65F, 0x65F
 };
 
-static const UChar shapeTable[4][4][4]=
+static const uint8_t shapeTable[4][4][4]=
 {
   { {0,0,0,0}, {0,0,0,0}, {0,1,0,3}, {0,1,0,1} },
   { {0,0,2,2}, {0,0,1,2}, {0,1,1,2}, {0,1,1,3} },

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2007, International Business Machines Corporation and    *
+* Copyright (C) 1997-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -224,7 +224,7 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
 void
 DecimalFormatSymbols::initialize(const UChar** numberElements, int32_t *numberElementsStrLen, int32_t numberElementsLength)
 {
-    static const int32_t TYPE_MAPPING[][2] = {
+    static const int8_t TYPE_MAPPING[][2] = {
         {kDecimalSeparatorSymbol, 0},
         {kGroupingSeparatorSymbol, 1},
         {kPatternSeparatorSymbol, 2},

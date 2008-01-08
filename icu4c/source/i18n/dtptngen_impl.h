@@ -98,9 +98,9 @@ typedef enum dtStrEnum {
 typedef struct dtTypeElem {
     UChar                  patternChar;
     UDateTimePatternField  field;
-    int32_t                type;
-    int32_t                minLen;
-    int32_t                weight;
+    int16_t                type;
+    int16_t                minLen;
+    int16_t                weight;
 }dtTypeElem;
 
 class PtnSkeleton : public UMemory {
