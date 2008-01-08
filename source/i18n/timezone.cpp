@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2007, International Business Machines Corporation and    *
+* Copyright (C) 1997-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -105,7 +105,7 @@ static UMTX                             TZSET_LOCK;
 static U_NAMESPACE_QUALIFIER TimeZone*  DEFAULT_ZONE = NULL;
 static U_NAMESPACE_QUALIFIER TimeZone*  _GMT = NULL; // cf. TimeZone::GMT
 
-static char TZDATA_VERSION[16] = "";
+static char TZDATA_VERSION[16];
 
 #ifdef U_USE_TIMEZONE_OBSOLETE_2_8
 static U_NAMESPACE_QUALIFIER UnicodeString* OLSON_IDS = 0;
@@ -149,7 +149,6 @@ U_NAMESPACE_BEGIN
  * which has 3 integers: The number of zones, rules, and countries,
  * respectively.  The country count includes the non-country 'Default'.
  */
-static int32_t OLSON_ZONE_START = -1; // starting index of zones
 static int32_t OLSON_ZONE_COUNT = 0;  // count of zones
 
 /**
@@ -157,34 +156,33 @@ static int32_t OLSON_ZONE_COUNT = 0;  // count of zones
  * meta-data. Return TRUE if successful.
  */
 static UBool getOlsonMeta(const UResourceBundle* top) {
-    if (OLSON_ZONE_START < 0) {
+    if (OLSON_ZONE_COUNT == 0) {
         UErrorCode ec = U_ZERO_ERROR;
         UResourceBundle res;
         ures_initStackObject(&res);
         ures_getByKey(top, kZONES, &res, &ec);
         if(U_SUCCESS(ec)) {
-          OLSON_ZONE_COUNT = ures_getSize(&res);
-          OLSON_ZONE_START = 0;
-          U_DEBUG_TZ_MSG(("OZC%d OZS%d\n",OLSON_ZONE_COUNT, OLSON_ZONE_START));
+            OLSON_ZONE_COUNT = ures_getSize(&res);
+            U_DEBUG_TZ_MSG(("OZC%d\n",OLSON_ZONE_COUNT));
         }
         ures_close(&res);
     }
-    return (OLSON_ZONE_START >= 0);
+    return (OLSON_ZONE_COUNT > 0);
 }
 
 /**
  * Load up the Olson meta-data. Return TRUE if successful.
  */
 static UBool getOlsonMeta() {
-    if (OLSON_ZONE_START < 0) {
+    if (OLSON_ZONE_COUNT == 0) {
         UErrorCode ec = U_ZERO_ERROR;
         UResourceBundle *top = ures_openDirect(0, kZONEINFO, &ec);
         if (U_SUCCESS(ec)) {
-          getOlsonMeta(top);
+            getOlsonMeta(top);
         }
         ures_close(top);
     }
-    return (OLSON_ZONE_START >= 0);
+    return (OLSON_ZONE_COUNT > 0);
 }
 
 static int32_t findInStringArray(UResourceBundle* array, const UnicodeString& id, UErrorCode &status)

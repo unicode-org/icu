@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-2007, International Business Machines
+*   Copyright (C) 1996-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  ucol_res.cpp
@@ -591,9 +591,9 @@ ucol_openAvailableLocales(UErrorCode *status) {
 
 // Note: KEYWORDS[0] != RESOURCE_NAME - alan
 
-static const char* RESOURCE_NAME = "collations";
+static const char RESOURCE_NAME[] = "collations";
 
-static const char* KEYWORDS[] = { "collation" };
+static const char* const KEYWORDS[] = { "collation" };
 
 #define KEYWORD_COUNT (sizeof(KEYWORDS)/sizeof(KEYWORDS[0]))
 
