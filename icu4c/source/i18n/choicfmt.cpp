@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2006, International Business Machines Corporation and    *
+* Copyright (C) 1997-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -168,10 +168,26 @@ ChoiceFormat::operator=(const   ChoiceFormat& that)
         fChoiceLimits = (double*) uprv_malloc( sizeof(double) * fCount);
         fClosures = (UBool*) uprv_malloc( sizeof(UBool) * fCount);
         fChoiceFormats = new UnicodeString[fCount];
-
-        uprv_arrayCopy(that.fChoiceLimits, fChoiceLimits, fCount);
-        uprv_arrayCopy(that.fClosures, fClosures, fCount);
-        uprv_arrayCopy(that.fChoiceFormats, fChoiceFormats, fCount);
+        
+        // check for memory allocation error
+        if (!fChoiceLimits || !fClosures || !fChoiceFormats) {
+        	if (fChoiceLimits) {
+        		uprv_free(fChoiceLimits);
+        		fChoiceLimits = NULL;
+        	}
+        	if (fClosures) {
+        		uprv_free(fClosures);
+        		fClosures = NULL;
+        	}
+        	if (fChoiceFormats) {
+        		delete[] fChoiceFormats;
+        		fChoiceFormats = NULL;
+        	}
+        } else {
+	        uprv_arrayCopy(that.fChoiceLimits, fChoiceLimits, fCount);
+	        uprv_arrayCopy(that.fClosures, fClosures, fCount);
+	        uprv_arrayCopy(that.fChoiceFormats, fChoiceFormats, fCount);
+        }
     }
     return *this;
 }
@@ -498,9 +514,15 @@ ChoiceFormat::adoptChoices(double *limits,
     if(limits == 0 || formats == 0)
         return;
 
-    uprv_free(fChoiceLimits);
-    uprv_free(fClosures);
-    delete [] fChoiceFormats;
+    if (fChoiceLImits) {
+    	uprv_free(fChoiceLimits);
+    }
+    if (fClosures) {
+    	uprv_free(fClosures);
+    }
+    if (fChoiceFormats) {
+    	delete [] fChoiceFormats;
+    }
     fChoiceLimits = limits;
     fClosures = closures;
     fChoiceFormats = formats;
@@ -508,10 +530,12 @@ ChoiceFormat::adoptChoices(double *limits,
 
     if (fClosures == 0) {
         fClosures = (UBool*) uprv_malloc( sizeof(UBool) * fCount);
-        int32_t i;
-        for (i=0; i<fCount; ++i) {
-            fClosures[i] = FALSE;
-        }
+        if (fClosures != NULL) {
+	        int32_t i;
+	        for (i=0; i<fCount; ++i) {
+	            fClosures[i] = FALSE;
+	        }
+        } 
     }
 }
 #endif
@@ -537,9 +561,15 @@ ChoiceFormat::setChoices(  const double* limits,
     if(limits == 0 || formats == 0)
         return;
 
-    uprv_free(fChoiceLimits);
-    uprv_free(fClosures);
-    delete [] fChoiceFormats;
+    if (fChoiceLimits) {
+    	uprv_free(fChoiceLimits);
+    }
+    if (fClosures) {
+    	uprv_free(fClosures);
+    }
+    if (fChoiceFormats) {
+    	delete [] fChoiceFormats;
+    }
 
     // Note that the old arrays are deleted and this owns
     // the created array.
@@ -548,6 +578,23 @@ ChoiceFormat::setChoices(  const double* limits,
     fClosures = (UBool*) uprv_malloc( sizeof(UBool) * fCount);
     fChoiceFormats = new UnicodeString[fCount];
 
+    //check for memory allocation error
+    if (!fChoiceLimits || !fClosures || !fChoiceFormats) {
+    	if (fChoiceLimits) {
+    		uprv_free(fChoiceLimits);
+    		fChoiceLimits = NULL;
+    	}
+    	if (fClosures) {
+    		uprv_free(fClosures);
+    		fClosures = NULL;
+    	}
+    	if (fChoiceFormats) {
+    		delete[] fChoiceFormats;
+    		fChoiceFormats = NULL;
+    	}
+    	return;
+    }
+    
     uprv_arrayCopy(limits, fChoiceLimits, fCount);
     uprv_arrayCopy(formats, fChoiceFormats, fCount);
 
