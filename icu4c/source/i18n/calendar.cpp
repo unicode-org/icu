@@ -325,9 +325,13 @@ protected:
             return NULL; 
         } else {
             UnicodeString *ret = new UnicodeString();
-            ret->append((UChar)0x40); // '@' is a variant character
-            ret->append(UNICODE_STRING("calendar=", 9));
-            (*ret) += UnicodeString(keyword,-1,US_INV);
+            if (ret == NULL) {
+            	status = U_MEMORY_ALLOCATION_ERROR;
+            } else {
+	            ret->append((UChar)0x40); // '@' is a variant character
+	            ret->append(UNICODE_STRING("calendar=", 9));
+	            (*ret) += UnicodeString(keyword,-1,US_INV);
+            }
             return ret;
         }
     }
@@ -402,6 +406,10 @@ getCalendarService(UErrorCode &status)
         fprintf(stderr, "Spinning up Calendar Service\n");
 #endif
         ICULocaleService * newservice = new CalendarService();
+        if (newservice == NULL) {
+        	status = U_MEMORY_ALLOCATION_ERROR;
+        	return newservice;
+        }
 #ifdef U_DEBUG_CALSVC
         fprintf(stderr, "Registering classes..\n");
 #endif
@@ -546,6 +554,9 @@ fZone(0)
 {
     clear();
     fZone = TimeZone::createDefault();
+    if (fZone == NULL) {
+    	success = U_MEMORY_ALLOCATION_ERROR;
+    }
     setWeekCountData(Locale::getDefault(), NULL, success);
 }
 
@@ -592,6 +603,9 @@ fZone(0)
 {
     clear();
     fZone = zone.clone();
+    if (fZone == NULL) {
+    	success = U_MEMORY_ALLOCATION_ERROR;
+    }
     setWeekCountData(aLocale, NULL, success);
 }
 
@@ -626,7 +640,9 @@ Calendar::operator=(const Calendar &right)
         fAreFieldsSet            = right.fAreFieldsSet;
         fAreFieldsVirtuallySet   = right.fAreFieldsVirtuallySet;
         fLenient                 = right.fLenient;
-        delete fZone;
+        if (fZone != NULL) {
+        	delete fZone;
+        }
         fZone                    = right.fZone->clone();
         fFirstDayOfWeek          = right.fFirstDayOfWeek;
         fMinimalDaysInFirstWeek  = right.fMinimalDaysInFirstWeek;
@@ -2087,6 +2103,10 @@ Calendar::getActualMinimum(UCalendarDateFields field, UErrorCode& status) const
     // clone the calendar so we don't mess with the real one, and set it to
     // accept anything for the field values
     Calendar *work = (Calendar*)this->clone();
+    if (work == NULL) {
+    	status = U_MEMORY_ALLOCATION_ERROR;
+    	return 0;
+    }
     work->setLenient(TRUE);
 
     // now try each value from getLeastMaximum() to getMaximum() one by one until
