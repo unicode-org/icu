@@ -55,8 +55,9 @@ UnicodeString& CurrencyFormat::format(const Formattable& obj,
 	if (fmt != NULL) {
 		return fmt->format(obj, appendTo, pos, ec);
 	} 
-	// Set error code
-	ec = U_ILLEGAL_ARGUMENT_ERROR;
+	// Set error code; fmt should never be NULL
+	// this is the case due to failure in construction process
+	ec = U_MEMORY_ALLOCATION_ERROR;
 	return appendTo;
 }
 
