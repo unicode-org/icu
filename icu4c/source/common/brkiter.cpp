@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2007, International Business Machines Corporation and    *
+* Copyright (C) 1997-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -334,7 +334,12 @@ hasService(void)
 URegistryKey U_EXPORT2
 BreakIterator::registerInstance(BreakIterator* toAdopt, const Locale& locale, UBreakIteratorType kind, UErrorCode& status)
 {
-    return getService()->registerInstance(toAdopt, locale, kind, status);
+	ICULocaleService *service = getService();
+	if (service == NULL) {
+		status = U_ILLEGAL_ARGUMENT_ERROR;
+		return NULL;
+	}
+    return service->registerInstance(toAdopt, locale, kind, status);
 }
 
 // -------------------------------------
@@ -356,7 +361,11 @@ BreakIterator::unregister(URegistryKey key, UErrorCode& status)
 StringEnumeration* U_EXPORT2
 BreakIterator::getAvailableLocales(void)
 {
-  return getService()->getAvailableLocales();
+    ICULocaleService *service = getService();
+    if (service == NULL) {
+    	return NULL;
+    }
+    return service->getAvailableLocales();
 }
 #endif /* UCONFIG_NO_SERVICE */
 
