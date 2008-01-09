@@ -1,6 +1,6 @@
 /*
 *****************************************************************
-* Copyright (c) 2002-2006, International Business Machines Corporation
+* Copyright (c) 2002-2008, International Business Machines Corporation
 * and others.  All Rights Reserved.
 *****************************************************************
 * Date        Name        Description
@@ -183,6 +183,10 @@ AnyTransliterator::AnyTransliterator(const UnicodeString& id,
     targetScript(theTargetScript) 
 {
     cache = uhash_open(uhash_hashLong, uhash_compareLong, NULL, &ec);
+    if (cache == NULL) {
+    	ec = U_MEMORY_ALLOCATION_ERROR;
+    	return;
+    }
     uhash_setValueDeleter(cache, _deleteTransliterator);
 
     target = theTarget;
@@ -206,6 +210,10 @@ AnyTransliterator::AnyTransliterator(const AnyTransliterator& o) :
     // Don't copy the cache contents
     UErrorCode ec = U_ZERO_ERROR;
     cache = uhash_open(uhash_hashLong, uhash_compareLong, NULL, &ec);
+    if (cache == NULL) {
+    	ec = U_MEMORY_ALLOCATION_ERROR;
+    	return;
+    }
     uhash_setValueDeleter(cache, _deleteTransliterator);
 }
 
