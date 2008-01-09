@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999,2004, International Business Machines
+*   Copyright (C) 1999,2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -38,6 +38,7 @@ udata_create(const char *dir, const char *type, const char *name,
     uint16_t headerSize, commentLength;
     char filename[512];
     uint8_t bytes[16];
+    int length;
 
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return NULL;
@@ -54,7 +55,7 @@ udata_create(const char *dir, const char *type, const char *name,
     }
     
     /* Check that the full path won't be too long */
-    int length = 0;					/* Start with nothing */
+    length = 0;					/* Start with nothing */
     if(dir != NULL  && *dir !=0)	/* Add directory length if one was given */
     {
     	length += strlen(dir);
