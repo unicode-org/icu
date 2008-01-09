@@ -336,7 +336,7 @@ BreakIterator::registerInstance(BreakIterator* toAdopt, const Locale& locale, UB
 {
 	ICULocaleService *service = getService();
 	if (service == NULL) {
-		status = U_ILLEGAL_ARGUMENT_ERROR;
+		status = U_MEMORY_ALLOCATION_ERROR;
 		return NULL;
 	}
     return service->registerInstance(toAdopt, locale, kind, status);
@@ -351,7 +351,7 @@ BreakIterator::unregister(URegistryKey key, UErrorCode& status)
         if (hasService()) {
             return gService->unregister(key, status);
         }
-        status = U_ILLEGAL_ARGUMENT_ERROR;
+        status = U_MEMORY_ALLOCATION_ERROR;
     }
     return FALSE;
 }
