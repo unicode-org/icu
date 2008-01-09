@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2006, International Business Machines
+*   Copyright (C) 1999-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -282,18 +282,38 @@ void CompoundTransliterator::freeTransliterators(void) {
 CompoundTransliterator& CompoundTransliterator::operator=(
                                              const CompoundTransliterator& t) {
     Transliterator::operator=(t);
-    int32_t i;
-    for (i=0; i<count; ++i) {
-        delete trans[i];
-        trans[i] = 0;
+    int32_t i = 0;
+    UBool failed = FALSE;
+    if (trans != NULL) {
+	    for (i=0; i<count; ++i) {
+	        delete trans[i];
+	        trans[i] = 0;
+	    }
     }
     if (t.count > count) {
-        uprv_free(trans);
+    	if (trans != NULL) {
+    		uprv_free(trans);
+    	}
         trans = (Transliterator **)uprv_malloc(t.count * sizeof(Transliterator *));
     }
     count = t.count;
-    for (i=0; i<count; ++i) {
-        trans[i] = t.trans[i]->clone();
+    if (trans != NULL) {
+	    for (i=0; i<count; ++i) {
+	        trans[i] = t.trans[i]->clone();
+	        if (trans[i] == NULL) {
+	        	failed = TRUE;
+	        	break;
+	        }
+	    }
+    }
+    
+    // if memory allocation failed delete backwards trans array
+    if (failed && i > 0) {
+    	int32_t n;
+    	for (n = i-1; n >= 0; n--) {
+    		uprv_free(trans[n]);
+    		trans[n] = NULL;
+    	}
     }
     numAnonymousRBTs = t.numAnonymousRBTs;
     return *this;
@@ -326,8 +346,25 @@ const Transliterator& CompoundTransliterator::getTransliterator(int32_t index) c
 void CompoundTransliterator::setTransliterators(Transliterator* const transliterators[],
                                                 int32_t transCount) {
     Transliterator** a = (Transliterator **)uprv_malloc(transCount * sizeof(Transliterator *));
-    for (int32_t i=0; i<transCount; ++i) {
+    if (a == NULL) {
+    	return;
+    }
+    int32_t i = 0;
+    UBool failed = FALSE;
+    for (i=0; i<transCount; ++i) {
         a[i] = transliterators[i]->clone();
+        if (a[i] == NULL) {
+        	failed = TRUE;
+        	break;
+        }
+    }
+    if (failed && i > 0) {
+    	int32_t n;
+    	for (n = i-1; n >= 0; n--) {
+    		uprv_free(a[n]);
+    		a[n] = NULL;
+    	}
+    	return;
     }
     adoptTransliterators(a, transCount);
 }
