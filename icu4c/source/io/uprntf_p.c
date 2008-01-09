@@ -1091,7 +1091,7 @@ ufmt_args* parseArguments(const UChar *alias, va_list ap) {
 	islonglong = (UBool*)uprv_malloc(sizeof(UBool) * size);
 	arglist = (ufmt_args*)uprv_malloc(sizeof(ufmt_args) * size);
 	
-	// If malloc failed, return NULL
+	/* If malloc failed, return NULL */
 	if (!typelist || !islonglong || !arglist) {
 		if (typelist) {
 			uprv_free(typelist);
@@ -1224,7 +1224,7 @@ u_printf_parse(const u_printf_stream_handler *streamHandler,
     	/* get the parsed list of argument types */
     	arglist = parseArguments(orgAlias, ap);
     	
-    	// Return error if parsing failed.
+    	/* Return error if parsing failed. */
 	    if (arglist == -1) {
 	    	return arglist;
 	    }
