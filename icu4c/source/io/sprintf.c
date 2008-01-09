@@ -248,7 +248,7 @@ u_vsnprintf_u(UChar    *buffer,
     /* Release the cloned bundle, if we cloned it. */
     u_locbund_close(&outStr.fBundle);
 
-    // parsing error 
+    /* parsing error */ 
     if (result < 0) {
     	return result;
     }
