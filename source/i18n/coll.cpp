@@ -706,7 +706,9 @@ public:
     virtual StringEnumeration * clone() const
     {
         CollationLocaleListEnumeration *result = new CollationLocaleListEnumeration();
-        result->index = index;
+        if (result) {
+        	result->index = index;
+        }
         return result;
     }
 
