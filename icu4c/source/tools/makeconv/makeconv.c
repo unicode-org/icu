@@ -1,7 +1,7 @@
 /*
  ********************************************************************************
  *
- *   Copyright (C) 1998-2007, International Business Machines
+ *   Copyright (C) 1998-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  ********************************************************************************
@@ -284,6 +284,13 @@ int main(int argc, char* argv[])
     {
         arg = getLongPathname(*argv);
 
+        /* Check for potential buffer overflow */
+        if(strlen(arg) > UCNV_MAX_FULL_FILE_NAME_LENGTH)
+        {
+            fprintf(stderr, "%s\n", u_errorName(U_BUFFER_OVERFLOW_ERROR));
+            return U_BUFFER_OVERFLOW_ERROR;
+        }
+
         /*produces the right destination path for display*/
         if (destdirlen != 0)
         {
@@ -330,12 +337,28 @@ int main(int argc, char* argv[])
         }
         else
         {
-            /* Make the static data name equal to the file name */
-            if( /*VERBOSE &&  */ uprv_stricmp(cnvName,data.staticData.name))
+            /* Insure the static data name matches the  file name */
+            /* Changed to ignore directory and only compare base name
+             LDH 1/2/08*/
+            char *p;
+            p = strrchr(cnvName, U_FILE_SEP_CHAR); /* Find last file separator */
+
+            if(p == NULL)            /* OK, try alternate */
+            {
+                p = strrchr(cnvName, U_FILE_ALT_SEP_CHAR);
+                if(p == NULL)
+                {
+                    p=cnvName; /* If no separators, no problem */
+                }
+            }
+            else
+            {
+                p++;   /* If found separtor, don't include it in compare */
+            }
+            if(uprv_stricmp(p,data.staticData.name))
             {
                 fprintf(stderr, "Warning: %s%s claims to be '%s'\n",
-                    cnvName,
-                    CONVERTER_FILE_EXTENSION,
+                    cnvName,  CONVERTER_FILE_EXTENSION,
                     data.staticData.name);
             }
 
