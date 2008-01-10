@@ -306,7 +306,8 @@ public class CharsetHZ extends CharsetICU {
 
         private CoderResult concatEscape(CharBuffer source, ByteBuffer target, IntBuffer offsets, byte[] strToAppend) {
             CoderResult cr = null;
-            for (byte b : strToAppend) {
+            for (int i=0; i<strToAppend.length; i++) {
+                byte b = strToAppend[i];
                 if (target.hasRemaining()) {
                     target.put(b);
                     if (offsets != null)
