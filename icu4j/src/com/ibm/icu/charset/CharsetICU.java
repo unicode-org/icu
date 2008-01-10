@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006-2007, International Business Machines Corporation and    *
+* Copyright (C) 2006-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -93,7 +93,6 @@ public abstract class CharsetICU extends Charset{
     private static final HashMap algorithmicCharsets = new HashMap();
     static{
         /*algorithmicCharsets.put("BOCU-1",                "com.ibm.icu.charset.CharsetBOCU1" );
-        algorithmicCharsets.put("HZ",                    "com.ibm.icu.charset.CharsetHZ" );
         algorithmicCharsets.put("iso2022",               "com.ibm.icu.charset.CharsetISO2022" );
         algorithmicCharsets.put("lmbcs1",                "com.ibm.icu.charset.CharsetLMBCS1" );
         algorithmicCharsets.put("lmbcs11",               "com.ibm.icu.charset.CharsetLMBCS11" );
@@ -133,7 +132,8 @@ public abstract class CharsetICU extends Charset{
         algorithmicCharsets.put("ISCII,version=6",       "com.ibm.icu.charset.CharsetISCII" );
         algorithmicCharsets.put("ISCII,version=7",       "com.ibm.icu.charset.CharsetISCII" );
         algorithmicCharsets.put("ISCII,version=8",       "com.ibm.icu.charset.CharsetISCII" );
-        algorithmicCharsets.put("IMAP-mailbox-name",      "com.ibm.icu.charset.CharsetUTF7" );
+        algorithmicCharsets.put("IMAP-mailbox-name",     "com.ibm.icu.charset.CharsetUTF7" );
+        algorithmicCharsets.put("HZ",                    "com.ibm.icu.charset.CharsetHZ" );
         }
 
     /*public*/ static final Charset getCharset(String icuCanonicalName, String javaCanonicalName, String[] aliases){
