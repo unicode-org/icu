@@ -634,7 +634,49 @@ public class TestCharset extends TestFmwk {
             return;
     }
     
-    
+    public void TestHZ() {
+        /* test input */
+        char[] in = new char[] {
+                0x3000, 0x3001, 0x3002, 0x00B7, 0x02C9, 0x02C7, 0x00A8, 0x3003, 0x3005, 0x2014,
+                0xFF5E, 0x2016, 0x2026, 0x007E, 0x997C, 0x70B3, 0x75C5, 0x5E76, 0x73BB, 0x83E0,
+                0x64AD, 0x62E8, 0x94B5, 0x000A, 0x6CE2, 0x535A, 0x52C3, 0x640F, 0x94C2, 0x7B94,
+                0x4F2F, 0x5E1B, 0x8236, 0x000A, 0x8116, 0x818A, 0x6E24, 0x6CCA, 0x9A73, 0x6355,
+                0x535C, 0x54FA, 0x8865, 0x000A, 0x57E0, 0x4E0D, 0x5E03, 0x6B65, 0x7C3F, 0x90E8,
+                0x6016, 0x248F, 0x2490, 0x000A, 0x2491, 0x2492, 0x2493, 0x2494, 0x2495, 0x2496,
+                0x2497, 0x2498, 0x2499, 0x000A, 0x249A, 0x249B, 0x2474, 0x2475, 0x2476, 0x2477,
+                0x2478, 0x2479, 0x247A, 0x000A, 0x247B, 0x247C, 0x247D, 0x247E, 0x247F, 0x2480,
+                0x2481, 0x2482, 0x2483, 0x000A, 0x0041, 0x0043, 0x0044, 0x0045, 0x0046, 0x007E,
+                0x0048, 0x0049, 0x004A, 0x000A, 0x004B, 0x004C, 0x004D, 0x004E, 0x004F, 0x0050,
+                0x0051, 0x0052, 0x0053, 0x000A, 0x0054, 0x0055, 0x0056, 0x0057, 0x0058, 0x0059,
+                0x005A, 0x005B, 0x005C, 0x000A
+          };
+        
+        String converter = "HZ";
+        CharsetProvider icu = new CharsetProviderICU();
+        Charset icuChar = icu.charsetForName(converter);
+        CharsetEncoder encoder = icuChar.newEncoder();
+        CharsetDecoder decoder = icuChar.newDecoder();
+        try {
+            CharBuffer start = CharBuffer.wrap(in);
+            ByteBuffer bytes = encoder.encode(start);
+            CharBuffer finish = decoder.decode(bytes);
+            
+            if (!equals(start, finish)) {
+                errln(converter + " roundtrip test failed: start does not match finish");
+                
+                char[] finishArray = new char[finish.limit()];
+                for (int i=0; i<finishArray.length; i++)
+                    finishArray[i] = finish.get(i);
+                
+                logln("start:  " + hex(in));
+                logln("finish: " + hex(finishArray));
+            }
+        } catch (CharacterCodingException ex) {
+            errln(converter + " roundtrip test failed: " + ex.getMessage());
+            ex.printStackTrace(System.err);
+        }
+    }
+
     public void TestUTF8Surrogates() {
         byte[][] in = new byte[][] {
             { (byte)0x61, },
@@ -777,7 +819,7 @@ public class TestCharset extends TestFmwk {
                 return;
             } catch (RuntimeException ex) {
                 if (!currentlybad) {currentlybad = true; badcount++; logln(""); }
-                errln(converter + " RuntimeException: " + ex.getMessage());
+                errln(converter + " " + ex.getClass().getName() + ": " + ex.getMessage());
                 continue outer;
             }
             

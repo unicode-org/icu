@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006-2007, International Business Machines Corporation and    *
+* Copyright (C) 2006-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.				                                  *
 *******************************************************************************
 *
@@ -30,6 +30,9 @@ import com.ibm.icu.text.UTF16;
  */
 public abstract class CharsetEncoderICU extends CharsetEncoder {
     
+    /* this is used in fromUnicode DBCS tables as an "unassigned" marker */
+    static final char MISSING_CHAR_MARKER = '\uFFFF';
+
     byte[] errorBuffer = new byte[30];
     int errorBufferLength = 0;
     
@@ -40,7 +43,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
     boolean useFallback;
     
     /* maximum number of indexed UChars */
-    private static final int EXT_MAX_UCHARS = 19;
+    protected static final int EXT_MAX_UCHARS = 19;
     
     /* store previous UChars/chars to continue partial matches */
     int preFromUFirstCP; /* >=0: partial match */
@@ -116,6 +119,13 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      */
     final boolean isFromUUseFallback(int c) {
         return (useFallback) || (UCharacter.getType(c) == UCharacter.PRIVATE_USE);
+    }
+    
+    /**
+     * Use fallbacks from Unicode to codepage when useFallback or for private-use code points
+     */
+    static final boolean isFromUUseFallback(boolean iUseFallback, int c) {
+        return (iUseFallback) || (UCharacter.getType(c) == UCharacter.PRIVATE_USE);
     }
     
     /**

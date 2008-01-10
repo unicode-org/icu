@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006-2007, International Business Machines Corporation and    *
+* Copyright (C) 2006-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -9,14 +9,13 @@
 
 package com.ibm.icu.charset;
 
+import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.IntBuffer;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
-import java.nio.ByteBuffer;
 
-import com.ibm.icu.charset.CharsetCallback;
 import com.ibm.icu.impl.Assert;
 
 /**
@@ -91,6 +90,20 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
      * @provisional This API might change or be removed in a future release.
      */
     final boolean isFallbackUsed() {
+        return true;
+    }
+    
+    /**
+     * Fallback is currently always used by icu4j decoders.
+     */
+    static final boolean isToUUseFallback() {
+        return true;
+    }
+    
+    /**
+     * Fallback is currently always used by icu4j decoders.
+     */
+    static final boolean isToUUseFallback(boolean iUseFallback) {
         return true;
     }
     
