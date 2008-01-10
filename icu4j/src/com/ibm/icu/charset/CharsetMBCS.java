@@ -622,8 +622,6 @@ class CharsetMBCS extends CharsetICU {
     private static final int EXT_TO_U_LENGTH = EXT_TO_U_INDEX + 1;
     private static final int EXT_TO_U_UCHARS_INDEX = EXT_TO_U_LENGTH + 1;
     private static final int EXT_TO_U_UCHARS_LENGTH = EXT_TO_U_UCHARS_INDEX + 1;
-    private static final int EXT_TO_U_MIN_CODE_POINT = 0x1f0000;
-    private static final int EXT_TO_U_MAX_CODE_POINT = 0x2fffff;
 
     private static final int EXT_FROM_U_UCHARS_INDEX = EXT_TO_U_UCHARS_LENGTH + 1; /* 5 */
     private static final int EXT_FROM_U_VALUES_INDEX = EXT_FROM_U_UCHARS_INDEX + 1;
@@ -648,97 +646,7 @@ class CharsetMBCS extends CharsetICU {
     // private static final int EXT_SIZE=31;
     // private static final int EXT_INDEXES_MIN_LENGTH=32;
 
-    private static final int EXT_MAX_BYTES = 0x1f;
-    private static final int EXT_STAGE_2_LEFT_SHIFT = 2;
-
-    private static final int EXT_TO_U_BYTE_SHIFT = 24;
-    private static final int EXT_TO_U_VALUE_MASK = 0xffffff;
-    private static final int EXT_TO_U_ROUNDTRIP_FLAG = 1 << 23;
-
-    private static final int EXT_FROM_U_LENGTH_SHIFT = 24;
-    private static final int EXT_FROM_U_ROUNDTRIP_FLAG = 1 << 31;
-    private static final int EXT_FROM_U_RESERVED_MASK = 0x60000000;
-    private static final int EXT_FROM_U_DATA_MASK = 0xffffff;
     private static final int EXT_FROM_U_MAX_DIRECT_LENGTH = 3;
-    private static final int EXT_FROM_U_SUBCHAR1 = 0x80000001;
-
-    private static final int EXT_TO_U_MAKE_WORD(byte b, int value) {
-        return (((b) << EXT_TO_U_BYTE_SHIFT) | (value));
-    }
-
-    private static final boolean EXT_TO_U_IS_CODE_POINT(int value) {
-        return ((value) <= EXT_TO_U_MAX_CODE_POINT);
-    }
-
-    private static final int EXT_TO_U_GET_CODE_POINT(int value) {
-        return ((value) - EXT_TO_U_MIN_CODE_POINT);
-    }
-
-    private static final int EXT_TO_U_GET_BYTE(int word) {
-        return ((word) >> EXT_TO_U_BYTE_SHIFT);
-    }
-
-    private static final int EXT_TO_U_GET_VALUE(int word) {
-        return ((word) & EXT_TO_U_VALUE_MASK);
-    }
-
-    private static final boolean EXT_TO_U_IS_ROUNDTRIP(int value) {
-        return (((value) & EXT_TO_U_ROUNDTRIP_FLAG) != 0);
-    }
-
-    private static final int EXT_TO_U_MASK_ROUNDTRIP(int value) {
-        return ((value) & ~EXT_TO_U_ROUNDTRIP_FLAG);
-    }
-
-    private static final boolean EXT_TO_U_IS_PARTIAL(int value) {
-        return ((value) < EXT_TO_U_MIN_CODE_POINT);
-    }
-
-    private static final int EXT_TO_U_GET_PARTIAL_INDEX(int value) {
-        return (value);
-    }
-
-    private static final boolean EXT_FROM_U_IS_PARTIAL(int value) {
-        return (((value) >> EXT_FROM_U_LENGTH_SHIFT) == 0);
-    }
-
-    private static final int EXT_FROM_U_GET_PARTIAL_INDEX(int value) {
-        return (value);
-    }
-
-    private static final boolean EXT_FROM_U_IS_ROUNDTRIP(int value) {
-        return (((value) & EXT_FROM_U_ROUNDTRIP_FLAG) != 0);
-    }
-
-    private static final int EXT_FROM_U_GET_LENGTH(int value) {
-        return (((value) >> EXT_FROM_U_LENGTH_SHIFT) & EXT_MAX_BYTES);
-    }
-
-    private static final int EXT_FROM_U_GET_DATA(int value) {
-        return ((value) & EXT_FROM_U_DATA_MASK);
-    }
-
-    private static final int EXT_FROM_U(CharBuffer stage12, CharBuffer stage3, int s1Index, int c) {
-        int step1 = stage12.get(s1Index) + (((c) >>> 4) & 0x3f);
-        int step2 = ((int) stage12.get(step1) << EXT_STAGE_2_LEFT_SHIFT) + ((c) & 0xf);
-        int step3 = stage3.get(step2);
-        //return step3;
-
-    
-        return stage3.get(stage3.position()
-                + ((int) stage12.get(stage12.position()
-                        + (stage12.get(stage12.position() + s1Index) + ((c >>> 4) & 0x3f))) << STAGE_2_LEFT_SHIFT)
-                + (c & 0xf));
-    }
-
-    /*
-     * TRUE if not an SI/SO stateful converter, or if the match length fits with the current converter state
-     */
-    private static boolean EXT_TO_U_VERIFY_SISO_MATCH(byte sisoState, int match) {
-        return ((sisoState) < 0 || ((sisoState) == 0) == (match == 1));
-    }
-
-    // TODO: bookmark (remove this todo)
 
     /* toUnicode helpers -------------------------------------------------------- */
 
@@ -1403,7 +1311,7 @@ class CharsetMBCS extends CharsetICU {
             int match, length;
 
             match = matchToU((byte) SISO_STATE(sharedData, mode), preToUArray, preToUBegin, preToULength, source,
-                    value, flush);
+                    value, isToUUseFallback(), flush);
 
             if (match > 0) {
                 if (match >= preToULength) {
@@ -1470,7 +1378,7 @@ class CharsetMBCS extends CharsetICU {
          * matchLength is not offset by 2
          */
         private int matchToU(byte sisoState, byte[] preArray, int preArrayBegin, int preLength, ByteBuffer source,
-                int[] pMatchValue, boolean flush) {
+                int[] pMatchValue, boolean isUseFallback, boolean flush) {
             ByteBuffer cx = sharedData.mbcs.extIndexes;
             IntBuffer toUTable, toUSection;
 
@@ -1517,7 +1425,7 @@ class CharsetMBCS extends CharsetICU {
                 value = toUSection.get();
                 length = TO_U_GET_BYTE(value);
                 value = TO_U_GET_VALUE(value);
-                if (value != 0 && (TO_U_IS_ROUNDTRIP(value) || isFallbackUsed())
+                if (value != 0 && (TO_U_IS_ROUNDTRIP(value) || isToUUseFallback(isUseFallback))
                         && TO_U_VERIFY_SISO_MATCH(sisoState, i + j)) {
                     /* remember longest match so far */
                     matchValue = value;
@@ -1553,7 +1461,7 @@ class CharsetMBCS extends CharsetICU {
                         /* partial match, continue */
                         index = TO_U_GET_PARTIAL_INDEX(value);
                     } else {
-                        if ((TO_U_IS_ROUNDTRIP(value) || isFallbackUsed()) && TO_U_VERIFY_SISO_MATCH(sisoState, i + j)) {
+                        if ((TO_U_IS_ROUNDTRIP(value) || isToUUseFallback(isUseFallback)) && TO_U_VERIFY_SISO_MATCH(sisoState, i + j)) {
                             /* full match, stop with result */
                             matchValue = value;
                             matchLength = i + j;
@@ -1679,7 +1587,7 @@ class CharsetMBCS extends CharsetICU {
 
             /* try to match */
             match = matchToU((byte) SISO_STATE(sharedData, mode), toUBytesArray, toUBytesBegin, firstLength, source,
-                    value, flush);
+                    value, isToUUseFallback(), flush);
             if (match > 0) {
                 /* advance src pointer for the consumed input */
                 source.position(source.position() + match - firstLength);
@@ -1715,7 +1623,7 @@ class CharsetMBCS extends CharsetICU {
             }
         }
 
-        private int extSimpleMatchToU(ByteBuffer cx, byte[] source, boolean useFallback) {
+        private int simpleMatchToU(byte[] source, boolean useFallback) {
             int[] value = new int[1];
             int match;
 
@@ -1724,12 +1632,12 @@ class CharsetMBCS extends CharsetICU {
             }
 
             /* try to match */
-            match = extMatchToU(cx, (byte) -1, source, source.length, null, 0, value, useFallback, true);
+            match = matchToU((byte) -1, source, 0, source.length, null, value, useFallback, true);
 
             if (match == source.length) {
                 /* write result for simple, single-character conversion */
-                if (EXT_TO_U_IS_CODE_POINT(value[0])) {
-                    return EXT_TO_U_GET_CODE_POINT(value[0]);
+                if (TO_U_IS_CODE_POINT(value[0])) {
+                    return TO_U_GET_CODE_POINT(value[0]);
                 }
             }
 
@@ -1740,187 +1648,6 @@ class CharsetMBCS extends CharsetICU {
              * flush==TRUE)
              */
             return 0xfffe;
-        }
-
-        /**
-         * this works like ucnv_extMatchFromU() except - the first character is in pre - no trie is used - the returned
-         * matchLength is not offset by 2
-         */
-        int extMatchToU(ByteBuffer cx, byte sisoState, byte[] pre, int preLength, byte[] src, int srcLength,
-                int[] pMatchValue, boolean useFallback, boolean flush) {
-            if (cx == null || cx.get(EXT_TO_U_LENGTH) <= 0) {
-                return 0; /* no extension data, no match */
-            }
-
-            /* initialize */
-            // toUTable = ((const int *)((const char *)(cx)+(cx)[EXT_TO_U_INDEX]))
-            cx.position(cx.get(EXT_TO_U_INDEX));
-            IntBuffer toUTable = cx.slice().asIntBuffer();
-
-            int matchValue = 0;
-            int matchLength = 0;
-            int i = 0;
-            int j = 0;
-            int index = 0;
-
-            int value;
-            int length;
-            byte b;
-
-            if (sisoState == 0) {
-                /* SBCS state of an SI/SO stateful converter, look at only exactly 1 byte */
-                if (preLength > 1) {
-                    return 0; /* no match of a DBCS sequence in SBCS mode */
-                } else if (preLength == 1) {
-                    srcLength = 0;
-                } else /* pre.length==0 */{
-                    if (srcLength > 1) {
-                        srcLength = 1;
-                    }
-                }
-                flush = true;
-            }
-
-            /* we must not remember fallback matches when not using fallbacks */
-
-            /* match input units until there is a full match or the input is consumed */
-            for (;;) {
-                /* go to the next section */
-                IntBuffer toUSection = toUTable.slice();
-
-                /* read first pair of the section */
-                value = toUSection.get(index++);
-                length = EXT_TO_U_GET_BYTE(value);
-                value = EXT_TO_U_GET_VALUE(value);
-                if (value != 0 && (EXT_TO_U_IS_ROUNDTRIP(value) || isToUUseFallback(useFallback))
-                        && EXT_TO_U_VERIFY_SISO_MATCH(sisoState, i + j)) {
-                    /* remember longest match so far */
-                    matchValue = value;
-                    matchLength = i + j;
-                }
-
-                /* match pre[] then src[] */
-                if (i < preLength) {
-                    b = pre[i++];
-                } else if (j < srcLength) {
-                    b = src[j++];
-                } else {
-                    /* all input consumed, partial match */
-                    if (flush || (length = (i + j)) > EXT_MAX_BYTES) {
-                        /*
-                         * end of the entire input stream, stop with the longest match so far or: partial match must not
-                         * be longer than UCNV_EXT_MAX_BYTES because it must fit into state buffers
-                         */
-                        break;
-                    } else {
-                        /* continue with more input next time */
-                        return -length;
-                    }
-                }
-
-                /* search for the current UChar */
-                value = extFindToU(toUSection, length, b);
-                if (value == 0) {
-                    /* no match here, stop with the longest match so far */
-                    break;
-                } else {
-                    if (EXT_TO_U_IS_PARTIAL(value)) {
-                        /* partial match, continue */
-                        index = EXT_TO_U_GET_PARTIAL_INDEX(value);
-                    } else {
-                        if ((EXT_TO_U_IS_ROUNDTRIP(value) || isToUUseFallback(useFallback))
-                                && EXT_TO_U_VERIFY_SISO_MATCH(sisoState, i + j)) {
-                            /* full match, stop with result */
-                            matchValue = value;
-                            matchLength = i + j;
-                        } else {
-                            /* full match on fallback not taken, stop with the longest match so far */
-                        }
-                        break;
-                    }
-                }
-            }
-
-            if (matchLength == 0) {
-                /* no match at all */
-                return 0;
-            }
-
-            /* return result */
-            pMatchValue[0] = EXT_TO_U_MASK_ROUNDTRIP(matchValue);
-            return matchLength;
-        }
-
-        /**
-         * @return lookup value for the byte, if found; else 0
-         */
-        int extFindToU(IntBuffer toUSection, int length, byte b) {
-            int word0, word; // unsigned in icu4c
-            int i, start, limit; // signed in icu4c
-
-            /* check the input byte against the lowest and highest section bytes */
-            start = EXT_TO_U_GET_BYTE(toUSection.get(0));
-            limit = EXT_TO_U_GET_BYTE(toUSection.get(length - 1));
-            if (b < start || limit < b) {
-                return 0; /* the byte is out of range */
-            }
-
-            if (length == ((limit - start) + 1)) {
-                /* direct access on a linear array */
-                return EXT_TO_U_GET_VALUE(toUSection.get(b - start)); /* could be 0 */
-            }
-
-            /* word0 is suitable for <=toUSection[] comparison, word for <toUSection[] */
-            word0 = EXT_TO_U_MAKE_WORD(b, 0);
-
-            /*
-             * Shift byte once instead of each section word and add 0xffffff. We will compare the shifted/added byte
-             * (bbffffff) against section words which have byte values in the same bit position. If and only if byte bb <
-             * section byte ss then bbffffff<ssvvvvvv for all v=0..f so we need not mask off the lower 24 bits of each
-             * section word.
-             */
-            word = word0 | EXT_TO_U_VALUE_MASK;
-
-            /* binary search */
-            start = 0;
-            limit = length;
-            for (;;) {
-                i = limit - start;
-                if (i <= 1) {
-                    break; /* done */
-                }
-                /* start<limit-1 */
-
-                if (i <= 4) {
-                    /* linear search for the last part */
-                    if (word0 <= toUSection.get(start)) {
-                        break;
-                    }
-                    if (++start < limit && word0 <= toUSection.get(start)) {
-                        break;
-                    }
-                    if (++start < limit && word0 <= toUSection.get(start)) {
-                        break;
-                    }
-                    /* always break at start==limit-1 */
-                    ++start;
-                    break;
-                }
-
-                i = (start + limit) / 2;
-                if (word < toUSection.get(i)) {
-                    limit = i;
-                } else {
-                    start = i;
-                }
-            }
-
-            /* did we really find it? */
-            if (start < limit && b == EXT_TO_U_GET_BYTE(word = toUSection.get(start))) {
-                return EXT_TO_U_GET_VALUE(word); /* never 0 */
-            } else {
-                return 0; /* not found */
-            }
         }
 
         /*
@@ -2224,7 +1951,7 @@ class CharsetMBCS extends CharsetICU {
          * 
          * @return U+fffe unassigned U+ffff illegal otherwise the Unicode code point
          */
-        int MBCSSimpleGetNextUChar(byte[] source, boolean useFallback) {
+        int simpleGetNextUChar(byte[] source, boolean useFallback) {
 
             // #if 0
             // /*
@@ -2339,9 +2066,8 @@ class CharsetMBCS extends CharsetICU {
 
             if (c == 0xfffe) {
                 /* try an extension mapping */
-                ByteBuffer cx = sharedData.mbcs.extIndexes;
-                if (cx != null) {
-                    return extSimpleMatchToU(cx, source, useFallback);
+                if (sharedData.mbcs.extIndexes != null) {
+                    return simpleMatchToU(source, useFallback);
                 }
             }
 
@@ -2860,13 +2586,12 @@ class CharsetMBCS extends CharsetICU {
          * *pValue will contain the resulting bytes with the last byte in bits 7..0, the second to last byte in bits
          * 15..8, etc. Currently, the function assumes but does not check that 0<=c<=0x10ffff.
          */
-        int MBCSFromUChar32(int c, int[] pValue, boolean isUseFallback) {
+        int fromUChar32(int c, int[] pValue, boolean isUseFallback) {
             // #if 0
             // /* #if 0 because this is not currently used in ICU - reduce code, increase code coverage */
             // const uint8_t *p;
             // #endif
 
-            ByteBuffer cx;
             char[] table;
             int stage2Entry;
             int value;
@@ -2986,9 +2711,8 @@ class CharsetMBCS extends CharsetICU {
                 }
             }
 
-            cx = sharedData.mbcs.extIndexes;
-            if (cx != null) {
-                length = extSimpleMatchFromU(cx, c, pValue, isUseFallback);
+            if (sharedData.mbcs.extIndexes != null) {
+                length = simpleMatchFromU(c, pValue, isUseFallback);
                 return length >= 0 ? length : -length; /* return abs(length); */
             }
 
@@ -3237,7 +2961,7 @@ class CharsetMBCS extends CharsetICU {
             return matchLength;
         }
 
-        private int extSimpleMatchFromU(ByteBuffer cx, int cp, int[] pValue, boolean isUseFallback) {
+        private int simpleMatchFromU(int cp, int[] pValue, boolean isUseFallback) {
             int[] value = new int[1];
             int match; // signed
 
@@ -3248,9 +2972,9 @@ class CharsetMBCS extends CharsetICU {
                 int length;
                 boolean isRoundtrip;
 
-                isRoundtrip = EXT_FROM_U_IS_ROUNDTRIP(value[0]);
-                length = EXT_FROM_U_GET_LENGTH(value[0]);
-                value[0] = EXT_FROM_U_GET_DATA(value[0]);
+                isRoundtrip = FROM_U_IS_ROUNDTRIP(value[0]);
+                length = FROM_U_GET_LENGTH(value[0]);
+                value[0] = FROM_U_GET_DATA(value[0]);
 
                 if (length <= EXT_FROM_U_MAX_DIRECT_LENGTH) {
                     pValue[0] = value[0];
@@ -3275,54 +2999,6 @@ class CharsetMBCS extends CharsetICU {
              * match, not supported for simple conversion (and flush==TRUE)
              */
             return 0;
-        }
-
-        /**
-         * @return index of the UChar, if found; else <0
-         */
-        int extFindFromU(CharBuffer fromUSection, int length, char u) {
-            int i, start, limit;
-
-            /* binary search */
-            start = 0;
-            limit = length;
-            for (;;) {
-                i = limit - start;
-                if (i <= 1) {
-                    break; /* done */
-                }
-                /* start<limit-1 */
-
-                if (i <= 4) {
-                    /* linear search for the last part */
-                    if (u <= fromUSection.get(start)) {
-                        break;
-                    }
-                    if (++start < limit && u <= fromUSection.get(start)) {
-                        break;
-                    }
-                    if (++start < limit && u <= fromUSection.get(start)) {
-                        break;
-                    }
-                    /* always break at start==limit-1 */
-                    ++start;
-                    break;
-                }
-
-                i = (start + limit) / 2;
-                if (u < fromUSection.get(i)) {
-                    limit = i;
-                } else {
-                    start = i;
-                }
-            }
-
-            /* did we really find it? */
-            if (start < limit && u == fromUSection.get(start)) {
-                return start;
-            } else {
-                return -1; /* not found */
-            }
         }
 
         private CoderResult writeFromU(int value, ByteBuffer target, IntBuffer offsets, int srcIndex) {

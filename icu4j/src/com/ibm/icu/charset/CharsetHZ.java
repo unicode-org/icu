@@ -115,7 +115,7 @@ public class CharsetHZ extends CharsetICU {
                             if (0x21 <= leadByte && leadByte <= 0x7d && 0x21 <= mySourceChar && mySourceChar <= 0x7e) {
                                 tempBuf[0] = (byte) (leadByte + 0x80);
                                 tempBuf[1] = (byte) (mySourceChar + 0x80);
-                                targetUniChar = gbDecoder.MBCSSimpleGetNextUChar(tempBuf, super.isFallbackUsed());
+                                targetUniChar = gbDecoder.simpleGetNextUChar(tempBuf, super.isFallbackUsed());
                             } else {
                                 targetUniChar = 0xffff;
                             }
@@ -217,7 +217,7 @@ public class CharsetHZ extends CharsetICU {
                         length = 1;
                         targetUniChar[0] = mySourceChar;
                     } else {
-                        length = gbEncoder.MBCSFromUChar32(mySourceChar, targetUniChar, super.isFallbackUsed());
+                        length = gbEncoder.fromUChar32(mySourceChar, targetUniChar, super.isFallbackUsed());
 
                         /*
                          * we can only use lead bytes 21..7D and trail bytes 21..7E
