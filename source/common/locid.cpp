@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1997-2007, International Business Machines
+ *   Copyright (C) 1997-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
 *
@@ -392,6 +392,10 @@ Locale::Locale( const   char * newLanguage,
         if (size >= ULOC_FULLNAME_CAPACITY)
         {
             togo_heap = (char *)uprv_malloc(sizeof(char)*(size+1));
+            // If togo_heap could not be created, initialize with default settings.
+            if (togo_heap == NULL) {
+            	init(NULL, FALSE);
+            }
             togo = togo_heap;
         }
         else
@@ -480,6 +484,9 @@ Locale &Locale::operator=(const Locale &other)
     /* Allocate the full name if necessary */
     if(other.fullName != other.fullNameBuffer) {
         fullName = (char *)uprv_malloc(sizeof(char)*(uprv_strlen(other.fullName)+1));
+        if (fullName == NULL) {
+        	return *this;
+        }
     }
     /* Copy the full name */
     uprv_strcpy(fullName, other.fullName);
@@ -1318,6 +1325,9 @@ Locale::getBaseName() const
         int32_t baseNameSize = uloc_getBaseName(fullName, baseName, ULOC_FULLNAME_CAPACITY, &status);
         if(baseNameSize >= ULOC_FULLNAME_CAPACITY) {
             ((Locale *)this)->baseName = (char *)uprv_malloc(sizeof(char) * baseNameSize + 1);
+            if (baseName == NULL) {
+            	return baseName;
+            }
             uloc_getBaseName(fullName, baseName, baseNameSize+1, &status);
         }
         baseName[baseNameSize] = 0;
