@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2003-2006, International Business Machines Corporation
+* Copyright (C) 2003-2008, International Business Machines Corporation
 * and others. All Rights Reserved.
 ******************************************************************************
 *
@@ -94,7 +94,7 @@ IslamicCalendar::IslamicCalendar(const Locale& aLocale, UErrorCode& success, ECi
 :   Calendar(TimeZone::createDefault(), aLocale, success),
 civil(beCivil)
 {
-    setTimeInMillis(getNow(), success); // Call this again now that the vtable is set up properly.
+	setTimeInMillis(getNow(), success); // Call this again now that the vtable is set up properly.
 }
 
 IslamicCalendar::IslamicCalendar(const IslamicCalendar& other) : Calendar(other), civil(other.civil) {
@@ -231,25 +231,36 @@ int32_t IslamicCalendar::trueMonthStart(int32_t month) const
         UDate origin = HIJRA_MILLIS 
             + uprv_floor(month * CalendarAstronomer::SYNODIC_MONTH - 1) * kOneDay;
 
-        double age = moonAge(origin);
+        // moonAge will fail due to memory allocation error
+        double age = moonAge(origin, status);
+        if (U_FAILURE(status)) {
+        	goto trueMonthStartEnd;
+        }
 
-        if (moonAge(origin) >= 0) {
+        if (age >= 0) {
             // The month has already started
             do {
                 origin -= kOneDay;
-                age = moonAge(origin);
+                age = moonAge(origin, status);
+                if (U_FAILURE(status)) {
+               	    goto trueMonthStartEnd;
+                }
             } while (age >= 0);
         }
         else {
             // Preceding month has not ended yet.
             do {
                 origin += kOneDay;
-                age = moonAge(origin);
+                age = moonAge(origin, status);
+                if (U_FAILURE(status)) {
+               	    goto trueMonthStartEnd;
+                }
             } while (age < 0);
         }
         start = (int32_t)Math::floorDivide((origin - HIJRA_MILLIS), (double)kOneDay) + 1;
         CalendarCache::put(&gMonthCache, month, start, status);
     }
+trueMonthStartEnd :
     if(U_FAILURE(status)) {
         start = 0;
     }
@@ -265,13 +276,18 @@ int32_t IslamicCalendar::trueMonthStart(int32_t month) const
 * @param time  The time at which the moon's age is desired,
 *              in millis since 1/1/1970.
 */
-double IslamicCalendar::moonAge(UDate time)
+double IslamicCalendar::moonAge(UDate time, UErrorCode &status)
 {
     double age = 0;
 
     umtx_lock(&astroLock);
     if(gIslamicCalendarAstro == NULL) {
         gIslamicCalendarAstro = new CalendarAstronomer();
+        // Memory allocation error
+        if (gIslamicCalendarAstro == NULL) {
+        	status = U_MEMORY_ALLOCATION_ERROR;
+        	return age;
+        }
         ucln_i18n_registerCleanup(UCLN_I18N_ISLAMIC_CALENDAR, calendar_islamic_cleanup);
     }
     gIslamicCalendarAstro->setTime(time);
@@ -372,7 +388,7 @@ int32_t IslamicCalendar::handleGetExtendedYear() {
 * calendar equivalents for the given Julian day.
 * @draft ICU 2.4
 */
-void IslamicCalendar::handleComputeFields(int32_t julianDay, UErrorCode &/*status*/) {
+void IslamicCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status) {
     int32_t year, month, dayOfMonth, dayOfYear;
     UDate startDate;
     int32_t days = julianDay - 1948440;
@@ -389,7 +405,12 @@ void IslamicCalendar::handleComputeFields(int32_t julianDay, UErrorCode &/*statu
 
         startDate = uprv_floor(months * CalendarAstronomer::SYNODIC_MONTH - 1);
 
-        if ( days - startDate >= 28 && moonAge(internalGetTime()) > 0) {
+        double age = moonAge(internalGetTime(), status);
+        if (U_FAILURE(status)) {
+        	status = U_MEMORY_ALLOCATION_ERROR;
+        	return;
+        }
+        if ( days - startDate >= 28 && age > 0) {
             // If we're near the end of the month, assume next month and search backwards
             months++;
         }
@@ -422,7 +443,7 @@ UBool
 IslamicCalendar::inDaylightTime(UErrorCode& status) const
 {
     // copied from GregorianCalendar
-    if (U_FAILURE(status) || !getTimeZone().useDaylightTime()) 
+    if (U_FAILURE(status) || (&(getTimeZone()) == NULL && !getTimeZone().useDaylightTime())) 
         return FALSE;
 
     // Force an update of the state of the Calendar.
