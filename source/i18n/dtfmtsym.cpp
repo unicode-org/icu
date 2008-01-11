@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2007, International Business Machines Corporation and    *
+* Copyright (C) 1997-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -276,15 +276,30 @@ void
 DateFormatSymbols::createZoneStrings(const UnicodeString *const * otherStrings)
 {
     int32_t row, col;
+    UBool failed = FALSE;
 
     fZoneStrings = (UnicodeString **)uprv_malloc(fZoneStringsRowCount * sizeof(UnicodeString *));
-    for (row=0; row<fZoneStringsRowCount; ++row)
-    {
-        fZoneStrings[row] = newUnicodeStringArray(fZoneStringsColCount);
-        for (col=0; col<fZoneStringsColCount; ++col) {
-            // fastCopyFrom() - see assignArray comments
-            fZoneStrings[row][col].fastCopyFrom(otherStrings[row][col]);
-        }
+    if (fZoneStrings != NULL) {
+	    for (row=0; row<fZoneStringsRowCount; ++row)
+	    {
+	        fZoneStrings[row] = newUnicodeStringArray(fZoneStringsColCount);
+	        if (fZoneStrings[row] == NULL) {
+	        	failed = TRUE;
+	        	break;
+	        }
+	        for (col=0; col<fZoneStringsColCount; ++col) {
+	            // fastCopyFrom() - see assignArray comments
+	            fZoneStrings[row][col].fastCopyFrom(otherStrings[row][col]);
+	        }
+	    }
+    }
+    // If memory allocation failed, roll back and delete fZoneStrings
+    if (failed) {
+    	for (int i = row; i >= 0; i--) {
+    		delete[] fZoneStrings[i];
+    	}
+    	uprv_free(fZoneStrings);
+    	fZoneStrings = NULL;
     }
 }
 
