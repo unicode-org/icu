@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2005, International Business Machines
+*   Copyright (C) 1997-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   file name:  nfrs.cpp
@@ -572,10 +572,12 @@ NFRuleSet::findFractionRuleSetRule(double number) const
 static void dumpUS(FILE* f, const UnicodeString& us) {
   int len = us.length();
   char* buf = (char *)uprv_malloc((len+1)*sizeof(char)); //new char[len+1];
-  us.extract(0, len, buf);
-  buf[len] = 0;
-  fprintf(f, "%s", buf);
-  uprv_free(buf); //delete[] buf;
+  if (buf != NULL) {
+	  us.extract(0, len, buf);
+	  buf[len] = 0;
+	  fprintf(f, "%s", buf);
+	  uprv_free(buf); //delete[] buf;
+  }
 }
 #endif
 
