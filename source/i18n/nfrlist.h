@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2005, International Business Machines
+*   Copyright (C) 1997-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   file name:  nfrlist.h
@@ -48,8 +48,11 @@ public:
             uprv_free(fStuff);
         }
     }
-    NFRule* operator[](uint32_t index) const { return fStuff[index]; }
+    NFRule* operator[](uint32_t index) const { return fStuff != NULL ? fStuff[index] : NULL; }
     NFRule* remove(uint32_t index) {
+    	if (fStuff == NULL) {
+    		return NULL;
+    	}
         NFRule* result = fStuff[index];
         fCount -= 1;
         for (uint32_t i = index; i < fCount; ++i) { // assumes small arrays
@@ -62,10 +65,15 @@ public:
             fCapacity += 10;
             fStuff = (NFRule**)uprv_realloc(fStuff, fCapacity * sizeof(NFRule*)); // assume success
         }
-        fStuff[fCount++] = thing;
+        if (fStuff != NULL) {
+        	fStuff[fCount++] = thing;
+        } else {
+        	fCapacity = 0;
+        	fCount = 0;
+        }
     }
     uint32_t size() const { return fCount; }
-    NFRule* last() const { return fCount > 0 ? fStuff[fCount-1] : NULL; }
+    NFRule* last() const { return (fCount > 0 && fStuff != NULL) ? fStuff[fCount-1] : NULL; }
     NFRule** release() {
         add(NULL); // ensure null termination
         NFRule** result = fStuff;
