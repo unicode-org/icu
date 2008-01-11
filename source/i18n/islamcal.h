@@ -1,6 +1,6 @@
 /*
  ********************************************************************************
- * Copyright (C) 2003-2007, International Business Machines Corporation
+ * Copyright (C) 2003-2008, International Business Machines Corporation
  * and others. All Rights Reserved.
  ******************************************************************************
  *
@@ -269,7 +269,7 @@ class IslamicCalendar : public Calendar {
    * @param time  The time at which the moon's age is desired,
    *              in millis since 1/1/1970.
    */
-  static double moonAge(UDate time);
+  static double moonAge(UDate time, UErrorCode &status);
 
   //-------------------------------------------------------------------------
   // Internal data....
