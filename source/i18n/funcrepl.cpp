@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2002-2003, International Business Machines Corporation
+*   Copyright (c) 2002-2008, International Business Machines Corporation
 *   and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -78,6 +78,9 @@ int32_t FunctionReplacer::replace(Replaceable& text,
                                   int32_t& cursor) {
 
     // First delegate to subordinate replacer
+	if (replacer == NULL || translit == NULL) {
+		return -1;
+	}
     int32_t len = replacer->toReplacer()->replace(text, start, limit, cursor);
     limit = start + len;
 
@@ -92,13 +95,15 @@ int32_t FunctionReplacer::replace(Replaceable& text,
  */
 UnicodeString& FunctionReplacer::toReplacerPattern(UnicodeString& rule,
                                                    UBool escapeUnprintable) const {
-    UnicodeString str;
-    rule.truncate(0);
-    rule.append(AMPERSAND);
-    rule.append(translit->getID());
-    rule.append(OPEN);
-    rule.append(replacer->toReplacer()->toReplacerPattern(str, escapeUnprintable));
-    rule.append(CLOSE);
+	if (translit != NULL && replacer != NULL) {
+	    UnicodeString str;
+	    rule.truncate(0);
+	    rule.append(AMPERSAND);
+	    rule.append(translit->getID());
+	    rule.append(OPEN);
+	    rule.append(replacer->toReplacer()->toReplacerPattern(str, escapeUnprintable));
+	    rule.append(CLOSE);
+	}
     return rule;
 }
 
@@ -107,14 +112,18 @@ UnicodeString& FunctionReplacer::toReplacerPattern(UnicodeString& rule,
  */
 void FunctionReplacer::addReplacementSetTo(UnicodeSet& toUnionTo) const {
     UnicodeSet set;
-    toUnionTo.addAll(translit->getTargetSet(set));
+    if (translit != NULL) {
+    	toUnionTo.addAll(translit->getTargetSet(set));
+    }
 }
 
 /**
  * UnicodeFunctor API
  */
 void FunctionReplacer::setData(const TransliterationRuleData* d) {
-    replacer->setData(d);
+	if (replacer != NULL) {
+		replacer->setData(d);
+	}
 }
 
 U_NAMESPACE_END
