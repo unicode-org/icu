@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004, International Business Machines
+* Copyright (c) 2004-2008, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -49,8 +49,8 @@ Measure::~Measure() {
 UBool Measure::operator==(const UObject& other) const {
     const Measure* m = (const Measure*) &other;
     return getDynamicClassID() == other.getDynamicClassID() &&
-        number == m->getNumber() &&
-        *unit == m->getUnit();
+        number == m->getNumber() && 
+        (unit != NULL && *unit == m->getUnit());
 }
 
 //----------------------------------------------------------------------
