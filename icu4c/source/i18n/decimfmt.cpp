@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2007, International Business Machines Corporation and    *
+* Copyright (C) 1997-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -1818,6 +1818,10 @@ int32_t DecimalFormat::compareComplexAffix(const UnicodeString& affixPat,
                     const char* loc = getLocaleID(ULOC_VALID_LOCALE, ec);
                     if (U_FAILURE(ec) || loc == NULL || *loc == 0) {
                         // applyPattern has been called; use the symbols
+                    	if (fSymbols == NULL) {
+                    		ec = U_MEMORY_ALLOCATION_ERROR;
+                    		return 0;
+                    	}
                         loc = fSymbols->getLocale().getName();
                         ec = U_ZERO_ERROR;
                     }
@@ -2131,13 +2135,17 @@ void DecimalFormat::setRoundingIncrement(double newValue) {
         if (fRoundingIncrement == NULL) {
             fRoundingIncrement = new DigitList();
         }
-        fRoundingIncrement->set((int32_t)newValue);
-        fRoundingDouble = newValue;
-    } else {
-        delete fRoundingIncrement;
-        fRoundingIncrement = NULL;
-        fRoundingDouble = 0.0;
-    }
+        if (fRoundingIncrement != NULL) {
+	        fRoundingIncrement->set((int32_t)newValue);
+	        fRoundingDouble = newValue;
+	        return;
+        }
+    } 
+    // These statements are executed if newValue is less than 0.0
+    // or fRoundingIncrement could not be created.
+    delete fRoundingIncrement;
+    fRoundingIncrement = NULL;
+    fRoundingDouble = 0.0;
 }
 
 /**
@@ -2501,7 +2509,8 @@ void DecimalFormat::expandAffix(const UnicodeString& pattern,
                     } else {
                         int32_t len;
                         UBool isChoiceFormat;
-                        const UChar* s = ucurr_getName(currencyUChars, fSymbols->getLocale().getName(),
+                        // If fSymbols is NULL, use default locale
+                        const UChar* s = ucurr_getName(currencyUChars, fSymbols != NULL ? fSymbols->getLocale().getName() : Locale::getDefault().getName(),
                                                        UCURR_SYMBOL_NAME, &isChoiceFormat, &len, &ec);
                         if (isChoiceFormat) {
                             // Two modes here: If doFormat is false, we set up
@@ -3714,8 +3723,13 @@ void DecimalFormat::setCurrency(const UChar* theCurrency) {
     setCurrency(theCurrency, ec);
 }
 
-void DecimalFormat::getEffectiveCurrency(UChar* result, UErrorCode& /*ec*/) const {
-    const UChar* c = getCurrency();
+void DecimalFormat::getEffectiveCurrency(UChar* result, UErrorCode& ec) const {
+    if (fSymbols == NULL) {
+    	ec = U_MEMORY_ALLOCATION_ERROR;
+    	return;
+    }
+    ec = U_ZERO_ERROR;
+	const UChar* c = getCurrency();
     if (*c == 0) {
         const UnicodeString &intl =
             fSymbols->getConstSymbol(DecimalFormatSymbols::kIntlCurrencySymbol);
