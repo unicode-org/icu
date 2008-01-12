@@ -1,7 +1,7 @@
 //##header J2SE15
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -227,7 +227,7 @@ final class DigitList {
         }
         return stringRep.toString();
     }
-    
+
 //#if defined(FOUNDATION10) || defined(J2SE13)
 //#else
     /**
@@ -238,8 +238,41 @@ final class DigitList {
      * @return the value of this object as a <code>BigDecimal</code>
      */
     public java.math.BigDecimal getBigDecimal(boolean isPositive) {
-        if (isZero()) return java.math.BigDecimal.valueOf(0);
-       return new java.math.BigDecimal(getStringRep(isPositive));
+        if (isZero()) {
+            return java.math.BigDecimal.valueOf(0);
+        }
+        // if exponential notion is negative,
+        // we prefer to use BigDecimal constructor with scale,
+        // because it works better when extremely small value
+        // is used.  See #5698.
+        long scale = (long)count - (long)decimalAt;
+        if (scale > 0) {
+            int numDigits = count;
+            if (scale > (long)Integer.MAX_VALUE) {
+                // try to reduce the scale
+                long numShift = scale - (long)Integer.MAX_VALUE;
+                if (numShift < count) {
+                    numDigits -= numShift;
+                } else {
+                    // fallback to 0
+                    return new java.math.BigDecimal(0);
+                }
+            }
+            StringBuffer significantDigits = new StringBuffer(numDigits + 1);
+            if (!isPositive) {
+                significantDigits.append('-');
+            }
+            for (int i = 0; i < numDigits; i++) {
+                significantDigits.append((char)digits[i]);
+            }
+            BigInteger unscaledVal = new BigInteger(significantDigits.toString());
+            return new java.math.BigDecimal(unscaledVal, (int)scale);
+        } else {
+            // We should be able to use a negative scale value for a positive exponential
+            // value on JDK1.5.  But it is not supported by older JDK.  So, for now,
+            // we always use BigDecimal constructor which takes String.
+            return new java.math.BigDecimal(getStringRep(isPositive));
+        }
     }
 //#endif
 
@@ -251,8 +284,38 @@ final class DigitList {
      * @return the value of this object as a <code>BigDecimal</code>
      */
     public com.ibm.icu.math.BigDecimal getBigDecimalICU(boolean isPositive) {
-        if (isZero()) return com.ibm.icu.math.BigDecimal.valueOf(0);
-       return new com.ibm.icu.math.BigDecimal(getStringRep(isPositive));
+        if (isZero()) {
+            return com.ibm.icu.math.BigDecimal.valueOf(0);
+        }
+        // if exponential notion is negative,
+        // we prefer to use BigDecimal constructor with scale,
+        // because it works better when extremely small value
+        // is used.  See #5698.
+        long scale = (long)count - (long)decimalAt;
+        if (scale > 0) {
+            int numDigits = count;
+            if (scale > (long)Integer.MAX_VALUE) {
+                // try to reduce the scale
+                long numShift = scale - (long)Integer.MAX_VALUE;
+                if (numShift < count) {
+                    numDigits -= numShift;
+                } else {
+                    // fallback to 0
+                    return new com.ibm.icu.math.BigDecimal(0);
+                }
+            }
+            StringBuffer significantDigits = new StringBuffer(numDigits + 1);
+            if (!isPositive) {
+                significantDigits.append('-');
+            }
+            for (int i = 0; i < numDigits; i++) {
+                significantDigits.append((char)digits[i]);
+            }
+            BigInteger unscaledVal = new BigInteger(significantDigits.toString());
+            return new com.ibm.icu.math.BigDecimal(unscaledVal, (int)scale);
+        } else {
+            return new com.ibm.icu.math.BigDecimal(getStringRep(isPositive));
+        }
     }
 
     /**
