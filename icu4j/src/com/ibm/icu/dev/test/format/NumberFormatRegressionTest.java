@@ -1,7 +1,7 @@
 //##header J2SE15
 /*
  *******************************************************************************
- * Copyright (C) 2001-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -228,6 +228,56 @@ public class NumberFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
                 if (expected[i]) {
                     errln("Failed: ParseException must not be thrown for string " + data[i]);
                 }
+            }
+        }
+    }
+
+    /*
+     * Test case for ticket#5698 - parsing extremely large/small values
+     */
+    public void TestT5698() {
+        final String[] data = {
+                "12345679E66666666666666666",
+                "-12345679E66666666666666666",
+                ".1E2147483648", // exponent > max int
+                ".1E2147483647", // exponent == max int
+                ".1E-2147483648", // exponent == min int
+                ".1E-2147483649", // exponent < min int
+                "1.23E350", // value > max double
+                "1.23E300", // value < max double
+                "-1.23E350", // value < min double
+                "-1.23E300", // value > min double
+                "4.9E-324", // value = smallest non-zero double
+                "1.0E-325", // 0 < value < smallest non-zero positive double0
+                "-1.0E-325", // 0 > value > largest non-zero negative double
+        };
+        final double[] expected = {
+                Double.POSITIVE_INFINITY,
+                Double.NEGATIVE_INFINITY,
+                Double.POSITIVE_INFINITY,
+                Double.POSITIVE_INFINITY,
+                0.0,
+                0.0,
+                Double.POSITIVE_INFINITY,
+                1.23e300d,
+                Double.NEGATIVE_INFINITY,
+                -1.23e300d,
+                4.9e-324d,
+                0.0,
+                -0.0,
+        };
+
+        NumberFormat nfmt = NumberFormat.getInstance();
+
+        for (int i = 0; i < data.length; i++) {
+            try {
+                Number n = nfmt.parse(data[i]);
+                if (expected[i] != n.doubleValue()) {
+                    errln("Failed: Parsed result for " + data[i] + ": " 
+                            + n.doubleValue() + " / expected: " + expected[i]);
+                }
+            } catch (ParseException pe) {
+                errln("Failed: ParseException is thrown for " + data[i]);
             }
         }
     }

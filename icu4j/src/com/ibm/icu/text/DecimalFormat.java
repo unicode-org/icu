@@ -1,7 +1,7 @@
 //##header J2SE15
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1651,9 +1651,14 @@ public class DecimalFormat extends NumberFormat {
                            : Double.NEGATIVE_INFINITY);
         }
 
+        // Handle underflow
+        else if (status[STATUS_UNDERFLOW]) {
+            n = status[STATUS_POSITIVE] ? new Double("0.0") : new Double("-0.0");
+        }
+
         // Handle -0.0
         else if (!status[STATUS_POSITIVE] && digitList.isZero()) {
-            n = new Double(-0.0);
+            n = new Double("-0.0");
         }
 
         else {
@@ -1689,7 +1694,6 @@ public class DecimalFormat extends NumberFormat {
                         (Number) new Long(big.longValue()) : (Number) big;
                 }
             }
-
             // Handle non-integral values or the case where parseBigDecimal is set
             else {
                 BigDecimal big = digitList.getBigDecimalICU(status[STATUS_POSITIVE]);
@@ -1708,7 +1712,8 @@ public class DecimalFormat extends NumberFormat {
 
     private static final int STATUS_INFINITE = 0;
     private static final int STATUS_POSITIVE = 1;
-    private static final int STATUS_LENGTH   = 2;
+    private static final int STATUS_UNDERFLOW = 2;
+    private static final int STATUS_LENGTH   = 3;
     private static final UnicodeSet dotEquivalents =(UnicodeSet) new UnicodeSet(
         "[.\u2024\u3002\uFE12\uFE52\uFF0E\uFF61]").freeze();
     private static final UnicodeSet commaEquivalents = (UnicodeSet) new UnicodeSet(
@@ -1727,6 +1732,14 @@ public class DecimalFormat extends NumberFormat {
         dotEquivalents).addAll(commaEquivalents).addAll(otherGroupingSeparators).freeze();
     private static final UnicodeSet strictDefaultGroupingSeparators = (UnicodeSet) new UnicodeSet(
             strictDotEquivalents).addAll(strictCommaEquivalents).addAll(strictOtherGroupingSeparators).freeze();
+
+    // When parsing a number with big exponential value, it requires to transform
+    // the value into a string representation to construct BigInteger instance.
+    // We want to set the maximum size because it can easily trigger OutOfMemoryException.
+    // PARSE_MAX_EXPONENT is currently set to 1000, which is much bigger than
+    // MAX_VALUE of Double (
+    // See the problem reported by ticket#5698
+    private static final int PARSE_MAX_EXPONENT = 1000;
 
     /**
      * <strong><font face=helvetica color=red>CHANGED</font></strong>
@@ -1806,7 +1819,7 @@ public class DecimalFormat extends NumberFormat {
             boolean sawDecimal = false;
             boolean sawExponent = false;
             boolean sawDigit = false;
-            int exponent = 0; // Set to the exponent value, if any
+            long exponent = 0; // Set to the exponent value, if any
             int digit = 0;
 
             // strict parsing
@@ -2012,10 +2025,22 @@ public class DecimalFormat extends NumberFormat {
                             }
                         }
 
-                        exponentDigits.decimalAt = exponentDigits.count;
-                        exponent = (int) exponentDigits.getLong();
-                        if (negExp) {
-                            exponent = -exponent;
+                        // Quick overflow check for exponential part.
+                        // Actual limit check will be done later in this code.
+                        if (exponentDigits.count > 10 /* maximum decimal digits for int */) {
+                            if (negExp) {
+                                // set underflow flag
+                                status[STATUS_UNDERFLOW] = true;
+                            } else {
+                                // set infinite flag
+                                status[STATUS_INFINITE] = true;
+                            }
+                        } else {
+                            exponentDigits.decimalAt = exponentDigits.count;
+                            exponent = exponentDigits.getLong();
+                            if (negExp) {
+                                exponent = -exponent;
+                            }
                         }
                         position = pos; // Advance past the exponent
                         sawExponent = true;
@@ -2048,7 +2073,14 @@ public class DecimalFormat extends NumberFormat {
             if (!sawDecimal) digits.decimalAt = digitCount; // Not digits.count!
 
             // Adjust for exponent, if any
-            digits.decimalAt += exponent;
+            exponent += digits.decimalAt;
+            if (exponent < -PARSE_MAX_EXPONENT) {
+                status[STATUS_UNDERFLOW] = true;
+            } else if (exponent > PARSE_MAX_EXPONENT) {
+                status[STATUS_INFINITE] = true;
+            } else {
+                digits.decimalAt = (int)exponent;
+            }
 
             // If none of the text string was recognized.  For example, parse
             // "x" with pattern "#0.00" (return index and error index both 0)
