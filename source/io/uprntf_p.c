@@ -1105,7 +1105,7 @@ ufmt_args* parseArguments(const UChar *alias, va_list ap) {
 			uprv_free(arglist);
 		}
 		
-		arglist = -1;
+		arglist = NULL;
 		goto endParse;
 	}
 	
@@ -1225,8 +1225,8 @@ u_printf_parse(const u_printf_stream_handler *streamHandler,
     	arglist = parseArguments(orgAlias, ap);
     	
     	/* Return error if parsing failed. */
-	    if (arglist == -1) {
-	    	return arglist;
+	    if (arglist == NULL) {
+	    	return -1;
 	    }
     }
     
