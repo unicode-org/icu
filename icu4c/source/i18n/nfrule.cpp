@@ -946,17 +946,14 @@ NFRule::doParse(const UnicodeString& text,
 void
 NFRule::stripPrefix(UnicodeString& text, const UnicodeString& prefix, ParsePosition& pp) const
 {
-	UErrorCode err;
     // if the prefix text is empty, dump out without doing anything
     if (prefix.length() != 0) {
         // use prefixLength() to match the beginning of
         // "text" against "prefix".  This function returns the
         // number of characters from "text" that matched (or 0 if
         // we didn't match the whole prefix)
-        int32_t pfl = prefixLength(text, prefix, err);
-        // The only error message we care about is 
-        // memory allocation problems.
-        if (err != U_MEMORY_ALLOCATION_ERROR && pfl != 0) {
+        int32_t pfl = prefixLength(text, prefix);
+        if (pfl != 0) {
             // if we got a successful match, update the parse position
             // and strip the prefix off of "text"
             pp.setIndex(pp.getIndex() + pfl);
@@ -1115,7 +1112,7 @@ NFRule::matchToDelimiter(const UnicodeString& text,
 * text with a collator).  If there's no match, this is 0.
 */
 int32_t
-NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix, UErrorCode& err) const
+NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix) const
 {
     // if we're looking for an empty prefix, it obviously matches
     // zero characters.  Just go ahead and return 0.
@@ -1136,14 +1133,8 @@ NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix, UErr
         RuleBasedCollator* collator = (RuleBasedCollator*)formatter->getCollator();
         CollationElementIterator* strIter = collator->createCollationElementIterator(str);
         CollationElementIterator* prefixIter = collator->createCollationElementIterator(prefix);
-        
-        // Memory allocation error.
-        if (collator == NULL || strIter == NULL || prefixIter == NULL) {
-        	err = U_MEMORY_ALLOCATION_ERROR;
-        	return -1;
-        }
 
-        err = U_ZERO_ERROR;
+        UErrorCode err = U_ZERO_ERROR;
 
         // The original code was problematic.  Consider this match:
         // prefix = "fifty-"
@@ -1309,7 +1300,6 @@ NFRule::findText(const UnicodeString& str,
                  int32_t startingAt,
                  int32_t* length) const
 {
-	UErrorCode err;
 #if !UCONFIG_NO_COLLATION
     // if lenient parsing is turned off, this is easy: just call
     // String.indexOf() and we're done
@@ -1343,12 +1333,7 @@ NFRule::findText(const UnicodeString& str,
         UnicodeString temp;
         while (p < str.length() && keyLen == 0) {
             temp.setTo(str, p, str.length() - p);
-            keyLen = prefixLength(temp, key, err);
-            // The only error message we care about right now is
-            // memory allocation error.
-            if (err == U_MEMORY_ALLOCATION_ERROR) {
-            	break;
-            }
+            keyLen = prefixLength(temp, key);
             if (keyLen != 0) {
                 *length = keyLen;
                 return p;
@@ -1437,10 +1422,6 @@ NFRule::allIgnorable(const UnicodeString& str) const
     if (formatter->isLenient()) {
         RuleBasedCollator* collator = (RuleBasedCollator*)(formatter->getCollator());
         CollationElementIterator* iter = collator->createCollationElementIterator(str);
-        // If memory allocation failed, return false since lenient is turned on.
-        if (collator == NULL || iter == NULL) {
-        	return FALSE;
-        }
 
         UErrorCode err = U_ZERO_ERROR;
         int32_t o = iter->next(err);
