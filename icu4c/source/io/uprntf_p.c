@@ -1037,7 +1037,7 @@ static const u_printf_info g_u_printf_infos[UPRINTF_NUM_FMT_HANDLERS] = {
             (s) == MOD_LOWERL || \
             (s) == MOD_L
 /* Returns an array of the parsed argument type given in the format string. */
-ufmt_args* parseArguments(const UChar *alias, va_list ap) {
+ufmt_args* parseArguments(const UChar *alias, va_list ap, UErrorCode *status) {
 	ufmt_args *arglist = NULL;
 	ufmt_type_info *typelist = NULL;
 	UBool *islonglong = NULL;
@@ -1105,8 +1105,8 @@ ufmt_args* parseArguments(const UChar *alias, va_list ap) {
 			uprv_free(arglist);
 		}
 		
-		arglist = NULL;
-		goto endParse;
+		*status = U_MEMORY_ALLOCATION_ERROR;
+		return NULL;
 	}
 	
 	/* reset alias back to the beginning */
@@ -1192,7 +1192,7 @@ ufmt_args* parseArguments(const UChar *alias, va_list ap) {
 	
 	uprv_free(typelist);
 	uprv_free(islonglong);
-endParse:	
+
 	return arglist;
 }
 
@@ -1219,13 +1219,13 @@ u_printf_parse(const u_printf_stream_handler *streamHandler,
     const UChar *orgAlias = fmt;
     /* parsed argument list */
     ufmt_args *arglist;
-    
+    UErrorCode status = U_ZERO_ERROR;
     if (!locStringContext || locStringContext->available >= 0) {
     	/* get the parsed list of argument types */
-    	arglist = parseArguments(orgAlias, ap);
+    	arglist = parseArguments(orgAlias, ap, &status);
     	
     	/* Return error if parsing failed. */
-	    if (arglist == NULL) {
+	    if (U_FAILURE(status)) {
 	    	return -1;
 	    }
     }
