@@ -307,6 +307,11 @@ void    RegexCompile::compile(
     //
     int32_t numSets = fRXPat->fSets->size();
     fRXPat->fSets8 = new Regex8BitSet[numSets];
+    // Null pointer check.
+    if (fRXPat->fSets8 == NULL) {
+    	e = *fStatus = U_MEMORY_ALLOCATION_ERROR;
+    	return;
+    }
     int32_t i;
     for (i=0; i<numSets; i++) {
         UnicodeSet *s = (UnicodeSet *)fRXPat->fSets->elementAt(i);
