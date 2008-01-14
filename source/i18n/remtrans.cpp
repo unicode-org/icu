@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2005, International Business Machines
+*   Copyright (c) 2001-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -47,7 +47,7 @@ RemoveTransliterator::~RemoveTransliterator() {}
 
 Transliterator* RemoveTransliterator::clone(void) const {
     Transliterator* result = new RemoveTransliterator();
-    if (getFilter() != 0) {
+    if (result != NULL && getFilter() != 0) {
         result->adoptFilter((UnicodeFilter*)(getFilter()->clone()));
     }
     return result;
