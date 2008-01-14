@@ -3,7 +3,7 @@
 //
 /*
 ***************************************************************************
-*   Copyright (C) 2002-2005 International Business Machines Corporation   *
+*   Copyright (C) 2002-2008 International Business Machines Corporation   *
 *   and others. All rights reserved.                                      *
 ***************************************************************************
 */
@@ -137,6 +137,10 @@ void RBBISetBuilder::build() {
     //  that is in no sets.
     //
     fRangeList                = new RangeDescriptor(*fStatus); // will check for status here
+    if (fRangeList == NULL) {
+    	*fStatus = U_MEMORY_ALLOCATION_ERROR;
+    	return;
+    }
     fRangeList->fStartChar    = 0;
     fRangeList->fEndChar      = 0x10ffff;
 
@@ -354,6 +358,10 @@ void  RBBISetBuilder::addValToSets(UVector *sets, uint32_t val) {
 
 void  RBBISetBuilder::addValToSet(RBBINode *usetNode, uint32_t val) {
     RBBINode *leafNode = new RBBINode(RBBINode::leafChar);
+    if (leafNode == NULL) {
+    	*fStatus = U_MEMORY_ALLOCATION_ERROR;
+    	return;
+    }
     leafNode->fVal = (unsigned short)val;
     if (usetNode->fLeftChild == NULL) {
         usetNode->fLeftChild = leafNode;
@@ -363,6 +371,10 @@ void  RBBISetBuilder::addValToSet(RBBINode *usetNode, uint32_t val) {
         // Set up an OR node, with the previous stuff as the left child
         //   and the new value as the right child.
         RBBINode *orNode = new RBBINode(RBBINode::opOr);
+        if (orNode == NULL) {
+        	*fStatus = U_MEMORY_ALLOCATION_ERROR;
+        	return;
+        }
         orNode->fLeftChild  = usetNode->fLeftChild;
         orNode->fRightChild = leafNode;
         orNode->fLeftChild->fParent  = orNode;
