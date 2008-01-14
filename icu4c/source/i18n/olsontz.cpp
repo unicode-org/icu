@@ -713,7 +713,7 @@ OlsonTimeZone::initTransitionRules(UErrorCode& status) {
             firstTZTransition = new TimeZoneTransition(((UDate)transitionTimes[firstTZTransitionIdx]) * U_MILLIS_PER_SECOND,
                     *initialRule, *historicRules[typeIdx]);
             // Check to make sure firstTZTransition was created.
-            if (firstTZTransition = NULL) {
+            if (firstTZTransition == NULL) {
             	status = U_MEMORY_ALLOCATION_ERROR;
             	deleteTransitionRules();
             	return;
