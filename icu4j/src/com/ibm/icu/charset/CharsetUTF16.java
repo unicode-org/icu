@@ -35,7 +35,7 @@ class CharsetUTF16 extends CharsetICU {
     private byte[] bom;
     private byte[] fromUSubstitution;
 
-    protected CharsetUTF16(String icuCanonicalName, String javaCanonicalName, String[] aliases) {
+    public CharsetUTF16(String icuCanonicalName, String javaCanonicalName, String[] aliases) {
         super(icuCanonicalName, javaCanonicalName, aliases);
 
         this.isEndianSpecified = (this instanceof CharsetUTF16BE || this instanceof CharsetUTF16LE);
@@ -201,12 +201,12 @@ class CharsetUTF16 extends CharsetICU {
 
         public CharsetEncoderUTF16(CharsetICU cs) {
             super(cs, fromUSubstitution);
-            fromUnicodeStatus = isEndianSpecified ? NEED_TO_WRITE_BOM : 0;
+            fromUnicodeStatus = isEndianSpecified ? 0 : NEED_TO_WRITE_BOM;
         }
 
         protected void implReset() {
             super.implReset();
-            fromUnicodeStatus = isEndianSpecified ? NEED_TO_WRITE_BOM : 0;
+            fromUnicodeStatus = isEndianSpecified ? 0 : NEED_TO_WRITE_BOM;
         }
 
         protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush) {
@@ -214,8 +214,6 @@ class CharsetUTF16 extends CharsetICU {
 
             /* write the BOM if necessary */
             if (fromUnicodeStatus == NEED_TO_WRITE_BOM) {
-                if (!source.hasRemaining())
-                    return CoderResult.UNDERFLOW;
                 if (!target.hasRemaining())
                     return CoderResult.OVERFLOW;
 
@@ -226,6 +224,9 @@ class CharsetUTF16 extends CharsetICU {
             }
 
             if (fromUChar32 != 0) {
+                if (!target.hasRemaining())
+                    return CoderResult.OVERFLOW;
+
                 // a note: fromUChar32 will either be 0 or a lead surrogate
                 cr = encodeChar(source, target, offsets, (char) fromUChar32);
                 if (cr != null)
@@ -233,6 +234,11 @@ class CharsetUTF16 extends CharsetICU {
             }
 
             while (true) {
+                if (!source.hasRemaining())
+                    return CoderResult.UNDERFLOW;
+                if (!target.hasRemaining())
+                    return CoderResult.OVERFLOW;
+
                 cr = encodeChar(source, target, offsets, source.get());
                 if (cr != null)
                     return cr;
@@ -240,11 +246,6 @@ class CharsetUTF16 extends CharsetICU {
         }
 
         private final CoderResult encodeChar(CharBuffer source, ByteBuffer target, IntBuffer offsets, char ch) {
-            if (!source.hasRemaining())
-                return CoderResult.UNDERFLOW;
-            if (!target.hasRemaining())
-                return CoderResult.OVERFLOW;
-
             int sourceIndex = source.position() - 1;
             CoderResult cr;
 

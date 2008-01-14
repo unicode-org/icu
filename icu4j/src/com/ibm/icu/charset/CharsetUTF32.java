@@ -35,7 +35,7 @@ class CharsetUTF32 extends CharsetICU {
     private byte[] bom;
     private byte[] fromUSubstitution;
 
-    protected CharsetUTF32(String icuCanonicalName, String javaCanonicalName, String[] aliases) {
+    public CharsetUTF32(String icuCanonicalName, String javaCanonicalName, String[] aliases) {
         super(icuCanonicalName, javaCanonicalName, aliases);
 
         this.isEndianSpecified = (this instanceof CharsetUTF32BE || this instanceof CharsetUTF32LE);
@@ -57,7 +57,7 @@ class CharsetUTF32 extends CharsetICU {
     }
 
     class CharsetDecoderUTF32 extends CharsetDecoderICU {
-        
+
         private boolean isBOMReadYet;
         private int actualEndianXOR;
         private byte[] actualBOM;
@@ -165,24 +165,22 @@ class CharsetUTF32 extends CharsetICU {
 
         public CharsetEncoderUTF32(CharsetICU cs) {
             super(cs, fromUSubstitution);
-            fromUnicodeStatus = isEndianSpecified ? NEED_TO_WRITE_BOM : 0;
+            fromUnicodeStatus = isEndianSpecified ? 0 : NEED_TO_WRITE_BOM;
         }
 
         protected void implReset() {
             super.implReset();
-            fromUnicodeStatus = isEndianSpecified ? NEED_TO_WRITE_BOM : 0;
+            fromUnicodeStatus = isEndianSpecified ? 0 : NEED_TO_WRITE_BOM;
         }
 
         protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush) {
-            if (!source.hasRemaining())
-                return CoderResult.UNDERFLOW;
-            if (!target.hasRemaining())
-                return CoderResult.OVERFLOW;
-
             CoderResult cr;
 
             /* write the BOM if necessary */
             if (fromUnicodeStatus == NEED_TO_WRITE_BOM) {
+                if (!target.hasRemaining())
+                    return CoderResult.OVERFLOW;
+
                 fromUnicodeStatus = 0;
                 cr = fromUWriteBytes(this, bom, 0, bom.length, target, offsets, -1);
                 if (cr.isOverflow())
@@ -190,6 +188,9 @@ class CharsetUTF32 extends CharsetICU {
             }
 
             if (fromUChar32 != 0) {
+                if (!target.hasRemaining())
+                    return CoderResult.OVERFLOW;
+
                 // a note: fromUChar32 will either be 0 or a lead surrogate
                 cr = encodeChar(source, target, offsets, (char) fromUChar32);
                 if (cr != null)

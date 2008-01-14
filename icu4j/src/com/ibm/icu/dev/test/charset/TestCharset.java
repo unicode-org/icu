@@ -66,6 +66,10 @@ public class TestCharset extends TestFmwk {
     
     protected void init(){
         try{
+            if ("UTF-16".equals(m_encoding)) {
+                int x = 2;
+                x++;
+            }
             CharsetProviderICU provider = new CharsetProviderICU();
             //Charset charset = CharsetICU.forName(encoding);
             m_charset = provider.charsetForName(m_encoding);
@@ -3842,8 +3846,9 @@ public class TestCharset extends TestFmwk {
        
         result = encoder.encode(us, bs, true);
         
-        if (!result.isOverflow()) {
-            errln("Overflow while encoding UTF-16LE (1) should have occured.");
+        if (!result.isMalformed()) {
+            // LE should not output BOM, so this should be malformed 
+            errln("Malformed while encoding UTF-16LE (1) should have occured.");
         }
         
         // Test for malform surrogate from previous buffer
