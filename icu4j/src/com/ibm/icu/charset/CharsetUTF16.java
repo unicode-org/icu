@@ -1,11 +1,9 @@
 /**
-*******************************************************************************
-* Copyright (C) 2006-2007, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
-*******************************************************************************
-*
-*******************************************************************************
-*/ 
+ *******************************************************************************
+ * Copyright (C) 2006-2008, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ */
 package com.ibm.icu.charset;
 
 import java.nio.ByteBuffer;
@@ -17,32 +15,33 @@ import java.nio.charset.CoderResult;
 
 import com.ibm.icu.text.UTF16;
 
+/**
+ * @author Niti Hantaweepant
+ */
 class CharsetUTF16 extends CharsetICU {
-    
+
     private static final int SIGNATURE_LENGTH = 2;
-    private static final byte[] fromUSubstitution_BE = { (byte)0xff, (byte)0xfd };
-    private static final byte[] fromUSubstitution_LE = { (byte)0xfd, (byte)0xff };
+    private static final byte[] fromUSubstitution_BE = { (byte) 0xff, (byte) 0xfd };
+    private static final byte[] fromUSubstitution_LE = { (byte) 0xfd, (byte) 0xff };
     private static final byte[] BOM_BE = { (byte) 0xfe, (byte) 0xff };
     private static final byte[] BOM_LE = { (byte) 0xff, (byte) 0xfe };
     private static final int ENDIAN_XOR_BE = 0;
     private static final int ENDIAN_XOR_LE = 1;
-    
-    private boolean useBOM;
+    private static final int NEED_TO_WRITE_BOM = 1;
+
+    private boolean isEndianSpecified;
     private boolean isBigEndian;
     private int endianXOR;
     private byte[] bom;
     private byte[] fromUSubstitution;
-    
-    public CharsetUTF16(String icuCanonicalName, String javaCanonicalName, String[] aliases){
-        this(icuCanonicalName, javaCanonicalName, aliases, true, false);
-    }
-    
-    protected CharsetUTF16(String icuCanonicalName, String javaCanonicalName, String[] aliases, boolean bigEndian, boolean useBOM){
+
+    protected CharsetUTF16(String icuCanonicalName, String javaCanonicalName, String[] aliases) {
         super(icuCanonicalName, javaCanonicalName, aliases);
-        
-        this.useBOM = useBOM;
-        this.isBigEndian = bigEndian;
-        if (bigEndian) {
+
+        this.isEndianSpecified = (this instanceof CharsetUTF16BE || this instanceof CharsetUTF16LE);
+        this.isBigEndian = !(this instanceof CharsetUTF16LE);
+
+        if (isBigEndian) {
             this.bom = BOM_BE;
             this.fromUSubstitution = fromUSubstitution_BE;
             this.endianXOR = ENDIAN_XOR_BE;
@@ -51,48 +50,49 @@ class CharsetUTF16 extends CharsetICU {
             this.fromUSubstitution = fromUSubstitution_LE;
             this.endianXOR = ENDIAN_XOR_LE;
         }
-        
+
         maxBytesPerChar = 2;
         minBytesPerChar = 2;
         maxCharsPerByte = 1;
     }
-    
-    
-    class CharsetDecoderUTF16 extends CharsetDecoderICU{
-        private boolean needToReadBOM;
+
+    class CharsetDecoderUTF16 extends CharsetDecoderICU {
+        
+        private boolean isBOMReadYet;
         private int actualEndianXOR;
         private byte[] actualBOM;
-        
+
         public CharsetDecoderUTF16(CharsetICU cs) {
             super(cs);
-            implReset();
         }
-        
+
         protected void implReset() {
             super.implReset();
-            needToReadBOM = true;
+            isBOMReadYet = false;
             actualBOM = null;
         }
-        
-        protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush){
+
+        protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) {
             /*
-             * If we detect a BOM in this buffer, then we must add the BOM size to the
-             * offsets because the actual converter function will not see and count the BOM.
-             * offsetDelta will have the number of the BOM bytes that are in the current buffer.
+             * If we detect a BOM in this buffer, then we must add the BOM size to the offsets because the actual
+             * converter function will not see and count the BOM. offsetDelta will have the number of the BOM bytes that
+             * are in the current buffer.
              */
-            if (needToReadBOM) {
+            if (!isBOMReadYet) {
                 while (true) {
                     if (!source.hasRemaining())
                         return CoderResult.UNDERFLOW;
-                    
+
                     toUBytesArray[toULength++] = source.get();
-                    
+
                     if (toULength == 1) {
                         // on the first byte, we haven't decided whether or not it's bigEndian yet
-                        if ((!useBOM || isBigEndian) && toUBytesArray[toULength-1] == BOM_BE[toULength-1]) {
+                        if ((!isEndianSpecified || isBigEndian)
+                                && toUBytesArray[toULength - 1] == BOM_BE[toULength - 1]) {
                             actualBOM = BOM_BE;
                             actualEndianXOR = ENDIAN_XOR_BE;
-                        } else if ((!useBOM || !isBigEndian) && toUBytesArray[toULength-1] == BOM_LE[toULength-1]) {
+                        } else if ((!isEndianSpecified || !isBigEndian)
+                                && toUBytesArray[toULength - 1] == BOM_LE[toULength - 1]) {
                             actualBOM = BOM_LE;
                             actualEndianXOR = ENDIAN_XOR_LE;
                         } else {
@@ -101,7 +101,7 @@ class CharsetUTF16 extends CharsetICU {
                             actualEndianXOR = endianXOR;
                             break;
                         }
-                    } else if (toUBytesArray[toULength-1] != actualBOM[toULength-1]) {
+                    } else if (toUBytesArray[toULength - 1] != actualBOM[toULength - 1]) {
                         // we do not have a BOM (and we have toULength bytes)
                         actualBOM = null;
                         actualEndianXOR = endianXOR;
@@ -113,34 +113,33 @@ class CharsetUTF16 extends CharsetICU {
                         break;
                     }
                 }
-                
-                needToReadBOM = false;
+
+                isBOMReadYet = true;
             }
-            
+
             // now that we no longer need to look for a BOM, let's do some work
-            
+
             // if we have unfinished business
             if (toUnicodeStatus != 0) {
                 CoderResult cr = decodeTrail(source, target, offsets, (char) toUnicodeStatus);
                 if (cr != null)
                     return cr;
             }
-            
+
             char char16;
-            
+
             while (true) {
                 while (toULength < 2) {
                     if (!source.hasRemaining())
                         return CoderResult.UNDERFLOW;
                     toUBytesArray[toULength++] = source.get();
                 }
-                
+
                 if (!target.hasRemaining())
                     return CoderResult.OVERFLOW;
-                
-                char16 = (char) ( ((toUBytesArray[0 ^ actualEndianXOR] & UConverterConstants.UNSIGNED_BYTE_MASK) << 8)
-                                | ((toUBytesArray[1 ^ actualEndianXOR] & UConverterConstants.UNSIGNED_BYTE_MASK)     ) );
-                
+
+                char16 = (char) (((toUBytesArray[0 ^ actualEndianXOR] & UConverterConstants.UNSIGNED_BYTE_MASK) << 8) | ((toUBytesArray[1 ^ actualEndianXOR] & UConverterConstants.UNSIGNED_BYTE_MASK)));
+
                 if (!UTF16.isSurrogate(char16)) {
                     toULength = 0;
                     target.put(char16);
@@ -151,14 +150,14 @@ class CharsetUTF16 extends CharsetICU {
                 }
             }
         }
-        
+
         private final CoderResult decodeTrail(ByteBuffer source, CharBuffer target, IntBuffer offsets, char lead) {
             if (!UTF16.isLeadSurrogate(lead)) {
                 // 2 bytes, lead malformed
                 toUnicodeStatus = 0;
                 return CoderResult.malformedForLength(2);
             }
-            
+
             while (toULength < 4) {
                 if (!source.hasRemaining()) {
                     // let this be unfinished business
@@ -167,25 +166,24 @@ class CharsetUTF16 extends CharsetICU {
                 }
                 toUBytesArray[toULength++] = source.get();
             }
-            
-            char trail = (char) ( ((toUBytesArray[2 ^ actualEndianXOR] & UConverterConstants.UNSIGNED_BYTE_MASK) << 8)
-                                | ((toUBytesArray[3 ^ actualEndianXOR] & UConverterConstants.UNSIGNED_BYTE_MASK)     ) );
-            
+
+            char trail = (char) (((toUBytesArray[2 ^ actualEndianXOR] & UConverterConstants.UNSIGNED_BYTE_MASK) << 8) | ((toUBytesArray[3 ^ actualEndianXOR] & UConverterConstants.UNSIGNED_BYTE_MASK)));
+
             if (!UTF16.isTrailSurrogate(trail)) {
-                // pretend like we didnt read the last 2 bytes 
+                // pretend like we didnt read the last 2 bytes
                 toULength = 2;
                 source.position(source.position() - 2);
-                
+
                 // 2 bytes, lead malformed
                 toUnicodeStatus = 0;
                 return CoderResult.malformedForLength(2);
             }
-            
+
             toUnicodeStatus = 0;
             toULength = 0;
-            
+
             target.put(lead);
-            
+
             if (target.hasRemaining()) {
                 target.put(trail);
                 return null;
@@ -197,60 +195,59 @@ class CharsetUTF16 extends CharsetICU {
             }
         }
     }
-    
-    class CharsetEncoderUTF16 extends CharsetEncoderICU{
+
+    class CharsetEncoderUTF16 extends CharsetEncoderICU {
         private final byte[] temp = new byte[4];
-        private boolean needToWriteBOM;
-        
+
         public CharsetEncoderUTF16(CharsetICU cs) {
             super(cs, fromUSubstitution);
-            implReset();
+            fromUnicodeStatus = isEndianSpecified ? NEED_TO_WRITE_BOM : 0;
         }
 
         protected void implReset() {
             super.implReset();
-            needToWriteBOM = true;
+            fromUnicodeStatus = isEndianSpecified ? NEED_TO_WRITE_BOM : 0;
         }
-        
-        protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush){
-            if (!source.hasRemaining())
-                return CoderResult.UNDERFLOW;
-            if (!target.hasRemaining())
-                return CoderResult.OVERFLOW;
-            
+
+        protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush) {
             CoderResult cr;
 
             /* write the BOM if necessary */
-            if (/*useBOM &&*/ needToWriteBOM) {
-                needToWriteBOM = false;
-                cr = fromUWriteBytes(this, bom, 0, bom.length, target, offsets, -1);
-                if (cr.isOverflow())
-                    return cr;
-            }
-            
-            if (fromUChar32 != 0) {
-                // a note: fromUChar32 will either be 0 or a lead surrogate
-                cr = encodeChar(source, target, offsets, (char)fromUChar32);
-                if (cr != null)
-                    return cr;
-            }
-
-            while (true) {
+            if (fromUnicodeStatus == NEED_TO_WRITE_BOM) {
                 if (!source.hasRemaining())
                     return CoderResult.UNDERFLOW;
                 if (!target.hasRemaining())
                     return CoderResult.OVERFLOW;
 
+                fromUnicodeStatus = 0;
+                cr = fromUWriteBytes(this, bom, 0, bom.length, target, offsets, -1);
+                if (cr.isOverflow())
+                    return cr;
+            }
+
+            if (fromUChar32 != 0) {
+                // a note: fromUChar32 will either be 0 or a lead surrogate
+                cr = encodeChar(source, target, offsets, (char) fromUChar32);
+                if (cr != null)
+                    return cr;
+            }
+
+            while (true) {
                 cr = encodeChar(source, target, offsets, source.get());
                 if (cr != null)
                     return cr;
             }
         }
-        
+
         private final CoderResult encodeChar(CharBuffer source, ByteBuffer target, IntBuffer offsets, char ch) {
+            if (!source.hasRemaining())
+                return CoderResult.UNDERFLOW;
+            if (!target.hasRemaining())
+                return CoderResult.OVERFLOW;
+
             int sourceIndex = source.position() - 1;
             CoderResult cr;
-            
+
             if (UTF16.isSurrogate(ch)) {
                 cr = handleSurrogates(source, ch);
                 if (cr != null)
@@ -258,7 +255,7 @@ class CharsetUTF16 extends CharsetICU {
 
                 char trail = UTF16.getTrailSurrogate(fromUChar32);
                 fromUChar32 = 0;
-                
+
                 // 4 bytes
                 temp[0 ^ endianXOR] = (byte) (ch >>> 8);
                 temp[1 ^ endianXOR] = (byte) (ch);
@@ -271,15 +268,35 @@ class CharsetUTF16 extends CharsetICU {
                 temp[1 ^ endianXOR] = (byte) (ch);
                 cr = fromUWriteBytes(this, temp, 0, 2, target, offsets, sourceIndex);
             }
-            return (cr.isUnderflow() ? null : cr); 
+            return (cr.isUnderflow() ? null : cr);
         }
     }
-    
+
     public CharsetDecoder newDecoder() {
         return new CharsetDecoderUTF16(this);
     }
 
     public CharsetEncoder newEncoder() {
         return new CharsetEncoderUTF16(this);
+    }
+}
+
+/**
+ * The purpose of this class is to set isBigEndian to true and isEndianSpecified to true in the super class, and to
+ * allow the Charset framework to open the variant UTF-16 converter without extra setup work.
+ */
+class CharsetUTF16BE extends CharsetUTF16 {
+    public CharsetUTF16BE(String icuCanonicalName, String javaCanonicalName, String[] aliases) {
+        super(icuCanonicalName, javaCanonicalName, aliases);
+    }
+}
+
+/**
+ * The purpose of this class is to set isBigEndian to false and isEndianSpecified to true in the super class, and to
+ * allow the Charset framework to open the variant UTF-16 converter without extra setup work.
+ */
+class CharsetUTF16LE extends CharsetUTF16 {
+    public CharsetUTF16LE(String icuCanonicalName, String javaCanonicalName, String[] aliases) {
+        super(icuCanonicalName, javaCanonicalName, aliases);
     }
 }
