@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2007, International Business Machines
+* Copyright (c) 2003-2008, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -195,6 +195,10 @@ OlsonTimeZone::OlsonTimeZone(const UResourceBundle* top,
                                 data[8] * U_MILLIS_PER_SECOND,
                                 (SimpleTimeZone::TimeMode) data[9],
                                 data[10] * U_MILLIS_PER_SECOND, ec);
+                            // Make sure finalZone was created
+                            if (finalZone == NULL) {
+                            	ec = U_MEMORY_ALLOCATION_ERROR;
+                            }
                         } else {
                             ec = U_INVALID_FORMAT_ERROR;
                         }
@@ -644,6 +648,12 @@ OlsonTimeZone::initTransitionRules(UErrorCode& status) {
         raw = rawOffset(typeIdx) * U_MILLIS_PER_SECOND;
         dst = dstOffset(typeIdx) * U_MILLIS_PER_SECOND;
         initialRule = new InitialTimeZoneRule((dst == 0 ? stdName : dstName), raw, dst);
+        // Check to make sure initialRule was created
+        if (initialRule == NULL) {
+        	status = U_MEMORY_ALLOCATION_ERROR;
+        	deleteTransitionRules();
+        	return;
+        }
 
         firstTZTransitionIdx = 0;
         for (transitionIdx = 1; transitionIdx < transitionCount; transitionIdx++) {
@@ -702,6 +712,12 @@ OlsonTimeZone::initTransitionRules(UErrorCode& status) {
             typeIdx = (int16_t)typeData[firstTZTransitionIdx];
             firstTZTransition = new TimeZoneTransition(((UDate)transitionTimes[firstTZTransitionIdx]) * U_MILLIS_PER_SECOND,
                     *initialRule, *historicRules[typeIdx]);
+            // Check to make sure firstTZTransition was created.
+            if (firstTZTransition = NULL) {
+            	status = U_MEMORY_ALLOCATION_ERROR;
+            	deleteTransitionRules();
+            	return;
+            }
         }
     }
     if (initialRule == NULL) {
@@ -709,6 +725,12 @@ OlsonTimeZone::initTransitionRules(UErrorCode& status) {
         raw = rawOffset(0) * U_MILLIS_PER_SECOND;
         dst = dstOffset(0) * U_MILLIS_PER_SECOND;
         initialRule = new InitialTimeZoneRule((dst == 0 ? stdName : dstName), raw, dst);
+        // Check to make sure initialRule was created.
+        if (initialRule == NULL) {
+        	status = U_MEMORY_ALLOCATION_ERROR;
+        	deleteTransitionRules();
+        	return;
+        }
     }
     if (finalZone != NULL) {
         // Get the first occurence of final rule starts
@@ -724,6 +746,12 @@ OlsonTimeZone::initTransitionRules(UErrorCode& status) {
              * start year when extracting rules.
              */
             finalZoneWithStartYear = (SimpleTimeZone*)finalZone->clone();
+            // Check to make sure finalZone was actually cloned.
+            if (finalZoneWithStartYear == NULL) {
+            	status = U_MEMORY_ALLOCATION_ERROR;
+            	deleteTransitionRules();
+            	return;
+            }
             // finalYear is 1 year before the actual final year.
             // See the comment in the construction method.
             finalZoneWithStartYear->setStartYear(finalYear + 1);
@@ -731,12 +759,30 @@ OlsonTimeZone::initTransitionRules(UErrorCode& status) {
             TimeZoneTransition tzt;
             finalZoneWithStartYear->getNextTransition(startTime, false, tzt);
             firstFinalRule  = tzt.getTo()->clone();
+            // Check to make sure firstFinalRule received proper clone.
+            if (firstFinalRule == NULL) {
+            	status = U_MEMORY_ALLOCATION_ERROR;
+	        	deleteTransitionRules();
+	        	return;
+            }
             startTime = tzt.getTime();
         } else {
             finalZoneWithStartYear = (SimpleTimeZone*)finalZone->clone();
+            // Check to make sure finalZoneWithStartYear received proper clone before dereference.
+            if (finalZoneWithStartYear == NULL) {
+            	status = U_MEMORY_ALLOCATION_ERROR;
+	        	deleteTransitionRules();
+	        	return;
+            }
             finalZone->getID(tzid);
             firstFinalRule = new TimeArrayTimeZoneRule(tzid,
                 finalZone->getRawOffset(), 0, &startTime, 1, DateTimeRule::UTC_TIME);
+            // Check firstFinalRule was properly created.
+            if (firstFinalRule == NULL) {
+            	status = U_MEMORY_ALLOCATION_ERROR;
+	        	deleteTransitionRules();
+	        	return;
+            }
         }
         TimeZoneRule *prevRule = NULL;
         if (transitionCount > 0) {
@@ -747,6 +793,12 @@ OlsonTimeZone::initTransitionRules(UErrorCode& status) {
             prevRule = initialRule;
         }
         firstFinalTZTransition = new TimeZoneTransition();
+        // Check to make sure firstFinalTZTransition was created before dereferencing
+        if (firstFinalTZTransition == NULL) {
+        	status = U_MEMORY_ALLOCATION_ERROR;
+        	deleteTransitionRules();
+        	return;
+        }
         firstFinalTZTransition->setTime(startTime);
         firstFinalTZTransition->adoptFrom(prevRule->clone());
         firstFinalTZTransition->adoptTo(firstFinalRule);
