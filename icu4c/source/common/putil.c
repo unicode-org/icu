@@ -889,6 +889,10 @@ u_setDataDirectory(const char *directory) {
     else {
         length=(int32_t)uprv_strlen(directory);
         newDataDir = (char *)uprv_malloc(length + 2);
+        /* Exit out if newDataDir could not be created. */
+        if (newDataDir == NULL) {
+        	return;
+        }
         uprv_strcpy(newDataDir, directory);
 
 #if (U_FILE_SEP_CHAR != U_FILE_ALT_SEP_CHAR)
@@ -1190,6 +1194,10 @@ The leftmost codepage (.xxx) wins.
     if ((p = uprv_strchr(posixID, '.')) != NULL) {
         /* assume new locale can't be larger than old one? */
         correctedPOSIXLocale = uprv_malloc(uprv_strlen(posixID)+1);
+        /* Exit on memory allocation error. */
+        if (correctedPOSIXLocale == NULL) {
+        	return NULL;
+        }
         uprv_strncpy(correctedPOSIXLocale, posixID, p-posixID);
         correctedPOSIXLocale[p-posixID] = 0;
 
@@ -1203,6 +1211,10 @@ The leftmost codepage (.xxx) wins.
     if ((p = uprv_strrchr(posixID, '@')) != NULL) {
         if (correctedPOSIXLocale == NULL) {
             correctedPOSIXLocale = uprv_malloc(uprv_strlen(posixID)+1);
+            /* Exit on memory allocation error. */
+            if (correctedPOSIXLocale == NULL) {
+            	return NULL;
+            }
             uprv_strncpy(correctedPOSIXLocale, posixID, p-posixID);
             correctedPOSIXLocale[p-posixID] = 0;
         }
@@ -1246,6 +1258,10 @@ The leftmost codepage (.xxx) wins.
     else {
         /* copy it, just in case the original pointer goes away.  See j2395 */
         correctedPOSIXLocale = (char *)uprv_malloc(uprv_strlen(posixID) + 1);
+        /* Exit on memory allocation error. */
+        if (correctedPOSIXLocale == NULL) {
+        	return NULL;
+        }
         posixID = uprv_strcpy(correctedPOSIXLocale, posixID);
     }
 
