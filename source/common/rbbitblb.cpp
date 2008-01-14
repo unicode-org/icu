@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2002-2007, International Business Machines
+*   Copyright (c) 2002-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -92,6 +92,12 @@ void  RBBITableBuilder::build() {
     if (fRB->fSetBuilder->sawBOF()) {
         RBBINode *bofTop    = new RBBINode(RBBINode::opCat);
         RBBINode *bofLeaf   = new RBBINode(RBBINode::leafChar);
+        // Delete and exit if memory allocation failed.
+        if (bofTop == NULL || bofLeaf == NULL) {
+        	delete bofTop;
+        	delete bofLeaf;
+        	return;
+        }
         bofTop->fLeftChild  = bofLeaf;
         bofTop->fRightChild = fTree;
         bofLeaf->fParent    = bofTop;
@@ -105,9 +111,18 @@ void  RBBITableBuilder::build() {
     //   right child being the end marker.
     //
     RBBINode *cn = new RBBINode(RBBINode::opCat);
+    // Exit if memory allocation failed.
+    if (cn == NULL) {
+    	return;
+    }
     cn->fLeftChild = fTree;
     fTree->fParent = cn;
     cn->fRightChild = new RBBINode(RBBINode::endMark);
+    // Delete and exit if memory allocation failed.
+    if (cn->fRightChild == NULL) {
+    	delete cn;
+    	return;
+    }
     cn->fRightChild->fParent = cn;
     fTree = cn;
 
@@ -527,33 +542,48 @@ void RBBITableBuilder::buildStateTable() {
     if (U_FAILURE(*fStatus)) {
         return;
     }
+    RBBIStateDescriptor *failState;
+    RBBIStateDescriptor *initialState;
     //
     // Add a dummy state 0 - the stop state.  Not from Aho.
     int      lastInputSymbol = fRB->fSetBuilder->getNumCharCategories() - 1;
-    RBBIStateDescriptor *failState = new RBBIStateDescriptor(lastInputSymbol, fStatus);
+    failState = new RBBIStateDescriptor(lastInputSymbol, fStatus);
+    if (failState == NULL) {
+    	*fStatus = U_MEMORY_ALLOCATION_ERROR;
+    	goto ExitBuildSTdeleteall;
+    }
     failState->fPositions = new UVector(*fStatus);
-    if (U_FAILURE(*fStatus)) {
-        return;
+    if (failState->fPositions == NULL) {
+    	*fStatus = U_MEMORY_ALLOCATION_ERROR;
+    }
+    if (failState->fPositions == NULL || U_FAILURE(*fStatus)) {
+    	goto ExitBuildSTdeleteall;
     }
     fDStates->addElement(failState, *fStatus);
     if (U_FAILURE(*fStatus)) {
-        return;
+    	goto ExitBuildSTdeleteall;
     }
 
     // initially, the only unmarked state in Dstates is firstpos(root),
     //       where toot is the root of the syntax tree for (r)#;
-    RBBIStateDescriptor *initialState = new RBBIStateDescriptor(lastInputSymbol, fStatus);
+    initialState = new RBBIStateDescriptor(lastInputSymbol, fStatus);
+    if (initialState == NULL) {
+    	*fStatus = U_MEMORY_ALLOCATION_ERROR;
+    }
     if (U_FAILURE(*fStatus)) {
-        return;
+    	goto ExitBuildSTdeleteall;
     }
     initialState->fPositions = new UVector(*fStatus);
+    if (initialState->fPositions == NULL) {
+    	*fStatus = U_MEMORY_ALLOCATION_ERROR;
+    }
     if (U_FAILURE(*fStatus)) {
-        return;
+    	goto ExitBuildSTdeleteall;
     }
     setAdd(initialState->fPositions, fTree->fFirstPosSet);
     fDStates->addElement(initialState, *fStatus);
     if (U_FAILURE(*fStatus)) {
-        return;
+    	goto ExitBuildSTdeleteall;
     }
 
     // while there is an unmarked state T in Dstates do begin
@@ -589,6 +619,10 @@ void RBBITableBuilder::buildStateTable() {
                 if ((p->fType == RBBINode::leafChar) &&  (p->fVal == a)) {
                     if (U == NULL) {
                         U = new UVector(*fStatus);
+                        if (U == NULL) {
+                        	*fStatus = U_MEMORY_ALLOCATION_ERROR;
+                        	goto ExitBuildSTdeleteall;
+                        }
                     }
                     setAdd(U, p->fFollowPos);
                 }
@@ -616,8 +650,11 @@ void RBBITableBuilder::buildStateTable() {
                 if (!UinDstates)
                 {
                     RBBIStateDescriptor *newState = new RBBIStateDescriptor(lastInputSymbol, fStatus);
+                    if (newState == NULL) {
+                    	*fStatus = U_MEMORY_ALLOCATION_ERROR;
+                    }
                     if (U_FAILURE(*fStatus)) {
-                        return;
+                        goto ExitBuildSTdeleteall;
                     }
                     newState->fPositions = U;
                     fDStates->addElement(newState, *fStatus);
@@ -632,6 +669,11 @@ void RBBITableBuilder::buildStateTable() {
             }
         }
     }
+    return;
+    // delete local pointers only if error occured.
+ExitBuildSTdeleteall:
+	delete initialState;
+	delete failState;
 }
 
 
