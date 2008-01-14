@@ -1714,7 +1714,7 @@ getLanguageBreakEngineFromFactory(UChar32 c, int32_t breakType)
     
     if (needsInit) {
         UStack  *factories = new UStack(_deleteFactory, NULL, status);
-        if (U_SUCCESS(status)) {
+        if (factories != NULL && U_SUCCESS(status)) {
             ICULanguageBreakFactory *builtIn = new ICULanguageBreakFactory(status);
             factories->push(builtIn, status);
 #ifdef U_LOCAL_SERVICE_HOOK
@@ -1764,7 +1764,7 @@ RuleBasedBreakIterator::getLanguageBreakEngine(UChar32 c) {
     
     if (fLanguageBreakEngines == NULL) {
         fLanguageBreakEngines = new UStack(status);
-        if (U_FAILURE(status)) {
+        if (fLanguageBreakEngines == NULL || U_FAILURE(status)) {
             delete fLanguageBreakEngines;
             fLanguageBreakEngines = 0;
             return NULL;
