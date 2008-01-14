@@ -2,7 +2,7 @@
 //
 //  file:  rbbiscan.cpp
 //
-//  Copyright (C) 2002-2007, International Business Machines Corporation and others.
+//  Copyright (C) 2002-2008, International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains the Rule Based Break Iterator Rule Builder functions for
@@ -137,12 +137,38 @@ RBBIRuleScanner::RBBIRuleScanner(RBBIRuleBuilder *rb)
         //   Change the error so that the actual problem will be clearer to users.
         *rb->fStatus = U_BRK_INIT_ERROR;
     }
+    if (fRuleSets[kRuleSet_rule_char-128]       == NULL ||
+    	fRuleSets[kRuleSet_white_space-128]     == NULL ||
+    	fRuleSets[kRuleSet_name_char-128]       == NULL ||
+    	fRuleSets[kRuleSet_name_start_char-128] == NULL ||
+    	fRuleSets[kRuleSet_digit_char-128]      == NULL   ) {
+    	
+    	delete fRuleSets[kRuleSet_rule_char-128];
+	    delete fRuleSets[kRuleSet_white_space-128];
+	    delete fRuleSets[kRuleSet_name_char-128];
+	    delete fRuleSets[kRuleSet_name_start_char-128];
+	    delete fRuleSets[kRuleSet_digit_char-128];
+	    fRuleSets[kRuleSet_rule_char-128]       = NULL;
+        fRuleSets[kRuleSet_white_space-128]     = NULL;
+        fRuleSets[kRuleSet_name_char-128]       = NULL;
+        fRuleSets[kRuleSet_name_start_char-128] = NULL;
+        fRuleSets[kRuleSet_digit_char-128]      = NULL;
+        *rb->fStatus = U_MEMORY_ALLOCATION_ERROR;
+    }
     if (U_FAILURE(*rb->fStatus)) {
         return;
     }
 
     fSymbolTable = new RBBISymbolTable(this, rb->fRules, *rb->fStatus);
+    if (fSymbolTable == NULL) {
+    	*rb->fStatus = U_MEMORY_ALLOCATION_ERROR;
+    	return;
+    }
     fSetTable    = uhash_open(uhash_hashUnicodeString, uhash_compareUnicodeString, NULL, rb->fStatus);
+    if (fSetTable == NULL) {
+    	*rb->fStatus = U_MEMORY_ALLOCATION_ERROR;
+    	return;
+    }
     uhash_setValueDeleter(fSetTable, RBBISetTable_deleter);
 }
 
@@ -695,6 +721,10 @@ void RBBIRuleScanner::findSetFor(const UnicodeString &s, RBBINode *node, Unicode
     // This new uset node becomes the child of the caller's setReference node.
     //
     RBBINode *usetNode    = new RBBINode(RBBINode::uset);
+    if (usetNode == NULL) {
+    	error(U_MEMORY_ALLOCATION_ERROR);
+    	return;
+    }
     usetNode->fInputSet   = setToAdopt;
     usetNode->fParent     = node;
     node->fLeftChild      = usetNode;
@@ -713,6 +743,14 @@ void RBBIRuleScanner::findSetFor(const UnicodeString &s, RBBINode *node, Unicode
     el      = (RBBISetTableEl *)uprv_malloc(sizeof(RBBISetTableEl));
     UnicodeString *tkey = new UnicodeString(s);
     if (tkey == NULL || el == NULL || setToAdopt == NULL) {
+    	// Delete to avoid memory leak
+    	delete tkey;
+    	uprv_free(el);
+    	delete setToAdopt;
+    	tkey = NULL;
+    	el = NULL;
+    	setToAdopt = NULL;
+    	
         error(U_MEMORY_ALLOCATION_ERROR);
         return;
     }
@@ -978,6 +1016,10 @@ void RBBIRuleScanner::parse() {
                 fC.fEscaped == FALSE &&                                      //   char is not escaped &&
                 fC.fChar != (UChar32)-1) {                                   //   char is not EOF
                 UnicodeSet *uniset = fRuleSets[tableEl->fCharClass-128];
+                // This is a result of fRuleSets[] initialization error.
+                if (uniset == NULL) {
+                	return;
+                }
                 if (uniset->contains(fC.fChar)) {
                     // Table row specified a character class, or set of characters,
                     //   and the current char matches it.
@@ -1135,6 +1177,9 @@ void RBBIRuleScanner::scanSet() {
     uset = new UnicodeSet(fRB->fRules, pos, USET_IGNORE_SPACE,
                          fSymbolTable,
                          localStatus);
+    if (uset == NULL) {
+    	localStatus = U_MEMORY_ALLOCATION_ERROR;
+    }
     if (U_FAILURE(localStatus)) {
         //  TODO:  Get more accurate position of the error from UnicodeSet's return info.
         //         UnicodeSet appears to not be reporting correctly at this time.
