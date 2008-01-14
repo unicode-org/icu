@@ -1,7 +1,7 @@
 //
 //  regexst.h
 //
-//  Copyright (C) 2004-2007, International Business Machines Corporation and others.
+//  Copyright (C) 2004-2008, International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains class RegexStaticSets
@@ -167,6 +167,20 @@ fRuleDigitsAlias(NULL)
     fPropSets[URX_GC_T]        = new UnicodeSet(UnicodeString(TRUE, gGC_TPattern, -1),       *status);
     fPropSets[URX_GC_LV]       = new UnicodeSet(UnicodeString(TRUE, gGC_LVPattern, -1),      *status);
     fPropSets[URX_GC_LVT]      = new UnicodeSet(UnicodeString(TRUE, gGC_LVTPattern, -1),     *status);
+    
+    // Check for null pointers
+    if (fPropSets[URX_ISWORD_SET]  == NULL ||
+		    fPropSets[URX_ISSPACE_SET] == NULL ||
+		    fPropSets[URX_GC_EXTEND]   == NULL ||
+		    fPropSets[URX_GC_CONTROL]  == NULL ||
+		    fPropSets[URX_GC_L]        == NULL ||
+		    fPropSets[URX_GC_V]        == NULL ||
+		    fPropSets[URX_GC_T]        == NULL ||
+		    fPropSets[URX_GC_LV]       == NULL ||
+		    fPropSets[URX_GC_LVT]      == NULL ) {
+    	goto ExitConstrDeleteAll;
+ 
+    }
     if (U_FAILURE(*status)) {
         // Bail out if we were unable to create the above sets.
         // The rest of the initialization needs them, so we cannot proceed.
@@ -185,6 +199,10 @@ fRuleDigitsAlias(NULL)
     //            when finding grapheme cluster boundaries.
     //
     fPropSets[URX_GC_NORMAL] = new UnicodeSet(0, UnicodeSet::MAX_VALUE);
+    // Null pointer check
+    if (fPropSets[URX_GC_NORMAL] == NULL) {
+    	goto ExitConstrDeleteAll;
+    }
     fPropSets[URX_GC_NORMAL]->remove(0xac00, 0xd7a4);
     fPropSets[URX_GC_NORMAL]->removeAll(*fPropSets[URX_GC_CONTROL]);
     fPropSets[URX_GC_NORMAL]->removeAll(*fPropSets[URX_GC_L]);
@@ -203,12 +221,47 @@ fRuleDigitsAlias(NULL)
     // Sets used while parsing rules, but not referenced from the parse state table
     fRuleSets[kRuleSet_rule_char-128]   = new UnicodeSet(UnicodeString(TRUE, gRuleSet_rule_char_pattern, -1),   *status);
     fRuleSets[kRuleSet_digit_char-128]  = new UnicodeSet(UnicodeString(TRUE, gRuleSet_digit_char_pattern, -1),  *status);
+    //Check for null pointers
+    if (fRuleSets[kRuleSet_rule_char-128] == NULL ||
+    		fRuleSets[kRuleSet_digit_char-128] == NULL) {
+    	goto ExitConstrDeleteAll;
+    }
     fRuleDigitsAlias = fRuleSets[kRuleSet_digit_char-128];
     for (i=0; i<(int32_t)(sizeof(fRuleSets)/sizeof(fRuleSets[0])); i++) {
         if (fRuleSets[i]) {
             fRuleSets[i]->compact();
         }
     }
+    return; // If we reached this point, everything is fine so just exit
+    
+ExitConstrDeleteAll: // Remove fPropSets and fRuleSets and return error
+	delete fPropSets[URX_ISWORD_SET];
+    delete fPropSets[URX_ISSPACE_SET];
+    delete fPropSets[URX_GC_EXTEND];
+    delete fPropSets[URX_GC_CONTROL];
+    delete fPropSets[URX_GC_L];
+    delete fPropSets[URX_GC_V];
+    delete fPropSets[URX_GC_T];
+    delete fPropSets[URX_GC_LV];
+    delete fPropSets[URX_GC_LVT];
+    delete fPropSets[URX_GC_NORMAL];
+    fPropSets[URX_ISWORD_SET]  = NULL;
+    fPropSets[URX_ISSPACE_SET] = NULL;
+    fPropSets[URX_GC_EXTEND]   = NULL;
+    fPropSets[URX_GC_CONTROL]  = NULL;
+    fPropSets[URX_GC_L]        = NULL;
+    fPropSets[URX_GC_V]        = NULL;
+    fPropSets[URX_GC_T]        = NULL;
+    fPropSets[URX_GC_LV]       = NULL;
+    fPropSets[URX_GC_LVT]      = NULL;
+    fPropSets[URX_GC_NORMAL]   = NULL;
+    
+    delete fRuleSets[kRuleSet_rule_char-128];
+    delete fRuleSets[kRuleSet_digit_char-128];
+    fRuleSets[kRuleSet_rule_char-128]  = NULL;
+    fRuleSets[kRuleSet_digit_char-128] = NULL;
+    
+    *status = U_MEMORY_ALLOCATION_ERROR;    	
 }
 
 
@@ -252,6 +305,10 @@ void RegexStaticSets::initGlobals(UErrorCode *status) {
     UMTX_CHECK(NULL, gStaticSets, p);
     if (p == NULL) {
         p = new RegexStaticSets(status);
+        if (p == NULL) {
+        	*status = U_MEMORY_ALLOCATION_ERROR;
+        	return;
+        }
         if (U_FAILURE(*status)) {
             delete p;
             return;

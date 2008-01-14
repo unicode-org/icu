@@ -3,7 +3,7 @@
 //
 /*
 ***************************************************************************
-*   Copyright (C) 2002-2007 International Business Machines Corporation   *
+*   Copyright (C) 2002-2008 International Business Machines Corporation   *
 *   and others. All rights reserved.                                      *
 ***************************************************************************
 */
@@ -99,6 +99,10 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
     int32_t i;
     int32_t  numSets = other.fSets->size();
     fSets8 = new Regex8BitSet[numSets];
+    if (fSets8 == NULL) {
+    	fDeferredStatus = U_MEMORY_ALLOCATION_ERROR;
+    	return *this;
+    }
     for (i=1; i<numSets; i++) {
         if (U_FAILURE(fDeferredStatus)) {
             return *this;
@@ -424,7 +428,11 @@ int32_t  RegexPattern::split(const UnicodeString &input,
     };
 
     RegexMatcher  m(this);
-    int32_t r = m.split(input, dest, destCapacity, status);
+    int32_t r = 0;
+    // Check m's status to make sure all is ok.
+    if (U_SUCCESS(m.fDeferredStatus)) {
+    	r = m.split(input, dest, destCapacity, status);
+    }
     return r;
 }
 
