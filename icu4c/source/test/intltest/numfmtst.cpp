@@ -85,6 +85,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
         CASE(33,TestHostClone);
         CASE(34,TestCurrencyFormat);
         CASE(35,TestRounding);
+        CASE(36,TestNonpositiveMultiplier);
         default: name = ""; break;
     }
 }
@@ -2408,5 +2409,53 @@ double NumberFormatTest::checkRound(DecimalFormat* df, double iValue, double las
 
     return lastParsed;
 }
+
+void NumberFormatTest::TestNonpositiveMultiplier() {
+    UErrorCode status = U_ZERO_ERROR;
+    DecimalFormatSymbols US(Locale::getUS(), status);
+    CHECK(status, "DecimalFormatSymbols constructor");
+    DecimalFormat df(UnicodeString("0"), US, status);
+    CHECK(status, "DecimalFormat(0)");
+    
+    // test zero multiplier
+
+    int32_t mult = df.getMultiplier();
+    df.setMultiplier(0);
+    if (df.getMultiplier() != mult) {
+        errln("DecimalFormat.setMultiplier(0) did not ignore its zero input");
+    }
+    
+    // test negative multiplier
+    
+    df.setMultiplier(-1);
+    if (df.getMultiplier() != -1) {
+        errln("DecimalFormat.setMultiplier(-1) ignored its negative input");
+        return;
+    }
+    
+    expect(df, "1122.123", -1122.123);
+    expect(df, "-1122.123", 1122.123);
+    expect(df, "1.2", -1.2);
+    expect(df, "-1.2", 1.2);
+
+    // TODO: comment once BigInteger is ported
+    // (right now the big numbers get turned into doubles and lose tons of accuracy)
+    expect(df, U_INT64_MIN, "9223372036854780000");
+
+    // TODO: uncomment (and fix up) once BigInteger is ported and DecimalFormat can handle it
+    // (right now the big numbers get turned into doubles and lose tons of accuracy)
+    //expect2(df, U_INT64_MAX, Int64ToUnicodeString(-U_INT64_MAX));
+    //expect2(df, U_INT64_MIN, UnicodeString(Int64ToUnicodeString(U_INT64_MIN), 1));
+    //expect2(df, U_INT64_MAX / 2, Int64ToUnicodeString(-(U_INT64_MAX / 2)));
+    //expect2(df, U_INT64_MIN / 2, Int64ToUnicodeString(-(U_INT64_MIN / 2)));
+
+    // TODO: uncomment (and fix up) once BigDecimal is ported and DecimalFormat can handle it
+    //expect2(df, BigDecimal.valueOf(Long.MAX_VALUE), BigDecimal.valueOf(Long.MAX_VALUE).negate().toString());
+    //expect2(df, BigDecimal.valueOf(Long.MIN_VALUE), BigDecimal.valueOf(Long.MIN_VALUE).negate().toString());
+    //expect2(df, java.math.BigDecimal.valueOf(Long.MAX_VALUE), java.math.BigDecimal.valueOf(Long.MAX_VALUE).negate().toString());
+    //expect2(df, java.math.BigDecimal.valueOf(Long.MIN_VALUE), java.math.BigDecimal.valueOf(Long.MIN_VALUE).negate().toString());
+}
+
+
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

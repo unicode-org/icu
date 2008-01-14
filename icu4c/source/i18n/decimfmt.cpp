@@ -641,7 +641,8 @@ DecimalFormat::format(int64_t number,
     // instead, trading off accuracy for range.
     if (fRoundingIncrement != NULL
         || (fMultiplier != 0 && (number > (U_INT64_MAX / fMultiplier)
-                              || number < (U_INT64_MIN / fMultiplier))))
+                              || number < (U_INT64_MIN / fMultiplier)
+                              || number == U_INT64_MIN && fMultiplier < 0)))
     {
         digits.set(((double)number) * fMultiplier,
                    precision(FALSE),
@@ -682,6 +683,13 @@ DecimalFormat::format(  double number,
         return appendTo;
     }
 
+    // Do this BEFORE checking to see if value is infinite or negative! Sets the
+    // begin and end index to be length of the string composed of
+    // localized name of Infinite and the positive/negative localized
+    // signs.
+
+    number *= fMultiplier;
+
     /* Detecting whether a double is negative is easy with the exception of
      * the value -0.0.  This is a double which has a zero mantissa (and
      * exponent), but a negative sign bit.  It is semantically distinct from
@@ -693,13 +701,6 @@ DecimalFormat::format(  double number,
      * issues raised by bugs 4106658, 4106667, and 4147706.  Liu 7/6/98.
      */
     UBool isNegative = uprv_isNegative(number);
-
-    // Do this BEFORE checking to see if value is infinite! Sets the
-    // begin and end index to be length of the string composed of
-    // localized name of Infinite and the positive/negative localized
-    // signs.
-
-    number *= fMultiplier;
 
     // Apply rounding after multiplier
     if (fRoundingIncrement != NULL) {
@@ -2100,10 +2101,10 @@ int32_t DecimalFormat::getMultiplier() const
 void
 DecimalFormat::setMultiplier(int32_t newValue)
 {
-//    if (newValue <= 0) {
-//        throw new IllegalArgumentException("Bad multiplier: " + newValue);
-//    }
-    if (newValue > 0) {
+//  if (newValue == 0) {
+//      throw new IllegalArgumentException("Bad multiplier: " + newValue);
+//  }
+    if (newValue != 0) {
         fMultiplier = newValue;
     }
     // else No way to return an error.

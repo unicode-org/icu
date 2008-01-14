@@ -129,6 +129,8 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     
     /* Port of ICU4J rounding test. */
     void TestRounding(void);
+
+    void TestNonpositiveMultiplier(void);
  private:
 
     static UBool equalValue(const Formattable& a, const Formattable& b);
