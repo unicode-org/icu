@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2007, International Business Machines
+*   Copyright (C) 1999-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -257,11 +257,13 @@ RuleBasedTransliterator::handleTransliterate(Replaceable& text, UTransPosition& 
         }
     }
     
-
-    while (index.start < index.limit &&
-           loopCount <= loopLimit &&
-           fData->ruleSet.transliterate(text, index, isIncremental)) {
-        ++loopCount;
+    // Check to make sure we don't dereference a null pointer.
+    if (fData != NULL) {
+	    while (index.start < index.limit &&
+	           loopCount <= loopLimit &&
+	           fData->ruleSet.transliterate(text, index, isIncremental)) {
+	        ++loopCount;
+	    }
     }
     if (lockedMutexAtThisLevel) {
         gLockedText = NULL;

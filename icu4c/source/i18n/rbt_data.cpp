@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2006, International Business Machines
+*   Copyright (C) 1999-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -40,12 +40,17 @@ TransliterationRuleData::TransliterationRuleData(const TransliterationRuleData& 
     variablesLength(other.variablesLength)
 {
     UErrorCode status = U_ZERO_ERROR;
+    int32_t i = 0;
     variableNames.setValueDeleter(uhash_deleteUnicodeString);
     int32_t pos = -1;
     const UHashElement *e;
     while ((e = other.variableNames.nextElement(pos)) != 0) {
         UnicodeString* value =
             new UnicodeString(*(const UnicodeString*)e->value.pointer);
+        // Exit out if value could not be created.
+        if (value == NULL) {
+        	return;
+        }
         variableNames.put(*(UnicodeString*)e->key.pointer, value, status);
     }
 
@@ -57,10 +62,23 @@ TransliterationRuleData::TransliterationRuleData(const TransliterationRuleData& 
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
-        for (int32_t i=0; i<variablesLength; ++i) {
+        for (i=0; i<variablesLength; ++i) {
             variables[i] = other.variables[i]->clone();
+            if (variables[i] == NULL) {
+            	status = U_MEMORY_ALLOCATION_ERROR;
+            	break;
+            }
         }
-    }    
+    }
+    // Remove the array and exit if memory allocation error occured.
+    if (status == U_MEMORY_ALLOCATION_ERROR) {
+    	for (int32_t n = i-1; n >= 0; n++) {
+    		delete variables[n];
+    	}
+    	uprv_free(variables);
+    	variables = NULL;
+    	return;
+    }
 
     // Do this last, _after_ setting up variables[].
     ruleSet.setData(this); // ruleSet must already be frozen

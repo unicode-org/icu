@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2006, International Business Machines Corporation
+* Copyright (C) 1997-2008, International Business Machines Corporation
 * and others. All Rights Reserved.
 *******************************************************************************
 */
@@ -1490,6 +1490,10 @@ RuleBasedNumberFormat::getCollator() const
                 rules.append(*lenientParseRules);
 
                 newCollator = new RuleBasedCollator(rules, status);
+                // Exit if newCollator could not be created.
+                if (newCollator == NULL) {
+                	return NULL;
+                }
             } else {
                 temp = NULL;
             }
