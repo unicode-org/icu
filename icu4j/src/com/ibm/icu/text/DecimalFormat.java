@@ -731,6 +731,9 @@ public class DecimalFormat extends NumberFormat {
             return result;
         }
 
+        // Do this BEFORE checking to see if value is infinite or negative!
+        if (multiplier != 1) number *= multiplier;
+
         /* Detecting whether a double is negative is easy with the exception of
          * the value -0.0.  This is a double which has a zero mantissa (and
          * exponent), but a negative sign bit.  It is semantically distinct from
@@ -742,10 +745,7 @@ public class DecimalFormat extends NumberFormat {
          * issues raised by bugs 4106658, 4106667, and 4147706.  Liu 7/6/98.
          */
         boolean isNegative = (number < 0.0) || (number == 0.0 && 1/number < 0.0);
-        if (isNegative) number = -number;
-
-        // Do this BEFORE checking to see if value is infinite!
-        if (multiplier != 1) number *= multiplier;
+		if (isNegative) number = -number;
 
         // Apply rounding after multiplier
         if (roundingDouble > 0.0) {
@@ -922,7 +922,7 @@ public class DecimalFormat extends NumberFormat {
             boolean tooBig = false;
             if (number < 0) { // This can only happen if number == Long.MIN_VALUE
                 long cutoff = Long.MIN_VALUE / multiplier;
-                tooBig = (number < cutoff);
+                tooBig = (number <= cutoff); // number == cutoff can only happen if multiplier == -1
             } else {
                 long cutoff = Long.MAX_VALUE / multiplier;
                 tooBig = (number > cutoff);
@@ -2591,7 +2591,7 @@ public class DecimalFormat extends NumberFormat {
      * @stable ICU 2.0
      */
     public void setMultiplier (int newValue) {
-        if (newValue <= 0) {
+        if (newValue == 0) {
             throw new IllegalArgumentException("Bad multiplier: " + newValue);
         }
         multiplier = newValue;
