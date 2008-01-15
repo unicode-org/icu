@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2007, International Business Machines
+*   Copyright (C) 2001-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -197,7 +197,7 @@ final class NormalizationTransliterator extends Transliterator {
 
         int len = limit - lastSafe;
         String input = null;
-        synchronized (buffer) {
+        synchronized (this) {
             if (buffer.length < len) {
                 buffer = new char[len]; // rare, and we don't care if we grow too large
             }
