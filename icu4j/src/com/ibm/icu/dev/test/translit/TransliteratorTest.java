@@ -1,10 +1,11 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.translit;
+
 import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.dev.test.*;
@@ -3261,6 +3262,74 @@ the ::BEGIN/::END stuff)
         String result = anyLatin.transliterate(testString.toString());
         logln("Sample result for Any-Latin: " + result);
     }
+
+    /*
+     * Test case for threading problem in NormalizationTransliterator
+     * reported by ticket#5160
+     */
+    public void TestT5160() {
+        final String[] testData = {
+                "a",
+                "b",
+                "\u09BE",
+                "A\u0301",
+        };
+        final String[] expected = {
+                "a",
+                "b",
+                "\u09BE",
+                "\u00C1",
+            };
+        Transliterator translit = Transliterator.getInstance("NFC");
+        NormTranslitTask[] tasks = new NormTranslitTask[testData.length];
+        for (int i = 0; i < tasks.length; i++) {
+            tasks[i] = new NormTranslitTask(translit, testData[i], expected[i]);
+        }
+        TestUtil.runUntilDone(tasks);
+
+        for (int i = 0; i < tasks.length; i++) {
+            if (tasks[i].getErrorMessage() != null) {
+                System.out.println("Fail: thread#" + i + " " + tasks[i].getErrorMessage());
+                break;
+            }
+        }
+    }
+
+    static class NormTranslitTask implements Runnable {
+        Transliterator translit;
+        String testData;
+        String expectedData;
+        String errorMsg;
+
+        NormTranslitTask(Transliterator translit, String testData, String expectedData) {
+            this.translit = translit;
+            this.testData = testData;
+            this.expectedData = expectedData;
+        }
+
+        public void run() {
+            errorMsg = null;
+            StringBuffer inBuf = new StringBuffer(testData);
+            StringBuffer expectedBuf = new StringBuffer(expectedData);
+
+            for(int i = 0; i < 1000; i++) {
+                String in = inBuf.toString();
+                String out = translit.transliterate(in);
+                String expected = expectedBuf.toString();
+                if (!out.equals(expected)) {
+                    errorMsg = "in {" + in + "} / out {" + out + "} / expected {" + expected + "}";
+                    break;
+                }
+                inBuf.append(testData);
+                expectedBuf.append(expectedData);
+            }
+        }
+
+        public String getErrorMessage() {
+            return errorMsg;
+        }
+    }
+
     //======================================================================
     // Support methods
     //======================================================================
