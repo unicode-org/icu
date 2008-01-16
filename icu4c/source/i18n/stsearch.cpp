@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2006 IBM and others. All rights reserved.
+*   Copyright (C) 2001-2008 IBM and others. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *  03/22/2000   helena      Creation.
@@ -220,9 +220,12 @@ StringSearch & StringSearch::operator=(const StringSearch &that)
                                               m_text_.length(),
                                               that.m_strsrch_->collator,
                                               NULL, &status);
-        // Alias the collator
-        m_collator_.setUCollator((UCollator *)m_strsrch_->collator);
-        m_search_ = m_strsrch_->search;
+        // Check null pointer
+        if (m_strsrch_ != NULL) {
+	        // Alias the collator
+	        m_collator_.setUCollator((UCollator *)m_strsrch_->collator);
+	        m_search_ = m_strsrch_->search;
+        }
     }
     return *this;
 }
