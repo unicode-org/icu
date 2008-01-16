@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -14,26 +14,21 @@ import java.util.*;
  * code points or ranges have been returned, it returns the
  * multicharacter strings of the UnicodSet, if any.
  *
- * <p>To iterate over code points, use a loop like this:
+ * <p>To iterate over code points and multicharacter strings,
+ * use a loop like this:
  * <pre>
- * UnicodeSetIterator it = new UnicodeSetIterator(set);
- * while (set.next()) {
- *   if (set.codepoint != UnicodeSetIterator.IS_STRING) {
- *     processCodepoint(set.codepoint);
- *   } else {
- *     processString(set.string);
- *   }
+ * for (UnicodeSetIterator it = new UnicodeSetIterator(set); it.next();) {
+ *   processString(it.getString());
  * }
  * </pre>
  *
  * <p>To iterate over code point ranges, use a loop like this:
  * <pre>
- * UnicodeSetIterator it = new UnicodeSetIterator(set);
- * while (set.nextRange()) {
- *   if (set.codepoint != UnicodeSetIterator.IS_STRING) {
- *     processCodepointRange(set.codepoint, set.codepointEnd);
+ * for (UnicodeSetIterator it = new UnicodeSetIterator(set); it.nextRange();) {
+ *   if (it.codepoint != UnicodeSetIterator.IS_STRING) {
+ *     processCodepointRange(it.codepoint, it.codepointEnd);
  *   } else {
- *     processString(set.string);
+ *     processString(it.getString());
  *   }
  * }
  * </pre>
@@ -211,8 +206,8 @@ public class UnicodeSetIterator {
     
     /**
      * Gets the current string from the iterator. Only use after calling next(), not nextRange().
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public String getString() {
         if (codepoint != IS_STRING) {
