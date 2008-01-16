@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1997-2007, International Business Machines Corporation and   *
+* Copyright (C) 1997-2008, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 *
@@ -385,6 +385,11 @@ static UResourceDataEntry *findFirstExisting(const char* path, char* name, UBool
 
   while(*hasChopped && !hasRealData) {
     r = init_entry(name, path, &intStatus);
+    /* Null pointer test */
+    if (r == NULL) {
+    	*status = U_MEMORY_ALLOCATION_ERROR;
+    	return NULL;
+    }
     *isDefault = (UBool)(uprv_strncmp(name, defaultLoc, uprv_strlen(name)) == 0);
     hasRealData = (UBool)(r->fBogus == U_ZERO_ERROR);
     if(!hasRealData) {
@@ -460,6 +465,11 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
         while (hasChopped && !isRoot && t1->fParent == NULL && !t1->fData.noFallback) {
             /* insert regular parents */
             t2 = init_entry(name, r->fPath, &parentStatus);
+            /* Check for null pointer. */
+            if (t2 == NULL) {
+            	*status = U_MEMORY_ALLOCATION_ERROR;
+            	return NULL;
+            }
             t1->fParent = t2;
             t1 = t2;
             hasChopped = chopLocale(name);
@@ -480,6 +490,11 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
             while (hasChopped && t1->fParent == NULL) {
                 /* insert chopped defaults */
                 t2 = init_entry(name, r->fPath, &parentStatus);
+                /* Check for null pointer. */
+                if (t2 == NULL) {
+                	*status = U_MEMORY_ALLOCATION_ERROR;
+                	return NULL;
+                }
                 t1->fParent = t2;
                 t1 = t2;
                 hasChopped = chopLocale(name);
@@ -502,6 +517,11 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
       } else if(!isRoot && uprv_strcmp(t1->fName, kRootLocaleName) != 0 && t1->fParent == NULL && !r->fData.noFallback) {
           /* insert root locale */
           t2 = init_entry(kRootLocaleName, r->fPath, &parentStatus);
+          /* Check for null pointer. */
+          if (t2 == NULL) {
+        	  *status = U_MEMORY_ALLOCATION_ERROR;
+        	  return NULL;
+          }
           if(!hasRealData) {
             r->fBogus = U_USING_DEFAULT_WARNING;
           }
@@ -606,9 +626,17 @@ static void ures_appendResPath(UResourceBundle *resB, const char* toAdd, int32_t
   if(RES_BUFSIZE <= resB->fResPathLen+1) {
     if(resB->fResPath == resB->fResBuf) {
       resB->fResPath = (char *)uprv_malloc((resB->fResPathLen+1)*sizeof(char));
+      /* Check that memory was allocated correctly. */
+      if (resB->fResPath == NULL) {
+    	  return;
+      }
       uprv_strcpy(resB->fResPath, resB->fResBuf);
     } else {
       resB->fResPath = (char *)uprv_realloc(resB->fResPath, (resB->fResPathLen+1)*sizeof(char));
+      /* Check that memory was reallocated correctly. */
+      if (resB->fResPath == NULL) {
+  	    return;
+      }
     }
   }
   uprv_strcpy(resB->fResPath + resPathLenOrig, toAdd);
@@ -2017,6 +2045,10 @@ ures_getVersionNumber(const UResourceBundle*   resourceBundle)
 
 
         ((UResourceBundle *)resourceBundle)->fVersion = (char *)uprv_malloc(1 + len); 
+        /* Check for null pointer. */
+        if (((UResourceBundle *)resourceBundle)->fVersion == NULL) {
+        	return;
+        }
        
         if(minor_len > 0) {
             u_UCharsToChars(minor_version, resourceBundle->fVersion , minor_len);
