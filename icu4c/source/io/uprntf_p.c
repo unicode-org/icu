@@ -825,6 +825,10 @@ u_printf_scidbl_handler(const u_printf_stream_handler  *handler,
     }
     else {
         UNumberFormat   *format = u_locbund_getNumberFormat(formatBundle, UNUM_DECIMAL);
+        /* Check for null pointer */
+        if (format == NULL) {
+        	return -1;
+        }
         int32_t maxSigDecimalDigits = unum_getAttribute(format, UNUM_MAX_SIGNIFICANT_DIGITS);
         int32_t significantDigits = scidbl_info.fPrecision;
 
