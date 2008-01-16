@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and   *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and   *
  * others. All Rights Reserved.                                               *
  ******************************************************************************
  */
@@ -534,10 +534,13 @@ Collator* RuleBasedCollator::safeClone(void)
     }
 
     RuleBasedCollator *result = new RuleBasedCollator();
-    result->ucollator = ucol;
-    result->dataIsOwned = TRUE;
-    result->isWriteThroughAlias = FALSE;
-    setRuleStringFromCollator();
+    // Null pointer check
+    if (result != NULL) {
+	    result->ucollator = ucol;
+	    result->dataIsOwned = TRUE;
+	    result->isWriteThroughAlias = FALSE;
+	    setRuleStringFromCollator();
+    }
 
     return result;
 }
