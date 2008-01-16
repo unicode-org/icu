@@ -331,13 +331,18 @@ static UBool loadOlsonIDs() {
         int32_t start = 0;
         count = ures_getSize(nres);
         ids = new UnicodeString[(count > 0) ? count : 1];
-        for (int32_t i=0; i<count; ++i) {
-            int32_t idLen = 0;
-            const UChar* id = ures_getStringByIndex(nres, i, &idLen, &ec);
-            ids[i].fastCopyFrom(UnicodeString(TRUE, id, idLen));
-            if (U_FAILURE(ec)) {
-                break;
-            }
+        // Null pointer check
+        if (ids != NULL) {
+	        for (int32_t i=0; i<count; ++i) {
+	            int32_t idLen = 0;
+	            const UChar* id = ures_getStringByIndex(nres, i, &idLen, &ec);
+	            ids[i].fastCopyFrom(UnicodeString(TRUE, id, idLen));
+	            if (U_FAILURE(ec)) {
+	                break;
+	            }
+	        }
+        } else {
+        	ec = U_MEMORY_ALLOCATION_ERROR;
         }
     }
     ures_close(nres);
@@ -457,7 +462,12 @@ TimeZone::createTimeZone(const UnicodeString& ID)
     }
     if (result == 0) {
         U_DEBUG_TZ_MSG(("failed to load time zone with id - falling to GMT"));
-        result = getGMT()->clone();
+        const TimeZone* temptz = getGMT();
+        if (temptz == NULL) {
+        	result = NULL;
+        } else {
+        	result = temptz->clone();
+        }
     }
     return result;
 }
@@ -613,7 +623,12 @@ TimeZone::initDefault()
 
     // If we _still_ don't have a time zone, use GMT.
     if (default_zone == NULL) {
-        default_zone = getGMT()->clone();
+    	const TimeZone* temptz = getGMT();
+    	// If we can't use GMT, get out.
+    	if (temptz == NULL) {
+    		return;
+    	}
+        default_zone = temptz->clone();
     }
 
     // If DEFAULT_ZONE is still NULL, set it up.
