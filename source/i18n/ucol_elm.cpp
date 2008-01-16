@@ -152,6 +152,10 @@ uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollat
         goto allocation_failure;
     }
     t->prefixLookup = uhash_open(prefixLookupHash, prefixLookupComp, NULL, status);
+    // Check for allocation error.
+    if (t->prefixLookup == NULL) {
+    	goto allocation_failure;
+    }
     uhash_setValueDeleter(t->prefixLookup, uhash_freeBlock);
 
     t->contractions = uprv_cnttab_open(t->mapping, status);
@@ -263,6 +267,11 @@ uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
 
     if(t->contractions != NULL) {
         r->contractions = uprv_cnttab_clone(t->contractions, status);
+        // Check for cloning failure.
+        if (r->contractions == NULL) {
+        	*status = U_MEMORY_ALLOCATION_ERROR;
+        	return NULL;
+        }
         r->contractions->mapping = r->mapping;
     }
 
@@ -277,24 +286,24 @@ uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
         r->maxExpansions->position = t->maxExpansions->position;
         if(t->maxExpansions->endExpansionCE != NULL) {
             r->maxExpansions->endExpansionCE = (uint32_t *)uprv_malloc(sizeof(uint32_t)*t->maxExpansions->size);
-            uprv_memset(r->maxExpansions->endExpansionCE, 0xDB, sizeof(uint32_t)*t->maxExpansions->size);
             /* test for NULL */
             if (r->maxExpansions->endExpansionCE == NULL) {
                 *status = U_MEMORY_ALLOCATION_ERROR;
                 return NULL;
             }
+            uprv_memset(r->maxExpansions->endExpansionCE, 0xDB, sizeof(uint32_t)*t->maxExpansions->size);
             uprv_memcpy(r->maxExpansions->endExpansionCE, t->maxExpansions->endExpansionCE, t->maxExpansions->position*sizeof(uint32_t));
         } else {
             r->maxExpansions->endExpansionCE = NULL;
         }
         if(t->maxExpansions->expansionCESize != NULL) {
             r->maxExpansions->expansionCESize = (uint8_t *)uprv_malloc(sizeof(uint8_t)*t->maxExpansions->size);
-            uprv_memset(r->maxExpansions->expansionCESize, 0xDB, sizeof(uint8_t)*t->maxExpansions->size);
             /* test for NULL */
             if (r->maxExpansions->expansionCESize == NULL) {
                 *status = U_MEMORY_ALLOCATION_ERROR;
                 return NULL;
             }
+            uprv_memset(r->maxExpansions->expansionCESize, 0xDB, sizeof(uint8_t)*t->maxExpansions->size);
             uprv_memcpy(r->maxExpansions->expansionCESize, t->maxExpansions->expansionCESize, t->maxExpansions->position*sizeof(uint8_t));
         } else {
             r->maxExpansions->expansionCESize = NULL;
@@ -451,6 +460,9 @@ static int uprv_uca_setMaxExpansion(uint32_t           endexpansion,
             fprintf(stderr, "out of memory for maxExpansions\n");
 #endif
             *status = U_MEMORY_ALLOCATION_ERROR;
+            // Free memory in allocation error to avoid leak.
+            uprv_free(neweece); 
+            uprv_free(neweces);
             return -1;
         }
         maxexpansion->endExpansionCE  = neweece;
@@ -1899,6 +1911,11 @@ uprv_uca_canonicalClosure(tempUCATable *t,
 
     UCollator *tempColl = NULL;
     tempUCATable *tempTable = uprv_uca_cloneTempTable(t, status);
+    // Check for null pointer
+    if (tempTable == NULL) {
+    	*status = U_MEMORY_ALLOCATION_ERROR;
+    	return 0;
+    }
 
     UCATableHeader *tempData = uprv_uca_assembleTable(tempTable, status);
     tempColl = ucol_initCollator(tempData, 0, t->UCA, status);
@@ -1921,7 +1938,11 @@ uprv_uca_canonicalClosure(tempUCATable *t,
 
     /* produce canonical closure */
     UCollationElements* colEl = ucol_openElements(tempColl, NULL, 0, status);
-
+    // Check for null pointer
+    if (colEl == NULL) {
+    	*status = U_MEMORY_ALLOCATION_ERROR;
+    	return 0;
+    }
     context.t = t;
     context.tempColl = tempColl;
     context.colEl = colEl;

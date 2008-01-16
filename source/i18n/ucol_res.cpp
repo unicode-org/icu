@@ -104,6 +104,11 @@ ucol_open_internal(const char *loc,
     if(*status == U_MISSING_RESOURCE_ERROR) { /* We didn't find the tailoring data, we fallback to the UCA */
         *status = U_USING_DEFAULT_WARNING;
         result = ucol_initCollator(UCA->image, result, UCA, status);
+        // Check for null result
+        if (result == NULL) {
+        	*status = U_MEMORY_ALLOCATION_ERROR;
+        	goto clean;
+        }
         // if we use UCA, real locale is root
         ures_close(b);
         b = ures_open(U_ICUDATA_COLL, "", status);
@@ -308,6 +313,11 @@ ucol_openRules( const UChar        *rules,
             // set UCA version
             uprv_memcpy(table->UCAVersion, UCA->image->UCAVersion, sizeof(UVersionInfo));
             result = ucol_initCollator(table, 0, UCA, status);
+            // Check for null result
+            if (result == NULL) {
+            	*status = U_MEMORY_ALLOCATION_ERROR;
+            	return NULL;
+            }
             result->hasRealData = TRUE;
             result->freeImageOnClose = TRUE;
         }
@@ -315,6 +325,11 @@ ucol_openRules( const UChar        *rules,
         // must be only options
         // We will init the collator from UCA
         result = ucol_initCollator(UCA->image, 0, UCA, status);
+        // Check for null result
+        if (result == NULL) {
+        	*status = U_MEMORY_ALLOCATION_ERROR;
+        	return NULL;
+        }
         // And set only the options
         UColOptionSet *opts = (UColOptionSet *)uprv_malloc(sizeof(UColOptionSet));
         /* test for NULL */
