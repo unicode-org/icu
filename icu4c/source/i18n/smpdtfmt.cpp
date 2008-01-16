@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2007, International Business Machines Corporation and    *
+* Copyright (C) 1997-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -368,8 +368,20 @@ void SimpleDateFormat::construct(EStyle timeStyle,
         // instead of Formattable::setString()'s unaware, safe, deep string clone
         // see Jitterbug 2296
         resStr = ures_getStringByIndex(dateTimePatterns, (int32_t)timeStyle, &resStrLen, &status);
-        timeDateArray[0].adoptString(new UnicodeString(TRUE, resStr, resStrLen));
+        UnicodeString *tempus = new UnicodeString(TRUE, resStr, resStrLen);
+        // NULL pointer check
+        if (tempus == NULL) {
+        	status = U_MEMORY_ALLOCATION_ERROR;
+        	return;
+        }
+        timeDateArray[0].adoptString(tempus);
         resStr = ures_getStringByIndex(dateTimePatterns, (int32_t)dateStyle, &resStrLen, &status);
+        tempus = new UnicodeString(TRUE, resStr, resStrLen);
+        // Null pointer check
+        if (tempus == NULL) {
+        	status = U_MEMORY_ALLOCATION_ERROR;
+        	return;
+        }
         timeDateArray[1].adoptString(new UnicodeString(TRUE, resStr, resStrLen));
 
         resStr = ures_getStringByIndex(dateTimePatterns, (int32_t)kDateTime, &resStrLen, &status);
@@ -417,6 +429,11 @@ SimpleDateFormat::initializeSymbols(const Locale& locale, Calendar* calendar, UE
   } else {
     // pass in calendar type - use NULL (default) if no calendar set (or err).
     fSymbols = new DateFormatSymbols(locale, calendar?calendar->getType() :NULL , status);
+    // Null pointer check
+    if (fSymbols == NULL) {
+    	status = U_MEMORY_ALLOCATION_ERROR;
+    	return;
+    }
   }
 }
 
@@ -622,6 +639,10 @@ _appendSymbol(UnicodeString& dst,
 void
 SimpleDateFormat::appendGMT(UnicodeString &appendTo, Calendar& cal, UErrorCode& status) const{
     int32_t offset = cal.get(UCAL_ZONE_OFFSET, status) + cal.get(UCAL_DST_OFFSET, status);
+	// Caused by memory allocation during fSymbols creation.
+	if (fSymbols == NULL) {
+		status = U_MEMORY_ALLOCATION_ERROR;
+	}
     if (U_FAILURE(status)) {
         return;
     }
@@ -646,6 +667,10 @@ SimpleDateFormat::appendGMT(UnicodeString &appendTo, Calendar& cal, UErrorCode& 
 
 int32_t
 SimpleDateFormat::parseGMT(const UnicodeString &text, ParsePosition &pos) const {
+	// Caused by memory allocation during fSymbols creation.
+	if (fSymbols == NULL) {
+		return 0;
+	}
     if (!isDefaultGMTFormat()) {
         int32_t start = pos.getIndex();
 
@@ -857,6 +882,7 @@ SimpleDateFormat::parseGMTDefault(const UnicodeString &text, ParsePosition &pos)
 
 UBool
 SimpleDateFormat::isDefaultGMTFormat() const {
+	// fSymbols null pointer is checked in calling methods.
     // GMT pattern
     if (fSymbols->fGmtFormat.length() == 0) {
         // No GMT pattern is set
@@ -912,6 +938,10 @@ SimpleDateFormat::formatRFC822TZ(UnicodeString &appendTo, int32_t offset) const 
 
 void
 SimpleDateFormat::initGMTFormatters(UErrorCode &status) {
+	// Caused by memory allocation error earlier in fSymbols creation.
+	if (fSymbols == NULL) {
+		status = U_MEMORY_ALLOCATION_ERROR;
+	}
     if (U_FAILURE(status)) {
         return;
     }
@@ -960,6 +990,10 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
                             Calendar& cal,
                             UErrorCode& status) const
 {
+	// Caused by memory allocation during fSymbols creation.
+	if (fSymbols == NULL) {
+		status = U_MEMORY_ALLOCATION_ERROR;
+	}
     if (U_FAILURE(status)) {
         return;
     }
@@ -1461,6 +1495,11 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
         Calendar *copy;
         if (ambiguousYear[0]) {
             copy = cal.clone();
+            // Check for failed cloning.
+            if (copy == NULL) {
+            	status = U_MEMORY_ALLOCATION_ERROR;
+            	goto ExitParse;
+            }
             UDate parsedDate = copy->getTime(status);
             // {sfb} check internalGetDefaultCenturyStart
             if (fHaveDefaultCentury && (parsedDate < fDefaultCenturyStart)) {
@@ -1472,6 +1511,11 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
 
         if (tztype != TZTYPE_UNK) {
             copy = cal.clone();
+            // Check for failed cloning.
+            if (copy == NULL) {
+            	status = U_MEMORY_ALLOCATION_ERROR;
+            	goto ExitParse;
+            }
             const TimeZone & tz = cal.getTimeZone();
             BasicTimeZone *btz = NULL;
 
@@ -1574,7 +1618,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
             delete copy;
         }
     }
-
+ExitParse: 
     // If any Calendar calls failed, we pretend that we
     // couldn't parse the string, when in reality this isn't quite accurate--
     // we did parse it; the Calendar calls just failed.
@@ -1784,6 +1828,12 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
     ParsePosition pos(0);
     int32_t patternCharIndex;
     UnicodeString temp;
+    
+	// Caused by memory allocation during fSymbols creation.
+	if (fSymbols == NULL) {
+		return -1; // Failed
+	}
+    
     UChar *patternCharPtr = u_strchr(DateFormatSymbols::getPatternUChars(), ch);
 
 #if defined (U_DEBUG_CAL)
@@ -2334,8 +2384,13 @@ UnicodeString&
 SimpleDateFormat::toLocalizedPattern(UnicodeString& result,
                                      UErrorCode& status) const
 {
-    translatePattern(fPattern, result, DateFormatSymbols::getPatternUChars(), fSymbols->fLocalPatternChars, status);
-    return result;
+	// Caused by memory allocation during fSymbols creation.
+	if (fSymbols == NULL) {
+		status = U_MEMORY_ALLOCATION_ERROR;
+	} else {
+		translatePattern(fPattern, result, DateFormatSymbols::getPatternUChars(), fSymbols->fLocalPatternChars, status);
+	}
+	return result;
 }
 
 //----------------------------------------------------------------------
@@ -2352,6 +2407,11 @@ void
 SimpleDateFormat::applyLocalizedPattern(const UnicodeString& pattern,
                                         UErrorCode &status)
 {
+	// Caused by memory allocation during fSymbols creation.
+	if (fSymbols == NULL) {
+		status = U_MEMORY_ALLOCATION_ERROR;
+		return;
+	}
     translatePattern(pattern, fPattern, fSymbols->fLocalPatternChars, DateFormatSymbols::getPatternUChars(), status);
 }
 
