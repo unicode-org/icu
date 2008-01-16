@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2006, International Business Machines
+*   Copyright (c) 2001-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -612,8 +612,11 @@ Transliterator* TransliteratorRegistry::reget(const UnicodeString& ID,
 void TransliteratorRegistry::put(Transliterator* adoptedProto,
                                  UBool visible) {
     Entry *entry = new Entry();
-    entry->adoptPrototype(adoptedProto);
-    registerEntry(adoptedProto->getID(), entry, visible);
+    // Null pointer check
+    if (entry != NULL) {
+	    entry->adoptPrototype(adoptedProto);
+	    registerEntry(adoptedProto->getID(), entry, visible);
+    }
 }
 
 void TransliteratorRegistry::put(const UnicodeString& ID,
@@ -621,8 +624,11 @@ void TransliteratorRegistry::put(const UnicodeString& ID,
                                  Transliterator::Token context,
                                  UBool visible) {
     Entry *entry = new Entry();
-    entry->setFactory(factory, context);
-    registerEntry(ID, entry, visible);
+    // Null pointer check
+    if (entry != NULL) {
+	    entry->setFactory(factory, context);
+	    registerEntry(ID, entry, visible);
+    }
 }
 
 void TransliteratorRegistry::put(const UnicodeString& ID,
@@ -631,15 +637,18 @@ void TransliteratorRegistry::put(const UnicodeString& ID,
                                  UBool readonlyResourceAlias,
                                  UBool visible) {
     Entry *entry = new Entry();
-    entry->entryType = (dir == UTRANS_FORWARD) ? Entry::RULES_FORWARD
-        : Entry::RULES_REVERSE;
-    if (readonlyResourceAlias) {
-        entry->stringArg.setTo(TRUE, resourceName.getBuffer(), -1);
+    // Null pointer check
+    if (entry != NULL) {
+	    entry->entryType = (dir == UTRANS_FORWARD) ? Entry::RULES_FORWARD
+	        : Entry::RULES_REVERSE;
+	    if (readonlyResourceAlias) {
+	        entry->stringArg.setTo(TRUE, resourceName.getBuffer(), -1);
+	    }
+	    else {
+	        entry->stringArg = resourceName;
+	    }
+	    registerEntry(ID, entry, visible);
     }
-    else {
-        entry->stringArg = resourceName;
-    }
-    registerEntry(ID, entry, visible);
 }
 
 void TransliteratorRegistry::put(const UnicodeString& ID,
@@ -647,14 +656,17 @@ void TransliteratorRegistry::put(const UnicodeString& ID,
                                  UBool readonlyAliasAlias,
                                  UBool visible) {
     Entry *entry = new Entry();
-    entry->entryType = Entry::ALIAS;
-    if (readonlyAliasAlias) {
-        entry->stringArg.setTo(TRUE, alias.getBuffer(), -1);
+    // Null pointer check
+    if (entry != NULL) {
+	    entry->entryType = Entry::ALIAS;
+	    if (readonlyAliasAlias) {
+	        entry->stringArg.setTo(TRUE, alias.getBuffer(), -1);
+	    }
+	    else {
+	        entry->stringArg = alias;
+	    }
+	    registerEntry(ID, entry, visible);
     }
-    else {
-        entry->stringArg = alias;
-    }
-    registerEntry(ID, entry, visible);
 }
 
 void TransliteratorRegistry::remove(const UnicodeString& ID) {
@@ -885,9 +897,12 @@ void TransliteratorRegistry::registerEntry(const UnicodeString& ID,
         registerSTV(source, target, variant);
         if (!availableIDs.contains((void*) &ID)) {
             UnicodeString *newID = (UnicodeString *)ID.clone();
-            // NUL-terminate the ID string
-            newID->getTerminatedBuffer();
-            availableIDs.addElement(newID, status);
+            // Check to make sure newID was created.
+            if (newID != NULL) {
+	            // NUL-terminate the ID string
+	            newID->getTerminatedBuffer();
+	            availableIDs.addElement(newID, status);
+            }
         }
     } else {
         removeSTV(source, target, variant);
@@ -929,10 +944,17 @@ void TransliteratorRegistry::registerSTV(const UnicodeString& source,
     // We add the variant string.  If it is the special "no variant"
     // string, that is, the empty string, we add it at position zero.
     if (!variants->contains((void*) &variant)) {
+    	UnicodeString *tempus; // Used for null pointer check.
         if (variant.length() > 0) {
-            variants->addElement(new UnicodeString(variant), status);
+        	tempus = new UnicodeString(variant);
+        	if (tempus != NULL) {
+        		variants->addElement(tempus, status);
+        	}
         } else {
-            variants->insertElementAt(new UnicodeString(NO_VARIANT), 0, status);
+        	tempus = new UnicodeString(NO_VARIANT) ;
+        	if (tempus != NULL) {
+        		variants->insertElementAt(tempus, 0, status);
+        	}
         }
     }
 }
@@ -1236,6 +1258,11 @@ Transliterator* TransliteratorRegistry::instantiateEntry(const UnicodeString& ID
     case Entry::COMPOUND_RBT:
         {
             UVector* rbts = new UVector(status);
+            // Check for null pointer
+            if (rbts == NULL) {
+            	status = U_MEMORY_ALLOCATION_ERROR;
+            	return NULL;
+            }
             int32_t passNumber = 1;
             for (int32_t i = 0; U_SUCCESS(status) && i < entry->u.dataVector->size(); i++) {
                 Transliterator* t = new RuleBasedTransliterator(UnicodeString(CompoundTransliterator::PASS_STRING) + (passNumber++),
