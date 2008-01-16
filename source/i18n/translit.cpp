@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1999-2007, International Business Machines
+ *   Copyright (C) 1999-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *   Date        Name        Description
@@ -948,10 +948,12 @@ Transliterator::createInstance(const UnicodeString& ID,
     else {
         t = (Transliterator*)list.elementAt(0);
     }
-    
-    t->setID(canonID);
-    if (globalFilter != NULL) {
-        t->adoptFilter(globalFilter);
+    // Check null pointer
+    if (t != NULL) {
+	    t->setID(canonID);
+	    if (globalFilter != NULL) {
+	        t->adoptFilter(globalFilter);
+	    }
     }
     return t;
 }
@@ -1103,15 +1105,26 @@ Transliterator::createFromRules(const UnicodeString& ID,
             }
             if (!parser.dataVector.isEmpty()) {
                 TransliterationRuleData* data = (TransliterationRuleData*)parser.dataVector.orphanElementAt(0);
-                transliterators.addElement(
-                    new RuleBasedTransliterator(UnicodeString(CompoundTransliterator::PASS_STRING) + (passNumber++),
-                    data, TRUE), status);
+                RuleBasedTransliterator* temprbt = new RuleBasedTransliterator(UnicodeString(CompoundTransliterator::PASS_STRING) + (passNumber++),
+                        data, TRUE);
+                // Check if NULL before adding it to transliterators to avoid future usage of NULL pointer.
+                if (temprbt == NULL) {
+                	status = U_MEMORY_ALLOCATION_ERROR;
+                	return t;
+                }
+                transliterators.addElement(temprbt, status);
             }
         }
 
         t = new CompoundTransliterator(transliterators, passNumber - 1, parseError, status);
-        t->setID(ID);
-        t->adoptFilter(parser.orphanCompoundFilter());
+        // Null pointer check
+        if (t != NULL) {
+	        t->setID(ID);
+	        t->adoptFilter(parser.orphanCompoundFilter());
+        } 
+    }
+    if (t == NULL) {
+    	status = U_MEMORY_ALLOCATION_ERROR;
     }
     return t;
 }
@@ -1164,21 +1177,25 @@ const Transliterator& Transliterator::getElement(int32_t index, UErrorCode& ec) 
 UnicodeSet& Transliterator::getSourceSet(UnicodeSet& result) const {
     handleGetSourceSet(result);
     if (filter != NULL) {
-    UnicodeSet* filterSet;
-    UBool deleteFilterSet = FALSE;
-    // Most, but not all filters will be UnicodeSets.  Optimize for
-    // the high-runner case.
-    if (filter->getDynamicClassID() == UnicodeSet::getStaticClassID()) {
-        filterSet = (UnicodeSet*) filter;
-    } else {
-        filterSet = new UnicodeSet();
-        deleteFilterSet = TRUE;
-        filter->addMatchSetTo(*filterSet);
-    }
-    result.retainAll(*filterSet);
-    if (deleteFilterSet) {
-        delete filterSet;
-    }
+	    UnicodeSet* filterSet;
+	    UBool deleteFilterSet = FALSE;
+	    // Most, but not all filters will be UnicodeSets.  Optimize for
+	    // the high-runner case.
+	    if (filter->getDynamicClassID() == UnicodeSet::getStaticClassID()) {
+	        filterSet = (UnicodeSet*) filter;
+	    } else {
+	        filterSet = new UnicodeSet();
+	        // Check null pointer
+	        if (filterSet == NULL) {
+	        	return result;
+	        }
+	        deleteFilterSet = TRUE;
+	        filter->addMatchSetTo(*filterSet);
+	    }
+	    result.retainAll(*filterSet);
+	    if (deleteFilterSet) {
+	        delete filterSet;
+	    }
     }
     return result;
 }
@@ -1533,13 +1550,37 @@ UBool Transliterator::initializeRegistry() {
     // Manually add prototypes that the system knows about to the
     // cache.  This is how new non-rule-based transliterators are
     // added to the system.
+    
+    // This is to allow for null pointer check
+    NullTransliterator* tempNullTranslit = new NullTransliterator();
+    LowercaseTransliterator* tempLowercaseTranslit = new LowercaseTransliterator();
+    UppercaseTransliterator* tempUppercaseTranslit = new UppercaseTransliterator();
+    TitlecaseTransliterator* tempTitlecaseTranslit = new TitlecaseTransliterator();
+    UnicodeNameTransliterator* tempUnicodeTranslit = new UnicodeNameTransliterator();
+    NameUnicodeTransliterator* tempNameUnicodeTranslit = new NameUnicodeTransliterator();
+    // Check for null pointers
+    if (tempNullTranslit == NULL || tempLowercaseTranslit == NULL || tempUppercaseTranslit == NULL ||
+    		tempTitlecaseTranslit == NULL || tempUnicodeTranslit == NULL || tempNameUnicodeTranslit == NULL) {
+    	delete tempNullTranslit;
+    	delete tempLowercaseTranslit;
+    	delete tempUppercaseTranslit;
+    	delete tempTitlecaseTranslit;
+    	delete tempUnicodeTranslit;
+    	delete tempNameUnicodeTranslit;
+    	
+    	// Since there was an error, remove registry
+    	delete registry;
+    	registry = NULL;
+    	
+    	return 0;
+    }
 
-    registry->put(new NullTransliterator(), TRUE);
-    registry->put(new LowercaseTransliterator(), TRUE);
-    registry->put(new UppercaseTransliterator(), TRUE);
-    registry->put(new TitlecaseTransliterator(), TRUE);
-    registry->put(new UnicodeNameTransliterator(), TRUE);
-    registry->put(new NameUnicodeTransliterator(), TRUE);
+    registry->put(tempNullTranslit, TRUE);
+    registry->put(tempLowercaseTranslit, TRUE);
+    registry->put(tempUppercaseTranslit, TRUE);
+    registry->put(tempTitlecaseTranslit, TRUE);
+    registry->put(tempUnicodeTranslit, TRUE);
+    registry->put(tempNameUnicodeTranslit, TRUE);
 
     RemoveTransliterator::registerIDs(); // Must be within mutex
     EscapeTransliterator::registerIDs();
