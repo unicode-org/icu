@@ -1160,16 +1160,24 @@ SimpleTimeZone::initTransitionRules(UErrorCode& status) {
             initialRule = new InitialTimeZoneRule(tzid+STD_STR, getRawOffset(), 0);
             firstTransition = new TimeZoneTransition(firstDstStart, *initialRule, *dstRule);
         }
+        // Check for null pointers.
+        if (initialRule == NULL || firstTransition == NULL) {
+        	status = U_MEMORY_ALLOCATION_ERROR;
+        	deleteTransitionRules();
+        	return;
+        }
         
     } else {
         // Create a TimeZoneRule for initial time
         initialRule = new InitialTimeZoneRule(tzid, getRawOffset(), 0);
+        // Check for null pointer.
+        if (initialRule == NULL) {
+        	status = U_MEMORY_ALLOCATION_ERROR;
+        	deleteTransitionRules();
+        	return;
+        }
     }
-    if (initialRule == NULL || firstTransition == NULL) {
-    	status = U_MEMORY_ALLOCATION_ERROR;
-    	deleteTransitionRules();
-    	return;
-    }
+
     transitionRulesInitialized = true;
 }
 
