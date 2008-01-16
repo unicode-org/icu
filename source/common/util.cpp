@@ -433,6 +433,11 @@ uprv_openRuleWhiteSpaceSet(UErrorCode* ec) {
     // create a set with the Pattern_White_Space characters,
     // without a pattern for fewer code dependencies
     U_NAMESPACE_QUALIFIER UnicodeSet *set=new U_NAMESPACE_QUALIFIER UnicodeSet(9, 0xd);
+    // Check for new failure.
+    if (set == NULL) {
+    	*ec = U_MEMORY_ALLOCATION_ERROR;
+    	return NULL;
+    }
     set->UnicodeSet::add(0x20).add(0x85).add(0x200e, 0x200f).add(0x2028, 0x2029);
     return set;
 }
