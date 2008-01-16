@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1999-2007, International Business Machines Corporation and   *
+* Copyright (C) 1999-2008, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 *
@@ -1138,9 +1138,12 @@ UnicodeString::copy(int32_t start, int32_t limit, int32_t dest) {
         return; // Nothing to do; avoid bogus malloc call
     }
     UChar* text = (UChar*) uprv_malloc( sizeof(UChar) * (limit - start) );
-    extractBetween(start, limit, text, 0);
-    insert(dest, text, 0, limit - start);    
-    uprv_free(text);
+    // Check to make sure text is not null.
+    if (text != NULL) {
+	    extractBetween(start, limit, text, 0);
+	    insert(dest, text, 0, limit - start);    
+	    uprv_free(text);
+    }
 }
 
 /**
