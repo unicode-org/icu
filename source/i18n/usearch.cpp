@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2007 IBM and others. All rights reserved.
+*   Copyright (C) 2001-2008 IBM and others. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *  07/02/2001   synwee      Creation.
@@ -965,6 +965,10 @@ inline UBool checkIdentical(const UStringSearch *strsrch, int32_t start,
         status = U_ZERO_ERROR;
         // allocate one buffer for both decompositions
         text = (UChar *)uprv_malloc(decomplength * 2 * U_SIZEOF_UCHAR);
+        // Check for allocation failure.
+        if (text == NULL) {
+        	return FALSE;
+        }
         pattern = text + decomplength;
         unorm_decompose(text, decomplength, strsrch->search->text + start, 
                         length, FALSE, 0, &status);

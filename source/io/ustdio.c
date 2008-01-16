@@ -1,7 +1,7 @@
 /*
  ******************************************************************************
  *
- *   Copyright (C) 1998-2007, International Business Machines
+ *   Copyright (C) 1998-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  ******************************************************************************
@@ -162,6 +162,10 @@ static const UChar * u_file_translit(UFILE *f, const UChar *src, int32_t *count,
         else
         {
             f->fTranslit->buffer = (UChar*)uprv_realloc(f->fTranslit->buffer, newlen * sizeof(UChar));
+        }
+        /* Check for malloc/realloc failure. */
+        if (f->fTranslit->buffer == NULL) {
+        	return NULL;
         }
         f->fTranslit->capacity = newlen;
     }
