@@ -243,23 +243,3 @@ class CharsetUTF32 extends CharsetICU {
         return new CharsetEncoderUTF32(this);
     }
 }
-
-/**
- * The purpose of this class is to set isBigEndian to true and isEndianSpecified to true in the super class, and to
- * allow the Charset framework to open the variant UTF-32 converter without extra setup work.
- */
-class CharsetUTF32BE extends CharsetUTF32 {
-    public CharsetUTF32BE(String icuCanonicalName, String javaCanonicalName, String[] aliases) {
-        super(icuCanonicalName, javaCanonicalName, aliases);
-    }
-}
-
-/**
- * The purpose of this class is to set isBigEndian to false and isEndianSpecified to true in the super class, and to
- * allow the Charset framework to open the variant UTF-32 converter without extra setup work.
- */
-class CharsetUTF32LE extends CharsetUTF32 {
-    public CharsetUTF32LE(String icuCanonicalName, String javaCanonicalName, String[] aliases) {
-        super(icuCanonicalName, javaCanonicalName, aliases);
-    }
-}
