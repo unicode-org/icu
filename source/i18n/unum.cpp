@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-2007, International Business Machines
+*   Copyright (C) 1996-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 * Modification History:
@@ -271,8 +271,13 @@ unum_formatDoubleCurrency(const UNumberFormat* fmt,
     if (pos != 0) {
         fp.setField(pos->field);
     }
-
-    Formattable n(new CurrencyAmount(number, currency, *status));
+    CurrencyAmount *tempCurrAmnt = new CurrencyAmount(number, currency, *status);
+    // Check for null pointer.
+    if (tempCurrAmnt == NULL) {
+    	*status = U_MEMORY_ALLOCATION_ERROR;
+    	return -1;
+    }
+    Formattable n(tempCurrAmnt);
     ((const NumberFormat*)fmt)->format(n, res, fp, *status);
     
     if (pos != 0) {

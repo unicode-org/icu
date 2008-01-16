@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (c) 2001-2004, International Business Machines
+ *   Copyright (c) 2001-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *   Date        Name        Description
@@ -82,7 +82,10 @@ static UChar* copySpec(const UChar* spec) {
     }
     ++len;
     UChar *result = (UChar *)uprv_malloc(len*sizeof(UChar));
-    uprv_memcpy(result, spec, len*sizeof(result[0]));
+    // Check for memory allocation error. 
+    if (result != NULL) {
+    	uprv_memcpy(result, spec, len*sizeof(result[0]));
+    }
     return result;
 }
 
