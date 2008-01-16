@@ -520,6 +520,11 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
     if (stackBuffer == NULL || *pBufferSize < bufferSizeNeeded) {
         /* allocate one here...*/
         stackBufferChars = (char *)uprv_malloc(bufferSizeNeeded);
+        // Null pointer check.
+        if (stackBufferChars == NULL) {
+        	*status = U_MEMORY_ALLOCATION_ERROR;
+        	return NULL;
+        }
         colAllocated = TRUE;
         if (U_SUCCESS(*status)) {
             *status = U_SAFECLONE_ALLOCATED_WARNING;
@@ -533,6 +538,11 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
     }
     if (coll->freeImageOnClose) {
         image = (uint8_t *)uprv_malloc(imageSize);
+        // Null pointer check
+        if (image == NULL) {
+        	*status = U_MEMORY_ALLOCATION_ERROR;
+        	return NULL;
+        }
         ucol_cloneBinary(coll, image, imageSize, status);
         imageAllocated = TRUE;
     }
@@ -1653,7 +1663,8 @@ void collPrevIterNormalize(collIterate *data)
             data->writableBuffer = (UChar *)uprv_malloc((normLen + 1) *
                                                         sizeof(UChar));
             if(data->writableBuffer == NULL) { // something is wrong here, return
-              return;
+            	data->writableBufSize = 0;     // Reset writableBufSize
+            	return;
             }
             data->flags |= UCOL_ITER_ALLOCATED;
             /* to handle the zero termination */
@@ -2138,6 +2149,8 @@ inline void normalizeNextContraction(collIterate *data)
           data->writableBuffer = temp;
           data->writableBufSize = size;
           data->flags |= UCOL_ITER_ALLOCATED;
+        } else {
+        	return; // Avoid writing past bound of buffer->writableBuffer.
         }
     }
 
@@ -2228,6 +2241,10 @@ inline UChar getNextNormalizedChar(collIterate *data)
                 /* at the end of the string, dump it into the normalizer */
                 data->pos = insertBufferEnd(data, data->pos,
                                             *(data->fcdPosition)) + 1;
+                // Check if data->pos received a null pointer
+                if (data->pos == NULL) {
+                	return (UChar)NULL; // Return a NULL UChar to indicate error.
+                }
                 return *(data->fcdPosition ++);
             }
             pEndWritableBuffer = data->pos;
@@ -2273,6 +2290,10 @@ inline UChar getNextNormalizedChar(collIterate *data)
             int32_t length = data->fcdPosition - data->pos + 1;
             data->pos = insertBufferEnd(data, pEndWritableBuffer,
                                         data->pos - 1, length);
+            // Check if data->pos received a null pointer
+            if (data->pos == NULL) {
+            	return (UChar)NULL; // Return a NULL UChar to indicate error.
+            }
             return *(data->pos ++);
         }
     }
@@ -2283,6 +2304,10 @@ inline UChar getNextNormalizedChar(collIterate *data)
         appended to the buffer.
         */
         data->pos = insertBufferEnd(data, pEndWritableBuffer, ch) + 1;
+        // Check if data->pos received a null pointer
+        if (data->pos == NULL) {
+        	return (UChar)NULL; // Return a NULL UChar to indicate error.
+        }
     }
 
     /* points back to the pos in string */
@@ -2327,7 +2352,8 @@ inline void setDiscontiguosAttribute(collIterate *source, UChar *buffer,
         source->writableBuffer =
                      (UChar *)uprv_malloc((length + 1) * sizeof(UChar));
         if(source->writableBuffer == NULL) {
-          return;
+        	source->writableBufSize = 0; // Reset size
+        	return;
         }
         source->writableBufSize = length;
     }
@@ -3033,6 +3059,11 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
                             numTempBufSize *= 2;
                             if (numTempBuf == stackNumTempBuf){
                                 numTempBuf = (uint8_t *)uprv_malloc(sizeof(uint8_t) * numTempBufSize);
+                                // Null pointer check
+                                if (numTempBuf == NULL) {
+                                	*status = U_MEMORY_ALLOCATION_ERROR;
+                                	return 0;
+                                }
                                 uprv_memcpy(numTempBuf, stackNumTempBuf, UCOL_MAX_BUFFER);
                             } else {
                                 uint8_t *temp = (uint8_t *)uprv_realloc(numTempBuf, numTempBufSize);
@@ -3681,6 +3712,11 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                             numTempBufSize *= 2;
                             if (numTempBuf == stackNumTempBuf){
                                 numTempBuf = (uint8_t *)uprv_malloc(sizeof(uint8_t) * numTempBufSize);
+                                // Null pointer check
+                                if (numTempBuf == NULL) {
+                                	*status = U_MEMORY_ALLOCATION_ERROR;
+                                	return 0;
+                                }
                                 uprv_memcpy(numTempBuf, stackNumTempBuf, UCOL_MAX_BUFFER);
                             }else {
                                 uint8_t *temp = (uint8_t *)uprv_realloc(numTempBuf, numTempBufSize);
@@ -6534,6 +6570,11 @@ ucol_setUpLatinOne(UCollator *coll, UErrorCode *status) {
     }
     UChar ch = 0;
     UCollationElements *it = ucol_openElements(coll, &ch, 1, status);
+    // Check for null pointer 
+    if (it == NULL) {
+    	*status = U_MEMORY_ALLOCATION_ERROR;
+    	return FALSE;
+    }
     uprv_memset(coll->latinOneCEs, 0, sizeof(uint32_t)*coll->latinOneTableLen*3);
 
     int32_t primShift = 24, secShift = 24, terShift = 24;

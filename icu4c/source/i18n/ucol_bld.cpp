@@ -1193,6 +1193,11 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
         //UChar *conts = (UChar *)((uint8_t *)src->UCA->image + src->UCA->image->UCAConsts+sizeof(UCAConstants));
         UChar *conts = (UChar *)((uint8_t *)src->UCA->image + src->UCA->image->contractionUCACombos);
         UCollationElements *ucaEl = ucol_openElements(src->UCA, NULL, 0, status);
+        // Check for null pointer
+        if (ucaEl == NULL) {
+        	*status = U_MEMORY_ALLOCATION_ERROR;
+        	return NULL;
+        }
         while(*conts != 0) {
             /*tailoredCE = ucmpe32_get(t->mapping, *conts);*/
             tailoredCE = utrie_get32(t->mapping, *conts, NULL);
