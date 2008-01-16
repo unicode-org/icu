@@ -1487,6 +1487,11 @@ uloc_openKeywordList(const char *keywordList, int32_t keywordListSize, UErrorCod
     return NULL;
   }
   result = (UEnumeration *)uprv_malloc(sizeof(UEnumeration));
+  /* Null pointer test */
+  if (result == NULL) {
+	  *status = U_MEMORY_ALLOCATION_ERROR;
+	  return NULL;
+  }
   uprv_memcpy(result, &gKeywordsEnum, sizeof(UEnumeration));
   myContext = uprv_malloc(sizeof(UKeywordsContext));
   if (myContext == NULL) {
@@ -2681,25 +2686,27 @@ static void _load_installedLocales()
         if(U_SUCCESS(status)) {
             localeCount = ures_getSize(&installed);
             temp = (char **) uprv_malloc(sizeof(char*) * (localeCount+1));
-            
-            ures_resetIterator(&installed);
-            while(ures_hasNext(&installed)) {
-                ures_getNextString(&installed, NULL, (const char **)&temp[i++], &status);
+            /* Check for null pointer */
+            if (temp != NULL) {
+	            ures_resetIterator(&installed);
+	            while(ures_hasNext(&installed)) {
+	                ures_getNextString(&installed, NULL, (const char **)&temp[i++], &status);
+	            }
+	            temp[i] = NULL;
+	            
+	            umtx_lock(NULL);
+	            if (_installedLocales == NULL)
+	            {
+	                _installedLocales = temp;
+	                _installedLocalesCount = localeCount;
+	                temp = NULL;
+	                ucln_common_registerCleanup(UCLN_COMMON_ULOC, uloc_cleanup);
+	            } 
+	            umtx_unlock(NULL);
+	
+	            uprv_free(temp);
+	            ures_close(&installed);
             }
-            temp[i] = NULL;
-            
-            umtx_lock(NULL);
-            if (_installedLocales == NULL)
-            {
-                _installedLocales = temp;
-                _installedLocalesCount = localeCount;
-                temp = NULL;
-                ucln_common_registerCleanup(UCLN_COMMON_ULOC, uloc_cleanup);
-            } 
-            umtx_unlock(NULL);
-
-            uprv_free(temp);
-            ures_close(&installed);
         }
         ures_close(index);
     }
@@ -2885,7 +2892,13 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
         /* eat spaces prior to semi */
         for(t=(paramEnd-1);(paramEnd>s)&&isspace(*t);t--)
             ;
-        j[n].locale = uprv_strndup(s,(int32_t)((t+1)-s));
+        /* Check for null pointer from uprv_strndup */
+        char *tempstr = uprv_strndup(s,(int32_t)((t+1)-s));
+        if (tempstr == NULL) {
+        	*status = U_MEMORY_ALLOCATION_ERROR;
+        	return -1;
+        }
+        j[n].locale = tempstr;
         uloc_canonicalize(j[n].locale,tmp,sizeof(tmp)/sizeof(tmp[0]),status);
         if(strcmp(j[n].locale,tmp)) {
             uprv_free(j[n].locale);
@@ -2932,6 +2945,12 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
         return -1;
     }
     strs = uprv_malloc((size_t)(sizeof(strs[0])*n));
+    /* Check for null pointer */
+    if (strs == NULL) {
+    	uprv_free(j); /* Free to avoid memory leak */
+    	*status = U_MEMORY_ALLOCATION_ERROR;
+    	return;
+    }
     for(i=0;i<n;i++) {
 #if defined(ULOC_DEBUG)
         /*fprintf(stderr,"%d: s <%s> q <%g>\n", i, j[i].locale, j[i].q);*/
