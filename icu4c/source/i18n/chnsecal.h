@@ -1,8 +1,8 @@
 /*
- ********************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation
+ *****************************************************************************
+ * Copyright (C) 2007-2008, International Business Machines Corporation
  * and others. All Rights Reserved.
- ******************************************************************************
+ *****************************************************************************
  *
  * File CHNSECAL.H
  *
@@ -162,29 +162,6 @@ private:
 
   static const UFieldResolutionTable CHINESE_DATE_PRECEDENCE[];
 
-  /**
-   * The start year of the Chinese calendar, the 61st year of the reign
-   * of Huang Di.  Some sources use the first year of his reign,
-   * resulting in EXTENDED_YEAR values 60 years greater and ERA (cycle)
-   * values one greater.
-   */
-  static const int32_t CHINESE_EPOCH_YEAR; // Gregorian year
-  
-  /**
-   * The offset from GMT in milliseconds at which we perform astronomical
-   * computations.  Some sources use a different historically accurate
-   * offset of GMT+7:45:40 for years before 1929; we do not do this.
-   */
-  static const double CHINA_OFFSET;
-  
-  /**
-   * Value to be added or subtracted from the local days of a new moon to
-   * get close to the next or prior new moon, but not cross it.  Must be
-   * >= 1 and < CalendarAstronomer.SYNODIC_MONTH.
-   */
-  static const int32_t SYNODIC_GAP;
-
-
   static double daysToMillis(double days);
   static double millisToDays(double millis);
   virtual int32_t winterSolstice(int32_t gyear) const;
@@ -194,7 +171,7 @@ private:
   virtual UBool hasNoMajorSolarTerm(int32_t newMoon) const;
   virtual UBool isLeapMonthBetween(int32_t newMoon1, int32_t newMoon2) const;
   virtual void computeChineseFields(int32_t days, int32_t gyear,
-	         int32_t gmonth, UBool setAllFields);
+                 int32_t gmonth, UBool setAllFields);
   virtual int32_t newYear(int32_t gyear) const;
   virtual void offsetMonth(int32_t newMoon, int32_t dom, int32_t delta);
 
