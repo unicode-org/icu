@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2006, International Business Machines
+*   Copyright (C) 1998-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -144,6 +144,10 @@ u_fstropen(UChar *stringBuf,
     }
 
     result = (UFILE*) uprv_malloc(sizeof(UFILE));
+    /* Null pointer test */
+    if (result == NULL) {
+    	return NULL; /* Just get out. */
+    }
     uprv_memset(result, 0, sizeof(UFILE));
     result->str.fBuffer = stringBuf;
     result->str.fPos    = stringBuf;
