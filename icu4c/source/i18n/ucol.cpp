@@ -2243,7 +2243,7 @@ inline UChar getNextNormalizedChar(collIterate *data)
                                             *(data->fcdPosition)) + 1;
                 // Check if data->pos received a null pointer
                 if (data->pos == NULL) {
-                	return (UChar)NULL; // Return a NULL UChar to indicate error.
+                	return (UChar)-1; // Return to indicate error.
                 }
                 return *(data->fcdPosition ++);
             }
@@ -2292,7 +2292,7 @@ inline UChar getNextNormalizedChar(collIterate *data)
                                         data->pos - 1, length);
             // Check if data->pos received a null pointer
             if (data->pos == NULL) {
-            	return (UChar)NULL; // Return a NULL UChar to indicate error.
+            	return (UChar)-1; // Return to indicate error.
             }
             return *(data->pos ++);
         }
@@ -2306,7 +2306,7 @@ inline UChar getNextNormalizedChar(collIterate *data)
         data->pos = insertBufferEnd(data, pEndWritableBuffer, ch) + 1;
         // Check if data->pos received a null pointer
         if (data->pos == NULL) {
-        	return (UChar)NULL; // Return a NULL UChar to indicate error.
+        	return (UChar)-1; // Return to indicate error.
         }
     }
 
