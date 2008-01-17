@@ -2852,6 +2852,7 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
     int32_t i;
     int32_t l = (int32_t)uprv_strlen(httpAcceptLanguage);
     int32_t jSize;
+    char *tempstr; /* Use for null pointer check */
 
     j = smallBuffer;
     jSize = sizeof(smallBuffer)/sizeof(smallBuffer[0]);
@@ -2893,7 +2894,7 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
         for(t=(paramEnd-1);(paramEnd>s)&&isspace(*t);t--)
             ;
         /* Check for null pointer from uprv_strndup */
-        char *tempstr = uprv_strndup(s,(int32_t)((t+1)-s));
+        tempstr = uprv_strndup(s,(int32_t)((t+1)-s));
         if (tempstr == NULL) {
         	*status = U_MEMORY_ALLOCATION_ERROR;
         	return -1;
