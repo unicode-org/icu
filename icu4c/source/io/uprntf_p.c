@@ -800,6 +800,8 @@ u_printf_scidbl_handler(const u_printf_stream_handler  *handler,
     u_printf_spec_info scidbl_info;
     double      num = args[0].doubleValue;
     int32_t     retVal;
+    UNumberFormat *format;
+    int32_t maxSigDecimalDigits, significantDigits;
 
     memcpy(&scidbl_info, info, sizeof(u_printf_spec_info));
 
@@ -824,13 +826,13 @@ u_printf_scidbl_handler(const u_printf_stream_handler  *handler,
         retVal = u_printf_scientific_handler(handler, context, formatBundle, &scidbl_info, args);
     }
     else {
-        UNumberFormat   *format = u_locbund_getNumberFormat(formatBundle, UNUM_DECIMAL);
+        format = u_locbund_getNumberFormat(formatBundle, UNUM_DECIMAL);
         /* Check for null pointer */
         if (format == NULL) {
         	return -1;
         }
-        int32_t maxSigDecimalDigits = unum_getAttribute(format, UNUM_MAX_SIGNIFICANT_DIGITS);
-        int32_t significantDigits = scidbl_info.fPrecision;
+        maxSigDecimalDigits = unum_getAttribute(format, UNUM_MAX_SIGNIFICANT_DIGITS);
+        significantDigits = scidbl_info.fPrecision;
 
         /* use 'f' notation */
         scidbl_info.fSpec = 0x0066;
