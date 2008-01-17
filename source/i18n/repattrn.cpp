@@ -328,6 +328,7 @@ uint32_t RegexPattern::flags() const {
 RegexMatcher *RegexPattern::matcher(const UnicodeString &input,
                                     UErrorCode          &status)  const {
     RegexMatcher    *retMatcher = matcher(status);
+    retMatcher->fDeferredStatus = status;
     if (retMatcher != NULL) {
         retMatcher->reset(input);
     }
