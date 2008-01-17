@@ -704,6 +704,12 @@ OlsonTimeZone::initTransitionRules(UErrorCode& status) {
                     }
                     historicRules[typeIdx] = new TimeArrayTimeZoneRule((dst == 0 ? stdName : dstName),
                         raw, dst, times, nTimes, DateTimeRule::UTC_TIME);
+                    // Check for memory allocation error
+                    if (historicRules[typeIdx] == NULL) {
+                    	status = U_MEMORY_ALLOCATION_ERROR;
+                    	deleteTransitionRules();
+                    	return;
+                    }
                 }
             }
             uprv_free(times);
