@@ -2047,7 +2047,7 @@ ures_getVersionNumber(const UResourceBundle*   resourceBundle)
         ((UResourceBundle *)resourceBundle)->fVersion = (char *)uprv_malloc(1 + len); 
         /* Check for null pointer. */
         if (((UResourceBundle *)resourceBundle)->fVersion == NULL) {
-        	return;
+        	return NULL;
         }
        
         if(minor_len > 0) {
