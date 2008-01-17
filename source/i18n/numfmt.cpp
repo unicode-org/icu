@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2007, International Business Machines Corporation and    *
+* Copyright (C) 1997-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -361,9 +361,11 @@ Formattable& NumberFormat::parseCurrency(const UnicodeString& text,
         getEffectiveCurrency(curr, ec);
         if (U_SUCCESS(ec)) {
             Formattable n(result);
-            result.adoptObject(new CurrencyAmount(n, curr, ec));
-            if (U_FAILURE(ec)) {
+            CurrencyAmount *tempCurAmnt = new CurrencyAmount(n, curr, ec);  // Use for null testing.
+            if (U_FAILURE(ec) || tempCurAmnt == NULL) {
                 pos.setIndex(start); // indicate failure
+            } else {
+            	result.adoptObject(tempCurAmnt);
             }
         }
     }
@@ -614,7 +616,10 @@ NumberFormat::registerFactory(NumberFormatFactory* toAdopt, UErrorCode& status)
 {
   ICULocaleService *service = getNumberFormatService();
   if (service) {
-    return service->registerFactory(new NFFactory(toAdopt), status);
+	  NFFactory *tempnnf = new NFFactory(toAdopt);
+	  if (tempnnf != NULL) {
+		  return service->registerFactory(tempnnf, status);
+	  }
   }
   status = U_MEMORY_ALLOCATION_ERROR;
   return NULL;
