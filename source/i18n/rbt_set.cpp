@@ -191,7 +191,7 @@ TransliterationRuleSet::TransliterationRuleSet(const TransliterationRuleSet& oth
         	TransliterationRule *tempTranslitRule = new TransliterationRule(*(TransliterationRule*)other.ruleVector->elementAt(i));
         	// Null pointer test
         	if (tempTranslitRule == NULL) {
-        		status = U_MEMORY_ALLOCAITON_ERROR;
+        		status = U_MEMORY_ALLOCATION_ERROR;
         		break;
         	}
             ruleVector->addElement(tempTranslitRule, status);
