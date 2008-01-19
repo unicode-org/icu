@@ -1,7 +1,7 @@
 //
 //  file:  rbbirb.cpp
 //
-//  Copyright (C) 2002-2005, International Business Machines Corporation and others.
+//  Copyright (C) 2002-2008, International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains the RBBIRuleBuilder class implementation.  This is the main class for
@@ -262,6 +262,14 @@ RBBIRuleBuilder::createRuleBasedBreakIterator( const UnicodeString    &rules,
             builder.fSafeFwdTables == NULL || builder.fSafeRevTables == NULL)) 
     {
         status = U_MEMORY_ALLOCATION_ERROR;
+    }
+    
+    // Before building the tables, check to make sure the status is ok.
+    if (U_FAILURE(status)) {
+    	delete builder.fForwardTables; builder.fForwardTables = NULL;
+    	delete builder.fReverseTables; builder.fReverseTables = NULL;
+    	delete builder.fSafeFwdTables; builder.fSafeFwdTables = NULL;
+    	delete builder.fSafeRevTables; builder.fSafeRevTables = NULL;
         return NULL;
     }
 
@@ -269,9 +277,6 @@ RBBIRuleBuilder::createRuleBasedBreakIterator( const UnicodeString    &rules,
     builder.fReverseTables->build();
     builder.fSafeFwdTables->build();
     builder.fSafeRevTables->build();
-    if (U_FAILURE(status)) {
-        return NULL;
-    }
 
 #ifdef RBBI_DEBUG
     if (builder.fDebugEnv && uprv_strstr(builder.fDebugEnv, "states")) {
@@ -284,6 +289,10 @@ RBBIRuleBuilder::createRuleBasedBreakIterator( const UnicodeString    &rules,
     //      in the run-time format.
     //
     RBBIDataHeader *data = builder.flattenData(); // returns NULL if error
+    if (data == NULL) {
+    	status = U_MEMORY_ALLOCATION_ERROR;
+    	return NULL;
+    }
 
 
     //
