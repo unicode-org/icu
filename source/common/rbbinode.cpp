@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-*   Copyright (C) 2002-2006 International Business Machines Corporation   *
+*   Copyright (C) 2002-2008 International Business Machines Corporation   *
 *   and others. All rights reserved.                                      *
 ***************************************************************************
 */
@@ -149,13 +149,16 @@ RBBINode *RBBINode::cloneTree() {
         n = this;
     } else {
         n = new RBBINode(*this);
-        if (fLeftChild != NULL) {
-            n->fLeftChild          = fLeftChild->cloneTree();
-            n->fLeftChild->fParent = n;
-        }
-        if (fRightChild != NULL) {
-            n->fRightChild          = fRightChild->cloneTree();
-            n->fRightChild->fParent = n;
+        // Check for null pointer.
+        if (n != NULL) {
+	        if (fLeftChild != NULL) {
+	            n->fLeftChild          = fLeftChild->cloneTree();
+	            n->fLeftChild->fParent = n;
+	        }
+	        if (fRightChild != NULL) {
+	            n->fRightChild          = fRightChild->cloneTree();
+	            n->fRightChild->fParent = n;
+	        }
         }
     }
     return n;
