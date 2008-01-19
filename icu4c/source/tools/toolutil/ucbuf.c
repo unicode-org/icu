@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2007, International Business Machines
+*   Copyright (C) 1998-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -187,6 +187,10 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* error){
     }else{
         cbufSize = T_FileStream_size(buf->in);
         cbuf = (char*)uprv_malloc(cbufSize);
+        if (cbuf == NULL) {
+        	*error = U_MEMORY_ALLOCATION_ERROR;
+        	return NULL;
+        }
         inputRead= T_FileStream_read(buf->in,cbuf,cbufSize);
         buf->remaining-=inputRead;
     }
