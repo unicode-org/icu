@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and
+* Copyright (C) 2008, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -16,7 +16,6 @@
 #include "unicode/utypes.h"
 #include "unicode/plurfmt.h"
 #include "unicode/plurrule.h"
-#include "mutex.h"
 #include "plurrule_impl.h"
 
 #if !UCONFIG_NO_FORMATTING
@@ -60,12 +59,12 @@ PluralFormat::PluralFormat(const Locale& locale, const UnicodeString& pattern, U
 }
 
 PluralFormat::PluralFormat(const PluralRules& rules, const UnicodeString& pattern, UErrorCode& status) {
-    init(NULL, locale, status);
+    init(&rules, locale, status);
     applyPattern(pattern, status);
 }
 
 PluralFormat::PluralFormat(const Locale& locale, const PluralRules& rules, const UnicodeString& pattern, UErrorCode& status) {
-    init(NULL, locale, status);
+    init(&rules, locale, status);
     applyPattern(pattern, status);
 }
 
@@ -109,7 +108,6 @@ PluralFormat::applyPattern(const UnicodeString& newPattern, UErrorCode& status) 
     UBool spaceIncluded=FALSE;
     
     if (fParsedValuesHash==NULL) {
-        Mutex mutex;
         fParsedValuesHash = new Hashtable(TRUE, status);
         if (U_FAILURE(status)) {
             return;
@@ -257,7 +255,7 @@ UnicodeString&
 PluralFormat::format(int32_t number,
                      UnicodeString& appendTo, 
                      FieldPosition& pos,
-                     UErrorCode& status) const {
+                     UErrorCode& /*status*/) const {
 
     if (fParsedValuesHash==NULL) {
         if ( replacedNumberFormat== NULL ) {
@@ -343,7 +341,7 @@ PluralFormat::setLocale(const Locale& locale, UErrorCode& status) {
 }
 
 void
-PluralFormat::setNumberFormat(const NumberFormat* format, UErrorCode& status) {
+PluralFormat::setNumberFormat(const NumberFormat* format, UErrorCode& /*status*/) {
     // TODO: The copy constructor and assignment op of NumberFormat class are protected.
     // create a pointer as the workaround.
     replacedNumberFormat = (NumberFormat *)format;
@@ -378,9 +376,9 @@ PluralFormat::operator!=(const Format& other) const {
 }
 
 void
-PluralFormat::parseObject(const UnicodeString& source,
-                        Formattable& result,
-                        ParsePosition& pos) const
+PluralFormat::parseObject(const UnicodeString& /*source*/,
+                        Formattable& /*result*/,
+                        ParsePosition& /*pos*/) const
 {
     // TODO: not yet supported in icu4j and icu4c
 }
