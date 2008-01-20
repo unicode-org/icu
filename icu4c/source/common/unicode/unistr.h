@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1998-2007, International Business Machines
+*   Copyright (C) 1998-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -3350,7 +3350,7 @@ UnicodeString::getBuffer() const {
 //========================================
 inline int8_t
 UnicodeString::doCompare(int32_t start,
-              int32_t length,
+              int32_t thisLength,
               const UnicodeString& srcText,
               int32_t srcStart,
               int32_t srcLength) const
@@ -3359,7 +3359,7 @@ UnicodeString::doCompare(int32_t start,
     return (int8_t)!isBogus(); // 0 if both are bogus, 1 otherwise
   } else {
     srcText.pinIndices(srcStart, srcLength);
-    return doCompare(start, length, srcText.getArrayStart(), srcStart, srcLength);
+    return doCompare(start, thisLength, srcText.getArrayStart(), srcStart, srcLength);
   }
 }
 
@@ -3445,7 +3445,7 @@ UnicodeString::compareBetween(int32_t start,
 
 inline int8_t
 UnicodeString::doCompareCodePointOrder(int32_t start,
-                                       int32_t length,
+                                       int32_t thisLength,
                                        const UnicodeString& srcText,
                                        int32_t srcStart,
                                        int32_t srcLength) const
@@ -3454,7 +3454,7 @@ UnicodeString::doCompareCodePointOrder(int32_t start,
     return (int8_t)!isBogus(); // 0 if both are bogus, 1 otherwise
   } else {
     srcText.pinIndices(srcStart, srcLength);
-    return doCompareCodePointOrder(start, length, srcText.getArrayStart(), srcStart, srcLength);
+    return doCompareCodePointOrder(start, thisLength, srcText.getArrayStart(), srcStart, srcLength);
   }
 }
 
@@ -3506,7 +3506,7 @@ UnicodeString::compareCodePointOrderBetween(int32_t start,
 
 inline int8_t
 UnicodeString::doCaseCompare(int32_t start,
-                             int32_t length,
+                             int32_t thisLength,
                              const UnicodeString &srcText,
                              int32_t srcStart,
                              int32_t srcLength,
@@ -3516,7 +3516,7 @@ UnicodeString::doCaseCompare(int32_t start,
     return (int8_t)!isBogus(); // 0 if both are bogus, 1 otherwise
   } else {
     srcText.pinIndices(srcStart, srcLength);
-    return doCaseCompare(start, length, srcText.getArrayStart(), srcStart, srcLength, options);
+    return doCaseCompare(start, thisLength, srcText.getArrayStart(), srcStart, srcLength, options);
   }
 }
 
