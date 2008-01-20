@@ -19,12 +19,38 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "hash.h"
-#include "mutex.h"
+#include "ucln_in.h"
+#include "umutex.h"
 #include "plurrule_impl.h"
 #include "putilimp.h"
 #include "ustrfmt.h"
 
 #if !UCONFIG_NO_FORMATTING
+
+// gPluralRuleLocaleHash is a global hash table that maps locale name to
+// the pointer of PluralRule. gPluralRuleLocaleHash is built only once and
+// destroried at end of application. We don't need the gPluralRuleLocaleHash
+// when we move plural rules data to resource bundle in ICU4.x release.
+static UMTX pRulesLock = 0;
+static Hashtable *gPluralRuleLocaleHash=NULL;
+
+U_CDECL_BEGIN
+
+static void U_CALLCONV
+deletePHashRules(void *obj) {
+    delete (RuleChain *)obj;
+}
+
+static UBool plural_rules_cleanup(void) {
+    if (gPluralRuleLocaleHash) {
+        delete gPluralRuleLocaleHash;
+        gPluralRuleLocaleHash = NULL;
+    }
+    umtx_destroy(&pRulesLock);
+    return TRUE;
+}
+
+U_CDECL_END
 
 U_NAMESPACE_BEGIN
 
@@ -96,7 +122,6 @@ static const UChar uCharPluralRules[NUMBER_PLURAL_RULES][128] = {
   LOW_R, 0},
 };
 
-static Hashtable *gPluralRuleLocaleHash=NULL;
 static const UChar PLURAL_KEYWORD_ZERO[] = {LOW_Z,LOW_E,LOW_R,LOW_O, 0};
 static const UChar PLURAL_KEYWORD_ONE[]={LOW_O,LOW_N,LOW_E,0};
 static const UChar PLURAL_KEYWORD_TWO[]={LOW_T,LOW_W,LOW_O,0};
@@ -125,7 +150,7 @@ PluralRules::PluralRules(UErrorCode& status) {
     }
 }
 
-PluralRules::PluralRules(const PluralRules& other) 
+PluralRules::PluralRules(const PluralRules& other)
 : UObject(other)
 {
     *this=other;
@@ -135,7 +160,6 @@ PluralRules::~PluralRules() {
     delete rules;
     delete parser;
 }
-
 
 PluralRules*
 PluralRules::clone() const {
@@ -147,14 +171,14 @@ PluralRules::operator=(const PluralRules& other) {
     fLocaleStringsHash=other.fLocaleStringsHash;
     rules = new RuleChain(*other.rules);
     parser = new RuleParser();
-    
+
     return *this;
 }
 
 PluralRules* U_EXPORT2
 PluralRules::createRules(const UnicodeString& description, UErrorCode& status) {
     RuleChain   rules;
-    
+
     PluralRules *newRules = new PluralRules(status);
     if ( (newRules != NULL)&& U_SUCCESS(status) ) {
         newRules->parseDescription((UnicodeString &)description, rules, status);
@@ -186,7 +210,9 @@ PluralRules::forLocale(const Locale& locale, UErrorCode& status) {
         return NULL;
     }
     UnicodeString localeName(locale.getName());
+    umtx_lock(&pRulesLock);
     locRules = (RuleChain *) (newRules->fLocaleStringsHash->get(localeName));
+    umtx_unlock(&pRulesLock);
     if (locRules == NULL) {
         // Check parent locales.
         char parentLocale[ULOC_FULLNAME_CAPACITY];
@@ -194,7 +220,9 @@ PluralRules::forLocale(const Locale& locale, UErrorCode& status) {
         int32_t localeNameLen=0;
         uprv_strcpy(parentLocale, curLocaleName);
         while ((localeNameLen=uloc_getParent(parentLocale, parentLocale, ULOC_FULLNAME_CAPACITY, &status)) > 0) {
+            umtx_lock(&pRulesLock);
             locRules = (RuleChain *) (newRules->fLocaleStringsHash->get(localeName));
+            umtx_unlock(&pRulesLock);
             if (locRules != NULL) {
                 break;
             }
@@ -244,7 +272,6 @@ PluralRules::isKeyword(const UnicodeString& keyword) const {
 UnicodeString
 PluralRules::getKeywordOther() const {
     return PLURAL_KEYWORD_OTHER;
-    
 }
 
 UBool
@@ -253,13 +280,13 @@ PluralRules::operator==(const PluralRules& other) const  {
     UBool sameList = TRUE;
     const UnicodeString *ptrKeyword;
     UErrorCode status= U_ZERO_ERROR;
-    
+
     if ( this == &other ) {
         return TRUE;
     }
     StringEnumeration* myKeywordList = getKeywords(status);
     StringEnumeration* otherKeywordList =other.getKeywords(status);
-    
+
     if (myKeywordList->count(status)!=otherKeywordList->count(status)) {
         sameList = FALSE;
     }
@@ -282,7 +309,7 @@ PluralRules::operator==(const PluralRules& other) const  {
             return FALSE;
         }
     }
-    
+
     if ((limit=this->getRepeatLimit()) != other.getRepeatLimit()) {
         return FALSE;
     }
@@ -297,7 +324,7 @@ PluralRules::operator==(const PluralRules& other) const  {
     return TRUE;
 }
 
-void 
+void
 PluralRules::getRuleData(UErrorCode& status) {
     UnicodeString ruleData;
     UnicodeString localeData;
@@ -335,7 +362,7 @@ PluralRules::parseDescription(UnicodeString& data, RuleChain& rules, UErrorCode 
     RuleChain *ruleChain=NULL;
     AndConstraint *curAndConstraint=NULL;
     OrConstraint *orNode=NULL;
-    
+
     UnicodeString ruleData = data.toLower();
     while (ruleIndex< ruleData.length()) {
         parser->getNextToken(ruleData, &ruleIndex, token, type, status);
@@ -370,7 +397,7 @@ PluralRules::parseDescription(UnicodeString& data, RuleChain& rules, UErrorCode 
             curAndConstraint->rangeHigh=PLURAL_RANGE_HIGH;
             break;
         case tNumber:
-            if ( (curAndConstraint->op==AndConstraint::MOD)&& 
+            if ( (curAndConstraint->op==AndConstraint::MOD)&&
                  (curAndConstraint->opNum == -1 ) ) {
                 curAndConstraint->opNum=getNumberValue(token);
             }
@@ -400,12 +427,14 @@ PluralRules::parseDescription(UnicodeString& data, RuleChain& rules, UErrorCode 
             curAndConstraint = orNode->add();
             ruleChain->keyword = token;
             break;
+        default:
+            break;
         }
         prevType=type;
     }
 }
 
-int32_t 
+int32_t
 PluralRules::getNumberValue(const UnicodeString& token) const {
     int32_t i;
     char digits[128];
@@ -414,7 +443,7 @@ PluralRules::getNumberValue(const UnicodeString& token) const {
       digits[i]=(char)token.charAt(i);
     }
     digits[i]='\0';
-    
+
     return((int32_t)atoi(digits));
 }
 
@@ -422,16 +451,15 @@ PluralRules::getNumberValue(const UnicodeString& token) const {
 void
 PluralRules::getNextLocale(const UnicodeString& localeData, int32_t* curIndex, UnicodeString& localeName) {
     int32_t i=*curIndex;
-    
+
     localeName.remove();
-    
     while (i< localeData.length()) {
        if ( (localeData.charAt(i)!= SPACE) && (localeData.charAt(i)!= COMMA) ) {
            break;
        }
        i++;
     }
-    
+
     while (i< localeData.length()) {
        if ( (localeData.charAt(i)== SPACE) || (localeData.charAt(i)== COMMA) ) {
            break;
@@ -447,41 +475,49 @@ PluralRules::getRepeatLimit() const {
     return rules->getRepeatLimit();
 }
 
-void 
+void
 PluralRules::initHashtable(UErrorCode& status) {
     if (fLocaleStringsHash!=NULL) {
         return;
     }
-    if ( gPluralRuleLocaleHash == NULL ) {
-        Mutex mutex;
+    UBool needsInit;
+    UMTX_CHECK(&LOCK, (gPluralRuleLocaleHash == NULL), needsInit);/* This is here to prevent race conditions. */
+
+    if (needsInit) {
         // This static PluralRule hashtable residents in memory until end of application.
+        umtx_lock(&pRulesLock);
         if ((gPluralRuleLocaleHash = new Hashtable(TRUE, status))!=NULL) {
+            ucln_i18n_registerCleanup(UCLN_I18N_PLURAL_RULE, plural_rules_cleanup);
+            gPluralRuleLocaleHash->setValueDeleter(deletePHashRules);
             fLocaleStringsHash = gPluralRuleLocaleHash;
+            umtx_unlock(&pRulesLock);
             return;
         }
+        umtx_unlock(&pRulesLock);
     }
     else {
         fLocaleStringsHash = gPluralRuleLocaleHash;
     }
 }
 
-void 
+void
 PluralRules::addRules(RuleChain& rules, UErrorCode& status) {
     addRules(localeName, rules, FALSE, status);
 }
 
-void 
+void
 PluralRules::addRules(const UnicodeString& localeName, RuleChain& rules, UBool addToHash, UErrorCode& status) {
     RuleChain *newRule = new RuleChain(rules);
     if ( addToHash )
     {
-        {
-            Mutex mutex;
+        {  
+            umtx_lock(&pRulesLock);
             if ( (RuleChain *)fLocaleStringsHash->get(localeName) == NULL ) {
                 fLocaleStringsHash->put(localeName, newRule, status);
-                this->rules=newRule;
+                umtx_unlock(&pRulesLock);
             }
             else {
+                umtx_unlock(&pRulesLock);
                 delete newRule;
                 return;
             }
@@ -620,8 +656,6 @@ OrConstraint::add()
 {
     OrConstraint *curOrConstraint=this;
     {
-        Mutex mutex;
-        
         while (curOrConstraint->next!=NULL) {
             curOrConstraint = curOrConstraint->next;
         }
@@ -728,7 +762,6 @@ RuleChain::dumpRules(UnicodeString& result) {
                     else {
                         result += UNICODE_STRING_SIMPLE("  n ");
                     }
-                  
                     if (andRule->rangeHigh==-1) {
                         if (andRule->notIn) {
                             result += UNICODE_STRING_SIMPLE(" is not ");
@@ -759,7 +792,6 @@ RuleChain::dumpRules(UnicodeString& result) {
                         }
                     }
                 }
-                    
                 if ( (andRule=andRule->next) != NULL) {
                     result += PK_AND;
                 }
@@ -769,7 +801,6 @@ RuleChain::dumpRules(UnicodeString& result) {
             }
         }
     }
-    
     if ( next != NULL ) {
         next->dumpRules(result);
     }
@@ -783,12 +814,12 @@ RuleChain::getRepeatLimit () {
 void
 RuleChain::setRepeatLimit () {
     int32_t limit=0;
-    
+
     if ( next != NULL ) {
         next->setRepeatLimit();
         limit = next->repeatLimit;
     }
-    
+
     if ( ruleHeader != NULL ) {
         OrConstraint* orRule=ruleHeader;
         while ( orRule != NULL ) {
@@ -800,7 +831,6 @@ RuleChain::setRepeatLimit () {
             orRule = orRule->next;
         }
     }
-    
     repeatLimit = limit;
 }
 
@@ -812,7 +842,7 @@ RuleChain::getKeywords(int32_t capacityOfKeywords, UnicodeString* keywords, int3
     else {
         return U_BUFFER_OVERFLOW_ERROR;
     }
-    
+
     if ( next != NULL ) {
         return next->getKeywords(capacityOfKeywords, keywords, arraySize);
     }
@@ -826,7 +856,7 @@ RuleChain::isKeyword(const UnicodeString& keyword) const {
     if ( this->keyword == keyword ) {
         return TRUE;
     }
-    
+
     if ( next != NULL ) {
         return next->isKeyword(keyword);
     }
@@ -862,7 +892,7 @@ RuleParser::checkSyntax(tokenType prevType, tokenType curType, UErrorCode &statu
             status = U_UNEXPECTED_TOKEN;
         }
         break;
-    case tVariableN : 
+    case tVariableN :
         if (curType != tIs && curType != tMod && curType != tIn && curType != tNot) {
             status = U_UNEXPECTED_TOKEN;
         }
@@ -903,7 +933,7 @@ RuleParser::checkSyntax(tokenType prevType, tokenType curType, UErrorCode &statu
         }
         break;
     case tNumber:
-        if (curType != tDot && curType != tSemiColon && curType != tIs && curType != tNot && 
+        if (curType != tDot && curType != tSemiColon && curType != tIs && curType != tNot &&
             curType != tIn && curType != tAnd && curType != tOr)
         {
             status = U_UNEXPECTED_TOKEN;
@@ -916,7 +946,7 @@ RuleParser::checkSyntax(tokenType prevType, tokenType curType, UErrorCode &statu
 }
 
 void
-RuleParser::getNextToken(const UnicodeString& ruleData, 
+RuleParser::getNextToken(const UnicodeString& ruleData,
                          int32_t *ruleIndex,
                          UnicodeString& token,
                          tokenType& type,
@@ -925,7 +955,7 @@ RuleParser::getNextToken(const UnicodeString& ruleData,
     int32_t curIndex= *ruleIndex;
     UChar ch;
     tokenType prevType=none;
-    
+
     while (curIndex<ruleData.length()) {
         ch = ruleData.charAt(curIndex);
         if ( !inRange(ch, type) ) {
@@ -963,6 +993,7 @@ RuleParser::getNextToken(const UnicodeString& ruleData,
                 prevType=type;
                 break;
              }
+             break;
         case tNumber:
              if ((type==prevType)||(prevType==none)) {
                 prevType=type;
@@ -990,6 +1021,10 @@ RuleParser::getNextToken(const UnicodeString& ruleData,
                     return;
                  }
              }
+             break;
+         default:
+             status = U_UNEXPECTED_TOKEN;
+             return;
         }
         curIndex++;
     }
@@ -1017,7 +1052,7 @@ RuleParser::inRange(UChar ch, tokenType& type) {
         return TRUE;
     }
     switch (ch) {
-    case COLON: 
+    case COLON:
         type = tColon;
         return TRUE;
     case SPACE:
