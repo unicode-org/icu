@@ -948,11 +948,15 @@ NFRule::stripPrefix(UnicodeString& text, const UnicodeString& prefix, ParsePosit
 {
     // if the prefix text is empty, dump out without doing anything
     if (prefix.length() != 0) {
+    	UErrorCode status = U_ZERO_ERROR;
         // use prefixLength() to match the beginning of
         // "text" against "prefix".  This function returns the
         // number of characters from "text" that matched (or 0 if
         // we didn't match the whole prefix)
-        int32_t pfl = prefixLength(text, prefix);
+        int32_t pfl = prefixLength(text, prefix, status);
+        if (U_FAILURE(status)) { // Memory allocation error.
+        	return;
+        }
         if (pfl != 0) {
             // if we got a successful match, update the parse position
             // and strip the prefix off of "text"
@@ -1000,11 +1004,15 @@ NFRule::matchToDelimiter(const UnicodeString& text,
                          const NFSubstitution* sub,
                          double upperBound) const
 {
+	UErrorCode status = U_ZERO_ERROR;
     // if "delimiter" contains real (i.e., non-ignorable) text, search
     // it for "delimiter" beginning at "start".  If that succeeds, then
     // use "sub"'s doParse() method to match the text before the
     // instance of "delimiter" we just found.
-    if (!allIgnorable(delimiter)) {
+    if (!allIgnorable(delimiter, status)) {
+    	if (U_FAILURE(status)) { //Memory allocation error.
+    		return 0;
+    	}
         ParsePosition tempPP;
         Formattable result;
 
@@ -1112,7 +1120,7 @@ NFRule::matchToDelimiter(const UnicodeString& text,
 * text with a collator).  If there's no match, this is 0.
 */
 int32_t
-NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix) const
+NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix, UErrorCode& status) const
 {
     // if we're looking for an empty prefix, it obviously matches
     // zero characters.  Just go ahead and return 0.
@@ -1133,6 +1141,14 @@ NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix) cons
         RuleBasedCollator* collator = (RuleBasedCollator*)formatter->getCollator();
         CollationElementIterator* strIter = collator->createCollationElementIterator(str);
         CollationElementIterator* prefixIter = collator->createCollationElementIterator(prefix);
+        // Check for memory allocation error.
+        if (collator == NULL || strIter == NULL || prefixIter == NULL) {
+        	delete collator;
+        	delete strIter;
+        	delete prefixIter;
+        	status = U_MEMORY_ALLOCATION_ERROR;
+        	return 0;
+        }
 
         UErrorCode err = U_ZERO_ERROR;
 
@@ -1331,9 +1347,13 @@ NFRule::findText(const UnicodeString& str,
         // slow, but it will locate the key and tell use how long the
         // matching text was.
         UnicodeString temp;
+        UErrorCode status = U_ZERO_ERROR;
         while (p < str.length() && keyLen == 0) {
             temp.setTo(str, p, str.length() - p);
-            keyLen = prefixLength(temp, key);
+            keyLen = prefixLength(temp, key, status);
+            if (U_FAILURE(status)) {
+            	break;
+            }
             if (keyLen != 0) {
                 *length = keyLen;
                 return p;
@@ -1408,7 +1428,7 @@ NFRule::findText(const UnicodeString& str,
 * ignorable at the primary-order level.  false otherwise.
 */
 UBool
-NFRule::allIgnorable(const UnicodeString& str) const
+NFRule::allIgnorable(const UnicodeString& str, UErrorCode& status) const
 {
     // if the string is empty, we can just return true
     if (str.length() == 0) {
@@ -1422,6 +1442,14 @@ NFRule::allIgnorable(const UnicodeString& str) const
     if (formatter->isLenient()) {
         RuleBasedCollator* collator = (RuleBasedCollator*)(formatter->getCollator());
         CollationElementIterator* iter = collator->createCollationElementIterator(str);
+        
+        // Memory allocation error check.
+        if (collator == NULL || iter == NULL) {
+        	delete collator;
+        	delete iter;
+        	status = U_MEMORY_ALLOCATION_ERROR;
+        	return FALSE;
+        }
 
         UErrorCode err = U_ZERO_ERROR;
         int32_t o = iter->next(err);
