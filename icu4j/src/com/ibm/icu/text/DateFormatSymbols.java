@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1233,9 +1233,8 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      */
     private void initializeGMTFormat(ULocale desiredLocale) {
         // TimeZone format localization is not included in CalendarData
-        try {
-            gmtFormat = ZoneMeta.getTZLocalizationInfo(desiredLocale, ZoneMeta.GMT);
-        } catch (MissingResourceException e) {
+        gmtFormat = ZoneMeta.getTZLocalizationInfo(desiredLocale, ZoneMeta.GMT);
+        if (gmtFormat == null) {
             gmtFormat = DEFAULT_GMT_PATTERN;
         }
 

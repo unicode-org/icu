@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007, Google, IBM and  *
- * others. All Rights Reserved. *
+ * Copyright (C) 2007-2008, Google, IBM and                                    *
+ * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 
@@ -138,7 +138,8 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                             }
                         } else { // "VVVV"
                             // Location: time zone rule must be preserved.
-                            if (!outtz.getID().equals(ZoneMeta.getCanonicalID(tzids[tzidx]))) {
+                            String canonicalID = TimeZone.getCanonicalID(tzids[tzidx]);
+                            if (canonicalID != null && !outtz.getID().equals(canonicalID)) {
                                 // Canonical ID did not match - check the rules
                                 if (!((BasicTimeZone)outtz).hasEquivalentTransitions(tz, low, high)) {
                                     errln("Canonical round trip failed; tz=" + tzids[tzidx]
@@ -221,7 +222,8 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
                 String[] ids = TimeZone.getAvailableIDs();
                 for (int zidx = 0; zidx < ids.length; zidx++) {
-                    if(!ids[zidx].equals(ZoneMeta.getCanonicalID(ids[zidx]))) {
+                    String id = TimeZone.getCanonicalID(ids[zidx]);
+                    if (id == null || !id.equals(ids[zidx])) {
                         // Skip aliases
                         continue;
                     }

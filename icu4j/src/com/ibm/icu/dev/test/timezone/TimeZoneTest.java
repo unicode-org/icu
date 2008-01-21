@@ -1366,6 +1366,136 @@ public class TimeZoneTest extends TestFmwk
             }
         }
     }
+
+    public void TestCanonicalID() {
+        // Some canonical IDs in CLDR are defined as "Link"
+        // in Olson tzdata.
+        final String[][] excluded1 = {
+                {"America/Shiprock", "America/Denver"}, // America/Shiprock is defined as a Link to America/Denver in tzdata
+                {"Antarctica/South_Pole", "Antarctica/McMurdo"},
+                {"Atlantic/Jan_Mayen", "Europe/Oslo"},
+                {"Arctic/Longyearbyen", "Europe/Oslo"},
+                {"Europe/Guernsey", "Europe/London"},
+                {"Europe/Isle_of_Man", "Europe/London"},
+                {"Europe/Jersey", "Europe/London"},
+                {"Europe/Ljubljana", "Europe/Belgrade"},
+                {"Europe/Podgorica", "Europe/Belgrade"},
+                {"Europe/Sarajevo", "Europe/Belgrade"},
+                {"Europe/Skopje", "Europe/Belgrade"},
+                {"Europe/Zagreb", "Europe/Belgrade"},
+                {"Europe/Bratislava", "Europe/Prague"},
+                {"Europe/Mariehamn", "Europe/Helsinki"},
+                {"Europe/San_Marino", "Europe/Rome"},
+                {"Europe/Vatican", "Europe/Rome"},
+        };
+
+        // Following IDs are aliases of Etc/GMT in CLDR,
+        // but Olson tzdata has 3 independent definitions
+        // for Etc/GMT, Etc/UTC, Etc/UCT.
+        // Until we merge them into one equivalent group
+        // in zoneinfo.res, we exclude them in the test
+        // below.
+        final String[] excluded2 = {
+                "Etc/UCT", "UCT",
+                "Etc/UTC", "UTC",
+                "Etc/Universal", "Universal",
+                "Etc/Zulu", "Zulu",
+        };
+
+        // Walk through equivalency groups
+        String[] ids = TimeZone.getAvailableIDs();
+        for (int i = 0; i < ids.length; i++) {
+            int nEquiv = TimeZone.countEquivalentIDs(ids[i]);
+            if (nEquiv == 0) {
+                continue;
+            }
+            String tmp = TimeZone.getEquivalentID(ids[i], 0);
+            String canonicalID = TimeZone.getCanonicalID(tmp);
+            if (canonicalID == null) {
+                errln("FAIL: getCanonicalID(" + tmp + ") returned null");
+                continue;
+            }
+            // Some exceptional cases
+            for (int k = 0; k < excluded1.length; k++) {
+                if (canonicalID.equals(excluded1[k][0])) {
+                    canonicalID = excluded1[k][1];
+                }
+            }
+            boolean bFoundCanonical = false;
+            // Make sure getCanonicalID returns the exact same result
+            // for all entries within a same equivalency group with some
+            // exceptions listed in exluded1.
+            // Also, one of them must be canonical id.
+            for (int j = 0; j < nEquiv; j++) {
+                tmp = TimeZone.getEquivalentID(ids[i], j);
+                if (canonicalID.equals(tmp)) {
+                    bFoundCanonical = true;
+                }
+                String tmpCanonical = TimeZone.getCanonicalID(tmp);
+                // Some exceptional cases
+                for (int k = 0; k < excluded1.length; k++) {
+                    if (tmpCanonical.equals(excluded1[k][0])) {
+                        tmpCanonical = excluded1[k][1];
+                    }
+                }
+                if (!canonicalID.equals(tmpCanonical)) {
+                    errln("FAIL: getCanonicalID(" + tmp + ") returned " + tmpCanonical + " expected:" + canonicalID);
+                }
+            }
+            // At least one ID in an equvalency group must match the
+            // canonicalID
+            if (!bFoundCanonical) {
+                // test exclusion because of differences between Olson tzdata and CLDR
+                boolean isExcluded = false;
+                for (int k = 0; k < excluded1.length; k++) {
+                    if (ids[i].equals(excluded2[k])) {
+                        isExcluded = true;
+                        break;
+                    }
+                }
+                if (isExcluded) {
+                    continue;
+                }
+
+                errln("FAIL: No timezone ids match the canonical ID " + canonicalID);
+            }
+        }
+        // Testing some special cases
+        final String[] data = {
+                "GMT-03",
+                "GMT+4",
+                "GMT-055",
+                "GMT+430",
+                "GMT-12:15",
+                "GMT-091015",
+                "GMT+1:90",
+                "America/Argentina/Buenos_Aires",
+                "bogus",
+                "",
+                null,
+        };
+        final String[] expected = {
+                "GMT-0300",
+                "GMT+0400",
+                "GMT-0055",
+                "GMT+0430",
+                "GMT-1215",
+                "GMT-091015",
+                null,
+                "America/Buenos_Aires",
+                null,
+                null,
+                null,
+        };
+        for (int i = 0; i < data.length; i++) {
+            String canonical = TimeZone.getCanonicalID(data[i]);
+            if (canonical != null && !canonical.equals(expected[i])
+                    || canonical == null && expected[i] != null) {
+                errln("FAIL: getCanonicalID(" + data[i] + ") returned " + canonical
+                        + " - expected: " + expected[i]);
+            }
+        }
+    }
 }
 
 //eof
