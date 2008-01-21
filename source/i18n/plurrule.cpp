@@ -173,7 +173,7 @@ PluralRules::clone() const {
 
 PluralRules&
 PluralRules::operator=(const PluralRules& other) {
-    if (this != other) {
+    if (this != &other) {
         fLocaleStringsHash=other.fLocaleStringsHash;
         delete mRules;
         mRules = new RuleChain(*other.mRules);
