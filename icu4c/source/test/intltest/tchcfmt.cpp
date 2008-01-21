@@ -1,7 +1,7 @@
 
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -26,6 +26,7 @@ void TestChoiceFormat::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(1,TestComplexExample);
         TESTCASE(2,TestClosures);
         TESTCASE(3,TestPatterns);
+        TESTCASE(4,TestChoiceFormatToPatternOverflow);
         default: name = ""; break;
     }
 }
@@ -78,21 +79,6 @@ TestChoiceFormat::TestSimpleExample( void )
         errln("ERROR: ==operator failed\n");
     }
     delete formequal; 
-    
-#ifdef U_USE_CHOICE_FORMAT_DEPRECATES
-    //Testing adoptChoices() 
-    double *limitsToAdopt = (double *)uprv_malloc(7 * sizeof(double));
-    UnicodeString *monthNamesToAdopt = new UnicodeString[7];
-
-    uprv_arrayCopy(monthNames, monthNamesToAdopt, 7);
-    uprv_memcpy(limitsToAdopt, limits, (size_t)(7 * sizeof(limits[0])));    
-
-    formnew->adoptChoices(limitsToAdopt, monthNamesToAdopt, 7);
-    if(!(*formnew == *form)){
-        errln("ERROR: ==Operator or adoptChoices failed\n");
-    }
-#endif
-
     delete formnew; 
       
     //Testing getLimits()
@@ -179,7 +165,7 @@ TestChoiceFormat::TestComplexExample( void )
     it_logln("MessageFormat toPattern: " + res1);
     fileform->toPattern( res1 );
     it_logln("ChoiceFormat toPattern: " + res1);
-    if (res1 == "-1.0#are corrupted files|0.0#are no files|1.0#is one file|2.0#are {2} files") {
+    if (res1 == "-1#are corrupted files|0#are no files|1#is one file|2#are {2} files") {
         it_logln("toPattern tested!");
     }else{
         it_errln("***  ChoiceFormat to Pattern result!");
@@ -348,30 +334,11 @@ TestChoiceFormat::TestComplexExample( void )
     }
 
     form_pat.toPattern( res1 );
-    if (res1 == "0.0#none|1.0#one|2.0#many") {
+    if (res1 == "0#none|1#one|2#many") {
         it_logln("ChoiceFormat contructor( newPattern, status) tested");
     }else{
         it_errln("***  ChoiceFormat contructor( newPattern, status) or toPattern result!");
     }
-
-#ifdef U_USE_CHOICE_FORMAT_DEPRECATES
-    double* d_a = (double *)uprv_malloc(2 * sizeof(double));
-    if (!d_a) { it_errln("*** allocation error."); return; }
-    d_a[0] = 1.0; d_a[1] = 2.0;
-
-    UnicodeString* s_a = new UnicodeString[2];
-    if (!s_a) { it_errln("*** allocation error."); return; }
-    s_a[0] = "first"; s_a[1] = "second";
-
-    form_pat.adoptChoices( d_a, s_a, 2 );
-    form_pat.toPattern( res1 );
-    it_out << "ChoiceFormat adoptChoices toPattern: " << res1 << endl;
-    if (res1 == "1.0#first|2.0#second") {
-        it_logln("ChoiceFormat adoptChoices tested");
-    }else{
-        it_errln("***  ChoiceFormat adoptChoices result!");
-    }
-#endif
 
     double d_a2[] = { 3.0, 4.0 };
     UnicodeString s_a2[] = { "third", "forth" };
@@ -379,7 +346,7 @@ TestChoiceFormat::TestComplexExample( void )
     form_pat.setChoices( d_a2, s_a2, 2 );
     form_pat.toPattern( res1 );
     it_logln(UnicodeString("ChoiceFormat adoptChoices toPattern: ") + res1);
-    if (res1 == "3.0#third|4.0#forth") {
+    if (res1 == "3#third|4#forth") {
         it_logln("ChoiceFormat adoptChoices tested");
     }else{
         it_errln("***  ChoiceFormat adoptChoices result!");
@@ -497,7 +464,7 @@ void TestChoiceFormat::TestClosures(void) {
 
     // 'fmt2' is created using a pattern; it should be equivalent
     UErrorCode status = U_ZERO_ERROR;
-    const char* PAT = "0.0#,1)|1.0#[1,2]|2.0<(2,3]|3.0<(3,4)|4.0#[4,5)|5.0#[5,";
+    const char* PAT = "0#,1)|1#[1,2]|2<(2,3]|3<(3,4)|4#[4,5)|5#[5,";
     ChoiceFormat fmt2(PAT, status);
     if (U_FAILURE(status)) {
         errln("FAIL: ChoiceFormat constructor failed");
@@ -647,6 +614,18 @@ void TestChoiceFormat::TestPatterns(void) {
     // [-Inf,2.0) [2.0,1.0) [1.0,+Inf]
     _testPattern("0.0#a|2.0#b|1.0#c", FALSE,
                  0, 0, 0, 0, 0, 0);
+}
+
+void TestChoiceFormat::TestChoiceFormatToPatternOverflow() 
+{
+    static const double limits[] = {0.1e-78, 1e13, 0.1e78};
+    UnicodeString monthNames[] = { "one", "two", "three" };
+    ChoiceFormat fmt(limits, monthNames, sizeof(limits)/sizeof(limits[0]));
+    UnicodeString patStr, expectedPattern("1e-079#one|10000000000000#two|1e+077#three");
+    fmt.toPattern(patStr);
+    if (patStr != expectedPattern) {
+        errln("ChoiceFormat returned \"" + patStr + "\" instead of \"" + expectedPattern + "\"");
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

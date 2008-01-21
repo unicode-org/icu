@@ -1,7 +1,7 @@
 
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -40,6 +40,7 @@ class TestChoiceFormat: public IntlTest {
      * Test applyPattern
      */
     void TestPatterns(void);
+    void TestChoiceFormatToPatternOverflow(void);
 
     void _testPattern(const char* pattern,
                       UBool isValid,
