@@ -173,7 +173,6 @@ void CalendarCaseTest::IslamicCivil()
     if (fmt == NULL) {
         dataerrln("Error calling DateFormat::createDateInstance");
         delete c;
-        delete fmt;
         return;
     }
 
