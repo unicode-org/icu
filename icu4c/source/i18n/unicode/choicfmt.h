@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2005, International Business Machines
+*   Copyright (C) 1997-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -381,40 +381,6 @@ public:
      * @stable ICU 2.0
      */
     virtual UnicodeString& toPattern(UnicodeString &pattern) const;
-
-#ifdef U_USE_CHOICE_FORMAT_DEPRECATES
-    /**
-     * Set the choices to be used in formatting.  The arrays are adopted and
-     * should not be deleted by the caller.
-     *
-     * @param limitsToAdopt     Contains the top value that you want
-     *                          parsed with that format,and should be in
-     *                          ascending sorted order. When formatting X,
-     *                          the choice will be the i, where limit[i]
-     *                          &lt;= X &lt; limit[i+1].
-     * @param formatsToAdopt    The format strings you want to use for each limit.
-     * @param count             The size of the above arrays.
-     * @obsolete ICU 2.6. Use setChoices instead since this API will be removed in that release.
-     */
-    virtual void adoptChoices(double* limitsToAdopt,
-                              UnicodeString* formatsToAdopt,
-                              int32_t count );  
-
-    /**
-     * Set the choices to be used in formatting.  The arrays are adopted
-     * and should not be deleted by the caller.  See class description
-     * for documenatation of the limits, closures, and formats arrays.
-     * @param limitsToAdopt Array of limits to adopt
-     * @param closuresToAdopt Array of limit booleans to adopt
-     * @param formatsToAdopt Array of format string to adopt
-     * @param count The size of the above arrays
-     * @obsolete ICU 2.6. Use setChoices instead since this API will be removed in that release.
-     */
-    virtual void adoptChoices(double* limitsToAdopt,
-                              UBool* closuresToAdopt,
-                              UnicodeString* formatsToAdopt,
-                              int32_t count);
-#endif
 
     /**
      * Set the choices to be used in formatting.

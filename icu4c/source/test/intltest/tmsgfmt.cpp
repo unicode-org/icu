@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1997-2007, International Business Machines
+ * Copyright (c) 1997-2008, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************
  * File TMSGFMT.CPP
@@ -162,7 +162,7 @@ void TestMessageFormat::testBug2()
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString result;
     // {sfb} use double format in pattern, so result will match (not strictly necessary)
-    const UnicodeString pattern = "There {0,choice,0.0#are no files|1.0#is one file|1.0<are {0, number} files} on disk {1}. ";
+    const UnicodeString pattern = "There {0,choice,0#are no files|1#is one file|1<are {0, number} files} on disk {1}. ";
     logln("The input pattern : " + pattern);
     MessageFormat *fmt = new MessageFormat(pattern, status);
     if (U_FAILURE(status)) {
