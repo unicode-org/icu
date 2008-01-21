@@ -171,22 +171,22 @@ ChoiceFormat::operator=(const   ChoiceFormat& that)
         
         // check for memory allocation error
         if (!fChoiceLimits || !fClosures || !fChoiceFormats) {
-        	if (fChoiceLimits) {
-        		uprv_free(fChoiceLimits);
-        		fChoiceLimits = NULL;
-        	}
-        	if (fClosures) {
-        		uprv_free(fClosures);
-        		fClosures = NULL;
-        	}
-        	if (fChoiceFormats) {
-        		delete[] fChoiceFormats;
-        		fChoiceFormats = NULL;
-        	}
+            if (fChoiceLimits) {
+                uprv_free(fChoiceLimits);
+                fChoiceLimits = NULL;
+            }
+            if (fClosures) {
+                uprv_free(fClosures);
+                fClosures = NULL;
+            }
+            if (fChoiceFormats) {
+                delete[] fChoiceFormats;
+                fChoiceFormats = NULL;
+            }
         } else {
-	        uprv_arrayCopy(that.fChoiceLimits, fChoiceLimits, fCount);
-	        uprv_arrayCopy(that.fClosures, fClosures, fCount);
-	        uprv_arrayCopy(that.fChoiceFormats, fChoiceFormats, fCount);
+            uprv_arrayCopy(that.fChoiceLimits, fChoiceLimits, fCount);
+            uprv_arrayCopy(that.fClosures, fClosures, fCount);
+            uprv_arrayCopy(that.fChoiceFormats, fChoiceFormats, fCount);
         }
     }
     return *this;
@@ -221,7 +221,7 @@ ChoiceFormat::stod(const UnicodeString& string)
 // -------------------------------------
 
 /**
- * Convert a double value to a string
+ * Convert a double value to a string without the overhead of ICU.
  */
 UnicodeString&
 ChoiceFormat::dtos(double value,
@@ -230,6 +230,7 @@ ChoiceFormat::dtos(double value,
     /* Buffer to contain the digits and any extra formatting stuff. */
     char temp[DBL_DIG + 16];
     char *itrPtr = temp;
+    char *expPtr;
     char *startPtr;
 
     sprintf(temp, "%.*g", DBL_DIG, value);
@@ -240,20 +241,32 @@ ChoiceFormat::dtos(double value,
     while (*itrPtr && (*itrPtr == '-' || isdigit(*itrPtr))) {
         itrPtr++;
     }
-    /* Have we reached something that looks like a decimal point? */
     if (*itrPtr != 0 && *itrPtr != 'e') {
+        /* We reached something that looks like a decimal point.
+        In case someone used setlocale(), which changes the decimal point. */
         *itrPtr = '.';
-
-        /* remove trailing zeros, except the one after '.' */
-        startPtr = itrPtr + 1;
-        itrPtr = uprv_strchr(startPtr, 0);
-        while(--itrPtr > startPtr){
-            if(*itrPtr == '0'){
-                *itrPtr = 0;
-            }else{
-                break;
-            }
+        itrPtr++;
+    }
+    /* Search for the exponent */
+    while (*itrPtr && *itrPtr != 'e') {
+        itrPtr++;
+    }
+    /* Verify the exponent sign */
+    if (*itrPtr == '+' || *itrPtr == '-') {
+        itrPtr++;
+    }
+    /* Remove leading zeros. You will see this on non-Windows machines. */
+    expPtr = itrPtr;
+    while (*itrPtr && *itrPtr == '0') {
+        itrPtr++;
+    }
+    if (*itrPtr && expPtr != itrPtr) {
+        /* Shift the exponent without zeros. */
+        while (*itrPtr) {
+            *(expPtr++)  = *(itrPtr++);
         }
+        // NULL terminate
+        *itrPtr = 0;
     }
     string = UnicodeString(temp, -1, US_INV);    /* invariant codepage */
     return string;
@@ -513,13 +526,13 @@ ChoiceFormat::setChoices(  const double* limits,
         return;
 
     if (fChoiceLimits) {
-    	uprv_free(fChoiceLimits);
+        uprv_free(fChoiceLimits);
     }
     if (fClosures) {
-    	uprv_free(fClosures);
+        uprv_free(fClosures);
     }
     if (fChoiceFormats) {
-    	delete [] fChoiceFormats;
+        delete [] fChoiceFormats;
     }
 
     // Note that the old arrays are deleted and this owns
@@ -531,19 +544,19 @@ ChoiceFormat::setChoices(  const double* limits,
 
     //check for memory allocation error
     if (!fChoiceLimits || !fClosures || !fChoiceFormats) {
-    	if (fChoiceLimits) {
-    		uprv_free(fChoiceLimits);
-    		fChoiceLimits = NULL;
-    	}
-    	if (fClosures) {
-    		uprv_free(fClosures);
-    		fClosures = NULL;
-    	}
-    	if (fChoiceFormats) {
-    		delete[] fChoiceFormats;
-    		fChoiceFormats = NULL;
-    	}
-    	return;
+        if (fChoiceLimits) {
+            uprv_free(fChoiceLimits);
+            fChoiceLimits = NULL;
+        }
+        if (fClosures) {
+            uprv_free(fClosures);
+            fClosures = NULL;
+        }
+        if (fChoiceFormats) {
+            delete[] fChoiceFormats;
+            fChoiceFormats = NULL;
+        }
+        return;
     }
     
     uprv_arrayCopy(limits, fChoiceLimits, fCount);
