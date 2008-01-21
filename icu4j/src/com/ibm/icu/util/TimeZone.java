@@ -1,7 +1,7 @@
 /*
  * @(#)TimeZone.java    1.51 00/01/19
  *
- * Copyright (C) 1996-2007, International Business Machines
+ * Copyright (C) 1996-2008, International Business Machines
  * Corporation and others.  All Rights Reserved.
  */
 
@@ -784,6 +784,28 @@ abstract public class TimeZone implements Serializable, Cloneable {
             TZDATA_VERSION = tzbundle.getString("TZVersion");
         }
         return TZDATA_VERSION;
+    }
+
+    /**
+     * Returns the canonical system timezone ID or the normalized
+     * custom time zone ID for the given time zone ID.
+     * @param id The input timezone ID to be canonicalized.
+     * @return The canonical system timezone ID or the custom timezone ID
+     * in normalized format for the given timezone ID.  When the given timezone ID
+     * is neither a known system time zone ID nor a valid custom timezone ID,
+     * null is returned.
+     * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static String getCanonicalID(String id) {
+        if (id == null || id.length() == 0) {
+            return null;
+        }
+        String canonicalID = ZoneMeta.getCanonicalSystemID(id);
+        if (canonicalID == null) {
+            canonicalID = ZoneMeta.getCustomID(id);
+        }
+        return canonicalID;
     }
 
     // =======================privates===============================
