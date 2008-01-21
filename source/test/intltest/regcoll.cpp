@@ -812,6 +812,7 @@ void CollationRegressionTest::Test4124632(/* char* par */)
     {
         errln("Failed to create collator for Locale::JAPAN");
         delete coll;
+        return;
     }
 
     static const UChar test[] = {0x41, 0x0308, 0x62, 0x63, 0};
@@ -844,6 +845,7 @@ void CollationRegressionTest::Test4132736(/* char* par */)
     {
         errln("Failed to create a collator for Locale::getFrance()");
         delete c;
+        return;
     }
 
     static const UChar test1[][CollationRegressionTest::MAX_TOKEN_LEN] =
