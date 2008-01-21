@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and         *
+ * Copyright (C) 2007-2008, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -235,9 +235,13 @@ class CharsetUTF7 extends CharsetICU {
                             break;
                         } else if ((!useIMAP && b!=PLUS) || (useIMAP && b!=AMPERSAND)) {
                             // write directly encoded character
-                            target.put(b);
-                            if (offsets!= null) {
-                                offsets.put(sourceIndex++);
+                            if (target.hasRemaining()) { // Check to make sure that there is room in target.
+                                target.put(b);
+                                if (offsets!= null) {
+                                    offsets.put(sourceIndex++);
+                                }
+                            } else {  // Get out and set the CoderResult.
+                                break;
                             }
                         } else { /* PLUS or (AMPERSAND in IMAP)*/
                             /* switch to Unicode mode */
