@@ -239,9 +239,9 @@ public:
 
 private:
     Hashtable       *fLocaleStringsHash;
-    UnicodeString   localeName;
-    RuleChain       *rules;
-    RuleParser      *parser;
+    UnicodeString   mLocaleName;
+    RuleChain       *mRules;
+    RuleParser      *mParser;
 
     PluralRules();   // default constructor not implemented
     void getRuleData(UErrorCode& status);
