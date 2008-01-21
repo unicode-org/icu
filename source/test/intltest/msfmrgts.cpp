@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation
+ * Copyright (c) 1997-2008, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
  
@@ -153,7 +153,7 @@ void MessageFormatRegressionTest::Test4058973()
 
     UnicodeString pat;
     pat = fmt->toPattern(pat);
-    UnicodeString exp("{0,choice,0.0#no files|1.0#one file|1.0< {0,number,integer} files}");
+    UnicodeString exp("{0,choice,0#no files|1#one file|1< {0,number,integer} files}");
     if (pat != exp) {
         errln("MessageFormat.toPattern failed");
         errln("Exp: " + exp);
@@ -628,7 +628,7 @@ void MessageFormatRegressionTest::Test4094906()
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString pattern("-");
     pattern += (UChar) 0x221E;
-    pattern += "<are negative|0.0<are no or fraction|1.0#is one|1.0<is 1+|";
+    pattern += "<are negative|0<are no or fraction|1#is one|1<is 1+|";
     pattern += (UChar) 0x221E;
     pattern += "<are many.";
 

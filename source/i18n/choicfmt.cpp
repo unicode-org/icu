@@ -232,7 +232,7 @@ ChoiceFormat::dtos(double value,
     char *itrPtr = temp;
     char *startPtr;
 
-    sprintf(temp, "%.*f", DBL_DIG, value);
+    sprintf(temp, "%.*g", DBL_DIG, value);
 
     /* Find and convert the decimal point.
        Using setlocale on some machines will cause sprintf to use a comma for certain locales.
@@ -240,18 +240,19 @@ ChoiceFormat::dtos(double value,
     while (*itrPtr && (*itrPtr == '-' || isdigit(*itrPtr))) {
         itrPtr++;
     }
-    if (*itrPtr) {
+    /* Have we reached something that looks like a decimal point? */
+    if (*itrPtr != 0 && *itrPtr != 'e') {
         *itrPtr = '.';
-    }
 
-    /* remove trailing zeros, except the one after '.' */
-    startPtr = itrPtr + 1;
-    itrPtr = uprv_strchr(startPtr, 0);
-    while(--itrPtr > startPtr){
-        if(*itrPtr == '0'){
-            *itrPtr = 0;
-        }else{
-            break;
+        /* remove trailing zeros, except the one after '.' */
+        startPtr = itrPtr + 1;
+        itrPtr = uprv_strchr(startPtr, 0);
+        while(--itrPtr > startPtr){
+            if(*itrPtr == '0'){
+                *itrPtr = 0;
+            }else{
+                break;
+            }
         }
     }
     string = UnicodeString(temp, -1, US_INV);    /* invariant codepage */
@@ -489,56 +490,6 @@ ChoiceFormat::toPattern(UnicodeString& result) const
 
     return result;
 }
-
-#ifdef U_USE_CHOICE_FORMAT_DEPRECATES
-// -------------------------------------
-// Adopts the limit and format arrays.
-
-void
-ChoiceFormat::adoptChoices(double *limits, 
-                           UnicodeString *formats, 
-                           int32_t cnt )
-{
-    adoptChoices(limits, (UBool *)0, formats, cnt);
-}
-
-// -------------------------------------
-// Adopts the limit and format arrays.
-
-void
-ChoiceFormat::adoptChoices(double *limits, 
-                           UBool *closures,
-                           UnicodeString *formats, 
-                           int32_t cnt )
-{
-    if(limits == 0 || formats == 0)
-        return;
-
-    if (fChoiceLImits) {
-    	uprv_free(fChoiceLimits);
-    }
-    if (fClosures) {
-    	uprv_free(fClosures);
-    }
-    if (fChoiceFormats) {
-    	delete [] fChoiceFormats;
-    }
-    fChoiceLimits = limits;
-    fClosures = closures;
-    fChoiceFormats = formats;
-    fCount = cnt;
-
-    if (fClosures == 0) {
-        fClosures = (UBool*) uprv_malloc( sizeof(UBool) * fCount);
-        if (fClosures != NULL) {
-	        int32_t i;
-	        for (i=0; i<fCount; ++i) {
-	            fClosures[i] = FALSE;
-	        }
-        } 
-    }
-}
-#endif
 
 // -------------------------------------
 // Sets the limit and format arrays. 
