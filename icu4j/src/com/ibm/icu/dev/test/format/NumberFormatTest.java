@@ -1800,8 +1800,12 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
         expect2(df, BigDecimal.valueOf(Long.MAX_VALUE), BigDecimal.valueOf(Long.MAX_VALUE).negate().toString());
         expect2(df, BigDecimal.valueOf(Long.MIN_VALUE), BigDecimal.valueOf(Long.MIN_VALUE).negate().toString());
+        
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
         expect2(df, java.math.BigDecimal.valueOf(Long.MAX_VALUE), java.math.BigDecimal.valueOf(Long.MAX_VALUE).negate().toString());
         expect2(df, java.math.BigDecimal.valueOf(Long.MIN_VALUE), java.math.BigDecimal.valueOf(Long.MIN_VALUE).negate().toString());
+//#endif
     }
 
     public void TestJB5358() {
