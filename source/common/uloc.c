@@ -1480,31 +1480,31 @@ static const UEnumeration gKeywordsEnum = {
 U_CAPI UEnumeration* U_EXPORT2
 uloc_openKeywordList(const char *keywordList, int32_t keywordListSize, UErrorCode* status)
 {
-  UKeywordsContext *myContext = NULL;
-  UEnumeration *result = NULL;
+    UKeywordsContext *myContext = NULL;
+    UEnumeration *result = NULL;
 
-  if(U_FAILURE(*status)) {
-    return NULL;
-  }
-  result = (UEnumeration *)uprv_malloc(sizeof(UEnumeration));
-  /* Null pointer test */
-  if (result == NULL) {
-	  *status = U_MEMORY_ALLOCATION_ERROR;
-	  return NULL;
-  }
-  uprv_memcpy(result, &gKeywordsEnum, sizeof(UEnumeration));
-  myContext = uprv_malloc(sizeof(UKeywordsContext));
-  if (myContext == NULL) {
-    *status = U_MEMORY_ALLOCATION_ERROR;
-    uprv_free(result);
-    return NULL;
-  }
-  myContext->keywords = (char *)uprv_malloc(keywordListSize+1);
-  uprv_memcpy(myContext->keywords, keywordList, keywordListSize);
-  myContext->keywords[keywordListSize] = 0;
-  myContext->current = myContext->keywords;
-  result->context = myContext;
-  return result;
+    if(U_FAILURE(*status)) {
+        return NULL;
+    }
+    result = (UEnumeration *)uprv_malloc(sizeof(UEnumeration));
+    /* Null pointer test */
+    if (result == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+    uprv_memcpy(result, &gKeywordsEnum, sizeof(UEnumeration));
+    myContext = uprv_malloc(sizeof(UKeywordsContext));
+    if (myContext == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        uprv_free(result);
+        return NULL;
+    }
+    myContext->keywords = (char *)uprv_malloc(keywordListSize+1);
+    uprv_memcpy(myContext->keywords, keywordList, keywordListSize);
+    myContext->keywords[keywordListSize] = 0;
+    myContext->current = myContext->keywords;
+    result->context = myContext;
+    return result;
 }
 
 U_CAPI UEnumeration* U_EXPORT2
@@ -2688,26 +2688,26 @@ static void _load_installedLocales()
             temp = (char **) uprv_malloc(sizeof(char*) * (localeCount+1));
             /* Check for null pointer */
             if (temp != NULL) {
-	            ures_resetIterator(&installed);
-	            while(ures_hasNext(&installed)) {
-	                ures_getNextString(&installed, NULL, (const char **)&temp[i++], &status);
-	            }
-	            temp[i] = NULL;
-	            
-	            umtx_lock(NULL);
-	            if (_installedLocales == NULL)
-	            {
-	                _installedLocales = temp;
-	                _installedLocalesCount = localeCount;
-	                temp = NULL;
-	                ucln_common_registerCleanup(UCLN_COMMON_ULOC, uloc_cleanup);
-	            } 
-	            umtx_unlock(NULL);
-	
-	            uprv_free(temp);
-	            ures_close(&installed);
+                ures_resetIterator(&installed);
+                while(ures_hasNext(&installed)) {
+                    ures_getNextString(&installed, NULL, (const char **)&temp[i++], &status);
+                }
+                temp[i] = NULL;
+
+                umtx_lock(NULL);
+                if (_installedLocales == NULL)
+                {
+                    _installedLocales = temp;
+                    _installedLocalesCount = localeCount;
+                    temp = NULL;
+                    ucln_common_registerCleanup(UCLN_COMMON_ULOC, uloc_cleanup);
+                } 
+                umtx_unlock(NULL);
+
+                uprv_free(temp);
             }
         }
+        ures_close(&installed);
         ures_close(index);
     }
 }
@@ -2896,8 +2896,8 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
         /* Check for null pointer from uprv_strndup */
         tempstr = uprv_strndup(s,(int32_t)((t+1)-s));
         if (tempstr == NULL) {
-        	*status = U_MEMORY_ALLOCATION_ERROR;
-        	return -1;
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            return -1;
         }
         j[n].locale = tempstr;
         uloc_canonicalize(j[n].locale,tmp,sizeof(tmp)/sizeof(tmp[0]),status);
@@ -2948,9 +2948,9 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
     strs = uprv_malloc((size_t)(sizeof(strs[0])*n));
     /* Check for null pointer */
     if (strs == NULL) {
-    	uprv_free(j); /* Free to avoid memory leak */
-    	*status = U_MEMORY_ALLOCATION_ERROR;
-    	return;
+        uprv_free(j); /* Free to avoid memory leak */
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return -1;
     }
     for(i=0;i<n;i++) {
 #if defined(ULOC_DEBUG)
