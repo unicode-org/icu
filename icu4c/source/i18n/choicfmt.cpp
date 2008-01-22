@@ -231,7 +231,6 @@ ChoiceFormat::dtos(double value,
     char temp[DBL_DIG + 16];
     char *itrPtr = temp;
     char *expPtr;
-    char *startPtr;
 
     sprintf(temp, "%.*g", DBL_DIG, value);
 
@@ -251,23 +250,27 @@ ChoiceFormat::dtos(double value,
     while (*itrPtr && *itrPtr != 'e') {
         itrPtr++;
     }
-    /* Verify the exponent sign */
-    if (*itrPtr == '+' || *itrPtr == '-') {
+    if (*itrPtr == 'e') {
         itrPtr++;
-    }
-    /* Remove leading zeros. You will see this on non-Windows machines. */
-    expPtr = itrPtr;
-    while (*itrPtr && *itrPtr == '0') {
-        itrPtr++;
-    }
-    if (*itrPtr && expPtr != itrPtr) {
-        /* Shift the exponent without zeros. */
-        while (*itrPtr) {
-            *(expPtr++)  = *(itrPtr++);
+        /* Verify the exponent sign */
+        if (*itrPtr == '+' || *itrPtr == '-') {
+            itrPtr++;
         }
-        // NULL terminate
-        *itrPtr = 0;
+        /* Remove leading zeros. You will see this on Windows machines. */
+        expPtr = itrPtr;
+        while (*itrPtr == '0') {
+            itrPtr++;
+        }
+        if (*itrPtr && expPtr != itrPtr) {
+            /* Shift the exponent without zeros. */
+            while (*itrPtr) {
+                *(expPtr++)  = *(itrPtr++);
+            }
+            // NULL terminate
+            *expPtr = 0;
+        }
     }
+
     string = UnicodeString(temp, -1, US_INV);    /* invariant codepage */
     return string;
 }
