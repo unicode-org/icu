@@ -190,6 +190,69 @@ static UnicodeString& itos(int32_t i, UnicodeString& appendTo) {
     return appendTo;
 }
 
+/*
+ * A structure representing one subformat of this MessageFormat.
+ * Each subformat has a Format object, an offset into the plain
+ * pattern text fPattern, and an argument number.  The argument
+ * number corresponds to the array of arguments to be formatted.
+ * @internal
+ */
+class MessageFormat::Subformat {
+public:
+    /**
+     * @internal 
+     */
+    Format* format; // formatter
+    /**
+     * @internal 
+     */
+    int32_t offset; // offset into fPattern
+    /**
+     * @internal 
+     */
+    // TODO (claireho) or save the number to argName and use itos to convert to number.=> we need this number
+    int32_t argNum;    // 0-based argument number
+    /**
+     * @internal 
+     */
+    UnicodeString* argName; // argument name or number
+     
+    /**
+     * Clone that.format and assign it to this.format
+     * Do NOT delete this.format
+     * @internal
+     */
+    Subformat& operator=(const Subformat& that) {
+        if (this != &that) {
+            format = that.format ? that.format->clone() : NULL;
+            offset = that.offset;
+            argNum = that.argNum;
+            argName = (that.argNum==-1) ? new UnicodeString(*that.argName): NULL;
+        }
+        return *this;
+    }
+
+    /**
+     * @internal 
+     */
+    UBool operator==(const Subformat& that) const {
+        // Do cheap comparisons first
+        return offset == that.offset &&
+               argNum == that.argNum &&
+               ((argName == that.argName) ||
+                (*argName == *that.argName)) &&
+               ((format == that.format) || // handles NULL
+                (*format == *that.format));
+    }
+
+    /**
+     * @internal
+     */
+    UBool operator!=(const Subformat& that) const {
+        return !operator==(that);
+    }
+};
+
 // -------------------------------------
 // Creates a MessageFormat instance based on the pattern.
 

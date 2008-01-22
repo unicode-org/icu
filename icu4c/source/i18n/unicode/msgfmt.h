@@ -791,59 +791,7 @@ private:
      * number corresponds to the array of arguments to be formatted.
      * @internal
      */
-    class Subformat {
-    public:
-        /**
-         * @internal 
-         */
-        Format* format; // formatter
-        /**
-         * @internal 
-         */
-        int32_t offset; // offset into fPattern
-        /**
-         * @internal 
-         */
-        // TODO (claireho) or save the number to argName and use itos to convert to number.=> we need this number
-        int32_t argNum;    // 0-based argument number
-        /**
-         * @internal 
-         */
-        UnicodeString* argName; // argument name or number
-         
-        /**
-         * Clone that.format and assign it to this.format
-         * Do NOT delete this.format
-         * @internal
-         */
-        Subformat& operator=(const Subformat& that) {
-            format = that.format ? that.format->clone() : NULL;
-            offset = that.offset;
-            argNum = that.argNum;
-            argName = (that.argNum==-1) ? new UnicodeString(*that.argName): NULL;
-            return *this;
-        }
-
-        /**
-         * @internal 
-         */
-        UBool operator==(const Subformat& that) const {
-            // Do cheap comparisons first
-            return offset == that.offset &&
-                   argNum == that.argNum &&
-                   ((argName == that.argName) ||
-                    (*argName == *that.argName)) &&
-                   ((format == that.format) || // handles NULL
-                    (*format == *that.format));
-        }
-
-        /**
-         * @internal
-         */
-        UBool operator!=(const Subformat& that) const {
-            return !operator==(that);
-        }
-    };
+    class Subformat;
 
     /**
      * A MessageFormat contains an array of subformats.  This array
