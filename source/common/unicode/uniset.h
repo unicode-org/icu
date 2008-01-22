@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-* Copyright (C) 1999-2007, International Business Machines Corporation
+* Copyright (C) 1999-2008, International Business Machines Corporation
 * and others. All Rights Reserved.
 ***************************************************************************
 *   Date        Name        Description
@@ -256,6 +256,15 @@ class RuleCharacterIterator;
  *     </tr>
  *   </table>
  * \htmlonly</blockquote>\endhtmlonly
+ * 
+ * <p>Note:
+ *  - Most UnicodeSet methods do not take a UErrorCode parameter because
+ *   there are usually very few opportunities for failure other than a shortage
+ *   of memory, error codes in low-level C++ string methods would be inconvenient,
+ *   and the error code as the last parameter (ICU convention) would prevent
+ *   the use of default parameter values.
+ *   Instead, such methods set the UnicodeSet into a "bogus" state
+ *   (see isBogus()) if an error occurs.
  *
  * @author Alan Liu
  * @stable ICU 2.0
@@ -282,6 +291,41 @@ class U_COMMON_API UnicodeSet : public UnicodeFilter {
     UChar *pat;
     UVector* strings; // maintained in sorted order
     UnicodeSetStringSpan *stringSpan;
+
+private:
+    enum { // constants
+        kIsBogus = 1       // This set is bogus (i.e. not valid)
+    };
+    uint8_t fFlags;         // Bit flag (see constants above)
+public:
+    /**
+     * Determine if this object contains a valid set.
+     * A bogus set has no value. It is different from an empty set.
+     * It can be used to indicate that no set value is available.
+     *
+     * @return TRUE if the set is valid, FALSE otherwise
+     * @see setToBogus()
+     * @draft ICU 4.0
+     */
+    inline UBool isBogus(void) const;
+    
+    /**
+     * Make this UnicodeSet object invalid.
+     * The string will test TRUE with isBogus().
+     *
+     * A bogus set has no value. It is different from an empty set.
+     * It can be used to indicate that no set value is available.
+     *
+     * This utility function is used throughout the UnicodeSet
+     * implementation to indicate that a UnicodeSet operation failed,
+     * and may be used in other functions,
+     * especially but not exclusively when such functions do not
+     * take a UErrorCode for simplicity.
+     *
+     * @see isBogus()
+     * @draft ICU 4.0
+     */
+    void setToBogus();
 
 public:
 
@@ -1509,6 +1553,10 @@ inline UBool UnicodeSet::containsSome(const UnicodeSet& s) const {
 
 inline UBool UnicodeSet::containsSome(const UnicodeString& s) const {
     return !containsNone(s);
+}
+
+inline UBool UnicodeSet::isBogus() const {
+    return (UBool)(fFlags & kIsBogus);
 }
 
 U_NAMESPACE_END
