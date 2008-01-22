@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002-2007, International Business Machines Corporation and
+ * Copyright (c) 2002-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -30,6 +30,7 @@ public:
     virtual void Extended();
     virtual void Errors();
     virtual void PerlTests();
+    virtual void Bug6149();
 
     // The following functions are internal to the regexp tests.
     virtual UBool doRegexLMTest(const char *pat, const char *text, UBool looking, UBool match, int32_t line);

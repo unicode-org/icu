@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1999-2003, International Business Machines Corporation and   *
+* Copyright (C) 1999-2008, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 *   Date        Name        Description
@@ -26,6 +26,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(UVector32)
 UVector32::UVector32(UErrorCode &status) :
     count(0),
     capacity(0),
+    maxCapacity(0),
     elements(NULL)
 {
     _init(DEFUALT_CAPACITY, status);
@@ -34,6 +35,7 @@ UVector32::UVector32(UErrorCode &status) :
 UVector32::UVector32(int32_t initialCapacity, UErrorCode &status) :
     count(0),
     capacity(0),
+    maxCapacity(0),
     elements(0)
 {
     _init(initialCapacity, status);
@@ -45,6 +47,9 @@ void UVector32::_init(int32_t initialCapacity, UErrorCode &status) {
     // Fix bogus initialCapacity values; avoid malloc(0)
     if (initialCapacity < 1) {
         initialCapacity = DEFUALT_CAPACITY;
+    }
+    if (maxCapacity>0 && maxCapacity<initialCapacity) {
+        initialCapacity = maxCapacity;
     }
     elements = (int32_t *)uprv_malloc(sizeof(int32_t)*initialCapacity);
     if (elements == 0) {
@@ -189,21 +194,35 @@ int32_t UVector32::indexOf(int32_t key, int32_t startIndex) const {
 UBool UVector32::expandCapacity(int32_t minimumCapacity, UErrorCode &status) {
     if (capacity >= minimumCapacity) {
         return TRUE;
-    } else {
-        int32_t newCap = capacity * 2;
-        if (newCap < minimumCapacity) {
-            newCap = minimumCapacity;
-        }
-        int32_t* newElems = (int32_t *)uprv_malloc(sizeof(int32_t)*newCap);
-        if (newElems == 0) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return FALSE;
-        }
-        uprv_memcpy(newElems, elements, sizeof(elements[0]) * count);
-        uprv_free(elements);
-        elements = newElems;
-        capacity = newCap;
-        return TRUE;
+    }
+    if (maxCapacity>0 && minimumCapacity>maxCapacity) {
+        status = U_BUFFER_OVERFLOW_ERROR;
+        return FALSE;
+    }
+    int32_t newCap = capacity * 2;
+    if (newCap < minimumCapacity) {
+        newCap = minimumCapacity;
+    }
+    if (maxCapacity > 0 && newCap > maxCapacity) {
+        newCap = maxCapacity;
+    }
+    int32_t* newElems = (int32_t *)uprv_malloc(sizeof(int32_t)*newCap);
+    if (newElems == 0) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return FALSE;
+    }
+    uprv_memcpy(newElems, elements, sizeof(elements[0]) * count);
+    uprv_free(elements);
+    elements = newElems;
+    capacity = newCap;
+    return TRUE;
+}
+
+void UVector32::setMaxCapacity(int32_t limit) {
+    U_ASSERT(limit >= 0);
+    maxCapacity = limit;
+    if (maxCapacity < 0) {
+        maxCapacity = 0;
     }
 }
 

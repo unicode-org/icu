@@ -1,6 +1,6 @@
 /*
 **************************************************************************
-*   Copyright (C) 2002-2007 International Business Machines Corporation  *
+*   Copyright (C) 2002-2008 International Business Machines Corporation  *
 *   and others. All rights reserved.                                     *
 **************************************************************************
 */
@@ -30,6 +30,15 @@
 
 U_NAMESPACE_BEGIN
 
+// Limit the size of the back track stack, to avoid system failures caused
+//   by heap exhaustion.  Units are in 32 bit words, not bytes.
+// This value puts ICU's limits higher than most other regexp implementations,
+//  which use recursion rather than the heap, and take more storage per
+//  backtrack point.
+// This constant is _temporary_.  Proper API to control the value will added.
+//
+static const int32_t BACKTRACK_STACK_CAPACITY = 8000000;
+
 //-----------------------------------------------------------------------------
 //
 //   Constructor and Destructor
@@ -53,8 +62,9 @@ RegexMatcher::RegexMatcher(const RegexPattern *pat)  {
     }
     if (fStack == NULL || fData == NULL) {
         fDeferredStatus = U_MEMORY_ALLOCATION_ERROR;
+    } else {
+        fStack->setMaxCapacity(BACKTRACK_STACK_CAPACITY);
     }
-        
     reset(RegexStaticSets::gStaticSets->fEmptyString);
 }
 
@@ -78,6 +88,8 @@ RegexMatcher::RegexMatcher(const UnicodeString &regexp, const UnicodeString &inp
     }
     if (fStack == NULL || fData == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
+    } else {
+        fStack->setMaxCapacity(BACKTRACK_STACK_CAPACITY);
     }
     reset(input);
 }
@@ -102,6 +114,8 @@ RegexMatcher::RegexMatcher(const UnicodeString &regexp,
     }
     if (fStack == NULL || fData == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
+    } else {
+        fStack->setMaxCapacity(BACKTRACK_STACK_CAPACITY);
     }
     reset(RegexStaticSets::gStaticSets->fEmptyString);
 }
@@ -1014,6 +1028,14 @@ UBool RegexMatcher::isUWordBoundary(int32_t pos) {
 inline REStackFrame *RegexMatcher::StateSave(REStackFrame *fp, int32_t savePatIdx, int32_t frameSize, UErrorCode &status) {
     // push storage for a new frame. 
     int32_t *newFP = fStack->reserveBlock(frameSize, status);
+    if (newFP == NULL) {
+        // Heap allocation error on attempted stack expansion.
+        // We need to return a writable stack frame, so just return the
+        //    previous frame.  The match operation will stop quickly
+        //    becuase of the error status, after which the frame will never
+        //    be looked at again.
+        return fp;
+    }
     fp = (REStackFrame *)(newFP - frameSize);  // in case of realloc of stack.
     
     // New stack frame = copy of old top frame.
@@ -1029,8 +1051,8 @@ inline REStackFrame *RegexMatcher::StateSave(REStackFrame *fp, int32_t savePatId
     fp->fPatIdx = savePatIdx;
     return (REStackFrame *)newFP;
 }
-    
-            
+
+
 //--------------------------------------------------------------------------------
 //
 //   MatchAt      This is the actual matching engine.
@@ -2261,6 +2283,7 @@ GC_Done:
         }
 
         if (U_FAILURE(status)) {
+            isMatch = FALSE;
             break;
         }
     }

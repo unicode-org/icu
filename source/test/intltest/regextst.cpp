@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2002-2007, International Business Machines Corporation and
+ * Copyright (c) 2002-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -66,6 +66,10 @@ void RegexTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
         case 6: name = "PerlTests";
             if (exec) PerlTests();
             break;
+        case 7: name = "Bug 6149";
+            if (exec) Bug6149();
+            break;
+            
 
 
         default: name = "";
@@ -1639,6 +1643,12 @@ void RegexTest::Errors() {
 
     // Ticket 5389
     REGEX_ERR("*c", 1, 1, U_REGEX_RULE_SYNTAX);
+    
+    // Invalid Back Reference \0
+    //    For ICU 3.8 and earlier
+    //    For ICU versions newer than 3.8, \0 introduces an octal escape.
+    //
+    REGEX_ERR("(ab)\\0", 1, 6, U_REGEX_INVALID_BACK_REF);
 
 }
 
@@ -2122,6 +2132,26 @@ void RegexTest::PerlTests() {
 }
 
 
+//--------------------------------------------------------------
+//
+//  Bug6149   Verify limits to heap expansion for backtrack stack.
+//             Use this pattern,
+//                 "(a?){1,}"
+//             The zero-length match will repeat forever.
+//                (That this goes into a loop is another bug)
+//
+//---------------------------------------------------------------
+void RegexTest::Bug6149() {
+    UnicodeString pattern("(a?){1,}");
+    UnicodeString s("xyz");
+    uint32_t flags = 0;
+    UErrorCode status = U_ZERO_ERROR;
+    
+    RegexMatcher  matcher(pattern, s, flags, status);
+    UBool result = false;
+    REGEX_ASSERT_FAIL(result=matcher.matches(status), U_BUFFER_OVERFLOW_ERROR);
+    REGEX_ASSERT(result == FALSE);
+ }
 
 #endif  /* !UCONFIG_NO_REGULAR_EXPRESSIONS  */
 

@@ -2,7 +2,7 @@
 //
 //  file:  regexcmp.cpp
 //
-//  Copyright (C) 2002-2007 International Business Machines Corporation and others.
+//  Copyright (C) 2002-2008 International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains the ICU regular expression compiler, which is responsible
@@ -1186,14 +1186,17 @@ UBool RegexCompile::doParseActions(int32_t action)
             // Because capture groups can be forward-referenced by back-references,
             //  we fill the operand with the capture group number.  At the end
             //  of compilation, it will be changed to the variable's location.
-            U_ASSERT(groupNum > 0);
-            int32_t  op;
-            if (fModeFlags & UREGEX_CASE_INSENSITIVE) {
-                op = URX_BUILD(URX_BACKREF_I, groupNum);
+            if (groupNum < 1) { 
+                error(U_REGEX_INVALID_BACK_REF);
             } else {
-                op = URX_BUILD(URX_BACKREF, groupNum);
+                int32_t  op;
+                if (fModeFlags & UREGEX_CASE_INSENSITIVE) {
+                    op = URX_BUILD(URX_BACKREF_I, groupNum);
+                } else {
+                    op = URX_BUILD(URX_BACKREF, groupNum);
+                }
+                fRXPat->fCompiledPat->addElement(op, *fStatus);
             }
-            fRXPat->fCompiledPat->addElement(op, *fStatus);
         }
         break;
 
