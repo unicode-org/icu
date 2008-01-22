@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2006, International Business Machines
+*   Copyright (C) 1997-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -90,7 +90,7 @@
  *
  */ 
 
-#define  MAX_MUTEXES  30
+#define  MAX_MUTEXES  40
 static UMTX              gGlobalMutex          = NULL;
 static UMTX              gIncDecMutex          = NULL;       
 #if (ICU_USE_THREADS == 1)
