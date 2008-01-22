@@ -621,7 +621,7 @@ void TestChoiceFormat::TestChoiceFormatToPatternOverflow()
     static const double limits[] = {0.1e-78, 1e13, 0.1e78};
     UnicodeString monthNames[] = { "one", "two", "three" };
     ChoiceFormat fmt(limits, monthNames, sizeof(limits)/sizeof(limits[0]));
-    UnicodeString patStr, expectedPattern("1e-079#one|10000000000000#two|1e+077#three");
+    UnicodeString patStr, expectedPattern("1e-79#one|10000000000000#two|1e+77#three");
     fmt.toPattern(patStr);
     if (patStr != expectedPattern) {
         errln("ChoiceFormat returned \"" + patStr + "\" instead of \"" + expectedPattern + "\"");
