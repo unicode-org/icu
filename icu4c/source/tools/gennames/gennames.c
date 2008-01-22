@@ -403,7 +403,7 @@ main(int argc, char* argv[]) {
             "\t-u or --unicode     Unicode version, followed by the version like 3.0.0\n");
         fprintf(stderr,
             "\t-1 or --unicode1-names     store Unicode 1.0 character names\n"
-            "\t      --no-iso-comments    do not store ISO comments\n",
+            "\t      --no-iso-comments    do not store ISO comments\n"
             "\t      --only-iso-comments  write ucomment.icu with only ISO comments\n");
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
