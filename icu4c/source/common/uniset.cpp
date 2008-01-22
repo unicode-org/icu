@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2007, International Business Machines
+*   Copyright (C) 1999-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -142,15 +142,22 @@ static int8_t U_CALLCONV compareUnicodeString(UHashTok t1, UHashTok t2) {
  */
 UnicodeSet::UnicodeSet() :
     len(1), capacity(1 + START_EXTRA), list(0), bmpSet(0), buffer(0),
-    bufferCapacity(0), patLen(0), pat(NULL), strings(NULL), stringSpan(NULL)
+    bufferCapacity(0), patLen(0), pat(NULL), strings(NULL), stringSpan(NULL),
+    fFlags(0)
 {
     UErrorCode status = U_ZERO_ERROR;
     allocateStrings(status);
+    if (U_FAILURE(status)) {
+        setToBogus();
+        return;
+    }
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
     if(list!=NULL){
         list[0] = UNICODESET_HIGH;
+    } else { // If memory allocation failed, set to bogus state.
+        setToBogus();
+        return;
     }
-    // else TODO: we should set this to bogus on malloc failure.
     _dbgct(this);
 }
 
@@ -163,16 +170,23 @@ UnicodeSet::UnicodeSet() :
  */
 UnicodeSet::UnicodeSet(UChar32 start, UChar32 end) :
     len(1), capacity(1 + START_EXTRA), list(0), bmpSet(0), buffer(0),
-    bufferCapacity(0), patLen(0), pat(NULL), strings(NULL), stringSpan(NULL)
+    bufferCapacity(0), patLen(0), pat(NULL), strings(NULL), stringSpan(NULL),
+    fFlags(0)
 {
     UErrorCode status = U_ZERO_ERROR;
     allocateStrings(status);
+    if (U_FAILURE(status)) {
+        setToBogus();
+        return;
+    }
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
     if(list!=NULL){
         list[0] = UNICODESET_HIGH;
         complement(start, end);
+    } else { // If memory allocation failed, set to bogus state.
+        setToBogus();
+        return;
     }
-    // else TODO: we should set this to bogus on malloc failure.
     _dbgct(this);
 }
 
@@ -184,15 +198,22 @@ UnicodeSet::UnicodeSet(const UnicodeSet& o) :
     len(0), capacity(o.isFrozen() ? o.len : o.len + GROW_EXTRA), list(0),
     bmpSet(0),
     buffer(0), bufferCapacity(0),
-    patLen(0), pat(NULL), strings(NULL), stringSpan(NULL)
+    patLen(0), pat(NULL), strings(NULL), stringSpan(NULL),
+    fFlags(0)
 {
     UErrorCode status = U_ZERO_ERROR;
     allocateStrings(status);
+    if (U_FAILURE(status)) {
+        setToBogus();
+        return;
+    }
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
     if(list!=NULL){
         *this = o;
+    } else { // If memory allocation failed, set to bogus state.
+        setToBogus();
+        return;
     }
-    // else TODO: we should set this to bogus on malloc failure.
     _dbgct(this);
 }
 
@@ -202,22 +223,33 @@ UnicodeSet::UnicodeSet(const UnicodeSet& o, UBool /* asThawed */) :
     len(0), capacity(o.len + GROW_EXTRA), list(0),
     bmpSet(0),
     buffer(0), bufferCapacity(0),
-    patLen(0), pat(NULL), strings(NULL), stringSpan(NULL)
+    patLen(0), pat(NULL), strings(NULL), stringSpan(NULL),
+    fFlags(0)
 {
     UErrorCode status = U_ZERO_ERROR;
     allocateStrings(status);
-
+    if (U_FAILURE(status)) {
+        setToBogus();
+        return;
+    }
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
     if(list!=NULL){
         // *this = o except for bmpSet and stringSpan
         len = o.len;
         uprv_memcpy(list, o.list, len*sizeof(UChar32));
-        strings->assign(*o.strings, cloneUnicodeString, status);
+        if (strings != NULL && o.strings != NULL) {
+            strings->assign(*o.strings, cloneUnicodeString, status);
+        } else { // Invalid strings.
+            setToBogus();
+            return;
+        }
         if (o.pat) {
             setPattern(UnicodeString(o.pat, o.patLen));
         }
+    } else { // If memory allocation failed, set to bogus state.
+        setToBogus();
+        return;
     }
-    // else TODO: we should set this to bogus on malloc failure.
     _dbgct(this);
 }
 
@@ -249,6 +281,7 @@ UnicodeSet& UnicodeSet::operator=(const UnicodeSet& o) {
     UErrorCode ec = U_ZERO_ERROR;
     ensureCapacity(o.len, ec);
     if (U_FAILURE(ec)) {
+        setToBogus();
         return *this; // There is no way to report this error :-(
     }
     len = o.len;
@@ -257,12 +290,25 @@ UnicodeSet& UnicodeSet::operator=(const UnicodeSet& o) {
         bmpSet = NULL;
     } else {
         bmpSet = new BMPSet(*o.bmpSet, list, len);
+        if (bmpSet == NULL) { // Check for memory allocation error.
+            setToBogus();
+            return *this;
+        }
     }
-    strings->assign(*o.strings, cloneUnicodeString, ec);
+    if (strings != NULL && o.strings != NULL) {
+        strings->assign(*o.strings, cloneUnicodeString, ec);
+    } else { // Invalid strings.
+        setToBogus();
+        return *this;
+    }
     if (o.stringSpan == NULL) {
         stringSpan = NULL;
     } else {
         stringSpan = new UnicodeSetStringSpan(*o.stringSpan, *strings);
+        if (stringSpan == NULL) { // Check for memory allocation error.
+            setToBogus();
+            return *this;
+        }
     }
     releasePattern();
     if (o.pat) {
@@ -974,6 +1020,10 @@ void UnicodeSet::_add(const UnicodeString& s) {
         return;
     }
     UnicodeString* t = new UnicodeString(s);
+    if (t == NULL) { // Check for memory allocation error.
+        setToBogus();
+        return;
+    }
     UErrorCode ec = U_ZERO_ERROR;
     strings->sortedInsert(t, compareUnicodeString, ec);
 }
@@ -1066,7 +1116,9 @@ UnicodeSet& UnicodeSet::removeAllStrings() {
  */
 UnicodeSet* U_EXPORT2 UnicodeSet::createFrom(const UnicodeString& s) {
     UnicodeSet *set = new UnicodeSet();
-    set->add(s);
+    if (set != NULL) { // Check for memory allocation error.
+        set->add(s);
+    }
     return set;
 }
 
@@ -1078,7 +1130,9 @@ UnicodeSet* U_EXPORT2 UnicodeSet::createFrom(const UnicodeString& s) {
  */
 UnicodeSet* U_EXPORT2 UnicodeSet::createFromAll(const UnicodeString& s) {
     UnicodeSet *set = new UnicodeSet();
-    set->addAll(s);
+    if (set != NULL) { // Check for memory allocation error.
+        set->addAll(s);
+    }
     return set;
 }
 
@@ -1485,11 +1539,15 @@ UBool UnicodeSet::allocateStrings(UErrorCode &status) {
     }
     strings = new UVector(uhash_deleteUnicodeString,
                           uhash_compareUnicodeString, 1, status);
+    if (strings == NULL) { // Check for memory allocation error.
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return FALSE;
+    }
     if (U_FAILURE(status)) {
         delete strings;
         strings = NULL;
         return FALSE;
-    }
+    } 
     return TRUE;
 }
 
@@ -1531,6 +1589,11 @@ void UnicodeSet::swapBuffers(void) {
     int32_t c = capacity;
     capacity = bufferCapacity;
     bufferCapacity = c;
+}
+
+void UnicodeSet::setToBogus() {
+    clear(); // Remove everything in the set.
+    fFlags = kIsBogus;
 }
 
 //----------------------------------------------------------------
@@ -2012,6 +2075,10 @@ UnicodeFunctor *UnicodeSet::freeze() {
             // We don't want to realloc of 0 size.
             capacity = len + (len == 0);
             list = (UChar32*) uprv_realloc(list, sizeof(UChar32) * capacity);
+            if (list == NULL) { // Check for memory allocation error.
+                setToBogus();
+                return this;
+            }
         }
 
         // Optimize contains() and span() and similar functions.
@@ -2030,6 +2097,9 @@ UnicodeFunctor *UnicodeSet::freeze() {
         if (stringSpan == NULL) {
             // No span-relevant strings: Optimize for code point spans.
             bmpSet=new BMPSet(list, len);
+            if (bmpSet == NULL) { // Check for memory allocation error.
+                setToBogus();
+            }
         }
     }
     return this;
