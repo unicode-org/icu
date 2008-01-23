@@ -1409,37 +1409,34 @@ public class TimeZoneTest extends TestFmwk
             if (nEquiv == 0) {
                 continue;
             }
-            String tmp = TimeZone.getEquivalentID(ids[i], 0);
-            String canonicalID = TimeZone.getCanonicalID(tmp);
-            if (canonicalID == null) {
-                errln("FAIL: getCanonicalID(" + tmp + ") returned null");
-                continue;
-            }
-            // Some exceptional cases
-            for (int k = 0; k < excluded1.length; k++) {
-                if (canonicalID.equals(excluded1[k][0])) {
-                    canonicalID = excluded1[k][1];
-                }
-            }
+            String canonicalID = null;
             boolean bFoundCanonical = false;
             // Make sure getCanonicalID returns the exact same result
             // for all entries within a same equivalency group with some
             // exceptions listed in exluded1.
             // Also, one of them must be canonical id.
             for (int j = 0; j < nEquiv; j++) {
-                tmp = TimeZone.getEquivalentID(ids[i], j);
-                if (canonicalID.equals(tmp)) {
-                    bFoundCanonical = true;
-                }
+                String tmp = TimeZone.getEquivalentID(ids[i], j);
                 String tmpCanonical = TimeZone.getCanonicalID(tmp);
+                if (tmpCanonical == null) {
+                    errln("FAIL: getCanonicalID(\"" + tmp + "\") returned null");
+                    continue;
+                }
                 // Some exceptional cases
                 for (int k = 0; k < excluded1.length; k++) {
                     if (tmpCanonical.equals(excluded1[k][0])) {
                         tmpCanonical = excluded1[k][1];
                     }
                 }
-                if (!canonicalID.equals(tmpCanonical)) {
-                    errln("FAIL: getCanonicalID(" + tmp + ") returned " + tmpCanonical + " expected:" + canonicalID);
+
+                if (j == 0) {
+                    canonicalID = tmpCanonical;
+                } else if (!canonicalID.equals(tmpCanonical)) {
+                    errln("FAIL: getCanonicalID(\"" + tmp + "\") returned " + tmpCanonical + " expected:" + canonicalID);
+                }
+
+                if (canonicalID.equals(tmp)) {
+                    bFoundCanonical = true;
                 }
             }
             // At least one ID in an equvalency group must match the
@@ -1461,38 +1458,25 @@ public class TimeZoneTest extends TestFmwk
             }
         }
         // Testing some special cases
-        final String[] data = {
-                "GMT-03",
-                "GMT+4",
-                "GMT-055",
-                "GMT+430",
-                "GMT-12:15",
-                "GMT-091015",
-                "GMT+1:90",
-                "America/Argentina/Buenos_Aires",
-                "bogus",
-                "",
-                null,
-        };
-        final String[] expected = {
-                "GMT-0300",
-                "GMT+0400",
-                "GMT-0055",
-                "GMT+0430",
-                "GMT-1215",
-                "GMT-091015",
-                null,
-                "America/Buenos_Aires",
-                null,
-                null,
-                null,
+        final String[][] data = {
+                {"GMT-03", "GMT-0300"},
+                {"GMT+4", "GMT+0400"},
+                {"GMT-055", "GMT-0055"},
+                {"GMT+430", "GMT+0430"},
+                {"GMT-12:15", "GMT-1215"},
+                {"GMT-091015", "GMT-091015"},
+                {"GMT+1:90", null},
+                {"America/Argentina/Buenos_Aires", "America/Buenos_Aires"},
+                {"bogus", null},
+                {"", null},
+                {null, null},
         };
         for (int i = 0; i < data.length; i++) {
-            String canonical = TimeZone.getCanonicalID(data[i]);
-            if (canonical != null && !canonical.equals(expected[i])
-                    || canonical == null && expected[i] != null) {
-                errln("FAIL: getCanonicalID(" + data[i] + ") returned " + canonical
-                        + " - expected: " + expected[i]);
+            String canonical = TimeZone.getCanonicalID(data[i][0]);
+            if (canonical != null && !canonical.equals(data[i][1])
+                    || canonical == null && data[i][1] != null) {
+                errln("FAIL: getCanonicalID(\"" + data[i][0] + "\") returned " + canonical
+                        + " - expected: " + data[i][1]);
             }
         }
     }
