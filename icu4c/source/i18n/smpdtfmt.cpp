@@ -376,7 +376,6 @@ void SimpleDateFormat::construct(EStyle timeStyle,
         }
         timeDateArray[0].adoptString(tempus);
         resStr = ures_getStringByIndex(dateTimePatterns, (int32_t)dateStyle, &resStrLen, &status);
-        tempus = new UnicodeString(TRUE, resStr, resStrLen);
         // Null pointer check
         if (tempus == NULL) {
         	status = U_MEMORY_ALLOCATION_ERROR;
