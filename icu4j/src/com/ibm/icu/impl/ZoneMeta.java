@@ -11,7 +11,6 @@
 package com.ibm.icu.impl;
 
 import java.lang.ref.SoftReference;
-import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -25,7 +24,6 @@ import java.util.Vector;
 
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.text.NumberFormat;
-import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
@@ -646,13 +644,13 @@ public final class ZoneMeta {
         if (id != null && id.length() > kGMT_ID.length() &&
             idUppercase.startsWith(kGMT_ID)) {
             ParsePosition pos = new ParsePosition(kGMT_ID.length());
-            boolean negative = false;
+            int sign = 1;
             int hour = 0;
             int min = 0;
             int sec = 0;
 
             if (id.charAt(pos.getIndex()) == 0x002D /*'-'*/) {
-                negative = true;
+                sign = -1;
             } else if (id.charAt(pos.getIndex()) != 0x002B /*'+'*/) {
                 return false;
             }
@@ -735,7 +733,7 @@ public final class ZoneMeta {
             if (hour <= kMAX_CUSTOM_HOUR && min <= kMAX_CUSTOM_MIN && sec <= kMAX_CUSTOM_SEC) {
                 if (fields != null) {
                     if (fields.length >= 1) {
-                        fields[0] = negative ? -1 : 1;
+                        fields[0] = sign;
                     }
                     if (fields.length >= 2) {
                         fields[1] = hour;
@@ -840,10 +838,6 @@ public final class ZoneMeta {
             if (olsonToMeta == null) {
                 olsonToMeta = createOlsonToMetaMap();
                 if (olsonToMeta == null) {
-                    // We may not need this code for ICU4J...
-                    olsonToMeta = createOlsonToMetaMapOld();
-                }
-                if (olsonToMeta == null) {
                     // We need to return non-null Map to avoid disaster
                     olsonToMeta = new HashMap();
                 }
@@ -914,68 +908,6 @@ public final class ZoneMeta {
         return olsonToMeta;
     }
 
-    /*
-     * Create olson tzid to metazone mappings from root.res (3.8)
-     */
-    private static Map createOlsonToMetaMapOld() {
-        // Create olson id to metazone mapping table
-        HashMap olsonToMeta = null;
-        UResourceBundle zoneStringsBundle = null;
-        try {
-            UResourceBundle bundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "root");
-            zoneStringsBundle = bundle.get("zoneStrings");
-        } catch (MissingResourceException mre) {
-            // do nothing
-        }
-        if (zoneStringsBundle != null) {
-            String[] tzids = getAvailableIDs();
-            for (int i = 0; i < tzids.length; i++) {
-                // Skip aliases
-                String canonicalID = TimeZone.getCanonicalID(tzids[i]);
-                if (canonicalID == null || !tzids[i].equals(canonicalID)) {
-                    continue;
-                }
-                String tzkey = tzids[i].replace('/', ':');
-                try {
-                    UResourceBundle zoneBundle = zoneStringsBundle.get(tzkey);
-                    UResourceBundle useMZ = zoneBundle.get("um");
-                    LinkedList mzMappings = new LinkedList();
-                    for (int idx = 0; ; idx++) {
-                        try {
-                            UResourceBundle mz = useMZ.get("mz" + idx);
-                            String[] mzstr = mz.getStringArray();
-                            if (mzstr == null || mzstr.length != 3) {
-                                continue;
-                            }
-                            OlsonToMetaMappingEntry mzmap = new OlsonToMetaMappingEntry();
-                            mzmap.mzid = mzstr[0].intern();
-                            mzmap.from = parseDate(mzstr[1]);
-                            mzmap.to = parseDate(mzstr[2]);
-
-                            // Add this mapping to the list
-                            mzMappings.add(mzmap);
-                        } catch (MissingResourceException nomz) {
-                            // we're done
-                            break;
-                        } catch (IllegalArgumentException baddate) {
-                            // skip this
-                        }
-                    }
-                    if (mzMappings.size() != 0) {
-                        // Add to the olson-to-meta map
-                        if (olsonToMeta == null) {
-                            olsonToMeta = new HashMap();
-                        }
-                        olsonToMeta.put(tzids[i], mzMappings);
-                    }
-                } catch (MissingResourceException noum) {
-                    // Does not use metazone, just skip this.
-                }
-            }
-        }
-        return olsonToMeta;
-    }
-    
     /**
      * Returns a CLDR metazone ID for the given Olson tzid and time.
      */
