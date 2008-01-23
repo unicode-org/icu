@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1997-2007, International Business Machines
+ * Copyright (c) 1997-2008, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************
  *
@@ -53,6 +53,9 @@ static const UChar PST[] = {0x50, 0x53, 0x54, 0x00}; /* "PST" */
 
 static const UChar EUROPE_PARIS[] = {0x45, 0x75, 0x72, 0x6F, 0x70, 0x65, 0x2F, 0x50, 0x61, 0x72, 0x69, 0x73, 0x00}; /* "Europe/Paris" */
 
+static const UChar AMERICA_LOS_ANGELES[] = {0x41, 0x6D, 0x65, 0x72, 0x69, 0x63, 0x61, 0x2F,
+    0x4C, 0x6F, 0x73, 0x5F, 0x41, 0x6E, 0x67, 0x65, 0x6C, 0x65, 0x73, 0x00}; /* America/Los_Angeles */
+
 static void TestCalendar()
 {
     UCalendar *caldef = 0, *caldef2 = 0, *calfr = 0, *calit = 0;
@@ -68,6 +71,7 @@ static void TestCalendar()
     char tempMsgBuf[256];
     UChar zone1[32], zone2[32];
     const char *tzver = 0;
+    UChar canonicalID[64];
 
 #ifdef U_USE_UCAL_OBSOLETE_2_8
     /*Testing countAvailableTimeZones*/
@@ -190,6 +194,16 @@ static void TestCalendar()
         log_verbose("PASS: ucal_getTZDataVersion returned %s\n", tzver);
     }
     
+    /*Testing ucal_getCanonicalTimeZoneID*/
+    status = U_ZERO_ERROR;
+    resultlength = ucal_getCanonicalTimeZoneID(PST, -1,
+        canonicalID, sizeof(canonicalID)/sizeof(UChar), &status);
+    if (U_FAILURE(status)) {
+        log_err("FAIL: error in ucal_getCanonicalTimeZoneID : %s\n", u_errorName(status));
+    } else if (u_strcmp(AMERICA_LOS_ANGELES, canonicalID) != 0) {
+        log_err("FAIL: ucal_getCanonicalTimeZoneID(%s) returned %s : expected - %s\n",
+            PST, canonicalID, AMERICA_LOS_ANGELES);
+    }
 
     /*Testing the  ucal_open() function*/
     status = U_ZERO_ERROR;

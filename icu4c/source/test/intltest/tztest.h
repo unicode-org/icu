@@ -1,6 +1,6 @@
 
 /********************************************************************
- * Copyright (c) 1997-2007, International Business Machines
+ * Copyright (c) 1997-2008, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************/
  
@@ -87,6 +87,8 @@ public:
     void TestFractionalDST(void);
 
     void TestFebruary(void);
+
+    void TestCanonicalID(void);
 
     static const UDate INTERVAL;
 

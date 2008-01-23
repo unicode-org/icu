@@ -1,5 +1,5 @@
 /*************************************************************************
-* Copyright (c) 1997-2007, International Business Machines Corporation
+* Copyright (c) 1997-2008, International Business Machines Corporation
 * and others. All Rights Reserved.
 **************************************************************************
 *
@@ -332,6 +332,22 @@ public:
      * @draft ICU 3.8
      */
     static const char* U_EXPORT2 getTZDataVersion(UErrorCode& status);
+
+    /**
+     * Returns the canonical system timezone ID or the normalized
+     * custom time zone ID for the given time zone ID.
+     * @param id            The input timezone ID to be canonicalized.
+     * @param canonicalID   Receives the canonical system timezone ID
+     *                      or the custom timezone ID in normalized format.
+     * @param status        Recevies the status.  When the given timezone ID
+     *                      is neither a known system time zone ID nor a
+     *                      valid custom timezone ID, U_ILLEGAL_ARGUMENT_ERROR
+     *                      is set.
+     * @return A reference to the result.
+     * @draft ICU 4.0
+     */
+    static UnicodeString& U_EXPORT2 getCanonicalID(const UnicodeString& id,
+        UnicodeString& canonicalID, UErrorCode& status);
 
     /**
      * Returns true if the two TimeZones are equal.  (The TimeZone version only compares
@@ -672,14 +688,57 @@ protected:
 private:
     friend class ZoneMeta;
 
-    /**
-     * Get a canonical Olson zone ID for the given ID.  If the given ID is not valid,
-     * this method returns empty string as the result.  If the given ID is a link, then the
-     * referenced ID (canonical ID) is returned.
-     */
-    static UnicodeString& getOlsonCanonicalID(const UnicodeString &id, UnicodeString &canonical);
 
     static TimeZone*        createCustomTimeZone(const UnicodeString&); // Creates a time zone based on the string.
+
+    /**
+     * Resolve a link in Olson tzdata.  When the given id is known and it's not a link,
+     * the id itself is returned.  When the given id is known and it is a link, then
+     * dereferenced zone id is returned.  When the given id is unknown, then it returns
+     * empty string.
+     * @param linkTo Input zone id string
+     * @param linkFrom Receives the dereferenced zone id string
+     * @return The reference to the result (linkFrom)
+     */
+    static UnicodeString& dereferOlsonLink(const UnicodeString& linkTo, UnicodeString& linkFrom);
+
+    /**
+     * Parses the given custom time zone identifier
+     * @param id id A string of the form GMT[+-]hh:mm, GMT[+-]hhmm, or
+     * GMT[+-]hh.
+     * @param sign Receves parsed sign, 1 for positive, -1 for negative.
+     * @param hour Receives parsed hour field
+     * @param minute Receives parsed minute field
+     * @param second Receives parsed second field
+     * @return Returns TRUE when the given custom id is valid.
+     */
+    static UBool parseCustomID(const UnicodeString& id, int32_t& sign, int32_t& hour,
+        int32_t& min, int32_t& sec);
+
+    /**
+     * Parse a custom time zone identifier and return the normalized
+     * custom time zone identifier for the given custom id string.
+     * @param id a string of the form GMT[+-]hh:mm, GMT[+-]hhmm, or
+     * GMT[+-]hh.
+     * @param normalized Receives the normalized custom ID
+     * @param status Receives the status.  When the input ID string is invalid,
+     * U_ILLEGAL_ARGUMENT_ERROR is set.
+     * @return The normalized custom id string.
+    */
+    static UnicodeString& getCustomID(const UnicodeString& id, UnicodeString& normalized,
+        UErrorCode& status);
+
+    /**
+     * Returns the normalized custome timezone ID for the given offset fields.
+     * @param hour offset hours
+     * @param min offset minutes
+     * @param sec offset seconds
+     * @param netative sign of the offset, TRUE for negative offset.
+     * @param id Receves the format result (normalized custom ID)
+     * @return The reference to id
+     */
+    static UnicodeString& formatCustomID(int32_t hour, int32_t min, int32_t sec,
+        UBool negative, UnicodeString& id);
 
     /**
      * Responsible for setting up DEFAULT_ZONE.  Uses routines in TPlatformUtilities

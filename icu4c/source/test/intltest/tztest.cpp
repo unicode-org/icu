@@ -54,6 +54,7 @@ void TimeZoneTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
         CASE(13, TestAliasedNames);
         CASE(14, TestFractionalDST);
         CASE(15, TestFebruary);
+        CASE(16, TestCanonicalID);
        default: name = ""; break;
     }
 }
@@ -1657,6 +1658,141 @@ void TimeZoneTest::TestFebruary() {
                       data[i].hour, data[i].minute, data[i].second,
                       raw, dst, data[i].offsetHours * U_MILLIS_PER_HOUR);
             }
+        }
+    }
+}
+void TimeZoneTest::TestCanonicalID() {
+
+    // Some canonical IDs in CLDR are defined as "Link"
+    // in Olson tzdata.
+    struct {
+        const char *alias;
+        const char *zone;
+    } excluded1[] = {
+        {"America/Shiprock", "America/Denver"}, // America/Shiprock is defined as a Link to America/Denver in tzdata
+        {"Antarctica/South_Pole", "Antarctica/McMurdo"},
+        {"Atlantic/Jan_Mayen", "Europe/Oslo"},
+        {"Arctic/Longyearbyen", "Europe/Oslo"},
+        {"Europe/Guernsey", "Europe/London"},
+        {"Europe/Isle_of_Man", "Europe/London"},
+        {"Europe/Jersey", "Europe/London"},
+        {"Europe/Ljubljana", "Europe/Belgrade"},
+        {"Europe/Podgorica", "Europe/Belgrade"},
+        {"Europe/Sarajevo", "Europe/Belgrade"},
+        {"Europe/Skopje", "Europe/Belgrade"},
+        {"Europe/Zagreb", "Europe/Belgrade"},
+        {"Europe/Bratislava", "Europe/Prague"},
+        {"Europe/Mariehamn", "Europe/Helsinki"},
+        {"Europe/San_Marino", "Europe/Rome"},
+        {"Europe/Vatican", "Europe/Rome"},
+        {0, 0}
+    };
+
+    // Following IDs are aliases of Etc/GMT in CLDR,
+    // but Olson tzdata has 3 independent definitions
+    // for Etc/GMT, Etc/UTC, Etc/UCT.
+    // Until we merge them into one equivalent group
+    // in zoneinfo.res, we exclude them in the test
+    // below.
+    const char* excluded2[] = {
+        "Etc/UCT", "UCT",
+        "Etc/UTC", "UTC",
+        "Etc/Universal", "Universal",
+        "Etc/Zulu", "Zulu", 0
+    };
+
+    // Walk through equivalency groups
+    UErrorCode ec = U_ZERO_ERROR;
+    int32_t s_length, i, j, k;
+    StringEnumeration* s = TimeZone::createEnumeration();
+    UnicodeString canonicalID, tmpCanonical;
+    s_length = s->count(ec);
+    for (i = 0; i < s_length;++i) {
+        const UnicodeString *tzid = s->snext(ec);
+        int32_t nEquiv = TimeZone::countEquivalentIDs(*tzid);
+        if (nEquiv == 0) {
+            continue;
+        }
+        UBool bFoundCanonical = FALSE;
+        // Make sure getCanonicalID returns the exact same result
+        // for all entries within a same equivalency group with some
+        // exceptions listed in exluded1.
+        // Also, one of them must be canonical id.
+        for (j = 0; j < nEquiv; j++) {
+            UnicodeString tmp = TimeZone::getEquivalentID(*tzid, j);
+            TimeZone::getCanonicalID(tmp, tmpCanonical, ec);
+            if (U_FAILURE(ec)) {
+                errln((UnicodeString)"FAIL: getCanonicalID(" + tmp + ") failed.");
+                ec = U_ZERO_ERROR;
+                continue;
+            }
+            // Some exceptional cases
+            for (k = 0; excluded1[k].alias != 0; k++) {
+                if (tmpCanonical == excluded1[k].alias) {
+                    tmpCanonical = excluded1[k].zone;
+                    break;
+                }
+            }
+            if (j == 0) {
+                canonicalID = tmpCanonical;
+            } else if (canonicalID != tmpCanonical) {
+                errln("FAIL: getCanonicalID(" + tmp + ") returned " + tmpCanonical + " expected:" + canonicalID);
+            }
+
+            if (canonicalID == tmp) {
+                bFoundCanonical = TRUE;
+            }
+        }
+        // At least one ID in an equvalency group must match the
+        // canonicalID
+        if (bFoundCanonical == FALSE) {
+            // test exclusion because of differences between Olson tzdata and CLDR
+            UBool isExcluded = FALSE;
+            for (k = 0; excluded2[k] != 0; k++) {
+                if (*tzid == UnicodeString(excluded2[k])) {
+                    isExcluded = TRUE;
+                    break;
+                }
+            }
+            if (isExcluded) {
+                continue;
+            }
+            errln((UnicodeString)"FAIL: No timezone ids match the canonical ID " + canonicalID);
+        }
+    }
+    delete s;
+
+    // Testing some special cases
+    struct {
+        const char *id;
+        const char *expected;
+    } data[] = {
+        {"GMT-03", "GMT-0300"},
+        {"GMT+4", "GMT+0400"},
+        {"GMT-055", "GMT-0055"},
+        {"GMT+430", "GMT+0430"},
+        {"GMT-12:15", "GMT-1215"},
+        {"GMT-091015", "GMT-091015"},
+        {"GMT+1:90", 0},
+        {"America/Argentina/Buenos_Aires", "America/Buenos_Aires"},
+        {"bogus", 0},
+        {"", 0},
+        {0, 0}
+    };
+
+    for (i = 0; data[i].id != 0; i++) {
+        TimeZone::getCanonicalID(UnicodeString(data[i].id), canonicalID, ec);
+        if (U_FAILURE(ec)) {
+            if (ec != U_ILLEGAL_ARGUMENT_ERROR || data[i].expected != 0) {
+                errln((UnicodeString)"FAIL: getCanonicalID(\"" + data[i].id
+                    + "\") returned status U_ILLEGAL_ARGUMENT_ERROR");
+            }
+            ec = U_ZERO_ERROR;
+            continue;
+        }
+        if (canonicalID != data[i].expected) {
+            errln((UnicodeString)"FAIL: getCanonicalID(\"" + data[i].id
+                + "\") returned " + canonicalID + " - expected: " + data[i].expected);
         }
     }
 }
