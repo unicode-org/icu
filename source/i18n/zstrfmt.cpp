@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and         *
+* Copyright (C) 2007-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -508,7 +508,12 @@ ZoneStringFormat::ZoneStringFormat(const Locale &locale, UErrorCode &status)
         // Skip non-canonical IDs
         UnicodeString utzid(tzid, -1, US_INV);
         UnicodeString canonicalID;
-        ZoneMeta::getCanonicalID(utzid, canonicalID);
+        TimeZone::getCanonicalID(utzid, canonicalID, status);
+        if (U_FAILURE(status)) {
+            // Ignore unknown ID - we should not get here, but just in case.
+            status = U_ZERO_ERROR;
+            continue;
+        }
         if (utzid != canonicalID) {
             continue;
         }
@@ -861,7 +866,12 @@ ZoneStringFormat::createZoneStringsArray(UDate date, int32_t &rowCount, int32_t 
         }
         UnicodeString utzid(tzid);
         UnicodeString canonicalID;
-        ZoneMeta::getCanonicalID(UnicodeString(tzid), canonicalID);
+        TimeZone::getCanonicalID(UnicodeString(tzid), canonicalID, status);
+        if (U_FAILURE(status)) {
+            // Ignore unknown ID - we should not get here, but just in case.
+            status = U_ZERO_ERROR;
+            continue;
+        }
         if (utzid == canonicalID) {
             canonicalIDs.addElement(new UnicodeString(utzid), status);
             if (U_FAILURE(status)) {
@@ -988,7 +998,12 @@ ZoneStringFormat::getString(const UnicodeString &tzid, TimeZoneTranslationTypeIn
 
     // ICU's own array does not have entries for aliases
     UnicodeString canonicalID;
-    ZoneMeta::getCanonicalID(tzid, canonicalID);
+    UErrorCode status = U_ZERO_ERROR;
+    TimeZone::getCanonicalID(tzid, canonicalID, status);
+    if (U_FAILURE(status)) {
+        // Unknown ID, but users might have their own data.
+        canonicalID.setTo(tzid);
+    }
 
     if (fTzidToStrings.count() > 0) {
         ZoneStrings *zstrings = (ZoneStrings*)fTzidToStrings.get(canonicalID);
@@ -1052,7 +1067,12 @@ ZoneStringFormat::getGenericString(const Calendar &cal, UBool isShort, UBool com
 
     // ICU's own array does not have entries for aliases
     UnicodeString canonicalID;
-    ZoneMeta::getCanonicalID(tzid, canonicalID);
+    TimeZone::getCanonicalID(tzid, canonicalID, status);
+    if (U_FAILURE(status)) {
+        // Unknown ID, but users might have their own data.
+        status = U_ZERO_ERROR;
+        canonicalID.setTo(tzid);
+    }
 
     ZoneStrings *zstrings = NULL;
     if (fTzidToStrings.count() > 0) {
@@ -1206,7 +1226,12 @@ ZoneStringFormat::getGenericPartialLocationString(const UnicodeString &tzid, UBo
     }
 
     UnicodeString canonicalID;
-    ZoneMeta::getCanonicalID(tzid, canonicalID);
+    UErrorCode status = U_ZERO_ERROR;
+    TimeZone::getCanonicalID(tzid, canonicalID, status);
+    if (U_FAILURE(status)) {
+        // Unknown ID, so no corresponding meta data.
+        return result;
+    }
 
     UnicodeString mzid;
     ZoneMeta::getMetazoneID(canonicalID, date, mzid);
