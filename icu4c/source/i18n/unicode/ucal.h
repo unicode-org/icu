@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and
+ * Copyright (C) 1996-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -1090,6 +1090,25 @@ ucal_getLocaleByType(const UCalendar *cal, ULocDataLocaleType type, UErrorCode* 
 U_DRAFT const char * U_EXPORT2
 ucal_getTZDataVersion(UErrorCode* status);
 
+/**
+ * Returns the canonical system timezone ID or the normalized
+ * custom time zone ID for the given time zone ID.
+ * @param id        The input timezone ID to be canonicalized.
+ * @param len       The length of id, or -1 if null-terminated.
+ * @param result    The buffer receives the canonical system timezone ID
+ *                  or the custom timezone ID in normalized format.
+ * @param resultCapacity    The capacity of the result buffer.
+ * @param status    Recevies the status.  When the given timezone ID
+ *                  is neither a known system time zone ID nor a
+ *                  valid custom timezone ID, U_ILLEGAL_ARGUMENT_ERROR
+ *                  is set.
+ * @return          The result string length, not including the terminating
+ *                  null.
+ * @draft ICU 4.0
+ */
+U_DRAFT int32_t U_EXPORT2
+ucal_getCanonicalTimeZoneID(const UChar* id, int32_t len,
+                            UChar* result, int32_t resultCapacity, UErrorCode* status);
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif

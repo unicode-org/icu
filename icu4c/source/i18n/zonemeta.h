@@ -37,10 +37,10 @@ class UVector;
 class U_I18N_API ZoneMeta {
 public:
     /**
-     * Return the canonical id for this tzid, which might be the id itself.
-     * If there is no canonical id for it, return the passed-in id.
+     * Return the canonical id for this system tzid, which might be the id itself.
+     * If the given system tzid is not know, U_ILLEGAL_ARGUMENT_ERROR is set in the status.
      */
-    static UnicodeString& U_EXPORT2 getCanonicalID(const UnicodeString &tzid, UnicodeString &canonicalID);
+    static UnicodeString& U_EXPORT2 getCanonicalSystemID(const UnicodeString &tzid, UnicodeString &systemID, UErrorCode& status);
 
     /**
      * Return the canonical country code for this tzid.  If we have none, or if the time zone
@@ -68,8 +68,13 @@ public:
     static const UVector* U_EXPORT2 getMetazoneMappings(const UnicodeString &tzid);
 
 private:
-    static const CanonicalMapEntry* U_EXPORT2 getCanonicalInfo(const UnicodeString &tzid);
     ZoneMeta(); // Prevent construction.
+    static const CanonicalMapEntry* U_EXPORT2 getCanonicalInfo(const UnicodeString &tzid);
+
+    static void initialize(void);
+    static Hashtable* createCanonicalMap(void);
+    static Hashtable* createOlsonToMetaMap(void);
+    static Hashtable* createMetaToOlsonMap(void);
 };
 
 U_NAMESPACE_END
