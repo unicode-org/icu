@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 1997-2006, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 1997-2008, International Business Machines Corporation and others. All Rights Reserved.
 *******************************************************************************
 *
 * File SMPDTFMT.H
@@ -69,6 +69,7 @@ class MessageFormat;
  * y        year                    (Number)            1996
  * Y        year (week of year)     (Number)            1997
  * u        extended year           (Number)            4601
+ * Q        Quarter                 (Text & Number)     Q2 & 02
  * M        month in year           (Text & Number)     July & 07
  * d        day in month            (Number)            10
  * h        hour in am/pm (1~12)    (Number)            12
@@ -77,7 +78,7 @@ class MessageFormat;
  * s        second in minute        (Number)            55
  * S        fractional second       (Number)            978
  * E        day of week             (Text)              Tuesday
- * e        day of week (local 1~7) (Number)            2
+ * e        day of week (local 1~7) (Text & Number)     Tues & 2
  * D        day in year             (Number)            189
  * F        day of week in month    (Number)            2 (2nd Wed in July)
  * w        week in year            (Number)            27
@@ -88,8 +89,13 @@ class MessageFormat;
  * z        time zone               (Time)              Pacific Standard Time
  * Z        time zone (RFC 822)     (Number)            -0800
  * v        time zone (generic)     (Text)              Pacific Time
+ * V        time zone (abreviation) (Text)              PT
+ * VVVV     time zone (location)    (Text)              United States (Los Angeles)
  * g        Julian day              (Number)            2451334
  * A        milliseconds in day     (Number)            69540000
+ * q        stand alone quarter     (Text & Number)     Q2 & 02
+ * L        stand alone month       (Text & Number)     July & 07
+ * c        stand alone day of week (Text & Number)     Tuesday & 2
  * '        escape for text         (Delimiter)         'Date='
  * ''       single quote            (Literal)           'o''clock'
  * \endcode
