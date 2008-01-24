@@ -78,7 +78,7 @@ import com.ibm.icu.util.ULocale;
  * s        second in minute        (Number)            55
  * S        fractional second       (Number)            978
  * E        day of week             (Text)              Tuesday
- * e*       day of week (local 1~7) (Number)            2
+ * e*       day of week (local 1~7) (Text & Number)     Tuesday & 2
  * D        day in year             (Number)            189
  * F        day of week in month    (Number)            2 (2nd Wed in July)
  * w        week in year            (Number)            27
@@ -1451,7 +1451,7 @@ public class SimpleDateFormat extends DateFormat {
      * Format characters that indicate numeric fields.  The character
      * at index 0 is treated specially.
      */
-    private static final String NUMERIC_FORMAT_CHARS = "MyudhHmsSDFwWkK";
+    private static final String NUMERIC_FORMAT_CHARS = "MYyudehHmsSDFwWkK";
 
     /**
      * Return true if the given format character, occuring count
