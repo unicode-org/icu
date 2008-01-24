@@ -1,7 +1,7 @@
 
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -231,8 +231,21 @@ void IntlTestSimpleDateFormatAPI::testAPI(/*char *par*/)
     if(test->getDynamicClassID() != SimpleDateFormat::getStaticClassID()) {
         errln("ERROR: getDynamicClassID() didn't return the expected value");
     }
-
+    
     delete test;
+    
+// ======= Test Ticket 5684 (Parsing with 'e' and 'Y')
+    SimpleDateFormat object("en", "us", status);
+    if(U_FAILURE(status)) {
+        errln("ERROR: Couldn't create a SimpleDateFormat");
+    }
+    object.setLenient(false);
+    ParsePosition pp(0);
+    object.applyPattern("YYYY'W'wwe");
+    UDate udDate = object.parse("2007W014", pp);
+    if ((long)udDate == 0) {
+        errln("ERROR: Parsing failed using 'Y' and 'e'");
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
