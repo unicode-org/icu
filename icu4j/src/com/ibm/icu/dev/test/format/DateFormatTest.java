@@ -3244,4 +3244,90 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 //#endif
+
+    /*
+     * Test for checking SimpleDateFormat/DateFormatSymbols creation
+     * honor the calendar keyword in the given locale.  See ticket#6100
+     */
+    public void TestCalendarType() {
+        final String testPattern = "GGGG y MMMM d EEEE";
+
+        final ULocale[] testLocales = {
+                new ULocale("de"),
+                new ULocale("fr_FR@calendar=gregorian"),
+                new ULocale("en@calendar=islamic"),
+                new ULocale("ja_JP@calendar=japanese"),
+                new ULocale("zh_Hans_CN@calendar=bogus"),
+        };
+
+        SimpleDateFormat[] formatters = new SimpleDateFormat[5];
+        for (int i = 0; i < testLocales.length; i++) {
+            // Create a locale with no keywords
+            StringBuffer locStrBuf = new StringBuffer();
+            if (testLocales[i].getLanguage().length() > 0) {
+                locStrBuf.append(testLocales[i].getLanguage());
+            }
+            if (testLocales[i].getScript().length() > 0) {
+                locStrBuf.append('_');
+                locStrBuf.append(testLocales[i].getScript());
+            }
+            if (testLocales[i].getCountry().length() > 0) {
+                locStrBuf.append('_');
+                locStrBuf.append(testLocales[i].getCountry());
+            }
+            ULocale locNoKeywords = new ULocale(locStrBuf.toString());
+
+            Calendar cal = Calendar.getInstance(testLocales[i]);
+
+            // Calendar getDateFormat method
+            DateFormat df = cal.getDateTimeFormat(DateFormat.MEDIUM, DateFormat.MEDIUM, locNoKeywords);
+            if (df instanceof SimpleDateFormat) {
+                formatters[0] = (SimpleDateFormat)df;
+                formatters[0].applyPattern(testPattern);
+            } else {
+                formatters[0] = null;
+            }
+
+            // DateFormat constructor with locale
+            df = DateFormat.getDateInstance(DateFormat.MEDIUM, testLocales[i]);
+            if (df instanceof SimpleDateFormat) {
+                formatters[1] = (SimpleDateFormat)df;
+                formatters[1].applyPattern(testPattern);
+            } else {
+                formatters[1] = null;
+            }
+
+            // DateFormat constructor with Calendar
+            df = DateFormat.getDateInstance(cal, DateFormat.MEDIUM, locNoKeywords);
+            if (df instanceof SimpleDateFormat) {
+                formatters[2] = (SimpleDateFormat)df;
+                formatters[2].applyPattern(testPattern);
+            } else {
+                formatters[2] = null;
+            }
+
+            // SimpleDateFormat constructor
+            formatters[3] = new SimpleDateFormat(testPattern, testLocales[i]);
+ 
+            // SimpleDateFormat with DateFormatSymbols
+            DateFormatSymbols dfs = new DateFormatSymbols(testLocales[i]);
+            formatters[4] = new SimpleDateFormat(testPattern, dfs, testLocales[i]);
+
+            // All SimpleDateFormat instances should produce the exact
+            // same result.
+            String expected = null;
+            Date d = new Date();
+            for (int j = 0; j < formatters.length; j++) {
+                if (formatters[j] != null) {
+                    String tmp = formatters[j].format(d);
+                    if (expected == null) {
+                        expected = tmp;
+                    } else if (!expected.equals(tmp)) {
+                        errln("FAIL: formatter[" + j + "] returned \"" + tmp + "\" in locale " +
+                                testLocales[i] + " - expected: " + expected);
+                    }
+                }
+            }
+        }
+    }
 }

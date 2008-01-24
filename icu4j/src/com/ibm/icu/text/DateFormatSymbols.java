@@ -142,7 +142,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      */
     public DateFormatSymbols()
     {
-        initializeData(ULocale.getDefault(), ""); // TODO: type?
+        this(ULocale.getDefault());
     }
     
     /**
@@ -156,7 +156,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      */
     public DateFormatSymbols(Locale locale)
     {
-        initializeData(ULocale.forLocale(locale), ""); // TODO: type?
+        this(ULocale.forLocale(locale));
     }
 
     /**
@@ -170,7 +170,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      */
     public DateFormatSymbols(ULocale locale)
     {
-        initializeData(locale, ""); // TODO: type?
+        initializeData(locale, getCalendarType(locale));
     }
 
     /**
@@ -1538,7 +1538,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      */
     public DateFormatSymbols(ResourceBundle bundle, ULocale locale) {
         initializeData(locale, 
-            new CalendarData((ICUResourceBundle)bundle, null));
+            new CalendarData((ICUResourceBundle)bundle, getCalendarType(locale)));
     }
 
     /**
@@ -1618,7 +1618,18 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         throws MissingResourceException {
         return getDateFormatBundle(cal.getClass(), locale);
     }
-    
+
+    // Return the calendar type string for the given locale
+    private static String getCalendarType(ULocale locale) {
+        String calType = locale.getKeywordValue("calendar");
+        if (calType == null) {
+            locale = ICUResourceBundle.getFunctionalEquivalent(
+                ICUResourceBundle.ICU_BASE_NAME, "calendar", "calendar", locale, null);
+            calType = locale.getKeywordValue("calendar");
+        }
+        return calType;
+    }
+
     // -------- BEGIN ULocale boilerplate --------
 
     /**
