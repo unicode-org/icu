@@ -1,6 +1,6 @@
 /*****************************************************************************************
  * (C) Copyright Taligent, Inc. 1996, 1997 - All Rights Reserved
- * (C) Copyright IBM Corp. 1996-2007 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1996-2008 - All Rights Reserved
  *
  *   The original version of this source code and documentation is copyrighted and
  * owned by Taligent, Inc., a wholly-owned subsidiary of IBM. These materials are
@@ -151,6 +151,18 @@ public class IntlTestSimpleDateFormatAPI extends com.ibm.icu.dev.test.TestFmwk
         if( ! s3.equals(p1) ) {
             errln("ERROR: toLocalizedPattern() result did not match pattern applied");
         }
+        
+        // ======= Test for Ticket 5684 (Parsing patterns with 'Y' and 'e'
+        logln("Testing parse()");
+
+        String p2 = new String("YYYY'W'wwe");
+        logln("Applying pattern " + p2);
+        pat.applyPattern(p1);
+        Date dt = pat.parse("2007W014", new ParsePosition(0));
+        if (dt == null) {
+            errln("ERROR: Parsing failed using 'Y' and 'e'");
+        }
+
 
         // ======= Test getStaticClassID()
 
