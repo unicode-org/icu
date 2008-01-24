@@ -197,7 +197,7 @@ static UnicodeString& itos(int32_t i, UnicodeString& appendTo) {
  * number corresponds to the array of arguments to be formatted.
  * @internal
  */
-class MessageFormat::Subformat {
+class MessageFormat::Subformat : public UMemory {
 public:
     /**
      * @internal 
