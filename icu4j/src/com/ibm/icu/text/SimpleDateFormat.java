@@ -1,7 +1,7 @@
 //##header J2SE15
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -744,11 +744,12 @@ public class SimpleDateFormat extends DateFormat {
         switch (patternCharIndex) {
         case 0: // 'G' - ERA
             if (count == 5) {
-                buf.append(formatData.narrowEras[value]);
-            } else if (count == 4)
-               buf.append(formatData.eraNames[value]);
-            else
-               buf.append(formatData.eras[value]);
+                safeAppend(formatData.narrowEras, value, buf);
+            } else if (count == 4) {
+                safeAppend(formatData.eraNames, value, buf);
+            } else {
+                safeAppend(formatData.eras, value, buf);
+            }
             break;
         case 1: // 'y' - YEAR
             /* According to the specification, if the number of pattern letters ('y') is 2,
@@ -763,14 +764,15 @@ public class SimpleDateFormat extends DateFormat {
                 zeroPaddingNumber(buf, value, count, maxIntCount);
             break;
         case 2: // 'M' - MONTH
-            if (count == 5) 
-                buf.append(formatData.narrowMonths[value]);
-            else if (count == 4)
-                buf.append(formatData.months[value]);
-            else if (count == 3)
-                buf.append(formatData.shortMonths[value]);
-            else
+            if (count == 5) {
+                safeAppend(formatData.narrowMonths, value, buf);
+            } else if (count == 4) {
+                safeAppend(formatData.months, value, buf);
+            } else if (count == 3) {
+                safeAppend(formatData.shortMonths, value, buf);
+            } else {
                 zeroPaddingNumber(buf, value+1, count, maxIntCount);
+            }
             break;
         case 4: // 'k' - HOUR_OF_DAY (1..24)
             if (value == 0)
@@ -800,14 +802,15 @@ public class SimpleDateFormat extends DateFormat {
             break;
         case 9: // 'E' - DAY_OF_WEEK
             if (count == 5) {
-                buf.append(formatData.narrowWeekdays[value]);
-            } else if (count == 4)
-                buf.append(formatData.weekdays[value]);
-            else // count <= 3, use abbreviated form if exists
-                buf.append(formatData.shortWeekdays[value]);
+                safeAppend(formatData.narrowWeekdays, value, buf);
+            } else if (count == 4) {
+                safeAppend(formatData.weekdays, value, buf);
+            } else {// count <= 3, use abbreviated form if exists
+                safeAppend(formatData.shortWeekdays, value, buf);
+            }
             break;
         case 14: // 'a' - AM_PM
-            buf.append(formatData.ampms[value]);
+            safeAppend(formatData.ampms, value, buf);
             break;
         case 15: // 'h' - HOUR (1..12)
             if (value == 0)
@@ -885,40 +888,44 @@ public class SimpleDateFormat extends DateFormat {
             }
             break;
         case 25: // 'c' - STANDALONE DAY
-            if (count == 5) 
-                buf.append(formatData.standaloneNarrowWeekdays[value]);
-            else if (count == 4)
-                buf.append(formatData.standaloneWeekdays[value]);
-            else if (count == 3)
-                buf.append(formatData.standaloneShortWeekdays[value]);
-            else
+            if (count == 5) {
+                safeAppend(formatData.standaloneNarrowWeekdays, value, buf);
+            } else if (count == 4) {
+                safeAppend(formatData.standaloneWeekdays, value, buf);
+            } else if (count == 3) {
+                safeAppend(formatData.standaloneShortWeekdays, value, buf);
+            } else {
                 zeroPaddingNumber(buf, value, 1, maxIntCount);
+            }
             break;
         case 26: // 'L' - STANDALONE MONTH
-            if (count == 5) 
-                buf.append(formatData.standaloneNarrowMonths[value]);
-            else if (count == 4)
-                buf.append(formatData.standaloneMonths[value]);
-            else if (count == 3)
-                buf.append(formatData.standaloneShortMonths[value]);
-            else
+            if (count == 5) {
+                safeAppend(formatData.standaloneNarrowMonths, value, buf);
+            } else if (count == 4) {
+                safeAppend(formatData.standaloneMonths, value, buf);
+            } else if (count == 3) {
+                safeAppend(formatData.standaloneShortMonths, value, buf);
+            } else {
                 zeroPaddingNumber(buf, value+1, count, maxIntCount);
+            }
             break;
         case 27: // 'Q' - QUARTER
-            if (count >= 4)
-                buf.append(formatData.quarters[value/3]);
-            else if (count == 3)
-                buf.append(formatData.shortQuarters[value/3]);
-            else
+            if (count >= 4) {
+                safeAppend(formatData.quarters, value/3, buf);
+            } else if (count == 3) {
+                safeAppend(formatData.shortQuarters, value/3, buf);
+            } else {
                 zeroPaddingNumber(buf, (value/3)+1, count, maxIntCount);
+            }
             break;
         case 28: // 'q' - STANDALONE QUARTER
-            if (count >= 4)
-                buf.append(formatData.standaloneQuarters[value/3]);
-            else if (count == 3)
-                buf.append(formatData.standaloneShortQuarters[value/3]);
-            else
+            if (count >= 4) {
+                safeAppend(formatData.standaloneQuarters, value/3, buf);
+            } else if (count == 3) {
+                safeAppend(formatData.standaloneShortQuarters, value/3, buf);
+            } else {
                 zeroPaddingNumber(buf, (value/3)+1, count, maxIntCount);
+            }
             break;
         case 29: // 'V' - TIMEZONE_SPECIAL
             if (count == 1) {
@@ -968,6 +975,12 @@ public class SimpleDateFormat extends DateFormat {
                 pos.setEndIndex(beginOffset + buf.length() - bufstart);
             }
 //#endif
+        }
+    }
+
+    private static void safeAppend(String[] array, int value, StringBuffer appendTo) {
+        if (array != null && value >= 0 && value < array.length) {
+            appendTo.append(array[value]);
         }
     }
 
