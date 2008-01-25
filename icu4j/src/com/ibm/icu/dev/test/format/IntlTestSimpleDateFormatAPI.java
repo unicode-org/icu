@@ -157,7 +157,7 @@ public class IntlTestSimpleDateFormatAPI extends com.ibm.icu.dev.test.TestFmwk
 
         String p2 = new String("YYYY'W'wwe");
         logln("Applying pattern " + p2);
-        pat.applyPattern(p1);
+        pat.applyPattern(p2);
         Date dt = pat.parse("2007W014", new ParsePosition(0));
         if (dt == null) {
             errln("ERROR: Parsing failed using 'Y' and 'e'");
