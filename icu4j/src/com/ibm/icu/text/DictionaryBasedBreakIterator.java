@@ -66,13 +66,13 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
      * to use either the dictionary or the state table again until the iterator
      * leaves this range of text
      */
-    protected int[] cachedBreakPositions;
+    int[] cachedBreakPositions;
 
     /**
      * if cachedBreakPositions is not null, this indicates which item in the
      * cache the current iteration position refers to
      */
-    protected int positionInCache;
+    int positionInCache;
 
     /**
      * Special variable name for characters in words in dictionary
@@ -317,7 +317,7 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
         return 1;
     }
 
-
+public static int tempcount = 0;
 
     /**
      * This is the implementation function for next().
@@ -338,6 +338,7 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
             int startPos = text.getIndex();
             fDictionaryCharCount = 0;
             int result = super.handleNext();
+            tempcount++;
 
             // if we passed over more than one dictionary character, then we use
             // divideUpDictionaryRange() to regenerate the cached break positions
