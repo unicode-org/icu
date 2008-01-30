@@ -278,7 +278,6 @@ icu4j/src/com/ibm/icu/dev/tool/tzu/runicutzuenv.bat -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/runicutzuenv.cmd -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/runicutzuenv.sh -text
 icu4j/src/com/ibm/icu/impl/data/icudata.jar -text
-icu4j/src/com/ibm/icu/impl/data/th.brk -text
 icu4j/src/com/ibm/icu/impl/duration/BasicDurationFormatter.java -text
 icu4j/src/com/ibm/icu/impl/duration/BasicDurationFormatterFactory.java -text
 icu4j/src/com/ibm/icu/impl/duration/BasicPeriodBuilderFactory.java -text
