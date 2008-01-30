@@ -2,7 +2,7 @@
 #
 # Yves Arrouye.
 #
-# Copyright (C) 2000-2007, International Business Machines Corporation and others.
+# Copyright (C) 2000-2008, International Business Machines Corporation and others.
 # All Rights Reserved.
 
 #
@@ -191,7 +191,8 @@ RMV = rm -rf
 # INSTALL-L installs libraries. Override in mh-* file to INSTALL_PROGRAM
 #           when the library needs to have executable permissions
 INSTALL-S = $(INSTALL_PROGRAM)
-INSTALL-L = $(INSTALL_DATA)
+INSTALL-L = $(INSTALL_PROGRAM)
+#INSTALL-L = $(INSTALL_DATA)
 
 # Location of the libraries before "make install" is used
 LIBDIR=$(top_builddir)/lib
