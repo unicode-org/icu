@@ -316,9 +316,6 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
         }
         return 1;
     }
-
-public static int tempcount = 0;
-
     /**
      * This is the implementation function for next().
      * @internal
@@ -338,7 +335,6 @@ public static int tempcount = 0;
             int startPos = text.getIndex();
             fDictionaryCharCount = 0;
             int result = super.handleNext();
-            tempcount++;
 
             // if we passed over more than one dictionary character, then we use
             // divideUpDictionaryRange() to regenerate the cached break positions

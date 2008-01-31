@@ -164,9 +164,6 @@ class ThaiBreakIterator extends DictionaryBasedBreakIterator {
             // we passed over on our way to the tentative return value
             int startPos = text.getIndex();
             fDictionaryCharCount = 0;
-            if (tempcount == 213) {
-                System.out.println("HA\n");
-            }
             int result = super.handleNext();
 
             // if we passed over more than one dictionary character, then we use
