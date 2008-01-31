@@ -133,19 +133,13 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
             // This type of break iterator could potentially use a dictionary.
             //
             try {
-                //ICUResourceBundle dictRes = (ICUResourceBundle)rb.getObject("BreakDictionaryData");
-                //byte[] dictBytes = null;
-                //dictBytes = dictRes.getBinary(dictBytes);
-                //TODO: Hard code this for now! fix it once CompactTrieDictionary is ported
-                if(locale.equals("th")){
+                if (locale.getLanguage().equals("th")){
+                    // If the language is Thai, load the thai compact trie dictionary.
                     String dictType = "Thai";
                     String dictFileName = rb.getStringWithFallback("dictionaries/" + dictType);
                     dictFileName = ICUResourceBundle.ICU_BUNDLE +ICUResourceBundle.ICU_BRKITR_NAME+ "/" + dictFileName;
                     InputStream is = ICUData.getStream(dictFileName);
                     iter = new ThaiBreakIterator(ruleStream, is);
-                    /*String  fileName = "data/th.brk";
-                    InputStream is    = ICUData.getStream(fileName);
-                    iter = new DictionaryBasedBreakIterator(ruleStream, is);*/
                 }
             } catch (MissingResourceException e) {
                 //  Couldn't find a dictionary.
