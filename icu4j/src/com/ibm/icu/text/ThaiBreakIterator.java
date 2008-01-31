@@ -106,7 +106,7 @@ class ThaiBreakIterator extends DictionaryBasedBreakIterator {
     // Minimum word size
     private final byte THAI_MIN_WORD = 2;
     // Minimum number of characters for two words
-    private final int THAI_MIN_WORD_SPAN = THAI_MIN_WORD * 2;
+    //private final int THAI_MIN_WORD_SPAN = THAI_MIN_WORD * 2;
 
     public ThaiBreakIterator(InputStream ruleStream, InputStream dictionaryStream) throws IOException {
         super(ruleStream);
@@ -203,8 +203,8 @@ class ThaiBreakIterator extends DictionaryBasedBreakIterator {
      * @return The number of breaks found
      */
     private int divideUpDictionaryRange(int rangeStart, int rangeEnd) {
-        if ((rangeEnd - rangeStart) < THAI_MIN_WORD_SPAN) {
-            return 0;  // Not enough chacters for two words
+        if ((rangeEnd - rangeStart) < THAI_MIN_WORD) {
+            return 0;  // Not enough chacters for word
         }
         CharacterIterator fIter = getText();
         int wordsFound = 0;
