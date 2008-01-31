@@ -2711,6 +2711,20 @@ public class TestCharset extends TestFmwk {
         smBufDecode(decoder, "UTF-7", bs, us);
         smBufEncode(encoder, "UTF-7", us, bs);
         
+        /* ticket 6151 */
+        CharBuffer smallus = CharBuffer.allocate(2);
+        ByteBuffer smallbs = ByteBuffer.allocate(2);
+        try {
+            smBufDecode(decoder, "UTF-7-DE-Overflow", bs, smallus, true, false);
+            errln("Buffer Overflow exception should have been thrown while decoding UTF-7.");
+        } catch (Exception ex) {
+        }
+        try {
+            smBufEncode(encoder,"UTF-7-EN-Overflow", us, smallbs, true, false);
+            errln("Buffer Overflow exception should have been thrown while encoding UTF-7.");
+        } catch(Exception ex) {
+        }
+        
         //The rest of the code in this method is to provide better code coverage
         CharBuffer ccus = CharBuffer.allocate(0x10);
         ByteBuffer ccbs = ByteBuffer.allocate(0x10);
