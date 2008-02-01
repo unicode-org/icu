@@ -363,14 +363,20 @@ static void TestBufferOverflow(void) {
         "\x80 This is English \x1b\x24", /* A partial ISO-2022 shift state at the end */
         "\x80 This is English \x1b\x24\x28", /* A partial ISO-2022 shift state at the end */
         "\x80 This is English \x1b\x24\x28\x44", /* A complete ISO-2022 shift state at the end with a bad one at the start */
-        "\x1b\x24\x28\x44" /* A complete ISO-2022 shift state at the end */
+        "\x1b\x24\x28\x44", /* A complete ISO-2022 shift state at the end */
+        "\xa1", /* Could be a single byte shift-jis at the end */
+        "th\xa1", /* Could be a single byte shift-jis at the end */
+        "the\xa1" /* Could be a single byte shift-jis at the end, but now we have English creeping in. */
     };
     static const char *testResults[] = {
         "windows-1252",
         "windows-1252",
         "windows-1252",
         "windows-1252",
-        "ISO-2022-JP"
+        "ISO-2022-JP",
+        NULL,
+        NULL,
+        "ISO-8859-1"
     };
     int32_t idx = 0;
     UCharsetDetector *csd = ucsdet_open(&status);
@@ -387,7 +393,17 @@ static void TestBufferOverflow(void) {
         ucsdet_setText(csd, testStrings[idx], -1, &status);
         match = ucsdet_detect(csd, &status);
 
-        if (strcmp(ucsdet_getName(match, &status), testResults[idx]) != 0) {
+        if (match == NULL) {
+            if (testResults[idx] != NULL) {
+                log_err("Unexpectedly got no results at index %d.\n", idx);
+            }
+            else {
+                log_verbose("Got no result as expected at index %d.\n", idx);
+            }
+            continue;
+        }
+
+        if (testResults[idx] == NULL || strcmp(ucsdet_getName(match, &status), testResults[idx]) != 0) {
             log_err("Unexpectedly got %s instead of %s at index %d with confidence %d.\n",
                 ucsdet_getName(match, &status), testResults[idx], idx, ucsdet_getConfidence(match, &status));
             goto bail;
