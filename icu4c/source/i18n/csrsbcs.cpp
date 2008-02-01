@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2005-2006, International Business Machines
+ *   Copyright (C) 2005-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -9,8 +9,6 @@
 
 #if !UCONFIG_NO_CONVERSION
 #include "csrsbcs.h"
-
-#include <stdio.h>
 
 #define N_GRAM_SIZE 3
 #define N_GRAM_MASK 0xFFFFFF
@@ -143,12 +141,11 @@ CharsetRecog_sbcs::~CharsetRecog_sbcs()
 
 int32_t CharsetRecog_sbcs::match_sbcs(InputText *det, const int32_t ngrams[],  const uint8_t byteMap[])
 {
-    NGramParser *parser = new NGramParser(ngrams, byteMap);
+    NGramParser parser(ngrams, byteMap);
     int32_t result;
 
     haveC1Bytes = det->fC1Bytes;
-    result = parser->parse(det);
-    delete parser;
+    result = parser.parse(det);
 
     return result;
 }
