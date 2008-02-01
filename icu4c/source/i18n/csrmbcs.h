@@ -38,7 +38,7 @@ public:
 
 public:
     IteratedChar();
-    void reset();
+    //void reset();
     int32_t nextByte(InputText* det);
 };
 
