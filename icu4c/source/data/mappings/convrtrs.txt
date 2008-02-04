@@ -1,6 +1,6 @@
 # ******************************************************************************
 # *
-# *   Copyright (C) 1995-2007, International Business Machines
+# *   Copyright (C) 1995-2008, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 # *
 # ******************************************************************************
@@ -167,6 +167,8 @@ UTF-16BE { IANA* MIME* JAVA* }  x-utf-16be { JAVA }
                                 ibm-21681 { IBM } # Unicode 4.0, UTF-16 BE
                                 ibm-25776 { IBM } # Unicode 4.1, UTF-16 BE with IBM PUA
                                 ibm-25777 { IBM } # Unicode 4.1, UTF-16 BE
+                                ibm-29872 { IBM } # Unicode 5.0, UTF-16 BE with IBM PUA
+                                ibm-29873 { IBM } # Unicode 5.0, UTF-16 BE
                                 ibm-61955 { IBM } # UTF-16BE with Gaidai University (Japan) PUA
                                 ibm-61956 { IBM } # UTF-16BE with Microsoft HKSCS-Big 5 PUA
                                 windows-1201 { WINDOWS* }
@@ -188,6 +190,8 @@ UTF-16LE { IANA* MIME* JAVA* }  x-utf-16le { JAVA }
                                 ibm-21683 { IBM } # Unicode 4.0, UTF-16 LE
                                 ibm-25778 { IBM } # Unicode 4.1, UTF-16 LE with IBM PUA
                                 ibm-25779 { IBM } # Unicode 4.1, UTF-16 LE
+                                ibm-29874 { IBM } # Unicode 5.0, UTF-16 LE with IBM PUA
+                                ibm-29875 { IBM } # Unicode 5.0, UTF-16 LE
                                 UTF16_LittleEndian
                                 windows-1200 { WINDOWS* }
 
@@ -199,6 +203,7 @@ UTF-32 { IANA* MIME* }          ISO-10646-UCS-4 { IANA }
 UTF-32BE { IANA* }              UTF32_BigEndian
                                 ibm-1232 { IBM* } # UTF-32 BE with IBM PUA
                                 ibm-1233 { IBM }  # UTF-32 BE
+                                ibm-9424 { IBM }  # Unicode 4.1, UTF-32 BE with IBM PUA
 UTF-32LE { IANA* }              UTF32_LittleEndian
                                 ibm-1234 { IBM* } # UTF-32 LE, with IBM PUA
                                 ibm-1235 { IBM }  # UTF-32 LE
