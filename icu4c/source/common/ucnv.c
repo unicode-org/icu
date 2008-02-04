@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2007, International Business Machines
+*   Copyright (C) 1998-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -57,8 +57,7 @@ static const UAmbiguousConverter ambiguousConverters[]={
     { "ibm-944_P100-1995", 0x20a9 },
     { "ibm-949_P110-1999", 0x20a9 },
     { "ibm-1363_P110-1997", 0x20a9 },
-    { "ISO_2022,locale=ko,version=0", 0x20a9 },
-    { "gsm-03.38", 0xd6 }
+    { "ISO_2022,locale=ko,version=0", 0x20a9 }
 };
 
 /*Calls through createConverter */
