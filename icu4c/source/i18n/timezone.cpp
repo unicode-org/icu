@@ -334,16 +334,16 @@ static UBool loadOlsonIDs() {
         ids = new UnicodeString[(count > 0) ? count : 1];
         // Null pointer check
         if (ids != NULL) {
-	        for (int32_t i=0; i<count; ++i) {
-	            int32_t idLen = 0;
-	            const UChar* id = ures_getStringByIndex(nres, i, &idLen, &ec);
-	            ids[i].fastCopyFrom(UnicodeString(TRUE, id, idLen));
-	            if (U_FAILURE(ec)) {
-	                break;
-	            }
-	        }
+            for (int32_t i=0; i<count; ++i) {
+                int32_t idLen = 0;
+                const UChar* id = ures_getStringByIndex(nres, i, &idLen, &ec);
+                ids[i].fastCopyFrom(UnicodeString(TRUE, id, idLen));
+                if (U_FAILURE(ec)) {
+                    break;
+                }
+            }
         } else {
-        	ec = U_MEMORY_ALLOCATION_ERROR;
+            ec = U_MEMORY_ALLOCATION_ERROR;
         }
     }
     ures_close(nres);
@@ -465,9 +465,9 @@ TimeZone::createTimeZone(const UnicodeString& ID)
         U_DEBUG_TZ_MSG(("failed to load time zone with id - falling to GMT"));
         const TimeZone* temptz = getGMT();
         if (temptz == NULL) {
-        	result = NULL;
+            result = NULL;
         } else {
-        	result = temptz->clone();
+            result = temptz->clone();
         }
     }
     return result;
@@ -624,11 +624,11 @@ TimeZone::initDefault()
 
     // If we _still_ don't have a time zone, use GMT.
     if (default_zone == NULL) {
-    	const TimeZone* temptz = getGMT();
-    	// If we can't use GMT, get out.
-    	if (temptz == NULL) {
-    		return;
-    	}
+        const TimeZone* temptz = getGMT();
+        // If we can't use GMT, get out.
+        if (temptz == NULL) {
+            return;
+        }
         default_zone = temptz->clone();
     }
 
@@ -1444,12 +1444,23 @@ TimeZone::getTZDataVersion(UErrorCode& status)
 UnicodeString&
 TimeZone::getCanonicalID(const UnicodeString& id, UnicodeString& canonicalID, UErrorCode& status)
 {
+    UBool isSystemID = FALSE;
+    return getCanonicalID(id, canonicalID, isSystemID, status);
+}
+
+UnicodeString&
+TimeZone::getCanonicalID(const UnicodeString& id, UnicodeString& canonicalID, UBool& isSystemID,
+                         UErrorCode& status)
+{
     canonicalID.remove();
+    isSystemID = FALSE;
     if (U_FAILURE(status)) {
         return canonicalID;
     }
     ZoneMeta::getCanonicalSystemID(id, canonicalID, status);
-    if (U_FAILURE(status)) {
+    if (U_SUCCESS(status)) {
+        isSystemID = TRUE;
+    } else {
         // Not a system ID
         status = U_ZERO_ERROR;
         getCustomID(id, canonicalID, status);

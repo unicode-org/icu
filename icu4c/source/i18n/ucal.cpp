@@ -471,9 +471,12 @@ ucal_getTZDataVersion(UErrorCode* status)
 
 U_CAPI int32_t U_EXPORT2
 ucal_getCanonicalTimeZoneID(const UChar* id, int32_t len,
-                            UChar* result, int32_t resultCapacity, UErrorCode* status) {
+                            UChar* result, int32_t resultCapacity, UBool *isSystemID, UErrorCode* status) {
     if(status == 0 || U_FAILURE(*status)) {
         return 0;
+    }
+    if (isSystemID) {
+        *isSystemID = FALSE;
     }
     if (id == 0 || len == 0 || result == 0 || resultCapacity <= 0) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -481,8 +484,12 @@ ucal_getCanonicalTimeZoneID(const UChar* id, int32_t len,
     }
     int32_t reslen = 0;
     UnicodeString canonical;
-    TimeZone::getCanonicalID(UnicodeString(id, len), canonical, *status);
+    UBool systemID = FALSE;
+    TimeZone::getCanonicalID(UnicodeString(id, len), canonical, systemID, *status);
     if (U_SUCCESS(*status)) {
+        if (isSystemID) {
+            *isSystemID = systemID;
+        }
         reslen = canonical.extract(result, resultCapacity, *status);
     }
     return reslen;
