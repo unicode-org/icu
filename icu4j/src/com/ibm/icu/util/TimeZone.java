@@ -798,12 +798,35 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @provisional This API might change or be removed in a future release.
      */
     public static String getCanonicalID(String id) {
-        if (id == null || id.length() == 0) {
-            return null;
+        return getCanonicalID(id, null);
+    }
+
+    /**
+     * Returns the canonical system timezone ID or the normalized
+     * custom time zone ID for the given time zone ID.
+     * @param id The input timezone ID to be canonicalized.
+     * @param isSystemID When non-null boolean array is specified and
+     * the given ID is a known system timezone ID, true is set to <code>isSystemID[0]</code>
+     * @return The canonical system timezone ID or the custom timezone ID
+     * in normalized format for the given timezone ID.  When the given timezone ID
+     * is neither a known system time zone ID nor a valid custom timezone ID,
+     * null is returned.
+     * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static String getCanonicalID(String id, boolean[] isSystemID) {
+        String canonicalID = null;
+        boolean systemTzid = false;
+        if (id != null && id.length() != 0) {
+            canonicalID = ZoneMeta.getCanonicalSystemID(id);
+            if (canonicalID != null) {
+                systemTzid = true;
+            } else {
+                canonicalID = ZoneMeta.getCustomID(id);
+            }
         }
-        String canonicalID = ZoneMeta.getCanonicalSystemID(id);
-        if (canonicalID == null) {
-            canonicalID = ZoneMeta.getCustomID(id);
+        if (isSystemID != null) {
+            isSystemID[0] = systemTzid;
         }
         return canonicalID;
     }

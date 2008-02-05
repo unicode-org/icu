@@ -196,6 +196,9 @@ public final class ZoneMeta {
     }
 
     private static String[] getCanonicalInfo(String id) {
+        if (id == null || id.length() == 0) {
+            return null;
+        }
         if (canonicalMap == null) {
             Map m = new HashMap();
             Set s = new HashSet();
