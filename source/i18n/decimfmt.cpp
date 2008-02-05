@@ -640,11 +640,11 @@ DecimalFormat::format(int64_t number,
     // check for this before multiplying, and if it happens we use doubles
     // instead, trading off accuracy for range.
     if (fRoundingIncrement != NULL
-        || (fMultiplier != 0 && (number > (U_INT64_MAX / fMultiplier)
-                              || number < (U_INT64_MIN / fMultiplier)
-                              || number == U_INT64_MIN && fMultiplier < 0)))
+        || (fMultiplier > 0 && (number > U_INT64_MAX / fMultiplier || number < U_INT64_MIN / fMultiplier))
+        || (fMultiplier < 0 && (number == U_INT64_MIN || -number > U_INT64_MAX / -fMultiplier || -number < U_INT64_MIN / -fMultiplier))
+        )
     {
-        digits.set(((double)number) * fMultiplier,
+        digits.set(((double) number) * fMultiplier,
                    precision(FALSE),
                    !fUseExponentialNotation && !areSignificantDigitsUsed());
     }

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2007, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /* Modification History:
@@ -2438,11 +2438,29 @@ void NumberFormatTest::TestNonpositiveMultiplier() {
     expect(df, "1.2", -1.2);
     expect(df, "-1.2", 1.2);
 
-    // TODO: comment once BigInteger is ported
+    // TODO: change all the following int64_t tests once BigInteger is ported
     // (right now the big numbers get turned into doubles and lose tons of accuracy)
-    expect(df, U_INT64_MIN, "9223372036854780000");
+    char* posOutOfRange = "9223372036854780000";
+    char* negOutOfRange = "-9223372036854780000";
 
-    // TODO: uncomment (and fix up) once BigInteger is ported and DecimalFormat can handle it
+    expect(df, U_INT64_MIN, posOutOfRange);
+    expect(df, U_INT64_MIN+1, "9223372036854775807");
+    expect(df, (int64_t)-123, "123");
+    expect(df, (int64_t)123, "-123");
+    expect(df, U_INT64_MAX-1, "-9223372036854775806");
+    expect(df, U_INT64_MAX, "-9223372036854775807");
+
+    df.setMultiplier(-2);
+    expect(df, -(U_INT64_MIN/2)-1, "-9223372036854775806");
+    expect(df, -(U_INT64_MIN/2), "-9223372036854775808");
+    expect(df, -(U_INT64_MIN/2)+1, negOutOfRange);
+
+    df.setMultiplier(-7);
+    expect(df, -(U_INT64_MAX/7)-1, posOutOfRange);
+    expect(df, -(U_INT64_MAX/7), "9223372036854775807");
+    expect(df, -(U_INT64_MAX/7)+1, "9223372036854775800");
+
+    // TODO: uncomment (and fix up) all the following int64_t tests once BigInteger is ported
     // (right now the big numbers get turned into doubles and lose tons of accuracy)
     //expect2(df, U_INT64_MAX, Int64ToUnicodeString(-U_INT64_MAX));
     //expect2(df, U_INT64_MIN, UnicodeString(Int64ToUnicodeString(U_INT64_MIN), 1));
