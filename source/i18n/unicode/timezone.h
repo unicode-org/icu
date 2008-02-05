@@ -350,6 +350,24 @@ public:
         UnicodeString& canonicalID, UErrorCode& status);
 
     /**
+     * Returns the canonical system timezone ID or the normalized
+     * custom time zone ID for the given time zone ID.
+     * @param id            The input timezone ID to be canonicalized.
+     * @param canonicalID   Receives the canonical system timezone ID
+     *                      or the custom timezone ID in normalized format.
+     * @param isSystemID    Receives if the given ID is a known system
+     *                      timezone ID.
+     * @param status        Recevies the status.  When the given timezone ID
+     *                      is neither a known system time zone ID nor a
+     *                      valid custom timezone ID, U_ILLEGAL_ARGUMENT_ERROR
+     *                      is set.
+     * @return A reference to the result.
+     * @draft ICU 4.0
+     */
+    static UnicodeString& U_EXPORT2 getCanonicalID(const UnicodeString& id,
+        UnicodeString& canonicalID, UBool& isSystemID, UErrorCode& status);
+
+    /**
      * Returns true if the two TimeZones are equal.  (The TimeZone version only compares
      * IDs, but subclasses are expected to also compare the fields they add.)
      *

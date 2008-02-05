@@ -1098,6 +1098,8 @@ ucal_getTZDataVersion(UErrorCode* status);
  * @param result    The buffer receives the canonical system timezone ID
  *                  or the custom timezone ID in normalized format.
  * @param resultCapacity    The capacity of the result buffer.
+ * @param isSystemID        Receives if the given ID is a known system
+     *                      timezone ID.
  * @param status    Recevies the status.  When the given timezone ID
  *                  is neither a known system time zone ID nor a
  *                  valid custom timezone ID, U_ILLEGAL_ARGUMENT_ERROR
@@ -1108,7 +1110,7 @@ ucal_getTZDataVersion(UErrorCode* status);
  */
 U_DRAFT int32_t U_EXPORT2
 ucal_getCanonicalTimeZoneID(const UChar* id, int32_t len,
-                            UChar* result, int32_t resultCapacity, UErrorCode* status);
+                            UChar* result, int32_t resultCapacity, UBool *isSystemID, UErrorCode* status);
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif

@@ -1766,22 +1766,24 @@ void TimeZoneTest::TestCanonicalID() {
     struct {
         const char *id;
         const char *expected;
+        const UBool isSystem;
     } data[] = {
-        {"GMT-03", "GMT-0300"},
-        {"GMT+4", "GMT+0400"},
-        {"GMT-055", "GMT-0055"},
-        {"GMT+430", "GMT+0430"},
-        {"GMT-12:15", "GMT-1215"},
-        {"GMT-091015", "GMT-091015"},
-        {"GMT+1:90", 0},
-        {"America/Argentina/Buenos_Aires", "America/Buenos_Aires"},
-        {"bogus", 0},
-        {"", 0},
-        {0, 0}
+        {"GMT-03", "GMT-0300", FALSE},
+        {"GMT+4", "GMT+0400", FALSE},
+        {"GMT-055", "GMT-0055", FALSE},
+        {"GMT+430", "GMT+0430", FALSE},
+        {"GMT-12:15", "GMT-1215", FALSE},
+        {"GMT-091015", "GMT-091015", FALSE},
+        {"GMT+1:90", 0, FALSE},
+        {"America/Argentina/Buenos_Aires", "America/Buenos_Aires", TRUE},
+        {"bogus", 0, FALSE},
+        {"", 0, FALSE},
+        {0, 0, FALSE}
     };
 
+    UBool isSystemID;
     for (i = 0; data[i].id != 0; i++) {
-        TimeZone::getCanonicalID(UnicodeString(data[i].id), canonicalID, ec);
+        TimeZone::getCanonicalID(UnicodeString(data[i].id), canonicalID, isSystemID, ec);
         if (U_FAILURE(ec)) {
             if (ec != U_ILLEGAL_ARGUMENT_ERROR || data[i].expected != 0) {
                 errln((UnicodeString)"FAIL: getCanonicalID(\"" + data[i].id
@@ -1793,6 +1795,10 @@ void TimeZoneTest::TestCanonicalID() {
         if (canonicalID != data[i].expected) {
             errln((UnicodeString)"FAIL: getCanonicalID(\"" + data[i].id
                 + "\") returned " + canonicalID + " - expected: " + data[i].expected);
+        }
+        if (isSystemID != data[i].isSystem) {
+            errln((UnicodeString)"FAIL: getCanonicalID(\"" + data[i].id
+                + "\") set " + isSystemID + " to isSystemID");
         }
     }
 }
