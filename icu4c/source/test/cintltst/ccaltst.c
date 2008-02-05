@@ -72,6 +72,7 @@ static void TestCalendar()
     UChar zone1[32], zone2[32];
     const char *tzver = 0;
     UChar canonicalID[64];
+    UBool isSystemID = FALSE;
 
 #ifdef U_USE_UCAL_OBSOLETE_2_8
     /*Testing countAvailableTimeZones*/
@@ -197,12 +198,18 @@ static void TestCalendar()
     /*Testing ucal_getCanonicalTimeZoneID*/
     status = U_ZERO_ERROR;
     resultlength = ucal_getCanonicalTimeZoneID(PST, -1,
-        canonicalID, sizeof(canonicalID)/sizeof(UChar), &status);
+        canonicalID, sizeof(canonicalID)/sizeof(UChar), &isSystemID, &status);
     if (U_FAILURE(status)) {
         log_err("FAIL: error in ucal_getCanonicalTimeZoneID : %s\n", u_errorName(status));
-    } else if (u_strcmp(AMERICA_LOS_ANGELES, canonicalID) != 0) {
-        log_err("FAIL: ucal_getCanonicalTimeZoneID(%s) returned %s : expected - %s\n",
-            PST, canonicalID, AMERICA_LOS_ANGELES);
+    } else {
+        if (u_strcmp(AMERICA_LOS_ANGELES, canonicalID) != 0) {
+            log_err("FAIL: ucal_getCanonicalTimeZoneID(%s) returned %s : expected - %s\n",
+                PST, canonicalID, AMERICA_LOS_ANGELES);
+        }
+        if (!isSystemID) {
+            log_err("FAIL: ucal_getCanonicalTimeZoneID(%s) set %d to isSystemID\n",
+                PST, isSystemID);
+        }
     }
 
     /*Testing the  ucal_open() function*/
