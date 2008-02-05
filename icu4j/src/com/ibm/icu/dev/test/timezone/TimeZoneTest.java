@@ -1459,24 +1459,29 @@ public class TimeZoneTest extends TestFmwk
         }
         // Testing some special cases
         final String[][] data = {
-                {"GMT-03", "GMT-0300"},
-                {"GMT+4", "GMT+0400"},
-                {"GMT-055", "GMT-0055"},
-                {"GMT+430", "GMT+0430"},
-                {"GMT-12:15", "GMT-1215"},
-                {"GMT-091015", "GMT-091015"},
-                {"GMT+1:90", null},
-                {"America/Argentina/Buenos_Aires", "America/Buenos_Aires"},
-                {"bogus", null},
-                {"", null},
-                {null, null},
+                {"GMT-03", "GMT-0300", null},
+                {"GMT+4", "GMT+0400", null},
+                {"GMT-055", "GMT-0055", null},
+                {"GMT+430", "GMT+0430", null},
+                {"GMT-12:15", "GMT-1215", null},
+                {"GMT-091015", "GMT-091015", null},
+                {"GMT+1:90", null, null},
+                {"America/Argentina/Buenos_Aires", "America/Buenos_Aires", "true"},
+                {"bogus", null, null},
+                {"", null, null},
+                {null, null, null},
         };
+        boolean[] isSystemID = new boolean[1];
         for (int i = 0; i < data.length; i++) {
-            String canonical = TimeZone.getCanonicalID(data[i][0]);
+            String canonical = TimeZone.getCanonicalID(data[i][0], isSystemID);
             if (canonical != null && !canonical.equals(data[i][1])
                     || canonical == null && data[i][1] != null) {
                 errln("FAIL: getCanonicalID(\"" + data[i][0] + "\") returned " + canonical
                         + " - expected: " + data[i][1]);
+            }
+            if (Boolean.parseBoolean(data[i][2]) != isSystemID[0]) {
+                errln("FAIL: getCanonicalID(\"" + data[i][0] + "\") set " + isSystemID[0]
+                        + " to isSystemID");
             }
         }
     }
