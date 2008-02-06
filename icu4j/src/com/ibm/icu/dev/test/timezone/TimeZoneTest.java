@@ -1479,7 +1479,7 @@ public class TimeZoneTest extends TestFmwk
                 errln("FAIL: getCanonicalID(\"" + data[i][0] + "\") returned " + canonical
                         + " - expected: " + data[i][1]);
             }
-            if (Boolean.parseBoolean(data[i][2]) != isSystemID[0]) {
+            if ("true".equalsIgnoreCase(data[i][2]) != isSystemID[0]) {
                 errln("FAIL: getCanonicalID(\"" + data[i][0] + "\") set " + isSystemID[0]
                         + " to isSystemID");
             }
