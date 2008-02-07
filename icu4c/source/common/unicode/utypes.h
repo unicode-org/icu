@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1996-2007, International Business Machines
+*   Copyright (C) 1996-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -503,6 +503,10 @@ operator new(size_t /*size*/) {
     return q;
 }
 
+#ifdef _Ret_bytecap_
+/* This is only needed to suppress a Visual C++ 2008 warning for operator new[]. */
+_Ret_bytecap_(_Size)
+#endif
 /**
  * Global operator new[], defined only inside ICU4C, must not be used.
  * Crashes intentionally.
