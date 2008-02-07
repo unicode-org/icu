@@ -2440,8 +2440,8 @@ void NumberFormatTest::TestNonpositiveMultiplier() {
 
     // TODO: change all the following int64_t tests once BigInteger is ported
     // (right now the big numbers get turned into doubles and lose tons of accuracy)
-    char* posOutOfRange = "9223372036854780000";
-    char* negOutOfRange = "-9223372036854780000";
+    static const char* posOutOfRange = "9223372036854780000";
+    static const char* negOutOfRange = "-9223372036854780000";
 
     expect(df, U_INT64_MIN, posOutOfRange);
     expect(df, U_INT64_MIN+1, "9223372036854775807");
