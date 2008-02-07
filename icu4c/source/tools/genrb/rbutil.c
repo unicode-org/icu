@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2005, International Business Machines
+*   Copyright (C) 1998-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -12,6 +12,8 @@
 *
 *   Date        Name        Description
 *   06/10/99    stephen     Creation.
+*   02/07/08    Spieth      Correct XLIFF generation on EBCDIC platform
+*   
 *******************************************************************************
 */
 
@@ -63,6 +65,7 @@ get_basename(char *basename,
 int32_t 
 itostr(char * buffer, int32_t i, uint32_t radix, int32_t pad)
 {
+    const char digits[16] = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
     int32_t length = 0;
     int32_t num = 0;
     int32_t save = i;
@@ -77,12 +80,12 @@ itostr(char * buffer, int32_t i, uint32_t radix, int32_t pad)
     
     do{
         digit = (int)(i % radix);
-        buffer[length++]=(char)(digit<=9?(0x0030+digit):(0x0030+digit+7));
+        buffer[length++]= digits[digit];
         i=i/radix;
     } while(i);
 
     while (length < pad){
-        buffer[length++] = 0x0030;/*zero padding */
+        buffer[length++] = '0';/*zero padding */
     }
     
     /* if i is negative add the negative sign */
