@@ -169,7 +169,6 @@
 				SuppressStartupBanner="true"
 				ProgramDatabaseFile=".\Release/makeconv.pdb"
 				SubSystem="1"
-				OptimizeForWindows98="1"
 			/>
 			<Tool
 				Name="VCALinkTool"

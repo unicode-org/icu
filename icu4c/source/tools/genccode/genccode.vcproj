@@ -75,7 +75,6 @@
 				SuppressStartupBanner="true"
 				ProgramDatabaseFile=".\Release/genccode.pdb"
 				SubSystem="1"
-				OptimizeForWindows98="1"
 			/>
 			<Tool
 				Name="VCALinkTool"

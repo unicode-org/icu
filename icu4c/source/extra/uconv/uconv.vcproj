@@ -78,7 +78,6 @@
 				AdditionalLibraryDirectories="Release"
 				ProgramDatabaseFile=".\Release/uconv.pdb"
 				SubSystem="1"
-				OptimizeForWindows98="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
