@@ -79,7 +79,6 @@
 				SuppressStartupBanner="true"
 				ProgramDatabaseFile=".\..\..\..\lib\icutest.pdb"
 				EnableCOMDATFolding="2"
-				OptimizeForWindows98="1"
 				LinkTimeCodeGeneration="1"
 				ImportLibrary=".\..\..\..\lib\icutest.lib"
 			/>

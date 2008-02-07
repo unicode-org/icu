@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (c) 1999-2007, International Business Machines Corporation and
+# Copyright (c) 1999-2008, International Business Machines Corporation and
 # others. All Rights Reserved.
 
 # runConfigureICU: This script will run the "configure" script for the appropriate platform
@@ -231,7 +231,6 @@ case $platform in
         CXX=cl; export CXX
         RELEASE_CFLAGS='/O2 /Ob2'
         RELEASE_CXXFLAGS='/O2 /Ob2'
-        RELEASE_LDFLAGS='/OPT:NOWIN98'
         DEBUG_CFLAGS='/Zi'
         DEBUG_CXXFLAGS='/Zi'
         DEBUG_LDFLAGS='/DEBUG'

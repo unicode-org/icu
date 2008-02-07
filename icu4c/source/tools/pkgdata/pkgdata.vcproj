@@ -170,7 +170,6 @@
 				SuppressStartupBanner="true"
 				ProgramDatabaseFile=".\Release/pkgdata.pdb"
 				SubSystem="1"
-				OptimizeForWindows98="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
