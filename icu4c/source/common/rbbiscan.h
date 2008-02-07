@@ -1,7 +1,7 @@
 //
 //  rbbiscan.h
 //
-//  Copyright (C) 2002-2007, International Business Machines Corporation and others.
+//  Copyright (C) 2002-2008, International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains declarations for class RBBIRuleScanner
@@ -41,13 +41,15 @@ class   RBBISymbolTable;
 //                        encountered.
 //
 //--------------------------------------------------------------------------------
-static const int    kStackSize = 100;               // The size of the state stack for
-                                                    //   rules parsing.  Corresponds roughly
-                                                    //   to the depth of parentheses nesting
-                                                    //   that is allowed in the rules.
 
 class RBBIRuleScanner : public UMemory {
 public:
+
+    enum {
+        kStackSize = 100            // The size of the state stack for
+    };                              //   rules parsing.  Corresponds roughly
+                                    //   to the depth of parentheses nesting
+                                    //   that is allowed in the rules.
 
     struct RBBIRuleChar {
         UChar32             fChar;
