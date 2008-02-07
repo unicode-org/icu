@@ -2599,6 +2599,8 @@ ures_getKeywordValues(const char *path, const char *keyword, UErrorCode *status)
 #endif
     return uloc_openKeywordList(valuesBuf, valuesIndex, status);
 }
+#if 0
+/* This code isn't needed, and given the documentation warnings the implementation is suspect */
 U_INTERNAL UBool U_EXPORT2
 ures_equal(const UResourceBundle* res1, const UResourceBundle* res2){
     if(res1==NULL || res2==NULL){
@@ -2658,4 +2660,6 @@ ures_getParentBundle(const UResourceBundle* res){
     }
     return res->fParentRes;
 }
+#endif
+
 /* eof */
