@@ -729,7 +729,7 @@ getKey_2022(char c,int32_t* key,int32_t* offset){
         else /*we found it*/{
             *key = togo;
             *offset = mid;
-            return escSeqStateTable_Value_2022[mid];
+            return (UCNV_TableStates_2022)escSeqStateTable_Value_2022[mid];
         }
         oldmid = mid;
 
@@ -829,7 +829,7 @@ DONE:
 #endif
         case ISO_2022_JP:
             {
-                StateEnum tempState=nextStateToUnicodeJP[offset];
+                StateEnum tempState=(StateEnum)nextStateToUnicodeJP[offset];
                 switch(tempState) {
                 case INVALID_STATE:
                     *err = U_UNSUPPORTED_ESCAPE_SEQUENCE;
@@ -868,7 +868,7 @@ DONE:
             break;
         case ISO_2022_CN:
             {
-                StateEnum tempState=nextStateToUnicodeCN[offset];
+                StateEnum tempState=(StateEnum)nextStateToUnicodeCN[offset];
                 switch(tempState) {
                 case INVALID_STATE:
                     *err = U_UNSUPPORTED_ESCAPE_SEQUENCE;
