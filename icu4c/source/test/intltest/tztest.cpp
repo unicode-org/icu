@@ -1665,7 +1665,7 @@ void TimeZoneTest::TestCanonicalID() {
 
     // Some canonical IDs in CLDR are defined as "Link"
     // in Olson tzdata.
-    struct {
+    static const struct {
         const char *alias;
         const char *zone;
     } excluded1[] = {
@@ -1694,7 +1694,7 @@ void TimeZoneTest::TestCanonicalID() {
     // Until we merge them into one equivalent group
     // in zoneinfo.res, we exclude them in the test
     // below.
-    const char* excluded2[] = {
+    static const char* excluded2[] = {
         "Etc/UCT", "UCT",
         "Etc/UTC", "UTC",
         "Etc/Universal", "Universal",
@@ -1763,10 +1763,10 @@ void TimeZoneTest::TestCanonicalID() {
     delete s;
 
     // Testing some special cases
-    struct {
+    static const struct {
         const char *id;
         const char *expected;
-        const UBool isSystem;
+        UBool isSystem;
     } data[] = {
         {"GMT-03", "GMT-0300", FALSE},
         {"GMT+4", "GMT+0400", FALSE},
