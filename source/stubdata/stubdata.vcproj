@@ -48,6 +48,7 @@
 				AdditionalIncludeDirectories="..\common"
 				PreprocessorDefinitions="WIN32;NDEBUG"
 				StringPooling="true"
+				ExceptionHandling="0"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				DisableLanguageExtensions="true"

@@ -80,7 +80,6 @@
 				SuppressStartupBanner="true"
 				ProgramDatabaseFile=".\derb_Win32_Release/derb.pdb"
 				SubSystem="1"
-				OptimizeForWindows98="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
