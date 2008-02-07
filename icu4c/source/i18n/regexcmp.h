@@ -1,7 +1,7 @@
 //
 //  regexcmp.h
 //
-//  Copyright (C) 2002-2007, International Business Machines Corporation and others.
+//  Copyright (C) 2002-2008, International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains declarations for the class RegexCompile
@@ -33,17 +33,18 @@ U_NAMESPACE_BEGIN
 //  class RegexCompile    Contains the regular expression compiler.
 //
 //--------------------------------------------------------------------------------
-static const int    kStackSize = 100;               // The size of the state stack for
-                                                    //   pattern parsing.  Corresponds roughly
-                                                    //   to the depth of parentheses nesting
-                                                    //   that is allowed in the rules.
-
 struct  RegexTableEl;
 class   RegexPattern;
 
 
 class RegexCompile : public UMemory {
 public:
+
+    enum {
+        kStackSize = 100            // The size of the state stack for
+    };                              //   pattern parsing.  Corresponds roughly
+                                    //   to the depth of parentheses nesting
+                                    //   that is allowed in the rules.
 
     struct RegexPatternChar {
         UChar32             fChar;
