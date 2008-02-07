@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and         *
+* Copyright (C) 2007-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -55,7 +55,7 @@ inline const UVector* CharacterNode::getChildNodes(void) const {
 /*
  * Search result handler callback interface used by TextTrieMap search.
  */
-class TextTrieMapSearchResultHandler {
+class TextTrieMapSearchResultHandler : public UMemory {
 public:
     virtual UBool handleMatch(int32_t matchLength,
         const UVector *values, UErrorCode& status) = 0;
@@ -371,7 +371,7 @@ ZoneStrings::isShortFormatCommonlyUsed(void) const {
  * TextTrieMapSearchHandler.  This class is used by ZoneStringFormat
  * for collecting search results for localized zone strings.
  */
-class ZoneStringSearchResultHandler : public UMemory, TextTrieMapSearchResultHandler {
+class ZoneStringSearchResultHandler : public TextTrieMapSearchResultHandler {
 public:
     ZoneStringSearchResultHandler(UErrorCode &status);
     virtual ~ZoneStringSearchResultHandler();
