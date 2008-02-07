@@ -156,8 +156,7 @@ getTimeZoneTranslationType(TimeZoneTranslationTypeIndex typeIdx) {
 
 // ----------------------------------------------------------------------------
 CharacterNode::CharacterNode(UChar32 c, UErrorCode &status)
-: UMemory(),
-  fChildren(deleteZoneStringInfo, NULL, DEFAULT_CHARACTERNODE_CAPACITY, status),
+: fChildren(deleteZoneStringInfo, NULL, DEFAULT_CHARACTERNODE_CAPACITY, status),
   fValues(deleteZoneStringInfo, NULL, DEFAULT_CHARACTERNODE_CAPACITY, status),
   fCharacter(c)
 {
@@ -216,7 +215,7 @@ CharacterNode::getChildNode(UChar32 c) const {
 
 // ----------------------------------------------------------------------------
 TextTrieMap::TextTrieMap(UBool ignoreCase)
-: UMemory(), fIgnoreCase(ignoreCase), fRoot(NULL) {
+: fIgnoreCase(ignoreCase), fRoot(NULL) {
 }
 
 TextTrieMap::~TextTrieMap() {
@@ -298,14 +297,14 @@ TextTrieMap::search(CharacterNode *node, const UnicodeString &text, int32_t star
 // ----------------------------------------------------------------------------
 ZoneStringInfo::ZoneStringInfo(const UnicodeString &id, const UnicodeString &str,
                                TimeZoneTranslationType type)
-: UMemory(), fId(id), fStr(str), fType(type) {
+: fId(id), fStr(str), fType(type) {
 }
 
 ZoneStringInfo::~ZoneStringInfo() {
 }
 // ----------------------------------------------------------------------------
 ZoneStringSearchResultHandler::ZoneStringSearchResultHandler(UErrorCode &status)
-: UMemory(), fResults(status)
+: fResults(status)
 {
     clear();
 }
@@ -375,8 +374,7 @@ ZoneStringSearchResultHandler::clear(void) {
 // ----------------------------------------------------------------------------
 ZoneStringFormat::ZoneStringFormat(const UnicodeString* const* strings,
                                    int32_t rowCount, int32_t columnCount, UErrorCode &status)
-: UMemory(),
-  fLocale(""),
+: fLocale(""),
   fTzidToStrings(uhash_compareUnicodeString, NULL, status),
   fMzidToStrings(uhash_compareUnicodeString, NULL, status),
   fZoneStringsTrie(TRUE)
@@ -451,8 +449,7 @@ error_cleanup:
 }
 
 ZoneStringFormat::ZoneStringFormat(const Locale &locale, UErrorCode &status)
-: UMemory(),
-  fLocale(locale),
+: fLocale(locale),
   fTzidToStrings(uhash_compareUnicodeString, NULL, status),
   fMzidToStrings(uhash_compareUnicodeString, NULL, status),
   fZoneStringsTrie(TRUE)
@@ -1423,7 +1420,7 @@ ZoneStringFormat::getLocalizedCountry(const UnicodeString &countryCode, const Lo
  */
 ZoneStrings::ZoneStrings(UnicodeString *strings, int32_t stringsCount, UBool commonlyUsed,
        UnicodeString **genericPartialLocationStrings, int32_t genericRowCount, int32_t genericColCount)
-: UMemory(), fStrings(strings), fStringsCount(stringsCount), fIsCommonlyUsed(commonlyUsed),
+: fStrings(strings), fStringsCount(stringsCount), fIsCommonlyUsed(commonlyUsed),
   fGenericPartialLocationStrings(genericPartialLocationStrings), 
   fGenericPartialLocationRowCount(genericRowCount), fGenericPartialLocationColCount(genericColCount) {
 }
@@ -1482,7 +1479,7 @@ ZoneStrings::getGenericPartialLocationString(const UnicodeString &mzid, UBool is
 
 // --------------------------------------------------------------
 SafeZoneStringFormatPtr::SafeZoneStringFormatPtr(ZSFCacheEntry *cacheEntry)
-: UMemory(), fCacheEntry(cacheEntry) {
+: fCacheEntry(cacheEntry) {
 }
 
 SafeZoneStringFormatPtr::~SafeZoneStringFormatPtr() {
@@ -1495,7 +1492,7 @@ SafeZoneStringFormatPtr::get() const {
 }
 
 ZSFCacheEntry::ZSFCacheEntry(const Locale &locale, ZoneStringFormat *zsf, ZSFCacheEntry *next)
-: UMemory(), fLocale(locale), fZoneStringFormat(zsf),
+: fLocale(locale), fZoneStringFormat(zsf),
  fNext(next), fRefCount(1)
 {
 }
@@ -1517,7 +1514,7 @@ ZSFCacheEntry::delRef(void) {
 }
 
 ZSFCache::ZSFCache(int32_t capacity)
-: UMemory(), fCapacity(capacity), fFirst(NULL) {
+: fCapacity(capacity), fFirst(NULL) {
 }
 
 ZSFCache::~ZSFCache() {
