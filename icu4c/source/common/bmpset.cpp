@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2007, International Business Machines
+*   Copyright (C) 2007-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -620,7 +620,7 @@ BMPSet::spanUTF8(const uint8_t *s, int32_t length, USetSpanCondition spanConditi
             if( /* handle U+0000..U+07FF inline */
                 (t1=(uint8_t)(*s-0x80)) <= 0x3f
             ) {
-                if(((table7FF[t1]&((uint32_t)1<<(b&0x1f)))!=0) != spanCondition) {
+                if((USetSpanCondition)((table7FF[t1]&((uint32_t)1<<(b&0x1f)))!=0) != spanCondition) {
                     return s-1;
                 }
                 ++s;
@@ -693,7 +693,7 @@ BMPSet::spanBackUTF8(const uint8_t *s, int32_t length, USetSpanCondition spanCon
         }
         // c is a valid code point, not ASCII, not a surrogate
         if(c<=0x7ff) {
-            if(((table7FF[c&0x3f]&((uint32_t)1<<(c>>6)))!=0) != spanCondition) {
+            if((USetSpanCondition)((table7FF[c&0x3f]&((uint32_t)1<<(c>>6)))!=0) != spanCondition) {
                 return prev+1;
             }
         } else if(c<=0xffff) {
