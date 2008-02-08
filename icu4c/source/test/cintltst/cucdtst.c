@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2007, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -3054,11 +3054,9 @@ static void TestUCase() {
 #if !HARDCODED_DATA_4497
     UDataMemory *pData;
     UCaseProps *csp;
-#endif
     const UCaseProps *ccsp;
     UErrorCode errorCode;
 
-#if !HARDCODED_DATA_4497
     /* coverage for ucase_openBinary() */
     errorCode=U_ZERO_ERROR;
     pData=udata_open(NULL, UCASE_DATA_TYPE, UCASE_DATA_NAME, &errorCode);
@@ -3082,7 +3080,6 @@ static void TestUCase() {
 
     ucase_close(csp);
     udata_close(pData);
-#endif
 
     /* coverage for ucase_getDummy() */
     errorCode=U_ZERO_ERROR;
@@ -3090,6 +3087,7 @@ static void TestUCase() {
     if(ucase_tolower(ccsp, 0x41)!=0x41) {
         log_err("ucase_tolower(dummy, A)!=A\n");
     }
+#endif
 }
 
 /* API coverage for ubidi_props.c */

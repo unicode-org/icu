@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2007, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -5214,12 +5214,13 @@ static void TestJitterbug981(){
     int numNeeded=0;
     utf8cnv = ucnv_open ("utf8", &status);
     if(U_FAILURE(status)){
-        log_err("Could not open UTF-8 converter. Error: %s", u_errorName(status));
+        log_err("Could not open UTF-8 converter. Error: %s\n", u_errorName(status));
         return;
     }
     myCollator = ucol_open("zh", &status);
     if(U_FAILURE(status)){
-        log_err("Could not open collator for zh locale. Error: %s", u_errorName(status));
+        log_err("Could not open collator for zh locale. Error: %s\n", u_errorName(status));
+        ucnv_close(utf8cnv);
         return;
     }
 
