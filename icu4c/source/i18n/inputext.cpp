@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2005-2006, International Business Machines
+ *   Copyright (C) 2005-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -25,7 +25,7 @@ U_NAMESPACE_BEGIN
 #define NEW_ARRAY(type,count) (type *) uprv_malloc((count) * sizeof(type))
 #define DELETE_ARRAY(array) uprv_free((void *) (array))
 
-InputText::InputText()
+InputText::InputText(UErrorCode &status)
     : fInputBytes(NEW_ARRAY(uint8_t, BUFFER_SIZE)), // The text to be checked.  Markup will have been
                                                  //   removed if appropriate.
       fByteStats(NEW_ARRAY(int16_t, 256)),       // byte frequency statistics for the input text.
@@ -33,8 +33,10 @@ InputText::InputText()
       fDeclaredEncoding(0),
       fRawInput(0),
       fRawLength(0)
-{  
-
+{
+    if (fInputBytes == NULL || fByteStats == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+    }
 }
 
 InputText::~InputText()

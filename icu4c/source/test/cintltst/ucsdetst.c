@@ -125,6 +125,11 @@ static void TestUTF8(void)
     bytes = extractBytes(s, sLength, "UTF-8", &byteLength);
 
     ucsdet_setText(csd, bytes, byteLength, &status);
+    if (U_FAILURE(status)) {
+        log_err("status is %s\n", u_errorName(status));
+        goto bail;
+    }
+
     match = ucsdet_detect(csd, &status);
 
     if (match == NULL) {
