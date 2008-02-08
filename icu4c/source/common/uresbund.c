@@ -967,7 +967,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
     resB->fVersion = NULL;
     resB->fRes = r;
     /*resB->fParent = parent->fRes;*/
-    uprv_memcpy(&resB->fResData, rdata, sizeof(ResourceData));
+    uprv_memmove(&resB->fResData, rdata, sizeof(ResourceData));
     resB->fSize = res_countArrayItems(&(resB->fResData), resB->fRes);
     return resB;
 }

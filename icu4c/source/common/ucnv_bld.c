@@ -1,7 +1,7 @@
 /*
  ********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1996-2007, International Business Machines Corporation and
+ * Copyright (c) 1996-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
  *
@@ -796,9 +796,14 @@ ucnv_createConverter(UConverter *myUConverter, const char *converterName, UError
             if(U_SUCCESS(*err)) {
                 UTRACE_EXIT_PTR_STATUS(myUConverter, *err);
                 return myUConverter;
-            } else {
-                ucnv_unloadSharedDataIfReady(mySharedConverterData);
             }
+            /*
+            else mySharedConverterData was already cleaned up by
+            ucnv_createConverterFromSharedData.
+            */
+            /*else {
+                ucnv_unloadSharedDataIfReady(mySharedConverterData);
+            }*/
         }
     }
 
