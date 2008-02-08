@@ -273,7 +273,6 @@ ZoneMeta::createCanonicalMap(void) {
         // Put this entry to the table
         canonicalMap->put(UnicodeString(entry->id), entry, status);
         if (U_FAILURE(status)) {
-            deleteCanonicalMapEntry(entry);
             goto error_cleanup;
         }
 
@@ -312,7 +311,6 @@ ZoneMeta::createCanonicalMap(void) {
             }
             canonicalMap->put(UnicodeString(alias), entry, status);
             if (U_FAILURE(status)) {
-                deleteCanonicalMapEntry(entry);
                 goto error_cleanup;
             }
         }
@@ -389,7 +387,6 @@ ZoneMeta::createCanonicalMap(void) {
             }
             canonicalMap->put(*zone, newEntry, status);
             if (U_FAILURE(status)) {
-                deleteCanonicalMapEntry(newEntry);
                 goto error_cleanup;
             }
         }
@@ -526,7 +523,6 @@ ZoneMeta::createOlsonToMetaMap(void) {
         if (mzMappings != NULL) {
             olsonToMeta->put(*tzid, mzMappings, status);
             if (U_FAILURE(status)) {
-                delete mzMappings;
                 goto error_cleanup;
             }
         }
@@ -614,9 +610,6 @@ ZoneMeta::createMetaToOlsonMap(void) {
                         tzMappings = new UVector(deleteMetaToOlsonMappingEntry, NULL, status);
                         metaToOlson->put(mzidStr, tzMappings, status);
                         if (U_FAILURE(status)) {
-                            if (tzMappings != NULL) {
-                                delete tzMappings;
-                            }
                             deleteMetaToOlsonMappingEntry(entry);
                             goto error_cleanup;
                         }

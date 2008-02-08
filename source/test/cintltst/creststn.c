@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2007, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -2306,6 +2306,7 @@ static void TestResourceLevelAliasing(void) {
     tb = ures_getByKey(aliasB, "testAliasToTree", tb, &status);
     if(U_FAILURE(status)){
         log_err("Fetching the resource with key \"testAliasToTree\" failed. Error: %s\n", u_errorName(status));
+        goto cleanup;
     }
     if (strcmp(ures_getKey(tb), "collations") != 0) {
         log_err("ures_getKey(aliasB) unexpectedly returned %s instead of \"collations\"\n", ures_getKey(tb));
