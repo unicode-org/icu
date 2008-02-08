@@ -802,8 +802,6 @@ void TestSafeClone() {
 
         ucol_close(someClonedCollators[index]);
     }
-    free(test1);
-    free(test2);
 }
 
 void TestCloneBinary(){
