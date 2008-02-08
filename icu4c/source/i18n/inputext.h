@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2005-2006, International Business Machines
+ *   Copyright (C) 2005-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -25,8 +25,10 @@ U_NAMESPACE_BEGIN
 
 class InputText : public UMemory
 {
+    // Prevent copying
+    InputText(const InputText &);
 public:
-    InputText();
+    InputText(UErrorCode &status);
     ~InputText();
 
     void setText(const char *in, int32_t len);
