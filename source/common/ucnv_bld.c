@@ -977,6 +977,9 @@ ucnv_flushCache ()
     /* Close the default converter without creating a new one so that everything will be flushed. */
     ucnv_close(u_getDefaultConverter(&status));
 
+    /* Flush now because we may not have any shared data in the hash. */
+    ucnv_flushAvailableConverterCache();
+
     /*if shared data hasn't even been lazy evaluated yet
     * return 0
     */
@@ -1028,8 +1031,6 @@ ucnv_flushCache ()
     umtx_unlock(&cnvCacheMutex);
 
     UTRACE_DATA1(UTRACE_INFO, "ucnv_flushCache() exits with %d converters remaining", remaining);
-
-    ucnv_flushAvailableConverterCache();
 
     UTRACE_EXIT_VALUE(tableDeletedNum);
     return tableDeletedNum;

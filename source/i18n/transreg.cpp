@@ -1257,7 +1257,7 @@ Transliterator* TransliteratorRegistry::instantiateEntry(const UnicodeString& ID
         return t;
     case Entry::COMPOUND_RBT:
         {
-            UVector* rbts = new UVector(status);
+            UVector* rbts = new UVector(entry->u.dataVector->size(), status);
             // Check for null pointer
             if (rbts == NULL) {
             	status = U_MEMORY_ALLOCATION_ERROR;
@@ -1272,8 +1272,10 @@ Transliterator* TransliteratorRegistry::instantiateEntry(const UnicodeString& ID
                 else
                     rbts->addElement(t, status);
             }
-            if (U_FAILURE(status))
+            if (U_FAILURE(status)) {
+                delete rbts;
                 return 0;
+            }
             aliasReturn = new TransliteratorAlias(ID, entry->stringArg, rbts, entry->compoundFilter);
         }
         if (aliasReturn == 0) {
