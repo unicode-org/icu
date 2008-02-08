@@ -34,7 +34,6 @@
 #include "uresimp.h"
 #include "dtptngen_impl.h"
 
-
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 U_NAMESPACE_BEGIN
@@ -856,7 +855,8 @@ DateTimePatternGenerator::getBestAppending(int32_t missingFields) {
                 tempPattern,
                 appendName
             };
-            formattedPattern = MessageFormat::format(appendItemFormats[topField], formatPattern, 3, resultPattern, err);
+            UnicodeString emptyStr;
+            formattedPattern = MessageFormat::format(appendItemFormats[topField], formatPattern, 3, emptyStr, err);
             lastMissingFieldMask = distanceInfo->missingFieldMask;
         }
     }

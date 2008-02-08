@@ -365,6 +365,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
             errln(UnicodeString("\nERROR: Test Japanese month hack Got: ") + rDate + 
                   UnicodeString(" Expected: ") + expR );
         }
+        
         delete patGen;
     }
     {   // Trac# 6104
@@ -390,6 +391,30 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         }
         delete patGen;   
     }
+
+    {
+         // Trac# 6172 duplicate time pattern
+         status = U_ZERO_ERROR;
+         pattern = UnicodeString("hmv");
+         UnicodeString expR = UnicodeString("h:m a v");
+         Locale loc("en");
+         UDate testDate1= LocaleTest::date(99, 0, 13, 23, 58, 59);
+         DateTimePatternGenerator *patGen=DateTimePatternGenerator::createInstance(loc, status);
+         if(U_FAILURE(status)) {
+             dataerrln("ERROR: Could not create DateTimePatternGenerator");
+             return;
+         }
+         UnicodeString bPattern = patGen->getBestPattern(pattern, status);
+         logln(UnicodeString(" en locale with skeleton: hmv  Best Pattern:") + bPattern);
+
+         if ( expR!= bPattern ) {
+             errln(UnicodeString("\nERROR: Test EN time format Got: ") + bPattern + 
+                   UnicodeString(" Expected: ") + expR );
+         }
+         
+         delete patGen;
+     }
+     
     
     // ======= Test various skeletons.
     logln("Testing DateTimePatternGenerator with various skeleton");
