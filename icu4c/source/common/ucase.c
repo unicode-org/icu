@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2007, International Business Machines
+*   Copyright (C) 2004-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -16,6 +16,8 @@
 *   Low-level Unicode character/string case mapping code.
 *   Much code moved here (and modified) from uchar.c.
 */
+
+#define UCASE_HARDCODE_DATA 1
 
 #include "unicode/utypes.h"
 #include "unicode/uset.h"
@@ -40,8 +42,6 @@ struct UCaseProps {
 };
 
 /* data loading etc. -------------------------------------------------------- */
-
-#define UCASE_HARDCODE_DATA 1
 
 #if UCASE_HARDCODE_DATA
 
@@ -205,23 +205,24 @@ ucase_close(UCaseProps *csp) {
 
 /* UCaseProps singleton ----------------------------------------------------- */
 
-static UCaseProps *gCsp=NULL, *gCspDummy=NULL;
 #if !UCASE_HARDCODE_DATA
+static UCaseProps *gCsp=NULL;
+static UCaseProps *gCspDummy=NULL;
 static UErrorCode gErrorCode=U_ZERO_ERROR;
 static int8_t gHaveData=0;
 #endif
 
+#if !UCASE_HARDCODE_DATA
 static UBool U_CALLCONV ucase_cleanup(void) {
     ucase_close(gCsp);
     gCsp=NULL;
     ucase_close(gCspDummy);
     gCspDummy=NULL;
-#if !UCASE_HARDCODE_DATA
     gErrorCode=U_ZERO_ERROR;
     gHaveData=0;
-#endif
     return TRUE;
 }
+#endif
 
 U_CAPI const UCaseProps * U_EXPORT2
 ucase_getSingleton(UErrorCode *pErrorCode) {
@@ -271,6 +272,7 @@ ucase_getSingleton(UErrorCode *pErrorCode) {
 #endif
 }
 
+#if !UCASE_HARDCODE_DATA
 U_CAPI const UCaseProps * U_EXPORT2
 ucase_getDummy(UErrorCode *pErrorCode) {
     UCaseProps *csp;
@@ -322,6 +324,7 @@ ucase_getDummy(UErrorCode *pErrorCode) {
         return gCspDummy;
     }
 }
+#endif
 
 /* set of property starts for UnicodeSet ------------------------------------ */
 
@@ -1488,6 +1491,7 @@ ucase_toFullFolding(const UCaseProps *csp, UChar32 c,
 /* case mapping properties API ---------------------------------------------- */
 
 /* get the UCaseProps singleton, or else its dummy, once and for all */
+#if !UCASE_HARDCODE_DATA
 static const UCaseProps *
 getCaseProps() {
     /*
@@ -1511,6 +1515,7 @@ getCaseProps() {
 
     return csp;
 }
+#endif
 
 /*
  * In ICU 3.0, most Unicode properties were loaded from uprops.icu.
@@ -1539,7 +1544,11 @@ getCaseProps() {
  * Other API implementations get the singleton themselves
  * (with mutexing), store it in the service object, and report errors.
  */
+#if !UCASE_HARDCODE_DATA
 #define GET_CASE_PROPS() (gCsp!=NULL ? gCsp : getCaseProps())
+#else
+#define GET_CASE_PROPS() &ucase_props_singleton
+#endif
 
 /* public API (see uchar.h) */
 

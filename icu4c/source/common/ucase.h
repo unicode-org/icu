@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2007, International Business Machines
+*   Copyright (C) 2004-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -44,6 +44,7 @@ ucase_close(UCaseProps *csp);
 U_CAPI const UCaseProps * U_EXPORT2
 ucase_getSingleton(UErrorCode *pErrorCode);
 
+#if defined(UCASE_HARDCODE_DATA) && !UCASE_HARDCODE_DATA
 /**
  * Get a singleton dummy object, one that works with no real data.
  * This can be used when the real data is not available.
@@ -51,6 +52,7 @@ ucase_getSingleton(UErrorCode *pErrorCode);
  */
 U_CAPI const UCaseProps * U_EXPORT2
 ucase_getDummy(UErrorCode *pErrorCode);
+#endif
 
 
 U_CAPI int32_t U_EXPORT2

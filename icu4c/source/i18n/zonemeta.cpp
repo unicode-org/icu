@@ -634,6 +634,7 @@ error_cleanup:
     if (metaToOlson != NULL) {
         delete metaToOlson;
     }
+    metaToOlson = NULL;
     goto normal_cleanup;
 }
 
