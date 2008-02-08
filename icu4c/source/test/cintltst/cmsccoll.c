@@ -1595,13 +1595,10 @@ static void TestComposeDecompose(void) {
     uint32_t len = 0;
     UCollationElements *iter;
     USet *charsToTest = uset_openPattern(UNICODESET_STR, -1, &status);
-    int32_t charsToTestSize = uset_size(charsToTest);
+    int32_t charsToTestSize;
 
     noOfLoc = uloc_countAvailable();
 
-    t = malloc(charsToTestSize * sizeof(tester *));
-    t[0] = (tester *)malloc(sizeof(tester));
-    log_verbose("Testing UCA extensively for %d characters\n", charsToTestSize);
     coll = ucol_open("", &status);
     if(status == U_FILE_ACCESS_ERROR) {
         log_data_err("Is your data around?\n");
@@ -1610,7 +1607,10 @@ static void TestComposeDecompose(void) {
         log_err("Error opening collator\n");
         return;
     }
-
+    charsToTestSize = uset_size(charsToTest);
+    t = malloc(charsToTestSize * sizeof(tester *));
+    t[0] = (tester *)malloc(sizeof(tester));
+    log_verbose("Testing UCA extensively for %d characters\n", charsToTestSize);
 
     for(u = 0; u < charsToTestSize; u++) {
         UChar32 ch = uset_charAt(charsToTest, u);
