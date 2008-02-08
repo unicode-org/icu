@@ -634,7 +634,7 @@ static void TestNewTypes() {
         expect ="test message ....";
         u_charsToUChars(expect,uExpect,(int32_t)strlen(expect)+1);
         CONFIRM_ErrorCode(status, U_ZERO_ERROR);
-        if(u_strcmp(uExpect,str)){
+        if(str == NULL || u_strcmp(uExpect,str)){
             log_err("Did not get the expected string for test_underscores.\n");
         }
     }

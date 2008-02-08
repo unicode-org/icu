@@ -645,28 +645,25 @@ void TestDecomposition() {
 #define CLONETEST_COLLATOR_COUNT 4
 
 void TestSafeClone() {
-    UChar* test1;
-    UChar* test2;
+    UChar test1[6];
+    UChar test2[6];
     static const UChar umlautUStr[] = {0x00DC, 0};
     static const UChar oeStr[] = {0x0055, 0x0045, 0};
     UCollator * someCollators [CLONETEST_COLLATOR_COUNT];
     UCollator * someClonedCollators [CLONETEST_COLLATOR_COUNT];
     UCollator * col;
     UErrorCode err = U_ZERO_ERROR;
-    int8_t testSize = 6;    /* Leave this here to test buffer alingment in memory*/
+    int8_t index = 6;    /* Leave this here to test buffer alingment in memory*/
     uint8_t buffer [CLONETEST_COLLATOR_COUNT] [U_COL_SAFECLONE_BUFFERSIZE];
     int32_t bufferSize = U_COL_SAFECLONE_BUFFERSIZE;
     const char sampleRuleChars[] = "&Z < CH";
     UChar sampleRule[sizeof(sampleRuleChars)];
-    int index;
 
     if (TestBufferSize()) {
         log_err("U_COL_SAFECLONE_BUFFERSIZE should be larger than sizeof(UCollator)\n");
         return;
     }
 
-    test1=(UChar*)malloc(sizeof(UChar) * testSize);
-    test2=(UChar*)malloc(sizeof(UChar) * testSize);
     u_uastrcpy(test1, "abCda");
     u_uastrcpy(test2, "abcda");
     u_uastrcpy(sampleRule, sampleRuleChars);
@@ -1851,7 +1848,7 @@ static void TestShortString(void)
         {"S3_ASS_MMM", "", NULL, U_ILLEGAL_ARGUMENT_ERROR, 5, 0 }
     };
 
-    int32_t i = 0, j = 0;
+    int32_t i = 0;
     UCollator *coll = NULL, *fromNormalized = NULL;
     UParseError parseError;
     UErrorCode status = U_ZERO_ERROR;
