@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2007, International Business Machines
+*   Copyright (C) 1999-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -249,7 +249,8 @@ isPOSIXClose(const UnicodeString &pattern, int32_t pos) {
 UnicodeSet::UnicodeSet(const UnicodeString& pattern,
                        UErrorCode& status) :
     len(0), capacity(START_EXTRA), list(0), bmpSet(0), buffer(0),
-    bufferCapacity(0), patLen(0), pat(NULL), strings(NULL), stringSpan(NULL)
+    bufferCapacity(0), patLen(0), pat(NULL), strings(NULL), stringSpan(NULL),
+    fFlags(0)
 {   
     if(U_SUCCESS(status)){
         list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
@@ -277,7 +278,8 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern,
                        const SymbolTable* symbols,
                        UErrorCode& status) :
     len(0), capacity(START_EXTRA), list(0), bmpSet(0), buffer(0),
-    bufferCapacity(0), patLen(0), pat(NULL), strings(NULL), stringSpan(NULL)
+    bufferCapacity(0), patLen(0), pat(NULL), strings(NULL), stringSpan(NULL),
+    fFlags(0)
 {   
     if(U_SUCCESS(status)){
         list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
@@ -297,7 +299,8 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
                        const SymbolTable* symbols,
                        UErrorCode& status) :
     len(0), capacity(START_EXTRA), list(0), bmpSet(0), buffer(0),
-    bufferCapacity(0), patLen(0), pat(NULL), strings(NULL), stringSpan(NULL)
+    bufferCapacity(0), patLen(0), pat(NULL), strings(NULL), stringSpan(NULL),
+    fFlags(0)
 {
     if(U_SUCCESS(status)){
         list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
@@ -825,6 +828,10 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
     } else {
         _generatePattern(rebuiltPat, FALSE);
     }
+    if (isBogus() && U_SUCCESS(ec)) {
+        // We likely ran out of memory. AHHH!
+        ec = U_MEMORY_ALLOCATION_ERROR;
+    }
 }
 
 //----------------------------------------------------------------
@@ -910,6 +917,10 @@ void UnicodeSet::applyFilter(UnicodeSet::Filter filter,
     }
     if (startHasProperty >= 0) {
         add((UChar32)startHasProperty, (UChar32)0x10FFFF);
+    }
+    if (isBogus() && U_SUCCESS(status)) {
+        // We likely ran out of memory. AHHH!
+        status = U_MEMORY_ALLOCATION_ERROR;
     }
 }
 
@@ -1101,6 +1112,10 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
         ec = U_ILLEGAL_ARGUMENT_ERROR;
     }
 
+    if (isBogus() && U_SUCCESS(ec)) {
+        // We likely ran out of memory. AHHH!
+        ec = U_MEMORY_ALLOCATION_ERROR;
+    }
     return *this;
 }
 
@@ -1293,7 +1308,7 @@ addCaseMapping(UnicodeSet &set, int32_t result, const UChar *full, UnicodeString
 }
 
 UnicodeSet& UnicodeSet::closeOver(int32_t attribute) {
-    if (isFrozen()) {
+    if (isFrozen() || isBogus()) {
         return *this;
     }
     if (attribute & (USET_CASE_INSENSITIVE | USET_ADD_CASE_MAPPINGS)) {

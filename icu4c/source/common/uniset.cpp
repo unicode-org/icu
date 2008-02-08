@@ -148,7 +148,6 @@ UnicodeSet::UnicodeSet() :
     UErrorCode status = U_ZERO_ERROR;
     allocateStrings(status);
     if (U_FAILURE(status)) {
-        setToBogus();
         return;
     }
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
@@ -176,7 +175,6 @@ UnicodeSet::UnicodeSet(UChar32 start, UChar32 end) :
     UErrorCode status = U_ZERO_ERROR;
     allocateStrings(status);
     if (U_FAILURE(status)) {
-        setToBogus();
         return;
     }
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
@@ -204,7 +202,6 @@ UnicodeSet::UnicodeSet(const UnicodeSet& o) :
     UErrorCode status = U_ZERO_ERROR;
     allocateStrings(status);
     if (U_FAILURE(status)) {
-        setToBogus();
         return;
     }
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
@@ -229,7 +226,6 @@ UnicodeSet::UnicodeSet(const UnicodeSet& o, UBool /* asThawed */) :
     UErrorCode status = U_ZERO_ERROR;
     allocateStrings(status);
     if (U_FAILURE(status)) {
-        setToBogus();
         return;
     }
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
@@ -278,10 +274,13 @@ UnicodeSet& UnicodeSet::operator=(const UnicodeSet& o) {
     if (isFrozen()) {
         return *this;
     }
+    if (o.isBogus()) {
+        setToBogus();
+        return *this;
+    }
     UErrorCode ec = U_ZERO_ERROR;
     ensureCapacity(o.len, ec);
     if (U_FAILURE(ec)) {
-        setToBogus();
         return *this; // There is no way to report this error :-(
     }
     len = o.len;
@@ -878,7 +877,7 @@ UnicodeSet& UnicodeSet::add(UChar32 c) {
     int32_t i = findCodePoint(pinCodePoint(c));
 
     // already in set?
-    if ((i & 1) != 0  || isFrozen()) return *this;
+    if ((i & 1) != 0  || isFrozen() || isBogus()) return *this;
 
     // HIGH is 0x110000
     // assert(list[len-1] == HIGH);
@@ -997,7 +996,7 @@ UnicodeSet& UnicodeSet::add(UChar32 c) {
  * @return the modified set, for chaining
  */
 UnicodeSet& UnicodeSet::add(const UnicodeString& s) {
-    if (s.length() == 0 || isFrozen()) return *this;
+    if (s.length() == 0 || isFrozen() || isBogus()) return *this;
     int32_t cp = getSingleCP(s);
     if (cp < 0) {
         if (!strings->contains((void*) &s)) {
@@ -1016,7 +1015,7 @@ UnicodeSet& UnicodeSet::add(const UnicodeString& s) {
  * already be in 'strings'.
  */
 void UnicodeSet::_add(const UnicodeString& s) {
-    if (isFrozen()) {
+    if (isFrozen() || isBogus()) {
         return;
     }
     UnicodeString* t = new UnicodeString(s);
@@ -1196,7 +1195,7 @@ UnicodeSet& UnicodeSet::remove(UChar32 c) {
  * @return the modified set, for chaining
  */
 UnicodeSet& UnicodeSet::remove(const UnicodeString& s) {
-    if (s.length() == 0 || isFrozen()) return *this;
+    if (s.length() == 0 || isFrozen() || isBogus()) return *this;
     int32_t cp = getSingleCP(s);
     if (cp < 0) {
         strings->removeElement((void*) &s);
@@ -1219,7 +1218,7 @@ UnicodeSet& UnicodeSet::remove(const UnicodeString& s) {
  * from this set.
  */
 UnicodeSet& UnicodeSet::complement(UChar32 start, UChar32 end) {
-    if (isFrozen()) {
+    if (isFrozen() || isBogus()) {
         return *this;
     }
     if (pinCodePoint(start) <= pinCodePoint(end)) {
@@ -1239,7 +1238,7 @@ UnicodeSet& UnicodeSet::complement(UChar32 c) {
  * <code>complement(MIN_VALUE, MAX_VALUE)</code>.
  */
 UnicodeSet& UnicodeSet::complement(void) {
-    if (isFrozen()) {
+    if (isFrozen() || isBogus()) {
         return *this;
     }
     UErrorCode status = U_ZERO_ERROR;
@@ -1273,7 +1272,7 @@ UnicodeSet& UnicodeSet::complement(void) {
  * @return this object, for chaining
  */
 UnicodeSet& UnicodeSet::complement(const UnicodeString& s) {
-    if (s.length() == 0 || isFrozen()) return *this;
+    if (s.length() == 0 || isFrozen() || isBogus()) return *this;
     int32_t cp = getSingleCP(s);
     if (cp < 0) {
         if (strings->contains((void*) &s)) {
@@ -1321,7 +1320,7 @@ UnicodeSet& UnicodeSet::addAll(const UnicodeSet& c) {
  * @param c set that defines which elements this set will retain.
  */
 UnicodeSet& UnicodeSet::retainAll(const UnicodeSet& c) {
-    if (isFrozen()) {
+    if (isFrozen() || isBogus()) {
         return *this;
     }
     retain(c.list, c.len, 0);
@@ -1339,7 +1338,7 @@ UnicodeSet& UnicodeSet::retainAll(const UnicodeSet& c) {
  *          this set.
  */
 UnicodeSet& UnicodeSet::removeAll(const UnicodeSet& c) {
-    if (isFrozen()) {
+    if (isFrozen() || isBogus()) {
         return *this;
     }
     retain(c.list, c.len, 2);
@@ -1356,7 +1355,7 @@ UnicodeSet& UnicodeSet::removeAll(const UnicodeSet& c) {
  *          this set.
  */
 UnicodeSet& UnicodeSet::complementAll(const UnicodeSet& c) {
-    if (isFrozen()) {
+    if (isFrozen() || isBogus()) {
         return *this;
     }
     exclusiveOr(c.list, c.len, 0);
@@ -1378,10 +1377,18 @@ UnicodeSet& UnicodeSet::clear(void) {
     if (isFrozen()) {
         return *this;
     }
-    list[0] = UNICODESET_HIGH;
+    if (list != NULL) {
+        list[0] = UNICODESET_HIGH;
+    }
     len = 1;
     releasePattern();
-    strings->removeAllElements();
+    if (strings != NULL) {
+        strings->removeAllElements();
+    }
+    if (list != NULL && strings != NULL) {
+        // Remove bogus
+        fFlags = 0;
+    }
     return *this;
 }
 
@@ -1428,7 +1435,7 @@ const UnicodeString* UnicodeSet::getString(int32_t index) const {
  * possible space, without changing this object's value.
  */
 UnicodeSet& UnicodeSet::compact() {
-    if (isFrozen()) {
+    if (isFrozen() || isBogus()) {
         return *this;
     }
     // Delete buffer first to defragment memory less.
@@ -1557,7 +1564,8 @@ void UnicodeSet::ensureCapacity(int32_t newLen, UErrorCode& ec) {
     UChar32* temp = (UChar32*) uprv_realloc(list, sizeof(UChar32) * (newLen + GROW_EXTRA));
     if (temp == NULL) {
         ec = U_MEMORY_ALLOCATION_ERROR;
-        return; // TODO: We should probably set a bogus flag.
+        setToBogus();
+        return;
     }
     list = temp;
     capacity = newLen + GROW_EXTRA;
@@ -1570,7 +1578,8 @@ void UnicodeSet::ensureBufferCapacity(int32_t newLen, UErrorCode& ec) {
     UChar32* temp = (UChar32*) uprv_realloc(buffer, sizeof(UChar32) * (newLen + GROW_EXTRA));
     if (temp == NULL) {
         ec = U_MEMORY_ALLOCATION_ERROR;
-        return; // TODO: We should probably set a bogus flag.
+        setToBogus();
+        return;
     }
     buffer = temp;
     bufferCapacity = newLen + GROW_EXTRA;
@@ -1608,7 +1617,7 @@ static inline UChar32 max(UChar32 a, UChar32 b) {
 // polarity = 1, 2: x xor ~y == x === y
 
 void UnicodeSet::exclusiveOr(const UChar32* other, int32_t otherLen, int8_t polarity) {
-    if (isFrozen()) {
+    if (isFrozen() || isBogus()) {
         return;
     }
     UErrorCode status = U_ZERO_ERROR;
@@ -1658,7 +1667,7 @@ void UnicodeSet::exclusiveOr(const UChar32* other, int32_t otherLen, int8_t pola
 // polarity = 3: ~x union ~y
 
 void UnicodeSet::add(const UChar32* other, int32_t otherLen, int8_t polarity) {
-    if (isFrozen()) {
+    if (isFrozen() || isBogus()) {
         return;
     }
     UErrorCode status = U_ZERO_ERROR;
@@ -1771,7 +1780,7 @@ void UnicodeSet::add(const UChar32* other, int32_t otherLen, int8_t polarity) {
 // polarity = 3: ~x intersect ~y
 
 void UnicodeSet::retain(const UChar32* other, int32_t otherLen, int8_t polarity) {
-    if (isFrozen()) {
+    if (isFrozen() || isBogus()) {
         return;
     }
     UErrorCode status = U_ZERO_ERROR;
@@ -2060,7 +2069,7 @@ void UnicodeSet::setPattern(const UnicodeString& newPat) {
 }
 
 UnicodeFunctor *UnicodeSet::freeze() {
-    if(!isFrozen()) {
+    if(!isFrozen() && !isBogus()) {
         // Do most of what compact() does before freezing because
         // compact() will not work when the set is frozen.
         // Small modification: Don't shrink if the savings would be tiny (<=GROW_EXTRA).
