@@ -139,6 +139,20 @@ static const ResourceData *getFallbackData(const UResourceBundle* resBundle, con
     }
 }
 
+static void
+free_entry(UResourceDataEntry *entry) {
+    if(entry->fBogus == U_ZERO_ERROR) {
+        res_unload(&(entry->fData));
+    }
+    if(entry->fName != NULL) {
+        uprv_free(entry->fName);
+    }
+    if(entry->fPath != NULL) {
+        uprv_free(entry->fPath);
+    }
+    uprv_free(entry);
+}
+
 /* Works just like ucnv_flushCache() */
 /* TODO: figure out why fCountExisting may not go to zero. Do not make this function public yet. */
 static int32_t ures_flushCache()
@@ -175,16 +189,7 @@ static int32_t ures_flushCache()
         if (resB->fCountExisting == 0) {
             rbDeletedNum++;
             uhash_removeElement(cache, e);
-            if(resB->fBogus == U_ZERO_ERROR) {
-                res_unload(&(resB->fData));
-            }
-            if(resB->fName != NULL) {
-                uprv_free(resB->fName);
-            }
-            if(resB->fPath != NULL) {
-                uprv_free(resB->fPath);
-            }
-            uprv_free(resB);
+            free_entry(resB);
         }
     }
     umtx_unlock(&resbMutex);
@@ -354,11 +359,15 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
         {
             UResourceDataEntry *oldR = NULL;
             if((oldR = (UResourceDataEntry *)uhash_get(cache, r)) == NULL) { /* if the data is not cached */
-              /* just insert it in the cache */
+                /* just insert it in the cache */
                 uhash_put(cache, (void *)r, r, status);
+                if (U_FAILURE(*status)) {
+                    free_entry(r);
+                    r = NULL;
+                }
             } else {
-              /* somebody have already inserted it while we were working, discard newly opened data */
-              /* Also, we could get here IF we opened an alias */
+                /* somebody have already inserted it while we were working, discard newly opened data */
+                /* Also, we could get here IF we opened an alias */
                 uprv_free(r->fName);
                 if(r->fPath != NULL) {
                     uprv_free(r->fPath);
