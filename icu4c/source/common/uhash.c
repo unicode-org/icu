@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2006, International Business Machines
+*   Copyright (C) 1997-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   Date        Name        Description
@@ -389,13 +389,12 @@ _uhash_find(const UHashtable *hash, UHashTok key,
  * arrays will be valid.
  */
 static void
-_uhash_rehash(UHashtable *hash) {
+_uhash_rehash(UHashtable *hash, UErrorCode *status) {
 
     UHashElement *old = hash->elements;
     int32_t oldLength = hash->length;
     int32_t newPrimeIndex = hash->primeIndex;
     int32_t i;
-    UErrorCode status = U_ZERO_ERROR;
 
     if (hash->count > hash->highWaterMark) {
         if (++newPrimeIndex >= PRIMES_LENGTH) {
@@ -409,9 +408,9 @@ _uhash_rehash(UHashtable *hash) {
         return;
     }
 
-    _uhash_allocate(hash, newPrimeIndex, &status);
+    _uhash_allocate(hash, newPrimeIndex, status);
 
-    if (U_FAILURE(status)) {
+    if (U_FAILURE(*status)) {
         hash->elements = old;
         hash->length = oldLength;       
         return;
@@ -445,11 +444,13 @@ _uhash_remove(UHashtable *hash,
     UHashTok result;
     UHashElement* e = _uhash_find(hash, key, hash->keyHasher(key));
     U_ASSERT(e != NULL);
-    result.pointer = NULL; result.integer = 0;
+    result.pointer = NULL;
+    result.integer = 0;
     if (!IS_EMPTY_OR_DELETED(e->hashcode)) {
         result = _uhash_internalRemoveElement(hash, e);
         if (hash->count < hash->lowWaterMark) {
-            _uhash_rehash(hash);
+            UErrorCode status = U_ZERO_ERROR;
+            _uhash_rehash(hash, &status);
         }
     }
     return result;
@@ -483,7 +484,10 @@ _uhash_put(UHashtable *hash,
         return _uhash_remove(hash, key);
     }
     if (hash->count > hash->highWaterMark) {
-        _uhash_rehash(hash);
+        _uhash_rehash(hash, status);
+        if (U_FAILURE(*status)) {
+            goto err;
+        }
     }
 
     hashcode = (*hash->keyHasher)(key);
@@ -618,10 +622,11 @@ uhash_setValueDeleter(UHashtable *hash, UObjectDeleter *fn) {
 
 U_CAPI void U_EXPORT2
 uhash_setResizePolicy(UHashtable *hash, enum UHashResizePolicy policy) {
+    UErrorCode status = U_ZERO_ERROR;
     _uhash_internalSetResizePolicy(hash, policy);
     hash->lowWaterMark  = (int32_t)(hash->length * hash->lowWaterRatio);
     hash->highWaterMark = (int32_t)(hash->length * hash->highWaterRatio);    
-    _uhash_rehash(hash);
+    _uhash_rehash(hash, &status);
 }
 
 U_CAPI int32_t U_EXPORT2
