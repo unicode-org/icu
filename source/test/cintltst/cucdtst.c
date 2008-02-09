@@ -3095,11 +3095,9 @@ static void TestUBiDiProps() {
 #if !HARDCODED_DATA_4497
     UDataMemory *pData;
     UBiDiProps *bdp;
-#endif
     const UBiDiProps *cbdp;
     UErrorCode errorCode;
 
-#if !HARDCODED_DATA_4497
     /* coverage for ubidi_openBinary() */
     errorCode=U_ZERO_ERROR;
     pData=udata_open(NULL, UBIDI_DATA_TYPE, UBIDI_DATA_NAME, &errorCode);
@@ -3123,7 +3121,6 @@ static void TestUBiDiProps() {
 
     ubidi_closeProps(bdp);
     udata_close(pData);
-#endif
 
     /* coverage for ubidi_getDummy() */
     errorCode=U_ZERO_ERROR;
@@ -3131,6 +3128,7 @@ static void TestUBiDiProps() {
     if(ubidi_getClass(cbdp, 0x20)!=0) {
         log_err("ubidi_getClass(dummy, space)!=0\n");
     }
+#endif
 }
 
 /* test case folding, compare return values with CaseFolding.txt ------------ */
