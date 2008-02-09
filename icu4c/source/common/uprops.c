@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2007, International Business Machines
+*   Copyright (C) 2002-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -59,6 +59,7 @@ getBiDiProps() {
     UErrorCode errorCode=U_ZERO_ERROR;
 
     bdp=ubidi_getSingleton(&errorCode);
+#if !UBIDI_HARDCODE_DATA
     if(U_FAILURE(errorCode)) {
         errorCode=U_ZERO_ERROR;
         bdp=ubidi_getDummy(&errorCode);
@@ -66,11 +67,11 @@ getBiDiProps() {
             return NULL;
         }
     }
+#endif
 
     umtx_lock(NULL);
     if(gBdp==NULL) {
         gBdp=bdp;
-        bdp=NULL;
         ucln_common_registerCleanup(UCLN_COMMON_UPROPS, uprops_cleanup);
     }
     umtx_unlock(NULL);

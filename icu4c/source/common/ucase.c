@@ -17,8 +17,6 @@
 *   Much code moved here (and modified) from uchar.c.
 */
 
-#define UCASE_HARDCODE_DATA 1
-
 #include "unicode/utypes.h"
 #include "unicode/uset.h"
 #include "unicode/udata.h" /* UDataInfo */
