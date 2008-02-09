@@ -462,17 +462,17 @@ class CharsetMBCS extends CharsetICU {
      * MBCS output types for conversions from Unicode. These per-converter types determine the storage method in stage 3
      * of the lookup table, mostly how many bytes are stored per entry.
      */
-    private static final int MBCS_OUTPUT_1 = 0; /* 0 */
-    private static final int MBCS_OUTPUT_2 = MBCS_OUTPUT_1 + 1; /* 1 */
-    private static final int MBCS_OUTPUT_3 = MBCS_OUTPUT_2 + 1; /* 2 */
-    private static final int MBCS_OUTPUT_4 = MBCS_OUTPUT_3 + 1; /* 3 */
-    private static final int MBCS_OUTPUT_3_EUC = 8; /* 8 */
-    private static final int MBCS_OUTPUT_4_EUC = MBCS_OUTPUT_3_EUC + 1; /* 9 */
-    private static final int MBCS_OUTPUT_2_SISO = 12; /* c */
-    private static final int MBCS_OUTPUT_2_HZ = MBCS_OUTPUT_2_SISO + 1; /* d */
-    private static final int MBCS_OUTPUT_EXT_ONLY = MBCS_OUTPUT_2_HZ + 1; /* e */
-    // private static final int MBCS_OUTPUT_COUNT = MBCS_OUTPUT_EXT_ONLY + 1;
-    private static final int MBCS_OUTPUT_DBCS_ONLY = 0xdb; /* runtime-only type for DBCS-only handling of SISO tables */
+    static final int MBCS_OUTPUT_1 = 0; /* 0 */
+    static final int MBCS_OUTPUT_2 = MBCS_OUTPUT_1 + 1; /* 1 */
+    static final int MBCS_OUTPUT_3 = MBCS_OUTPUT_2 + 1; /* 2 */
+    static final int MBCS_OUTPUT_4 = MBCS_OUTPUT_3 + 1; /* 3 */
+    static final int MBCS_OUTPUT_3_EUC = 8; /* 8 */
+    static final int MBCS_OUTPUT_4_EUC = MBCS_OUTPUT_3_EUC + 1; /* 9 */
+    static final int MBCS_OUTPUT_2_SISO = 12; /* c */
+    static final int MBCS_OUTPUT_2_HZ = MBCS_OUTPUT_2_SISO + 1; /* d */
+    static final int MBCS_OUTPUT_EXT_ONLY = MBCS_OUTPUT_2_HZ + 1; /* e */
+    // static final int MBCS_OUTPUT_COUNT = MBCS_OUTPUT_EXT_ONLY + 1;
+    static final int MBCS_OUTPUT_DBCS_ONLY = 0xdb; /* runtime-only type for DBCS-only handling of SISO tables */
 
     /* GB 18030 data ------------------------------------------------------------ */
 
@@ -925,6 +925,576 @@ class CharsetMBCS extends CharsetICU {
     private static int SISO_STATE(UConverterSharedData sharedData, int mode) {
         return sharedData.mbcs.outputType == MBCS_OUTPUT_2_SISO ? (byte) mode
                 : sharedData.mbcs.outputType == MBCS_OUTPUT_DBCS_ONLY ? 1 : -1;
+    }
+
+    private static int getFallback(UConverterMBCSTable mbcsTable, int offset) 
+    {
+        MBCSToUFallback[] toUFallbacks;
+        int i, start, limit;
+    
+        limit = mbcsTable.countToUFallbacks;
+        if(limit>0) {
+            /* do a binary search for the fallback mapping */
+            toUFallbacks = mbcsTable.toUFallbacks;
+            start = 0;
+            while(start<limit-1) {
+                i = (start+limit)/2;
+                if(offset<toUFallbacks[i].offset) {
+                    limit = i;
+                } 
+                else {
+                    start = i;
+                }
+            }
+    
+            /* did we really find it? */
+            if(offset==toUFallbacks[start].offset) {
+                return toUFallbacks[start].codePoint;
+            }
+        }
+    
+        return 0xfffe;
+    }
+    
+    /*
+     * This is a simple version of _MBCSGetNextUChar() that is used
+     * by other converter implementations.
+     * It only returns an "assigned" result if it consumes the entire input.
+     * It does not use state from the converter, nor error codes.
+     * It does not handle the EBCDIC swaplfnl option (set in UConverter).
+     * It handles conversion extensions but not GB 18030.
+     *
+     * Return value:
+     * U+fffe   unassigned
+     * U+ffff   illegal
+     * otherwise the Unicode code point
+     */
+     static int MBCSSimpleGetNextUChar(UConverterSharedData sharedData,
+                               ByteBuffer   source, 
+                               boolean      useFallback) {
+        int[][] stateTable;
+        char[]  unicodeCodeUnits;
+
+        int   offset;
+        int   state;
+        int   action;
+
+        int   c;
+        int   entry;
+
+        /* set up the local pointers */
+        stateTable=sharedData.mbcs.stateTable;
+        unicodeCodeUnits=sharedData.mbcs.unicodeCodeUnits;
+
+        /* converter state */
+        offset=0;
+        state=sharedData.mbcs.dbcsOnlyState;
+
+        /* conversion loop */
+        for(;;) {
+            if (source.hasRemaining() == false) {
+                /* no input at all: "illegal" */
+                return 0xffff;
+            }
+            int sourceByte = source.get() & UConverterConstants.UNSIGNED_BYTE_MASK;
+            entry = stateTable[state][sourceByte];
+            if (MBCS_ENTRY_IS_TRANSITION(entry)) {
+                state = MBCS_ENTRY_TRANSITION_STATE(entry);
+                offset+=MBCS_ENTRY_TRANSITION_OFFSET(entry);
+            } else {
+                /*
+                 * An if-else-if chain provides more reliable performance for
+                 * the most common cases compared to a switch.
+                 */
+                action = MBCS_ENTRY_FINAL_ACTION(entry);
+                if(action==MBCS_STATE_VALID_16) {
+                    offset+=MBCS_ENTRY_FINAL_VALUE_16(entry);
+                    c=unicodeCodeUnits[offset];
+                    if(c!=0xfffe) {
+                        /* done */
+                    } else if (useFallback) {
+                        c = getFallback(sharedData.mbcs, offset);
+                    /* else done with 0xfffe */
+                    }
+                    break;
+                } else if(action==MBCS_STATE_VALID_DIRECT_16) {
+                    /* output BMP code point */
+                    c = MBCS_ENTRY_FINAL_VALUE_16(entry);
+                    break;
+                } else if (action==MBCS_STATE_VALID_16_PAIR) {
+                    offset += MBCS_ENTRY_FINAL_VALUE_16(entry);
+                    c=unicodeCodeUnits[offset++];
+                    if(c<0xd800) {
+                        /* output BMP code point below 0xd800 */
+                    } else if (useFallback ? c<=0xdfff : c<=0xdbff) {
+                        /* output roundtrip or fallback supplementary code point */
+                        c = (((c&0x3ff)<<10) + unicodeCodeUnits[offset] + (0x10000-0xdc00));
+                    } else if(useFallback ? (c&0xfffe)==0xe000 : c==0xe000) {
+                        /* output roundtrip BMP code point above 0xd800 or fallback BMP code point */
+                        c=unicodeCodeUnits[offset];
+                    } else if(c==0xffff) {
+                        return 0xffff;
+                    } else {
+                        c=0xfffe;
+                    }
+                    break;
+                } else if(action==MBCS_STATE_VALID_DIRECT_20) {
+                    /* output supplementary code point */
+                    c=0x10000+MBCS_ENTRY_FINAL_VALUE(entry);
+                    break;
+                } else if(action==MBCS_STATE_FALLBACK_DIRECT_16) {
+                    if(!useFallback) {
+                        c=0xfffe;
+                        break;
+                    }
+                    /* output BMP code point */
+                    c=MBCS_ENTRY_FINAL_VALUE_16(entry);
+                    break;
+                } else if(action==MBCS_STATE_FALLBACK_DIRECT_20) {
+                    if(!useFallback) {
+                        c=0xfffe;
+                        break;
+                    }
+                    /* output supplementary code point */
+                    c=0x10000+MBCS_ENTRY_FINAL_VALUE(entry);
+                    break;
+                } else if(action==MBCS_STATE_UNASSIGNED) {
+                    c=0xfffe;
+                    break;
+                }
+
+                /*
+                 * forbid MBCS_STATE_CHANGE_ONLY for this function,
+                 * and MBCS_STATE_ILLEGAL and reserved action codes
+                 */
+                c =  0xffff;
+                break;
+            }
+        }
+
+        if(c==0xfffe) {
+            /* try an extension mapping */
+            ByteBuffer cx=sharedData.mbcs.extIndexes;
+            cx.position(0);
+            if(cx != null) {
+                source.position(0);
+                return extSimpleMatchToU(cx, source, useFallback, sharedData);
+            }
+        }
+
+        return c;
+    }
+    /* This private static method is use by MBCSSimpleGetNextUChar for extension mapping.*/
+    private static int extSimpleMatchToU(ByteBuffer cx, ByteBuffer source, boolean useFallback, UConverterSharedData sharedData) {
+        int[] value = new int[1];
+        int match;
+
+        if (source.remaining() <= 0) {
+            return 0xffff;
+        }
+
+        /* try to match */
+        match = extMatchToU(cx, (byte)-1, source, null, value,
+                useFallback, true, sharedData);
+
+        if (match == source.array().length) {
+            /* write result for simple, single-character conversion */
+            if (TO_U_IS_CODE_POINT(value[0])) {
+                return TO_U_GET_CODE_POINT(value[0]);
+            }
+        }
+
+        /*
+         * return no match because
+         * - match>0 && value points to string: simple conversion cannot handle multiple code points
+         * - match>0 && match!=length: not all input consumed, forbidden for this function
+         * - match==0: no match found in the first place
+         * - match<0: partial match, not supported for simple conversion (and flush==TRUE)
+         */
+        return 0xfffe;
+    }
+    /* This private static method is use by extSimpleMatchToU for extension mapping. */
+    private static int extMatchToU(ByteBuffer cx, byte sisoState, ByteBuffer pre, ByteBuffer src,
+            int[] pMatchValue, boolean isUseFallback, boolean flush, UConverterSharedData sharedData) {
+        IntBuffer toUTable, toUSection;
+
+        int preLength = pre.array().length;
+        int value, matchValue, srcLength;
+        int i, j, index, length, matchLength;
+        short b;
+        
+        if (src == null) {
+            srcLength = 0;
+        } else {
+            srcLength = src.array().length;
+        }
+
+        if (cx == null || cx.getInt(EXT_TO_U_LENGTH) <= 0) {
+            return 0; /* no extension data, no match */
+        }
+
+        /* initialize */
+        toUTable = (IntBuffer)ARRAY(cx, EXT_TO_U_INDEX, int.class);//(IntBuffer) ARRAY(cx, EXT_TO_U_INDEX, int.class);
+        index = 0;
+
+        matchValue = 0;
+        i = j = matchLength = 0;
+
+        if (sisoState == 0) {
+            /* SBCS state of an SI/SO stateful converter, look at only exactly 1 byte */
+            if (preLength > 1) {
+                return 0; /* no match of a DBCS sequence in SBCS mode */
+            } else if (preLength == 1) {
+                srcLength = 0;
+            } else /* preLength==0 */{
+                if (srcLength > 1) {
+                    srcLength = 1;
+                }
+            }
+            flush = true;
+        }
+
+        /* we must not remember fallback matches when not using fallbacks */
+
+        /* match input units until there is a full match or the input is consumed */
+        for (;;) {
+            /* go to the next section */
+            int oldpos = toUTable.position();
+            toUSection = ((IntBuffer) toUTable.position(index)).slice();
+            toUTable.position(oldpos);
+
+            /* read first pair of the section */
+            value = toUSection.get();
+            length = TO_U_GET_BYTE(value);
+            value = TO_U_GET_VALUE(value);
+            if (value != 0 && (TO_U_IS_ROUNDTRIP(value)) /*|| isToUUseFallback(isUseFallback))*/
+                    && TO_U_VERIFY_SISO_MATCH(sisoState, i + j)) {
+                /* remember longest match so far */
+                matchValue = value;
+                matchLength = i + j;
+            }
+
+            /* match pre[] then src[] */
+            if (i < preLength) {
+                b = (short) (pre.get(i++) & UConverterConstants.UNSIGNED_BYTE_MASK);
+            } else if (j < srcLength) {
+                b = (short) (src.get(j++) & UConverterConstants.UNSIGNED_BYTE_MASK);
+            } else {
+                /* all input consumed, partial match */
+                if (flush || (length = (i + j)) > MAX_BYTES) {
+                    /*
+                     * end of the entire input stream, stop with the longest match so far or: partial match must not
+                     * be longer than UCNV_EXT_MAX_BYTES because it must fit into state buffers
+                     */
+                    break;
+                } else {
+                    /* continue with more input next time */
+                    return -length;
+                }
+            }
+
+            /* search for the current UChar */
+            value = findToU(toUSection, length, b);
+            if (value == 0) {
+                /* no match here, stop with the longest match so far */
+                break;
+            } else {
+                if (TO_U_IS_PARTIAL(value)) {
+                    /* partial match, continue */
+                    index = TO_U_GET_PARTIAL_INDEX(value);
+                } else {
+                    if (TO_U_IS_ROUNDTRIP(value) /*|| isToUUseFallback(isUseFallback)) */&& TO_U_VERIFY_SISO_MATCH(sisoState, i + j)) {
+                        /* full match, stop with result */
+                        matchValue = value;
+                        matchLength = i + j;
+                    } else {
+                        /* full match on fallback not taken, stop with the longest match so far */
+                    }
+                    break;
+                }
+            }
+        }
+
+        if (matchLength == 0) {
+            /* no match at all */
+            return 0;
+        }
+
+        /* return result */
+        pMatchValue[0] = TO_U_MASK_ROUNDTRIP(matchValue);
+        return matchLength;
+    }
+    /*
+     * This is another simple conversion function for internal use by other
+     * conversion implementations.
+     * It does not use the converter state nor call callbacks.
+     * It does not handle the EBCDIC swaplfnl option (set in UConverter).
+     * It handles conversion extensions but not GB 1830.
+     * 
+     * It converts a single Unicode code point into code page bytes, encoded 
+     * as one 32-bit value. The function returns the number of bytes in *pValue:
+     * 1..4 the number of bytes in *pValue
+     * 0    unassigned (*pValue undefined)
+     * -1   illegal (currently not used, *pValue undefined)
+     * *pValue will contain the resulting bytes with the last byte in bits 7..0,
+     * the second to last byte in bits 15..8, etc.
+     * Currently the function assumes but does not check that 0<=c<=0x10ffff.
+     */
+    static int MBCSFromUChar32_ISO2022(UConverterSharedData sharedData, int c, int[] value, boolean useFallback,
+            int outputType) { // Output Type from MBCS, e.g. CharsetMBCS.MBCS_OUTPUT_2
+        ByteBuffer cx;
+        char[] table;
+        int stage2Entry;
+        int myValue;
+        int length;
+        int p;
+        
+        /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
+        if (c<0x10000 || (sharedData.mbcs.unicodeMask& UConverterConstants.HAS_SUPPLEMENTARY) != 0) {
+            table = sharedData.mbcs.fromUnicodeTable;
+            stage2Entry = MBCS_STAGE_2_FROM_U(table, c);
+            
+            /* get the bytes and the length for the output */
+            if (outputType == MBCS_OUTPUT_2) {
+
+                myValue = MBCS_VALUE_2_FROM_STAGE_2(sharedData.mbcs.fromUnicodeBytes, stage2Entry, c);
+                if (myValue <= 0xff) {
+                    length = 1;
+                } else {
+                    length = 2;
+                }
+            } else { /* outputType == MBCS_OUTPUT_3 */
+                byte[] bytes = sharedData.mbcs.fromUnicodeBytes;
+                p = MBCS_POINTER_3_FROM_STAGE_2(bytes, stage2Entry, c);
+                myValue = ((bytes[p] & UConverterConstants.UNSIGNED_BYTE_MASK)<<16) |
+                    ((bytes[p+1] & UConverterConstants.UNSIGNED_BYTE_MASK)<<8) |
+                    (bytes[p+2] & UConverterConstants.UNSIGNED_BYTE_MASK);
+                if (myValue <= 0xff) {
+                    length = 1;
+                } else if (myValue <= 0xffff) {
+                    length = 2;
+                } else {
+                    length = 3;
+                }
+            }
+            /* is this code point assigned, or do we use fallbacks? */
+            if ((stage2Entry&(1<<(16+(c&0xf)))) != 0) {
+                /* assigned */
+                value[0] = myValue;
+                return length;
+            } else if (CharsetEncoderICU.isFromUUseFallback(useFallback, c) && myValue != 0) {
+                /*
+                 * We allow a 0 byte output if the "assigned" bit is set for this entry.
+                 * There is no way with this data structure for fallback output
+                 * to be a zero byte.
+                 */
+                value[0] = myValue;
+                return -length;
+            }
+            
+        }
+        
+        cx = sharedData.mbcs.extIndexes;
+        if (cx != null) {
+            return extSimpleMatchFromU(cx, c, value, useFallback);
+        }
+        return 0;
+    }
+    /*
+     * Used by ISO 2022 implementation
+     * @return number of bytes in pValue; negative number if fallback; 0 for no mapping
+     */
+    private static int extSimpleMatchFromU(ByteBuffer cx, int c, int[] pValue, boolean useFallback) {
+        int match;
+        int[] value = new int[1];
+        
+        /*try to match */
+        match = extMatchFromU(cx, c, null, null, value, useFallback, true);
+        if (match >= 2) {
+            int length;
+            boolean isRoundtrip;
+            isRoundtrip = FROM_U_IS_ROUNDTRIP(value[0]);
+            length = FROM_U_GET_LENGTH(value[0]);
+            value[0] = FROM_U_GET_DATA(value[0]);
+            
+            if (length <= EXT_FROM_U_MAX_DIRECT_LENGTH) {
+                pValue[0] = value[0];
+                return isRoundtrip ? length : -length;
+            }
+        }
+        
+        /*
+         * return no match because
+         * - match>1 && resultLength>4: result too long for simple conversion
+         * - match==1: no match found, <subchar1> preferred
+         * - match==0: no match found in the first place
+         * - match<0: partial match, not supported for simple conversion (and flush==true)
+         */
+        return 0;
+    }
+    
+    private static int extMatchFromU(ByteBuffer cx, int firstCP, char[] pre, char[] src, int[] pMatchValue, boolean useFallback, boolean flush) {
+        CharBuffer stage12, stage3;
+        IntBuffer stage3b;
+        
+        CharBuffer fromUTableUChars, fromUSectionUChars;
+        IntBuffer fromUTableValues, fromUSectionValues;
+        
+        int value, matchValue;
+        int i, j, index, length, matchLength;
+        char c;
+        
+        if (cx == null) {
+            return 0; /* no extension data, no match */
+        }
+        
+        /* trie lookup of firstCP */
+        index = firstCP>>10; /* stage 1 index */
+        if (index>=cx.getInt(EXT_FROM_U_STAGE_1_LENGTH*4)) { // need to find the correct int in the bytebuffer
+            return 0; /* the first code point is outside the trie */
+        }
+        
+        stage12 = (CharBuffer)ARRAY(cx, EXT_FROM_U_STAGE_12_INDEX, char.class);
+        stage3 = (CharBuffer)ARRAY(cx, EXT_FROM_U_STAGE_3_INDEX, char.class);
+        index = FROM_U(stage12, stage3, index, firstCP);
+        
+        stage3b = (IntBuffer)ARRAY(cx, EXT_FROM_U_STAGE_3B_INDEX, int.class);
+        value = stage3b.get(index);
+        if (value == 0) {
+            return 0;
+        }
+        
+        /*
+         * Tests for (value&EXT_FROM_U_RESERVED_MASK) == 0:
+         * Do not interpret values with reserved bits used, for forward compatibility,
+         * and do not even remember intermediate results with reserved bits used.
+         */
+        
+        if (TO_U_IS_PARTIAL(value)) {
+            /* partial match, enter the loop below */
+            index = FROM_U_GET_PARTIAL_INDEX(value);
+            
+            /* initialize */
+            fromUTableUChars = (CharBuffer)ARRAY(cx, EXT_FROM_U_UCHARS_INDEX, char.class);
+            fromUTableValues = (IntBuffer)ARRAY(cx, EXT_FROM_U_VALUES_INDEX, int.class);
+            
+            matchValue = 0;
+            i = j = matchLength = 0;
+            
+            /* we must not remember fallback matches when not using fallbacks */
+            
+            /*match inputs until there is a full match or the input is consumed */
+            for(;;) {
+                /* go to the next section */
+                int oldpos = fromUTableUChars.position();
+                fromUSectionUChars = ((CharBuffer)fromUTableUChars.position(index)).slice();
+                fromUTableUChars.position(oldpos);
+                oldpos = fromUTableValues.position();
+                fromUSectionValues = ((IntBuffer)fromUTableValues.position(index)).slice();
+                fromUTableValues.position(oldpos);
+                
+                /*read first pair of the section */
+                length = fromUSectionUChars.get();
+                value = fromUSectionValues.get();
+                if (value != 0 &&
+                        (FROM_U_IS_ROUNDTRIP(value) || CharsetEncoderICU.isFromUUseFallback(useFallback, firstCP)) &&
+                        (value&FROM_U_RESERVED_MASK) == 0) {
+                    /* remember longest match so far */
+                    matchValue = value;
+                    matchLength = 2 + i + j;
+                }
+                
+                /* match pre[] then src[] */
+                if (pre != null && i < pre.length) {
+                    c = pre[i++];
+                } else if (src != null && j < src.length) {
+                    c = src[j++];
+                } else {
+                    /* all input consumed, partial match */
+                    if (flush || (length=(i+j))> MAX_UCHARS) {
+                        /*
+                         * end of the entire input stream, stop with the longest match so far
+                         * or: partial match must not be longer than MAX_UCHARS
+                         * because it must fit into state buffers
+                         */
+                        break;
+                    } else {
+                        /* continue with more input next time */
+                        return -(2+length);
+                    }
+                }
+                
+                /* search for the current UChar */
+                index = findFromU(fromUSectionUChars, length, c);
+                if (index < 0) {
+                    /* no match here, stop with the longest match so far */
+                    break;
+                } else {
+                    value = fromUSectionValues.get(index);
+                    if (FROM_U_IS_PARTIAL(value)) {
+                        /* partial match, continue */
+                        index = FROM_U_GET_PARTIAL_INDEX(value);
+                    } else {
+                        if ((FROM_U_IS_ROUNDTRIP(value) || CharsetEncoderICU.isFromUUseFallback(useFallback, firstCP)) &&
+                                (value&FROM_U_RESERVED_MASK) == 0 ) {
+                            /* full match, stop with result */
+                            matchValue = value;
+                            matchLength = 2 + i + j;
+                        } else {
+                            /* full match on fallback not taken, stop with the longest match so far */
+                        }
+                        break;
+                    }
+                }
+            }
+            
+            if (matchLength == 0) {
+                /* no match at all */
+                return 0;
+            }
+        } else { /* result from firstCP trie lookup */
+            if ((FROM_U_IS_ROUNDTRIP(value) || CharsetEncoderICU.isFromUUseFallback(useFallback, firstCP)) &&
+                    (value&FROM_U_RESERVED_MASK) == 0) {
+                /* full match, stop with result */
+                matchValue = value;
+                matchLength = 2;
+            } else {
+                /* fallback not taken */
+                return 0;
+            }
+        }
+        
+        /* return result */
+        if (matchValue == FROM_U_SUBCHAR1) {
+            return 1; /* assert matchLength == 2 */
+        }
+        pMatchValue[0] = matchValue;
+        return matchLength;
+    }
+    /*
+     * @param is the the output byte
+     * @return 1 roundtrip byte  0 no mapping  -1 fallback byte
+     */
+    static int MBCSSingleFromUChar32(UConverterSharedData sharedData, int c, int[] retval, boolean useFallback) {
+        char[] table;
+        int value;
+        /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
+        if (c >= 0x10000 && (sharedData.mbcs.unicodeMask&UConverterConstants.HAS_SUPPLEMENTARY) == 0) {
+            return 0;
+        }
+        /* convert the Unicode code point in c into codepage bytes */
+        table = sharedData.mbcs.fromUnicodeTable;
+        /* get the byte for the output */
+        value = MBCS_SINGLE_RESULT_FROM_U(table, sharedData.mbcs.fromUnicodeBytes, c);
+        /* get the byte for the output */
+        retval[0] = value & 0xff;
+        if (value >= 0xf00) {
+            return 1; /* roundtrip */
+        } else if (useFallback ? value>=0x800 : value>=0xc00) {
+            return -1; /* fallback taken */
+        } else {
+            return 0; /* no mapping */
+        }
     }
 
     class CharsetDecoderMBCS extends CharsetDecoderICU {
