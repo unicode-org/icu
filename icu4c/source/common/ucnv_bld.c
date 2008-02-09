@@ -187,8 +187,8 @@ static UBool U_CALLCONV ucnv_cleanup(void) {
         SHARED_DATA_HASHTABLE = NULL;
     }
 
-    /* Called from ucnv_flushCache because it allocates the hashtable */
-    /*ucnv_flushAvailableConverterCache();*/
+    /* Isn't called from flushCache because other threads may have preexisting references to the table. */
+    ucnv_flushAvailableConverterCache();
 
     gDefaultConverterName = NULL;
     gDefaultConverterNameBuffer[0] = 0;
@@ -976,9 +976,6 @@ ucnv_flushCache ()
 
     /* Close the default converter without creating a new one so that everything will be flushed. */
     ucnv_close(u_getDefaultConverter(&status));
-
-    /* Flush now because we may not have any shared data in the hash. */
-    ucnv_flushAvailableConverterCache();
 
     /*if shared data hasn't even been lazy evaluated yet
     * return 0
