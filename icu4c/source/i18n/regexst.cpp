@@ -169,17 +169,10 @@ fRuleDigitsAlias(NULL)
     fPropSets[URX_GC_LVT]      = new UnicodeSet(UnicodeString(TRUE, gGC_LVTPattern, -1),     *status);
     
     // Check for null pointers
-    if (fPropSets[URX_ISWORD_SET]  == NULL ||
-		    fPropSets[URX_ISSPACE_SET] == NULL ||
-		    fPropSets[URX_GC_EXTEND]   == NULL ||
-		    fPropSets[URX_GC_CONTROL]  == NULL ||
-		    fPropSets[URX_GC_L]        == NULL ||
-		    fPropSets[URX_GC_V]        == NULL ||
-		    fPropSets[URX_GC_T]        == NULL ||
-		    fPropSets[URX_GC_LV]       == NULL ||
-		    fPropSets[URX_GC_LVT]      == NULL ) {
-    	goto ExitConstrDeleteAll;
- 
+    if (fPropSets[URX_ISWORD_SET] == NULL || fPropSets[URX_ISSPACE_SET] == NULL || fPropSets[URX_GC_EXTEND] == NULL || 
+        fPropSets[URX_GC_CONTROL] == NULL || fPropSets[URX_GC_L] == NULL || fPropSets[URX_GC_V] == NULL || 
+        fPropSets[URX_GC_T] == NULL || fPropSets[URX_GC_LV] == NULL || fPropSets[URX_GC_LVT] == NULL) {
+        goto ExitConstrDeleteAll;
     }
     if (U_FAILURE(*status)) {
         // Bail out if we were unable to create the above sets.
@@ -235,31 +228,14 @@ fRuleDigitsAlias(NULL)
     return; // If we reached this point, everything is fine so just exit
     
 ExitConstrDeleteAll: // Remove fPropSets and fRuleSets and return error
-	delete fPropSets[URX_ISWORD_SET];
-    delete fPropSets[URX_ISSPACE_SET];
-    delete fPropSets[URX_GC_EXTEND];
-    delete fPropSets[URX_GC_CONTROL];
-    delete fPropSets[URX_GC_L];
-    delete fPropSets[URX_GC_V];
-    delete fPropSets[URX_GC_T];
-    delete fPropSets[URX_GC_LV];
-    delete fPropSets[URX_GC_LVT];
-    delete fPropSets[URX_GC_NORMAL];
-    fPropSets[URX_ISWORD_SET]  = NULL;
-    fPropSets[URX_ISSPACE_SET] = NULL;
-    fPropSets[URX_GC_EXTEND]   = NULL;
-    fPropSets[URX_GC_CONTROL]  = NULL;
-    fPropSets[URX_GC_L]        = NULL;
-    fPropSets[URX_GC_V]        = NULL;
-    fPropSets[URX_GC_T]        = NULL;
-    fPropSets[URX_GC_LV]       = NULL;
-    fPropSets[URX_GC_LVT]      = NULL;
-    fPropSets[URX_GC_NORMAL]   = NULL;
-    
-    delete fRuleSets[kRuleSet_rule_char-128];
-    delete fRuleSets[kRuleSet_digit_char-128];
-    fRuleSets[kRuleSet_rule_char-128]  = NULL;
-    fRuleSets[kRuleSet_digit_char-128] = NULL;
+    for (i=0; i<URX_LAST_SET; i++) {
+        delete fPropSets[i];
+        fPropSets[i] = NULL;
+    }
+    for (i=0; i<(int32_t)(sizeof(fRuleSets)/sizeof(fRuleSets[0])); i++) {
+        delete fRuleSets[i];
+        fRuleSets[i] = NULL;
+    }
     
     *status = U_MEMORY_ALLOCATION_ERROR;    	
 }
