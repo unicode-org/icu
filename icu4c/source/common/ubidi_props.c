@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2007, International Business Machines
+*   Copyright (C) 2004-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -39,8 +39,6 @@ struct UBiDiProps {
 };
 
 /* data loading etc. -------------------------------------------------------- */
-
-#define UBIDI_HARDCODE_DATA 1
 
 #if UBIDI_HARDCODE_DATA
 
@@ -268,6 +266,7 @@ ubidi_getSingleton(UErrorCode *pErrorCode) {
 #endif
 }
 
+#if !UBIDI_HARDCODE_DATA
 U_CAPI const UBiDiProps *
 ubidi_getDummy(UErrorCode *pErrorCode) {
     UBiDiProps *bdp;
@@ -319,6 +318,7 @@ ubidi_getDummy(UErrorCode *pErrorCode) {
         return gBdpDummy;
     }
 }
+#endif
 
 /* set of property starts for UnicodeSet ------------------------------------ */
 

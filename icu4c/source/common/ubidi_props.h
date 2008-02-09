@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2007, International Business Machines
+*   Copyright (C) 2004-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -24,6 +24,8 @@
 #include "uset_imp.h"
 #include "udataswp.h"
 
+#define UBIDI_HARDCODE_DATA 1
+
 U_CDECL_BEGIN
 
 /* library API -------------------------------------------------------------- */
@@ -44,6 +46,7 @@ ubidi_closeProps(UBiDiProps *bdp);
 U_CFUNC const UBiDiProps *
 ubidi_getSingleton(UErrorCode *pErrorCode);
 
+#if !UBIDI_HARDCODE_DATA
 /**
  * Get a singleton dummy object, one that works with no real data.
  * This can be used when the real data is not available.
@@ -51,7 +54,7 @@ ubidi_getSingleton(UErrorCode *pErrorCode);
  */
 U_CAPI const UBiDiProps *
 ubidi_getDummy(UErrorCode *pErrorCode);
-
+#endif
 
 U_CAPI int32_t
 ubidi_swap(const UDataSwapper *ds,

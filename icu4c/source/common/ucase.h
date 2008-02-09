@@ -44,7 +44,9 @@ ucase_close(UCaseProps *csp);
 U_CAPI const UCaseProps * U_EXPORT2
 ucase_getSingleton(UErrorCode *pErrorCode);
 
-#if defined(UCASE_HARDCODE_DATA) && !UCASE_HARDCODE_DATA
+#define UCASE_HARDCODE_DATA 1
+
+#if !UCASE_HARDCODE_DATA
 /**
  * Get a singleton dummy object, one that works with no real data.
  * This can be used when the real data is not available.
